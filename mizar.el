@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.88 $
+;; $Revision: 1.89 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -159,6 +159,16 @@ Valid values are 'gnuemacs,'Xemacs and 'winemacs.")
 (defgroup mizar-education nil
   "Options for nonstandard Mizaring used when teaching Mizar"
   :group 'mizar)
+
+(defcustom mizar-newline-indents t
+"*Newline indents."
+:type 'boolean
+:group 'mizar-indenting)
+
+(defcustom mizar-semicolon-indents nil
+"*Semicolon indents."
+:type 'boolean
+:group 'mizar-indenting)
 
 (defcustom mizar-indent-width 2 
 "*Indentation width for Mizar articles."
@@ -489,8 +499,8 @@ Now also the environmental declarations."
 
 (defun mizar-mode-commands (map)
   (define-key map "\t" 'mizar-indent-line)
+  (define-key map ";" 'mizar-semicolon)
   (define-key map "\r" 'mizar-newline))
-
 
 (if mizar-mode-map
     nil
@@ -736,10 +746,19 @@ Used for exact completion.")
   (delete-horizontal-space)
   (newline)
   ;; Indent both the (now) previous and current line first.
-  (save-excursion
-    (previous-line 1)
-    (mizar-indent-line))
-  (mizar-indent-line))
+  (when mizar-newline-indents
+    (save-excursion
+      (previous-line 1)
+      (mizar-indent-line))
+    (mizar-indent-line)))
+
+(defun mizar-semicolon (&optional arg)
+  "Indent if `mizar-semicolon-indents' and insert arg semicolons."
+  (interactive "*p")
+  (self-insert-command (prefix-numeric-value arg))
+  (if mizar-semicolon-indents
+    (mizar-indent-line)))
+
 
 ;;;;;;;;;;;;;;;;  end of indentation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -921,10 +940,16 @@ See `mizar-insert-skeleton' for more."
    
      (t (error "Unexpected formula: %s" (prin1-to-string fla)))
      ))))
+
+(defvar  mizar-replace-dupl-spaces-skeletons t)
    
 (defun mizar-skelitem-string (item)
-(replace-regexp-in-string 
- " *; *$" ";" (mapconcat 'mizar-pp-parsed-fla item " ")))
+(let ((res (replace-regexp-in-string 
+	    " *; *$" ";" (mapconcat 'mizar-pp-parsed-fla item " "))))
+  (if mizar-replace-dupl-spaces-skeletons      
+      (replace-regexp-in-string "  +" " " res)
+    res)))
+
 
 (defun mizar-skeleton-string (skel)
 "Print the proof skeleton for parsed formula FLA into a string.
@@ -5020,16 +5045,18 @@ if that value is non-nil."
 		["Findvoc" mizar-findvoc t]
 		["Listvoc" mizar-listvoc t]
 		["Constr" mizar-constr t])
-;		["Scconstr" mizar-scconstr t])
-	  '("Irrelevant Utilities"
-	    ["Irrelevant Theorems" mizar-irrths t]
-	    ["Irrelevant Inferences" mizar-relinfer t]
-	    ["Trivial Proofs" mizar-trivdemo t]
-	    ["Irrelevant Iterative Steps" mizar-reliters t]
+	  (list "Irrelevant Utilities"	    
 	    ["Irrelevant Premises" mizar-relprem t]
+	    ["Irrelevant Inferences" mizar-relinfer t]
+	    ["Irrelevant Iterative Steps" mizar-reliters t]
 	    ["Irrelevant Labels" mizar-chklab t]
-	    ["Irrelevant Vocabularies" mizar-irrvoc t]
-	    ["Inaccessible Items" mizar-inacc t])
+	    ["Inaccessible Items" mizar-inacc t]
+	    ["Trivial Proofs" mizar-trivdemo t]
+	    (list "Environmental Utils"
+		  ["Irrelevant Theorems" mizar-irrths t]
+		  ["Irrelevant Vocabularies" mizar-irrvoc t]
+		  )
+	    )
 	  '("Other Utilities"
 	    ["Miz2Prel" (mizar-it "miz2prel" t) (eq mizar-emacs 'gnuemacs)]
 	    ["Miz2Abs" (mizar-it "miz2abs" t) (eq mizar-emacs 'gnuemacs)]
@@ -5066,16 +5093,24 @@ if that value is non-nil."
 							  (point-max) t) t]
 	    )
 	  "-"
-	  '("Indent"
-	    ["Line" mizar-indent-line t]
-	    ["Region" indent-region t]
-	    ["Buffer" mizar-indent-buffer t])
-	  '("Indent width"
-	    ["1" (mizar-set-indent-width 1) :style radio :selected (= mizar-indent-width 1) :active t]
-	    ["2" (mizar-set-indent-width 2) :style radio :selected (= mizar-indent-width 2) :active t]
-	    ["3" (mizar-set-indent-width 3) :style radio :selected (= mizar-indent-width 3) :active t])
-	  '("Fontify"
-	    ["Buffer" font-lock-fontify-buffer t])
+	  '("Indenting"
+	    ["Customize Indenting" (customize-group 'mizar-indenting) t]
+	    ["Newline indents"  (setq mizar-newline-indents
+				      (not mizar-newline-indents))
+	     :style toggle :selected mizar-newline-indents :active t]
+	     ["Semicolon indents"  (setq mizar-semicolon-indents
+					 (not mizar-semicolon-indents))
+	     :style toggle :selected mizar-semicolon-indents :active t]
+	    ["Indent line" mizar-indent-line t]
+	    ["Indent region" indent-region t]
+	    ["Indent buffer" mizar-indent-buffer t]
+	    '("Indent width"
+	      ["1" (mizar-set-indent-width 1) :style radio :selected (= mizar-indent-width 1) :active t]
+	      ["2" (mizar-set-indent-width 2) :style radio :selected (= mizar-indent-width 2) :active t]
+	      ["3" (mizar-set-indent-width 3) :style radio :selected (= mizar-indent-width 3) :active t])
+	    )
+;	  '("Fontify"
+;	    ["Buffer" font-lock-fontify-buffer t])
 	  )
   "The definition for the menu in the editing buffers."
   )

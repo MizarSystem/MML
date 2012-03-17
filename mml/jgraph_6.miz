@@ -11,16 +11,17 @@ environ
       ORDINAL2, TOPS_2, ARYTM_1, ARYTM, COMPLEX1, MCART_1, PCOMPS_1, JGRAPH_3,
       BORSUK_1, TOPREAL1, TOPREAL2, JORDAN3, PSCOMP_1, REALSET1, JORDAN5C,
       JORDAN6, JGRAPH_2, JGRAPH_6, RELAT_2, FINSEQ_1, FINSEQ_4, TARSKI, TOPS_1,
-      FUNCT_4, JORDAN17;
+      FUNCT_4, JORDAN17, ZF_LANG;
  notation XBOOLE_0, ORDINAL1, ABSVALUE, EUCLID, TARSKI, RELAT_1, TOPS_2,
       FUNCT_1, FUNCT_2, SUBSET_1, FINSEQ_1, STRUCT_0, TOPMETR, PCOMPS_1,
       COMPTS_1, METRIC_1, SQUARE_1, RCOMP_1, PRE_TOPC, FUNCT_4, JGRAPH_3,
       JORDAN5C, JORDAN6, TOPREAL2, CONNSP_1, FINSEQ_4, TOPS_1, JORDAN17,
       JGRAPH_2, NUMBERS, XCMPLX_0, XREAL_0, TOPRNS_1, TOPREAL1, PSCOMP_1,
-      REAL_1, NAT_1;
+      REAL_1, NAT_1, SPPOL_2;
  constructors TOPS_1, RCOMP_1, JGRAPH_2, TOPREAL2, TOPGRP_1, CONNSP_1,
       WELLFND1, JGRAPH_3, JORDAN5C, JORDAN6, TOPRNS_1, TREAL_1, FINSEQ_4,
-      TOPS_2, JORDAN17, TOPREAL1, PSCOMP_1, REAL_1, NAT_1;
+      TOPS_2, JORDAN17, TOPREAL1, PSCOMP_1, REAL_1, NAT_1, SPPOL_2,
+      COMPTS_1;
  clusters STRUCT_0, RELSET_1, FUNCT_1, EUCLID, PRE_TOPC, TOPMETR, SQUARE_1,
       PSCOMP_1, BORSUK_1, TOPREAL2, BORSUK_2, TOPREAL1, JGRAPH_3, TOPS_1,
       JGRAPH_2, TOPREAL6, XREAL_0, NAT_1, MEMBERED, XBOOLE_0, SUBSET_1;
@@ -33,7 +34,8 @@ environ
       JORDAN7, HEINE, JGRAPH_4, JORDAN5C, JGRAPH_5, GOBOARD6, JORDAN2C,
       TOPREAL2, TREAL_1, SEQ_2, FINSEQ_1, FINSEQ_3, FINSEQ_4, ZFMISC_1, NAT_1,
       ENUMSET1, UNIFORM1, BORSUK_4, TSEP_1, FUNCT_4, JORDAN1A, JORDAN17,
-      JORDAN1, GOBOARD7, XREAL_0, TOPRNS_1, COMPLEX1, XCMPLX_0, XCMPLX_1;
+      JORDAN1, GOBOARD7, XREAL_0, TOPRNS_1, COMPLEX1, XCMPLX_0, XCMPLX_1,
+      SPPOL_2;
  schemes FUNCT_2, JGRAPH_2, TOPREAL1, FRAENKEL, FUNCT_1, DOMAIN_1;
 
 begin :: Preliminaries
@@ -1090,19 +1092,38 @@ end;
 
 begin :: General Rectangles and Circles
 
-definition let a,b,c,d be real number;
-  func rectangle(a,b,c,d) -> Subset of TOP-REAL 2 equals :Def1:
-   {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b};
-  coherence
-   proof
-     defpred P[Point of TOP-REAL 2] means
-     $1`1=a & c <=$1`2 & $1`2<=d or $1`2=d & a<=$1`1 & $1`1<=b or
-      $1`1=b & c <=$1`2 & $1`2<=d or $1`2=c & a<=$1`1 & $1`1<=b;
-        {p: P[p]}
-       c= the carrier of TOP-REAL 2 from FRAENKEL:sch 10;
-    hence thesis;
-   end;
+notation let a,b,c,d be real number;
+  synonym rectangle(a,b,c,d) for [.a,b,c,d.];
+end;
+
+Lm10:
+for a,b,c,d being real number holds
+rectangle(a,b,c,d) =
+{p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
+p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b}
+proof
+let a,b,c,d being real number;
+set X = {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
+p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b};
+a1:rectangle(a,b,c,d) =
+{p2: p2`1 = a & p2`2 <= d & p2`2 >= c or
+ p2`1 <= b & p2`1 >= a & p2`2 = d or p2`1 <= b & p2`1 >= a & p2`2 = c or
+ p2`1 = b & p2`2 <= d & p2`2 >= c} by SPPOL_2:def 3;
+ hereby
+  let x be set;
+  assume x in rectangle(a,b,c,d);
+  then ex p2 st x = p2 &
+  (p2`1 = a & p2`2 <= d & p2`2 >= c or
+ p2`1 <= b & p2`1 >= a & p2`2 = d or p2`1 <= b & p2`1 >= a & p2`2 = c or
+ p2`1 = b & p2`2 <= d & p2`2 >= c) by a1;
+ hence x in X;
+end;
+let x be set;
+assume x in X;
+then ex p st x = p &
+(p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
+p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b);
+ hence thesis by a1;
 end;
 
 theorem Th28: for a,b,c,d being real number, p being Point of TOP-REAL 2
@@ -1110,12 +1131,13 @@ theorem Th28: for a,b,c,d being real number, p being Point of TOP-REAL 2
   a<=p`1 & p`1<=b & c <=p`2 & p`2<=d
 proof let a,b,c,d be real number, p be Point of TOP-REAL 2;
  assume A1: a<=b & c <=d & p in rectangle(a,b,c,d);
-  then p in {p2: p2`1=a & c <=p2`2 & p2`2<=d or p2`2=d & a<=p2`1 & p2`1<=b or
-      p2`1=b & c <=p2`2 & p2`2<=d or p2`2=c & a<=p2`1 & p2`1<=b} by Def1;
+ then p in {p2: p2`1 = a & p2`2 <= d & p2`2 >= c or
+ p2`1 <= b & p2`1 >= a & p2`2 = d or p2`1 <= b & p2`1 >= a & p2`2 = c or
+ p2`1 = b & p2`2 <= d & p2`2 >= c} by SPPOL_2:def 3;
   then consider p2 such that
   A2: p2=p &
-    (p2`1=a & c <=p2`2 & p2`2<=d or p2`2=d & a<=p2`1 & p2`1<=b or
-      p2`1=b & c <=p2`2 & p2`2<=d or p2`2=c & a<=p2`1 & p2`1<=b);
+  (p2`1 = a & p2`2 <= d & p2`2 >= c or p2`1 <= b & p2`1 >= a & p2`2 = d or
+  p2`1 <= b & p2`1 >= a & p2`2 = c or p2`1 = b & p2`2 <= d & p2`2 >= c);
   per cases by A2;
   suppose p`1=a & c <=p`2 & p`2<=d;
    hence thesis by A1;
@@ -1280,8 +1302,8 @@ proof let P,Q be Subset of TOP-REAL 2;
     rng f=[#]((TOP-REAL 2)|Q) by A2,TOPS_2:def 5;
    then dom f= P by PRE_TOPC:def 10;
    then f.(g.(|[1,0]|)) in rng f by A7,FUNCT_1:12;
-   then reconsider Q1=Q as non empty Subset of TOP-REAL 2 by A8,PRE_TOPC:def 10
-;
+   then reconsider Q1=Q as non empty Subset of TOP-REAL 2
+   by A8,PRE_TOPC:def 10;
    reconsider f1=f as map of (TOP-REAL 2)|P1,(TOP-REAL 2)|Q1;
    reconsider g1=g as map of (TOP-REAL 2)|R^2-unit_square,(TOP-REAL 2)|P1;
    reconsider h=f1*g1 as map of (TOP-REAL 2)|R^2-unit_square,
@@ -1364,28 +1386,51 @@ defpred P[Point of TOP-REAL 2] means |.$1.|=1;
  end;
 
  definition let a,b,r be real number;
-  assume A1: r>=0;
-  func circle(a,b,r) -> compact non empty Subset of TOP-REAL 2 equals:Def6:
+  func circle(a,b,r) -> Subset of TOP-REAL 2 equals:Def6:
    {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|=r};
   coherence
-   proof
-     defpred P[Point of TOP-REAL 2] means |.$1- |[a,b]| .|=r;
-        {p where p is Point of TOP-REAL 2:P[p]}
+proof
+  defpred P[Point of TOP-REAL 2] means |.$1- |[a,b]| .|=r;
+  {p where p is Point of TOP-REAL 2:P[p]}
        c= the carrier of TOP-REAL 2 from FRAENKEL:sch 10;
-   then reconsider Cb={p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|=r}
-                as Subset of TOP-REAL 2;
-   A2:(|[r,0]|)`1=r & (|[r,0]|)`2=0 by EUCLID:56;
-        |.(|[r+a,b]| - |[a,b]|).|=|.(|[r+a,0+b]| - |[a,b]|).|
-   .=|.(|[r,0]|+|[a,b]|- |[a,b]|).| by EUCLID:60
-   .= |.(|[r,0]|+(|[a,b]|- |[a,b]|)).| by EUCLID:49
-   .=|.|[r,0]|+(0.REAL 2).| by EUCLID:46
-   .=|.|[r,0]|.| by EUCLID:31 .=sqrt(r^2+0^2) by A2,JGRAPH_3:10
-   .=r by A1,SQUARE_1:60,89;
-    then A3: |[r+a,b]| in Cb;
-    per cases by A1;
+  hence thesis;
+end;
+end;
+ 
+registration let a,b,r be real number;
+  cluster circle(a,b,r) -> compact;
+  coherence
+proof
+  set Cb = circle(a,b,r);
+a1:Cb = {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|=r} by Def6;
+    per cases;
+    suppose
+      A4:  r < 0;
+      set A = (TOP-REAL 2) | Cb;
+a5:  Cb = {}
+    proof
+      hereby
+        let x be set;
+        assume x in Cb;
+        then ex p being Point of TOP-REAL 2 st
+          x = p & |.p- |[a,b]| .| = r by a1;
+        hence x in {} by A4,TOPRNS_1:26;
+      end;
+      thus thesis by XBOOLE_1:2;
+    end;
+f1: Cb c= [#]((TOP-REAL 2)|Cb) by a5,XBOOLE_1:2;    
+for P being Subset of A st P=Cb holds P is compact
+proof
+  let P be Subset of A such that
+  f2: P=Cb;
+  {}A is compact by COMPTS_1:9;
+  hence P is compact by a5,f2;
+end;
+hence Cb is compact by f1,COMPTS_1:11;
+    end;
     suppose r > 0;
-    then Cb is_simple_closed_curve by Th32;
-    hence thesis by A3,Th31;
+    then Cb is_simple_closed_curve by a1,Th32;
+    hence thesis by Th31;
     end;
     suppose
 A4:   r = 0;
@@ -1396,7 +1441,7 @@ A4:   r = 0;
         assume x in Cb;
         then consider p being Point of TOP-REAL 2 such that
 A5:       x = p and
-A6:       |.p- |[a,b]| .| = r;
+A6:       |.p- |[a,b]| .| = r by a1;
          p = |[a,b]| by A4,A6,TOPRNS_1:29;
         hence x in {|[a,b]|} by A5,TARSKI:def 1;
       end;
@@ -1404,12 +1449,31 @@ A6:       |.p- |[a,b]| .| = r;
       assume x in {|[a,b]|};
       then A7:   x = |[a,b]| by TARSKI:def 1;
        |. |[a,b]| - |[a,b]| .| = 0 by TOPRNS_1:29;
-      hence x in Cb by A4,A7;
+      hence x in Cb by A4,A7,a1;
     end;
     hence thesis by BORSUK_1:41;
-    end;
-   end;
- end;
+  end;
+  end;
+end;
+
+registration let a,b be real number;
+  let r be non negative (real number);
+  cluster circle(a,b,r) -> non empty;
+  coherence
+proof
+  set Cb = circle(a,b,r);
+  a1:Cb = {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|=r} by Def6;
+   A2:(|[r,0]|)`1=r & (|[r,0]|)`2=0 by EUCLID:56;
+        |.(|[r+a,b]| - |[a,b]|).|=|.(|[r+a,0+b]| - |[a,b]|).|
+   .=|.(|[r,0]|+|[a,b]|- |[a,b]|).| by EUCLID:60
+   .= |.(|[r,0]|+(|[a,b]|- |[a,b]|)).| by EUCLID:49
+   .=|.|[r,0]|+(0.REAL 2).| by EUCLID:46
+   .=|.|[r,0]|.| by EUCLID:31 .=sqrt(r^2+0^2) by A2,JGRAPH_3:10
+   .= r by SQUARE_1:60,89;
+   then |[r+a,b]| in Cb by a1;
+   hence Cb is non empty;
+end;
+end;
 
 definition let a,b,r be real number;
   func inside_of_circle(a,b,r) -> Subset of TOP-REAL 2 equals :Def7:
@@ -2831,15 +2895,15 @@ f be map of TOP-REAL 2,TOP-REAL 2;
   A8: K11={p: not(-1 <p`1 & p`1< 1 & -1 <p`2 & p`2< 1)} by A1,Def5;
   A9: P11={p: |.p.| >=1} by A1,Th33;
   defpred P[Point of TOP-REAL 2] means
-  $1`1=-1 & -1 <=$1`2 & $1`2<=1 or $1`2=1 & -1<=$1`1 & $1`1<=1 or
-      $1`1=1 & -1 <=$1`2 & $1`2<=1 or $1`2=-1 & -1<=$1`1 & $1`1<=1;
+$1`1 = -1 & $1`2 <= 1 & $1`2 >= -1 or $1`1 <= 1 & $1`1 >= -1 & $1`2 = 1 or
+$1`1 <= 1 & $1`1 >= -1 & $1`2 = -1 or $1`1 = 1 & $1`2 <= 1 & $1`2 >= -1;
   defpred Q[Point of TOP-REAL 2] means
   -1=$1`1 & -1<=$1`2 & $1`2<=1 or $1`1=1 & -1<=$1`2 & $1`2<=1
         or -1=$1`2 & -1<=$1`1 & $1`1<=1 or 1=$1`2 & -1<=$1`1 & $1`1<=1;
 deffunc F(set)=$1;
   A10: for p being Element of TOP-REAL 2
   holds P[p] iff Q[p];
-  A11: K= {F(p): P[p]} by A1,Def1
+  A11: K= {F(p): P[p]} by A1,SPPOL_2:def 3
   .= {F(q):Q[q]} from FRAENKEL:sch 3(A10);
   defpred Q[Point of TOP-REAL 2] means |.$1.|=1;
   defpred P[Point of TOP-REAL 2] means |.$1- |[0,0]| .|=1;
@@ -3185,103 +3249,10 @@ proof let a,b,c,d be real number;assume A1: a <= b & c <= d;
  end;
 
 theorem Th40: for a,b,c,d being real number st a<=b & c <=d holds
- {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b}
+ rectangle(a,b,c,d) 
  = (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
  \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|))
-proof let a,b,c,d be real number;
- assume A1: a<=b & c <=d;
-  set L1 = { p : p`1 = a & p`2 <= d & p`2 >= c},
-      L2 = { p : p`1 <= b & p`1 >= a & p`2 = d},
-      L3 = { p : p`1 <= b & p`1 >= a & p`2 = c},
-      L4 = { p : p`1 = b & p`2 <= d & p`2 >= c};
-defpred P1[Point of TOP-REAL 2] means $1`1=a & c <=$1`2 & $1`2<=d;
-defpred P2[Point of TOP-REAL 2] means $1`2=d & a<=$1`1 & $1`1 <= b;
-defpred Q1[Point of TOP-REAL 2] means $1`1=b & c <=$1`2 & $1`2<=d;
-defpred Q2[Point of TOP-REAL 2] means $1`2=c & a<=$1`1 & $1`1<=b;
-set M1 = { p : P1[p]},
-    M2 = { p : P2[p]},
-    M3 = { p : Q2[p]},
-    M4 = { p : Q1[p]};
-  A2: L1 = M1
-   proof
-    thus L1 c= M1
-     proof let x be set;assume x in L1;
-       then consider p such that
-       A3: x=p & p`1 = a & p`2 <= d & p`2 >= c;
-      thus x in M1 by A3;
-     end;
-    thus M1 c= L1
-     proof let x be set;assume x in M1;
-       then consider p such that
-       A4: x=p & p`1 = a & c <=p`2 & p`2 <= d;
-      thus x in L1 by A4;
-     end;
-   end;
-  A5: L2 = M2
-   proof
-    thus L2 c= M2
-     proof let x be set;assume x in L2;
-       then consider p such that
-       A6: x=p & p`1 <= b & p`1 >= a & p`2 = d;
-      thus x in M2 by A6;
-     end;
-    thus M2 c= L2
-     proof let x be set;assume x in M2;
-       then consider p such that
-       A7: x=p & p`2=d & a<=p`1 & p`1 <= b;
-      thus x in L2 by A7;
-     end;
-   end;
-  A8: L3 = M3
-   proof
-    thus L3 c= M3
-     proof let x be set;assume x in L3;
-       then consider p such that
-       A9: x=p & p`1 <= b & p`1 >= a & p`2 = c;
-      thus x in M3 by A9;
-     end;
-    thus M3 c= L3
-     proof let x be set;assume x in M3;
-       then consider p such that
-       A10: x=p & p`2=c & a<=p`1 & p`1 <= b;
-      thus x in L3 by A10;
-     end;
-   end;
-  A11: L4 = M4
-   proof
-    thus L4 c= M4
-     proof let x be set;assume x in L4;
-       then consider p such that
-       A12: x=p & p`1 = b & p`2 <= d & p`2 >= c;
-      thus x in M4 by A12;
-     end;
-    thus M4 c= L4
-     proof let x be set;assume x in M4;
-       then consider p such that
-       A13: x=p & p`1 = b & c <=p`2 & p`2 <= d;
-      thus x in L4 by A13;
-     end;
-   end;
-   defpred P[Point of TOP-REAL 2] means
-   $1`1=a & c <=$1`2 & $1`2<=d or $1`2=d & a<=$1`1 & $1`1<=b;
-   defpred Q[Point of TOP-REAL 2] means
-   $1`1=b & c <=$1`2 & $1`2<=d or $1`2=c & a<=$1`1 & $1`1<=b;
-
- A14: {p2: P[p2] or Q[p2]}
-   =
- {p: P[p]} \/ {q1: Q[q1]} from TOPREAL1:sch 1;
-A15:
- {p: P1[p] or P2[p]}
-      = M1 \/ M2 from TOPREAL1:sch 1
-     .= LSeg(|[a,c]|,|[a,d]|) \/ L2 by A1,A2,A5,Th39
-     .= LSeg(|[a,c]|,|[a,d]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|) by A1,Th39;
-        {q1: Q1[q1] or Q2[q1]}
-      = M4 \/ M3 from TOPREAL1:sch 1
-     .= LSeg(|[ a,c ]|, |[ b,c ]|) \/ L4 by A1,A8,A11,Th39
-     .= LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|) by A1,Th39;
- hence thesis by A14,A15;
-end;
+ by SPPOL_2:58;
 
 theorem Th41: for a,b,c,d being real number st a <= b & c <= d holds
  LSeg(|[a,c]|,|[a,d]|) /\ LSeg(|[a,c]|,|[b,c]|) = {|[a,c]|}
@@ -3454,12 +3425,12 @@ A4:    p0 in the carrier of (TOP-REAL 2)|X and
 A5:    p = (proj1||X).p0 by FUNCT_2:115;
       reconsider p0 as Point of TOP-REAL 2 by A2,A4;
            X= {q :
-         q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-          q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b} by A1,Def1;
+q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c}
+         by A1,SPPOL_2:def 3;
         then ex q being Point of TOP-REAL 2 st p0 = q &
-        ( q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-          q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b)
-                          by A2,A4;
+        (q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c) by A2,A4;
      hence p >= a by A1,A2,A4,A5,PSCOMP_1:69;
     end;
 A6: for q being real number st
@@ -3470,11 +3441,7 @@ A7:    for p being real number st p in Z holds p >= q;
      then A8: |[a,c]| in LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d
 ]|)
                  by XBOOLE_0:def 2;
-           X= {q2 :
-         q2`1=a & c <=q2`2 & q2`2<=d or q2`2=d & a<=q2`1 & q2`1<=b or
-          q2`1=b & c <=q2`2 & q2`2<=d or q2`2=c & a<=q2`1 & q2`1<=b}
-                                 by A1,Def1;
-       then X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
+        X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
           \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|))
                        by A1,Th40;
 then A9:   |[a,c]| in X by A8,XBOOLE_0:def 2;
@@ -3508,11 +3475,12 @@ A4:    p0 in the carrier of (TOP-REAL 2)|X and
 A5:    p = (proj2||X).p0 by FUNCT_2:115;
       reconsider p0 as Point of TOP-REAL 2 by A2,A4;
            X= {q :
-        q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-        q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b} by A1,Def1;
+q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c}
+        by A1,SPPOL_2:def 3;
         then ex q being Point of TOP-REAL 2 st p0 = q &
-        ( q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-          q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b) by A2,A4;
+        (q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c) by A2,A4;
      hence p <= d by A1,A2,A4,A5,PSCOMP_1:70;
     end;
 A6: for q being real number st
@@ -3523,11 +3491,7 @@ A7:    for p be real number st p in Z holds p <= q;
             |[b,d]| in LSeg(|[ b,c ]|, |[ b,d ]|) by TOPREAL1:6;
 then A8:   |[b,d]| in LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|)
                  by XBOOLE_0:def 2;
-           X= {q2 :
-         q2`1=a & c <=q2`2 & q2`2<=d or q2`2=d & a<=q2`1 & q2`1<=b or
-          q2`1=b & c <=q2`2 & q2`2<=d or q2`2=c & a<=q2`1 & q2`1<=b}
-                                 by A1,Def1;
-       then X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
+       X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
           \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|))
                        by A1,Th40;
 then A9:   |[b,d]| in X by A8,XBOOLE_0:def 2;
@@ -3561,11 +3525,12 @@ A4:    p0 in the carrier of (TOP-REAL 2)|X and
 A5:    p = (proj1||X).p0 by FUNCT_2:115;
       reconsider p0 as Point of TOP-REAL 2 by A2,A4;
            X= {q :
-         q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-          q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b} by A1,Def1;
+q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c}
+         by A1,SPPOL_2:def 3;
         then ex q being Point of TOP-REAL 2 st p0 = q &
-        ( q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-          q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b)
+        (q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c)
                          by A2,A4;
      hence p <= b by A1,A2,A4,A5,PSCOMP_1:69;
     end;
@@ -3576,11 +3541,7 @@ A7:    for p be real number st p in Z holds p <= q;
             |[b,d]| in LSeg(|[ b,c ]|, |[ b,d ]|) by TOPREAL1:6;
 then A8:   |[b,d]| in LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|)
                  by XBOOLE_0:def 2;
-           X= {q2 :
-         q2`1=a & c <=q2`2 & q2`2<=d or q2`2=d & a<=q2`1 & q2`1<=b or
-          q2`1=b & c <=q2`2 & q2`2<=d or q2`2=c & a<=q2`1 & q2`1<=b}
-                                 by A1,Def1;
-       then X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
+       X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
           \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|))
                        by A1,Th40;
 then A9:   |[b,d]| in X by A8,XBOOLE_0:def 2;
@@ -3614,11 +3575,12 @@ A4:    p0 in the carrier of (TOP-REAL 2)|X and
 A5:    p = (proj2||X).p0 by FUNCT_2:115;
       reconsider p0 as Point of TOP-REAL 2 by A2,A4;
            X= {q :
-         q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-          q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b} by A1,Def1;
+         q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+  q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c}
+         by A1,SPPOL_2:def 3;
         then ex q being Point of TOP-REAL 2 st p0 = q &
-        ( q`1=a & c <=q`2 & q`2<=d or q`2=d & a<=q`1 & q`1<=b or
-          q`1=b & c <=q`2 & q`2<=d or q`2=c & a<=q`1 & q`1<=b)
+        (q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+  q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c)
                        by A2,A4;
      hence p >= c by A1,A2,A4,A5,PSCOMP_1:70;
     end;
@@ -3630,11 +3592,7 @@ A7:    for p being real number st p in Z holds p >= q;
      then A8: |[b,c]| in LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d
 ]|)
                  by XBOOLE_0:def 2;
-           X= {q2 :
-         q2`1=a & c <=q2`2 & q2`2<=d or q2`2=d & a<=q2`1 & q2`1<=b or
-          q2`1=b & c <=q2`2 & q2`2<=d or q2`2=c & a<=q2`1 & q2`1<=b}
-                                 by A1,Def1;
-       then X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
+       X= (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
           \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|))
                        by A1,Th40;
 then A9:   |[b,c]| in X by A8,XBOOLE_0:def 2;
@@ -3702,11 +3660,9 @@ a,b,c,d being real number st K=rectangle(a,b,c,d) & a<=b & c <=d
 proof let K be non empty compact Subset of TOP-REAL 2,
 a,b,c,d be real number;
  assume A1: K=rectangle(a,b,c,d) & a<=b & c <=d;
-  then K= {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} by Def1;
-  then K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
+   then K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
     \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|))
-                  by A1,Th40;
+                  by Th40;
 then A2: LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|) c= K
                                   by XBOOLE_1:7;
         LSeg(|[a,c]|,|[a,d]|) c=
@@ -3727,11 +3683,9 @@ a,b,c,d being real number st K=rectangle(a,b,c,d) & a<=b & c <=d
 proof let K be non empty compact Subset of TOP-REAL 2,
 a,b,c,d be real number;
  assume A1: K=rectangle(a,b,c,d) & a<=b & c <=d;
-  then K= {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} by Def1;
   then K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
     \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|))
-                  by A1,Th40;
+                  by Th40;
 then A2: LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|) c= K
                                   by XBOOLE_1:7;
         LSeg(|[b,c]|,|[b,d]|) c=
@@ -3861,8 +3815,7 @@ a,b,c,d being real number,
 f1,f2 being FinSequence of TOP-REAL 2,
 p0,p1,p01,p10 being Point of TOP-REAL 2 st
  a < b & c < d &
-P={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
+P=rectangle(a,b,c,d) &
 p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
 & f1=<*p0,p01,p1*>
 & f2=<*p0,p10,p1*> holds
@@ -3878,8 +3831,7 @@ p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
    f1,f2 be FinSequence of TOP-REAL 2,
    p0,p1,p01,p10 be Point of TOP-REAL 2;
    assume A1: a < b & c < d &
-    P={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
+    P=rectangle(a,b,c,d) &
     p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
     & f1=<*p0,p01,p1*>
     & f2=<*p0,p10,p1*>;
@@ -4139,8 +4091,7 @@ theorem Th59: for P,P1,P2 being Subset of TOP-REAL 2,
 a,b,c,d being real number,
 f1,f2 being FinSequence of TOP-REAL 2,p1,p2 being Point of TOP-REAL 2 st
  a < b & c < d &
-P={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
+P=rectangle(a,b,c,d) &
 p1=|[a,c]| & p2=|[b,d]|
 & f1=<*|[a,c]|,|[a,d]|,|[b,d]|*>
 & f2=<*|[a,c]|,|[b,c]|,|[b,d]|*>
@@ -4152,8 +4103,7 @@ proof let P,P1,P2 be Subset of TOP-REAL 2,
   a,b,c,d be real number,
   f1,f2 be FinSequence of TOP-REAL 2,p1,p2 be Point of TOP-REAL 2;
  assume A1: a < b & c < d &
-   P={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
+   P=rectangle(a,b,c,d) &
    p1=|[a,c]| & p2=|[b,d]|
    & f1=<*|[a,c]|,|[a,d]|,|[b,d]|*>
    & f2=<*|[a,c]|,|[b,c]|,|[b,d]|*>
@@ -4175,7 +4125,6 @@ holds rectangle(a,b,c,d) is_simple_closed_curve
 proof let a,b,c,d be real number;
   assume A1: a < b & c < d;
    set P=rectangle(a,b,c,d);
-
    set p1=|[a,c]|,p2=|[b,d]|;
    reconsider f1=<*|[a,c]|,|[a,d]|,|[b,d]|*> as FinSequence of TOP-REAL 2;
    reconsider f2=<*|[a,c]|,|[b,c]|,|[b,d]|*> as FinSequence of TOP-REAL 2;
@@ -4192,13 +4141,13 @@ proof let a,b,c,d be real number;
     P = P1 \/ P2 & P1 /\ P2 = {p1,p2} by Th59;
         (|[a,c]|)`1=a by EUCLID:56;
    then A3: p1<>p2 by A1,EUCLID:56;
-        p1 in P1 /\ P2 by A1,A2,Def1,TARSKI:def 2;
+        p1 in P1 /\ P2 by A1,A2,Lm10,TARSKI:def 2;
    then p1 in P1 by XBOOLE_0:def 3;
-   then A4: p1 in P by A1,A2,Def1,XBOOLE_0:def 2;
-        p2 in P1 /\ P2 by A1,A2,Def1,TARSKI:def 2;
+   then A4: p1 in P by A1,A2,Lm10,XBOOLE_0:def 2;
+        p2 in P1 /\ P2 by A1,A2,Lm10,TARSKI:def 2;
    then p2 in P1 by XBOOLE_0:def 3;
-   then p2 in P by A1,A2,Def1,XBOOLE_0:def 2;
- hence thesis by A1,A2,A3,A4,Def1,TOPREAL2:6;
+   then p2 in P by A1,A2,Lm10,XBOOLE_0:def 2;
+ hence thesis by A1,A2,A3,A4,Lm10,TOPREAL2:6;
 end;
 
 theorem Th61: for K being non empty compact Subset of TOP-REAL 2,
@@ -4221,8 +4170,6 @@ a,b,c,d be real number;
      f2=<* |[a,c]|,|[b,c]|,|[b,d]| *> as FinSequence of TOP-REAL 2;
   set p0=|[a,c]|,p01=|[a,d]|,p10=|[b,c]|,p1=|[b,d]|;
  A7: a < b & c < d &
-K={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
 p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
 & f1=<*p0,p01,p1*>
 & f2=<*p0,p10,p1*> implies
@@ -4232,7 +4179,7 @@ p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
   L~f2 = LSeg(p0,p10) \/ LSeg(p10,p1) &
   K = L~f1 \/ L~f2 &
   L~f1 /\ L~f2 = {p0,p1} & f1/.1 = p0 &
-  f1/.len f1=p1 & f2/.1 = p0 & f2/.len f2 = p1 by Th58;
+  f1/.len f1=p1 & f2/.1 = p0 & f2/.len f2 = p1 by A1,Th58;
   A8: Vertical_Line((W-bound(P)+E-bound(P))/2)
    = Vertical_Line((a+E-bound(P))/2) by A1,Th46
   .= Vertical_Line((a+b)/2) by A1,Th48;
@@ -4274,8 +4221,7 @@ p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
       then x in U by XBOOLE_0:def 2;
      hence
            x in U /\ Vertical_Line((W-bound(P)+E-bound(P))/2) by A13,XBOOLE_0:
-def 3
-;
+def 3;
    end;
   then |[(a+b)/2,d]| in U /\ Q by TARSKI:def 1;
    then A15: U meets Q by XBOOLE_0:4;
@@ -4341,7 +4287,7 @@ def 3
       then Last_Point(P3,E-max(P),W-min(P),
         Vertical_Line((W-bound(P)+E-bound(P))/2))`2 = c by EUCLID:56;
  hence Upper_Arc(K)= LSeg(|[a,c]|,|[a,d]|) \/ LSeg(|[a,d]|,|[b,d]|)
-                   by A1,A2,A3,A4,A5,A6,A7,A17,Def1,JORDAN6:def 8;
+                   by A1,A2,A3,A4,A5,A6,A7,A17,JORDAN6:def 8;
 end;
 
 theorem Th62: for K being non empty compact Subset of TOP-REAL 2,
@@ -4364,8 +4310,6 @@ a,b,c,d be real number;
      f2=<* |[a,c]|,|[b,c]|,|[b,d]| *> as FinSequence of TOP-REAL 2;
   set p0=|[a,c]|,p01=|[a,d]|,p10=|[b,c]|,p1=|[b,d]|;
  A7: a < b & c < d &
-K={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
 p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
 & f1=<*p0,p01,p1*>
 & f2=<*p0,p10,p1*> implies
@@ -4375,7 +4319,7 @@ p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
   L~f2 = LSeg(p0,p10) \/ LSeg(p10,p1) &
   K = L~f1 \/ L~f2 &
   L~f1 /\ L~f2 = {p0,p1} & f1/.1 = p0 &
-  f1/.len f1=p1 & f2/.1 = p0 & f2/.len f2 = p1 by Th58;
+  f1/.len f1=p1 & f2/.1 = p0 & f2/.len f2 = p1 by A1,Th58;
   A8: Vertical_Line((W-bound(P)+E-bound(P))/2)
    = Vertical_Line((a+E-bound(P))/2) by A1,Th46
   .= Vertical_Line((a+b)/2) by A1,Th48;
@@ -4417,8 +4361,7 @@ p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
       then x in U by XBOOLE_0:def 2;
      hence
            x in U /\ Vertical_Line((W-bound(P)+E-bound(P))/2) by A13,XBOOLE_0:
-def 3
-;
+def 3;
    end;
   then |[(a+b)/2,d]| in U /\ Q by TARSKI:def 1;
    then A15: U meets Q by XBOOLE_0:4;
@@ -4490,8 +4433,8 @@ def 3
          & First_Point(Upper_Arc(P),W-min(P),E-max(P),
          Vertical_Line((W-bound(P)+E-bound(P))/2))`2>
         Last_Point(P3,E-max(P),W-min(P),
-         Vertical_Line((W-bound(P)+E-bound(P))/2))`2 by A1,A3,A4,A7,A17,Def1,
-Th57,Th61;
+        Vertical_Line((W-bound(P)+E-bound(P))/2))`2
+        by A1,A3,A4,A7,A17,Th57,Th61;
  hence Lower_Arc(K)= LSeg(|[a,c]|,|[b,c]|) \/ LSeg(|[b,c]|,|[b,d]|)
                    by A2,JORDAN6:def 9;
 end;
@@ -5731,9 +5674,8 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
     A9: now assume p2 in Lower_Arc(K);
       then A10: p2 in Upper_Arc(K) /\ Lower_Arc(K) by A1,A7,XBOOLE_0:def 3;
            now assume p2=E-max(K);
-        then A11: p2`1=b by A5,EUCLID:56;
-             p2 in LSeg(|[a2,c2]|,|[a2,d2]|) by A1;
-       hence contradiction by A1,A11,TOPREAL3:17;
+        then p2`1=b by A5,EUCLID:56;
+       hence contradiction by A1,TOPREAL3:17;
       end;
      hence p2=W-min(K) by A8,A10,TARSKI:def 2;
     end;
@@ -5966,9 +5908,8 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
     A10: now assume p2 in Lower_Arc(K);
       then A11: p2 in Upper_Arc(K) /\ Lower_Arc(K) by A1,A8,XBOOLE_0:def 3;
            now assume p2=W-min(K);
-        then A12: p2`2=c by A5,EUCLID:56;
-             p2 in LSeg(|[a2,d2]|,|[b2,d2]|) by A1;
-       hence contradiction by A1,A12,TOPREAL3:18;
+        then p2`2=c by A5,EUCLID:56;
+       hence contradiction by A1,TOPREAL3:18;
       end;
      hence p2=E-max(K) by A9,A11,TARSKI:def 2;
     end;
@@ -6201,8 +6142,7 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
  A4: p2`1=b & c <=p2`2 & p2`2 <= d by A1,Th9;
   A5: W-min(K)= |[a,c]| by A1,Th56;
   A6: E-max(K)= |[b,d]| by A1,Th56;
-  A7: Lower_Arc(K)=LSeg(|[b,d]|,|[b,c]|) \/ LSeg(|[b,c]|,|[a,c]|) by A1,Th62
-;
+  A7: Lower_Arc(K)=LSeg(|[b,d]|,|[b,c]|) \/ LSeg(|[b,c]|,|[a,c]|) by A1,Th62;
     then A8: LSeg(|[b,d]|,|[b,c]|) c= Lower_Arc(K) by XBOOLE_1:7;
     A9: Upper_Arc(K) /\ Lower_Arc(K)={W-min(K),E-max(K)}
                               by A2,JORDAN6:def 9;
@@ -6210,9 +6150,8 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
     A10: now assume p1 in Upper_Arc(K);
       then A11: p1 in Upper_Arc(K) /\ Lower_Arc(K) by A1,A8,XBOOLE_0:def 3;
            now assume p1=W-min(K);
-        then A12: p1`1=a by A5,EUCLID:56;
-             p1 in LSeg(|[b2,c2]|,|[b2,d2]|) by A1;
-       hence contradiction by A1,A12,TOPREAL3:17;
+        then p1`1=a by A5,EUCLID:56;
+       hence contradiction by A1,TOPREAL3:17;
       end;
      hence p1=E-max(K) by A9,A11,TARSKI:def 2;
     end;
@@ -6705,9 +6644,7 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
   or p2 in LSeg(|[b,c]|,|[a,c]|) & p2<>W-min(K)
   proof assume A5: LE p1,p2,K;
     then A6: p1 in K & p2 in K by A2,JORDAN7:5;
-         K= {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} by A1,Def1;
-    then K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
+    K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
     \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|)) by A1,Th40
     .=LSeg(|[a,c]|,|[a,d]|) \/ LSeg(|[a,d]|,|[b,d]|)
     \/ LSeg(|[b,d]|,|[b,c]|) \/ LSeg(|[b,c]|,|[a,c]|) by XBOOLE_1:4;
@@ -6978,9 +6915,7 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
   or p2 in LSeg(|[b,c]|,|[a,c]|) & p2<>W-min(K)
   proof assume A5: LE p1,p2,K;
     then A6: p1 in K & p2 in K by A2,JORDAN7:5;
-         K= {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} by A1,Def1;
-    then K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
+    K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
     \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|)) by A1,Th40
     .=LSeg(|[a,c]|,|[a,d]|) \/ LSeg(|[a,d]|,|[b,d]|)
     \/ LSeg(|[b,d]|,|[b,c]|) \/ LSeg(|[b,c]|,|[a,c]|) by XBOOLE_1:4;
@@ -7242,9 +7177,7 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
   or p2 in LSeg(|[b,c]|,|[a,c]|) & p2<>W-min(K)
   proof assume A4: LE p1,p2,K;
     then A5: p1 in K & p2 in K by A2,JORDAN7:5;
-         K= {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} by A1,Def1;
-    then K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
+    K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
     \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|)) by A1,Th40
     .=LSeg(|[a,c]|,|[a,d]|) \/ LSeg(|[a,d]|,|[b,d]|)
     \/ LSeg(|[b,d]|,|[b,c]|) \/ LSeg(|[b,c]|,|[a,c]|) by XBOOLE_1:4;
@@ -7655,9 +7588,7 @@ a,b,c,d be real number,p1,p2 be Point of TOP-REAL 2;
   p2 in LSeg(|[b,c]|,|[a,c]|) & p1`1>=p2`1 & p2<>W-min(K)
   proof assume A4: LE p1,p2,K;
     then A5: p1 in K & p2 in K by A2,JORDAN7:5;
-         K= {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} by A1,Def1;
-    then K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
+    K= LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|)
     \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|)) by A1,Th40
     .=LSeg(|[a,c]|,|[a,d]|) \/ LSeg(|[a,d]|,|[b,d]|)
     \/ LSeg(|[b,d]|,|[b,c]|) \/ LSeg(|[b,c]|,|[a,c]|) by XBOOLE_1:4;
@@ -8047,11 +7978,13 @@ theorem Th73: for x being set,a,b,c,d being real number
  or x in LSeg(|[b,d]|,|[b,c]|) or x in LSeg(|[b,c]|,|[a,c]|)
 proof let x be set,a,b,c,d be real number;assume
   A1: x in rectangle(a,b,c,d) & a<b & c <d;
-  then x in {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} by Def1;
+  then x in {q:
+  q`1 = a & q`2 <= d & q`2 >= c or q`1 <= b & q`1 >= a & q`2 = d or
+  q`1 <= b & q`1 >= a & q`2 = c or q`1 = b & q`2 <= d & q`2 >= c}
+  by SPPOL_2:def 3;
   then consider p such that
-  A2: p=x &( p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b);
+  A2: p=x &(p`1 = a & p`2 <= d & p`2 >= c or p`1 <= b & p`1 >= a & p`2 = d or
+  p`1 <= b & p`1 >= a & p`2 = c or p`1 = b & p`2 <= d & p`2 >= c);
        now per cases by A2;
   case A3: p`1=a & c <=p`2 & p`2<=d;
     A4: d-c >0 by A1,SQUARE_1:11;
@@ -8259,9 +8192,9 @@ proof let p1,p2 be Point of TOP-REAL 2,
     A4: p1`1=-1 & -1<=p1`2 & p1`2<=1 by A1,Th9;
     A5: p1 in K by A1,A2,JORDAN7:5;
     A6: p2 in K by A1,A2,JORDAN7:5;
-         K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
-               p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+    K= {p:p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
+                   p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
+                                          by A1,Lm10;
     then A7: f.:K=P by A1,A3,Th45,JGRAPH_3:33;
     A8: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
     then A9: f.p1 in P by A5,A7,FUNCT_1:def 12;
@@ -8422,7 +8355,7 @@ proof let p1,p2,p3 be Point of TOP-REAL 2,
     A5: p2 in K by A1,A2,JORDAN7:5;
          K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
     then A6: f.:K=P by A1,A3,Th45,JGRAPH_3:33;
     A7: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
     then A8: f.p2 in P by A5,A6,FUNCT_1:def 12;
@@ -8990,7 +8923,8 @@ proof let p1,p2,p3,p4 be Point of TOP-REAL 2,
   assume A1: P= circle(0,0,1) & K=rectangle(-1,1,-1,1) & f=Sq_Circ;
   then A2: K is_simple_closed_curve by Th60;
   A3: K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
-      p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1} by A1,Def1;
+  p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
+  by A1,Lm10;
 
   A4: P={p: |.p.|=1} by A1,Th33;
   thus LE p1,p2,K & LE p2,p3,K & LE p3,p4,K implies
@@ -9021,7 +8955,7 @@ proof let p1,p2,p3,p4 be Point of TOP-REAL 2,
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A17: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A18: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A19: f.p1 in P by A6,A17,FUNCT_1:def 12;
@@ -9127,7 +9061,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A57: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A58: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              A59: (f.p1)`1<0 & (f.p1)`2<=0 by A1,A15,A23,Th77;
@@ -9157,7 +9091,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A68: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A69: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A70: f.p4 in P by A7,A68,FUNCT_1:def 12;
@@ -9211,7 +9145,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A88: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A89: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A90: f.p4 in P by A7,A88,FUNCT_1:def 12;
@@ -9238,7 +9172,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A100: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A101: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A102: f.p4 in P by A7,A100,FUNCT_1:def 12;
@@ -9255,7 +9189,7 @@ or
        end;
        A107: K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                         by A1,Def1;
+                         by A1,Lm10;
        thus K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or -1=p`2 & -1<=p`1 & p`1<=1 or
           1=p`2 & -1<=p`1 & p`1<=1}
@@ -9375,7 +9309,7 @@ GOBOARD7:8;
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A136: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A137: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              A138: (f.p1)`1<0 & (f.p1)`2<=0 by A1,A15,A23,Th77;
@@ -9405,7 +9339,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A147: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A148: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A149: f.p4 in P by A7,A147,FUNCT_1:def 12;
@@ -9459,7 +9393,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A167: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A168: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A169: f.p4 in P by A7,A167,FUNCT_1:def 12;
@@ -9486,7 +9420,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A179: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A180: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A181: f.p4 in P by A7,A179,FUNCT_1:def 12;
@@ -9505,7 +9439,7 @@ or
        end;
        A186: K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                         by A1,Def1;
+                         by A1,Lm10;
        thus K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or -1=p`2 & -1<=p`1 & p`1<=1 or
           1=p`2 & -1<=p`1 & p`1<=1}
@@ -9625,7 +9559,7 @@ GOBOARD7:8;
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A214: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A215: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              A216: (f.p1)`1<0 & (f.p1)`2<=0 by A1,A15,A23,Th77;
@@ -9655,7 +9589,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A225: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A226: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A227: f.p4 in P by A7,A225,FUNCT_1:def 12;
@@ -9710,7 +9644,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A245: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A246: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A247: f.p4 in P by A7,A245,FUNCT_1:def 12;
@@ -9737,7 +9671,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by A1,Def1;
+                                          by A1,Lm10;
              then A257: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A258: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A259: f.p4 in P by A7,A257,FUNCT_1:def 12;
@@ -9755,7 +9689,7 @@ or
        end;
        A264: K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                         by A1,Def1;
+                         by A1,Lm10;
        thus K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or -1=p`2 & -1<=p`1 & p`1<=1 or
           1=p`2 & -1<=p`1 & p`1<=1}
@@ -9979,7 +9913,8 @@ proof let p1,p2,p3,p4 be Point of TOP-REAL 2,
    then A5: LE f.p1,f.p3,P by A1,JORDAN6:73;
    A6: LE f.p2,f.p4,P by A1,A4,JORDAN6:73;
         K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
-      p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1} by A1,Def1;
+        p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
+        by A1,Lm10;
     then A7: f.:K=P by A1,A3,Th45,JGRAPH_3:33;
     A8: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
         P={p: |.p.|=1} by A1,Th33;
@@ -10395,8 +10330,9 @@ K being compact non empty Subset of TOP-REAL 2,K0 being Subset of TOP-REAL 2
 proof let p1,p2,p3,p4 be Point of TOP-REAL 2,
 K be compact non empty Subset of TOP-REAL 2,K0 be Subset of TOP-REAL 2;
  assume A1: K=rectangle(-1,1,-1,1)
-   & p1,p2,p3,p4 are_in_this_order_on K;
-   reconsider P= circle(0,0,1) as compact non empty Subset of TOP-REAL 2;
+ & p1,p2,p3,p4 are_in_this_order_on K;
+ reconsider j = 1 as non negative (real number) by XREAL_0:def 4;
+   reconsider P= circle(0,0,j) as non empty compact Subset of TOP-REAL 2;
    A2: P={p6 where p6 is Point of TOP-REAL 2: |.p6.|=1} by Th33;
   thus
        (for f,g being map of I[01],TOP-REAL 2 st

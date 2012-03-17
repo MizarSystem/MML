@@ -11,16 +11,16 @@ environ
       ORDINAL2, TOPS_2, ARYTM_1, ARYTM, COMPLEX1, MCART_1, PCOMPS_1, JGRAPH_3,
       BORSUK_1, TOPREAL1, TOPREAL2, JORDAN3, PSCOMP_1, REALSET1, JORDAN5C,
       JORDAN6, JGRAPH_2, JGRAPH_6, RELAT_2, FINSEQ_1, FINSEQ_4, TARSKI, TOPS_1,
-      FUNCT_4, JORDAN17;
+      FUNCT_4, JORDAN17, ZF_LANG;
  notation XBOOLE_0, ORDINAL1, ABSVALUE, EUCLID, TARSKI, RELAT_1, TOPS_2,
       FUNCT_1, FUNCT_2, SUBSET_1, FINSEQ_1, STRUCT_0, TOPMETR, PCOMPS_1,
       COMPTS_1, METRIC_1, SQUARE_1, RCOMP_1, PRE_TOPC, FUNCT_4, JGRAPH_3,
       JORDAN5C, JORDAN6, TOPREAL2, CONNSP_1, FINSEQ_4, TOPS_1, JORDAN17,
       JGRAPH_2, NUMBERS, XCMPLX_0, XREAL_0, TOPRNS_1, TOPREAL1, PSCOMP_1,
-      REAL_1, NAT_1;
+      REAL_1, NAT_1, SPPOL_2;
  constructors TOPS_1, RCOMP_1, JGRAPH_2, TOPREAL2, TOPGRP_1, CONNSP_1,
       WELLFND1, JGRAPH_3, JORDAN5C, JORDAN6, TOPRNS_1, TREAL_1, FINSEQ_4,
-      TOPS_2, JORDAN17, TOPREAL1, PSCOMP_1, REAL_1, NAT_1;
+      TOPS_2, JORDAN17, TOPREAL1, PSCOMP_1, REAL_1, NAT_1, SPPOL_2, COMPTS_1;
  clusters STRUCT_0, RELSET_1, FUNCT_1, EUCLID, PRE_TOPC, TOPMETR, SQUARE_1,
       PSCOMP_1, BORSUK_1, TOPREAL2, BORSUK_2, TOPREAL1, JGRAPH_3, TOPS_1,
       JGRAPH_2, TOPREAL6, XREAL_0, NAT_1, MEMBERED, XBOOLE_0, SUBSET_1;
@@ -217,11 +217,8 @@ for p1,p2,p3,p4 being Point of TOP-REAL 2,
 
 begin :: General Rectangles and Circles
 
-definition let a,b,c,d be real number;
-  func rectangle(a,b,c,d) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 1
-   {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b};
+notation let a,b,c,d be real number;
+  synonym rectangle(a,b,c,d) for [.a,b,c,d.];
 end;
 
 theorem :: JGRAPH_6:28
@@ -231,27 +228,27 @@ for a,b,c,d being real number, p being Point of TOP-REAL 2
 
  definition let a,b,c,d be real number;
   func inside_of_rectangle(a,b,c,d) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 2
+:: JGRAPH_6:def 1
    {p: a <p`1 & p`1< b & c <p`2 & p`2< d};
  end;
 
  definition let a,b,c,d be real number;
   func closed_inside_of_rectangle(a,b,c,d) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 3
+:: JGRAPH_6:def 2
 
    {p: a <=p`1 & p`1<= b & c <=p`2 & p`2<= d};
  end;
 
  definition let a,b,c,d be real number;
   func outside_of_rectangle(a,b,c,d) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 4
+:: JGRAPH_6:def 3
 
    {p: not(a <=p`1 & p`1<= b & c <=p`2 & p`2<= d)};
  end;
 
  definition let a,b,c,d be real number;
   func closed_outside_of_rectangle(a,b,c,d) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 5
+:: JGRAPH_6:def 4
 
    {p: not(a <p`1 & p`1< b & c <p`2 & p`2< d)};
  end;
@@ -278,33 +275,41 @@ for a,b,r be real number, Cb being Subset of TOP-REAL 2 st r>0 &
  holds Cb is_simple_closed_curve;
 
  definition let a,b,r be real number;
-  assume  r>=0;
-  func circle(a,b,r) -> compact non empty Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 6
+  func circle(a,b,r) -> Subset of TOP-REAL 2 equals
+:: JGRAPH_6:def 5
    {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|=r};
- end;
+end;
+
+registration let a,b,r be real number;
+  cluster circle(a,b,r) -> compact;
+end;
+
+registration let a,b be real number;
+  let r be non negative (real number);
+  cluster circle(a,b,r) -> non empty;
+end;
 
 definition let a,b,r be real number;
   func inside_of_circle(a,b,r) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 7
+:: JGRAPH_6:def 6
    {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|<r};
 end;
 
 definition let a,b,r be real number;
   func closed_inside_of_circle(a,b,r) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 8
+:: JGRAPH_6:def 7
    {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|<=r};
 end;
 
 definition let a,b,r be real number;
   func outside_of_circle(a,b,r) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 9
+:: JGRAPH_6:def 8
    {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|>r};
 end;
 
 definition let a,b,r be real number;
   func closed_outside_of_circle(a,b,r) -> Subset of TOP-REAL 2 equals
-:: JGRAPH_6:def 10
+:: JGRAPH_6:def 9
    {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|>=r};
 end;
 
@@ -365,8 +370,7 @@ theorem :: JGRAPH_6:39
 
 theorem :: JGRAPH_6:40
 for a,b,c,d being real number st a<=b & c <=d holds
- {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b}
+ rectangle(a,b,c,d)
  = (LSeg(|[ a,c ]|, |[ a,d ]|) \/ LSeg(|[ a,d ]|, |[ b,d ]|))
  \/ (LSeg(|[ a,c ]|, |[ b,c ]|) \/ LSeg(|[ b,c ]|, |[ b,d ]|));
 
@@ -466,8 +470,7 @@ a,b,c,d being real number,
 f1,f2 being FinSequence of TOP-REAL 2,
 p0,p1,p01,p10 being Point of TOP-REAL 2 st
  a < b & c < d &
-P={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
+P=rectangle(a,b,c,d) &
 p0=|[a,c]| & p1=|[b,d]| & p01=|[a,d]| & p10=|[b,c]|
 & f1=<*p0,p01,p1*>
 & f2=<*p0,p10,p1*> holds
@@ -484,8 +487,7 @@ for P,P1,P2 being Subset of TOP-REAL 2,
 a,b,c,d being real number,
 f1,f2 being FinSequence of TOP-REAL 2,p1,p2 being Point of TOP-REAL 2 st
  a < b & c < d &
-P={p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
-      p`1=b & c <=p`2 & p`2<=d or p`2=c & a<=p`1 & p`1<=b} &
+P=rectangle(a,b,c,d) &
 p1=|[a,c]| & p2=|[b,d]|
 & f1=<*|[a,c]|,|[a,d]|,|[b,d]|*>
 & f2=<*|[a,c]|,|[b,c]|,|[b,d]|*>

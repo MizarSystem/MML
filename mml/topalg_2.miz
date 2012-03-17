@@ -1,0 +1,1194 @@
+:: The Fundamental Group of Convex Subspaces of TOP-REAL n
+::  by Artur Korni{\l}owicz
+:: 
+:: Received April 20, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PRE_TOPC, EUCLID, ORDINAL2, RELAT_1, ARYTM_1, TOPALG_2,
+      SUBSET_1, BORSUK_1, TOPALG_1, GRAPH_1, ALGSTR_1, SEQM_3, BORSUK_2,
+      EQREL_1, WAYBEL20, BORSUK_6, JORDAN1, TOPREAL1, TOPS_2, REALSET1,
+      TOPMETR, ARYTM, FINSEQ_1, FINSEQ_4, RCOMP_1, MEMBERED, TREAL_1, SEQ_1,
+      ARYTM_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, MEMBERED, EQREL_1,
+      NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, FINSEQ_4, RVSUM_1, FUNCOP_1, SEQM_3,
+      STRUCT_0, PRE_TOPC, VECTSP_1, GROUP_1, GR_CY_1, GROUP_6, GRCAT_1,
+      BORSUK_1, TOPS_2, TOPREAL1, METRIC_1, RCOMP_1, RCOMP_2, TREAL_1, TOPMETR,
+      EUCLID, TOPRNS_1, JORDAN1, JORDAN2B, KNASTER, BORSUK_2, BORSUK_6,
+      TOPALG_1;
+ constructors NAT_1, EUCLID, BORSUK_1, JGRAPH_6, TOPRNS_1, JORDAN2C, GRCAT_1,
+      ABIAN, KNASTER, TOPALG_1, SEQM_3, GR_CY_1, REALSET1, PARTFUN2, FINSEQ_4,
+      JORDAN1, TOPREAL1, REAL_1, TOPS_2, ABSVALUE, JGRAPH_2, T_0TOPSP,
+      MEMBERED, QUIN_1, POLYEQ_1, SQUARE_1, TOPS_1, CONNSP_1, URYSOHN1,
+      JORDAN2B, BINARITH, RCOMP_1, SEQ_4, TREAL_1, RCOMP_2, COMPTS_1;
+ clusters STRUCT_0, EUCLID, RELSET_1, ARYTM_3, XREAL_0, REAL_1, BORSUK_1,
+      PRE_TOPC, SUBSET_1, XCMPLX_0, NUMBERS, XBOOLE_0, FUNCT_1, TOPALG_1,
+      POLYEQ_1, BORSUK_2, GROUP_1, SCMRING3, FINSET_1, TOPREAL1, JORDAN5A,
+      TEX_2, QUIN_1, SQUARE_1, METRIC_1, TOPS_1, BINARITH, JORDAN6, TOPMETR,
+      BORSUK_5, BORSUK_6;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, BORSUK_1, BORSUK_2, JORDAN1, MEMBERED, BORSUK_6;
+ theorems JGRAPH_6, XREAL_0, TARSKI, FUNCT_2, TSEP_1, PRE_TOPC, EUCLID,
+      GRCAT_1, TOPS_2, BORSUK_1, TOPALG_1, EQREL_1, BORSUK_2, BINOP_1, TOPMETR,
+      JORDAN2C, JORDAN1, TOPREAL1, JORDAN5A, FUNCT_3, BORSUK_6, REALSET1,
+      JGRAPH_2, FUNCT_1, JORDAN2B, FINSEQ_4, RVSUM_1, GROUP_7, TOPREAL5,
+      TREAL_1, XCMPLX_1, REAL_1, AXIOMS, SQUARE_1, JORDAN6, RCOMP_2, BORSUK_4;
+ schemes FUNCT_2;
+
+begin :: Convex subspaces of TOP-REAL n
+
+reserve
+  n for Nat,
+  a, b for real number;
+
+registration
+  let n;
+  cluster non empty convex Subset of TOP-REAL n;
+existence
+proof
+  consider a, b being Point of TOP-REAL n;
+  take LSeg(a,b);
+  thus thesis by BORSUK_4:8;
+end;
+end;
+
+definition
+  let n be Nat, T be SubSpace of TOP-REAL n;
+  attr T is convex means :dconv:
+  [#]T is convex Subset of TOP-REAL n;
+end;
+
+registration
+  let n be Nat;
+  cluster convex -> arcwise_connected (non empty SubSpace of TOP-REAL n);
+coherence
+proof
+  let T be non empty SubSpace of TOP-REAL n;
+  assume
+a0: [#]T is convex Subset of TOP-REAL n;
+  let a, b be Point of T;
+a3: a in the carrier of T & b in the carrier of T;
+  the carrier of T is Subset of TOP-REAL n by TSEP_1:1;
+  then reconsider a1 = a, b1 = b as Point of TOP-REAL n by a3;
+  per cases;
+  suppose a1 <> b1;
+  then LSeg(a1,b1) is_an_arc_of a1,b1 by TOPREAL1:15;
+  then consider h being map of I[01], (TOP-REAL n)|LSeg(a1,b1) such that
+A1: h is_homeomorphism and
+A2: h.0 = a1 & h.1 = b1 by TOPREAL1:def 2;
+A3: h is continuous by A1,TOPS_2:def 5;
+a7: [#]T = the carrier of T by PRE_TOPC:12;
+  [#]((TOP-REAL n)|LSeg(a1,b1)) = LSeg(a1,b1) by PRE_TOPC:def 10;
+  then the carrier of (TOP-REAL n)|LSeg(a1,b1) = LSeg(a1,b1) by PRE_TOPC:12;
+  then
+A6:the carrier of (TOP-REAL n)|LSeg(a1,b1) c= the carrier of T
+    by a7,a0,JORDAN1:def 1;
+  then reconsider f = h as map of I[01], T by FUNCT_2:9;
+  take f;
+  (TOP-REAL n)|LSeg(a1,b1) is SubSpace of T by A6,TSEP_1:4;
+  hence f is continuous by A3,TOPMETR:7;
+  thus f.0 = a & f.1 = b by A2;
+  end;
+  suppose a1 = b1;
+  hence thesis by BORSUK_2:4;
+  end;
+end;
+end;
+
+registration
+  let n be Nat;
+  cluster strict non empty convex SubSpace of TOP-REAL n;
+existence
+proof
+  reconsider T = TOP-REAL n as SubSpace of TOP-REAL n by TSEP_1:2;
+  take T;
+  thus T is strict non empty;
+  thus [#]T is convex Subset of TOP-REAL n by JORDAN2C:21;
+end;
+end;
+
+theorem Tlo:
+  for X being non empty TopSpace, Y being non empty SubSpace of X,
+      x1, x2 being Point of X, y1, y2 being Point of Y,
+      f being Path of y1,y2 st x1 = y1 & x2 = y2 & y1,y2 are_connected holds
+   f is Path of x1,x2
+proof
+  let X be non empty TopSpace, Y be non empty SubSpace of X,
+      x1, x2 be Point of X, y1, y2 be Point of Y,
+      f be Path of y1,y2 such that
+a1: x1 = y1 & x2 = y2;
+  given m being map of I[01], Y such that
+a2:  m is continuous & m.0 = y1 & m.1 = y2;
+  the carrier of Y is Subset of the carrier of X by TSEP_1:1;
+  then reconsider g = f as map of I[01], X by FUNCT_2:9;
+  g is Path of x1,x2
+  proof
+a3: f is continuous by a2,BORSUK_2:def 1;
+    thus ex f being map of I[01], X st f is continuous & f.0 = x1 & f.1 = x2
+    proof
+      take g;
+      thus g is continuous by a3,TOPMETR:7;
+      thus thesis by a1,a2,BORSUK_2:def 1;
+    end;
+    thus g is continuous by a3,TOPMETR:7;
+    thus g.0 = x1 & g.1 = x2 by a1,a2,BORSUK_2:def 1;
+  end;
+  hence f is Path of x1,x2;
+end;
+
+set I = the carrier of I[01];
+Lm0: the carrier of [:I[01],I[01]:] = [:I,I:] by BORSUK_1:def 5;
+Lm1: the carrier of [:TOP-REAL 1,I[01]:] = [:the carrier of TOP-REAL 1,I:]
+     by BORSUK_1:def 5;
+Lm2: the carrier of [:R^1,I[01]:] = [:the carrier of R^1,I:] by BORSUK_1:def 5;
+Lm3: dom id I[01] = I by FUNCT_2:def 1;
+
+definition
+  let n be Nat,
+      T being non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  func ConvexHomotopy(P,Q) -> map of [:I[01],I[01]:], T means :def12:
+  for s, t being Element of I[01],
+      a1, b1 being Point of TOP-REAL n st a1 = P.s & b1 = Q.s holds
+   it.(s,t) = (1-t) * a1 + t * b1;
+existence
+proof
+  defpred P[Element of I,Element of I,set] means
+    ex a1, b1 being Point of TOP-REAL n st a1 = P.$1 & b1 = Q.$1 &
+      $3 = (1-$2) * a1 + $2 * b1;
+a1: for x, y being Element of I ex z being Element of the carrier of T st
+   P[x,y,z]
+  proof
+    let x, y be Element of I;
+a2: P.x in the carrier of T & Q.x in the carrier of T;
+    the carrier of T is Subset of TOP-REAL n by TSEP_1:1;
+    then reconsider a1 = P.x, b1 = Q.x as Point of TOP-REAL n by a2;
+a3: [#]T = the carrier of T by PRE_TOPC:12;
+    set z = (1-y) * a1 + y * b1;
+a5: y is Real by XREAL_0:def 1;
+a6: 0 <= y & y <= 1 by JORDAN5A:2;
+    LSeg(a1,b1) = { (1-l)*a1 + l*b1 where l is Real: 0 <= l & l <= 1 }
+      by TOPREAL1:def 4;
+    then
+a4: z in LSeg(a1,b1) by a5,a6;
+    [#]T is convex Subset of TOP-REAL n by dconv;
+    then LSeg(a1,b1) c= [#]T by a3,JORDAN1:def 1;
+    then z is Point of T by a4,PRE_TOPC:12;
+    hence thesis;
+  end;
+  consider F being Function of [:I,I:],the carrier of T such that
+A1: for x, y being Element of I holds P[x,y,F. [x,y]] from FUNCT_2:sch 7(a1);
+  reconsider F as map of [:I[01],I[01]:], T by Lm0;
+  take F;
+  let x, y be Element of I;
+  ex a1, b1 being Point of TOP-REAL n st
+    a1 = P.x & b1 = Q.x & F. [x,y] = (1-y) * a1 + y * b1 by A1;
+  hence thesis by BINOP_1:def 1;
+end;
+uniqueness
+proof
+  let f, g be map of [:I[01],I[01]:], T such that
+a1: for s, t being Element of I[01], a1, b1 being Point of TOP-REAL n st
+     a1 = P.s & b1 = Q.s holds f.(s,t) = (1-t) * a1 + t * b1 and
+a2: for s, t being Element of I[01], a1, b1 being Point of TOP-REAL n st
+     a1 = P.s & b1 = Q.s holds g.(s,t) = (1-t) * a1 + t * b1;
+  for s, t being Element of I holds f.(s,t) = g.(s,t)
+  proof
+    let s, t be Element of I;
+    reconsider a1 = P.s, b1 = Q.s as Point of TOP-REAL n by TOPMETR:2;
+    f.(s,t) = (1-t) * a1 + t * b1 by a1;
+    hence f.(s,t) = g.(s,t) by a2;
+  end;
+  hence f = g by Lm0,BINOP_1:2;
+end;
+end;
+
+T90c:
+  for T being non empty convex SubSpace of TOP-REAL n, a, b being Point of T,
+      P, Q being Path of a,b holds ConvexHomotopy(P,Q) is continuous
+proof
+  let T be non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q being Path of a,b;
+  set F = ConvexHomotopy(P,Q);
+  set X = the carrier of T;
+  set E = the carrier of TOP-REAL n;
+  set PI = [:P,id I[01]:];
+  set QI = [:Q,id I[01]:];
+a2: the carrier of T is Subset of the carrier of TOP-REAL n by TSEP_1:1;
+  then reconsider G = F as map of [:I[01],I[01]:],TOP-REAL n by FUNCT_2:9;
+  a in the carrier of T & b in the carrier of T;
+  then reconsider a1 = a, b1 = b as Point of TOP-REAL n by a2;
+  a,b are_connected by BORSUK_6:47;
+  then reconsider P1 = P, Q1 = Q as Path of a1,b1 by Tlo;
+  set P1I = [:P1,id I[01]:];
+  set Q1I = [:Q1,id I[01]:];
+xA5: P1I is continuous & Q1I is continuous by BORSUK_2:12;
+  deffunc Fa(Element of E,Element of I) = (1-$2)*$1;
+  deffunc Fb(Element of E,Element of I) = $2*$1;
+  consider Pa being Function of [:E,I:],E such that
+xA1: for x being Element of E, i being Element of I holds
+    Pa. [x,i] = Fa(x,i) from FUNCT_2:sch 8;
+  consider Pb being Function of [:E,I:],E such that
+xA2: for x being Element of E, i being Element of I holds
+    Pb. [x,i] = Fb(x,i) from FUNCT_2:sch 8;
+  the carrier of [:TOP-REAL n,I[01]:] = [:E,I:] by BORSUK_1:def 5;
+  then reconsider Pa, Pb as map of [:TOP-REAL n,I[01]:],TOP-REAL n;
+yA1: for x being Element of E, i being Element of I holds
+    Pa.(x,i) = Fa(x,i)
+  proof
+    let x be Element of E, i be Element of I;
+    thus Pa.(x,i) = Pa. [x,i] by BINOP_1:def 1
+      .= Fa(x,i) by xA1;
+  end;
+  for x being Element of E, i being Element of I holds
+    Pb.(x,i) = Fb(x,i)
+  proof
+    let x be Element of E, i be Element of I;
+    thus Pb.(x,i) = Pb. [x,i] by BINOP_1:def 1
+      .= Fb(x,i) by xA2;
+  end;
+  then Pa is continuous & Pb is continuous by yA1,TOPALG_1:18,19;
+  then
+xA3: Pa*P1I is continuous & Pb*Q1I is continuous by xA5,TOPS_2:58;
+jj:  for p being Point of [:I[01],I[01]:] holds G.p = (Pa*P1I).p + (Pb*Q1I).p
+  proof
+    let p be Point of [:I[01],I[01]:];
+    consider s, t being Point of I[01] such that
+a1:   p = [s,t] by BORSUK_1:50;
+a4: dom P = I by FUNCT_2:def 1;
+a7: dom Q = I by FUNCT_2:def 1;
+a6: (id I[01]).t = t by GRCAT_1:11;
+a2: (Pa*PI).p = Pa.(PI.p) by FUNCT_2:21
+      .= Pa. [P.s,t] by a1,a4,a6,Lm3,FUNCT_3:def 9
+      .= (1-t) * P1.s by xA1;
+k1: (Pb*QI).p = Pb.(QI.p) by FUNCT_2:21
+      .= Pb. [Q.s,t] by a1,a7,a6,Lm3,FUNCT_3:def 9
+      .= t * Q1.s by xA2;
+    reconsider a1 = P.s, b1 = Q.s as Point of TOP-REAL n by TOPMETR:2;
+    F.(s,t) = (1-t) * a1 + t * b1 by def12;
+    hence G.p = (Pa*P1I).p + (Pb*Q1I).p by a2,k1,a1,BINOP_1:def 1;
+  end;
+  consider g being map of [:I[01],I[01]:],TOP-REAL n such that
+Z1:  for r being Point of [:I[01],I[01]:] holds g.r = (Pa*P1I).r + (Pb*Q1I).r
+  and
+Z2:  g is continuous by xA3,JGRAPH_6:20;
+  for p being Point of [:I[01],I[01]:] holds G.p = g.p
+  proof
+    let p be Point of [:I[01],I[01]:];
+    thus G.p = (Pa*P1I).p + (Pb*Q1I).p by jj
+      .= g.p by Z1;
+  end;
+  then G = g by FUNCT_2:113;
+  hence F is continuous by Z2,TOPMETR:8;
+end;
+  
+T90k:
+  for T being non empty convex SubSpace of TOP-REAL n,
+      a, b being Point of T,
+      P, Q being Path of a,b holds
+  for s being Point of I[01] holds ConvexHomotopy(P,Q).(s,0) = P.s &
+                                   ConvexHomotopy(P,Q).(s,1) = Q.s &
+  for t being Point of I[01] holds ConvexHomotopy(P,Q).(0,t) = a &
+                                   ConvexHomotopy(P,Q).(1,t) = b
+proof
+  let T be non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  set F = ConvexHomotopy(P,Q);
+  let s be Point of I[01];
+  reconsider x0 = 0, x1 = 1 as Point of I[01] by BORSUK_1:def 17,def 18;
+  reconsider a1 = P.s, b1 = Q.s as Point of TOP-REAL n by TOPMETR:2;
+a3: F.(s,x0) = (1-x0) * a1 + x0 * b1 by def12;
+  thus F.(s,0) = a1 + 0 * b1 by a3,EUCLID:33
+    .= a1 + 0.REAL n by EUCLID:33
+    .= P.s by EUCLID:31;
+a3: F.(s,x1) = (1-x1) * a1 + x1 * b1 by def12;
+  thus F.(s,1) = 0.REAL n + 1 * b1 by a3,EUCLID:33
+    .= 0.REAL n + b1 by EUCLID:33
+    .= Q.s by EUCLID:31;
+  let t be Point of I[01];
+  reconsider a1 = P.x0, b1 = Q.x0 as Point of TOP-REAL n by TOPMETR:2;
+a3: F.(0,t) = (1-t) * a1 + t * b1 by def12;
+A2: P.x0 = a by BORSUK_2:def 3;
+A3: Q.x0 = a by BORSUK_2:def 3;
+A4: P.x1 = b by BORSUK_2:def 3;
+A5: Q.x1 = b by BORSUK_2:def 3;
+  thus F.(0,t) = 1*a1 - t*a1 + t*a1 by A2,A3,a3,EUCLID:54
+    .= 1*a1 by EUCLID:52
+    .= a by A2,EUCLID:33;
+  reconsider a1 = P.x1, b1 = Q.x1 as Point of TOP-REAL n by TOPMETR:2;
+a3: F.(1,t) = (1-t) * a1 + t * b1 by def12;
+  thus F.(1,t) = 1*a1 - t*b1 + t*a1 by A4,A5,a3,EUCLID:54
+    .= 1*b1 by A4,A5,EUCLID:52
+    .= b by A5,EUCLID:33;
+end;
+
+theorem T90:
+  for T being non empty convex SubSpace of TOP-REAL n,
+      a, b being Point of T,
+      P, Q being Path of a,b holds
+  P, Q are_homotopic
+proof
+  let T be non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  take F = ConvexHomotopy(P,Q);
+  thus F is continuous by T90c;
+  thus thesis by T90k;
+end;
+
+definition
+  let n be Nat,
+      T be non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  redefine func ConvexHomotopy(P,Q) -> Homotopy of P,Q;
+coherence
+proof
+  thus P, Q are_homotopic by T90;
+  thus ConvexHomotopy(P,Q) is continuous by T90c;
+  thus thesis by T90k;
+end;
+end;
+
+registration
+  let n be Nat,
+      T be non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  cluster -> continuous Homotopy of P,Q;
+coherence
+proof
+  let F be Homotopy of P,Q;
+  P, Q are_homotopic by T90;
+  hence F is continuous by BORSUK_6:def 13;
+end;
+end;
+
+theorem T91:
+  for T being non empty convex SubSpace of TOP-REAL n,
+      a being Point of T,
+      C being Loop of a holds
+  the carrier of pi_1(T,a) = { Class(EqRel(T,a),C) }
+proof
+  let T be non empty convex SubSpace of TOP-REAL n,
+      a be Point of T,
+      C be Loop of a;
+  set E = EqRel(T,a);
+  hereby
+    let x be set;
+    assume x in the carrier of pi_1(T,a);
+    then consider P being Loop of a such that
+a3:   x = Class(E,P) by TOPALG_1:48;
+    P,C are_homotopic by T90;
+    then x = Class(E,C) by a3,TOPALG_1:47;
+    hence x in { Class(E,C) } by TARSKI:def 1;
+  end;
+  let x be set;
+  assume x in { Class(E,C) };
+  then
+a2: x = Class(E,C) by TARSKI:def 1;
+  C in Loops a by TOPALG_1:def 1;
+  then x in Class E by a2,EQREL_1:def 5;
+  hence thesis by TOPALG_1:def 3;
+end;
+  
+registration
+  let n be Nat,
+      T be non empty convex SubSpace of TOP-REAL n,
+      a be Point of T;
+  cluster pi_1(T,a) -> trivial;
+coherence
+proof
+  set E = EqRel(T,a);
+  consider C being constant Loop of a;
+a1: the carrier of pi_1(T,a) = Class E by TOPALG_1:def 3;
+  then { Class(E,C) } = Class E by T91;
+  hence thesis by a1,REALSET1:def 13;
+end;
+end;
+
+begin :: Convex subspaces of R^1
+
+theorem Taa:
+  Proj(|[a]|,1) = a
+proof
+  reconsider y = a as Real by XREAL_0:def 1;
+  |[a]| = <*y*> by JORDAN2B:def 2;
+  hence Proj(|[a]|,1) = <*y*>/.1 by JORDAN2B:def 1
+    .= a by FINSEQ_4:25;
+end;
+  
+registration
+  cluster -> real-membered SubSpace of R^1;
+coherence
+proof
+  let T be SubSpace of R^1;
+  let r be set such that
+a0: r in the carrier of T;
+  the carrier of T is Subset of R^1 by TSEP_1:1;
+  hence thesis by a0,TOPMETR:24,XREAL_0:def 1;
+end;
+end;
+
+theorem
+  a <= b implies
+  [.a,b.] = { (1-l)*a + l*b where l is Real: 0 <= l & l <= 1 }
+proof
+  assume
+a1:  a <= b;
+  set X = {(1-l)*a+l*b where l is Real: 0 <= l & l <= 1};
+  hereby
+    let x be set;
+    assume
+b1:   x in [.a,b.];
+    then reconsider y = x as Real;
+w1: a <= y & y <= b by b1,TOPREAL5:1;
+    per cases by a1,REAL_1:def 5;
+    suppose a < b;
+    then
+b3: b-a > b-b by REAL_1:92;
+    reconsider l = (y-a)/(b-a) as Real by XREAL_0:def 1;
+    l in the carrier of Closed-Interval-TSpace (0,1) by a1,w1,BORSUK_6:5;
+    then l in [.0,1.] by TOPMETR:25;
+    then
+b2: 0 <= l & l <= 1 by TOPREAL5:1;
+    (1-l)*a+l*b = a+l*(b-a)
+    .= a+(y-a) by b3,XCMPLX_1:88
+    .= y;
+    hence x in X by b2;
+    end;
+    suppose a = b;
+    then (1-1)*a+1*b = y by w1,AXIOMS:21;
+    hence x in X;
+    end;
+  end;
+  let x be set;
+  assume x in X;
+  then consider l being Real such that
+a2: x = (1-l)*a+l*b and
+a3: 0 <= l and
+a4: l <= 1;
+  a <= (1-l)*a+l*b & (1-l)*a+l*b <= b by a1,a3,a4,JGRAPH_6:2;
+  hence x in [.a,b.] by a2,TOPREAL5:1;
+end;
+
+theorem TT100:
+  for F being map of [:R^1,I[01]:], R^1 st
+   for x being Point of R^1, i being Point of I[01] holds
+    F.(x,i) = (1-i) * x holds
+  F is continuous
+proof
+  let F be map of [:R^1,I[01]:], R^1 such that
+A3: for x being Point of R^1, i being Point of I[01] holds
+   F.(x,i) = (1-i) * x;
+   deffunc Fa(Element of the carrier of TOP-REAL 1,
+              Element of I) = (1-$2)*$1;
+   consider G being Function of [:the carrier of TOP-REAL 1,I:],
+              the carrier of TOP-REAL 1 such that
+A1: for x being Point of TOP-REAL 1, i being Point of I[01] holds
+    G. [x,i] = Fa(x,i) from FUNCT_2:sch 8;
+    reconsider G as map of [:TOP-REAL 1,I[01]:], TOP-REAL 1 by Lm1;
+a1: for x being Point of TOP-REAL 1, i being Point of I[01] holds
+    G.(x,i) = Fa(x,i)
+    proof
+      let x be Point of TOP-REAL 1,
+          i be Point of I[01];
+      thus G.(x,i) = G. [x,i] by BINOP_1:def 1
+        .= Fa(x,i) by A1;
+    end;
+a3: G is continuous by a1,TOPALG_1:18;
+  consider f being map of TOP-REAL 1,R^1 such that
+a2:  for p being Element of TOP-REAL 1 holds f.p = Proj(p,1) by JORDAN2B:1;
+a5: f is_homeomorphism by a2,JORDAN2B:34;
+  then
+a4: f is continuous by TOPS_2:def 5;
+  f" is continuous by a5,TOPS_2:def 5;
+  then [:f",id I[01]:] is continuous by BORSUK_2:12;
+  then G*[:f",id I[01]:] is continuous by a3,TOPS_2:58;
+  then
+b1: f*(G*[:f",id I[01]:]) is continuous by a4,TOPS_2:58; 
+  for x being Point of [:R^1,I[01]:] holds F.x = (f*(G*[:f",id I[01]:])).x
+  proof
+    let x be Point of [:R^1,I[01]:];
+    consider a being Point of R^1, b being Point of I[01] such that
+b2:   x = [a,b] by BORSUK_1:50;
+e1: dom f = the carrier of TOP-REAL 1 by FUNCT_2:def 1;    
+b3: dom (f") = the carrier of R^1 by FUNCT_2:def 1;    
+    reconsider ff = f as Function;
+    set g = ff";
+d4: rng f = [#]R^1 by a5,TOPS_2:def 5;
+d2: ff is one-to-one by a5,TOPS_2:def 5;
+t1: <*a*> = |[a]| by JORDAN2B:def 2;
+    consider z being Real such that
+c1:   (1-b)*f".a = <*z*> by JORDAN2B:24;
+    reconsider w = <*a*> as Element of REAL 1 by t1,EUCLID:25;
+xx: 1-b is Real & a is Real by XREAL_0:def 1;    
+    f.<*a*> = f. |[a]| by JORDAN2B:def 2
+      .= Proj(|[a]|,1) by a2
+      .= a by Taa;
+    then <*a*> = g.a by d2,t1,e1,FUNCT_1:54;
+    then f".a = <*a*> by d2,d4,TOPS_2:def 4;
+    then
+e2: <*z*> = (1-b)*w by c1,EUCLID:def 11
+         .= <*(1-b)*a*> by xx,RVSUM_1:69;
+    thus (f*(G*[:f",id I[01]:])).x = f.((G*[:f",id I[01]:]).x) by FUNCT_2:21
+      .= f.(G.([:f",id I[01]:].x)) by FUNCT_2:21
+      .= f.(G. [f".a,id I[01].b]) by b2,b3,Lm3,FUNCT_3:def 9
+      .= f.(G. [f".a,b]) by GRCAT_1:11
+      .= f.(G.(f".a,b)) by BINOP_1:def 1
+      .= f.((1-b)*f".a) by a1
+      .= Proj((1-b)*f".a,1) by a2
+      .= <*z*>/.1 by c1,JORDAN2B:def 1
+      .= z by FINSEQ_4:25
+      .= (1-b)*a by e2,GROUP_7:1
+      .= F.(a,b) by A3
+      .= F.x by b2,BINOP_1:def 1;
+  end;
+  hence thesis by b1,FUNCT_2:113;
+end;
+  
+theorem TT101:
+  for F being map of [:R^1,I[01]:], R^1 st
+  for x being Point of R^1, i being Point of I[01] holds F.(x,i) = i * x
+  holds F is continuous
+proof
+  let F be map of [:R^1,I[01]:], R^1 such that
+A3: for x being Point of R^1, i being Point of I[01] holds
+   F.(x,i) = i*x;
+   deffunc Fa(Element of the carrier of TOP-REAL 1,
+              Element of I) = $2*$1;
+   consider G being Function of [:the carrier of TOP-REAL 1,I:],
+              the carrier of TOP-REAL 1 such that
+A1: for x being Point of TOP-REAL 1, i being Point of I[01] holds
+    G. [x,i] = Fa(x,i) from FUNCT_2:sch 8;
+   reconsider G as map of [:TOP-REAL 1,I[01]:], TOP-REAL 1 by Lm1;
+a1: for x being Point of TOP-REAL 1, i being Point of I[01] holds
+    G.(x,i) = Fa(x,i)
+    proof
+      let x be Point of TOP-REAL 1,
+          i be Point of I[01];
+      thus G.(x,i) = G. [x,i] by BINOP_1:def 1
+        .= Fa(x,i) by A1;
+    end;
+a3: G is continuous by a1,TOPALG_1:19;
+  consider f being map of TOP-REAL 1,R^1 such that
+a2:  for p being Element of TOP-REAL 1 holds f.p = Proj(p,1) by JORDAN2B:1;
+a5: f is_homeomorphism by a2,JORDAN2B:34;
+  then
+a4: f is continuous by TOPS_2:def 5;
+  f" is continuous by a5,TOPS_2:def 5;
+  then [:f",id I[01]:] is continuous by BORSUK_2:12;
+  then G*[:f",id I[01]:] is continuous by a3,TOPS_2:58;
+  then
+b1: f*(G*[:f",id I[01]:]) is continuous by a4,TOPS_2:58; 
+  for x being Point of [:R^1,I[01]:] holds F.x = (f*(G*[:f",id I[01]:])).x
+  proof
+    let x be Point of [:R^1,I[01]:];
+    consider a being Point of R^1, b being Point of I[01] such that
+b2:   x = [a,b] by BORSUK_1:50;
+e1: dom f = the carrier of TOP-REAL 1 by FUNCT_2:def 1;    
+b3: dom (f") = the carrier of R^1 by FUNCT_2:def 1;    
+    reconsider ff = f as Function;
+    set g = ff";
+d4: rng f = [#]R^1 by a5,TOPS_2:def 5;
+d2: ff is one-to-one by a5,TOPS_2:def 5;
+t1: <*a*> = |[a]| by JORDAN2B:def 2;
+    consider z being Real such that
+c1:   b*f".a = <*z*> by JORDAN2B:24;
+    reconsider w = <*a*> as Element of REAL 1 by t1,EUCLID:25;
+xx: b is Real & a is Real by XREAL_0:def 1;    
+    f.<*a*> = f. |[a]| by JORDAN2B:def 2
+      .= Proj(|[a]|,1) by a2
+      .= a by Taa;
+    then <*a*> = g.a by d2,t1,e1,FUNCT_1:54;
+    then f".a = <*a*> by d2,d4,TOPS_2:def 4;
+    then
+e2: <*z*> = b*w by c1,EUCLID:def 11
+         .= <*b*a*> by xx,RVSUM_1:69;
+    thus (f*(G*[:f",id I[01]:])).x = f.((G*[:f",id I[01]:]).x) by FUNCT_2:21
+      .= f.(G.([:f",id I[01]:].x)) by FUNCT_2:21
+      .= f.(G. [f".a,id I[01].b]) by b2,b3,Lm3,FUNCT_3:def 9
+      .= f.(G. [f".a,b]) by GRCAT_1:11
+      .= f.(G.(f".a,b)) by BINOP_1:def 1
+      .= f.(b*f".a) by a1
+      .= Proj(b*f".a,1) by a2
+      .= <*z*>/.1 by c1,JORDAN2B:def 1
+      .= z by FINSEQ_4:25
+      .= b*a by e2,GROUP_7:1
+      .= F.(a,b) by A3
+      .= F.x by b2,BINOP_1:def 1;
+  end;
+  hence thesis by b1,FUNCT_2:113;
+end;
+    
+definition
+  let P be Subset of R^1;
+  attr P is convex means :dc1:
+  for a, b being Point of R^1 st a in P & b in P holds [. a,b .] c= P;
+end;
+
+registration
+  cluster non empty convex Subset of R^1;
+existence
+proof
+  REAL c= the carrier of R^1 by TOPMETR:24;
+  then reconsider P = REAL as non empty Subset of R^1;
+  take P;
+  thus P is non empty;
+  let a, b be Point of R^1;
+  thus thesis;
+end;
+  cluster empty -> convex Subset of R^1;
+coherence
+proof
+  let P be Subset of R^1 such that
+a1: P is empty;
+  let a, b be Point of R^1;
+  thus thesis by a1;
+end;
+end;
+
+theorem T20:
+  [.a,b.] is convex Subset of R^1
+proof
+  reconsider P = [.a,b.] as Subset of R^1 by TOPMETR:24;
+  P is convex
+  proof
+    let x, y be Point of R^1;
+    assume x in P;
+    then
+a1: a <= x & x <= b by TOPREAL5:1;
+    assume y in P;
+    then
+a2: a <= y & y <= b by TOPREAL5:1;
+    let m be set;
+    assume
+a3:   m in [. x,y .];
+    then reconsider m as Real;
+    x <= m & m <= y by a3,TOPREAL5:1;
+    then a <= m & m <= b by a1,a2,AXIOMS:22;
+    hence thesis by TOPREAL5:1;
+  end;
+  hence thesis;
+end;
+  
+theorem
+  ].a,b.[ is convex Subset of R^1
+proof
+  reconsider P = ].a,b.[ as Subset of R^1 by TOPMETR:24;
+  P is convex
+  proof
+    let x, y be Point of R^1;
+    assume x in P;
+    then
+a1: a < x & x < b by JORDAN6:45;
+    assume y in P;
+    then
+a2: a < y & y < b by JORDAN6:45;
+    let m be set;
+    assume
+a3:   m in [. x,y .];
+    then reconsider m as Real;
+    x <= m & m <= y by a3,TOPREAL5:1;
+    then a < m & m < b by a1,a2,AXIOMS:22;
+    hence thesis by JORDAN6:45;
+  end;
+  hence thesis;
+end;
+
+theorem
+  [.a,b.[ is convex Subset of R^1
+proof
+  reconsider P = [.a,b.[ as Subset of R^1 by TOPMETR:24;
+  P is convex
+  proof
+    let x, y be Point of R^1;
+    assume x in P;
+    then
+a1: a <= x & x < b by RCOMP_2:3;
+    assume y in P;
+    then
+a2: a <= y & y < b by RCOMP_2:3;
+    let m be set;
+    assume
+a3:   m in [. x,y .];
+    then reconsider m as Real;
+    x <= m & m <= y by a3,TOPREAL5:1;
+    then a <= m & m < b by a1,a2,AXIOMS:22;
+    hence thesis by RCOMP_2:3;
+  end;
+  hence thesis;
+end;
+  
+theorem
+  ].a,b.] is convex Subset of R^1
+proof
+  reconsider P = ].a,b.] as Subset of R^1 by TOPMETR:24;
+  P is convex
+  proof
+    let x, y be Point of R^1;
+    assume x in P;
+    then
+a1: a < x & x <= b by RCOMP_2:4;
+    assume y in P;
+    then
+a2: a < y & y <= b by RCOMP_2:4;
+    let m be set;
+    assume
+a3:   m in [. x,y .];
+    then reconsider m as Real;
+    x <= m & m <= y by a3,TOPREAL5:1;
+    then a < m & m <= b by a1,a2,AXIOMS:22;
+    hence thesis by RCOMP_2:4;
+  end;
+  hence thesis;
+end;
+  
+definition
+  let T be SubSpace of R^1;
+  attr T is convex means :dconv:
+  [#]T is convex Subset of R^1;
+end;
+
+Lm10:
+for T being SubSpace of R^1 st T = R^1 holds T is convex
+proof
+  let T be SubSpace of R^1 such that
+a1: T = R^1;
+a2: [#]T = REAL by a1,PRE_TOPC:12,TOPMETR:24;
+  reconsider P = [#]T as Subset of R^1 by a1;
+  P is convex
+  proof
+    let a, b be Point of R^1;
+    thus thesis by a2;
+  end;
+  hence [#]T is convex Subset of R^1;
+end;
+
+registration
+  cluster strict non empty convex SubSpace of R^1;
+existence
+proof
+  reconsider T = R^1 as strict non empty SubSpace of R^1 by TSEP_1:2;
+  take T;
+  thus thesis by Lm10;
+end;
+end;
+
+definition
+  redefine func R^1 -> strict convex SubSpace of R^1;
+coherence by Lm10,TSEP_1:2;
+end;
+  
+theorem Tc1:
+  for T being non empty convex SubSpace of R^1,
+      a, b being Point of T holds
+  [. a, b .] c= the carrier of T
+proof
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T;
+  reconsider a1 = a, b1 = b as Point of R^1 by TOPMETR:2;
+k1: [#]T is convex Subset of R^1 by dconv;
+  [#]T = the carrier of T by PRE_TOPC:12;
+  then [. a1, b1 .] c= the carrier of T by k1,dc1;
+  hence [. a, b .] c= the carrier of T;
+end;
+      
+registration
+  cluster convex -> arcwise_connected (non empty SubSpace of R^1);
+coherence
+proof
+  let T be non empty SubSpace of R^1 such that
+a1: T is convex;
+  let a, b be Point of T;
+  per cases;
+  suppose
+s1: a <= b;
+  set f = L[01]((#)(a,b),(a,b)(#));
+a2: [.a,b.] c= the carrier of T by a1,Tc1;
+  set X = Closed-Interval-TSpace(a,b);
+  the carrier of X = [.a,b.] by s1,TOPMETR:25;
+  then reconsider f as map of I[01], T by a2,FUNCT_2:9,TOPMETR:27;
+  take f;
+  the carrier of X is Subset of the carrier of R^1 by TSEP_1:1;
+  then reconsider g = f as map of I[01], R^1 by FUNCT_2:9,TOPMETR:27;
+  L[01]((#)(a,b),(a,b)(#)) is continuous by s1,TREAL_1:11;
+  then g is continuous by TOPMETR:7,27;
+  hence f is continuous by TOPMETR:8;
+  thus f.0 = f.(#)(0,1) by TREAL_1:def 1
+    .= (#)(a,b) by s1,TREAL_1:12
+    .= a by s1,TREAL_1:def 1;
+  thus f.1 = f.(0,1)(#) by TREAL_1:def 2
+    .= (a,b)(#) by s1,TREAL_1:12
+    .= b by s1,TREAL_1:def 2;
+  end;
+  suppose
+s1: b <= a;
+  set f = L[01]((b,a)(#),(#)(b,a));
+a2: [.b,a.] c= the carrier of T by a1,Tc1;
+  set X = Closed-Interval-TSpace(b,a);
+  the carrier of X = [.b,a.] by s1,TOPMETR:25;
+  then reconsider f as map of I[01], T by a2,FUNCT_2:9,TOPMETR:27;
+  take f;
+  the carrier of X is Subset of the carrier of R^1 by TSEP_1:1;
+  then reconsider g = f as map of I[01], R^1 by FUNCT_2:9,TOPMETR:27;
+  L[01]((b,a)(#),(#)(b,a)) is continuous by s1,TREAL_1:11;
+  then g is continuous by TOPMETR:7,27;
+  hence f is continuous by TOPMETR:8;
+  thus f.0 = f.(#)(0,1) by TREAL_1:def 1
+    .= (b,a)(#) by s1,TREAL_1:12
+    .= a by s1,TREAL_1:def 2;
+  thus f.1 = f.(0,1)(#) by TREAL_1:def 2
+    .= (#)(b,a) by s1,TREAL_1:12
+    .= b by s1,TREAL_1:def 1;
+  end;
+end;
+end;
+
+theorem To:
+  a <= b implies Closed-Interval-TSpace(a,b) is convex
+proof
+  set X = Closed-Interval-TSpace(a,b);
+  assume a <= b;
+  then [.a,b.] = the carrier of X by TOPMETR:25
+    .= [#]X by PRE_TOPC:12;
+  hence [#]X is convex Subset of R^1 by T20;
+end;
+  
+theorem Tcc:
+  I[01] is convex by To,TOPMETR:27;
+  
+theorem
+  a <= b implies Closed-Interval-TSpace(a,b) is arcwise_connected
+proof
+  assume a <= b;
+  then reconsider X = Closed-Interval-TSpace(a,b) as
+    non empty convex SubSpace of R^1 by To;
+  X is arcwise_connected;
+  hence thesis;  
+end;
+  
+definition
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  func R1Homotopy(P,Q) -> map of [:I[01],I[01]:], T means :def12:
+  for s, t being Element of I[01] holds it.(s,t) = (1-t) * P.s + t * Q.s;
+existence
+proof
+  defpred P[Element of I, Element of I, set] means
+   $3 = (1-$2) * P.$1 + $2 * Q.$1;
+a1: for m, n being Element of I
+  ex z being Element of the carrier of T st P[m,n,z]
+  proof
+    let m, n be Element of I;
+r1: 0 <= n & n <= 1 by JORDAN5A:2;
+    set z = (1-n) * P.m + n * Q.m;
+    per cases;
+    suppose P.m <= Q.m;
+    then P.m <= z & z <= Q.m by r1,JGRAPH_6:2;
+    then
+a0: z in [. P.m,Q.m .] by TOPREAL5:1;
+    [. P.m,Q.m .] c= the carrier of T by Tc1;
+    hence thesis by a0;
+    end;
+    suppose
+d2:   P.m > Q.m;
+    then Q.m - P.m < Q.m - Q.m by REAL_1:92;
+    then n*(Q.m-P.m) <= n*0 by r1,SQUARE_1:23;
+    then
+d1: P.m+n*(Q.m-P.m) <= P.m+0 by AXIOMS:24;
+    1-1 <= 1-n by r1,REAL_1:92;
+    then (1-n)*Q.m <= (1-n)*P.m by d2,AXIOMS:25;
+    then (1-n)*Q.m+n*Q.m <= (1-n)*P.m+n*Q.m by AXIOMS:24;
+    then
+a0: z in [. Q.m, P.m .] by d1,TOPREAL5:1;
+    [. Q.m, P.m .] c= the carrier of T by Tc1;
+    hence thesis by a0;
+    end;
+  end;
+  consider F being Function of [:I,I:], the carrier of T such that
+A1: for m, n being Element of I holds P[m,n,F. [m,n]] from FUNCT_2:sch 7(a1);
+  reconsider F as map of [:I[01],I[01]:], T by Lm0;
+  take F;
+  let s, t be Element of I;
+  thus F.(s,t) = F. [s,t] by BINOP_1:def 1
+    .= (1-t) * P.s + t * Q.s by A1;
+end;
+uniqueness
+proof
+  let f, g be map of [:I[01],I[01]:], T such that
+a1: for s, t being Element of I[01] holds f.(s,t) = (1-t) * P.s + t * Q.s
+  and
+a2: for s, t being Element of I[01] holds g.(s,t) = (1-t) * P.s + t * Q.s;
+  for s, t being Element of I holds f.(s,t) = g.(s,t)
+  proof
+    let s, t be Element of I;
+    thus f.(s,t) = (1-t) * P.s + t * Q.s by a1
+      .= g.(s,t) by a2;
+  end;
+  hence f = g by Lm0,BINOP_1:2;
+end;
+end;
+
+T90c:
+  for T being non empty convex SubSpace of R^1, a, b being Point of T,
+      P, Q being Path of a,b holds R1Homotopy(P,Q) is continuous
+proof
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q being Path of a,b;
+  set F = R1Homotopy(P,Q);
+  set X = the carrier of T;
+  set E = the carrier of R^1;
+  set PI = [:P,id I[01]:];
+  set QI = [:Q,id I[01]:];
+a2: the carrier of T is Subset of the carrier of R^1 by TSEP_1:1;
+  then reconsider G = F as map of [:I[01],I[01]:],R^1 by FUNCT_2:9;
+  a in the carrier of T & b in the carrier of T;
+  then reconsider a1 = a, b1 = b as Point of R^1 by a2;
+  a,b are_connected by BORSUK_6:47;
+  then reconsider P1 = P, Q1 = Q as Path of a1,b1 by Tlo;
+  set P1I = [:P1,id I[01]:];
+  set Q1I = [:Q1,id I[01]:];
+xA5: P1I is continuous & Q1I is continuous by BORSUK_2:12;
+  defpred Fa[Element of E,Element of I,set] means $3 = (1-$2)*$1;
+  defpred Fb[Element of E,Element of I,set] means $3 = $2*$1;
+l1: for x being Element of E for y being Element of I
+    ex z being Element of E st Fa[x,y,z]
+  proof
+    let x be Element of E,
+        y be Element of I;
+    (1-y)*x in REAL by XREAL_0:def 1;
+    hence thesis by TOPMETR:24;
+  end;
+  consider Pa being Function of [:E,I:],E such that
+xA1: for x being Element of E, i being Element of I holds Fa[x,i,Pa. [x,i]]
+    from FUNCT_2:sch 7(l1);
+l2: for x being Element of E for y being Element of I
+      ex z being Element of E st Fb[x,y,z]
+  proof
+    let x be Element of E,
+        y be Element of I;
+    y*x in REAL by XREAL_0:def 1;
+    hence thesis by TOPMETR:24;
+  end;
+  consider Pb being Function of [:E,I:],E such that
+xA2: for x being Element of E, i being Element of I holds Fb[x,i, Pb. [x,i]]
+   from FUNCT_2:sch 7(l2);
+  reconsider Pa, Pb as map of [:R^1,I[01]:],R^1 by Lm2;
+yA1: for x being Element of E, i being Element of I holds Pa.(x,i) = (1-i)*x
+  proof
+    let x be Element of E, i be Element of I;
+    thus Pa.(x,i) = Pa. [x,i] by BINOP_1:def 1
+    .= (1-i)*x by xA1;
+  end;
+  for x being Element of E, i being Element of I holds Pb.(x,i) = i*x
+  proof
+    let x be Element of E, i be Element of I;
+    thus Pb.(x,i) = Pb. [x,i] by BINOP_1:def 1
+    .= i*x by xA2;
+  end;
+  then Pa is continuous & Pb is continuous by yA1,TT100,TT101;
+  then
+xA3: Pa*P1I is continuous & Pb*Q1I is continuous by xA5,TOPS_2:58;
+jj:  for p being Point of [:I[01],I[01]:] holds G.p = (Pa*P1I).p + (Pb*Q1I).p
+  proof
+    let p be Point of [:I[01],I[01]:];
+    consider s, t being Point of I[01] such that
+a1:   p = [s,t] by BORSUK_1:50;
+a4: dom P = I by FUNCT_2:def 1;
+a7: dom Q = I by FUNCT_2:def 1;
+a6: (id I[01]).t = t by GRCAT_1:11;
+a2: (Pa*PI).p = Pa.(PI.p) by FUNCT_2:21
+      .= Pa. [P.s,t] by a1,a4,a6,Lm3,FUNCT_3:def 9
+      .= (1-t) * P1.s by xA1;
+k1: (Pb*QI).p = Pb.(QI.p) by FUNCT_2:21
+      .= Pb. [Q.s,t] by a1,a7,a6,Lm3,FUNCT_3:def 9
+      .= t * Q1.s by xA2;
+    reconsider a1 = P.s, b1 = Q.s as Point of R^1 by TOPMETR:2;
+    F.(s,t) = (1-t) * a1 + t * b1 by def12;
+    hence G.p = (Pa*P1I).p + (Pb*Q1I).p by a2,k1,a1,BINOP_1:def 1;
+  end;
+  consider g being map of [:I[01],I[01]:],R^1 such that
+Z1:  for p being Point of [:I[01],I[01]:],r1,r2 being real number st
+      (Pa*P1I).p=r1 & (Pb*Q1I).p=r2 holds g.p=r1+r2 and
+Z2: g is continuous by xA3,JGRAPH_2:29;
+  for p being Point of [:I[01],I[01]:] holds G.p = g.p
+  proof
+    let p be Point of [:I[01],I[01]:];
+    thus G.p = (Pa*P1I).p + (Pb*Q1I).p by jj
+      .= g.p by Z1;
+  end;
+  then G = g by FUNCT_2:113;
+  hence F is continuous by Z2,TOPMETR:8;
+end;
+  
+T90k:
+  for T being non empty convex SubSpace of R^1,
+      a, b being Point of T,
+      P, Q being Path of a,b holds
+  for s being Point of I[01] holds R1Homotopy(P,Q).(s,0) = P.s &
+                                   R1Homotopy(P,Q).(s,1) = Q.s &
+  for t being Point of I[01] holds R1Homotopy(P,Q).(0,t) = a &
+                                   R1Homotopy(P,Q).(1,t) = b
+proof
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  set F = R1Homotopy(P,Q);
+  let s be Point of I[01];
+  thus F.(s,0) = (1-0) * P.s + 0 * Q.s by def12,BORSUK_1:def 17
+    .= P.s;
+  thus F.(s,1) = (1-1) * P.s + 1 * Q.s by def12,BORSUK_1:def 18
+    .= Q.s;
+  let t be Point of I[01];
+A2: P.0[01] = a by BORSUK_1:def 17,BORSUK_2:def 3;
+A3: Q.0[01] = a by BORSUK_1:def 17,BORSUK_2:def 3;
+A4: P.1[01] = b by BORSUK_1:def 18,BORSUK_2:def 3;
+A5: Q.1[01] = b by BORSUK_1:def 18,BORSUK_2:def 3;
+  thus F.(0,t) = (1-t) * P.0[01] + t * Q.0[01] by def12,BORSUK_1:def 17
+    .= a by A2,A3;
+  thus F.(1,t) = (1-t) * P.1[01] + t * Q.1[01] by def12,BORSUK_1:def 18
+    .= b by A4,A5;
+end;
+
+theorem T90:
+  for T being non empty convex SubSpace of R^1,
+      a, b being Point of T,
+      P, Q being Path of a,b holds
+  P, Q are_homotopic
+proof
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  take F = R1Homotopy(P,Q);
+  thus F is continuous by T90c;
+  thus thesis by T90k;
+end;
+
+definition
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  redefine func R1Homotopy(P,Q) -> Homotopy of P,Q;
+coherence
+proof
+  thus P, Q are_homotopic by T90;
+  thus R1Homotopy(P,Q) is continuous by T90c;
+  thus thesis by T90k;
+end;
+end;
+
+registration
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  cluster -> continuous Homotopy of P,Q;
+coherence
+proof
+  let F be Homotopy of P,Q;
+  P, Q are_homotopic by T90;
+  hence F is continuous by BORSUK_6:def 13;
+end;
+end;
+
+theorem T91:
+  for T being non empty convex SubSpace of R^1,
+      a being Point of T,
+      C being Loop of a holds
+   the carrier of pi_1(T,a) = { Class(EqRel(T,a),C) }
+proof
+  let T be non empty convex SubSpace of R^1,
+      a be Point of T,
+      C be Loop of a;
+  set E = EqRel(T,a);
+  hereby
+    let x be set;
+    assume x in the carrier of pi_1(T,a);
+    then consider P being Loop of a such that
+a3:   x = Class(E,P) by TOPALG_1:48;
+    P,C are_homotopic by T90;
+    then x = Class(E,C) by a3,TOPALG_1:47;
+    hence x in { Class(E,C) } by TARSKI:def 1;
+  end;
+  let x be set;
+  assume x in { Class(E,C) };
+  then
+a2: x = Class(E,C) by TARSKI:def 1;
+  C in Loops a by TOPALG_1:def 1;
+  then x in Class E by a2,EQREL_1:def 5;
+  hence thesis by TOPALG_1:def 3;
+end;
+  
+registration
+  let T be non empty convex SubSpace of R^1,
+      a be Point of T;
+  cluster pi_1(T,a) -> trivial;
+coherence
+proof
+  set E = EqRel(T,a);
+  consider C being constant Loop of a;
+a1: the carrier of pi_1(T,a) = Class E by TOPALG_1:def 3;
+  then { Class(E,C) } = Class E by T91;
+  hence thesis by a1,REALSET1:def 13;
+end;
+end;
+
+theorem
+  a <= b implies
+  for x, y being Point of Closed-Interval-TSpace(a,b),
+      P, Q being Path of x,y holds
+  P, Q are_homotopic
+proof
+  assume
+a1: a <= b;  
+  let x, y be Point of Closed-Interval-TSpace(a,b),
+      P, Q be Path of x,y;
+  Closed-Interval-TSpace(a,b) is convex by a1,To;
+  hence thesis by T90;
+end;
+
+theorem
+  a <= b implies
+  for x being Point of Closed-Interval-TSpace(a,b),
+      C being Loop of x holds 
+  the carrier of pi_1(Closed-Interval-TSpace(a,b),x) =
+  { Class(EqRel(Closed-Interval-TSpace(a,b),x),C) }
+proof
+  assume
+a1: a <= b;
+  let x be Point of Closed-Interval-TSpace(a,b),
+      C be Loop of x;
+  Closed-Interval-TSpace(a,b) is convex by a1,To;
+  hence thesis by T91;
+end;
+
+theorem
+  for x, y being Point of I[01],
+      P, Q being Path of x,y holds
+  P, Q are_homotopic by Tcc,T90;
+
+theorem T91a:
+  for x being Point of I[01],
+      C being Loop of x holds 
+  the carrier of pi_1(I[01],x) = { Class(EqRel(I[01],x),C) } by Tcc,T91;
+  
+registration
+  let x be Point of I[01];
+  cluster pi_1(I[01],x) -> trivial;
+coherence
+proof
+  set E = EqRel(I[01],x);
+  consider C being constant Loop of x;
+a1: the carrier of pi_1(I[01],x) = Class E by TOPALG_1:def 3;
+  then { Class(E,C) } = Class E by T91a;
+  hence thesis by a1,REALSET1:def 13;
+end;
+end;
+

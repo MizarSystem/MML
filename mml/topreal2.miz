@@ -21,7 +21,7 @@ environ
  theorems AXIOMS, BORSUK_1, COMPTS_1, ENUMSET1, EUCLID, FUNCT_1, FUNCT_2,
       HEINE, PCOMPS_1, PRE_TOPC, RCOMP_1, REAL_1, TARSKI, TOPMETR, TOPMETR2,
       TOPS_2, ZFMISC_1, TOPREAL1, RELAT_1, RELSET_1, GRCAT_1, XBOOLE_0,
-      XBOOLE_1;
+      XBOOLE_1, STRUCT_0;
 
 begin
 
@@ -4436,3 +4436,82 @@ A3:  P1 is_an_arc_of p1,p2 & P2 is_an_arc_of p1,p2 &
  end;
  thus thesis by Lm27;
 end;
+
+Th4:
+  for S being 1-sorted, T being 1-sorted, f being map of S, T st
+  S is empty & rng f = [#]T holds T is empty
+proof
+  let S be 1-sorted,
+  T be 1-sorted,
+  f be map of S, T such that
+A0: S is empty and  
+A1: rng f = [#]T;
+  assume T is non empty;
+  then reconsider T as non empty 1-sorted;
+  consider y being set such that
+  A2:   y in the carrier of T by XBOOLE_0:def 1;
+  y in rng f by A1,A2,PRE_TOPC:12;
+  then
+A3: ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+  the carrier of T is non empty;
+  then dom f = the carrier of S by FUNCT_2:def 1;
+  hence contradiction by A3,A0,STRUCT_0:def 1;
+end;
+
+Th5:
+  for S being 1-sorted, T being 1-sorted, f being map of S, T st
+  T is empty & dom f = [#]S holds S is empty
+proof
+  let S be 1-sorted,
+  T be 1-sorted,
+  f be map of S, T such that
+  A0: T is empty and
+  A1: dom f = [#]S;
+  assume S is non empty;
+  then reconsider S as non empty 1-sorted;
+  consider x being set such that
+  A2:   x in the carrier of S by XBOOLE_0:def 1;
+  x in dom f by A1,A2,PRE_TOPC:12;
+  then
+  A3: f.x in rng f by FUNCT_1:def 5;
+  rng f c= the carrier of T by RELSET_1:12;
+  hence thesis by A0,A3,STRUCT_0:def 1;
+end;
+
+Lm00:
+for S, T being TopStruct st
+ex f being map of S,T st f is_homeomorphism
+holds S is empty iff T is empty
+proof
+  let S, T be TopStruct;
+  given f being map of S, T such that
+    A2:   f is_homeomorphism;
+    rng f = [#]T & dom f = [#]S by A2,TOPS_2:def 5;
+    hence thesis by Th4,Th5;
+end;
+
+registration
+ cluster being_simple_closed_curve -> non empty compact Subset of TOP-REAL 2;
+coherence
+  proof
+    let P be Subset of TOP-REAL 2;
+    given f being map of (TOP-REAL 2)|R^2-unit_square, (TOP-REAL 2)|P
+     such that
+     A1: f is_homeomorphism;
+     a1:   (TOP-REAL 2)|R^2-unit_square is compact by Th2,COMPTS_1:12;
+     thus P is non empty
+     proof
+       assume
+b1:      P is empty;
+the carrier of ((TOP-REAL 2)|P) = [#]((TOP-REAL 2)|P) by PRE_TOPC:12
+.= P by PRE_TOPC:def 10;
+       then (TOP-REAL 2)|P is empty by b1,STRUCT_0:def 1;
+       hence thesis by A1,Lm00;
+     end;
+    then reconsider R = P as non empty Subset of TOP-REAL 2;
+         f is continuous & rng f = [#]((TOP-REAL 2)|P) by A1,TOPS_2:def 5;
+    then (TOP-REAL 2)|R is compact by a1,COMPTS_1:23;
+    hence P is compact by COMPTS_1:12;
+  end;
+end;
+

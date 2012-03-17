@@ -17,13 +17,13 @@ environ
  constructors REAL_1, NAT_1, ABSVALUE, SQUARE_1, FINSEQOP, TOPREAL1, FINSEQ_4,
       INT_1, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0;
  clusters FUNCT_1, RELSET_1, STRUCT_0, EUCLID, XREAL_0, FINSEQ_1, INT_1,
-      MEMBERED, ZFMISC_1, XBOOLE_0;
+      MEMBERED, ZFMISC_1, XBOOLE_0, SQUARE_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, TOPREAL1, FUNCT_1, XBOOLE_0;
  theorems TARSKI, AXIOMS, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE,
       SEQ_2, SQUARE_1, FINSEQ_2, METRIC_1, RVSUM_1, REAL_2, EUCLID, TOPREAL1,
       FINSEQ_3, FINSEQ_4, CQC_THE1, PROB_1, GROUP_5, PARTFUN2, TBSP_1, RELAT_1,
-      INT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+      INT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_0;
 
 begin
 
@@ -153,30 +153,51 @@ the carrier of TOP-REAL n = the carrier of Euclid n
    .= the carrier of Euclid n by Lm1;
  end;
 
- reserve r,r1,r2,lambda,s,s1,s2 for Real;
-
+reserve lambda for Real;
+ 
 canceled;
 
 theorem Th15:
-r1 < s1 implies {p1: p1`1=r & r1<=p1`2 & p1`2<=s1} = LSeg(|[r,r1]|,|[r,s1]|)
- proof assume
-  A1: r1 < s1;
+r1 <= s1 implies {p1: p1`1=r & r1<=p1`2 & p1`2<=s1} = LSeg(|[r,r1]|,|[r,s1]|)
+proof
+  assume
+a1:  r1 <= s1;
+then
+A4: s1 - r1 >= r1 - r1 by REAL_1:92;
   set L = { p3 : p3`1 = r & r1 <= p3`2 & p3`2 <= s1},
       p = |[ r,r1 ]|,
       q = |[ r,s1 ]|;
   A2: p`1 = r & p`2 = r1 by EUCLID:56;
   A3: q`1 = r & q`2 = s1 by EUCLID:56;
-  A4: s1 - r1 > 0 by A1,SQUARE_1:11;
   thus L c= LSeg(p,q)
-   proof let x; assume x in L; then consider p2 such that
+proof
+  per cases by a1,REAL_1:def 5;
+  suppose
+    a2:  r1 = s1;
+    L c= {p}
+    proof
+     let x; assume x in L; then consider p2 such that
+     A5: x = p2 and
+     A6: p2`1 = r & r1 <= p2`2 & p2`2 <= s1;
+     p`2 = p2`2 by a2,A2,A6,AXIOMS:21;
+     then p2 = p by A2,A6,Th11;
+     hence x in {p} by A5,TARSKI:def 1;
+    end;
+    hence thesis by a2,TOPREAL1:7;
+  end;
+  suppose r1 < s1;
+then
+A4: s1 - r1 > 0 by SQUARE_1:11;
+  let x; assume x in L; then consider p2 such that
     A5: x = p2 & p2`1 = r & r1 <= p2`2 & p2`2 <= s1;
     set t = p2`2,
-        l = (t - r1)/(s1-r1);
+    l = (t - r1)/(s1-r1);
+A0: l is Real by XREAL_0:def 1;
        t - r1 <= s1 - r1 by A5,REAL_1:49;
-    then l <= (s1-r1)/(s1-r1) & (s1-r1) <> 0 by A4,REAL_1:73;
+    then l <= (s1-r1)/(s1-r1) & s1-r1 <> 0 by A4,REAL_1:73;
     then A6: l <= 1 by XCMPLX_1:60;
        r1 - r1 <= t - r1 & r1-r1=0 by A5,REAL_1:49;
-    then A7: 0/(s1-r1) <= l & (s1-r1) <> 0 by A4,REAL_1:73;
+    then A7: 0/(s1-r1) <= l & s1-r1 <> 0 by A4,REAL_1:73;
     A8: ((1-l)*p + l*q)`1 = ((1-l)*p)`1 + (l*q)`1 by Th7
      .= (1-l)* (p`1) + (l*q)`1 by Th9
      .= (1-l)*r + l*r by A2,A3,Th9
@@ -194,11 +215,11 @@ r1 < s1 implies {p1: p1`1=r & r1<=p1`2 & p1`2<=s1} = LSeg(|[r,r1]|,|[r,s1]|)
      .= t*1 by A4,XCMPLX_1:60
      .= p2`2;
     then p2 = (1-l)*p + l*q by A8,Th11;
-    then x in {(1-lambda)*p + lambda*q: 0 <= lambda & lambda <= 1 } by A5,A6,
-A7
-;
+    then x in {(1-lambda)*p + lambda*q: 0 <= lambda & lambda <= 1 }
+    by A0,A5,A6,A7;
     hence x in LSeg(|[ r,r1 ]|,|[ r,s1 ]|) by TOPREAL1:def 4;
-   end;
+  end;
+  end;
   let x; assume x in LSeg(p,q);
   then x in {(1-lambda)*p + lambda*q: 0 <= lambda & lambda <= 1 } by TOPREAL1:
 def 4;
@@ -221,22 +242,42 @@ def 4;
  end;
 
 theorem Th16:
-r1 < s1 implies {p1: p1`2=r & r1<=p1 `1 & p1 `1<=s1} = LSeg(|[r1,r]|,|[s1,r]|)
+r1 <= s1 implies {p1: p1`2=r & r1<=p1`1 & p1`1<=s1} = LSeg(|[r1,r]|,|[s1,r]|)
  proof assume
-  A1: r1 < s1;
+  a1: r1 <= s1;
+then
+A4: s1 - r1 >= r1 - r1 by REAL_1:92;
   set L = {p3 : p3`2 = r & r1 <= p3`1 & p3`1 <= s1},
       p = |[ r1,r]|,
       q = |[ s1,r]|;
   A2: p`1 = r1 & p`2 = r by EUCLID:56;
   A3: q`1 = s1 & q`2 = r by EUCLID:56;
-  A4: s1 - r1 > 0 by A1,SQUARE_1:11;
   thus L c= LSeg(p,q)
-   proof let x; assume x in L; then consider p2 such that
+proof
+  per cases by a1,REAL_1:def 5;
+  suppose
+    a2:  r1 = s1;
+    L c= {p}
+    proof
+     let x; assume x in L; then consider p2 such that
+     A5: x = p2 and
+     A6: p2`2 = r & r1 <= p2`1 & p2`1 <= s1;
+     p`1 = p2`1 by a2,A2,A6,AXIOMS:21;
+     then p2 = p by A2,A6,Th11;
+     hence x in {p} by A5,TARSKI:def 1;
+    end;
+    hence thesis by a2,TOPREAL1:7;
+  end;
+  suppose r1 < s1;
+then
+  A4: s1 - r1 > 0 by SQUARE_1:11;
+  let x; assume x in L; then consider p2 such that
     A5: x = p2 & p2`2 = r & r1 <= p2`1 & p2`1 <= s1;
     set t = p2`1,
         l = (t - r1)/(s1-r1);
+A0: l is Real by XREAL_0:def 1;
        t - r1 <= s1 - r1 by A5,REAL_1:49;
-    then l <= (s1-r1)/(s1-r1) & (s1-r1) <> 0 by A4,REAL_1:73;
+    then l <= (s1-r1)/(s1-r1) & s1-r1 <> 0 by A4,REAL_1:73;
     then A6: l <= 1 by XCMPLX_1:60;
        r1 - r1 <= t - r1 & r1-r1=0 by A5,REAL_1:49;
     then A7: 0/(s1-r1) <= l & (s1-r1) <> 0 by A4,REAL_1:73;
@@ -257,11 +298,11 @@ r1 < s1 implies {p1: p1`2=r & r1<=p1 `1 & p1 `1<=s1} = LSeg(|[r1,r]|,|[s1,r]|)
      .= t*1 by A4,XCMPLX_1:60
      .= p2`1;
     then p2 = (1-l)*p + l*q by A8,Th11;
-    then x in {(1-lambda)*p + lambda*q: 0 <= lambda & lambda <= 1 } by A5,A6,
-A7
-;
+    then x in {(1-lambda)*p + lambda*q: 0 <= lambda & lambda <= 1 }
+     by A0,A5,A6,A7;
     hence x in LSeg(|[r1,r]|,|[s1,r]|) by TOPREAL1:def 4;
-   end;
+  end;
+  end;
   let x; assume x in LSeg(p,q);
   then x in {(1-lambda)*p + lambda*q: 0 <= lambda & lambda <= 1 } by TOPREAL1:
 def 4;
@@ -319,8 +360,7 @@ theorem
     hence p`2 = r by EUCLID:56;
    end;
    suppose r1>s1;
-    then LSeg(|[r1,r]|,|[s1,r]|) = {q: q`2 = r & s1<=q`1 & q`1<=r1} by Th16
-;
+    then LSeg(|[r1,r]|,|[s1,r]|) = {q: q`2 = r & s1<=q`1 & q`1<=r1} by Th16;
     then ex p1 st p1=p & p1`2 = r & s1<=p1`1 & p1`1<=r1 by A1;
     hence p`2=r;
  end;
@@ -530,11 +570,11 @@ theorem
  end;
 
 theorem Th28:
-for r being Real, p1,p2 being Point of TOP-REAL n, u being Point of Euclid n
+for p1,p2 being Point of TOP-REAL n, u being Point of Euclid n
  st p1 in Ball(u,r) & p2 in Ball(u,r) holds
     LSeg(p1,p2) c= Ball(u,r)
-proof let r be Real, p1,p2 be Point of TOP-REAL n, u be Point of Euclid n
-; assume
+    proof let p1,p2 be Point of TOP-REAL n, u be Point of Euclid n;
+      assume
   A1: p1 in Ball(u,r) & p2 in Ball(u,r);
   then reconsider p'=p1 as Point of Euclid n;
   A2:dist(p',u)<r by A1,METRIC_1:12;
@@ -632,6 +672,7 @@ p in Ball(u,r)
   A3: p2=|[r2,s2]| and
   A4: p=|[r2,s1]| and
   A5: p2 in Ball(u,r);
+  reconsider r1,s1,r2,s2 as Real by XREAL_0:def 1;
      p2 in {u6 where u6 is Element of Euclid 2:dist(u,u6)<r}
                                     by A5,METRIC_1:18;
   then A6: ex u5 st u5 = p2 & dist(u,u5)<r;
@@ -724,7 +765,8 @@ theorem
 theorem
    r1 <> s1 & s2 <> r2 & |[r1,r2]| in Ball(u,r) & |[s1,s2]| in Ball(u,r)
 implies |[r1,s2]| in Ball(u,r) or |[s1,r2]| in Ball(u,r)
- proof assume
+proof
+  assume
   A1: r1<>s1 & s2<>r2 & |[r1,r2]| in Ball(u,r) & |[s1,s2]| in Ball(u,r);
 then A2: r > 0 by TBSP_1:17;
    per cases;
@@ -836,7 +878,7 @@ theorem
        then A3: x in l23 & x in l by XBOOLE_0:def 3;
        then x in {(1-lambda)*p2+lambda*p3: 0 <=lambda & lambda <= 1 }
         by TOPREAL1:def 4;
-       then consider s1 such that
+       then consider s1 being Real such that
        A4: (1-s1)*p2 + s1*p3=x & 0<=s1 & s1<=1;
        set t = (1-s1)*p2 + s1*p3;
        A5: t`1 = ((1-s1)*p2) `1 + (s1*p3) `1 by Th7
@@ -846,7 +888,7 @@ theorem
        .= p2 `1;
           x in {(1-lambda)*q+lambda*p2: 0 <=lambda & lambda <= 1 }
         by A3,TOPREAL1:def 4;
-       then consider s2 such that
+       then consider s2 being Real such that
        A6: (1-s2)*q + s2*p2=x & 0 <= s2 & s2 <= 1;
        A7: ((1-s2)*q + s2*p2) `2 = ((1-s2)*q) `2 + (s2*p2) `2 by Th7
        .= (1-s2)*(q`2) + (s2*p2) `2 by Th9
@@ -867,7 +909,7 @@ theorem
      A11: x in l3 & x in l by A10,XBOOLE_0:def 3;
      then x in {(1-lambda)*p3+lambda*p: 0 <=lambda & lambda <= 1 }
       by TOPREAL1:def 4;
-     then consider s1 such that
+     then consider s1 being Real such that
      A12: x = (1-s1)*p3 + s1*p & 0 <= s1 & s1 <= 1;
      A13: ((1-s1)*p3 + s1*p)`2 = ((1-s1)*p3) `2 + (s1*p) `2 by Th7
        .= (1-s1)*(p3 `2) + (s1*p) `2 by Th9
@@ -876,7 +918,7 @@ theorem
        .= p `2;
         x in {(1-lambda)*q+lambda*p2: 0 <=lambda & lambda <= 1 }
       by A11,TOPREAL1:def 4;
-     then consider s2 such that
+     then consider s2 being Real such that
      A14: x = (1-s2)*q + s2*p2 & 0 <= s2 & s2 <= 1;
         ((1-s2)*q + s2*p2) `2 = ((1-s2)*q) `2 + (s2*p2) `2 by Th7
      .= (1-s2)*(q`2) + (s2*p2) `2 by Th9
@@ -905,7 +947,7 @@ theorem
        then A3: x in l23 & x in l by XBOOLE_0:def 3;
        then x in {(1-lambda)*p2+lambda*p3: 0 <=lambda & lambda <= 1 }
         by TOPREAL1:def 4;
-       then consider s1 such that
+       then consider s1 being Real such that
        A4: x = (1-s1)*p2 + s1*p3 & 0 <= s1 & s1 <= 1;
        set t = (1-s1)*p2 + s1*p3;
        A5: t`2 = ((1-s1)*p2) `2 + (s1*p3) `2 by Th7
@@ -915,7 +957,7 @@ theorem
        .= p2 `2;
           x in {(1-lambda)*q+lambda*p2: 0 <=lambda & lambda <= 1 }
         by A3,TOPREAL1:def 4;
-       then consider s2 such that
+       then consider s2 being Real such that
        A6: x = (1-s2)*q + s2*p2 & 0 <= s2 & s2 <= 1;
        A7: ((1-s2)*q + s2*p2) `1 = ((1-s2)*q) `1 + (s2*p2) `1 by Th7
        .= (1-s2)*(q`1) + (s2*p2) `1 by Th9

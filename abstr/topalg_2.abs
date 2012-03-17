@@ -1,0 +1,264 @@
+:: The Fundamental Group of Convex Subspaces of TOP-REAL n
+::  by Artur Korni{\l}owicz
+:: 
+:: Received April 20, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PRE_TOPC, EUCLID, ORDINAL2, RELAT_1, ARYTM_1, TOPALG_2,
+      SUBSET_1, BORSUK_1, TOPALG_1, GRAPH_1, ALGSTR_1, SEQM_3, BORSUK_2,
+      EQREL_1, WAYBEL20, BORSUK_6, JORDAN1, TOPREAL1, TOPS_2, REALSET1,
+      TOPMETR, ARYTM, FINSEQ_1, FINSEQ_4, RCOMP_1, MEMBERED, TREAL_1, SEQ_1,
+      ARYTM_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, MEMBERED, EQREL_1,
+      NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, FINSEQ_4, RVSUM_1, FUNCOP_1, SEQM_3,
+      STRUCT_0, PRE_TOPC, VECTSP_1, GROUP_1, GR_CY_1, GROUP_6, GRCAT_1,
+      BORSUK_1, TOPS_2, TOPREAL1, METRIC_1, RCOMP_1, RCOMP_2, TREAL_1, TOPMETR,
+      EUCLID, TOPRNS_1, JORDAN1, JORDAN2B, KNASTER, BORSUK_2, BORSUK_6,
+      TOPALG_1;
+ constructors NAT_1, EUCLID, BORSUK_1, JGRAPH_6, TOPRNS_1, JORDAN2C, GRCAT_1,
+      ABIAN, KNASTER, TOPALG_1, SEQM_3, GR_CY_1, REALSET1, PARTFUN2, FINSEQ_4,
+      JORDAN1, TOPREAL1, REAL_1, TOPS_2, ABSVALUE, JGRAPH_2, T_0TOPSP,
+      MEMBERED, QUIN_1, POLYEQ_1, SQUARE_1, TOPS_1, CONNSP_1, URYSOHN1,
+      JORDAN2B, BINARITH, RCOMP_1, SEQ_4, TREAL_1, RCOMP_2, COMPTS_1;
+ clusters STRUCT_0, EUCLID, RELSET_1, ARYTM_3, XREAL_0, REAL_1, BORSUK_1,
+      PRE_TOPC, SUBSET_1, XCMPLX_0, NUMBERS, XBOOLE_0, FUNCT_1, TOPALG_1,
+      POLYEQ_1, BORSUK_2, GROUP_1, SCMRING3, FINSET_1, TOPREAL1, JORDAN5A,
+      TEX_2, QUIN_1, SQUARE_1, METRIC_1, TOPS_1, BINARITH, JORDAN6, TOPMETR,
+      BORSUK_5, BORSUK_6;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Convex subspaces of TOP-REAL n
+
+reserve
+  n for Nat,
+  a, b for real number;
+
+registration
+  let n;
+  cluster non empty convex Subset of TOP-REAL n;
+end;
+
+definition
+  let n be Nat, T be SubSpace of TOP-REAL n;
+  attr T is convex means
+:: TOPALG_2:def 1
+  [#]T is convex Subset of TOP-REAL n;
+end;
+
+registration
+  let n be Nat;
+  cluster convex -> arcwise_connected (non empty SubSpace of TOP-REAL n);
+end;
+
+registration
+  let n be Nat;
+  cluster strict non empty convex SubSpace of TOP-REAL n;
+end;
+
+theorem :: TOPALG_2:1
+  for X being non empty TopSpace, Y being non empty SubSpace of X,
+      x1, x2 being Point of X, y1, y2 being Point of Y,
+      f being Path of y1,y2 st x1 = y1 & x2 = y2 & y1,y2 are_connected holds
+   f is Path of x1,x2;
+
+definition
+  let n be Nat,
+      T being non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  func ConvexHomotopy(P,Q) -> map of [:I[01],I[01]:], T means
+:: TOPALG_2:def 2
+  for s, t being Element of I[01],
+      a1, b1 being Point of TOP-REAL n st a1 = P.s & b1 = Q.s holds
+   it.(s,t) = (1-t) * a1 + t * b1;
+end;
+
+theorem :: TOPALG_2:2
+  for T being non empty convex SubSpace of TOP-REAL n,
+      a, b being Point of T,
+      P, Q being Path of a,b holds
+  P, Q are_homotopic;
+
+definition
+  let n be Nat,
+      T be non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  redefine func ConvexHomotopy(P,Q) -> Homotopy of P,Q;
+end;
+
+registration
+  let n be Nat,
+      T be non empty convex SubSpace of TOP-REAL n,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  cluster -> continuous Homotopy of P,Q;
+end;
+
+theorem :: TOPALG_2:3
+  for T being non empty convex SubSpace of TOP-REAL n,
+      a being Point of T,
+      C being Loop of a holds
+  the carrier of pi_1(T,a) = { Class(EqRel(T,a),C) };
+
+registration
+  let n be Nat,
+      T be non empty convex SubSpace of TOP-REAL n,
+      a be Point of T;
+  cluster pi_1(T,a) -> trivial;
+end;
+
+begin :: Convex subspaces of R^1
+
+theorem :: TOPALG_2:4
+  Proj(|[a]|,1) = a;
+
+registration
+  cluster -> real-membered SubSpace of R^1;
+end;
+
+theorem :: TOPALG_2:5
+  a <= b implies
+  [.a,b.] = { (1-l)*a + l*b where l is Real: 0 <= l & l <= 1 };
+
+theorem :: TOPALG_2:6
+  for F being map of [:R^1,I[01]:], R^1 st
+   for x being Point of R^1, i being Point of I[01] holds
+    F.(x,i) = (1-i) * x holds
+  F is continuous;
+
+theorem :: TOPALG_2:7
+  for F being map of [:R^1,I[01]:], R^1 st
+  for x being Point of R^1, i being Point of I[01] holds F.(x,i) = i * x
+  holds F is continuous;
+
+definition
+  let P be Subset of R^1;
+  attr P is convex means
+:: TOPALG_2:def 3
+  for a, b being Point of R^1 st a in P & b in P holds [. a,b .] c= P;
+end;
+
+registration
+  cluster non empty convex Subset of R^1;
+  cluster empty -> convex Subset of R^1;
+end;
+
+theorem :: TOPALG_2:8
+  [.a,b.] is convex Subset of R^1;
+
+theorem :: TOPALG_2:9
+  ].a,b.[ is convex Subset of R^1;
+
+theorem :: TOPALG_2:10
+  [.a,b.[ is convex Subset of R^1;
+
+theorem :: TOPALG_2:11
+  ].a,b.] is convex Subset of R^1;
+
+definition
+  let T be SubSpace of R^1;
+  attr T is convex means
+:: TOPALG_2:def 4
+  [#]T is convex Subset of R^1;
+end;
+
+registration
+  cluster strict non empty convex SubSpace of R^1;
+end;
+
+definition
+  redefine func R^1 -> strict convex SubSpace of R^1;
+end;
+
+theorem :: TOPALG_2:12
+  for T being non empty convex SubSpace of R^1,
+      a, b being Point of T holds
+  [. a, b .] c= the carrier of T;
+
+registration
+  cluster convex -> arcwise_connected (non empty SubSpace of R^1);
+end;
+
+theorem :: TOPALG_2:13
+  a <= b implies Closed-Interval-TSpace(a,b) is convex;
+
+theorem :: TOPALG_2:14
+  I[01] is convex;
+
+theorem :: TOPALG_2:15
+  a <= b implies Closed-Interval-TSpace(a,b) is arcwise_connected;
+
+definition
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  func R1Homotopy(P,Q) -> map of [:I[01],I[01]:], T means
+:: TOPALG_2:def 5
+  for s, t being Element of I[01] holds it.(s,t) = (1-t) * P.s + t * Q.s;
+end;
+
+theorem :: TOPALG_2:16
+  for T being non empty convex SubSpace of R^1,
+      a, b being Point of T,
+      P, Q being Path of a,b holds
+  P, Q are_homotopic;
+
+definition
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  redefine func R1Homotopy(P,Q) -> Homotopy of P,Q;
+end;
+
+registration
+  let T be non empty convex SubSpace of R^1,
+      a, b be Point of T,
+      P, Q be Path of a,b;
+  cluster -> continuous Homotopy of P,Q;
+end;
+
+theorem :: TOPALG_2:17
+  for T being non empty convex SubSpace of R^1,
+      a being Point of T,
+      C being Loop of a holds
+   the carrier of pi_1(T,a) = { Class(EqRel(T,a),C) };
+
+registration
+  let T be non empty convex SubSpace of R^1,
+      a be Point of T;
+  cluster pi_1(T,a) -> trivial;
+end;
+
+theorem :: TOPALG_2:18
+  a <= b implies
+  for x, y being Point of Closed-Interval-TSpace(a,b),
+      P, Q being Path of x,y holds
+  P, Q are_homotopic;
+
+theorem :: TOPALG_2:19
+  a <= b implies
+  for x being Point of Closed-Interval-TSpace(a,b),
+      C being Loop of x holds
+  the carrier of pi_1(Closed-Interval-TSpace(a,b),x) =
+  { Class(EqRel(Closed-Interval-TSpace(a,b),x),C) };
+
+theorem :: TOPALG_2:20
+  for x, y being Point of I[01],
+      P, Q being Path of x,y holds
+  P, Q are_homotopic;
+
+theorem :: TOPALG_2:21
+  for x being Point of I[01],
+      C being Loop of x holds
+  the carrier of pi_1(I[01],x) = { Class(EqRel(I[01],x),C) };
+
+registration
+  let x be Point of I[01];
+  cluster pi_1(I[01],x) -> trivial;
+end;
+
