@@ -6,13 +6,14 @@
 
 environ
 
- vocabularies PRE_TOPC, ARYTM, FUNCT_1, FINSEQ_1, EUCLID, SQUARE_1, RLVECT_1,
-      RLVECT_2, RLVECT_3, RVSUM_1, FINSEQ_2, ARYTM_1, RELAT_1, ARYTM_3,
-      COMPLEX1, ABSVALUE, FUNCT_2, FINSET_1, VALUED_0, EUCLID_2, BHSP_1,
-      VECTSP_1, SEQ_1, REALSET1, BHSP_3, SUBSET_1, BOOLE, SETFAM_1, FINSEQ_4,
-      XREAL_0, ORDINAL2, REAL_NS1, ALGSTR_0, MATRIXR2, RLSUB_1, PARTFUN1,
-      CQC_LANG, CARD_1, MATRIX_7, RFINSEQ, MATRLIN, VECTSP_9, SGRAPH1,
-      RFINSEQ2, FINSEQ_7, MONOID_0, EUCLID_7, SUPINF_1, FUNCOP_1, FUNCSDOM;
+ vocabularies NUMBERS, NAT_1, XREAL_0, ORDINAL1, SUBSET_1, FINSEQ_2, PRE_TOPC,
+      EUCLID, VALUED_0, FINSEQ_1, FUNCT_1, RELAT_1, XBOOLE_0, TARSKI, FUNCT_2,
+      CARD_1, ARYTM_1, ARYTM_3, REAL_1, PARTFUN1, ZFMISC_1, ORDINAL2, XXREAL_0,
+      RLVECT_1, RLSUB_1, STRUCT_0, SUPINF_2, ALGSTR_0, REALSET1, MONOID_0,
+      FUNCT_7, AFINSQ_1, RFINSEQ2, CLASSES1, RVSUM_1, COMPLEX1, SQUARE_1,
+      REWRITE1, SETFAM_1, CARD_3, ORDINAL4, MATRIXR2, BINOP_2, XCMPLX_0,
+      REAL_NS1, VALUED_1, RLVECT_2, MATRIX_7, FUNCOP_1, FUNCSDOM, RLVECT_3,
+      FINSET_1, RLVECT_5, EUCLID_7;
  notations XBOOLE_0, TARSKI, RELAT_1, FUNCT_1, RVSUM_1, RELSET_1, PARTFUN1,
       CARD_1, FUNCT_2, FUNCT_3, ORDINAL1, CLASSES1, NUMBERS, XCMPLX_0, XREAL_0,
       SUBSET_1, COMPLEX1, FINSEQ_1, FINSEQ_2, VALUED_0, VALUED_1, SEQ_1,
@@ -36,8 +37,7 @@ begin :: 1. Preliminaries
 reserve i, j, m, n for Nat,
   x, y, a for real number,
   z, B0, B1 for set,
-  v for
-  Element of n-tuples_on REAL,
+  v for Element of n-tuples_on REAL,
   p, p1, p2, p3, q, q1, q2 for Point of TOP-REAL n,
   f, x0 for real-valued FinSequence;
 
@@ -147,8 +147,7 @@ definition
   attr B0 is R-normal means
 :: EUCLID_7:def 4
 
-  for x being real-valued FinSequence st x in
-  B0 holds |.x.| = 1;
+  for x being real-valued FinSequence st x in B0 holds |.x.| = 1;
 end;
 
 registration
@@ -270,28 +269,22 @@ registration
 end;
 
 definition
-  let n be Nat;
-  let f be FinSequence of REAL n;
-  func Sum f -> Element of REAL n means
+  let n be Nat,f be FinSequence of REAL n;
+  func accum f -> FinSequence of REAL n means
 :: EUCLID_7:def 10
-
-  ex g being FinSequence of REAL
-n st len f=len g & f.1=g.1 & (for i being Nat st 1<=i & i<len f holds g.(i+1)=(
-  g/.i)+(f/.(i+1))) & it=g.len f if len f>0 otherwise it=0*n;
+  len f = len it & f.1 = it.1 &
+  for i being Nat st 1<=i & i<len f holds it.(i+1) = (it/.i) + (f/.(i+1));
 end;
 
 definition
-  let n be Nat,f be FinSequence of REAL n;
-  func accum f -> FinSequence of REAL n means
+  let n be Nat;
+  let f be FinSequence of REAL n;
+  func Sum f -> Element of REAL n equals
 :: EUCLID_7:def 11
-
-  len f = len it & f.1 =
-it.1 & for i being Nat st 1<=i & i<len f holds it.(i+1) = (it/.i) + (f/.(i+1));
+    (accum f).len f if len f > 0 otherwise 0*n;
 end;
 
-theorem :: EUCLID_7:22
-  for f being FinSequence of REAL n st len f>0 holds (accum f).(
-  len f)= Sum f;
+canceled;
 
 theorem :: EUCLID_7:23
   for F, F2 being FinSequence of REAL n, h being Permutation of
@@ -333,8 +326,7 @@ theorem :: EUCLID_7:30
   1<=i & i<=n implies |. Base_FinSeq(n,i) .| = 1;
 
 theorem :: EUCLID_7:31
-  1<=i & i<=n & i<>j implies |( Base_FinSeq(n,i),Base_FinSeq(n,j)
-  )| = 0;
+  1<=i & i<=n & i<>j implies |( Base_FinSeq(n,i),Base_FinSeq(n,j))| = 0;
 
 theorem :: EUCLID_7:32
   for x being Element of REAL n st 1<=i & i<=n holds |( x,
@@ -345,10 +337,8 @@ definition
   let x0 be Element of REAL n;
   func ProjFinSeq x0 -> FinSequence of REAL n means
 :: EUCLID_7:def 12
-
-  len it = n & for i
-being Nat st 1<=i & i<=n holds it.i = |( x0,Base_FinSeq(n,i) )| * Base_FinSeq(n
-  ,i);
+  len it = n & for i being Nat st 1<=i & i<=n holds
+  it.i = |( x0,Base_FinSeq(n,i) )| * Base_FinSeq(n,i);
 end;
 
 theorem :: EUCLID_7:33
@@ -413,8 +403,9 @@ registration
 end;
 
 registration
-  let n be Element of NAT, x be VECTOR of REAL-US n, y be real-valued Function
-  , a, b be Element of REAL;
+  let n be Element of NAT,
+      x be VECTOR of REAL-US n, y be real-valued Function,
+      a, b be Element of REAL;
   identify a*x with b(#)y when x = y, a = b;
 end;
 
@@ -433,11 +424,14 @@ end;
 canceled;
 
 theorem :: EUCLID_7:36
-  for n,j being Element of NAT, F being FinSequence of the carrier
-  of REAL-US n, Bn being Subset of REAL-US n, v0 being Element of REAL-US n,l
-being Linear_Combination of Bn st F is one-to-one & Bn is R-orthogonal & rng F
-= Carrier l & v0 in Bn & j in dom (l (#) F) & v0=F.j holds (Euclid_scalar n).(
-  v0,Sum (l(#)F)) = (Euclid_scalar n).(v0,(l.(F/.j))*v0);
+  for n,j being Element of NAT,
+      F being FinSequence of the carrier of REAL-US n,
+      Bn being Subset of REAL-US n, v0 being Element of REAL-US n,
+      l being Linear_Combination of Bn st
+    F is one-to-one & Bn is R-orthogonal &
+    rng F = Carrier l & v0 in Bn & j in dom (l (#) F) &
+    v0=F.j holds (Euclid_scalar n).(v0,Sum (l(#)F)) =
+    (Euclid_scalar n).(v0,(l.(F/.j))*v0);
 
 theorem :: EUCLID_7:37
   for n being Element of NAT, f being FinSequence of REAL n, g
@@ -488,9 +482,10 @@ theorem :: EUCLID_7:38
   REAL n, a being Real st x in the carrier of X holds a*x in the carrier of X;
 
 theorem :: EUCLID_7:39
-  for X being Subspace of RealVectSpace(Seg n), x,y being Element
-  of REAL n st x in the carrier of X & y in the carrier of X holds x+y in the
-  carrier of X;
+  for X being Subspace of RealVectSpace(Seg n),
+      x,y being Element of REAL n st
+      x in the carrier of X & y in the carrier of X holds
+      x+y in the carrier of X;
 
 theorem :: EUCLID_7:40
   for X being Subspace of RealVectSpace(Seg n), x,y being Element of
@@ -525,8 +520,7 @@ of REAL n,a being Real st Bn is linearly-independent & x in Bn & y in Bn & y=a*
 
 begin :: 6. Finite Dimensionality of the Spaces
 
-registration
-  let n;
+registration let n;
   cluster RN_Base n -> finite;
 end;
 

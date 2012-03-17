@@ -87,7 +87,7 @@ aid optionally specifies its article's name in uppercase.   </a:documentation>
         <ref name="Signature"/>
       </optional>
       <zeroOrMore>
-        <ref name="IdentifyWithExp"/>
+        <ref name="Identify"/>
       </zeroOrMore>
     </element>
   </define>
@@ -648,6 +648,12 @@ the variable (vid) inside.</a:documentation>
       <ref name="Formula"/>
     </element>
   </define>
+  <define name="Choice">
+    <a:documentation>Choice term is defined by the type of its argument,</a:documentation>
+    <element name="Choice">
+      <ref name="Typ"/>
+    </element>
+  </define>
   <define name="QuaTrm">
     <a:documentation>Qua terms capture the retyping term qua type construct,
 but they are probably no longer used on this level.</a:documentation>
@@ -683,6 +689,7 @@ but they are probably no longer used on this level.</a:documentation>
       <ref name="Fraenkel"/>
       <ref name="QuaTrm"/>
       <ref name="It"/>
+      <ref name="Choice"/>
       <ref name="ErrorTrm"/>
     </choice>
   </define>
@@ -757,9 +764,9 @@ can be given.   </a:documentation>
     <a:documentation>Conditional cluster.
 This says that Typ with the first cluster has also the second
 (optionally followed by its extended version created by rounding
-up in current environment).      
+up in current environment).
 Optionally the article id (aid) and order in article (nr)
-can be given.   </a:documentation>
+can be given.</a:documentation>
     <element name="CCluster">
       <optional>
         <attribute name="nr">
@@ -823,19 +830,37 @@ are equal.
 Optionally the article id (aid) and order in article (nr)
 can be given.</a:documentation>
     <element name="Identify">
-      <optional>
-        <attribute name="nr">
-          <data type="integer"/>
-        </attribute>
-        <attribute name="aid">
-          <data type="string"/>
-        </attribute>
-      </optional>
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <attribute name="aid">
+        <data type="string"/>
+      </attribute>
+      <attribute name="constrkind">
+        <choice>
+          <value>K</value>
+          <value>U</value>
+          <value>G</value>
+          <value>V</value>
+          <value>R</value>
+        </choice>
+      </attribute>
       <choice>
         <ref name="ErrorIdentify"/>
         <group>
-          <ref name="ConstrDef"/>
-          <ref name="ConstrDef"/>
+          <zeroOrMore>
+            <ref name="Typ"/>
+          </zeroOrMore>
+          <choice>
+            <group>
+              <ref name="Term"/>
+              <ref name="Term"/>
+            </group>
+            <group>
+              <ref name="Formula"/>
+              <ref name="Formula"/>
+            </group>
+          </choice>
           <element name="EqArgs">
             <zeroOrMore>
               <ref name="Pair"/>
@@ -853,8 +878,8 @@ can be given.</a:documentation>
   </define>
   <define name="IdentifyWithExp">
     <a:documentation>Identification (oriented, currently used version).
-This says to identify anything matching the first term 
-or formula pattern (with ConstrKind and ConstrNr as the top 
+This says to identify anything matching the first term
+or formula pattern (with ConstrKind and ConstrNr as the top
 constructor) with the second pattern (instantiated by the matching).
 The type requirements for the matching (i.e. the loci) are given first.
 Note that this works only one way, if you want it also the other way, the
@@ -1564,6 +1589,7 @@ locally installed html in MIZFILES/html).</a:documentation>
           <ref name="DefTheorem"/>
           <ref name="Definiens"/>
           <ref name="Canceled"/>
+          <ref name="Section"/>
           <ref name="AuxiliaryItem"/>
         </choice>
       </zeroOrMore>
@@ -2028,11 +2054,23 @@ numbering, and original label identifier (vid).</a:documentation>
       <ref name="DefPred"/>
     </choice>
   </define>
+  <define name="Section">
+    <element name="Section">
+      <empty/>
+    </element>
+  </define>
   <define name="Reservation">
     <a:documentation>Reservation of a new variable for a type.
 The type may optionally have presentational info about
-the variable (vid) inside.   </a:documentation>
+the variable (vid) inside.</a:documentation>
     <element name="Reservation">
+      <oneOrMore>
+        <element name="Ident">
+          <attribute name="vid">
+            <data type="integer"/>
+          </attribute>
+        </element>
+      </oneOrMore>
       <ref name="Typ"/>
     </element>
   </define>
@@ -2358,7 +2396,7 @@ could be made more specific for each.</a:documentation>
     <a:documentation>One justified identification registration. The correctness conditions
 could be made more specific.</a:documentation>
     <element name="IdentifyRegistration">
-      <ref name="IdentifyWithExp"/>
+      <ref name="Identify"/>
       <zeroOrMore>
         <ref name="CorrectnessCondition"/>
       </zeroOrMore>
@@ -2402,7 +2440,8 @@ semantically irrelevant and are not printed yet - fix this.</a:documentation>
   <define name="PolyEval">
     <a:documentation>Builtin numerical evaluations of arithmetical functors 
 and predicates. For predicates, the value can be false.
-Arguments are generally polynoms with complex coefficients.   </a:documentation>
+Arguments are generally polynoms with complex coefficients.
+For functors, the last polynom is the result value.</a:documentation>
     <element name="PolyEval">
       <ref name="Position"/>
       <optional>

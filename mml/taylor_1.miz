@@ -6,12 +6,13 @@
 
 environ
 
- vocabularies PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
-      RELAT_1, ABSVALUE, SUBSET_1, ORDINAL2, QC_LANG1, PARTFUN1, LIMFUNC1,
-      FCONT_1, INT_1, RAT_1, SEQ_1, SEQ_2, SEQM_3, RCOMP_1, SEQFUNC, SIN_COS,
-      FDIFF_1, PREPOWER, POWER, SERIES_1, GROUP_1, FINSEQ_4, SUPINF_2,
-      TAYLOR_1, OPPCAT_1;
+ vocabularies NUMBERS, ORDINAL1, INT_1, XREAL_0, RAT_1, PARTFUN1, PREPOWER,
+      FUNCT_1, REAL_1, SUBSET_1, ARYTM_3, RELAT_1, CARD_1, NEWTON, COMPLEX1,
+      XXREAL_0, FDIFF_1, ARYTM_1, RCOMP_1, TARSKI, XBOOLE_0, VALUED_1, SIN_COS,
+      SEQ_2, ORDINAL2, FCONT_1, FUNCT_2, POWER, SERIES_1, REALSET1, NAT_1,
+      CARD_3, LIMFUNC1, SEQFUNC, SEQ_1, XXREAL_1, TAYLOR_1, IRRAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      IRRAT_1,
       LIMFUNC1, RCOMP_1, FCONT_1, XCMPLX_0, XXREAL_0, XREAL_0, COMPLEX1, RAT_1,
       ORDINAL1, NUMBERS, REAL_1, NAT_1, INT_1, NEWTON, VALUED_1, PARTFUN2,
       SEQ_1, SEQ_2, SERIES_1, FDIFF_1, SEQFUNC, PREPOWER, POWER, SIN_COS;
@@ -35,8 +36,7 @@ begin :: The Logarithmic differentiation method
 reserve n for natural number,
   i for Integer,
   p, x, x0, y for real number,
-  q
-  for Rational,
+  q for Rational,
   f for PartFunc of REAL,REAL;
 
 definition
@@ -235,11 +235,10 @@ A20:  y=f.x by FUNCT_1:def 5;
 A21: rng(f) = {1} by A18,XBOOLE_0:def 10;
 A22: dom(f)=[#]REAL by FUNCT_2:def 1;
     then
-A23: dom(f)=[#]REAL & f is_differentiable_on dom(f) by A21,FDIFF_1:19
-    ,FUNCT_2:def 1;
+A23: f is_differentiable_on dom(f) by A21,FDIFF_1:19;
 A24: x is Real by XREAL_0:def 1;
     then (f`|dom(f)) .x = 0 by A21,A22,FDIFF_1:19;
-    hence f is_differentiable_in x & diff(f,x)= 0 * x #Z (0-1) by A24,A23,
+    hence f is_differentiable_in x & diff(f,x)= 0 * x #Z (0-1) by A24,A23,A22,
     FDIFF_1:16,def 8;
   end;
   for n be natural number holds P[n] from NAT_1:sch 2(A15,A1);
@@ -413,8 +412,9 @@ proof
 end;
 
 theorem
-  number_e >= 2
+  number_e > 2
 proof
+A0: number_e is irrational by IRRAT_1:42;
 A1: for th,th1,th2,th3 be real number for n be Element of NAT holds th |^ 0=
 1 & th |^ (2*n)=(th |^ n)|^ 2 & th |^ 1=th & th |^ 2=th * th & (-1)|^(2*n)=1 &(
   -1)|^ (2*n+1)=-1
@@ -484,7 +484,9 @@ A10: Partial_Sums(1 rExpSeq) is convergent by SERIES_1:def 2;
   then lim(Partial_Sums(1 rExpSeq)^\1)=Sum(1 rExpSeq) by A10,SEQ_4:33;
   then Sum(1 rExpSeq)>=2 by A9,A10,SIN_COS:41;
   then exp_R.1 >=2 by SIN_COS:def 26;
-  hence thesis by IRRAT_1:def 7,SIN_COS:def 27;
+  then number_e >= 2 by IRRAT_1:def 7,SIN_COS:def 27;
+  then number_e > 2 or number_e = 2 by XXREAL_0:1;
+  hence thesis by A0;
 end;
 then
 Lm4: number_e > 1 by XXREAL_0:2;

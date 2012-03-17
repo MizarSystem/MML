@@ -39,7 +39,7 @@ IdentifyRegistrations =
  element IdentifyRegistrations {
    attribute aid { xsd:string }?,
    Signature?,
-   IdentifyWithExp*
+   Identify*
    }
 
 ## Definientia, either imported from other articles ( after accommodation)
@@ -309,6 +309,12 @@ Fraenkel =
    Typ*, Term, Formula
  }
 
+## Choice term is defined by the type of its argument,
+Choice =
+ element Choice {
+   Typ
+ }
+
 ## Qua terms capture the retyping term qua type construct,
 ## but they are probably no longer used on this level.
 QuaTrm =
@@ -329,7 +335,7 @@ Term =
    ( Var | LocusVar | FreeVar | LambdaVar
    | Const | InfConst | Num
    | Func | PrivFunc | Fraenkel
-   | QuaTrm | It | ErrorTrm)
+   | QuaTrm | It | Choice | ErrorTrm)
 
 Position = 
    attribute line { xsd:integer},
@@ -349,7 +355,7 @@ ArgTypes =
  element ArgTypes { Typ* }
 
 ## This encodes error during cluster processing
-ErrorCluster =   
+ErrorCluster =
  element ErrorCluster { empty }   
    
 ## Existential (registration) cluster.
@@ -367,10 +373,10 @@ RCluster =
 ## Conditional cluster.
 ## This says that Typ with the first cluster has also the second
 ## (optionally followed by its extended version created by rounding
-## up in current environment).      
+## up in current environment).
 ## Optionally the article id (aid) and order in article (nr)
-## can be given.   
-CCluster =   
+## can be given.
+CCluster =
  element CCluster {
    ( attribute nr { xsd:integer },
      attribute aid { xsd:string } )?,
@@ -398,19 +404,23 @@ FCluster =
 ## can be given.
 Identify =
  element Identify {
-   ( attribute nr { xsd:integer },
-     attribute aid { xsd:string } )?,
-   ( ErrorIdentify
-     | ( ConstrDef, ConstrDef, element EqArgs { Pair* }))
-   }
+   attribute nr { xsd:integer },
+      attribute aid { xsd:string },
+      attribute constrkind { 'K' | 'U' | 'G' | 'V' | 'R'},
+    ( ErrorIdentify |
+      ( Typ*,
+       ((Term, Term) | (Formula, Formula)),
+        element EqArgs { Pair* }
+      ))
+    }
 
 ## This encodes error during identification processing
 ErrorIdentify =
  element ErrorIdentify { empty }
 
 ## Identification (oriented, currently used version).
-## This says to identify anything matching the first term 
-## or formula pattern (with ConstrKind and ConstrNr as the top 
+## This says to identify anything matching the first term
+## or formula pattern (with ConstrKind and ConstrNr as the top
 ## constructor) with the second pattern (instantiated by the matching).
 ## The type requirements for the matching (i.e. the loci) are given first.
 ## Note that this works only one way, if you want it also the other way, the
@@ -424,7 +434,7 @@ IdentifyWithExp =
    ( ErrorIdentify
      | ( attribute constrkind { 'K' | 'U' | 'G' | 'V' | 'R'},
          attribute constrnr { xsd:integer},
-         Typ*, 
+         Typ*,
          ( (Term, Term) | (Formula, Formula) )
        )
    )
@@ -734,7 +744,7 @@ Article =
    ( DefinitionBlock | RegistrationBlock |
      NotationBlock | Reservation | SchemeBlock |
      JustifiedTheorem | DefTheorem | Definiens |
-     Canceled | AuxiliaryItem )*
+     Canceled | Section | AuxiliaryItem )*
  }
 
 ## Numbers of Definiens used in expanding the thesis,
@@ -987,14 +997,20 @@ JustifiedProposition =
 
 ## Auxiliary items are items which do not change thesis.
 AuxiliaryItem =
-   ( JustifiedProposition | Consider | 
+   ( JustifiedProposition | Consider |
      Set | Reconsider | DefFunc | DefPred )
+
+Section =
+ element Section { empty }
 
 ## Reservation of a new variable for a type.
 ## The type may optionally have presentational info about
-## the variable (vid) inside.   
-Reservation = 
- element Reservation { Typ }
+## the variable (vid) inside.
+Reservation =
+ element Reservation {
+   element Ident { attribute vid { xsd:integer } }+,
+   Typ
+  }
 
 ## Theorem as a proposition with justification.
 JustifiedTheorem = 
@@ -1137,7 +1153,7 @@ Registration =
 ## could be made more specific.
 IdentifyRegistration = 
  element IdentifyRegistration {
-   IdentifyWithExp, CorrectnessCondition*, Correctness?
+   Identify, CorrectnessCondition*, Correctness?
  }
 
 ## Block of cluster registrations.
@@ -1151,7 +1167,7 @@ RegistrationBlock =
 
 ## Block of synonyms or antonyms. The patterns are
 ## semantically irrelevant and are not printed yet - fix this.
-NotationBlock = 
+NotationBlock =
  element NotationBlock {
    Position,
    ( Let | AuxiliaryItem | Pattern)*,
@@ -1160,7 +1176,8 @@ NotationBlock =
 
 ## Builtin numerical evaluations of arithmetical functors 
 ## and predicates. For predicates, the value can be false.
-## Arguments are generally polynoms with complex coefficients.   
+## Arguments are generally polynoms with complex coefficients.
+## For functors, the last polynom is the result value.
 PolyEval =
  element PolyEval {
    Position,

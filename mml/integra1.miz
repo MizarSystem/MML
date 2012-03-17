@@ -6,10 +6,12 @@
 
 environ
 
- vocabularies FINSEQ_1, RCOMP_1, COMPTS_1, SEQ_2, LATTICES, ORDINAL2, ARYTM,
-      ARYTM_1, RELAT_1, FUNCT_1, MEASURE5, PARTFUN1, RLVECT_1, BOOLE, FUNCT_3,
+ vocabularies FINSEQ_1, RCOMP_1, COMPTS_1, SEQ_2, LATTICES, ORDINAL2,
+      ARYTM_1, RELAT_1, FUNCT_1, MEASURE5, PARTFUN1, RLVECT_1, CARD_3,
+      XBOOLE_0, FUNCT_3, ZFMISC_1, XXREAL_0, REAL_1, SUBSET_1,
       FINSEQ_4, FINSEQ_2, SQUARE_1, RFINSEQ, JORDAN3, SEQ_4, CARD_1, INTEGRA1,
-      REALSET1, FUNCOP_1, SEQM_3, VALUED_0;
+      REALSET1, FUNCOP_1, SEQM_3, VALUED_0, NUMBERS, ORDINAL1, MEASURE7,
+      ORDINAL4, XXREAL_1, XXREAL_2, NAT_1, XREAL_0, ARYTM_3, TARSKI;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XREAL_0, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, RELSET_1, VALUED_0,
       VALUED_1, SEQ_1, SEQ_4, XXREAL_0, XXREAL_2, SEQ_2, RCOMP_1, PSCOMP_1,
@@ -46,8 +48,7 @@ definition
   let IT be Subset of REAL;
   attr IT is closed-interval means
   :Def1:
-  ex a,b being Real st a <= b & IT=[.a
-  ,b.];
+  ex a,b being Real st a <= b & IT=[.a,b.];
 end;
 
 registration
@@ -1916,16 +1917,49 @@ A2: i <= j;
   then p/^(i-'1) is increasing FinSequence of REAL by Th36,NAT_D:44;
   then
 A3: (p/^(i-'1))|Seg(j-'i+1) is increasing FinSequence of REAL by
-  FINSEQ_1
-  :23,GOBOARD2:20;
+  FINSEQ_1:23,GOBOARD2:20;
   mid(p,i,j)=(p/^(i-'1))|(j-'i+1) by A2,JORDAN3:def 1;
   hence thesis by A3,FINSEQ_1:def 15;
 end;
 
+Th38a:
+  for f being FinSequence holds
+  i in dom f & j in dom f & i<=j implies len mid(f,i,j) = j-i+1
+proof
+  let D be FinSequence;
+  assume that
+A1: i in dom D and
+A2: j in dom D and
+A3: i<=j;
+  j in Seg(len D) by A2,FINSEQ_1:def 3;
+  then j <= len D by FINSEQ_1:3;
+  then i <= len D by A3,XXREAL_0:2;
+  then i-'1 <= len D by NAT_D:44;
+  then
+A4: len (D/^(i-'1)) = len D - (i-'1) by RFINSEQ:def 2;
+  reconsider D1=D/^(i-'1) as FinSequence;
+  reconsider k=j-'i+1 as Element of NAT;
+  i in Seg(len D) by A1,FINSEQ_1:def 3;
+  then 1 <= i by FINSEQ_1:3;
+  then j-(i-'1)=j-(i-1) by XREAL_1:235;
+  then
+A5: j-(i-'1)=j-i+1;
+  j in Seg(len D) by A2,FINSEQ_1:def 3;
+  then j <= len D by FINSEQ_1:3;
+  then j-(i-'1) <= len D-(i-'1) by XREAL_1:11;
+  then
+A6: j-'i+1 <= len (D/^(i-'1)) by A3,A4,A5,XREAL_1:235;
+    mid(D,i,j) = (D/^(i-'1))|(j-'i+1) by A3,JORDAN3:def 1
+    .=D1|Seg k by FINSEQ_1:def 15;
+  then len mid(D,i,j) = j-'i+1 by A6,FINSEQ_1:21;
+  hence thesis by A3,XREAL_1:235;
+end;
+
 theorem Th38:
-  i in dom D & j in dom D & i<=j implies ex B be closed-interval
-  Subset of REAL st lower_bound B=mid(D,i,j).1 & upper_bound B=mid(D,i,j).(len
-  mid(D,i,j)) & len mid(D,i,j)=j-i+1 & mid(D,i,j) is Division of B
+  i in dom D & j in dom D & i<=j implies
+  ex B be closed-interval Subset of REAL st
+  lower_bound B = mid(D,i,j).1 & upper_bound B = mid(D,i,j).(len mid(D,i,j)) &
+  mid(D,i,j) is Division of B
 proof
   assume that
 A1: i in dom D and
@@ -1952,12 +1986,8 @@ A6: j-'i+1 <= len (D/^(i-'1)) by A3,A4,A5,XREAL_1:235;
 A7: mid(D,i,j) = (D/^(i-'1))|(j-'i+1) by A3,JORDAN3:def 1
     .=D1|Seg k by FINSEQ_1:def 15;
   then 0<len mid(D,i,j) by A6,FINSEQ_1:21;
-  then reconsider
-  M=mid(D,i,j) as non empty increasing FinSequence of REAL by A2,A3
-  ,Th37;
-  len mid(D,i,j) = j-'i+1 by A6,A7,FINSEQ_1:21;
-  then
-A8: len mid(D,i,j) = j-i+1 by A3,XREAL_1:235;
+  then reconsider M=mid(D,i,j) as
+  non empty increasing FinSequence of REAL by A2,A3,Th37;
   j-'i+1 >= 0 + 1 by XREAL_1:8;
   then
 A9: 1 <= len M by A6,A7,FINSEQ_1:21;
@@ -1993,7 +2023,7 @@ A18: M.i <= M.(len M) by A10,A15,GOBOARD2:18;
   end;
   then rng M c= B by SUBSET_1:7;
   then M is Division of B by A14,Def2;
-  hence thesis by A8,A13,A14;
+  hence thesis by A13,A14;
   reconsider D2=D1|Seg k as FinSequence of REAL by FINSEQ_1:23;
 end;
 
@@ -2020,8 +2050,8 @@ A9: j<=len D by FINSEQ_1:3;
   consider A1 be closed-interval Subset of REAL such that
 A10: lower_bound A1=mid(D,i,j).1 and
 A11: upper_bound A1=mid(D,i,j).(len mid(D,i,j)) and
-A12: len mid(D,i,j)=j-i+1 and
 A13: mid(D,i,j) is Division of A1 by A1,A2,A3,Th38;
+A12: len mid(D,i,j)=j-i+1 by A1,A2,A3,Th38a;
 A14: 1+i-1 = i;
   for x st x in A1 holds x in B
   proof
@@ -4532,3 +4562,6 @@ A61: upper_integral(f+g) = lower_integral(f+g) by A59,A60,A5,
   hence thesis by A12,A59,A5,A38,A61,Def17,XXREAL_0:1;
 end;
 
+theorem 
+  for f being FinSequence holds
+  i in dom f & j in dom f & i<=j implies len mid(f,i,j) = j-i+1 by Th38a;

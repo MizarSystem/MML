@@ -1,0 +1,1398 @@
+:: Nilpotent Groups
+::  by Dailu Li , Xiquan Liang and Yanhong Men
+:: 
+:: Received November 10, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies REALSET1, FINSEQ_1, GROUP_3, FUNCT_1, RLSUB_1, GROUP_2, RELAT_1,
+      GROUP_6, XBOOLE_0, QC_LANG1, GROUP_1, GRAPH_1, ARYTM_1, ARYTM_3,
+      ZFMISC_1, NUMBERS, SUBSET_1, XXREAL_1, STRUCT_0, NEWTON, TARSKI, NAT_1,
+      PARTFUN1, PRE_TOPC, XXREAL_0, CARD_1, GROUP_4, NATTRA_1, CARD_3, BINOP_1,
+      GROUP_5, GRSOLV_1, GRNILP_1, BCIALG_2, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, RELSET_1,
+      FUNCT_2, STRUCT_0, ALGSTR_0, PARTFUN1, FINSEQ_1, ZFMISC_1, NAT_1,
+      GROUP_1, GROUP_2, GROUP_3, XXREAL_0, GROUP_4, NUMBERS, GROUP_5, GROUP_6,
+      DOMAIN_1, GR_CY_1, GRSOLV_1, REALSET1;
+ constructors BINOP_1, XXREAL_0, BINARITH, REALSET2, GROUP_4, GROUP_5,
+      GRSOLV_1, RELSET_1, GR_CY_1, REALSET1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0,
+      XREAL_0, INT_1, FINSEQ_1, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, GROUP_6,
+      GR_CY_1, ALGSTR_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions GROUP_2, GROUP_6, TARSKI, FINSEQ_1, GROUP_4, ALGSTR_0, GROUP_3,
+      GROUP_5, GRSOLV_1, REALSET1;
+ theorems FINSEQ_1, GROUP_2, GROUP_3, TARSKI, GROUP_5, GROUP_6, FINSEQ_2,
+      FUNCT_2, RELAT_1, XBOOLE_0, XBOOLE_1, NAT_1, GROUP_1, PARTFUN1, FINSEQ_3,
+      SUBSET_1, GROUP_4, FUNCT_1, GRSOLV_1, STRUCT_0, GROUP_11;
+ schemes XBOOLE_0, FUNCT_1, FINSEQ_1, FINSEQ_2;
+
+begin
+
+reserve x,y for set,
+  G for Group,
+  A,B,C,H,H1,H2 for Subgroup of G,
+  a,b,c for Element of G,
+  F,F1 for FinSequence of the carrier of G,
+  I,I1 for FinSequence of INT,
+  i,j for Element of NAT;
+
+theorem
+  a |^ b = a * [.a,b.]
+proof
+  a * [.a,b.] = a * ((a" * b") * (a * b)) by GROUP_1:def 4
+             .= a * (a" * (b" * (a * b))) by GROUP_1:def 4
+             .= (a * a") * (b" * (a * b)) by GROUP_1:def 4
+             .= 1_G * (b" * (a * b)) by GROUP_1:def 6
+             .= b" * (a * b) by GROUP_1:def 5
+             .= b" * a * b by GROUP_1:def 4;
+  hence thesis;
+end;
+
+theorem
+  [.a,b.]" = [.a,b".]|^b
+proof
+  thus [.a,b.]" = ((a" * b") * (a * b))" by GROUP_1:def 4
+          .= (a * b)" * (a" * b")" by GROUP_1:25
+          .= (b" * a") * (a" * b")" by GROUP_1:25
+          .= (b" * a") * (b"" * a"") by GROUP_1:25
+          .= b" * (a" * (b * a)) by GROUP_1:def 4
+          .= b" * (a" * b * a) by GROUP_1:def 4
+          .= b" * (a" * b * a) * 1_G by GROUP_1:def 5
+          .= b" * (a" * b * a) * (b" * b) by GROUP_1:def 6
+          .= b" * (a" * b * a) * b" * b by GROUP_1:def 4
+          .= [.a,b".]|^b by GROUP_1:def 4;
+end;
+
+theorem
+  [.a,b.]" = [.a",b.]|^a
+proof
+  thus [.a,b.]" = ((a" * b") * (a * b))" by GROUP_1:def 4
+          .= (a * b)" * (a" * b")" by GROUP_1:25
+          .= (b" * a") * (a" * b")" by GROUP_1:25
+          .= (b" * a") * (b"" * a"") by GROUP_1:25
+          .= b" * (a" * (b * a)) by GROUP_1:def 4
+          .= b" * (a" * b * a) by GROUP_1:def 4
+          .= 1_G * (b" * (a" * b * a)) by GROUP_1:def 5
+          .= a" * a * (b" * (a" * b * a)) by GROUP_1:def 6
+          .= a" * (a * (b" * (a" * b * a))) by GROUP_1:def 4
+          .= a" * ((a * b") * ((a" * b) * a)) by GROUP_1:def 4
+          .= a" * (((a * b") * (a" * b)) * a) by GROUP_1:def 4
+          .= a" * ((a * b") * (a" * b)) * a by GROUP_1:def 4
+          .= [.a",b.]|^a by GROUP_5:19;
+end;
+
+theorem Th4:
+  ([.a,b".]|^ b)" = [.b",a.]|^ b
+proof
+  thus ([.a,b".]|^ b)" = [.a,b".]"|^ b by GROUP_3:32
+                 .= [.b",a.]|^ b by GROUP_5:25;
+end;
+
+theorem Th5:
+  [.a,b",c.] |^ b = [.[.a,b".]|^ b,c|^ b.]
+proof
+A1:[.a,b",c.] |^ b
+    = b" * ([.a,b".]" * 1_G * c" * [.a,b".] * c) * b by GROUP_1:def 5
+   .= b" * (([.a,b".]" * (b * b")) * c" * [.a,b".] * c) * b by GROUP_1:def 6
+   .= b" * (([.a,b".]" * b * b") * c" * [.a,b".] * c) * b by GROUP_1:def 4
+   .= b" * ((([.a,b".]" * b) * b") * c" * ([.a,b".] * c)) * b by GROUP_1:def 4
+   .= b" * (([.a,b".]" * b) * b" * (c" * ([.a,b".] * c))) * b by GROUP_1:def 4
+   .= (b" * (([.a,b".]" * b) * (b" * (c" * ([.a,b".] * c))))) * b
+       by GROUP_1:def 4
+   .= ((b" * ([.a,b".]" * b)) * (b" * (c" * ([.a,b".] * c)))) * b
+       by GROUP_1:def 4
+   .= (([.a,b".]"|^ b) * (b" * (c" * ([.a,b".] * c)))) * b by GROUP_1:def 4
+   .= [.a,b".]"|^ b * ((b" * (c" * ([.a,b".] * c))) * b) by GROUP_1:def 4
+   .= [.a,b".]"|^ b * ([.a,b".]|^ c |^ b) by GROUP_1:def 4
+   .= [.b",a.]|^ b * ([.a,b".]|^ c |^ b) by GROUP_5:25
+   .= [.b",a.]|^ b * [.a,b".]|^ (c * b) by GROUP_3:29;
+  [.[.a,b".]|^ b,c|^ b.]
+    = [.b",a.]|^ b * (c|^ b)" * ([.a,b".]|^ b) * (c|^ b) by Th4
+   .= [.b",a.]|^ b * (c"|^ b) * ([.a,b".]|^ b) * (c|^ b) by GROUP_3:32
+   .= [.b",a.]|^ b * (b" * c" * b) * ((b" * [.a,b".]) * b) * (b" * (c * b))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * (b" * c" * b) * ((b" * [.a,b".]) * b * (b" * (c * b)))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * ((b" * c") * b) * ((b" * [.a,b".]) * (b * (b" * (c * b))))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * ((b" * c") * b) * ((b" * [.a,b".]) * (b * b" * (c * b)))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * ((b" * c") * b) * ((b" * [.a,b".]) * (1_G * (c * b)))
+       by GROUP_1:def 6
+   .= [.b",a.]|^ b * ((b" * c") * b) * ((b" * [.a,b".]) * (c * b))
+       by GROUP_1:def 5
+   .= [.b",a.]|^ b * (((b" * c") * b) * ((b" * [.a,b".]) * (c * b)))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * ((b" * c") * (b * ((b" * [.a,b".]) * (c * b))))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * (((b" * c") * ((b * (b" * [.a,b".])) * (c * b))))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * (((b" * c") * ((b * b" * [.a,b".]) * (c * b))))
+       by GROUP_1:def 4
+   .= [.b",a.]|^ b * (((b" * c") * ((1_G * [.a,b".]) * (c * b))))
+       by GROUP_1:def 6
+   .= [.b",a.]|^ b * (((b" * c") * ([.a,b".] * (c * b)))) by GROUP_1:def 5
+   .= [.b",a.]|^ b * (((b" * c") * [.a,b".] * (c * b))) by GROUP_1:def 4
+   .= [.b",a.]|^ b * [.a,b".] |^ (c * b) by GROUP_1:25;
+  hence thesis by A1;
+end;
+
+theorem Th6:
+  [.a,b".]|^ b = [.b,a.]
+proof
+  thus [.a,b".]|^ b = b" * ((a" * b"" * a * b") * b) by GROUP_1:def 4
+              .= b" * (((a" * b"" * a) * (b" * b))) by GROUP_1:def 4
+              .= b" * ((a" * b"" * a) * 1_G) by GROUP_1:def 6
+              .= b" * (a" * b"" * a)  by GROUP_1:def 5
+              .= b" * (a" * (b * a)) by GROUP_1:def 4
+              .= (b" * a") * (b * a) by GROUP_1:def 4
+              .= b" * a" * b * a by GROUP_1:def 4
+              .= [.b,a.];
+end;
+
+theorem Th7:
+  [.a,b",c.] |^ b  = [.b,a,c|^ b.]
+proof
+  [.a,b",c.] |^ b = [.[.a,b".]|^ b,c|^ b.] by Th5;
+  hence thesis by Th6;
+end;
+
+theorem
+   [.a,b,c|^ a.]  * [.c,a,b|^ c.]  * [.b,c,a|^ b.] = 1_G
+proof
+  [.a,b,c|^ a.] = [.b,a",c.]|^ a & [.c,a,b|^ c.] = [.a,c",b.]|^ c &
+  [.b,c,a|^ b.] = [.c,b",a.]|^b by Th7;
+  hence thesis by GROUP_5:50;
+end;
+
+theorem Th9:
+  [.A,B.] is Subgroup of [.B,A.]
+proof
+  now let a;
+    assume a in [.A,B.];
+    then consider F,I such that len F = len I and
+A1: rng F c= commutators(A,B) and
+A2: a = Product(F |^ I) by GROUP_5:69;
+    deffunc F(Nat) = (F/.$1)";
+    consider F1 such that
+A3: len F1 = len F and
+A4: for k be Nat st k in dom F1 holds F1.k = F(k) from FINSEQ_2:sch 1;
+A5: dom F1 = Seg len F by A3,FINSEQ_1:def 3;
+    deffunc F(Nat) = @(- @(I/.$1));
+    consider I1 such that
+A6: len I1 = len F and
+A7: for k be Nat st k in dom I1 holds I1.k = F(k) from FINSEQ_2:sch 1;
+A8: dom F = Seg len F by FINSEQ_1:def 3;
+A9: dom F1 = dom F by A3,FINSEQ_3:31;
+A10: dom I1 = dom F by A6,FINSEQ_3:31;
+    set J = F1 |^ I1;
+A11: len J = len F & len(F |^ I) = len F by A3,GROUP_4:def 4;
+   then
+A12: dom(F |^ I)  = Seg len F by FINSEQ_1:def 3;
+    now
+      let k be Nat;
+      assume
+A13:  k in dom(F |^ I); then
+A14:  k in dom F by FINSEQ_1:def 3,A12;
+      J.k = (F1/.k) |^ @(I1/.k) & F1/.k = F1.k & F1.k = (F/.k)" &
+      I1.k = (I1/.k) & @(I1/.k) = I1/.k &
+      I1.k = @(- @(I/.k)) & @(- @(I/.k)) = - @(I/.k)
+        by A4,A7,A8,A9,A10,A13,GROUP_4:def 4,PARTFUN1:def 8,A12;
+      then J.k = ((F/.k)" |^ @(I/.k))" by GROUP_1:70
+        .= ((F/.k) |^ @(I/.k))"" by GROUP_1:72
+        .= (F/.k) |^ @(I/.k);
+      hence (F |^ I).k = J.k by A14,GROUP_4:def 4;
+    end; then
+A15: J = F |^ I by A11,FINSEQ_2:10;
+    rng F1 c= commutators(B,A)
+    proof
+      let x;
+      assume x in rng F1;
+      then consider y such that
+A16:  y in dom F1 and
+A17:  F1.y = x by FUNCT_1:def 5;
+      reconsider y as Element of NAT by A16;
+      y in dom F by A3,A16,FINSEQ_3:31;
+      then F.y in rng F by FUNCT_1:def 5;
+      then consider b,c such that
+A18:  F.y = [.b,c.] and
+A19:  b in A & c in B by A1,GROUP_5:58;
+      x = (F/.y)" & F/.y = F.y by A16,A4,A8,A17,PARTFUN1:def 8,A5;
+      then x = [.c,b.] by A18,GROUP_5:25;
+      hence thesis by A19,GROUP_5:58;
+    end;
+    hence a in [.B,A.] by A2,A3,A6,A15,GROUP_5:69;
+  end;
+  hence thesis by GROUP_2:67;
+end;
+
+theorem Th10:
+  [.A,B.] = [.B,A.]
+proof
+  [.A,B.] is Subgroup of [.B,A.] & [.B,A.] is Subgroup of [.A,B.] by Th9;
+  hence thesis by GROUP_2:64;
+end;
+
+definition let G,A,B;
+  redefine func [.A,B.];
+  commutativity by Th10;
+end;
+
+theorem Th11:
+  B is Subgroup of A implies commutators(A,B) c= carr A
+proof
+  assume
+A1: B is Subgroup of A;
+  let x;
+  assume x in commutators(A,B);
+  then consider a,b such that
+A2: x = [.a,b.] & a in A & b in B by GROUP_5:58;
+A3: b in A by A1,A2,GROUP_2:49;
+A4: a * b in A by A2,A3,GROUP_2:59;
+  a" in A & b" in A by A2,A3,GROUP_2:60;
+  then a" * b" in A by GROUP_2:59;
+  then
+A5: (a" * b") * (a * b) in A by A4,GROUP_2:59;
+  [.a,b.] = (a" * b") * (a * b) by GROUP_1:def 4;
+  hence thesis by A2,A5,STRUCT_0:def 5;
+end;
+
+Lm1: gr carr A is Subgroup of A
+proof
+  set A' = multMagma(# the carrier of A, the multF of A #);
+  the carrier of A' c= the carrier of G &
+  the multF of A' = (the multF of G) || the carrier of A by GROUP_2:def 5;
+  then reconsider A' = multMagma(# the carrier of A, the multF of A #)
+  as strict Subgroup of G by GROUP_2:def 5;
+A1: gr carr A is Subgroup of A' by GROUP_4:def 5;
+  A' is Subgroup of A by GROUP_2:66;
+  hence thesis by A1,GROUP_2:65;
+end;
+
+theorem Th12:
+  B is Subgroup of A implies [.A,B.] is Subgroup of A
+proof
+A1: gr carr A is Subgroup of A by Lm1;
+  assume B is Subgroup of A;
+  then commutators(A,B) c= carr A by Th11;
+  then [.A,B.] is Subgroup of gr carr A by GROUP_4:41;
+  hence thesis by A1,GROUP_2:65;
+end;
+
+theorem
+  B is Subgroup of A implies [.B,A.] is Subgroup of A by Th12;
+
+Lm2: A is Subgroup of (Omega).G
+proof
+  dom the multF of G c= [:the carrier of G, the carrier of G:];
+  then the multF of G
+  = (the multF of (Omega).G) || the carrier of (Omega).G by RELAT_1:97;
+  then G is Subgroup of (Omega).G by GROUP_2:def 5;
+  hence thesis by GROUP_2:65;
+end;
+
+theorem
+  [.H1, (Omega).G.] is Subgroup of H2
+  implies [.H1 /\ H,H.] is Subgroup of H2 /\ H
+proof
+  assume
+A1: [.H1, (Omega).G.] is Subgroup of H2;
+  H1 /\ H is Subgroup of H by GROUP_2:106;
+  then
+A2:[.H1 /\ H,H.] is Subgroup of H by Th12;
+A3: H is Subgroup of (Omega).G by Lm2;
+  H1 /\ H is Subgroup of H1 by GROUP_2:106;
+  then [.H1 /\ H,H.] is Subgroup of [.H1, (Omega).G.] by A3,GROUP_5:75;
+  then [.H1 /\ H,H.] is Subgroup of H2 by A1,GROUP_2:65;
+  hence thesis by A2,GROUP_2:109;
+end;
+
+theorem
+  [.H1,H2.] is Subgroup of [.H1,(Omega).G.]
+proof
+A1: H2 is Subgroup of (Omega).G by Lm2;
+  H1 is Subgroup of H1 by GROUP_2:63;
+  hence thesis by A1,GROUP_5:75;
+end;
+
+Lm3: for N being normal Subgroup of G holds [.N,H.] is Subgroup of N
+proof
+  let N be normal Subgroup of G;
+  the carrier of N c= the carrier of G &
+  the multF of N = (the multF of G) || the carrier of N by GROUP_2:def 5;
+  then reconsider N' = multMagma(# the carrier of N, the multF of N #)
+  as strict Subgroup of G by GROUP_2:def 5;
+  now
+    let a be Element of G;
+    the carrier of N |^ a = (carr N) |^ a by GROUP_3:def 6
+    .= (carr N') |^ a .= the carrier of N' |^ a by GROUP_3:def 6;
+    hence N' |^ a = N |^ a by GROUP_2:68
+    .= multMagma(# the carrier of N',the multF of N' #) by GROUP_3:def 13;
+  end;
+  then reconsider N' as strict normal Subgroup of G by GROUP_3:def 13;
+  [.N',H.] = [.N,H.]; then
+A2: [.N,H.] is Subgroup of N' by GROUP_5:76;
+  N' is Subgroup of N by GROUP_2:66;
+  hence thesis by A2,GROUP_2:65;
+end;
+
+theorem Th19:
+  A is normal Subgroup of G iff [.A,(Omega).G.] is Subgroup of A
+proof
+  thus A is normal Subgroup of G implies [.A,(Omega).G.] is
+  Subgroup of A by Lm3;
+  assume
+A1: [.A,(Omega).G.] is Subgroup of A;
+  for b holds b * A c= A * b
+  proof
+    let b;
+    let x;
+    assume
+A2: x in b * A;
+    then reconsider x as Element of G;
+    consider Z be Element of G such that
+A3: x = b * Z & Z in A by A2,GROUP_2:125;
+A4: Z" in A by A3,GROUP_2:60;
+    b" in (Omega).G by STRUCT_0:def 5; then
+A5: [.b",Z".] in [.(Omega).G,A.] by A4,GROUP_5:74;
+    [.b",Z".] in A by A1,A5,GROUP_2:49; then
+A6: (b * Z * b" * Z") * Z in A by A3,GROUP_2:59;
+A7: (b * Z * b" * Z") * Z = ((b * Z) * b") * (Z" * Z) by GROUP_1:def 4
+                         .= ((b * Z) * b") * 1_G by GROUP_1:def 6
+                         .= b * Z * b" by GROUP_1:def 5;
+    (b * Z * b") * b = (b * Z) * (b" * b) by GROUP_1:def 4
+                    .= b * Z * 1_G by GROUP_1:def 6
+                    .= b * Z  by GROUP_1:def 5;
+    hence thesis by A3,A6,A7,GROUP_2:126;
+  end;
+  hence thesis by GROUP_3:141;
+end;
+
+definition let G;
+  func the_normal_subgroups_of G -> set means :def2:
+  x in it iff x is strict normal Subgroup of G;
+  existence
+  proof
+    defpred P[set,set] means ex H being strict normal Subgroup of G st $2 = H &
+    $1 = the carrier of H;
+    defpred P[set] means ex H being strict normal Subgroup of G st $1 = the
+    carrier of H;
+    consider B being set such that
+A1: for x being set holds x in B iff x in bool the carrier of G & P[x]
+    from XBOOLE_0:sch 1;
+A2: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by GROUP_2:68;
+    consider f being Function such that
+A3: for x,y being set holds [x,y] in f iff x in B & P[x,y] from
+    FUNCT_1:sch 1(A2);
+    for x being set holds x in B iff ex y being set st [x,y] in f
+    proof
+      let x be set;
+      thus x in B implies ex y being set st [x,y] in f
+      proof
+        assume
+A4:     x in B;
+        then consider H being strict normal Subgroup of G such that
+A5:     x = the carrier of H by A1;
+        reconsider y = H as set;
+        take y;
+        thus thesis by A3,A4,A5;
+      end;
+      given y be set such that
+A6:   [x,y] in f;
+      thus thesis by A3,A6;
+    end;
+    then
+A7: B = dom f by RELAT_1:def 4;
+    for y being set holds y in rng f iff y is strict normal Subgroup of G
+    proof
+      let y be set;
+      thus y in rng f implies y is strict normal Subgroup of G
+      proof
+        assume
+        y in rng f;
+        then consider x be set such that
+A8:     x in dom f & y = f.x by FUNCT_1:def 5;
+        [x,y] in f by A8,FUNCT_1:def 4;
+        then ex H being strict normal Subgroup of G st y = H & x = the carrier
+        of H by A3;
+        hence thesis;
+      end;
+      assume
+      y is strict normal Subgroup of G;
+      then reconsider H = y as strict normal Subgroup of G;
+      reconsider x = the carrier of H as set;
+      the carrier of H c= the carrier of G by GROUP_2:def 5;
+      then
+A9:   x in dom f by A1,A7;
+      then [x,y] in f by A3,A7;
+      then y = f.x by A9,FUNCT_1:def 4;
+      hence thesis by A9,FUNCT_1:def 5;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    defpred P[set] means $1 is strict normal Subgroup of G;
+    let A1,A2 be set;
+    assume
+A10: for x being set holds x in A1 iff P[x];
+    assume
+A11: for x being set holds x in A2 iff P[x];
+    thus thesis from XBOOLE_0:sch 2(A10,A11);
+  end;
+end;
+
+registration let G;
+  cluster the_normal_subgroups_of G -> non empty;
+  coherence
+  proof
+    the strict normal Subgroup of G in the_normal_subgroups_of G by def2;
+    hence thesis;
+  end;
+end;
+
+theorem Th40:
+  for F being FinSequence of the_normal_subgroups_of G
+  for j st j in dom F holds F.j is strict normal Subgroup of G
+proof
+  let F be FinSequence of the_normal_subgroups_of G;
+  let j;
+  assume
+A1: j in dom F;
+  then F.j in rng F by FUNCT_1:12;
+  hence thesis by def2;
+end;
+
+theorem Th21:
+  the_normal_subgroups_of G c= Subgroups G
+proof
+  let x;
+  assume x in the_normal_subgroups_of G;
+  then x is strict normal Subgroup of G by def2;
+  hence thesis by GROUP_3:def 1;
+end;
+
+theorem Th39:
+  for F being FinSequence of the_normal_subgroups_of G
+  holds F is FinSequence of Subgroups G
+proof
+  let F be FinSequence of the_normal_subgroups_of G;
+  the_normal_subgroups_of G c= Subgroups G by Th21;
+  then rng F c= Subgroups G by XBOOLE_1:1;
+  hence thesis by FINSEQ_1:def 4;
+end;
+
+definition let IT be Group;
+  attr IT is nilpotent means  :def3:
+  ex F being FinSequence of the_normal_subgroups_of IT st
+  len F > 0 & F.1 = (Omega).IT & F.(len F) = (1).IT &
+  for i st i in dom F & i+1 in dom F
+  for G1,G2 being strict normal Subgroup of IT st G1 = F.i & G2 = F.(i+1) holds
+  G2 is Subgroup of G1 &
+  G1./.(G1,G2)`*` is Subgroup of center (IT./.G2);
+end;
+
+registration
+  cluster nilpotent strict Group;
+  existence
+proof
+    set G = the Group;
+    take H = (1).G;
+    thus H is nilpotent
+    proof
+        rng <*H*> c= the_normal_subgroups_of H
+        proof
+          let x be set;
+          assume
+A1:       x in rng<*H*>;
+          rng <*H*> = { H } by FINSEQ_1:56;
+          then
+          x = H by A1,TARSKI:def 1;
+          then x is strict normal Subgroup of H by  GROUP_2:63,GROUP_6:9;
+          hence thesis by def2;
+        end;
+      then reconsider F = <*H*> as FinSequence of the_normal_subgroups_of H
+      by FINSEQ_1:def 4;
+      take F;
+A2:   len F = 1 by FINSEQ_1:56; then
+A3:   F.(len F) = H by FINSEQ_1:57
+               .= (1).H by GROUP_2:75;
+      for i st i in dom F & i+1 in dom F for G1,G2
+      being strict normal Subgroup of H st G1 = F.i & G2 = F.(i+1) holds
+      G2 is strict Subgroup of G1 &
+      G1./.(G1,G2)`*` is Subgroup of center (H./.G2)
+      proof
+        let i;
+        assume
+A4:     i in dom F & i+1 in dom F;
+        let G1,G2 be strict normal Subgroup of H;
+        assume G1=F.i & G2=F.(i+1);
+        dom F={1} by A2,FINSEQ_1:4,def 3;
+        then i=1 & i+1=1 by A4,TARSKI:def 1;
+        hence thesis;
+      end;
+      hence thesis by A3,FINSEQ_1:57;
+    end;
+    thus thesis;
+  end;
+end;
+
+theorem Th22:
+  for G1 being Subgroup of G,N being strict normal Subgroup of G st
+  N is Subgroup of G1 & G1./.(G1,N)`*` is Subgroup of center (G./.N) holds
+   [.G1,(Omega).G.] is Subgroup of N
+proof
+  let G1 be Subgroup of G;
+  let N be strict normal Subgroup of G;
+  assume that
+A1: N is Subgroup of G1 and
+A2: G1./.(G1,N)`*` is Subgroup of center (G./.N);
+A3: (G1,N)`*` = N by A1,GROUP_6:def 1;
+  reconsider J = G1./.(G1,N)`*` as Subgroup of G./.N by A1,GROUP_6:34;
+  reconsider I = N as normal Subgroup of G1 by A3;
+A4: commutators (G1,(Omega).G) c= carr N
+  proof
+    now
+      let x be Element of G;
+      assume
+      x in commutators (G1,(Omega).G);
+      then consider a,b such that
+A5:   x = [.a,b.] & a in G1 & b in (Omega).G by GROUP_5:58;
+      reconsider c = a as Element of G1 by A5,STRUCT_0:def 5;
+      reconsider S' = c * I as Element of J by A3,GROUP_6:27;
+A6:   S' in J by STRUCT_0:def 5;
+      reconsider T = b * N  as Element of G./.N
+      by GROUP_6:16;
+      reconsider d = c as Element of G;
+A7:   d * N = c * I by GROUP_6:2;
+      reconsider S = S' as Element of G./.N by A7,GROUP_6:16;
+      S in center (G./.N) by A2,A6,GROUP_2:49; then
+A8:   S * T = T * S by GROUP_5:89;
+A9:   S = d * N & T = b * N & @S = S & @T = T by GROUP_6:2;
+A10:  S * T = (d * N) * (b * N) by A9,GROUP_6:def 4
+           .= d * (N * (b * N)) by GROUP_3:11
+           .= d * (N * b * N) by GROUP_3:15
+           .= d * (b * N * N) by GROUP_3:140
+           .= d * (b * N) by GROUP_6:6
+           .= d * b * N by GROUP_2:127;
+      T * S = (b * N) * (d * N) by A9,GROUP_6:def 4
+           .= b * (N * (d * N)) by GROUP_3:11
+           .= b * (N * d * N) by GROUP_3:15
+           .= b * (d * N * N) by GROUP_3:140
+           .= b * (d * N) by GROUP_6:6
+           .= b * d * N by GROUP_2:127;
+      then
+A11:  (d" * b") * (d * b * N) = ((d" * b") * (b * d)) * N by A8,A10,GROUP_2:127
+                           .= (d" * (b" * (b * d))) * N by GROUP_1:def 4
+                           .= (d" * ((b" * b) * d)) * N by GROUP_1:def 4
+                           .= (d" * (1_G * d)) * N by GROUP_1:def 6
+                           .= (d" *  d) * N by GROUP_1:def 5
+                           .= 1_G * N by GROUP_1:def 6
+                           .= carr N by GROUP_2:132;
+      (d" * b") * (d * b * N) = (d" * b") * (d * b) * N by GROUP_2:127
+                             .= [.d,b.] * N by GROUP_5:19;
+      then [.d,b.] in N by A11,GROUP_2:136;
+      hence x in carr N by A5,STRUCT_0:def 5;
+    end;
+    hence thesis by SUBSET_1:7;
+  end;
+  gr carr N = N by GROUP_4:40;
+  hence thesis by A4,GROUP_4:41;
+end;
+
+theorem Th24:
+  for G1 being Subgroup of G, N being normal Subgroup of G st
+  N is strict Subgroup of G1 & [.G1,(Omega).G.] is strict Subgroup of N holds
+  G1./.(G1,N)`*` is Subgroup of center (G./.N)
+proof
+  let G1 be Subgroup of G;
+  let N be normal Subgroup of G;
+  assume that
+A1: N is strict Subgroup of G1 and
+A2: [.G1,(Omega).G.] is strict Subgroup of N;
+A3: (G1,N)`*` = N by A1,GROUP_6:def 1;
+  reconsider J = G1./.(G1,N)`*` as Subgroup of G./.N by A1,GROUP_6:34;
+  reconsider I = N as normal Subgroup of G1 by A3;
+  for S1 be Element of G./.N st S1 in J holds S1 in center (G./.N)
+  proof
+    let S1 be Element of G./.N;
+    assume
+A4: S1 in J;
+    for S be Element of G./.N holds S1 * S = S * S1
+    proof
+      let S be Element of G./.N;
+      consider a being Element of G such that
+A5:   S = a * N & S = N * a by GROUP_6:26;
+      consider c being Element of G1 such that
+A6:   S1 = c * I & S1 = I * c by A3,A4,GROUP_6:28;
+      reconsider d = c as Element of G by GROUP_2:51;
+A7:   d in G1 by STRUCT_0:def 5;
+      a in (Omega).G by STRUCT_0:def 5;
+      then [.d,a.] in [.G1,(Omega).G.] by A7,GROUP_5:74; then
+A8:   [.d,a.] in N by A2,GROUP_2:49;
+A9:   @S = S & @S1 = S1 & c * I = d * N & N * d = I * c by GROUP_6:2; then
+A10:  S * S1 = a * N * (d * N) by A5,A6,GROUP_6:def 4
+            .= a * d * N by GROUP_11:1;
+A11:  S1 * S = d * N * (a * N) by A5,A6,A9,GROUP_6:def 4
+            .= d * a * N by GROUP_11:1;
+A12:  a * d * [.d,a.] * N = a * d * ([.d,a.] * N) by GROUP_2:38
+                         .= a * d *  N by A8,GROUP_2:136;
+      a * d * [.d,a.] * N = a * d * ((d" * a") * (d * a)) * N by GROUP_1:def 4
+                       .= (a * d * (d" * a")) * (d * a) * N by GROUP_1:def 4
+                       .= (a * (d * (d" * a"))) * (d * a) * N by GROUP_1:def 4
+                       .= (a * (d * d" * a")) * (d * a) * N by GROUP_1:def 4
+                       .= (a * (1_G * a")) * (d * a) * N by GROUP_1:def 6
+                       .= (a * a") * (d * a) * N by GROUP_1:def 5
+                       .= 1_G * (d * a) * N by GROUP_1:def 6
+                       .= d * a * N by GROUP_1:def 5;
+      hence thesis by A10,A11,A12;
+    end;
+    hence thesis by GROUP_5:89;
+  end;
+  hence thesis by GROUP_2:67;
+end;
+
+theorem Th25:
+  for G being Group holds G is nilpotent iff
+  ex F being FinSequence of the_normal_subgroups_of G st len F > 0 &
+  F.1 = (Omega).G & F.(len F) = (1).G &
+  for i st i in dom F & i+1 in dom F for G1,G2 being
+  strict normal Subgroup of G st G1 = F.i & G2 = F.(i+1) holds
+  G2 is Subgroup of G1 & [.G1, (Omega).G.] is Subgroup of G2
+proof
+  let G be Group;
+B1: now assume
+    G is nilpotent;
+    then consider R being FinSequence of the_normal_subgroups_of G such that
+A1: len R > 0 & R.1 = (Omega).G & R.(len R) = (1).G &
+    for i st i in dom R
+    & i+1 in dom R for H1,H2 being strict normal Subgroup of G st H1 = R.i
+    & H2 = R.(i+1) holds H2 is Subgroup of H1 &
+    H1./.(H1,H2)`*` is Subgroup of center (G./.H2) by def3;
+    reconsider F = R as FinSequence of the_normal_subgroups_of G;
+A2: for i st i in dom F & i+1 in dom F for G1,G2 being
+    strict normal Subgroup of G st G1 = F.i & G2 = F.(i+1) holds G2 is strict
+    Subgroup of G1 & [.G1, (Omega).G.] is strict Subgroup of G2
+    proof
+      let i;
+      assume
+A3:   i in dom F & i+1 in dom F;
+      let G1,G2 be strict normal Subgroup of G;
+      assume
+A4:   G1 = F.i & G2 = F.(i+1);
+      then
+A5:   G2 is strict Subgroup of G1 & for N being strict normal
+      Subgroup of G st N = G2 & N is strict Subgroup of G1 holds
+      G1./.(G1,N)`*` is Subgroup of center (G./.N) by A1,A3;
+      [.G1, (Omega).G.] is strict Subgroup of G2
+      proof
+        now
+          let N be strict normal Subgroup of G;
+          assume
+A6:       N = G2 & N is strict Subgroup of G1;
+          then G1./.(G1,N)`*` is Subgroup of center (G./.N) by A1,A3,A4;
+          hence [.G1, (Omega).G.] is strict Subgroup of G2 by A6,Th22;
+        end;
+        hence thesis by A5;
+      end;
+      hence thesis by A1,A3,A4;
+    end;
+    take F;
+    thus len F > 0 &
+    F.1 = (Omega).G & F.(len F) = (1).G &
+    for i st i in dom F & i+1 in dom F for G1,G2 being
+    strict normal Subgroup of G st G1 = F.i & G2 = F.(i+1) holds G2 is
+    Subgroup of G1 & [.G1, (Omega).G.] is Subgroup of G2 by A1,A2;
+  end;
+  now
+    given F being FinSequence of the_normal_subgroups_of G such that
+A1: len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G &
+    for i st i in dom F & i+1 in dom F for G1,G2 being
+    strict normal Subgroup of G st G1 = F.i & G2 = F.(i+1) holds G2 is
+    Subgroup of G1 & [.G1, (Omega).G.] is Subgroup of G2;
+A2: for i st i in dom F & i+1 in dom F
+    for G1,G2 being strict normal Subgroup
+    of G st G1 = F.i & G2 = F.(i+1) holds
+    G2 is strict Subgroup of G1 &
+    G1./.(G1,G2)`*` is Subgroup of center (G./.G2)
+    proof
+      let i;
+      assume
+A3:   i in dom F & i+1 in dom F;
+      let G1,G2 be strict normal Subgroup of G;
+      assume
+A4:   G1 = F.i & G2 = F.(i+1);
+A5:   G2 is strict Subgroup of G1 by A1,A3,A4;
+      [.G1, (Omega).G.] is strict Subgroup of G2 by A1,A3,A4;
+      hence thesis by A5,Th24;
+    end;
+    take F;
+    len F > 0 &
+    F.1 = (Omega).G & F.(len F) = (1).G & for i st i in dom F & i+1 in dom F
+    for G1,G2 being strict normal Subgroup of G st
+    G1 = F.i & G2 = F.(i+1) holds
+    G2 is Subgroup of G1 &
+    G1./.(G1,G2)`*` is Subgroup of center (G./.G2) by A1,A2;
+    hence G is nilpotent by def3;
+  end;
+  hence thesis by B1;
+end;
+
+theorem Th26:
+  for G being Group for H,G1 being Subgroup of G
+  for G2 being strict normal Subgroup of G
+  for H1 being Subgroup of H
+  for H2 being normal Subgroup of H
+   st G2 is Subgroup of G1
+   & G1./.(G1,G2)`*` is Subgroup of center (G./.G2)
+   & H1=G1 /\ H & H2=G2 /\ H holds
+  H1./.(H1,H2)`*` is Subgroup of center (H./.H2)
+proof
+  let G be Group;
+  let H,G1 be Subgroup of G;
+  let G2 be strict normal Subgroup of G;
+  let H1 be Subgroup of H;
+  let H2 be normal Subgroup of H;
+  assume that
+A1: G2 is Subgroup of G1 and
+A2: G1./.(G1,G2)`*` is Subgroup of center (G./.G2) and
+A3: H1=G1 /\ H & H2=G2 /\ H;
+A4: [.G1, (Omega).G.] is Subgroup of G2 by A1,A2,Th22;
+B:  H2 is strict Subgroup of H1 by A1,A3,GROUP_2:110; then
+A5: (H1,H2)`*` = H2 by GROUP_6:def 1;
+  then reconsider I = H2 as normal Subgroup of H1;
+  reconsider J = H1./.(H1,H2)`*` as Subgroup of H./.H2 by B,GROUP_6:34;
+  for T be Element of H./.H2 st T in J holds T in center (H./.H2)
+  proof
+    let T be Element of H./.H2;
+    assume
+A6: T in J;
+    for S be Element of H./.H2 holds S * T = T * S
+    proof
+      let S be Element of H./.H2;
+      consider h being Element of H such that
+A7:   S = h * H2 & S = H2 * h by GROUP_6:26;
+      consider h1 being Element of H1 such that
+A8:   T = h1 * I & T = I * h1 by A5,A6,GROUP_6:28;
+      reconsider h2 = h1 as Element of H by GROUP_2:51;
+A9:   @S = S & @T = T & h1 * I = h2 * H2 by GROUP_6:2;
+      then
+A10:  S * T = h * H2 * (h2 * H2) by A7,A8,GROUP_6:def 4
+           .= h * h2 * H2 by GROUP_11:1;
+A11:  T * S = h2 * H2 * (h * H2) by A7,A8,A9,GROUP_6:def 4
+           .= h2 * h * H2 by GROUP_11:1;
+A12:  [.h2,h.] in H by STRUCT_0:def 5;
+      reconsider a = h as Element of G by GROUP_2:51;
+A13:  a in (Omega).G by STRUCT_0:def 5;
+      H1 is Subgroup of G1 by A3,GROUP_2:106;
+      then reconsider b = h1 as Element of G1 by GROUP_2:51;
+      reconsider c = b as Element of G by GROUP_2:51;
+      b in G1 by STRUCT_0:def 5;
+      then [.c,a.] in [.G1, (Omega).G.] by A13,GROUP_5:74;
+      then
+A14:  [.c,a.] in G2 by A4,GROUP_2:49;
+A15:  a" = h" by GROUP_2:57;
+A16:  c" = h2" by GROUP_2:57;
+A17:  h2" * h" = c" * a" by A15,A16,GROUP_2:52;
+      h2 * h = c * a by GROUP_2:52;
+      then
+A18:  (h2" * h") * (h2 * h) = (c" * a") * (c * a) by A17,GROUP_2:52;
+A19:  [.h2,h.] = (h2" * h") * (h2 * h) by GROUP_5:19;
+      [.c,a.] = (c" * a") * (c * a) by GROUP_5:19;
+      then
+A20:  [.h2,h.] in H2 by A3,A12,A14,A18,A19,GROUP_2:99;
+      h * h2 * H2 = h * h2 * ([.h2,h.] * H2) by A20, GROUP_2:136
+                 .= h * h2 * ((h2" * h") * (h2 * h) * H2) by GROUP_5:19
+                 .= h * h2 * ((h2" * h") * (h2 * h)) * H2 by GROUP_2:38
+                 .= (h * h2 * (h2" * h")) * (h2 * h) * H2 by GROUP_1:def 4
+                 .= (h * (h2 * (h2" * h"))) * (h2 * h) * H2 by GROUP_1:def 4
+                 .= (h * (h2 * h2" * h")) * (h2 * h) * H2 by GROUP_1:def 4
+                 .= (h * (1_H * h")) * (h2 * h) * H2 by GROUP_1:def 6
+                 .= (h * h") * (h2 * h) * H2 by GROUP_1:def 5
+                 .= 1_H * (h2 * h) * H2 by GROUP_1:def 6
+                 .= h2 * h * H2 by GROUP_1:def 5;
+      hence thesis by A10,A11;
+    end;
+    hence thesis by GROUP_5:89;
+  end;
+  hence thesis by GROUP_2:67;
+end;
+
+Lm4: (Omega).G /\ H = (Omega).H
+proof
+  reconsider G' = (Omega).G as strict Group;
+  the carrier of H c= the carrier of G &
+  the multF of H = (the multF of G) || the carrier of H by GROUP_2:def 5;
+  then reconsider H' = (Omega).H as strict Subgroup of G' by GROUP_2:def 5;
+  the carrier of H c= the carrier of G &
+  the multF of H = (the multF of G) || the carrier of H by GROUP_2:def 5;
+  then
+A1: H is Subgroup of (Omega).G by GROUP_2:def 5;
+  the multMagma of (Omega).G /\ H
+  = multMagma(# the carrier of (H /\ (Omega).G),
+                the multF of (H /\ (Omega).G) #) by GROUP_2:101
+  .= multMagma(# the carrier of H, the multF of H #) by A1,GROUP_2:107
+  .= multMagma(# the carrier of (H' /\ (Omega).G'),
+                 the multF of (H' /\ (Omega).G') #) by GROUP_2:107
+  .= the multMagma of (Omega).G' /\ H' by GROUP_2:101;
+  hence thesis by GROUP_2:104;
+end;
+
+Lm5: for F1 being strict Subgroup of G for H, F2 being Subgroup of G
+st F1 is normal Subgroup of F2 holds F1 /\ H is normal Subgroup of F2 /\ H
+proof
+  let F1 be strict Subgroup of G;
+  let H,F2 be Subgroup of G;
+  reconsider F=F2 /\ H as Subgroup of F2 by GROUP_2:106;
+  assume
+A1: F1 is normal Subgroup of F2; then
+A2: (F1 /\ H) = ((F1 /\ F2) /\ H) by GROUP_2:107
+    .= F1 /\ (F2 /\ H) by GROUP_2:102;
+  reconsider F1 as normal Subgroup of F2 by A1;
+  F1/\F is normal Subgroup of F;
+  hence thesis by A2,GROUP_6:3;
+end;
+
+registration let G be nilpotent Group;
+  cluster -> nilpotent Subgroup of G;
+  coherence
+proof
+  let H be Subgroup of G;
+  consider F being FinSequence of the_normal_subgroups_of G such that
+A1:len F > 0 & F.1 = (Omega).G &  F.(len F) = (1).G and
+A2: for i st i in dom F & i+1 in dom F for G1,G2 being strict normal
+  Subgroup of G st G1 = F.i & G2 = F.(i+1) holds G2 is Subgroup of
+  G1 & G1./.(G1,G2)`*` is Subgroup of center (G./.G2) by def3;
+  defpred P[set,set] means ex I being strict normal Subgroup of G st I=F.$1 &
+   $2=I/\H;
+A3: for k be Nat st k in Seg len F ex x being Element of
+   the_normal_subgroups_of H st P[k,x]
+  proof
+    let k be Nat;
+    assume k in Seg len F;
+    then k in dom F by FINSEQ_1:def 3;
+    then F.k in the_normal_subgroups_of G by FINSEQ_2:13;
+    then reconsider I=F.k as strict normal Subgroup of G by def2;
+    reconsider x=I /\ H as strict Subgroup of H;
+    reconsider y=x as Element of the_normal_subgroups_of H by def2;
+    take y;
+    take I;
+    thus thesis;
+  end;
+  consider R being FinSequence of the_normal_subgroups_of H such that
+A4: dom R=Seg len F & for i be Nat st i in Seg len F holds P[i,R.i] from
+   FINSEQ_1:sch 5(A3);
+A5: len R=len F by A4,FINSEQ_1:def 3;
+A6: len R >0 by A1,A4,FINSEQ_1:def 3;
+A7: R.1=(Omega).H
+  proof
+    1<=len R by A6,NAT_1:14;
+    then 1 in Seg len F by A5;
+    then ex I being strict normal Subgroup of G st
+    I=F.1 & R.1=I /\ H by A4;
+    hence R.1 = (Omega).H by A1,Lm4;
+  end;
+A9:R.(len R)= (1).H
+  proof
+    ex I being strict normal Subgroup of G st I=F.(len R) & R.(len R )=I /\ H
+    by A1,A4,A5,FINSEQ_1:5;
+    hence R.(len R)=(1).G by A1,A5,GROUP_2:103
+      .=(1).H by GROUP_2:75;
+  end;
+A10: for i st i in dom R & i+1 in dom R for H1,H2 being strict normal Subgroup
+  of H st H1=R.i & H2=R.(i+1) holds H2 is Subgroup of H1 &
+  H1./.(H1,H2)`*` is Subgroup of center (H./.H2)
+  proof
+    let i;
+    assume
+A11: i in dom R & i+1 in dom R;
+    let H1,H2 be strict normal Subgroup of H;
+    assume
+A12: H1 = R.i & H2 = R.(i+1);
+    consider I being strict normal Subgroup of G such that
+A13: I = F.i & R.i = I /\ H by A4,A11;
+    consider J being strict normal Subgroup of G such that
+A14: J = F.(i+1) & R.(i+1) = J /\ H by A4,A11;
+A15: i in dom F & i+1 in dom F by A4,A11,FINSEQ_1:def 3;
+    then
+A16: J is strict normal Subgroup of I by A13,A14,A2,GROUP_6:9;
+    I./.(I,J)`*` is Subgroup of center (G./.J) by A15,A13,A14,A16,A2;
+    hence thesis by A14,A16,A13,A12,Th26,Lm5;
+  end;
+  take R;
+  thus thesis by A1,A4,FINSEQ_1:def 3,A7,A9,A10;
+end;
+end;
+
+registration
+  cluster commutative -> nilpotent Group;
+  correctness
+  proof
+    let G be Group;
+    assume
+B1: G is commutative;
+    (Omega).G in the_normal_subgroups_of G &
+    (1).G in the_normal_subgroups_of G by def2;
+    then <*(Omega).G,(1).G*>is FinSequence of the_normal_subgroups_of G
+    by FINSEQ_2:15;
+    then consider F being FinSequence of the_normal_subgroups_of G such that
+A1: F = <*(Omega).G,(1).G*>;
+A2: len F = 2 & F.1 = (Omega).G & F.2 = (1).G by A1,FINSEQ_1:61;
+    for i st i in dom F & i+1 in dom F
+    for G1,G2 being strict normal Subgroup of G
+    st G1 = F.i & G2 = F.(i+1) holds
+    G2 is Subgroup of G1 & [.G1,(Omega).G.] is Subgroup of G2
+    proof
+      let i;
+      assume
+A3:   i in dom F & i+1 in dom F;
+      now
+        let G1,G2 be Subgroup of G;
+        assume
+A4:     G1 = F.i & G2 = F.(i+1);
+A5:     dom F={1,2} by A2,FINSEQ_1:4,def 3;
+A6:     i in {1,2} & i+1 in {1,2} by A2,A3,FINSEQ_1:4,def 3;
+A7:     i = 1 or i = 2 by A3,A5,TARSKI:def 2;
+        commutators(G1,(Omega).G) = {1_G} by B1,GROUP_5:63; then
+A8:     [.G1,(Omega).G.] = gr ({1_G} \ {1_G}) by GROUP_4:44
+                       .= gr {} the carrier of G by XBOOLE_1:37
+                       .= (1).G by GROUP_4:39;
+        G1 = (Omega).G & G2 = (1).G by A1,FINSEQ_1:61,A4,A6,A7,TARSKI:def 2;
+        hence thesis by A4,A8,GROUP_2:77;
+      end;
+      hence thesis;
+    end;
+    hence thesis by A2,Th25;
+  end;
+  cluster cyclic -> nilpotent Group;
+  coherence;
+end;
+
+theorem Th30:
+  for G,H being strict Group, h being Homomorphism of G,H for A
+  being strict Subgroup of G for a,b being Element of G
+  holds h.a * h.b * h.:A = h.:(a * b * A) & h.:A * h.a * h.b = h.:(A * a * b)
+proof
+  let G,H be strict Group;
+  let h be Homomorphism of G,H;
+  let A be strict Subgroup of G;
+  let a,b be Element of G;
+  thus h.a * h.b * h.:A = h. (a * b) * h.:A by GROUP_6:def 7
+                    .= h.:(a * b * A) by GRSOLV_1:14;
+  thus h.:A * h.a * h.b = h.:A * (h.a * h.b) by GROUP_2:129
+                  .= h.:A * h. (a * b) by GROUP_6:def 7
+                  .= h.:(A * (a * b)) by GRSOLV_1:14
+                  .= h.:(A * a * b) by GROUP_2:129;
+end;
+
+theorem Th31:
+  for G,H being strict Group, h being Homomorphism of G,H
+  for A being strict Subgroup of G for a,b being Element of G
+  for H1 being Subgroup of Image h for a1,b1 being Element of Image h
+  st a1 = h.a & b1 = h.b & H1 = h.:A holds a1 * b1 * H1 = h.a * h.b * h.:A
+proof
+  let G,H be strict Group;
+  let h being Homomorphism of G,H;
+  let A be strict Subgroup of G;
+  let a,b be Element of G;
+  let H1 be Subgroup of Image h;
+  let a1,b1 be Element of Image h;
+  assume that
+A1: a1 = h.a and
+A2: b1 = h.b and
+A3: H1 = h.:A;
+A4: a1 * b1 = h.a * h.b by A1,A2,GROUP_2:52;
+  set c1 = a1 * b1;
+  set c = a * b;
+A5: h.c = h.a * h.b by GROUP_6:def 7;
+A6: h.:(c * A) = h.c * h.:A by GRSOLV_1:14;
+  c1 * H1 = h.c * h.:A
+  proof
+    now
+      let x;
+      assume x in c1 * H1;
+      then consider Z being Element of Image h such that
+A7:   x = c1 * Z and
+A8:   Z in H1 by GROUP_2:125;
+      consider Z1 being Element of A such that
+A9:   Z = (h|A).Z1 by A3,A8,GROUP_6:54;
+A10:  Z1 in A by STRUCT_0:def 5;
+      reconsider Z1 as Element of G by GROUP_2:51;
+      Z = h.Z1 by A9,FUNCT_1:72;
+      then
+A11:  x = h.c * h.Z1 by A4,A5,A7,GROUP_2:52
+       .= h.(c * Z1) by GROUP_6:def 7;
+      c * Z1 in c * A by A10,GROUP_2:125;
+      hence x in h.c * h.:A by A11,FUNCT_2:43,A6;
+    end;
+    then
+A12: c1 * H1 c= h.c * h.:A by TARSKI:def 3;
+    now
+      let x;
+      assume x in h.c * h.:A;
+      then consider y being set such that
+A13: y in the carrier of G and
+A14: y in c * A and
+A15: x = h.y by A6,FUNCT_2:115;
+    reconsider y as Element of G by A13;
+    consider Z being Element of G such that
+A16: y= c * Z and
+A17: Z in A by A14,GROUP_2:125;
+    Z in the carrier of A by A17,STRUCT_0:def 5;
+    then h.Z in h.:(the carrier of A) by FUNCT_2:43;
+    then h.Z in the carrier of h.: A by GRSOLV_1:9;
+    then
+A18: h.Z in H1 by STRUCT_0:def 5,A3;
+    then h.Z in Image h by GROUP_2:49;
+    then reconsider Z1 = h.Z as Element of Image h by STRUCT_0:def 5;
+A19: x = h.c * h.Z by A15,A16,GROUP_6:def 7;
+    x = c1 * Z1 by A19,A4,A5,GROUP_2:52;
+    hence x in c1 * H1 by A18,GROUP_2:125;
+    end;
+    then h.c * h.:A c= c1 * H1 by TARSKI:def 3;
+    hence thesis by A12,XBOOLE_0:def 10;
+  end;
+  hence thesis by GROUP_6:def 7;
+end;
+
+theorem Th32:
+  for G,H being strict Group,h being Homomorphism of G,H
+  for G1 being strict Subgroup of G
+  for G2 being strict normal Subgroup of G
+  for H1 being strict Subgroup of Image h
+  for H2 being strict normal Subgroup of Image h
+   st G2 is strict Subgroup of G1 &
+   G1./.(G1,G2)`*` is Subgroup of center (G./.G2)
+   & H1=h.:G1 & H2=h.:G2 holds
+  H1./.(H1,H2)`*` is Subgroup of center (Image h./.H2)
+proof
+  let G,H be strict Group;
+  let h be Homomorphism of G,H;
+  let G1 be strict Subgroup of G;
+  let G2 be strict normal Subgroup of G;
+  let H1 be strict Subgroup of Image h;
+  let H2 be strict normal Subgroup of Image h;
+  assume that
+A1: G2 is strict Subgroup of G1 and
+A2: G1./.(G1,G2)`*` is Subgroup of center (G./.G2) and
+A3: H1=h.:G1 & H2=h.:G2;
+B:  H2 is strict Subgroup of H1 by A1,A3,GRSOLV_1:13; then
+A4: (H1,H2)`*` = H2 by GROUP_6:def 1;
+  then  reconsider I = H2 as normal Subgroup of H1;
+  reconsider J = H1./.(H1,H2)`*` as Subgroup of Image h./.H2 by B,GROUP_6:34;
+  for T be Element of Image h./.H2 st T in J holds T in center (Image h./.H2)
+  proof
+    let T be Element of Image h./.H2;
+    assume
+A5: T in J;
+    for S be Element of Image h./.H2 holds S * T = T * S
+    proof
+      let S be Element of Image h./.H2;
+      consider g being Element of Image h such that
+A6:   S = g * H2 & S = H2 * g by GROUP_6:26;
+      consider h1 being Element of H1 such that
+A7:   T = h1 * I & T = I * h1 by A4,A5,GROUP_6:28;
+      reconsider h2 = h1 as Element of Image h by GROUP_2:51;
+A8:   @S = S & @T = T & h1 * I = h2 * H2 by GROUP_6:2;
+      then
+A9:   S * T = g * H2 * (h2 * H2) by A6,A7,GROUP_6:def 4
+           .= g * h2 * H2 by GROUP_11:1;
+A10:  T * S = h2 * H2 * (g * H2) by A6,A7,A8,GROUP_6:def 4
+           .= h2 * g * H2 by GROUP_11:1;
+      g in Image h by STRUCT_0:def 5;
+      then consider a being Element of G such that
+A11:  g = h.a by GROUP_6:54;
+A12:  a in (Omega).G by STRUCT_0:def 5;
+      h1 in H1 by STRUCT_0:def 5;
+      then consider a1 being Element of G1 such that
+A13:  h1 = (h|G1).a1 by A3,GROUP_6:54;
+A14:  a1 in G1 by STRUCT_0:def 5;
+      reconsider a2 = a1 as Element of G by GROUP_2:51;
+A15:  h2 = h.a2 by A13,FUNCT_1:72;
+A16:  g * h2 * H2 = h.a * h.a2 * h.:G2 by A11,A15,A3,Th31
+                 .= h.:(a * a2 * G2) by Th30;
+A17:  h2 * g * H2 = h.a2 * h.a * h.:G2 by A11,A15,A3,Th31
+                 .= h.:(a2 * a * G2) by Th30;
+A18:  [.G1, (Omega).G.] is strict Subgroup of G2 by A1,A2,Th22;
+      [.a2,a.] in [.G1, (Omega).G.] by A12,A14,GROUP_5:74; then
+A19:  [.a2,a.] in G2 by A18,GROUP_2:49;
+      a * a2 * G2= a * a2 * ([.a2,a.] * G2) by A19, GROUP_2:136
+                .= a * a2 * ((a2" * a") * (a2 * a) * G2) by GROUP_5:19
+                .= a * a2 * ((a2" * a") * (a2 * a)) * G2 by GROUP_2:38
+                .= (a * a2 * (a2" * a")) * (a2 * a) * G2 by GROUP_1:def 4
+                .= (a * (a2 * (a2" * a"))) * (a2 * a) * G2 by GROUP_1:def 4
+                .= (a * (a2 * a2" * a")) * (a2 * a) * G2 by GROUP_1:def 4
+                .= (a * (1_G * a")) * (a2 * a) * G2 by GROUP_1:def 6
+                .= (a * a") * (a2 * a) * G2 by GROUP_1:def 5
+                .= 1_G * (a2 * a) * G2 by GROUP_1:def 6
+                .= a2 * a * G2 by GROUP_1:def 5;
+      hence thesis by A9,A10,A16,A17;
+    end;
+    hence thesis by GROUP_5:89;
+  end;
+  hence thesis by GROUP_2:67;
+end;
+
+theorem Th33:
+  for G,H being strict Group, h being Homomorphism of G,H holds
+  for A being strict normal Subgroup of G holds
+  h.:A is strict normal Subgroup of Image h
+proof
+  let G,H be strict Group;
+  let h be Homomorphism of G,H;
+  let A be strict normal Subgroup of G;
+  reconsider C=h.:A as strict Subgroup of Image h by GRSOLV_1:10;
+  for b being Element of Image h holds b* C c= C * b
+  proof
+    let b be Element of Image h;
+A1: b in Image h by STRUCT_0:def 5;
+    now
+      consider b1 being Element of G such that
+A2:   b = h.b1 by A1,GROUP_6:54;
+      let x be set;
+      assume
+      x in b * C;
+      then consider g being Element of Image h such that
+A3:   x = b * g and
+A4:   g in C by GROUP_2:125;
+      consider g1 being Element of A such that
+A5:   g=(h|A).g1 by A4,GROUP_6:54;
+      reconsider g1 as Element of G by GROUP_2:51;
+      g=h.g1 by A5,FUNCT_1:72;
+      then
+A6:   x =h.b1 * h.g1 by A2,A3,GROUP_2:52
+        .=h.(b1 *g1) by GROUP_6:def 7;
+      g1 in A by STRUCT_0:def 5; then
+A7:   b1 * g1 in b1 * A by GROUP_2:125;
+A8:   h.:(A * b1) = h.:A * h.b1 by GRSOLV_1:14;
+      b1 * A = A * b1 by GROUP_3:140;
+      then x in h.:A * h.b1 by A6,A7,FUNCT_2:43,A8;
+      hence x in C * b by A2,GROUP_6:2;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  hence thesis by GROUP_3:141;
+end;
+
+registration
+  let G be strict nilpotent Group, H be strict Group,
+      h be Homomorphism of G,H;
+  cluster Image h -> nilpotent;
+coherence
+proof
+  consider F being FinSequence of the_normal_subgroups_of G such that
+A1: len F>0 and
+A2: F.1 = (Omega).G and
+A3: F.(len F) = (1).G and
+A4: for i st i in dom F & i+1 in dom F for G1,G2 being strict normal Subgroup
+  of G st G1 = F.i & G2 = F.(i+1) holds G2 is Subgroup of G1 &
+  G1./.(G1,G2)`*` is Subgroup of center (G./.G2) by def3;
+  1 <= len F by A1,NAT_1:14;
+  then
+A5: 1 in Seg len F;
+  defpred P[set,set] means ex J being strict normal Subgroup of G st J = F.$1
+  & $2 = h.:(J);
+A6: for k be Nat st k in Seg len F ex x being Element of
+  the_normal_subgroups_of Image h st P[k,x]
+  proof
+    let k be Nat;
+    assume
+    k in Seg len F;
+    then k in dom F by FINSEQ_1:def 3;
+    then F.k in the_normal_subgroups_of G by FINSEQ_2:13;
+    then F.k is strict normal Subgroup of G by def2;
+    then consider A being strict normal Subgroup of G such that
+A7: A=F.k;
+    h.:(A) is strict normal Subgroup of Image h by Th33;
+    then h.:(A) in the_normal_subgroups_of Image h by def2;
+    hence thesis by A7;
+  end;
+  consider Z being FinSequence of the_normal_subgroups_of Image h such that
+A8: dom Z = Seg len F & for j be Nat st j in Seg len F holds P[j,Z.j]
+  from FINSEQ_1:sch 5(A6);
+  Seg len Z = Seg len F by A8,FINSEQ_1:def 3;
+  then
+A9: dom F = Seg len Z by FINSEQ_1:def 3
+         .= dom Z by FINSEQ_1:def 3;
+A10: for i st i in dom Z & i+1 in dom Z for H1,H2 being strict normal Subgroup
+  of Image h st H1 = Z.i & H2 = Z.(i+1) holds H2 is strict Subgroup of H1 &
+  H1./.(H1,H2)`*` is Subgroup of center (Image h./.H2)
+  proof
+    let i;
+    assume
+A11: i in dom Z & i+1 in dom Z;
+    let H1,H2 be strict normal Subgroup of Image h;
+    assume that
+A12: H1=Z.i and
+A13: H2=Z.(i+1);
+A14:i in dom F & i+1 in dom F by A8,A11,FINSEQ_1:def 3;
+    consider G1 being strict normal Subgroup of G such that
+A15: G1 = F.i and
+A16: H1 = h.:G1 by A8,A11,A12;
+    consider G2 being strict normal Subgroup of G such that
+A17: G2 = F.(i+1) and
+A18: H2 = h.:G2 by A8,A11,A13;
+A19: G2 is strict Subgroup of G1 by A4,A9,A11,A15,A17;
+    G1./.(G1,G2)`*` is Subgroup of center (G./.G2)  by A14,A15,A17,A19,A4;
+    hence thesis by A16,A19,A18,Th32,GRSOLV_1:13;
+  end;
+  take Z;
+A21: len Z = len F by A8,FINSEQ_1:def 3;
+  Z.1 = (Omega).(Image h) & Z.(len Z) = (1).(Image h)
+  proof
+    ex G1 being strict normal Subgroup of G st G1 = F.1 & Z.1 = h.:G1 by A8,A5;
+    hence Z.1 = (Omega).(Image h) by A2,GRSOLV_1:12;
+    ex G2 being strict normal Subgroup of G st G2 = F.(len F) &
+    Z.(len F ) = h.:G2 by A1,A8,FINSEQ_1:5;
+    hence Z.(len Z) = (1).H by A3,A21,GRSOLV_1:12
+                   .= (1).(Image h) by GROUP_2:75;
+  end;
+  hence thesis by A1,A8,FINSEQ_1:def 3,A10;
+end;
+end;
+
+registration
+  let G be strict nilpotent Group, N be strict normal Subgroup of G;
+  cluster G./.N -> nilpotent;
+coherence
+proof
+  Image nat_hom N = G./.N by GROUP_6:57;
+  hence thesis;
+end;
+end;
+
+theorem
+  for G being Group st
+  ex F being FinSequence of the_normal_subgroups_of G st
+  len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G & for i st i in dom F
+  & i+1 in dom F for G1 being strict normal Subgroup of G st G1 = F.i
+  holds [.G1, (Omega).G.] = F.(i+1) holds G is nilpotent
+proof
+  let G be Group;
+  given F being FinSequence of the_normal_subgroups_of G such that
+A1: len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G and
+A2: for i st i in dom F & i+1 in dom F for G1 being strict normal
+  Subgroup of G st G1 = F.i holds [.G1, (Omega).G.] = F.(i+1);
+  for i st i in dom F & i+1 in dom F for H1,H2 being
+  strict normal Subgroup of G st H1 = F.i & H2 = F.(i+1) holds H2 is
+  Subgroup of H1 & [.H1, (Omega).G.] is Subgroup of H2
+  proof
+    let i;
+    assume
+A3: i in dom F & i+1 in dom F;
+    let H1,H2 be strict normal Subgroup of G;
+    assume H1 = F.i & H2 = F.(i+1);
+    then H2 = [.H1, (Omega).G.] by A2,A3;
+    hence thesis by GROUP_2:63,Th19;
+  end;
+  hence thesis by A1,Th25;
+end;
+
+theorem
+  for G being Group st ex F being FinSequence of the_normal_subgroups_of G
+  st len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G & for i st i in dom F
+  & i+1 in dom F for G1,G2 being strict normal Subgroup of G
+  st G1 = F.i & G2 = F.(i+1) holds G2 is Subgroup of G1 &
+  G./.G2 is commutative Group holds G is nilpotent
+proof
+  let G be Group;
+  given F being FinSequence of the_normal_subgroups_of G such that
+A1: len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G and
+A2: for i st i in dom F & i+1 in dom F for G1,G2 being strict normal Subgroup
+  of G st G1 = F.i & G2 = F.(i+1) holds G2 is Subgroup of G1 &
+  G./.G2 is commutative Group;
+A3: for i st i in dom F & i+1 in dom F for H1,H2 being
+  strict normal Subgroup of G st H1 = F.i & H2 = F.(i+1) holds H2 is
+  Subgroup of H1 & H1./.(H1,H2)`*` is Subgroup of center (G./.H2)
+  proof
+    let i;
+    assume
+A4: i in dom F & i+1 in dom F;
+    let H1,H2 be strict normal Subgroup of G;
+    assume
+A5: H1 = F.i & H2 = F.(i+1);
+    H2 is Subgroup of H1 by A2,A4,A5;
+    then
+A6: H1./.(H1,H2)`*` is Subgroup of G./.H2 by GROUP_6:34;
+    G./.H2 is commutative Group by A2,A4,A5;
+    hence thesis by A2,A4,A5,A6,GROUP_5:94;
+  end;
+  take F;
+  thus thesis by A1,A3;
+end;
+
+theorem
+  for G being Group st ex F being FinSequence of the_normal_subgroups_of
+  G st len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G & for i st i in dom F
+  & i+1 in dom F for G1,G2 being strict normal Subgroup of G
+  st G1 = F.i & G2 = F.(i+1) holds G2 is Subgroup of G1 &
+  G./.G2 is cyclic Group holds G is nilpotent
+proof
+  let G be Group;
+  given F being FinSequence of the_normal_subgroups_of G such that
+A1: len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G and
+A2: for i st i in dom F & i+1 in dom F for G1,G2 being strict normal Subgroup
+  of G st G1 = F.i & G2 = F.(i+1) holds G2 is Subgroup of G1 &
+  G./.G2 is cyclic Group;
+A3: for i st i in dom F & i+1 in dom F for H1,H2 being
+  strict normal Subgroup of G st H1 = F.i & H2 = F.(i+1) holds H2 is strict
+  Subgroup of H1 & H1./.(H1,H2)`*` is Subgroup of center (G./.H2)
+  proof
+    let i;
+    assume
+A4: i in dom F & i+1 in dom F;
+    let H1,H2 be strict normal Subgroup of G;
+    assume
+A5: H1 = F.i & H2 = F.(i+1);
+    H2 is strict Subgroup of H1 by A2,A4,A5; then
+A6: H1./.(H1,H2)`*` is Subgroup of G./.H2 by GROUP_6:34;
+    G./.H2 is commutative Group by A2,A4,A5;
+    hence thesis by A2,A4,A5,A6,GROUP_5:94;
+  end;
+  take F;
+  thus thesis by A1,A3;
+end;
+
+registration
+  cluster nilpotent -> solvable Group;
+  correctness
+  proof
+    let G be Group;
+    assume G is nilpotent;
+    then consider F being FinSequence of the_normal_subgroups_of G such that
+A1: len F > 0 & F.1 = (Omega).G & F.(len F) = (1).G &
+    for i st i in dom F & i+1 in dom F for G1,G2 being strict normal
+    Subgroup of G st G1 = F.i & G2 = F.(i+1) holds G2 is Subgroup of
+    G1 & G1./.(G1,G2)`*` is Subgroup of center (G./.G2) by def3;
+    reconsider R = F as FinSequence of Subgroups G by Th39;
+A2: for i st i in dom R & i+1 in dom R for H1,H2 being Subgroup
+    of G st H1 = R.i & H2 = R.(i+1) holds H2 is strict normal Subgroup of H1
+    & for N being normal Subgroup of H1 st N = H2 holds H1./.N is commutative
+    proof
+      let i;
+      assume
+A3:   i in dom R & i+1 in dom R;
+X:    F.i is strict normal Subgroup of G &
+      F.(i+1) is strict normal Subgroup of G by A3,Th40;
+      let H1,H2 be Subgroup of G;
+      assume
+A6:   H1 = R.i & H2 = R.(i+1);
+      for N being normal Subgroup of H1 st N = H2 holds H1./.N is commutative
+      proof
+        let N be normal Subgroup of H1;
+        assume
+A7:     N = H2;
+        then reconsider N' = N as strict normal Subgroup of G by A6,A7,X;
+A8:     H1./.(H1,N')`*` is Subgroup of center (G./.N') by A1,A3,A6,A7,X;
+        center (G./.N') is commutative by GROUP_5:92;
+        hence H1./.N is commutative by GROUP_6:def 1,A8;
+      end;
+      hence thesis by A1,A3,A6,GROUP_6:9,X;
+    end;
+    take R;
+    thus thesis by A1,A2;
+  end;
+end;
+

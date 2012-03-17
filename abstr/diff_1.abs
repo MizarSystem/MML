@@ -6,9 +6,10 @@
 
 environ
 
- vocabularies DIFF_1, ARYTM, ARYTM_1, SEQM_3, SEQ_1, PARTFUN1, FUNCT_1,
-      SEQFUNC, RELAT_1, BOOLE, ORDINAL2, ARYTM_3, SERIES_1, FUNCOP_1, NEWTON,
-      RLVECT_1, RELOC, FUZZY_2, INCPROJ, VALUED_0;
+ vocabularies NUMBERS, SUBSET_1, REAL_1, PARTFUN1, SEQFUNC, XREAL_0, ORDINAL1,
+      VALUED_1, RELAT_1, ARYTM_1, MEMBER_1, FUNCT_1, ARYTM_3, TARSKI, XBOOLE_0,
+      CARD_1, NAT_1, VALUED_0, ZFMISC_1, SEQ_1, FUNCOP_1, XXREAL_0, CARD_3,
+      SERIES_1, DIFF_1;
  notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
       TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1,
       VALUED_0, VALUED_1, SEQ_1, FUNCOP_1, NAT_D, NEWTON, MEASURE6, FUNCT_2,
@@ -24,8 +25,7 @@ begin
 
 reserve n,m,k,i for Element of NAT,
   h,r,r1,r2,x0,x1,x2,x for Real,
-  f for
-  PartFunc of REAL,REAL,
+  f for PartFunc of REAL,REAL,
   S for Functional_Sequence of REAL,REAL,
   y for set;
 
@@ -45,8 +45,7 @@ definition
   redefine func Shift(f,h) -> Function of REAL,REAL means
 :: DIFF_1:def 2
 
-  for x holds
-  it.x = f.(x+h);
+  for x holds it.x = f.(x+h);
 end;
 
 definition
@@ -73,8 +72,7 @@ definition
   redefine func bD(f,h) -> Function of REAL,REAL;
 end;
 
-theorem :: DIFF_1:1
-  bD(f,h) = -fD(f,-h);
+canceled;
 
 definition
   let f be PartFunc of REAL,REAL, h be real number;
@@ -94,8 +92,7 @@ definition
   func forward_difference(f,h) -> Functional_Sequence of REAL,REAL means
 :: DIFF_1:def 6
 
-
-  it.0=f & for n holds it.(n+1)=fD(it.n,h);
+  it.0=f & for n being Nat holds it.(n+1)=fD(it.n,h);
 end;
 
 notation
@@ -107,7 +104,7 @@ end;
 reserve f,f1,f2 for Function of REAL,REAL;
 
 theorem :: DIFF_1:2
-  for n holds fdif(f,h).n is Function of REAL,REAL;
+  for n be Nat holds fdif(f,h).n is Function of REAL,REAL;
 
 theorem :: DIFF_1:3
   fD(f,h).x = f.(x+h) - f.x;
@@ -142,8 +139,7 @@ definition
   let h be real number;
   func backward_difference(f,h) -> Functional_Sequence of REAL,REAL means
 :: DIFF_1:def 7
-
-   it.0=f & for n holds it.(n+1)=bD(it.n,h);
+   it.0=f & for n being Nat holds it.(n+1)=bD(it.n,h);
 end;
 
 notation
@@ -153,7 +149,7 @@ notation
 end;
 
 theorem :: DIFF_1:12
-  for n holds bdif(f,h).n is Function of REAL,REAL;
+  for n be Nat holds bdif(f,h).n is Function of REAL,REAL;
 
 theorem :: DIFF_1:13
   f is constant implies for x holds bdif(f,h).(n+1).x=0;
@@ -180,8 +176,7 @@ definition
   func central_difference(f,h) -> Functional_Sequence of REAL,REAL means
 :: DIFF_1:def 8
 
-
-  it.0=f & for n holds it.(n+1)=cD(it.n,h);
+  it.0=f & for n be Nat holds it.(n+1)=cD(it.n,h);
 end;
 
 notation
@@ -191,7 +186,7 @@ notation
 end;
 
 theorem :: DIFF_1:19
-  for n holds cdif(f,h).n is Function of REAL,REAL;
+  for n being Nat holds cdif(f,h).n is Function of REAL,REAL;
 
 theorem :: DIFF_1:20
   f is constant implies for x holds cdif(f,h).(n+1).x=0;
@@ -242,8 +237,7 @@ definition :: Forward difference quotient of the third order
   let x0,x1,x2,x3 be real number;
   func [!f,x0,x1,x2,x3!] -> Real equals
 :: DIFF_1:def 11
-  ([!f,x0,x1,x2!] - [!f,x1,x2,x3!])/(x0-
-  x3);
+  ([!f,x0,x1,x2!] - [!f,x1,x2,x3!])/(x0-x3);
 end;
 
 theorem :: DIFF_1:29
@@ -266,8 +260,8 @@ theorem :: DIFF_1:34
   x2,x0!] & [!f,x0,x1,x2!] = [!f,x2,x1,x0!];
 
 theorem :: DIFF_1:35
-  x0,x1,x2 are_mutually_different implies [!f,x0,x1,x2!] = [!f,x2,x0,x1
-  !] & [!f,x0,x1,x2!] = [!f,x1,x0,x2!];
+  x0,x1,x2 are_mutually_different implies
+  [!f,x0,x1,x2!] = [!f,x2,x0,x1!] & [!f,x0,x1,x2!] = [!f,x1,x0,x2!];
 
 theorem :: DIFF_1:36
   (fdif(fdif(f,h).m,h).n).x = fdif(f,h).(m+n).x;

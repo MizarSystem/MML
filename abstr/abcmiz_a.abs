@@ -1,0 +1,745 @@
+:: A Model of Mizar Concepts -- Unification
+::  by Grzegorz Bancerek
+:: 
+:: Received November 20, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies TARSKI, QC_LANG3, PBOOLE, MSUALG_1, CATALG_1, FINSEQ_1, XBOOLE_0,
+      ZFMISC_1, ARYTM_3, CARD_1, NAT_1, NUMBERS, XXREAL_0, ZF_LANG1, ORDINAL1,
+      TREES_A, ABIAN, CARD_3, MEMBER_1, FINSET_1, FUNCOP_1, FUNCT_1, TREES_4,
+      TREES_2, MSATERM, RELAT_1, MCART_1, MSAFREE, ZF_MODEL, AOFA_000,
+      FINSEQ_2, PARTFUN1, QC_LANG1, FUNCT_2, ORDINAL4, CAT_3, TREES_3,
+      ABCMIZ_0, ABCMIZ_1, ABCMIZ_A, STRUCT_0, FACIRC_1, INSTALG1, MSUALG_2,
+      COMPUT_1, BINTREE1, TREES_9, ARYTM_1, FUNCT_6, SUBSET_1, MARGREL1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FACIRC_1, ENUMSET1, FUNCT_2, FUNCOP_1, XCMPLX_0,
+      XXREAL_0, NAT_1, NAT_D, MCART_1, FINSET_1, CARD_1, NUMBERS, CARD_3,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCT_6, TREES_1, TREES_2, TREES_3,
+      TREES_4, TREES_9, PBOOLE, STRUCT_0, ORDINAL1, MSUALG_1, MSUALG_2,
+      MSAFREE, EQUATION, MSATERM, INSTALG1, CATALG_1, MSAFREE3, AOFA_000,
+      ABCMIZ_1;
+ constructors RELSET_1, DOMAIN_1, WELLORD2, MSAFREE1, TREES_9, EQUATION, NAT_D,
+      FINSEQ_4, CATALG_1, FACIRC_1, ABCMIZ_1, PRE_POLY;
+ registrations XBOOLE_0, SUBSET_1, XREAL_0, ORDINAL1, FUNCT_1, FINSET_1,
+      STRUCT_0, PBOOLE, MSUALG_2, FINSEQ_1, NAT_1, CARD_1, MSAFREE, TREES_3,
+      MSAFREE1, TREES_2, FUNCOP_1, RELAT_1, INDEX_1, INSTALG1, MSAFREE3,
+      WAYBEL26, FACIRC_1, PRE_CIRC, ABCMIZ_1, REALSET1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin :: Preliminary
+
+reserve i,j for Nat;
+
+theorem :: ABCMIZ_A:1
+ for x being pair set holds x = [x`1, x`2];
+
+scheme :: ABCMIZ_A:sch 1
+ MinimalElement{X() -> finite non empty set, R[set,set]}:
+  ex x being set st x in X() &
+  for y being set st y in X() holds not R[y,x]
+  provided
+ for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x]
+  and
+ for x,y,z being set st x in X() & y in X() & z in X() & R[x,y] & R[y,z]
+    holds R[x,z];
+
+scheme :: ABCMIZ_A:sch 2
+ FiniteC{X() -> finite set, P[set]}:
+  P[X()]
+  provided
+ for A being Subset of X()
+   st for B being set st B c< A holds P[B]
+   holds P[A];
+
+scheme :: ABCMIZ_A:sch 3
+ Numeration{X() -> finite set, R[set, set]}:
+  ex s being one-to-one FinSequence st rng s = X() &
+  for i,j st i in dom s & j in dom s & R[s.i, s.j] holds i < j
+  provided
+ for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x]
+  and
+ for x,y,z being set st x in X() & y in X() & z in X() & R[x,y] & R[y,z]
+    holds R[x,z];
+
+theorem :: ABCMIZ_A:2
+  for x being variable holds varcl vars x = vars x;
+
+theorem :: ABCMIZ_A:3
+ for C being initialized ConstructorSignature
+ for e being expression of C holds
+  e is compound iff not ex x being Element of Vars st e = x-term C;
+
+begin :: Standardized Constructor Signature
+
+registration
+  cluster empty quasi-loci;
+end;
+
+definition
+ let C be ConstructorSignature;
+ attr C is standardized means
+:: ABCMIZ_A:def 1
+
+  for o being OperSymbol of C st o is constructor
+   holds o in Constructors &
+    o`1 = the_result_sort_of o &
+    card o`2`1 = len the_arity_of o;
+end;
+
+theorem :: ABCMIZ_A:4
+  for C being ConstructorSignature st C is standardized
+  for o being OperSymbol of C
+  holds o is constructor iff o in Constructors;
+
+registration
+ cluster MaxConstrSign -> standardized;
+end;
+
+registration
+ cluster initialized standardized strict ConstructorSignature;
+end;
+
+definition
+  let C be initialized standardized ConstructorSignature;
+  let c be constructor OperSymbol of C;
+  func loci_of c -> quasi-loci equals
+:: ABCMIZ_A:def 2
+c`2`1;
+end;
+
+registration
+ let C be ConstructorSignature;
+ cluster constructor Subsignature of C;
+end;
+
+registration
+ let C be initialized ConstructorSignature;
+ cluster initialized (constructor Subsignature of C);
+end;
+
+registration
+ let C be standardized ConstructorSignature;
+ cluster -> standardized (constructor Subsignature of C);
+end;
+
+theorem :: ABCMIZ_A:5
+ for S1,S2 being standardized ConstructorSignature
+  st the carrier' of S1 = the carrier' of S2
+  holds the ManySortedSign of S1 = the ManySortedSign of S2;
+
+theorem :: ABCMIZ_A:6
+ for C being ConstructorSignature holds
+   C is standardized iff C is Subsignature of MaxConstrSign;
+
+registration
+ let C be initialized ConstructorSignature;
+ cluster non compound quasi-term of C;
+end;
+
+registration
+ cluster -> pair Element of Vars;
+end;
+
+theorem :: ABCMIZ_A:7
+ for x being Element of Vars st vars x is natural holds vars x = 0;
+
+theorem :: ABCMIZ_A:8
+ Vars misses Constructors;
+
+theorem :: ABCMIZ_A:9
+ for x being Element of Vars holds
+   x <> * & x <> non_op;
+
+theorem :: ABCMIZ_A:10
+ for C being standardized ConstructorSignature holds
+   Vars misses the carrier' of C;
+
+theorem :: ABCMIZ_A:11  :: see ABCMIZ_1:51
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  holds
+   (ex x being Element of Vars st e = x-term C & e.{} = [x, a_Term]) or
+   (ex o being OperSymbol of C st e.{} = [o, the carrier of C] &
+    ( o in Constructors or o = * or o = non_op ));
+
+registration
+ let C be initialized standardized ConstructorSignature;
+ let e be expression of C;
+ cluster e.{} -> pair;
+end;
+
+theorem :: ABCMIZ_A:12
+ for C being initialized ConstructorSignature
+ for e being expression of C
+ for o being OperSymbol of C st e.{} = [o, the carrier of C]
+  holds
+    e is expression of C, the_result_sort_of o;
+
+theorem :: ABCMIZ_A:13
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  holds
+    ( (e.{})`1 = * implies e is expression of C, a_Type C ) &
+    ( (e.{})`1 = non_op implies e is expression of C, an_Adj C );
+
+theorem :: ABCMIZ_A:14
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  holds
+   (e.{})`1 in Vars & (e.{})`2 = a_Term & e is quasi-term of C or
+   (e.{})`2 = the carrier of C &
+    ( (e.{})`1 in Constructors & (e.{})`1 in the carrier' of C or
+      (e.{})`1 = * or (e.{})`1 = non_op );
+
+theorem :: ABCMIZ_A:15
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  st (e.{})`1 in Constructors
+  holds e in (the Sorts of Free(C, MSVars C)).(e.{})`1`1;
+
+theorem :: ABCMIZ_A:16
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  holds not (e.{})`1 in Vars iff (e.{})`1 is OperSymbol of C;
+
+theorem :: ABCMIZ_A:17
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  st (e.{})`1 in Vars
+ ex x being Element of Vars st x = (e.{})`1 & e = x-term C;
+
+theorem :: ABCMIZ_A:18
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  st (e.{})`1 = *
+ ex a being expression of C, an_Adj C, q being expression of C, a_Type C st
+  e = [*,3]-tree(a,q);
+
+theorem :: ABCMIZ_A:19
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  st (e.{})`1 = non_op
+ ex a being expression of C, an_Adj C st e = [non_op,3]-tree a;
+
+theorem :: ABCMIZ_A:20
+ for C being initialized standardized ConstructorSignature
+ for e being expression of C
+  st (e.{})`1 in Constructors
+ ex o being OperSymbol of C st o = (e.{})`1 & the_result_sort_of o = o`1 &
+   e is expression of C, the_result_sort_of o;
+
+theorem :: ABCMIZ_A:21
+ for C being initialized standardized ConstructorSignature
+ for t being quasi-term of C holds
+   t is compound iff (t.{})`1 in Constructors & (t.{})`1`1 = a_Term;
+
+theorem :: ABCMIZ_A:22
+ for C being initialized standardized ConstructorSignature
+ for t being expression of C holds
+   t is non compound quasi-term of C iff (t.{})`1 in Vars;
+
+theorem :: ABCMIZ_A:23
+ for C being initialized standardized ConstructorSignature
+ for t being expression of C holds
+   t is quasi-term of C iff
+      (t.{})`1 in Constructors & (t.{})`1`1 = a_Term or (t.{})`1 in Vars;
+
+theorem :: ABCMIZ_A:24
+ for C being initialized standardized ConstructorSignature
+ for a being expression of C holds
+   a is positive quasi-adjective of C iff
+    (a .{})`1 in Constructors & (a .{})`1`1 = an_Adj;
+
+theorem :: ABCMIZ_A:25
+ for C being initialized standardized ConstructorSignature
+ for a being quasi-adjective of C holds
+   a is negative iff (a .{})`1 = non_op;
+
+theorem :: ABCMIZ_A:26
+ for C being initialized standardized ConstructorSignature
+ for t being expression of C holds
+   t is pure expression of C, a_Type C iff
+    (t.{})`1 in Constructors & (t.{})`1`1 = a_Type;
+
+begin :: Expressions
+
+reserve C for initialized ConstructorSignature,
+  f for valuation of C;
+reserve i,j for Nat,
+  x,y,z for variable,
+  l,l' for quasi-loci;
+
+definition
+  mode expression is expression of MaxConstrSign;
+  mode valuation is valuation of MaxConstrSign;
+  mode quasi-adjective is quasi-adjective of MaxConstrSign;
+  func QuasiAdjs -> Subset of Free(MaxConstrSign, MSVars MaxConstrSign) equals
+:: ABCMIZ_A:def 3
+  QuasiAdjs MaxConstrSign;
+
+  mode quasi-term is quasi-term of MaxConstrSign;
+  func QuasiTerms -> Subset of Free(MaxConstrSign, MSVars MaxConstrSign) equals
+:: ABCMIZ_A:def 4
+  QuasiTerms MaxConstrSign;
+
+  mode quasi-type is quasi-type of MaxConstrSign;
+  func QuasiTypes equals
+:: ABCMIZ_A:def 5
+QuasiTypes MaxConstrSign;
+
+end;
+
+registration
+  cluster QuasiAdjs -> non empty;
+
+  cluster QuasiTerms -> non empty;
+
+  cluster QuasiTypes -> non empty;
+
+end;
+
+definition
+  redefine
+  func Modes -> non empty Subset of Constructors;
+  func Attrs -> non empty Subset of Constructors;
+  func Funcs -> non empty Subset of Constructors;
+end;
+
+reserve C for initialized ConstructorSignature,
+  c for constructor OperSymbol of C;
+
+definition
+  func set-constr -> Element of Modes equals
+:: ABCMIZ_A:def 6
+[a_Type,[{},0]];
+end;
+
+theorem :: ABCMIZ_A:27
+  kind_of set-constr = a_Type &
+  loci_of set-constr = {} &
+  index_of set-constr = 0;
+
+theorem :: ABCMIZ_A:28
+ Constructors = [:{a_Type, an_Adj, a_Term}, [:QuasiLoci, NAT:]:];
+
+theorem :: ABCMIZ_A:29
+  [rng l, i] in Vars & l^<*[rng l,i]*> is quasi-loci;
+
+theorem :: ABCMIZ_A:30
+  ex l st len l = i;
+
+theorem :: ABCMIZ_A:31
+  for X being finite Subset of Vars
+  ex l st rng l = varcl X;
+
+theorem :: ABCMIZ_A:32   :: to mozna uogolnic na X zamkniety na poddrzewa
+               :: (troche dodatkowych pojec i twierdzen)
+  for X,o being set, p being DTree-yielding FinSequence
+  st ex C st X = Union the Sorts of Free(C, MSVars C)
+  holds o-tree p in X implies p is FinSequence of X;
+
+definition
+  let C;
+  let e be expression of C;
+  mode subexpression of e -> expression of C means
+:: ABCMIZ_A:def 7
+  it in Subtrees e;
+  func constrs e equals
+:: ABCMIZ_A:def 8
+  (proj1 rng e)/\{o where o is constructor OperSymbol of C: not contradiction};
+  func main-constr e equals
+:: ABCMIZ_A:def 9   :: dobre dla zestandaryzowanych (nie ma def)
+
+  (e.{})`1 if e is compound otherwise {};
+  func args e -> FinSequence of Free(C, MSVars C) means
+:: ABCMIZ_A:def 10
+  e = (e.{})-tree it;
+end;
+
+theorem :: ABCMIZ_A:33
+  for C for e being expression of C holds e is subexpression of e;
+
+theorem :: ABCMIZ_A:34
+  main-constr (x -term C) = {};
+
+theorem :: ABCMIZ_A:35
+  for c being constructor OperSymbol of C
+  for p being FinSequence of QuasiTerms C st len p = len the_arity_of c
+  holds main-constr (c-trm p) = c;
+
+definition
+  let C;
+  let e be expression of C;
+  attr e is constructor means
+:: ABCMIZ_A:def 11
+
+  e is compound & main-constr e is constructor OperSymbol of C;
+end;
+
+registration
+  let C;
+  cluster constructor -> compound expression of C;
+end;
+
+registration
+  let C;
+  cluster constructor expression of C;
+end;
+
+registration
+  let C;
+  let e be constructor expression of C;
+  cluster constructor subexpression of e;
+end;
+
+registration
+  let S be non void Signature;
+  let X be non empty-yielding ManySortedSet of S;
+  let t be Element of Free(S,X);
+  cluster rng t -> Relation-like;
+end;
+
+theorem :: ABCMIZ_A:36
+  for e being constructor expression of C holds main-constr e in constrs e;
+
+begin :: Arity
+
+reserve a,a' for quasi-adjective,
+  t,t1,t2 for quasi-term,
+  T,T',T1,T2 for quasi-type,
+  e,e1,e2 for expression,
+  f for valuation,
+  c for Element of Constructors;
+
+definition
+  let C be non void Signature;
+  attr C is arity-rich means
+:: ABCMIZ_A:def 12
+  for n being Nat, s being SortSymbol of C holds
+  {o where o is OperSymbol of C: the_result_sort_of o = s &
+        len the_arity_of o = n} is infinite;
+  let o be OperSymbol of C;
+  attr o is nullary means
+:: ABCMIZ_A:def 13
+the_arity_of o = {};
+  attr o is unary means
+:: ABCMIZ_A:def 14
+len the_arity_of o = 1;
+  attr o is binary means
+:: ABCMIZ_A:def 15
+len the_arity_of o = 2;
+end;
+
+theorem :: ABCMIZ_A:37
+  for C being non void Signature
+  for o being OperSymbol of C holds
+  (o is nullary implies o is not unary) &
+  (o is nullary implies o is not binary) &
+  (o is unary implies o is not binary);
+
+registration
+  let C be ConstructorSignature;
+  cluster non_op C -> unary;
+  cluster ast C -> binary;
+end;
+
+registration
+  let C be ConstructorSignature;
+  cluster nullary -> constructor OperSymbol of C;
+end;
+
+theorem :: ABCMIZ_A:38
+  for C being ConstructorSignature holds C is initialized iff
+  ex m being OperSymbol of a_Type C, a being OperSymbol of an_Adj C st
+  m is nullary & a is nullary;
+
+registration
+  let C be initialized ConstructorSignature;
+  cluster nullary constructor OperSymbol of a_Type C;
+  cluster nullary constructor OperSymbol of an_Adj C;
+end;
+
+registration
+  let C be initialized ConstructorSignature;
+  cluster nullary constructor OperSymbol of C;
+end;
+
+registration
+  cluster arity-rich -> with_an_operation_for_each_sort (non void Signature);
+  cluster arity-rich -> initialized ConstructorSignature;
+end;
+
+registration
+  cluster MaxConstrSign -> arity-rich;
+end;
+
+registration
+  cluster arity-rich initialized ConstructorSignature;
+end;
+
+registration
+  let C be arity-rich ConstructorSignature;
+  let s be SortSymbol of C;
+  cluster nullary constructor OperSymbol of s;
+  cluster unary constructor OperSymbol of s;
+  cluster binary constructor OperSymbol of s;
+end;
+
+registration
+  let C be arity-rich ConstructorSignature;
+  cluster unary constructor OperSymbol of C;
+  cluster binary constructor OperSymbol of C;
+end;
+
+theorem :: ABCMIZ_A:39
+ for o being nullary OperSymbol of C holds
+   [o, the carrier of C]-tree {} is expression of C, the_result_sort_of o;
+
+definition
+  let C be initialized ConstructorSignature;
+  let m be nullary constructor OperSymbol of a_Type C;
+  redefine func m term -> pure expression of C, a_Type C;
+end;
+
+definition
+  let c be Element of Constructors;
+  func @c -> constructor OperSymbol of MaxConstrSign equals
+:: ABCMIZ_A:def 16
+c;
+end;
+
+definition
+  let m be Element of Modes;
+  redefine func @m -> constructor OperSymbol of a_Type MaxConstrSign;
+end;
+
+registration
+  cluster @set-constr -> nullary;
+end;
+
+theorem :: ABCMIZ_A:40
+  the_arity_of @set-constr = {};
+
+definition
+  func set-type -> quasi-type equals
+:: ABCMIZ_A:def 17
+  ({}QuasiAdjs MaxConstrSign) ast ((@set-constr) term);
+end;
+
+theorem :: ABCMIZ_A:41
+  adjs set-type = {} &
+  the_base_of set-type = (@set-constr) term;
+
+definition
+  let l be FinSequence of Vars;
+  func args l -> FinSequence of QuasiTerms MaxConstrSign means
+:: ABCMIZ_A:def 18
+
+  len it = len l & for i st i in dom l holds it.i = (l/.i)-term MaxConstrSign;
+end;
+
+definition
+  let c;
+  func base_exp_of c -> expression equals
+:: ABCMIZ_A:def 19
+(@c)-trm args loci_of c;
+end;
+
+theorem :: ABCMIZ_A:42
+  for o being OperSymbol of MaxConstrSign holds
+  o is constructor iff o in Constructors;
+
+theorem :: ABCMIZ_A:43
+  for m being nullary OperSymbol of MaxConstrSign holds
+  main-constr (m term) = m;
+
+theorem :: ABCMIZ_A:44
+  for m being unary constructor OperSymbol of MaxConstrSign
+  for t holds main-constr (m term t) = m;
+
+theorem :: ABCMIZ_A:45
+  for a holds main-constr ((non_op MaxConstrSign)term a) = non_op;
+
+theorem :: ABCMIZ_A:46
+  for m being binary constructor OperSymbol of MaxConstrSign
+  for t1,t2 holds main-constr (m term(t1,t2)) = m;
+
+theorem :: ABCMIZ_A:47
+  for q being expression of MaxConstrSign, a_Type MaxConstrSign
+  for a holds main-constr ((ast MaxConstrSign)term(a,q)) = *;
+
+definition
+  let T be quasi-type;
+  func constrs T equals
+:: ABCMIZ_A:def 20
+  (constrs the_base_of T) \/ union {constrs a: a in adjs T};
+end;
+
+theorem :: ABCMIZ_A:48
+  for q being pure expression of MaxConstrSign, a_Type MaxConstrSign
+  for A being finite Subset of QuasiAdjs MaxConstrSign holds
+  constrs(A ast q) = (constrs q) \/ union {constrs a: a in A};
+
+theorem :: ABCMIZ_A:49
+  constrs(a ast T) = (constrs a) \/ (constrs T);
+
+begin :: Unification
+
+definition
+  let C be initialized ConstructorSignature;
+  let t,p be expression of C;
+  pred t matches_with p means
+:: ABCMIZ_A:def 21
+  ex f being valuation of C st t = p at f;
+  reflexivity;
+end;
+
+theorem :: ABCMIZ_A:50
+ for t1,t2,t3 being expression of C
+  st t1 matches_with t2 & t2 matches_with t3
+  holds t1 matches_with t3;
+
+definition
+  let C be initialized ConstructorSignature;
+  let A,B be Subset of QuasiAdjs C;
+  pred A matches_with B means
+:: ABCMIZ_A:def 22
+  ex f being valuation of C st B at f c= A;
+  reflexivity;
+end;
+
+theorem :: ABCMIZ_A:51
+ for A1,A2,A3 being Subset of QuasiAdjs C
+  st A1 matches_with A2 & A2 matches_with A3
+  holds A1 matches_with A3;
+
+definition
+  let C be initialized ConstructorSignature;
+  let T,P be quasi-type of C;
+  pred T matches_with P means
+:: ABCMIZ_A:def 23
+  ex f being valuation of C st
+   (adjs P) at f c= adjs T & (the_base_of P) at f = the_base_of T;
+  reflexivity;
+end;
+
+theorem :: ABCMIZ_A:52
+ for T1,T2,T3 being quasi-type of C
+  st T1 matches_with T2 & T2 matches_with T3
+  holds T1 matches_with T3;
+
+definition
+  let C be initialized ConstructorSignature;
+  let t1,t2 be expression of C;
+  let f be valuation of C;
+  pred f unifies t1,t2 means
+:: ABCMIZ_A:def 24
+  t1 at f = t2 at f;
+end;
+
+theorem :: ABCMIZ_A:53
+ for t1,t2 being expression of C
+ for f being valuation of C st f unifies t1,t2
+  holds f unifies t2,t1;
+
+definition
+  let C be initialized ConstructorSignature;
+  let t1,t2 be expression of C;
+  pred t1,t2 are_unifiable means
+:: ABCMIZ_A:def 25
+  ex f being valuation of C st f unifies t1,t2;
+  reflexivity;
+  symmetry;
+end;
+
+definition
+  let C be initialized ConstructorSignature;
+  let t1,t2 be expression of C;
+  pred t1,t2 are_weakly-unifiable means
+:: ABCMIZ_A:def 26
+  ex g being irrelevant one-to-one valuation of C
+  st variables_in t2 c= dom g & t1,t2 at g are_unifiable;
+  reflexivity;
+::  symmetry;
+end;
+
+:: theorem
+::  for t1,t2 being expression of C st t1 matches_with t2
+::   holds t1,t2 are_weakly-unifiable;
+
+theorem :: ABCMIZ_A:54
+ for t1,t2 being expression of C st t1,t2 are_unifiable
+  holds t1,t2 are_weakly-unifiable;
+
+definition
+  let C be initialized ConstructorSignature;
+  let t,t1,t2 be expression of C;
+  pred t is_a_unification_of t1,t2 means
+:: ABCMIZ_A:def 27
+  ex f being valuation of C st f unifies t1,t2 & t = t1 at f;
+end;
+
+theorem :: ABCMIZ_A:55
+ for t1,t2,t being expression of C st t is_a_unification_of t1,t2
+  holds t is_a_unification_of t2,t1;
+
+theorem :: ABCMIZ_A:56
+ for t1,t2,t being expression of C st t is_a_unification_of t1,t2
+  holds t matches_with t1 & t matches_with t2;
+
+definition
+  let C be initialized ConstructorSignature;
+  let t,t1,t2 be expression of C;
+  pred t is_a_general-unification_of t1,t2 means
+:: ABCMIZ_A:def 28
+  t is_a_unification_of t1,t2 &
+  for u being expression of C st u is_a_unification_of t1,t2
+  holds u matches_with t;
+end;
+
+:: theorem
+::  for t1,t2 being expression of C st t1,t2 are_unifiable
+::  ex t being expression of C st t is_a_general-unification_of t1,t2;
+
+begin :: Type distribution
+
+theorem :: ABCMIZ_A:57
+  for n being Nat
+  for s being SortSymbol of MaxConstrSign
+  ex m being constructor OperSymbol of s
+  st len the_arity_of m = n;
+
+theorem :: ABCMIZ_A:58
+  for l
+  for s being SortSymbol of MaxConstrSign
+  for m being constructor OperSymbol of s st len the_arity_of m = len l
+  holds variables_in (m-trm args l) = rng l;
+
+theorem :: ABCMIZ_A:59
+  for X being finite Subset of Vars st varcl X = X
+  for s being SortSymbol of MaxConstrSign
+  ex m being constructor OperSymbol of s st ::a_Type MaxConstrSign
+  ex p being FinSequence of QuasiTerms MaxConstrSign
+  st len p = len the_arity_of m & vars (m-trm p) = X;
+
+definition
+  let d be PartFunc of Vars, QuasiTypes;
+  attr d is even means
+:: ABCMIZ_A:def 29 :: rowny,rownomierny
+
+  for x,T st x in dom d & T = d.x holds vars T = vars x;
+end;
+
+definition
+  let l be quasi-loci;
+  mode type-distribution of l -> PartFunc of Vars, QuasiTypes means
+:: ABCMIZ_A:def 30
+
+  dom it = rng l & it is even;
+end;
+
+theorem :: ABCMIZ_A:60
+  for l being empty quasi-loci holds {} is type-distribution of l;

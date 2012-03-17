@@ -6,9 +6,10 @@
 
 environ
 
- vocabularies DIFF_1, ARYTM, ARYTM_1, SEQM_3, SEQ_1, PARTFUN1, FUNCT_1,
-      SEQFUNC, RELAT_1, BOOLE, ORDINAL2, ARYTM_3, SERIES_1, FUNCOP_1, NEWTON,
-      RLVECT_1, RELOC, FUZZY_2, INCPROJ, VALUED_0;
+ vocabularies NUMBERS, SUBSET_1, REAL_1, PARTFUN1, SEQFUNC, XREAL_0, ORDINAL1,
+      VALUED_1, RELAT_1, ARYTM_1, MEMBER_1, FUNCT_1, ARYTM_3, TARSKI, XBOOLE_0,
+      CARD_1, NAT_1, VALUED_0, ZFMISC_1, SEQ_1, FUNCOP_1, XXREAL_0, CARD_3,
+      SERIES_1, DIFF_1;
  notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
       TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1,
       VALUED_0, VALUED_1, SEQ_1, FUNCOP_1, NAT_D, NEWTON, MEASURE6, FUNCT_2,
@@ -28,8 +29,7 @@ begin
 
 reserve n,m,k,i for Element of NAT,
   h,r,r1,r2,x0,x1,x2,x for Real,
-  f for
-  PartFunc of REAL,REAL,
+  f for PartFunc of REAL,REAL,
   S for Functional_Sequence of REAL,REAL,
   y for set;
 
@@ -90,8 +90,7 @@ definition
   let h be real number;
   redefine func Shift(f,h) -> Function of REAL,REAL means
   :Def2:
-  for x holds
-  it.x = f.(x+h);
+  for x holds it.x = f.(x+h);
   coherence
   proof
     dom Shift(f,h) = -h ++ dom f & dom f = REAL by Def1,FUNCT_2:def 1;
@@ -119,13 +118,10 @@ A1:     IT = Shift(f,h);
 A2:   dom IT = dom Shift(f,h) by FUNCT_2:def 1;
       assume
 A3:   for x holds IT.x = f.(x+h);
-      for x being Element of REAL st x in dom IT holds IT.x = Shift(f,h).
-      x
+      for x being Element of REAL st x in dom IT holds IT.x = Shift(f,h).x
       proof
         let x be Element of REAL;
-        assume
-        x in dom IT;
-        then
+        assume x in dom IT; then
 A4:     x in (-h ++ dom f) by A2,Def1;
         IT.x = f.(x+h) by A3;
         hence thesis by A4,Def1;
@@ -176,8 +172,7 @@ definition
   end;
 end;
 
-theorem
-  bD(f,h) = -fD(f,-h) by RFUNCT_1:31;
+canceled;
 
 definition
   let f be PartFunc of REAL,REAL, h be real number;
@@ -203,15 +198,15 @@ definition
   let f be PartFunc of REAL,REAL;
   let h be real number;
   func forward_difference(f,h) -> Functional_Sequence of REAL,REAL means
-  :Def6
-  :
-  it.0=f & for n holds it.(n+1)=fD(it.n,h);
+  :Def6:
+  it.0=f & for n being Nat holds it.(n+1)=fD(it.n,h);
   existence
   proof
     reconsider fZ = f as Element of PFuncs(REAL,REAL) by PARTFUN1:119;
     defpred R[set,set,set] means ex g being PartFunc of REAL, REAL st $2 = g &
     $3 = fD(g,h);
-A1: for n for x being Element of PFuncs(REAL,REAL) ex y being Element of
+A1: for n be Element of NAT
+    for x being Element of PFuncs(REAL,REAL) ex y being Element of
     PFuncs(REAL,REAL) st R[n,x,y]
     proof
       let n;
@@ -238,9 +233,9 @@ A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     let seq1,seq2 be Functional_Sequence of REAL,REAL;
     assume that
 A3: seq1.0=f and
-A4: for n holds seq1.(n+1)=fD(seq1.n,h) and
+A4: for n be Nat holds seq1.(n+1)=fD(seq1.n,h) and
 A5: seq2.0=f and
-A6: for n holds seq2.(n+1)=fD(seq2.n,h);
+A6: for n be Nat holds seq2.(n+1)=fD(seq2.n,h);
     defpred P[Nat] means seq1.$1 = seq2.$1;
 A7: for k st P[k] holds P[k+1]
     proof
@@ -267,19 +262,18 @@ reserve f,f1,f2 for Function of REAL,REAL;
 Lm1: fD(f,h) is Function of REAL,REAL;
 
 theorem Th2:
-  for n holds fdif(f,h).n is Function of REAL,REAL
+  for n be Nat holds fdif(f,h).n is Function of REAL,REAL
 proof
-  defpred X[Element of NAT] means fdif(f,h).$1 is Function of REAL,REAL;
-A1: for k st X[k] holds X[k+1]
+  defpred X[Nat] means fdif(f,h).$1 is Function of REAL,REAL;
+A1: for k be Nat st X[k] holds X[k+1]
   proof
-    let k;
-    assume
-    fdif(f,h).k is Function of REAL,REAL;
+    let k be Nat;
+    assume fdif(f,h).k is Function of REAL,REAL;
     then fD(fdif(f,h).k,h) is Function of REAL,REAL by Lm1;
     hence thesis by Def6;
   end;
 A2: X[0] by Def6;
-  for n holds X[n] from NAT_1:sch 1(A2,A1);
+  for n be Nat holds X[n] from NAT_1:sch 2(A2,A1);
   hence thesis;
 end;
 
@@ -318,8 +312,7 @@ A1: f is constant;
 A2: for x holds f.(x+h) - f.x = 0
   proof
     let x;
-    x+h in REAL;
-    then
+    x+h in REAL; then
 A3: x+h in dom f by FUNCT_2:def 1;
     x in REAL;
     then x in dom f by FUNCT_2:def 1;
@@ -383,11 +376,9 @@ A5: fdif(f,h).(k+1) is Function of REAL,REAL by Th2;
 A6: X[0]
   proof
     let x;
-    x in REAL;
-    then
+    x in REAL; then
 A7: x in dom (r(#)f) by FUNCT_2:def 1;
-    x+h in REAL;
-    then
+    x+h in REAL; then
 A8: x+h in dom (r(#)f) by FUNCT_2:def 1;
     fdif(r(#)f,h).(0+1).x = fD(fdif(r(#)f,h).0,h).x by Def6
       .= fD(r(#)f,h).x by Def6
@@ -542,8 +533,7 @@ definition
   let f be PartFunc of REAL,REAL;
   let h be real number;
   func backward_difference(f,h) -> Functional_Sequence of REAL,REAL means
-  :
-  Def7: it.0=f & for n holds it.(n+1)=bD(it.n,h);
+  :Def7: it.0=f & for n being Nat holds it.(n+1)=bD(it.n,h);
   existence
   proof
     reconsider fZ = f as Element of PFuncs(REAL,REAL) by PARTFUN1:119;
@@ -576,9 +566,9 @@ A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     let seq1,seq2 be Functional_Sequence of REAL,REAL;
     assume that
 A3: seq1.0=f and
-A4: for n holds seq1.(n+1)=bD(seq1.n,h) and
+A4: for n be Nat holds seq1.(n+1)=bD(seq1.n,h) and
 A5: seq2.0=f and
-A6: for n holds seq2.(n+1)=bD(seq2.n,h);
+A6: for n be Nat holds seq2.(n+1)=bD(seq2.n,h);
     defpred P[Nat] means seq1.$1 = seq2.$1;
 A7: for k st P[k] holds P[k+1]
     proof
@@ -603,19 +593,18 @@ end;
 Lm2: bD(f,h) is Function of REAL,REAL;
 
 theorem Th12:
-  for n holds bdif(f,h).n is Function of REAL,REAL
+  for n be Nat holds bdif(f,h).n is Function of REAL,REAL
 proof
-  defpred X[Element of NAT] means bdif(f,h).$1 is Function of REAL,REAL;
-A1: for k st X[k] holds X[k+1]
+  defpred X[Nat] means bdif(f,h).$1 is Function of REAL,REAL;
+A1: for k be Nat st X[k] holds X[k+1]
   proof
-    let k;
-    assume
-    bdif(f,h).k is Function of REAL,REAL;
+    let k be Nat;
+    assume bdif(f,h).k is Function of REAL,REAL;
     then bD(bdif(f,h).k,h) is Function of REAL,REAL by Lm2;
     hence thesis by Def7;
   end;
 A2: X[0] by Def7;
-  for n holds X[n] from NAT_1:sch 1(A2,A1);
+  for n be Nat holds X[n] from NAT_1:sch 2(A2,A1);
   hence thesis;
 end;
 
@@ -851,9 +840,8 @@ definition
   let f be PartFunc of REAL,REAL;
   let h be real number;
   func central_difference(f,h) -> Functional_Sequence of REAL,REAL means
-  :Def8
-  :
-  it.0=f & for n holds it.(n+1)=cD(it.n,h);
+  :Def8:
+  it.0=f & for n be Nat holds it.(n+1)=cD(it.n,h);
   existence
   proof
     reconsider fZ = f as Element of PFuncs(REAL,REAL) by PARTFUN1:119;
@@ -886,9 +874,9 @@ A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     let seq1,seq2 be Functional_Sequence of REAL,REAL;
     assume that
 A3: seq1.0=f and
-A4: for n holds seq1.(n+1)=cD(seq1.n,h) and
+A4: for n be Nat holds seq1.(n+1)=cD(seq1.n,h) and
 A5: seq2.0=f and
-A6: for n holds seq2.(n+1)=cD(seq2.n,h);
+A6: for n be Nat holds seq2.(n+1)=cD(seq2.n,h);
     defpred P[Nat] means seq1.$1 = seq2.$1;
 A7: for k st P[k] holds P[k+1]
     proof
@@ -913,19 +901,19 @@ end;
 Lm3: cD(f,h) is Function of REAL,REAL;
 
 theorem Th19:
-  for n holds cdif(f,h).n is Function of REAL,REAL
+  for n being Nat holds cdif(f,h).n is Function of REAL,REAL
 proof
-  defpred X[Element of NAT] means cdif(f,h).$1 is Function of REAL,REAL;
-A1: for k st X[k] holds X[k+1]
+  defpred X[Nat] means cdif(f,h).$1 is Function of REAL,REAL;
+A1: for k be Nat st X[k] holds X[k+1]
   proof
-    let k;
+    let k be Nat;
     assume
     cdif(f,h).k is Function of REAL,REAL;
     then cD(cdif(f,h).k,h) is Function of REAL,REAL by Lm3;
     hence thesis by Def8;
   end;
 A2: X[0] by Def8;
-  for n holds X[n] from NAT_1:sch 1(A2,A1);
+  for n be Nat holds X[n] from NAT_1:sch 2(A2,A1);
   hence thesis;
 end;
 
@@ -1258,8 +1246,7 @@ A1: for k st X[k] holds X[k+1]
   proof
     let k;
     assume
-A2: for x holds (fdif(f,h).(2*k+1)).x = (cdif(f,h).(2*k+1)).(x+k*h+h/2
-    );
+A2: for x holds (fdif(f,h).(2*k+1)).x = (cdif(f,h).(2*k+1)).(x+k*h+h/2);
     let x;
 A3: fdif(f,h).(2*k+1).(x+h+h) = cdif(f,h).(2*k+1).(x+h+h+k*h+h/2) by A2
       .= cdif(f,h).(2*k+1).(x+(k+2)*h+h/2);
@@ -1335,8 +1322,7 @@ definition :: Forward difference quotient of the third order
   let f be real-valued Function;
   let x0,x1,x2,x3 be real number;
   func [!f,x0,x1,x2,x3!] -> Real equals
-  ([!f,x0,x1,x2!] - [!f,x1,x2,x3!])/(x0-
-  x3);
+  ([!f,x0,x1,x2!] - [!f,x1,x2,x3!])/(x0-x3);
   correctness;
 end;
 
@@ -1434,8 +1420,8 @@ A5: [!f,x2,x1,x0!] = ((-(f.x1-f.x2))/(-(x1-x2)) - (f.x1-f.x0)/(x1-x0))/(x2-
 end;
 
 theorem
-  x0,x1,x2 are_mutually_different implies [!f,x0,x1,x2!] = [!f,x2,x0,x1
-  !] & [!f,x0,x1,x2!] = [!f,x1,x0,x2!]
+  x0,x1,x2 are_mutually_different implies
+  [!f,x0,x1,x2!] = [!f,x2,x0,x1!] & [!f,x0,x1,x2!] = [!f,x1,x0,x2!]
 proof
   assume
 A1: x0,x1,x2 are_mutually_different;
@@ -1485,18 +1471,14 @@ end;
 
 Lm4: ex S being Functional_Sequence of REAL,REAL st for n holds S.n is
 Real_Sequence
-
 proof
   consider s1 being Real_Sequence;
   consider S being Functional_Sequence of REAL,REAL;
   set s1 = NAT --> 1;
   set S = NAT --> s1;
   s1 is PartFunc of REAL,REAL by RELSET_1:17;
-
   then dom S = NAT & for n holds S.n is PartFunc of REAL,REAL by
-  FUNCOP_1:13
-  ,19;
-
+  FUNCOP_1:13,19;
   then reconsider S as Functional_Sequence of REAL,REAL by SEQFUNC:1;
   dom s1 = NAT & for n holds s1.n is real by FUNCOP_1:19;
   then s1 is Real_Sequence by SEQ_1:4;

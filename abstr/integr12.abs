@@ -1,0 +1,385 @@
+:: Integrability Formulas -- Part {I}
+::  by Bo Li and Na Ma
+:: 
+:: Received November 7, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, FUNCT_1, ARYTM_1, SIN_COS, INTEGRA1, FDIFF_1, XBOOLE_0,
+      SQUARE_1, ARYTM_3, ORDINAL2, RCOMP_1, PREPOWER, NEWTON, NUMBERS, REAL_1,
+      SUBSET_1, XXREAL_0, XXREAL_1, PARTFUN1, TAYLOR_1, SIN_COS6, SIN_COS9,
+      LIMFUNC1, TARSKI, VALUED_1, CARD_1, ORDINAL4, INTEGRA5, NAT_1, XXREAL_2;
+ notations TARSKI, XBOOLE_0, SEQ_1, SIN_COS, SUBSET_1, NUMBERS, VALUED_1,
+      NAT_1, XXREAL_0, XREAL_0, REAL_1, RELAT_1, RELSET_1, PARTFUN1, PARTFUN2,
+      RCOMP_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FCONT_1, SQUARE_1, INTEGRA5,
+      TAYLOR_1, FDIFF_1, SEQ_2, SIN_COS6, SIN_COS9, BINOP_2, ORDINAL1, NEWTON,
+      LIMFUNC1, PREPOWER;
+ constructors SIN_COS, TAYLOR_1, SEQ_1, REAL_1, FDIFF_1, FCONT_1, PSCOMP_1,
+      BINOP_2, SQUARE_1, PREPOWER, INTEGRA5, SEQ_4, XXREAL_3, XBOOLE_0,
+      LIMFUNC1, NAT_1, POWER, RELSET_1, TARSKI, SIN_COS9, PARTFUN1, PARTFUN2,
+      FUNCT_1, RCOMP_1, RELAT_1, SIN_COS6, RFUNCT_1, VALUED_1, FDIFF_9;
+ registrations VALUED_1, NAT_1, XBOOLE_0, NUMBERS, MEMBERED, VALUED_0,
+      INTEGRA1, INT_1, RELAT_1, ORDINAL1, FUNCT_2, RCOMP_1, RELSET_1, RFUNCT_1,
+      XREAL_0, NEWTON, SQUARE_1, FUNCT_1, XXREAL_0, FDIFF_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin
+
+ reserve r,a,b,p,x,r,s for Real;
+ reserve y for set;
+ reserve n for Element of NAT;
+ reserve A for closed-interval Subset of REAL;
+ reserve f,g,h,f1,f2,g1,g2 for PartFunc of REAL,REAL;
+ reserve Z for open Subset of REAL;
+
+theorem :: INTEGR12:1
+ Z c= dom ((f1+f2)^) & (for x st x in Z holds f1.x=1) & f2=#Z 2
+ implies (f1+f2)^ is_differentiable_on Z & for x st x in Z holds
+ (((f1+f2)^)`|Z).x = -2*x/(1+x |^2)^2;
+
+::f.x=1/((1+x^2)*arccot.x)
+
+theorem :: INTEGR12:2
+ A c= Z & f = ((g1+g2)^)/f2 & f2 = arccot & Z c= ]. -1,1 .[ & g2=#Z 2
+ & (for x st x in Z holds g1.x=1 & f2.x>0) & Z = dom f implies
+ integral(f,A)=(-ln*arccot).(sup A)-(-ln*arccot).(inf A);
+
+::f.x=exp_R.x/(1+(exp_R.x)^2)
+
+theorem :: INTEGR12:3
+ A c= Z & (for x st x in Z holds exp_R.x < 1 & f1.x=1)
+ & Z c= dom (arctan*exp_R)
+ & Z = dom f & f=exp_R/(f1+(exp_R)^2)
+ implies integral(f,A)=(arctan*exp_R).(sup A)
+                      -(arctan*exp_R).(inf A);
+
+::f.x=-exp_R.x/(1+(exp_R.x)^2)
+
+theorem :: INTEGR12:4
+A c= Z & (for x st x in Z holds exp_R.x < 1 & f1.x=1)
+& Z c= dom (arccot*exp_R) & Z = dom f & f=(-exp_R)/(f1+(exp_R)^2)
+ implies integral(f,A)=(arccot*exp_R).(sup A)
+                      -(arccot*exp_R).(inf A);
+
+::f.x=exp_R.x*sin.x/cos.x+exp_R.x/(cos.x)^2
+
+theorem :: INTEGR12:5
+ A c= Z & Z = dom f & f=exp_R(#)(sin/cos)+exp_R/cos^2 implies
+ integral(f,A)=(exp_R(#)tan).(sup A)-(exp_R(#)tan).(inf A);
+
+::f.x=exp_R.x*cos.x/sin.x-exp_R.x/(sin.x)^2
+
+theorem :: INTEGR12:6
+ A c= Z & Z = dom f & f=exp_R(#)(cos/sin)-exp_R/sin^2 implies
+ integral(f,A)=(exp_R(#)cot).(sup A)-(exp_R(#)cot).(inf A);
+
+::f.x=exp_R.x*arctan.x+exp_R.x/(1+x^2)
+
+theorem :: INTEGR12:7
+ A c= Z & (for x st x in Z holds f1.x=1) & Z c= ]. -1,1 .[ & Z = dom f
+ & f=exp_R(#)arctan+exp_R/(f1+#Z 2) implies
+ integral(f,A)=(exp_R(#)arctan).(sup A)-(exp_R(#)arctan).(inf A);
+
+::f.x=exp_R.x*arccot.x-exp_R.x/(1+x^2)
+
+theorem :: INTEGR12:8
+ A c= Z & (for x st x in Z holds f1.x=1) & Z c= ]. -1,1 .[ & Z = dom f
+ & f=exp_R(#)arccot-exp_R/(f1+#Z 2) implies
+ integral(f,A)=(exp_R(#)arccot).(sup A)-(exp_R(#)arccot).(inf A);
+
+::f.x=exp_R.(sin.x) * cos.x
+
+theorem :: INTEGR12:9
+ A c= Z & Z = dom f & f=(exp_R*sin)(#)cos implies
+ integral(f,A)=(exp_R*sin).(sup A)-(exp_R*sin).(inf A);
+
+::f.x=exp_R.(cos.x) * sin.x
+
+theorem :: INTEGR12:10
+  A c= Z & Z = dom f & f=(exp_R*cos)(#)sin implies
+  integral(f,A)=(-exp_R*cos).(sup A)-(-exp_R*cos).(inf A);
+
+::f.x=cos.(ln.x)/x
+
+theorem :: INTEGR12:11
+ A c= Z & (for x st x in Z holds x>0)
+ & Z = dom f & f=(cos*ln)(#)((id Z)^) implies
+ integral(f,A)=(sin*ln).(sup A)-(sin*ln).(inf A);
+
+::f.x=sin.(ln.x)/x
+
+theorem :: INTEGR12:12
+ A c= Z & (for x st x in Z holds x>0)
+ & Z = dom f & f=(sin*ln)(#)((id Z)^) implies
+ integral(f,A)=(-cos*ln).(sup A)-(-cos*ln).(inf A);
+
+::f.x=exp_R.x * cos.(exp_R.x)
+
+theorem :: INTEGR12:13
+ A c= Z & Z = dom f & f=exp_R(#)(cos*exp_R) implies
+ integral(f,A)=(sin*exp_R).(sup A)-(sin*exp_R).(inf A);
+
+::f.x = exp_R.x * sin.(exp_R.x)
+
+theorem :: INTEGR12:14
+ A c= Z & Z = dom f & f=exp_R(#)(sin*exp_R) implies
+ integral(f,A)=(-cos*exp_R).(sup A)-(-cos*exp_R).(inf A);
+
+::f.x=arctan.(x/r)
+
+theorem :: INTEGR12:15
+A c= Z & Z c= dom (ln*(f1+f2))
+& r <> 0 & (for x st x in Z holds g.x=x/r & g.x > -1 & g.x < 1 & f1.x=1)
+& f2=( #Z 2)*g & Z = dom f & f=arctan*g
+implies
+integral(f,A)=((id Z)(#)(arctan*g)-(r/2)(#)(ln*(f1+f2))).(sup A)
+             -((id Z)(#)(arctan*g)-(r/2)(#)(ln*(f1+f2))).(inf A);
+
+::f.x=arccot.(x/r)
+
+theorem :: INTEGR12:16
+A c= Z & Z c= dom (ln*(f1+f2))
+& r <> 0 & (for x st x in Z holds g.x=x/r & g.x > -1 & g.x < 1 & f1.x=1)
+& f2=( #Z 2)*g & Z = dom f & f=arccot*g implies
+integral(f,A)=((id Z)(#)((arccot)*g)+(r/2)(#)(ln*(f1+f2))).(sup A)
+             -((id Z)(#)((arccot)*g)+(r/2)(#)(ln*(f1+f2))).(inf A);
+
+::f.x=arctan.(x/r)+x/(r*(1+(x/r)^2))
+
+theorem :: INTEGR12:17
+ A c= Z & f=arctan*f1+(id Z)/(r(#)(g+f1^2))
+ & (for x st x in Z holds g.x=1 & f1.x=x/r & f1.x > -1 & f1.x < 1)
+ & Z = dom f & f|A is continuous
+ implies integral(f,A)=((id Z)(#)(arctan*f1)).(sup A)
+                      -((id Z)(#)(arctan*f1)).(inf A);
+
+::f.x=arccot.(x/r)-x/(r*(1+(x/r)^2))
+
+theorem :: INTEGR12:18
+ A c= Z & f=arccot*f1-(id Z)/(r(#)(g+f1^2))
+ & (for x st x in Z holds g.x=1 & f1.x=x/r & f1.x > -1 & f1.x < 1)
+ & Z = dom f & f|A is continuous
+ implies integral(f,A)=((id Z)(#)((arccot)*f1)).(sup A)
+                      -((id Z)(#)((arccot)*f1)).(inf A);
+
+::f.x=n*(arcsin.x) #Z (n-1) / sqrt(1-x^2)
+
+theorem :: INTEGR12:19
+ A c= Z & Z c= ]. -1,1 .[  & (for x st x in Z holds f1.x=1)
+ & Z = dom f & Z c= dom (( #Z n)*arcsin) & 1<n &
+ f=n(#)(( #Z (n-1))*arcsin)/(( #R (1/2))*(f1-#Z 2))
+ implies integral(f,A) = (( #Z n)*arcsin).(sup A)
+                        -(( #Z n)*arcsin).(inf A);
+
+::f.x=n*(arccos.x) #Z (n-1) / sqrt(1-x^2)
+
+theorem :: INTEGR12:20
+ A c= Z & Z c= ]. -1,1 .[  & (for x st x in Z holds f1.x=1)
+ & Z c= dom (( #Z n)*(arccos)) & Z = dom f & 1<n &
+ f=n(#)(( #Z (n-1))*arccos)/(( #R (1/2))*(f1-#Z 2))
+ implies integral(f,A) = (-( #Z n)*(arccos)).(sup A)
+                       - (-( #Z n)*(arccos)).(inf A);
+
+::f.x=arcsin.x+x/sqrt(1-x^2)
+
+theorem :: INTEGR12:21
+ A c= Z & (for x st x in Z holds f1.x=1)
+ & Z c= ]. -1,1 .[ & Z = dom f & f=arcsin+(id Z)/(( #R (1/2))*(f1-#Z 2))
+ implies
+ integral(f,A)=((id Z)(#)(arcsin)).(sup A)-((id Z)(#)(arcsin)).(inf A);
+
+::f.x=arccos.x-x/sqrt(1-x^2)
+
+theorem :: INTEGR12:22
+ A c= Z & (for x st x in Z holds f1.x=1)
+ & Z c= ]. -1,1 .[ & Z = dom f & f=arccos-(id Z)/(( #R (1/2))*(f1-#Z 2))
+ implies
+ integral(f,A)=((id Z)(#)(arccos)).(sup A)-((id Z)(#)(arccos)).(inf A);
+
+::f.x=a*arcsin.x+(a*x+b)/sqrt(1-x^2)
+
+theorem :: INTEGR12:23
+A c= Z & Z c= ]. -1,1 .[ &
+(for x st x in Z holds f1.x=a*x+b & f2.x=1) & Z = dom f
+& f=a(#)arcsin+f1/(( #R (1/2))*(f2-#Z 2)) implies
+integral(f,A)=(f1(#)(arcsin)).(sup A)-(f1(#)(arcsin)).(inf A);
+
+::f.x=a*arccos.x-(a*x+b)/sqrt(1-x^2)
+
+theorem :: INTEGR12:24
+A c= Z & Z c= ]. -1,1 .[ &
+(for x st x in Z holds f1.x=a*x+b & f2.x=1) & Z = dom f &
+f=a(#)arccos-f1/(( #R (1/2))*(f2-#Z 2)) implies
+integral(f,A)=(f1(#)(arccos)).(sup A)-(f1(#)(arccos)).(inf A);
+
+::f.x=arcsin.(x/a)+x/(a*sqrt(1-(x/a)^2))
+
+theorem :: INTEGR12:25
+ A c= Z & (for x st x in Z holds g.x=1 & f1.x=x/a & f1.x>-1 & f1.x<1)
+ & Z = dom f & f|A is continuous
+ & f=arcsin*f1+(id Z)/(a(#)(( #R (1/2))*(g-f1^2))) implies
+ integral(f,A)=((id Z)(#)((arcsin)*f1)).(sup A)
+              -((id Z)(#)((arcsin)*f1)).(inf A);
+
+::f.x=arccos.(x/a)-x/(a*sqrt(1-(x/a)^2))
+
+theorem :: INTEGR12:26
+ A c= Z & (for x st x in Z holds g.x=1 & f1.x=x/a & f1.x>-1 & f1.x<1)
+ & Z = dom f & f|A is continuous
+ & f=arccos*f1-(id Z)/(a(#)(( #R (1/2))*(g-f1^2))) implies
+ integral(f,A)=((id Z)(#)(arccos*f1)).(sup A)
+              -((id Z)(#)(arccos*f1)).(inf A);
+
+::f.x = n*(sin.x) #Z (n-1)/(cos.x) #Z (n+1)
+
+theorem :: INTEGR12:27
+ A c= Z & f=(n(#)(( #Z (n-1))*sin))/(( #Z (n+1))*cos) &
+ 1<=n & Z c= dom (( #Z n)*tan) & Z = dom f
+ implies
+ integral(f,A)=(( #Z n)*tan).(sup A)-(( #Z n)*tan).(inf A);
+
+::f.x=n*(cos.x) #Z (n-1)/(sin.x) #Z (n+1)
+
+theorem :: INTEGR12:28
+ A c= Z & f=(n(#)(( #Z (n-1))*cos))/(( #Z (n+1))*sin)
+ & 1<=n & Z c= dom (( #Z n)*cot) & Z = dom f
+ implies
+ integral(f,A)=(-( #Z n)*cot).(sup A)-(-( #Z n)*cot).(inf A);
+
+::f.x=(sin.(a*x))^2/(cos.(a*x))^2
+
+theorem :: INTEGR12:29
+ A c= Z & Z c= dom (tan*f1) & f=(sin*f1)^2/(cos*f1)^2
+ & (for x st x in Z holds f1.x=a*x & a<>0) & Z = dom f
+ implies
+ integral(f,A)=((1/a)(#)(tan*f1)-id Z).(sup A)
+              -((1/a)(#)(tan*f1)-id Z).(inf A);
+
+::f.x=(cos.(a*x))^2/(sin.(a*x))^2
+
+theorem :: INTEGR12:30
+ A c= Z & Z c= dom (cot*f1) & f=(cos*f1)^2/(sin*f1)^2 &
+ (for x st x in Z holds f1.x=a*x & a<>0) & Z = dom f
+ implies
+ integral(f,A)=((-1/a)(#)(cot*f1)-id Z).(sup A)
+              -((-1/a)(#)(cot*f1)-id Z).(inf A);
+
+::f.x=a*sin.x/cos.x+(a*x+b)/(cos.x)^2
+
+theorem :: INTEGR12:31
+ A c= Z & (for x st x in Z holds f1.x=a*x+b) & Z = dom f &
+ f=a(#)(sin/cos)+f1/cos^2 implies
+ integral(f,A)=(f1(#)tan).(sup A)-(f1(#)tan).(inf A);
+
+::f.x=a*cos.x/sin.x-(a*x+b)/(sin.x)^2
+
+theorem :: INTEGR12:32
+ A c= Z & (for x st x in Z holds f1.x=a*x+b) & Z = dom f &
+ f=a(#)(cos/sin)-f1/sin^2 implies
+ integral(f,A)=(f1(#)cot).(sup A)-(f1(#)cot).(inf A);
+
+::f.x=(sin.x)^2/(cos.x)^2
+
+theorem :: INTEGR12:33
+ A c= Z & (for x st x in Z holds f.x=(sin.x)^2/(cos.x)^2)
+ & Z c= dom (tan-id Z) & Z = dom f & f|A is continuous implies
+ integral(f,A)=(tan-id Z).(sup A)-(tan-id Z).(inf A);
+
+::f.x=(cos.x)^2/(sin.x)^2
+
+theorem :: INTEGR12:34
+ A c= Z & (for x st x in Z holds f.x=(cos.x)^2/(sin.x)^2)
+ & Z c= dom (-cot-id Z) & Z = dom f & f|A is continuous implies
+ integral(f,A)=(-cot-id Z).(sup A)-(-cot-id Z).(inf A);
+
+::f.x=1/(x*(1+(ln.x)^2))
+
+theorem :: INTEGR12:35
+ A c= Z & (for x st x in Z holds f.x=1/(x*(1+(ln.x)^2))
+ & ln.x > -1 & ln.x < 1) & Z c= dom (arctan*ln) & Z = dom f
+ & f|A is continuous implies integral(f,A)=(arctan*ln).(sup A)
+                                          -(arctan*ln).(inf A);
+
+::f.x=-1/(x*(1+(ln.x)^2))
+
+theorem :: INTEGR12:36
+ A c= Z & (for x st x in Z holds f.x=-1/(x*(1+(ln.x)^2))
+ & ln.x > -1 & ln.x < 1) & Z c= dom (arccot*ln) & Z = dom f
+ & f|A is continuous implies integral(f,A)=(arccot*ln).(sup A)
+                                          -(arccot*ln).(inf A);
+
+::f.x=a / sqrt(1-(a*x+b)^2)
+
+theorem :: INTEGR12:37
+ A c= Z & (for x st x in Z holds f.x=a / sqrt(1-(a*x+b)^2)
+ & f1.x=a*x+b & f1.x>-1 & f1.x<1) & Z c= dom ((arcsin)*f1)
+ & Z = dom f & f|A is continuous implies
+ integral(f,A)=((arcsin)*f1).(sup A)-((arcsin)*f1).(inf A);
+
+theorem :: INTEGR12:38
+ A c= Z & (for x st x in Z holds f.x=a / sqrt(1-(a*x+b)^2)
+ & f1.x=a*x+b & f1.x>-1 & f1.x<1) & Z c= dom ((arccos)*f1)
+ & Z = dom f & f|A is continuous implies
+ integral(f,A)=(-(arccos)*f1).(sup A)-(-(arccos)*f1).(inf A);
+
+::f.x=x*(1-x #Z 2) #R (-1/2)
+
+theorem :: INTEGR12:39
+A c= Z & f1=g-f2 & f2=#Z 2
+& (for x st x in Z holds f.x=x*(1-x #Z 2) #R (-1/2)
+& g.x=1 & f1.x >0) & Z c= dom (( #R (1/2))*f1)
+& Z = dom f & f|A is continuous implies
+integral(f,A)=(-( #R (1/2))*f1).(sup A)
+             -(-( #R (1/2))*f1).(inf A);
+
+::f.x=x*(a^2-x #Z 2) #R (-1/2)
+
+theorem :: INTEGR12:40
+ A c= Z & g=f1-f2 & f2=#Z 2 & (for x st x in Z holds
+ f.x=x*((a^2-x #Z 2) #R (-1/2)) & f1.x=a^2 & g.x >0)
+ & Z c= dom (( #R (1/2))*g) & Z = dom f & f|A is continuous implies
+ integral(f,A)=(-( #R (1/2))*g).(sup A)-(-( #R (1/2))*g).(inf A);
+
+::f.x=cos.x/((sin.x) #Z (n+1))
+
+theorem :: INTEGR12:41
+ A c= Z & n>0 & (for x st x in Z holds f.x=cos.x/((sin.x) #Z (n+1))
+ & sin.x<>0) & Z c= dom (( #Z n)*(sin^)) & Z =dom f
+ & f|A is continuous implies
+ integral(f,A)=((-1/n)(#)(( #Z n)*(sin^))).(sup A)
+              -((-1/n)(#)(( #Z n)*(sin^))).(inf A);
+
+::f.x=sin.x/((cos.x) #Z (n+1))
+
+theorem :: INTEGR12:42
+ A c= Z & n>0 & (for x st x in Z holds f.x=sin.x/((cos.x) #Z (n+1))
+ & cos.x<>0) & Z c= dom (( #Z n)*(cos^)) & Z =dom f
+ & f|A is continuous implies
+ integral(f,A)=((1/n)(#)(( #Z n)*(cos^))).(sup A)
+              -((1/n)(#)(( #Z n)*(cos^))).(inf A);
+
+::f.x=1/((1+x^2)*arccot.x)
+
+theorem :: INTEGR12:43
+ A c= Z & f = ((g1+g2)^)/f2 & f2 = arccot & Z c= ]. -1,1 .[ & g2=#Z 2
+ & (for x st x in Z holds f.x=1/((1+x^2)*arccot.x) & g1.x=1 & f2.x>0) &
+ Z = dom f implies
+ integral(f,A)=(-ln*arccot).(sup A)-(-ln*arccot).(inf A);
+
+::f.x=1 / (sqrt(1-x^2)*arcsin.x)
+
+theorem :: INTEGR12:44
+ A c= Z & Z c= ]. -1,1 .[ & (for x st x in Z holds
+ arcsin.x>0 & f1.x=1) & Z c= dom (ln*(arcsin)) & Z = dom f
+ & f=((( #R (1/2))*(f1-#Z 2))(#)arcsin)^ implies
+ integral(f,A)=(ln*(arcsin)).(sup A)-(ln*(arcsin)).(inf A);
+
+::f.x=1 / (sqrt(1-x^2)*arccos.x)
+
+theorem :: INTEGR12:45
+ A c= Z & Z c= ]. -1,1 .[  & (for x st x in Z holds f1.x=1
+ & arccos.x>0) & Z c= dom (ln*arccos) & Z = dom f &
+ f=((( #R (1/2))*(f1-#Z 2))(#)arccos)^ implies
+ integral(f,A)=(-ln*arccos).(sup A)-(-ln*arccos).(inf A);

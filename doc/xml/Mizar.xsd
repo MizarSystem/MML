@@ -51,7 +51,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" ref="Signature"/>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="IdentifyWithExp"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Identify"/>
       </xs:sequence>
       <xs:attribute name="aid" type="xs:string"/>
     </xs:complexType>
@@ -382,6 +382,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="Choice" substitutionGroup="Term">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Typ"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="QuaTrm" substitutionGroup="Term">
     <xs:complexType>
       <xs:sequence>
@@ -473,13 +480,33 @@
       <xs:choice>
         <xs:element ref="ErrorIdentify"/>
         <xs:sequence>
-          <xs:element ref="ConstrDef"/>
-          <xs:element ref="ConstrDef"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="Typ"/>
+          <xs:choice>
+            <xs:sequence>
+              <xs:element ref="Term"/>
+              <xs:element ref="Term"/>
+            </xs:sequence>
+            <xs:sequence>
+              <xs:element ref="Formula"/>
+              <xs:element ref="Formula"/>
+            </xs:sequence>
+          </xs:choice>
           <xs:element ref="EqArgs"/>
         </xs:sequence>
       </xs:choice>
-      <xs:attribute name="nr" type="xs:integer"/>
-      <xs:attribute name="aid" type="xs:string"/>
+      <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="aid" use="required" type="xs:string"/>
+      <xs:attribute name="constrkind" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="K"/>
+            <xs:enumeration value="U"/>
+            <xs:enumeration value="G"/>
+            <xs:enumeration value="V"/>
+            <xs:enumeration value="R"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="EqArgs">
@@ -917,6 +944,10 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="Symbols">
+    <xs:annotation>
+      <xs:documentation>Local dictionary for an article.
+The symbol kinds still use very internal notation.   </xs:documentation>
+    </xs:annotation>
     <xs:attribute name="aid" type="xs:string"/>
   </xs:attributeGroup>
   <xs:element name="ByExplanations">
@@ -947,6 +978,7 @@
         <xs:element ref="DefTheorem"/>
         <xs:element ref="Definiens"/>
         <xs:element ref="Canceled"/>
+        <xs:element ref="Section"/>
         <xs:group ref="AuxiliaryItem"/>
       </xs:choice>
       <xs:attribute name="aid" use="required" type="xs:string"/>
@@ -1164,6 +1196,12 @@
     </xs:complexType>
   </xs:element>
   <xs:group name="SkeletonItem">
+    <xs:annotation>
+      <xs:documentation>Skeleton items change the InFile.Current thesis, for Proof the
+changed Thesis together with used expansions is printed
+explicitely after them.   
+PerCasesReasoning is not included here.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:choice>
         <xs:element ref="Let"/>
@@ -1177,6 +1215,10 @@
     </xs:sequence>
   </xs:group>
   <xs:group name="Reasoning">
+    <xs:annotation>
+      <xs:documentation>Reasoning is a series of skeleton and auxiliary items,
+finished by optional per cases reasoning.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="SkeletonItem"/>
@@ -1247,11 +1289,20 @@
       <xs:element ref="DefPred"/>
     </xs:choice>
   </xs:group>
+  <xs:element name="Section">
+    <xs:complexType/>
+  </xs:element>
   <xs:element name="Reservation">
     <xs:complexType>
       <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Ident"/>
         <xs:element ref="Typ"/>
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Ident">
+    <xs:complexType>
+      <xs:attribute name="vid" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="JustifiedTheorem">
@@ -1290,6 +1341,12 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="CorrectnessCondition" abstract="true">
+    <xs:annotation>
+      <xs:documentation>The possible correctness conditions are following.
+They can either be only stated in the Correctness,
+which conjugates them and proves them all, or come
+separately as a proposition with a justification.</xs:documentation>
+    </xs:annotation>
     <xs:complexType>
       <xs:choice>
         <xs:element ref="Formula"/>
@@ -1432,7 +1489,7 @@
   <xs:element name="IdentifyRegistration">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="IdentifyWithExp"/>
+        <xs:element ref="Identify"/>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="CorrectnessCondition"/>
         <xs:element minOccurs="0" ref="Correctness"/>
       </xs:sequence>
