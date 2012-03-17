@@ -10,20 +10,20 @@ environ
  vocabulary UNIALG_1, FUNCT_1, FRAENKEL, ALG_1, FUNCT_2, BINOP_1, VECTSP_1,
       VECTSP_2, AMI_1, MSUALG_1, ZF_REFLE, AUTALG_1, PRALG_1, CARD_3, NATTRA_1,
       MSUALG_3, FUNCOP_1, MSUHOM_1, RELAT_1, PRE_TOPC, COHSP_1, GROUP_6,
-      WELLORD1, ENDALG;
+      WELLORD1, ENDALG, GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, PRE_TOPC, RELAT_1, FUNCT_1,
-      CARD_3, STRUCT_0, MONOID_0, VECTSP_1, BINOP_1, PARTFUN1, FUNCT_2,
+      CARD_3, STRUCT_0, BINOP_1, PARTFUN1, FUNCT_2, GROUP_1, VECTSP_1,
       FRAENKEL, FINSEQ_1, PZFMISC1, UNIALG_1, PBOOLE, MSUALG_1, ALG_1,
       MSUALG_3, MSUHOM_1, AUTALG_1;
- constructors TEX_2, BINOP_1, ALG_1, MSUALG_3, MSUHOM_1, AUTALG_1, MONOID_0,
-      MEMBERED, CARD_3, PRE_CIRC, PZFMISC1;
- clusters FRAENKEL, MONOID_0, RELSET_1, MSUALG_1, STRUCT_0, SUBSET_1, MEMBERED,
-      FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2, PBOOLE;
+ constructors TEX_2, BINOP_1, ALG_1, MSUALG_3, MSUHOM_1, AUTALG_1, 
+      MEMBERED, CARD_3, PRE_CIRC, PZFMISC1, GROUP_1;
+ clusters FRAENKEL, RELSET_1, MSUALG_1, STRUCT_0, SUBSET_1, MEMBERED,
+      FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2, PBOOLE, VECTSP_1, MONOID_0;
  requirements SUBSET, BOOLE;
- definitions AUTALG_1, FRAENKEL, TARSKI, VECTSP_1, XBOOLE_0;
+ definitions AUTALG_1, FRAENKEL, TARSKI, VECTSP_1, XBOOLE_0, GROUP_1;
  theorems AUTALG_1, ALG_1, BINOP_1, FUNCOP_1, FUNCT_1, FUNCT_2, GROUP_6,
       MSUALG_1, MSUALG_3, MSUHOM_1, TARSKI, ZFMISC_1, RELAT_1, VECTSP_1,
-      MONOID_0, RELSET_1, XBOOLE_0;
+      RELSET_1, XBOOLE_0, GROUP_1, VECTSP_2;
  schemes BINOP_1, FUNCT_1, XBOOLE_0;
 
 begin
@@ -50,8 +50,7 @@ A2:   I in Funcs (the carrier of UA, the carrier of UA) by FUNCT_2:11;
     proof
       let q be set;
       assume q in F;
-      then consider x be Element of Funcs (the carrier of UA, the carrier of UA
-)
+      then consider x be Element of Funcs(the carrier of UA, the carrier of UA)
         such that
 A3:     q = x & x is_homomorphism UA, UA;
       thus thesis by A3;
@@ -61,8 +60,7 @@ A3:     q = x & x is_homomorphism UA, UA;
     proof
       let a be Element of F;
           a in F;
-      then consider x be Element of Funcs (the carrier of UA, the carrier of UA
-)
+      then consider x be Element of Funcs(the carrier of UA, the carrier of UA)
         such that
 A4:   a = x & x is_homomorphism UA, UA;
       thus thesis by A4;
@@ -198,84 +196,47 @@ registration let UA;
   coherence
     proof
      reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
-         multLoopStr(#UAEnd UA, UAEndComp UA, i#) is non empty;
+     multLoopStr(#UAEnd UA, UAEndComp UA, i#) is non empty;
      hence thesis by Def3;
     end;
 end;
 
+Lm10: now let UA;
+  set F = UAEndMonoid UA;
+  let x, e be Element of F;
+  assume
+A1: e = id the carrier of UA;
+  reconsider i = e, y = x as Element of UAEnd UA by Def3;
+  thus x*e = (the mult of F).(x,e) by GROUP_1:def 1
+  .= (UAEndComp UA).(y,i) by Def3
+  .= i*y by Def2
+  .= x by A1,FUNCT_2:74;
+  thus e*x = (the mult of F).(e,x) by GROUP_1:def 1
+  .= (UAEndComp UA).(i,y) by Def3
+  .= y*i by Def2
+  .= x by A1,FUNCT_2:74;
+end;
+
 registration let UA;
-  cluster UAEndMonoid UA -> left_unital well-unital associative;
+  cluster UAEndMonoid UA -> unital associative;
 coherence
 proof
  reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
  set H = multLoopStr (# UAEnd UA, UAEndComp UA, i#);
-A1:H is left_unital
-  proof
-A2:    now
-        let f, g be Element of H,
-            A, B be Element of UAEnd UA;
-        assume f = A & g = B;
-        hence f * g = (UAEndComp UA).(A, B) by VECTSP_1:def 10
-                   .= B * A by Def2;
-      end;
-         H is left_unital
-      proof
-           for x being Element of H holds (1_ H)*x = x
-        proof
-         let x be Element of H;
-         consider A be Element of UAEnd UA such that
-A3:       A = x;
-             (1_ H)*x = (the unity of H)*x by VECTSP_1:def 9
-                .= A*(id the carrier of UA) by A2,A3
-                .= x by A3,FUNCT_2:74;
-         hence thesis;
-        end;
-       hence thesis by VECTSP_1:def 19;
-      end;
-     hence thesis;
-  end;
-A4:H is well-unital
-proof
-A5:    now
-        let f, g be Element of H,
-            A, B be Element of UAEnd UA;
-        assume f = A & g = B;
-        hence f * g = (UAEndComp UA).(A, B) by VECTSP_1:def 10
-                   .= B * A by Def2;
-      end;
-      consider e be Element of UAEnd UA such that
-A6:   e = i;
-          for a being Element of H holds
-             (the unity of H)*a = a & a*(the unity of H) = a
-      proof
-       let a be Element of H;
-       A7:(the unity of H)*a = a
-         proof
-          consider A be Element of UAEnd UA such that
-A8:        A = a;
-              (the unity of H)*a = A*e by A5,A6,A8
-                            .= a by A6,A8,FUNCT_2:74;
-         hence thesis;
-         end;
-              a*(the unity of H) = a
-         proof
-          consider A be Element of UAEnd UA such that
-A9:        A = a;
-              a*(the unity of H) = e*A by A5,A6,A9
-                            .= a by A6,A9,FUNCT_2:74;
-         hence thesis;
-         end;
-       hence thesis by A7;
-      end;
-    hence thesis by MONOID_0:18;
-end;
+ set F = UAEndMonoid UA;
+ thus F is unital
+ proof
+   reconsider e = i as Element of F by Def3;
+   take e;
+   thus thesis by Lm10;
+ end;
    H is associative
 proof
 A10:    now
         let f, g be Element of H,
             A, B be Element of UAEnd UA;
         assume f = A & g = B;
-        hence f * g = (UAEndComp UA).(A, B) by VECTSP_1:def 10
+        hence f * g = (UAEndComp UA).(A, B) by GROUP_1:def 1
                    .= B * A by Def2;
       end;
       thus for f, g, h be Element of H
@@ -291,7 +252,7 @@ A12:     g * h = C * B by A10;
       end;
     thus thesis;
   end;
- hence thesis by A1,A4,Def3;
+ hence thesis by Def3;
  end;
 end;
 
@@ -304,17 +265,17 @@ theorem Th5:
     assume A1: x = f & y = g;
       reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
     UAEndMonoid UA = multLoopStr (# UAEnd UA, UAEndComp UA,i #) by Def3;
-    hence x * y = (UAEndComp UA).(f, g) by A1,VECTSP_1:def 10
+    hence x * y = (UAEndComp UA).(f, g) by A1,GROUP_1:def 1
               .= g * f by Def2;
   end;
 
 theorem Th6:
- id the carrier of UA = 1_ UAEndMonoid UA
+ id the carrier of UA = 1.UAEndMonoid UA
 proof
   reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
-        id the carrier of UA =
- 1_ multLoopStr(#UAEnd UA, UAEndComp UA, i#) by VECTSP_1:def 9;
-  hence thesis by Def3;
+  reconsider e = i as Element of UAEndMonoid UA by Def3;
+  for x being Element of UAEndMonoid UA holds x*e=x & e*x=x by Lm10;
+  hence thesis by GROUP_1:def 5;
 end;
 
  reserve S for non void non empty ManySortedSign,
@@ -500,79 +461,41 @@ registration let S, U1;
     end;
 end;
 
+Lm11: now let S,U1;
+  set F = MSAEndMonoid U1;
+  let x, e be Element of F;
+  assume
+A1: e = id the Sorts of U1;
+  reconsider i = e, y = x as Element of MSAEnd U1 by Def6;
+  thus x*e = (the mult of F).(x,e) by GROUP_1:def 1
+  .= (MSAEndComp U1).(y,i) by Def6
+  .= i**y by Def5
+  .= x by A1,MSUALG_3:4;
+  thus e*x = (the mult of F).(e,x) by GROUP_1:def 1
+  .= (MSAEndComp U1).(i,y) by Def6
+  .= y**i by Def5
+  .= x by A1,MSUALG_3:3;
+end;
+
 registration let S,U1;
-  cluster MSAEndMonoid U1 -> left_unital well-unital associative;
+  cluster MSAEndMonoid U1 -> unital associative;
 coherence
  proof
   reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
   set H = multLoopStr(#MSAEnd U1, MSAEndComp U1, i#);
-A1: H is left_unital
+  thus MSAEndMonoid U1 is unital
   proof
-A2:    now
-        let f, g be Element of H,
-            A, B be Element of MSAEnd U1;
-        assume f = A & g = B;
-        hence f * g = (MSAEndComp U1).(A, B) by VECTSP_1:def 10
-                   .= B ** A by Def5;
-      end;
-         H is left_unital
-      proof
-           for x being Element of H holds (1_ H)*x = x
-        proof
-         let x be Element of H;
-         consider A be Element of MSAEnd U1 such that
-A3:       A = x;
-             (1_ H)*x = (the unity of H)*x by VECTSP_1:def 9
-                .= A**(id the Sorts of U1) by A2,A3
-                .= x by A3,MSUALG_3:3;
-         hence thesis;
-        end;
-       hence thesis by VECTSP_1:def 19;
-      end;
-     hence thesis;
-  end;
-A4: H is well-unital
-   proof
-A5:    now
-      let f, g be Element of H,
-            A, B be Element of MSAEnd U1;
-        assume f = A & g = B;
-        hence f * g = (MSAEndComp U1).(A, B) by VECTSP_1:def 10
-                   .= B ** A by Def5;
-   end;
-      consider e be Element of MSAEnd U1 such that
-A6:   e = i;
-        for a being Element of H holds
-           (the unity of H)*a = a & a*(the unity of H) = a
-     proof
-      let a be Element of H;
-      A7:(the unity of H)*a = a
-         proof
-          consider A be Element of MSAEnd U1 such that
-A8:        A = a;
-              (the unity of H)*a = A**e by A5,A6,A8
-                            .= a by A6,A8,MSUALG_3:3;
-         hence thesis;
-         end;
-             a*(the unity of H) = a
-         proof
-          consider A be Element of MSAEnd U1 such that
-A9:        A = a;
-              a*(the unity of H) = e**A by A5,A6,A9
-                            .= a by A6,A9,MSUALG_3:4;
-         hence thesis;
-         end;
-     hence thesis by A7;
-     end;
-    hence thesis by MONOID_0:18;
-   end;
-      H is associative
+   reconsider e = i as Element of MSAEndMonoid U1 by Def6;
+   take e;
+   thus thesis by Lm11;
+ end;
+ H is associative
   proof
 A10:    now
         let f, g be Element of H,
             A, B be Element of MSAEnd U1;
         assume f = A & g = B;
-        hence f * g = (MSAEndComp U1).(A, B) by VECTSP_1:def 10
+        hence f * g = (MSAEndComp U1).(A, B) by GROUP_1:def 1
                    .= B ** A by Def5;
       end;
      thus for f, g, h be Element of H
@@ -588,7 +511,7 @@ A12:     g * h = C ** B by A10;
       end;
     thus thesis;
   end;
- hence thesis by A1,A4,Def6;
+ hence thesis by Def6;
  end;
 end;
 
@@ -602,17 +525,17 @@ theorem Th13:
     reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
     MSAEndMonoid U1 = multLoopStr
             (# MSAEnd U1, MSAEndComp U1, i #) by Def6;
-    hence x * y = (MSAEndComp U1).(f, g) by A1,VECTSP_1:def 10
+    hence x * y = (MSAEndComp U1).(f, g) by A1,GROUP_1:def 1
               .= g ** f by Def5;
   end;
 
 theorem Th14:
- id the Sorts of U1 = 1_ MSAEndMonoid U1
+ id the Sorts of U1 = 1.MSAEndMonoid U1
   proof
    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
-       id the Sorts of U1 = 1_ multLoopStr(#MSAEnd U1, MSAEndComp U1, i#)
-     by VECTSP_1:def 9;
-  hence thesis by Def6;
+   reconsider e = i as Element of MSAEndMonoid U1 by Def6;
+   for x being Element of MSAEndMonoid U1 holds x*e=x & e*x=x by Lm11;
+   hence thesis by GROUP_1:def 5;
   end;
 
 canceled;
@@ -660,8 +583,8 @@ then A6:   MSAlg q' is_homomorphism MSAlg UA, MSAlg UA Over MSSign UA
     proof
       let x be set;
       assume A7: x in MSAEnd (MSAlg UA);
-      then reconsider f = x as ManySortedFunction of MSAlg UA, MSAlg UA by Def4
-;
+      then reconsider f = x as ManySortedFunction of MSAlg UA, MSAlg UA
+      by Def4;
 A8:   f is_homomorphism MSAlg UA, MSAlg UA by A7,Def4;
       reconsider g = (*-->0)*(signature UA) as
         Function of dom signature(UA), {0}* by MSUALG_1:7;
@@ -700,7 +623,7 @@ end;
 definition let G,H be non empty multLoopStr;
   let IT be map of G,H;
  attr IT is unity-preserving means
-:Def8: IT.1_ G = 1_ H;
+:Def8: IT.1.G = 1.H;
 end;
 
 registration
@@ -710,7 +633,7 @@ registration
     consider m being BinOp of {0}, u be Element of {0};
    take multLoopStr(#{0},m,u#);
    let x be Element of multLoopStr(#{0},m,u#);
-   thus (1_ multLoopStr(#{0},m,u#))*x = 0 by TARSKI:def 1
+   thus (1.multLoopStr(#{0},m,u#))*x = 0 by TARSKI:def 1
         .= x by TARSKI:def 1;
   end;
 end;
@@ -719,7 +642,7 @@ registration let G,H be left_unital (non empty multLoopStr);
  cluster multiplicative unity-preserving map of G,H;
  existence
   proof
-   reconsider m = (the carrier of G) --> 1_ H
+   reconsider m = (the carrier of G) --> 1.H
           as Function of the carrier of G,the carrier of H by FUNCOP_1:57;
    reconsider m as map of G,H;
    take m;
@@ -728,15 +651,15 @@ registration let G,H be left_unital (non empty multLoopStr);
           for x,y being Element of G holds m.(x*y) = (m.x)*(m.y)
        proof
         let x,y be Element of G;
-            m.(x*y) = 1_ H by FUNCOP_1:13
-               .= 1_ H * 1_ H by VECTSP_1:def 19
-               .= (m.x)* 1_ H by FUNCOP_1:13
+            m.(x*y) = 1.H by FUNCOP_1:13
+               .= 1.H * 1.H by VECTSP_1:def 19
+               .= (m.x)* 1.H by FUNCOP_1:13
                .= (m.x)*(m.y) by FUNCOP_1:13;
         hence thesis;
        end;
       hence thesis by Def7;
      end;
-   thus m.1_ G = 1_ H by FUNCOP_1:13;
+   thus m.1.G = 1.H by FUNCOP_1:13;
   end;
 end;
 
@@ -777,7 +700,7 @@ A1:   f is multiplicative map of G,G
       end;
          f is unity-preserving map of G,G
       proof
-           f.1_ G = 1_ G by FUNCT_1:35;
+           f.1.G = 1.G by FUNCT_1:35;
        hence thesis by Def8;
       end;
    hence thesis by A1;
@@ -849,13 +772,13 @@ then A6:       h'.(b' * a') = {0} --> (b' * a') by A1;
                    .= B ** A by MSUHOM_1:def 3
                    .= h'.a * h'.b by A5,Th13;
          end;
-          h'.1_ G = 1_ H
+          h'.1.G = 1.H
        proof
 A7:     h'.(e) = {0} --> (e) by A1;
-            h'.1_ G = h'.e by Th6
+            h'.1.G = h'.e by Th6
               .= MSAlg (e) by A7,MSUHOM_1:def 3
               .= i by MSUHOM_1:25
-              .= 1_ H by Th14;
+              .= 1.H by Th14;
         hence thesis;
        end;
     hence thesis by A4,Def7,Def8;

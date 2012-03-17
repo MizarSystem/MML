@@ -1,6 +1,6 @@
 :: Series on Complex {B}anach Algebra
 ::  by Noboru Endou
-:: 
+::
 :: Received April 6, 2004
 :: Copyright (c) 2004 Association of Mizar Users
 
@@ -9,11 +9,12 @@ environ
  vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, VECTSP_1,
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, PROB_1, SEQ_2, SEQM_3,
       CAT_1, PREPOWER, POWER, SERIES_1, BHSP_3, RSSPACE3, LOPBAN_3, SUPINF_2,
-      CLVECT_1, CFUNCT_1, CLOPBAN1, CLOPBAN2, COMPLEX1;
+      CLVECT_1, CFUNCT_1, CLOPBAN1, CLOPBAN2, COMPLEX1, GROUP_1;
  notation TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, DOMAIN_1,
       BINOP_1, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, RLVECT_1,
-      COMPLEX1, VECTSP_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, PREPOWER,
-      POWER, CFUNCT_1, CLVECT_1, CSSPACE3, CLOPBAN1, CLOPBAN2, LOPBAN_3;
+      COMPLEX1, GROUP_1, VECTSP_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      PREPOWER, POWER, CFUNCT_1, CLVECT_1, CSSPACE3, CLOPBAN1, CLOPBAN2,
+      LOPBAN_3;
  constructors REAL_1, NAT_1, FUNCT_7, DOMAIN_1, SEQ_2, SERIES_1, SEQ_4,
       PREPOWER, RSSPACE3, COMPLEX1, CSSPACE3, LOPBAN_3, CLVECT_2, CLOPBAN2,
       PRALG_1;
@@ -23,7 +24,7 @@ environ
  definitions SEQ_2, SERIES_1, CLVECT_1;
  theorems AXIOMS, ABSVALUE, REAL_1, RLVECT_1, VECTSP_1, BINOP_1, SEQ_1, SEQ_2,
       SEQM_3, SERIES_1, NAT_1, INT_1, SQUARE_1, FUNCT_2, SEQ_4, PREPOWER,
-      CLVECT_1, CSSPACE3, LOPBAN_3, CLOPBAN1, CFUNCDOM, CLOPBAN2;
+      CLVECT_1, CSSPACE3, LOPBAN_3, CLOPBAN1, CFUNCDOM, CLOPBAN2, GROUP_1;
  schemes SEQ_1, RECDEF_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Complex Normed Space
@@ -31,78 +32,78 @@ begin :: Basic Properties of Sequences of Complex Normed Space
 definition
   let X be non empty CNORMSTR;
   let seq be sequence of X;
-func Partial_Sums seq -> sequence of X means :LOPBAN_3_def_1:
+func Partial_Sums seq -> sequence of X means :Def1:
   it.0 = seq.0 & for n be Nat holds it.(n+1) = it.n + seq.(n+1);
 existence
 proof
    deffunc G(Nat,set)= (the add of X).($2,seq.($1+1));
    consider g be Function such that
-H1:dom g = NAT and
-H2:g.0 = seq.0 and 
-H3:for n being Element of NAT holds g.(n+1) = G(n,g.n) from RECDEF_1:sch 3;
+A1:dom g = NAT and
+A2:g.0 = seq.0 and
+A3:for n being Element of NAT holds g.(n+1) = G(n,g.n) from RECDEF_1:sch 3;
    defpred P[Nat] means g.$1 in the carrier of X;
-A0:P[0] by H2;
-A1:for k be Nat st P[k] holds P[k+1]
+A4:P[0] by A2;
+A5:for k be Nat st P[k] holds P[k+1]
    proof
      let k be Nat such that
-BS1: P[k];
-     reconsider gk=g.k as Element of the carrier of X by BS1;
-     g.(k+1)=(the add of X).(gk,seq.(k+1)) by H3;
+A6: P[k];
+     reconsider gk=g.k as Element of the carrier of X by A6;
+     g.(k+1)=(the add of X).(gk,seq.(k+1)) by A3;
      hence thesis;
    end;
-   for n be Nat holds P[n] from NAT_1:sch 1(A0,A1); then
+   for n be Nat holds P[n] from NAT_1:sch 1(A4,A5); then
    for n be set st n in NAT holds g.n in the carrier of X; then
-   reconsider g0=g as sequence of X by H1,FUNCT_2:5;
+   reconsider g0=g as sequence of X by A1,FUNCT_2:5;
    take g0;
    now let n be Nat;
-     thus g0.(n+1) = (the add of X).(g0.n,seq.(n+1)) by H3
+     thus g0.(n+1) = (the add of X).(g0.n,seq.(n+1)) by A3
             .=g0.n+seq.(n+1) by RLVECT_1:5;
    end;
-   hence thesis by H2;
+   hence thesis by A2;
 end;
 uniqueness
 proof
    let seq1,seq2 be sequence of X;
-   assume that 
-A2:seq1.0=seq.0 & 
+   assume that
+A7:seq1.0=seq.0 &
    for n be Nat holds seq1.(n+1)=seq1.n + seq.(n+1) and
-A3:seq2.0=seq.0 & 
+A8:seq2.0=seq.0 &
    for n be Nat holds seq2.(n+1)=seq2.n + seq.(n+1);
    defpred P[Nat] means seq1.$1 = seq2.$1;
-A4:P[0] by A2,A3;
-A5:for k be Nat st P[k] holds P[k+1]
+A9:P[0] by A7,A8;
+A10:for k be Nat st P[k] holds P[k+1]
    proof
      let k be Nat;
      assume P[k];
-     hence seq1.(k+1) = seq2.k + seq.(k+1) by A2
-                     .= seq2.(k+1) by A3;
+     hence seq1.(k+1) = seq2.k + seq.(k+1) by A7
+                     .= seq2.(k+1) by A8;
    end;
-   for n be Nat holds P[n] from NAT_1:sch 1(A4,A5);
+   for n be Nat holds P[n] from NAT_1:sch 1(A9,A10);
    hence seq1 = seq2 by FUNCT_2:113;
 end;
 end;
 
-theorem COMSEQ_3_2:
-for X be add-associative right_zeroed 
+theorem Th1:
+for X be add-associative right_zeroed
          right_complementable (non empty CNORMSTR)
  for seq be sequence of X st
-  (for n be Nat holds seq.n = 0.X) holds 
+  (for n be Nat holds seq.n = 0.X) holds
     for m be Nat holds (Partial_Sums seq).m = 0.X
 proof
-   let X be add-associative right_zeroed 
+   let X be add-associative right_zeroed
             right_complementable (non empty CNORMSTR);
    let seq be sequence of X such that
 A1: for n be Nat holds seq.n = 0.X;
    let m be Nat;
     defpred P[Nat] means seq.$1 = (Partial_Sums seq).$1;
-A2:P[0] by LOPBAN_3_def_1;
+A2:P[0] by Def1;
 A3:for k be Nat st P[k] holds P[k+1]
-   proof 
+   proof
      let k be Nat such that
 A4:  P[k];
      thus seq.(k+1) = 0.X + seq.(k+1) by RLVECT_1:10
                    .= (Partial_Sums seq).k + seq.(k+1) by A1,A4
-                   .= (Partial_Sums seq).(k+1) by LOPBAN_3_def_1;
+                   .= (Partial_Sums seq).(k+1) by Def1;
    end;
    for n be Nat holds P[n] from NAT_1:sch 1(A2,A3); then
    seq = Partial_Sums seq by FUNCT_2:113;
@@ -112,7 +113,7 @@ end;
 definition
   let X be ComplexNormSpace;
   let seq be sequence of X;
-attr seq is summable means :LOPBAN_3_def_2:
+attr seq is summable means :Def2:
   Partial_Sums seq is convergent;
 end;
 
@@ -130,7 +131,7 @@ A1: for n be Nat holds C.n = G(n) from FUNCT_2:sch 4;
 A2:0<p;
    take 0;
    let m be Nat such that 0<=m;
-   ||.Partial_Sums C.m-0.X.|| = ||.0.X-0.X.|| by COMSEQ_3_2,A1
+   ||.Partial_Sums C.m-0.X.|| = ||.0.X-0.X.|| by A1,Th1
      .=0 by CLVECT_1:108;
    hence ||.Partial_Sums C.m-0.X.||<p by A2;
 end;
@@ -139,7 +140,7 @@ end;
 definition
   let X be ComplexNormSpace;
   let seq be sequence of X;
-func Sum seq -> Element of X equals :LOPBAN_3_def_3:
+func Sum seq -> Element of X equals :Def3:
   lim Partial_Sums seq;
 correctness;
 end;
@@ -147,12 +148,12 @@ end;
 definition
   let X be ComplexNormSpace;
   let seq be sequence of X;
-attr seq is norm_summable means :LOPBAN_3_def_4:
+attr seq is norm_summable means :Def4:
  ||.seq.|| is summable;
 end;
 
-theorem LM2000:
-for X be ComplexNormSpace, seq be sequence of X, m be Nat holds 
+theorem Th2:
+for X be ComplexNormSpace, seq be sequence of X, m be Nat holds
  0 <= ||.seq.||.m
 proof
   let X be ComplexNormSpace;
@@ -162,7 +163,7 @@ proof
   hence thesis by CLVECT_1:106;
 end;
 
-theorem LM2010:
+theorem Th3:
 for X be ComplexNormSpace, x,y,z be Element of X holds
  ||.x-y.|| = ||.(x-z)+(z-y).||
 proof
@@ -175,40 +176,40 @@ proof
                  .= ||.(x-z)+(z-y).|| by RLVECT_1:42;
 end;
 
-theorem LM2100:
+theorem Th4:
 for X be ComplexNormSpace, seq be sequence of X holds
  seq is convergent implies
-  for s be Real st 0 < s 
+  for s be Real st 0 < s
   ex n be Nat st for m be Nat st n<=m holds ||.seq.m -seq.n.||<s
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
-   assume seq is convergent; then 
+   assume seq is convergent; then
    consider g1 be Element of X such that
 A1: for s be Real st 0<s
      ex n be Nat st for m be Nat st n<=m holds ||.seq.m -g1.||<s
       by CLVECT_1:def 15;
    let s be Real;
-   assume 0 < s; then 
+   assume 0 < s; then
    0 < s/2 by SEQ_2:3; then
    consider n be Nat such that
 A2: for m be Nat st n<=m holds ||.seq.m -g1.||<s/2 by A1;
    now
-     let m be Nat such that 
+     let m be Nat such that
 A3:  n<=m;
-     ||.seq.n -g1.||<s/2 by A2; then 
+     ||.seq.n -g1.||<s/2 by A2; then
 A4:  ||.g1-seq.n.||<s/2 by CLVECT_1:109;
-     ||.seq.m -g1.||<s/2 by A2,A3; then 
+     ||.seq.m -g1.||<s/2 by A2,A3; then
 A5:  ||.seq.m -g1.||+||.g1-seq.n.||<s/2+s/2 by A4,REAL_1:67;
 A6:  ||.seq.m -g1+(g1-seq.n).||<=||.seq.m -g1.||+||.g1-seq.n.||
             by CLVECT_1:def 10;
-     ||.seq.m -g1+(g1-seq.n).|| = ||.seq.m -seq.n.|| by LM2010;
+     ||.seq.m -g1+(g1-seq.n).|| = ||.seq.m -seq.n.|| by Th3;
      hence ||.seq.m -seq.n.|| < s by A5,A6,AXIOMS:22;
    end;
    hence thesis;
 end;
 
-theorem LM2105:
+theorem Th5:
 for X be ComplexNormSpace, seq be sequence of X holds
  seq is Cauchy_sequence_by_Norm
         iff
@@ -217,50 +218,50 @@ for X be ComplexNormSpace, seq be sequence of X holds
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
-D0:now assume
-D1:  seq is Cauchy_sequence_by_Norm;
+A1:now assume
+A2:  seq is Cauchy_sequence_by_Norm;
      thus for p be Real st p > 0 holds
            ex n be Nat st for m be Nat st n <= m holds ||.seq.m-seq.n.||< p
      proof
        let p be Real such that
-H1:    p >0;
+A3:    p >0;
        consider n be Nat such that
-H2:    for m,k be Nat st n <= m & n <=k holds 
-         ||.seq.m-seq.k.||< p by H1,D1,CSSPACE3:10;
-       for m be Nat st n <= m holds ||.seq.m-seq.n.||<p by H2;
+A4:    for m,k be Nat st n <= m & n <=k holds
+         ||.seq.m-seq.k.||< p by A2,A3,CSSPACE3:10;
+       for m be Nat st n <= m holds ||.seq.m-seq.n.||<p by A4;
        hence thesis;
      end;
    end;
    now assume
-A1:  for p be Real st p > 0 holds
+A5:  for p be Real st p > 0 holds
       ex n be Nat st for m be Nat st n <= m holds ||.seq.m-seq.n.||< p;
      now let s be Real;
-       assume 0<s; then 
+       assume 0<s; then
        0<s/2 by SEQ_2:3; then
        consider k be Nat such that
-A2:     for m be Nat st k<=m holds ||.seq.m -seq.k.||<s/2 by A1;
+A6:     for m be Nat st k<=m holds ||.seq.m -seq.k.||<s/2 by A5;
        now
-         let m,n be Nat such that 
-A3:      k<=m & k<=n;
-F1:      ||.seq.m -seq.k.||<s/2 by A2,A3;
-         ||.seq.n -seq.k.||<s/2 by A2,A3; then 
+         let m,n be Nat such that
+A7:      k<=m & k<=n;
+A8:      ||.seq.m -seq.k.||<s/2 by A6,A7;
+         ||.seq.n -seq.k.||<s/2 by A6,A7; then
          ||.seq.k-seq.n.||<s/2 by CLVECT_1:109; then
-A5:      ||.seq.m -seq.k.||+||.seq.k-seq.n.||<s/2+s/2 by F1,REAL_1:67;
-A6:      ||.seq.m -seq.k+(seq.k-seq.n).||
+A9:      ||.seq.m -seq.k.||+||.seq.k-seq.n.||<s/2+s/2 by A8,REAL_1:67;
+A10:      ||.seq.m -seq.k+(seq.k-seq.n).||
           <=||.seq.m -seq.k.||+||.seq.k-seq.n.|| by CLVECT_1:def 10;
-         ||.seq.m -seq.k+(seq.k-seq.n).|| =||.seq.m -seq.n.|| by LM2010;
-         hence ||.seq.m -seq.n.|| < s  by A5,A6,AXIOMS:22;
+         ||.seq.m -seq.k+(seq.k-seq.n).|| =||.seq.m -seq.n.|| by Th3;
+         hence ||.seq.m -seq.n.|| < s  by A9,A10,AXIOMS:22;
        end;
        hence ex k be Nat st
         for m,n be Nat st k <= m & k <=n holds ||.seq.m-seq.n.||< s;
      end;
      hence seq is Cauchy_sequence_by_Norm by CSSPACE3:10;
    end;
-   hence thesis by D0;
+   hence thesis by A1;
 end;
 
-theorem Th2500:
-for X be ComplexNormSpace, seq be sequence of X st 
+theorem Th6:
+for X be ComplexNormSpace, seq be sequence of X st
  (for n be Nat holds seq.n = 0.X) holds
    for m be Nat holds (Partial_Sums ||.seq.||).m = 0
 proof
@@ -275,9 +276,9 @@ A3:for k be Nat st P[k] holds P[k+1]
      let k be Nat such that
 A4:  P[k];
      thus ||.seq.||.(k+1) =0 +  ||.seq.||.(k+1)
-            .=  ||.0.X.|| + ||.seq.||.(k+1) by  CLVECT_1:103
+            .=  ||.0.X.|| + ||.seq.||.(k+1) by CLVECT_1:103
             .= ||.seq.k.|| + ||.seq.||.(k+1) by A1
-            .= (Partial_Sums ||.seq.||).k + ||.seq.||.(k+1) 
+            .= (Partial_Sums ||.seq.||).k + ||.seq.||.(k+1)
                 by A4,CLVECT_1:def 16
             .= (Partial_Sums ||.seq.||).(k+1) by SERIES_1:def 1;
    end;
@@ -291,7 +292,7 @@ end;
 definition
   let X be ComplexNormSpace;
   let seq be sequence of X;
-redefine attr seq is constant means :SEQM_3_def_6:
+redefine attr seq is constant means :Def5:
   ex r be Element of X st for n be Nat holds seq.n=r;
 compatibility
 proof
@@ -306,14 +307,14 @@ A2:  seq is constant;
    end;
    given r be Element of X such that
 A3: for n be Nat holds seq.n=r;
-AA:for n1,n2 being set st n1 in dom seq & n2 in dom seq holds seq.n1=seq.n2
+A4:for n1,n2 being set st n1 in dom seq & n2 in dom seq holds seq.n1=seq.n2
    proof
      let n1,n2 be set;
      assume
-A4:  n1 in dom seq & n2 in dom seq;
-     hence seq.n1 = r by A1,A3 .= seq.n2 by A1,A3,A4;
+A5:  n1 in dom seq & n2 in dom seq;
+     hence seq.n1 = r by A1,A3 .= seq.n2 by A1,A3,A5;
   end;
-  thus seq is constant by SEQM_3:def 5,AA;
+  thus seq is constant by A4,SEQM_3:def 5;
 end;
 end;
 
@@ -321,7 +322,7 @@ definition
   let X be ComplexNormSpace;
   let seq be sequence of X;
   let k be Nat;
-func seq ^\k -> sequence of X means :SEQM_3_def_9:
+func seq ^\k -> sequence of X means :Def6:
   for n be Nat holds it.n=seq.(n+k);
 existence
 proof
@@ -332,7 +333,7 @@ end;
 uniqueness
 proof
    let seq1,seq2 be sequence of X;
-   assume that 
+   assume that
 A1:for n be Nat holds seq1.n=seq.(n+k) and
 A2:for n be Nat holds seq2.n=seq.(n+k);
    now let n be Nat;
@@ -346,18 +347,18 @@ end;
 definition
   let X be ComplexNormSpace;
   let seq,seq1 be sequence of X;
-pred seq is_subsequence_of seq1 means :SEQM_3_def_10:
+pred seq is_subsequence_of seq1 means :Def7:
   ex Nseq be increasing Seq_of_Nat st seq=seq1*Nseq;
 end;
 
-theorem SEQM_3_34:
+theorem Th7:
 for X be ComplexNormSpace, seq be sequence of X holds
    seq ^\0 =seq
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
    now let n be Nat;
-     thus (seq ^\0).n=seq.(n+0) by SEQM_3_def_9
+     thus (seq ^\0).n=seq.(n+0) by Def6
                   .=seq.n;
    end;
    hence thesis by FUNCT_2:113;
@@ -371,16 +372,16 @@ proof
    let seq be sequence of X;
    let k,m be Nat;
    now let n be Nat;
-     thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by SEQM_3_def_9
-      .=seq.(n+m+k) by SEQM_3_def_9
+     thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def6
+      .=seq.(n+m+k) by Def6
       .=seq.(n+k+m)
-      .=(seq ^\m).(n+k) by SEQM_3_def_9
-      .=((seq ^\m)^\k).n by SEQM_3_def_9;
+      .=(seq ^\m).(n+k) by Def6
+      .=((seq ^\m)^\k).n by Def6;
    end;
    hence thesis by FUNCT_2:113;
 end;
 
-theorem SEQM_3_36:
+theorem Th9:
 for X be ComplexNormSpace, seq be sequence of X, k,m be Nat holds
   (seq ^\k)^\m=seq ^\(k+m)
 proof
@@ -388,15 +389,15 @@ proof
    let seq be sequence of X;
    let k,m be Nat;
    now let n be Nat;
-     thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by SEQM_3_def_9
-      .=seq.(n+m+k) by SEQM_3_def_9
+     thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def6
+      .=seq.(n+m+k) by Def6
       .=seq.(n+(k+m))
-      .=(seq ^\(k+m)).n by SEQM_3_def_9;
+      .=(seq ^\(k+m)).n by Def6;
    end;
    hence thesis by FUNCT_2:113;
 end;
 
-theorem SEQ_4_30:
+theorem Th10:
 for X be ComplexNormSpace, seq,seq1 be sequence of X holds
   seq1 is_subsequence_of seq & seq is convergent implies
     seq1 is convergent
@@ -410,14 +411,14 @@ A2:seq is convergent;
 A3: for p be Real st 0<p ex n be Nat st for m be Nat st n<=m holds
      ||.(seq.m)-g1.||< p by A2,CLVECT_1:def 15;
    consider Nseq be increasing Seq_of_Nat such that
-A4: seq1=seq*Nseq by A1,SEQM_3_def_10;
+A4: seq1=seq*Nseq by A1,Def7;
    take g=g1;
    let p be Real;
-   assume 0<p; then 
+   assume 0<p; then
    consider n1 be Nat such that
 A5: for m be Nat st n1<=m holds ||.(seq.m)-g1.||<p by A3;
    take n=n1;
-   let m be Nat such that 
+   let m be Nat such that
 A6:n<=m;
    m<=Nseq.m by SEQM_3:33; then
 A7:n<=Nseq.m by A6,AXIOMS:22;
@@ -425,28 +426,28 @@ A7:n<=Nseq.m by A6,AXIOMS:22;
    hence ||.(seq1.m)-g.||<p by A5,A7;
 end;
 
-theorem SEQ_4_31:
+theorem Th11:
 for X be ComplexNormSpace, seq,seq1 be sequence of X holds
   seq1 is_subsequence_of seq & seq is convergent implies
     lim seq1=lim seq
 proof
    let X be ComplexNormSpace;
    let seq,seq1 be sequence of X;
-   assume that 
+   assume that
 A1:seq1 is_subsequence_of seq and
 A2:seq is convergent;
-A3:seq1 is convergent by A1,A2,SEQ_4_30;
+A3:seq1 is convergent by A1,A2,Th10;
    consider Nseq be increasing Seq_of_Nat such that
-A4: seq1=seq*Nseq by A1,SEQM_3_def_10;
+A4: seq1=seq*Nseq by A1,Def7;
    now let p be Real;
-     assume 0<p; then 
+     assume 0<p; then
      consider n1 be Nat such that
-A5:   for m be Nat st n1<=m holds ||.(seq.m)-(lim seq).||<p 
+A5:   for m be Nat st n1<=m holds ||.(seq.m)-(lim seq).||<p
         by A2,CLVECT_1:def 17;
      take n=n1;
      let m be Nat such that
 A6:  n<=m;
-     m<=Nseq.m by SEQM_3:33; then 
+     m<=Nseq.m by SEQM_3:33; then
 A7:  n<=Nseq.m by A6,AXIOMS:22;
      seq1.m=seq.(Nseq.m) by A4,LOPBAN_3:7;
      hence ||.(seq1.m)-(lim seq).||<p by A5,A7;
@@ -461,7 +462,7 @@ proof
    let n,m be Nat;
    assume A1: n<m; then
    consider k1 be Nat such that A2:m=n+k1 by NAT_1:28;
-   k1 <> 0 by A1,A2; then 
+   k1 <> 0 by A1,A2; then
    consider n1 be Nat such that A3:k1=n1+1 by NAT_1:22;
    take k=n1;
    thus m=n+1+k by A2,A3;
@@ -480,12 +481,12 @@ proof
    thus (for n be Nat holds seq.n<seq.(n+1)) implies
                   for n,k be Nat holds seq.n<seq.(n+1+k)
    proof
-     assume 
+     assume
 A1:  for n be Nat holds seq.n<seq.(n+1);
      let n be Nat;
      defpred X[Nat] means seq.n<seq.(n+1+$1);
 A2:  X[0] by A1;
-A3:  now let k be Nat such that 
+A3:  now let k be Nat such that
 A4:    X[k];
        seq.(n+1+k)<seq.(n+1+k+1) by A1;
        hence X[k+1] by A4,AXIOMS:22;
@@ -495,47 +496,47 @@ A4:    X[k];
    thus (for n,k be Nat holds seq.n<seq.(n+1+k)) implies
              for n,m be Nat st n<m holds seq.n<seq.m
    proof
-     assume 
+     assume
 A5:  for n,k be Nat holds seq.n<seq.(n+1+k);
      let n,m be Nat; assume n<m; then
      ex k be Nat st m=n+1+k by Lm1;
      hence seq.n<seq.m by A5;
    end;
-   assume 
+   assume
 A6:for n,m be Nat st n<m holds seq.n<seq.m;
    let n be Nat;
    n<n+1 by NAT_1:38;
    hence seq.n<seq.(n+1) by A6;
 end;
 
-Lm6:
+Lm3:
 for f be Real_Sequence holds
  (f is increasing iff (for n being Nat holds f.n < f.(n+1)))
 proof
    let f be Real_Sequence;
    thus f is increasing implies for n being Nat holds f.n < f.(n+1)
    proof
-     assume 
+     assume
 A1:  f is increasing;
      let n be Nat;
 A2:  dom f = NAT by FUNCT_2:def 1;
      n < n+1 by NAT_1:38;
      hence thesis by A1,A2,SEQM_3:def 1;
    end;
-   assume 
+   assume
 A3:for n being Nat holds f.n < f.(n+1);
-AB:for m,n be Nat st m in dom f & n in dom f & m < n holds f.m < f.n
+A4:for m,n be Nat st m in dom f & n in dom f & m < n holds f.m < f.n
    proof
      let m,nn be Nat such that
-AA:   m in dom f & nn in dom f & m < nn;
+A5:   m in dom f & nn in dom f & m < nn;
      consider k be Nat such that
-A4:   nn = m+1+k by Lm1,AA;
-     thus thesis by A3,A4,Lm2;
+A6:   nn = m+1+k by A5,Lm1;
+     thus thesis by A3,A6,Lm2;
    end;
-   thus thesis by AB,SEQM_3:def 1;
+   thus thesis by A4,SEQM_3:def 1;
 end;
 
-theorem SEQM_3_47:
+theorem Th12:
 for X be ComplexNormSpace, seq be sequence of X, k be Nat holds
   seq ^\k is_subsequence_of seq
 proof
@@ -549,8 +550,8 @@ A1: for n be Nat holds seq1.n=U(n) from SEQ_1:sch 1;
 A2:  seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
      n+k<n+k+1 by NAT_1:38;
      hence seq1.n<seq1.(n+1) by A2;
-   end; then 
-A3:seq1 is increasing by Lm6;
+   end; then
+A3:seq1 is increasing by Lm3;
    now let n be Nat;
      n+k is Nat;
      hence seq1.n is Nat by A1;
@@ -560,28 +561,28 @@ A3:seq1 is increasing by Lm6;
    now let n be Nat;
      thus (seq*Nseq).n=seq.(Nseq.n) by LOPBAN_3:7
        .=seq.(n+k) by A1
-       .=(seq ^\k).n by SEQM_3_def_9;
+       .=(seq ^\k).n by Def6;
    end;
    hence thesis by FUNCT_2:113;
 end;
 
 :::::::::: Norm Space versions of SEQ_4_33 - SEQ_4_39
 
-theorem SEQ_4_33:
+theorem Th13:
 for X be ComplexNormSpace, seq,seq1 be sequence of X, k be Nat holds
   seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
 proof
    let X be ComplexNormSpace;
    let seq,seq1 be sequence of X;
    let k be Nat;
-   assume 
+   assume
 A1:seq is convergent;
-A2:seq^\k is_subsequence_of seq by SEQM_3_47;
-   hence seq^\k is convergent by A1, SEQ_4_30;
-   thus lim (seq ^\k)=lim seq by A1,A2,SEQ_4_31;
+A2:seq^\k is_subsequence_of seq by Th12;
+   hence seq^\k is convergent by A1,Th10;
+   thus lim (seq ^\k)=lim seq by A1,A2,Th11;
 end;
 
-theorem SEQ_4_35:
+theorem Th14:
 for X be ComplexNormSpace, seq,seq1 be sequence of X holds
   seq is convergent & (ex k be Nat st seq=seq1 ^\k)
      implies seq1 is convergent
@@ -594,7 +595,7 @@ A2: ex k be Nat st seq=seq1 ^\k;
    consider k be Nat such that
 A3: seq=seq1 ^\k by A2;
    consider g1 be Element of X  such that
-A4: for p be Real st 0<p ex n be Nat st 
+A4: for p be Real st 0<p ex n be Nat st
      for m be Nat st n<=m holds ||.seq.m-g1.||<p by A1,CLVECT_1:def 15;
    take g=g1;
    let p be Real;
@@ -604,23 +605,23 @@ A5: for m be Nat st n1<=m holds ||.seq.m-g1.||<p by A4;
    take n=n1+k;
    let m be Nat;
    assume
-A6: n<=m; then 
+A6: n<=m; then
    consider l be Nat such that
 A7: m=n1+k+l by NAT_1:28;
    m-k=n1+l+0 by A7; then
    consider m1 be Nat such that
 A8: m1=m-k;
-A9:now 
-     assume not n1<=m1; then 
+A9:now
+     assume not n1<=m1; then
      m1+k<n1+k by REAL_1:53;
      hence contradiction by A6,A8;
    end;
 A10:m1+k=m-(k-k) by A8 .=m;
    ||.seq.m1-g1.||<p by A5,A9;
-   hence ||.seq1.m-g.||<p by A3,A10,SEQM_3_def_9;
+   hence ||.seq1.m-g.||<p by A3,A10,Def6;
 end;
 
-theorem SEQ_4_36:
+theorem Th15:
 for X be ComplexNormSpace, seq,seq1 be sequence of X holds
   seq is convergent & (ex k be Nat st seq=seq1 ^\k)
     implies lim seq1 =lim seq
@@ -630,13 +631,13 @@ proof
    assume that
 A1: seq is convergent and
 A2: ex k be Nat st seq=seq1 ^\k;
-A3:seq1 is convergent by A1,A2,SEQ_4_35;
+A3:seq1 is convergent by A1,A2,Th14;
    consider k be Nat such that
 A4: seq=seq1 ^\k by A2;
    now let p be Real;
      assume 0<p; then
      consider n1 be Nat such that
-A5:   for m be Nat st n1<=m holds ||.seq.m-(lim seq).||<p 
+A5:   for m be Nat st n1<=m holds ||.seq.m-(lim seq).||<p
         by A1,CLVECT_1:def 17;
      take n=n1+k;
      let m be Nat; assume
@@ -646,27 +647,27 @@ A7:   m=n1+k+l by NAT_1:28;
      m-k=n1+l+0 by A7; then
      consider m1 be Nat such that
 A8:   m1=m-k;
-A9:  now 
-       assume not n1<=m1; then 
+A9:  now
+       assume not n1<=m1; then
        m1+k<n1+k by REAL_1:53;
        hence contradiction by A6,A8;
      end;
 A10: m1+k=m-(k-k) by A8 .=m;
      ||.seq.m1-(lim seq) .||<p by A5,A9;
-     hence ||.seq1.m-(lim seq).||<p by A4,A10,SEQM_3_def_9;
+     hence ||.seq1.m-(lim seq).||<p by A4,A10,Def6;
    end;
    hence thesis by A3,CLVECT_1:def 17;
 end;
 
-theorem SEQ_4_39:
+theorem Th16:
 for X be ComplexNormSpace, seq be sequence of X holds
   seq is constant implies seq is convergent
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
-   assume seq is constant; then 
+   assume seq is constant; then
    consider r be Element of X such that
-A1: for n be Nat holds seq.n=r by SEQM_3_def_6;
+A1: for n be Nat holds seq.n=r by Def5;
    take g=r;
    let p be Real such that A2:0<p;
    take n=0;
@@ -677,8 +678,8 @@ A1: for n be Nat holds seq.n=r by SEQM_3_def_6;
    hence ||.(seq.m)-g.||<p by A2;
 end;
 
-theorem Th5200:
-for X be ComplexNormSpace, seq be sequence of X st 
+theorem Th17:
+for X be ComplexNormSpace, seq be sequence of X st
   (for n be Nat holds seq.n = 0.X) holds seq is norm_summable
 proof
    let X be ComplexNormSpace;
@@ -689,7 +690,7 @@ A1: for n be Nat holds seq.n = 0.X;
 A2: 0<p;
    take 0;
    let m be Nat such that 0<=m;
-   abs((Partial_Sums ||.seq.||).m-0) = abs(0-0) by A1,Th2500
+   abs((Partial_Sums ||.seq.||).m-0) = abs(0-0) by A1,Th6
        .= 0 by ABSVALUE:def 1;
    hence abs((Partial_Sums ||.seq.||).m-0)<p by A2;
 end;
@@ -703,49 +704,49 @@ existence
     consider C being sequence of X such that
 A1:   for n be Nat holds C.n = z(n) from FUNCT_2:sch 4;
     take C;
-    thus thesis by A1,Th5200;
+    thus thesis by A1,Th17;
   end;
 end;
 
 :::::::::: Norm Space versions of SERIES_1_7 - SERIES_1_16
 
-theorem SERIES_1_7:
+theorem Th18:
 for X be ComplexNormSpace, s be sequence of X holds
   s is summable implies s is convergent & lim s = 0.X
 proof
    let X be ComplexNormSpace;
    let s be sequence of X;
-   assume s is summable; then 
-A1:Partial_Sums(s) is convergent by LOPBAN_3_def_2; then
+   assume s is summable; then
+A1:Partial_Sums(s) is convergent by Def2; then
 A2:Partial_Sums(s) ^\1 is convergent &
-    lim(Partial_Sums(s) ^\1) = lim(Partial_Sums(s)) by SEQ_4_33; then
+    lim(Partial_Sums(s) ^\1) = lim(Partial_Sums(s)) by Th13; then
 A3:lim(Partial_Sums(s) ^\1 - Partial_Sums(s))
      = lim(Partial_Sums(s)) - lim(Partial_Sums(s)) by A1,CLVECT_1:122
     .= 0.X by RLVECT_1:28;
 A4:s ^\1 = Partial_Sums(s) ^\1 - Partial_Sums(s)
    proof
      now let n be Nat;
-       (Partial_Sums(s)).(n+1) = (Partial_Sums(s)).n + s.(n+1) 
-         by LOPBAN_3_def_1; then 
+       (Partial_Sums(s)).(n+1) = (Partial_Sums(s)).n + s.(n+1)
+         by Def1; then
        (Partial_Sums(s)).(n+1) = (Partial_Sums(s)).n + (s ^\1).n
-         by SEQM_3_def_9; then 
+         by Def6; then
        (Partial_Sums(s) ^\1).n = (s ^\1).n+  (Partial_Sums(s)).n
-         by SEQM_3_def_9; then 
+         by Def6; then
        (Partial_Sums(s) ^\1).n- (Partial_Sums(s)).n
          = (s ^\1).n+ ( (Partial_Sums(s)).n- (Partial_Sums(s)).n )
-             by RLVECT_1:42; then 
+             by RLVECT_1:42; then
        (Partial_Sums(s) ^\1).n- (Partial_Sums(s)).n
          = (s ^\1).n+ ( 0.X) by RLVECT_1:28;
-       hence (Partial_Sums(s) ^\1).n- (Partial_Sums(s)).n = (s ^\1).n 
+       hence (Partial_Sums(s) ^\1).n- (Partial_Sums(s)).n = (s ^\1).n
          by RLVECT_1:10;
      end;
      hence thesis by CLVECT_1:def 12;
-   end; then 
+   end; then
    s ^\1 is convergent by A1,A2,CLVECT_1:116;
-   hence thesis by A3,A4,SEQ_4_35,SEQ_4_36;
+   hence thesis by A3,A4,Th14,Th15;
 end;
 
-theorem SERIES_1_8:
+theorem Th19:
 for X be ComplexNormSpace, s1,s2 be sequence of X holds
   Partial_Sums(s1)+Partial_Sums(s2) = Partial_Sums(s1+s2)
 proof
@@ -753,28 +754,28 @@ proof
    let s1,s2 be sequence of X;
 A1:(Partial_Sums(s1) + Partial_Sums(s2)).0
      = Partial_Sums(s1).0 + Partial_Sums(s2).0 by CLVECT_1:def 11
-    .= s1.0 + Partial_Sums(s2).0 by LOPBAN_3_def_1
-    .= s1.0 + s2.0 by LOPBAN_3_def_1
+    .= s1.0 + Partial_Sums(s2).0 by Def1
+    .= s1.0 + s2.0 by Def1
     .= (s1+s2).0 by CLVECT_1:def 11;
    now let n be Nat;
      thus (Partial_Sums(s1) + Partial_Sums(s2)).(n+1)
       = Partial_Sums(s1).(n+1) + Partial_Sums(s2).(n+1) by CLVECT_1:def 11
-     .= Partial_Sums(s1).n + s1.(n+1) + Partial_Sums(s2).(n+1) 
-         by LOPBAN_3_def_1
-     .= Partial_Sums(s1).n+s1.(n+1)+(s2.(n+1) + Partial_Sums(s2).n) 
-         by LOPBAN_3_def_1
+     .= Partial_Sums(s1).n + s1.(n+1) + Partial_Sums(s2).(n+1)
+         by Def1
+     .= Partial_Sums(s1).n+s1.(n+1)+(s2.(n+1) + Partial_Sums(s2).n)
+         by Def1
      .= Partial_Sums(s1).n+s1.(n+1)+s2.(n+1)+Partial_Sums(s2).n
          by RLVECT_1:def 6
-     .= Partial_Sums(s1).n+(s1.(n+1)+s2.(n+1)) + Partial_Sums(s2).n 
+     .= Partial_Sums(s1).n+(s1.(n+1)+s2.(n+1)) + Partial_Sums(s2).n
          by RLVECT_1:def 6
      .= Partial_Sums(s1).n+(s1+s2).(n+1)+Partial_Sums(s2).n by CLVECT_1:def 11
      .= Partial_Sums(s1).n+Partial_Sums(s2).n+(s1+s2).(n+1) by RLVECT_1:def 6
      .= (Partial_Sums(s1)+Partial_Sums(s2)).n+(s1+s2).(n+1) by CLVECT_1:def 11;
    end;
-   hence thesis by A1,LOPBAN_3_def_1;
+   hence thesis by A1,Def1;
 end;
 
-theorem SERIES_1_9:
+theorem Th20:
 for X be ComplexNormSpace, s1,s2 be sequence of X holds
   Partial_Sums(s1)-Partial_Sums(s2) = Partial_Sums(s1-s2)
 proof
@@ -782,16 +783,16 @@ proof
    let s1,s2 be sequence of X;
 A1:(Partial_Sums(s1) - Partial_Sums(s2)).0
      = Partial_Sums(s1).0 - Partial_Sums(s2).0 by CLVECT_1:def 12
-    .= s1.0 - Partial_Sums(s2).0 by LOPBAN_3_def_1
-    .= s1.0 - s2.0 by LOPBAN_3_def_1
+    .= s1.0 - Partial_Sums(s2).0 by Def1
+    .= s1.0 - s2.0 by Def1
     .= (s1-s2).0 by CLVECT_1:def 12;
-   now let n be Nat; 
+   now let n be Nat;
      thus (Partial_Sums(s1) - Partial_Sums(s2)).(n+1)
        = Partial_Sums(s1).(n+1) - Partial_Sums(s2).(n+1) by CLVECT_1:def 12
       .= (Partial_Sums(s1).n + s1.(n+1)) - Partial_Sums(s2).(n+1)
-          by LOPBAN_3_def_1
-      .= (Partial_Sums(s1).n+s1.(n+1))-(s2.(n+1) + Partial_Sums(s2).n) 
-          by LOPBAN_3_def_1
+          by Def1
+      .= (Partial_Sums(s1).n+s1.(n+1))-(s2.(n+1) + Partial_Sums(s2).n)
+          by Def1
       .= (Partial_Sums(s1).n+s1.(n+1))-s2.(n+1)-Partial_Sums(s2).n
           by RLVECT_1:41
       .= Partial_Sums(s1).n+(s1.(n+1)-s2.(n+1))-Partial_Sums(s2).n
@@ -802,77 +803,77 @@ A1:(Partial_Sums(s1) - Partial_Sums(s2)).0
       .= (Partial_Sums(s1)-Partial_Sums(s2)).n+(s1-s2).(n+1)
           by CLVECT_1:def 12;
    end;
-   hence thesis by A1,LOPBAN_3_def_1;
+   hence thesis by A1,Def1;
 end;
 
 registration
   let X be ComplexNormSpace;
   let seq be norm_summable sequence of X;
 cluster ||.seq.|| -> summable;
-coherence by LOPBAN_3_def_4;
+coherence by Def4;
 end;
 
 registration
   let X be ComplexNormSpace;
 cluster summable -> convergent sequence of X;
-coherence by SERIES_1_7;
+coherence by Th18;
 end;
 
-theorem SERIES_1_10:
-for X be ComplexNormSpace, seq1,seq2 be sequence of X st 
+theorem Th21:
+for X be ComplexNormSpace, seq1,seq2 be sequence of X st
   seq1 is summable & seq2 is summable holds
     seq1+seq2 is summable & Sum(seq1+seq2) = Sum(seq1)+Sum(seq2)
 proof
    let X be ComplexNormSpace;
    let seq1,seq2 be sequence of X such that
-AS0:seq1 is summable and
-AS1:seq2 is summable;
-A1:Partial_Sums(seq1) is convergent &
-   Partial_Sums(seq2) is convergent by LOPBAN_3_def_2,AS0,AS1; then 
-A2:Partial_Sums(seq1)+Partial_Sums(seq2) is convergent by CLVECT_1:115;
-A3:Partial_Sums(seq1)+Partial_Sums(seq2) =Partial_Sums(seq1+seq2) 
-     by SERIES_1_8;
-   Sum(seq1+seq2)=lim(Partial_Sums(seq1+seq2)) by LOPBAN_3_def_3
-                .=lim(Partial_Sums(seq1)+Partial_Sums(seq2)) by SERIES_1_8
-                .=lim(Partial_Sums(seq1))+lim(Partial_Sums(seq2)) 
-                   by A1,CLVECT_1:121; then
-   Sum(seq1+seq2)=Sum(seq1)+lim(Partial_Sums(seq2)) by LOPBAN_3_def_3
-                .= Sum(seq1)+Sum(seq2) by LOPBAN_3_def_3;
-   hence thesis by A2,A3,LOPBAN_3_def_2;
+A1:seq1 is summable and
+A2:seq2 is summable;
+A3:Partial_Sums(seq1) is convergent &
+   Partial_Sums(seq2) is convergent by A1,A2,Def2; then
+A4:Partial_Sums(seq1)+Partial_Sums(seq2) is convergent by CLVECT_1:115;
+A5:Partial_Sums(seq1)+Partial_Sums(seq2) =Partial_Sums(seq1+seq2)
+     by Th19;
+   Sum(seq1+seq2)=lim(Partial_Sums(seq1+seq2)) by Def3
+                .=lim(Partial_Sums(seq1)+Partial_Sums(seq2)) by Th19
+                .=lim(Partial_Sums(seq1))+lim(Partial_Sums(seq2))
+                   by A3,CLVECT_1:121; then
+   Sum(seq1+seq2)=Sum(seq1)+lim(Partial_Sums(seq2)) by Def3
+                .= Sum(seq1)+Sum(seq2) by Def3;
+   hence thesis by A4,A5,Def2;
 end;
 
-theorem SERIES_1_11:
-for X be ComplexNormSpace, seq1,seq2 be sequence of X st 
+theorem Th22:
+for X be ComplexNormSpace, seq1,seq2 be sequence of X st
   seq1 is summable & seq2 is summable holds
     seq1-seq2 is summable & Sum(seq1-seq2)= Sum(seq1)-Sum(seq2)
 proof
    let X be ComplexNormSpace;
    let seq1,seq2 be sequence of X such that
-AS0:seq1 is summable & seq2 is summable;
-A1:Partial_Sums(seq1) is convergent &
-   Partial_Sums(seq2) is convergent by LOPBAN_3_def_2,AS0; then 
-A2:Partial_Sums(seq1)-Partial_Sums(seq2) is convergent by CLVECT_1:116;
-A3:Partial_Sums(seq1)-Partial_Sums(seq2) = Partial_Sums(seq1-seq2) 
-     by SERIES_1_9;
-   Sum(seq1-seq2)=lim(Partial_Sums(seq1-seq2)) by LOPBAN_3_def_3
-              .=lim(Partial_Sums(seq1)-Partial_Sums(seq2)) by SERIES_1_9
+A1:seq1 is summable & seq2 is summable;
+A2:Partial_Sums(seq1) is convergent &
+   Partial_Sums(seq2) is convergent by A1,Def2; then
+A3:Partial_Sums(seq1)-Partial_Sums(seq2) is convergent by CLVECT_1:116;
+A4:Partial_Sums(seq1)-Partial_Sums(seq2) = Partial_Sums(seq1-seq2)
+     by Th20;
+   Sum(seq1-seq2)=lim(Partial_Sums(seq1-seq2)) by Def3
+              .=lim(Partial_Sums(seq1)-Partial_Sums(seq2)) by Th20
               .=lim(Partial_Sums(seq1))-lim(Partial_Sums(seq2))
-                by A1,CLVECT_1:122; then 
-   Sum(seq1-seq2)=Sum(seq1)-lim(Partial_Sums(seq2)) by LOPBAN_3_def_3
-                .= Sum(seq1)-Sum(seq2) by LOPBAN_3_def_3;
-   hence thesis by A2,A3,LOPBAN_3_def_2;
+                by A2,CLVECT_1:122; then
+   Sum(seq1-seq2)=Sum(seq1)-lim(Partial_Sums(seq2)) by Def3
+                .= Sum(seq1)-Sum(seq2) by Def3;
+   hence thesis by A3,A4,Def2;
 end;
 
 registration
   let X be ComplexNormSpace;
   let seq1,seq2 be summable sequence of X;
 cluster seq1 + seq2 -> summable;
-coherence by SERIES_1_10;
+coherence by Th21;
 cluster seq1 - seq2 -> summable;
-coherence by SERIES_1_11;
+coherence by Th22;
 end;
 
-theorem SERIES_1_12:
+theorem Th23:
 for X be ComplexNormSpace, seq be sequence of X, z be Complex holds
   Partial_Sums(z * seq) = z * Partial_Sums(seq)
 proof
@@ -882,9 +883,9 @@ proof
    defpred P[Nat] means Partial_Sums(z * seq).$1 = (z * Partial_Sums(seq)).$1;
 A1:P[0]
    proof
-     thus Partial_Sums(z * seq).0 = (z * seq).0 by LOPBAN_3_def_1
+     thus Partial_Sums(z * seq).0 = (z * seq).0 by Def1
            .=z * seq.0 by CLVECT_1:def 14
-           .=z * Partial_Sums(seq).0 by LOPBAN_3_def_1
+           .=z * Partial_Sums(seq).0 by Def1
            .=(z * Partial_Sums(seq)).0 by CLVECT_1:def 14;
    end;
 A2:now let n be Nat;
@@ -893,11 +894,11 @@ A3:  P[n];
      thus P[n+1]
      proof
        thus Partial_Sums(z * seq).(n+1)
-         =Partial_Sums(z * seq).n + (z * seq).(n+1) by LOPBAN_3_def_1
+         =Partial_Sums(z * seq).n + (z * seq).(n+1) by Def1
         .=(z * Partial_Sums(seq).n )+ (z * seq).(n+1) by A3,CLVECT_1:def 14
         .=(z * Partial_Sums(seq).n )+ (z * seq.(n+1)) by CLVECT_1:def 14
         .= z * ( Partial_Sums(seq).n + seq.(n+1)) by CLVECT_1:def 2
-        .= z * ( Partial_Sums(seq).(n+1)) by LOPBAN_3_def_1
+        .= z * ( Partial_Sums(seq).(n+1)) by Def1
         .= (z * Partial_Sums(seq)).(n+1) by CLVECT_1:def 14;
      end;
    end;
@@ -905,90 +906,89 @@ A3:  P[n];
    hence thesis by FUNCT_2:113;
 end;
 
-theorem SERIES_1_13:
+theorem Th24:
 for X be ComplexNormSpace, seq be summable sequence of X, z be Complex holds
   z *seq is summable & Sum(z *seq)= z * Sum(seq)
 proof
    let X be ComplexNormSpace;
    let seq be summable sequence of X;
    let z be Complex;
-A1:Partial_Sums(seq) is convergent by LOPBAN_3_def_2; then 
+A1:Partial_Sums(seq) is convergent by Def2; then
 A2:(z *Partial_Sums(seq)) is convergent by CLVECT_1:118;
-A3:Partial_Sums(z *seq)=(z *Partial_Sums(seq)) by SERIES_1_12;
-   Sum(z *seq)=lim(Partial_Sums(z *seq)) by LOPBAN_3_def_3
-            .=lim((z *Partial_Sums(seq))) by SERIES_1_12
+A3:Partial_Sums(z *seq)=(z *Partial_Sums(seq)) by Th23;
+   Sum(z *seq)=lim(Partial_Sums(z *seq)) by Def3
+            .=lim((z *Partial_Sums(seq))) by Th23
             .=z * lim(Partial_Sums(seq)) by A1,CLVECT_1:124
-            .=z * Sum(seq) by LOPBAN_3_def_3;
-   hence z *seq is summable & Sum(z *seq)= z * Sum(seq) by 
-     A2,A3,LOPBAN_3_def_2;
+            .=z * Sum(seq) by Def3;
+   hence z *seq is summable & Sum(z *seq)= z * Sum(seq) by A2,A3,Def2;
 end;
 
 registration
   let X be ComplexNormSpace;
   let z be Complex, seq be summable sequence of X;
 cluster z *seq -> summable;
-coherence by SERIES_1_13;
+coherence by Th24;
 end;
 
-theorem SERIES_1_14:
-for X be ComplexNormSpace, s,s1 be sequence of X st 
+theorem Th25:
+for X be ComplexNormSpace, s,s1 be sequence of X st
   for n be Nat holds s1.n=s.0 holds
     Partial_Sums(s^\1) = (Partial_Sums(s)^\1) - s1
 proof
    let X be ComplexNormSpace;
    let s,s1 be sequence of X;
-   assume 
+   assume
 A1: for n be Nat holds s1.n=s.0;
-A2:((Partial_Sums(s)^\1) - s1).0 = (Partial_Sums(s)^\1).0 - s1.0 
+A2:((Partial_Sums(s)^\1) - s1).0 = (Partial_Sums(s)^\1).0 - s1.0
        by CLVECT_1:def 12
     .= (Partial_Sums(s)^\1).0 - s.0 by A1
-    .= Partial_Sums(s).(0+1) - s.0 by SEQM_3_def_9
-    .= Partial_Sums(s).0 + s.(0+1) - s.0 by LOPBAN_3_def_1
-    .= s.(0+1) + s.0 - s.0 by LOPBAN_3_def_1
+    .= Partial_Sums(s).(0+1) - s.0 by Def6
+    .= Partial_Sums(s).0 + s.(0+1) - s.0 by Def1
+    .= s.(0+1) + s.0 - s.0 by Def1
     .= s.(0+1) + (s.0 - s.0) by RLVECT_1:42
     .= s.(0+1) + 0.X  by RLVECT_1:28
     .=s.(0+1) by RLVECT_1:10
-    .= (s^\1).0 by SEQM_3_def_9;
+    .= (s^\1).0 by Def6;
    now let k be Nat;
      thus ((Partial_Sums(s)^\1) - s1).(k+1)
        = (Partial_Sums(s)^\1).(k+1) - s1.(k+1) by CLVECT_1:def 12
       .= (Partial_Sums(s)^\1).(k+1) - s.0 by A1
-      .= Partial_Sums(s).(k+1+1) - s.0 by SEQM_3_def_9
-      .= s.(k+1+1) + Partial_Sums(s).(k+1) - s.0 by LOPBAN_3_def_1
+      .= Partial_Sums(s).(k+1+1) - s.0 by Def6
+      .= s.(k+1+1) + Partial_Sums(s).(k+1) - s.0 by Def1
       .= s.(k+1+1) + Partial_Sums(s).(k+1) - s1.k by A1
       .= s.(k+1+1) + (Partial_Sums(s).(k+1) - s1.k) by RLVECT_1:42
-      .= s.(k+1+1) + ((Partial_Sums(s)^\1).k - s1.k) by SEQM_3_def_9
+      .= s.(k+1+1) + ((Partial_Sums(s)^\1).k - s1.k) by Def6
       .= s.(k+1+1) + ((Partial_Sums(s)^\1) - s1).k by CLVECT_1:def 12
-      .= ((Partial_Sums(s)^\1) - s1).k + (s^\1).(k+1) by SEQM_3_def_9;
+      .= ((Partial_Sums(s)^\1) - s1).k + (s^\1).(k+1) by Def6;
    end;
-   hence thesis by A2,LOPBAN_3_def_1;
+   hence thesis by A2,Def1;
 end;
 
-theorem SERIES_1_15:
+theorem Th26:
 for X be ComplexNormSpace, s be sequence of X holds
   s is summable implies for n be Nat holds s^\n is summable
 proof
    let X be ComplexNormSpace;
    let s be sequence of X;
    defpred X[Nat] means s^\$1 is summable;
-   assume s is summable; then 
-A1:X[0] by SEQM_3_34;
+   assume s is summable; then
+A1:X[0] by Th7;
 A2:for n be Nat st X[n] holds X[n+1]
    proof
      let n be Nat;
-     assume s^\n is summable; then 
-     Partial_Sums(s^\n) is convergent by LOPBAN_3_def_2; then 
-A3:  Partial_Sums(s^\n)^\1 is convergent by SEQ_4_33;
-A4:  s^\(n+1)=(s^\n)^\1 by SEQM_3_36;
+     assume s^\n is summable; then
+     Partial_Sums(s^\n) is convergent by Def2; then
+A3:  Partial_Sums(s^\n)^\1 is convergent by Th13;
+A4:  s^\(n+1)=(s^\n)^\1 by Th9;
      deffunc U(Nat) = (s^\n).0;
      consider s1 be sequence of X such that
 A5:   for k be Nat holds s1.k = U(k) from FUNCT_2:sch 4;
-     s1 is constant by A5,SEQM_3_def_6; then 
-A6:  s1 is convergent by SEQ_4_39;
-     Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 
-       by A5,SERIES_1_14; then 
+     s1 is constant by A5,Def5; then
+A6:  s1 is convergent by Th16;
+     Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1
+       by A5,Th25; then
      Partial_Sums(s^\n^\1) is convergent by A3,A6,CLVECT_1:116;
-     hence thesis by A4,LOPBAN_3_def_2;
+     hence thesis by A4,Def2;
    end;
   thus for n be Nat holds X[n] from NAT_1:sch 1(A1,A2);
 end;
@@ -997,55 +997,55 @@ registration
    let X be ComplexNormSpace;
    let seq be summable sequence of X, n be Nat;
 cluster seq^\n -> summable;
-coherence by SERIES_1_15;
+coherence by Th26;
 end;
 
-theorem Th6200:
+theorem Th27:
 for X be ComplexNormSpace, seq be sequence of X holds
   Partial_Sums ||.seq.|| is bounded_above iff seq is norm_summable
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
-   for n be Nat holds 0 <=||.seq.||.n by LM2000;
+   for n be Nat holds 0 <=||.seq.||.n by Th2;
    then Partial_Sums(||.seq.||) is bounded_above
    iff ||.seq.|| is summable by SERIES_1:20;
-  hence thesis by LOPBAN_3_def_4;
+  hence thesis by Def4;
 end;
 
 registration
   let X be ComplexNormSpace;
   let seq be norm_summable sequence of X;
   cluster Partial_Sums ||.seq.|| -> bounded_above;
-  coherence by Th6200;
+  coherence by Th27;
 end;
 
-theorem Th6300:
+theorem Th28:
 for X be ComplexBanachSpace, seq be sequence of X holds
-  seq is summable iff 
+  seq is summable iff
    (for p be Real st 0 <p holds ex n be Nat st
-     for m be Nat st n <= m holds 
+     for m be Nat st n <= m holds
       ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||<p)
 proof
    let X be ComplexBanachSpace;
    let seq be sequence of X;
-A1:now 
-     assume seq is summable; then 
-     Partial_Sums(seq) is convergent by LOPBAN_3_def_2;
+A1:now
+     assume seq is summable; then
+     Partial_Sums(seq) is convergent by Def2;
      hence for p be Real st 0<p holds ex n be Nat st for m be Nat st n <= m
-       holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||<p by LM2100;
+       holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||<p by Th4;
    end;
-   now 
+   now
      assume for p be Real st 0<p holds ex n be Nat st for m be Nat st n <= m
-       holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||< p; then 
-     Partial_Sums(seq) is Cauchy_sequence_by_Norm by LM2105; then
+       holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||< p; then
+     Partial_Sums(seq) is Cauchy_sequence_by_Norm by Th5; then
      Partial_Sums(seq) is convergent by CLOPBAN1:def 14;
-     hence seq is summable by LOPBAN_3_def_2;
+     hence seq is summable by Def2;
    end;
    hence thesis by A1;
 end;
 
-theorem SERIES_1_39:
-for X be ComplexNormSpace, s be sequence of X, n,m be Nat st n<=m holds 
+theorem Th29:
+for X be ComplexNormSpace, s be sequence of X, n,m be Nat st n<=m holds
   ||.Partial_Sums(s).m - Partial_Sums(s).n.||
     <= abs(Partial_Sums(||.s.||).m - Partial_Sums(||.s.||).n)
 proof
@@ -1066,22 +1066,22 @@ A3:s2 is non-decreasing by SERIES_1:19;
 A4:for k be Nat st X[k] holds X[k+1]
    proof
      let k be Nat;
-     assume 
+     assume
 A5:  ||. s1.(n+k) - s1.n.|| <= abs(s2.(n+k) - s2.n);
      ||. s1.(n+(k+1)) - s1.n.|| = ||. s1.(n+k+1) - s1.n .||
-      .= ||. s.(n+k+1) + s1.(n+k) - s1.n .|| by LOPBAN_3_def_1
+      .= ||. s.(n+k+1) + s1.(n+k) - s1.n .|| by Def1
       .= ||. s.(n+k+1) + (s1.(n+k) - s1.n).|| by RLVECT_1:42; then
 A6:  ||. s1.(n+(k+1))-s1.n .|| <= ||.s.(n+k+1).||+||.s1.(n+k) - s1.n.||
        by CLVECT_1:def 10;
-     ||.s.(n+k+1).|| + ||. s1.(n+k) - s1.n.|| 
-      <= ||.s.(n+k+1).|| + abs(s2.(n+k) - s2.n) by A5,REAL_1:55; then 
+     ||.s.(n+k+1).|| + ||. s1.(n+k) - s1.n.||
+      <= ||.s.(n+k+1).|| + abs(s2.(n+k) - s2.n) by A5,REAL_1:55; then
 A7:  ||. s1.(n+(k+1))-s1.n.||
       <= ||. s.(n+k+1).||+ abs(s2.(n+k)-s2.n) by A6,AXIOMS:22;
-     s2.(n+k)>=s2.n by A3,SEQM_3:11; then 
-A8:  s2.(n+k) - s2.n >= 0 by SQUARE_1:12; then 
-A9:  ||. s1.(n+(k+1))-s1.n .|| <= ||. s.(n+k+1).||+(s2.(n+k)-s2.n) 
+     s2.(n+k)>=s2.n by A3,SEQM_3:11; then
+A8:  s2.(n+k) - s2.n >= 0 by SQUARE_1:12; then
+A9:  ||. s1.(n+(k+1))-s1.n .|| <= ||. s.(n+k+1).||+(s2.(n+k)-s2.n)
        by A7,ABSVALUE:def 1;
-     ||. s .(n+k+1) .|| >= 0 by CLVECT_1:106; then 
+     ||. s .(n+k+1) .|| >= 0 by CLVECT_1:106; then
 A10: ||. s .(n+k+1).|| +(s2.(n+k)-s2.n) >= 0+0 by A8,REAL_1:55;
      abs(s2.(n+(k+1)) - s2.n) = abs(s2.(n+k+1) - s2.n)
                .= abs(s2.(n+k) + ( ||.s.||).(n+k+1) - s2.n) by SERIES_1:def 1
@@ -1096,32 +1096,32 @@ A11:for k be Nat holds X[k] from NAT_1:sch 1(A2,A4);
    hence thesis by A11;
 end;
 
-theorem SERIES_1_40:
+theorem Th30:
 for X be ComplexBanachSpace, seq be sequence of X holds
   seq is norm_summable implies seq is summable
 proof
    let X be ComplexBanachSpace;
    let seq be sequence of X;
-   assume seq is norm_summable; then 
-   ||.seq.|| is summable by LOPBAN_3_def_4; then 
+   assume seq is norm_summable; then
+   ||.seq.|| is summable by Def4; then
 A1:Partial_Sums(||.seq.||) is convergent by SERIES_1:def 2;
    now let p be Real;
      assume 0<p; then
      consider n be Nat such that
 A2:   for m be Nat st n <= m holds
-     abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)< p 
+     abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)< p
        by A1,SEQ_4:58;
      take n;
-     let m be Nat; 
-     assume 
-GG:  n <= m; then 
-A3:  abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)< p by A2;
+     let m be Nat;
+     assume
+A3:  n <= m; then
+A4:  abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)< p by A2;
      ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||
       <= abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)
-       by GG,SERIES_1_39;
-     hence ||.Partial_Sums(seq).m-Partial_Sums(seq).n.|| <p by A3,AXIOMS:22;
+       by A3,Th29;
+     hence ||.Partial_Sums(seq).m-Partial_Sums(seq).n.|| <p by A4,AXIOMS:22;
    end;
-   hence seq is summable by Th6300;
+   hence seq is summable by Th28;
 end;
 
 theorem
@@ -1134,13 +1134,13 @@ proof
    let rseq1 be Real_Sequence;
    let seq2 be sequence of X;
    assume
-A1:rseq1 is summable & 
+A1:rseq1 is summable &
    (ex m be Nat st for n be Nat st  m<=n holds ||.seq2.n.|| <= rseq1.n ); then
    consider m be Nat such that
 A2: for n be Nat st m<=n holds ||.seq2.n.|| <= rseq1.n;
-A3:now 
-     let n be Nat; 
-     assume m <= n; then 
+A3:now
+     let n be Nat;
+     assume m <= n; then
      ||.seq2.n.|| <= rseq1.n by A2;
      hence ||.seq2.||.n <= rseq1.n by CLVECT_1:def 16;
    end;
@@ -1154,17 +1154,17 @@ end;
 
 theorem
 for X be ComplexNormSpace, seq1,seq2 be sequence of X holds
-  (for n be Nat holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n) & 
+  (for n be Nat holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n) &
   seq2 is norm_summable implies
     seq1 is norm_summable & Sum ||.seq1.|| <= Sum ||.seq2.||
 proof
    let X be ComplexNormSpace;
    let seq1,seq2 be sequence of X;
-   assume 
+   assume
 A1:(for n be Nat holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n) &
-    seq2 is norm_summable; then 
-   ||.seq2.|| is summable by LOPBAN_3_def_4;
-   hence ||.seq1.|| is summable & Sum(||.seq1.||) <=Sum(||.seq2.||) 
+    seq2 is norm_summable; then
+   ||.seq2.|| is summable by Def4;
+   hence ||.seq1.|| is summable & Sum(||.seq1.||) <=Sum(||.seq2.||)
      by A1,SERIES_1:24;
 end;
 
@@ -1176,15 +1176,15 @@ for X be ComplexNormSpace, seq be sequence of X holds
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
-   assume (for n be Nat holds ||.seq.||.n>0) & 
-    (ex m be Nat st for n be Nat st n >=m holds 
+   assume (for n be Nat holds ||.seq.||.n>0) &
+    (ex m be Nat st for n be Nat st n >=m holds
       ||.seq.||.(n+1)/||.seq.||.n >= 1);
    hence ||.seq.|| is not summable by SERIES_1:31;
 end;
 
 theorem
 for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
-  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) & 
+  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
   rseq1 is convergent &
   lim rseq1 < 1
     implies seq is norm_summable
@@ -1195,13 +1195,13 @@ proof
    assume
 A1:(for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
     rseq1 is convergent & lim rseq1 < 1;
-   for n be Nat holds ||.seq.||.n >=0 by LM2000;
+   for n be Nat holds ||.seq.||.n >=0 by Th2;
    hence ||.seq.|| is summable by A1,SERIES_1:32;
 end;
 
 theorem
 for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
-  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) & 
+  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
   (ex m be Nat st for n be Nat st m<=n holds rseq1.n>= 1)
     implies ||.seq.|| is not summable
 proof
@@ -1211,13 +1211,13 @@ proof
    assume
 A1: (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
     (ex m be Nat st for n be Nat st m<=n holds rseq1.n>= 1);
-   for n be Nat holds ||.seq.||.n >=0 by LM2000;
+   for n be Nat holds ||.seq.||.n >=0 by Th2;
    hence||.seq.|| is not summable by A1,SERIES_1:33;
 end;
 
 theorem
 for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
-  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) & 
+  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
   rseq1 is convergent & lim rseq1 > 1
     implies seq is not norm_summable
 proof
@@ -1225,27 +1225,27 @@ proof
    let seq be sequence of X;
    let rseq1 be Real_Sequence;
    assume
-A1: (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) & 
+A1: (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
     rseq1 is convergent & lim rseq1 > 1;
-   for n be Nat holds ||.seq.||.n >=0 by LM2000;
+   for n be Nat holds ||.seq.||.n >=0 by Th2;
    hence||.seq.|| is not summable by A1,SERIES_1:34;
 end;
 
 theorem
-for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence st 
-  (||.seq.|| is non-increasing) & 
+for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence st
+  (||.seq.|| is non-increasing) &
   (for n be Nat holds rseq1.n = 2 to_power n *||.seq.||.(2 to_power n)) holds
     (seq is norm_summable iff rseq1 is summable)
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
    let rseq1 be Real_Sequence;
-   assume ||.seq.|| is non-increasing & 
+   assume ||.seq.|| is non-increasing &
      (for n be Nat holds rseq1.n = 2 to_power n *||.seq.||.(2 to_power n));then
-   for n be Nat holds ( ||.seq.|| is non-increasing & ||.seq.||.n >= 0 & 
-    rseq1.n = 2 to_power n *||.seq.||.(2 to_power n) ) by LM2000; then
+   for n be Nat holds ( ||.seq.|| is non-increasing & ||.seq.||.n >= 0 &
+    rseq1.n = 2 to_power n *||.seq.||.(2 to_power n) ) by Th2; then
    ||.seq.|| is summable iff rseq1 is summable by SERIES_1:35;
-   hence seq is norm_summable iff rseq1 is summable by LOPBAN_3_def_4;
+   hence seq is norm_summable iff rseq1 is summable by Def4;
 end;
 
 theorem
@@ -1259,7 +1259,7 @@ proof
    assume
    p>1 & (for n be Nat st n >=1 holds ||. seq .|| .n = 1/n to_power p); then
    ||.seq.|| is summable by SERIES_1:36;
-   hence thesis by LOPBAN_3_def_4;
+   hence thesis by Def4;
 end;
 
 theorem
@@ -1270,59 +1270,59 @@ proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
    let p be Real;
-   assume 
-   p<=1 & (for n be Nat  st n  >=1 holds ||.seq.||.n=1/n to_power p); then 
+   assume
+   p<=1 & (for n be Nat  st n  >=1 holds ||.seq.||.n=1/n to_power p); then
    not ||.seq.|| is summable by SERIES_1:37;
-   hence thesis by LOPBAN_3_def_4;
+   hence thesis by Def4;
 end;
 
 theorem
 for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
   (for n be Nat holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n) &
-  rseq1 is convergent & lim rseq1 < 1 
+  rseq1 is convergent & lim rseq1 < 1
     implies seq is norm_summable
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
    let rseq1 be Real_Sequence;
    assume
-A1: (for n be Nat  holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n) & 
+A1: (for n be Nat  holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n) &
     rseq1 is convergent & lim rseq1 < 1;
    now let n be Nat;
 A2:  seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n by A1;
-A3:  0 <=||.seq.||.n  & 0 <=||.seq.||.(n+1) by LM2000;
+A3:  0 <=||.seq.||.n  & 0 <=||.seq.||.(n+1) by Th2;
 A4:  abs((||.seq.||)).n =abs((||.seq.||).n) by SEQ_1:16
                       .=||.seq.||.n by A3,ABSVALUE:def 1;
 A5:  abs((||.seq.||)).(n+1) =abs((||.seq.||).(n+1)) by SEQ_1:16
                       .=||.seq.||.(n+1) by A3,ABSVALUE:def 1;
      ||.seq.||.n =||.seq.n.|| by CLVECT_1:def 16;
-     hence 
+     hence
       (||.seq.||).n <>0 & rseq1.n=abs((||.seq.||)).(n+1)/abs((||.seq.||)).n
         by A2,A4,A5,CLVECT_1:def 10;
-   end; then 
-   ||.seq.|| is absolutely_summable  by A1,SERIES_1:42; then 
-A7:abs(||.seq.||) is summable by SERIES_1:def 5;
+   end; then
+   ||.seq.|| is absolutely_summable  by A1,SERIES_1:42; then
+A6:abs(||.seq.||) is summable by SERIES_1:def 5;
    now let n be Nat;
-A8:  0 <=||.seq.||.n by LM2000;
+A7:  0 <=||.seq.||.n by Th2;
      thus abs((||.seq.||)).n =abs((||.seq.||).n) by SEQ_1:16
-                      .=||.seq.||.n by A8,ABSVALUE:def 1;
-   end; then 
+                      .=||.seq.||.n by A7,ABSVALUE:def 1;
+   end; then
    abs((||.seq.||)) =||.seq.|| by FUNCT_2:113;
-   hence seq is norm_summable by A7,LOPBAN_3_def_4;
+   hence seq is norm_summable by A6,Def4;
 end;
 
 theorem
 for X be ComplexNormSpace, seq be sequence of X holds
-  (for n be Nat  holds seq.n<>0.X) & 
-  (ex m be Nat st for n be Nat st n >=m holds 
+  (for n be Nat  holds seq.n<>0.X) &
+  (ex m be Nat st for n be Nat st n >=m holds
     ||.seq.||.(n+1)/||.seq.||.n >= 1)
     implies seq is not norm_summable
 proof
    let X be ComplexNormSpace;
    let seq be sequence of X;
    assume
-A1: (for n be Nat holds seq.n <> 0.X ) & 
-    (ex m be Nat st for n be Nat st n >=m holds 
+A1: (for n be Nat holds seq.n <> 0.X ) &
+    (ex m be Nat st for n be Nat st n >=m holds
       ||.seq.||.(n+1)/||.seq.||.n >= 1);
 A2:now let n be Nat;
      seq.n <> 0.X  by A1; then
@@ -1333,7 +1333,7 @@ A2:now let n be Nat;
 A3: for n be Nat st n >=m holds ||.seq.||.(n+1)/||.seq.||.n >= 1 by A1;
    now let n be Nat such that
 A4:  n>=m;
-A5:  0 <=||.seq.||.n & 0 <=||.seq.||.(n+1) by LM2000;
+A5:  0 <=||.seq.||.n & 0 <=||.seq.||.(n+1) by Th2;
 A6:  abs((||.seq.||)).n =abs((||.seq.||).n) by SEQ_1:16
                       .=||.seq.||.n by A5,ABSVALUE:def 1;
      abs((||.seq.||)).(n+1) =abs((||.seq.||).(n+1)) by SEQ_1:16
@@ -1346,12 +1346,12 @@ end;
 registration
   let X be ComplexBanachSpace;
 cluster norm_summable -> summable sequence of X;
-coherence by SERIES_1_40;
+coherence by Th30;
 end;
 
 begin :: Basic Properties of Sequence of Complex_Banach_Algebra
 
-theorem LM000:
+theorem Th42:
 for X be Complex_Banach_Algebra holds
  for x,y,z being Element of X, a,b be Complex holds
    x+y = y+x &
@@ -1363,8 +1363,8 @@ for X be Complex_Banach_Algebra holds
    0c*x=0.X  &
    a*0.X =0.X&
    (-1r)*x=-x &
-   x*(1_ X) = x &
-   (1_ X)*x = x &
+   x*(1.X) = x &
+   (1.X)*x = x &
    x*(y+z) = x*y + x*z &
    (y+z)*x = y*x + z*x &
    a*(x*y) = (a*x)*y &
@@ -1388,7 +1388,7 @@ for X be Complex_Banach_Algebra holds
    ||.a * x.|| = |.a.| * ||.x.|| &
    ||.x + y.|| <= ||.x.|| + ||.y.|| &
    ||. x*y .|| <= ||.x.|| * ||.y.|| &
-   ||. 1_ X .|| = 1  &
+   ||. 1.X .|| = 1  &
    X is complete
 proof
    let X be Complex_Banach_Algebra;
@@ -1398,16 +1398,16 @@ proof
    thus (x+y)+z = x+(y+z) by RLVECT_1:def 6;
    thus x+(0.X) = x by RLVECT_1:def 7;
    thus ex t being Element of X st x+t=0.X by RLVECT_1:def 8;
-   thus (x*y)*z = x*(y*z) by VECTSP_1:def 16;
+   thus (x*y)*z = x*(y*z) by GROUP_1:def 4;
    thus 1r*x = x by CLVECT_1:def 2;
    thus 0c*x = 0.X by CLVECT_1:2;
    thus a*0.X =0.X by CLVECT_1:2;
    thus (-1r)*x = -x by CLVECT_1:4;
-   thus x*(1_ X) = x & (1_ X)*x= x & x*(y+z) = x*y + x*z & 
+   thus x*(1.X) = x & (1.X)*x= x & x*(y+z) = x*y + x*z &
         (y+z)*x = y*x + z*x & a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y &
         (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x)
            by CFUNCDOM:def 9,VECTSP_1:def 12,def 19;
-   thus (a*b)*(x*y) =a*(b*(x*y)) by CFUNCDOM:def 9 
+   thus (a*b)*(x*y) =a*(b*(x*y)) by CFUNCDOM:def 9
                    .=a*(x*(b*y) ) by CLOPBAN2:def 11
                    .=(a*x)*(b*y) by CFUNCDOM:def 9;
    thus a*(x*y)=x*(a*y) by CLOPBAN2:def 11;
@@ -1420,39 +1420,39 @@ proof
      0.X = 0.X*x + 0.X by RLVECT_1:28;
      hence 0.X = 0.X*x by RLVECT_1:def 7;
      x*0.X =x*(0.X+0.X) by RLVECT_1:def 7
-          .=x*0.X + x*0.X by CFUNCDOM:def 9; then 
+          .=x*0.X + x*0.X by CFUNCDOM:def 9; then
      0.X = x*0.X + x*0.X-x* 0.X by RLVECT_1:28; then
-     0.X = x*0.X + (x*0.X-x* 0.X)  by RLVECT_1:42; then 
+     0.X = x*0.X + (x*0.X-x* 0.X)  by RLVECT_1:42; then
      0.X = x*0.X + 0.X by RLVECT_1:28;
      hence 0.X = x*0.X by RLVECT_1:def 7;
      thus thesis;
    end;
-P1R:x*(y-z)+x*z =x*((y-z)+z) by CFUNCDOM:def 9
+A1:x*(y-z)+x*z =x*((y-z)+z) by CFUNCDOM:def 9
           .=x*(y-(z-z)) by RLVECT_1:43
           .=x*(y-0.X) by RLVECT_1:28
           .=x*y by RLVECT_1:26;
-   thus x*(y-z) =x*(y-z)+0.X by  RLVECT_1:10
-         .=x*(y-z)+(x*z-x*z) by  RLVECT_1:28
-         .=x*y-x*z by P1R,RLVECT_1:42;
-P1L:(y-z)*x+z*x =((y-z)+z)*x  by VECTSP_1:def 12
+   thus x*(y-z) =x*(y-z)+0.X by RLVECT_1:10
+         .=x*(y-z)+(x*z-x*z) by RLVECT_1:28
+         .=x*y-x*z by A1,RLVECT_1:42;
+A2:(y-z)*x+z*x =((y-z)+z)*x  by VECTSP_1:def 12
           .=(y-(z-z))*x by RLVECT_1:43
           .=(y-0.X)*x    by RLVECT_1:28
           .=y*x by RLVECT_1:26;
-   thus (y-z)*x =(y-z)*x+0.X by  RLVECT_1:10
-         .=(y-z)*x+(z*x-z*x) by  RLVECT_1:28
-         .=y*x-z*x by P1L,RLVECT_1:42;
+   thus (y-z)*x =(y-z)*x+0.X by RLVECT_1:10
+         .=(y-z)*x+(z*x-z*x) by RLVECT_1:28
+         .=y*x-z*x by A2,RLVECT_1:42;
    thus x+y-z = x+(y-z) by RLVECT_1:42;
    thus x-y+z = x-(y-z) by RLVECT_1:43;
    thus x-y-z = x-(y+z) by RLVECT_1:41;
-   thus (x-z)+(z+y)=(x-z)+z+y by  RLVECT_1:def 6
-                        .=x-(z-z)+y by  RLVECT_1:43
-                        .=x-0.X + y  by  RLVECT_1:28
+   thus (x-z)+(z+y)=(x-z)+z+y by RLVECT_1:def 6
+                        .=x-(z-z)+y by RLVECT_1:43
+                        .=x-0.X + y  by RLVECT_1:28
                         .=x+y  by RLVECT_1:26;
-   thus (x-z)+(z-y) =x-z+z-y  by  RLVECT_1:42
+   thus (x-z)+(z-y) =x-z+z-y  by RLVECT_1:42
                          .=x-(z-z)-y by RLVECT_1:43
                          .=x-0.X -y by RLVECT_1:28
                          .=x-y by RLVECT_1:26;
-   thus (x-y)+y=x-(y-y) by  RLVECT_1:43
+   thus (x-y)+y=x-(y-y) by RLVECT_1:43
                    .=x-0.X by RLVECT_1:28
                    .=x by RLVECT_1:26;
    thus y-(y-x)=y-y + x by RLVECT_1:43
@@ -1461,11 +1461,11 @@ P1L:(y-z)*x+z*x =((y-z)+z)*x  by VECTSP_1:def 12
    thus ( ||.x.|| = 0 iff x = 0.X ) &
           ||.a * x.|| = |.a.| * ||.x.|| &
           ||.x + y.|| <= ||.x.|| + ||.y.|| &
-          ||. x*y .|| <= ||.x.|| * ||.y.|| by CLVECT_1:def 10, CLOPBAN2:def 9;
+          ||. x*y .|| <= ||.x.|| * ||.y.|| by CLOPBAN2:def 9,CLVECT_1:def 10;
    thus thesis by CLOPBAN2:def 10;
 end;
 
-definition 
+definition
   let X be non empty Normed_Complex_AlgebraStr;
   let S be sequence of X;
   let a be Element of X;
@@ -1494,7 +1494,7 @@ A2: ( for n be Nat holds S2.n = a * S.n );
 end;
 end;
 
-definition 
+definition
   let X be non empty Normed_Complex_AlgebraStr;
   let S be sequence of X;
   let a be Element of X;
@@ -1523,7 +1523,7 @@ A2: ( for n be Nat holds S2.n = S.n *a);
 end;
 end;
 
-definition 
+definition
   let X be non empty Normed_Complex_AlgebraStr;
   let seq1,seq2 be sequence of X;
 func seq1 * seq2 -> sequence of X means
@@ -1553,18 +1553,18 @@ end;
 
 definition
   let X be Complex_Banach_Algebra;
-  let x be Element of X such that AS0:x is invertible;
-func x" -> Element of X means :Def02:
- x*it= 1_  X & it*x= 1_  X;
-existence by LOPBAN_3:def 8,AS0;
+  let x be Element of X such that A1:x is invertible;
+func x" -> Element of X means :Def11:
+ x*it= 1. X & it*x= 1. X;
+existence by A1,LOPBAN_3:def 8;
 uniqueness
 proof
    let z,y be Element of X such that
-AS1:x*z=1_ X & z*x=1_ X and
-AS2:x*y=(1_ X)  & y*x= (1_ X);
-   y= y*(1_ X) by LM000
-   .=(y*x)*z by LM000,AS1
-   .=z by LM000,AS2;
+A2:x*z=1.X & z*x=1.X and
+A3:x*y=(1.X)  & y*x= (1.X);
+   y= y*(1.X) by Th42
+   .=(y*x)*z by A2,Th42
+   .=z by A3,Th42;
    hence thesis;
 end;
 end;
@@ -1572,53 +1572,53 @@ end;
 definition
   let X be Complex_Banach_Algebra;
   let z be Element of X;
-func z GeoSeq -> sequence of X means :defGeo:
- it.0 = 1_ X & for n be Nat  holds it.(n+1) = it.n * z;
+func z GeoSeq -> sequence of X means :Def12:
+ it.0 = 1.X & for n be Nat  holds it.(n+1) = it.n * z;
 existence
 proof
    deffunc G(set,set)=(the mult of X).[$2,z];
    consider g be Function such that
-AS2:dom g = NAT & g.0 = 1_ X & 
+A1:dom g = NAT & g.0 = 1.X &
     for n being Element of NAT holds g.(n+1) = G(n,g.n) from RECDEF_1:sch 3;
    defpred P[Nat] means g.$1 in the carrier of X;
-A0:P[0] by AS2;
-A1:for k be Nat st P[k] holds P[k+1]
+A2:P[0] by A1;
+A3:for k be Nat st P[k] holds P[k+1]
    proof
      let k be Nat such that
-BS1: P[k];
-     reconsider gk=g.k as Element of the carrier of X by BS1;
-     g.(k+1)=(the mult of X).[gk,z] by AS2;
+A4: P[k];
+     reconsider gk=g.k as Element of the carrier of X by A4;
+     g.(k+1)=(the mult of X).[gk,z] by A1;
      hence thesis;
    end;
-   for n be Nat holds P[n]  from NAT_1:sch 1(A0,A1); then
+   for n be Nat holds P[n]  from NAT_1:sch 1(A2,A3); then
    for n be set st n in NAT holds g.n in the carrier of X; then
-   reconsider g0=g as sequence of X by AS2,FUNCT_2:5;
+   reconsider g0=g as sequence of X by A1,FUNCT_2:5;
    take g0;
    now let n be Nat;
-     thus g0.(n+1) = (the mult of X).[g0.n,z] by AS2
+     thus g0.(n+1) = (the mult of X).[g0.n,z] by A1
             .=(the mult of X).(g0.n,z) by BINOP_1:def 1
-            .=g0.n * z by VECTSP_1:def 10;
+            .=g0.n * z by GROUP_1:def 1;
    end;
-   hence thesis by AS2;
+   hence thesis by A1;
 end;
 uniqueness
 proof
    let seq1,seq2 be sequence of X;
-   assume that 
-A2: seq1.0=1_ X & 
+   assume that
+A5: seq1.0=1.X &
     for n be Nat holds seq1.(n+1)=seq1.n * z and
-A3: seq2.0=1_ X & 
+A6: seq2.0=1.X &
     for n be Nat holds seq2.(n+1)=seq2.n * z;
    defpred P[Nat] means seq1.$1 = seq2.$1;
-A4:P[0] by A2,A3;
-A5:for k be Nat st P[k] holds P[k+1]
+A7:P[0] by A5,A6;
+A8:for k be Nat st P[k] holds P[k+1]
    proof
      let k be Nat;
      assume P[k];
-     hence seq1.(k+1) = seq2.k * z by A2
-                     .= seq2.(k+1) by A3;
+     hence seq1.(k+1) = seq2.k * z by A5
+                     .= seq2.(k+1) by A6;
    end;
-   for n be Nat holds P[n] from NAT_1:sch 1(A4,A5);
+   for n be Nat holds P[n] from NAT_1:sch 1(A7,A8);
    hence seq1 = seq2 by FUNCT_2:113;
 end;
 end;
@@ -1626,104 +1626,104 @@ end;
 definition
   let X be Complex_Banach_Algebra;
   let z be Element of X, n be Nat;
-func z #N n -> Element of X equals:Def03:
+func z #N n -> Element of X equals:Def13:
  z GeoSeq.n;
 correctness;
 end;
 
 theorem
 for X be Complex_Banach_Algebra, z be Element of X holds
-  z #N 0 = 1_ X
+  z #N 0 = 1.X
 proof
    let X be Complex_Banach_Algebra;
    let z be Element of X;
-   thus z #N 0 = (z GeoSeq).0 by Def03
-                   .= 1_ X  by defGeo;
+   thus z #N 0 = (z GeoSeq).0 by Def13
+                   .= 1.X  by Def12;
 end;
 
-theorem LM010:
+theorem Th44:
 for X be Complex_Banach_Algebra, z be Element of X holds
   ||.z.|| < 1 implies z GeoSeq is summable norm_summable
 proof
    let X be Complex_Banach_Algebra;
    let z be Element of X;
    assume
-A0: ||.z.|| < 1;
+A1: ||.z.|| < 1;
    0<=  ||.z.|| by CLVECT_1:106; then
-A1:abs( ||.z.||)  < 1 by A0,ABSVALUE:def 1;
-A2:for n be Nat holds 
+A2:abs( ||.z.||)  < 1 by A1,ABSVALUE:def 1;
+A3:for n be Nat holds
      (0 <= ||.z GeoSeq.||.n & ||.z GeoSeq.||.n <=(||.z.|| GeoSeq).n )
    proof
      defpred P[Nat] means
      0 <= ||.z GeoSeq.||.$1 & ||.z GeoSeq.||.$1 <= (  ||.z.||  GeoSeq ).$1;
-P1:  ||.(z GeoSeq).||.0 = ||.(z GeoSeq).0 .|| by CLVECT_1:def 16;
-     ||.(z GeoSeq).0 .|| = ||.1_ X.|| by defGeo
+A4:  ||.(z GeoSeq).||.0 = ||.(z GeoSeq).0 .|| by CLVECT_1:def 16;
+     ||.(z GeoSeq).0 .|| = ||.1.X.|| by Def12
                         .= 1 by CLOPBAN2:def 10
                         .= ( ||.z.||  GeoSeq ).0 by PREPOWER:4; then
-A4:  P[0] by P1,CLVECT_1:106;
-A5:  for k be Nat st P[k] holds P[k+1]
+A5:  P[0] by A4,CLVECT_1:106;
+A6:  for k be Nat st P[k] holds P[k+1]
      proof
        let k be Nat;
        assume
-A6:    P[k];
-AA:    0 <=  ||.z.|| by CLVECT_1:106;
-A7:    ||.z GeoSeq.||.(k+1) = ||. (z GeoSeq).(k+1) .|| by CLVECT_1:def 16
-               .= ||. (z GeoSeq).k * z .|| by defGeo;
-       ||.(z GeoSeq.k)*z.|| <= ||.(z GeoSeq.k).||*||.z.|| 
+A7:    P[k];
+A8:    0 <=  ||.z.|| by CLVECT_1:106;
+A9:    ||.z GeoSeq.||.(k+1) = ||. (z GeoSeq).(k+1) .|| by CLVECT_1:def 16
+               .= ||. (z GeoSeq).k * z .|| by Def12;
+       ||.(z GeoSeq.k)*z.|| <= ||.(z GeoSeq.k).||*||.z.||
          by CLOPBAN2:def 9; then
 A10:   ||. (z GeoSeq.k)*z .|| <= ||. z GeoSeq .||.k * ||.z.||
          by CLVECT_1:def 16;
        ||. z GeoSeq.||.k  *  ||.z.|| <= (||.z.|| GeoSeq ).k * ||.z.||
-         by AA,A6,AXIOMS:25; then
+         by A7,A8,AXIOMS:25; then
        ||. (z GeoSeq.k)*z .|| <= ( ||.z.||  GeoSeq ).k *  ||.z.||
          by A10,AXIOMS:22;
        hence 0<= ||.z GeoSeq.||.(k+1) &
              ||.z GeoSeq.||.(k+1)  <=  ( ||.z.||  GeoSeq ).(k+1)
-              by A7,PREPOWER:4,CLVECT_1:106;
+              by A9,CLVECT_1:106,PREPOWER:4;
      end;
-     for n be Nat holds P[n] from NAT_1:sch 1(A4,A5);
+     for n be Nat holds P[n] from NAT_1:sch 1(A5,A6);
      hence thesis;
    end;
-   ||.z.|| GeoSeq is summable by A1,SERIES_1:28; then 
-   ||.z GeoSeq.|| is summable by A2,SERIES_1:24; then 
-   z GeoSeq is norm_summable by LOPBAN_3_def_4;
-   hence thesis by SERIES_1_40;
+   ||.z.|| GeoSeq is summable by A2,SERIES_1:28; then
+   ||.z GeoSeq.|| is summable by A3,SERIES_1:24; then
+   z GeoSeq is norm_summable by Def4;
+   hence thesis by Th30;
 end;
 
 theorem
-for X be Complex_Banach_Algebra, x be Point of X st 
-  ||.1_ X - x .|| < 1 holds 
-    ( (1_ X - x) GeoSeq is summable & (1_ X - x) GeoSeq is norm_summable)
-by LM010;
+for X be Complex_Banach_Algebra, x be Point of X st
+  ||.1.X - x .|| < 1 holds
+    ( (1.X - x) GeoSeq is summable & (1.X - x) GeoSeq is norm_summable)
+by Th44;
 
-LmBeZero1:
-for X be ComplexNormSpace, x be Point of X st 
+Lm4:
+for X be ComplexNormSpace, x be Point of X st
  (for e be Real st e>0 holds  ||.x.|| <e) holds x=0.X
 proof
    let X be ComplexNormSpace;
    let x be Point of X such that
-GS1:for e be Real st e > 0 holds ||.x.|| <e;
+A1:for e be Real st e > 0 holds ||.x.|| <e;
    now assume
-Lb:  x<>0.X;
-     0<> ||.x.|| by Lb, CLVECT_1:def 10; then 
+A2:  x<>0.X;
+     0<> ||.x.|| by A2,CLVECT_1:def 10; then
      0< ||.x.|| by CLVECT_1:106;
-     hence contradiction by GS1;
+     hence contradiction by A1;
    end;
    hence thesis;
 end;
 
-LmBeZero2:
-for X be ComplexNormSpace, x,y be Point of X st 
+Lm5:
+for X be ComplexNormSpace, x,y be Point of X st
  (for e be Real st e>0 holds ||.x-y.|| <e) holds x=y
 proof
    let X be ComplexNormSpace;
    let x,y be Point of X such that
-GS1:for e be Real st e > 0 holds  ||.x-y.|| <e;
-   x-y = 0.X by LmBeZero1,GS1;
+A1:for e be Real st e > 0 holds  ||.x-y.|| <e;
+   x-y = 0.X by A1,Lm4;
    hence thesis by RLVECT_1:35;
 end;
 
-LmBeZero3:
+Lm6:
 for X be ComplexNormSpace, x,y be Point of X, seq be Real_Sequence st
  (seq is convergent & lim seq=0 & for n be Nat holds ||.x-y.|| <= seq.n)
    holds x=y
@@ -1731,267 +1731,267 @@ proof
    let X be ComplexNormSpace;
    let x,y be Point of X;
    let seq be Real_Sequence such that
-AS1: seq is convergent and
-AS2: lim seq=0 and
-AS3: for n be Nat holds ||.x-y.|| <= seq.n;
+A1: seq is convergent and
+A2: lim seq=0 and
+A3: for n be Nat holds ||.x-y.|| <= seq.n;
    now let e be Real such that
-AS4: 0 < e;
+A4: 0 < e;
      consider n be Nat such that
-B4:   for m be Nat st n<=m holds
-     abs(seq.m - 0) < e by AS1,AS2,AS4,SEQ_2:def 7;
-B5:  abs(seq.n -0 ) < e by B4;
+A5:   for m be Nat st n<=m holds
+     abs(seq.m - 0) < e by A1,A2,A4,SEQ_2:def 7;
+A6:  abs(seq.n -0 ) < e by A5;
      seq.n <=abs( seq.n ) by ABSVALUE:11; then
-B7:  seq.n < e by B5,AXIOMS:22;
-     ||.x-y.|| <= seq.n by AS3;
-     hence ||.x-y.|| < e by B7,AXIOMS:22;
+A7:  seq.n < e by A6,AXIOMS:22;
+     ||.x-y.|| <= seq.n by A3;
+     hence ||.x-y.|| < e by A7,AXIOMS:22;
    end;
-   hence x=y by LmBeZero2;
+   hence x=y by Lm5;
    thus thesis;
 end;
 
 theorem
-for X be Complex_Banach_Algebra, x be Point of X st 
- ||.1_ X - x .|| < 1 holds 
-  x is invertible & x" = Sum ((1_ X - x) GeoSeq )
+for X be Complex_Banach_Algebra, x be Point of X st
+ ||.1.X - x .|| < 1 holds
+  x is invertible & x" = Sum ((1.X - x) GeoSeq )
 proof
    let X be Complex_Banach_Algebra;
    let x be Point of X such that
-AS1:||.1_ X - x .|| < 1;
-   set seq = (1_ X - x)GeoSeq;
-P1:seq is summable by AS1,LM010;
+A1:||.1.X - x .|| < 1;
+   set seq = (1.X - x)GeoSeq;
+A2:seq is summable by A1,Th44;
    reconsider  y=Sum(seq) as Element of X;
-P2:for n be Nat holds
-     (Partial_Sums(seq).n)*(1_ X -x)=(Partial_Sums(seq)^\1).n-seq.0
+A3:for n be Nat holds
+     (Partial_Sums(seq).n)*(1.X -x)=(Partial_Sums(seq)^\1).n-seq.0
    proof
      defpred P[Nat] means
-     (Partial_Sums(seq).$1)*(1_ X -x)=(Partial_Sums(seq)^\1).$1-seq.0;
-I0L: (Partial_Sums(seq).0)*(1_ X -x)
-      =(seq.0)*(1_ X -x) by LOPBAN_3_def_1
-     .=1_ X *(1_ X -x) by defGeo
-     .=1_ X -x by LM000;
-I0R: (Partial_Sums(seq)^\1).0-seq.0
-      =(Partial_Sums(seq)).(0+1)-seq.0 by SEQM_3_def_9
-     .=(Partial_Sums(seq)).(0)+seq.1-seq.0 by LOPBAN_3_def_1
-     .=seq.0 + seq.1-seq.0 by LOPBAN_3_def_1
-     .=seq.1 +(seq.0-seq.0) by LM000
+     (Partial_Sums(seq).$1)*(1.X -x)=(Partial_Sums(seq)^\1).$1-seq.0;
+A4: (Partial_Sums(seq).0)*(1.X -x)
+      =(seq.0)*(1.X -x) by Def1
+     .=1.X *(1.X -x) by Def12
+     .=1.X -x by Th42;
+A5: (Partial_Sums(seq)^\1).0-seq.0
+      =(Partial_Sums(seq)).(0+1)-seq.0 by Def6
+     .=(Partial_Sums(seq)).(0)+seq.1-seq.0 by Def1
+     .=seq.0 + seq.1-seq.0 by Def1
+     .=seq.1 +(seq.0-seq.0) by Th42
      .=seq.1 + 0.X by RLVECT_1:28
      .=seq.(0+1) by RLVECT_1:10
-     .=seq.0*(1_ X -x) by defGeo
-     .=1_ X * (1_ X -x) by defGeo
-     .=1_ X -x by LM000;
-I4:  P[0] by I0L,I0R;
-I5:  for k be Nat st P[k] holds P[k+1]
+     .=seq.0*(1.X -x) by Def12
+     .=1.X * (1.X -x) by Def12
+     .=1.X -x by Th42;
+A6:  P[0] by A4,A5;
+A7:  for k be Nat st P[k] holds P[k+1]
      proof let k be Nat;
        assume
-I6:    P[k];
-IKL:   (Partial_Sums(seq).(k+1))*(1_ X -x)
-         = ( Partial_Sums(seq).k+seq.(k+1) )*(1_ X -x) by LOPBAN_3_def_1
-        .=(Partial_Sums(seq).k)*(1_ X -x)+seq.(k+1)*(1_ X -x) by LM000
-        .=(Partial_Sums(seq)^\1).k-seq.0+seq.((k+1)+1) by defGeo,I6;
+A8:    P[k];
+A9:   (Partial_Sums(seq).(k+1))*(1.X -x)
+         = ( Partial_Sums(seq).k+seq.(k+1) )*(1.X -x) by Def1
+        .=(Partial_Sums(seq).k)*(1.X -x)+seq.(k+1)*(1.X -x) by Th42
+        .=(Partial_Sums(seq)^\1).k-seq.0+seq.((k+1)+1) by A8,Def12;
        (Partial_Sums(seq)^\1).(k+1)-seq.0
-         =(Partial_Sums(seq)).((k+1)+1)-seq.0 by SEQM_3_def_9
-        .=(Partial_Sums(seq)).(k+1)+seq.((k+1)+1)-seq.0 by LOPBAN_3_def_1
-        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)-seq.0 by SEQM_3_def_9
+         =(Partial_Sums(seq)).((k+1)+1)-seq.0 by Def6
+        .=(Partial_Sums(seq)).(k+1)+seq.((k+1)+1)-seq.0 by Def1
+        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)-seq.0 by Def6
         .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)+(-seq.0) by RLVECT_1:def 11
         .=(Partial_Sums(seq)^\1).(k)+(-seq.0) +seq.((k+1)+1) by RLVECT_1:def 6
         .=(Partial_Sums(seq)^\1).(k)-seq.0 +seq.((k+1)+1) by RLVECT_1:def 11;
-       hence (Partial_Sums(seq).(k+1))*(1_ X -x)
-        =(Partial_Sums(seq)^\1).(k+1)-seq.0 by IKL;
+       hence (Partial_Sums(seq).(k+1))*(1.X -x)
+        =(Partial_Sums(seq)^\1).(k+1)-seq.0 by A9;
      end;
-     for n be Nat holds P[n] from NAT_1:sch 1(I4,I5);
+     for n be Nat holds P[n] from NAT_1:sch 1(A6,A7);
      hence thesis;
    end;
 
-RdefGeo:
-   for n be Nat holds (1_ X -x)*seq.n=seq.(n+1)
+A10:
+   for n be Nat holds (1.X -x)*seq.n=seq.(n+1)
    proof
-     defpred P[Nat] means (1_ X -x)*seq.$1=seq.($1+1);
-I0L: (1_ X -x)*seq.0 =(1_ X -x)*1_ X by defGeo
-       .=(1_ X -x) by LM000;
-I0R: seq.(0+1) =seq.0 * (1_ X -x) by defGeo
-              .=1_ X * (1_ X -x) by defGeo
-              .=(1_ X -x) by LM000;
-A0:  P[0] by I0R,I0L;
-A1:  for k be Nat st P[k] holds P[k+1]
+     defpred P[Nat] means (1.X -x)*seq.$1=seq.($1+1);
+A11: (1.X -x)*seq.0 =(1.X -x)*1.X by Def12
+       .=(1.X -x) by Th42;
+A12: seq.(0+1) =seq.0 * (1.X -x) by Def12
+              .=1.X * (1.X -x) by Def12
+              .=(1.X -x) by Th42;
+A13:  P[0] by A11,A12;
+A14:  for k be Nat st P[k] holds P[k+1]
      proof
        let k be Nat such that
-BS1:   P[k];
-       thus (1_ X -x)*seq.(k+1)
-        = (1_ X -x)*(seq.(k)*(1_ X -x)) by defGeo
-       .=(1_ X -x)*seq.(k)*(1_ X -x) by LM000
-       .=seq.((k+1)+1) by defGeo,BS1;
+A15:   P[k];
+       thus (1.X -x)*seq.(k+1)
+        = (1.X -x)*(seq.(k)*(1.X -x)) by Def12
+       .=(1.X -x)*seq.(k)*(1.X -x) by Th42
+       .=seq.((k+1)+1) by A15,Def12;
      end;
-     for n be Nat holds P[n] from NAT_1:sch 1(A0,A1);
+     for n be Nat holds P[n] from NAT_1:sch 1(A13,A14);
      hence thesis;
    end;
-P3:for n be Nat holds
-    (1_ X -x)* (Partial_Sums(seq).n)=(Partial_Sums(seq)^\1).n-seq.0
+A16:for n be Nat holds
+    (1.X -x)* (Partial_Sums(seq).n)=(Partial_Sums(seq)^\1).n-seq.0
    proof
      defpred P[Nat] means
-     (1_ X -x)* (Partial_Sums(seq).$1)=(Partial_Sums(seq)^\1).$1-seq.0;
-I0L: (1_ X -x)*(Partial_Sums(seq).0)
-      =(1_ X -x)*(seq.0) by LOPBAN_3_def_1
-     .=(1_ X -x)*1_ X  by defGeo
-     .=1_ X -x by LM000;
-I0R: (Partial_Sums(seq)^\1).0-seq.0
-      =(Partial_Sums(seq)).(0+1)-seq.0 by SEQM_3_def_9
-     .=(Partial_Sums(seq)).(0)+seq.1-seq.0 by LOPBAN_3_def_1
-     .=seq.0 + seq.1-seq.0 by LOPBAN_3_def_1
-     .=seq.1 +(seq.0-seq.0) by LM000
+     (1.X -x)* (Partial_Sums(seq).$1)=(Partial_Sums(seq)^\1).$1-seq.0;
+A17: (1.X -x)*(Partial_Sums(seq).0)
+      =(1.X -x)*(seq.0) by Def1
+     .=(1.X -x)*1.X  by Def12
+     .=1.X -x by Th42;
+A18: (Partial_Sums(seq)^\1).0-seq.0
+      =(Partial_Sums(seq)).(0+1)-seq.0 by Def6
+     .=(Partial_Sums(seq)).(0)+seq.1-seq.0 by Def1
+     .=seq.0 + seq.1-seq.0 by Def1
+     .=seq.1 +(seq.0-seq.0) by Th42
      .=seq.1 + 0.X by RLVECT_1:28
      .=seq.(0+1) by RLVECT_1:10
-     .=seq.0*(1_ X -x) by defGeo
-     .=1_ X * (1_ X -x) by defGeo
-     .=1_ X -x by LM000;
-I4:  P[0] by I0L,I0R;
-I5:  for k be Nat st P[k] holds P[k+1]
-     proof 
+     .=seq.0*(1.X -x) by Def12
+     .=1.X * (1.X -x) by Def12
+     .=1.X -x by Th42;
+A19:  P[0] by A17,A18;
+A20:  for k be Nat st P[k] holds P[k+1]
+     proof
        let k be Nat;
        assume
-I6:    P[k];
-IKL:   (1_ X -x)*(Partial_Sums(seq).(k+1))
-         = (1_ X -x)*( Partial_Sums(seq).k+seq.(k+1) ) by LOPBAN_3_def_1
-        .=(1_ X -x)*(Partial_Sums(seq).k)+(1_ X -x)*seq.(k+1) by LM000
-        .=(Partial_Sums(seq)^\1).k-seq.0+seq.((k+1)+1) by RdefGeo,I6;
+A21:    P[k];
+A22:   (1.X -x)*(Partial_Sums(seq).(k+1))
+         = (1.X -x)*( Partial_Sums(seq).k+seq.(k+1) ) by Def1
+        .=(1.X -x)*(Partial_Sums(seq).k)+(1.X -x)*seq.(k+1) by Th42
+        .=(Partial_Sums(seq)^\1).k-seq.0+seq.((k+1)+1) by A10,A21;
        (Partial_Sums(seq)^\1).(k+1)-seq.0
-         =(Partial_Sums(seq)).((k+1)+1)-seq.0 by SEQM_3_def_9
-        .=(Partial_Sums(seq)).(k+1)+seq.((k+1)+1)-seq.0 by LOPBAN_3_def_1
-        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)-seq.0 by SEQM_3_def_9
+         =(Partial_Sums(seq)).((k+1)+1)-seq.0 by Def6
+        .=(Partial_Sums(seq)).(k+1)+seq.((k+1)+1)-seq.0 by Def1
+        .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)-seq.0 by Def6
         .=(Partial_Sums(seq)^\1).(k)+seq.((k+1)+1)+(-seq.0) by RLVECT_1:def 11
         .=(Partial_Sums(seq)^\1).(k)+(-seq.0) +seq.((k+1)+1) by RLVECT_1:def 6
         .=(Partial_Sums(seq)^\1).(k)-seq.0 +seq.((k+1)+1) by RLVECT_1:def 11;
-       hence (1_ X -x)*(Partial_Sums(seq).(k+1))
-         =(Partial_Sums(seq)^\1).(k+1)-seq.0 by IKL;
+       hence (1.X -x)*(Partial_Sums(seq).(k+1))
+         =(Partial_Sums(seq)^\1).(k+1)-seq.0 by A22;
      end;
-     for n be Nat holds P[n] from NAT_1:sch 1(I4,I5);
+     for n be Nat holds P[n] from NAT_1:sch 1(A19,A20);
      hence thesis;
    end;
-P4:now let n be Nat;
+A23:now let n be Nat;
      reconsider yn=Partial_Sums(seq).n  as Element of X;
-P20: 1_ X -y*x =1_ X -  0.X -y*x by RLVECT_1:26
-       .=1_ X - (yn*x-yn*x) -y*x by RLVECT_1:28
-       .=1_ X-yn*x+yn*x-y*x by RLVECT_1:43
-       .=(1_ X-yn*x)+(yn*x-y*x) by RLVECT_1:42
-       .=(1_ X-yn*x)+(yn-y)*x by LM000;
-P40: yn*(1_ X - (1_ X-x))
-        =  yn*1_ X - yn*(1_ X -x) by LM000
-       .=  yn - yn*(1_ X -x) by LM000
-       .=Partial_Sums(seq).n-((Partial_Sums(seq)^\1).n-seq.0) by P2
-       .=Partial_Sums(seq).n-(Partial_Sums(seq)^\1).n +seq.0 by LM000;
-     (Partial_Sums(seq)).(n+1) 
-       = (Partial_Sums(seq)).n + seq.(n+1) by LOPBAN_3_def_1; then 
+A24: 1.X -y*x =1.X -  0.X -y*x by RLVECT_1:26
+       .=1.X - (yn*x-yn*x) -y*x by RLVECT_1:28
+       .=1.X-yn*x+yn*x-y*x by RLVECT_1:43
+       .=(1.X-yn*x)+(yn*x-y*x) by RLVECT_1:42
+       .=(1.X-yn*x)+(yn-y)*x by Th42;
+A25: yn*(1.X - (1.X-x))
+        =  yn*1.X - yn*(1.X -x) by Th42
+       .=  yn - yn*(1.X -x) by Th42
+       .=Partial_Sums(seq).n-((Partial_Sums(seq)^\1).n-seq.0) by A3
+       .=Partial_Sums(seq).n-(Partial_Sums(seq)^\1).n +seq.0 by Th42;
+     (Partial_Sums(seq)).(n+1)
+       = (Partial_Sums(seq)).n + seq.(n+1) by Def1; then
      (Partial_Sums(seq)).(n+1) = (Partial_Sums(seq)).n + (seq ^\1).n
-        by SEQM_3_def_9; then
-P42: yn*(1_ X - (1_ X-x))
-      =Partial_Sums(seq).n -( (Partial_Sums(seq)).n + (seq ^\1).n)+seq.0 
-        by P40,SEQM_3_def_9
-     .=Partial_Sums(seq).n-(Partial_Sums(seq)).n - (seq ^\1).n +seq.0 by LM000
+        by Def6; then
+A26: yn*(1.X - (1.X-x))
+      =Partial_Sums(seq).n -( (Partial_Sums(seq)).n + (seq ^\1).n)+seq.0
+        by A25,Def6
+     .=Partial_Sums(seq).n-(Partial_Sums(seq)).n - (seq ^\1).n +seq.0 by Th42
      .=0.X - (seq ^\1).n +seq.0 by RLVECT_1:28
      .=0.X-((seq ^\1).n-seq.0) by RLVECT_1:43
      .=-((seq ^\1).n-seq.0) by RLVECT_1:27
      .=seq.0+(- (seq ^\1).n) by RLVECT_1:47
      .= (seq.0- (seq ^\1).n) by RLVECT_1:def 11
-     .=seq.0-seq.(n+1) by SEQM_3_def_9
-     .=1_ X - seq.(n+1) by defGeo;
-p7:  (1_ X-yn*x) =1_ X -(1_ X - seq.(n+1) ) by LM000,P42
-      .=seq.(n+1) by LM000
-      .=(seq^\1).n  by SEQM_3_def_9;
-P80: ||. (seq^\1).n+(yn-y)*x .|| <= ||. (seq^\1).n .|| + ||. (yn-y)*x .|| 
+     .=seq.0-seq.(n+1) by Def6
+     .=1.X - seq.(n+1) by Def12;
+A27:  (1.X-yn*x) =1.X -(1.X - seq.(n+1) ) by A26,Th42
+      .=seq.(n+1) by Th42
+      .=(seq^\1).n  by Def6;
+A28: ||. (seq^\1).n+(yn-y)*x .|| <= ||. (seq^\1).n .|| + ||. (yn-y)*x .||
        by CLVECT_1:def 10;
-P90: ||. (seq^\1).n .|| + ||. (yn-y)*x .||
+A29: ||. (seq^\1).n .|| + ||. (yn-y)*x .||
         =  ||. (seq^\1).||.n  + ||. (yn-y)*x .|| by CLVECT_1:def 16;
-     ||. (yn-y)*x .|| <= ||. (yn-y).|| * ||. x .|| by LM000; then
+     ||. (yn-y)*x .|| <= ||. (yn-y).|| * ||. x .|| by Th42; then
      ||. (seq^\1).||.n  + ||. (yn-y)*x .||
            <= ||. (seq^\1).||.n + ||. (yn-y).|| * ||. x .|| by REAL_1:55; then
      ||. (seq^\1).n+(yn-y)*x .||
            <= ||. (seq^\1).||.n + ||. (yn-y).|| * ||. x .||
-             by AXIOMS:22,P80,P90; then 
-     ||. 1_ X -y*x.|| 
+             by A28,A29,AXIOMS:22; then
+     ||. 1.X -y*x.||
         <= ||.(seq^\1).||.n + ||.(Partial_Sums(seq)-y).n.||*||.x.||
-           by p7,P20,CLVECT_1:def 13; then
-     ||. 1_ X -y*x.||
-        <= ||. (seq^\1).||.n + ||.Partial_Sums(seq)-y.||.n * ||.x.|| 
-           by CLVECT_1:def 16; then 
-     ||. 1_ X -y*x.||
+           by A24,A27,CLVECT_1:def 13; then
+     ||. 1.X -y*x.||
+        <= ||. (seq^\1).||.n + ||.Partial_Sums(seq)-y.||.n * ||.x.||
+           by CLVECT_1:def 16; then
+     ||. 1.X -y*x.||
         <= ||. (seq^\1).||.n + (||.x.|| (#) ||.Partial_Sums(seq)-y.||).n
            by SEQ_1:13;
-     hence ||. 1_ X -y*x.||
+     hence ||. 1.X -y*x.||
             <=( ||. (seq^\1).|| + ||.x.|| (#) ||.Partial_Sums(seq)-y.||).n
               by SEQ_1:11;
    end;
-P5:now let n be Nat;
+A30:now let n be Nat;
      reconsider yn=Partial_Sums(seq).n  as Element of X;
-P20: 1_ X -x*y =1_ X -  0.X -x*y by RLVECT_1:26
-          .=1_ X - (x*yn-x*yn) -x*y by RLVECT_1:28
-          .=1_ X-x*yn+x*yn-x*y  by RLVECT_1:43
-          .=(1_ X-x*yn)+(x*yn-x*y) by RLVECT_1:42
-           .=(1_ X-x*yn)+x*(yn-y) by LM000;
-P40: (1_ X - (1_ X-x))*yn = 1_ X*yn - (1_ X -x)*yn by LM000
-           .=  yn - (1_ X -x)*yn by LM000
-           .=Partial_Sums(seq).n-((Partial_Sums(seq)^\1).n-seq.0) by P3
-           .=Partial_Sums(seq).n-(Partial_Sums(seq)^\1).n +seq.0 by LM000;
-     (Partial_Sums(seq)).(n+1) = (Partial_Sums(seq)).n + seq.(n+1) 
-       by LOPBAN_3_def_1; then
+A31: 1.X -x*y =1.X -  0.X -x*y by RLVECT_1:26
+          .=1.X - (x*yn-x*yn) -x*y by RLVECT_1:28
+          .=1.X-x*yn+x*yn-x*y  by RLVECT_1:43
+          .=(1.X-x*yn)+(x*yn-x*y) by RLVECT_1:42
+           .=(1.X-x*yn)+x*(yn-y) by Th42;
+A32: (1.X - (1.X-x))*yn = 1.X*yn - (1.X -x)*yn by Th42
+           .=  yn - (1.X -x)*yn by Th42
+           .=Partial_Sums(seq).n-((Partial_Sums(seq)^\1).n-seq.0) by A16
+           .=Partial_Sums(seq).n-(Partial_Sums(seq)^\1).n +seq.0 by Th42;
+     (Partial_Sums(seq)).(n+1) = (Partial_Sums(seq)).n + seq.(n+1)
+       by Def1; then
      (Partial_Sums(seq)).(n+1) = (Partial_Sums(seq)).n + (seq ^\1).n
-       by SEQM_3_def_9; then
-P42: (1_ X - (1_ X-x))*yn 
+       by Def6; then
+A33: (1.X - (1.X-x))*yn
        =Partial_Sums(seq).n - ((Partial_Sums(seq)).n + (seq ^\1).n)+seq.0
-         by P40,SEQM_3_def_9
-      .=Partial_Sums(seq).n-(Partial_Sums(seq)).n - (seq ^\1).n+seq.0 by LM000
+         by A32,Def6
+      .=Partial_Sums(seq).n-(Partial_Sums(seq)).n - (seq ^\1).n+seq.0 by Th42
       .=0.X - (seq ^\1).n +seq.0 by RLVECT_1:28
       .=0.X-((seq ^\1).n-seq.0) by RLVECT_1:43
       .=-((seq ^\1).n-seq.0) by RLVECT_1:27
       .=seq.0+(- (seq ^\1).n) by RLVECT_1:47
       .= (seq.0- (seq ^\1).n) by RLVECT_1:def 11
-      .=seq.0-seq.(n+1) by SEQM_3_def_9
-      .=1_ X - seq.(n+1) by defGeo;
-p7:  (1_ X-x*yn)
-       =1_ X -(1_ X - seq.(n+1) ) by LM000,P42
-      .=seq.(n+1) by LM000
-      .=(seq^\1).n  by SEQM_3_def_9;
-P80: ||. (seq^\1).n+x*(yn-y) .||
+      .=seq.0-seq.(n+1) by Def6
+      .=1.X - seq.(n+1) by Def12;
+A34:  (1.X-x*yn)
+       =1.X -(1.X - seq.(n+1) ) by A33,Th42
+      .=seq.(n+1) by Th42
+      .=(seq^\1).n  by Def6;
+A35: ||. (seq^\1).n+x*(yn-y) .||
         <= ||. (seq^\1).n .|| + ||. x*(yn-y) .|| by CLVECT_1:def 10;
-P90: ||. (seq^\1).n .|| + ||. x*(yn-y) .||
+A36: ||. (seq^\1).n .|| + ||. x*(yn-y) .||
          =  ||. (seq^\1).||.n  + ||. x*(yn-y) .|| by CLVECT_1:def 16;
-     ||. x*(yn-y) .|| <=   ||. x .||*||. (yn-y).||  by LM000; then
+     ||. x*(yn-y) .|| <=   ||. x .||*||. (yn-y).||  by Th42; then
      ||. (seq^\1).||.n  + ||. x*(yn-y) .||
          <= ||. (seq^\1).||.n + ||. x .|| * ||. (yn-y).|| by REAL_1:55; then
      ||. (seq^\1).n+x*(yn-y) .||
          <= ||. (seq^\1).||.n +  ||. x .|| * ||. (yn-y).||
-             by AXIOMS:22,P80,P90; then 
-     ||. 1_ X -x*y.|| 
+             by A35,A36,AXIOMS:22; then
+     ||. 1.X -x*y.||
          <= ||. (seq^\1).||.n + ||. x .|| * ||. (Partial_Sums(seq)-y).n.||
-           by P20,CLVECT_1:def 13,p7; then 
-     ||. 1_ X -x*y.||
+           by A31,A34,CLVECT_1:def 13; then
+     ||. 1.X -x*y.||
          <= ||. (seq^\1).||.n + ||. x .|| * ||. Partial_Sums(seq)-y.||.n
-           by CLVECT_1:def 16; then 
-     ||. 1_ X -x*y.|| <= ||. (seq^\1).||.n
+           by CLVECT_1:def 16; then
+     ||. 1.X -x*y.|| <= ||. (seq^\1).||.n
                 + ( ||. x .|| (#) ||. Partial_Sums(seq)-y.||).n by SEQ_1:13;
-     hence ||. 1_ X -x*y.||
+     hence ||. 1.X -x*y.||
                 <=( ||. (seq^\1).||
                 +  ||. x .|| (#) ||. Partial_Sums(seq)-y.||).n  by SEQ_1:11;
    end;
-P6:Partial_Sums(seq) is convergent by P1,LOPBAN_3_def_2;
-   lim Partial_Sums(seq) =y by LOPBAN_3_def_3; then
-P8:||. Partial_Sums(seq)-y.|| is convergent
-      & lim ||. Partial_Sums(seq)-y.|| =0 by CLVECT_1:120,P6;
-P9:||. x .|| (#)  ||. Partial_Sums(seq)-y.|| is convergent by SEQ_2:21,P8;
-P10:lim ( ||. x .|| (#)  ||. Partial_Sums(seq)-y.|| )
-       = ||. x .|| *0 by P8,SEQ_2:22
+A37:Partial_Sums(seq) is convergent by A2,Def2;
+   lim Partial_Sums(seq) =y by Def3; then
+A38:||. Partial_Sums(seq)-y.|| is convergent
+      & lim ||. Partial_Sums(seq)-y.|| =0 by A37,CLVECT_1:120;
+A39:||. x .|| (#)  ||. Partial_Sums(seq)-y.|| is convergent by A38,SEQ_2:21;
+A40:lim ( ||. x .|| (#)  ||. Partial_Sums(seq)-y.|| )
+       = ||. x .|| *0 by A38,SEQ_2:22
       .=0;
-P11:seq is convergent & lim seq =0.X  by P1,SERIES_1_7;
-   seq^\1 is convergent & lim (seq^\1)=0.X by P11, SEQ_4_33; then
-P13:||. seq^\1.|| is convergent & lim (||. seq^\1.||)= ||. 0.X.||
+A41:seq is convergent & lim seq =0.X  by A2,Th18;
+   seq^\1 is convergent & lim (seq^\1)=0.X by A41,Th13; then
+A42:||. seq^\1 .|| is convergent & lim (||. seq^\1 .||)= ||. 0.X.||
         by CLOPBAN1:45; then
-P14:||. seq^\1.|| +  ||. x .|| (#)  ||. Partial_Sums(seq)-y.|| is convergent 
-        by SEQ_2:19,P9;
-P15:lim( ||. seq^\1.|| +  ||. x .|| (#)  ||. Partial_Sums(seq)-y.||)
-         = lim( ||. seq^\1.||) + lim (||. x .||(#)||. Partial_Sums(seq)-y.||)
-           by SEQ_2:20,P9,P13
-        .=0 by P10,P13,CLVECT_1:103;
-P16:1_ X = y*x by P4,P14,P15,LmBeZero3;
-P17:1_ X = x*y by P5,P14,P15,LmBeZero3;
-   hence x is invertible by P16,LOPBAN_3:def 8;
-   hence thesis by P16,P17,Def02;
+A43:||. seq^\1 .|| +  ||. x .|| (#)  ||. Partial_Sums(seq)-y.|| is convergent
+        by A39,SEQ_2:19;
+A44:lim( ||. seq^\1 .|| +  ||. x .|| (#)  ||. Partial_Sums(seq)-y.||)
+         = lim( ||. seq^\1 .||) + lim (||. x .||(#)||. Partial_Sums(seq)-y.||)
+           by A39,A42,SEQ_2:20
+        .=0 by A40,A42,CLVECT_1:103;
+A45:1.X = y*x by A23,A43,A44,Lm6;
+A46:1.X = x*y by A30,A43,A44,Lm6;
+   hence x is invertible by A45,LOPBAN_3:def 8;
+   hence thesis by A45,A46,Def11;
 end;
 

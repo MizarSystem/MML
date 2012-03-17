@@ -876,12 +876,12 @@ theorem Th12:
       assume <*t*> is_firable_on M0;
       then consider M being FinSequence of Bool_marks_of PTN
         such that len <*t*> = len M
-          and A7: <*t*>/.1 is_firable_on M0
+          and A6: <*t*>/.1 is_firable_on M0
           and M/.1 = Firing(<*t*>/.1,M0)
               & for i being Nat st i < len <*t*> & i > 0
                 holds <*t*>/.(i+1) is_firable_on M/.i
                   & M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by Def4;
-      thus t is_firable_on M0 by A7,FINSEQ_4:25;
+      thus t is_firable_on M0 by A6,FINSEQ_4:25;
     end;
 
 theorem Th13:
@@ -943,28 +943,28 @@ defpred P[FinSequence of the Transitions of PTN] means
              then A7: <*x*> is_firable_on Firing(Q,M0) by Th11;
                Firing(Q^<*x*>,M0) = Firing(<*x*>,Firing(Q,M0)) by Th10;
              then consider M being FinSequence of Bool_marks_of PTN
-               such that A9: len <*x*> = len M
-               and A10: Firing(Q^<*x*>,M0) = M/.len M
-               and A11: M/.1 = Firing(<*x*>/.1,Firing(Q,M0))
+               such that A8: len <*x*> = len M
+               and A9: Firing(Q^<*x*>,M0) = M/.len M
+               and A10: M/.1 = Firing(<*x*>/.1,Firing(Q,M0))
                and for i being Nat st i < len <*x*> & i > 0
                   holds M/.(i+1) = Firing(<*x*>/.(i+1),M/.i)
                     by Def5;
                  <*x*>/.1 = x by FINSEQ_4:25;
-             then A12: Firing(Q^<*x*>, M0) = Firing(x,Firing(Q,M0))
-               by A9,A10,A11,FINSEQ_1:56
+             then A11: Firing(Q^<*x*>, M0) = Firing(x,Firing(Q,M0))
+               by A8,A9,A10,FINSEQ_1:56
                .= Firing(Q,M0) +* (*'{x}-->FALSE) +* ({x}*'-->TRUE)
                  by Def3;
                 x is_firable_on Firing(Q,M0) by A7,Th12;
-             then A13: Firing(Q,M0).:*'{x} c= {TRUE} by Def2;
+             then A12: Firing(Q,M0).:*'{x} c= {TRUE} by Def2;
                 {TRUE} misses {FALSE} by MARGREL1:38,ZFMISC_1:17;
-             then Firing(Q,M0).:*'{x} misses {FALSE} by A13,XBOOLE_1:63;
-             then A14: *'{x} misses Sd by A5,A6,Th2,Th11;
+             then Firing(Q,M0).:*'{x} misses {FALSE} by A12,XBOOLE_1:63;
+             then A13: *'{x} misses Sd by A5,A6,Th2,Th11;
              then not x in *'Sd by A1,PETRI:19;
              then {x}*' misses Sd by PETRI:20;
              hence Firing(Q^<*x*>,M0).:Sd = (Firing(Q,M0) +* (*'
 {x}-->FALSE)).:Sd
-              by A12,Th3
-              .= {FALSE} by A5,A6,A14,Th3,Th11;
+              by A11,Th3
+              .= {FALSE} by A5,A6,A13,Th3,Th11;
             end;
           end;
           thus for Q0 being FinSequence of the Transitions of PTN
@@ -972,51 +972,51 @@ defpred P[FinSequence of the Transitions of PTN] means
         end;
 
       assume
-        A15: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
+        A14: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
           for Q being FinSequence of the Transitions of PTN
             st Q is_firable_on M0
         holds Firing(Q,M0).:Sd = {FALSE};
 
       assume *'Sd is not Subset of Sd*';
       then consider t being transition of PTN
-        such that A16: t in *'Sd and A17: not t in Sd*' by SUBSET_1:7;
+        such that A15: t in *'Sd and A16: not t in Sd*' by SUBSET_1:7;
       set M0 = ((the Places of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
-      A18: [#]the Places of PTN = the Places of PTN by SUBSET_1:def 4;
+      A17: [#]the Places of PTN = the Places of PTN by SUBSET_1:def 4;
          dom ((the Places of PTN)-->TRUE qua Function) = the Places of PTN
         & dom (Sd-->FALSE) = Sd by FUNCOP_1:19;
-      then A19: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
-        .= the Places of PTN by A18,SUBSET_1:28;
+      then A18: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
+        .= the Places of PTN by A17,SUBSET_1:28;
           rng ((the Places of PTN)-->TRUE) c= {TRUE}
         & rng (Sd-->FALSE) c= {FALSE} by FUNCOP_1:19;
       then rng ((the Places of PTN)-->TRUE) c= BOOLEAN
         & rng (Sd-->FALSE) c= BOOLEAN by XBOOLE_1:1;
-      then A20: rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN
+      then A19: rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN
         by XBOOLE_1:8;
          rng M0 c= rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE)
         by FUNCT_4:18;
-      then rng M0 c= BOOLEAN by A20,XBOOLE_1:1;
-      then M0 in Funcs(the Places of PTN, BOOLEAN) by A19,FUNCT_2:def 2;
+      then rng M0 c= BOOLEAN by A19,XBOOLE_1:1;
+      then M0 in Funcs(the Places of PTN, BOOLEAN) by A18,FUNCT_2:def 2;
       then reconsider M0 as Boolean_marking of PTN by Def1;
-      A21: (M0).:(Sd) = {FALSE qua set} by Th5;
+      A20: (M0).:(Sd) = {FALSE qua set} by Th5;
       reconsider Q = <*t*> as FinSequence of the Transitions of PTN;
-         Sd misses *'{t} by A17,PETRI:19;
-      then A22: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t}
+         Sd misses *'{t} by A16,PETRI:19;
+      then A21: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t}
         by Th3;
-      A23: rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
+      A22: rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
          ((the Places of PTN)-->TRUE).:*'{t} c= rng ((the Places of PTN)-->TRUE
 )
         by RELAT_1:144;
-      then M0.:*'{t} c= {TRUE} by A22,A23,XBOOLE_1:1;
+      then M0.:*'{t} c= {TRUE} by A21,A22,XBOOLE_1:1;
       then t is_firable_on M0 by Def2;
-      then A24: Q is_firable_on M0 by Th12;
-         {t}*' meets Sd by A16,PETRI:20;
-      then consider s being set such that A25: s in {t}*' /\ Sd
+      then A23: Q is_firable_on M0 by Th12;
+         {t}*' meets Sd by A15,PETRI:20;
+      then consider s being set such that A24: s in {t}*' /\ Sd
         by XBOOLE_0:4;
-      A26: s in {t}*' & s in Sd by A25,XBOOLE_0:def 3;
+      A25: s in {t}*' & s in Sd by A24,XBOOLE_0:def 3;
       then Firing(t,M0).s = TRUE by Th6;
-      then TRUE in Firing(t,M0).:Sd by A26,FUNCT_2:43;
+      then TRUE in Firing(t,M0).:Sd by A25,FUNCT_2:43;
       then Firing(t,M0).:Sd <> {FALSE} by MARGREL1:38,TARSKI:def 1;
       then Firing(Q,M0).:Sd <> {FALSE} by Th13;
-      hence contradiction by A15,A21,A24;
+      hence contradiction by A14,A20,A23;
     end;
 

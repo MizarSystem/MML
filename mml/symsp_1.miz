@@ -6,14 +6,15 @@
 
 environ
 
- vocabulary VECTSP_1, RLVECT_1, BINOP_1, FUNCT_1, RELAT_1, ARYTM_1, SYMSP_1;
+ vocabulary VECTSP_1, RLVECT_1, BINOP_1, FUNCT_1, RELAT_1, ARYTM_1, SYMSP_1,
+      GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, FUNCT_2, DOMAIN_1,
-      STRUCT_0, RLVECT_1, BINOP_1, VECTSP_1, RELSET_1;
+      STRUCT_0, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1;
  constructors DOMAIN_1, BINOP_1, VECTSP_1, MEMBERED, XBOOLE_0;
  clusters STRUCT_0, RELSET_1, SUBSET_1, VECTSP_1, MEMBERED, ZFMISC_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
  definitions TARSKI, STRUCT_0;
- theorems BINOP_1, VECTSP_1, TARSKI, RELSET_1, ZFMISC_1, RLVECT_1;
+ theorems BINOP_1, VECTSP_1, TARSKI, RELSET_1, ZFMISC_1, RLVECT_1, GROUP_1;
  schemes BINOP_1, FUNCT_2, XBOOLE_0;
 
 begin :: 1. SYMPLECTIC VECTOR SPACE STRUCTURE
@@ -162,7 +163,7 @@ A2: MPS = SymStr (# X,md,o,mF,mo #);
   x*(v+w) = x*v+x*w &
   (x+y)*v = x*v+y*v &
   (x*y)*v = x*(y*v) &
-  (1_ F)*v = v
+  (1.F)*v = v
   proof
    let x,y be Element of F;
    let v,w be Element of MPS;
@@ -222,9 +223,9 @@ A20:      mF.(z,v) = mF.[z,v] by BINOP_1:def 1;
          mF.(x,o) = mF.[x,o] by BINOP_1:def 1;
      hence thesis by A1,A21,A23;
     end;
-       (1_ F)*v = v
+       (1.F)*v = v
     proof
-     set one = 1_ F;
+     set one = 1.F;
      A24: one*v = mF.(one,v) by A2,VECTSP_1:def 24;
      A25: mF.(one,v) = mF.[one,v] by BINOP_1:def 1;
      reconsider v as Element of MPS;
@@ -419,7 +420,7 @@ Th13: not a _|_ b & c+a _|_ b implies not c _|_ b
  proof
   assume A1:not a _|_ b & c+a _|_ b;
   assume not thesis;
-  then (-1_ F)*c _|_ b by Def2;
+  then (-1.F)*c _|_ b by Def2;
   then -c _|_ b by VECTSP_1:59;
   then -c+(c+a) _|_ b by A1,Def2;
   then (c+(-c))+a _|_ b by RLVECT_1:def 6;
@@ -432,7 +433,7 @@ Th14: not b _|_ a & c _|_ a implies not b+c _|_ a
  proof
   assume A1:not b _|_ a & c _|_ a;
   assume A2:not thesis;
-     (-1_ F)*c _|_ a by A1,Def2;
+     (-1.F)*c _|_ a by A1,Def2;
   then -c _|_ a by VECTSP_1:59;
   then (b+c)+(-c) _|_ a by A2,Def2;
   then b+(c+(-c)) _|_ a by RLVECT_1:def 6;
@@ -443,7 +444,7 @@ Th14: not b _|_ a & c _|_ a implies not b+c _|_ a
 theorem
 Th15: not b _|_ a & not l=0.F implies not l*b _|_ a & not b _|_ l*a
  proof
-  set 1F = 1_ F;
+  set 1F = 1.F;
   assume A1: not b _|_ a & not l=0.F;
   A2:now assume A3:l*b _|_ a;
    consider k such that A4:l*k=1F by A1,VECTSP_1:def 20;
@@ -466,19 +467,19 @@ theorem
 Th16: a _|_ b implies -a _|_ b
  proof
   assume a _|_ b;
-  then (-1_ F)*a _|_ b by Def2;
+  then (-1.F)*a _|_ b by Def2;
   hence thesis by VECTSP_1:59;
  end;
 
 canceled 2;
 
 theorem
-Th19: not a _|_ c implies not a+b _|_ c or not (1_ F+1_ F)*a+b _|_ c
+Th19: not a _|_ c implies not a+b _|_ c or not (1.F+1.F)*a+b _|_ c
  proof
-  set 1F = 1_ F;
+  set 1F = 1.F;
   assume A1: not a _|_ c;
   assume not thesis;
-    then a+b _|_ c & (1F*a+1_ F*a)+b _|_ c by VECTSP_1:def 26;
+    then a+b _|_ c & (1F*a+1.F*a)+b _|_ c by VECTSP_1:def 26;
     then a+b _|_ c & (a+1F*a)+b _|_ c by VECTSP_1:def 26;
     then a+b _|_ c & (a+a)+b _|_ c by VECTSP_1:def 26;
     then a+(a+b) _|_ c & (a+b) _|_ c by RLVECT_1:def 6;
@@ -492,8 +493,8 @@ a & not a'+b' _|_ b
  set 0V = 0.S;
  assume A1: not a' _|_ a & a' _|_ b & not b' _|_ b & b' _|_ a;
  assume not thesis;
-       then (a'+b' _|_ a & (-(1_ F))*b' _|_ a) or (a'+b' _|_ b &
-            (-(1_ F))*a' _|_ b) by A1,Def2;
+       then (a'+b' _|_ a & (-(1.F))*b' _|_ a) or (a'+b' _|_ b &
+            (-(1.F))*a' _|_ b) by A1,Def2;
        then (a'+b' _|_ a & -b' _|_ a) or (a'+b' _|_ b & -a' _|_ b)
        by VECTSP_1:59;
        then (a'+b')+(-b') _|_ a or -a'+(a'+b') _|_ b by Def2;
@@ -516,20 +517,20 @@ end;
    hence thesis by A2; end;
 
 theorem
-Th22: 1_ F+1_ F<>0.F & a<>0.S & b<>0.S & c <>0.S implies
+Th22: 1.F+1.F<>0.F & a<>0.S & b<>0.S & c <>0.S implies
      ex p st not p _|_ a & not p _|_ b & not p _|_ c
 proof
- assume A1: 1_ F+1_ F<>0.F & a<>0.S & b<>0.S & c <>0.S;
+ assume A1: 1.F+1.F<>0.F & a<>0.S & b<>0.S & c <>0.S;
  then consider r such that A2: not r _|_ a & not r _|_ b by Th21;
  consider s such that A3: not s _|_ a & not s _|_ c by A1,Th21;
      now assume that A4: r _|_ c and A5: s _|_ b;
     A6: now assume A7: not r+s _|_ a;
        not r+s _|_ b & not r+s _|_ c by A2,A3,A4,A5,Th14;
     hence thesis by A7; end;
-        now assume A8: not (1_ F+1_ F)*r+s _|_ a;
-       not (1_ F+1_ F)*r+s _|_ b & not (1_ F+1_ F)*r+s _|_ c
+        now assume A8: not (1.F+1.F)*r+s _|_ a;
+       not (1.F+1.F)*r+s _|_ b & not (1.F+1.F)*r+s _|_ c
      proof
-          not (1_ F+1_ F)*r _|_ b & (1_ F+1_ F)*r _|_ c by A1,A2,A4,Def2,Th15;
+          not (1.F+1.F)*r _|_ b & (1.F+1.F)*r _|_ c by A1,A2,A4,Def2,Th15;
        hence thesis by A3,A5,Th14;
      end;
     hence thesis by A8; end;
@@ -557,7 +558,7 @@ Th24: not b _|_ a & x-k*b _|_ a & x-l*b _|_ a implies k = l
  proof
   assume A1:not b _|_ a & x-k*b _|_ a & x-l*b _|_ a;
   assume A2:not thesis;
-  set 1F=1_ F;
+  set 1F=1.F;
      k*b-l*b _|_ a by A1,Th23;
   then k*b+(-l*b) _|_ a by RLVECT_1:def 11;
   then k*b+((-1F)*(l*b)) _|_ a by VECTSP_1:59;
@@ -574,10 +575,10 @@ Th24: not b _|_ a & x-k*b _|_ a & x-l*b _|_ a implies k = l
  end;
 
 theorem
-Th25: 1_ F+1_ F<>0.F implies a _|_ a
+Th25: 1.F+1.F<>0.F implies a _|_ a
  proof
-  assume A1: 1_ F+1_ F<>0.F;
-  set 1F = 1_ F;
+  assume A1: 1.F+1.F<>0.F;
+  set 1F = 1.F;
      now assume a <> 0.S;
     then consider c such that A2: not c _|_ a by Def2;
     consider k such that A3: a-k*c _|_ a by A2,Def2;
@@ -590,9 +591,9 @@ Th25: 1_ F+1_ F<>0.F implies a _|_ a
     then (-1F)*(k*c) _|_ ((1F)+(1F))*a by VECTSP_1:def 26;
     then ((-1F)*k)*c _|_ ((1F)+(1F))*a by VECTSP_1:def 26;
     then (-(k*(1F)))*c _|_ ((1F)+(1F))*a by VECTSP_1:41;
-    then (-k)*c _|_ ((1_ F)+(1F))*a by VECTSP_1:def 19;
-    then ((1_ F)+(1_ F))*a _|_ (-k)*c by Th12;
-    then ((1_ F)+(1_ F))"*(((1_ F)+(1_ F))*a) _|_ (-k)*c by Def2;
+    then (-k)*c _|_ ((1.F)+(1F))*a by VECTSP_1:def 19;
+    then ((1.F)+(1.F))*a _|_ (-k)*c by Th12;
+    then ((1.F)+(1.F))"*(((1.F)+(1.F))*a) _|_ (-k)*c by Def2;
     then a _|_ (-k)*c by A1,VECTSP_1:67;
     then A4: (-k)*c _|_ a by Th12;
        a+(-k)*c _|_ a by A3,VECTSP_1:68;
@@ -661,7 +662,7 @@ end;
 theorem
 Th29:not b _|_ a implies ProJ(a,b,x+y) = ProJ(a,b,x) + ProJ(a,b,y)
  proof
-  set 1F = 1_ F;
+  set 1F = 1.F;
   assume A1: not b _|_ a;
   then A2: x-ProJ(a,b,x)*b _|_ a & y-ProJ(a,b,y)*b _|_ a by Th27;
   set L = (x-ProJ(a,b,x)*b)+(y-ProJ(a,b,y)*b);
@@ -679,8 +680,8 @@ Th29:not b _|_ a implies ProJ(a,b,x+y) = ProJ(a,b,x) + ProJ(a,b,y)
 (a,b,y))*b)) by VECTSP_1:68
         .= (x+y)+(((1F)*(-ProJ(a,b,x)))*b+(1F)*((-ProJ
 (a,b,y))*b)) by VECTSP_1:def 26
-        .= (x+y)+(((-ProJ(a,b,x))*(1F))*b+((1F)*(-ProJ(a,b,y)))*b) by VECTSP_1:
-def 26
+        .= (x+y)+(((-ProJ(a,b,x))*(1F))*b+((1F)*(-ProJ(a,b,y)))*b) by
+VECTSP_1:def 26
         .= (x+y)+((-ProJ(a,b,x))*b+((-ProJ(a,b,y))*(1F))*b) by VECTSP_1:def 19
         .= (x+y)+((-ProJ(a,b,x))*b+(-ProJ(a,b,y))*b) by VECTSP_1:def 19
         .= (x+y)+((-ProJ(a,b,x))+(-ProJ(a,b,y)))*b by VECTSP_1:def 26
@@ -700,8 +701,8 @@ A4:  not l*b _|_ a by A1,A2,Th15;
   A5: L _|_ a by A4,Th27;
      L = x-(ProJ(a,l*b,x)*l)*b by VECTSP_1:def 26;
   then ProJ(a,b,x)*l" = (ProJ(a,l*b,x)*l)*l" by A1,A3,A5,Th24;
-  then ProJ(a,b,x)*l" = ProJ(a,l*b,x)*(l*l") by VECTSP_1:def 16;
-  then l"*ProJ(a,b,x) = ProJ(a,l*b,x)*(1_ F) by A2,VECTSP_1:def 22;
+  then ProJ(a,b,x)*l" = ProJ(a,l*b,x)*(l*l") by GROUP_1:def 4;
+  then l"*ProJ(a,b,x) = ProJ(a,l*b,x)*(1.F) by A2,VECTSP_1:def 22;
   hence thesis by VECTSP_1:def 19;
  end;
 
@@ -714,7 +715,7 @@ Th31: not b _|_ a & l <> 0.F implies ProJ(l*a,b,x) = ProJ(a,b,x)
   then l*a _|_ x-ProJ(l*a,b,x)*b by Th12;
   then l"*(l*a) _|_ x-ProJ(l*a,b,x)*b by Def2;
   then (l"*l)*a _|_ x-ProJ(l*a,b,x)*b by VECTSP_1:def 26;
-  then 1_ F*a _|_ x-ProJ(l*a,b,x)*b by A2,VECTSP_1:def 22;
+  then 1.F*a _|_ x-ProJ(l*a,b,x)*b by A2,VECTSP_1:def 22;
   then a _|_ x-ProJ(l*a,b,x)*b by VECTSP_1:def 26;
   then x-ProJ(l*a,b,x)*b _|_ a by Th12;
   hence thesis by A1,A3,Th24;
@@ -774,16 +775,16 @@ Th33: not b _|_ a & p _|_ b & p _|_ c implies ProJ(a+p,b,c) = ProJ(a,b,c)
  end;
 
 theorem
-Th34: not b _|_ a & c-b _|_ a implies ProJ(a,b,c) = 1_ F
+Th34: not b _|_ a & c-b _|_ a implies ProJ(a,b,c) = 1.F
  proof
   assume A1: not b _|_ a & c-b _|_ a;
-  then A2: c-(1_ F)*b _|_ a by VECTSP_1:def 26;
+  then A2: c-(1.F)*b _|_ a by VECTSP_1:def 26;
      c-ProJ(a,b,c)*b _|_ a by A1,Th27;
   hence thesis by A1,A2,Th24;
  end;
 
 theorem
-Th35: not b _|_ a implies ProJ(a,b,b) = 1_ F
+Th35: not b _|_ a implies ProJ(a,b,b) = 1.F
  proof
   assume A1: not b _|_ a;
      b+(-b) = 0.S by RLVECT_1:16;
@@ -840,24 +841,23 @@ Th37: not b _|_ a & not q _|_ a implies ProJ(a,b,p)*ProJ(a,b,q)" = ProJ(a,q,p)
   then A3: ProJ(a,q,p)*ProJ(a,b,q) = ProJ(a,b,p) by A1,A2,Th24;
   A4: ProJ(a,b,q) <> 0.F by A1,Th36;
      ProJ(a,q,p)*(ProJ(a,b,q)*ProJ(a,b,q)") = ProJ(a,b,p)*ProJ
-(a,b,q)" by A3,VECTSP_1:def 16;
-  then ProJ(a,q,p)*1_ F = ProJ(a,b,p)*ProJ(a,b,q)" by A4,VECTSP_1:def 22;
+(a,b,q)" by A3,GROUP_1:def 4;
+  then ProJ(a,q,p)*1.F = ProJ(a,b,p)*ProJ(a,b,q)" by A4,VECTSP_1:def 22;
   hence thesis by VECTSP_1:def 19;
  end;
 
 theorem
 Th38: not b _|_ a & not c _|_ a implies ProJ(a,b,c) = ProJ(a,c,b)"
  proof
-  set 1F = 1_ F, 0F = 0.F;
+  set 1F = 1.F, 0F = 0.F;
   assume A1: not b _|_ a & not c _|_ a;
   then ProJ(a,b,b)*ProJ(a,b,c)" = ProJ(a,c,b) by Th37;
   then ProJ(a,b,c)"*1F = ProJ(a,c,b) by A1,Th35;
   then A2: ProJ(a,b,c)" = ProJ(a,c,b) by VECTSP_1:def 19;
   A3: ProJ(a,c,b) <> 0F & ProJ(a,b,c) <> 0F by A1,Th36;
   then 1F = ProJ(a,c,b)*ProJ(a,b,c) by A2,VECTSP_1:def 22;
-  then ProJ(a,c,b)" = ProJ(a,c,b)"*(ProJ(a,c,b)*ProJ(a,b,c)) by VECTSP_1:def
-19
-               .= (ProJ(a,c,b)"*ProJ(a,c,b))*ProJ(a,b,c) by VECTSP_1:def 16
+  then ProJ(a,c,b)" = ProJ(a,c,b)"*(ProJ(a,c,b)*ProJ(a,b,c)) by VECTSP_1:def 19
+               .= (ProJ(a,c,b)"*ProJ(a,c,b))*ProJ(a,b,c) by GROUP_1:def 4
                .= ProJ(a,b,c)*1F by A3,VECTSP_1:def 22;
   hence thesis by VECTSP_1:def 19;
  end;
@@ -885,11 +885,11 @@ theorem
 Th40:not a _|_ b & not c _|_ b implies ProJ(c,b,a) =
   (-ProJ(b,a,c)")*ProJ(a,b,c)
  proof
-   set 1F = 1_ F;
+   set 1F = 1.F;
    assume A1: not a _|_ b & not c _|_ b;
    then A2: ProJ(b,a,c) <> 0.F by Th36;
    then (-1F)*(ProJ(b,a,c)"*ProJ(b,a,c)) = (-1F)*(1F) by VECTSP_1:def 22;
-   then ((-1F)*ProJ(b,a,c)")*ProJ(b,a,c) = (-1F)*(1F) by VECTSP_1:def 16;
+   then ((-1F)*ProJ(b,a,c)")*ProJ(b,a,c) = (-1F)*(1F) by GROUP_1:def 4;
    then ((-1F)*ProJ(b,a,c)")*ProJ(b,a,c) = (-1F) by VECTSP_1:def 19;
    then (-(ProJ(b,a,c)"*(1F)))*ProJ(b,a,c) = -1F by VECTSP_1:41;
    then (-ProJ(b,a,c)")*ProJ(b,a,c) = -1F by VECTSP_1:def 19;
@@ -908,24 +908,24 @@ Th40:not a _|_ b & not c _|_ b implies ProJ(c,b,a) =
   end;
 
 theorem
-Th41: (1_ F+1_ F<>0.F) & not a _|_ p & not a _|_ q & not b _|_ p & not b _|_ q
+Th41: (1.F+1.F<>0.F) & not a _|_ p & not a _|_ q & not b _|_ p & not b _|_ q
   implies
       ProJ(a,p,q)*ProJ(b,q,p) = ProJ(p,a,b)*ProJ(q,b,a)
  proof
-  assume A1: (1_ F+1_ F<>0.F) & not a _|_ p & not a _|_ q & not b _|_ p &
+  assume A1: (1.F+1.F<>0.F) & not a _|_ p & not a _|_ q & not b _|_ p &
   not b _|_ q;
    A2: now assume A3: not p _|_ q;
    then A4:not p _|_ a & not q _|_ b & not q _|_ p by A1,Th12;
    then ProJ(a,p,q) = (-ProJ(p,q,a)")*ProJ(q,p,a) &
    ProJ(b,q,p) = (-(ProJ(q,p,b)"))*ProJ(p,q,b) by A1,A3,Th40;
    then ProJ(a,p,q)*ProJ(b,q,p) =
- ((ProJ(q,p,a)*(-ProJ(p,q,a)"))*(-ProJ(q,p,b)"))*ProJ(p,q,b) by VECTSP_1:def 16
+ ((ProJ(q,p,a)*(-ProJ(p,q,a)"))*(-ProJ(q,p,b)"))*ProJ(p,q,b) by GROUP_1:def 4
    .= (ProJ(q,p,a)*((-ProJ(p,q,a)")*(-ProJ(q,p,b)")))*ProJ
-(p,q,b) by VECTSP_1:def 16
+(p,q,b) by GROUP_1:def 4
    .= (ProJ(q,p,a)*(ProJ(q,p,b)"*ProJ(p,q,a)"))*ProJ(p,q,b) by VECTSP_1:42
-   .= ((ProJ(q,p,a)*ProJ(q,p,b)")*ProJ(p,q,a)")*ProJ(p,q,b) by VECTSP_1:def 16
+   .= ((ProJ(q,p,a)*ProJ(q,p,b)")*ProJ(p,q,a)")*ProJ(p,q,b) by GROUP_1:def 4
    .= (ProJ(q,b,a)*ProJ(p,q,a)")*ProJ(p,q,b) by A1,A3,Th37
-   .= ProJ(q,b,a)*(ProJ(p,q,b)*ProJ(p,q,a)") by VECTSP_1:def 16
+   .= ProJ(q,b,a)*(ProJ(p,q,b)*ProJ(p,q,a)") by GROUP_1:def 4
    .= ProJ(q,b,a)*ProJ(p,a,b) by A1,A4,Th37;
    hence thesis;
    end;
@@ -936,13 +936,13 @@ b by A1,Th12;
    ProJ(q,b,a) = (-ProJ(b,a,q)")*ProJ(a,b,q) by A6,Th40;
    then ProJ(p,a,b)*ProJ(q,b,a) =
  ((ProJ(b,a,p)*(-ProJ(a,b,p)"))*(-ProJ(b,a,q)"))*ProJ
-(a,b,q) by VECTSP_1:def 16
+(a,b,q) by GROUP_1:def 4
    .= (ProJ(b,a,p)*((-ProJ(a,b,p)")*(-ProJ(b,a,q)")))*ProJ
-(a,b,q) by VECTSP_1:def 16
+(a,b,q) by GROUP_1:def 4
    .= (ProJ(b,a,p)*(ProJ(b,a,q)"*ProJ(a,b,p)"))*ProJ(a,b,q) by VECTSP_1:42
-   .= ((ProJ(b,a,p)*ProJ(b,a,q)")*ProJ(a,b,p)")*ProJ(a,b,q) by VECTSP_1:def 16
+   .= ((ProJ(b,a,p)*ProJ(b,a,q)")*ProJ(a,b,p)")*ProJ(a,b,q) by GROUP_1:def 4
    .= (ProJ(b,q,p)*ProJ(a,b,p)")*ProJ(a,b,q) by A6,A7,Th37
-   .= ProJ(b,q,p)*(ProJ(a,b,q)*ProJ(a,b,p)") by VECTSP_1:def 16
+   .= ProJ(b,q,p)*(ProJ(a,b,q)*ProJ(a,b,p)") by GROUP_1:def 4
    .= ProJ(b,q,p)*ProJ(a,p,q) by A7,Th37;
    hence thesis;
    end;
@@ -958,15 +958,15 @@ b by A1,Th12;
    ProJ(b,q,p+a) = (-ProJ(q,p+a,b)")*ProJ(p+a,q,b) by A1,Th40;
    then ProJ(a,p,q)*ProJ(b,q,p) =
  ((ProJ(q,p+a,a)*(-ProJ(p+a,q,a)"))*(-ProJ(q,p+a,b)"))*ProJ
-(p+a,q,b) by A10,VECTSP_1:def 16
+(p+a,q,b) by A10,GROUP_1:def 4
    .= (ProJ(q,p+a,a)*((-ProJ(p+a,q,a)")*(-ProJ(q,p+a,b)")))*ProJ
-(p+a,q,b) by VECTSP_1:def 16
-   .= (ProJ(q,p+a,a)*(ProJ(q,p+a,b)"*ProJ(p+a,q,a)"))*ProJ(p+a,q,b) by VECTSP_1
-:42
+(p+a,q,b) by GROUP_1:def 4
+   .= (ProJ(q,p+a,a)*(ProJ(q,p+a,b)"*ProJ(p+a,q,a)"))*ProJ(p+a,q,b) by
+VECTSP_1:42
    .= ((ProJ(q,p+a,a)*ProJ(q,p+a,b)")*ProJ(p+a,q,a)")*ProJ
-(p+a,q,b) by VECTSP_1:def 16
+(p+a,q,b) by GROUP_1:def 4
    .= (ProJ(q,b,a)*ProJ(p+a,q,a)")*ProJ(p+a,q,b) by A1,A12,Th37
-   .= ProJ(q,b,a)*(ProJ(p+a,q,b)*ProJ(p+a,q,a)") by VECTSP_1:def 16
+   .= ProJ(q,b,a)*(ProJ(p+a,q,b)*ProJ(p+a,q,a)") by GROUP_1:def 4
    .= ProJ(q,b,a)*ProJ(p+a,a,b) by A13,Th37
    .= ProJ(q,b,a)*ProJ(p,a,b) by A1,A8,A9,Th33;
    hence thesis;
@@ -975,40 +975,40 @@ b by A1,Th12;
   end;
 
 theorem
-Th42: (1_ F+1_ F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a & not q _|_ x
+Th42: (1.F+1.F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a & not q _|_ x
 implies
       ProJ(a,q,p)*ProJ(p,a,x) = ProJ(x,q,p)*ProJ(q,a,x)
  proof
-  set 0F = 0.F, 1F = 1_ F;
-  assume A1: (1_ F+1_ F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
+  set 0F = 0.F, 1F = 1.F;
+  assume A1: (1.F+1.F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
   not q _|_ x;
   then A2: not a _|_ p & not x _|_ p & not a _|_ q & not x _|_ q by Th12;
      ProJ(p,a,x)*ProJ(q,x,a) = ProJ(a,p,q)*ProJ(x,q,p) by A1,Th41;
   then A3: ProJ(p,a,x)*ProJ(q,x,a) = ProJ(a,q,p)"*ProJ(x,q,p) by A1,Th38;
   A4: ProJ(a,q,p) <> 0F by A1,Th36;
      ProJ(a,q,p)*(ProJ(p,a,x)*ProJ(q,x,a)) = (ProJ(a,q,p)*ProJ(a,q,p)")*ProJ
-(x,q,p) by A3,VECTSP_1:def 16;
+(x,q,p) by A3,GROUP_1:def 4;
   then ProJ(a,q,p)*(ProJ(p,a,x)*ProJ(q,x,a)) = ProJ
 (x,q,p)*(1F) by A4,VECTSP_1:def 22;
   then ProJ(a,q,p)*(ProJ(p,a,x)*ProJ(q,x,a)) = ProJ(x,q,p) by VECTSP_1:def 19;
-  then (ProJ(a,q,p)*ProJ(p,a,x))*ProJ(q,x,a) = ProJ(x,q,p) by VECTSP_1:def 16;
+  then (ProJ(a,q,p)*ProJ(p,a,x))*ProJ(q,x,a) = ProJ(x,q,p) by GROUP_1:def 4;
   then A5: (ProJ(a,q,p)*ProJ(p,a,x))*ProJ(q,a,x)" = ProJ(x,q,p) by A2,Th38;
   A6: ProJ(q,a,x) <> 0F by A2,Th36;
      (ProJ(a,q,p)*ProJ(p,a,x))*(ProJ(q,a,x)"*ProJ(q,a,x)) = ProJ(x,q,p)*ProJ
 (q,a,x)
-                                                         by A5,VECTSP_1:def 16;
+                                                         by A5,GROUP_1:def 4;
   then (ProJ(a,q,p)*ProJ(p,a,x))*(1F) = ProJ(x,q,p)*ProJ
 (q,a,x) by A6,VECTSP_1:def 22;
   hence thesis by VECTSP_1:def 19;
  end;
 
 theorem
-Th43: (1_ F+1_ F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
+Th43: (1.F+1.F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
  not q _|_ x & not b _|_ a implies
   ProJ(a,b,p)*ProJ(p,a,x)*ProJ(x,p,y) = ProJ(a,b,q)*ProJ(q,a,x)*ProJ(x,q,y)
  proof
-  set 0F = 0.F, 1F = 1_ F;
-  assume A1: (1_ F+1_ F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
+  set 0F = 0.F, 1F = 1.F;
+  assume A1: (1.F+1.F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
   not q _|_ x & not b _|_ a;
    A2: now assume y _|_ x;
     then ProJ(x,p,y) = 0F & ProJ(x,q,y) = 0F by A1,Th36;
@@ -1025,10 +1025,10 @@ Th43: (1_ F+1_ F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
 (q,a,x) by A1,A3,Th37;
    then ProJ(a,b,q)*(ProJ(a,b,q)"*(ProJ(a,b,p)*ProJ(p,a,x))) =
                              ProJ(a,b,q)*((ProJ(x,y,p)*ProJ(x,y,q)")*ProJ
-(q,a,x)) by VECTSP_1:def 16;
+(q,a,x)) by GROUP_1:def 4;
    then A4: (ProJ(a,b,q)*ProJ(a,b,q)")*(ProJ(a,b,p)*ProJ(p,a,x)) =
                ProJ(a,b,q)*((ProJ(x,y,p)*ProJ(x,y,q)")*ProJ
-(q,a,x)) by VECTSP_1:def 16;
+(q,a,x)) by GROUP_1:def 4;
       ProJ(a,b,q) <> 0F by A1,Th36;
    then (ProJ(a,b,p)*ProJ(p,a,x))*(1F) =
             ProJ(a,b,q)*((ProJ(x,y,p)*ProJ(x,y,q)")*ProJ
@@ -1042,17 +1042,17 @@ Th43: (1_ F+1_ F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
 (q,a,x)) by A1,A3,Th38;
    then ProJ(a,b,p)*ProJ(p,a,x) =
                     (ProJ(a,b,q)*(ProJ(x,y,q)"*ProJ(x,p,y)"))*ProJ
-(q,a,x) by VECTSP_1:def 16;
+(q,a,x) by GROUP_1:def 4;
    then ProJ(a,b,p)*ProJ(p,a,x) =
                    ProJ(q,a,x)*((ProJ(a,b,q)*ProJ(x,y,q)")*ProJ
-(x,p,y)") by VECTSP_1:def 16
+(x,p,y)") by GROUP_1:def 4
 ;
    then ProJ(a,b,p)*ProJ(p,a,x)*ProJ(x,p,y) =
                    ((ProJ(q,a,x)*(ProJ(a,b,q)*ProJ(x,y,q)"))*ProJ(x,p,y)")*ProJ
-(x,p,y) by VECTSP_1:def 16;
+(x,p,y) by GROUP_1:def 4;
    then A5: ProJ(a,b,p)*ProJ(p,a,x)*ProJ(x,p,y) =
          (ProJ(q,a,x)*(ProJ(a,b,q)*ProJ(x,y,q)"))*(ProJ(x,p,y)"*ProJ
-(x,p,y)) by VECTSP_1:def 16;
+(x,p,y)) by GROUP_1:def 4;
       ProJ(x,p,y) <> 0F by A1,A3,Th36;
    then ProJ(a,b,p)*ProJ(p,a,x)*ProJ(x,p,y) =
            (ProJ(q,a,x)*(ProJ(a,b,q)*ProJ(x,y,q)"))*(1F) by A5,VECTSP_1:def 22;
@@ -1060,7 +1060,7 @@ Th43: (1_ F+1_ F<>0.F) & not p _|_ a & not p _|_ x & not q _|_ a &
            ProJ(q,a,x)*(ProJ(a,b,q)*ProJ(x,y,q)") by VECTSP_1:def 19;
    then ProJ(a,b,p)*ProJ(p,a,x)*ProJ(x,p,y) =
            ProJ(q,a,x)*(ProJ(a,b,q)*ProJ(x,q,y)) by A1,A3,Th38;
-   hence thesis by VECTSP_1:def 16;
+   hence thesis by GROUP_1:def 4;
   end;
   hence thesis by A2;
  end;
@@ -1069,7 +1069,7 @@ theorem
 Th44: not a _|_ p & not x _|_ p & not y _|_ p implies
       ProJ(p,a,x)*ProJ(x,p,y) = (-ProJ(p,a,y))*ProJ(y,p,x)
  proof
-  set 0F = 0.F, 1F = 1_ F;
+  set 0F = 0.F, 1F = 1.F;
   assume A1: not a _|_ p & not x _|_ p & not y _|_ p;
   then A2: not a _|_ p & not x _|_ p & not y _|_ p & not p _|_ a &
   not p _|_ x & not p _|_ y by Th12;
@@ -1086,19 +1086,19 @@ Th44: not a _|_ p & not x _|_ p & not y _|_ p implies
    then (ProJ(p,a,y)*ProJ(p,a,x)")*ProJ(p,a,x) =
          ((-ProJ(x,y,p)")*ProJ(y,x,p))*ProJ(p,a,x) by A2,A4,Th40;
    then A6: ProJ(p,a,y)*(ProJ(p,a,x)"*ProJ(p,a,x)) =
-         ((-ProJ(x,y,p)")*ProJ(y,x,p))*ProJ(p,a,x) by VECTSP_1:def 16;
+         ((-ProJ(x,y,p)")*ProJ(y,x,p))*ProJ(p,a,x) by GROUP_1:def 4;
       ProJ(p,a,x) <> 0F by A1,Th36;
    then ProJ(p,a,y)*(1F) =
          ((-ProJ(x,y,p)")*ProJ(y,x,p))*ProJ(p,a,x) by A6,VECTSP_1:def 22;
    then ProJ(p,a,y) = (ProJ(y,x,p)*(-ProJ(x,y,p)"))*ProJ
 (p,a,x) by VECTSP_1:def 19;
    then ProJ(p,a,y) = ProJ(y,x,p)*((-ProJ(x,y,p)")*ProJ
-(p,a,x)) by VECTSP_1:def 16;
+(p,a,x)) by GROUP_1:def 4;
    then ProJ(y,p,x)*ProJ(p,a,y) =
         ProJ(y,p,x)*(ProJ(y,p,x)"*((-ProJ(x,y,p)")*ProJ(p,a,x))) by A2,A5,Th38;
    then A7: ProJ(y,p,x)*ProJ(p,a,y) =
             (ProJ(y,p,x)*ProJ(y,p,x)")*((-ProJ(x,y,p)")*ProJ
-(p,a,x)) by VECTSP_1:def 16;
+(p,a,x)) by GROUP_1:def 4;
       ProJ(y,p,x) <> 0F by A2,A5,Th36;
    then ProJ(y,p,x)*ProJ(p,a,y) =
             ((-ProJ(x,y,p)")*ProJ(p,a,x))*(1F) by A7,VECTSP_1:def 22;
@@ -1118,7 +1118,7 @@ Th44: not a _|_ p & not x _|_ p & not y _|_ p implies
 ::
 
 definition let F,S,x,y,a,b;
- assume that A1: not b _|_ a and A2: 1_ F+1_ F<>0.F;
+ assume that A1: not b _|_ a and A2: 1.F+1.F<>0.F;
  func PProJ(a,b,x,y) -> Element of F means
  :Def7: for q st not q _|_ a & not q _|_ x holds it = ProJ(a,b,q)*
   ProJ(q,a,x)*ProJ(x,q,y)
@@ -1165,9 +1165,9 @@ end;
 canceled 2;
 
 theorem
-Th47: (1_ F+1_ F<>0.F) & not b _|_ a & x=0.S implies PProJ(a,b,x,y) = 0.F
+Th47: (1.F+1.F<>0.F) & not b _|_ a & x=0.S implies PProJ(a,b,x,y) = 0.F
  proof
-  assume that A1: (1_ F+1_ F<>0.F) and A2: not b _|_ a & x=0.S;
+  assume that A1: (1.F+1.F<>0.F) and A2: not b _|_ a & x=0.S;
      for p holds p _|_ a or p _|_ x
    proof
    let p be Element of S;
@@ -1184,10 +1184,10 @@ Lm6: x _|_ 0.S
  end;
 
 theorem
-Th48: (1_ F+1_ F<>0.F) & not b _|_ a implies (PProJ(a,b,x,y) = 0.F iff y _|_ x)
+Th48: (1.F+1.F<>0.F) & not b _|_ a implies (PProJ(a,b,x,y) = 0.F iff y _|_ x)
  proof
   set 0F = 0.F;
-  assume that A1: (1_ F+1_ F<>0.F) and A2: not b _|_ a;
+  assume that A1: (1.F+1.F<>0.F) and A2: not b _|_ a;
   A3: a<>0.S by A2,Lm6;
   A4: PProJ(a,b,x,y) = 0.F implies y _|_ x
      proof
@@ -1222,10 +1222,10 @@ Th48: (1_ F+1_ F<>0.F) & not b _|_ a implies (PProJ(a,b,x,y) = 0.F iff y _|_ x)
  end;
 
 theorem
-    (1_ F+1_ F<>0.F) & not b _|_ a implies PProJ(a,b,x,y) = -PProJ(a,b,y,x)
+    (1.F+1.F<>0.F) & not b _|_ a implies PProJ(a,b,x,y) = -PProJ(a,b,y,x)
  proof
-  set 0F = 0.F, 1F = 1_ F;
-  assume A1: (1_ F+1_ F<>0.F) & not b _|_ a;
+  set 0F = 0.F, 1F = 1.F;
+  assume A1: (1.F+1.F<>0.F) & not b _|_ a;
    A2: now assume x _|_ y;
     then y _|_ x & x _|_ y by Th12;
     then PProJ(a,b,x,y) = 0F & (-1F)*PProJ(a,b,y,x) = (-1F)*0F by A1,Th48;
@@ -1242,11 +1242,11 @@ theorem
     A5: PProJ(a,b,x,y) = ProJ(a,b,r)*ProJ(r,a,x)*ProJ(x,r,y) by A1,A3,Def7;
         PProJ(a,b,y,x) = ProJ(a,b,r)*ProJ(r,a,y)*ProJ(y,r,x) by A1,A3,Def7;
     then PProJ(a,b,y,x) = ProJ(a,b,r)*(ProJ(r,a,y)*ProJ
-(y,r,x)) by VECTSP_1:def 16;
+(y,r,x)) by GROUP_1:def 4;
     then PProJ(a,b,y,x) = ProJ(a,b,r)*((-(ProJ(r,a,x)))*ProJ
 (x,r,y)) by A4,Th44;
     then PProJ(a,b,y,x) = ((-(ProJ(r,a,x)))*ProJ(a,b,r))*ProJ
-(x,r,y) by VECTSP_1:def 16;
+(x,r,y) by GROUP_1:def 4;
     then PProJ(a,b,y,x) = (-ProJ(r,a,x)*ProJ(a,b,r))*ProJ
 (x,r,y) by VECTSP_1:41;
     then (-1F)*PProJ(a,b,y,x) = (-1F)*(-ProJ(a,b,r)*ProJ(r,a,x)*ProJ
@@ -1263,10 +1263,10 @@ theorem
 end;
 
 theorem
-    (1_ F+1_ F<>0.F) & not b _|_ a implies PProJ(a,b,x,l*y) = l*PProJ(a,b,x,y)
+    (1.F+1.F<>0.F) & not b _|_ a implies PProJ(a,b,x,l*y) = l*PProJ(a,b,x,y)
  proof
   set 0F = 0.F;
-   assume that A1: (1_ F+1_ F<>0.F) and A2: not b _|_ a;
+   assume that A1: (1.F+1.F<>0.F) and A2: not b _|_ a;
     A3: now assume A4: x _|_ y;
      then y _|_ x by Th12;
      then l*y _|_ x by Def2;
@@ -1281,18 +1281,17 @@ theorem
 (x,p,l*y) by A1,A2,A5,Def7;
     A7: PProJ(a,b,x,y) = ProJ(a,b,p)*ProJ(p,a,x)*ProJ(x,p,y) by A1,A2,A5,Def7;
        PProJ(a,b,x,l*y) = (l*ProJ(x,p,y))*(ProJ(a,b,p)*ProJ(p,a,x)) by A5,A6,
-Th28
-;
-    hence thesis by A7,VECTSP_1:def 16;
+Th28;
+    hence thesis by A7,GROUP_1:def 4;
    end;
    hence thesis by A3;
   end;
 
 theorem
-    (1_ F+1_ F<>0.F) & not b _|_ a implies PProJ(a,b,x,y+z) =
+    (1.F+1.F<>0.F) & not b _|_ a implies PProJ(a,b,x,y+z) =
    PProJ(a,b,x,y) + PProJ (a,b,x,z)
  proof
-  assume that A1: (1_ F+1_ F<>0.F) and A2: not b _|_ a;
+  assume that A1: (1.F+1.F<>0.F) and A2: not b _|_ a;
   set 0F = 0.F;
    A3: now assume x = 0.S;
     then PProJ(a,b,x,y+z) = 0F & PProJ(a,b,x,y) = 0F & PProJ

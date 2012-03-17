@@ -10,11 +10,12 @@ environ
  vocabulary RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, GRCAT_1, UNIALG_1,
       RELAT_1, HAHNBAN1, RLSUB_1, REALSET1, SEQM_3, GROUP_6, VECTSP10,
       BILINEAR, HERMITAN, COMPLEX1, ABSVALUE, ARYTM_3, SQUARE_1, COMPLFLD,
-      ARYTM, XCMPLX_0;
+      ARYTM, XCMPLX_0, GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XREAL_0, REAL_1, REALSET1, STRUCT_0, DOMAIN_1, FUNCT_1,
-      REALSET2, RLVECT_1, BINOP_1, VECTSP_1, RELSET_1, FUNCT_2, SQUARE_1,
-      COMPLEX1, SEQM_3, VECTSP_4, COMPLFLD, HAHNBAN1, VECTSP10, BILINEAR;
+      REALSET2, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1, FUNCT_2,
+      SQUARE_1, COMPLEX1, SEQM_3, VECTSP_4, COMPLFLD, HAHNBAN1, VECTSP10,
+      BILINEAR;
  constructors REAL_1, DOMAIN_1, SQUARE_1, BINOP_1, MONOID_0, BILINEAR,
       COMPLEX1, MEMBERED, ARYTM_0, BINOP_2, INT_2;
  clusters STRUCT_0, XREAL_0, SUBSET_1, RELSET_1, SQUARE_1, COMPLFLD, HAHNBAN1,
@@ -24,7 +25,7 @@ environ
  theorems COMPLEX1, SQUARE_1, REAL_1, ABSVALUE, COMPLFLD, AXIOMS, COMPTRIG,
       XREAL_0, FUNCT_2, HAHNBAN1, VECTSP_1, RLVECT_1, VECTSP_4, VECTSP_6,
       TARSKI, SEQM_3, VECTSP10, BILINEAR, DOMAIN_1, ZFMISC_1, FUNCT_1,
-      XCMPLX_0, XCMPLX_1;
+      XCMPLX_0, XCMPLX_1, GROUP_1;
  schemes FUNCT_2;
 
 begin :: Auxiliary Facts about Complex Numbers
@@ -121,10 +122,10 @@ theorem Th6:
 i_FC*' = <i>" by COMPLEX1:72,116,HAHNBAN1:def 2;
 
 theorem Th7:
-i_FC * i_FC*' = 1_ F_Complex
+i_FC * i_FC*' = 1.F_Complex
  proof
   thus i_FC * i_FC*' = <i> * <i>" by Th6,COMPLFLD:6,HAHNBAN1:def 2
-   .= 1_ F_Complex by COMPLEX1:12,17,65,COMPLFLD:10;
+   .= 1.F_Complex by COMPLEX1:12,17,65,COMPLFLD:10;
  end;
 
 theorem Th8:
@@ -138,10 +139,13 @@ A1: z <> 0.F_Complex;
   reconsider b = z as Element of COMPLEX by COMPLFLD:def 1;
   set a = [**(Re z)/|.z.|, (-Im z)/|.z.|**];
   set a1 = [*(Re z)/|.z.|, (-Im z)/|.z.|*];
-A8: a = a1 by HAHNBAN1:def 1;
+A2: a = a1 by HAHNBAN1:def 1;
   then a*z = a1*b by COMPLFLD:6;
-  hence thesis by A1,A8,Th2,COMPLFLD:9;
+  hence thesis by A1,A2,Th2,COMPLFLD:9;
  end;
+
+Lm230: the unity of F_Complex = 1r by COMPLFLD:def 1
+ .= 1.F_Complex by COMPLFLD:10;
 
 theorem Th9:
 for a be Element of F_Complex
@@ -149,7 +153,6 @@ for a be Element of F_Complex
   |.b.| = 1 & Re (b * a) = |.a.| & Im (b * a)= 0
  proof let z be Element of F_Complex;
   set r = |.z.|;
- A1: (the unity of F_Complex) = 1_ F_Complex by VECTSP_1:def 9;
   A2: r = 0 implies ex a be Element of F_Complex st
     |.a.| = 1 & Re (a * z) = r & Im (a * z) = 0
      proof
@@ -159,7 +162,7 @@ for a be Element of F_Complex
       take a=the unity of F_Complex;
       thus |.a.| = 1 by COMPLFLD:97;
       Re z = 0 & Im z = 0 by A4,COMPTRIG:10,HAHNBAN1:15;
-      hence thesis by A1,A3,VECTSP_1:def 13;
+      hence thesis by Lm230,A3,VECTSP_1:def 13;
      end;
      0 < r implies ex a be Element of F_Complex st
        |.a.| =1 & Re (a * z) = r & Im (a * z)= 0
@@ -335,7 +338,7 @@ cluster a*f -> cmplxhomogeneous;
    let v be Vector of V, b be Scalar of V;
    thus (a*f).(b*v) = a* f.(b*v) by HAHNBAN1:def 9
     .= a*(b*'*f.v) by Def1
-    .= b*'*(a*f.v) by VECTSP_1:def 16
+    .= b*'*(a*f.v) by GROUP_1:def 4
     .= b*'*(a*f).v by HAHNBAN1:def 9;
    end;
 end;
@@ -670,8 +673,8 @@ cluster QcFunctional(f) -> non degenerated;
       K = F_Complex;
   A1: ker qf = {w where w is Vector of qV: qf.w=0.K} by VECTSP10:def 9;
   A2: the carrier of qV = CosetSet(V,W) by VECTSP10:def 6;
-  A3: CosetSet(V,W) = {A where A is Coset of W: not contradiction} by VECTSP10:
-def 2;
+  A3: CosetSet(V,W) = {A where A is Coset of W: not contradiction} by
+VECTSP10:def 2;
   A4: qf = QFunctional(f,W) by Def3;
   A5: the carrier of W = ker f*' by VECTSP10:def 11
    .= ker f by Th26;
@@ -940,7 +943,7 @@ cluster FormFunctional(f,g) -> cmplxhomogeneousFAF;
    let y be Vector of W,r be Scalar of W;
    thus F.(r* y) = f.v * g.(r*y) by A1,HAHNBAN1:def 9
     .= f.v *(r*'*g.y) by Def1
-    .= r*'*(f.v * g.y) by VECTSP_1:def 16
+    .= r*'*(f.v * g.y) by GROUP_1:def 4
     .= r*' *F.y by A1,HAHNBAN1:def 9;
   end;
 end;
@@ -993,7 +996,7 @@ cluster a*f -> cmplxhomogeneousFAF;
    thus Ffg.(b*v) = (a*Ff).(b*v) by BILINEAR:16
     .= a*Ff.(b*v) by HAHNBAN1:def 9
     .= a*(b*'*Ff.v) by Def1
-    .= b*'*(a*Ff.v) by VECTSP_1:def 16
+    .= b*'*(a*Ff.v) by GROUP_1:def 4
     .= b*'*(a*Ff).v by HAHNBAN1:def 9
     .= b*'* Ffg.v by BILINEAR:16;
   end;
@@ -1322,12 +1325,11 @@ for f be additiveFAF cmplxhomogeneousFAF Form of V,W holds
      f be additiveFAF cmplxhomogeneousFAF Form of V,W;
    thus f.[v1,w-w2] = f.[v1, w+(-w2)] by RLVECT_1:def 11
     .= f.[v1,w] + f.[v1,-w2] by BILINEAR:28
-    .= f.[v1,w] + f.[v1,(-1_ K)* w2] by VECTSP_1:59
-    .= f.[v1,w] + (-1_ K)*' *f.[v1,w2] by Th30
-    .= f.[v1,w] + (-(the unity of F_Complex))*' *f.[v1,w2]
-                          by VECTSP_1:def 9
+    .= f.[v1,w] + f.[v1,(-1.K)* w2] by VECTSP_1:59
+    .= f.[v1,w] + (-1.K)*' *f.[v1,w2] by Th30
+    .= f.[v1,w] + (-(the unity of F_Complex))*' *f.[v1,w2] by Lm230
     .= f.[v1,w] + (-(the unity of F_Complex)) *f.[v1,w2] by COMPLFLD:85,88
-    .= f.[v1,w] + (-1_ K) *f.[v1,w2] by VECTSP_1:def 9
+    .= f.[v1,w] + (-1.K) *f.[v1,w2] by Lm230
     .= f.[v1,w] + - f.[v1,w2] by VECTSP_6:81
     .= f.[v1,w] - f.[v1,w2]by RLVECT_1:def 11;
   end;
@@ -1432,12 +1434,12 @@ then A3: i_FC *f.[v1+i_FC*w,v1+i_FC*w]
     = i_FC * (v3 + i_FC*' * v4)+ i_FC*(i_FC*(w1 + i_FC*' * w2))
          by VECTSP_1:def 11
     .= i_FC * (v3 + i_FC*' * v4)+ i_FC*i_FC*(w1 + i_FC*' * w2)
-         by VECTSP_1:def 16
+         by GROUP_1:def 4
     .= i_FC * (v3 + i_FC*' * v4)+ -(w1 + i_FC*' * w2)
      by HAHNBAN1:8,VECTSP_6:81
     .= i_FC * (v3 + i_FC*' * v4) -(w1 + i_FC*' * w2) by RLVECT_1:def 11
     .= i_FC * v3 + i_FC *(i_FC*' * v4) -(w1 + i_FC*' * w2) by VECTSP_1:def 11
-    .= i_FC * v3 + (i_FC *i_FC*') * v4 -(w1 + i_FC*' * w2) by VECTSP_1:def 16
+    .= i_FC * v3 + (i_FC *i_FC*') * v4 -(w1 + i_FC*' * w2) by GROUP_1:def 4
     .= i_FC * v3 + v4 -(w1 + i_FC*' * w2) by Th7,VECTSP_1:def 19;
        f.[v1-i_FC * w,v1 - i_FC * w]
      = f.[v1,v1-i_FC*w] - f.[i_FC*w,v1-i_FC*w] by BILINEAR:36
@@ -1450,12 +1452,12 @@ then A3: i_FC *f.[v1+i_FC*w,v1+i_FC*w]
     = i_FC * (v3 - i_FC*' * v4)- i_FC*(i_FC*(w1 - i_FC*' * w2))
          by VECTSP_1:43
     .= i_FC * (v3 - i_FC*' * v4)- i_FC*i_FC*(w1 - i_FC*' * w2)
-      by VECTSP_1:def 16
+      by GROUP_1:def 4
     .= i_FC * (v3 - i_FC*' * v4)- -(w1 - i_FC*' * w2)
      by HAHNBAN1:8,VECTSP_6:81
     .= i_FC * (v3 - i_FC*' * v4) +(w1 - i_FC*' * w2) by COMPLFLD:35
     .= i_FC * v3 - i_FC *(i_FC*' * v4) +(w1 - i_FC*' * w2) by VECTSP_1:43
-    .= i_FC * v3 - (i_FC *i_FC*') * v4 +(w1 - i_FC*' * w2) by VECTSP_1:def 16
+    .= i_FC * v3 - (i_FC *i_FC*') * v4 +(w1 - i_FC*' * w2) by GROUP_1:def 4
     .= i_FC * v3 - v4 +(w1 - i_FC*' * w2) by Th7,VECTSP_1:def 19;
      then i_FC *f.[v1+i_FC*w,v1+i_FC*w] - i_FC *f.[v1-i_FC*w,v1-i_FC*w]
     = i_FC * v3 + v4 -(w1 + i_FC*' * w2)
@@ -1543,9 +1545,9 @@ holds
    .= v3 - ([**r,0**]*a*')*v4 -
       ([**r,0**]*a*w1 - [**r,0**]*a*(([**r,0**]*a*')*w2)) by A2,Th14
    .= v3 - [**r,0**]*(a*'*v4) -
-      ([**r,0**]*a*w1 - [**r,0**]*a*(([**r,0**]*a*')*w2)) by VECTSP_1:def 16
+      ([**r,0**]*a*w1 - [**r,0**]*a*(([**r,0**]*a*')*w2)) by GROUP_1:def 4
    .= v3 - [**r,0**]*(a*'*v4) -
-      ([**r,0**]*(a*w1)-[**r,0**]*a*(([**r,0**]*a*')*w2)) by VECTSP_1:def 16
+      ([**r,0**]*(a*w1)-[**r,0**]*a*(([**r,0**]*a*')*w2)) by GROUP_1:def 4
    .= v3 - [**r,0**]*(a*'*v4)
       - [**r,0**]*(a*w1)+[**r,0**]*a*(([**r,0**]*a*')*w2) by RLVECT_1:43
    .= v3 - ([**r,0**]*(a*w1)
@@ -1553,12 +1555,12 @@ holds
    .= v3 - [**r,0**]*(a*w1)
       - [**r,0**]*(a*'*v4)+[**r,0**]*a*(([**r,0**]*a*')*w2) by RLVECT_1:41;
      [**r,0**]*a*([**r,0**]*a*'*w2)
-    = [**r,0**]*a*([**r,0**]*a*')*w2 by VECTSP_1:def 16
-   .= a*[**r,0**]*[**r,0**]*a*'*w2 by VECTSP_1:def 16
-   .= a*([**r,0**]*[**r,0**])*a*'*w2 by VECTSP_1:def 16
+    = [**r,0**]*a*([**r,0**]*a*')*w2 by GROUP_1:def 4
+   .= a*[**r,0**]*[**r,0**]*a*'*w2 by GROUP_1:def 4
+   .= a*([**r,0**]*[**r,0**])*a*'*w2 by GROUP_1:def 4
    .= a*[**r*r,0**]*a*'*w2 by Th15
    .= a*[**r^2,0**]*a*'*w2 by SQUARE_1:def 3
-   .= [**r^2,0**]*(a*a*')*w2 by VECTSP_1:def 16
+   .= [**r^2,0**]*(a*a*')*w2 by GROUP_1:def 4
    .= [**r^2,0**]*[**1,0**]*w2 by A1,Th16,SQUARE_1:59
    .= [**r^2*1,0**]*w2 by Th15;
   hence thesis by A3;
@@ -1882,7 +1884,7 @@ A1: quasinorm(f) is subadditive
      let v be Vector of V, r be Scalar of V;
    A4: f.[r*v,r*v] = r*f.[v,r*v] by BILINEAR:32
         .= r*(r*' * f.[v,v]) by Th30
-        .= r*r*' * f.[v,v] by VECTSP_1:def 16
+        .= r*r*' * f.[v,v] by GROUP_1:def 4
         .= [**|.r.|^2,0**] * f.[v,v] by Th16
         .= [**|.r.|^2,0**] * [**Re(f.[v,v]),Im (f.[v,v])**]
               by COMPTRIG:9
@@ -2748,8 +2750,7 @@ cluster LQForm(RQ*Form(f)) -> non degenerated-on-left non degenerated-on-right;
  coherence
  proof
       rightker RQ*Form(f) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:def 25;
-   then rightker LQForm(RQ*Form(f)) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:
-45
+   then rightker LQForm(RQ*Form(f)) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:45
 ;
    hence thesis by BILINEAR:def 25;
   end;

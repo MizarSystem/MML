@@ -8,10 +8,10 @@ environ
 
  vocabulary RLVECT_1, VECTSP_1, MCART_1, VECTSP_2, BINOP_1, LATTICES, SETFAM_1,
       FUNCSDOM, ARYTM_3, BOOLE, ARYTM_1, FUNCT_1, RELAT_1, PRE_TOPC, GRCAT_1,
-      COHSP_1, ENDALG, SUBSET_1, QUOFIELD;
+      COHSP_1, ENDALG, SUBSET_1, QUOFIELD, GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
-      FUNCT_2, SETFAM_1, DOMAIN_1, STRUCT_0, RLVECT_1, VECTSP_2, VECTSP_1,
-      BINOP_1, PRE_TOPC, TOPS_2, FUNCSDOM, GRCAT_1, ENDALG, GCD_1;
+      FUNCT_2, SETFAM_1, BINOP_1, DOMAIN_1, STRUCT_0, RLVECT_1, GROUP_1,
+      VECTSP_2, VECTSP_1, PRE_TOPC, TOPS_2, FUNCSDOM, GRCAT_1, ENDALG, GCD_1;
  constructors DOMAIN_1, BINOP_1, GCD_1, TOPS_2, GRCAT_1, ENDALG, ALGSTR_2;
  clusters STRUCT_0, RELSET_1, SUBSET_1, GCD_1, ALGSTR_1, VECTSP_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
@@ -31,18 +31,19 @@ func Q.I -> Subset of [:the carrier of I,the carrier of I:] means
 end;
 
 theorem :: QUOFIELD:1
-for I being non degenerated non empty multLoopStr_0 holds Q.I is non empty;
+for I being non degenerated (non empty multLoopStr_0) holds
+Q.I is non empty;
 
-registration let I be non degenerated non empty multLoopStr_0;
+registration let I be non degenerated (non empty multLoopStr_0);
   cluster Q.I -> non empty;
 end;
 
 theorem :: QUOFIELD:2
-for I being non degenerated non empty multLoopStr_0
+for I being non degenerated (non empty multLoopStr_0)
 for u being Element of Q.I holds u`2 <> 0.I;
 
 definition
-let I be non degenerated non empty multLoopStr_0;
+let I be non degenerated (non empty multLoopStr_0);
 let u be Element of Q.I;
  redefine func u`1 -> Element of I;
  redefine func u`2 -> Element of I;
@@ -97,7 +98,7 @@ end;
 ::: Definition of Classes of Pairs
 
 definition
-let I be non degenerated non empty multLoopStr_0;
+let I be non degenerated (non empty multLoopStr_0);
 let u be Element of Q.I;
 func QClass.u -> Subset of Q.I means
 :: QUOFIELD:def 4
@@ -114,7 +115,7 @@ registration let I be non degenerated commutative (non empty multLoopStr_0);
 end;
 
 definition
-let I be non degenerated non empty multLoopStr_0;
+let I be non degenerated (non empty multLoopStr_0);
 func Quot.I -> Subset-Family of Q.I means
 :: QUOFIELD:def 5
  for A being Subset of Q.I holds
@@ -122,10 +123,10 @@ func Quot.I -> Subset-Family of Q.I means
 end;
 
 theorem :: QUOFIELD:7
-for I being non degenerated non empty multLoopStr_0 holds
+for I being non degenerated (non empty multLoopStr_0) holds
 Quot.I is non empty;
 
-registration let I be non degenerated non empty multLoopStr_0;
+registration let I be non degenerated (non empty multLoopStr_0);
   cluster Quot.I -> non empty;
 end;
 
@@ -165,7 +166,7 @@ func qmult(u,v) -> Element of Quot.I means
   a in u & b in v & z`1 * (a`2 * b`2) = z`2 * (a`1 * b`1));
 end;
 
-definition let I be non degenerated non empty multLoopStr_0;
+definition let I be non degenerated (non empty multLoopStr_0);
            let u be Element of Q.I;
   redefine func QClass.u -> Element of Quot.I;
 end;
@@ -407,9 +408,17 @@ for I being non degenerated domRing-like commutative Ring
 for u,v being Element of the_Field_of_Quotients(I) holds
 u * v = (quotmult(I)).(u,v);
 
+registration let I be non degenerated domRing-like commutative Ring;
+  cluster the_Field_of_Quotients(I) -> commutative;
+end;
+
+registration let I be non degenerated domRing-like commutative Ring;
+  cluster the_Field_of_Quotients(I) -> unital;
+end;
+
 theorem :: QUOFIELD:40
    for I being non degenerated domRing-like commutative Ring holds
-1_ the_Field_of_Quotients(I) = q1.I & 0.the_Field_of_Quotients(I) = q0.I;
+1.the_Field_of_Quotients(I) = q1.I & 0.the_Field_of_Quotients(I) = q0.I;
 
 theorem :: QUOFIELD:41
     for I being non degenerated domRing-like commutative Ring
@@ -431,7 +440,7 @@ canceled;
 theorem :: QUOFIELD:45
 for I being non degenerated domRing-like commutative Ring
 for u being Element of the_Field_of_Quotients(I) holds
-1_ the_Field_of_Quotients(I) * u = u;
+1.the_Field_of_Quotients(I) * u = u;
 
 theorem :: QUOFIELD:46
 for I being non degenerated domRing-like commutative Ring
@@ -448,18 +457,17 @@ for I being non degenerated domRing-like commutative Ring
 for u being Element of the_Field_of_Quotients(I)
 st u <> 0.the_Field_of_Quotients(I)
 ex v being Element of the_Field_of_Quotients(I)
-st u * v = 1_ the_Field_of_Quotients(I);
+st u * v = 1.the_Field_of_Quotients(I);
 
 theorem :: QUOFIELD:49
 for I being non degenerated domRing-like commutative Ring holds
 the_Field_of_Quotients(I) is add-associative right_zeroed right_complementable
-    Abelian commutative associative left_unital distributive
+    Abelian associative unital distributive
       Field-like non degenerated (non empty doubleLoopStr);
 
 registration let I be non degenerated domRing-like commutative Ring;
   cluster the_Field_of_Quotients(I) ->
-    Abelian commutative associative left_unital distributive
-      Field-like non degenerated;
+    Abelian associative distributive Field-like non degenerated;
 end;
 
 theorem :: QUOFIELD:50
@@ -467,8 +475,8 @@ for I being non degenerated domRing-like commutative Ring
 for x being Element of the_Field_of_Quotients(I)
       st x <> 0.the_Field_of_Quotients(I)
 for a being Element of I st a <> 0.I
-for u being Element of Q.I st x = QClass.u & u = [a,1_ I]
-for v being Element of Q.I st v = [1_ I,a] holds
+for u being Element of Q.I st x = QClass.u & u = [a,1.I]
+for v being Element of Q.I st v = [1.I,a] holds
 x" = QClass.v;
 
 ::: Field is Integral Domain
@@ -619,7 +627,7 @@ definition let I be non degenerated domRing-like commutative Ring;
 func canHom(I) -> map of I, the_Field_of_Quotients(I) means
 :: QUOFIELD:def 28
  for x being Element of I holds
- it.x = QClass.(quotient(x,1_ I));
+ it.x = QClass.(quotient(x,1.I));
 end;
 
 theorem :: QUOFIELD:59

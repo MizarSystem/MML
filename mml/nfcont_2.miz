@@ -11,10 +11,10 @@ environ
       SEQ_2, SEQM_3, SQUARE_1, COMPTS_1, BOOLE, SEQ_4, PARTFUN1, PARTFUN2,
       NORMSP_1, POWER, LOPBAN_1, RSSPACE3, ARYTM;
  notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, PARTFUN2, FUNCOP_1, FINSEQ_4, STRUCT_0, PRE_TOPC,
-      ORDINAL1, COMPLEX1, XCMPLX_0, XREAL_0, NUMBERS, REAL_1, NAT_1, ALG_1,
-      RLVECT_1, SQUARE_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, ABIAN, POWER, VFUNCT_1,
-      NORMSP_1, LOPBAN_1, LOPBAN_3, RSSPACE3, NFCONT_1;
+      FUNCT_2, PARTFUN2, FUNCOP_1, FINSEQ_4, STRUCT_0, PRE_TOPC, ORDINAL1,
+      COMPLEX1, XCMPLX_0, XREAL_0, NUMBERS, REAL_1, NAT_1, ALG_1, RLVECT_1,
+      SQUARE_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, ABIAN, POWER, VFUNCT_1, NORMSP_1,
+      LOPBAN_1, LOPBAN_3, RSSPACE3, NFCONT_1;
  constructors TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ARYTM_0, REAL_1, SQUARE_1,
       BINARITH, FUNCT_7, SEQ_2, COMPLEX1, SERIES_1, SEQM_3, NORMSP_1, SEQ_4,
       PREPOWER, PARTFUN1, PARTFUN2, RFUNCT_1, RFUNCT_2, COMSEQ_3, RVSUM_1,
@@ -49,12 +49,12 @@ end;
 
 definition let X,S;
            let f be PartFunc of the carrier of S,REAL;
-  pred f is_uniformly_continuous_on X means :Def1a:
+  pred f is_uniformly_continuous_on X means :Def2:
   X c= dom f & for r st 0<r ex s st 0<s & for x1,x2 st x1 in X & x2 in X &
   ||.x1 - x2.|| < s holds abs(f/.x1 - f/.x2) < r;
 end;
 
-theorem Th2:
+theorem Th1:
 f is_uniformly_continuous_on X & X1 c= X implies
 f is_uniformly_continuous_on X1
 proof assume A1: f is_uniformly_continuous_on X & X1 c= X;
@@ -73,9 +73,9 @@ f1+f2 is_uniformly_continuous_on X/\X1
 proof assume A1: f1 is_uniformly_continuous_on X &
                  f2 is_uniformly_continuous_on X1;
  A2: X /\ X1 c= X & X /\ X1 c= X1 by XBOOLE_1:17;
- then A3: f1 is_uniformly_continuous_on X /\ X1 by A1,Th2;
+ then A3: f1 is_uniformly_continuous_on X /\ X1 by A1,Th1;
  then A4: X /\ X1 c= dom f1 by Def1;
- A5: f2 is_uniformly_continuous_on X /\ X1 by A1,A2,Th2;
+ A5: f2 is_uniformly_continuous_on X /\ X1 by A1,A2,Th1;
  then X /\ X1 c= dom f2 by Def1;
  then X /\ X1 c= dom f1 /\ dom f2 by A4,XBOOLE_1:19;
  hence A6: X /\ X1 c= dom (f1+f2) by VFUNCT_1:def 1;
@@ -116,9 +116,9 @@ f1-f2 is_uniformly_continuous_on X/\X1
 proof assume A1: f1 is_uniformly_continuous_on X &
                  f2 is_uniformly_continuous_on X1;
  A2: X /\ X1 c= X & X /\ X1 c= X1 by XBOOLE_1:17;
- then A3: f1 is_uniformly_continuous_on X /\ X1 by A1,Th2;
+ then A3: f1 is_uniformly_continuous_on X /\ X1 by A1,Th1;
  then A4: X /\ X1 c= dom f1 by Def1;
- A5: f2 is_uniformly_continuous_on X /\ X1 by A1,A2,Th2;
+ A5: f2 is_uniformly_continuous_on X /\ X1 by A1,A2,Th1;
  then X /\ X1 c= dom f2 by Def1;
  then X /\ X1 c= dom f1 /\ dom f2 by A4,XBOOLE_1:19;
  hence A6: X /\ X1 c= dom (f1-f2) by VFUNCT_1:def 2;
@@ -149,7 +149,7 @@ proof assume A1: f1 is_uniformly_continuous_on X &
  hence thesis by A13,A14,AXIOMS:22;
 end;
 
-theorem Th5:
+theorem Th4:
 f is_uniformly_continuous_on X implies p(#)f is_uniformly_continuous_on X
 proof assume A1: f is_uniformly_continuous_on X;
  then X c= dom f by Def1;
@@ -195,7 +195,7 @@ theorem
   f is_uniformly_continuous_on X implies -f is_uniformly_continuous_on X
 proof assume A1: f is_uniformly_continuous_on X;
    -f = (-1)(#)f by VFUNCT_1:29;
- hence thesis by A1,Th5;
+ hence thesis by A1,Th4;
 end;
 
 theorem
@@ -210,8 +210,8 @@ proof assume A1: f is_uniformly_continuous_on X;
   let x1,x2; assume A4: x1 in X & x2 in X & ||.x1-x2.||<s;
   then
   abs((||.f.||)/.x1-(||.f.||)/.x2)
-   =abs((||.f.||).x1-(||.f.||)/.x2)  by A2 ,FINSEQ_4: def 4
-  .=abs((||.f.||).x1-(||.f.||).x2)  by A4,A2,FINSEQ_4: def 4
+   =abs((||.f.||).x1-(||.f.||)/.x2)  by A2,FINSEQ_4:def 4
+  .=abs((||.f.||).x1-(||.f.||).x2)  by A2,A4,FINSEQ_4:def 4
   .= abs(||.f/.x1.||-(||.f.||).x2)  by A2,A4,NFCONT_1:def 2
    .= abs(||.f/.x1.|| - ||.f/.x2.||)
    by A2,A4,NFCONT_1:def 2;
@@ -221,26 +221,26 @@ proof assume A1: f is_uniformly_continuous_on X;
     hence thesis by A5,AXIOMS:22;
 end;
 
-theorem Th9:
+theorem Th7:
 f is_uniformly_continuous_on X implies f is_continuous_on X
 proof assume A1: f is_uniformly_continuous_on X;
 then A2: X c= dom f & for r st 0<r ex s st 0<s & for x1,x2 st x1 in X & x2 in X
 & ||.x1 - x2.|| < s holds ||.f/.x1 - f/.x2.||< r by Def1;
    now let x0;
        let r be Real;
-  assume A4: x0 in X & 0<r;
+  assume A3: x0 in X & 0<r;
   then consider s be Real such that
-A5: 0<s & for x1,x2 st x1 in X & x2 in X &
+A4: 0<s & for x1,x2 st x1 in X & x2 in X &
     ||.x1 -x2.|| < s holds ||.f/.x1 - f/.x2.||< r by A1,Def1;
-  take s; thus 0<s by A5;
+  take s; thus 0<s by A4;
   let x1;
   assume x1 in X & ||.x1-x0.|| < s;
-  hence ||.f/.x1 - f/.x0.|| < r by A4,A5;
+  hence ||.f/.x1 - f/.x0.|| < r by A3,A4;
  end;
  hence f is_continuous_on X by A2,NFCONT_1:26;
 end;
 
-theorem Th9a:
+theorem Th8:
 for f be PartFunc of the carrier of S, REAL
 st  f is_uniformly_continuous_on X holds
  f is_continuous_on X
@@ -248,22 +248,22 @@ proof
 let f be PartFunc of the carrier of S, REAL;
 assume A1: f is_uniformly_continuous_on X;
 then A2: X c= dom f & for r st 0<r ex s st 0<s & for x1,x2 st x1 in X & x2 in X
-& ||.x1 - x2.|| < s holds abs(f/.x1 - f/.x2)< r by Def1a;
+& ||.x1 - x2.|| < s holds abs(f/.x1 - f/.x2)< r by Def2;
    now let x0;
        let r be Real;
-  assume A4: x0 in X & 0<r;
+  assume A3: x0 in X & 0<r;
   then consider s be Real such that
-A5: 0<s & for x1,x2 st x1 in X & x2 in X &
-    ||.x1 -x2.|| < s holds abs(f/.x1 - f/.x2)< r by A1,Def1a;
-  take s; thus 0<s by A5;
+A4: 0<s & for x1,x2 st x1 in X & x2 in X &
+    ||.x1 -x2.|| < s holds abs(f/.x1 - f/.x2)< r by A1,Def2;
+  take s; thus 0<s by A4;
   let x1;
   assume x1 in X & ||.x1-x0.|| < s;
-  hence abs(f/.x1 - f/.x0) < r by A4,A5;
+  hence abs(f/.x1 - f/.x0) < r by A3,A4;
  end;
  hence f is_continuous_on X by A2,NFCONT_1:27;
 end;
 
-theorem Th10:
+theorem Th9:
 f is_Lipschitzian_on X implies f is_uniformly_continuous_on X
 proof assume A1: f is_Lipschitzian_on X;
  hence X c= dom f by NFCONT_1:def 13;
@@ -336,7 +336,7 @@ proof let f, Y such that A1: Y is compact and
   end;
  then A23: s1-s2 is convergent by NORMSP_1:def 9;
  then A24: lim (s1-s2) = 0.S by A13,NORMSP_1:def 11;
-   now let x; assume x in rng s1; 
+   now let x; assume x in rng s1;
    then ex n st x=s1.n by NFCONT_1:6;
    hence x in Y by A9;
  end;
@@ -354,13 +354,13 @@ proof let f, Y such that A1: Y is compact and
  A33: lim q2 = lim q1 - 0.S by A26,A30,A31,NORMSP_1:43
            .= lim q1 by RLVECT_1:26;
    now let n;
-  thus q2.n = (s1*Ns1).n - ((s1-s2)*Ns1).n 
+  thus q2.n = (s1*Ns1).n - ((s1-s2)*Ns1).n
   by A28,NORMSP_1:def 6
    .= s1.(Ns1.n) - ((s1-s2)*Ns1).n by LOPBAN_3:7
    .= s1.(Ns1.n) - (s1-s2).(Ns1.n) by LOPBAN_3:7
    .= s1.(Ns1.n) - (s1.(Ns1.n)-s2.(Ns1.n)) by NORMSP_1:def 6
-   .= (s1.(Ns1.n) - s1.(Ns1.n)) + s2.(Ns1.n) by  RLVECT_1:43 
-   .= 0.S  + s2.(Ns1.n) by  RLVECT_1:28 
+   .= (s1.(Ns1.n) - s1.(Ns1.n)) + s2.(Ns1.n) by RLVECT_1:43
+   .= 0.S  + s2.(Ns1.n) by RLVECT_1:28
    .= s2.(Ns1.n) by RLVECT_1:10
    .= (s2*Ns1).n by LOPBAN_3:7;
  end;
@@ -375,7 +375,7 @@ then A35: q2 is_subsequence_of s2 by LOPBAN_3:def 7;
  then rng q1 c= dom f by A3,XBOOLE_1:1;
  then rng q1 c= dom f /\ Y by A37,XBOOLE_1:19;
  then A38: rng q1 c= dom (f|Y) by RELAT_1:90;
- then A39: (f|Y)*q1 is convergent 
+ then A39: (f|Y)*q1 is convergent
  & (f|Y)/.(lim q1)=lim((f|Y)*q1) by A26,A27,NFCONT_1:def 9;
    rng q2 c= rng s2 by A35,NFCONT_1:7;
  then A40: rng q2 c= Y by A36,XBOOLE_1:1;
@@ -390,7 +390,7 @@ then A35: q2 is_subsequence_of s2 by LOPBAN_3:def 7;
      .= 0.T by RLVECT_1:28;
    now let n;
   consider k be Nat such that
-A45: for m st k<=m holds 
+A45: for m st k<=m holds
    ||.((f|Y)*q1 - (f|Y)*q2).m-0.T .||<r
   by A4,A43,A44,NORMSP_1:def 11;
   A46: ||.((f|Y)*q1 - (f|Y)*q2).k - 0.T.||<r by A45;
@@ -413,21 +413,21 @@ theorem
   Y c= dom f & Y is compact & f is_uniformly_continuous_on Y implies
  f.:Y is compact
 proof assume A1: Y c= dom f & Y is compact & f is_uniformly_continuous_on Y;
- then f is_continuous_on Y by Th9; 
+ then f is_continuous_on Y by Th7;
  hence thesis by A1,NFCONT_1:39;
 end;
 
 theorem
-  for f be PartFunc of the carrier of S, REAL 
+  for f be PartFunc of the carrier of S, REAL
   for Y st Y <> {} & Y c= dom f & Y is compact &
  f is_uniformly_continuous_on Y ex x1,x2 st x1 in Y & x2 in Y &
   f/.x1 = upper_bound (f.:Y) & f/.x2 = lower_bound (f.:Y)
-proof 
-let f be PartFunc of the carrier of S, REAL; 
-let Y; 
+proof
+let f be PartFunc of the carrier of S, REAL;
+let Y;
 assume A1: Y <> {} & Y c= dom f & Y is compact &
                          f is_uniformly_continuous_on Y;
- then f is_continuous_on Y by Th9a;
+ then f is_continuous_on Y by Th8;
  hence thesis by A1,NFCONT_1:44;
 end;
 
@@ -435,14 +435,14 @@ theorem
   X c= dom f & f is_constant_on X implies f is_uniformly_continuous_on X
 proof assume X c= dom f & f is_constant_on X;
  then f is_Lipschitzian_on X by NFCONT_1:50;
- hence thesis by Th10;
+ hence thesis by Th9;
 end;
 
 begin :: Contraction Mapping Principle on Normed Linear Spaces
 
 definition let M be RealBanachSpace;
   mode contraction of M -> Function of the carrier of M, the carrier of M
-    means :Def01:
+    means :Def3:
   ex L being Real st 0 < L & L < 1 &
     for x,y being Point of M holds
       ||.it.x - it.y.|| <=L*||.x - y.||;
@@ -468,10 +468,10 @@ A1: dom ((the carrier of M) --> x) = the carrier of M by FUNCOP_1:19;
 end;
 end;
 
-LM_etc:
+Lm1:
   (for X be RealNormSpace
    for x, y be Point of X holds ||.x-y.|| = 0 iff x = y) &
-  (for X be RealNormSpace 
+  (for X be RealNormSpace
    for x, y be Point of X holds ||.x-y.|| <> 0 iff x <> y) &
   (for X be RealNormSpace
    for x, y be Point of X holds ||.x-y.|| > 0 iff x <> y) &
@@ -493,10 +493,10 @@ LM_etc:
    for x,y be Point of X
      st (for e be Real st e>0 holds ||.x-y.|| <e) holds x=y)
 proof
-  L3: for X be RealNormSpace
+  A1: for X be RealNormSpace
    for x, y be Point of X holds ||.x-y.|| > 0 iff x <> y
   proof
-    let X be RealNormSpace; 
+    let X be RealNormSpace;
     let x, y be Point of X;
     0 < ||.x-y.|| implies x-y <> 0.X by NORMSP_1:def 2;
     hence 0 < ||.x-y.|| implies x <> y by RLVECT_1:28;
@@ -506,16 +506,16 @@ proof
     end;
     hence x <> y implies 0 < ||.x-y.||;
   end;
-  L4: for X be RealNormSpace
+  A2: for X be RealNormSpace
    for x, y be Point of X holds ||.x-y.|| = ||.y-x.||
   proof
-    let X be RealNormSpace; 
+    let X be RealNormSpace;
     let x, y be Point of X;
     thus ||.x-y.|| = ||.-(x-y).|| by NORMSP_1:6
      .= ||.y+(-x).|| by RLVECT_1:47
      .= ||.y-x.|| by RLVECT_1:def 11;
   end;
-  L5: for X be RealNormSpace
+  A3: for X be RealNormSpace
    for x, y, z be Point of X
    for e be Real st e > 0 holds
    ((||.x-z.|| < e/2 & ||.z-y.|| < e/2)  implies ||.x-y.|| <e)
@@ -524,82 +524,82 @@ proof
     let x, y, z be Point of X;
     let e be Real such that e > 0;
     assume ||.x-z.|| < e/2 & ||.z-y.|| < e/2;
-      then La: ||.x-z.|| + ||.z-y.|| < e/2 + e/2 by REAL_1:67;
+      then A4: ||.x-z.|| + ||.z-y.|| < e/2 + e/2 by REAL_1:67;
     ||.x-y.|| <= ||.x-z.|| + ||.z-y.|| by NORMSP_1:14;
     then ||.x-y.|| + (||.x-z.|| + ||.z-y.||)
-      < (||.x-z.|| + ||.z-y.||) + e by La, REAL_1:67;
+      < (||.x-z.|| + ||.z-y.||) + e by A4,REAL_1:67;
     then ||.x-y.|| + (||.x-z.|| + ||.z-y.||) +- (||.x-z.|| + ||.z-y.||)
       < e + (||.x-z.|| + ||.z-y.||) +- (||.x-z.|| + ||.z-y.||)
       by REAL_1:67;
     hence thesis;
   end;
-  L6: for X be RealNormSpace 
+  A5: for X be RealNormSpace
    for x, y, z be Point of X
    for e be Real st e > 0 holds
    ((||.x-z.|| < e/2 & ||.y-z.|| < e/2) implies ||.x-y.|| < e)
   proof
     let X be RealNormSpace;
     let x, y, z be Point of X;
-    let e be Real such that La: e > 0;
-    assume Lb: ||.x-z.|| < e/2 & ||.y-z.|| < e/2;
+    let e be Real such that A6: e > 0;
+    assume A7: ||.x-z.|| < e/2 & ||.y-z.|| < e/2;
     then ||.-(y-z).|| < e/2 by NORMSP_1:6;
     then ||.z+-y.|| < e/2 by RLVECT_1:47;
     then ||.z-y.|| < e/2 by RLVECT_1:def 11;
-    hence thesis by La, Lb, L5;
+    hence thesis by A3,A6,A7;
   end;
-  L7: for X be RealNormSpace
+  A8: for X be RealNormSpace
    for x be Point of X
      st (for e be Real st e>0 holds ||.x.|| <e)
    holds x=0.X
   proof
     let X be RealNormSpace;
     let x be Point of X such that
-    GS1: for e be Real st e > 0 holds ||.x.|| <e;
+    A9: for e be Real st e > 0 holds ||.x.|| <e;
     now assume
-      Lb: x<>0.X;
-       0<>  ||.x.|| by Lb, NORMSP_1:def 2;
+      A10: x<>0.X;
+       0<>  ||.x.|| by A10,NORMSP_1:def 2;
      then 0< ||.x.|| by NORMSP_1:8;
-     hence contradiction by GS1;
+     hence contradiction by A9;
     end;
     hence thesis;
   end;
   for X be RealNormSpace for x,y be Point of X
      st (for e be Real st e>0 holds ||.x-y.|| <e) holds x=y
   proof
-    let X be RealNormSpace; 
+    let X be RealNormSpace;
     let x,y be Point of X such that
-GS1:   for e be Real st e > 0 holds ||.x-y.|| <e;
-    x-y = 0.X by L7,GS1;
+A11:   for e be Real st e > 0 holds ||.x-y.|| <e;
+    x-y = 0.X by A8,A11;
     hence thesis by RLVECT_1:35;
   end;
-  hence thesis by NORMSP_1:10,L3,L4,L5,L6,L7;
+  hence thesis by A1,A2,A3,A5,A8,NORMSP_1:10;
 end;
 
-LM_etc2:
+Lm2:
 for K, L, e be real number st 0 < K & K < 1 & 0 < e
    ex n be Nat st abs (L * (K to_power n )) < e
 proof
 let K, L, e be real number such that
-AS1: 0 < K and
-AS2: K < 1 and
-AS3: 0 < e;
+A1: 0 < K and
+A2: K < 1 and
+A3: 0 < e;
 deffunc P(Nat)=K to_power ($1+1);
 consider rseq be Real_Sequence such that
-AS4: for n be Nat holds rseq.n=P(n) from SEQ_1:sch 1;
-B1: rseq is convergent & lim rseq = 0 by SERIES_1:1,AS1,AS2,AS4;
-B2: L(#)rseq is convergent by B1,SEQ_2:21;
-B3: lim ( L(#)rseq ) = L* lim rseq by SEQ_2:22,B1
-                    .=0 by B1;
+A4: for n be Nat holds rseq.n=P(n) from SEQ_1:sch 1;
+A5: rseq is convergent & lim rseq = 0 by A1,A2,A4,SERIES_1:1;
+A6: L(#)rseq is convergent by A5,SEQ_2:21;
+A7: lim ( L(#)rseq ) = L* lim rseq by A5,SEQ_2:22
+                    .=0 by A5;
 consider n be Nat such that
-B4:for m be Nat st n<=m holds
-     abs( (L(#)rseq).m-0  ) < e by B2,B3,AS3,SEQ_2:def 7;
- abs( (L(#)rseq).n-0 ) < e by B4;
+A8:for m be Nat st n<=m holds
+     abs( (L(#)rseq).m-0  ) < e by A3,A6,A7,SEQ_2:def 7;
+ abs( (L(#)rseq).n-0 ) < e by A8;
 then abs( L*rseq.n ) < e by SEQ_1:13;
-then abs( L*(K to_power (n+1)) ) < e by AS4;
+then abs( L*(K to_power (n+1)) ) < e by A4;
 hence thesis;
 end;
 
-theorem Th01:
+theorem Th14:
   for X be RealBanachSpace
    for f be Function of X, X st f is contraction of X
       ex xp be Point of X st
@@ -608,60 +608,60 @@ theorem Th01:
 proof
   let X be RealBanachSpace;
   let f be Function of X,X such that
-  AS1: f is contraction of X;
+  A1: f is contraction of X;
 consider x0 be Element of the carrier of X;
 deffunc G(set,set)=f.$2;
 consider g be Function such that
- AS2:   dom g = NAT & g.0 = x0
+ A2:   dom g = NAT & g.0 = x0
  & for n being Element of NAT holds g.(n+1) = G(n,g.n) from RECDEF_1:sch 3;
 consider K be Real such that
- K1:  0 < K and
- K2:  K < 1 and
- K3:  for x,y be Point of X holds
-       ||.f.x - f.y.|| <=K*||.x - y.||  by Def01,AS1;
+ A3:  0 < K and
+ A4:  K < 1 and
+ A5:  for x,y be Point of X holds
+       ||.f.x - f.y.|| <=K*||.x - y.||  by A1,Def3;
 defpred P[Nat] means g.$1 in the carrier of X;
- A0: P[0] by AS2;  
- A1:  for k be Nat st P[k] holds P[k+1] 
+ A6: P[0] by A2;
+ A7:  for k be Nat st P[k] holds P[k+1]
  proof
  let k be Nat such that
-   BS1: P[k];
-   g.(k+1)=f.(g.k) by AS2;
-   hence thesis by BS1,FUNCT_2:7;
+   A8: P[k];
+   g.(k+1)=f.(g.k) by A2;
+   hence thesis by A8,FUNCT_2:7;
  end;
- for n be Nat holds P[n] from NAT_1:sch 1(A0,A1); then
-A3: for n be set st n in NAT holds g.n in the carrier of X;
-reconsider g as sequence of X by A3,AS2,FUNCT_2:5;
-A51: for n be Nat holds ||.g.(n+1) - g.n .||
+ for n be Nat holds P[n] from NAT_1:sch 1(A6,A7); then
+A9: for n be set st n in NAT holds g.n in the carrier of X;
+reconsider g as sequence of X by A2,A9,FUNCT_2:5;
+A10: for n be Nat holds ||.g.(n+1) - g.n .||
       <= ||. g.1-g.0 .||* (K to_power n )
 proof
   defpred P[Nat] means
      ||.g.($1+1) - g.($1) .|| <= ||. g.1-g.0 .||* (K to_power $1 );
- B1:   ||.g.(0+1) - g.(0) .|| = ||. g.1-g.0 .|| * 1
+ A11:   ||.g.(0+1) - g.(0) .|| = ||. g.1-g.0 .|| * 1
             .= ||. g.1-g.0 .|| * (K to_power 0 ) by POWER:29;
- I0:  P[0] by B1;
- I1:  for k be Nat st P[k] holds P[k+1]
+ A12:  P[0] by A11;
+ A13:  for k be Nat st P[k] holds P[k+1]
  proof
  let k be Nat such that
-   BS1: P[k];
-   BS4: g.(k+1) =f.(g.k) by AS2;
-   BS5: ||.g.((k+1)+1) - g.(k+1) .||
-          = ||.f.(g.(k+1)) - f.(g.k) .|| by AS2,BS4;
-   BS6:  ||.f.(g.(k+1)) - f.(g.k) .||
-         <= K* ||. g.(k+1) - g.k .|| by K3;
+   A14: P[k];
+   A15: g.(k+1) =f.(g.k) by A2;
+   A16: ||.g.((k+1)+1) - g.(k+1) .||
+          = ||.f.(g.(k+1)) - f.(g.k) .|| by A2,A15;
+   A17:  ||.f.(g.(k+1)) - f.(g.k) .||
+         <= K* ||. g.(k+1) - g.k .|| by A5;
   K* ||. g.(k+1) - g.k .||
-   <=  K*( ||. g.1-g.0 .||* (K to_power k ) ) by BS1, K1,AXIOMS:25;
+   <=  K*( ||. g.1-g.0 .||* (K to_power k ) ) by A3,A14,AXIOMS:25;
    then ||.f.(g.(k+1)) - f.(g.k)  .||
              <=||. g.1-g.0 .||*(K* (K to_power k ))
-               by BS6,AXIOMS:22; then
+               by A17,AXIOMS:22; then
         ||.f.(g.(k+1)) - f.(g.k)  .||
              <=||. g.1-g.0 .||*((K to_power 1)* (K to_power k )) by POWER:30;
-   hence thesis by BS5,POWER:32,K1;
+   hence thesis by A3,A16,POWER:32;
  end;
- for n be Nat holds P[n] from NAT_1:sch 1(I0,I1);
+ for n be Nat holds P[n] from NAT_1:sch 1(A12,A13);
 hence thesis;
 end;
 
-A52:
+A18:
 for k, n be Nat holds ||.g.(n+k) - g.n .||
       <=  ||. g.1-g.0 .||* ((K to_power n - K to_power (n+k)) /(1-K))
 proof
@@ -669,40 +669,41 @@ proof
     for n be Nat holds ||.g.(n+$1) - g.n .||
          <= ||. g.1-g.0 .||*( (K to_power n-K to_power (n+$1)) /(1-K));
      now let n be Nat;
-       L1: ||.g.(n+0) - g.n .||= ||.0.X.|| by RLVECT_1:28
+       A19: ||.g.(n+0) - g.n .||= ||.0.X.|| by RLVECT_1:28
                                .=0 by NORMSP_1:5;
-       L2: (K to_power n-K to_power (n+0)) /(1-K)
+       A20: (K to_power n-K to_power (n+0)) /(1-K)
            =((K to_power n-K to_power n) /(1-K))
            .=0;
        thus ||.g.(n+0) - g.n .||
-         <= ||. g.1-g.0 .||* ((K to_power n-K to_power (n+0))/(1-K)) by L1,L2;
+         <= ||. g.1-g.0 .||* ((K to_power n-K to_power (n+0))/(1-K)) by A19,A20
+;
     end;
   then
-  I0: P[0];
-  I1: now let k be Nat such that
-    BS1:  P[k];
+  A21: P[0];
+  A22: now let k be Nat such that
+    A23:  P[k];
       now let n be Nat;
-      BS2: ||.g.(n+k) - g.n .|| 
+      A24: ||.g.(n+k) - g.n .||
             <= ||. g.1-g.0 .||* ((K to_power n - K to_power (n+k)) /(1-K))
-            by BS1;
-      BS3: ||.g.(n+(k+1)) - g.n .||
+            by A23;
+      A25: ||.g.(n+(k+1)) - g.n .||
            <= ||.g.(n+(k+1)) - g.(n+k) .|| +  ||.g.(n+k) - g.n .||
            by NORMSP_1:14;
       ||.g.((n+k)+1) - g.(n+k) .||
-           <= ||. g.1-g.0 .||* (K to_power (n+k)) by A51; then
+           <= ||. g.1-g.0 .||* (K to_power (n+k)) by A10; then
       ||.g.(n+(k+1)) - g.(n+k) .|| +  ||.g.(n+k) - g.n .||
        <= ||. g.1-g.0 .||* (K to_power (n+k))
          + ||. g.1-g.0 .|| * ((K to_power n - K to_power (n+k)) /(1-K))
-       by REAL_1:55, BS2; then
-      BS6:  ||.g.(n+(k+1)) - g.n .|| <= ||. g.1-g.0 .||
+       by A24,REAL_1:55; then
+      A26:  ||.g.(n+(k+1)) - g.n .|| <= ||. g.1-g.0 .||
                 * ((K to_power n - K to_power (n+k)) /(1-K))
-               + ||. g.1-g.0 .||* (K to_power (n+k)) by BS3,AXIOMS:22;
-      BS61: 1- K <> 0 by K2,XCMPLX_1:15;
+               + ||. g.1-g.0 .||* (K to_power (n+k)) by A25,AXIOMS:22;
+      A27: 1- K <> 0 by A4,XCMPLX_1:15;
       ||. g.1-g.0 .||*((K to_power n - K to_power (n+k)) /(1-K))
    + ||. g.1-g.0 .||*(K to_power (n+k))
      = ||. g.1-g.0 .||*((K to_power n - K to_power (n+k))/(1-K))
-         + ||. g.1-g.0 .||*(K to_power (n+k))*(1-K)/(1-K) 
-           by BS61,XCMPLX_1:90
+         + ||. g.1-g.0 .||*(K to_power (n+k))*(1-K)/(1-K)
+           by A27,XCMPLX_1:90
      .= ||. g.1-g.0 .||*((K to_power n - K to_power (n+k))/(1-K))
          + ||. g.1-g.0 .||*((K to_power (n+k))*(1-K))/(1-K)
      .= ||. g.1-g.0 .||*((K to_power n - K to_power (n+k))/(1-K))
@@ -716,163 +717,163 @@ proof
   .= ||. g.1-g.0 .||*((K to_power n- (K to_power 1)
   *K to_power (n+k)) /(1-K)) by POWER:30
   .= ||. g.1-g.0 .||*((K to_power n - K to_power (n+k+1))/(1-K))
-      by POWER:32,K1;
+      by A3,POWER:32;
  hence ||.g.(n+(k+1)) - g.n .||
       <= ||. g.1-g.0 .||*((K to_power n  - K to_power (n+(k+1)))/(1-K))
-        by BS6;
+        by A26;
      end;
    hence P[k+1];
    end;
- for k be Nat holds P[k] from NAT_1: sch 1(I0,I1);
- hence thesis;                
+ for k be Nat holds P[k] from NAT_1: sch 1(A21,A22);
+ hence thesis;
   end;
-A54: for k,n be Nat holds ||.g.(n+k) - g.n .||
+A28: for k,n be Nat holds ||.g.(n+k) - g.n .||
       <= ||. g.1-g.0 .||* (K to_power n  /(1-K))
  proof
  let k be Nat;
    now let n be Nat;
-   BS1: ||.g.(n+k) - g.n .||
-      <= ||. g.1-g.0 .||*( (K to_power n - K to_power (n+k)) /(1-K)) by A52;
-   BS2: (K to_power n - K to_power (n+k)) /(1-K)
+   A29: ||.g.(n+k) - g.n .||
+      <= ||. g.1-g.0 .||*( (K to_power n - K to_power (n+k)) /(1-K)) by A18;
+   A30: (K to_power n - K to_power (n+k)) /(1-K)
       <= (( K to_power n ) /(1-K))
       proof
-      BS22: K to_power (n+k) > 0 by POWER:39,K1;
-BS25: 1-K > 1-1 by REAL_1:92,K2;
-      K to_power n - K to_power (n+k) <= K to_power n - 0 by REAL_1:92,BS22;
-     hence thesis by BS25,REAL_1:73;
+      A31: K to_power (n+k) > 0 by A3,POWER:39;
+A32: 1-K > 1-1 by A4,REAL_1:92;
+      K to_power n - K to_power (n+k) <= K to_power n - 0 by A31,REAL_1:92;
+     hence thesis by A32,REAL_1:73;
       end;
      0 <= ||. g.1-g.0 .|| by NORMSP_1:8; then
      ||. g.1-g.0 .||*( (K to_power n - K to_power (n+k)) /(1-K) )
-      <= ||. g.1-g.0 .||*( ( K to_power n ) /(1-K) ) by AXIOMS:25,BS2;
+      <= ||. g.1-g.0 .||*( ( K to_power n ) /(1-K) ) by A30,AXIOMS:25;
    hence ||.g.(n+k) - g.n .|| <=  ||. g.1-g.0 .||* ((K to_power n)  /(1-K))
-         by AXIOMS:22,BS1;
+         by A29,AXIOMS:22;
    end;
  hence thesis;
  end;
 g is Cauchy_sequence_by_Norm
 proof
 now let e be Real such that
-  AS1: e >0;
-  AAA: e/2 > 0 by SEQ_2:3,AS1;
+  A33: e >0;
+  A34: e/2 > 0 by A33,SEQ_2:3;
   consider n be Nat such that
- AS02: abs( ||. g.1-g.0 .||/(1-K)* (K to_power n) ) < e/2
- by LM_etc2,AAA,K1,K2;
+ A35: abs( ||. g.1-g.0 .||/(1-K)* (K to_power n) ) < e/2
+ by A3,A4,A34,Lm2;
   ||. g.1-g.0 .||/(1-K)* (K to_power n)
  <= abs( ||. g.1-g.0 .||/(1-K)* (K to_power n) ) by ABSVALUE:11; then
-   ||. g.1-g.0 .||/(1-K)* (K to_power n) < e/2 by AXIOMS:22,AS02; then
-II:   ||. g.1-g.0 .|| *( (K to_power n)/(1-K)) < e/2 by XCMPLX_1:76;
-  take nn=n+1;  
+   ||. g.1-g.0 .||/(1-K)* (K to_power n) < e/2 by A35,AXIOMS:22; then
+A36:   ||. g.1-g.0 .|| *( (K to_power n)/(1-K)) < e/2 by XCMPLX_1:76;
+  take nn=n+1;
    now let m,l be Nat such that
-        AS3: nn <= m and
-        AS4: nn <= l;
+        A37: nn <= m and
+        A38: nn <= l;
         n < nn by NAT_1:38; then
-        O2: n < m by AS3,AXIOMS:22;
-        O3: n < l by NAT_1:38,AS4;
+        A39: n < m by A37,AXIOMS:22;
+        A40: n < l by A38,NAT_1:38;
         consider k1 be Nat such that
-          AS5: n+k1 =m by O2,NAT_1:28;
+          A41: n+k1 =m by A39,NAT_1:28;
         consider k2 be Nat such that
-          AS6: n+k2 =l by O3,NAT_1:28;
+          A42: n+k2 =l by A40,NAT_1:28;
          ||.g.(n+k1) - g.n .||
-         <= ||. g.1-g.0 .||*( (K to_power n) /(1-K)) by A54; then
-       AS7: ||.g.m - g.n .|| < e/2 by II,AS5,AXIOMS:22;
+         <= ||. g.1-g.0 .||*( (K to_power n) /(1-K)) by A28; then
+       A43: ||.g.m - g.n .|| < e/2 by A36,A41,AXIOMS:22;
          ||.g.(n+k2) - g.n .||
-         <= ||. g.1-g.0 .||*( (K to_power n) /(1-K) ) by A54; then
-       AS8: ||.g.l - g.n .|| < e/2 by II,AS6,AXIOMS:22;
-        thus ||.g.l - g.m .|| < e by LM_etc,AS7,AS8,AS1;
-       end;        
+         <= ||. g.1-g.0 .||*( (K to_power n) /(1-K) ) by A28; then
+       A44: ||.g.l - g.n .|| < e/2 by A36,A42,AXIOMS:22;
+        thus ||.g.l - g.m .|| < e by A33,A43,A44,Lm1;
+       end;
   hence for n, m be Nat st
     n >= nn & m >= nn holds ||.g.n - g.m.|| < e;
  end;
  hence thesis by RSSPACE3:10;
 end;
 then
-A7: g is convergent by LOPBAN_1:def 16;
-A8: lim g = f. (lim g)
+A45: g is convergent by LOPBAN_1:def 16;
+A46: lim g = f. (lim g)
 proof
-L2: g^\1 is convergent & lim (g^\1) = lim g by A7,LOPBAN_3:14;
-L3:now let n be Nat;
-  L4: ||. (g^\1).n  - f. (lim g) .||
+A47: g^\1 is convergent & lim (g^\1) = lim g by A45,LOPBAN_3:14;
+A48:now let n be Nat;
+  A49: ||. (g^\1).n  - f. (lim g) .||
      = ||. g.(n+1) - f. (lim g) .|| by LOPBAN_3:def 6
-     .= ||. f.(g.n)- f. (lim g) .|| by AS2;
-  thus ||. (g^\1).n - f. (lim g) .|| <= K* ||. g.n - lim g .|| by L4,K3;
+     .= ||. f.(g.n)- f. (lim g) .|| by A2;
+  thus ||. (g^\1).n - f. (lim g) .|| <= K* ||. g.n - lim g .|| by A5,A49;
  end;
- L6: ||. g - lim g .|| is convergent by NORMSP_1:41,A7;
- L8: K(#)||. g - lim g .|| is convergent by L6,SEQ_2:21;
- L9: lim (K(#)(||.g - lim g.||)) =K*lim ||.(g - lim g).|| by L6,SEQ_2:22
-                                    .=K*0 by NORMSP_1:41,A7
+ A50: ||. g - lim g .|| is convergent by A45,NORMSP_1:41;
+ A51: K(#)||. g - lim g .|| is convergent by A50,SEQ_2:21;
+ A52: lim (K(#)(||.g - lim g.||)) =K*lim ||.(g - lim g).|| by A50,SEQ_2:22
+                                    .=K*0 by A45,NORMSP_1:41
                                     .=0;
  for e be Real st e >0 ex n be Nat st
          for m be Nat st n<=m holds ||. (g^\1).m - f. (lim g) .|| <e
 proof
   let e be Real such that
-   AS20: e >0;
+   A53: e >0;
    consider n be Nat such that
-   L11:  for m be Nat st n<=m holds abs( (K(#)||. g - lim g .||).m-0)
-      <e by L8,L9,AS20,SEQ_2:def 7;
+   A54:  for m be Nat st n<=m holds abs( (K(#)||. g - lim g .||).m-0)
+      <e by A51,A52,A53,SEQ_2:def 7;
   take n;
  now let m be Nat such that
-     AS21: n<=m;
-     abs( (K(#)||. g - lim g .||).m-0)<e by AS21,L11; then
+     A55: n<=m;
+     abs( (K(#)||. g - lim g .||).m-0)<e by A54,A55; then
      abs( K*||. g - lim g .||.m) < e by SEQ_1:13; then
       abs( K*||. (g - lim g).m .||) < e by NORMSP_1:def 10; then
-     L13: abs( K*||. g.m - lim g .||) < e by NORMSP_1:def 7;
-     L14:K*||. g.m - lim g .|| <=abs( K*||. g.m - lim g .||) by ABSVALUE:11;
-     L15: K*||. g.m - lim g .|| < e by AXIOMS:22,L13,L14;
-      ||. (g^\1).m  - f. (lim g) .||  <= K* ||. g.m - lim g .||  by L3;
-     hence ||. (g^\1).m  - f. (lim g) .||  < e by AXIOMS:22,L15;
+     A56: abs( K*||. g.m - lim g .||) < e by NORMSP_1:def 7;
+     A57:K*||. g.m - lim g .|| <=abs( K*||. g.m - lim g .||) by ABSVALUE:11;
+     A58: K*||. g.m - lim g .|| < e by A56,A57,AXIOMS:22;
+      ||. (g^\1).m  - f. (lim g) .||  <= K* ||. g.m - lim g .||  by A48;
+     hence ||. (g^\1).m  - f. (lim g) .||  < e by A58,AXIOMS:22;
    end;
   hence thesis;
 end;
-hence thesis by L2,NORMSP_1:def 11;
+hence thesis by A47,NORMSP_1:def 11;
 end;
 take xp=lim g;
-A9: xp=f.xp by A8;
-A10:
+A59: xp=f.xp by A46;
+A60:
  now let x be Point of X such that
-   AS9: f.x=x;
-   A11: for k be Nat holds
+   A61: f.x=x;
+   A62: for k be Nat holds
       ||.x-xp.|| <= ||.x-xp.||*(K to_power k)
     proof
       defpred P[Nat] means
       ||.x-xp .|| <= ||.x-xp.||*(K to_power $1);
-B1:   ||.x-xp .|| = ||. x-xp .|| * 1
+A63:   ||.x-xp .|| = ||. x-xp .|| * 1
                  .= ||. x-xp .|| * (K to_power 0 ) by POWER:29;
- I0:  P[0] by B1;
- I1:  for k be Nat st P[k] holds P[k+1]
+ A64:  P[0] by A63;
+ A65:  for k be Nat st P[k] holds P[k+1]
  proof
  let k be Nat such that
-   BS1: P[k];
-   BS2: ||.x-xp.|| <= ||.x-xp.||*(K to_power k) by BS1;
-   BS3: x=f.x by AS9;
-   BS4: xp=f.xp by A8;
-   BS5: ||.x - xp .|| = ||.f.x - f.xp .|| by BS3,BS4;
-   BS6: ||.f.x - f.xp .|| <= K* ||. x-xp .|| by K3;
+   A66: P[k];
+   A67: ||.x-xp.|| <= ||.x-xp.||*(K to_power k) by A66;
+   A68: x=f.x by A61;
+   A69: xp=f.xp by A46;
+   A70: ||.x - xp .|| = ||.f.x - f.xp .|| by A68,A69;
+   A71: ||.f.x - f.xp .|| <= K* ||. x-xp .|| by A5;
    K* ||. x-xp .||
-   <= K*( ||.x-xp.||*(K to_power k) ) by BS2, K1,AXIOMS:25;
+   <= K*( ||.x-xp.||*(K to_power k) ) by A3,A67,AXIOMS:25;
    then ||.f.x - f.xp .|| <= ||. x-xp .||*(K* (K to_power k ))
-     by BS6,AXIOMS:22;
+     by A71,AXIOMS:22;
    then ||.f.x - f.xp .||
      <= ||. x-xp .||*((K to_power 1)* (K to_power k )) by POWER:30;
-   hence thesis by BS5,POWER:32,K1;
+   hence thesis by A3,A70,POWER:32;
  end;
- for n be Nat holds P[n] from NAT_1:sch 1(I0,I1);
-hence thesis; 
+ for n be Nat holds P[n] from NAT_1:sch 1(A64,A65);
+hence thesis;
  end;
-A12: for e be Real st 0 <e holds ||.x-xp.|| < e
+A72: for e be Real st 0 <e holds ||.x-xp.|| < e
       proof
       let e be Real such that
-AS12: 0 < e;
+A73: 0 < e;
       consider n be Nat such that
-AS13: abs(||.x-xp.||*(K to_power n) ) < e by LM_etc2,AS12,K1,K2;
-P1:   ||.x-xp.||*(K to_power n) <=abs(||.x-xp.||*(K to_power n))
+A74: abs(||.x-xp.||*(K to_power n) ) < e by A3,A4,A73,Lm2;
+A75:   ||.x-xp.||*(K to_power n) <=abs(||.x-xp.||*(K to_power n))
         by ABSVALUE:11;
-P2:   ||.x-xp.||*(K to_power n) <e by AXIOMS:22,P1,AS13;
-      ||.x-xp.|| <= ||.x-xp.||*(K to_power n) by A11;
-      hence ||.x-xp.|| < e by AXIOMS:22,P2;
+A76:   ||.x-xp.||*(K to_power n) <e by A74,A75,AXIOMS:22;
+      ||.x-xp.|| <= ||.x-xp.||*(K to_power n) by A62;
+      hence ||.x-xp.|| < e by A76,AXIOMS:22;
       end;
-      thus x=xp by LM_etc,A12;
+      thus x=xp by A72,Lm1;
  end;
-thus thesis by A9,A10;
+thus thesis by A59,A60;
 end;
 
 theorem
@@ -886,39 +887,39 @@ theorem
    let X be RealBanachSpace;
    let f be Function of X, X;
    given n0 be Nat such that
-BS0:iter(f,n0) is contraction of X;
+A1:iter(f,n0) is contraction of X;
    consider xp be Point of X such that
-BS1:(iter(f,n0)).xp=xp and
-BS2: for x be Point of X st iter(f,n0).x=x holds xp=x by Th01,BS0;
-BS3: (iter(f,n0)).(f.xp)
+A2:(iter(f,n0)).xp=xp and
+A3: for x be Point of X st iter(f,n0).x=x holds xp=x by A1,Th14;
+A4: (iter(f,n0)).(f.xp)
             =(iter(f,n0)*f).xp by FUNCT_2:21
            .=(iter(f,n0+1)).xp by FUNCT_7:71
            .=(f*iter(f,n0)).xp by FUNCT_7:73
-            .=f.xp by BS1,FUNCT_2:21;
-BS4: f.xp=xp by BS3,BS2;
+            .=f.xp by A2,FUNCT_2:21;
+A5: f.xp=xp by A3,A4;
      now let x be Point of X such that
-BS6:   f.x=x;
+A6:   f.x=x;
        for n be Nat holds (iter(f,n)).x=x
        proof
          defpred P[Nat] means (iter(f,$1)).x=x;
          (iter(f,0)).x=(id the carrier of X).x by FUNCT_7:86
                      .=x by FUNCT_1:34; then
-     I0: P[0];
-     I1: now let n be Nat such that
-      AS9: P[n];
+     A7: P[0];
+     A8: now let n be Nat such that
+      A9: P[n];
            (iter(f,n+1)).x =(f*iter(f,n)).x by FUNCT_7:73
-                       .=x by BS6,AS9,FUNCT_2:21;
+                       .=x by A6,A9,FUNCT_2:21;
            hence P[n+1];
          end;
-         for n be Nat holds P[n] from NAT_1:sch 1(I0,I1);
+         for n be Nat holds P[n] from NAT_1:sch 1(A7,A8);
          hence thesis;
        end;
        then (iter(f,n0)).x=x;
-       hence xp=x by BS2;
+       hence xp=x by A3;
     end;
-    hence thesis by BS4;
+    hence thesis by A5;
 end;
 
 theorem
   for K, L, e be real number st 0 < K & K < 1 & 0 < e
-   ex n be Nat st abs (L * (K to_power n)) < e by LM_etc2;
+   ex n be Nat st abs (L * (K to_power n)) < e by Lm2;

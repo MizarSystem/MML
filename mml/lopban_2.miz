@@ -9,11 +9,12 @@ environ
  vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, FUNCT_2,
       VECTSP_1, ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1, LATTICES,
       FUNCSDOM, SEQ_1, SEQ_2, REALSET1, PREPOWER, SERIES_1, BHSP_3, RSSPACE,
-      RSSPACE3, ALGSTR_2, LOPBAN_1, LOPBAN_2, SUPINF_2;
+      RSSPACE3, ALGSTR_2, LOPBAN_1, LOPBAN_2, SUPINF_2, GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
       PRE_TOPC, BINOP_1, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1,
-      COMPLEX1, PSCOMP_1, RLVECT_1, VECTSP_1, REALSET2, FRAENKEL, NORMSP_1,
-      RSSPACE, RSSPACE3, SEQ_1, SEQ_4, SERIES_1, PREPOWER, FUNCSDOM, LOPBAN_1;
+      COMPLEX1, PSCOMP_1, RLVECT_1, GROUP_1, VECTSP_1, REALSET2, FRAENKEL,
+      NORMSP_1, RSSPACE, RSSPACE3, SEQ_1, SEQ_4, SERIES_1, PREPOWER, FUNCSDOM,
+      LOPBAN_1;
  constructors MCART_1, FUNCT_3, BINOP_1, ARYTM_0, REAL_1, XREAL_0, NAT_1,
       SQUARE_1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCT_7, ABIAN, REALSET2, XCMPLX_0,
       SUBSET_1, MEMBERED, DOMAIN_1, SEQ_1, SEQ_2, SERIES_1, SEQ_4, PSCOMP_1,
@@ -25,10 +26,10 @@ environ
       RLVECT_1, VECTSP_1, NORMSP_1, XREAL_0, MEMBERED, FUNCSDOM, INT_1, SEQ_1,
       RSSPACE3, BHSP_1, LOPBAN_1, COMPLEX1, ZFMISC_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions STRUCT_0, VECTSP_1, LOPBAN_1;
+ definitions STRUCT_0, GROUP_1, VECTSP_1, LOPBAN_1;
  theorems REAL_2, AXIOMS, ABSVALUE, RLVECT_1, VECTSP_1, BINOP_1, FUNCSDOM,
       XCMPLX_0, SERIES_1, FUNCT_1, SQUARE_1, FUNCT_2, NORMSP_1, SEQ_4, RSSPACE,
-      RSSPACE3, LOPBAN_1, PREPOWER, ANPROJ_1;
+      RSSPACE3, LOPBAN_1, PREPOWER, ANPROJ_1, GROUP_1;
  schemes BINOP_1, NAT_1;
 
 begin :: Banach Algebra of Bounded Linear Operators
@@ -608,6 +609,64 @@ A1:      Ring_of_BoundedLinearOperators(X)
   end;
 end;
 
+Lm10: now
+  let X be RealNormSpace;
+  set F = Ring_of_BoundedLinearOperators(X);
+  let x, e be Element of F;
+  assume
+A1: e = FuncUnit(X);
+A2: Ring_of_BoundedLinearOperators(X) = doubleLoopStr
+   (# BoundedLinearOperators(X,X),
+      Add_(BoundedLinearOperators(X,X),
+      R_VectorSpace_of_LinearOperators(X,X)),
+      FuncMult(X), FuncUnit(X),
+      Zero_(BoundedLinearOperators(X,X),
+      R_VectorSpace_of_LinearOperators(X,X)) #) by Def6;
+  then reconsider f = x as Element of BoundedLinearOperators(X,X);
+  thus x * e = (the mult of F).(x,e) by GROUP_1:def 1
+  .= (FuncMult(X)).(f,FuncUnit(X)) by A1,A2
+  .= f * (FuncUnit(X)) by Def4
+  .= x by Th8;
+  thus e * x = (the mult of F).(e,x) by GROUP_1:def 1
+  .= (FuncMult(X)).(FuncUnit(X),f) by A1,A2
+  .= (FuncUnit(X)) * f by Def4
+  .= x by Th8;
+end;
+
+registration
+  let X be RealNormSpace;
+  cluster Ring_of_BoundedLinearOperators(X) -> unital;
+coherence
+proof
+  Ring_of_BoundedLinearOperators(X) = doubleLoopStr
+   (# BoundedLinearOperators(X,X),
+      Add_(BoundedLinearOperators(X,X),
+      R_VectorSpace_of_LinearOperators(X,X)),
+      FuncMult(X), FuncUnit(X),
+      Zero_(BoundedLinearOperators(X,X),
+      R_VectorSpace_of_LinearOperators(X,X)) #) by Def6;
+  then reconsider e = FuncUnit(X) as Element of
+  Ring_of_BoundedLinearOperators(X);
+  take e;
+  thus thesis by Lm10;
+end;
+end;
+
+Lm11: now
+  let X be RealNormSpace;
+  set F = Ring_of_BoundedLinearOperators(X);
+  Ring_of_BoundedLinearOperators(X) = doubleLoopStr
+   (# BoundedLinearOperators(X,X),
+      Add_(BoundedLinearOperators(X,X),
+      R_VectorSpace_of_LinearOperators(X,X)),
+      FuncMult(X), FuncUnit(X),
+      Zero_(BoundedLinearOperators(X,X),
+      R_VectorSpace_of_LinearOperators(X,X)) #) by Def6;
+  then reconsider e = FuncUnit(X) as Element of F;
+  for x being Element of F holds x*e=x & e*x=x by Lm10;
+  hence 1.F = FuncUnit(X) by GROUP_1:def 5;
+end;
+
 theorem Th13:
    for X be RealNormSpace
      for x,y,z being Element of Ring_of_BoundedLinearOperators(X) holds
@@ -618,8 +677,8 @@ theorem Th13:
             Ring_of_BoundedLinearOperators(X) st  x+t=
           0.Ring_of_BoundedLinearOperators(X)) &
          (x*y)*z = x*(y*z) &
-         x*(1_ Ring_of_BoundedLinearOperators(X)) = x &
-         (1_ Ring_of_BoundedLinearOperators(X))*x = x &
+         x*(1.Ring_of_BoundedLinearOperators(X)) = x &
+         (1.Ring_of_BoundedLinearOperators(X))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x
  proof
@@ -682,24 +741,24 @@ theorem Th13:
                .=0.RBLOP by A1,RLVECT_1:def 2;
    end;
   reconsider xx=x,yy=y,zz=z as Element of BLOP by A1;
-  thus (x*y)*z = MULT.(x*y,z) by A1,VECTSP_1:def 10
-                   .= MULT.(MULT.(x,y),z) by A1,VECTSP_1:def 10
+  thus (x*y)*z = MULT.(x*y,z) by A1,GROUP_1:def 1
+                   .= MULT.(MULT.(x,y),z) by A1,GROUP_1:def 1
                    .= MULT.(xx*yy,zz) by Def4
                    .=(xx*yy)*zz by Def4
                    .=xx*(yy*zz) by Th7
                    .= MULT.(xx,yy*zz) by Def4
                   .= MULT.(xx,MULT.(yy,zz)) by Def4
-                  .= MULT.(x,(y*z)) by A1,VECTSP_1:def 10
-                  .=x*(y*z) by A1,VECTSP_1:def 10;
-  thus x*(1_ RBLOP) = MULT.(x,1_ IT) by A1,VECTSP_1:def 10
-                     .= MULT.(x,UNIT) by A1,VECTSP_1:def 9
+                  .= MULT.(x,(y*z)) by A1,GROUP_1:def 1
+                  .=x*(y*z) by A1,GROUP_1:def 1;
+  thus x*(1.RBLOP) = MULT.(x,1.IT) by A1,GROUP_1:def 1
+                     .= MULT.(x,UNIT) by Lm11
                      .=xx*UNIT by Def4
                      .= x by Th8;
-  thus (1_ RBLOP)*x = MULT.(1_ IT,x) by A1,VECTSP_1:def 10
-                     .= MULT.(UNIT,x) by A1,VECTSP_1:def 9
+  thus (1.RBLOP)*x = MULT.(1.IT,x) by A1,GROUP_1:def 1
+                     .= MULT.(UNIT,x) by Lm11
                      .=UNIT*xx by Def4
                      .= x by Th8;
-  thus x*(y+z) = MULT.(x,y+z) by A1,VECTSP_1:def 10
+  thus x*(y+z) = MULT.(x,y+z) by A1,GROUP_1:def 1
               .= MULT.(x,ADD.(y,z)) by A1,RLVECT_1:5
               .=MULT.(xx,(yy+zz)) by Def1
               .=xx*(yy+zz) by Def4
@@ -707,10 +766,10 @@ theorem Th13:
               .= ADD.(xx*yy,xx*zz) by Def1
               .= ADD.(xx*yy,MULT.(xx,zz)) by Def4
               .= ADD.(MULT.(xx,yy),MULT.(xx,zz)) by Def4
-              .= ADD.(x*y,MULT.(x,z)) by A1,VECTSP_1:def 10
-              .= ADD.(x*y,x*z) by A1,VECTSP_1:def 10
+              .= ADD.(x*y,MULT.(x,z)) by A1,GROUP_1:def 1
+              .= ADD.(x*y,x*z) by A1,GROUP_1:def 1
               .= x*y + x*z by A1,RLVECT_1:5;
-  thus (y+z)*x = MULT.(y+z,x) by A1,VECTSP_1:def 10
+  thus (y+z)*x = MULT.(y+z,x) by A1,GROUP_1:def 1
               .= MULT.(ADD.(y,z),x) by A1,RLVECT_1:5
               .=MULT.((yy+zz),xx) by Def1
               .=(yy+zz)*xx by Def4
@@ -718,8 +777,8 @@ theorem Th13:
               .= ADD.(yy*xx,zz*xx) by Def1
               .= ADD.(yy*xx,MULT.(zz,xx)) by Def4
               .= ADD.(MULT.(yy,xx),MULT.(zz,xx)) by Def4
-              .= ADD.(y*x,MULT.(z,x)) by A1,VECTSP_1:def 10
-              .= ADD.(y*x,z*x) by A1,VECTSP_1:def 10
+              .= ADD.(y*x,MULT.(z,x)) by A1,GROUP_1:def 1
+              .= ADD.(y*x,z*x) by A1,GROUP_1:def 1
               .= y*x + z*x by A1,RLVECT_1:5;
    end;
 
@@ -736,12 +795,12 @@ theorem Th14:
             Ring_of_BoundedLinearOperators(X) st  x+t=
           0.Ring_of_BoundedLinearOperators(X)) &
          (x*y)*z = x*(y*z) &
-         x*(1_ Ring_of_BoundedLinearOperators(X)) = x &
-         (1_ Ring_of_BoundedLinearOperators(X))*x = x &
+         x*(1.Ring_of_BoundedLinearOperators(X)) = x &
+         (1.Ring_of_BoundedLinearOperators(X))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x by Th13;
-      hence thesis by RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:def 13,def 16,
-def 18,def 19;
+      hence thesis by GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7,def 8
+,VECTSP_1:def 18;
   end;
 
 registration
@@ -790,6 +849,74 @@ A1:   R_Algebra_of_BoundedLinearOperators(X) =
   end;
 end;
 
+Lm20: now
+  let X be RealNormSpace;
+  set F = R_Algebra_of_BoundedLinearOperators(X);
+  let x, e be Element of F;
+  assume
+A1: e = FuncUnit(X);
+A2:  R_Algebra_of_BoundedLinearOperators(X) = AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+      FuncUnit(X),
+      Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X)) #) by Def7;
+  then reconsider f = x as Element of BoundedLinearOperators(X,X);
+  thus x * e = (the mult of F).(x,e) by GROUP_1:def 1
+  .= (FuncMult(X)).(f,FuncUnit(X)) by A1,A2
+  .= f * (FuncUnit(X)) by Def4
+  .= x by Th8;
+  thus e * x = (the mult of F).(e,x) by GROUP_1:def 1
+  .= (FuncMult(X)).(FuncUnit(X),f) by A1,A2
+  .= (FuncUnit(X)) * f by Def4
+  .= x by Th8;
+end;
+
+registration
+  let X be RealNormSpace;
+  cluster R_Algebra_of_BoundedLinearOperators(X) -> unital;
+coherence
+proof
+  R_Algebra_of_BoundedLinearOperators(X) = AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+      FuncUnit(X),
+      Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X)) #) by Def7;
+  then reconsider e = FuncUnit(X) as
+    Element of R_Algebra_of_BoundedLinearOperators(X);
+  take e;
+  thus thesis by Lm20;
+end;
+end;
+
+Lm21: now
+  let X be RealNormSpace;
+  set F = R_Algebra_of_BoundedLinearOperators(X);
+  R_Algebra_of_BoundedLinearOperators(X) = AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+      FuncUnit(X),
+      Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X)) #) by Def7;
+  then reconsider e = FuncUnit(X) as Element of
+  R_Algebra_of_BoundedLinearOperators(X);
+  for x being Element of F holds x*e=x & e*x=x by Lm20;
+  hence 1.F = FuncUnit(X) by GROUP_1:def 5;
+end;
+
 theorem Th15:
    for X be RealNormSpace
      for x,y,z being Element of
@@ -802,8 +929,8 @@ theorem Th15:
             R_Algebra_of_BoundedLinearOperators(X) st  x+t=
           0.R_Algebra_of_BoundedLinearOperators(X)) &
          (x*y)*z = x*(y*z) &
-         x*(1_ R_Algebra_of_BoundedLinearOperators(X)) = x &
-         (1_ R_Algebra_of_BoundedLinearOperators(X))*x = x &
+         x*(1.R_Algebra_of_BoundedLinearOperators(X)) = x &
+         (1.R_Algebra_of_BoundedLinearOperators(X))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x &
         a*(x*y) = (a*x)*y &
@@ -875,24 +1002,24 @@ theorem Th15:
                .=0.RBLOP by A1,RLVECT_1:def 2;
    end;
   reconsider xx=x,yy=y,zz=z as Element of BLOP by A1;
-  thus (x*y)*z = MULT.(x*y,z) by A1,VECTSP_1:def 10
-                   .= MULT.(MULT.(x,y),z) by A1,VECTSP_1:def 10
+  thus (x*y)*z = MULT.(x*y,z) by A1,GROUP_1:def 1
+                   .= MULT.(MULT.(x,y),z) by A1,GROUP_1:def 1
                    .= MULT.(xx*yy,zz) by Def4
                    .=(xx*yy)*zz by Def4
                    .=xx*(yy*zz) by Th7
                    .= MULT.(xx,yy*zz) by Def4
                   .= MULT.(xx,MULT.(yy,zz)) by Def4
-                  .= MULT.(x,(y*z)) by A1,VECTSP_1:def 10
-                  .=x*(y*z) by A1,VECTSP_1:def 10;
-  thus x*(1_ RBLOP) = MULT.(x,1_ IT) by A1,VECTSP_1:def 10
-                     .= MULT.(x,UNIT) by A1,VECTSP_1:def 9
+                  .= MULT.(x,(y*z)) by A1,GROUP_1:def 1
+                  .=x*(y*z) by A1,GROUP_1:def 1;
+  thus x*(1.RBLOP) = MULT.(x,1.IT) by A1,GROUP_1:def 1
+                     .= MULT.(x,UNIT) by Lm21
                      .=xx*UNIT by Def4
                      .= x by Th8;
-  thus (1_ RBLOP)*x = MULT.(1_ IT,x) by A1,VECTSP_1:def 10
-                     .= MULT.(UNIT,x) by A1,VECTSP_1:def 9
+  thus (1.RBLOP)*x = MULT.(1.IT,x) by A1,GROUP_1:def 1
+                     .= MULT.(UNIT,x) by Lm21
                      .=UNIT*xx by Def4
                      .= x by Th8;
-  thus x*(y+z) = MULT.(x,y+z) by A1,VECTSP_1:def 10
+  thus x*(y+z) = MULT.(x,y+z) by A1,GROUP_1:def 1
               .= MULT.(x,ADD.(y,z)) by A1,RLVECT_1:5
               .=MULT.(xx,(yy+zz)) by Def1
               .=xx*(yy+zz) by Def4
@@ -900,10 +1027,10 @@ theorem Th15:
               .= ADD.(xx*yy,xx*zz) by Def1
               .= ADD.(xx*yy,MULT.(xx,zz)) by Def4
               .= ADD.(MULT.(xx,yy),MULT.(xx,zz)) by Def4
-              .= ADD.(x*y,MULT.(x,z)) by A1,VECTSP_1:def 10
-              .= ADD.(x*y,x*z) by A1,VECTSP_1:def 10
+              .= ADD.(x*y,MULT.(x,z)) by A1,GROUP_1:def 1
+              .= ADD.(x*y,x*z) by A1,GROUP_1:def 1
               .= x*y + x*z by A1,RLVECT_1:5;
-  thus (y+z)*x = MULT.(y+z,x) by A1,VECTSP_1:def 10
+  thus (y+z)*x = MULT.(y+z,x) by A1,GROUP_1:def 1
               .= MULT.(ADD.(y,z),x) by A1,RLVECT_1:5
               .=MULT.((yy+zz),xx) by Def1
               .=(yy+zz)*xx by Def4
@@ -911,11 +1038,11 @@ theorem Th15:
               .= ADD.(yy*xx,zz*xx) by Def1
               .= ADD.(yy*xx,MULT.(zz,xx)) by Def4
               .= ADD.(MULT.(yy,xx),MULT.(zz,xx)) by Def4
-              .= ADD.(y*x,MULT.(z,x)) by A1,VECTSP_1:def 10
-              .= ADD.(y*x,z*x) by A1,VECTSP_1:def 10
+              .= ADD.(y*x,MULT.(z,x)) by A1,GROUP_1:def 1
+              .= ADD.(y*x,z*x) by A1,GROUP_1:def 1
               .= y*x + z*x by A1,RLVECT_1:5;
  thus a*(x*y) =EXMULT.[a,x*y] by A1,RLVECT_1:def 4
-                   .= EXMULT.[a, MULT.(x,y)] by A1,VECTSP_1:def 10
+                   .= EXMULT.[a, MULT.(x,y)] by A1,GROUP_1:def 1
                    .= EXMULT.[a, (xx*yy)] by Def4
                    .= EXMULT.(a, (xx*yy)) by BINOP_1:def 1
                    .= a*(xx*yy) by Def3
@@ -924,7 +1051,7 @@ theorem Th15:
                   .= MULT.(EXMULT.(a,xx),yy) by Def3
                   .= MULT.(EXMULT.[a,x],y) by BINOP_1:def 1
                    .= MULT.(a*x,y) by A1,RLVECT_1:def 4
-                   .=(a*x)*y by A1,VECTSP_1:def 10;
+                   .=(a*x)*y by A1,GROUP_1:def 1;
 thus a*(x+y) =(the Mult of RBLOP).[a,(x+y)] by RLVECT_1:def 4
               .=(the Mult of RBLOP).[a,(the add of RBLOP).[x,y]]
              by RLVECT_1:def 3
@@ -957,7 +1084,7 @@ thus (a*b)*x =(the Mult of RBLOP).[(a*b), x] by RLVECT_1:def 4
               .=(the Mult of RBLOP).[a,(b*x)] by RLVECT_1:def 4
               .=a*(b*x) by RLVECT_1:def 4;
  thus (a*b)*(x*y) =EXMULT.[(a*b),x*y] by A1,RLVECT_1:def 4
-                   .= EXMULT.[(a*b), MULT.(x,y)] by A1,VECTSP_1:def 10
+                   .= EXMULT.[(a*b), MULT.(x,y)] by A1,GROUP_1:def 1
                    .= EXMULT.[(a*b), (xx*yy)] by Def4
                    .= EXMULT.((a*b), (xx*yy)) by BINOP_1:def 1
                    .= (a*b)*(xx*yy) by Def3
@@ -969,7 +1096,7 @@ thus (a*b)*x =(the Mult of RBLOP).[(a*b), x] by RLVECT_1:def 4
                    .= MULT.(EXMULT.[a,x],EXMULT.[b,y]) by BINOP_1:def 1
                    .= MULT.(a*x,EXMULT.[b,y]) by A1,RLVECT_1:def 4
                    .= MULT.(a*x,b*y) by A1,RLVECT_1:def 4
-                   .=(a*x)*(b*y) by A1,VECTSP_1:def 10;
+                   .=(a*x)*(b*y) by A1,GROUP_1:def 1;
    end;
 
 definition
@@ -992,16 +1119,16 @@ theorem
             R_Algebra_of_BoundedLinearOperators(X) st  x+t=
           0.R_Algebra_of_BoundedLinearOperators(X)) &
          (x*y)*z = x*(y*z) &
-         x*(1_ R_Algebra_of_BoundedLinearOperators(X)) = x &
-         (1_ R_Algebra_of_BoundedLinearOperators(X))*x = x &
+         x*(1.R_Algebra_of_BoundedLinearOperators(X)) = x &
+         (1.R_Algebra_of_BoundedLinearOperators(X))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x &
-        a*(x*y) = (a*x)*y &
+         a*(x*y) = (a*x)*y &
          a*(x+y) = a*x + a*y &
          (a+b)*x = a*x + b*x &
          (a*b)*x = a*(b*x) by Th15;
-   hence thesis by FUNCSDOM:def 20,RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:
-def 16;
+   hence thesis by FUNCSDOM:def 20,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7
+,def 8;
  end;
 
 registration
@@ -1168,6 +1295,77 @@ A1:   R_Normed_Algebra_of_BoundedLinearOperators(X) =
   end;
 end;
 
+Lm30: now
+  let X be RealNormSpace;
+  set F = R_Normed_Algebra_of_BoundedLinearOperators(X);
+  let x, e be Element of F;
+  assume
+A1: e = FuncUnit(X);
+A2: F =  Normed_AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+        FuncUnit(X),
+        Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X)),
+       BoundedLinearOperatorsNorm(X,X) #) by Def8;
+  then reconsider f = x as Element of BoundedLinearOperators(X,X);
+  thus x * e = (the mult of F).(x,e) by GROUP_1:def 1
+  .= (FuncMult(X)).(f,FuncUnit(X)) by A1,A2
+  .= f * (FuncUnit(X)) by Def4
+  .= x by Th8;
+  thus e * x = (the mult of F).(e,x) by GROUP_1:def 1
+  .= (FuncMult(X)).(FuncUnit(X),f) by A1,A2
+  .= (FuncUnit(X)) * f by Def4
+  .= x by Th8;
+end;
+
+registration
+  let X be RealNormSpace;
+  cluster R_Normed_Algebra_of_BoundedLinearOperators(X) -> unital;
+coherence
+proof
+ R_Normed_Algebra_of_BoundedLinearOperators(X) =  Normed_AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+        FuncUnit(X),
+        Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X)),
+       BoundedLinearOperatorsNorm(X,X) #) by Def8;
+  then reconsider e = FuncUnit(X) as
+    Element of R_Normed_Algebra_of_BoundedLinearOperators(X);
+  take e;
+  thus thesis by Lm30;
+end;
+end;
+
+Lm31: now
+  let X be RealNormSpace;
+  set F = R_Normed_Algebra_of_BoundedLinearOperators(X);
+  F = Normed_AlgebraStr
+    (# BoundedLinearOperators(X,X),
+        FuncMult(X),
+        Add_(BoundedLinearOperators(X,X),
+                     R_VectorSpace_of_LinearOperators(X,X)),
+        Mult_(BoundedLinearOperators(X,X),
+                 R_VectorSpace_of_LinearOperators(X,X)),
+        FuncUnit(X),
+        Zero_(BoundedLinearOperators(X,X),
+               R_VectorSpace_of_LinearOperators(X,X)),
+       BoundedLinearOperatorsNorm(X,X) #) by Def8;
+  then reconsider e = FuncUnit(X) as Element of
+  R_Normed_Algebra_of_BoundedLinearOperators(X);
+  for x being Element of F holds x*e=x & e*x=x by Lm30;
+  hence 1.F = FuncUnit(X) by GROUP_1:def 5;
+end;
+
 theorem Th19:
    for X be RealNormSpace
      for x,y,z being Element of
@@ -1180,8 +1378,8 @@ theorem Th19:
             R_Normed_Algebra_of_BoundedLinearOperators(X) st  x+t=
           0.R_Normed_Algebra_of_BoundedLinearOperators(X)) &
          (x*y)*z = x*(y*z) &
-         x*(1_ R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-         (1_ R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
+         x*(1.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
+         (1.R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x &
          a*(x*y) = (a*x)*y &
@@ -1256,24 +1454,24 @@ theorem Th19:
                .=0.RBLOP by A1,RLVECT_1:def 2;
    end;
   reconsider xx=x,yy=y,zz=z as Element of BLOP by A1;
-  thus (x*y)*z = MULT.(x*y,z) by A1,VECTSP_1:def 10
-                   .= MULT.(MULT.(x,y),z) by A1,VECTSP_1:def 10
+  thus (x*y)*z = MULT.(x*y,z) by A1,GROUP_1:def 1
+                   .= MULT.(MULT.(x,y),z) by A1,GROUP_1:def 1
                    .= MULT.(xx*yy,zz) by Def4
                    .=(xx*yy)*zz by Def4
                    .=xx*(yy*zz) by Th7
                    .= MULT.(xx,yy*zz) by Def4
                   .= MULT.(xx,MULT.(yy,zz)) by Def4
-                  .= MULT.(x,(y*z)) by A1,VECTSP_1:def 10
-                  .=x*(y*z) by A1,VECTSP_1:def 10;
-  thus x*(1_ RBLOP) = MULT.(x,1_ IT) by A1,VECTSP_1:def 10
-                     .= MULT.(x,UNIT) by A1,VECTSP_1:def 9
+                  .= MULT.(x,(y*z)) by A1,GROUP_1:def 1
+                  .=x*(y*z) by A1,GROUP_1:def 1;
+  thus x*(1.RBLOP) = MULT.(x,1.IT) by A1,GROUP_1:def 1
+                     .= MULT.(x,UNIT) by Lm31
                      .=xx*UNIT by Def4
                      .= x by Th8;
-  thus (1_ RBLOP)*x = MULT.(1_ IT,x) by A1,VECTSP_1:def 10
-                     .= MULT.(UNIT,x) by A1,VECTSP_1:def 9
+  thus (1.RBLOP)*x = MULT.(1.IT,x) by A1,GROUP_1:def 1
+                     .= MULT.(UNIT,x) by Lm31
                      .=UNIT*xx by Def4
                      .= x by Th8;
-  thus x*(y+z) = MULT.(x,y+z) by A1,VECTSP_1:def 10
+  thus x*(y+z) = MULT.(x,y+z) by A1,GROUP_1:def 1
               .= MULT.(x,ADD.(y,z)) by A1,RLVECT_1:5
               .=MULT.(xx,(yy+zz)) by Def1
               .=xx*(yy+zz) by Def4
@@ -1281,10 +1479,10 @@ theorem Th19:
               .= ADD.(xx*yy,xx*zz) by Def1
               .= ADD.(xx*yy,MULT.(xx,zz)) by Def4
               .= ADD.(MULT.(xx,yy),MULT.(xx,zz)) by Def4
-              .= ADD.(x*y,MULT.(x,z)) by A1,VECTSP_1:def 10
-              .= ADD.(x*y,x*z) by A1,VECTSP_1:def 10
+              .= ADD.(x*y,MULT.(x,z)) by A1,GROUP_1:def 1
+              .= ADD.(x*y,x*z) by A1,GROUP_1:def 1
               .= x*y + x*z by A1,RLVECT_1:5;
-  thus (y+z)*x = MULT.(y+z,x) by A1,VECTSP_1:def 10
+  thus (y+z)*x = MULT.(y+z,x) by A1,GROUP_1:def 1
               .= MULT.(ADD.(y,z),x) by A1,RLVECT_1:5
               .=MULT.((yy+zz),xx) by Def1
               .=(yy+zz)*xx by Def4
@@ -1292,11 +1490,11 @@ theorem Th19:
               .= ADD.(yy*xx,zz*xx) by Def1
               .= ADD.(yy*xx,MULT.(zz,xx)) by Def4
               .= ADD.(MULT.(yy,xx),MULT.(zz,xx)) by Def4
-              .= ADD.(y*x,MULT.(z,x)) by A1,VECTSP_1:def 10
-              .= ADD.(y*x,z*x) by A1,VECTSP_1:def 10
+              .= ADD.(y*x,MULT.(z,x)) by A1,GROUP_1:def 1
+              .= ADD.(y*x,z*x) by A1,GROUP_1:def 1
               .= y*x + z*x by A1,RLVECT_1:5;
  thus a*(x*y) =EXMULT.[a,x*y] by A1,RLVECT_1:def 4
-                   .= EXMULT.[a, MULT.(x,y)] by A1,VECTSP_1:def 10
+                   .= EXMULT.[a, MULT.(x,y)] by A1,GROUP_1:def 1
                    .= EXMULT.[a, (xx*yy)] by Def4
                    .= EXMULT.(a, (xx*yy)) by BINOP_1:def 1
                    .= a*(xx*yy) by Def3
@@ -1305,9 +1503,9 @@ theorem Th19:
                   .= MULT.(EXMULT.(a,xx),yy) by Def3
                   .= MULT.(EXMULT.[a,x],y) by BINOP_1:def 1
                    .= MULT.(a*x,y) by A1,RLVECT_1:def 4
-                   .=(a*x)*y by A1,VECTSP_1:def 10;
+                   .=(a*x)*y by A1,GROUP_1:def 1;
 thus (a*b)*(x*y) =EXMULT.[(a*b),x*y] by A1,RLVECT_1:def 4
-                   .= EXMULT.[(a*b), MULT.(x,y)] by A1,VECTSP_1:def 10
+                   .= EXMULT.[(a*b), MULT.(x,y)] by A1,GROUP_1:def 1
                    .= EXMULT.[(a*b), (xx*yy)] by Def4
                    .= EXMULT.((a*b), (xx*yy)) by BINOP_1:def 1
                    .= (a*b)*(xx*yy) by Def3
@@ -1319,7 +1517,7 @@ thus (a*b)*(x*y) =EXMULT.[(a*b),x*y] by A1,RLVECT_1:def 4
                    .= MULT.(EXMULT.[a,x],EXMULT.[b,y]) by BINOP_1:def 1
                    .= MULT.(a*x,EXMULT.[b,y]) by A1,RLVECT_1:def 4
                    .= MULT.(a*x,b*y) by A1,RLVECT_1:def 4
-                   .=(a*x)*(b*y) by A1,VECTSP_1:def 10;
+                   .=(a*x)*(b*y) by A1,GROUP_1:def 1;
 thus a*(x+y) =(the Mult of RBLOP).[a,(x+y)] by RLVECT_1:def 4
               .=(the Mult of RBLOP).[a,(the add of RBLOP).[x,y]]
              by RLVECT_1:def 3
@@ -1386,8 +1584,8 @@ thus 1*x =(the Mult of RBLOP).[1, x] by RLVECT_1:def 4
             R_Normed_Algebra_of_BoundedLinearOperators(X) st  x+t=
           0.R_Normed_Algebra_of_BoundedLinearOperators(X)) &
          (x*y)*z = x*(y*z) &
-         x*(1_ R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-         (1_ R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
+         x*(1.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
+         (1.R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x &
         a*(x*y) = (a*x)*y &
@@ -1451,8 +1649,8 @@ by LOPBAN_1:def 15;
                   .= ||.a*x1.|| by A3,NORMSP_1:def 1
                     .=abs(a)* ||.x.|| by A6,NORMSP_1:def 2;
   end;
-hence thesis by A2,A4,FUNCSDOM:def 20,NORMSP_1:def 2,RLVECT_1:def 5,def 6,def
-7,def 8,def 9,VECTSP_1:def 16;
+hence thesis by A2,A4,FUNCSDOM:def 20,GROUP_1:def 4,NORMSP_1:def 2
+,RLVECT_1:def 5,def 6,def 7,def 8,def 9;
  end;
 
 registration
@@ -1488,7 +1686,7 @@ definition let X be non empty Normed_AlgebraStr;
   attr X is Banach_Algebra-like_1 means
       for x,y being Element of X holds ||. x*y .|| <= ||.x.|| * ||.y.||;
   attr X is Banach_Algebra-like_2 means
-      ||. 1_ X .|| = 1;
+      ||. 1.X .|| = 1;
   attr X is Banach_Algebra-like_3 means
       for a being Real for x,y being Element of X
    holds a*(x*y)=x*(a*y);
@@ -1557,7 +1755,7 @@ A2:
   reconsider x1=x,y1=y as Element of BLOP by A1;
   A3:  ||.x * y.||
     = ( the norm of RBLOP ).(x*y) by NORMSP_1:def 1
-    .= NRM.(MULT.(x,y)) by A1,VECTSP_1:def 10
+    .= NRM.(MULT.(x,y)) by A1,GROUP_1:def 1
     .= NRM.(x1*y1) by Def4
     .= NRM.(modetrans(x1,X,X)*modetrans(y1,X,X)) by Def2;
    NRM.(modetrans(x1,X,X)) *NRM.(modetrans(y1,X,X))
@@ -1569,8 +1767,8 @@ A2:
   end;
  thus RBLOP is Banach_Algebra-like_2
 proof
-  thus ||. 1_ RBLOP .|| = ||. the unity of RBLOP .|| by VECTSP_1:def 9
-      .= NRM.(UNIT) by A1,NORMSP_1:def 1
+A3: 1.RBLOP = FuncUnit(X) by Lm31;
+  thus ||. 1.RBLOP .|| = NRM.(UNIT) by A1,A3,NORMSP_1:def 1
       .= NRM.(id (the carrier of X)) by Def5
       .= 1 by Th18;
 end;
@@ -1585,8 +1783,8 @@ end;
  thus RBLOP is left_unital
  proof let x be Element of RBLOP;
  reconsider xx=x as Element of BLOP by A1;
-   thus (1_ RBLOP)*x  = MULT.(1_ RBLOP,x) by A1,VECTSP_1:def 10
-                      .= MULT.(UNIT,x) by A1,VECTSP_1:def 9
+   thus (1.RBLOP)*x  = MULT.(1.RBLOP,x) by A1,GROUP_1:def 1
+                      .= MULT.(UNIT,x) by Lm31
                       .=UNIT*xx by Def4
                      .= x by Th8;
 end;
@@ -1594,7 +1792,7 @@ end;
  proof
   let x,y,z be Element of RBLOP;
  reconsider xx=x,yy=y,zz=z as Element of BLOP by A1;
-  thus (y+z)*x = MULT.(y+z,x) by A1,VECTSP_1:def 10
+  thus (y+z)*x = MULT.(y+z,x) by A1,GROUP_1:def 1
               .= MULT.(ADD.(y,z),x) by A1,RLVECT_1:5
               .= MULT.((yy+zz),xx) by Def1
               .= (yy+zz)*xx by Def4
@@ -1602,8 +1800,8 @@ end;
               .= ADD.(yy*xx,zz*xx) by Def1
               .= ADD.(yy*xx,MULT.(zz,xx)) by Def4
               .= ADD.(MULT.(yy,xx),MULT.(zz,xx)) by Def4
-              .= ADD.(y*x,MULT.(z,x)) by A1,VECTSP_1:def 10
-              .= ADD.(y*x,z*x) by A1,VECTSP_1:def 10
+              .= ADD.(y*x,MULT.(z,x)) by A1,GROUP_1:def 1
+              .= ADD.(y*x,z*x) by A1,GROUP_1:def 1
               .= y*x + z*x by A1,RLVECT_1:5;
  end;
            now let seq be sequence of RBLOP such that
@@ -1688,3 +1886,15 @@ end;
 definition
   mode Banach_Algebra is Banach_Algebra-like Normed_Algebra;
 end;
+
+theorem
+  for X being RealNormSpace holds
+  1.Ring_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm11;
+
+theorem
+  for X being RealNormSpace holds
+  1.R_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm21;
+
+theorem
+  for X being RealNormSpace holds
+  1.R_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X) by Lm31;

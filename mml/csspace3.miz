@@ -211,7 +211,7 @@ end;
 end;
 
 canceled;
- Th2:
+ Lm1:
 CLSStruct (# the_set_of_l1ComplexSequences,
       Zero_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
       Add_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
@@ -229,14 +229,14 @@ coherence by CSSPACE:13;
 end;
 
 canceled;
- Th3:
+ Lm2:
 CLSStruct (# the_set_of_l1ComplexSequences,
       Zero_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
       Add_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
       Mult_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences) #)
 is ComplexLinearSpace;
 
-Lm1:
+Lm3:
   ex NORM be Function of the_set_of_l1ComplexSequences,REAL st
    for x be set st x in the_set_of_l1ComplexSequences holds
     NORM.x = Sum |.seq_id x.|
@@ -254,7 +254,7 @@ definition
   :Def2:
   for x be set st x in the_set_of_l1ComplexSequences holds
     it.x = Sum |.seq_id x.|;
-existence by Lm1;
+existence by Lm3;
 uniqueness
 proof
    let NORM1,NORM2 be Function of the_set_of_l1ComplexSequences, REAL such that
@@ -491,7 +491,7 @@ CNORMSTR (# the_set_of_l1ComplexSequences,
     Zero_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
     Add_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
     Mult_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-    cl_norm #) is ComplexLinearSpace by Th3,Th4;
+    cl_norm #) is ComplexLinearSpace by Lm2,Th4;
 
 definition
 func Complex_l1_Space -> non empty CNORMSTR equals :Def3:
@@ -535,7 +535,7 @@ A2:for u be VECTOR of l1 holds u =seq_id u
    proof
      let u be VECTOR of l1;
       u is VECTOR of Linear_Space_of_ComplexSequences
-       by Def3,Th2,CLVECT_1:30;
+       by Def3,Lm1,CLVECT_1:30;
      hence thesis by CSSPACE:def 2,def 7;
    end;
 
@@ -543,7 +543,7 @@ A3:for u,v be VECTOR of l1 holds u+v =seq_id(u)+seq_id(v)
    proof
      let u,v be VECTOR of l1;
      reconsider u1=u, v1=v as VECTOR of Linear_Space_of_ComplexSequences
-       by Def3,Th2,CLVECT_1:30;
+       by Def3,Lm1,CLVECT_1:30;
      set L1=Linear_Space_of_ComplexSequences;
      set W = the_set_of_l1ComplexSequences;
 A4:  [:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
@@ -565,7 +565,7 @@ A6:for p be Complex for u be VECTOR of l1 holds p*u =p(#)seq_id(u)
      let p be Complex;
      let u be VECTOR of l1;
      reconsider u1=u as VECTOR of Linear_Space_of_ComplexSequences
-       by Def3,Th2,CLVECT_1:30;
+       by Def3,Lm1,CLVECT_1:30;
      set L1=Linear_Space_of_ComplexSequences;
      set W = the_set_of_l1ComplexSequences;
 A7: [:COMPLEX,W:] c= [:COMPLEX,the carrier of L1:] by ZFMISC_1:119;
@@ -723,10 +723,10 @@ end;
 registration
  cluster Complex_l1_Space -> ComplexNormSpace-like ComplexLinearSpace-like
        Abelian add-associative right_zeroed right_complementable;
-  coherence by Def3,Th3,Th4,Th9,CLVECT_1:def 10;
+  coherence by Def3,Lm2,Th4,Th9,CLVECT_1:def 10;
 end;
 
-Lm2:
+Lm4:
 for c be Complex, seq be Complex_Sequence, seq1 be Real_Sequence st
  seq is convergent & seq1 is convergent
   for rseq be Real_Sequence st
@@ -895,8 +895,8 @@ A8:          k<=m;
 then A9:          Sum(|.(seq_id((vseq.m) - (vseq.k))).|) < e by A7,A8;
               seq_id((vseq.m)-(vseq.k)) is absolutely_summable
                by Def1,Def3;
-then A10:         |.(seq_id((vseq.m)-(vseq.k))).| is summable by COMSEQ_3:def
-11;
+then A10:         |.(seq_id((vseq.m)-(vseq.k))).| is summable by
+COMSEQ_3:def 11;
               for i be Nat holds 0 <= |.(seq_id((vseq.m) - (vseq.k))).| .i
              proof
                let i be Nat;
@@ -964,8 +964,8 @@ A19: for m,n be Nat st n >= k & m >= k holds
        let m,n be Nat such that
 A20:    n >= k & m >= k;
         ||.(vseq.n) - (vseq.m).|| < e by A18,A20;
-then A21:   (the norm of Complex_l1_Space).(vseq.n-vseq.m) < e by CLVECT_1:def
-9;
+then A21:   (the norm of Complex_l1_Space).(vseq.n-vseq.m) < e by
+CLVECT_1:def 9;
 A22:   seq_id(vseq.n-vseq.m) is absolutely_summable
          by Def1,Def3;
         for i be Nat holds 0 <= |.(seq_id(vseq.n-vseq.m)).| .i
@@ -1091,7 +1091,7 @@ A35:       now
               .= |.(rseq0.m-(seq_id(vseq.n)).(i+1)).| + rseqb.m by A34;
            end;
            then lim rseq = |.(lim(rseq0)-(seq_id(vseq.n)).(i+1) ).|
-                      + lim rseqb by A33,A34,Lm2
+                      + lim rseqb by A33,A34,Lm4
               .= |.(tseq.(i+1)+-(seq_id(vseq.n)).(i+1) ).|
                   + lim rseqb by A34
               .= |.(tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ).|
@@ -1110,7 +1110,7 @@ A35:       now
                          by CSSPACE:3
               .= Partial_Sums (|.((seq_id tseq -seq_id(vseq.n))).|).(i+1)
                          by SERIES_1:def 1;
-           hence thesis by A33,A34,A35,Lm2;
+           hence thesis by A33,A34,A35,Lm4;
          end;
        end;
        hence thesis;

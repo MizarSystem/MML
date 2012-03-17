@@ -12,9 +12,9 @@ environ
       PARTFUN1, FINSEQOP, FUNCT_5, SUBSET_1, FVSUM_1, MATRIX_3;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, STRUCT_0,
       FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, BINOP_1,
-      FUNCT_3, FUNCOP_1, RLVECT_1, VECTSP_1, SETWISEO, SETWOP_2, FINSEQ_2,
-      FINSEQOP, MATRIX_1, FINSUB_1, MATRIX_2, NAT_1, SQUARE_1, FVSUM_1,
-      TREES_1, FUNCT_5, CAT_2;
+      FUNCT_3, FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1, SETWISEO, SETWOP_2,
+      FINSEQ_2, FINSEQOP, MATRIX_1, FINSUB_1, MATRIX_2, NAT_1, SQUARE_1,
+      FVSUM_1, TREES_1, FUNCT_5, CAT_2;
  constructors ALGSTR_1, BINOP_1, SETWISEO, SETWOP_2, FINSEQOP, MATRIX_2, NAT_1,
       SQUARE_1, FVSUM_1, CAT_2, FINSOP_1, MEMBERED, PARTFUN1, RELAT_2,
       XBOOLE_0;
@@ -26,7 +26,7 @@ environ
       FUNCT_1, SETWISEO, VECTSP_1, ZFMISC_1, FVSUM_1, SETWOP_2, MATRIX_1,
       MATRIX_2, FUNCT_3, REAL_1, FINSEQOP, FUNCOP_1, FINSUB_1, FUNCT_5,
       FINSEQ_3, RLVECT_1, RELAT_1, FINSOP_1, RELSET_1, XBOOLE_0, XBOOLE_1,
-      XCMPLX_1;
+      XCMPLX_1, GROUP_1;
  schemes FUNCT_2, FINSEQ_2, MATRIX_1, FINSEQ_1, FUNCT_3, SETWISEO, FUNCT_1;
 
 begin
@@ -39,7 +39,7 @@ begin
 ::  Auxiliary theorems
 
 canceled;
- Th1:
+ Lm1:
  n = n + k implies k=0 by XCMPLX_1:3;
 
 definition let K,n,m;
@@ -305,8 +305,8 @@ A4:    now per cases by NAT_1:19;
        hence len (0.(K,n,m))=len (A+ -A) & width (0.(K,n,m))=width (A+ -A);
           Seg n = dom A & dom A = dom -A & dom A = dom(A + (-A))
         by A1,A2,A6,FINSEQ_1:def 3,FINSEQ_3:31;
-       hence Indices A= Indices (-A) & Indices A= Indices (A + (-A)) by A1,A2,
-A6,MATRIX_1:def 5;
+       hence Indices A= Indices (-A) & Indices A= Indices (A + (-A)) by A1,A2
+,A6,MATRIX_1:def 5;
      end;
      case n=0;
        then A7:len A=0 & width A=0 & Indices A= {} & len (0.(K,n,m))=0 &
@@ -452,7 +452,7 @@ proof
 end;
 
 theorem
-    for i,l st [i,l] in Indices (1.(K,n)) & l=i holds (Line(1.(K,n),i)).l=1_ K
+    for i,l st [i,l] in Indices (1.(K,n)) & l=i holds (Line(1.(K,n),i)).l=1.K
 proof
  let i,l;
  assume A1:[i,l] in Indices (1.(K,n)) & l=i;
@@ -460,7 +460,7 @@ proof
    by MATRIX_1:def 5;
  then i in dom (1.(K,n)) & l in Seg width (1.(K,n))by A1,ZFMISC_1:106;
  hence (Line(1.(K,n),i)).l=(1.(K,n))*(i,l) by MATRIX_1:def 8
-                   .= 1_ K by A1,MATRIX_1:def 12;
+                   .= 1.K by A1,MATRIX_1:def 12;
 end;
 
 theorem
@@ -478,7 +478,7 @@ end;
 
 theorem
     for l,j st [l,j] in Indices (1.(K,n))
-  & l=j holds (Col(1.(K,n),j)).l=1_ K
+  & l=j holds (Col(1.(K,n),j)).l=1.K
 proof
  let l,j;
  assume A1:[l,j] in Indices (1.(K,n)) & l=j;
@@ -486,7 +486,7 @@ proof
    by MATRIX_1:def 5;
  then l in dom (1.(K,n)) & j in Seg width (1.(K,n))by A1,ZFMISC_1:106;
  hence (Col(1.(K,n),j)).l=(1.(K,n))*(l,j) by MATRIX_1:def 9
-                   .= 1_ K by A1,MATRIX_1:def 12;
+                   .= 1.K by A1,MATRIX_1:def 12;
 end;
 
 theorem
@@ -502,7 +502,7 @@ proof
                    .= 0.K by A1,MATRIX_1:def 12;
 end;
 
-Lm1:
+Lm2:
 for L be add-associative right_zeroed right_complementable
  (non empty LoopStr)
 for p be FinSequence of the carrier of L st
@@ -562,7 +562,7 @@ proof
     then i in Seg n by FINSEQ_2:68;
     hence thesis by FINSEQ_2:70;
   end;
-  hence thesis by Lm1;
+  hence thesis by Lm2;
 end;
 
 theorem Th14:
@@ -605,7 +605,7 @@ theorem Th14:
       then A10:k in dom p2 by FINSEQ_1:def 3;
       A11:1<=i & i <=len p1 by A5,FINSEQ_3:27;
          0<>k by A10,FINSEQ_3:27;
-      then A12:len p1<>len p1 + k by Th1;
+      then A12:len p1<>len p1 + k by Lm1;
          len p1 <= len p1 + k by NAT_1:37;
       then A13:i<>len p1 + k by A11,A12,REAL_1:def 5;
       A14: (len p1+ k) in dom p by A4,A10,FINSEQ_1:41;
@@ -666,14 +666,14 @@ Th15:for p,q being FinSequence of the carrier of K
 
 theorem Th16:
  for p,q being FinSequence of the carrier of K
-  for i st i in dom p & p.i=1_ K &
+  for i st i in dom p & p.i=1.K &
   for k st k in dom p & k<>i holds p.k=0.K
   for j st j in dom (mlt(p,q)) holds
    (i=j implies mlt(p,q).j=(q.i)) & (i<>j implies mlt(p,q).j=0.K)
   proof
    let p,q be FinSequence of the carrier of K;
    let i;
-   assume that A1:i in dom p & p.i=1_ K and
+   assume that A1:i in dom p & p.i=1.K and
     A2:for k st k in dom p & k<>i holds p.k=0.K;
    let j;
      assume A3:j in dom (mlt(p,q));
@@ -686,7 +686,7 @@ theorem Th16:
       proof
        assume A6:i=j;
        reconsider b=q.j as Element of K by A5,FINSEQ_2:13;
-       thus mlt(p,q).j=b*(1_ K) by A1,A3,A6,FVSUM_1:73
+       thus mlt(p,q).j=b*(1.K) by A1,A3,A6,FVSUM_1:73
                      .=q.i by A6,VECTSP_1:def 19;
      end;
    thus (i<>j implies mlt(p,q).j=0.K)
@@ -701,7 +701,7 @@ theorem Th16:
 
 theorem Th17:
  for i,j st [i,j] in Indices (1.(K,n)) holds
-  (i=j implies (Line((1.(K,n)),i)).j=1_ K) &
+  (i=j implies (Line((1.(K,n)),i)).j=1.K) &
   (i<>j implies (Line((1.(K,n)),i)).j=0.K)
  proof
    let i,j;
@@ -710,13 +710,13 @@ theorem Th17:
       Indices B=[:dom B,Seg width B:] by MATRIX_1:def 5;
    then i in dom B & j in Seg width B by A1,ZFMISC_1:106;
    then A2:(Line(B,i)).j = B*(i,j) by MATRIX_1:def 8;
-   hence i=j implies (Line((1.(K,n)),i)).j=1_ K by A1,MATRIX_1:def 12;
+   hence i=j implies (Line((1.(K,n)),i)).j=1.K by A1,MATRIX_1:def 12;
    thus thesis by A1,A2,MATRIX_1:def 12;
   end;
 
 theorem Th18:
 for i,j st [i,j] in Indices (1.(K,n)) holds
-  (i=j implies (Col((1.(K,n)),j)).i=1_ K) &
+  (i=j implies (Col((1.(K,n)),j)).i=1.K) &
   (i<>j implies (Col((1.(K,n)),j)).i=0.K)
  proof
    let i,j;
@@ -725,19 +725,19 @@ for i,j st [i,j] in Indices (1.(K,n)) holds
       Indices B=[:dom B,Seg width B:] by MATRIX_1:def 5;
    then i in dom B & j in Seg width B by A1,ZFMISC_1:106;
    then A2:(Col(B,j)).i = B*(i,j) by MATRIX_1:def 9;
-   hence i=j implies (Col((1.(K,n)),j)).i=1_ K by A1,MATRIX_1:def 12;
+   hence i=j implies (Col((1.(K,n)),j)).i=1.K by A1,MATRIX_1:def 12;
    thus thesis by A1,A2,MATRIX_1:def 12;
   end;
 
 theorem Th19:
  for p,q being FinSequence of the carrier of K
-  for i st i in dom p & i in dom q & p.i=1_ K &
+  for i st i in dom p & i in dom q & p.i=1.K &
   for k st k in dom p & k<>i holds p.k=0.K
     holds Sum(mlt(p,q))=q.i
     proof
      let p,q be FinSequence of the carrier of K;
      let i;
-     assume that A1:i in dom p & i in dom q & p.i=1_ K and
+     assume that A1:i in dom p & i in dom q & p.i=1.K and
       A2:for k st k in dom p & k<>i holds p.k=0.K;
     reconsider r=mlt(p,q) as FinSequence of the carrier of K;
      A3:i in dom r & r.i=q.i
@@ -774,10 +774,10 @@ A4: dom A = Seg len A & dom B = Seg len B &
    then A7:i in dom (Line(B,i)) by FINSEQ_1:def 3;
       i in Seg len (Col(A,j)) by A1,A5,MATRIX_1:def 9;
    then A8:i in dom (Col(A,j)) by FINSEQ_1:def 3;
-  A9: (Line(B,i)).i=1_ K &
+  A9: (Line(B,i)).i=1.K &
    for k st k in dom (Line (B,i)) & k<>i holds (Line(B,i)).k=0.K
      proof
-      thus (Line(B,i)).i=1_ K by A6,Th17;
+      thus (Line(B,i)).i=1.K by A6,Th17;
          now let k;
        assume A10:k in dom (Line (B,i)) & k<>i;
        then k in Seg len (Line (B,i)) by FINSEQ_1:def 3;
@@ -813,10 +813,10 @@ theorem
       j in Seg len (Col(B,j)) & j in Seg len (Line(A,i))
      by A1,A4,MATRIX_1:def 8,def 9;
    then A6:j in dom (Col(B,j)) & j in dom (Line(A,i)) by FINSEQ_1:def 3;
-  A7: (Col(B,j)).j=1_ K &
+  A7: (Col(B,j)).j=1.K &
    for k st k in dom (Col(B,j)) & k<>j holds (Col(B,j)).k=0.K
      proof
-      thus (Col(B,j)).j=1_ K by A5,Th18;
+      thus (Col(B,j)).j=1.K by A5,Th18;
          now let k;
        assume A8:k in dom (Col(B,j)) & k<>j;
        then k in Seg len (Col(B,j)) by FINSEQ_1:def 3;
@@ -1819,10 +1819,10 @@ A39:     l in dom(a*p) by A30,A31,A35,A37,FINSEQ_3:31;
                 .= f.[k,l'] by A27,A28,FUNCT_5:38
                 .=(A* (i,l'))*(B* (l',k))*(C* (k,j)) by A18
                 .=(the mult of K).( (A* (i,l'))*(B* (l',k)),(C* (k,j)))
-                 by VECTSP_1:def 10
+                 by GROUP_1:def 1
                 .=(the mult of K).
                 ((the mult of K).((A*(i,l')),(B*(l',k))),(C*(k,j)))
-                 by VECTSP_1:def 10
+                 by GROUP_1:def 1
                 .=(the mult of K).
                 ((the mult of K).((Line(A,i).l'),(B*(l',k))),(C*(k,j)))
                  by A1,A2,A37,MATRIX_1:def 8
@@ -1834,7 +1834,7 @@ A39:     l in dom(a*p) by A30,A31,A35,A37,FINSEQ_3:31;
                  by A38,FUNCOP_1:28
                 .=(the mult of K). ( (mlt(Line(A,i),Col(B,k))).l',(C*(k,j)))
                  by FVSUM_1:def 7
-                .=a*b by VECTSP_1:def 10
+                .=a*b by GROUP_1:def 1
                 .=(C*(k,j) * mlt(Line(A,i),Col(B,k))).l
                   by A39,FVSUM_1:62;
         end;
@@ -1858,8 +1858,8 @@ A39:     l in dom(a*p) by A30,A31,A35,A37,FINSEQ_3:31;
        now let k' be set;
      assume A44:k' in dom C;
      then reconsider k=k' as Nat by SETWISEO:14;
-     A45:k in dom ((the mult of K).:(Line(A*B,i),Col(C,j))) by A16,A44,FINSEQ_3
-:31;
+     A45:k in dom ((the mult of K).:(Line(A*B,i),Col(C,j))) by A16,A44,
+FINSEQ_3:31;
         len (Line(A,i))= len B by A1,MATRIX_1:def 8
                    .= len (Col(B,k)) by MATRIX_1:def 9;
                   then A46: len ((the mult of K).:(Line(A,i),Col(B,k)))
@@ -1875,8 +1875,8 @@ A47:     len B = len p by A46,FVSUM_1:def 7;
            hence thesis by FINSEQ_1:def 4;
          end;
          then dom (a*p)=dom p by A48,RELAT_1:46;
-        then A49: dom (C*(k,j)*mlt(Line(A,i),Col(B,k)))=dom B by A47,FINSEQ_3:
-31;
+        then A49: dom (C*(k,j)*mlt(Line(A,i),Col(B,k)))=dom B by A47,
+FINSEQ_3:31;
 
     then [#](C*(k,j)*mlt(Line(A,i),Col(B,k)),0.K)| dom B
                  =C*(k,j)*mlt(Line(A,i),Col(B,k)) by SETWOP_2:23;
@@ -1896,7 +1896,7 @@ A53:   k in Seg width (A*B) by A4,A44,FINSEQ_1:def 3;
         .= C*(k,j)*(Sum(mlt(Line(A,i),Col(B,k)))) by FVSUM_1:92
         .= C*(k,j) *( Line(A,i) "*" Col(B,k)) by FVSUM_1:def 10
         .=((A*B)*(i,k))*(C*(k,j)) by A1,A52,Def4
-        .=(the mult of K).((A*B)*(i,k),C*(k,j)) by VECTSP_1:def 10
+        .=(the mult of K).((A*B)*(i,k),C*(k,j)) by GROUP_1:def 1
         .= (the mult of K).(Line(A*B,i).k,C*(k,j)) by A53,MATRIX_1:def 8
         .= (the mult of K).(Line(A*B,i).k,Col(C,j).k) by A44,MATRIX_1:def 9
         .= ((the mult of K).:(Line(A*B,i),Col(C,j))).k by A45,FUNCOP_1:28
@@ -1959,8 +1959,8 @@ A67:    dom(((curry' f).k)|dom C)=NAT /\ dom C by A66,RELAT_1:90
           hence thesis by FINSEQ_1:def 4;
          end;
       then A69:dom (a*p)=dom p by A68,RELAT_1:46;
-then A70:      dom (A*(i,k)*mlt(Line(B,k),Col(C,j)))=dom C by A64,A65,FINSEQ_3:
-31;
+then A70:      dom (A*(i,k)*mlt(Line(B,k),Col(C,j)))=dom C by A64,A65,
+FINSEQ_3:31;
 
       then A71:[#](A*(i,k)*mlt(Line(B,k),Col(C,j)),0.K)| dom C
          =A*(i,k)*mlt(Line(B,k),Col(C,j)) by SETWOP_2:23;
@@ -1981,12 +1981,12 @@ A76:          l in dom(a*p) by A64,A65,A69,A73,FINSEQ_3:31;
                   by A73,FUNCT_1:72
                 .= f.[l',k] by A66
                 .=(A* (i,k))*(B* (k,l'))*(C* (l',j)) by A18
-                .=(A* (i,k))*((B* (k,l'))*(C* (l',j))) by VECTSP_1:def 16
+                .=(A* (i,k))*((B* (k,l'))*(C* (l',j))) by GROUP_1:def 4
                 .=(the mult of K).( (A* (i,k)),(B* (k,l'))*(C* (l',j)))
-                 by VECTSP_1:def 10
+                 by GROUP_1:def 1
                 .=(the mult of K).(A*(i,k),
                    (the mult of K).((B*(k,l')),(C*
-(l',j)))) by VECTSP_1:def 10
+(l',j)))) by GROUP_1:def 1
                 .=(the mult of K).
                    (A*(i,k), (the mult of K).(( Line(B,k) ).l', ( C*(l',j))))
                    by A74,MATRIX_1:def 8
@@ -1998,7 +1998,7 @@ A76:          l in dom(a*p) by A64,A65,A69,A73,FINSEQ_3:31;
                    by A75,FUNCOP_1:28
                 .=(the mult of K).(A*(i,k), (mlt(Line(B,k),Col(C,j))).l')
                    by FVSUM_1:def 7
-                .=a*b by VECTSP_1:def 10
+                .=a*b by GROUP_1:def 1
                 .=(A*(i,k)*mlt(Line(B,k),Col(C,j))).l
                   by A76,FVSUM_1:62;
         end;
@@ -2018,7 +2018,7 @@ A80:  k in dom(B*C) by A1,A5,A61,FINSEQ_3:31;
         .= A*(i,k)*(Sum(mlt(Line(B,k),Col(C,j)))) by FVSUM_1:92
         .= A*(i,k) *( Line(B,k) "*" Col(C,j)) by FVSUM_1:def 10
         .= A*(i,k)*((B*C)*(k,j)) by A1,A78,Def4
-        .=(the mult of K).(A*(i,k),(B*C)*(k,j)) by VECTSP_1:def 10
+        .=(the mult of K).(A*(i,k),(B*C)*(k,j)) by GROUP_1:def 1
         .= (the mult of K).(Line(A,i).k,(B*C)*(k,j)) by A79,MATRIX_1:def 8
         .= (the mult of K).(Line(A,i).k,Col(B*C,j).k)
          by A80,MATRIX_1:def 9

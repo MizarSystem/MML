@@ -7,17 +7,18 @@
 environ
 
  vocabulary BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
-      RLVECT_1, ARYTM_1, LATTICES, FUNCSDOM;
+      RLVECT_1, ARYTM_1, LATTICES, FUNCSDOM, GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, RLVECT_1,
-      REAL_1, VECTSP_1, FRAENKEL;
+      REAL_1, GROUP_1, VECTSP_1, FRAENKEL;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, REAL_1, VECTSP_1, FRAENKEL,
       MEMBERED, XBOOLE_0, BINOP_2;
  clusters SUBSET_1, RLVECT_1, VECTSP_1, FUNCOP_1, RELSET_1, MEMBERED, ZFMISC_1,
       XBOOLE_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, STRUCT_0;
- theorems FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI, BINOP_2;
+ definitions RLVECT_1, STRUCT_0, GROUP_1;
+ theorems FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI, BINOP_2,
+      GROUP_1;
  schemes BINOP_1, FUNCT_2;
 
 begin
@@ -791,7 +792,50 @@ registration
   end;
 end;
 
-canceled 4;
+canceled 3;
+
+Lm20: now let A;
+  set FR = RRing(A);
+  let h, a be Element of FR;
+  assume
+A1: a = RealFuncUnit(A);
+ A2: FR=doubleLoopStr(#Funcs(A,REAL),RealFuncAdd(A),RealFuncMult(A),
+                       (RealFuncUnit(A)),(RealFuncZero(A))#) by Def12;
+  then reconsider g = h as Element of Funcs(A,REAL);
+  thus h * a = (RealFuncMult(A)).(h,a) by A2,GROUP_1:def 1
+  .= (RealFuncMult(A)).(h,RealFuncUnit(A)) by A1
+  .= (RealFuncMult(A)).(RealFuncUnit(A),g) by Th18
+  .= g by Th20
+  .= h;
+  thus a * h = (RealFuncMult(A)).(a,h) by A2,GROUP_1:def 1
+  .= (RealFuncMult(A)).(RealFuncUnit(A),h) by A1
+  .= g by Th20
+  .= h;
+end;
+
+registration
+  let A;
+ cluster RRing(A) -> unital;
+ coherence
+ proof
+   RRing(A)=doubleLoopStr(#Funcs(A,REAL),RealFuncAdd(A),RealFuncMult(A),
+                       (RealFuncUnit(A)),(RealFuncZero(A))#) by Def12;
+   then reconsider e = RealFuncUnit(A) as Element of RRing(A);
+   take e;
+   thus thesis by Lm20;
+ end;
+end;
+
+theorem Th41:
+  1.RRing(A) = RealFuncUnit(A)
+proof
+  set FR = RRing(A);
+  FR=doubleLoopStr(#Funcs(A,REAL),RealFuncAdd(A),RealFuncMult(A),
+                       (RealFuncUnit(A)),(RealFuncZero(A))#) by Def12;
+  then reconsider e = RealFuncUnit(A) as Element of FR;
+  for h being Element of FR holds h * e = h & e * h = h by Lm20;
+  hence thesis by GROUP_1:def 5;
+end;
 
 theorem Th42:
    for x,y,z being Element of RRing(A) holds
@@ -802,8 +846,8 @@ theorem Th42:
                                             x+t=(0.RRing(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_ RRing(A)) = x &
-         (1_ RRing(A))*x = x &
+         x*(1.RRing(A)) = x &
+         (1.RRing(A))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x
  proof let x,y,z be Element of RRing(A);
@@ -811,9 +855,9 @@ theorem Th42:
                        (RealFuncUnit(A)),(RealFuncZero(A))#) by Def12;
 A2:now let x,y be Element of RRing(A);
     reconsider f=x, g=y as Element of Funcs(A,REAL) by A1;
-    thus x*y = (RealFuncMult(A)).(f,g) by A1,VECTSP_1:def 10
+    thus x*y = (RealFuncMult(A)).(f,g) by A1,GROUP_1:def 1
             .= (RealFuncMult(A)).(g,f) by Th18
-            .= y*x by A1,VECTSP_1:def 10;
+            .= y*x by A1,GROUP_1:def 1;
   end;
   set IT = RRing(A);
   reconsider f=x, g=y, h=z as Element of Funcs(A,REAL) by A1;
@@ -841,25 +885,24 @@ A2:now let x,y be Element of RRing(A);
             .= 0.IT by A1,RLVECT_1:def 2;
    end;
   thus x*y = y*x by A2;
-  thus (x*y)*z = (RealFuncMult(A)).(x*y,h) by A1,VECTSP_1:def 10
+  thus (x*y)*z = (RealFuncMult(A)).(x*y,h) by A1,GROUP_1:def 1
               .= (RealFuncMult(A)).((RealFuncMult(A)).(f,g),h)
-                 by A1,VECTSP_1:def 10
+                 by A1,GROUP_1:def 1
               .= (RealFuncMult(A)).(f,(RealFuncMult(A)).(g,h)) by Th19
-              .= (RealFuncMult(A)).(f,y*z) by A1,VECTSP_1:def 10
-              .= x*(y*z) by A1,VECTSP_1:def 10;
-  thus x*(1_ RRing(A)) = (RealFuncMult(A)).(f,1_ IT) by A1,VECTSP_1:def 10
-                     .= (RealFuncMult(A)).(f,RealFuncUnit(A))
-                       by A1,VECTSP_1:def 9
+              .= (RealFuncMult(A)).(f,y*z) by A1,GROUP_1:def 1
+              .= x*(y*z) by A1,GROUP_1:def 1;
+  thus x*(1.RRing(A)) = (RealFuncMult(A)).(f,1.IT) by A1,GROUP_1:def 1
+                     .= (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th41
                      .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
                      .= x by Th20;
-  hence (1_ RRing(A))*x = x by A2;
-  thus x*(y+z) = (RealFuncMult(A)).(f,y+z) by A1,VECTSP_1:def 10
+  hence (1.RRing(A))*x = x by A2;
+  thus x*(y+z) = (RealFuncMult(A)).(f,y+z) by A1,GROUP_1:def 1
               .= (RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h)) by A1,RLVECT_1:5
               .= (RealFuncAdd(A)).
               ((RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h)) by Th26
               .= (RealFuncAdd(A)).(x*y,(RealFuncMult(A)).(f,h))
-                by A1,VECTSP_1:def 10
-              .= (RealFuncAdd(A)).(x*y,x*z) by A1,VECTSP_1:def 10
+                by A1,GROUP_1:def 1
+              .= (RealFuncAdd(A)).(x*y,x*z) by A1,GROUP_1:def 1
               .= x*y + x*z by A1,RLVECT_1:5;
   hence (y+z)*x = x*y + x*z by A2
               .= y*x + x*z by A2
@@ -880,13 +923,13 @@ registration
            x+t=(0.RRing(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_ RRing(A)) = x &
+         x*(1.RRing(A)) = x &
          x*(y+z) = x*y + x*z by Th42;
       then RRing(A) is
          Abelian add-associative right_zeroed right_complementable
            associative commutative right_unital right-distributive
-        by RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:def 11,def 13,def 16,def
-17;
+        by GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8
+,VECTSP_1:def 11;
      hence thesis;
     end;
 end;
@@ -907,12 +950,12 @@ theorem  RRing(A) is commutative Ring
                                             x+t=(0.RRing(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_ RRing(A)) = x &
-         (1_ RRing(A))*x = x &
+         x*(1.RRing(A)) = x &
+         (1.RRing(A))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x by Th42;
-   hence thesis by RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:def 13,def 16,def
-17,def 18,def 19;
+   hence thesis by GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8
+,VECTSP_1:def 18;
   end;
 
 definition
@@ -952,7 +995,49 @@ registration let A;
   end;
 end;
 
-canceled 5;
+Lm10: now
+  let A;
+  set F = RAlgebra(A);
+  let x, e be Element of F;
+  assume
+A1: e = RealFuncUnit(A);
+A2: RAlgebra A = AlgebraStr(#Funcs(A,REAL),RealFuncMult(A),RealFuncAdd(A),
+    RealFuncExtMult(A),(RealFuncUnit(A)),(RealFuncZero(A))#) by Def19;
+  then reconsider f = x as Element of Funcs(A,REAL);
+  thus x * e = (the mult of F).(x,e) by GROUP_1:def 1
+  .= (RealFuncMult(A)).(f,RealFuncUnit(A)) by A1,A2
+  .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
+  .= x by Th20;
+  thus e * x = (the mult of F).(e,x) by GROUP_1:def 1
+  .= (RealFuncMult(A)).(RealFuncUnit(A),f) by A1,A2
+  .= x by Th20;
+end;
+
+registration
+  let A;
+  cluster RAlgebra(A) -> unital;
+coherence
+proof
+  RAlgebra A = AlgebraStr(#Funcs(A,REAL),RealFuncMult(A),RealFuncAdd(A),
+    RealFuncExtMult(A),(RealFuncUnit(A)),(RealFuncZero(A))#) by Def19;
+  then reconsider e = RealFuncUnit(A) as Element of RAlgebra(A);
+  take e;
+  thus thesis by Lm10;
+end;
+end;
+
+theorem Th48:
+  1.RAlgebra(A) = RealFuncUnit(A)
+proof
+  set F = RAlgebra(A);
+  F = AlgebraStr(#Funcs(A,REAL),RealFuncMult(A),RealFuncAdd(A),
+    RealFuncExtMult(A),(RealFuncUnit(A)),(RealFuncZero(A))#) by Def19;
+  then reconsider e = RealFuncUnit(A) as Element of F;
+  for x being Element of F holds x*e=x & e*x=x by Lm10;
+  hence 1.F = RealFuncUnit(A) by GROUP_1:def 5;
+end;
+
+canceled 4;
 
 theorem Th49:
    for x,y,z being Element of RAlgebra(A)
@@ -964,7 +1049,7 @@ theorem Th49:
                                             x+t=(0.RAlgebra(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_ RAlgebra(A)) = x &
+         x*(1.RAlgebra(A)) = x &
          x*(y+z) = x*y + x*z &
          a*(x*y) = (a*x)*y &
          a*(x+y) = a*x + a*y &
@@ -1001,35 +1086,34 @@ theorem Th49:
             .= RealFuncZero(A) by Th22
             .= 0.IT by A1,RLVECT_1:def 2;
    end;
-  thus x*y = (RealFuncMult(A)).(f,g) by A1,VECTSP_1:def 10
+  thus x*y = (RealFuncMult(A)).(f,g) by A1,GROUP_1:def 1
           .= (RealFuncMult(A)).(g,f) by Th18
-          .= y*x by A1,VECTSP_1:def 10;
-  thus (x*y)*z = (RealFuncMult(A)).(x*y,h) by A1,VECTSP_1:def 10
+          .= y*x by A1,GROUP_1:def 1;
+  thus (x*y)*z = (RealFuncMult(A)).(x*y,h) by A1,GROUP_1:def 1
               .= (RealFuncMult(A)).((RealFuncMult(A)).(f,g),h)
-               by A1,VECTSP_1:def 10
+               by A1,GROUP_1:def 1
               .= (RealFuncMult(A)).(f,(RealFuncMult(A)).(g,h)) by Th19
-              .= (RealFuncMult(A)).(f,y*z) by A1,VECTSP_1:def 10
-              .= x*(y*z) by A1,VECTSP_1:def 10;
-  thus x*(1_ RAlgebra(A)) = (RealFuncMult(A)).(f,1_ IT) by A1,VECTSP_1:def 10
-                     .= (RealFuncMult(A)).(f,RealFuncUnit(A))
-                       by A1,VECTSP_1:def 9
+              .= (RealFuncMult(A)).(f,y*z) by A1,GROUP_1:def 1
+              .= x*(y*z) by A1,GROUP_1:def 1;
+  thus x*(1.RAlgebra(A)) = (RealFuncMult(A)).(f,1.IT) by A1,GROUP_1:def 1
+                     .= (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th48
                      .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
                      .= x by Th20;
-  thus x*(y+z) = (RealFuncMult(A)).(f,y+z) by A1,VECTSP_1:def 10
+  thus x*(y+z) = (RealFuncMult(A)).(f,y+z) by A1,GROUP_1:def 1
               .= (RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h))
                by A1,RLVECT_1:5
               .= (RealFuncAdd(A)).
                  ((RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h)) by Th26
               .= (RealFuncAdd(A)).(x*y,(RealFuncMult(A)).(f,h))
-                   by A1,VECTSP_1:def 10
-              .= (RealFuncAdd(A)).(x*y,x*z) by A1,VECTSP_1:def 10
+                   by A1,GROUP_1:def 1
+              .= (RealFuncAdd(A)).(x*y,x*z) by A1,GROUP_1:def 1
               .= x*y + x*z by A1,RLVECT_1:5;
    thus a*(x*y) = (RealFuncExtMult(A)).[a,x*y] by A1,RLVECT_1:def 4
                .= (RealFuncExtMult(A)).[a,(RealFuncMult(A)).(f,g)]
-                by A1,VECTSP_1:def 10
+                by A1,GROUP_1:def 1
                .= (RealFuncMult(A)).((RealFuncExtMult(A)).[a,f],g) by Th27
                .= (RealFuncMult(A)).(a*x,g) by A1,RLVECT_1:def 4
-               .= (a*x)*y by A1,VECTSP_1:def 10;
+               .= (a*x)*y by A1,GROUP_1:def 1;
    thus a*(x+y) = (RealFuncExtMult(A)).[a,x+y] by A1,RLVECT_1:def 4
                .= (RealFuncExtMult(A)).[a,(RealFuncAdd(A)).(f,g)]
                 by A1,RLVECT_1:5
@@ -1059,7 +1143,7 @@ theorem Th49:
   attr IT is Algebra-like means
    :Def20: for x,y,z being Element of IT
            for a,b holds
-         x*(1_ IT) = x &
+         x*(1.IT) = x &
          x*(y+z) = x*y + x*z &
          a*(x*y) = (a*x)*y &
          a*(x+y) = a*x + a*y &
@@ -1081,7 +1165,7 @@ registration
           x+t=(0.RAlgebra(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_ RAlgebra(A)) = x &
+         x*(1.RAlgebra(A)) = x &
          x*(y+z) = x*y + x*z &
          a*(x*y) = (a*x)*y &
          a*(x+y) = a*x + a*y &
@@ -1090,7 +1174,7 @@ registration
      then RAlgebra(A) is Abelian add-associative right_zeroed
 right_complementable
         Algebra-like commutative associative
-      by Def20,RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:def 16,def 17;
+      by Def20,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8;
     hence thesis;
    end;
 end;
@@ -1101,7 +1185,7 @@ definition
 end;
 
 theorem
-     RAlgebra(A) is Algebra
+  RAlgebra(A) is Algebra
  proof
      for x,y,z being Element of RAlgebra(A)
    for a,b holds
@@ -1112,12 +1196,12 @@ theorem
                                           x+t=(0.RAlgebra(A))) &
        x*y = y*x &
        (x*y)*z = x*(y*z) &
-       x*(1_ RAlgebra(A)) = x &
+       x*(1.RAlgebra(A)) = x &
        x*(y+z) = x*y + x*z &
        a*(x*y) = (a*x)*y &
        a*(x+y) = a*x + a*y &
        (a+b)*x = a*x + b*x &
        (a*b)*x = a*(b*x) by Th49;
    hence thesis
-    by Def20,RLVECT_1:def 5,def 6,def 7,def 8,VECTSP_1:def 16,def 17;
+    by Def20,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8;
  end;

@@ -8,18 +8,19 @@ environ
 
  vocabulary FUNCSDOM, VECTSP_1, CLASSES2, GRCAT_1, RLVECT_1, BOOLE, MIDSP_1,
       VECTSP_2, FUNCT_3, FUNCT_1, PRE_TOPC, INCSP_1, ORDINAL4, CAT_1, RELAT_1,
-      ARYTM_3, ORDINAL1, ARYTM_1, BINOP_1, LATTICES, FUNCT_2, MOD_2, ALGSTR_1;
+      ARYTM_3, ORDINAL1, ARYTM_1, BINOP_1, LATTICES, FUNCT_2, MOD_2, ALGSTR_1,
+      GROUP_1;
  notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, BINOP_1, FUNCT_2,
-      STRUCT_0, ORDINAL1, RLVECT_1, VECTSP_1, FUNCSDOM, VECTSP_2, CLASSES2,
-      PRE_TOPC, ALGSTR_1, MIDSP_1, GRCAT_1, FUNCT_3;
+      STRUCT_0, ORDINAL1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, VECTSP_2,
+      CLASSES2, PRE_TOPC, ALGSTR_1, MIDSP_1, GRCAT_1, FUNCT_3;
  constructors ENUMSET1, BINOP_1, VECTSP_2, GRCAT_1, TOPS_2, ALGSTR_1, MIDSP_1,
       MEMBERED, PARTFUN1, XBOOLE_0;
  clusters VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, ALGSTR_1, MEMBERED, ZFMISC_1,
       XBOOLE_0;
  requirements SUBSET, BOOLE;
- definitions RLVECT_1, STRUCT_0;
+ definitions RLVECT_1, STRUCT_0, GROUP_1;
  theorems BINOP_1, CARD_2, CLASSES2, ENUMSET1, GRCAT_1, FUNCT_2, ORDINAL1,
-      ORDINAL2, VECTSP_1, RLVECT_1, TARSKI, RELAT_1, ALGSTR_1;
+      ORDINAL2, VECTSP_1, RLVECT_1, TARSKI, RELAT_1, ALGSTR_1, GROUP_1;
  schemes FUNCT_2, BINOP_1;
 
 begin
@@ -47,8 +48,8 @@ Lm2: VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#)
       thus a + b = (the add of G).(a,b) by RLVECT_1:5
                 .= x + y by A2,ALGSTR_1:def 4,RLVECT_1:5;
      end;
-A3: 0.G = the Zero of G by RLVECT_1:def 2 .= 0.L_Trivial by Lm1,ALGSTR_1:def 4,
-RLVECT_1:def 2;
+A3: 0.G = the Zero of G by RLVECT_1:def 2 .= 0.L_Trivial by Lm1,ALGSTR_1:def 4
+,RLVECT_1:def 2;
 A4:  G is Abelian add-associative right_zeroed right_complementable
       proof
        thus G is Abelian
@@ -86,9 +87,9 @@ A6:     x + b = 0.L_Trivial by RLVECT_1:def 8;
         x*(v+w) = a & x*v+x*w = a &
      (x+y)*v = a & x*v+y*v = a &
      (x*y)*v = a & x*(y*v) = a &
-     (1_ R)*v = a & v = a by ALGSTR_1:def 4,GRCAT_1:8;
+     (1.R)*v = a & v = a by ALGSTR_1:def 4,GRCAT_1:8;
      hence x*(v+w) = x*v+x*w & (x+y)*v = x*v+y*v
-           & (x*y)*v = x*(y*v) & (1_ R)*v = v;end;
+           & (x*y)*v = x*(y*v) & (1.R)*v = v;end;
   hence thesis by A4,VECTSP_1:def 26;
 end;
 
@@ -106,8 +107,8 @@ theorem
    let x be Vector of TrivialLMod(R);
    A1: TrivialLMod(R) = VectSpStr (#{{}},op2,op0,
      pr2(the carrier of R,{{}})#) by Def2;
-   then 0.L_Trivial = the Zero of TrivialLMod(R) by Lm1,ALGSTR_1:def 4,
-RLVECT_1:def 2
+   then 0.L_Trivial = the Zero of TrivialLMod(R) by Lm1,ALGSTR_1:def 4
+,RLVECT_1:def 2
         .= 0.TrivialLMod(R) by RLVECT_1:def 2;
    hence thesis by A1,ALGSTR_1:def 4,GRCAT_1:8;
  end;
@@ -805,14 +806,45 @@ end;
 
 canceled;
 
+Lm17: now
+  let h, e be Element of Z3;
+  assume
+A1: e = 1;
+  reconsider a=e, b=h as Element of {0,1,2} by Def23;
+  thus h * e = mult3.(h,e) by Def23,GROUP_1:def 1
+  .= b*a by Def19
+  .= h by A1,Def17;
+  thus e * h = mult3.(e,h) by Def23,GROUP_1:def 1
+  .= a*b by Def19
+  .= h by A1,Def17;
+end;
+
+registration
+  cluster Z3 -> unital;
+coherence
+proof
+  reconsider e = 1 as Element of Z3 by Def23,ENUMSET1:14;
+  take e;
+  thus thesis by Lm17;
+end;
+end;
+
+Lm16:
+1.Z3 = 1
+proof
+  reconsider e = 1 as Element of Z3 by Def23,ENUMSET1:14;
+  for h being Element of Z3 holds h * e = h & e * h = h by Lm17;
+  hence thesis by GROUP_1:def 5;
+end;
+
 theorem
 Th32: 0.Z3 = 0
-  & 1_ Z3 = 1
+  & 1.Z3 = 1
   & 0.Z3 is Element of {0,1,2}
-  & 1_ Z3 is Element of {0,1,2}
+  & 1.Z3 is Element of {0,1,2}
   & the add of Z3 = add3
   & the mult of Z3 = mult3
- by Def21,Def22,Def23,RLVECT_1:def 2,VECTSP_1:def 9;
+ by Def22,Def23,RLVECT_1:def 2,Lm16;
 
 Lm7:
   for x,y being Scalar of Z3, X,Y being Element of {0,1,2}
@@ -824,7 +856,7 @@ Lm7:
    A1: X=x & Y=y;
    hence x+y = add3.(X,Y) by Def23,RLVECT_1:5
            .= X+Y by Def18;
-   thus x*y = mult3.(X,Y) by A1,Def23,VECTSP_1:def 10
+   thus x*y = mult3.(X,Y) by A1,Def23,GROUP_1:def 1
            .= X*Y by Def19;
  end;
 
@@ -971,7 +1003,7 @@ Th33: for x,y being Scalar of Z3, X,Y being Element of {0,1,2}
    A1: X=x & Y=y;
    hence x+y = add3.(X,Y) by Def23,RLVECT_1:5
            .= X+Y by Def18;
-   thus x*y = mult3.(X,Y) by A1,Def23,VECTSP_1:def 10
+   thus x*y = mult3.(X,Y) by A1,Def23,GROUP_1:def 1
            .= X*Y by Def19;
    reconsider a = -X as Element of Z3 by Def23;
       x + a = add3.(X,-X) by A1,Def23,RLVECT_1:5
@@ -1168,9 +1200,9 @@ Th36: for F being non empty doubleLoopStr st for x,y,z being Scalar of F holds
             x+(-x) = (0.F) &
             x*y = y*x &
             (x*y)*z = x*(y*z) &
-            1_ F*x = x &
-            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_ F) &
-            0.F <> 1_ F &
+            1.F*x = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1.F) &
+            0.F <> 1.F &
             x*(y+z) = x*y+x*z holds F is Field
  proof
    let F be non empty doubleLoopStr such that
@@ -1178,17 +1210,17 @@ Th36: for F being non empty doubleLoopStr st for x,y,z being Scalar of F holds
             x+y = y+x & (x+y)+z = x+(y+z) &
             x+(0.F) = x & x+(-x) = (0.F) &
             x*y = y*x & (x*y)*z = x*(y*z) &
-            (1_ F)*x = x &
-            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_ F) &
-            0.F <> 1_ F & x*(y+z) = x*y+x*z;
+            (1.F)*x = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1.F) &
+            0.F <> 1.F & x*(y+z) = x*y+x*z;
 A2:now
      let x,y,z be Scalar of F;
      thus x+y = y+x & (x+y)+z = x+(y+z) &
             x+(0.F) = x & x+(-x) = (0.F) &
             x*y = y*x & (x*y)*z = x*(y*z) &
-            (1_ F)*x = x &
-            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_ F) &
-            0.F <> 1_ F & x*(y+z) = x*y+x*z by A1;
+            (1.F)*x = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1.F) &
+            0.F <> 1.F & x*(y+z) = x*y+x*z by A1;
      thus (y+z)*x = x*(y+z) by A1
                  .= x*y + x*z by A1
                  .= y*x + x*z by A1
@@ -1200,23 +1232,24 @@ A2:now
        take -v;
        thus v + -v = 0.F by A2;
      end;
-   hence F is Field by A2,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 16,def 17,
-def 18,def 19,def 20,def 21;
+   hence F is Field by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7
+,VECTSP_1:def 18,def 19,def 20,def 21;
  end;
 
 theorem
 Th37: Z3 is Fanoian Field
  proof
-   set F = doubleLoopStr (#{0,1,2},add3,mult3,unit3,zero3#);
-   reconsider a = 0.F, b = 1_ F as Element of {0,1,2};
+   set F = Z3;
+A1: F = doubleLoopStr (#{0,1,2},add3,mult3,unit3,zero3#) by Def23;
+   then reconsider a = 0.F, b = 1.F as Element of {0,1,2};
       now
      let x,y,z be Scalar of Z3;
      thus x+y = y+x & (x+y)+z = x+(y+z) &
             x+(0.Z3) = x & x+(-x) = (0.Z3) &
             x*y = y*x & (x*y)*z = x*(y*z) &
-            (1_ Z3)*x = x &
-            (x<>0.Z3 implies ex y be Scalar of Z3 st x*y = 1_ Z3) &
-            0.Z3 <> 1_ Z3 & x*(y+z) = x*y+x*z
+            (1.Z3)*x = x &
+            (x<>0.Z3 implies ex y be Scalar of Z3 st x*y = 1.Z3) &
+            0.Z3 <> 1.Z3 & x*(y+z) = x*y+x*z
        proof
          reconsider X=x, Y=y, Z=z as Element of {0,1,2} by Def23;
          thus x+y = X+Y by Th33
@@ -1225,8 +1258,8 @@ Th37: Z3 is Fanoian Field
          thus (x+y)+z = (X+Y)+Z by Th34
                      .= X+(Y+Z) by Lm4,Lm5,Th35
                      .= x+(y+z) by Th34;
-         thus x+(0.Z3) = X+a by Def23,Th33
-                      .= x by Def23,Th32,Th35;
+         thus x+(0.Z3) = X+a by Th33
+                      .= x by Th32,Th35;
             -x = -X by Th33;
          hence x+(-x) = X+(-X) by Th33
                      .= (0.Z3) by Th32,Th35;
@@ -1236,28 +1269,28 @@ Th37: Z3 is Fanoian Field
          thus (x*y)*z = (X*Y)*Z by Th34
                      .= X*(Y*Z) by Lm4,Lm5,Th35
                      .= x*(y*z) by Th34;
-         thus (1_ Z3)*x = b*X by Def23,Th33
-                      .= x by Def23,Th32,Th35;
-         thus x <> 0.Z3 implies ex y being Scalar of Z3 st x*y = 1_ Z3
+         thus (1.Z3)*x = b*X by Th33
+                      .= x by Th32,Th35;
+         thus x <> 0.Z3 implies ex y being Scalar of Z3 st x*y = 1.Z3
           proof
             assume x <> 0.Z3;
             then consider Y being Element of {0,1,2} such that
-            A1: X*Y = b by Def23,Th32,Th35;
+            A1: X*Y = b by Th32,Th35;
             reconsider y=Y as Scalar of Z3 by Def23;
             take y;
-            thus thesis by A1,Def23,Th33;
+            thus thesis by A1,Th33;
           end;
-         thus 0.Z3 <> 1_ Z3 by Th32;
+         thus 0.Z3 <> 1.Z3 by Th32;
          A2: y+z = Y+Z & x*y = X*Y & x*z = X*Z by Th33;
          hence x*(y+z) = X*(Y+Z) by Th33
                      .= X*Y + X*Z by Def21,Def22,Th35
                      .= x*y+x*z by A2,Th33;
        end;end;
-   then reconsider F as Field by Def23,Th36;
-      1_ F + 1_ F = add3.(b,b) by RLVECT_1:5
+   then reconsider F as Field by Th36;
+      1.F + 1.F = add3.(b,b) by A1,RLVECT_1:5
             .= b + b by Def18
-            .= 2 by Def16,Def23,Th32;
-   hence thesis by Def23,Th32,VECTSP_1:def 29;
+            .= 2 by Def16,Th32;
+   hence thesis by Th32,VECTSP_1:def 29;
  end;
 
 registration

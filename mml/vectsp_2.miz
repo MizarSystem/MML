@@ -7,14 +7,15 @@
 environ
 
  vocabulary VECTSP_1, RLVECT_1, LATTICES, ARYTM_1, FUNCSDOM, BINOP_1, RELAT_1,
-      ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2;
+      ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2, GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, STRUCT_0,
-      RLVECT_1, VECTSP_1, FUNCSDOM, MIDSP_1, FUNCT_3;
+      RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, MIDSP_1, FUNCT_3;
  constructors BINOP_1, VECTSP_1, MIDSP_1, FUNCT_3, MEMBERED, XBOOLE_0;
- clusters VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ clusters VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0,
+      GROUP_1;
  requirements SUBSET, BOOLE;
- definitions VECTSP_1, RLVECT_1, STRUCT_0;
- theorems VECTSP_1, FUNCT_2, TARSKI, RLVECT_1, STRUCT_0;
+ definitions VECTSP_1, RLVECT_1, STRUCT_0, GROUP_1;
+ theorems VECTSP_1, FUNCT_2, TARSKI, RLVECT_1, STRUCT_0, GROUP_1;
 
 begin :: 1. RING
 
@@ -26,34 +27,42 @@ definition
  canceled;
 
  attr IT is well-unital means
- :Def2: for x being Element of IT
-   holds x*(1_ IT) = x & (1_ IT)*x = x;
+ :Def2: for x being Element of IT holds x * 1_ IT = x & 1_ IT * x = x;
+end;
+
+Lm31:
+for L being non empty multLoopStr st L is well-unital 
+  holds L is unital
+proof
+  let L being non empty multLoopStr such that
+A1: L is well-unital;
+  take 1_ L;
+  thus for h being Element of L holds h * 1_ L = h & 1_ L * h = h by A1,Def2;
 end;
 
 registration
- cluster well-unital -> left_unital right_unital (non empty multLoopStr);
- coherence
-  proof let F be non empty multLoopStr;
+ cluster well-unital -> unital (non empty multLoopStr);
+coherence by Lm31;
+end;
+
+Lm30:
+for L being non empty multLoopStr st L is well-unital holds 1_(L) = 1.L
+ proof let L be non empty multLoopStr;
    assume
-A1:   F is well-unital;
-   hence for x being Element of F
-     holds (1_ F)*x = x by Def2;
-   thus for x being Element of F
-     holds x*(1_ F) = x by A1,Def2;
-  end;
- cluster left_unital right_unital -> well-unital (non empty multLoopStr);
- coherence
-  proof let F be non empty multLoopStr;
-   assume F is left_unital right_unital;
-   hence for x being Element of F
-     holds x*(1_ F) = x & (1_ F)*x = x by VECTSP_1:def 13,def 19;
-  end;
+A1: L is well-unital;
+   then
+A2: for h being Element of L holds h * 1_(L) = h & 1_(L) * h = h by Def2;
+   L is unital by A1,Lm31;
+   hence 1_(L) = 1.L by A2,GROUP_1:def 5;
+ end;
+
+registration
  cluster strict Abelian add-associative right_zeroed right_complementable
-    well-unital distributive (non empty doubleLoopStr);
+    unital distributive (non empty doubleLoopStr);
   existence
    proof
     consider F being strict Field;
-     F is well-unital distributive;
+    F is unital distributive;
     hence thesis;
    end;
 end;
@@ -64,7 +73,7 @@ theorem
                (x+y)+z = x+(y+z) &
                x+(0.FS) = x &
                x+(-x) = 0.FS &
-               x*(1_ FS) = x & (1_ FS)*x = x &
+               x*(1.FS) = x & (1.FS)*x = x &
                (x*y)*z = x*(y*z) &
                x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x)
     iff FS is Ring
@@ -74,7 +83,7 @@ theorem
                (x+y)+z = x+(y+z) &
                x+(0.FS) = x &
                x+(-x) = 0.FS &
-               x*(1_ FS) = x & (1_ FS)*x = x &
+               x*(1.FS) = x & (1.FS)*x = x &
                (x*y)*z = x*(y*z) &
                x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x)
     implies FS is Ring
@@ -84,7 +93,7 @@ theorem
                (x+y)+z = x+(y+z) &
                x+(0.FS) = x &
                x+(-x) = 0.FS &
-               x*(1_ FS) = x & (1_ FS)*x = x &
+               x*(1.FS) = x & (1.FS)*x = x &
                (x*y)*z = x*(y*z) &
                x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
          FS is right_complementable
@@ -93,14 +102,14 @@ theorem
         take -v;
         thus v + -v = 0.FS by A1;
       end;
-  hence thesis by A1,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 13,def 16,def 18,
-def 19;
+  hence thesis by A1,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 13
+,def 18,def 19;
  end;
  assume
 A2: FS is Ring;
  let x,y,z be Scalar of FS;
- thus thesis by A2,RLVECT_1:def 5,def 6,def 7,def 10,VECTSP_1:def 13,def 16,
-def 18,def 19;
+ thus thesis by A2,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7,def 10
+,VECTSP_1:def 13,def 18,def 19;
  end;
 
 :: 3. RING
@@ -157,10 +166,8 @@ registration
   existence
    proof
      consider F being strict Field;
-     reconsider F as comRing;
-        0.F <> 1_ F &
      for x,y being Scalar of F holds x*y = 0.F
-      implies x = 0.F or y = 0.F by VECTSP_1:44,def 21;
+      implies x = 0.F or y = 0.F by VECTSP_1:44;
      then F is domRing-like by Def5;
     hence thesis;
    end;
@@ -173,12 +180,10 @@ end;
 canceled 11;
 
 theorem
-    F is domRing
+  F is domRing
  proof
-  reconsider F as comRing;
-     0.F <> 1_ F &
-   (for x,y being Scalar of F holds x*y = 0.F
-   implies x = 0.F or y = 0.F) by VECTSP_1:44,def 21;
+   for x,y being Scalar of F holds x*y = 0.F
+   implies x = 0.F or y = 0.F by VECTSP_1:44;
   hence thesis by Def5;
  end;
 
@@ -213,7 +218,7 @@ canceled 2;
 theorem
     (for x being Scalar of R holds
       (x <> 0.R implies ex y be Scalar of R
-      st x*y = 1_ R) & 0.R <> 1_ R )
+      st x*y = 1.R) & 0.R <> 1.R)
       implies R is Skew-Field by VECTSP_1:def 20,def 21;
 
 :: 10. AXIOMS OF SKEW-FIELD
@@ -221,27 +226,29 @@ theorem
 canceled 3;
 
 registration
- cluster commutative left_unital -> well-unital (non empty multLoopStr);
+ cluster commutative left_unital -> unital (non empty multLoopStr);
  coherence
   proof let F be non empty multLoopStr;
    assume
 A1:  F is commutative left_unital;
+   take 1.F;
    let x be Scalar of F;
       for F be commutative (non empty HGrStr),
     x,y being Element of F holds x*y = y*x;
-    then x*(1_ F) = (1_ F)*x by A1;
-   hence x*(1_ F) = x & (1_ F)*x = x by A1,VECTSP_1:def 19;
+    then x*(1.F) = (1.F)*x by A1;
+   hence x*(1.F) = x & (1.F)*x = x by A1,VECTSP_1:def 19;
   end;
- cluster commutative right_unital -> well-unital (non empty multLoopStr);
+ cluster commutative right_unital -> unital (non empty multLoopStr);
  coherence
   proof let F be non empty multLoopStr;
    assume
 A2:  F is commutative right_unital;
-   let x be Scalar of F;
+  take 1.F;
+   let x be Element of F;
       for F be commutative (non empty HGrStr),
     x,y being Element of F holds x*y = y*x;
-    then x*(1_ F) = (1_ F)*x by A2;
-   hence x*(1_ F) = x & (1_ F)*x = x by A2,VECTSP_1:def 13;
+    then x*(1.F) = (1.F)*x by A2;
+   hence x*(1.F) = x & (1.F)*x = x by A2,VECTSP_1:def 13;
   end;
 end;
 
@@ -317,18 +324,18 @@ theorem Th39:
  for F being add-associative right_zeroed right_complementable
      distributive non degenerated (non empty doubleLoopStr)
  for x, y being Element of F holds
-   x*y = 1_ F implies x<>0.F & y<>0.F
+   x*y = 1.F implies x<>0.F & y<>0.F
 proof
 let F be add-associative right_zeroed right_complementable
      distributive non degenerated (non empty doubleLoopStr),
   x, y be Element of F;
-    now A1: x = 0.F implies x*y <> 1_ F
+    now A1: x = 0.F implies x*y <> 1.F
   proof
     assume x = 0.F;
     then x*y = 0.F by VECTSP_1:39;
     hence thesis by VECTSP_1:def 21;
   end;
-     y = 0.F implies x*y <> 1_ F
+     y = 0.F implies x*y <> 1.F
    proof
     assume y = 0.F;
     then x*y = 0.F by VECTSP_1:36;
@@ -342,63 +349,65 @@ end;
 theorem Th40:
  for SF being non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        well-unital distributive (non empty doubleLoopStr),
+        left_unital right_unital distributive (non empty doubleLoopStr),
      x being Element of SF holds
-  x<>0.SF implies ex y being Element of SF st y*x = 1_ SF
+  x<>0.SF implies ex y being Element of SF st y*x = 1.SF
  proof
   let SF be non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        well-unital distributive (non empty doubleLoopStr),
+        left_unital right_unital distributive (non empty doubleLoopStr),
      x be Element of SF;
   assume x<>0.SF;
   then consider y be Element of SF
-  such that A1: x*y = 1_ SF by VECTSP_1:def 20;
+  such that A1: x*y = 1.SF by VECTSP_1:def 20;
      y<>0.SF by A1,Th39;
   then consider z be Element of SF
-  such that A2: y*z = 1_ SF by VECTSP_1:def 20;
-A3:  z = (x*y)*z by A1,Def2 .= x*1_ SF by A2,VECTSP_1:def 16 .= x by Def2;
+  such that A2: y*z = 1.SF by VECTSP_1:def 20;
+A3:  z = (x*y)*z by A1,VECTSP_1:def 19
+.= x*1.SF by A2,GROUP_1:def 4 .= x by VECTSP_1:def 13;
   take y;
   thus thesis by A2,A3;
  end;
 
 theorem
-Th41: x*y = 1_ SF implies y*x = 1_ SF
+Th41: x*y = 1.SF implies y*x = 1.SF
  proof
-  assume A1: x*y = 1_ SF;
+  assume A1: x*y = 1.SF;
   then x<>0.SF by Th39;
-  then consider z such that A2: z*x = 1_ SF by Th40;
-     y = (z*x)*y by A2,Def2 .= z*1_ SF by A1,VECTSP_1:def 16 .= z by Def2;
+  then consider z such that A2: z*x = 1.SF by Th40;
+     y = (z*x)*y by A2,VECTSP_1:def 19
+     .= z*1.SF by A1,GROUP_1:def 4 .= z by VECTSP_1:def 13;
   hence thesis by A2;
  end;
 
 theorem Th42:
  for SF being non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        well-unital distributive (non empty doubleLoopStr),
+        unital distributive (non empty doubleLoopStr),
      x,y,z being Element of SF holds
         x * y = x * z & x<>0.SF implies y = z
  proof
   let SF be non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        well-unital distributive (non empty doubleLoopStr),
+        unital distributive (non empty doubleLoopStr),
      x,y,z be Element of SF;
   assume that A1: x * y = x * z and A2: x<>0.SF;
   consider u being Element of SF such that
-  A3: u * x = 1_ SF by A2,Th40;
-     y = (u*x)*y by A3,Def2 .= u*(x*z) by A1,VECTSP_1:def 16
-  .= 1_ SF*z by A3,VECTSP_1:def 16 .= z by Def2;
+  A3: u * x = 1.SF by A2,Th40;
+     y = (u*x)*y by A3,VECTSP_1:def 19 .= u*(x*z) by A1,GROUP_1:def 4
+  .= 1.SF*z by A3,GROUP_1:def 4 .= z by VECTSP_1:def 19;
   hence thesis;
  end;
 
 definition let SF be non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        well-unital distributive (non empty doubleLoopStr),
+        unital distributive (non empty doubleLoopStr),
                x be Element of SF;
   assume A1: x<>0.SF;
  canceled;
 
   func x" -> Scalar of SF
-    means :Def7:  x * it = 1_ SF;
+    means :Def7:  x * it = 1.SF;
   existence by A1,VECTSP_1:def 20;
   uniqueness by A1,Th42;
 end;
@@ -410,28 +419,28 @@ definition let SF,x,y;
 end;
 
 theorem Th43:
-   x<>0.SF implies x * x" =1_ SF & x" * x =1_ SF
+   x<>0.SF implies x * x" = 1.SF & x" * x = 1.SF
   proof
     assume x<>0.SF;
-    then x * x" = 1_ SF by Def7;
-       hence thesis by Th41;
-   end;
-
+    then x * x" = 1.SF by Def7;
+    hence thesis by Th41;
+  end;
+   
 canceled;
 
 theorem
-Th45: x*y = 1_ SF implies x = y" & y = x"
+Th45: x*y = 1.SF implies x = y" & y = x"
  proof
-     now A1: x*y = 1_ SF implies x = y"
+     now A1: x*y = 1.SF implies x = y"
    proof
-    assume A2: x*y = 1_ SF;
+    assume A2: x*y = 1.SF;
     then A3: y<>0.SF by Th39;
-       y*x = 1_ SF by A2,Th41;
+       y*x = 1.SF by A2,Th41;
     hence thesis by A3,Def7;
    end;
-     x*y = 1_ SF implies y = x"
+     x*y = 1.SF implies y = x"
    proof
-    assume A4: x*y = 1_ SF;
+    assume A4: x*y = 1.SF;
     then x<>0.SF by Th39;
     hence thesis by A4,Def7;
    end;
@@ -441,21 +450,21 @@ Th45: x*y = 1_ SF implies x = y" & y = x"
  end;
 
 theorem Th46:
- x<>0.SF & y<>0.SF implies x"*y"=(y*x)"
+  x<>0.SF & y<>0.SF implies x"*y"=(y*x)"
 proof
   assume A1: x<>0.SF;
   assume A2: y<>0.SF;
       x"*y"*(y*x)
-  =x"*(y"*(y*x)) by VECTSP_1:def 16
-  .=x"*(y"*y*x) by VECTSP_1:def 16
-  .=x"*(1_ SF*x) by A2,Th43
-  .=x"*x by Def2
-  .=1_ SF by A1,Th43;
+  =x"*(y"*(y*x)) by GROUP_1:def 4
+  .=x"*(y"*y*x) by GROUP_1:def 4
+  .=x"*(1.SF*x) by A2,Th43
+  .=x"*x by VECTSP_1:def 19
+  .=1.SF by A1,Th43;
   hence thesis by Th45;
 end;
 
 theorem
-    x*y = 0.SF implies x = 0.SF or y = 0.SF
+  x*y = 0.SF implies x = 0.SF or y = 0.SF
  proof
      now assume that A1: x*y = 0.SF and A2: x <> 0.SF;
      x*y = x*(0.SF) by A1,VECTSP_1:36;
@@ -470,7 +479,7 @@ theorem Th48:
     assume A1:x<>0.SF;
     assume x"=0.SF;
     then x*x"=0.SF by VECTSP_1:36;
-    then 1_ SF=0.SF by A1,Th43;
+    then 1.SF=0.SF by A1,Th43;
     hence contradiction by VECTSP_1:def 21;
   end;
 
@@ -479,28 +488,28 @@ theorem Th49:
   proof
      assume A1:
        x<>0.SF;
-A2:   x""=x""*1_ SF by Def2
+A2:   x""=x""*1.SF by VECTSP_1:def 13
      .=x"" * (x" * x) by A1,Th43
-     .=x""*x"*x by VECTSP_1:def 16;
+     .=x""*x"*x by GROUP_1:def 4;
          x"<>0.SF by A1,Th48;
-      then x""=1_ SF*x by A2,Th43;
-     hence thesis by Def2;
+      then x""=1.SF*x by A2,Th43;
+     hence thesis by VECTSP_1:def 19;
   end;
 
 theorem Th50:
- x<>0.SF implies ((1_ SF)/x=x" & (1_ SF)/x"=x)
+  x<>0.SF implies (1.SF)/x=x" & (1.SF)/x"=x
  proof
-       A1: for x holds (1_ SF)/x=x"
+       A1: for x holds (1.SF)/x=x"
           proof
              let x;
-                (1_ SF)/x= 1_ SF * x" by Def8
-             .=x" by Def2;
+             (1.SF)/x= 1.SF * x" by Def8
+             .=x" by VECTSP_1:def 19;
              hence thesis;
           end;
-        x<>0.SF implies (1_ SF)/x"=x
+        x<>0.SF implies (1.SF)/x"=x
       proof
         assume A2: x<>0.SF;
-             (1_ SF)/x"=x"" by A1
+             (1.SF)/x"=x"" by A1
           .=x by A2,Th49;
         hence thesis;
       end;
@@ -508,31 +517,21 @@ theorem Th50:
  end;
 
 theorem
-      x<>0.SF implies x*((1_ SF)/x)=1_ SF & ((1_ SF)/x)*x=1_ SF
+  x<>0.SF implies x*((1.SF)/x)=1.SF & ((1.SF)/x)*x=1.SF
 proof
-    A1:
-     x<>0.SF implies x*((1_ SF)/x)=1_ SF
-     proof
-        assume A2:x<>0.SF;
-        hence
-           x*((1_ SF)/x)=x*x" by Th50
-        .=1_ SF by A2,Th43;
-     end;
-      x<>0.SF implies ((1_ SF)/x)*x=1_ SF
-     proof
-        assume A3:x<>0.SF;
-        hence ((1_ SF)/x)*x=x"*x by Th50
-        .=1_ SF by A3,Th43;
-     end;
-   hence thesis by A1;
+  assume A2:x<>0.SF;
+  hence x*((1.SF)/x)=x*x" by Th50
+        .=1.SF by A2,Th43;
+  thus ((1.SF)/x)*x=x"*x by A2,Th50
+        .=1.SF by A2,Th43;
 end;
 
 theorem
-     x<>0.SF implies x/x = 1_ SF
+     x<>0.SF implies x/x = 1.SF
 proof
   assume A1: x<>0.SF;
   thus x/x=x*x" by Def8
-   .=1_ SF by A1,Th43;
+   .=1.SF by A1,Th43;
 end;
 
 theorem Th53:
@@ -541,49 +540,45 @@ proof
   assume A1: y<>0.SF;
   assume A2: z<>0.SF;
   thus x/y=x*y" by Def8
-    .=x*1_ SF*y" by Def2
+    .=x*1.SF*y" by VECTSP_1:def 13
     .=x*(z*z")*y" by A2,Th43
-    .=(x*z)*z"*y" by VECTSP_1:def 16
-    .=(x*z)*(z"*y") by VECTSP_1:def 16
+    .=(x*z)*z"*y" by GROUP_1:def 4
+    .=(x*z)*(z"*y") by GROUP_1:def 4
     .=(x*z)*(y*z)" by A1,A2,Th46
     .=(x*z)/(y*z) by Def8;
 end;
 
 theorem Th54:
-  y<>0.SF implies (-x/y=(-x)/y & x/(-y)=-x/y)
+  y<>0.SF implies -x/y=(-x)/y & x/(-y)=-x/y
 proof
  assume A1:y<>0.SF;
-A2: for x,y holds -x/y=(-x)/y
-  proof
-     let x,y;
-     thus
-         -x/y=-(x*y") by Def8
+ thus
+A2: -x/y=-(x*y") by Def8
       .=(-x)*y" by VECTSP_1:41
       .=(-x)/y by Def8;
-   end;
 A3:
-   -1_ SF<>0.SF
+   -1.SF<>0.SF
    proof
-        1_ SF<>0.SF by VECTSP_1:def 21;
+     1.SF<>0.SF by VECTSP_1:def 21;
      hence thesis by Th34;
    end;
-      x/(-y)=-x/y
+   x/(-y)=-x/y
    proof
-          x/(-y)=(x*(-1_ SF))/((-y)*(-1_ SF))
-        proof
-              -y<>0.SF by A1,Th34;
-          hence thesis by A3,Th53;
-        end;
-      then x/(-y)=(-x*1_ SF)/((-y)*(-1_ SF)) by VECTSP_1:40
-      .= (-x)/((-y)*(-1_ SF)) by Def2
-      .= (-x)/(-(-y)*1_ SF) by VECTSP_1:40
-      .= (-x)/((-(-y))*1_ SF) by VECTSP_1:41
-      .= (-x)/(y*1_ SF) by RLVECT_1:30
-      .= (-x)/y by Def2
+     x/(-y)=(x*(-1.SF))/((-y)*(-1.SF))
+     proof
+       -y<>0.SF by A1,Th34;
+       hence thesis by A3,Th53;
+     end;
+     then x/(-y)=(-x*1.SF)/((-y)*(-1.SF)) by VECTSP_1:40
+      .= (-x)/((-y)*(-1.SF)) by VECTSP_1:def 13
+      .= (-x)/(-(-y)*1.SF) by VECTSP_1:40
+      .= (-x)/((-(-y))*1.SF) by VECTSP_1:41
+      .= (-x)/(y*1.SF) by RLVECT_1:30
+      .= (-x)/y by VECTSP_1:def 13
       .= -x/y by A2;
      hence thesis;
     end;
-  hence thesis by A2;
+  hence thesis;
 end;
 
 theorem
@@ -620,19 +615,19 @@ proof
     .=x*(y*z")" by Def8
     .=x*(z""*y") by A1,A3,Th46
     .=x*(z*y") by A2,Th49
-    .=(x*z)*y" by VECTSP_1:def 16
+    .=(x*z)*y" by GROUP_1:def 4
     .=(x*z)/y by Def8;
 end;
 
 theorem
-     y<>0.SF implies x/y*y=x
+  y<>0.SF implies x/y*y=x
 proof
   assume A1:y<>0.SF;
   thus
        x/y*y=x*y"*y by Def8
-    .=x*(y"*y) by VECTSP_1:def 16
-    .=x*1_ SF by A1,Th43
-    .=x by Def2;
+    .=x*(y"*y) by GROUP_1:def 4
+    .=x*1.SF by A1,Th43
+    .=x by VECTSP_1:def 13;
 end;
 
 :: 13. LEFT-, RIGHT-, AND BI-MODULE STRUCTURE
@@ -712,7 +707,7 @@ definition let R be Abelian add-associative right_zeroed
   proof
    reconsider IT =
      LoopStr(# the carrier of R,the add of R,the Zero of R #)
-      as non empty LoopStr by STRUCT_0:def 1;
+      as non empty LoopStr;
       for x,y,z being Element of IT holds
             x+y = y+x &
             (x+y)+z = x+(y+z) &
@@ -779,8 +774,8 @@ A4:  y + z = y'+ z' by A1;
       thus (x+y)+z = (x'+ y') + z' by A1,A3 .= x'+ (y'+ z') by RLVECT_1:def 6
       .= x + (y + z) by A1,A4;
      end;
-A5:  0.(LEFTMODULE(R)) = the Zero of R by RLVECT_1:def 2 .= 0.R by RLVECT_1:def
-2;
+A5:  0.(LEFTMODULE(R)) = the Zero of R by RLVECT_1:def 2 .= 0.R by
+RLVECT_1:def 2;
      thus LEFTMODULE(R) is right_zeroed
      proof
       let x be Element of LEFTMODULE(R);
@@ -844,8 +839,8 @@ A4:  y + z = y'+ z' by A1;
       thus (x+y)+z = (x'+ y') + z' by A1,A3 .= x'+ (y'+ z') by RLVECT_1:def 6
       .= x + (y + z) by A1,A4;
      end;
-A5:  0.(RIGHTMODULE(R)) = the Zero of R by RLVECT_1:def 2 .= 0.R by RLVECT_1:
-def 2;
+A5:  0.(RIGHTMODULE(R)) = the Zero of R by RLVECT_1:def 2 .= 0.R by
+RLVECT_1:def 2;
      thus RIGHTMODULE(R) is right_zeroed
      proof let x be Element of RIGHTMODULE(R);
       reconsider x'= x as Scalar of R;
@@ -958,7 +953,7 @@ Th71: for x,y being Scalar of R
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_ R)*v = v
+               (1.R)*v = v
 proof
  set MLT = the mult of R;
  set LS = VectSpStr (# the carrier of R,the add of R,
@@ -969,7 +964,7 @@ proof
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_ R)*v = v
+               (1.R)*v = v
  proof
   let x,y be Scalar of R;
   let v,w be Vector of LS;
@@ -979,33 +974,33 @@ proof
   thus x*(v+w) = (the lmult of LS).(x,(v+w)) by VECTSP_1:def 24
    .= MLT.(x,(the add of R).(v',w')) by RLVECT_1:5
    .= MLT.(x,v'+w') by RLVECT_1:5
-   .= x*(v'+w') by VECTSP_1:def 10
+   .= x*(v'+w') by GROUP_1:def 1
    .= x*v'+x*w' by VECTSP_1:def 18
    .= (the add of R).(x*v',x*w') by RLVECT_1:5
-   .= (the add of R).(MLT.(x,v'),x*w') by VECTSP_1:def 10
+   .= (the add of R).(MLT.(x,v'),x*w') by GROUP_1:def 1
    .= (the add of R).
-    ((the lmult of LS).(x,v),(the lmult of LS).(x,w)) by VECTSP_1:def 10
+    ((the lmult of LS).(x,v),(the lmult of LS).(x,w)) by GROUP_1:def 1
    .= (the add of R).(x*v,x*w) by A2,VECTSP_1:def 24
    .= x*v+x*w by RLVECT_1:5;
   thus (x+y)*v = (the lmult of LS).((x+y),v) by VECTSP_1:def 24
-   .= (x+y)*v' by VECTSP_1:def 10
+   .= (x+y)*v' by GROUP_1:def 1
    .= x*v'+y*v' by VECTSP_1:def 18
    .= (the add of R).(x*v',y*v') by RLVECT_1:5
-   .= (the add of R).(MLT.(x,v'),y*v') by VECTSP_1:def 10
+   .= (the add of R).(MLT.(x,v'),y*v') by GROUP_1:def 1
    .= (the add of R).
-    ((the lmult of LS).(x,v),(the lmult of LS).(y,v)) by VECTSP_1:def 10
+    ((the lmult of LS).(x,v),(the lmult of LS).(y,v)) by GROUP_1:def 1
    .= (the add of R).(x*v,y*v) by A3,VECTSP_1:def 24
    .= x*v+y*v by RLVECT_1:5;
   thus (x*y)*v = (the lmult of LS).((x*y),v) by VECTSP_1:def 24
-   .= (x*y)*v' by VECTSP_1:def 10
-   .= x*(y*v') by VECTSP_1:def 16
-   .= MLT.(x,y*v') by VECTSP_1:def 10
-   .= (the lmult of LS).(x,(the lmult of LS).(y,v)) by VECTSP_1:def 10
+   .= (x*y)*v' by GROUP_1:def 1
+   .= x*(y*v') by GROUP_1:def 4
+   .= MLT.(x,y*v') by GROUP_1:def 1
+   .= (the lmult of LS).(x,(the lmult of LS).(y,v)) by GROUP_1:def 1
    .= (the lmult of LS).(x,(y*v)) by VECTSP_1:def 24
    .= x*(y*v) by VECTSP_1:def 24;
-  thus (1_ R)*v = MLT.(1_ R,v') by VECTSP_1:def 24
-   .= (1_ R)*v' by VECTSP_1:def 10
-   .= v by Def2;
+  thus (1.R)*v = MLT.(1.R,v') by VECTSP_1:def 24
+   .= (1.R)*v' by GROUP_1:def 1
+   .= v by VECTSP_1:def 19;
   end;
  hence thesis by A1;
 end;
@@ -1021,7 +1016,7 @@ registration let R;
        x*(v+w) = x*v+x*w &
        (x+y)*v = x*v+y*v &
        (x*y)*v = x*(y*v) &
-       (1_ R)*v = v by Th71;
+       (1.R)*v = v by Th71;
     thus thesis;
    end;
 end;
@@ -1054,7 +1049,7 @@ Th77: for x,y being Scalar of R
                (v+w)*x = v*x+w*x &
                v*(x+y) = v*x+v*y &
                v*(y*x) = (v*y)*x &
-               v*(1_ R) = v
+               v*(1.R) = v
 proof
  set GF = LoopStr (# the carrier of R,the add of R,the Zero of R #);
      GF = AbGr R by Def9;
@@ -1067,7 +1062,7 @@ proof
               (v+w)*x = v*x+w*x &
               v*(x+y) = v*x+v*y &
               v*(y*x) = (v*y)*x &
-              v*(1_ R) = v
+              v*(1.R) = v
  proof
   let x,y be Scalar of R;
   let v,w be Vector of LS;
@@ -1077,33 +1072,33 @@ proof
   thus (v+w)*x = (the rmult of LS).((v+w),x) by Def15
    .= MLT.((the add of R).(v',w'),x) by RLVECT_1:5
    .= MLT.(v'+w',x) by RLVECT_1:5
-   .= (v'+w')*x by VECTSP_1:def 10
+   .= (v'+w')*x by GROUP_1:def 1
    .= v'*x+w'*x by VECTSP_1:def 18
    .= (the add of R).(v'*x,w'*x) by RLVECT_1:5
-   .= (the add of R).(MLT.(v',x),w'*x) by VECTSP_1:def 10
+   .= (the add of R).(MLT.(v',x),w'*x) by GROUP_1:def 1
    .= (the add of GF).
-    ((the rmult of LS).(v,x),(the rmult of LS).(w,x)) by VECTSP_1:def 10
+    ((the rmult of LS).(v,x),(the rmult of LS).(w,x)) by GROUP_1:def 1
    .= (the add of GF).(v*x,w*x) by A2,Def15
    .= v*x+w*x by RLVECT_1:5;
   thus v*(x+y) = (the rmult of LS).(v,(x+y)) by Def15
-   .= v'*(x+y) by VECTSP_1:def 10
+   .= v'*(x+y) by GROUP_1:def 1
    .= v'*x+v'*y by VECTSP_1:def 18
    .= (the add of R).(v'*x,v'*y) by RLVECT_1:5
-   .= (the add of R).(MLT.(v',x),v'*y) by VECTSP_1:def 10
+   .= (the add of R).(MLT.(v',x),v'*y) by GROUP_1:def 1
    .= (the add of GF).
-    ((the rmult of LS).(v,x),(the rmult of LS).(v,y)) by VECTSP_1:def 10
+    ((the rmult of LS).(v,x),(the rmult of LS).(v,y)) by GROUP_1:def 1
    .= (the add of GF).(v*x,v*y) by A3,Def15
    .= v*x+v*y by RLVECT_1:5;
   thus v*(y*x) = (the rmult of LS).(v,(y*x)) by Def15
-   .= v'*(y*x) by VECTSP_1:def 10
-   .= (v'*y)*x by VECTSP_1:def 16
-   .= MLT.(v'*y,x) by VECTSP_1:def 10
-   .= (the rmult of LS).((the rmult of LS).(v,y),x) by VECTSP_1:def 10
+   .= v'*(y*x) by GROUP_1:def 1
+   .= (v'*y)*x by GROUP_1:def 4
+   .= MLT.(v'*y,x) by GROUP_1:def 1
+   .= (the rmult of LS).((the rmult of LS).(v,y),x) by GROUP_1:def 1
    .= (the rmult of LS).((v*y),x) by Def15
    .= (v*y)*x by Def15;
-  thus v*(1_ R) = MLT.(v',1_ R) by Def15
-   .= v'*(1_ R) by VECTSP_1:def 10
-   .= v by Def2;
+  thus v*(1.R) = MLT.(v',1.R) by Def15
+   .= v'*(1.R) by GROUP_1:def 1
+   .= v by VECTSP_1:def 13;
  end;
  hence thesis by A1;
 end;
@@ -1118,7 +1113,7 @@ definition let R be non empty doubleLoopStr;
                       (v+w)*x = v*x+w*x &
                       v*(x+y) = v*x+v*y &
                       v*(y*x) = (v*y)*x &
-                      v*(1_ R) = v;
+                      v*(1.R) = v;
 end;
 
 registration let R;
@@ -1134,7 +1129,7 @@ registration let R;
              (v+w)*x = v*x+w*x &
              v*(x+y) = v*x+v*y &
              v*(y*x) = (v*y)*x &
-             v*(1_ R) = v by Th77;
+             v*(1.R) = v by Th77;
     thus thesis;
    end;
 end;
@@ -1164,11 +1159,11 @@ Lm8: for x,y being Scalar of R1 for p,q being Scalar of R2
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_ R1)*v = v &
+               (1.R1)*v = v &
                (v+w)*p = v*p+w*p &
                v*(p+q) = v*p+v*q &
                v*(q*p) = (v*q)*p &
-               v*(1_ R2) = v &
+               v*(1.R2) = v &
                x*(v*p) = (x*v)*p
 proof
   set G = BiModule(R1,R2); set a = {};
@@ -1178,15 +1173,15 @@ A1:  G = BiModStr (# {{}},op2,op0,pr2(the carrier of R1, {{}}),
         x*(v+w) = a & x*v+x*w = a &
      (x+y)*v = a & x*v+y*v = a &
      (x*y)*v = a & x*(y*v) = a &
-     (1_ R1)*v = a & v = a by A1,TARSKI:def 1;
+     (1.R1)*v = a & v = a by A1,TARSKI:def 1;
      hence x*(v+w) = x*v+x*w
            & (x+y)*v = x*v+y*v
            & (x*y)*v = x*(y*v)
-           & (1_ R1)*v = v;
+           & (1.R1)*v = v;
        (v+w)*p = a & v*p+w*p = a &
     v*(p+q) = a & v*p+v*q = a &
     v*(q*p) = a & (v*q)*p = a &
-    v*(1_ R2) = a & v = a &
+    v*(1.R2) = a & v = a &
     x*(v*p) = a & (x*v)*p = a by A1,TARSKI:def 1;
     hence thesis;
 end;
@@ -1212,11 +1207,11 @@ registration let R1,R2;
          x*(v+w) = x*v+x*w &
          (x+y)*v = x*v+y*v &
          (x*y)*v = x*(y*v) &
-         (1_ R1)*v = v &
+         (1.R1)*v = v &
          (v+w)*p = v*p+w*p &
          v*(p+q) = v*p+v*q &
          v*(q*p) = (v*q)*p &
-         v*(1_ R2) = v &
+         v*(1.R2) = v &
          x*(v*p) = (x*v)*p by Lm8;
     hence thesis by Def23,Def24,VECTSP_1:def 26;
    end;
@@ -1237,11 +1232,11 @@ theorem
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_ R1)*v = v &
+               (1.R1)*v = v &
                (v+w)*p = v*p+w*p &
                v*(p+q) = v*p+v*q &
                v*(q*p) = (v*q)*p &
-               v*(1_ R2) = v &
+               v*(1.R2) = v &
                x*(v*p) = (x*v)*p)
                iff V is RightMod-like VectSp-like BiMod-like
  by Def23,Def24,VECTSP_1:def 26;
@@ -1254,11 +1249,11 @@ proof
           x*(v+w) = x*v+x*w &
           (x+y)*v = x*v+y*v &
           (x*y)*v = x*(y*v) &
-          (1_ R1)*v = v &
+          (1.R1)*v = v &
           (v+w)*p = v*p+w*p &
           v*(p+q) = v*p+v*q &
           v*(q*p) = (v*q)*p &
-          v*(1_ R2) = v &
+          v*(1.R2) = v &
           x*(v*p) = (x*v)*p) by Lm8;
  hence thesis by Def23,Def24,VECTSP_1:def 26;
 end;
@@ -1269,3 +1264,6 @@ registration let R1,R2;
  coherence by Th84;
 end;
 
+theorem
+  for L being non empty multLoopStr st L is well-unital holds 1_(L) = 1.L
+by Lm30;

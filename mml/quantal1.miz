@@ -9,9 +9,9 @@ environ
  vocabulary TARSKI, BOOLE, LATTICES, VECTSP_1, FUNCT_1, LATTICE3, BINOP_1,
       PRE_TOPC, FINSET_1, FREEALG, MONOID_0, ALGSTR_2, GROUP_1, BHSP_3,
       SETWISEO, VECTSP_2, SEQM_3, GRAPH_1, FUNCT_3, RELAT_1, QUANTAL1;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, VECTSP_1, RELAT_1, FUNCT_1,
-      BINOP_1, SETWISEO, STRUCT_0, FINSET_1, DOMAIN_1, LATTICES, LATTICE3,
-      MONOID_0, PRE_TOPC, PARTFUN1, FUNCT_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, GROUP_1, VECTSP_1, RELAT_1,
+      FUNCT_1, BINOP_1, SETWISEO, STRUCT_0, FINSET_1, DOMAIN_1, LATTICES,
+      LATTICE3, MONOID_0, PRE_TOPC, PARTFUN1, FUNCT_2;
  constructors BINOP_1, SETWISEO, DOMAIN_1, LATTICE3, MONOID_0, PRE_TOPC,
       MEMBERED, PARTFUN1, RELAT_2, XBOOLE_0;
  clusters LATTICE3, MONOID_0, FINSET_1, STRUCT_0, GROUP_1, RELSET_1, SUBSET_1,
@@ -20,7 +20,7 @@ environ
  definitions TARSKI, BINOP_1, SETWISEO, LATTICES, LATTICE3, MONOID_0, STRUCT_0,
       XBOOLE_0;
  theorems TARSKI, ZFMISC_1, BINOP_1, LATTICES, LATTICE3, SETWISEO, MONOID_0,
-      VECTSP_1, FUNCT_1, FUNCT_2, STRUCT_0, RELSET_1, XBOOLE_1;
+      VECTSP_1, FUNCT_1, FUNCT_2, STRUCT_0, RELSET_1, XBOOLE_1, GROUP_1;
  schemes FUNCT_2, FRAENKEL;
 
 begin
@@ -409,8 +409,7 @@ A7:    x in V & V in Z by TARSKI:def 4;
       consider a being Element of Q such that
 A8:    V = {f(a,b) where b is Element of Q: b in Y} & a in X
         by A7;
-          ex b being Element of Q st x = f(a,b) & b in Y by A7,A8
-;
+        ex b being Element of Q st x = f(a,b) & b in Y by A7,A8;
       hence thesis by A8;
      end;
    hence thesis by A1,A3,LATTICE3:49;
@@ -445,8 +444,8 @@ theorem Th6:
  (c [*] b)
   proof set X1 = {d [*] c: d in {a,b}}, X2 = {c [*] d: d in {a,b}};
        a"\/"b = "\/"{a,b} by LATTICE3:44;
-then A1:  (a"\/"b) [*] c = "\/"(X1, Q) & c [*] (a"\/"b) = "\/"(X2, Q) by Def5,
-Def6;
+then A1:  (a"\/"b) [*] c = "\/"(X1, Q) & c [*] (a"\/"b) = "\/"(X2, Q) by Def5
+,Def6;
        now let x;  a in {a,b} & b in {a,b} by TARSKI:def 2;
      hence x = a [*] c or x = b [*] c implies x in X1;
      assume x in X1; then consider d such that
@@ -498,7 +497,7 @@ registration
 end;
 
 registration
- cluster associative commutative well-unital with_zero with_left-zero
+ cluster associative commutative unital with_zero with_left-zero
   left-distributive right-distributive complete Lattice-like
    (non empty QuasiNetStr);
   existence
@@ -510,11 +509,14 @@ A1:   now let x, y be Element of Q;
        then x = {} & y = {} by TARSKI:def 1;
       hence x = y;
      end;
-        Q is with_zero well-unital
+     Q is with_zero unital
       proof thus Q is with_zero by Th4;
-       thus the unity of Q is_a_left_unity_wrt times(Q)
-         proof let b be Element of Q; thus thesis by A1; end;
-       let b be Element of Q; thus thesis by A1;
+        now
+          consider e being Element of Q;
+          take e;
+          thus for x being Element of Q holds x*e=x & e*x=x by A1;
+        end;
+        hence thesis by GROUP_1:def 2;
       end;
     hence thesis by Def4,Th4;
    end;
@@ -524,7 +526,7 @@ definition
  mode Quantale is associative left-distributive right-distributive
       complete Lattice-like (non empty QuantaleStr);
 
- mode QuasiNet is well-unital associative with_left-zero times-continuous
+ mode QuasiNet is unital associative with_left-zero times-continuous
    times-additive complete Lattice-like (non empty QuasiNetStr);
 end;
 
@@ -533,9 +535,9 @@ definition
 end;
 
 theorem
-    for Q being well-unital (non empty QuasiNetStr) st Q is Quantale
+    for Q being unital (non empty QuasiNetStr) st Q is Quantale
    holds Q is BlikleNet
-  proof let Q be well-unital (non empty QuasiNetStr); assume
+  proof let Q be unital (non empty QuasiNetStr); assume
 A1:  Q is Quantale;
    then reconsider Q' = Q as Quantale;
    defpred P[set] means $1 in {};
@@ -944,15 +946,15 @@ A5:     a'[*]b'[*]((a[*]b)-r>s) = a'[*]b'[*]
         proof let d; assume d in B;
          then consider c such that
 A6:        d = a'[*]b'[*]c & c[*](a[*]b) [= s;
-             c[*]a[*]b [= s by A6,VECTSP_1:def 16;
+             c[*]a[*]b [= s by A6,GROUP_1:def 4;
           then c[*]a [= b-r>s & b-r>s [= b'-l>s by A3,Th11,Th12;
           then c[*]a [= b'-l>s by LATTICES:25;
           then b'[*](c[*]a) [= s by Th11;
-          then b'[*]c[*]a [= s by VECTSP_1:def 16;
+          then b'[*]c[*]a [= s by GROUP_1:def 4;
           then b'[*]c [= a-r>s & a-r>s [= a'-l>s by A3,Th11,Th12;
           then b'[*]c [= a'-l>s by LATTICES:25;
           then a'[*](b'[*]c) [= s by Th11;
-         hence d [= s by A6,VECTSP_1:def 16;
+         hence d [= s by A6,GROUP_1:def 4;
         end;
        then a'[*]b'[*]((a[*]b)-r>s) [= s by A5,LATTICE3:def 21;
       hence thesis by A2;
@@ -974,7 +976,7 @@ deffunc F(set) = $1;
 defpred P1[Element of Q] means $1 [*] (a [*] I) [= D;
 defpred P2[Element of Q] means $1 [*] a [= D;
 A3:   P1[b] iff P2[b]
-       proof b [*] (a [*] I) = b [*] a [*] I & I-r>D=D by A1,VECTSP_1:def 16;
+       proof b [*] (a [*] I) = b [*] a [*] I & I-r>D=D by A1,GROUP_1:def 4;
         hence thesis by Th12;
        end;
 A4:    {F(b): P1[b]} = {F(c): P2[c]} from FRAENKEL:sch 3(A3);
@@ -985,7 +987,7 @@ A4:    {F(b): P1[b]} = {F(c): P2[c]} from FRAENKEL:sch 3(A3);
 defpred P3[Element of Q] means J [*] a [*] $1 [= D;
 defpred P4[Element of Q] means a [*] $1 [= D;
 A5:   P3[b] iff P4[b]
-       proof J [*] (a [*] b) = J [*] a [*] b & J-l>D=D by A1,VECTSP_1:def 16;
+       proof J [*] (a [*] b) = J [*] a [*] b & J-l>D=D by A1,GROUP_1:def 4;
         hence thesis by Th11;
        end;
 A6:    {F(b): P3[b]} = {F(c): P4[c]} from FRAENKEL:sch 3(A5);
@@ -999,11 +1001,11 @@ A8:  I is_a_unity_wrt times(Q)
      proof
       thus I is_a_left_unity_wrt times(Q)
        proof let a;
-        thus times(Q).(I,a) = J [*] a by A7,VECTSP_1:def 10 .= a by A2;
+        thus times(Q).(I,a) = J [*] a by A7,GROUP_1:def 1 .= a by A2;
         end;
       thus I is_a_right_unity_wrt times(Q)
        proof let a;
-        thus times(Q).(a,I) = a [*] I by VECTSP_1:def 10 .= a by A2;
+        thus times(Q).(a,I) = a [*] I by GROUP_1:def 1 .= a by A2;
        end;
      end;
    hence times(Q) has_a_unity by SETWISEO:def 2;
@@ -1020,7 +1022,7 @@ deffunc F(set) = $1;
 defpred P1[Element of Q] means $1 [*] b [= c;
 defpred P2[Element of Q] means $1 [*] (b [*] (c -l> a)) [= a;
 A2:  P1[d] iff P2[d]
-     proof d [*] (b [*] (c -l> a)) = d [*] b [*] (c -l> a) by VECTSP_1:def 16;
+     proof d [*] (b [*] (c -l> a)) = d [*] b [*] (c -l> a) by GROUP_1:def 4;
       hence thesis by A1,Th12;
      end;
 A3:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A2);
@@ -1029,7 +1031,7 @@ A3:  {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A2);
 defpred P3[Element of Q] means b [*] $1 [= c;
 defpred P4[Element of Q] means (c -r> a) [*] b [*] $1 [= a;
 A4:  P3[d] iff P4[d]
-     proof (c -r> a) [*] b [*] d = (c -r> a) [*] (b [*] d) by VECTSP_1:def 16;
+     proof (c -r> a) [*] b [*] d = (c -r> a) [*] (b [*] d) by GROUP_1:def 4;
       hence thesis by A1,Th11;
      end;
 A5:  {F(d1): P3[d1]} = {F(d2): P4[d2]} from FRAENKEL:sch 3(A4);
@@ -1086,22 +1088,19 @@ registration let A be non empty set, b1,b2,b3 be (BinOp of A),
 end;
 
 registration
-  cluster associative commutative well-unital
+  cluster associative commutative unital
    left-distributive right-distributive complete Lattice-like
    cyclic dualized strict (non empty Girard-QuantaleStr);
    existence
     proof set B = BooleLatt {};
      consider b being BinOp of B; consider e being Element of B;
      take Q = Girard-QuantaleStr (#carr(B), join(B), met(B), b, e, e#);
-         carr(B) = {{}} by LATTICE3:def 1,ZFMISC_1:1;
-      then Q is unital & e = {} & the_unity_wrt b = {} by Th4,TARSKI:def 1;
-      then e is_a_unity_wrt b by MONOID_0:4;
-     hence thesis by Th4,Th21,MONOID_0:def 21;
+     thus thesis by Th4,Th21;
     end;
 end;
 
 definition
-  mode Girard-Quantale is associative well-unital
+  mode Girard-Quantale is associative unital
    left-distributive right-distributive
    complete Lattice-like cyclic dualized (non empty Girard-QuantaleStr);
 end;
@@ -1218,8 +1217,8 @@ A1:     x = Bottom a & a in {Bottom b: b in X};
 A2:     a = Bottom b & b in X by A1;
       thus thesis by A1,A2,Th22;
      end;
-then A3:  "/\"(X,Q) [= "/\"({Bottom a: a in {Bottom b: b in X}}, Q) by LATTICE3
-:46;
+then A3:  "/\"(X,Q) [= "/\"({Bottom a: a in {Bottom b: b in X}}, Q) by
+LATTICE3:46;
        X is_great_than "/\"({Bottom a: a in {Bottom b: b in X}}, Q)
      proof let c; assume c in X;
        then Bottom c in {Bottom b: b in X};
@@ -1253,8 +1252,8 @@ A3:        x = Bottom c & c in {a,b};
          hence thesis by A3,TARSKI:def 2;
         end;
       let x; assume x in {Bottom a,Bottom b};
-       then x = Bottom a & a in {a,b} or x = Bottom b & b in {a,b} by TARSKI:
-def 2;
+       then x = Bottom a & a in {a,b} or x = Bottom b & b in {a,b} by
+TARSKI:def 2;
       hence thesis;
      end;
    hence Bottom (a"\/"b) = Bottom a"/\"Bottom b by A1,Th24;
@@ -1346,7 +1345,7 @@ theorem
    thus a delta b delta c = Bottom (Bottom (a delta b) [*] Bottom c) by Def27
       .= Bottom (Bottom Bottom (Bottom a [*] Bottom b) [*] Bottom c) by Def27
       .= Bottom (Bottom a [*] Bottom b [*] Bottom c) by Th22
-      .= Bottom (Bottom a [*] (Bottom b [*] Bottom c)) by VECTSP_1:def 16
+      .= Bottom (Bottom a [*] (Bottom b [*] Bottom c)) by GROUP_1:def 4
       .= Bottom (Bottom a [*] Bottom Bottom (Bottom b [*] Bottom c)) by Th22
       .= a delta Bottom (Bottom b [*] Bottom c) by Def27
       .= a delta (b delta c) by Def27;
@@ -1361,7 +1360,7 @@ Q = the absurd of Q & the absurd of Q is dualizing
     then Top Q = the_unity_wrt times(Q) & times(Q) has_a_unity
      by Th19,MONOID_0:def 10;
     then times(Q).(a,Top Q) = a & times(Q).(Top Q,a) = a by SETWISEO:23;
-   hence thesis by VECTSP_1:def 10;
+   hence thesis by GROUP_1:def 1;
   end;
 
 theorem
@@ -1383,8 +1382,8 @@ theorem
   proof let Q be Quantale, j be UnOp of Q; assume
 A1:  j is monotone idempotent \/-distributive;
    consider q being Element of Q;
-A2:  dom j = carr(Q) & rng j c= carr(Q) & q in carr(Q) by FUNCT_2:def 1,
-RELSET_1:12;
+A2:  dom j = carr(Q) & rng j c= carr(Q) & q in carr(Q) by FUNCT_2:def 1
+,RELSET_1:12;
    then reconsider D = rng j as non empty Subset of Q by FUNCT_1:12;
    reconsider j' = j as Function of carr(Q), D by A2,FUNCT_2:def 1,RELSET_1:11;
    deffunc F(Subset of D) = j'."\/"($1,Q);

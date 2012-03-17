@@ -21,12 +21,12 @@ environ
  clusters SUBSET_1, FUNCT_1, STRUCT_0, RELSET_1, VECTSP_1, VECTSP_2, ALGSTR_2,
       FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, RLVECT_1, VECTSP_1, VECTSP_2, VECTSP_4;
+ definitions TARSKI, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_2, VECTSP_4;
  theorems AXIOMS, TARSKI, NAT_1, RLVECT_1, VECTSP_1, BINARITH, FUNCT_1,
       FUNCT_2, FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ,
       BINOP_1, GOBOARD1, GOBOARD9, POLYNOM1, POLYNOM3, STRUCT_0, ZFMISC_1,
       POLYNOM5, BINOM, RELAT_1, VECTSP_4, SETFAM_1, ALGSTR_1, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1;
+      XBOOLE_1, XCMPLX_1, GROUP_1;
  schemes FUNCT_2, SETFAM_1;
 
 begin :: Preliminaries
@@ -62,7 +62,7 @@ attr A is mix-associative means
 end;
 
 registration let L be non empty doubleLoopStr;
-  cluster well-unital distributive VectSp-like mix-associative
+  cluster unital distributive VectSp-like mix-associative
     (non empty AlgebraStr over L);
 existence
 proof
@@ -79,10 +79,10 @@ A1: for x,y being Element of A holds x = y
        x = 0 & y = 0 by TARSKI:def 1;
   hence thesis;
  end;
-thus A is well-unital
+thus A is unital
 proof
-  let x be Element of A;
-  thus x*(1_ A) = x & (1_ A)*x = x by A1;
+  take 1.A;
+  thus thesis by A1;
 end;
 thus A is distributive
 proof
@@ -96,7 +96,7 @@ proof
   thus x*(v+w) = x*v+x*w &
       (x+y)*v = x*v+y*v &
       (x*y)*v = x*(y*v) &
-      (1_ L)*v = v by A1;
+      (1.L)*v = v by A1;
 end;
 thus A is mix-associative
 proof
@@ -107,7 +107,7 @@ end;
 end;
 
 definition let L be non empty doubleLoopStr;
-  mode Algebra of L is well-unital distributive VectSp-like mix-associative
+  mode Algebra of L is unital distributive VectSp-like mix-associative
     (non empty AlgebraStr over L);
 end;
 
@@ -143,8 +143,8 @@ definition
       x = p & y = q holds x*y = p*'q) &
     (for a be Element of L, x be Element of it,
     p be sequence of L st x = p holds a*x = a*p) &
-    0.it = 0_.(L) &
-    1_(it) = 1_.(L);
+    0.it = 0_.L &
+    1_ it = 1_.L;
   existence
    proof
     A1: 0_.(L) in {x where x is sequence of L : not contradiction};
@@ -246,7 +246,7 @@ definition
       A21: p1 = x and
       A22: q1 = y and
       A23: Mu.[x,y] = p1*'q1 by A9;
-     thus x*y = Mu.(x,y) by VECTSP_1:def 10
+     thus x*y = Mu.(x,y) by GROUP_1:def 1
              .= p*'q by A19,A20,A21,A22,A23,BINOP_1:def 1;
     end;
 
@@ -308,10 +308,10 @@ definition
      reconsider y1=y as Element of P1 by A39;
      reconsider p=x as sequence of L by A27;
      reconsider q=y as sequence of L by A33;
-     thus (the mult of P1).(x,y) = x*y1 by VECTSP_1:def 10
+     thus (the mult of P1).(x,y) = x*y1 by GROUP_1:def 1
         .= p*'q by A29
         .= x1*y by A35
-        .= (the mult of P2).(x,y) by VECTSP_1:def 10;
+        .= (the mult of P2).(x,y) by GROUP_1:def 1;
     end;
         now let a be Element of L,
             x be Element of P1;
@@ -419,20 +419,6 @@ definition
   end;
 
 registration
-   let L be add-associative right_zeroed right_complementable right_unital
-        right-distributive (non empty doubleLoopStr);
-   cluster Formal-Series L -> right_unital;
-   coherence
-   proof
-    let p be Element of Formal-Series L;
-    reconsider p1=p as sequence of L by Def2;
-        1_(Formal-Series L) = 1_.(L) by Def2;
-    hence p * 1_(Formal-Series L) = p1 *' 1_.(L) by Def2
-       .= p by POLYNOM3:36;
-   end;
-end;
-
-registration
   cluster add-associative associative right_zeroed left_zeroed
     right_unital left_unital
     right_complementable distributive (non empty doubleLoopStr);
@@ -523,25 +509,46 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
         .= (1_.(L)).(1-'1)*p.(i+1-'1) by A3,A5
         .= (1_.(L)).(1-'1)*p.i by BINARITH:39
         .= (1_.(L)).(0)*p.i by GOBOARD9:1
-        .= 1_(L)*p.i by POLYNOM3:31
+        .= 1.(L)*p.i by POLYNOM3:31
         .= p.i by VECTSP_1:def 19;
      hence ((1_.(L))*'p).i = p.i by A2,A6,A12,RLVECT_1:10;
     end;
     hence (1_.(L))*'p = p by FUNCT_2:113;
    end;
 
+Lm10: now
+   let L be add-associative right_zeroed right_complementable 
+         distributive unital (non empty doubleLoopStr);
+   set F = Formal-Series L;
+   let x, e be Element of F;
+   assume
+A1: e = 1_.L;
+   reconsider a=x, b=e as sequence of L by Def2;
+   thus x * e = a*'b by Def2
+   .= x by A1,POLYNOM3:36;
+   thus e * x = b*'a by Def2
+   .= x by A1,Th5;
+end;
+
 registration
-   let L be add-associative right_zeroed right_complementable left_unital
-    left-distributive (non empty doubleLoopStr);
-   cluster Formal-Series L -> left_unital;
-   coherence
-   proof
-    let p be Element of Formal-Series L;
-    reconsider p1=p as sequence of L by Def2;
-        1_(Formal-Series L) = 1_.(L) by Def2;
-    hence 1_(Formal-Series L)*p = (1_.(L)) *' p1 by Def2
-       .= p by Th5;
-   end;
+  let L be right_zeroed add-associative right_complementable
+    distributive unital (non empty doubleLoopStr);
+  cluster Formal-Series L -> unital;
+  coherence
+  proof
+    reconsider e = 1_.L as Element of Formal-Series L by Def2;
+    take e;
+    thus thesis by Lm10;
+  end;
+end;
+
+Lm11: now
+   let L be add-associative right_zeroed right_complementable unital
+         distributive (non empty doubleLoopStr);
+   set F = Formal-Series L;
+   reconsider e = 1_.L as Element of F by Def2;
+   for x being Element of F holds x*e = x & e*x = x by Lm10;
+   hence 1.F = 1_.L by GROUP_1:def 5;
 end;
 
 registration
@@ -626,7 +633,7 @@ theorem Th8:
       proof
        let i be Element of NAT;
        thus ((a*b)*p).i = (a*b)*p.i by POLYNOM5:def 3
-         .= a*(b*(p.i)) by VECTSP_1:def 16
+         .= a*(b*(p.i)) by GROUP_1:def 4
          .= a*(b*p).i by POLYNOM5:def 3
          .= (a*(b*p)).i by POLYNOM5:def 3;
       end;
@@ -635,16 +642,14 @@ theorem Th8:
 
 theorem Th9:
    for L be associative left_unital (non empty doubleLoopStr)
-   for p being sequence of L holds
-   (the unity of L)*p = p
+   for p being sequence of L holds 1.L*p = p
     proof
      let L be associative left_unital (non empty doubleLoopStr);
      let p be sequence of L;
-         for i being Element of NAT holds ((the unity of L)*p).i = p.i
+     for i being Element of NAT holds ((1.L)*p).i = p.i
       proof
        let i be Element of NAT;
-       thus ((the unity of L)*p).i = (the unity of L)*p.i by POLYNOM5:def 3
-        .= (1_ L)*p.i by VECTSP_1:def 9
+       thus ((1.L)*p).i = (1.L)*p.i by POLYNOM5:def 3
         .= p.i by VECTSP_1:def 19;
       end;
      hence thesis by FUNCT_2:113;
@@ -675,9 +680,7 @@ thus (x+y)*v = (x'+y')*p by Def2
 thus (x*y)*v = (x'*y')*p by Def2
        .= x'*(y'*p) by Th8
        .= x*(y*v) by A3,Def2;
-       reconsider u = the unity of L as Element of L;
-thus (1_ L)*v = (the unity of L)*v by VECTSP_1:def 9
-       .= u*p by Def2
+thus (1.L)*v = 1.L*p by Def2
        .= v by Th9;
    end;
 end;
@@ -715,7 +718,7 @@ then A11:    p.(k-'1) * q.(i+1-'k) = f1.k by A3
           .= f1/.k by A10,FINSEQ_4:def 4;
          thus f2.k = (a*p).(k-'1) * q.(i+1-'k) by A6,A9
          .= a*p.(k-'1) * q.(i+1-'k) by POLYNOM5:def 3
-         .= a*(f1/.k) by A11,VECTSP_1:def 16
+         .= a*(f1/.k) by A11,GROUP_1:def 4
          .= (a*f1)/.k by A10,POLYNOM1:def 2
          .= (a*f1).k by A7,A9,FINSEQ_4:def 4;
         end;
@@ -743,13 +746,6 @@ A1:    a*x = a*p by Def2;
     end;
 end;
 
-registration
-  let L be left_zeroed right_zeroed add-associative left_unital right_unital
-   right_complementable distributive (non empty doubleLoopStr);
-  cluster Formal-Series L -> well-unital;
-  coherence;
-end;
-
 Lm1:
   now let L be 1-sorted, A be AlgebraStr over L;
         dom the add of A = [:the carrier of A,the carrier of A:] by Th2;
@@ -770,7 +766,7 @@ definition
   let L be 1-sorted;
   let A be AlgebraStr over L;
  mode Subalgebra of A -> AlgebraStr over L means :Def3:
-  the carrier of it c= the carrier of A & 1_(it) = 1_(A) & 0.it = 0.A &
+  the carrier of it c= the carrier of A & 1_ it = 1_ A & 0.it = 0.A &
   the add of it = (the add of A)|[:the carrier of it,the carrier of it:] &
   the mult of it = (the mult of A)|[:the carrier of it,the carrier of it:] &
   the lmult of it = (the lmult of A)|[:the carrier of L,the carrier of it:];
@@ -959,7 +955,7 @@ definition
   attr A is opers_closed means :Def4:
     A is lineary-closed &
     (for x,y being Element of B st x in A & y in A holds x*y in A) &
-    1_(B) in A &
+    1_ B in A &
     0.B in A;
 end;
 
@@ -1000,13 +996,13 @@ let x,y be Element of B,
    x',y' be Element of A such that
 A1: x = x' & y = y';
 A2: [x',y'] in [:the carrier of A,the carrier of A:] by ZFMISC_1:106;
-thus x*y = (the mult of B).(x',y') by A1,VECTSP_1:def 10
+thus x*y = (the mult of B).(x',y') by A1,GROUP_1:def 1
         .= (the mult of B).[x',y'] by BINOP_1:def 1
         .= (the mult of B)|[:the carrier of A,the carrier of A:].[x',y']
            by A2,FUNCT_1:72
         .= (the mult of A).[x',y'] by Def3
         .= (the mult of A).(x',y') by BINOP_1:def 1
-        .= x'* y' by VECTSP_1:def 10;
+        .= x'* y' by GROUP_1:def 1;
 end;
 
 theorem Th17:
@@ -1123,7 +1119,7 @@ A8:  y in A & z in A & x = [y,z] by A7,ZFMISC_1:def 2;
     reconsider y,z as Element of B by A8;
          f2.x = (the mult of B).[y,z] by A7,A8,FUNCT_1:72
          .= (the mult of B).(y,z) by BINOP_1:def 1
-         .= y * z by VECTSP_1:def 10;
+         .= y * z by GROUP_1:def 1;
     hence f2.x in A by A1,A8,Def4;
    end;
  then reconsider mu = f2 as BinOp of A by A6,FUNCT_2:5;
@@ -1146,8 +1142,8 @@ A12:  A is lineary-closed by A1,Def4;
          .= y * z by VECTSP_1:def 24;
     hence f4.x in A by A11,A12,VECTSP_4:def 1;
    end;
- then reconsider lm = f4 as Function of [:the carrier of L,A:],A by A9,FUNCT_2:
-5;
+ then reconsider lm = f4 as Function of [:the carrier of L,A:],A by A9,
+FUNCT_2:5;
       0.B in A by A1,Def4;
  then reconsider z = the Zero of B as Element of A by RLVECT_1:def 2;
       1_(B) in A by A1,Def4;
@@ -1338,10 +1334,10 @@ then A15: the add of P1 = the add of P2 by A13,BINOP_1:2;
 A16:  the carrier of P2 c= the carrier of B by Def3;
      then reconsider x' = x1 as Element of B by TARSKI:def 3;
      reconsider y' = y as Element of B by A16,TARSKI:def 3;
-     thus (the mult of P1).(x,y) = x * y1 by VECTSP_1:def 10
+     thus (the mult of P1).(x,y) = x * y1 by GROUP_1:def 1
         .= x' * y' by Th16
         .= x1 * y by Th16
-        .= (the mult of P2).(x,y) by VECTSP_1:def 10;
+        .= (the mult of P2).(x,y) by GROUP_1:def 1;
     end;
 then A17: the mult of P1 = the mult of P2 by A13,BINOP_1:2;
 A18: the Zero of P1 = 0.P1 by RLVECT_1:def 2
@@ -1537,11 +1533,11 @@ A5: for x being Element of Polynom-Algebra L
       by A1,TARSKI:def 3;
      reconsider p=x as AlgSequence of L by A3,POLYNOM3:def 12;
      reconsider q=y as AlgSequence of L by POLYNOM3:def 12;
-     thus (the mult of Polynom-Algebra L).(x,y) = x*y1 by VECTSP_1:def 10
+     thus (the mult of Polynom-Algebra L).(x,y) = x*y1 by GROUP_1:def 1
         .= x' * y' by A1,Th16
         .= p*'q by Def2
         .= x1*y by POLYNOM3:def 12
-        .= (the mult of Polynom-Ring L).(x,y) by VECTSP_1:def 10;
+        .= (the mult of Polynom-Ring L).(x,y) by GROUP_1:def 1;
     end;
 then A6: the mult of Polynom-Algebra L = the mult of Polynom-Ring L
   by A3,BINOP_1:2;
@@ -1557,4 +1553,9 @@ A7: the Zero of Polynom-Algebra L = 0.(Polynom-Algebra L) by RLVECT_1:def 2
        .= the unity of Polynom-Ring L by VECTSP_1:def 9;
  hence thesis by A3,A5,A6,A7,BINOP_1:2;
 end;
+
+theorem
+  for L being add-associative right_zeroed right_complementable unital
+         distributive (non empty doubleLoopStr) holds
+   1.Formal-Series L = 1_.L by Lm11;
 

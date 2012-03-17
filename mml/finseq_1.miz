@@ -249,54 +249,54 @@ registration let n be natural number;
  cluster Seg n -> finite;
  coherence
   proof
-A0:n is Nat by ORDINAL2:def 21;
+A1:n is Nat by ORDINAL2:def 21;
       Seg n is finite
    proof
-A1: n = { k : k < n } by AXIOMS:30;
-A2: for x,y1,y2 st x in n & P[x,y1] & P[x,y2] holds y1 = y2;
-A3:   for x st x in n ex y st P[x,y]
+A2: n = { k : k < n } by AXIOMS:30;
+A3: for x,y1,y2 st x in n & P[x,y1] & P[x,y2] holds y1 = y2;
+A4:   for x st x in n ex y st P[x,y]
       proof let x;
        assume x in n;
-        then ex k st x = k & k < n by A1;
+        then ex k st x = k & k < n by A2;
         then reconsider k = x as Nat;
        take k+1;
        thus thesis;
       end;
      consider f such that
-A4:   dom f = n and
-A5:   for x st x in n holds P[x,f.x] from FUNCT_1:sch 2(A2,A3);
+A5:   dom f = n and
+A6:   for x st x in n holds P[x,f.x] from FUNCT_1:sch 2(A3,A4);
     take f;
-A6:  Seg n = { k : 1 <= k & k <= n } by Def1;
+A7:  Seg n = { k : 1 <= k & k <= n } by Def1;
     thus rng f = Seg n
      proof
       thus rng f c= Seg n
        proof let x;
         assume x in rng f;
          then consider y being set such that
-A7:       y in dom f and
-A8:       x = f.y by FUNCT_1:def 5;
+A8:       y in dom f and
+A9:       x = f.y by FUNCT_1:def 5;
          consider k such that
-A9:       y = k and
-A10:       x = k+1 by A4,A5,A7,A8;
-A11:       1 <= k+1 by NAT_1:29;
-            ex m st m = y & m < n by A1,A4,A7;
-         then k+1 <= n by A9,NAT_1:38;
-        hence x in Seg n by A6,A10,A11;
+A10:       y = k and
+A11:       x = k+1 by A5,A6,A8,A9;
+A12:       1 <= k+1 by NAT_1:29;
+            ex m st m = y & m < n by A2,A5,A8;
+         then k+1 <= n by A10,NAT_1:38;
+        hence x in Seg n by A7,A11,A12;
        end;
       let x;
       assume x in Seg n;
        then consider k such that
-A12:     x = k and
-A13:     1 <= k and
-A14:     k <= n by A6;
+A13:     x = k and
+A14:     1 <= k and
+A15:     k <= n by A7;
        consider i being Nat such that
-A15:     1+i = k by A13,NAT_1:28;
-          i < n by A14,A15,NAT_1:38;
-       then A16:     i in n by A1;
-       then P[i,f.i] by A5;
-       hence x in rng f by A4,A12,A15,A16,FUNCT_1:def 5;
+A16:     1+i = k by A14,NAT_1:28;
+          i < n by A15,A16,NAT_1:38;
+       then A17:     i in n by A2;
+       then P[i,f.i] by A6;
+       hence x in rng f by A5,A13,A16,A17,FUNCT_1:def 5;
      end;
-    thus thesis by A0,A4;
+    thus thesis by A1,A5;
    end;
    hence thesis;
   end;
@@ -767,8 +767,8 @@ A14:   for k st k in dom p holds f.k=p.k
        then A15: k in Seg len p by Def3;
        then A16: 1 <= k & k <= len p by Th3;
               len p <= len p + len q by NAT_1:29;
-          then Seg len p c= Seg(len p + len q) by Th7; hence f.k=p.k by A13,
-A15,A16;
+          then Seg len p c= Seg(len p + len q) by Th7; hence f.k=p.k by A13,A15
+,A16;
      end;
 
 A17:  for n st n in dom q holds f.(len p+n)=q.n
@@ -776,8 +776,8 @@ A17:  for n st n in dom q holds f.(len p+n)=q.n
          assume n in dom q;
           then n in Seg len q by Def3;
            then 1 <= n & n <= len q by Th3;
-       then A18: len p + 1 <= len p + n & len p + n <= len p + len q by REAL_1:
-55;
+       then A18: len p + 1 <= len p + n & len p + n <= len p + len q by
+REAL_1:55;
               len p + n <= len p + n + len p by NAT_1:29;
            then len p + 1 <= len p + n + len p by A18,AXIOMS:22;
            then 1 <= len p + n by REAL_1:53;
@@ -808,7 +808,8 @@ A17:  for n st n in dom q holds f.(len p+n)=q.n
                then consider m such that A24: len p + 1 + m = k by NAT_1:28;
                   0<=m by NAT_1:18;
 then A25:               1+0<=1+m by REAL_1:55;
-                  len p + (1 + m) <= len p + len q by A24, A21, Th3;
+                  len p + 1 + m <= len p + len q by A21,A24,Th3;
+                  then len p + (1 + m) <= len p + len q;
                then 1 + m <= len q by REAL_1:53;
                then (1+m) in Seg len q by A25,Th3;
            then A26: (1+m) in dom q by Def3;
@@ -963,8 +964,8 @@ theorem
  Th44: rng(p^q) = rng p \/ rng q
  proof
          now let x; assume x in rng(p^q);
-             then consider y such that A1: y in dom(p^q) & x=(p^q).y by FUNCT_1
-:def 5;
+             then consider y such that A1: y in dom(p^q) & x=(p^q).y by
+FUNCT_1:def 5;
         A2:  y in Seg(len p + len q) by A1,Def7;
              reconsider k=y as Nat by A1;
         A3:  1 <= k & k <= len p + len q by A2,Th3;
@@ -1020,8 +1021,7 @@ theorem
                   now assume not k in dom q;
                    then consider n such that
                       A7: n in dom r & k=len q + n by A4,Th38;
-                    thus (p^q^r).(len p + k) =(p^q^r).(len p + len q + n) by
-A7
+                    thus (p^q^r).(len p + k) =(p^q^r).(len p + len q + n) by A7
                       .=(p^q^r).(len(p^q) + n) by Th35
                       .=r.n by A7,Def7
                       .=(q^r).k by A7,Def7;
@@ -1655,131 +1655,131 @@ theorem
    defpred P[FinSequence] means $1 is one-to-one implies
         for q st rng $1 = rng q & q is one-to-one holds len $1 = len q;
   A1: P[{}] by Th27;
- A3: for p,x st P[p] holds P[p^<*x*>]
+ A2: for p,x st P[p] holds P[p^<*x*>]
   proof
     now let p,x;
-     assume A4: p is one-to-one implies
+     assume A3: p is one-to-one implies
                 for q st rng p = rng q & q is one-to-one holds len p = len q;
-     assume A5: p ^ <* x *> is one-to-one;
+     assume A4: p ^ <* x *> is one-to-one;
     let q;
-     assume that A6: rng(p ^ <* x *>) = rng q and A7: q is one-to-one;
-       A8: rng(p ^ <* x *>) = rng p \/ rng<* x *> by Th44
+     assume that A5: rng(p ^ <* x *>) = rng q and A6: q is one-to-one;
+       A7: rng(p ^ <* x *>) = rng p \/ rng<* x *> by Th44
                            .= rng p \/ {x} by Th55;
           x in {x} by TARSKI:def 1;
-       then x in rng q by A6,A8,XBOOLE_0:def 2;
-      then consider y such that A9: y in dom q and A10: x = q.y by FUNCT_1:def
-5;
-       A11: y in Seg(len q) by A9,Def3;
-      reconsider y as Nat by A9;
-       A12: 1 <= y by A11,Th3;
-      then consider k such that A13: 1 + k = y by NAT_1:28;
-       A14: y <= len q by A11,Th3;
-      then consider n such that A15: y + n = len q by NAT_1:28;
+       then x in rng q by A5,A7,XBOOLE_0:def 2;
+      then consider y such that A8: y in dom q and A9: x = q.y by FUNCT_1:def 5
+;
+       A10: y in Seg(len q) by A8,Def3;
+      reconsider y as Nat by A8;
+       A11: 1 <= y by A10,Th3;
+      then consider k such that A12: 1 + k = y by NAT_1:28;
+       A13: y <= len q by A10,Th3;
+      then consider n such that A14: y + n = len q by NAT_1:28;
       reconsider q1 = q | (Seg k) as FinSequence by Th19;
       defpred P[Nat,set] means $2 = q.(y + $1);
-       A16: for j being Nat,y1,y2 st
+       A15: for j being Nat,y1,y2 st
         j in Seg n & P[j,y1] & P[j,y2] holds y1 = y2;
-       A17: for j being Nat st j in Seg n ex x st P[j,x];
-      consider q2 being FinSequence such that A18: dom q2 = Seg n and
-       A19: for j being Nat st j in Seg n holds
-       P[j,q2.j] from SeqEx(A16,A17);
-          k <= y by A13,NAT_1:37;
-       then A20: k <= len q by A14,AXIOMS:22;
-       then A21: len q1 = k by Th21;
-       A22: rng(q1 ^ q2) = rng q \ {x}
+       A16: for j being Nat st j in Seg n ex x st P[j,x];
+      consider q2 being FinSequence such that A17: dom q2 = Seg n and
+       A18: for j being Nat st j in Seg n holds
+       P[j,q2.j] from SeqEx(A15,A16);
+          k <= y by A12,NAT_1:37;
+       then A19: k <= len q by A13,AXIOMS:22;
+       then A20: len q1 = k by Th21;
+       A21: rng(q1 ^ q2) = rng q \ {x}
         proof
          thus rng(q1 ^ q2) c= rng q \ {x}
           proof let z be set;
             assume z in rng(q1 ^ q2);
-              then A23: z in rng q1 \/ rng q2 by Th44;
-              A24: now assume A25: z in rng q1;
-                 A26: rng q1 = q .: (Seg k) & q .: (Seg k) c= rng q
+              then A22: z in rng q1 \/ rng q2 by Th44;
+              A23: now assume A24: z in rng q1;
+                 A25: rng q1 = q .: (Seg k) & q .: (Seg k) c= rng q
                                                     by RELAT_1:144,148;
-                consider y1 such that A27: y1 in dom q1 and A28: q1.y1 = z
-                                              by A25,FUNCT_1:def 5;
-                 A29: q1.y1 = q.y1 by A27,FUNCT_1:70;
-                 A30: y1 in Seg(len q1) by A27,Def3;
-                reconsider y1 as Nat by A27;
-A31:                 y1 <= k & k < y by A13,A21,A30,Th3,REAL_1:69;
-                    Seg k c= Seg(len q) by A20,Th7;
-                 then dom q1 c= Seg(len q) by A20,Th21;
+                consider y1 such that A26: y1 in dom q1 and A27: q1.y1 = z
+                                              by A24,FUNCT_1:def 5;
+                 A28: q1.y1 = q.y1 by A26,FUNCT_1:70;
+                 A29: y1 in Seg(len q1) by A26,Def3;
+                reconsider y1 as Nat by A26;
+A30:                 y1 <= k & k < y by A12,A20,A29,Th3,REAL_1:69;
+                    Seg k c= Seg(len q) by A19,Th7;
+                 then dom q1 c= Seg(len q) by A19,Th21;
                  then dom q1 c= dom q by Def3;
-                 then x <> z by A7,A9,A10,A27,A28,A29,A31,FUNCT_1:def 8;
+                 then x <> z by A6,A8,A9,A26,A27,A28,A30,FUNCT_1:def 8;
                  then not z in {x} by TARSKI:def 1;
-               hence thesis by A25,A26,XBOOLE_0:def 4;
+               hence thesis by A24,A25,XBOOLE_0:def 4;
               end;
                  now assume z in rng q2;
-                then consider y1 such that A32: y1 in dom q2 and A33: q2.y1 = z
+                then consider y1 such that A31: y1 in dom q2 and A32: q2.y1 = z
                                                         by FUNCT_1:def 5;
-                reconsider y1 as Nat by A32;
-                 A34: q2.y1 = q.(y + y1) by A18,A19,A32;
-                 A35: 1 <= y + y1 by A12,NAT_1:37;
-                    y1 <= n by A18,A32,Th3;
-                 then y + y1 <= len q by A15,REAL_1:55;
-                 then y + y1 in Seg(len q) by A35,Th3;
-                 then A36: y + y1 in dom q by Def3;
-                 then A37: z in rng q by A33,A34,FUNCT_1:def 5;
-                    y1 <> 0 by A18,A32,Th3;
+                reconsider y1 as Nat by A31;
+                 A33: q2.y1 = q.(y + y1) by A17,A18,A31;
+                 A34: 1 <= y + y1 by A11,NAT_1:37;
+                    y1 <= n by A17,A31,Th3;
+                 then y + y1 <= len q by A14,REAL_1:55;
+                 then y + y1 in Seg(len q) by A34,Th3;
+                 then A35: y + y1 in dom q by Def3;
+                 then A36: z in rng q by A32,A33,FUNCT_1:def 5;
+                    y1 <> 0 by A17,A31,Th3;
                  then y <> y + y1 by NAT_1:41;
-                 then x <> z by A7,A9,A10,A33,A34,A36,FUNCT_1:def 8;
+                 then x <> z by A6,A8,A9,A32,A33,A35,FUNCT_1:def 8;
                  then not z in {x} by TARSKI:def 1;
-               hence thesis by A37,XBOOLE_0:def 4;
+               hence thesis by A36,XBOOLE_0:def 4;
               end;
-           hence thesis by A23,A24,XBOOLE_0:def 2;
+           hence thesis by A22,A23,XBOOLE_0:def 2;
           end;
          let z be set;
-          assume A38: z in rng q \ {x};
+          assume A37: z in rng q \ {x};
             then z in rng q by XBOOLE_0:def 4;
-           then consider y1 such that A39: y1 in dom q and A40: z = q.y1
+           then consider y1 such that A38: y1 in dom q and A39: z = q.y1
                                                         by FUNCT_1:def 5;
-            A41: y1 in Seg(len q) by A39,Def3;
-           reconsider y1 as Nat by A39;
-               not z in {x} by A38,XBOOLE_0:def 4;
-            then A42: y <> y1 by A10,A40,TARSKI:def 1;
-            A43: now assume A44: y < y1;
+            A40: y1 in Seg(len q) by A38,Def3;
+           reconsider y1 as Nat by A38;
+               not z in {x} by A37,XBOOLE_0:def 4;
+            then A41: y <> y1 by A9,A39,TARSKI:def 1;
+            A42: now assume A43: y < y1;
               then consider j being Nat such that
-              A45: y1 = y + j by NAT_1:28;
-               A46: 1 <= j by A44,A45,NAT_1:59;
-                  y + j <= len q by A41,A45,Th3;
-               then j <= n by A15,REAL_1:53;
-               then A47: j in Seg n by A46,Th3;
-               then z = q2.j by A19,A40,A45;
-             hence z in rng q2 by A18,A47,FUNCT_1:def 5;
+              A44: y1 = y + j by NAT_1:28;
+               A45: 1 <= j by A43,A44,NAT_1:59;
+                  y + j <= len q by A40,A44,Th3;
+               then j <= n by A14,REAL_1:53;
+               then A46: j in Seg n by A45,Th3;
+               then z = q2.j by A18,A39,A44;
+             hence z in rng q2 by A17,A46,FUNCT_1:def 5;
             end;
                now assume y1 < y;
-              then 1 <= y1 & y1 <= k by A13,A41,Th3,NAT_1:38;
+              then 1 <= y1 & y1 <= k by A12,A40,Th3,NAT_1:38;
               then y1 in Seg k by Th3;
-              then A48: y1 in dom q1 by A20,Th21;
-              then q1.y1 = z by A40,FUNCT_1:70;
-             hence z in rng q1 by A48,FUNCT_1:def 5;
+              then A47: y1 in dom q1 by A19,Th21;
+              then q1.y1 = z by A39,FUNCT_1:70;
+             hence z in rng q1 by A47,FUNCT_1:def 5;
             end;
-           then z in rng q1 \/ rng q2 by A42,A43,REAL_1:def 5,XBOOLE_0:def 2;
+           then z in rng q1 \/ rng q2 by A41,A42,REAL_1:def 5,XBOOLE_0:def 2;
          hence thesis by Th44;
         end;
-       A49: p = (p ^ <* x *>) | (dom p) by Th33;
-A50:     rng p = rng(p ^ <* x *>) \ {x}
+       A48: p = (p ^ <* x *>) | (dom p) by Th33;
+A49:     rng p = rng(p ^ <* x *>) \ {x}
         proof
          thus rng p c= rng(p ^ <* x *>) \ {x}
           proof let z be set;
-            assume A51: z in rng p;
-A52:             rng p c= rng(p ^ <* x *>) by A49,FUNCT_1:76;
-            consider y1 such that A53: y1 in dom p and A54: p.y1 = z
-                                                   by A51,FUNCT_1:def 5;
-             A55: y1 in Seg(len p) by A53,Def3;
-            reconsider y1 as Nat by A53;
-             A56: (p ^ <* x *>).(len p + 1) = x & (p ^ <* x *>).y1 = p.y1
-                     by A49,A53,Th59,FUNCT_1:70;
-A57:             y1 <= len p & len p < len p +1 by A55,Th3,REAL_1:69;
-             then 1 <= y1 & y1 <= len p + 1 by A55,AXIOMS:22,Th3;
+            assume A50: z in rng p;
+A51:             rng p c= rng(p ^ <* x *>) by A48,FUNCT_1:76;
+            consider y1 such that A52: y1 in dom p and A53: p.y1 = z
+                                                   by A50,FUNCT_1:def 5;
+             A54: y1 in Seg(len p) by A52,Def3;
+            reconsider y1 as Nat by A52;
+             A55: (p ^ <* x *>).(len p + 1) = x & (p ^ <* x *>).y1 = p.y1
+                     by A48,A52,Th59,FUNCT_1:70;
+A56:             y1 <= len p & len p < len p +1 by A54,Th3,REAL_1:69;
+             then 1 <= y1 & y1 <= len p + 1 by A54,Th3,AXIOMS:22;
              then y1 in Seg(len p + 1) & len p + 1 in Seg(len p + 1)
                      by Th3,Th6;
              then y1 in Seg(len p + len<* x *>) &
                   len p + 1 in Seg(len p + len<* x *>) by Th57;
              then y1 in dom(p ^ <* x *>) & len p + 1 in dom(p ^ <* x *>)
                                                           by Def7;
-             then x <> z by A5,A54,A56,A57,FUNCT_1:def 8;
+             then x <> z by A4,A53,A55,A56,FUNCT_1:def 8;
              then z in rng(p ^ <* x *>) & not z in {x}
-              by A51,A52,TARSKI:def 1;
+              by A50,A51,TARSKI:def 1;
            hence thesis by XBOOLE_0:def 4;
           end;
          let z be set;
@@ -1790,112 +1790,112 @@ A57:             y1 <= len p & len p < len p +1 by A55,Th3,REAL_1:69;
            then (z in rng p or z in {x}) & x <> z by Th55;
          hence thesis by TARSKI:def 1;
         end;
-A58:       q1 ^ q2 is one-to-one
+A57:       q1 ^ q2 is one-to-one
         proof let y1,y2;
-          assume that A59: y1 in dom(q1 ^ q2) and A60: y2 in dom(q1 ^ q2) and
-                      A61: (q1 ^ q2).y1 = (q1 ^ q2).y2;
-            reconsider m1 = y1, m2 = y2 as Nat by A59,A60;
-            A62: q1 is one-to-one by A7,FUNCT_1:84;
-            A63: now assume A64: m1 in dom q1 & m2 in dom q1;
+          assume that A58: y1 in dom(q1 ^ q2) and A59: y2 in dom(q1 ^ q2) and
+                      A60: (q1 ^ q2).y1 = (q1 ^ q2).y2;
+            reconsider m1 = y1, m2 = y2 as Nat by A58,A59;
+            A61: q1 is one-to-one by A6,FUNCT_1:84;
+            A62: now assume A63: m1 in dom q1 & m2 in dom q1;
               then (q1 ^ q2).m1 = q1.m1 & (q1 ^ q2).m2 = q1.m2
                by Def7;
-             hence thesis by A61,A62,A64,FUNCT_1:def 8;
+             hence thesis by A60,A61,A63,FUNCT_1:def 8;
             end;
-            A65: now assume A66: m1 in dom q1;
+            A64: now assume A65: m1 in dom q1;
               given j being Nat such that
-              A67: j in dom q2 and A68: m2 = len q1 + j;
+              A66: j in dom q2 and A67: m2 = len q1 + j;
                   (q1 ^ q2).m1 = q1.m1 & (q1 ^ q2).m2 = q2.j & q1.m1 = q.m1
-                                    by A66,A67,A68,Def7,FUNCT_1:70;
-               then A69: q.m1 = q.(y + j) by A18,A19,A61,A67;
-               A70: dom q1 c= dom q by FUNCT_1:76;
-                  1 <= j by A18,A67,Th3;
-               then A71: 1 <= y + j by NAT_1:37;
-                  j <= n by A18,A67,Th3;
-               then y + j <= len q by A15,REAL_1:55;
-               then y + j in Seg(len q) by A71,Th3;
-               then A72: y + j in dom q by Def3;
-                  m1 in Seg k by A20,A66,Th21;
-               then m1 <= k & k < y by A13,Th3,REAL_1:69;
+                                    by A65,A66,A67,Def7,FUNCT_1:70;
+               then A68: q.m1 = q.(y + j) by A17,A18,A60,A66;
+               A69: dom q1 c= dom q by FUNCT_1:76;
+                  1 <= j by A17,A66,Th3;
+               then A70: 1 <= y + j by NAT_1:37;
+                  j <= n by A17,A66,Th3;
+               then y + j <= len q by A14,REAL_1:55;
+               then y + j in Seg(len q) by A70,Th3;
+               then A71: y + j in dom q by Def3;
+                  m1 in Seg k by A19,A65,Th21;
+               then m1 <= k & k < y by A12,Th3,REAL_1:69;
                then m1 < y & y <= y + j by AXIOMS:22,NAT_1:37;
-             hence thesis by A7,A66,A69,A70,A72,FUNCT_1:def 8;
+             hence thesis by A6,A65,A68,A69,A71,FUNCT_1:def 8;
             end;
-            A73: now assume A74: m2 in dom q1;
+            A72: now assume A73: m2 in dom q1;
               given j be Nat such that
-              A75: j in dom q2 and A76: m1 = len q1 + j;
+              A74: j in dom q2 and A75: m1 = len q1 + j;
                   (q1 ^ q2).m2 = q1.m2 & (q1 ^ q2).m1 = q2.j & q1.m2 = q.m2
-                                     by A74,A75,A76,Def7,FUNCT_1:70;
-               then A77: q.m2 = q.(y + j) by A18,A19,A61,A75;
-               A78: dom q1 c= dom q by FUNCT_1:76;
-                  1 <= j by A18,A75,Th3;
-               then A79: 1 <= y + j by NAT_1:37;
-                  j <= n by A18,A75,Th3;
-               then y + j <= len q by A15,REAL_1:55;
-               then y + j in Seg(len q) by A79,Th3;
-               then A80: y + j in dom q by Def3;
-                  m2 in Seg k by A20,A74,Th21;
-               then m2 <= k & k < y by A13,Th3,REAL_1:69;
+                                     by A73,A74,A75,Def7,FUNCT_1:70;
+               then A76: q.m2 = q.(y + j) by A17,A18,A60,A74;
+               A77: dom q1 c= dom q by FUNCT_1:76;
+                  1 <= j by A17,A74,Th3;
+               then A78: 1 <= y + j by NAT_1:37;
+                  j <= n by A17,A74,Th3;
+               then y + j <= len q by A14,REAL_1:55;
+               then y + j in Seg(len q) by A78,Th3;
+               then A79: y + j in dom q by Def3;
+                  m2 in Seg k by A19,A73,Th21;
+               then m2 <= k & k < y by A12,Th3,REAL_1:69;
                then m2 < y & y <= y + j by AXIOMS:22,NAT_1:37;
-             hence thesis by A7,A74,A77,A78,A80,FUNCT_1:def 8;
+             hence thesis by A6,A73,A76,A77,A79,FUNCT_1:def 8;
             end;
                now
-              given j1 being Nat such that A81: j1 in dom q2 and
-                                           A82: m1 = len q1 + j1;
-              given j2 being Nat such that A83: j2 in dom q2 and
-                                           A84: m2 = len q1 + j2;
+              given j1 being Nat such that A80: j1 in dom q2 and
+                                           A81: m1 = len q1 + j1;
+              given j2 being Nat such that A82: j2 in dom q2 and
+                                           A83: m2 = len q1 + j2;
                   (q1 ^ q2).m1 = q2.j1 & (q1 ^ q2).m2 = q2.j2
-                                            by A81,A82,A83,A84,Def7;
-               then A85: (q1 ^ q2).m1 = q.(y + j1) & (q1 ^ q2).m2 = q.(y + j2)
-                                                by A18,A19,A81,A83;
-                  1 <= j1 & 1 <= j2 by A18,A81,A83,Th3;
-               then A86: 1 <= y + j1 & 1 <= y + j2 by NAT_1:37;
-                  j1 <= n & j2 <= n by A18,A81,A83,Th3;
-               then y + j1 <= len q & y + j2 <= len q by A15,REAL_1:55;
+                                            by A80,A81,A82,A83,Def7;
+               then A84: (q1 ^ q2).m1 = q.(y + j1) & (q1 ^ q2).m2 = q.(y + j2)
+                                                by A17,A18,A80,A82;
+                  1 <= j1 & 1 <= j2 by A17,A80,A82,Th3;
+               then A85: 1 <= y + j1 & 1 <= y + j2 by NAT_1:37;
+                  j1 <= n & j2 <= n by A17,A80,A82,Th3;
+               then y + j1 <= len q & y + j2 <= len q by A14,REAL_1:55;
                then y + j1 in Seg(len q) & y + j2 in
- Seg(len q) by A86,Th3;
+ Seg(len q) by A85,Th3;
                then y + j1 in dom q & y + j2 in dom q by Def3;
-               then y + j1 = y + j2 by A7,A61,A85,FUNCT_1:def 8;
-             hence thesis by A82,A84,XCMPLX_1:2;
+               then y + j1 = y + j2 by A6,A60,A84,FUNCT_1:def 8;
+             hence thesis by A81,A83,XCMPLX_1:2;
             end;
-         hence thesis by A59,A60,A63,A65,A73,Th38;
+         hence thesis by A58,A59,A62,A64,A72,Th38;
         end;
           len(q1 ^ <* x *>) + len q2 = len q1 + len<* x *> + len q2 by Th35
-                                 .= k + 1 + len q2 by A21,Th56
-                                 .= len q by A13,A15,A18,Def3;
-       then A87: dom q = Seg(len(q1 ^ <* x *>) + len q2) by Def3;
-       A88: now let j be Nat;
-         assume A89: j in dom(q1 ^ <* x *>);
-          A90: now assume j in dom q1;
+                                 .= k + 1 + len q2 by A20,Th56
+                                 .= len q by A12,A14,A17,Def3;
+       then A86: dom q = Seg(len(q1 ^ <* x *>) + len q2) by Def3;
+       A87: now let j be Nat;
+         assume A88: j in dom(q1 ^ <* x *>);
+          A89: now assume j in dom q1;
             then (q1 ^ <* x *>).j = q1.j & q.j = q1.j
                                                   by Def7,FUNCT_1:70;
            hence q.j = (q1 ^ <* x *>).j;
           end;
              now given i be Nat such that
-             A91: i in dom<* x *> and A92: j = len q1 + i;
-               i in {1} by A91,Th4,Th55;
+             A90: i in dom<* x *> and A91: j = len q1 + i;
+               i in {1} by A90,Th4,Th55;
             then i = 1 by TARSKI:def 1;
-           hence q.j = (q1 ^ <* x *>).j by A10,A13,A21,A92,Th59;
+           hence q.j = (q1 ^ <* x *>).j by A9,A12,A20,A91,Th59;
           end;
-        hence q.j = (q1 ^ <* x *>).j by A89,A90,Th38;
+        hence q.j = (q1 ^ <* x *>).j by A88,A89,Th38;
        end;
           now let j be Nat;
          assume j in dom q2;
-          hence q2.j = q.(len q1 + 1 + j) by A13,A18,A19,A21
+          hence q2.j = q.(len q1 + 1 + j) by A12,A17,A18,A20
                     .= q.(len q1 + len<* x *> + j) by Th56
                     .= q.(len(q1 ^ <* x *>) + j) by Th35;
        end;
-       then q1 ^ <* x *> ^ q2 = q by A87,A88,Def7;
-       then A93: len q = len(q1 ^ <* x *>) + len q2 by Th35
+       then q1 ^ <* x *> ^ q2 = q by A86,A87,Def7;
+       then A92: len q = len(q1 ^ <* x *>) + len q2 by Th35
                      .= len <* x *> + len q1 + len q2 by Th35
                      .= 1 + len q1 + len q2 by Th57
                      .= 1 + (len q1 + len q2)
                      .= len(q1 ^ q2) + 1 by Th35;
           len(p ^ <* x *>) = len p + len<* x *> by Th35
                         .= len p + 1 by Th57;
-    hence len(p ^ <* x *>) = len q by A4,A5,A6,A22,A49,A50,A58,A93,FUNCT_1:84;
+    hence len(p ^ <* x *>) = len q by A3,A4,A5,A21,A48,A49,A57,A92,FUNCT_1:84;
    end;
    hence thesis;
    end;
-      for p holds P[p] from IndSeq(A1,A3);
+      for p holds P[p] from IndSeq(A1,A2);
   hence thesis;
  end;
 
@@ -2183,8 +2183,8 @@ A27: rng q = X & for l,m,k1,k2 st
            proof
                now let x;
                  assume x in rng q';
-                 then consider y such that A43: y in dom q' & x=q'.y by FUNCT_1
-:def 5;
+                 then consider y such that A43: y in dom q' & x=q'.y by
+FUNCT_1:def 5;
              A44: y in Seg len q' by A43,Def3;
                  reconsider y as Nat by A43;
              A45: 1 <= y & y <= n by A42,A44,Th3;
@@ -2761,14 +2761,14 @@ reserve D for set, p for FinSequence of D,
 
 definition let D, p, m;
  func p|m -> FinSequence of D equals
-  :Def1: p|Seg m;
+  :Def15: p|Seg m;
  coherence by Th23;
 end;
 
 registration let D be set, f be FinSequence of D;
  cluster f|0 -> empty;
   coherence
- proof f|0 = f|(Seg 0) by Def1;
+ proof f|0 = f|(Seg 0) by Def15;
   hence f|0 is empty by Th4,RELAT_1:110;
  end;
 end;
@@ -2780,17 +2780,17 @@ theorem
   then Seg len p c= Seg m by Th7;
   then dom p c= Seg m by Def3;
   then p|Seg m = p by RELAT_1:97;
-  hence thesis by Def1;
+  hence thesis by Def15;
  end;
 
-theorem 
+theorem
  m <= len p implies len(p|m) = m
 proof
 A1:  m is Nat by ORDINAL2:def 21;
  assume m <= len p;
  then Seg m c= Seg(len p) by Th7;
  then Seg m c= dom p by Def3;
- then Seg m = dom(p|(Seg m)) by RELAT_1:91 .= dom(p|m) by Def1;
+ then Seg m = dom(p|(Seg m)) by RELAT_1:91 .= dom(p|m) by Def15;
  hence m = len(p|m) by A1,Def3;
 end;
 

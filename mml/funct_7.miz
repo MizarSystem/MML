@@ -1215,50 +1215,50 @@ A1: for i being Nat st 1 <= i & i < len p+1
       reconsider f = p.i as Function;
       let x be set; take f.x, f; thus thesis;
      end;
-A3: for n being Nat st 1 <= n & n < len p+1
+A2: for n being Nat st 1 <= n & n < len p+1
      for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
    consider q being FinSequence such that
-A4:  len q = len p+1 and
-A5:  q.1 = x or len p+1 = 0 and
-A6:  for i being Nat st 1 <= i & i < len p+1 holds
-      P[i,q.i,q.(i+1)] from RECDEF_1:sch 5(A1,A3);
-   take q; thus len q = len p+1 & q.1 = x by A4,A5;
+A3:  len q = len p+1 and
+A4:  q.1 = x or len p+1 = 0 and
+A5:  for i being Nat st 1 <= i & i < len p+1 holds
+      P[i,q.i,q.(i+1)] from RECDEF_1:sch 5(A1,A2);
+   take q; thus len q = len p+1 & q.1 = x by A3,A4;
    let i be Nat, f be Function; assume i in dom p;
     then i >= 1 & i <= len p by FINSEQ_3:27;
     then i >= 1 & i < len p+1 by NAT_1:38;
-    then ex f being Function st f = p.i & q.(i+1) = f.(q.i) by A6;
+    then ex f being Function st f = p.i & q.(i+1) = f.(q.i) by A5;
    hence f = p.i implies q.(i+1) = f.(q.i);
   end;
  correctness
   proof let q1, q2 be FinSequence such that
-A7: len q1 = len p+1 & q1.1 = x and
-A8: for i being Nat, f being Function st i in dom p & f = p.i
+A6: len q1 = len p+1 & q1.1 = x and
+A7: for i being Nat, f being Function st i in dom p & f = p.i
      holds q1.(i+1) = f.(q1.i) and
-A9: len q2 = len p+1 & q2.1 = x and
-A10: for i being Nat, f being Function st i in dom p & f = p.i
+A8: len q2 = len p+1 & q2.1 = x and
+A9: for i being Nat, f being Function st i in dom p & f = p.i
      holds q2.(i+1) = f.(q2.i);
-A11:  dom q1 = dom q2 by A7,A9,FINSEQ_3:31;
+A10:  dom q1 = dom q2 by A6,A8,FINSEQ_3:31;
     defpred P[Nat] means $1 in dom q1 implies q1.$1 = q2.$1;
-A12:  P[ 0] by FINSEQ_3:27;
-A13: for i being Nat st P[i] holds P[i+1]
+A11:  P[ 0] by FINSEQ_3:27;
+A12: for i being Nat st P[i] holds P[i+1]
      proof let i be Nat such that
-A14:   i in dom q1 implies q1.i = q2.i and
-A15:   i+1 in dom q1;
-           i+1 <= len q1 by A15,FINSEQ_3:27;
-then A16:   i <= len p by A7,REAL_1:53;
+A13:   i in dom q1 implies q1.i = q2.i and
+A14:   i+1 in dom q1;
+           i+1 <= len q1 by A14,FINSEQ_3:27;
+then A15:   i <= len p by A6,REAL_1:53;
      per cases by NAT_1:19; suppose i = 0;
-      hence q1.(i+1) = q2.(i+1) by A7,A9;
+      hence q1.(i+1) = q2.(i+1) by A6,A8;
      end;
      suppose i > 0;
        then i >= 0+1 by NAT_1:38;
-then A17:    i in dom p by A16,FINSEQ_3:27;
+then A16:    i in dom p by A15,FINSEQ_3:27;
       reconsider f = p.i as Function;
-      thus q1.(i+1) = f.(q2.i) by A7,A8,A14,A17,Th24
-                   .= q2.(i+1) by A10,A17;
+      thus q1.(i+1) = f.(q2.i) by A6,A7,A13,A16,Th24
+                   .= q2.(i+1) by A9,A16;
     end;
     end;
-         for i being Nat holds P[i] from NAT_1:sch 1(A12,A13);
-   hence thesis by A11,FINSEQ_1:17;
+         for i being Nat holds P[i] from NAT_1:sch 1(A11,A12);
+   hence thesis by A10,FINSEQ_1:17;
   end;
 end;
 
@@ -1324,8 +1324,8 @@ then A4:  dom apply(p^<*f*>,x) = Seg (len apply(p,x)+1) by A1,A2,FINSEQ_1:def 3
 ;
 A5: (p^<*f*>).(len p+1) = f by FINSEQ_1:59;
          len p+1 >= 1 by NAT_1:29;
-then A6: len p+1 in dom (p^<*f*>) & len p+1 in dom apply(p,x) by A2,A3,FINSEQ_3
-:27;
+then A6: len p+1 in dom (p^<*f*>) & len p+1 in dom apply(p,x) by A2,A3,
+FINSEQ_3:27;
     defpred P[Nat] means $1 in dom apply(p,x)
      implies apply(p^<*f*>,x).$1 = apply(p,x).$1;
 A7: P[ 0] by FINSEQ_3:27;
@@ -1346,8 +1346,7 @@ then A13:    i in dom apply(p,x) & i in dom p by A11,FINSEQ_3:27;
        then i in dom (p^<*f*>) & g = (p^<*f*>).i by A13,FINSEQ_1:def 7;
        then apply(p^<*f*>,x).(i+1) = g.(apply(p^<*f*>,x).i) &
        apply(p,x).(i+1) = g.(apply(p,x).i) by A13,Def5;
-      hence apply(p^<*f*>,x).(i+1) = apply(p,x).(i+1) by A9,A11,A12,FINSEQ_3:
-27
+      hence apply(p^<*f*>,x).(i+1) = apply(p,x).(i+1) by A9,A11,A12,FINSEQ_3:27
 ;
     end;
     end;
@@ -1419,8 +1418,8 @@ then A6:   len apply(p,f.x) = len p+1 & len p' = len p+1 by Def5,FINSEQ_1:35;
 then apply(p',x).(1+len p') = apply(p,f.x).(len p+1)
        by A3,A5,A6,FINSEQ_1:def 7;
      hence apply(<*f*>^(p^<*g*>),x)
-        = <*x*>^apply(p,f.x)^<*g.(apply(p,f.x).(len p+1))*> by A3,A4,FINSEQ_1:
-45
+        = <*x*>^apply(p,f.x)^<*g.(apply(p,f.x).(len p+1))*> by A3,A4,
+FINSEQ_1:45
        .= <*x*>^(apply(p,f.x)^<*g.(apply(p,f.x).(len p+1))*>) by FINSEQ_1:45
        .= <*x*>^apply(p^<*g*>,f.x) by Th44;
     end;
@@ -1779,8 +1778,8 @@ A4:   q^<*f*> is FuncSequence & q^<*f*> <> {};
 A5:   compose(q^<*f*>,X) = f*compose(q,X) by Th43;
      per cases; suppose q = {};
        then q^<*f*> = <*f*> & <*f*>^{} = <*f*> by FINSEQ_1:47;
-       then compose(q^<*f*>,X) = f*id X & firstdom(q^<*f*>) = dom f by Th47,
-Th60;
+       then compose(q^<*f*>,X) = f*id X & firstdom(q^<*f*>) = dom f by Th47
+,Th60;
       hence dom compose(q^<*f*>,X) = (firstdom (q^<*f*>)) /\ X by FUNCT_1:37;
       end;
       suppose
@@ -2289,8 +2288,8 @@ theorem
 A2:  P[k] implies P[k+1]
   proof assume
        dom iter(f,k+1) c= dom f & rng iter(f,k+1) c= rng f;
-      iter(f,k+1+1) = f*iter(f,k+1) & iter(f,k+1+1) = iter(f,k+1)*f by Th71,
-Th73
+      iter(f,k+1+1) = f*iter(f,k+1) & iter(f,k+1+1) = iter(f,k+1)*f by Th71
+,Th73
 ;
    hence thesis by RELAT_1:44,45;
   end;

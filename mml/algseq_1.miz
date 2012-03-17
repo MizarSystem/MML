@@ -231,7 +231,7 @@ definition let R,p,k;
   for i st i>=k holds p.i=0.R;
 end;
 
-Lm3:
+Lm2:
   ex m st m is_at_least_length_of p
     proof
       consider n such that A1:for i st i >= n holds p.i = 0.R by Def2;
@@ -239,12 +239,12 @@ Lm3:
       thus thesis by A1,Def3;
     end;
 
-Lm4:
+Lm3:
   ex k st k is_at_least_length_of p
      & (for n st n is_at_least_length_of p holds k<=n)
     proof
       defpred P[Nat] means $1 is_at_least_length_of p;
-      A1:ex m st P[m] by Lm3;
+      A1:ex m st P[m] by Lm2;
          ex k st P[k]
         & (for n st P[n] holds k<=n) from NAT_1:sch 5(A1);
       then consider k such that A2:k is_at_least_length_of p
@@ -253,7 +253,7 @@ Lm4:
       thus thesis by A2;
     end;
 
-Lm5:
+Lm4:
   (k is_at_least_length_of p)
   & (for m st m is_at_least_length_of p holds k<=m)
   & (l is_at_least_length_of p)
@@ -272,8 +272,8 @@ Lm5:
   func len p -> Nat means :Def4:
    it is_at_least_length_of p
     & for m st m is_at_least_length_of p holds it<=m;
-   existence by Lm4;
-   uniqueness by Lm5;
+   existence by Lm3;
+   uniqueness by Lm4;
  end;
 
 canceled 4;
@@ -459,7 +459,7 @@ A6:      now assume x<>0.R;
    end;
  end;
 
-Lm6:
+Lm5:
   p=<%0.R%> implies len p = 0
     proof
       A1:0+1=1;
@@ -475,11 +475,11 @@ canceled;
 theorem Th31:
   p=<%0.R%> iff len p = 0
     proof
-      thus p=<%0.R%> implies len p = 0 by Lm6;
+      thus p=<%0.R%> implies len p = 0 by Lm5;
       thus len p=0 implies p=<%0.R%>
         proof
           assume A1:len p=0;
-          then A2:len p=len <%0.R%> by Lm6;
+          then A2:len p=len <%0.R%> by Lm5;
              for k st k < len p holds p.k = <%0.R%>.k by A1,NAT_1:18;
           hence thesis by A2,Th28;
         end;
@@ -492,7 +492,7 @@ proof
      p=<%0.R%> implies support p = {}
    proof
     assume p=<%0.R%>;
-    then len p = 0 by Lm6;
+    then len p = 0 by Lm5;
     hence support p = {} by Def5,Th11;
    end;
   assume A1: support p = {};

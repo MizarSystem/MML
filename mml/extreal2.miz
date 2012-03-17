@@ -493,7 +493,7 @@ A13:  p = x + y & q = z & p <= q by A2,SUPINF_1:16;
          a + b < c by A2,A12,A13,REAL_1:def 5;
 then A14:  a < c - b by REAL_1:86;
          x = a & z - y = c - b by SUPINF_2:5;
-      hence thesis by A1,A2,A7,A14,Th23,SUPINF_1:120,SUPINF_1:21;
+      hence thesis by A1,A2,A7,A14,Th23,SUPINF_1:21,120;
      end;
      end;
      hence thesis;
@@ -543,7 +543,7 @@ A13:  p = x & q = z - y & p <= q by A2,SUPINF_1:16;
          a < c - b by A2,A12,A13,REAL_1:def 5;
 then A14:  a + b < c by REAL_1:86;
          x + y = a + b & z = c by SUPINF_2:1;
-      hence thesis by A1,A2,A7,A14,Th26,SUPINF_1:120,SUPINF_1:20;
+      hence thesis by A1,A2,A7,A14,Th26,SUPINF_1:20,120;
      end;
      end;
      hence thesis;
@@ -593,7 +593,7 @@ A13:  p = x - y & q = z & p <= q by A2,SUPINF_1:16;
          a - b < c by A2,A12,A13,REAL_1:def 5;
 then A14:  a < c + b by REAL_1:84;
          x = a & z + y = c + b by SUPINF_2:1;
-      hence thesis by A1,A2,A7,A14,Th25,SUPINF_1:120,SUPINF_1:21;
+      hence thesis by A1,A2,A7,A14,Th25,SUPINF_1:21,120;
      end;
      end;
      hence thesis;
@@ -643,7 +643,7 @@ A13:  p = x & q = z + y & p <= q by A2,SUPINF_1:16;
          a < c + b by A2,A12,A13,REAL_1:def 5;
 then A14:  a - b < c by REAL_1:84;
          x - y = a - b & z = c by SUPINF_2:5;
-      hence thesis by A1,A2,A7,A14,Th24,SUPINF_1:120,SUPINF_1:20;
+      hence thesis by A1,A2,A7,A14,Th24,SUPINF_1:20,120;
      end;
      end;
      hence thesis;
@@ -1381,8 +1381,8 @@ then A21: -infty <' |.y.| by A2,SUPINF_1:29;
 A22: x + y <=' |.x.| + |.y.| by A1,A2,A13,A20,SUPINF_2:14;
    -|.y.| <> +infty by A21,SUPINF_2:4,17;
 then A23: -|.x.|+(-|.y.|) <=' x + y by A1,A2,A12,SUPINF_1:14,SUPINF_2:14;
-        -|.x.|+(-|.y.|) = -(|.x.|+|.y.|) by A2,A12,A20,Th14,SUPINF_1:14,
-SUPINF_2:4;
+        -|.x.|+(-|.y.|) = -(|.x.|+|.y.|) by A2,A12,A20,Th14,SUPINF_1:14
+,SUPINF_2:4;
      hence thesis by A22,A23,Th60;
     end;
     end;
@@ -1702,8 +1702,8 @@ theorem  :: extension of ABSVALUE:22
      x is Real or y is Real implies |.|.x.|-|.y.|.| <=' |.x-y.|
 proof
    assume A1:x is Real or y is Real;
-then A2:(-infty <' x & x <' +infty) or (-infty <' y & y <' +infty) by SUPINF_1:
-31;
+then A2:(-infty <' x & x <' +infty) or (-infty <' y & y <' +infty) by
+SUPINF_1:31;
 A3:|.x.|-|.y.| <=' |.x-y.| by A1,Th68;
 A4:|.y.|-|.x.| <=' |.y-x.| by A1,Th68;
       y - x = -(x - y) by A2,Th15;
@@ -1760,9 +1760,51 @@ definition let x,y;
  func min(x,y) -> R_eal equals
 :Def1: x if x <=' y otherwise y;
  correctness;
+ commutativity
+ proof
+   let r,x,y be R_eal;
+   assume that
+   A1: x <=' y implies r = x and
+   A2: not x <=' y implies r = y;
+   thus y <=' x implies r = y
+   proof
+     assume
+     A3: y <=' x;
+     per cases;
+     suppose x <='y;
+       hence r = y by A1,A3,SUPINF_1:22;
+     end;
+     suppose not x <='y;
+       hence r = y by A2;
+     end;
+ end;
+ thus not y <=' x implies r = x by A1;
+end;
+ idempotence;
  func max(x,y) -> R_eal equals
 :Def2: x if y <=' x otherwise y;
  correctness;
+ commutativity
+ proof
+   let r,x,y be R_eal;
+   assume that
+   A1: y <=' x implies r = x and
+   A3: not y <=' x implies r = y;
+   thus x <=' y implies r = y
+   proof
+     assume
+     A2: x <=' y;
+     per cases;
+     suppose x <='y;
+       hence r = y by A1,A3,SUPINF_1:22;
+     end;
+     suppose not x <='y;
+       hence r = y by A2;
+     end;
+ end;
+ thus not x <=' y implies r = x by A1;
+end;
+ idempotence;
 end;
 
 theorem Th75:
@@ -1778,7 +1820,7 @@ proof
 then A4: y <=' x by SUPINF_1:21;
        now per cases by A4,SUPINF_1:22;
      suppose x = y;
-     hence thesis by A3,Def1;
+     hence thesis by A3;
      end;
      suppose y <' x;
      hence thesis by A3,Def1;
@@ -1801,7 +1843,7 @@ proof
 then A4: x <=' y by SUPINF_1:20;
        now per cases by A4,SUPINF_1:22;
      suppose x = y;
-     hence thesis by A3,Def2;
+     hence thesis by A3;
      end;
      suppose x <' y;
      hence thesis by A3,Def2;
@@ -1859,7 +1901,7 @@ proof
     hence thesis by Def1;
     end;
     suppose y = x;
-    hence thesis by Def1;
+    hence thesis;
 end;
 end;
 
@@ -1934,7 +1976,7 @@ proof
      end;
      suppose y = +infty;
      then x <=' y by SUPINF_1:20;
-     hence thesis by Def1,Th78;
+     hence thesis by Def1;
      end;
      suppose y <> +infty & y <> -infty;
      then reconsider b = y as Real by EXTREAL1:1;
@@ -1949,30 +1991,14 @@ end;
 
 canceled;
 
-theorem Th83:  :: extension of SQUARE_1:37
-  min(x,y) = min(y,x)
-proof
-   per cases;
-    suppose x <=' y;
-    then min(x,y) = x & min(y,x) = x by Def1,Th78;
-    hence thesis;
-    end;
-    suppose not x <=' y;
-    then min(x,y) = y & min(y,x) = y by Def1;
-    hence thesis;
-end;
-end;
+theorem  :: extension of SQUARE_1:37
+  min(x,y) = min(y,x);
 
 theorem Th84:  :: extension of SQUARE_1:38
   min(x,y) = x or min(x,y) = y
 proof
-   per cases;
-    suppose x <=' y;
-    hence thesis by Def1;
-    end;
-    suppose not x <=' y;
-    hence thesis by Def1;
-end;
+  x <=' y or not x <=' y;
+  hence thesis by Def1;
 end;
 
 theorem Th85:  :: extension of SQUARE_1:39
@@ -2026,7 +2052,7 @@ proof
     hence thesis by Def2;
     end;
     suppose x = y;
-    hence thesis by Def2;
+    hence thesis;
 end;
 end;
 
@@ -2101,7 +2127,7 @@ proof
      end;
      suppose y = -infty;
      then y <=' x by SUPINF_1:21;
-     hence thesis by Def2,Th89;
+     hence thesis by Def2;
      end;
      suppose y <> +infty & y <> -infty;
      then reconsider b = y as Real by EXTREAL1:1;
@@ -2116,19 +2142,8 @@ end;
 
 canceled;
 
-theorem Th94:  :: extension of SQUARE_1:48
-  max(x,y) = max(y,x)
-proof
-   per cases;
-    suppose y <=' x;
-    then max(x,y) = x & max(y,x) = x by Def2,Th89;
-    hence thesis;
-    end;
-    suppose not y <=' x;
-    then max(x,y) = y & max(y,x) = y by Def2;
-    hence thesis;
-end;
-end;
+theorem  :: extension of SQUARE_1:48
+  max(x,y) = max(y,x);
 
 theorem Th95:  :: extension of SQUARE_1:49
   max(x,y) = x or max(x,y) = y
@@ -2217,13 +2232,11 @@ theorem Th101:  :: extension of SQUARE_1:54
 proof
    per cases by Th84;
     suppose min(x,y) = x;
-    then max(x,min(x,y)) = x & max(min(x,y),x) = x by Def2;
-    hence thesis by Th83;
+    hence thesis;
     end;
     suppose A1:min(x,y) = y;
     then y <=' x by Def1;
-    then max(x,min(x,y)) = x & max(min(x,y),x) = x by A1,Def2,Th89;
-    hence thesis by Th83;
+    hence thesis by A1,Def2;
 end;
 end;
 
@@ -2233,35 +2246,29 @@ theorem Th102:  :: extension of SQUARE_1:55
 proof
    per cases by Th95;
     suppose max(x,y) = x;
-    then min(x,max(x,y)) = x & min(max(x,y),x) = x by Def1;
-    hence thesis by Th94;
+    hence thesis;
     end;
     suppose A1:max(x,y) = y;
     then x <=' y by Def2;
-    then min(x,max(x,y)) = x & min(max(x,y),x) = x by A1,Def1,Th78;
-    hence thesis by Th94;
+    hence thesis by A1,Def1;
 end;
 end;
 
 theorem  :: extension of SQUARE_1:56
-     min(x,max(y,z)) = max(min(x,y),min(x,z)) &
+  min(x,max(y,z)) = max(min(x,y),min(x,z)) &
   min(max(y,z),x) = max(min(y,x),min(z,x))
 proof
    per cases by Th84;
     suppose A1:min(x,max(y,z)) = x;
-then A2: min(max(y,z),x) = x by Th83;
 A3: x <=' max(y,z) by A1,Def1;
        now per cases by A3,Th95;
      suppose x <=' y;
      then min(x,y) = x by Def1;
-then A4:  max(min(x,y),min(x,z)) = x by Th101;
-     then max(min(y,x),min(x,z)) = x by Th83;
-     hence thesis by A2,A4,Th83;
+     hence thesis by A1,Th101;
      end;
      suppose x <=' z;
      then min(x,z) = x by Def1;
-     then max(min(x,y),min(x,z)) = x & max(min(y,x),min(x,z)) = x by Th101;
-     hence thesis by A2,Th83;
+     hence thesis by A1,Th101;
     end;
     end;
     hence thesis;
@@ -2269,31 +2276,26 @@ then A4:  max(min(x,y),min(x,z)) = x by Th101;
     suppose A5:min(x,max(y,z)) = max(y,z);
     then max(y,z) <=' x by Def1;
     then y <=' x & z <=' x by Th96;
-then A6: min(y,x) = y & min(z,x) = z by Def1;
-    then min(x,y) = y & min(x,z) = z by Th83;
-    hence thesis by A5,A6,Th83;
+    then min(y,x) = y & min(z,x) = z by Def1;
+    hence thesis by A5;
 end;
 end;
 
 theorem  :: extension of SQUARE_1:57
-     max(x,min(y,z)) = min(max(x,y),max(x,z)) &
+  max(x,min(y,z)) = min(max(x,y),max(x,z)) &
   max(min(y,z),x) = min(max(y,x),max(z,x))
 proof
    per cases by Th95;
     suppose A1:max(x,min(y,z)) = x;
-then A2: max(min(y,z),x) = x by Th94;
 A3: min(y,z) <=' x by A1,Def2;
        now per cases by A3,Th84;
      suppose y <=' x;
      then max(x,y) = x by Def2;
-then A4:  min(max(x,y),max(x,z)) = x by Th102;
-     then min(max(y,x),max(x,z)) = x by Th94;
-     hence thesis by A2,A4,Th94;
+     hence thesis by A1,Th102;
      end;
      suppose z <=' x;
      then max(x,z) = x by Def2;
-     then min(max(x,y),max(x,z)) = x & min(max(y,x),max(x,z)) = x by Th102;
-     hence thesis by A2,Th94;
+     hence thesis by A1,Th102;
     end;
     end;
     hence thesis;
@@ -2301,8 +2303,7 @@ then A4:  min(max(x,y),max(x,z)) = x by Th102;
     suppose A5:max(x,min(y,z)) = min(y,z);
     then x <=' min(y,z) by Def2;
     then x <=' y & x <=' z by Th85;
-then A6: max(y,x) = y & max(z,x) = z by Def2;
-    then max(x,y) = y & max(x,z) = z by Th94;
-    hence thesis by A5,A6,Th94;
+    then max(y,x) = y & max(z,x) = z by Def2;
+    hence thesis by A5;
 end;
 end;

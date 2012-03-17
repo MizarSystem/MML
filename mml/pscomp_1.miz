@@ -14,10 +14,12 @@ environ
  notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, SETFAM_1, FINSET_1, STRUCT_0, FINSOP_1, REAL_1, NAT_1, INT_1,
       MEMBERED, RELAT_1, FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
-      LIMFUNC1, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1;
+      LIMFUNC1, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1,
+      MEASURE6;
  constructors REAL_1, TOPS_2, NAT_1, INT_1, FINSOP_1, ABSVALUE, SEQ_2, SEQ_4,
       AMI_1, RCOMP_1, COMPTS_1, LIMFUNC1, TOPREAL1, SEQM_3, TSP_1, PCOMPS_1,
-      XCMPLX_0, XREAL_0, MEMBERED, RELSET_1, PARTFUN1, XBOOLE_0, COMPLEX1;
+      XCMPLX_0, XREAL_0, MEMBERED, RELSET_1, PARTFUN1, XBOOLE_0, COMPLEX1,
+      MEASURE6;
  clusters NUMBERS, SUBSET_1, STRUCT_0, PRE_TOPC, RCOMP_1, SEQM_3, EUCLID,
       PCOMPS_1, FUNCT_1, XREAL_0, RELSET_1, SEQ_1, REAL_1, SETFAM_1, INT_1,
       XBOOLE_0, SEQ_2, NAT_1, MEMBERED, RELAT_1, FUNCT_2, ZFMISC_1, ORDINAL2,
@@ -30,7 +32,7 @@ environ
       EUCLID, RFUNCT_2, SEQ_1, SEQ_2, BORSUK_1, TOPS_1, TSP_1, COMPTS_1,
       LIMFUNC1, SETFAM_1, ZFMISC_1, PCOMPS_1, TOPREAL1, JORDAN1, GOBOARD7,
       SPPOL_1, RELSET_1, XREAL_0, ORDINAL1, XBOOLE_0, XBOOLE_1, PARTFUN1,
-      XCMPLX_0, XCMPLX_1;
+      XCMPLX_0, XCMPLX_1, MEASURE6;
  schemes FINSET_1, FUNCT_2, DOMAIN_1, WELLORD2, BINOP_2;
 
 begin :: Preliminaries
@@ -97,8 +99,7 @@ A8: now let x, B be set; assume that
      thus P[B \/ {x}]
      proof
      per cases;
-     suppose A12: B is empty; assume
-         B \/ {x} <> {};
+     suppose A12: B is empty; assume B \/ {x} <> {};
       take x' = x;
       thus x' in B \/ {x} by A12,TARSKI:def 1;
       let y be set;
@@ -109,9 +110,9 @@ A8: now let x, B be set; assume that
      A14: for y being set st y in B holds z c= y by A11;
       assume B \/ {x} <> {};
      thus ex x' being set
-           st x' in B \/ {x} & for y being set st y in B \/ {x} holds x' c= y
+       st x' in B \/ {x} & for y being set st y in B \/ {x} holds x' c= y
      proof
-            z in G by A10,A13;
+       z in G by A10,A13;
      then A15:  x, z are_c=-comparable by A3,A5,A9,ORDINAL1:def 9;
      per cases by A15,XBOOLE_0:def 9;
      suppose A16: x c= z;
@@ -239,15 +240,15 @@ r < s & s < t implies abs s < abs r + abs t
 proof assume
 A1: r < s & s < t;
  per cases;
- suppose A2: s<0; then r<0 by A1;
- then A3: -s = abs(s) & -r = abs(r) by A2,ABSVALUE:def 1;
+ suppose s<0;
+ then A3: -s = abs(s) & -r = abs(r) by A1,ABSVALUE:def 1;
  A4: -s < -r by A1,REAL_1:50;
        0 <= abs(t) by ABSVALUE:5;
     then -s+0 < -r+abs(t) by A4,REAL_1:67;
   hence abs(s) < abs(r)+abs(t) by A3;
  end;
- suppose A5: 0<=s; then 0<t by A1;
- then A6: s = abs(s) & t = abs(t) by A5,ABSVALUE:def 1;
+ suppose 0<=s;
+ then A6: s = abs(s) & t = abs(t) by A1,ABSVALUE:def 1;
        0 <= abs(r) by ABSVALUE:5;
     then s+0 < t+abs(r) by A1,REAL_1:67;
  hence abs(s) < abs(r)+abs(t) by A6;
@@ -255,16 +256,7 @@ end;
 end;
 
 theorem Th5:
--s < r & r < s implies abs r < s
-proof assume that
-A1: -s < r & r < s and
-A2: abs(r) >= s;
-      abs(r) <= s by A1,ABSVALUE:12;
-then A3: abs(r) = s by A2,AXIOMS:21;
-       0 <= r or r < 0;
-    then r = s or -r = s by A3,ABSVALUE:def 1;
- hence contradiction by A1;
-end;
+  -s < r & r < s implies abs r < s by SEQ_2:9;
 
  reserve seq for Real_Sequence,
          X, Y for Subset of REAL;
@@ -378,9 +370,8 @@ registration
  cluster non empty closed bounded Subset of REAL;
  existence proof
    reconsider 0r = 0 as Real;
-      [.0,0.]={0} & [.0,0.] is closed & {0r} is bounded by RCOMP_1:14,23,SEQ_4:
-15
-;
+   [.0,0.]={0} & [.0,0.] is closed & {0r} is bounded by RCOMP_1:14,23,SEQ_4:
+15;
   hence thesis;
  end;
 end;
@@ -441,7 +432,7 @@ end;
 registration let X be non empty Subset of REAL;
  cluster -X -> non empty;
  coherence proof
-      ex x being Real st x in X by SUBSET_1:10;
+  ex x being Real st x in X by SUBSET_1:10;
   hence thesis by Th14;
  end;
 end;
@@ -455,7 +446,7 @@ A1: for t st t in X holds t <= s;
   let t; assume t in -X; then t in { -r3 : r3 in X } by Def7;
    then consider r3 such that
 A2: t = -r3 & r3 in X;
-      r3 <= s by A1,A2;
+   r3 <= s by A1,A2;
  hence t >= -s by A2,REAL_1:50;
 end;
 
@@ -473,20 +464,20 @@ A2: t = -r3 & r3 in X;
 end;
 
 theorem Th15:
-X is bounded_above iff -X is bounded_below
+  X is bounded_above iff -X is bounded_below
 proof X = --X;
  hence X is bounded_above iff -X is bounded_below by Lm1,Lm2;
 end;
 
 theorem
-   X is bounded_below iff -X is bounded_above
+  X is bounded_below iff -X is bounded_above
 proof X = --X;
  hence X is bounded_below iff -X is bounded_above by Th15;
 end;
 
 theorem Th17:
-for X being non empty Subset of REAL
- st X is bounded_below holds inf X = - sup -X
+  for X being non empty Subset of REAL
+   st X is bounded_below holds inf X = - sup -X
 proof let X be non empty Subset of REAL; assume
        X is bounded_below;
 then A1: -X is bounded_above by Lm2;
@@ -555,22 +546,53 @@ then A8: lim -s1 in X by A1,A4,RCOMP_1:def 4;
 end;
 
 theorem Th19:
-X is closed iff -X is closed
+  X is closed iff -X is closed
 proof --X = X; hence thesis by Lm3; end;
 
 definition let X be Subset of REAL, p be Real;
- func p+X -> Subset of REAL equals
+ redefine func p+X equals
 :Def8: { p+r3 : r3 in X};
- coherence
+ compatibility
  proof
-  defpred P[set] means $1 in X;
-  deffunc F(Real) = p+$1;
-  thus { F(r3) : P[r3]} is Subset of REAL from DOMAIN_1:sch 8;
+   let IT be Subset of REAL;
+   hereby assume
+A0:  IT = p + X;
+A1:  IT c= { p+r3 : r3 in X }
+     proof
+       let x be set;
+       assume
+B1:    x in IT; then
+       reconsider x' = x as Real;
+       ex z being Real st z in X & x' = p + z by B1,A0,MEASURE6:def 6;
+       hence thesis;
+     end;
+     { p+r3 : r3 in X } c= IT
+     proof
+       let x be set;
+       assume x in { p+r3 : r3 in X }; then
+       consider r3 be Real such that
+C1:    x = p + r3 & r3 in X;
+       thus thesis by A0,C1,MEASURE6:def 6;
+     end;
+     hence IT = { p+r3 : r3 in X } by A1,XBOOLE_0:def 10;
+   end;
+   assume X1: IT = { p+r3 : r3 in X };
+   now let y be Real;
+     hereby assume y in IT; then
+       consider r3 being Real such that
+E1:    y = p+r3 & r3 in X by X1;
+       thus ex z being Real st z in X & y = p + z by E1;
+     end;
+     given z being Real such that
+F1:  z in X & y = p + z;
+     thus y in IT by X1,F1;
+   end;
+   hence IT = p + X by MEASURE6:def 6;
  end;
 end;
 
 theorem Th20:
-r in X iff q3+r in q3+X
+  r in X iff q3+r in q3+X
 proof
 A1: q3+X = { q3+p : p in X } by Def8;
  hence r in X implies q3+r in q3+X;
@@ -586,7 +608,7 @@ registration let X be non empty Subset of REAL, s be Real;
 end;
 
 theorem Th21:
-X = 0+X
+  X = 0+X
 proof
 A1: 0+X = {0+r3 : r3 in X} by Def8;
      now let x be set;
@@ -602,7 +624,7 @@ A1: 0+X = {0+r3 : r3 in X} by Def8;
 end;
 
 theorem Th22:
-q3+(p3+X) = (q3+p3)+X
+  q3+(p3+X) = (q3+p3)+X
 proof
 A1: q3+(p3+X) = {q3+r3 : r3 in p3+X} by Def8;
 A2: p3+X = {p3+r3 : r3 in X} by Def8;
@@ -637,7 +659,7 @@ A2: t = p+r3 & r3 in X;
 end;
 
 theorem
-   X is bounded_above iff q3+X is bounded_above
+  X is bounded_above iff q3+X is bounded_above
 proof -q3+(q3+X) = (-q3+q3)+X by Th22 .= X by Th21;
  hence thesis by Lm4;
 end;
@@ -656,15 +678,15 @@ A2: t = p+r3 & r3 in X;
 end;
 
 theorem
-   X is bounded_below iff q3+X is bounded_below
+  X is bounded_below iff q3+X is bounded_below
 proof
-     -q3+(q3+X) = (-q3+q3)+X by Th22 .= X by Th21;
+  -q3+(q3+X) = (-q3+q3)+X by Th22 .= X by Th21;
  hence thesis by Lm5;
 end;
 
 theorem
-   for X being non empty Subset of REAL
- st X is bounded_below holds inf (q3+X) = q3+inf X
+  for X being non empty Subset of REAL
+   st X is bounded_below holds inf (q3+X) = q3+inf X
 proof let X be non empty Subset of REAL such that
 A1: X is bounded_below;
    set i = q3+inf X;
@@ -686,8 +708,8 @@ A3: now let s; assume s in q3+X; then consider r3 such that
 end;
 
 theorem
-   for X being non empty Subset of REAL
- st X is bounded_above holds sup (q3+X) = q3+sup X
+  for X being non empty Subset of REAL
+   st X is bounded_above holds sup (q3+X) = q3+sup X
 proof let X be non empty Subset of REAL such that
 A1: X is bounded_above;
    set i = q3+sup X;
@@ -730,8 +752,7 @@ then A4: s1-s0 is convergent by A3,SEQ_2:25;
         .= s1.n + - q3 by FUNCOP_1:13
         .= s1.n - q3;
           s1.n in rng s1 by FUNCT_2:6;
-       then s1.n in q3+X by A2;
-       then x'+q3 in q3+X by A8;
+       then x'+q3 in q3+X by A2,A8;
     hence x in X by Th20;
    end;
 then A9: lim (s1-s0) in X by A1,A4,RCOMP_1:def 4;
@@ -742,7 +763,7 @@ then A9: lim (s1-s0) in X by A1,A4,RCOMP_1:def 4;
 end;
 
 theorem Th27:
-X is closed iff q3+X is closed
+  X is closed iff q3+X is closed
 proof -q3+(q3+X) = (-q3+q3)+X by Th22 .= X by Th21;
  hence thesis by Lm6;
 end;
@@ -759,7 +780,7 @@ definition let X be Subset of REAL;
 end;
 
 theorem Th28:
-for X being without_zero Subset of REAL holds r in X iff 1/r in Inv X
+  for X being without_zero Subset of REAL holds r in X iff 1/r in Inv X
 proof let X be without_zero Subset of REAL;
 A1: Inv X = { 1/p : p in X } by Def9;
  hence r in X implies 1/r in Inv X;
@@ -799,7 +820,7 @@ registration let X be without_zero Subset of REAL;
 end;
 
 theorem Th29:
-for X being without_zero Subset of REAL holds Inv Inv X = X
+  for X being without_zero Subset of REAL holds Inv Inv X = X
 proof let X be without_zero Subset of REAL;
      now let x be set;
    hereby assume x in Inv Inv X;
@@ -823,8 +844,8 @@ proof let X be without_zero Subset of REAL;
 end;
 
 theorem
-   for X being without_zero Subset of REAL
- st X is closed & X is bounded holds Inv X is closed
+  for X being without_zero Subset of REAL
+   st X is closed & X is bounded holds Inv X is closed
 proof let X be without_zero Subset of REAL; assume that
 A1: X is closed and
 A2: X is bounded;
@@ -872,12 +893,12 @@ then A16: lim s1" in X by A1,A12,RCOMP_1:def 4;
 end;
 
 theorem Th31:
- for Z being Subset-Family of REAL st Z is closed holds meet Z is closed
+  for Z being Subset-Family of REAL st Z is closed holds meet Z is closed
 proof let Z be Subset-Family of REAL; assume
 A1: Z is closed;
   set mZ = meet Z;
  let seq be Real_Sequence; assume that
-A2: rng seq  c= mZ and
+A2: rng seq c= mZ and
 A3: seq is convergent;
  per cases;
  suppose Z = {}; then mZ = {} by SETFAM_1:def 1;
@@ -890,7 +911,7 @@ A3: seq is convergent;
         hence x in X by A2,A5,SETFAM_1:def 1;
        end;
        reconsider X' = X as Subset of REAL by A5;
-          X' is closed by A1,A5,Def6;
+       X' is closed by A1,A5,Def6;
     hence lim seq in X by A3,A6,RCOMP_1:def 4;
    end;
   hence lim seq in mZ by A4,SETFAM_1:def 1;
@@ -923,7 +944,7 @@ A1:  IT= meet ClX;
     then IT c= W by SUBSET_1:def 4;
     then A3:  W in ClIT by FCONT_3:1;
    thus
-       IT c= meet { A where A is Element of bool REAL : IT c= A & A is closed }
+   IT c= meet { A where A is Element of bool REAL : IT c= A & A is closed }
     proof let e be set;
      assume
 A4:   e in IT;
@@ -951,8 +972,7 @@ A7:       A is closed;
    let e be set;
    assume
 A8:  e in meet ClIT;
-
-         for Y being set holds Y in ClX implies e in Y
+     for Y being set holds Y in ClX implies e in Y
        proof let Y be set;
         assume
 A9:      Y in ClX;
@@ -986,7 +1006,7 @@ A1: Z is closed proof let Y be Subset of REAL; assume Y in Z;
 end;
 
 theorem Th32:
- for Y being closed Subset of REAL st X c= Y holds Cl X c= Y
+  for Y being closed Subset of REAL st X c= Y holds Cl X c= Y
 proof let Y be closed Subset of REAL; assume
 A1: X c= Y;
    set ClX = { A where A is Element of bool REAL : X c= A & A is closed };
@@ -996,7 +1016,7 @@ A2: Cl X = meet ClX by Def10;
 end;
 
 theorem Th33:
-X c= Cl X
+  X c= Cl X
 proof let x be set; assume
 A1: x in X;
    set ClX = { A where A is Element of bool REAL : X c= A & A is closed };
@@ -1012,7 +1032,7 @@ then A3: [#]REAL in ClX by FCONT_3:1;
 end;
 
 theorem Th34:
-X is closed iff X = Cl X
+  X is closed iff X = Cl X
 proof
  hereby assume
  A1: X is closed;
@@ -1027,16 +1047,16 @@ proof
 end;
 
 theorem
-    Cl ({}REAL) = {} by Th34,FCONT_3:3;
+  Cl ({}REAL) = {} by Th34,FCONT_3:3;
 
 theorem
-    Cl ([#]REAL) = REAL
+  Cl ([#]REAL) = REAL
 proof REAL = [#]REAL by SUBSET_1:def 4;
  hence thesis by Th34,FCONT_3:1;
 end;
 
 theorem
-   X c= Y implies Cl X c= Cl Y
+  X c= Y implies Cl X c= Cl Y
 proof assume
 A1: X c= Y;
     Y c= Cl Y by Th33;
@@ -1146,7 +1166,7 @@ A10: now let p be real number; assume
      A18: seq.m = s & r3-1/m1 < s & s < r3+1/m1;
             r3-1/m1 = r3+-1/m1;
          then -1/m1 < s-r3 & s-r3 < 1/m1 by A18,REAL_1:84,86;
-     then A19: abs(s-r3) < 1/m1 by Th5;
+     then A19: abs(s-r3) < 1/m1 by SEQ_2:9;
      A20: n+1 > 0 by NAT_1:18;
             n+1 <= m+1 by A15,AXIOMS:24;
      then A21: 1/m1 <= 1/(n+1) by A20,REAL_2:152;
@@ -2026,8 +2046,8 @@ A6: now assume 0 in rng bf; then consider x being set such that
       reconsider 1' = 1 as real number;
       take 1';
       thus 1' > 0;
-      let r be real number; assume r in gcT; then r <= p by A11;
-      hence r <= 1' by A12;
+      let r be real number; assume r in gcT;
+      hence r <= 1' by A12,A11;
      end;
      suppose A13: p > 0;
       take p;

@@ -10,12 +10,12 @@ environ
       RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
       GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
-      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, STRUCT_0, RLVECT_1, VECTSP_1,
-      INT_1, NAT_1, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, INT_2;
- constructors REAL_1, VECTSP_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1,
+      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, STRUCT_0, RLVECT_1, INT_1,
+      NAT_1, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, INT_2;
+ constructors REAL_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, RLVECT_1,
       ABSVALUE, MEMBERED, XBOOLE_0, BINOP_2, INT_2;
- clusters FINSET_1, VECTSP_1, INT_1, STRUCT_0, RELSET_1, XREAL_0, MEMBERED,
-      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ clusters FINSET_1, INT_1, STRUCT_0, RELSET_1, XREAL_0, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -23,6 +23,24 @@ begin
 
  reserve k,m,n for Nat;
  reserve i,j for Integer;
+
+definition
+  struct(1-sorted) HGrStr (# carrier -> set,
+                             mult -> BinOp of the carrier #);
+end;
+
+registration
+ cluster non empty strict HGrStr;
+end;
+
+definition
+  let S be non empty HGrStr;
+  let x, y be Element of S;
+ func x*y -> Element of S equals
+:: GROUP_1:def 1
+  (the mult of S).(x,y);
+end;
+
  reserve S for non empty HGrStr;
  reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
 
@@ -34,18 +52,20 @@ end;
 definition
  let IT be non empty HGrStr;
  attr IT is unital means
-:: GROUP_1:def 1
+:: GROUP_1:def 2
    ex e being Element of IT st
         for h being Element of IT holds
          h * e = h & e * h = h;
- canceled;
-
  attr IT is Group-like means
 :: GROUP_1:def 3
    ex e being Element of IT st
         for h being Element of IT holds
          h * e = h & e * h = h &
          ex g being Element of IT st h * g = e & g * h = e;
+ attr IT is associative means
+:: GROUP_1:def 4
+  for x,y,z being Element of IT holds
+          (x*y)*z = x*(y*z);
 end;
 
 registration
@@ -63,7 +83,7 @@ end;
 canceled 4;
 
 theorem :: GROUP_1:5
-    ((for r,s,t holds (r * s) * t = r * (s * t)) &
+  ((for r,s,t holds (r * s) * t = r * (s * t)) &
    ex t st
     for s1 holds s1 * t = s1 & t * s1 = s1 &
      ex s2 st s1 * s2 = t & s2 * s1 = t) implies S is Group;
@@ -80,9 +100,10 @@ theorem :: GROUP_1:7
  reserve G for Group-like (non empty HGrStr);
  reserve e,h for Element of G;
 
-definition let G be unital (non empty HGrStr);
+definition let G be non empty HGrStr such that
+ G is unital;
  func 1.G -> Element of G means
-:: GROUP_1:def 4
+:: GROUP_1:def 5
    for h being Element of G
     holds h * it = h & it * h = h;
 end;
@@ -97,7 +118,7 @@ theorem :: GROUP_1:10
 
 definition let G,h;
  func h" -> Element of G means
-:: GROUP_1:def 5
+:: GROUP_1:def 6
    h * it = 1.G & it * h = 1.G;
 end;
 
@@ -136,10 +157,10 @@ theorem :: GROUP_1:22
  f * h = g iff f = g * h";
 
 theorem :: GROUP_1:23
-    ex f st g * f = h;
+  ex f st g * f = h;
 
 theorem :: GROUP_1:24
-    ex f st f * g = h;
+  ex f st f * g = h;
 
 theorem :: GROUP_1:25
  (h * g)" = g" * h";
@@ -157,7 +178,7 @@ reserve u for UnOp of the carrier of G;
 
 definition let G;
  func inverse_op(G) -> UnOp of the carrier of G means
-:: GROUP_1:def 6
+:: GROUP_1:def 7
    it.h = h";
 end;
 
@@ -188,23 +209,23 @@ theorem :: GROUP_1:36
 theorem :: GROUP_1:37
     the_inverseOp_wrt the mult of G = inverse_op(G);
 
-definition let G be unital (non empty HGrStr);
+definition let G be non empty HGrStr;
  func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
-:: GROUP_1:def 7
+:: GROUP_1:def 8
    for h being Element of G
    holds it.(h,0) = 1.G & for n holds it.(h,n + 1) = it.(h,n) * h;
 end;
 
 definition let G,i,h;
  func h |^ i -> Element of G equals
-:: GROUP_1:def 8
+:: GROUP_1:def 9
     power(G).(h,abs(i)) if 0 <= i otherwise
         (power(G).(h,abs(i)))";
 end;
 
 definition let G,n,h;
  redefine func h |^ n equals
-:: GROUP_1:def 9
+:: GROUP_1:def 10
     power(G).(h,n);
 end;
 
@@ -315,7 +336,7 @@ theorem :: GROUP_1:77
 
 definition let G,h;
  attr h is being_of_order_0 means
-:: GROUP_1:def 10
+:: GROUP_1:def 11
    h |^ n = 1.G implies n = 0;
  end;
 
@@ -330,7 +351,7 @@ theorem :: GROUP_1:79
 
 definition let G,h;
  func ord h -> Nat means
-:: GROUP_1:def 11
+:: GROUP_1:def 12
    it = 0 if h is_of_order_0 otherwise
          h |^ it = 1.G & it <> 0 &
           for m st h |^ m = 1.G & m <> 0 holds it <= m;
@@ -354,13 +375,13 @@ theorem :: GROUP_1:86
 
 definition let G;
  func Ord G -> Cardinal equals
-:: GROUP_1:def 12
+:: GROUP_1:def 13
        Card(the carrier of G);
 end;
 
 definition let S be 1-sorted;
   attr S is finite means
-:: GROUP_1:def 13
+:: GROUP_1:def 14
    the carrier of S is finite;
  end;
 
@@ -372,18 +393,31 @@ definition let G;
  assume
   G is finite;
  func ord G -> Nat means
-:: GROUP_1:def 14
+:: GROUP_1:def 15
    ex B being finite set st B = the carrier of G & it = card B;
 end;
 
 canceled 3;
 
 theorem :: GROUP_1:90
-    G is finite implies ord G >= 1;
+  G is finite implies ord G >= 1;
+
+definition let IT be non empty HGrStr;
+ attr IT is commutative means
+:: GROUP_1:def 16
+  for x,y being Element of IT holds x*y = y*x;
+end;
 
 registration
  cluster strict commutative Group;
 end;
+
+definition let FS be commutative (non empty HGrStr);
+ let x,y be Element of FS;
+ redefine func x*y;
+ commutativity;
+end;
+
 
 canceled;
 
@@ -396,13 +430,13 @@ reserve a,b for Element of A;
 canceled;
 
 theorem :: GROUP_1:94
-    (a * b)" = a" * b";
+  (a * b)" = a" * b";
 
 theorem :: GROUP_1:95
-    (a * b) |^ n = a |^ n * (b |^ n);
+  (a * b) |^ n = a |^ n * (b |^ n);
 
 theorem :: GROUP_1:96
-    (a * b) |^ i = a |^ i * (b |^ i);
+  (a * b) |^ i = a |^ i * (b |^ i);
 
 registration
  let A be non empty set, m be BinOp of A, u be Element of A;
@@ -413,7 +447,3 @@ theorem :: GROUP_1:97
     LoopStr (# the carrier of A, the mult of A, 1.A #)
              is Abelian add-associative right_zeroed right_complementable;
 
-reserve B for AbGroup;
-
-theorem :: GROUP_1:98
-    HGrStr (# the carrier of B, the add of B #) is commutative Group;

@@ -10,22 +10,47 @@ environ
       RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
       GROUP_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
-      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, STRUCT_0, RLVECT_1, VECTSP_1,
-      INT_1, NAT_1, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, INT_2;
- constructors REAL_1, VECTSP_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1,
+      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, STRUCT_0, RLVECT_1, INT_1,
+      NAT_1, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, INT_2;
+ constructors REAL_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, RLVECT_1,
       ABSVALUE, MEMBERED, XBOOLE_0, BINOP_2, INT_2;
- clusters FINSET_1, VECTSP_1, INT_1, STRUCT_0, RELSET_1, XREAL_0, MEMBERED,
-      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ clusters FINSET_1, INT_1, STRUCT_0, RELSET_1, XREAL_0, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions BINOP_1, FINSEQOP, RLVECT_1, VECTSP_1, SETWISEO;
+ definitions BINOP_1, FINSEQOP, STRUCT_0, RLVECT_1, SETWISEO;
  theorems ABSVALUE, AXIOMS, BINOP_1, CARD_1, FINSEQOP, FUNCT_2, INT_1, NAT_1,
-      REAL_1, RLVECT_1, VECTSP_1, ZFMISC_1, STRUCT_0, XCMPLX_0, BINOP_2;
+      REAL_1, RLVECT_1, ZFMISC_1, STRUCT_0, XCMPLX_0, BINOP_2;
  schemes FUNCT_1, FUNCT_2, INT_1, NAT_1, RECDEF_1;
 
 begin
 
  reserve k,m,n for Nat;
  reserve i,j for Integer;
+
+definition
+  struct(1-sorted) HGrStr (# carrier -> set,
+                             mult -> BinOp of the carrier #);
+end;
+
+registration
+ cluster non empty strict HGrStr;
+  existence
+   proof
+    consider A being non empty set, m being BinOp of A;
+    take HGrStr(#A,m#);
+    thus the carrier of HGrStr(#A,m#) is non empty;
+    thus thesis;
+   end;
+end;
+
+definition
+  let S be non empty HGrStr;
+  let x, y be Element of S;
+ func x*y -> Element of S equals
+ :Def1: (the mult of S).(x,y);
+  coherence;
+end;
+
  reserve S for non empty HGrStr;
  reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
 
@@ -39,11 +64,10 @@ Lm1:
 now set G = HGrStr (# REAL, addreal #);
   A1: now let h,g be Element of G, A,B be Real;
     assume h = A & g = B;
-   hence h * g = addreal.(A,B) by VECTSP_1:def 10
+   hence h * g = addreal.(A,B) by Def1
               .= A + B by BINOP_2:def 9;
   end;
- thus for h,g,f being Element of G holds h * g * f = h * (g * f
-)
+ thus for h,g,f being Element of G holds h * g * f = h * (g * f)
   proof let h,g,f be Element of G;
     reconsider A = h, B = g, C = f as Real;
     A2: h * g = A + B by A1;
@@ -71,16 +95,17 @@ end;
 definition
  let IT be non empty HGrStr;
  attr IT is unital means
-  :Def1: ex e being Element of IT st
+  :Def2: ex e being Element of IT st
         for h being Element of IT holds
          h * e = h & e * h = h;
- canceled;
-
  attr IT is Group-like means
   :Def3: ex e being Element of IT st
         for h being Element of IT holds
          h * e = h & e * h = h &
          ex g being Element of IT st h * g = e & g * h = e;
+ attr IT is associative means
+ :Def4: for x,y,z being Element of IT holds
+          (x*y)*z = x*(y*z);
 end;
 
 registration
@@ -101,8 +126,8 @@ registration
  cluster strict Group-like associative (non empty HGrStr);
   existence
    proof
-        HGrStr (# REAL, addreal #) is Group-like associative
-      by Def3,Lm1,VECTSP_1:def 16;
+     HGrStr (# REAL, addreal #) is Group-like associative
+      by Def3,Def4,Lm1;
     hence thesis;
    end;
 end;
@@ -114,11 +139,11 @@ end;
 canceled 4;
 
 theorem
-    ((for r,s,t holds (r * s) * t = r * (s * t)) &
+  ((for r,s,t holds (r * s) * t = r * (s * t)) &
    ex t st
     for s1 holds s1 * t = s1 & t * s1 = s1 &
      ex s2 st s1 * s2 = t & s2 * s1 = t) implies S is Group
-      by Def3,VECTSP_1:def 16;
+      by Def3,Def4;
 
 theorem
     (for r,s,t holds r * s * t = r * (s * t)) &
@@ -158,7 +183,7 @@ theorem Th7:
   proof set G = HGrStr (# REAL, addreal #);
     A1: now let h,g be Element of G, A,B be Real;
       assume h = A & g = B;
-     hence h * g = addreal.(A,B) by VECTSP_1:def 10
+     hence h * g = addreal.(A,B) by Def1
                 .= A + B by BINOP_2:def 9;
     end;
    thus for h,g,f being Element of G
@@ -190,11 +215,12 @@ theorem Th7:
  reserve G for Group-like (non empty HGrStr);
  reserve e,h for Element of G;
 
-definition let G be unital (non empty HGrStr);
+definition let G be non empty HGrStr such that
+A3: G is unital;
  func 1.G -> Element of G means
-  :Def4: for h being Element of G
+  :Def5: for h being Element of G
     holds h * it = h & it * h = h;
- existence by Def1;
+ existence by A3,Def2;
  uniqueness
   proof let e1,e2 be Element of G;
    assume that
@@ -208,36 +234,36 @@ end;
 canceled 2;
 
 theorem
-    (for h holds h * e = h & e * h = h) implies e = 1.G by Def4;
+    (for h holds h * e = h & e * h = h) implies e = 1.G by Def5;
 
  reserve G for Group;
  reserve e,f,g,h for Element of G;
 
 definition let G,h;
  func h" -> Element of G means
-  :Def5: h * it = 1.G & it * h = 1.G;
+  :Def6: h * it = 1.G & it * h = 1.G;
  existence
   proof consider e such that A1: for h holds h * e = h & e * h = h &
                                  ex g st h * g = e & g * h = e by Def3;
     consider g such that A2: h * g = e & g * h = e by A1;
     reconsider g as Element of G;
    take g;
-    thus thesis by A1,A2,Def4;
+    thus thesis by A1,A2,Def5;
   end;
  uniqueness
   proof let h1,h2 be Element of G;
     assume that A3: h * h1 = 1.G & h1 * h = 1.G and
                 A4: h * h2 = 1.G & h2 * h = 1.G;
-   thus h1 = 1.G * h1 by Def4
-          .= h2 * (h * h1) by A4,VECTSP_1:def 16
-          .= h2 by A3,Def4;
+   thus h1 = 1.G * h1 by Def5
+          .= h2 * (h * h1) by A4,Def4
+          .= h2 by A3,Def5;
   end;
 end;
 
 canceled;
 
 theorem
-    h * g = 1.G & g * h = 1.G implies g = h" by Def5;
+    h * g = 1.G & g * h = 1.G implies g = h" by Def6;
 
 canceled;
 
@@ -245,32 +271,32 @@ theorem Th14:
  h * g = h * f or g * h = f * h implies g = f
   proof assume h * g = h * f or g * h = f * h;
     then h " * (h * g) = h" * h * f or g * h * h" = f * (h * h")
-     by VECTSP_1:def 16;
+     by Def4;
     then h " * (h * g) = 1.G * f or g * (h * h") = f * (h * h")
-     by Def5,VECTSP_1:def 16;
-    then h " * (h * g) = f or g * 1.G = f * (h * h") by Def4,Def5;
-    then h " * h * g = f or g = f * (h * h") by Def4,VECTSP_1:def 16;
-    then h " * h * g = f or g = f * 1.G by Def5;
-    then 1.G * g = f or g = f by Def4,Def5;
-   hence thesis by Def4;
+     by Def4,Def6;
+    then h " * (h * g) = f or g * 1.G = f * (h * h") by Def5,Def6;
+    then h " * h * g = f or g = f * (h * h") by Def4,Def5;
+    then h " * h * g = f or g = f * 1.G by Def6;
+    then 1.G * g = f or g = f by Def5,Def6;
+   hence thesis by Def5;
   end;
 
 theorem
     h * g = h or g * h = h implies g = 1.G
-  proof h * 1.G = h & 1.G * h = h by Def4;
+  proof h * 1.G = h & 1.G * h = h by Def5;
    hence thesis by Th14;
   end;
 
 theorem Th16:
  (1.G)" = 1.G
-  proof (1.G)" * 1.G = 1.G & 1.G * 1.G = 1.G by Def4,Def5;
+  proof (1.G)" * 1.G = 1.G & 1.G * 1.G = 1.G by Def5,Def6;
    hence thesis by Th14;
   end;
 
 theorem Th17:
  h" = g" implies h = g
   proof assume h" = g";
-    then h * g" = 1.G & g * g" = 1.G by Def5;
+    then h * g" = 1.G & g * g" = 1.G by Def6;
    hence thesis by Th14;
   end;
 
@@ -282,14 +308,14 @@ theorem
 
 theorem Th19:
  h"" = h
-  proof h" * h"" = 1.G & h" * h = 1.G by Def5;
+  proof h" * h"" = 1.G & h" * h = 1.G by Def6;
    hence thesis by Th14;
   end;
 
 theorem Th20:
  h * g = 1.G or g * h = 1.G implies h = g" & g = h"
   proof assume A1: h * g = 1.G or g * h = 1.G;
-       h * h" = 1.G & g * g" = 1.G & h" * h = 1.G & g" * g = 1.G by Def5;
+       h * h" = 1.G & g * g" = 1.G & h" * h = 1.G & g" * g = 1.G by Def6;
    hence thesis by A1,Th14;
   end;
 
@@ -297,40 +323,40 @@ theorem Th21:
  h * f = g iff f = h" * g
   proof
    thus h * f = g implies f = h" * g
-    proof h * (h" * g) = h * h" * g by VECTSP_1:def 16
-                      .= 1.G * g by Def5
-                      .= g by Def4;
+    proof h * (h" * g) = h * h" * g by Def4
+                      .= 1.G * g by Def6
+                      .= g by Def5;
      hence thesis by Th14;
     end;
     assume f = h" * g;
-   hence h * f = h * h" * g by VECTSP_1:def 16
-              .= 1.G * g by Def5
-              .= g by Def4;
+   hence h * f = h * h" * g by Def4
+              .= 1.G * g by Def6
+              .= g by Def5;
   end;
 
 theorem Th22:
  f * h = g iff f = g * h"
   proof
    thus f * h = g implies f = g * h"
-    proof g * h" * h = g * (h" * h) by VECTSP_1:def 16
-                    .= g * 1.G by Def5
-                    .= g by Def4;
+    proof g * h" * h = g * (h" * h) by Def4
+                    .= g * 1.G by Def6
+                    .= g by Def5;
      hence thesis by Th14;
     end;
     assume f = g * h";
- hence f * h = g * (h" * h) by VECTSP_1:def 16
-            .= g * 1.G by Def5
-            .= g by Def4;
+ hence f * h = g * (h" * h) by Def4
+            .= g * 1.G by Def6
+            .= g by Def5;
 end;
 
 theorem
-    ex f st g * f = h
+  ex f st g * f = h
   proof take g" * h;
    thus thesis by Th21;
   end;
 
 theorem
-    ex f st f * g = h
+  ex f st f * g = h
   proof take h * g";
    thus thesis by Th22;
   end;
@@ -338,11 +364,11 @@ theorem
 theorem Th25:
  (h * g)" = g" * h"
   proof
-       (g" * h") * (h * g) = g" * h" * h * g by VECTSP_1:def 16
-                       .= g" * (h" * h) * g by VECTSP_1:def 16
-                       .= g" * 1.G * g by Def5
-                       .= g" * g by Def4
-                       .= 1.G by Def5;
+       (g" * h") * (h * g) = g" * h" * h * g by Def4
+                       .= g" * (h" * h) * g by Def4
+                       .= g" * 1.G * g by Def6
+                       .= g" * g by Def5
+                       .= 1.G by Def6;
    hence thesis by Th20;
   end;
 
@@ -351,12 +377,12 @@ theorem Th26:
   proof
    thus g * h = h * g implies (g * h)" = g" * h" by Th25;
     assume A1: (g * h)" = g" * h";
-     A2: (g * h) * (g * h)" = 1.G by Def5;
-        (h * g) * (g * h)" = h * g * g" * h" by A1,VECTSP_1:def 16
-                       .= h * (g * g") * h" by VECTSP_1:def 16
-                       .= h * 1.G * h" by Def5
-                       .= h * h" by Def4
-                       .= 1.G by Def5;
+     A2: (g * h) * (g * h)" = 1.G by Def6;
+        (h * g) * (g * h)" = h * g * g" * h" by A1,Def4
+                       .= h * (g * g") * h" by Def4
+                       .= h * 1.G * h" by Def6
+                       .= h * h" by Def5
+                       .= 1.G by Def6;
    hence thesis by A2,Th14;
   end;
 
@@ -381,32 +407,32 @@ theorem Th28:
   proof
    thus g * h = h * g implies g * h" = h" * g
     proof assume A1: g * h = h * g;
-         (g * h") * (g" * h) = g * h" * g" * h by VECTSP_1:def 16
-                         .= g * (h" * g") * h by VECTSP_1:def 16
+         (g * h") * (g" * h) = g * h" * g" * h by Def4
+                         .= g * (h" * g") * h by Def4
                          .= g * (g" * h") * h by A1,Th27
-                         .= g * g" * h" * h by VECTSP_1:def 16
-                         .= 1.G * h" * h by Def5
-                         .= h" * h by Def4
-                         .= 1.G by Def5;
+                         .= g * g" * h" * h by Def4
+                         .= 1.G * h" * h by Def6
+                         .= h" * h by Def5
+                         .= 1.G by Def6;
       then g * h" = (g" * h)" by Th20
                  .= h" * g"" by Th25;
      hence thesis by Th19;
     end;
     assume g * h" = h" * g;
-     then g * (h" * h) = h" * g * h by VECTSP_1:def 16;
-     then g * 1.G = h" * g * h by Def5;
-     then g = h" * g * h by Def4;
-     then g = h" * (g * h) by VECTSP_1:def 16;
-     then h * g = h * h" * (g * h) by VECTSP_1:def 16;
-     then h * g = 1.G * (g * h) by Def5;
-   hence thesis by Def4;
+     then g * (h" * h) = h" * g * h by Def4;
+     then g * 1.G = h" * g * h by Def6;
+     then g = h" * g * h by Def5;
+     then g = h" * (g * h) by Def4;
+     then h * g = h * h" * (g * h) by Def4;
+     then h * g = 1.G * (g * h) by Def6;
+   hence thesis by Def5;
   end;
 
 reserve u for UnOp of the carrier of G;
 
 definition let G;
  func inverse_op(G) -> UnOp of the carrier of G means
-  :Def6: it.h = h";
+  :Def7: it.h = h";
  existence
   proof
     deffunc F(Element of G) = $1";
@@ -437,11 +463,11 @@ theorem Th31:
   proof let G be associative (non empty HGrStr);
    let h,g,f be Element of G;
     set o = the mult of G;
-   thus o.(h,o.(g,f)) = o.(h,g * f) by VECTSP_1:def 10
-                     .= h * (g * f) by VECTSP_1:def 10
-                     .= h * g * f by VECTSP_1:def 16
-                     .= o.(h * g,f) by VECTSP_1:def 10
-                     .= o.(o.(h,g),f) by VECTSP_1:def 10;
+   thus o.(h,o.(g,f)) = o.(h,g * f) by Def1
+                     .= h * (g * f) by Def1
+                     .= h * g * f by Def4
+                     .= o.(h * g,f) by Def1
+                     .= o.(o.(h,g),f) by Def1;
   end;
 
 theorem Th32:
@@ -450,10 +476,10 @@ theorem Th32:
   proof let G be unital (non empty HGrStr);
     set o = the mult of G;
        now let h be Element of G;
-     thus o.(1.G,h) = 1.G * h by VECTSP_1:def 10
-                   .= h by Def4;
-     thus o.(h,1.G) = h * 1.G by VECTSP_1:def 10
-                   .= h by Def4;
+     thus o.(1.G,h) = 1.G * h by Def1
+                   .= h by Def5;
+     thus o.(h,1.G) = h * 1.G by Def1
+                   .= h by Def5;
     end;
    hence thesis by BINOP_1:11;
   end;
@@ -478,14 +504,14 @@ theorem Th35:
  inverse_op(G) is_an_inverseOp_wrt the mult of G
   proof let h be Element of G;
    thus (the mult of G).(h,inverse_op(G).h) =
-                          h * (inverse_op(G).h) by VECTSP_1:def 10
-                       .= h * h" by Def6
-                       .= 1.G by Def5
+                          h * (inverse_op(G).h) by Def1
+                       .= h * h" by Def7
+                       .= 1.G by Def6
                        .= the_unity_wrt the mult of G by Th33;
    thus (the mult of G).(inverse_op(G).h,h) =
-                          (inverse_op(G).h) * h by VECTSP_1:def 10
-                       .= h" * h by Def6
-                       .= 1.G by Def5
+                          (inverse_op(G).h) * h by Def1
+                       .= h" * h by Def7
+                       .= 1.G by Def6
                        .= the_unity_wrt the mult of G by Th33;
   end;
 
@@ -503,9 +529,9 @@ theorem
    hence thesis by FINSEQOP:def 3;
   end;
 
-definition let G be unital (non empty HGrStr);
+definition let G be non empty HGrStr;
  func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
-  :Def7: for h being Element of G
+  :Def8: for h being Element of G
    holds it.(h,0) = 1.G & for n holds it.(h,n + 1) = it.(h,n) * h;
  existence
   proof
@@ -632,32 +658,32 @@ end;
 
 definition let G,i,h;
  func h |^ i -> Element of G equals
-  :Def8:  power(G).(h,abs(i)) if 0 <= i otherwise
+  :Def9:  power(G).(h,abs(i)) if 0 <= i otherwise
         (power(G).(h,abs(i)))";
  correctness;
 end;
 
 definition let G,n,h;
  redefine func h |^ n equals
-  :Def9:  power(G).(h,n);
+  :Def10:  power(G).(h,n);
  compatibility
   proof let g be Element of G;
 A1: n >= 0 by NAT_1:18;
    then abs( n ) = n by ABSVALUE:def 1;
-   hence thesis by A1,Def8;
+   hence thesis by A1,Def9;
   end;
 end;
 
 Lm2: h |^ (n + 1) = h |^ n * h
  proof
-  thus h |^ (n + 1) = power(G).(h,n + 1) by Def9
-                  .= (power(G).(h,n)) * h by Def7
-                  .= h |^ n * h by Def9;
+  thus h |^ (n + 1) = power(G).(h,n + 1) by Def10
+                  .= (power(G).(h,n)) * h by Def8
+                  .= h |^ n * h by Def10;
  end;
 
 Lm3: h |^ 0 = 1.G
- proof h |^ 0 = power(G).(h,0) by Def9;
-  hence thesis by Def7;
+ proof h |^ 0 = power(G).(h,0) by Def10;
+  hence thesis by Def8;
  end;
 
 canceled 4;
@@ -670,7 +696,7 @@ A1: P[0] by Lm3;
 A2: now let n;
   assume P[n];
   then (1.G) |^ (n + 1) = 1.G * 1.G by Lm2
-                   .= 1.G by Def4;
+                   .= 1.G by Def5;
   hence P[n+1];
 end;
   for n holds P[n] from NAT_1:sch 1(A1,A2);
@@ -686,7 +712,7 @@ theorem Th44:
    thus h |^ 1 = h |^(0 + 1)
              .= h |^ 0 * h by Lm2
              .= 1.G * h by Lm3
-             .= h by Def4;
+             .= h by Def5;
   end;
 
 theorem Th45:
@@ -716,7 +742,7 @@ theorem
     end;
     assume h = h";
    hence h |^ 2 = h * h" by Th45
-              .= 1.G by Def5;
+              .= 1.G by Def6;
   end;
 
 theorem Th48:
@@ -725,7 +751,7 @@ theorem Th48:
   defpred P[Nat] means
   for n holds h |^ (n + $1) = h |^ n * (h |^ $1);
 A1: P[0] proof let n;
- thus h |^ (n + 0) = h |^ n * 1.G by Def4
+ thus h |^ (n + 0) = h |^ n * 1.G by Def5
                  .= h |^ n * (h |^ 0) by Lm3;
 end;
 A2: for m st P[m] holds P[m+1]
@@ -735,7 +761,7 @@ A2: for m st P[m] holds P[m+1]
  thus h |^ (n + (m + 1)) = h |^ (n + m + 1)
                        .= h |^ (n + m) * h by Lm2
                        .= h |^ n * (h |^ m) * h by A3
-                       .= h |^ n * (h |^ m * h) by VECTSP_1:def 16
+                       .= h |^ n * (h |^ m * h) by Def4
                        .= h |^ n * (h |^ (m + 1)) by Lm2;
 end;
    for m holds P[m] from NAT_1:sch 1(A1,A2);
@@ -797,8 +823,8 @@ proof
   defpred P[Nat] means g * h = h * g implies g * (h |^ $1) = h |^ $1 * g;
 A1: P[0] proof assume g * h = h * g;
  thus g * (h |^ 0) = g * 1.G by Lm3
-                 .= g by Def4
-                 .= 1.G * g by Def4
+                 .= g by Def5
+                 .= 1.G * g by Def5
                  .= h |^ 0 * g by Lm3;
 end;
 A2: for n st P[n] holds P[n+1]
@@ -806,9 +832,9 @@ A2: for n st P[n] holds P[n+1]
   assume A3: g * h = h * g implies g * (h |^ n) = h |^ n * g;
   assume A4: g * h = h * g;
  thus g * (h |^ (n + 1)) = g * (h * (h |^ n)) by Th49
-                       .= g * h * (h |^ n) by VECTSP_1:def 16
-                       .= h * ((h |^ n) * g)by A3,A4,VECTSP_1:def 16
-                       .= h * (h |^ n) * g by VECTSP_1:def 16
+                       .= g * h * (h |^ n) by Def4
+                       .= h * ((h |^ n) * g)by A3,A4,Def4
+                       .= h * (h |^ n) * g by Def4
                        .= h |^ (n + 1) * g by Th49;
 end;
    for n holds P[n] from NAT_1:sch 1(A1,A2);
@@ -823,8 +849,8 @@ proof
 A1: P[0] proof let m;
   assume g * h = h * g;
  thus g |^ 0 * (h |^ m) = 1.G * (h |^ m)by Lm3
-                     .= h |^ m by Def4
-                     .= h |^ m * 1.G by Def4
+                     .= h |^ m by Def5
+                     .= h |^ m * 1.G by Def5
                      .= h |^ m * (g |^ 0) by Lm3;
 end;
 A2: for n st P[n] holds P[n+1]
@@ -834,11 +860,11 @@ A3: for m st g * h = h * g holds g |^ n * (h |^ m) = h |^ m * (g |^ n);
   let m;
   assume A4: g * h = h * g;
  thus g |^ (n + 1) * (h |^ m) = g * (g |^ n) * (h |^ m) by Th49
-                         .= g * ((g |^ n) * (h |^ m)) by VECTSP_1:def 16
+                         .= g * ((g |^ n) * (h |^ m)) by Def4
                          .= g * ((h |^ m) * (g |^ n)) by A3,A4
-                         .= g * (h |^ m) * (g |^ n) by VECTSP_1:def 16
+                         .= g * (h |^ m) * (g |^ n) by Def4
                          .= h |^ m * g * (g |^ n) by A4,Th52
-                         .= h |^ m * (g * (g |^ n)) by VECTSP_1:def 16
+                         .= h |^ m * (g * (g |^ n)) by Def4
                          .= h |^ m * (g |^ (n + 1)) by Th49;
 end;
     for n holds P[n] from NAT_1:sch 1(A1,A2);
@@ -853,7 +879,7 @@ proof
 A1: P[0] proof
   assume g * h = h * g;
   thus (g * h) |^ 0 = 1.G by Lm3
-                 .= 1.G * 1.G by Def4
+                 .= 1.G * 1.G by Def5
                  .= g |^ 0 * 1.G by Lm3
                  .= g |^ 0 * (h |^ 0) by Lm3;
 end;
@@ -862,11 +888,11 @@ A2: for n st P[n] holds P[n+1]
    assume A3: g * h = h * g implies (g * h) |^ n = g |^ n * (h |^ n);
    assume A4: g * h = h * g;
   hence (g * h) |^ (n + 1) = g |^ n * (h |^ n) * (h * g) by A3,Th49
-                         .= g |^ n * (h |^ n) * h * g by VECTSP_1:def 16
-                         .= g |^ n * ((h |^ n) * h) * g by VECTSP_1:def 16
+                         .= g |^ n * (h |^ n) * h * g by Def4
+                         .= g |^ n * ((h |^ n) * h) * g by Def4
                          .= g |^ n * (h |^ (n + 1)) * g by Th49
                          .= h |^ (n + 1) * (g |^ n) * g by A4,Th53
-                         .= h |^ (n + 1) * ((g |^ n) * g) by VECTSP_1:def 16
+                         .= h |^ (n + 1) * ((g |^ n) * g) by Def4
                          .= h |^ (n + 1) * (g |^ (n + 1)) by Th49
                          .= g |^ (n + 1) * (h |^ (n + 1)) by A4,Th53;
  end;
@@ -880,15 +906,15 @@ theorem Th55:
    assume
 A1:  0 <= i;
     then reconsider i as Nat by INT_1:16;
-       h |^ i = power(G).(h,abs(i)) by A1,Def8;
-   hence thesis by Def9;
+       h |^ i = power(G).(h,abs(i)) by A1,Def9;
+   hence thesis by Def10;
   end;
 
 theorem Th56:
  not 0 <= i implies h |^ i = (h |^ abs(i))"
  proof
-      h |^ abs(i) = power(G).(h,abs(i)) by Def9;
-  hence thesis by Def8;
+      h |^ abs(i) = power(G).(h,abs(i)) by Def10;
+  hence thesis by Def9;
  end;
 
 canceled 2;
@@ -970,11 +996,11 @@ A1:   now per cases by Lm5;
                         .= j;
       A7: abs( j ) = j & abs( j ) = abs( - j ) by A5,ABSVALUE:17,def 1;
      thus h|^(j - 1) * (h * (h|^(- j)))
-               = h|^(j - 1) * h * (h|^(- j)) by VECTSP_1:def 16
+               = h|^(j - 1) * h * (h|^(- j)) by Def4
               .= h |^ abs( j - 1 ) * h * (h |^ (- j)) by A3,Th55
               .= h |^ abs( j - 1 ) * h * ((h |^ abs( - j ))") by A4,Th60
               .= h |^ (abs( j - 1 ) + 1) * ((h |^ abs( - j ))") by Th49
-              .= 1.G by A6,A7,Def5;
+              .= 1.G by A6,A7,Def6;
     end;
     suppose A8: j < 0;
          - 1 < 0 & 0 + 0 = 0;
@@ -989,21 +1015,21 @@ A1:   now per cases by Lm5;
      .= (h |^ abs( j - 1 ))" * (h |^ (1 + abs( - j ))) by Th49
      .= (h |^ abs( j - 1 ))" * (h |^ (1 + (- j))) by A11,ABSVALUE:def 1
      .= (h |^ abs( j - 1 ))" * (h |^ abs( j - 1 )) by A10,A12,ABSVALUE:def 1
-     .= 1.G by Def5;
+     .= 1.G by Def6;
     end;
     suppose A13: j = 0;
      hence h |^ (j - 1) * (h * (h |^ (- j))) =
                       h" * (h * (h |^ (- j))) by Th62
-                   .= h " * h * (h |^ (- j)) by VECTSP_1:def 16
-                   .= 1.G * (h |^ (- j)) by Def5
-                   .= h |^ 0 by A13,Def4
+                   .= h " * h * (h |^ (- j)) by Def4
+                   .= 1.G * (h |^ (- j)) by Def6
+                   .= h |^ 0 by A13,Def5
                    .= 1.G by Lm3;
    end;
    end;
 
       h|^(j - 1) * (h|^(1 - j)) = h|^(j - 1) * (h|^(- (j - 1)))
                               .= h |^ (j - 1) * (h |^ (j - 1))" by Lm4
-                              .= 1.G by Def5;
+                              .= 1.G by Def6;
    then h * (h |^ (- j)) = h |^ (1 - j) by A1,Th14;
    then (h |^ (1 - j))" = (h |^ (- j))" * h" by Th25
                       .= (h |^ (- (- j))) * h" by Lm4
@@ -1044,32 +1070,32 @@ A1:   now per cases by Lm7;
       .= h |^ abs( j + 1 ) * ((h |^ abs( j ) * h)") by Th25
       .= h |^ abs( j + 1 ) * (h |^ (abs( j ) + 1))" by Th49
       .= h |^ abs( j + 1 ) * (h |^ abs( j + 1 ))" by A2,A4,ABSVALUE:def 1
-      .= 1.G by Def5;
+      .= 1.G by Def6;
     end;
     suppose j < - 1;
       then A5:j + 1 < - 1 + 1 by REAL_1:53;
      hence h |^ (j + 1) * ((h |^ (- 1)) * (h |^ (- j))) =
          (h |^ abs( j + 1 ))" * ((h |^ (- 1)) * (h |^ (- j))) by Th56
       .= (h |^ abs( j + 1 ))" * (h" * (h |^ (- j))) by Th62
-      .= (h |^ abs( j + 1 ))" * h" * (h |^ (- j)) by VECTSP_1:def 16
+      .= (h |^ abs( j + 1 ))" * h" * (h |^ (- j)) by Def4
       .= (h * (h |^ abs( j + 1 )))" * (h |^ (- j)) by Th25
       .= (h |^ (abs( j + 1 ) + 1))" * (h |^ (- j)) by Th49
       .= (h |^ (- (j + 1) + 1))" * (h |^ (- j)) by A5,ABSVALUE:def 1
-      .= 1.G by Def5;
+      .= 1.G by Def6;
     end;
     suppose A6: j = - 1;
      hence h |^ (j + 1) * ((h |^ (- 1)) * (h |^ (- j))) =
          1.G * ((h |^ (- 1)) * (h |^ (- j))) by Lm3
-      .= (h |^ (- 1)) * (h |^ (- j)) by Def4
+      .= (h |^ (- 1)) * (h |^ (- j)) by Def5
       .= h" * (h |^ (- j)) by Th62
       .= h" * (h |^ j)" by Lm4
       .= h" * h"" by A6,Th62
-      .= 1.G by Def5;
+      .= 1.G by Def6;
    end;
    end;
 
       h |^ (j + 1) * (h |^ (- (j + 1))) = h |^ (j + 1) * (h |^ (j + 1))" by Lm4
-                                  .= 1.G by Def5;
+                                  .= 1.G by Def6;
    then A7: h |^ (- (j + 1)) = h |^ (- 1) * (h |^ (- j)) by A1,Th14;
   thus h |^ (j + 1) = h |^ (- (- (j + 1)))
                   .= ((h |^ (- 1)) * (h |^ (- j)))" by A7,Lm4
@@ -1085,7 +1111,7 @@ proof
   defpred P[Integer] means for i holds h |^ (i + $1) = h |^ i * (h |^ $1);
 A1: P[0]
  proof let i;
-  thus h |^ (i + 0) = h |^ i * 1.G by Def4
+  thus h |^ (i + 0) = h |^ i * 1.G by Def5
                   .= h |^ i * (h |^ 0) by Lm3;
  end;
 A2: for j holds P[j] implies P[j - 1] & P[j + 1]
@@ -1098,7 +1124,7 @@ A2: for j holds P[j] implies P[j - 1] & P[j + 1]
                      .= h |^ (i - 1) * (h |^ j) by A3
                      .= h |^ i * (h |^ (- 1)) * (h |^ j) by Lm6
                      .= h |^ i * ((h |^ (- 1)) * (h |^ j))
-                            by VECTSP_1:def 16
+                            by Def4
                      .= h |^ i * (h |^ (j + (- 1))) by A3
                      .= h |^ i * (h |^ (j - 1));
   end;
@@ -1106,7 +1132,7 @@ A2: for j holds P[j] implies P[j - 1] & P[j + 1]
  thus h |^ (i + (j + 1)) = h |^ ((i + 1) + j)
                        .= h |^ (i + 1) * (h |^ j) by A3
                        .= h |^ i * (h |^ 1) * (h |^ j) by Lm8
-                       .= h |^ i * ((h |^ 1) * (h |^ j)) by VECTSP_1:def 16
+                       .= h |^ i * ((h |^ 1) * (h |^ j)) by Def4
                        .= h |^ i * (h |^ (j + 1)) by A3;
 end;
   for j holds P[j] from INT_1:sch 4(A1,A2);
@@ -1264,7 +1290,7 @@ theorem
 
 definition let G,h;
  attr h is being_of_order_0 means
-  :Def10: h |^ n = 1.G implies n = 0;
+  :Def11: h |^ n = 1.G implies n = 0;
  end;
 
 notation let G,h;
@@ -1276,12 +1302,12 @@ canceled;
 theorem Th79:
  1.G is_not_of_order_0
   proof (1.G) |^ 8 = 1.G & 0 <> 8 by Th42;
-   hence thesis by Def10;
+   hence thesis by Def11;
   end;
 
 definition let G,h;
  func ord h -> Nat means
-  :Def11: it = 0 if h is_of_order_0 otherwise
+  :Def12: it = 0 if h is_of_order_0 otherwise
          h |^ it = 1.G & it <> 0 &
           for m st h |^ m = 1.G & m <> 0 holds it <= m;
  existence
@@ -1292,7 +1318,7 @@ definition let G,h;
       hence thesis;
      end;
      suppose not h is_of_order_0;
-        then A1: ex n st P[n] by Def10;
+        then A1: ex n st P[n] by Def11;
        consider k such that A2: P[k] &
         for n st P[n] holds k <= n from NAT_1:sch 5(A1);
       thus thesis by A2;
@@ -1319,11 +1345,11 @@ theorem Th82:
   proof
     per cases;
      suppose h is_of_order_0;
-       then ord h = 0 by Def11;
+       then ord h = 0 by Def12;
       hence thesis by Lm3;
      end;
      suppose h is_not_of_order_0;
-      hence thesis by Def11;
+      hence thesis by Def12;
   end;
   end;
 
@@ -1334,14 +1360,14 @@ theorem
   proof A1: not 1.G is_of_order_0 by Th79;
     A2: (1.G) |^ 1 = 1.G & 1 <> 0 by Th42;
        for n st (1.G) |^ n = 1.G & n <> 0 holds 1 <= n by NAT_1:39;
-   hence thesis by A1,A2,Def11;
+   hence thesis by A1,A2,Def12;
   end;
 
 theorem
     ord h = 1 implies h = 1.G
   proof assume A1: ord h = 1;
-    then not h is_of_order_0 by Def11;
-    then h |^ 1 = 1.G by A1,Def11;
+    then not h is_of_order_0 by Def12;
+    then h |^ 1 = 1.G by A1,Def12;
    hence thesis by Th44;
   end;
 
@@ -1360,16 +1386,16 @@ proof let n;
      suppose A4: n <> 0;
           now per cases;
         suppose ord h = 0;
-          then h is_of_order_0 by Def11;
-         hence thesis by A3,A4,Def10;
+          then h is_of_order_0 by Def12;
+         hence thesis by A3,A4,Def11;
         end;
         suppose A5: ord h <> 0;
-           then h is_not_of_order_0 by Def11;
-           then ord h <= n by A3,A4,Def11;
+           then h is_not_of_order_0 by Def12;
+           then ord h <= n by A3,A4,Def12;
           then consider m such that A6: n = ord h + m by NAT_1:28;
            A7: h |^ n = h |^ ord h * (h |^ m) by A6,Th48
                    .= 1.G * (h |^ m) by Th82
-                   .= h |^ m by Def4;
+                   .= h |^ m by Def5;
               m < n by A5,A6,NAT_1:41;
            then ord h divides m by A2,A3,A7;
           then consider i being Nat such that A8: m = ord h * i by NAT_1:def 3;
@@ -1392,7 +1418,7 @@ end;
 
 definition let S be 1-sorted;
   attr S is finite means
-  :Def13: the carrier of S is finite;
+  :Def14: the carrier of S is finite;
  end;
 
 notation let S be 1-sorted;
@@ -1403,10 +1429,10 @@ definition let G;
  assume
 A1:  G is finite;
  func ord G -> Nat means
-  :Def14: ex B being finite set st B = the carrier of G & it = card B;
+  :Def15: ex B being finite set st B = the carrier of G & it = card B;
  existence
   proof
-    reconsider B = the carrier of G as finite set by A1,Def13;
+    reconsider B = the carrier of G as finite set by A1,Def14;
    take card B, B;
    thus thesis;
   end;
@@ -1416,30 +1442,42 @@ end;
 canceled 3;
 
 theorem
-    G is finite implies ord G >= 1
+  G is finite implies ord G >= 1
   proof
   assume A1: G is finite;
     consider g being Element of G;
-     reconsider B = the carrier of G as finite set by A1,Def13;
+     reconsider B = the carrier of G as finite set by A1,Def14;
         {g} c= the carrier of G & card{g} = 1 by CARD_1:79,ZFMISC_1:37;
      then 1 <= card B by CARD_1:80;
-   hence thesis by A1,Def14;
+   hence thesis by A1,Def15;
   end;
 
   reconsider G0 = HGrStr (# REAL, addreal #) as Group by Th7;
+
+definition let IT be non empty HGrStr;
+ attr IT is commutative means
+ :Def16: for x,y being Element of IT holds x*y = y*x;
+end;
 
 registration
  cluster strict commutative Group;
   existence
    proof take G0; thus G0 is strict;
     let a,g be Element of G0;
-      reconsider A = a, B = g as Real;
-    thus a * g = addreal.(A,B) by VECTSP_1:def 10
+    reconsider A = a, B = g as Real;
+    thus a * g = addreal.(A,B) by Def1
             .= B + A by BINOP_2:def 9
             .= addreal.(g,a) by BINOP_2:def 9
-            .= g * a by VECTSP_1:def 10;
+            .= g * a by Def1;
    end;
 end;
+
+definition let FS be commutative (non empty HGrStr);
+ let x,y be Element of FS;
+ redefine func x*y;
+ commutativity by Def16;
+end;
+
 
 canceled;
 
@@ -1450,10 +1488,10 @@ theorem
      proof
       let h,g be Element of G;
        reconsider A = h, B = g as Real;
-      thus h * g = addreal.(A,B) by VECTSP_1:def 10
+      thus h * g = addreal.(A,B) by Def1
                  .= B + A by BINOP_2:def 9
                  .= addreal.(g,h) by BINOP_2:def 9
-                 .= g * h by VECTSP_1:def 10;
+                 .= g * h by Def1;
      end;
    hence thesis;
   end;
@@ -1464,13 +1502,13 @@ reserve a,b for Element of A;
 canceled;
 
 theorem
-    (a * b)" = a" * b" by Th25;
+  (a * b)" = a" * b" by Th25;
 
 theorem
-    (a * b) |^ n = a |^ n * (b |^ n) by Th54;
+  (a * b) |^ n = a |^ n * (b |^ n) by Th54;
 
 theorem
-    (a * b) |^ i = a |^ i * (b |^ i) by Th73;
+  (a * b) |^ i = a |^ i * (b |^ i) by Th73;
 
 registration
  let A be non empty set, m be BinOp of A, u be Element of A;
@@ -1489,7 +1527,7 @@ theorem
           x,y be Element of A;
        assume a = x & b = y;
       hence a + b = (the mult of A).(x,y) by RLVECT_1:5
-                 .= x * y by VECTSP_1:def 10;
+                 .= x * y by Def1;
      end;
    hence a + b = x * y
              .= b + a by A1;
@@ -1498,71 +1536,27 @@ A2: now let a,b be Element of G,
         x,y be Element of A;
       assume a = x & b = y;
       hence a + b = (the mult of A).(x,y) by RLVECT_1:5
-                 .= x * y by VECTSP_1:def 10;
+                 .= x * y by Def1;
      end;
    hereby let a,b,c be Element of G;
     reconsider x = a, y = b, z = c as Element of A;
      A3: a + b = x * y & b + c = y * z by A2;
    hence a + b + c = x * y * z by A2
-                  .= x * (y * z) by VECTSP_1:def 16
+                  .= x * (y * z) by Def4
                   .= a + (b + c) by A2,A3;
    end;
 A4:  0.G = 1.A by RLVECT_1:def 2;
    hereby let a be Element of G;
     reconsider x = a as Element of A;
     thus a + 0.G = x * 1.A by A2,A4
-                .= a by Def4;
+                .= a by Def5;
    end;
    let a be Element of G;
    reconsider x = a as Element of A;
    reconsider b = inverse_op(A).x as Element of G;
    take b;
    thus a + b = x * inverse_op(A).x by A2
-              .= x * x" by Def6
-              .= 0.G by A4,Def5;
+              .= x * x" by Def7
+              .= 0.G by A4,Def6;
   end;
 
-reserve B for AbGroup;
-
-theorem
-    HGrStr (# the carrier of B, the add of B #) is commutative Group
-  proof set G = HGrStr (# the carrier of B, the add of B #);
-    A1: now let a,b be Element of G,
-       x,y be Element of B;
-      assume a = x & b = y;
-     hence a * b = (the add of B).(x,y) by VECTSP_1:def 10
-                .= x + y by RLVECT_1:5;
-    end;
-    A2: G is associative Group-like
-     proof
-      thus for a,b,c being Element of G
-        holds a * b * c = a * (b * c)
-       proof let a,b,c be Element of G;
-         reconsider x = a, y = b, z = c as Element of B;
-          A3: a * b = x + y & b * c = y + z by A1;
-        hence a * b * c = x + y + z by A1
-                      .= x + (y + z) by RLVECT_1:def 6
-                      .= a * (b * c) by A1,A3;
-       end;
-       reconsider e = 0.B as Element of G;
-      take e;
-      let a be Element of G;
-       reconsider x = a as Element of B;
-      thus a * e = x + 0.B by A1
-                .= a by RLVECT_1:10;
-      thus e * a = x + 0.B by A1
-                .= a by RLVECT_1:10;
-       reconsider b = - x as Element of G;
-      take b;
-      thus a * b = x + (- x) by A1
-                .= e by RLVECT_1:16;
-      thus b * a = x + (- x) by A1
-                .= e by RLVECT_1:16;
-     end;
-       now let a,b be Element of G;
-      reconsider x = a, y = b as Element of B;
-     thus a * b = y + x by A1
-               .= b * a by A1;
-    end;
-   hence thesis by A2,VECTSP_1:def 17;
-  end;

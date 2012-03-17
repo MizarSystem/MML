@@ -14,7 +14,7 @@ environ
  notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, STRUCT_0,
       NAT_1, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, FINSOP_1, RFINSEQ, BINARITH, PRE_TOPC, NORMSP_1, RLVECT_1,
-      REALSET2, VECTSP_1, VECTSP_2, FVSUM_1, GROUP_1, ALGSTR_1, GRCAT_1,
+      REALSET2, GROUP_1, VECTSP_1, VECTSP_2, FVSUM_1, ALGSTR_1, GRCAT_1,
       ENDALG, QUOFIELD, POLYNOM1, ALGSEQ_1, POLYNOM3;
  constructors REAL_1, SQUARE_1, FINSOP_1, SETWOP_2, RFINSEQ, TOPREAL1,
       BINARITH, QUOFIELD, FVSUM_1, ALGSTR_2, ALGSEQ_1, GRCAT_1, ENDALG,
@@ -84,7 +84,7 @@ cluster Field-like -> domRing-like
             left_unital commutative associative (non empty doubleLoopStr));
 coherence
  proof
- let L be left_zeroed add-right-cancelable right-distributiveleft_unital
+ let L be left_zeroed add-right-cancelable right-distributive left_unital
           commutative associative (non empty doubleLoopStr);
  assume A1: L is Field-like;
      now let x,y be Element of L;
@@ -93,8 +93,8 @@ coherence
      proof
      assume x <> 0.L;
      then consider z being Element of L such that
-     A3: x * z = 1_ L by A1,VECTSP_1:def 20;
-         z * 0.L = 1_ L * y by A2,A3,VECTSP_1:def 16
+     A3: x * z = 1.L by A1,VECTSP_1:def 20;
+         z * 0.L = 1.L * y by A2,A3,GROUP_1:def 4
             .= y by VECTSP_1:def 19;
      hence y = 0.L by Lm1;
      end;
@@ -105,7 +105,7 @@ end;
 
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
-         associative commutative distributive well-unital
+         associative commutative distributive unital
          domRing-like Field-like
          non degenerated non trivial (non empty doubleLoopStr);
   existence proof
@@ -173,7 +173,7 @@ canceled;
      assume that
       A2: i is_at_least_length_of 1_.(L) and
       A3: 0+1 > i;
-     A4: 1_(L) <> 0.L by VECTSP_1:def 21;
+     A4: 1.L <> 0.L by VECTSP_1:def 21;
          0 >= i by A3,NAT_1:38;
      then (1_.(L)).0 = 0.L by A2,ALGSEQ_1:def 3;
      hence contradiction by A4,POLYNOM3:31;
@@ -418,8 +418,7 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
      then A27: len p + 0 <= len r by A25,REAL_1:84;
      A28: len p >= 0+1 by A2,NAT_1:38;
      then r = (r|((len p)-'1))^<*r.(len p)*>^(r/^len p) by A27,Th3;
-     then r = (r|((len p)-'1))^<*r/.(len p)*>^(r/^len p) by A27,A28,FINSEQ_4:
-24
+     then r = (r|((len p)-'1))^<*r/.(len p)*>^(r/^len p) by A27,A28,FINSEQ_4:24
 ;
      then A29: Sum r =
            Sum((r|((len p)-'1))^<*r/.(len p)*>) + Sum (r/^len p) by RLVECT_1:58
@@ -790,12 +789,12 @@ begin  :: Evaluation of Polynomials
    end;
 
   theorem Th21:
-   for L be well-unital add-associative right_zeroed right_complementable
+   for L be unital add-associative right_zeroed right_complementable
     associative non degenerated (non empty doubleLoopStr)
    for x be Element of the carrier of L holds
-    eval(1_.(L),x) = 1_(L)
+    eval(1_.(L),x) = 1.L
    proof
-    let L be well-unital add-associative right_zeroed right_complementable
+    let L be unital add-associative right_zeroed right_complementable
      associative non degenerated (non empty doubleLoopStr);
     let x be Element of the carrier of L;
     consider F be FinSequence of the carrier of L such that
@@ -808,12 +807,11 @@ begin  :: Evaluation of Polynomials
     then 1 in dom F by FINSEQ_1:def 3;
     then F.1 = (1_.(L)).(1-'1) * (power L).(x,1-'1) by A3
        .= (1_.(L)).(0) * (power L).(x,1-'1) by GOBOARD9:1
-       .= 1_(L) * (power L).(x,1-'1) by POLYNOM3:31
+       .= 1.L * (power L).(x,1-'1) by POLYNOM3:31
        .= (power L).(x,1-'1) by VECTSP_1:def 19
        .= (power L).(x,0) by GOBOARD9:1
-       .= 1.L by GROUP_1:def 7
-       .= 1_(L) by POLYNOM2:3;
-    then F = <*1_(L)*> by A4,FINSEQ_1:57;
+       .= 1.L by GROUP_1:def 8;
+    then F = <*1.L*> by A4,FINSEQ_1:57;
     hence thesis by A1,RLVECT_1:61;
    end;
 
@@ -1173,14 +1171,14 @@ unital
    end;
 
   Lm3:
-   for L be add-associative right_zeroed right_complementable well-unital
+   for L be add-associative right_zeroed right_complementable unital
     distributive associative (non empty doubleLoopStr)
    for p,q be Polynomial of L st len p > 0 & len q > 0
    for x be Element of the carrier of L holds
     eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
     p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2)
    proof
-    let L be add-associative right_zeroed right_complementable well-unital
+    let L be add-associative right_zeroed right_complementable unital
      distributive associative (non empty doubleLoopStr);
     let p,q be Polynomial of L;
     assume A1: len p > 0 & len q > 0;
@@ -1374,11 +1372,11 @@ VECTSP_1:39;
          .= p.(len p-'1)*q.(len q-'1)*((power L).(x,len p-'1)*
             (power L).(x,len q-'1)) by A3,A4,A5,POLYNOM2:2
          .= p.(len p-'1)*(q.(len q-'1)*((power L).(x,len p-'1)*
-            (power L).(x,len q-'1))) by VECTSP_1:def 16
+            (power L).(x,len q-'1))) by GROUP_1:def 4
          .= p.(len p-'1)*((power L).(x,len p-'1)*(q.(len q-'1)*
-            (power L).(x,len q-'1))) by VECTSP_1:def 16
+            (power L).(x,len q-'1))) by GROUP_1:def 4
          .= p.(len p-'1)*(power L).(x,len p-'1)*
-            (q.(len q-'1)*(power L).(x,len q-'1)) by VECTSP_1:def 16
+            (q.(len q-'1)*(power L).(x,len q-'1)) by GROUP_1:def 4
          .= p.(len p-'1)*(power L).(x,len p-'1)*eval(Leading-Monomial(q),x)
                                                                       by Th25
          .= eval(Leading-Monomial(p),x)*eval(Leading-Monomial(q),x) by Th25;
@@ -1556,15 +1554,16 @@ begin  :: Evaluation Homomorphism
 
   registration
    let L be add-associative right_zeroed right_complementable distributive
-    associative well-unital non degenerated (non empty doubleLoopStr);
+    associative unital non degenerated commutative Abelian
+    (non empty doubleLoopStr);
    let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> unity-preserving;
    coherence
    proof
-    thus (Polynom-Evaluation(L,x)).(1_(Polynom-Ring L)) =
-          (Polynom-Evaluation(L,x)).(1_.(L)) by POLYNOM3:def 12
+    thus (Polynom-Evaluation(L,x)).(1.(Polynom-Ring L)) =
+          (Polynom-Evaluation(L,x)).(1_.(L)) by POLYNOM3:37
        .= eval(1_.(L),x) by Def3
-       .= 1_(L) by Th21;
+       .= 1.L by Th21;
    end;
   end;
 

@@ -25,7 +25,7 @@ environ
       ALGSTR_1, POLYNOM1, ALGSTR_2, ARYTM_3, MONOID_0, VECTSP_1, NAT_1,
       XREAL_0, MEMBERED, ORDINAL2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions VECTSP_2, QUOFIELD, ENDALG;
+ definitions VECTSP_2, QUOFIELD, ENDALG, GROUP_1;
  theorems TARSKI, RELSET_1, FINSEQ_1, FUNCT_1, FUNCT_2, ORDINAL1, RELAT_1,
       ZFMISC_1, VECTSP_1, POLYNOM1, PBOOLE, RELAT_2, WELLORD2, FUNCT_7,
       FUNCT_4, CQC_LANG, ENDALG, ORDERS_1, SEQM_3, FINSET_1, NAT_1, AXIOMS,
@@ -154,8 +154,8 @@ proof
  then reconsider p = g|Seg N() as FinSequence by FINSEQ_1:def 2;
      now let x be set;
    assume x in rng p;
-   then consider y being set such that A11: y in dom p & x = p.y by FUNCT_1:def
-5;
+   then consider y being set such that A11: y in dom p & x = p.y by
+FUNCT_1:def 5;
    reconsider y as Nat by A11;
    A12: f.(y-1) in D()
         proof
@@ -450,33 +450,26 @@ proof
 let L be unital associative (non empty HGrStr),
     a be Element of L, n,m be Nat;
     defpred P[Nat] means power(L).(a,n+$1) = power(L).(a,n) * power(L).(a,$1);
-      power(L).(a,n + 0) = power(L).(a,n) * 1.L by GROUP_1:def 4
-                      .= power(L).(a,n) * power(L).(a,0) by GROUP_1:def 7;
+      power(L).(a,n + 0) = power(L).(a,n) * 1.L by GROUP_1:def 5
+                      .= power(L).(a,n) * power(L).(a,0) by GROUP_1:def 8;
     then A1: P[0];
 A2: now let m be Nat;
    assume A3: P[m];
      power(L).(a,n+(m+1)) = power(L).(a,(n+m)+1)
-     .= (power(L).(a,n) * power(L).(a,m)) * a by A3,GROUP_1:def 7
-     .= power(L).(a,n) * (power(L).(a,m) * a) by VECTSP_1:def 16
-     .= power(L).(a,n) * power(L).(a,(m+1)) by GROUP_1:def 7;
+     .= (power(L).(a,n) * power(L).(a,m)) * a by A3,GROUP_1:def 8
+     .= power(L).(a,n) * (power(L).(a,m) * a) by GROUP_1:def 4
+     .= power(L).(a,n) * power(L).(a,(m+1)) by GROUP_1:def 8;
    hence P[m+1];
    end;
     for m being Nat holds P[m] from NAT_1:sch 1(A1,A2);
 hence thesis;
 end;
 
-theorem Th3:
- for L being well-unital (non empty doubleLoopStr)
-  holds 1_(L) = 1.L
- proof let L be well-unital (non empty doubleLoopStr);
-       for h being Element of L
-    holds h * 1_(L) = h & 1_(L) * h = h by VECTSP_2:def 2;
-  hence 1_(L) = 1.L by GROUP_1:def 4;
- end;
+canceled;
 
 registration
  cluster Abelian right_zeroed add-associative right_complementable
-         unital well-unital distributive commutative associative
+         unital distributive commutative associative
          non trivial (non empty doubleLoopStr);
  existence proof take F_Real; thus thesis; end;
 end;
@@ -851,70 +844,70 @@ suppose len p <> 0;
       proof
       let j be Nat;
       assume A15: 1 <= j & j < len p;
-      assume A17: P[j];
+      assume A16: P[j];
       per cases;
-      suppose A18: j < i;
+      suppose A17: j < i;
             now per cases;
-        case A19: j + 1 = i;
-          then A20: p.(j+1) = p/.(j+1) by A2,FINSEQ_4:def 4;
-              q.(j+1) = q/.(j+1) by A2,A7,A9,A10,A19,FINSEQ_4:def 4;
-          then fq.(j+1) = (the mult of L).(fq.j,a * p/.(j+1)) by A1,A2,A6,A15,
-A19
-                       .= fp.j * (a * p/.(j+1)) by A17,A18,VECTSP_1:def 10
-                       .= (fp.j * p/.(j+1)) * a by VECTSP_1:def 16
+        case A18: j + 1 = i;
+          then A19: p.(j+1) = p/.(j+1) by A2,FINSEQ_4:def 4;
+              q.(j+1) = q/.(j+1) by A2,A7,A9,A10,A18,FINSEQ_4:def 4;
+          then fq.(j+1) = (the mult of L).(fq.j,a * p/.(j+1)) by A1,A2,A6,A15
+,A18
+                       .= fp.j * (a * p/.(j+1)) by A16,A17,GROUP_1:def 1
+                       .= (fp.j * p/.(j+1)) * a by GROUP_1:def 4
                        .= (the mult of L).(fp.j,p/.(j+1)) * a
-                          by VECTSP_1:def 10
-                       .= fp.(j+1) * a by A5,A15,A20;
-          hence P[j+1] by A19;
+                          by GROUP_1:def 1
+                       .= fp.(j+1) * a by A5,A15,A19;
+          hence P[j+1] by A18;
         end;
-        case A21: j + 1 <> i;
-              j + 1 <= i by A18,NAT_1:38;
-          then A22: j + 1 <= l by A8,AXIOMS:22;
+        case A20: j + 1 <> i;
+              j + 1 <= i by A17,NAT_1:38;
+          then A21: j + 1 <= l by A8,AXIOMS:22;
               0 <= j by NAT_1:18;
           then 0 + 1 <= j + 1 by AXIOMS:24;
-          then A23: j + 1 in Seg l by A22,FINSEQ_1:3;
-          then A24: p.(j+1) = p/.(j+1) by A7,FINSEQ_4:def 4;
-          A25: q.(j+1) = q/.(j+1) by A9,A10,A23,FINSEQ_4:def 4;
-          A26: fq.(j+1) = (the mult of L).(fq.j,q.(j+1))
+          then A22: j + 1 in Seg l by A21,FINSEQ_1:3;
+          then A23: p.(j+1) = p/.(j+1) by A7,FINSEQ_4:def 4;
+          A24: q.(j+1) = q/.(j+1) by A9,A10,A22,FINSEQ_4:def 4;
+          A25: fq.(j+1) = (the mult of L).(fq.j,q.(j+1))
                          by A1,A6,A15
-                      .= fq.j * q/.(j+1) by A25,VECTSP_1:def 10
-                      .= fq.j * p/.(j+1) by A2,A7,A21,A23
+                      .= fq.j * q/.(j+1) by A24,GROUP_1:def 1
+                      .= fq.j * p/.(j+1) by A2,A7,A20,A22
                       .= (the mult of L).(fq.j,p.(j+1))
-                               by A24,VECTSP_1:def 10
-                      .= fp.(j+1) by A5,A15,A17,A18;
+                               by A23,GROUP_1:def 1
+                      .= fp.(j+1) by A5,A15,A16,A17;
               j + 1 < i
             proof
             assume i <= j + 1;
-            then i < j + 1 by A21,REAL_1:def 5;
-            hence thesis by A18,NAT_1:38;
+            then i < j + 1 by A20,REAL_1:def 5;
+            hence thesis by A17,NAT_1:38;
             end;
-          hence P[j+1] by A26;
+          hence P[j+1] by A25;
         end;
         end;
         hence P[j+1];
       end;
-      suppose A27: i <= j;
-        then A28: i < j + 1 by NAT_1:38;
+      suppose A26: i <= j;
+        then A27: i < j + 1 by NAT_1:38;
             j < l by A7,A15,FINSEQ_1:def 3;
-        then A29: j + 1 <= l by NAT_1:38;
+        then A28: j + 1 <= l by NAT_1:38;
             0 <= j by NAT_1:18;
         then 0 + 1 <= j + 1 by AXIOMS:24;
-        then A30: j + 1 in dom p by A7,A29,FINSEQ_1:3;
-        then A31: p.(j+1) = p/.(j+1) by FINSEQ_4:def 4;
-        A32: q.(j+1) = q/.(j+1) by A7,A9,A10,A30,FINSEQ_4:def 4;
+        then A29: j + 1 in dom p by A7,A28,FINSEQ_1:3;
+        then A30: p.(j+1) = p/.(j+1) by FINSEQ_4:def 4;
+        A31: q.(j+1) = q/.(j+1) by A7,A9,A10,A29,FINSEQ_4:def 4;
             fq.(j+1) = (the mult of L).(fq.j,q.(j+1))
                    by A1,A6,A15
-                .= fq.j * q/.(j+1) by A32,VECTSP_1:def 10
-                .= (a * fp.j) * p/.(j+1) by A2,A17,A27,A28,A30
-                .= a * (fp.j * p/.(j+1)) by VECTSP_1:def 16
-                .= a * ((the mult of L).(fp.j,p/.(j+1))) by VECTSP_1:def 10
-                .= a * fp.(j+1) by A5,A15,A31;
-        hence P[j+1] by A27,NAT_1:38;
+                .= fq.j * q/.(j+1) by A31,GROUP_1:def 1
+                .= (a * fp.j) * p/.(j+1) by A2,A16,A26,A27,A29
+                .= a * (fp.j * p/.(j+1)) by GROUP_1:def 4
+                .= a * ((the mult of L).(fp.j,p/.(j+1))) by GROUP_1:def 1
+                .= a * fp.(j+1) by A5,A15,A30;
+        hence P[j+1] by A26,NAT_1:38;
       end;
       end;
-  A33: for j being Nat st 1 <= j & j <= len p holds P[j] from FinInd(A13,A14);
+  A32: for j being Nat st 1 <= j & j <= len p holds P[j] from FinInd(A13,A14);
       len p = l by A7,FINSEQ_1:def 3;
-  hence Product q = a * Product p by A4,A5,A6,A8,A33;
+  hence Product q = a * Product p by A4,A5,A6,A8,A32;
 end;
 end;
 
@@ -1832,7 +1825,7 @@ set ytmp = Ins(yb1,k',a);
     Product((yb1|k')^<*a*>^(yb1/^k'))
   = Product((yb1|k')^<*a*>) * Product(yb1/^k') by GROUP_4:8
  .= (Product(yb1|k') * Product(<*a*>)) * Product(yb1/^k') by GROUP_4:8
- .= (Product(yb1|k') * Product(yb1/^k')) * Product(<*a*>) by VECTSP_1:def 16
+ .= (Product(yb1|k') * Product(yb1/^k')) * Product(<*a*>) by GROUP_1:def 4
  .= Product((yb1|k')^(yb1/^k')) * Product(<*a*>) by GROUP_4:8
  .= Product(yb1) * Product(<*a*>) by RFINSEQ:21
  .= eval(b1,x') * a by A14,GROUP_4:12;
@@ -2193,7 +2186,7 @@ let n be Ordinal,
       then support b1 = {} by CARD_2:59;
       then A2: b1 = EmptyBag n by Th14;
       hence eval(b1+b2,x) = eval(b2,x) by POLYNOM1:57
-                         .= 1.L * eval(b2,x) by GROUP_1:def 4
+                         .= 1.L * eval(b2,x) by GROUP_1:def 5
                          .= eval(b1,x) * eval(b2,x) by A2,Th16;
       end;
     A3: for k being Nat st P[k] holds P[k + 1]
@@ -2324,7 +2317,7 @@ let n be Ordinal,
            then eval(b1,x) = eval(m+b1',x) by A25,FUNCT_1:9
                      .= eval(b1',x) * eval(m,x) by A24,Lm9;
           hence eval(b1,x) * eval(b2,x)
-              = (eval(b1',x) * eval(b2,x)) * eval(m,x) by VECTSP_1:def 16
+              = (eval(b1',x) * eval(b2,x)) * eval(m,x) by GROUP_1:def 4
              .= eval(b1'+b2,x) * eval(m,x) by A4,A20
              .= eval(m+(b1'+b2),x) by A24,Lm9
              .= eval((b1'+m)+b2,x) by POLYNOM1:39
@@ -2693,10 +2686,10 @@ then A10: for u being set holds u in {1} implies u in dom sg1p by TARSKI:def 1;
         thus thesis by A13,A16,REAL_1:def 5;
         end;
          sg1p/.1 = sg1p.1 & sg1p/.u = sg1p.u by A9,A11,FINSEQ_4:def 4;
-     then A17: sg1p/.1 in rng sg1p & sg1p/.u in rng sg1p by A9,A11,FUNCT_1:def
-5;
-     then sg1p/.1 = EmptyBag n by A7,TARSKI:def 1 .= sg1p/.u by A7,A17,TARSKI:
-def 1;
+     then A17: sg1p/.1 in rng sg1p & sg1p/.u in rng sg1p by A9,A11,
+FUNCT_1:def 5;
+     then sg1p/.1 = EmptyBag n by A7,TARSKI:def 1 .= sg1p/.u by A7,A17,
+TARSKI:def 1;
      hence thesis by A6,A9,A11,A14,TRIANG_1:def 2;
      end;
 then dom sg1p = Seg 1 by A10,FINSEQ_1:4,TARSKI:2;
@@ -2713,7 +2706,7 @@ A21: y.1 = y/.1 by A18,A20,FINSEQ_4:24
              .= (1p * sg1p)/.1 * eval(((sg1p)/.1)@,x) by A18,A20
              .= (1p * sg1p)/.1 * eval(EmptyBag n,x) by A19,Def3
              .= (1p * sg1p)/.1 * 1.L by Th16
-             .= (1p * sg1p)/.1 by GROUP_1:def 4;
+             .= (1p * sg1p)/.1 by GROUP_1:def 5;
 A22: sg1p.1 in rng sg1p by A9,FUNCT_1:def 5;
 A23: 1 in dom sg1p by A8,FINSEQ_3:33;
     sg1p.1 in {EmptyBag n} by A5,A6,A22,TRIANG_1:def 2;
@@ -2814,7 +2807,7 @@ then A14: len ymp = len ((-1.L) * yp) by A9,A10,A11,A12,FINSEQ_1:8;
        .= mp.b by A20,FINSEQ_4:def 4
        .= -(p.b) by POLYNOM1:def 22
        .= -(p/.b) by A20,FINSEQ_4:def 4
-       .= -(1.L * p/.b) by GROUP_1:def 4
+       .= -(1.L * p/.b) by GROUP_1:def 5
        .= (-1.L) * p/.b by VECTSP_1:41
        .= (-1.L) * ((p * SgmX(BagOrder n, Support p))/.k) by A23,PARTFUN2:6;
       end;
@@ -2826,11 +2819,11 @@ then A14: len ymp = len ((-1.L) * yp) by A9,A10,A11,A12,FINSEQ_1:8;
                  eval(((SgmX(BagOrder n, Support p))/.k)@,x) by VECTSP_1:41
               .= (-((p * SgmX(BagOrder n, Support p))/.k)) *
                  eval(((SgmX(BagOrder n, Support p))/.k)@,x)
-                 by GROUP_1:def 4
+                 by GROUP_1:def 5
               .= -(((p * SgmX(BagOrder n, Support p))/.k) *
                  eval(((SgmX(BagOrder n, Support p))/.k)@,x)) by VECTSP_1:41
               .= - (yp/.k) by A7,A9,A15
-              .= - (1.L * (yp/.k)) by GROUP_1:def 4
+              .= - (1.L * (yp/.k)) by GROUP_1:def 5
               .= (-1.L) * (yp/.k) by VECTSP_1:41
               .= ((-1.L) * yp)/.k by A16,POLYNOM1:def 2
               .= ((-1.L) * yp).k by A17,FINSEQ_4:24;
@@ -2838,7 +2831,7 @@ then A14: len ymp = len ((-1.L) * yp) by A9,A10,A11,A12,FINSEQ_1:8;
 hence eval(mp,x) = Sum((-1.L) * yp) by A8,A14,FINSEQ_1:18
                 .= (-1.L) * eval(p,x) by A7,POLYNOM1:28
                 .= -(1.L * eval(p,x)) by VECTSP_1:41
-                .= - eval(p,x) by GROUP_1:def 4;
+                .= - eval(p,x) by GROUP_1:def 5;
 end;
 
 Lm10:
@@ -3629,9 +3622,9 @@ A17: for u being set holds u in Support(p*'q) implies u in {b1+b2}
     hence thesis by A18,A20,POLYNOM1:def 9;
     end;
 A32: (p.b1 * q.b2) * (eval(b1,x) * eval(b2,x))
-        = ((p.b1 * q.b2) * eval(b1,x)) * eval(b2,x) by VECTSP_1:def 16
-       .= ((p.b1 * eval(b1,x)) * q.b2) * eval(b2,x) by VECTSP_1:def 16
-       .= (p.b1 * eval(b1,x)) * (q.b2 * eval(b2,x)) by VECTSP_1:def 16
+        = ((p.b1 * q.b2) * eval(b1,x)) * eval(b2,x) by GROUP_1:def 4
+       .= ((p.b1 * eval(b1,x)) * q.b2) * eval(b2,x) by GROUP_1:def 4
+       .= (p.b1 * eval(b1,x)) * (q.b2 * eval(b2,x)) by GROUP_1:def 4
        .= eval(p,x) * (q.b2 * eval(b2,x)) by A1,Th21
        .= eval(p,x) * eval(q,x) by A1,Th21;
 per cases;
@@ -4127,17 +4120,18 @@ end;
 registration
  let n be Ordinal,
      L be right_zeroed Abelian add-associative right_complementable
-          well-unital distributive associative
+          unital distributive associative
           non trivial (non empty doubleLoopStr);
- cluster Polynom-Ring (n, L) -> well-unital;
+ cluster Polynom-Ring (n, L) -> unital;
  coherence
   proof set R = Polynom-Ring (n, L);
+    take 1.R;
    let x be Element of R;
-A1:   1_ R = 1_(n,L) by POLYNOM1:def 27;
+A1:   1.R = 1_(n,L) by POLYNOM1:90;
     reconsider p = x as Polynomial of n,L by POLYNOM1:def 27;
-   thus x*(1_ R) = p*'1_(n,L) by A1,POLYNOM1:def 27
+   thus x*(1.R) = p*'1_(n,L) by A1,POLYNOM1:def 27
           .= x by POLYNOM1:88;
-   thus (1_ R)*x = 1_(n,L)*'p by A1,POLYNOM1:def 27
+   thus (1.R)*x = 1_(n,L)*'p by A1,POLYNOM1:def 27
           .= x by POLYNOM1:89;
   end;
 end;
@@ -4145,16 +4139,15 @@ end;
 registration
 let n be Ordinal,
     L be Abelian right_zeroed add-associative right_complementable
-         well-unital distributive associative
+         unital distributive associative
          non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 cluster Polynom-Evaluation(n,L,x) -> unity-preserving;
 coherence
  proof set f = Polynom-Evaluation(n,L,x);
-  thus f.(1_(Polynom-Ring(n,L))) = f.(1_(n,L)) by POLYNOM1:def 27
+  thus f.(1.(Polynom-Ring(n,L))) = f.(1_(n,L)) by POLYNOM1:90
                 .= eval(1_(n,L),x) by Def5
-                .= 1.L by Th23
-                .= 1_ L by Th3;
+                .= 1.L by Th23;
  end;
 end;
 
@@ -4213,7 +4206,7 @@ end;
 registration
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-            Abelian well-unital distributive
+            Abelian unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     x be Function of n, L;
  cluster Polynom-Evaluation(n,L,x) -> RingHomomorphism;

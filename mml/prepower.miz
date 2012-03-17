@@ -24,7 +24,7 @@ environ
 
 begin
 
-Lm0: for i being Integer holds abs i is Integer
+Lm1: for i being Integer holds abs i is Integer
 proof
   let i be Integer;
   per cases;
@@ -42,7 +42,7 @@ registration let i be Integer;
   coherence
   proof
 A1: 0 <= abs i by ABSVALUE:5;
-    abs i is Integer by Lm0;then
+    abs i is Integer by Lm1;then
     abs i in NAT by A1,INT_1:16;
     hence thesis by ORDINAL2:def 21;
   end;
@@ -160,7 +160,7 @@ definition let a be Real; let n;
 coherence by XREAL_0:def 1;
 end;
 
-Lm1:
+Lm2:
 a |^ 2 = a^2
 proof thus a |^ 2 = a GeoSeq.(1+1) by Def1 .= a GeoSeq.(0+1) * a by Th4
  .= a GeoSeq.0 *a *a by Th4 .= 1*a*a by Th4
@@ -250,7 +250,7 @@ proof let n be natural number;
  hence thesis;
 end;
 
-Lm2: for n being natural number holds
+Lm3: for n being natural number holds
 0 < a & a < b & 1 <= n implies a |^ n < b |^ n
 proof let n be natural number;
   assume A1: 0 < a & a < b & 1 <= n;
@@ -279,7 +279,7 @@ proof
   let n be natural number;
   assume A1: 0 <= a & a < b & 1 <= n;
     now per cases by A1;
- suppose a>0; hence a |^ n < b |^ n by A1,Lm2;
+ suppose a>0; hence a |^ n < b |^ n by A1,Lm3;
  end;
  suppose A2: a=0;
   reconsider k=n as Integer;
@@ -442,7 +442,7 @@ assume
      end;
      suppose 0 <> n; then 0 < n by NAT_1:19;
        then 0 + 1 <= n by NAT_1:38;
-       then 1 |^ n < 3 |^ n by Lm2;
+       then 1 |^ n < 3 |^ n by Lm3;
        hence thesis by NEWTON:15;
        end;
        end; hence thesis;
@@ -456,8 +456,8 @@ then A11: 1 + a <= 1 + 3 |^ n * a by REAL_1:55;
       a * a < 1 * a by A1,REAL_1:70;
    then 3 |^ n * (a * a) < 3 |^ n * a by A10,REAL_1:70;
    then 3 |^ n * a + 3 |^ n * (a*a) < 3 |^ n * a + 3 |^ n * a by REAL_1:53;
-  then A14: (1 + 3 |^ n * a) * (1+a) < 1 + 3 |^ (n+1) * a by A11,A12,A13,REAL_1
-:67;
+  then A14: (1 + 3 |^ n * a) * (1+a) < 1 + 3 |^ (n+1) * a by A11,A12,A13,
+REAL_1:67;
       (1 + a) |^ n * (1 + a) <= (1 + 3 |^ n * a) * (1+a) by A6,A7,AXIOMS:25;
    then (1 + a) |^ n * (1 + a) <= 1 + 3 |^ (n + 1) * a by A14,AXIOMS:22;
    hence thesis by NEWTON:11;
@@ -561,7 +561,7 @@ A9:    1 <= a implies ex c be real number st
           b in X;
        then A11: ex d be Real st b = d & 0 < d & d |^ n <= a;
        assume a1 < b;
-       then a |^ n < b |^ n by A1,A2,Lm2;
+       then a |^ n < b |^ n by A1,A2,Lm3;
        then a1 |^ n < a1 by A11,AXIOMS:22;
        hence contradiction by A1,A10,Th20;
        end;
@@ -579,7 +579,7 @@ A9:    1 <= a implies ex c be real number st
        assume b in X;
        then A14: ex d be Real st d = b & 0 < d & d |^ n <= a;
        assume not b <= c;
-       then 1 |^ n < b |^ n by A1,A13,Lm2;
+       then 1 |^ n < b |^ n by A1,A13,Lm3;
        then 1 < b |^ n by NEWTON:15;
        hence contradiction by A12,A14,AXIOMS:22;
        end;
@@ -623,7 +623,7 @@ A9:    1 <= a implies ex c be real number st
    consider c be real number such that
   A28: c in X & d - b < c by A3,A8,A24,SEQ_4:def 4;
       0 < d - b by A27,SQUARE_1:11;
-  then A29: (d - b) |^ n < c |^ n by A1,A28,Lm2;
+  then A29: (d - b) |^ n < c |^ n by A1,A28,Lm3;
 A30:    ex e be Real st e = c & 0 < e & e |^ n <= a by A28;
       b/d < d/d by A15,A27,REAL_1:73;
    then b/d < 1 by A15,XCMPLX_1:60;
@@ -640,8 +640,8 @@ A30:    ex e be Real st e = c & 0 < e & e |^ n <= a by A28;
    A34: (1 + n * (-b/d)) * d |^ n
       = (1 - n * (d * (1 - a / d |^ n) / (n + 1)/d)) * d |^ n
      .= (1 - n*(d * ((1 - a / d |^ n) / (n+1))/d)) * d |^ n by XCMPLX_1:75
-     .= (1 - n * ((((1 - a / d |^ n) / (n + 1))/d) * d)) * d |^ n by XCMPLX_1:
-75
+     .= (1 - n * ((((1 - a / d |^ n) / (n + 1))/d) * d)) * d |^ n by
+XCMPLX_1:75
      .= (1 - n * ((1 - a / d |^ n) / (n + 1))) * d |^ n by A15,XCMPLX_1:88
      .= (1 - (1 - a / d |^ n) * n / (n + 1)) * d |^ n by XCMPLX_1:75
      .= (1 - (1 - a / d |^ n) * (n / (n + 1))) * d |^ n by XCMPLX_1:75
@@ -697,9 +697,9 @@ uniqueness
                A49: c |^ n = a & c>0 and
                A50: b <> c;
       now per cases by A50,REAL_1:def 5;
-   suppose b > c; hence contradiction by A1,A48,A49,Lm2;
+   suppose b > c; hence contradiction by A1,A48,A49,Lm3;
    end;
-   suppose c > b; hence contradiction by A1,A48,A49,Lm2;
+   suppose c > b; hence contradiction by A1,A48,A49,Lm3;
    end;
    end;
    hence contradiction; end; hence thesis;
@@ -711,7 +711,7 @@ definition let n; let a be Real;
 coherence by XREAL_0:def 1;
 end;
 
-Lm3:
+Lm4:
 a>0 & n>=1 implies (n -Root a) |^ n = a & n -Root (a |^ n) = a
 proof assume A1: a>0 & n>=1;
  hence (n -Root a) |^ n = a by Def3;
@@ -733,7 +733,7 @@ theorem Th28:
 a>=0 & n>=1 implies (n -Root a) |^ n = a & n -Root (a |^ n) = a
 proof assume A1: a>=0 & n>=1;
     now per cases by A1;
- suppose a>0; hence (n -Root a) |^ n = a & n -Root (a |^ n) = a by A1,Lm3;
+ suppose a>0; hence (n -Root a) |^ n = a & n -Root (a |^ n) = a by A1,Lm4;
  end;
  suppose A2: a=0;
   reconsider k=n as Integer;
@@ -782,12 +782,11 @@ proof assume that A1: a>=0 & b>=0 & n>=1 and
      now per cases by A2,REAL_1:def 5;
   suppose
     n -Root (a*b) < n -Root a * n -Root b; hence contradiction by A1,A3,A4,A6,
-Lm2
+Lm3
 ;
   end;
   suppose
-    n -Root (a*b) > n -Root a * n -Root b; hence contradiction by A1,A3,A8,
-Th28
+    n -Root (a*b) > n -Root a * n -Root b; hence contradiction by A1,A3,A8,Th28
 ;
   end;
   end; hence contradiction;
@@ -814,16 +813,15 @@ proof assume that A1: a>0 & n>=1 and
     a">0 by A1,REAL_1:72;
  then A3: 1/a>0 by XCMPLX_1:217;
  A4: n -Root a > 0 by A1,Def3;
- A5: (1/(n -Root a)) |^ n = 1 / (n -Root a) |^ n by Th14 .= 1/a by A1,Lm3;
- A6: (n -Root (1/a)) |^ n = 1/a by A1,A3,Lm3;
+ A5: (1/(n -Root a)) |^ n = 1 / (n -Root a) |^ n by Th14 .= 1/a by A1,Lm4;
+ A6: (n -Root (1/a)) |^ n = 1/a by A1,A3,Lm4;
     (n -Root a)">0 by A4,REAL_1:72;
  then A7: 1/n -Root a > 0 by XCMPLX_1:217;
  A8: n -Root (1/a) > 0 by A1,A3,Def3;
     now per cases by A2,REAL_1:def 5;
- suppose n -Root (1/a) > 1/(n -Root a); hence contradiction by A1,A5,A7,Lm3;
+ suppose n -Root (1/a) > 1/(n -Root a); hence contradiction by A1,A5,A7,Lm4;
  end;
- suppose n -Root (1/a) < 1/(n -Root a); hence contradiction by A1,A5,A6,A8,
-Lm2;
+ suppose n -Root (1/a) < 1/(n -Root a); hence contradiction by A1,A5,A6,A8,Lm3;
  end;
  end;
  hence contradiction;
@@ -850,7 +848,7 @@ proof assume that A1: a>=0 & n>=1 & m>=1 and
   then A4: m -Root a > 0 by A1,Def3;
   A5: (n -Root (m -Root a)) |^ (n*m) = ((n -Root (m -Root
  a)) |^ n) |^ m by NEWTON:14
-      .= (m -Root a) |^ m by A1,A4,Lm3
+      .= (m -Root a) |^ m by A1,A4,Lm4
       .= a by A1,Th28;
   A6: n*m>=1 by A1,REAL_2:138;
   then A7: ((n*m) -Root a) |^ (n*m) = a by A3,Def3;
@@ -861,7 +859,7 @@ proof assume that A1: a>=0 & n>=1 & m>=1 and
  a; hence contradiction by A3,A5,A6,A8,Def3;
   end;
   suppose (n*m) -Root a < n -Root (m -Root
- a); hence contradiction by A5,A6,A7,A9,Lm2;
+ a); hence contradiction by A5,A6,A7,A9,Lm3;
   end;
   end; hence contradiction;
  end;
@@ -898,7 +896,7 @@ proof assume that A1: a>=0 & n>=1 & m>=1 and
    hence contradiction by A3,A4,A6,A9,Def3;
   end;
   suppose n -Root a * m -Root a > (n*m) -Root (a |^ (n+m));
-   hence contradiction by A3,A4,A7,A10,Lm2;
+   hence contradiction by A3,A4,A7,A10,Lm3;
   end;
   end; hence contradiction;
  end;
@@ -935,19 +933,19 @@ a>=0 & a<b & n>=1 implies n -Root a < n -Root b
 proof assume that A1: a>=0 & a<b & n>=1 and
                   A2: n -Root a >= n -Root b;
    (n -Root a) |^ n = a by A1,Th28;
- then A3: (n -Root a) |^ n < (n -Root b) |^ n by A1,Lm3;
+ then A3: (n -Root a) |^ n < (n -Root b) |^ n by A1,Lm4;
     n -Root b > 0 by A1,Def3;
  hence contradiction by A2,A3,Th17;
 end;
 
 theorem Th38:
 a>=1 & n>=1 implies n -Root a >= 1 & a >= n -Root a
-proof assume A1: a>=1 & n>=1; 
+proof assume A1: a>=1 & n>=1;
     n -Root a >= n -Root 1 by A1,Th36;
- hence n -Root a >= 1 by A1,Th29; 
+ hence n -Root a >= 1 by A1,Th29;
     a <= a |^ n by A1,Th20;
  then n -Root a <= n -Root (a |^ n) by A1,Th36;
- hence thesis by A1,Lm3;
+ hence thesis by A1,Lm4;
 end;
 
 theorem Th39:
@@ -980,7 +978,7 @@ proof assume A1: a>0 & n>=1; then A2: n>0;
  then n -Root a - 1 > 0 - 1 by REAL_1:54
 ;
  then (1 + (n -Root a - 1)) |^ n >= 1 + n*(n -Root a - 1) by Th24;
- then a >= 1 + n*(n -Root a - 1) by A1,Lm3;
+ then a >= 1 + n*(n -Root a - 1) by A1,Lm4;
  then a - 1 >= n*(n -Root a - 1) by REAL_1:84;
  then (a - 1)/n >= n*(n -Root a - 1)/n by A2,REAL_1:73;
  hence thesis by A3,XCMPLX_1:90;
@@ -989,12 +987,12 @@ end;
 theorem
    a>=0 implies 2-Root a = sqrt a
 proof assume A1: a>=0 & 2-Root a <> sqrt a;
- A2: sqrt a |^ 2 = (sqrt a)^2 by Lm1 .= a by A1,SQUARE_1:def 4;
+ A2: sqrt a |^ 2 = (sqrt a)^2 by Lm2 .= a by A1,SQUARE_1:def 4;
     sqrt a >= 0 by A1,SQUARE_1:def 4;
  hence contradiction by A1,A2,Th28;
 end;
 
-Lm4:
+Lm5:
 for s being Real_Sequence, a st a >= 1 & (for n st n>=1 holds s.n = n -Root a)
 holds s is convergent & lim s = 1
 proof let s be Real_Sequence;
@@ -1025,7 +1023,7 @@ proof let s be Real_Sequence;
   then A17: (s^\1).n-1>=0 by SQUARE_1:12;
   set b = (s^\1).n - 1;
   A18: -1 < b by A17,AXIOMS:22;
-   a = (1+b) |^ (n+1) by A3,A13,A15,Lm3;
+   a = (1+b) |^ (n+1) by A3,A13,A15,Lm4;
   then a >= 1 + (n+1)*b by A18,Th24;
   then a - 1 >= 1 + (n+1)*b - 1 by REAL_1:49;
   then (a - 1)*(n+1)" >= (n+1)"*((n+1)*b) by A14,AXIOMS:25;
@@ -1051,7 +1049,7 @@ proof let s be Real_Sequence;
  let a; assume A1: a>0;
  assume A2: for n st n>=1 holds s.n = n -Root a;
     now per cases;
- suppose a>=1; hence s is convergent & lim s = 1 by A2,Lm4;
+ suppose a>=1; hence s is convergent & lim s = 1 by A2,Lm5;
  end;
  suppose A3: a<1; then a/a<1/a by A1,REAL_1:73;
   then A4: 1<=1/a by A1,XCMPLX_1:60;
@@ -1059,7 +1057,7 @@ proof let s be Real_Sequence;
   consider s1 being Real_Sequence such that A5:
   for n holds s1.n = O(n) from SEQ_1:sch 1;
      for n holds n>=1 implies s1.n=n -Root (1/a) by A5;
-  then A6: s1 is convergent & lim s1 = 1 by A4,Lm4;
+  then A6: s1 is convergent & lim s1 = 1 by A4,Lm5;
   A7: now let b be real number; assume b>0;
    then consider m1 such that A8:
    for m st m1<=m holds abs(s1.m-1)<b by A6,SEQ_2:def 7;
@@ -1083,11 +1081,11 @@ A15:   a<=m -Root a & m -Root a<1 by A1,A3,A11,Th39;
    then 0<(m -Root a)" & m -Root a<1 by REAL_1:72;
    then (m -Root a)*(m -Root a)"<1*(m -Root a)" by REAL_1:70;
     then 1<(m -Root a)" by A13,XCMPLX_0:def 7;
-   then A17: 1<abs((m -Root a)") by ABSVALUE:def 1;
+   then A16: 1<abs((m -Root a)") by ABSVALUE:def 1;
       0<>1 - m -Root a by A15,SQUARE_1:11;
    then abs(1 - m -Root a) > 0 by ABSVALUE:6;
    then 1*abs(1 - m -Root a) < abs(1 - m -Root a)*abs((m -Root
- a)") by A17,REAL_1:70;
+ a)") by A16,REAL_1:70;
    then abs(-(m -Root a - 1)) < b by A12,A14,AXIOMS:22;
    then abs(m -Root a - 1) < b by ABSVALUE:17; hence
       abs(s.m - 1) < b by A2,A11;
@@ -1146,7 +1144,7 @@ proof
     a #Z n = a |^ abs(n) by Def4 .= a |^ n by A1,ABSVALUE:def 1;
 end;
 
-Lm5: 1" = 1 & 1/1 = 1;
+Lm6: 1" = 1 & 1/1 = 1;
 
 theorem
 Th47: 1 #Z k = 1
@@ -1155,7 +1153,7 @@ proof
  suppose k>=0; hence 1 #Z k = 1 |^ abs(k) by Def4 .= 1 by NEWTON:15;
  end;
  suppose k<0; then 1 #Z k = (1 |^ abs(k))" by Def4;
-  hence 1 #Z k = 1 by Lm5,NEWTON:15;
+  hence 1 #Z k = 1 by Lm6,NEWTON:15;
  end;
  end; hence thesis;
 end;
@@ -1398,13 +1396,13 @@ proof assume A1: a>0 & n>=1; then A2: n -Root a > 0 by Def3;
   A6: a |^ m > 0 by A1,Th13;
   then A7: m -Root (n -Root (a |^ m)) = (n*m) -Root (a |^ m) by A1,A4,Th34
       .= n -Root (m -Root (a |^ m)) by A1,A4,A6,Th34
-      .= n -Root a by A1,A4,Lm3;
-  A8: m -Root ((n -Root a) |^ m) = n -Root a by A2,A4,Lm3;
+      .= n -Root a by A1,A4,Lm4;
+  A8: m -Root ((n -Root a) |^ m) = n -Root a by A2,A4,Lm4;
   A9: (n -Root a) |^ m >= 0 by A2,Th13;
   A10: n -Root (a |^ m) >= 0 by A1,A6,Def3;
      now per cases by A5,REAL_1:def 5;
   suppose (n -Root a) |^ m < n -Root (a |^ m); hence contradiction
-                                      by A4,A7,A9,Lm3;
+                                      by A4,A7,A9,Lm4;
   end;
   suppose (n -Root a) |^ m > n -Root (a |^ m); hence contradiction
                                       by A4,A7,A8,A10,Th37;
@@ -1562,7 +1560,7 @@ proof assume A1: a>0;
  .= (dp*dq) -Root ((a #Z np) |^ (dp+dq))*dq -Root
  (a #Z (nq-np)) by A2,A5,A6,Th35
  .= (dp*dq) -Root ((a #Z np) |^ (dp+dq)) *
-    dq -Root (dp -Root ((a #Z (nq-np)) |^ dp)) by A3,A6,Lm3
+    dq -Root (dp -Root ((a #Z (nq-np)) |^ dp)) by A3,A6,Lm4
  .= (dp*dq) -Root ((a #Z np) |^ (dp+dq)) *
     (dp*dq) -Root ((a #Z (nq-np)) |^ dp) by A5,A6,A7,Th34
  .= (dp*dq) -Root (((a #Z np) |^ (dp+dq)) * ((a #Z (nq-np)) |^ dp))
@@ -1581,7 +1579,7 @@ proof assume A1: a>0;
 .= (n -Root ((denominator(p+q) -Root
  (a #Z numerator(p+q))))) |^ n by A16,A17,A18,Th34
 .= (n -Root (a #Q (p+q))) |^ n by Def5
-.= a #Q (p+q) by A16,A19,Lm3;
+.= a #Q (p+q) by A16,A19,Lm4;
 end;
 
 theorem
@@ -1686,7 +1684,7 @@ A16: a #Q (p*q) > 0 by A1,Th63; thus
 .= (n -Root ((denominator(p*q) -Root
  (a #Z numerator(p*q))))) |^ n by A12,A13,A14,Th34
 .= (n -Root (a #Q (p*q))) |^ n by Def5
-.= a #Q (p*q) by A12,A16,Lm3;
+.= a #Q (p*q) by A12,A16,Lm4;
 end;
 
 theorem
@@ -1718,7 +1716,7 @@ proof assume A1: a>1 & p>0;
  A3: denominator(p) >= 1 by RAT_1:29;
  A4: a #Z numerator(p) = a |^ n by Th46;
      n>=0+1 by A2,NAT_1:38;
- then a |^ n > 1 |^ n by A1,Lm2;
+ then a |^ n > 1 |^ n by A1,Lm3;
  then a #Z numerator(p) > 1 & 1>=0 by A4,NEWTON:15;
  then (denominator(p)) -Root (a #Z numerator(p))>(denominator(p)) -Root 1
  by A3,Th37;
@@ -1758,10 +1756,10 @@ theorem
 Th76: a>0 & a<1 & p>0 implies a #Q p < 1
 proof assume A1: a>0 & a<1 & p>0;
  reconsider q=0 as Rational;
- A3: 1/a>1 by A1,Lm5,REAL_2:151;
- then A4: 1/a>0;
-    (1/a) #Q p > (1/a) #Q q by A1,A3,Th75;
- then (1/a) #Q p > 1 by A4,Th58;
+ A2: 1/a>1 by A1,Lm6,REAL_2:151;
+ then A3: 1/a>0;
+    (1/a) #Q p > (1/a) #Q q by A1,A2,Th75;
+ then (1/a) #Q p > 1 by A3,Th58;
  then 1/a #Q p > 1 by A1,Th68;
  hence thesis by REAL_2:117;
 end;
@@ -1769,7 +1767,7 @@ end;
 theorem
    a>0 & a<=1 & p<=0 implies a #Q p >= 1
 proof assume A1: a>0 & a<=1 & p<=0;
-then 1/a >= 1 by Lm5,REAL_2:152;
+then 1/a >= 1 by Lm6,REAL_2:152;
  then (1/a) #Q p <= 1 by A1,Th72;
  then A2: 1/a #Q p <= 1 by A1,Th68;
     a #Q p > 0 by A1,Th63;
@@ -1938,7 +1936,7 @@ definition let a be real number; let s be Rational_Sequence;
   end;
 end;
 
-Lm6:
+Lm7:
 for s being Rational_Sequence, a st s is convergent & a>=1 holds
 a #Q s is convergent
 proof let s be Rational_Sequence; let a;
@@ -1993,8 +1991,8 @@ proof let s be Rational_Sequence; let a;
    then A22: a #Q (-(s.m-s.n)) - 1 <= (m1+1) -Root a - 1 by REAL_1:49;
       a #Q (-(s.m-s.n)) >= 1 by A2,A19,Th71;
    then a #Q (-(s.m-s.n)) - 1 >= 0 by SQUARE_1:12;
-   then A23: abs(a #Q (-(s.m-s.n)) - 1) <= (m1+1) -Root a - 1 by A22,ABSVALUE:
-def 1;
+   then A23: abs(a #Q (-(s.m-s.n)) - 1) <= (m1+1) -Root a - 1 by A22,
+ABSVALUE:def 1;
    A24: abs(a #Q (s.m-s.n) - 1) = abs((a #Q (s.m-s.n) - 1)*1)
    .= abs((a #Q (s.m-s.n) - 1)*(a #Q (s.m-s.n)/a #Q (s.m-s.n)))
       by A16,XCMPLX_1:60
@@ -2058,11 +2056,11 @@ a #Q s is convergent
 proof let s be Rational_Sequence;
  assume A1: s is convergent & a>0;
     now per cases;
- suppose a>=1; hence a #Q s is convergent by A1,Lm6;
+ suppose a>=1; hence a #Q s is convergent by A1,Lm7;
  end;
  suppose A2: a<1; then a/a<1/a by A1,REAL_1:73;
   then 1<1/a by A1,XCMPLX_1:60;
-  then A3: (1/a) #Q s is convergent by A1,Lm6;
+  then A3: (1/a) #Q s is convergent by A1,Lm7;
      s is bounded by A1,SEQ_2:27;
   then consider d be real number such that
   A4: 0<d & for n holds abs(s.n)<d by SEQ_2:15;
@@ -2121,7 +2119,7 @@ proof let s be Rational_Sequence;
  end; hence thesis;
 end;
 
-Lm7:
+Lm8:
 for s1,s2 being Rational_Sequence, a st s1 is convergent & s2 is convergent &
 lim s1 = lim s2 & a>=1 holds lim a #Q s1 = lim a #Q s2
 proof let s1,s2 be Rational_Sequence; let a;
@@ -2185,8 +2183,8 @@ by A4,A5,SEQ_2:def 7;
    A27: abs(a #Q (s1.m-s2.m) - 1) = abs((a #Q (s1.m-s2.m) - 1)*1)
    .= abs((a #Q (s1.m-s2.m) - 1)*(a #Q (s1.m-s2.m)/a #Q (s1.m-s2.m)))
       by A19,XCMPLX_1:60
-   .= abs(a #Q (s1.m-s2.m)*(a #Q (s1.m-s2.m) - 1)/a #Q (s1.m-s2.m)) by XCMPLX_1
-:75
+   .= abs(a #Q (s1.m-s2.m)*(a #Q (s1.m-s2.m) - 1)/a #Q (s1.m-s2.m)) by
+XCMPLX_1:75
    .= abs(a #Q (s1.m-s2.m)*((a #Q (s1.m-s2.m) - 1)/a #Q (s1.m-s2.m)))
       by XCMPLX_1:75
    .= abs(a #Q (s1.m-s2.m))*abs((a #Q (s1.m-s2.m) - 1)/a #Q (s1.m-s2.m))
@@ -2218,8 +2216,8 @@ hence abs(a #Q (s1.m-s2.m) - 1) <= (m1+1) -Root a - 1 by A26,A27,AXIOMS:22;
  a - 1)
       by A20,A28,A32,RFUNCT_1:2;
   A35: abs(a #Q (s1.m) - a #Q (s2.m)) = abs((a #Q (s1.m) - a #Q (s2.m))*1)
-  .=abs((a #Q (s1.m) - a #Q (s2.m))*(a #Q (s2.m)/a #Q (s2.m))) by A33,XCMPLX_1:
-60
+  .=abs((a #Q (s1.m) - a #Q (s2.m))*(a #Q (s2.m)/a #Q (s2.m))) by A33,
+XCMPLX_1:60
   .=abs(a #Q (s2.m)*(a #Q (s1.m) - a #Q (s2.m))/a #Q (s2.m)) by XCMPLX_1:75
   .=abs(a #Q (s2.m)*((a #Q (s1.m) - a #Q (s2.m))/a #Q (s2.m)))
     by XCMPLX_1:75
@@ -2275,12 +2273,12 @@ proof let s1,s2 be Rational_Sequence; let a;
  reconsider m1 as Rational;
  A8: a #Q m1 > 0 by A2,Th63;
     now per cases;
- suppose a>=1; hence lim a #Q s1 = lim a #Q s2 by A1,Lm7;
+ suppose a>=1; hence lim a #Q s1 = lim a #Q s2 by A1,Lm8;
  end;
  suppose A9: a<1; then a/a<1/a by A2,REAL_1:73;
 then A10:  1<1/a by A2,XCMPLX_1:60;
   then A11: 1/a>0;
-  A12: lim (1/a) #Q s1 = lim (1/a) #Q s2 by A1,A10,Lm7;
+  A12: lim (1/a) #Q s1 = lim (1/a) #Q s2 by A1,A10,Lm8;
   A13: (1/a) #Q s1 is convergent by A1,A11,Th82;
   A14: (1/a) #Q s2 is convergent by A1,A11,Th82;
   then A15: (1/a) #Q s1 - (1/a) #Q s2 is convergent by A13,SEQ_2:25;
@@ -2481,7 +2479,7 @@ A9:    now let n; thus
     .= a #R b * a #R c by A1,A4,A5,Def8;
   end;
 
-Lm8: a > 0 implies a #R b >= 0
+Lm9: a > 0 implies a #R b >= 0
   proof assume A1: a > 0;
   consider s being Rational_Sequence such that
  A2: s is convergent & b = lim s & for n holds s.n<=b by Th79;
@@ -2494,7 +2492,7 @@ Lm8: a > 0 implies a #R b >= 0
   hence thesis by A3,A4,SEQ_2:31;
   end;
 
-Lm9: a > 0 implies a #R b <> 0
+Lm10: a > 0 implies a #R b <> 0
   proof assume A1: a > 0;
   assume a #R b = 0;
   then 0 = a #R b * a #R (-b)
@@ -2505,7 +2503,7 @@ Lm9: a > 0 implies a #R b <> 0
 
 theorem
 Th90: a > 0 implies a #R (-c) = 1 / a #R c
-proof assume A1: a>0; then A2: a #R c <>0 by Lm9;
+proof assume A1: a>0; then A2: a #R c <>0 by Lm10;
     1 = a #R (c+-c) by A1,Th85
  .= a #R (-c) * a #R c by A1,Th89;
  then 1 / a #R c = a #R (-c) * (a #R c / a #R c) by XCMPLX_1:75
@@ -2549,7 +2547,7 @@ Th93: a>0 implies (1/a) #R c = 1 / a #R c
 proof assume A1: a>0;
     a" = 1/a by XCMPLX_1:217;
  then A2: 1/a > 0 by A1,REAL_1:72;
- A3: a #R c <> 0 by A1,Lm9;
+ A3: a #R c <> 0 by A1,Lm10;
     1 = 1 #R c by Th87
  .= ((1/a)*a) #R c by A1,XCMPLX_1:107
  .= (1/a) #R c * a #R c by A1,A2,Th92;
@@ -2572,8 +2570,8 @@ end;
 theorem
 Th95: a > 0 implies a #R b > 0
   proof assume A1: a > 0;
-   then a #R b <> 0 by Lm9;
-  hence thesis by A1,Lm8;
+   then a #R b <> 0 by Lm10;
+  hence thesis by A1,Lm9;
   end;
 
 theorem Th96:
@@ -2631,7 +2629,7 @@ end;
 theorem Th98:
 a>0 & a<=1 & c>=b implies a #R c <= a #R b
 proof assume A1: a>0 & a<=1 & c>=b;
- then A2: 1/a>=1 by Lm5,REAL_2:152;
+ then A2: 1/a>=1 by Lm6,REAL_2:152;
     a #R b > 0 by A1,Th95;
  then (a #R b)" > 0 by REAL_1:72;
  then A3: 1/a #R b > 0 by XCMPLX_1:217;
@@ -2683,7 +2681,7 @@ proof assume A1: a>1 & b<0; then A2: a>0;
  hence thesis by XCMPLX_1:56;
 end;
 
-Lm10:
+Lm11:
 s1 is convergent & s2 is convergent & lim s1 > 0 & p>=0 &
 (for n holds s1.n>0 & s2.n = (s1.n) #Q p) implies lim s2 = (lim s1) #Q p
 proof assume that A1: s1 is convergent & s2 is convergent and
@@ -2848,7 +2846,7 @@ proof assume that A1: s1 is convergent & s2 is convergent and
                   A2: lim s1 > 0 and
                   A3: for n holds s1.n>0 & s2.n = (s1.n) #Q p;
     now per cases;
-  suppose p>=0; hence lim s2 = (lim s1) #Q p by A1,A2,A3,Lm10;
+  suppose p>=0; hence lim s2 = (lim s1) #Q p by A1,A2,A3,Lm11;
   end;
   suppose A4: p<=0; then A5: -p>=-0 by REAL_1:50;
   deffunc O(Nat) = (s2.$1)";
@@ -2893,7 +2891,7 @@ hence contradiction by A15,A17,XCMPLX_1:88;
       .= (s1.n) #Q (-p) by A21,Th65; hence
       s1.n>0 & s.n = (s1.n) #Q (-p) by A3;
   end;
-  then (lim s2)" = (lim s1) #Q (-p) by A1,A2,A5,A18,A19,A20,Lm10;
+  then (lim s2)" = (lim s1) #Q (-p) by A1,A2,A5,A18,A19,A20,Lm11;
   then 1/lim s2 = (lim s1) #Q (-p) by XCMPLX_1:217;
   then 1/lim s2 = 1/(lim s1) #Q p by A2,Th65; hence
      lim s2 = (lim s1) #Q p by XCMPLX_1:59;
@@ -2901,7 +2899,7 @@ hence contradiction by A15,A17,XCMPLX_1:88;
  end; hence thesis;
 end;
 
-Lm11: a > 0 implies a #R b #Q p = a #R (b * p)
+Lm12: a > 0 implies a #R b #Q p = a #R (b * p)
 proof assume A1: a>0;
  consider s1 being Rational_Sequence such that
  A2: s1 is convergent & b = lim s1 & for n holds s1.n>=b by Th80;
@@ -2926,7 +2924,7 @@ proof assume A1: a>0;
  end; hence thesis by A3,A4,A5,A7,A8,Th103;
 end;
 
-Lm12:
+Lm13:
 a>=1 & s1 is convergent & s2 is convergent &
 (for n holds s2.n = a #R (s1.n)) implies lim s2 = a #R (lim s1)
 proof assume that A1: a>=1 and
@@ -3011,15 +3009,15 @@ hence abs(a #R (s1.m-lim s1) - 1) <= (m1+1) -Root a - 1 by A23,A24,AXIOMS:22;
   then A26: a #R (lim s1) <= a #R d by A1,Th96;
   A27: a #R (lim s1) > 0 by A4,Th95;
   A28: abs(a #R (lim s1)) >= 0 by ABSVALUE:5;
-  A29: a #R (lim s1) <> 0 by A4,Lm9;
+  A29: a #R (lim s1) <> 0 by A4,Lm10;
      abs(a #R (lim s1)) <= a #R d by A26,A27,ABSVALUE:def 1;
   then A30:abs(a #R (lim s1))*abs(a #R (s1.m-lim s1) - 1) <=
   (a #R d)*((m1+1) -Root a - 1) by A17,A25,A28,RFUNCT_1:2;
   A31: abs(a #R (s1.m) - a #R (lim s1)) = abs((a #R (s1.m) - a #R (lim s1))*1)
   .=abs((a #R (s1.m) - a #R (lim s1))*(a #R (lim s1)/a #R (lim s1)))
     by A29,XCMPLX_1:60
-  .=abs(a #R (lim s1)*(a #R (s1.m) - a #R (lim s1))/a #R (lim s1)) by XCMPLX_1:
-75
+  .=abs(a #R (lim s1)*(a #R (s1.m) - a #R (lim s1))/a #R (lim s1)) by
+XCMPLX_1:75
   .=abs(a #R (lim s1)*((a #R (s1.m) - a #R (lim s1))/a #R (lim s1)))
     by XCMPLX_1:75
   .=abs(a #R (lim s1))*abs((a #R (s1.m) - a #R (lim s1))/a #R (lim s1))
@@ -3049,7 +3047,7 @@ proof assume that A1: a>0 and
                    A3: for n holds s2.n = a #R (s1.n);
     a">0 by A1,REAL_1:72; then A4: 1/a>=0 by XCMPLX_1:217;
     now per cases;
- suppose a>=1; hence lim s2 = a #R (lim s1) by A2,A3,Lm12;
+ suppose a>=1; hence lim s2 = a #R (lim s1) by A2,A3,Lm13;
  end;
  suppose A5: a<1;
   then a*(1/a)<=1*(1/a) by A4,AXIOMS:25;
@@ -3089,7 +3087,7 @@ A7:  now assume A8: lim s2 = 0;
    .= 1/(a #R (s1.n)) by XCMPLX_1:217
    .= (1/a) #R (s1.n) by A1,Th93;
   end;
-  then (lim s2)" = (1/a) #R (lim s1) by A2,A6,A18,A19,Lm12
+  then (lim s2)" = (1/a) #R (lim s1) by A2,A6,A18,A19,Lm13
   .= 1/a #R (lim s1) by A1,Th93;
   then 1 = 1/a #R (lim s1) * lim s2 by A7,XCMPLX_0:def 7;
   then a #R (lim s1)= a #R (lim s1)*(1/a #R (lim s1) * lim s2)
@@ -3111,7 +3109,7 @@ proof assume A1: a>0; then A2: a #R b > 0 by Th95;
  A7: lim (b(#)s) = b*c by A3,SEQ_2:22;
     now let n; thus
      (a #R b) #Q s .n = (a #R b) #Q (s.n) by Def7
-  .= a #R (b*s.n) by A1,Lm11
+  .= a #R (b*s.n) by A1,Lm12
   .= a #R ((b(#)s).n) by SEQ_1:13;
  end; hence thesis by A1,A4,A5,A6,A7,Th104;
 end;
