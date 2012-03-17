@@ -40,13 +40,11 @@ definition
  let I be Macro-Instruction;
  func while=0(a,I) -> Macro-Instruction equals
 :: SCMFSA_9:def 1
-
  if=0(a, I ';' Goto insloc 0, SCM+FSA-Stop) +*
   ( insloc (card I +4) .--> goto insloc 0 );
 
  func while>0(a,I) -> Macro-Instruction equals
 :: SCMFSA_9:def 2
-
  if>0(a, I ';' Goto insloc 0, SCM+FSA-Stop) +*
   ( insloc (card I +4) .--> goto insloc 0 );
 end;
@@ -61,7 +59,6 @@ definition
  let I be Macro-Instruction;
  func while<0(a,I) -> Macro-Instruction equals
 :: SCMFSA_9:def 3
-
   if=0(a,SCM+FSA-Stop,if>0(a,SCM+FSA-Stop,I ';' Goto insloc 0)) +*
   ( insloc (card I +4) .--> goto insloc 0 );
 end;
@@ -191,11 +188,10 @@ definition
  func StepWhile=0(a,I,s) -> Function of NAT,product the Object-Kind of SCM+FSA
   means
 :: SCMFSA_9:def 4
-
    it.0 = s &
    for i being Element of NAT
-    holds it.(i+1)=(Computation (it.i +* (while=0(a,I) +* (Start-At insloc 0)
-))).
+    holds it.(i+1)=
+    (Computation (it.i +* (while=0(a,I) +* (Start-At insloc 0)))).
       (LifeSpan (it.i +* (I +* (Start-At insloc 0))) + 3);
 end;
 
@@ -392,12 +388,8 @@ definition
   means
 :: SCMFSA_9:def 5
    it.0 = s & for i being Element of NAT holds
-    it.(i+1)=(Computation (it.i +* (while>0(a,I) +*
-(Start-At insloc 0)
-))).
-      (LifeSpan (it.i +* (I +*
-(Start-At insloc 0)
-)) + 3);
+    it.(i+1)=(Computation (it.i +* (while>0(a,I) +*(Start-At insloc 0)))).
+      (LifeSpan (it.i +* (I +* (Start-At insloc 0))) + 3);
 end;
 
 canceled 2;
@@ -408,12 +400,9 @@ theorem :: SCMFSA_9:50
 theorem :: SCMFSA_9:51
   for I being Macro-Instruction,a being read-write Int-Location,
    s being State of SCM+FSA holds
-   StepWhile>0(a,I,s).(0+1)=(Computation (s +* (while>0(a,I) +*
-(Start-At insloc 0)
-))).
-   (LifeSpan (s+* (I +*
-(Start-At insloc 0)
-)) + 3);
+   StepWhile>0(a,I,s).(0+1)=
+     (Computation (s +* (while>0(a,I) +* (Start-At insloc 0)))).
+   (LifeSpan (s+* (I +* (Start-At insloc 0))) + 3);
 
 theorem :: SCMFSA_9:52
   for I being Macro-Instruction,a being read-write Int-Location,

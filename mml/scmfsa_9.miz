@@ -47,8 +47,7 @@ theorem Th2:
      card if>0(a, I ';' Goto insloc 0, SCM+FSA-Stop) = card I + 6
 proof
   let I be Macro-Instruction, a be Int-Location;
-  thus
-       card if>0(a, I ';' Goto insloc 0, SCM+FSA-Stop)
+  thus card if>0(a, I ';' Goto insloc 0, SCM+FSA-Stop)
     = card (I ';' Goto insloc 0) + 1 +4 by SCMFSA8A:17,SCMFSA8B:15
    .= card I + card Goto insloc 0 + 1+4 by SCMFSA6A:61
    .= card I + 1+1+4 by SCMFSA8A:29
@@ -62,7 +61,6 @@ definition
  let a be Int-Location;
  let I be Macro-Instruction;
  func while=0(a,I) -> Macro-Instruction equals
-
  if=0(a, I ';' Goto insloc 0, SCM+FSA-Stop) +*
   ( insloc (card I +4) .--> goto insloc 0 );
  correctness
@@ -84,7 +82,6 @@ A3:  dom(P) = dom C \/ dom i by FUNCT_4:def 1
   end;
 
  func while>0(a,I) -> Macro-Instruction equals
-
  if>0(a, I ';' Goto insloc 0, SCM+FSA-Stop) +*
   ( insloc (card I +4) .--> goto insloc 0 );
   correctness
@@ -126,7 +123,6 @@ definition
  let a be Int-Location;
  let I be Macro-Instruction;
  func while<0(a,I) -> Macro-Instruction equals
-
   if=0(a,SCM+FSA-Stop,if>0(a,SCM+FSA-Stop,I ';' Goto insloc 0)) +*
   ( insloc (card I +4) .--> goto insloc 0 );
   correctness
@@ -183,8 +179,7 @@ then A2:  {insloc (card I + 4)} c= dom C by ZFMISC_1:37;
 A3:  dom(P) = dom C \/ dom i by FUNCT_4:def 1
     .= dom C \/ {insloc (card I + 4)} by CQC_LANG:5
     .= dom C by A2,XBOOLE_1:12;
-    thus
-       card while>0(a,I) = card dom C by A3,PRE_CIRC:21
+    thus card while>0(a,I) = card dom C by A3,PRE_CIRC:21
     .= card I + 6 by A1,PRE_CIRC:21;
 end;
 
@@ -1088,12 +1083,11 @@ reserve s for State of SCM+FSA,
 definition
  let s,I,a;
  func StepWhile=0(a,I,s) -> Function of NAT,product the Object-Kind of SCM+FSA
-  means
-:Def4:
+  means :Def4:
    it.0 = s &
    for i being Element of NAT
-    holds it.(i+1)=(Computation (it.i +* (while=0(a,I) +* (Start-At insloc 0)
-))).
+    holds it.(i+1)=
+    (Computation (it.i +* (while=0(a,I) +* (Start-At insloc 0)))).
       (LifeSpan (it.i +* (I +* (Start-At insloc 0))) + 3);
  existence
   proof
@@ -2373,12 +2367,8 @@ definition
  func StepWhile>0(a,I,s) -> Function of NAT,product the Object-Kind of SCM+FSA
   means :Def5:
    it.0 = s & for i being Element of NAT holds
-    it.(i+1)=(Computation (it.i +* (while>0(a,I) +*  
-(Start-At insloc 0)
-))).
-      (LifeSpan (it.i +* (I +* 
-(Start-At insloc 0)
-)) + 3);
+    it.(i+1)=(Computation (it.i +* (while>0(a,I) +*(Start-At insloc 0)))).
+      (LifeSpan (it.i +* (I +* (Start-At insloc 0))) + 3);
  existence
   proof
    deffunc U(Element of NAT,Element of product the Object-Kind of SCM+FSA) =
@@ -2418,12 +2408,9 @@ end;
 theorem Th51:
   for I being Macro-Instruction,a being read-write Int-Location,
    s being State of SCM+FSA holds
-   StepWhile>0(a,I,s).(0+1)=(Computation (s +* (while>0(a,I) +*  
-(Start-At insloc 0)
-))).
-   (LifeSpan (s+* (I +* 
-(Start-At insloc 0)
-)) + 3)
+   StepWhile>0(a,I,s).(0+1)=
+     (Computation (s +* (while>0(a,I) +* (Start-At insloc 0)))).
+   (LifeSpan (s+* (I +* (Start-At insloc 0))) + 3)
 proof
     let I be Macro-Instruction,a be read-write Int-Location,
     s be State of SCM+FSA;
