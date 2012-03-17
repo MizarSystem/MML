@@ -76,8 +76,7 @@ A4: X1 c= X2 by TARSKI:def 3;
   end;
 end;
 
-
-theorem Lm4:
+theorem Th1:
 for c be Real, seq be Real_Sequence st seq is convergent
 for rseq be Real_Sequence st
  ( for i be Nat holds rseq .i = abs(seq.i-c) ) holds
@@ -91,7 +90,7 @@ A2:for i be Nat holds rseq .i = abs(seq.i-c);
    deffunc F(set) = c;
    consider cseq be Real_Sequence such that
 A3:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
-A4:now let i be Nat;
+now let i be Nat;
      thus rseq.i=abs(seq.i-c) by A2
         .=abs(seq.i-(cseq.i))by A3
         .=abs(seq.i+-(cseq.i)) by XCMPLX_0:def 8
@@ -100,16 +99,16 @@ A4:now let i be Nat;
         .=abs((seq -cseq ).i) by SEQ_1:15
         .=abs(seq -cseq).i by SEQ_1:16;
    end;
-A5:for x be set st x in NAT holds rseq.x = abs(seq -cseq).x by A4;
-A6:cseq is constant by A3,SEQM_3:def 6; then
-A7:cseq is convergent by SEQ_4:39; then
-A8:seq -cseq is convergent by A1,SEQ_2:25; then
-A9:abs(seq -cseq) is convergent by SEQ_4:26;
-   lim abs(seq -cseq) = abs(lim(seq-cseq)) by A8,SEQ_4:27
-    .=abs(lim seq-lim cseq) by A1,A7,SEQ_2:26
-    .=abs(lim seq-(cseq.0)) by A6,SEQ_4:41
+then A4:for x be set st x in NAT holds rseq.x = abs(seq -cseq).x;
+A5:cseq is constant by A3,SEQM_3:def 6; then
+A6:cseq is convergent by SEQ_4:39; then
+A7:seq -cseq is convergent by A1,SEQ_2:25; then
+A8:abs(seq -cseq) is convergent by SEQ_4:26;
+   lim abs(seq -cseq) = abs(lim(seq-cseq)) by A7,SEQ_4:27
+    .=abs(lim seq-lim cseq) by A1,A6,SEQ_2:26
+    .=abs(lim seq-(cseq.0)) by A5,SEQ_4:41
     .=abs(lim seq-c) by A3;
-   hence thesis by A5,A9,SEQ_1:8;
+   hence thesis by A4,A8,SEQ_1:8;
 end;
 
 registration
@@ -126,7 +125,6 @@ registration
   end;
 end;
 
-
 registration
   cluster the_set_of_l1RealSequences -> lineary-closed;
   coherence
@@ -139,17 +137,17 @@ A1:for v,u be VECTOR of Linear_Space_of_RealSequences st
    proof
      let v,u be VECTOR of Linear_Space_of_RealSequences such that
 A2: v in W & u in W;
-A3: seq_id(v+u) is absolutely_summable
+ seq_id(v+u) is absolutely_summable
      proof
-A4:  seq_id v is absolutely_summable by A2,Def1;
-A5:  seq_id u is absolutely_summable by A2,Def1;
+A3:  seq_id v is absolutely_summable by A2,Def1;
+A4:  seq_id u is absolutely_summable by A2,Def1;
        set p = abs seq_id v;
        set q = abs seq_id u;
        set r = abs seq_id(v+u);
-A6:  p is summable by A4,SERIES_1:def 5;
-A7:  q is summable by A5,SERIES_1:def 5;
-A8:  p+q is summable by A6,A7,SERIES_1:10;
-A9:  for n be Nat holds 0<=r.n
+A5:  p is summable by A3,SERIES_1:def 5;
+  q is summable by A4,SERIES_1:def 5;
+then A6:  p+q is summable by A5,SERIES_1:10;
+A7:  for n be Nat holds 0<=r.n
        proof
         let n be Nat;
         r.n=abs((seq_id(v+u)).n) by SEQ_1:16;
@@ -158,20 +156,20 @@ A9:  for n be Nat holds 0<=r.n
       for n be Nat holds r.n <=(p+q).n
       proof
         let n be Nat;
-A10:      r.n=abs((seq_id(v+u)).n) by SEQ_1:16
+A8:      r.n=abs((seq_id(v+u)).n) by SEQ_1:16
           .=abs((seq_id(seq_id(v) + seq_id(u))).n) by RSSPACE:4,def 7
           .=abs((seq_id v + seq_id u).n) by RSSPACE:3
           .=abs((seq_id v).n + (seq_id u).n) by SEQ_1:11;
-A11:     abs((seq_id v).n)+abs((seq_id u).n)
+     abs((seq_id v).n)+abs((seq_id u).n)
         = abs(seq_id v).n + abs((seq_id u).n) by SEQ_1:16
        .= abs(seq_id v).n+ abs(seq_id u).n by SEQ_1:16
        .= (p + q).n by SEQ_1:11;
-       thus r.n <= (p+q).n by A10,A11,ABSVALUE:13;
+       hence r.n <= (p+q).n by A8,ABSVALUE:13;
       end;
-     then r is summable by A8,A9,SERIES_1:24;
+     then r is summable by A6,A7,SERIES_1:24;
      hence thesis by SERIES_1:def 5;
     end;
-    thus v+u in W by A3,Def1,RSSPACE:def 7;
+    hence v+u in W by Def1,RSSPACE:def 7;
 end;
 
 for a be Real for v be VECTOR of Linear_Space_of_RealSequences
@@ -180,15 +178,15 @@ for a be Real for v be VECTOR of Linear_Space_of_RealSequences
 let a be Real;
 let v be VECTOR of Linear_Space_of_RealSequences
         such that
-    A12: v in W;
+    A9: v in W;
     seq_id(a*v) is absolutely_summable
     proof
-     A13: seq_id v is absolutely_summable by A12,Def1;
-     A14: abs seq_id v is summable by A13,SERIES_1:def 5;
+      seq_id v is absolutely_summable by A9,Def1;
+     then A10: abs seq_id v is summable by SERIES_1:def 5;
      set q1 = abs seq_id(a*v);
      set r1 = ((abs a)(#)abs(seq_id v));
-    A15: r1 is summable by A14,SERIES_1:13;
-    A16:  for n be Nat holds 0<=q1.n
+    A11: r1 is summable by A10,SERIES_1:13;
+    A12:  for n be Nat holds 0<=q1.n
             proof
               let n be Nat;
               q1.n=abs((seq_id(a*v)).n) by SEQ_1:16;
@@ -203,7 +201,7 @@ let v be VECTOR of Linear_Space_of_RealSequences
                  .=abs(a(#)seq_id v).n by SEQ_1:16;
                hence thesis by SEQ_1:64;
               end;
-      then q1 is summable by A15,A16,SERIES_1:24;
+      then q1 is summable by A11,A12,SERIES_1:24;
       hence thesis by SERIES_1:def 5;
     end;
     hence a*v in W by Def1,RSSPACE:def 7;
@@ -211,7 +209,6 @@ let v be VECTOR of Linear_Space_of_RealSequences
   hence thesis by A1,RLSUB_1:def 1;
 end;
 end;
-
 
 theorem Th2:
 RLSStruct (# the_set_of_l1RealSequences,
@@ -229,7 +226,6 @@ registration
         RealLinearSpace-like;
   coherence by RSSPACE:13;
 end;
-
 
 theorem Th3:
 RLSStruct (# the_set_of_l1RealSequences,
@@ -276,7 +272,6 @@ A4:  z in the_set_of_l1RealSequences;
 end;
 end;
 
-
 registration let X be non empty set,
                Z be Element of X, A be BinOp of X,
                M be Function of [:REAL, X:], X,
@@ -284,7 +279,6 @@ registration let X be non empty set,
   cluster NORMSTR (# X, Z, A, M, N #) -> non empty;
   coherence by STRUCT_0:def 1;
 end;
-
 
 theorem Th4:
 for l be NORMSTR st RLSStruct (# the carrier of l, the Zero of l,
@@ -442,27 +436,27 @@ A7:      (abs rseq).k = (Partial_Sums (abs rseq)).k;
        hence (Partial_Sums abs rseq).m = (abs rseq).m .= 0 by A2;
      end;
 
-A8:  Sum(abs rseq) =0 & rseq is absolutely_summable
+  Sum(abs rseq) =0 & rseq is absolutely_summable
      proof
-A9:    for p be real number st 0<p
+A8:    for p be real number st 0<p
         ex n be Nat st for m be Nat st n<=m holds
          abs((Partial_Sums abs rseq).m-0)<p
        proof
          let p be real number such that
-A10:      0<p;
+A9:      0<p;
          take 0;
          let m be Nat such that 0<=m;
          abs((Partial_Sums abs rseq).m-0)
             = abs(0-0) by A4
            .= 0 by ABSVALUE:def 1;
-         hence abs((Partial_Sums abs rseq).m-0)<p by A10;
+         hence abs((Partial_Sums abs rseq).m-0)<p by A9;
        end; then
-A11:    Partial_Sums abs rseq is convergent by SEQ_2:def 6; then
-A12:    abs rseq is summable by SERIES_1:def 2;
-       lim Partial_Sums abs rseq =0 by A9,A11,SEQ_2:def 7;
-       hence thesis by A12,SERIES_1:def 3,def 5;
+A10:    Partial_Sums abs rseq is convergent by SEQ_2:def 6; then
+A11:    abs rseq is summable by SERIES_1:def 2;
+       lim Partial_Sums abs rseq =0 by A8,A10,SEQ_2:def 7;
+       hence thesis by A11,SERIES_1:def 3,def 5;
      end;
-     thus thesis by A8;
+     hence thesis;
 end;
 
 theorem Th6:
@@ -507,7 +501,6 @@ definition
         l_norm #);
   coherence;
 end;
-
 
 begin :: l1_Space is Banach
 
@@ -634,31 +627,31 @@ proof
 A1:now assume
 A2: ||.x.|| = 0;
 A3: ||.x.|| = Sum abs seq_id x by Th8;
-A4: seq_id(x) is absolutely_summable by Th8;
-A5: for n be Nat holds 0 = (seq_id x).n by A2,A3,A4,Th6;
+ seq_id(x) is absolutely_summable by Th8;
+then A4: for n be Nat holds 0 = (seq_id x).n by A2,A3,Th6;
      x in the_set_of_RealSequences by Def1,Def3;
-     hence x=0.l1_Space by A5,Th8,RSSPACE:def 6;
+     hence x=0.l1_Space by A4,Th8,RSSPACE:def 6;
    end;
 
-A6:now assume
-A7:x=0.l1_Space;
-A8: for n be Nat holds (seq_id x).n=0 by A7,Th8,RSSPACE:def 6;
+A5:now assume
+x=0.l1_Space;
+then A6: for n be Nat holds (seq_id x).n=0 by Th8,RSSPACE:def 6;
      thus ||.x.|| = (the norm of l1_Space). x by NORMSP_1:def 1
             .= Sum abs seq_id x by Def2,Def3
-            .= 0 by A8,Th5;
+            .= 0 by A6,Th5;
    end;
-A9:for n be Nat holds 0 <= abs(seq_id x).n
+A7:for n be Nat holds 0 <= abs(seq_id x).n
    proof
      let n be Nat;
      0 <= abs((seq_id x).n) by ABSVALUE:5;
      hence thesis by SEQ_1:16;
    end;
    seq_id x is absolutely_summable by Def1,Def3; then
-A10:abs seq_id x is summable by SERIES_1:def 5;
-A11:||.x.|| = Sum abs seq_id x by Th8;
-A12:||.y.|| = Sum abs seq_id y by Th8;
-A13:Sum abs seq_id(x+y) = ||.x + y.|| by Th8;
-A14:for n be Nat holds (abs seq_id(x+y)).n
+A8:abs seq_id x is summable by SERIES_1:def 5;
+A9:||.x.|| = Sum abs seq_id x by Th8;
+A10:||.y.|| = Sum abs seq_id y by Th8;
+A11:Sum abs seq_id(x+y) = ||.x + y.|| by Th8;
+A12:for n be Nat holds (abs seq_id(x+y)).n
        = abs(((seq_id x).n) + ((seq_id y).n))
    proof
      let n be Nat;
@@ -670,42 +663,42 @@ A14:for n be Nat holds (abs seq_id(x+y)).n
      hence thesis;
    end;
 
-A15:for n be Nat holds (abs seq_id(x+y)).n
+A13:for n be Nat holds (abs seq_id(x+y)).n
         <= (abs seq_id x).n + (abs seq_id y).n
    proof
      let n be Nat;
      (abs(((seq_id x).n)+ ((seq_id y).n)))
        <= abs((seq_id x).n) + abs((seq_id y).n) by ABSVALUE:13; then
      (abs(seq_id(x+y))) .n
-       <= abs((seq_id x).n) + abs((seq_id y).n) by A14; then
+       <= abs((seq_id x).n) + abs((seq_id y).n) by A12; then
      (abs(seq_id(x+y))) .n
         <= (abs(seq_id x)).n + abs((seq_id y).n) by SEQ_1:16;
      hence thesis by SEQ_1:16;
    end;
 
-A16:for n being Nat holds
+A14:for n being Nat holds
      (abs(seq_id(x+y))).n <= ((abs seq_id x) + (abs seq_id y)).n
    proof
      let n be Nat;
      (abs seq_id x).n + (abs seq_id y).n
         =((abs seq_id x) + (abs seq_id y)).n by SEQ_1:11;
      hence (abs(seq_id(x+y))).n
-          <= ((abs seq_id x) + (abs seq_id y)).n by A15;
+          <= ((abs seq_id x) + (abs seq_id y)).n by A13;
     end;
     seq_id x is absolutely_summable by Def1,Def3; then
-A17:abs seq_id x is summable by SERIES_1:def 5;
+A15:abs seq_id x is summable by SERIES_1:def 5;
     seq_id y is absolutely_summable by Def1,Def3; then
-A18:abs seq_id y is summable by SERIES_1:def 5;
-A19:(abs seq_id x) + (abs seq_id y) is summable
-         by A17,A18,SERIES_1:10;
-A20:now
+A16:abs seq_id y is summable by SERIES_1:def 5;
+then A17:(abs seq_id x) + (abs seq_id y) is summable
+         by A15,SERIES_1:10;
+now
       let n be Nat;
       (abs(seq_id(x+y))).n = abs((seq_id(x+y)).n) by SEQ_1:16;
       hence 0 <= (abs(seq_id(x+y))).n by ABSVALUE:5;
     end;
-A21:Sum(abs(seq_id(x+y))) <= Sum((abs seq_id x) + (abs seq_id y))
-        by A16,A19,A20,SERIES_1:24;
-A22:for n be Nat holds
+then A18:Sum(abs(seq_id(x+y))) <= Sum((abs seq_id x) + (abs seq_id y))
+        by A14,A17,SERIES_1:24;
+A19:for n be Nat holds
      (abs(a(#)seq_id(x))).n =(abs a)*(abs(seq_id x).n)
    proof
      let n be Nat;
@@ -717,14 +710,14 @@ A22:for n be Nat holds
      hence thesis;
    end;
    seq_id x is absolutely_summable by Def1,Def3; then
-A23:abs seq_id x is summable by SERIES_1:def 5;
+A20:abs seq_id x is summable by SERIES_1:def 5;
    ||.(a*x).|| =Sum(abs(seq_id(a*x))) by Th8
             .=Sum(abs(seq_id(a(#)seq_id(x)))) by Th8
             .=Sum(abs(a(#)seq_id(x))) by RSSPACE:3
-            .=Sum((abs a) (#) (abs seq_id x)) by A22,SEQ_1:13
-            .=abs(a)*Sum(abs seq_id x) by A23,SERIES_1:13
+            .=Sum((abs a) (#) (abs seq_id x)) by A19,SEQ_1:13
+            .=abs(a)*Sum(abs seq_id x) by A20,SERIES_1:13
             .=abs(a)*||.x.|| by Th8;
-   hence thesis by A1,A6,A9,A10,A11,A12,A13,A18,A21,SERIES_1:10,21;
+   hence thesis by A1,A5,A7,A8,A9,A10,A11,A16,A18,SERIES_1:10,21;
 end;
 
 registration
@@ -733,8 +726,7 @@ registration
   coherence by Def3,Th3,Th4,Th9,NORMSP_1:def 2;
 end;
 
-
-Lm5:
+Lm2:
 for c be Real, seq,seq1 be Real_Sequence st
  seq is convergent & seq1 is convergent
   for rseq be Real_Sequence st
@@ -751,7 +743,7 @@ A3:for i be Nat holds rseq .i = abs(seq.i-c)+seq1.i;
    consider cseq be Real_Sequence such that
 A4:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
 
-A5:now
+now
      let i be Nat;
      thus rseq.i=abs(seq.i-c)+seq1.i by A3
             .=abs(seq.i-cseq.i)+seq1.i by A4
@@ -762,19 +754,19 @@ A5:now
             .=abs(seq-cseq).i + seq1.i by SEQ_1:16
             .=(abs(seq-cseq) + seq1).i by SEQ_1:11;
    end;
-   for x be set st x in NAT holds
-   rseq.x =(abs(seq-(cseq)) + seq1).x by A5; then
-A6:rseq = (abs(seq-(cseq)) + seq1) by SEQ_1:8;
-A7:cseq is constant by A4,SEQM_3:def 6;then
-A8:cseq is convergent by SEQ_4:39; then
-A9:seq -cseq is convergent by A1,SEQ_2:25; then
-A10:abs(seq- cseq) is convergent by SEQ_4:26;
+   then for x be set st x in NAT holds
+   rseq.x =(abs(seq-(cseq)) + seq1).x; then
+A5:rseq = (abs(seq-(cseq)) + seq1) by SEQ_1:8;
+A6:cseq is constant by A4,SEQM_3:def 6;then
+A7:cseq is convergent by SEQ_4:39; then
+A8:seq -cseq is convergent by A1,SEQ_2:25; then
+A9:abs(seq- cseq) is convergent by SEQ_4:26;
    lim abs(seq-cseq)
-     = abs(lim(seq-cseq)) by A9,SEQ_4:27
-    .= abs(lim seq - lim cseq) by A1,A8,SEQ_2:26
-    .= abs(lim seq - (cseq.0)) by A7,SEQ_4:41
+     = abs(lim(seq-cseq)) by A8,SEQ_4:27
+    .= abs(lim seq - lim cseq) by A1,A7,SEQ_2:26
+    .= abs(lim seq - (cseq.0)) by A6,SEQ_4:41
     .= abs(lim seq - c) by A4;
-   hence thesis by A2,A6,A10,SEQ_2:19,20;
+   hence thesis by A2,A5,A9,SEQ_2:19,20;
 end;
 
 definition let X be non empty NORMSTR, x, y be Point of X;
@@ -782,7 +774,6 @@ definition let X be non empty NORMSTR, x, y be Point of X;
   ||.x - y.||;
   coherence;
 end;
-
 
 definition
  let NRM be non empty NORMSTR;
@@ -792,11 +783,12 @@ definition
   for n1, m1 be Nat st n1 >= k1 & m1 >= k1 holds
    dist(seqt.n1, seqt.m1) < r1;
   end;
+
 notation
  let NRM be non empty NORMSTR;
  let seqt be sequence of NRM;
- synonym seqt is Cauchy_sequence_by_Norm for seqt is CCauchy ; end;
-
+ synonym seqt is Cauchy_sequence_by_Norm for seqt is CCauchy; 
+end;
 
  reserve NRM for non empty RealNormSpace;
  reserve seq for sequence of NRM;
@@ -888,40 +880,40 @@ A6:     e > 0;
          thus ex k be Nat st
           for m be Nat st k <= m holds abs(rseqi.m -rseqi.k) < e
          proof
-A7:       e is Real by XREAL_0:def 1;
-           consider k be Nat such that
-A8:       for n, m be Nat st n >= k & m >= k holds
-           ||.(vseq.n) - (vseq.m).|| < e by A1,A6,A7,Th10;
+       e is Real by XREAL_0:def 1;
+           then consider k be Nat such that
+A7:       for n, m be Nat st n >= k & m >= k holds
+           ||.(vseq.n) - (vseq.m).|| < e by A1,A6,Th10;
            for m being Nat st k <= m holds abs(rseqi.m-rseqi.k) < e
            proof
              let m be Nat such that
-A9:         k<=m;
+A8:         k<=m;
              ||.(vseq.m) - (vseq.k).||
                =Sum(abs(seq_id((vseq.m) - (vseq.k)))) by Th8; then
-A10:         Sum(abs(seq_id((vseq.m) - (vseq.k)))) < e by A8,A9;
-A11:         seq_id((vseq.m)-(vseq.k)) is absolutely_summable by Def1,Def3;
-A12:        abs(seq_id((vseq.m)-(vseq.k))) is summable by A11,SERIES_1:def 5;
-A13:        for i be Nat holds 0 <= abs(seq_id((vseq.m) - (vseq.k))).i
+A9:         Sum(abs(seq_id((vseq.m) - (vseq.k)))) < e by A7,A8;
+         seq_id((vseq.m)-(vseq.k)) is absolutely_summable by Def1,Def3;
+then A10:        abs(seq_id((vseq.m)-(vseq.k))) is summable by SERIES_1:def 5;
+        for i be Nat holds 0 <= abs(seq_id((vseq.m) - (vseq.k))).i
              proof
                let i be Nat;
                0 <= abs((seq_id((vseq.m) - (vseq.k))).i) by ABSVALUE:5;
                hence thesis by SEQ_1:16;
              end;
-A14:         abs(seq_id((vseq.m) - (vseq.k))).i
-              <= Sum(abs(seq_id((vseq.m) - (vseq.k)))) by A12,A13,RSSPACE2:4;
-A15:         seq_id((vseq.m) - (vseq.k))
+then A11:         abs(seq_id((vseq.m) - (vseq.k))).i
+              <= Sum(abs(seq_id((vseq.m) - (vseq.k)))) by A10,RSSPACE2:4;
+         seq_id((vseq.m) - (vseq.k))
                =seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by Th8
               .= seq_id((vseq.m))-seq_id((vseq.k)) by RSSPACE:3
               .= seq_id((vseq.m))+-seq_id((vseq.k)) by SEQ_1:15;
-             (seq_id((vseq.m) - (vseq.k))).i
-               =(seq_id((vseq.m))).i+(-seq_id((vseq.k))).i by A15,SEQ_1:11
+             then (seq_id((vseq.m) - (vseq.k))).i
+               =(seq_id((vseq.m))).i+(-seq_id((vseq.k))).i by SEQ_1:11
               .=(seq_id((vseq.m))).i+(-(seq_id((vseq.k))).i) by SEQ_1:14
               .=(seq_id((vseq.m))).i-(seq_id((vseq.k))).i by XCMPLX_0:def 8
               .=rseqi.m -(seq_id((vseq.k))).i by A4
               .=rseqi.m - rseqi.k by A4; then
              abs(rseqi.m-rseqi.k) = abs(seq_id((vseq.m) - (vseq.k))).i
               by SEQ_1:16;
-             hence thesis by A10,A14,AXIOMS:22;
+             hence thesis by A9,A11,AXIOMS:22;
            end;
            hence thesis;
          end;
@@ -932,53 +924,53 @@ A15:         seq_id((vseq.m) - (vseq.k))
      thus thesis by A4,A5;
    end;
    consider f be Function of NAT,REAL such that
-A16:for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
+A12:for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
    reconsider tseq=f as Real_Sequence;
-A17:now
+A13:now
      let i be Nat;
      reconsider x=i as set;
      ex i0 be Nat st
       x=i0 &
       ex rseqi be Real_Sequence st
        ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i0 ) &
-      rseqi is convergent & f.x=lim rseqi by A16;
+      rseqi is convergent & f.x=lim rseqi by A12;
       hence ex rseqi be Real_Sequence st
        ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i ) &
        rseqi is convergent & tseq.i=lim rseqi;
    end;
-A18:for e be Real st e >0
+A14:for e be Real st e >0
    ex k be Nat st
     for n be Nat st n >= k holds
      ( abs(seq_id tseq-seq_id(vseq.n)) is summable &
        Sum(abs(seq_id tseq-seq_id(vseq.n))) < e )
    proof
      let e1 be Real such that
-A19: e1 >0;
+A15: e1 >0;
      set e=e1/2;
-A20:e > 0 by A19,SEQ_2:3;
-A21:e < e1 by A19,SEQ_2:4;
+A16:e > 0 by A15,SEQ_2:3;
+A17:e < e1 by A15,SEQ_2:4;
      consider k be Nat such that
-A22: for n, m be Nat st n >= k & m >= k holds
-      ||.(vseq.n) - (vseq.m).|| < e by A1,A20,Th10;
-A23: for m,n be Nat st n >= k & m >= k holds
+A18: for n, m be Nat st n >= k & m >= k holds
+      ||.(vseq.n) - (vseq.m).|| < e by A1,A16,Th10;
+A19: for m,n be Nat st n >= k & m >= k holds
       ( abs(seq_id((vseq.n) - (vseq.m))) is summable &
         Sum(abs(seq_id((vseq.n) - (vseq.m)))) < e &
         for i be Nat holds 0 <= abs(seq_id((vseq.n) - (vseq.m))).i )
      proof
        let m,n be Nat such that
-A24:  n >= k & m >= k;
-       ||.(vseq.n) - (vseq.m).|| < e by A22,A24; then
-A25:   (the norm of l1_Space).((vseq.n) - (vseq.m)) < e by NORMSP_1:def 1;
-A26:  seq_id(((vseq.n) - (vseq.m))) is absolutely_summable by Def1,Def3;
+A20:  n >= k & m >= k;
+       ||.(vseq.n) - (vseq.m).|| < e by A18,A20; then
+A21:   (the norm of l1_Space).((vseq.n) - (vseq.m)) < e by NORMSP_1:def 1;
+A22:  seq_id(((vseq.n) - (vseq.m))) is absolutely_summable by Def1,Def3;
        for i be Nat holds 0 <= abs(seq_id((vseq.n) - (vseq.m))).i
        proof
          let i be Nat;
          0 <= abs((seq_id((vseq.n) - (vseq.m))).i) by ABSVALUE:5;
          hence thesis by SEQ_1:16;
        end;
-       hence thesis by A25,A26,Def2,Def3,SERIES_1:def 5;
+       hence thesis by A21,A22,Def2,Def3,SERIES_1:def 5;
      end;
-A27:  for n be Nat for i be Nat holds
+A23:  for n be Nat for i be Nat holds
       for rseq be Real_Sequence st
        ( for m be Nat holds
          rseq.m=Partial_Sums(abs(seq_id((vseq.m)-(vseq.n)))).i )
@@ -987,7 +979,7 @@ A27:  for n be Nat for i be Nat holds
          lim rseq = Partial_Sums(abs(seq_id tseq-seq_id(vseq.n))).i )
      proof
        let n be Nat;
-A28:    for m,k be Nat holds
+A24:    for m,k be Nat holds
         seq_id((vseq.m) - (vseq.k)) = seq_id((vseq.m))-seq_id((vseq.k))
        proof
          let m,k be Nat;
@@ -1001,33 +993,33 @@ A28:    for m,k be Nat holds
           rseq.m=Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).$1 holds
           rseq is convergent &
           lim rseq = Partial_Sums(abs(seq_id tseq-seq_id(vseq.n))).$1;
-A29:  P[0]
+A25:  P[0]
   proof
     now
          let rseq be Real_Sequence such that
-A30:     for m be Nat holds
+A26:     for m be Nat holds
           rseq.m=Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).0;
          thus rseq is convergent &
           lim rseq = Partial_Sums(abs(seq_id tseq-seq_id(vseq.n))).0
          proof
            consider rseq0 be Real_Sequence such that
-A31:        ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).0 ) &
-            rseq0 is convergent & tseq.0=lim rseq0 by A17;
-A32:       for m being Nat holds rseq.m = abs(rseq0.m-(seq_id((vseq.n))).0)
+A27:        ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).0 ) &
+            rseq0 is convergent & tseq.0=lim rseq0 by A13;
+A28:       for m being Nat holds rseq.m = abs(rseq0.m-(seq_id((vseq.n))).0)
            proof
              let m be Nat;
-             rseq.m=Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).0 by A30
+             rseq.m=Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).0 by A26
                 .=(abs(seq_id((vseq.m) - (vseq.n)))).0 by SERIES_1:def 1
-                .=(abs(seq_id(vseq.m)-seq_id(vseq.n))).0 by A28
+                .=(abs(seq_id(vseq.m)-seq_id(vseq.n))).0 by A24
                 .=(abs(seq_id(vseq.m)+-seq_id(vseq.n))).0 by SEQ_1:15
                 .=abs((seq_id(vseq.m)+-seq_id(vseq.n)).0) by SEQ_1:16
                 .=abs((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0) by SEQ_1:11
                 .=abs((seq_id(vseq.m)).0+-(seq_id(vseq.n)).0) by SEQ_1:14
                 .=abs((seq_id(vseq.m)).0-(seq_id(vseq.n)).0) by XCMPLX_0:def 8;
-             hence thesis by A31;
+             hence thesis by A27;
            end;
-           lim rseq = abs(lim(rseq0) -((seq_id(vseq.n)).0 )) by A31,A32,Lm4
-                 .= abs(tseq.0+-((seq_id(vseq.n)).0)) by A31,XCMPLX_0:def 8
+           then lim rseq = abs(lim(rseq0) -((seq_id(vseq.n)).0 )) by A27,Th1
+                 .= abs(tseq.0+-((seq_id(vseq.n)).0)) by A27,XCMPLX_0:def 8
                  .= abs(tseq.0+(-(seq_id(vseq.n))).0) by SEQ_1:14
                  .= abs((tseq+(-seq_id((vseq.n)))).0) by SEQ_1:11
                  .= abs((tseq-(seq_id((vseq.n)))).0) by SEQ_1:15
@@ -1035,16 +1027,16 @@ A32:       for m being Nat holds rseq.m = abs(rseq0.m-(seq_id((vseq.n))).0)
                  .= abs(seq_id tseq-(seq_id(vseq.n))).0 by SEQ_1:16
                  .=Partial_Sums(abs(seq_id tseq-(seq_id(vseq.n)))).0
                         by SERIES_1:def 1;
-           hence thesis by A31,A32,Lm4;
+           hence thesis by A27,A28,Th1;
          end;
        end;
       hence thesis;
     end;
-A33:  for i be Nat st P[i] holds P[i+1]
+A29:  for i be Nat st P[i] holds P[i+1]
    proof
     now
          let i be Nat such that
-A34:    for rseq be Real_Sequence st
+A30:    for rseq be Real_Sequence st
           ( for m be Nat holds
             rseq.m= Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i )
          holds
@@ -1058,29 +1050,29 @@ A34:    for rseq be Real_Sequence st
             lim rseq =Partial_Sums(abs((seq_id tseq - seq_id(vseq.n)))).(i+1))
          proof
            let rseq be Real_Sequence such that
-A35:     ( for m be Nat holds
+A31:     ( for m be Nat holds
              rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).(i+1) );
            deffunc F(Nat) = Partial_Sums(abs(seq_id((vseq.$1) - (vseq.n)))).i;
            consider rseqb be Real_Sequence such that
-A36:       for m be Nat holds rseqb.m = F(m) from SEQ_1:sch 1;
-A37:       rseqb is convergent &
+A32:       for m be Nat holds rseqb.m = F(m) from SEQ_1:sch 1;
+A33:       rseqb is convergent &
            lim rseqb = Partial_Sums(abs((seq_id tseq - seq_id(vseq.n)))).i
-             by A34,A36;
+             by A30,A32;
            consider rseq0 be Real_Sequence such that
-A38:       ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).(i+1) ) &
-           rseq0 is convergent & tseq.(i+1)=lim rseq0 by A17;
-A39:       now
+A34:       ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).(i+1) ) &
+           rseq0 is convergent & tseq.(i+1)=lim rseq0 by A13;
+A35:       now
              let m be Nat;
              thus
              rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).(i+1)
-                  by A35
+                  by A31
                 .=abs(seq_id((vseq.m) - (vseq.n))).(i+1)
                  +Partial_Sums(abs(seq_id((vseq.m) -
                                    (vseq.n)))).i by SERIES_1:def 1
                 .=abs(seq_id(vseq.m)-seq_id(vseq.n)).(i+1)
                  +Partial_Sums(abs(seq_id((vseq.m) -
-                                   (vseq.n)))).i by A28
-                .=abs(seq_id(vseq.m)-seq_id(vseq.n)).(i+1) + rseqb.m by A36
+                                   (vseq.n)))).i by A24
+                .=abs(seq_id(vseq.m)-seq_id(vseq.n)).(i+1) + rseqb.m by A32
                 .=abs((seq_id(vseq.m)-seq_id(vseq.n)).(i+1))
                  + rseqb.m by SEQ_1:16
                 .=abs((seq_id(vseq.m)+-seq_id(vseq.n)).(i+1))
@@ -1091,12 +1083,12 @@ A39:       now
                  + rseqb.m by SEQ_1:14
                 .= abs((seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1))
                  + rseqb.m by XCMPLX_0:def 8
-                .= abs(rseq0.m-(seq_id(vseq.n)).(i+1)) + rseqb.m by A38;
+                .= abs(rseq0.m-(seq_id(vseq.n)).(i+1)) + rseqb.m by A34;
            end;
-           lim rseq = abs(lim(rseq0)-(seq_id(vseq.n)).(i+1) )
-                      + lim rseqb by A37,A38,A39,Lm5
+           then lim rseq = abs(lim(rseq0)-(seq_id(vseq.n)).(i+1) )
+                      + lim rseqb by A33,A34,Lm2
                    .= abs(tseq.(i+1)+-(seq_id(vseq.n)).(i+1) )
-                      + lim rseqb by A38,XCMPLX_0:def 8
+                      + lim rseqb by A34,XCMPLX_0:def 8
                    .= abs(tseq.(i+1)+(-seq_id(vseq.n)).(i+1) )
                       + lim rseqb by SEQ_1:14
                    .= abs((tseq+(-seq_id(vseq.n))).(i+1) )
@@ -1107,18 +1099,18 @@ A39:       now
                       + lim rseqb by SEQ_1:16
                    .= abs(tseq-(seq_id(vseq.n))).(i+1)
                       + Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))).i
-                         by A34,A36
+                         by A30,A32
                    .= abs(seq_id tseq-(seq_id(vseq.n))).(i+1)
                       + Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))).i
                          by RSSPACE:3
                    .= Partial_Sums (abs((seq_id tseq -seq_id(vseq.n)))).(i+1)
                          by SERIES_1:def 1;
-           hence thesis by A37,A38,A39,Lm5;
+           hence thesis by A33,A34,A35,Lm2;
          end;
        end;
        hence thesis;
      end;
-       for i be Nat holds P[i] from NAT_1:sch 1(A29,A33);
+       for i be Nat holds P[i] from NAT_1:sch 1(A25,A29);
        hence thesis;
      end;
      for n be Nat st n >= k holds
@@ -1126,126 +1118,126 @@ A39:       now
         Sum abs(seq_id tseq-seq_id(vseq.n)) < e1
      proof
        let n be Nat such that
-A40:   n >= k;
-A41:   for i be Nat st 0 <= i holds
+A36:   n >= k;
+A37:   for i be Nat st 0 <= i holds
          Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))).i <=e
        proof
          let i be Nat such that 0 <=i;
          deffunc F(Nat)= Partial_Sums(abs(seq_id((vseq.$1) - (vseq.n)))).i;
          consider rseq be Real_Sequence such that
-A42:      for m be Nat holds rseq.m = F(m) from SEQ_1:sch 1;
-A43:     rseq is convergent by A27,A42;
-A44:     lim rseq = Partial_Sums(abs(seq_id tseq-seq_id(vseq.n))).i by A27,A42
+A38:      for m be Nat holds rseq.m = F(m) from SEQ_1:sch 1;
+A39:     rseq is convergent by A23,A38;
+A40:     lim rseq = Partial_Sums(abs(seq_id tseq-seq_id(vseq.n))).i by A23,A38
 ;
          for m be Nat st m >= k holds rseq.m <= e
          proof
            let m be Nat;
            assume m >= k; then
-A45:       abs(seq_id((vseq.m) - (vseq.n))) is summable &
+A41:       abs(seq_id((vseq.m) - (vseq.n))) is summable &
            Sum(abs(seq_id((vseq.m) - (vseq.n)))) < e &
            for i be Nat holds 0 <= abs(seq_id((vseq.m) - (vseq.n))).i
-                  by A23,A40; then
-A46:       Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i
+                  by A19,A36; then
+A42:       Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i
                <=Sum(abs(seq_id((vseq.m) - (vseq.n)))) by RSSPACE2:4;
-           rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i by A42;
-           hence thesis by A45,A46,AXIOMS:22;
+           rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i by A38;
+           hence thesis by A41,A42,AXIOMS:22;
          end;
-         hence thesis by A43,A44,RSSPACE2:6;
+         hence thesis by A39,A40,RSSPACE2:6;
        end;
-A47:   for i be Nat holds 0 <= abs(seq_id tseq-seq_id(vseq.n)).i
+A43:   for i be Nat holds 0 <= abs(seq_id tseq-seq_id(vseq.n)).i
        proof
          let i be Nat;
          abs(seq_id tseq -seq_id(vseq.n)).i
             =abs((seq_id tseq -seq_id(vseq.n)).i) by SEQ_1:16;
          hence thesis by ABSVALUE:5;
        end;
-A48:   Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))) is bounded_above
+A44:   Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))) is bounded_above
        proof
          now
            take e1;
            let i be Nat;
            0 <= i by NAT_1:18; then
-           Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))).i <=e by A41;
+           Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))).i <=e by A37;
            hence Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))).i < e1
-             by A21,AXIOMS:22;
+             by A17,AXIOMS:22;
          end;
          hence thesis by SEQ_2:def 3;
        end;
-A49:   Sum(abs((seq_id tseq -seq_id(vseq.n))))
+A45:   Sum(abs((seq_id tseq -seq_id(vseq.n))))
        = lim Partial_Sums(abs((seq_id tseq -seq_id(vseq.n))))
           by SERIES_1:def 3;
        abs((seq_id tseq-seq_id(vseq.n))) is summable
-         by A47,A48,SERIES_1:20; then
+         by A43,A44,SERIES_1:20; then
        Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))) is convergent
          by SERIES_1:def 2; then
        lim Partial_Sums(abs((seq_id tseq -seq_id(vseq.n)))) <= e
-         by A41,RSSPACE2:6;
-       hence thesis by A21,A47,A48,A49,AXIOMS:22,SERIES_1:20;
+         by A37,RSSPACE2:6;
+       hence thesis by A17,A43,A44,A45,AXIOMS:22,SERIES_1:20;
      end;
      hence thesis;
    end;
    abs seq_id tseq is summable
    proof
-A50: for i be Nat holds 0 <= abs(seq_id tseq).i
+A46: for i be Nat holds 0 <= abs(seq_id tseq).i
      proof
        let i be Nat;
        abs(seq_id tseq).i = abs((seq_id tseq).i) by SEQ_1:16;
        hence thesis by ABSVALUE:5;
      end;
      consider m be Nat such that
-A51: for n be Nat st n >= m holds
+A47: for n be Nat st n >= m holds
      abs((seq_id tseq -seq_id(vseq.n))) is summable &
-     Sum(abs((seq_id tseq -seq_id(vseq.n)))) < 1 by A18;
-A52: abs((seq_id tseq -seq_id(vseq.m))) is summable by A51;
+     Sum(abs((seq_id tseq -seq_id(vseq.n)))) < 1 by A14;
+A48: abs((seq_id tseq -seq_id(vseq.m))) is summable by A47;
      seq_id(vseq.m) is absolutely_summable by Def1,Def3; then
-A53: abs(seq_id(vseq.m)) is summable by SERIES_1:def 5;
+A49: abs(seq_id(vseq.m)) is summable by SERIES_1:def 5;
      set a=abs(seq_id tseq -seq_id(vseq.m));
      set b=abs seq_id(vseq.m);
      set d=abs seq_id tseq;
-A54: a + b is summable by A52,A53,SERIES_1:10;
+A50: a + b is summable by A48,A49,SERIES_1:10;
      for i be Nat holds d.i <= (a+b).i
      proof
        let i be Nat;
-A55:   a.i = abs((seq_id tseq -seq_id(vseq.m)).i) by SEQ_1:16
+A51:   a.i = abs((seq_id tseq -seq_id(vseq.m)).i) by SEQ_1:16
           .= abs((seq_id tseq+-seq_id(vseq.m)).i) by SEQ_1:15
           .= abs((seq_id tseq).i+(-seq_id(vseq.m)).i) by SEQ_1:11
           .= abs((seq_id tseq).i+(-(seq_id(vseq.m)).i)) by SEQ_1:14
           .=abs((seq_id tseq).i-(seq_id(vseq.m)).i) by XCMPLX_0:def 8;
-A56:   b.i=abs((seq_id(vseq.m)).i) by SEQ_1:16;
+A52:   b.i=abs((seq_id(vseq.m)).i) by SEQ_1:16;
        d.i=abs((seq_id tseq).i) by SEQ_1:16; then
-       d.i-b.i <= a.i by A55,A56,ABSVALUE:18; then
+       d.i-b.i <= a.i by A51,A52,ABSVALUE:18; then
        d.i-b.i+b.i<= a.i + b.i by AXIOMS:24; then
        d.i <= a.i + b.i by XCMPLX_1:27;
        hence thesis by SEQ_1:11;
      end;
-     hence d is summable by A50,A54,SERIES_1:24;
+     hence d is summable by A46,A50,SERIES_1:24;
    end; then
-A57:seq_id tseq is absolutely_summable by SERIES_1:def 5;
-A58:tseq in the_set_of_RealSequences by RSSPACE:def 1;
-   reconsider tv=tseq as Point of l1_Space by A57,A58,Def1,Def3;
+A53:seq_id tseq is absolutely_summable by SERIES_1:def 5;
+A54:tseq in the_set_of_RealSequences by RSSPACE:def 1;
+   then reconsider tv=tseq as Point of l1_Space by A53,Def1,Def3;
    for e be Real st
     e > 0 ex m be Nat st for n be Nat st
      n >= m holds ||.(vseq.n) - tv.|| < e
    proof
      let e be Real such that
-A59: e > 0;
+A55: e > 0;
      consider m be Nat such that
-A60: for n be Nat st n >= m holds
+A56: for n be Nat st n >= m holds
         abs(seq_id tseq-seq_id(vseq.n)) is summable &
-     Sum(abs(seq_id tseq-seq_id(vseq.n))) < e by A18,A59;
+     Sum(abs(seq_id tseq-seq_id(vseq.n))) < e by A14,A55;
      now let n be Nat such that
-A61:   n >= m;
-       reconsider u=tseq as VECTOR of l1_Space by A57,A58,Def1,Def3;
-A62:   Sum abs(seq_id tseq-seq_id(vseq.n)) < e by A60,A61;
+A57:   n >= m;
+       reconsider u=tseq as VECTOR of l1_Space by A53,A54,Def1,Def3;
+A58:   Sum abs(seq_id tseq-seq_id(vseq.n)) < e by A56,A57;
        reconsider v=vseq.n as VECTOR of l1_Space;
        seq_id(u-v) = u-v by Th8; then
        Sum abs seq_id(u-v) = Sum abs(seq_id tseq-seq_id(vseq.n))
          by Th8;then
-A63:   (the norm of l1_Space).(u-v) < e by A62,Def2,Def3;
+A59:   (the norm of l1_Space).(u-v) < e by A58,Def2,Def3;
        ||.(vseq.n) - tv.|| =||.(vseq.n) + -tv.|| by RLVECT_1:def 11
           .=||.-(tv-(vseq.n)).|| by RLVECT_1:47
           .=||.tv-(vseq.n).|| by NORMSP_1:6;
-       hence ||.(vseq.n) - tv.|| < e by A63,NORMSP_1:def 1;
+       hence ||.(vseq.n) - tv.|| < e by A59,NORMSP_1:def 1;
      end;
      hence thesis;
    end;

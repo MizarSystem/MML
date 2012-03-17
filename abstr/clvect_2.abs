@@ -1,0 +1,497 @@
+:: Convergent Sequences in Complex Unitary Space
+::  by Noboru Endou
+:: 
+:: Received February 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2,
+      SEQ_1, SEQ_2, BHSP_3, COMPLEX1, BOOLE, ARYTM_3, CSSPACE, CFUNCT_1,
+      PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, LATTICES;
+ notation TARSKI, ORDINAL1, NUMBERS, XREAL_0, REAL_1, NAT_1, RELAT_1, FUNCT_1,
+      FUNCT_2, SEQ_1, SEQM_3, ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_1,
+      BHSP_1, BHSP_3, SEQ_2, COMPLEX1, COMSEQ_1, CFUNCT_1, CLVECT_1, CSSPACE;
+ constructors REAL_1, NAT_1, ABSVALUE, MEMBERED, XBOOLE_0, BHSP_3, COMPLEX1,
+      COMSEQ_1, CSSPACE, SEQ_2, COMPLEX2;
+ clusters FUNCT_1, SEQM_3, STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED,
+      ORDINAL2, COMPLEX1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Convergence in complex unitary space
+
+ reserve X for ComplexUnitarySpace;
+ reserve x, y, w, g, g1, g2 for Point of X;
+ reserve z for Complex;
+ reserve p, q, r, M, M1, M2 for Real;
+ reserve seq, seq1, seq2, seq3 for sequence of X;
+ reserve k,n,m for Nat;
+ reserve Nseq for increasing Seq_of_Nat;
+
+definition let X, seq;
+attr seq is convergent means
+:: CLVECT_2:def 1
+  ex g st for r st r > 0 ex m st for n st n >= m holds dist(seq.n, g) < r;
+end;
+
+theorem :: CLVECT_2:1
+seq is constant implies seq is convergent;
+
+theorem :: CLVECT_2:2
+seq1 is convergent & (ex k st for n st k <= n holds seq2.n = seq1.n) implies
+ seq2 is convergent;
+
+theorem :: CLVECT_2:3
+seq1 is convergent & seq2 is convergent implies
+ seq1 + seq2 is convergent;
+
+theorem :: CLVECT_2:4
+seq1 is convergent & seq2 is convergent implies
+ seq1 - seq2 is convergent;
+
+theorem :: CLVECT_2:5
+seq is convergent implies z * seq is convergent;
+
+theorem :: CLVECT_2:6
+seq is convergent implies - seq is convergent;
+
+theorem :: CLVECT_2:7
+seq is convergent implies seq + x is convergent;
+
+theorem :: CLVECT_2:8
+seq is convergent implies seq - x is convergent;
+
+theorem :: CLVECT_2:9
+seq is convergent iff ex g st for r st r > 0 ex m st for n st
+ n >= m holds ||.(seq.n) - g.|| < r;
+
+definition let X, seq;
+  assume  seq is convergent;
+   func lim seq -> Point of X means
+:: CLVECT_2:def 2
+    for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , it) < r;
+end;
+
+theorem :: CLVECT_2:10
+seq is constant & x in rng seq implies lim seq = x;
+
+theorem :: CLVECT_2:11
+seq is constant & (ex n st seq.n = x) implies lim seq = x;
+
+theorem :: CLVECT_2:12
+seq1 is convergent & (ex k st for n st n >= k holds seq2.n = seq1.n) implies
+ lim seq1 = lim seq2;
+
+theorem :: CLVECT_2:13
+seq1 is convergent & seq2 is convergent implies
+ lim (seq1 + seq2) = (lim seq1) + (lim seq2);
+
+theorem :: CLVECT_2:14
+seq1 is convergent & seq2 is convergent implies
+  lim (seq1 - seq2) = (lim seq1) - (lim seq2);
+
+theorem :: CLVECT_2:15
+seq is convergent implies lim (z * seq) = z * (lim seq);
+
+theorem :: CLVECT_2:16
+seq is convergent implies lim (- seq) = - (lim seq);
+
+theorem :: CLVECT_2:17
+seq is convergent implies lim (seq + x) = (lim seq) + x;
+
+theorem :: CLVECT_2:18
+seq is convergent implies lim (seq - x) = (lim seq) - x;
+
+theorem :: CLVECT_2:19
+seq is convergent implies
+ (lim seq = g iff for r st r > 0 ex m st for n st n >= m
+    holds ||.(seq.n) - g.|| < r);
+
+definition let X, seq;
+  func ||.seq.|| -> Real_Sequence means
+:: CLVECT_2:def 3
+  for n holds it.n =||.(seq.n).||;
+end;
+
+theorem :: CLVECT_2:20
+seq is convergent implies ||.seq.|| is convergent;
+
+theorem :: CLVECT_2:21
+seq is convergent & lim seq = g implies
+  ||.seq.|| is convergent & lim ||.seq.|| = ||.g.||;
+
+theorem :: CLVECT_2:22
+seq is convergent & lim seq = g implies
+  ( ||.seq - g.|| is convergent & lim ||.seq - g.|| = 0 );
+
+definition let X, seq, x;
+ func dist(seq , x) -> Real_Sequence means
+:: CLVECT_2:def 4
+  for n holds it.n =dist((seq.n) , x);
+end;
+
+theorem :: CLVECT_2:23
+( seq is convergent & lim seq = g ) implies dist(seq,g) is convergent;
+
+theorem :: CLVECT_2:24
+seq is convergent & lim seq = g implies
+  ( dist(seq,g) is convergent & lim dist(seq,g) = 0 );
+
+theorem :: CLVECT_2:25
+seq1 is convergent & lim seq1 = g1 &
+seq2 is convergent & lim seq2 = g2 implies
+ ||.seq1 + seq2.|| is convergent &
+ lim ||.seq1 + seq2.|| = ||.g1 + g2.||;
+
+theorem :: CLVECT_2:26
+seq1 is convergent & lim seq1 = g1 &
+seq2 is convergent & lim seq2 = g2 implies
+ ||.(seq1 + seq2) - (g1 + g2).|| is convergent &
+ lim ||.(seq1 + seq2) - (g1 + g2).|| = 0;
+
+theorem :: CLVECT_2:27
+seq1 is convergent & lim seq1 = g1 &
+seq2 is convergent & lim seq2 = g2 implies
+ ||.seq1 - seq2.|| is convergent &
+ lim ||.seq1 - seq2.|| = ||.g1 - g2.||;
+
+theorem :: CLVECT_2:28
+seq1 is convergent & lim seq1 = g1 &
+seq2 is convergent & lim seq2 = g2 implies
+ ||.(seq1 - seq2) - (g1 - g2).|| is convergent &
+ lim ||.(seq1 - seq2) - (g1 - g2).|| = 0;
+
+theorem :: CLVECT_2:29
+seq is convergent & lim seq = g implies
+ ||.z * seq.|| is convergent & lim ||.z * seq.|| = ||.z * g.||;
+
+theorem :: CLVECT_2:30
+seq is convergent & lim seq = g implies
+ ||.(z * seq) - (z * g).|| is convergent & lim ||.(z * seq) - (z * g).|| = 0;
+
+theorem :: CLVECT_2:31
+seq is convergent & lim seq = g implies
+ ||.- seq.|| is convergent & lim ||.- seq.|| = ||.- g.||;
+
+theorem :: CLVECT_2:32
+seq is convergent & lim seq = g implies
+ ||.(- seq) - (- g).|| is convergent & lim ||.(- seq) - (- g).|| = 0;
+
+theorem :: CLVECT_2:33
+seq is convergent & lim seq = g implies
+ ||.(seq + x) - (g + x).|| is convergent & lim ||.(seq + x) - (g + x).|| = 0;
+
+theorem :: CLVECT_2:34
+seq is convergent & lim seq = g implies
+ ||.seq - x.|| is convergent & lim ||.seq - x.|| = ||.g - x.||;
+
+theorem :: CLVECT_2:35
+seq is convergent & lim seq = g implies
+ ||.(seq - x) - (g - x).|| is convergent & lim ||.(seq - x) - (g - x).|| = 0;
+
+theorem :: CLVECT_2:36
+seq1 is convergent & lim seq1 = g1 &
+seq2 is convergent & lim seq2 = g2 implies
+ dist((seq1 + seq2) , (g1 + g2)) is convergent &
+ lim dist((seq1 + seq2) , (g1 + g2)) = 0;
+
+theorem :: CLVECT_2:37
+seq1 is convergent & lim seq1 = g1 &
+seq2 is convergent & lim seq2 = g2 implies
+   dist((seq1 - seq2) , (g1 - g2)) is convergent &
+   lim dist((seq1 - seq2) , (g1 - g2)) = 0;
+
+theorem :: CLVECT_2:38
+seq is convergent & lim seq = g implies
+ dist((z * seq) , (z * g)) is convergent &
+ lim dist((z * seq) , (z * g)) = 0;
+
+theorem :: CLVECT_2:39
+seq is convergent & lim seq = g implies
+  dist((seq + x) , (g + x)) is convergent &
+  lim dist((seq + x) , (g + x)) = 0;
+
+definition let X, x, r;
+func Ball(x,r) -> Subset of X equals
+:: CLVECT_2:def 5
+  {y where y is Point of X : ||.x - y.|| < r};
+
+func cl_Ball(x,r) -> Subset of X equals
+:: CLVECT_2:def 6
+  {y where y is Point of X : ||.x - y.|| <= r};
+
+func Sphere(x,r) -> Subset of X equals
+:: CLVECT_2:def 7
+  {y where y is Point of X : ||.x - y.|| = r};
+end;
+
+theorem :: CLVECT_2:40
+w in Ball(x,r) iff ||.x - w.|| < r;
+
+theorem :: CLVECT_2:41
+w in Ball(x,r) iff dist(x,w) < r;
+
+theorem :: CLVECT_2:42
+r > 0 implies x in Ball(x,r);
+
+theorem :: CLVECT_2:43
+y in Ball(x,r) & w in Ball(x,r) implies dist(y,w) < 2 * r;
+
+theorem :: CLVECT_2:44
+y in Ball(x,r) implies y - w in Ball(x - w,r);
+
+theorem :: CLVECT_2:45
+y in Ball(x,r) implies (y - x) in Ball (0.(X),r);
+
+theorem :: CLVECT_2:46
+y in Ball(x,r) & r <= q implies y in Ball(x,q);
+
+theorem :: CLVECT_2:47
+w in cl_Ball(x,r) iff ||.x - w.|| <= r;
+
+theorem :: CLVECT_2:48
+w in cl_Ball(x,r) iff dist(x,w) <= r;
+
+theorem :: CLVECT_2:49
+r >= 0 implies x in cl_Ball(x,r);
+
+theorem :: CLVECT_2:50
+y in Ball(x,r) implies y in cl_Ball(x,r);
+
+theorem :: CLVECT_2:51
+w in Sphere(x,r) iff ||.x - w.|| = r;
+
+theorem :: CLVECT_2:52
+w in Sphere(x,r) iff dist(x,w) = r;
+
+theorem :: CLVECT_2:53
+y in Sphere(x,r) implies y in cl_Ball(x,r);
+
+theorem :: CLVECT_2:54
+Ball(x,r) c= cl_Ball(x,r);
+
+theorem :: CLVECT_2:55
+Sphere(x,r) c= cl_Ball(x,r);
+
+theorem :: CLVECT_2:56
+Ball(x,r) \/ Sphere(x,r) = cl_Ball(x,r);
+
+begin
+
+definition let X; let seq;
+  attr seq is Cauchy means
+:: CLVECT_2:def 8
+  for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
+   dist((seq.n), (seq.m)) < r;
+end;
+
+theorem :: CLVECT_2:57
+seq is constant implies seq is Cauchy;
+
+theorem :: CLVECT_2:58
+seq is Cauchy iff for r st r > 0 ex k st for n, m st
+ n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r;
+
+theorem :: CLVECT_2:59
+seq1 is Cauchy & seq2 is Cauchy implies
+  seq1 + seq2 is Cauchy;
+
+theorem :: CLVECT_2:60
+seq1 is Cauchy & seq2 is Cauchy implies
+  seq1 - seq2 is Cauchy;
+
+theorem :: CLVECT_2:61
+seq is Cauchy implies z * seq is Cauchy;
+
+theorem :: CLVECT_2:62
+seq is Cauchy implies - seq is Cauchy;
+
+theorem :: CLVECT_2:63
+seq is Cauchy implies seq + x is Cauchy;
+
+theorem :: CLVECT_2:64
+seq is Cauchy implies seq - x is Cauchy;
+
+theorem :: CLVECT_2:65
+seq is convergent implies seq is Cauchy;
+
+definition let X; let seq1, seq2;
+pred seq1 is_compared_to seq2 means
+:: CLVECT_2:def 9
+  for r st r > 0 ex m st for n st n >= m holds
+    dist(seq1.n, seq2.n) < r;
+end;
+
+theorem :: CLVECT_2:66
+seq is_compared_to seq;
+
+theorem :: CLVECT_2:67
+seq1 is_compared_to seq2 implies seq2 is_compared_to seq1;
+
+definition let X; let seq1, seq2;
+redefine pred seq1 is_compared_to seq2;
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: CLVECT_2:68
+seq1 is_compared_to seq2 & seq2 is_compared_to seq3 implies
+  seq1 is_compared_to seq3;
+
+theorem :: CLVECT_2:69
+seq1 is_compared_to seq2 iff for r st r > 0 ex m st
+  for n st n >= m holds ||.(seq1.n) - (seq2.n).|| < r;
+
+theorem :: CLVECT_2:70
+( ex k st for n st n >= k holds seq1.n = seq2.n ) implies
+  seq1 is_compared_to seq2;
+
+theorem :: CLVECT_2:71
+seq1 is Cauchy & seq1 is_compared_to seq2 implies
+  seq2 is Cauchy;
+
+theorem :: CLVECT_2:72
+seq1 is convergent & seq1 is_compared_to seq2 implies
+  seq2 is convergent;
+
+theorem :: CLVECT_2:73
+seq1 is convergent & lim seq1 = g & seq1 is_compared_to seq2 implies
+  seq2 is convergent & lim seq2 = g;
+
+definition let X; let seq;
+attr seq is bounded means
+:: CLVECT_2:def 10
+  ex M st M > 0 & for n holds ||.seq.n.|| <= M;
+end;
+
+theorem :: CLVECT_2:74
+seq1 is bounded & seq2 is bounded implies seq1 + seq2 is bounded;
+
+theorem :: CLVECT_2:75
+seq is bounded implies -seq is bounded;
+
+theorem :: CLVECT_2:76
+seq1 is bounded & seq2 is bounded implies seq1 - seq2 is bounded;
+
+theorem :: CLVECT_2:77
+seq is bounded implies z * seq is bounded;
+
+theorem :: CLVECT_2:78
+seq is constant implies seq is bounded;
+
+theorem :: CLVECT_2:79
+for m ex M st ( M > 0 & for n st n <= m holds ||.seq.n.|| < M );
+
+theorem :: CLVECT_2:80
+seq is convergent implies seq is bounded;
+
+theorem :: CLVECT_2:81
+seq1 is bounded & seq1 is_compared_to seq2 implies seq2 is bounded;
+
+definition let X, Nseq, seq;
+  redefine func seq * Nseq -> sequence of X;
+end;
+
+theorem :: CLVECT_2:82
+for X being ComplexUnitarySpace, s being sequence of X,
+ N being increasing Seq_of_Nat
+  for n being Nat holds (s * N).n=s.(N.n);
+
+theorem :: CLVECT_2:83
+seq is_subsequence_of seq;
+
+theorem :: CLVECT_2:84
+seq1 is_subsequence_of seq2 & seq2 is_subsequence_of seq3 implies
+  seq1 is_subsequence_of seq3;
+
+theorem :: CLVECT_2:85
+seq is constant & seq1 is_subsequence_of seq implies seq1 is constant;
+
+theorem :: CLVECT_2:86
+seq is constant & seq1 is_subsequence_of seq implies seq = seq1;
+
+theorem :: CLVECT_2:87
+seq is bounded & seq1 is_subsequence_of seq implies seq1 is bounded;
+
+theorem :: CLVECT_2:88
+seq is convergent & seq1 is_subsequence_of seq implies seq1 is convergent;
+
+theorem :: CLVECT_2:89
+seq1 is_subsequence_of seq & seq is convergent implies lim seq1=lim seq;
+
+theorem :: CLVECT_2:90
+seq is Cauchy & seq1 is_subsequence_of seq implies
+  seq1 is Cauchy;
+
+definition let X; let seq; let k;
+func seq ^\k -> sequence of X means
+:: CLVECT_2:def 11
+ for n holds it.n=seq.(n + k);
+end;
+
+theorem :: CLVECT_2:91
+seq ^\0 = seq;
+
+theorem :: CLVECT_2:92
+(seq ^\k)^\m = (seq ^\m)^\k;
+
+theorem :: CLVECT_2:93
+(seq ^\k)^\m=seq ^\(k + m);
+
+theorem :: CLVECT_2:94
+(seq1 + seq2) ^\k = (seq1 ^\k) + (seq2 ^\k);
+
+theorem :: CLVECT_2:95
+(-seq) ^\k = -(seq ^\k);
+
+theorem :: CLVECT_2:96
+(seq1 - seq2) ^\k = (seq1 ^\k) - (seq2 ^\k);
+
+theorem :: CLVECT_2:97
+(z * seq) ^\k = z * (seq ^\k);
+
+theorem :: CLVECT_2:98
+(seq * Nseq) ^\k = seq * (Nseq ^\k);
+
+theorem :: CLVECT_2:99
+seq ^\k is_subsequence_of seq;
+
+theorem :: CLVECT_2:100
+seq is convergent implies
+  ((seq ^\k) is convergent & lim (seq ^\k)=lim seq);
+
+theorem :: CLVECT_2:101
+seq is convergent & (ex k st seq = seq1 ^\k) implies seq1 is convergent;
+
+theorem :: CLVECT_2:102
+seq is Cauchy & (ex k st seq = seq1 ^\k) implies
+  seq1 is Cauchy;
+
+theorem :: CLVECT_2:103
+seq is Cauchy implies (seq ^\k) is Cauchy;
+
+theorem :: CLVECT_2:104
+seq1 is_compared_to seq2 implies (seq1 ^\k) is_compared_to (seq2 ^\k);
+
+theorem :: CLVECT_2:105
+seq is bounded implies (seq ^\k) is bounded;
+
+theorem :: CLVECT_2:106
+seq is constant implies (seq ^\k) is constant;
+
+definition let X;
+attr X is complete means
+:: CLVECT_2:def 12
+ for seq holds seq is Cauchy implies seq is convergent;
+end;
+
+theorem :: CLVECT_2:107
+X is complete & seq is Cauchy implies seq is bounded;
+
+definition let X;
+  attr X is Hilbert means
+:: CLVECT_2:def 13
+  X is ComplexUnitarySpace & X is complete;
+end;
+

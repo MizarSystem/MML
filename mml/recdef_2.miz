@@ -1,0 +1,1437 @@
+:: Recursive Definitions. {P}art {II}
+::  by Artur Korni{\l}owicz
+:: 
+:: Received February 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_1, MCART_1, ARYTM_1, FUNCT_3, RECDEF_2, BOOLE,
+      FUNCT_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, MCART_2, DOMAIN_1,
+      NUMBERS, XCMPLX_0, XREAL_0, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2,
+      DTCONSTR, FUNCT_4, BINARITH, JCT_MISC;
+ constructors SUBSET_1, FUNCT_2, NAT_1, DOMAIN_1, DTCONSTR, XREAL_0, BINARITH,
+      JCT_MISC, INT_1, FUNCT_4, MCART_2;
+ clusters XBOOLE_0, RELSET_1, ZFMISC_1, SUBSET_1, ORDINAL2, ARYTM_3, XCMPLX_0,
+      XREAL_0, NAT_1, INT_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0;
+ theorems MCART_1, XCMPLX_1, BINARITH, REAL_1, AMI_5, XCMPLX_0, NAT_1,
+      GOBOARD9, CQC_THE1, JCT_MISC, FUNCT_1, FUNCT_2, RELSET_1, INT_1, AXIOMS,
+      FUNCT_4, XBOOLE_0, XBOOLE_1, DOMAIN_1, MCART_2;
+ schemes NAT_1, RECDEF_1, FUNCT_1, PARTFUN1, XBOOLE_0;
+
+begin
+
+reserve a,b,c,d,e,z,A,B,C,D,E for set;
+
+Lm00: for x,y,z being Nat holds x+(-y+z) = x-y+z
+proof
+  let x,y,z be Nat;
+  thus x+(-y+z) = x+-y+z by XCMPLX_1:1
+    .= x-y+z by XCMPLX_0:def 8;
+end;
+
+Lm12: for x being Nat holds x+1 = x-1+2
+proof
+  let x be Nat;
+  thus x+1 = x+(-1+2)
+    .= x-1+2 by Lm00;
+end;
+
+Lm13: for x being Nat holds x+1 = x-2+3
+proof
+  let x be Nat;
+  thus x+1 = x+(-2+3)
+    .= x-2+3 by Lm00;
+end;
+
+Lm14: for x being Nat holds x+1 = x-3+4
+proof
+  let x be Nat;
+  thus x+1 = x+(-3+4)
+    .= x-3+4 by Lm00;
+end;
+
+Lm23: for x being Nat holds x+2 = x-1+3
+proof
+  let x be Nat;
+  thus x+2 = x+(-1+3)
+    .= x-1+3 by Lm00;
+end;
+
+Lm24: for x being Nat holds x+2 = x-2+4
+proof
+  let x be Nat;
+  thus x+2 = x+(-2+4)
+    .= x-2+4 by Lm00;
+end;
+
+Lm34: for x being Nat holds x+3 = x-1+4
+proof
+  let x be Nat;
+  thus x+3 = x+(-1+4)
+    .= x-1+4 by Lm00;
+end;
+
+:: Projections
+
+definition
+  let x be set;
+  given x1,x2,x3 being set such that
+A1: x = [x1,x2,x3];
+  func x`1_3 means :dd1:
+  for y1,y2,y3 being set holds x = [y1,y2,y3] implies it = y1;
+existence
+proof take x1; thus thesis by A1,MCART_1:28; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3 being set st x = [y1,y2,y3] holds z1 = y1) &
+         (for y1,y2,y3 being set st x = [y1,y2,y3] holds z2 = y1);
+  then z1 = x1 & z2 = x1 by A1;
+  hence z1 = z2;
+end;
+  func x`2_3 means :dd2:
+  for y1,y2,y3 being set holds x = [y1,y2,y3] implies it = y2;
+existence
+proof take x2; thus thesis by A1,MCART_1:28; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3 being set st x = [y1,y2,y3] holds z1 = y2) &
+         (for y1,y2,y3 being set st x = [y1,y2,y3] holds z2 = y2);
+  then z1 = x2 & z2 = x2 by A1;
+  hence z1 = z2;
+end;
+  func x`3_3 means :dd3:
+  for y1,y2,y3 being set holds x = [y1,y2,y3] implies it = y3;
+existence
+proof take x3; thus thesis by A1,MCART_1:28; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3 being set st x = [y1,y2,y3] holds z1 = y3) &
+         (for y1,y2,y3 being set st x = [y1,y2,y3] holds z2 = y3);
+  then z1 = x3 & z2 = x3 by A1;
+  hence z1 = z2;
+end;
+end;
+
+theorem th2:
+  (ex a,b,c st z = [a,b,c]) implies z = [ z`1_3, z`2_3, z`3_3 ]
+proof
+  given a,b,c such that
+a1:  z = [a,b,c];  
+  z`1_3 = a & z`2_3 = b & z`3_3 = c by a1,dd1,dd2,dd3;
+  hence thesis by a1;
+end;
+
+theorem
+  z in [:A,B,C:] implies z`1_3 in A & z`2_3 in B & z`3_3 in C
+proof
+  assume
+a0: z in [:A,B,C:];
+  then
+a2: A is non empty & B is non empty & C is non empty by MCART_1:35;
+  then consider a being Element of A, b being Element of B,
+   c being Element of C such that
+a1:  z = [a,b,c] by a0,DOMAIN_1:15;
+  z`1_3 = a & z`2_3 = b & z`3_3 = c by a1,dd1,dd2,dd3;
+  hence thesis by a2;
+end;
+
+theorem 
+  z in [:A,B,C:] implies z = [ z`1_3, z`2_3, z`3_3 ]
+proof
+  assume
+a0: z in [:A,B,C:];
+  then A is non empty & B is non empty & C is non empty by MCART_1:35;
+  then ex a being Element of A, b being Element of B,
+   c being Element of C st z = [a,b,c] by a0,DOMAIN_1:15;
+  hence thesis by th2;
+end;
+
+definition
+  let x be set;
+  given x1,x2,x3,x4 being set such that
+A1: x = [x1,x2,x3,x4];
+  func x`1_4 means :ee1:
+  for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4] implies it = y1;
+existence
+proof take x1; thus thesis by A1,MCART_1:33; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y1) &
+         (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y1);
+  then z1 = x1 & z2 = x1 by A1;
+  hence z1 = z2;
+end;
+  func x`2_4 means :ee2:
+  for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4] implies it = y2;
+existence
+proof take x2; thus thesis by A1,MCART_1:33; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y2) &
+         (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y2);
+  then z1 = x2 & z2 = x2 by A1;
+  hence z1 = z2;
+end;
+  func x`3_4 means :ee3:
+  for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4] implies it = y3;
+existence
+proof take x3; thus thesis by A1,MCART_1:33; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y3) &
+         (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y3);
+  then z1 = x3 & z2 = x3 by A1;
+  hence z1 = z2;
+end;
+  func x`4_4 means :ee4:
+  for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4] implies it = y4;
+existence
+proof take x4; thus thesis by A1,MCART_1:33; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y4) &
+         (for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y4);
+  then z1 = x4 & z2 = x4 by A1;
+  hence z1 = z2;
+end;
+end;
+
+theorem th1:
+  (ex a,b,c,d st z = [a,b,c,d]) implies z = [ z`1_4, z`2_4, z`3_4, z`4_4 ]
+proof
+  given a,b,c,d such that
+a1:  z = [a,b,c,d];  
+  z`1_4 = a & z`2_4 = b & z`3_4 = c & z`4_4 = d by a1,ee1,ee2,ee3,ee4;
+  hence thesis by a1;
+end;
+
+theorem
+  z in [:A,B,C,D:] implies z`1_4 in A & z`2_4 in B & z`3_4 in C & z`4_4 in D
+proof
+  assume
+a0: z in [:A,B,C,D:];
+  then
+a2: A is non empty & B is non empty & C is non empty & D is non empty
+    by MCART_1:55;
+  then consider a being Element of A, b being Element of B,
+   c being Element of C, d being Element of D such that
+a1:  z = [a,b,c,d] by a0,DOMAIN_1:31;
+  z`1_4 = a & z`2_4 = b & z`3_4 = c & z`4_4 = d by a1,ee1,ee2,ee3,ee4;
+  hence thesis by a2;
+end;
+
+theorem 
+  z in [:A,B,C,D:] implies z = [ z`1_4, z`2_4, z`3_4, z`4_4 ]
+proof
+  assume
+a0: z in [:A,B,C,D:];
+  then A is non empty & B is non empty & C is non empty & D is non empty
+    by MCART_1:55;
+  then ex a being Element of A, b being Element of B,
+   c being Element of C, d being Element of D st z = [a,b,c,d]
+    by a0,DOMAIN_1:31;
+  hence thesis by th1;
+end;
+
+definition
+  let x be set;
+  given x1,x2,x3,x4,x5 being set such that
+A1: x = [x1,x2,x3,x4,x5];
+  func x`1_5 means :ff1:
+  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4,y5] implies it = y1;
+existence
+proof take x1; thus thesis by A1,MCART_2:7; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y1) &
+         (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y1);
+  then z1 = x1 & z2 = x1 by A1;
+  hence z1 = z2;
+end;
+  func x`2_5 means :ff2:
+  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4,y5] implies it = y2;
+existence
+proof take x2; thus thesis by A1,MCART_2:7; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y2) &
+         (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y2);
+  then z1 = x2 & z2 = x2 by A1;
+  hence z1 = z2;
+end;
+  func x`3_5 means :ff3:
+  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4,y5] implies it = y3;
+existence
+proof take x3; thus thesis by A1,MCART_2:7; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y3) &
+         (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y3);
+  then z1 = x3 & z2 = x3 by A1;
+  hence z1 = z2;
+end;
+  func x`4_5 means :ff4:
+  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4,y5] implies it = y4;
+existence
+proof take x4; thus thesis by A1,MCART_2:7; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y4) &
+         (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y4);
+  then z1 = x4 & z2 = x4 by A1;
+  hence z1 = z2;
+end;
+  func x`5_5 means :ff5:
+  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4,y5] implies it = y5;
+existence
+proof take x5; thus thesis by A1,MCART_2:7; end;
+uniqueness
+proof let z1,z2 be set;
+  assume (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y5) &
+         (for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y5);
+  then z1 = x5 & z2 = x5 by A1;
+  hence z1 = z2;
+end;
+end;
+
+theorem th2:
+  (ex a,b,c,d,e st z = [a,b,c,d,e]) implies
+    z = [ z`1_5, z`2_5, z`3_5, z`4_5, z`5_5 ]
+proof
+  given a,b,c,d,e such that
+a1:  z = [a,b,c,d,e];  
+  z`1_5 = a & z`2_5 = b & z`3_5 = c & z`4_5 = d & z`5_5 = e
+    by a1,ff1,ff2,ff3,ff4,ff5;
+  hence thesis by a1;
+end;
+
+theorem
+  z in [:A,B,C,D,E:] implies
+   z`1_5 in A & z`2_5 in B & z`3_5 in C & z`4_5 in D & z`5_5 in E
+proof
+  assume
+a0: z in [:A,B,C,D,E:];
+  then
+a2: A is non empty & B is non empty & C is non empty & D is non empty &
+     E is non empty by MCART_2:13;
+  then consider a being Element of A, b being Element of B,
+   c being Element of C, d being Element of D, e being Element of E such that
+a1:  z = [a,b,c,d,e] by a0,MCART_2:17;
+  z`1_5 = a & z`2_5 = b & z`3_5 = c & z`4_5 = d & z`5_5 = e
+    by a1,ff1,ff2,ff3,ff4,ff5;
+  hence thesis by a2;
+end;
+
+theorem 
+  z in [:A,B,C,D,E:] implies z = [ z`1_5, z`2_5, z`3_5, z`4_5, z`5_5 ]
+proof
+  assume
+a0: z in [:A,B,C,D,E:];
+  then A is non empty & B is non empty & C is non empty & D is non empty &
+    E is non empty by MCART_2:13;
+  then ex a being Element of A, b being Element of B,
+   c being Element of C, d being Element of D, e being Element of E
+    st z = [a,b,c,d,e] by a0,MCART_2:17;
+  hence thesis by th2;
+end;
+
+:: Conditional schemes
+
+scheme ExFunc3Cond { C() -> set, P,Q,R[set], F,G,H(set) -> set }:
+  ex f being Function st dom f = C() &
+   for c being set st c in C() holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c))
+provided
+x1: for c being set st c in C() holds (P[c] implies not Q[c]) &
+    (P[c] implies not R[c]) & (Q[c] implies not R[c]) and
+x2: for c being set st c in C() holds P[c] or Q[c] or R[c]
+proof
+  consider D1 being set such that
+a1:  for x being set holds x in D1 iff x in C() & P[x] from XBOOLE_0:sch 1;
+  consider D2 being set such that
+a2:  for x being set holds x in D2 iff x in C() & Q[x] from XBOOLE_0:sch 1;
+  consider D3 being set such that
+a3:  for x being set holds x in D3 iff x in C() & R[x] from XBOOLE_0:sch 1;
+  consider f1 being Function such that
+a4:  dom f1 = D1 and
+a5:  for x being set st x in D1 holds f1.x = F(x) from FUNCT_1:sch 3;
+  consider f2 being Function such that
+a6:  dom f2 = D2 and
+a7:  for x being set st x in D2 holds f2.x = G(x) from FUNCT_1:sch 3;
+  consider f3 being Function such that
+a8:  dom f3 = D3 and
+a9:  for x being set st x in D3 holds f3.x = H(x) from FUNCT_1:sch 3;
+  set f = f1 +* f2 +* f3;
+  take f;
+b2: dom f = dom (f1 +* f2) \/ dom f3 by FUNCT_4:def 1
+     .= dom f1 \/ dom f2 \/ dom f3 by FUNCT_4:def 1;
+  thus dom f = C()
+  proof
+h1: D1 c= C()
+    proof
+      let x be set; thus thesis by a1;
+    end;
+    D2 c= C()
+    proof
+      let x be set; thus thesis by a2;
+    end;
+    then
+h2: D1 \/ D2 c= C() by h1,XBOOLE_1:8;
+    D3 c= C()
+    proof
+      let x be set; thus thesis by a3;
+    end;
+    hence dom f c= C() by b2,a4,a6,a8,h2,XBOOLE_1:8;
+    let x be set;
+    assume
+h3:   x in C();
+    then P[x] or Q[x] or R[x] by x2;
+    then x in D1 or x in D2 or x in D3 by a1,a2,a3,h3;
+    then x in D1 \/ D2 or x in D3 by XBOOLE_0:def 2;
+    hence x in dom f by b2,a4,a6,a8,XBOOLE_0:def 2;
+  end;
+  let c be set such that
+b1: c in C();
+  hereby
+    assume
+f1:   P[c];
+    then
+c1: c in D1 by a1,b1;
+    not Q[c] by b1,f1,x1;
+    then
+r1: not c in D2 by a2;
+    not R[c] by b1,f1,x1;
+    then not c in D3 by a3;
+    hence f.c = (f1 +* f2).c by a8,FUNCT_4:12
+       .= f1.c by a6,r1,FUNCT_4:12
+       .= F(c) by a5,c1;
+  end;
+  hereby
+    assume
+w1:   Q[c];
+    then
+c1: c in D2 by a2,b1;
+    not R[c] by w1,b1,x1;
+    then not c in D3 by a3;
+    hence f.c = (f1 +* f2).c by a8,FUNCT_4:12
+      .= f2.c by c1,a6,FUNCT_4:14
+      .= G(c) by c1,a7;
+  end;
+  assume R[c];
+  then
+c1: c in D3 by a3,b1;
+  hence f.c = f3.c by a8,FUNCT_4:14
+     .= H(c) by c1,a9;
+end;
+
+scheme ExFunc4Cond { C() -> set, P,Q,R,S[set], F,G,H,I(set) -> set }:
+  ex f being Function st dom f = C() &
+   for c being set st c in C() holds
+    (P[c] implies f.c = F(c)) & (Q[c] implies f.c = G(c)) &
+    (R[c] implies f.c = H(c)) & (S[c] implies f.c = I(c))
+provided
+x1: for c being set st c in C() holds
+    (P[c] implies not Q[c]) & (P[c] implies not R[c]) &
+    (P[c] implies not S[c]) & (Q[c] implies not R[c]) &
+    (Q[c] implies not S[c]) & (R[c] implies not S[c]) and
+x2: for c being set st c in C() holds P[c] or Q[c] or R[c] or S[c]
+proof
+  consider D1 being set such that
+a1:  for x being set holds x in D1 iff x in C() & P[x] from XBOOLE_0:sch 1;
+  consider D2 being set such that
+a2:  for x being set holds x in D2 iff x in C() & Q[x] from XBOOLE_0:sch 1;
+  consider D3 being set such that
+a3:  for x being set holds x in D3 iff x in C() & R[x] from XBOOLE_0:sch 1;
+  consider D4 being set such that
+A1:  for x being set holds x in D4 iff x in C() & S[x] from XBOOLE_0:sch 1;
+  consider f1 being Function such that
+a4:  dom f1 = D1 and
+a5:  for x being set st x in D1 holds f1.x = F(x) from FUNCT_1:sch 3;
+  consider f2 being Function such that
+a6:  dom f2 = D2 and
+a7:  for x being set st x in D2 holds f2.x = G(x) from FUNCT_1:sch 3;
+  consider f3 being Function such that
+a8:  dom f3 = D3 and
+a9:  for x being set st x in D3 holds f3.x = H(x) from FUNCT_1:sch 3;
+  consider f4 being Function such that
+A8:  dom f4 = D4 and
+A9:  for x being set st x in D4 holds f4.x = I(x) from FUNCT_1:sch 3;
+  set f = f1 +* f2 +* f3 +* f4;
+  take f;
+b2: dom f = dom (f1 +* f2 +* f3) \/ dom f4 by FUNCT_4:def 1
+     .= dom (f1 +* f2) \/ dom f3 \/ dom f4 by FUNCT_4:def 1
+     .= dom f1 \/ dom f2 \/ dom f3 \/ dom f4 by FUNCT_4:def 1;
+  thus dom f = C()
+  proof
+h1: D1 c= C()
+    proof
+      let x be set; thus thesis by a1;
+    end;
+    D2 c= C()
+    proof
+      let x be set; thus thesis by a2;
+    end;
+    then
+h2: D1 \/ D2 c= C() by h1,XBOOLE_1:8;
+    D3 c= C()
+    proof
+      let x be set; thus thesis by a3;
+    end;
+    then
+h3: D1 \/ D2 \/ D3 c= C() by h2,XBOOLE_1:8;
+    D4 c= C()
+    proof
+      let x be set; thus thesis by A1;
+    end;
+    hence dom f c= C() by b2,a4,a6,a8,A8,h3,XBOOLE_1:8;
+    let x be set;
+    assume
+h3:   x in C();
+    then P[x] or Q[x] or R[x] or S[x] by x2;
+    then x in D1 or x in D2 or x in D3 or x in D4 by a1,a2,a3,A1,h3;
+    then x in D1 \/ D2 or x in D3 or x in D4 by XBOOLE_0:def 2;
+    then x in D1 \/ D2 \/ D3 or x in D4 by XBOOLE_0:def 2;
+    hence x in dom f by b2,a4,a6,a8,A8,XBOOLE_0:def 2;
+  end;
+  let c be set such that
+b1: c in C();
+  hereby
+    assume
+f1:   P[c];
+    then
+c1: c in D1 by a1,b1;
+    not Q[c] by b1,f1,x1;
+    then
+r1: not c in D2 by a2;
+    not R[c] by b1,f1,x1;
+    then
+d1: not c in D3 by a3;
+    not S[c] by b1,f1,x1;
+    then not c in D4 by A1;
+    hence f.c = (f1 +* f2 +* f3).c by A8,FUNCT_4:12
+       .= (f1 +* f2).c by a8,d1,FUNCT_4:12
+       .= f1.c by a6,r1,FUNCT_4:12
+       .= F(c) by a5,c1;
+  end;
+  hereby
+    assume
+w1:   Q[c];
+    then
+c1: c in D2 by a2,b1;
+    not R[c] by w1,b1,x1;
+    then
+d1: not c in D3 by a3;
+    not S[c] by w1,b1,x1;
+    then not c in D4 by A1;
+    hence f.c = (f1 +* f2 +* f3).c by A8,FUNCT_4:12
+      .= (f1 +* f2).c by d1,a8,FUNCT_4:12
+      .= f2.c by c1,a6,FUNCT_4:14
+      .= G(c) by c1,a7;
+  end;
+  hereby
+    assume
+w1:   R[c];
+    then
+c1: c in D3 by a3,b1;
+    not S[c] by w1,b1,x1;
+    then not c in D4 by A1;
+    hence f.c = (f1 +* f2 +* f3).c by A8,FUNCT_4:12
+     .= f3.c by c1,a8,FUNCT_4:14
+     .= H(c) by c1,a9;
+  end;
+  assume S[c];
+  then
+c1: c in D4 by A1,b1;
+  hence f.c = f4.c by A8,FUNCT_4:14
+     .= I(c) by c1,A9;
+end;
+
+:: 1 step
+
+scheme DoubleChoiceRec { A, B() -> non empty set,
+  A0() -> Element of A(), B0() -> Element of B(), P[set,set,set,set,set] }:
+  ex f being Function of NAT, A(),
+     g being Function of NAT, B() st f.0 = A0() & g.0 = B0() &
+   for n being Element of NAT holds P[n,f.n,g.n,f.(n+1),g.(n+1)]
+provided
+A1:for n being Element of NAT, x being Element of A(), y being Element of B()
+    ex x1 being Element of A(), y1 being Element of B() st P[n,x,y,x1,y1]
+proof
+  defpred P1[set,set,set] means P[$1,($2)`1,($2)`2,($3)`1,($3)`2];
+A2: for n being Element of NAT, x being Element of [:A(),B():]
+       ex y being Element of [:A(),B():] st P1[n,x,y]
+  proof
+    let n be Element of NAT,
+        x be Element of [:A(),B():];
+    consider ai being Element of A(),
+             bi being Element of B() such that
+A3:    P[n,x`1,x`2,ai,bi] by A1;
+    take [ai,bi];
+    [ai,bi]`1 = ai & [ai,bi]`2 = bi by MCART_1:7;
+    hence P1[n,x,[ai,bi]] by A3;
+   end;
+   consider f being Function of NAT, [:A(),B():] such that
+A5: f.0 = [A0(),B0()] and
+A4: for e being Element of NAT holds P1[e,f.e,f.(e+1)] from RECDEF_1:sch 2(A2);
+  take pr1 f, pr2 f;
+  (f.0)`1 = (pr1 f).0 & (f.0)`2 = (pr2 f).0 by JCT_MISC:def 1,def 2;
+  hence (pr1 f).0 = A0() & (pr2 f).0 = B0() by A5,MCART_1:def 1,def 2;
+  let i be Element of NAT;
+  (f.i)`1 = (pr1 f).i & (f.i)`2 = (pr2 f).i &
+  (f.(i+1))`1 = (pr1 f).(i+1) & (f.(i+1))`2 = (pr2 f).(i+1)
+    by JCT_MISC:def 1,def 2;
+  hence P[i,(pr1 f).i,(pr2 f).i,(pr1 f).(i+1),(pr2 f).(i+1)] by A4;
+end;
+
+:: 2 steps
+
+scheme LambdaRec2Ex { A,B() -> set, F(set,set,set) -> set }:
+  ex f being Function st dom f = NAT & f.0 = A() & f.1 = B() &
+     for n being Nat holds f.(n+2) = F(n,f.n,f.(n+1))
+proof
+  set r03 = F(0,A(),B());
+  set r13 = F(1,B(),r03);
+  deffunc G(Nat,set) = [$2`2_3, $2`3_3, F($1+1,$2`2_3,$2`3_3)];
+  deffunc H(Nat,set) = G($1+1,$2);
+  consider h being Function such that
+    dom h = NAT and
+A3: h.0 = [ B(), r03, r13 ] and
+A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
+  defpred C[set] means $1 = 0;
+  deffunc X(set) = [ A(), B(), r03 ];
+  deffunc Y(Nat) = h.($1-'1);
+  consider g being Function such that
+    dom g = NAT and  
+CC: for x being set st x in NAT holds
+     (C[x] implies g.x = X(x)) & (not C[x] implies g.x = Y(x))
+      from PARTFUN1:sch 1;
+a1: g.0 = [ A(), B(), r03 ] by CC;
+a3: g.1 = Y(1) by CC
+       .= [ B(), r03, r13 ] by A3,GOBOARD9:1;
+a2: for n being Nat holds g.(n+2) = G(n+1,g.(n+1))
+    proof
+      let n be Nat;
+q1:   g.(n+1) = Y(n+1) by CC
+        .= h.n by BINARITH:39;
+q3:   n+2-1 = n+2+-1 by XCMPLX_0:def 8
+         .= n+(2+-1) by XCMPLX_1:1
+         .= n+(2-1);
+q2:   0 <= n+1 by NAT_1:18;
+      thus g.(n+2) = Y(n+2) by CC
+        .= h.(n+1) by q2,q3,BINARITH:def 3
+        .= G(n+1,g.(n+1)) by A2,q1;
+    end;
+  deffunc M(Nat) = (g.$1)`1_3;
+  consider f being Function such that
+dd:  dom f = NAT and  
+dpr1: for x being set st x in NAT holds f.x = M(x) from FUNCT_1:sch 3;
+  take f;
+  thus dom f = NAT by dd;
+  thus
+c1:f.0 = (g.0)`1_3 by dpr1
+      .= A() by a1,dd1;
+  thus
+c2:f.1 = (g.1)`1_3 by dpr1
+      .= B() by a3,dd1;
+  defpred P[Nat] means
+  f.($1+2) = (g.($1+1))`2_3 &
+  (g.($1+1))`1_3 = (g.$1)`2_3 &
+  (g.($1+2))`1_3 = (g.$1)`3_3 &
+  (g.($1+2))`1_3 = (g.($1+1))`2_3 &
+  (g.($1+2))`2_3 = (g.($1+1))`3_3 &
+  f.($1+2) = F($1,f.$1,f.($1+1));
+b1: P[0]
+  proof
+    thus
+x1: f.(0+2) = (g.(0+2))`1_3 by dpr1
+      .= G(0+1,g.(0+1))`1_3 by a2
+      .= (g.(0+1))`2_3 by dd1;
+    thus (g.(0+1))`1_3 = B() by a3,dd1
+      .= (g.0)`2_3 by a1,dd2;
+    thus (g.(0+2))`1_3 = G(0+1,g.(0+1))`1_3 by a2
+      .= (g.1)`2_3 by dd1
+      .= r03 by a3,dd2
+      .= (g.0)`3_3 by a1,dd3;
+    hence (g.(0+2))`1_3 = r03 by a1,dd3
+      .= (g.(0+1))`2_3 by a3,dd2;
+    thus (g.(0+2))`2_3 = G(0+1,g.(0+1))`2_3 by a2
+      .= (g.(0+1))`3_3 by dd2;
+    thus f.(0+2) = F(0,f.0,f.(0+1)) by c1,c2,x1,a3,dd2;
+  end;
+b2: for x being Nat st P[x] holds P[x+1]
+  proof
+    let x be Nat;
+    assume
+z0:   P[x];
+aa: x+1+1 = x+(1+1) by XCMPLX_1:1;
+    thus
+x1: f.(x+1+2) = (g.(x+1+2))`1_3 by dpr1
+      .= G(x+1+1,g.(x+1+1))`1_3 by a2
+      .= (g.(x+1+1))`2_3 by dd1;
+    thus (g.(x+1+1))`1_3 = (g.(x+1))`2_3 by aa,z0;
+    thus (g.(x+1+2))`1_3 = G(x+1+1,g.(x+1+1))`1_3 by a2
+      .= (g.(x+1))`3_3 by aa,z0,dd1;
+    hence (g.(x+1+2))`1_3 = (g.(x+1+1))`2_3 by aa,z0;
+    thus (g.(x+1+2))`2_3 = G(x+1+1,g.(x+1+1))`2_3 by a2
+      .= (g.(x+1+1))`3_3 by dd2;
+e1: f.(x+1) = (g.x)`2_3 by dpr1,z0;
+    per cases;
+    suppose
+uu:   x = 0;
+    hence f.(x+1+2) = (g.(1+2))`1_3 by dpr1
+      .= G(1+1,g.(1+1))`1_3 by a2
+      .= (g.(0+1))`3_3 by uu,z0,dd1
+      .= r13 by a3,dd3
+      .= F(0+1,B(),(g.0)`3_3) by a1,dd3
+      .= F(x+1,f.(x+1),f.(x+1+1)) by e1,z0,uu,a1,dd2;
+    end;
+    suppose x <> 0;
+    then 0 < x by NAT_1:19;
+    then
+h3: 0+1 <= x by NAT_1:38;
+    then 1-1 <= x-1 by REAL_1:92;
+    then
+h0: x-1 = x-'1 by BINARITH:def 3;
+h1: x+1 = x-1+2 by Lm12;
+h2: x-'1+1 = x by h3,AMI_5:4;
+    thus f.(x+1+2) = (g.(x+(1+1)))`2_3 by x1,XCMPLX_1:1
+      .= G(x-'1+1,g.(x-'1+1))`3_3 by a2,h0,h1,z0
+      .= F(x+1,f.(x+1),f.(x+1+1)) by aa,z0,e1,h2,dd3;
+    end;
+  end;
+  for x being Nat holds P[x] from NAT_1:sch 1(b1,b2);
+  hence thesis;
+end;
+
+scheme LambdaRec2ExD { X() -> non empty set, A,B() -> Element of X(),
+                       F(set,set,set) -> Element of X() }:
+  ex f being Function of NAT,X() st f.0 = A() & f.1 = B() &
+     for n being Nat holds f.(n+2) = F(n,f.n,f.(n+1))
+proof
+  consider f being Function such that
+a1:  dom f = NAT and
+a2:  f.0 = A() & f.1 = B() and
+a3:  for n being Nat holds f.(n+2) = F(n,f.n,f.(n+1)) from LambdaRec2Ex;
+  rng f c= X()
+  proof
+    let y be set;
+    assume y in rng f;
+    then consider n being set such that
+a4:   n in dom f and
+a5:   f.n = y by FUNCT_1:def 5;
+    reconsider n as Nat by a1,a4;
+    per cases;
+    suppose n <= 1;
+    then n = 0 or n = 1 by CQC_THE1:2;
+    hence y in X() by a2,a5;
+    end;
+    suppose n > 1;
+    then 1+1 <= n by NAT_1:38;
+    then n-2 is Nat by INT_1:18;
+    then
+a6: f.(n-2+2) = F(n-2,f.(n-2),f.(n-2+1)) by a3;
+    n = n-2+2 by XCMPLX_1:27;
+    hence y in X() by a6,a5;
+    end;
+  end;
+  then f is Function of NAT,X() by a1,RELSET_1:10,FUNCT_2:def 1;
+  hence thesis by a2,a3;
+end;
+
+scheme LambdaRec2Un { A,B() -> set, F,G() -> Function,
+                      F(set,set,set) -> set }:
+  F() = G()
+provided
+a0: dom F() = NAT and
+a1: F().0 = A() & F().1 = B() and
+a2: for n being Nat holds F().(n+2) = F(n,F().n,F().(n+1)) and
+b0: dom G() = NAT and
+a3: G().0 = A() & G().1 = B() and
+a4: for n being Nat holds G().(n+2) = F(n,G().n,G().(n+1))
+proof
+  assume F() <> G();
+  then consider x being set such that
+A6: x in NAT & F().x <> G().x by a0,b0,FUNCT_1:9;
+  defpred Q[Nat] means F().$1 <> G().$1;
+A7: ex k being Nat st Q[k] by A6;
+  consider m being Nat such that
+A8: Q[m] and
+B1: for n being Nat st Q[n] holds m <= n from NAT_1:sch 5(A7);
+  now
+    set k = m-'2;
+    assume m <> 0 & m <> 1;
+    then 2 <= m by CQC_THE1:3;
+    then
+A9: m = k+2 by AMI_5:4;
+    then
+A10:k+0 < m by REAL_1:53;
+    k+1 < m by A9,REAL_1:53;
+    then
+A11: F().(k+1) = G().(k+1) by B1;
+   F().(k+2) = F(k,F().k,F().(k+1)) &
+   G().(k+2) = F(k,G().k,G().(k+1)) by a2,a4;
+   hence contradiction by A8,A9,A10,A11,B1;
+  end;
+  hence contradiction by a1,a3,A8;
+end;
+
+scheme LambdaRec2UnD { X() -> non empty set, A,B() -> Element of X(),
+                       F,G() -> Function of NAT,X(),
+                       F(set,set,set) -> Element of X() }:
+  F() = G()
+provided
+a1: F().0 = A() & F().1 = B() and
+a2: for n being Nat holds F().(n+2) = F(n,F().n,F().(n+1)) and
+a3: G().0 = A() & G().1 = B() and
+a4: for n being Nat holds G().(n+2) = F(n,G().n,G().(n+1))
+proof
+A5: dom F() = NAT by FUNCT_2:def 1;
+A6: dom G() = NAT by FUNCT_2:def 1;
+  thus F() = G() from LambdaRec2Un(A5,a1,a2,A6,a3,a4);
+end;
+
+:: 3 steps
+
+scheme LambdaRec3Ex { A,B,C() -> set, F(set,set,set,set) -> set }:
+  ex f being Function st dom f = NAT & f.0 = A() & f.1 = B() & f.2 = C() &
+     for n being Nat holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
+proof
+  set r04 = F(0,A(),B(),C());
+  set r14 = F(1,B(),C(),r04);
+  set r24 = F(2,C(),r04,r14);
+  deffunc G(Nat,set) =
+    [$2`2_4, $2`3_4, $2`4_4, F($1+1,$2`2_4,$2`3_4,$2`4_4)];
+  deffunc H(Nat,set) = G($1+2,$2);
+  consider h being Function such that
+    dom h = NAT and
+A3: h.0 = [ C(), r04, r14, r24 ] and
+A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
+  defpred C1[set] means $1 = 0;
+  defpred C2[set] means $1 = 1;
+  defpred C3[Nat] means $1 > 1;
+  deffunc X1(set) = [ A(), B(), C(), r04 ];
+  deffunc X2(set) = [ B(), C(), r04, r14 ];
+  deffunc X3(Nat) = h.($1-'2);
+y1: for c being set st c in NAT holds (C1[c] implies not C2[c]) &
+     (C1[c] implies not C3[c]) & (C2[c] implies not C3[c]);
+y2: for c being set st c in NAT holds C1[c] or C2[c] or C3[c]
+  proof
+    let c be set;
+    assume c in NAT;
+    then reconsider c as Nat;
+    c > 1 or c <= 1;
+    hence thesis by CQC_THE1:2;
+  end;
+  consider g being Function such that
+    dom g = NAT and  
+CC: for x being set st x in NAT holds
+     (C1[x] implies g.x = X1(x)) &
+     (C2[x] implies g.x = X2(x)) &
+     (C3[x] implies g.x = X3(x)) from ExFunc3Cond(y1,y2);
+a1: g.0 = [ A(), B(), C(), r04 ] by CC;
+a3: g.1 = [ B(), C(), r04, r14 ]
+       by CC;
+a5: g.2 = X3(2) by CC
+       .= [ C(), r04, r14, r24 ] by A3,GOBOARD9:1;
+a2: for n being Nat holds g.(n+3) = G(n+2,g.(n+2))
+    proof
+      let n be Nat;
+hh:   0 <= n by NAT_1:18;
+      then 0+1 < n+2 by REAL_1:67;
+      then
+q1:   g.(n+2) = X3(n+2) by CC
+        .= h.n by BINARITH:39;
+q3:   n+3-2 = n+3+-2 by XCMPLX_0:def 8
+         .= n+(3+-2) by XCMPLX_1:1
+         .= n+(3-2);
+q2:   0 <= n+1 by NAT_1:18;
+      0+1 < n+3 by hh,REAL_1:67;
+      hence g.(n+3) = X3(n+3) by CC
+         .= h.(n+1) by q2,q3,BINARITH:def 3
+         .= G(n+2,g.(n+2)) by A2,q1;
+    end;
+  deffunc M(Nat) = (g.$1)`1_4;
+  consider f being Function such that
+dd:  dom f = NAT and  
+dpr1: for x being set st x in NAT holds f.x = M(x) from FUNCT_1:sch 3;
+  take f;
+  thus dom f = NAT by dd;
+  thus
+c1:f.0 = (g.0)`1_4 by dpr1
+      .= A() by a1,ee1;
+  thus
+c2:f.1 = (g.1)`1_4 by dpr1
+      .= B() by a3,ee1;
+  thus
+c3:f.2 = (g.2)`1_4 by dpr1
+      .= C() by a5,ee1;
+  defpred P[Nat] means
+  f.($1+3) = (g.($1+2))`2_4 &
+  (g.$1)`2_4 = (g.($1+1))`1_4 &
+  (g.$1)`3_4 = (g.($1+1))`2_4 &
+  (g.$1)`4_4 = (g.($1+1))`3_4 &
+  (g.($1+1))`2_4 = (g.($1+2))`1_4 &
+  (g.($1+1))`3_4 = (g.($1+2))`2_4 &
+  (g.($1+1))`4_4 = (g.($1+2))`3_4 &
+  (g.($1+2))`2_4 = (g.($1+3))`1_4 &
+  f.($1+3) = F($1,f.$1,f.($1+1),f.($1+2));
+b1: P[0]
+  proof
+    thus
+x1: f.(0+3) = (g.(0+3))`1_4 by dpr1
+      .= G(0+2,g.(0+2))`1_4 by a2
+      .= (g.(0+2))`2_4 by ee1;
+    thus (g.(0+1))`1_4 = B() by a3,ee1
+      .= (g.0)`2_4 by a1,ee2;
+    thus (g.0)`3_4 = C() by a1,ee3
+      .= (g.(0+1))`2_4 by a3,ee2;
+    thus (g.0)`4_4 = r04 by a1,ee4
+      .= (g.(0+1))`3_4 by a3,ee3;
+    thus (g.(0+1))`2_4 = C() by a3,ee2
+      .= (g.(0+2))`1_4 by a5,ee1;
+    thus (g.(0+1))`3_4 = r04 by a3,ee3
+      .= (g.(0+2))`2_4 by a5,ee2;
+    thus (g.(0+1))`4_4 = r14 by a3,ee4
+      .= (g.(0+2))`3_4 by a5,ee3;
+    thus (g.(0+2))`2_4 = G(0+2,g.(0+2))`1_4 by ee1
+      .= (g.(0+3))`1_4 by a2;
+    thus f.(0+3) = F(0,f.0,f.(0+1),f.(0+2)) by c1,c2,c3,x1,a5,ee2;
+  end;
+b2: for x being Nat st P[x] holds P[x+1]
+  proof
+    let x be Nat;
+    assume
+z0:   P[x];
+aa: x+1+1 = x+(1+1) by XCMPLX_1:1;
+bb: x+1+2 = x+(1+2) by XCMPLX_1:1;
+    thus
+x1: f.(x+1+3) = (g.(x+1+3))`1_4 by dpr1
+      .= G(x+1+2,g.(x+1+2))`1_4 by a2
+      .= (g.(x+1+2))`2_4 by ee1;
+    thus (g.(x+1+1))`1_4 = (g.(x+1))`2_4 by aa,z0;
+    thus (g.(x+1))`3_4 = (g.(x+1+1))`2_4 by aa,z0;
+    thus (g.(x+1))`4_4 = (g.(x+1+1))`3_4 by aa,z0;
+    thus
+i1: (g.(x+1+1))`2_4 = G(x+2,g.(x+2))`1_4 by aa,ee1
+      .= (g.(x+1+2))`1_4 by bb,a2;
+    thus (g.(x+1+1))`3_4 = G(x+2,g.(x+2))`2_4 by aa,ee2
+      .= (g.(x+1+2))`2_4 by bb,a2;
+    thus (g.(x+1+1))`4_4 = G(x+2,g.(x+2))`3_4 by aa,ee3
+      .= (g.(x+1+2))`3_4 by bb,a2;
+    thus (g.(x+1+2))`2_4 = G(x+1+2,g.(x+1+2))`1_4 by ee1
+      .= (g.(x+1+3))`1_4 by a2;
+e4: f.(x+1+1) = (g.x)`3_4 by dpr1,aa,z0;
+c4: f.(x+1+2) = (g.x)`4_4 by aa,z0,i1,dpr1;
+    per cases;
+    suppose x <= 1 & x <> 1;
+    then
+uu: x = 0 by CQC_THE1:2;
+    hence f.(x+1+3) = (g.(1+3))`1_4 by dpr1
+      .= G(1+2,g.(1+2))`1_4 by a2
+      .= (g.(0+3))`2_4 by ee1
+      .= G(0+2,g.(0+2))`2_4 by a2
+      .= (g.(0+2))`3_4 by ee2
+      .= r14 by a5,ee3
+      .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2)) by uu,c2,c3,z0,a1,ee4;
+    end;
+    suppose
+uu:   x = 1;
+f2: f.(x+1+1) = r04 by e4,uu,a3,ee3;
+f3: f.(x+1+2) = r14 by uu,z0,a3,ee4;
+    thus f.(x+1+3) = (g.(1+1+3))`1_4 by uu,dpr1
+      .= G(2+2,g.(2+2))`1_4 by a2
+      .= (g.(1+3))`2_4 by ee1
+      .= G(1+2,g.(1+2))`2_4 by a2
+      .= (g.(0+3))`3_4 by ee2
+      .= G(0+2,g.(0+2))`3_4 by a2
+      .= (g.(0+2))`4_4 by ee3
+      .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2)) by uu,c3,f2,f3,a5,ee4;
+    end;
+    suppose
+qq:   1 < x;
+    then
+h3: 1+1 <= x by NAT_1:38;
+    then 2-2 <= x-2 by REAL_1:92;
+    then
+h0: x-2 = x-'2 by BINARITH:def 3;
+    1-1 <= x-1 by qq,REAL_1:92;
+    then
+H0: x-1 = x-'1 by BINARITH:def 3;
+h2: x-'2+2 = x by h3,AMI_5:4;
+m2: x+1 = x-1+2 by Lm12;
+    thus f.(x+1+3) = (g.(x+(1+2)))`2_4 by x1,XCMPLX_1:1
+      .= G(x+2,g.(x+2))`2_4 by a2
+      .= (g.(x+2))`3_4 by ee2
+      .= (g.(x-'1+3))`3_4 by H0,Lm23
+      .= G(x+1,g.(x+1))`3_4 by a2,m2,H0
+      .= (g.(x+1))`4_4 by ee3
+      .= (g.(x-'2+3))`4_4 by h0,Lm13
+      .= G(x-'2+2,g.(x-'2+2))`4_4 by a2
+      .= F(x+1,(g.x)`2_4,(g.x)`3_4,(g.x)`4_4) by h2,ee4
+      .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2)) by e4,c4,dpr1,z0;
+    end;
+  end;
+  for x being Nat holds P[x] from NAT_1:sch 1(b1,b2);
+  hence thesis;
+end;
+
+scheme LambdaRec3ExD { X() -> non empty set, A,B,C() -> Element of X(),
+                       F(set,set,set,set) -> Element of X() }:
+  ex f being Function of NAT,X() st f.0 = A() & f.1 = B() & f.2 = C() &
+     for n being Nat holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
+proof
+  consider f being Function such that
+a1:  dom f = NAT and
+a2:  f.0 = A() & f.1 = B() & f.2 = C() and
+a3:  for n being Nat holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
+     from LambdaRec3Ex;
+  rng f c= X()
+  proof
+    let y be set;
+    assume y in rng f;
+    then consider n being set such that
+a4:   n in dom f and
+a5:   f.n = y by FUNCT_1:def 5;
+    reconsider n as Nat by a1,a4;
+    per cases;
+    suppose n <= 2;
+    then n = 0 or n = 1 or n = 2 by CQC_THE1:3;
+    hence y in X() by a2,a5;
+    end;
+    suppose n > 2;
+    then 2+1 <= n by NAT_1:38;
+    then n-3 is Nat by INT_1:18;
+    then
+a6: f.(n-3+3) = F(n-3,f.(n-3),f.(n-3+1),f.(n-3+2)) by a3;
+    n = n-3+3 by XCMPLX_1:27;
+    hence y in X() by a6,a5;
+    end;
+  end;
+  then f is Function of NAT,X() by a1,RELSET_1:10,FUNCT_2:def 1;
+  hence thesis by a2,a3;
+end;
+
+scheme LambdaRec3Un { A,B,C() -> set, F,G() -> Function,
+                      F(set,set,set,set) -> set }:
+  F() = G()
+provided
+a0: dom F() = NAT and
+a1: F().0 = A() & F().1 = B() & F().2 = C() and
+a2: for n being Nat holds F().(n+3) = F(n,F().n,F().(n+1),F().(n+2)) and
+b0: dom G() = NAT and
+a3: G().0 = A() & G().1 = B() & G().2 = C() and
+a4: for n being Nat holds G().(n+3) = F(n,G().n,G().(n+1),G().(n+2))
+proof
+  assume F() <> G();
+  then consider x being set such that
+A6: x in NAT & F().x <> G().x by a0,b0,FUNCT_1:9;
+  defpred Q[Nat] means F().$1 <> G().$1;
+A7: ex k being Nat st Q[k] by A6;
+  consider m being Nat such that
+A8: Q[m] and
+B1: for n being Nat st Q[n] holds m <= n from NAT_1:sch 5(A7);
+  now
+    set k = m-'3;
+    assume m <> 0 & m <> 1 & m <> 2;
+    then 3 <= m by CQC_THE1:4;
+    then
+A9: m = k+3 by AMI_5:4;
+    then
+A10:k+0 < m by REAL_1:53;
+    k+1 < m by A9,REAL_1:53;
+    then
+A11: F().(k+1) = G().(k+1) by B1;
+    k+2 < m by A9,REAL_1:53;
+    then
+A12: F().(k+2) = G().(k+2) by B1;
+   F().(k+3) = F(k,F().k,F().(k+1),F().(k+2)) &
+   G().(k+3) = F(k,G().k,G().(k+1),G().(k+2)) by a2,a4;
+   hence contradiction by A8,A9,A10,A11,A12,B1;
+  end;
+  hence contradiction by a1,a3,A8;
+end;
+
+scheme LambdaRec3UnD { X() -> non empty set, A,B,C() -> Element of X(),
+                       F,G() -> Function of NAT,X(),
+                       F(set,set,set,set) -> Element of X() }:
+  F() = G()
+provided
+a1: F().0 = A() & F().1 = B() & F().2 = C() and
+a2: for n being Nat holds F().(n+3) = F(n,F().n,F().(n+1),F().(n+2)) and
+a3: G().0 = A() & G().1 = B() & G().2 = C() and
+a4: for n being Nat holds G().(n+3) = F(n,G().n,G().(n+1),G().(n+2))
+proof
+A5: dom F() = NAT by FUNCT_2:def 1;
+A6: dom G() = NAT by FUNCT_2:def 1;
+  thus F() = G() from LambdaRec3Un(A5,a1,a2,A6,a3,a4);
+end;
+
+:: 4 steps
+
+scheme LambdaRec4Ex { A,B,C,D() -> set, F(set,set,set,set,set) -> set }:
+  ex f being Function st dom f = NAT &
+   f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() &
+    for n being Nat holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
+proof
+  set r05 = F(0,A(),B(),C(),D());
+  set r15 = F(1,B(),C(),D(),r05);
+  set r25 = F(2,C(),D(),r05,r15);
+  set r35 = F(3,D(),r05,r15,r25);
+  deffunc G(Nat,set) =
+    [$2`2_5, $2`3_5, $2`4_5, $2`5_5, F($1+1,$2`2_5,$2`3_5,$2`4_5,$2`5_5)];
+  deffunc H(Nat,set) = G($1+3,$2);
+  consider h being Function such that
+    dom h = NAT and
+A3: h.0 = [ D(), r05, r15, r25, r35 ]
+     and
+A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
+  defpred C1[set] means $1 = 0;
+  defpred C2[set] means $1 = 1;
+  defpred C3[Nat] means $1 = 2;
+  defpred C4[Nat] means $1 > 2;
+  deffunc X1(set) = [ A(), B(), C(), D(), r05 ];
+  deffunc X2(set) = [ B(), C(), D(), r05, r15 ];
+  deffunc X3(set) = [ C(), D(), r05, r15, r25 ];
+  deffunc X4(Nat) = h.($1-'3);
+y1: for c being set st c in NAT holds
+    (C1[c] implies not C2[c]) & (C1[c] implies not C3[c]) &
+    (C1[c] implies not C4[c]) & (C2[c] implies not C3[c]) &
+    (C2[c] implies not C4[c]) & (C3[c] implies not C4[c]);
+y2: for c being set st c in NAT holds C1[c] or C2[c] or C3[c] or C4[c]
+  proof
+    let c be set;
+    assume c in NAT;
+    then reconsider c as Nat;
+    c > 2 or c <= 2;
+    hence thesis by CQC_THE1:3;
+  end;
+  consider g being Function such that
+    dom g = NAT and  
+CC: for x being set st x in NAT holds
+     (C1[x] implies g.x = X1(x)) &
+     (C2[x] implies g.x = X2(x)) &
+     (C3[x] implies g.x = X3(x)) &
+     (C4[x] implies g.x = X4(x)) from ExFunc4Cond(y1,y2);
+a1: g.0 = [ A(), B(), C(), D(), r05 ] by CC;
+a3: g.1 = [ B(), C(), D(), r05, r15 ] by CC;
+a5: g.2 = [ C(), D(), r05, r15, r25 ] by CC;
+a7: g.3 = X4(3) by CC
+       .= [ D(), r05, r15, r25, r35 ] by A3,GOBOARD9:1;
+a2: for n being Nat holds g.(n+4) = G(n+3,g.(n+3))
+    proof
+      let n be Nat;
+hh:   0 <= n by NAT_1:18;
+      then 0+2 < n+3 by REAL_1:67;
+      then
+q1:   g.(n+3) = X4(n+3) by CC
+        .= h.n by BINARITH:39;
+q3:   n+4-3 = n+4+-3 by XCMPLX_0:def 8
+         .= n+(4+-3) by XCMPLX_1:1
+         .= n+(4-3);
+q2:   0 <= n+1 by NAT_1:18;
+      0+2 < n+4 by hh,REAL_1:67;
+      hence g.(n+4) = X4(n+4) by CC
+         .= h.(n+1) by q2,q3,BINARITH:def 3
+         .= G(n+3,g.(n+3)) by A2,q1;
+    end;
+  deffunc M(Nat) = (g.$1)`1_5;
+  consider f being Function such that
+dd:  dom f = NAT and  
+dpr1: for x being set st x in NAT holds f.x = M(x) from FUNCT_1:sch 3;
+  take f;
+  thus dom f = NAT by dd;
+  thus
+c1:f.0 = (g.0)`1_5 by dpr1
+      .= A() by a1,ff1;
+  thus
+c2:f.1 = (g.1)`1_5 by dpr1
+      .= B() by a3,ff1;
+  thus
+c3:f.2 = (g.2)`1_5 by dpr1
+      .= C() by a5,ff1;
+  thus
+C4:f.3 = (g.3)`1_5 by dpr1
+      .= D() by a7,ff1;
+  defpred P[Nat] means
+  f.($1+4) = (g.($1+3))`2_5 &
+  (g.$1)`2_5 = (g.($1+1))`1_5 &
+  (g.$1)`3_5 = (g.($1+1))`2_5 &
+  (g.$1)`4_5 = (g.($1+1))`3_5 &
+  (g.$1)`5_5 = (g.($1+1))`4_5 &
+  (g.($1+1))`2_5 = (g.($1+2))`1_5 &
+  (g.($1+1))`3_5 = (g.($1+2))`2_5 &
+  (g.($1+1))`4_5 = (g.($1+2))`3_5 &
+  (g.($1+1))`5_5 = (g.($1+2))`4_5 &
+  (g.($1+2))`2_5 = (g.($1+3))`1_5 &
+  (g.($1+2))`3_5 = (g.($1+3))`2_5 &
+  (g.($1+2))`4_5 = (g.($1+3))`3_5 &
+  (g.($1+2))`5_5 = (g.($1+3))`4_5 &
+  (g.($1+3))`2_5 = (g.($1+4))`1_5 &
+  (g.($1+3))`3_5 = (g.($1+4))`2_5 &
+  (g.($1+3))`4_5 = (g.($1+4))`3_5 &
+  (g.($1+3))`5_5 = (g.($1+4))`4_5 &
+  f.($1+4) = F($1,f.$1,f.($1+1),f.($1+2),f.($1+3));
+b1: P[0]
+  proof
+    thus
+x1: f.(0+4) = (g.(0+4))`1_5 by dpr1
+      .= G(0+3,g.(0+3))`1_5 by a2
+      .= (g.(0+3))`2_5 by ff1;
+    thus (g.(0+1))`1_5 = B() by a3,ff1
+      .= (g.0)`2_5 by a1,ff2;
+    thus (g.0)`3_5 = C() by a1,ff3
+      .= (g.(0+1))`2_5 by a3,ff2;
+    thus (g.0)`4_5 = D() by a1,ff4
+      .= (g.(0+1))`3_5 by a3,ff3;
+    thus (g.0)`5_5 = r05 by a1,ff5
+      .= (g.(0+1))`4_5 by a3,ff4;
+    thus (g.(0+1))`2_5 = C() by a3,ff2
+      .= (g.(0+2))`1_5 by a5,ff1;
+    thus (g.(0+1))`3_5 = D() by a3,ff3
+      .= (g.(0+2))`2_5 by a5,ff2;
+    thus (g.(0+1))`4_5 = r05 by a3,ff4
+      .= (g.(0+2))`3_5 by a5,ff3;
+    thus (g.(0+1))`5_5 = r15 by a3,ff5
+      .= (g.(0+2))`4_5 by a5,ff4;
+    thus (g.(0+2))`2_5 = D() by a5,ff2
+      .= (g.(0+3))`1_5 by a7,ff1;
+    thus (g.(0+2))`3_5 = r05 by a5,ff3
+      .= (g.(0+3))`2_5 by a7,ff2;
+    thus (g.(0+2))`4_5 = r15 by a5,ff4
+      .= (g.(0+3))`3_5 by a7,ff3;
+    thus (g.(0+2))`5_5 = r25 by a5,ff5
+      .= (g.(0+3))`4_5 by a7,ff4;
+    thus (g.(0+3))`2_5 = G(0+3,(g.(0+3)))`1_5 by ff1
+      .= (g.(0+4))`1_5 by a2;
+    thus (g.(0+3))`3_5 = G(0+3,(g.(0+3)))`2_5 by ff2
+      .= (g.(0+4))`2_5 by a2;
+    thus (g.(0+3))`4_5 = G(0+3,(g.(0+3)))`3_5 by ff3
+      .= (g.(0+4))`3_5 by a2;
+    thus (g.(0+3))`5_5 = G(0+3,(g.(0+3)))`4_5 by ff4
+      .= (g.(0+4))`4_5 by a2;
+    thus f.(0+4) = F(0,f.0,f.(0+1),f.(0+2),f.(0+3)) by c1,c2,c3,C4,x1,a7,ff2;
+  end;
+b2: for x being Nat st P[x] holds P[x+1]
+  proof
+    let x be Nat;
+    assume
+z0:   P[x];
+aa: x+1+1 = x+(1+1) by XCMPLX_1:1;
+bb: x+1+2 = x+(1+2) by XCMPLX_1:1;
+cc: x+1+3 = x+(1+3) by XCMPLX_1:1;
+    thus
+x1: f.(x+1+4) = (g.(x+1+4))`1_5 by dpr1
+      .= G(x+1+3,g.(x+1+3))`1_5 by a2
+      .= (g.(x+1+3))`2_5 by ff1;
+    thus (g.(x+1+1))`1_5 = (g.(x+1))`2_5 by aa,z0;
+    thus (g.(x+1))`3_5 = (g.(x+1+1))`2_5 by aa,z0;
+    thus (g.(x+1))`4_5 = (g.(x+1+1))`3_5 by aa,z0;
+    thus (g.(x+1))`5_5 = (g.(x+1+1))`4_5 by aa,z0;
+    thus (g.(x+1+1))`2_5 = (g.(x+1+2))`1_5 by aa,z0,bb;
+    thus (g.(x+1+1))`3_5 = (g.(x+1+2))`2_5 by aa,z0,bb;
+    thus (g.(x+1+1))`4_5 = (g.(x+1+2))`3_5 by aa,z0,bb;
+    thus (g.(x+1+1))`5_5 = (g.(x+1+2))`4_5 by aa,z0,bb;
+    thus (g.(x+1+2))`2_5 = (g.(x+1+3))`1_5 by z0,bb,cc;
+e4: f.(x+1+1) = (g.x)`3_5 by dpr1,aa,z0;
+c4: f.(x+1+2) = (g.x)`4_5 by bb,z0,dpr1;
+    thus (g.(x+1+2))`3_5 = (g.(x+1+3))`2_5 by bb,cc,z0;
+    thus (g.(x+1+2))`4_5 = (g.(x+1+3))`3_5 by bb,cc,z0;
+    thus (g.(x+1+2))`5_5 = (g.(x+1+3))`4_5 by bb,cc,z0;
+    thus (g.(x+1+3))`2_5 = G(x+1+3,(g.(x+1+3)))`1_5 by ff1
+      .= (g.(x+1+4))`1_5 by a2;
+    thus (g.(x+1+3))`3_5 = G(x+1+3,(g.(x+1+3)))`2_5 by ff2
+      .= (g.(x+1+4))`2_5 by a2;
+    thus (g.(x+1+3))`4_5 = G(x+1+3,(g.(x+1+3)))`3_5 by ff3
+      .= (g.(x+1+4))`3_5 by a2;
+    thus (g.(x+1+3))`5_5 = G(x+1+3,(g.(x+1+3)))`4_5 by ff4
+      .= (g.(x+1+4))`4_5 by a2;
+    per cases;
+    suppose
+ss:   x <= 2;
+    thus thesis
+    proof
+    per cases by ss,CQC_THE1:3;
+    suppose
+uu:   x = 0;
+    hence f.(x+1+4) = (g.(1+4))`1_5 by dpr1
+      .= G(1+3,g.(1+3))`1_5 by a2
+      .= (g.(0+4))`2_5 by ff1
+      .= G(0+3,g.(0+3))`2_5 by a2
+      .= (g.(0+3))`3_5 by ff2
+      .= r15 by a7,ff3
+      .= F(0+1,B(),C(),D(),(g.0)`5_5) by a1,ff5
+      .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3))
+         by a1,uu,c2,c3,c4,z0,ff4;
+    end;
+    suppose
+uu:   x = 1;
+    then
+f2: f.(x+1+1) = D() by a3,e4,ff3;
+f3: f.(x+1+2) = r05 by uu,a3,c4,ff4;
+f4: f.(x+1+3) = r15 by uu,a3,z0,ff5;
+    thus f.(x+1+4) = (g.(1+1+4))`1_5 by uu,dpr1
+      .= G(2+3,g.(2+3))`1_5 by a2
+      .= (g.(1+4))`2_5 by ff1
+      .= G(1+3,g.(1+3))`2_5 by a2
+      .= (g.(0+4))`3_5 by ff2
+      .= G(0+3,g.(0+3))`3_5 by a2
+      .= (g.(0+3))`4_5 by ff3
+      .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by uu,c3,f2,f3,f4,a7,ff4;
+    end;
+    suppose
+uu:   x = 2;
+    then
+f2: f.(x+1+1) = r05 by a5,e4,ff3;
+f3: f.(x+1+2) = r15 by uu,a5,c4,ff4;
+f4: f.(x+1+3) = r25 by uu,a5,z0,ff5;
+    thus f.(x+1+4) = (g.(2+1+4))`1_5 by uu,dpr1
+      .= G(3+3,g.(3+3))`1_5 by a2
+      .= (g.(2+4))`2_5 by ff1
+      .= G(2+3,g.(2+3))`2_5 by a2
+      .= (g.(1+4))`3_5 by ff2
+      .= G(1+3,g.(1+3))`3_5 by a2
+      .= (g.(0+4))`4_5 by ff3
+      .= G(0+3,g.(0+3))`4_5 by a2
+      .= (g.(0+3))`5_5 by ff4
+      .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by uu,C4,f2,f3,f4,a7,ff5;
+    end;
+    end;
+    end;
+    suppose
+qq:   2 < x;
+    then
+h3: 1+2 <= x by NAT_1:38;
+    then 3-3 <= x-3 by REAL_1:92;
+    then
+h0: x-3 = x-'3 by BINARITH:def 3;
+H7: 2-2 <= x-2 by qq,REAL_1:92;
+    then
+h6: x-2 = x-'2 by BINARITH:def 3;
+    1 < x by qq,AXIOMS:22;
+    then 1-1 <= x-1 by REAL_1:92;
+    then
+H0: x-1 = x-'1 by BINARITH:def 3;
+h2: x-'3+3 = x by h3,AMI_5:4;
+m3: x+2 = x-1+3 by Lm23;
+jj: x-'2+3 = x-2+3 by H7,BINARITH:def 3
+      .= x+1 by Lm13;
+    thus f.(x+1+4) = (g.(x+(1+3)))`2_5 by x1,XCMPLX_1:1
+      .= G(x+3,g.(x+3))`2_5 by a2
+      .= (g.(x+3))`3_5 by ff2
+      .= (g.(x-'1+4))`3_5 by H0,Lm34
+      .= G(x+2,g.(x+2))`3_5 by a2,m3,H0
+      .= (g.(x+2))`4_5 by ff3
+      .= (g.(x-'2+4))`4_5 by h6,Lm24
+      .= G(x+1,g.(x+1))`4_5 by a2,jj
+      .= (g.(x+1))`5_5 by ff4
+      .= (g.(x-'3+4))`5_5 by h0,Lm14
+      .= G(x-'3+3,g.(x-'3+3))`5_5 by a2
+      .= F(x+1,(g.x)`2_5,(g.x)`3_5,(g.x)`4_5,(g.x)`5_5) by h2,ff5
+      .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by e4,c4,cc,dpr1,z0;
+    end;
+  end;
+  for x being Nat holds P[x] from NAT_1:sch 1(b1,b2);
+  hence thesis;
+end;
+
+scheme LambdaRec4ExD { X() -> non empty set, A,B,C,D() -> Element of X(),
+                       F(set,set,set,set,set) -> Element of X() }:
+  ex f being Function of NAT,X() st
+    f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() &
+     for n being Nat holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
+proof
+  consider f being Function such that
+a1:  dom f = NAT and
+a2:  f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() and
+a3:  for n being Nat holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
+     from LambdaRec4Ex;
+  rng f c= X()
+  proof
+    let y be set;
+    assume y in rng f;
+    then consider n being set such that
+a4:   n in dom f and
+a5:   f.n = y by FUNCT_1:def 5;
+    reconsider n as Nat by a1,a4;
+    per cases;
+    suppose n <= 3;
+    then n = 0 or n = 1 or n = 2 or n = 3 by CQC_THE1:4;
+    hence y in X() by a2,a5;
+    end;
+    suppose n > 3;
+    then 3+1 <= n by NAT_1:38;
+    then n-4 is Nat by INT_1:18;
+    then
+a6: f.(n-4+4) = F(n-4,f.(n-4),f.(n-4+1),f.(n-4+2),f.(n-4+3)) by a3;
+    n = n-4+4 by XCMPLX_1:27;
+    hence y in X() by a6,a5;
+    end;
+  end;
+  then f is Function of NAT,X() by a1,RELSET_1:10,FUNCT_2:def 1;
+  hence thesis by a2,a3;
+end;
+
+scheme LambdaRec4Un { A,B,C,D() -> set, F,G() -> Function,
+                      F(set,set,set,set,set) -> set }:
+  F() = G()
+provided
+a0: dom F() = NAT and
+a1: F().0 = A() & F().1 = B() & F().2 = C() & F().3 = D() and
+a2: for n being Nat holds F().(n+4) = F(n,F().n,F().(n+1),F().(n+2),F().(n+3))
+    and
+b0: dom G() = NAT and
+a3: G().0 = A() & G().1 = B() & G().2 = C() & G().3 = D() and
+a4: for n being Nat holds G().(n+4) = F(n,G().n,G().(n+1),G().(n+2),G().(n+3))
+proof
+  assume F() <> G();
+  then consider x being set such that
+A6: x in NAT & F().x <> G().x by a0,b0,FUNCT_1:9;
+  defpred Q[Nat] means F().$1 <> G().$1;
+A7: ex k being Nat st Q[k] by A6;
+  consider m being Nat such that
+A8: Q[m] and
+B1: for n being Nat st Q[n] holds m <= n from NAT_1:sch 5(A7);
+  now
+    set k = m-'4;
+    assume m <> 0 & m <> 1 & m <> 2 & m <> 3;
+    then 4 <= m by CQC_THE1:5;
+    then
+A9: m = k+4 by AMI_5:4;
+    then
+A10:k+0 < m by REAL_1:53;
+    k+1 < m by A9,REAL_1:53;
+    then
+A11: F().(k+1) = G().(k+1) by B1;
+    k+2 < m by A9,REAL_1:53;
+    then
+A12: F().(k+2) = G().(k+2) by B1;
+    k+3 < m by A9,REAL_1:53;
+    then
+A13: F().(k+3) = G().(k+3) by B1;
+   F().(k+4) = F(k,F().k,F().(k+1),F().(k+2),F().(k+3)) &
+   G().(k+4) = F(k,G().k,G().(k+1),G().(k+2),G().(k+3)) by a2,a4;
+   hence contradiction by A8,A9,A10,A11,A12,A13,B1;
+  end;
+  hence contradiction by a1,a3,A8;
+end;
+
+scheme LambdaRec4UnD { X() -> non empty set, A,B,C,D() -> Element of X(),
+                       F,G() -> Function of NAT,X(),
+                       F(set,set,set,set,set) -> Element of X() }:
+  F() = G()
+provided
+a1: F().0 = A() & F().1 = B() & F().2 = C() & F().3 = D() and
+a2: for n being Nat holds F().(n+4) = F(n,F().n,F().(n+1),F().(n+2),F().(n+3))
+    and
+a3: G().0 = A() & G().1 = B() & G().2 = C() & G().3 = D() and
+a4: for n being Nat holds G().(n+4) = F(n,G().n,G().(n+1),G().(n+2),G().(n+3))
+proof
+A5: dom F() = NAT by FUNCT_2:def 1;
+A6: dom G() = NAT by FUNCT_2:def 1;
+  thus F() = G() from LambdaRec4Un(A5,a1,a2,A6,a3,a4);
+end;
+

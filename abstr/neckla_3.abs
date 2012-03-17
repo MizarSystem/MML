@@ -1,0 +1,362 @@
+:: The Class of Series-Parallel Graphs, {III}
+::  by Krzysztof Retel
+:: 
+:: Received February 3, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary NECKLA_3, NECKLA_2, NECKLACE, ORDERS_1, RELAT_1, FINSET_1, FUNCT_1,
+      PRE_TOPC, BOOLE, YELLOW_0, SUBSET_1, INCPROJ, RELAT_2, CLASSES2, CAT_1,
+      REALSET1, REWRITE1, CARD_1, FINSEQ_1, ARYTM_1, FINSEQ_5, MSUALG_5,
+      TARSKI, EQREL_1, WELLORD1, FUNCT_4, FUNCOP_1, SEQM_3;
+ notation TARSKI, SETWISEO, GROUP_2, XBOOLE_0, ENUMSET1, SUBSET_1, ZFMISC_1,
+      RELAT_1, RELAT_2, RELSET_1, ORDINAL1, FINSET_1, ARYTM_1, ARYTM_0,
+      XCMPLX_0, REAL_1, XREAL_0, NAT_1, CARD_1, STRUCT_0, LATTICE3, ORDERS_3,
+      ORDERS_1, WAYBEL_1, PRE_TOPC, SETFAM_1, CQC_LANG, FUNCT_1, INCPROJ,
+      PROB_1, FINSUB_1, CLASSES2, MCART_1, NECKLACE, WAYBEL_0, FUNCOP_1,
+      REALSET1, FUNCT_4, GROUP_1, PARTFUN1, REWRITE1, FINSEQ_1, FINSEQ_5,
+      EQREL_1, MSUALG_5, YELLOW_0, NECKLA_2, WELLORD1, FUNCT_2;
+ constructors STRUCT_0, ORDERS_1, ORDERS_2, CLASSES2, CQC_LANG, NECKLA_2,
+      ORDERS_3, ENUMSET1, NECKLACE, NAT_1, ARYTM_0, RELAT_1, FUNCT_1, XREAL_0,
+      WAYBEL_0, WAYBEL_1, RELAT_2, ARYTM_1, REAL_1, ORDINAL3, SETFAM_1, CARD_1,
+      YELLOW13, FINSET_1, FINSUB_1, SETWISEO, GROUP_2, CLASSES1, SEQM_3,
+      GROUP_1, PROB_1, SQUARE_1, INCPROJ, REALSET1, LATTICE3, YELLOW21, CARD_2,
+      FINSOP_1, FUNCT_4, BVFUNC24, REWRITE1, FINSEQ_5, MSUALG_5, YELLOW_0,
+      AMI_1, WELLORD1, TOLER_1;
+ clusters RELSET_1, ORDERS_1, STRUCT_0, FINSET_1, ARYTM_3, RELAT_1, PARTFUN1,
+      FINSEQ_5, FUNCT_1, NAT_1, FINSUB_1, FUNCT_2, ORDINAL2, ORDINAL1,
+      ORDERS_3, SUBSET_1, XBOOLE_0, WAYBEL_0, CLASSES1, CLASSES2, CQC_LANG,
+      CARD_1, YELLOW13, BINARITH, PRELAMB, ZFMISC_1, NECKLA_2, NECKLACE,
+      YELLOW_0, WAYBEL11, REALSET1, TOPREAL8, ORDERS_4, XREAL_0, INT_1,
+      FINSEQ_1, FUNCOP_1, FUNCT_7, AMISTD_1, FUNCT_4, WAYBEL35;
+ requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve A,B,a,b,c,d,e,f,g,h for set;
+
+theorem :: NECKLA_3:1
+  (id A)|B = id A /\ [:B,B:];
+
+theorem :: NECKLA_3:2
+  id {a,b,c,d} = {[a,a],[b,b],[c,c],[d,d]};
+
+theorem :: NECKLA_3:3
+ [:{a,b,c,d},{e,f,g,h}:] = {[a,e],[a,f],[b,e],[b,f],[a,g],[a,h],[b,g],[b,h]}
+   \/ {[c,e],[c,f],[d,e],[d,f],[c,g],[c,h],[d,g],[d,h]};
+
+registration
+  let X,Y be trivial set;
+  cluster -> trivial Relation of X,Y;
+end;
+
+theorem :: NECKLA_3:4
+  for X be trivial set, R be Relation of X st R is non empty
+   holds ex x be set st R = {[x,x]};
+
+registration
+ let X be trivial set;
+ cluster -> trivial reflexive symmetric transitive
+                    strongly_connected Relation of X;
+end;
+
+theorem :: NECKLA_3:5
+for X be non empty trivial set, R be Relation of X
+  holds R is_symmetric_in X;
+
+registration
+  cluster non empty strict finite irreflexive symmetric RelStr;
+end;
+
+registration
+ let L be irreflexive RelStr;
+ cluster -> irreflexive (full SubRelStr of L);
+end;
+
+registration
+ let L be symmetric RelStr;
+ cluster -> symmetric (full SubRelStr of L);
+end;
+
+theorem :: NECKLA_3:6
+  for R be irreflexive symmetric RelStr st Card (the carrier of R) = 2
+  holds ex a,b be set st the carrier of R = {a,b} &
+  (the InternalRel of R = {[a,b],[b,a]} or the InternalRel of R = {});
+
+begin :: Some facts about operations 'union_of' and 'sum_of'
+
+registration
+ let R be non empty RelStr,S be RelStr;
+ cluster union_of(R,S) -> non empty;
+ cluster sum_of(R,S) -> non empty;
+end;
+
+registration
+ let R be RelStr, S be non empty RelStr;
+ cluster union_of(R,S) -> non empty;
+ cluster sum_of(R,S) -> non empty;
+end;
+
+registration
+ let R,S be finite RelStr;
+ cluster union_of(R,S) -> finite;
+ cluster sum_of(R,S) -> finite;
+end;
+
+registration
+  let R,S be symmetric RelStr;
+  cluster union_of(R,S) -> symmetric;
+  cluster sum_of(R,S) -> symmetric;
+end;
+
+registration
+  let R,S be irreflexive RelStr;
+  cluster union_of(R,S) -> irreflexive;
+end;
+
+theorem :: NECKLA_3:7
+    for R,S be irreflexive RelStr st the carrier of R misses the carrier of S
+ holds sum_of(R,S) is irreflexive;
+
+theorem :: NECKLA_3:8
+  for R1,R2 being RelStr holds
+  union_of(R1,R2) = union_of(R2,R1) & sum_of(R1,R2) = sum_of(R2,R1);
+
+theorem :: NECKLA_3:9
+  for G being irreflexive RelStr, G1,G2 being RelStr st
+   ( G = union_of(G1,G2) or G = sum_of(G1,G2) )
+   holds G1 is irreflexive & G2 is irreflexive;
+
+theorem :: NECKLA_3:10
+  for G being non empty RelStr, H1,H2 being RelStr
+  st the carrier of H1 misses the carrier of H2 &
+   ( the RelStr of G = union_of(H1,H2) or the RelStr of G = sum_of(H1,H2) )
+  holds H1 is full SubRelStr of G & H2 is full SubRelStr of G;
+
+begin :: Theorems relating to the complement of RelStr
+
+theorem :: NECKLA_3:11
+ the InternalRel of ComplRelStr Necklace 4
+         = {[0,2],[2,0],[0,3],[3,0],[1,3],[3,1]};
+
+registration
+  let R be RelStr;
+  cluster ComplRelStr R -> irreflexive;
+end;
+
+registration
+  let R be symmetric RelStr;
+  cluster ComplRelStr R -> symmetric;
+end;
+
+theorem :: NECKLA_3:12
+for R be RelStr holds
+  the InternalRel of R misses the InternalRel of ComplRelStr R;
+
+theorem :: NECKLA_3:13
+for R being RelStr holds
+  id the carrier of R misses the InternalRel of ComplRelStr R;
+
+theorem :: NECKLA_3:14
+ for G being RelStr holds
+  [:the carrier of G,the carrier of G:] = id (the carrier of G) \/
+       (the InternalRel of G) \/ (the InternalRel of ComplRelStr G);
+
+theorem :: NECKLA_3:15
+  for G being strict irreflexive RelStr st G is trivial
+   holds ComplRelStr G = G;
+
+theorem :: NECKLA_3:16
+  for G being strict irreflexive RelStr
+   holds ComplRelStr (ComplRelStr G) = G;
+
+theorem :: NECKLA_3:17
+  for G1,G2 being RelStr st the carrier of G1 misses the carrier of G2
+   holds ComplRelStr union_of(G1,G2) = sum_of(ComplRelStr G1, ComplRelStr G2);
+
+theorem :: NECKLA_3:18
+  for G1,G2 being RelStr st the carrier of G1 misses the carrier of G2
+   holds ComplRelStr sum_of(G1,G2) = union_of(ComplRelStr G1, ComplRelStr G2);
+
+theorem :: NECKLA_3:19
+    for G being RelStr, H being full SubRelStr of G
+  holds  the InternalRel of ComplRelStr H =
+     (the InternalRel of ComplRelStr G)|_2 the carrier of ComplRelStr H;
+
+theorem :: NECKLA_3:20
+ for G being non empty irreflexive RelStr, x being Element of the carrier of G,
+  x' being Element of the carrier of ComplRelStr G st x = x'  holds
+ ComplRelStr (subrelstr ([#]G \ {x})) = subrelstr ([#](ComplRelStr G) \ {x'});
+
+begin :: Another facts relating to operation 'embeds'
+
+registration
+  cluster trivial strict -> N-free (non empty RelStr);
+end;
+
+theorem :: NECKLA_3:21
+     for R being reflexive antisymmetric RelStr, S being RelStr  holds
+    (ex f being map of R,S st
+    for x,y being Element of the carrier of R holds
+    [x,y] in the InternalRel of R iff [f.x,f.y] in the InternalRel of S)
+     iff S embeds R;
+
+theorem :: NECKLA_3:22
+ for G being non empty RelStr, H being non empty full SubRelStr of G
+  holds G embeds H;
+
+theorem :: NECKLA_3:23
+  for G being non empty RelStr, H being non empty full SubRelStr of G
+  st G is N-free holds H is N-free;
+
+theorem :: NECKLA_3:24
+  for G being non empty irreflexive RelStr holds
+  G embeds Necklace 4 iff ComplRelStr G embeds Necklace 4;
+
+theorem :: NECKLA_3:25
+  for G being non empty irreflexive RelStr holds
+   G is N-free iff ComplRelStr G is N-free;
+
+begin :: Connected Graphs
+
+definition
+  let R be RelStr;
+  mode path of R is RedSequence of the InternalRel of R;
+end;
+
+definition
+  let R be RelStr;
+  attr R is path-connected means
+:: NECKLA_3:def 1
+ for x,y being set st x in the carrier of R &
+   y in the carrier of R & x <> y   holds
+   the InternalRel of R reduces x,y or the InternalRel of R reduces y,x;
+end;
+
+registration
+  cluster empty -> path-connected RelStr;
+end;
+
+registration
+  cluster connected -> path-connected (non empty RelStr);
+end;
+
+theorem :: NECKLA_3:26
+  for R being non empty transitive reflexive RelStr, x,y being Element of R
+   holds the InternalRel of R reduces x,y
+         implies [x,y] in the InternalRel of R;
+
+registration
+  cluster path-connected -> connected (non empty transitive reflexive RelStr);
+end;
+
+theorem :: NECKLA_3:27
+for R be symmetric RelStr,x,y being set
+ st x in the carrier of R & y in the carrier of R holds
+ the InternalRel of R reduces x,y implies the InternalRel of R reduces y,x;
+
+definition
+  let R be symmetric RelStr;
+  redefine attr R is path-connected means
+:: NECKLA_3:def 2
+  for x,y being set st x in the carrier of R &
+  y in the carrier of R & x <> y holds (the InternalRel of R) reduces x,y;
+end;
+
+definition
+  let R be RelStr;
+  let x be Element of R;
+  func component x -> Subset of R equals
+:: NECKLA_3:def 3
+ Class(EqCl the InternalRel of R, x);
+end;
+
+theorem :: NECKLA_3:28
+for R being non empty RelStr, x being Element of R
+  holds x in component x;
+
+registration
+  let R be non empty RelStr;
+  let x be Element of R;
+  cluster component x -> non empty;
+end;
+
+theorem :: NECKLA_3:29
+for R being  RelStr, x being Element of R,
+  y be set st y in component x holds [x,y] in EqCl the InternalRel of R;
+
+theorem :: NECKLA_3:30
+for R being RelStr, x being Element of R, A being set
+  holds A = component x iff for y being set
+  holds y in A iff [x,y] in EqCl the InternalRel of R;
+
+theorem :: NECKLA_3:31
+ for R be non empty irreflexive symmetric RelStr holds
+  R is not path-connected implies
+  ex G1,G2 being non empty strict irreflexive symmetric RelStr
+  st the carrier of G1 misses the carrier of G2 &
+  the RelStr of R = union_of(G1,G2);
+
+theorem :: NECKLA_3:32
+ for R be non empty irreflexive symmetric RelStr holds
+  ComplRelStr R is not path-connected implies
+  ex G1,G2 being non empty strict irreflexive symmetric RelStr
+  st the carrier of G1 misses the carrier of G2 &
+  the RelStr of R = sum_of(G1,G2);
+
+theorem :: NECKLA_3:33
+    for G being irreflexive RelStr st G in fin_RelStr_sp
+  holds ComplRelStr G in fin_RelStr_sp;
+
+theorem :: NECKLA_3:34
+  for R be irreflexive symmetric RelStr
+   st Card (the carrier of R) = 2 & the carrier of R in FinSETS
+   holds the RelStr of R in fin_RelStr_sp;
+
+theorem :: NECKLA_3:35
+    for R be RelStr st R in fin_RelStr_sp holds R is symmetric;
+
+theorem :: NECKLA_3:36
+for G being RelStr, H1,H2 being non empty RelStr,
+  x being Element of the carrier of H1, y being Element of the carrier of H2
+  st G = union_of(H1,H2) & the carrier of H1 misses the carrier of H2
+   holds not [x,y] in the InternalRel of G;
+
+theorem :: NECKLA_3:37
+for G being RelStr, H1,H2 being non empty RelStr,
+  x being Element of the carrier of H1, y being Element of the carrier of H2
+  st G = sum_of(H1,H2) holds not [x,y] in the InternalRel of ComplRelStr G;
+
+theorem :: NECKLA_3:38
+ for G being non empty symmetric RelStr, x being Element of the carrier of G,
+ R1,R2 being non empty RelStr st the carrier of R1 misses the carrier of R2
+ &  subrelstr ([#]G \ {x}) = union_of(R1,R2) & G is path-connected
+ holds ex b being Element of the carrier of R1 st [b,x] in the InternalRel of G
+;
+
+theorem :: NECKLA_3:39
+  for G being non empty symmetric irreflexive RelStr,
+  a,b,c,d being Element of the carrier of G,
+  Z being Subset of the carrier of G st Z = {a,b,c,d}
+  & a,b,c,d are_mutually_different & [a,b] in the InternalRel of G
+  & [b,c] in the InternalRel of G  & [c,d] in the InternalRel of G
+  & not [a,c] in the InternalRel of G
+  & not [a,d] in the InternalRel of G
+  & not [b,d] in the InternalRel of G
+    holds subrelstr Z embeds Necklace 4;
+
+theorem :: NECKLA_3:40
+for G being non empty irreflexive symmetric RelStr,
+  x being Element of the carrier of G,
+  R1,R2 being non empty RelStr
+  st the carrier of R1 misses the carrier of R2
+   & subrelstr ([#]G \ {x}) = union_of(R1,R2) & G is non trivial
+   & G is path-connected & ComplRelStr G is path-connected
+   holds G embeds Necklace 4;
+
+theorem :: NECKLA_3:41
+     for G being non empty strict finite irreflexive symmetric RelStr
+  st G is N-free & the carrier of G in FinSETS
+     holds the RelStr of G in fin_RelStr_sp;

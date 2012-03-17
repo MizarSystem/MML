@@ -463,6 +463,8 @@ Associative notation must not be used for "iff" and "implies"
 "st" expected
 # 388
 "as" expected
+# 389
+"proof" expected
 # 391
 Incorrect beginning of a text item
 # 392
@@ -875,6 +877,8 @@ Collection overflow error
 Arithmetic overflow error
 # 1216
 General Protection fault
+# 1217
+Segmentation fault
 # 1255
 Ctrl Break
 # 1994           -------> I/O stream errors
