@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -33,7 +34,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="82"/>
+<Adjective nr="88"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINTOPO2" nr="2">
@@ -42,8 +43,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="49" value="false"/>
-<Adjective nr="82"/>
+<Adjective nr="53" value="false"/>
+<Adjective nr="88"/>
 </Cluster>
 </RCluster>
 </Registrations>

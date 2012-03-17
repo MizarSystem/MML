@@ -2,7 +2,7 @@
 ::  by Tetsuya Tsunetou , Grzegorz Bancerek and Yatsuka Nakamura
 ::
 :: Received September 28, 2001
-:: Copyright (c) 2001-2011 Association of Mizar Users
+:: Copyright (c) 2001-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -24,17 +24,18 @@ environ
       BINOP_1, FINSOP_1, NAT_D, FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7,
       XXREAL_0, VALUED_0, VALUED_1;
  constructors WELLORD2, FUNCT_4, XXREAL_0, ORDINAL4, FUNCT_7, ORDINAL3,
-      VALUED_1, ENUMSET1, NAT_D, XXREAL_2, BINOP_1, FINSOP_1, RELSET_1;
+      VALUED_1, ENUMSET1, NAT_D, XXREAL_2, BINOP_1, FINSOP_1, RELSET_1, CARD_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, NUMBERS, FINSEQ_1, VALUED_1,
-      XXREAL_2, MEMBERED;
+      XXREAL_2, MEMBERED, FINSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, ORDINAL1, XBOOLE_0, FUNCOP_1, RELAT_1, VALUED_1, NAT_1,
-      FUNCT_1;
+      PARTFUN1, CARD_1, FUNCT_1;
  theorems TARSKI, AXIOMS, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       ORDINAL1, CARD_1, FINSEQ_1, FUNCT_7, ORDINAL4, CARD_2, FUNCT_4, ORDINAL3,
       XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1, XREAL_1, VALUED_0, ENUMSET1,
-      XXREAL_0, XREAL_0, GRFUNC_1, XXREAL_2, NAT_D, VALUED_1, BINOP_1, INT_1;
+      XXREAL_0, XREAL_0, GRFUNC_1, XXREAL_2, NAT_D, VALUED_1, BINOP_1, INT_1,
+      XTUPLE_0;
  schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, CLASSES1, FINSEQ_1, BINOP_1;
 
 begin
@@ -48,14 +49,14 @@ reserve k,n for Nat,
 theorem
   k = k /\ n implies k <= n by NAT_1:46;
 
-theorem Th4:
+theorem Th2:
   n \/ { n } = n+1
 proof
   n+1 = succ n;
   hence thesis;
 end;
 
-theorem Th5:
+theorem Th3:
   Seg n c= n+1
 proof
   let x;
@@ -85,26 +86,15 @@ A2: j<n+1;
   end;
   1 <= n+1 by NAT_1:11; then
 A3: {0} c= n+1 by CARD_1:49,NAT_1:39;
-  Seg(n) c= n+1 by Th5;
+  Seg(n) c= n+1 by Th3;
   hence thesis by A3,XBOOLE_1:8;
 end;
 
 ::  Finite ExFinSequences
 
-theorem Th7:
+theorem
   for r being Function holds r is finite T-Sequence-like iff
-  ex n st dom r = n
-proof
-  let r be Function;
-  hereby
-    assume
-A1: r is finite T-Sequence-like;
-    then dom r is finite by FINSET_1:10;
-    hence ex n st dom r = n by A1;
-  end;
-  assume ex n st dom r = n;
-  hence thesis by FINSET_1:10,ORDINAL1:def 7;
-end;
+  ex n st dom r = n by FINSET_1:10,ORDINAL1:def 7;
 
 definition
   mode XFinSequence is finite T-Sequence;
@@ -114,11 +104,7 @@ reserve p,q,r,s,t for XFinSequence;
 
 registration let p;
   cluster dom p -> natural;
-  coherence
-  proof
-    ex n st dom p = n by Th7;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 notation let p;
@@ -167,12 +153,12 @@ A1: dom f c= k;
   deffunc F(set) = f.$1;
   consider g such that
 A2: dom g = k & for x st x in k holds g.x = F(x) from FUNCT_1:sch 3;
-  reconsider g as XFinSequence by A2,Th7;
+  reconsider g as XFinSequence by A2,FINSET_1:10,ORDINAL1:def 7;
   take g;
   let y,z;
   assume A3: [y,z] in f;
   then
-A4: y in dom f by RELAT_1:def 4;
+A4: y in dom f by XTUPLE_0:def 12;
   then
 A5: [y,g.y] in g by A1,A2,FUNCT_1:1;
   f.y = z by A3,A4,FUNCT_1:def 2;
@@ -195,7 +181,7 @@ A3: x in A();
   end;
   consider f being Function such that
 A4: dom f = A() & for x st x in A() holds P[x,f.x] from CLASSES1:sch 1(A2);
-  reconsider p=f as XFinSequence by A4,Th7;
+  reconsider p=f as XFinSequence by A4,FINSET_1:10,ORDINAL1:def 7;
   take p;
   thus thesis by A4;
 end;
@@ -205,7 +191,7 @@ scheme
   for k st k in A() holds p.k=F(k) proof
   consider f being Function such that
 A1: dom f = A() & for x st x in A() holds f.x=F(x) from FUNCT_1:sch 3;
-  reconsider p=f as XFinSequence by A1,Th7;
+  reconsider p=f as XFinSequence by A1,FINSET_1:10,ORDINAL1:def 7;
   take p;
   thus thesis by A1;
 end;
@@ -223,7 +209,7 @@ A2: z=[x,y] by RELAT_1:def 1;
   thus thesis by A1,A2,FUNCT_1:1;
 end;
 
-theorem Th10:
+theorem Th8:
   dom p = dom q & (for k st k in dom p holds p.k = q.k) implies p = q
 proof
   assume that
@@ -233,7 +219,7 @@ A2: for k st k in dom p holds p.k = q.k;
   hence thesis by A1,FUNCT_1:2;
 end;
 
-theorem Th11:
+theorem Th9:
   ( len p = len q & for k st k < len p holds p.k=q.k ) implies p=q
 proof
   assume that
@@ -252,13 +238,7 @@ end;
 
 registration let p,n;
   cluster p|n -> finite;
-  coherence
-proof
-A1: len p <= n or n <= len p;
-  dom(p| n) = len p /\ n by RELAT_1:61;
-  then dom(p| n) = len p or dom(p| n) = n by A1,NAT_1:46;
-  hence thesis by Th7;
-end;
+  coherence;
 end;
 
 theorem
@@ -266,10 +246,10 @@ theorem
 proof
   assume rng p c= dom f;
   then dom(f*p) = len p by RELAT_1:27;
-  hence thesis by Th7;
+  hence thesis by ORDINAL1:def 7;
 end;
 
-theorem Th14:
+theorem Th11:
   k < len p implies dom(p|k) = k
 proof
   assume k < len p;
@@ -292,7 +272,7 @@ definition let D be set;
   mode XFinSequence of D is finite T-Sequence of D;
 end;
 
-theorem Th15:
+theorem Th12:
   for D being set, f being XFinSequence of D holds f is PartFunc of NAT,D
 proof
   let D be set, f be XFinSequence of D;
@@ -307,23 +287,16 @@ end;
 
 reserve D for set;
 
-theorem Th16:
-  for k being Nat,a being set holds k --> a is XFinSequence
-proof
-  let k be Nat,a be set;
-  reconsider p = (k --> a) as Function;
-  k in NAT & dom p = k by FUNCOP_1:13,ORDINAL1:def 12;
-  hence thesis by Th7;
-end;
+theorem
+  for k being Nat,a being set holds k --> a is XFinSequence;
 
-theorem Th17:
+theorem Th14:
   for D being non empty set ex p being XFinSequence of D st len p = k
 proof
   let D be non empty set;
   set y = the Element of D;
   set p = k --> y;
-  dom p = k by FUNCOP_1:13;
-  then reconsider p = k --> y as XFinSequence by Th7;
+  reconsider p = k --> y as XFinSequence;
   reconsider p as XFinSequence of D;
   take p;
   thus thesis by FUNCOP_1:13;
@@ -336,7 +309,7 @@ end;
 theorem
   len p = 0 iff p = {};
 
-theorem Th19:
+theorem Th16:
   for D be set holds {} is XFinSequence of D
 proof
   let D be set;
@@ -348,7 +321,7 @@ registration let D be set;
   cluster empty for XFinSequence of D;
   existence
   proof
-    {} is XFinSequence of D by Th19;
+    {} is XFinSequence of D by Th16;
     hence thesis;
   end;
 end;
@@ -359,9 +332,8 @@ registration
   existence
   proof
     set k = 1;
-    ex p being XFinSequence of D st len p = k by Th17; then
     consider p being XFinSequence of D such that
-A1: len p = k;
+A1: len p = k by Th14;
     p <> {} by A1;
     hence thesis;
   end;
@@ -381,7 +353,7 @@ end;
 definition let D be set;
   func <%>D -> XFinSequence of D equals
   {};
-  coherence by Th19;
+  coherence by Th16;
 end;
 
 registration
@@ -392,7 +364,7 @@ end;
 
 definition let p,q;
   redefine func p^q means
-:Def4: dom it = len p + len q & (for k st k in dom p
+:Def3: dom it = len p + len q & (for k st k in dom p
   holds it.k=p.k) & for k st k in dom q holds it.(len p + k) = q.k;
   compatibility
   proof
@@ -431,14 +403,14 @@ registration
   coherence
   proof
     dom (p^q) = (dom p)+^dom q by ORDINAL4:def 1;
-    hence thesis by Th7;
+    hence thesis by FINSET_1:10;
   end;
 end;
 
-theorem Th20:
-  len(p^q) = len p + len q by Def4;
+theorem
+  len(p^q) = len p + len q by Def3;
 
-theorem Th21:
+theorem Th18:
   len p <= k & k < len p + len q implies (p^q).k=q.(k-len p)
 proof
   assume that
@@ -448,25 +420,25 @@ A2: k < len p + len q;
 A3: len p + m = k by A1,NAT_1:10;
   k - len p < len p + len q - len p by A2,XREAL_1:14;
   then m in dom q by A3,NAT_1:44;
-  hence thesis by A3,Def4;
+  hence thesis by A3,Def3;
 end;
 
-theorem Th22:
+theorem Th19:
   len p <= k & k < len(p^q) implies (p^q).k = q.(k - len p)
 proof
   assume that
 A1: len p <= k and
 A2: k < len(p^q);
-  k < len p + len q by A2,Def4;
-  hence thesis by A1,Th21;
+  k < len p + len q by A2,Def3;
+  hence thesis by A1,Th18;
 end;
 
-theorem Th23:
+theorem Th20:
   k in dom (p^q) implies (k in dom p or ex n st n in dom q & k=len
   p + n )
 proof
   assume k in dom(p^q);
-  then k in (len p + len q) by Def4;
+  then k in (len p + len q) by Def3;
   then
 A1: k < len p + len q by NAT_1:44;
   now
@@ -480,7 +452,7 @@ A2: k=len p + n by NAT_1:10;
   hence thesis by NAT_1:44;
 end;
 
-theorem Th24:
+theorem Th21:
   for p,q being T-Sequence holds dom p c= dom(p^q)
 proof
   let p,q be T-Sequence;
@@ -488,7 +460,7 @@ proof
   hence thesis by ORDINAL3:24;
 end;
 
-theorem Th25:
+theorem Th22:
   x in dom q implies ex k st k=x & len p + k in dom(p^q)
 proof
   assume
@@ -498,35 +470,35 @@ A1: x in dom q;
   k < len q by A1,NAT_1:44;
   then len p + k < len p + len q by XREAL_1:8;
   then len p + k in (len p + len q) by NAT_1:44;
-  hence thesis by Def4;
+  hence thesis by Def3;
 end;
 
-theorem Th26:
+theorem Th23:
   k in dom q implies len p + k in dom(p^q)
 proof
   assume k in dom q;
-  then ex n st n=k & len p + n in dom(p^q) by Th25;
+  then ex n st n=k & len p + n in dom(p^q) by Th22;
   hence thesis;
 end;
 
-theorem Th27:
+theorem Th24:
   rng p c= rng(p^q)
 proof
   now
-A1: dom p c= dom(p^q) by Th24;
+A1: dom p c= dom(p^q) by Th21;
     let x;
     assume x in rng p;
     then consider y such that
 A2: y in dom p and
 A3: x=p.y by FUNCT_1:def 3;
     reconsider k=y as Element of NAT by A2;
-    (p^q).k=p.k by A2,Def4;
+    (p^q).k=p.k by A2,Def3;
     hence x in rng(p^q) by A2,A3,A1,FUNCT_1:3;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th28:
+theorem Th25:
   rng q c= rng(p^q)
 proof
   now
@@ -536,13 +508,13 @@ proof
 A1: y in dom q and
 A2: x=q.y by FUNCT_1:def 3;
     reconsider k=y as Element of NAT by A1;
-    len p + k in dom(p^q) & (p^q).(len p + k) = q.k by A1,Def4,Th26;
+    len p + k in dom(p^q) & (p^q).(len p + k) = q.k by A1,Def3,Th23;
     hence x in rng(p^q) by A2,FUNCT_1:3;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th29:
+theorem Th26:
   rng(p^q) = rng p \/ rng q
 proof
   now
@@ -552,7 +524,7 @@ proof
 A1: y in dom(p^q) and
 A2: x=(p^q).y by FUNCT_1:def 3;
     reconsider k=y as Element of NAT by A1;
-    y in (len p + len q) by A1,Def4;
+    y in (len p + len q) by A1,Def3;
     then
 A3: k < len p + len q by NAT_1:44;
 A4: now
@@ -563,25 +535,25 @@ A6:   len p + m = k by NAT_1:10;
       m + len p - len p < len p + len q - len p by A3,A6,XREAL_1:14;
       then
 A7:   m in len q by NAT_1:44;
-      q.(k-len p) = x by A2,A3,A5,Th21;
+      q.(k-len p) = x by A2,A3,A5,Th18;
       hence x in rng q by A6,A7,FUNCT_1:3;
     end;
     now
       assume not len p <= k;
       then
 A8:   k in dom p by NAT_1:44;
-      then p.k = x by A2,Def4;
+      then p.k = x by A2,Def3;
       hence x in rng p by A8,FUNCT_1:3;
     end;
     hence x in rng p \/ rng q by A4,XBOOLE_0:def 3;
   end; then
 A9: rng(p^q) c= rng p \/ rng q by TARSKI:def 3;
-  rng p c= rng(p^q) & rng q c= rng(p^q) by Th27,Th28;
+  rng p c= rng(p^q) & rng q c= rng(p^q) by Th24,Th25;
   then (rng p \/ rng q) c= rng(p^q) by XBOOLE_1:8;
   hence thesis by A9,XBOOLE_0:def 10;
 end;
 
-theorem Th30:
+theorem Th27:
   p^q^r = p^(q^r)
 proof
 A1: for k st k in dom p holds ((p^q)^r).k=p.k
@@ -589,9 +561,9 @@ A1: for k st k in dom p holds ((p^q)^r).k=p.k
     let k;
     assume
 A2: k in dom p;
-    dom p c= dom(p^q) by Th24;
-    hence (p^q^r).k=(p^q).k by A2,Def4
-      .=p.k by A2,Def4;
+    dom p c= dom(p^q) by Th21;
+    hence (p^q^r).k=(p^q).k by A2,Def3
+      .=p.k by A2,Def3;
   end;
 A3: for k st k in dom(q^r) holds ((p^q)^r).(len p + k)=(q^r).k
   proof
@@ -602,94 +574,102 @@ A5: now
       assume not k in dom q;
       then consider n such that
 A6:   n in dom r and
-A7:   k=len q + n by A4,Th23;
+A7:   k=len q + n by A4,Th20;
       thus (p^q^r).(len p + k) =(p^q^r).(len p + len q + n) by A7
-        .=(p^q^r).(len(p^q) + n) by Def4
-        .=r.n by A6,Def4
-        .=(q^r).k by A6,A7,Def4;
+        .=(p^q^r).(len(p^q) + n) by Def3
+        .=r.n by A6,Def3
+        .=(q^r).k by A6,A7,Def3;
     end;
     now
       assume
 A8:   k in dom q;
-      then (len p + k) in dom(p^q) by Th26;
-      hence (p^q^r).(len p + k) = (p^q).(len p + k) by Def4
-        .=q.k by A8,Def4
-        .=(q^r).k by A8,Def4;
+      then (len p + k) in dom(p^q) by Th23;
+      hence (p^q^r).(len p + k) = (p^q).(len p + k) by Def3
+        .=q.k by A8,Def3
+        .=(q^r).k by A8,Def3;
     end;
     hence thesis by A5;
   end;
-  dom ((p^q)^r) = (len (p^q) + len r) by Def4
-    .= (len p + len q + len r) by Def4
+  dom ((p^q)^r) = (len (p^q) + len r) by Def3
+    .= (len p + len q + len r) by Def3
     .= (len p + (len q + len r))
-    .= (len p + len(q^r)) by Def4;
-  hence thesis by A1,A3,Def4;
+    .= (len p + len(q^r)) by Def3;
+  hence thesis by A1,A3,Def3;
 end;
 
-theorem Th31:
+theorem Th28:
   p^r = q^r or r^p = r^q implies p = q
 proof
 A1: now
     assume
 A2: p^r = q^r;
-    then len p + len r = len(q^r) by Def4;
+    then len p + len r = len(q^r) by Def3;
     then
-A3: len p + len r = len q + len r by Def4;
+A3: len p + len r = len q + len r by Def3;
     for k st k in dom p holds p.k=q.k
     proof
       let k;
       assume
 A4:   k in dom p;
-      hence p.k=(q^r).k by A2,Def4
-        .=q.k by A3,A4,Def4;
+      hence p.k=(q^r).k by A2,Def3
+        .=q.k by A3,A4,Def3;
     end;
-    hence thesis by A3,Th10;
+    hence thesis by A3,Th8;
   end;
 A5: now
     assume
 A6: r^p=r^q;
     then
-A7: len r + len p = len(r^q) by Def4
-      .=len r + len q by Def4;
+A7: len r + len p = len(r^q) by Def3
+      .=len r + len q by Def3;
     for k st k in dom p holds p.k=q.k
     proof
       let k;
       assume
 A8:   k in dom p;
-      hence p.k = (r^q).(len r + k) by A6,Def4
-        .= q.k by A7,A8,Def4;
+      hence p.k = (r^q).(len r + k) by A6,Def3
+        .= q.k by A7,A8,Def3;
     end;
-    hence thesis by A7,Th10;
+    hence thesis by A7,Th8;
   end;
   assume p^r = q^r or r^p = r^q;
   hence thesis by A1,A5;
 end;
 
-theorem Th32:
-  p^{} = p & {}^p = p
-proof
-A1: for k st k in dom p holds p.k=(p^{}).k by Def4;
-  dom(p^{}) = len p + len {} by Def4
+registration let p;
+ reduce p^{} to p;
+ reducibility
+ proof
+A1: for k st k in dom p holds p.k=(p^{}).k by Def3;
+  dom(p^{}) = len p + len {} by Def3
     .= dom p;
-  hence p^{} = p by A1,Th10;
+  hence p^{} = p by A1,Th8;
+ end;
+ reduce {}^p to p;
+ reducibility
+  proof
 A2: for k st k in dom p holds p.k = ({}^p).k
   proof
     let k;
     assume
 A3: k in dom p;
     thus ({}^p).k =({}^p).(len {} + k)
-      .=p.k by A3,Def4;
+      .=p.k by A3,Def3;
   end;
-  dom({}^p) = (len {} + len p) by Def4
+  dom({}^p) = (len {} + len p) by Def3
     .= dom p;
-  hence thesis by A2,Th10;
+  hence thesis by A2,Th8;
+  end;
 end;
 
-theorem Th33:
+canceled;
+
+theorem Th30:
   p^q = {} implies p={} & q={}
 proof
   assume p^q={};
   then 0 = len (p^q)
-    .= len p + len q by Def4;
+    .= len p + len q by Def3;
   hence thesis;
 end;
 
@@ -700,7 +680,7 @@ registration
   coherence
   proof
 A1: rng q c= D by RELAT_1:def 19;
-    rng(p^q) = rng p \/ rng q & rng p c= D by Th29,RELAT_1:def 19;
+    rng(p^q) = rng p \/ rng q & rng p c= D by Th26,RELAT_1:def 19;
     then rng(p^q) c= D by A1,XBOOLE_1:8;
     hence thesis by RELAT_1:def 19;
   end;
@@ -711,13 +691,13 @@ proof
   let x1, y1 be set;
   assume [x,y] in {[x1,y1]};
   then [x,y] = [x1,y1] by TARSKI:def 1;
-  hence thesis by ZFMISC_1:27;
+  hence thesis by XTUPLE_0:1;
 end;
 
 definition
   let x;
   redefine func <%x%> -> Function means
-  :Def5:
+  :Def4:
   dom it = 1 & it.0 = x;
   coherence;
   compatibility
@@ -733,11 +713,11 @@ A2: f.0 = x;
       hereby
         assume
 A3:     [y,z] in f;
-        then y in {0} by A1,CARD_1:49,RELAT_1:def 4;
+        then y in {0} by A1,CARD_1:49,XTUPLE_0:def 12;
         then
 A4:     y = 0 by TARSKI:def 1;
 A5:     rng f = {f.0} by A1,CARD_1:49,FUNCT_1:4;
-        z in rng f by A3,RELAT_1:def 5;
+        z in rng f by A3,XTUPLE_0:def 13;
         then z = f.0 by A5,TARSKI:def 1;
         hence [y,z] in g by A4,TARSKI:def 1;
       end;
@@ -763,8 +743,8 @@ registration
   cluster <%x%> -> finite T-Sequence-like;
   coherence
   proof
-    dom <%x%> = 1 by Def5;
-    hence thesis by FINSET_1:10,ORDINAL1:def 7;
+    dom <%x%> = 1 by Def4;
+    hence thesis by ORDINAL1:def 7;
   end;
 end;
 
@@ -775,7 +755,7 @@ proof
   assume p^q is XFinSequence of D;
   then rng(p^q) c= D by RELAT_1:def 19;
   then
-A1: rng p \/ rng q c= D by Th29;
+A1: rng p \/ rng q c= D by Th26;
   rng p c= rng p \/ rng q by XBOOLE_1:7;
   then rng p c= D by A1,XBOOLE_1:1;
   hence p is XFinSequence of D by RELAT_1:def 19;
@@ -816,17 +796,17 @@ end;
 theorem
   <%x%> = { [0,x] } by FUNCT_4:82;
 
-theorem Th36:
+theorem Th33:
   p=<%x%> iff dom p = 1 & rng p = {x}
 proof
   thus p = <%x%> implies dom p = 1 & rng p = {x}
   proof
     assume
 A1: p = <%x%>;
-    hence dom p = 1 by Def5;
-    dom p = {0} by A1,Def5,CARD_1:49;
+    hence dom p = 1 by Def4;
+    dom p = {0} by A1,Def4,CARD_1:49;
     then rng p = {p.0} by FUNCT_1:4;
-    hence thesis by A1,Def5;
+    hence thesis by A1,Def4;
   end;
   assume that
 A2: dom p = 1 and
@@ -834,55 +814,55 @@ A3: rng p = {x};
   1=0+1;
   then p.0 in {x} by A2,A3,FUNCT_1:3,NAT_1:45;
   then p.0 = x by TARSKI:def 1;
-  hence thesis by A2,Def5;
+  hence thesis by A2,Def4;
 end;
 
 theorem
-  p = <%x%> iff len p = 1 & p.0 = x by Def5;
+  p = <%x%> iff len p = 1 & p.0 = x by Def4;
 
-theorem Th39:
+theorem Th35:
   (<%x%>^p).0 = x
 proof
   0 in 1 by CARD_1:49,TARSKI:def 1;
-  then 0 in dom <%x%> by Def5;
-  then (<%x%>^p).0 = <%x%>.0 by Def4;
-  hence thesis by Def5;
+  then 0 in dom <%x%> by Def4;
+  then (<%x%>^p).0 = <%x%>.0 by Def3;
+  hence thesis by Def4;
 end;
 
-theorem Th40:
+theorem Th36:
   (p^<%x%>).(len p)=x
 proof
-  dom <%x%> = 1 & 1 = (0+1) by Def5;
+  dom <%x%> = 1 & 1 = (0+1) by Def4;
   then
 A1: 0 in dom <%x%> by NAT_1:45;
   len p + 0 = len p;
-  hence (p^<%x%>).(len p) = <%x%>.0 by A1,Def4
-    .=x by Def5;
+  hence (p^<%x%>).(len p) = <%x%>.0 by A1,Def3
+    .=x by Def4;
 end;
 
 theorem
-  <%x,y,z%>=<%x%>^<%y,z%> & <%x,y,z%>=<%x,y%>^<%z%> by Th30;
+  <%x,y,z%>=<%x%>^<%y,z%> & <%x,y,z%>=<%x,y%>^<%z%> by Th27;
 
-theorem Th42:
+theorem Th38:
   p = <%x,y%> iff len p = 2 & p.0=x & p.1=y
 proof
   thus p = <%x,y%> implies len p = 2 & p.0=x & p.1=y
   proof
     assume
 A1: p=<%x,y%>;
-    hence len p = len <%x%> + len <%y%> by Def4
-      .= 1 + len <%y%> by Th36
-      .= 1 + 1 by Th36
+    hence len p = len <%x%> + len <%y%> by Def3
+      .= 1 + len <%y%> by Th33
+      .= 1 + 1 by Th33
       .=2;
 A2: 0 in {0} by TARSKI:def 1;
     then
-A3: 0 in dom <%y%> by Def5,CARD_1:49;
-    0 in dom <%x%> by A2,Def5,CARD_1:49;
-    hence p.0 = <%x%>.0 by A1,Def4
-      .= x by Def5;
-    thus p.1 = (<%x%>^<%y%>).(len <%x%> + 0) by A1,Th36
-      .= <%y%>.0 by A3,Def4
-      .= y by Def5;
+A3: 0 in dom <%y%> by Def4,CARD_1:49;
+    0 in dom <%x%> by A2,Def4,CARD_1:49;
+    hence p.0 = <%x%>.0 by A1,Def3
+      .= x by Def4;
+    thus p.1 = (<%x%>^<%y%>).(len <%x%> + 0) by A1,Th33
+      .= <%y%>.0 by A3,Def3
+      .= y by Def4;
   end;
   assume that
 A4: len p = 2 and
@@ -893,50 +873,50 @@ A7: for k st k in dom <%y%> holds p.((len <%x%>)+k)=<%y%>.k
     let k;
     assume k in dom <%y%>;
     then
-A8: k in {0} by Def5,CARD_1:49;
-    thus p.((len <%x%>) + k) = p.(1+k) by Th36
+A8: k in {0} by Def4,CARD_1:49;
+    thus p.((len <%x%>) + k) = p.(1+k) by Th33
       .=p.(1+0) by A8,TARSKI:def 1
-      .=<%y%>.0 by A6,Def5
+      .=<%y%>.0 by A6,Def4
       .= <%y%>.k by A8,TARSKI:def 1;
   end;
 A9: for k st k in dom <%x%> holds p.k=<%x%>.k
   proof
     let k;
     assume k in dom <%x%>;
-    then k in {0} by Def5,CARD_1:49;
+    then k in {0} by Def4,CARD_1:49;
     then k=0 by TARSKI:def 1;
-    hence thesis by A5,Def5;
+    hence thesis by A5,Def4;
   end;
   dom p = (1+1) by A4
-    .= (len <%x%> + 1) by Th36
-    .= (len <%x%> + len <%y%>) by Th36;
-  hence thesis by A9,A7,Def4;
+    .= (len <%x%> + 1) by Th33
+    .= (len <%x%> + len <%y%>) by Th33;
+  hence thesis by A9,A7,Def3;
 end;
 
-theorem Th43:
+theorem Th39:
   p = <%x,y,z%> iff len p = 3 & p.0 = x & p.1 = y & p.2 = z
 proof
   thus p = <%x,y,z%> implies len p = 3 & p.0 = x & p.1 = y & p.2 = z
   proof
 A1: 0 in {0} by TARSKI:def 1;
     then
-A2: 0 in dom <%x%> by Def5,CARD_1:49;
-A3: 0 in dom <%z%> by A1,Def5,CARD_1:49;
+A2: 0 in dom <%x%> by Def4,CARD_1:49;
+A3: 0 in dom <%z%> by A1,Def4,CARD_1:49;
     assume
 A4: p =<%x,y,z%>;
-    hence len p =len <%x,y%> + len <%z%> by Def4
-      .=2 + len <%z%> by Th42
-      .=2+1 by Th36
+    hence len p =len <%x,y%> + len <%z%> by Def3
+      .=2 + len <%z%> by Th38
+      .=2+1 by Th33
       .=3;
-    thus p.0 = (<%x%>^<%y,z%>).0 by A4,Th30
-      .=<%x%>.0 by A2,Def4
-      .=x by Def5;
-    1 in (1+1) & len <%x,y%> = 2 by Th42,NAT_1:45;
-    hence p.1 =<%x,y%>.1 by A4,Def4
-      .=y by Th42;
-    thus p.2 =(<%x,y%>^<%z%>).(len (<%x,y%>) + 0) by A4,Th42
-      .= <%z%>.0 by A3,Def4
-      .= z by Def5;
+    thus p.0 = (<%x%>^<%y,z%>).0 by A4,Th27
+      .=<%x%>.0 by A2,Def3
+      .=x by Def4;
+    1 in (1+1) & len <%x,y%> = 2 by Th38,NAT_1:45;
+    hence p.1 =<%x,y%>.1 by A4,Def3
+      .=y by Th38;
+    thus p.2 =(<%x,y%>^<%z%>).(len (<%x,y%>) + 0) by A4,Th38
+      .= <%z%>.0 by A3,Def3
+      .= z by Def4;
   end;
   assume that
 A5: len p = 3 and
@@ -945,30 +925,83 @@ A7: p.1 = y and
 A8: p.2 = z;
 A9: for k st k in dom <%x,y%> holds p.k=<%x,y%>.k
   proof
-A10: len <%x,y%> = 2 by Th42;
+A10: len <%x,y%> = 2 by Th38;
     let k such that
 A11: k in dom <%x,y%>;
-A12: k=1 implies p.k=<%x,y%>.k by A7,Th42;
-    k=0 implies p.k=<%x,y%>.k by A6,Th42;
+A12: k=1 implies p.k=<%x,y%>.k by A7,Th38;
+    k=0 implies p.k=<%x,y%>.k by A6,Th38;
     hence thesis by A11,A10,A12,CARD_1:50,TARSKI:def 2;
   end;
 A13: for k st k in dom <%z%> holds p.( (len <%x,y%>) + k) = <%z%>.k
   proof
     let k;
     assume k in dom <%z%>;
-    then k in {0} by Def5,CARD_1:49;
+    then k in {0} by Def4,CARD_1:49;
     then
 A14: k = 0 by TARSKI:def 1;
-    hence p.( (len <%x,y%>) + k) = p.(2+0) by Th42
-      .=<%z%>.k by A8,A14,Def5;
+    hence p.( (len <%x,y%>) + k) = p.(2+0) by Th38
+      .=<%z%>.k by A8,A14,Def4;
   end;
   dom p = (2+1) by A5
-    .= ((len <%x,y%>) + 1) by Th42
-    .= ((len <%x,y%>) + len <%z%>) by Th36;
-  hence thesis by A9,A13,Def4;
+    .= ((len <%x,y%>) + 1) by Th38
+    .= ((len <%x,y%>) + len <%z%>) by Th33;
+  hence thesis by A9,A13,Def3;
 end;
 
-theorem Th44:
+registration
+  let x;
+  cluster <%x%> -> 1-element;
+  coherence
+   proof
+    thus card <%x%> = 1 by Th33;
+   end;
+  let y;
+  cluster <%x,y%> -> 2-element;
+  coherence
+   proof
+    thus card <%x,y%> = 2 by Th38;
+   end;
+  let z;
+  cluster <%x,y,z%> -> 3-element;
+  coherence
+   proof
+    thus card <%x,y,z%> = 3 by Th39;
+   end;
+end;
+
+registration let n be Nat;
+ cluster n-element -> n-defined for XFinSequence;
+ coherence
+  proof let s be XFinSequence;
+   assume card s = n;
+   hence dom s c= n;
+  end;
+end;
+
+registration let n be Nat, x be set;
+ cluster n --> x -> finite T-Sequence-like;
+ coherence;
+end;
+
+registration let n be Nat;
+ cluster n-element for XFinSequence;
+ existence
+  proof
+   take n --> 0;
+   thus card(n --> 0)= n by FUNCOP_1:13;
+  end;
+end;
+
+registration let n be Nat;
+ cluster -> total for n-element n-defined XFinSequence;
+ coherence
+  proof let s be n-element XFinSequence;
+    card s = n by CARD_1:def 7;
+   hence dom s = n;
+  end;
+end;
+
+theorem Th40:
   p <> {} implies ex q,x st p=q^<%x%>
 proof
   assume p <> {};
@@ -990,27 +1023,27 @@ A5: now
       assume
 A6:   k in n;
       hence p.k=q.k by A2,FUNCT_1:47
-        .=(q^<%p.(len p - 1)%>).k by A2,A6,Def4;
+        .=(q^<%p.(len p - 1)%>).k by A2,A6,Def3;
     end;
 A7: now
       0 in (0+1) by NAT_1:45;
       then
-A8:   0 in dom <%p.(len p - 1)%> by Def5;
+A8:   0 in dom <%p.(len p - 1)%> by Def4;
       assume
 A9:   k in {n};
       hence (q^<%p.(len p - 1)%>).k =(q^<%p.(len p - 1)%>).(len q + 0) by A2,
 TARSKI:def 1
-        .=<%p.(len p - 1)%>.0 by A8,Def4
-        .=p.n by A1,Def5
+        .=<%p.(len p - 1)%>.0 by A8,Def3
+        .=p.n by A1,Def4
         .=p.k by A9,TARSKI:def 1;
     end;
-    k in n \/ {n} by A1,A4,Th4;
+    k in n \/ {n} by A1,A4,Th2;
     hence thesis by A5,A7,XBOOLE_0:def 3;
   end;
   take q;
   take p.(len p - 1);
-  dom(q^<%p.(len p - 1)%>) = (len q + len <%p.(len p - 1)%>) by Def4
-    .= dom p by A1,A2,Th36;
+  dom(q^<%p.(len p - 1)%>) = (len q + len <%p.(len p - 1)%>) by Def3
+    .= dom p by A1,A2,Th33;
   hence q^<%p.(len p - 1)%>=p by A3,FUNCT_1:2;
 end;
 
@@ -1063,9 +1096,9 @@ A6:   R[n];
 A7:     len p = n+1;
         then p <> {};
         then consider w being XFinSequence, x such that
-A8:     p = w^<%x%> by Th44;
-        len p = len w + len <%x%> by A8,Def4
-        .= len w+1 by Def5;
+A8:     p = w^<%x%> by Th40;
+        len p = len w + len <%x%> by A8,Def3
+        .= len w+1 by Def4;
         then P[w] by A3,A6,A7;
         hence P[p] by A8,A2;
       end;
@@ -1094,16 +1127,16 @@ A3: p^q=(r^<%x%>)^s and
 A4: len p <= len (r^<%x%>);
 A5: now
       assume len p <> len(r^<%x%>);
-      then len p <> len r + len <%x%> by Def4;
+      then len p <> len r + len <%x%> by Def3;
       then
-A6:   len p <> len r + 1 by Th36;
-      len p <= len r + len <%x%> by A4,Def4;
+A6:   len p <> len r + 1 by Th33;
+      len p <= len r + len <%x%> by A4,Def3;
       then
-A7:   len p <= len r + 1 by Th36;
-      p^q=r^(<%x%>^s) by A3,Th30;
+A7:   len p <= len r + 1 by Th33;
+      p^q=r^(<%x%>^s) by A3,Th27;
       then consider t being XFinSequence such that
 A8:   p^t = r by A2,A6,A7,NAT_1:8;
-      p^(t^<%x%>) = r^<%x%> by A8,Th30;
+      p^(t^<%x%>) = r^<%x%> by A8,Th27;
       hence thesis;
     end;
     now
@@ -1114,11 +1147,10 @@ A10:  for k st k in dom p holds p.k=(r^<%x%>).k
         let k;
         assume
 A11:    k in dom p;
-        hence p.k = (r^<%x%>^s).k by A3,Def4
-          .=(r^<%x%>).k by A9,A11,Def4;
+        hence p.k = (r^<%x%>^s).k by A3,Def3
+          .=(r^<%x%>).k by A9,A11,Def3;
       end;
-      p^{} = p by Th32
-        .=r^<%x%> by A9,A10,Th10;
+      p^{} =r^<%x%> by A9,A10,Th8;
       hence thesis;
     end;
     hence thesis by A5;
@@ -1130,8 +1162,7 @@ A12: P[{}]
     p^q={}^s and
 A13: len p <= len {};
     take {};
-    thus p^{} = p by Th32
-      .= {} by A13;
+    thus p^{} = {} by A13;
   end;
   for r holds P[r] from IndXSeq(A12,A1);
   hence thesis;
@@ -1140,7 +1171,7 @@ end;
 definition
   let D be set;
   func D^omega -> set means
-  :Def8:
+  :Def7:
   x in it iff x is XFinSequence of D;
   existence
   proof
@@ -1152,7 +1183,7 @@ A1: x in X iff x in bool [:NAT,D:] & P[x] from XBOOLE_0:sch 1;
     thus x in X implies x is XFinSequence of D by A1;
     assume x is XFinSequence of D;
     then reconsider p = x as XFinSequence of D;
-    reconsider p as PartFunc of NAT,D by Th15;
+    reconsider p as PartFunc of NAT,D by Th12;
     p c= [:NAT,D:];
     hence thesis by A1;
   end;
@@ -1170,19 +1201,19 @@ registration
   coherence
   proof
     set f = the XFinSequence of D;
-    f in D^omega by Def8;
+    f in D^omega by Def7;
     hence thesis;
   end;
 end;
 
 theorem
-  x in D^omega iff x is XFinSequence of D by Def8;
+  x in D^omega iff x is XFinSequence of D by Def7;
 
 theorem
   {} in D^omega
 proof
   {} = <%>D;
-  hence thesis by Def8;
+  hence thesis by Def7;
 end;
 
 scheme
@@ -1284,7 +1315,7 @@ end;
 
 :: 2009.0929, A.T.
 
-theorem Th49:
+theorem Th45:
   for x1, x2, x3, x4 being set st
    p = <%x1%>^<%x2%>^<%x3%>^<%x4%>
   holds len p = 4 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4
@@ -1295,19 +1326,19 @@ A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>;
   set p13 = <%x1%>^<%x2%>^<%x3%>;
 A2: p13 = <%x1, x2, x3%>;
   then
-A3: len p13 = 3 by Th43;
-A4: p13.0 = x1 & p13.1 = x2 by A2,Th43;
-A5: p13.2 = x3 by A2,Th43;
-  thus len p = len p13 + len <%x4%> by A1,Def4
-    .= 3 + 1 by A3,Th36
+A3: len p13 = 3 by Th39;
+A4: p13.0 = x1 & p13.1 = x2 by A2,Th39;
+A5: p13.2 = x3 by A2,Th39;
+  thus len p = len p13 + len <%x4%> by A1,Def3
+    .= 3 + 1 by A3,Th33
     .= 4;
    0 in 3 & 1 in 3 & 2 in 3 by CARD_1:51,ENUMSET1:def 1;
-  hence p.0 = x1 & p.1 = x2 & p.2 = x3 by A1,A4,A5,Def4,A3;
-  thus p.3 = p.len p13 by A2,Th43
-    .= x4 by A1,Th40;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 by A1,A4,A5,Def3,A3;
+  thus p.3 = p.len p13 by A2,Th39
+    .= x4 by A1,Th36;
 end;
 
-theorem Th50:
+theorem Th46:
   for x1, x2, x3, x4, x5 being set st
      p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>
   holds len p = 5 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5
@@ -1316,19 +1347,19 @@ proof
   assume
 A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>;
   set p14 = <%x1%>^<%x2%>^<%x3%>^<%x4%>;
-A2: len p14 = 4 by Th49;
-A3: p14.0 = x1 & p14.1 = x2 by Th49;
-A4: p14.2 = x3 & p14.3 = x4 by Th49;
-  thus len p = len p14 + len <%x5%> by A1,Def4
-    .= 4 + 1 by A2,Th36
+A2: len p14 = 4 by Th45;
+A3: p14.0 = x1 & p14.1 = x2 by Th45;
+A4: p14.2 = x3 & p14.3 = x4 by Th45;
+  thus len p = len p14 + len <%x5%> by A1,Def3
+    .= 4 + 1 by A2,Th33
     .= 5;
    0 in 4 & 1 in 4 & 2 in 4 & 3 in 4 by CARD_1:52,ENUMSET1:def 2;
-  hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 by A1,A3,A4,Def4,A2;
-  thus p.4 = p.len p14 by Th49
-    .= x5 by A1,Th40;
+  hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 by A1,A3,A4,Def3,A2;
+  thus p.4 = p.len p14 by Th45
+    .= x5 by A1,Th36;
 end;
 
-theorem Th51:
+theorem Th47:
   for x1, x2, x3, x4, x5, x6 being set st
      p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>
   holds len p = 6 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
@@ -1338,21 +1369,21 @@ proof
   assume
 A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>;
   set p15 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>;
-A2: len p15 = 5 by Th50;
-A3: p15.0 = x1 & p15.1 = x2 by Th50;
-A4: p15.2 = x3 & p15.3 = x4 by Th50;
-A5: p15.4 = x5 by Th50;
-  thus len p = len p15 + len <%x6%> by A1,Def4
-    .= 5 + 1 by A2,Th36
+A2: len p15 = 5 by Th46;
+A3: p15.0 = x1 & p15.1 = x2 by Th46;
+A4: p15.2 = x3 & p15.3 = x4 by Th46;
+A5: p15.4 = x5 by Th46;
+  thus len p = len p15 + len <%x6%> by A1,Def3
+    .= 5 + 1 by A2,Th33
     .= 6;
    0 in 5 & 1 in 5 & 2 in 5 & 3 in 5 & 4 in 5 by CARD_1:53,ENUMSET1:def 3;
   hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5
-  by A1,A3,A4,A5,Def4,A2;
-  thus p.5 = p.len p15 by Th50
-    .= x6 by A1,Th40;
+  by A1,A3,A4,A5,Def3,A2;
+  thus p.5 = p.len p15 by Th46
+    .= x6 by A1,Th36;
 end;
 
-theorem Th52:
+theorem Th48:
   for x1, x2, x3, x4, x5, x6, x7 being set st
      p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>
   holds len p = 7 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
@@ -1362,22 +1393,22 @@ proof
   assume
 A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>;
   set p16 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>;
-A2: len p16 = 6 by Th51;
-A3: p16.0 = x1 & p16.1 = x2 by Th51;
-A4: p16.2 = x3 & p16.3 = x4 by Th51;
-A5: p16.4 = x5 & p16.5 = x6 by Th51;
-  thus len p = len p16 + len <%x7%> by A1,Def4
-    .= 6 + 1 by A2,Th36
+A2: len p16 = 6 by Th47;
+A3: p16.0 = x1 & p16.1 = x2 by Th47;
+A4: p16.2 = x3 & p16.3 = x4 by Th47;
+A5: p16.4 = x5 & p16.5 = x6 by Th47;
+  thus len p = len p16 + len <%x7%> by A1,Def3
+    .= 6 + 1 by A2,Th33
     .= 7;
    0 in 6 & 1 in 6 & 2 in 6 & 3 in 6 & 4 in 6 & 5 in 6
     by CARD_1:54,ENUMSET1:def 4;
   hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 & p.5 = x6
-  by A1,A3,A4,A5,Def4,A2;
-  thus p.6 = p.len p16 by Th51
-    .= x7 by A1,Th40;
+  by A1,A3,A4,A5,Def3,A2;
+  thus p.6 = p.len p16 by Th47
+    .= x7 by A1,Th36;
 end;
 
-theorem Th53:
+theorem Th49:
   for x1,x2,x3,x4, x5, x6, x7, x8 being set st
     p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>
   holds len p = 8 & p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 &
@@ -1387,20 +1418,20 @@ proof
   assume
 A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>;
   set p17 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>;
-A2: len p17 = 7 by Th52;
-A3: p17.0 = x1 & p17.1 = x2 by Th52;
-A4: p17.2 = x3 & p17.3 = x4 by Th52;
-A5: p17.4 = x5 & p17.5 = x6 by Th52;
-A6: p17.6 = x7 by Th52;
-  thus len p = len p17 + len <%x8%> by A1,Def4
-    .= 7 + 1 by A2,Th36
+A2: len p17 = 7 by Th48;
+A3: p17.0 = x1 & p17.1 = x2 by Th48;
+A4: p17.2 = x3 & p17.3 = x4 by Th48;
+A5: p17.4 = x5 & p17.5 = x6 by Th48;
+A6: p17.6 = x7 by Th48;
+  thus len p = len p17 + len <%x8%> by A1,Def3
+    .= 7 + 1 by A2,Th33
     .= 8;
    0 in 7 & 1 in 7 & 2 in 7 & 3 in 7 & 4 in 7 & 5 in 7 & 6 in 7
     by CARD_1:55,ENUMSET1:def 5;
   hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 & p.5 = x6 &
-  p.6 = x7 by A1,A3,A4,A5,A6,Def4,A2;
-  thus p.7 = p.len p17 by Th52
-    .= x8 by A1,Th40;
+  p.6 = x7 by A1,A3,A4,A5,A6,Def3,A2;
+  thus p.7 = p.len p17 by Th48
+    .= x8 by A1,Th36;
 end;
 
 theorem
@@ -1413,20 +1444,20 @@ proof
   assume
 A1: p = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>^<%x9%>;
   set p17 = <%x1%>^<%x2%>^<%x3%>^<%x4%>^<%x5%>^<%x6%>^<%x7%>^<%x8%>;
-A2: len p17 = 8 by Th53;
-A3: p17.0 = x1 & p17.1 = x2 by Th53;
-A4: p17.2 = x3 & p17.3 = x4 by Th53;
-A5: p17.4 = x5 & p17.5 = x6 by Th53;
-A6: p17.6 = x7 & p17.7 = x8 by Th53;
-  thus len p = len p17 + len <%x9%> by A1,Def4
-    .= 8 + 1 by A2,Th36
+A2: len p17 = 8 by Th49;
+A3: p17.0 = x1 & p17.1 = x2 by Th49;
+A4: p17.2 = x3 & p17.3 = x4 by Th49;
+A5: p17.4 = x5 & p17.5 = x6 by Th49;
+A6: p17.6 = x7 & p17.7 = x8 by Th49;
+  thus len p = len p17 + len <%x9%> by A1,Def3
+    .= 8 + 1 by A2,Th33
     .= 9;
    0 in 8 & 1 in 8 & 2 in 8 & 3 in 8 & 4 in 8 & 5 in 8 & 6 in 8 & 7 in 8
     by CARD_1:56,ENUMSET1:def 6;
   hence p.0 = x1 & p.1 = x2 & p.2 = x3 & p.3 = x4 & p.4 = x5 & p.5 = x6 &
-  p.6 = x7 & p.7 = x8 by A1,A3,A4,A5,A6,Def4,A2;
-  thus p.8 = p.len p17 by Th53
-    .= x9 by A1,Th40;
+  p.6 = x7 & p.7 = x8 by A1,A3,A4,A5,A6,Def3,A2;
+  thus p.8 = p.len p17 by Th49
+    .= x9 by A1,Th36;
 end;
 
 :: K.P. 12.2009
@@ -1436,7 +1467,7 @@ theorem :: FINSEQ_2:7
 proof
   assume n <len p;
   then n in dom p by NAT_1:44;
-  hence thesis by Def4;
+  hence thesis by Def3;
 end;
 
 theorem :: FINSEQ_2:10
@@ -1447,7 +1478,7 @@ proof
   hence thesis by RELAT_1:68,XBOOLE_1:18;
 end;
 
-theorem Th57: :: FINSEQ_1:11
+theorem Th53: :: FINSEQ_1:11
   n <=len p & k in n
   implies (p|n).k = p.k & k in dom p
 proof
@@ -1460,7 +1491,7 @@ A3: n c= dom p by A1,NAT_1:39;
   hence thesis by A2,A3,FUNCT_1:47;
 end;
 
-theorem Th58: :: FINSEQ_1:12
+theorem Th54: :: FINSEQ_1:12
   n <= len p implies len(p|n) = n
 proof
   assume n <= len p;
@@ -1475,7 +1506,7 @@ proof
   hence thesis by NAT_1:39;
 end;
 
-theorem Th60: :: FINSEQ_1:14
+theorem Th56: :: FINSEQ_1:14
   len p = n+1 implies p = (p|n) ^ <% p.n %>
 proof
   set pn = p|n;
@@ -1483,7 +1514,7 @@ proof
   assume
 A1: len p = n+1;
 then A2: n < len p by NAT_1:13;
-then A3: len pn = n by Th58;
+then A3: len pn = n by Th54;
 A4: now
     let m be Nat;
     assume m in dom p;
@@ -1494,25 +1525,25 @@ A5: m <= len pn by A1,A3,NAT_1:13;
       per cases;
       case
         m = len pn;
-        hence p.m = (pn^<%x%>).m by A3,Th40;
+        hence p.m = (pn^<%x%>).m by A3,Th36;
       end;
       case
         m <> len pn;
         then m< len pn by A5,XXREAL_0:1;
         then
 A6:     m in dom pn by NAT_1:44;
-        hence (pn^<%x%>).m = pn.m by Def4
-          .= p.m by A2,A3,A6,Th57;
+        hence (pn^<%x%>).m = pn.m by Def3
+          .= p.m by A2,A3,A6,Th53;
       end;
     end;
     hence p.m = (pn^<%x%>).m;
   end;
-  len (pn^<%x%>) = n + len <%x%> by A3,Def4
-    .= len p by A1,Def5;
-  hence thesis by A4,Th10;
+  len (pn^<%x%>) = n + len <%x%> by A3,Def3
+    .= len p by A1,Def4;
+  hence thesis by A4,Th8;
 end;
 
-theorem Th61: :: CATALAN2:1
+theorem Th57: :: CATALAN2:1
   (p^q)|dom p = p
 proof
     set r=(p^q)|(dom p);
@@ -1521,16 +1552,16 @@ A1: now
 A2: k < len p;
 A3: k in dom p by A2,NAT_1:44;
     then
-A4: (p^q).k=p.k by Def4;
+A4: (p^q).k=p.k by Def3;
     k+0<len p+len q by A2,XREAL_1:8;
     then k in len p+len q by NAT_1:44;
-    then k in dom (p^q) by Def4;
+    then k in dom (p^q) by Def3;
     then k in dom (p^q)/\ dom p by A3,XBOOLE_0:def 4;
     hence r.k=p.k by A4,FUNCT_1:48;
   end;
-  dom p c= dom (p^q) by Th24;
+  dom p c= dom (p^q) by Th21;
   then len r= len p by RELAT_1:62;
-  hence thesis by A1,Th11;
+  hence thesis by A1,Th9;
 end;
 
 theorem :: CATALAN2:2
@@ -1539,7 +1570,7 @@ proof
   assume n <= dom p;
   then n c= dom p by NAT_1:39;
   then ((p^q)|dom p)|n=(p^q)|n by RELAT_1:74;
-  hence thesis by Th61;
+  hence thesis by Th57;
 end;
 
 theorem :: CATALAN2:3
@@ -1551,7 +1582,7 @@ A1: n = dom p + k;
     per cases;
     suppose
 A2:   n>=len (p^q);
-      then n>=len p+len q by Def4;
+      then n>=len p+len q by Def3;
       then k >= len q by A1,XREAL_1:8;
       then dom q c= k by NAT_1:39;
       then
@@ -1562,12 +1593,12 @@ A3:   q|k = q by RELAT_1:68;
     suppose
 A4:   n<len (p^q);
       then
-A5:   len ((p^q)|n)=n by Th14;
-      n<len p+len q by A4,Def4;
+A5:   len ((p^q)|n)=n by Th11;
+      n<len p+len q by A4,Def3;
       then k < len q by A1,XREAL_1:6;
-      then len (q|k)=k by Th14;
+      then len (q|k)=k by Th11;
       then
-A6:   len (p^(q|k))=len p + k by Def4;
+A6:   len (p^(q|k))=len p + k by Def3;
       now
         let m be Nat such that
 A7:     m in dom ((p^q)|n);
@@ -1575,7 +1606,7 @@ A8:  m < len ((p^q)|n) by A7,NAT_1:44;then
         m <len (p^q) by A4,A5,XXREAL_0:2;
         then
 A9:     m in len (p^q) by NAT_1:44;
-        m in n by A4,Th14,A7;
+        m in n by A4,Th11,A7;
         then
 A10:     m in dom (p^q) /\ n by A9,XBOOLE_0:def 4;
         then
@@ -1585,17 +1616,17 @@ A11:    ((p^q)|n).m=(p^q).m by FUNCT_1:48;
           suppose
             m<dom p;
             then m in dom p by NAT_1:44;
-            then (p^(q|k)).m=p.m & (p^q).m=p.m by Def4;
+            then (p^(q|k)).m=p.m & (p^q).m=p.m by Def3;
             hence ((p^q)|n).m=(p^(q|k)).m by A10,FUNCT_1:48;
           end;
           suppose
 A12:        m>=dom p;
             m < len (p^q) by A4,A5,A8,XXREAL_0:2;
             then
-A13:        q.(m-len p)=(p^q).m by A12,Th22;
+A13:        q.(m-len p)=(p^q).m by A12,Th19;
 A14:        m-len p+len p< len (p^q) by A4,A5,A8,XXREAL_0:2;
 A15:        m-len p is Nat by A12,NAT_1:21;
-            len (p^q)=len p+len q by Def4;
+            len (p^q)=len p+len q by Def3;
             then m-len p<len q by A14,XREAL_1:6;
             then
 A16:        m-len p in len q by A15,NAT_1:44;
@@ -1603,13 +1634,13 @@ A16:        m-len p in len q by A15,NAT_1:44;
             then m-len p in k by A15,NAT_1:44;
             then
 A17:        m-len p in k/\dom q by A16,XBOOLE_0:def 4;
-            (p^(q|k)).m=(q|k).(m-len p) by A1,A6,A5,A12,A8,Th22;
+            (p^(q|k)).m=(q|k).(m-len p) by A1,A6,A5,A12,A8,Th19;
             hence ((p^q)|n).m=(p^(q|k)).m by A11,A13,A17,FUNCT_1:48;
           end;
         end;
         hence ((p^q)|n).m=(p^(q|k)).m;
       end;
-      hence thesis by Th10,A6,A1,A4,Th14;
+      hence thesis by Th8,A6,A1,A4,Th11;
     end;
   end;
   hence thesis;
@@ -1625,7 +1656,7 @@ proof
       then len p c= n by NAT_1:39;
       then
 A1:   p|n=p by RELAT_1:68;
-      p^{}=p by Th32;
+      p^{}=p;
       hence thesis by A1;
     end;
     suppose
@@ -1645,14 +1676,12 @@ A5:     p=(p|(k+1))^q by A3,A4;
         then
 A6:     (p|(k+1))|k =p|k by RELAT_1:74;
          len p-m<=len p-0 by XREAL_1:10;
-         then k+1=len p & dom (p | len p)=len p or k+1<len p by A4,RELAT_1:68
-,XXREAL_0:1;
-    then len (p | (k+1)) = k+1 by Th58;
-        then p|(k+1)=(p|(k+1))|k^<%(p|(k+1)).k%> by Th60;
-        then p=(p|k)^(<%(p|(k+1)).k%>^q) by A5,A6,Th30;
+        then len (p | (k+1)) = k+1 by Th54,A4;
+        then p|(k+1)=(p|(k+1))|k^<%(p|(k+1)).k%> by Th56;
+        then p=(p|k)^(<%(p|(k+1)).k%>^q) by A5,A6,Th27;
         hence thesis;
       end;
-      p|(len p-0)=p & p^{}=p by Th32,RELAT_1:68;
+      p|(len p-0)=p & p^{}=p by RELAT_1:68;
       then
 A7:   P[0];
 A8:      for m be Nat holds P[m] from NAT_1:sch 2(A7,A2);
@@ -1686,7 +1715,8 @@ A4:   len p = i + j;
 A5:     j = 0;
         take q1 = p;
         take q2 = {};
-        thus thesis by A4,A5,Th32;
+         p^{} = p;
+        hence thesis by A4,A5;
       end;
       suppose
         j > 0;
@@ -1694,17 +1724,17 @@ A5:     j = 0;
 A6:     j = k + 1 by NAT_1:6;
         p <> {} by A3;
         then consider q being XFinSequence, x such that
-A7:     p = q ^ <%x%> by Th44;
-A8:     n + 1 = len q + len <%x%> by A3,A7,Def4
-          .= len q + 1 by Th36;
+A7:     p = q ^ <%x%> by Th40;
+A8:     n + 1 = len q + len <%x%> by A3,A7,Def3
+          .= len q + 1 by Th33;
         n = i + k by A3,A4,A6;
         then consider q1, q2 being XFinSequence such that
 A9:     len q1 = i and
 A10:    len q2 = k and
 A11:    q = q1 ^ q2 by A2,A8;
-A12:    len (q2 ^ <%x%>) = len q2 + len <%x%> by Def4
-          .= j by A6,A10,Th36;
-        p = q1 ^ (q2 ^ <%x%>) by A7,A11,Th30;
+A12:    len (q2 ^ <%x%>) = len q2 + len <%x%> by Def3
+          .= j by A6,A10,Th33;
+        p = q1 ^ (q2 ^ <%x%>) by A7,A11,Th27;
         hence thesis by A9,A12;
       end;
     end;
@@ -1718,9 +1748,9 @@ A14: len p = 0 and
 A15: len p = i + j;
     p = {} by A14;
     then
-A16: p = {} ^ {} by Th32;
+A16: p = {} ^ {};
     len {} = i by A14,A15;
-    hence thesis by A14,A15,A16;
+    hence thesis by A15,A16;
   end;
   for n holds P[n] from NAT_1:sch 2(A13, A1);
   hence thesis;
@@ -1730,14 +1760,14 @@ theorem :: FSM_3:6
    <%x%>^p = <%y%>^q implies x = y & p = q
 proof
   assume A1: <%x%>^p = <%y%>^q;
-  (<%x%>^p).0 = x by Th39;
-  then x = y by A1,Th39;
-  hence thesis by A1,Th31;
+  (<%x%>^p).0 = x by Th35;
+  then x = y by A1,Th35;
+  hence thesis by A1,Th28;
 end;
 
 definition
   let D be set,q be FinSequence of D;
-  func FS2XFS q -> XFinSequence of D means :Def9:
+  func FS2XFS q -> XFinSequence of D means :Def8:
   len it=len q & for i being Nat st i < len q holds q.(i+1)=it.i;
   existence
   proof
@@ -1800,7 +1830,7 @@ A13:    i<len p1;
         then q.(i+1)=p1.i by A9,A10;
         hence thesis by A9,A12,A13;
       end;
-      hence thesis by A9,A11,Th11;
+      hence thesis by A9,A11,Th9;
     end;
   end;
 end;
@@ -1879,36 +1909,9 @@ A16:    1<=i & i<=len p1;
   end;
 end;
 
-theorem Th67:
+theorem
   for D being set, n being Nat, r being set st r in D holds
-  (n-->r) is XFinSequence of D
-proof
-  let D be set, n be Nat, r be set;
-  reconsider p=(n-->r) as XFinSequence by Th16;
-  assume
-A1: r in D;
-  now
-    per cases;
-    case
-      n<>0;
-      then
-A2:   rng p={r} by FUNCOP_1:8;
-      rng p c= D
-      proof
-        let x be set;
-        assume x in rng p;
-        hence thesis by A1,A2,TARSKI:def 1;
-      end;
-      hence thesis by RELAT_1:def 19;
-    end;
-    case
-      n=0;
-      then (n-->r)={};
-      hence thesis by Th19;
-    end;
-  end;
-  hence thesis;
-end;
+  (n-->r) is XFinSequence of D;
 
 definition
   let D be non empty set;
@@ -1927,20 +1930,18 @@ A2: NAT c= D;
     then reconsider x=len q as Element of D by A2;
     0 in NAT;
     then reconsider r=0 as Element of D by A2;
-    reconsider q5= ((n-'len q-'1)-->r) as XFinSequence of D by Th67;
-    <%x%> ^ (FS2XFS q) <>{} by Th33;
+    reconsider q5= ((n-'len q-'1)-->r) as XFinSequence of D;
+    <%x%> ^ (FS2XFS q) <>{} by Th30;
     then reconsider
-    p0=<%x%> ^ (FS2XFS q)^q5 as non empty XFinSequence of D by Th33;
-    0 in 1 by NAT_1:44;
-    then
-A3: 0 in dom (<%x%>) by Def5;
-A4: len <%x%>=1 by Def5;
+    p0=<%x%> ^ (FS2XFS q)^q5 as non empty XFinSequence of D by Th30;
+A3: 0 in dom (<%x%>) by NAT_1:44;
+A4: len <%x%>=1 by Def4;
     0 in len <%x%> + len (FS2XFS q) by NAT_1:44;
-    then 0 in len (<%x%> ^ (FS2XFS q)) by Th20;
+    then 0 in len (<%x%> ^ (FS2XFS q)) by Def3;
     then
-A5: p0.0=(<%x%> ^ (FS2XFS q)).0 by Def4
-      .=(<%x%>).0 by A3,Def4
-      .=x by Def5;
+A5: p0.0=(<%x%> ^ (FS2XFS q)).0 by Def3
+      .=(<%x%>).0 by A3,Def3
+      .=x by Def4;
 A6: for i st 1<=i & i<= len q holds p0.i=q.i
     proof
       let i;
@@ -1956,14 +1957,14 @@ A9:   i-'1=i-1 by XREAL_0:def 2;
 A10:  i-'1 <len q by A8,A9,XXREAL_0:2;
       then i-'1 in len q by NAT_1:44;
       then
-A11:  i-'1 in len (FS2XFS q) by Def9;
+A11:  i-'1 in len (FS2XFS q) by Def8;
       i<1+len q by A8,NAT_1:13;
-      then i< (len (<%x%>)+len (FS2XFS q)) by A4,Def9;
+      then i< (len (<%x%>)+len (FS2XFS q)) by A4,Def8;
       then i in (len (<%x%>)+len (FS2XFS q)) by NAT_1:44;
-      then i in len (<%x%> ^ (FS2XFS q)) by Th20;
-      then p0.i =(<%x%>^(FS2XFS q)).(1+(i-'1)) by A9,Def4
-        .=(FS2XFS q).(i-'1) by A4,A11,Def4
-        .=q.(i-'1+1) by A10,Def9
+      then i in len (<%x%> ^ (FS2XFS q)) by Def3;
+      then p0.i =(<%x%>^(FS2XFS q)).(1+(i-'1)) by A9,Def3
+        .=(FS2XFS q).(i-'1) by A4,A11,Def3
+        .=q.(i-'1+1) by A10,Def8
         .=q.i by A9;
       hence thesis;
     end;
@@ -1980,8 +1981,8 @@ A16: for j being Nat st len q<j & j<n holds p0.j=0
       assume that
 A17:  len q<j and
 A18:  j<n;
-A19:  len (<%x%> ^ (FS2XFS q)) =len (<%x%>) + len (FS2XFS q) by Th20
-        .=1+len q by A4,Def9;
+A19:  len (<%x%> ^ (FS2XFS q)) =len (<%x%>) + len (FS2XFS q) by Def3
+        .=1+len q by A4,Def8;
       len q<n by A17,A18,XXREAL_0:2;
       then
 A20:  n-len q>0 by XREAL_1:50;
@@ -1999,14 +2000,14 @@ A23:  j-'(1+len q)=j-(1+len q) by XREAL_0:def 2;
       then
 A24:  j-'len (<%x%> ^ (FS2XFS q)) in (n-'len q-'1) by A19,A23,A22,NAT_1:44;
       j =len (<%x%> ^ (FS2XFS q))+(j-'len (<%x%> ^ (FS2XFS q))) by A19,A23;
-      then p0.j=q5.(j-'len (<%x%> ^ (FS2XFS q))) by A15,A24,Def4
+      then p0.j=q5.(j-'len (<%x%> ^ (FS2XFS q))) by A15,A24,Def3
         .=0 by A24,FUNCOP_1:7;
       hence thesis;
     end;
-    len p0=len (<%x%> ^ (FS2XFS q)) + len q5 by Th20
-      .=len <%x%> + len (FS2XFS q) + len q5 by Th20
-      .= 1 + len (FS2XFS q) + len q5 by Th36
-      .=1 + len q + len q5 by Def9
+    len p0=len (<%x%> ^ (FS2XFS q)) + len q5 by Def3
+      .=len <%x%> + len (FS2XFS q) + len q5 by Def3
+      .= 1 + len (FS2XFS q) + len q5 by Th33
+      .=1 + len q + len q5 by Def8
       .=1+len q+(n-'len q-'1) by FUNCOP_1:13
       .=(n-(len q+1))+(len q+1) by A13,A14,XREAL_0:def 2
       .=n;
@@ -2047,7 +2048,7 @@ A35:      len q<i & i<n;
       end;
       hence thesis;
     end;
-    hence thesis by A26,A30,Th11;
+    hence thesis by A26,A30,Th9;
   end;
 end;
 
@@ -2060,7 +2061,7 @@ definition
   assume that
 A1: p.0 is Nat and
 A2: p.0 in len p;
-  func XFS2FS*(p) -> FinSequence of D means :Def12:
+  func XFS2FS*(p) -> FinSequence of D means :Def11:
   for m be Nat st m = p.0 holds
   len it =m & for i st 1<=i & i<= m holds it.i=p.i;
   existence
@@ -2141,17 +2142,16 @@ A1: p.0=0 and
 A2: 0<len p;
   set q= XFS2FS*(p);
   0 in len p by A2,NAT_1:44;
-  then len q=0 by A1,Def12;
-  then q=<*>D;
+  then len q=0 by A1,Def11;
   hence thesis;
 end;
 
-:: from SCMNORM, 2010.01.11, A.T.
+:: from EXTPRO_1, 2010.01.11, A.T.
 
 definition
   let F be Function;
   attr F is initial means
-:Def13:
+:Def12:
   for m,n being Nat st n in dom F & m < n holds m in dom F;
 end;
 
@@ -2189,7 +2189,7 @@ registration
   end;
 end;
 
-theorem Th69:
+theorem Th65:
  for F being non empty initial NAT-defined Function holds 0 in dom F
 proof
  let F be non empty initial NAT-defined Function;
@@ -2198,7 +2198,7 @@ A1: x in dom F by XBOOLE_0:def 1;
   dom F c= NAT by RELAT_1:def 18;
   then reconsider x as Element of NAT by A1;
   x = 0 or 0 < x;
- hence 0 in dom F by A1,Def13;
+ hence 0 in dom F by A1,Def12;
 end;
 
 registration
@@ -2213,26 +2213,23 @@ A2:   dom F c= NAT by RELAT_1:def 18;
     proof let x;
      assume
 A3:    x in dom F;
-      then reconsider i = x as Nat by A2;
+      then reconsider i = x as Nat by A1;
      let y;
      assume
 A4:   y in x;
-      x in NAT by A3,A2;
-      then x c= NAT by ORDINAL1:def 2;
-      then y in NAT by A4;
-      then reconsider j = y as Nat;
+      reconsider j = y as Nat by A4,A3,A2;
       j < i by A4,NAT_1:44;
-     hence y in dom F by A1,A3,Def13;
+     hence y in dom F by A1,A3,Def12;
     end;
   let x,y;
   assume x in dom F & y in dom F;
-    then reconsider x,y as Ordinal by A2;
+    then reconsider x,y as Ordinal by A1;
     x in y or x = y or y in x by ORDINAL1:14;
    hence thesis;
   end;
 end;
 
-theorem Th70:
+theorem
  for F being finite initial NAT-defined Function
  for n being Nat holds
   n in dom F iff n < card F by NAT_1:44;
@@ -2246,7 +2243,7 @@ proof
   let F be initial NAT-defined Function,
   G be NAT-defined Function;
   assume dom F = dom G;
-  hence for m,l being Nat st l in dom G & m < l holds m in dom G by Def13;
+  hence for m,l being Nat st l in dom G & m < l holds m in dom G by Def12;
 end;
 
 theorem
@@ -2259,13 +2256,13 @@ proof
     assume
 A1: x in dom F;
     then reconsider f = x as Element of NAT;
-    f < card F by A1,Th70;
+    f < card F by A1,NAT_1:44;
     hence x in { k where k is Element of NAT: k < card F };
   end;
   let x be set;
   assume x in { k where k is Element of NAT: k < card F };
   then ex k being Element of NAT st x = k & k < card F;
-  hence thesis by Th70;
+  hence thesis by NAT_1:44;
 end;
 
 theorem
@@ -2288,7 +2285,7 @@ A3: x in dom G;
 A4: LastLoc F in dom F by VALUED_1:30;
     x <= LastLoc F by A2,A3,VALUED_1:32;
     then x < LastLoc F or x = LastLoc F by XXREAL_0:1;
-    hence thesis by A4,Def13;
+    hence thesis by A4,Def12;
   end;
   hence thesis by A1,GRFUNC_1:3;
 end;
@@ -2298,11 +2295,11 @@ theorem
   LastLoc F = card F -' 1
 proof
   let F be initial non empty NAT-defined finite Function;
-  consider k being natural number such that
+  consider k being Nat such that
 A1: LastLoc F = k;
   reconsider k as Element of NAT by ORDINAL1:def 12;
   LastLoc F in dom F by VALUED_1:30;
-  then k < card F by A1,Th70;
+  then k < card F by A1,NAT_1:44;
   then
 A2: k <= card F -' 1 by NAT_D:49;
   per cases by A2,XXREAL_0:1;
@@ -2310,7 +2307,7 @@ A2: k <= card F -' 1 by NAT_D:49;
     k < card F -' 1;
     then k+1 < card F -' 1 + 1 by XREAL_1:6;
     then k+1 < card F by NAT_1:14,XREAL_1:235;
-    then k+1 in dom F by Th70;
+    then k+1 in dom F by NAT_1:44;
     then
 A3: k+1 <= k by A1,VALUED_1:32;
     k <= k+1 by NAT_1:11;
@@ -2325,13 +2322,7 @@ end;
 
 theorem
   for F being initial non empty NAT-defined finite Function holds
-  FirstLoc F = 0
-proof
-  let F be initial non empty NAT-defined finite Function;
-  0 in dom F by Th69;
-  then FirstLoc F <= 0 by VALUED_1:35;
-  hence thesis;
-end;
+  FirstLoc F = 0 by Th65,VALUED_1:35;
 
 registration
   let F be initial non empty NAT-defined finite Function;
@@ -2362,7 +2353,7 @@ A4:     dom F \ dom R = dom G by VALUED_1:36;
         then
        l in dom F by A1,XBOOLE_0:def 5;
         then
-A5:     m in dom F by A2,Def13;
+A5:     m in dom F by A2,Def12;
         l in M by A4,A1,XBOOLE_0:def 5;
         then m <> LastLoc F by A2,XXREAL_2:def 8;
         then not m in {LastLoc F} by TARSKI:def 1;
@@ -2388,7 +2379,7 @@ A3: x in { l+card I: l in dom J } by A1,XBOOLE_0:3;
   consider l such that
 A4: x = l+card I and
   l in dom J by A3;
-  l+card I < card I by A2,A4,Th70;
+  l+card I < card I by A2,A4,NAT_1:44;
   hence contradiction by NAT_1:11;
 end;
 
@@ -2399,10 +2390,10 @@ theorem
 proof
   assume not m in dom p;
   then
-A1: m >= card p by Th70;
+A1: m >= card p by NAT_1:44;
   m+1 >= m by NAT_1:11;
   then m+1 >= card p by A1,XXREAL_0:2;
-  hence thesis by Th70;
+  hence thesis by NAT_1:44;
 end;
 
 :: from SCM_COMP, 2010.05.16, A.T.
@@ -2413,20 +2404,20 @@ registration let D be set;
   proof
    let x be set;
    assume x in D^omega;
-   hence x is Function by Def8;
+   hence x is Function by Def7;
   end;
 end;
 
 registration let D be set;
   cluster -> finite T-Sequence-like for Element of D^omega;
-  coherence by Def8;
+  coherence by Def7;
 end;
 
 definition let D be set;
  let f be XFinSequence of D;
  func Down f -> Element of D^omega equals
  f;
- coherence by Def8;
+ coherence by Def7;
 end;
 
 definition let D be set;
@@ -2434,9 +2425,9 @@ definition let D be set;
  redefine func f^g -> Element of D^omega;
  coherence
   proof
-    reconsider g as XFinSequence of D by Def8;
+    reconsider g as XFinSequence of D by Def7;
     f^g is XFinSequence of D;
-   hence thesis by Def8;
+   hence thesis by Def7;
   end;
 end;
 
@@ -2445,49 +2436,42 @@ definition let D be set;
  redefine func f^g -> Element of D^omega;
  coherence
   proof
-    reconsider f,g as XFinSequence of D by Def8;
+    reconsider f,g as XFinSequence of D by Def7;
     f^g is XFinSequence of D;
-   hence thesis by Def8;
+   hence thesis by Def7;
   end;
 end;
 
 :: missing, 2010.05.15, A.T.
 
-theorem Th78:
+theorem Th74:
  p c= p^q
 proof
-A1: dom p c= dom(p^q) by Th24;
-  for x st x in dom p holds (p^q).x = p.x
-  proof let x;
-   assume
-A2:  x in dom p;
-    then reconsider x as Nat;
-    (p^q).x = p.x by A2,Def4;
-   hence thesis;
-  end;
+A1: dom p c= dom(p^q) by Th21;
+  for x st x in dom p holds (p^q).x = p.x by Def3;
  hence thesis by A1,GRFUNC_1:2;
 end;
 
-theorem
+theorem Th75:
   len(p^<%x%>) = len p + 1
  proof
-  thus len(p^<%x%>) = len p + len<%x%> by Th20
-      .= len p + 1 by Th36;
+  thus len(p^<%x%>) = len p + len<%x%> by Def3
+      .= len p + 1 by Th33;
  end;
 
 theorem
  <%x,y%> = (0,1) --> (x,y)
 proof
 A1: dom<%x,y%> = len<%x,y%>
-    .= {0,1} by Th42,CARD_1:50;
-A2: <%x,y%>.0 = x by Th42;
-  <%x,y%>.1 = y by Th42;
+    .= {0,1} by Th38,CARD_1:50;
+A2: <%x,y%>.0 = x by Th38;
+  <%x,y%>.1 = y by Th38;
  hence <%x,y%> = (0,1) --> (x,y) by A1,A2,FUNCT_4:66;
 end;
 
 reserve M for Element of NAT;
 
-theorem Th81:
+theorem Th77:
  p^q = p +* Shift(q, card p)
 proof
 A1: dom Shift(q, card p) = { M+card p:M in dom q } by VALUED_1:def 12;
@@ -2497,7 +2481,7 @@ A1: dom Shift(q, card p) = { M+card p:M in dom q } by VALUED_1:def 12;
       proof assume
 A2:     x in dom(p^q);
         then reconsider k = x as Nat;
-       per cases by A2,Th23;
+       per cases by A2,Th20;
        suppose k in dom p;
        hence x in dom p or x in dom Shift(q, card p);
        end;
@@ -2510,12 +2494,12 @@ A3:    x in dom p or x in dom Shift(q, card p);
      per cases by A3;
      suppose
 A4:    x in dom p;
-      dom p c= dom(p^q) by Th24;
+      dom p c= dom(p^q) by Th21;
      hence x in dom(p^q) by A4;
      end;
      suppose x in dom Shift(q, card p);
       then ex M st x = M+card p & M in dom q by A1;
-     hence x in dom(p^q) by Th26;
+     hence x in dom(p^q) by Th23;
      end;
     end;
    then
@@ -2533,12 +2517,12 @@ A8:   x = M+card p and
 A9:   M in dom q by A7,A1;
      set m = k -' len p;
 A10: len p + m = k by A8,NAT_D:34;
-    hence (p^q).x = q.m by A8,A9,Def4
+    hence (p^q).x = q.m by A8,A9,Def3
        .= Shift(q, card p).x by A8,A9,A10,VALUED_1:def 12;
    end;
    assume not x in dom Shift(q, card p);
     then x in dom p by A6,XBOOLE_0:def 3;
-   hence (p^q).x = p.x by Def4;
+   hence (p^q).x = p.x by Def3;
   end;
  hence p^q = p +* Shift(q, card p) by A5,FUNCT_4:def 1;
 end;
@@ -2546,13 +2530,13 @@ end;
 theorem
  p +* (p ^ q) = p ^ q & (p ^ q) +* p = p ^ q
 proof
-  p c= p ^ q by Th78;
+  p c= p ^ q by Th74;
  hence thesis by FUNCT_4:97,98;
 end;
 
 reserve m,n for Element of NAT;
 
-theorem Th83:
+theorem Th79:
  for I being finite initial NAT-defined Function, J being Function
  holds dom Shift(I,n) misses dom Shift(J,n+card I)
 proof let I be finite initial NAT-defined Function, J be Function;
@@ -2569,28 +2553,27 @@ A5: m in dom I by A2;
   consider l such that
 A6: x = l+(n+card I) and
   l in dom J by A3;
-  m < card I by A5,Th70;
-  then m+n < n+card I by XREAL_1:6;
-  then l+(n+card I) < n+card I by A4,A6;
+  m < card I by A5,NAT_1:44;
+  then l+(n+card I) < n+card I by A4,A6,XREAL_1:6;
   hence contradiction by NAT_1:11;
 end;
 
-theorem Th84:
+theorem Th80:
  Shift(p,n) c= Shift(p^q,n)
  proof
-    p^q = p +* Shift(q, card p) by Th81;
+    p^q = p +* Shift(q, card p) by Th77;
     then
 A1:   Shift(p^q,n) = Shift(p,n) +* Shift(Shift(q,card p),n) by VALUED_1:23;
     Shift(Shift(q,card p),n) = Shift(q,n+card p) by VALUED_1:21;
-    then dom Shift(p,n) misses dom Shift(Shift(q,card p),n) by Th83;
+    then dom Shift(p,n) misses dom Shift(Shift(q,card p),n) by Th79;
    hence Shift(p,n) c=  Shift(p^q,n) by A1,FUNCT_4:32;
  end;
 
-theorem Th85:
+theorem Th81:
  Shift(q,n+card p) c= Shift(p^q,n)
  proof
 A1: Shift(Shift(q,card p),n) = Shift(q,n+card p) by VALUED_1:21;
-    p^q = p +* Shift(q, card p) by Th81;
+    p^q = p +* Shift(q, card p) by Th77;
     then Shift(p^q,n) = Shift(p,n) +* Shift(Shift(q,card p),n) by VALUED_1:23;
    hence thesis by A1,FUNCT_4:25;
  end;
@@ -2599,7 +2582,7 @@ theorem
  Shift(p^q,n) c= X implies Shift(p,n) c= X
  proof assume
 A1: Shift(p^q,n) c= X;
-   Shift(p,n) c= Shift(p^q,n) by Th84;
+   Shift(p,n) c= Shift(p^q,n) by Th80;
   hence Shift(p,n) c= X by A1,XBOOLE_1:1;
  end;
 
@@ -2607,7 +2590,61 @@ theorem
  Shift(p^q,n) c= X implies Shift(q,n+card p) c= X
  proof assume
 A1: Shift(p^q,n) c= X;
-   Shift(q,n+card p) c= Shift(p^q,n) by Th85;
+   Shift(q,n+card p) c= Shift(p^q,n) by Th81;
   hence thesis by A1,XBOOLE_1:1;
  end;
 
+registration let F be initial non empty NAT-defined finite Function;
+ cluster CutLastLoc F -> initial;
+ coherence;
+end;
+
+definition let x1,x2,x3,x4 be set;
+ func <%x1,x2,x3,x4%> -> set equals
+  <%x1%>^<%x2%>^<%x3%>^<%x4%>;
+ coherence;
+end;
+
+registration let x1,x2,x3,x4 be set;
+ cluster <%x1,x2,x3,x4%> -> Function-like Relation-like;
+ coherence;
+end;
+
+registration let x1,x2,x3,x4 be set;
+ cluster <%x1,x2,x3,x4%> -> finite T-Sequence-like;
+ coherence;
+end;
+
+reserve x1,x2,x3,x4 for set;
+
+theorem
+ len<%x1,x2,x3,x4%> = 4
+  proof
+   thus len<%x1,x2,x3,x4%>
+       = len<%x1,x2,x3%> + 1 by Th75
+      .= 3 + 1 by Th39
+      .= 4;
+  end;
+
+theorem
+ <%x1,x2,x3,x4%>.0 = x1 &
+ <%x1,x2,x3,x4%>.1 = x2 &
+ <%x1,x2,x3,x4%>.2 = x3 &
+ <%x1,x2,x3,x4%>.3 = x4
+ proof
+  thus <%x1,x2,x3,x4%>.0
+       =(<%x1%>^<%x2,x3%>^<%x4%>).0 by Th27
+      .=(<%x1%>^<%x2,x3,x4%>).0 by Th27
+      .= x1 by Th35;
+A: len<%x1,x2,x3%> = 3 by Th39;
+   then
+B: 1 in dom<%x1,x2,x3%> by NAT_1:44;
+  thus <%x1,x2,x3,x4%>.1
+       =<%x1,x2,x3%>.1 by B,Def3
+      .= x2 by Th39;
+C: 2 in dom<%x1,x2,x3%> by A,NAT_1:44;
+  thus <%x1,x2,x3,x4%>.2
+       =<%x1,x2,x3%>.2 by C,Def3
+      .= x3 by Th39;
+  thus <%x1,x2,x3,x4%>.3 = x4 by A,Th36;
+ end;

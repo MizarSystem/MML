@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received May 20, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,22 +17,22 @@ environ
  vocabularies SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, ORDINAL1, CARD_1,
       FUNCOP_1, FUNCT_4, RELAT_1, TARSKI, CAT_1, FINSET_1, NAT_1, AFINSQ_1,
       AMISTD_1, AMISTD_2, ARYTM_1, VALUED_1, PARTFUN1, ZFMISC_1, AMI_1,
-      ARYTM_3, SCMNORM, PBOOLE, RECDEF_2, COMPOS_1, FINSEQ_1, UNIALG_1, CARD_5,
-      RELOC, TURING_1, XXREAL_0, VALUED_0, SCMFSA_7, INT_1, SCMPDS_4, ORDINAL4,
-      SCMFSA6A, SCMPDS_5;
- notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
-      PBOOLE, FUNCT_7, CARD_1, CARD_3, XXREAL_0, XCMPLX_0, RELAT_1, FUNCT_1,
-      PARTFUN1, FINSET_1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4,
-      FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, RECDEF_2, AFINSQ_1,
-      STRUCT_0, MEMSTR_0;
+      ARYTM_3, EXTPRO_1, PBOOLE, RECDEF_2, COMPOS_1, FINSEQ_1, UNIALG_1,
+      CARD_5, RELOC, TURING_1, XXREAL_0, VALUED_0, SCMFSA_7, INT_1, SCMPDS_4,
+      ORDINAL4, SCMFSA6A, SCMPDS_5;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, MCART_1, SUBSET_1, SETFAM_1,
+      ORDINAL1, PBOOLE, FUNCT_7, CARD_1, CARD_3, XXREAL_0, XCMPLX_0, RELAT_1,
+      FUNCT_1, PARTFUN1, FINSET_1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1,
+      FUNCT_4, FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, RECDEF_2,
+      AFINSQ_1, STRUCT_0, COMPOS_0;
  constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, RELSET_1, FUNCT_7,
-      PRE_POLY, PBOOLE, RECDEF_2, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0,
-      MEMSTR_0;
+      PRE_POLY, PBOOLE, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0, COMPOS_0,
+      XTUPLE_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
       RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, AFINSQ_1, VALUED_1, XCMPLX_0,
-      MEMSTR_0, PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2,
-      ZFMISC_1, SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5;
+      PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2, ZFMISC_1,
+      SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5, COMPOS_0, XTUPLE_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
 
 
@@ -41,53 +41,56 @@ begin :: General concepts
 reserve x,A for set,
   i,j,k,m,n, l, l1, l2 for Nat;
 reserve D for non empty set,
-  z for natural number;
+  z for Nat;
 
 definition
   struct COM-Struct(#
-    Instructions -> non empty set,
-    haltF -> Element of the Instructions
+    InstructionsF -> Instructions
      #);
 end;
 
 definition
+ canceled 7;
   func Trivial-COM -> strict COM-Struct means
-:: COMPOS_1:def 1
+:: COMPOS_1:def 8
 
-  the Instructions of it = {[0,{},{}]} &
-  the haltF of it = [0,{},{}];
+  the InstructionsF of it = {[0,{},{}]};
 end;
 
 definition
   let S be COM-Struct;
-  mode Instruction of S is Element of the Instructions of S;
+  mode Instruction of S is Element of the InstructionsF of S;
 end;
 
 definition
+ canceled;
   let S be COM-Struct;
   func halt S -> Instruction of S equals
-:: COMPOS_1:def 2
-   the haltF of S;
+:: COMPOS_1:def 10
+  halt the InstructionsF of S;
 end;
 
-definition
+:: Definicje musi zachowac, zeby nie musiec pisac
+:: halt SCM-Instr, zamiast halt SCM, zreszta wyrzucenie jej
+:: spowodowaloby problemy z typowaniem.
 
+definition
   let S be COM-Struct;
-  let I be (the Instructions of S)-valued Function;
+  let I be (the InstructionsF of S)-valued Function;
   attr I is halt-free means
-:: COMPOS_1:def 3
+:: COMPOS_1:def 11
   not halt S in rng I;
 end;
 
 begin :: General theory
 
 reserve S for COM-Struct;
-reserve ins for Element of the Instructions of S;
+reserve ins for Element of the InstructionsF of S;
 
 definition
  let S be COM-Struct;
  mode Instruction-Sequence of S is
-    (the Instructions of S)-valued ManySortedSet of NAT;
+    (the InstructionsF of S)-valued ManySortedSet of NAT;
 end;
 
 definition
@@ -96,91 +99,21 @@ definition
  redefine func P.k -> Instruction of S;
 end;
 
-begin :: InsType & InsCode
-
-notation
-  let x;
-  synonym InsCode x for x`1_3;
-  synonym JumpPart x for x`2_3;
-  synonym AddressPart x for x`3_3;
-end;
-
-definition
-
-  let  S be COM-Struct;
-  attr S is standard-ins means
-:: COMPOS_1:def 4
-
-   ex X being non empty set
-    st the Instructions of S c= [: NAT,NAT*,X*:];
-end;
-
-registration
-  cluster Trivial-COM -> standard-ins;
-end;
-
-registration
-  cluster standard-ins strict for COM-Struct;
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  cluster the Instructions of S -> Relation-like;
-end;
-
-registration
- let S be standard-ins COM-Struct;
- let x be Instruction of S;
- cluster InsCode x -> natural;
-end;
-
-definition
-  let  S be standard-ins COM-Struct;
-  func InsCodes S equals
-:: COMPOS_1:def 5
-  proj1 proj1 the Instructions of S;
-end;
-
-registration
-  let  S be standard-ins COM-Struct;
-  cluster InsCodes S ->non empty;
-end;
-
-definition
-  let  S be standard-ins COM-Struct;
-  mode InsType of S is Element of InsCodes S;
-end;
-
-definition
-  let  S be standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  redefine func InsCode I -> InsType of S;
-end;
-
 begin
 
-theorem :: COMPOS_1:1
- for  S be standard-ins COM-Struct
- for I,J being Instruction of S
-  st InsCode I = InsCode J & JumpPart I = JumpPart J &
-   AddressPart I = AddressPart J
- holds I = J;
-
 definition
-
   let S be (COM-Struct);
-  let p be NAT-defined (the Instructions of S)-valued Function, l be set;
+  let p be NAT-defined (the InstructionsF of S)-valued Function, l be set;
   pred p halts_at l means
-:: COMPOS_1:def 6
+:: COMPOS_1:def 12
  l in dom p & p.l = halt S;
 end;
 
 definition
-
   let S be COM-Struct;
   let s be Instruction-Sequence of S, l be Nat;
   redefine pred s halts_at l means
-:: COMPOS_1:def 7
+:: COMPOS_1:def 13
   s.l = halt S;
 end;
 
@@ -195,32 +128,27 @@ end;
 registration
   let S;
   cluster initial 1-element NAT-defined
-    (the Instructions of S)-valued for Function;
+    (the InstructionsF of S)-valued for Function;
 end;
 
 definition
   let S be COM-Struct;
   mode preProgram of S is finite
-   NAT-defined (the Instructions of S)-valued Function;
+   NAT-defined (the InstructionsF of S)-valued Function;
 end;
 
 definition
   let S be COM-Struct,
   F be non empty preProgram of S;
   attr F is halt-ending means
-:: COMPOS_1:def 8
+:: COMPOS_1:def 14
 
   F.(LastLoc F) = halt S;
   attr F is unique-halt means
-:: COMPOS_1:def 9
+:: COMPOS_1:def 15
 
   for f being Nat st
   F.f = halt S & f in dom F holds f = LastLoc F;
-end;
-
-registration let S;
-  cluster halt-ending unique-halt trivial
-   for initial non empty preProgram of S;
 end;
 
 registration
@@ -228,40 +156,51 @@ registration
   cluster trivial initial non empty for preProgram of S;
 end;
 
-registration
-  let S be COM-Struct;
-  cluster halt-ending unique-halt trivial
-    for initial non empty NAT-defined
-    (the Instructions of S)-valued finite Function;
-end;
-
 definition
   let S be  COM-Struct;
   mode Program of S is initial non empty preProgram of S;
 end;
 
-definition let S;
-  mode pre-Macro of S is halt-ending unique-halt Program of S;
-end;
+canceled;
 
 theorem :: COMPOS_1:2
-  for ins being Element of the Instructions of Trivial-COM holds
+  for ins being Element of the InstructionsF of Trivial-COM holds
   InsCode ins = 0;
 
 begin :: Addenda
 
-reserve i, j, k for natural number;
+reserve i, j, k for Nat;
 
 definition
   let S be  COM-Struct;
   func Stop S -> finite preProgram of S equals
-:: COMPOS_1:def 10
+:: COMPOS_1:def 16
    Load halt S;
 end;
 
 registration
   let S be  COM-Struct;
   cluster Stop S -> initial non empty;
+end;
+
+registration
+  let S be COM-Struct;
+  cluster Stop S ->
+   initial non empty NAT-defined (the InstructionsF of S)-valued trivial;
+end;
+
+registration
+  let S be COM-Struct;
+  cluster Stop S -> halt-ending unique-halt;
+end;
+
+registration let S;
+  cluster halt-ending unique-halt trivial
+   for initial non empty preProgram of S;
+end;
+
+definition let S;
+  mode MacroInstruction of S is halt-ending unique-halt Program of S;
 end;
 
 registration
@@ -275,302 +214,109 @@ theorem :: COMPOS_1:3
 theorem :: COMPOS_1:4
   card Stop S = 1;
 
-reserve k, m for natural number,
+reserve k, m for Nat,
   x, x1, x2, x3, y, y1, y2, y3, X,Y,Z for set;
 
 begin  :: Properties of AMI-Struct
 
-definition
-
-  let S be standard-ins COM-Struct;
-  let T be InsType of S;
-  func JumpParts T equals
-:: COMPOS_1:def 11
-  { JumpPart I where I is Instruction of S: InsCode I = T };
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  cluster AddressPart I -> Function-like Relation-like;
-  cluster JumpPart I -> Function-like Relation-like;
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  cluster AddressPart I -> FinSequence-like;
-  cluster JumpPart I -> FinSequence-like;
-end;
-
-definition
-  let S be standard-ins COM-Struct;
-  attr S is homogeneous means
-:: COMPOS_1:def 12
-
-  for I, J being Instruction of S st InsCode I = InsCode J holds
-  dom JumpPart I = dom JumpPart J;
-end;
-
 theorem :: COMPOS_1:5
   for I being Instruction of Trivial-COM holds JumpPart I = 0;
 
-definition
-  let S be standard-ins COM-Struct;
-  let T be InsType of S;
-  func AddressParts T equals
-:: COMPOS_1:def 13
-  { AddressPart I where I is Instruction of S: InsCode I = T };
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  let T be InsType of S;
-  cluster AddressParts T -> functional;
-  cluster JumpParts T -> non empty functional;
-end;
-
-definition
-  let S be standard-ins COM-Struct;
-  attr S is regular means
-:: COMPOS_1:def 14
-
-  for I being Instruction of S, k being set st k in dom JumpPart I
-   holds (product" JumpParts InsCode I).k = NAT;
-  attr S is J/A-independent means
-:: COMPOS_1:def 15
- for T being InsType of S, f1,f2 being Function,
-     p being set
-    st f1 in JumpParts T & f2 in product product" JumpParts T &
-    [T,f1,p] in the Instructions of S
-    holds [T,f2,p] in the Instructions of S;
-end;
-
 theorem :: COMPOS_1:6
-  for T being InsType of Trivial-COM holds JumpParts T = {0};
-
-registration
-  cluster Trivial-COM -> homogeneous regular J/A-independent;
-end;
-
-registration
-  cluster regular J/A-independent homogeneous
-        for standard-ins strict COM-Struct;
-end;
-
-registration
- let S be regular homogeneous standard-ins COM-Struct;
- let T being InsType of S;
- cluster JumpParts T ->  with_common_domain;
-end;
-
-registration
- let S be regular homogeneous standard-ins COM-Struct;
- let I be Instruction of S;
- cluster JumpPart I -> NAT-valued for Function;
-end;
-
-registration
-  let S be regular J/A-independent homogeneous standard-ins COM-Struct;
-  let T be InsType of S;
-  cluster JumpParts T -> product-like;
-end;
-
-registration
-  cluster Trivial-COM -> regular J/A-independent;
-end;
-
-registration
-  let S be homogeneous standard-ins COM-Struct;
-  let T be InsType of S;
-  cluster JumpParts T -> with_common_domain;
-end;
-
-theorem :: COMPOS_1:7
-  for S being homogeneous regular standard-ins COM-Struct,
-  I being Instruction of S, x being set st x in dom JumpPart I holds
-  (JumpPart I).x is Element of NAT;
+  for T being InsType of the InstructionsF of Trivial-COM
+   holds JumpParts T = {0};
 
 registration
   let S be COM-Struct;
   cluster trivial -> unique-halt for non empty finite preProgram of S;
 end;
 
-definition
-  let S be standard-ins COM-Struct;
-  let I be Instruction of S;
-  attr I is ins-loc-free means
-:: COMPOS_1:def 16
- JumpPart I is empty;
-end;
-
-registration
-  let S be COM-Struct;
-  cluster Stop S ->
-   initial non empty NAT-defined (the Instructions of S)-valued trivial;
-end;
+canceled;
 
 theorem :: COMPOS_1:8
-  for F being pre-Macro of S st card F = 1 holds F = Stop S;
+  for F being MacroInstruction of S st card F = 1 holds F = Stop S;
 
 theorem :: COMPOS_1:9
  for S being COM-Struct holds LastLoc Stop S = 0;
 
-registration
-  let S be COM-Struct;
-  cluster Stop S -> halt-ending unique-halt;
-end;
-
 begin  :: On the composition of macro instructions
 
-registration
-  let S be regular J/A-independent homogeneous standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
- cluster JumpPart I -> natural-valued for Function;
-end;
-
 definition
-  let S be regular J/A-independent homogeneous standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  let k be natural number;
-  func IncAddr(I,k) -> Instruction of S means
-:: COMPOS_1:def 17
-
-  InsCode it = InsCode I &
-  AddressPart it = AddressPart I &
-  JumpPart it = k + JumpPart I;
-end;
-
-theorem :: COMPOS_1:10
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  I being Element of the Instructions of S holds IncAddr(I, 0) = I;
-
-theorem :: COMPOS_1:11
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  I being Instruction of S st I is ins-loc-free holds IncAddr(I, k) = I;
-
-definition
-  let S be standard-ins COM-Struct;
-  attr S is proper-halt means
-:: COMPOS_1:def 18
-  halt S is ins-loc-free;
-end;
-
-registration
-  cluster Trivial-COM -> proper-halt;
-end;
-
-registration
- cluster proper-halt regular homogeneous J/A-independent
-  for standard-ins COM-Struct;
-end;
-
-registration
-  let S be proper-halt standard-ins COM-Struct;
- cluster halt S -> ins-loc-free;
-end;
-
-registration
-  let S be proper-halt standard-ins COM-Struct;
- cluster ins-loc-free for Instruction of S;
-end;
-
-registration
-  let S be proper-halt standard-ins COM-Struct;
-  let I be ins-loc-free Instruction of S;
-  cluster JumpPart I -> empty;
-end;
-
-
-
-theorem :: COMPOS_1:12
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-      I being Instruction of S
-  holds JumpParts InsCode I = JumpParts InsCode IncAddr(I,k);
-
-theorem :: COMPOS_1:13
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  I, J being Instruction of S st
-  ex k being natural number st IncAddr(I,k) = IncAddr(J,k) holds I = J;
-
-theorem :: COMPOS_1:14
-  for S being regular homogeneous J/A-independent proper-halt
-   standard-ins COM-Struct,
-  I being Instruction of S st IncAddr(I,k) = halt S holds I = halt S;
-
-theorem :: COMPOS_1:15
-  for S being regular homogeneous J/A-independent
-   standard-ins COM-Struct, I being Instruction of S
-  holds IncAddr(IncAddr(I,k),m) = IncAddr(I,k+m);
-
-definition
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  p be NAT-defined (the Instructions of S)-valued finite Function,
-  k be natural number;
+ canceled 4;
+  let S be COM-Struct,
+  p be NAT-defined (the InstructionsF of S)-valued finite Function,
+  k be Nat;
   func IncAddr(p,k) ->
-   NAT-defined (the Instructions of S)-valued finite Function
+   NAT-defined (the InstructionsF of S)-valued finite Function
   means
-:: COMPOS_1:def 19
+:: COMPOS_1:def 21
 
   dom it = dom p &
-  for m being natural number st m in dom p holds it.m = IncAddr(p/.m,k);
+  for m being Nat st m in dom p holds it.m = IncAddr(p/.m,k);
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be NAT-defined (the Instructions of S)-valued finite Function,
-  k be natural number;
-  cluster IncAddr(F,k) -> NAT-defined (the Instructions of S)-valued;
+  let S be COM-Struct,
+  F be NAT-defined (the InstructionsF of S)-valued finite Function,
+  k be Nat;
+  cluster IncAddr(F,k) -> NAT-defined (the InstructionsF of S)-valued;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be empty (the Instructions of S)-valued NAT-defined finite Function,
-  k be natural number;
+  let S be COM-Struct,
+  F be empty (the InstructionsF of S)-valued NAT-defined finite Function,
+  k be Nat;
   cluster IncAddr(F,k) -> empty;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be non empty (the Instructions of S)-valued NAT-defined finite Function,
-  k be natural number;
+  let S be COM-Struct,
+  F be non empty (the InstructionsF of S)-valued NAT-defined finite Function,
+  k be Nat;
   cluster IncAddr(F,k) -> non empty;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be initial NAT-defined (the Instructions of S)-valued finite Function,
-  k be natural number;
+  let S be COM-Struct,
+  F be initial NAT-defined (the InstructionsF of S)-valued finite Function,
+  k be Nat;
   cluster IncAddr(F,k) -> initial;
 end;
 
+canceled 6;
+
+registration let S be COM-Struct;
+ let F be NAT-defined (the InstructionsF of S)-valued finite Function;
+ reduce IncAddr(F,0) to F;
+end;
+
 theorem :: COMPOS_1:16
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  F being NAT-defined (the Instructions of S)-valued finite Function
+  for S being COM-Struct,
+  F being NAT-defined (the InstructionsF of S)-valued finite Function
    holds IncAddr(F,0) = F;
 
 theorem :: COMPOS_1:17
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  F being NAT-defined (the Instructions of S)-valued finite Function
+  for S being COM-Struct,
+  F being NAT-defined (the InstructionsF of S)-valued finite Function
   holds IncAddr(IncAddr(F,k),m) = IncAddr(F,k+m);
 
 definition
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct;
-  let p be finite NAT-defined (the Instructions of S)-valued Function,
+  let S be COM-Struct;
+  let p be finite NAT-defined (the InstructionsF of S)-valued Function,
      k be Nat;
  func Reloc(p,k) ->
-   finite NAT-defined (the Instructions of S)-valued Function
-   equals
-:: COMPOS_1:def 20
-IncAddr(Shift(p,k),k);
+   finite NAT-defined (the InstructionsF of S)-valued Function
+     equals
+:: COMPOS_1:def 22
+Shift(IncAddr(p,k),k);
 end;
 
 theorem :: COMPOS_1:18
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F being initial non empty finite preProgram of S,
   G being non empty
-   NAT-defined (the Instructions of S)-valued finite Function
-  holds dom CutLastLoc F misses dom Shift(IncAddr(G,card F -' 1),card F -' 1);
+   NAT-defined (the InstructionsF of S)-valued finite Function
+  holds dom CutLastLoc F misses dom Reloc(G,card F -' 1);
 
 theorem :: COMPOS_1:19
   for F being unique-halt initial non empty finite preProgram of S,
@@ -578,93 +324,91 @@ theorem :: COMPOS_1:19
   holds (CutLastLoc F).I <> halt S;
 
 definition
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct;
+  let S be COM-Struct;
   let F, G be non empty finite preProgram of S;
   func F ';' G -> finite preProgram of S equals
-:: COMPOS_1:def 21
-  CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1);
+:: COMPOS_1:def 23
+  CutLastLoc F +* Reloc(G,card F -' 1);
 end;
 
 registration
-  let S be regular  homogeneous J/A-independent standard-ins COM-Struct,
+  let S be COM-Struct,
   F, G be non empty
-  (the Instructions of S)-valued NAT-defined finite Function;
+  (the InstructionsF of S)-valued NAT-defined finite Function;
   cluster F ';' G -> non empty
-  (the Instructions of S)-valued NAT-defined;
+  (the InstructionsF of S)-valued NAT-defined;
 end;
 
 theorem :: COMPOS_1:20
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F being initial non empty finite preProgram of S,
   G being non empty
-  (the Instructions of S)-valued NAT-defined finite Function
+  (the InstructionsF of S)-valued NAT-defined finite Function
   holds card (F ';' G) = card F + card G - 1 &
   card (F ';' G) = card F + card G -' 1;
 
 registration
-  let S be regular  homogeneous J/A-independent standard-ins COM-Struct;
+  let S be COM-Struct;
   let F, G be initial non empty finite preProgram of S;
   cluster F ';' G -> initial;
 end;
 
 theorem :: COMPOS_1:21
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S
   holds dom F c= dom (F ';' G);
 
 registration
- let S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+ let S being COM-Struct,
   F, G being initial non empty finite preProgram of S;
  cluster F ';' G -> initial non empty;
 end;
 
 theorem :: COMPOS_1:22
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S
   holds CutLastLoc F c= CutLastLoc (F ';' G);
 
 theorem :: COMPOS_1:23
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S
   holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).0;
 
 theorem :: COMPOS_1:24
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S,
   f being Nat st f < card F - 1
   holds IncAddr(F,card F -' 1).f = IncAddr(F ';' G, card F -' 1).f;
 
 registration
-  let S be regular  homogeneous J/A-independent  proper-halt
-      standard-ins COM-Struct;
+  let S be COM-Struct;
   let F be initial non empty NAT-defined
-  (the Instructions of S)-valued finite Function;
+  (the InstructionsF of S)-valued finite Function;
   let G be halt-ending initial non empty NAT-defined
-  (the Instructions of S)-valued finite Function;
+  (the InstructionsF of S)-valued finite Function;
   cluster F ';' G -> halt-ending;
 end;
 
 registration
-  let S be regular  homogeneous J/A-independent  proper-halt
-   standard-ins COM-Struct;
+  let S be COM-Struct;
   let F, G be halt-ending unique-halt
   initial non empty NAT-defined
-  (the Instructions of S)-valued finite Function;
+  (the InstructionsF of S)-valued finite Function;
   cluster F ';' G -> unique-halt;
 end;
 
 definition
+  let S be COM-Struct;
+  let F, G be MacroInstruction of S;
+  redefine func F ';' G -> MacroInstruction of S;
+end;
 
-  let S be regular homogeneous J/A-independent  proper-halt
-   standard-ins
-  COM-Struct;
-  let F, G be pre-Macro of S;
-  redefine func F ';' G -> pre-Macro of S;
+registration let S be COM-Struct, k;
+ reduce IncAddr(Stop S, k) to Stop S;
 end;
 
 theorem :: COMPOS_1:25
-  for S being regular homogeneous J/A-independent proper-halt
-   standard-ins COM-Struct
+  for S being COM-Struct
   holds IncAddr(Stop S, k) = Stop S;
 
 theorem :: COMPOS_1:26
@@ -672,65 +416,62 @@ theorem :: COMPOS_1:26
   for S being COM-Struct
   holds Shift(Stop S, k) = k .--> halt S;
 
+registration let S be COM-Struct, F being MacroInstruction of S;
+ reduce F ';' Stop S to F;
+end;
+
 theorem :: COMPOS_1:27
-  for S being regular homogeneous J/A-independent proper-halt
-                standard-ins COM-Struct,
-      F being pre-Macro of S
+  for S being COM-Struct,
+      F being MacroInstruction of S
   holds F ';' Stop S = F;
 
+registration let S be COM-Struct, F be MacroInstruction of S;
+ reduce Stop S ';' F to F;
+end;
+
 theorem :: COMPOS_1:28
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-      F being pre-Macro of S
+  for S being COM-Struct,
+      F being MacroInstruction of S
   holds Stop S ';' F = F;
 
 theorem :: COMPOS_1:29
-  for S being regular homogeneous J/A-independent proper-halt
-   standard-ins COM-Struct,
-  F, G, H being pre-Macro of S holds F ';' G ';' H = F ';' (G ';' H);
+  for S being COM-Struct, F, G, H being MacroInstruction of S
+   holds F ';' G ';' H = F ';' (G ';' H);
 
-theorem :: COMPOS_1:30
-  for S being regular homogeneous standard-ins COM-Struct,
-  I being Instruction of S, x being set st x in dom JumpPart I holds
-  (JumpPart I).x in (product" JumpParts InsCode I).x;
+canceled;
 
 theorem :: COMPOS_1:31
   for I being Instruction of Trivial-COM holds JumpPart I = 0;
 
-theorem :: COMPOS_1:32
-  for T being InsType of Trivial-COM holds JumpParts T = {0};
-
 begin :: Addenda
 
-:: from SCMRING4, 2008.03.13, A.T.
-
-reserve i, j, k for natural number,
+reserve i, j, k for Nat,
   n for Nat,
   l,il for Nat;
 
-reserve S for regular homogeneous J/A-independent standard-ins COM-Struct;
+reserve S for COM-Struct;
 
-
+theorem :: COMPOS_1:32
+ for k being Nat holds
+  for p being finite NAT-defined (the InstructionsF of S)-valued Function
+   holds dom Reloc(p,k) = dom Shift(p,k);
 
 theorem :: COMPOS_1:33
   for k being Nat holds
-  for p being finite NAT-defined (the Instructions of S)-valued Function
+  for p being finite NAT-defined (the InstructionsF of S)-valued Function
    holds dom Reloc(p,k) = { j+k where j is Element of NAT:j in dom p };
-
-
 
 theorem :: COMPOS_1:34
   for i,j being Nat holds
-  for p being NAT-defined (the Instructions of S)-valued finite Function
+  for p being NAT-defined (the InstructionsF of S)-valued finite Function
   holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i);
 
 theorem :: COMPOS_1:35
-  for g being NAT-defined (the Instructions of S)-valued finite Function
+  for g being NAT-defined (the InstructionsF of S)-valued finite Function
   for k being Nat holds
   for I being Instruction of S holds
   il in dom g & I = g.il implies
   IncAddr(I, k) = Reloc(g, k).(il + k);
-
-begin :: SCMPDS_4
 
 reserve S for COM-Struct;
 
@@ -752,7 +493,7 @@ definition
   let S be COM-Struct;
   let I be initial preProgram of S;
   func stop I -> preProgram of S equals
-:: COMPOS_1:def 22
+:: COMPOS_1:def 24
   I ^ Stop S;
 end;
 
@@ -776,7 +517,7 @@ definition
   let S be COM-Struct;
   let i be Instruction of S;
   func Macro i -> preProgram of S equals
-:: COMPOS_1:def 23
+:: COMPOS_1:def 25
    stop Load i;
 end;
 
@@ -801,17 +542,16 @@ end;
 
 registration
   let S be  COM-Struct;
-  let p be NAT-defined (the Instructions of S)-valued Function,
+  let p be NAT-defined (the InstructionsF of S)-valued Function,
       q be non halt-free
-       NAT-defined (the Instructions of S)-valued Function;
+       NAT-defined (the InstructionsF of S)-valued Function;
   cluster p +* q -> non halt-free;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent proper-halt
-    standard-ins COM-Struct;
+  let S be COM-Struct;
   let p be finite non halt-free
-    NAT-defined (the Instructions of S)-valued Function,
+    NAT-defined (the InstructionsF of S)-valued Function,
      k be Nat;
  cluster Reloc(p,k) -> non halt-free;
 end;
@@ -824,53 +564,54 @@ end;
 canceled 4;
 
 theorem :: COMPOS_1:41
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
+ for S being COM-Struct
   for p,q being
-   finite NAT-defined (the Instructions of S)-valued Function
+   finite NAT-defined (the InstructionsF of S)-valued Function
     holds IncAddr(p +* q, n) = IncAddr(p,n) +* IncAddr(q,n);
 
 theorem :: COMPOS_1:42
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
- for p,q being finite NAT-defined (the Instructions of S)-valued Function,
+ for S being COM-Struct
+ for p,q being finite NAT-defined (the InstructionsF of S)-valued Function,
      k be Nat
   holds Reloc(p+*q,k) = Reloc(p,k)+*Reloc(q,k);
 
 theorem :: COMPOS_1:43
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
- for p being finite NAT-defined (the Instructions of S)-valued Function,
+ for S being COM-Struct
+ for p being finite NAT-defined (the InstructionsF of S)-valued Function,
      m,n be Nat
  holds Reloc(Reloc(p,m), n) = Reloc(p, m + n);
 
 theorem :: COMPOS_1:44
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
-  for P,Q being NAT-defined (the Instructions of S)-valued finite Function,
+ for S being COM-Struct
+  for P,Q being NAT-defined (the InstructionsF of S)-valued finite Function,
    k being Nat st
   P c= Q holds Reloc(P,k) c= Reloc(Q,k);
 
+registration let S be COM-Struct;
+ let P be preProgram of S;
+ reduce Reloc(P,0) to P;
+end;
+
 theorem :: COMPOS_1:45
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
+ for S being COM-Struct
   for P being preProgram of S holds Reloc(P,0) = P;
 
 theorem :: COMPOS_1:46
- for S being regular homogeneous J/A-independent
-   standard-ins COM-Struct
+ for S being COM-Struct
   for k being Nat holds
     for P being preProgram of S holds
     il in dom P iff il + k in dom Reloc(P,k);
 
-
-
 theorem :: COMPOS_1:47
-  for S be regular J/A-independent homogeneous proper-halt
-   standard-ins COM-Struct
+  for S be COM-Struct
   for i being Instruction of S
-  for f being Function of the Instructions of S, the Instructions of S
-   st f = (id the Instructions of S) +* (halt S .--> i)
-  for s being finite NAT-defined (the Instructions of S)-valued Function
+  for f being Function of the InstructionsF of S, the InstructionsF of S
+   st f = (id the InstructionsF of S) +* (halt S .--> i)
+  for s being finite NAT-defined (the InstructionsF of S)-valued Function
   holds IncAddr(f*s,n)
-   = ((id the Instructions of S) +* (halt S .--> IncAddr(i,n)))* IncAddr(s,n);
+   = ((id the InstructionsF of S) +* (halt S .--> IncAddr(i,n)))* IncAddr(s,n);
 
-reserve S for regular J/A-independent homogeneous standard-ins COM-Struct;
+reserve S for COM-Struct;
 reserve I,J for Program of S;
 
 theorem :: COMPOS_1:48
@@ -882,7 +623,6 @@ theorem :: COMPOS_1:49
 :: from SCMPDS_5, 2011.05.16, A.T.
 
 reserve S for COM-Struct;
-
 reserve i for Instruction of S,
         I for Program of S;
 
@@ -944,14 +684,6 @@ theorem :: COMPOS_1:66
 
 :: from SCMPDS_5, 2011.05.27,A.T.
 
-definition
-  let S be COM-Struct;
-  let i be Instruction of S;
-  attr i is No-StopCode means
-:: COMPOS_1:def 24
-  i <> halt S;
-end;
-
 registration let S be COM-Struct;
  cluster empty for preProgram of S;
 end;
@@ -961,10 +693,11 @@ registration let S be COM-Struct;
 end;
 
 definition
+ canceled;
   let S be COM-Struct;
-  let IT be NAT-defined (the Instructions of S)-valued Function;
+  let IT be NAT-defined (the InstructionsF of S)-valued Function;
   redefine attr IT is halt-free means
-:: COMPOS_1:def 25
+:: COMPOS_1:def 27
  for x being Nat st x in dom IT holds IT.x <> halt S;
 end;
 
@@ -975,6 +708,11 @@ end;
 theorem :: COMPOS_1:67
  rng Macro i = {i, halt S};
 
+registration let S;
+ let p be initial preProgram of S;
+ reduce CutLastLoc stop p to p;
+end;
+
 theorem :: COMPOS_1:68
  for p being initial preProgram of S
   holds CutLastLoc stop p = p;
@@ -983,3 +721,15 @@ registration let S be COM-Struct;
  let p be halt-free initial preProgram of S;
  cluster stop p -> unique-halt;
 end;
+
+registration let S;
+ let I be Program of S, J be non halt-free Program of S;
+  cluster I ';' J -> non halt-free;
+end;
+
+theorem :: COMPOS_1:69
+ for I being Program of S
+  holds CutLastLoc stop I = I;
+
+theorem :: COMPOS_1:70
+ InsCode halt S = 0;

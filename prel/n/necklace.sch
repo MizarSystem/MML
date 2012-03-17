@@ -28,7 +28,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="4">
+<Func kind="K" nr="2">
 <Func kind="F" nr="2"/>
 </Func>
 <Fraenkel>
@@ -36,7 +36,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="35">
+<Func kind="K" nr="33">
 <Func kind="F" nr="3">
 <Var nr="1"/>
 </Func>
@@ -56,7 +56,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="35">
+<Func kind="K" nr="33">
 <Func kind="F" nr="4">
 <Var nr="1"/>
 </Func>

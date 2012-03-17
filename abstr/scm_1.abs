@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek and Piotr Rudnicki
 ::
 :: Received October 8, 1993
-:: Copyright (c) 1993-2011 Association of Mizar Users
+:: Copyright (c) 1993-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,18 +15,16 @@
 environ
 
  vocabularies NUMBERS, INT_1, FINSEQ_1, SUBSET_1, FSM_1, AMI_3, PARTFUN1,
-      AMI_1, SCMNORM, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1, ARYTM_3, XXREAL_0,
-      CARD_1, TARSKI, AFINSQ_1, AMI_2, ORDINAL4, GRAPHSP, ARYTM_1, SCM_1,
-      STRUCT_0, ORDINAL1, RECDEF_2, FUNCT_4, CAT_1;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, VALUED_1,
-      MCART_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, XXREAL_0,
-      AFINSQ_1, FUNCT_4, RECDEF_2, AMI_2, STRUCT_0, MEMSTR_0, COMPOS_1,
-      EXTPRO_1, AMI_3;
- constructors XXREAL_0, AMI_3, RELSET_1, AMI_2, AFINSQ_1, ORDINAL4, PRE_POLY,
-      RECDEF_2, AMISTD_2, MEMSTR_0;
- registrations XBOOLE_0, SETFAM_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, AMI_3, AMI_2, AFINSQ_1, RELAT_1, COMPOS_1, PBOOLE, FINSEQ_1,
-      STRUCT_0, VALUED_0, FUNCT_4, MEMSTR_0;
+      AMI_1, EXTPRO_1, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1, ARYTM_3, XXREAL_0,
+      CARD_1, TARSKI, AFINSQ_1, ORDINAL4, GRAPHSP, ARYTM_1, SCM_1, STRUCT_0,
+      ORDINAL1, RECDEF_2, FUNCT_4, CAT_1, GOBRD13, MEMSTR_0;
+ notations TARSKI, XTUPLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, XXREAL_0, AFINSQ_1, FUNCT_4,
+      RECDEF_2, STRUCT_0, MEMSTR_0, COMPOS_1, EXTPRO_1, AMI_3;
+ constructors AMI_3, RELSET_1, PRE_POLY, XTUPLE_0;
+ registrations XBOOLE_0, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
+      AMI_3, AFINSQ_1, RELAT_1, PBOOLE, FINSEQ_1, STRUCT_0, VALUED_0, FUNCT_4,
+      COMPOS_0, XTUPLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -37,39 +35,49 @@ definition
   redefine func <*i*> -> FinSequence of INT;
 end;
 
+registration let i1 be Integer;
+ cluster <%i1%> -> INT-valued;
+ let i2 be Integer;
+ cluster <%i1,i2%> -> INT-valued;
+ let i3 be Integer;
+ cluster <%i1,i2,i3%> -> INT-valued;
+ let i4 be Integer;
+ cluster <%i1,i2,i3,i4%> -> INT-valued;
+end;
+
 definition
-  let D be FinSequence of INT, ds be Element of NAT;
-  mode State-consisting of ds, D -> State of SCM means
+  let D be XFinSequence of INT;
+  mode State-consisting of D -> State of SCM means
 :: SCM_1:def 1
 
-   for k being Element of NAT st k < len D holds it.dl.(ds+k) = D.(k+1);
+   for k being Element of NAT st k < len D holds it.dl.k = D.k;
 end;
 
 registration
-  let D be FinSequence of INT, il, ds be Element of NAT;
- cluster il-started for State-consisting of ds, D;
+  let D be XFinSequence of INT, il be Element of NAT;
+ cluster il-started for State-consisting of D;
 end;
 
 theorem :: SCM_1:1
   for i1, i2, i3, i4 being Integer, il being Element of NAT,
- s being il-started State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*i4*>
+ s being il-started State-consisting of <%i1,i2,i3,i4%>
 holds
   s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4;
 
 theorem :: SCM_1:2
   for i1, i2 being Integer, il being Element of NAT,
-  s being il-started State-consisting of 0, <*i1*>^<*i2*> holds
+  s being il-started State-consisting of <%i1,i2%> holds
    s.dl.0 = i1 & s.dl.1 = i2;
 
 theorem :: SCM_1:3
   for I1, I2 being Instruction of SCM
   for F being total
-   NAT-defined the Instructions of SCM-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
    st <%I1%>^<%I2%> c= F
    holds F.0 = I1 & F.1 = I2;
 
 reserve F for total
-  NAT-defined (the Instructions of SCM)-valued Function;
+  NAT-defined (the InstructionsF of SCM)-valued Function;
 
 theorem :: SCM_1:4
   for k, n being Element of NAT, s being State of SCM,
@@ -164,25 +172,25 @@ theorem :: SCM_1:12
 theorem :: SCM_1:13
   for i1, i2, i3, i4 being Integer,
   s being State of SCM st s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
-   holds s is State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*i4*>;
+   holds s is State-consisting of <%i1,i2,i3,i4%>;
 
 :: Empty program
 
 theorem :: SCM_1:14
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%halt SCM%> c= F
-  for s being 0-started State-consisting of 0, <*>INT
+  for s being 0-started State-consisting of <*>INT
    holds F halts_on s & LifeSpan(F,s) = 0 & Result(F,s) = s;
 
 :: Assignment
 
 theorem :: SCM_1:15
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%dl.0 := dl.1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
    holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i2 &
   for d being Data-Location st d<>dl.0
    holds (Result(F,s)).d = s.d;
@@ -191,10 +199,10 @@ theorem :: SCM_1:15
 
 theorem :: SCM_1:16
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%AddTo(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
   holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i1 + i2 &
   for d being Data-Location st d<>dl.0 holds Result(F,s).d = s.d;
 
@@ -202,10 +210,10 @@ theorem :: SCM_1:16
 
 theorem :: SCM_1:17
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%SubFrom(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s
  & LifeSpan(F,s) = 1 &
  (Result(F,s)).dl.0 = i1 - i2 & for d being Data-Location
@@ -216,10 +224,10 @@ st d<>dl.0 holds
 
 theorem :: SCM_1:18
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%MultBy(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-     s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+     s being 0-started State-consisting of <%i1,i2%>
   holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i1 * i2 &
    for d being Data-Location st d<>dl.0 holds (Result(F,s)).d = s.d;
 
@@ -227,10 +235,10 @@ theorem :: SCM_1:18
 
 theorem :: SCM_1:19
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%Divide(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-    s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+    s being 0-started State-consisting of  <%i1,i2%>
    holds F halts_on s
  & LifeSpan(F,s)
   = 1 & (Result(F,s)).dl.0 = i1 div i2 & (Result(F,s)
@@ -241,10 +249,10 @@ theorem :: SCM_1:19
 
 theorem :: SCM_1:20
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%SCM-goto 1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s &
  LifeSpan(F,s) = 1 & for d
   being Data-Location holds (Result(F,s)).d = s.d;
@@ -253,10 +261,10 @@ theorem :: SCM_1:20
 
 theorem :: SCM_1:21
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%dl.0=0_goto 1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s
  & LifeSpan(F,s) = 1
   & for d being Data-Location holds (Result(F,s)).d = s.d;
@@ -265,14 +273,14 @@ theorem :: SCM_1:21
 
 theorem :: SCM_1:22
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%dl.0>0_goto 1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s
  & LifeSpan(F,s) = 1
   & for d being Data-Location holds (Result(F,s)).d = s.d;
 
 theorem :: SCM_1:23
- for s being State of SCM, n being Element of NAT
- holds s is State-consisting of n, <*>INT;
+ for s being State of SCM
+ holds s is State-consisting of <*>INT;

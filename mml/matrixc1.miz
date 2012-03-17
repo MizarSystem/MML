@@ -2,7 +2,7 @@
 ::  by Wenpai Chang , Hiroshi Yamazaki and Yatsuka Nakamura
 ::
 :: Received October 10, 2005
-:: Copyright (c) 2005-2011 Association of Mizar Users
+:: Copyright (c) 2005-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,18 +19,15 @@ environ
       COMPLFLD, MATRIX_5, ARYTM_1, COMPLEX1, QC_LANG1, FUNCT_1, RVSUM_1,
       BINOP_2, TARSKI, XBOOLE_0, CARD_3, INCSP_1, FUNCOP_1, SETWISEO, ORDINAL4,
       PARTFUN1, MATRIXC1;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_2, ZFMISC_1, NAT_1, NAT_D, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
-      FINSEQOP, SEQ_4, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2, ORDINAL1,
+ notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, FUNCT_1, RELSET_1,
+      FUNCT_2, ZFMISC_1, ORDINAL1, NAT_D, PARTFUN1, BINOP_1, FUNCOP_1,
+      FINSEQ_1, FINSEQOP, SEQ_4, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2,
       MATRIX_5, MATRIX_1, MATRIX_3, MATRIX_4, RLVECT_1, COMPLSP2, SETWOP_2,
       COMPLFLD, STRUCT_0, GROUP_1, SEQ_1;
- constructors PARTFUN1, SETWISEO, XXREAL_0, NAT_1, FINSOP_1, BINARITH,
-      MATRIX_3, MATRIX_4, MATRIX_5, SEQ_4, SEQ_1, BINOP_2, BINOP_1, RVSUM_1,
-      NAT_D, RELSET_1, COMPLSP2;
+ constructors SETWISEO, FINSOP_1, MATRIX_3, MATRIX_4, MATRIX_5, SEQ_4, SEQ_1,
+      BINOP_2, BINOP_1, RVSUM_1, NAT_D, RELSET_1, COMPLSP2, PRE_POLY;
  registrations XBOOLE_0, FUNCT_1, FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
-      BINOP_2, MEMBERED, FINSEQ_2, COMPLFLD, MATRIX_1, VALUED_0, RELSET_1,
-      CARD_1, FINSEQ_1;
+      BINOP_2, MEMBERED, FINSEQ_2, COMPLFLD, MATRIX_1, VALUED_0, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions MATRIX_1, RVSUM_1, VALUED_1;
  theorems FINSEQ_1, FUNCT_1, NAT_1, MATRIX_1, FINSEQ_2, COMPLEX1, BINOP_2,
@@ -95,6 +92,22 @@ A12:  dom M1 = dom M by A5,FINSEQ_3:29;
     end;
     hence thesis by A5,A6,A8,A9,MATRIX_1:21;
   end;
+ involutiveness
+  proof let N,M be Matrix of COMPLEX;
+   assume that
+A13: len N=len M and
+A14: width N=width M and
+A15:  for i,j being Nat st [i,j] in Indices M holds N*(i,j) = (M*(i,j))*';
+   thus len M=len N by A13;
+   thus width M=width N by A14;
+   let i,j be Nat such that
+A16: [i,j] in Indices N;
+   1 <= i & i <= len M & 1 <= j & j <= width M by A13,A14,A16,MATRIX_1:38;
+   then
+A17: [i,j] in Indices M by MATRIX_1:36;
+   thus M*(i,j) = (M*(i,j))*'*'
+      .= (N*(i,j))*' by A17,A15;
+  end;
 end;
 
 theorem Th1:
@@ -122,32 +135,7 @@ A7: j in Seg width M by A5,A6,FINSEQ_1:1;
   hence thesis by A7,ZFMISC_1:87;
 end;
 
-theorem Th2:
-  for M being Matrix of COMPLEX holds (M*')*' = M
-proof
-  let M be Matrix of COMPLEX;
-A1: len (M*') = len M by Def1;
-A2: width ((M*')*') = width (M*') by Def1;
-A3: width (M*') = width M by Def1;
-A4: len ((M*')*') = len (M*') by Def1;
-  now
-    let i,j;
-    assume
-A5: [i,j] in Indices (M*')*';
-    then
-A6: 1<=i by Th1;
-A7: 1<=j by A5,Th1;
-A8: j<=width (M*') by A2,A5,Th1;
-A9: i<=len (M*') by A4,A5,Th1;
-    then [i,j] in Indices M by A1,A3,A6,A7,A8,Th1;
-    then
-A10: (M*')*(i,j) = (M*(i,j))*' by Def1;
-    [i,j] in Indices (M*') by A6,A9,A7,A8,Th1;
-    hence (M*')*'*(i,j) = ((M*(i,j))*')*' by A10,Def1
-      .= M*(i,j);
-  end;
-  hence thesis by A4,A1,A2,A3,MATRIX_1:21;
-end;
+canceled;
 
 theorem Th3:
   for a being complex number,M being Matrix of COMPLEX holds len (a
@@ -624,7 +612,7 @@ definition
   let F be FinSequence of COMPLEX;
 
   func M*F -> FinSequence of COMPLEX means
-  :Def7:
+  :Def6:
   len it = len M & for i st i in Seg len M holds it.i=Sum mlt(Line(M,i),F);
   existence
   proof
@@ -684,7 +672,7 @@ theorem
   for a being Element of COMPLEX,M being Matrix of COMPLEX holds (M*a)*'
   = a*'*(M*') by Th5;
 
-theorem Th19:
+theorem Th18:
   for F1,F2 being FinSequence of COMPLEX,i being Nat holds i in
   dom mlt(F1,F2) implies mlt(F1,F2).i = F1.i * F2.i
 proof
@@ -701,7 +689,7 @@ definition
   coherence by FINSEQ_2:120;
 end;
 
-theorem Th20:
+theorem Th19:
   mlt(R1,R2).j = R1.j * R2.j
 proof
   reconsider i,j1=j as Element of NAT by ORDINAL1:def 12;
@@ -719,11 +707,11 @@ A2: not j in dom R2 by FINSEQ_2:124;
   suppose
     j in Seg i;
     then j in dom mlt(R1,R2) by FINSEQ_2:124;
-    hence thesis by Th19;
+    hence thesis by Th18;
   end;
 end;
 
-theorem Th21:
+theorem Th20:
   for a,b being Element of COMPLEX holds addcomplex.(a,(b*'))*'=
   addcomplex.((a*'),b)
 proof
@@ -734,7 +722,7 @@ proof
   hence thesis;
 end;
 
-theorem Th22:
+theorem Th21:
   for F being FinSequence of COMPLEX ex G being Function of NAT,
   COMPLEX st for n being Nat st 1<= n & n<=len F holds G.n=F.n
 proof
@@ -774,7 +762,7 @@ A4: n<=len F;
   hence thesis;
 end;
 
-theorem Th23:
+theorem Th22:
   for F being FinSequence of COMPLEX st len (F*') >= 1 holds
   addcomplex $$ (F*') = (addcomplex $$ F)*'
 proof
@@ -797,7 +785,7 @@ A7: for k be Nat st k in Seg len (F*') ex x being Element of COMPLEX st P[k,
 A8: dom f2 = Seg len (F*') and
 A9: for k be Nat st k in Seg len (F*') holds P[k,f2.k];
   consider f9 being Function of NAT,COMPLEX such that
-A10: for n being Nat st 1<= n & n<=len (f2*') holds f9.n=(f2*').n by Th22;
+A10: for n being Nat st 1<= n & n<=len (f2*') holds f9.n=(f2*').n by Th21;
 A11: len (f2*')=len f2 by COMPLSP2:def 1;
   then 1<=len (f2*') by A2,A8,FINSEQ_1:def 3;
   then
@@ -837,7 +825,7 @@ A26: n+1<=len F by A22,NAT_1:13;
     then (f2*').(n + 1) = (f2.(n+1))*' by A25,COMPLSP2:def 1
       .= (addcomplex.(f2.n,(F*').(n + 1)))*' by A1,A14,A21,A22
       .= (addcomplex.(f2.n,(F.(n + 1))*'))*' by A25,A26,COMPLSP2:def 1
-      .= addcomplex.((f2.n)*',F.(n + 1)) by Th21;
+      .= addcomplex.((f2.n)*',F.(n + 1)) by Th20;
     hence thesis by A24,A23,COMPLSP2:def 1;
   end;
 A27: for n be Element of NAT st 0 <> n & n < len F holds f9.(n + 1) =
@@ -870,16 +858,16 @@ A34: d=f9.(len F) by A2,A1,A13,A10,A11;
   hence thesis;
 end;
 
-theorem Th24:
+theorem Th23:
   for F being FinSequence of COMPLEX st len F >= 1 holds Sum(F*') = (Sum F)*'
 proof
   let F be FinSequence of COMPLEX;
   assume len F >= 1;
   then len (F*') >= 1 by COMPLSP2:def 1;
-  hence thesis by Th23;
+  hence thesis by Th22;
 end;
 
-theorem Th25:
+theorem Th24:
   for x,y being FinSequence of COMPLEX st len x=len y holds (mlt(x
   ,(y*')))*' = mlt(y,(x*'))
 proof
@@ -904,12 +892,12 @@ A7: 1 <= i and
 A8: i <= len ((mlt(x,(y*')))*');
 A9: i <= len (mlt(x,(y*'))) by A8,COMPLSP2:def 1;
     hence (mlt(x,(y*')))*'.i = ((mlt(x,(y*'))).i)*' by A7,COMPLSP2:def 1
-      .= (((x9.i)*((y9).i)))*' by A1,A3,Th20
+      .= (((x9.i)*((y9).i)))*' by A1,A3,Th19
       .= (x.i)*'*((y*').i)*' by COMPLEX1:35
       .= (x.i)*'*((y*')*'.i) by A5,A7,A9,COMPLSP2:def 1
       .= (x.i)*'*(y.i) by COMPLSP2:22
       .= ((x*').i)*(y.i) by A4,A7,A9,COMPLSP2:def 1
-      .= mlt(x19,y19).i by A1,A2,Th20
+      .= mlt(x19,y19).i by A1,A2,Th19
       .= mlt(y,(x*')).i;
   end;
   len (mlt(x,(y*'))) = len ((mlt(x,(y*')))*') by COMPLSP2:def 1;
@@ -917,7 +905,7 @@ A9: i <= len (mlt(x,(y*'))) by A8,COMPLSP2:def 1;
   hence thesis by A6,FINSEQ_1:14;
 end;
 
-theorem Th26:
+theorem Th25:
   for x,y being FinSequence of COMPLEX,a being Element of COMPLEX
   st len x=len y holds (mlt(x,a*y)) = a*mlt(x,y)
 proof
@@ -930,7 +918,7 @@ proof
   hence thesis;
 end;
 
-theorem Th27:
+theorem Th26:
   for x,y being FinSequence of COMPLEX,a being Element of COMPLEX
   st len x=len y holds mlt(a*x,y) = a*mlt(x,y)
 proof
@@ -943,7 +931,7 @@ proof
   hence thesis;
 end;
 
-theorem Th28:
+theorem Th27:
   for x,y being FinSequence of COMPLEX st len x=len y holds (mlt(x
   ,y))*' = mlt(x*',y*')
 proof
@@ -957,7 +945,7 @@ A4: for i be Nat st 1 <=i & i <= len ((mlt(x,y))*') holds (mlt(x,(y)))*'.i=
   proof
     let i be Nat;
     (mlt(x,y))*'.i = ((mlt(y,(x*')*')*').i) by COMPLSP2:22
-      .= (mlt(x*',y*').i) by A3,A2,Th25;
+      .= (mlt(x*',y*').i) by A3,A2,Th24;
     hence thesis;
   end;
   len (y*') = len y by COMPLSP2:def 1;
@@ -976,7 +964,7 @@ FUNCOP_1:53
     .= a*b by BINOP_2:def 5;
 end;
 
-theorem Th29:
+theorem Th28:
   for F being FinSequence of COMPLEX,a being Element of COMPLEX
   holds Sum(a*F) = a*(Sum F)
 proof
@@ -1019,7 +1007,7 @@ A6: for k be Nat st k in Seg len R ex x being Element of REAL st P[k,x];
 A7: dom f2 = Seg len R and
 A8: for k be Nat st k in Seg len R holds P[k,f2.k];
   consider f9 being Function of NAT,COMPLEX such that
-A9: for n being Nat st 1<= n & n<=len FR2FC f2 holds f9.n=(FR2FC f2).n by Th22;
+A9: for n being Nat st 1<= n & n<=len FR2FC f2 holds f9.n=(FR2FC f2).n by Th21;
 A10: len f2 = len R by A7,FINSEQ_1:def 3;
   then
 A11: (FR2FC f2).(len F)=f9.(len F) by A1,A2,A9;
@@ -1068,7 +1056,7 @@ theorem
   for x being FinSequence of REAL, y being FinSequence of COMPLEX st x=y
   & len x >=1 holds Sum x = Sum y;
 
-theorem Th32:
+theorem Th31:
   for F1,F2 being FinSequence of COMPLEX st len F1=len F2 holds
   Sum(F1 - F2) = Sum F1 - Sum F2
 proof
@@ -1119,16 +1107,16 @@ A6: i in dom mlt(x-y,z);
       .=dom (mlt(x,z)) by FINSEQ_1:def 3;
     then
 A7: d=a-b by A3,A4,A6,COMPLSP2:2;
-    thus mlt(x-y,z).i=d*e by A6,Th19
+    thus mlt(x-y,z).i=d*e by A6,Th18
       .=a*e-b*e by A7
-      .=mlt(x,z).i -b*e by A3,A4,A6,Th19
-      .=mlt(x,z).i -mlt(y,z).i by A3,A5,A6,Th19
+      .=mlt(x,z).i -b*e by A3,A4,A6,Th18
+      .=mlt(x,z).i -mlt(y,z).i by A3,A5,A6,Th18
       .=(mlt(x,z)-mlt(y,z)).i by A3,A6,COMPLSP2:2;
   end;
   hence thesis by A3,FINSEQ_1:13;
 end;
 
-theorem Th34:
+theorem Th33:
   for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
   len z holds mlt(x,y-z) = mlt(x,y)-mlt(x,z)
 proof
@@ -1163,10 +1151,10 @@ A6: i in dom mlt(x,y-z);
       .=dom mlt(x,y) by FINSEQ_1:def 3;
     then
 A7: d=a-b by A3,A4,A6,COMPLSP2:2;
-    thus mlt(x,y-z).i=e*d by A6,Th19
+    thus mlt(x,y-z).i=e*d by A6,Th18
       .=e*a-e*b by A7
-      .=mlt(x,y).i -e*b by A3,A4,A6,Th19
-      .=mlt(x,y).i -mlt(x,z).i by A3,A5,A6,Th19
+      .=mlt(x,y).i -e*b by A3,A4,A6,Th18
+      .=mlt(x,y).i -mlt(x,z).i by A3,A5,A6,Th18
       .=(mlt(x,y)-mlt(x,z)).i by A3,A6,COMPLSP2:2;
   end;
   hence thesis by A3,FINSEQ_1:13;
@@ -1207,16 +1195,16 @@ A6: i in dom mlt(x,y+z);
       .=dom mlt(x,y) by FINSEQ_1:def 3;
     then
 A7: d=a+b by A3,A4,A6,COMPLSP2:1;
-    thus mlt(x,y+z).i=e*d by A6,Th19
+    thus mlt(x,y+z).i=e*d by A6,Th18
       .=e*a+e*b by A7
-      .=mlt(x,y).i +e*b by A3,A4,A6,Th19
-      .=mlt(x,y).i +mlt(x,z).i by A3,A5,A6,Th19
+      .=mlt(x,y).i +e*b by A3,A4,A6,Th18
+      .=mlt(x,y).i +mlt(x,z).i by A3,A5,A6,Th18
       .=(mlt(x,y)+mlt(x,z)).i by A3,A6,COMPLSP2:1;
   end;
   hence thesis by A3,FINSEQ_1:13;
 end;
 
-theorem Th36:
+theorem Th35:
   for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
   len z holds mlt((x+y),z) = mlt(x,z)+mlt(y,z)
 proof
@@ -1251,16 +1239,16 @@ A6: i in dom mlt(x+y,z);
       .=dom mlt(x,z) by FINSEQ_1:def 3;
     then
 A7: d=a+b by A3,A4,A6,COMPLSP2:1;
-    thus mlt(x+y,z).i=d*e by A6,Th19
+    thus mlt(x+y,z).i=d*e by A6,Th18
       .=a*e+b*e by A7
-      .=mlt(x,z).i +b*e by A3,A4,A6,Th19
-      .=mlt(x,z).i +mlt(y,z).i by A3,A5,A6,Th19
+      .=mlt(x,z).i +b*e by A3,A4,A6,Th18
+      .=mlt(x,z).i +mlt(y,z).i by A3,A5,A6,Th18
       .=(mlt(x,z)+mlt(y,z)).i by A3,A6,COMPLSP2:1;
   end;
   hence thesis by A3,FINSEQ_1:13;
 end;
 
-theorem Th37:
+theorem Th36:
   for F1,F2 being FinSequence of COMPLEX st len F1=len F2 holds
   Sum(F1 + F2) = Sum F1 + Sum F2
 proof
@@ -1275,7 +1263,7 @@ A1: len F1=len F2;
   hence thesis;
 end;
 
-theorem Th38:
+theorem Th37:
   for x1,y1 being FinSequence of COMPLEX for x2,y2 being
 FinSequence of REAL st x1 = x2 & y1 = y2 & len x1=len y2 holds multcomplex.:(x1
   ,y1) = multreal.:(x2,y2)
@@ -1298,9 +1286,9 @@ end;
 
 theorem
   for x,y being FinSequence of REAL st len x=len y holds FR2FC mlt(x,y)=
-  mlt(FR2FC x,FR2FC y) by Th38;
+  mlt(FR2FC x,FR2FC y) by Th37;
 
-theorem Th40:
+theorem Th39:
   for x,y being FinSequence of COMPLEX st len x=len y holds |( x,y
   )| = Sum mlt(x,(y*'))
 proof
@@ -1330,14 +1318,14 @@ A11: len ((<i>)*(Imx))=len Imx by COMPLSP2:3
 A12: len Rex = len x by COMPLSP2:48;
 A13: len Im x=len x by COMPLSP2:48;
   then
-A14: mlt(Im x,Im y)= mlt(FR2FC(Im x),FR2FC(Im y)) by A9,A1,Th38;
+A14: mlt(Im x,Im y)= mlt(FR2FC(Im x),FR2FC(Im y)) by A9,A1,Th37;
 A15: len Re y=len y by COMPLSP2:48;
   then
-A16: mlt(Im x,Re y)= mlt(FR2FC(Im x),FR2FC(Re y)) by A9,A13,Th38;
+A16: mlt(Im x,Re y)= mlt(FR2FC(Im x),FR2FC(Re y)) by A9,A13,Th37;
 A17: len Re x=len x by COMPLSP2:48;
   then
-A18: mlt(Re x,Re y)= mlt(FR2FC Re x,FR2FC Re y) by A9,A15,Th38;
-A19: mlt(Re x,Im y)= mlt(FR2FC Re x,FR2FC Im y) by A9,A17,A1,Th38;
+A18: mlt(Re x,Re y)= mlt(FR2FC Re x,FR2FC Re y) by A9,A15,Th37;
+A19: mlt(Re x,Im y)= mlt(FR2FC Re x,FR2FC Im y) by A9,A17,A1,Th37;
 A20: len ((<i>)*(Imx))=len Imx by COMPLSP2:3
     .= len y by A9,COMPLSP2:48
     .= len (y*') by COMPLSP2:def 1;
@@ -1416,17 +1404,17 @@ A40: len (((mlt(Rex,Rey) - (<i>*(mlt(Rex,Imy)))) + ((<i>*mlt(Imx,Rey)))) ) =
     .= Sum (mlt(Rex,Rey)) - <i>*(Sum mlt(Rex,Imy)) + <i>*(Sum mlt(Imx,Rey))
   + Sum mlt(Im x,Im y) by A16,A18,A19
     .= Sum (mlt(Rex,Rey)) - (Sum(<i>*(mlt(Rex,Imy)))) + <i>*(Sum mlt(Imx,Rey
-  )) + Sum mlt(Imx,Imy) by A14,Th29
+  )) + Sum mlt(Imx,Imy) by A14,Th28
     .= Sum (mlt(Rex,Rey)) - (Sum(<i>*(mlt(Rex,Imy)))) + (Sum (<i>*mlt(Imx,
-  Rey))) + Sum mlt(Imx,Imy) by Th29
+  Rey))) + Sum mlt(Imx,Imy) by Th28
     .= Sum ((mlt(Rex,Rey)) - ((<i>*(mlt(Rex,Imy))))) + (Sum (<i>*mlt(Imx,Rey
-  ))) + Sum mlt(Imx,Imy) by A30,A37,Th32
+  ))) + Sum mlt(Imx,Imy) by A30,A37,Th31
     .= Sum (((mlt(Rex,Rey)) - ((<i>*( mlt(Rex,Imy))))) + ((<i>*mlt(Imx,Rey))
-  )) + Sum mlt(Imx,Imy) by A39,Th37
+  )) + Sum mlt(Imx,Imy) by A39,Th36
     .= Sum (mlt(Rex,Rey)- <i>*(mlt(Rex,Imy)) + <i>*mlt(Imx,Rey) + mlt(Imx,
-  Imy)) by A40,Th37
+  Imy)) by A40,Th36
     .= Sum (mlt(Rex,Rey)- (mlt(Rex,<i>*Imy)) + <i>*mlt(Imx,Rey) + mlt(Imx,
-  Imy)) by A9,A12,A35,Th26
+  Imy)) by A9,A12,A35,Th25
     .= Sum (mlt(Rex,Rey)-mlt(Rex,<i>*Imy) + (<i>*(mlt(Imx,Rey))+(--mlt(Imx,
   Imy)))) by A36,A30,A38,A32,COMPLSP2:28
     .= Sum (mlt(Rex,Rey)-mlt(Rex,<i>*Imy) + (<i>*(mlt(Imx,Rey))-<i>*<i>*(mlt
@@ -1434,14 +1422,14 @@ A40: len (((mlt(Rex,Rey) - (<i>*(mlt(Rex,Imy)))) + ((<i>*mlt(Imx,Rey)))) ) =
     .= Sum (mlt(Rex,Rey)-mlt(Rex,<i>*Imy) + (<i>*(mlt(Imx,Rey))-<i>*(<i>*(
   mlt(Imx,Imy))))) by COMPLSP2:53
     .= Sum (mlt(Rex,Rey)-mlt(Rex,<i>*Imy) + (<i>*(mlt(Imx,Rey))-<i>*(mlt(Imx
-  ,<i>*Imy)))) by A9,A35,A33,Th26
+  ,<i>*Imy)))) by A9,A35,A33,Th25
     .= Sum (mlt(Rex,Rey)-mlt(Rex,<i>*Imy) + <i>*(mlt(Imx,Rey)-mlt(Imx,<i>*
   Imy))) by A34,COMPLSP2:43
     .= Sum (mlt(Rex,Rey)-mlt(Rex,<i>*Imy) + <i>*mlt(Imx,y*')) by A9,A31,A29,A33
-,A28,Th34
-    .= Sum (mlt(Rex,Rey-<i>*Imy) + <i>*mlt(Imx,y*')) by A9,A31,A29,A12,Th34
-    .= Sum ((mlt(Rex,y*'))+(mlt((<i>)*(Imx),y*'))) by A10,A28,Th27
-    .= Sum mlt(x,y*') by A11,A20,A26,Th36;
+,A28,Th33
+    .= Sum (mlt(Rex,Rey-<i>*Imy) + <i>*mlt(Imx,y*')) by A9,A31,A29,A12,Th33
+    .= Sum ((mlt(Rex,y*'))+(mlt((<i>)*(Imx),y*'))) by A10,A28,Th26
+    .= Sum mlt(x,y*') by A11,A20,A26,Th35;
   hence thesis;
 end;
 
@@ -1485,7 +1473,7 @@ A11: i in Seg width M2 by A1,A4,A6,A7,FINSEQ_1:1;
   hence thesis by A3,A4,FINSEQ_1:14;
 end;
 
-theorem Th43:
+theorem Th41:
   for M being Matrix of COMPLEX st i in Seg len M holds Line(M,i)=
   (Line(M*',i))*'
 proof
@@ -1523,7 +1511,7 @@ A11: [i,j] in Indices M by A6,A5,A4,Th1;
   hence thesis by A2,A3,FINSEQ_1:14;
 end;
 
-theorem Th44:
+theorem Th42:
   for F being FinSequence of COMPLEX,M being Matrix of COMPLEX st
   len F=width M holds mlt(F,(Line((M*'),i))*') = mlt(Line((M*'),i),(F*'))*'
 proof
@@ -1532,10 +1520,10 @@ proof
 A1: len F=width M;
   len (Line((M*'),i))=width (M*') by MATRIX_1:def 7
     .= width M by Def1;
-  hence thesis by A1,Th25;
+  hence thesis by A1,Th24;
 end;
 
-theorem Th45:
+theorem Th43:
   for F being FinSequence of COMPLEX,M being Matrix of COMPLEX st
   len F = width M & len F >= 1 holds (M*F)*'=(M*')*(F*')
 proof
@@ -1546,7 +1534,7 @@ A2: len F >= 1;
 A3: len (F*') = len F by COMPLSP2:def 1;
 A4: width (M*')=width M by Def1;
 A5: len ((M*F)*')=len (M*F) by COMPLSP2:def 1
-    .= len M by Def7;
+    .= len M by Def6;
 A6: len (M*') = len M by Def1;
 A7: now
     let i be Nat;
@@ -1560,13 +1548,13 @@ A11: len (mlt(Line((M*'),i),(F*'))) >= 1 by A2,A3,FINSEQ_2:72;
 A12: i in Seg len (M*') by A5,A6,A8,A9,FINSEQ_1:1;
     i <= len ((M*F)) by A9,COMPLSP2:def 1;
     hence ((M*F)*').i = ((M*F).i)*' by A8,COMPLSP2:def 1
-      .= Sum(mlt(F,Line(M,i)))*' by A10,Def7
-      .= Sum(mlt(F,(Line((M*'),i))*'))*' by A10,Th43
-      .= Sum((mlt(Line((M*'),i),(F*')))*')*' by A1,Th44
-      .= (Sum(mlt(Line((M*'),i),(F*'))))*'*' by A11,Th24
-      .= ((M*')*(F*')).i by A12,Def7;
+      .= Sum(mlt(F,Line(M,i)))*' by A10,Def6
+      .= Sum(mlt(F,(Line((M*'),i))*'))*' by A10,Th41
+      .= Sum((mlt(Line((M*'),i),(F*')))*')*' by A1,Th42
+      .= (Sum(mlt(Line((M*'),i),(F*'))))*'*' by A11,Th23
+      .= ((M*')*(F*')).i by A12,Def6;
   end;
-  len (M*'*(F*'))=len (M*') by Def7
+  len (M*'*(F*'))=len (M*') by Def6
     .= len M by Def1;
   hence thesis by A5,A7,FINSEQ_1:14;
 end;
@@ -1596,7 +1584,7 @@ proof
     .= -(Sum F) by BINOP_2:def 1;
 end;
 
-theorem Th49:
+theorem Th46:
   for F1,F2 being FinSequence of COMPLEX holds Sum(F1^F2) = Sum F1 + Sum F2
 proof
   let F1,F2 be FinSequence of COMPLEX;
@@ -1608,7 +1596,7 @@ end;
 definition
   let M be Matrix of COMPLEX;
   func LineSum M -> FinSequence of COMPLEX means
-  :Def10:
+  :Def9:
   len it=len M & for i being Nat st i in Seg len M holds it.i=Sum Line(M,i);
   existence
   proof
@@ -1646,7 +1634,7 @@ end;
 definition
   let M be Matrix of COMPLEX;
   func ColSum M -> FinSequence of COMPLEX means
-  :Def11:
+  :Def10:
   len it=width M & for j
   being Nat st j in Seg width M holds it.j=Sum (Col(M,j));
   existence
@@ -1682,7 +1670,7 @@ A8:   j in dom p1;
   end;
 end;
 
-theorem Th50:
+theorem Th47:
   for F being FinSequence of COMPLEX holds len F = 1 implies Sum F = F.1
 proof
   let F be FinSequence of COMPLEX;
@@ -1691,7 +1679,7 @@ proof
   hence thesis by FINSOP_1:11;
 end;
 
-theorem Th51:
+theorem Th48:
   for f,g being FinSequence of COMPLEX,n being Nat st len f = n +
   1 & g = f|n holds Sum f = Sum g + f/.(len f)
 proof
@@ -1748,11 +1736,11 @@ A14:    i in dom g by A5,A6,FINSEQ_1:17;
   then dom f = Seg len(g^q) by FINSEQ_1:def 3
     .= dom(g^q) by FINSEQ_1:def 3;
   then f = g^<*(f/.(len f))*> by A7,FUNCT_1:2;
-  hence Sum f = Sum g + Sum <*(f/.len f)*> by Th49
+  hence Sum f = Sum g + Sum <*(f/.len f)*> by Th46
     .= Sum g + (f/.len f) by FINSOP_1:11;
 end;
 
-theorem Th52:
+theorem Th49:
   for M being Matrix of COMPLEX st len M > 0 holds Sum LineSum M = Sum ColSum M
 proof
   defpred P[Nat] means for N being Matrix of COMPLEX st $1+1=len N holds Sum
@@ -1790,190 +1778,194 @@ A7:   len Line(N,(k+1+1))=width N by MATRIX_1:def 7;
 A8:   k+1+1=len N;
       then
 A9:   len N2=k+1 by FINSEQ_1:59,NAT_1:11;
-A10:  len g1 = len N2 by Def10
+A10:  len g1 = len N2 by Def9
         .= k1 by A8,FINSEQ_1:59,NAT_1:11;
       1+k>=1 by NAT_1:11;
       then
 A11:  len N2>=1 by A8,FINSEQ_1:59,NAT_1:11;
-      then 1 in Seg len N2 by FINSEQ_1:1;
+      then
+A12:  len N2>0;
+      1 in Seg len N2 by FINSEQ_1:1,A11;
       then 1 in dom N2 by FINSEQ_1:def 3;
       then
-A12:  N2.1 in rng N2 by FUNCT_1:3;
+A13:  N2.1 in rng N2 by FUNCT_1:3;
       then ex s3 being FinSequence st s3=N2.1 & len s3=n3 by A5,A6;
       then
-A13:  width N2=n3 by A11,A12,MATRIX_1:def 3;
-      len N>=1 by A8,NAT_1:11;
-      then 1 in Seg len N by FINSEQ_1:1;
+A14:  width N2=n3 by A13,MATRIX_1:def 3,A12;
+A15:    len N>=1 by A8,NAT_1:11;
       then
-A14:  1 in dom N by FINSEQ_1:def 3;
+A16:   len N>0;
+      1 in Seg len N by FINSEQ_1:1,A15;
       then
-A15:  N.1 in rng N by FUNCT_1:3;
-A16:  ex s2 being FinSequence st s2=N.1 & len s2=n3 by A6,A14,FUNCT_1:3;
+A17:  1 in dom N by FINSEQ_1:def 3;
       then
-A17:  width N2= width N by A8,A15,A13,MATRIX_1:def 3;
-      len f3= k1+1 by A8,Def10;
+A18:  N.1 in rng N by FUNCT_1:3;
+A19:  ex s2 being FinSequence st s2=N.1 & len s2=n3 by A6,A17,FUNCT_1:3;
       then
-A18:  len (f3|k1) = len g1 by A10,FINSEQ_1:59,NAT_1:11;
-A19:  for n being Nat st 1 <= n & n <= len (f3|k1) holds (f3|k1).n=g1.n
+A20:  width N2= width N by A18,A14,MATRIX_1:def 3,A16;
+      len f3= k1+1 by A8,Def9;
+      then
+A21:  len (f3|k1) = len g1 by A10,FINSEQ_1:59,NAT_1:11;
+A22:  for n being Nat st 1 <= n & n <= len (f3|k1) holds (f3|k1).n=g1.n
       proof
         let n be Nat;
         assume that
-A20:    1 <= n and
-A21:    n <= len (f3|k1);
-A22:    n <= k1+1 by A10,A18,A21,NAT_1:13;
+A23:    1 <= n and
+A24:    n <= len (f3|k1);
+A25:    n <= k1+1 by A10,A21,A24,NAT_1:13;
         then
-A23:    n in Seg len N by A8,A20,FINSEQ_1:1;
-A24:    for n1 being Nat st 1 <= n1 & n1 <= len (Line(N,n)) holds Line(N
+A26:    n in Seg len N by A8,A23,FINSEQ_1:1;
+A27:    for n1 being Nat st 1 <= n1 & n1 <= len (Line(N,n)) holds Line(N
         ,n).n1=Line(N2,n).n1
         proof
-A25:      N2.n=N.n by A10,A18,A21,FINSEQ_3:112;
-A26:      n<=len N2 by A18,A21,Def10;
+A28:      N2.n=N.n by A10,A21,A24,FINSEQ_3:112;
+A29:      n<=len N2 by A21,A24,Def9;
           let n1 be Nat;
           assume that
-A27:      1 <= n1 and
-A28:      n1 <= len (Line(N,n));
-A29:      n1 in Seg (len (Line(N,n))) by A27,A28,FINSEQ_1:1;
+A30:      1 <= n1 and
+A31:      n1 <= len (Line(N,n));
+A32:      n1 in Seg (len (Line(N,n))) by A30,A31,FINSEQ_1:1;
           then
-A30:      n1 in Seg width N2 by A17,MATRIX_1:def 7;
-A31:      n1 in Seg width N by A29,MATRIX_1:def 7;
+A33:      n1 in Seg width N2 by A20,MATRIX_1:def 7;
+A34:      n1 in Seg width N by A32,MATRIX_1:def 7;
           then n1 <= width N by FINSEQ_1:1;
-          then [n,n1] in Indices N by A8,A20,A22,A27,Th1;
+          then [n,n1] in Indices N by A8,A23,A25,A30,Th1;
           then
-A32:      ex pn being FinSequence of COMPLEX st pn=N.n & N*(n,n1)= pn.
+A35:      ex pn being FinSequence of COMPLEX st pn=N.n & N*(n,n1)= pn.
           n1 by MATRIX_1:def 5;
-          n1<=width N by A31,FINSEQ_1:1;
-          then n1<=width N2 by A8,A15,A16,A13,MATRIX_1:def 3;
+          n1<=width N by A34,FINSEQ_1:1;
+          then n1<=width N2 by A8,A18,A19,A14,MATRIX_1:def 3,A12;
           then
-A33:      [n,n1] in Indices (N2) by A20,A27,A26,Th1;
-          n1 in Seg width N by A29,MATRIX_1:def 7;
+A36:      [n,n1] in Indices (N2) by A23,A30,A29,Th1;
+          n1 in Seg width N by A32,MATRIX_1:def 7;
           then Line(N,n).n1=N*(n,n1) by MATRIX_1:def 7
-            .=N2*(n,n1) by A33,A32,A25,MATRIX_1:def 5
-            .=Line(N2,n).n1 by A30,MATRIX_1:def 7;
+            .=N2*(n,n1) by A36,A35,A28,MATRIX_1:def 5
+            .=Line(N2,n).n1 by A33,MATRIX_1:def 7;
           hence thesis;
         end;
         len Line(N,n) = width N by MATRIX_1:def 7
-          .= width N2 by A8,A15,A16,A13,MATRIX_1:def 3
+          .= width N2 by A8,A18,A19,A14,MATRIX_1:def 3,A12
           .= len (Line(N2,n)) by MATRIX_1:def 7;
         then
-A34:    Line(N,n)=Line(N2,n) by A24,FINSEQ_1:14;
-        n in Seg len (f3|k1) by A20,A21,FINSEQ_1:1;
+A37:    Line(N,n)=Line(N2,n) by A27,FINSEQ_1:14;
+        n in Seg len (f3|k1) by A23,A24,FINSEQ_1:1;
         then n in dom(f3|k1) by FINSEQ_1:def 3;
         then
-A35:    n in dom(f3|Seg k1) by FINSEQ_1:def 15;
-        n in Seg k1 by A10,A18,A20,A21,FINSEQ_1:1;
+A38:    n in dom(f3|Seg k1) by FINSEQ_1:def 15;
+        n in Seg k1 by A10,A21,A23,A24,FINSEQ_1:1;
         then
-A36:    n in Seg len N2 by A8,FINSEQ_1:59,NAT_1:11;
+A39:    n in Seg len N2 by A8,FINSEQ_1:59,NAT_1:11;
         (f3|k1).n=(f3|Seg k1).n by FINSEQ_1:def 15
-          .=(LineSum(N)).n by A35,FUNCT_1:47
-          .= Sum (Line(N2,n)) by A23,A34,Def10
-          .= g1.n by A36,Def10;
+          .=(LineSum(N)).n by A38,FUNCT_1:47
+          .= Sum (Line(N2,n)) by A26,A37,Def9
+          .= g1.n by A39,Def9;
         hence thesis;
       end;
-      len ColSum N2=width N2 by Def11;
+      len ColSum N2=width N2 by Def10;
       then
-A37:  len (ColSum(N2)+Line(N,(k+1+1))) = width N by A17,A7,COMPLSP2:6
-        .= len ColSum N by Def11;
-A38:  len ColSum N2=width N2 by Def11
-        .= width N by A8,A15,A16,A13,MATRIX_1:def 3
+A40:  len (ColSum(N2)+Line(N,(k+1+1))) = width N by A20,A7,COMPLSP2:6
+        .= len ColSum N by Def10;
+A41:  len ColSum N2=width N2 by Def10
+        .= width N by A8,A18,A19,A14,MATRIX_1:def 3,A12
         .= len Line(N,(k+1+1)) by MATRIX_1:def 7;
-A39:  k+1+1 in Seg len N by A8,FINSEQ_1:3;
-      then k+1+1 in Seg len LineSum N by Def10;
+A42:  k+1+1 in Seg len N by A8,FINSEQ_1:3;
+      then k+1+1 in Seg len LineSum N by Def9;
       then
-A40:  k+1+1 in dom LineSum N by FINSEQ_1:def 3;
-A41:  len N >= k+1 by A8,NAT_1:11;
-A42:  for j st 1<=j & j<=width N holds (ColSum N2).j+N*(k+1+1,j)=(ColSum N).j
+A43:  k+1+1 in dom LineSum N by FINSEQ_1:def 3;
+A44:  len N >= k+1 by A8,NAT_1:11;
+A45:  for j st 1<=j & j<=width N holds (ColSum N2).j+N*(k+1+1,j)=(ColSum N).j
       proof
         let j;
         assume that
-A43:    1<=j and
-A44:    j<=width N;
+A46:    1<=j and
+A47:    j<=width N;
         set g=Col(N2,j);
         set f=Col(N,j);
-A45:    k1 <= len f by A41,MATRIX_1:def 8;
-A46:    for n be Nat st 1 <=n & n <= len (f|k1) holds (f|k1).n=g.n
+A48:    k1 <= len f by A44,MATRIX_1:def 8;
+A49:    for n be Nat st 1 <=n & n <= len (f|k1) holds (f|k1).n=g.n
         proof
           let n be Nat;
           assume that
-A47:      1 <= n and
-A48:      n <= len (f|k1);
-A49:      n <= k1 by A45,A48,FINSEQ_1:59;
+A50:      1 <= n and
+A51:      n <= len (f|k1);
+A52:      n <= k1 by A48,A51,FINSEQ_1:59;
           then
-A50:      N2.n=N.n by FINSEQ_3:112;
-          n <= k1+1 by A49,NAT_1:13;
-          then n in Seg len N by A8,A47,FINSEQ_1:1;
+A53:      N2.n=N.n by FINSEQ_3:112;
+          n <= k1+1 by A52,NAT_1:13;
+          then n in Seg len N by A8,A50,FINSEQ_1:1;
           then
-A51:      n in dom N by FINSEQ_1:def 3;
-          n<=len N by A8,A49,NAT_1:13;
-          then [n,j] in Indices N by A43,A44,A47,Th1;
+A54:      n in dom N by FINSEQ_1:def 3;
+          n<=len N by A8,A52,NAT_1:13;
+          then [n,j] in Indices N by A46,A47,A50,Th1;
           then
-A52:      ex pn being FinSequence of COMPLEX st pn=N.n & N*(n,j)= pn.j
+A55:      ex pn being FinSequence of COMPLEX st pn=N.n & N*(n,j)= pn.j
           by MATRIX_1:def 5;
-A53:      j<=width N2 by A8,A15,A16,A13,A44,MATRIX_1:def 3;
-          n in Seg k1 by A47,A49,FINSEQ_1:1;
+A56:      j<=width N2 by A8,A18,A19,A14,A47,MATRIX_1:def 3,A12;
+          n in Seg k1 by A50,A52,FINSEQ_1:1;
           then
-A54:      n in dom N2 by A9,FINSEQ_1:def 3;
-          n in Seg len (f|k1) by A47,A48,FINSEQ_1:1;
+A57:      n in dom N2 by A9,FINSEQ_1:def 3;
+          n in Seg len (f|k1) by A50,A51,FINSEQ_1:1;
           then n in dom(f|k1) by FINSEQ_1:def 3;
           then
-A55:      n in dom(f|Seg k1) by FINSEQ_1:def 15;
-          n<=len N2 by A9,A45,A48,FINSEQ_1:59;
+A58:      n in dom(f|Seg k1) by FINSEQ_1:def 15;
+          n<=len N2 by A9,A48,A51,FINSEQ_1:59;
           then
-A56:      [n,j] in Indices N2 by A43,A47,A53,Th1;
+A59:      [n,j] in Indices N2 by A46,A50,A56,Th1;
           (f|k1).n=(f|Seg k1).n by FINSEQ_1:def 15
-            .=(Col(N,j)).n by A55,FUNCT_1:47
-            .= N*(n,j) by A51,MATRIX_1:def 8
-            .= N2*(n,j) by A56,A52,A50,MATRIX_1:def 5
-            .= g.n by A54,MATRIX_1:def 8;
+            .=(Col(N,j)).n by A58,FUNCT_1:47
+            .= N*(n,j) by A54,MATRIX_1:def 8
+            .= N2*(n,j) by A59,A55,A53,MATRIX_1:def 5
+            .= g.n by A57,MATRIX_1:def 8;
           hence thesis;
         end;
-A57:    k+1+1 in Seg len N by A8,FINSEQ_1:4;
+A60:    k+1+1 in Seg len N by A8,FINSEQ_1:4;
         then
-A58:    k+1+1 in dom N by FINSEQ_1:def 3;
+A61:    k+1+1 in dom N by FINSEQ_1:def 3;
         len g = len N2 by MATRIX_1:def 8
           .= k1 by A8,FINSEQ_1:59,NAT_1:11;
         then
-A59:    g=f|k1 by A45,A46,FINSEQ_1:14,59;
-A60:    len (Col(N,j))=len N by MATRIX_1:def 8;
-        k+1+1 in Seg len Col(N,j) by A57,MATRIX_1:def 8;
+A62:    g=f|k1 by A48,A49,FINSEQ_1:14,59;
+A63:    len (Col(N,j))=len N by MATRIX_1:def 8;
+        k+1+1 in Seg len Col(N,j) by A60,MATRIX_1:def 8;
         then
-A61:    k+1+1 in dom Col(N,j) by FINSEQ_1:def 3;
-A62:    j in Seg width N by A43,A44,FINSEQ_1:1;
+A64:    k+1+1 in dom Col(N,j) by FINSEQ_1:def 3;
+A65:    j in Seg width N by A46,A47,FINSEQ_1:1;
         then
-        (ColSum N2).j+N*(k+1+1,j) = Sum (Col(N2,j))+N*((k+1+1),j) by A17,Def11
-          .= Sum (Col(N2,j))+Col(N,j).(k+1+1) by A58,MATRIX_1:def 8
-          .= Sum (Col(N2,j))+Col(N,j)/.(k+1+1) by A61,PARTFUN1:def 6
-          .= Sum (Col(N,j)) by A8,A60,A59,Th51
-          .=(ColSum N).j by A62,Def11;
+        (ColSum N2).j+N*(k+1+1,j) = Sum (Col(N2,j))+N*((k+1+1),j) by A20,Def10
+          .= Sum (Col(N2,j))+Col(N,j).(k+1+1) by A61,MATRIX_1:def 8
+          .= Sum (Col(N2,j))+Col(N,j)/.(k+1+1) by A64,PARTFUN1:def 6
+          .= Sum (Col(N,j)) by A8,A63,A62,Th48
+          .=(ColSum N).j by A65,Def10;
         hence thesis;
       end;
-A63:  for j be Nat st 1<=j & j<= len ColSum N holds (ColSum(N2)+Line(N,k+
+A66:  for j be Nat st 1<=j & j<= len ColSum N holds (ColSum(N2)+Line(N,k+
       1+1)).j=(ColSum N).j
       proof
         let j be Nat;
         assume that
-A64:    1<=j and
-A65:    j<= len ColSum N;
-        j in Seg len ColSum N by A64,A65,FINSEQ_1:1;
+A67:    1<=j and
+A68:    j<= len ColSum N;
+        j in Seg len ColSum N by A67,A68,FINSEQ_1:1;
         then
-A66:    j in Seg width N2 by A17,Def11;
+A69:    j in Seg width N2 by A20,Def10;
         then
-A67:    j<=width N by A17,FINSEQ_1:1;
-        j in Seg len ((ColSum(N2)+Line(N,k+1+1))) by A37,A64,A65,FINSEQ_1:1;
+A70:    j<=width N by A20,FINSEQ_1:1;
+        j in Seg len ((ColSum(N2)+Line(N,k+1+1))) by A40,A67,A68,FINSEQ_1:1;
         then j in dom ((ColSum(N2)+Line(N,k+1+1))) by FINSEQ_1:def 3;
         then (ColSum(N2)+Line(N,(k+1+1))).j = (ColSum N2).j+(Line(N,k+1+1)).j
         by COMPLSP2:1
-          .= (ColSum N2).j+N*(k+1+1,j) by A17,A66,MATRIX_1:def 7
-          .= (ColSum N).j by A42,A64,A67;
+          .= (ColSum N2).j+N*(k+1+1,j) by A20,A69,MATRIX_1:def 7
+          .= (ColSum N).j by A45,A67,A70;
         hence thesis;
       end;
-      len LineSum N = len N by Def10;
-      then Sum LineSum N =Sum (LineSum N2)+(LineSum N)/.(k+1+1) by A8,A18,A19
-,Th51,FINSEQ_1:14
-        .=Sum (LineSum N2)+(LineSum N).(k+1+1) by A40,PARTFUN1:def 6
+      len LineSum N = len N by Def9;
+      then Sum LineSum N =Sum (LineSum N2)+(LineSum N)/.(k+1+1) by A8,A21,A22
+,Th48,FINSEQ_1:14
+        .=Sum (LineSum N2)+(LineSum N).(k+1+1) by A43,PARTFUN1:def 6
         .=Sum (ColSum N2)+(LineSum N).(k+1+1) by A3,A9
-        .=Sum (ColSum N2)+Sum (Line(N,(k+1+1))) by A39,Def10
-        .=Sum (ColSum(N2)+Line(N,(k+1+1))) by A38,Th37
-        .=Sum ColSum N by A37,A63,FINSEQ_1:14;
+        .=Sum (ColSum N2)+Sum (Line(N,(k+1+1))) by A42,Def9
+        .=Sum (ColSum(N2)+Line(N,(k+1+1))) by A41,Th36
+        .=Sum ColSum N by A40,A66,FINSEQ_1:14;
       hence thesis;
     end;
     hence thesis;
@@ -1981,37 +1973,37 @@ A67:    j<=width N by A17,FINSEQ_1:1;
   for N being Matrix of COMPLEX st 0+1=len N holds Sum LineSum N=Sum ColSum N
   proof
     let N be Matrix of COMPLEX;
-A68: len Line(N,1)=width N by MATRIX_1:def 7;
+A71: len Line(N,1)=width N by MATRIX_1:def 7;
     assume
-A69: 0+1=len N;
+A72: 0+1=len N;
     then
-A70: 1 in Seg len N by FINSEQ_1:3;
-A71: 1 in Seg 1 by FINSEQ_1:3;
-A72: for j be Nat st 1<=j & j<= width N holds (ColSum(N)).j=Line(N,1).j
+A73: 1 in Seg len N by FINSEQ_1:3;
+A74: 1 in Seg 1 by FINSEQ_1:3;
+A75: for j be Nat st 1<=j & j<= width N holds (ColSum(N)).j=Line(N,1).j
     proof
-A73:  1 in dom N by A69,A71,FINSEQ_1:def 3;
+A76:  1 in dom N by A72,A74,FINSEQ_1:def 3;
       let j be Nat;
       assume that
-A74:  1<=j and
-A75:  j<= width N;
-A76:  len (Col(N,j)) = 1 by A69,MATRIX_1:def 8;
-A77:  j in Seg width N by A74,A75,FINSEQ_1:1;
-      then (ColSum N).j=Sum Col(N,j) by Def11
-        .= (Col(N,j)).1 by A76,Th50
-        .= N*(1,j) by A73,MATRIX_1:def 8
-        .= Line(N,1).j by A77,MATRIX_1:def 7;
+A77:  1<=j and
+A78:  j<= width N;
+A79:  len (Col(N,j)) = 1 by A72,MATRIX_1:def 8;
+A80:  j in Seg width N by A77,A78,FINSEQ_1:1;
+      then (ColSum N).j=Sum Col(N,j) by Def10
+        .= (Col(N,j)).1 by A79,Th47
+        .= N*(1,j) by A76,MATRIX_1:def 8
+        .= Line(N,1).j by A80,MATRIX_1:def 7;
       hence thesis;
     end;
-A78: len LineSum N=1 by A69,Def10;
-    len ColSum N=width N by Def11;
-    then Sum ColSum N = Sum Line(N,1) by A68,A72,FINSEQ_1:14
-      .=(LineSum N).1 by A70,Def10
-      .= Sum LineSum N by A78,Th50;
+A81: len LineSum N=1 by A72,Def9;
+    len ColSum N=width N by Def10;
+    then Sum ColSum N = Sum Line(N,1) by A71,A75,FINSEQ_1:14
+      .=(LineSum N).1 by A73,Def9
+      .= Sum LineSum N by A81,Th47;
     hence thesis;
   end;
   then
-A79: P[0];
-  for i holds P[i] from NAT_1:sch 2(A79,A2);
+A82: P[0];
+  for i holds P[i] from NAT_1:sch 2(A82,A2);
   then (len M)-'1+1=len M implies Sum LineSum M=Sum ColSum M;
   hence thesis by A1;
 end;
@@ -2023,12 +2015,12 @@ definition
   coherence;
 end;
 
-theorem Th53:
+theorem Th50:
   for M being Matrix of COMPLEX holds ColSum M = LineSum(M@)
 proof
   let M be Matrix of COMPLEX;
-A1: len ColSum M=width M by Def11;
-A2: len (LineSum(M@))=len (M@) by Def10;
+A1: len ColSum M=width M by Def10;
+A2: len (LineSum(M@))=len (M@) by Def9;
 A3: now
     let i be Nat;
     assume that
@@ -2037,23 +2029,23 @@ A5: i <= len ColSum M;
     i <= len LineSum(M@) by A2,A1,A5,MATRIX_1:def 6;
     then i in Seg len LineSum(M@) by A4,FINSEQ_1:1;
     then
-A6: i in Seg len (M@) by Def10;
+A6: i in Seg len (M@) by Def9;
 A7: i in Seg width M by A1,A4,A5,FINSEQ_1:1;
-    hence (ColSum M).i = Sum Col(M,i) by Def11
+    hence (ColSum M).i = Sum Col(M,i) by Def10
       .= Sum (Line(M@,i)) by A7,MATRIX_2:15
-      .= (LineSum(M@)).i by A6,Def10;
+      .= (LineSum(M@)).i by A6,Def9;
   end;
   len ColSum M=len LineSum(M@) by A2,A1,MATRIX_1:def 6;
   hence thesis by A3,FINSEQ_1:14;
 end;
 
-theorem Th54:
+theorem Th51:
   for M being Matrix of COMPLEX st len M > 0 holds SumAll M = SumAll (M@)
 proof
   let M be Matrix of COMPLEX;
   assume len M > 0;
-  then SumAll M = Sum ColSum M by Th52
-    .= SumAll(M@) by Th53;
+  then SumAll M = Sum ColSum M by Th49
+    .= SumAll(M@) by Th50;
   hence thesis;
 end;
 
@@ -2063,7 +2055,7 @@ definition
 A1: len x=len M and
 A2: len y=width M;
   func QuadraticForm(x,M,y) -> Matrix of COMPLEX means
-  :Def13:
+  :Def12:
   len it = len x
 & width it=len y & for i,j being Nat st [i,j] in Indices M holds it*(i,j)=(x.i)
   *(M*(i,j))*((y.j)*');
@@ -2113,7 +2105,7 @@ A14:  dom M1 = dom M by A1,A7,FINSEQ_3:29;
   end;
 end;
 
-theorem Th55:
+theorem Th52:
   for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX
 st len x = len M & len y = width M & len y > 0 holds (QuadraticForm(x,M,y))@ =
   (QuadraticForm(y,M@",x))*'
@@ -2125,7 +2117,7 @@ A2: len y =width M and
 A3: len y > 0;
 A4: width (M@") = width (M@) by Def1
     .= len x by A1,A2,A3,MATRIX_2:10;
-A5: width (QuadraticForm(x,M,y))=len y by A1,A2,Def13;
+A5: width (QuadraticForm(x,M,y))=len y by A1,A2,Def12;
   then
 A6: width ((QuadraticForm(x,M,y))@) = len (QuadraticForm(x,M,y)) by A3,
 MATRIX_2:10;
@@ -2138,13 +2130,13 @@ MATRIX_1:def 6;
 A10: len (M@") = len (M@) by Def1
     .= len y by A2,MATRIX_1:def 6;
   then
-A11: width (QuadraticForm(y,M@",x))= len x by A4,Def13;
+A11: width (QuadraticForm(y,M@",x))= len x by A4,Def12;
 A12: len ((QuadraticForm(y,M@",x))*')=len (QuadraticForm(y,M@",x)) by Def1
-    .= len y by A10,A4,Def13;
+    .= len y by A10,A4,Def12;
 A13: len ((QuadraticForm(x,M,y))@) = width (QuadraticForm(x,M,y)) by
 MATRIX_1:def 6
-    .= len y by A1,A2,Def13;
-A14: len QuadraticForm(y,M@",x) = len y by A10,A4,Def13;
+    .= len y by A1,A2,Def12;
+A14: len QuadraticForm(y,M@",x) = len y by A10,A4,Def12;
 A15: for i,j st [i,j] in Indices ((QuadraticForm(x,M,y))@) holds ((
   QuadraticForm(y,M@",x))*')*(i,j) = ((QuadraticForm(x,M,y))@)*(i,j)
   proof
@@ -2156,52 +2148,52 @@ A16: [i,j] in Indices ((QuadraticForm(x,M,y))@);
 A17: 1<=j by Th1;
 A18: j<=len QuadraticForm(x,M,y) by A6,A16,Th1;
     then
-A19: j<=len M by A1,A2,Def13;
+A19: j<=len M by A1,A2,Def12;
 A20: 1<=i by A16,Th1;
 A21: i<=width QuadraticForm(x,M,y) by A9,A16,Th1;
-    then i<=width M by A1,A2,Def13;
+    then i<=width M by A1,A2,Def12;
     then
 A22: [j,i] in Indices M by A17,A20,A19,Th1;
-A23: j<=width (M@") by A1,A2,A4,A18,Def13;
+A23: j<=width (M@") by A1,A2,A4,A18,Def12;
 A24: 1<=i by A16,Th1;
     1<=i by A16,Th1;
     then
 A25: [j,i] in Indices (QuadraticForm(x,M,y)) by A21,A17,A18,Th1;
-    i<=len (M@") by A1,A2,A7,A21,Def13;
+    i<=len (M@") by A1,A2,A7,A21,Def12;
     then
 A26: [i,j] in Indices (M@") by A17,A24,A23,Th1;
-A27: j<=len x by A1,A2,A18,Def13;
-A28: j<=len x by A1,A2,A18,Def13;
-A29: j<=width QuadraticForm(y,M@",x) by A1,A2,A11,A18,Def13;
+A27: j<=len x by A1,A2,A18,Def12;
+A28: j<=len x by A1,A2,A18,Def12;
+A29: j<=width QuadraticForm(y,M@",x) by A1,A2,A11,A18,Def12;
 A30: 1<=i by A16,Th1;
-    i<=len QuadraticForm(y,M@",x) by A1,A2,A14,A21,Def13;
+    i<=len QuadraticForm(y,M@",x) by A1,A2,A14,A21,Def12;
     then [i,j] in Indices QuadraticForm(y,M@",x) by A17,A30,A29,Th1;
     then ((QuadraticForm(y,M@",x))*')*(i,j) = ((QuadraticForm(y,M@",x))*(i,j)
     *') by Def1
-      .= ((y.i)*((M@")*(i,j))*((x.j)*'))*' by A10,A4,A26,Def13
+      .= ((y.i)*((M@")*(i,j))*((x.j)*'))*' by A10,A4,A26,Def12
       .= ((y.i)*((M@")*(i9,j9))*((x*'.j)))*' by A17,A27,COMPLSP2:def 1
       .= (((y.i)*((M@")*(i,j)))*')*((x*'.j)*') by COMPLEX1:35
       .= (((y.i)*((M@")*(i9,j9)))*')*((x*')*'.j) by A8,A17,A28,COMPLSP2:def 1
       .= ((y.i)*')*(((M@")*(i,j)*'))*((x*')*'.j) by COMPLEX1:35
       .= ((y.i)*')*(((M@")*')*(i,j))*((x*')*'.j) by A26,Def1
       .= ((y.i)*')*(((M@")*')*(i,j))*(x.j) by COMPLSP2:22
-      .= ((y.i)*')*((M@)*(i,j))*(x.j) by Th2
+      .= ((y.i)*')*((M@)*(i,j))*(x.j)
       .= ((y.i)*')*(M*(j,i))*(x.j) by A22,MATRIX_1:def 6
       .= (x.j)*(M*(j,i))*((y.i)*')
-      .= (QuadraticForm(x,M,y))*(j,i) by A1,A2,A22,Def13
+      .= (QuadraticForm(x,M,y))*(j,i) by A1,A2,A22,Def12
       .= ((QuadraticForm(x,M,y))@)*(i,j) by A25,MATRIX_1:def 6;
     hence thesis;
   end;
 A31: width ((QuadraticForm(y,M@",x))*') = width (QuadraticForm(y,M@",x)) by
 Def1
-    .= len x by A10,A4,Def13;
+    .= len x by A10,A4,Def12;
   width ((QuadraticForm(x,M,y))@) = len (QuadraticForm(x,M,y)) by A3,A5,
 MATRIX_2:10
-    .= len x by A1,A2,Def13;
+    .= len x by A1,A2,Def12;
   hence thesis by A13,A12,A31,A15,MATRIX_1:21;
 end;
 
-theorem Th56:
+theorem Th53:
   for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX
 st len x=len M & len y =width M holds (QuadraticForm(x,M,y))*'=QuadraticForm(x
   *',M*',y*')
@@ -2217,7 +2209,7 @@ A4: len (y*') = width (M*') by A2,Def1;
   then
 A5: len (x*') = len (M*') by A1,COMPLSP2:def 1;
   then
-A6: len (QuadraticForm(x*',M*',y*')) = len (x*') by A4,Def13
+A6: len (QuadraticForm(x*',M*',y*')) = len (x*') by A4,Def12
     .= len M by A1,COMPLSP2:def 1;
 A7: width ((QuadraticForm(x,M,y))*')=width QuadraticForm(x,M,y) by Def1;
 A8: len ((QuadraticForm(x,M,y))*') = len QuadraticForm(x,M,y) by Def1;
@@ -2232,29 +2224,29 @@ A10: [i,j] in Indices ((QuadraticForm(x,M,y))*');
 A11: 1<=i by Th1;
 A12: i<=len (QuadraticForm(x,M,y)) by A8,A10,Th1;
     then
-A13: i<=len x by A1,A2,Def13;
-    i<=len M by A1,A2,A12,Def13;
+A13: i<=len x by A1,A2,Def12;
+    i<=len M by A1,A2,A12,Def12;
     then
 A14: i<=len (M*') by Def1;
 A15: j<=width (QuadraticForm(x,M,y)) by A7,A10,Th1;
     then
-A16: j<=len y by A1,A2,Def13;
-    j<=width M by A1,A2,A15,Def13;
+A16: j<=len y by A1,A2,Def12;
+    j<=width M by A1,A2,A15,Def12;
     then
 A17: j<=width (M*') by Def1;
     1<=j by A10,Th1;
     then
 A18: [i,j] in Indices (M*') by A11,A14,A17,Th1;
-A19: j<=width M by A1,A2,A15,Def13;
+A19: j<=width M by A1,A2,A15,Def12;
 A20: 1<=i by A10,Th1;
 A21: 1<=j by A10,Th1;
-    i<=len M by A1,A2,A12,Def13;
+    i<=len M by A1,A2,A12,Def12;
     then
 A22: [i,j] in Indices M by A21,A20,A19,Th1;
     [i,j] in Indices QuadraticForm(x,M,y) by A11,A12,A21,A15,Th1;
     then
     ((QuadraticForm(x,M,y))*')*(i,j) =((QuadraticForm(x,M,y))*(i,j))*' by Def1
-      .=((x.i)*(M*(i,j))*((y.j)*'))*' by A1,A2,A22,Def13
+      .=((x.i)*(M*(i,j))*((y.j)*'))*' by A1,A2,A22,Def12
       .=((x.i)*(M*(i9,j9))*((y*'.j)))*' by A21,A16,COMPLSP2:def 1
       .= (((x.i)*(M*(i,j)))*')*((y*'.j)*') by COMPLEX1:35
       .= (((x.i)*(M*(i9,j9)))*')*((y*')*'.j) by A3,A21,A16,COMPLSP2:def 1
@@ -2262,19 +2254,19 @@ A22: [i,j] in Indices M by A21,A20,A19,Th1;
       .= ((x.i)*')*((M*')*(i,j))*(((y*')*'.j)) by A22,Def1
       .= ((x.i)*')*((M*')*(i9,j9))*(((y*').j)*') by A3,A21,A16,COMPLSP2:def 1
       .= ((x*').i)*((M*')*(i9,j9))*(((y*').j)*') by A11,A13,COMPLSP2:def 1
-      .= (QuadraticForm(x*',M*',y*'))*(i,j) by A5,A4,A18,Def13;
+      .= (QuadraticForm(x*',M*',y*'))*(i,j) by A5,A4,A18,Def12;
     hence thesis;
   end;
 A23: width ((QuadraticForm(x,M,y))*')=width (QuadraticForm(x,M,y)) by Def1
-    .= len y by A1,A2,Def13;
-A24: width QuadraticForm(x*',M*',y*')=len (y*') by A5,A4,Def13
+    .= len y by A1,A2,Def12;
+A24: width QuadraticForm(x*',M*',y*')=len (y*') by A5,A4,Def12
     .= len y by COMPLSP2:def 1;
   len ((QuadraticForm(x,M,y))*') = len QuadraticForm(x,M,y) by Def1
-    .= len M by A1,A2,Def13;
+    .= len M by A1,A2,Def12;
   hence thesis by A6,A23,A24,A9,MATRIX_1:21;
 end;
 
-theorem Th57:
+theorem Th54:
   for x,y being FinSequence of COMPLEX st len x=len y & 0 < len y
   holds |(x,y)|=(|(y,x)|)*'
 proof
@@ -2286,14 +2278,14 @@ A3: 0+1 <= len x by A1,A2,NAT_1:8;
   len (x*') = len (x) by COMPLSP2:def 1;
   then
 A4: len (mlt(y,(x*'))) = len y by A1,FINSEQ_2:72;
-  (|(y,x)|)*' = (Sum (mlt(y,(x*'))))*' by A1,Th40
-    .= Sum (mlt(y,(x*'))*') by A1,A3,A4,Th24
-    .= Sum (mlt(x,(y*'))) by A1,Th25
-    .= |(x, y)| by A1,Th40;
+  (|(y,x)|)*' = (Sum (mlt(y,(x*'))))*' by A1,Th39
+    .= Sum (mlt(y,(x*'))*') by A1,A3,A4,Th23
+    .= Sum (mlt(x,(y*'))) by A1,Th24
+    .= |(x, y)| by A1,Th39;
   hence thesis;
 end;
 
-theorem Th58:
+theorem Th55:
   for x,y being FinSequence of COMPLEX st len x=len y & 0 < len y
   holds (|(x,y)|)*'=|(x*',y*')|
 proof
@@ -2306,10 +2298,10 @@ A4: len (y*') = len y by COMPLSP2:def 1;
   then
 A5: len (mlt(x,y*')) = len x by A1,FINSEQ_2:72;
   len (x*') = len x by COMPLSP2:def 1;
-  then |(x*',y*')| = Sum (mlt(x*',(y*')*')) by A1,A4,Th40
-    .= Sum ((mlt(x,y*'))*') by A1,A4,Th28
-    .= (Sum (mlt(x,y*')))*' by A3,A5,Th24
-    .= (|(x, y)|)*' by A1,Th40;
+  then |(x*',y*')| = Sum (mlt(x*',(y*')*')) by A1,A4,Th39
+    .= Sum ((mlt(x,y*'))*') by A1,A4,Th27
+    .= (Sum (mlt(x,y*')))*' by A3,A5,Th23
+    .= (|(x, y)|)*' by A1,Th39;
   hence thesis;
 end;
 
@@ -2364,7 +2356,7 @@ A17: [j,i] in Indices (M*') by A14,A16,A15,Th1;
   hence thesis by A4,A5,A2,A7,MATRIX_1:21;
 end;
 
-theorem Th60:
+theorem Th57:
   for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX
   st len x=width M & len y = len M & len x>0 & len y>0 holds |(x,(M@")*y)| =
   SumAll QuadraticForm(x,M@,y)
@@ -2380,14 +2372,14 @@ A5: width (M@) = len y by A1,A2,A3,MATRIX_2:10;
 A6: width ((M@)*')=len y by Def1;
 A7: dom LineSum QuadraticForm(x,M@,y) = Seg len LineSum QuadraticForm(x,M@,
   y) by FINSEQ_1:def 3
-    .= Seg len QuadraticForm(x,M@,y) by Def10;
+    .= Seg len QuadraticForm(x,M@,y) by Def9;
 A8: len (M@)=len x by A1,MATRIX_1:def 6;
-A9: len LineSum(QuadraticForm(x,M@,y)) = len QuadraticForm(x,M@,y) by Def10
-    .= len x by A8,A5,Def13;
+A9: len LineSum(QuadraticForm(x,M@,y)) = len QuadraticForm(x,M@,y) by Def9
+    .= len x by A8,A5,Def12;
 A10: len (M@")=len (M@) by Def1
     .=len x by A1,MATRIX_1:def 6;
   then
-A11: len ((M@")*y)= len x by Def7;
+A11: len ((M@")*y)= len x by Def6;
   then len (((M@")*y)*')= len x by COMPLSP2:def 1;
   then
 A12: len LineSum(QuadraticForm(x,M@,y)) = len mlt(x,((M@")*y)*') by A9,
@@ -2400,14 +2392,14 @@ A13: 0+1<=len y by A4,NAT_1:13;
     assume that
 A14: 1<=i and
 A15: i<=len LineSum(QuadraticForm(x,M@,y));
-A16: len y = width QuadraticForm(x,M@,y) by A8,A5,Def13
+A16: len y = width QuadraticForm(x,M@,y) by A8,A5,Def12
       .=len Line(QuadraticForm(x,M@,y),i) by MATRIX_1:def 7;
 A17: len (Line(M@",i))=len y by A6,MATRIX_1:def 7;
     then
 A18: len mlt(Line(M@",i),y)>=1 by A13,FINSEQ_2:72;
-    len (M@)=len QuadraticForm(x,M@,y) by A8,A5,Def13;
+    len (M@)=len QuadraticForm(x,M@,y) by A8,A5,Def12;
     then
-A19: len (M@)=len LineSum(QuadraticForm(x,M@,y)) by Def10;
+A19: len (M@)=len LineSum(QuadraticForm(x,M@,y)) by Def9;
     then
 A20: i in Seg len (M@") by A8,A10,A14,A15,FINSEQ_1:1;
 A21: for j being Nat st 1<=j & j<= len (Line(QuadraticForm(x,M@,y),i))
@@ -2434,13 +2426,13 @@ A27:  j in Seg width QuadraticForm(x,M@,y) by MATRIX_1:def 7;
 A28:  [i,j] in Indices (M@) by A14,A15,A19,A23,Th1;
       ((x.i)*(mlt(Line((M@"),i),y))*').j =(x.i)*(((mlt(Line((M@"),i),y))
       *').j) by COMPLSP2:16
-        .=(x.i)*((mlt((Line((M@"),i))*',y*')).j) by A17,Th28
-        .=(x.i)*((mlt(Line(M@,i),y*')).j) by A8,A10,A20,Th43
-        .=(x.i)*(((Line(M@,i)).j)*((y*').j)) by A26,Th19
+        .=(x.i)*((mlt((Line((M@"),i))*',y*')).j) by A17,Th27
+        .=(x.i)*((mlt(Line(M@,i),y*')).j) by A8,A10,A20,Th41
+        .=(x.i)*(((Line(M@,i)).j)*((y*').j)) by A26,Th18
         .=(x.i)*(((Line(M@,i)).j)*((y.j)*')) by A16,A23,A24,COMPLSP2:def 1
         .=(x.i)*((Line(M@,i)).j)*((y.j)*')
         .=(x.i)*((M@)*(i,j))*((y.j)*') by A25,MATRIX_1:def 7
-        .=(QuadraticForm(x,M@,y))*(i,j) by A8,A5,A28,Def13;
+        .=(QuadraticForm(x,M@,y))*(i,j) by A8,A5,A28,Def12;
       hence thesis by A27,MATRIX_1:def 7;
     end;
     i in Seg len LineSum(QuadraticForm(x,M@,y)) by A14,A15,FINSEQ_1:1;
@@ -2453,22 +2445,22 @@ A31: len ((x.i)*(mlt(Line((M@"),i),y))*') =len ((mlt(Line((M@"),i),y))*')
       .=len (Line(QuadraticForm(x,M@,y),i)) by A16,A30,FINSEQ_2:72;
     i in Seg len mlt(x,((M@")*y)*') by A12,A14,A15,FINSEQ_1:1;
     then i in dom mlt(x,((M@")*y)*') by FINSEQ_1:def 3;
-    then (mlt(x,((M@")*y)*')).i =(x.i)*((((M@")*y)*').i) by Th19
+    then (mlt(x,((M@")*y)*')).i =(x.i)*((((M@")*y)*').i) by Th18
       .=(x.i)*((((M@")*y).i)*') by A11,A9,A14,A15,COMPLSP2:def 1;
     then
-    (mlt(x,((M@")*y)*')).i = (x.i)*((Sum(mlt(Line((M@"),i),y)))*') by A20,Def7
-      .=(x.i)*(Sum((mlt(Line((M@"),i),y))*')) by A18,Th24
-      .=Sum((x.i)*(mlt(Line((M@"),i),y))*') by Th29;
+    (mlt(x,((M@")*y)*')).i = (x.i)*((Sum(mlt(Line((M@"),i),y)))*') by A20,Def6
+      .=(x.i)*(Sum((mlt(Line((M@"),i),y))*')) by A18,Th23
+      .=Sum((x.i)*(mlt(Line((M@"),i),y))*') by Th28;
     then (mlt(x,((M@")*y)*')).i=Sum (Line(QuadraticForm(x,M@,y),i)) by A31,A21,
 FINSEQ_1:14;
-    hence thesis by A7,A29,Def10;
+    hence thesis by A7,A29,Def9;
   end;
   then Sum LineSum(QuadraticForm(x,M@,y))=Sum mlt(x,((M@")*y)*') by A12,
 FINSEQ_1:14;
-  hence thesis by A11,Th40;
+  hence thesis by A11,Th39;
 end;
 
-theorem Th61:
+theorem Th58:
   for x,y being FinSequence of COMPLEX,M being Matrix of COMPLEX
   st len y=len M & len x =width M & len x>0 & len y>0 holds |(M*x,y)| = SumAll
   QuadraticForm(x,M@,y)
@@ -2484,24 +2476,24 @@ A6: width (M@)=len M by A2,A3,MATRIX_2:10;
 A7: len (x*')= width M by A2,COMPLSP2:def 1;
   len (y*')= len M by A1,COMPLSP2:def 1;
   then
-A8: len QuadraticForm(y*',M,x*') = len M by A7,Def13;
+A8: len QuadraticForm(y*',M,x*') = len M by A7,Def12;
 A9: len (x*')=len x by COMPLSP2:def 1;
 A10: 0+1<=len x by A3,NAT_1:13;
 A11: len (y*')=len y by COMPLSP2:def 1;
 A12: len (M@)=width M by MATRIX_1:def 6;
-A13: len (M*x)=len M by Def7;
-  hence |(M*x,y)| = (|(y,M*x)|)*' by A1,A4,Th57
-    .= (|(y*',(M*x)*')|) by A1,A4,A13,Th58
-    .= |(y*',((M*')*(x*')) )| by A2,A10,Th45
-    .= SumAll QuadraticForm(y*',(M@)@,x*') by A1,A2,A3,A4,A9,A11,A12,A6,A5,Th60
+A13: len (M*x)=len M by Def6;
+  hence |(M*x,y)| = (|(y,M*x)|)*' by A1,A4,Th54
+    .= (|(y*',(M*x)*')|) by A1,A4,A13,Th55
+    .= |(y*',((M*')*(x*')) )| by A2,A10,Th43
+    .= SumAll QuadraticForm(y*',(M@)@,x*') by A1,A2,A3,A4,A9,A11,A12,A6,A5,Th57
     .= SumAll QuadraticForm(y*',M,x*') by A1,A2,A3,A4,MATRIX_2:13
-    .= SumAll((QuadraticForm(y*',M,x*'))@) by A1,A4,A8,Th54
-    .= SumAll((QuadraticForm(x*',(M@"),y*'))*') by A1,A2,A3,A9,A11,Th55
-    .= SumAll(((QuadraticForm(x,(M@),y))*')*') by A1,A2,A12,A6,Th56
-    .= SumAll QuadraticForm(x,M@,y) by Th2;
+    .= SumAll((QuadraticForm(y*',M,x*'))@) by A1,A4,A8,Th51
+    .= SumAll((QuadraticForm(x*',(M@"),y*'))*') by A1,A2,A3,A9,A11,Th52
+    .= SumAll(((QuadraticForm(x,(M@),y))*')*') by A1,A2,A12,A6,Th53
+    .= SumAll QuadraticForm(x,M@,y);
 end;
 
-theorem Th62:
+theorem Th59:
   for x,y being FinSequence of COMPLEX, M being Matrix of COMPLEX
 st len x=width M & len y =len M & width M>0 & len M>0 holds |(M*x,y)| = |(x,(M
   @")*y)|
@@ -2512,8 +2504,8 @@ A1: len x=width M and
 A2: len y =len M and
 A3: width M>0 and
 A4: len M >0;
-  |(x,(M@")*y)| = SumAll(QuadraticForm(x,M@,y)) by A1,A2,A3,A4,Th60;
-  hence thesis by A1,A2,A3,A4,Th61;
+  |(x,(M@")*y)| = SumAll(QuadraticForm(x,M@,y)) by A1,A2,A3,A4,Th57;
+  hence thesis by A1,A2,A3,A4,Th58;
 end;
 
 theorem
@@ -2526,11 +2518,11 @@ A1: len x=len M and
 A2: len y =width M and
 A3: width M>0 and
 A4: len M>0;
-A5: len ((M@")*x)=len (M@") by Def7
+A5: len ((M@")*x)=len (M@") by Def6
     .=len (M@) by Def1
     .=width M by MATRIX_1:def 6;
-  len (M*y) =len x by A1,Def7;
-  hence |(x,M*y)| = (|(M*y,x)|)*' by A1,A4,Th57
-    .= (|(y,(M@")*x)|)*' by A1,A2,A3,A4,Th62
-    .= |((M@")*x,y)| by A2,A3,A5,Th57;
+  len (M*y) =len x by A1,Def6;
+  hence |(x,M*y)| = (|(M*y,x)|)*' by A1,A4,Th54
+    .= (|(y,(M@")*x)|)*' by A1,A2,A3,A4,Th59
+    .= |((M@")*x,y)| by A2,A3,A5,Th54;
 end;

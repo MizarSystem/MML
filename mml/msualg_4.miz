@@ -2,7 +2,7 @@
 ::  by Ma{\l}gorzata Korolkiewicz
 ::
 :: Received May 6, 1994
-:: Copyright (c) 1994-2011 Association of Mizar Users
+:: Copyright (c) 1994-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,8 +18,8 @@ environ
       EQREL_1, SUBSET_1, NAT_1, MARGREL1, PARTFUN1, FINSEQ_1, TARSKI, CARD_3,
       MSUALG_3, WELLORD1, MSUALG_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      EQREL_1, STRUCT_0, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, CARD_3, PBOOLE,
-      FUNCOP_1, MSUALG_1, MSUALG_3;
+      EQREL_1, STRUCT_0, ORDINAL1, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, CARD_3,
+      PBOOLE, FUNCOP_1, MSUALG_1, MSUALG_3;
  constructors EQREL_1, PRALG_2, MSUALG_3, RELSET_1;
  registrations RELAT_1, FUNCT_1, PARTFUN1, FUNCOP_1, PBOOLE, STRUCT_0,
       MSUALG_1, MSUALG_3, CARD_3, RELSET_1, FINSEQ_2, FINSEQ_1;
@@ -44,10 +44,9 @@ registration
   proof
     set R = the Relation;
     set f = I --> R;
-A1: dom f = I by FUNCOP_1:13;
     reconsider f as ManySortedSet of I;
     take f;
-    for x be set st x in dom f holds f.x is Relation by A1,FUNCOP_1:7;
+    for x be set st x in dom f holds f.x is Relation by FUNCOP_1:7;
     hence thesis by FUNCOP_1:def 11;
   end;
 end;
@@ -56,7 +55,7 @@ definition
 
   let I be set, A,B be ManySortedSet of I;
   mode ManySortedRelation of A,B -> ManySortedSet of I means
-    :Def2:
+    :Def1:
     for i be set st i in I holds it.i is Relation of A.i,B.i;
   existence
   proof
@@ -84,8 +83,8 @@ registration
     let R be ManySortedRelation of A,B;
     let x be set;
     assume x in dom R;
-    then x in I by PARTFUN1:def 2;
-    hence thesis by Def2;
+    then x in I;
+    hence thesis by Def1;
   end;
 end;
 
@@ -98,7 +97,7 @@ definition
   let I be set, A be ManySortedSet of I;
   let IT be ManySortedRelation of A;
   attr IT is MSEquivalence_Relation-like means
-  :Def3:
+  :Def2:
   for i be set, R be
   Relation of A.i st i in I & IT.i = R holds R is Equivalence_Relation of A.i;
 end;
@@ -107,7 +106,7 @@ definition
   let I be non empty set, A,B be ManySortedSet of I, F be ManySortedRelation
   of A,B, i be Element of I;
   redefine func F.i -> Relation of A.i,B.i;
-  coherence by Def2;
+  coherence by Def1;
 end;
 
 definition
@@ -120,7 +119,7 @@ definition
   let IT be ManySortedRelation of U1;
 
   attr IT is MSEquivalence-like means
-  :Def5:
+  :Def3:
   IT is MSEquivalence_Relation-like;
 end;
 
@@ -135,13 +134,6 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
     from FUNCT_1:sch 4;
     reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 2
 ,RELAT_1:def 18;
-    for x be set st x in dom f holds f.x is Relation
-    proof
-      let x be set;
-      assume x in dom f;
-      then f.x = id ((the Sorts of U1).x) by A1;
-      hence thesis;
-    end;
     for i be set st i in the carrier of S holds f.i is Relation of (the
     Sorts of U1).i,(the Sorts of U1).i
     proof
@@ -151,7 +143,7 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
       hence thesis;
     end;
     then reconsider
-    f as ManySortedRelation of the Sorts of U1,the Sorts of U1 by Def2;
+    f as ManySortedRelation of the Sorts of U1,the Sorts of U1 by Def1;
     reconsider f as ManySortedRelation of U1;
     take f;
     for i be set, R be Relation of (the Sorts of U1).i st i in the carrier
@@ -162,8 +154,8 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
       then R = id ((the Sorts of U1).i) by A1;
       hence thesis;
     end;
-    then f is MSEquivalence_Relation-like by Def3;
-    hence thesis by Def5;
+    then f is MSEquivalence_Relation-like by Def2;
+    hence thesis by Def3;
   end;
 end;
 
@@ -172,15 +164,15 @@ theorem Th1:
   Equivalence_Relation of (the Sorts of U1).s
 proof
   let R be MSEquivalence-like ManySortedRelation of U1;
-  R is MSEquivalence_Relation-like by Def5;
-  hence thesis by Def3;
+  R is MSEquivalence_Relation-like by Def3;
+  hence thesis by Def2;
 end;
 
 definition
   let S be non void non empty ManySortedSign, U1 be non-empty MSAlgebra over S
   , R be MSEquivalence-like ManySortedRelation of U1;
   attr R is MSCongruence-like means
-  :Def6:
+  :Def4:
   for o be OperSymbol of S, x,y be
   Element of Args(o,U1) st (for n be Nat st n in dom x holds [x.n,y.n] in R.((
 the_arity_of o)/.n)) holds [Den(o,U1).x,Den(o,U1).y] in R.(the_result_sort_of o
@@ -198,13 +190,6 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
     from FUNCT_1:sch 4;
     reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 2
 ,RELAT_1:def 18;
-    for x be set st x in dom f holds f.x is Relation
-    proof
-      let x be set;
-      assume x in dom f;
-      then f.x = id ((the Sorts of U1).x) by A1;
-      hence thesis;
-    end;
     for i be set st i in the carrier of S holds f.i is Relation of (the
     Sorts of U1).i,(the Sorts of U1).i
     proof
@@ -214,7 +199,7 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
       hence thesis;
     end;
     then reconsider
-    f as ManySortedRelation of the Sorts of U1,the Sorts of U1 by Def2;
+    f as ManySortedRelation of the Sorts of U1,the Sorts of U1 by Def1;
     reconsider f as ManySortedRelation of U1;
     for i be set, R be Relation of (the Sorts of U1).i st i in the carrier
     of S & f.i = R holds R is Equivalence_Relation of (the Sorts of U1).i
@@ -224,8 +209,8 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
       then R = id ((the Sorts of U1).i) by A1;
       hence thesis;
     end;
-    then f is MSEquivalence_Relation-like by Def3;
-    then reconsider f as MSEquivalence-like ManySortedRelation of U1 by Def5;
+    then f is MSEquivalence_Relation-like by Def2;
+    then reconsider f as MSEquivalence-like ManySortedRelation of U1 by Def3;
     take f;
     for o be OperSymbol of S, x,y be Element of Args(o,U1) st (for n be
 Nat st n in dom x holds [x.n,y.n] in f.((the_arity_of o)/.n)) holds [Den(o,U1).
@@ -263,7 +248,7 @@ MSUALG_1:def 5
       then Den(o,U1).x = Den(o,U1).y by A4,A6,FUNCT_1:2;
       hence thesis by A9,A10,RELAT_1:def 10;
     end;
-    hence thesis by Def6;
+    hence thesis by Def4;
   end;
 end;
 
@@ -294,7 +279,7 @@ definition
   let U1 be non-empty MSAlgebra over S;
   let R be MSCongruence of U1;
   func Class R -> non-empty ManySortedSet of the carrier of S means
-  :Def8:
+  :Def6:
   for s being Element of S holds it.s = Class (R.s);
   existence
   proof
@@ -384,7 +369,7 @@ definition
   let R be MSCongruence of A;
   let x be Element of Args(o,A);
   func R # x -> Element of product ((Class R) * (the_arity_of o)) means
-  :Def9:
+  :Def7:
 for n be Nat st n in dom (the_arity_of o) holds it.n = Class(R.((the_arity_of o
   )/.n),x.n);
   existence
@@ -409,7 +394,7 @@ A3: dom ((Class R) * ar) = da by PARTFUN1:def 2;
       let y be set;
       assume
 A4:   y in dom ((Class R) * ar);
-      then reconsider n = y as Nat by A3,ORDINAL1:def 12;
+      then reconsider n = y as Nat by ORDINAL1:def 12;
       ar.y in rng ar by A3,A4,FUNCT_1:def 3;
       then reconsider s = ar.y as Element of S;
 A5:   y in dom ((the Sorts of A) * ar) by A3,A4,PARTFUN1:def 2;
@@ -420,7 +405,7 @@ A6:   x.y in (the Sorts of A).s by A5,MSUALG_3:6;
       then
 A7:   f.y in Class (R.s) by A6,EQREL_1:def 3;
       ((Class R) * ar).y = (Class R).(ar.y) by A4,FUNCT_1:12;
-      hence thesis by A7,Def8;
+      hence thesis by A7,Def6;
     end;
     then reconsider f as Element of product ((Class R) * ar) by A2,A3,CARD_3:9
 ;
@@ -458,7 +443,7 @@ definition
   let R be MSCongruence of A;
   func QuotRes(R,o) -> Function of ((the Sorts of A) * the ResultSort of S).o,
   ((Class R) * the ResultSort of S).o means
-  :Def10:
+  :Def8:
   for x being Element of (the
   Sorts of A).(the_result_sort_of o) holds it.x = Class(R,x);
   existence
@@ -475,7 +460,7 @@ A2: for x be set st x in D holds f.x in (Class R).rs
       then reconsider x1 = x as Element of D;
       f.x1 = Class(R,x1) by A1;
       then f.x1 in Class (R.rs) by EQREL_1:def 3;
-      hence thesis by Def8;
+      hence thesis by Def6;
     end;
     o in the carrier' of S;
     then o in dom ((the Sorts of A)*(the ResultSort of S)) by PARTFUN1:def 2;
@@ -609,7 +594,7 @@ A2: dom f = O & for x be set st x in O holds P[x,f.x] from CLASSES1:
     proof
       let x be set;
       assume x in dom f;
-      then reconsider x1 = x as OperSymbol of S by A2;
+      then reconsider x1 = x as OperSymbol of S;
       f.x1 = QuotRes(R,x1) by A2;
       hence thesis;
     end;
@@ -669,7 +654,7 @@ A6: dom f = O & for x be set st x in O holds P[x,f.x] from CLASSES1:
     proof
       let x be set;
       assume x in dom f;
-      then reconsider x1 = x as OperSymbol of S by A6;
+      then reconsider x1 = x as OperSymbol of S;
       f.x1 = QuotArgs(R,x1) by A6;
       hence thesis;
     end;
@@ -733,7 +718,7 @@ A7: for n be Nat st n in dom f holds f.n in Class (R.(ar/.n))
 A8: n in dom f;
     then ar.n = ar/.n by A4,A6,PARTFUN1:def 6;
     then ((Class R) * ar).n = (Class R).s by A4,A8,FUNCT_1:12
-      .= Class (R.s) by Def8;
+      .= Class (R.s) by Def6;
     hence thesis by A4,A5,A8;
   end;
 A9: for a be set st a in dom f ex b be set st P[a,b]
@@ -742,7 +727,7 @@ A9: for a be set st a in dom f ex b be set st P[a,b]
     reconsider s = ar/.a as Element of S;
     assume
 A10: a in dom f;
-    then reconsider n = a as Nat by A4,A6,ORDINAL1:def 12;
+    then reconsider n = a as Nat by A4,ORDINAL1:def 12;
     f.n in Class (R.s) by A7,A10;
     then consider a1 be set such that
 A11: a1 in (the Sorts of A).s & f.n = Class(R.s,a1) by EQREL_1:def 3;
@@ -764,11 +749,11 @@ A14: for y be set st y in dom ((the Sorts of A) * ar) holds g.y in ((the
 A15: y in dom ((the Sorts of A) * ar);
     then
 A16: g.y in f.y & f.y in ((Class R) * ar).y by A4,A5,A12,A13;
-    reconsider n = y as Nat by A4,A6,A12,A13,A15,ORDINAL1:def 12;
+    reconsider n = y as Nat by A15,ORDINAL1:def 12;
     reconsider s = ar/.n as Element of S;
 A17: ar.n = ar/.n by A4,A6,A12,A13,A15,PARTFUN1:def 6;
     then ((Class R) * ar).y = (Class R).s by A4,A12,A13,A15,FUNCT_1:12
-      .= Class (R.s) by Def8;
+      .= Class (R.s) by Def6;
     then g.n in (the Sorts of A).s by A16;
     hence thesis by A15,A17,FUNCT_1:12;
   end;
@@ -787,7 +772,7 @@ A20: a1 in (the Sorts of A).s and
 A21: f.n = Class(R.s,a1) by EQREL_1:def 3;
     g.n in f.n by A4,A6,A12,A19;
     then Class(R.s,g.n) = Class(R.s,a1) by A20,A21,EQREL_1:23;
-    hence f.x = (R # g).x by A19,A21,Def9;
+    hence f.x = (R # g).x by A19,A21,Def7;
   end;
   take g;
   dom (R # g) = dom ((Class R) * ar) by CARD_3:9;
@@ -800,7 +785,7 @@ definition
   let R be MSCongruence of A;
   func QuotCharact(R,o) -> Function of ((Class R)# * the Arity of S).o, ((
   Class R) * the ResultSort of S).o means
-  :Def14:
+  :Def12:
   for a be Element of Args(o,A)
 st R # a in ((Class R)# * the Arity of S).o holds it.(R # a) = ((QuotRes(R,o))
   * (Den(o,A))).a;
@@ -843,7 +828,7 @@ A7:   dom Den(o,A) = Args(o,A) & dom (QuotRes(R,o) * Den(o,A)) = dom Den(
       reconsider da = (Den(o,A)).a, db = (Den(o,A)).b as Element of (the Sorts
       of A).ro by A5,MSUALG_1:def 5;
 A8:   ((QuotRes(R,o)) * (Den(o,A))).b = (QuotRes(R,o)).db by A7,FUNCT_1:12
-        .= Class(R,db) by Def10
+        .= Class(R,db) by Def8
         .= Class(R.ro,db);
       assume
 A9:   x = R # b;
@@ -855,7 +840,7 @@ A10:    dom a = dom ar by MSUALG_3:6;
 A11:    n in dom a;
         then
 A12:    (R#a).n = Class(R.(ar/.n),a.n) & (R#b).n = Class(R.(ar/.n),b.n)
-        by A10,Def9;
+        by A10,Def7;
         dom (the Sorts of A) = the carrier of S by PARTFUN1:def 2;
         then rng ar c= dom (the Sorts of A);
         then
@@ -868,9 +853,9 @@ FUNCT_1:12
         hence thesis by A2,A9,A14,A12,EQREL_1:35;
       end;
       then
-A15:  [da,db] in R.ro by Def6;
+A15:  [da,db] in R.ro by Def4;
       y = (QuotRes(R,o)).((Den(o,A)).a) by A7,FUNCT_1:12
-        .= Class(R, da) by Def10
+        .= Class(R, da) by Def8
         .= Class (R.ro, da);
       hence thesis by A8,A15,EQREL_1:35;
     end;
@@ -919,7 +904,7 @@ definition
   let R be MSCongruence of A;
   func QuotCharact R -> ManySortedFunction of (Class R)# * the Arity of S, (
   Class R) * the ResultSort of S means
-  :Def15:
+  :Def13:
   for o be OperSymbol of S holds it. o = QuotCharact(R,o);
   existence
   proof
@@ -942,7 +927,7 @@ A2: dom f = O & for x be set st x in O holds P[x,f.x] from CLASSES1:
     proof
       let x be set;
       assume x in dom f;
-      then reconsider x1 = x as OperSymbol of S by A2;
+      then reconsider x1 = x as OperSymbol of S;
       f.x1 = QuotCharact(R,x1) by A2;
       hence thesis;
     end;
@@ -1004,7 +989,7 @@ definition
   let R be MSCongruence of U1;
   let s be SortSymbol of S;
   func MSNat_Hom(U1,R,s) -> Function of (the Sorts of U1).s,(Class R).s means
-  :Def17:
+  :Def15:
   for x be set st x in (the Sorts of U1).s holds it.x = Class(R.s,x);
   existence
   proof
@@ -1019,7 +1004,7 @@ A1: dom f = (the Sorts of U1).s & for x be set st x in (the Sorts of
 A2:   x in (the Sorts of U1).s;
       then Class(R.s,x) in Class (R.s) by EQREL_1:def 3;
       then f.x in Class (R.s) by A1,A2;
-      hence thesis by Def8;
+      hence thesis by Def6;
     end;
     then reconsider f as Function of (the Sorts of U1).s,(Class R).s by A1,
 FUNCT_2:3;
@@ -1050,7 +1035,7 @@ definition
   let R be MSCongruence of U1;
   func MSNat_Hom(U1,R) -> ManySortedFunction of U1, QuotMSAlg (U1,R) means
   :
-  Def18: for s be SortSymbol of S holds it.s = MSNat_Hom(U1,R,s);
+  Def16: for s be SortSymbol of S holds it.s = MSNat_Hom(U1,R,s);
   existence
   proof
     deffunc F(Element of S) = MSNat_Hom(U1,R,$1);
@@ -1063,7 +1048,7 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
     proof
       let x be set;
       assume x in dom f;
-      then reconsider y = x as Element of S by A1;
+      then reconsider y = x as Element of S;
       f.y = MSNat_Hom(U1,R,y) by A1;
       hence thesis;
     end;
@@ -1130,9 +1115,9 @@ A5:   n in dom ((the Sorts of U1) * ar) by A4,PARTFUN1:def 2;
         .= S1.s by A4,PARTFUN1:def 6;
       then reconsider xn = x.n as Element of S1.s by A5,MSUALG_3:6;
       thus (F#x).a = (F.(ar/.n)).(x.n) by A2,A4,MSUALG_3:def 6
-        .= Fo.xn by Def18
-        .= Class(R.s,x.n) by Def17
-        .= (R#x).a by A4,Def9;
+        .= Fo.xn by Def16
+        .= Class(R.s,x.n) by Def15
+        .= (R#x).a by A4,Def7;
     end;
     dom (the Sorts of U1) = the carrier of S by PARTFUN1:def 2;
     then rng (the ResultSort of S) c= dom (the Sorts of U1);
@@ -1157,12 +1142,12 @@ A7: dom Den(o,U1) = Args(o,U1) & dom ((QuotRes(R,o)) * Den(o,U1)) = dom
     then
 A8: F # x = R # x by A3,FUNCT_1:2;
     Den(o,QA) = (QuotCharact R).o by MSUALG_1:def 6
-      .= QuotCharact(R,o) by Def15;
-    then Den(o,QA).(F#x) = ((QuotRes(R,o)) * (Den(o,U1))).x by A1,A8,Def14
+      .= QuotCharact(R,o) by Def13;
+    then Den(o,QA).(F#x) = ((QuotRes(R,o)) * (Den(o,U1))).x by A1,A8,Def12
       .= (QuotRes(R,o)) . dx by A7,FUNCT_1:12
-      .= Class (R, dx) by Def10
-      .= (MSNat_Hom(U1,R,ro)).dx by Def17
-      .= (F.ro).((Den(o,U1)).x) by Def18;
+      .= Class (R, dx) by Def8
+      .= (MSNat_Hom(U1,R,ro)).dx by Def15
+      .= (F.ro).((Den(o,U1)).x) by Def16;
     hence thesis;
   end;
   hence F is_homomorphism U1,QA by MSUALG_3:def 7;
@@ -1174,17 +1159,17 @@ A8: F # x = R # x by A3,FUNCT_1:2;
     reconsider f = F.i as Function of S1.s, (the Sorts of QA).s by
 PBOOLE:def 15;
 A9: dom f = S1.s by FUNCT_2:def 1;
-A10: (the Sorts of QA).s = Class (R.s) by Def8;
+A10: (the Sorts of QA).s = Class (R.s) by Def6;
     for x be set st x in (the Sorts of QA).i holds x in rng f
     proof
       let x be set;
-A11:  f = MSNat_Hom(U1,R,s) by Def18;
+A11:  f = MSNat_Hom(U1,R,s) by Def16;
       assume x in (the Sorts of QA).i;
       then consider a1 be set such that
 A12:  a1 in S1.s and
 A13:  x = Class(R.s,a1) by A10,EQREL_1:def 3;
       f.a1 in rng f by A9,A12,FUNCT_1:def 3;
-      hence thesis by A12,A13,A11,Def17;
+      hence thesis by A12,A13,A11,Def15;
     end;
     then (the Sorts of QA).i c= rng f by TARSKI:def 3;
     hence thesis by XBOOLE_0:def 10;
@@ -1198,7 +1183,7 @@ definition
   let F be ManySortedFunction of U1,U2;
   let s be SortSymbol of S;
   func MSCng(F,s) -> Equivalence_Relation of (the Sorts of U1).s means
-  :Def19:
+  :Def17:
 for x,y be Element of (the Sorts of U1).s holds [x,y] in it iff (F.s).x = (F.s)
   .y;
   existence
@@ -1252,7 +1237,7 @@ definition
   assume
 A1: F is_homomorphism U1,U2;
   func MSCng(F) -> MSCongruence of U1 means
-  :Def20:
+  :Def18:
   for s be SortSymbol of S holds it.s = MSCng(F,s);
   existence
   proof
@@ -1262,14 +1247,6 @@ A2: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
     from FUNCT_1:sch 4;
     reconsider f as ManySortedSet of the carrier of S
      by A2,PARTFUN1:def 2,RELAT_1:def 18;
-    for x be set st x in dom f holds f.x is Relation
-    proof
-      let x be set;
-      assume x in dom f;
-      then reconsider s = x as Element of S by A2;
-      f.s = MSCng(F,s) by A2;
-      hence thesis;
-    end;
     for i be set st i in the carrier of S holds f.i is Relation of (the
     Sorts of U1).i,(the Sorts of U1).i
     proof
@@ -1279,7 +1256,7 @@ A2: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
       f.i = MSCng(F,s) by A2;
       hence thesis;
     end;
-    then reconsider f as ManySortedRelation of the Sorts of U1 by Def2;
+    then reconsider f as ManySortedRelation of the Sorts of U1 by Def1;
     reconsider f as ManySortedRelation of U1;
     for i be set, R be Relation of (the Sorts of U1).i st i in the carrier
     of S & f.i = R holds R is Equivalence_Relation of (the Sorts of U1).i
@@ -1292,8 +1269,8 @@ A4:   f.i = R;
       R = MSCng(F,s) by A2,A4;
       hence thesis;
     end;
-    then f is MSEquivalence_Relation-like by Def3;
-    then reconsider f as MSEquivalence-like ManySortedRelation of U1 by Def5;
+    then f is MSEquivalence_Relation-like by Def2;
+    then reconsider f as MSEquivalence-like ManySortedRelation of U1 by Def3;
     for o be OperSymbol of S, x,y be Element of Args(o,U1) st (for n be
 Nat st n in dom x holds [x.n,y.n] in f.((the_arity_of o)/.n)) holds [Den(o,U1).
     x,Den(o,U1).y] in f.(the_result_sort_of o)
@@ -1320,7 +1297,7 @@ A11:    n in dom (S1*ao) by A9,PARTFUN1:def 2;
 A12:    [x1,y1] in f.(ao/.m) by A7,A5,A9;
 A13:    ao/.m = ao.m by A9,PARTFUN1:def 6;
         then f.(ao/.m) = MSCng(F,s) by A2;
-        hence (F#x).n = (F#y).n by A10,A13,A12,Def19;
+        hence (F#x).n = (F#y).n by A10,A13,A12,Def17;
       end;
       dom (F#x) = dom (the_arity_of o) & dom (F#y) = dom (the_arity_of o)
       by MSUALG_3:6;
@@ -1340,9 +1317,9 @@ MSUALG_1:def 5
       of U1).ro;
 A17:  (F.ro).Dy = Den(o,U2).(F#y) by A1,MSUALG_3:def 7;
       f.ro = MSCng(F,ro) & (F.ro).Dx = Den(o,U2).(F#x) by A1,A2,MSUALG_3:def 7;
-      hence thesis by A14,A17,Def19;
+      hence thesis by A14,A17,Def17;
     end;
-    then reconsider f as MSCongruence of U1 by Def6;
+    then reconsider f as MSCongruence of U1 by Def4;
     take f;
     thus thesis by A2;
   end;
@@ -1372,7 +1349,7 @@ definition
 A1: F is_homomorphism U1,U2;
   func MSHomQuot(F,s) -> Function of (the Sorts of (QuotMSAlg (U1,MSCng F))).s
   ,(the Sorts of U2).s means
-  :Def21:
+  :Def19:
   for x be Element of (the Sorts of U1).s
   holds it.(Class(MSCng(F,s),x)) = (F.s).x;
   existence
@@ -1381,8 +1358,8 @@ A1: F is_homomorphism U1,U2;
     U1, S2 = the Sorts of U2;
     defpred P[set,set] means for a be Element of S1.s st $1 = Class(MSCng(F,s)
     ,a) holds $2 = (F.s).a;
-A2: cqa.s = Class ((MSCng(F)).s) by Def8
-      .= Class (MSCng(F,s)) by A1,Def20;
+A2: cqa.s = Class ((MSCng(F)).s) by Def6
+      .= Class (MSCng(F,s)) by A1,Def18;
 A3: for x be set st x in cqa.s ex y be set st y in S2.s & P[x,y]
     proof
       let x be set;
@@ -1399,7 +1376,7 @@ A6:   x1 = Class(MSCng(F,s),a) by A2,A4,EQREL_1:def 3;
       assume x = Class(MSCng(F,s),b);
       then b in Class(MSCng(F,s),a) by A6,EQREL_1:23;
       then [b,a] in MSCng(F,s) by EQREL_1:19;
-      hence thesis by Def19;
+      hence thesis by Def17;
     end;
     consider G being Function such that
 A7: dom G = cqa.s & rng G c= S2.s & for x be set st x in cqa.s holds
@@ -1418,8 +1395,8 @@ A7: dom G = cqa.s & rng G c= S2.s & for x be set st x in cqa.s holds
     assume that
 A8: for a be Element of u1.s holds H.(Class(MSCng(F,s),a)) = (F.s).a and
 A9: for a be Element of u1.s holds G.(Class(MSCng(F,s),a)) = (F.s).a;
-A10: cqa.s = Class ((MSCng(F)).s) by Def8
-      .= Class (MSCng(F,s)) by A1,Def20;
+A10: cqa.s = Class ((MSCng(F)).s) by Def6
+      .= Class (MSCng(F,s)) by A1,Def18;
     for x be set st x in cqa.s holds H.x = G.x
     proof
       let x be set;
@@ -1443,7 +1420,7 @@ definition
   let F be ManySortedFunction of U1,U2;
   func MSHomQuot(F) -> ManySortedFunction of (QuotMSAlg (U1, MSCng F)),U2
   means
-  :Def22:
+  :Def20:
   for s be SortSymbol of S holds it.s = MSHomQuot(F,s);
   existence
   proof
@@ -1457,7 +1434,7 @@ A1: dom f = the carrier of S & for d be Element of S holds f.d = G(d)
     proof
       let x be set;
       assume x in dom f;
-      then reconsider y = x as Element of S by A1;
+      then reconsider y = x as Element of S;
       f.y = MSHomQuot(F,y) by A1;
       hence thesis;
     end;
@@ -1526,15 +1503,15 @@ A6:   y in dom ar;
       ar.n in rng ar by A6,FUNCT_1:def 3;
       then reconsider s = ar.n as SortSymbol of S;
 A7:   ar/.n = ar.n by A6,PARTFUN1:def 6;
-      then x.n = Class(mc.s,a.n) by A3,A6,Def9;
+      then x.n = Class(mc.s,a.n) by A3,A6,Def7;
       then
-A8:   x.n = Class(MSCng(F,s),a.n) by A1,Def20;
+A8:   x.n = Class(MSCng(F,s),a.n) by A1,Def18;
 A9:   n in dom (S1 * ar) by A6,PARTFUN1:def 2;
       then a.n in (S1 * ar).n by MSUALG_3:6;
       then reconsider an = a.n as Element of S1.s by A9,FUNCT_1:12;
       (qh # x).n = (qh.s).(x.n) by A2,A6,A7,MSUALG_3:def 6
-        .= MSHomQuot(F,s).(x.n) by Def22
-        .= (F.s).an by A1,A8,Def21
+        .= MSHomQuot(F,s).(x.n) by Def20
+        .= (F.s).an by A1,A8,Def19
         .= (F # a).n by A4,A6,A7,MSUALG_3:def 6;
       hence (qh # x).y = (F # a).y;
     end;
@@ -1554,15 +1531,15 @@ A11: dom Den(o,U1) = Args(o,U1) & dom ((QuotRes(mc,o)) * Den(o,U1)) = dom
     then
 A12: product((Class mc) * ar) = ((Class mc)# * the Arity of S).o by MSAFREE:1;
     reconsider da = (Den(o,U1)).a as Element of S1.ro by A10,MSUALG_1:def 5;
-A13: qh.ro = MSHomQuot(F,ro) by Def22;
+A13: qh.ro = MSHomQuot(F,ro) by Def20;
     Den(o,qa) = (QuotCharact mc).o by MSUALG_1:def 6
-      .= QuotCharact(mc,o) by Def15;
-    then Den(o,qa).x = (QuotRes(mc,o) * Den(o,U1)).a by A3,A12,Def14
+      .= QuotCharact(mc,o) by Def13;
+    then Den(o,qa).x = (QuotRes(mc,o) * Den(o,U1)).a by A3,A12,Def12
       .= (QuotRes(mc,o)) . da by A11,FUNCT_1:12
-      .= Class (mc, da) by Def10
-      .= Class (MSCng(F,ro),da) by A1,Def20;
+      .= Class (mc, da) by Def8
+      .= Class (MSCng(F,ro),da) by A1,Def18;
     then
-A14: (qh.ro).(Den(o,qa).x) = (F.ro).((Den(o,U1)).a) by A1,A13,Def21
+A14: (qh.ro).(Den(o,qa).x) = (F.ro).((Den(o,U1)).a) by A1,A13,Def19
       .= Den(o,U2).(F#a) by A1,MSUALG_3:def 7;
     dom (qh # x) = dom ar & dom (F # a) = dom ar by MSUALG_3:6;
     hence thesis by A5,A14,FUNCT_1:2;
@@ -1574,7 +1551,7 @@ A14: (qh.ro).(Den(o,qa).x) = (F.ro).((Den(o,U1)).a) by A1,A13,Def21
     set f = qh.i;
     assume i in the carrier of S;
     then reconsider s = i as SortSymbol of S;
-A15: f = MSHomQuot(F,s) by Def22;
+A15: f = MSHomQuot(F,s) by Def20;
     for x1,x2 be set st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2
     proof
       let x1,x2 be set;
@@ -1583,22 +1560,22 @@ A16:  x1 in dom f and
 A17:  x2 in dom f and
 A18:  f.x1 = f.x2;
       x1 in (Class mc).s by A15,A16,FUNCT_2:def 1;
-      then x1 in Class (mc.s) by Def8;
+      then x1 in Class (mc.s) by Def6;
       then consider a1 be set such that
 A19:  a1 in S1.s and
 A20:  x1 = Class(mc.s,a1) by EQREL_1:def 3;
       x2 in (Class mc).s by A15,A17,FUNCT_2:def 1;
-      then x2 in Class (mc.s) by Def8;
+      then x2 in Class (mc.s) by Def6;
       then consider a2 be set such that
 A21:  a2 in S1.s and
 A22:  x2 = Class(mc.s,a2) by EQREL_1:def 3;
       reconsider a2 as Element of S1.s by A21;
-A23:  mc.s = MSCng(F,s) by A1,Def20;
+A23:  mc.s = MSCng(F,s) by A1,Def18;
       then
-A24:  f.x2 = (F.s).a2 by A1,A15,A22,Def21;
+A24:  f.x2 = (F.s).a2 by A1,A15,A22,Def19;
       reconsider a1 as Element of S1.s by A19;
-      f.x1 = (F.s).a1 by A1,A15,A23,A20,Def21;
-      then [a1,a2] in MSCng(F,s) by A18,A24,Def19;
+      f.x1 = (F.s).a1 by A1,A15,A23,A20,Def19;
+      then [a1,a2] in MSCng(F,s) by A18,A24,Def17;
       hence thesis by A23,A20,A22,EQREL_1:35;
     end;
     hence thesis by FUNCT_1:def 4;
@@ -1626,19 +1603,19 @@ A3: F is "onto" by A1,MSUALG_3:def 8;
     assume i in the carrier of S;
     then reconsider s = i as SortSymbol of S;
 A4: rng (F.s) = S2.s by A3,MSUALG_3:def 3;
-A5: qh.i = MSHomQuot(F,s) by Def22;
+A5: qh.i = MSHomQuot(F,s) by Def20;
     hence rng f c= S2.i by RELAT_1:def 19;
     let x be set;
     assume x in S2.i;
     then consider a be set such that
 A6: a in dom (F.s) and
 A7: (F.s).a = x by A4,FUNCT_1:def 3;
-A8: MSCng(F,s) = (MSCng(F)).s & Sq.s = Class ((MSCng(F)).s) by A2,Def8,Def20;
+A8: MSCng(F,s) = (MSCng(F)).s & Sq.s = Class ((MSCng(F)).s) by A2,Def6,Def18;
     reconsider a as Element of S1.s by A6;
     dom f = Sq.s by A5,FUNCT_2:def 1;
     then
 A9: Class(MSCng(F,s),a) in dom f by A8,EQREL_1:def 3;
-    f.(Class(MSCng(F,s),a)) = x by A2,A5,A7,Def21;
+    f.(Class(MSCng(F,s),a)) = x by A2,A5,A7,Def19;
     hence thesis by A9,FUNCT_1:def 3;
   end;
   then

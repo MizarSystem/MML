@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz
 ::
 :: Received June 18, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,13 +20,13 @@ environ
       XXREAL_2, SEQ_4, SEQM_3, ZFMISC_1, XXREAL_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
       REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, RELSET_1, PARTFUN1,
-      VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1,
-      XXREAL_0, XXREAL_2, RECDEF_1;
+      VALUED_0, VALUED_1, SEQ_1, COMSEQ_2, SEQ_2, SEQ_4, PARTFUN2, RCOMP_1,
+      RFUNCT_1, XXREAL_0, XXREAL_2, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3, SEQ_4, RCOMP_1,
       PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, ZFMISC_1,
-      RELSET_1;
+      RELSET_1, COMSEQ_2;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
-      VALUED_0, VALUED_1, FUNCT_2, ZFMISC_1;
+      VALUED_0, VALUED_1, FUNCT_2, ZFMISC_1, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -38,7 +38,8 @@ reserve R for Subset of REAL;
 reserve seq,seq1,seq2,seq3 for Real_Sequence;
 reserve Ns for increasing sequence of NAT;
 reserve n for Element of NAT;
-reserve h,h1,h2 for PartFunc of REAL,REAL;
+reserve W for non empty set;
+reserve h,h1,h2 for PartFunc of W,REAL;
 
 ::
 :: REAL SEQUENCES
@@ -67,34 +68,44 @@ theorem :: RFUNCT_2:7
   seq is convergent & (for n holds seq.n<=0) implies lim seq <= 0;
 
 theorem :: RFUNCT_2:8
+  for h1,h2 being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom h1 /\ dom h2 implies (h1+h2)/*seq=h1/*seq+h2/*seq
   & (h1-h2)/*seq=h1/*seq-h2/*seq & (h1(#)h2)/*seq=(h1/*seq)(#)(h2/*seq);
 
 theorem :: RFUNCT_2:9
-  for r being real number holds rng seq c= dom h implies (r(#)h)/*
-  seq = r(#) (h/*seq);
+  for h being PartFunc of W,REAL, seq being sequence of W holds
+  for r being real number holds rng seq c= dom h implies
+  (r(#)h)/*seq = r(#) (h/*seq);
 
 theorem :: RFUNCT_2:10
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom h implies abs(h/*seq) = (abs(h))/*seq & -(h/*seq) = (-h )/*seq
 ;
 
 theorem :: RFUNCT_2:11
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h^) implies h/*seq is non-zero;
 
 theorem :: RFUNCT_2:12
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h^) implies (h^)/*seq =(h/*seq)";
 
 theorem :: RFUNCT_2:13
-  h1 is total & h2 is total implies (h1+h2)/*seq = h1/*seq + h2/*seq & (
-  h1-h2)/*seq = h1/*seq - h2/*seq & (h1(#)h2)/*seq = (h1/*seq) (#) (h2/*seq);
+  for h1,h2 being PartFunc of W,REAL, seq being sequence of W holds
+  h1 is total & h2 is total implies
+  (h1+h2)/*seq = h1/*seq + h2/*seq & (h1-h2)/*seq = h1/*seq - h2/*seq &
+  (h1(#)h2)/*seq = (h1/*seq) (#) (h2/*seq);
 
 theorem :: RFUNCT_2:14
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   h is total implies (r(#)h)/*seq = r(#)(h/*seq);
 
 theorem :: RFUNCT_2:15
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h|X) implies abs((h|X)/*seq) = ((abs(h))|X)/*seq;
 
 theorem :: RFUNCT_2:16
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h|X) & h"{0}={} implies ((h^)|X)/*seq = ((h|X)/*seq)";
 
 ::
@@ -111,17 +122,19 @@ theorem :: RFUNCT_2:17
   for h being one-to-one Function holds (h|X)" = (h")|(h.:X);
 
 theorem :: RFUNCT_2:18
-  rng h is bounded & upper_bound (rng h) = lower_bound (rng h)
+  for h being PartFunc of W,REAL holds
+  rng h is real-bounded & upper_bound (rng h) = lower_bound (rng h)
   implies h is constant;
 
 theorem :: RFUNCT_2:19
-  h.:Y is bounded & upper_bound(h.:Y) = lower_bound(h.:Y) implies h|Y is
-  constant;
+  for h being PartFunc of W,REAL holds
+  h.:Y is real-bounded & upper_bound(h.:Y) = lower_bound(h.:Y) implies
+  h|Y is constant;
 
 reserve e1,e2 for ext-real number;
+reserve h,h1,h2 for PartFunc of REAL,REAL;
 
 definition
-
   let h;
   redefine attr h is increasing means
 :: RFUNCT_2:def 1

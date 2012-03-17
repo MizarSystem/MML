@@ -4,6 +4,7 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -25,7 +26,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="1">
+<Func kind="K" nr="22">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -45,7 +46,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="13">
+<Func kind="K" nr="11">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

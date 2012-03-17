@@ -10,6 +10,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -24,7 +25,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Not>
@@ -62,7 +63,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Not>
@@ -130,7 +131,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="105">
+<Func kind="K" nr="113">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>

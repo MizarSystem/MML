@@ -14,13 +14,14 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
 <FCluster aid="COMPTRIG" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="131"/>
+<Func kind="K" nr="138"/>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="26" value="false"/>

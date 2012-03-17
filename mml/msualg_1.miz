@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received April 21, 1994
-:: Copyright (c) 1994-2011 Association of Mizar Users
+:: Copyright (c) 1994-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,12 +17,13 @@ environ
  vocabularies STRUCT_0, FUNCT_1, RELAT_1, XBOOLE_0, FUNCOP_1, SUBSET_1,
       MARGREL1, PBOOLE, CARD_1, NAT_1, UNIALG_1, FUNCT_2, PARTFUN1, FINSEQ_2,
       TARSKI, FINSEQ_1, NUMBERS, ZFMISC_1, CARD_3, MSUALG_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, RELAT_1,
-      FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, PARTFUN1, FINSEQ_2, CARD_3,
-      FUNCOP_1, PBOOLE, MARGREL1, UNIALG_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, ORDINAL1, NAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, PARTFUN1, FINSEQ_2,
+      CARD_3, FUNCOP_1, PBOOLE, MARGREL1, UNIALG_1;
  constructors CARD_3, PBOOLE, REALSET2, UNIALG_1, RELSET_1, MARGREL1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_2,
-      RELAT_1, PBOOLE, STRUCT_0, UNIALG_1, FUNCT_2, CARD_1, ZFMISC_1, MARGREL1;
+      RELAT_1, PBOOLE, STRUCT_0, UNIALG_1, FUNCT_2, CARD_1, ZFMISC_1, MARGREL1,
+      FINSEQ_1;
  requirements BOOLE, SUBSET, NUMERALS;
  definitions TARSKI, FINSEQ_1, FUNCT_1, PBOOLE, STRUCT_0, XBOOLE_0, UNIALG_1,
       FUNCOP_1, MARGREL1;
@@ -91,16 +92,17 @@ end;
 
 definition
   let S;
-  struct(many-sorted over S) MSAlgebra over S (# Sorts -> ManySortedSet of the
-carrier of S, Charact -> ManySortedFunction of (the Sorts)# * the Arity of S,
-    the Sorts * the ResultSort of S#);
+  struct(many-sorted over S) MSAlgebra over S
+   (# Sorts -> ManySortedSet of the carrier of S,
+      Charact -> ManySortedFunction of
+    ((the Sorts)# * the Arity of S), the Sorts * the ResultSort of S#);
 end;
 
 definition
   let S be 1-sorted;
   let A be many-sorted over S;
   attr A is non-empty means
-  :Def8:
+  :Def3:
   the Sorts of A is non-empty;
 end;
 
@@ -140,7 +142,7 @@ registration
   let S be 1-sorted;
   let A be non-empty many-sorted over S;
   cluster the Sorts of A -> non-empty;
-  coherence by Def8;
+  coherence by Def3;
 end;
 
 registration
@@ -238,7 +240,7 @@ A4: f is Element of (len f)-tuples_on D by FINSEQ_2:92;
   hence thesis by MARGREL1:def 22;
 end;
 
-theorem Th7:
+theorem Th2:
   for C being set, A,B being non empty set, F being PartFunc of C,A
   , G being Function of A,B holds G*F is Function of dom F,B
 proof
@@ -254,7 +256,7 @@ A1: dom(G*F) = dom F by RELAT_1:27;
   hence thesis by A1,FUNCT_2:def 1,RELSET_1:4;
 end;
 
-theorem Th8:
+theorem Th3:
   for h being homogeneous quasi_total non empty PartFunc of D*,D
   holds dom h = Funcs(Seg(arity h),D)
 proof
@@ -263,7 +265,7 @@ proof
     .= Funcs(Seg(arity h),D) by FINSEQ_2:93;
 end;
 
-theorem Th9:
+theorem Th4:
   for A being Universal_Algebra holds signature A is non empty
 proof
   let A be Universal_Algebra;
@@ -277,11 +279,11 @@ begin :: Relationship to one sorted algebras
 definition
   let IT be ManySortedSign;
   attr IT is segmental means
-  :Def12:
+  :Def7:
   ex n st the carrier' of IT = Seg n;
 end;
 
-theorem Th10:
+theorem Th5:
   for S being non empty ManySortedSign st S is trivial for A being
   MSAlgebra over S, c1,c2 being Component of the Sorts of A holds c1 = c2
 proof
@@ -308,7 +310,7 @@ A1: S is segmental
     take len signature(A);
     thus thesis by FINSEQ_1:def 3;
   end;
-  signature A <> {} by Th9;
+  signature A <> {} by Th4;
   hence thesis by A1,STRUCT_0:def 19;
 end;
 
@@ -318,7 +320,7 @@ registration
   proof
     set A = the Universal_Algebra;
     reconsider f = (*-->0)*(signature A) as Function of dom signature A, {0}*
-    by Th7;
+    by Th2;
     ManySortedSign(#{0},dom signature(A),f,dom signature(A)-->z#) is
     segmental non void strict 1-element by Lm2;
     hence thesis;
@@ -328,13 +330,13 @@ end;
 definition
   let A be Universal_Algebra;
   func MSSign A -> non void strict segmental trivial ManySortedSign means
-:Def13: the carrier of it = {0} & the carrier' of it = dom signature A & the
+:Def8: the carrier of it = {0} & the carrier' of it = dom signature A & the
 Arity of it = (*-->0)*signature A &
      the ResultSort of it = dom signature(A)-->0;
   correctness
   proof
     reconsider f = (*-->0)*(signature A) as Function of dom signature A, {0}*
-    by Th7;
+    by Th2;
     ManySortedSign(#{0},dom signature(A),f,dom signature(A)-->z#) is
     segmental trivial non void strict by Lm2;
     hence thesis;
@@ -346,7 +348,7 @@ registration
   cluster MSSign A -> 1-element;
   coherence
    proof
-     the carrier of MSSign A = {0} by Def13;
+     the carrier of MSSign A = {0} by Def8;
     hence the carrier of MSSign A is 1-element;
    end;
 end;
@@ -358,7 +360,7 @@ definition
   coherence
   proof
     set M = {0}-->the carrier of A;
-    the carrier of MSSign A = {0} by Def13;
+    the carrier of MSSign A = {0} by Def8;
     then reconsider M as ManySortedSet of the carrier of MSSign A;
     M is non-empty;
     hence thesis;
@@ -373,19 +375,19 @@ definition
   the charact of A;
   coherence
   proof
-A1: the ResultSort of MSSign A = dom signature(A)-->0 by Def13;
+A1: the ResultSort of MSSign A = dom signature(A)-->0 by Def8;
     reconsider OS = the carrier' of MSSign A as non empty set;
     reconsider DO = (MSSorts A)# * the Arity of MSSign A, RO = (MSSorts A)*
     the ResultSort of MSSign A as ManySortedSet of OS;
-A2: the carrier' of MSSign A = dom signature A by Def13;
+A2: the carrier' of MSSign A = dom signature A by Def8;
     len signature A = len the charact of A by UNIALG_1:def 4;
     then
 A3: dom the charact of A = OS by A2,FINSEQ_3:29;
     then reconsider O = the charact of A as ManySortedSet of OS by
 PARTFUN1:def 2,RELAT_1:def 18;
-A4: the Arity of MSSign A = (*-->0)*signature A by Def13;
+A4: the Arity of MSSign A = (*-->0)*signature A by Def8;
     reconsider O as ManySortedFunction of OS;
-A5: the carrier of MSSign A = {0} by Def13;
+A5: the carrier of MSSign A = {0} by Def8;
     O is ManySortedFunction of DO,RO
     proof
       set D = the carrier of A;
@@ -408,7 +410,7 @@ A8:   rng h c= RO.i by RELAT_1:def 19;
         .= (M#*(*-->0)).((signature A).n) by A5,A2,A7,FUNCT_1:13
         .= (M#*(*-->0)).arity h by A2,A7,UNIALG_1:def 4
         .= Funcs(Seg arity h,D) by FINSEQ_2:145
-        .= dom(O.o) by Th8;
+        .= dom(O.o) by Th3;
       hence thesis by A8,FUNCT_2:def 1,RELSET_1:4;
     end;
     hence thesis;
@@ -438,7 +440,7 @@ definition
   let MS be 1-element ManySortedSign;
   let A be MSAlgebra over MS;
   func the_sort_of A -> set means
-  :Def17:
+  :Def12:
   it is Component of the Sorts of A;
   existence
   proof
@@ -446,7 +448,7 @@ definition
     take c;
     thus thesis;
   end;
-  uniqueness by Th10;
+  uniqueness by Th5;
 end;
 
 registration
@@ -455,12 +457,12 @@ registration
   cluster the_sort_of A -> non empty;
   coherence
   proof
-    the_sort_of A is Component of the Sorts of A by Def17;
+    the_sort_of A is Component of the Sorts of A by Def12;
     hence thesis;
   end;
 end;
 
-theorem Th11:
+theorem Th6:
   for MS being segmental non void 1-element ManySortedSign
 , i being OperSymbol of MS, A being non-empty MSAlgebra over MS holds Args(i,A)
   = (len the_arity_of i)-tuples_on the_sort_of A
@@ -500,7 +502,7 @@ A10:  (the Sorts of A).((the_arity_of i).u) is Component of the Sorts of
       A by A2,PBOOLE:139;
       g.u in ((the Sorts of A)*the_arity_of i).u by A6,A7,A8;
       then g.u in (the Sorts of A).((the_arity_of i).u) by A3,A6,A8,FUNCT_1:13;
-      hence thesis by A9,A10,Def17;
+      hence thesis by A9,A10,Def12;
     end;
     then
 A11: p is FinSequence of the_sort_of A by FINSEQ_1:def 4;
@@ -526,24 +528,24 @@ A17: (the Sorts of A).((the_arity_of i).x) is Component of the Sorts of A
     by A2,PBOOLE:139;
     g.x in rng g by A15,A16,FUNCT_1:def 3;
     then g.x in the_sort_of A by A14;
-    then g.x in (the Sorts of A).((the_arity_of i).x) by A17,Def17;
+    then g.x in (the Sorts of A).((the_arity_of i).x) by A17,Def12;
     hence g.x in ((the Sorts of A)*the_arity_of i).x by A3,A16,FUNCT_1:13;
   end;
   hence thesis by A1,A12,A15,CARD_3:9;
 end;
 
-theorem Th13:
+theorem Th7:
   for MS being segmental non void 1-element ManySortedSign
 , i being OperSymbol of MS, A being non-empty MSAlgebra over MS holds Args(i,A)
   c= (the_sort_of A)*
 proof
   let MS be segmental non void 1-element ManySortedSign, i be
   OperSymbol of MS, A be non-empty MSAlgebra over MS;
-  Args(i,A) = (len the_arity_of i)-tuples_on the_sort_of A by Th11;
+  Args(i,A) = (len the_arity_of i)-tuples_on the_sort_of A by Th6;
   hence thesis by FINSEQ_2:142;
 end;
 
-theorem Th14:
+theorem Th8:
   for MS being segmental non void 1-element ManySortedSign
 , A being non-empty MSAlgebra over MS holds the Charact of A is FinSequence of
   PFuncs((the_sort_of A)*,the_sort_of A)
@@ -554,7 +556,7 @@ A1: dom the Charact of A = the carrier' of MS by PARTFUN1:def 2;
   ex n being Element of NAT st the carrier' of MS = Seg n
   proof
     consider n such that
-A2: the carrier' of MS = Seg n by Def12;
+A2: the carrier' of MS = Seg n by Def7;
     n in NAT by ORDINAL1:def 12;
     hence thesis by A2;
   end;
@@ -572,10 +574,10 @@ A5: (the Sorts of A).((the ResultSort of MS).i) is Component of the Sorts
     dom(the ResultSort of MS) = the carrier' of MS by FUNCT_2:def 1;
     then ((the Sorts of A)*the ResultSort of MS).i = (the Sorts of A).((the
     ResultSort of MS).i) by FUNCT_1:13
-      .= the_sort_of A by A5,Def17;
+      .= the_sort_of A by A5,Def12;
     then
 A6: x is Function of Args(i,A),the_sort_of A by A4,PBOOLE:def 15;
-    Args(i,A) c= (the_sort_of A)* by Th13;
+    Args(i,A) c= (the_sort_of A)* by Th7;
     then x is PartFunc of (the_sort_of A)*,the_sort_of A by A6,RELSET_1:7;
     hence thesis by PARTFUN1:45;
   end;
@@ -588,7 +590,7 @@ definition
   func the_charact_of A -> PFuncFinSequence of the_sort_of A equals
   the
   Charact of A;
-  coherence by Th14;
+  coherence by Th8;
 end;
 
 reserve MS for segmental non void 1-element ManySortedSign,
@@ -617,7 +619,7 @@ A6:   ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
       Sorts of A) * the ResultSort of MS).o by A3,PBOOLE:def 15;
       then
 A7:   dom h = ((the Sorts of A)# * the Arity of MS).o by FUNCT_2:def 1
-        .= (len the_arity_of o)-tuples_on the_sort_of A by A6,Th11;
+        .= (len the_arity_of o)-tuples_on the_sort_of A by A6,Th6;
       then len y = len the_arity_of o by A4,A5,CARD_1:def 7;
       then y is Element of dom h by A7,FINSEQ_2:92;
       hence thesis by A5;
@@ -638,7 +640,7 @@ A13:  ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
       Sorts of A) * the ResultSort of MS).o by A10,PBOOLE:def 15;
       then
 A14:  dom h = ((the Sorts of A)# * the Arity of MS).o by FUNCT_2:def 1
-        .= (len the_arity_of o)-tuples_on the_sort_of A by A13,Th11;
+        .= (len the_arity_of o)-tuples_on the_sort_of A by A13,Th6;
       hence len x = len the_arity_of o by A11,CARD_1:def 7
         .= len y by A12,A14,CARD_1:def 7;
      end;
@@ -663,7 +665,7 @@ proof
   let A be strict Universal_Algebra;
   the carrier of A in {the carrier of A} by TARSKI:def 1;
   then the carrier of A in rng the Sorts of MSAlg A by FUNCOP_1:8;
-  hence thesis by Def17;
+  hence thesis by Def12;
 end;
 
 theorem
@@ -675,7 +677,7 @@ proof
   let f be Function of dom signature A, {0}*;
   let z be Element of {0};
 A1: the carrier' of MSSign A = dom signature A & the Arity of MSSign A = (
-  *-->0) *signature A by Def13;
-  z = 0 & the carrier of MSSign A = {0} by Def13,TARSKI:def 1;
-  hence thesis by A1,Def13;
+  *-->0) *signature A by Def8;
+  z = 0 & the carrier of MSSign A = {0} by Def8,TARSKI:def 1;
+  hence thesis by A1,Def8;
 end;

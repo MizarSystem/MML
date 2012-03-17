@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec and Yatsuka Nakamura
 ::
 :: Received February 7, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,51 +16,31 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, SCMFSA_2, AMI_1, RELAT_1, AMI_3, FSM_1,
       STRUCT_0, FUNCT_4, FUNCOP_1, XBOOLE_0, TARSKI, FUNCT_1, XXREAL_0,
-      ARYTM_3, GRAPHSP, SCMNORM, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      CARD_1, INT_1, CIRCUIT2, ARYTM_1, ORDINAL1, AMISTD_5, PBOOLE, FINSET_1,
-      COMPOS_1;
+      ARYTM_3, GRAPHSP, EXTPRO_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
+      CARD_1, INT_1, CIRCUIT2, ARYTM_1, ORDINAL1, AMISTD_5, FINSET_1, COMPOS_1,
+      GOBRD13;
  notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, NUMBERS, XCMPLX_0, INT_2,
-      RELAT_1, PBOOLE, FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, DOMAIN_1,
-      STRUCT_0, FUNCOP_1, FINSEQ_1, FINSEQ_2, MEMSTR_0, COMPOS_1, EXTPRO_1,
-      AMI_3, FUNCT_7, SCMFSA_2, XXREAL_0, AMISTD_5;
- constructors DOMAIN_1, XXREAL_0, INT_2, AMI_3, SCMFSA_2, RELSET_1, PRE_POLY,
-      SCMFSA_1, AMISTD_5, AMISTD_2, PBOOLE, FUNCT_7, AMISTD_1, MEMSTR_0;
- registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XREAL_0, INT_1,
-      FINSEQ_1, CARD_3, STRUCT_0, AMI_3, SCMFSA_2, FINSET_1, ZFMISC_1,
-      ORDINAL1, RELSET_1, FUNCT_2, COMPOS_1, EXTPRO_1, AMISTD_5, CARD_1,
-      PBOOLE, FUNCT_7, PRE_POLY, MEMSTR_0, AMI_2, FUNCT_4, FUNCOP_1;
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1,
+      FINSEQ_1, FINSEQ_2, MEMSTR_0, COMPOS_1, EXTPRO_1, FUNCT_7, SCMFSA_2,
+      XXREAL_0, AMISTD_5;
+ constructors DOMAIN_1, INT_2, AMI_3, SCMFSA_2, RELSET_1, PRE_POLY, SCMFSA_1,
+      AMISTD_5, FUNCT_7;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, XREAL_0, INT_1, FINSEQ_1, STRUCT_0,
+      AMI_3, SCMFSA_2, FINSET_1, ORDINAL1, COMPOS_1, EXTPRO_1, CARD_1,
+      MEMSTR_0, FUNCT_4, FUNCOP_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions COMPOS_1, EXTPRO_1, AMI_3, FUNCOP_1, SCMFSA_2, AMISTD_5, AMI_2,
-      MEMSTR_0;
+ definitions EXTPRO_1, FUNCOP_1, SCMFSA_2, AMISTD_5, MEMSTR_0, SCM_INST;
  theorems GRFUNC_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1, ZFMISC_1, INT_1,
-      RELAT_1, SCMFSA_2, SCMFSA_1, ABSVALUE, FINSEQ_2, XBOOLE_0, XBOOLE_1,
-      NUMBERS, PBOOLE, PARTFUN1, COMPOS_1, EXTPRO_1, AMISTD_5, NAT_1, MEMSTR_0;
+      RELAT_1, SCMFSA_2, ABSVALUE, FINSEQ_2, XBOOLE_0, XBOOLE_1, PBOOLE,
+      PARTFUN1, EXTPRO_1, AMISTD_5, NAT_1, MEMSTR_0, AMI_2;
 
-begin
+begin :: Finite partial states of SCM+FSA
+
+canceled 2;
 
 reserve k for Element of NAT,
   da,db for Int-Location,
   fa for FinSeq-Location;
-
-theorem
-  not IC SCM+FSA in Int-Locations
-proof
-  assume IC SCM+FSA in Int-Locations;
-  then IC SCM+FSA is Int-Location by SCMFSA_2:4;
-  then ObjectKind IC SCM+FSA = INT by SCMFSA_2:11;
-  hence contradiction by MEMSTR_0:def 3,NUMBERS:27;
-end;
-
-theorem
-  not IC SCM+FSA in FinSeq-Locations
-proof
-  assume IC SCM+FSA in FinSeq-Locations;
-  then IC SCM+FSA is FinSeq-Location by SCMFSA_2:5;
-  then ObjectKind IC SCM+FSA = INT* by SCMFSA_2:12;
-  hence contradiction by MEMSTR_0:def 3,SCMFSA_1:12;
-end;
-
-begin :: Finite partial states of SCM+FSA
 
 theorem
   for s being State of SCM+FSA, iloc being Element of NAT
@@ -104,7 +84,7 @@ definition
   redefine func la .--> a -> FinPartState of SCM+FSA;
   coherence
   proof
-    a is Element of INT & ObjectKind la = INT by INT_1:def 2,SCMFSA_2:11;
+    a is Element of INT & Values la = INT by INT_1:def 2,SCMFSA_2:11;
     hence thesis;
   end;
 end;
@@ -114,12 +94,12 @@ registration
  coherence
   proof
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic FinPartState of SCM+FSA
       st DataPart p <> {} holds IC SCM+FSA in dom p
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic FinPartState of SCM+FSA;
   assume DataPart p <> {};
   then
@@ -141,17 +121,17 @@ A4: (NAT) \ dom q <> {} by XBOOLE_1:37;
     then
 A5: Int-Locations \ dom p <> {} by XBOOLE_1:37;
     then d2 in Int-Locations by XBOOLE_0:def 5;
-    then reconsider d2 as Int-Location by SCMFSA_2:4;
+    then reconsider d2 as Int-Location by AMI_2:def 16;
 A6: d1 in dom DataPart p by A1;
     DataPart p c=  p by MEMSTR_0:12;
     then
-B7:   dom DataPart p c= dom  p by RELAT_1:11;
+A7:   dom DataPart p c= dom  p by RELAT_1:11;
     dom DataPart p c= the carrier of SCM+FSA by RELAT_1:def 18;
     then reconsider d1 as Element of SCM+FSA by A6;
     per cases by A6,A3,SCMFSA_2:100,XBOOLE_0:def 3;
     suppose
       d1 in Int-Locations;
-      then reconsider d1 as Int-Location by SCMFSA_2:4;
+      then reconsider d1 as Int-Location by AMI_2:def 16;
       set p1 = p +* (( d2.--> 0) +* Start-At(il,SCM+FSA));
       set p2 = p +* (( d2.--> 1) +* Start-At(il,SCM+FSA));
       set q1 = q +* (il .--> (d1:=d2));
@@ -161,7 +141,7 @@ A8:   p1 c= s1 by PBOOLE:141;
       consider S1 being
        Instruction-Sequence of SCM+FSA
         such that
-B8:  q1 c= S1 by PBOOLE:145;
+A9:  q1 c= S1 by PBOOLE:145;
       not d2 in dom p by A5,XBOOLE_0:def 5;
       then
 A10:   dom p misses {d2} by ZFMISC_1:50;
@@ -170,10 +150,10 @@ A11:  p2 c= s2 by PBOOLE:141;
       consider S2 being
        Instruction-Sequence of SCM+FSA
         such that
-B11:  q2 c= S2 by PBOOLE:145;
+A12:  q2 c= S2 by PBOOLE:145;
       take P = S1, Q = S2;
-UU:   dom(il .--> (d1:=d2)) = {il} by FUNCOP_1:13;
-VV:   not il in dom q by A4,XBOOLE_0:def 5;
+A13:   dom(il .--> (d1:=d2)) = {il} by FUNCOP_1:13;
+A14:   not il in dom q by A4,XBOOLE_0:def 5;
       dom (( d2.--> 0) +* Start-At(il,SCM+FSA))
          = dom(( d2.--> 0)) \/ dom(Start-At(il,SCM+FSA))
        by FUNCT_4:def 1
@@ -189,10 +169,10 @@ VV:   not il in dom q by A4,XBOOLE_0:def 5;
       then
     p c= p1 by FUNCT_4:32;
       then
-A12:   p c= s1 by A8,XBOOLE_1:1;
-       dom q misses dom (il .--> (d1:=d2)) by UU,VV,ZFMISC_1:50;
+A15:   p c= s1 by A8,XBOOLE_1:1;
+       dom q misses dom (il .--> (d1:=d2)) by A13,A14,ZFMISC_1:50;
        then q c= q1 by FUNCT_4:32;
-      hence q c= P by B8,XBOOLE_1:1;
+      hence q c= P by A9,XBOOLE_1:1;
       dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
          = dom(( d2.--> 1)) \/ dom(Start-At(il,SCM+FSA)) by FUNCT_4:def 1
         .= dom(( d2.--> 1)) \/ {IC SCM+FSA} by FUNCOP_1:13
@@ -206,195 +186,195 @@ A12:   p c= s1 by A8,XBOOLE_1:1;
       by XBOOLE_0:def 7;
       then p c= p2 by FUNCT_4:32;
       then
-A13:    p c= s2 by A11,XBOOLE_1:1;
-       dom q misses dom (il .--> (d1:=d2)) by UU,VV,ZFMISC_1:50;
+A16:    p c= s2 by A11,XBOOLE_1:1;
+       dom q misses dom (il .--> (d1:=d2)) by A13,A14,ZFMISC_1:50;
        then q c= q1 by FUNCT_4:32;
-      hence q c= Q by B11,XBOOLE_1:1;
+      hence q c= Q by A12,XBOOLE_1:1;
       take s1,s2;
-      thus  p c= s1 by A12;
-      thus  p c= s2 by A13;
+      thus  p c= s1 by A15;
+      thus  p c= s2 by A16;
       take 1;
-A14:  dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
+A17:  dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
       = dom (( d2.--> 1)) \/ dom(Start-At(il,SCM+FSA))
        by FUNCT_4:def 1;
-A15:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
-A16:  dom ( Comput(S2,s2,1)) = the carrier of SCM+FSA by PARTFUN1:def 2;
-A17:  dom ( Comput(S2,s2,1)|dom  p) = dom  p
-       by A15,A16,RELAT_1:62;
-A19:  dom (( d2.--> 0) +* Start-At(il,SCM+FSA))
+A18:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
+A19:  dom ( Comput(S2,s2,1)) = the carrier of SCM+FSA by PARTFUN1:def 2;
+A20:  dom ( Comput(S2,s2,1)|dom  p) = dom  p
+       by A18,A19,RELAT_1:62;
+A21:  dom (( d2.--> 0) +* Start-At(il,SCM+FSA))
      = dom (( d2.--> 0)) \/ dom(Start-At(il,SCM+FSA))
        by FUNCT_4:def 1;
-A20:  dom p1 = dom p \/ dom (( d2.--> 0) +*
+A22:  dom p1 = dom p \/ dom (( d2.--> 0) +*
       Start-At(il,SCM+FSA)) by FUNCT_4:def 1;
-A21:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
+A23:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
       then
-A22:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
+A24:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
       then
-A23:  IC SCM+FSA in dom (( d2.--> 0) +* Start-At(il,SCM+FSA))
-        by A19,XBOOLE_0:def 3;
-      then IC SCM+FSA in dom p1 by A20,XBOOLE_0:def 3;
+A25:  IC SCM+FSA in dom (( d2.--> 0) +* Start-At(il,SCM+FSA))
+        by A21,XBOOLE_0:def 3;
+      then IC SCM+FSA in dom p1 by A22,XBOOLE_0:def 3;
       then
-A24:  IC s1 = p1.IC SCM+FSA by A8,GRFUNC_1:2
+A26:  IC s1 = p1.IC SCM+FSA by A8,GRFUNC_1:2
         .= (( d2.--> 0) +*
-         Start-At(il,SCM+FSA)).IC SCM+FSA by A23,FUNCT_4:13
-        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A22,FUNCT_4:13
+         Start-At(il,SCM+FSA)).IC SCM+FSA by A25,FUNCT_4:13
+        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A24,FUNCT_4:13
         .= il by FUNCOP_1:72;
       d2 <> IC SCM+FSA by SCMFSA_2:56;
       then
-A27:  not d2 in dom (Start-At(il,SCM+FSA)) by A21,TARSKI:def 1;
+A27:  not d2 in dom (Start-At(il,SCM+FSA)) by A23,TARSKI:def 1;
   dom (d2 .--> 0) = {d2} by FUNCOP_1:13;
       then d2 in dom (( d2.--> 0)) by TARSKI:def 1;
       then
-A30:  d2 in dom (( d2.--> 0) +* Start-At(il,SCM+FSA)) by A19,XBOOLE_0:def 3;
-      then d2 in dom p1 by A20,XBOOLE_0:def 3;
+A28:  d2 in dom (( d2.--> 0) +* Start-At(il,SCM+FSA)) by A21,XBOOLE_0:def 3;
+      then d2 in dom p1 by A22,XBOOLE_0:def 3;
       then
-A31:  s1.d2 = p1.d2 by A8,GRFUNC_1:2
-        .= (( d2.--> 0) +* Start-At(il,SCM+FSA)).d2 by A30,FUNCT_4:13
+A29:  s1.d2 = p1.d2 by A8,GRFUNC_1:2
+        .= (( d2.--> 0) +* Start-At(il,SCM+FSA)).d2 by A28,FUNCT_4:13
         .= (( d2.--> 0)).d2 by A27,FUNCT_4:11
         .= 0 by FUNCOP_1:72;
   dom (il .--> (d1:=d2)) = {il} by FUNCOP_1:13;
       then
-A33:   il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
+A30:   il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
       dom q1 = dom q \/ dom(il .--> (d1:=d2)) by FUNCT_4:def 1;
-      then il in dom q1 by A33,XBOOLE_0:def 3;
+      then il in dom q1 by A30,XBOOLE_0:def 3;
       then
-A34:  S1.il = q1.il by B8,GRFUNC_1:2
-        .= (il .--> (d1:=d2)).il by A33,FUNCT_4:13
+A31:  S1.il = q1.il by A9,GRFUNC_1:2
+        .= (il .--> (d1:=d2)).il by A30,FUNCT_4:13
         .=(d1:=d2) by FUNCOP_1:72;
-A35:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
-A36: dom ( Comput(S1,s1,1)) = the carrier of SCM+FSA
+A32:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
+A33: dom ( Comput(S1,s1,1)) = the carrier of SCM+FSA
         by PARTFUN1:def 2;
-A37:  dom ( Comput(S1,s1,1)|dom  p) = dom  p
-          by A35,A36,RELAT_1:62;
-A38:  dom p2 = dom p \/ dom (( d2.--> 1) +*
+A34:  dom ( Comput(S1,s1,1)|dom  p) = dom  p
+          by A32,A33,RELAT_1:62;
+A35:  dom p2 = dom p \/ dom (( d2.--> 1) +*
       Start-At(il,SCM+FSA)) by FUNCT_4:def 1;
-B38:  dom q2 = dom q \/ dom(il .--> (d1:=d2)) by FUNCT_4:def 1;
-A39:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
+A36:  dom q2 = dom q \/ dom(il .--> (d1:=d2)) by FUNCT_4:def 1;
+A37:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
       then
-A40:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
+A38:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
       then
-A41:  IC SCM+FSA in dom (( d2.--> 1) +* Start-At(il,SCM+FSA)
-      ) by A14,XBOOLE_0:def 3;
-      then IC SCM+FSA in dom p2 by A38,XBOOLE_0:def 3;
+A39:  IC SCM+FSA in dom (( d2.--> 1) +* Start-At(il,SCM+FSA)
+      ) by A17,XBOOLE_0:def 3;
+      then IC SCM+FSA in dom p2 by A35,XBOOLE_0:def 3;
       then
-A42:  IC s2 = p2.IC SCM+FSA by A11,GRFUNC_1:2
+A40:  IC s2 = p2.IC SCM+FSA by A11,GRFUNC_1:2
         .= (( d2.--> 1) +*
-         Start-At(il,SCM+FSA)).IC SCM+FSA by A41,FUNCT_4:13
-        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A40,FUNCT_4:13
+         Start-At(il,SCM+FSA)).IC SCM+FSA by A39,FUNCT_4:13
+        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A38,FUNCT_4:13
         .= il by FUNCOP_1:72;
       d2 <> IC SCM+FSA by SCMFSA_2:56;
       then
-A43:  not d2 in dom (Start-At(il,SCM+FSA)) by A39,TARSKI:def 1;
+A41:  not d2 in dom (Start-At(il,SCM+FSA)) by A37,TARSKI:def 1;
   dom (d2 .--> 1) = {d2} by FUNCOP_1:13;
       then
   d2 in dom (d2 .--> 1) by TARSKI:def 1;
       then
-A46:  d2 in dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
- by A14,XBOOLE_0:def 3;
-      then d2 in dom p2 by A38,XBOOLE_0:def 3;
+A42:  d2 in dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
+ by A17,XBOOLE_0:def 3;
+      then d2 in dom p2 by A35,XBOOLE_0:def 3;
       then
-A47:  s2.d2 = p2.d2 by A11,GRFUNC_1:2
-        .= (( d2.--> 1) +* Start-At(il,SCM+FSA)).d2 by A46,FUNCT_4:13
-        .= (( d2.--> 1)).d2 by A43,FUNCT_4:11
+A43:  s2.d2 = p2.d2 by A11,GRFUNC_1:2
+        .= (( d2.--> 1) +* Start-At(il,SCM+FSA)).d2 by A42,FUNCT_4:13
+        .= (( d2.--> 1)).d2 by A41,FUNCT_4:11
         .= 1 by FUNCOP_1:72;
       dom (il .--> (d1:=d2)) = {il} by FUNCOP_1:13;
       then
-A50:  il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
-      il in dom q2 by B38,A50,XBOOLE_0:def 3;
+A44:  il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
+      il in dom q2 by A36,A44,XBOOLE_0:def 3;
       then
-A51:  S2.il = q2.il by B11,GRFUNC_1:2
-        .= (il .--> (d1:=d2)).il by A50,FUNCT_4:13
+A45:  S2.il = q2.il by A12,GRFUNC_1:2
+        .= (il .--> (d1:=d2)).il by A44,FUNCT_4:13
         .=(d1:=d2) by FUNCOP_1:72;
-A52:  S2/.IC s2 = S2.IC s2 by PBOOLE:143;
-A53:  Comput(S2,s2,0+1).d1 = (Following(S2,Comput(S2,s2,0))).d1 by EXTPRO_1:3
-        .= (Following(S2,s2)).d1 by EXTPRO_1:2
-        .= 1 by A42,A51,A47,A52,SCMFSA_2:63;
-A54:  S1/.IC s1 = S1.IC s1 by PBOOLE:143;
+A46:  S2/.IC s2 = S2.IC s2 by PBOOLE:143;
+A47:  Comput(S2,s2,0+1).d1 = (Following(S2,Comput(S2,s2,0))).d1 by EXTPRO_1:3
+        .= (Following(S2,s2)).d1
+        .= 1 by A40,A45,A43,A46,SCMFSA_2:63;
+A48:  S1/.IC s1 = S1.IC s1 by PBOOLE:143;
       Comput(S1,s1,0+1).d1 = (Following(S1,Comput(S1,s1,0))).d1 by EXTPRO_1:3
-        .= (Following(S1,s1)).d1 by EXTPRO_1:2
-        .= 0 by A24,A34,A31,A54,SCMFSA_2:63;
-      then ( Comput(S1,s1,1)|dom  p).d1 = 0 by B7,A37,A6,FUNCT_1:47;
+        .= (Following(S1,s1)).d1
+        .= 0 by A26,A31,A29,A48,SCMFSA_2:63;
+      then ( Comput(S1,s1,1)|dom  p).d1 = 0 by A7,A34,A6,FUNCT_1:47;
       hence Comput(P,s1,1)|dom  p <> Comput(Q,s2,1)|dom  p
-       by A53,A6,B7,A17,FUNCT_1:47;
+       by A47,A6,A7,A20,FUNCT_1:47;
     end;
     suppose
       d1 in FinSeq-Locations;
-      then reconsider d1 as FinSeq-Location by SCMFSA_2:5;
+      then reconsider d1 as FinSeq-Location by SCMFSA_2:def 5;
       set p1 = p +* (( d2.--> 0) +* Start-At(il,SCM+FSA));
       set p2 = p +* (( d2.--> 1) +* Start-At(il,SCM+FSA));
       set q1 = q +* (il .--> (d1:=<0,...,0>d2));
       set q2 = q +* (il .--> (d1:=<0,...,0>d2));
       consider s1 being State of SCM+FSA such that
-A55:  p1 c= s1 by PBOOLE:141;
+A49:  p1 c= s1 by PBOOLE:141;
       consider S1 being
        Instruction-Sequence of SCM+FSA
         such that
-B55:  q1 c= S1 by PBOOLE:145;
-A57:  dom (( d2.--> 0) +* Start-At(il,SCM+FSA))
+A50:  q1 c= S1 by PBOOLE:145;
+A51:  dom (( d2.--> 0) +* Start-At(il,SCM+FSA))
       = dom (( d2.--> 0)) \/ dom(Start-At(il,SCM+FSA)) by FUNCT_4:def 1;
       consider k such that
-A58:  k = abs(s1.d2) and
-A59:  Exec(d1:=<0,...,0>d2, s1).d1 = k |-> 0 by SCMFSA_2:75;
-A61:  dom p1 = dom p \/ dom (( d2.--> 0)
+A52:  k = abs(s1.d2) and
+A53:  Exec(d1:=<0,...,0>d2, s1).d1 = k |-> 0 by SCMFSA_2:75;
+A54:  dom p1 = dom p \/ dom (( d2.--> 0)
       +* Start-At(il,SCM+FSA)) by FUNCT_4:def 1;
-B61:  dom q1 = dom q \/ dom(il .--> (d1:=<0,...,0>d2)) by FUNCT_4:def 1;
-A62:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
+A55:  dom q1 = dom q \/ dom(il .--> (d1:=<0,...,0>d2)) by FUNCT_4:def 1;
+A56:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
       then
-A63:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
+A57:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
       then
-A64:  IC SCM+FSA in dom (( d2.--> 0) +*
-      Start-At(il,SCM+FSA)) by A57,XBOOLE_0:def 3;
-      then IC SCM+FSA in dom p1 by A61,XBOOLE_0:def 3;
+A58:  IC SCM+FSA in dom (( d2.--> 0) +*
+      Start-At(il,SCM+FSA)) by A51,XBOOLE_0:def 3;
+      then IC SCM+FSA in dom p1 by A54,XBOOLE_0:def 3;
       then
-A65:  IC s1 = p1.IC SCM+FSA by A55,GRFUNC_1:2
-        .= (( d2.--> 0) +* Start-At(il,SCM+FSA)).IC SCM+FSA by A64,FUNCT_4:13
-        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A63,FUNCT_4:13
+A59:  IC s1 = p1.IC SCM+FSA by A49,GRFUNC_1:2
+        .= (( d2.--> 0) +* Start-At(il,SCM+FSA)).IC SCM+FSA by A58,FUNCT_4:13
+        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A57,FUNCT_4:13
         .= il by FUNCOP_1:72;
       consider s2 being State of SCM+FSA such that
-A67:  p2 c= s2 by PBOOLE:141;
+A60:  p2 c= s2 by PBOOLE:141;
       consider S2 being
        Instruction-Sequence of SCM+FSA
         such that
-B67:  q2 c= S2 by PBOOLE:145;
+A61:  q2 c= S2 by PBOOLE:145;
       d2 <> IC SCM+FSA by SCMFSA_2:56;
       then
-A68:  not d2 in dom (Start-At(il,SCM+FSA)) by A62,TARSKI:def 1;
+A62:  not d2 in dom (Start-At(il,SCM+FSA)) by A56,TARSKI:def 1;
   dom (d2 .--> 0) = {d2} by FUNCOP_1:13;
       then d2 in dom (d2 .--> 0) by TARSKI:def 1;
       then
-A71:  d2 in dom (( d2.--> 0) +* Start-At(
-      il,SCM+FSA)) by A57,XBOOLE_0:def 3;
-      then d2 in dom p1 by A61,XBOOLE_0:def 3;
-      then s1.d2 = p1.d2 by A55,GRFUNC_1:2
-        .= (( d2.--> 0) +* Start-At(il,SCM+FSA)).d2 by A71,FUNCT_4:13
-        .= (( d2.--> 0)).d2 by A68,FUNCT_4:11
+A63:  d2 in dom (( d2.--> 0) +* Start-At(
+      il,SCM+FSA)) by A51,XBOOLE_0:def 3;
+      then d2 in dom p1 by A54,XBOOLE_0:def 3;
+      then s1.d2 = p1.d2 by A49,GRFUNC_1:2
+        .= (( d2.--> 0) +* Start-At(il,SCM+FSA)).d2 by A63,FUNCT_4:13
+        .= (( d2.--> 0)).d2 by A62,FUNCT_4:11
         .= 0 by FUNCOP_1:72;
       then
-A72:  k |-> 0 = 0 |-> 0 by A58,ABSVALUE:2
+A64:  k |-> 0 = 0 |-> 0 by A52,ABSVALUE:2
         .= {} by FINSEQ_2:58;
       not d2 in dom p by A5,XBOOLE_0:def 5;
       then
-A73:  dom p misses {d2} by ZFMISC_1:50;
-B74:  dom (il .--> (d1:=<0,...,0>d2)) = {il} by FUNCOP_1:13;
-A75:  il in dom (il .--> (d1:=<0,...,0>d2)) by B74,ZFMISC_1:31;
-      then il in dom q1 by B61,XBOOLE_0:def 3;
+A65:  dom p misses {d2} by ZFMISC_1:50;
+A66:  dom (il .--> (d1:=<0,...,0>d2)) = {il} by FUNCOP_1:13;
+A67:  il in dom (il .--> (d1:=<0,...,0>d2)) by A66,ZFMISC_1:31;
+      then il in dom q1 by A55,XBOOLE_0:def 3;
       then
-A76:  S1.il = q1.il by B55,GRFUNC_1:2
-        .= (il .--> (d1:=<0,...,0>d2)).il by A75,FUNCT_4:13
+A68:  S1.il = q1.il by A50,GRFUNC_1:2
+        .= (il .--> (d1:=<0,...,0>d2)).il by A67,FUNCT_4:13
         .=(d1:=<0,...,0>d2) by FUNCOP_1:72;
-A77:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
-A78:   dom Comput(S1,s1,1) = the carrier of SCM+FSA by PARTFUN1:def 2;
-A79:  dom ( Comput(S1,s1,1)|dom  p) = dom  p
-         by A77,A78,RELAT_1:62;
+A69:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
+A70:   dom Comput(S1,s1,1) = the carrier of SCM+FSA by PARTFUN1:def 2;
+A71:  dom ( Comput(S1,s1,1)|dom  p) = dom  p
+         by A69,A70,RELAT_1:62;
       consider k such that
-A81:  k = abs(s2.d2) and
-A82:  Exec(d1:=<0,...,0>d2, s2).d1 = k |-> 0 by SCMFSA_2:75;
-A83:  dom p2 = dom p \/ dom (( d2.--> 1)
+A72:  k = abs(s2.d2) and
+A73:  Exec(d1:=<0,...,0>d2, s2).d1 = k |-> 0 by SCMFSA_2:75;
+A74:  dom p2 = dom p \/ dom (( d2.--> 1)
       +* Start-At(il,SCM+FSA)) by FUNCT_4:def 1;
       take P = S1, Q = S2;
-UU:   dom(il .--> (d1:=<0,...,0>d2)) = {il} by FUNCOP_1:13;
-VV:   not il in dom q by A4,XBOOLE_0:def 5;
-B83:  dom q2 = dom q \/ dom(il .--> (d1:=<0,...,0>d2)) by FUNCT_4:def 1;
+A75:   dom(il .--> (d1:=<0,...,0>d2)) = {il} by FUNCOP_1:13;
+A76:   not il in dom q by A4,XBOOLE_0:def 5;
+A77:  dom q2 = dom q \/ dom(il .--> (d1:=<0,...,0>d2)) by FUNCT_4:def 1;
       dom (( d2.--> 0) +* Start-At(il,SCM+FSA)) =
 dom(( d2.--> 0)) \/ dom(Start-At(il,SCM+FSA))
 by FUNCT_4:def 1
@@ -404,15 +384,15 @@ by FUNCT_4:def 1
 Start-At(il,SCM+FSA)) = dom p /\ ({d2}) \/ dom p /\ {IC SCM+FSA}
  by XBOOLE_1:23
         .= dom p /\ ({d2}) \/ {} by A2,XBOOLE_0:def 7
-        .= {} by A73,XBOOLE_0:def 7;
+        .= {} by A65,XBOOLE_0:def 7;
       then dom p misses dom (( d2.--> 0) +*
       Start-At(il,SCM+FSA)) by XBOOLE_0:def 7;
       then p c= p1 by FUNCT_4:32;
       then
-A84:    p c= s1 by A55,XBOOLE_1:1;
-       dom q misses dom (il .--> (d1:=<0,...,0>d2)) by UU,VV,ZFMISC_1:50;
+A78:    p c= s1 by A49,XBOOLE_1:1;
+       dom q misses dom (il .--> (d1:=<0,...,0>d2)) by A75,A76,ZFMISC_1:50;
        then q c= q1 by FUNCT_4:32;
-      hence q c= P by B55,XBOOLE_1:1;
+      hence q c= P by A50,XBOOLE_1:1;
       dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
        =
 dom(( d2.--> 1)) \/ dom(Start-At(il,SCM+FSA))
@@ -423,76 +403,76 @@ by FUNCT_4:def 1
       Start-At(il,SCM+FSA)) = dom p /\ ({d2}) \/ dom p /\ {IC SCM+FSA}
        by XBOOLE_1:23
         .= dom p /\ ({d2}) \/ {} by A2,XBOOLE_0:def 7
-        .= {} by A73,XBOOLE_0:def 7;
+        .= {} by A65,XBOOLE_0:def 7;
       then dom p misses dom (( d2.--> 1) +*
       Start-At(il,SCM+FSA)) by XBOOLE_0:def 7;
       then p c= p2 by FUNCT_4:32;
       then
-A85:   p c= s2 by A67,XBOOLE_1:1;
-       dom q misses dom (il .--> (d1:=<0,...,0>d2)) by UU,VV,ZFMISC_1:50;
+A79:   p c= s2 by A60,XBOOLE_1:1;
+       dom q misses dom (il .--> (d1:=<0,...,0>d2)) by A75,A76,ZFMISC_1:50;
        then q c= q2 by FUNCT_4:32;
-      hence q c= Q by B67,XBOOLE_1:1;
+      hence q c= Q by A61,XBOOLE_1:1;
       take s1,s2;
-      thus  p c= s1 by A84;
-      thus  p c= s2 by A85;
+      thus  p c= s1 by A78;
+      thus  p c= s2 by A79;
       take 1;
-A86:  dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
+A80:  dom (( d2.--> 1) +* Start-At(il,SCM+FSA))
  =
 dom (( d2.--> 1)) \/ dom(Start-At(il,SCM+FSA))
  by FUNCT_4:def 1;
-A87:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
+A81:  dom(Start-At(il,SCM+FSA)) = {IC SCM+FSA} by FUNCOP_1:13;
       then
-A88:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
+A82:  IC SCM+FSA in dom (Start-At(il,SCM+FSA)) by TARSKI:def 1;
       then
-A89:  IC SCM+FSA in dom (( d2.--> 1) +*
-      Start-At(il,SCM+FSA)) by A86,XBOOLE_0:def 3;
-      then IC SCM+FSA in dom p2 by A83,XBOOLE_0:def 3;
+A83:  IC SCM+FSA in dom (( d2.--> 1) +*
+      Start-At(il,SCM+FSA)) by A80,XBOOLE_0:def 3;
+      then IC SCM+FSA in dom p2 by A74,XBOOLE_0:def 3;
       then
-A90:  IC s2 = p2.IC SCM+FSA by A67,GRFUNC_1:2
-        .= (( d2.--> 1) +* Start-At(il,SCM+FSA)).IC SCM+FSA by A89,FUNCT_4:13
-        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A88,FUNCT_4:13
+A84:  IC s2 = p2.IC SCM+FSA by A60,GRFUNC_1:2
+        .= (( d2.--> 1) +* Start-At(il,SCM+FSA)).IC SCM+FSA by A83,FUNCT_4:13
+        .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A82,FUNCT_4:13
         .= il by FUNCOP_1:72;
       d2 <> IC SCM+FSA by SCMFSA_2:56;
       then
-A91:  not d2 in dom (Start-At(il,SCM+FSA)) by A87,TARSKI:def 1;
+A85:  not d2 in dom (Start-At(il,SCM+FSA)) by A81,TARSKI:def 1;
   dom (d2 .--> 1) = {d2} by FUNCOP_1:13;
       then
   d2 in dom (d2 .--> 1) by TARSKI:def 1;
       then
-A94:  d2 in dom (( d2.--> 1) +* Start-At(
-      il,SCM+FSA)) by A86,XBOOLE_0:def 3;
-      then d2 in dom p2 by A83,XBOOLE_0:def 3;
-      then s2.d2 = p2.d2 by A67,GRFUNC_1:2
-        .= (( d2.--> 1) +* Start-At(il,SCM+FSA)).d2 by A94,FUNCT_4:13
-        .= (( d2.--> 1)).d2 by A91,FUNCT_4:11
+A86:  d2 in dom (( d2.--> 1) +* Start-At(
+      il,SCM+FSA)) by A80,XBOOLE_0:def 3;
+      then d2 in dom p2 by A74,XBOOLE_0:def 3;
+      then s2.d2 = p2.d2 by A60,GRFUNC_1:2
+        .= (( d2.--> 1) +* Start-At(il,SCM+FSA)).d2 by A86,FUNCT_4:13
+        .= (( d2.--> 1)).d2 by A85,FUNCT_4:11
         .= 1 by FUNCOP_1:72;
       then
-A95:  k |-> 0 = 1 |-> 0 by A81,ABSVALUE:def 1
+A87:  k |-> 0 = 1 |-> 0 by A72,ABSVALUE:def 1
         .= <*0*> by FINSEQ_2:59;
       dom (il .--> (d1:=<0,...,0>d2)) = {il} by FUNCOP_1:13;
       then
-A98:  il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
-      then il in dom q2 by B83,XBOOLE_0:def 3;
+A88:  il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
+      then il in dom q2 by A77,XBOOLE_0:def 3;
       then
-A99:  S2.il = q2.il by B67,GRFUNC_1:2
-        .= (il .--> (d1:=<0,...,0>d2)).il by A98,FUNCT_4:13
+A89:  S2.il = q2.il by A61,GRFUNC_1:2
+        .= (il .--> (d1:=<0,...,0>d2)).il by A88,FUNCT_4:13
         .=(d1:=<0,...,0>d2) by FUNCOP_1:72;
-A101:  Comput(S2,s2,0+1).d1 = (Following(S2,Comput(S2,s2,0))).d1 by EXTPRO_1:3
-        .= (Following(S2,s2)).d1 by EXTPRO_1:2
-        .= <*0*> by A90,A99,A82,A95,PBOOLE:143;
-A102:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
-A103: dom ( Comput(S2,s2,1)) = the carrier of SCM+FSA
+A90:  Comput(S2,s2,0+1).d1 = (Following(S2,Comput(S2,s2,0))).d1 by EXTPRO_1:3
+        .= (Following(S2,s2)).d1
+        .= <*0*> by A84,A89,A73,A87,PBOOLE:143;
+A91:  dom  p c= the carrier of SCM+FSA by RELAT_1:def 18;
+A92: dom ( Comput(S2,s2,1)) = the carrier of SCM+FSA
         by PARTFUN1:def 2;
-A104:  dom ( Comput(S2,s2,1)|dom  p) = dom  p
-         by A102,A103,RELAT_1:62;
+A93:  dom ( Comput(S2,s2,1)|dom  p) = dom  p
+         by A91,A92,RELAT_1:62;
       Comput(S1,s1,0+1).d1
        = (Following(S1,Comput(S1,s1,0))).d1
         by EXTPRO_1:3
-        .= (Following(S1,s1)).d1 by EXTPRO_1:2
-        .= {} by A65,A76,A59,A72,PBOOLE:143;
-      then ( Comput(S1,s1,1)|dom  p).d1 = {} by A6,B7,A79,FUNCT_1:47;
+        .= (Following(S1,s1)).d1
+        .= {} by A59,A68,A53,A64,PBOOLE:143;
+      then ( Comput(S1,s1,1)|dom  p).d1 = {} by A6,A7,A71,FUNCT_1:47;
       hence Comput(P,s1,1)|dom  p <> Comput(Q,s2,1)|dom  p
-        by A101,A6,B7,A104,FUNCT_1:47;
+        by A90,A6,A7,A93,FUNCT_1:47;
     end;
   end;
   hence contradiction;
@@ -506,7 +486,7 @@ registration
  coherence
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s be State of SCM+FSA such that
 A1:  p c= s;
@@ -517,7 +497,7 @@ A2: q c= P;
   set loc = IC Csi;
   set loc1 = loc+1;
   assume
-Z: not IC Comput(P,s,i) in dom q;
+A3: not IC Comput(P,s,i) in dom q;
   set I = intloc 0 := intloc 0;
   set q1 = q +* (loc .--> I);
   set q2 = q +* (loc .--> halt SCM+FSA);
@@ -525,62 +505,62 @@ Z: not IC Comput(P,s,i) in dom q;
    as Instruction-Sequence of SCM+FSA;
   reconsider P2 = P +* (loc .--> halt SCM+FSA)
    as Instruction-Sequence of SCM+FSA;
-A6: dom (loc .--> halt SCM+FSA) = {loc} by FUNCOP_1:13;
+A4: dom (loc .--> halt SCM+FSA) = {loc} by FUNCOP_1:13;
   then
-A7: loc in dom (loc .--> halt SCM+FSA) by TARSKI:def 1;
-A12: dom (loc .--> I) = {loc} by FUNCOP_1:13;
+A5: loc in dom (loc .--> halt SCM+FSA) by TARSKI:def 1;
+A6: dom (loc .--> I) = {loc} by FUNCOP_1:13;
   then
-A13: loc in dom (loc .--> I) by TARSKI:def 1;
-Y6: dom q misses dom (loc .--> halt SCM+FSA) by Z,A6,ZFMISC_1:50;
-Y5: dom q misses dom (loc .--> I) by Z,A12,ZFMISC_1:50;
-P3: q1 c= P1 by A2,FUNCT_4:123;
-P4: q2 c= P2 by A2,FUNCT_4:123;
+A7: loc in dom (loc .--> I) by TARSKI:def 1;
+A8: dom q misses dom (loc .--> halt SCM+FSA) by A3,A4,ZFMISC_1:50;
+A9: dom q misses dom (loc .--> I) by A3,A6,ZFMISC_1:50;
+A10: q1 c= P1 by A2,FUNCT_4:123;
+A11: q2 c= P2 by A2,FUNCT_4:123;
   set Cs2i = Comput(P2,s,i), Cs1i = Comput(P1,s,i);
   p is not q-autonomic
   proof
     (loc .--> halt SCM+FSA).loc = halt SCM+FSA by FUNCOP_1:72;
     then
-A18:  P2.loc = halt SCM+FSA by A7,FUNCT_4:13;
-B19:  (loc .--> I).loc = I by FUNCOP_1:72;
+A12:  P2.loc = halt SCM+FSA by A5,FUNCT_4:13;
+A13:  (loc .--> I).loc = I by FUNCOP_1:72;
     take P1, P2;
-    q c= q1 by Y5,FUNCT_4:32;
+    q c= q1 by A9,FUNCT_4:32;
     hence
-A25:  q c= P1 by P3,XBOOLE_1:1;
-    q c= q2 by Y6,FUNCT_4:32;
+A14:  q c= P1 by A10,XBOOLE_1:1;
+    q c= q2 by A8,FUNCT_4:32;
     hence
-A27:  q c= P2 by P4,XBOOLE_1:1;
+A15:  q c= P2 by A11,XBOOLE_1:1;
     take s, s;
     thus  p c= s by A1;
-A28: (Cs1i|dom  p) = (Csi|dom  p) by A25,A2,A1,EXTPRO_1:def 10;
+A16: (Cs1i|dom  p) = (Csi|dom  p) by A14,A2,A1,EXTPRO_1:def 10;
     thus  p c= s by A1;
-A29: (Cs1i|dom  p) = (Cs2i|dom  p) by A25,A27,A1,EXTPRO_1:def 10;
+A17: (Cs1i|dom  p) = (Cs2i|dom  p) by A14,A15,A1,EXTPRO_1:def 10;
     take k = i+1;
     set Cs1k = Comput(P1,s,k);
-A33: IC SCM+FSA in dom p by AMISTD_5:6;
- IC Csi = IC(Csi|dom  p) by A33,FUNCT_1:49;
+A18: IC SCM+FSA in dom p by AMISTD_5:6;
+ IC Csi = IC(Csi|dom  p) by A18,FUNCT_1:49;
     then
-  IC Cs1i = loc by A28,A33,FUNCT_1:49;
+  IC Cs1i = loc by A16,A18,FUNCT_1:49;
     then
-XX: CurInstr(P1,Cs1i) = P1.loc by PBOOLE:143
-         .= I by B19,A13,FUNCT_4:13;
-A31: Cs1k = Following(P1,Cs1i) by EXTPRO_1:3
-      .= Exec(I,Cs1i) by XX;
-A32:  IC Exec(I,Cs1i) = succ IC Cs1i by SCMFSA_2:63;
-A33: IC SCM+FSA in dom p by AMISTD_5:6;
-A34: IC Csi = IC(Csi|dom  p) by A33,FUNCT_1:49;
+A19: CurInstr(P1,Cs1i) = P1.loc by PBOOLE:143
+         .= I by A13,A7,FUNCT_4:13;
+A20: Cs1k = Following(P1,Cs1i) by EXTPRO_1:3
+      .= Exec(I,Cs1i) by A19;
+A21:  IC Exec(I,Cs1i) = succ IC Cs1i by SCMFSA_2:63;
+A22: IC SCM+FSA in dom p by AMISTD_5:6;
+A23: IC Csi = IC(Csi|dom  p) by A22,FUNCT_1:49;
     then
-A35: IC Cs1k = succ loc by A31,A32,A28,A33,FUNCT_1:49
+A24: IC Cs1k = succ loc by A20,A21,A16,A22,FUNCT_1:49
          .= loc1 by NAT_1:38;
     set Cs2k = Comput(P2,s,k);
-A36: Cs2k = Following(P2,Cs2i) by EXTPRO_1:3
+A25: Cs2k = Following(P2,Cs2i) by EXTPRO_1:3
       .= Exec (CurInstr(P2,Cs2i), Cs2i);
-A37:  P2/.IC Cs2i = P2.IC Cs2i by PBOOLE:143;
-    IC Cs2i = loc by A28,A34,A29,A33,FUNCT_1:49;
+A26:  P2/.IC Cs2i = P2.IC Cs2i by PBOOLE:143;
+    IC Cs2i = loc by A16,A23,A17,A22,FUNCT_1:49;
     then
-A38: IC Cs2k = loc by A36,A18,A37,EXTPRO_1:def 3;
+A27: IC Cs2k = loc by A25,A12,A26,EXTPRO_1:def 3;
     IC(Cs1k|dom  p) = IC Cs1k & IC(Cs2k|dom  p) = IC Cs2k
-     by A33,FUNCT_1:49;
-    hence thesis by A35,A38;
+     by A22,FUNCT_1:49;
+    hence thesis by A24,A27;
   end;
   hence contradiction;
 end;
@@ -588,7 +568,7 @@ end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -600,11 +580,11 @@ being State of SCM+FSA st  p c= s1 &  p c= s2
   holds Comput(P1,s1,i).db = Comput(P2,s2,i).db
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
@@ -625,15 +605,15 @@ A6: da in dom p & Comput(P1,s1,i).db <> Comput(P2,s2,i).db;
   Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:3
     .= Exec (CurInstr(P1, Cs1i), Cs1i);
   then
-A8: Cs1i1.da = Cs1i.db by A5,SCMFSA_2:63;
-  I = CurInstr(P2,Comput(P2,s2,i)) by B1,A2,AMISTD_5:7;
+A7: Cs1i1.da = Cs1i.db by A5,SCMFSA_2:63;
+  I = CurInstr(P2,Comput(P2,s2,i)) by A1,A2,AMISTD_5:7;
   then Cs2i1.da = Cs2i.db by A3,A5,SCMFSA_2:63;
-  hence contradiction by A4,A6,A8,A2,B1,EXTPRO_1:def 10;
+  hence contradiction by A4,A6,A7,A2,A1,EXTPRO_1:def 10;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -648,11 +628,11 @@ being Int-Location st
 Comput(P2,s2,i).da + Comput(P2,s2,i).db
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
@@ -675,15 +655,15 @@ A6: da in dom p & Comput(P1,s1,i).da + Comput(P1,s1,i
   Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:3
     .= Exec (CurInstr(P1, Cs1i), Cs1i);
   then
-A8: Cs1i1.da = Cs1i.da + Cs1i.db by A5,SCMFSA_2:64;
-  I = CurInstr(P2,Comput(P2,s2,i)) by B1,A2,AMISTD_5:7;
+A7: Cs1i1.da = Cs1i.da + Cs1i.db by A5,SCMFSA_2:64;
+  I = CurInstr(P2,Comput(P2,s2,i)) by A1,A2,AMISTD_5:7;
   then Cs2i1.da = Cs2i.da + Cs2i.db by A3,A5,SCMFSA_2:64;
-  hence contradiction by B1,A4,A6,A8,A2,EXTPRO_1:def 10;
+  hence contradiction by A1,A4,A6,A7,A2,EXTPRO_1:def 10;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -699,11 +679,11 @@ Comput(P2,s2,i).da
   - Comput(P2,s2,i).db
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
@@ -726,16 +706,16 @@ A6: da in dom p & Comput(P1,s1,i).da - Comput(P1,s1,i
   Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:3
     .= Exec (CurInstr(P1, Cs1i), Cs1i);
   then
-A8: Cs1i1.da = Cs1i.da - Cs1i.db by A5,SCMFSA_2:65;
+A7: Cs1i1.da = Cs1i.da - Cs1i.db by A5,SCMFSA_2:65;
   I = CurInstr(P2,Comput(P2,
-s2,i)) by B1,A2,AMISTD_5:7;
+s2,i)) by A1,A2,AMISTD_5:7;
   then Cs2i1.da = Cs2i.da - Cs2i.db by A3,A5,SCMFSA_2:65;
-  hence contradiction by B1,A4,A6,A8,A2,EXTPRO_1:def 10;
+  hence contradiction by A1,A4,A6,A7,A2,EXTPRO_1:def 10;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -751,11 +731,11 @@ Comput(P2,s2,i).da
   * Comput(P2,s2,i).db
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
@@ -778,16 +758,16 @@ A6: da in dom p & Comput(P1,s1,i).da * Comput(P1,s1,i
   Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:3
     .= Exec (CurInstr(P1, Cs1i), Cs1i);
   then
-A8: Cs1i1.da = Cs1i.da * Cs1i.db by A5,SCMFSA_2:66;
+A7: Cs1i1.da = Cs1i.da * Cs1i.db by A5,SCMFSA_2:66;
   I = CurInstr(P2,Comput(P2,
-s2,i)) by B1,A2,AMISTD_5:7;
+s2,i)) by A1,A2,AMISTD_5:7;
   then Cs2i1.da = Cs2i.da * Cs2i.db by A3,A5,SCMFSA_2:66;
-  hence contradiction by B1,A4,A6,A8,A2,EXTPRO_1:def 10;
+  hence contradiction by A1,A4,A6,A7,A2,EXTPRO_1:def 10;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -803,11 +783,11 @@ i)) = Divide(da, db)
   Comput(P2,s2,i).da div Comput(P2,s2,i).db
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
@@ -832,16 +812,16 @@ Comput(P2,s2,i).
   Cs1i1 = Following(P1,Cs1i) by EXTPRO_1:3
     .= Exec (CurInstr(P1, Cs1i), Cs1i);
   then
-A10: Cs1i1.da = Cs1i.da div Cs1i.db by A5,A7,SCMFSA_2:67;
+A9: Cs1i1.da = Cs1i.da div Cs1i.db by A5,A7,SCMFSA_2:67;
   I = CurInstr(P2,Comput(P2,
-s2,i)) by B1,A2,AMISTD_5:7;
+s2,i)) by A1,A2,AMISTD_5:7;
   then Cs2i1.da = Cs2i.da div Cs2i.db by A3,A5,A7,SCMFSA_2:67;
-  hence contradiction by B1,A4,A8,A10,A2,A6,EXTPRO_1:def 10;
+  hence contradiction by A1,A4,A8,A9,A2,A6,EXTPRO_1:def 10;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -856,11 +836,11 @@ dom p holds Comput(P1,s1,i).da mod Comput(P1,s1,i).db
   da mod Comput(P2,s2,i).db
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
@@ -885,14 +865,14 @@ A7: (Cs1i1|dom  p).db = Cs1i1.db & (Cs2i1|dom  p).db = Cs2i1.db
   then
 A8: Cs1i1.db = Cs1i.da mod Cs1i.db by A4,SCMFSA_2:67;
   I = CurInstr(P2,Comput(P2,
-s2,i)) by B1,A2,AMISTD_5:7;
+s2,i)) by A1,A2,AMISTD_5:7;
   then Cs2i1.db = Cs2i.da mod Cs2i.db by A3,A4,SCMFSA_2:67;
-  hence contradiction by B1,A6,A7,A8,A2,EXTPRO_1:def 10;
+  hence contradiction by A1,A6,A7,A8,A2,EXTPRO_1:def 10;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
   being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -905,11 +885,11 @@ theorem
   Comput(P1,s1,i).da = 0 iff Comput(P2,s2,i).da = 0)
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
@@ -931,30 +911,30 @@ A5: (Cs1i1|dom  p).IC SCM+FSA = Cs1i1.IC SCM+FSA &
   assume that
 A6: I = da=0_goto loc and
 A7: loc <> succ (IC Comput(P1,s1,i));
-A8: I = CurInstr(P2,Comput(P2,s2,i)) by B1,A2,AMISTD_5:7;
+A8: I = CurInstr(P2,Comput(P2,s2,i)) by A1,A2,AMISTD_5:7;
 A9: now
     assume
     Comput(P2,s2,i).da = 0 & Comput(P1,s1,i).da <> 0;
     then
     Cs2i1.IC SCM+FSA = loc & Cs1i1.IC SCM+FSA = succ IC Cs1i by A8,A3,A4,A6,
 SCMFSA_2:70;
-    hence contradiction by B1,A5,A7,A2,EXTPRO_1:def 10;
+    hence contradiction by A1,A5,A7,A2,EXTPRO_1:def 10;
   end;
-A10: (Cs1i1|dom  p) = (Cs2i1|dom  p) by B1,A2,EXTPRO_1:def 10;
+A10: (Cs1i1|dom  p) = (Cs2i1|dom  p) by A1,A2,EXTPRO_1:def 10;
   now
     assume
     Comput(P1,s1,i).da = 0 & Comput(P2,s2,i).da <> 0;
     then
     Cs1i1.IC SCM+FSA = loc & Cs2i1.IC SCM+FSA = succ IC Cs2i by A8,A3,A4,A6,
 SCMFSA_2:70;
-    hence contradiction by B1,A5,A10,A7,A2,AMISTD_5:7;
+    hence contradiction by A1,A5,A10,A7,A2,AMISTD_5:7;
   end;
   hence thesis by A9;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
   being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -967,18 +947,18 @@ theorem
   Comput(P1,s1,i).da > 0 iff Comput(P2,s2,i).da > 0
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
   let i be Element of NAT, da be Int-Location, loc be Element of NAT;
   set Cs1i1 = Comput(P1,s1,i+1);
   set Cs2i1 = Comput(P2,s2,i+1);
-A3: (Cs1i1|dom  p) = (Cs2i1|dom  p) by B1,A2,EXTPRO_1:def 10;
+A3: (Cs1i1|dom  p) = (Cs2i1|dom  p) by A1,A2,EXTPRO_1:def 10;
   set Cs2i = Comput(P2,s2,i);
   set Cs1i = Comput(P1,s1,i);
   set I = CurInstr(P1,Comput(P1,s1,i));
@@ -994,7 +974,7 @@ A6: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:3
   assume that
 A7: I = da>0_goto loc and
 A8: loc <> succ (IC Comput(P1,s1,i));
-A9: I = CurInstr(P2,Comput(P2,s2,i)) by B1,A2,AMISTD_5:7;
+A9: I = CurInstr(P2,Comput(P2,s2,i)) by A1,A2,AMISTD_5:7;
 A10: now
     assume that
 A11: Comput(P2,s2,i).da > 0 and
@@ -1002,7 +982,7 @@ A12: Comput(P1,s1,i).da <= 0;
     Cs2i1.IC SCM+FSA = loc by A9,A6,A7,A11,SCMFSA_2:71;
     hence contradiction by A4,A5,A3,A7,A8,A12,SCMFSA_2:71;
   end;
-A13: IC Cs1i = IC Cs2i by B1,A2,AMISTD_5:7;
+A13: IC Cs1i = IC Cs2i by A1,A2,AMISTD_5:7;
   now
     assume that
 A14: Comput(P1,s1,i).da > 0 and
@@ -1015,7 +995,7 @@ end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -1031,18 +1011,18 @@ holds ( Comput(P1,s1,
   i).f)/.k1 = ( Comput(P2,s2,i).f)/.k2
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
   let i be Element of NAT, da, db be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(P1,s1,i+1);
   set Cs2i1 = Comput(P2,s2,i+1);
-A3: Cs1i1|dom  p = Cs2i1|dom  p by B1,A2,EXTPRO_1:def 10;
+A3: Cs1i1|dom  p = Cs2i1|dom  p by A1,A2,EXTPRO_1:def 10;
   set Cs2i = Comput(P2,s2,i);
   set Cs1i = Comput(P1,s1,i);
   set I = CurInstr(P1,Comput(P1,s1,i));
@@ -1066,12 +1046,12 @@ Cs1i .f)/.k1 )& ex k2 being Element of NAT st k2 = abs(Cs2i.db) &
 ,s2,i).db) &
   ( Comput(P1,s1,i).f)/.i1 <> ( Comput(P2,s2,i).f)/.
 i2;
-  hence contradiction by B1,A4,A6,A5,A3,A9,A8,A2,AMISTD_5:7;
+  hence contradiction by A1,A4,A6,A5,A3,A9,A8,A2,AMISTD_5:7;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
 being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -1088,18 +1068,18 @@ Comput(P1,s1,i).f+*(k1,
 Comput(P2,s2,i).da)
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
   let i be Element of NAT, da, db be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(P1,s1,i+1);
   set Cs2i1 = Comput(P2,s2,i+1);
-A3: Cs1i1|dom  p = Cs2i1|dom  p by B1,A2,EXTPRO_1:def 10;
+A3: Cs1i1|dom  p = Cs2i1|dom  p by A1,A2,EXTPRO_1:def 10;
   set Cs2i = Comput(P2,s2,i);
   set Cs1i = Comput(P1,s1,i);
   set I = CurInstr(P1,Comput(P1,s1,i));
@@ -1113,18 +1093,18 @@ A6: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:3
   assume that
 A7: I = (f,db):=da and
 A8: f in dom p;
-A10: (ex k1 being Element of NAT st k1 = abs(Cs1i.db) & Exec(I, Cs1i).f =
+A9: (ex k1 being Element of NAT st k1 = abs(Cs1i.db) & Exec(I, Cs1i).f =
 Cs1i.f +*(k1,Cs1i.da) )& ex k2 being Element of NAT st k2 = abs(Cs2i.db) & Exec
   (I, Cs2i).f = Cs2i.f+*(k2,Cs2i.da) by A7,SCMFSA_2:73;
   let i1, i2 be Element of NAT;
   assume i1 = abs(Cs1i.db) & i2 = abs(Cs2i.db) & Cs1i.f+*(i1,Cs1i.da) <> Cs2i
   .f+* (i2,Cs2i.da);
-  hence contradiction by B1,A4,A6,A5,A3,A10,A8,A2,AMISTD_5:7;
+  hence contradiction by A1,A4,A6,A5,A3,A9,A8,A2,AMISTD_5:7;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
   being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -1137,18 +1117,18 @@ da :=len f & da in dom p holds len( Comput(P1,s1,i).f)
  = len(Comput(P2,s2,i).f)
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
   let i be Element of NAT, da be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(P1,s1,i+1);
   set Cs2i1 = Comput(P2,s2,i+1);
-A3: Cs1i1|dom  p = Cs2i1|dom  p by B1,A2,EXTPRO_1:def 10;
+A3: Cs1i1|dom  p = Cs2i1|dom  p by A1,A2,EXTPRO_1:def 10;
   set Cs2i = Comput(P2,s2,i);
   set Cs1i = Comput(P1,s1,i);
   set I = CurInstr(P1,Comput(P1,s1,i));
@@ -1165,12 +1145,12 @@ A8: da in dom p & len( Comput(P1,s1,i).f) <> len( Comput(
 P2,s2,i).f);
   Exec(I, Cs1i).da = len(Cs1i.f) & Exec(I, Cs2i).da = len(Cs2i.f) by A7,
 SCMFSA_2:74;
-  hence contradiction by B1,A4,A6,A5,A3,A8,A2,AMISTD_5:7;
+  hence contradiction by A1,A4,A6,A5,A3,A8,A2,AMISTD_5:7;
 end;
 
 theorem
    for q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2
   being State of SCM+FSA st  p c= s1 &  p c= s2
@@ -1184,18 +1164,18 @@ Comput(P1,s1,i).da) & k2 = abs( Comput(P2,s2,i).da)
 holds k1 |-> 0 = k2 |-> 0
 proof
   let q being non halt-free finite
-      (the Instructions of SCM+FSA)-valued NAT-defined Function;
+      (the InstructionsF of SCM+FSA)-valued NAT-defined Function;
   let p be q-autonomic non empty FinPartState of SCM+FSA,
       s1, s2 be State
   of SCM+FSA such that
-B1:  p c= s1 &  p c= s2;
+A1:  p c= s1 &  p c= s2;
   let P1,P2 be Instruction-Sequence of SCM+FSA
   such that
 A2: q c= P1 & q c= P2;
   let i be Element of NAT, da be Int-Location, f be FinSeq-Location;
   set Cs1i1 = Comput(P1,s1,i+1);
   set Cs2i1 = Comput(P2,s2,i+1);
-A3: Cs1i1|dom  p = Cs2i1|dom  p by B1,A2,EXTPRO_1:def 10;
+A3: Cs1i1|dom  p = Cs2i1|dom  p by A1,A2,EXTPRO_1:def 10;
   set Cs2i = Comput(P2,s2,i);
   set Cs1i = Comput(P1,s1,i);
   set I = CurInstr(P1,Comput(P1,s1,i));
@@ -1209,11 +1189,11 @@ A6: Cs2i1 = Following(P2,Cs2i) by EXTPRO_1:3
   assume that
 A7: I = f:=<0,...,0>da and
 A8: f in dom p;
-A10: (ex k1 being Element of NAT st k1 = abs(Cs1i.da) & Exec(I, Cs1i).f = k1
+A9: (ex k1 being Element of NAT st k1 = abs(Cs1i.da) & Exec(I, Cs1i).f = k1
 |->0 )& ex k2 being Element of NAT st k2 = abs(Cs2i.da) & Exec(I, Cs2i).f = k2
   |->0 by A7,SCMFSA_2:75;
   let i1, i2 be Element of NAT;
   assume i1 = abs(Cs1i.da) & i2 = abs(Cs2i.da) & i1 |-> 0 <> i2 |->0;
-  hence contradiction by B1,A4,A6,A5,A3,A10,A8,A2,AMISTD_5:7;
+  hence contradiction by A1,A4,A6,A5,A3,A9,A8,A2,AMISTD_5:7;
 end;
 

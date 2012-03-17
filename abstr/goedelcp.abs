@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,35 +18,42 @@ environ
       FINSEQ_1, HENMODEL, CQC_THE1, XBOOLEAN, BVFUNC_2, FUNCT_1, ORDINAL4,
       CALCUL_1, ARYTM_3, RELAT_1, CARD_1, XXREAL_0, TARSKI, ZF_MODEL, CQC_SIM1,
       REALSET1, SUBSTUT1, SUBSTUT2, ZF_LANG, ARYTM_1, CARD_3, ZFMISC_1,
-      FINSET_1, MCART_1, NAT_1, GOEDELCP;
+      FINSET_1, MCART_1, GOEDELCP, ORDINAL1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, NAT_1,
-      CARD_3, FINSEQ_1, FUNCT_1, QC_LANG1, QC_LANG2, QC_LANG3, NUMBERS,
-      CQC_LANG, RELAT_1, FINSET_1, VALUAT_1, RELSET_1, FUNCT_2, CQC_SIM1,
-      DOMAIN_1, MCART_1, SUBSTUT1, SUBLEMMA, SUBSTUT2, CALCUL_1, HENMODEL;
+      ORDINAL1, CARD_3, FINSEQ_1, FUNCT_1, QC_LANG1, QC_LANG2, QC_LANG3,
+      NUMBERS, CQC_LANG, RELAT_1, FINSET_1, VALUAT_1, RELSET_1, FUNCT_2,
+      CQC_SIM1, DOMAIN_1, XTUPLE_0, MCART_1, SUBSTUT1, SUBLEMMA, SUBSTUT2,
+      CALCUL_1, HENMODEL;
  constructors SETFAM_1, DOMAIN_1, XXREAL_0, NAT_1, NAT_D, FINSEQ_2, QC_LANG3,
-      CQC_SIM1, SUBSTUT2, CALCUL_1, HENMODEL, CARD_3, RELSET_1;
+      CQC_SIM1, SUBSTUT2, CALCUL_1, HENMODEL, CARD_3, RELSET_1, XTUPLE_0;
  registrations SUBSET_1, RELAT_1, ORDINAL1, XXREAL_0, XREAL_0, CQC_LANG,
-      HENMODEL, FINSEQ_1, FINSET_1, CARD_3, RELSET_1;
+      HENMODEL, FINSEQ_1, FINSET_1, CARD_3, RELSET_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Henkin`s Theorem
 
+registration
+  cluster countable for QC-alphabet;
+end;
+
+reserve Al for QC-alphabet;
 reserve b,c,d for set,
-  X,Y for Subset of CQC-WFF,
+  X,Y for Subset of CQC-WFF(Al),
   i,j,k,m,n for Element of NAT,
-  p,p1,q,r,s,s1 for Element of CQC-WFF,
-  x,x1,x2,y,y1 for bound_QC-variable,
+  p,p1,q,r,s,s1 for Element of CQC-WFF(Al),
+  x,x1,x2,y,y1 for bound_QC-variable of Al,
   A for non empty set,
-  J for interpretation of A,
-  v for Element of Valuations_in A,
-  f1,f2 for FinSequence of CQC-WFF,
-  CX,CY,CZ for Consistent Subset of CQC-WFF,
+  J for interpretation of Al, A,
+  v for Element of Valuations_in(Al,A),
+  f1,f2 for FinSequence of CQC-WFF(Al),
+  CX,CY,CZ for Consistent Subset of CQC-WFF(Al),
   JH for Henkin_interpretation of CX,
-  a for Element of A;
+  a for Element of A,
+  t,u for QC-symbol of Al;
 
 definition
-  let X;
+  let Al,X;
   attr X is negation_faithful means
 :: GOEDELCP:def 1
 
@@ -54,7 +61,7 @@ definition
 end;
 
 definition
-  let X;
+  let Al,X;
   attr X is with_examples means
 :: GOEDELCP:def 2
 
@@ -65,7 +72,7 @@ theorem :: GOEDELCP:1
   CX is negation_faithful implies (CX |- p iff not CX |- 'not' p);
 
 theorem :: GOEDELCP:2
-  for f being FinSequence of CQC-WFF holds
+  for f being FinSequence of CQC-WFF(Al) holds
   |- f^<*'not' p 'or' q*> & |- f^<*p*> implies |- f^<*q*>;
 
 theorem :: GOEDELCP:3
@@ -73,9 +80,9 @@ theorem :: GOEDELCP:3
 
 theorem :: GOEDELCP:4
   (CX is negation_faithful & CX is with_examples implies
-  (JH,valH |= p iff CX |- p)) implies
+  (JH,valH(Al) |= p iff CX |- p)) implies
   (CX is negation_faithful & CX is with_examples implies
-  (JH,valH |= 'not' p iff CX |- 'not' p));
+  (JH,valH(Al) |= 'not' p iff CX |- 'not' p));
 
 theorem :: GOEDELCP:5
   |- f1^<*p*> & |- f1^<*q*> implies |- f1^<*p '&' q*>;
@@ -85,22 +92,22 @@ theorem :: GOEDELCP:6
 
 theorem :: GOEDELCP:7
   (CX is negation_faithful & CX is with_examples implies
-  (JH,valH |= p iff CX |- p)) &
+  (JH,valH(Al) |= p iff CX |- p)) &
   (CX is negation_faithful & CX is with_examples implies
-  (JH,valH |= q iff CX |- q)) implies
+  (JH,valH(Al) |= q iff CX |- q)) implies
   (CX is negation_faithful & CX is with_examples
-  implies (JH,valH |= p '&' q iff CX |- p '&' q));
+  implies (JH,valH(Al) |= p '&' q iff CX |- p '&' q));
 
 theorem :: GOEDELCP:8
   for p st QuantNbr(p) <= 0 holds
   CX is negation_faithful & CX is with_examples implies
-  (JH,valH |= p iff CX |- p);
+  (JH,valH(Al) |= p iff CX |- p);
 
 theorem :: GOEDELCP:9
   J,v |= Ex(x,p) iff ex a st J,v.(x|a) |= p;
 
 theorem :: GOEDELCP:10
-  JH,valH |= Ex(x,p) iff ex y st JH,valH |= p.(x,y);
+  JH,valH(Al) |= Ex(x,p) iff ex y st JH,valH(Al) |= p.(x,y);
 
 theorem :: GOEDELCP:11
   J,v |= 'not' Ex(x,'not' p) iff J,v |= All(x,p);
@@ -115,82 +122,91 @@ theorem :: GOEDELCP:14
   QuantNbr(p) = QuantNbr(p.(x,y));
 
 reserve L for PATH of q,p,
-  F1,F3 for QC-formula,
+  F1,F3 for QC-formula of Al,
   a for set;
 
 theorem :: GOEDELCP:15
   for p st QuantNbr(p) = 1 holds (CX is negation_faithful & CX is with_examples
-  implies (JH,valH |= p iff CX |- p));
+  implies (JH,valH(Al) |= p iff CX |- p));
 
 theorem :: GOEDELCP:16
   for n st for p st QuantNbr(p) <= n holds
   (CX is negation_faithful & CX is with_examples
-  implies (JH,valH |= p iff CX |- p)) holds for p st QuantNbr(p) <= n+1 holds
+  implies (JH,valH(Al) |= p iff CX |- p)) holds
+  for p st QuantNbr(p) <= n+1 holds
   (CX is negation_faithful & CX is with_examples
-  implies (JH,valH |= p iff CX |- p));
+  implies (JH,valH(Al) |= p iff CX |- p));
 
 :: Ebb et al, Chapter V, Henkin's Theorem 1.10
 
 theorem :: GOEDELCP:17
   for p holds (CX is negation_faithful & CX is with_examples
-  implies (JH,valH |= p iff CX |- p));
+  implies (JH,valH(Al) |= p iff CX |- p));
 
 begin :: Satisfiability of Consistent Sets of Formulas with Finitely Many Free
 :: Variables
 
 theorem :: GOEDELCP:18
-  QC-WFF is countable;
+  Al is countable implies
+  QC-WFF(Al) is countable;
 
 definition
-  func ExCl -> Subset of CQC-WFF means
+  let Al;
+  func ExCl(Al) -> Subset of CQC-WFF(Al) means
 :: GOEDELCP:def 3
 
   a in it iff ex x,p st a = Ex(x,p);
 end;
 
 theorem :: GOEDELCP:19
-  CQC-WFF is countable;
+  Al is countable implies
+  CQC-WFF(Al) is countable;
 
 theorem :: GOEDELCP:20
-  ExCl is non empty & ExCl is countable;
+  Al is countable implies
+  ExCl(Al) is non empty & ExCl(Al) is countable;
 
 definition
-  let p be Element of QC-WFF such that
+  let Al;
+  let p be Element of QC-WFF(Al) such that
  p is existential;
-  func Ex-bound_in p -> bound_QC-variable means
+  func Ex-bound_in p -> bound_QC-variable of Al means
 :: GOEDELCP:def 4
 
-  ex q being Element of QC-WFF st p = Ex(it,q);
+  ex q being Element of QC-WFF(Al) st p = Ex(it,q);
 end;
 
 definition
-  let p be Element of CQC-WFF such that
+  let Al;
+  let p be Element of CQC-WFF(Al) such that
  p is existential;
-  func Ex-the_scope_of p -> Element of CQC-WFF means
+  func Ex-the_scope_of p -> Element of CQC-WFF(Al) means
 :: GOEDELCP:def 5
 
   ex x st p = Ex(x,it);
 end;
 
 definition
-  let F be Function of NAT,CQC-WFF,a be Element of NAT;
-  func bound_in(F,a) -> bound_QC-variable means
+  let Al;
+  let F be Function of NAT,CQC-WFF(Al),a be Element of NAT;
+  func bound_in(F,a) -> bound_QC-variable of Al means
 :: GOEDELCP:def 6
 
   p = F.a implies it = Ex-bound_in p;
 end;
 
 definition
-  let F be Function of NAT,CQC-WFF,a be Element of NAT;
-  func the_scope_of(F,a) -> Element of CQC-WFF means
+  let Al;
+  let F be Function of NAT,CQC-WFF(Al),a be Element of NAT;
+  func the_scope_of(F,a) -> Element of CQC-WFF(Al) means
 :: GOEDELCP:def 7
 
   p = F.a implies it = Ex-the_scope_of p;
 end;
 
 definition
-  let X;
-  func still_not-bound_in X -> Subset of bound_QC-variables equals
+  let Al,X;
+  func still_not-bound_in X -> Subset of bound_QC-variables(Al) equals
 :: GOEDELCP:def 8
   union {still_not-bound_in p : p in X};
 end;
@@ -202,16 +218,16 @@ theorem :: GOEDELCP:22
   Ex-bound_in Ex(x,p) = x & Ex-the_scope_of Ex(x,p) = p;
 
 theorem :: GOEDELCP:23
-  X |- VERUM;
+  X |- VERUM(Al);
 
 theorem :: GOEDELCP:24
-  X |- 'not' VERUM iff X is Inconsistent;
+  X |- 'not' VERUM(Al) iff X is Inconsistent;
 
-reserve C,D for Element of [:CQC-WFF,bool bound_QC-variables:];
-reserve K,L for Subset of bound_QC-variables;
+reserve C,D for Element of [:CQC-WFF(Al),bool bound_QC-variables(Al):];
+reserve K,L for Subset of bound_QC-variables(Al);
 
 theorem :: GOEDELCP:25
-  for f,g being FinSequence of CQC-WFF st 0 < len f & |- f^<*p*> holds
+  for f,g being FinSequence of CQC-WFF(Al) st 0 < len f & |- f^<*p*> holds
   |- Ant(f)^g^<*Suc(f)*>^<*p*>;
 
 theorem :: GOEDELCP:26
@@ -221,39 +237,42 @@ theorem :: GOEDELCP:27
   still_not-bound_in (X \/ Y) = still_not-bound_in X \/ still_not-bound_in Y;
 
 theorem :: GOEDELCP:28
-  for A being Subset of bound_QC-variables st A is finite holds
+  for A being Subset of bound_QC-variables(Al) st A is finite holds
   ex x st not x in A;
 
 theorem :: GOEDELCP:29
   X c= Y implies still_not-bound_in X c= still_not-bound_in Y;
 
 theorem :: GOEDELCP:30
-  for f being FinSequence of CQC-WFF holds
+  for f being FinSequence of CQC-WFF(Al) holds
   still_not-bound_in rng f = still_not-bound_in f;
 
 :: Ebb et al, Chapter V, Lemma 2.1
 
 theorem :: GOEDELCP:31
-  still_not-bound_in CX is finite implies
+  ( Al is countable &
+  still_not-bound_in CX is finite ) implies
   ex CY st CX c= CY & CY is with_examples;
 
 theorem :: GOEDELCP:32
   X |- p & X c= Y implies Y |- p;
 
-reserve C,D for Subset of CQC-WFF;
+reserve C,D for Subset of CQC-WFF(Al);
 
 :: Ebb et al, Chapter V, Lemma 2.2
 
 theorem :: GOEDELCP:33
-  CX is with_examples implies ex CY st CX c= CY &
-  CY is negation_faithful & CY is with_examples;
+  ( Al is countable &
+  CX is with_examples ) implies ( ex CY st CX c= CY &
+  CY is negation_faithful & CY is with_examples );
 
 reserve JH1 for Henkin_interpretation of CZ,
-  J for interpretation of A,
-  v for Element of Valuations_in A;
+  J for interpretation of Al, A,
+  v for Element of Valuations_in(Al,A);
 
 theorem :: GOEDELCP:34
-  still_not-bound_in CX is finite implies ex CZ,JH1 st JH1,valH |= CX;
+  (Al is countable & still_not-bound_in CX is finite)
+   implies ex CZ,JH1 st JH1,valH(Al) |= CX;
 
 begin :: Goedel's Completeness Theorem,
 :: Ebb et al, Chapter V, Completeness Theorem 4.1
@@ -270,4 +289,5 @@ theorem :: GOEDELCP:37
 
 ::$N Goedel Completeness Theorem
 theorem :: GOEDELCP:38
-  still_not-bound_in X is finite & X |= p implies X |- p;
+  ( Al is countable &
+  still_not-bound_in X is finite & X |= p ) implies X |- p;

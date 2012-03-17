@@ -2,7 +2,7 @@
 ::  by Chanapat Pacharapokin , Hiroshi Yamazaki , Yasunari Shidama and Yatsuka Nakamura
 ::
 :: Received November 4, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -27,15 +27,16 @@ environ
       FINSEQ_4, SEQM_3, PARTFUN2, SQUARE_1, COMSEQ_2, COMSEQ_3, CFCONT_1,
       XXREAL_0, CFUNCT_1, RELSET_1;
  registrations FUNCT_1, RELSET_1, FUNCT_2, MEMBERED, NUMBERS, ORDINAL1,
-      XREAL_0, XXREAL_0, COMSEQ_2, NAT_1, VALUED_0, SEQ_4, VALUED_1, FUNCOP_1;
+      XREAL_0, XXREAL_0, COMSEQ_2, NAT_1, VALUED_0, SEQ_4, VALUED_1, FUNCOP_1,
+      XCMPLX_0, SEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions XCMPLX_0, XBOOLE_0, TARSKI, RELAT_1, COMSEQ_2, SEQM_3, CFCONT_1,
       SUBSET_1, FINSEQ_4, VALUED_0, VALUED_1, SEQ_2, COMPLEX1, FUNCT_2;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, COMPLEX1, SEQ_1, SEQ_2,
-      SEQ_4, NUMBERS, COMSEQ_1, COMSEQ_2, COMSEQ_3, CFUNCT_1, CFCONT_1,
-      RELAT_1, XBOOLE_0, XBOOLE_1, PARTFUN1, PARTFUN2, XCMPLX_0, XCMPLX_1,
-      XREAL_1, XXREAL_0, ORDINAL1, ABSVALUE, XREAL_0, FUNCOP_1, SUBSET_1,
-      VALUED_1, VALUED_0;
+      SEQ_4, COMSEQ_1, COMSEQ_2, COMSEQ_3, CFUNCT_1, CFCONT_1, RELAT_1,
+      XBOOLE_0, XBOOLE_1, PARTFUN1, PARTFUN2, XCMPLX_0, XCMPLX_1, XREAL_1,
+      XXREAL_0, ORDINAL1, ABSVALUE, XREAL_0, FUNCOP_1, SUBSET_1, VALUED_1,
+      VALUED_0;
  schemes SEQ_1, COMSEQ_1, FUNCT_2;
 
 begin
@@ -44,47 +45,22 @@ reserve k, k1, n, n1, m for Element of NAT;
 reserve X, y for set;
 reserve p for Real;
 reserve r for real number;
-reserve a, a1, a2, b, b1, b2, x, x0, z, z0 for Complex;
+reserve a, a1, a2, b, b1, b2, x, x0, z, z0 for Element of COMPLEX;
 reserve s1, s3, seq, seq1 for Complex_Sequence;
 reserve Y for Subset of COMPLEX;
 reserve f, f1, f2 for PartFunc of COMPLEX,COMPLEX;
 reserve Nseq for increasing sequence of NAT;
 
 definition
+  let x be real number;
   let IT be Complex_Sequence;
-  attr IT is convergent_to_0 means
-  :Def1:
-  IT is non-zero convergent & lim IT = 0;
+  attr IT is x-convergent means :Def1:
+  IT is convergent & lim IT = x;
 end;
 
 theorem
   for rs be Real_Sequence, cs be Complex_Sequence st rs = cs & rs is
-  convergent holds cs is convergent
-proof
-  deffunc F(Nat) = 0;
-  let rs be Real_Sequence, cs be Complex_Sequence such that
-A1: rs = cs and
-A2: rs is convergent;
-  consider bs being Real_Sequence such that
-A3: for n holds bs.n = F(n) from SEQ_1:sch 1;
-  for n be Nat holds bs.n = F(n)
-  proof
-    let n be Nat;
-    n in NAT by ORDINAL1:def 12;
-    hence thesis by A3;
-  end;
-  then
-A4: bs is constant by VALUED_0:def 18;
-  for n holds Re (cs.n) = rs.n & Im (cs.n) = bs.n
-  proof
-    let n;
-    thus Re (cs.n) = rs.n by A1,COMPLEX1:def 1;
-    Im (cs.n) = Im (rs.n) by A1;
-    then Im (cs.n) = 0 by COMPLEX1:def 2;
-    hence thesis by A3;
-  end;
-  hence thesis by A2,A4,COMSEQ_3:38;
-end;
+  convergent holds cs is convergent;
 
 definition
   let r be real number;
@@ -163,12 +139,12 @@ A5: seq.m = 1/(m+r) by Def2;
     then 1/(m+r) < p by A4,XXREAL_0:2;
     hence abs(seq.m-0c) < p by A1,A5,ABSVALUE:def 1;
   end;
-  hence thesis by A1,COMSEQ_2:def 5;
+  hence thesis by A1,COMSEQ_2:def 6;
 end;
 
 registration
   let r be positive real number;
-  cluster InvShift(r) -> convergent_to_0;
+  cluster InvShift(r) -> non-zero 0-convergent;
   coherence
   proof
     set s = InvShift(r);
@@ -178,12 +154,13 @@ registration
       hence s.n <> 0c by Def2;
     end;
     hence s is non-zero by COMSEQ_1:4;
-    thus thesis by Th3;
+    lim s = 0 by Th3;
+    hence thesis by Def1;
   end;
 end;
 
 registration
-  cluster convergent_to_0 for Complex_Sequence;
+  cluster 0-convergent non-zero for Complex_Sequence;
   existence
   proof
     take InvShift(1);
@@ -192,7 +169,7 @@ registration
 end;
 
 registration
-  cluster convergent_to_0 -> non-zero convergent for Complex_Sequence;
+  cluster 0-convergent non-zero -> convergent for Complex_Sequence;
   coherence by Def1;
 end;
 
@@ -232,12 +209,12 @@ proof
   hence thesis by FUNCT_1:12;
 end;
 
-reserve h for convergent_to_0 Complex_Sequence;
+reserve h for 0-convergent non-zero Complex_Sequence;
 reserve c for constant Complex_Sequence;
 
 definition
   let IT be PartFunc of COMPLEX,COMPLEX;
-  attr IT is REST-like means
+  attr IT is RestFunc-like means
   :Def3:
   for h holds (h")(#)(IT/*h) is convergent & lim ((h")(#)(IT/*h)) = 0;
 end;
@@ -245,7 +222,7 @@ end;
 reconsider cf = COMPLEX --> 0c as Function of COMPLEX,COMPLEX;
 
 registration
-  cluster total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   existence
   proof
     take f = cf;
@@ -268,7 +245,7 @@ A1:   n in NAT & rng h c= dom f by ORDINAL1:def 12;
 end;
 
 definition
-  mode C_REST is total REST-like PartFunc of COMPLEX,COMPLEX;
+  mode C_RestFunc is total RestFunc-like PartFunc of COMPLEX,COMPLEX;
 end;
 
 definition
@@ -296,16 +273,16 @@ A2: dom f = COMPLEX by XBOOLE_0:def 10;
     take 1r;
     let z;
     thus f/.z = f.z by A2,PARTFUN1:def 6
-      .= 1r*z by A1,A2;
+      .= 1r*z by A1;
   end;
 end;
 
 definition
-  mode C_LINEAR is total linear PartFunc of COMPLEX,COMPLEX;
+  mode C_LinearFunc is total linear PartFunc of COMPLEX,COMPLEX;
 end;
 
-reserve R, R1, R2 for C_REST;
-reserve L, L1, L2 for C_LINEAR;
+reserve R, R1, R2 for C_RestFunc;
+reserve L, L1, L2 for C_LinearFunc;
 
 registration
   let L1,L2;
@@ -362,7 +339,7 @@ end;
 
 registration
   let R1,R2;
-  cluster R1+R2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R1+R2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   coherence
   proof
     now
@@ -378,7 +355,7 @@ A3:   lim ((h")(#)(R1/*h)) = 0 by Def3;
     end;
     hence thesis by Def3;
   end;
-  cluster R1-R2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R1-R2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   coherence
   proof
     now
@@ -393,7 +370,7 @@ A5:   (h")(#)(R1/*h) is convergent & (h")(#)(R2/*h) is convergent by Def3;
     end;
     hence thesis by Def3;
   end;
-  cluster R1(#)R2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R1(#)R2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   coherence
   proof
     now
@@ -435,7 +412,7 @@ end;
 
 registration
   let a,R;
-  cluster a(#)R -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster a(#)R -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   coherence
   proof
     now
@@ -454,11 +431,11 @@ end;
 
 registration
   let L1,L2;
-  cluster L1(#)L2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster L1(#)L2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   coherence
   proof
     reconsider LL = L1(#)L2 as PartFunc of COMPLEX,COMPLEX;
-    LL is REST-like
+    LL is RestFunc-like
     proof
       let h;
       consider b1 such that
@@ -493,7 +470,7 @@ end;
 
 registration
   let R,L;
-  cluster R(#)L -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R(#)L -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   coherence
   proof
     consider b1 such that
@@ -522,15 +499,15 @@ A5:   (h")(#)(R/*h) is convergent by Def3;
     end;
     hence thesis by Def3;
   end;
-  cluster L(#)R -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster L(#)R -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
   coherence;
 end;
 
 definition
   let z0 be Complex;
   mode Neighbourhood of z0 -> Subset of COMPLEX means
-    :Def5:
-    ex g be Real st 0 < g & {y where y is Complex : |.y-z0.| < g} c= it;
+  :Def5:
+  ex g be Real st 0 < g & {y where y is Complex : |.y-z0.| < g} c= it;
   existence
   proof
     set N = {y where y is Complex : |.y-z0.| < 1};
@@ -540,15 +517,15 @@ definition
       let z be set;
       assume z in {y where y is Complex : |.y-z0.| < 1};
       then ex y be Complex st z = y & |.y-z0.| < 1;
-      hence thesis;
+      hence thesis by XCMPLX_0:def 2;
     end;
     hence thesis;
   end;
 end;
 
 theorem Th6:
-  for g be real number st 0 < g holds {y where y is Complex : |.y-
-  z0.| < g} is Neighbourhood of z0
+  for g be real number st 0 < g holds
+  {y where y is Complex : |.y-z0.| < g} is Neighbourhood of z0
 proof
   let g be real number such that
 A1: g > 0;
@@ -558,7 +535,7 @@ A2: N c= COMPLEX
     let z be set;
     assume z in {y where y is Complex : |.y-z0.| < g};
     then ex y be Complex st z = y & |.y-z0.| < g;
-    hence thesis;
+    hence thesis by XCMPLX_0:def 2;
   end;
   g in REAL by XREAL_0:def 1;
   hence thesis by A1,A2,Def5;
@@ -580,41 +557,42 @@ Lm1: for z0 be Complex for N1,N2 being Neighbourhood of z0 ex N being
 Neighbourhood of z0 st N c= N1 & N c= N2
 proof
   let z0 be Complex;
+A1: z0 in COMPLEX by XCMPLX_0:def 2;
   let N1,N2 be Neighbourhood of z0;
   consider a1 be Real such that
-A1: 0 < a1 and
-A2: {y where y is Complex : |.y-z0.| < a1} c= N1 by Def5;
+A2: 0 < a1 and
+A3: {y where y is Complex : |.y-z0.| < a1} c= N1 by Def5;
   consider a2 be Real such that
-A3: 0 < a2 and
-A4: {y where y is Complex : |.y-z0.| < a2} c= N2 by Def5;
+A4: 0 < a2 and
+A5: {y where y is Complex : |.y-z0.| < a2} c= N2 by Def5;
   set g = min(a1,a2);
   take {y where y is Complex : |.y-z0.| < g};
-A5: g <= a2 by XXREAL_0:17;
-A6: {y where y is Complex : |.y-z0.| < g} c= {y where y is Complex : |.y-z0
+A6: g <= a2 by XXREAL_0:17;
+A7: {y where y is Complex : |.y-z0.| < g} c= {y where y is Complex : |.y-z0
   .| < a2}
   proof
     let z be set;
     assume z in {y where y is Complex : |.y-z0.| < g};
     then consider y be Complex such that
-A7: z = y and
-A8: |.y-z0.| < g;
-    |.y-z0.| < a2 by A5,A8,XXREAL_0:2;
-    hence thesis by A7;
+A8: z = y and
+A9: |.y-z0.| < g;
+    |.y-z0.| < a2 by A6,A9,XXREAL_0:2;
+    hence thesis by A8;
   end;
-A9: g <= a1 by XXREAL_0:17;
-A10: {y where y is Complex : |.y-z0.| < g} c= {y where y is Complex : |.y-z0
+A10: g <= a1 by XXREAL_0:17;
+A11: {y where y is Complex : |.y-z0.| < g} c= {y where y is Complex : |.y-z0
   .| < a1}
   proof
     let z be set;
     assume z in {y where y is Complex : |.y-z0.| < g};
     then consider y be Complex such that
-A11: z = y and
-A12: |.y-z0.| < g;
-    |.y-z0.| < a1 by A9,A12,XXREAL_0:2;
-    hence thesis by A11;
+A12: z = y and
+A13: |.y-z0.| < g;
+    |.y-z0.| < a1 by A10,A13,XXREAL_0:2;
+    hence thesis by A12;
   end;
-  0 < g by A1,A3,XXREAL_0:15;
-  hence thesis by A2,A4,A10,A6,Th6,XBOOLE_1:1;
+  0 < g by A2,A4,XXREAL_0:15;
+  hence thesis by A1,A3,A5,A11,A7,Th6,XBOOLE_1:1;
 end;
 
 definition
@@ -622,9 +600,8 @@ definition
   let z0 be Complex;
   pred f is_differentiable_in z0 means
   :Def6:
-  ex N being Neighbourhood of z0
-st N c= dom f & ex L,R st for z be Complex st z in N holds f/.z-f/.z0 = L/.(z-
-  z0)+R/.(z-z0);
+  ex N being Neighbourhood of z0 st N c= dom f &
+  ex L,R st for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
 end;
 
 definition
@@ -632,10 +609,10 @@ definition
   let z0 be Complex;
   assume
 A1: f is_differentiable_in z0;
-  func diff(f,z0) -> Complex means
+  func diff(f,z0) -> Element of COMPLEX means
   :Def7:
-  ex N being Neighbourhood of z0 st N
-c= dom f & ex L,R st it = L/.1r & for z be Complex st z in N holds f/.z-f/.z0 =
+  ex N being Neighbourhood of z0 st N c= dom f &
+  ex L,R st it = L/.1r & for z st z in N holds f/.z-f/.z0 =
   L/.(z-z0)+R/.(z-z0);
   existence
   proof
@@ -644,9 +621,9 @@ A2: N c= dom f and
 A3: ex L, R st for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0)
     by A1,Def6;
     consider L,R such that
-A4: for z be Complex st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A3;
-    consider a be Complex such that
-A5: for d be Complex holds L/.d = a*d by Def4;
+A4: for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A3;
+    consider a be Element of COMPLEX such that
+A5: for d be Element of COMPLEX holds L/.d = a*d by Def4;
     take a;
     L/.1r = a*1r by A5
       .= a;
@@ -655,7 +632,7 @@ A5: for d be Complex holds L/.d = a*d by Def4;
   uniqueness
   proof
     set s0=InvShift(2);
-    let a, b be Complex;
+    let a, b be Element of COMPLEX;
     assume that
 A6: ex N being Neighbourhood of z0 st N c= dom f & ex L,R st a = L/.1r
     & for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) and
@@ -663,11 +640,11 @@ A7: ex N being Neighbourhood of z0 st N c= dom f & ex L,R st b = L/.1r
     & for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
     consider N being Neighbourhood of z0 such that
     N c= dom f and
-A8: ex L,R st a = L/.1r & for z be Complex st z in N holds f/.z-f/.z0
+A8: ex L,R st a = L/.1r & for z st z in N holds f/.z-f/.z0
     = L/.(z-z0)+R/.(z-z0) by A6;
     consider L,R such that
 A9: a = L/.1r and
-A10: for z be Complex st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A8;
+A10: for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A8;
     consider a1 such that
 A11: for b holds L/.b = a1*b by Def4;
     consider N1 being Neighbourhood of z0 such that
@@ -695,18 +672,18 @@ A19: now
     now
       let n;
       s1.n = g/(n+2) by A19;
-      hence 0 <> s1.n by A17,XREAL_1:139;
+      hence 0 <> s1.n by A17;
     end;
     then
 A20: s1 is non-zero by COMSEQ_1:4;
     lim s0 = 0 by Th3;
     then lim s1 = g*0 by COMSEQ_2:18;
-    then reconsider h = s1 as convergent_to_0 Complex_Sequence by A20,Def1;
+    then reconsider h = s1 as 0-convergent non-zero Complex_Sequence
+      by A20,Def1;
 A21: for n ex x be Complex st x in N & x in N1 & h.n = x-z0
     proof
       let n;
-      g/(n+2) in REAL;
-      then reconsider g0 = g/(n+2) as Complex by NUMBERS:11;
+      reconsider g0 = g/(n+2) as Complex;
       take x = z0+g0;
       0+1 < n+1+1 by XREAL_1:6;
       then
@@ -722,9 +699,10 @@ A24: now
       assume that
 A25:  z in N and
 A26:  z in N1;
+      reconsider t0=z0,t=z as Element of COMPLEX by XCMPLX_0:def 2;
       f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A10,A25;
       then L/.(z-z0)+R/.(z-z0) = L1/.(z-z0)+R1/.(z-z0) by A14,A26;
-      then a1*(z-z0)+R/.(z-z0) = L1/.(z-z0)+R1/.(z-z0) by A11;
+      then a1*(t-t0)+R/.(t-t0) = L1/.(t-t0)+R1/.(t-t0) by A11;
       then (a1*1r)*(z-z0)+R/.(z-z0) = (b1*1r)*(z-z0)+R1/.(z-z0) by A15;
       hence a*(z-z0)+R/.(z-z0) = b*(z-z0)+R1/.(z-z0) by A13,A15,A23;
     end;
@@ -821,61 +799,63 @@ A2: z0 in X and
 A3: for N be Neighbourhood of z0 holds not N c= X;
   defpred P[Element of NAT,Complex] means $2 in {y where y is Complex : |.y-z0
   .| < 1/($1+1)} & $2 in X`;
+A4: z0 in COMPLEX by XCMPLX_0:def 2;
   now
     let g be Real such that
-A4: 0 < g;
+A5: 0 < g;
     set N = {y where y is Complex : |.y-z0.| < g};
-    N is Neighbourhood of z0 by A4,Th6;
+    N is Neighbourhood of z0 by A4,A5,Th6;
     then not N c= X by A3;
     then consider x be set such that
-A5: x in N and
-A6: not x in X by TARSKI:def 3;
+A6: x in N and
+A7: not x in X by TARSKI:def 3;
     consider s be Complex such that
-A7: x = s and
-A8: |.s-z0.| < g by A5;
+A8: x = s and
+A9: |.s-z0.| < g by A6;
+    reconsider s as Element of COMPLEX by XCMPLX_0:def 2;
     take s;
-    thus s in N by A8;
-    thus s in X` by A6,A7,XBOOLE_0:def 5;
+    thus s in N by A9;
+    thus s in X` by A7,A8,XBOOLE_0:def 5;
   end;
   then
-A9: for n ex s be Complex st P[n,s];
+A10: for n ex s be Element of COMPLEX st P[n,s];
   consider s1 be Function of NAT,COMPLEX such that
-A10: for n being Element of NAT holds P[n,s1.n] from FUNCT_2:sch 3(A9);
-A11: rng s1 c= X`
+A11: for n being Element of NAT holds P[n,s1.n] from FUNCT_2:sch 3(A10);
+A12: rng s1 c= X`
   proof
     let y;
     assume y in rng s1;
     then consider y1 be set such that
-A12: y1 in dom s1 and
-A13: s1.y1 = y by FUNCT_1:def 3;
-    reconsider y1 as Element of NAT by A12;
-    s1.y1 in X` by A10;
-    hence thesis by A13;
+A13: y1 in dom s1 and
+A14: s1.y1 = y by FUNCT_1:def 3;
+    reconsider y1 as Element of NAT by A13;
+    s1.y1 in X` by A11;
+    hence thesis by A14;
   end;
-A14: now
+A15: now
     let p be Real;
     assume
-A15: 0 < p;
+A16: 0 < p;
     consider n such that
-A16: p" < n by SEQ_4:3;
+A17: p" < n by SEQ_4:3;
     take n;
     let m be Element of NAT;
     assume n <= m;
     then n+1 <= m+1 by XREAL_1:6;
     then
-A17: 1/(m+1) <= 1/(n+1) by XREAL_1:118;
-    s1.m in {y where y is Complex : |.y-z0.| < 1/(m+1)} by A10;
+A18: 1/(m+1) <= 1/(n+1) by XREAL_1:118;
+    s1.m in {y where y is Complex : |.y-z0.| < 1/(m+1)} by A11;
     then ex y be Complex st s1.m = y & |.y-z0.| < 1/(m+1);
     then
-A18: |.s1.m-z0.| < 1/(n+1) by A17,XXREAL_0:2;
-    p"+0 < n+1 by A16,XREAL_1:8;
-    then 1/(n+1) < 1/p" by A15,XREAL_1:76;
-    hence |.s1.m - z0.| < p by A18,XXREAL_0:2;
+A19: |.s1.m-z0.| < 1/(n+1) by A18,XXREAL_0:2;
+    p"+0 < n+1 by A17,XREAL_1:8;
+    then 1/(n+1) < 1/p" by A16,XREAL_1:76;
+    hence |.s1.m - z0.| < p by A19,XXREAL_0:2;
   end;
   then
-A19: s1 is convergent by COMSEQ_2:def 4;
-  then lim s1 = z0 by A14,COMSEQ_2:def 5;
-  then z0 in COMPLEX \ X by A19,A11,A1,Def10;
+A20: s1 is convergent by A4,COMSEQ_2:def 5;
+  then lim s1 = z0 by A4,A15,COMSEQ_2:def 6;
+  then z0 in COMPLEX \ X by A20,A12,A1,Def10;
   hence contradiction by A2,XBOOLE_0:def 5;
 end;
 
@@ -917,7 +897,7 @@ A7: 0 < g and
 A8: {y where y is Complex : |.y-(lim s1).| < g} c= N by Def5;
   consider n such that
 A9: for m be Element of NAT st n <= m holds |.(s1.m)-(lim s1).| < g by A4,A7,
-COMSEQ_2:def 5;
+COMSEQ_2:def 6;
   n in NAT;
   then n in dom s1 by FUNCT_2:def 1;
   then
@@ -943,27 +923,28 @@ A1: X = {y where y is Complex : |.y-z0.| < r};
   for x be Complex st x in X0 ex N be Neighbourhood of x st N c= X0
   proof
     let x be Complex;
+A2: x in COMPLEX by XCMPLX_0:def 2;
     reconsider r1 = (r- |.x-z0.|)/2 as Real;
     set N = {y where y is Complex : |.y-x.| < r1};
     assume x in X0;
     then ex y be Complex st x = y & |.y-z0.| < r by A1;
     then
-A2: r - |.x-z0.| > 0 by XREAL_1:50;
-    then reconsider N as Neighbourhood of x by Th6,XREAL_1:215;
-    r1 < r- |.x-z0.| by A2,XREAL_1:216;
+A3: r - |.x-z0.| > 0 by XREAL_1:50;
+    then reconsider N as Neighbourhood of x by A2,Th6;
+    r1 < r- |.x-z0.| by A3,XREAL_1:216;
     then
-A3: r1+|.x-z0.| < (r- |.x-z0.|)+|.x-z0.| by XREAL_1:8;
+A4: r1+|.x-z0.| < (r- |.x-z0.|)+|.x-z0.| by XREAL_1:8;
     take N;
     let z be set;
     assume z in N;
     then consider y1 be Complex such that
-A4: z = y1 and
-A5: |.y1-x.| < r1;
-    |.y1-x.|+|.x-z0.| < r1+|.x-z0.| by A5,XREAL_1:8;
-    then |.y1-z0.| <= |.y1-x.|+|.x-z0.| & |.y1-x.|+|.x-z0.| < r by A3,
+A5: z = y1 and
+A6: |.y1-x.| < r1;
+    |.y1-x.|+|.x-z0.| < r1+|.x-z0.| by A6,XREAL_1:8;
+    then |.y1-z0.| <= |.y1-x.|+|.x-z0.| & |.y1-x.|+|.x-z0.| < r by A4,
 COMPLEX1:63,XXREAL_0:2;
     then |.y1-z0.| < r by XXREAL_0:2;
-    hence thesis by A1,A4;
+    hence thesis by A1,A5;
   end;
   hence thesis by Th11;
 end;
@@ -1008,7 +989,7 @@ A7:   s3.n = s1.n-z0;
     end;
     s3 is convergent by A3,A4;
     then
-A8: lim |.s3.| = |.lim s3.| by COMSEQ_2:11;
+A8: lim |.s3.| = |.lim s3.| by SEQ_2:27;
     reconsider s3 = s1-s2 as convergent Complex_Sequence by A3,A4;
 A9: for n be Element of NAT holds |.s3.|.n <= s4.n
     proof
@@ -1218,10 +1199,10 @@ A2:   rng h c= dom R & n in NAT by A1,ORDINAL1:def 12;
     hence (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c by CFCONT_1:26
 ,27;
   end;
-  then reconsider R as C_REST by Def3;
+  then reconsider R as C_RestFunc by Def3;
   set L = cf;
   L/.z = 0c*z by FUNCOP_1:7;
-  then reconsider L as C_LINEAR by Def4;
+  then reconsider L as C_LinearFunc by Def4;
   let f, Z such that
 A3: Z c= dom f;
   given a1 such that
@@ -1293,7 +1274,7 @@ end;
 
 registration
   let h,n;
-  cluster h^\n -> convergent_to_0 for Complex_Sequence;
+  cluster h^\n -> 0-convergent for Complex_Sequence;
   coherence
   proof
     lim h = 0 by Def1;
@@ -1411,7 +1392,7 @@ A15: h+c is convergent;
       .= x0;
     then consider n such that
 A16: for m being Element of NAT st n <= m holds |.(h+c).m-x0.| < g by A9,A15,
-COMSEQ_2:def 5;
+COMSEQ_2:def 6;
     take n;
 A17: rng (c^\n) = {x0} by A7,VALUED_0:26;
     thus rng (c^\n) c= N2
@@ -1459,7 +1440,7 @@ A26:  ((h^\n)")(#)(R/*(h^\n)) is convergent & lim (((h^\n)")(#)(R/*(h^\n)
       assume 0 < r;
       then consider m being Element of NAT such that
 A27:  for k st m <= k holds abs((((h^\n)")(#)(R/*(h^\n))).k-0c) < r
-      by A26,COMSEQ_2:def 5;
+      by A26,COMSEQ_2:def 6;
       take n1 = m;
       let k such that
 A28:  n1 <= k;
@@ -1488,8 +1469,8 @@ A31:  (h^\n).m <> 0c by COMSEQ_1:4;
     end;
     then
 A32: (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:63;
-    hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A25,COMSEQ_2:def 4;
-    hence thesis by A32,A25,COMSEQ_2:def 5;
+    hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A25,COMSEQ_2:def 5;
+    hence thesis by A32,A25,COMSEQ_2:def 6;
   end;
 A33: for k holds f/.(((h+c)^\n).k)-f/.((c^\n).k) = L/.((h^\n).k)+R/.((h^\n). k)
   proof
@@ -1569,8 +1550,8 @@ A7: ex L,R st for x st x in N2 holds f2/.x-f2/.x0 = L/.(x-x0)+R/.(x-x0)
   by A2,Def6;
   consider L2,R2 such that
 A8: for x st x in N2 holds f2/.x-f2/.x0 = L2/.(x-x0)+R2/.(x-x0) by A7;
-  reconsider R = R1+R2 as C_REST;
-  reconsider L = L1+L2 as C_LINEAR;
+  reconsider R = R1+R2 as C_RestFunc;
+  reconsider L = L1+L2 as C_LinearFunc;
   consider N be Neighbourhood of x0 such that
 A9: N c= N1 and
 A10: N c= N2 by Lm1;
@@ -1621,8 +1602,8 @@ A7: ex L,R st for x st x in N2 holds f2/.x-f2/.x0 = L/.(x-x0)+R/.(x-x0)
   by A2,Def6;
   consider L2,R2 such that
 A8: for x st x in N2 holds f2/.x-f2/.x0 = L2/.(x-x0)+R2/.(x-x0) by A7;
-  reconsider R = R1-R2 as C_REST;
-  reconsider L = L1-L2 as C_LINEAR;
+  reconsider R = R1-R2 as C_RestFunc;
+  reconsider L = L1-L2 as C_LinearFunc;
   consider N be Neighbourhood of x0 such that
 A9: N c= N1 and
 A10: N c= N2 by Lm1;
@@ -1664,8 +1645,8 @@ A2: N1 c= dom f and
 A3: ex L,R st for x st x in N1 holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
   consider L1,R1 such that
 A4: for x st x in N1 holds f/.x-f/.x0 = L1/.(x-x0)+R1/.(x-x0) by A3;
-  reconsider R = a(#)R1 as C_REST;
-  reconsider L = a(#)L1 as C_LINEAR;
+  reconsider R = a(#)R1 as C_RestFunc;
+  reconsider L = a(#)L1 as C_LinearFunc;
 A5: N1 c= dom(a(#)f) by A2,VALUED_1:def 5;
 A6: now
     let x;
@@ -1701,26 +1682,26 @@ A4: ex L,R st for x st x in N2 holds f2/.x-f2/.x0 = L/.(x-x0)+R/.(x-x0)
   by A2,Def6;
   consider L2,R2 such that
 A5: for x st x in N2 holds f2/.x-f2/.x0 = L2/.(x-x0)+R2/.(x-x0) by A4;
-  reconsider R12 = (f1/.x0)(#)R2 as C_REST;
-  reconsider L12 = (f1/.x0)(#)L2 as C_LINEAR;
+  reconsider R12 = (f1/.x0)(#)R2 as C_RestFunc;
+  reconsider L12 = (f1/.x0)(#)L2 as C_LinearFunc;
   consider N1 be Neighbourhood of x0 such that
 A6: N1 c= dom f1 and
 A7: ex L,R st for x st x in N1 holds f1/.x-f1/.x0 = L/.(x-x0)+R/.(x-x0)
   by A1,Def6;
   consider L1,R1 such that
 A8: for x st x in N1 holds f1/.x-f1/.x0 = L1/.(x-x0)+R1/.(x-x0) by A7;
-  reconsider R11 = (f2/.x0)(#)R1 as C_REST;
-  reconsider L11 = (f2/.x0)(#)L1 as C_LINEAR;
-  reconsider R18 = R2(#)L1 as C_REST;
-  reconsider R17 = R1(#)R2 as C_REST;
-  reconsider R16 = R1(#)L2 as C_REST;
-  reconsider R14 = L1(#)L2 as C_REST;
-  reconsider R13 = R11+R12 as C_REST;
-  reconsider L = L11+L12 as C_LINEAR;
-  reconsider R15 = R13+R14 as C_REST;
-  reconsider R19 = R16+R17 as C_REST;
-  reconsider R20 = R19+R18 as C_REST;
-  reconsider R = R15+R20 as C_REST;
+  reconsider R11 = (f2/.x0)(#)R1 as C_RestFunc;
+  reconsider L11 = (f2/.x0)(#)L1 as C_LinearFunc;
+  reconsider R18 = R2(#)L1 as C_RestFunc;
+  reconsider R17 = R1(#)R2 as C_RestFunc;
+  reconsider R16 = R1(#)L2 as C_RestFunc;
+  reconsider R14 = L1(#)L2 as C_RestFunc;
+  reconsider R13 = R11+R12 as C_RestFunc;
+  reconsider L = L11+L12 as C_LinearFunc;
+  reconsider R15 = R13+R14 as C_RestFunc;
+  reconsider R19 = R16+R17 as C_RestFunc;
+  reconsider R20 = R19+R18 as C_RestFunc;
+  reconsider R = R15+R20 as C_RestFunc;
   consider N be Neighbourhood of x0 such that
 A9: N c= N1 and
 A10: N c= N2 by Lm1;
@@ -1798,7 +1779,7 @@ proof
   reconsider L = id COMPLEX as PartFunc of COMPLEX,COMPLEX;
 A1: COMPLEX c= COMPLEX;
   then for b holds L/.b = 1r*b by PARTFUN2:6;
-  then reconsider L as C_LINEAR by Def4;
+  then reconsider L as C_LinearFunc by Def4;
 A2: dom R = COMPLEX by FUNCOP_1:13;
   now
     let h;
@@ -1814,7 +1795,7 @@ A3:   n in NAT & rng h c= dom R by A2,ORDINAL1:def 12;
     hence (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c by CFCONT_1:26
 ,27;
   end;
-  then reconsider R as C_REST by Def3;
+  then reconsider R as C_RestFunc by Def3;
   let f, Z;
   assume that
 A4: Z c= dom f and
@@ -2011,10 +1992,10 @@ A2:   n in NAT & rng h c= dom R by A1,ORDINAL1:def 12;
     hence (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c by CFCONT_1:26
 ,27;
   end;
-  then reconsider R as C_REST by Def3;
+  then reconsider R as C_RestFunc by Def3;
   set L = cf;
   L/.x = 0c*x by FUNCOP_1:7;
-  then reconsider L as C_LINEAR by Def4;
+  then reconsider L as C_LinearFunc by Def4;
   assume that
 A3: Z c= dom f and
 A4: f|Z is constant;
@@ -2085,15 +2066,15 @@ A2:   n in NAT & rng h c= dom R by A1,ORDINAL1:def 12;
     hence (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c by CFCONT_1:26
 ,27;
   end;
-  then reconsider R as C_REST by Def3;
+  then reconsider R as C_RestFunc by Def3;
   assume that
 A3: Z c= dom f and
 A4: for x st x in Z holds f/.x = a*x+b;
-  deffunc G(Complex) = a*$1;
+  deffunc G(Element of COMPLEX) = a*$1;
   consider L being Function of COMPLEX,COMPLEX such that
 A5: for x being Element of COMPLEX holds L.x = G(x) from FUNCT_2:sch 4;
   for z holds L/.z = a*z by A5;
-  then reconsider L as C_LINEAR by Def4;
+  then reconsider L as C_LinearFunc by Def4;
 A6: now
     let x0;
     assume
@@ -2139,16 +2120,15 @@ A15: f is_differentiable_in x0 by A6,A11;
 end;
 
 theorem Th34:
-  for x0 be Complex holds f is_differentiable_in x0 implies f
+  for x0 be Element of COMPLEX holds f is_differentiable_in x0 implies f
   is_continuous_in x0
 proof
-  let x0 be Complex;
+  let x0 be Element of COMPLEX;
   assume
 A1: f is_differentiable_in x0;
   then consider N being Neighbourhood of x0 such that
 A2: N c= dom f and
-  ex L,R st for x be Complex st x in N holds f/.x-f/.x0 = L/.(x-x0)+R /.(x
-  -x0) by Def6;
+  ex L,R st for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R /.(x-x0) by Def6;
 A3: x0 in N by Th7;
   now
     consider g be Real such that
@@ -2162,7 +2142,7 @@ A8: lim s1 = x0 and
 A9: for n holds s1.n <> x0;
     consider l be Element of NAT such that
 A10: for m be Element of NAT st l <= m holds |.s1.m-x0.| < g by A7,A8,A4,
-COMSEQ_2:def 5;
+COMSEQ_2:def 6;
 A11: lim s2 = s2.0 by CFCONT_1:28
       .= x0 by FUNCOP_1:7;
     deffunc G(Element of NAT) = s1.$1-s2.$1;
@@ -2193,8 +2173,8 @@ A20:  (s3^\l).n = 0c;
     then
 A21: s3^\l is non-zero by COMSEQ_1:4;
     s3^\l is convergent by A15,CFCONT_1:21;
-    then reconsider h = s3^\l as convergent_to_0 Complex_Sequence by A16,A21
-,Def1;
+    then reconsider h = s3^\l as 0-convergent non-zero Complex_Sequence
+      by A16,A21,Def1;
     now
       let n;
       thus (f/*(h+c)-f/*c+f/*c).n = (f/*(h+c)-f/*c).n+(f/*c).n by VALUED_1:1
@@ -2251,7 +2231,7 @@ A28:  0 < p;
       end;
     end;
     then
-A29: f/*c is convergent by COMSEQ_2:def 4;
+A29: f/*c is convergent by COMSEQ_2:def 5;
     now
       let n;
 A30:  h.n <> 0 by A19;
@@ -2293,7 +2273,7 @@ A36: f/*(h+c)-f/*c+f/*c is convergent by A29;
 COMSEQ_2:30
       .= 0;
     then lim(f/*(h+c)-f/*c+f/*c) = 0c+lim (f/*c) by A31,A35,A29,COMSEQ_2:14
-      .= f/.x0 by A27,A29,COMSEQ_2:def 5;
+      .= f/.x0 by A27,A29,COMSEQ_2:def 6;
     hence f/.x0 = lim(f/*s1) by A36,A23,CFCONT_1:23;
   end;
   hence thesis by A2,A3,CFCONT_1:31;
@@ -2306,7 +2286,7 @@ proof
 A1: f is_differentiable_on X;
   hence
 A2: X c= dom f by Def9;
-  let x be Complex;
+  let x be Element of COMPLEX;
   assume x in X;
   then
 A3: x in dom (f|X) by A2,RELAT_1:57;
@@ -2365,8 +2345,7 @@ A16: (f|X)/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A2,A5,A6,PARTFUN2:17;
   hence thesis by A13,A15,PARTFUN2:15;
 end;
 
-theorem
-  seq is convergent implies |.seq.| is convergent;
+canceled;
 
 theorem
   f is_differentiable_in x0 implies ex R st R/.0c = 0c & R is_continuous_in 0c
@@ -2390,56 +2369,55 @@ A5: now
     then consider M being Real such that
     M > 0 and
 A6: for n holds |.((h")(#)(R/*h)).n.| < M by COMSEQ_2:8;
-A7: M(#)|.h.| is convergent by SEQ_2:7;
     lim h = 0 by Def1;
-    then lim |.h.| = |. 0 .| by COMSEQ_2:11;
+    then lim |.h.| = |. 0 .| by SEQ_2:27;
     then
-A8: lim (M(#)|.h.|) = M * |. 0 .| by SEQ_2:8
+A7: lim (M(#)|.h.|) = M * |. 0 .| by SEQ_2:8
       .=M*0 by ABSVALUE:2
       .=0;
-A9: now
+A8: now
       let p be Real;
       assume 0 < p;
       then consider m such that
-A10:  for n st m <= n holds abs((M(#)|.h.|).n-0) < p by A7,A8,SEQ_2:def 7;
+A9:  for n st m <= n holds abs((M(#)|.h.|).n-0) < p by A7,SEQ_2:def 7;
       take m;
       now
         let n;
         assume m <= n;
         then
-A11:    abs((M(#)|.h.|).n-0) < p by A10;
+A10:    abs((M(#)|.h.|).n-0) < p by A9;
         |.((h")(#)(R/*h)).n.| = |.((h").n)*(R/*h).n.| by VALUED_1:5
           .= |.(h.n)"*(R/*h).n.| by VALUED_1:10;
         then
-A12:    |.(h.n)"*(R/*h).n.| <= M by A6;
+A11:    |.(h.n)"*(R/*h).n.| <= M by A6;
         |.(h.n).| >= 0 by COMPLEX1:46;
-        then |.(h.n).|*|.(h.n)"*(R/*h).n.| <= M*|.(h.n).| by A12,XREAL_1:64;
+        then |.(h.n).|*|.(h.n)"*(R/*h).n.| <= M*|.(h.n).| by A11,XREAL_1:64;
         then |.(h.n)*((h.n)"*(R/*h).n).| <= M*|.(h.n).| by COMPLEX1:65;
         then h.n <> 0c & |.(h.n)*(h.n)"*(R/*h).n.| <= M*|.(h.n).| by COMSEQ_1:4
 ;
         then |.1r*(R/*h).n.| <= M*|.(h.n).| by XCMPLX_0:def 7;
         then |.(R/*h).n.| <= M*|.h.|.n by VALUED_1:18;
         then
-A13:    |.(R/*h).n.| <= (M(#)|.h.|).n by SEQ_1:9;
+A12:    |.(R/*h).n.| <= (M(#)|.h.|).n by SEQ_1:9;
         then 0 <= (M(#)|.h.|).n by COMPLEX1:46;
-        then (M(#)|.h.|).n < p by A11,ABSVALUE:def 1;
-        hence |.(R/*h).n-0c.| < p by A13,XXREAL_0:2;
+        then (M(#)|.h.|).n < p by A10,ABSVALUE:def 1;
+        hence |.(R/*h).n-0c.| < p by A12,XXREAL_0:2;
       end;
       hence for n st m <= n holds |.(R/*h).n-0c.| < p;
     end;
-    hence R/*h is convergent by COMSEQ_2:def 4;
-    hence lim (R/*h) = R/.0c by A4,A9,COMSEQ_2:def 5;
+    hence R/*h is convergent by COMSEQ_2:def 5;
+    hence lim (R/*h) = R/.0c by A4,A8,COMSEQ_2:def 6;
   end;
-A14: now
+A13: now
     let s1;
     assume that
     rng s1 c= dom R and
-A15: s1 is convergent & lim s1 = 0 and
-A16: for n holds s1.n <> 0;
-    s1 is non-zero by A16,COMSEQ_1:4;
-    then s1 is convergent_to_0 Complex_Sequence by A15,Def1;
+A14: s1 is convergent & lim s1 = 0 and
+A15: for n holds s1.n <> 0;
+    s1 is non-zero by A15,COMSEQ_1:4;
+    then s1 is 0-convergent non-zero Complex_Sequence by A14,Def1;
     hence R/*s1 is convergent & lim (R/*s1) = R/.0c by A5;
   end;
   dom R = COMPLEX by PARTFUN1:def 2;
-  hence thesis by A14,CFCONT_1:31;
+  hence thesis by A13,CFCONT_1:31;
 end;

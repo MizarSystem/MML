@@ -2,7 +2,7 @@
 ::  by Takao Inou\'e , Bing Xie and Xiquan Liang
 ::
 :: Received November 7, 2009
-:: Copyright (c) 2009-2011 Association of Mizar Users
+:: Copyright (c) 2009-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,7 +25,7 @@ environ
       FDIFF_1, XXREAL_0, FCONT_1, PDIFF_1, PDIFF_2, EUCLID_8;
  constructors REAL_1, SEQ_2, COMPLEX1, RCOMP_1, FDIFF_1, SEQ_1, FCONT_1,
       PDIFF_1, RELSET_1, PDIFF_2, EUCLID_8, SQUARE_1, BINOP_2, FINSEQOP,
-      FINSEQ_4, MONOID_0;
+      FINSEQ_4, MONOID_0, COMSEQ_2;
  registrations RELSET_1, XREAL_0, MEMBERED, FDIFF_1, FUNCT_2, NAT_1, NUMBERS,
       XXREAL_0, FINSEQ_1, VALUED_0, VALUED_1, ORDINAL1, SEQ_4, EUCLID, RVSUM_1,
       RCOMP_1, FUNCOP_1, FCONT_3;
@@ -41,13 +41,12 @@ environ
 begin :: Preliminaries
 
 reserve D for set;
-
 reserve x,x0,x1,x2,y,y0,y1,y2,z,z0,z1,z2,r,s,t for Real;
 reserve p,a,u,u0 for Element of REAL 3;
 reserve n,m,k for Element of NAT;
 reserve f,f1,f2,f3,g for PartFunc of REAL 3,REAL;
-reserve R,R1,R2 for REST;
-reserve L,L1,L2 for LINEAR;
+reserve R,R1,R2 for RestFunc;
+reserve L,L1,L2 for LinearFunc;
 
 theorem Th1:
   dom proj(1,3) = REAL 3 & rng proj(1,3) = REAL &
@@ -923,7 +922,7 @@ begin :: Main Properties of Partial Differentiation of Real Ternary Functions
 theorem
   for u0 being Element of REAL 3 for N being Neighbourhood of proj(1,3).u0 st
   f is_partial_differentiable_in u0,1 & N c= dom SVF1(1,f,u0) holds
-  for h be convergent_to_0 Real_Sequence,
+  for h be 0-convergent non-zero Real_Sequence,
   c be constant Real_Sequence st rng c = {proj(1,3).u0} & rng (h+c) c= N
   holds h"(#)(SVF1(1,f,u0)/*(h+c) - SVF1(1,f,u0)/*c) is convergent &
   partdiff(f,u0,1) = lim (h"(#)(SVF1(1,f,u0)/*(h+c) - SVF1(1,f,u0)/*c))
@@ -932,7 +931,7 @@ proof
      let N be Neighbourhood of proj(1,3).u0;
      assume
 A1:  f is_partial_differentiable_in u0,1 & N c= dom SVF1(1,f,u0);
-     let h be convergent_to_0 Real_Sequence,
+     let h be 0-convergent non-zero Real_Sequence,
      c be constant Real_Sequence such that
 A2:  rng c = {proj(1,3).u0} & rng (h+c) c= N;
      consider x0,y0,z0 being Real such that
@@ -960,53 +959,53 @@ A9: x0 in N2
      proof
        x0 in rng c by A2,A6,TARSKI:def 1;then
   A11: lim c = x0 by SEQ_4:25;
-  A12: h is convergent & lim h = 0 by FDIFF_1:def 1;then
-  A13: lim (h+c) = 0+x0 by A11,SEQ_2:6
+   h is convergent & lim h = 0;then
+  A12: lim (h+c) = 0+x0 by A11,SEQ_2:6
        .= x0;
-       h + c is convergent by A12,SEQ_2:5;
+       h + c is convergent by SEQ_2:5;
        then consider n such that
-  A14: for m being Element of NAT st n <= m holds abs((h+c).m-x0) < g
-       by A8,A13,SEQ_2:def 7;
-  A15: rng (c^\n) = {x0} by A2,A6,VALUED_0:26;
+  A13: for m being Element of NAT st n <= m holds abs((h+c).m-x0) < g
+       by A8,A12,SEQ_2:def 7;
+  A14: rng (c^\n) = {x0} by A2,A6,VALUED_0:26;
        take n;
        thus rng (c^\n) c= N2
        proof
          let y be set;
          assume y in rng (c^\n);
-         hence thesis by A9,A15,TARSKI:def 1;
+         hence thesis by A9,A14,TARSKI:def 1;
        end;
        let y be set;
        assume y in rng ((h+c)^\n);
        then consider m such that
-  A16: y = ((h+c)^\n).m by FUNCT_2:113;
+  A15: y = ((h+c)^\n).m by FUNCT_2:113;
        n + 0 <= n+m by XREAL_1:7;
-       then abs((h+c).(n+m)-x0)<g by A14;
+       then abs((h+c).(n+m)-x0)<g by A13;
        then -g < (h+c).(m+n) - x0 & (h+c).(m+n) - x0 < g by SEQ_2:1;
        then -g < ((h+c)^\n).m - x0 & ((h+c)^\n).m - x0 < g by NAT_1:def 3;
        then
     x0 +-g < ((h+c)^\n).m & ((h+c)^\n).m < x0 + g by XREAL_1:19,20;
-       hence thesis by A8,A16;
+       hence thesis by A8,A15;
      end;
      then consider n such that
-A17: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
-A18: rng (c^\n) c= dom SVF1(1,f,u0)
+A16: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
+A17: rng (c^\n) c= dom SVF1(1,f,u0)
      proof
        let y be set;
-  A19: rng (c^\n) = rng c by VALUED_0:26;
+  A18: rng (c^\n) = rng c by VALUED_0:26;
        assume y in rng (c^\n);
-       then y = x0 by A2,A6,A19,TARSKI:def 1;
+       then y = x0 by A2,A6,A18,TARSKI:def 1;
        then y in N by A7,A9;
        hence thesis by A1;
      end;
-A20: rng ((h+c)^\n) c= dom SVF1(1,f,u0)
+A19: rng ((h+c)^\n) c= dom SVF1(1,f,u0)
      proof
        let y be set;
        assume y in rng ((h+c)^\n);
-       then y in N2 by A17;
+       then y in N2 by A16;
        then y in N by A7;
        hence thesis by A1;
      end;
-A21: rng c c= dom SVF1(1,f,u0)
+A20: rng c c= dom SVF1(1,f,u0)
      proof
        let y be set;
        assume y in rng c;
@@ -1014,32 +1013,32 @@ A21: rng c c= dom SVF1(1,f,u0)
        then y in N by A7,A9;
        hence thesis by A1;
      end;
-A22: rng (h+c) c= dom SVF1(1,f,u0)
+A21: rng (h+c) c= dom SVF1(1,f,u0)
      proof
        let y be set;
        assume y in rng (h+c);
        then y in N by A2;
        hence thesis by A1;
      end;
-A23: for x st x in N2 holds
+A22: for x st x in N2 holds
      SVF1(1,f,u0).x - SVF1(1,f,u0).x0 = L.(x-x0) + R.(x-x0) by A5,A7;
-A24: for k holds SVF1(1,f,u0).(((h+c)^\n).k) - SVF1(1,f,u0).((c^\n).k)
+A23: for k holds SVF1(1,f,u0).(((h+c)^\n).k) - SVF1(1,f,u0).((c^\n).k)
      = L.((h^\n).k) + R.((h^\n).k)
      proof
        let k;
        ((h+c)^\n).k in rng ((h+c)^\n) by VALUED_0:28;then
-  A25: ((h+c)^\n).k in N2 by A17;
-  A26: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:15
+  A24: ((h+c)^\n).k in N2 by A16;
+  A25: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:15
       .= (h^\n).k + (c^\n).k - (c^\n).k by SEQ_1:7
       .= (h^\n).k;
-  A27: (c^\n).k in rng (c^\n) by VALUED_0:28;
+  A26: (c^\n).k in rng (c^\n) by VALUED_0:28;
        rng (c^\n) = rng c by VALUED_0:26;
-       then (c^\n).k = x0 by A2,A6,A27,TARSKI:def 1;
-       hence thesis by A5,A7,A25,A26;
+       then (c^\n).k = x0 by A2,A6,A26,TARSKI:def 1;
+       hence thesis by A5,A7,A24,A25;
      end;
-A28: L is total by FDIFF_1:def 3;
-A29: R is total by FDIFF_1:def 2;
-A30: SVF1(1,f,u0)/*((h+c)^\n) - SVF1(1,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
+A27: L is total by FDIFF_1:def 3;
+A28: R is total by FDIFF_1:def 2;
+A29: SVF1(1,f,u0)/*((h+c)^\n) - SVF1(1,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
      proof
        now
          let k;
@@ -1047,30 +1046,29 @@ A30: SVF1(1,f,u0)/*((h+c)^\n) - SVF1(1,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
          = (SVF1(1,f,u0)/*((h+c)^\n)).k - (SVF1(1,f,u0)/*(c^\n)).k
            by RFUNCT_2:1
         .= SVF1(1,f,u0).(((h+c)^\n).k) - (SVF1(1,f,u0)/*(c^\n)).k
-           by A20,FUNCT_2:108
+           by A19,FUNCT_2:108
         .= SVF1(1,f,u0).(((h+c)^\n).k) - SVF1(1,f,u0).((c^\n).k)
-          by A18,FUNCT_2:108
-        .= L.((h^\n).k) + R.((h^\n).k) by A24
-        .= (L/*(h^\n)).k + R.((h^\n).k) by A28,FUNCT_2:115
-        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A29,FUNCT_2:115
+          by A17,FUNCT_2:108
+        .= L.((h^\n).k) + R.((h^\n).k) by A23
+        .= (L/*(h^\n)).k + R.((h^\n).k) by A27,FUNCT_2:115
+        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A28,FUNCT_2:115
         .= (L/*(h^\n) + R/*(h^\n)).k by SEQ_1:7;
        end;
        hence thesis by FUNCT_2:63;
      end;
-A31: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
+A30: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
      lim ((L/*(h^\n) + R/*(h^\n))(#)(h^\n)") = L.1
      proof
        deffunc F(Element of NAT) = L.1 + ((R/*(h^\n))(#)(h^\n)").$1;
        consider s1 be Real_Sequence such that
-  A32: for k holds s1.k = F(k) from SEQ_1:sch 1;
+  A31: for k holds s1.k = F(k) from SEQ_1:sch 1;
        consider s such that
-  A33: for p1 be Real holds L.p1 = s*p1 by FDIFF_1:def 3;
-  A34: L.1 = s*1 by A33
+  A32: for p1 be Real holds L.p1 = s*p1 by FDIFF_1:def 3;
+  A33: L.1 = s*1 by A32
        .= s;
        now
          let m;
-         h^\n is non-zero by FDIFF_1:def 1;then
-    A35: (h^\n).m <> 0 by SEQ_1:5;
+    A34: (h^\n).m <> 0 by SEQ_1:5;
          thus ((L/*(h^\n) + R/*(h^\n))(#)(h^\n)").m
          = ((L/*(h^\n) + R/*(h^\n)).m)*((h^\n)").m by SEQ_1:8
          .= ((L/*(h^\n)).m + (R/*(h^\n)).m) * ((h^\n)").m by SEQ_1:7
@@ -1080,54 +1078,54 @@ A31: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
          .= ((L/*(h^\n)).m)*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m
          by VALUED_1:10
          .= (L.((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m
-         by A28,FUNCT_2:115
-         .= (s*((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m by A33
+         by A27,FUNCT_2:115
+         .= (s*((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m by A32
          .= s*(((h^\n).m)*((h^\n).m)") + ((R/*(h^\n))(#)(h^\n)").m
-         .= s*1 + ((R/*(h^\n))(#)(h^\n)").m by A35,XCMPLX_0:def 7
-         .= s1.m by A32,A34;
+         .= s*1 + ((R/*(h^\n))(#)(h^\n)").m by A34,XCMPLX_0:def 7
+         .= s1.m by A31,A33;
        end;
        then
-  A36: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:63;
-  A37: now
+  A35: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:63;
+  A36: now
          let r be real number such that
-   A38:  0 < r;
+   A37:  0 < r;
          ((h^\n)")(#)(R/*(h^\n)) is convergent &
          lim (((h^\n)")(#)(R/*(h^\n))) = 0 by FDIFF_1:def 2;
          then consider m such that
-   A39:  for k st m <= k holds
-         abs((((h^\n)")(#)(R/*(h^\n))).k-0) < r by A38,SEQ_2:def 7;
+   A38:  for k st m <= k holds
+         abs((((h^\n)")(#)(R/*(h^\n))).k-0) < r by A37,SEQ_2:def 7;
          take n1 = m;
          let k such that
-   A40:  n1 <= k;
-         abs(s1.k-L.1) = abs(L.1+((R/*(h^\n))(#)(h^\n)").k-L.1 ) by A32
+   A39:  n1 <= k;
+         abs(s1.k-L.1) = abs(L.1+((R/*(h^\n))(#)(h^\n)").k-L.1 ) by A31
          .= abs((((h^\n)")(#)(R/*(h^\n))).k-0);
-         hence abs(s1.k-L.1) < r by A39,A40;
+         hence abs(s1.k-L.1) < r by A38,A39;
        end;
-       hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A36,SEQ_2:def 6;
-       hence thesis by A36,A37,SEQ_2:def 7;
+       hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A35,SEQ_2:def 6;
+       hence thesis by A35,A36,SEQ_2:def 7;
      end;
-A41: N2 c= dom SVF1(1,f,u0) by A1,A7,XBOOLE_1:1;
-A42: ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)")
+A40: N2 c= dom SVF1(1,f,u0) by A1,A7,XBOOLE_1:1;
+A41: ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)")
      = ((((SVF1(1,f,u0)/*(h+c))^\n)-SVF1(1,f,u0)/*(c^\n))(#)(h^\n)")
-     by A22,A30,VALUED_0:27
+     by A21,A29,VALUED_0:27
      .= ((((SVF1(1,f,u0)/*(h+c))^\n)-((SVF1(1,f,u0)/*c)^\n))(#)(h^\n)")
-     by A21,VALUED_0:27
+     by A20,VALUED_0:27
      .= ((((SVF1(1,f,u0)/*(h+c))-(SVF1(1,f,u0)/*c))^\n)(#)(h^\n)") by SEQM_3:17
      .= ((((SVF1(1,f,u0)/*(h+c))-(SVF1(1,f,u0)/*c))^\n)(#)((h")^\n))
        by SEQM_3:18
      .= ((((SVF1(1,f,u0)/*(h+c))-(SVF1(1,f,u0)/*c))(#) h")^\n)
        by SEQM_3:19;then
-A43: L.1 = lim ((h")(#)((SVF1(1,f,u0)/*(h+c))-(SVF1(1,f,u0)/*c)))
-       by A31,SEQ_4:22;
+A42: L.1 = lim ((h")(#)((SVF1(1,f,u0)/*(h+c))-(SVF1(1,f,u0)/*c)))
+       by A30,SEQ_4:22;
      thus h"(#)(SVF1(1,f,u0)/*(h+c)-SVF1(1,f,u0)/*c) is convergent
-     by A31,A42,SEQ_4:21;
-     thus thesis by A1,A3,A23,A41,A43,Th16;
+     by A30,A41,SEQ_4:21;
+     thus thesis by A1,A3,A22,A40,A42,Th16;
 end;
 
 theorem
   for u0 being Element of REAL 3 for N being Neighbourhood of proj(2,3).u0 st
   f is_partial_differentiable_in u0,2 & N c= dom SVF1(2,f,u0) holds
-  for h be convergent_to_0 Real_Sequence,
+  for h be 0-convergent non-zero Real_Sequence,
   c be constant Real_Sequence st rng c = {proj(2,3).u0} & rng (h+c) c= N
   holds h"(#)(SVF1(2,f,u0)/*(h+c) - SVF1(2,f,u0)/*c) is convergent &
   partdiff(f,u0,2) = lim (h"(#)(SVF1(2,f,u0)/*(h+c) - SVF1(2,f,u0)/*c))
@@ -1136,7 +1134,7 @@ proof
      let N be Neighbourhood of proj(2,3).u0;
      assume
 A1:  f is_partial_differentiable_in u0,2 & N c= dom SVF1(2,f,u0);
-     let h be convergent_to_0 Real_Sequence,
+     let h be 0-convergent non-zero Real_Sequence,
      c be constant Real_Sequence such that
 A2:  rng c = {proj(2,3).u0} & rng (h+c) c= N;
      consider x0,y0,z0 being Real such that
@@ -1164,53 +1162,53 @@ A9: y0 in N2
      proof
        y0 in rng c by A2,A6,TARSKI:def 1;then
   A11: lim c = y0 by SEQ_4:25;
-  A12: h is convergent & lim h = 0 by FDIFF_1:def 1;then
-  A13: lim (h+c) = 0+y0 by A11,SEQ_2:6
+   h is convergent & lim h = 0;then
+  A12: lim (h+c) = 0+y0 by A11,SEQ_2:6
        .= y0;
-       h + c is convergent by A12,SEQ_2:5;
+       h + c is convergent by SEQ_2:5;
        then consider n such that
-  A14: for m being Element of NAT st n <= m holds abs((h+c).m-y0) < g
-       by A8,A13,SEQ_2:def 7;
-  A15: rng (c^\n) = {y0} by A2,A6,VALUED_0:26;
+  A13: for m being Element of NAT st n <= m holds abs((h+c).m-y0) < g
+       by A8,A12,SEQ_2:def 7;
+  A14: rng (c^\n) = {y0} by A2,A6,VALUED_0:26;
        take n;
        thus rng (c^\n) c= N2
        proof
          let y be set;
          assume y in rng (c^\n);
-         hence thesis by A9,A15,TARSKI:def 1;
+         hence thesis by A9,A14,TARSKI:def 1;
        end;
        let y be set;
        assume y in rng ((h+c)^\n);
        then consider m such that
-  A16: y = ((h+c)^\n).m by FUNCT_2:113;
+  A15: y = ((h+c)^\n).m by FUNCT_2:113;
        n + 0 <= n+m by XREAL_1:7;
-       then abs((h+c).(n+m)-y0)<g by A14;
+       then abs((h+c).(n+m)-y0)<g by A13;
        then -g < (h+c).(m+n) - y0 & (h+c).(m+n) - y0 < g by SEQ_2:1;
        then -g < ((h+c)^\n).m - y0 & ((h+c)^\n).m - y0 < g by NAT_1:def 3;
        then
     y0 +-g < ((h+c)^\n).m & ((h+c)^\n).m < y0 + g by XREAL_1:19,20;
-       hence thesis by A8,A16;
+       hence thesis by A8,A15;
      end;
      then consider n such that
-A17: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
-A18: rng (c^\n) c= dom SVF1(2,f,u0)
+A16: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
+A17: rng (c^\n) c= dom SVF1(2,f,u0)
      proof
        let y be set;
-  A19: rng (c^\n) = rng c by VALUED_0:26;
+  A18: rng (c^\n) = rng c by VALUED_0:26;
        assume y in rng (c^\n);
-       then y = y0 by A2,A6,A19,TARSKI:def 1;
+       then y = y0 by A2,A6,A18,TARSKI:def 1;
        then y in N by A7,A9;
        hence thesis by A1;
      end;
-A20: rng ((h+c)^\n) c= dom SVF1(2,f,u0)
+A19: rng ((h+c)^\n) c= dom SVF1(2,f,u0)
      proof
        let y be set;
        assume y in rng ((h+c)^\n);
-       then y in N2 by A17;
+       then y in N2 by A16;
        then y in N by A7;
        hence thesis by A1;
      end;
-A21: rng c c= dom SVF1(2,f,u0)
+A20: rng c c= dom SVF1(2,f,u0)
      proof
        let y be set;
        assume y in rng c;
@@ -1218,32 +1216,32 @@ A21: rng c c= dom SVF1(2,f,u0)
        then y in N by A7,A9;
        hence thesis by A1;
      end;
-A22: rng (h+c) c= dom SVF1(2,f,u0)
+A21: rng (h+c) c= dom SVF1(2,f,u0)
      proof
        let y be set;
        assume y in rng (h+c);
        then y in N by A2;
        hence thesis by A1;
      end;
-A23: for y st y in N2 holds
+A22: for y st y in N2 holds
      SVF1(2,f,u0).y - SVF1(2,f,u0).y0 = L.(y-y0) + R.(y-y0) by A5,A7;
-A24: for k holds SVF1(2,f,u0).(((h+c)^\n).k) - SVF1(2,f,u0).((c^\n).k)
+A23: for k holds SVF1(2,f,u0).(((h+c)^\n).k) - SVF1(2,f,u0).((c^\n).k)
      = L.((h^\n).k) + R.((h^\n).k)
      proof
        let k;
        ((h+c)^\n).k in rng ((h+c)^\n) by VALUED_0:28;then
-  A25: ((h+c)^\n).k in N2 by A17;
-  A26: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:15
+  A24: ((h+c)^\n).k in N2 by A16;
+  A25: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:15
       .= (h^\n).k + (c^\n).k - (c^\n).k by SEQ_1:7
       .= (h^\n).k;
-  A27: (c^\n).k in rng (c^\n) by VALUED_0:28;
+  A26: (c^\n).k in rng (c^\n) by VALUED_0:28;
        rng (c^\n) = rng c by VALUED_0:26;
-       then (c^\n).k = y0 by A2,A6,A27,TARSKI:def 1;
-       hence thesis by A5,A7,A25,A26;
+       then (c^\n).k = y0 by A2,A6,A26,TARSKI:def 1;
+       hence thesis by A5,A7,A24,A25;
      end;
-A28: L is total by FDIFF_1:def 3;
-A29: R is total by FDIFF_1:def 2;
-A30: SVF1(2,f,u0)/*((h+c)^\n) - SVF1(2,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
+A27: L is total by FDIFF_1:def 3;
+A28: R is total by FDIFF_1:def 2;
+A29: SVF1(2,f,u0)/*((h+c)^\n) - SVF1(2,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
      proof
        now
          let k;
@@ -1251,30 +1249,29 @@ A30: SVF1(2,f,u0)/*((h+c)^\n) - SVF1(2,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
          = (SVF1(2,f,u0)/*((h+c)^\n)).k - (SVF1(2,f,u0)/*(c^\n)).k
            by RFUNCT_2:1
         .= SVF1(2,f,u0).(((h+c)^\n).k) - (SVF1(2,f,u0)/*(c^\n)).k
-           by A20,FUNCT_2:108
+           by A19,FUNCT_2:108
         .= SVF1(2,f,u0).(((h+c)^\n).k) - SVF1(2,f,u0).((c^\n).k)
-           by A18,FUNCT_2:108
-        .= L.((h^\n).k) + R.((h^\n).k) by A24
-        .= (L/*(h^\n)).k + R.((h^\n).k) by A28,FUNCT_2:115
-        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A29,FUNCT_2:115
+           by A17,FUNCT_2:108
+        .= L.((h^\n).k) + R.((h^\n).k) by A23
+        .= (L/*(h^\n)).k + R.((h^\n).k) by A27,FUNCT_2:115
+        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A28,FUNCT_2:115
         .= (L/*(h^\n) + R/*(h^\n)).k by SEQ_1:7;
        end;
        hence thesis by FUNCT_2:63;
      end;
-A31: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
+A30: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
      lim ((L/*(h^\n) + R/*(h^\n))(#)(h^\n)") = L.1
      proof
        deffunc F(Element of NAT) = L.1 + ((R/*(h^\n))(#)(h^\n)").$1;
        consider s1 be Real_Sequence such that
-  A32: for k holds s1.k = F(k) from SEQ_1:sch 1;
+  A31: for k holds s1.k = F(k) from SEQ_1:sch 1;
        consider s such that
-  A33: for p1 be Real holds L.p1 = s*p1 by FDIFF_1:def 3;
-  A34: L.1 = s*1 by A33
+  A32: for p1 be Real holds L.p1 = s*p1 by FDIFF_1:def 3;
+  A33: L.1 = s*1 by A32
        .= s;
        now
          let m;
-         h^\n is non-zero by FDIFF_1:def 1;then
-    A35: (h^\n).m <> 0 by SEQ_1:5;
+    A34: (h^\n).m <> 0 by SEQ_1:5;
          thus ((L/*(h^\n) + R/*(h^\n))(#)(h^\n)").m
          = ((L/*(h^\n) + R/*(h^\n)).m)*((h^\n)").m by SEQ_1:8
          .= ((L/*(h^\n)).m + (R/*(h^\n)).m) * ((h^\n)").m by SEQ_1:7
@@ -1284,54 +1281,54 @@ A31: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
          .= ((L/*(h^\n)).m)*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m
          by VALUED_1:10
          .= (L.((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m
-         by A28,FUNCT_2:115
-         .= (s*((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m by A33
+         by A27,FUNCT_2:115
+         .= (s*((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m by A32
          .= s*(((h^\n).m)*((h^\n).m)") + ((R/*(h^\n))(#)(h^\n)").m
-         .= s*1 + ((R/*(h^\n))(#)(h^\n)").m by A35,XCMPLX_0:def 7
-         .= s1.m by A32,A34;
+         .= s*1 + ((R/*(h^\n))(#)(h^\n)").m by A34,XCMPLX_0:def 7
+         .= s1.m by A31,A33;
        end;
        then
-  A36: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:63;
-  A37: now
+  A35: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:63;
+  A36: now
          let r be real number such that
-   A38:  0 < r;
+   A37:  0 < r;
          ((h^\n)")(#)(R/*(h^\n)) is convergent &
          lim (((h^\n)")(#)(R/*(h^\n))) = 0 by FDIFF_1:def 2;
          then consider m such that
-   A39:  for k st m <= k holds
-         abs((((h^\n)")(#)(R/*(h^\n))).k-0) < r by A38,SEQ_2:def 7;
+   A38:  for k st m <= k holds
+         abs((((h^\n)")(#)(R/*(h^\n))).k-0) < r by A37,SEQ_2:def 7;
          take n1 = m;
          let k such that
-   A40:  n1 <= k;
-         abs(s1.k-L.1) = abs(L.1+((R/*(h^\n))(#)(h^\n)").k-L.1 ) by A32
+   A39:  n1 <= k;
+         abs(s1.k-L.1) = abs(L.1+((R/*(h^\n))(#)(h^\n)").k-L.1 ) by A31
          .= abs((((h^\n)")(#)(R/*(h^\n))).k-0);
-         hence abs(s1.k-L.1) < r by A39,A40;
+         hence abs(s1.k-L.1) < r by A38,A39;
        end;
-       hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A36,SEQ_2:def 6;
-       hence thesis by A36,A37,SEQ_2:def 7;
+       hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A35,SEQ_2:def 6;
+       hence thesis by A35,A36,SEQ_2:def 7;
      end;
-A41: N2 c= dom SVF1(2,f,u0) by A1,A7,XBOOLE_1:1;
-A42: ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)")
+A40: N2 c= dom SVF1(2,f,u0) by A1,A7,XBOOLE_1:1;
+A41: ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)")
      = ((((SVF1(2,f,u0)/*(h+c))^\n)-SVF1(2,f,u0)/*(c^\n))(#)(h^\n)")
-     by A22,A30,VALUED_0:27
+     by A21,A29,VALUED_0:27
      .= ((((SVF1(2,f,u0)/*(h+c))^\n)-((SVF1(2,f,u0)/*c)^\n))(#)(h^\n)")
-     by A21,VALUED_0:27
+     by A20,VALUED_0:27
      .= ((((SVF1(2,f,u0)/*(h+c))-(SVF1(2,f,u0)/*c))^\n)(#)(h^\n)") by SEQM_3:17
      .= ((((SVF1(2,f,u0)/*(h+c))-(SVF1(2,f,u0)/*c))^\n)(#)((h")^\n))
        by SEQM_3:18
      .= ((((SVF1(2,f,u0)/*(h+c))-(SVF1(2,f,u0)/*c))(#) h")^\n)
        by SEQM_3:19;then
-A43: L.1 = lim ((h")(#)((SVF1(2,f,u0)/*(h+c))-(SVF1(2,f,u0)/*c)))
-       by A31,SEQ_4:22;
+A42: L.1 = lim ((h")(#)((SVF1(2,f,u0)/*(h+c))-(SVF1(2,f,u0)/*c)))
+       by A30,SEQ_4:22;
      thus h"(#)(SVF1(2,f,u0)/*(h+c)-SVF1(2,f,u0)/*c) is convergent
-     by A31,A42,SEQ_4:21;
-     thus thesis by A1,A3,A23,A41,A43,Th17;
+     by A30,A41,SEQ_4:21;
+     thus thesis by A1,A3,A22,A40,A42,Th17;
 end;
 
 theorem
   for u0 being Element of REAL 3 for N being Neighbourhood of proj(3,3).u0 st
   f is_partial_differentiable_in u0,3 & N c= dom SVF1(3,f,u0) holds
-  for h be convergent_to_0 Real_Sequence,
+  for h be 0-convergent non-zero Real_Sequence,
   c be constant Real_Sequence st rng c = {proj(3,3).u0} & rng (h+c) c= N
   holds h"(#)(SVF1(3,f,u0)/*(h+c) - SVF1(3,f,u0)/*c) is convergent &
   partdiff(f,u0,3) = lim (h"(#)(SVF1(3,f,u0)/*(h+c) - SVF1(3,f,u0)/*c))
@@ -1340,7 +1337,7 @@ proof
      let N be Neighbourhood of proj(3,3).u0;
      assume
 A1:  f is_partial_differentiable_in u0,3 & N c= dom SVF1(3,f,u0);
-     let h be convergent_to_0 Real_Sequence,
+     let h be 0-convergent non-zero Real_Sequence,
      c be constant Real_Sequence such that
 A2:  rng c = {proj(3,3).u0} & rng (h+c) c= N;
      consider x0,y0,z0 being Real such that
@@ -1369,53 +1366,53 @@ A9: z0 in N2
      proof
        z0 in rng c by A2,A6,TARSKI:def 1;then
   A11: lim c = z0 by SEQ_4:25;
-  A12: h is convergent & lim h = 0 by FDIFF_1:def 1;then
-  A13: lim (h+c) = 0+z0 by A11,SEQ_2:6
+   h is convergent & lim h = 0;then
+  A12: lim (h+c) = 0+z0 by A11,SEQ_2:6
        .= z0;
-       h + c is convergent by A12,SEQ_2:5;
+       h + c is convergent by SEQ_2:5;
        then consider n such that
-  A14: for m being Element of NAT st n <= m holds abs((h+c).m-z0) < g
-       by A8,A13,SEQ_2:def 7;
-  A15: rng (c^\n) = {z0} by A2,A6,VALUED_0:26;
+  A13: for m being Element of NAT st n <= m holds abs((h+c).m-z0) < g
+       by A8,A12,SEQ_2:def 7;
+  A14: rng (c^\n) = {z0} by A2,A6,VALUED_0:26;
        take n;
        thus rng (c^\n) c= N2
        proof
          let z be set;
          assume z in rng (c^\n);
-         hence thesis by A9,A15,TARSKI:def 1;
+         hence thesis by A9,A14,TARSKI:def 1;
        end;
        let z be set;
        assume z in rng ((h+c)^\n);
        then consider m such that
-  A16: z = ((h+c)^\n).m by FUNCT_2:113;
+  A15: z = ((h+c)^\n).m by FUNCT_2:113;
        n + 0 <= n+m by XREAL_1:7;
-       then abs((h+c).(n+m)-z0)<g by A14;
+       then abs((h+c).(n+m)-z0)<g by A13;
        then -g < (h+c).(m+n) - z0 & (h+c).(m+n) - z0 < g by SEQ_2:1;
        then -g < ((h+c)^\n).m - z0 & ((h+c)^\n).m - z0 < g by NAT_1:def 3;
        then
     z0 +-g < ((h+c)^\n).m & ((h+c)^\n).m < z0 + g by XREAL_1:19,20;
-       hence thesis by A8,A16;
+       hence thesis by A8,A15;
      end;
      then consider n such that
-A17: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
-A18: rng (c^\n) c= dom SVF1(3,f,u0)
+A16: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
+A17: rng (c^\n) c= dom SVF1(3,f,u0)
      proof
        let z be set;
-  A19: rng (c^\n) = rng c by VALUED_0:26;
+  A18: rng (c^\n) = rng c by VALUED_0:26;
        assume z in rng (c^\n);
-       then z = z0 by A2,A6,A19,TARSKI:def 1;
+       then z = z0 by A2,A6,A18,TARSKI:def 1;
        then z in N by A7,A9;
        hence thesis by A1;
      end;
-A20: rng ((h+c)^\n) c= dom SVF1(3,f,u0)
+A19: rng ((h+c)^\n) c= dom SVF1(3,f,u0)
      proof
        let z be set;
        assume z in rng ((h+c)^\n);
-       then z in N2 by A17;
+       then z in N2 by A16;
        then z in N by A7;
        hence thesis by A1;
      end;
-A21: rng c c= dom SVF1(3,f,u0)
+A20: rng c c= dom SVF1(3,f,u0)
      proof
        let z be set;
        assume z in rng c;
@@ -1423,32 +1420,32 @@ A21: rng c c= dom SVF1(3,f,u0)
        then z in N by A7,A9;
        hence thesis by A1;
      end;
-A22: rng (h+c) c= dom SVF1(3,f,u0)
+A21: rng (h+c) c= dom SVF1(3,f,u0)
      proof
        let z be set;
        assume z in rng (h+c);
        then z in N by A2;
        hence thesis by A1;
      end;
-A23: for z st z in N2 holds
+A22: for z st z in N2 holds
      SVF1(3,f,u0).z - SVF1(3,f,u0).z0 = L.(z-z0) + R.(z-z0) by A5,A7;
-A24: for k holds SVF1(3,f,u0).(((h+c)^\n).k) - SVF1(3,f,u0).((c^\n).k)
+A23: for k holds SVF1(3,f,u0).(((h+c)^\n).k) - SVF1(3,f,u0).((c^\n).k)
      = L.((h^\n).k) + R.((h^\n).k)
      proof
        let k;
        ((h+c)^\n).k in rng ((h+c)^\n) by VALUED_0:28;then
-  A25: ((h+c)^\n).k in N2 by A17;
-  A26: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:15
+  A24: ((h+c)^\n).k in N2 by A16;
+  A25: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:15
       .= (h^\n).k + (c^\n).k - (c^\n).k by SEQ_1:7
       .= (h^\n).k;
-  A27: (c^\n).k in rng (c^\n) by VALUED_0:28;
+  A26: (c^\n).k in rng (c^\n) by VALUED_0:28;
        rng (c^\n) = rng c by VALUED_0:26;
-       then (c^\n).k = z0 by A2,A6,A27,TARSKI:def 1;
-       hence thesis by A5,A7,A25,A26;
+       then (c^\n).k = z0 by A2,A6,A26,TARSKI:def 1;
+       hence thesis by A5,A7,A24,A25;
      end;
-A28: L is total by FDIFF_1:def 3;
-A29: R is total by FDIFF_1:def 2;
-A30: SVF1(3,f,u0)/*((h+c)^\n) - SVF1(3,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
+A27: L is total by FDIFF_1:def 3;
+A28: R is total by FDIFF_1:def 2;
+A29: SVF1(3,f,u0)/*((h+c)^\n) - SVF1(3,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
      proof
        now
          let k;
@@ -1456,30 +1453,29 @@ A30: SVF1(3,f,u0)/*((h+c)^\n) - SVF1(3,f,u0)/*(c^\n) = L/*(h^\n) + R/*(h^\n)
          = (SVF1(3,f,u0)/*((h+c)^\n)).k - (SVF1(3,f,u0)/*(c^\n)).k
            by RFUNCT_2:1
         .= SVF1(3,f,u0).(((h+c)^\n).k) - (SVF1(3,f,u0)/*(c^\n)).k
-           by A20,FUNCT_2:108
+           by A19,FUNCT_2:108
         .= SVF1(3,f,u0).(((h+c)^\n).k) - SVF1(3,f,u0).((c^\n).k)
-           by A18,FUNCT_2:108
-        .= L.((h^\n).k) + R.((h^\n).k) by A24
-        .= (L/*(h^\n)).k + R.((h^\n).k) by A28,FUNCT_2:115
-        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A29,FUNCT_2:115
+           by A17,FUNCT_2:108
+        .= L.((h^\n).k) + R.((h^\n).k) by A23
+        .= (L/*(h^\n)).k + R.((h^\n).k) by A27,FUNCT_2:115
+        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A28,FUNCT_2:115
         .= (L/*(h^\n) + R/*(h^\n)).k by SEQ_1:7;
        end;
        hence thesis by FUNCT_2:63;
      end;
-A31: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
+A30: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
      lim ((L/*(h^\n) + R/*(h^\n))(#)(h^\n)") = L.1
      proof
        deffunc F(Element of NAT) = L.1 + ((R/*(h^\n))(#)(h^\n)").$1;
        consider s1 be Real_Sequence such that
-  A32: for k holds s1.k = F(k) from SEQ_1:sch 1;
+  A31: for k holds s1.k = F(k) from SEQ_1:sch 1;
        consider s such that
-  A33: for p1 be Real holds L.p1 = s*p1 by FDIFF_1:def 3;
-  A34: L.1 = s*1 by A33
+  A32: for p1 be Real holds L.p1 = s*p1 by FDIFF_1:def 3;
+  A33: L.1 = s*1 by A32
        .= s;
        now
          let m;
-         h^\n is non-zero by FDIFF_1:def 1;then
-    A35: (h^\n).m <> 0 by SEQ_1:5;
+    A34: (h^\n).m <> 0 by SEQ_1:5;
          thus ((L/*(h^\n) + R/*(h^\n))(#)(h^\n)").m
          = ((L/*(h^\n) + R/*(h^\n)).m)*((h^\n)").m by SEQ_1:8
          .= ((L/*(h^\n)).m + (R/*(h^\n)).m) * ((h^\n)").m by SEQ_1:7
@@ -1489,47 +1485,47 @@ A31: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" is convergent &
          .= ((L/*(h^\n)).m)*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m
          by VALUED_1:10
          .= (L.((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m
-         by A28,FUNCT_2:115
-         .= (s*((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m by A33
+         by A27,FUNCT_2:115
+         .= (s*((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m by A32
          .= s*(((h^\n).m)*((h^\n).m)") + ((R/*(h^\n))(#)(h^\n)").m
-         .= s*1 + ((R/*(h^\n))(#)(h^\n)").m by A35,XCMPLX_0:def 7
-         .= s1.m by A32,A34;
+         .= s*1 + ((R/*(h^\n))(#)(h^\n)").m by A34,XCMPLX_0:def 7
+         .= s1.m by A31,A33;
        end; then
-  A36: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:63;
-  A37: now
+  A35: (L/*(h^\n) + R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:63;
+  A36: now
          let r be real number such that
-   A38:  0 < r;
+   A37:  0 < r;
          ((h^\n)")(#)(R/*(h^\n)) is convergent &
          lim (((h^\n)")(#)(R/*(h^\n))) = 0 by FDIFF_1:def 2;
          then consider m such that
-   A39:  for k st m <= k holds
-         abs((((h^\n)")(#)(R/*(h^\n))).k-0) < r by A38,SEQ_2:def 7;
+   A38:  for k st m <= k holds
+         abs((((h^\n)")(#)(R/*(h^\n))).k-0) < r by A37,SEQ_2:def 7;
          take n1 = m;
          let k such that
-   A40:  n1 <= k;
-         abs(s1.k-L.1) = abs(L.1+((R/*(h^\n))(#)(h^\n)").k-L.1 ) by A32
+   A39:  n1 <= k;
+         abs(s1.k-L.1) = abs(L.1+((R/*(h^\n))(#)(h^\n)").k-L.1 ) by A31
          .= abs((((h^\n)")(#)(R/*(h^\n))).k-0);
-         hence abs(s1.k-L.1) < r by A39,A40;
+         hence abs(s1.k-L.1) < r by A38,A39;
        end;
-       hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A36,SEQ_2:def 6;
-       hence thesis by A36,A37,SEQ_2:def 7;
+       hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent by A35,SEQ_2:def 6;
+       hence thesis by A35,A36,SEQ_2:def 7;
      end;
-A41: N2 c= dom SVF1(3,f,u0) by A1,A7,XBOOLE_1:1;
-A42: ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)")
+A40: N2 c= dom SVF1(3,f,u0) by A1,A7,XBOOLE_1:1;
+A41: ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)")
      = ((((SVF1(3,f,u0)/*(h+c))^\n)-SVF1(3,f,u0)/*(c^\n))(#)(h^\n)")
-     by A22,A30,VALUED_0:27
+     by A21,A29,VALUED_0:27
      .= ((((SVF1(3,f,u0)/*(h+c))^\n)-((SVF1(3,f,u0)/*c)^\n))(#)(h^\n)")
-     by A21,VALUED_0:27
+     by A20,VALUED_0:27
      .= ((((SVF1(3,f,u0)/*(h+c))-(SVF1(3,f,u0)/*c))^\n)(#)(h^\n)") by SEQM_3:17
      .= ((((SVF1(3,f,u0)/*(h+c))-(SVF1(3,f,u0)/*c))^\n)(#)((h")^\n))
        by SEQM_3:18
      .= ((((SVF1(3,f,u0)/*(h+c))-(SVF1(3,f,u0)/*c))(#) h")^\n)
        by SEQM_3:19;then
-A43: L.1 = lim ((h")(#)((SVF1(3,f,u0)/*(h+c))-(SVF1(3,f,u0)/*c)))
-       by A31,SEQ_4:22;
+A42: L.1 = lim ((h")(#)((SVF1(3,f,u0)/*(h+c))-(SVF1(3,f,u0)/*c)))
+       by A30,SEQ_4:22;
      thus h"(#)(SVF1(3,f,u0)/*(h+c)-SVF1(3,f,u0)/*c) is convergent
-     by A31,A42,SEQ_4:21;
-     thus thesis by A1,A3,A23,A41,A43,Th18;
+     by A30,A41,SEQ_4:21;
+     thus thesis by A1,A3,A22,A40,A42,Th18;
 end;
 
 theorem
@@ -1566,19 +1562,19 @@ A8:  for x st x in N2 holds
      consider N be Neighbourhood of x0 such that
 A9: N c= N1 & N c= N2 by RCOMP_1:17;
      reconsider L11=(SVF1(1,f2,u0).x0)(#)L1, L12=(SVF1(1,f1,u0).x0)(#)L2
-       as LINEAR by FDIFF_1:3;
+       as LinearFunc by FDIFF_1:3;
 A10: L11 is total & L12 is total & L1 is total & L2 is total by FDIFF_1:def 3;
-     reconsider L=L11+L12 as LINEAR by FDIFF_1:2;
-     reconsider R11=(SVF1(1,f2,u0).x0)(#)R1 as REST by FDIFF_1:5;
-     reconsider R12=(SVF1(1,f1,u0).x0)(#)R2 as REST by FDIFF_1:5;
-     reconsider R13=R11+R12 as REST by FDIFF_1:4;
-     reconsider R14=L1(#)L2 as REST by FDIFF_1:6;
-     reconsider R15=R13+R14 as REST by FDIFF_1:4;
-     reconsider R16=R1(#)L2, R18=R2(#)L1 as REST by FDIFF_1:7;
-     reconsider R17=R1(#)R2 as REST by FDIFF_1:4;
-     reconsider R19=R16+R17 as REST by FDIFF_1:4;
-     reconsider R20=R19+R18 as REST by FDIFF_1:4;
-     reconsider R=R15+R20 as REST by FDIFF_1:4;
+     reconsider L=L11+L12 as LinearFunc by FDIFF_1:2;
+     reconsider R11=(SVF1(1,f2,u0).x0)(#)R1 as RestFunc by FDIFF_1:5;
+     reconsider R12=(SVF1(1,f1,u0).x0)(#)R2 as RestFunc by FDIFF_1:5;
+     reconsider R13=R11+R12 as RestFunc by FDIFF_1:4;
+     reconsider R14=L1(#)L2 as RestFunc by FDIFF_1:6;
+     reconsider R15=R13+R14 as RestFunc by FDIFF_1:4;
+     reconsider R16=R1(#)L2, R18=R2(#)L1 as RestFunc by FDIFF_1:7;
+     reconsider R17=R1(#)R2 as RestFunc by FDIFF_1:4;
+     reconsider R19=R16+R17 as RestFunc by FDIFF_1:4;
+     reconsider R20=R19+R18 as RestFunc by FDIFF_1:4;
+     reconsider R=R15+R20 as RestFunc by FDIFF_1:4;
 A11: R1 is total & R2 is total & R11 is total & R12 is total &
      R13 is total & R14 is total & R15 is total & R16 is total &
      R17 is total & R18 is total & R19 is total & R20 is total
@@ -1723,19 +1719,19 @@ A8:  for y st y in N2 holds
      SVF1(2,f2,u0).y - SVF1(2,f2,u0).y0 = L2.(y-y0) + R2.(y-y0) by A7;
      consider N be Neighbourhood of y0 such that
 A9: N c= N1 & N c= N2 by RCOMP_1:17;
-     reconsider L11=(SVF1(2,f2,u0).y0)(#)L1 as LINEAR by FDIFF_1:3;
-     reconsider L12=(SVF1(2,f1,u0).y0)(#)L2 as LINEAR by FDIFF_1:3;
+     reconsider L11=(SVF1(2,f2,u0).y0)(#)L1 as LinearFunc by FDIFF_1:3;
+     reconsider L12=(SVF1(2,f1,u0).y0)(#)L2 as LinearFunc by FDIFF_1:3;
 A10: L11 is total & L12 is total & L1 is total & L2 is total by FDIFF_1:def 3;
-     reconsider L=L11+L12 as LINEAR by FDIFF_1:2;
+     reconsider L=L11+L12 as LinearFunc by FDIFF_1:2;
      reconsider R11=(SVF1(2,f2,u0).y0)(#)R1, R12=(SVF1(2,f1,u0).y0)(#)R2
-       as REST by FDIFF_1:5;
-     reconsider R13=R11+R12 as REST by FDIFF_1:4;
-     reconsider R14=L1(#)L2 as REST by FDIFF_1:6;
-     reconsider R15=R13+R14, R17=R1(#)R2 as REST by FDIFF_1:4;
-     reconsider R16=R1(#)L2, R18=R2(#)L1 as REST by FDIFF_1:7;
-     reconsider R19=R16+R17 as REST by FDIFF_1:4;
-     reconsider R20=R19+R18 as REST by FDIFF_1:4;
-     reconsider R=R15+R20 as REST by FDIFF_1:4;
+       as RestFunc by FDIFF_1:5;
+     reconsider R13=R11+R12 as RestFunc by FDIFF_1:4;
+     reconsider R14=L1(#)L2 as RestFunc by FDIFF_1:6;
+     reconsider R15=R13+R14, R17=R1(#)R2 as RestFunc by FDIFF_1:4;
+     reconsider R16=R1(#)L2, R18=R2(#)L1 as RestFunc by FDIFF_1:7;
+     reconsider R19=R16+R17 as RestFunc by FDIFF_1:4;
+     reconsider R20=R19+R18 as RestFunc by FDIFF_1:4;
+     reconsider R=R15+R20 as RestFunc by FDIFF_1:4;
 A11: R1 is total & R2 is total & R11 is total & R12 is total &
      R13 is total & R14 is total & R15 is total & R16 is total &
      R17 is total & R18 is total & R19 is total & R20 is total
@@ -1880,19 +1876,19 @@ A8:  for z st z in N2 holds
      SVF1(3,f2,u0).z - SVF1(3,f2,u0).z0 = L2.(z-z0) + R2.(z-z0) by A7;
      consider N be Neighbourhood of z0 such that
 A9: N c= N1 & N c= N2 by RCOMP_1:17;
-     reconsider L11=(SVF1(3,f2,u0).z0)(#)L1 as LINEAR by FDIFF_1:3;
-     reconsider L12=(SVF1(3,f1,u0).z0)(#)L2 as LINEAR by FDIFF_1:3;
+     reconsider L11=(SVF1(3,f2,u0).z0)(#)L1 as LinearFunc by FDIFF_1:3;
+     reconsider L12=(SVF1(3,f1,u0).z0)(#)L2 as LinearFunc by FDIFF_1:3;
 A10: L11 is total & L12 is total & L1 is total & L2 is total by FDIFF_1:def 3;
-     reconsider L=L11+L12 as LINEAR by FDIFF_1:2;
+     reconsider L=L11+L12 as LinearFunc by FDIFF_1:2;
      reconsider R11=(SVF1(3,f2,u0).z0)(#)R1, R12=(SVF1(3,f1,u0).z0)(#)R2
-       as REST by FDIFF_1:5;
-     reconsider R13=R11+R12 as REST by FDIFF_1:4;
-     reconsider R14=L1(#)L2 as REST by FDIFF_1:6;
-     reconsider R15=R13+R14, R17=R1(#)R2 as REST by FDIFF_1:4;
-     reconsider R16=R1(#)L2, R18=R2(#)L1 as REST by FDIFF_1:7;
-     reconsider R19=R16+R17 as REST by FDIFF_1:4;
-     reconsider R20=R19+R18 as REST by FDIFF_1:4;
-     reconsider R=R15+R20 as REST by FDIFF_1:4;
+       as RestFunc by FDIFF_1:5;
+     reconsider R13=R11+R12 as RestFunc by FDIFF_1:4;
+     reconsider R14=L1(#)L2 as RestFunc by FDIFF_1:6;
+     reconsider R15=R13+R14, R17=R1(#)R2 as RestFunc by FDIFF_1:4;
+     reconsider R16=R1(#)L2, R18=R2(#)L1 as RestFunc by FDIFF_1:7;
+     reconsider R19=R16+R17 as RestFunc by FDIFF_1:4;
+     reconsider R20=R19+R18 as RestFunc by FDIFF_1:4;
+     reconsider R=R15+R20 as RestFunc by FDIFF_1:4;
 A11: R1 is total & R2 is total & R11 is total & R12 is total &
      R13 is total & R14 is total & R15 is total & R16 is total &
      R17 is total & R18 is total & R19 is total & R20 is total
@@ -2063,7 +2059,7 @@ definition
   coherence;
 end;
 
-theorem Th37:
+theorem Th34:
   grad(f,p) = |[ partdiff(f,p,1),partdiff(f,p,2),partdiff(f,p,3) ]|
 proof
   grad(f,p) = |[ partdiff(f,p,1)*1,partdiff(f,p,1)*0,partdiff(f,p,1)*0 ]|+
@@ -2079,7 +2075,7 @@ proof
   hence thesis;
 end;
 
-theorem Th38:
+theorem Th35:
   (f is_partial_differentiable_in p,1 & f is_partial_differentiable_in p,2 &
   f is_partial_differentiable_in p,3 & g is_partial_differentiable_in p,1 &
   g is_partial_differentiable_in p,2 & g is_partial_differentiable_in p,3)
@@ -2091,7 +2087,7 @@ A1: f is_partial_differentiable_in p,1 & f is_partial_differentiable_in p,2 &
 A2: g is_partial_differentiable_in p,1 & g is_partial_differentiable_in p,2 &
     g is_partial_differentiable_in p,3;
     grad(f+g,p)
-    = |[ partdiff(f+g,p,1),partdiff(f+g,p,2),partdiff(f+g,p,3) ]| by Th37
+    = |[ partdiff(f+g,p,1),partdiff(f+g,p,2),partdiff(f+g,p,3) ]| by Th34
    .= |[ partdiff(f,p,1)+partdiff(g,p,1),partdiff(f+g,p,2),partdiff(f+g,p,3) ]|
       by A1,A2,PDIFF_1:29
    .= |[ partdiff(f,p,1)+partdiff(g,p,1),partdiff(f,p,2)+partdiff(g,p,2),
@@ -2100,12 +2096,12 @@ A2: g is_partial_differentiable_in p,1 & g is_partial_differentiable_in p,2 &
       partdiff(f,p,3)+partdiff(g,p,3) ]| by A1,A2,PDIFF_1:29
    .= |[ partdiff(f,p,1),partdiff(f,p,2),partdiff(f,p,3) ]|+
       |[ partdiff(g,p,1),partdiff(g,p,2),partdiff(g,p,3) ]| by Lm4
-   .= grad(f,p)+|[ partdiff(g,p,1),partdiff(g,p,2),partdiff(g,p,3) ]| by Th37
-   .= grad(f,p)+grad(g,p) by Th37;
+   .= grad(f,p)+|[ partdiff(g,p,1),partdiff(g,p,2),partdiff(g,p,3) ]| by Th34
+   .= grad(f,p)+grad(g,p) by Th34;
     hence thesis;
 end;
 
-theorem Th39:
+theorem Th36:
   (f is_partial_differentiable_in p,1 & f is_partial_differentiable_in p,2 &
   f is_partial_differentiable_in p,3 & g is_partial_differentiable_in p,1 &
   g is_partial_differentiable_in p,2 & g is_partial_differentiable_in p,3)
@@ -2117,7 +2113,7 @@ A1: f is_partial_differentiable_in p,1 & f is_partial_differentiable_in p,2 &
 A2: g is_partial_differentiable_in p,1 & g is_partial_differentiable_in p,2 &
     g is_partial_differentiable_in p,3;
     grad(f-g,p)
-    = |[ partdiff(f-g,p,1),partdiff(f-g,p,2),partdiff(f-g,p,3) ]| by Th37
+    = |[ partdiff(f-g,p,1),partdiff(f-g,p,2),partdiff(f-g,p,3) ]| by Th34
    .= |[ partdiff(f,p,1)-partdiff(g,p,1),
          partdiff(f-g,p,2),partdiff(f-g,p,3) ]| by A1,A2,PDIFF_1:31
    .= |[ partdiff(f,p,1)-partdiff(g,p,1),partdiff(f,p,2)-partdiff(g,p,2),
@@ -2129,14 +2125,14 @@ A2: g is_partial_differentiable_in p,1 & g is_partial_differentiable_in p,2 &
    .= |[ partdiff(f,p,1),partdiff(f,p,2),partdiff(f,p,3) ]|+
       |[ -partdiff(g,p,1),-partdiff(g,p,2),-partdiff(g,p,3) ]| by Lm4
    .= grad(f,p)+|[ (-1)*partdiff(g,p,1),(-1)*partdiff(g,p,2),
-      (-1)*partdiff(g,p,3) ]| by Th37
+      (-1)*partdiff(g,p,3) ]| by Th34
    .= grad(f,p)+(-1)*|[ partdiff(g,p,1),partdiff(g,p,2),partdiff(g,p,3) ]|
       by EUCLID_8:59
-   .= grad(f,p)-grad(g,p) by Th37;
+   .= grad(f,p)-grad(g,p) by Th34;
     hence thesis;
 end;
 
-theorem Th40:
+theorem Th37:
   (f is_partial_differentiable_in p,1 & f is_partial_differentiable_in p,2 &
   f is_partial_differentiable_in p,3) implies grad(r(#)f,p) = r*grad(f,p)
 proof
@@ -2145,7 +2141,7 @@ A1: f is_partial_differentiable_in p,1 & f is_partial_differentiable_in p,2 &
     f is_partial_differentiable_in p,3;
     grad(r(#)f,p)
     = |[ partdiff(r(#)f,p,1),partdiff(r(#)f,p,2),partdiff(r(#)f,p,3) ]|
-      by Th37
+      by Th34
    .= |[ r*partdiff(f,p,1),partdiff(r(#)f,p,2),partdiff(r(#)f,p,3) ]|
      by A1,PDIFF_1:33
    .= |[ r*partdiff(f,p,1),r*partdiff(f,p,2),partdiff(r(#)f,p,3)]|
@@ -2153,7 +2149,7 @@ A1: f is_partial_differentiable_in p,1 & f is_partial_differentiable_in p,2 &
    .= |[ r*partdiff(f,p,1),r*partdiff(f,p,2),r*partdiff(f,p,3) ]|
      by A1,PDIFF_1:33
    .= r*|[ partdiff(f,p,1),partdiff(f,p,2),partdiff(f,p,3) ]| by EUCLID_8:59
-   .= r*grad(f,p) by Th37;
+   .= r*grad(f,p) by Th34;
     hence thesis;
 end;
 
@@ -2174,9 +2170,9 @@ A3: s(#)f is_partial_differentiable_in p,1 &
  t(#)g is_partial_differentiable_in p,1 &
     t(#)g is_partial_differentiable_in p,2 &
     t(#)g is_partial_differentiable_in p,3 by A2,PDIFF_1:33;
-    then grad(s(#)f+t(#)g,p) = grad(s(#)f,p)+grad(t(#)g,p) by A3,Th38
-   .= s*grad(f,p)+grad(t(#)g,p) by A1,Th40
-   .= s*grad(f,p)+t*grad(g,p) by A2,Th40;
+    then grad(s(#)f+t(#)g,p) = grad(s(#)f,p)+grad(t(#)g,p) by A3,Th35
+   .= s*grad(f,p)+grad(t(#)g,p) by A1,Th37
+   .= s*grad(f,p)+t*grad(g,p) by A2,Th37;
     hence thesis;
 end;
 
@@ -2197,9 +2193,9 @@ A3: s(#)f is_partial_differentiable_in p,1 &
  t(#)g is_partial_differentiable_in p,1 &
     t(#)g is_partial_differentiable_in p,2 &
     t(#)g is_partial_differentiable_in p,3 by A2,PDIFF_1:33;
-    then grad(s(#)f-t(#)g,p) = grad(s(#)f,p)-grad(t(#)g,p) by A3,Th39
-   .= s*grad(f,p)-grad(t(#)g,p) by A1,Th40
-   .= s*grad(f,p)-t*grad(g,p) by A2,Th40;
+    then grad(s(#)f-t(#)g,p) = grad(s(#)f,p)-grad(t(#)g,p) by A3,Th36
+   .= s*grad(f,p)-grad(t(#)g,p) by A1,Th37
+   .= s*grad(f,p)-t*grad(g,p) by A2,Th37;
     hence thesis;
 end;
 
@@ -2277,7 +2273,7 @@ then A17: g3 is_differentiable_on REAL & for z being Real st z in REAL
        hence thesis;
      end;
 then  partdiff(f,p,3) = 0;
-     then grad(f,p) = |[ 0,0,0 ]| by A8,A13,Th37
+     then grad(f,p) = |[ 0,0,0 ]| by A8,A13,Th34
       .= 0.REAL 3 by FINSEQ_2:62;
      hence thesis;
 end;
@@ -2350,7 +2346,7 @@ proof
 A1: len g1 = len <* p0.1,p0.2,p0.3 *> by EUCLID_8:1
     .= 3 by FINSEQ_1:45;
 A2: len g2 = 3 by FINSEQ_1:45;
-A3: p0 = |[ partdiff(f,p,1),partdiff(f,p,2),partdiff(f,p,3) ]| by Th37;
+A3: p0 = |[ partdiff(f,p,1),partdiff(f,p,2),partdiff(f,p,3) ]| by Th34;
     |( grad(f,p),unitvector(a) )|
     = Sum <* g1.1*g2.1, g1.2*g2.2, g1.3*g2.3 *> by A1,A2,EUCLID_5:28
    .= p0.1*g2.1+p0.2*g2.2+p0.3*g2.3 by RVSUM_1:78

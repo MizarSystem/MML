@@ -2,7 +2,7 @@
 ::  by Czes\law Byli\'nski
 ::
 :: Received September 25, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -30,7 +30,7 @@ environ
       XBOOLE_0, YELLOW_2, STRUCT_0;
  theorems ZFMISC_1, ORDERS_2, FUNCT_1, FUNCT_2, LATTICE3, RELAT_1, TARSKI,
       WELLORD1, ORDERS_3, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_0, RELSET_1,
-      XBOOLE_0, XBOOLE_1;
+      XBOOLE_0, XBOOLE_1, XTUPLE_0;
  schemes FUNCT_2, DOMAIN_1;
 
 begin :: Preliminaries
@@ -65,7 +65,7 @@ definition
   end;
 end;
 
-theorem Th2:
+theorem Th1:
   for L being antisymmetric transitive with_infima RelStr, x,y,z
   being Element of L st x <= y holds x "/\" z <= y "/\" z
 proof
@@ -78,7 +78,7 @@ A2: x"/\"z <= z by YELLOW_0:23;
   hence thesis by A2,YELLOW_0:23;
 end;
 
-theorem Th3:
+theorem Th2:
   for L being antisymmetric transitive with_suprema RelStr, x,y,z
   being Element of L st x <= y holds x "\/" z <= y "\/" z
 proof
@@ -91,7 +91,7 @@ A2: z <= y"\/"z by YELLOW_0:22;
   hence thesis by A2,YELLOW_0:22;
 end;
 
-theorem Th4:
+theorem Th3:
   for L being non empty lower-bounded antisymmetric RelStr for x
 being Element of L holds (L is with_infima implies Bottom L "/\" x = Bottom L)
   & (L is with_suprema reflexive transitive implies Bottom L "\/" x = x)
@@ -117,7 +117,7 @@ A3: x <= x by ORDERS_2:1;
   hence thesis by A2,ORDERS_2:2;
 end;
 
-theorem Th5:
+theorem Th4:
   for L being non empty upper-bounded antisymmetric RelStr for x
   being Element of L holds (L is with_infima transitive reflexive implies Top L
   "/\" x = x) & (L is with_suprema implies Top L "\/" x = Top L)
@@ -127,7 +127,7 @@ proof
   proof
     assume
 A1: L is with_infima transitive reflexive;
-    then x "/\" x <= Top L "/\" x by Th2,YELLOW_0:45;
+    then x "/\" x <= Top L "/\" x by Th1,YELLOW_0:45;
     then
 A2: x <= Top L "/\" x by A1,YELLOW_0:25;
     Top L "/\" x <= x by A1,YELLOW_0:23;
@@ -146,7 +146,7 @@ definition
   "/\" (y "\/" z) = (x "/\" y) "\/" (x "/\" z);
 end;
 
-theorem Th6:
+theorem Th5:
   for L being LATTICE holds L is distributive iff for x,y,z being
   Element of L holds x "\/" (y "/\" z) = (x "\/" y) "/\" (x "\/" z)
 proof
@@ -347,7 +347,7 @@ of T,S st gc = [g,d] & g is monotone & d is monotone & for t being Element of T
   , s being Element of S holds t <= g.s iff d.t <= s;
 end;
 
-theorem Th9:
+theorem Th8:
   for S,T being non empty Poset,g being Function of S,T, d being
 Function of T,S holds [g,d] is Galois iff g is monotone & d is monotone & for t
   being Element of T, s being Element of S holds t <= g.s iff d.t <= s
@@ -359,7 +359,7 @@ proof
 A1: [g,d] = [g9,d9] and
 A2: g9 is monotone & d9 is monotone & for t being Element of T, s
     being Element of S holds t <= g9.s iff d9.t <= s by Def10;
-    g = g9 & d = d9 by A1,ZFMISC_1:27;
+    g = g9 & d = d9 by A1,XTUPLE_0:1;
     hence g is monotone & d is monotone & for t being Element of T, s being
     Element of S holds t <= g.s iff d.t <= s by A2;
   end;
@@ -384,7 +384,7 @@ definition
   ex g being Function of S,T st [g,d] is Galois;
 end;
 
-theorem Th10:
+theorem Th9:
   for S,T being non empty Poset,g being Function of S,T, d being
   Function of T,S st [g,d] is Galois holds g is upper_adjoint & d is
   lower_adjoint
@@ -398,7 +398,7 @@ end;
 
 :: Theorem 3.2  (1) iff (2)
 
-theorem Th11:
+theorem Th10:
   for S,T being non empty Poset,g being Function of S,T, d being
   Function of T,S holds [g,d] is Galois iff g is monotone & for t being Element
   of T holds d.t is_minimum_of g"(uparrow t)
@@ -407,12 +407,12 @@ proof
   hereby
     assume
 A1: [g,d] is Galois;
-    hence g is monotone by Th9;
+    hence g is monotone by Th8;
     let t be Element of T;
     thus d.t is_minimum_of g"(uparrow t)
     proof
       set X = g"(uparrow t);
-      t <= g.(d.t) by A1,Th9;
+      t <= g.(d.t) by A1,Th8;
       then g.(d.t) in uparrow t by WAYBEL_0:18;
       then
 A2:   d.t in X by FUNCT_2:38;
@@ -425,7 +425,7 @@ A4:   d.t is_<=_than X
         assume s in X;
         then g.s in uparrow t by FUNCT_1:def 7;
         then t <= g.s by WAYBEL_0:18;
-        hence d.t <= s by A1,Th9;
+        hence d.t <= s by A1,Th8;
       end;
       hence ex_inf_of X,S & d.t = inf X by A3,YELLOW_0:31;
       thus thesis by A4,A2,A3,YELLOW_0:31;
@@ -475,12 +475,12 @@ A15: d.t1 is_minimum_of g"(uparrow t1) by A6;
     then d.t1 <= inf (g"(uparrow t2)) by A15,Def6;
     hence d.t1 <= d.t2 by A13,Def6;
   end;
-  hence thesis by A5,A7,Th9;
+  hence thesis by A5,A7,Th8;
 end;
 
 :: Theorem 3.2 (1) iff (3)
 
-theorem Th12:
+theorem Th11:
   for S,T being non empty Poset,g being Function of S,T, d being
   Function of T,S holds [g,d] is Galois iff d is monotone & for s being Element
   of S holds g.s is_maximum_of d"(downarrow s)
@@ -489,12 +489,12 @@ proof
   hereby
     assume
 A1: [g,d] is Galois;
-    hence d is monotone by Th9;
+    hence d is monotone by Th8;
     let s be Element of S;
     thus g.s is_maximum_of d"(downarrow s)
     proof
       set X = d"(downarrow s);
-      s >= d.(g.s) by A1,Th9;
+      s >= d.(g.s) by A1,Th8;
       then d.(g.s) in downarrow s by WAYBEL_0:17;
       then
 A2:   g.s in X by FUNCT_2:38;
@@ -507,7 +507,7 @@ A4:   g.s is_>=_than X
         assume t in X;
         then d.t in downarrow s by FUNCT_1:def 7;
         then s >= d.t by WAYBEL_0:17;
-        hence thesis by A1,Th9;
+        hence thesis by A1,Th8;
       end;
       hence ex_sup_of X,T & g.s = sup X by A3,YELLOW_0:30;
       thus thesis by A4,A2,A3,YELLOW_0:30;
@@ -556,12 +556,12 @@ RELAT_1:143,YELLOW_0:34;
     then g.s1 <= sup (d"(downarrow s2)) by A14,Def7;
     hence g.s1 <= g.s2 by A12,Def7;
   end;
-  hence thesis by A5,A7,Th9;
+  hence thesis by A5,A7,Th8;
 end;
 
 :: Theorem 3.3 (first part)
 
-theorem Th13:
+theorem Th12:
   for S,T being non empty Poset,g being Function of S,T st g is
   upper_adjoint holds g is infs-preserving
 proof
@@ -583,10 +583,10 @@ A4: t is_<=_than g.:X;
       assume si in X;
       then g.si in g.:X by FUNCT_2:35;
       then t <= g.si by A4,LATTICE3:def 8;
-      hence d.t <= si by A1,Th9;
+      hence d.t <= si by A1,Th8;
     end;
     then d.t <= s by A2,YELLOW_0:31;
-    hence thesis by A1,Th9;
+    hence thesis by A1,Th8;
   end;
   g.s is_<=_than g.:X
   proof
@@ -595,7 +595,7 @@ A4: t is_<=_than g.:X;
     then consider si being Element of S such that
 A5: si in X and
 A6: t = g.si by FUNCT_2:65;
-A7: g is monotone by A1,Th9;
+A7: g is monotone by A1,Th8;
     reconsider si as Element of S;
     s is_<=_than X by A2,YELLOW_0:31;
     then s <= si by A5,LATTICE3:def 8;
@@ -607,12 +607,12 @@ end;
 registration
   let S,T be non empty Poset;
   cluster upper_adjoint -> infs-preserving for Function of S,T;
-  coherence by Th13;
+  coherence by Th12;
 end;
 
 :: Theorem 3.3 (second part)
 
-theorem Th14:
+theorem Th13:
   for S,T being non empty Poset, d being Function of T,S st d is
   lower_adjoint holds d is sups-preserving
 proof
@@ -634,10 +634,10 @@ A4: s is_>=_than d.:X;
       assume ti in X;
       then d.ti in d.:X by FUNCT_2:35;
       then s >= d.ti by A4,LATTICE3:def 9;
-      hence thesis by A1,Th9;
+      hence thesis by A1,Th8;
     end;
     then g.s >= t by A2,YELLOW_0:30;
-    hence thesis by A1,Th9;
+    hence thesis by A1,Th8;
   end;
   d.t is_>=_than d.:X
   proof
@@ -646,7 +646,7 @@ A4: s is_>=_than d.:X;
     then consider ti being Element of T such that
 A5: ti in X and
 A6: s = d.ti by FUNCT_2:65;
-A7: d is monotone by A1,Th9;
+A7: d is monotone by A1,Th8;
     reconsider ti as Element of T;
     t is_>=_than X by A2,YELLOW_0:30;
     then t >= ti by A5,LATTICE3:def 9;
@@ -658,12 +658,12 @@ end;
 registration
   let S,T be non empty Poset;
   cluster lower_adjoint -> sups-preserving for Function of S,T;
-  coherence by Th14;
+  coherence by Th13;
 end;
 
 :: Theorem 3.4
 
-theorem Th15:
+theorem Th14:
   for S,T being non empty Poset,g being Function of S,T st S is
 complete & g is infs-preserving ex d being Function of T,S st [g,d] is Galois &
   for t being Element of T holds d.t is_minimum_of g"(uparrow t)
@@ -736,7 +736,7 @@ A12: uparrow t2 c= uparrow t1 by WAYBEL_0:22;
     then d.t1 <= inf (g"(uparrow t2)) by A5;
     hence d.t1 <= d.t2 by A5;
   end;
-  hence [g,d] is Galois by A6,A7,Th9;
+  hence [g,d] is Galois by A6,A7,Th8;
   let t be Element of T;
   thus
 A13: ex_inf_of g"(uparrow t),S by A1,YELLOW_0:17;
@@ -757,7 +757,7 @@ end;
 
 :: Theorem 3.4 (dual)
 
-theorem Th16:
+theorem Th15:
   for S,T being non empty Poset, d being Function of T,S st T is
 complete & d is sups-preserving ex g being Function of S,T st [g,d] is Galois &
   for s being Element of S holds g.s is_maximum_of d"(downarrow s)
@@ -831,7 +831,7 @@ YELLOW_0:17;
     then g.s1 <= sup (d"(downarrow s2)) by A5;
     hence g.s1 <= g.s2 by A5;
   end;
-  hence [g,d] is Galois by A6,A7,Th9;
+  hence [g,d] is Galois by A6,A7,Th8;
   let s be Element of S;
   thus
 A13: ex_sup_of d"(downarrow s),T by A1,YELLOW_0:17;
@@ -863,8 +863,8 @@ A1: S is complete;
     assume g is infs-preserving;
     then
     ex d being Function of T,S st[g,d] is Galois & for t being Element of
-    T holds d.t is_minimum_of g"(uparrow t) by A1,Th15;
-    hence g is monotone & g is upper_adjoint by Def11,Th11;
+    T holds d.t is_minimum_of g"(uparrow t) by A1,Th14;
+    hence g is monotone & g is upper_adjoint by Def11,Th10;
   end;
   assume g is monotone;
   assume ex d being Function of T,S st [g,d] is Galois;
@@ -874,7 +874,7 @@ end;
 
 :: Corollary 3.5 (ii)
 
-theorem Th18:
+theorem Th17:
   for S,T being non empty Poset, d being Function of T,S st T is
   complete holds d is sups-preserving iff d is monotone & d is lower_adjoint
 proof
@@ -885,8 +885,8 @@ A1: T is complete;
     assume d is sups-preserving;
     then
     ex g being Function of S,T st [g,d] is Galois & for s being Element of
-    S holds g.s is_maximum_of d"(downarrow s) by A1,Th16;
-    hence d is monotone & d is lower_adjoint by Def12,Th12;
+    S holds g.s is_maximum_of d"(downarrow s) by A1,Th15;
+    hence d is monotone & d is lower_adjoint by Def12,Th11;
   end;
   assume d is monotone;
   assume ex g being Function of S,T st [g,d] is Galois;
@@ -896,7 +896,7 @@ end;
 
 :: Theorem 3.6 (1) iff (2)
 
-theorem Th19:
+theorem Th18:
   for S,T being non empty Poset,g being Function of S,T, d being
   Function of T,S st [g,d] is Galois holds d*g <= id S & id T <= g*d
 proof
@@ -906,7 +906,7 @@ A1: [g,d] is Galois;
   for s being Element of S holds (d*g).s <= (id S).s
   proof
     let s be Element of S;
-    d.(g.s) <= s by A1,Th9;
+    d.(g.s) <= s by A1,Th8;
     then (d*g).s <= s by FUNCT_2:15;
     hence thesis by FUNCT_1:18;
   end;
@@ -914,7 +914,7 @@ A1: [g,d] is Galois;
   for t being Element of T holds (id T).t <= (g*d).t
   proof
     let t be Element of T;
-    t <= g.(d.t) by A1,Th9;
+    t <= g.(d.t) by A1,Th8;
     then t <= (g*d).t by FUNCT_2:15;
     hence thesis by FUNCT_1:18;
   end;
@@ -923,7 +923,7 @@ end;
 
 :: Theorem 3.6 (2) implies (1)
 
-theorem Th20:
+theorem Th19:
   for S,T being non empty Poset,g being Function of S,T, d being
   Function of T,S st g is monotone & d is monotone & d*g <= id S & id T <= g*d
   holds [g,d] is Galois
@@ -954,12 +954,12 @@ A6: t <= g.(d.t) by FUNCT_1:18;
     then g.(d.t) <= g.s by A1,Def2;
     hence thesis by A6,ORDERS_2:3;
   end;
-  hence thesis by A1,A2,Th9;
+  hence thesis by A1,A2,Th8;
 end;
 
 :: Theorem 3.6 (2) implies (3)
 
-theorem Th21:
+theorem Th20:
   for S,T being non empty Poset,g being Function of S,T, d being
   Function of T,S st g is monotone & d is monotone & d*g <= id S & id T <= g*d
   holds d = d*g*d & g = g*d*g
@@ -1004,7 +1004,7 @@ end;
 
 :: Theorem 3.6 (3) implies (4)
 
-theorem Th22:
+theorem Th21:
   for S,T being non empty RelStr, g being Function of S,T, d being
   Function of T,S st g = g*d*g holds g*d is idempotent
 proof
@@ -1015,7 +1015,7 @@ end;
 
 :: Proposition 3.7 (1) implies (2)
 
-theorem Th23:
+theorem Th22:
   for S,T being non empty Poset,g being Function of S,T, d being
 Function of T,S st [g,d] is Galois & g is onto for t being Element of T holds d
   .t is_minimum_of g"{t}
@@ -1024,12 +1024,12 @@ proof
   assume that
 A1: [g,d] is Galois and
 A2: g is onto;
-A3: g is monotone by A1,Th9;
+A3: g is monotone by A1,Th8;
   let t be Element of T;
 A4: rng g = the carrier of T by A2,FUNCT_2:def 3;
   then
 A5: g.:(g"(uparrow t)) = uparrow t by FUNCT_1:77;
-A6: d.t is_minimum_of g"(uparrow t) by A1,Th11;
+A6: d.t is_minimum_of g"(uparrow t) by A1,Th10;
   then
 A7: d.t = inf (g"(uparrow t)) by Def6;
   then d.t in g"(uparrow t) by A6,Def6;
@@ -1079,7 +1079,7 @@ end;
 
 :: Proposition 3.7 (2) implies (3)
 
-theorem Th24:
+theorem Th23:
   for S,T being non empty Poset,g being Function of S,T, d being
 Function of T,S st for t being Element of T holds d.t is_minimum_of g"{t} holds
   g*d = id T
@@ -1110,17 +1110,17 @@ A1: the carrier of T = dom d & the carrier of T = dom (g*d) by FUNCT_2:def 1;
   assume
 A2: [g,d] is Galois;
   then
-A3: d*g <= id S & id T <= g*d by Th19;
+A3: d*g <= id S & id T <= g*d by Th18;
   hereby
     assume g is onto;
-    then for t being Element of T holds d.t is_minimum_of g"{t} by A2,Th23;
-    then g*d = id T by Th24;
+    then for t being Element of T holds d.t is_minimum_of g"{t} by A2,Th22;
+    then g*d = id T by Th23;
     hence d is one-to-one by FUNCT_2:23;
   end;
 A4: rng (g*d) c= the carrier of T;
-  g is monotone & d is monotone by A2,Th9;
+  g is monotone & d is monotone by A2,Th8;
   then
-A5: d = d*g*d by A3,Th21
+A5: d = d*g*d by A3,Th20
     .= d*(g*d) by RELAT_1:36;
   assume d is one-to-one;
   then g*d = id T by A1,A4,A5,FUNCT_1:28;
@@ -1129,7 +1129,7 @@ end;
 
 :: Proposition 3.7 (1*) implies (2*)
 
-theorem Th27:
+theorem Th25:
   for S,T being non empty Poset,g being Function of S,T, d being
 Function of T,S st [g,d] is Galois & d is onto for s being Element of S holds g
   .s is_maximum_of d"{s}
@@ -1138,12 +1138,12 @@ proof
   assume that
 A1: [g,d] is Galois and
 A2: d is onto;
-A3: d is monotone by A1,Th9;
+A3: d is monotone by A1,Th8;
   let s be Element of S;
 A4: rng d = the carrier of S by A2,FUNCT_2:def 3;
   then
 A5: d.:(d"(downarrow s)) = downarrow s by FUNCT_1:77;
-A6: g.s is_maximum_of (d"(downarrow s)) by A1,Th12;
+A6: g.s is_maximum_of (d"(downarrow s)) by A1,Th11;
   then
 A7: g.s = sup (d"(downarrow s)) by Def7;
   then g.s in d"(downarrow s) by A6,Def7;
@@ -1193,7 +1193,7 @@ end;
 
 :: Proposition 3.7 (2*) implies (3*)
 
-theorem Th28:
+theorem Th26:
   for S,T being non empty Poset,g being Function of S,T, d being
 Function of T,S st for s being Element of S holds g.s is_maximum_of d"{s} holds
   d*g = id S
@@ -1223,10 +1223,10 @@ proof
   assume
 A1: [g,d] is Galois;
   hereby
-A2: d*g <= id S & id T <= g*d by A1,Th19;
-    g is monotone & d is monotone by A1,Th9;
+A2: d*g <= id S & id T <= g*d by A1,Th18;
+    g is monotone & d is monotone by A1,Th8;
     then
-A3: g = g*d*g by A2,Th21
+A3: g = g*d*g by A2,Th20
       .= g*(d*g) by RELAT_1:36;
 A4: the carrier of S = dom g & the carrier of S = dom (d*g) by FUNCT_2:def 1;
 A5: rng (d*g) c= the carrier of S;
@@ -1235,8 +1235,8 @@ A5: rng (d*g) c= the carrier of S;
     hence d is onto by FUNCT_2:23;
   end;
   assume d is onto;
-  then for s being Element of S holds g.s is_maximum_of d"{s} by A1,Th27;
-  then d*g = id S by Th28;
+  then for s being Element of S holds g.s is_maximum_of d"{s} by A1,Th25;
+  then d*g = id S by Th26;
   hence thesis by FUNCT_2:23;
 end;
 
@@ -1361,7 +1361,7 @@ A1: p is idempotent;
   hence thesis by A1,YELLOW_2:18;
 end;
 
-theorem Th30:
+theorem Th28:
   for L being non empty Poset, c being Function of L,L, X being
 Subset of L st c is closure & ex_inf_of X,L & X c= rng c holds inf X = c.(inf X
   )
@@ -1390,7 +1390,7 @@ A8: c.(inf X) <= inf X by A3,YELLOW_0:31;
   hence thesis by A8,ORDERS_2:2;
 end;
 
-theorem Th31:
+theorem Th29:
   for L being non empty Poset, k being Function of L,L, X being
 Subset of L st k is kernel & ex_sup_of X,L & X c= rng k holds sup X = k.(sup X)
 proof
@@ -1421,17 +1421,17 @@ end;
 definition
   let L1, L2 be non empty RelStr, g be Function of L1,L2;
   func corestr(g) -> Function of L1,Image g equals
-  (the carrier of Image g)|g;
+  (the carrier of Image g)|`g;
   coherence
   proof
 A1: the carrier of L1 = dom g by FUNCT_2:def 1;
 A2: the carrier of Image g = rng g by YELLOW_0:def 15;
-    then (the carrier of Image g)|g = g by RELAT_1:94;
+    then (the carrier of Image g)|`g = g by RELAT_1:94;
     hence thesis by A2,A1,FUNCT_2:1;
   end;
 end;
 
-theorem Th32:
+theorem Th30:
   for L1, L2 being non empty RelStr,g being Function of L1,L2
   holds corestr g = g
 proof
@@ -1445,7 +1445,7 @@ corestr g is onto
 proof
   let L1, L2 be non empty RelStr, g be Function of L1,L2;
   the carrier of Image g = rng g by YELLOW_0:def 15
-    .= rng corestr g by Th32;
+    .= rng corestr g by Th30;
   hence thesis by FUNCT_2:def 3;
 end;
 
@@ -1455,7 +1455,7 @@ registration
   coherence by Lm3;
 end;
 
-theorem Th33:
+theorem Th31:
   for L1, L2 being non empty RelStr, g being Function of L1,L2 st
   g is monotone holds corestr g is monotone
 proof
@@ -1466,7 +1466,7 @@ A1: g is monotone;
   then
 A2: g.s1 <= g.s2 by A1,Def2;
   reconsider s19 = g.s1, s29 = g.s2 as Element of L2;
-  s19 = (corestr g).s1 & s29 = (corestr g).s2 by Th32;
+  s19 = (corestr g).s1 & s29 = (corestr g).s2 by Th30;
   hence thesis by A2,YELLOW_0:60;
 end;
 
@@ -1500,19 +1500,19 @@ registration
   coherence by Lm4;
 end;
 
-theorem Th35:
+theorem Th32:
   for L being non empty RelStr, f being Function of L,L holds (
   inclusion f)*(corestr f) = f
 proof
   let L be non empty RelStr, f be Function of L,L;
-  thus (inclusion f)*(corestr f) = (id the carrier of Image f)*f by Th32
+  thus (inclusion f)*(corestr f) = (id the carrier of Image f)*f by Th30
     .= (id rng f)*f by YELLOW_0:def 15
     .= f by RELAT_1:54;
 end;
 
 ::Theorem 3.10 (1) implies (2)
 
-theorem Th36:
+theorem Th33:
   for L being non empty Poset, f being Function of L,L st f is
   idempotent holds (corestr f)*(inclusion f) = id(Image f)
 proof
@@ -1527,11 +1527,11 @@ A1: f is idempotent;
 A2: l in the carrier of L and
 A3: (corestr f).l = s by FUNCT_2:11;
     reconsider l as Element of L by A2;
-A4: (corestr f).l = f.l by Th32;
+A4: (corestr f).l = f.l by Th30;
     thus ((corestr f)*(inclusion f)).s = (corestr f).((inclusion f).s) by
 FUNCT_2:15
       .= (corestr f).s by FUNCT_1:18
-      .= f.(f.l) by A3,A4,Th32
+      .= f.(f.l) by A3,A4,Th30
       .= s by A1,A3,A4,YELLOW_2:18;
   end;
   hence thesis by FUNCT_2:124;
@@ -1553,11 +1553,11 @@ proof
   then
 A1: f is monotone idempotent by Def13;
   take T,q,i;
-  thus q is monotone by A1,Th33;
+  thus q is monotone by A1,Th31;
   thus q is onto;
   thus i is monotone one-to-one;
-  thus f = i*q by Th35;
-  thus thesis by A1,Th36;
+  thus f = i*q by Th32;
+  thus thesis by A1,Th33;
 end;
 
 ::Theorem 3.10 (3) implies (1)
@@ -1575,13 +1575,13 @@ A2: f = i*q and
 A3: id(T) = q*i;
   i*q*i = i*(id the carrier of T) by A3,RELAT_1:36
     .= i by FUNCT_2:17;
-  hence f is idempotent by A2,Th22;
+  hence f is idempotent by A2,Th21;
   thus thesis by A1,A2,YELLOW_2:12;
 end;
 
 ::Theorem 3.10 (1_1) implies (2_1)
 
-theorem Th39:
+theorem Th36:
   for L being non empty Poset, f being Function of L,L st f is
   closure holds [inclusion f,corestr f] is Galois
 proof
@@ -1590,11 +1590,11 @@ proof
 A1: f is idempotent monotone and
 A2: id L <= f;
   set g = (corestr f), d = inclusion f;
-  g*d = id(Image f) by A1,Th36;
+  g*d = id(Image f) by A1,Th33;
   then
 A3: g*d <= id(Image f) by Lm1;
-  g is monotone & id L <= d*g by A1,A2,Th33,Th35;
-  hence thesis by A3,Th20;
+  g is monotone & id L <= d*g by A1,A2,Th31,Th32;
+  hence thesis by A3,Th19;
 end;
 
 ::Theorem 3.10 (2_1) implies (3_1)
@@ -1611,13 +1611,13 @@ A1: f is closure;
   reconsider g = inclusion f as Function of S,L;
   reconsider d = corestr f as Function of L,S;
   take S,g,d;
-  thus [g,d] is Galois by A1,Th39;
-  thus thesis by Th35;
+  thus [g,d] is Galois by A1,Th36;
+  thus thesis by Th32;
 end;
 
 ::Theorem 3.10 (3_1) implies (1_1)
 
-theorem Th41:
+theorem Th38:
   for L being non empty Poset, f being Function of L,L st f is
   monotone & ex S being non empty Poset, g being Function of S,L, d being
   Function of L,S st [g,d] is Galois & f = g*d holds f is closure
@@ -1628,16 +1628,16 @@ A1: f is monotone;
   L,S such that
 A2: [g,d] is Galois and
 A3: f = g*d;
-A4: d is monotone & g is monotone by A2,Th9;
-  d*g <= id S & id L <= g*d by A2,Th19;
-  then g = g*d*g by A4,Th21;
-  hence f is idempotent monotone by A1,A3,Th22;
-  thus thesis by A2,A3,Th19;
+A4: d is monotone & g is monotone by A2,Th8;
+  d*g <= id S & id L <= g*d by A2,Th18;
+  then g = g*d*g by A4,Th20;
+  hence f is idempotent monotone by A1,A3,Th21;
+  thus thesis by A2,A3,Th18;
 end;
 
 ::Theorem 3.10 (1_2) implies (2_2)
 
-theorem Th42:
+theorem Th39:
   for L being non empty Poset, f being Function of L,L st f is
   kernel holds [corestr f,inclusion f] is Galois
 proof
@@ -1646,11 +1646,11 @@ proof
 A1: f is idempotent monotone and
 A2: f <= id(L);
   set g = (corestr f), d = inclusion f;
-  g*d = id(Image f) by A1,Th36;
+  g*d = id(Image f) by A1,Th33;
   then
 A3: id(Image f) <= g*d by Lm1;
-  g is monotone & d*g <= id L by A1,A2,Th33,Th35;
-  hence thesis by A3,Th20;
+  g is monotone & d*g <= id L by A1,A2,Th31,Th32;
+  hence thesis by A3,Th19;
 end;
 
 ::Theorem 3.10 (2_2) implies (3_2)
@@ -1667,8 +1667,8 @@ A1: f is kernel;
   reconsider g = corestr f as Function of L,T;
   reconsider d = inclusion f as Function of T,L;
   take T,g,d;
-  thus [g,d] is Galois by A1,Th42;
-  thus thesis by Th35;
+  thus [g,d] is Galois by A1,Th39;
+  thus thesis by Th32;
 end;
 
 ::Theorem 3.10 (3_2) implies (1_2)
@@ -1685,16 +1685,16 @@ A1: f is monotone;
   T,L such that
 A2: [g,d] is Galois and
 A3: f = d*g;
-A4: d is monotone & g is monotone by A2,Th9;
-  d*g <= id L & id T <= g*d by A2,Th19;
-  then d = d*g*d by A4,Th21;
-  hence f is idempotent monotone by A1,A3,Th22;
-  thus thesis by A2,A3,Th19;
+A4: d is monotone & g is monotone by A2,Th8;
+  d*g <= id L & id T <= g*d by A2,Th18;
+  then d = d*g*d by A4,Th20;
+  hence f is idempotent monotone by A1,A3,Th21;
+  thus thesis by A2,A3,Th18;
 end;
 
 :: Lemma 3.11 (i) (part I)
 
-theorem Th45:
+theorem Th42:
   for L being non empty Poset, p being Function of L,L st p is
 projection holds rng p = {c where c is Element of L: c <= p.c} /\ {k where k is
   Element of L: p.k <= k}
@@ -1730,7 +1730,7 @@ A6: ex lc being Element of L st x = lc & lc <= p.lc;
   hence thesis by A6,FUNCT_1:def 3;
 end;
 
-theorem Th46:
+theorem Th43:
   for L being non empty Poset, p being Function of L,L st p is
 projection holds {c where c is Element of L: c <= p.c} is non empty Subset of L
   & {k where k is Element of L: p.k <= k} is non empty Subset of L
@@ -1741,7 +1741,7 @@ A1: p is projection;
   defpred P[Element of L] means $1 <= p.$1;
   set Lc = {c where c is Element of L: P[c]};
   set Lk = {k where k is Element of L: Q[k]};
-A2: rng p = Lc /\ Lk by A1,Th45;
+A2: rng p = Lc /\ Lk by A1,Th42;
   Lc is Subset of L from DOMAIN_1:sch 7;
   hence Lc is non empty Subset of L by A2;
   Lk is Subset of L from DOMAIN_1:sch 7;
@@ -1750,7 +1750,7 @@ end;
 
 :: Lemma 3.11 (i) (part II)
 
-theorem Th47:
+theorem Th44:
   for L being non empty Poset, p being Function of L,L st p is
 projection holds rng(p|{c where c is Element of L: c <= p.c}) = rng p & rng(p|{
   k where k is Element of L: p.k <= k}) = rng p
@@ -1759,7 +1759,7 @@ proof
 A1: p is projection;
   set Lk = {k where k is Element of L: p.k <= k};
   set Lc = {c where c is Element of L: c <= p.c};
-A2: rng p = Lc /\ Lk by A1,Th45;
+A2: rng p = Lc /\ Lk by A1,Th42;
 A3: dom p = the carrier of L by FUNCT_2:def 1;
   thus rng(p|Lc) = rng p
   proof
@@ -1789,7 +1789,7 @@ A9: y in Lk by A2,A7,XBOOLE_0:def 4;
   hence thesis by A3,A9,A8,FUNCT_1:50;
 end;
 
-theorem Th48:
+theorem Th45:
   for L being non empty Poset, p being Function of L,L st p is
   projection for Lc being non empty Subset of L, Lk being non empty Subset of L
   st Lc = {c where c is Element of L: c <= p.c} holds p|Lc is Function of
@@ -1800,8 +1800,8 @@ A1: p is projection;
   let Lc be non empty Subset of L, Lk be non empty Subset of L such that
 A2: Lc = {c where c is Element of L: c <= p.c};
   set Lk = {k where k is Element of L: p.k <= k};
-  rng p = Lc /\ Lk by A1,A2,Th45;
-  then rng(p|Lc) = Lc /\ Lk by A1,A2,Th47;
+  rng p = Lc /\ Lk by A1,A2,Th42;
+  then rng(p|Lc) = Lc /\ Lk by A1,A2,Th44;
   then
 A3: rng(p|Lc) c= Lc by XBOOLE_1:17;
   Lc = the carrier of subrelstr Lc & p|Lc is Function of Lc,the carrier of
@@ -1819,8 +1819,8 @@ A1: p is projection;
   set Lc = {c where c is Element of L: c <= p.c};
   let Lk be non empty Subset of L such that
 A2: Lk = {k where k is Element of L: p.k <= k};
-  rng p = Lc /\ Lk by A1,A2,Th45;
-  then rng(p|Lk) = Lc /\ Lk by A1,A2,Th47;
+  rng p = Lc /\ Lk by A1,A2,Th42;
+  then rng(p|Lk) = Lc /\ Lk by A1,A2,Th44;
   then
 A3: rng(p|Lk) c= Lk by XBOOLE_1:17;
   Lk = the carrier of subrelstr Lk & p|Lk is Function of Lk,the carrier of
@@ -1830,7 +1830,7 @@ end;
 
 :: Lemma 3.11 (i) (part IIIa)
 
-theorem Th50:
+theorem Th47:
   for L being non empty Poset, p being Function of L,L st p is
 projection for Lc being non empty Subset of L st Lc = {c where c is Element of
 L: c <= p.c} for pc being Function of subrelstr Lc,subrelstr Lc st pc = p|Lc
@@ -1934,7 +1934,7 @@ end;
 
 :: Lemma 3.11 (ii) (part I)
 
-theorem Th52:
+theorem Th49:
   for L being non empty Poset, p being Function of L,L st p is
 monotone for Lc being Subset of L st Lc = {c where c is Element of L: c <= p.c}
   holds subrelstr Lc is sups-inheriting
@@ -1967,7 +1967,7 @@ end;
 
 :: Lemma 3.11 (ii) (part II)
 
-theorem Th53:
+theorem Th50:
   for L being non empty Poset, p being Function of L,L st p is
 monotone for Lk being Subset of L st Lk = {k where k is Element of L: p.k <= k}
   holds subrelstr Lk is infs-inheriting
@@ -2013,15 +2013,15 @@ proof
 A1: p is projection;
   then reconsider
   Lk = {k where k is Element of L: p.k <= k} as non empty Subset of
-  L by Th46;
+  L by Th43;
   let Lc be non empty Subset of L such that
 A2: Lc = {c where c is Element of L: c <= p.c};
 A3: p is monotone by A1,Def13;
   then
-A4: subrelstr Lk is infs-inheriting by Th53;
+A4: subrelstr Lk is infs-inheriting by Th50;
 A5: Lc = the carrier of subrelstr Lc by YELLOW_0:def 15;
 A6: the carrier of Image p = rng p by YELLOW_0:def 15
-    .= Lc /\ Lk by A1,A2,Th45;
+    .= Lc /\ Lk by A1,A2,Th42;
   then
 A7: the carrier of Image p c= Lk by XBOOLE_1:17;
 A8: Lk = the carrier of subrelstr Lk by YELLOW_0:def 15;
@@ -2065,7 +2065,7 @@ A17:  ex_inf_of X,L;
       then
 A18:  "/\"(X,L) in the carrier of subrelstr Lc by A5,A11,A17,YELLOW_0:def 18;
       subrelstr Lk is infs-inheriting & X c= the carrier of subrelstr Lk
-      by A3,A7,A8,Th53,XBOOLE_1:1;
+      by A3,A7,A8,Th50,XBOOLE_1:1;
       then "/\"(X,L) in the carrier of subrelstr Lk by A17,YELLOW_0:def 18;
       hence thesis by A6,A5,A8,A18,XBOOLE_0:def 4;
     end;
@@ -2127,15 +2127,15 @@ proof
 A1: p is projection;
   then reconsider
   Lc = {c where c is Element of L: c <= p.c} as non empty Subset of
-  L by Th46;
+  L by Th43;
   let Lk be non empty Subset of L such that
 A2: Lk = {k where k is Element of L: p.k <= k};
 A3: p is monotone by A1,Def13;
   then
-A4: subrelstr Lc is sups-inheriting by Th52;
+A4: subrelstr Lc is sups-inheriting by Th49;
 A5: Lc = the carrier of subrelstr Lc by YELLOW_0:def 15;
 A6: the carrier of Image p = rng p by YELLOW_0:def 15
-    .= Lc /\ Lk by A1,A2,Th45;
+    .= Lc /\ Lk by A1,A2,Th42;
   then
 A7: the carrier of Image p c= Lk by XBOOLE_1:17;
 A8: Lk = the carrier of subrelstr Lk by YELLOW_0:def 15;
@@ -2179,7 +2179,7 @@ A17:  ex_sup_of X,L;
       then
 A18:  "\/"(X,L) in the carrier of subrelstr Lk by A8,A11,A17,YELLOW_0:def 19;
       subrelstr Lc is sups-inheriting & X c= the carrier of subrelstr Lc
-      by A3,A9,A5,Th52,XBOOLE_1:1;
+      by A3,A9,A5,Th49,XBOOLE_1:1;
       then "\/"(X,L) in the carrier of subrelstr Lc by A17,YELLOW_0:def 19;
       hence thesis by A6,A5,A8,A18,XBOOLE_0:def 4;
     end;
@@ -2228,7 +2228,7 @@ end;
 
 :: Proposition 3.12 (i)
 
-theorem Th56:
+theorem Th53:
   for L being non empty Poset, p being Function of L,L holds (p is
   closure implies Image p is infs-inheriting) & (p is kernel implies Image p is
   sups-inheriting)
@@ -2243,7 +2243,7 @@ A1: p is closure;
 A2:   the carrier of Image p = rng p by YELLOW_0:def 15;
       then reconsider X9=X as Subset of L by XBOOLE_1:1;
       assume ex_inf_of X,L;
-      then p.("/\"(X9,L)) = "/\"(X9,L) by A1,A2,Th30;
+      then p.("/\"(X9,L)) = "/\"(X9,L) by A1,A2,Th28;
       hence thesis by A2,FUNCT_2:4;
     end;
   end;
@@ -2253,7 +2253,7 @@ A3: p is kernel;
 A4: the carrier of Image p = rng p by YELLOW_0:def 15;
   then reconsider X9=X as Subset of L by XBOOLE_1:1;
   assume ex_sup_of X,L;
-  then p.("\/"(X9,L)) = "\/"(X9,L) by A3,A4,Th31;
+  then p.("\/"(X9,L)) = "\/"(X9,L) by A3,A4,Th29;
   hence thesis by A4,FUNCT_2:4;
 end;
 
@@ -2269,17 +2269,17 @@ A1: the carrier of Image p = rng p by YELLOW_0:def 15;
 A2: p is projection;
   then reconsider
   Lc = {c where c is Element of L: c <= p.c}, Lk = {k where k is
-  Element of L: p.k <= k} as non empty Subset of L by Th46;
-A3: the carrier of subrelstr Lc = Lc & rng p = Lc /\ Lk by A2,Th45,
+  Element of L: p.k <= k} as non empty Subset of L by Th43;
+A3: the carrier of subrelstr Lc = Lc & rng p = Lc /\ Lk by A2,Th42,
 YELLOW_0:def 15;
   p is monotone by A2,Def13;
-  then subrelstr Lc is sups-inheriting by Th52;
+  then subrelstr Lc is sups-inheriting by Th49;
   then
 A4: subrelstr Lc is complete LATTICE by YELLOW_2:31;
-  reconsider pc = p|Lc as Function of subrelstr Lc,subrelstr Lc by A2,Th48;
-A5: Image pc is infs-inheriting by A2,Th50,Th56;
+  reconsider pc = p|Lc as Function of subrelstr Lc,subrelstr Lc by A2,Th45;
+A5: Image pc is infs-inheriting by A2,Th47,Th53;
 A6: the carrier of Image pc = rng(pc) by YELLOW_0:def 15
-    .= the carrier of Image p by A2,A1,Th47;
+    .= the carrier of Image p by A2,A1,Th44;
   then the InternalRel of Image pc = (the InternalRel of subrelstr Lc)|_2 the
   carrier of Image p by YELLOW_0:def 14
     .= ((the InternalRel of L)|_2 the carrier of subrelstr Lc) |_2 the
@@ -2299,12 +2299,12 @@ carrier of Image c & ex_sup_of X,L holds ex_sup_of X,Image c & "\/"(X,Image c)
   = c.("\/"(X,L))
 proof
   let L be non empty Poset, c be Function of L,L;
-A1: (corestr c) = c by Th32;
+A1: (corestr c) = c by Th30;
   assume
 A2: c is closure;
   then
 A3: c is idempotent by Def13;
-  [inclusion c,corestr c] is Galois by A2,Th39;
+  [inclusion c,corestr c] is Galois by A2,Th36;
   then
 A4: corestr c is lower_adjoint by Def12;
   hence corestr c is sups-preserving;
@@ -2327,12 +2327,12 @@ carrier of Image k & ex_inf_of X,L holds ex_inf_of X,Image k & "/\"(X,Image k)
   = k.("/\"(X,L))
 proof
   let L be non empty Poset, k be Function of L,L;
-A1: (corestr k) = k by Th32;
+A1: (corestr k) = k by Th30;
   assume
 A2: k is kernel;
   then
 A3: k is idempotent by Def13;
-  [corestr k,inclusion k] is Galois by A2,Th42;
+  [corestr k,inclusion k] is Galois by A2,Th39;
   then
 A4: corestr k is upper_adjoint by Def11;
   hence (corestr k) is infs-preserving;
@@ -2349,7 +2349,7 @@ end;
 begin :: Heyting algebras
 :: Proposition 3.15 (i)
 
-theorem Th60:
+theorem Th57:
   for L being complete non empty Poset holds [IdsMap L,SupMap L]
   is Galois & SupMap L is sups-preserving
 proof
@@ -2375,8 +2375,8 @@ A1: sup I9 <= x by YELLOW_2:def 3;
     then I c= g.x by YELLOW_2:def 4;
     hence I <= g.x by YELLOW_1:3;
   end;
-  hence [IdsMap L,SupMap L] is Galois by Th9;
-  then SupMap L is lower_adjoint by Th10;
+  hence [IdsMap L,SupMap L] is Galois by Th8;
+  then SupMap L is lower_adjoint by Th9;
   hence thesis;
 end;
 
@@ -2395,8 +2395,8 @@ A1: now
       .= (IdsMap L).(sup I) by YELLOW_2:def 3
       .= downarrow (sup I) by YELLOW_2:def 4;
   end;
-  i is monotone & [IdsMap L,SupMap L] is Galois by Th60,YELLOW_2:12;
-  hence i is closure by Th41;
+  i is monotone & [IdsMap L,SupMap L] is Galois by Th57,YELLOW_2:12;
+  hence i is closure by Th38;
   take f = (SupMap L)*(inclusion i);
 A2: now
     let x be Element of Image i;
@@ -2498,7 +2498,7 @@ A2: for s being Element of S holds f2.s = x"/\"s;
   end;
 end;
 
-theorem Th62:
+theorem Th59:
   for S being non empty RelStr, x,t being Element of S holds {s
   where s is Element of S: x"/\"s <= t} = (x "/\")"(downarrow t)
 proof
@@ -2523,7 +2523,7 @@ A3: s in (x "/\")"(downarrow t);
   hence thesis;
 end;
 
-theorem Th63:
+theorem Th60:
   for S being Semilattice, x be Element of S holds x "/\" is monotone
 proof
   let S be Semilattice, x be Element of S;
@@ -2543,10 +2543,10 @@ end;
 registration
   let S be Semilattice, x be Element of S;
   cluster x "/\" -> monotone;
-  coherence by Th63;
+  coherence by Th60;
 end;
 
-theorem Th64:
+theorem Th61:
   for S being non empty RelStr, x being Element of S, X being
   Subset of S holds (x "/\").:X = {x"/\"y where y is Element of S: y in X}
 proof
@@ -2574,7 +2574,7 @@ end;
 
 :: Lemma 3.16 (1) iff (2)
 
-theorem Th65:
+theorem Th62:
   for S being Semilattice holds (for x being Element of S holds x
 "/\" is lower_adjoint) iff for x,t being Element of S holds ex_max_of {s where
   s is Element of S: x"/\"s <= t},S
@@ -2588,8 +2588,8 @@ A1: for x being Element of S holds x "/\" is lower_adjoint;
     then consider g being Function of S,S such that
 A2: [g, x "/\"] is Galois by Def12;
     set X = {s where s is Element of S: x"/\"s <= t};
-A3: X = (x "/\")"(downarrow t) by Th62;
-    g.t is_maximum_of (x "/\")"(downarrow t) by A2,Th12;
+A3: X = (x "/\")"(downarrow t) by Th59;
+    g.t is_maximum_of (x "/\")"(downarrow t) by A2,Th11;
     then ex_sup_of X,S & "\/"(X,S)in X by A3,Def7;
     hence ex_max_of X,S by Def5;
   end;
@@ -2607,16 +2607,16 @@ A5: for s being Element of S holds g.s = F(s) from FUNCT_2:sch 4;
     then
 A6: ex_sup_of X,S & "\/"(X,S) in X by Def5;
     X = (x "/\")"(downarrow t) & g.t = "\/"((x "/\")"(downarrow t),S) by A5
-,Th62;
+,Th59;
     hence g.t is_maximum_of (x "/\")"(downarrow t) by A6,Def7;
   end;
-  then [g, x "/\"] is Galois by Th12;
+  then [g, x "/\"] is Galois by Th11;
   hence thesis by Def12;
 end;
 
 :: Lemma 3.16 (1) implies (3)
 
-theorem Th66:
+theorem Th63:
   for S being Semilattice st for x being Element of S holds x "/\"
   is lower_adjoint for X being Subset of S st ex_sup_of X,S for x being Element
 of S holds x "/\" "\/"(X,S) = "\/"({x"/\"y where y is Element of S: y in X},S)
@@ -2626,11 +2626,11 @@ A1: for x being Element of S holds x "/\" is lower_adjoint;
   let X be Subset of S such that
 A2: ex_sup_of X,S;
   let x be Element of S;
-  x "/\" is sups-preserving by A1,Th14;
+  x "/\" is sups-preserving by A1,Th13;
   then x "/\" preserves_sup_of X by WAYBEL_0:def 33;
   then sup ((x "/\").:X) = (x "/\").(sup X) by A2,WAYBEL_0:def 31;
   hence x "/\" "\/"(X,S) = sup ((x "/\").:X) by Def18
-    .= "\/"({x"/\" y where y is Element of S: y in X},S) by Th64;
+    .= "\/"({x"/\" y where y is Element of S: y in X},S) by Th61;
 end;
 
 :: Lemma 3.16 (1) iff (3)
@@ -2643,7 +2643,7 @@ proof
   let S be complete non empty Poset;
   thus (for x being Element of S holds x "/\" is lower_adjoint) implies for X
   being Subset of S, x being Element of S holds x "/\" "\/"(X,S) = "\/"({x"/\"y
-  where y is Element of S: y in X},S) by Th66,YELLOW_0:17;
+  where y is Element of S: y in X},S) by Th63,YELLOW_0:17;
   assume
 A1: for X being Subset of S, x being Element of S holds x "/\" "\/"(X,S)
   = "\/"({x"/\"y where y is Element of S: y in X},S);
@@ -2655,14 +2655,14 @@ A1: for X being Subset of S, x being Element of S holds x "/\" "\/"(X,S)
     thus ex_sup_of (x "/\").:X,S by YELLOW_0:17;
     thus (x "/\").(sup X) = x "/\" "\/"(X,S) by Def18
       .= "\/"({x"/\" y where y is Element of S: y in X},S) by A1
-      .= sup ((x "/\").:X) by Th64;
+      .= sup ((x "/\").:X) by Th61;
   end;
-  hence thesis by Th18;
+  hence thesis by Th17;
 end;
 
 :: Lemma 3.16 (3) implies (D)
 
-theorem Th68:
+theorem Th65:
   for S being LATTICE st for X being Subset of S st ex_sup_of X,S
   for x being Element of S holds x"/\"("\/"(X,S)) = "\/"({x"/\" y where y is
   Element of S: y in X},S) holds S is distributive
@@ -2733,17 +2733,17 @@ A2: [g1,a "/\"] is Galois and
 A3: [g2,a "/\"] is Galois;
     now
       let x be Element of H;
-      g1.x is_maximum_of (a "/\")"(downarrow x) by A1,A2,Th12;
+      g1.x is_maximum_of (a "/\")"(downarrow x) by A1,A2,Th11;
       then
 A4:   g1.x = "\/"((a "/\")"(downarrow x),H) by Def7;
-      g2.x is_maximum_of (a "/\")"(downarrow x) by A1,A3,Th12;
+      g2.x is_maximum_of (a "/\")"(downarrow x) by A1,A3,Th11;
       hence g1.x = g2.x by A4,Def7;
     end;
     hence g1 = g2 by FUNCT_2:63;
   end;
 end;
 
-theorem Th69:
+theorem Th66:
   for H being non empty RelStr st H is Heyting holds H is distributive
 proof
   let H be non empty RelStr;
@@ -2752,13 +2752,13 @@ A1: H is LATTICE and
 A2: for x being Element of H holds x "/\" is lower_adjoint;
   for X being Subset of H st ex_sup_of X,H for x being Element of H holds
   x "/\" "\/"(X,H) = "\/"({x"/\"y where y is Element of H: y in X},H) by A1,A2
-,Th66;
-  hence thesis by A1,Th68;
+,Th63;
+  hence thesis by A1,Th65;
 end;
 
 registration
   cluster Heyting -> distributive for non empty RelStr;
-  coherence by Th69;
+  coherence by Th66;
 end;
 
 definition
@@ -2768,7 +2768,7 @@ definition
   correctness;
 end;
 
-theorem Th70:
+theorem Th67:
   for H being non empty RelStr st H is Heyting for x,a,y being
   Element of H holds x >= a "/\" y iff a => x >= y
 proof
@@ -2777,11 +2777,11 @@ proof
 A1: H is Heyting;
   let x,a,y be Element of H;
   [a =>, a "/\"] is Galois by A1,Def20;
-  then x >= (a "/\").y iff (a =>).x >= y by A1,Th9;
+  then x >= (a "/\").y iff (a =>).x >= y by A1,Th8;
   hence thesis by Def18;
 end;
 
-theorem Th71:
+theorem Th68:
   for H being non empty RelStr st H is Heyting holds H is upper-bounded
 proof
   let H be non empty RelStr;
@@ -2792,15 +2792,15 @@ A1: H is Heyting;
   let y be Element of H;
   assume y in the carrier of H;
   a >= a "/\" y by A1,YELLOW_0:23;
-  hence thesis by A1,Th70;
+  hence thesis by A1,Th67;
 end;
 
 registration
   cluster Heyting -> upper-bounded for non empty RelStr;
-  coherence by Th71;
+  coherence by Th68;
 end;
 
-theorem Th72:
+theorem Th69:
   for H being non empty RelStr st H is Heyting for a,b being
   Element of H holds Top H = a => b iff a <= b
 proof
@@ -2809,15 +2809,15 @@ proof
 A1: H is Heyting;
   let a,b be Element of H;
 A2: a "/\" Top H = Top H "/\" a by A1,LATTICE3:15
-    .= a by A1,Th5;
+    .= a by A1,Th4;
   hereby
     assume Top H = a => b;
     then a => b >= Top H by A1,ORDERS_2:1;
-    hence a <= b by A1,A2,Th70;
+    hence a <= b by A1,A2,Th67;
   end;
   assume a <= b;
   then
-A3: a => b >= Top H by A1,A2,Th70;
+A3: a => b >= Top H by A1,A2,Th67;
   a => b <= Top H by A1,YELLOW_0:45;
   hence thesis by A1,A3,ORDERS_2:2;
 end;
@@ -2832,7 +2832,7 @@ A1: H is Heyting;
   let a be Element of H;
   a >= a "/\" Top H by A1,YELLOW_0:23;
   then
-A2: Top H <= a => a by A1,Th70;
+A2: Top H <= a => a by A1,Th67;
   Top H >= a => a by A1,YELLOW_0:45;
   hence thesis by A1,A2,ORDERS_2:2;
 end;
@@ -2849,12 +2849,12 @@ A1: H is Heyting;
 A2: Top H = a => b;
   assume Top H = b => a;
   then
-A3: b <= a by A1,Th72;
-  a <= b by A1,A2,Th72;
+A3: b <= a by A1,Th69;
+  a <= b by A1,A2,Th69;
   hence thesis by A1,A3,ORDERS_2:2;
 end;
 
-theorem Th75:
+theorem Th72:
   for H being non empty RelStr st H is Heyting for a,b being
   Element of H holds b <= (a => b)
 proof
@@ -2863,7 +2863,7 @@ proof
 A1: H is Heyting;
   let a,b be Element of H;
   a"/\"b <= b by A1,YELLOW_0:23;
-  hence thesis by A1,Th70;
+  hence thesis by A1,Th67;
 end;
 
 theorem
@@ -2875,7 +2875,7 @@ proof
 A1: H is Heyting;
   let a be Element of H;
   a <= Top H by A1,YELLOW_0:45;
-  hence thesis by A1,Th72;
+  hence thesis by A1,Th69;
 end;
 
 theorem
@@ -2887,10 +2887,10 @@ proof
 A1: H is Heyting;
   let b be Element of H;
   (Top H) => b <= (Top H) => b by A1,ORDERS_2:1;
-  then Top H "/\" ((Top H) => b) <= b by A1,Th70;
+  then Top H "/\" ((Top H) => b) <= b by A1,Th67;
   then
-A2: (Top H) => b <= b by A1,Th5;
-  (Top H) => b >= b by A1,Th75;
+A2: (Top H) => b <= b by A1,Th4;
+  (Top H) => b >= b by A1,Th72;
   hence thesis by A1,A2,ORDERS_2:2;
 end;
 
@@ -2902,10 +2902,10 @@ proof
 A1: H is Heyting;
   let a,b be Element of H;
   (a => b) <= (a => b) by A1,ORDERS_2:1;
-  hence thesis by A1,Th70;
+  hence thesis by A1,Th67;
 end;
 
-theorem Th78:
+theorem Th75:
   for H being non empty RelStr st H is Heyting for a,b,c being
   Element of H st a <= b holds (b => c) <= (a => c)
 proof
@@ -2915,10 +2915,10 @@ A1: H is Heyting;
   let a,b,c be Element of H;
   assume a <= b;
   then
-A2: a"/\"(b => c) <= b"/\"(b => c) by A1,Th2;
+A2: a"/\"(b => c) <= b"/\"(b => c) by A1,Th1;
   b"/\"(b => c) <= c by A1,Lm5;
   then a"/\"(b => c) <= c by A1,A2,ORDERS_2:3;
-  hence thesis by A1,Th70;
+  hence thesis by A1,Th67;
 end;
 
 theorem
@@ -2933,10 +2933,10 @@ A1: H is Heyting;
 A2: b <= c;
   a"/\"(a => b) <= b by A1,Lm5;
   then a"/\"(a => b) <= c by A1,A2,ORDERS_2:3;
-  hence thesis by A1,Th70;
+  hence thesis by A1,Th67;
 end;
 
-theorem Th80:
+theorem Th77:
   for H being non empty RelStr st H is Heyting for a,b being
   Element of H holds a"/\"(a => b) = a"/\"b
 proof
@@ -2944,19 +2944,19 @@ proof
   assume
 A1: H is Heyting;
   let a,b be Element of H;
-  (a"/\"(a => b))"/\"a <= b"/\"a by A1,Lm5,Th2;
+  (a"/\"(a => b))"/\"a <= b"/\"a by A1,Lm5,Th1;
   then a"/\"(a"/\"(a => b)) <= b"/\"a by A1,LATTICE3:15;
   then a"/\"(a"/\"(a => b)) <= a"/\"b by A1,LATTICE3:15;
   then (a"/\"a)"/\"(a => b) <= a"/\"b by A1,LATTICE3:16;
   then
 A2: a"/\"(a => b) <= a"/\"b by A1,YELLOW_0:25;
-  b"/\"a <= (a => b)"/\"a by A1,Th2,Th75;
+  b"/\"a <= (a => b)"/\"a by A1,Th1,Th72;
   then a"/\"b <= (a => b)"/\"a by A1,LATTICE3:15;
   then a"/\"b <= a"/\"(a => b) by A1,LATTICE3:15;
   hence thesis by A1,A2,ORDERS_2:2;
 end;
 
-theorem Th81:
+theorem Th78:
   for H being non empty RelStr st H is Heyting for a,b,c being
   Element of H holds (a"\/"b)=> c = (a => c) "/\" (b => c)
 proof
@@ -2978,16 +2978,16 @@ A3: ((b"/\"c)"/\"(a=>c)) <= c by A1,ORDERS_2:3;
     .= ((a"/\"(a=>c))"/\"(b=>c))"\/"(b"/\"d) by A1,LATTICE3:16
     .= ((a"/\"(a=>c))"/\"(b=>c))"\/"(b"/\"((b=>c)"/\"(a=>c))) by A1,LATTICE3:15
     .= ((a"/\"(a=>c))"/\"(b=>c))"\/"((b"/\"(b=>c))"/\"(a=>c)) by A1,LATTICE3:16
-    .= ((a"/\"c)"/\"(b=>c))"\/"((b"/\"(b=>c))"/\"(a=>c)) by A1,Th80
-    .= ((a"/\"c)"/\"(b=>c))"\/"((b"/\"c)"/\"(a=>c)) by A1,Th80;
+    .= ((a"/\"c)"/\"(b=>c))"\/"((b"/\"(b=>c))"/\"(a=>c)) by A1,Th77
+    .= ((a"/\"c)"/\"(b=>c))"\/"((b"/\"c)"/\"(a=>c)) by A1,Th77;
   then (a"\/"b)"/\"d <= c by A1,A2,A3,YELLOW_0:22;
   then
-A4: (a"\/"b)=> c >= d by A1,Th70;
+A4: (a"\/"b)=> c >= d by A1,Th67;
   b <= a"\/"b by A1,YELLOW_0:22;
   then
-A5: (a"\/"b)=> c <= (b => c) by A1,Th78;
+A5: (a"\/"b)=> c <= (b => c) by A1,Th75;
   a <= a"\/"b by A1,YELLOW_0:22;
-  then (a"\/"b)=> c <= (a => c) by A1,Th78;
+  then (a"\/"b)=> c <= (a => c) by A1,Th75;
   then (a"\/"b)=> c <= (a => c) "/\" (b => c) by A1,A5,YELLOW_0:23;
   hence thesis by A1,A4,ORDERS_2:2;
 end;
@@ -3032,7 +3032,7 @@ A7: a"/\"x <= Bottom H;
   end;
 A8: now
     a => (Bottom H) <= a => (Bottom H) by A1,ORDERS_2:1;
-    then a"/\"'not' a <= Bottom H by A1,Th70;
+    then a"/\"'not' a <= Bottom H by A1,Th67;
     then
 A9: 'not' a in X by A3;
     let b be Element of H;
@@ -3041,20 +3041,20 @@ A9: 'not' a in X by A3;
   end;
   for x being Element of H holds x "/\" is lower_adjoint by A1,Def19;
   then
-A10: ex_max_of X,H by A1,A3,Th65;
+A10: ex_max_of X,H by A1,A3,Th62;
   hence ex_sup_of X,H by Def5;
   'not' a is_>=_than X
   proof
     let b be Element of H;
     assume b in X;
     then ex x being Element of H st x = b & a"/\"x <= Bottom H by A3;
-    hence thesis by A1,Th70;
+    hence thesis by A1,Th67;
   end;
   hence 'not' a = "\/"(X,H) by A1,A8,YELLOW_0:30;
   thus thesis by A10,Def5;
 end;
 
-theorem Th83:
+theorem Th80:
   for H being non empty RelStr st H is Heyting & H is
   lower-bounded holds 'not' Bottom H = Top H & 'not' Top H = Bottom H
 proof
@@ -3063,10 +3063,10 @@ A1: H is Heyting and
 A2: H is lower-bounded;
   (Top H) => (Bottom H) <= (Top H) => (Bottom H) by A1,ORDERS_2:1;
   then
-A3: Bottom H >= Top H "/\" 'not' Top H by A1,Th70;
+A3: Bottom H >= Top H "/\" 'not' Top H by A1,Th67;
   Bottom H >= Bottom H "/\" Top H by A1,YELLOW_0:23;
   then
-A4: Top H <= (Bottom H) => (Bottom H) by A1,Th70;
+A4: Top H <= (Bottom H) => (Bottom H) by A1,Th67;
   Bottom H <= Top H "/\" 'not' Top H by A1,A2,YELLOW_0:44;
   then
 A5: Bottom H = Top H "/\" 'not' Top H by A1,A3,ORDERS_2:2;
@@ -3086,14 +3086,14 @@ proof
   let H be non empty lower-bounded RelStr such that
 A1: H is Heyting;
   let a,b be Element of H;
-A2: Bottom H >= a "/\" b iff a => Bottom H >= b by A1,Th70;
-  Bottom H >= b "/\" a iff b => Bottom H >= a by A1,Th70;
+A2: Bottom H >= a "/\" b iff a => Bottom H >= b by A1,Th67;
+  Bottom H >= b "/\" a iff b => Bottom H >= a by A1,Th67;
   hence thesis by A1,A2,LATTICE3:15;
 end;
 
 :: Exercise 3.18 (ii)
 
-theorem Th85:
+theorem Th82:
   for H being non empty lower-bounded RelStr st H is Heyting for a
   ,b being Element of H holds 'not' a >= b iff a "/\" b = Bottom H
 proof
@@ -3104,13 +3104,13 @@ A1: H is Heyting;
   hereby
     assume 'not' a >= b;
     then
-A2: a "/\" b <= Bottom H by A1,Th70;
+A2: a "/\" b <= Bottom H by A1,Th67;
     a "/\" b >= Bottom H by A1,YELLOW_0:44;
     hence a "/\" b = Bottom H by A1,A2,ORDERS_2:2;
   end;
   assume a "/\" b = Bottom H;
   then a "/\" b <= Bottom H by A1,ORDERS_2:1;
-  hence thesis by A1,Th70;
+  hence thesis by A1,Th67;
 end;
 
 theorem
@@ -3124,15 +3124,15 @@ A2: 'not' b >= 'not' b by A1,ORDERS_2:1;
   assume a <= b;
   then a "/\" 'not' b = (a"/\"b)"/\"'not' b by A1,YELLOW_0:25
     .= a"/\"(b"/\"'not' b) by A1,LATTICE3:16
-    .= a"/\"Bottom H by A1,A2,Th85
+    .= a"/\"Bottom H by A1,A2,Th82
     .= Bottom H"/\"a by A1,LATTICE3:15
-    .= Bottom H by A1,Th4;
-  hence thesis by A1,Th85;
+    .= Bottom H by A1,Th3;
+  hence thesis by A1,Th82;
 end;
 
 theorem
   for H being non empty lower-bounded RelStr st H is Heyting for a,b
-  being Element of H holds 'not' (a"\/"b) = 'not' a"/\"'not' b by Th81;
+  being Element of H holds 'not' (a"\/"b) = 'not' a"/\"'not' b by Th78;
 
 theorem
   for H being non empty lower-bounded RelStr st H is Heyting for a,b
@@ -3151,14 +3151,14 @@ A4: 'not' b <= 'not' b by A1,ORDERS_2:1;
     .= ((b"/\"a)"/\"'not' a)"\/"((a"/\"b)"/\" 'not' b) by A1,LATTICE3:15
     .= (b"/\"(a"/\"'not' a))"\/"((a"/\"b)"/\" 'not' b) by A1,LATTICE3:16
     .= (b"/\"(a"/\"'not' a))"\/"(a"/\"(b"/\" 'not' b)) by A1,LATTICE3:16
-    .= (b"/\"Bottom H)"\/"(a"/\"(b"/\"'not' b)) by A1,A3,Th85
-    .= (b"/\"Bottom H)"\/"(a"/\"Bottom H) by A1,A4,Th85
+    .= (b"/\"Bottom H)"\/"(a"/\"(b"/\"'not' b)) by A1,A3,Th82
+    .= (b"/\"Bottom H)"\/"(a"/\"Bottom H) by A1,A4,Th82
     .= (Bottom H"/\"b)"\/"(a"/\"Bottom H) by A1,LATTICE3:15
     .= (Bottom H"/\"b)"\/"(Bottom H"/\"a) by A1,LATTICE3:15
-    .= Bottom H"\/"(Bottom H"/\"a) by A1,Th4
-    .= Bottom H"\/"Bottom H by A1,Th4
+    .= Bottom H"\/"(Bottom H"/\"a) by A1,Th3
+    .= Bottom H"\/"Bottom H by A1,Th3
     .= Bottom H by A1,A2,YELLOW_0:24;
-  hence thesis by A1,Th85;
+  hence thesis by A1,Th82;
 end;
 
 definition
@@ -3213,11 +3213,11 @@ A3: x9 is_a_complement_of x by A2,Def24;
   let y be Element of L;
   (y "\/" x9) "/\" x = (x "/\" y) "\/" (x "/\" x9) by A1,Def3
     .= Bottom L "\/" (x "/\" y) by A3,Def23
-    .= x "/\" y by Th4;
+    .= x "/\" y by Th3;
   hence (y "\/" x9) "/\" x <= y by YELLOW_0:23;
-  (y "/\" x) "\/" x9 = (x9 "\/" y) "/\" (x9 "\/" x) by A1,Th6
+  (y "/\" x) "\/" x9 = (x9 "\/" y) "/\" (x9 "\/" x) by A1,Th5
     .= (x9 "\/" y) "/\" Top L by A3,Def23
-    .= x9 "\/" y by Th5;
+    .= x9 "\/" y by Th4;
   hence thesis by YELLOW_0:22;
 end;
 
@@ -3245,7 +3245,7 @@ A5: now
         assume x <= g.z;
         then x <= g9.y "\/" z by A4;
         then
-A6:     x "/\" y <= (g9.y "\/" z) "/\" y by Th2;
+A6:     x "/\" y <= (g9.y "\/" z) "/\" y by Th1;
         (g9.y "\/" z) "/\" y <= z by A2;
         then x "/\" y <= z by A6,ORDERS_2:3;
         hence (y "/\").x <= z by Def18;
@@ -3253,7 +3253,7 @@ A6:     x "/\" y <= (g9.y "\/" z) "/\" y by Th2;
       assume (y "/\").x <= z;
       then y "/\" x <= z by Def18;
       then
-A7:   (x "/\" y) "\/" g9.y <= z "\/" g9.y by Th3;
+A7:   (x "/\" y) "\/" g9.y <= z "\/" g9.y by Th2;
       x <= (x "/\" y) "\/" g9.y by A2;
       then x <= z "\/" g9.y by A7,ORDERS_2:3;
       hence x <= g.z by A4;
@@ -3262,11 +3262,11 @@ A7:   (x "/\" y) "\/" g9.y <= z "\/" g9.y by Th3;
     proof
       let z1,z2 be Element of L;
       assume z1 <= z2;
-      then g9.y "\/" z1 <= z2 "\/" g9.y by Th3;
+      then g9.y "\/" z1 <= z2 "\/" g9.y by Th2;
       then g.z1 <= g9.y "\/" z2 by A4;
       hence thesis by A4;
     end;
-    hence [g,y "/\"] is Galois by A5,Th9;
+    hence [g,y "/\"] is Galois by A5,Th8;
   end;
   thus
 A8: L is Heyting
@@ -3287,15 +3287,15 @@ A11: for z being Element of L holds g.z = F(z) from FUNCT_2:sch 4;
     [g,x "/\"] is Galois by A3,A11;
     then g = x => by A8,Def20;
     hence 'not' x = Bottom L "\/" g9.x by A11
-      .= g9.x by Th4;
+      .= g9.x by Th3;
   end;
 A12: now
     let x be Element of L;
     (Bottom L "\/" g9.x) "/\" x <= Bottom L by A2;
     then (x "/\" Bottom L) "\/" (x "/\" g9.x) <= Bottom L by A8,Def3;
-    then Bottom L "\/" (x "/\" g9.x) <= Bottom L by Th4;
+    then Bottom L "\/" (x "/\" g9.x) <= Bottom L by Th3;
     then
-A13: x "/\" g9.x <= Bottom L by Th4;
+A13: x "/\" g9.x <= Bottom L by Th3;
     Bottom L <= x "/\" g9.x by YELLOW_0:44;
     hence Bottom L = x "/\" g9.x by A13,ORDERS_2:2
       .= x "/\" 'not' x by A10;
@@ -3305,29 +3305,29 @@ A14: now
     let x be Element of L;
     Top L <= (Top L "/\" x) "\/" g9.x by A2;
     then
-A15: Top L <= x "\/" g9.x by Th5;
+A15: Top L <= x "\/" g9.x by Th4;
     x "\/" g9.x <= Top L by YELLOW_0:45;
     hence Top L = x "\/" g9.x by A15,ORDERS_2:2
       .= x "\/" 'not' x by A10;
   end;
   then ('not' x "\/" 'not' 'not' x) "/\" x = Top L "/\" x;
-  then x = x "/\" ('not' x "\/" 'not' 'not' x) by Th5
+  then x = x "/\" ('not' x "\/" 'not' 'not' x) by Th4
     .= (x "/\" 'not' x) "\/" (x "/\" 'not' 'not' x) by A8,Def3
     .= Bottom L "\/" (x "/\" 'not' 'not' x) by A12
-    .= x "/\" 'not' 'not' x by Th4;
+    .= x "/\" 'not' 'not' x by Th3;
   then
 A16: x <= 'not' 'not' x by YELLOW_0:25;
   Bottom L "\/" x = ('not' x "/\" 'not' 'not' x) "\/" x by A12;
-  then x = x "\/" ('not' x "/\" 'not' 'not' x) by Th4
-    .= (x "\/" 'not' x) "/\" (x "\/" 'not' 'not' x) by A8,Th6
+  then x = x "\/" ('not' x "/\" 'not' 'not' x) by Th3
+    .= (x "\/" 'not' x) "/\" (x "\/" 'not' 'not' x) by A8,Th5
     .= Top L "/\" (x "\/" 'not' 'not' x) by A14
-    .= x "\/" 'not' 'not' x by Th5;
+    .= x "\/" 'not' 'not' x by Th4;
   hence thesis by A16,YELLOW_0:24;
 end;
 
 :: Exercise 3.19
 
-theorem Th89:
+theorem Th86:
   for L being bounded LATTICE st L is Heyting & for x being
   Element of L holds 'not' 'not' x = x for x being Element of L holds 'not' x
   is_a_complement_of x
@@ -3336,18 +3336,18 @@ proof
 A1: L is Heyting and
 A2: for x being Element of L holds 'not' 'not' x = x;
   let x be Element of L;
-A3: 'not' (x "\/" 'not' x) = 'not' x "/\" 'not' 'not' x by A1,Th81
+A3: 'not' (x "\/" 'not' x) = 'not' x "/\" 'not' 'not' x by A1,Th78
     .= x "/\" 'not' x by A2;
 A4: 'not' x >= 'not' x by ORDERS_2:1;
-  then x "/\" 'not' x = Bottom L by A1,Th85;
+  then x "/\" 'not' x = Bottom L by A1,Th82;
   hence x "\/" 'not' x = 'not' (Bottom L) by A2,A3
-    .= Top L by A1,Th83;
-  thus thesis by A1,A4,Th85;
+    .= Top L by A1,Th80;
+  thus thesis by A1,A4,Th82;
 end;
 
 :: Exercise 3.19  (1) iff (2)
 
-theorem Th90:
+theorem Th87:
   for L being bounded LATTICE holds L is distributive complemented
   iff L is Heyting & for x being Element of L holds 'not' 'not' x = x
 proof
@@ -3365,7 +3365,7 @@ A2: for x being Element of L holds 'not' 'not' x = x;
   thus L is distributive by A1;
   let x be Element of L;
   take 'not' x;
-  thus thesis by A1,A2,Th89;
+  thus thesis by A1,A2,Th86;
 end;
 
 :: Definition 3.20
@@ -3391,7 +3391,7 @@ end;
 
 registration
   cluster Boolean -> Heyting for non empty RelStr;
-  coherence by Th90;
+  coherence by Th87;
 end;
 
 registration

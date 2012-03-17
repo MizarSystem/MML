@@ -2,7 +2,7 @@
 ::  by Christoph Schwarzweller
 ::
 :: Received October 2, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,18 +18,17 @@ environ
       ZFMISC_1, MCART_1, YELLOW_1, LATTICE3, ORDERS_2, FILTER_1, WAYBEL_1,
       WAYBEL_0, XXREAL_0, PBOOLE, EQREL_1, CLASSES2, BINOP_1, LATTICES,
       QC_LANG1, REWRITE1, SETFAM_1, CONLAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, LATTICES, ORDERS_2,
-      YELLOW_1, WAYBEL_1, LATTICE3, SETFAM_1, WAYBEL_0;
- constructors SETFAM_1, BINOP_1, DOMAIN_1, LATTICE3, WAYBEL_1, STRUCT_0,
-      RELSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XTUPLE_0, MCART_1, RELAT_1,
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, LATTICES,
+      ORDERS_2, YELLOW_1, WAYBEL_1, LATTICE3, SETFAM_1, WAYBEL_0;
+ constructors BINOP_1, DOMAIN_1, LATTICE3, WAYBEL_1, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, LATTICES,
-      LATTICE3, YELLOW_1;
+      LATTICE3, YELLOW_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, BINOP_1;
+ definitions TARSKI, BINOP_1, XTUPLE_0;
  theorems TARSKI, RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, LATTICES, MCART_1,
       LATTICE3, YELLOW_1, ORDERS_2, FILTER_1, VECTSP_8, SETFAM_1, WAYBEL_0,
-      RELSET_1, XBOOLE_0, XBOOLE_1;
+      RELSET_1, XBOOLE_0, XBOOLE_1, XTUPLE_0;
  schemes BINOP_1;
 
 begin
@@ -38,7 +37,7 @@ definition
   let C be 2-sorted;
 
   attr C is quasi-empty means
-  :Def2:
+  :Def1:
   the carrier of C is empty or the carrier' of C is empty;
 end;
 
@@ -52,7 +51,7 @@ registration
   cluster strict non quasi-empty for 2-sorted;
   existence
   proof
-    2-sorted(#{{}},{{}}#) is non quasi-empty by Def2;
+    2-sorted(#{{}},{{}}#) is non quasi-empty by Def1;
     hence thesis;
   end;
 end;
@@ -61,7 +60,7 @@ registration
   cluster strict empty void quasi-empty for 2-sorted;
   existence
   proof
-    2-sorted(#{},{}#) is empty void quasi-empty by Def2;
+    2-sorted(#{},{}#) is empty void quasi-empty by Def1;
     hence thesis;
   end;
 end;
@@ -83,7 +82,7 @@ registration
   existence
   proof
     set I = the Relation of {{}},{{}};
-    ContextStr(#{{}},{{}},I#) is non quasi-empty by Def2;
+    ContextStr(#{{}},{{}},I#) is non quasi-empty by Def1;
     hence thesis;
   end;
 end;
@@ -101,9 +100,9 @@ end;
 registration
   let C be non quasi-empty 2-sorted;
   cluster the carrier' of C -> non empty;
-  coherence by Def2;
+  coherence by Def1;
   cluster the carrier of C -> non empty;
-  coherence by Def2;
+  coherence by Def1;
 end;
 
 registration
@@ -130,7 +129,7 @@ definition
   let a be Attribute of C;
 
   pred o is-connected-with a means
-  :Def5:
+  :Def2:
   [o,a] in the Information of C;
 end;
 
@@ -149,7 +148,7 @@ definition
   let C be FormalContext;
   func ObjectDerivation(C) -> Function of bool the carrier of C,bool the
   carrier' of C means
-  :Def6:
+  :Def3:
   for O being Subset of the carrier of C holds it.O =
   { a where a is Attribute of C : for o being Object of C st o in O holds o
   is-connected-with a };
@@ -177,23 +176,27 @@ A2:   [u,v2] in f;
       consider O being Subset of the carrier of C such that
 A3:   [u,v1] = [O,{a where a is Attribute of C : for o being Object of
       C st o in O holds o is-connected-with a}] by A1;
-A4:   v1 = [O,{a where a is Attribute of C : for o being Object of C st o
-      in O holds o is-connected-with a}]`2 by A3,MCART_1:def 2
+A4:   v1 = [u,v1]`2
+       .= [O,{a where a is Attribute of C : for o being Object of C st o
+      in O holds o is-connected-with a}]`2 by A3
         .= {a where a is Attribute of C : for o being Object of C st o in O
-      holds o is-connected-with a} by MCART_1:def 2;
+      holds o is-connected-with a};
       consider O9 being Subset of the carrier of C such that
 A5:   [u,v2] = [O9,{a where a is Attribute of C : for o being Object
       of C st o in O9 holds o is-connected-with a}] by A2;
-A6:   v2 = [O9,{a where a is Attribute of C : for o being Object of C st
-      o in O9 holds o is-connected-with a}]`2 by A5,MCART_1:def 2
+A6:   v2 = [u,v2]`2
+       .= [O9,{a where a is Attribute of C : for o being Object of C st
+      o in O9 holds o is-connected-with a}]`2 by A5
         .= {a where a is Attribute of C : for o being Object of C st o in O9
-      holds o is-connected-with a} by MCART_1:def 2;
+      holds o is-connected-with a}                 ;
       O = [O,{a where a is Attribute of C : for o being Object of C st o
-      in O holds o is-connected-with a}]`1 by MCART_1:def 1
-        .= u by A3,MCART_1:def 1
+      in O holds o is-connected-with a}]`1
+        .= [u,v1]`1 by A3
+        .= u
+        .= [u,v2]`1
         .= [O9,{a where a is Attribute of C : for o being Object of C st o
-      in O9 holds o is-connected-with a}]`1 by A5,MCART_1:def 1
-        .= O9 by MCART_1:def 1;
+      in O9 holds o is-connected-with a}]`1 by A5
+        .= O9;
       hence thesis by A4,A6;
     end;
     then reconsider f as Function by FUNCT_1:def 1;
@@ -202,12 +205,14 @@ A7: for x being set holds x in dom f implies x in bool the carrier of C
       let x be set;
       assume x in dom f;
       then consider y being set such that
-A8:   [x,y] in f by RELAT_1:def 4;
+A8:   [x,y] in f by XTUPLE_0:def 12;
       consider O being Subset of the carrier of C such that
 A9:   [x,y] = [O,{a where a is Attribute of C : for o being Object of
       C st o in O holds o is-connected-with a}] by A8;
-      x = [x,y]`1 by MCART_1:def 1
-        .= O by A9,MCART_1:def 1;
+      x = [x,y]`1
+        .= [O,{a where a is Attribute of C : for o being Object of
+      C st o in O holds o is-connected-with a}]`1 by A9
+        .= O;
       hence thesis;
     end;
     for x being set holds x in bool the carrier of C implies x in dom f
@@ -217,7 +222,7 @@ A9:   [x,y] = [O,{a where a is Attribute of C : for o being Object of
       then reconsider x as Subset of the carrier of C;
       [x,{a where a is Attribute of C : for o being Object of C st o in x
       holds o is-connected-with a}] in f;
-      hence thesis by RELAT_1:def 4;
+      hence thesis by XTUPLE_0:def 12;
     end;
     then
 A10: dom f = bool the carrier of C by A7,TARSKI:1;
@@ -226,7 +231,7 @@ A10: dom f = bool the carrier of C by A7,TARSKI:1;
       let y be set;
       assume y in rng f;
       then consider x being set such that
-A11:  [x,y] in f by RELAT_1:def 5;
+A11:  [x,y] in f by XTUPLE_0:def 13;
       consider O being Subset of the carrier of C such that
 A12:  [x,y] = [O,{a where a is Attribute of C : for o being Object of
       C st o in O holds o is-connected-with a}] by A11;
@@ -240,9 +245,11 @@ A13:  {a where a is Attribute of C : for o being Object of C st o in O
         o in O holds o is-connected-with u9;
         hence thesis;
       end;
-      y = [x,y]`2 by MCART_1:def 2
+      y = [x,y]`2
+       .= [O,{a where a is Attribute of C : for o being Object of
+      C st o in O holds o is-connected-with a}]`2 by A12
         .= {a where a is Attribute of C : for o being Object of C st o in O
-      holds o is-connected-with a} by A12,MCART_1:def 2;
+      holds o is-connected-with a};
       hence thesis by A13;
     end;
     then reconsider
@@ -254,15 +261,19 @@ Attribute of C : for o being Object of C st o in O holds o is-connected-with a}
     proof
       let O be Subset of the carrier of C;
       consider y being set such that
-A14:  [O,y] in f by A10,RELAT_1:def 4;
+A14:  [O,y] in f by A10,XTUPLE_0:def 12;
       consider O9 being Subset of the carrier of C such that
 A15:  [O,y] = [O9,{a where a is Attribute of C : for o being Object
       of C st o in O9 holds o is-connected-with a}] by A14;
-A16:  y = [O,y]`2 by MCART_1:def 2
+A16:  y = [O,y]`2
+       .= [O9,{a where a is Attribute of C : for o being Object
+      of C st o in O9 holds o is-connected-with a}]`2 by A15
         .= {a where a is Attribute of C : for o being Object of C st o in O9
-      holds o is-connected-with a} by A15,MCART_1:def 2;
-      O = [O,y]`1 by MCART_1:def 1
-        .= O9 by A15,MCART_1:def 1;
+      holds o is-connected-with a};
+      O = [O,y]`1
+        .= [O9,{a where a is Attribute of C : for o being Object
+      of C st o in O9 holds o is-connected-with a}]`1 by A15
+        .= O9;
       hence thesis by A10,A14,A16,FUNCT_1:def 2;
     end;
     hence thesis;
@@ -298,7 +309,7 @@ definition
   let C be FormalContext;
   func AttributeDerivation(C) -> Function of bool the carrier' of C,bool the
   carrier of C means
-  :Def7:
+  :Def4:
   for A being Subset of the carrier' of C holds it.A =
   { o where o is Object of C : for a being Attribute of C st a in A holds o
   is-connected-with a };
@@ -327,23 +338,29 @@ A2:   [u,v2] in f;
       consider A being Subset of the carrier' of C such that
 A3:   [u,v1] = [A,{o where o is Object of C : for a being Attribute of
       C st a in A holds o is-connected-with a}] by A1;
-A4:   v1 = [A,{o where o is Object of C : for a being Attribute of C st a
-      in A holds o is-connected-with a}]`2 by A3,MCART_1:def 2
+A4:   v1 =[u,v1]`2
+       .= [A,{o where o is Object of C : for a being Attribute of C st a
+      in A holds o is-connected-with a}]`2 by A3
         .= {o where o is Object of C : for a being Attribute of C st a in A
-      holds o is-connected-with a} by MCART_1:def 2;
+      holds o is-connected-with a};
       consider A9 being Subset of the carrier' of C such that
 A5:   [u,v2] = [A9,{o where o is Object of C : for a being Attribute
       of C st a in A9 holds o is-connected-with a}] by A2;
-A6:   v2 = [A9,{o where o is Object of C : for a being Attribute of C st
-      a in A9 holds o is-connected-with a}] `2 by A5,MCART_1:def 2
+A6:   v2 = [u,v2]`2
+       .=[A9,{o where o is Object of C : for a being Attribute
+      of C st a in A9 holds o is-connected-with a}]`2 by A5
+       .= [A9,{o where o is Object of C : for a being Attribute of C st
+      a in A9 holds o is-connected-with a}] `2
         .= {o where o is Object of C : for a being Attribute of C st a in A9
-      holds o is-connected-with a} by MCART_1:def 2;
+      holds o is-connected-with a};
       A = [A,{o where o is Object of C : for a being Attribute of C st a
-      in A holds o is-connected-with a}]`1 by MCART_1:def 1
-        .= u by A3,MCART_1:def 1
+      in A holds o is-connected-with a}]`1
+        .= [u,v1]`1 by A3
+        .= u
+        .= [u,v2]`1
         .= [A9,{o where o is Object of C : for a being Attribute of C st a
-      in A9 holds o is-connected-with a}]`1 by A5,MCART_1:def 1
-        .= A9 by MCART_1:def 1;
+      in A9 holds o is-connected-with a}]`1 by A5
+        .= A9;
       hence thesis by A4,A6;
     end;
     then reconsider f as Function by FUNCT_1:def 1;
@@ -352,12 +369,14 @@ A7: for x being set holds x in dom f implies x in bool the carrier' of C
       let x be set;
       assume x in dom f;
       then consider y being set such that
-A8:   [x,y] in f by RELAT_1:def 4;
+A8:   [x,y] in f by XTUPLE_0:def 12;
       consider A being Subset of the carrier' of C such that
 A9:   [x,y] = [A,{o where o is Object of C : for a being Attribute of
       C st a in A holds o is-connected-with a}] by A8;
-      x = [x,y]`1 by MCART_1:def 1
-        .= A by A9,MCART_1:def 1;
+      x = [x,y]`1
+       .=[A,{o where o is Object of C : for a being Attribute of
+      C st a in A holds o is-connected-with a}]`1 by A9
+        .= A;
       hence thesis;
     end;
     for x being set holds x in bool the carrier' of C implies x in dom f
@@ -367,7 +386,7 @@ A9:   [x,y] = [A,{o where o is Object of C : for a being Attribute of
       then reconsider x as Subset of the carrier' of C;
       [x,{o where o is Object of C : for a being Attribute of C st a in x
       holds o is-connected-with a}] in f;
-      hence thesis by RELAT_1:def 4;
+      hence thesis by XTUPLE_0:def 12;
     end;
     then
 A10: dom f = bool the carrier' of C by A7,TARSKI:1;
@@ -376,7 +395,7 @@ A10: dom f = bool the carrier' of C by A7,TARSKI:1;
       let y be set;
       assume y in rng f;
       then consider x being set such that
-A11:  [x,y] in f by RELAT_1:def 5;
+A11:  [x,y] in f by XTUPLE_0:def 13;
       consider A being Subset of the carrier' of C such that
 A12:  [x,y] = [A,{o where o is Object of C : for a being Attribute of
       C st a in A holds o is-connected-with a}] by A11;
@@ -390,9 +409,11 @@ A13:  {o where o is Object of C : for a being Attribute of C st a in A
         a in A holds u9 is-connected-with a;
         hence thesis;
       end;
-      y = [x,y]`2 by MCART_1:def 2
+      y = [x,y]`2
+        .=[A,{o where o is Object of C : for a being Attribute of
+      C st a in A holds o is-connected-with a}]`2 by A12
         .= {o where o is Object of C : for a being Attribute of C st a in A
-      holds o is-connected-with a} by A12,MCART_1:def 2;
+      holds o is-connected-with a};
       hence thesis by A13;
     end;
     then reconsider
@@ -404,15 +425,19 @@ Object of C : for a being Attribute of C st a in A holds o is-connected-with a}
     proof
       let A be Subset of the carrier' of C;
       consider y being set such that
-A14:  [A,y] in f by A10,RELAT_1:def 4;
+A14:  [A,y] in f by A10,XTUPLE_0:def 12;
       consider A9 being Subset of the carrier' of C such that
 A15:  [A,y] = [A9,{o where o is Object of C : for a being Attribute
       of C st a in A9 holds o is-connected-with a}] by A14;
-A16:  y = [A,y]`2 by MCART_1:def 2
+A16:  y = [A,y]`2
+        .=[A9,{o where o is Object of C : for a being Attribute
+      of C st a in A9 holds o is-connected-with a}]`2 by A15
         .= {o where o is Object of C : for a being Attribute of C st a in A9
-      holds o is-connected-with a} by A15,MCART_1:def 2;
-      A = [A,y]`1 by MCART_1:def 1
-        .= A9 by A15,MCART_1:def 1;
+      holds o is-connected-with a};
+      A = [A,y]`1
+       .=[A9,{o where o is Object of C : for a being Attribute
+      of C st a in A9 holds o is-connected-with a}]`1 by A15
+        .= A9;
       hence thesis by A10,A14,A16,FUNCT_1:def 2;
     end;
     hence thesis;
@@ -490,7 +515,7 @@ TARSKI:def 1;
     hence thesis;
   end;
   (ObjectDerivation(C)).t = {a where a is Attribute of C : for o9 being
-  Object of C st o9 in t holds o9 is-connected-with a} by Def6;
+  Object of C st o9 in t holds o9 is-connected-with a} by Def3;
   hence thesis by A1,A4,TARSKI:1;
 end;
 
@@ -540,7 +565,7 @@ A5: ex x9 being Object of C st x9 = x & x9 is-connected-with a;
     hence thesis;
   end;
   (AttributeDerivation(C)).t = {o where o is Object of C : for a9 being
-  Attribute of C st a9 in t holds o is-connected-with a9} by Def7;
+  Attribute of C st a9 in t holds o is-connected-with a9} by Def4;
   hence thesis by A1,A4,TARSKI:1;
 end;
 
@@ -556,14 +581,14 @@ A1: O1 c= O2;
   let x be set;
   assume x in (ObjectDerivation(C)).O2;
   then x in {a where a is Attribute of C : for o being Object of C st o in O2
-  holds o is-connected-with a} by Def6;
+  holds o is-connected-with a} by Def3;
   then consider x9 being Attribute of C such that
 A2: x9 = x and
 A3: for o being Object of C st o in O2 holds o is-connected-with x9;
   for o being Object of C st o in O1 holds o is-connected-with x9 by A1,A3;
   then x in {a where a is Attribute of C : for o being Object of C st o in O1
   holds o is-connected-with a} by A2;
-  hence thesis by Def6;
+  hence thesis by Def3;
 end;
 
 theorem Th4:
@@ -578,14 +603,14 @@ A1: A1 c= A2;
   let x be set;
   assume x in (AttributeDerivation(C)).A2;
   then x in {o where o is Object of C : for a being Attribute of C st a in A2
-  holds o is-connected-with a} by Def7;
+  holds o is-connected-with a} by Def4;
   then consider x9 being Object of C such that
 A2: x9 = x and
 A3: for a being Attribute of C st a in A2 holds x9 is-connected-with a;
   for a being Attribute of C st a in A1 holds x9 is-connected-with a by A1,A3;
   then x in {o where o is Object of C : for a being Attribute of C st a in A1
   holds o is-connected-with a} by A2;
-  hence thesis by Def7;
+  hence thesis by Def4;
 end;
 
 theorem Th5:
@@ -620,9 +645,9 @@ A2: for a being Attribute of C st a in A holds x is-connected-with a
     hence thesis by A1;
   end;
   (AttributeDerivation(C)).A = {o where o is Object of C : for a being
-  Attribute of C st a in A holds o is-connected-with a} by Def7;
+  Attribute of C st a in A holds o is-connected-with a} by Def4;
   then x in (AttributeDerivation(C)).A by A2;
-  hence thesis by Def6;
+  hence thesis by Def3;
 end;
 
 theorem Th6:
@@ -657,9 +682,9 @@ A2: for o being Object of C st o in O holds o is-connected-with x
     hence thesis by A1;
   end;
   (ObjectDerivation(C)).O = {a where a is Attribute of C : for o being
-  Object of C st o in O holds o is-connected-with a} by Def6;
+  Object of C st o in O holds o is-connected-with a} by Def3;
   then x in (ObjectDerivation(C)).O by A2;
-  hence thesis by Def7;
+  hence thesis by Def4;
 end;
 
 theorem Th7:
@@ -749,8 +774,8 @@ A7: A = A9 by A1,TARSKI:1;
     hence thesis;
   end;
   then reconsider O9 as Subset of the carrier of C;
-  A = (ObjectDerivation(C)).O & O9 = (AttributeDerivation(C)).A by Def6,Def7;
-  hence thesis by A7,Def6;
+  A = (ObjectDerivation(C)).O & O9 = (AttributeDerivation(C)).A by Def3,Def4;
+  hence thesis by A7,Def3;
 end;
 
 theorem Th8:
@@ -840,8 +865,8 @@ A7: O = O9 by A1,TARSKI:1;
     hence thesis;
   end;
   then reconsider A9 as Subset of the carrier' of C;
-  O = (AttributeDerivation(C)).A & A9 = (ObjectDerivation(C)).O by Def6,Def7;
-  hence thesis by A7,Def7;
+  O = (AttributeDerivation(C)).A & A9 = (ObjectDerivation(C)).O by Def3,Def4;
+  hence thesis by A7,Def4;
 end;
 
 theorem Th9:
@@ -867,19 +892,19 @@ A3: x in O;
 A4:   z = [x,a];
       assume a in A;
       then z in [:O,A:] by A3,A4,ZFMISC_1:def 2;
-      hence thesis by A2,A4,Def5;
+      hence thesis by A2,A4,Def2;
     end;
     then
     x in {o where o is Object of C : for a being Attribute of C st a in A
     holds o is-connected-with a};
-    hence thesis by Def7;
+    hence thesis by Def4;
   end;
   O c= (AttributeDerivation(C)).A implies [:O,A:] c= the Information of C
   proof
     assume O c= (AttributeDerivation(C)).A;
     then
 A5: O c= {o where o is Object of C : for a being Attribute of C st a in A
-    holds o is-connected-with a} by Def7;
+    holds o is-connected-with a} by Def4;
     let z be set;
     assume z in [:O,A:];
     then consider x,y being set such that
@@ -894,7 +919,7 @@ A8: z = [x,y] by ZFMISC_1:def 2;
     ex x9 being Object of C st x9 = x & for a being Attribute of C st a in
     A holds x9 is-connected-with a;
     then x is-connected-with y by A7;
-    hence thesis by A8,Def5;
+    hence thesis by A8,Def2;
   end;
   hence thesis by A1;
 end;
@@ -922,19 +947,19 @@ A3: x in A;
 A4:   z = [o,x];
       assume o in O;
       then z in [:O,A:] by A3,A4,ZFMISC_1:def 2;
-      hence thesis by A2,A4,Def5;
+      hence thesis by A2,A4,Def2;
     end;
     then
     x in {a where a is Attribute of C : for o being Object of C st o in O
     holds o is-connected-with a};
-    hence thesis by Def6;
+    hence thesis by Def3;
   end;
   A c= (ObjectDerivation(C)).O implies [:O,A:] c= the Information of C
   proof
     assume A c= (ObjectDerivation(C)).O;
     then
 A5: A c= {a where a is Attribute of C : for o being Object of C st o in O
-    holds o is-connected-with a} by Def6;
+    holds o is-connected-with a} by Def3;
     let z be set;
     assume z in [:O,A:];
     then consider x,y being set such that
@@ -949,7 +974,7 @@ A8: z = [x,y] by ZFMISC_1:def 2;
     ex y9 being Attribute of C st y9 = y & for o being Object of C st o in
     O holds o is-connected-with y9;
     then x is-connected-with y by A6;
-    hence thesis by A8,Def5;
+    hence thesis by A8,Def2;
   end;
   hence thesis by A1;
 end;
@@ -1069,14 +1094,14 @@ definition
   let P,R be non empty RelStr;
   let Con be Connection of P,R;
   attr Con is co-Galois means
-  :Def10:
+  :Def7:
   ex f being Function of P,R, g being
   Function of R,P st (Con = [f,g] & f is antitone & g is antitone & for p1,p2
 being Element of P, r1,r2 being Element of R holds p1 <= g.(f.p1) & r1 <= f.(g.
   r1));
 end;
 
-theorem Th13:
+theorem Th12:
   for P,R being non empty Poset for Con being Connection of P,R
   for f being Function of P,R, g being Function of R,P st Con = [f,g] holds Con
 is co-Galois iff for p being Element of P, r being Element of R holds p <= g.r
@@ -1122,7 +1147,7 @@ A8:   p1 = g.r1 & p2 = g.r2;
 A9: g is antitone by WAYBEL_0:def 5;
     for p1,p2 being Element of P, r1,r2 being Element of R holds p1 <= g.
     (f.p1) & r1 <= f.(g.r1) by A3;
-    hence Con is co-Galois by A1,A6,A9,Def10;
+    hence Con is co-Galois by A1,A6,A9,Def7;
   end;
   now
     assume Con is co-Galois;
@@ -1131,11 +1156,15 @@ A10: Con = [f9,g9] and
 A11: f9 is antitone and
 A12: g9 is antitone and
 A13: for p1,p2 being Element of P, r1,r2 being Element of R holds p1 <=
-    g9.(f9.p1) & r1 <= f9.(g9.r1) by Def10;
-A14: g = Con`2 by A1,MCART_1:def 2
-      .= g9 by A10,MCART_1:def 2;
-A15: f = Con`1 by A1,MCART_1:def 1
-      .= f9 by A10,MCART_1:def 1;
+    g9.(f9.p1) & r1 <= f9.(g9.r1) by Def7;
+A14: g = [f,g]`2
+      .= Con`2 by A1
+      .= [f9,g9]`2 by A10
+      .= g9;
+A15: f = [f,g]`1
+      .= Con`1 by A1
+      .= [f9,g9]`1 by A10
+      .= f9;
 A16: for p being Element of P, r being Element of R holds r <= f.p implies
     p <= g.r
     proof
@@ -1175,15 +1204,18 @@ A1: Con = [f9,g9] and
 A2: f9 is antitone and
 A3: g9 is antitone and
 A4: for p1,p2 being Element of P, r1,r2 being Element of R holds p1 <=
-  g9.(f9.p1) & r1 <= f9.(g9.r1) by Def10;
+  g9.(f9.p1) & r1 <= f9.(g9.r1) by Def7;
   let f be Function of P,R, g be Function of R,P;
   assume
 A5: Con = [f,g];
-  then
-A6: f = Con`1 by MCART_1:def 1
-    .= f9 by A1,MCART_1:def 1;
-A7: g = Con`2 by A5,MCART_1:def 2
-    .= g9 by A1,MCART_1:def 2;
+A6: f = [f,g]`1
+    .= Con`1 by A5
+    .= [f9,g9]`1 by A1
+    .= f9;
+A7: g = [f,g]`2
+     .= Con`2 by A5
+    .= [f9,g9]`2 by A1
+    .= g9;
 A8: dom g = the carrier of R by FUNCT_2:def 1;
 A9: dom f = the carrier of P by FUNCT_2:def 1;
 A10: for x being set st x in the carrier of P holds f.x =(f*(g*f)).x
@@ -1318,10 +1350,10 @@ A12: y c= (ObjectDerivation(C)).((AttributeDerivation(C)).y) by Th6;
     by A1,YELLOW_1:def 2;
     hence thesis by ORDERS_2:def 5;
   end;
-  hence thesis by A3,Th13;
+  hence thesis by A3,Th12;
 end;
 
-theorem Th16:
+theorem Th15:
   for C being FormalContext for O1,O2 being Subset of the carrier
 of C holds (ObjectDerivation(C)).(O1 \/ O2) = ((ObjectDerivation(C)).O1) /\ ((
   ObjectDerivation(C)).O2)
@@ -1337,13 +1369,13 @@ A1: for x being set holds x in (ObjectDerivation(C)).O1 /\ (
 A2: x in (ObjectDerivation(C)).O1 /\ (ObjectDerivation(C)).O2;
     then x in (ObjectDerivation(C)).O1 by XBOOLE_0:def 4;
     then x in {a where a is Attribute of C : for o being Object of C st o in
-    O1 holds o is-connected-with a} by Def6;
+    O1 holds o is-connected-with a} by Def3;
     then
 A3: ex x1 being Attribute of C st x1 = x & for o being Object of C st o in
     O1 holds o is-connected-with x1;
     x in (ObjectDerivation(C)).O2 by A2,XBOOLE_0:def 4;
     then x in {a where a is Attribute of C : for o being Object of C st o in
-    O2 holds o is-connected-with a } by Def6;
+    O2 holds o is-connected-with a } by Def3;
     then
 A4: ex x2 being Attribute of C st x2 = x & for o being Object of C st o in
     O2 holds o is-connected-with x2;
@@ -1368,7 +1400,7 @@ A5:   o in (O1 \/ O2);
     end;
     then x in {a where a is Attribute of C : for o being Object of C st o in
     O9 holds o is-connected-with a};
-    hence thesis by Def6;
+    hence thesis by Def3;
   end;
   for x being set holds x in (ObjectDerivation(C)).(O1 \/ O2) implies x in
   (ObjectDerivation(C)).O1 /\ (ObjectDerivation(C)).O2
@@ -1377,7 +1409,7 @@ A5:   o in (O1 \/ O2);
     assume x in (ObjectDerivation(C)).(O1 \/ O2);
     then
     x in {a where a is Attribute of C : for o being Object of C st o in O9
-    holds o is-connected-with a} by Def6;
+    holds o is-connected-with a} by Def3;
     then
 A6: ex x9 being Attribute of C st x9 = x & for o being Object of C st o in
     O9 holds o is-connected-with x9;
@@ -1392,7 +1424,7 @@ A6: ex x9 being Attribute of C st x9 = x & for o being Object of C st o in
     then x in {a where a is Attribute of C : for o being Object of C st o in
     O2 holds o is-connected-with a};
     then
-A7: x in (ObjectDerivation(C)).O2 by Def6;
+A7: x in (ObjectDerivation(C)).O2 by Def3;
     for o being Object of C st o in O1 holds o is-connected-with x
     proof
       let o be Object of C;
@@ -1403,13 +1435,13 @@ A7: x in (ObjectDerivation(C)).O2 by Def6;
     then
     x in {a where a is Attribute of C : for o being Object of C st o in O1
     holds o is-connected-with a};
-    then x in (ObjectDerivation(C)).O1 by Def6;
+    then x in (ObjectDerivation(C)).O1 by Def3;
     hence thesis by A7,XBOOLE_0:def 4;
   end;
   hence thesis by A1,TARSKI:1;
 end;
 
-theorem Th17:
+theorem Th16:
   for C being FormalContext for A1,A2 being Subset of the carrier'
 of C holds (AttributeDerivation(C)).(A1 \/ A2) = ((AttributeDerivation(C)).A1)
   /\ ((AttributeDerivation(C)).A2)
@@ -1425,13 +1457,13 @@ A1: for x being set holds x in (AttributeDerivation(C)).A1 /\ (
 A2: x in (AttributeDerivation(C)).A1 /\ (AttributeDerivation(C)).A2;
     then x in (AttributeDerivation(C)).A1 by XBOOLE_0:def 4;
     then x in {o where o is Object of C : for a being Attribute of C st a in
-    A1 holds o is-connected-with a} by Def7;
+    A1 holds o is-connected-with a} by Def4;
     then
 A3: ex x1 being Object of C st x1 = x & for a being Attribute of C st a in
     A1 holds x1 is-connected-with a;
     x in (AttributeDerivation(C)).A2 by A2,XBOOLE_0:def 4;
     then x in {o where o is Object of C : for a being Attribute of C st a in
-    A2 holds o is-connected-with a} by Def7;
+    A2 holds o is-connected-with a} by Def4;
     then
 A4: ex x2 being Object of C st x2 = x & for a being Attribute of C st a in
     A2 holds x2 is-connected-with a;
@@ -1456,7 +1488,7 @@ A5:   a in (A1 \/ A2);
     end;
     then x in {o where o is Object of C : for a being Attribute of C st a in
     A9 holds o is-connected-with a};
-    hence thesis by Def7;
+    hence thesis by Def4;
   end;
   for x being set holds x in (AttributeDerivation(C)).(A1 \/ A2) implies x
   in (AttributeDerivation(C)).A1 /\ (AttributeDerivation(C)).A2
@@ -1465,7 +1497,7 @@ A5:   a in (A1 \/ A2);
     assume x in (AttributeDerivation(C)).(A1 \/ A2);
     then
     x in {o where o is Object of C : for a being Attribute of C st a in A9
-    holds o is-connected-with a} by Def7;
+    holds o is-connected-with a} by Def4;
     then
 A6: ex x9 being Object of C st x9 = x & for a being Attribute of C st a in
     A9 holds x9 is-connected-with a;
@@ -1480,7 +1512,7 @@ A6: ex x9 being Object of C st x9 = x & for a being Attribute of C st a in
     then x in {o where o is Object of C : for a being Attribute of C st a in
     A2 holds o is-connected-with a};
     then
-A7: x in (AttributeDerivation(C)).A2 by Def7;
+A7: x in (AttributeDerivation(C)).A2 by Def4;
     for a being Attribute of C st a in A1 holds x is-connected-with a
     proof
       let a be Attribute of C;
@@ -1491,13 +1523,13 @@ A7: x in (AttributeDerivation(C)).A2 by Def7;
     then
     x in {o where o is Object of C : for a being Attribute of C st a in A1
     holds o is-connected-with a};
-    then x in (AttributeDerivation(C)).A1 by Def7;
+    then x in (AttributeDerivation(C)).A1 by Def4;
     hence thesis by A7,XBOOLE_0:def 4;
   end;
   hence thesis by A1,TARSKI:1;
 end;
 
-theorem Th18:
+theorem Th17:
   for C being FormalContext holds (ObjectDerivation(C)).{} = the carrier' of C
 proof
   let C be FormalContext;
@@ -1522,11 +1554,11 @@ A2: for x being set holds x in the carrier' of C implies x in A
     hence thesis;
   end;
   (ObjectDerivation(C)).e = {a where a is Attribute of C : for o being
-  Object of C st o in e holds o is-connected-with a} by Def6;
+  Object of C st o in e holds o is-connected-with a} by Def3;
   hence thesis by A1,A2,TARSKI:1;
 end;
 
-theorem Th19:
+theorem Th18:
   for C being FormalContext holds (AttributeDerivation(C)).{} =
   the carrier of C
 proof
@@ -1552,7 +1584,7 @@ A2: for x being set holds x in the carrier of C implies x in O
     hence thesis;
   end;
   (AttributeDerivation(C)).e = {o where o is Object of C : for a being
-  Attribute of C st a in e holds o is-connected-with a} by Def7;
+  Attribute of C st a in e holds o is-connected-with a} by Def4;
   hence thesis by A1,A2,TARSKI:1;
 end;
 
@@ -1568,10 +1600,10 @@ definition
   let C be 2-sorted;
   let CP be ConceptStr over C;
   attr CP is empty means
-  :Def11:
+  :Def8:
   the Extent of CP is empty & the Intent of CP is empty;
   attr CP is quasi-empty means
-  :Def12:
+  :Def9:
   the Extent of CP is empty or the Intent of CP is empty;
 end;
 
@@ -1582,7 +1614,7 @@ registration
   proof
     set A = the non empty Subset of the carrier' of C;
     set O = the non empty Subset of the carrier of C;
-    ConceptStr(#O,A#) is non empty by Def11;
+    ConceptStr(#O,A#) is non empty by Def8;
     hence thesis;
   end;
   cluster strict quasi-empty for ConceptStr over C;
@@ -1590,7 +1622,7 @@ registration
   proof
     reconsider A = {} as Subset of the carrier' of C by XBOOLE_1:2;
     reconsider O = {} as Subset of the carrier of C by XBOOLE_1:2;
-    ConceptStr(#O,A#) is quasi-empty by Def12;
+    ConceptStr(#O,A#) is quasi-empty by Def9;
     hence thesis;
   end;
 end;
@@ -1602,7 +1634,7 @@ registration
   proof
     let CP be ConceptStr over C;
     the Extent of CP is empty & the Intent of CP is empty;
-    hence thesis by Def11;
+    hence thesis by Def8;
   end;
 end;
 
@@ -1623,10 +1655,10 @@ A1:   x in the Extent of CP;
         set x = the Element of the Intent of CP;
         assume the Intent of CP is non empty;
         then x in the Intent of CP;
-        hence contradiction by A1,Def2;
+        hence contradiction by A1,Def1;
       end;
     end;
-    hence thesis by Def12;
+    hence thesis by Def9;
   end;
 end;
 
@@ -1642,12 +1674,12 @@ A1: (ObjectDerivation(C)).(the Extent of CS) = the Intent of CS;
     per cases;
     case
       the Extent of CS is empty;
-      then the Intent of CS = the carrier' of C by A1,Th18;
-      hence thesis by Def11;
+      then the Intent of CS = the carrier' of C by A1,Th17;
+      hence thesis by Def8;
     end;
     case
       the Extent of CS is non empty;
-      hence thesis by Def11;
+      hence thesis by Def8;
     end;
   end;
   hence thesis;
@@ -1657,7 +1689,7 @@ definition
   let C be FormalContext;
   let CP be ConceptStr over C;
   attr CP is concept-like means
-  :Def13:
+  :Def10:
   (ObjectDerivation(C)).(the Extent of
   CP) = the Intent of CP & (AttributeDerivation(C)).(the Intent of CP) = the
   Extent of CP;
@@ -1684,7 +1716,7 @@ registration
       assume x in A;
       then
       x in {a where a is Attribute of C : for o being Object of C st o in
-      t holds o is-connected-with a} by Def6;
+      t holds o is-connected-with a} by Def3;
       then ex x9 being Attribute of C st x9 = x & for o being Object of C st o
       in t holds o is-connected-with x9;
       hence thesis;
@@ -1696,7 +1728,7 @@ registration
       let x be set;
       assume x in O;
       then x in {o9 where o9 is Object of C : for a being Attribute of C st a
-      in ((ObjectDerivation(C)).t) holds o9 is-connected-with a} by Def7;
+      in ((ObjectDerivation(C)).t) holds o9 is-connected-with a} by Def4;
       then ex x9 being Object of C st x9 = x & for a being Attribute of C st a
       in ((ObjectDerivation(C)).t) holds x9 is-connected-with a;
       hence thesis;
@@ -1705,10 +1737,10 @@ registration
     set M9 = ConceptStr(#O,A#);
     o in {o} & t c= (AttributeDerivation(C)).((ObjectDerivation(C)).t) by Th5,
 TARSKI:def 1;
-    then reconsider M9 as non empty ConceptStr over C by Def11;
+    then reconsider M9 as non empty ConceptStr over C by Def8;
     (ObjectDerivation(C)).(the Extent of M9) = (ObjectDerivation(C)).t by Th7
       .= the Intent of M9;
-    then M9 is concept-like by Def13;
+    then M9 is concept-like by Def10;
     hence thesis;
   end;
 end;
@@ -1725,14 +1757,14 @@ registration
   proof
     set CP = the FormalConcept of C;
 A1: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP & (
-    AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def13;
-    the Intent of CP is non empty or the Extent of CP is non empty by Def11;
-    then the ConceptStr of CP is FormalConcept of C by A1,Def11,Def13;
+    AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def10;
+    the Intent of CP is non empty or the Extent of CP is non empty by Def8;
+    then the ConceptStr of CP is FormalConcept of C by A1,Def8,Def10;
     hence thesis;
   end;
 end;
 
-theorem Th20:
+theorem Th19:
   for C being FormalContext for O being Subset of the carrier of C
   holds ConceptStr(#(AttributeDerivation(C)).((ObjectDerivation(C)).O), (
     ObjectDerivation(C)).O#) is FormalConcept of C & for O9 being Subset of the
@@ -1752,9 +1784,9 @@ A1: for O9 being Subset of the carrier of C, A9 being Subset of the carrier'
 A2: ConceptStr(#O9,A9#) is FormalConcept of C and
 A3: O c= O9;
     reconsider M9 = ConceptStr(#O9,A9#) as FormalConcept of C by A2;
-A4: (AttributeDerivation(C)).(A9) = the Extent of M9 by Def13
+A4: (AttributeDerivation(C)).(A9) = the Extent of M9 by Def10
       .= O9;
-A5: (ObjectDerivation(C)).(O9) = the Intent of M9 by Def13
+A5: (ObjectDerivation(C)).(O9) = the Intent of M9 by Def10
       .= A9;
     (ObjectDerivation(C)).(O9) c= (ObjectDerivation(C)).(O) by A3,Th3;
     hence thesis by A4,A5,Th4;
@@ -1765,7 +1797,7 @@ A5: (ObjectDerivation(C)).(O9) = the Intent of M9 by Def13
     set M9 = ConceptStr(#(AttributeDerivation(C)).((ObjectDerivation(C)).O), (
       ObjectDerivation(C)).O#);
     (ObjectDerivation(C)).(the Extent of M9) = the Intent of M9 by Th7;
-    hence thesis by Def13,Lm1;
+    hence thesis by Def10,Lm1;
   end;
   hence thesis by A1;
 end;
@@ -1784,7 +1816,7 @@ A2: for x being set holds x in O implies x in (AttributeDerivation(C)).((
     ObjectDerivation(C)).O);
     given A being Subset of the carrier' of C such that
 A3: ConceptStr(#O,A#) is FormalConcept of C;
-    (AttributeDerivation(C)).((ObjectDerivation(C)).O) c= O by A3,Th20;
+    (AttributeDerivation(C)).((ObjectDerivation(C)).O) c= O by A3,Th19;
     then
     for x being set holds x in (AttributeDerivation(C)).((ObjectDerivation
     (C)).O) implies x in O;
@@ -1795,14 +1827,14 @@ A3: ConceptStr(#O,A#) is FormalConcept of C;
     reconsider A = (ObjectDerivation(C)).O as Subset of the carrier' of C;
     set M9 = ConceptStr(#O,A#);
     assume (AttributeDerivation(C)).((ObjectDerivation(C)).O) = O;
-    then M9 is FormalConcept of C by Def13,Lm1;
+    then M9 is FormalConcept of C by Def10,Lm1;
     hence ex A being Subset of the carrier' of C st ConceptStr(#O,A#) is
     FormalConcept of C;
   end;
   hence thesis by A1;
 end;
 
-theorem Th22:
+theorem Th21:
   for C being FormalContext for A being Subset of the carrier' of
   C holds ConceptStr(#(AttributeDerivation(C)).A, (ObjectDerivation(C)).((
 AttributeDerivation(C)).A)#) is FormalConcept of C & for O9 being Subset of the
@@ -1822,9 +1854,9 @@ A1: for O9 being Subset of the carrier of C, A9 being Subset of the carrier'
 A2: ConceptStr(#O9,A9#) is FormalConcept of C and
 A3: A c= A9;
     reconsider M9 = ConceptStr(#O9,A9#) as FormalConcept of C by A2;
-A4: (AttributeDerivation(C)).(A9) = the Extent of M9 by Def13
+A4: (AttributeDerivation(C)).(A9) = the Extent of M9 by Def10
       .= O9;
-A5: (ObjectDerivation(C)).(O9) = the Intent of M9 by Def13
+A5: (ObjectDerivation(C)).(O9) = the Intent of M9 by Def10
       .= A9;
     (AttributeDerivation(C)).(A9) c= (AttributeDerivation(C)).(A) by A3,Th4;
     hence thesis by A4,A5,Th3;
@@ -1835,7 +1867,7 @@ A5: (ObjectDerivation(C)).(O9) = the Intent of M9 by Def13
     set M9 = ConceptStr(#(AttributeDerivation(C)).A, (ObjectDerivation(C)).((
       AttributeDerivation(C)).A)#);
     (AttributeDerivation(C)).(the Intent of M9) = the Extent of M9 by Th8;
-    hence thesis by Def13,Lm1;
+    hence thesis by Def10,Lm1;
   end;
   hence thesis by A1;
 end;
@@ -1854,7 +1886,7 @@ A2: for x being set holds x in A implies x in (ObjectDerivation(C)).((
     AttributeDerivation(C)).A);
     given O being Subset of the carrier of C such that
 A3: ConceptStr(#O,A#) is FormalConcept of C;
-    (ObjectDerivation(C)).((AttributeDerivation(C)).A) c= A by A3,Th22;
+    (ObjectDerivation(C)).((AttributeDerivation(C)).A) c= A by A3,Th21;
     then
     for x being set holds x in (ObjectDerivation(C)).((AttributeDerivation
     (C)).A) implies x in A;
@@ -1865,7 +1897,7 @@ A3: ConceptStr(#O,A#) is FormalConcept of C;
     reconsider O = (AttributeDerivation(C)).A as Subset of the carrier of C;
     set M9 = ConceptStr(#O,A#);
     assume (ObjectDerivation(C)).((AttributeDerivation(C)).A) = A;
-    then M9 is FormalConcept of C by Def13,Lm1;
+    then M9 is FormalConcept of C by Def10,Lm1;
     hence ex O being Subset of the carrier of C st ConceptStr(#O,A#) is
     FormalConcept of C;
   end;
@@ -1876,7 +1908,7 @@ definition
   let C be FormalContext;
   let CP be ConceptStr over C;
   attr CP is universal means
-  :Def14:
+  :Def11:
   the Extent of CP = the carrier of C;
 end;
 
@@ -1884,7 +1916,7 @@ definition
   let C be FormalContext;
   let CP be ConceptStr over C;
   attr CP is co-universal means
-  :Def15:
+  :Def12:
   the Intent of CP = the carrier' of C;
 end;
 
@@ -1896,9 +1928,9 @@ registration
     reconsider e = {} as Subset of the carrier' of C by XBOOLE_1:2;
     reconsider CP = ConceptStr(#(AttributeDerivation(C)).(e), (
 ObjectDerivation(C)).((AttributeDerivation(C)).(e))#) as FormalConcept of C by
-Th22;
-    (AttributeDerivation(C)).({}) = the carrier of C by Th19;
-    then CP is universal by Def14;
+Th21;
+    (AttributeDerivation(C)).({}) = the carrier of C by Th18;
+    then CP is universal by Def11;
     hence thesis;
   end;
   cluster strict co-universal for FormalConcept of C;
@@ -1906,9 +1938,9 @@ Th22;
   proof
     reconsider e = {} as Subset of the carrier of C by XBOOLE_1:2;
     reconsider CP = ConceptStr(# (AttributeDerivation(C)).((ObjectDerivation(C
-      )).(e)), (ObjectDerivation(C)).(e)#) as FormalConcept of C by Th20;
-    (ObjectDerivation(C)).({}) = the carrier' of C by Th18;
-    then CP is co-universal by Def15;
+      )).(e)), (ObjectDerivation(C)).(e)#) as FormalConcept of C by Th19;
+    (ObjectDerivation(C)).({}) = the carrier' of C by Th17;
+    then CP is co-universal by Def12;
     hence thesis;
   end;
 end;
@@ -1917,7 +1949,7 @@ definition
   let C be FormalContext;
   func Concept-with-all-Objects(C) -> strict universal FormalConcept of C
   means
-  :Def16:
+  :Def13:
   ex O being Subset of the carrier of C, A being Subset of the
 carrier' of C st it = ConceptStr(#O,A#) & O = (AttributeDerivation(C)).({}) & A
   = (ObjectDerivation(C)).((AttributeDerivation(C)).({}));
@@ -1926,9 +1958,9 @@ carrier' of C st it = ConceptStr(#O,A#) & O = (AttributeDerivation(C)).({}) & A
     reconsider e = {} as Subset of the carrier' of C by XBOOLE_1:2;
     reconsider CP = ConceptStr(#(AttributeDerivation(C)).(e), (
 ObjectDerivation(C)).((AttributeDerivation(C)).(e))#) as FormalConcept of C by
-Th22;
-    (AttributeDerivation(C)).({}) = the carrier of C by Th19;
-    then CP is universal by Def14;
+Th21;
+    (AttributeDerivation(C)).({}) = the carrier of C by Th18;
+    then CP is universal by Def11;
     hence thesis;
   end;
   uniqueness;
@@ -1938,7 +1970,7 @@ definition
   let C be FormalContext;
   func Concept-with-all-Attributes(C) -> strict co-universal FormalConcept of
   C means
-  :Def17:
+  :Def14:
   ex O being Subset of the carrier of C, A being Subset of the
   carrier' of C st it = ConceptStr(#O,A#) & O = (AttributeDerivation(C)).((
   ObjectDerivation(C)).({})) & A = (ObjectDerivation(C)).({});
@@ -1946,15 +1978,15 @@ definition
   proof
     reconsider e = {} as Subset of the carrier of C by XBOOLE_1:2;
     reconsider CP = ConceptStr(# (AttributeDerivation(C)).((ObjectDerivation(C
-      )).(e)), (ObjectDerivation(C)).(e)#) as FormalConcept of C by Th20;
-    (ObjectDerivation(C)).({}) = the carrier' of C by Th18;
-    then CP is co-universal by Def15;
+      )).(e)), (ObjectDerivation(C)).(e)#) as FormalConcept of C by Th19;
+    (ObjectDerivation(C)).({}) = the carrier' of C by Th17;
+    then CP is co-universal by Def12;
     hence thesis;
   end;
   uniqueness;
 end;
 
-theorem Th24:
+theorem Th23:
   for C being FormalContext holds the Extent of
   Concept-with-all-Objects(C) = the carrier of C & the Intent of
   Concept-with-all-Attributes(C) = the carrier' of C
@@ -1966,8 +1998,8 @@ AttributeDerivation(C) ).({}) & A = (ObjectDerivation(C)).((AttributeDerivation
   (C)).({})) )& ex O being Subset of the carrier of C, A being Subset of the
   carrier' of C st Concept-with-all-Attributes(C) = ConceptStr(#O,A#) & O = (
 AttributeDerivation( C)).((ObjectDerivation(C)).({})) & A = ( ObjectDerivation(
-  C)).({}) by Def16,Def17;
-  hence thesis by Th18,Th19;
+  C)).({}) by Def13,Def14;
+  hence thesis by Th17,Th18;
 end;
 
 theorem
@@ -1977,43 +2009,43 @@ Extent of CP = {} implies CP is co-universal) & (the Intent of CP = {} implies
 proof
   let C be FormalContext;
   let CP be FormalConcept of C;
-A1: (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def13;
+A1: (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def10;
 A2: now
     assume the Intent of CP = {};
-    then the Extent of CP = the carrier of C by A1,Th19;
-    hence CP is universal by Def14;
+    then the Extent of CP = the carrier of C by A1,Th18;
+    hence CP is universal by Def11;
   end;
-A3: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP by Def13;
+A3: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP by Def10;
   now
     assume the Extent of CP = {};
-    then the Intent of CP = the carrier' of C by A3,Th18;
-    hence CP is co-universal by Def15;
+    then the Intent of CP = the carrier' of C by A3,Th17;
+    hence CP is co-universal by Def12;
   end;
   hence thesis by A2;
 end;
 
-theorem Th26:
+theorem Th25:
   for C being FormalContext for CP being strict FormalConcept of C
   holds (the Extent of CP = {} implies CP = Concept-with-all-Attributes(C)) & (
   the Intent of CP = {} implies CP = Concept-with-all-Objects(C))
 proof
   let C be FormalContext;
   let CP be strict FormalConcept of C;
-A1: (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def13;
-A2: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP by Def13;
+A1: (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def10;
+A2: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP by Def10;
 A3: now
     assume
 A4: the Intent of CP = {};
-    then the Extent of CP = the carrier of C by A1,Th19;
-    then CP is universal by Def14;
-    hence CP = Concept-with-all-Objects(C) by A2,A1,A4,Def16;
+    then the Extent of CP = the carrier of C by A1,Th18;
+    then CP is universal by Def11;
+    hence CP = Concept-with-all-Objects(C) by A2,A1,A4,Def13;
   end;
   now
     assume
 A5: the Extent of CP = {};
-    then the Intent of CP = the carrier' of C by A2,Th18;
-    then CP is co-universal by Def15;
-    hence CP = Concept-with-all-Attributes(C) by A2,A1,A5,Def17;
+    then the Intent of CP = the carrier' of C by A2,Th17;
+    then CP is co-universal by Def12;
+    hence CP = Concept-with-all-Attributes(C) by A2,A1,A5,Def14;
   end;
   hence thesis by A3;
 end;
@@ -2026,19 +2058,19 @@ proof
   let CP be quasi-empty ConceptStr over C;
   assume CP is FormalConcept of C;
   then reconsider CP as FormalConcept of C;
-A1: (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def13;
-A2: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP by Def13;
+A1: (AttributeDerivation(C)).(the Intent of CP) = the Extent of CP by Def10;
+A2: (ObjectDerivation(C)).(the Extent of CP) = the Intent of CP by Def10;
   now
-    per cases by Def12;
+    per cases by Def9;
     case
       the Intent of CP is empty;
-      then the Extent of CP = the carrier of C by A1,Th19;
-      hence CP is universal by Def14;
+      then the Extent of CP = the carrier of C by A1,Th18;
+      hence CP is universal by Def11;
     end;
     case
       the Extent of CP is empty;
-      then the Intent of CP = the carrier' of C by A2,Th18;
-      hence CP is co-universal by Def15;
+      then the Intent of CP = the carrier' of C by A2,Th17;
+      hence CP is co-universal by Def12;
     end;
   end;
   hence thesis;
@@ -2054,14 +2086,14 @@ proof
   assume
 A1: CP is strict FormalConcept of C;
   now
-    per cases by Def12;
+    per cases by Def9;
     case
       the Intent of CP is empty;
-      hence CP = Concept-with-all-Objects(C) by A1,Th26;
+      hence CP = Concept-with-all-Objects(C) by A1,Th25;
     end;
     case
       the Extent of CP is empty;
-      hence CP = Concept-with-all-Attributes(C) by A1,Th26;
+      hence CP = Concept-with-all-Attributes(C) by A1,Th25;
     end;
   end;
   hence thesis;
@@ -2070,7 +2102,7 @@ end;
 definition
   let C be FormalContext;
   mode Set-of-FormalConcepts of C -> non empty set means
-    :Def18:
+    :Def15:
     for X being set st X in it holds X is FormalConcept of C;
   existence
   proof
@@ -2084,14 +2116,14 @@ definition
   let C be FormalContext;
   let FCS be Set-of-FormalConcepts of C;
   redefine mode Element of FCS -> FormalConcept of C;
-  coherence by Def18;
+  coherence by Def15;
 end;
 
 definition
   let C be FormalContext;
   let CP1,CP2 be FormalConcept of C;
   pred CP1 is-SubConcept-of CP2 means
-  :Def19:
+  :Def16:
   the Extent of CP1 c= the Extent of CP2;
 end;
 
@@ -2101,7 +2133,7 @@ notation
   synonym CP2 is-SuperConcept-of CP1 for CP1 is-SubConcept-of CP2;
 end;
 
-theorem Th31:
+theorem Th28:
   for C being FormalContext for CP1,CP2 being FormalConcept of C
   holds CP1 is-SubConcept-of CP2 iff the Intent of CP2 c= the Intent of CP1
 proof
@@ -2113,15 +2145,15 @@ A1: now
 A2: (AttributeDerivation(C)).(the Intent of CP1) c= (AttributeDerivation(C
     )).(the Intent of CP2) by Th4;
     (AttributeDerivation(C)).(the Intent of CP1) = the Extent of CP1 & (
-    AttributeDerivation(C)).(the Intent of CP2) = the Extent of CP2 by Def13;
-    hence CP1 is-SubConcept-of CP2 by A2,Def19;
+    AttributeDerivation(C)).(the Intent of CP2) = the Extent of CP2 by Def10;
+    hence CP1 is-SubConcept-of CP2 by A2,Def16;
   end;
   now
     assume CP1 is-SubConcept-of CP2;
     then
-A3: the Extent of CP1 c= the Extent of CP2 by Def19;
+A3: the Extent of CP1 c= the Extent of CP2 by Def16;
     (ObjectDerivation(C)).(the Extent of CP2) = the Intent of CP2 & (
-    ObjectDerivation(C)).(the Extent of CP1) = the Intent of CP1 by Def13;
+    ObjectDerivation(C)).(the Extent of CP1) = the Intent of CP1 by Def10;
     hence the Intent of CP2 c= the Intent of CP1 by A3,Th3;
   end;
   hence thesis by A1;
@@ -2129,7 +2161,7 @@ end;
 
 theorem
   for C being FormalContext for CP1,CP2 being FormalConcept of C holds
-CP1 is-SuperConcept-of CP2 iff the Intent of CP1 c= the Intent of CP2 by Th31;
+CP1 is-SuperConcept-of CP2 iff the Intent of CP1 c= the Intent of CP2 by Th28;
 
 theorem
   for C being FormalContext for CP being FormalConcept of C holds CP
@@ -2139,10 +2171,10 @@ proof
   let C be FormalContext;
   let CP be FormalConcept of C;
 A1: the carrier' of C = the Intent of Concept-with-all-Attributes(C) & the
-  Intent of CP c= the carrier' of C by Th24;
+  Intent of CP c= the carrier' of C by Th23;
   the carrier of C = the Extent of Concept-with-all-Objects(C) & the
-  Extent of CP c= the carrier of C by Th24;
-  hence thesis by A1,Def19,Th31;
+  Extent of CP c= the carrier of C by Th23;
+  hence thesis by A1,Def16,Th28;
 end;
 
 begin :: Concept Lattices
@@ -2166,8 +2198,8 @@ Subset of the carrier of C, I is Subset of the carrier' of C : ConceptStr(#E,I
 A1:   O = the Extent of CP;
       consider A being Subset of the carrier' of C such that
 A2:   A = the Intent of CP;
-A3:   (AttributeDerivation(C)).A = O by A1,A2,Def13;
-A4:   (ObjectDerivation(C)).O = A by A1,A2,Def13;
+A3:   (AttributeDerivation(C)).A = O by A1,A2,Def10;
+A4:   (ObjectDerivation(C)).O = A by A1,A2,Def10;
       then ConceptStr(#O,A#) is non empty by Lm1;
       then ConceptStr(#O,A#) in M9 by A4,A3;
       hence thesis;
@@ -2205,9 +2237,9 @@ definition
       ex E being Subset of the carrier of C, I being Subset of the carrier'
       of C st X = ConceptStr(#E,I#) & ConceptStr(#E,I#) is non empty & (
       ObjectDerivation(C)).E = I & (AttributeDerivation(C)).I = E;
-      hence thesis by Def13;
+      hence thesis by Def10;
     end;
-    hence thesis by Def18;
+    hence thesis by Def15;
   end;
 end;
 
@@ -2217,7 +2249,7 @@ registration
   coherence;
 end;
 
-theorem Th35:
+theorem Th31:
   for C being FormalContext for CP being set holds CP in B-carrier
   (C) iff CP is strict FormalConcept of C
 proof
@@ -2230,7 +2262,7 @@ A2: CP is strict FormalConcept of C;
     then reconsider CP as FormalConcept of C;
     set I9 = the Intent of CP;
     set E9 = the Extent of CP;
-    (ObjectDerivation(C)).E9 = I9 & (AttributeDerivation(C)).I9 = E9 by Def13;
+    (ObjectDerivation(C)).E9 = I9 & (AttributeDerivation(C)).I9 = E9 by Def10;
     hence thesis by A2;
   end;
   CP in B-carrier(C) implies CP is strict FormalConcept of C
@@ -2239,7 +2271,7 @@ A2: CP is strict FormalConcept of C;
     then ex E being Subset of the carrier of C, I being Subset of the carrier'
     of C st CP = ConceptStr(#E,I#) & ConceptStr(#E,I#) is non empty & (
     ObjectDerivation(C)).E = I & (AttributeDerivation(C)).I = E;
-    hence thesis by Def13;
+    hence thesis by Def10;
   end;
   hence thesis by A1;
 end;
@@ -2247,7 +2279,7 @@ end;
 definition
   let C be FormalContext;
   func B-meet(C) -> BinOp of B-carrier(C) means
-  :Def21:
+  :Def18:
   for CP1,CP2 being
 strict FormalConcept of C holds ex O being Subset of the carrier of C, A being
   Subset of the carrier' of C st it.(CP1,CP2) = ConceptStr(#O,A#) & O = (the
@@ -2273,10 +2305,10 @@ A1: for CP1 being Element of B-carrier(C), CP2 being Element of B-carrier(
       set CP = ConceptStr(#O,A#);
 A2:   (AttributeDerivation(C)).A = (AttributeDerivation(C)).A9 by Th8
         .= (AttributeDerivation(C)).(the Intent of CP1) /\ (
-      AttributeDerivation(C)).(the Intent of CP2) by Th17
+      AttributeDerivation(C)).(the Intent of CP2) by Th16
         .= (the Extent of CP1) /\ (AttributeDerivation(C)).(the Intent of
-      CP2) by Def13
-        .= (the Extent of CP1) /\ (the Extent of CP2) by Def13;
+      CP2) by Def10
+        .= (the Extent of CP1) /\ (the Extent of CP2) by Def10;
       then
 A3:   (ObjectDerivation(C)).O = A by Th7;
       then ConceptStr(#O,A#) is non empty by Lm1;
@@ -2299,7 +2331,7 @@ ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP1) \/ (the
     Intent of CP2)))
     proof
       let CP1,CP2 be strict FormalConcept of C;
-      CP1 is Element of B-carrier(C) & CP2 is Element of B-carrier(C) by Th35;
+      CP1 is Element of B-carrier(C) & CP2 is Element of B-carrier(C) by Th31;
       hence thesis by A4;
     end;
     hence thesis;
@@ -2327,8 +2359,8 @@ A7: for X being set st X in [:B-carrier(C),B-carrier(C):] holds F1.X = F2 .X
 A8:   A in B-carrier(C) and
 A9:   B in B-carrier(C) and
 A10:  X = [A,B] by ZFMISC_1:def 2;
-      reconsider B as strict FormalConcept of C by A9,Th35;
-      reconsider A as strict FormalConcept of C by A8,Th35;
+      reconsider B as strict FormalConcept of C by A9,Th31;
+      reconsider A as strict FormalConcept of C by A8,Th31;
       (ex O being Subset of the carrier of C, At being Subset of the
 carrier' of C st F1.(A,B) = ConceptStr(#O,At#) & O = (the Extent of A) /\ (the
 Extent of B) & At = (ObjectDerivation(C)).((AttributeDerivation(C)). ( (the
@@ -2347,7 +2379,7 @@ end;
 definition
   let C be FormalContext;
   func B-join(C) -> BinOp of B-carrier(C) means
-  :Def22:
+  :Def19:
   for CP1,CP2 being
 strict FormalConcept of C holds ex O being Subset of the carrier of C, A being
   Subset of the carrier' of C st it.(CP1,CP2) = ConceptStr(#O,A#) & O = (
@@ -2373,10 +2405,10 @@ A1: for CP1 being Element of B-carrier(C), CP2 being Element of B-carrier(
       set CP = ConceptStr(#O,A#);
 A2:   (ObjectDerivation(C)).O = (ObjectDerivation(C)).O9 by Th7
         .= (ObjectDerivation(C)).(the Extent of CP1) /\ (ObjectDerivation(C)
-      ).(the Extent of CP2) by Th16
+      ).(the Extent of CP2) by Th15
         .= (the Intent of CP1) /\ (ObjectDerivation(C)).(the Extent of CP2)
-      by Def13
-        .= (the Intent of CP1) /\ (the Intent of CP2) by Def13;
+      by Def10
+        .= (the Intent of CP1) /\ (the Intent of CP2) by Def10;
       then (AttributeDerivation(C)).A = O & ConceptStr(#O,A#) is non empty by
 Lm1,Th7;
       then
@@ -2398,7 +2430,7 @@ ConceptStr(#O,A#) & O = (AttributeDerivation(C)).((ObjectDerivation(C)). ((the
     Intent of CP2)
     proof
       let CP1,CP2 be strict FormalConcept of C;
-      CP1 is Element of B-carrier(C) & CP2 is Element of B-carrier(C) by Th35;
+      CP1 is Element of B-carrier(C) & CP2 is Element of B-carrier(C) by Th31;
       hence thesis by A3;
     end;
     hence thesis;
@@ -2426,8 +2458,8 @@ A6: for X being set st X in [:B-carrier(C),B-carrier(C):] holds F1.X = F2 .X
 A7:   A in B-carrier(C) and
 A8:   B in B-carrier(C) and
 A9:   X = [A,B] by ZFMISC_1:def 2;
-      reconsider B as strict FormalConcept of C by A8,Th35;
-      reconsider A as strict FormalConcept of C by A7,Th35;
+      reconsider B as strict FormalConcept of C by A8,Th31;
+      reconsider A as strict FormalConcept of C by A7,Th31;
       (ex O being Subset of the carrier of C, At being Subset of the
 carrier' of C st F1.(A,B) = ConceptStr(#O,At#) & O = ( AttributeDerivation(C)).
 (( ObjectDerivation(C)). ((the Extent of A) \/ (the Extent of B))) & At = (the
@@ -2448,7 +2480,7 @@ holds (B-meet(C)).(CP1,CP2) in rng((B-meet(C)))
 proof
   let C be FormalContext;
   let CP1,CP2 be strict FormalConcept of C;
-  CP1 in B-carrier(C) & CP2 in B-carrier(C) by Th35;
+  CP1 in B-carrier(C) & CP2 in B-carrier(C) by Th31;
   then [CP1,CP2] in [:B-carrier(C),B-carrier(C):] by ZFMISC_1:def 2;
   then [CP1,CP2] in dom((B-meet(C))) by FUNCT_2:def 1;
   hence thesis by FUNCT_1:def 3;
@@ -2459,13 +2491,13 @@ holds (B-join(C)).(CP1,CP2) in rng((B-join(C)))
 proof
   let C be FormalContext;
   let CP1,CP2 be strict FormalConcept of C;
-  CP1 in B-carrier(C) & CP2 in B-carrier(C) by Th35;
+  CP1 in B-carrier(C) & CP2 in B-carrier(C) by Th31;
   then [CP1,CP2] in [:B-carrier(C),B-carrier(C):] by ZFMISC_1:def 2;
   then [CP1,CP2] in dom((B-join(C))) by FUNCT_2:def 1;
   hence thesis by FUNCT_1:def 3;
 end;
 
-theorem Th36:
+theorem Th32:
   for C being FormalContext for CP1,CP2 being strict FormalConcept
   of C holds (B-meet(C)).(CP1,CP2) = (B-meet(C)).(CP2,CP1)
 proof
@@ -2478,11 +2510,11 @@ of C st (B-meet(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = (the Extent of CP1) /\
   carrier of C, A9 being Subset of the carrier' of C st (B-meet(C)).(CP2,CP1) =
 ConceptStr (#O9,A9#) & O9 = (the Extent of CP2) /\ (the Extent of CP1) & A9 = (
   ObjectDerivation(C)).(( AttributeDerivation(C)). ((the Intent of CP2) \/ (the
-  Intent of CP1))) by Def21;
+  Intent of CP1))) by Def18;
   hence thesis;
 end;
 
-theorem Th37:
+theorem Th33:
   for C being FormalContext for CP1,CP2 being strict FormalConcept
   of C holds (B-join(C)).(CP1,CP2) = (B-join(C)).(CP2,CP1)
 proof
@@ -2495,11 +2527,11 @@ of C st (B-join(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = ( AttributeDerivation(C
   of C, A9 being Subset of the carrier' of C st (B-join(C)).(CP2,CP1) =
 ConceptStr (#O9,A9#) & O9 = ( AttributeDerivation(C)).((ObjectDerivation(C)). (
 (the Extent of CP2) \/ (the Extent of CP1))) & A9 = (the Intent of CP2) /\ (the
-  Intent of CP1) by Def22;
+  Intent of CP1) by Def19;
   hence thesis;
 end;
 
-theorem Th38:
+theorem Th34:
   for C being FormalContext for CP1,CP2,CP3 being strict
 FormalConcept of C holds (B-meet(C)).(CP1,(B-meet(C)).(CP2,CP3)) = (B-meet(C)).
   ((B-meet(C)).(CP1,CP2),CP3)
@@ -2508,7 +2540,7 @@ proof
   let CP1,CP2,CP3 be strict FormalConcept of C;
   (B-meet(C)).(CP1,CP2) in rng((B-meet(C))) by Lm2;
   then reconsider CP = (B-meet(C)).(CP1,CP2) as strict FormalConcept of C by
-Th35;
+Th31;
 A1: (ex O being Subset of the carrier of C, A being Subset of the carrier'
 of C st (B-meet(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = (the Extent of CP1) /\
 (the Extent of CP2) & A = (ObjectDerivation(C)).(( AttributeDerivation(C)). ((
@@ -2516,10 +2548,10 @@ of C st (B-meet(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = (the Extent of CP1) /\
   carrier of C, A9 being Subset of the carrier' of C st (B-meet(C)).(CP,CP3) =
 ConceptStr (#O9,A9#) & O9 = (the Extent of CP) /\ (the Extent of CP3) & A9 = (
   ObjectDerivation(C)).(( AttributeDerivation(C)). ((the Intent of CP) \/ (the
-  Intent of CP3))) by Def21;
+  Intent of CP3))) by Def18;
   (B-meet(C)).(CP2,CP3) in rng((B-meet(C))) by Lm2;
   then reconsider CP9 = (B-meet(C)).(CP2,CP3) as strict FormalConcept of C by
-Th35;
+Th31;
 A2: (ex O being Subset of the carrier of C, A being Subset of the carrier'
 of C st (B-meet(C)).(CP2,CP3) = ConceptStr(#O,A#) & O = (the Extent of CP2) /\
 (the Extent of CP3) & A = (ObjectDerivation(C)).(( AttributeDerivation(C)). ((
@@ -2527,35 +2559,35 @@ of C st (B-meet(C)).(CP2,CP3) = ConceptStr(#O,A#) & O = (the Extent of CP2) /\
   carrier of C, A9 being Subset of the carrier' of C st (B-meet(C)).(CP1,CP9) =
 ConceptStr (#O9,A9#) & O9 = (the Extent of CP1) /\ (the Extent of CP9) & A9 = (
   ObjectDerivation(C)).(( AttributeDerivation(C)). ((the Intent of CP1) \/ (the
-  Intent of CP9))) by Def21;
+  Intent of CP9))) by Def18;
   (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP1) \/
 ((ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP2) \/ (the
   Intent of CP3)))))) = (ObjectDerivation(C)). (((AttributeDerivation(C)).(the
   Intent of CP1)) /\ ((AttributeDerivation(C)). ((ObjectDerivation(C)).((
   AttributeDerivation(C)). ((the Intent of CP2) \/ (the Intent of CP3)))))) by
-Th17
+Th16
     .= (ObjectDerivation(C)). (((AttributeDerivation(C)).(the Intent of CP1)
 ) /\ ((AttributeDerivation(C)). ((the Intent of CP2) \/ (the Intent of CP3))))
   by Th8
     .= (ObjectDerivation(C)). (((AttributeDerivation(C)).(the Intent of CP1)
 ) /\ (((AttributeDerivation(C)).(the Intent of CP2)) /\ ((AttributeDerivation(C
-  )).(the Intent of CP3)))) by Th17
+  )).(the Intent of CP3)))) by Th16
     .= (ObjectDerivation(C)). ((((AttributeDerivation(C)).(the Intent of CP1
 )) /\ ((AttributeDerivation(C)).(the Intent of CP2))) /\ ((AttributeDerivation(
   C)).(the Intent of CP3))) by XBOOLE_1:16
     .= (ObjectDerivation(C)). (((AttributeDerivation(C)). ((the Intent of
 CP1) \/ (the Intent of CP2)) /\ ((AttributeDerivation(C)).(the Intent of CP3)))
-  ) by Th17
+  ) by Th16
     .= (ObjectDerivation(C)). (((AttributeDerivation(C)). ((ObjectDerivation
 (C)).((AttributeDerivation(C)). ((the Intent of CP1) \/ (the Intent of CP2))))
   /\ ((AttributeDerivation(C)).(the Intent of CP3)))) by Th8
     .= (ObjectDerivation(C)).((AttributeDerivation(C)). (((ObjectDerivation(
   C)).((AttributeDerivation(C)). ((the Intent of CP1) \/ (the Intent of CP2))))
-  \/ (the Intent of CP3))) by Th17;
+  \/ (the Intent of CP3))) by Th16;
   hence thesis by A1,A2,XBOOLE_1:16;
 end;
 
-theorem Th39:
+theorem Th35:
   for C being FormalContext for CP1,CP2,CP3 being strict
 FormalConcept of C holds (B-join(C)).(CP1,(B-join(C)).(CP2,CP3)) = (B-join(C)).
   ((B-join(C)).(CP1,CP2),CP3)
@@ -2564,7 +2596,7 @@ proof
   let CP1,CP2,CP3 be strict FormalConcept of C;
   (B-join(C)).(CP1,CP2) in rng((B-join(C))) by Lm3;
   then reconsider CP = (B-join(C)).(CP1,CP2) as strict FormalConcept of C by
-Th35;
+Th31;
 A1: (ex O being Subset of the carrier of C, A being Subset of the carrier'
 of C st (B-join(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = ( AttributeDerivation(C
 )).(( ObjectDerivation(C)). ((the Extent of CP1) \/ (the Extent of CP2))) & A =
@@ -2572,10 +2604,10 @@ of C st (B-join(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = ( AttributeDerivation(C
   of C, A9 being Subset of the carrier' of C st (B-join(C)).(CP,CP3) =
 ConceptStr(# O9,A9#) & O9 = ( AttributeDerivation(C)).((ObjectDerivation(C)). (
   (the Extent of CP) \/ (the Extent of CP3))) & A9 = (the Intent of CP) /\ (the
-  Intent of CP3) by Def22;
+  Intent of CP3) by Def19;
   (B-join(C)).(CP2,CP3) in rng((B-join(C))) by Lm3;
   then reconsider CP9 = (B-join(C)).(CP2,CP3) as strict FormalConcept of C by
-Th35;
+Th31;
 A2: (ex O being Subset of the carrier of C, A being Subset of the carrier'
 of C st (B-join(C)).(CP2,CP3) = ConceptStr(#O,A#) & O = ( AttributeDerivation(C
 )).(( ObjectDerivation(C)). ((the Extent of CP2) \/ (the Extent of CP3))) & A =
@@ -2583,34 +2615,34 @@ of C st (B-join(C)).(CP2,CP3) = ConceptStr(#O,A#) & O = ( AttributeDerivation(C
   of C, A9 being Subset of the carrier' of C st (B-join(C)).(CP1,CP9) =
 ConceptStr (#O9,A9#) & O9 = ( AttributeDerivation(C)).((ObjectDerivation(C)). (
 (the Extent of CP1) \/ (the Extent of CP9))) & A9 = (the Intent of CP1) /\ (the
-  Intent of CP9) by Def22;
+  Intent of CP9) by Def19;
   (AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of CP1) \/
 ((AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of CP2) \/ (the
   Extent of CP3)))))) = (AttributeDerivation(C)). (((ObjectDerivation(C)).(the
   Extent of CP1)) /\ ((ObjectDerivation(C)). ((AttributeDerivation(C)).((
-ObjectDerivation(C)). ((the Extent of CP2) \/ (the Extent of CP3)))))) by Th16
+ObjectDerivation(C)). ((the Extent of CP2) \/ (the Extent of CP3)))))) by Th15
     .= (AttributeDerivation(C)). (((ObjectDerivation(C)).(the Extent of CP1)
 ) /\ ((ObjectDerivation(C)). ((the Extent of CP2) \/ (the Extent of CP3)))) by
 Th7
     .= (AttributeDerivation(C)). (((ObjectDerivation(C)).(the Extent of CP1)
   ) /\ (((ObjectDerivation(C)).(the Extent of CP2)) /\ ((ObjectDerivation(C)).(
-  the Extent of CP3)))) by Th16
+  the Extent of CP3)))) by Th15
     .= (AttributeDerivation(C)). ((((ObjectDerivation(C)).(the Extent of CP1
 )) /\ ((ObjectDerivation(C)).(the Extent of CP2))) /\ ((ObjectDerivation(C)).(
   the Extent of CP3))) by XBOOLE_1:16
     .= (AttributeDerivation(C)). (((ObjectDerivation(C)). ((the Extent of
   CP1) \/ (the Extent of CP2)) /\ ((ObjectDerivation(C)).(the Extent of CP3))))
-  by Th16
+  by Th15
     .= (AttributeDerivation(C)). (((ObjectDerivation(C)). ((
   AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of CP1) \/ (the
   Extent of CP2)))) /\ ((ObjectDerivation(C)).(the Extent of CP3)))) by Th7
     .= (AttributeDerivation(C)).((ObjectDerivation(C)). (((
   AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of CP1) \/ (the
-  Extent of CP2)))) \/ (the Extent of CP3))) by Th16;
+  Extent of CP2)))) \/ (the Extent of CP3))) by Th15;
   hence thesis by A1,A2,XBOOLE_1:16;
 end;
 
-theorem Th40:
+theorem Th36:
   for C being FormalContext for CP1,CP2 being strict FormalConcept
   of C holds (B-join(C)).((B-meet(C)).(CP1,CP2),CP2) = CP2
 proof
@@ -2620,7 +2652,7 @@ A1: ((the Extent of CP1) /\ (the Extent of CP2)) c= (the Extent of CP2) by
 XBOOLE_1:17;
   (B-meet(C)).(CP1,CP2) in rng((B-meet(C))) by Lm2;
   then reconsider CP9 = (B-meet(C)).(CP1,CP2) as strict FormalConcept of C by
-Th35;
+Th31;
 A2: (ex O being Subset of the carrier of C, A being Subset of the carrier'
 of C st (B-meet(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = (the Extent of CP1) /\
 (the Extent of CP2) & A = (ObjectDerivation(C)).(( AttributeDerivation(C)). ((
@@ -2628,33 +2660,33 @@ of C st (B-meet(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = (the Extent of CP1) /\
   carrier of C, A9 being Subset of the carrier' of C st (B-join(C)).(CP9,CP2) =
 ConceptStr (#O9,A9#) & O9 = ( AttributeDerivation(C)).((ObjectDerivation(C)). (
 (the Extent of CP9) \/ (the Extent of CP2))) & A9 = (the Intent of CP9) /\ (the
-  Intent of CP2) by Def21,Def22;
+  Intent of CP2) by Def18,Def19;
   (AttributeDerivation(C)).((ObjectDerivation(C)). (((the Extent of CP1)
 /\ (the Extent of CP2)) \/ (the Extent of CP2))) = (AttributeDerivation(C)). ((
   (ObjectDerivation(C)).((the Extent of CP1) /\ (the Extent of CP2))) /\ ((
-  ObjectDerivation(C)).(the Extent of CP2))) by Th16;
+  ObjectDerivation(C)).(the Extent of CP2))) by Th15;
   then
 A3: (AttributeDerivation(C)).((ObjectDerivation(C)). (((the Extent of CP1)
 /\ (the Extent of CP2)) \/ (the Extent of CP2))) = (AttributeDerivation(C)).((
   ObjectDerivation(C)).(the Extent of CP2)) by A1,Th3,XBOOLE_1:28
-    .= (AttributeDerivation(C)).(the Intent of CP2) by Def13
-    .= the Extent of CP2 by Def13;
+    .= (AttributeDerivation(C)).(the Intent of CP2) by Def10
+    .= the Extent of CP2 by Def10;
   ((ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP1)
 \/ (the Intent of CP2)))) /\ (the Intent of CP2) = ((ObjectDerivation(C)). (((
 AttributeDerivation(C)).(the Intent of CP1)) /\ ((AttributeDerivation(C)).(the
-  Intent of CP2)))) /\ (the Intent of CP2) by Th17
+  Intent of CP2)))) /\ (the Intent of CP2) by Th16
     .= ((ObjectDerivation(C)). ((the Extent of CP1) /\ ((AttributeDerivation
-  (C)).(the Intent of CP2)))) /\ (the Intent of CP2) by Def13
+  (C)).(the Intent of CP2)))) /\ (the Intent of CP2) by Def10
     .= ((ObjectDerivation(C)). ((the Extent of CP1) /\ (the Extent of CP2)))
-  /\ (the Intent of CP2) by Def13
+  /\ (the Intent of CP2) by Def10
     .= ((ObjectDerivation(C)). ((the Extent of CP1) /\ (the Extent of CP2)))
-  /\ ((ObjectDerivation(C)).(the Extent of CP2)) by Def13
+  /\ ((ObjectDerivation(C)).(the Extent of CP2)) by Def10
     .= (ObjectDerivation(C)).(the Extent of CP2) by A1,Th3,XBOOLE_1:28
-    .= the Intent of CP2 by Def13;
+    .= the Intent of CP2 by Def10;
   hence thesis by A2,A3;
 end;
 
-theorem Th41:
+theorem Th37:
   for C being FormalContext for CP1,CP2 being strict FormalConcept
   of C holds (B-meet(C)).(CP1,(B-join(C)).(CP1,CP2)) = CP1
 proof
@@ -2664,7 +2696,7 @@ A1: ((the Intent of CP1) /\ (the Intent of CP2)) c= (the Intent of CP1) by
 XBOOLE_1:17;
   (B-join(C)).(CP1,CP2) in rng((B-join(C))) by Lm3;
   then reconsider CP9 = (B-join(C)).(CP1,CP2) as strict FormalConcept of C by
-Th35;
+Th31;
 A2: (ex O being Subset of the carrier of C, A being Subset of the carrier'
 of C st (B-join(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = ( AttributeDerivation(C
 )).(( ObjectDerivation(C)). ((the Extent of CP1) \/ (the Extent of CP2))) & A =
@@ -2672,29 +2704,29 @@ of C st (B-join(C)).(CP1,CP2) = ConceptStr(#O,A#) & O = ( AttributeDerivation(C
   of C, A9 being Subset of the carrier' of C st (B-meet(C)).(CP1,CP9) =
 ConceptStr (#O9,A9#) & O9 = (the Extent of CP1) /\ (the Extent of CP9) & A9 = (
   ObjectDerivation(C)).(( AttributeDerivation(C)). ((the Intent of CP1) \/ (the
-  Intent of CP9))) by Def21,Def22;
+  Intent of CP9))) by Def18,Def19;
   (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP1) \/
   ((the Intent of CP1) /\ (the Intent of CP2)))) = (ObjectDerivation(C)). (((
 AttributeDerivation(C)).(the Intent of CP1)) /\ ((AttributeDerivation(C)).((the
-  Intent of CP1) /\ (the Intent of CP2)))) by Th17;
+  Intent of CP1) /\ (the Intent of CP2)))) by Th16;
   then
 A3: (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP1) \/
   ((the Intent of CP1) /\ (the Intent of CP2)))) = (ObjectDerivation(C)).((
   AttributeDerivation(C)).(the Intent of CP1)) by A1,Th4,XBOOLE_1:28
-    .= (ObjectDerivation(C)).(the Extent of CP1) by Def13
-    .= the Intent of CP1 by Def13;
+    .= (ObjectDerivation(C)).(the Extent of CP1) by Def10
+    .= the Intent of CP1 by Def10;
   (the Extent of CP1) /\ ((AttributeDerivation(C)).((ObjectDerivation(C)).
   ((the Extent of CP1) \/ (the Extent of CP2)))) = (the Extent of CP1) /\ ((
   AttributeDerivation(C)). (((ObjectDerivation(C)).(the Extent of CP1)) /\ ((
-  ObjectDerivation(C)).(the Extent of CP2)))) by Th16
+  ObjectDerivation(C)).(the Extent of CP2)))) by Th15
     .= (the Extent of CP1) /\ ((AttributeDerivation(C)). ((the Intent of CP1
-  ) /\ ((ObjectDerivation(C)).(the Extent of CP2)))) by Def13
+  ) /\ ((ObjectDerivation(C)).(the Extent of CP2)))) by Def10
     .= (the Extent of CP1) /\ ((AttributeDerivation(C)). ((the Intent of CP1
-  ) /\ (the Intent of CP2))) by Def13
+  ) /\ (the Intent of CP2))) by Def10
     .= ((AttributeDerivation(C)).(the Intent of CP1)) /\ ((
-AttributeDerivation(C)). ((the Intent of CP1) /\ (the Intent of CP2))) by Def13
+AttributeDerivation(C)). ((the Intent of CP1) /\ (the Intent of CP2))) by Def10
     .= (AttributeDerivation(C)).(the Intent of CP1) by A1,Th4,XBOOLE_1:28
-    .= the Extent of CP1 by Def13;
+    .= the Extent of CP1 by Def10;
   hence thesis by A2,A3;
 end;
 
@@ -2709,8 +2741,8 @@ proof
 A1: (B-meet(C)).(CP,Concept-with-all-Objects(C)) = ConceptStr(#O,A#) and
 A2: O = (the Extent of CP) /\ (the Extent of Concept-with-all-Objects(C) ) and
 A3: A = (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of
-  CP) \/ (the Intent of Concept-with-all-Objects(C)))) by Def21;
-A4: O = (the Extent of CP) /\ the carrier of C by A2,Th24
+  CP) \/ (the Intent of Concept-with-all-Objects(C)))) by Def18;
+A4: O = (the Extent of CP) /\ the carrier of C by A2,Th23
     .= the Extent of CP by XBOOLE_1:28;
   the carrier of C c= the carrier of C;
   then reconsider O9 = the carrier of C as Subset of the carrier of C;
@@ -2718,17 +2750,17 @@ A5: (ObjectDerivation(C)).(the Extent of CP) \/ (ObjectDerivation(C)).O9 = (
   ObjectDerivation(C)).(the Extent of CP) by Th3,XBOOLE_1:12;
   A = (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP)
   \/ (ObjectDerivation(C)).(the Extent of Concept-with-all-Objects(C)))) by A3
-,Def13
+,Def10
     .= (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP)
-  \/ (ObjectDerivation(C)). the carrier of C)) by Th24
+  \/ (ObjectDerivation(C)). the carrier of C)) by Th23
     .= (ObjectDerivation(C)).((AttributeDerivation(C)). ((ObjectDerivation(C
-  )).(the Extent of CP))) by A5,Def13
+  )).(the Extent of CP))) by A5,Def10
     .= (ObjectDerivation(C)).(the Extent of CP) by Th7
-    .= the Intent of CP by Def13;
+    .= the Intent of CP by Def10;
   hence thesis by A1,A4;
 end;
 
-theorem Th43:
+theorem Th39:
   for C being FormalContext for CP being strict FormalConcept of C
 holds (B-join(C)).(CP,Concept-with-all-Objects(C)) = Concept-with-all-Objects(C
   )
@@ -2741,27 +2773,27 @@ A1: (B-join(C)).(CP,Concept-with-all-Objects(C)) = ConceptStr(#O,A#) and
 A2: O = (AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of
   CP) \/ (the Extent of Concept-with-all-Objects(C)))) and
 A3: A = (the Intent of CP) /\ (the Intent of Concept-with-all-Objects(C)
-  ) by Def22;
+  ) by Def19;
 A4: O = (AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of CP)
-  \/ the carrier of C)) by A2,Th24
+  \/ the carrier of C)) by A2,Th23
     .= (AttributeDerivation(C)).((ObjectDerivation(C)). the carrier of C) by
 XBOOLE_1:12
     .= (AttributeDerivation(C)).((ObjectDerivation(C)). (the Extent of
-  Concept-with-all-Objects(C))) by Th24
+  Concept-with-all-Objects(C))) by Th23
     .= (AttributeDerivation(C)). (the Intent of Concept-with-all-Objects(C))
-  by Def13
-    .= the Extent of Concept-with-all-Objects(C) by Def13;
+  by Def10
+    .= the Extent of Concept-with-all-Objects(C) by Def10;
   A = ((ObjectDerivation(C)).(the Extent of CP)) /\ (the Intent of
-  Concept-with-all-Objects(C)) by A3,Def13
+  Concept-with-all-Objects(C)) by A3,Def10
     .= ((ObjectDerivation(C)).(the Extent of CP)) /\ ((ObjectDerivation(C)).
-  (the Extent of Concept-with-all-Objects(C))) by Def13
+  (the Extent of Concept-with-all-Objects(C))) by Def10
     .= (ObjectDerivation(C)). ((the Extent of CP) \/ (the Extent of
-  Concept-with-all-Objects(C))) by Th16
-    .= (ObjectDerivation(C)). ((the Extent of CP) \/ the carrier of C) by Th24
+  Concept-with-all-Objects(C))) by Th15
+    .= (ObjectDerivation(C)). ((the Extent of CP) \/ the carrier of C) by Th23
     .= (ObjectDerivation(C)). the carrier of C by XBOOLE_1:12
     .= (ObjectDerivation(C)).(the Extent of Concept-with-all-Objects(C)) by
-Th24
-    .= the Intent of Concept-with-all-Objects(C) by Def13;
+Th23
+    .= the Intent of Concept-with-all-Objects(C) by Def10;
   hence thesis by A1,A4;
 end;
 
@@ -2777,8 +2809,8 @@ A1: (B-join(C)).(CP,Concept-with-all-Attributes(C)) = ConceptStr(#O,A#) and
 A2: O = (AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of
   CP) \/ (the Extent of Concept-with-all-Attributes(C)))) and
 A3: A = (the Intent of CP) /\ (the Intent of Concept-with-all-Attributes
-  (C)) by Def22;
-A4: A = (the Intent of CP) /\ the carrier' of C by A3,Th24
+  (C)) by Def19;
+A4: A = (the Intent of CP) /\ the carrier' of C by A3,Th23
     .= the Intent of CP by XBOOLE_1:28;
   the carrier' of C c= the carrier' of C;
   then reconsider A9 = the carrier' of C as Subset of the carrier' of C;
@@ -2786,13 +2818,13 @@ A5: (AttributeDerivation(C)).(the Intent of CP) \/ (AttributeDerivation(C) )
   .A9 = (AttributeDerivation(C)).(the Intent of CP) by Th4,XBOOLE_1:12;
   O = (AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of CP)
 \/ (AttributeDerivation(C)).(the Intent of Concept-with-all-Attributes(C))))
-by A2,Def13
+by A2,Def10
     .= (AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent of CP)
-  \/ (AttributeDerivation(C)). the carrier' of C)) by Th24
+  \/ (AttributeDerivation(C)). the carrier' of C)) by Th23
     .= (AttributeDerivation(C)).((ObjectDerivation(C)). ((
-  AttributeDerivation(C)).(the Intent of CP))) by A5,Def13
+  AttributeDerivation(C)).(the Intent of CP))) by A5,Def10
     .= (AttributeDerivation(C)).(the Intent of CP) by Th8
-    .= the Extent of CP by Def13;
+    .= the Extent of CP by Def10;
   hence thesis by A1,A4;
 end;
 
@@ -2809,29 +2841,29 @@ A1: (B-meet(C)).(CP,Concept-with-all-Attributes(C)) = ConceptStr(#O,A#) and
 A2: O = (the Extent of CP) /\ (the Extent of Concept-with-all-Attributes
   (C)) and
 A3: A = (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of
-  CP) \/ (the Intent of Concept-with-all-Attributes(C)))) by Def21;
+  CP) \/ (the Intent of Concept-with-all-Attributes(C)))) by Def18;
 A4: A = (ObjectDerivation(C)).((AttributeDerivation(C)). ((the Intent of CP)
-  \/ the carrier' of C)) by A3,Th24
+  \/ the carrier' of C)) by A3,Th23
     .= (ObjectDerivation(C)).((AttributeDerivation(C)). the carrier' of C)
   by XBOOLE_1:12
     .= (ObjectDerivation(C)).((AttributeDerivation(C)). (the Intent of
-  Concept-with-all-Attributes(C))) by Th24
+  Concept-with-all-Attributes(C))) by Th23
     .= (ObjectDerivation(C)).(the Extent of Concept-with-all-Attributes(C))
-  by Def13
-    .= the Intent of Concept-with-all-Attributes(C) by Def13;
+  by Def10
+    .= the Intent of Concept-with-all-Attributes(C) by Def10;
   O = ((AttributeDerivation(C)).(the Intent of CP)) /\ (the Extent of
-  Concept-with-all-Attributes(C)) by A2,Def13
+  Concept-with-all-Attributes(C)) by A2,Def10
     .= ((AttributeDerivation(C)).(the Intent of CP)) /\ ((
   AttributeDerivation(C)). (the Intent of Concept-with-all-Attributes(C))) by
-Def13
+Def10
     .= (AttributeDerivation(C)). ((the Intent of CP) \/ (the Intent of
-  Concept-with-all-Attributes(C))) by Th17
+  Concept-with-all-Attributes(C))) by Th16
     .= (AttributeDerivation(C)). ((the Intent of CP) \/ the carrier' of C)
-  by Th24
+  by Th23
     .= (AttributeDerivation(C)). the carrier' of C by XBOOLE_1:12
     .= (AttributeDerivation(C)).(the Intent of Concept-with-all-Attributes(C
-  )) by Th24
-    .= the Extent of Concept-with-all-Attributes(C) by Def13;
+  )) by Th23
+    .= the Extent of Concept-with-all-Attributes(C) by Def10;
   hence thesis by A1,A4;
 end;
 
@@ -2843,7 +2875,7 @@ definition
   coherence;
 end;
 
-theorem Th46:
+theorem Th42:
   for C being FormalContext holds ConceptLattice(C) is Lattice
 proof
   let C be FormalContext;
@@ -2862,9 +2894,9 @@ A2: a"\/"(b"\/"c) = a"\/"d by LATTICES:def 1
       .= (B-join(C)).(a,(B-join(C)).(b,c)) by LATTICES:def 1;
 A3: (a"\/"b)"\/"c = e"\/"c by LATTICES:def 1
       .= (B-join(C)).((B-join(C)).(a,b),c) by LATTICES:def 1;
-    reconsider a,b,c as strict FormalConcept of C by Th35;
+    reconsider a,b,c as strict FormalConcept of C by Th31;
     (B-join(C)).(a,(B-join(C)).(b,c)) = (B-join(C)).((B-join(C)).(a,b),c)
-    by Th39;
+    by Th35;
     hence thesis by A2,A3;
   end;
 A4: for a,b being Element of L holds (a"/\"b)"\/"b = b
@@ -2875,8 +2907,8 @@ A4: for a,b being Element of L holds (a"/\"b)"\/"b = b
     reconsider a,b as Element of L;
 A5: (a"/\"b)"\/"b = d"\/"b by LATTICES:def 2
       .= (B-join(C)).((B-meet(C)).(a,b),b) by LATTICES:def 1;
-    reconsider a,b as strict FormalConcept of C by Th35;
-    (B-join(C)).((B-meet(C)).(a,b),b) = b by Th40;
+    reconsider a,b as strict FormalConcept of C by Th31;
+    (B-join(C)).((B-meet(C)).(a,b),b) = b by Th36;
     hence thesis by A5;
   end;
 A6: for a,b,c being Element of L holds a"/\"(b"/\"c) = (a"/\" b)"/\"c
@@ -2892,17 +2924,17 @@ A7: a"/\"(b"/\"c) = a"/\"d by LATTICES:def 2
     reconsider a,b as Element of L;
 A8: (a"/\"b)"/\"c = e"/\"c by LATTICES:def 2
       .= (B-meet(C)).((B-meet(C)).(a,b),c) by LATTICES:def 2;
-    reconsider a,b,c as strict FormalConcept of C by Th35;
+    reconsider a,b,c as strict FormalConcept of C by Th31;
     (B-meet(C)).(a,(B-meet(C)).(b,c)) = (B-meet(C)).((B-meet(C)).(a,b),c)
-    by Th38;
+    by Th34;
     hence thesis by A7,A8;
   end;
 A9: for a,b being Element of L holds a"/\"b = b"/\"a
   proof
     let a,b be Element of L;
 A10: b"/\"a = (B-meet(C)).(b,a) by LATTICES:def 2;
-    reconsider a,b as strict FormalConcept of C by Th35;
-    (B-meet(C)).(a,b) = (B-meet(C)).(b,a) by Th36;
+    reconsider a,b as strict FormalConcept of C by Th31;
+    (B-meet(C)).(a,b) = (B-meet(C)).(b,a) by Th32;
     hence thesis by A10,LATTICES:def 2;
   end;
 A11: for a,b being Element of L holds a"/\"(a"\/"b)=a
@@ -2913,16 +2945,16 @@ A11: for a,b being Element of L holds a"/\"(a"\/"b)=a
     reconsider a,b as Element of L;
 A12: a"/\"(a"\/"b) = a"/\"d by LATTICES:def 1
       .= (B-meet(C)).(a,(B-join(C)).(a,b)) by LATTICES:def 2;
-    reconsider a,b as strict FormalConcept of C by Th35;
-    (B-meet(C)).(a,(B-join(C)).(a,b)) = a by Th41;
+    reconsider a,b as strict FormalConcept of C by Th31;
+    (B-meet(C)).(a,(B-join(C)).(a,b)) = a by Th37;
     hence thesis by A12;
   end;
   for a,b being Element of L holds a"\/"b = b"\/"a
   proof
     let a,b be Element of L;
 A13: b"\/"a = (B-join(C)).(b,a) by LATTICES:def 1;
-    reconsider a,b as strict FormalConcept of C by Th35;
-    (B-join(C)).(a,b) = (B-join(C)).(b,a) by Th37;
+    reconsider a,b as strict FormalConcept of C by Th31;
+    (B-join(C)).(a,b) = (B-join(C)).(b,a) by Th33;
     hence thesis by A13,LATTICES:def 1;
   end;
   then L is join-commutative join-associative meet-absorbing meet-commutative
@@ -2934,7 +2966,7 @@ end;
 registration
   let C be FormalContext;
   cluster ConceptLattice(C) -> strict non empty Lattice-like;
-  coherence by Th46;
+  coherence by Th42;
 end;
 
 definition
@@ -2954,10 +2986,10 @@ definition
   let CP be Element of ConceptLattice(C);
   func CP@ -> strict FormalConcept of C equals
   CP;
-  coherence by Th35;
+  coherence by Th31;
 end;
 
-theorem Th47:
+theorem Th43:
   for C being FormalContext for CP1,CP2 being Element of
   ConceptLattice(C) holds CP1 [= CP2 iff CP1@ is-SubConcept-of CP2@
 proof
@@ -2967,7 +2999,7 @@ proof
 A1: now
     assume
 A2: CP1@ is-SubConcept-of CP2@;
-    then the Intent of CP2@ c= the Intent of CP1@ by Th31;
+    then the Intent of CP2@ c= the Intent of CP1@ by Th28;
     then
 A3: (the Intent of CP1@) /\ (the Intent of CP2@) = the Intent of CP2@ by
 XBOOLE_1:28;
@@ -2976,12 +3008,12 @@ XBOOLE_1:28;
 A4: (B-join(C)).(CP1@,CP2@) = ConceptStr(#O,A#) and
 A5: O = (AttributeDerivation(C)).((ObjectDerivation(C)). ((the Extent
     of CP1@) \/ (the Extent of CP2@))) and
-A6: A = (the Intent of CP1@) /\ (the Intent of CP2@) by Def22;
-    the Extent of CP1@ c= the Extent of CP2@ by A2,Def19;
+A6: A = (the Intent of CP1@) /\ (the Intent of CP2@) by Def19;
+    the Extent of CP1@ c= the Extent of CP2@ by A2,Def16;
     then (the Extent of CP1@) \/ (the Extent of CP2@) = the Extent of CP2@ by
 XBOOLE_1:12;
-    then O = (AttributeDerivation(C)).(the Intent of CP2@) by A5,Def13
-      .= the Extent of CP2@ by Def13;
+    then O = (AttributeDerivation(C)).(the Intent of CP2@) by A5,Def10
+      .= the Extent of CP2@ by Def10;
     then CP1 "\/" CP2 = CP2 by A3,A4,A6,LATTICES:def 1;
     hence CP1 [= CP2 by LATTICES:def 3;
   end;
@@ -2993,17 +3025,17 @@ A7: (the L_join of CL).(CP1,CP2) = CP2 by LATTICES:def 1;
     ex O being Subset of the carrier of C, A being Subset of the carrier'
 of C st (B-join(C)).(CP1@,CP2@) = ConceptStr(#O,A#) & O = ( AttributeDerivation
 (C)).((ObjectDerivation(C)). ((the Extent of CP1@) \/ (the Extent of CP2@))) &
-    A = (the Intent of CP1@) /\ (the Intent of CP2@) by Def22;
+    A = (the Intent of CP1@) /\ (the Intent of CP2@) by Def19;
     then
     for x being set holds x in the Intent of CP2@ implies x in the Intent
     of CP1@ by A7,XBOOLE_0:def 4;
     then the Intent of CP2@ c= the Intent of CP1@ by TARSKI:def 3;
-    hence CP1@ is-SubConcept-of CP2@ by Th31;
+    hence CP1@ is-SubConcept-of CP2@ by Th28;
   end;
   hence thesis by A1;
 end;
 
-theorem Th48:
+theorem Th44:
   for C being FormalContext holds ConceptLattice(C) is complete Lattice
 proof
   let C be FormalContext;
@@ -3024,22 +3056,21 @@ A2:   for b being Element of ConceptLattice(C) st b is_less_than X holds b
         ConceptLattice(C) holds c"\/"a = c & a"\/"c = c
         proof
           reconsider CO = Concept-with-all-Objects(C) as Element of
-          ConceptLattice(C) by Th35;
+          ConceptLattice(C) by Th31;
           for CP being Element of ConceptLattice(C) holds CO "\/" CP = CO
           & CP "\/" CO = CO
           proof
             let CP be Element of ConceptLattice(C);
-            reconsider CP as strict FormalConcept of C by Th35;
+            reconsider CP as strict FormalConcept of C by Th31;
             reconsider CO as strict FormalConcept of C;
-            (B-join(C)).(CO,CP) = (B-join(C)).(CP,CO) by Th37
-              .= CO by Th43;
+            (B-join(C)).(CO,CP) = (B-join(C)).(CP,CO) by Th33
+              .= CO by Th39;
             hence thesis by LATTICES:def 1;
           end;
           hence thesis;
         end;
         then ConceptLattice(C) is upper-bounded by LATTICES:def 14;
-        then Top ConceptLattice(C) "\/" b = Top ConceptLattice(C) by
-LATTICES:def 17;
+        then Top ConceptLattice(C) "\/" b = Top ConceptLattice(C);
         hence thesis by LATTICES:def 3;
       end;
       for q being Element of ConceptLattice(C) st q in X holds Top
@@ -3167,7 +3198,7 @@ A21:      for x being Element of X holds o in (AttributeDerivation(C)
           proof
             let x be Element of X;
             o in (AttributeDerivation(C)).(the Intent of x) by A21;
-            hence thesis by Def13;
+            hence thesis by Def10;
           end;
           hence thesis by A9;
         end;
@@ -3181,7 +3212,7 @@ A22:      o in O;
           proof
             let x be Element of X;
             o in the Extent of x by A9,A22;
-            hence thesis by Def13;
+            hence thesis by Def10;
           end;
           hence thesis;
         end;
@@ -3192,7 +3223,7 @@ A23:  for x being set holds x in (AttributeDerivation(C)).A9 implies x in O
         let x be set;
         assume x in (AttributeDerivation(C)).A9;
         then x in {o where o is Object of C : for a being Attribute of C st a
-        in A9 holds o is-connected-with a} by Def7;
+        in A9 holds o is-connected-with a} by Def4;
         then consider x9 being Object of C such that
 A24:    x9 = x and
 A25:    for a being Attribute of C st a in A9 holds x9 is-connected-with a;
@@ -3211,7 +3242,7 @@ A25:    for a being Attribute of C st a in A9 holds x9 is-connected-with a;
           then
           x9 in {o where o is Object of C : for a being Attribute of C st
           a in (the Intent of x) holds o is-connected-with a};
-          hence thesis by Def7;
+          hence thesis by Def4;
         end;
         hence thesis by A19,A24;
       end;
@@ -3233,7 +3264,7 @@ A28:      a in the Intent of x by A18;
           x9 in (AttributeDerivation(C)).(the Intent of x) by A19,A27;
           then
           x9 in {o where o is Object of C : for a being Attribute of C st
-          a in the Intent of x holds o is-connected-with a} by Def7;
+          a in the Intent of x holds o is-connected-with a} by Def4;
           then
           ex y being Object of C st y = x9 & for a being Attribute of C st
           a in the Intent of x holds y is-connected-with a;
@@ -3242,11 +3273,11 @@ A28:      a in the Intent of x by A18;
         then
         x9 in {o where o is Object of C : for a being Attribute of C st a
         in A9 holds o is-connected-with a};
-        hence thesis by Def7;
+        hence thesis by Def4;
       end;
       then O = (AttributeDerivation(C)).A9 by A23,TARSKI:1;
-      then p is FormalConcept of C by A26,Th22;
-      then reconsider p as Element of ConceptLattice(C) by Th35;
+      then p is FormalConcept of C by A26,Th21;
+      then reconsider p as Element of ConceptLattice(C) by Th31;
 A29:  for b being Element of ConceptLattice(C) st b is_less_than X holds b [= p
       proof
         let b be Element of ConceptLattice(C);
@@ -3264,14 +3295,14 @@ A31:      x9 in the Extent of b@;
             x in X;
             then reconsider x as Element of ConceptLattice(C);
             b [= x by A30,LATTICE3:def 16;
-            then b@ is-SubConcept-of x@ by Th47;
-            then the Extent of b@ c= the Extent of x@ by Def19;
+            then b@ is-SubConcept-of x@ by Th43;
+            then the Extent of b@ c= the Extent of x@ by Def16;
             hence thesis by A31;
           end;
           hence thesis by A9;
         end;
-        then b@ is-SubConcept-of p@ by Def19;
-        hence thesis by Th47;
+        then b@ is-SubConcept-of p@ by Def16;
+        hence thesis by Th43;
       end;
       for q being Element of ConceptLattice(C) st q in X holds p [= q
       proof
@@ -3284,8 +3315,8 @@ A32:    q in X;
           assume x in the Extent of p@;
           hence thesis by A9,A32;
         end;
-        then p@ is-SubConcept-of q@ by Def19;
-        hence thesis by Th47;
+        then p@ is-SubConcept-of q@ by Def16;
+        hence thesis by Th43;
       end;
       then p is_less_than X by LATTICE3:def 16;
       hence thesis by A29;
@@ -3297,5 +3328,5 @@ end;
 registration
   let C be FormalContext;
   cluster ConceptLattice(C) -> complete;
-  coherence by Th48;
+  coherence by Th44;
 end;

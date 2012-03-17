@@ -2,7 +2,7 @@
 ::  by Shunichi Kobayashi
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,17 +19,18 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, RELAT_1, FUNCT_1,
       FUNCT_2, BVFUNC_1;
  constructors BVFUNC_1, RELSET_1;
- registrations FUNCT_1, FUNCT_2, XBOOLEAN, MARGREL1, XBOOLE_0;
+ registrations FUNCT_1, FUNCT_2, XBOOLEAN, MARGREL1, XBOOLE_0, RELSET_1,
+   BVFUNC_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, MARGREL1;
+ definitions TARSKI, MARGREL1, FUNCT_2;
  theorems FUNCT_1, FUNCT_2, MARGREL1, BVFUNC_1, BVFUNC_4, BVFUNC_8, BVFUNC25,
-      XBOOLEAN;
+      XBOOLEAN, PARTFUN1;
  schemes FUNCT_1;
 
 begin
 
 reserve Y for non empty set,
-  a,b,c for Element of Funcs(Y,BOOLEAN);
+  a,b,c for Function of Y,BOOLEAN;
 
 definition
   let p,q be boolean-valued Function;
@@ -125,23 +126,22 @@ end;
 
 definition
   let A be non empty set;
-  let p,q be Element of Funcs(A,BOOLEAN);
-  redefine func p 'nand' q -> Element of Funcs(A,BOOLEAN) means
+  let p,q be Function of A,BOOLEAN;
+  redefine func p 'nand' q -> Function of A,BOOLEAN means
   :Def3:
   for x being Element of A holds it.x = (p.x) 'nand' (q.x);
   coherence
   proof
-    ( ex f being Function st p = f & dom f = A & rng f c= BOOLEAN)& ex f
-    being Function st q = f & dom f = A & rng f c= BOOLEAN by FUNCT_2:def 2;
+    dom p = A & dom q = A by PARTFUN1:def 2;
     then
 A1: dom(p 'nand' q) = A /\ A by Def1
       .= A;
     rng(p 'nand' q) c= BOOLEAN by MARGREL1:def 16;
-    hence thesis by A1,FUNCT_2:def 2;
+    hence thesis by A1,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
+    let IT be Function of A,BOOLEAN;
 A2: dom IT = A by FUNCT_2:def 1;
     hereby
       assume
@@ -160,22 +160,21 @@ A5: dom IT = A /\ A by FUNCT_2:def 1
     for x being set st x in dom IT holds IT.x = (p.x) 'nand' (q.x) by A2;
     hence thesis by A5,Def1;
   end;
-  redefine func p 'nor' q -> Element of Funcs(A,BOOLEAN) means
+  redefine func p 'nor' q -> Function of A,BOOLEAN means
   :Def4:
   for x being Element of A holds it.x = (p.x) 'nor' (q.x);
   coherence
   proof
-    ( ex f being Function st p = f & dom f = A & rng f c= BOOLEAN)& ex f
-    being Function st q = f & dom f = A & rng f c= BOOLEAN by FUNCT_2:def 2;
+    dom p = A & dom q = A by PARTFUN1:def 2;
     then
 A6: dom(p 'nor' q) = A /\ A by Def2
       .= A;
     rng(p 'nor' q) c= BOOLEAN by MARGREL1:def 16;
-    hence thesis by A6,FUNCT_2:def 2;
+    hence thesis by A6,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
+    let IT be Function of A,BOOLEAN;
 A7: dom IT = A by FUNCT_2:def 1;
     hereby
       assume
@@ -198,17 +197,17 @@ end;
 
 definition
   let Y;
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  redefine func a 'nand' b ->Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
+  redefine func a 'nand' b ->Function of Y,BOOLEAN;
   coherence
   proof
-    a 'nand' b is Element of Funcs(Y,BOOLEAN);
+    a 'nand' b is Function of Y,BOOLEAN;
     hence thesis;
   end;
-  redefine func a 'nor' b ->Element of Funcs(Y,BOOLEAN);
+  redefine func a 'nor' b ->Function of Y,BOOLEAN;
   coherence
   proof
-    a 'nor' b is Element of Funcs(Y,BOOLEAN);
+    a 'nor' b is Function of Y,BOOLEAN;
     hence thesis;
   end;
 end;
@@ -216,47 +215,21 @@ end;
 theorem Th1:
   a 'nand' b = 'not' (a '&' b)
 proof
-  consider k3 being Function such that
-A1: a 'nand' b=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: 'not' (a '&' b)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'nand' b).x = ('not' (a '&' b)).x
-  proof
     let x be Element of Y;
     thus ('not' (a '&' b)).x = 'not' (a '&' b).x by MARGREL1:def 19
       .= 'not' (a.x '&' b.x) by MARGREL1:def 20
       .= 'not' ('not' (a.x 'nand' b.x)) by BVFUNC_1:46
       .= (a 'nand' b).x by Def3;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 theorem Th2:
   a 'nor' b = 'not' (a 'or' b)
 proof
-  consider k3 being Function such that
-A1: a 'nor' b=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: 'not' (a 'or' b)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'nor' b).x = ('not' (a 'or' b)).x
-  proof
     let x be Element of Y;
     thus ('not' (a 'or' b)).x = 'not' (a 'or' b).x by MARGREL1:def 19
       .= 'not' ((a).x 'or' (b).x) by BVFUNC_1:def 4
       .= 'not' 'not' (a.x 'nor' b.x) by BVFUNC_1:53
       .= (a 'nor' b).x by Def4;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 theorem Th3:

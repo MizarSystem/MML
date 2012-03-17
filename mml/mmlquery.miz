@@ -1,0 +1,2332 @@
+:: Semantic of MML Query
+::  by Grzegorz Bancerek
+:: 
+:: Received December 18, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies MMLQUERY, TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      FUNCOP_1, ZFMISC_1, AOFA_000, CARD_1, FINSEQ_1, NAT_1, NUMBERS, XXREAL_0,
+      CARD_3, ORDINAL1, FINSET_1, STRUCT_0, QC_LANG1, ARYTM_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      RELSET_1, FUNCOP_1, ORDINAL1, FINSET_1, CARD_1, CARD_3, STRUCT_0,
+      XCMPLX_0, XXREAL_0, NUMBERS, NAT_1, FINSEQ_1, AOFA_000, FINSEQ_4, PROB_3;
+ constructors TARSKI, SUBSET_1, SETFAM_1, RELSET_1, FUNCT_1, FUNCOP_1,
+      FINSEQ_1, CARD_1, XXREAL_0, CARD_3, FINSET_1, STRUCT_0, WELLORD2,
+      FINSEQ_4, XCMPLX_0, NAT_1, PROB_3;
+ registrations SUBSET_1, RELSET_1, ORDINAL1, FINSET_1, XXREAL_0, FINSEQ_1,
+      CARD_1, XCMPLX_0, STRUCT_0;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM;
+ definitions TARSKI, XBOOLE_0, RELAT_1, STRUCT_0;
+ theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, RELAT_1, SYSREL, SETFAM_1,
+      FUNCOP_1, XXREAL_0, CARD_1, FINSEQ_1, NAT_1, CARD_FIN, FUNCT_1, CARD_5,
+      FINSEQ_2, CARD_3, RELSET_2, ORDINAL1, ORDINAL3, XTUPLE_0;
+ schemes RELAT_1, NAT_1;
+
+begin :: Elementary queries
+
+definition
+  let X be set;
+  mode List of X is Subset of X;
+  mode Operation of X is Relation of X;
+end;
+
+definition
+  let x,y,R be set;
+  pred x,y in R means: Def1: [x,y] in R;
+end;
+
+notation
+  let x,y,R be set;
+  antonym x,y nin R for x,y in R;
+end;
+
+reserve X,Y,z,s for set, L,L1,L2,A,B for List of X, x for Element of X,
+  O,O1,O2,O3 for Operation of X, a,b,y for Element of X, n,m for Nat;
+
+theorem Th9:
+  for R1,R2 be Relation holds R1 c= R2 iff for z holds Im(R1,z) c= Im(R2,z)
+  proof
+    let R1,R2 be Relation;
+    hereby
+      assume
+Z1:   R1 c= R2;
+      let z;
+      thus Im(R1,z) c= Im(R2,z)
+      proof
+        let s; assume s in Im(R1,z); then
+        consider v being set such that
+A1:     [v,s] in R1 & v in {z} by RELAT_1:def 13;
+        thus thesis by Z1,A1,RELAT_1:def 13;
+      end;
+    end;
+    assume
+Z2: for z holds Im(R1,z) c= Im(R2,z);
+    let a,b be set;
+    assume [a,b] in R1; then
+    b in Im(R1,a) & Im(R1,a) c= Im(R2,a) by Z2,RELAT_1:169;
+    hence thesis by RELAT_1:169;
+  end;
+
+notation
+  let X,O,x;
+  synonym x.O for Im(O,x);
+end;
+
+definition
+  let X,O,x;
+  redefine func x.O -> List of X;
+  coherence
+  proof
+    x.O = O.:{x};
+    hence x.O is Subset of X;
+  end;
+end;
+
+theorem Th0:
+  x,y in O iff y in x.O
+  proof
+    x,y in O iff [x,y] in O by Def1;
+    hence thesis by RELAT_1:169;
+  end;
+
+notation
+  let X,O,L;
+  synonym L | O for O.:L;
+end;
+
+definition
+  let X,O,L;
+  redefine func L | O -> List of X equals union {x.O: x in L};
+  coherence
+  proof
+    thus O.:L is Subset of X;
+  end;
+  compatibility
+  proof
+    union {x.O: x in L} = L|O
+    proof
+      thus union {x.O: x in L} c= L|O
+      proof
+        let z be set;
+        assume z in union {x.O: x in L}; then
+        consider Y being set such that
+A1:     z in Y & Y in {x.O: x in L} by TARSKI:def 4;
+        consider x such that
+A2:     Y = x.O & x in L by A1;
+        [x,z] in O by A1,A2,RELAT_1:169;
+        hence thesis by A2,RELAT_1:def 13;
+      end;
+      thus L|O c= union {x.O: x in L}
+      proof
+        let z be set;
+        assume z in L|O; then
+        consider y being set such that
+A3:     [y,z] in O & y in L by RELAT_1:def 13;
+        reconsider y as Element of X by A3;
+        z in y.O & y.O in {x.O: x in L} by A3,RELAT_1:169;
+        hence thesis by TARSKI:def 4;
+      end;
+    end;
+    hence thesis;
+  end;
+  func L \& O -> List of X equals meet {x.O: x in L};
+  coherence
+  proof
+    meet {x.O: x in L} c= X
+    proof
+      let z be set;
+      assume
+A1:   z in meet {x.O: x in L}; then
+      {x.O: x in L} <> {} by SETFAM_1:def 1; then
+      consider Y being set such that
+A2:   Y in {x.O: x in L} by XBOOLE_0:def 1;
+      consider x such that
+A3:   Y = x.O & x in L by A2;
+      z in x.O by A1,A2,A3,SETFAM_1:def 1;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHERE O -> List of X equals {x: ex y st x,y in O & x in L};
+  coherence
+  proof
+    {x: ex y st x,y in O & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: ex y st x,y in O & x in L}; then
+      consider x such that
+A1:   z = x & ex y st x,y in O & x in L;
+      thus thesis by A1;
+    end;
+    hence thesis;
+  end;
+  let O2 be Operation of X;
+  func L WHEREeq(O,O2) -> List of X equals
+  {x: card(x.O) = card(x.O2) & x in L};
+  coherence
+  proof
+    {x: card(x.O) = card(x.O2) & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O) = card(x.O2) & x in L}; then
+      ex x st z = x & card(x.O) = card(x.O2) & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHEREle(O,O2) -> List of X equals
+  {x: card(x.O) c= card(x.O2) & x in L};
+  coherence
+  proof
+    {x: card(x.O) c= card(x.O2) & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O) c= card(x.O2) & x in L}; then
+      ex x st z = x & card(x.O) c= card(x.O2) & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHEREge(O,O2) -> List of X equals
+  {x: card(x.O2) c= card(x.O) & x in L};
+  coherence
+  proof
+    {x: card(x.O2) c= card(x.O) & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O2) c= card(x.O) & x in L}; then
+      ex x st z = x & card(x.O2) c= card(x.O) & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHERElt(O,O2) -> List of X equals
+  {x: card(x.O) in card(x.O2) & x in L};
+  coherence
+  proof
+    {x: card(x.O) in card(x.O2) & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O) in card(x.O2) & x in L}; then
+      ex x st z = x & card(x.O) in card(x.O2) & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHEREgt(O,O2) -> List of X equals
+  {x: card(x.O2) in card(x.O) & x in L};
+  coherence
+  proof
+    {x: card(x.O2) in card(x.O) & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O2) in card(x.O) & x in L}; then
+      ex x st z = x & card(x.O2) in card(x.O) & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let X,L,O,n;
+  func L WHEREeq(O,n) -> List of X equals {x: card(x.O) = n & x in L};
+  coherence
+  proof
+    {x: card(x.O) = n & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O) = n & x in L}; then
+      ex x st z = x & card(x.O) = n & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHEREle(O,n) -> List of X equals {x: card(x.O) c= n & x in L};
+  coherence
+  proof
+    {x: card(x.O) c= n & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O) c= n & x in L}; then
+      ex x st z = x & card(x.O) c= n & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHEREge(O,n) -> List of X equals {x: n c= card(x.O) & x in L};
+  coherence
+  proof
+    {x: n c= card(x.O) & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: n c= card(x.O) & x in L}; then
+      ex x st z = x & n c= card(x.O) & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHERElt(O,n) -> List of X equals {x: card(x.O) in n & x in L};
+  coherence
+  proof
+    {x: card(x.O) in n & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: card(x.O) in n & x in L}; then
+      ex x st z = x & card(x.O) in n & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func L WHEREgt(O,n) -> List of X equals {x: n in card(x.O) & x in L};
+  coherence
+  proof
+    {x: n in card(x.O) & x in L} c= X
+    proof
+      let z be set;
+      assume z in {x: n in card(x.O) & x in L}; then
+      ex x st z = x & n in card(x.O) & x in L;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem ThW:
+  x in L WHERE O iff x in L & x.O <> {}
+  proof
+    hereby
+      assume x in L WHERE O; then
+      consider y such that
+A1:   x = y & ex a st y,a in O & y in L;
+      thus x in L & x.O <> {} by A1,Th0;
+    end;
+    assume
+A3: x in L & x.O <> {};
+    set y = the Element of x.O;
+    y in x.O by A3; then
+    reconsider y as Element of X;
+    x,y in O by A3,Th0;
+    hence thesis by A3;
+  end;
+
+theorem Th56:
+  L WHERE O c= L
+  proof
+    let z; thus thesis by ThW;
+  end;
+
+theorem
+  L c= dom O implies L WHERE O = L
+  proof
+    assume
+A1: L c= dom O;
+    thus L WHERE O c= L by Th56;
+    let z; assume
+A2: z in L; then
+    reconsider z as Element of X;
+    z.O <> {} by A1,A2,RELAT_1:170;
+    hence thesis by A2,ThW;
+  end;
+
+theorem Th26:
+  n <> 0 & L1 c= L2 implies L1 WHEREge(O,n) c= L2 WHERE O
+  proof
+    assume
+A1: n <> 0 & L1 c= L2;
+    let z; assume z in L1 WHEREge(O,n); then
+    consider x such that
+A2: z = x & n c= card(x.O) & x in L1;
+    x.O <> {} by A1,A2;
+    hence thesis by A1,A2,ThW;
+  end;
+
+theorem
+  L WHEREge(O,1) = L WHERE O
+  proof
+    thus L WHEREge(O,1) c= L WHERE O by Th26;
+    let z; assume
+A1: z in L WHERE O; then
+    reconsider z as Element of X;
+A2: z.O <> {} & z in L by A1,ThW; then
+    succ 0 c= card(z.O) by ORDINAL1:21,ORDINAL3:8;
+    hence thesis by A2;
+  end;
+
+theorem Th27:
+  L1 c= L2 implies L1 WHEREgt(O,n) c= L2 WHERE O
+  proof assume
+A1: L1 c= L2;
+    let z; assume z in L1 WHEREgt(O,n); then
+    consider x such that
+A2: z = x & n in card(x.O) & x in L1;
+    x.O <> {} by A2;
+    hence thesis by A1,A2,ThW;
+  end;
+
+theorem
+  L WHEREgt(O,0) = L WHERE O
+  proof
+    thus L WHEREgt(O,0) c= L WHERE O by Th27;
+    let z; assume
+A1: z in L WHERE O; then
+    reconsider z as Element of X;
+A2: z.O <> {} & z in L by A1,ThW; then
+    0 in card(z.O) by ORDINAL3:8;
+    hence thesis by A2;
+  end;
+
+theorem
+  n <> 0 & L1 c= L2 implies L1 WHEREeq(O,n) c= L2 WHERE O
+  proof
+    assume
+A1: n <> 0 & L1 c= L2;
+    let z; assume z in L1 WHEREeq(O,n); then
+    consider x such that
+A2: z = x & card(x.O) = n & x in L1;
+    x.O <> {} by A1,A2;
+    hence thesis by A1,A2,ThW;
+  end;
+
+theorem
+  L WHEREge(O,n+1) = L WHEREgt(O,n)
+  proof
+    thus L WHEREge(O,n+1) c= L WHEREgt(O,n)
+    proof
+      let z; assume z in L WHEREge(O,n+1); then
+      consider x such that
+A2:   z = x & n+1 c= card(x.O) & x in L;
+      n+1 = succ n by NAT_1:38; then
+      n in card(x.O) by A2,ORDINAL1:21;
+      hence thesis by A2;
+    end;
+    let z; assume z in L WHEREgt(O,n); then
+    consider x such that
+A2: z = x & n in card(x.O) & x in L;
+    n+1 = succ n by NAT_1:38; then
+    n+1 c= card(x.O) by A2,ORDINAL1:21;
+    hence thesis by A2;
+  end;
+
+theorem
+  L WHEREle(O,n) = L WHERElt(O,n+1)
+  proof
+    thus L WHEREle(O,n) c= L WHERElt(O,n+1)
+    proof
+      let z; assume z in L WHEREle(O,n); then
+      consider x such that
+A2:   z = x & card(x.O) c= n & x in L;
+      n+1 = succ n by NAT_1:38; then
+      card(x.O) in n+1 by A2,ORDINAL1:22;
+      hence thesis by A2;
+    end;
+    let z; assume z in L WHERElt(O,n+1); then
+    consider x such that
+A2: z = x & card(x.O) in n+1 & x in L;
+    n+1 = succ n by NAT_1:38; then
+    card(x.O) c= n by A2,ORDINAL1:22;
+    hence thesis by A2;
+  end;
+
+theorem
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHEREge(O1,m) c= L2 WHEREge(O2,n)
+  proof
+    assume
+A1: n <= m & L1 c= L2 & O1 c= O2;
+    let z; assume z in L1 WHEREge(O1,m); then
+    consider x such that
+A2: z = x & m c= card(x.O1) & x in L1;
+    n c= m & x.O1 c= x.O2 by A1,Th9,NAT_1:39; then
+    n c= card (x.O1) & card (x.O1) c= card (x.O2) by A2,CARD_1:11,XBOOLE_1:1;
+    then n c= card (x.O2) by XBOOLE_1:1;
+    hence thesis by A1,A2;
+  end;
+
+theorem
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHEREgt(O1,m) c= L2 WHEREgt(O2,n)
+  proof
+    assume
+A1: n <= m & L1 c= L2 & O1 c= O2;
+    let z; assume z in L1 WHEREgt(O1,m); then
+    consider x such that
+A2: z = x & m in card(x.O1) & x in L1;
+    n c= m & card(x.O1) c= card (x.O2) by A1,CARD_1:11,NAT_1:39,Th9; then
+    n in card (x.O2) by A2,ORDINAL1:12;
+    hence thesis by A1,A2;
+  end;
+
+theorem
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHEREle(O2,n) c= L2 WHEREle(O1,m)
+  proof
+    assume
+A1: n <= m & L1 c= L2 & O1 c= O2;
+    let z; assume z in L1 WHEREle(O2,n); then
+    consider x such that
+A2: z = x & card(x.O2) c= n & x in L1;
+    n c= m & x.O1 c= x.O2 by A1,Th9,NAT_1:39; then
+    card (x.O1) c= card (x.O2) & card (x.O2) c= m by A2,CARD_1:11,XBOOLE_1:1;
+    then card (x.O1) c= m by XBOOLE_1:1;
+    hence thesis by A1,A2;
+  end;
+
+theorem
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHERElt(O2,n) c= L2 WHERElt(O1,m)
+  proof
+    assume
+A1: n <= m & L1 c= L2 & O1 c= O2;
+    let z; assume z in L1 WHERElt(O2,n); then
+    consider x such that
+A2: z = x & card(x.O2) in n & x in L1;
+    n c= m & card(x.O1) c= card(x.O2) by A1,CARD_1:11,NAT_1:39,Th9; then
+    card(x.O1) in m by A2,ORDINAL1:12;
+    hence thesis by A1,A2;
+  end;
+
+theorem
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHEREge(O,O2) c= L2 WHEREge(O3,O1)
+  proof
+    assume Z0: O1 c= O2 & L1 c= L2 & O c= O3;
+    let z; assume z in L1 WHEREge(O,O2); then
+    consider x such that
+A1: z = x & card(x.O2) c= card(x.O) & x in L1;
+A2: card(x.O1) c= card(x.O2) & card(x.O) c= card(x.O3)
+      by Z0,Th9,CARD_1:11; then
+    card(x.O1) c= card(x.O) by A1,XBOOLE_1:1; then
+    card(x.O1) c= card(x.O3) by A2,XBOOLE_1:1;
+    hence z in L2 WHEREge(O3,O1) by A1,Z0;
+  end;
+
+theorem
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHEREgt(O,O2) c= L2 WHEREgt(O3,O1)
+  proof
+    assume Z0: O1 c= O2 & L1 c= L2 & O c= O3;
+    let z; assume z in L1 WHEREgt(O,O2); then
+    consider x such that
+A1: z = x & card(x.O2) in card(x.O) & x in L1;
+    x.O1 c= x.O2 & x.O c= x.O3 by Z0,Th9; then
+    card(x.O1) in card(x.O) & card(x.O) c= card(x.O3)
+    by A1,CARD_1:11,ORDINAL1:12;
+    hence z in L2 WHEREgt(O3,O1) by A1,Z0;
+  end;
+
+theorem
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHEREle(O3,O1) c= L2 WHEREle(O,O2)
+  proof
+    assume Z0: O1 c= O2 & L1 c= L2 & O c= O3;
+    let z; assume z in L1 WHEREle(O3,O1); then
+    consider x such that
+A1: z = x & card(x.O3) c= card(x.O1) & x in L1;
+A2: card(x.O1) c= card(x.O2) & card(x.O) c= card(x.O3)
+      by Z0,Th9,CARD_1:11; then
+    card(x.O3) c= card(x.O2) by A1,XBOOLE_1:1; then
+    card(x.O) c= card(x.O2) by A2,XBOOLE_1:1;
+    hence z in L2 WHEREle(O,O2) by A1,Z0;
+  end;
+
+theorem
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHERElt(O3,O1) c= L2 WHERElt(O,O2)
+  proof
+    assume Z0: O1 c= O2 & L1 c= L2 & O c= O3;
+    let z; assume z in L1 WHERElt(O3,O1); then
+    consider x such that
+A1: z = x & card(x.O3) in card(x.O1) & x in L1;
+    card(x.O1) c= card(x.O2) & card(x.O) c= card(x.O3)
+      by Z0,Th9,CARD_1:11; then
+    card(x.O) in card(x.O2) by A1,ORDINAL1:12;
+    hence z in L2 WHERElt(O,O2) by A1,Z0;
+  end;
+
+theorem
+  L WHEREgt(O,O1) c= L WHERE O
+  proof
+    let z; assume z in L WHEREgt(O,O1); then
+    consider x such that
+A2: z = x & card(x.O1) in card(x.O) & x in L;
+    x.O <> {} by A2;
+    hence thesis by A2,ThW;
+  end;
+
+theorem
+  O1 c= O2 & L1 c= L2 implies L1 WHERE O1 c= L2 WHERE O2
+  proof assume
+A1: O1 c= O2 & L1 c= L2;
+    let z; assume
+A2: z in L1 WHERE O1; then
+    reconsider z as Element of X;
+A3: z.O1 <> {} & z in L1 by A2,ThW;
+    z.O1 c= z.O2 by A1,Th9; then
+    z.O2 <> {} by A3;
+    hence thesis by A1,A3,ThW;
+  end;
+
+theorem Th1:
+  a in L|O iff ex b st a in b.O & b in L
+  proof
+    hereby
+      assume
+      a in L|O; then
+      consider b being set such that
+A1:   [b,a] in O & b in L by RELAT_1:def 13;
+      reconsider b as Element of X by A1;
+      take b;
+      thus a in b.O by A1,RELAT_1:169;
+      thus b in L by A1;
+    end;
+    given b such that
+A2: a in b.O & b in L;
+    [b,a] in O by A2,RELAT_1:169;
+    hence a in L|O by A2,RELAT_1:def 13;
+  end;
+
+notation
+  let X,A,B;
+  synonym A AND B for A /\ B;
+  synonym A OR B for A \/ B;
+  synonym A BUTNOT B for A \ B;
+end;
+
+definition
+  let X,A,B;
+  redefine func A AND B -> List of X;
+  coherence
+  proof
+    A/\B is Subset of X;
+    hence thesis;
+  end;
+  redefine func A OR B -> List of X;
+  coherence
+  proof
+    A\/B is Subset of X;
+    hence thesis;
+  end;
+  redefine func A BUTNOT B -> List of X;
+  coherence
+  proof
+    A\B is Subset of X;
+    hence thesis;
+  end;
+end;
+
+theorem Th17:
+  L1 <> {} & L2 <> {} implies (L1 OR L2)\& O = (L1 \& O)AND(L2 \& O)
+  proof assume
+A0: L1 <> {} & L2 <> {};
+    thus (L1 OR L2)\& O c= (L1 \& O)AND(L2 \& O)
+    proof
+      let z; assume
+A1:   z in (L1 OR L2)\& O;
+      now
+        set c = the Element of L1;
+        c in L1 by A0; then
+        reconsider c as Element of X;
+        c.O in {x.O: x in L1} by A0;
+        hence {x.O: x in L1} <> {};
+        let Y; assume Y in {x.O: x in L1}; then
+        consider x such that
+A3:     Y = x.O & x in L1;
+        x in L1 OR L2 by A3,XBOOLE_0:def 3; then
+        Y in {a.O: a in L1 OR L2} by A3;
+        hence z in Y by A1,SETFAM_1:def 1;
+      end; then
+A4:   z in L1\&O by SETFAM_1:def 1;
+      now
+        set c = the Element of L2;
+        c in L2 by A0; then
+        reconsider c as Element of X;
+        c.O in {x.O: x in L2} by A0;
+        hence {x.O: x in L2} <> {};
+        let Y; assume Y in {x.O: x in L2}; then
+        consider x such that
+A3:     Y = x.O & x in L2;
+        x in L1 OR L2 by A3,XBOOLE_0:def 3; then
+        Y in {a.O: a in L1 OR L2} by A3;
+        hence z in Y by A1,SETFAM_1:def 1;
+      end; then
+      z in L2\&O by SETFAM_1:def 1;
+      hence thesis by A4,XBOOLE_0:def 4;
+    end;
+    let z; assume z in (L1\&O)AND(L2\&O); then
+A5: z in L1\&O & z in L2\&O by XBOOLE_0:def 4;
+    now
+      set c = the Element of L2;
+      c in L2 by A0; then
+      reconsider c as Element of X;
+      c in L1 OR L2 by A0,XBOOLE_0:def 3; then
+      c.O in {x.O: x in L1 OR L2};
+      hence {x.O: x in L1 OR L2} <> {};
+      let Y; assume Y in {x.O: x in L1 OR L2}; then
+      consider x such that
+A3:   Y = x.O & x in L1 OR L2;
+      x in L1 or x in L2 by A3,XBOOLE_0:def 3; then
+      Y in {a.O: a in L1} or Y in {b.O: b in L2} by A3;
+      hence z in Y by A5,SETFAM_1:def 1;
+    end;
+    hence thesis by SETFAM_1:def 1;
+  end;
+
+theorem
+  L1 c= L2 & O1 c= O2 implies L1|O1 c= L2|O2
+  proof
+    assume L1 c= L2 & O1 c= O2; then
+    L1|O1 c= L2|O1 & L2|O1 c= L2|O2 by RELAT_1:123,124;
+    hence thesis by XBOOLE_1:1;
+  end;
+
+theorem Th81:
+  O1 c= O2 implies L\&O1 c= L\&O2
+  proof
+    assume
+A1: O1 c= O2;
+    let z; assume
+A2: z in L\&O1; then
+    {x.O1: x in L} <> {} by SETFAM_1:def 1; then
+    consider Y such that
+A3: Y in {x.O1: x in L} by XBOOLE_0:def 1;
+    consider y such that
+A4: Y = y.O1 & y in L by A3;
+A5: y.O2 in {x.O2: x in L} by A4;
+    now
+      let Y; assume Y in {x.O2: x in L}; then
+      consider a such that
+A6:   Y = a.O2 & a in L;
+      a.O1 in {x.O1: x in L} by A6; then
+      z in a.O1 & a.O1 c= Y by A1,A2,A6,Th9,SETFAM_1:def 1;
+      hence z in Y;
+    end;
+    hence thesis by A5,SETFAM_1:def 1;
+  end;
+
+theorem
+  L\&(O1 AND O2) = (L \& O1)AND(L \& O2)
+  proof
+    L\&(O1 AND O2) c= L\&O1 & L\&(O1 AND O2) c= L\&O2 by XBOOLE_1:17,Th81;
+    hence L\&(O1 AND O2) c= (L\&O1)AND(L\&O2) by XBOOLE_1:19;
+    let z; assume z in (L\&O1)AND(L\&O2); then
+A5: z in L\&O1 & z in L\&O2 by XBOOLE_0:def 4;
+    now
+      set O = O1 AND O2;
+      set c = the Element of L;
+      {x.O1: x in L} <> {} by A5,SETFAM_1:def 1; then
+      consider c being set such that
+A1:   c in {x.O1: x in L} by XBOOLE_0:def 1;
+      consider a such that
+A2:   c = a.O1 & a in L by A1;
+      a.O in {x.O: x in L} by A2;
+      hence {x.O: x in L} <> {};
+      let Y; assume Y in {x.O: x in L}; then
+      consider x such that
+A3:   Y = x.O & x in L;
+A4:   Y = (x.O1) AND (x.O2) by A3,RELSET_2:11;
+      x.O1 in {y.O1: y in L} by A3; then
+A6:   z in x.O1 by A5,SETFAM_1:def 1;
+      x.O2 in {y.O2: y in L} by A3; then
+      z in x.O2 by A5,SETFAM_1:def 1;
+      hence z in Y by A4,A6,XBOOLE_0:def 4;
+    end;
+    hence thesis by SETFAM_1:def 1;
+  end;
+
+theorem
+  L1 <> {} & L1 c= L2 implies L2 \& O c= L1 \& O
+  proof
+    assume Z0: L1 <> {};
+    assume Z1: L1 c= L2;
+    let z;
+    assume
+A0: z in L2 \& O;
+    now
+      set c = the Element of L1;
+      c in L1 by Z0; then
+      reconsider c as Element of X;
+      c.O in {x.O: x in L1} by Z0;
+      hence {x.O: x in L1} <> {};
+      let Y; assume Y in {x.O: x in L1}; then
+      consider x such that
+A3:   Y = x.O & x in L1;
+      Y in {a.O: a in L2} by A3,Z1;
+      hence z in Y by A0,SETFAM_1:def 1;
+    end;
+    hence z in L1 \& O by SETFAM_1:def 1;
+  end;
+
+begin :: Operations
+
+theorem Th3a:
+  for O1,O2 being Operation of X st for x holds x.O1 = x.O2 holds O1 = O2
+  proof
+    let O1,O2 be Operation of X;
+    assume
+Z0: for x holds x.O1 = x.O2;
+    let a,b be set;
+    thus [a,b] in O1 implies [a,b] in O2
+    proof
+      assume
+A1:   [a,b] in O1;
+      reconsider a,b as Element of X by A1,ZFMISC_1:87;
+      b in a.O1 by A1,RELAT_1:169; then
+      b in a.O2 by Z0;
+      hence thesis by RELAT_1:169;
+    end;
+    assume
+A1: [a,b] in O2; then
+A2: a in X & b in X by ZFMISC_1:87;
+    reconsider a,b as Element of X by A1,ZFMISC_1:87;
+    reconsider L = {a} as Subset of X by A2,ZFMISC_1:31;
+    b in a.O2 by A1,RELAT_1:169; then
+    b in a.O1 by Z0;
+    hence thesis by RELAT_1:169;
+  end;
+
+theorem Th3:
+  for O1,O2 being Operation of X st for L holds L|O1 = L|O2 holds O1 = O2
+  proof
+    let O1,O2 be Operation of X;
+    assume
+Z0: for L holds L|O1 = L|O2;
+    now let x;
+      per cases;
+      suppose X <> {}; then
+        reconsider L = {x} as Subset of X by ZFMISC_1:31;
+        thus x.O1 = L|O1 .= x.O2 by Z0;
+      end;
+      suppose X = {};
+        hence x.O1 = x.O2;
+      end;
+    end;
+    hence thesis by Th3a;
+  end;
+
+definition
+  let X,O;
+  func NOT O -> Operation of X means: DEFNOT:
+  for L holds L|it = union {IFEQ(x.O, {}, {x}, {}): x in L};
+  existence
+  proof
+    defpred P[set,set] means Im(O,$1) = {} & $2 = $1;
+    consider O1 being Relation such that
+A1: for a,b being set holds
+    [a,b] in O1 iff a in X & b in X & P[a,b] from RELAT_1:sch 1;
+    O1 c= [:X,X:]
+    proof
+      let x,y be set;
+      assume [x,y] in O1; then
+      x in X & y in X by A1;
+      hence thesis by ZFMISC_1:87;
+    end; then
+    reconsider O1 as Operation of X;
+    take O1;
+    let L;
+    thus L|O1 c= union {IFEQ(x.O, {}, {x}, {}): x in L}
+    proof let a be set; assume a in L|O1; then
+      consider b such that
+A2:   a in b.O1 & b in L by Th1;
+      [b,a] in O1 by A2,RELAT_1:169; then
+A3:   a = b & b.O = {} by A1; then
+      a in {b} by TARSKI:def 1; then
+A4:   a in IFEQ(b.O,{},{b},{}) by A3,FUNCOP_1:def 8;
+      IFEQ(b.O,{},{b},{}) in {IFEQ(x.O,{},{x},{}): x in L} by A2;
+      hence thesis by A4,TARSKI:def 4;
+    end;
+    let a be set; assume a in union {IFEQ(x.O, {}, {x}, {}): x in L}; then
+    consider A be set such that
+A5: a in A & A in {IFEQ(x.O, {}, {x}, {}): x in L} by TARSKI:def 4;
+    consider x such that
+A6: A = IFEQ(x.O, {}, {x}, {}) & x in L by A5;
+A7: x.O = {} by A5,A6,FUNCOP_1:def 8; then
+    A = {x} by A6,FUNCOP_1:def 8; then
+    a = x by A5,TARSKI:def 1; then
+    [x,a] in O1 by A1,A6,A7;
+    hence thesis by A6,RELAT_1:def 13;
+  end;
+  uniqueness
+  proof
+    let O1,O2 be Operation of X such that
+A1: for L holds L|O1 = union {IFEQ(x.O, {}, {x}, {}): x in L} and
+A2: for L holds L|O2 = union {IFEQ(x.O, {}, {x}, {}): x in L};
+    now let L;
+      thus L|O1 = union {IFEQ(x.O, {}, {x}, {}): x in L} by A1 .= L|O2 by A2;
+    end;
+    hence thesis by Th3;
+  end;
+end;
+
+notation
+  let X;
+  let O1,O2 be Operation of X;
+  synonym O1 AND O2 for O1 /\ O2;
+  synonym O1 OR O2 for O1 \/ O2;
+  synonym O1 BUTNOT O2 for O1 \ O2;
+  synonym O1 | O2 for O1 * O2;
+end;
+
+definition
+  let X;
+  let O1,O2 be Operation of X;
+  redefine func O1 AND O2 -> Operation of X means
+  for L holds L|it = union {x.O1 AND x.O2: x in L};
+  coherence
+  proof
+    thus O1 /\ O2 is Subset of [:X,X:];
+  end;
+  compatibility
+  proof
+AA: for O being Operation of X holds
+    O = O1 AND O2 implies for L holds L|O = union {x.O1 AND x.O2: x in L}
+    proof
+      let O;
+      assume
+A0:   O = O1 /\ O2;
+      defpred P[set,set] means [$1,$2] in O1 & [$1,$2] in O2;
+      let L;
+      thus L|O c= union {x.O1 AND x.O2: x in L}
+      proof
+        let z be set;
+        assume z in L|O; then
+        consider y being set such that
+A2:     [y,z] in O & y in L by RELAT_1:def 13;
+        reconsider y,z as Element of X by A2,ZFMISC_1:87;
+        [y,z] in O1 & [y,z] in O2 by A0,A2,XBOOLE_0:def 4; then
+        z in y.O1 & z in y.O2 by RELAT_1:169; then
+        z in y.O1 AND y.O2 & y.O1 AND y.O2 in {x.O1 AND x.O2: x in L}
+        by A2,XBOOLE_0:def 4;
+        hence thesis by TARSKI:def 4;
+      end;
+      let z be set; assume
+      z in union {x.O1 AND x.O2: x in L}; then
+      consider Y being set such that
+A3:   z in Y & Y in {x.O1 AND x.O2: x in L} by TARSKI:def 4;
+      consider x such that
+A4:   Y = x.O1 AND x.O2 & x in L by A3;
+A5:   z in x.O1 & z in x.O2 by A3,A4,XBOOLE_0:def 4;
+      reconsider z as Element of X by A3,A4;
+      [x,z] in O1 & [x,z] in O2 by A5,RELAT_1:169; then
+      [x,z] in O by A0,XBOOLE_0:def 4;
+      hence thesis by A4,RELAT_1:def 13;
+    end;
+    let O be Operation of X;
+    thus O = O1 AND O2 implies for L holds L|O = union {x.O1 AND x.O2: x in L}
+    by AA;
+    assume
+A6: for L holds L|O = union {x.O1 AND x.O2: x in L};
+    now
+      let L;
+      thus L|O = union {x.O1 AND x.O2: x in L} by A6 .= L|(O1 /\ O2) by AA;
+    end;
+    hence thesis by Th3;
+  end;
+  redefine func O1 OR O2 -> Operation of X means
+  for L holds L|it = union {x.O1 OR x.O2: x in L};
+  coherence
+  proof
+    thus O1 \/ O2 is Subset of [:X,X:];
+  end;
+  compatibility
+  proof
+AA: for O being Operation of X holds
+    O = O1 OR O2 implies for L holds L|O = union {x.O1 OR x.O2: x in L}
+    proof
+      let O;
+      assume
+A0:   O = O1 \/ O2;
+      defpred P[set,set] means [$1,$2] in O1 or [$1,$2] in O2;
+      let L;
+      thus L|O c= union {x.O1 OR x.O2: x in L}
+      proof
+        let z be set;
+        assume z in L|O; then
+        consider y being set such that
+A2:     [y,z] in O & y in L by RELAT_1:def 13;
+        reconsider y,z as Element of X by A2,ZFMISC_1:87;
+        [y,z] in O1 or [y,z] in O2 by A0,A2,XBOOLE_0:def 3; then
+        z in y.O1 or z in y.O2 by RELAT_1:169; then
+        z in y.O1 OR y.O2 & y.O1 OR y.O2 in {x.O1 OR x.O2: x in L}
+        by A2,XBOOLE_0:def 3;
+        hence thesis by TARSKI:def 4;
+      end;
+      let z be set; assume
+      z in union {x.O1 OR x.O2: x in L}; then
+      consider Y being set such that
+A3:   z in Y & Y in {x.O1 OR x.O2: x in L} by TARSKI:def 4;
+      consider x such that
+A4:   Y = x.O1 OR x.O2 & x in L by A3;
+A5:   z in x.O1 or z in x.O2 by A3,A4,XBOOLE_0:def 3;
+      reconsider z as Element of X by A3,A4;
+      [x,z] in O1 or [x,z] in O2 by A5,RELAT_1:169; then
+      [x,z] in O by A0,XBOOLE_0:def 3;
+      hence thesis by A4,RELAT_1:def 13;
+    end;
+    let O be Operation of X;
+    thus O = O1 OR O2 implies for L holds L|O = union {x.O1 OR x.O2: x in L}
+    by AA;
+    assume
+A6: for L holds L|O = union {x.O1 OR x.O2: x in L};
+    now
+      let L;
+      thus L|O = union {x.O1 OR x.O2: x in L} by A6 .= L|(O1 \/ O2) by AA;
+    end;
+    hence thesis by Th3;
+  end;
+  redefine func O1 BUTNOT O2 -> Operation of X means
+  for L holds L|it = union {x.O1 BUTNOT x.O2: x in L};
+  coherence
+  proof
+    thus O1 \ O2 is Subset of [:X,X:];
+  end;
+  compatibility
+  proof
+AA: for O being Operation of X holds
+    O = O1 BUTNOT O2 implies for L holds L|O = union {x.O1 BUTNOT x.O2: x in L}
+    proof
+      let O;
+      assume
+A0:   O = O1 \ O2;
+      defpred P[set,set] means [$1,$2] in O1 & not [$1,$2] in O2;
+      let L;
+      thus L|O c= union {x.O1 BUTNOT x.O2: x in L}
+      proof
+        let z be set;
+        assume z in L|O; then
+        consider y being set such that
+A2:     [y,z] in O & y in L by RELAT_1:def 13;
+        reconsider y,z as Element of X by A2,ZFMISC_1:87;
+        [y,z] in O1 & [y,z] nin O2 by A0,A2,XBOOLE_0:def 5; then
+        z in y.O1 & z nin y.O2 by RELAT_1:169; then
+        z in y.O1 BUTNOT y.O2 & y.O1 BUTNOT y.O2 in {x.O1 BUTNOT x.O2: x in L}
+        by A2,XBOOLE_0:def 5;
+        hence thesis by TARSKI:def 4;
+      end;
+      let z be set; assume
+      z in union {x.O1 BUTNOT x.O2: x in L}; then
+      consider Y being set such that
+A3:   z in Y & Y in {x.O1 BUTNOT x.O2: x in L} by TARSKI:def 4;
+      consider x such that
+A4:   Y = x.O1 BUTNOT x.O2 & x in L by A3;
+A5:   z in x.O1 & z nin x.O2 by A3,A4,XBOOLE_0:def 5;
+      reconsider z as Element of X by A3,A4;
+      [x,z] in O1 & [x,z] nin O2 by A5,RELAT_1:169; then
+      [x,z] in O by A0,XBOOLE_0:def 5;
+      hence thesis by A4,RELAT_1:def 13;
+    end;
+    let O be Operation of X;
+    thus O = O1 BUTNOT O2 implies
+    for L holds L|O = union {x.O1 BUTNOT x.O2: x in L}
+    by AA;
+    assume
+A6: for L holds L|O = union {x.O1 BUTNOT x.O2: x in L};
+    now
+      let L;
+      thus L|O = union {x.O1 BUTNOT x.O2: x in L} by A6 .= L|(O1 \ O2) by AA;
+    end;
+    hence thesis by Th3;
+  end;
+  redefine func O1 | O2 -> Operation of X means
+  for L holds L|it = L|O1|O2;
+  coherence
+  proof
+    thus O1 * O2 is Relation of X;
+  end;
+  compatibility
+  proof
+    let O be Operation of X;
+    thus O = O1|O2 implies for L holds L|O = L|O1|O2 by RELAT_1:126;
+    assume
+A1: for L holds L|O = L|O1|O2;
+    now
+      let L;
+      thus L|O = L|O1|O2 by A1 .= L|(O1*O2) by RELAT_1:126;
+    end;
+    hence thesis by Th3;
+  end;
+  func O1 \& O2 -> Operation of X means :DefAmp:
+  for L holds L|it = union {x.O1\&O2: x in L};
+  existence
+  proof
+    defpred P[set,set] means ex x st $1 = x & $2 in x.O1\&O2;
+    consider O being Relation such that
+A1: [z,s] in O iff z in X & s in X & P[z,s] from RELAT_1:sch 1;
+    O c= [:X,X:]
+    proof
+      let z,s;
+      assume [z,s] in O; then
+      z in X & s in X by A1;
+      hence thesis by ZFMISC_1:87;
+    end; then
+    reconsider O as Operation of X;
+    take O;
+    let L;
+    thus L|O c= union {x.O1\&O2: x in L}
+    proof
+      let z;
+      assume z in L|O; then
+      consider y such that
+A2:   z in y.O & y in L by Th1;
+      [y,z] in O by A2,RELAT_1:169; then
+      ex x st y = x & z in x.O1\&O2 by A1; then
+      z in y.O1\&O2 & y.O1\&O2 in {x.O1\&O2: x in L} by A2;
+      hence thesis by TARSKI:def 4;
+    end;
+    let z;
+    assume z in union {x.O1\&O2: x in L}; then
+    consider Y such that
+A3: z in Y & Y in {x.O1\&O2: x in L} by TARSKI:def 4;
+    consider x such that
+A4: Y = x.O1\&O2 & x in L by A3;
+    [x,z] in O by A1,A3,A4;
+    hence thesis by A4,RELAT_1:def 13;
+  end;
+  uniqueness
+  proof
+    let R1,R2 be Operation of X such that
+A1: for L holds L|R1 = union {x.O1\&O2: x in L} and
+A2: for L holds L|R2 = union {x.O1\&O2: x in L};
+    now let L;
+      thus L|R1 = union {x.O1\&O2: x in L} by A1 .= L|R2 by A2;
+    end;
+    hence thesis by Th3;
+  end;
+end;
+
+theorem
+  x.(O1 AND O2) = (x.O1)AND(x.O2) by RELSET_2:11;
+theorem
+  x.(O1 OR O2) = (x.O1)OR(x.O2) by RELSET_2:10;
+theorem
+  x.(O1 BUTNOT O2) = (x.O1)BUTNOT(x.O2) by RELSET_2:12;
+theorem
+  x.(O1|O2) = (x.O1)|O2 by RELAT_1:126;
+
+theorem Th25:
+  x.(O1\&O2) = (x.O1)\&O2
+  proof
+    per cases;
+    suppose X = {}; then
+      x.(O1\&O2) = {} & (x.O1)\&O2 = {};
+      hence thesis;
+    end;
+    suppose
+      X <> {}; then
+      reconsider L = {x} as List of X by ZFMISC_1:31;
+A1:   {a.O1\&O2: a in L} = {x.O1\&O2}
+      proof
+        thus {a.O1\&O2: a in L} c= {x.O1\&O2}
+        proof
+          let z; assume z in {a.O1\&O2: a in L}; then
+          consider a such that
+A2:       z = a.O1\&O2 & a in L;
+          a = x by A2,TARSKI:def 1;
+          hence thesis by A2,TARSKI:def 1;
+        end;
+        let z; assume z in {x.O1\&O2}; then
+        z = x.O1\&O2 & x in L by TARSKI:def 1;
+        hence thesis;
+      end;
+      thus x.(O1\&O2) = union {a.O1\&O2: a in L} by DefAmp
+      .= x.O1\&O2 by A1,ZFMISC_1:25;
+    end;
+  end;
+
+theorem Th4:
+  [z,s] in NOT O iff z = s & z in X & z nin dom O
+  proof
+    thus [z,s] in NOT O implies z = s & z in X & z nin dom O
+    proof
+      assume
+A7:   [z,s] in NOT O; then
+      s in Im(NOT O,z) & z in X by RELAT_1:169,ZFMISC_1:87; then
+      s in (NOT O).:{z} & {z} c= X by ZFMISC_1:31; then
+      s in union {IFEQ(x.O, {}, {x}, {}): x in {z}} by DEFNOT; then
+      consider Y such that
+A1:   s in Y & Y in {IFEQ(x.O, {}, {x}, {}): x in {z}} by TARSKI:def 4;
+      consider x such that
+A2:   Y = IFEQ(x.O, {}, {x}, {}) & x in {z} by A1;
+A3:   x = z by A2,TARSKI:def 1;
+A5:   x.O = {} by A1,A2,FUNCOP_1:def 8; then
+      s in {x} by A1,A2,FUNCOP_1:def 8; then
+      s = x & for s holds [x,s] nin O by A5,RELAT_1:169,TARSKI:def 1;
+      hence z = s & z in X & z nin dom O by A3,A7,XTUPLE_0:def 12,ZFMISC_1:87;
+    end;
+    assume
+A6: z = s & z in X & z nin dom O;
+    then reconsider z as Element of X;
+    z.O c= {}
+    proof
+      let y be set; assume y in z.O; then
+      [z,y] in O by RELAT_1:169;
+      hence thesis by A6,XTUPLE_0:def 12;
+    end; then
+    z.O = {}; then
+A7: IFEQ(z.O, {}, {z}, {}) = {z} by FUNCOP_1:def 8;
+A8: z in {z} by TARSKI:def 1;
+    reconsider L = {z} as Subset of X by A6,ZFMISC_1:31;
+    {z} in {IFEQ(x.O, {}, {x}, {}): x in {z}} by A7,A8; then
+    z in union {IFEQ(x.O, {}, {x}, {}): x in {z}} by A8,TARSKI:def 4; then
+    z in L|(NOT O) by DEFNOT; then
+    z in z.NOT O;
+    hence thesis by A6,RELAT_1:169;
+  end;
+
+theorem Th5:
+  NOT O = id(X\dom O)
+  proof
+    let z,s;
+    thus [z,s] in NOT O implies [z,s] in id(X\dom O)
+    proof
+      assume [z,s] in NOT O; then
+A1:   z = s & z in X & z nin dom O by Th4; then
+      z in X\dom O by XBOOLE_0:def 5;
+      hence thesis by A1,RELAT_1:def 10;
+    end;
+    assume [z,s] in id(X\dom O); then
+A2: z = s & z in X\dom O by RELAT_1:def 10; then
+    z in X & z nin dom O by XBOOLE_0:def 5;
+    hence thesis by A2,Th4;
+  end;
+
+theorem Th6:
+  dom NOT NOT O = dom O
+  proof
+    thus dom NOT NOT O = dom id(X\dom NOT O) by Th5
+    .= X\dom NOT O by RELAT_1:45 .= X\dom id(X\dom O) by Th5
+    .= X\(X\dom O) by RELAT_1:45 .= X/\dom O by XBOOLE_1:48
+    .= dom O by XBOOLE_1:28;
+  end;
+
+theorem
+  L WHERE NOT NOT O = L WHERE O
+  proof
+    thus L WHERE NOT NOT O c= L WHERE O
+    proof
+      let z; assume
+A0:   z in L WHERE NOT NOT O; then
+      reconsider x = z as Element of X;
+A1:   x in L & x.NOT NOT O <> {} by A0,ThW; then
+      x in dom NOT NOT O by RELAT_1:170; then
+      x in dom O by Th6; then
+      x.O <> {} by RELAT_1:170;
+      hence thesis by A1,ThW;
+    end;
+    let z;
+    assume
+A2: z in L WHERE O; then
+    reconsider x = z as Element of X;
+A3: z in L & x.O <> {} by A2,ThW; then
+    x in dom O by RELAT_1:170; then
+    x in dom NOT NOT O by Th6; then
+    x.NOT NOT O <> {} by RELAT_1:170;
+    hence thesis by A3,ThW;
+  end;
+
+theorem
+  L WHEREeq(O,0) = L WHERE NOT O
+  proof
+    thus L WHEREeq(O,0) c= L WHERE NOT O
+    proof
+      let z; assume z in L WHEREeq(O,0); then
+      consider x such that
+A1:   z = x & card(x.O) = 0 & x in L;
+      x.O = {} by A1; then
+      x nin dom O by RELAT_1:170; then
+      [x,x] in NOT O by A1,Th4; then
+      x,x in NOT O by Def1;
+      hence thesis by A1;
+    end;
+    let z; assume z in L WHERE NOT O; then
+    consider x such that
+A2: z = x & ex y st x,y in NOT O & x in L;
+    consider y such that
+A3: x,y in NOT O & x in L by A2;
+    [x,y] in NOT O by A3,Def1; then
+    x = y & x in X & x nin dom O by Th4; then
+    x.O = {} by RELAT_1:170; then
+    card(x.O) = 0;
+    hence thesis by A2;
+  end;
+
+theorem
+  NOT NOT NOT O = NOT O
+  proof
+    thus NOT NOT NOT O = id(X\dom NOT NOT O) by Th5
+    .= id(X\dom O) by Th6 .= NOT O by Th5;
+end;
+
+theorem
+  (NOT O1) OR NOT O2 c= NOT (O1 AND O2)
+  proof
+    let z,s;
+    assume [z,s] in (NOT O1) OR NOT O2; then
+    [z,s] in NOT O1 or [z,s] in NOT O2 by XBOOLE_0:def 3; then
+A1: s = z & z in X & (z nin dom O1 or z nin dom O2) by Th4; then
+    z nin (dom O1) /\ dom O2 & dom(O1 AND O2) c= (dom O1)/\dom O2
+    by RELAT_1:2,XBOOLE_0:def 4; then
+    z nin dom(O1 AND O2);
+    hence thesis by A1,Th4;
+  end;
+
+theorem
+  NOT (O1 OR O2) = (NOT O1) AND NOT O2
+  proof
+    let z,s;
+    thus [z,s] in NOT (O1 OR O2) implies [z,s] in (NOT O1) AND NOT O2
+    proof
+      assume [z,s] in NOT (O1 OR O2); then
+A1:   z = s & z in X & z nin dom (O1 OR O2) by Th4; then
+      z nin (dom O1)\/dom O2 by RELAT_1:1; then
+      z nin dom O1 & z nin dom O2 by XBOOLE_0:def 3; then
+      [z,s] in NOT O1 & [z,s] in NOT O2 by A1,Th4;
+      hence thesis by XBOOLE_0:def 4;
+    end;
+    assume [z,s] in (NOT O1) AND NOT O2; then
+    [z,s] in NOT O1 & [z,s] in NOT O2 by XBOOLE_0:def 4; then
+A1: z = s & z in X & z nin dom O1 & z nin dom O2 by Th4; then
+    z nin (dom O1)\/dom O2 by XBOOLE_0:def 3; then
+    z nin dom (O1 OR O2) by RELAT_1:1;
+    hence thesis by A1,Th4;
+  end;
+
+theorem
+  dom O1 = X & dom O2 = X implies (O1 OR O2)\& O = (O1 \& O) AND (O2 \& O)
+  proof assume
+A0: dom O1 = X & dom O2 = X;
+    let z,s;
+    thus [z,s] in (O1 OR O2)\& O implies [z,s] in (O1 \& O) AND (O2 \& O)
+    proof
+      assume
+Z0:   [z,s] in (O1 OR O2)\& O; then
+      reconsider z,s as Element of X by ZFMISC_1:87;
+      s in z.((O1 OR O2)\& O) by Z0,RELAT_1:169; then
+      s in z.(O1 OR O2)\&O by Th25; then
+      s in ((z.O1) OR (z.O2))\&O & z.O1 <> {} & z.O2 <> {}
+      by A0,RELAT_1:170,RELSET_2:10; then
+      s in (z.O1\&O)AND(z.O2\&O) by Th17; then
+      s in (z.(O1\&O))AND(z.O2\&O) by Th25; then
+      s in (z.(O1\&O))AND(z.(O2\&O)) by Th25; then
+      s in z.((O1\&O)AND(O2\&O)) by RELSET_2:11;
+      hence thesis by RELAT_1:169;
+    end;
+    assume
+Z1: [z,s] in (O1 \& O) AND (O2 \& O); then
+    reconsider z,s as Element of X by ZFMISC_1:87;
+    s in z.((O1 \& O) AND (O2 \& O)) by Z1,RELAT_1:169; then
+    s in (z.(O1\&O))AND(z.(O2\&O)) by RELSET_2:11; then
+    s in (z.(O1\&O))AND(z.O2\&O) by Th25; then
+    s in (z.O1\&O)AND(z.O2\&O) & z.O1 <> {} & z.O2 <> {}
+    by Th25,A0,RELAT_1:170; then
+    s in ((z.O1) OR (z.O2))\&O by Th17; then
+    s in (z.(O1 OR O2))\&O by RELSET_2:10; then
+    s in z.((O1 OR O2)\&O) by Th25;
+    hence thesis by RELAT_1:169;
+  end;
+
+definition
+  let X,O;
+  attr O is filtering means :DEFFILT: O c= id X;
+end;
+
+theorem Th20:
+  O is filtering iff O = id dom O
+  proof
+    thus O is filtering implies O = id dom O
+    proof
+      assume
+A1:   O c= id X;
+      let z,s;
+      thus [z,s] in O implies [z,s] in id dom O
+      proof
+        assume [z,s] in O; then
+        z in dom O & z = s by A1,RELAT_1:def 10,XTUPLE_0:def 12;
+        hence thesis by RELAT_1:def 10;
+      end;
+      assume [z,s] in id dom O; then
+A2:   z in dom O & z = s by RELAT_1:def 10; then
+      consider y being set such that
+A3:   [z,y] in O by XTUPLE_0:def 12;
+      thus thesis by A1,A2,A3,RELAT_1:def 10;
+    end;
+    assume O = id dom O;
+    hence O c= id X by SYSREL:15;
+  end;
+
+registration
+  let X,O;
+  cluster NOT O -> filtering;
+  coherence
+  proof
+    NOT O = id(X\dom O) by Th5;
+    hence NOT O c= id X by SYSREL:15;
+  end;
+end;
+
+registration
+  let X;
+  cluster filtering for Operation of X;
+  existence
+  proof
+    set O = the Operation of X;
+    take NOT O; thus thesis;
+  end;
+end;
+
+reserve F,F1,F2 for filtering Operation of X;
+
+registration
+  let X,F,O;
+  cluster F AND O -> filtering for Operation of X;
+  coherence
+  proof
+    let O1; assume O1 = F AND O; then
+    O1 c= F & F c= id X by DEFFILT,XBOOLE_1:17;
+    hence O1 c= id X by XBOOLE_1:1;
+  end;
+  cluster O AND F -> filtering for Operation of X;
+  coherence;
+  cluster F BUTNOT O -> filtering for Operation of X;
+  coherence
+  proof
+    let O1; assume O1 = F BUTNOT O; then
+    O1 c= F & F c= id X by DEFFILT,XBOOLE_1:36;
+    hence O1 c= id X by XBOOLE_1:1;
+  end;
+end;
+
+registration
+  let X,F1,F2;
+  cluster F1 OR F2 -> filtering for Operation of X;
+  coherence
+  proof
+    let O1; assume A1: O1 = F1 OR F2;
+    F1 c= id X & F2 c= id X by DEFFILT;
+    hence O1 c= id X by A1,XBOOLE_1:8;
+  end;
+end;
+
+theorem Th11:
+  z in x.F implies z = x
+  proof
+    assume z in x.F; then
+    [x,z] in F & F c= id X by DEFFILT,RELAT_1:169;
+    hence thesis by RELAT_1:def 10;
+  end;
+
+theorem
+  L|F = L WHERE F
+  proof
+    thus L|F c= L WHERE F
+    proof
+      let z;
+      assume z in L|F; then
+      consider y such that
+A1:   z in y.F & y in L by Th1;
+      z = y by A1,Th11;
+      hence thesis by A1,ThW;
+    end;
+    let z;
+    assume
+A2: z in L WHERE F; then
+    reconsider x = z as Element of X;
+A3: x in L & x.F <> {} by A2,ThW;
+    set y = the Element of x.F;
+A4: [x,y] in F by A3,RELAT_1:169;
+    F c= id X by DEFFILT; then
+    x = y by A4,RELAT_1:def 10;
+    hence thesis by A3,Th1;
+  end;
+
+theorem
+  NOT NOT F = F
+  proof
+    thus NOT NOT F = id(X\dom NOT F) by Th5
+    .= id (X\dom id(X\dom F)) by Th5
+    .= id (X\(X\dom F)) by RELAT_1:45
+    .= id (X/\dom F) by XBOOLE_1:48
+    .= id dom F by XBOOLE_1:28
+    .= F by Th20;
+  end;
+
+theorem
+  NOT (F1 AND F2) = (NOT F1) OR (NOT F2)
+  proof
+A1: F1 = id dom F1 & F2 = id dom F2 by Th20;
+    NOT (F1 AND F2) = id(X\dom(F1 AND F2)) by Th5
+    .= id (X\dom id ((dom F1) AND dom F2)) by A1,SYSREL:14
+    .= id (X\((dom F1) AND dom F2)) by RELAT_1:45
+    .= id ((X\dom F1)\/(X\dom F2)) by XBOOLE_1:54
+    .= id (X\dom F1) \/ id (X\dom F2) by SYSREL:14
+    .= (NOT F1) \/ id (X\dom F2) by Th5;
+    hence thesis by Th5;
+  end;
+
+theorem Th71:
+  dom(O OR NOT O) = X
+  proof
+    thus dom(O OR NOT O) = (dom O) OR dom NOT O by RELAT_1:1
+    .= (dom O) \/ dom id (X\dom O) by Th5
+    .= (dom O) OR (X\dom O) by RELAT_1:45
+    .= (dom O) \/ X by XBOOLE_1:39
+    .= X by XBOOLE_1:12;
+  end;
+
+theorem
+  F OR NOT F = id X
+  proof
+    dom(F OR NOT F) = X & F OR NOT F c= id X by Th71,DEFFILT;
+    hence thesis by SYSREL:17;
+  end;
+
+theorem Th72:
+  O AND NOT O = {}
+  proof
+    dom (O AND NOT O) = dom(O /\ id(X\dom O)) by Th5; then
+A1: dom (O AND NOT O) c= (dom O) /\ dom id(X\dom O) by RELAT_1:2;
+    (dom O) /\ dom id(X\dom O) = (dom O) /\ (X\dom O) by RELAT_1:45
+    .= ((dom O) /\ X)\dom O by XBOOLE_1:49
+    .= (dom O)\dom O by XBOOLE_1:28
+    .= {} by XBOOLE_1:37;
+    hence thesis by A1,RELAT_1:41,XBOOLE_1:3;
+  end;
+
+theorem
+  (O1 OR O2) AND NOT O1 c= O2
+  proof
+    (O1 OR O2) AND NOT O1 = (O1 AND NOT O1)OR (O2 AND NOT O1) by XBOOLE_1:23
+    .= {} \/ (O2 AND NOT O1) by Th72
+    .= O2 AND NOT O1;
+    hence thesis by XBOOLE_1:17;
+  end;
+
+begin :: Rough queries
+
+reserve i for Element of NAT;
+
+definition
+  let A be FinSequence;
+  let a be set;
+  func #occurrences(a,A) -> Nat equals card {i: i in dom A & a in A.i};
+  coherence
+  proof
+    {i: i in dom A & a in A.i} c= dom A
+    proof
+      let z; assume z in {i: i in dom A & a in A.i}; then
+      ex i st z = i & i in dom A & a in A.i;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th21:
+  for A being FinSequence, a being set holds #occurrences(a,A) <= len A
+  proof
+    let A be FinSequence;
+    let a be set;
+    {i: i in dom A & a in A.i} c= dom A
+    proof
+      let z; assume z in {i: i in dom A & a in A.i}; then
+      ex i st z = i & i in dom A & a in A.i;
+      hence thesis;
+    end; then
+    #occurrences(a,A) c= card dom A & dom A = Seg len A &
+    card Seg len A = len A by CARD_1:11,FINSEQ_1:57,def 3;
+    hence #occurrences(a,A) <= len A by NAT_1:39;
+  end;
+
+theorem Th22:
+  for A being FinSequence, a being set holds
+  A <> {} & #occurrences(a,A) = len A iff a in meet rng A
+  proof
+    let A be FinSequence;
+    let a be set;
+A2: {i: i in dom A & a in A.i} c= dom A
+    proof
+      let z; assume z in {i: i in dom A & a in A.i}; then
+      ex i st z = i & i in dom A & a in A.i;
+      hence thesis;
+    end;
+A6: dom A = Seg len A & card Seg len A = len A by FINSEQ_1:57,def 3;
+    hereby
+      assume
+      A <> {}; then
+A0:   rng A <> {} by RELAT_1:41;
+      assume
+Z1:   #occurrences(a,A) = len A;
+A1:   {i: i in dom A & a in A.i} = dom A by Z1,A2,A6,CARD_FIN:1;
+      now
+        let z; assume z in rng A; then
+        consider s such that
+A3:     s in dom A & z = A.s by FUNCT_1:def 3;
+        consider i such that
+A4:     s = i & i in dom A & a in A.i by A1,A3;
+        thus a in z by A3,A4;
+      end;
+      hence a in meet rng A by A0,SETFAM_1:def 1;
+    end;
+    assume
+Z2: a in meet rng A;
+    thus A <> {} by Z2,RELAT_1:38,SETFAM_1:def 1;
+    dom A c= {i: i in dom A & a in A.i}
+    proof
+      let z; assume
+A7:   z in dom A; then
+      A.z in rng A by FUNCT_1:def 3; then
+      a in A.z by Z2,SETFAM_1:def 1;
+      hence thesis by A7;
+    end;
+    hence #occurrences(a,A) = len A by A6,A2,XBOOLE_0:def 10;
+  end;
+
+definition
+  let A be FinSequence;
+  func max# A -> Nat means :MAX:
+  (for a being set holds #occurrences(a,A) <= it) &
+  (for n st for a being set holds #occurrences(a,A) <= n holds it <= n);
+  existence
+  proof
+    defpred P[Nat] means for a being set holds #occurrences(a,A) <= $1;
+    P[len A] by Th21; then
+A1: ex n st P[n];
+    consider n such that
+A2: P[n] & for m being Nat st P[m] holds n <= m from NAT_1:sch 5(A1);
+    take n; thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let n1,n2 be Nat such that
+A1: (for a being set holds #occurrences(a,A) <= n1) &
+    (for n st for a being set holds #occurrences(a,A) <= n holds n1 <= n) and
+A2: (for a being set holds #occurrences(a,A) <= n2) &
+    (for n st for a being set holds #occurrences(a,A) <= n holds n2 <= n);
+    n1 <= n2 & n2 <= n1 by A1,A2;
+    hence thesis by XXREAL_0:1;
+  end;
+end;
+
+theorem Th23:
+  for A being FinSequence holds max# A <= len A
+  proof
+    let A be FinSequence;
+    for a being set holds #occurrences(a,A) <= len A by Th21;
+    hence max# A <= len A by MAX;
+  end;
+
+theorem
+  for A being FinSequence, a being set st #occurrences(a,A) = len A holds
+  max# A = len A
+  proof
+    let A be FinSequence;
+    let a be set;
+    assume #occurrences(a,A) = len A; then
+    len A <= max# A & max# A <= len A by MAX,Th23;
+    hence max# A = len A by XXREAL_0:1;
+  end;
+
+definition
+  let X;
+  let A be FinSequence of bool X;
+  let n be Nat;
+  func ROUGH(A,n) -> List of X equals :ROUGH1:
+  {x: n <= #occurrences(x,A)} if X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: X <> {};
+    {x: n <= #occurrences(x,A)} c= X
+    proof
+      let z; assume z in {x: n <= #occurrences(x,A)}; then
+      ex x st z = x & n <= #occurrences(x,A);
+      hence thesis by A1;
+    end;
+    hence {x: n <= #occurrences(x,A)} is List of X;
+  end;
+  let m be Nat;
+  func ROUGH(A,n,m) -> List of X equals :ROUGH2:
+  {x: n <= #occurrences(x,A) & #occurrences(x,A) <= m} if X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: X <> {};
+    {x: n <= #occurrences(x,A) & #occurrences(x,A) <= m} c= X
+    proof
+      let z;
+      assume z in {x: n <= #occurrences(x,A) & #occurrences(x,A) <= m}; then
+      ex x st z = x & n <= #occurrences(x,A) & #occurrences(x,A) <= m;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let X;
+  let A be FinSequence of bool X;
+  func ROUGH(A) -> List of X equals ROUGH(A, max# A);
+  coherence;
+end;
+
+theorem
+  for A being FinSequence of bool X holds
+  ROUGH(A, n, len A) = ROUGH(A, n)
+  proof
+    let A be FinSequence of bool X;
+    thus ROUGH(A, n, len A) c= ROUGH(A, n)
+    proof
+      let z; assume
+A1:   z in ROUGH(A,n,len A); then
+      z in {x: n <= #occurrences(x,A) & #occurrences(x,A) <= len A} by ROUGH2;
+      then ex x st z = x & n <= #occurrences(x,A) & #occurrences(x,A) <= len A;
+      then z in {x: n <= #occurrences(x,A)};
+      hence thesis by A1,ROUGH1;
+    end;
+    let z; assume
+A2: z in ROUGH(A, n); then
+    z in {x: n <= #occurrences(x,A)} by ROUGH1; then
+    consider x such that
+A3: z = x & n <= #occurrences(x,A);
+    #occurrences(x,A) <= len A by Th21; then
+    z in {x1 where x1 is Element of X: n <= #occurrences(x1,A) &
+    #occurrences(x1,A) <= len A} by A3;
+    hence thesis by A2,ROUGH2;
+  end;
+
+theorem
+  for A being FinSequence of bool X holds
+  n <= m implies ROUGH(A,m) c= ROUGH(A,n)
+  proof
+    let A be FinSequence of bool X;
+    assume Z0: n <= m;
+    let z; assume
+A1: z in ROUGH(A,m); then
+    z in {x: m <= #occurrences(x,A)} by ROUGH1; then
+    consider a such that
+A2: z = a & m <= #occurrences(a,A);
+    n <= #occurrences(a,A) by Z0,A2,XXREAL_0:2; then
+    z in {x: n <= #occurrences(x,A)} by A2;
+    hence z in ROUGH(A,n) by A1,ROUGH1;
+  end;
+
+theorem
+  for A being FinSequence of bool X holds
+  for n1,n2,m1,m2 being Nat st n1 <= m1 & n2 <= m2 holds
+  ROUGH(A,m1,n2) c= ROUGH(A,n1,m2)
+  proof
+    let A be FinSequence of bool X;
+    let n1,n2,m1,m2 be Nat;
+    assume Z1: n1 <= m1;
+    assume Z2: n2 <= m2;
+    let z; assume
+A1: z in ROUGH(A,m1,n2); then
+    z in {x: m1 <= #occurrences(x,A) & #occurrences(x,A) <= n2} by ROUGH2; then
+    consider a such that
+A2: z = a & m1 <= #occurrences(a,A) & #occurrences(a,A) <= n2;
+    n1 <= #occurrences(a,A) & #occurrences(a,A) <= m2
+    by Z1,Z2,A2,XXREAL_0:2; then
+    z in {x: n1 <= #occurrences(x,A) & #occurrences(x,A) <= m2} by A2;
+    hence z in ROUGH(A,n1,m2) by A1,ROUGH2;
+  end;
+
+theorem
+  for A being FinSequence of bool X holds
+  ROUGH(A,n,m) c= ROUGH(A,n)
+  proof
+    let A be FinSequence of bool X;
+    let z; assume
+A1: z in ROUGH(A,n,m); then
+    z in {x: n <= #occurrences(x,A) & #occurrences(x,A) <= m} by ROUGH2; then
+    ex x st z = x & n <= #occurrences(x,A) & #occurrences(x,A) <= m; then
+    z in {x: n <= #occurrences(x,A)};
+    hence z in ROUGH(A,n) by A1,ROUGH1;
+  end;
+
+theorem Th31:
+  for A being FinSequence of bool X st A <> {} holds
+  ROUGH(A, len A) = meet rng A
+  proof
+    let A be FinSequence of bool X such that
+A0: A <> {};
+    thus ROUGH(A, len A) c= meet rng A
+    proof
+      let z; assume
+      z in ROUGH(A, len A); then
+      z in {x: len A <= #occurrences(x,A)} by ROUGH1; then
+      consider x such that
+A3:   z = x & len A <= #occurrences(x,A);
+      #occurrences(x,A) <= len A by Th21;
+      hence thesis by A0,A3,Th22,XXREAL_0:1;
+    end;
+    let z; assume
+A2: z in meet rng A; then
+    #occurrences(z,A) = len A by Th22; then
+    z in {x: len A <= #occurrences(x,A)} by A2;
+    hence thesis by A2,ROUGH1;
+  end;
+
+theorem Th32:
+  for A being FinSequence of bool X holds
+  ROUGH(A, 1) = Union A
+  proof
+    let A be FinSequence of bool X;
+    thus ROUGH(A, 1) c= Union A
+    proof
+      let z; assume
+      z in ROUGH(A,1); then
+      z in {x: 1 <= #occurrences(x,A)} by ROUGH1; then
+      consider x such that
+A3:   z = x & 1 <= #occurrences(x,A);
+      1 = 0+1; then
+      #occurrences(x,A) > 0 by A3,NAT_1:13; then
+      {i: i in dom A & x in A.i} <> {}; then
+      consider s such that
+A2:   s in {i: i in dom A & x in A.i} by XBOOLE_0:def 1;
+      consider i such that
+A4:   s = i & i in dom A & x in A.i by A2;
+      thus thesis by A3,A4,CARD_5:2;
+    end;
+    let z; assume
+A6: z in Union A; then
+    consider s such that
+A5: s in dom A & z in A.s by CARD_5:2;
+    s in {i: i in dom A & z in A.i} by A5; then
+    card {s} c= #occurrences(z,A) by CARD_1:11,ZFMISC_1:31; then
+    1 c= #occurrences(z,A) by CARD_1:30; then
+    1 <= #occurrences(z,A) by NAT_1:39; then
+    z in {x: 1 <= #occurrences(x,A)} by A6;
+    hence thesis by A6,ROUGH1;
+  end;
+
+theorem
+  for L1,L2 being List of X holds
+  ROUGH(<*L1,L2*>,2) = L1 AND L2
+  proof
+    let L1,L2 be List of X;
+    len <*L1,L2*> = 2 & rng <*L1,L2*> = {L1,L2} & meet {L1,L2} = L1 AND L2
+    by FINSEQ_1:44,FINSEQ_2:127,SETFAM_1:11;
+    hence ROUGH(<*L1,L2*>,2) = L1 AND L2 by Th31;
+  end;
+
+theorem
+  for L1,L2 being List of X holds
+  ROUGH(<*L1,L2*>,1) = L1 OR L2
+  proof
+    let L1,L2 be List of X;
+    len <*L1,L2*> = 2 & rng <*L1,L2*> = {L1,L2} & union {L1,L2} = L1 OR L2 &
+    Union <*L1,L2*> = union rng <*L1,L2*>
+    by CARD_3:def 4,FINSEQ_1:44,FINSEQ_2:127,ZFMISC_1:75;
+    hence ROUGH(<*L1,L2*>,1) = L1 OR L2 by Th32;
+  end;
+
+begin :: Constructor Database
+
+definition
+  struct(1-sorted) ConstructorDB(#
+     carrier -> set,
+     Constrs -> List of the carrier,
+     ref-operation -> Relation of the carrier, the Constrs
+  #);
+end;
+
+definition
+  let X be 1-sorted;
+  mode List of X is List of the carrier of X;
+  mode Operation of X is Operation of the carrier of X;
+end;
+
+definition
+  let X;
+  let S be Subset of X;
+  let R be Relation of X,S;
+  func @R -> Relation of X equals R;
+  coherence
+  proof
+    [:X,S:] c= [:X,X:] by ZFMISC_1:96;
+    hence thesis by XBOOLE_1:1;
+  end;
+end;
+
+definition
+  let X be ConstructorDB;
+  let a be Element of X;
+  func a ref -> List of X equals a.@the ref-operation of X;
+  coherence;
+  func a occur -> List of X equals a.((@the ref-operation of X)~);
+  coherence;
+end;
+
+theorem Th10:
+  for X being ConstructorDB
+  for x,y being Element of X holds x in y ref iff y in x occur
+  proof
+    let X be ConstructorDB;
+    let x,y be Element of X;
+    hereby
+      assume x in y ref; then
+      [y,x] in @the ref-operation of X by RELAT_1:169; then
+      [x,y] in (@the ref-operation of X)~ by RELAT_1:def 7;
+      hence y in x occur by RELAT_1:169;
+    end;
+    assume y in x occur; then
+    [x,y] in (@the ref-operation of X)~ by RELAT_1:169; then
+    [y,x] in @the ref-operation of X by RELAT_1:def 7;
+    hence x in y ref by RELAT_1:169;
+  end;
+
+definition
+  let X be ConstructorDB;
+  attr X is ref-finite means :REFF:
+  for x being Element of X holds x ref is finite;
+end;
+
+registration
+  cluster finite -> ref-finite for ConstructorDB;
+  coherence
+  proof
+    let X be ConstructorDB;
+    assume
+A1: the carrier of X is finite;
+    let x be Element of X;
+    thus thesis by A1;
+  end;
+end;
+
+registration
+  cluster finite non empty for ConstructorDB;
+  existence
+  proof
+    set X = the finite non empty set;
+    set C = the Subset of X;
+    set R = the Relation of X,C;
+    take D = ConstructorDB(#X,C,R#);
+    thus the carrier of D is finite non empty;
+  end;
+end;
+
+registration
+  let X be ref-finite ConstructorDB;
+  let x be Element of X;
+  cluster x ref -> finite;
+  coherence by REFF;
+end;
+
+definition
+  let X be ConstructorDB;
+  let A be FinSequence of the Constrs of X;
+  func ATLEAST(A) -> List of X equals :DefAtleast:
+  {x where x is Element of X: rng A c= x ref}
+  if the carrier of X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: the carrier of X <> {};
+    {x where x is Element of X: rng A c= x ref} c= the carrier of X
+    proof
+      let z; assume z in {x where x is Element of X: rng A c= x ref}; then
+      ex x being Element of X st z = x & rng A c= x ref;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+  func ATMOST(A) -> List of X equals :DefAtmost:
+  {x where x is Element of X: x ref c= rng A}
+  if the carrier of X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: the carrier of X <> {};
+    {x where x is Element of X: x ref c= rng A} c= the carrier of X
+    proof
+      let z; assume z in {x where x is Element of X: x ref c= rng A}; then
+      ex x being Element of X st z = x & x ref c= rng A;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+  func EXACTLY(A) -> List of X equals :DefExactly:
+  {x where x is Element of X: x ref = rng A}
+  if the carrier of X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: the carrier of X <> {};
+    {x where x is Element of X: x ref = rng A} c= the carrier of X
+    proof
+      let z; assume z in {x where x is Element of X: x ref = rng A}; then
+      ex x being Element of X st z = x & x ref = rng A;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+
+  let n be Nat;
+  func ATLEAST-(A,n) -> List of X equals :DefAtleastMinus:
+  {x where x is Element of X: card((rng A) \ x ref) <= n}
+  if the carrier of X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: the carrier of X <> {};
+    {x where x is Element of X: card((rng A)\x ref) <= n} c= the carrier of X
+    proof
+      let z; assume
+      z in {x where x is Element of X: card((rng A)\x ref) <= n}; then
+      ex x being Element of X st z = x & card((rng A)\x ref) <= n;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let X be ref-finite ConstructorDB;
+  let A be FinSequence of the Constrs of X;
+  let n be Nat;
+  func ATMOST+(A,n) -> List of X equals :DefAtmostPlus:
+  {x where x is Element of X: card((x ref) \ rng A) <= n}
+  if the carrier of X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: the carrier of X <> {};
+    {x where x is Element of X: card((x ref)\rng A) <= n} c= the carrier of X
+    proof
+      let z; assume
+      z in {x where x is Element of X: card((x ref)\rng A) <= n}; then
+      ex x being Element of X st z = x & card((x ref)\rng A) <= n;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+  let m be Nat;
+  func EXACTLY+-(A,n,m) -> List of X equals :DefExactlyPlusMinus:
+  {x where x is Element of X: card((x ref) \ rng A) <= n &
+                              card((rng A) \ x ref) <= m}
+  if the carrier of X <> {};
+  consistency;
+  coherence
+  proof
+    assume
+A1: the carrier of X <> {};
+    {x where x is Element of X: card((x ref) \ rng A) <= n &
+    card((rng A)\x ref) <= m} c= the carrier of X
+    proof
+      let z; assume
+      z in {x where x is Element of X: card((x ref) \ rng A) <= n &
+      card((rng A)\x ref) <= m}; then
+      ex x being Element of X st z = x & card((x ref) \ rng A) <= n &
+      card((rng A)\x ref) <= m;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+reserve X for ConstructorDB, A for FinSequence of the Constrs of X,
+  x for Element of X;
+reserve Y for ref-finite ConstructorDB,
+  B for FinSequence of the Constrs of Y,
+  y for Element of Y;
+
+theorem Th41:
+  ATLEAST-(A,0) = ATLEAST(A)
+  proof
+    per cases;
+    suppose the carrier of X = {}; then
+      ATLEAST-(A,0) = {} & ATLEAST(A) = {};
+      hence thesis;
+    end;
+    suppose
+A0:   the carrier of X <> {}; then
+A1:   ATLEAST-(A,0) = {x: card((rng A)\x ref) <= 0} by DefAtleastMinus;
+A2:   ATLEAST(A) = {x: rng A c= x ref} by A0,DefAtleast;
+      thus ATLEAST-(A,0) c= ATLEAST(A)
+      proof
+        let z; assume z in ATLEAST-(A,0); then
+        consider x such that
+A3:     z = x & card((rng A)\x ref) <= 0 by A1;
+        (rng A)\x ref = {} by A3,NAT_1:3; then
+        rng A c= x ref by XBOOLE_1:37;
+        hence thesis by A3,A2;
+      end;
+      let z; assume z in ATLEAST(A); then
+      consider x such that
+A4:   z = x & rng A c= x ref by A2;
+      (rng A)\x ref = {} by A4,XBOOLE_1:37; then
+      card((rng A)\x ref) = 0;
+      hence z in ATLEAST-(A,0) by A1,A4;
+    end;
+  end;
+
+theorem Th42:
+  ATMOST+(B,0) = ATMOST(B)
+  proof
+    per cases;
+    suppose the carrier of Y = {}; then
+      ATMOST+(B,0) = {} & ATMOST(B) = {};
+      hence thesis;
+    end;
+    suppose
+A0:   the carrier of Y <> {}; then
+A1:   ATMOST+(B,0) = {y: card((y ref)\rng B) <= 0} by DefAtmostPlus;
+A2:   ATMOST(B) = {y: y ref c= rng B} by A0,DefAtmost;
+      thus ATMOST+(B,0) c= ATMOST(B)
+      proof
+        let z; assume z in ATMOST+(B,0); then
+        consider y such that
+A3:     z = y & card((y ref)\rng B) <= 0 by A1;
+        (y ref)\rng B = {} by A3,NAT_1:3; then
+        y ref c= rng B by XBOOLE_1:37;
+        hence thesis by A3,A2;
+      end;
+      let z; assume z in ATMOST(B); then
+      consider y such that
+A4:   z = y & y ref c= rng B by A2;
+      (y ref)\rng B = {} by A4,XBOOLE_1:37; then
+      card((y ref)\rng B) = 0;
+      hence z in ATMOST+(B,0) by A1,A4;
+    end;
+  end;
+
+theorem Th43:
+  EXACTLY+-(B,0,0) = EXACTLY(B)
+  proof
+    per cases;
+    suppose the carrier of Y = {}; then
+      EXACTLY+-(B,0,0) = {} & EXACTLY(B) = {};
+      hence thesis;
+    end;
+    suppose
+A0:   the carrier of Y <> {}; then
+A1:   EXACTLY+-(B,0,0) = {y: card((y ref)\rng B) <= 0 & card((rng B)\y ref)<=0}
+      by DefExactlyPlusMinus;
+A2:   EXACTLY(B) = {y: y ref = rng B} by A0,DefExactly;
+      thus EXACTLY+-(B,0,0) c= EXACTLY(B)
+      proof
+        let z; assume z in EXACTLY+-(B,0,0); then
+        consider y such that
+A3:     z = y & card((y ref)\rng B) <= 0 & card((rng B)\y ref)<=0 by A1;
+        (y ref)\rng B = {} & (rng B)\y ref = {}
+        by A3,NAT_1:3; then
+        y ref c= rng B & rng B c= y ref by XBOOLE_1:37; then
+        y ref = rng B by XBOOLE_0:def 10;
+        hence thesis by A3,A2;
+      end;
+      let z; assume z in EXACTLY(B); then
+      consider y such that
+A4:   z = y & y ref = rng B by A2;
+      (y ref)\rng B = {} & (rng B)\y ref = {} by A4,XBOOLE_1:37; then
+      card((y ref)\rng B) = 0 & card((rng B)\y ref) = 0;
+      hence z in EXACTLY+-(B,0,0) by A1,A4;
+    end;
+  end;
+
+theorem Th44:
+  n <= m implies ATLEAST-(A,n) c= ATLEAST-(A,m)
+  proof
+    assume
+A1: n <= m;
+    let z; assume
+A2: z in ATLEAST-(A,n); then
+    z in {x: card((rng A)\x ref) <= n} by DefAtleastMinus; then
+    consider x such that
+A3: z = x & card((rng A)\x ref) <= n;
+    card((rng A)\x ref) <= m by A1,A3,XXREAL_0:2; then
+    x in {x1 where x1 is Element of X: card((rng A)\x1 ref) <= m};
+    hence thesis by A2,A3,DefAtleastMinus;
+  end;
+
+theorem Th45:
+  n <= m implies ATMOST+(B,n) c= ATMOST+(B,m)
+  proof
+    assume
+A1: n <= m;
+    let z; assume
+A2: z in ATMOST+(B,n); then
+    z in {y: card((y ref)\rng B) <= n} by DefAtmostPlus; then
+    consider y such that
+A3: z = y & card((y ref)\rng B) <= n;
+    card((y ref)\rng B) <= m by A1,A3,XXREAL_0:2; then
+    y in {x1 where x1 is Element of Y: card((x1 ref)\rng B) <= m};
+    hence thesis by A2,A3,DefAtmostPlus;
+  end;
+
+theorem Th46:
+  for n1,n2,m1,m2 being Nat st n1 <= m1 & n2 <= m2 holds
+  EXACTLY+-(B,n1,n2) c= EXACTLY+-(B,m1,m2)
+  proof let n1,n2,m1,m2 be Nat;
+    assume
+A1: n1 <= m1 & n2 <= m2;
+    let z; assume
+A2: z in EXACTLY+-(B,n1,n2); then
+    z in {y: card((y ref)\rng B) <= n1 & card((rng B)\y ref) <= n2}
+    by DefExactlyPlusMinus; then
+    consider y such that
+A3: z = y & card((y ref)\rng B) <= n1 & card((rng B)\y ref) <= n2;
+    card((y ref)\rng B) <= m1 & card((rng B)\y ref) <= m2
+    by A1,A3,XXREAL_0:2; then
+    y in {x1 where x1 is Element of Y: card((x1 ref)\rng B) <= m1 &
+    card((rng B)\x1 ref) <= m2};
+    hence thesis by A2,A3,DefExactlyPlusMinus;
+  end;
+
+theorem
+  ATLEAST(A) c= ATLEAST-(A,n)
+  proof
+    ATLEAST(A) = ATLEAST-(A,0) & 0 <= n by Th41,NAT_1:2;
+    hence thesis by Th44;
+  end;
+
+theorem
+  ATMOST(B) c= ATMOST+(B,n)
+  proof
+    ATMOST(B) = ATMOST+(B,0) & 0 <= n by Th42,NAT_1:2;
+    hence thesis by Th45;
+  end;
+
+theorem
+  EXACTLY(B) c= EXACTLY+-(B,n,m)
+  proof
+    EXACTLY(B) = EXACTLY+-(B,0,0) & 0 <= n & 0 <= m by Th43,NAT_1:2;
+    hence thesis by Th46;
+  end;
+
+theorem
+  EXACTLY A = ATLEAST A AND ATMOST A
+  proof
+    thus EXACTLY A c= ATLEAST A AND ATMOST A
+    proof
+      let z; assume
+A1:   z in EXACTLY A; then
+      z in {x where x is Element of X: (x ref) = rng A} by DefExactly; then
+      consider x being Element of X such that
+A2:   z = x & (x ref) = rng A;
+      z in {y where y is Element of X: (rng A) c= y ref} by A2; then
+A3:   z in ATLEAST A by A1,DefAtleast;
+      z in {y where y is Element of X: (y ref) c= rng A} by A2; then
+      z in ATMOST A by A1,DefAtmost;
+      hence thesis by A3,XBOOLE_0:def 4;
+    end;
+    let z; assume
+A6: z in ATLEAST A AND ATMOST A; then
+A4: z in ATLEAST A & z in ATMOST A by XBOOLE_0:def 4; then
+    z in {y where y is Element of X: (y ref) c= rng A} by DefAtmost; then
+    consider a being Element of X such that
+A5: z = a & (a ref) c= rng A;
+    z in {y where y is Element of X: (rng A) c= y ref} by A4,DefAtleast; then
+    consider b being Element of X such that
+A7: z = b & (rng A) c= b ref;
+    z = a & a ref = rng A by A5,A7,XBOOLE_0:def 10; then
+    z in {y where y is Element of X: (y ref) = rng A};
+    hence thesis by A6,DefExactly;
+  end;
+
+theorem
+  EXACTLY+-(B,n,m) = ATLEAST-(B,m) AND ATMOST+(B,n)
+  proof
+    thus EXACTLY+-(B,n,m) c= ATLEAST-(B,m) AND ATMOST+(B,n)
+    proof
+      let z; assume
+A1:   z in EXACTLY+-(B,n,m); then
+      z in {x where x is Element of Y: card((x ref) \ rng B) <= n &
+      card((rng B) \ x ref) <= m} by DefExactlyPlusMinus; then
+      consider x being Element of Y such that
+A2:   z = x & card((x ref) \ rng B) <= n & card((rng B) \ x ref) <= m;
+      z in {y: card((rng B) \ y ref) <= m} by A2; then
+A3:   z in ATLEAST-(B,m) by A1,DefAtleastMinus;
+      z in {y: card((y ref) \ rng B) <= n} by A2; then
+      z in ATMOST+(B,n) by A1,DefAtmostPlus;
+      hence z in ATLEAST-(B,m) AND ATMOST+(B,n) by A3,XBOOLE_0:def 4;
+    end;
+    let z; assume
+A6: z in ATLEAST-(B,m) AND ATMOST+(B,n); then
+A4: z in ATLEAST-(B,m) & z in ATMOST+(B,n) by XBOOLE_0:def 4; then
+    z in {y: card((y ref) \ rng B) <= n} by DefAtmostPlus; then
+A5: ex y st z = y & card((y ref) \ rng B) <= n;
+    z in {y: card((rng B) \ y ref) <= m} by A4,DefAtleastMinus; then
+    ex y st z = y & card((rng B) \ y ref) <= m; then
+    z in {y: card((y ref) \ rng B) <= n & card((rng B) \ y ref) <= m} by A5;
+    hence thesis by A6,DefExactlyPlusMinus;
+  end;
+
+theorem Th65:
+  A <> {} implies ATLEAST A = meet {x occur: x in rng A}
+  proof assume
+    A <> {}; then
+    rng A <> {} by RELAT_1:41; then
+    consider s such that
+A1: s in rng A by XBOOLE_0:def 1;
+    s in the Constrs of X & the Constrs of X c= the carrier of X
+    by A1; then
+    reconsider s as Element of X;
+A2: s occur in {x occur: x in rng A} by A1;
+    thus ATLEAST A c= meet {x occur: x in rng A}
+    proof
+      let z; assume z in ATLEAST A; then
+      z in {y where y is Element of X: (rng A) c= y ref} by DefAtleast; then
+      consider a being Element of X such that
+A5:   z = a & (rng A) c= a ref;
+      now let Y be set;
+        assume Y in {x occur: x in rng A}; then
+        consider x such that
+A3:     Y = x occur & x in rng A;
+        thus z in Y by A5,A3,Th10;
+      end;
+      hence thesis by A2,SETFAM_1:def 1;
+    end;
+    let z; assume
+A6: z in meet {x occur: x in rng A};
+    then
+A8: z in s occur by A2,SETFAM_1:def 1;
+    then reconsider z as Element of X;
+    rng A c= z ref
+    proof
+      let s; assume
+A7:   s in rng A; then
+      s in the Constrs of X; then
+      reconsider s as Element of X;
+      s occur in {x occur: x in rng A} by A7; then
+      z in s occur by A6,SETFAM_1:def 1;
+      hence thesis by Th10;
+    end; then
+    z in {x: rng A c= x ref};
+    hence thesis by A8,DefAtleast;
+  end;
+
+theorem
+  for c1,c2 being Element of X holds
+  A = <*c1,c2*> implies ATLEAST A = (c1 occur) AND (c2 occur)
+  proof
+    let c1,c2 be Element of X;
+    assume Z0: A = <*c1,c2*>; then
+A0: rng A = {c1,c2} by FINSEQ_2:127;
+A1: {x occur: x in rng A} = {c1 occur, c2 occur}
+    proof
+      thus {x occur: x in rng A} c= {c1 occur, c2 occur}
+      proof
+        let z; assume z in {x occur: x in rng A}; then
+        consider x such that
+A2:     z = x occur & x in rng A;
+        x = c1 or x = c2 by A0,A2,TARSKI:def 2;
+        hence thesis by A2,TARSKI:def 2;
+      end;
+      let z; assume z in {c1 occur,c2 occur}; then
+A3:   z = c1 occur or z = c2 occur by TARSKI:def 2;
+      c1 in rng A & c2 in rng A by A0,TARSKI:def 2;
+      hence thesis by A3;
+    end;
+    thus ATLEAST A = meet {x occur: x in rng A} by Z0,Th65
+    .= (c1 occur) AND (c2 occur) by A1,SETFAM_1:11;
+  end;
+

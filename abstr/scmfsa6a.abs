@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec , Yatsuka Nakamura and Noriko Asamoto
 ::
 :: Received June 20, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,20 +14,23 @@
 
 environ
 
- vocabularies NUMBERS, SUBSET_1, AMI_1, SCMFSA_2, SCMNORM, FUNCT_4, AMI_3,
+ vocabularies NUMBERS, SUBSET_1, AMI_1, SCMFSA_2, EXTPRO_1, FUNCT_4, AMI_3,
       FUNCOP_1, RELAT_1, FUNCT_1, TARSKI, XBOOLE_0, CARD_1, CAT_1, NAT_1,
-      ARYTM_3, FINSET_1, STRUCT_0, XXREAL_0, AMISTD_2, VALUED_1, FSM_1,
-      GRAPHSP, FUNCT_7, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      TURING_1, SCMFSA6A, ORDINAL1, RELOC, SCMFSA6C;
+      ARYTM_3, FINSET_1, XXREAL_0, AMISTD_2, VALUED_1, FSM_1, GRAPHSP, ARYTM_1,
+      INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, SCMFSA6A, ORDINAL1, RELOC,
+      SCMFSA6C, MEMSTR_0, SCMPDS_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
-      NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
-      FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0, MEMSTR_0,
-      COMPOS_1, EXTPRO_1, FUNCT_7, SCMFSA_2, AMISTD_2, FUNCOP_1, XXREAL_0;
+      ORDINAL1, NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      FINSEQ_2, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0,
+      MEMSTR_0, COMPOS_0, COMPOS_1, EXTPRO_1, FUNCT_7, SCMFSA_2, AMISTD_2,
+      FUNCOP_1, XXREAL_0, SCMFSA_M;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, INT_2, AMISTD_2, SCMFSA_2,
-      RELSET_1, VALUED_1, AMI_3, PRE_POLY, AMISTD_1, FUNCT_7, MEMSTR_0;
+      RELSET_1, VALUED_1, AMI_3, PRE_POLY, AMISTD_1, FUNCT_7, MEMSTR_0,
+      SCMFSA_1, SCMFSA_M;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, SCMFSA_2, FUNCT_4, RELAT_1,
-      VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1, SCMFSA_4, MEMSTR_0;
+      VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1, SCMFSA_4, MEMSTR_0,
+      FINSEQ_1, AMI_3, COMPOS_0, SCMFSA_M;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -38,7 +41,7 @@ reserve l, m, n for Element of NAT,
   I,J,K for Program of SCM+FSA;
 
 definition
-  let P be NAT-defined (the Instructions of SCM+FSA)-valued finite Function;
+  let P be NAT-defined (the InstructionsF of SCM+FSA)-valued finite Function;
   let l be Element of NAT;
   func Directed(P,l) -> preProgram of SCM+FSA equals
 :: SCMFSA6A:def 1
@@ -46,7 +49,7 @@ definition
 end;
 
 definition
-  let P be NAT-defined (the Instructions of SCM+FSA)-valued finite Function;
+  let P be NAT-defined (the InstructionsF of SCM+FSA)-valued finite Function;
   func Directed P -> preProgram of SCM+FSA equals
 :: SCMFSA6A:def 2
   Directed(P, card P);
@@ -57,65 +60,21 @@ registration
   cluster Directed I -> initial non empty;
 end;
 
-
-
 theorem :: SCMFSA6A:1
   not halt SCM+FSA in rng Directed I;
 
 theorem :: SCMFSA6A:2
-  Reloc(Directed I, m) = ((id the Instructions of
+  Reloc(Directed I, m) = ((id the InstructionsF of
 SCM+FSA) +* (halt SCM+FSA .--> goto (m + card I)))* Reloc(I, m);
 
 reserve a,b for Int-Location,
   f for FinSeq-Location,
   s,s1,s2 for State of SCM+FSA;
 
-registration
-  let n be Nat;
-  let i be Integer;
-  cluster (intloc n) .--> i -> (the Object-Kind of SCM+FSA)-compatible;
-end;
-
-definition
-  let I be PartState of SCM+FSA;
-  func Initialized I -> PartState of SCM+FSA equals
-:: SCMFSA6A:def 3
-  I +* Initialize ((intloc 0) .--> 1);
- projectivity;
-end;
-
-registration
-  let I be PartState of SCM+FSA;
- cluster Initialized I -> 0-started;
-end;
-
-registration
-  let I be FinPartState of SCM+FSA;
- cluster Initialized I -> finite;
-end;
-
 theorem :: SCMFSA6A:3
   InsCode i in {0,6,7,8} or Exec(i,s).IC SCM+FSA = succ IC s;
 
-scheme :: SCMFSA6A:sch 1
-
-  SCMFSAEx{ G(set) -> Integer, H(set) -> FinSequence of INT,
-        I() -> Element of NAT }:
- ex S being State of SCM+FSA st IC S = I() &
-   for i being Element of NAT holds S.intloc i = G(i) & S.fsloc i = H(i);
-
-canceled;
-
-theorem :: SCMFSA6A:5
-  for s being State of SCM+FSA, x being set st x in dom s holds x is
-  Int-Location or x is FinSeq-Location or x = IC SCM+FSA;
-
-canceled;
-
-theorem :: SCMFSA6A:7
-  for s1,s2 being State of SCM+FSA holds ((for a being
-Int-Location holds s1.a = s2.a) & for f being FinSeq-Location
- holds s1.f = s2.f) iff DataPart s1 = DataPart s2;
+canceled 4;
 
 theorem :: SCMFSA6A:8
   for s1,s2 being State of SCM+FSA, n being Element of NAT, i being
@@ -123,99 +82,67 @@ theorem :: SCMFSA6A:8
   implies IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) & DataPart Exec(i,s1) =
   DataPart Exec(IncAddr(i,n),s2);
 
-theorem :: SCMFSA6A:9
-  for p being PartState of SCM+FSA holds dom Initialized p = dom p
-  \/ {intloc 0} \/ {IC SCM+FSA};
-
-registration
-  let s be State of SCM+FSA;
-  cluster Initialized s -> total;
-end;
-
-theorem :: SCMFSA6A:10
-  for p being PartState of SCM+FSA holds intloc 0 in dom Initialized p;
-
-theorem :: SCMFSA6A:11
-  for p being PartState of SCM+FSA holds (Initialized p).intloc 0 =
-  1 & (Initialized p).IC SCM+FSA =  0;
-
-theorem :: SCMFSA6A:12
-  for I being Program of SCM+FSA holds not intloc 0 in dom I;
-
-theorem :: SCMFSA6A:13
-  for p being PartState of SCM+FSA, a being Int-Location
-   st  a <> intloc 0 & not a in dom p
-  holds not a in dom Initialized p;
-
-theorem :: SCMFSA6A:14
-  for p being PartState of SCM+FSA, f being FinSeq-Location
-     st not f in dom p
-    holds not f in dom Initialized p;
-
-
+canceled 6;
 
 begin :: The composition of macroinstructions
 
 definition
+ canceled;
   let I,J be Program of SCM+FSA;
-  func I ';' J -> Program of SCM+FSA equals
+  func I ";" J -> Program of SCM+FSA equals
 :: SCMFSA6A:def 4
-  Directed I +* Reloc(J, card I);
+  Directed CutLastLoc stop I +* Reloc(J, card I);
 end;
 
 registration
  let I be Program of SCM+FSA, J be non halt-free Program of SCM+FSA;
-  cluster I ';' J -> non halt-free;
+  cluster I ";" J -> non halt-free;
 end;
-
-
 
 theorem :: SCMFSA6A:15
   for I,J being Program of SCM+FSA, l being Element of NAT
-   st l in dom I & I.l <> halt SCM+FSA holds (I ';' J).l = I.l;
+   st l in dom I & I.l <> halt SCM+FSA holds (I ";" J).l = I.l;
 
 theorem :: SCMFSA6A:16
-  for I,J being Program of SCM+FSA holds Directed I c= I ';' J;
+  for I,J being Program of SCM+FSA holds Directed I c= I ";" J;
 
 theorem :: SCMFSA6A:17
-  for I,J being Program of SCM+FSA holds dom I c= dom (I ';' J);
+  for I,J being Program of SCM+FSA holds dom I c= dom (I ";" J);
 
 theorem :: SCMFSA6A:18
-  for I,J being Program of SCM+FSA holds I +* (I ';' J) = (I ';' J);
+  for I,J being Program of SCM+FSA holds I +* (I ";" J) = (I ";" J);
 
 begin :: The compostion of instruction and macroinstructions
 
 definition
   let i, J;
-  func i ';' J -> Program of SCM+FSA equals
+  func i ";" J -> Program of SCM+FSA equals
 :: SCMFSA6A:def 5
-  Macro i ';' J;
+  Macro i ";" J;
 end;
 
 definition
   let I, j;
-  func I ';' j -> Program of SCM+FSA equals
+  func I ";" j -> Program of SCM+FSA equals
 :: SCMFSA6A:def 6
-  I ';' Macro j;
+  I ";" Macro j;
 end;
 
 definition
   let i,j;
-  func i ';' j -> Program of SCM+FSA equals
+  func i ";" j -> Program of SCM+FSA equals
 :: SCMFSA6A:def 7
-  Macro i ';' Macro j;
+  Macro i ";" Macro j;
 end;
 
-
-
 theorem :: SCMFSA6A:19
-  i ';' j = Macro i ';' j;
+  i ";" j = Macro i ";" j;
 
 theorem :: SCMFSA6A:20
-  i ';' j = i ';' Macro j;
+  i ";" j = i ";" Macro j;
 
 theorem :: SCMFSA6A:21
-  card(I ';' J) = card I + card J;
+  card(I ";" J) = card I + card J;
 
 registration
   let P be preProgram of SCM+FSA;
@@ -228,76 +155,47 @@ registration
   cluster Directed P -> halt-free;
 end;
 
-
-
 theorem :: SCMFSA6A:22
   for I being preProgram of SCM+FSA, l being Element of NAT
    holds I is halt-free implies Directed(I,l) = I;
-
-
 
 theorem :: SCMFSA6A:23
   for I being preProgram of SCM+FSA, k being Element of NAT holds
   Reloc(Directed I,k) = Directed(Reloc(I,k),(card I + k));
 
 theorem :: SCMFSA6A:24
-  for I,J being Program of SCM+FSA holds Directed (I ';' J) = I
-  ';' Directed J;
+  for I,J being Program of SCM+FSA holds Directed (I ";" J) = I
+  ";" Directed J;
 
 theorem :: SCMFSA6A:25
-  I ';' J ';' K = I ';' (J ';' K);
+  I ";" J ";" K = I ";" (J ";" K);
 
 theorem :: SCMFSA6A:26
-  I ';' J ';' k = I ';' (J ';' k);
+  I ";" J ";" k = I ";" (J ";" k);
 
 theorem :: SCMFSA6A:27
-  I ';' j ';' K = I ';' (j ';' K);
+  I ";" j ";" K = I ";" (j ";" K);
 
 theorem :: SCMFSA6A:28
-  I ';' j ';' k = I ';' (j ';' k);
+  I ";" j ";" k = I ";" (j ";" k);
 
 theorem :: SCMFSA6A:29
-  i ';' J ';' K = i ';' (J ';' K);
+  i ";" J ";" K = i ";" (J ";" K);
 
 theorem :: SCMFSA6A:30
-  i ';' J ';' k = i ';' (J ';' k);
+  i ";" J ";" k = i ";" (J ";" k);
 
 theorem :: SCMFSA6A:31
-  i ';' j ';' K = i ';' (j ';' K);
+  i ";" j ";" K = i ";" (j ";" K);
 
 theorem :: SCMFSA6A:32
-  i ';' j ';' k = i ';' (j ';' k);
+  i ";" j ";" k = i ";" (j ";" k);
 
 theorem :: SCMFSA6A:33
- card(i ';' J) = card J + 2;
+ card(i ";" J) = card J + 2;
 
 theorem :: SCMFSA6A:34
- card(I ';' j) = card I + 2;
+ card(I ";" j) = card I + 2;
 
 theorem :: SCMFSA6A:35
- card(i ';' j) = 4;
-
-canceled;
-
-theorem :: SCMFSA6A:37  :: from SCMFSA8C
-  for s being State of SCM+FSA st s.intloc 0 = 1 & IC s =  0
-  holds Initialized s = s;
-
-theorem :: SCMFSA6A:38
- for p being PartState of SCM+FSA holds
-   (Initialized p).intloc 0 = 1;
-
-canceled 2;
-
-theorem :: SCMFSA6A:41
- intloc 0 in dom Initialize ((intloc 0).-->1);
-
-theorem :: SCMFSA6A:42
-  dom Initialize ((intloc 0) .--> 1) = {intloc 0,IC SCM+FSA};
-
-theorem :: SCMFSA6A:43
- (Initialize((intloc 0).-->1)).intloc 0 = 1;
-
-theorem :: SCMFSA6A:44
- for p being PartState of SCM+FSA holds
- Initialize((intloc 0).-->1) c= Initialized p;
+ card(i ";" j) = 4;

@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received December 10, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -28,10 +28,9 @@ environ
       RAT_1, NUMBERS, ABIAN, FUNCT_7, VALUED_1, PREPOWER, SERIES_1, RCOMP_1,
       PBOOLE, LIMFUNC1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, TEX_1,
       CANTOR_1, YELLOW_8, WAYBEL23, TOPGEN_2;
- constructors SETFAM_1, DOMAIN_1, ARYTM_2, FINSUB_1, REAL_1, SQUARE_1, SEQ_1,
-      CARD_2, PROB_1, RCOMP_1, LIMFUNC1, NEWTON, PREPOWER, SERIES_1, ABIAN,
-      TOPS_1, COMPTS_1, TEX_1, TAXONOM2, WAYBEL23, TOPGEN_2, VALUED_1,
-      RELSET_1;
+ constructors DOMAIN_1, ARYTM_2, FINSUB_1, REAL_1, SQUARE_1, SEQ_1, CARD_2,
+      PROB_1, RCOMP_1, LIMFUNC1, NEWTON, PREPOWER, SERIES_1, ABIAN, TOPS_1,
+      COMPTS_1, TEX_1, TAXONOM2, WAYBEL23, TOPGEN_2, RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, NUMBERS,
       XREAL_0, INT_1, RAT_1, CARD_1, MEMBERED, NEWTON, PBOOLE, CARD_5,
       STRUCT_0, PRE_TOPC, TOPS_1, TEX_2, VALUED_0, VALUED_1, FUNCT_2;
@@ -44,7 +43,7 @@ environ
       INT_1, XCMPLX_1, FINSET_1, ORDINAL3, MCART_1, ARYTM_2, ARYTM_3, SERIES_1,
       ABSVALUE, PREPOWER, NEWTON, NAT_1, IRRAT_1, ORDINAL1, FINSUB_1, FUNCT_7,
       FINSEQ_1, TDLAT_3, FUNCOP_1, TEX_1, XREAL_1, XXREAL_0, WAYBEL23,
-      VALUED_1, XXREAL_1, RELAT_1, PARTFUN1, TOPS_2;
+      VALUED_1, XXREAL_1, RELAT_1, PARTFUN1, TOPS_2, XTUPLE_0;
  schemes FUNCT_1, FUNCT_2, NAT_1, CLASSES1;
 
 begin :: Introducing topology
@@ -287,7 +286,7 @@ A29:  x in a and
 A30:  a in Y by A28,TARSKI:def 4;
       ex b st b in dom B & a in B.b by A27,A30,CARD_5:2;
       then
-A31:  ex V being set st V in B.x & V c= a by A2,A4,A29;
+A31:  ex V being set st V in B.x & V c= a by A4,A29;
       a c= A by A28,A30,ZFMISC_1:74;
       hence thesis by A31,XBOOLE_1:1;
     end;
@@ -1075,7 +1074,7 @@ end;
 theorem Th17:
   card RAT = omega
 proof
-  defpred P[set,set] means ex i being integer number, n being natural number
+  defpred P[set,set] means ex i being integer number, n being Nat
   st $1 = [i,n] & $2 = i/n;
 A1: a in [:INT,NAT:] implies ex b st P[a,b]
   proof
@@ -1084,7 +1083,7 @@ A1: a in [:INT,NAT:] implies ex b st P[a,b]
 A2: x in INT and
 A3: y in NAT and
 A4: a = [x,y] by ZFMISC_1:def 2;
-    reconsider y as natural number by A3;
+    reconsider y as Nat by A3;
     reconsider x as integer number by A2;
     x/y = x/y;
     hence thesis by A4;
@@ -1107,11 +1106,11 @@ A9: a = k/n;
     k in INT by INT_1:def 2;
     then
 A10: [k,n] in [:INT,NAT:] by ZFMISC_1:def 2;
-    then consider i1 being integer number, n1 being natural number such that
+    then consider i1 being integer number, n1 being Nat such that
 A11: [k,n] = [i1,n1] and
 A12: f. [k,n] = i1/n1 by A5;
-A13: n = n1 by A11,ZFMISC_1:27;
-    i1 = k by A11,ZFMISC_1:27;
+A13: n = n1 by A11,XTUPLE_0:1;
+    i1 = k by A11,XTUPLE_0:1;
     hence thesis by A13,A5,A9,A10,A12,FUNCT_1:def 3;
   end;
   card [:INT,NAT:] = card [:omega,omega:] by Th16,CARD_2:7
@@ -1394,8 +1393,7 @@ definition
   let X be set, r being real number;
   func X-powers r -> Function of NAT, REAL means
   : Def5:
-  for i being natural
-  number holds i in X & it.i = r|^i or not i in X & it.i = 0;
+  for i being Nat holds i in X & it.i = r|^i or not i in X & it.i = 0;
   existence
   proof
     deffunc G(set) = 0;
@@ -1407,7 +1405,7 @@ A1: for a st a in NAT holds (C[a] implies F(a) in REAL) & (not C[a]
 A2: for a st a in NAT holds (C[a] implies f.a = F(a)) & (not C[a]
     implies f.a = G(a)) from FUNCT_2:sch 5(A1);
     take f;
-    let i be natural number;
+    let i be Nat;
     i in NAT by ORDINAL1:def 12;
     then In(i,NAT) = i by FUNCT_7:def 1;
     hence thesis by A2;
@@ -1415,9 +1413,9 @@ A2: for a st a in NAT holds (C[a] implies f.a = F(a)) & (not C[a]
   uniqueness
   proof
     let f1,f2 be Function of NAT,REAL such that
-A3: for i being natural number holds i in X & f1.i = r|^i or not i in
+A3: for i being Nat holds i in X & f1.i = r|^i or not i in
     X & f1.i = 0 and
-A4: for i being natural number holds i in X & f2.i = r|^i or not i in
+A4: for i being Nat holds i in X & f2.i = r|^i or not i in
     X & f2.i = 0;
     now
       let i be Element of NAT;
@@ -1533,12 +1531,12 @@ PREPOWER:6;
 end;
 
 theorem Th26:
-  for X being infinite Subset of NAT, i being natural number holds
+  for X being infinite Subset of NAT, i being Nat holds
   (Partial_Sums (X-powers (1/2))).i < Sum (X-powers (1/2))
 proof
   set r = 1/2;
   let X be infinite Subset of NAT;
-  let i be natural number;
+  let i be Nat;
   defpred P[Element of NAT] means (Partial_Sums (X-powers r)).i <= (
   Partial_Sums (X-powers r)).(i+$1);
   not X c= i+1;

@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received May 31, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,53 +16,20 @@ environ
 
  vocabularies XBOOLE_0, SUBSET_1, FUNCT_2, FUNCT_1, ZFMISC_1, FUNCT_5, RELAT_1,
       TARSKI, CAT_1, FUNCOP_1, STRUCT_0, GRAPH_1, FUNCT_3, REALSET1, PARTFUN1,
-      FUNCT_4, MCART_1, CAT_2;
+      FUNCT_4, MCART_1, CAT_2, MONOID_0, RELAT_2, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, REALSET1,
       FUNCOP_1, STRUCT_0, GRAPH_1, CAT_1;
  constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCT_4, FUNCT_5, REALSET1, CAT_1,
       FUNCOP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, CAT_1, STRUCT_0,
-      RELAT_1;
+      RELAT_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
 
 
 begin
 
-reserve X for set;
-reserve C,D,E for non empty set;
-reserve c for Element of C,
-  d for Element of D;
-
-:: Auxiliary theorems
-
-definition
-  let D,X,E;
-  let F be FUNCTION_DOMAIN of X,E;
-  let f be Function of D,F;
-  let d be Element of D;
-  redefine func f.d -> Element of F;
-end;
-
-reserve f for Function of [:C,D:],E;
-
-theorem :: CAT_2:1
-  curry f is Function of C,Funcs(D,E);
-
-theorem :: CAT_2:2
-  curry' f is Function of D,Funcs(C,E);
-
-definition
-  let C,D,E,f;
-  redefine func curry f -> Function of C,Funcs(D,E);
-  redefine func curry' f -> Function of D,Funcs(C,E);
-end;
-
-theorem :: CAT_2:3
-  f.(c,d) = ((curry f).c).d;
-
-theorem :: CAT_2:4
-  f.(c,d) = ((curry' f).d).c;
+canceled 4;
 
 reserve B,C,D,C9,D9 for Category;
 
@@ -125,10 +92,12 @@ definition
   mode Subcategory of C -> Category means
 :: CAT_2:def 4
 
-    the carrier of it c= the
-carrier of C & (for a,b being Object of it, a9,b9 being Object of C st a = a9 &
-b = b9 holds Hom(a,b) c= Hom(a9,b9)) & the Comp of it c= the Comp of C & for a
-    being Object of it, a9 being Object of C st a = a9 holds id a = id a9;
+    the carrier of it c= the carrier of C &
+     (for a,b being Object of it, a9,b9 being Object of C
+        st a = a9 & b = b9
+    holds Hom(a,b) c= Hom(a9,b9)) & the Comp of it c= the Comp of C &
+    for a being Object of it, a9 being Object of C st a = a9
+      holds id a = id a9;
 end;
 
 registration
@@ -157,7 +126,7 @@ theorem :: CAT_2:10
 
 theorem :: CAT_2:11
   for f,g being (Morphism of E), f9,g9 being Morphism of C st f =
-  f9 & g = g9 & dom g = cod f holds g*f = g9*f9;
+  f9 & g = g9 & dom g = cod f holds g(*)f = g9(*)f9;
 
 theorem :: CAT_2:12
   C is Subcategory of C;
@@ -185,18 +154,21 @@ theorem :: CAT_2:17
   incl E is full iff for a,b being Object of E, a9,b9 being Object
   of C st a = a9 & b = b9 holds Hom(a,b) = Hom(a9,b9);
 
-definition
-  let C be non void non empty CatStr, D;
-  pred C is_full_subcategory_of D means
+definition let D;
+  let C be Subcategory of D;
+  attr C is full means
 :: CAT_2:def 6
+  for c1,c2 being Object of C, d1,d2 being Object of D
+   st c1 = d1 & c2 = d2
+  holds Hom(c1,c2) = Hom(d1,d2);
+end;
 
-  C is Subcategory of D & for a,b
-being Object of C, a9,b9 being Object of D st a = a9 & b = b9 holds Hom(a,b) =
-  Hom(a9,b9);
+registration let D;
+ cluster full for Subcategory of D;
 end;
 
 theorem :: CAT_2:18
-  E is_full_subcategory_of C iff incl(E) is full;
+  E is full iff incl(E) is full;
 
 theorem :: CAT_2:19
   for O being non empty Subset of the carrier of C holds union{Hom
@@ -207,13 +179,12 @@ theorem :: CAT_2:20
   for O being non empty Subset of the carrier of C, M being non
 empty set st M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O
 & b in O} holds (the Source of C)|M is Function of M,O & (the Target of C)|M is
-Function of M,O & (the Comp of C)||M is PartFunc of [:M,M:],M & (the Id of C)|O
-  is Function of O,M;
+Function of M,O & (the Comp of C)||M is PartFunc of [:M,M:],M;
 
 registration
   let O, M be non empty set, d,c being Function of M,O, p being PartFunc of [:
-  M,M:],M, i being Function of O,M;
-  cluster CatStr(#O,M,d,c,p,i#) -> non void non empty;
+  M,M:],M;
+  cluster CatStr(#O,M,d,c,p#) -> non void non empty;
 end;
 
 theorem :: CAT_2:21
@@ -221,16 +192,16 @@ theorem :: CAT_2:21
 set, d,c being Function of M,O, p being PartFunc of [:M,M:],M, i being Function
 of O,M st M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O &
 b in O} & d = (the Source of C)|M & c = (the Target of C)|M & p = (the Comp of
-C)||M & i = (the Id of C)|O holds CatStr(#O,M,d,c,p,i#) is_full_subcategory_of
-  C;
+C)||M
+  holds CatStr(#O,M,d,c,p#) is full Subcategory of C;
 
 theorem :: CAT_2:22
   for O being non empty Subset of the carrier of C, M being non empty
-  set , d,c being Function of M,O, p being PartFunc of [:M,M:],M, i being
-  Function of O,M st CatStr(#O,M,d,c,p,i#) is_full_subcategory_of C holds M =
+  set , d,c being Function of M,O, p being PartFunc of [:M,M:],M
+  st CatStr(#O,M,d,c,p#) is full Subcategory of C
+  holds M =
 union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O} & d =
-(the Source of C)|M & c = (the Target of C)|M & p = (the Comp of C)||M & i = (
-  the Id of C)|O;
+(the Source of C)|M & c = (the Target of C)|M & p = (the Comp of C)||M;
 
 :: Product of Categories
 
@@ -252,15 +223,11 @@ definition
   let C,D;
   func [:C,D:] -> Category equals
 :: CAT_2:def 7
-  CatStr (# [:the carrier of C,the carrier of
-D:], [:the carrier' of C,the carrier' of D:], [:the Source of C,the Source of D
-:], [:the Target of C,the Target of D:], |:the Comp of C, the Comp of D:|, [:
-    the Id of C,the Id of D:] #);
-end;
-
-registration
-  let C,D;
-  cluster [:C,D:] -> strict;
+  CatStr (# [:the carrier of C,the carrier of D:],
+     [:the carrier' of C,the carrier' of D:],
+     [:the Source of C,the Source of D:],
+     [:the Target of C,the Target of D:],
+     |:the Comp of C, the Comp of D:| #);
 end;
 
 theorem :: CAT_2:23
@@ -268,11 +235,7 @@ theorem :: CAT_2:23
   carrier' of [:C,D:] = [:the carrier' of C,the carrier' of D:] & the Source of
   [:C,D:] = [:the Source of C,the Source of D:] & the Target of [:C,D:] = [:the
 Target of C,the Target of D:] & the Comp of [:C,D:] = |:the Comp of C, the Comp
-  of D:| & the Id of [:C,D:] = [:the Id of C,the Id of D:];
-
-theorem :: CAT_2:24
-  for c being Object of C, d being Object of D holds [c,d] is
-  Object of [:C,D:];
+  of D:|;
 
 definition
   let C,D;
@@ -281,13 +244,11 @@ definition
   redefine func [c,d] -> Object of [:C,D:];
 end;
 
+canceled;
+
 theorem :: CAT_2:25
   for cd being Object of [:C,D:] ex c being Object of C, d being Object
   of D st cd = [c,d];
-
-theorem :: CAT_2:26
-  for f being Morphism of C for g being Morphism of D holds [f,g]
-  is Morphism of [:C,D:];
 
 definition
   let C,D;
@@ -296,28 +257,30 @@ definition
   redefine func [f,g] -> Morphism of [:C,D:];
 end;
 
+canceled;
+
 theorem :: CAT_2:27
   for fg being Morphism of [:C,D:] ex f being (Morphism of C), g being
   Morphism of D st fg = [f,g];
 
 theorem :: CAT_2:28
-  for f being Morphism of C for g being Morphism of D holds dom [f
-  ,g] = [dom f,dom g] & cod [f,g] = [cod f,cod g];
+  for f being Morphism of C for g being Morphism of D
+   holds dom [f,g] = [dom f,dom g] & cod [f,g] = [cod f,cod g];
 
 theorem :: CAT_2:29
   for f,f9 being Morphism of C for g,g9 being Morphism of D st dom
-  f9 = cod f & dom g9 = cod g holds [f9,g9]*[f,g] = [f9*f,g9*g];
+  f9 = cod f & dom g9 = cod g holds [f9,g9](*)[f,g] = [f9(*)f,g9(*)g];
 
 theorem :: CAT_2:30
   for f,f9 being Morphism of C for g,g9 being Morphism of D st dom
-  [f9,g9] = cod [f,g] holds [f9,g9]*[f,g] = [f9*f,g9*g];
+  [f9,g9] = cod [f,g] holds [f9,g9](*)[f,g] = [f9(*)f,g9(*)g];
 
 theorem :: CAT_2:31
-  for c being Object of C, d being Object of D holds id [c,d] = [ id c,id d];
+  for c being Object of C, d being Object of D holds id [c,d] = [id c,id d];
 
 theorem :: CAT_2:32
-  for c,c9 being Object of C, d,d9 being Object of D holds Hom([c,d],[c9
-  ,d9]) = [:Hom(c,c9),Hom(d,d9):];
+  for c,c9 being Object of C, d,d9 being Object of D
+   holds Hom([c,d],[c9,d9]) = [:Hom(c,c9),Hom(d,d9):];
 
 theorem :: CAT_2:33
   for c,c9 being Object of C, f being Morphism of c,c9, d,d9 being
@@ -380,34 +343,32 @@ theorem :: CAT_2:40
   for L being Function of the carrier of C,Funct(B,D), M being Function
 of the carrier of B,Funct(C,D) st ( for c being Object of C,b being Object of B
   holds (M.b).(id c) = (L.c).(id b) ) & ( for f being Morphism of B for g being
-Morphism of C holds ((M.(cod f)).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom
+Morphism of C
+  holds ((M.(cod f)).g)(*)((L.(dom g)).f) = ((L.(cod g)).f)(*)((M.(dom
   f)).g) ) ex S being Functor of [:B,C:],D st for f being Morphism of B for g
-  being Morphism of C holds S.(f,g) = ((L.(cod g)).f)*((M.(dom f)).g);
+  being Morphism of C holds S.(f,g) = ((L.(cod g)).f)(*)((M.(dom f)).g);
 
 theorem :: CAT_2:41
-  for L being Function of the carrier of C,Funct(B,D), M being Function
-  of the carrier of B,Funct(C,D) st ex S being Functor of [:B,C:],D st for c
-being Object of C,b being Object of B holds S-?c = L.c & S?-b = M.b for f being
-Morphism of B for g being Morphism of C holds ((M.(cod f)).g)*((L.(dom g)).f) =
-  ((L.(cod g)).f)*((M.(dom f)).g);
-
-theorem :: CAT_2:42
-  pr1(the carrier' of C,the carrier' of D) is Functor of [:C,D:],C;
-
-theorem :: CAT_2:43
-  pr2(the carrier' of C,the carrier' of D) is Functor of [:C,D:],D;
+  for L being Function of the carrier of C,Funct(B,D),
+      M being Function of the carrier of B,Funct(C,D)
+   st ex S being Functor of [:B,C:],D st
+    for c being Object of C,b being Object of B
+     holds S-?c = L.c & S?-b = M.b
+  for f being Morphism of B for g being Morphism of C
+   holds ((M.(cod f)).g)(*)((L.(dom g)).f) =
+     ((L.(cod g)).f)(*)((M.(dom f)).g);
 
 definition
   let C,D;
   func pr1(C,D) -> Functor of [:C,D:],C equals
 :: CAT_2:def 10
-  pr1(the carrier' of C,the
-  carrier' of D);
+   pr1(the carrier' of C,the carrier' of D);
   func pr2(C,D) -> Functor of [:C,D:],D equals
 :: CAT_2:def 11
-  pr2(the carrier' of C,the
-  carrier' of D);
+   pr2(the carrier' of C,the carrier' of D);
 end;
+
+canceled 2;
 
 theorem :: CAT_2:44
   for c being Object of C, d being Object of D holds (Obj pr1(C,D)).(c,d ) = c;
@@ -415,15 +376,13 @@ theorem :: CAT_2:44
 theorem :: CAT_2:45
   for c being Object of C, d being Object of D holds (Obj pr2(C,D)).(c,d ) = d;
 
-theorem :: CAT_2:46
-  for T being Functor of C,D, T9 being Functor of C,D9 holds <:T,
-  T9:> is Functor of C,[:D,D9:];
-
 definition
   let C,D,D9;
   let T be Functor of C,D, T9 be Functor of C,D9;
   redefine func <:T,T9:> -> Functor of C,[:D,D9:];
 end;
+
+canceled;
 
 theorem :: CAT_2:47
   for T being Functor of C,D, T9 being Functor of C,D9, c being Object
@@ -433,15 +392,13 @@ theorem :: CAT_2:48
   for T being Functor of C,D, T9 being Functor of C9,D9 holds [:T,
   T9:] = <:T*pr1(C,C9),T9*pr2(C,C9):>;
 
-theorem :: CAT_2:49
-  for T being Functor of C,D, T9 being Functor of C9,D9 holds [:T,
-  T9:] is Functor of [:C,C9:],[:D,D9:];
-
 definition
   let C,C9,D,D9;
   let T be Functor of C,D, T9 be Functor of C9,D9;
   redefine func [:T,T9:] -> Functor of [:C,C9:],[:D,D9:];
 end;
+
+canceled;
 
 theorem :: CAT_2:50
   for T being Functor of C,D, T9 being Functor of C9,D9, c being Object

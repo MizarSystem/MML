@@ -2,6 +2,7 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 </Signature>
@@ -21,27 +22,27 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="6"/>
+<Adjective nr="4"/>
+<Adjective nr="9"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="6"/>
+<Adjective nr="4"/>
+<Adjective nr="9"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="1">
+<Func kind="K" nr="9">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="1">
+<Func kind="K" nr="9">
 <Var nr="2"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -59,11 +60,11 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="13">
+<Func kind="K" nr="25">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="13">
+<Func kind="K" nr="25">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>

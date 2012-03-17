@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz
 ::
 :: Received June 18, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,13 +20,14 @@ environ
       XXREAL_2, SEQ_4, SEQM_3, ZFMISC_1, XXREAL_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
       REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, RELSET_1, PARTFUN1,
-      VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1,
+      VALUED_0, VALUED_1, SEQ_1, COMSEQ_2,
+      SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1,
       XXREAL_0, XXREAL_2, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3, SEQ_4, RCOMP_1,
       PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, ZFMISC_1,
-      RELSET_1;
+      RELSET_1, COMSEQ_2;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
-      VALUED_0, VALUED_1, FUNCT_2, ZFMISC_1;
+      VALUED_0, VALUED_1, FUNCT_2, ZFMISC_1, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQM_3, XBOOLE_0, FUNCT_1, VALUED_0, VALUED_1;
  theorems TARSKI, FUNCT_1, SEQ_1, SEQ_2, SEQ_4, PARTFUN1, PARTFUN2, RFUNCT_1,
@@ -41,13 +42,14 @@ reserve R for Subset of REAL;
 reserve seq,seq1,seq2,seq3 for Real_Sequence;
 reserve Ns for increasing sequence of NAT;
 reserve n for Element of NAT;
-reserve h,h1,h2 for PartFunc of REAL,REAL;
+reserve W for non empty set;
+reserve h,h1,h2 for PartFunc of W,REAL;
 
 ::
 :: REAL SEQUENCES
 ::
 
-theorem Th6:
+theorem Th1:
   seq1=seq2-seq3 iff for n holds seq1.n=seq2.n-seq3.n
 proof
   thus seq1=seq2-seq3 implies for n holds seq1.n=seq2.n-seq3.n
@@ -73,7 +75,7 @@ A2: for n holds seq1.n=seq2.n-seq3.n;
   hence thesis by SEQ_1:7;
 end;
 
-theorem Th13:
+theorem Th2:
   (seq1 + seq2)*Ns = (seq1*Ns) + (seq2*Ns) & (seq1 - seq2)*Ns = (
   seq1*Ns) - (seq2*Ns) & (seq1 (#) seq2)*Ns = (seq1*Ns) (#) (seq2*Ns)
 proof
@@ -89,10 +91,10 @@ proof
   now
     let n;
     thus ((seq1 - seq2)*Ns).n = (seq1 - seq2).(Ns.n) by FUNCT_2:15
-      .= seq1.(Ns.n) - seq2.(Ns.n) by Th6
+      .= seq1.(Ns.n) - seq2.(Ns.n) by Th1
       .= (seq1*Ns).n - seq2.(Ns.n) by FUNCT_2:15
       .= (seq1*Ns).n - (seq2*Ns).n by FUNCT_2:15
-      .= (seq1*Ns - seq2*Ns).n by Th6;
+      .= (seq1*Ns - seq2*Ns).n by Th1;
   end;
   hence (seq1 - seq2)*Ns = (seq1*Ns) - (seq2*Ns) by FUNCT_2:63;
   now
@@ -106,7 +108,7 @@ proof
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th14:
+theorem Th3:
   (p(#)seq)*Ns = p(#)(seq*Ns)
 proof
   now
@@ -122,7 +124,7 @@ end;
 theorem
   (-seq)*Ns = -(seq*Ns) & (abs(seq))*Ns = abs((seq*Ns))
 proof
-  thus (-seq)*Ns = ((-1)(#)seq)*Ns .= (-1)(#)(seq*Ns) by Th14
+  thus (-seq)*Ns = ((-1)(#)seq)*Ns .= (-1)(#)(seq*Ns) by Th3
     .= -(seq*Ns);
   now
     let n;
@@ -134,7 +136,7 @@ proof
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th16:
+theorem Th5:
   (seq*Ns)" = (seq")*Ns
 proof
   now
@@ -150,8 +152,8 @@ end;
 theorem
   (seq1/"seq)*Ns = (seq1*Ns)/"(seq*Ns)
 proof
-  thus (seq1/"seq)*Ns = (seq1(#)(seq"))*Ns .= (seq1*Ns)(#)((seq")*Ns) by Th13
-    .= (seq1*Ns)(#)((seq*Ns)") by Th16
+  thus (seq1/"seq)*Ns = (seq1(#)(seq"))*Ns .= (seq1*Ns)(#)((seq")*Ns) by Th2
+    .= (seq1*Ns)(#)((seq*Ns)") by Th5
     .= (seq1*Ns)/"(seq*Ns);
 end;
 
@@ -173,10 +175,12 @@ A3: now
   hence thesis by XREAL_1:24;
 end;
 
-theorem Th23:
+theorem Th8:
+  for h1,h2 being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom h1 /\ dom h2 implies (h1+h2)/*seq=h1/*seq+h2/*seq
   & (h1-h2)/*seq=h1/*seq-h2/*seq & (h1(#)h2)/*seq=(h1/*seq)(#)(h2/*seq)
 proof
+  let h1,h2 be PartFunc of W,REAL, seq be sequence of W;
 A1: dom h1 /\ dom h2 c= dom h1 by XBOOLE_1:17;
 A2: dom h1 /\ dom h2 c= dom h2 by XBOOLE_1:17;
   assume
@@ -201,7 +205,7 @@ A7: seq.n in rng seq by VALUED_0:28;
       .= (h1/*seq).n - h2.(seq.n) by A3,A1,FUNCT_2:108,XBOOLE_1:1
       .= (h1/*seq).n - (h2/*seq).n by A3,A2,FUNCT_2:108,XBOOLE_1:1;
   end;
-  hence (h1-h2)/*seq=h1/*seq-h2/*seq by Th6;
+  hence (h1-h2)/*seq=h1/*seq-h2/*seq by Th1;
 A8: rng seq c= dom (h1 (#) h2) by A3,VALUED_1:def 4;
   now
     let n;
@@ -213,10 +217,12 @@ A8: rng seq c= dom (h1 (#) h2) by A3,VALUED_1:def 4;
   hence thesis by SEQ_1:8;
 end;
 
-theorem Th24:
-  for r being real number holds rng seq c= dom h implies (r(#)h)/*
-  seq = r(#) (h/*seq)
+theorem Th9:
+  for h being PartFunc of W,REAL, seq being sequence of W holds
+  for r being real number holds rng seq c= dom h implies
+  (r(#)h)/*seq = r(#) (h/*seq)
 proof
+  let h be PartFunc of W,REAL, seq be sequence of W;
   let r be real number;
   assume
 A1: rng seq c= dom h;
@@ -233,8 +239,10 @@ A3: seq.n in rng seq by VALUED_0:28;
 end;
 
 theorem
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom h implies abs(h/*seq) = (abs(h))/*seq & -(h/*seq) = (-h )/*seq
 proof
+  let h be PartFunc of W,REAL, seq be sequence of W;
   assume
 A1: rng seq c= dom h;
   then
@@ -247,13 +255,15 @@ A2: rng seq c= dom abs(h) by VALUED_1:def 11;
       .= (abs(h)/*seq).n by A2,FUNCT_2:108;
   end;
   hence abs(h/*seq) = (abs(h))/*seq by FUNCT_2:63;
-  thus -(h/*seq) = (-1)(#)(h/*seq) .= ((-1)(#)h)/*seq by A1,Th24
+  thus -(h/*seq) = (-1)(#)(h/*seq) .= ((-1)(#)h)/*seq by A1,Th9
     .= (-h)/*seq;
 end;
 
 theorem
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h^) implies h/*seq is non-zero
 proof
+  let h be PartFunc of W,REAL, seq be sequence of W;
   assume
 A1: rng seq c= dom (h^);
   then
@@ -275,8 +285,10 @@ A4: not h.(seq.n) in {0} by FUNCT_1:def 7;
 end;
 
 theorem
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h^) implies (h^)/*seq =(h/*seq)"
 proof
+  let h be PartFunc of W,REAL, seq be sequence of W;
   assume
 A1: rng seq c= dom (h^);
   then
@@ -294,31 +306,38 @@ A3: seq.n in rng seq by VALUED_0:28;
 end;
 
 theorem
-  h1 is total & h2 is total implies (h1+h2)/*seq = h1/*seq + h2/*seq & (
-  h1-h2)/*seq = h1/*seq - h2/*seq & (h1(#)h2)/*seq = (h1/*seq) (#) (h2/*seq)
+  for h1,h2 being PartFunc of W,REAL, seq being sequence of W holds
+  h1 is total & h2 is total implies
+  (h1+h2)/*seq = h1/*seq + h2/*seq & (h1-h2)/*seq = h1/*seq - h2/*seq &
+  (h1(#)h2)/*seq = (h1/*seq) (#) (h2/*seq)
 proof
+  let h1,h2 be PartFunc of W,REAL, seq be sequence of W;
   assume h1 is total & h2 is total;
-  then dom (h1+h2) = REAL by PARTFUN1:def 2;
-  then dom h1 /\ dom h2 = REAL by VALUED_1:def 1;
+  then dom (h1+h2) = W by PARTFUN1:def 2;
+  then dom h1 /\ dom h2 = W by VALUED_1:def 1;
   then
 A1: rng seq c= dom h1 /\ dom h2;
-  hence (h1+h2)/*seq = h1/*seq + h2/*seq by Th23;
-  thus (h1-h2)/*seq = h1/*seq - h2/*seq by A1,Th23;
-  thus thesis by A1,Th23;
+  hence (h1+h2)/*seq = h1/*seq + h2/*seq by Th8;
+  thus (h1-h2)/*seq = h1/*seq - h2/*seq by A1,Th8;
+  thus thesis by A1,Th8;
 end;
 
 theorem
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   h is total implies (r(#)h)/*seq = r(#)(h/*seq)
 proof
+  let h be PartFunc of W,REAL, seq be sequence of W;
   assume h is total;
-  then dom h = REAL by PARTFUN1:def 2;
+  then dom h = W by PARTFUN1:def 2;
   then rng seq c= dom h;
-  hence thesis by Th24;
+  hence thesis by Th9;
 end;
 
 theorem
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h|X) implies abs((h|X)/*seq) = ((abs(h))|X)/*seq
 proof
+  let h be PartFunc of W,REAL, seq be sequence of W;
   assume
 A1: rng seq c= dom (h|X);
 A2: dom (h|X) = dom h /\ X by RELAT_1:61
@@ -342,8 +361,10 @@ A4: seq.n in X by XBOOLE_0:def 4;
 end;
 
 theorem
+  for h being PartFunc of W,REAL, seq being sequence of W holds
   rng seq c= dom (h|X) & h"{0}={} implies ((h^)|X)/*seq = ((h|X)/*seq)"
 proof
+  let h be PartFunc of W,REAL, seq be sequence of W;
   assume that
 A1: rng seq c= dom (h|X) and
 A2: h"{0}={};
@@ -460,12 +481,14 @@ A17: g in dom h by XBOOLE_0:def 4;
   hence thesis by A10,FUNCT_1:2;
 end;
 
-theorem Th41:
-  rng h is bounded & upper_bound (rng h) = lower_bound (rng h)
+theorem Th18:
+  for h being PartFunc of W,REAL holds
+  rng h is real-bounded & upper_bound (rng h) = lower_bound (rng h)
   implies h is constant
 proof
+  let h be PartFunc of W,REAL;
   assume
-A1: rng h is bounded & upper_bound (rng h) = lower_bound (rng h);
+A1: rng h is real-bounded & upper_bound (rng h) = lower_bound (rng h);
   assume not h is constant;
   then consider x1,x2 being set such that
 A2: x1 in dom h & x2 in dom h and
@@ -475,22 +498,22 @@ A3: h.x1 <> h.x2 by FUNCT_1:def 10;
 end;
 
 theorem
-  h.:Y is bounded & upper_bound(h.:Y) = lower_bound(h.:Y) implies h|Y is
-  constant
+  for h being PartFunc of W,REAL holds
+  h.:Y is real-bounded & upper_bound(h.:Y) = lower_bound(h.:Y) implies
+  h|Y is constant
 proof
-  set Z = h.:Y;
-A1: rng (h|Y) = Z by RELAT_1:115;
-  assume h.:Y is bounded & upper_bound Z = lower_bound Z;
-  hence thesis by A1,Th41;
+  let h be PartFunc of W,REAL;
+  rng (h|Y) = h.:Y by RELAT_1:115;
+  hence thesis by Th18;
 end;
 
 reserve e1,e2 for ext-real number;
+reserve h,h1,h2 for PartFunc of REAL,REAL;
 
 definition
-
   let h;
   redefine attr h is increasing means
-  :Def2:
+  :Def1:
   for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 < h.r2;
   compatibility
   proof
@@ -502,7 +525,7 @@ A1: for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 < h.r2;
     thus thesis by A1;
   end;
   redefine attr h is decreasing means
-  :Def3:
+  :Def2:
   for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 < h.r1;
   compatibility
   proof
@@ -514,7 +537,7 @@ A2: for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 > h.r2;
     thus thesis by A2;
   end;
   redefine attr h is non-decreasing means
-  :Def4:
+  :Def3:
   for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 <= h.r2;
   compatibility
   proof
@@ -529,7 +552,7 @@ A4: e1 in dom h & e2 in dom h;
     hence thesis by A3,A4;
   end;
   redefine attr h is non-increasing means
-  :Def5:
+  :Def4:
   for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 <= h.r1;
   compatibility
   proof
@@ -545,7 +568,7 @@ A6: e1 in dom h & e2 in dom h;
   end;
 end;
 
-theorem Th43:
+theorem Th20:
   h|Y is increasing iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\
   dom h & r1<r2 holds h.r1 < h.r2
 proof
@@ -563,7 +586,7 @@ A5: r2 in dom(h|Y) by A3,RELAT_1:61;
 A6: (h|Y).r2 = h.r2 by FUNCT_1:47;
 A7: r1 in dom(h|Y) by A2,RELAT_1:61;
     then (h|Y).r1 = h.r1 by FUNCT_1:47;
-    hence thesis by A1,A4,A7,A5,A6,Def2;
+    hence thesis by A1,A4,A7,A5,A6,Def1;
   end;
   assume
 A8: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 >h.r1;
@@ -576,7 +599,7 @@ A11: (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by A9,FUNCT_1:47;
   hence thesis by A8,A10,A11;
 end;
 
-theorem Th44:
+theorem Th21:
   h|Y is decreasing iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\
   dom h & r1<r2 holds h.r2 < h.r1
 proof
@@ -594,7 +617,7 @@ A5: r2 in dom(h|Y) by A3,RELAT_1:61;
 A6: (h|Y).r2 = h.r2 by FUNCT_1:47;
 A7: r1 in dom(h|Y) by A2,RELAT_1:61;
     then (h|Y).r1 = h.r1 by FUNCT_1:47;
-    hence thesis by A1,A4,A7,A5,A6,Def3;
+    hence thesis by A1,A4,A7,A5,A6,Def2;
   end;
   assume
 A8: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 <h.r1;
@@ -607,7 +630,7 @@ A11: (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by A9,FUNCT_1:47;
   hence thesis by A8,A10,A11;
 end;
 
-theorem Th45:
+theorem Th22:
   h|Y is non-decreasing iff for r1,r2 st r1 in Y /\ dom h & r2 in
   Y /\ dom h & r1<r2 holds h.r1 <= h.r2
 proof
@@ -625,7 +648,7 @@ A5: r2 in dom(h|Y) by A3,RELAT_1:61;
 A6: (h|Y).r2 = h.r2 by FUNCT_1:47;
 A7: r1 in dom(h|Y) by A2,RELAT_1:61;
     then (h|Y).r1 = h.r1 by FUNCT_1:47;
-    hence thesis by A1,A4,A7,A5,A6,Def4;
+    hence thesis by A1,A4,A7,A5,A6,Def3;
   end;
   assume
 A8: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1
@@ -639,7 +662,7 @@ A11: (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by A9,FUNCT_1:47;
   hence thesis by A8,A10,A11;
 end;
 
-theorem Th46:
+theorem Th23:
   h|Y is non-increasing iff for r1,r2 st r1 in Y /\ dom h & r2 in
   Y /\ dom h & r1<r2 holds h.r2 <= h.r1
 proof
@@ -657,7 +680,7 @@ A5: r2 in dom(h|Y) by A3,RELAT_1:61;
 A6: (h|Y).r2 = h.r2 by FUNCT_1:47;
 A7: r1 in dom(h|Y) by A2,RELAT_1:61;
     then (h|Y).r1 = h.r1 by FUNCT_1:47;
-    hence thesis by A1,A4,A7,A5,A6,Def5;
+    hence thesis by A1,A4,A7,A5,A6,Def4;
   end;
   assume
 A8: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 <=h.r1;
@@ -673,21 +696,21 @@ end;
 definition
   let h;
   attr h is monotone means
-  :Def6:
+  :Def5:
   h is non-decreasing or h is non-increasing;
 end;
 
 registration
   cluster non-decreasing -> monotone for PartFunc of REAL,REAL;
-  coherence by Def6;
+  coherence by Def5;
   cluster non-increasing -> monotone for PartFunc of REAL,REAL;
-  coherence by Def6;
+  coherence by Def5;
   cluster non monotone -> non non-decreasing non non-increasing for PartFunc of
     REAL,REAL;
   coherence;
 end;
 
-theorem Th48:
+theorem Th24:
   h|Y is non-decreasing iff for r1,r2 st r1 in Y /\ dom h & r2 in
   Y /\ dom h & r1<=r2 holds h.r1 <= h.r2
 proof
@@ -703,7 +726,7 @@ A3: r1<=r2;
       per cases by A3,XXREAL_0:1;
       suppose
         r1 < r2;
-        hence thesis by A1,A2,Th45;
+        hence thesis by A1,A2,Th22;
       end;
       suppose
         r1 = r2;
@@ -724,7 +747,7 @@ A7: (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by A5,FUNCT_1:47;
   hence thesis by A4,A6,A7;
 end;
 
-theorem Th49:
+theorem Th25:
   h|Y is non-increasing iff for r1,r2 st r1 in Y /\ dom h & r2 in
   Y /\ dom h & r1<=r2 holds h.r2 <= h.r1
 proof
@@ -740,7 +763,7 @@ A3: r1<=r2;
       per cases by A3,XXREAL_0:1;
       suppose
         r1 < r2;
-        hence thesis by A1,A2,Th46;
+        hence thesis by A1,A2,Th23;
       end;
       suppose
         r1 = r2;
@@ -773,7 +796,7 @@ A1: h is non-decreasing non-increasing;
 A2: r1 in dom h & r2 in dom h;
     then reconsider r1,r2 as Real;
     r1 < r2 or r1 = r2 or r2 < r1 by XXREAL_0:1;
-    then h.r1 <= h.r2 & h.r2 <= h.r1 by A1,A2,Def4,Def5;
+    then h.r1 <= h.r2 & h.r2 <= h.r1 by A1,A2,Def3,Def4;
     hence thesis by XXREAL_0:1;
   end;
 end;
@@ -821,9 +844,9 @@ A2:   h.r1 = (h|X).r1 & h.r2 = (h|X).r2 by FUNCT_1:47;
       assume
 A3:   r1 < r2;
       r1 in dom h & r2 in dom h by A1,RELAT_1:57;
-      hence (h|X).r1 < (h|X).r2 by A2,A3,Def2;
+      hence (h|X).r1 < (h|X).r2 by A2,A3,Def1;
     end;
-    hence thesis by Def2;
+    hence thesis by Def1;
   end;
 end;
 
@@ -841,9 +864,9 @@ A2:   h.r1 = (h|X).r1 & h.r2 = (h|X).r2 by FUNCT_1:47;
       assume
 A3:   r1 < r2;
       r1 in dom h & r2 in dom h by A1,RELAT_1:57;
-      hence (h|X).r1 > (h|X).r2 by A2,A3,Def3;
+      hence (h|X).r1 > (h|X).r2 by A2,A3,Def2;
     end;
-    hence thesis by Def3;
+    hence thesis by Def2;
   end;
 end;
 
@@ -861,9 +884,9 @@ A2:   h.r1 = (h|X).r1 & h.r2 = (h|X).r2 by FUNCT_1:47;
       assume
 A3:   r1 < r2;
       r1 in dom h & r2 in dom h by A1,RELAT_1:57;
-      hence (h|X).r1 <= (h|X).r2 by A2,A3,Def4;
+      hence (h|X).r1 <= (h|X).r2 by A2,A3,Def3;
     end;
-    hence thesis by Def4;
+    hence thesis by Def3;
   end;
 end;
 
@@ -876,17 +899,17 @@ A1: Y /\ dom h = {};
   then
   for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies h.
   r1<h.r2);
-  hence h|Y is increasing by Th43;
+  hence h|Y is increasing by Th20;
   for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies h.
   r2<h.r1) by A1;
-  hence h|Y is decreasing by Th44;
+  hence h|Y is decreasing by Th21;
   for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies h.
   r1<= h.r2) by A1;
-  hence h|Y is non-decreasing by Th45;
+  hence h|Y is non-decreasing by Th22;
 A2: for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies h.
   r2<= h.r1) by A1;
-  hence h|Y is non-increasing by Th46;
-  thus thesis by A2,Th46;
+  hence h|Y is non-increasing by Th23;
+  thus thesis by A2,Th23;
 end;
 
 theorem
@@ -933,12 +956,12 @@ A11:      p in (Y /\ dom h) by A5,XBOOLE_0:def 4;
             per cases;
             suppose
               x <= p;
-              then h.x <= h.p & h.p <= h.x by A1,A11,A6,A9,A10,Th48,Th49;
+              then h.x <= h.p & h.p <= h.x by A1,A11,A6,A9,A10,Th24,Th25;
               hence h.p = h.x by XXREAL_0:1;
             end;
             suppose
               p <= x;
-              then h.p <= h.x & h.x <= h.p by A1,A11,A6,A9,A10,Th48,Th49;
+              then h.p <= h.x & h.x <= h.p by A1,A11,A6,A9,A10,Th24,Th25;
               hence h.p = h.x by XXREAL_0:1;
             end;
           end;
@@ -962,9 +985,9 @@ A2: h|Y is increasing;
 A3: X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
     let r1,r2;
     assume r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
-    hence h.r1 < h.r2 by A2,A3,Th43;
+    hence h.r1 < h.r2 by A2,A3,Th20;
   end;
-  hence thesis by Th43;
+  hence thesis by Th20;
 end;
 
 theorem
@@ -977,9 +1000,9 @@ A2: h|Y is decreasing;
 A3: X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
     let r1,r2;
     assume r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
-    hence h.r1 > h.r2 by A2,A3,Th44;
+    hence h.r1 > h.r2 by A2,A3,Th21;
   end;
-  hence thesis by Th44;
+  hence thesis by Th21;
 end;
 
 theorem
@@ -992,9 +1015,9 @@ A2: h|Y is non-decreasing;
 A3: X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
     let r1,r2;
     assume r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
-    hence h.r1 <= h.r2 by A2,A3,Th45;
+    hence h.r1 <= h.r2 by A2,A3,Th22;
   end;
-  hence thesis by Th45;
+  hence thesis by Th22;
 end;
 
 theorem
@@ -1007,12 +1030,12 @@ A2: h|Y is non-increasing;
 A3: X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
     let r1,r2;
     assume r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
-    hence h.r1 >= h.r2 by A2,A3,Th46;
+    hence h.r1 >= h.r2 by A2,A3,Th23;
   end;
-  hence thesis by Th46;
+  hence thesis by Th23;
 end;
 
-theorem Th64:
+theorem Th32:
   (h|Y is increasing & 0<r implies (r(#)h)|Y is increasing) & (r =
   0 implies (r(#)h)|Y is constant) & (h|Y is increasing & r<0 implies (r(#)h)|Y
   is decreasing)
@@ -1037,12 +1060,12 @@ A9:   r1 in Y by A3,XBOOLE_0:def 4;
 A10:  r1 in dom (r(#)h) by A3,XBOOLE_0:def 4;
       then r1 in dom h by VALUED_1:def 5;
       then r1 in Y /\ dom h by A9,XBOOLE_0:def 4;
-      then h.r1 < h.r2 by A1,A5,A8,Th43;
+      then h.r1 < h.r2 by A1,A5,A8,Th20;
       then r* h.r1 < r* h.r2 by A2,XREAL_1:68;
       then (r(#)h).r1 < r * h.r2 by A10,VALUED_1:def 5;
       hence (r(#)h).r1 < (r(#)h).r2 by A7,VALUED_1:def 5;
     end;
-    hence thesis by Th43;
+    hence thesis by Th20;
   end;
   thus r = 0 implies (r(#)h)|Y is constant
   proof
@@ -1076,12 +1099,12 @@ A21: r1 in Y by A15,XBOOLE_0:def 4;
 A22: r1 in dom (r(#)h) by A15,XBOOLE_0:def 4;
     then r1 in dom h by VALUED_1:def 5;
     then r1 in Y /\ dom h by A21,XBOOLE_0:def 4;
-    then h.r1 < h.r2 by A13,A17,A20,Th43;
+    then h.r1 < h.r2 by A13,A17,A20,Th20;
     then r* h.r2 < r* h.r1 by A14,XREAL_1:69;
     then (r(#)h).r2 < r * h.r1 by A19,VALUED_1:def 5;
     hence (r(#)h).r2 < (r(#)h).r1 by A22,VALUED_1:def 5;
   end;
-  hence thesis by Th44;
+  hence thesis by Th21;
 end;
 
 theorem
@@ -1108,12 +1131,12 @@ A9:   r1 in Y by A3,XBOOLE_0:def 4;
 A10:  r1 in dom (r(#)h) by A3,XBOOLE_0:def 4;
       then r1 in dom h by VALUED_1:def 5;
       then r1 in Y /\ dom h by A9,XBOOLE_0:def 4;
-      then h.r2 < h.r1 by A1,A5,A8,Th44;
+      then h.r2 < h.r1 by A1,A5,A8,Th21;
       then r * h.r2 < r * h.r1 by A2,XREAL_1:68;
       then (r(#)h).r2 < r * h.r1 by A7,VALUED_1:def 5;
       hence (r(#)h).r2 < (r(#)h).r1 by A10,VALUED_1:def 5;
     end;
-    hence thesis by Th44;
+    hence thesis by Th21;
   end;
   assume that
 A11: h|Y is decreasing and
@@ -1133,15 +1156,15 @@ A19: r1 in Y by A13,XBOOLE_0:def 4;
 A20: r1 in dom (r(#)h) by A13,XBOOLE_0:def 4;
     then r1 in dom h by VALUED_1:def 5;
     then r1 in Y /\ dom h by A19,XBOOLE_0:def 4;
-    then h.r2 < h.r1 by A11,A15,A18,Th44;
+    then h.r2 < h.r1 by A11,A15,A18,Th21;
     then r* h.r1 < r* h.r2 by A12,XREAL_1:69;
     then (r(#) h).r1 < r* h.r2 by A20,VALUED_1:def 5;
     hence (r(#) h).r1 < (r(#) h).r2 by A17,VALUED_1:def 5;
   end;
-  hence thesis by Th43;
+  hence thesis by Th20;
 end;
 
-theorem Th66:
+theorem Th34:
   (h|Y is non-decreasing & 0<=r implies (r(#)h)|Y is
   non-decreasing) & (h|Y is non-decreasing & r<=0 implies (r(#)h)|Y is
   non-increasing)
@@ -1166,12 +1189,12 @@ A9:   r1 in Y by A3,XBOOLE_0:def 4;
 A10:  r1 in dom (r(#)h) by A3,XBOOLE_0:def 4;
       then r1 in dom h by VALUED_1:def 5;
       then r1 in Y /\ dom h by A9,XBOOLE_0:def 4;
-      then h.r1 <= h.r2 by A1,A5,A8,Th45;
+      then h.r1 <= h.r2 by A1,A5,A8,Th22;
       then r* h.r1 <= (h.r2)*r by A2,XREAL_1:64;
       then (r(#)h).r1 <= r * h.r2 by A10,VALUED_1:def 5;
       hence (r(#)h).r1 <= (r(#)h).r2 by A7,VALUED_1:def 5;
     end;
-    hence thesis by Th45;
+    hence thesis by Th22;
   end;
   assume that
 A11: h|Y is non-decreasing and
@@ -1191,12 +1214,12 @@ A19: r1 in Y by A13,XBOOLE_0:def 4;
 A20: r1 in dom (r(#)h) by A13,XBOOLE_0:def 4;
     then r1 in dom h by VALUED_1:def 5;
     then r1 in Y /\ dom h by A19,XBOOLE_0:def 4;
-    then h.r1<=h.r2 by A11,A15,A18,Th45;
+    then h.r1<=h.r2 by A11,A15,A18,Th22;
     then r*h.r2<=r*h.r1 by A12,XREAL_1:65;
     then (r(#)h).r2<=r*h.r1 by A17,VALUED_1:def 5;
     hence (r(#)h).r2<=(r(#)h).r1 by A20,VALUED_1:def 5;
   end;
-  hence thesis by Th46;
+  hence thesis by Th23;
 end;
 
 theorem
@@ -1223,12 +1246,12 @@ A9:   r1 in Y by A3,XBOOLE_0:def 4;
 A10:  r1 in dom (r(#)h) by A3,XBOOLE_0:def 4;
       then r1 in dom h by VALUED_1:def 5;
       then r1 in Y /\ dom h by A9,XBOOLE_0:def 4;
-      then h.r2 <= h.r1 by A1,A5,A8,Th46;
+      then h.r2 <= h.r1 by A1,A5,A8,Th23;
       then r* h.r2 <= (h.r1)*r by A2,XREAL_1:64;
       then (r(#)h).r2 <= r * h.r1 by A7,VALUED_1:def 5;
       hence (r(#)h).r2 <= (r(#)h).r1 by A10,VALUED_1:def 5;
     end;
-    hence thesis by Th46;
+    hence thesis by Th23;
   end;
   assume that
 A11: h|Y is non-increasing and
@@ -1248,15 +1271,15 @@ A19: r1 in Y by A13,XBOOLE_0:def 4;
 A20: r1 in dom (r(#)h) by A13,XBOOLE_0:def 4;
     then r1 in dom h by VALUED_1:def 5;
     then r1 in Y /\ dom h by A19,XBOOLE_0:def 4;
-    then h.r2 <= h.r1 by A11,A15,A18,Th46;
+    then h.r2 <= h.r1 by A11,A15,A18,Th23;
     then r* h.r1 <= r* h.r2 by A12,XREAL_1:65;
     then (r(#)h).r1 <= r * h.r2 by A20,VALUED_1:def 5;
     hence (r(#)h).r1 <= (r(#)h).r2 by A17,VALUED_1:def 5;
   end;
-  hence thesis by Th45;
+  hence thesis by Th22;
 end;
 
-theorem Th68:
+theorem Th36:
   r in X /\ Y /\ dom (h1+h2) implies r in X /\ dom h1 & r in Y /\ dom h2
 proof
   assume
@@ -1289,19 +1312,19 @@ A2: h2|Y is increasing;
 A3:   r1 in X /\ Y /\ dom (h1+h2) and
 A4:   r2 in X /\ Y /\ dom (h1+h2) and
 A5:   r1<r2;
-      r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A3,A4,Th68;
+      r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A3,A4,Th36;
       then
-A6:   h2.r1 < h2.r2 by A2,A5,Th43;
+A6:   h2.r1 < h2.r2 by A2,A5,Th20;
 A7:   r1 in dom (h1+h2) by A3,XBOOLE_0:def 4;
-      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A3,A4,Th68;
-      then h1.r1 < h1.r2 by A1,A5,Th43;
+      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A3,A4,Th36;
+      then h1.r1 < h1.r2 by A1,A5,Th20;
       then h1.r1+h2.r1 < h1.r2+h2.r2 by A6,XREAL_1:8;
       then
 A8:   (h1+h2).r1 < h1.r2 + h2.r2 by A7,VALUED_1:def 1;
       r2 in dom (h1+h2) by A4,XBOOLE_0:def 4;
       hence (h1+h2).r1 < (h1+h2).r2 by A8,VALUED_1:def 1;
     end;
-    hence thesis by Th43;
+    hence thesis by Th20;
   end;
   thus h1|X is decreasing & h2|Y is decreasing implies (h1+h2)|(X /\ Y) is
   decreasing
@@ -1315,19 +1338,19 @@ A10: h2|Y is decreasing;
 A11:  r1 in X /\ Y /\ dom (h1+h2) and
 A12:  r2 in X /\ Y /\ dom (h1+h2) and
 A13:  r1<r2;
-      r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A11,A12,Th68;
+      r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A11,A12,Th36;
       then
-A14:  h2.r2 < h2.r1 by A10,A13,Th44;
+A14:  h2.r2 < h2.r1 by A10,A13,Th21;
 A15:  r2 in dom (h1+h2) by A12,XBOOLE_0:def 4;
-      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A11,A12,Th68;
-      then h1.r2 < h1.r1 by A9,A13,Th44;
+      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A11,A12,Th36;
+      then h1.r2 < h1.r1 by A9,A13,Th21;
       then h1.r2+h2.r2 < h1.r1+h2.r1 by A14,XREAL_1:8;
       then
 A16:  (h1+h2).r2 < h1.r1 + h2.r1 by A15,VALUED_1:def 1;
       r1 in dom (h1+h2) by A11,XBOOLE_0:def 4;
       hence (h1+h2).r2 < (h1+h2).r1 by A16,VALUED_1:def 1;
     end;
-    hence thesis by Th44;
+    hence thesis by Th21;
   end;
   thus h1|X is non-decreasing & h2|Y is non-decreasing implies (h1+h2)|(X /\ Y
   ) is non-decreasing
@@ -1341,19 +1364,19 @@ A18: h2|Y is non-decreasing;
 A19:  r1 in X /\ Y /\ dom (h1+h2) and
 A20:  r2 in X /\ Y /\ dom (h1+h2) and
 A21:  r1<r2;
-      r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A19,A20,Th68;
+      r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A19,A20,Th36;
       then
-A22:  h2.r1 <= h2.r2 by A18,A21,Th45;
+A22:  h2.r1 <= h2.r2 by A18,A21,Th22;
 A23:  r1 in dom (h1+h2) by A19,XBOOLE_0:def 4;
-      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A19,A20,Th68;
-      then h1.r1 <= h1.r2 by A17,A21,Th45;
+      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A19,A20,Th36;
+      then h1.r1 <= h1.r2 by A17,A21,Th22;
       then h1.r1+h2.r1 <= h1.r2+h2.r2 by A22,XREAL_1:7;
       then
 A24:  (h1+h2).r1 <= h1.r2 + h2.r2 by A23,VALUED_1:def 1;
       r2 in dom (h1+h2) by A20,XBOOLE_0:def 4;
       hence (h1+h2).r1 <= (h1+h2).r2 by A24,VALUED_1:def 1;
     end;
-    hence thesis by Th45;
+    hence thesis by Th22;
   end;
   assume that
 A25: h1|X is non-increasing and
@@ -1364,19 +1387,19 @@ A26: h2|Y is non-increasing;
 A27: r1 in X /\ Y /\ dom (h1+h2) and
 A28: r2 in X /\ Y /\ dom (h1+h2) and
 A29: r1<r2;
-    r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A27,A28,Th68;
+    r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A27,A28,Th36;
     then
-A30: h2.r2 <= h2.r1 by A26,A29,Th46;
+A30: h2.r2 <= h2.r1 by A26,A29,Th23;
 A31: r2 in dom (h1+h2) by A28,XBOOLE_0:def 4;
-    r1 in X /\ dom h1 & r2 in X /\ dom h1 by A27,A28,Th68;
-    then h1.r2 <= h1.r1 by A25,A29,Th46;
+    r1 in X /\ dom h1 & r2 in X /\ dom h1 by A27,A28,Th36;
+    then h1.r2 <= h1.r1 by A25,A29,Th23;
     then h1.r2+h2.r2 <= h1.r1+h2.r1 by A30,XREAL_1:7;
     then
 A32: (h1+h2).r2 <= h1.r1 + h2.r1 by A31,VALUED_1:def 1;
     r1 in dom (h1+h2) by A27,XBOOLE_0:def 4;
     hence (h1+h2).r2 <= (h1+h2).r1 by A32,VALUED_1:def 1;
   end;
-  hence thesis by Th46;
+  hence thesis by Th23;
 end;
 
 theorem
@@ -1398,22 +1421,22 @@ A3: for p st p in Y /\ dom h2 holds h2.p = r by A2,PARTFUN2:57;
 A4:   r1 in X /\ Y /\ dom (h1+h2) and
 A5:   r2 in X /\ Y /\ dom (h1+h2) and
 A6:   r1<r2;
-      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A4,A5,Th68;
-      then h1.r1 < h1.r2 by A1,A6,Th43;
+      r1 in X /\ dom h1 & r2 in X /\ dom h1 by A4,A5,Th36;
+      then h1.r1 < h1.r2 by A1,A6,Th20;
       then
 A7:   h1.r1 + r < h1.r2 + r by XREAL_1:6;
-      r1 in Y /\ dom h2 by A4,Th68;
+      r1 in Y /\ dom h2 by A4,Th36;
       then
 A8:   h1.r1 + h2.r1 < h1.r2 + r by A3,A7;
 A9:   r1 in dom (h1+h2) by A4,XBOOLE_0:def 4;
-      r2 in Y /\ dom h2 by A5,Th68;
+      r2 in Y /\ dom h2 by A5,Th36;
       then h1.r1 + h2.r1 < h1.r2 + h2.r2 by A3,A8;
       then
 A10:  (h1+h2).r1 < h1.r2 + h2.r2 by A9,VALUED_1:def 1;
       r2 in dom (h1+h2) by A5,XBOOLE_0:def 4;
       hence (h1+h2).r1 < (h1+h2).r2 by A10,VALUED_1:def 1;
     end;
-    hence thesis by Th43;
+    hence thesis by Th20;
   end;
   assume that
 A11: h1|X is decreasing and
@@ -1426,22 +1449,22 @@ A13: for p st p in Y /\ dom h2 holds h2.p = r by A12,PARTFUN2:57;
 A14: r1 in X /\ Y /\ dom (h1+h2) and
 A15: r2 in X /\ Y /\ dom (h1+h2) and
 A16: r1<r2;
-    r1 in X /\ dom h1 & r2 in X /\ dom h1 by A14,A15,Th68;
-    then h1.r2 < h1.r1 by A11,A16,Th44;
+    r1 in X /\ dom h1 & r2 in X /\ dom h1 by A14,A15,Th36;
+    then h1.r2 < h1.r1 by A11,A16,Th21;
     then
 A17: h1.r2 + r < h1.r1 + r by XREAL_1:6;
-    r2 in Y /\ dom h2 by A15,Th68;
+    r2 in Y /\ dom h2 by A15,Th36;
     then
 A18: h1.r2 + h2.r2 < h1.r1 + r by A13,A17;
 A19: r2 in dom (h1+h2) by A15,XBOOLE_0:def 4;
-    r1 in Y /\ dom h2 by A14,Th68;
+    r1 in Y /\ dom h2 by A14,Th36;
     then h1.r2 + h2.r2 < h1.r1 + h2.r1 by A13,A18;
     then
 A20: (h1+h2).r2 < h1.r1 + h2.r1 by A19,VALUED_1:def 1;
     r1 in dom (h1+h2) by A14,XBOOLE_0:def 4;
     hence (h1+h2).r2 < (h1+h2).r1 by A20,VALUED_1:def 1;
   end;
-  hence thesis by Th44;
+  hence thesis by Th21;
 end;
 
 theorem
@@ -1475,7 +1498,7 @@ A14: r1 in dom h1 /\ dom h2 by VALUED_1:def 1;
     then r1 in dom h2 by XBOOLE_0:def 4;
     then r1 in Y /\ dom h2 by A12,XBOOLE_0:def 4;
     then
-A15: h2.r1 <= h2.r2 by A2,A5,A10,Th45;
+A15: h2.r1 <= h2.r2 by A2,A5,A10,Th22;
 A16: r2 in X by A6,XBOOLE_0:def 4;
 A17: r1 in X by A11,XBOOLE_0:def 4;
     r2 in dom h1 by A9,XBOOLE_0:def 4;
@@ -1483,12 +1506,12 @@ A17: r1 in X by A11,XBOOLE_0:def 4;
 A18: r2 in X /\ dom h1 by A16,XBOOLE_0:def 4;
     r1 in dom h1 by A14,XBOOLE_0:def 4;
     then r1 in X /\ dom h1 by A17,XBOOLE_0:def 4;
-    then h1.r1 < h1.r2 by A1,A5,A18,Th43;
+    then h1.r1 < h1.r2 by A1,A5,A18,Th20;
     then h1.r1 + h2.r1 < h1.r2 + h2.r2 by A15,XREAL_1:8;
     then (h1+h2).r1 < h1.r2 + h2.r2 by A13,VALUED_1:def 1;
     hence (h1+h2).r1 < (h1+h2).r2 by A8,VALUED_1:def 1;
   end;
-  hence thesis by Th43;
+  hence thesis by Th20;
 end;
 
 theorem
@@ -1530,12 +1553,12 @@ A17: r1 in dom h1 /\ dom h2 by VALUED_1:def 1;
 A18: h2.r2 = h2.r1 by A2,A11,PARTFUN2:58;
     r1 in dom h1 by A17,XBOOLE_0:def 4;
     then r1 in X /\ dom h1 by A14,XBOOLE_0:def 4;
-    then h1.r2 <= h1.r1 by A1,A5,A12,Th46;
+    then h1.r2 <= h1.r1 by A1,A5,A12,Th23;
     then h1.r2 + h2.r2 <= h1.r1 + h2.r1 by A18,XREAL_1:6;
     then (h1+h2).r2 <= h1.r1 + h2.r1 by A9,VALUED_1:def 1;
     hence (h1+h2).r2 <= (h1+h2).r1 by A16,VALUED_1:def 1;
   end;
-  hence thesis by Th46;
+  hence thesis by Th23;
 end;
 
 theorem
@@ -1569,7 +1592,7 @@ A14: r1 in dom h1 /\ dom h2 by VALUED_1:def 1;
     then r1 in dom h2 by XBOOLE_0:def 4;
     then r1 in Y /\ dom h2 by A12,XBOOLE_0:def 4;
     then
-A15: h2.r2 <= h2.r1 by A2,A5,A10,Th46;
+A15: h2.r2 <= h2.r1 by A2,A5,A10,Th23;
 A16: r2 in X by A6,XBOOLE_0:def 4;
 A17: r1 in X by A11,XBOOLE_0:def 4;
     r2 in dom h1 by A9,XBOOLE_0:def 4;
@@ -1577,12 +1600,12 @@ A17: r1 in X by A11,XBOOLE_0:def 4;
 A18: r2 in X /\ dom h1 by A16,XBOOLE_0:def 4;
     r1 in dom h1 by A14,XBOOLE_0:def 4;
     then r1 in X /\ dom h1 by A17,XBOOLE_0:def 4;
-    then h1.r2 < h1.r1 by A1,A5,A18,Th44;
+    then h1.r2 < h1.r1 by A1,A5,A18,Th21;
     then h1.r2 + h2.r2 < h1.r1 + h2.r1 by A15,XREAL_1:8;
     then (h1+h2).r2 < h1.r1 + h2.r1 by A8,VALUED_1:def 1;
     hence (h1+h2).r2 < (h1+h2).r1 by A13,VALUED_1:def 1;
   end;
-  hence thesis by Th44;
+  hence thesis by Th21;
 end;
 
 theorem
@@ -1624,12 +1647,12 @@ A17: r1 in dom h1 /\ dom h2 by VALUED_1:def 1;
 A18: h2.r2 = h2.r1 by A2,A11,PARTFUN2:58;
     r1 in dom h1 by A17,XBOOLE_0:def 4;
     then r1 in X /\ dom h1 by A14,XBOOLE_0:def 4;
-    then h1.r1 <= h1.r2 by A1,A5,A12,Th45;
+    then h1.r1 <= h1.r2 by A1,A5,A12,Th22;
     then h1.r1 + h2.r1 <= h1.r2 + h2.r2 by A18,XREAL_1:6;
     then (h1+h2).r1 <= h1.r2 + h2.r2 by A16,VALUED_1:def 1;
     hence (h1+h2).r1 <= (h1+h2).r2 by A9,VALUED_1:def 1;
   end;
-  hence thesis by Th45;
+  hence thesis by Th22;
 end;
 
 theorem
@@ -1647,7 +1670,7 @@ A3: r1 = x by TARSKI:def 1;
     r2 in {x} by A2,XBOOLE_0:def 4;
     hence h.r1 >= h.r2 by A3,TARSKI:def 1;
   end;
-  hence thesis by Th46;
+  hence thesis by Th23;
 end;
 
 theorem
@@ -1665,7 +1688,7 @@ A4: r1 = x by TARSKI:def 1;
     r2 in {x} by A2,XBOOLE_0:def 4;
     hence h.r1 > h.r2 by A3,A4,TARSKI:def 1;
   end;
-  hence thesis by Th44;
+  hence thesis by Th21;
 end;
 
 theorem
@@ -1683,7 +1706,7 @@ A3: r1 = x by TARSKI:def 1;
     r2 in {x} by A2,XBOOLE_0:def 4;
     hence h.r1 <= h.r2 by A3,TARSKI:def 1;
   end;
-  hence thesis by Th45;
+  hence thesis by Th22;
 end;
 
 theorem
@@ -1701,7 +1724,7 @@ A3: r1 = x by TARSKI:def 1;
     r2 in {x} by A2,XBOOLE_0:def 4;
     hence h.r2 <= h.r1 by A3,TARSKI:def 1;
   end;
-  hence thesis by Th46;
+  hence thesis by Th23;
 end;
 
 theorem
@@ -1719,14 +1742,14 @@ A4: (id R).r1 = r1 by FUNCT_1:18;
     r2 in R by A2,XBOOLE_0:def 4;
     hence (id R).r1 < (id R).r2 by A3,A4,FUNCT_1:18;
   end;
-  hence thesis by Th43;
+  hence thesis by Th20;
 end;
 
 theorem
   h|X is increasing implies (-h)|X is decreasing
 proof
   assume h|X is increasing;
-  then ((-1)(#)h)|X is decreasing by Th64;
+  then ((-1)(#)h)|X is decreasing by Th32;
   hence thesis;
 end;
 
@@ -1734,7 +1757,7 @@ theorem
   h|X is non-decreasing implies (-h)|X is non-increasing
 proof
   assume h|X is non-decreasing;
-  then ((-1)(#)h)|X is non-increasing by Th66;
+  then ((-1)(#)h)|X is non-increasing by Th34;
   hence thesis;
 end;
 
@@ -1765,11 +1788,11 @@ A8:       p1<>p2;
             per cases by A8,XXREAL_0:1;
             suppose
               p1<p2;
-              hence contradiction by A2,A7,A6,Th43;
+              hence contradiction by A2,A7,A6,Th20;
             end;
             suppose
               p2<p1;
-              hence contradiction by A2,A7,A6,Th43;
+              hence contradiction by A2,A7,A6,Th20;
             end;
           end;
           hence contradiction;
@@ -1796,11 +1819,11 @@ A15:      p1<>p2;
             per cases by A15,XXREAL_0:1;
             suppose
               p1<p2;
-              hence contradiction by A9,A14,A13,Th44;
+              hence contradiction by A9,A14,A13,Th21;
             end;
             suppose
               p2<p1;
-              hence contradiction by A9,A14,A13,Th44;
+              hence contradiction by A9,A14,A13,Th21;
             end;
           end;
           hence contradiction;
@@ -1824,7 +1847,7 @@ A2: (h|[.p,g.])"|(h.:[.p,g.]) is not increasing;
 A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") and
 A4: y2 in h.:[.p,g.] /\ dom((h|[.p,g.])") and
 A5: y1<y2 and
-A6: ((h|[.p,g.])").y1 >= ((h|[.p,g.])").y2 by A2,Th43;
+A6: ((h|[.p,g.])").y1 >= ((h|[.p,g.])").y2 by A2,Th20;
   y1 in h.:[.p,g.] by A3,XBOOLE_0:def 4;
   then
 A7: y1 in rng (h|[.p,g.]) by RELAT_1:115;
@@ -1848,7 +1871,7 @@ A12:  ((h|[.p,g.])").y2 in dom (h|[.p,g.]) & ((h|[.p,g.])").y1 in dom (h|
       [.p,g.]) by A7,A8,PARTFUN2:60;
       ((h|[.p,g.])").y2 < ((h|[.p,g.])").y1 by A6,A10,XXREAL_0:1;
       then (h|[.p,g.]).(((h|[.p,g.])").y2) < (h|[.p,g.]).(((h|[.p,g.])").y1)
-      by A9,A12,A11,Th43;
+      by A9,A12,A11,Th20;
       then y2 < (h|[.p,g.]).(((h|[.p,g.])").y1) by A8,FUNCT_1:35;
       hence contradiction by A5,A7,FUNCT_1:35;
     end;
@@ -1868,7 +1891,7 @@ A2: not (h|[.p,g.])"|(h.:[.p,g.]) is decreasing;
 A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") and
 A4: y2 in h.:[.p,g.] /\ dom((h|[.p,g.])") and
 A5: y1<y2 and
-A6: ((h|[.p,g.])").y2 >= ((h|[.p,g.])").y1 by A2,Th44;
+A6: ((h|[.p,g.])").y2 >= ((h|[.p,g.])").y1 by A2,Th21;
   y1 in h.:[.p,g.] by A3,XBOOLE_0:def 4;
   then
 A7: y1 in rng (h|[.p,g.]) by RELAT_1:115;
@@ -1892,7 +1915,7 @@ A12:  ((h|[.p,g.])").y2 in dom (h|[.p,g.]) & ((h|[.p,g.])").y1 in dom (h|
       [.p,g.]) by A7,A8,PARTFUN2:60;
       ((h|[.p,g.])").y2 > ((h|[.p,g.])").y1 by A6,A10,XXREAL_0:1;
       then (h|[.p,g.]).(((h|[.p,g.])").y2) < (h|[.p,g.]).(((h|[.p,g.])").y1)
-      by A9,A12,A11,Th44;
+      by A9,A12,A11,Th21;
       then y2 < (h|[.p,g.]).(((h|[.p,g.])").y1) by A8,FUNCT_1:35;
       hence contradiction by A5,A7,FUNCT_1:35;
     end;

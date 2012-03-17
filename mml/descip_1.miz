@@ -1,0 +1,4430 @@
+:: Formalization of the Data Encryption Standard
+::  by Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received November 30, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies DESCIP_1, TARSKI, XBOOLE_0, FINSEQ_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FINSEQ_2, NAT_1, XBOOLEAN, MARGREL1, MCART_1, RFINSEQ, ZFMISC_1,
+      SUBSET_1, NUMBERS, INT_1, CARD_1, ARYTM_1, XXREAL_0, PARTFUN1, ARYTM_3,
+      ORDINAL4, ORDINAL1, FINSEQ_5;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, FUNCT_1, CARD_1,
+      ORDINAL1,
+      XTUPLE_0, DOMAIN_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1,
+      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1, FINSEQ_1, FINSEQ_2, XBOOLEAN,
+      MARGREL1, FINSEQ_4, RFINSEQ, FINSEQ_5, BINARITH, BVFUNC_1;
+ constructors CARD_1, INT_3, GROUP_1, RLVECT_1, VECTSP_1, ENUMSET1, RELSET_1,
+      BINOP_1, ARYTM_0, XXREAL_0, DOMAIN_1, REAL_1, FINSEQ_4,
+      RFUNCT_1, RFINSEQ, FINSEQ_5, BINARITH, NAT_D, BVFUNC_1;
+ registrations XREAL_0, RELSET_1, FINSEQ_2, FUNCT_2, ORDINAL1, FINSET_1,
+      MEMBERED, XBOOLEAN, MARGREL1, INT_1, SUBSET_1, FINSEQ_1, NAT_1, RELAT_1,
+      XXREAL_0, XBOOLE_0, FUNCT_1, VALUED_0, CARD_1, FINSEQ_4, BVFUNC_1,
+      AFINSQ_2, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions CARD_1, FUNCT_1, FUNCT_2, XCMPLX_0, NAT_1, FINSEQ_1, FINSEQ_2,
+      XBOOLEAN, MARGREL1;
+ theorems NAT_D, TARSKI, ENUMSET1, RELAT_1, FUNCT_1, PARTFUN1, CARD_1,
+      FUNCT_2, XXREAL_0, XREAL_1, BVFUNC_1, NAT_1, INT_1, FINSEQ_1, FINSEQ_2,
+      XBOOLEAN, FINSEQ_3, FINSEQ_4, RFINSEQ, FINSEQ_5, XBOOLE_0, EUCLID_7,
+      XBOOLE_1, ORDINAL1, XTUPLE_0;
+ schemes FUNCT_2, FINSEQ_1, NAT_1, RECDEF_2;
+
+begin :: Preliminaries
+
+reserve D for non empty set;
+reserve s for FinSequence of D;
+reserve m,n for Element of NAT;
+
+registration
+  let n be Nat, f be n-element FinSequence;
+  cluster Rev f -> n-element;
+  coherence
+  proof
+    len f = n by CARD_1:def 7;
+    hence len Rev f = n by FINSEQ_5:def 3;
+  end;
+end;
+
+definition
+  let D be non empty set, n be Nat, f be Element of n-tuples_on D;
+  redefine func Rev f -> Element of n-tuples_on D;
+  coherence
+  proof
+    len Rev(f) = n by CARD_1:def 7;
+    hence thesis by FINSEQ_2:92;
+  end;
+end;
+
+notation
+  let n be Nat, f be FinSequence;
+  synonym Op-Left(f,n) for f|n;
+  synonym Op-Right(f,n) for f/^n;
+end;
+
+definition
+  let D be non empty set, n be Nat, f be FinSequence of D;
+  redefine func Op-Left(f,n) -> FinSequence of D;
+  coherence
+  proof
+    Op-Left(f,n) = f|n;
+    hence thesis;
+  end;
+  redefine func Op-Right(f,n) -> FinSequence of D;
+  coherence
+  proof
+    Op-Right(f,n) = f/^n;
+    hence thesis;
+  end;
+end;
+
+notation
+  let D be non empty set, n be Nat, s be Element of (2*n)-tuples_on D;
+  synonym SP-Left(s) for Op-Left(s,n);
+  synonym SP-Right(s) for Op-Right(s,n);
+end;
+
+definition
+  let D be non empty set, n be Nat, s be Element of (2*n)-tuples_on D;
+  redefine func SP-Left(s) -> Element of n-tuples_on D;
+  coherence
+  proof
+    L1: 1*n <= 2*n by XREAL_1:68;
+    len s = 2*n by CARD_1:def 7;then
+    len (Op-Left(s,n)) = n by L1,FINSEQ_1:59;
+    hence thesis by FINSEQ_2:92;
+  end;
+end;
+
+theorem LM001B:
+  for m,n be non empty Element of NAT, s be Element of n-tuples_on D
+  st m <= n
+  holds Op-Left(s,m) is Element of m-tuples_on D
+  proof
+    let m,n be non empty Element of NAT,
+    s be Element of n-tuples_on D;
+    assume A1: m <= n;
+    len s = n by CARD_1:def 7;
+    then len (Op-Left(s,m)) = m by A1,FINSEQ_1:59;
+    then Op-Left(s,m) is Tuple of m,D by CARD_1:def 7;
+    hence thesis by FINSEQ_2:131;
+  end;
+
+theorem LM002B:
+  for m,n,l be non empty Element of NAT,
+  s be Element of n-tuples_on D
+  st m <= n & l= n - m
+  holds (Op-Right(s,m)) is Element of l-tuples_on D
+  proof
+    let m,n,l be non empty Element of NAT,
+    s be Element of n-tuples_on D;
+    assume A1: m <= n & l= n - m;
+    len s = n by CARD_1:def 7;
+    then len (Op-Right(s,m)) = l by A1,RFINSEQ:def 1;
+    then Op-Right(s,m) is Tuple of l,D by CARD_1:def 7;
+    hence thesis by FINSEQ_2:131;
+  end;
+
+definition
+  let D be non empty set,n be non empty Element of NAT,
+  s be Element of (2*n)-tuples_on D;
+  redefine func SP-Right(s) -> Element of n-tuples_on D;
+  coherence
+  proof
+    L0:2*n -n =n;
+    1*n < 2*n by XREAL_1:68;
+    hence thesis by L0,LM002B;
+  end;
+end;
+
+theorem SPLR:
+  for n be non empty Element of NAT,
+  s be Element of (2*n)-tuples_on D holds
+  (SP-Left(s))^( SP-Right(s)) = s by RFINSEQ:8;
+
+definition
+  let s be FinSequence;
+  func Op-LeftShift(s) -> FinSequence equals
+  (s /^1) ^ <* s.1 *>;
+  coherence;
+end;
+
+theorem LM003:
+  for s be FinSequence st 1 <= len s
+  holds len (Op-LeftShift(s)) = len s
+  proof
+    let s be FinSequence;
+    assume AS: 1 <= len s;
+    P0: len <* s.1 *> = 1 by FINSEQ_1:40;
+    len (s /^1) = (len s) - 1 by AS,RFINSEQ:def 1;
+    then
+    len ((s /^1) ^ <* s.1 *>) = ((len s) - 1) + 1 by P0,FINSEQ_1:22
+    .= (len s);
+    hence thesis;
+  end;
+
+theorem LM003A:
+  1 <= len s implies
+  Op-LeftShift(s) is FinSequence of D &
+  len (Op-LeftShift(s)) = len s
+  proof
+    assume AS: 1 <= len s;
+    then 1 in Seg (len s);
+    then 1 in dom s by FINSEQ_1:def 3;
+    then s.1 is Element of D by FINSEQ_2:11;
+    then s /^1 is FinSequence of D & <* s.1 *> is FinSequence of D
+    by FINSEQ_1:74;
+    hence thesis by LM003,AS,FINSEQ_1:75;
+  end;
+
+theorem
+  for n be non empty Element of NAT,
+  s be Element of n-tuples_on D
+  holds (Op-LeftShift(s)) is Element of n-tuples_on D
+  proof
+    let n be non empty Element of NAT,
+    s be Element of n-tuples_on D;
+    A20: len s = n by CARD_1:def 7;
+    then 1 <= len s by NAT_1:14;
+    then (Op-LeftShift(s)) is FinSequence of D &
+    len (Op-LeftShift(s)) = len s by LM003A;
+    then Op-LeftShift(s) is Tuple of n,D by A20,CARD_1:def 7;
+    hence thesis by FINSEQ_2:131;
+  end;
+
+definition
+  let s be FinSequence;
+  func Op-RightShift(s) -> FinSequence equals
+  (<* s.(len s) *> ^ s )| len s;
+  coherence;
+end;
+
+theorem LM004:
+  for s be FinSequence holds len (Op-RightShift(s)) = len s
+  proof
+    let s be FinSequence;
+    P0: len <* s.(len s) *> = 1 by FINSEQ_1:40;
+    len ((<* s.(len s) *>) ^ s ) = (len s) + 1
+    by P0,FINSEQ_1:22;
+    hence thesis by FINSEQ_1:59,NAT_1:12;
+  end;
+
+theorem LM004A:
+  1 <= len s implies
+  Op-RightShift(s) is FinSequence of D &
+  len (Op-RightShift(s)) = len s
+  proof
+    assume 1 <= len s;
+    then len s in Seg (len s);
+    then len s in dom s by FINSEQ_1:def 3;
+    then s.(len s) is Element of D by FINSEQ_2:11;
+    then <* s.(len s) *> is FinSequence of D by FINSEQ_1:74;
+    then reconsider ss=((<* s.(len s) *>) ^ s )
+    as FinSequence of D by FINSEQ_1:75;
+    ss | (len s) is FinSequence of D;
+    hence thesis by LM004;
+  end;
+
+theorem
+  for n be non empty Element of NAT,
+  s be Element of n-tuples_on D
+  holds (Op-RightShift(s)) is Element of n-tuples_on D
+  proof
+    let n be non empty Element of NAT,
+    s be Element of n-tuples_on D;
+    A20: len s = n by CARD_1:def 7;
+    then 1 <= len s by NAT_1:14;
+    then (Op-RightShift(s)) is FinSequence of D &
+    len (Op-RightShift(s)) = len s by LM004A;
+    then Op-RightShift(s) is Tuple of n,D by A20,CARD_1:def 7;
+    hence thesis by FINSEQ_2:131;
+  end;
+
+definition
+  let D be non empty set;
+  let s be FinSequence of D,n be Integer;
+  assume AS: 1 <= len s;
+  func Op-Shift(s,n) -> FinSequence of D means
+  :defShift:
+  len it = len s &
+  for i be Nat st i in Seg (len s)
+  holds it.i = s.(( (i-1+n) mod (len s) ) + 1);
+  existence
+  proof
+    defpred P[Nat,set ] means
+    $2 = s.(( ($1-1+n) mod (len s) ) + 1);
+    P1: now let k be Nat;
+    assume k in Seg (len s);
+    reconsider i0= (k-1+n) mod (len s) as
+    Element of NAT by INT_1:3,57;
+    P21: 0 + 1 <= i0 + 1 by XREAL_1:6;
+    (k-1+n) mod (len s) < len s by AS,INT_1:58;
+    then
+    i0 + 1 <= (len s) by NAT_1:13;
+    then
+    i0 + 1 in Seg (len s) by P21;
+    then
+    i0 + 1 in dom s by FINSEQ_1:def 3;
+    then
+    s.(i0 + 1) in D by FINSEQ_2:11;
+    hence ex x being Element of D st P[k,x];
+  end;
+  consider p being FinSequence of D
+  such that P3: dom p = Seg (len s) &
+  for k be Nat st k in Seg (len s) holds P[k,p.k]
+  from FINSEQ_1:sch 5(P1);
+  len p = len s by P3,FINSEQ_1:def 3;
+  hence thesis by P3;
+end;
+uniqueness
+proof
+  let p,q be FinSequence of D;
+  assume A1: len p=len s &
+  for i be Nat
+  st i in Seg (len s)
+  holds p.i= s.(( (i-1+n) mod (len s) ) + 1);
+  assume A2: len q=len s &
+  for i be Nat st i in Seg (len s)
+  holds q.i= s.(( (i-1+n) mod (len s) ) + 1);
+  now let j be Nat;
+    assume j in dom p;
+    then
+    A32:j in Seg (len s) by A1,FINSEQ_1:def 3;
+    thus p.j = s.(( (j-1+n) mod (len s) ) + 1) by A32,A1
+    .= q.j by A32,A2;
+  end;
+  hence thesis by A1,A2,FINSEQ_2:9;
+end;
+end;
+
+theorem
+  for n,m be Integer
+  st 1 <= len s holds
+  Op-Shift(Op-Shift(s,n),m)= Op-Shift(s,n+m)
+  proof
+    let n,m be Integer;
+    assume
+    AS:1 <= len s;
+    P1:len (Op-Shift(s,n)) = len s &
+    for i be Nat
+    st i in Seg (len s)
+    holds (Op-Shift(s,n)).i = s.(( (i-1+n) mod (len s) ) + 1) by defShift,AS;
+    P4:len (Op-Shift(s,n+m)) = len s &
+    for i be Nat
+    st i in Seg (len s)
+    holds (Op-Shift(s,n+m)).i
+    = s.(( (i-1+(n+m)) mod (len s) ) + 1) by defShift,AS;
+    P5: len (Op-Shift(Op-Shift(s,n),m) )
+    = len (Op-Shift(s,n+m)) by P4,defShift,AS,P1;
+    now let i be Nat;
+      assume P9P:i in dom (Op-Shift(Op-Shift(s,n),m) );
+      then
+      P9:i in Seg (len s) by P4,P5,FINSEQ_1:def 3;
+      P10:i in Seg len (Op-Shift(s,n))
+      by P1,P4,P5,P9P,FINSEQ_1:def 3;
+      reconsider i1= (i-1+m) mod (len s) as
+      Element of NAT by INT_1:3,57;
+      P21: 0 + 1 <= i1 + 1 by XREAL_1:6;
+      (i-1+m) mod (len s) < len s by AS,INT_1:58;
+      then
+      i1 + 1 <= (len s) by NAT_1:13;
+      then
+      P14:i1 + 1 in Seg (len s) by P21;
+      P17: i1 mod (len s) = (i-1+m) mod (len s) by NAT_D:65;
+      P16: (i1 + n ) mod (len s)
+      = ( ( (i-1+m) mod (len s) ) + (n mod (len s)) ) mod (len s)
+      by P17,NAT_D:66
+      .=(i-1+m+n) mod (len s) by NAT_D:66;
+      P11:(Op-Shift(Op-Shift(s,n),m)).i
+      = (Op-Shift(s,n)).(i1+1) by P10,defShift,AS,P1
+      .= s.((i1+1 - 1 + n ) mod (len s) + 1) by P14,defShift,AS
+      .= s.( (i-1+n+m) mod (len s) + 1) by P16;
+      (Op-Shift(s,n+m)).i = s.(( (i-1+(n+m)) mod (len s) ) + 1)
+      by P9,defShift,AS;
+      hence (Op-Shift(Op-Shift(s,n),m) ).i =(Op-Shift(s,n+m)).i by P11;
+    end;
+    hence thesis by P5,FINSEQ_2:9;
+  end;
+
+theorem
+  1 <= len s implies Op-Shift(s,0)= s
+  proof
+    assume AS:1 <= len s;
+    then
+    A1:len (Op-Shift(s,0)) = len s &
+    for i be Nat st i in Seg (len s) holds (Op-Shift(s,0)).i
+    = s.( (i-1+0) mod (len s) + 1) by defShift;
+    A2: now let i be Nat;
+    assume i in dom (Op-Shift(s,0));
+    then
+    A32:i in Seg (len s) by A1,FINSEQ_1:def 3;
+    then
+    P31: 1<=i & i <=len s by FINSEQ_1:1;
+    then
+    P32: 1-1 <= i-1 by XREAL_1:9;
+    i < len s + 1 by P31,NAT_1:13;
+    then P33:
+    i -1 < len s + 1 -1 by XREAL_1:14;
+    thus (Op-Shift(s,0)).i = s.((i-1+0) mod (len s) + 1) by A32,defShift,AS
+    .= s.((i-1) + 1) by P33,P32,NAT_D:63
+    .= s.i;
+  end;
+  thus thesis by A1,A2,FINSEQ_2:9;
+end;
+
+theorem
+  1 <= len s implies Op-Shift(s,len s)= s
+  proof
+    assume
+    AS:1 <= len s;
+    set m = len s;
+    P1:len Op-Shift(s,m) = m &
+    for i be Nat st i in Seg m
+    holds Op-Shift(s,m).i = s.( ( (i-1+ m) mod m ) + 1 ) by defShift,AS;
+    now let i be Nat;
+      assume i in dom (Op-Shift(s,m));
+      then
+      P3: i in Seg m by P1,FINSEQ_1:def 3;
+      then
+      P31: 1<=i & i <=len s by FINSEQ_1:1;
+      then
+      P32: 1-1 <= i-1 by XREAL_1:9;
+      i < len s + 1 by P31,NAT_1:13;
+      then P33:
+      i -1 < len s + 1 -1 by XREAL_1:14;
+      ( (i-1+ m) mod m ) + 1
+      = (((i-1) mod m ) + (m mod m) ) mod m + 1 by NAT_D:66
+      .= (((i-1) mod m) + 0) mod m + 1 by AS,INT_1:62
+      .= (i-1) mod m + 1 by NAT_D:65
+      .= i-1 + 1 by P33,P32,NAT_D:63
+      .= i;
+      hence Op-Shift(s,m).i = s.i by P3,defShift,AS;
+    end;
+    hence thesis by P1,FINSEQ_2:9;
+  end;
+
+theorem
+  1 <= len s implies Op-Shift(s,-(len s ))= s
+  proof
+    assume
+    AS:1 <= len s;
+    set m = len s;
+    P1:len Op-Shift(s,-m) = m &
+    for i be Nat
+    st i in Seg m
+    holds Op-Shift(s,-m).i
+    = s.( ( (i-1 + - m) mod m ) + 1 ) by defShift,AS;
+    -m = m*(-1);
+    then P11P:
+    0 < m & m divides -m by AS,INT_1:def 3;
+    now let i be Nat;
+      assume i in dom (Op-Shift(s,-m));
+      then
+      P3: i in Seg m by P1,FINSEQ_1:def 3;
+      then
+      P31: 1<=i & i <=len s by FINSEQ_1:1;
+      then
+      P32: 1-1 <= i-1 by XREAL_1:9;
+      i < len s + 1 by P31,NAT_1:13;
+      then P33:
+      i -1 < len s + 1 -1 by XREAL_1:14;
+      ( (i-1+ -m) mod m ) + 1
+      = (((i-1) mod m ) + ( (-m) mod m) ) mod m + 1 by NAT_D:66
+      .= (((i-1) mod m) + 0) mod m + 1 by P11P,INT_1:62
+      .= (i-1) mod m + 1 by NAT_D:65
+      .= i-1 + 1 by P33,P32,NAT_D:63
+      .= i;
+      hence Op-Shift(s,-m).i = s.i
+      by defShift,AS,P3;
+    end;
+    hence thesis by P1,FINSEQ_2:9;
+  end;
+
+theorem LM008:
+  for n be non empty Element of NAT,
+  m be Integer,
+  s be Element of n-tuples_on D
+  holds Op-Shift(s,m) is Element of n-tuples_on D
+  proof
+    let n be non empty Element of NAT,
+    m be Integer,
+    s be Element of n-tuples_on D;
+    A20: len s = n by CARD_1:def 7;
+    then 1 <= len s by NAT_1:14;
+    then len (Op-Shift(s,m)) = len s by defShift;
+    then Op-Shift(s,m) is Tuple of n,D by A20,CARD_1:def 7;
+    hence thesis by FINSEQ_2:131;
+  end;
+
+theorem
+  1 <= len s implies Op-Shift(s,-1)= Op-RightShift(s)
+  proof
+    assume AS: 1 <= len s;
+    R1:len Op-Shift(s,-1) = len s &
+    for i be Nat st i in Seg (len s)
+    holds Op-Shift(s,-1).i = s.( ( (i-1 - 1) mod (len s) ) + 1 )
+    by defShift,AS;
+    R3: (Op-RightShift(s)) is FinSequence of D &
+    len (Op-RightShift(s)) = len s by AS,LM004A;
+    R5:len <* s.(len s) *> = 1 by FINSEQ_1:40;
+    now let i be Nat;
+      assume i in dom (Op-Shift(s,-1));
+      then
+      P3: i in Seg (len s) by R1,FINSEQ_1:def 3;
+      then
+      P31: 1<=i & i <=len s by FINSEQ_1:1;
+      i < len s + 1 by P31,NAT_1:13;
+      then
+      DD1: i -1 < len s + 1 -1 by XREAL_1:14;
+      now per cases;
+        suppose CS1: i=1;
+          P34P: -1 >= - (len s) by AS,XREAL_1:24;
+          P35: Op-Shift(s,-1).i
+          = s.( ((i-1 -1) mod (len s) ) + 1) by P3,defShift,AS
+          .=s.( (len s) + -1 + 1 ) by P34P,CS1,NAT_D:63
+          .=s.(len s);
+          (Op-RightShift(s)).i
+          =((<* s.(len s) *>) ^ s ).i by P3,FUNCT_1:49
+          .= (<* s.(len s) *>).i by CS1,R5,FINSEQ_1:64
+          .= s.(len s) by CS1,FINSEQ_1:40;
+          hence Op-Shift(s,-1).i = (Op-RightShift(s)).i by P35;
+        end;
+        suppose i <> 1;
+          then Q35P: 1 < i by P31,XXREAL_0:1;
+          then
+          Q35:1+1 <= i by NAT_1:13;
+          i-1-1 <= i-1 by XREAL_1:43;
+          then Q36P:
+          0 <= i-2 & i-2 < len s by Q35,DD1,XREAL_1:48,XXREAL_0:2;
+          Q37: Op-Shift(s,-1).i
+          = s.( ( (i-1 -1) mod (len s) ) + 1 ) by P3,defShift,AS
+          .=s.( i-2 + 1 ) by Q36P,NAT_D:63
+          .=s.( i-1);
+          Q38: len (<* s.(len s) *>) + 1 <= i by Q35P,R5,NAT_1:13;
+          Q39: i <= len (<* s.(len s) *>) + len s by P31,R5,NAT_1:13;
+          (Op-RightShift(s)).i
+          =((<* s.(len s) *>) ^ s ).i by P3,FUNCT_1:49
+          .= s.(i-1) by Q38,Q39,R5,FINSEQ_1:23;
+          hence Op-Shift(s,-1).i = (Op-RightShift(s)).i by Q37;
+        end;
+      end;
+      hence Op-Shift(s,-1).i = (Op-RightShift(s)).i;
+    end;
+    hence thesis by R1,R3,FINSEQ_2:9;
+  end;
+
+theorem
+  1 <= len s implies Op-Shift(s,1)= Op-LeftShift(s)
+  proof
+    assume AS: 1 <= len s;
+    R1:len Op-Shift(s,1) = len s &
+    for i be Nat st i in Seg (len s) holds Op-Shift(s,1).i
+    = s.( ( (i-1 + 1) mod (len s) ) + 1 ) by defShift,AS;
+    R3: (Op-LeftShift(s)) is FinSequence of D &
+    len (Op-LeftShift(s)) = len s by AS,LM003A;
+    R5:len <* s.1 *> = 1 by FINSEQ_1:40;
+    R6: len (s /^ 1 ) = len s - 1 by AS,RFINSEQ:def 1;
+    now let i be Nat;
+      assume i in dom (Op-Shift(s,1));
+      then
+      P3: i in Seg (len s) by R1,FINSEQ_1:def 3;
+      then
+      P31: 1<=i & i <=len s by FINSEQ_1:1;
+      now per cases;
+        suppose CS1: i=(len s);
+          P35: Op-Shift(s,1).i
+          = s.( ( (i-1 + 1) mod (len s) ) + 1 ) by P3,defShift,AS
+          .=s.( 0 + 1 ) by AS,CS1,INT_1:62
+          .=s.1;
+          Q39: i <= len ((s /^1)) + len (<* s.1 *>) by CS1,R6,R5;
+          Q40: i - len (s /^1) = len s - (len s - 1)
+          by CS1,AS,RFINSEQ:def 1;
+          (Op-LeftShift(s)).i = (<* s.1 *>).1 by Q39,R5,Q40,FINSEQ_1:23
+          .= s.1 by FINSEQ_1:40;
+          hence Op-Shift(s,1).i = (Op-LeftShift(s)).i by P35;
+        end;
+        suppose i <> len s;
+          then
+          ZZZ:0 <= i & i < len s by P31,XXREAL_0:1;
+          i +1 <= len s by ZZZ,NAT_1:13;
+          then Q38P:
+          i + 1 - 1 <= len s -1 by XREAL_1:9;
+          then
+          Q38: 1 <=i & i <= (len s) -1 by P3,FINSEQ_1:1;
+          reconsider ls1=len s -1 as Element of NAT by Q38P,INT_1:3;
+          i in Seg (ls1) by Q38,FINSEQ_1:1;
+          then
+          Q39: i in dom (s /^1) by R6,FINSEQ_1:def 3;
+          Q37: Op-Shift(s,1).i
+          = s.( ( (i-1 + 1) mod (len s) ) + 1 ) by P3,defShift,AS
+          .=s.( i + 1 ) by ZZZ,NAT_D:63;
+          (Op-LeftShift(s)).i =(s /^1).i by R6,Q38,FINSEQ_1:64
+          .= s.(i+1) by Q39,AS,RFINSEQ:def 1;
+          hence Op-Shift(s,1).i = (Op-LeftShift(s)).i by Q37;
+        end;
+      end;
+      hence Op-Shift(s,1).i = (Op-LeftShift(s)).i;
+    end;
+    hence thesis by R1,R3,FINSEQ_2:9;
+  end;
+
+definition
+  let x,y be Element of 28-tuples_on BOOLEAN;
+  redefine func x^y -> Element of 56-tuples_on BOOLEAN;
+  coherence
+  proof
+    len (x^y) = 56 by CARD_1:def 7;
+    hence thesis by FINSEQ_2:92;
+  end;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let s be Element of n-tuples_on BOOLEAN;
+  let i be Nat;
+  redefine func s.i -> Element of BOOLEAN;
+  coherence
+  proof
+    per cases;
+    suppose not i in dom s;
+      then s.i = {} by FUNCT_1:def 2;
+      hence s.i is Element of BOOLEAN by TARSKI:def 2;
+    end;
+    suppose i in dom s;
+      then s.i in rng s by FUNCT_1:3;
+      hence s.i is Element of BOOLEAN;
+    end;
+  end;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let s be Element of n-tuples_on NAT;
+  let i be Nat;
+  redefine func s.i -> Element of NAT;
+  coherence
+  proof
+    per cases;
+    suppose not i in dom s; then
+      s.i = 0 by FUNCT_1:def 2;
+      hence s.i is Element of NAT;
+    end;
+    suppose i in dom s; then
+      s.i in rng s by FUNCT_1:3;
+      hence s.i is Element of NAT;
+    end;
+  end;
+end;
+
+registration
+  let n be Nat;
+  cluster -> boolean-valued for Element of n-tuples_on BOOLEAN;
+  coherence
+  proof let e be Element of n-tuples_on BOOLEAN;
+   thus rng e c= BOOLEAN by FINSEQ_2:132;
+  end;
+end;
+
+notation
+  let n be Element of NAT;
+  let s,t be Element of n-tuples_on BOOLEAN;
+  synonym Op-XOR(s,t) for s 'xor' t;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let s,t be Element of n-tuples_on BOOLEAN;
+  redefine func Op-XOR(s,t) -> Element of n-tuples_on BOOLEAN means
+  :defXOR:
+  for i be Nat st i in Seg n holds it.i = s.i 'xor' t.i;
+  coherence
+  proof
+    reconsider s1=s, t1=t as Element of Funcs(Seg n,BOOLEAN) by FINSEQ_2:93;
+    s1 'xor' t1 is Element of Funcs(Seg n,BOOLEAN) by FUNCT_2:8;
+    hence thesis by FINSEQ_2:93;
+  end;
+  compatibility
+  proof
+    let R be Element of n-tuples_on BOOLEAN;
+    set F = s 'xor' t;
+A0: now
+      let R be Element of n-tuples_on BOOLEAN;
+      thus dom R = Seg len R by FINSEQ_1:def 3
+      .= Seg n by CARD_1:def 7;
+    end;
+    then
+A1: dom R = Seg n;
+    hence R = F implies
+    for i be Nat st i in Seg n holds R.i = s.i 'xor' t.i by BVFUNC_1:def 3;
+A2: dom s = Seg n & dom t = Seg n by A0;
+A3: Seg n /\ Seg n = Seg n;
+    assume for i be Nat st i in Seg n holds R.i = s.i 'xor' t.i;
+    then for x being set st x in dom R holds R.x = (s.x) 'xor' (t.x) by A1;
+    hence R = F by A1,A2,A3,BVFUNC_1:def 3;
+  end;
+  commutativity;
+end;
+
+definition
+  let n,k be non empty Element of NAT,
+  RK be Element of k-tuples_on (n-tuples_on BOOLEAN);
+  let i be Element of Seg k;
+  redefine func RK.i -> Element of n-tuples_on BOOLEAN;
+  coherence
+  proof
+    RK is Element of Funcs(Seg k,n-tuples_on BOOLEAN) by FINSEQ_2:93;
+    hence RK.i is Element of n-tuples_on BOOLEAN by FUNCT_2:5;
+  end;
+end;
+
+theorem LM011:
+  for n be non empty Element of NAT,
+  s,t be Element of n-tuples_on BOOLEAN
+  holds Op-XOR(Op-XOR(s,t),t) = s
+  proof
+    let n be non empty Element of NAT,
+    s,t be Element of n-tuples_on BOOLEAN;
+    now let j be Nat;
+      assume A31: j in Seg n;
+      thus (Op-XOR(Op-XOR(s,t),t)).j
+      = (Op-XOR(s,t)).j 'xor' t.j by A31,defXOR
+      .= (s.j 'xor' t.j ) 'xor' t.j by A31,defXOR
+      .= s.j by XBOOLEAN:72;
+    end;
+    hence thesis by FINSEQ_2:119;
+  end;
+
+definition
+  let m be non empty Element of NAT;
+  let D be non empty set;
+  let L be sequence of (m-tuples_on D );
+  let i be Nat;
+  redefine func L.i -> Element of m-tuples_on D;
+  coherence
+  proof
+    thus L.i is Element of m-tuples_on D;
+  end;
+end;
+
+definition
+  let f be Function of 64,16;
+  let i be set;
+  redefine func f.i -> Element of 16;
+  coherence
+  proof
+    f.i in 16
+    proof
+      per cases;
+      suppose i in dom f;
+        hence thesis by FUNCT_2:5;
+      end;
+      suppose not i in dom f;
+        then f.i=0 by FUNCT_1:def 2;
+        hence thesis by NAT_1:44;
+      end;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem LC1:
+  for n,m be Nat st n+m <= len s holds
+  (s|n)^((s/^n)|m) = s|(n+m)
+  proof
+    let n,m be Nat;
+    assume AS: n+m <= len s;
+    set f0=s/^n;
+    L1:(s|n)^f0 =s by RFINSEQ:8;
+    set f1=f0|m;
+    set f2=f0/^m;
+    set f3=(s|n)^((s/^n)|m);
+    L4: (s|n)^(f1^f2) =s by L1,RFINSEQ:8;
+    n <= n+m by NAT_1:11;then
+    n <= len s by AS,XXREAL_0:2;
+    then L3: len (s|n)= n &
+    len f0= len s -n by FINSEQ_1:59,RFINSEQ:def 1;
+    then n+m <= n + len f0 by AS;
+    then m <= len f0 by XREAL_1:6;
+    then len f1 = m by FINSEQ_1:59;
+    then len f3= n+m by L3,FINSEQ_1:22;
+    then dom f3 = Seg (n+m) by FINSEQ_1:def 3;
+    hence f3=(f3^f2)|(Seg (n+m)) by FINSEQ_1:21
+    .=s|(n+m) by L4,FINSEQ_1:32;
+  end;
+
+scheme
+  QuadChoiceRec { A, B,C,D() -> non empty set,
+  A0() -> Element of A(), B0() -> Element of B(),
+  C0() -> Element of C(), D0() -> Element of D(),
+  P[set,set,set,set,set,set,set,set,set] }:
+  ex f being Function of NAT, A(), g being Function of NAT, B(),
+  h being Function of NAT, C(), i being Function of NAT, D()
+  st f.0 = A0() & g.0 = B0() &h.0 = C0() & i.0 = D0()
+  & for n being Element of
+  NAT holds P[n,f.n,g.n,h.n,i.n,f.(n+1),g.(n+1),h.(n+1),i.(n+1)]
+  provided
+  A1: for n being Element of NAT, x being Element of A(), y being Element
+  of B() , z being Element of C(),w being Element of D()
+  ex x1 being Element of A(), y1 being Element of B(),
+  z1 being Element of C(), w1 being Element of D()
+  st P[n,x,y,z,w,x1,y1,z1,w1]
+  proof
+    defpred P1[set,set,set,set,set]
+    means P[$1,($2)`1,($2)`2,($3)`1,($3)`2,($4)`1,($4)`2,($5)`1,($5)`2];
+    A2: for n being Element of NAT, x being Element of [:A(),B():],
+    y being Element of [:C(),D():]
+    ex z being Element of [:A(),B():],w being Element of [:C(),D():]
+    st P1[n,x,y,z,w]
+    proof
+      let n be Element of NAT, x be Element of [:A(),B():],
+      y be Element of [:C(),D():];
+      consider ai being Element of A(), bi being Element of B(),
+      ci being Element of C(), di being Element of D() such that
+      A3: P[n,x`1,x`2,y`1,y`2,ai,bi,ci,di] by A1;
+      take z= [ai,bi],w= [ci,di];
+      [ai,bi]`1 = ai &
+      [ai,bi]`2 = bi &
+      [ci,di]`1 = ci &
+      [ci,di]`2 = di;
+      hence thesis by A3;
+    end;
+    set AB0=[A0(),B0()],CD0=[C0(),D0()];
+    consider fg being Function of NAT, [:A(),B():],
+    hi being Function of NAT, [:C(),D():] such that
+    A4: fg.0 = AB0 and
+    A41: hi.0 = CD0 and
+    A5: for e being Element of NAT holds P1[e,fg.e,hi.e,fg.(e+1),hi.(e+1)]
+    from RECDEF_2:sch 3( A2);
+    take pr1 fg, pr2 fg,pr1 hi, pr2 hi;
+    (fg.0)`1 = (pr1 fg).0 & (fg.0)`2 = (pr2 fg).0
+    & (hi.0)`1 = (pr1 hi).0 & (hi.0)`2 = (pr2 hi).0
+    by FUNCT_2:def 5,def 6;
+    hence (pr1 fg).0 = A0() & (pr2 fg).0 = B0()
+    &(pr1 hi).0 = C0() & (pr2 hi).0 = D0()
+    by A4,A41,XTUPLE_0:def 2,def 3;
+    let i be Element of NAT;
+    A6: (fg.(i+1))`1 = (pr1 fg).(i+1) & (fg.(i+1))`2 = (pr2 fg).(i+1)
+    & (hi.(i+1))`1 = (pr1 hi).(i+1) & (hi.(i+1))`2 = (pr2 hi).(i+1)
+    by FUNCT_2:def 5,def 6;
+    (fg.i)`1 = (pr1 fg).i & (fg.i)`2 = (pr2 fg).i
+    & (hi.i)`1 = (pr1 hi).i & (hi.i)`2 = (pr2 hi).i
+    by FUNCT_2:def 5,def 6;
+    hence thesis by A5,A6;
+  end;
+
+  Lmseg4:
+  for i, j be Nat st i<=j & j <=i+3
+  holds (j=i or j=i+1 or j=i+2 or j=i+3 )
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+3;
+    now per cases;
+      case j <=i+1;
+        hence j=i or j=i+1 by A0,NAT_1:9;
+      end;
+      case j > i+1;
+        then
+        i+1+1 <= j by NAT_1:13;
+        then j=i+2 or j=i+2+1 by A0,NAT_1:9;
+        hence j=i+2 or j=i+3;
+      end;
+    end;
+    hence thesis;
+  end;
+
+  Lmseg8:
+  for i, j be Nat st i<=j & j <=i+7
+  holds (j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6 or j=i+7)
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+7;
+    now per cases;
+      case j <=i+3;
+        hence j=i or j=i+1 or j=i+2 or j=i+3 by Lmseg4,A0;
+      end;
+      case A2: j > i+3;
+        i+3+1 <= j by A2,NAT_1:13;
+        then
+        j=i+4 or j=i+4+1 or j=i+4+2 or j=i+4+3 by Lmseg4,A0;
+        hence j=i+4 or j=i+5 or j=i+6 or j=i+7;
+      end;
+    end;
+    hence thesis;
+  end;
+
+  Lmseg16:
+  for i, j be Nat st i<=j & j <=i+15
+  holds (j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6 or j=i+7
+  or j=i+8 or j=i+9 or j=i+10 or j=i+11 or j=i+12
+  or j=i+13 or j=i+14 or j=i+15)
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+15;
+    now per cases;
+      case j <=i+7;
+        hence j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5
+        or j=i+6 or j=i+7 by Lmseg8,A0;
+      end;
+      case A2: j > i+7;
+        i+7+1 <= j by A2,NAT_1:13;
+        then
+        j=i+8 or j=i+8+1 or j=i+8+2 or j=i+8+3 or j=i+8+4 or j=i+8+5 or j=i+8+6
+        or j=i+8+7 by Lmseg8,A0;
+        hence j=i+8 or j=i+9 or j=i+10 or j=i+11 or j=i+12 or j=i+13
+        or j=i+14 or j=i+15;
+      end;
+    end;
+    hence thesis;
+  end;
+
+  Lmseg24:
+  for i, j be Nat st i<=j & j <=i+23
+  holds (j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6 or j=i+7
+  or j=i+8 or j=i+9 or j=i+10 or j=i+11 or j=i+12
+  or j=i+13 or j=i+14 or j=i+15
+  or j=i+16 or j=i+17 or j=i+18 or j=i+19 or j=i+20
+  or j=i+21 or j=i+22 or j=i+23)
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+23;
+    now per cases;
+      case j <=i+15;
+        hence
+        j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6 or j=i+7
+        or j=i+8 or j=i+9 or j=i+10 or j=i+11 or j=i+12
+        or j=i+13 or j=i+14 or j=i+15 by Lmseg16,A0;
+      end;
+      case A2: j > i+15;
+        i+15+1 <= j by A2,NAT_1:13;
+        then
+        j=i+16 or j=i+16+1 or j=i+16+2 or j=i+16+3
+        or j=i+16+4 or j=i+16+5 or j=i+16+6
+        or j=i+16+7 by Lmseg8,A0;
+        hence j=i+16 or j=i+17 or j=i+18 or j=i+19 or j=i+20
+        or j=i+21 or j=i+22 or j=i+23;
+      end;
+    end;
+    hence thesis;
+  end;
+
+  Lmseg32:
+  for i, j be Nat st i<=j & j <=i+31
+  holds (j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6 or j=i+7
+  or j=i+8 or j=i+9 or j=i+10 or j=i+11 or j=i+12
+  or j=i+13 or j=i+14 or j=i+15
+  or j=i+16 or j=i+17 or j=i+18 or j=i+19 or j=i+20
+  or j=i+21 or j=i+22 or j=i+23
+  or j=i+24 or j=i+25 or j=i+26 or j=i+27 or j=i+28
+  or j=i+29 or j=i+30 or j=i+31 )
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+31;
+    now per cases;
+      case j <=i+15;
+        hence
+        j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6 or j=i+7
+        or j=i+8 or j=i+9 or j=i+10 or j=i+11 or j=i+12
+        or j=i+13 or j=i+14 or j=i+15 by Lmseg16,A0;
+      end;
+      case A2: j > i+15;
+        i+15+1 <= j by A2,NAT_1:13;
+        then
+        j=i+16 or j=i+16+1 or j=i+16+2 or j=i+16+3
+        or j=i+16+4 or j=i+16+5 or j=i+16+6
+        or j=i+16+7 or j=i+16+8 or j=i+16+9 or j=i+16+10 or j=i+16+11
+        or j=i+16+12 or j=i+16+13 or j=i+16+14 or j=i+16+15 by Lmseg16,A0;
+        hence
+        j=i+16 or j=i+17 or j=i+18 or j=i+19 or j=i+20
+        or j=i+21 or j=i+22 or j=i+23
+        or j=i+24 or j=i+25 or j=i+26 or j=i+27 or j=i+28
+        or j=i+29 or j=i+30 or j=i+31;
+      end;
+    end;
+    hence thesis;
+  end;
+
+  Lmseg48:
+  for i, j be Nat st i<=j & j <=i+47
+  holds
+  ( j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6
+  or j=i+7 or j=i+8
+  or j=i+9 or j=i+10 or j=i+11 or j=i+12 or j=i+13 or j=i+14
+  or j=i+15 or j=i+16
+  or j=i+17 or j=i+18 or j=i+19 or j=i+20 or j=i+21 or j=i+22
+  or j=i+23 or j=i+24
+  or j=i+25 or j=i+26 or j=i+27 or j=i+28 or j=i+29 or j=i+30
+  or j=i+31 or j=i+32
+  or j=i+33 or j=i+34 or j=i+35 or j=i+36 or j=i+37 or j=i+38
+  or j=i+39 or j=i+40
+  or j=i+41 or j=i+42 or j=i+43 or j=i+44 or j=i+45 or j=i+46
+  or j=i+47 )
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+47;
+    now per cases;
+      case j <=i+31;
+        hence
+        j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6
+        or j=i+7 or j=i+8
+        or j=i+9 or j=i+10 or j=i+11 or j=i+12 or j=i+13 or j=i+14
+        or j=i+15 or j=i+16
+        or j=i+17 or j=i+18 or j=i+19 or j=i+20 or j=i+21 or j=i+22
+        or j=i+23 or j=i+24
+        or j=i+25 or j=i+26 or j=i+27 or j=i+28 or j=i+29 or j=i+30
+        or j=i+31 by Lmseg32,A0;
+      end;
+      case A2: j > i+31;
+        i+31+1 <= j by A2,NAT_1:13;
+        then
+        j=i+32 or j=i+32+1 or j=i+32+2 or j=i+32+3
+        or j=i+32+4 or j=i+32+5 or j=i+32+6
+        or j=i+32+7 or j=i+32+8 or j=i+32+9 or j=i+32+10 or j=i+32+11
+        or j=i+32+12 or j=i+32+13 or j=i+32+14 or j=i+32+15
+        by Lmseg16,A0;
+        hence
+        j=i+32 or j=i+33 or j=i+34 or j=i+35 or j=i+36 or j=i+37
+        or j=i+38 or j=i+39 or j=i+40
+        or j=i+41 or j=i+42 or j=i+43 or j=i+44 or j=i+45 or j=i+46
+        or j=i+47;
+      end;
+    end;
+    hence thesis;
+  end;
+
+  Lmseg56:
+  for i, j be Nat st i<=j & j <=i+55
+  holds
+  ( j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6
+  or j=i+7 or j=i+8
+  or j=i+9 or j=i+10 or j=i+11 or j=i+12 or j=i+13 or j=i+14
+  or j=i+15 or j=i+16
+  or j=i+17 or j=i+18 or j=i+19 or j=i+20 or j=i+21 or j=i+22
+  or j=i+23 or j=i+24
+  or j=i+25 or j=i+26 or j=i+27 or j=i+28 or j=i+29 or j=i+30
+  or j=i+31 or j=i+32
+  or j=i+33 or j=i+34 or j=i+35 or j=i+36 or j=i+37 or j=i+38
+  or j=i+39 or j=i+40
+  or j=i+41 or j=i+42 or j=i+43 or j=i+44 or j=i+45 or j=i+46
+  or j=i+47 or j=i+48
+  or j=i+49 or j=i+50 or j=i+51 or j=i+52 or j=i+53 or j=i+54
+  or j=i+55 )
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+55;
+    now per cases;
+      case j <=i+31;
+        hence
+        j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6
+        or j=i+7 or j=i+8
+        or j=i+9 or j=i+10 or j=i+11 or j=i+12 or j=i+13 or j=i+14
+        or j=i+15 or j=i+16
+        or j=i+17 or j=i+18 or j=i+19 or j=i+20 or j=i+21 or j=i+22
+        or j=i+23 or j=i+24
+        or j=i+25 or j=i+26 or j=i+27 or j=i+28 or j=i+29 or j=i+30
+        or j=i+31 by Lmseg32,A0;
+      end;
+      case A2: j > i+31;
+        i+31+1 <= j by A2,NAT_1:13;
+        then
+        j=i+32 or j=i+32+1 or j=i+32+2 or j=i+32+3
+        or j=i+32+4 or j=i+32+5 or j=i+32+6
+        or j=i+32+7 or j=i+32+8 or j=i+32+9 or j=i+32+10 or j=i+32+11
+        or j=i+32+12 or j=i+32+13 or j=i+32+14 or j=i+32+15
+        or j=i+32+16 or j=i+32+17 or j=i+32+18 or j=i+32+19
+        or j=i+32+20 or j=i+32+21 or j=i+32+22 or j=i+32+23
+        by Lmseg24,A0;
+        hence
+        j=i+32 or j=i+33 or j=i+34 or j=i+35 or j=i+36 or j=i+37
+        or j=i+38 or j=i+39 or j=i+40
+        or j=i+41 or j=i+42 or j=i+43 or j=i+44 or j=i+45 or j=i+46
+        or j=i+47 or j=i+48
+        or j=i+49 or j=i+50 or j=i+51 or j=i+52 or j=i+53 or j=i+54
+        or j=i+55;
+      end;
+    end;
+    hence thesis;
+  end;
+
+  Lmseg64:
+  for i, j be Nat st i<=j & j <=i+63
+  holds
+  ( j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6
+  or j=i+7 or j=i+8
+  or j=i+9 or j=i+10 or j=i+11 or j=i+12 or j=i+13 or j=i+14
+  or j=i+15 or j=i+16
+  or j=i+17 or j=i+18 or j=i+19 or j=i+20 or j=i+21 or j=i+22
+  or j=i+23 or j=i+24
+  or j=i+25 or j=i+26 or j=i+27 or j=i+28 or j=i+29 or j=i+30
+  or j=i+31 or j=i+32
+  or j=i+33 or j=i+34 or j=i+35 or j=i+36 or j=i+37 or j=i+38
+  or j=i+39 or j=i+40
+  or j=i+41 or j=i+42 or j=i+43 or j=i+44 or j=i+45 or j=i+46
+  or j=i+47 or j=i+48
+  or j=i+49 or j=i+50 or j=i+51 or j=i+52 or j=i+53 or j=i+54
+  or j=i+55 or j=i+56
+  or j=i+57 or j=i+58 or j=i+59 or j=i+60 or j=i+61 or j=i+62
+  or j=i+63 )
+  proof
+    let i, j be Nat;
+    assume A0: i<=j & j <=i+63;
+    now per cases;
+      case j <=i+31;
+        hence
+        j=i or j=i+1 or j=i+2 or j=i+3 or j=i+4 or j=i+5 or j=i+6
+        or j=i+7 or j=i+8
+        or j=i+9 or j=i+10 or j=i+11 or j=i+12 or j=i+13 or j=i+14
+        or j=i+15 or j=i+16
+        or j=i+17 or j=i+18 or j=i+19 or j=i+20 or j=i+21 or j=i+22
+        or j=i+23 or j=i+24
+        or j=i+25 or j=i+26 or j=i+27 or j=i+28 or j=i+29 or j=i+30
+        or j=i+31 by Lmseg32,A0;
+      end;
+      case A2: j > i+31;
+        i+31+1 <= j by A2,NAT_1:13;
+        then
+        j=i+32 or j=i+32+1 or j=i+32+2 or j=i+32+3
+        or j=i+32+4 or j=i+32+5 or j=i+32+6
+        or j=i+32+7 or j=i+32+8 or j=i+32+9 or j=i+32+10 or j=i+32+11
+        or j=i+32+12 or j=i+32+13 or j=i+32+14 or j=i+32+15
+        or j=i+32+16 or j=i+32+17 or j=i+32+18 or j=i+32+19
+        or j=i+32+20 or j=i+32+21 or j=i+32+22 or j=i+32+23
+        or j=i+32+24 or j=i+32+25 or j=i+32+26 or j=i+32+27
+        or j=i+32+28 or j=i+32+29 or j=i+32+30 or j=i+32+31
+        by Lmseg32,A0;
+        hence
+        j=i+32 or j=i+33 or j=i+34 or j=i+35 or j=i+36 or j=i+37
+        or j=i+38 or j=i+39 or j=i+40
+        or j=i+41 or j=i+42 or j=i+43 or j=i+44 or j=i+45 or j=i+46
+        or j=i+47 or j=i+48
+        or j=i+49 or j=i+50 or j=i+51 or j=i+52 or j=i+53 or j=i+54
+        or j=i+55 or j=i+56
+        or j=i+57 or j=i+58 or j=i+59 or j=i+60 or j=i+61 or j=i+62
+        or j=i+63;
+      end;
+    end;
+    hence thesis;
+  end;
+
+theorem Lmseg16a:
+  for x be set st x in Seg 16 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  proof
+    let x be set;
+    assume AS: x in Seg 16;
+    then reconsider j=x as Nat;
+    1 <= j & j <= 16 by AS,FINSEQ_1:1;
+    then
+    j=1 or j=1+1 or j=1+2 or j=1+3 or j=1+4 or j=1+5 or j=1+6
+    or j=1+7 or j=1+8
+    or j=1+9 or j=1+10 or j=1+11 or j=1+12 or j=1+13 or j=1+14
+    or j=1+15 by Lmseg16;
+    hence thesis;
+  end;
+
+theorem Lmseg32a:
+  for x be set st x in Seg 32 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32
+  proof
+    let x be set;
+    assume AS: x in Seg 32;
+    then reconsider j=x as Nat;
+    1 <= j & j <= 32 by AS,FINSEQ_1:1;
+    then
+    j=1 or j=1+1 or j=1+2 or j=1+3 or j=1+4 or j=1+5 or j=1+6
+    or j=1+7 or j=1+8
+    or j=1+9 or j=1+10 or j=1+11 or j=1+12 or j=1+13 or j=1+14
+    or j=1+15 or j=1+16
+    or j=1+17 or j=1+18 or j=1+19 or j=1+20 or j=1+21 or j=1+22
+    or j=1+23 or j=1+24
+    or j=1+25 or j=1+26 or j=1+27 or j=1+28 or j=1+29 or j=1+30
+    or j=1+31 by Lmseg32;
+    hence thesis;
+  end;
+
+theorem Lmseg48a:
+  for x be set st x in Seg 48 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32
+  or x=33 or x=34 or x=35 or x=36 or x=37 or x=38 or x=39 or x=40
+  or x=41 or x=42 or x=43 or x=44 or x=45 or x=46 or x=47 or x=48
+  proof
+    let x be set;
+    assume AS: x in Seg 48;
+    then reconsider j=x as Nat;
+    1 <= j & j <= 48 by AS,FINSEQ_1:1;
+    then
+    j=1 or j=1+1 or j=1+2 or j=1+3 or j=1+4 or j=1+5 or j=1+6
+    or j=1+7 or j=1+8
+    or j=1+9 or j=1+10 or j=1+11 or j=1+12 or j=1+13 or j=1+14
+    or j=1+15 or j=1+16
+    or j=1+17 or j=1+18 or j=1+19 or j=1+20 or j=1+21 or j=1+22
+    or j=1+23 or j=1+24
+    or j=1+25 or j=1+26 or j=1+27 or j=1+28 or j=1+29 or j=1+30
+    or j=1+31 or j=1+32
+    or j=1+33 or j=1+34 or j=1+35 or j=1+36 or j=1+37 or j=1+38
+    or j=1+39 or j=1+40
+    or j=1+41 or j=1+42 or j=1+43 or j=1+44 or j=1+45 or j=1+46
+    or j=1+47 by Lmseg48;
+    hence thesis;
+  end;
+
+theorem Lmseg56a:
+  for x be set st x in Seg 56 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32
+  or x=33 or x=34 or x=35 or x=36 or x=37 or x=38 or x=39 or x=40
+  or x=41 or x=42 or x=43 or x=44 or x=45 or x=46 or x=47 or x=48
+  or x=49 or x=50 or x=51 or x=52 or x=53 or x=54 or x=55 or x=56
+  proof
+    let x be set;
+    assume AS: x in Seg 56;
+    then reconsider j=x as Nat;
+    1<= j & j <= 1+55 by AS,FINSEQ_1:1;
+    then
+    j=1 or j=1+1 or j=1+2 or j=1+3 or j=1+4 or j=1+5 or j=1+6
+    or j=1+7 or j=1+8
+    or j=1+9 or j=1+10 or j=1+11 or j=1+12 or j=1+13 or j=1+14
+    or j=1+15 or j=1+16
+    or j=1+17 or j=1+18 or j=1+19 or j=1+20 or j=1+21 or j=1+22
+    or j=1+23 or j=1+24
+    or j=1+25 or j=1+26 or j=1+27 or j=1+28 or j=1+29 or j=1+30
+    or j=1+31 or j=1+32
+    or j=1+33 or j=1+34 or j=1+35 or j=1+36 or j=1+37 or j=1+38
+    or j=1+39 or j=1+40
+    or j=1+41 or j=1+42 or j=1+43 or j=1+44 or j=1+45 or j=1+46
+    or j=1+47 or j=1+48
+    or j=1+49 or j=1+50 or j=1+51 or j=1+52 or j=1+53 or j=1+54
+    or j=1+55 by Lmseg56;
+    hence thesis;
+  end;
+
+theorem Lmseg64a:
+  for x be set st x in Seg 64 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32
+  or x=33 or x=34 or x=35 or x=36 or x=37 or x=38 or x=39 or x=40
+  or x=41 or x=42 or x=43 or x=44 or x=45 or x=46 or x=47 or x=48
+  or x=49 or x=50 or x=51 or x=52 or x=53 or x=54 or x=55 or x=56
+  or x=57 or x=58 or x=59 or x=60 or x=61 or x=62 or x=63 or x=64
+  proof
+    let x be set;
+    assume AS: x in Seg 64;
+    then
+    reconsider j=x as Nat;
+    1<= j & j <= 1+63 by AS,FINSEQ_1:1;
+    then
+    j=1 or j=1+1 or j=1+2 or j=1+3 or j=1+4 or j=1+5 or j=1+6
+    or j=1+7 or j=1+8
+    or j=1+9 or j=1+10 or j=1+11 or j=1+12 or j=1+13 or j=1+14
+    or j=1+15 or j=1+16
+    or j=1+17 or j=1+18 or j=1+19 or j=1+20 or j=1+21 or j=1+22
+    or j=1+23 or j=1+24
+    or j=1+25 or j=1+26 or j=1+27 or j=1+28 or j=1+29 or j=1+30
+    or j=1+31 or j=1+32
+    or j=1+33 or j=1+34 or j=1+35 or j=1+36 or j=1+37 or j=1+38
+    or j=1+39 or j=1+40
+    or j=1+41 or j=1+42 or j=1+43 or j=1+44 or j=1+45 or j=1+46
+    or j=1+47 or j=1+48
+    or j=1+49 or j=1+50 or j=1+51 or j=1+52 or j=1+53 or j=1+54
+    or j=1+55 or j=1+56
+    or j=1+57 or j=1+58 or j=1+59 or j=1+60 or j=1+61 or j=1+62
+    or j=1+63 by Lmseg64;
+    hence thesis;
+  end;
+
+theorem th1:
+  for n be non empty Nat holds n = {0} \/ ((Seg n) \ {n})
+  proof
+    let n be non empty Nat;
+    {0} /\ {n} = {}
+    proof
+      assume {0} /\ {n} <> {};
+      then consider x be set such that
+      A2: x in {0} /\ {n} by XBOOLE_0:def 1;
+      x in {0} & x in {n} by A2,XBOOLE_0:def 4;
+      then x=0 & x= n by TARSKI:def 1;
+      hence contradiction;
+    end;
+    then P1P:
+    {0} misses {n} by XBOOLE_0:def 7;
+    P2: {k where k is Element of NAT: k <= n }
+    = {0}\/ Seg n
+    proof
+      now let x be set;
+        assume x in {k where k is Element of NAT: k <= n };
+        then
+        consider m be Element of NAT
+        such that A3: m=x & m <= n;
+        m =0 or (1 <= m & m <= n ) by A3,NAT_1:14;
+        then
+        m in {0} or m in Seg n by TARSKI:def 1;
+        hence x in {0}\/ Seg n by A3,XBOOLE_0:def 3;
+      end;
+      then
+      A4:{k where k is Element of NAT: k <= n }
+      c= {0}\/ Seg n by TARSKI:def 3;
+      now let x be set;
+        assume A5: x in {0}\/ Seg n;
+        then reconsider m=x as Element of NAT;
+        m in {0} or m in Seg n by A5,XBOOLE_0:def 3;
+        then
+        m=0 or 1 <= m & m <= n by FINSEQ_1:1,TARSKI:def 1;
+        hence x in {k where k is Element of NAT: k <= n };
+      end;
+      then {0}\/ Seg n
+      c={k where k is Element of NAT: k <= n } by TARSKI:def 3;
+      hence thesis by A4,XBOOLE_0:def 10;
+    end;
+    thus n=succ n \ {n} by ORDINAL1:37
+    .= {k where k is Element of NAT: k <= n } \ {n} by NAT_1:54
+    .= ({0} \ {n} ) \/ ((Seg n) \ {n}) by P2,XBOOLE_1:42
+    .= {0} \/ ((Seg n) \ {n}) by P1P,XBOOLE_1:83;
+  end;
+
+theorem th3:
+  for n be non empty Nat,x be set st x in n holds
+  x = 0 or x in Seg n & x <> n
+  proof
+    let n be non empty Nat,
+    x be set;
+    assume x in n;then
+    x in {0}\/ ((Seg n) \ {n}) by th1;
+    then
+    x in {0} or x in ((Seg n) \ {n}) by XBOOLE_0:def 3;
+    then
+    x = 0 or x in Seg n & not x in {n} by TARSKI:def 1,XBOOLE_0:def 5;
+    hence thesis by TARSKI:def 1;
+  end;
+
+theorem thel16:
+  for x be set st x in 16 holds
+  x=0 or x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or
+  x=8 or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15
+  proof
+    let x be set;
+    assume x in 16;then
+    x = 0 or x in Seg 16 & x <> 16 by th3;
+    hence thesis by Lmseg16a;
+  end;
+
+theorem thel64:
+  for x be set st x in 64 holds
+  x=0 or x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or
+  x=7 or x=8 or x=9 or x=10 or x=11 or x=12 or
+  x=13 or x=14 or x=15 or x=16 or x=17 or x=18 or
+  x=19 or x=20 or x=21 or x=22 or x=23 or x=24 or
+  x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or
+  x=31 or x=32 or x=33 or x=34 or x=35 or x=36 or
+  x=37 or x=38 or x=39 or x=40 or x=41 or x=42 or
+  x=43 or x=44 or x=45 or x=46 or x=47 or x=48 or
+  x=49 or x=50 or x=51 or x=52 or x=53 or x=54 or
+  x=55 or x=56 or x=57 or x=58 or x=59 or x=60 or
+  x=61 or x=62 or x=63
+  proof
+    let x be set;
+    assume x in 64;then
+    x = 0 or x in Seg 64 & not x = 64 by th3;
+    hence thesis by Lmseg64a;
+  end;
+
+  T8:
+  for S be non empty set,
+  p,q be FinSequence of S st p is 4-element & q is 4-element holds
+  (p^q) is 8-element &
+  (p^q).1=p.1&
+  (p^q).2=p.2&
+  (p^q).3=p.3&
+  (p^q).4=p.4&
+  (p^q).5=q.1&
+  (p^q).6=q.2&
+  (p^q).7=q.3&
+  (p^q).8=q.4
+  proof
+    let S be non empty set,
+    p,q be FinSequence of S;
+    assume AS: p is 4-element & q is 4-element;
+    set r=p^q;
+
+    L1: len p = 4 & len q = 4 by AS,CARD_1:def 7;
+
+    len r= (len p) + (len q) by FINSEQ_1:22
+    .=8 by L1;
+    hence r is 8-element by CARD_1:def 7;
+
+    L50:dom p = {1,2,3,4} by L1,FINSEQ_1:def 3,FINSEQ_3:2;
+    L51:dom q = {1,2,3,4} by L1,FINSEQ_1:def 3,FINSEQ_3:2;
+    1 in dom p &2 in dom p &3 in dom p & 4 in dom p
+    by L50,ENUMSET1:def 2;
+    hence r.1 =p.1 &r.2 =p.2 &r.3 =p.3 &
+    r.4 =p.4 by FINSEQ_1:def 7;
+    1 in dom q &2 in dom q &3 in dom q & 4 in dom q
+    by L51,ENUMSET1:def 2; then
+    r.(4 + 1) =q.1 &r.(4 + 2) =q.2 &r.(4 + 3) =q.3 &
+    r.(4 + 4) =q.4 by L1,FINSEQ_1:def 7;
+    hence r.5 =q.1 &r.6 =q.2 & r.7 =q.3&r.8 =q.4;
+  end;
+
+theorem TT8:
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8 be Element of S holds
+  ex s be FinSequence of S st
+  s is 8-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8
+  proof
+    let S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8 be Element of S;
+    set a1=<*x1,x2,x3,x4*>;
+    set a2=<*x5,x6,x7,x8*>;
+    take b1 = a1^a2;
+    b1 is 8-element&
+    b1.1=a1.1&b1.2=a1.2&b1.3=a1.3&b1.4=a1.4&
+    b1.5=a2.1&b1.6=a2.2&b1.7=a2.3&b1.8=a2.4 by T8;
+    hence thesis by FINSEQ_4:76;
+  end;
+
+  T16:
+  for S be non empty set,
+  p,q be FinSequence of S st p is 8-element & q is 8-element holds
+  (p^q) is 16-element&
+  (p^q).1=p.1&(p^q).2=p.2&(p^q).3=p.3&(p^q).4=p.4&
+  (p^q).5=p.5&(p^q).6=p.6&(p^q).7=p.7&(p^q).8=p.8&
+  (p^q).9=q.1&(p^q).10=q.2&(p^q).11=q.3&(p^q).12=q.4&
+  (p^q).13=q.5&(p^q).14=q.6&(p^q).15=q.7&(p^q).16=q.8
+  proof
+    let S be non empty set,
+    p,q be FinSequence of S;
+    assume AS: p is 8-element & q is 8-element;
+    set r=p^q;
+    L1: len p = 8 & len q = 8 by AS,CARD_1:def 7;
+    len r= (len p) + (len q) by FINSEQ_1:22
+    .=16 by L1;
+    hence r is 16-element by CARD_1:def 7;
+    L50:dom p = {1,2,3,4,5,6,7,8} by L1,FINSEQ_1:def 3,FINSEQ_3:6;
+
+    L51:dom q = {1,2,3,4,5,6,7,8} by L1,FINSEQ_1:def 3,FINSEQ_3:6;
+    1 in dom p &2 in dom p &3 in dom p & 4 in dom p &
+    5 in dom p &6 in dom p &7 in dom p & 8 in dom p
+    by L50,ENUMSET1:def 6;
+    hence r.1 =p.1 & r.2 =p.2 &
+    r.3 =p.3 & r.4 =p.4 &
+    r.5 =p.5 & r.6 =p.6 &
+    r.7 =p.7 & r.8 =p.8 by FINSEQ_1:def 7;
+    1 in dom q &2 in dom q &3 in dom q & 4 in dom q &
+    5 in dom q &6 in dom q &7 in dom q & 8 in dom q
+    by L51,ENUMSET1:def 6; then
+    r.(8 + 1) =q.1 &
+    r.(8 + 2) =q.2 &
+    r.(8 + 3) =q.3 &
+    r.(8 + 4) =q.4 &
+    r.(8 + 5) =q.5 &
+    r.(8 + 6) =q.6 &
+    r.(8 + 7) =q.7 &
+    r.(8 + 8) =q.8 by L1,FINSEQ_1:def 7;
+    hence
+    r.9 =q.1 & r.10 =q.2 &
+    r.11 =q.3& r.12 =q.4 &
+    r.13 =q.5 & r.14 =q.6 &
+    r.15 =q.7& r.16 =q.8;
+  end;
+
+theorem TT16:
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16
+  be Element of S holds
+  ex s be FinSequence of S st
+  s is 16-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16
+  proof
+    let S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8,
+    x9,x10,x11,x12,x13,x14,x15,x16 be Element of S;
+    consider a1 be FinSequence of S such that
+    LA1:a1 is 8-element &
+    a1.1=x1&a1.2=x2&a1.3=x3&a1.4=x4&
+    a1.5=x5&a1.6=x6&a1.7=x7&a1.8=x8 by TT8;
+    consider a2 be FinSequence of S such that
+    LA2:a2 is 8-element &
+    a2.1=x9&a2.2=x10&a2.3=x11&a2.4=x12&
+    a2.5=x13&a2.6=x14&a2.7=x15&a2.8=x16 by TT8;
+    take a1^a2;
+    thus thesis by LA1,LA2,T16;
+  end;
+
+  T32:
+  for S be non empty set,
+  p,q be FinSequence of S st p is 16-element & q is 16-element holds
+  (p^q) is 32-element &
+  (p^q).1=p.1&(p^q).2=p.2&(p^q).3=p.3&(p^q).4=p.4&
+  (p^q).5=p.5&(p^q).6=p.6&(p^q).7=p.7&(p^q).8=p.8&
+  (p^q).9=p.9&(p^q).10=p.10&(p^q).11=p.11&(p^q).12=p.12&
+  (p^q).13=p.13&(p^q).14=p.14&(p^q).15=p.15&(p^q).16=p.16&
+  (p^q).17=q.1&(p^q).18=q.2&(p^q).19=q.3&(p^q).20=q.4&
+  (p^q).21=q.5&(p^q).22=q.6&(p^q).23=q.7&(p^q).24=q.8 &
+  (p^q).25=q.9&(p^q).26=q.10&(p^q).27=q.11&(p^q).28=q.12&
+  (p^q).29=q.13&(p^q).30=q.14&(p^q).31=q.15&(p^q).32=q.16
+  proof
+    let S be non empty set,
+    p,q be FinSequence of S;
+    assume AS: p is 16-element & q is 16-element;
+    set r=p^q;
+    L1: len p = 16 &len q = 16 by AS,CARD_1:def 7;
+    len r= (len p) + (len q) by FINSEQ_1:22
+    .=32 by L1;
+    hence r is 32-element by CARD_1:def 7;
+    L50:dom p =Seg 16 by L1,FINSEQ_1:def 3;
+    L51:dom q =Seg 16 by L1,FINSEQ_1:def 3;
+
+    1 in dom p &2 in dom p &3 in dom p & 4 in dom p &
+    5 in dom p &6 in dom p &7 in dom p & 8 in dom p &
+    9 in dom p &10 in dom p &11 in dom p &12 in dom p &
+    13 in dom p &14 in dom p &15 in dom p &16 in dom p
+    by L50;
+    hence
+    r.1 =p.1&r.2 =p.2&r.3 =p.3&r.4 =p.4&
+    r.5 =p.5&r.6 =p.6&r.7 =p.7&r.8 =p.8 &
+    r.9=p.9&r.10= p.10&r.11 = p.11 &r.12 = p.12 &
+    r.13 = p.13 &r.14 = p.14 &r.15 = p.15 &
+    r.16 = p.16 by FINSEQ_1:def 7;
+
+    1 in dom q &2 in dom q &3 in dom q & 4 in dom q &
+    5 in dom q &6 in dom q &7 in dom q & 8 in dom q &
+    9 in dom q &10 in dom q &11 in dom q &12 in dom q &
+    13 in dom q &14 in dom q &15 in dom q &16 in dom q by L51; then
+    r.(16 + 1) =q.1 &r.(16 + 2) =q.2 &r.(16 + 3) =q.3 &
+    r.(16 + 4) =q.4 &r.(16 + 5) =q.5 &r.(16 + 6) =q.6 &
+    r.(16 + 7) =q.7 &r.(16 + 8) =q.8 &r.(16 + 9) =q.9 &
+    r.(16 + 10) =q.10 &r.(16 + 11) =q.11 &r.(16 + 12) =q.12 &
+    r.(16 + 13) =q.13 &r.(16 + 14) =q.14 &r.(16 + 15) =q.15 &
+    r.(16 + 16) =q.16 by L1,FINSEQ_1:def 7;
+    hence
+    r.17 =q.1 &r.18 =q.2 &r.19 =q.3&r.20 =q.4 &
+    r.21 =q.5 &r.22 =q.6 &r.23 =q.7&r.24 =q.8 &
+    r.25 =q.9 &r.26 =q.10&r.27 =q.11&r.28 =q.12 &
+    r.29 =q.13&r.30 =q.14&r.31 =q.15&r.32=q.16;
+  end;
+
+theorem TT32:
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32
+  be Element of S holds
+  ex s be FinSequence of S st
+  s is 32-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32
+  proof
+    let S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8,
+    x9,x10,x11,x12,x13,x14,x15,x16,
+    x17,x18,x19,x20,x21,x22,x23,x24,
+    x25,x26,x27,x28,x29,x30,x31,x32 be Element of S;
+
+    consider a1 be FinSequence of S such that
+    LA1:a1 is 16-element &
+    a1.1=x1&a1.2=x2&a1.3=x3&a1.4=x4&
+    a1.5=x5&a1.6=x6&a1.7=x7&a1.8=x8&
+    a1.9=x9&a1.10=x10&a1.11=x11&a1.12=x12&
+    a1.13=x13&a1.14=x14&a1.15=x15&a1.16=x16 by TT16;
+
+    consider a2 be FinSequence of S such that
+    LA2:a2 is 16-element &
+    a2.1=x17&a2.2=x18&a2.3=x19&a2.4=x20&
+    a2.5=x21&a2.6=x22&a2.7=x23&a2.8=x24&
+    a2.9=x25&a2.10=x26&a2.11=x27&a2.12=x28&
+    a2.13=x29&a2.14=x30&a2.15=x31&a2.16=x32 by TT16;
+    take a1^a2;
+    thus thesis by LA1,LA2,T32;
+  end;
+
+  T48:
+  for S be non empty set,
+  p,q be FinSequence of S st p is 32-element & q is 16-element holds
+  (p^q) is 48-element &
+  (p^q).1=p.1&(p^q).2=p.2&(p^q).3=p.3&(p^q).4=p.4&
+  (p^q).5=p.5&(p^q).6=p.6&(p^q).7=p.7&(p^q).8=p.8&
+  (p^q).9=p.9&(p^q).10=p.10&(p^q).11=p.11&(p^q).12=p.12&
+  (p^q).13=p.13&(p^q).14=p.14&(p^q).15=p.15&(p^q).16=p.16&
+  (p^q).17=p.17&(p^q).18=p.18&(p^q).19=p.19&(p^q).20=p.20&
+  (p^q).21=p.21&(p^q).22=p.22&(p^q).23=p.23&(p^q).24=p.24 &
+  (p^q).25=p.25&(p^q).26=p.26&(p^q).27=p.27&(p^q).28=p.28&
+  (p^q).29=p.29&(p^q).30=p.30&(p^q).31=p.31&(p^q).32=p.32&
+  (p^q).33=q.1&(p^q).34=q.2&(p^q).35=q.3&(p^q).36=q.4&
+  (p^q).37=q.5&(p^q).38=q.6&(p^q).39=q.7&(p^q).40=q.8 &
+  (p^q).41=q.9&(p^q).42=q.10&(p^q).43=q.11&(p^q).44=q.12&
+  (p^q).45=q.13&(p^q).46=q.14&(p^q).47=q.15&(p^q).48=q.16
+  proof
+    let S be non empty set,
+    p,q be FinSequence of S;
+    assume AS: p is 32-element & q is 16-element;
+    set r=p^q;
+
+    L1: len p = 32 & len q = 16 by AS,CARD_1:def 7;
+
+    len r= (len p) + (len q) by FINSEQ_1:22
+    .=48 by L1;
+    hence r is 48-element by CARD_1:def 7;
+    L50:dom p =Seg 32 by L1,FINSEQ_1:def 3;
+    L51:dom q =Seg 16 by L1,FINSEQ_1:def 3;
+    1 in dom p &2 in dom p &3 in dom p & 4 in dom p &
+    5 in dom p &6 in dom p &7 in dom p & 8 in dom p &
+    9 in dom p &10 in dom p &11 in dom p &12 in dom p &
+    13 in dom p &14 in dom p &15 in dom p &16 in dom p &
+    17 in dom p &18 in dom p &19 in dom p & 20 in dom p &
+    21 in dom p &22 in dom p &23 in dom p & 24 in dom p &
+    25 in dom p &26 in dom p &27 in dom p &28 in dom p &
+    29 in dom p &30 in dom p &31 in dom p &32 in dom p by L50;
+    hence
+    r.1 =p.1 &r.2 =p.2 &r.3 =p.3&r.4 =p.4 &
+    r.5 =p.5 &r.6 =p.6 &r.7 =p.7 &r.8 =p.8 &
+    r.9=p.9 &r.10 = p.10 &r.11 = p.11 &r.12 = p.12 &
+    r.13 = p.13 &r.14 = p.14 &r.15 = p.15 &r.16 = p.16&
+    r.17=p.17&r.18=p.18&r.19=p.19&r.20=p.20&r.21=p.21&
+    r.22=p.22&r.23=p.23&r.24=p.24&r.25=p.25&r.26=p.26&
+    r.27=p.27&r.28=p.28&r.29=p.29&r.30=p.30&r.31=p.31&
+    r.32=p.32 by FINSEQ_1:def 7;
+
+    1 in dom q &2 in dom q &3 in dom q & 4 in dom q &
+    5 in dom q &6 in dom q &7 in dom q & 8 in dom q &
+    9 in dom q &10 in dom q &11 in dom q &12 in dom q &
+    13 in dom q &14 in dom q &15 in dom q &16 in dom q
+    by L51;then
+    r.(32 + 1) =q.1 &r.(32 + 2) =q.2 &
+    r.(32 + 3) =q.3 &r.(32 + 4) =q.4 &
+    r.(32 + 5) =q.5 &r.(32 + 6) =q.6 &
+    r.(32 + 7) =q.7 &r.(32 + 8) =q.8 &
+    r.(32 + 9) =q.9 &r.(32 + 10) =q.10 &
+    r.(32 + 11) =q.11 &r.(32 + 12) =q.12 &
+    r.(32 + 13) =q.13 &r.(32 + 14) =q.14 &
+    r.(32 + 15) =q.15 &r.(32 + 16) =q.16 by L1,FINSEQ_1:def 7;
+    hence r.33 =q.1 &r.34 =q.2 &r.35 =q.3&r.36 =q.4 &
+    r.37 =q.5 &r.38 =q.6 &r.39 =q.7&r.40 =q.8 &
+    r.41 =q.9 &r.42 =q.10 &r.43 =q.11&r.44 =q.12 &
+    r.45 =q.13 &r.46 =q.14&r.47 =q.15&r.48 =q.16;
+  end;
+
+theorem TT48:
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48
+  be Element of S holds
+  ex s be FinSequence of S st
+  s is 48-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32&
+  s.33=x33&s.34=x34&s.35=x35&s.36=x36&
+  s.37=x37&s.38=x38&s.39=x39&s.40=x40&
+  s.41=x41&s.42=x42&s.43=x43&s.44=x44&
+  s.45=x45&s.46=x46&s.47=x47&s.48=x48
+  proof
+    let S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8,
+    x9,x10,x11,x12,x13,x14,x15,x16,
+    x17,x18,x19,x20,x21,x22,x23,x24,
+    x25,x26,x27,x28,x29,x30,x31,x32,
+    x33,x34,x35,x36,x37,x38,x39,x40,
+    x41,x42,x43,x44,x45,x46,x47,x48 be Element of S;
+
+    consider a1 be FinSequence of S such that
+    LA1:a1 is 32-element &
+    a1.1=x1&a1.2=x2&a1.3=x3&a1.4=x4&
+    a1.5=x5&a1.6=x6&a1.7=x7&a1.8=x8&
+    a1.9=x9&a1.10=x10&a1.11=x11&a1.12=x12&
+    a1.13=x13&a1.14=x14&a1.15=x15&a1.16=x16 &
+    a1.17=x17&a1.18=x18&a1.19=x19&a1.20=x20&
+    a1.21=x21&a1.22=x22&a1.23=x23&a1.24=x24&
+    a1.25=x25&a1.26=x26&a1.27=x27&a1.28=x28&
+    a1.29=x29&a1.30=x30&a1.31=x31&a1.32=x32
+    by TT32;
+
+    consider a2 be FinSequence of S such that
+    LA2:a2 is 16-element &
+    a2.1=x33&a2.2=x34&a2.3=x35&a2.4=x36&
+    a2.5=x37&a2.6=x38&a2.7=x39&a2.8=x40&
+    a2.9=x41&a2.10=x42&a2.11=x43&a2.12=x44&
+    a2.13=x45&a2.14=x46&a2.15=x47&a2.16=x48 by TT16;
+    take a1^a2;
+    thus thesis by LA1,LA2,T48;
+  end;
+
+  T56:
+  for S be non empty set,
+  p,q be FinSequence of S st p is 48-element & q is 8-element holds
+  (p^q) is 56-element &
+  (p^q).1=p.1&(p^q).2=p.2&(p^q).3=p.3&(p^q).4=p.4&
+  (p^q).5=p.5&(p^q).6=p.6&(p^q).7=p.7&(p^q).8=p.8&
+  (p^q).9=p.9&(p^q).10=p.10&(p^q).11=p.11&(p^q).12=p.12&
+  (p^q).13=p.13&(p^q).14=p.14&(p^q).15=p.15&(p^q).16=p.16&
+  (p^q).17=p.17&(p^q).18=p.18&(p^q).19=p.19&(p^q).20=p.20&
+  (p^q).21=p.21&(p^q).22=p.22&(p^q).23=p.23&(p^q).24=p.24 &
+  (p^q).25=p.25&(p^q).26=p.26&(p^q).27=p.27&(p^q).28=p.28&
+  (p^q).29=p.29&(p^q).30=p.30&(p^q).31=p.31&(p^q).32=p.32&
+  (p^q).33=p.33&(p^q).34=p.34&(p^q).35=p.35&(p^q).36=p.36&
+  (p^q).37=p.37&(p^q).38=p.38&(p^q).39=p.39&(p^q).40=p.40&
+  (p^q).41=p.41&(p^q).42=p.42&(p^q).43=p.43&(p^q).44=p.44&
+  (p^q).45=p.45&(p^q).46=p.46&(p^q).47=p.47&(p^q).48=p.48&
+  (p^q).49=q.1&(p^q).50=q.2&(p^q).51=q.3&(p^q).52=q.4&
+  (p^q).53=q.5&(p^q).54=q.6&(p^q).55=q.7&(p^q).56=q.8
+  proof
+    let S be non empty set,
+    p,q be FinSequence of S;
+    assume AS: p is 48-element & q is 8-element;
+    set r=p^q;
+
+    L1: len p = 48 & len q = 8 by AS,CARD_1:def 7;
+
+    len r= (len p) + (len q) by FINSEQ_1:22
+    .=56 by L1;
+    hence r is 56-element by CARD_1:def 7;
+    L50:dom p =Seg 48 by L1,FINSEQ_1:def 3;
+
+    L51:dom q =Seg 8 by L1,FINSEQ_1:def 3;
+
+    1 in dom p &2 in dom p &3 in dom p & 4 in dom p &
+    5 in dom p &6 in dom p &7 in dom p & 8 in dom p &
+    9 in dom p &10 in dom p &11 in dom p &12 in dom p &
+    13 in dom p &14 in dom p &15 in dom p &16 in dom p &
+    17 in dom p &18 in dom p &19 in dom p & 20 in dom p &
+    21 in dom p &22 in dom p &23 in dom p & 24 in dom p &
+    25 in dom p &26 in dom p &27 in dom p &28 in dom p &
+    29 in dom p &30 in dom p &31 in dom p &32 in dom p &
+    33 in dom p &34 in dom p &35 in dom p &36 in dom p &
+    37 in dom p &38 in dom p &39 in dom p &40 in dom p &
+    41 in dom p &42 in dom p &43 in dom p&44 in dom p &
+    45 in dom p &46 in dom p &47 in dom p &48 in dom p by L50;
+    hence
+    r.1 =p.1 &r.2 =p.2 &r.3 =p.3&r.4 =p.4 &
+    r.5 =p.5 &r.6 =p.6 &r.7 =p.7 &r.8 =p.8 &
+    r.9=p.9 &r.10 = p.10 &r.11 = p.11 &r.12 = p.12 &
+    r.13 = p.13 &r.14 = p.14 &r.15 = p.15 &r.16 = p.16&
+    r.17=p.17&r.18=p.18&r.19=p.19&r.20=p.20&r.21=p.21&
+    r.22=p.22&r.23=p.23&r.24=p.24&r.25=p.25&r.26=p.26&
+    r.27=p.27&r.28=p.28&r.29=p.29&r.30=p.30&r.31=p.31&
+    r.32=p.32&r.33=p.33&r.34=p.34&r.35=p.35&r.36=p.36&
+    r.37 =p.37 &r.38 =p.38&r.39=p.39 &r.40 = p.40 &
+    r.41 = p.41 &r.42 = p.42 &r.43 = p.43 &r.44 = p.44 &
+    r.45 = p.45 &r.46 = p.46&r.47=p.47&r.48=p.48
+    by FINSEQ_1:def 7;
+
+    1 in dom q &2 in dom q &3 in dom q & 4 in dom q &
+    5 in dom q &6 in dom q &7 in dom q & 8 in dom q
+    by L51;then
+    r.(48 + 1) =q.1 &r.(48 + 2) =q.2 &
+    r.(48 + 3) =q.3 &r.(48 + 4) =q.4 &
+    r.(48 + 5) =q.5 &r.(48 + 6) =q.6 &
+    r.(48 + 7) =q.7 &r.(48 + 8) =q.8
+    by L1,FINSEQ_1:def 7;
+    hence
+    r.49 =q.1 &r.50 =q.2&r.51=q.3&r.52 =q.4 &
+    r.53 =q.5 &r.54=q.6&r.55=q.7&r.56=q.8;
+  end;
+
+theorem TT56:
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56 be Element of S holds
+  ex s be FinSequence of S st
+  s is 56-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32&
+  s.33=x33&s.34=x34&s.35=x35&s.36=x36&
+  s.37=x37&s.38=x38&s.39=x39&s.40=x40&
+  s.41=x41&s.42=x42&s.43=x43&s.44=x44&
+  s.45=x45&s.46=x46&s.47=x47&s.48=x48&
+  s.49=x49&s.50=x50&s.51=x51&s.52=x52&
+  s.53=x53&s.54=x54&s.55=x55&s.56=x56
+  proof
+    let S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8,
+    x9,x10,x11,x12,x13,x14,x15,x16,
+    x17,x18,x19,x20,x21,x22,x23,x24,
+    x25,x26,x27,x28,x29,x30,x31,x32,
+    x33,x34,x35,x36,x37,x38,x39,x40,
+    x41,x42,x43,x44,x45,x46,x47,x48,
+    x49,x50,x51,x52,x53,x54,x55,x56 be Element of S;
+    consider a1 be FinSequence of S such that
+    LA1:a1 is 48-element &
+    a1.1=x1&a1.2=x2&a1.3=x3&a1.4=x4&
+    a1.5=x5&a1.6=x6&a1.7=x7&a1.8=x8&
+    a1.9=x9&a1.10=x10&a1.11=x11&a1.12=x12&
+    a1.13=x13&a1.14=x14&a1.15=x15&a1.16=x16 &
+    a1.17=x17&a1.18=x18&a1.19=x19&a1.20=x20&
+    a1.21=x21&a1.22=x22&a1.23=x23&a1.24=x24&
+    a1.25=x25&a1.26=x26&a1.27=x27&a1.28=x28&
+    a1.29=x29&a1.30=x30&a1.31=x31&a1.32=x32&
+    a1.33=x33&a1.34=x34&a1.35=x35&a1.36=x36&
+    a1.37=x37&a1.38=x38&a1.39=x39&a1.40=x40&
+    a1.41=x41&a1.42=x42& a1.43=x43&a1.44=x44&
+    a1.45=x45&a1.46=x46&a1.47=x47&a1.48=x48 by TT48;
+
+    consider a2 be FinSequence of S such that
+    LA2:a2 is 8-element &
+    a2.1=x49&a2.2=x50&a2.3=x51&a2.4=x52&
+    a2.5=x53&a2.6=x54&a2.7=x55&a2.8=x56 by TT8;
+
+    take a1^a2;
+    thus thesis by LA1,LA2,T56;
+  end;
+
+  T64:
+  for S be non empty set,
+  p,q be FinSequence of S st p is 32-element & q is 32-element holds
+  (p^q) is 64-element &
+  (p^q).1=p.1&(p^q).2=p.2&(p^q).3=p.3&(p^q).4=p.4&
+  (p^q).5=p.5&(p^q).6=p.6&(p^q).7=p.7&(p^q).8=p.8&
+  (p^q).9=p.9&(p^q).10=p.10&(p^q).11=p.11&(p^q).12=p.12&
+  (p^q).13=p.13&(p^q).14=p.14&(p^q).15=p.15&(p^q).16=p.16&
+  (p^q).17=p.17&(p^q).18=p.18&(p^q).19=p.19&(p^q).20=p.20&
+  (p^q).21=p.21&(p^q).22=p.22&(p^q).23=p.23&(p^q).24=p.24 &
+  (p^q).25=p.25&(p^q).26=p.26&(p^q).27=p.27&(p^q).28=p.28&
+  (p^q).29=p.29&(p^q).30=p.30&(p^q).31=p.31&(p^q).32=p.32&
+  (p^q).33=q.1&(p^q).34=q.2&(p^q).35=q.3&(p^q).36=q.4&
+  (p^q).37=q.5&(p^q).38=q.6&(p^q).39=q.7&(p^q).40=q.8 &
+  (p^q).41=q.9&(p^q).42=q.10&(p^q).43=q.11&(p^q).44=q.12&
+  (p^q).45=q.13&(p^q).46=q.14&(p^q).47=q.15&(p^q).48=q.16&
+  (p^q).49=q.17&(p^q).50=q.18&(p^q).51=q.19&(p^q).52=q.20&
+  (p^q).53=q.21&(p^q).54=q.22&(p^q).55=q.23&(p^q).56=q.24&
+  (p^q).57=q.25&(p^q).58=q.26&(p^q).59=q.27&(p^q).60=q.28&
+  (p^q).61=q.29&(p^q).62=q.30&(p^q).63=q.31&(p^q).64=q.32
+  proof
+    let S be non empty set,
+    p,q be FinSequence of S;
+    assume AS: p is 32-element & q is 32-element;
+    set r=p^q;
+    L1: len p = 32 & len q = 32 by AS,CARD_1:def 7;
+    len r= (len p) + (len q) by FINSEQ_1:22
+    .=64 by L1;
+    hence r is 64-element by CARD_1:def 7;
+    L50:dom p =Seg 32 by L1,FINSEQ_1:def 3;
+    L51:dom q =Seg 32 by L1,FINSEQ_1:def 3;
+    1 in dom p &2 in dom p &3 in dom p & 4 in dom p &
+    5 in dom p &6 in dom p &7 in dom p & 8 in dom p &
+    9 in dom p &10 in dom p &11 in dom p &12 in dom p &
+    13 in dom p &14 in dom p &15 in dom p &16 in dom p &
+    17 in dom p &18 in dom p &19 in dom p & 20 in dom p &
+    21 in dom p &22 in dom p &23 in dom p & 24 in dom p &
+    25 in dom p &26 in dom p &27 in dom p &28 in dom p &
+    29 in dom p &30 in dom p &31 in dom p &32 in dom p
+    by L50;
+    hence
+    r.1 =p.1 &r.2 =p.2 &r.3 =p.3&r.4 =p.4 &
+    r.5 =p.5 &r.6 =p.6 &r.7 =p.7 &r.8 =p.8 &
+    r.9=p.9 &r.10 = p.10 &r.11 = p.11 &r.12 = p.12 &
+    r.13 = p.13 &r.14 = p.14 &r.15 = p.15 &r.16 = p.16&
+    r.17=p.17&r.18=p.18&r.19=p.19&r.20=p.20&r.21=p.21&
+    r.22=p.22&r.23=p.23&r.24=p.24&r.25=p.25&r.26=p.26&
+    r.27=p.27&r.28=p.28&r.29=p.29&r.30=p.30&r.31=p.31&
+    r.32=p.32 by FINSEQ_1:def 7;
+    1 in dom q &2 in dom q &3 in dom q & 4 in dom q &
+    5 in dom q &6 in dom q &7 in dom q & 8 in dom q &
+    9 in dom q &10 in dom q &11 in dom q &12 in dom q &
+    13 in dom q &14 in dom q &15 in dom q &16 in dom q &
+    17 in dom q &18 in dom q &19 in dom q & 20 in dom q &
+    21 in dom q &22 in dom q &23 in dom q & 24 in dom q &
+    25 in dom q &26 in dom q &27 in dom q &28 in dom q &
+    29 in dom q &30 in dom q &31 in dom q &32 in dom q
+    by L51;then
+    r.(32 + 1) =q.1 &r.(32 + 2) =q.2 &
+    r.(32 + 3) =q.3 &r.(32 + 4) =q.4 &
+    r.(32 + 5) =q.5 &r.(32 + 6) =q.6 &
+    r.(32 + 7) =q.7 &r.(32 + 8) =q.8 &
+    r.(32 + 9) =q.9 &r.(32 + 10) =q.10 &
+    r.(32 + 11) =q.11 &r.(32 + 12) =q.12 &
+    r.(32 + 13) =q.13 &r.(32 + 14) =q.14 &
+    r.(32 + 15) =q.15 &r.(32 + 16) =q.16 &
+    r.(32 + 17) =q.17 &r.(32 + 18) =q.18 &
+    r.(32 + 19) =q.19 &r.(32 + 20) =q.20 &
+    r.(32 + 21) =q.21 &r.(32 + 22) =q.22 &
+    r.(32 + 23) =q.23 &r.(32 + 24) =q.24 &
+    r.(32 + 25) =q.25 &r.(32 + 26) =q.26 &
+    r.(32 + 27) =q.27 &r.(32 + 28) =q.28 &
+    r.(32 + 29) =q.29 &r.(32 + 30) =q.30 &
+    r.(32 + 31) =q.31 &r.(32 + 32) =q.32
+    by L1,FINSEQ_1:def 7;
+    hence r.33 =q.1 &r.34 =q.2 &r.35 =q.3&r.36 =q.4 &
+    r.37 =q.5 &r.38 =q.6 &r.39 =q.7&r.40 =q.8 &
+    r.41 =q.9 &r.42 =q.10 &r.43 =q.11&r.44 =q.12 &
+    r.45 =q.13 &r.46 =q.14&r.47 =q.15&r.48 =q.16 &
+    r.49 =q.17 &r.50 =q.18&r.51=q.19&r.52 =q.20 &
+    r.53 =q.21 &r.54=q.22&r.55=q.23&r.56=q.24&
+    r.57=q.25&r.58=q.26&r.59=q.27&r.60=q.28&
+    r.61=q.29&r.62=q.30&r.63=q.31&r.64=q.32;
+  end;
+
+theorem TT64:
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56,
+  x57,x58,x59,x60,x61,x62,x63,x64 be Element of S holds
+  ex s be FinSequence of S st
+  s is 64-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32&
+  s.33=x33&s.34=x34&s.35=x35&s.36=x36&
+  s.37=x37&s.38=x38&s.39=x39&s.40=x40&
+  s.41=x41&s.42=x42&s.43=x43&s.44=x44&
+  s.45=x45&s.46=x46&s.47=x47&s.48=x48&
+  s.49=x49&s.50=x50&s.51=x51&s.52=x52&
+  s.53=x53&s.54=x54&s.55=x55&s.56=x56&
+  s.57=x57&s.58=x58&s.59=x59&s.60=x60&
+  s.61=x61&s.62=x62&s.63=x63&s.64=x64
+  proof
+    let S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8,
+    x9,x10,x11,x12,x13,x14,x15,x16,
+    x17,x18,x19,x20,x21,x22,x23,x24,
+    x25,x26,x27,x28,x29,x30,x31,x32,
+    x33,x34,x35,x36,x37,x38,x39,x40,
+    x41,x42,x43,x44,x45,x46,x47,x48,
+    x49,x50,x51,x52,x53,x54,x55,x56,
+    x57,x58,x59,x60,x61,x62,x63,x64 be Element of S;
+
+    consider a1 be FinSequence of S such that
+    LA1:a1 is 32-element &
+    a1.1=x1&a1.2=x2&a1.3=x3&a1.4=x4&
+    a1.5=x5&a1.6=x6&a1.7=x7&a1.8=x8&
+    a1.9=x9&a1.10=x10&a1.11=x11&a1.12=x12&
+    a1.13=x13&a1.14=x14&a1.15=x15&a1.16=x16 &
+    a1.17=x17&a1.18=x18&a1.19=x19&a1.20=x20&
+    a1.21=x21&a1.22=x22&a1.23=x23&a1.24=x24&
+    a1.25=x25&a1.26=x26&a1.27=x27&a1.28=x28&
+    a1.29=x29&a1.30=x30&a1.31=x31&a1.32=x32 by TT32;
+
+    consider a2 be FinSequence of S such that
+    LA2:a2 is 32-element &
+    a2.1=x33&a2.2=x34&a2.3=x35&a2.4=x36&
+    a2.5=x37&a2.6=x38&a2.7=x39&a2.8=x40&
+    a2.9=x41&a2.10=x42&a2.11=x43&a2.12=x44&
+    a2.13=x45&a2.14=x46&a2.15=x47&a2.16=x48&
+    a2.17=x49&a2.18=x50&a2.19=x51&a2.20=x52&
+    a2.21=x53&a2.22=x54&a2.23=x55&a2.24=x56&
+    a2.25=x57&a2.26=x58&a2.27=x59&a2.28=x60&
+    a2.29=x61&a2.30=x62&a2.31=x63&a2.32=x64 by TT32;
+    take a1^a2;
+    thus thesis by LA1,LA2,T64;
+  end;
+
+notation
+  let n be non empty Nat, i be Element of n;
+  synonym ntoSeg(i) for succ(i);
+end;
+
+definition
+  let n be non empty Nat,
+  i be Element of n;
+  redefine func ntoSeg(i) -> Element of Seg n;
+  coherence
+  proof
+    i < n by NAT_1:44;
+    hence thesis by FINSEQ_3:11;
+  end;
+end;
+
+definition
+  let n be non empty Nat,
+  f be Function of n, Seg n;
+  attr f is NtoSEG means
+  :defNtoSEG:
+  for i be Element of n holds f.i=ntoSeg(i);
+end;
+
+registration
+  let n be non empty Nat;
+  cluster NtoSEG for Function of n, Seg n;
+  existence
+  proof
+    deffunc F(Element of n) = ntoSeg($1);
+    P1: for x being Element of n holds F(x) is Element of Seg n;
+    consider f being Function of n, Seg n such that
+    P2: for x being Element of n holds f.x = F(x)
+    from FUNCT_2:sch 9(P1);
+    take f;
+    thus thesis by P2,defNtoSEG;
+  end;
+end;
+
+RNGNtoSEG:
+for n be non empty Nat,
+f be NtoSEG Function of n, Seg n holds
+rng f = Seg n
+proof
+  let n be non empty Nat,
+  f be NtoSEG Function of n, Seg n;
+  L1: dom f =n by FUNCT_2:def 1;
+  now let x be set;assume x in Seg n;
+    then
+    consider xk be Element of NAT such that
+    T1: x=xk & 1 <= xk & xk <= n;
+    xk-1 is Element of NAT& xk-1 < n by T1,NAT_1:21,XREAL_1:147;
+    then reconsider i=xk-1 as Element of n by NAT_1:44;
+    f.i = ntoSeg(i) by defNtoSEG;
+    hence x in rng f by L1,T1,FUNCT_1:def 3;
+  end;
+  then Seg n c= rng f by TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+registration
+  let n be non empty Nat;
+  cluster -> bijective for NtoSEG Function of n, Seg n;
+  coherence
+  proof
+    let f be NtoSEG Function of n, Seg n;
+    thus f is one-to-one
+    proof
+      let x1,x2 be set;
+      assume ASL1:x1 in dom f & x2 in dom f & f.x1 = f.x2;
+      reconsider x1,x2 as Element of n by ASL1;
+      f.x1=ntoSeg(x1) & f.x2=ntoSeg(x2) by defNtoSEG;
+      then x1+1=x2+1 by ASL1;
+      hence thesis;
+    end;
+    thus rng f = Seg n by RNGNtoSEG;
+  end;
+end;
+
+theorem ThL1:
+  for n be non empty Nat,
+  f be NtoSEG Function of n, Seg n,
+  i be Nat st i < n holds f.i=i+1 & i in dom f
+  proof
+    let n be non empty Nat,
+    f be NtoSEG Function of n, Seg n,
+    i be Nat;
+    assume i < n;then
+    L0:i in n by NAT_1:44;then
+    consider ii be Element of n such that L1:ii=i;
+    L2: ntoSeg(ii)=ii+1;
+    thus f.i = i+1 by defNtoSEG,L1,L2;
+    thus i in dom f by L0,FUNCT_2:def 1;
+  end;
+
+  ThL2:
+  for f be NtoSEG Function of 64, Seg 64,
+  S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56,
+  x57,x58,x59,x60,x61,x62,x63,x64 be Element of S,
+  t be Element of 64-tuples_on S st
+  t.1=x1&t.2=x2&t.3=x3&t.4=x4&t.5=x5&t.6=x6&
+  t.7=x7&t.8=x8&t.9=x9&t.10=x10&t.11=x11&t.12=x12&
+  t.13=x13&t.14=x14&t.15=x15&t.16=x16&t.17=x17&t.18=x18&
+  t.19=x19&t.20=x20&t.21=x21&t.22=x22&t.23=x23&t.24=x24&
+  t.25=x25&t.26=x26&t.27=x27&t.28=x28&t.29=x29&t.30=x30&
+  t.31=x31&t.32=x32&t.33=x33&t.34=x34&t.35=x35&t.36=x36&
+  t.37=x37&t.38=x38&t.39=x39&t.40=x40&t.41=x41&t.42=x42&
+  t.43=x43&t.44=x44&t.45=x45&t.46=x46&t.47=x47&t.48=x48&
+  t.49=x49&t.50=x50&t.51=x51&t.52=x52&t.53=x53&t.54=x54&
+  t.55=x55&t.56=x56&t.57=x57&t.58=x58&t.59=x59&t.60=x60&
+  t.61=x61&t.62=x62&t.63=x63&t.64=x64
+  holds
+  (t*f).0=x1&(t*f).1=x2&(t*f).2=x3&(t*f).3=x4&
+  (t*f).4=x5&(t*f).5=x6&(t*f).6=x7&(t*f).7=x8&
+  (t*f).8=x9&(t*f).9=x10&(t*f).10=x11&(t*f).11=x12&
+  (t*f).12=x13&(t*f).13=x14&(t*f).14=x15&(t*f).15=x16&
+  (t*f).16=x17&(t*f).17=x18&(t*f).18=x19&(t*f).19=x20&
+  (t*f).20=x21&(t*f).21=x22&(t*f).22=x23&(t*f).23=x24&
+  (t*f).24=x25&(t*f).25=x26&(t*f).26=x27&(t*f).27=x28&
+  (t*f).28=x29&(t*f).29=x30&(t*f).30=x31&(t*f).31=x32&
+  (t*f).32=x33&(t*f).33=x34&(t*f).34=x35&(t*f).35=x36&
+  (t*f).36=x37&(t*f).37=x38&(t*f).38=x39&(t*f).39=x40&
+  (t*f).40=x41&(t*f).41=x42&(t*f).42=x43&(t*f).43=x44&
+  (t*f).44=x45&(t*f).45=x46&(t*f).46=x47&(t*f).47=x48&
+  (t*f).48=x49&(t*f).49=x50&(t*f).50=x51&(t*f).51=x52&
+  (t*f).52=x53&(t*f).53=x54&(t*f).54=x55&(t*f).55=x56&
+  (t*f).56=x57&(t*f).57=x58&(t*f).58=x59&(t*f).59=x60&
+  (t*f).60=x61&(t*f).61=x62&(t*f).62=x63&(t*f).63=x64
+  proof
+    let f be NtoSEG Function of 64, Seg 64,
+    S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8,
+    x9,x10,x11,x12,x13,x14,x15,x16,
+    x17,x18,x19,x20,x21,x22,x23,x24,
+    x25,x26,x27,x28,x29,x30,x31,x32,
+    x33,x34,x35,x36,x37,x38,x39,x40,
+    x41,x42,x43,x44,x45,x46,x47,x48,
+    x49,x50,x51,x52,x53,x54,x55,x56,
+    x57,x58,x59,x60,x61,x62,x63,x64 be Element of S,
+    t be Element of 64-tuples_on S;
+    assume t.1=x1&t.2=x2&t.3=x3&t.4=x4&t.5=x5&t.6=x6&
+    t.7=x7&t.8=x8&t.9=x9&t.10=x10&t.11=x11&t.12=x12&
+    t.13=x13&t.14=x14&t.15=x15&t.16=x16&t.17=x17&t.18=x18&
+    t.19=x19&t.20=x20&t.21=x21&t.22=x22&t.23=x23&t.24=x24&
+    t.25=x25&t.26=x26&t.27=x27&t.28=x28&t.29=x29&t.30=x30&
+    t.31=x31&t.32=x32&t.33=x33&t.34=x34&t.35=x35&t.36=x36&
+    t.37=x37&t.38=x38&t.39=x39&t.40=x40&t.41=x41&t.42=x42&
+    t.43=x43&t.44=x44&t.45=x45&t.46=x46&t.47=x47&t.48=x48&
+    t.49=x49&t.50=x50&t.51=x51&t.52=x52&t.53=x53&t.54=x54&
+    t.55=x55&t.56=x56&t.57=x57&t.58=x58&t.59=x59&t.60=x60&
+    t.61=x61&t.62=x62&t.63=x63&t.64=x64;
+    then
+    t.(0+1)=x1&t.(1+1)=x2&t.(2+1)=x3&t.(3+1)=x4&
+    t.(4+1)=x5&t.(5+1)=x6&t.(6+1)=x7&t.(7+1)=x8&
+    t.(8+1)=x9&t.(9+1)=x10&t.(10+1)=x11&t.(11+1)=x12&
+    t.(12+1)=x13&t.(13+1)=x14&t.(14+1)=x15&t.(15+1)=x16&
+    t.(16+1)=x17&t.(17+1)=x18&t.(18+1)=x19&t.(19+1)=x20&
+    t.(20+1)=x21&t.(21+1)=x22&t.(22+1)=x23&t.(23+1)=x24&
+    t.(24+1)=x25&t.(25+1)=x26&t.(26+1)=x27&t.(27+1)=x28&
+    t.(28+1)=x29&t.(29+1)=x30&t.(30+1)=x31&t.(31+1)=x32&
+    t.(32+1)=x33&t.(33+1)=x34&t.(34+1)=x35&t.(35+1)=x36&
+    t.(36+1)=x37&t.(37+1)=x38&t.(38+1)=x39&t.(39+1)=x40&
+    t.(40+1)=x41&t.(41+1)=x42&t.(42+1)=x43&t.(43+1)=x44&
+    t.(44+1)=x45&t.(45+1)=x46&t.(46+1)=x47&t.(47+1)=x48&
+    t.(48+1)=x49&t.(49+1)=x50&t.(50+1)=x51&t.(51+1)=x52&
+    t.(52+1)=x53&t.(53+1)=x54&t.(54+1)=x55&t.(55+1)=x56&
+    t.(56+1)=x57&t.(57+1)=x58&t.(58+1)=x59&t.(59+1)=x60&
+    t.(60+1)=x61&t.(61+1)=x62&t.(62+1)=x63&t.(63+1)=x64;
+    then L1:
+    t.(f.0)=x1&t.(f.1)=x2&t.(f.2)=x3&t.(f.3)=x4&
+    t.(f.4)=x5&t.(f.5)=x6&t.(f.6)=x7&t.(f.7)=x8&
+    t.(f.8)=x9&t.(f.9)=x10&t.(f.10)=x11&t.(f.11)=x12&
+    t.(f.12)=x13&t.(f.13)=x14&t.(f.14)=x15&t.(f.15)=x16&
+    t.(f.16)=x17&t.(f.17)=x18&t.(f.18)=x19&t.(f.19)=x20&
+    t.(f.20)=x21&t.(f.21)=x22&t.(f.22)=x23&t.(f.23)=x24&
+    t.(f.24)=x25&t.(f.25)=x26&t.(f.26)=x27&t.(f.27)=x28&
+    t.(f.28)=x29&t.(f.29)=x30&t.(f.30)=x31&t.(f.31)=x32&
+    t.(f.32)=x33&t.(f.33)=x34&t.(f.34)=x35&t.(f.35)=x36&
+    t.(f.36)=x37&t.(f.37)=x38&t.(f.38)=x39&t.(f.39)=x40&
+    t.(f.40)=x41&t.(f.41)=x42&t.(f.42)=x43&t.(f.43)=x44&
+    t.(f.44)=x45&t.(f.45)=x46&t.(f.46)=x47&t.(f.47)=x48&
+    t.(f.48)=x49&t.(f.49)=x50&t.(f.50)=x51&t.(f.51)=x52&
+    t.(f.52)=x53&t.(f.53)=x54&t.(f.54)=x55&t.(f.55)=x56&
+    t.(f.56)=x57&t.(f.57)=x58&t.(f.58)=x59&t.(f.59)=x60&
+    t.(f.60)=x61&t.(f.61)=x62&t.(f.62)=x63&t.(f.63)=x64 by ThL1;
+
+    0 in dom f&1 in dom f&2 in dom f&3 in dom f&
+    4 in dom f&5 in dom f&6 in dom f&7 in dom f&
+    8 in dom f&9 in dom f&10 in dom f&11 in dom f&
+    12 in dom f&13 in dom f&14 in dom f&15 in dom f&
+    16 in dom f&17 in dom f&18 in dom f&19 in dom f&
+    20 in dom f&21 in dom f&22 in dom f&23 in dom f&
+    24 in dom f&25 in dom f&26 in dom f&27 in dom f&
+    28 in dom f&29 in dom f&30 in dom f&31 in dom f&
+    32 in dom f&33 in dom f&34 in dom f&35 in dom f&
+    36 in dom f&37 in dom f&38 in dom f&39 in dom f&
+    40 in dom f&41 in dom f&42 in dom f&43 in dom f&
+    44 in dom f&45 in dom f&46 in dom f&47 in dom f&
+    48 in dom f&49 in dom f&50 in dom f&51 in dom f&
+    52 in dom f&53 in dom f&54 in dom f&55 in dom f&
+    56 in dom f&57 in dom f&58 in dom f&59 in dom f&
+    60 in dom f&61 in dom f&62 in dom f&63 in dom f
+    by ThL1;
+    hence thesis by L1,FUNCT_1:13;
+  end;
+
+theorem ThL3:
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56,
+  x57,x58,x59,x60,x61,x62,x63,x64 be Element of S holds
+  ex f be Function of 64, S st
+  f.0=x1&f.1=x2&f.2=x3&f.3=x4&
+  f.4=x5&f.5=x6&f.6=x7&f.7=x8&
+  f.8=x9&f.9=x10&f.10=x11&f.11=x12&
+  f.12=x13&f.13=x14&f.14=x15&f.15=x16&
+  f.16=x17&f.17=x18&f.18=x19&f.19=x20&
+  f.20=x21&f.21=x22&f.22=x23&f.23=x24&
+  f.24=x25&f.25=x26&f.26=x27&f.27=x28&
+  f.28=x29&f.29=x30&f.30=x31&f.31=x32&
+  f.32=x33&f.33=x34&f.34=x35&f.35=x36&
+  f.36=x37&f.37=x38&f.38=x39&f.39=x40&
+  f.40=x41&f.41=x42&f.42=x43&f.43=x44&
+  f.44=x45&f.45=x46&f.46=x47&f.47=x48&
+  f.48=x49&f.49=x50&f.50=x51&f.51=x52&
+  f.52=x53&f.53=x54&f.54=x55&f.55=x56&
+  f.56=x57&f.57=x58&f.58=x59&f.59=x60&
+  f.60=x61&f.61=x62&f.62=x63&f.63=x64
+  proof
+    let S be non empty set,
+    x1,x2,x3,x4,x5,x6,x7,x8,
+    x9,x10,x11,x12,x13,x14,x15,x16,
+    x17,x18,x19,x20,x21,x22,x23,x24,
+    x25,x26,x27,x28,x29,x30,x31,x32,
+    x33,x34,x35,x36,x37,x38,x39,x40,
+    x41,x42,x43,x44,x45,x46,x47,x48,
+    x49,x50,x51,x52,x53,x54,x55,x56,
+    x57,x58,x59,x60,x61,x62,x63,x64 be Element of S;
+
+    consider t be FinSequence of S such that
+    LCS: t is 64-element &
+    t.1=x1&t.2=x2&t.3=x3&t.4=x4&t.5=x5&t.6=x6&
+    t.7=x7&t.8=x8&t.9=x9&t.10=x10&t.11=x11&t.12=x12&
+    t.13=x13&t.14=x14&t.15=x15&t.16=x16&t.17=x17&t.18=x18&
+    t.19=x19&t.20=x20&t.21=x21&t.22=x22&t.23=x23&t.24=x24&
+    t.25=x25&t.26=x26&t.27=x27&t.28=x28&t.29=x29&t.30=x30&
+    t.31=x31&t.32=x32&t.33=x33&t.34=x34&t.35=x35&t.36=x36&
+    t.37=x37&t.38=x38&t.39=x39&t.40=x40&t.41=x41&t.42=x42&
+    t.43=x43&t.44=x44&t.45=x45&t.46=x46&t.47=x47&t.48=x48&
+    t.49=x49&t.50=x50&t.51=x51&t.52=x52&t.53=x53&t.54=x54&
+    t.55=x55&t.56=x56&t.57=x57&t.58=x58&t.59=x59&t.60=x60&
+    t.61=x61&t.62=x62&t.63=x63&t.64=x64 by TT64;
+
+    L2:len t =64 by LCS,CARD_1:def 7;
+    set f = the NtoSEG Function of 64, Seg 64;
+    rng f =Seg 64 by FUNCT_2:def 3;
+    then
+    f"(dom t)=f"(rng f) by L2,FINSEQ_1:def 3
+    .= dom f by RELAT_1:134;then
+    (dom f) /\ f"(dom t) = dom f;then
+    LS5:dom (t*f)=dom f by EUCLID_7:1
+    .= 64 by FUNCT_2:def 1;
+
+    LS4:rng(t*f) c= S;
+
+    reconsider t as Element of 64-tuples_on S by L2,FINSEQ_2:92;
+
+    reconsider tf= t*f as Function of 64,S by LS5,LS4,FUNCT_2:2;
+    take tf;
+    thus thesis by LCS,ThL2;
+  end;
+
+  LELEMNT16:
+  0 is Element of 16&1 is Element of 16&2 is Element of 16&
+  3 is Element of 16&4 is Element of 16&5 is Element of 16&
+  6 is Element of 16&7 is Element of 16&8 is Element of 16&
+  9 is Element of 16&10 is Element of 16&11 is Element of 16&
+  12 is Element of 16&13 is Element of 16&14 is Element of 16&
+  15 is Element of 16 by NAT_1:44;
+
+  LSBOXES:
+  for x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,
+  x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56,
+  x57,x58,x59,x60,x61,x62,x63,x64
+  be Element of 16, f,g be Function of 64,16 st
+  f.1=x1&f.2=x2&f.3=x3&f.4=x4&
+  f.5=x5&f.6=x6&f.7=x7&f.8=x8&
+  f.9=x9&f.10=x10&f.11=x11&f.12=x12&
+  f.13=x13&f.14=x14&f.15=x15&f.16=x16 &
+  f.17=x17&f.18=x18&f.19=x19&f.20=x20&
+  f.21=x21&f.22=x22&f.23=x23&f.24=x24&
+  f.25=x25&f.26=x26&f.27=x27&f.28=x28&
+  f.29=x29&f.30=x30&f.31=x31&f.32=x32&
+  f.33=x33&f.34=x34&f.35=x35&f.36=x36&
+  f.37=x37&f.38=x38&f.39=x39&f.40=x40&
+  f.41=x41&f.42=x42&f.43=x43&f.44=x44&
+  f.45=x45&f.46=x46&f.47=x47&f.48=x48&
+  f.49=x49&f.50=x50&f.51=x51&f.52=x52&
+  f.53=x53&f.54=x54&f.55=x55&f.56=x56&
+  f.57=x57&f.58=x58&f.59=x59&f.60=x60&
+  f.61=x61&f.62=x62&f.63=x63&f.0=x64&
+  g.1=x1&g.2=x2&g.3=x3&g.4=x4&
+  g.5=x5&g.6=x6&g.7=x7&g.8=x8&
+  g.9=x9&g.10=x10&g.11=x11&g.12=x12&
+  g.13=x13&g.14=x14&g.15=x15&g.16=x16 &
+  g.17=x17&g.18=x18&g.19=x19&g.20=x20&
+  g.21=x21&g.22=x22&g.23=x23&g.24=x24&
+  g.25=x25&g.26=x26&g.27=x27&g.28=x28&
+  g.29=x29&g.30=x30&g.31=x31&g.32=x32&
+  g.33=x33&g.34=x34&g.35=x35&g.36=x36&
+  g.37=x37&g.38=x38&g.39=x39&g.40=x40&
+  g.41=x41&g.42=x42&g.43=x43&g.44=x44&
+  g.45=x45&g.46=x46&g.47=x47&g.48=x48&
+  g.49=x49&g.50=x50&g.51=x51&g.52=x52&
+  g.53=x53&g.54=x54&g.55=x55&g.56=x56&
+  g.57=x57&g.58=x58&g.59=x59&g.60=x60&
+  g.61=x61&g.62=x62&g.63=x63&g.0=x64
+  holds
+  f=g
+  proof
+    let x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,
+    x11,x12,x13,x14,x15,x16,
+    x17,x18,x19,x20,x21,x22,x23,x24,
+    x25,x26,x27,x28,x29,x30,x31,x32,
+    x33,x34,x35,x36,x37,x38,x39,x40,
+    x41,x42,x43,x44,x45,x46,x47,x48,
+    x49,x50,x51,x52,x53,x54,x55,x56,
+    x57,x58,x59,x60,x61,x62,x63,x64
+    be Element of 16, f,g be Function of 64,16;
+    assume L3:
+    f.1=x1&f.2=x2&f.3=x3&f.4=x4&
+    f.5=x5&f.6=x6&f.7=x7&f.8=x8&
+    f.9=x9&f.10=x10&f.11=x11&f.12=x12&
+    f.13=x13&f.14=x14&f.15=x15&f.16=x16 &
+    f.17=x17&f.18=x18&f.19=x19&f.20=x20&
+    f.21=x21&f.22=x22&f.23=x23&f.24=x24&
+    f.25=x25&f.26=x26&f.27=x27&f.28=x28&
+    f.29=x29&f.30=x30&f.31=x31&f.32=x32&
+    f.33=x33&f.34=x34&f.35=x35&f.36=x36&
+    f.37=x37&f.38=x38&f.39=x39&f.40=x40&
+    f.41=x41&f.42=x42&f.43=x43&f.44=x44&
+    f.45=x45&f.46=x46&f.47=x47&f.48=x48&
+    f.49=x49&f.50=x50&f.51=x51&f.52=x52&
+    f.53=x53&f.54=x54&f.55=x55&f.56=x56&
+    f.57=x57&f.58=x58&f.59=x59&f.60=x60&
+    f.61=x61&f.62=x62&f.63=x63&f.0=x64&
+    g.1=x1&g.2=x2&g.3=x3&g.4=x4&
+    g.5=x5&g.6=x6&g.7=x7&g.8=x8&
+    g.9=x9&g.10=x10&g.11=x11&g.12=x12&
+    g.13=x13&g.14=x14&g.15=x15&g.16=x16 &
+    g.17=x17&g.18=x18&g.19=x19&g.20=x20&
+    g.21=x21&g.22=x22&g.23=x23&g.24=x24&
+    g.25=x25&g.26=x26&g.27=x27&g.28=x28&
+    g.29=x29&g.30=x30&g.31=x31&g.32=x32&
+    g.33=x33&g.34=x34&g.35=x35&g.36=x36&
+    g.37=x37&g.38=x38&g.39=x39&g.40=x40&
+    g.41=x41&g.42=x42&g.43=x43&g.44=x44&
+    g.45=x45&g.46=x46&g.47=x47&g.48=x48&
+    g.49=x49&g.50=x50&g.51=x51&g.52=x52&
+    g.53=x53&g.54=x54&g.55=x55&g.56=x56&
+    g.57=x57&g.58=x58&g.59=x59&g.60=x60&
+    g.61=x61&g.62=x62&g.63=x63&g.0=x64;
+
+    L1: dom f =64 & dom g =64 by FUNCT_2:def 1;
+    for i be set st i in dom f holds f.i = g.i
+    proof
+      let i be set;
+      assume i in dom f; then
+      i=0 or i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+      i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+      i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+      i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+      i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48 or
+      i=49 or i=50 or i=51 or i=52 or i=53 or i=54 or i=55 or i=56 or
+      i=57 or i=58 or i=59 or i=60 or i=61 or i=62 or i=63 by thel64;
+      hence thesis by L3;
+    end;
+    hence thesis by L1,FUNCT_1:2;
+  end;
+
+begin :: S-Boxes
+  
+definition
+  func DES-SBOX1 -> Function of 64,16 means
+  it.0 = 14 & it.1 = 4 & it.2 = 13 & it.3 = 1 & it.4 = 2 &
+  it.5 = 15 & it.6 = 11 & it.7 = 8 & it.8 = 3 & it.9 = 10 &
+  it.10 = 6 & it.11 = 12 & it.12 = 5 & it.13 = 9 & it.14 = 0 &
+  it.15 = 7 & it.16 = 0 & it.17 = 15 & it.18 = 7 & it.19 = 4 &
+  it.20 = 14 & it.21 = 2 & it.22 = 13 & it.23 = 1 & it.24 = 10 &
+  it.25 = 6 & it.26 = 12 & it.27 = 11 & it.28 = 9 & it.29 = 5 &
+  it.30 = 3 & it.31 = 8 & it.32 = 4 & it.33 = 1 & it.34 = 14 &
+  it.35 = 8 & it.36 = 13 & it.37 = 6 & it.38 = 2 & it.39 = 11 &
+  it.40 = 15 & it.41 = 12 & it.42 = 9 & it.43 = 7 & it.44 = 3 &
+  it.45 = 10 & it.46 = 5 & it.47 = 0 & it.48 = 15 & it.49 = 12 &
+  it.50 = 8 & it.51 = 2 & it.52 = 4 & it.53 = 9 & it.54 = 1 &
+  it.55 = 7 & it.56 = 5 & it.57 = 11 & it.58 = 3 & it.59 = 14 &
+  it.60 = 10 & it.61 = 0 & it.62 = 6 & it.63 = 13;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+definition
+  func DES-SBOX2 -> Function of 64,16 means
+  it.0 = 15 & it.1 = 1 & it.2 = 8 & it.3 = 14 & it.4 = 6 &
+  it.5 = 11 & it.6 = 3 & it.7 = 4 & it.8 = 9 & it.9 = 7 &
+  it.10 = 2 & it.11 = 13 & it.12 = 12 & it.13 = 0 & it.14 = 5 &
+  it.15 = 10 & it.16 = 3 & it.17 = 13 & it.18 = 4 & it.19 = 7 &
+  it.20 = 15 & it.21 = 2 & it.22 = 8 & it.23 = 14 & it.24 = 12 &
+  it.25 = 0 & it.26 = 1 & it.27 = 10 & it.28 = 6 & it.29 = 9 &
+  it.30 = 11 & it.31 = 5 & it.32 = 0 & it.33 = 14 & it.34 = 7 &
+  it.35 = 11 & it.36 = 10 & it.37 = 4 & it.38 = 13 & it.39 = 1 &
+  it.40 = 5 & it.41 = 8 & it.42 = 12 & it.43 = 6 & it.44 = 9 &
+  it.45 = 3 & it.46 = 2 & it.47 = 15 & it.48 = 13 & it.49 = 8 &
+  it.50 = 10 & it.51 = 1 & it.52 = 3 & it.53 = 15 & it.54 = 4 &
+  it.55 = 2 & it.56 = 11 & it.57 = 6 & it.58 = 7 & it.59 = 12 &
+  it.60 = 0 & it.61 = 5 & it.62 = 14 & it.63 = 9;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+definition
+  func DES-SBOX3 -> Function of 64,16 means
+  it.0 = 10 & it.1 = 0 & it.2 = 9 & it.3 = 14 & it.4 = 6 &
+  it.5 = 3 & it.6 = 15 & it.7 = 5 & it.8 = 1 & it.9 = 13 &
+  it.10 = 12 & it.11 = 7 & it.12 = 11 & it.13 = 4 & it.14 = 2 &
+  it.15 = 8 & it.16 = 13 & it.17 = 7 & it.18 = 0 & it.19 = 9 &
+  it.20 = 3 & it.21 = 4 & it.22 = 6 & it.23 = 10 & it.24 = 2 &
+  it.25 = 8 & it.26 = 5 & it.27 = 14 & it.28 = 12 & it.29 = 11 &
+  it.30 = 15 & it.31 = 1 & it.32 = 13 & it.33 = 6 & it.34 = 4 &
+  it.35 = 9 & it.36 = 8 & it.37 = 15 & it.38 = 3 & it.39 = 0 &
+  it.40 = 11 & it.41 = 1 & it.42 = 2 & it.43 = 12 & it.44 = 5 &
+  it.45 = 10 & it.46 = 14 & it.47 = 7 & it.48 = 1 & it.49 = 10 &
+  it.50 = 13 & it.51 = 0 & it.52 = 6 & it.53 = 9 & it.54 = 8 &
+  it.55 = 7 & it.56 = 4 & it.57 = 15 & it.58 = 14 & it.59 = 3 &
+  it.60 = 11 & it.61 = 5 & it.62 = 2 & it.63 = 12;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+definition
+  func DES-SBOX4 -> Function of 64,16 means
+  it.0 = 7 & it.1 = 13 & it.2 = 14 & it.3 = 3 & it.4 = 0 &
+  it.5 = 6 & it.6 = 9 & it.7 = 10 & it.8 = 1 & it.9 = 2 &
+  it.10 = 8 & it.11 = 5 & it.12 = 11 & it.13 = 12 & it.14 = 4 &
+  it.15 = 15 & it.16 = 13 & it.17 = 8 & it.18 = 11 & it.19 = 5 &
+  it.20 = 6 & it.21 = 15 & it.22 = 0 & it.23 = 3 & it.24 = 4 &
+  it.25 = 7 & it.26 = 2 & it.27 = 12 & it.28 = 1 & it.29 = 10 &
+  it.30 = 14 & it.31 = 9 & it.32 = 10 & it.33 = 6 & it.34 = 9 &
+  it.35 = 0 & it.36 = 12 & it.37 = 11 & it.38 = 7 & it.39 = 13 &
+  it.40 = 15 & it.41 = 1 & it.42 = 3 & it.43 = 14 & it.44 = 5 &
+  it.45 = 2 & it.46 = 8 & it.47 = 4 & it.48 = 3 & it.49 = 15 &
+  it.50 = 0 & it.51 = 6 & it.52 = 10 & it.53 = 1 & it.54 = 13 &
+  it.55 = 8 & it.56 = 9 & it.57 = 4 & it.58 = 5 & it.59 = 11 &
+  it.60 = 12 & it.61 = 7 & it.62 = 2 & it.63 = 14;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+definition
+  func DES-SBOX5 -> Function of 64,16 means
+  it.0 = 2 & it.1 = 12 & it.2 = 4 & it.3 = 1 & it.4 = 7 &
+  it.5 = 10 & it.6 = 11 & it.7 = 6 & it.8 = 8 & it.9 = 5 &
+  it.10 = 3 & it.11 = 15 &it.12 = 13 & it.13 = 0 & it.14 = 14 &
+  it.15 = 9 & it.16 = 14 & it.17 = 11 & it.18 = 2 & it.19 = 12 &
+  it.20 = 4 & it.21 = 7 & it.22 = 13 & it.23 = 1 & it.24 = 5 &
+  it.25 = 0 & it.26 = 15 & it.27 = 10 & it.28 = 3 & it.29 = 9 &
+  it.30 = 8 & it.31 = 6 & it.32 = 4 & it.33 = 2 & it.34 = 1 &
+  it.35 = 11 & it.36 = 10 & it.37 = 13 & it.38 = 7 & it.39 = 8 &
+  it.40 = 15 & it.41 = 9 & it.42 = 12 & it.43 = 5 & it.44 = 6 &
+  it.45 = 3 & it.46 = 0 & it.47 = 14 & it.48 = 11 & it.49 = 8 &
+  it.50 = 12 & it.51 = 7 & it.52 = 1 & it.53 = 14 & it.54 = 2 &
+  it.55 = 13 & it.56 = 6 & it.57 = 15 & it.58 = 0 & it.59 = 9 &
+  it.60 = 10 & it.61 = 4 & it.62 = 5 & it.63 = 3;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+definition
+  func DES-SBOX6 -> Function of 64,16 means
+  it.0 = 12 & it.1 = 1 & it.2 = 10 & it.3 = 15 & it.4 = 9 &
+  it.5 = 2 & it.6 = 6 & it.7 = 8 & it.8 = 0 & it.9 = 13 &
+  it.10 = 3 & it.11 = 4 & it.12 = 14 & it.13 = 7 & it.14 = 5 &
+  it.15 = 11 & it.16 = 10 & it.17 = 15 & it.18 = 4 & it.19 = 2 &
+  it.20 = 7 & it.21 = 12 & it.22 = 9 & it.23 = 5 & it.24 = 6 &
+  it.25 = 1 & it.26 = 13 & it.27 = 14 & it.28 = 0 & it.29 = 11 &
+  it.30 = 3 & it.31 = 8 & it.32 = 9 & it.33 = 14 & it.34 = 15 &
+  it.35 = 5 & it.36 = 2 & it.37 = 8 & it.38 = 12 & it.39 = 3 &
+  it.40 = 7 & it.41 = 0 & it.42 = 4 & it.43 = 10 & it.44 = 1 &
+  it.45 = 13 & it.46 = 11 & it.47 = 6 & it.48 = 4 & it.49 = 3 &
+  it.50 = 2 & it.51 = 12 & it.52 = 9 & it.53 = 5 & it.54 = 15 &
+  it.55 = 10 & it.56 = 11 & it.57 = 14 & it.58 = 1 & it.59 = 7 &
+  it.60 = 6 & it.61 = 0 & it.62 = 8 & it.63 = 13;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+definition
+  func DES-SBOX7 -> Function of 64,16 means
+  it.0 = 4 & it.1 = 11 & it.2 = 2 & it.3 = 14 & it.4 = 15 &
+  it.5 = 0 & it.6 = 8 & it.7 = 13 & it.8 = 3 & it.9 = 12 &
+  it.10 = 9 & it.11 = 7 & it.12 = 5 & it.13 = 10 & it.14 = 6 &
+  it.15 = 1 & it.16 = 13 & it.17 = 0 & it.18 = 11 & it.19 = 7 &
+  it.20 = 4 & it.21 = 9 & it.22 = 1 & it.23 = 10 & it.24 = 14 &
+  it.25 = 3 & it.26 = 5 & it.27 = 12 & it.28 = 2 & it.29 = 15 &
+  it.30 = 8 & it.31 = 6 & it.32 = 1 & it.33 = 4 & it.34 = 11 &
+  it.35 = 13 & it.36 = 12 & it.37 = 3 & it.38 = 7 & it.39 = 14 &
+  it.40 = 10 & it.41 = 15 & it.42 = 6 & it.43 = 8 & it.44 = 0 &
+  it.45 = 5 & it.46 = 9 & it.47 = 2 & it.48 = 6 & it.49 = 11 &
+  it.50 = 13 & it.51 = 8 & it.52 = 1 & it.53 = 4 & it.54 = 10 &
+  it.55 = 7 & it.56 = 9 & it.57 = 5 & it.58 = 0 & it.59 = 15 &
+  it.60 = 14 & it.61 = 2 & it.62 = 3 & it.63 = 12;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+definition
+  func DES-SBOX8 -> Function of 64,16 means
+  it.0 = 13 & it.1 = 2 & it.2 = 8 & it.3 = 4 & it.4 = 6 &
+  it.5 = 15 & it.6 = 11 & it.7 = 1 & it.8 = 10 & it.9 = 9 &
+  it.10 = 3 & it.11 = 14 & it.12 = 5 & it.13 = 0 & it.14 = 12 &
+  it.15 = 7 & it.16 = 1 & it.17 = 15 & it.18 = 13 & it.19 = 8 &
+  it.20 = 10 & it.21 = 3 & it.22 = 7 & it.23 = 4 & it.24 = 12 &
+  it.25 = 5 & it.26 = 5 & it.27 = 11 & it.28 = 0 & it.29 = 14 &
+  it.30 = 9 & it.31 = 2 & it.32 = 7 & it.33 = 11 & it.34 = 4 &
+  it.35 = 1 & it.36 = 9 & it.37 = 12 & it.38 = 14 & it.39 = 2 &
+  it.40 = 0 & it.41 = 6 & it.42 = 10 & it.43 = 13 & it.44 = 15 &
+  it.45 = 3 & it.46 = 5 & it.47 = 8 & it.48 = 2 & it.49 = 1 &
+  it.50 = 14 & it.51 = 7 & it.52 = 4 & it.53 = 10 & it.54 = 8 &
+  it.55 = 13 & it.56 = 15 & it.57 = 12 & it.58 = 9 & it.59 = 0 &
+  it.60 = 3 & it.61 = 5 & it.62 = 6 & it.63 = 11;
+  existence by ThL3,LELEMNT16;
+  uniqueness by LSBOXES;
+end;
+
+begin :: Initial Permutation
+
+definition
+  let r be Element of 64-tuples_on BOOLEAN;
+  func DES-IP(r) -> Element of 64-tuples_on BOOLEAN
+  means :defIP:
+  it.1=r.58 & it.2=r.50 & it.3=r.42 & it.4=r.34 & it.5=r.26 &
+  it.6=r.18 & it.7=r.10 & it.8=r.2 & it.9=r.60 & it.10=r.52 &
+  it.11=r.44 & it.12=r.36 & it.13=r.28 & it.14=r.20 & it.15=r.12 &
+  it.16=r.4 & it.17=r.62 & it.18=r.54 & it.19=r.46 & it.20=r.38 &
+  it.21=r.30 & it.22=r.22 & it.23=r.14 & it.24=r.6 & it.25=r.64 &
+  it.26=r.56 & it.27=r.48 & it.28=r.40 & it.29=r.32 & it.30=r.24 &
+  it.31=r.16 & it.32=r.8 & it.33=r.57 & it.34=r.49 & it.35=r.41 &
+  it.36=r.33 & it.37=r.25 & it.38=r.17 & it.39=r.9 & it.40=r.1 &
+  it.41=r.59 & it.42=r.51 & it.43=r.43 & it.44=r.35 & it.45=r.27 &
+  it.46=r.19 & it.47=r.11 & it.48=r.3 & it.49=r.61 & it.50=r.53 &
+  it.51=r.45 & it.52=r.37 & it.53=r.29 & it.54=r.21 & it.55=r.13 &
+  it.56=r.5 & it.57=r.63 & it.58=r.55 & it.59=r.47 & it.60=r.39 &
+  it.61=r.31 & it.62=r.23 & it.63=r.15 & it.64=r.7;
+  existence
+  proof
+    consider e be FinSequence of BOOLEAN such that
+    LCE: e is 64-element &
+    e.1=r.58 & e.2=r.50 & e.3=r.42 & e.4=r.34 & e.5=r.26 &
+    e.6=r.18 & e.7=r.10 & e.8=r.2 & e.9=r.60 & e.10=r.52 &
+    e.11=r.44 & e.12=r.36 & e.13=r.28 & e.14=r.20 & e.15=r.12 &
+    e.16=r.4 & e.17=r.62 & e.18=r.54 & e.19=r.46 & e.20=r.38 &
+    e.21=r.30 & e.22=r.22 & e.23=r.14 & e.24=r.6 & e.25=r.64 &
+    e.26=r.56 & e.27=r.48 & e.28=r.40 & e.29=r.32 & e.30=r.24 &
+    e.31=r.16 & e.32=r.8 & e.33=r.57 & e.34=r.49 & e.35=r.41 &
+    e.36=r.33 & e.37=r.25 & e.38=r.17 & e.39=r.9 & e.40=r.1 &
+    e.41=r.59 & e.42=r.51 & e.43=r.43 & e.44=r.35 & e.45=r.27 &
+    e.46=r.19 & e.47=r.11 & e.48=r.3 & e.49=r.61 & e.50=r.53 &
+    e.51=r.45 & e.52=r.37 & e.53=r.29 & e.54=r.21 & e.55=r.13 &
+    e.56=r.5 & e.57=r.63 & e.58=r.55 & e.59=r.47 & e.60=r.39 &
+    e.61=r.31 & e.62=r.23 & e.63=r.15 & e.64=r.7 by TT64;
+
+    len e =64 by LCE,CARD_1:def 7;then
+    reconsider e as Element of 64-tuples_on BOOLEAN
+    by FINSEQ_2:92;
+    take e;
+    thus thesis by LCE;
+  end;
+  uniqueness
+  proof
+    let p,q be Element of 64-tuples_on BOOLEAN;
+    assume ASP:
+    p.1=r.58 & p.2=r.50 & p.3=r.42 & p.4=r.34 & p.5=r.26 &
+    p.6=r.18 & p.7=r.10 & p.8=r.2 & p.9=r.60 & p.10=r.52 &
+    p.11=r.44 & p.12=r.36 & p.13=r.28 & p.14=r.20 & p.15=r.12 &
+    p.16=r.4 & p.17=r.62 & p.18=r.54 & p.19=r.46 & p.20=r.38 &
+    p.21=r.30 & p.22=r.22 & p.23=r.14 & p.24=r.6 & p.25=r.64 &
+    p.26=r.56 & p.27=r.48 & p.28=r.40 & p.29=r.32 & p.30=r.24 &
+    p.31=r.16 & p.32=r.8 & p.33=r.57 & p.34=r.49 & p.35=r.41 &
+    p.36=r.33 & p.37=r.25 & p.38=r.17 & p.39=r.9 & p.40=r.1 &
+    p.41=r.59 & p.42=r.51 & p.43=r.43 & p.44=r.35 & p.45=r.27 &
+    p.46=r.19 & p.47=r.11 & p.48=r.3 & p.49=r.61 & p.50=r.53 &
+    p.51=r.45 & p.52=r.37 & p.53=r.29 & p.54=r.21 & p.55=r.13 &
+    p.56=r.5 & p.57=r.63 & p.58=r.55 & p.59=r.47 & p.60=r.39 &
+    p.61=r.31 & p.62=r.23 & p.63=r.15 & p.64=r.7;
+
+    assume ASQ:
+    q.1=r.58 & q.2=r.50 & q.3=r.42 & q.4=r.34 & q.5=r.26 &
+    q.6=r.18 & q.7=r.10 & q.8=r.2 & q.9=r.60 & q.10=r.52 &
+    q.11=r.44 & q.12=r.36 & q.13=r.28 & q.14=r.20 & q.15=r.12 &
+    q.16=r.4 & q.17=r.62 & q.18=r.54 & q.19=r.46 & q.20=r.38 &
+    q.21=r.30 & q.22=r.22 & q.23=r.14 & q.24=r.6 & q.25=r.64 &
+    q.26=r.56 & q.27=r.48 & q.28=r.40 & q.29=r.32 & q.30=r.24 &
+    q.31=r.16 & q.32=r.8 & q.33=r.57 & q.34=r.49 & q.35=r.41 &
+    q.36=r.33 & q.37=r.25 & q.38=r.17 & q.39=r.9 & q.40=r.1 &
+    q.41=r.59 & q.42=r.51 & q.43=r.43 & q.44=r.35 & q.45=r.27 &
+    q.46=r.19 & q.47=r.11 & q.48=r.3 & q.49=r.61 & q.50=r.53 &
+    q.51=r.45 & q.52=r.37 & q.53=r.29 & q.54=r.21 & q.55=r.13 &
+    q.56=r.5 & q.57=r.63 & q.58=r.55 & q.59=r.47 & q.60=r.39 &
+    q.61=r.31 & q.62=r.23 & q.63=r.15 & q.64=r.7;
+
+    p in { s where s is Element of BOOLEAN*: len s = 64 };
+    then consider t be Element of BOOLEAN* such that
+    CT: p = t & len t = 64;
+
+    q in { s where s is Element of BOOLEAN*: len s = 64 };
+    then consider s be Element of BOOLEAN* such that
+    CS: q = s & len s = 64;
+
+    L1: dom p = Seg 64 & dom q =Seg 64 by CT,CS,FINSEQ_1:def 3;
+
+    for i be Nat st i in dom p holds p.i = q.i
+    proof
+      let i be Nat;
+      assume i in dom p; then
+      i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+      i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+      i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+      i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+      i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48 or
+      i=49 or i=50 or i=51 or i=52 or i=53 or i=54 or i=55 or i=56 or
+      i=57 or i=58 or i=59 or i=60 or i=61 or i=62 or i=63 or i=64
+      by L1,Lmseg64a;
+      hence thesis by ASP,ASQ;
+    end;
+    hence thesis by L1,FINSEQ_1:13;
+  end;
+end;
+
+definition
+  func DES-PIP ->
+  Function of 64-tuples_on BOOLEAN,64-tuples_on BOOLEAN
+  means :defPIP:
+  for i be Element of 64-tuples_on BOOLEAN holds it.i = DES-IP(i);
+  existence
+  proof
+    deffunc F(Element of 64-tuples_on BOOLEAN) = DES-IP($1);
+    P1: for x being Element of 64-tuples_on BOOLEAN holds
+    F(x) is Element of 64-tuples_on BOOLEAN;
+    consider f being
+    Function of 64-tuples_on BOOLEAN, 64-tuples_on BOOLEAN such that
+    P2: for x being Element of 64-tuples_on BOOLEAN holds f.x = F(x)
+    from FUNCT_2:sch 9(P1);
+    take f;
+    thus thesis by P2;
+  end;
+  uniqueness
+  proof
+    let f,g be Function of 64-tuples_on BOOLEAN,64-tuples_on BOOLEAN;
+    assume AS1:
+    for i be Element of 64-tuples_on BOOLEAN holds
+    f.i= DES-IP(i);
+    assume AS2:
+    for i be Element of 64-tuples_on BOOLEAN holds
+    g.i= DES-IP(i);
+    L1:dom f=64-tuples_on BOOLEAN &
+    dom g=64-tuples_on BOOLEAN by FUNCT_2:def 1;
+    for i be set st i in 64-tuples_on BOOLEAN
+    holds f.i=g.i
+    proof
+      let i be set;
+      assume i in 64-tuples_on BOOLEAN;
+      then
+      reconsider i as Element of 64-tuples_on BOOLEAN;
+      f.i=DES-IP(i) by AS1
+      .=g.i by AS2;
+      hence thesis;
+    end;
+    hence thesis by L1,FUNCT_1:2;
+  end;
+end;
+
+definition
+  let r be Element of 64-tuples_on BOOLEAN;
+  func DES-IPINV(r) -> Element of 64-tuples_on BOOLEAN means :defIPINV:
+  it.1=r.40 & it.2=r.8 & it.3=r.48 & it.4=r.16 &
+  it.5=r.56 &it.6=r.24 & it.7=r.64 & it.8=r.32 &
+  it.9=r.39 & it.10=r.7 &it.11=r.47 & it.12=r.15 &
+  it.13=r.55 & it.14=r.23 & it.15=r.63 &it.16=r.31 &
+  it.17=r.38 & it.18=r.6 & it.19=r.46 & it.20=r.14 &
+  it.21=r.54 & it.22=r.22 & it.23=r.62 & it.24=r.30 &
+  it.25=r.37 &it.26=r.5 & it.27=r.45 & it.28=r.13 &
+  it.29=r.53 & it.30=r.21 &it.31=r.61 & it.32=r.29 &
+  it.33=r.36 & it.34=r.4 & it.35=r.44 &it.36=r.12 &
+  it.37=r.52 & it.38=r.20 & it.39=r.60 & it.40=r.28 &
+  it.41=r.35 & it.42=r.3 & it.43=r.43 & it.44=r.11 &
+  it.45=r.51 &it.46=r.19 & it.47=r.59 & it.48=r.27 &
+  it.49=r.34 & it.50=r.2 &it.51=r.42 & it.52=r.10 &
+  it.53=r.50 & it.54=r.18 & it.55=r.58 &it.56=r.26 &
+  it.57=r.33 & it.58=r.1 & it.59=r.41 & it.60=r.9 &
+  it.61=r.49 & it.62=r.17 & it.63=r.57 & it.64=r.25;
+  existence
+  proof
+    consider e be FinSequence of BOOLEAN such that
+    LCE: e is 64-element &
+    e.1=r.40 & e.2=r.8 & e.3=r.48 & e.4=r.16 &
+    e.5=r.56 &e.6=r.24 & e.7=r.64 & e.8=r.32 &
+    e.9=r.39 & e.10=r.7 &e.11=r.47 & e.12=r.15 &
+    e.13=r.55 & e.14=r.23 & e.15=r.63 &e.16=r.31 &
+    e.17=r.38 & e.18=r.6 & e.19=r.46 & e.20=r.14 &
+    e.21=r.54 & e.22=r.22 & e.23=r.62 & e.24=r.30 &
+    e.25=r.37 &e.26=r.5 & e.27=r.45 & e.28=r.13 &
+    e.29=r.53 & e.30=r.21 &e.31=r.61 & e.32=r.29 &
+    e.33=r.36 & e.34=r.4 & e.35=r.44 &e.36=r.12 &
+    e.37=r.52 & e.38=r.20 & e.39=r.60 & e.40=r.28 &
+    e.41=r.35 & e.42=r.3 & e.43=r.43 & e.44=r.11 &
+    e.45=r.51 &e.46=r.19 & e.47=r.59 & e.48=r.27 &
+    e.49=r.34 & e.50=r.2 &e.51=r.42 & e.52=r.10 &
+    e.53=r.50 & e.54=r.18 & e.55=r.58 &e.56=r.26 &
+    e.57=r.33 & e.58=r.1 & e.59=r.41 & e.60=r.9 &
+    e.61=r.49 & e.62=r.17 & e.63=r.57 & e.64=r.25 by TT64;
+    len e =64 by LCE,CARD_1:def 7;then
+    reconsider e as Element of 64-tuples_on BOOLEAN by FINSEQ_2:92;
+    take e;
+    thus thesis by LCE;
+  end;
+  uniqueness
+  proof
+    let p,q be Element of 64-tuples_on BOOLEAN;
+    assume ASP:
+    p.1=r.40 & p.2=r.8 & p.3=r.48 & p.4=r.16 &
+    p.5=r.56 &p.6=r.24 & p.7=r.64 & p.8=r.32 &
+    p.9=r.39 & p.10=r.7 &p.11=r.47 & p.12=r.15 &
+    p.13=r.55 & p.14=r.23 & p.15=r.63 &p.16=r.31 &
+    p.17=r.38 & p.18=r.6 & p.19=r.46 & p.20=r.14 &
+    p.21=r.54 & p.22=r.22 & p.23=r.62 & p.24=r.30 &
+    p.25=r.37 &p.26=r.5 & p.27=r.45 & p.28=r.13 &
+    p.29=r.53 & p.30=r.21 &p.31=r.61 & p.32=r.29 &
+    p.33=r.36 & p.34=r.4 & p.35=r.44 &p.36=r.12 &
+    p.37=r.52 & p.38=r.20 & p.39=r.60 & p.40=r.28 &
+    p.41=r.35 & p.42=r.3 & p.43=r.43 & p.44=r.11 &
+    p.45=r.51 &p.46=r.19 & p.47=r.59 & p.48=r.27 &
+    p.49=r.34 & p.50=r.2 &p.51=r.42 & p.52=r.10 &
+    p.53=r.50 & p.54=r.18 & p.55=r.58 &p.56=r.26 &
+    p.57=r.33 & p.58=r.1 & p.59=r.41 & p.60=r.9 &
+    p.61=r.49 & p.62=r.17 & p.63=r.57 & p.64=r.25;
+
+    assume ASQ:
+    q.1=r.40 & q.2=r.8 & q.3=r.48 & q.4=r.16 &
+    q.5=r.56 &q.6=r.24 & q.7=r.64 & q.8=r.32 &
+    q.9=r.39 & q.10=r.7 &q.11=r.47 & q.12=r.15 &
+    q.13=r.55 & q.14=r.23 & q.15=r.63 &q.16=r.31 &
+    q.17=r.38 & q.18=r.6 & q.19=r.46 & q.20=r.14 &
+    q.21=r.54 & q.22=r.22 & q.23=r.62 & q.24=r.30 &
+    q.25=r.37 &q.26=r.5 & q.27=r.45 & q.28=r.13 &
+    q.29=r.53 & q.30=r.21 &q.31=r.61 & q.32=r.29 &
+    q.33=r.36 & q.34=r.4 & q.35=r.44 &q.36=r.12 &
+    q.37=r.52 & q.38=r.20 & q.39=r.60 & q.40=r.28 &
+    q.41=r.35 & q.42=r.3 & q.43=r.43 & q.44=r.11 &
+    q.45=r.51 &q.46=r.19 & q.47=r.59 & q.48=r.27 &
+    q.49=r.34 & q.50=r.2 &q.51=r.42 & q.52=r.10 &
+    q.53=r.50 & q.54=r.18 & q.55=r.58 &q.56=r.26 &
+    q.57=r.33 & q.58=r.1 & q.59=r.41 & q.60=r.9 &
+    q.61=r.49 & q.62=r.17 & q.63=r.57 & q.64=r.25;
+    p in { s where s is Element of BOOLEAN*: len s = 64 };
+    then consider t be Element of BOOLEAN* such that
+    CT: p = t & len t = 64;
+    q in { s where s is Element of BOOLEAN*: len s = 64 };
+    then consider s be Element of BOOLEAN* such that
+    CS: q = s & len s = 64;
+    L1: dom p = Seg 64 & dom q =Seg 64 by CT,CS,FINSEQ_1:def 3;
+    for i be Nat st i in dom p holds p.i = q.i
+    proof
+      let i be Nat;
+      assume i in dom p; then
+      i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+      i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+      i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+      i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+      i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48 or
+      i=49 or i=50 or i=51 or i=52 or i=53 or i=54 or i=55 or i=56 or
+      i=57 or i=58 or i=59 or i=60 or i=61 or i=62 or i=63 or i=64
+      by L1,Lmseg64a;
+      hence thesis by ASP,ASQ;
+    end;
+    hence thesis by L1,FINSEQ_1:13;
+  end;
+end;
+
+definition
+  func DES-PIPINV ->
+  Function of 64-tuples_on BOOLEAN,64-tuples_on BOOLEAN means :defPIPINV:
+  for i be Element of 64-tuples_on BOOLEAN holds it.i = DES-IPINV(i);
+  existence
+  proof
+    deffunc F(Element of 64-tuples_on BOOLEAN) = DES-IPINV($1);
+    P1: for x being Element of 64-tuples_on BOOLEAN holds
+    F(x) is Element of 64-tuples_on BOOLEAN;
+    consider f being
+    Function of 64-tuples_on BOOLEAN, 64-tuples_on BOOLEAN such that
+    P2: for x being Element of 64-tuples_on BOOLEAN holds f.x = F(x)
+    from FUNCT_2:sch 9(P1);
+    take f;
+    thus thesis by P2;
+  end;
+  uniqueness
+  proof
+    let f,g be Function of 64-tuples_on BOOLEAN,64-tuples_on BOOLEAN;
+    assume AS1:
+    for i be Element of 64-tuples_on BOOLEAN holds
+    f.i= DES-IPINV(i);
+    assume AS2:
+    for i be Element of 64-tuples_on BOOLEAN holds
+    g.i= DES-IPINV(i);
+    L1:dom f=64-tuples_on BOOLEAN &
+    dom g=64-tuples_on BOOLEAN by FUNCT_2:def 1;
+    for i be set st i in 64-tuples_on BOOLEAN holds f.i=g.i
+    proof
+      let i be set;
+      assume i in 64-tuples_on BOOLEAN;
+      then reconsider i as Element of 64-tuples_on BOOLEAN;
+      f.i=DES-IPINV(i) by AS1
+      .=g.i by AS2;
+      hence thesis;
+    end;
+    hence thesis by L1,FUNCT_1:2;
+  end;
+end;
+
+LTHIPP1:
+for x be Element of 64-tuples_on BOOLEAN holds
+DES-IPINV(DES-IP(x)) =x
+proof
+  let x be Element of 64-tuples_on BOOLEAN;
+  set y =DES-IP(x);
+  set z= DES-IPINV(y);
+  len x =64&len z =64 by CARD_1:def 7;then
+  L1: dom x =Seg 64 &dom z=Seg 64 by FINSEQ_1:def 3;
+  LI1:
+  z.1=y.40 & z.2=y.8 & z.3=y.48 & z.4=y.16 &
+  z.5=y.56 &z.6=y.24 & z.7=y.64 & z.8=y.32 &
+  z.9=y.39 & z.10=y.7 &z.11=y.47 & z.12=y.15 &
+  z.13=y.55 & z.14=y.23 & z.15=y.63 &z.16=y.31 &
+  z.17=y.38 & z.18=y.6 & z.19=y.46 & z.20=y.14 &
+  z.21=y.54 & z.22=y.22 & z.23=y.62 & z.24=y.30 &
+  z.25=y.37 &z.26=y.5 & z.27=y.45 & z.28=y.13 &
+  z.29=y.53 & z.30=y.21 &z.31=y.61 & z.32=y.29 &
+  z.33=y.36 & z.34=y.4 & z.35=y.44 &z.36=y.12 &
+  z.37=y.52 & z.38=y.20 & z.39=y.60 & z.40=y.28 &
+  z.41=y.35 & z.42=y.3 & z.43=y.43 & z.44=y.11 &
+  z.45=y.51 &z.46=y.19 & z.47=y.59 & z.48=y.27 &
+  z.49=y.34 & z.50=y.2 &z.51=y.42 & z.52=y.10 &
+  z.53=y.50 & z.54=y.18 & z.55=y.58 &z.56=y.26 &
+  z.57=y.33 & z.58=y.1 & z.59=y.41 & z.60=y.9 &
+  z.61=y.49 & z.62=y.17 & z.63=y.57 & z.64=y.25 by defIPINV;
+  for i be set st i in Seg 64 holds z.i=x.i
+  proof
+    let i be set;
+    assume i in Seg 64; then
+    i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+    i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+    i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+    i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+    i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+    i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48 or
+    i=49 or i=50 or i=51 or i=52 or i=53 or i=54 or i=55 or i=56 or
+    i=57 or i=58 or i=59 or i=60 or i=61 or i=62 or i=63 or i=64 by Lmseg64a;
+    hence thesis by LI1,defIP;
+  end;
+  hence thesis by L1,FUNCT_1:2;
+end;
+
+LTHIPP2:
+  for x be Element of 64-tuples_on BOOLEAN holds
+  DES-IP(DES-IPINV(x)) =x
+proof
+  let x be Element of 64-tuples_on BOOLEAN;
+  set y =DES-IPINV(x);
+  set z= DES-IP(y);
+  len x =64&len z =64 by CARD_1:def 7;then
+L1: dom x =Seg 64 &dom z=Seg 64 by FINSEQ_1:def 3;
+LI1:
+    z.1=y.58 &z.2=y.50& z.3=y.42 & z.4=y.34 & z.5=y.26 &
+    z.6=y.18 & z.7=y.10 & z.8=y.2 & z.9=y.60 & z.10=y.52 &
+    z.11=y.44 & z.12=y.36 & z.13=y.28 & z.14=y.20 & z.15=y.12 &
+    z.16=y.4 & z.17=y.62 & z.18=y.54 & z.19=y.46 & z.20=y.38 &
+    z.21=y.30 & z.22=y.22 & z.23=y.14 & z.24=y.6 & z.25=y.64 &
+    z.26=y.56 & z.27=y.48 & z.28=y.40 & z.29=y.32 & z.30=y.24 &
+    z.31=y.16 & z.32=y.8 & z.33=y.57 & z.34=y.49 & z.35=y.41 &
+    z.36=y.33 & z.37=y.25 & z.38=y.17 & z.39=y.9 & z.40=y.1 &
+    z.41=y.59 & z.42=y.51 & z.43=y.43 & z.44=y.35 & z.45=y.27 &
+    z.46=y.19 & z.47=y.11 & z.48=y.3 & z.49=y.61 & z.50=y.53 &
+    z.51=y.45 & z.52=y.37 & z.53=y.29 & z.54=y.21 & z.55=y.13 &
+    z.56=y.5 & z.57=y.63 & z.58=y.55 & z.59=y.47 & z.60=y.39 &
+    z.61=y.31 & z.62=y.23 & z.63=y.15 & z.64=y.7 by defIP;
+   for i be set st i in Seg 64 holds z.i=x.i
+   proof
+     let i be set;
+     assume i in Seg 64; then
+     i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+     i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+     i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+     i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+     i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+     i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48 or
+     i=49 or i=50 or i=51 or i=52 or i=53 or i=54 or i=55 or i=56 or
+     i=57 or i=58 or i=59 or i=60 or i=61 or i=62 or i=63 or i=64
+     by Lmseg64a;
+     hence thesis by LI1,defIPINV;
+   end;
+   hence thesis by L1,FUNCT_1:2;
+ end;
+
+THIPP1:
+  DES-PIPINV * DES-PIP = id (64-tuples_on BOOLEAN)
+proof
+L1: dom(DES-PIPINV*DES-PIP)
+   = 64-tuples_on BOOLEAN by FUNCT_2:def 1;
+  for x be set st x in 64-tuples_on BOOLEAN holds
+  (DES-PIPINV*DES-PIP).x =x
+  proof
+    let x be set;
+    assume x in 64-tuples_on BOOLEAN;then
+    reconsider x as Element of 64-tuples_on BOOLEAN;
+    (DES-PIPINV*DES-PIP).x =DES-PIPINV.(DES-PIP.x) by FUNCT_2:15
+      .=DES-PIPINV.(DES-IP(x)) by defPIP
+      .=DES-IPINV(DES-IP(x)) by defPIPINV
+      .= x by LTHIPP1;
+    hence thesis;
+  end;
+  hence thesis by L1,FUNCT_1:17;
+end;
+
+THIPP2:
+  DES-PIP*DES-PIPINV = id (64-tuples_on BOOLEAN)
+proof
+L1: dom(DES-PIP*DES-PIPINV) = 64-tuples_on BOOLEAN by FUNCT_2:def 1;
+   for x be set st x in 64-tuples_on BOOLEAN holds
+   (DES-PIP*DES-PIPINV).x =x
+   proof
+     let x be set;
+     assume x in 64-tuples_on BOOLEAN;then
+     reconsider x as Element of 64-tuples_on BOOLEAN;
+     (DES-PIP*DES-PIPINV).x =DES-PIP.(DES-PIPINV.x) by FUNCT_2:15
+       .=DES-PIP.(DES-IPINV(x)) by defPIPINV
+       .=DES-IP(DES-IPINV(x)) by defPIP
+       .= x by LTHIPP2;
+     hence thesis;
+   end;
+   hence thesis by L1,FUNCT_1:17;
+ end;
+
+registration
+  cluster DES-PIP -> bijective;
+  coherence
+  proof
+    thus DES-PIP is one-to-one onto by THIPP1,FUNCT_2:23,THIPP2;
+  end;
+end;
+
+registration
+  cluster DES-PIPINV -> bijective;
+  correctness
+  proof
+    thus DES-PIPINV is one-to-one onto by THIPP1,FUNCT_2:23,THIPP2;
+  end;
+end;
+
+theorem
+  DES-PIPINV=DES-PIP" by THIPP1,FUNCT_2:60;
+
+begin :: Feistel function
+
+definition
+  let r be Element of 32-tuples_on BOOLEAN;
+  func DES-E(r) -> Element of 48-tuples_on BOOLEAN means
+  it.1=r.32 & it.2=r.1 & it.3=r.2& it.4=r.3& it.5=r.4&
+  it.6=r.5& it.7=r.4 & it.8=r.5 & it.9=r.6 & it.10=r.7 &
+  it.11=r.8 & it.12=r.9& it.13=r.8 & it.14=r.9 & it.15=r.10 &
+  it.16=r.11 & it.17=r.12 & it.18=r.13& it.19=r.12 & it.20=r.13 &
+  it.21=r.14 & it.22=r.15 & it.23=r.16 & it.24=r.17& it.25=r.16 &
+  it.26=r.17 & it.27=r.18 & it.28=r.19 & it.29=r.20 & it.30=r.21&
+  it.31=r.20 & it.32=r.21 & it.33=r.22 & it.34=r.23 & it.35=r.24 &
+  it.36=r.25& it.37=r.24 & it.38=r.25 & it.39=r.26 & it.40=r.27 &
+  it.41=r.28 & it.42=r.29& it.43=r.28 & it.44=r.29 & it.45=r.30 &
+  it.46=r.31 & it.47=r.32 & it.48=r.1;
+  existence
+  proof
+    consider e be FinSequence of BOOLEAN such that
+    LCE: e is 48-element &
+    e.1=r.32 & e.2=r.1 & e.3=r.2& e.4=r.3& e.5=r.4&
+    e.6=r.5& e.7=r.4 & e.8=r.5 & e.9=r.6 & e.10=r.7 &
+    e.11=r.8 & e.12=r.9& e.13=r.8 & e.14=r.9 & e.15=r.10 &
+    e.16=r.11 & e.17=r.12 & e.18=r.13& e.19=r.12 & e.20=r.13 &
+    e.21=r.14 & e.22=r.15 & e.23=r.16 & e.24=r.17& e.25=r.16 &
+    e.26=r.17 & e.27=r.18 & e.28=r.19 & e.29=r.20 & e.30=r.21&
+    e.31=r.20 & e.32=r.21 & e.33=r.22 & e.34=r.23 & e.35=r.24 &
+    e.36=r.25& e.37=r.24 & e.38=r.25 & e.39=r.26 & e.40=r.27 &
+    e.41=r.28 & e.42=r.29& e.43=r.28 & e.44=r.29 & e.45=r.30 &
+    e.46=r.31 & e.47=r.32 & e.48=r.1 by TT48;
+    len e =48 by LCE,CARD_1:def 7;then
+    reconsider e as Element of 48-tuples_on BOOLEAN by FINSEQ_2:92;
+    take e;
+    thus thesis by LCE;
+  end;
+  uniqueness
+  proof
+    let p,q be Element of 48-tuples_on BOOLEAN;
+    assume ASP:
+    p.1=r.32 & p.2=r.1 & p.3=r.2& p.4=r.3& p.5=r.4&
+    p.6=r.5& p.7=r.4 & p.8=r.5 & p.9=r.6 & p.10=r.7 &
+    p.11=r.8 & p.12=r.9& p.13=r.8 & p.14=r.9 & p.15=r.10 &
+    p.16=r.11 & p.17=r.12 & p.18=r.13& p.19=r.12 & p.20=r.13 &
+    p.21=r.14 & p.22=r.15 & p.23=r.16 & p.24=r.17& p.25=r.16 &
+    p.26=r.17 & p.27=r.18 & p.28=r.19 & p.29=r.20 & p.30=r.21&
+    p.31=r.20 & p.32=r.21 & p.33=r.22 & p.34=r.23 & p.35=r.24 &
+    p.36=r.25& p.37=r.24 & p.38=r.25 & p.39=r.26 & p.40=r.27 &
+    p.41=r.28 & p.42=r.29& p.43=r.28 & p.44=r.29 & p.45=r.30 &
+    p.46=r.31 & p.47=r.32 & p.48=r.1;
+
+    assume ASQ:
+    q.1=r.32 & q.2=r.1 & q.3=r.2& q.4=r.3& q.5=r.4&
+    q.6=r.5& q.7=r.4 & q.8=r.5 & q.9=r.6 & q.10=r.7 &
+    q.11=r.8 & q.12=r.9& q.13=r.8 & q.14=r.9 & q.15=r.10 &
+    q.16=r.11 & q.17=r.12 & q.18=r.13& q.19=r.12 & q.20=r.13 &
+    q.21=r.14 & q.22=r.15 & q.23=r.16 & q.24=r.17& q.25=r.16 &
+    q.26=r.17 & q.27=r.18 & q.28=r.19 & q.29=r.20 & q.30=r.21&
+    q.31=r.20 & q.32=r.21 & q.33=r.22 & q.34=r.23 & q.35=r.24 &
+    q.36=r.25& q.37=r.24 & q.38=r.25 & q.39=r.26 & q.40=r.27 &
+    q.41=r.28 & q.42=r.29& q.43=r.28 & q.44=r.29 & q.45=r.30 &
+    q.46=r.31 & q.47=r.32 & q.48=r.1;
+    p in { s where s is Element of BOOLEAN*: len s = 48 };
+    then consider t be Element of BOOLEAN* such that
+    CT: p=t &len t = 48;
+    q in { s where s is Element of BOOLEAN*: len s = 48 };
+    then consider s be Element of BOOLEAN* such that
+    CS: q=s & len s =48;
+    L1: dom p= Seg 48 & dom q =Seg 48 by CT,CS,FINSEQ_1:def 3;
+    for i be Nat st i in dom p holds p.i = q.i
+    proof
+      let i be Nat;
+      assume i in dom p;
+      then i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+      i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+      i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+      i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+      i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48
+      by L1,Lmseg48a;
+      hence thesis by ASP,ASQ;
+    end;
+    hence thesis by L1,FINSEQ_1:13;
+  end;
+end;
+
+definition
+  let r be Element of 32-tuples_on BOOLEAN;
+  func DES-P(r) -> Element of 32-tuples_on BOOLEAN
+  means
+  it.1=r.16 &it.2=r.7 &it.3=r.20 &it.4=r.21&
+  it.5=r.29 &it.6=r.12 &it.7=r.28 &it.8=r.17&
+  it.9=r.1 &it.10=r.15 &it.11=r.23 &it.12=r.26&
+  it.13=r.5 &it.14=r.18 &it.15=r.31 &it.16=r.10&
+  it.17=r.2 &it.18=r.8 &it.19=r.24 &it.20=r.14&
+  it.21=r.32 &it.22=r.27 &it.23=r.3 &it.24=r.9&
+  it.25=r.19 &it.26=r.13 &it.27=r.30 &it.28=r.6&
+  it.29=r.22 &it.30=r.11 &it.31=r.4 &it.32=r.25;
+  existence
+  proof
+
+    consider e be FinSequence of BOOLEAN such that
+    LCE: e is 32-element &
+    e.1=r.16 &e.2=r.7 &e.3=r.20 &e.4=r.21&
+    e.5=r.29 &e.6=r.12 &e.7=r.28 &e.8=r.17&
+    e.9=r.1 &e.10=r.15 &e.11=r.23 &e.12=r.26&
+    e.13=r.5 &e.14=r.18 &e.15=r.31 &e.16=r.10&
+    e.17=r.2 &e.18=r.8 &e.19=r.24 &e.20=r.14&
+    e.21=r.32 &e.22=r.27 &e.23=r.3 &e.24=r.9&
+    e.25=r.19 &e.26=r.13 &e.27=r.30 &e.28=r.6&
+    e.29=r.22 &e.30=r.11 &e.31=r.4 &e.32=r.25 by TT32;
+
+    len e =32 by LCE,CARD_1:def 7;then
+    reconsider e as Element of 32-tuples_on BOOLEAN by FINSEQ_2:92;
+    take e;
+    thus thesis by LCE;
+  end;
+  uniqueness
+  proof
+    let p,q be Element of 32-tuples_on BOOLEAN;
+    assume ASP:
+    p.1=r.16 &p.2=r.7 &p.3=r.20 &p.4=r.21&
+    p.5=r.29 &p.6=r.12 &p.7=r.28 &p.8=r.17&
+    p.9=r.1 &p.10=r.15 &p.11=r.23 &p.12=r.26&
+    p.13=r.5 &p.14=r.18 &p.15=r.31 &p.16=r.10&
+    p.17=r.2 &p.18=r.8 &p.19=r.24 &p.20=r.14&
+    p.21=r.32 &p.22=r.27 &p.23=r.3 &p.24=r.9&
+    p.25=r.19 &p.26=r.13 &p.27=r.30 &p.28=r.6&
+    p.29=r.22 &p.30=r.11 &p.31=r.4 &p.32=r.25;
+
+    assume ASQ:
+    q.1=r.16 &q.2=r.7 &q.3=r.20 &q.4=r.21&
+    q.5=r.29 &q.6=r.12 &q.7=r.28 &q.8=r.17&
+    q.9=r.1 &q.10=r.15 &q.11=r.23 &q.12=r.26&
+    q.13=r.5 &q.14=r.18 &q.15=r.31 &q.16=r.10&
+    q.17=r.2 &q.18=r.8 &q.19=r.24 &q.20=r.14&
+    q.21=r.32 &q.22=r.27 &q.23=r.3 &q.24=r.9&
+    q.25=r.19 &q.26=r.13 &q.27=r.30 &q.28=r.6&
+    q.29=r.22 &q.30=r.11 &q.31=r.4 &q.32=r.25;
+
+    p in { s where s is Element of BOOLEAN*: len s = 32 };
+    then consider t be Element of BOOLEAN* such that
+    CT: p=t &len t = 32;
+
+    q in { s where s is Element of BOOLEAN*: len s = 32 };
+    then consider s be Element of BOOLEAN* such that
+    CS: q=s & len s =32;
+
+    L1: dom p= Seg 32 & dom q =Seg 32 by CT,CS,FINSEQ_1:def 3;
+
+    for i be Nat st i in dom p holds p.i = q.i
+    proof
+      let i be Nat;
+      assume i in dom p;
+      then i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+      i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+      i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32
+      by L1,Lmseg32a;
+      hence thesis by ASP,ASQ;
+    end;
+    hence thesis by L1,FINSEQ_1:13;
+  end;
+end;
+
+definition
+  let r be Element of 48-tuples_on BOOLEAN;
+  func DES-DIV8(r) -> Element of 8-tuples_on (6-tuples_on BOOLEAN) means
+  :DEFDIV8:
+  it.1 =Op-Left(r,6) &
+  it.2 =Op-Left(Op-Right(r,6),6) &
+  it.3 =Op-Left(Op-Right(r,12),6) &
+  it.4 =Op-Left(Op-Right(r,18),6) &
+  it.5 =Op-Left(Op-Right(r,24),6) &
+  it.6 =Op-Left(Op-Right(r,30),6) &
+  it.7 =Op-Left(Op-Right(r,36),6) &
+  it.8 =Op-Right(r,42);
+  existence
+  proof
+    r in { s where s is Element of BOOLEAN*: len s = 48};
+    then consider s be Element of BOOLEAN* such that
+    CS: r=s &len s = 48;
+
+    6<=len r & 42 = (len r) -6&
+    12<=len r & 36 = (len r) -12&
+    18<=len r & 30 = (len r) -18&
+    24<=len r & 24 = (len r) -24&
+    30<=len r & 18 = (len r) -30&
+    36<=len r & 12 = (len r) -36&
+    42<=len r& 6 = (len r) -42 by CS;
+    then L2:
+    len (Op-Right(r,6)) = 42 &
+    len (Op-Right(r,12)) = 36 &
+    len (Op-Right(r,18)) = 30 &
+    len (Op-Right(r,24)) = 24 &
+    len (Op-Right(r,30)) = 18 &
+    len (Op-Right(r,36)) = 12 &
+    len (Op-Right(r,42)) = 6 by RFINSEQ:def 1;
+    then L3:
+    len Op-Left(r,6) =6&
+    len Op-Left(Op-Right(r,6),6) =6&
+    len Op-Left(Op-Right(r,12),6) =6&
+    len Op-Left(Op-Right(r,18),6) =6&
+    len Op-Left(Op-Right(r,24),6) =6&
+    len Op-Left(Op-Right(r,30),6) =6&
+    len Op-Left(Op-Right(r,36),6) =6 by CS,FINSEQ_1:59;
+
+    reconsider x1=Op-Left(r,6)
+    as Element of 6-tuples_on BOOLEAN by L3,FINSEQ_2:92;
+    reconsider x2 = Op-Left(Op-Right(r,6),6)
+    as Element of 6-tuples_on BOOLEAN by L3,FINSEQ_2:92;
+    reconsider x3 = Op-Left(Op-Right(r,12),6)
+    as Element of 6-tuples_on BOOLEAN by L3,FINSEQ_2:92;
+    reconsider x4 = Op-Left(Op-Right(r,18),6)
+    as Element of 6-tuples_on BOOLEAN by L3,FINSEQ_2:92;
+    reconsider x5=Op-Left(Op-Right(r,24),6)
+    as Element of 6-tuples_on BOOLEAN by L3,FINSEQ_2:92;
+    reconsider x6 = Op-Left(Op-Right(r,30),6)
+    as Element of 6-tuples_on BOOLEAN by L3,FINSEQ_2:92;
+    reconsider x7= Op-Left(Op-Right(r,36),6)
+    as Element of 6-tuples_on BOOLEAN by L3,FINSEQ_2:92;
+    reconsider x8 = Op-Right(r,42)
+    as Element of 6-tuples_on BOOLEAN by L2,FINSEQ_2:92;
+
+    set T1 =<*x1,x2,x3,x4*>;
+    set T2 =<*x5,x6,x7,x8*>;
+    set T = T1^T2;
+
+    L4: T is 8-element &
+    T.1=T1.1&T.2=T1.2&T.3=T1.3&T.4=T1.4&
+    T.5=T2.1&T.6=T2.2&T.7=T2.3&T.8=T2.4 by T8;
+
+    len T =8 & T is FinSequence of 6-tuples_on BOOLEAN by CARD_1:def 7;
+    then
+    reconsider T as Element of 8-tuples_on (6-tuples_on BOOLEAN)
+    by FINSEQ_2:92;
+    take T;
+    thus thesis by L4,FINSEQ_4:76;
+  end;
+  uniqueness
+  proof
+    let p,q be Element of 8-tuples_on (6-tuples_on BOOLEAN);
+    assume ASP:
+    p.1 =Op-Left(r,6) &
+    p.2 =Op-Left(Op-Right(r,6),6) &
+    p.3 =Op-Left(Op-Right(r,12),6) &
+    p.4 =Op-Left(Op-Right(r,18),6) &
+    p.5 =Op-Left(Op-Right(r,24),6) &
+    p.6 =Op-Left(Op-Right(r,30),6) &
+    p.7 =Op-Left(Op-Right(r,36),6) &
+    p.8 =Op-Right(r,42);
+
+    assume ASQ:
+    q.1 =Op-Left(r,6) &
+    q.2 =Op-Left(Op-Right(r,6),6) &
+    q.3 =Op-Left(Op-Right(r,12),6) &
+    q.4 =Op-Left(Op-Right(r,18),6) &
+    q.5 =Op-Left(Op-Right(r,24),6) &
+    q.6 =Op-Left(Op-Right(r,30),6) &
+    q.7 =Op-Left(Op-Right(r,36),6) &
+    q.8 =Op-Right(r,42);
+
+    p in { s where s is Element of (6-tuples_on BOOLEAN)*: len s = 8};
+    then consider t be Element of (6-tuples_on BOOLEAN)* such that
+    CT: p=t &len t = 8;
+
+    q in { s where s is Element of (6-tuples_on BOOLEAN)*: len s = 8};
+    then consider s be Element of (6-tuples_on BOOLEAN)* such that
+    CS: q=s &len s = 8;
+
+    L1: dom p= Seg 8 & dom q =Seg 8 by CT,CS,FINSEQ_1:def 3;
+
+    for i be Nat st i in dom p holds p.i = q.i
+    proof
+      let i be Nat;
+      assume i in dom p; then
+      i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8
+      by L1,ENUMSET1:def 6,FINSEQ_3:6;
+      hence thesis by ASP,ASQ;
+    end;
+    hence thesis by L1,FINSEQ_1:13;
+  end;
+end;
+
+theorem thDESDIV8:
+  for r be Element of 48-tuples_on BOOLEAN
+  ex s1,s2,s3,s4,s5,s6,s7,s8
+  be Element of 6-tuples_on BOOLEAN st
+  s1=(DES-DIV8(r)).1&
+  s2=(DES-DIV8(r)).2&
+  s3=(DES-DIV8(r)).3&
+  s4=(DES-DIV8(r)).4&
+  s5=(DES-DIV8(r)).5&
+  s6=(DES-DIV8(r)).6&
+  s7=(DES-DIV8(r)).7&
+  s8=(DES-DIV8(r)).8&
+  r=s1^s2^s3^s4^s5^s6^s7^s8
+  proof
+    let r be Element of 48-tuples_on BOOLEAN;
+    r is Element of Funcs(Seg 48,BOOLEAN) by FINSEQ_2:93;
+    then
+    dom r =Seg 48 by FUNCT_2:def 1;then
+    LR: len r =48 by FINSEQ_1:def 3;
+    1 in Seg 8;then
+    reconsider SEG8E1=1 as Element of Seg 8;
+    2 in Seg 8;then
+    reconsider SEG8E2=2 as Element of Seg 8;
+    3 in Seg 8;then
+    reconsider SEG8E3=3 as Element of Seg 8;
+    4 in Seg 8;then
+    reconsider SEG8E4=4 as Element of Seg 8;
+    5 in Seg 8;then
+    reconsider SEG8E5=5 as Element of Seg 8;
+    6 in Seg 8;then
+    reconsider SEG8E6=6 as Element of Seg 8;
+    7 in Seg 8;then
+    reconsider SEG8E7=7 as Element of Seg 8;
+    8 in Seg 8;then
+    reconsider SEG8E8=8 as Element of Seg 8;
+
+    set s1=(DES-DIV8(r)).SEG8E1,
+    s2=(DES-DIV8(r)).SEG8E2,
+    s3=(DES-DIV8(r)).SEG8E3,
+    s4=(DES-DIV8(r)).SEG8E4,
+    s5=(DES-DIV8(r)).SEG8E5,
+    s6=(DES-DIV8(r)).SEG8E6,
+    s7=(DES-DIV8(r)).SEG8E7,
+    s8=(DES-DIV8(r)).SEG8E8;
+
+    take s1,s2,s3,s4,s5,s6,s7,s8;
+
+    r=s1^s2^s3^s4^s5^s6^s7^s8
+    proof
+      L0:
+      s1 =Op-Left(r,6) &
+      s2 =Op-Left(Op-Right(r,6),6) &
+      s3 =Op-Left(Op-Right(r,12),6) &
+      s4 =Op-Left(Op-Right(r,18),6) &
+      s5 =Op-Left(Op-Right(r,24),6) &
+      s6 =Op-Left(Op-Right(r,30),6) &
+      s7 =Op-Left(Op-Right(r,36),6) &
+      s8 =Op-Right(r,42) by DEFDIV8;
+
+      s1^s2=r|12 by LC1,LR,L0;then
+      s1^s2^s3
+      =r|18 by LC1,LR,L0;then
+      s1^s2^s3^s4
+      =r|24 by LC1,LR,L0;then
+      s1^s2^s3^s4^s5
+      =r|30 by LC1,LR,L0;then
+      s1^s2^s3^s4^s5^s6
+      =r|36 by LC1,LR,L0;then
+      s1^s2^s3^s4^s5^s6^s7
+      =r|42 by LC1,LR,L0;
+      hence thesis by L0,RFINSEQ:8;
+    end;
+    hence thesis;
+  end;
+
+  CTH1:
+  for n be Nat, b be Element of BOOLEAN holds n*b <= n
+  proof
+    let n be Nat, b be Element of BOOLEAN;
+    b = 0 or b = 1 by TARSKI:def 2;
+    hence thesis;
+  end;
+  
+definition
+  let t be Element of 6-tuples_on BOOLEAN;
+  func B6toN64(t) -> Element of 64 equals
+  32*(t.1) + 16*(t.6) + 8*(t.2) + 4*(t.3) + 2*(t.4) + 1*(t.5);
+  coherence
+  proof
+    L1:
+    32*(t.1) <= 32 & 16*(t.6)<=16 &8*(t.2)<=8 &
+    4*(t.3)<=4 &2*(t.4)<=2 &1*(t.5)<=1 by CTH1;
+    then
+    32*(t.1) + 16*(t.6) <= 32+16 by XREAL_1:7;then
+    32*(t.1) + 16*(t.6) + 8*(t.2)
+    <=48+8 by L1,XREAL_1:7;then
+    32*(t.1) + 16*(t.6) +
+    8*(t.2)+4*(t.3)<=56+4 by L1,XREAL_1:7;then
+    32*(t.1) + 16*(t.6) +
+    8*(t.2)+4*(t.3) +2*(t.4)<= 60+2 by L1,XREAL_1:7;then
+    32*(t.1) + 16*(t.6) + 8*(t.2)+
+    4*(t.3) +2*(t.4) +1*(t.5)<=62+1 by L1,XREAL_1:7;then
+    32*(t.1) + 16*(t.6) + 8*(t.2)
+    +4*(t.3)+2*(t.4)+1*(t.5) < 63+1 by XREAL_1:145;
+    hence thesis by NAT_1:44;
+  end;
+end;
+
+ThL2L16:
+for f be NtoSEG Function of 16, Seg 16,
+S be non empty set,
+x1,x2,x3,x4,x5,x6,x7,x8,
+x9,x10,x11,x12,x13,x14,x15,x16
+be Element of S,
+t be Element of 16-tuples_on S st
+t.1=x1&t.2=x2&t.3=x3&t.4=x4&t.5=x5&t.6=x6&
+t.7=x7&t.8=x8&t.9=x9&t.10=x10&t.11=x11&t.12=x12&
+t.13=x13&t.14=x14&t.15=x15&t.16=x16
+holds
+(t*f).0=x1&(t*f).1=x2&(t*f).2=x3&(t*f).3=x4&
+(t*f).4=x5&(t*f).5=x6&(t*f).6=x7&(t*f).7=x8&
+(t*f).8=x9&(t*f).9=x10&(t*f).10=x11&(t*f).11=x12&
+(t*f).12=x13&(t*f).13=x14&(t*f).14=x15&(t*f).15=x16
+proof
+  let f be NtoSEG Function of 16, Seg 16,
+  S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16
+  be Element of S,
+  t be Element of 16-tuples_on S;
+  assume
+  t.1=x1&t.2=x2&t.3=x3&t.4=x4&t.5=x5&
+  t.6=x6&t.7=x7&t.8=x8&t.9=x9&t.10=x10&t.11=x11&
+  t.12=x12&t.13=x13&t.14=x14&t.15=x15&
+  t.16=x16;
+
+  then
+  t.(0+1)=x1&t.(1+1)=x2&t.(2+1)=x3&t.(3+1)=x4&
+  t.(4+1)=x5&t.(5+1)=x6&t.(6+1)=x7&t.(7+1)=x8&
+  t.(8+1)=x9&t.(9+1)=x10&t.(10+1)=x11&t.(11+1)=x12&
+  t.(12+1)=x13&t.(13+1)=x14&t.(14+1)=x15&t.(15+1)=x16;
+  then L1:
+  t.(f.0)=x1&t.(f.1)=x2&t.(f.2)=x3&t.(f.3)=x4&
+  t.(f.4)=x5&t.(f.5)=x6&t.(f.6)=x7&t.(f.7)=x8&
+  t.(f.8)=x9&t.(f.9)=x10&t.(f.10)=x11&t.(f.11)=x12&
+  t.(f.12)=x13&t.(f.13)=x14&t.(f.14)=x15&t.(f.15)=x16
+  by ThL1;
+
+  0 in dom f&1 in dom f&2 in dom f&3 in dom f&
+  4 in dom f&5 in dom f&6 in dom f&7 in dom f&
+  8 in dom f&9 in dom f&10 in dom f&11 in dom f&
+  12 in dom f&13 in dom f&14 in dom f&15 in dom f
+  by ThL1;
+  hence thesis by L1,FUNCT_1:13;
+end;
+
+definition
+  func N16toB4 -> Function of 16,4-tuples_on BOOLEAN
+  means
+  it.0=<*0,0,0,0*>&
+  it.1=<*0,0,0,1*>&
+  it.2=<*0,0,1,0*>&
+  it.3=<*0,0,1,1*>&
+  it.4=<*0,1,0,0*>&
+  it.5=<*0,1,0,1*>&
+  it.6=<*0,1,1,0*>&
+  it.7=<*0,1,1,1*>&
+  it.8=<*1,0,0,0*>&
+  it.9=<*1,0,0,1*>&
+  it.10=<*1,0,1,0*>&
+  it.11=<*1,0,1,1*>&
+  it.12=<*1,1,0,0*>&
+  it.13=<*1,1,0,1*>&
+  it.14=<*1,1,1,0*>&
+  it.15=<*1,1,1,1*>;
+  existence
+  proof
+    set x0 =<*FALSE,FALSE,FALSE,FALSE*>;
+    set x1=<*FALSE,FALSE,FALSE,TRUE*>;
+    set x2=<*FALSE,FALSE,TRUE,FALSE*>;
+    set x3=<*FALSE,FALSE,TRUE,TRUE*>;
+    set x4=<*FALSE,TRUE,FALSE,FALSE*>;
+    set x5=<*FALSE,TRUE,FALSE,TRUE*>;
+    set x6=<*FALSE,TRUE,TRUE,FALSE*>;
+    set x7=<*FALSE,TRUE,TRUE,TRUE*>;
+    set x8=<*TRUE,FALSE,FALSE,FALSE*>;
+    set x9=<*TRUE,FALSE,FALSE,TRUE*>;
+    set x10=<*TRUE,FALSE,TRUE,FALSE*>;
+    set x11=<*TRUE,FALSE,TRUE,TRUE*>;
+    set x12=<*TRUE,TRUE,FALSE,FALSE*>;
+    set x13=<*TRUE,TRUE,FALSE,TRUE*>;
+    set x14=<*TRUE,TRUE,TRUE,FALSE*>;
+    set x15=<*TRUE,TRUE,TRUE,TRUE*>;
+
+    L1:
+    len x0 =4 &len x1 =4 &len x2 =4 &len x3 =4 &
+    len x4 =4 &len x5 =4 &len x6 =4 &len x7 =4 &
+    len x8 =4 &len x9 =4 &len x10 =4 &len x11 =4 &
+    len x12 =4 &len x13 =4 &len x14 =4 &len x15 =4
+    by FINSEQ_4:76;then
+    reconsider x0 as
+    Element of 4-tuples_on BOOLEAN by FINSEQ_2:92;
+
+    reconsider x1 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x2 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x3 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x4 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x5 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x6 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x7 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x8 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x9 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x10 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x11 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x12 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x13 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x14 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+    reconsider x15 as
+    Element of 4-tuples_on BOOLEAN by L1,FINSEQ_2:92;
+
+    consider s be FinSequence of (4-tuples_on BOOLEAN)
+    such that LCS:
+    s is 16-element&
+    s.1=x0&s.2=x1&s.3=x2&
+    s.4=x3&s.5=x4&s.6=x5&
+    s.7=x6&s.8=x7&s.9=x8&
+    s.10=x9&s.11=x10&s.12=x11&
+    s.13=x12&s.14=x13&s.15=x14&
+    s.16=x15 by TT16;
+
+    L2:len s =16 by LCS,CARD_1:def 7;
+
+    set f = the NtoSEG Function of 16, Seg 16;
+
+    rng f =Seg 16 by FUNCT_2:def 3;
+    then
+    f"(dom s)=f"(rng f) by L2,FINSEQ_1:def 3
+    .= dom f by RELAT_1:134;then
+    (dom f) /\ f"(dom s) = dom f;then
+    LS5:dom (s*f)=dom f by EUCLID_7:1
+    .= 16 by FUNCT_2:def 1;
+
+    LS4:rng(s*f) c= (4-tuples_on BOOLEAN);
+
+    reconsider s as Element of
+    16-tuples_on (4-tuples_on BOOLEAN) by L2,FINSEQ_2:92;
+
+    reconsider sf= s*f as
+    Function of 16,4-tuples_on BOOLEAN by LS5,LS4,FUNCT_2:2;
+    take sf;
+    thus thesis by ThL2L16,LCS;
+  end;
+
+  uniqueness
+  proof
+    let s,t be Function of 16,4-tuples_on BOOLEAN;
+    assume AS1:
+    s.0 =<*0,0,0,0*>&
+    s.1=<*0,0,0,1*>&
+    s.2=<*0,0,1,0*>&
+    s.3=<*0,0,1,1*>&
+    s.4=<*0,1,0,0*>&
+    s.5=<*0,1,0,1*>&
+    s.6=<*0,1,1,0*>&
+    s.7=<*0,1,1,1*>&
+    s.8=<*1,0,0,0*>&
+    s.9=<*1,0,0,1*>&
+    s.10=<*1,0,1,0*>&
+    s.11=<*1,0,1,1*>&
+    s.12=<*1,1,0,0*>&
+    s.13=<*1,1,0,1*>&
+    s.14=<*1,1,1,0*>&
+    s.15=<*1,1,1,1*>;
+
+    L1: dom s = 16 by FUNCT_2:def 1;
+
+    assume AS2:
+    t.0 =<*0,0,0,0*>&
+    t.1=<*0,0,0,1*>&
+    t.2=<*0,0,1,0*>&
+    t.3=<*0,0,1,1*>&
+    t.4=<*0,1,0,0*>&
+    t.5=<*0,1,0,1*>&
+    t.6=<*0,1,1,0*>&
+    t.7=<*0,1,1,1*>&
+    t.8=<*1,0,0,0*>&
+    t.9=<*1,0,0,1*>&
+    t.10=<*1,0,1,0*>&
+    t.11=<*1,0,1,1*>&
+    t.12=<*1,1,0,0*>&
+    t.13=<*1,1,0,1*>&
+    t.14=<*1,1,1,0*>&
+    t.15=<*1,1,1,1*>;
+
+    L2: dom s = dom t by L1,FUNCT_2:def 1;
+
+    for i be set st i in dom s holds s.i=t.i
+    proof
+      let i be set;
+      assume i in dom s; then
+      i=0 or i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 by thel16;
+      hence thesis by AS1,AS2;
+    end;
+    hence thesis by L2,FUNCT_1:2;
+  end;
+end;
+
+definition
+  let R be Element of 32-tuples_on BOOLEAN,
+  RKey be Element of 48-tuples_on BOOLEAN;
+  func DES-F(R,RKey) -> Element of 32-tuples_on BOOLEAN means
+  ex D1,D2,D3,D4,D5,D6,D7,D8 be Element of 6-tuples_on BOOLEAN,
+  x1,x2,x3,x4,x5,x6,x7,x8 be Element of 4-tuples_on BOOLEAN,
+  C32 be Element of 32-tuples_on BOOLEAN
+  st
+  D1=(DES-DIV8(Op-XOR(DES-E(R),RKey))).1 &
+  D2=(DES-DIV8(Op-XOR(DES-E(R),RKey))).2 &
+  D3=(DES-DIV8(Op-XOR(DES-E(R),RKey))).3 &
+  D4=(DES-DIV8(Op-XOR(DES-E(R),RKey))).4 &
+  D5=(DES-DIV8(Op-XOR(DES-E(R),RKey))).5 &
+  D6=(DES-DIV8(Op-XOR(DES-E(R),RKey))).6 &
+  D7=(DES-DIV8(Op-XOR(DES-E(R),RKey))).7 &
+  D8=(DES-DIV8(Op-XOR(DES-E(R),RKey))).8 &
+  Op-XOR(DES-E(R),RKey) =D1^D2^D3^D4^D5^D6^D7^D8&
+  x1=N16toB4.(DES-SBOX1.(B6toN64(D1)))&
+  x2=N16toB4.(DES-SBOX2.(B6toN64(D2)))&
+  x3=N16toB4.(DES-SBOX3.(B6toN64(D3)))&
+  x4=N16toB4.(DES-SBOX4.(B6toN64(D4)))&
+  x5=N16toB4.(DES-SBOX5.(B6toN64(D5)))&
+  x6=N16toB4.(DES-SBOX6.(B6toN64(D6)))&
+  x7=N16toB4.(DES-SBOX7.(B6toN64(D7)))&
+  x8=N16toB4.(DES-SBOX8.(B6toN64(D8)))&
+  C32=x1^x2^x3^x4^x5^x6^x7^x8&
+  it=DES-P(C32);
+  existence
+  proof
+    consider
+    D1,D2,D3,D4,D5,D6,D7,D8 be Element of 6-tuples_on BOOLEAN such that
+    L0:
+    D1=(DES-DIV8(Op-XOR(DES-E(R),RKey))).1 &
+    D2=(DES-DIV8(Op-XOR(DES-E(R),RKey) )).2&
+    D3=(DES-DIV8(Op-XOR(DES-E(R),RKey) )).3&
+    D4=(DES-DIV8(Op-XOR(DES-E(R),RKey) )).4&
+    D5=(DES-DIV8(Op-XOR(DES-E(R),RKey) )).5&
+    D6=(DES-DIV8(Op-XOR(DES-E(R),RKey) )).6&
+    D7=(DES-DIV8(Op-XOR(DES-E(R),RKey) )).7&
+    D8=(DES-DIV8(Op-XOR(DES-E(R),RKey) )).8&
+    Op-XOR(DES-E(R),RKey) =D1^D2^D3^D4^D5^D6^D7^D8
+    by thDESDIV8;
+
+    consider x1 be Element of 4-tuples_on BOOLEAN
+    such that L1:x1=N16toB4.(DES-SBOX1.(B6toN64(D1)));
+    consider x2 be Element of 4-tuples_on BOOLEAN
+    such that L2:x2=N16toB4.(DES-SBOX2.(B6toN64(D2)));
+    consider x3 be Element of 4-tuples_on BOOLEAN
+    such that L3:x3=N16toB4.(DES-SBOX3.(B6toN64(D3)));
+    consider x4 be Element of 4-tuples_on BOOLEAN
+    such that L4:x4=N16toB4.(DES-SBOX4.(B6toN64(D4)));
+    consider x5 be Element of 4-tuples_on BOOLEAN
+    such that L5:x5=N16toB4.(DES-SBOX5.(B6toN64(D5)));
+    consider x6 be Element of 4-tuples_on BOOLEAN
+    such that L6:x6=N16toB4.(DES-SBOX6.(B6toN64(D6)));
+    consider x7 be Element of 4-tuples_on BOOLEAN
+    such that L7:x7=N16toB4.(DES-SBOX7.(B6toN64(D7)));
+    consider x8 be Element of 4-tuples_on BOOLEAN
+    such that L8:x8=N16toB4.(DES-SBOX8.(B6toN64(D8)));
+    len (x1^x2^x3^x4^x5^x6^x7^x8) = 32 by CARD_1:def 7;then
+    x1^x2^x3^x4^x5^x6^x7^x8 is
+    Element of 32-tuples_on BOOLEAN by FINSEQ_2:92;
+    then
+    consider FIT be Element of 32-tuples_on BOOLEAN such that
+    LFF: FIT = x1^x2^x3^x4^x5^x6^x7^x8;
+    reconsider PFIT=DES-P(FIT) as Element of 32-tuples_on BOOLEAN;
+    take PFIT;
+    thus thesis by L0,L1,L2,L3,L4,L5,L6,L7,L8,LFF;
+  end;
+  uniqueness;
+end;
+
+definition
+  func DES-FFUNC ->
+  Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+  32-tuples_on BOOLEAN
+  means
+  for z be Element of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:]
+  holds it.z = DES-F(z`1 ,z`2);
+  existence
+  proof
+    deffunc F(Element of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:])
+    =DES-F($1`1,$1`2);
+
+    P1: for x being Element of [:32-tuples_on BOOLEAN,48-tuples_on
+    BOOLEAN:]
+    holds
+    F(x) is Element of 32-tuples_on BOOLEAN;
+    consider f being
+    Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+    32-tuples_on BOOLEAN
+    such that
+    P2: for x being Element of [:32-tuples_on BOOLEAN,48-tuples_on
+    BOOLEAN:]
+    holds f.x = F(x)
+    from FUNCT_2:sch 9(P1);
+    take f;
+    thus thesis by P2;
+  end;
+  uniqueness
+  proof
+    let f,g be Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+    32-tuples_on BOOLEAN;
+    assume AS1:
+    for i be Element of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:] holds
+    f.i= DES-F(i`1 ,i`2);
+    assume AS2:
+    for i be Element of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:] holds
+    g.i= DES-F(i`1 ,i`2);
+    for i be Element of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:]
+    holds f.i=g.i
+    proof
+      let i be Element of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:];
+      thus
+      f.i=DES-F(i`1 ,i`2) by AS1
+      .=g.i by AS2;
+    end;
+    hence thesis by FUNCT_2:def 8;
+  end;
+end;
+
+begin :: Key Schedule
+
+definition
+  let r be Element of 64-tuples_on BOOLEAN;
+  func DES-PC1(r) -> Element of 56-tuples_on BOOLEAN
+  means
+  it.1=r.57&it.2=r.49&it.3=r.41&it.4=r.33&it.5=r.25&
+  it.6=r.17&it.7=r.9&it.8=r.1&it.9=r.58&it.10=r.50&
+  it.11=r.42&it.12=r.34&it.13=r.26&it.14=r.18&it.15=r.10&
+  it.16=r.2&it.17=r.59&it.18=r.51&it.19=r.43&it.20=r.35&
+  it.21=r.27&it.22=r.19&it.23=r.11&it.24=r.3&it.25=r.60&
+  it.26=r.52&it.27=r.44&it.28=r.36&it.29=r.63&it.30=r.55&
+  it.31=r.47&it.32=r.39&it.33=r.31&it.34=r.23&it.35=r.15&
+  it.36=r.7&it.37=r.62&it.38=r.54&it.39=r.46&it.40=r.38&
+  it.41=r.30&it.42=r.22&it.43=r.14&it.44=r.6&it.45=r.61&
+  it.46=r.53&it.47=r.45&it.48=r.37&it.49=r.29&it.50=r.21&
+  it.51=r.13&it.52=r.5&it.53=r.28&it.54=r.20&it.55=r.12&
+  it.56=r.4;
+  existence
+  proof
+    consider e be FinSequence of BOOLEAN such that
+    LCE: e is 56-element &
+    e.1=r.57&e.2=r.49&e.3=r.41&e.4=r.33&e.5=r.25&
+    e.6=r.17&e.7=r.9&e.8=r.1&e.9=r.58&e.10=r.50&
+    e.11=r.42&e.12=r.34&e.13=r.26&e.14=r.18&e.15=r.10&
+    e.16=r.2&e.17=r.59&e.18=r.51&e.19=r.43&e.20=r.35&
+    e.21=r.27&e.22=r.19&e.23=r.11&e.24=r.3&e.25=r.60&
+    e.26=r.52&e.27=r.44&e.28=r.36&e.29=r.63&e.30=r.55&
+    e.31=r.47&e.32=r.39&e.33=r.31&e.34=r.23&e.35=r.15&
+    e.36=r.7&e.37=r.62&e.38=r.54&e.39=r.46&e.40=r.38&
+    e.41=r.30&e.42=r.22&e.43=r.14&e.44=r.6&e.45=r.61&
+    e.46=r.53&e.47=r.45&e.48=r.37&e.49=r.29&e.50=r.21&
+    e.51=r.13&e.52=r.5&e.53=r.28&e.54=r.20&e.55=r.12&
+    e.56=r.4 by TT56;
+
+    len e =56 by LCE,CARD_1:def 7;then
+    reconsider e as Element of 56-tuples_on BOOLEAN
+    by FINSEQ_2:92;
+    take e;
+    thus thesis by LCE;
+  end;
+
+  uniqueness
+  proof
+    let p,q be Element of 56-tuples_on BOOLEAN;
+    assume ASP:
+    p.1=r.57&p.2=r.49&p.3=r.41&p.4=r.33&p.5=r.25&
+    p.6=r.17&p.7=r.9&p.8=r.1&p.9=r.58&p.10=r.50&
+    p.11=r.42&p.12=r.34&p.13=r.26&p.14=r.18&p.15=r.10&
+    p.16=r.2&p.17=r.59&p.18=r.51&p.19=r.43&p.20=r.35&
+    p.21=r.27&p.22=r.19&p.23=r.11&p.24=r.3&p.25=r.60&
+    p.26=r.52&p.27=r.44&p.28=r.36&p.29=r.63&p.30=r.55&
+    p.31=r.47&p.32=r.39&p.33=r.31&p.34=r.23&p.35=r.15&
+    p.36=r.7&p.37=r.62&p.38=r.54&p.39=r.46&p.40=r.38&
+    p.41=r.30&p.42=r.22&p.43=r.14&p.44=r.6&p.45=r.61&
+    p.46=r.53&p.47=r.45&p.48=r.37&p.49=r.29&p.50=r.21&
+    p.51=r.13&p.52=r.5&p.53=r.28&p.54=r.20&p.55=r.12&
+    p.56=r.4;
+    assume ASQ:
+    q.1=r.57&q.2=r.49&q.3=r.41&q.4=r.33&q.5=r.25&
+    q.6=r.17&q.7=r.9&q.8=r.1&q.9=r.58&q.10=r.50&
+    q.11=r.42&q.12=r.34&q.13=r.26&q.14=r.18&q.15=r.10&
+    q.16=r.2&q.17=r.59&q.18=r.51&q.19=r.43&q.20=r.35&
+    q.21=r.27&q.22=r.19&q.23=r.11&q.24=r.3&q.25=r.60&
+    q.26=r.52&q.27=r.44&q.28=r.36&q.29=r.63&q.30=r.55&
+    q.31=r.47&q.32=r.39&q.33=r.31&q.34=r.23&q.35=r.15&
+    q.36=r.7&q.37=r.62&q.38=r.54&q.39=r.46&q.40=r.38&
+    q.41=r.30&q.42=r.22&q.43=r.14&q.44=r.6&q.45=r.61&
+    q.46=r.53&q.47=r.45&q.48=r.37&q.49=r.29&q.50=r.21&
+    q.51=r.13&q.52=r.5&q.53=r.28&q.54=r.20&q.55=r.12&
+    q.56=r.4;
+
+    p in { s where s is Element of BOOLEAN*: len s = 56 };
+    then consider t be Element of BOOLEAN* such that
+    CT: p = t & len t = 56;
+
+    q in { s where s is Element of BOOLEAN*: len s = 56 };
+    then consider s be Element of BOOLEAN* such that
+    CS: q = s & len s = 56;
+
+    L1: dom p = Seg 56 & dom q =Seg 56 by CT,CS,FINSEQ_1:def 3;
+
+    for i be Nat st i in dom p holds p.i = q.i
+    proof
+      let i be Nat;
+      assume i in dom p; then
+      i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+      i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+      i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+      i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+      i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48 or
+      i=49 or i=50 or i=51 or i=52 or i=53 or i=54 or i=55 or i=56
+      by L1,Lmseg56a;
+      hence thesis by ASP,ASQ;
+    end;
+    hence thesis by L1,FINSEQ_1:13;
+  end;
+end;
+
+definition
+  let r be Element of 56-tuples_on BOOLEAN;
+  func DES-PC2(r) -> Element of 48-tuples_on BOOLEAN
+  means
+  it.1=r.14&it.2=r.17&it.3=r.11&it.4=r.24&it.5=r.1&
+  it.6=r.5&it.7=r.3&it.8=r.28&it.9=r.15&it.10=r.6&
+  it.11=r.21&it.12=r.10&it.13=r.23&it.14=r.19&
+  it.15=r.12&it.16=r.4&it.17=r.26&it.18=r.8&
+  it.19=r.16&it.20=r.7&it.21=r.27&it.22=r.20&
+  it.23=r.13&it.24=r.2&it.25=r.41&it.26=r.52&
+  it.27=r.31&it.28=r.37&it.29=r.47&it.30=r.55&
+  it.31=r.30&it.32=r.40&it.33=r.51&it.34=r.45&
+  it.35=r.33&it.36=r.48&it.37=r.44&it.38=r.49&
+  it.39=r.39&it.40=r.56&it.41=r.34&it.42=r.53&
+  it.43=r.46&it.44=r.42&it.45=r.50&it.46=r.36&
+  it.47=r.29&it.48=r.32;
+  existence
+  proof
+    consider e be FinSequence of BOOLEAN such that
+    LCE: e is 48-element &
+    e.1=r.14&e.2=r.17&e.3=r.11&e.4=r.24&e.5=r.1&
+    e.6=r.5&e.7=r.3&e.8=r.28&e.9=r.15&e.10=r.6&
+    e.11=r.21&e.12=r.10&e.13=r.23&e.14=r.19&
+    e.15=r.12&e.16=r.4&e.17=r.26&e.18=r.8&
+    e.19=r.16&e.20=r.7&e.21=r.27&e.22=r.20&
+    e.23=r.13&e.24=r.2&e.25=r.41&e.26=r.52&
+    e.27=r.31&e.28=r.37&e.29=r.47&e.30=r.55&
+    e.31=r.30&e.32=r.40&e.33=r.51&e.34=r.45&
+    e.35=r.33&e.36=r.48&e.37=r.44&e.38=r.49&
+    e.39=r.39&e.40=r.56&e.41=r.34&e.42=r.53&
+    e.43=r.46&e.44=r.42&e.45=r.50&e.46=r.36&
+    e.47=r.29&e.48=r.32 by TT48;
+
+    len e =48 by LCE,CARD_1:def 7;then
+    reconsider e as Element of 48-tuples_on BOOLEAN
+    by FINSEQ_2:92;
+    take e;
+    thus thesis by LCE;
+  end;
+
+  uniqueness
+  proof
+    let p,q be Element of 48-tuples_on BOOLEAN;
+    assume ASP:
+    p.1=r.14&p.2=r.17&p.3=r.11&p.4=r.24&p.5=r.1&
+    p.6=r.5&p.7=r.3&p.8=r.28&p.9=r.15&p.10=r.6&
+    p.11=r.21&p.12=r.10&p.13=r.23&p.14=r.19&
+    p.15=r.12&p.16=r.4&p.17=r.26&p.18=r.8&
+    p.19=r.16&p.20=r.7&p.21=r.27&p.22=r.20&
+    p.23=r.13&p.24=r.2&p.25=r.41&p.26=r.52&
+    p.27=r.31&p.28=r.37&p.29=r.47&p.30=r.55&
+    p.31=r.30&p.32=r.40&p.33=r.51&p.34=r.45&
+    p.35=r.33&p.36=r.48&p.37=r.44&p.38=r.49&
+    p.39=r.39&p.40=r.56&p.41=r.34&p.42=r.53&
+    p.43=r.46&p.44=r.42&p.45=r.50&p.46=r.36&
+    p.47=r.29&p.48=r.32;
+    assume ASQ:
+    q.1=r.14&q.2=r.17&q.3=r.11&q.4=r.24&q.5=r.1&
+    q.6=r.5&q.7=r.3&q.8=r.28&q.9=r.15&q.10=r.6&
+    q.11=r.21&q.12=r.10&q.13=r.23&q.14=r.19&
+    q.15=r.12&q.16=r.4&q.17=r.26&q.18=r.8&
+    q.19=r.16&q.20=r.7&q.21=r.27&q.22=r.20&
+    q.23=r.13&q.24=r.2&q.25=r.41&q.26=r.52&
+    q.27=r.31&q.28=r.37&q.29=r.47&q.30=r.55&
+    q.31=r.30&q.32=r.40&q.33=r.51&q.34=r.45&
+    q.35=r.33&q.36=r.48&q.37=r.44&q.38=r.49&
+    q.39=r.39&q.40=r.56&q.41=r.34&q.42=r.53&
+    q.43=r.46&q.44=r.42&q.45=r.50&q.46=r.36&
+    q.47=r.29&q.48=r.32;
+
+    p in { s where s is Element of BOOLEAN*: len s = 48 };
+    then consider t be Element of BOOLEAN* such that
+    CT: p = t & len t = 48;
+
+    q in { s where s is Element of BOOLEAN*: len s = 48 };
+    then consider s be Element of BOOLEAN* such that
+    CS: q = s & len s = 48;
+
+    L1: dom p = Seg 48 & dom q =Seg 48 by CT,CS,FINSEQ_1:def 3;
+
+    for i be Nat st i in dom p holds p.i = q.i
+    proof
+      let i be Nat;
+      assume i in dom p; then
+      i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16 or
+      i=17 or i=18 or i=19 or i=20 or i=21 or i=22 or i=23 or i=24 or
+      i=25 or i=26 or i=27 or i=28 or i=29 or i=30 or i=31 or i=32 or
+      i=33 or i=34 or i=35 or i=36 or i=37 or i=38 or i=39 or i=40 or
+      i=41 or i=42 or i=43 or i=44 or i=45 or i=46 or i=47 or i=48
+      by L1,Lmseg48a;
+      hence thesis by ASP,ASQ;
+    end;
+    hence thesis by L1,FINSEQ_1:13;
+  end;
+end;
+
+definition
+  func bitshift_DES -> FinSequence of NAT means
+  it is 16-element &
+  it.1=1&it.2=1&it.3=2&it.4=2&
+  it.5=2&it.6=2&it.7=2&it.8=2&
+  it.9=1&it.10=2&it.11=2&it.12=2&
+  it.13=2&it.14=2&it.15=2&it.16=1;
+  existence by TT16;
+  uniqueness
+  proof
+    let s,t be FinSequence of NAT;
+    assume AS1:
+    s is 16-element &
+    s.1=1&s.2=1&s.3=2&s.4=2&
+    s.5=2&s.6=2&s.7=2&s.8=2&
+    s.9=1&s.10=2&s.11=2&s.12=2&
+    s.13=2&s.14=2&s.15=2&s.16=1;
+    then len s = 16 by CARD_1:def 7;
+    then L1: dom s = Seg 16 by FINSEQ_1:def 3;
+
+    assume AS2:
+    t is 16-element &
+    t.1=1&t.2=1&t.3=2&t.4=2&
+    t.5=2&t.6=2&t.7=2&t.8=2&
+    t.9=1&t.10=2&t.11=2&t.12=2&
+    t.13=2&t.14=2&t.15=2&t.16=1;
+    then len t = 16 by CARD_1:def 7;
+    then L2: dom s = dom t by L1,FINSEQ_1:def 3;
+
+    for i be set st i in dom s holds s.i=t.i
+    proof
+      let i be set;
+      assume i in dom s; then
+      i=1 or i=2 or i=3 or i=4 or i=5 or i=6 or i=7 or i=8 or
+      i=9 or i=10 or i=11 or i=12 or i=13 or i=14 or i=15 or i=16
+      by Lmseg16a,L1;
+      hence thesis by AS1,AS2;
+     end;
+     hence thesis by L2,FUNCT_1:2;
+   end;
+ end;
+
+definition
+  let Key be Element of 64-tuples_on BOOLEAN;
+  func DES-KS(Key) -> Element of (16-tuples_on (48-tuples_on BOOLEAN)) means
+  ex C,D be sequence of (28-tuples_on BOOLEAN) st
+  C.0= Op-Left(DES-PC1(Key),28) & D.0= Op-Right(DES-PC1(Key),28)
+  & (for i be Element of NAT st 0<=i & i <=15
+  holds
+  it.(i+1)=DES-PC2((C.(i+1))^(D.(i+1)))
+  &
+  C.(i+1) = Op-Shift(C.i,bitshift_DES.i)
+  &
+  D.(i+1) = Op-Shift(D.i,bitshift_DES.i));
+  existence
+  proof
+    defpred P[Element of NAT,
+    Element of (28-tuples_on BOOLEAN ),
+    Element of (28-tuples_on BOOLEAN ),
+    Element of (28-tuples_on BOOLEAN ),
+    Element of (28-tuples_on BOOLEAN )]
+    means
+    $4 = Op-Shift($2,bitshift_DES.$1)
+    & $5 = Op-Shift($3,bitshift_DES.$1);
+
+    A1: for i being Element of NAT,
+    z being Element of (28-tuples_on BOOLEAN ),
+    w being Element of (28-tuples_on BOOLEAN )
+    ex z1 being Element of (28-tuples_on BOOLEAN ),
+    w1 being Element of (28-tuples_on BOOLEAN )
+    st P[ i,z,w,z1, w1 ]
+    proof
+      let i being Element of NAT,
+      z being Element of (28-tuples_on BOOLEAN ),
+      w being Element of (28-tuples_on BOOLEAN );
+      reconsider
+      z1= Op-Shift(z,bitshift_DES.i) as Element of (28-tuples_on BOOLEAN )
+      by LM008;
+      reconsider
+      w1= Op-Shift(w,bitshift_DES.i) as Element of (28-tuples_on BOOLEAN )
+      by LM008;
+      take z1,w1;
+
+      thus thesis;
+    end;
+    reconsider C0= Op-Left(DES-PC1(Key),28) as
+    Element of (28-tuples_on BOOLEAN ) by LM001B;
+
+    DES-PC1(Key) is Element of 56-tuples_on BOOLEAN
+    & 28 <= 56 & 28=56-28;
+    then
+    reconsider D0 = Op-Right(DES-PC1(Key),28) as
+    Element of (28-tuples_on BOOLEAN ) by LM002B;
+    consider
+    C,D be sequence of (28-tuples_on BOOLEAN )
+    such that
+    A2:
+    C.0=C0 & D.0= D0
+    & for n being Element of
+    NAT holds P[n,C.n,D.n,C.(n+1),D.(n+1)]
+    from RECDEF_2:sch 3(A1);
+
+    defpred PP[Nat,set] means
+    $2 = DES-PC2((C.$1)^(D.$1));
+
+    A200: for k be Nat st k in Seg 16 ex x being Element of
+    (48-tuples_on BOOLEAN) st PP[k,x];
+
+    consider OUT be FinSequence of (48-tuples_on BOOLEAN) such that
+    A20: dom OUT = Seg 16 & for j being Nat st j in Seg 16
+    holds PP[j,OUT.j] from FINSEQ_1:sch 5(A200);
+
+    len OUT = 16 by A20,FINSEQ_1:def 3;
+    then
+    reconsider OUT as Element of 16-tuples_on (48-tuples_on BOOLEAN)
+    by FINSEQ_2:92;
+    A3:
+    now let i be Element of NAT;
+      assume A31: 0<=i & i <=15;
+      X1: 0+1 <= i+1 by XREAL_1:6;
+      i +1 <=15 +1 by A31,XREAL_1:6;
+      then
+      i+1 in Seg 16 by X1;
+      hence
+      OUT.(i+1)= DES-PC2((C.(i+1))^(D.(i+1)))
+      &
+      C.(i+1) = Op-Shift(C.i,bitshift_DES.i)
+      &
+      D.(i+1) = Op-Shift(D.i,bitshift_DES.i) by A2,A20;
+    end;
+    thus thesis by A3,A2;
+  end;
+  uniqueness
+  proof
+    let p,q be Element of (16-tuples_on ( 48-tuples_on BOOLEAN));
+    len p = 16 by CARD_1:def 7; then
+    LDOMP:dom p =Seg 16 by FINSEQ_1:def 3;
+    q in { s where s is Element of
+    (48-tuples_on BOOLEAN)*: len s = 16 };
+    then consider s be Element of ( 48-tuples_on BOOLEAN)*
+    such that CS: q=s &len s = 16;
+    LDOMQ:dom q =Seg 16 by CS,FINSEQ_1:def 3;
+
+    given
+    C1,D1 be sequence of (28-tuples_on BOOLEAN )
+    such that A3:
+    C1.0= Op-Left(DES-PC1(Key),28) &
+    D1.0= Op-Right(DES-PC1(Key),28)
+    & (for i be Element of NAT
+    st 0<=i & i <=15
+    holds
+    p.(i+1)=DES-PC2((C1.(i+1))^(D1.(i+1)))
+    &
+    C1.(i+1) = Op-Shift(C1.i,bitshift_DES.i)
+    &
+    D1.(i+1) = Op-Shift(D1.i,bitshift_DES.i));
+
+    given
+    C2,D2 be sequence of (28-tuples_on BOOLEAN )
+    such that A4:
+    C2.0= Op-Left(DES-PC1(Key),28) &
+    D2.0= Op-Right(DES-PC1(Key),28)&
+    (for i be Element of NAT
+    st 0<=i & i <=15
+    holds
+    q.(i+1)=DES-PC2((C2.(i+1))^(D2.(i+1)))&
+    C2.(i+1) = Op-Shift(C2.i,bitshift_DES.i)&
+    D2.(i+1) = Op-Shift(D2.i,bitshift_DES.i));
+
+    defpred P[Element of NAT] means
+    (0<=$1 & $1 <=15)
+    implies
+    p.($1+1) = q.($1+1)
+    &
+    C1.($1+1) = C2.($1+1) & D1.($1+1) = D2.($1+1);
+
+    P0: P[0]
+    proof
+      Q2:C1.(0+1)
+      =Op-Shift(C2.0,bitshift_DES.0) by A3,A4
+      .=C2.(0+1) by A4;
+      Q3:D1.(0+1) = Op-Shift(D2.0,bitshift_DES.0)
+      by A3,A4
+      .=D2.(0+1) by A4;
+      p.(0+1) =DES-PC2((C2.(0+1))^(D2.(0+1)))
+      by Q2,Q3,A3
+      .=q.(0+1) by A4;
+      hence thesis by Q2,Q3;
+    end;
+    P1: now let i be Element of NAT;
+    assume P11: P[i];
+    thus P[i+1]
+    proof
+      assume P12: 0<=i+1 & i+1 <=15;
+      P14P:
+      i <= i+1 by NAT_1:12;
+      Q2:C1.((i+1)+1)
+      =Op-Shift(C2.(i+1),bitshift_DES.(i+1))
+      by P14P,P11,P12,A3,XXREAL_0:2
+      .=C2.((i+1)+1) by A4,P12;
+      Q3:D1.((i+1)+1)
+      = Op-Shift(D2.(i+1),bitshift_DES.(i+1))
+      by P14P,P11,P12,A3,XXREAL_0:2
+      .=D2.((i+1)+1) by A4,P12;
+
+      p.((i+1)+1)
+      =DES-PC2((C2.((i+1)+1))^(D2.((i+1)+1)))
+      by Q2,Q3,A3,P12
+      .=q.((i+1)+1) by A4,P12;
+      hence thesis by Q2,Q3;
+
+    end;
+  end;
+  LP1P:for i be Element of NAT
+  holds P[i] from NAT_1:sch 1(P0,P1);
+
+  for i be set st i in dom p holds p.i = q.i
+  proof
+    let i be set;
+    assume LL1P:i in dom p;
+    reconsider i as Element of NAT by LL1P;
+    LL2:1 <= i & i <= 16 by LL1P,LDOMP,FINSEQ_1:1;
+    then
+    reconsider y=i-1 as Element of NAT by NAT_1:21;
+    1-1<= i-1 & i-1 <= 16-1 by LL2,XREAL_1:9;
+    then p.(y+1)=q.(y+1) by LP1P;
+    hence thesis;
+  end;
+  hence thesis by LDOMP,LDOMQ,FUNCT_1:2;
+end;
+end;
+
+begin :: Encryption and Decryption
+
+  LM0102gen:
+  for m,n,k be non empty Element of NAT,
+  RK be Element of k-tuples_on (m-tuples_on BOOLEAN),
+  F be Function of [:n-tuples_on BOOLEAN,m-tuples_on BOOLEAN:],
+  n-tuples_on BOOLEAN,
+  IP be Permutation of (2*n)-tuples_on BOOLEAN,
+  M be Element of (2*n)-tuples_on BOOLEAN
+  ex OUT be Element of (2*n)-tuples_on BOOLEAN st
+  ex L,R be sequence of (n-tuples_on BOOLEAN) st
+  L.0= SP-Left(IP.M)
+  & R.0= SP-Right(IP.M)
+  & (for i be Element of NAT st 0<=i & i <= k-1
+  holds
+  L.(i+1)= R.i
+  & R.(i+1)= Op-XOR(L.i,F.(R.i,RK/.(i+1))))
+  & OUT= IP".((R.k )^(L.k ))
+  proof
+    let m,n,k be non empty Element of NAT,
+    RK be Element of k-tuples_on (m-tuples_on BOOLEAN),
+    F be Function of [:n-tuples_on BOOLEAN,m-tuples_on BOOLEAN:],
+    n-tuples_on BOOLEAN,
+    IP be Permutation of (2*n)-tuples_on BOOLEAN,
+    M be Element of (2*n)-tuples_on BOOLEAN;
+
+    defpred P[Element of NAT,
+    Element of (n-tuples_on BOOLEAN ),
+    Element of (n-tuples_on BOOLEAN ),
+    Element of (n-tuples_on BOOLEAN ),
+    Element of (n-tuples_on BOOLEAN ) ] means
+    $4= $3 & $5=Op-XOR($2,F.($3,RK/.($1+1)));
+
+    A1: for
+    k being Element of NAT,
+    x being Element of (n-tuples_on BOOLEAN ),
+    y being Element of (n-tuples_on BOOLEAN )
+    ex x1 being Element of (n-tuples_on BOOLEAN ),
+    y1 being Element of (n-tuples_on BOOLEAN )
+    st P[k,x,y,x1,y1];
+
+    consider L,R be sequence of (n-tuples_on BOOLEAN) such that
+    A2:
+    L.0=SP-Left(IP.M) & R.0=SP-Right(IP.M)
+    & for n be Element of NAT holds P[n,L.n,R.n,L.(n+1),R.(n+1)]
+    from RECDEF_2:sch 3(A1);
+    A3:for i be Element of NAT st
+    0<=i & i <= k-1 holds L.(i+1)= R.i&
+    R.(i+1)=Op-XOR(L.i,F.(R.i,RK/.(i+1))) by A2;
+
+    reconsider RL=((R.k )^(L.k )) as
+    Element of (2*n)-tuples_on BOOLEAN by FINSEQ_2:131;
+    IP".RL is Element of (2*n)-tuples_on BOOLEAN;
+    hence thesis by A3,A2;
+  end;
+
+definition
+  let n,m,k be non empty Element of NAT,
+  RK be Element of (k-tuples_on (m-tuples_on BOOLEAN)),
+  F be Function of [:n-tuples_on BOOLEAN,m-tuples_on BOOLEAN:],
+  n-tuples_on BOOLEAN,
+  IP be Permutation of (2*n)-tuples_on BOOLEAN,
+  M be Element of (2*n)-tuples_on BOOLEAN;
+  func DES-like-CoDec(M,F,IP,RK) -> Element of (2*n)-tuples_on BOOLEAN means
+  :defOPDESlike:
+  ex L,R be sequence of (n-tuples_on BOOLEAN)
+  st
+  L.0= SP-Left(IP.M) & R.0= SP-Right(IP.M)
+  & (for i be Element of NAT st 0<=i & i <=k-1 holds L.(i+1)= R.i
+  &
+  R.(i+1)=Op-XOR(L.i,F.(R.i,RK/.(i+1))))
+  &
+  it=IP".((R.k )^(L.k));
+  existence by LM0102gen;
+  uniqueness
+  proof
+    let p,q be Element of (2*n)-tuples_on BOOLEAN;
+
+    given L1,R1 be sequence of (n-tuples_on BOOLEAN)
+    such that A3:
+    L1.0= SP-Left(IP.M) &
+    R1.0= SP-Right(IP.M)
+    &
+    (for i be Element of NAT
+    st 0<=i & i <= k-1
+    holds
+    L1.(i+1)= R1.i
+    &
+    R1.(i+1)=Op-XOR(L1.i,F.(R1.i,RK/.(i+1))))
+    & p=IP". ((R1.k )^(L1.k ));
+
+    given L2,R2 be sequence of (n-tuples_on BOOLEAN) such that
+A4: L2.0= SP-Left(IP.M) & R2.0= SP-Right(IP.M)
+    &
+    (for i be Element of NAT st 0<=i & i <= k-1 holds L2.(i+1)= R2.i
+    &
+    R2.(i+1)=Op-XOR(L2.i,F.(R2.i,RK/.(i+1))))
+    & q=IP". ((R2.k )^(L2.k ));
+
+    0+1<=k by INT_1:7;then
+    TK:1-1<= k-1 by XREAL_1:9;then
+    reconsider KD =k-1 as Element of NAT by INT_1:3;
+
+    defpred P[Element of NAT] means
+    (0<=$1 & $1 <= k-1)
+    implies
+    R1.($1+1) = R2.($1+1) & L1.($1+1) = L2.($1+1);
+    P0: P[0]
+    proof
+      Q1: L1.(0+1)
+      =R2.0 by A3,A4,TK
+      .=L2.(0+1) by A4,TK;
+
+      R1.(0+1)
+      =Op-XOR(L2.0,F.(R2.0,RK/.(0+1))) by A3,A4,TK
+      .=R2.(0+1) by A4,TK;
+      hence thesis by Q1;
+    end;
+    P1: now let i be Element of NAT;
+    assume P11: P[i];
+    thus P[i+1]
+    proof
+      assume P12: 0<=i+1 & i+1 <=k-1;
+      P14P:i <= i+1 by NAT_1:12;
+      Q1: L1.((i+1)+1)
+      =R2.(i+1) by P12,P11,P14P,A3,XXREAL_0:2
+      .=L2.((i+1)+1) by A4,P12;
+      R1.((i+1)+1)
+      =Op-XOR(L1.(i+1),F.(R1.(i+1),RK/.((i+1)+1))) by A3,P12;
+      hence thesis by Q1,A4,P12,P11,P14P,XXREAL_0:2;
+    end;
+  end;
+  for i be Element of NAT holds P[i] from NAT_1:sch 1(P0,P1);
+  then P[KD];
+  hence thesis by A3,A4;
+end;
+end;
+
+theorem THMAINgen:
+  for n,m,k be non empty Element of NAT,
+  RK be Element of k-tuples_on (m-tuples_on BOOLEAN),
+  F be Function of [:n-tuples_on BOOLEAN,m-tuples_on BOOLEAN:],
+  n-tuples_on BOOLEAN,
+  IP be Permutation of (2*n)-tuples_on BOOLEAN,
+  M be Element of (2*n)-tuples_on BOOLEAN holds
+  DES-like-CoDec(DES-like-CoDec(M,F,IP,RK),F,IP,Rev(RK))=M
+  proof
+    let n,m,k be non empty Element of NAT,
+    RK be Element of k-tuples_on (m-tuples_on BOOLEAN),
+    F be Function of [:n-tuples_on BOOLEAN,m-tuples_on BOOLEAN:],
+    n-tuples_on BOOLEAN,
+    IP be Permutation of (2*n)-tuples_on BOOLEAN,
+    M be Element of (2*n)-tuples_on BOOLEAN;
+
+    set REVRKS= Rev (RK);
+    set EM=DES-like-CoDec(M,F,IP,RK);
+    consider L,R be sequence of (n-tuples_on BOOLEAN) such that
+    P1:L.0= SP-Left(IP.M) & R.0= SP-Right(IP.M)
+    & (for i be Element of NAT
+    st 0<=i & i <= k-1 holds
+    L.(i+1)= R.i &
+    R.(i+1)=Op-XOR(L.i,F.(R.i,RK/.(i+1)))) &
+    EM=IP".((R.k )^(L.k)) by defOPDESlike;
+
+    consider LB,RB be sequence of (n-tuples_on BOOLEAN) such that
+    P2: LB.0= SP-Left(IP.EM) & RB.0= SP-Right(IP.EM) &
+    (for i be Element of NAT
+    st 0<=i & i <=k-1 holds LB.(i+1)= RB.i &
+    RB.(i+1)=Op-XOR(LB.i,F.(RB.i,REVRKS/.(i+1))))
+    & DES-like-CoDec(EM,F,IP,REVRKS)
+    =IP". ((RB.k )^(LB.k )) by defOPDESlike;
+
+    defpred P[Nat] means $1 <=k implies
+    (LB.$1 = R.(k-$1) & RB.$1 = L.(k-$1) );
+    PN0: P[0]
+    proof
+      Q1: len (R.k) =n by CARD_1:def 7;
+      rng IP = (2*n)-tuples_on BOOLEAN by FUNCT_2:def 3;
+      then
+      X2:(R.k)^(L.k) in rng IP by FINSEQ_2:131;
+
+      LIPEM: IP.EM = (R.k)^(L.k) by X2,P1,FUNCT_1:35;
+
+      ATLK: len (R.k) =n by CARD_1:def 7;
+
+      ((R.k)^(L.k) )| n
+      = ((R.k)^(L.k) )| (dom (R.k)) by Q1,FINSEQ_1:def 3
+      .= R.k by FINSEQ_1:21;
+      hence thesis by P2,ATLK,LIPEM,FINSEQ_5:37;
+    end;
+    PN1: for i be Element of NAT st P[i] holds P[i+1]
+    proof
+      let i be Element of NAT;
+      assume PN11: P[i];
+      now assume
+        PN12: i+1 <= k;
+        PN13P:i <= i+1 by NAT_1:11;
+        then
+        PN13: i <= k by PN12,XXREAL_0:2;
+        XX0:(i+1)-(i+1) <= k -(i+1) by PN12,XREAL_1:9;
+        IX1P:(k-1) - i <= (k-1)-0 by XREAL_1:13;
+        i-i <= k-i by PN13,XREAL_1:9;
+        then
+        reconsider i16=k-i as Element of NAT by INT_1:3;
+        reconsider i161 = k-(i+1) as Element of NAT
+        by XX0,INT_1:3;
+        PN15:
+        i+1 -1 <= k-1 by PN12,XREAL_1:9;
+        then
+        PN16:
+        LB.(i+1)= RB.i &
+        RB.(i+1)=Op-XOR(LB.i,F.(RB.i,REVRKS/.(i+1))) by P2;
+        reconsider Ki=REVRKS/.(i+1)
+        as Element of m-tuples_on BOOLEAN;
+        Y1: RB.i =L.(k-(i+1) +1 )
+        by PN11,PN12,PN13P,XXREAL_0:2
+        .=R.(i161) by P1,IX1P;
+        Y12: len RK = k by CARD_1:def 7;
+        1<= (i+1) & (i+1) <=k by PN12,NAT_1:11;
+        then
+        (i+1) in Seg k;
+        then
+        Y10: (i+1) in dom RK by Y12,FINSEQ_1:def 3;
+        then
+        Y11: (i+1) in dom REVRKS by FINSEQ_5:57;
+        Y130: k-i <= k-0 by XREAL_1:10;
+        k-(k-1) <= k-i by PN15,XREAL_1:10;
+        then
+        i16 in Seg k by Y130;
+        then
+        Y13: (k -i) in dom RK by Y12,FINSEQ_1:def 3;
+        Y2: REVRKS/.(i+1)
+        = REVRKS.(i+1) by Y11,PARTFUN1:def 6
+        .= RK.(len RK -(i+1) +1) by Y10,FINSEQ_5:58
+        .= RK/.(k -i) by Y13,Y12,PARTFUN1:def 6;
+        LB.i=Op-XOR(L.(i161),F.(R.(i161),RK/.(i161+1)))
+        by P1,IX1P,PN11,PN12,PN13P,XXREAL_0:2
+        .=Op-XOR(L.(i161),F.(R.(i161),Ki)) by Y2;
+        hence LB.(i+1) = R.(k-(i+1)) &
+        RB.(i+1) = L.(k-(i+1)) by PN16,Y1,LM011;
+      end;
+      hence thesis;
+    end;
+    for i be Element of NAT holds P[i] from NAT_1:sch 1(PN0,PN1);
+    then
+    LB.k = R.(k-k) & RB.k = L.(k-k);then
+    (RB.k )^(LB.k ) = IP.M by SPLR,P1;
+    hence thesis by P2,FUNCT_2:26;
+  end;
+
+definition
+  let RK be Element of (16-tuples_on (48-tuples_on BOOLEAN)),
+  F be Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+  32-tuples_on BOOLEAN,
+  IP be Permutation of 64-tuples_on BOOLEAN,
+  M be Element of 64-tuples_on BOOLEAN;
+  func DES-CoDec(M,F,IP,RK) -> Element of 64-tuples_on BOOLEAN
+  means :defDESCODEC:
+  ex IPX be Permutation of (2*32)-tuples_on BOOLEAN,
+  MX be Element of (2*32)-tuples_on BOOLEAN st
+  IPX=IP & MX =M & it =DES-like-CoDec(MX,F,IPX,RK);
+  existence
+  proof
+    reconsider IPX = IP as Permutation of (2*32)-tuples_on BOOLEAN;
+    reconsider MX = M as Element of (2*32)-tuples_on BOOLEAN;
+    reconsider CM =DES-like-CoDec(MX,F,IPX,RK)
+    as Element of 64-tuples_on BOOLEAN;
+    take CM;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+theorem THMAIN:
+  for RK be Element of 16-tuples_on (48-tuples_on BOOLEAN),
+  F be Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+  32-tuples_on BOOLEAN,
+  IP be Permutation of 64-tuples_on BOOLEAN,
+  M be Element of 64-tuples_on BOOLEAN holds
+  DES-CoDec(DES-CoDec(M,F,IP,RK),F,IP,Rev(RK))=M
+  proof
+    let RK be Element of 16-tuples_on (48-tuples_on BOOLEAN),
+    F be Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+    32-tuples_on BOOLEAN,
+    IP be Permutation of 64-tuples_on BOOLEAN,
+    M be Element of 64-tuples_on BOOLEAN;
+    reconsider IPX = IP as Permutation of (2*32)-tuples_on BOOLEAN;
+    reconsider MX = M as Element of (2*32)-tuples_on BOOLEAN;
+    reconsider EM = DES-like-CoDec(MX,F,IPX,RK)
+    as Element of (2*32)-tuples_on BOOLEAN;
+    reconsider EM64 = DES-CoDec(M,F,IP,RK) as Element of 64-tuples_on BOOLEAN;
+    EM=EM64 by defDESCODEC;
+    then
+    DES-like-CoDec(EM,F,IPX,Rev(RK))
+    =DES-CoDec(EM64,F,IP,Rev(RK)) by defDESCODEC;
+    hence thesis by THMAINgen;
+  end;
+
+definition
+  let plaintext,secretkey be Element of 64-tuples_on BOOLEAN;
+  func DES-ENC(plaintext,secretkey) -> Element of 64-tuples_on BOOLEAN
+  equals
+  DES-CoDec (plaintext,DES-FFUNC,DES-PIP,DES-KS(secretkey));
+  correctness;
+end;
+
+definition
+  let ciphertext,secretkey be Element of 64-tuples_on BOOLEAN;
+  func DES-DEC(ciphertext,secretkey) -> Element of 64-tuples_on BOOLEAN
+  equals
+  DES-CoDec (ciphertext,DES-FFUNC,DES-PIP,Rev(DES-KS(secretkey)));
+  correctness;
+end;
+
+theorem
+  for message,secretkey be Element of 64-tuples_on BOOLEAN
+  holds DES-DEC(DES-ENC(message,secretkey),secretkey) = message by THMAIN;

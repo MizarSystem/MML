@@ -11,6 +11,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="WELLORD2"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -46,7 +47,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="22">
+<Adjective nr="25">
 <Func kind="K" nr="11">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -76,7 +77,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="83">
+<Func kind="K" nr="91">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -131,7 +132,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="30">
+<Pred kind="V" nr="33">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -148,7 +149,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="V" nr="30">
+<Pred kind="V" nr="33">
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
@@ -342,8 +343,8 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="28"/>
-<Adjective nr="37"/>
+<Adjective nr="31"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -358,8 +359,8 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="28"/>
-<Adjective nr="37"/>
+<Adjective nr="31"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Not>
@@ -376,9 +377,9 @@
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="124">
+<Func kind="K" nr="133">
 <Var nr="1"/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="135">
 <Var nr="2"/>
 </Func>
 </Func>

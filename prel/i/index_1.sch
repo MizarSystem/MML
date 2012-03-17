@@ -2,14 +2,15 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="ORDINAL1"/>
@@ -23,43 +24,44 @@
 <ArticleID name="OPPCAT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="CAT_5"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="NATTRA_1"/>
+<ArticleID name="ISOCAT_1"/>
 <ArticleID name="INDEX_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="4" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4">
+<Adjective nr="7"/>
+<Adjective nr="10">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="12"/>
+<Adjective nr="17">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="76"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4">
+<Adjective nr="7"/>
+<Adjective nr="10">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="6"/>
-<Adjective nr="14">
+<Adjective nr="12"/>
+<Adjective nr="17">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="76"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -68,7 +70,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="24">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -81,7 +83,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="13">
+<Func kind="K" nr="48">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -104,12 +106,12 @@
 </Func>
 <Typ kind="M" nr="12">
 <Cluster/>
-<Func kind="K" nr="250">
+<Func kind="K" nr="266">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="250">
+<Func kind="K" nr="266">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>

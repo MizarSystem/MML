@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -32,17 +33,17 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="37" value="false"/>
 <Adjective nr="41" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="81"/>
-<Adjective nr="86"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="67"/>
 <Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="97"/>
-<Adjective nr="99"/>
-<Adjective nr="104"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="103"/>
 <Adjective nr="105"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -51,27 +52,27 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="108">
+<Adjective nr="41" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="114">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="109">
+<Adjective nr="115">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="110">
+<Adjective nr="116">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="111">
+<Adjective nr="117">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="122">
+<Adjective nr="129">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="124">
+<Adjective nr="131">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

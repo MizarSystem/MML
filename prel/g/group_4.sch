@@ -10,6 +10,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -28,9 +29,9 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -38,7 +39,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="70"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -47,11 +48,11 @@
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="46">
+<Func kind="K" nr="44">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="21">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -62,7 +63,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="70"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -91,7 +92,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="70"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -107,9 +108,9 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -122,14 +123,14 @@
 <And>
 <Pred kind="R" nr="14">
 <Var nr="1"/>
-<Func kind="K" nr="156">
+<Func kind="K" nr="164">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="70"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

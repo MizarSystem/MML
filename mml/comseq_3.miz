@@ -2,7 +2,7 @@
 ::  by Yasunari Shidama and Artur Korni{\l}owicz
 ::
 :: Received June 25, 1997
-:: Copyright (c) 1997-2011 Association of Mizar Users
+:: Copyright (c) 1997-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,19 +18,19 @@ environ
       ARYTM_3, RELAT_1, XCMPLX_0, FUNCT_1, SERIES_1, XREAL_0, ORDINAL1,
       XXREAL_0, ARYTM_1, FUNCOP_1, SEQ_2, VALUED_0, ORDINAL2, NAT_1, PREPOWER,
       NEWTON, SQUARE_1, VALUED_1, CARD_3, POWER, XXREAL_2, COMSEQ_3, PARTFUN1,
-      TARSKI, FUNCT_2;
+      TARSKI;
  notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0,
-      COMPLEX1, REAL_1, NEWTON, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1,
-      VALUED_1, SEQ_1, SEQ_2, NAT_1, VALUED_0, SERIES_1, SQUARE_1, POWER,
-      COMSEQ_1, COMSEQ_2;
+      COMPLEX1, REAL_1, NEWTON, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, VALUED_1, SEQ_1, SEQ_2, NAT_1, VALUED_0, SERIES_1, SQUARE_1,
+      POWER, COMSEQ_1, COMSEQ_2;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
       SEQM_3, COMSEQ_2, NEWTON, SERIES_1, SEQ_1, RECDEF_1, SEQ_2, VALUED_1,
       SEQ_4, RELSET_1, BINOP_2, RVSUM_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, COMSEQ_2, NEWTON, VALUED_0, VALUED_1,
-      FUNCOP_1, SEQ_4;
+      FUNCOP_1, SEQ_4, SERIES_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions SEQ_2, COMSEQ_2, SERIES_1, SQUARE_1, VALUED_0, VALUED_1;
+ definitions COMSEQ_2, SEQ_2, SERIES_1, SQUARE_1, VALUED_0, VALUED_1;
  theorems NAT_1, ABSVALUE, SEQ_1, SEQ_2, SERIES_1, SEQM_3, SEQ_4, POWER,
       COMPLEX1, COMSEQ_2, SQUARE_1, FUNCT_2, XREAL_0, XCMPLX_0, XCMPLX_1,
       FUNCOP_1, XREAL_1, NEWTON, XXREAL_0, ORDINAL1, VALUED_0, VALUED_1,
@@ -100,7 +100,7 @@ end;
 
 registration
   cluster absolutely_summable -> summable for Real_Sequence;
-  coherence by SERIES_1:35;
+  coherence;
 end;
 
 registration
@@ -824,7 +824,18 @@ proof
 end;
 
 definition
+  let s be Complex_Sequence;
+  redefine func Partial_Sums s -> Complex_Sequence;
+  coherence
+   proof
+A1:   dom Partial_Sums s = NAT by PARTFUN1:def 2;
+     rng Partial_Sums s c= COMPLEX by VALUED_0:def 1;
+     then Partial_Sums s is PartFunc of NAT, COMPLEX by A1,RELSET_1:4;
+    hence Partial_Sums s is Complex_Sequence;
+   end;
+end;
 
+definition
   let seq be Complex_Sequence;
   func Sum seq -> Element of COMPLEX equals
   lim Partial_Sums seq;
@@ -981,7 +992,7 @@ A3: P[0];
 end;
 
 theorem
-  |.Partial_Sums(seq).k.| <= Partial_Sums(|.seq.|).k
+  |.Partial_Sums(seq).k.| <= (Partial_Sums |.seq.|).k
 proof
   defpred P[Element of NAT] means |. Partial_Sums(seq).$1 .| <= Partial_Sums(
   |.seq.|).$1;
@@ -1167,7 +1178,7 @@ end;
 
 registration
   let seq be Complex_Sequence;
-  cluster Partial_Sums |.seq.| -> non-decreasing;
+  cluster Partial_Sums |.seq.| -> non-decreasing for Real_Sequence;
   coherence by Th34;
 end;
 
@@ -1332,7 +1343,7 @@ A15:    abs(a.m-a1) + abs(b.m-b1)< p/2+ p/2 by A14,XREAL_1:8;
   end;
   assume c is convergent;
   then consider z such that
-A16: for p st 0<p ex n st for m st n <= m holds |.c.m-z.| < p by COMSEQ_2:def 4
+A16: for p st 0<p ex n st for m st n <= m holds |.c.m-z.| < p by COMSEQ_2:def 5
 ;
   thus a is convergent
   proof
@@ -1415,7 +1426,7 @@ A12: Im(c.m-g)=b.m-lim(b) by COMPLEX1:19;
     |.c.m-g.| <= abs(Re(c.m-g)) + abs(Im(c.m-g)) by Th12;
     hence thesis by A10,A11,A12,XXREAL_0:2;
   end;
-  hence thesis by A2,COMSEQ_2:def 5;
+  hence thesis by A2,COMSEQ_2:def 6;
 end;
 
 theorem Th40:
@@ -1434,7 +1445,7 @@ A2: for p being real number st 0<p ex n st for m st n<=m holds abs(b.m-Im(
 A3: p>0;
     p is Real by XREAL_0:def 1;
     then consider n such that
-A4: for m st n <= m holds |.c.m-lim(c).| < p by A3,COMSEQ_2:def 5;
+A4: for m st n <= m holds |.c.m-lim(c).| < p by A3,COMSEQ_2:def 6;
     take n;
     let m;
     assume n <= m;
@@ -1452,7 +1463,7 @@ A6: for p being real number st 0<p ex n st for m st n<=m holds abs(a.m-Re(
 A7: 0<p;
     p is Real by XREAL_0:def 1;
     then consider n such that
-A8: for m st n <= m holds |.c.m-lim(c).| < p by A7,COMSEQ_2:def 5;
+A8: for m st n <= m holds |.c.m-lim(c).| < p by A7,COMSEQ_2:def 6;
     take n;
     let m;
     Re(c.m) =a.m by A1;
@@ -1687,7 +1698,7 @@ A9:   |.seq.m-seq.n.|<p by A8;
     assume seq is convergent;
     then consider z such that
 A10: for p st 0<p holds ex n st for m st n <= m holds |.seq.m-z.|<p by
-COMSEQ_2:def 4;
+COMSEQ_2:def 5;
     let p;
     assume 0< p;
     then consider n such that
@@ -1850,7 +1861,7 @@ definition
 
   let seq be Complex_Sequence;
   attr seq is summable means
-  :Def12:
+  :Def8:
   Partial_Sums seq is convergent;
 end;
 
@@ -1871,18 +1882,18 @@ end;
 
 registration
   let seq be summable Complex_Sequence;
-  cluster Partial_Sums seq -> convergent;
-  coherence by Def12;
+  cluster Partial_Sums seq -> convergent for Complex_Sequence;
+  coherence by Def8;
 end;
 
 definition
-  let seq;
+  let seq be Complex_Sequence;
   attr seq is absolutely_summable means
-  :Def13:
+  :Def9:
   |.seq.| is summable;
 end;
 
-theorem Th52:
+theorem Th51:
   (for n holds seq.n = 0c) implies seq is absolutely_summable
 proof
   assume
@@ -1903,17 +1914,17 @@ registration
   proof
     take D;
     for n holds D.n = 0c by FUNCOP_1:7;
-    hence thesis by Th52;
+    hence thesis by Th51;
   end;
 end;
 
 registration
   let seq be absolutely_summable Complex_Sequence;
   cluster |.seq.| -> summable for Real_Sequence;
-  coherence by Def13;
+  coherence by Def9;
 end;
 
-theorem Th53:
+theorem Th52:
   seq is summable implies seq is convergent & lim seq = 0c
 proof
   assume
@@ -1936,10 +1947,10 @@ end;
 
 registration
   cluster summable -> convergent for Complex_Sequence;
-  coherence by Th53;
+  coherence by Th52;
 end;
 
-theorem Th54:
+theorem Th53:
   seq is summable implies Re seq is summable & Im seq is summable
   & Sum(seq)= Sum(Re seq)+Sum(Im seq)*<i>
 proof
@@ -1961,12 +1972,12 @@ end;
 registration
   let seq be summable Complex_Sequence;
   cluster Re seq -> summable for Real_Sequence;
-  coherence by Th54;
+  coherence by Th53;
   cluster Im seq -> summable for Real_Sequence;
-  coherence by Th54;
+  coherence by Th53;
 end;
 
-theorem Th55:
+theorem Th54:
   seq1 is summable & seq2 is summable implies seq1+seq2 is
   summable & Sum(seq1+seq2)= Sum(seq1)+Sum(seq2)
 proof
@@ -1977,10 +1988,10 @@ A2: Partial_Sums(seq1)+Partial_Sums(seq2) is convergent;
 A3: Partial_Sums(seq1)+Partial_Sums(seq2) =Partial_Sums(seq1+seq2) by Th27;
   Sum(seq1+seq2)=lim(Partial_Sums(seq1)+Partial_Sums(seq2)) by Th27
     .=lim(Partial_Sums(seq1))+lim(Partial_Sums(seq2)) by A1,COMSEQ_2:14;
-  hence thesis by A2,A3,Def12;
+  hence thesis by A2,A3,Def8;
 end;
 
-theorem Th56:
+theorem Th55:
   seq1 is summable & seq2 is summable implies seq1-seq2 is
   summable & Sum(seq1-seq2)= Sum(seq1)-Sum(seq2)
 proof
@@ -1991,18 +2002,18 @@ A2: Partial_Sums(seq1)-Partial_Sums(seq2) is convergent;
 A3: Partial_Sums(seq1)-Partial_Sums(seq2) =Partial_Sums(seq1-seq2) by Th28;
   Sum(seq1-seq2)=lim(Partial_Sums(seq1)-Partial_Sums(seq2)) by Th28
     .=lim(Partial_Sums(seq1))-lim(Partial_Sums(seq2)) by A1,COMSEQ_2:26;
-  hence thesis by A2,A3,Def12;
+  hence thesis by A2,A3,Def8;
 end;
 
 registration
   let seq1, seq2 be summable Complex_Sequence;
   cluster seq1 + seq2 -> summable for Complex_Sequence;
-  coherence by Th55;
+  coherence by Th54;
   cluster seq1 - seq2 -> summable for Complex_Sequence;
-  coherence by Th56;
+  coherence by Th55;
 end;
 
-theorem Th57:
+theorem Th56:
   seq is summable implies for z being complex number holds z (#)
   seq is summable & Sum(z (#) seq)= z * Sum(seq)
 proof
@@ -2012,16 +2023,16 @@ A1: seq is summable;
 A2: Partial_Sums(z (#) seq)=(z (#) Partial_Sums(seq)) by Th29;
   Sum(z (#) seq)=lim((z (#) Partial_Sums(seq))) by Th29
     .=z * Sum(seq) by A1,COMSEQ_2:18;
-  hence thesis by A1,A2,Def12;
+  hence thesis by A1,A2,Def8;
 end;
 
 registration
   let z be Element of COMPLEX, seq be summable Complex_Sequence;
   cluster z (#) seq -> summable for Complex_Sequence;
-  coherence by Th57;
+  coherence by Th56;
 end;
 
-theorem Th58:
+theorem Th57:
   Re seq is summable & Im seq is summable implies seq is summable
   & Sum(seq)=Sum(Re seq)+Sum(Im seq)*<i>
 proof
@@ -2040,10 +2051,10 @@ A6: lim(Re Partial_Sums(seq))=lim(Partial_Sums(Re seq)) & lim(Im
   Partial_Sums( seq))=lim(Partial_Sums(Im seq)) by Th26;
   Partial_Sums(seq) is convergent & lim(Re Partial_Sums(seq))=Re(lim(
   Partial_Sums(seq))) by A4,A3,Th42;
-  hence thesis by A6,A5,Def12,COMPLEX1:13;
+  hence thesis by A6,A5,Def8,COMPLEX1:13;
 end;
 
-theorem Th59:
+theorem Th58:
   seq is summable implies for n holds seq^\n is summable
 proof
   assume
@@ -2051,13 +2062,13 @@ A1: seq is summable;
     let n;
 A2: Re (seq^\n)=Re seq^\n & Im(seq^\n)=Im seq^\n by Th23;
     Re seq^\n is summable & Im seq^\n is summable by A1,SERIES_1:12;
-    hence seq^\n is summable by A2,Th58;
+    hence seq^\n is summable by A2,Th57;
 end;
 
 registration
   let seq be summable Complex_Sequence, n be Element of NAT;
   cluster seq^\n -> summable for Complex_Sequence;
-  coherence by Th59;
+  coherence by Th58;
 end;
 
 theorem
@@ -2070,7 +2081,7 @@ A1: seq^\n is summable;
 A2: Im seq is summable by A1,SERIES_1:13;
   Re (seq^\n)=Re seq^\n by Th23;
   then Re seq is summable by A1,SERIES_1:13;
-  hence thesis by A2,Th58;
+  hence thesis by A2,Th57;
 end;
 
 theorem
@@ -2079,11 +2090,11 @@ theorem
 proof
   assume
 A1: seq is summable;
-  then Sum(seq)=Sum(Re(seq))+(Sum(Im(seq)))*<i> by Th54;
+  then Sum(seq)=Sum(Re(seq))+(Sum(Im(seq)))*<i> by Th53;
   then
 A2: Re(Sum(seq))=Sum(Re(seq)) & Im(Sum(seq))=Sum(Im(seq)) by COMPLEX1:12;
   let n;
-A3: Sum(seq^\(n+1)) = Sum(Re(seq^\(n+1)))+(Sum(Im(seq^\(n+1))))*<i> by A1,Th54;
+A3: Sum(seq^\(n+1)) = Sum(Re(seq^\(n+1)))+(Sum(Im(seq^\(n+1))))*<i> by A1,Th53;
 A4: Sum(Im(seq)) =Partial_Sums(Im(seq)).n + Sum(Im(seq)^\(n+1)) by A1,
 SERIES_1:15
     .=Im(Partial_Sums(seq)).n + Sum(Im(seq)^\(n+1)) by Th26
@@ -2100,22 +2111,22 @@ SERIES_1:15
   hence thesis by A2,A4,COMPLEX1:def 3;
 end;
 
-theorem Th62:
+theorem Th61:
   Partial_Sums |.seq.| is bounded_above iff seq is absolutely_summable
 proof
   for n holds 0 <= |.seq.|.n by Lm3;
   then Partial_Sums(|.seq.|) is bounded_above iff |.seq.| is summable by
 SERIES_1:17;
-  hence thesis by Def13;
+  hence thesis by Def9;
 end;
 
 registration
   let seq be absolutely_summable Complex_Sequence;
-  cluster Partial_Sums |.seq.| -> bounded_above;
-  coherence by Th62;
+  cluster Partial_Sums |.seq.| -> bounded_above for Real_Sequence;
+  coherence by Th61;
 end;
 
-theorem Th63:
+theorem Th62:
   seq is summable iff for p st 0<p holds ex n st for m st n <= m
   holds |.Partial_Sums(seq).m-Partial_Sums(seq).n.|<p
 proof
@@ -2123,12 +2134,12 @@ proof
     assume for p st 0<p holds ex n st for m st n <= m holds |.Partial_Sums(
     seq).m-Partial_Sums(seq).n.|< p;
     then Partial_Sums(seq) is convergent by Th46;
-    hence seq is summable by Def12;
+    hence seq is summable by Def8;
   end;
   hence thesis by Th46;
 end;
 
-theorem Th64:
+theorem Th63:
   seq is absolutely_summable implies seq is summable
 proof
   assume
@@ -2148,12 +2159,12 @@ A3: abs(Partial_Sums(|.seq.|).m-Partial_Sums(|.seq.|).n)< p by A2;
     .|).m-Partial_Sums(|.seq.|).n) by Th31;
     hence |.Partial_Sums(seq).m-Partial_Sums(seq).n.| <p by A3,XXREAL_0:2;
   end;
-  hence thesis by Th63;
+  hence thesis by Th62;
 end;
 
 registration
   cluster absolutely_summable -> summable for Complex_Sequence;
-  coherence by Th64;
+  coherence by Th63;
 end;
 
 registration
@@ -2166,7 +2177,7 @@ registration
   end;
 end;
 
-theorem Th65:
+theorem Th64:
   |.z.| < 1 implies z GeoSeq is summable & Sum(z GeoSeq) = 1r/(1r- z)
 proof
   set seq2 = NAT --> 1r;
@@ -2218,10 +2229,10 @@ A2: for n holds seq.(n+1) = z * seq.n;
   end;
   then
 A3: Partial_Sums(seq)=(seq.0 (#) Partial_Sums(z GeoSeq)) by FUNCT_2:63;
-A4: z GeoSeq is summable by A1,Th65;
-  hence seq is summable by A3,Def12;
+A4: z GeoSeq is summable by A1,Th64;
+  hence seq is summable by A3,Def8;
   Sum seq=seq.0 * Sum(z GeoSeq) by A3,A4,COMSEQ_2:18
-    .=seq.0 * (1r/(1r-z)) by A1,Th65
+    .=seq.0 * (1r/(1r-z)) by A1,Th64
     .=seq.0 * 1r/(1r-z) by XCMPLX_1:74
     .=seq.0/(1r-z) by COMPLEX1:def 4;
   hence thesis;
@@ -2307,7 +2318,7 @@ proof
   then for n holds |.seq.| is non-increasing & |.seq.|.n >= 0 & rseq1.n = 2
   to_power n * |.seq.|.(2 to_power n) by Lm3;
   then |.seq.| is summable iff rseq1 is summable by SERIES_1:31;
-  hence thesis by Def13;
+  hence thesis by Def9;
 end;
 
 theorem
@@ -2316,7 +2327,7 @@ theorem
 proof
   assume p>1 & for n st n>=1 holds |.seq.|.n = 1/n to_power p;
   then |.seq.| is summable by SERIES_1:32;
-  hence thesis by Def13;
+  hence thesis by Def9;
 end;
 
 theorem
@@ -2340,7 +2351,7 @@ COMPLEX1:47;
 ,A3,COMPLEX1:47;
   end;
   then |.seq.| is absolutely_summable by A2,SERIES_1:37;
-  hence thesis by Def13;
+  hence thesis by Def9;
 end;
 
 theorem

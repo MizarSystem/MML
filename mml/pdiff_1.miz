@@ -2,7 +2,7 @@
 ::  by Noboru Endou , Yasunari Shidama and Keiichi Miyajima
 ::
 :: Received June 6, 2007
-:: Copyright (c) 2007-2011 Association of Mizar Users
+:: Copyright (c) 2007-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,32 +19,32 @@ environ
       FDIFF_1, STRUCT_0, RLVECT_1, NORMSP_1, COMPLEX1, ARYTM_3, REAL_1,
       ARYTM_1, SQUARE_1, RVSUM_1, LOPBAN_1, XXREAL_0, CARD_1, SUPINF_2,
       SUPINF_1, SEQ_1, VALUED_1, SEQ_2, ORDINAL2, XREAL_0, ORDINAL1, VALUED_0,
-      TARSKI, XXREAL_2, NAT_1, RCOMP_1, XXREAL_1, PDIFF_1;
+      TARSKI, NAT_1, RCOMP_1, XXREAL_1, PDIFF_1, FCONT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, PRE_TOPC, STRUCT_0, XREAL_0, COMPLEX1, ORDINAL1, NUMBERS,
       REAL_1, RLVECT_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2, RVSUM_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_7, SQUARE_1, RCOMP_1, VFUNCT_1, NORMSP_0, NORMSP_1,
       EUCLID, LOPBAN_1, NFCONT_1, FDIFF_1, NDIFF_1, REAL_NS1, XXREAL_0,
       EXTREAL1, SUPINF_1;
- constructors REAL_1, SQUARE_1, RSSPACE3, SEQ_2, PARTFUN1, RFUNCT_2, FINSEQ_7,
-      VFUNCT_1, COMPLEX1, NFCONT_1, RCOMP_1, FDIFF_1, NDIFF_1, REAL_NS1,
-      EXTREAL1, SEQ_1, RVSUM_1, NORMSP_1, RELSET_1, BINOP_2;
+ constructors REAL_1, SQUARE_1, RSSPACE3, SEQ_2, FINSEQ_7, VFUNCT_1, COMPLEX1,
+      NFCONT_1, RCOMP_1, FDIFF_1, NDIFF_1, REAL_NS1, EXTREAL1, SEQ_1, RVSUM_1,
+      RELSET_1, BINOP_2, COMSEQ_2;
  registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, LOPBAN_1,
       FDIFF_1, NDIFF_1, FUNCT_1, FUNCT_2, NAT_1, REAL_NS1, NUMBERS, XBOOLE_0,
-      XXREAL_0, VALUED_0, VALUED_1, EUCLID, CARD_1;
+      XXREAL_0, VALUED_0, VALUED_1, EUCLID;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, LOPBAN_1, EUCLID;
  theorems TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, XREAL_0, RCOMP_1, RLVECT_1,
       SEQ_4, COMPLEX1, SEQ_1, SEQ_2, FINSEQ_1, FINSEQ_2, FINSEQ_7, RVSUM_1,
       RELAT_1, FUNCT_1, VFUNCT_1, FUNCT_2, NORMSP_1, LOPBAN_1, PARTFUN1,
       PARTFUN2, NFCONT_1, FDIFF_1, NDIFF_1, FRECHET, REAL_NS1, EXTREAL2,
-      NUMBERS, VALUED_1, GRCAT_1, NORMSP_0, CARD_1;
+      NUMBERS, VALUED_1, VECTSP_1, NORMSP_0, CARD_1;
  schemes SEQ_1, FUNCT_2, GRAPH_5;
 
 begin :: Preliminaries
 
 definition
-  let i,n be natural number;
+  let i,n be Nat;
   func proj(i,n) -> Function of REAL n,REAL means
   :Def1:
   for x be Element of REAL n holds it.x=x.i;
@@ -131,7 +131,7 @@ A1: i in Seg n;
     let y be set;
     assume y in REAL;
     then reconsider y1 = y as Element of REAL;
-    reconsider x = n |-> y1 as Element of REAL n by FINSEQ_2:112;
+    reconsider x = n |-> y1 as Element of REAL n;
     f.x = x.i by Def1;
     then f.x = y by A1,FINSEQ_2:57;
     hence thesis;
@@ -189,7 +189,7 @@ PARTFUN1:9;
 end;
 
 definition
-  let n be natural number;
+  let n be Nat;
   let g be PartFunc of REAL n,REAL;
   func <>*g -> PartFunc of REAL n,REAL 1 equals
   proj(1,1) qua Function" * g;
@@ -203,7 +203,7 @@ PARTFUN1:9;
 end;
 
 definition
-  let i,n be natural number;
+  let i,n be Nat;
   func Proj(i,n) -> Function of REAL-NS n,REAL-NS 1 means
   :Def4:
   for x be Point of REAL-NS n holds it.x=<* proj(i,n).x *>;
@@ -316,7 +316,7 @@ A2:   r=<*q*> by FINSEQ_2:97;
       hence thesis by A2;
     end;
     thus ex f being Function of REAL-NS 1,REAL-NS n st for r be Element of
-    REAL-NS 1 holds P[r,f.r] from FUNCT_2:sch 10(A1);
+    REAL-NS 1 holds P[r,f.r] from FUNCT_2:sch 3(A1);
   end;
   uniqueness
   proof
@@ -511,17 +511,18 @@ end;
 
 theorem Th5:
   for I be Function of REAL,REAL 1, J be Function of REAL 1,REAL st
-  I=proj(1,1) qua Function" & J=proj(1,1) holds (for R being REST of REAL-NS 1,
-  REAL-NS 1 holds J*R*I is REST) & for L being LinearOperator of REAL-NS 1,
-  REAL-NS 1 holds J*L*I is LINEAR
+  I=proj(1,1) qua Function" & J=proj(1,1) holds
+  (for R being RestFunc of REAL-NS 1, REAL-NS 1 holds J*R*I is RestFunc) &
+  for L being LinearOperator of REAL-NS 1, REAL-NS 1 holds
+  J*L*I is LinearFunc
 proof
   let I be Function of REAL,REAL 1, J be Function of REAL 1,REAL;
   assume that
 A1: I=proj(1,1) qua Function" and
 A2: J=proj(1,1);
-  thus for R being REST of REAL-NS 1, REAL-NS 1 holds J*R*I is REST
+  thus for R being RestFunc of REAL-NS 1, REAL-NS 1 holds J*R*I is RestFunc
   proof
-    let R be REST of REAL-NS 1,REAL-NS 1;
+    let R be RestFunc of REAL-NS 1,REAL-NS 1;
 A3: R is total by NDIFF_1:def 5;
     the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4;
     then reconsider R0=R as Function of REAL 1,REAL 1 by A3;
@@ -576,29 +577,26 @@ A17:    ||.z.||" = abs(z1)" by A1,Th3;
       end;
       hence thesis by A7;
     end;
-    for h be convergent_to_0 Real_Sequence holds h"(#)(R1/*h) is
+    for h be 0-convergent non-zero Real_Sequence holds h"(#)(R1/*h) is
     convergent & lim(h"(#)(R1/*h)) = 0
     proof
-      let h be convergent_to_0 Real_Sequence;
+      let h be 0-convergent non-zero Real_Sequence;
 A18:  now
         let r0 be real number;
         reconsider r = r0 as Real by XREAL_0:def 1;
-A19:    lim h = 0 by FDIFF_1:def 1;
+A19:    lim h = 0;
         assume r0 > 0;
         then consider d be Real such that
 A20:    d > 0 and
 A21:    for z1 be Real st z1 <> 0 & abs z1 < d holds abs(z1)" * abs(
         R1.z1) < r by A6;
         reconsider d1 =d as real number;
-        h is convergent by FDIFF_1:def 1;
-        then consider m be Element of NAT such that
+        consider m be Element of NAT such that
 A22:    for n be Element of NAT st m <= n holds abs(h.n-0) < d1 by A20,A19,
 SEQ_2:def 7;
         take m;
         hereby
           let n be Element of NAT;
-          h is non-zero by FDIFF_1:def 1;
-          then
 A23:      h.n <> 0 by SEQ_1:5;
           rng h c= dom R1 by A5;
           then
@@ -619,7 +617,8 @@ A24:      abs(h.n)" * abs(R1.(h.n)) = abs(h.n)" * abs((R1/*h).n) by FUNCT_2:108
     end;
     hence thesis by A4,FDIFF_1:def 2;
   end;
-  thus for L being LinearOperator of REAL-NS 1,REAL-NS 1 holds J*L*I is LINEAR
+  thus for L being LinearOperator of REAL-NS 1,REAL-NS 1 holds
+  J*L*I is LinearFunc
   proof
     let L be LinearOperator of REAL-NS 1,REAL-NS 1;
 A25: the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4;
@@ -649,25 +648,29 @@ end;
 
 theorem Th6:
   for I be Function of REAL,REAL 1, J be Function of REAL 1,REAL st
-I=proj(1,1) qua Function" & J=proj(1,1) holds (for R being REST holds I*R*J is
-  REST of REAL-NS 1,REAL-NS 1) & for L being LINEAR holds I*L*J is bounded
+I=proj(1,1) qua Function" & J=proj(1,1) holds
+(for R being RestFunc holds I*R*J is
+  RestFunc of REAL-NS 1,REAL-NS 1) &
+  for L being LinearFunc holds I*L*J is Lipschitzian
   LinearOperator of REAL-NS 1,REAL-NS 1
 proof
   let I be Function of REAL,REAL 1, J be Function of REAL 1,REAL;
   assume that
 A1: I=proj(1,1) qua Function" and
 A2: J=proj(1,1);
-  thus for R being REST holds I*R*J is REST of REAL-NS 1,REAL-NS 1
+  thus for R being RestFunc holds I*R*J is RestFunc of REAL-NS 1,REAL-NS 1
   proof
-    let R be REST;
+    let R be RestFunc;
     R is total by FDIFF_1:def 2;
     then reconsider R0=R as Function of REAL,REAL;
 A3: the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4;
     then reconsider R1 = I*R0*J as PartFunc of REAL-NS 1,REAL-NS 1;
-    for h be convergent_to_0 sequence of REAL-NS 1 holds ||.h.||"(#)(R1/*h
+    for h be (0.(REAL-NS 1))-convergent non-zero sequence
+    of REAL-NS 1 holds
+    ||.h.||"(#)(R1/*h
     ) is convergent & lim(||.h.||"(#)(R1/*h)) = 0.(REAL-NS 1)
     proof
-      let h be convergent_to_0 sequence of REAL-NS 1;
+      let h be (0.(REAL-NS 1))-convergent non-zero sequence of REAL-NS 1;
 A4:   lim h = 0.(REAL-NS 1) by NDIFF_1:def 4;
       deffunc F(Element of NAT)=J.(h.$1);
       consider s be Real_Sequence such that
@@ -696,57 +699,56 @@ A10:      ||. h.n .|| < p by RLVECT_1:13;
 A11:  s is convergent by SEQ_2:def 6;
       then
 A12:  lim s = 0 by A7,SEQ_2:def 7;
-A13:  h is non-zero by NDIFF_1:def 4;
       now
         let x be set;
         assume x in NAT;
         then reconsider n=x as Element of NAT;
-A14:    0 <= abs(s.n) by COMPLEX1:46;
-        h.n <> 0.(REAL-NS 1) by A13,NDIFF_1:6;
+A13:    0 <= abs(s.n) by COMPLEX1:46;
+        h.n <> 0.(REAL-NS 1) by NDIFF_1:6;
         then
-A15:    ||. h.n .|| <> 0 by NORMSP_0:def 5;
+A14:    ||. h.n .|| <> 0 by NORMSP_0:def 5;
         s.n = J.(h.n) by A5;
-        then abs(s.n) <> 0 by A2,A15,Th4;
-        hence s.x <> 0 by A14,COMPLEX1:47;
+        then abs(s.n) <> 0 by A2,A14,Th4;
+        hence s.x <> 0 by A13,COMPLEX1:47;
       end;
       then s is non-zero by SEQ_1:4;
-      then reconsider s as convergent_to_0 Real_Sequence by A11,A12,
+      then reconsider s as 0-convergent non-zero Real_Sequence by A11,A12,
 FDIFF_1:def 1;
-A16:  J*I =id REAL by A1,A2,Lm1,FUNCT_1:39;
+A15:  J*I =id REAL by A1,A2,Lm1,FUNCT_1:39;
       now
         reconsider f1=R1 as Function;
         let n be Element of NAT;
-A17:    rng h c= the carrier of REAL-NS 1;
+A16:    rng h c= the carrier of REAL-NS 1;
         h.n in the carrier of (REAL-NS 1);
         then
-A18:    h.n in (REAL 1) by REAL_NS1:def 4;
+A17:    h.n in (REAL 1) by REAL_NS1:def 4;
         R1 is total by A3;
         then (R/*s).n =R.(s.n) by FUNCT_2:115;
         then (R/*s).n =R.(J.(h.n)) by A5;
-        then (R/*s).n =(J*I).(R0.(J.(h.n))) by A16,FUNCT_1:18;
-        then (R/*s).n =(J*I).((R0*J).(h.n)) by A18,FUNCT_2:15;
+        then (R/*s).n =(J*I).(R0.(J.(h.n))) by A15,FUNCT_1:18;
+        then (R/*s).n =(J*I).((R0*J).(h.n)) by A17,FUNCT_2:15;
         then (R/*s).n =J.(I.((R0*J).(h.n))) by FUNCT_2:15;
         then
-A19:    (R/*s).n =J.((I*(R0*J)).(h.n)) by A18,FUNCT_2:15;
+A18:    (R/*s).n =J.((I*(R0*J)).(h.n)) by A17,FUNCT_2:15;
         NAT = dom h by FUNCT_2:def 1;
         then
-A20:    R1.(h.n) =(f1*h).n by FUNCT_1:13;
+A19:    R1.(h.n) =(f1*h).n by FUNCT_1:13;
         dom R1 = REAL 1 by FUNCT_2:def 1;
-        then rng h c= dom R1 by A17,REAL_NS1:def 4;
-        then R1.(h.n) =(R1/*h).n by A20,FUNCT_2:def 11;
+        then rng h c= dom R1 by A16,REAL_NS1:def 4;
+        then R1.(h.n) =(R1/*h).n by A19,FUNCT_2:def 11;
         then
-A21:    (R/*s).n =J.((R1/*h).n) by A19,RELAT_1:36;
-A22:    ||.h.n.|| >= 0 by NORMSP_1:4;
-A23:    s.n = J.(h.n) by A5;
+A20:    (R/*s).n =J.((R1/*h).n) by A18,RELAT_1:36;
+A21:    ||.h.n.|| >= 0 by NORMSP_1:4;
+A22:    s.n = J.(h.n) by A5;
         ||. ||.h.||"(#)(R1/*h).|| .n = ||.(||.h.||"(#)(R1/*h)).n .|| by
 NORMSP_0:def 4
           .= ||.(||.h.||").n * (R1/*h).n .|| by NDIFF_1:def 2
           .= abs((||.h.||").n) * ||.(R1/*h).n .|| by NORMSP_1:def 1
           .= abs((||.h.||.n)") * ||.(R1/*h).n .|| by VALUED_1:10
           .= abs(||.h.n.||") * ||.(R1/*h).n .|| by NORMSP_0:def 4
-          .= ||.h.n .||" *||.(R1/*h).n .|| by A22,ABSVALUE:def 1
-          .= (abs(s.n))" *||.(R1/*h).n .|| by A2,A23,Th4
-          .= (abs(s.n))" *abs((R/*s).n) by A2,A21,Th4
+          .= ||.h.n .||" *||.(R1/*h).n .|| by A21,ABSVALUE:def 1
+          .= (abs(s.n))" *||.(R1/*h).n .|| by A2,A22,Th4
+          .= (abs(s.n))" *abs((R/*s).n) by A2,A20,Th4
           .= (abs(s.n))" *(abs(R/*s)).n by SEQ_1:12
           .= ((abs s).n)" *(abs(R/*s)).n by SEQ_1:12
           .= ((abs s)").n *(abs(R/*s)).n by VALUED_1:10
@@ -755,93 +757,93 @@ NORMSP_0:def 4
         hence ||. ||.h.||"(#)(R1/*h) .|| .n = (abs(s"(#)(R/*s))).n by SEQ_1:52;
       end;
       then
-A24:  ||. ||.h.||"(#)(R1/*h) .|| = abs(s"(#)(R/*s)) by FUNCT_2:63;
-A25:  lim(s"(#)(R/*s))=0 by FDIFF_1:def 2;
-A26:  s"(#)(R/*s) is convergent by FDIFF_1:def 2;
+A23:  ||. ||.h.||"(#)(R1/*h) .|| = abs(s"(#)(R/*s)) by FUNCT_2:63;
+A24:  lim(s"(#)(R/*s))=0 by FDIFF_1:def 2;
+A25:  s"(#)(R/*s) is convergent by FDIFF_1:def 2;
       then lim abs(s"(#)(R/*s)) =abs lim(s"(#)(R/*s)) by SEQ_4:14;
       then
-A27:  lim abs(s"(#)(R/*s)) =0 by A25,ABSVALUE:2;
-A28:  abs(s"(#)(R/*s)) is convergent by A26,SEQ_4:13;
-A29:  now
+A26:  lim abs(s"(#)(R/*s)) =0 by A24,ABSVALUE:2;
+A27:  abs(s"(#)(R/*s)) is convergent by A25,SEQ_4:13;
+A28:  now
         let p be Real;
         assume 0 < p;
         then consider m be Element of NAT such that
-A30:    for n be Element of NAT st m <= n holds abs(||. ||.h.||"(#)(
-        R1/*h).||.n - 0) < p by A24,A28,A27,SEQ_2:def 7;
+A29:    for n be Element of NAT st m <= n holds abs(||. ||.h.||"(#)(
+        R1/*h).||.n - 0) < p by A23,A27,A26,SEQ_2:def 7;
         take m;
         hereby
           let n be Element of NAT;
           assume m <= n;
-          then abs(||. ||.h.||"(#)(R1/*h).|| .n - 0) < p by A30;
+          then abs(||. ||.h.||"(#)(R1/*h).|| .n - 0) < p by A29;
           then
-A31:      abs ||.(||.h.||"(#)(R1/*h)).n.|| < p by NORMSP_0:def 4;
+A30:      abs ||.(||.h.||"(#)(R1/*h)).n.|| < p by NORMSP_0:def 4;
           0 <= ||.(||.h.||"(#)(R1/*h)).n.|| by NORMSP_1:4;
-          then ||.(||.h.||"(#)(R1/*h)).n.|| < p by A31,ABSVALUE:def 1;
+          then ||.(||.h.||"(#)(R1/*h)).n.|| < p by A30,ABSVALUE:def 1;
           hence ||.(||.h.||"(#)(R1/*h)).n -0.(REAL-NS 1).|| < p by RLVECT_1:13;
         end;
       end;
       then ||.h.||"(#)(R1/*h) is convergent by NORMSP_1:def 6;
-      hence thesis by A29,NORMSP_1:def 7;
+      hence thesis by A28,NORMSP_1:def 7;
     end;
     hence thesis by A3,NDIFF_1:def 5;
   end;
-  thus for L being LINEAR holds I*L*J is bounded LinearOperator of REAL-NS 1,
-  REAL-NS 1
+  thus for L being LinearFunc holds I*L*J is Lipschitzian
+  LinearOperator of REAL-NS 1,REAL-NS 1
   proof
-    let L be LINEAR;
+    let L be LinearFunc;
     consider r be Real such that
-A32: for p be Real holds L.p = r * p by FDIFF_1:def 3;
+A31: for p be Real holds L.p = r * p by FDIFF_1:def 3;
     L is total by FDIFF_1:def 3;
     then reconsider L0 = L as Function of REAL,REAL;
     set K = abs r;
-A33: the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4;
+A32: the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4;
     I*L0*J is Function of REAL 1,REAL 1;
-    then reconsider L1 = I*L*J as Function of REAL-NS 1,REAL-NS 1 by A33;
-A34: dom L1 = REAL 1 by A33,FUNCT_2:def 1;
-A35: dom L0 = REAL by FUNCT_2:def 1;
-A36: now
+    then reconsider L1 = I*L*J as Function of REAL-NS 1,REAL-NS 1 by A32;
+A33: dom L1 = REAL 1 by A32,FUNCT_2:def 1;
+A34: dom L0 = REAL by FUNCT_2:def 1;
+A35: now
       let x,y be VECTOR of REAL-NS 1;
-      I.(L.(J.y)) = (I*L).(J.y) by A35,FUNCT_1:13;
+      I.(L.(J.y)) = (I*L).(J.y) by A34,FUNCT_1:13;
       then
-A37:  I.(L.(J.y)) = L1.y by A33,A34,FUNCT_1:12;
-      L1.(x+y) =(I*L).(J.(x+y)) by A33,A34,FUNCT_1:12;
+A36:  I.(L.(J.y)) = L1.y by A32,A33,FUNCT_1:12;
+      L1.(x+y) =(I*L).(J.(x+y)) by A32,A33,FUNCT_1:12;
       then L1.(x+y) =(I*L).(J.x+J.y) by A2,Th4;
-      then L1.(x+y) =I.(L.((J.x+J.y))) by A35,FUNCT_1:13;
-      then L1.(x+y) =I.(r*(J.x+J.y)) by A32;
+      then L1.(x+y) =I.(L.((J.x+J.y))) by A34,FUNCT_1:13;
+      then L1.(x+y) =I.(r*(J.x+J.y)) by A31;
       then L1.(x+y) =I.(r*J.x+r*J.y);
-      then L1.(x+y) =I.(L.(J.x)+(r*J.y)) by A32;
+      then L1.(x+y) =I.(L.(J.x)+(r*J.y)) by A31;
       then
-A38:  L1.(x+y) =I.(L.(J.x)+L.(J.y)) by A32;
-      I.(L.(J.x)) = (I*L).(J.x) by A35,FUNCT_1:13;
-      then I.(L.(J.x)) = L1.x by A33,A34,FUNCT_1:12;
-      hence L1.(x+y) =L1.x + L1.y by A1,A37,A38,Th3;
+A37:  L1.(x+y) =I.(L.(J.x)+L.(J.y)) by A31;
+      I.(L.(J.x)) = (I*L).(J.x) by A34,FUNCT_1:13;
+      then I.(L.(J.x)) = L1.x by A32,A33,FUNCT_1:12;
+      hence L1.(x+y) =L1.x + L1.y by A1,A36,A37,Th3;
     end;
     now
       let x be VECTOR of REAL-NS 1, a be Real;
-      L1.(a*x) =(I*L).(J.(a*x)) by A33,A34,FUNCT_1:12;
+      L1.(a*x) =(I*L).(J.(a*x)) by A32,A33,FUNCT_1:12;
       then L1.(a*x) =(I*L).(a*J.x) by A2,Th4;
-      then L1.(a*x) =I.(L.((a*J.x))) by A35,FUNCT_1:13;
-      then L1.(a*x) =I.(r*(a*J.x)) by A32;
+      then L1.(a*x) =I.(L.((a*J.x))) by A34,FUNCT_1:13;
+      then L1.(a*x) =I.(r*(a*J.x)) by A31;
       then L1.(a*x) =I.(a*(r*J.x));
       then
-A39:  L1.(a*x) =I.(a*L.(J.x)) by A32;
-      I.(L.(J.x)) = (I*L).(J.x) by A35,FUNCT_1:13;
-      then I.(L.(J.x)) = L1.x by A33,A34,FUNCT_1:12;
-      hence L1.(a*x) =a*(L1.x) by A1,A39,Th3;
+A38:  L1.(a*x) =I.(a*L.(J.x)) by A31;
+      I.(L.(J.x)) = (I*L).(J.x) by A34,FUNCT_1:13;
+      then I.(L.(J.x)) = L1.x by A32,A33,FUNCT_1:12;
+      hence L1.(a*x) =a*(L1.x) by A1,A38,Th3;
     end;
-    then reconsider L1 as LinearOperator of REAL-NS 1,REAL-NS 1 by A36,
-GRCAT_1:def 8,LOPBAN_1:def 5;
-A40: now
+    then reconsider L1 as LinearOperator of REAL-NS 1,REAL-NS 1 by A35,
+VECTSP_1:def 20,LOPBAN_1:def 5;
+A39: now
       let x be VECTOR of REAL-NS 1;
-      I.(L.(J.x)) =(I*L).(J.x) by A35,FUNCT_1:13;
-      then I.(L.(J.x)) =L1.x by A33,A34,FUNCT_1:12;
+      I.(L.(J.x)) =(I*L).(J.x) by A34,FUNCT_1:13;
+      then I.(L.(J.x)) =L1.x by A32,A33,FUNCT_1:12;
       then ||. L1.x .|| =abs(L.(J.x)) by A1,Th3;
-      then ||. L1.x .|| =abs(r*J.x) by A32;
+      then ||. L1.x .|| =abs(r*J.x) by A31;
       then ||. L1.x .|| =abs(r)*abs(J.x) by COMPLEX1:65;
       hence ||. L1.x .|| <= K* ||.x.|| by A2,Th4;
     end;
     0 <= K by COMPLEX1:46;
-    hence thesis by A40,LOPBAN_1:def 8;
+    hence thesis by A39,LOPBAN_1:def 8;
   end;
 end;
 
@@ -856,23 +858,23 @@ theorem Th7:
   Function")).1
 proof
   set J = proj(1,1) qua Function;
-  reconsider L = diff(f,x) as bounded LinearOperator of REAL-NS 1,REAL-NS 1 by
-LOPBAN_1:def 9;
+  reconsider L = diff(f,x) as
+  Lipschitzian LinearOperator of REAL-NS 1,REAL-NS 1 by LOPBAN_1:def 9;
 A1: rng g c= dom I by Th2;
-  reconsider L0=J*L*I as LINEAR by Th5;
+  reconsider L0=J*L*I as LinearFunc by Th5;
   assume that
 A2: f=<>*g and
 A3: x=<*y*> and
 A4: f is_differentiable_in x;
   consider NN being Neighbourhood of x such that
 A5: NN c= dom f and
-A6: ex R being REST of REAL-NS 1,REAL-NS 1 st for y be Point of REAL-NS
+A6: ex R being RestFunc of REAL-NS 1,REAL-NS 1 st for y be Point of REAL-NS
 1 st y in NN holds f/.y - f/.x = diff(f,x).(y-x) + R/.(y-x) by A4,NDIFF_1:def 7
   ;
   consider e be Real such that
 A7: 0 < e and
 A8: {z where z is Point of REAL-NS 1 : ||.z-x.|| < e} c= NN by NFCONT_1:def 1;
-  consider R being REST of REAL-NS 1,REAL-NS 1 such that
+  consider R being RestFunc of REAL-NS 1,REAL-NS 1 such that
 A9: for x9 be Point of REAL-NS 1 st x9 in NN holds f/.x9 - f/.x = diff(f
   ,x).(x9-x) + R/.(x9-x) by A6;
   set N={z where z is Point of REAL-NS 1 : ||.z-x.|| < e};
@@ -922,7 +924,7 @@ A18: N0=J.:N by TARSKI:1;
   then
 A19: J.:(dom f) = dom g by Lm1,FUNCT_1:77;
 A20: I*J =id (REAL 1) by Lm1,FUNCT_1:39;
-  reconsider R0=J*R*I as REST by Th5;
+  reconsider R0=J*R*I as RestFunc by Th5;
 A21: J*I =id REAL by Lm1,FUNCT_1:39;
   N c= dom f by A5,A8,XBOOLE_1:1;
   then
@@ -1032,7 +1034,7 @@ A3: g is_differentiable_in y;
   reconsider x0=y as Real;
   consider N0 being Neighbourhood of x0 such that
 A4: N0 c= dom g and
-A5: ex L0 be LINEAR, R0 be REST st diff(g,x0)=L0.1 & for y0 be Real st
+A5: ex L0 be LinearFunc, R0 be RestFunc st diff(g,x0)=L0.1 & for y0 be Real st
   y0 in N0 holds g.y0 - g.x0 = L0.(y0-x0) + R0.(y0-x0) by A3,FDIFF_1:def 5;
   consider e0 be real number such that
 A6: 0 < e0 and
@@ -1040,12 +1042,13 @@ A7: N0 = ].x0 - e0,x0 + e0.[ by RCOMP_1:def 6;
   reconsider e = e0 as Real by XREAL_0:def 1;
   set N = {z where z is Point of REAL-NS 1 : ||.z-x.|| < e};
 A8: rng(g*J) c= REAL;
-  consider L0 be LINEAR, R0 be REST such that
+  consider L0 be LinearFunc, R0 be RestFunc such that
 A9: diff(g,x0)=L0.1 and
 A10: for y0 be Real st y0 in N0 holds g.y0 - g.x0 = L0.(y0-x0) + R0.(y0-
   x0) by A5;
-  reconsider R=I*R0*J as REST of REAL-NS 1,REAL-NS 1 by Th6;
-  reconsider L=I*L0*J as bounded LinearOperator of REAL-NS 1,REAL-NS 1 by Th6;
+  reconsider R=I*R0*J as RestFunc of REAL-NS 1,REAL-NS 1 by Th6;
+  reconsider L=I*L0*J as Lipschitzian LinearOperator of REAL-NS 1,REAL-NS 1
+  by Th6;
 A11: dom g c= REAL;
   dom f c= the carrier of REAL-NS 1;
   then

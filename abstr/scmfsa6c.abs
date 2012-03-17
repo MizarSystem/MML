@@ -2,7 +2,7 @@
 ::  by Noriko Asamoto , Yatsuka Nakamura , Piotr Rudnicki and Andrzej Trybulec
 ::
 :: Received July 22, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,20 +18,21 @@ environ
       RELAT_1, ARYTM_3, FUNCT_4, SCMFSA6A, TARSKI, XBOOLE_0, CIRCUIT2, NUMBERS,
       SUBSET_1, GRAPHSP, AMI_3, XXREAL_0, SF_MASTR, FUNCOP_1, FUNCT_7,
       STRUCT_0, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      MSUALG_1, AOFA_I00, ORDINAL1, SCMNORM, PBOOLE, SCMFSA6C, AMISTD_1,
-      AMISTD_2, COMPOS_1;
+      MSUALG_1, AOFA_I00, ORDINAL1, EXTPRO_1, PBOOLE, SCMFSA6C, AMISTD_1,
+      AMISTD_2, COMPOS_1, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1, INT_1, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      FUNCOP_1, FUNCT_4, PBOOLE, STRUCT_0, MEMSTR_0, COMPOS_1, EXTPRO_1,
-      AMISTD_1, AMISTD_2, FUNCT_7, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      XXREAL_0;
+      ORDINAL1, NAT_1, INT_1, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1,
+      FINSEQ_2, FUNCOP_1, FUNCT_4, PBOOLE, STRUCT_0, MEMSTR_0, COMPOS_0,
+      COMPOS_1, EXTPRO_1, AMISTD_1, AMISTD_2, FUNCT_7, SCMFSA_M, SCMFSA_2,
+      SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, INT_2, SCMFSA6A, SF_MASTR,
       SCMFSA6B, RELSET_1, PRE_POLY, AMISTD_1, AMISTD_2, PBOOLE, FUNCT_4,
-      MEMSTR_0;
+      MEMSTR_0, SCMFSA_1, SCMFSA_M, FUNCT_7;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       NUMBERS, XREAL_0, INT_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
       ORDINAL1, RELSET_1, COMPOS_1, STRUCT_0, EXTPRO_1, SCMFSA10, PBOOLE,
-      FUNCT_4, AMISTD_2, MEMSTR_0, AMISTD_1;
+      FUNCT_4, AMISTD_2, MEMSTR_0, AMISTD_1, FINSEQ_1, AMI_3, COMPOS_0,
+      SCMFSA_M;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -47,13 +48,13 @@ reserve x for set,
 
 theorem :: SCMFSA6C:1
   for I being keeping_0 parahalting Program of SCM+FSA, J being
-parahalting Program of SCM+FSA holds IExec(I ';' J,P,s).a
+parahalting Program of SCM+FSA holds IExec(I ";" J,P,s).a
  = IExec(J,P,IExec(I,P,s)).a;
 
 theorem :: SCMFSA6C:2
   for I being keeping_0 parahalting Program of SCM+FSA, J being
 parahalting Program of SCM+FSA
- holds IExec(I ';' J,P,s).f = IExec(J,P,IExec(I,P,s)).f;
+ holds IExec(I ";" J,P,s).f = IExec(J,P,IExec(I,P,s)).f;
 
 begin :: Properties of simple macro instructions
 
@@ -131,43 +132,39 @@ end;
 registration
   let i be parahalting Instruction of SCM+FSA, J be parahalting Program of
   SCM+FSA;
-  cluster i ';' J -> parahalting;
+  cluster i ";" J -> parahalting;
 end;
 
 registration
   let I be parahalting Program of SCM+FSA, j be parahalting Instruction of
   SCM+FSA;
-  cluster I ';' j -> parahalting;
+  cluster I ";" j -> parahalting;
 end;
 
 registration
   let i be parahalting Instruction of SCM+FSA, j be parahalting Instruction of
   SCM+FSA;
-  cluster i ';' j -> parahalting;
+  cluster i ";" j -> parahalting;
 end;
 
 registration
   let i be keeping_0 Instruction of SCM+FSA, J be keeping_0 Program of SCM+FSA;
-  cluster i ';' J -> keeping_0;
+  cluster i ";" J -> keeping_0;
 end;
 
 registration
   let I be keeping_0 Program of SCM+FSA, j be keeping_0 Instruction of SCM+FSA;
-  cluster I ';' j -> keeping_0;
+  cluster I ";" j -> keeping_0;
 end;
 
 registration
   let i, j be keeping_0 Instruction of SCM+FSA;
-  cluster i ';' j -> keeping_0;
+  cluster i ";" j -> keeping_0;
 end;
 
 begin :: Consequenses of the main theorem
 
-theorem :: SCMFSA6C:3
-  (for a being read-write Int-Location holds (Initialized s).a = s.a) &
-  (for f holds (Initialized s).f = s.f);
-
-
+canceled;
 
 theorem :: SCMFSA6C:4
   DataPart s1 = DataPart s2 implies DataPart Exec (i, s1) =
@@ -179,22 +176,22 @@ theorem :: SCMFSA6C:5
 
 theorem :: SCMFSA6C:6
   for I being keeping_0 parahalting Program of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(I ';' j,P,s).a
+parahalting Instruction of SCM+FSA holds IExec(I ";" j,P,s).a
  = Exec(j,IExec(I,P,s)).a;
 
 theorem :: SCMFSA6C:7
   for I being keeping_0 parahalting Program of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(I ';' j,P,s).f
+parahalting Instruction of SCM+FSA holds IExec(I ";" j,P,s).f
  = Exec(j,IExec(I,P,s)).f;
 
 theorem :: SCMFSA6C:8
   for i being keeping_0 parahalting Instruction of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(i ';' j,P,s).a
+parahalting Instruction of SCM+FSA holds IExec(i ";" j,P,s).a
  = Exec(j, Exec(i,Initialized s)).a;
 
 theorem :: SCMFSA6C:9
   for i being keeping_0 parahalting Instruction of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(i ';' j,P,s).f = Exec(j, Exec(i,
+parahalting Instruction of SCM+FSA holds IExec(i ";" j,P,s).f = Exec(j, Exec(i,
   Initialized s)).f;
 
 begin :: An example
@@ -204,7 +201,7 @@ definition
   func swap (a, b) -> Program of SCM+FSA equals
 :: SCMFSA6C:def 3
   FirstNotUsed Macro (a := b) :=
-  a ';' (a := b) ';' (b := FirstNotUsed Macro (a := b));
+  a ";" (a := b) ";" (b := FirstNotUsed Macro (a := b));
 end;
 
 registration

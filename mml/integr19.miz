@@ -1,0 +1,2719 @@
+:: Riemann Integral of Functions from $\mathbbbR$ into $n$-dimensional Real
+:: Normed Space
+::  by Keiichi Miyajima , Artur Korni{\l}owicz and Yasunari Shidama
+::
+:: Received October 27, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, INTEGRA1, SUBSET_1, FUNCT_1, FINSEQ_1, NAT_1, RELAT_1,
+      MEASURE7, XBOOLE_0, XXREAL_2, XXREAL_0, CARD_1, REAL_1, ARYTM_3, XREAL_0,
+      ORDINAL1, ARYTM_1, CARD_3, FINSEQ_2, INTEGRA2, SEQ_1, SEQ_2, ORDINAL2,
+      COMPLEX1, XXREAL_1, FUNCT_3, NORMSP_1, REAL_NS1, STRUCT_0, PARTFUN1,
+      FDIFF_1, RSSPACE, VALUED_1, RCOMP_1, FUNCT_2, SUPINF_2, FUNCOP_1,
+      VALUED_0, TARSKI, PRE_TOPC, INTEGRA5, INTEGR15, FCONT_1, ORDINAL4,
+      EUCLID, MEASURE5;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, NAT_1,
+      VALUED_0, COMPLEX1, BINOP_2, FINSEQ_1, VALUED_1, FINSEQ_2, SEQ_1,SEQ_2,
+      FINSEQOP, RVSUM_1, RCOMP_1, FDIFF_1, INTEGRA1, INTEGRA2, RFINSEQ2,
+      INTEGRA3, INTEGRA5, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_0, NORMSP_1,
+      MEASURE5, VFUNCT_1, RSSPACE, EUCLID, NDIFF_1, REAL_NS1, PDIFF_1,
+      EUCLID_7, INTEGR15, INTEGR18, NDIFF_3, NFCONT_3, NFCONT_4;
+ constructors REAL_1, FINSEQOP, MONOID_0, SEQ_4, NAT_D, VFUNCT_1, PDIFF_1,
+      BINOP_2, SEQ_1, INTEGRA5, RELSET_1, SEQ_2, INTEGRA3, INTEGR15, INTEGR18,
+      NFCONT_4, NDIFF_3, NFCONT_3, RSSPACE3, RFINSEQ2, FDIFF_1, NDIFF_1,
+      VALUED_2, EUCLID_7, REALSET1, COMSEQ_2;
+ registrations NUMBERS, XREAL_0, FINSEQ_2, INTEGRA1, FUNCT_1, FUNCT_2, NAT_1,
+      MEMBERED, XXREAL_0, VALUED_0, VALUED_1, REAL_NS1, RELSET_1, XBOOLE_0,
+      RELAT_1, FINSEQ_1, RCOMP_1, FDIFF_1, FINSET_1, XXREAL_2, CARD_1,
+      STRUCT_0, EUCLID, VALUED_2, SETFAM_1, ABIAN, RFUNCT_1, MEASURE5,
+      ORDINAL1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions EUCLID, TARSKI, INTEGRA5, INTEGR15, INTEGR18, FINSEQ_2, FINSEQ_1,
+      VALUED_1, RCOMP_1, REALSET1;
+ theorems XBOOLE_0, XBOOLE_1, XREAL_0, INTEGRA1, INTEGRA2, INTEGRA4, XXREAL_2,
+      XXREAL_0, EUCLID, RELAT_1, XCMPLX_1, RLVECT_1, RFINSEQ2, NFCONT_3,
+      NFCONT_4, NDIFF_3, RFUNCT_1, TARSKI, ABSVALUE, RELSET_1, COMPLEX1,
+      FUNCOP_1, RSSPACE, FUNCT_1, FUNCT_2, INTEGR15, INTEGR18, INTEGRA6,
+      NORMSP_0, PARTFUN2, VALUED_2, NORMSP_1, XXREAL_1, XREAL_1, RCOMP_1,
+      SEQ_2, FINSEQ_1, FINSEQ_2, RVSUM_1, PARTFUN1, REAL_NS1, INTEGRA5,
+      NDIFF_1, PDIFF_1, VFUNCT_1, VALUED_1, PDIFF_8, CARD_1, LOPBAN_1, NAT_1,
+      EUCLID_7, PDIFF_6, COMSEQ_2, NDIFF_4;
+ schemes NAT_1, FUNCT_2, FINSEQ_1, PARTFUN1, RECDEF_1;
+
+begin :: On the functions from REAL into REAL n
+
+reserve X for set;
+reserve n,i for Element of NAT;
+reserve a,b,c,d,e,r,x0 for real number;
+reserve A for non empty closed_interval Subset of REAL;
+reserve f,g,h for PartFunc of REAL,REAL n;
+reserve E for Element of REAL n;
+
+Lm1: f-g = f+-g by NDIFF_4:1;
+
+theorem Th1:
+  a <= c & c <= b
+  implies c in ['a,b'] & ['a,c'] c= ['a,b'] & ['c,b'] c= ['a,b']
+  proof
+    assume that
+A1: a <= c and
+A2: c <= b;
+A3: c in [.a,b.] by A1,A2,XXREAL_1:1;
+    hence c in ['a,b'] by A1,A2,INTEGRA5:def 3,XXREAL_0:2;
+A4: ['c,b'] = [.c,b.] by A2,INTEGRA5:def 3;
+    a <= b by A1,A2,XXREAL_0:2; then
+A5: a in [.a,b.] & b in [.a,b.] by XXREAL_1:1;
+    ['a,b'] = [.a,b.] & ['a,c'] = [.a,c.]
+    by A1,A2,INTEGRA5:def 3,XXREAL_0:2;
+    hence thesis by A4,A3,A5,XXREAL_2:def 12;
+  end;
+
+theorem Th2:
+  a <= c & c <= d & d <= b & ['a,b'] c= X implies ['c,d'] c= X
+  proof
+    assume that
+A1: a <= c & c <= d & d <= b and
+A2: ['a,b'] c= X;
+A3: ['c,d'] c= ['c,b'] by Th1,A1;
+    c <= b by A1,XXREAL_0:2; then
+    ['c,b'] c= ['a,b'] by Th1,A1; then
+    ['c,d'] c= ['a,b'] by A3,XBOOLE_1:1;
+    hence thesis by A2,XBOOLE_1:1;
+  end;
+
+Lm2:
+  a <= b & c in ['a,b'] & d in ['a,b']
+  implies ['min(c,d),max(c,d)'] c= ['a,b']
+  proof
+    assume A1:a<=b & c in ['a,b'] & d in ['a,b'];
+    ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3;
+    then
+A2: a <=c & d <=b & a <=d & c <= b  by A1,XXREAL_1:1;
+    per cases;
+    suppose A3:c <= d;
+      then
+A4:   c = min(c,d) & d = max(c,d) by XXREAL_0:def 9,def 10;
+A5:   ['c,b'] c= ['a,b'] by A2,Th1;
+      ['c,d'] c= ['c,b'] by A2,A3,Th1;
+      hence
+      ['min(c,d),max(c,d)'] c=['a,b']  by A4,A5,XBOOLE_1:1;
+    end;
+    suppose A6:not c <= d;
+      then
+A7:   d = min(c,d) & c = max(c,d) by XXREAL_0:def 9,def 10;
+A8:   ['d,b'] c= ['a,b'] by A2,Th1;
+      ['d,c'] c= ['d,b'] by A2,A6,Th1;
+      hence ['min(c,d),max(c,d)'] c=['a,b']  by A7,A8,XBOOLE_1:1;
+    end;
+  end;
+
+theorem Th3:
+  a <= b & c in ['a,b'] & d in ['a,b'] & ['a,b'] c= X
+  implies ['min(c,d),max(c,d)'] c= X
+  proof
+    assume a <= b & c in ['a,b'] & d in ['a,b'];
+    then ['min(c,d),max(c,d)'] c= ['a,b'] by Lm2;
+    hence thesis by XBOOLE_1:1;
+  end;
+
+theorem Th4:
+  a <= c & c <= d & d <= b & ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies ['c,d'] c= dom (f+g)
+  proof
+    assume that
+A1: a <= c & c <= d & d <= b and
+A2: ['a,b'] c= dom f & ['a,b'] c= dom g;
+    dom(f+g) = (dom f) /\ (dom g) by VALUED_2:def 45;
+    then ['a,b'] /\ ['a,b'] c= dom(f+g) by A2,XBOOLE_1:27;
+    hence thesis by A1,Th2;
+  end;
+
+theorem Th5:
+  a <= c & c <= d & d <= b & ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies ['c,d'] c= dom (f-g)
+  proof
+    assume that
+A1: a <= c & c <= d & d <= b and
+A2: ['a,b'] c= dom f & ['a,b'] c= dom g;
+    dom(f-g) = (dom f) /\ (dom g) by VALUED_2:def 46;
+    then ['a,b'] /\ ['a,b'] c= dom(f-g) by A2,XBOOLE_1:27;
+    hence thesis by A1,Th2;
+  end;
+
+Lm3: for X,Y,Z be non empty set, f be PartFunc of X,Y
+     st Z c= dom f holds f|Z is Function of Z,Y
+  proof
+    let X,Y,Z be non empty set, f be PartFunc of X,Y;
+    rng f c= Y; then
+    f is Function of dom f,Y by FUNCT_2:2;
+    hence thesis by FUNCT_2:32;
+  end;
+
+theorem Th6:
+  for f be PartFunc of REAL,REAL holds
+  a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+  f | [' a,b '] is bounded & ['a,b'] c= dom f
+  implies r(#)f is_integrable_on ['c,d'] & (r(#)f) | ['c,d'] is bounded
+  proof
+    let f be PartFunc of REAL,REAL;
+    assume that
+A1: a <= c and
+A2: c <= d & d <= b and
+A3: f is_integrable_on ['a,b'] & f | ['a,b'] is bounded and
+A4: ['a,b'] c= dom f;
+A5: r is Real by XREAL_0:def 1;
+A6: f | ['c,d'] is bounded by A1,A2,A3,A4,INTEGRA6:18;
+A7: ['c,d'] c= dom f by A2,A1,Th2,A4;
+    f is_integrable_on ['c,d'] by A1,A2,A3,A4,INTEGRA6:18;
+    hence r(#)f is_integrable_on ['c,d'] by A6,A7,A5,INTEGRA6:9;
+    thus thesis by A6,RFUNCT_1:80;
+  end;
+
+theorem
+  for f,g be PartFunc of REAL,REAL
+  st a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+  g is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  g| ['a,b'] is bounded & ['a,b'] c= dom f & ['a,b'] c= dom g
+  holds f-g is_integrable_on ['c,d'] & (f-g) | ['c,d'] is bounded
+  proof
+    let f,g be PartFunc of REAL,REAL;
+    assume A1: a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+    g is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    g| ['a,b'] is bounded & ['a,b'] c= dom f & ['a,b'] c= dom g;
+A2: ((-1)(#)g) | ['a,b'] is bounded by A1,RFUNCT_1:80;
+A3: ['a,b'] c= dom ((-1)(#)g) by A1,VALUED_1:def 5;
+    -1 is Real by XREAL_0:def 1; then
+    (-1)(#)g is_integrable_on ['a,b'] by A1,INTEGRA6:9;
+    hence thesis by A1,A2,A3,INTEGRA6:19;
+  end;
+
+Lm4:
+  for f be PartFunc of REAL,REAL st
+  (a<=b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded & ['a,b'] c= dom f
+  & c in ['a,b'] & d in ['a,b'] & for x be real number st
+  x in ['min(c,d),max(c,d)'] holds abs(f.x) <= e) holds
+  abs integral(f,c,d) <= e *abs(d-c)
+  proof
+    let f be PartFunc of REAL,REAL;
+    set A = ['min(c,d),max(c,d)'];
+    assume that
+A1: a<=b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded & ['a,
+    b'] c= dom f & c in ['a,b'] & d in ['a,b'] and
+A2: for x be real number st x in ['min(c,d),max(c,d)'] holds abs(f.x) <= e;
+    rng abs f c= REAL;
+    then
+A3: abs f is Function of dom abs f,REAL by FUNCT_2:2;
+    ['min(c,d),max(c,d)'] c= dom (abs f) by A1,INTEGRA6:21;
+    then reconsider g =abs(f) | A as Function of A,REAL by A3,FUNCT_2:32;
+A4: vol A = abs(d-c) by INTEGRA6:6;
+    abs f is_integrable_on A by A1,INTEGRA6:21;
+    then
+A5: g is integrable by INTEGRA5:def 1;
+    e is Real by XREAL_0:def 1; then
+    consider h be Function of A,REAL such that
+A6: rng h = {e} and
+A7: h|A is bounded by INTEGRA4:5;
+A8: now
+      let x be Real;
+      assume
+A9:   x in A;
+      then g.x = (abs f).x by FUNCT_1:49;
+      then
+A10:  g.x = abs(f.x) by VALUED_1:18;
+      h.x in {e} by A6,A9,FUNCT_2:4;
+      then h.x =e by TARSKI:def 1;
+      hence g.x <= h.x by A2,A9,A10;
+    end;
+A11: abs integral(f,c,d) <= integral(abs f,min(c,d),max(c,d))
+     by A1,INTEGRA6:21;
+     min(c,d) <= c & c <= max(c,d) by XXREAL_0:17,25;
+     then min(c,d) <= max(c,d) by XXREAL_0:2;
+     then
+A12: integral(abs f,min(c,d),max(c,d)) = integral(abs f,A) by INTEGRA5:def 4;
+     abs f|A is bounded by A1,INTEGRA6:21;
+     then
+A13: g|A is bounded;
+     e is Real by XREAL_0:def 1;
+     then h is integrable & integral h = e*vol A by A6,INTEGRA4:4;
+     then integral(abs f,min(c,d),max(c,d)) <= e * abs(d-c)
+     by A12,A7,A8,A5,A13,A4,INTEGRA2:34;
+     hence thesis by A11,XXREAL_0:2;
+   end;
+
+Lm5:
+  for f be PartFunc of REAL,REAL st A c= dom f holds f|A is Function of A,REAL
+    by Lm3;
+
+theorem
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b']
+  implies f is_integrable_on ['a,c'] & f is_integrable_on ['c,b'] &
+  integral(f,a,b) = integral(f,a,c) + integral(f,c,b)
+  proof
+    assume A1: a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'];
+A2: now let i; set P = proj(i,n);
+      assume A3: i in Seg n; then
+A4:   P*f is_integrable_on ['a,b'] by A1,INTEGR15:def 16;
+      (P*(f | ['a,b'])) is bounded by A3,A1,INTEGR15:def 15; then
+A5:   (P*f) | ['a,b'] is bounded by RELAT_1:83;
+      dom (P) = REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+      dom (P*f) = dom f by RELAT_1:27;
+      hence P*f is_integrable_on ['a,c'] &
+      P*f is_integrable_on ['c,b'] &
+      integral((P*f),a,b) = integral((P*f),a,c) +
+      integral((P*f),c,b) by A4,A5,A1,INTEGRA6:17;
+    end; then
+    for i be Element of NAT st i in Seg n
+    holds (proj(i,n)*f) is_integrable_on ['a,c'];
+    hence f is_integrable_on ['a,c'] by INTEGR15:def 16;
+    for i be Element of NAT st i in Seg n
+    holds (proj(i,n)*f) is_integrable_on ['c,b'] by A2;
+    hence f is_integrable_on ['c,b'] by INTEGR15:def 16;
+A6: now let i be Nat;
+      assume i in dom (integral(f,a,b)); then
+A7:   i in Seg n by INTEGR15:def 18;
+      set P = proj(i,n);
+      thus (integral(f,a,b)).i
+      = integral((P*f),a,b) by A7,INTEGR15:def 18
+      .= integral((P*f),a,c) + integral((P*f),c,b) by A7,A2
+      .= (integral(f,a,c)).i + integral((P*f),c,b) by A7,INTEGR15:def 18
+      .= (integral(f,a,c)).i +(integral(f,c,b)).i by A7,INTEGR15:def 18
+      .= (integral(f,a,c)+ integral(f,c,b)).i by RVSUM_1:11;
+    end;
+A8: Seg n = dom (integral(f,a,b)) by INTEGR15:def 18;
+    len (integral(f,a,c) + integral(f,c,b)) = n by CARD_1:def 7; then
+    Seg n = dom (integral(f,a,c) + integral(f,c,b)) by FINSEQ_1:def 3;
+    hence thesis by A8,A6,FINSEQ_1:13;
+  end;
+
+theorem Th9:
+  a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & ['a,b'] c= dom f
+  implies f is_integrable_on ['c,d'] & f| ['c,d'] is bounded
+  proof
+    assume A1: a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+    f| ['a,b'] is bounded & ['a,b'] c= dom f;
+A2: now let i;
+      set P = proj(i,n);
+      assume A3: i in Seg n; then
+A4:   P*f is_integrable_on ['a,b'] by A1,INTEGR15:def 16;
+      (P*(f| ['a,b'])) is bounded by A3,A1,INTEGR15:def 15; then
+A5:   (P*f) | ['a,b'] is bounded by RELAT_1:83;
+      dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+      dom (P*f) = dom f by RELAT_1:27; then
+      P*f is_integrable_on ['c,d'] & (P*f) | ['c,d'] is bounded &
+      ['c,d'] c= dom (P*f) by A4,A5,A1,INTEGRA6:18;
+      hence P*f is_integrable_on ['c,d'] & P*(f| ['c,d']) is bounded
+      by RELAT_1:83;
+    end; then
+    for i be Element of NAT st i in Seg n holds
+    proj(i,n)*f is_integrable_on ['c,d'];
+    hence f is_integrable_on ['c,d'] by INTEGR15:def 16;
+    for i be Element of NAT st i in Seg n
+    holds (proj(i,n))*(f| ['c,d']) is bounded by A2;
+    hence thesis by INTEGR15:def 15;
+  end;
+
+theorem Th10:
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded &
+  ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies
+  f + g is_integrable_on ['c,d'] & (f + g) | ['c,d'] is bounded
+  proof
+    assume that
+A1: a <= c & c <= d & d <= b and
+A2: f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+    f| ['a,b'] is bounded & g| ['a,b'] is bounded and
+A3: ['a,b'] c= dom f & ['a,b'] c= dom g;
+A4: now let i;
+      set P = proj(i,n);
+      assume
+A5:   i in Seg n; then
+A6:   P*f is_integrable_on ['a,b'] by A2,INTEGR15:def 16;
+      (P*(f| ['a,b'])) is bounded by A5,A2,INTEGR15:def 15; then
+A7:   (P*f) | ['a,b'] is bounded by RELAT_1:83;
+A8:   dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+A9:  dom (P*f) = dom f by RELAT_1:27;
+A10:  P*g is_integrable_on ['a,b'] by A5,A2,INTEGR15:def 16;
+      (P*(g| ['a,b'])) is bounded by A5,A2,INTEGR15:def 15; then
+A11:  (P*g) | ['a,b'] is bounded by RELAT_1:83;
+      rng g c= dom(P) by A8; then
+      dom (P*g) = dom g by RELAT_1:27; then
+A12:  (P*f)+(P*g) is_integrable_on ['c,d'] &
+      ((P*f)+(P*g)) | ['c,d'] is bounded
+      by A1,A3,A6,A7,A9,A10,A11,INTEGRA6:19;
+      ((P*f) + (P*g)) | ['c,d'] = (P*(f+g)) | ['c,d'] by INTEGR15:15
+      .= P*((f+g) | ['c,d']) by RELAT_1:83;
+      hence P*(f+g) is_integrable_on ['c,d'] &
+      P*((f+g) | ['c,d']) is bounded by A12,INTEGR15:15;
+    end; then
+    for i be Element of NAT st i in Seg n
+    holds ((proj(i,n))*(f + g)) is_integrable_on ['c,d'];
+    hence f + g is_integrable_on ['c,d'] by INTEGR15:def 16;
+    for i be Element of NAT st i in Seg n
+    holds (proj(i,n))*((f + g) | ['c,d']) is bounded by A4;
+    hence thesis by INTEGR15:def 15;
+  end;
+
+theorem Th11:
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & f| ['a,b'] is bounded & ['a,b'] c= dom f
+  implies
+  r(#)f is_integrable_on ['c,d'] & (r(#)f) | ['c,d'] is bounded
+  proof
+    assume that
+A1: a <= c & c <= d & d <= b and
+A2: f is_integrable_on ['a,b'] & f| ['a,b'] is bounded and
+A3: ['a,b'] c= dom f;
+A4: now let i;
+      set P = proj(i,n);
+      assume
+A5:   i in Seg n; then
+A6:   P*f is_integrable_on ['a,b'] by A2,INTEGR15:def 16;
+      P*(f| ['a,b']) is bounded by A5,A2,INTEGR15:def 15; then
+A7:   (P*f) | ['a,b'] is bounded by RELAT_1:83;
+      dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+A8:   dom (P*f) = dom f by RELAT_1:27;
+A9:  r(#)(P*f) is_integrable_on ['c,d'] & (r(#)(P*f)) | ['c,d'] is bounded
+      by A1,A3,Th6,A6,A7,A8;
+A10:  r is Real by XREAL_0:def 1;
+      then (r(#)(P*f)) | ['c,d'] = (P*(r(#)f)) | ['c,d'] by INTEGR15:16
+      .= P*((r(#)f) | ['c,d']) by RELAT_1:83;
+      hence P*(r(#)f) is_integrable_on ['c,d'] &
+      P*((r(#)f) | ['c,d']) is bounded by A10,A9,INTEGR15:16;
+    end; then
+    for i be Element of NAT st i in Seg n
+    holds ((proj(i,n))*(r(#)f)) is_integrable_on ['c,d'];
+    hence r(#)f is_integrable_on ['c,d'] by INTEGR15:def 16;
+    for i be Element of NAT st i in Seg n
+    holds (proj(i,n))*((r(#)f) | ['c,d']) is bounded by A4;
+    hence thesis by INTEGR15:def 15;
+  end;
+
+theorem Th12:
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & f| ['a,b'] is bounded & ['a,b'] c= dom f
+  implies
+  -f is_integrable_on ['c,d'] & (-f) | ['c,d'] is bounded
+  proof
+    -f = (-1)(#)f by NFCONT_4:7;
+    hence thesis by Th11;
+  end;
+
+theorem Th13:
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded &
+  ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies
+  f - g is_integrable_on ['c,d'] & (f - g) | ['c,d'] is bounded
+  proof
+    assume that
+A1: a <= c & c <= d & d <= b and
+A2: f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+    f| ['a,b'] is bounded & g| ['a,b'] is bounded and
+A3: ['a,b'] c= dom f & ['a,b'] c= dom g;
+A4: dom g = dom -g by NFCONT_4:def 3;
+A5: f-g = f+-g by Lm1;
+    a <= d by A1,XXREAL_0:2; then
+    a <= b by A1,XXREAL_0:2;
+    then -g is_integrable_on ['a,b'] & (-g) | ['a,b'] is bounded by A2,A3,Th12;
+    hence thesis by A5,A1,A2,A3,A4,Th10;
+  end;
+
+theorem Th14:
+  for n be non empty Element of NAT,
+      f be Function of A,REAL n holds
+  f is bounded iff |.f.| is bounded
+  proof
+    let n be non empty Element of NAT,
+    f be Function of A,REAL n;
+    hereby assume A1: f is bounded;
+      defpred YX[Nat,set] means
+      ex K be Element of REAL st 0<=K & K = $2 &
+      for y be set st y in dom(proj($1,n)*f) holds abs((proj($1,n)*f).y) < K;
+A2:   for i be Nat st i in Seg n ex r be Element of REAL st YX[i,r]
+      proof
+        let i be Nat;
+        assume A3: i in Seg n;
+        set P = proj(i,n);
+        P*f is bounded by A1,A3,INTEGR15:def 12; then
+        consider L be real number such that
+A4:     for y be set st y in dom (P*f) holds abs ((P*f).y) < L
+          by COMSEQ_2:def 3;
+        now let y be set;
+          assume
+A5:       y in dom (P*f);
+          L <= abs(L) by ABSVALUE:4;
+          hence abs (((proj (i,n))* f).y) < abs(L) by A4,A5,XXREAL_0:2;
+        end;
+        hence thesis by COMPLEX1:46;
+      end;
+      consider w be FinSequence of REAL such that
+A6:   dom w = Seg n
+      & for i be Nat st i in Seg n holds YX[i,w.i] from FINSEQ_1:sch 5(A2);
+A7:   now let i;   set P = proj(i,n);
+        assume i in Seg n;
+        then YX[i,w.i] by A6;
+        hence 0<=w.i &
+        for y be set st y in dom (P*f) holds abs ((P*f).y) < w.i;
+      end;
+      len w = n by A6,FINSEQ_1:def 3; then
+      reconsider w as Element of REAL n by FINSEQ_2:92;
+A8:   for i st i in Seg n holds 0 <= w.i by A7;
+      set KK = Sum w;
+      for y be set st y in dom |.f.| holds abs (|.f.| . y) < n*KK + 1
+      proof
+        let y be set;
+        assume A9: y in dom |.f.|; then
+A10:    |.f.| . y =|.f.| /. y by PARTFUN1:def 6
+        .= |. f/.y .| by A9,NFCONT_4:def 2; then
+A11:    abs (|.f.| . y) = |.f.| . y by ABSVALUE:def 1;
+        now let i;   set P = proj(i,n);
+          assume A12: 1 <= i & i <= n;
+A13:      y in dom f by A9,NFCONT_4:def 2; then
+          f.y in rng f by FUNCT_1:3; then
+          f.y in REAL n; then
+          f.y in dom (P) by FUNCT_2:def 1; then
+A14:      y in dom (P*f) by A13,FUNCT_1:11;
+A15:      i in Seg n by A12; then
+          abs ((P*f). y) < w.i by A7,A14; then
+          abs (P.(f.y)) < w.i by A14,FUNCT_1:12; then
+A16:      |. P.(f/.y) .| < w.i by A13,PARTFUN1:def 6;
+          w.i <= Sum w by A8,A15,REAL_NS1:7;
+          hence |. P.(f/.y) .| <= KK by A16,XXREAL_0:2;
+        end; then
+        |. f/.y .| <= n*KK by PDIFF_8:17; then
+        (0 qua Real) + abs (|.f.| . y) < n*KK + 1 by A10,A11,XREAL_1:8;
+        hence thesis;
+      end;
+      hence |.f.| is bounded by COMSEQ_2:def 3;
+    end;
+    assume |.f.| is bounded; then
+    consider K be real number such that
+A17: for y be set st y in dom |.f.| holds abs (|.f.| . y) < K
+        by COMSEQ_2:def 3;
+    let i;   set P = proj(i,n);
+    assume A18: i in Seg n;
+    for y be set st y in dom (P*f) holds abs ((P*f) . y) < K
+    proof
+      let y be set;
+      assume A19: y in dom (P*f); then
+A20:  y in dom f by FUNCT_1:11;
+A21:  (P*f).y = P.(f.y) by A19,FUNCT_1:12
+      .= P.(f/.y) by A20,PARTFUN1:def 6;
+      1 <= i & i <= n by A18,FINSEQ_1:1; then
+A22:  |. P.(f/.y) .| <= |. f/.y .| by PDIFF_8:5;
+A23:  y in dom |.f.| by A20,NFCONT_4:def 2; then
+      abs (|.f.| .y) < K by A17; then
+      abs (|.f.| /.y) < K by A23,PARTFUN1:def 6;
+      then abs (|.f/.y .|) < K by A23,NFCONT_4:def 2; then
+      |. f/.y .| < K by ABSVALUE:def 1;
+      hence abs ((P*f).y) < K by A21,A22,XXREAL_0:2;
+    end;
+    hence P*f is bounded by COMSEQ_2:def 3;
+  end;
+
+Lm6:
+  for p be FinSequence of REAL n st (for i be Element of NAT st i in Seg n
+  ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & E.i = Sum(Pi)) holds
+  E = Sum(p)
+  proof
+    defpred P[Element of NAT] means
+    for p be FinSequence of REAL n, r be Element of REAL n st len p = $1
+    & (for i be Element of NAT st i in Seg n
+    ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & r.i = Sum(Pi))
+    holds r = Sum(p);
+A1: P[0]
+    proof
+      let p be FinSequence of REAL n, r be Element of REAL n;
+      assume A2: len p = 0 & (for i be Element of NAT st i in Seg n
+      ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & r.i = Sum(Pi));
+A3:   p = {} by A2;
+      len r = n by CARD_1:def 7; then
+A4:   dom r = Seg n by FINSEQ_1:def 3;
+A5:   dom ((Seg n) --> 0) = Seg n by FUNCOP_1:13;
+A6:   now let x be set;
+        assume
+A7:     x in dom r; then
+        reconsider i=x as  Element of NAT; set P = proj(i,n);
+        consider Pi be FinSequence of REAL such that
+A8:     Pi=P*p & r.i=Sum(Pi) by A2,A4,A7;
+        r.x = 0 by A3,A8,RVSUM_1:72;
+        hence r.x = ((Seg n) --> 0).x by A4,A7,FUNCOP_1:7;
+      end;
+      Sum(p) = 0*n by A2,EUCLID_7:def 11;
+      hence r = Sum(p) by A6,A4,A5,FUNCT_1:2;
+    end;
+A9: for  k be Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume A10: P[k];
+      now let p be FinSequence of REAL n,
+        r be Element of REAL n;
+        assume A11: len p = k+1
+        & (for i be Element of NAT st i in Seg n holds
+        ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & r.i = Sum(Pi));
+        set p1=p|k;
+        k+1 in Seg(k+1) by FINSEQ_1:4; then
+        k+1 in dom p by A11,FINSEQ_1:def 3; then
+        p.(k+1) in rng p by FUNCT_1:3; then
+        reconsider pk1 =p.(k+1) as Element of REAL n;
+        defpred YX[Nat,set] means ex P1i be FinSequence of REAL
+        st P1i=proj($1,n)*p1 & $2 = Sum(P1i);
+A12:    for i be Nat st i in Seg n ex r be Element of REAL st YX[i,r]
+        proof
+          let i be Nat;
+          assume i in Seg n;
+          take Sum(proj(i,n)*p1);
+          thus thesis;
+        end;
+        consider r1 be FinSequence of REAL such that
+A13:    dom r1 = Seg n
+        & for i be Nat st i in Seg n holds YX[i,r1.i] from FINSEQ_1:sch 5(A12);
+        len r1 = n by A13,FINSEQ_1:def 3; then
+        reconsider r1 as Element of REAL n by FINSEQ_2:92;
+A14:    for i st i in Seg n ex P1i be FinSequence of REAL st P1i=proj(i,n)*p1 &
+        r1.i = Sum(P1i) by A13;
+A15:    k <= len p by A11,NAT_1:16; then
+A16:    len p1 = k by FINSEQ_1:59;
+A17:    len r = n by CARD_1:def 7;
+A18:    len (r1+pk1) = n by CARD_1:def 7;
+        now let i be Nat; set P = proj(i,n);
+          assume 1<= i & i <= n; then
+A19:      i in Seg n by FINSEQ_1:1;
+          consider Pi be FinSequence of REAL such that
+A20:      Pi=P*p & r.i = Sum(Pi) by A19,A11;
+          consider P1i be FinSequence of REAL such that
+A21:      P1i=P*p1 & r1.i = Sum(P1i) by A19,A13;
+A22:      dom P = REAL n by FUNCT_2:def 1; then
+A23:      rng p c= dom P;
+A24:      dom (Pi) = dom p by A23,A20,RELAT_1:27
+          .= Seg (len p) by FINSEQ_1:def 3;
+A25:      len p = len p1 + len <* pk1.i *> by A11,A16,FINSEQ_1:40;
+A26:      rng p1 c= dom P by A22;
+A27:      dom (P1i) = dom p1 by A26,A21,RELAT_1:27
+          .= Seg len p1 by FINSEQ_1:def 3; then
+A28:      len P1i = len p1 by FINSEQ_1:def 3;
+A29:      dom (Pi) = Seg (len P1i + len <* pk1.i *>)
+          by A24,A25,A27,FINSEQ_1:def 3;
+          len p1 <= len p by A15,FINSEQ_1:59; then
+A30:      Seg (len p1) c=Seg (len p) by FINSEQ_1:5;
+A31:      for k be Nat st k in dom P1i holds Pi.k=P1i.k
+          proof
+            let k be Nat;
+            assume A32: k in dom P1i; then
+A33:        k in dom p1 by A27,FINSEQ_1:def 3;
+            thus  P1i.k = P.(p1.k) by A21,A32,FUNCT_1:12
+            .= P.(p.k) by A33,FUNCT_1:47
+            .= Pi.k by A20,A32,A24,A27,A30,FUNCT_1:12;
+          end;
+          for k be Nat st k in dom <*pk1.i*> holds Pi.(len P1i + k)=<*pk1.i*>.k
+          proof
+            let j be Nat;
+            assume j in dom <*pk1.i*>; then
+            j in Seg len (<*pk1.i*>) by FINSEQ_1:def 3; then
+            j in Seg 1 by FINSEQ_1:40; then
+A34:        j=1 by FINSEQ_1:2,TARSKI:def 1;
+            hence Pi.(len P1i + j) = P.(p.(k+1))
+            by A20,A24,A11,A28,A16,FINSEQ_1:4,FUNCT_1:12
+            .= pk1.i by PDIFF_1:def 1
+            .= (<*pk1.i*>).j by A34,FINSEQ_1:40;
+          end; then
+          Pi = P1i^ <* pk1.i *> by A31,A29,FINSEQ_1:def 7;
+          hence r.i = r1.i + pk1.i by A20,A21,RVSUM_1:74
+          .= (r1+pk1).i by RVSUM_1:11;
+        end; then
+A35:    r = r1 + pk1 by A17,A18,FINSEQ_1:14;
+        ex v be Element of REAL n st v = p.(len p) & Sum p = Sum p1 + v
+        by A16,A11,PDIFF_6:15;
+        hence r = Sum(p) by A11,A35,A10,A14,A16;
+      end;
+      hence P[k+1];
+    end;
+A36: for k be Element of NAT holds P[k] from NAT_1:sch 1(A1,A9);
+     let p be FinSequence of REAL n;
+     assume A37: for i be Element of NAT st i in Seg n holds
+     ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & E.i = Sum(Pi);
+     len p = len p;
+     hence thesis by A37,A36;
+   end;
+
+Lm7: for p be FinSequence of REAL n, q be FinSequence of REAL st len p = len q
+    & (for j be Nat st j in dom p holds |. p/.j .| <= q/.j)
+    & (for i be Element of NAT st i in Seg n
+    ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & E.i = Sum(Pi))
+   holds |.E.| <= Sum(q)
+  proof
+    let p be FinSequence of REAL n, q be FinSequence of REAL;
+    assume A1: len p = len q
+    & (for j be Nat st j in dom p holds |. p/.j .| <= q/.j)
+    & (for i be Element of NAT st i in Seg n
+    ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & E.i = Sum(Pi)); then
+A2: E = Sum(p) by Lm6;
+    defpred P1[Nat,set] means
+    ex v be Element of REAL n st v = p.$1 & $2 = |.v .|;
+A3: for i be Nat st i in Seg len p ex x be Element of REAL st P1[i,x]
+    proof
+      let i be Nat;
+      assume i in Seg len p;
+      then
+A4:   i in dom p by FINSEQ_1:def 3;
+      take |.p/.i.|;
+      thus thesis by A4,PARTFUN1:def 6;
+    end;
+    consider u be FinSequence of REAL such that
+A5: dom u = Seg len p & for i be Nat st
+    i in Seg len p holds P1[i,u.i] from FINSEQ_1:sch 5(A3);
+A6: for i be Element of NAT st i in dom p holds
+    ex v be Element of REAL n st v = p.i & u.i = |.v .|
+    proof
+      let i;
+      assume i in dom p; then
+      i in Seg len p by FINSEQ_1:def 3;
+      hence ex v be Element of REAL n st v = p.i & u.i = |.v .| by A5;
+    end;
+A7: len u = len p by A5,FINSEQ_1:def 3; then
+A8: |.Sum p.| <= Sum u by A6,PDIFF_6:17;
+    set i = len p;
+    reconsider uu=u as Element of i-tuples_on REAL by A7,FINSEQ_2:92;
+    reconsider qq=q as Element of i-tuples_on REAL by A1,FINSEQ_2:92;
+    now let j be Nat;
+      assume A9: j in Seg i; then
+A10:  j in dom p by FINSEQ_1:def 3; then
+A11:  |. p/.j .| <= q/.j by A1;
+      j in dom q by A9,A1,FINSEQ_1:def 3; then
+A12:  q/.j = q.j by PARTFUN1:def 6;
+      ex v be Element of REAL n st v = p.j & u.j = |.v .| by A6,A10;
+      hence uu.j <= qq.j by A11,A12,A10,PARTFUN1:def 6;
+    end; then
+    Sum uu <= Sum qq by RVSUM_1:82;
+    hence thesis by A2,A8,XXREAL_0:2;
+  end;
+
+Lm8:
+  for n be non empty Element of NAT,
+      h be Function of A,REAL n, f be Function of A,REAL
+   st h is bounded & h is integrable & f = |. h .| & f is integrable
+   holds |. integral(h) .| <= integral(f)
+  proof
+    let n be non empty Element of NAT,
+    h be Function of A,REAL n, f be Function of A,REAL;
+    assume A1: h is bounded & h is integrable & f = |. h .| & f is integrable;
+    then
+A2: f is bounded by Th14;
+    consider T be DivSequence of A such that
+A3: delta(T) is convergent & lim delta(T)=0 by INTEGRA4:11;
+    set S = the middle_volume_Sequence of h,T;
+A4: dom f = dom h by A1,NFCONT_4:def 2;
+    defpred P[Element of NAT, set] means
+    ex p be FinSequence of REAL st p = $2 & len p = len (T.$1) &
+    for i be Nat st i in dom (T.$1) holds (p.i) in dom (h|divset((T.$1),i)) &
+    ex z be Element of REAL n
+    st z = (h|divset((T.$1),i)).(p.i) & (S.$1).i = (vol divset((T.$1),i)) * z;
+A5: for k be Element of NAT ex p be Element of (REAL)* st P[k, p]
+    proof
+      let k be Element of NAT;
+      defpred P1[Nat,set] means $2 in dom (h|divset((T.k),$1)) &
+      ex c be Element of REAL n st c = (h|divset((T.k),$1)).($2) &
+      (S.k).$1 = (vol divset((T.k),$1)) * c;
+A6:   Seg len ((T.k)) = dom (T.k) by FINSEQ_1:def 3;
+A7:   for i be Nat st i in Seg len (T.k) ex x be Element of REAL st P1[i,x]
+      proof
+        let i be Nat;
+        assume i in Seg len (T.k); then
+        i in dom (T.k) by FINSEQ_1:def 3; then
+        consider c be Element of REAL n such that
+A8:     c in rng (h|divset((T.k),i)) &
+        (S.k).i = (vol divset((T.k),i)) * c by INTEGR15:def 5;
+        consider x be set such that
+A9:     x in dom (h|divset((T.k),i)) &
+        c = (h|divset((T.k),i)).x by A8,FUNCT_1:def 3;
+        x in (dom h) & x in (divset((T.k),i)) by A9,RELAT_1:57; then
+        reconsider x as Element of REAL;
+        take x;
+        thus thesis by A8,A9;
+      end;
+      consider p be FinSequence of REAL such that
+A10:  dom p = Seg len (T.k) & for i be Nat st
+      i in Seg len (T.k) holds P1[i,p.i] from FINSEQ_1:sch 5(A7);
+      take p;
+      len p = len (T.k) by A10,FINSEQ_1:def 3;
+      hence thesis by A10,A6,FINSEQ_1:def 11;
+    end;
+    consider F be Function of NAT,(REAL)* such that
+A11: for x be Element of NAT holds P[x, F.x] from FUNCT_2:sch 3(A5);
+     defpred P1[Element of NAT,set] means ex q be middle_volume of f,T.$1
+     st q = $2 & for i be Nat st i in dom (T.$1)
+     ex z be Element of REAL st (F.$1).i in dom (f |divset((T.$1),i)) &
+     z = (f |divset((T.$1),i)).((F.$1).i) & q.i = (vol divset((T.$1),i)) * z;
+A12: for k be Element of NAT ex y be Element of (REAL)* st P1[k, y]
+     proof
+       let k be Element of NAT;
+       defpred P11[Nat,set] means ex c be Element of REAL st
+       (F.k).$1 in dom (f |divset((T.k),$1)) &
+       c = (f |divset((T.k),$1)).((F.k).$1) & $2 = (vol divset((T.k),$1)) * c;
+A13:   Seg len (T.k) = dom (T.k) by FINSEQ_1:def 3;
+A14:   for i be Nat st i in Seg len (T.k) holds
+       ex x be Element of REAL st P11[i,x]
+       proof
+         let i be Nat;
+         assume i in Seg len (T.k); then
+A15:     i in dom (T.k) by FINSEQ_1:def 3;
+         consider p be FinSequence of REAL such that
+A16:     p = F.k & len p = len (T.k) &
+         for i be Nat st i in dom (T.k) holds p.i in dom (h|divset((T.k),i)) &
+         ex z be Element of REAL n st z = (h|divset((T.k),i)).(p.i) &
+         (S.k).i = (vol divset((T.k),i)) * z by A11;
+         p.i in dom (h|divset((T.k),i)) by A15,A16; then
+         p.i in dom h & p.i in (divset((T.k),i)) by RELAT_1:57; then
+A17:     (F.k).i in dom (f |divset((T.k),i)) by A16,A4,RELAT_1:57;
+         (vol divset((T.k),i)) * ((f |divset((T.k),i)).(p.i))
+         is Element of REAL;
+         hence thesis by A16,A17;
+       end;
+       consider q be FinSequence of REAL such that
+A18:   dom q = Seg len (T.k) & for i be Nat st i in Seg len (T.k)
+       holds P11[i,q.i] from FINSEQ_1:sch 5(A14);
+A19:   len q = len (T.k) by A18,FINSEQ_1:def 3;
+       now let i be Nat;
+         assume i in dom (T.k); then
+         i in Seg len (T.k) by FINSEQ_1:def 3; then
+         consider c be Element of REAL such that
+A20:     (F.k).i in dom (f |divset((T.k),i)) &
+         c = (f |divset((T.k),i)).((F.k).i) &
+         q.i = (vol divset((T.k),i)) * c by A18;
+         thus ex c be Element of REAL st c in rng (f |divset((T.k),i)) &
+         q.i = c*(vol divset((T.k),i)) by A20,FUNCT_1:3;
+       end; then
+       reconsider q as middle_volume of f,T.k by A19,INTEGR15:def 1;
+       q is Element of (REAL)* by FINSEQ_1:def 11;
+       hence thesis by A13,A18;
+  end;
+  consider Sf be Function of NAT,(REAL)* such that
+A21: for x be Element of NAT holds P1[x, Sf.x] from FUNCT_2:sch 3(A12);
+     now let k be Element of NAT;
+       ex q be middle_volume of f,T.k st q = Sf.k &
+       for i be Nat st i in dom (T.k) holds ex z be Element of REAL st
+       (F.k).i in dom (f |divset((T.k),i)) &
+       z = (f |divset((T.k),i)).((F.k).i) &
+       q.i = (vol divset((T.k),i)) * z by A21;
+       hence Sf.k is middle_volume of f,T.k;
+     end; then
+     reconsider Sf as middle_volume_Sequence of f,T by INTEGR15:def 3;
+A22: middle_sum(f,Sf) is convergent & lim (middle_sum(f,Sf)) = integral(f)
+     by A1,A2,A3,INTEGR15:9;
+A23: middle_sum(h,S) is convergent & lim (middle_sum(h,S)) = integral(h)
+     by A1,A3,INTEGR15:11;
+A24: for k be Element of NAT holds
+     ||. (middle_sum(h,S)).k .|| <= (middle_sum(f,Sf)).k
+     proof
+       let k be Element of NAT;
+A25:   (middle_sum(f,Sf)).k = middle_sum(f,Sf.k) by INTEGR15:def 4
+       .= Sum(Sf.k);
+A26:   (middle_sum(h,S)).k = middle_sum(h,S.k) by INTEGR15:def 8;
+A27:   for i be Element of NAT st i in Seg n holds
+       ex Pi be FinSequence of REAL st Pi=proj(i,n)*(S.k)
+       & (middle_sum(h,S.k)).i = Sum(Pi) by INTEGR15:def 6;
+A28:   ex p be FinSequence of REAL
+       st p = F.k & len p = len (T.k) & for i be Nat st i in dom (T.k)
+       holds (p.i) in dom (h|divset((T.k),i)) & ex z be Element of REAL n
+       st z = (h|divset((T.k),i)).(p.i) & (S.k).i = (vol divset((T.k),i)) * z
+       by A11;
+A29:   ex q be middle_volume of f,T.k st q = Sf.k &
+       for i be Nat st i in dom (T.k) holds ex z be Element of REAL st
+       (F.k).i in dom (f |divset((T.k),i)) &
+       z = (f |divset((T.k),i)).((F.k).i) &
+       q.i = (vol divset((T.k),i)) * z by A21;
+A30:   len (Sf.k) = len(T.k) by INTEGR15:def 1;
+A31:   len(S.k) = len(T.k) by INTEGR15:def 5;
+       now let i be Nat;
+         assume A32: i in dom (S.k); then
+A33:     i in Seg len (T.k) by A31,FINSEQ_1:def 3; then
+A34:     i in dom (T.k) by FINSEQ_1:def 3;
+A35:     i in dom (Sf.k) by A30,A33,FINSEQ_1:def 3;
+A36:     ((F.k).i) in dom (h|divset((T.k),i)) by A34,A28;
+         consider  z be Element of REAL n  such that
+A37:     z = (h|divset((T.k),i)).((F.k).i) &
+         (S.k).i  =(vol divset((T.k),i)) *z  by A28,A34;
+         consider w be Element of REAL such that
+A38:     (F.k).i in dom (f |divset((T.k),i))
+         & w = (f |divset((T.k),i)).((F.k).i)
+         & (Sf.k).i = (vol divset((T.k),i)) * w by A29,A34;
+A39:     (S.k)/.i = (S.k).i by A32,PARTFUN1:def 6;
+A40:     0 <= (vol divset((T.k),i)) by INTEGRA1:9;
+A41:     |. (S.k)/.i .| = abs((vol divset((T.k),i))) *|.z.|
+         by A37,A39,EUCLID:11
+         .= (vol divset((T.k),i)) *|.z.| by A40,ABSVALUE:def 1;
+A42:     dom (h |divset((T.k),i)) c= dom h by RELAT_1:60;
+A43:     (h|divset((T.k),i)).((F.k).i) = h.((F.k).i) by A36,FUNCT_1:47
+         .= h/.((F.k).i)by A42,A36,PARTFUN1:def 6;
+A44:     dom (f |divset((T.k),i)) c= dom f by RELAT_1:60;
+         (f|divset((T.k),i)).((F.k).i)
+         = f.((F.k).i) by A38,FUNCT_1:47
+         .= (|.h.|)/.((F.k).i) by A44,A1,A38,PARTFUN1:def 6
+         .= |. h/.((F.k).i) .| by A44,A1,A38,NFCONT_4:def 2;
+         hence |. (S.k)/.i .| <= (Sf.k)/.i
+         by A41,A43,A38,A37,A35,PARTFUN1:def 6;
+       end; then
+       |. (middle_sum(h,S.k)) .| <= Sum(Sf.k) by Lm7,A27,A30,A31;
+       hence thesis by A25,A26,REAL_NS1:1;
+     end;
+A45: now let i be Element of NAT;
+       ||. (middle_sum(h,S)).|| .i = ||. (middle_sum(h,S)).i .||
+       by NORMSP_0:def 4;
+       hence ||. (middle_sum(h,S)).|| .i <= (middle_sum(f,Sf)).i by A24;
+     end;
+     ||. (middle_sum(h,S)).|| is convergent by A1,A3,INTEGR15:11,NORMSP_1:23;
+     then lim (||. (middle_sum(h,S)).||) <= lim (middle_sum(f,Sf))
+     by A45,A22,SEQ_2:18;
+     then ||. lim (middle_sum(h,S)) .|| <= lim (middle_sum(f,Sf))
+     by A23,LOPBAN_1:41;
+     hence thesis by A22,A1,A3,INTEGR15:11,REAL_NS1:1;
+   end;
+
+Lm9:
+  A c= dom h implies h|A is Function of A,REAL n by Lm3;
+
+theorem
+  f is bounded & A c= dom f implies f|A is bounded
+  proof
+    assume
+A1: f is bounded & A c= dom f;
+    let i; set P = proj(i,n);
+    assume i in Seg n;
+    then P*f is bounded by A1,INTEGR15:def 15;
+    then consider r be real number such that
+A2: for c be set st c in dom (P*f) holds
+    abs (((P*f)).c)<=r by RFUNCT_1:72;
+    now let c be set;
+      assume c in A /\ dom (P*f);
+      then c in dom (P*f) by XBOOLE_0:def 4;
+      hence abs (((P*f)).c)<=r by A2;
+    end;
+    then (P*f) |A is bounded by RFUNCT_1:73;
+    hence (P*(f|A)) is bounded by RELAT_1:83;
+  end;
+
+theorem Th16:
+  for f be PartFunc of REAL,REAL n, g be Function of A,REAL n
+  st f is bounded & f = g holds g is bounded
+  proof
+    let f be PartFunc of REAL,REAL n, g be Function of A,REAL n;
+    assume
+A1: f is bounded & f = g;
+    let i;
+    thus thesis by A1,INTEGR15:def 15;
+  end;
+
+theorem Th17:
+  for f be PartFunc of REAL,REAL n, g be Function of A,REAL n
+  st f = g holds |. f .| = |. g .|
+  proof
+    let f be PartFunc of REAL,REAL n, g be Function of A,REAL n;
+    assume A1:f = g;
+A2: dom (|. f .|) = dom f by NFCONT_4:def 2
+    .= dom |. g .| by A1,NFCONT_4:def 2;
+    now let x be set;
+      assume A3: x in dom (|. f .|);
+      thus (|. f .|).x  =|. f .| /.x by A3,PARTFUN1:def 6
+      .=|. f/.x .| by A3,NFCONT_4:def 2
+      .= (|. g .|)/.x by A1,A2,A3,NFCONT_4:def 2
+      .= (|. g .|).x by A2,A3,PARTFUN1:def 6;
+    end;
+    hence thesis by A2,FUNCT_1:2;
+  end;
+
+theorem Th18:
+  A c= dom h implies |. h|A .| = (|.h.|) |A
+  proof
+    assume A1:  A c= dom h;
+A2: dom (h|A) = A by A1,RELAT_1:62;
+A3: dom ((|.h.|) |A) = dom (|.h.|) /\ A by RELAT_1:61
+    .= dom (h) /\ A by NFCONT_4:def 2
+    .= A by A1,XBOOLE_1:28;
+A4: dom |. h|A .| = dom ((|.h.|) |A) by A3,A2,NFCONT_4:def 2;
+    now let x be set;
+      assume A5: x in dom ((|.h.|) |A);
+      then
+A6:   x in dom (|.h.|) /\ A by RELAT_1:61;
+      then
+A7:   x in dom (h) /\ A by NFCONT_4:def 2;
+      then
+A8:   x in dom (h|A) by RELAT_1:61;
+A9:   x in dom (|.h.|) by A6,XBOOLE_0:def 4;
+A10:  x in dom h by A7,XBOOLE_0:def 4;
+A11:  h/.x = h.x by A10,PARTFUN1:def 6
+      .= (h|A).x by A8,FUNCT_1:47
+      .= (h|A)/.x by A8,PARTFUN1:def 6;
+      thus ((|.h.|) |A).x = (|.h.|).x by A6,FUNCT_1:48
+      .= (|.h.|)/.x by A9,PARTFUN1:def 6
+      .= |. h/.x .| by A9,NFCONT_4:def 2
+      .= (|. (h|A) .|) /.x by A11,A4,A5,NFCONT_4:def 2
+      .= (|. (h|A) .|) .x by A4,A5,PARTFUN1:def 6;
+    end;
+    hence thesis by A4,FUNCT_1:2;
+  end;
+
+theorem Th19:
+  for n be non empty Element of NAT, h be PartFunc of REAL,REAL n
+   st A c= dom h & h|A is bounded
+   holds (|.h.|) |A is bounded
+   proof
+     let n be non empty Element of NAT,
+     h be PartFunc of REAL,REAL n;
+     assume A1: A c= dom h & h|A is bounded;
+A2:  |. (h|A) .| = (|.h.|) |A by Th18,A1;
+     reconsider g = h|A as Function of A,REAL n by A1,Lm9;
+     g is bounded by Th16,A1;
+     then |. g .| is bounded by Th14;
+     hence thesis by A2,Th17;
+   end;
+
+theorem Th20:
+  for n be non empty Element of NAT, h be PartFunc of REAL,REAL n
+  st A c= dom h & h|A is bounded &
+  h is_integrable_on A & |. h .| is_integrable_on A
+  holds |.integral(h,A) .| <= integral(|. h .|,A)
+  proof
+    let n be non empty Element of NAT, h be PartFunc of REAL,REAL n;
+    assume A1: A c= dom h & h|A is bounded
+    & h is_integrable_on A & |. h .| is_integrable_on A;
+    set f = |. h .|;
+    reconsider hA = h|A as Function of A,REAL n by A1,Lm9;
+A2: integral(h,A) = integral(hA) by INTEGR15:14;
+    A c= dom f by A1,NFCONT_4:def 2; then
+    reconsider fA = f|A as Function of A,REAL by Lm5;
+A3: fA is integrable by A1,INTEGRA5:def 1;
+A4: hA is integrable by A1,INTEGR15:13;
+    |. hA .| = |. (h|A) .| by Th17
+    .= f|A by Th18,A1;
+    hence thesis by A2,A3,A4,A1,Th16,Lm8;
+  end;
+
+theorem Th21:
+  for n be non empty Element of NAT, h be PartFunc of REAL,REAL n
+  st a<=b & ['a,b'] c= dom h & h is_integrable_on ['a,b']
+  & |.h.| is_integrable_on ['a,b'] & h| ['a ,b'] is bounded
+  holds |. integral(h,a,b).| <= integral(|.h.|,a,b)
+  proof
+    let n be non empty Element of NAT, h be PartFunc of REAL,REAL n;
+    assume A1: a<=b & ['a,b'] c= dom h & h is_integrable_on ['a,b']
+    & |.h.| is_integrable_on ['a,b'] & h| ['a ,b'] is bounded;
+A2: a is Real & b is Real by XREAL_0:def 1;
+    ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3; then
+A3: integral(h,a,b) = integral(h,['a,b']) by A2,INTEGR15:19;
+    integral(|.h.|,a,b) = integral (|.h.|,['a,b']) by A1,INTEGRA5:def 4;
+    hence thesis by Th20,A1,A3;
+  end;
+
+Lm10:
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+    st a <= b & c <=d & f is_integrable_on ['a,b']
+    & |.f.| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds f is_integrable_on ['c,d'] &
+        |.f.| is_integrable_on ['c,d'] & |. f .| | ['c,d']  is bounded &
+        |. integral(f,c,d) .| <= integral(|.f.|,c,d)
+proof
+let n be non empty Element of NAT, f be PartFunc of REAL,REAL n such that
+A1: a <= b and
+A2: c <= d and
+A3: f is_integrable_on ['a,b']
+    & |.f.| is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & ['a,b'] c= dom f and
+A4: c in ['a,b'] & d in ['a,b'];
+    ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3; then
+A5: a<=c & d <= b by A4,XXREAL_1:1; then
+A6: f| ['c,d'] is bounded by A2,A3,Th9;
+A7: ['c,d'] c= dom f & f is_integrable_on ['c,d'] by A2,A3,A5,Th9,Th2;
+A8: ['a,b'] c= dom |.f.| by A3,NFCONT_4:def 2;
+    |.f.| | ['a,b'] is bounded by A3,Th19;
+    then ['c,d'] c= dom |.f.| & |.f.| is_integrable_on ['c,d']
+    by A2,A3,A5,A8,INTEGRA6:18;
+    hence thesis by A2,A6,A7,Th21,Th19;
+  end;
+
+theorem Th22:
+  for n be non empty Element of NAT, f be PartFunc of REAL,REAL n
+  st a <= b & f is_integrable_on ['a,b'] & |. f .| is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds |. f .| is_integrable_on ['min(c,d),max(c,d)'] &
+    (|. f .|) | ['min(c,d),max(c,d)'] is bounded &
+    |. integral(f,c,d) .| <= integral((|. f .|),min(c,d),max(c,d))
+  proof
+    let n be non empty Element of NAT, f be PartFunc of REAL,REAL n;
+    assume A1: a <= b & f is_integrable_on ['a,b']
+    & |. f .| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'];
+A2: c is Real & d is Real by XREAL_0:def 1;
+    per cases;
+    suppose
+A3:   not c <= d; then
+A4:   ['d,c'] = [.d,c.] by INTEGRA5:def 3; then
+      integral(f,c,d) = -integral(f,['d,c']) by A2,INTEGR15:20; then
+      integral(f,c,d) = -integral(f,d,c) by A2,A4,INTEGR15:19; then
+A5:   |. integral(f,c,d) .| = |.integral(f,d,c).| by EUCLID:10;
+      d = min(c,d) & c = max(c,d) by A3,XXREAL_0:def 9,def 10;
+      hence thesis by A1,A3,A5,Lm10;
+    end;
+    suppose
+A6:   c <= d; then
+      c = min(c,d) & d = max(c,d) by XXREAL_0:def 9,def 10;
+      hence thesis by A1,A6,Lm10;
+    end;
+  end;
+
+Lm11:
+  for n be non empty Element of NAT
+    for f be PartFunc of REAL,REAL n
+  st a <= b & c <= d & f is_integrable_on ['a,b']
+    & |.f.| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds |.f.| is_integrable_on ['c,d'] &
+    |.f.| | ['c,d'] is bounded & |.integral(f,c,d) .| <= integral(|.f.|,c,d)
+  proof
+    let n be non empty Element of NAT;
+    let f be PartFunc of REAL,REAL n;
+    assume that
+A1: a<=b and
+A2: c <= d and
+A3: f is_integrable_on ['a,b'] & |.f.|  is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+    d in ['a,b'];
+    min(c,d) = c & max(c,d) = d by A2,XXREAL_0:def 9,def 10;
+    hence thesis by A1,A3,Th22;
+  end;
+
+Lm12:
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+  st a <= b & c <= d & f is_integrable_on ['a,b']
+   & |.f.| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds |.integral(f,d,c).| <= integral(|.f.|,c,d)
+  proof
+    let n be non empty Element of NAT;
+    let f be PartFunc of REAL,REAL n;
+    assume that
+A1: a<=b and
+A2: c <= d and
+A3: f is_integrable_on ['a,b'] & |.f.| is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] and
+A4: d in ['a,b'];
+A5: c is Real & d is Real by XREAL_0:def 1;
+    ['c,d'] = [. c, d .] by A2,INTEGRA5:def 3; then
+A6: |.integral(f,c,d).| <= integral(|.f.|,c,d) &
+    integral(f,c,d) = integral(f,['c,d']) by A1,A2,A3,A4,Lm11,INTEGR15:19;
+    ['c,d'] = [. c,d .] by A2,INTEGRA5:def 3; then
+    integral(f,d,c) = -integral(f,['c,d']) by A5,INTEGR15:20;
+    hence thesis by A6,EUCLID:10;
+  end;
+
+theorem
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+  st a <= b & c <= d & f is_integrable_on ['a,b'] &
+  |.f.| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds |.f.| is_integrable_on ['c,d'] &
+  |.f.| | ['c,d'] is bounded & |.integral(f,c,d).| <= integral(|.f.|,c,d) &
+  |.integral(f,d,c).| <= integral(|.f.|,c,d) by Lm11,Lm12;
+
+Lm13:
+for n be non empty Element of NAT
+for f be PartFunc of REAL,REAL n
+ st (a<=b & f is_integrable_on ['a,b']
+ & |.f.| is_integrable_on ['a,b']
+ & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+ d in ['a,b'] & for x be real number st x in ['min(c,d),max(c,d)']
+ holds |. f/.x .| <= e)
+ holds |. integral(f,c,d) .|<= e * abs(d-c)
+  proof
+    let n be non empty Element of NAT;
+    let f be PartFunc of REAL,REAL n;
+    set A = ['min(c,d),max(c,d)'];
+    assume that
+A1: a<=b & f is_integrable_on ['a,b']
+    & |.f.| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'] and
+A2: for x be real number st x in ['min(c,d),max(c,d)'] holds |. f/.x .| <= e;
+    rng |.f.| c= REAL; then
+A3: |.f.| is Function of dom |.f.|,REAL by FUNCT_2:2;
+    dom |.f.| = dom f by NFCONT_4:def 2; then
+A4: ['min(c,d),max(c,d)'] c= dom |.f.| by A1,Th3; then
+    reconsider g =|.f.| |A as Function of A,REAL by A3,FUNCT_2:32;
+A5: vol A = abs(d-c) by INTEGRA6:6;
+    |.f.| is_integrable_on A by A1,Th22; then
+A6: g is integrable by INTEGRA5:def 1;
+    e is Real by XREAL_0:def 1; then
+    consider h be Function of A,REAL such that
+A7: rng h = {e} and
+A8: h|A is bounded by INTEGRA4:5;
+A9: now
+      let x be Real;
+      assume
+A10:  x in A; then
+      g.x = |.f.|.x by FUNCT_1:49; then
+      g.x = |.f.|/.x by A10,A4,PARTFUN1:def 6;
+      then
+A11:  g.x = |.f/.x .| by A10,A4,NFCONT_4:def 2;
+      h.x in {e} by A7,A10,FUNCT_2:4; then
+      h.x =e by TARSKI:def 1;
+      hence g.x <= h.x by A11,A2,A10;
+    end;
+A12: |.integral(f,c,d).| <= integral(|.f.|,min(c,d),max(c,d))
+     by A1,Th22;
+     min(c,d) <= c & c <= max(c,d) by XXREAL_0:17,25; then
+     min(c,d) <= max(c,d) by XXREAL_0:2; then
+A13: integral(|.f.|,min(c,d),max(c,d)) = integral(|.f.|,A) by INTEGRA5:def 4;
+     |. f .| |A is bounded by A1,Th22; then
+A14: g|A is bounded;
+     e is Real by XREAL_0:def 1;
+     then h is integrable & integral h = e*vol A by A7,INTEGRA4:4; then
+     integral(|. f .|,min(c,d),max(c,d)) <= e * abs(d-c)
+     by A13,A8,A9,A6,A14,A5,INTEGRA2:34;
+     hence thesis by A12,XXREAL_0:2;
+   end;
+
+Lm14:
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+  st (a<=b & c <= d & f is_integrable_on ['a,b']
+  & |. f .| is_integrable_on ['a,b']
+  & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'] &
+  for x be real number st x in ['c,d'] holds |.f/.x .| <= e)
+  holds |. integral(f,c,d) .| <= e * (d-c)
+  proof
+    let n be non empty Element of NAT;
+    let f be PartFunc of REAL,REAL n;
+    assume that
+A1: a<=b and
+A2: c <= d and
+A3: f is_integrable_on ['a,b']
+    & |. f .| is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+    (d in ['a,b'] & for x be real number st x in ['c,d'] holds |.f/.x .| <= e);
+    0 <= d - c by A2,XREAL_1:48; then
+A4: abs(d-c) = d-c by ABSVALUE:def 1;
+    min(c,d) = c & max(c,d) = d by A2,XXREAL_0:def 9,def 10;
+    hence thesis by A1,A3,A4,Lm13;
+  end;
+
+Lm15:
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+  st (a<=b & c <= d & f is_integrable_on ['a,b']
+  & |. f .| is_integrable_on ['a,b']
+  & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'] &
+  for x be real number st x in ['c,d'] holds |.f/.x .| <= e)
+  holds |. integral(f,d,c).| <= e * (d-c)
+  proof
+    let n be non empty Element of NAT;
+    let f be PartFunc of REAL,REAL n;
+    assume that
+A1: a<=b and
+A2: c <= d and
+A3: f is_integrable_on ['a,b'] & |. f .| is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] and
+A4: d in ['a,b'] and
+A5: for x be real number st x in ['c,d'] holds |.f/.x .| <= e;
+    ['c,d'] = [. c,d .] by A2,INTEGRA5:def 3; then
+A6: |. integral(f,c,d).| <= e * (d-c) & integral(f,c,d) = integral(f,['c,d'])
+    by A1,A2,A3,A4,A5,Lm14,INTEGR15:19;
+A7: c is Real & d is Real by XREAL_0:def 1;
+    ['c,d'] = [. c,d .]  by A2,INTEGRA5:def 3; then
+    integral(f,d,c) = -integral(f,['c,d']) by A7,INTEGR15:20;
+    hence thesis by A6,EUCLID:10;
+  end;
+
+theorem
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+  st (a<=b & c <= d & f is_integrable_on ['a,b']
+  & |. f .| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'] &
+  for x be real number st x in ['c,d'] holds |. f/.x .| <= e)
+  holds |. integral(f,c,d) .| <= e * (d-c) &
+  |. integral(f,d,c).| <= e * (d-c) by Lm14,Lm15;
+
+theorem Th25:
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(r(#)f,c,d) = r*integral(f,c,d)
+  proof
+    assume A1: a<=b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'];
+A2: now let i; set P = proj(i,n);
+      assume A3: i in Seg n; then
+A4:   P*f is_integrable_on ['a,b'] by A1,INTEGR15:def 16;
+      (P*(f| ['a,b'])) is bounded by A3,A1,INTEGR15:def 15; then
+A5:   (P*f) | ['a,b'] is bounded by RELAT_1:83;
+      dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+A6:   ['a,b'] c= dom (P*f) by A1,RELAT_1:27;
+      r is Real by XREAL_0:def 1;
+      then P*(r(#)f)= r(#)(P*f) by INTEGR15:16;
+      hence integral(P*(r(#)f),c,d) = r*integral((P*f),c,d)
+      by A4,A5,A6,A1,INTEGRA6:25;
+    end;
+A7: now let i be Nat;
+      assume i in dom (integral(r(#)f,c,d)); then
+A8:   i in Seg n by INTEGR15:def 18;
+      set P = proj(i,n);
+      thus (integral(r(#)f,c,d)).i = integral((P*(r(#)f)),c,d)
+      by A8,INTEGR15:def 18
+      .= r*integral((P*f),c,d) by A8,A2
+      .= r*(integral(f,c,d)).i by A8,INTEGR15:def 18
+      .= (r*integral(f,c,d)).i by RVSUM_1:44;
+    end;
+A9: Seg n = dom (integral((r(#)f),c,d)) by INTEGR15:def 18;
+     len (r*integral(f,c,d)) = n by CARD_1:def 7; then
+     Seg n = dom (r*integral(f,c,d)) by FINSEQ_1:def 3;
+     hence integral(r(#)f,c,d)=r*integral(f,c,d) by A9,A7,FINSEQ_1:13;
+   end;
+
+theorem Th26:
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(-f,c,d) = -integral(f,c,d)
+  proof
+    -f = (-1)(#)f by NFCONT_4:7;
+    hence thesis by Th25;
+  end;
+
+theorem Th27:
+  a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  implies integral(f+g,c,d) = integral(f,c,d) + integral(g,c,d)
+  proof
+    assume A1: a<=b & f is_integrable_on ['a,b'] &
+    g is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    g| ['a,b'] is bounded & ['a,b'] c= dom f &
+    ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b'];
+A2: now let i; set P = proj(i,n);
+      assume A3: i in Seg n; then
+A4:   P*f is_integrable_on ['a,b'] by A1,INTEGR15:def 16;
+      (P*(f| ['a,b'])) is bounded by A3,A1,INTEGR15:def 15; then
+A5:   (P*f) | ['a,b'] is bounded by RELAT_1:83;
+A6:   (P*g) is_integrable_on ['a,b'] by A3,A1,INTEGR15:def 16;
+      (P*(g| ['a,b'])) is bounded by A3,A1,INTEGR15:def 15; then
+A7:   (P*g) | ['a,b'] is bounded by RELAT_1:83;
+A8:   dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+A9:   ['a,b'] c= dom (P*f) by A1,RELAT_1:27;
+      rng g c= dom(P) by A8; then
+A10:  ['a,b'] c= dom (P*g) by A1,RELAT_1:27;
+A11:  P*(f+g)= P*f+P*g by INTEGR15:15;
+      thus integral(P*(f+g),c,d) =integral((P*f),c,d) + integral((P*g),c,d)
+      by A4,A5,A9,A6,A7,A10,A1,A11,INTEGRA6:24;
+    end;
+A12: now let i be Nat;
+       assume i in dom (integral(f+g,c,d)); then
+A13:   i in Seg n by INTEGR15:def 18;
+       set P = proj(i,n);
+       thus (integral(f+g,c,d)).i
+       = integral((P*(f+g)),c,d) by A13,INTEGR15:def 18
+       .= integral((P*f),c,d) + integral((P*g),c,d) by A13,A2
+       .= (integral(f,c,d)).i +integral((P*g),c,d) by A13,INTEGR15:def 18
+       .= (integral(f,c,d)).i +(integral(g,c,d)).i by A13,INTEGR15:def 18
+       .= (integral(f,c,d)+ integral(g,c,d)).i by RVSUM_1:11;
+     end;
+A14: Seg n = dom (integral((f+g),c,d)) by INTEGR15:def 18;
+     len (integral(f,c,d)+ integral(g,c,d)) = n by CARD_1:def 7; then
+     Seg n = dom (integral(f,c,d) + integral(g,c,d)) by FINSEQ_1:def 3;
+     hence thesis by A14,A12,FINSEQ_1:13;
+   end;
+
+theorem Th28:
+  a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  implies integral(f-g,c,d) = integral(f,c,d) - integral(g,c,d)
+  proof
+    assume A1: a<=b & f is_integrable_on ['a,b'] &
+    g is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    g| ['a,b'] is bounded & ['a,b'] c= dom f &
+    ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b'];
+A2: -g is_integrable_on ['a,b'] & (-g) | ['a,b'] is bounded by A1,Th12;
+A3: dom g = dom -g by NFCONT_4:def 3;
+    f-g = f+-g by Lm1;
+    hence integral(f-g,c,d) = integral(f,c,d) + integral(-g,c,d)
+    by A1,A2,A3,Th27
+    .= integral(f,c,d) - integral(g,c,d) by A1,Th26;
+   end;
+
+theorem Th29:
+  (a <= b & ['a,b'] c= dom f &
+  for x be real number st x in ['a,b'] holds f.x = E)
+  implies f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  integral(f,a,b) = (b-a)*E
+  proof
+    assume A1: a<=b & ['a,b'] c= dom f &
+    (for x be real number st x in ['a,b'] holds f.x = E);
+A2: now let i be Element of NAT;  set P = proj(i,n);
+      assume i in Seg n;
+      dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+A3:   ['a,b'] c= dom (P*f) by A1,RELAT_1:27;
+      for x be real number st x in ['a,b'] holds (P*f).x = P.E
+      proof
+        let x be real number;
+        assume A4: x in ['a,b'];
+A5:     f.x = f/.x by A4,A1,PARTFUN1:def 6;
+        hence (P*f).x = P.(f/.x) by A4,A3,FUNCT_1:12
+        .= P.E by A4,A1,A5;
+      end;
+      hence P*f is_integrable_on ['a,b'] & (P*f) | ['a,b'] is bounded &
+      integral((P*f),a,b) = (P.E)*(b-a) by A3,A1,INTEGRA6:26;
+    end; then
+A6: for i be Element of NAT st i in Seg n
+    holds (proj(i,n)*f) is_integrable_on ['a,b'];
+A7: Seg n = dom (integral(f,a,b)) by INTEGR15:def 18;
+A8: now let i; set P = proj(i,n);
+      assume i in Seg n; then
+      (P*f) | ['a,b'] is bounded by A2;
+      hence P*(f | ['a,b']) is bounded by RELAT_1:83;
+    end;
+A9: now let i be Nat;
+      assume
+A10:   i in dom (integral(f,a,b));
+      hence (integral(f,a,b)).i = integral(proj(i,n)*f,a,b)
+      by A7,INTEGR15:def 18
+      .= (proj(i,n).E)*(b-a) by A10,A2,A7
+      .= (b-a)*(E.i) by PDIFF_1:def 1
+      .= ((b-a)*E).i by RVSUM_1:44;
+    end;
+    len ((b-a)*E) = n by CARD_1:def 7; then
+    Seg n = dom ((b-a)*E) by FINSEQ_1:def 3;
+    hence thesis by A6,A8,A7,A9,FINSEQ_1:13,INTEGR15:def 15,def 16;
+  end;
+
+theorem Th30:
+  a <= b & (for x be real number st x in ['a,b'] holds f.x = E) &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(f,c,d) = (d-c)*E
+  proof
+    assume A1: a<=b & (for x be real number st x in ['a,b'] holds f.x=E) &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'];
+A2: Seg n = dom (integral(f,c,d)) by INTEGR15:def 18;
+A3: now let i; set P = proj(i,n);
+      dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+A4:   ['a,b'] c= dom (P*f) by A1,RELAT_1:27;
+      for x be real number st x in ['a,b'] holds (P*f).x=P.E
+      proof
+        let x be real number;
+        assume A5: x in ['a,b']; then
+A6:     f.x = f/.x by A1,PARTFUN1:def 6;
+        (P*f).x = P.(f/.x) by A4,A5,A6,FUNCT_1:12
+        .= P.E by A6,A5,A1;
+        hence thesis;
+      end;
+      hence integral((P*f),c,d) = (P.E)*(d-c) by A4,A1,INTEGRA6:27;
+    end;
+A7: now let i be Nat;
+      set P = proj(i,n);
+      assume
+A8:   i in dom (integral(f,c,d));
+      hence (integral(f,c,d)).i = integral(P*f,c,d) by A2,INTEGR15:def 18
+      .= (P.E)*(d-c) by A3,A8
+      .= (d-c)*(E.i) by PDIFF_1:def 1
+      .= ((d-c)*E).i by RVSUM_1:44;
+    end;
+    len ((d-c)*E) = n by CARD_1:def 7; then
+    Seg n = dom ((d-c)*E) by FINSEQ_1:def 3;
+    hence thesis by A2,A7,FINSEQ_1:13;
+  end;
+
+theorem Th31:
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(f,a,d) = integral(f,a,c) + integral(f,c,d)
+  proof
+    assume
+A1: a<=b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'];
+A2: now let i;
+      set P = proj(i,n);
+      assume A3: i in Seg n; then
+A4:   P*f is_integrable_on ['a,b'] by A1,INTEGR15:def 16;
+      (P*(f| ['a,b'])) is bounded by A3,A1,INTEGR15:def 15; then
+A5:   (P*f) | ['a,b'] is bounded by RELAT_1:83;
+      dom (P)=REAL n by FUNCT_2:def 1; then
+      rng f c= dom(P); then
+      dom (P*f) = dom f by RELAT_1:27;
+      hence integral(P*f,a,d) = integral(P*f,a,c)
+      + integral(P*f,c,d) by A4,A5,A1,INTEGRA6:20;
+    end;
+A6: Seg n = dom (integral(f,a,d)) by INTEGR15:def 18;
+A7: now let i0 be Nat;
+      assume
+A8:   i0 in dom (integral(f,a,d));
+      set P = proj(i0,n);
+      thus (integral(f,a,d)).i0 = integral(P*f,a,d) by A8,A6,INTEGR15:def 18
+      .= integral(P*f,a,c) + integral(P*f,c,d) by A8,A2,A6
+      .= (integral(f,a,c)).i0 +integral(P*f,c,d) by A8,A6,INTEGR15:def 18
+      .= (integral(f,a,c)).i0 + (integral(f,c,d)).i0 by A8,A6,INTEGR15:def 18
+      .= (integral(f,a,c)+ integral(f,c,d)).i0 by RVSUM_1:11;
+    end;
+    len (integral(f,a,c) + integral(f,c,d)) = n by CARD_1:def 7; then
+    Seg n = dom (integral(f,a,c)+ integral(f,c,d)) by FINSEQ_1:def 3;
+    hence thesis by A6,A7,FINSEQ_1:13;
+  end;
+
+theorem Th32:
+  (a<=b & f is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+  d in ['a,b'] & for x be real number st x in ['min(c,d),max(c,d)']
+  holds |. f/.x .| <= e)
+  implies |. integral(f,c,d) .| <= n*e * abs(d-c)
+  proof
+    assume A1: a<=b & f is_integrable_on ['a,b']  &
+    f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+    d in ['a,b'] & for x be real number st x in ['min(c,d),max(c,d)']
+    holds |. f/.x .| <= e;
+A2: now let i; set P = proj(i,n);
+      assume A3: i in Seg n;
+      dom P = REAL n by FUNCT_2:def 1;
+      then rng f c= dom P;
+      then
+A4:   ['a,b'] c= dom (P*f) by A1,RELAT_1:27;
+      set f1= P*f;
+A5:   for x be real number st x in ['min(c,d),max(c,d)'] holds
+      |. (P*f).x .| <= e
+      proof
+        let x be real number;
+        assume A6: x in ['min(c,d),max(c,d)'];
+        ['min(c,d),max(c,d)'] c= ['a,b'] by A1,Lm2;
+        then
+A7:     x in dom (P*f) by A4,A6,TARSKI:def 3;
+        then
+A8:     x in dom f by FUNCT_1:11;
+A9:     |. f/.x .| <= e by A1,A6;
+A10:    (P*f).x = P.(f.x) by A7,FUNCT_1:12
+        .=P.(f/.x) by A8,PARTFUN1:def 6;
+        1 <= i & i <= n by A3,FINSEQ_1:1;
+        then |. P.(f/.x) .| <= |. f/.x .| by PDIFF_8:5;
+        hence |. (P*f).x .| <= e by A10,A9,XXREAL_0:2;
+      end;
+A11:  f1 is_integrable_on ['a,b'] by A1,A3,INTEGR15:def 16;
+A12:  P*(f| ['a,b']) is bounded by A1,A3,INTEGR15:def 15;
+      (P*f) | ['a,b'] = P*(f| ['a,b']) by RELAT_1:83;
+      hence |. integral (f1,c,d) .| <= e *abs(d-c) by A12,A1,A4,A5,A11,Lm4;
+    end;
+    now let i; set P = proj(i,n);
+      assume 1 <=i & i <= n;
+      then
+A13:  i in Seg n;
+      then |. integral ((P*f),c,d) .| <= e *abs(d-c)  by A2;
+      hence |.(integral(f,c,d)).i .| <= e *abs(d-c) by A13,INTEGR15:def 18;
+    end;
+    then |. integral (f,c,d) .| <= n*(e *abs(d-c)) by PDIFF_8:15;
+    hence thesis;
+  end;
+
+theorem Th33:
+  integral(f,b,a) = - integral(f,a,b)
+  proof
+A1: a is Real & b is Real by XREAL_0:def 1;
+    per cases;
+    suppose a <= b; then
+A2:   ['a,b'] = [.a,b.] by INTEGRA5:def 3;
+      integral(f,['a,b']) = integral(f,a,b) by A1,A2,INTEGR15:19;
+      hence integral(f,b,a) = - integral(f,a,b) by A1,A2,INTEGR15:20;
+    end;
+    suppose not a <= b; then
+A3:   ['b,a'] = [.b,a.] by INTEGRA5:def 3;
+      then - integral(f,['b,a'])= integral(f,a,b) by A1,INTEGR15:20;
+      hence thesis by A1,A3,INTEGR15:19;
+    end;
+  end;
+
+begin :: On the functions from REAL into REAL-NS n
+
+Lm16:
+   for p be FinSequence of REAL n, r be Element of REAL n,
+   q be FinSequence of REAL-NS n st p = q
+   & (for i be Element of NAT st i in Seg n holds
+   ex Pi be FinSequence of REAL st Pi=(proj(i,n))*p
+   & r.i = Sum(Pi)) holds r = Sum(q)
+  proof
+    defpred P[Element of NAT] means for p be FinSequence of REAL n,
+    r be Element of REAL n, q be FinSequence of REAL-NS n
+    st len p = $1 & p = q & (for i be Element of NAT st i in Seg n
+    ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & r.i = Sum(Pi))
+    holds r = Sum(q);
+A1: P[0]
+    proof
+      let p be FinSequence of REAL n,
+      r be Element of REAL n,
+      q be FinSequence of REAL-NS n;
+      assume
+A2:   len p = 0 & p = q
+      & (for i be Element of NAT st i in Seg n holds
+      ex Pi be FinSequence of REAL st Pi=proj(i,n)*p
+      & r.i = Sum(Pi)); then
+A3:   p = {};
+A4:   q = <*>(the carrier of (REAL-NS n)) by A2;
+      len r = n by CARD_1:def 7; then
+A5:   dom r = Seg n by FINSEQ_1:def 3;
+A6:   dom ((Seg n) --> 0) = Seg n by FUNCOP_1:13;
+      now let x be set;
+        assume
+A7:     x in dom r; then
+        reconsider i=x as  Element of NAT;
+        set P = proj(i,n);
+        consider Pi be FinSequence of REAL such that
+A8:     Pi=P*p & r.i=Sum(Pi) by A2,A5,A7;
+        r.x = 0 by A3,A8,RVSUM_1:72;
+        hence r.x = ((Seg n) --> 0).x by A5,A7,FUNCOP_1:7;
+      end; then
+      r = 0*n by A5,A6,FUNCT_1:2; then
+      r = 0.(REAL-NS n) by REAL_NS1:def 4;
+      hence r = Sum(q) by A4,RLVECT_1:43;
+    end;
+
+A9: for k be Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume A10: P[k];
+      now let p be FinSequence of REAL n,
+        r be Element of REAL n,
+        q be FinSequence of REAL-NS n;
+        assume A11: len p = k+1 & p = q
+        & (for i be Element of NAT st i in Seg n
+        ex Pi be FinSequence of REAL st Pi=proj(i,n)*p & r.i = Sum(Pi));
+        set p1=p|k;
+A12:    k+1 in Seg(k+1) by FINSEQ_1:4; then
+        k+1 in dom p by A11,FINSEQ_1:def 3; then
+        p.(k+1) in rng p by FUNCT_1:3; then
+        reconsider pk1 =p.(k+1) as Element of REAL n;
+        set q1=q|k;
+        k+1 in dom q by A11,A12,FINSEQ_1:def 3; then
+        q.(k+1) in rng q by FUNCT_1:3; then
+        reconsider qk1 =q.(k+1) as Point of REAL-NS n;
+        defpred YX[Nat,set] means ex P1i be FinSequence of REAL
+        st P1i=proj($1,n)*p1 & $2 = Sum(P1i);
+A13:    for i be Nat st i in Seg n ex r be Element of REAL st YX[i,r]
+        proof
+          let i be Nat;
+          assume i in Seg n;
+          take Sum(proj(i,n)*p1);
+          thus thesis;
+        end;
+        consider r1 be FinSequence of REAL such that
+A14:    dom r1 = Seg n
+        & for i be Nat st i in Seg n holds YX[i,r1.i] from FINSEQ_1:sch 5(A13);
+        len r1 = n by A14,FINSEQ_1:def 3; then
+        reconsider r1 as Element of REAL n by FINSEQ_2:92;
+A15:    for i st i in Seg n ex P1i be FinSequence of REAL st P1i=proj(i,n)*p1
+        & r1.i = Sum(P1i) by A14;
+A16:    k <= len p by A11,NAT_1:16; then
+A17:    len p1 = k by FINSEQ_1:59;
+A18:    r1= Sum(q1) by A10,A11,A15,A17;
+A19:    len r = n by CARD_1:def 7;
+A20:    len (r1+pk1) = n by CARD_1:def 7;
+        now let i be Nat; set P = proj(i,n);
+          assume 1 <= i & i <= n; then
+A21:      i in Seg n by FINSEQ_1:1;
+          consider Pi be FinSequence of REAL such that
+A22:      Pi=P*p & r.i = Sum(Pi) by A21,A11;
+          consider P1i be FinSequence of REAL such that
+A23:      P1i=P*p1 & r1.i = Sum(P1i) by A21,A14;
+A24:      dom P = REAL n by FUNCT_2:def 1; then
+A25:      rng p c= dom P;
+A26:      dom (Pi) = dom p by A25,A22,RELAT_1:27
+          .= Seg (len p) by FINSEQ_1:def 3;
+A27:      len p = len p1 + 1 by A11,A16,FINSEQ_1:59
+          .= len p1 + len <* pk1.i *> by FINSEQ_1:40;
+A28:      rng p1 c= dom P by A24;
+A29:      dom (P1i) = dom p1 by A28,A23,RELAT_1:27
+          .= Seg len p1 by FINSEQ_1:def 3; then
+A30:      dom (Pi) = Seg (len P1i + len <* pk1.i *>) by A26,A27,FINSEQ_1:def 3;
+          len p1 <= len p by A16,FINSEQ_1:59; then
+A31:      Seg (len p1) c=Seg (len p) by FINSEQ_1:5;
+A32:      for k be Nat st k in dom P1i holds Pi.k=P1i.k
+          proof
+            let k be Nat;
+            assume A33: k in dom P1i; then
+A34:        k in dom p1 by A29,FINSEQ_1:def 3;
+            thus P1i.k = P.(p1.k) by A23,A33,FUNCT_1:12
+            .= P.(p.k) by A34,FUNCT_1:47
+            .= Pi.k by A22,A33,A29,A26,A31,FUNCT_1:12;
+          end;
+          for k be Nat st k in dom <*pk1.i*> holds Pi.(len P1i + k)=<*pk1.i*>.k
+          proof
+            let j be Nat;
+            assume j in dom <*pk1.i*>; then
+            j in Seg len (<*pk1.i*>) by FINSEQ_1:def 3; then
+            j in {1} by FINSEQ_1:2,40; then
+A35:        j=1 by TARSKI:def 1;
+            thus Pi.(len P1i + j) = Pi.(k + 1) by A29,A17,A35,FINSEQ_1:def 3
+            .= P.(p.(k+1)) by A22,A26,A11,FINSEQ_1:4,FUNCT_1:12
+            .= pk1.i by PDIFF_1:def 1
+            .=(<*pk1.i*>).j by A35,FINSEQ_1:40;
+          end; then
+          Pi = P1i^ <* pk1.i *> by A32,A30,FINSEQ_1:def 7;
+          hence r.i =r1.i + pk1.i by A22,A23,RVSUM_1:74
+          .= (r1+pk1).i by RVSUM_1:11;
+        end; then
+A36:    r = r1 + pk1 by A19,A20,FINSEQ_1:14;
+A37:    len q = len q1 + 1 by A16,A11,FINSEQ_1:59;
+A38:    q1 = q | (dom q1) by A17,A11,FINSEQ_1:def 3;
+        thus r = Sum(q1)+ qk1 by A36,A18,A11,REAL_NS1:2
+        .= Sum(q) by A11,A37,A38,RLVECT_1:38;
+      end;
+      hence P[k+1];
+    end;
+A39: for k be Element of NAT holds P[k] from NAT_1:sch 1(A1,A9);
+     let p be FinSequence of REAL n,
+     r be Element of REAL n,
+     q be FinSequence of REAL-NS n;
+     assume A40: p = q
+     & (for i be Element of NAT st i in Seg n holds
+     ex Pi be FinSequence of REAL st Pi=proj(i,n)*p
+     & r.i = Sum(Pi));
+     len p = len p;
+     hence r = Sum(q) by A40,A39;
+   end;
+
+definition
+  let R be RealNormSpace, X be non empty set, g be PartFunc of X,R;
+  attr g is bounded means
+  :Def1:
+  ex r be real number
+  st for y be set st y in dom g holds ||. g/.y .|| < r;
+end;
+
+theorem Th34:
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n st f=g
+  holds f is bounded iff g is bounded
+  proof
+    let f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n;
+    assume A1: f=g;
+    thus f is bounded implies g is bounded
+    proof
+      assume
+A2:   f is bounded;
+      defpred Pd[Element of NAT,Element of REAL] means
+      for y be set st y in dom (proj($1,n)*f) holds
+      abs((proj($1,n)*f).y) < $2;
+A3:   for i be Element of NAT st i in Seg n
+      ex di be Element of REAL st Pd[i,di]
+      proof
+        let i; set P = proj(i,n);
+        assume i in Seg n; then
+        P*f is bounded by A2,INTEGR15:def 15; then
+        consider r be real number such that
+A4:     for y be set st y in dom (P*f) holds
+        abs((P*f).y) < r by COMSEQ_2:def 3;
+        reconsider r as Element of REAL by XREAL_0:def 1;
+        take r;
+        thus thesis by A4;
+      end;
+      consider d be FinSequence of REAL such that
+A5:   dom d = Seg n & for k be Element of NAT st k in Seg n holds
+      Pd[k,d/.k] from RECDEF_1:sch 17(A3);
+      set K = max d;
+      for y be set st y in dom g holds ||. g/.y .|| < n*K + 1
+      proof
+        let y be set;
+        assume A6: y in dom g;
+        set s = f/.y;
+        now
+          let i; set P = proj(i,n);
+          assume A7: 1 <= i & i <= n; then
+A8:       i in Seg n;
+          dom (P)=REAL n by FUNCT_2:def 1; then
+          rng f c= dom(P); then
+A9:       y in dom (P*f) by A6,A1,RELAT_1:27; then
+A10:      abs((P*f).y) < d/.i by A8,A5;
+          f.y = s by A6,A1,PARTFUN1:def 6; then
+          (P*f).y = P.s by A9,FUNCT_1:12; then
+A11:      abs (s.i) < d/.i by A10,PDIFF_1:def 1;
+          len d = n by A5,FINSEQ_1:def 3;
+          then d.i <= K by A7,RFINSEQ2:1;
+          then d/.i <= K by A8,A5,PARTFUN1:def 6;
+          hence abs (s.i) <= K by A11,XXREAL_0:2;
+        end; then
+A12:    |. s .| < n*K + 1 by PDIFF_8:15,XREAL_1:145;
+        g/.y = g.y by A6,PARTFUN1:def 6
+        .= f/.y by A1,A6,PARTFUN1:def 6;
+        hence ||. g/.y .|| < n*K + 1 by A12,REAL_NS1:1;
+      end;
+      hence g is bounded by Def1;
+    end;
+    assume A13: g is bounded;
+    consider r be real number such that
+A14: for y be set st y in dom g holds ||. g/.y .|| < r by A13,Def1;
+     let i; set P = proj(i,n);
+     assume A15: i in Seg n;
+     for y be set st y in dom (P*f) holds abs((P*f).y) < r
+     proof
+       let y be set;
+       assume A16: y in dom (P*f);
+       dom (P)=REAL n by FUNCT_2:def 1; then
+       rng f c= dom(P); then
+A17:   y in dom f by A16,RELAT_1:27; then
+A18:   ||. g/.y .|| < r by A14,A1;
+       set s = f/.y;
+       g/.y = g.y by A17,A1,PARTFUN1:def 6
+       .= f/.y by A1,A17,PARTFUN1:def 6; then
+A19:   |. s .| < r by A18,REAL_NS1:1;
+       abs(s.i) <= |. s .| by A15,REAL_NS1:8; then
+A20:   abs(s.i) < r by A19,XXREAL_0:2;
+       f.y = s by A17,PARTFUN1:def 6; then
+       (P*f).y = P.s by A16,FUNCT_1:12;
+       hence abs((P*f).y) < r by A20,PDIFF_1:def 1;
+     end;
+     hence P*f is bounded by COMSEQ_2:def 3;
+   end;
+
+theorem Th35:
+  for X,Y be set, f1,f2 be PartFunc of REAL,REAL-NS n
+  st f1|X is bounded & f2|Y is bounded
+  holds (f1+f2) | (X /\ Y) is bounded & (f1-f2) | (X /\ Y) is bounded
+  proof
+    let X,Y  be set,  f1,f2 be PartFunc of REAL,REAL-NS n;
+    assume A1: f1|X is bounded & f2|Y is bounded;
+    consider r1 be real number such that
+A2: for x be set st x in dom (f1|X)
+    holds ||. (f1|X)/.x .|| <r1 by A1,Def1;
+    consider r2 be real number such that
+A3: for x be set st x in dom (f2|Y)
+    holds ||. (f2|Y)/.x .|| <r2 by A1,Def1;
+    now let x be set;
+      assume x in dom ((f1+f2) | (X /\ Y));
+      then
+A4:   x in dom (f1+f2) & x in (X /\ Y)  by RELAT_1:57;
+      then x in (dom f1) /\ (dom f2)  by VFUNCT_1:def 1;
+      then
+A5:   x in dom f1 & x in dom f2 by XBOOLE_0:def 4;
+A6:   x in X & x in Y by A4,XBOOLE_0:def 4;
+      ((f1+f2) | (X /\ Y))/.x = (f1+f2)/.x by A4,PARTFUN2:17
+      .= f1/.x + f2/.x by A4,VFUNCT_1:def 1
+      .= (f1|X)/.x + f2/.x by A5,A6,PARTFUN2:17
+      .= (f1|X)/.x + (f2|Y)/.x by A5,A6,PARTFUN2:17;
+      then
+A7:   ||. ((f1+f2) | (X /\ Y))/.x .||
+      <= ||.(f1|X)/.x .|| + ||.(f2|Y)/.x .|| by NORMSP_1:def 1;
+      x in dom (f1|X) by A5,A6,RELAT_1:57;
+      then
+A8:   ||.(f1|X)/.x .|| < r1 by A2;
+      x in dom (f2|Y) by A5,A6,RELAT_1:57;
+      then ||.(f1|X)/.x .|| + ||.(f2|Y)/.x .|| < r1+r2 by A3,A8,XREAL_1:8;
+      hence
+      ||. ((f1+f2) | (X /\ Y))/.x .|| < r1+r2 by A7,XXREAL_0:2;
+    end;
+    hence (f1+f2) | (X /\ Y) is bounded by Def1;
+    take r1+r2;
+    let x be set;
+    assume x in dom ((f1-f2) | (X /\ Y));
+    then
+A9: x in dom (f1-f2) & x in (X /\ Y)  by RELAT_1:57;
+    then x in (dom f1) /\ (dom f2)  by VFUNCT_1:def 2;
+    then
+A10: x in dom f1 & x in dom f2 by XBOOLE_0:def 4;
+A11: x in X & x in Y by A9,XBOOLE_0:def 4;
+     ((f1-f2) | (X /\ Y))/.x = (f1-f2)/.x by A9,PARTFUN2:17
+     .= f1/.x - f2/.x by A9,VFUNCT_1:def 2
+     .= (f1|X)/.x - f2/.x by A10,A11,PARTFUN2:17
+     .= (f1|X)/.x - (f2|Y)/.x by A10,A11,PARTFUN2:17;
+     then
+A12: ||. ((f1-f2) | (X /\ Y))/.x .||
+     <= ||.(f1|X)/.x .|| + ||.(f2|Y)/.x .|| by NORMSP_1:3;
+     x in dom (f1|X) by A10,A11,RELAT_1:57;
+     then
+A13: ||.(f1|X)/.x .|| < r1 by A2;
+     x in dom (f2|Y) by A10,A11,RELAT_1:57;
+     then ||.(f1|X)/.x .|| + ||.(f2|Y)/.x .|| < r1+r2 by A13,A3,XREAL_1:8;
+     hence ||. ((f1-f2) | (X /\ Y))/.x .|| < r1+r2 by A12,XXREAL_0:2;
+   end;
+
+theorem Th36:
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n,
+      D be Division of A, p be FinSequence of REAL n,
+      q be FinSequence of REAL-NS n st f=g & p=q
+  holds p is middle_volume of f,D iff q is middle_volume of g,D
+  proof
+    let f be Function of A,REAL n,
+    g be Function of A,REAL-NS n,
+    D be Division of A,
+    p be FinSequence of REAL n,
+    q be FinSequence of REAL-NS n;
+    assume A1: f=g & p=q;
+    thus p is middle_volume of f,D
+    implies q is middle_volume of g,D
+    proof
+      assume A2: p is middle_volume of f,D; then
+A3:   len q = len D by A1,INTEGR15:def 5;
+      for i be Nat st i in dom D holds
+      ex c be Point of REAL-NS n st c in rng (g|divset(D,i)) &
+      q.i= (vol divset(D,i)) * c
+      proof
+        let i be Nat;
+        assume i in dom D;
+        then consider r be Element of REAL n such that
+A4:     r in rng (f|divset(D,i)) & p.i=vol divset(D,i)*r
+        by A2,INTEGR15:def 5;
+        reconsider c = r as Point of REAL-NS n by REAL_NS1:def 4;
+        take c;
+        thus thesis by A4,A1,REAL_NS1:3;
+      end;
+      hence q is middle_volume of g,D by A3,INTEGR18:def 1;
+    end;
+    thus q is middle_volume of g,D implies p is middle_volume of f,D
+    proof
+      assume A5: q is middle_volume of g,D; then
+A6:   len p = len D by A1,INTEGR18:def 1;
+      for i be Nat st i in dom D holds ex r be Element of REAL n st r in
+      rng (f|divset(D,i)) & p.i=vol divset(D,i)*r
+      proof
+        let i be Nat;
+        assume A7: i in dom D;
+        consider c be Point of REAL-NS n such that
+A8:     c in rng (g|divset(D,i)) & q.i=vol divset(D,i)*c
+        by A5,A7,INTEGR18:def 1;
+        reconsider r = c as Element of REAL n by REAL_NS1:def 4;
+        take r;
+        thus thesis by A8,A1,REAL_NS1:3;
+      end;
+      hence p is middle_volume of f,D by A6,INTEGR15:def 5;
+    end;
+  end;
+
+theorem Th37:
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n,
+  D be Division of A,
+  p be middle_volume of f,D,
+  q be middle_volume of g,D
+  st f=g & p=q
+  holds middle_sum(f,p) = middle_sum(g,q)
+  proof
+    let f be Function of A,REAL n,
+    g be Function of A,REAL-NS n,
+    D be Division of A,
+    p be middle_volume of f,D,
+    q be middle_volume of g,D;
+    assume A1: f=g & p=q;
+    for i be Element of NAT st i in Seg n holds
+    ex Pi be FinSequence of REAL st Pi=proj(i,n)*p
+    & (middle_sum(f,p)).i = Sum(Pi) by INTEGR15:def 6;
+    hence middle_sum(f,p) = middle_sum(g,q) by Lm16,A1;
+  end;
+
+theorem Th38:
+  for f be Function of A,REAL n,
+  g be Function of A,REAL-NS n,
+  T be DivSequence of A,
+  p be Function of NAT,(REAL n)*,
+  q be Function of NAT,(the carrier of REAL-NS n)*
+  st f=g & p=q
+  holds p is middle_volume_Sequence of f,T
+  iff  q is middle_volume_Sequence of g,T
+  proof
+    let f be Function of A,REAL n,
+    g be Function of A,REAL-NS n,
+    T be DivSequence of A,
+    p be Function of NAT,(REAL n)*,
+    q be Function of NAT,(the carrier of REAL-NS n)*;
+    assume A1:f=g & p=q;
+    hereby assume A2: p is middle_volume_Sequence of f,T;
+      for k be Element of NAT holds q.k is middle_volume of g,T.k
+      proof
+        let k be Element of NAT;
+A3:     p.k is middle_volume of f,T.k by A2,INTEGR15:def 7;
+        q.k is FinSequence of REAL-NS n by FINSEQ_2:def 3;
+        hence q.k is middle_volume of g,T.k by A1,A3,Th36;
+      end;
+      hence q is middle_volume_Sequence of g,T by INTEGR18:def 3;
+    end;
+    assume A4: q is middle_volume_Sequence of g,T;
+    for k be Element of NAT holds p.k is middle_volume of f,T.k
+    proof
+      let k be Element of NAT;
+A5:   q.k is middle_volume of g,T.k by A4,INTEGR18:def 3;
+      p.k is FinSequence of REAL n by FINSEQ_2:def 3;
+      hence p.k is middle_volume of f,T.k by A1,A5,Th36;
+    end;
+    hence p is middle_volume_Sequence of f,T by INTEGR15:def 7;
+  end;
+
+theorem Th39:
+  for f be Function of A,REAL n,
+  g be Function of A,REAL-NS n,
+  T be DivSequence of A,
+  S be middle_volume_Sequence of f,T,
+  U be middle_volume_Sequence of g,T
+  st f=g & S=U
+  holds middle_sum(f,S) = middle_sum(g,U)
+  proof
+    let f be Function of A,REAL n,
+    g be Function of A,REAL-NS n,
+    T be DivSequence of A,
+    S be middle_volume_Sequence of f,T,
+    U be middle_volume_Sequence of g,T;
+    assume A1:f=g & S=U;
+A2: dom (middle_sum(f,S)) = NAT by FUNCT_2:def 1
+    .=dom (middle_sum(g,U)) by FUNCT_2:def 1;
+    now let x be set;
+      assume x in dom (middle_sum(f,S));
+      then reconsider n=x as Element of NAT;
+A3:   middle_sum(f,S.n) = middle_sum(g,U.n) by A1,Th37;
+      thus (middle_sum(f,S)).x = middle_sum(f,S.n) by INTEGR15:def 8
+      .=(middle_sum(g,U)).x by A3,INTEGR18:def 4;
+    end;
+    hence thesis by A2,FUNCT_1:2;
+  end;
+
+theorem Th40:
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n,
+  I be Element of REAL n, J be Point of REAL-NS n
+  st f=g & I = J holds
+  (for T be DivSequence of A, S be middle_volume_Sequence of f,T
+  st delta(T) is convergent & lim delta(T)=0
+  holds middle_sum(f,S) is convergent
+  & lim (middle_sum(f,S))=I)
+  iff
+  (for T be DivSequence of A, S be middle_volume_Sequence of g,T
+  st delta(T) is convergent & lim delta(T)=0
+  holds middle_sum(g,S) is convergent & lim (middle_sum(g,S))=J)
+  proof
+    let f be Function of A,REAL n,
+    g be Function of A,REAL-NS n,
+    I be Element of REAL n,
+    J be Point of REAL-NS n;
+    assume A1: f=g & I = J;
+    hereby assume A2: for T be DivSequence of A,
+      S be middle_volume_Sequence of f,T
+      st delta(T) is convergent & lim delta(T)=0 holds
+      middle_sum(f,S) is convergent
+      & lim (middle_sum(f,S))=I;
+A3:   the carrier of REAL-NS n = REAL n by REAL_NS1:def 4;
+      thus for T be DivSequence of A, S0 be middle_volume_Sequence of g,T
+      st delta(T) is convergent & lim delta(T)=0
+      holds middle_sum(g,S0) is convergent
+      & lim (middle_sum(g,S0))=J
+      proof let T be DivSequence of A, S0 be middle_volume_Sequence of g,T;
+        assume A4:delta(T) is convergent & lim delta(T)=0;
+        reconsider S=S0 as middle_volume_Sequence of f,T by A3,A1,Th38;
+        middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I by A2,A4;
+        hence thesis by A1,Th39;
+      end;
+    end;
+    assume
+A5: for T be DivSequence of A, S be middle_volume_Sequence of g,T
+    st delta(T) is convergent & lim delta(T)=0 holds
+    middle_sum(g,S) is convergent
+    & lim (middle_sum(g,S))=J;
+A6: the carrier of REAL-NS n = REAL n by REAL_NS1:def 4;
+    thus for T be DivSequence of A, S0 be middle_volume_Sequence of f,T
+    st delta(T) is convergent & lim delta(T)=0
+    holds middle_sum(f,S0) is convergent & lim (middle_sum(f,S0))=I
+    proof
+      let T be DivSequence of A, S0 be middle_volume_Sequence of f,T;
+      assume A7:delta(T) is convergent & lim delta(T)=0;
+      reconsider S=S0  as middle_volume_Sequence of g,T by A6,A1,Th38;
+      middle_sum(g,S) is convergent & lim (middle_sum(g,S))=I by A1,A5,A7;
+      hence thesis by A1,Th39;
+    end;
+  end;
+
+theorem Th41:
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n
+  st f=g & f is bounded
+  holds f is integrable iff g is integrable
+  proof
+    let f be Function of A,REAL n,
+    g be Function of A,REAL-NS n;
+    assume A1: f=g & f is bounded;
+    hereby assume f is integrable;
+      then consider I be Element of REAL n such that
+A2:   for T be DivSequence of A, S be middle_volume_Sequence of f,T
+      st delta(T) is convergent & lim delta(T)=0 holds
+      middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I
+      by A1,INTEGR15:12;
+      reconsider I0 = I as Point of REAL-NS n by REAL_NS1:def 4;
+      I=I0;
+      then for T be DivSequence of A, S0 be middle_volume_Sequence of g,T
+      st delta(T) is convergent & lim delta(T)=0 holds
+      middle_sum(g,S0) is convergent & lim (middle_sum(g,S0))=I0 by A2,A1,Th40;
+      hence g is integrable by INTEGR18:def 5;
+    end;
+    assume g is integrable;
+    then consider I be  Point of REAL-NS n such that
+A3: for T be DivSequence of A, S be middle_volume_Sequence of g,T
+    st delta(T) is convergent & lim delta(T)=0 holds
+    middle_sum(g,S) is convergent & lim (middle_sum(g,S))=I by INTEGR18:def 5;
+    reconsider I0 = I as Element of  REAL n by REAL_NS1:def 4;
+    I0=I;
+    then
+    for T be DivSequence of A, S0 be middle_volume_Sequence of f,T
+    st delta(T) is convergent & lim delta(T)=0
+    holds middle_sum(f,S0) is convergent
+    & lim (middle_sum(f,S0))=I0 by A3,A1,Th40;
+    hence f is integrable by A1,INTEGR15:12;
+  end;
+
+theorem Th42:
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n
+  st f=g & f is bounded & f is integrable
+  holds g is integrable & integral(f) = integral(g)
+  proof
+    let f be Function of A,REAL n,
+    g be Function of A,REAL-NS n;
+    assume A1: f=g & f is bounded & f is integrable;
+    then
+A2: g is integrable by Th41;
+A3: for T be DivSequence of A, S be middle_volume_Sequence of f,T
+    st delta(T) is convergent & lim delta(T)=0 holds
+    middle_sum(f,S) is convergent & lim (middle_sum(f,S))=integral(f)
+    by A1,INTEGR15:11;
+    reconsider I0 = integral(f) as Point of REAL-NS n by REAL_NS1:def 4;
+    integral(f)=I0; then
+    for T be DivSequence of A, S0 be middle_volume_Sequence of g,T
+    st delta(T) is convergent & lim delta(T)=0 holds
+    middle_sum(g,S0) is convergent & lim (middle_sum(g,S0))=I0 by A3,A1,Th40;
+    hence thesis by A2,INTEGR18:def 6;
+  end;
+
+theorem Th43:
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n
+  st f=g & f |A is bounded & A c= dom f
+  holds f is_integrable_on A iff g is_integrable_on A
+  proof
+    let f be PartFunc of REAL,REAL n,
+    g be PartFunc of REAL,REAL-NS n;
+    assume A1: f=g & f|A is bounded & A c= dom f;
+    reconsider h= f|A as Function of A,REAL n by Lm3,A1;
+    reconsider k=h as Function of A,REAL-NS n by REAL_NS1:def 4;
+A2: h is bounded by A1,Th16;
+    hereby assume f is_integrable_on A;
+      then h is integrable by INTEGR15:13;
+      then k is integrable by A2,Th41;
+      hence g is_integrable_on A by A1,INTEGR18:def 7;
+    end;
+    assume g is_integrable_on A;
+    then k is integrable by A1,INTEGR18:8;
+    then h is integrable by A2,Th41;
+    hence thesis by INTEGR15:13;
+  end;
+
+theorem Th44:
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n
+  st f=g & f|A is bounded & A c= dom f & f is_integrable_on A
+  holds g is_integrable_on A & integral(f,A) = integral(g,A)
+  proof
+    let f be PartFunc of REAL,REAL n,
+    g be PartFunc of REAL,REAL-NS n;
+    assume A1: f=g & f|A is bounded & A c= dom f
+    & f is_integrable_on A;
+    hence g is_integrable_on A by Th43;
+    reconsider h= f|A as Function of A,REAL n by Lm3,A1;
+    reconsider k=h as Function of A,REAL-NS n by REAL_NS1:def 4;
+A2: integral(f,A) = integral(h) by INTEGR15:14;
+A3: h is bounded by A1,Th16;
+    h is integrable by A1,INTEGR15:13; then
+    integral(h) = integral(k) by A3,Th42;
+    hence thesis by A2,A1,INTEGR18:9;
+  end;
+
+theorem Th45:
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n
+  st f=g & a <= b & f| ['a,b'] is bounded & ['a,b'] c= dom f
+  & f is_integrable_on ['a,b']
+  holds integral(f,a,b) = integral(g,a,b)
+  proof
+    let f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n;
+    assume A1:f=g & a <= b & f | ['a,b'] is bounded & ['a,b'] c= dom f
+    & f is_integrable_on ['a,b'];
+A2: ['a,b'] =[.a,b.] by A1,INTEGRA5:def 3;
+A3: integral(g,['a,b'])= integral(f,['a,b']) by A1,Th44;
+A4: a is Real & b is Real by XREAL_0:def 1; then
+    integral(g,['a,b']) = integral(g,a,b) by A2,INTEGR18:16;
+    hence thesis by A3,A2,A4,INTEGR15:19;
+  end;
+
+theorem
+  for f,g be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b']
+  & ['a,b'] c= dom f & ['a,b'] c= dom g
+  holds integral(f+g,a,b) = integral(f,a,b) + integral(g,a,b) &
+  integral(f-g,a,b) = integral(f,a,b) - integral(g,a,b)
+  proof
+    let f,g be PartFunc of REAL,REAL-NS n;
+    assume
+A1: a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b']
+    & ['a,b'] c= dom f & ['a,b'] c= dom g;
+A2: f+g is_integrable_on ['a,b'] & integral(f + g,['a,b'])
+    = integral(f,['a,b']) + integral(g,['a,b']) by A1,INTEGR18:14;
+A3: f-g is_integrable_on ['a,b'] & integral(f - g,['a,b'])
+    = integral(f,['a,b']) - integral(g,['a,b']) by A1,INTEGR18:15;
+A4: a is Real & b is Real by XREAL_0:def 1;
+A5: ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3;
+    thus integral(f + g,a,b)
+    = integral(f + g,['a,b']) by A5,A4,INTEGR18:16
+    .= integral(f,a,b) + integral(g,['a,b']) by A5,A4,A2,INTEGR18:16
+    .= integral(f,a,b) + integral(g,a,b) by A5,A4,INTEGR18:16;
+    thus integral(f - g,a,b)
+    = integral(f - g,['a,b']) by A5,A4,INTEGR18:16
+    .= integral(f,a,b) - integral(g,['a,b']) by A5,A4,A3,INTEGR18:16
+    .= integral(f,a,b) - integral(g,a,b) by A5,A4,INTEGR18:16;
+  end;
+
+theorem Th47:
+  for f be PartFunc of REAL,REAL-NS n st a <= b & ['a,b'] c= dom f
+  holds integral(f,b,a) = - integral(f,a,b)
+  proof
+    let f be PartFunc of REAL,REAL-NS n;
+    assume A1: a<=b & ['a,b'] c= dom f;
+    then
+A2: ['a,b'] = [.a,b.] by INTEGRA5:def 3;
+A3: a is Real & b is Real by XREAL_0:def 1; then
+    integral(f,['a,b'])= integral(f,a,b) by A2,INTEGR18:16;
+    hence thesis by A3,A2,A1,INTEGR18:18;
+  end;
+
+theorem Th48:
+  for f be PartFunc of REAL,REAL-NS n, g be PartFunc of REAL,REAL n
+  st f=g & a <= b & ['a,b'] c= dom f & f | ['a,b'] is bounded
+  & f is_integrable_on ['a,b'] & c in ['a,b'] & d in ['a,b']
+  holds integral(f,c,d) = integral(g,c,d)
+  proof
+    let f be PartFunc of REAL,REAL-NS n,
+    g be PartFunc of REAL,REAL n;
+    assume
+A1: f=g & a <= b & ['a,b'] c= dom f & f | ['a,b'] is bounded
+    & f is_integrable_on ['a,b'] & c in ['a,b'] & d in ['a,b'];
+    ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3;
+    then
+A2: a <=c & d <=b & a <=d & c <= b by A1,XXREAL_1:1;
+A3: g | ['a,b'] is bounded by A1,Th34;
+A4: g is_integrable_on ['a,b'] by Th43,A3,A1;
+    per cases;
+    suppose A5: c <= d;
+      ['c,d'] c= dom g & g | ['c,d'] is bounded
+      & g is_integrable_on ['c,d'] by A3,A4,A1,Th9,A2,A5,Th2;
+      hence integral(f,c,d) = integral(g,c,d) by A1,A5,Th45;
+    end;
+    suppose A6: not c <= d;
+A7:   ['d,c'] c= dom g & g | ['d,c'] is bounded &
+      g is_integrable_on ['d,c'] by A3,A4,A1,Th9,A2,A6,Th2; then
+A8:   integral(f,d,c) = integral(g,d,c) by A1,A6,Th45;
+      thus integral(g,c,d) =-integral(g,d,c) by Th33
+      .=- integral(f,d,c) by A8,REAL_NS1:4
+      .=integral(f,c,d) by A6,A7,A1,Th47;
+    end;
+  end;
+
+theorem
+  for f,g be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  holds integral(f+g,c,d) = integral(f,c,d) + integral(g,c,d)
+  proof
+    let f,g be PartFunc of REAL,REAL-NS n;
+    assume
+A1: a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & g| ['a,b'] is bounded
+    & ['a,b'] c= dom f & ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b'];
+    reconsider f1=f, g1=g as PartFunc of REAL,REAL n by REAL_NS1:def 4;
+A2: f1| ['a,b'] is bounded by Th34,A1;
+A3: g1| ['a,b'] is bounded by Th34,A1;
+A4: f1 is_integrable_on ['a,b'] by Th43,A2,A1;
+A5: g1 is_integrable_on ['a,b'] by Th43,A3,A1;
+A6: f1+g1 = f+g by NFCONT_4:5;
+A7: integral(f1,c,d) = integral(f,c,d) &
+    integral(g1,c,d) = integral(g,c,d) by A1,Th48;
+A8: ['a,b'] c= dom(f+g) by A1,A6,Th4;
+     f1+g1 is_integrable_on ['a,b'] & (f1+g1)| ['a,b'] is bounded
+     by A1,A2,A3,A4,A5,Th10;
+     then f+g is_integrable_on ['a,b'] & (f+g)| ['a,b'] is bounded
+     by Th43,A6,A8,Th34;
+     hence integral(f+g,c,d) = integral(f1+g1,c,d) by A1,A8,Th48,NFCONT_4:5
+     .= integral(f1,c,d) + integral(g1,c,d) by A1,A2,A3,A4,A5,Th27
+     .= integral(f,c,d) + integral(g,c,d) by A7,REAL_NS1:2;
+  end;
+
+theorem Th50:
+  for f,g be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  holds integral(f-g,c,d) = integral(f,c,d) - integral(g,c,d)
+  proof
+    let f,g be PartFunc of REAL,REAL-NS n;
+    assume
+A1: a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & g| ['a,b'] is bounded
+    & ['a,b'] c= dom f & ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b'];
+    reconsider f1=f, g1=g as PartFunc of REAL,REAL n by REAL_NS1:def 4;
+A2: f1| ['a,b'] is bounded by Th34,A1;
+A3: g1| ['a,b'] is bounded by Th34,A1;
+A4: f1 is_integrable_on ['a,b'] by Th43,A2,A1;
+A5: g1 is_integrable_on ['a,b'] by Th43,A3,A1;
+A6: f1-g1 = f-g by NFCONT_4:10;
+A7: integral(f1,c,d) = integral(f,c,d) &
+    integral(g1,c,d) = integral(g,c,d) by A1,Th48;
+A8: ['a,b'] c= dom(f-g) by A1,A6,Th5;
+     f1-g1 is_integrable_on ['a,b'] & (f1-g1)| ['a,b'] is bounded
+     by A1,A2,A3,A4,A5,Th13;
+     then f-g is_integrable_on ['a,b'] & (f-g)| ['a,b'] is bounded
+     by Th43,A6,A8,Th34;
+     hence integral(f-g,c,d) = integral(f1-g1,c,d) by A1,A8,Th48,NFCONT_4:10
+     .= integral(f1,c,d) - integral(g1,c,d) by A1,A2,A3,A4,A5,Th28
+     .= integral(f,c,d) - integral(g,c,d) by A7,REAL_NS1:5;
+  end;
+
+theorem Th51:
+  for E be Point of REAL-NS n, f be PartFunc of REAL,REAL-NS n
+  st (a <= b & ['a,b'] c= dom f &
+  for x be real number st x in ['a,b'] holds f.x = E)
+  holds f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  integral(f,a,b) = (b-a)*E
+  proof
+    let e be Point of REAL-NS n,
+    f be PartFunc of REAL,REAL-NS n;
+    assume
+A1: a <= b & ['a,b'] c= dom f &
+    for x be real number st x in ['a,b'] holds f.x = e;
+    reconsider f1=f as PartFunc of REAL,REAL n by REAL_NS1:def 4;
+    reconsider e1=e as Element of REAL n by REAL_NS1:def 4;
+A2: for x be real number st x in ['a,b'] holds f1.x = e1 by A1;
+A3: f1 is_integrable_on ['a,b'] & f1| ['a,b'] is bounded &
+    integral(f1,a,b) = (b-a)*e1 by Th29,A1,A2;
+    integral(f1,a,b) = integral(f,a,b) by A3,A1,Th45;
+    hence thesis by A3,Th43,A1,Th34,REAL_NS1:3;
+  end;
+
+theorem Th52:
+  for E be Point of REAL-NS n, f be PartFunc of REAL,REAL-NS n
+  st a <= b & ['a,b'] c= dom f &
+  (for x be real number st x in ['a,b'] holds f.x = E)
+  & c in ['a,b'] & d in ['a,b']
+  holds integral(f,c,d) = (d-c)*E
+  proof
+    let e be Point of REAL-NS n, f be PartFunc of REAL,REAL-NS n;
+    assume
+A1: a <= b & ['a,b'] c= dom f &
+    (for x be real number st x in ['a,b'] holds f.x = e)
+    & c in ['a,b'] & d in ['a,b'];
+    reconsider f1=f as PartFunc of REAL,REAL n by REAL_NS1:def 4;
+    reconsider e1=e as Element of REAL n by REAL_NS1:def 4;
+A2: for x be real number st x in ['a,b'] holds f1.x = e1 by A1;
+A3: f1 is_integrable_on ['a,b'] & f1| ['a,b'] is bounded &
+    integral(f1,a,b) = (b-a)*e1 by Th29,A1,A2;
+A4: integral(f1,c,d) = (d-c)*e1 by Th30,A1;
+    ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3;
+    then
+A5: a <=c & d <=b & a <=d & c <= b by A1,XXREAL_1:1;
+    per cases;
+    suppose A6: c <= d;
+A7:   ['c,d'] c= dom f1 & f1 | ['c,d'] is bounded &
+      f1 is_integrable_on ['c,d'] by A3,A1,Th9,A5,A6,Th2;
+      integral(f1,c,d) = integral(f,c,d) by A7,A6,Th45;
+      hence integral(f,c,d) = (d-c)*e by A4,REAL_NS1:3;
+    end;
+    suppose A8: not c <= d;
+A9:   ['d,c'] c= dom f1 & f1 | ['d,c'] is bounded
+      & f1 is_integrable_on ['d,c'] by A3,A1,Th9,A5,A8,Th2;
+A10:  integral(f1,d,c) = integral(f,d,c) by A9,A8,Th45;
+      integral(f1,c,d) =-integral(f1,d,c) by Th33
+      .=- integral(f,d,c) by A10,REAL_NS1:4
+      .=integral(f,c,d) by A8,A9,Th47;
+      hence integral(f,c,d) = (d-c)*e by A4,REAL_NS1:3;
+    end;
+  end;
+
+theorem Th53:
+  for f be PartFunc of REAL,REAL-NS n
+  st a<=b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds integral(f,a,d) = integral(f,a,c) + integral(f,c,d)
+  proof
+    let f be PartFunc of REAL,REAL-NS n;
+    assume
+A1: a<=b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'];
+    ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3;
+    then
+A2: a in ['a,b'] & b in ['a,b'] by A1,XXREAL_1:1;
+    reconsider f1=f as PartFunc of REAL,REAL n by REAL_NS1:def 4;
+A3: f1 | ['a,b'] is bounded by A1,Th34;
+A4: f1 is_integrable_on ['a,b'] by Th43,A3,A1;
+A5: integral(f1,a,d) = integral(f1,a,c) + integral(f1,c,d) by A3,A4,A1,Th31;
+A6: integral(f,a,d)= integral(f1,a,d) by A2,Th48,A1;
+A7: integral(f,a,c)= integral(f1,a,c) by A2,Th48,A1;
+    integral(f,c,d)= integral(f1,c,d) by Th48,A1;
+    hence integral(f,a,d) = integral(f,a,c) + integral(f,c,d)
+    by A7,A5,A6,REAL_NS1:2;
+  end;
+
+theorem Th54:
+  for f be PartFunc of REAL,REAL-NS n
+  st (a<=b & f is_integrable_on ['a,b']
+  & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+  d in ['a,b'] & for x be real number st x in ['min(c,d),max(c,d)']
+  holds ||. f/.x .|| <= e)
+  holds ||. integral(f,c,d) .||<= (n*e)* abs(d-c)
+  proof
+    let f be PartFunc of REAL,REAL-NS n;
+    assume
+A1: (a<=b & f is_integrable_on ['a,b'] &
+    f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+    d in ['a,b'] & for x be real number st x in ['min(c,d),max(c,d)']
+    holds ||. f/.x .|| <= e);
+    reconsider f1=f as PartFunc of REAL,REAL n by REAL_NS1:def 4;
+A2: f1 | ['a,b'] is bounded by A1,Th34;
+A3: f1 is_integrable_on ['a,b'] by Th43,A2,A1;
+    for x be real number st x in ['min(c,d),max(c,d)'] holds |. f1/.x .| <= e
+    proof
+      let x be real number;
+      assume A4: x in ['min(c,d),max(c,d)'];
+      then
+A5:   ||. f/.x .|| <= e by A1;
+      ['min(c,d),max(c,d)']  c= ['a,b'] by A1,Lm2;
+      then
+A6:   x in ['a,b'] by A4;
+      then f/.x = f.x by A1,PARTFUN1:def 6
+      .= f1/.x by A6,A1,PARTFUN1:def 6;
+      hence |. f1/.x .| <= e by A5,REAL_NS1:1;
+    end;
+    then |. integral(f1,c,d) .|<= (n*e)* abs(d-c) by A1,A2,A3,Th32;
+    hence thesis by Th48,A1,REAL_NS1:1;
+  end;
+
+begin :: Fundamental Theorem of Calculus
+
+Lm17:
+ for X be RealNormSpace, x be Point of X holds ||. a"*x .|| = ||. x .||/abs(a)
+  proof
+    let X be RealNormSpace, x be Point of X;
+    thus ||. a"*x .|| = abs(a")*||. x .|| by NORMSP_1:def 1
+    .= (abs(a))"*||. x .|| by COMPLEX1:66
+    .= (1/abs(a)) * ||. x .|| by XCMPLX_1:215
+    .=||. x .||/abs(a) by XCMPLX_1:99;
+  end;
+
+theorem Th55:
+  for n be non empty Element of NAT, F,f be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b']
+  & f| ['a,b'] is bounded & ['a,b'] c= dom f & ].a,b.[ c= dom F &
+  (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x)) &
+  x0 in ].a,b.[ & f is_continuous_in x0 holds F is_differentiable_in x0 &
+  diff(F,x0)=f/.x0
+  proof
+    let n be non empty Element of NAT,
+    F,f be PartFunc of REAL,REAL-NS n;
+    deffunc F2(set) = 0.(REAL-NS n);
+    assume that
+A1: a <= b and
+A2: f is_integrable_on ['a,b'] and
+A3: f| ['a,b'] is bounded and
+A4: ['a,b'] c= dom f and
+A5: ].a,b.[ c= dom F and
+A6: for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x) and
+A7: x0 in ].a,b.[ and
+A8: f is_continuous_in x0;
+    defpred C1[set] means x0+R_id($1) in ].a,b.[;
+    deffunc F0(Element of REAL)=$1*(f/.x0);
+    consider L be Function of REAL,REAL-NS n such that
+A9: for h be Real holds L.h=F0(h) from FUNCT_2:sch 4;
+    reconsider L as LinearFunc of REAL-NS n by A9,NDIFF_3:def 2;
+    deffunc F1(set) = F/.(x0+R_id($1))-F/.x0-L.(R_id($1));
+    consider R be Function such that
+A10: dom R=REAL & for x be set st x in REAL holds (C1[x] implies R.x =
+     F1(x)) & (not C1[x] implies R.x = F2(x)) from PARTFUN1:sch 1;
+     rng R c= the carrier of (REAL-NS n)
+     proof
+       let y be set;
+       assume y in rng R;
+       then consider x be set such that
+A11:   x in dom R and
+A12:   y=R.x by FUNCT_1:def 3;
+A13:   not C1[x] implies R.x = F2(x) by A10,A11;
+       C1[x] implies R.x = F1(x) by A10,A11;
+       hence thesis by A12,A13;
+     end;
+     then reconsider R as PartFunc of REAL,REAL-NS n by A10,RELSET_1:4;
+A14: R is total by A10,PARTFUN1:def 2;
+A15: ['a,b'] = [.a,b.] by A1,INTEGRA5:def 3;
+A16: for h be 0-convergent non-zero Real_Sequence holds (h")(#)(R/*h) is
+     convergent & lim ((h")(#)(R/*h)) = 0.(REAL-NS n)
+     proof
+       let h be 0-convergent non-zero Real_Sequence;
+       set Z0  = 0.(REAL-NS n);
+A17:   for e be Real  st 0<e ex n be Element of NAT st for m be
+       Element of NAT st n <= m holds ||.((h")(#)(R/*h)).m - Z0 .|| < e
+       proof
+         set g = REAL --> (f/.x0);
+         let e0 be Real;
+         set e = e0/2/n;
+A18:     h is convergent & lim(h) = 0;
+         assume
+A19:     0 < e0;
+         then 0 < (e0/2) by XREAL_1:215;
+         then 0 < e by XREAL_1:139;
+         then consider p be real number such that
+A20:     0 < p and
+A21:     for t be real number st t in dom f & abs(t - x0) < p holds
+         ||.f/.t - f/.x0.|| < e by A8,NFCONT_3:8;
+A22:     0 < p/2 by A20,XREAL_1:215;
+A23:     p/2 < p by A20,XREAL_1:216;
+         consider N be Neighbourhood of x0 such that
+A24:     N c= ].a,b.[ by A7,RCOMP_1:18;
+         consider q be real number such that
+A25:     0<q and
+A26:     N = ].x0-q,x0+q.[ by RCOMP_1:def 6;
+A27:     q/2 < q by A25,XREAL_1:216;
+         set r=min(p/2,q/2);
+         0 < q/2 by A25,XREAL_1:215;
+         then 0 < r by A22,XXREAL_0:15;
+         then consider n0 be Element of NAT such that
+A28:     for m be Element of NAT st n0 <= m holds abs(h.m - 0)<r by A18,
+SEQ_2:def 7;
+         take n0;
+         let m be Element of NAT;
+         r <= q/2 by XXREAL_0:17;
+         then
+A29:     ].x0-r,x0+r.[ c= ].x0-q,x0+q.[ by A27,INTEGRA6:2,XXREAL_0:2;
+         assume n0 <= m;
+         then
+A30:     abs(h.m - 0) < r by A28;
+         then abs((x0 + h.m)-x0) < r;
+         then x0 + h.m in ].x0-r,x0+r.[ by RCOMP_1:1;
+         then
+A31:     x0 + h.m in ].x0-q,x0+q.[ by A29;
+         then
+A32:     x0+h.m in ].a,b.[ by A24,A26;
+         then x0+R_id(h.m) in ].a,b.[ by RSSPACE:def 3;
+         then R.(h.m)=F/.(x0+R_id(h.m))-F/.x0-L.R_id(h.m) by A10;
+         then R.(h.m)=F/.(x0+h.m)-F/.x0-L.R_id(h.m) by RSSPACE:def 3;
+         then
+A33:     R.(h.m) = F/.(x0+h.m)-F/.x0-L.(h.m) by RSSPACE:def 3;
+A34:     F/.x0 =F.x0 by A7,A5,PARTFUN1:def 6
+         .=integral(f,a,x0) by A6,A7;
+         F/.(x0+h.m) = F.(x0+h.m) by A32,A5,PARTFUN1:def 6
+         .=integral(f,a,x0+h.m) by A6,A24,A26,A31;
+         then
+A35:     R.(h.m)
+         =integral(f,a,x0+h.m) -integral(f,a,x0) -h.m*(f/.x0) by A34,A9,A33;
+A36:     dom g = REAL by FUNCT_2:def 1;
+         then ['a,b'] /\ ['a,b'] c= dom f /\ dom g by A4,XBOOLE_1:27;
+         then
+A37:     ['a,b'] c= dom (f-g) by VFUNCT_1:def 2;
+A38:     ].a,b.[ c= [.a,b.] by XXREAL_1:25;
+         then
+A39:     integral(f,a,x0+h.m) = integral(f,a,x0) +integral(f,x0,x0+h.m) by A1
+,A2,A3,A4,A7,A15,A32,Th53;
+A40:     r <= p/2 by XXREAL_0:17;
+A41:     for x be real number st x in ['min(x0,x0+h.m),max(x0,x0+h.m)']
+         holds ||.(f-g)/.x .|| <= e
+         proof
+           let x be real number;
+A42:       min(x0,x0+h.m) <= x0 & x0 <= max(x0,x0+h.m) by XXREAL_0:17,25;
+           assume x in ['min(x0,x0+h.m),max(x0,x0+h.m)'];
+           then
+A43:       x in [. min(x0,x0+h.m),max(x0,x0+h.m) .]
+           by A42,INTEGRA5:def 3,XXREAL_0:2;
+           abs(x-x0) <=abs(h.m)
+           proof
+             per cases;
+             suppose x0<= x0+h.m;
+               then x0 = min(x0,x0+h.m) & x0+h.m = max(x0,x0+h.m)
+               by XXREAL_0:def 9,def 10; then
+A44:           ex z be Real st x=z & x0<=z & z<=x0+h.m by A43;
+               then 0 <= x-x0 by XREAL_1:48;
+               then
+A45:           abs(x-x0) = x-x0 by ABSVALUE:def 1;
+A46:           x-x0 <= x0+h.m - x0 by A44,XREAL_1:9;
+               then 0 <= h.m by A44,XREAL_1:48;
+               hence thesis by A46,A45,ABSVALUE:def 1;
+             end;
+             suppose
+A47:           not x0<=x0 +h.m;
+               then x0 = max(x0,x0+h.m) & x0+h.m = min(x0,x0+h.m)
+               by XXREAL_0:def 9,def 10;
+               then
+A48:           ex z be Real st x=z & x0+h.m<=z & z<=x0 by A43;
+               then
+A49:           x0 +h.m -x0 <= x-x0 by XREAL_1:9;
+               per cases;
+               suppose
+A50:             x-x0 <> 0;
+                 x0 + h.m - x0 < x0-x0 by A47,XREAL_1:14;
+                 then
+A51:             abs(h.m) = -(h.m) by ABSVALUE:def 1;
+              x-x0 < 0 by A48,A50,XREAL_1:47;
+              then abs(x-x0) = -(x-x0) by ABSVALUE:def 1;
+              hence thesis by A49,A51,XREAL_1:24;
+            end;
+            suppose x-x0 = 0;
+              then abs(x-x0) = 0 by ABSVALUE:def 1;
+              hence thesis by COMPLEX1:46;
+            end;
+          end;
+        end;
+        then
+A52:    abs(x-x0) < r by A30,XXREAL_0:2;
+        then x in ].x0-r,x0+r.[ by RCOMP_1:1;
+        then x in ].x0-q,x0+q.[ by A29;
+        then x in ].a,b.[ by A24,A26;
+        then
+A53:    x in [.a,b.] by A38;
+        reconsider xx = x as Real by XREAL_0:def 1;
+        abs(x-x0) < p/2 by A40,A52,XXREAL_0:2;
+        then abs(x-x0) < p by A23,XXREAL_0:2;
+        then ||. f/.x- f/.x0 .|| <= e by A4,A15,A21,A53;
+        then ||. f/.x- g/.xx .|| <= e by FUNCOP_1:7;
+        hence thesis by A15,A37,A53,VFUNCT_1:def 2;
+      end;
+A54:  for x be real number st x in ['a,b'] holds g.x = f/.x0 by FUNCOP_1:7;
+      then
+A55:  g| ['a,b'] is bounded by A1,A36,Th51;
+      then
+A56:  (f-g) | (['a,b'] /\ ['a,b']) is bounded by A3,Th35;
+      rng h c= dom R by A10;
+      then (h.m)"*(R/.(h.m)) =(h.m)"*(R/*h).m  by FUNCT_2:109;
+      then (h.m)"*(R/.(h.m)) =((h").m)*((R/*h).m)  by VALUED_1:10;
+      then
+A57:  (h.m)"*(R/.(h.m)) = ((h")(#)(R/*h)).m by NDIFF_1:def 2;
+      dom h = NAT by FUNCT_2:def 1; then
+      h.m <> 0; then
+A58:  0 < abs(h.m) by COMPLEX1:47;
+A59:  g is_integrable_on ['a,b'] by A1,A36,A54,Th51;
+      then
+A60:  ||. integral(f-g,x0,x0+h.m) .|| <= (n*e)*abs(x0+h.m-x0)
+      by A1,A7,A15,A38,A32,A56,A37,A41,Th54,A2,A4,A36,INTEGR18:15;
+A61:  integral(g,x0,x0+h.m)=((x0+h.m)-x0)*(f/.x0)
+      by A1,A7,A15,A38,A32,A36,A54,Th52
+      .= (h.m)*(f/.x0);
+A62:  integral(f-g,x0,x0+h.m) = integral(f,x0,x0+h.m)
+      - integral(g,x0,x0+h.m) by A1,A2,A3,A4,A7,A15,A38,A32,A36,A59,A55,Th50;
+      R.(h.m) = integral(f,x0,x0+h.m)
+      + (integral(f,a,x0)-integral(f,a,x0)) -h.m*(f/.x0)
+      by A35,A39,RLVECT_1:28
+      .= integral(f,x0,x0+h.m) + Z0 -(h.m)*(f/.x0) by RLVECT_1:15
+      .= integral(f,x0,x0+h.m) - integral(g,x0,x0+h.m) by A61,RLVECT_1:def 4;
+      then R/.(h.m) =integral(f-g,x0,x0+h.m) by A62,A10,PARTFUN1:def 6;
+      then ||.(h.m)"*(R/.(h.m)) .|| = ||.(R/.(h.m)).|| /abs(h.m) &
+      ||.(R/.(h.m)).|| /abs(h.m)
+      <= (n*e)*abs(h.m)/abs(h.m) by A60,A58,Lm17,XREAL_1:72;
+      then ||.(h.m)"*(R/.(h.m)).|| <= n*e by A58,XCMPLX_1:89;
+      then
+A63:  ||.(h.m)"*(R/.(h.m)).|| <= e0/2 by XCMPLX_1:87;
+      e0/2 < e0 by A19,XREAL_1:216;
+      then ||.((h")(#)(R/*h)).m .|| < e0 by A63,A57,XXREAL_0:2;
+      hence thesis by RLVECT_1:13;
+    end;
+    hence (h")(#)(R/*h) is convergent by NORMSP_1:def 6;
+    hence thesis by A17,NORMSP_1:def 7;
+  end;
+  consider N be Neighbourhood of x0 such that
+A64: N c= ].a,b.[ by A7,RCOMP_1:18;
+     reconsider R as RestFunc of REAL-NS n by A14,A16,NDIFF_3:def 1;
+A65: for x be Real st x in N holds F/.x-F/.x0 = L.(x-x0) + R/.(x-x0)
+     proof
+       let x be Real;
+       assume x in N;
+       then x0 + (x-x0) in N;
+       then x0+R_id(x-x0) in N by RSSPACE:def 3;
+       then x0+R_id((x-x0)) = x0 + (x-x0) & R.(x-x0) = F1(x-x0)
+       by A10,A64,RSSPACE:def 3;
+       then R/.(x-x0) =F/.x-F/.x0 -L.(x-x0) by A10,PARTFUN1:def 6;
+       then R/.(x-x0) + L.(x-x0) = F/.x-F/.x0 - (L.(x-x0) - L.(x-x0))
+       by RLVECT_1:29
+       .= F/.x-F/.x0 - 0.(REAL-NS n) by RLVECT_1:15
+       .= F/.x-F/.x0 by RLVECT_1:13;
+       hence thesis;
+     end;
+A66: N c= dom F by A5,A64,XBOOLE_1:1;
+     hence
+A67: F is_differentiable_in x0 by A65,NDIFF_3:def 3;
+     reconsider N1=1 as Real;
+     L.1=N1*(f/.x0) by A9
+     .= f/.x0 by RLVECT_1:def 8;
+     hence thesis by A66,A65,A67,NDIFF_3:def 4;
+   end;
+
+Lm18:
+  for f be PartFunc of REAL,REAL-NS n
+  ex F be PartFunc of REAL,REAL-NS n st ].a,b.[ c= dom F
+  & for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x)
+  proof
+    deffunc G(real number) = 0.(REAL-NS n);
+    let f be PartFunc of REAL,REAL-NS n;
+    defpred C[set] means $1 in ].a,b.[;
+    deffunc F(real number) = integral(f,a,$1);
+    consider F be Function such that
+A1: dom F = REAL & for x be Element of REAL holds (C[x] implies F.x = F(x)) &
+    (not C[x] implies F.x = G(x)) from PARTFUN1:sch 4;
+    now
+      let y be set;
+      assume y in rng F;
+      then consider x be set such that
+A2:   x in dom F and
+A3:   y = F.x by FUNCT_1:def 3;
+      reconsider x as Element of REAL by A1,A2;
+A4:   now
+        assume not x in ].a,b.[;
+        then F.x = 0.(REAL-NS n) by A1;
+        hence y in the carrier of (REAL-NS n) by A3;
+      end;
+      now
+        assume x in ].a,b.[;
+        then F.x = integral(f,a,x) by A1;
+        hence y in the carrier of (REAL-NS n) by A3;
+      end;
+      hence y in the carrier of (REAL-NS n) by A4;
+    end;
+    then rng F c= the carrier of (REAL-NS n) by TARSKI:def 3;
+    then reconsider F as PartFunc of REAL,REAL-NS n by A1,RELSET_1:4;
+    take F;
+    thus thesis by A1;
+  end;
+
+theorem
+  for n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & x0 in ].a,b.[ & f is_continuous_in x0
+  ex F be PartFunc of REAL,REAL-NS n st ].a,b.[ c= dom F &
+  (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x))
+  & F is_differentiable_in x0 & diff(F,x0)=f/.x0
+  proof
+    let n be non empty Element of NAT;
+    let f be PartFunc of REAL,REAL-NS n;
+    consider F be PartFunc of REAL,REAL-NS n such that
+A1: ].a,b.[ c= dom F & for x be real number st x in ].a,b.[ holds
+    F.x = integral(f,a,x) by Lm18;
+    assume a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+    ['a,b'] c= dom f & x0 in ].a,b.[ & f is_continuous_in x0;
+    then F is_differentiable_in x0 & diff(F,x0)=f/.x0 by A1,Th55;
+    hence thesis by A1;
+  end;
+

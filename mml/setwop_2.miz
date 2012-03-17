@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received May 4, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,13 +17,13 @@ environ
  vocabularies NUMBERS, XBOOLE_0, SUBSET_1, FINSUB_1, BINOP_1, FUNCT_1, NAT_1,
       FINSEQ_1, FINSEQ_2, ARYTM_3, XXREAL_0, SETWISEO, TARSKI, RELAT_1,
       FINSEQOP, FUNCOP_1, FUNCT_4, ORDINAL4, FINSOP_1, CARD_1, SETWOP_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
-      RELSET_1, FUNCT_1, FINSEQ_1, FINSUB_1, PARTFUN1, FUNCT_2, BINOP_1,
-      FUNCOP_1, SETWISEO, FINSEQ_2, FINSEQOP, FINSOP_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, ORDINAL1, XCMPLX_0, NAT_1,
+      RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSUB_1, PARTFUN1, FUNCT_2,
+      BINOP_1, FUNCOP_1, SETWISEO, FINSEQ_2, FINSEQOP, FINSOP_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, BINOP_1, SETWISEO, XXREAL_0, XREAL_0, NAT_1,
-      FINSEQOP, FINSOP_1, RELSET_1;
+      FINSEQOP, FINSOP_1, RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FINSUB_1,
-      XREAL_0, FINSEQ_1, FINSEQ_2, NAT_1, CARD_1;
+      XREAL_0, FINSEQ_1, FINSEQ_2, NAT_1, CARD_1, RELAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions BINOP_1, XBOOLE_0, RELAT_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
@@ -60,7 +60,7 @@ Lm2: now
   hence contradiction by XREAL_1:29;
 end;
 
-theorem Th3:
+theorem Th1:
   F is commutative associative & c1 <> c2 implies F $$ ({.c1,c2.},f
   ) = F.(f.c1, f.c2)
 proof
@@ -82,7 +82,7 @@ A6: c2 in {c1,c2} \ {c1} by TARSKI:def 1;
     .= F.(f.c1, f.c2) by A4;
 end;
 
-theorem Th4:
+theorem Th2:
   F is commutative associative & (B <> {} or F is having_a_unity) &
   not c in B implies F $$(B \/ {.c.}, f) = F.(F $$(B,f),f.c)
 proof
@@ -122,7 +122,7 @@ A14:  B9 <> {} & B9 c= B implies g.B9 = g9.B9 and
 A15:  not c9 in B9 and
       B9 \/ {c9} <> {} and
 A16:  B9 \/ {c9} c= B;
-A17:  c9 in B by A16,SETWISEO:5;
+A17:  c9 in B by A16,ZFMISC_1:137;
       then
 A18:  c9 in B \ B9 by A15,XBOOLE_0:def 5;
       c9 in (B \/ {c}) by A17,XBOOLE_0:def 3;
@@ -146,7 +146,7 @@ XBOOLE_1:11
     end;
 A23: X[{}.C];
 A24: for B9 holds X[B9] from SETWISEO:sch 2(A23,A12);
-    c in B \/ {c} by SETWISEO:4;
+    c in B \/ {c} by ZFMISC_1:136;
     then c in (B \/ {c}) \ B by A3,XBOOLE_0:def 5;
     hence F $$(B \/ {.c.}, f) = F.(g.B, f.c) by A5,A9,A11,XBOOLE_1:7
       .= F.(F $$(B,f),f.c) by A5,A6,A24;
@@ -164,8 +164,8 @@ A2: c1 <> c2;
   then
 A3: not c3 in {c1,c2} by TARSKI:def 2;
   thus F $$ ({.c1,c2,c3.},f) = F $$ ({.c1,c2.} \/ {.c3.},f) by ENUMSET1:3
-    .= F.(F $$ ({.c1,c2.},f),f.c3) by A1,A3,Th4
-    .= F.(F.(f.c1, f.c2),f.c3) by A1,A2,Th3;
+    .= F.(F $$ ({.c1,c2.},f),f.c3) by A1,A3,Th2
+    .= F.(F.(f.c1, f.c2),f.c3) by A1,A2,Th1;
 end;
 
 theorem
@@ -216,7 +216,7 @@ A10:    not c in B and
 A11:    B1 /\ (B \/ {c}) = {};
         then
 A12:    B1 misses (B \/ {c}) by XBOOLE_0:def 7;
-        c in B \/ {c} by SETWISEO:4;
+        c in B \/ {c} by ZFMISC_1:136;
         then
 A13:    not c in B1 by A11,XBOOLE_0:def 4;
 A14:    B <> {} & B1 misses B implies F $$(B1 \/ B,f) = F.(F $$ (B1,f),F
@@ -226,7 +226,7 @@ A14:    B <> {} & B1 misses B implies F $$(B1 \/ B,f) = F.(F $$ (B1,f),F
           suppose
 A15:        B = {};
             hence
-            F $$ (B1 \/ (B \/ {.c.}),f) = F.(F $$ (B1,f), f.c) by A1,A7,A13,Th4
+            F $$ (B1 \/ (B \/ {.c.}),f) = F.(F $$ (B1,f), f.c) by A1,A7,A13,Th2
               .= F.(F $$ (B1,f),F $$(B \/ {.c.},f)) by A1,A15,SETWISEO:17;
           end;
           suppose
@@ -234,10 +234,10 @@ A16:        B <> {};
 A17:        not c in B1 \/ B by A10,A13,XBOOLE_0:def 3;
             thus F $$ (B1 \/ (B \/ {.c.}),f) = F $$ (B1 \/ B \/ {.c.},f) by
 XBOOLE_1:4
-              .= F.(F.(F $$ (B1,f),F $$(B,f)), f.c) by A1,A14,A12,A16,A17,Th4,
+              .= F.(F.(F $$ (B1,f),F $$(B,f)), f.c) by A1,A14,A12,A16,A17,Th2,
 XBOOLE_1:7,63
               .= F.(F $$ (B1,f),F.(F $$(B,f), f.c)) by A1,BINOP_1:def 3
-              .= F.(F $$(B1,f),F $$(B \/ {.c.},f)) by A1,A10,A16,Th4;
+              .= F.(F $$(B1,f),F $$(B \/ {.c.},f)) by A1,A10,A16,Th2;
           end;
         end;
         hence thesis;
@@ -250,7 +250,7 @@ A18:  X[{}.C];
   hence thesis;
 end;
 
-theorem Th7:
+theorem Th5:
   F is commutative associative & (A <> {} or F is having_a_unity) &
 (ex s st dom s = A & rng s = B & s is one-to-one & g|A = f*s) implies F $$(A,g)
   = F $$(B,f)
@@ -276,7 +276,7 @@ A5: dom s = A and
 A6: rng s = B and
 A7: s is one-to-one and
 A8: g|A = f*s;
-A9: a in A by SETWISEO:4;
+A9: a in A by ZFMISC_1:136;
     then
 A10: s.a in B by A5,A6,FUNCT_1:def 3;
     B c= C by FINSUB_1:def 5;
@@ -327,7 +327,7 @@ A22:    x in dom g /\ A9 by RELAT_1:61;
         then
 A23:    x in A9 by XBOOLE_0:def 4;
 A24:    x in dom g by A22,XBOOLE_0:def 4;
-        x in A by A23,SETWISEO:4;
+        x in A by A23,ZFMISC_1:136;
         then x in dom g /\ A by A24,XBOOLE_0:def 4;
         then
 A25:    x in dom(f*s) by A8,RELAT_1:61;
@@ -379,7 +379,7 @@ A38:  x in dom g /\ A9 by RELAT_1:61;
       then
 A39:  x in A9 by XBOOLE_0:def 4;
       then
-A40:  x in A by SETWISEO:4;
+A40:  x in A by ZFMISC_1:136;
       x in dom g by A38,XBOOLE_0:def 4;
       then x in dom g /\ A by A40,XBOOLE_0:def 4;
       then x in dom(f*s) by A8,RELAT_1:61;
@@ -444,7 +444,7 @@ A57:    A9 = {};
         B9 c= C by FINSUB_1:def 5;
         then B9 c= dom f by FUNCT_2:def 1;
         then
-A58:    B9 = {} by A55,A57,RELAT_1:116;
+A58:    B9 = {} by A55,A57;
         thus F $$(A,g) = f.c by A1,A34,A57,SETWISEO:17
           .= F $$(B,f) by A1,A35,A58,SETWISEO:17;
       end;
@@ -453,10 +453,10 @@ A59:    A9 <> {};
         A9 c= C9 by FINSUB_1:def 5;
         then A9 c= dom g by FUNCT_2:def 1;
         then
-A60:    B9 <> {} by A55,A59,RELAT_1:116;
-        thus F $$(A,g) = F.(F $$(A9,g),g.a) by A1,A4,A59,Th4
+A60:    B9 <> {} by A55,A59;
+        thus F $$(A,g) = F.(F $$(A9,g),g.a) by A1,A4,A59,Th2
           .= F.(F $$(B9,f),f.c) by A3,A34,A11,A36,A21,A33,A37,A59,FUNCT_1:2
-          .= F $$(B,f) by A1,A35,A56,A60,Th4;
+          .= F $$(B,f) by A1,A35,A56,A60,Th2;
       end;
     end;
     hence thesis;
@@ -493,7 +493,7 @@ A3: rng s = f.:B & (h*f)|B = h*s by RELAT_1:83,115;
   then
 A4: dom s = B by RELAT_1:62;
   s is one-to-one by A2,FUNCT_1:52;
-  hence thesis by A1,A4,A3,Th7;
+  hence thesis by A1,A4,A3,Th5;
 end;
 
 theorem
@@ -503,10 +503,10 @@ proof
   assume
 A1: F is commutative associative &( B <> {} or F is having_a_unity);
   set s = id B;
-A2: dom s = B & rng s = B by RELAT_1:45;
+A2: dom s = B & rng s = B;
   assume f|B = f9|B;
   then f|B = f9*s by RELAT_1:65;
-  hence thesis by A1,A2,Th7;
+  hence thesis by A1,A2,Th5;
 end;
 
 theorem
@@ -531,7 +531,7 @@ A8: now
         B9 = {};
         then
 A9:     B9 = {}.C;
-        thus F$$(B9 \/ {.c.},f) = F.(F $$(B9,f),f.c) by A1,A2,A6,Th4
+        thus F$$(B9 \/ {.c.},f) = F.(F $$(B9,f),f.c) by A1,A2,A6,Th2
           .= F.(e,f.c) by A1,A2,A3,A9,SETWISEO:31;
       end;
       suppose
@@ -540,7 +540,7 @@ A10:    B9 <> {};
         then
 A11:    B9 c= dom f by FUNCT_2:def 1;
         f.:B9 c= {e} by A7,RELAT_1:123,XBOOLE_1:7;
-        hence F$$(B9 \/ {.c.},f) = F.(e,f.c) by A1,A5,A6,A10,A11,Th4,
+        hence F$$(B9 \/ {.c.},f) = F.(e,f.c) by A1,A5,A6,A10,A11,Th2,
 ZFMISC_1:33;
       end;
     end;
@@ -555,12 +555,12 @@ A13: c in dom f by ZFMISC_1:31;
     then f.c = e by ZFMISC_1:3;
     hence thesis by A2,A3,A8,SETWISEO:15;
   end;
-A14: X[{}.C] by RELAT_1:116;
+A14: X[{}.C];
   for B holds X[B] from SETWISEO:sch 2(A14,A4);
   hence thesis;
 end;
 
-theorem Th11:
+theorem Th9:
   F is commutative associative & F is having_a_unity & e =
 the_unity_wrt F & G.(e,e) = e & (for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))=
   G.(F.(d1,d3),F.(d2,d4))) implies G.(F$$(B,f),F$$(B,f9)) = F $$(B,G.:(f,f9))
@@ -581,11 +581,11 @@ A7: not c in B;
     set s9 = F$$(B,f9);
     set s = F$$(B,f);
     F$$(B \/ {.c.},f) = F.(s,f.c) & F$$(B \/ {.c.},f9) = F.(s9,f9.c) by A1,A7
-,Th4;
+,Th2;
     hence G.(F$$(B \/ {.c.},f),F$$(B \/ {.c.},f9)) = F.(G.(s,s9),G.(f.c,f9.c))
     by A4
       .= F.(G.(s,s9),G.:(f,f9).c) by FUNCOP_1:37
-      .= F $$(B \/ {.c.},G.:(f,f9)) by A1,A6,A7,Th4;
+      .= F $$(B \/ {.c.},G.:(f,f9)) by A1,A6,A7,Th2;
   end;
   F$$({}.C,f) = e & F$$({}.C,f9) = e by A1,A2,SETWISEO:31;
   then
@@ -618,7 +618,7 @@ A1: F is commutative & F is associative & F is having_a_unity;
   then
   F.(e,e) = e & for d1,d2,d3,d4 holds F.(F.(d1,d2),F.(d3,d4))= F.(F.(d1,d3
   ),F. (d2,d4)) by Lm3,SETWISEO:15;
-  hence thesis by A1,Th11;
+  hence thesis by A1,Th9;
 end;
 
 theorem
@@ -632,10 +632,10 @@ A2: F is having_an_inverseOp & G = F*(id D,the_inverseOp_wrt F);
   set e = the_unity_wrt F;
   G.(e,e) = e & for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3
   ),F. (d2,d4)) by A1,A2,FINSEQOP:86,89;
-  hence thesis by A1,Th11;
+  hence thesis by A1,Th9;
 end;
 
-theorem Th14:
+theorem Th12:
   F is commutative associative & F is having_a_unity & e =
 the_unity_wrt F & G is_distributive_wrt F & G.(d,e) = e implies G.(d,F$$(B,f))
   = F $$(B,G[;](d,f))
@@ -651,10 +651,10 @@ A4: for B9 being Element of Fin C, b being Element of C holds X[B9] & not b
     let B9,c such that
 A5: G.(d,F$$(B9,f)) = F $$(B9,G[;](d,f)) and
 A6: not c in B9;
-    thus G.(d,F$$(B9 \/ {.c.},f)) = G.(d,F.(F$$(B9,f),f.c)) by A1,A6,Th4
+    thus G.(d,F$$(B9 \/ {.c.},f)) = G.(d,F.(F$$(B9,f),f.c)) by A1,A6,Th2
       .= F.(G.(d,F$$(B9,f)),G.(d,f.c)) by A3,BINOP_1:11
       .= F.(F $$(B9,G[;](d,f)),(G[;](d,f)).c) by A5,FUNCOP_1:53
-      .= F $$(B9 \/ {.c.},G[;](d,f)) by A1,A6,Th4;
+      .= F $$(B9 \/ {.c.},G[;](d,f)) by A1,A6,Th2;
   end;
   assume G.(d,e) = e;
   then G.(d,F$$({}.C,f)) = e by A1,A2,SETWISEO:31
@@ -665,7 +665,7 @@ A7: X[{}.C];
   hence thesis;
 end;
 
-theorem Th15:
+theorem Th13:
   F is commutative associative & F is having_a_unity & e =
 the_unity_wrt F & G is_distributive_wrt F & G.(e,d) = e implies G.(F$$(B,f),d)
   = F $$(B,G[:](f,d))
@@ -681,10 +681,10 @@ A4: for B9 being (Element of Fin C), b being Element of C holds X[B9] & not
     let B9,c such that
 A5: G.(F$$(B9,f),d) = F $$(B9,G[:](f,d)) and
 A6: not c in B9;
-    thus G.(F$$(B9 \/ {.c.},f),d) = G.(F.(F$$(B9,f),f.c),d) by A1,A6,Th4
+    thus G.(F$$(B9 \/ {.c.},f),d) = G.(F.(F$$(B9,f),f.c),d) by A1,A6,Th2
       .= F.(G.(F$$(B9,f),d),G.(f.c,d)) by A3,BINOP_1:11
       .= F.(F $$(B9,G[:](f,d)),(G[:](f,d)).c) by A5,FUNCOP_1:48
-      .= F $$(B9 \/ {.c.},G[:](f,d)) by A1,A6,Th4;
+      .= F $$(B9 \/ {.c.},G[:](f,d)) by A1,A6,Th2;
   end;
   assume G.(e,d) = e;
   then G.(F$$({}.C,f),d) = e by A1,A2,SETWISEO:31
@@ -706,7 +706,7 @@ A2: F is having_an_inverseOp and
 A3: G is_distributive_wrt F;
   set e = the_unity_wrt F;
   G.(d,e) = e by A1,A2,A3,FINSEQOP:66;
-  hence thesis by A1,A3,Th14;
+  hence thesis by A1,A3,Th12;
 end;
 
 theorem
@@ -720,10 +720,10 @@ A2: F is having_an_inverseOp and
 A3: G is_distributive_wrt F;
   set e = the_unity_wrt F;
   G.(e,d) = e by A1,A2,A3,FINSEQOP:66;
-  hence thesis by A1,A3,Th15;
+  hence thesis by A1,A3,Th13;
 end;
 
-theorem Th18:
+theorem Th16:
   F is commutative associative & F is having_a_unity & H is
   commutative associative & H is having_a_unity & h.the_unity_wrt F =
 the_unity_wrt H & (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2)) implies h.(F
@@ -741,10 +741,10 @@ A5: for B9 being (Element of Fin C), b being Element of C holds X[B9] & not
     let B,c such that
 A6: h.(F$$(B,f)) = H $$(B,h*f) and
 A7: not c in B;
-    thus h.(F$$(B \/ {.c.},f)) = h.(F.(F$$(B,f),f.c)) by A1,A7,Th4
+    thus h.(F$$(B \/ {.c.},f)) = h.(F.(F$$(B,f),f.c)) by A1,A7,Th2
       .= H.(H $$(B,h*f),h.(f.c)) by A4,A6
       .= H.(H $$(B,h*f),(h*f).c) by FUNCT_2:15
-      .= H $$(B \/ {.c.},h*f) by A2,A7,Th4;
+      .= H $$(B \/ {.c.},h*f) by A2,A7,Th2;
   end;
   h.(F$$({}.C,f)) = the_unity_wrt H by A1,A3,SETWISEO:31
     .= H $$({}.C,h*f) by A2,SETWISEO:31;
@@ -762,7 +762,7 @@ proof
 A1: F is commutative associative & F is having_a_unity & u.the_unity_wrt
   F = the_unity_wrt F;
   assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
-  hence thesis by A1,Th18;
+  hence thesis by A1,Th16;
 end;
 
 theorem
@@ -780,7 +780,7 @@ A3: G is_distributive_wrt F;
   then
 A4: for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2) by BINOP_1:def 12;
   G[;](d,id D).e = e by A1,A2,A3,FINSEQOP:69;
-  hence thesis by A1,A4,Th18;
+  hence thesis by A1,A4,Th16;
 end;
 
 theorem
@@ -796,7 +796,7 @@ A2: F is having_an_inverseOp;
   then
 A3: for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2) by BINOP_1:def 12;
   u.e = e by A1,A2,FINSEQOP:61;
-  hence thesis by A1,A3,Th18;
+  hence thesis by A1,A3,Th16;
 end;
 
 definition
@@ -806,7 +806,7 @@ definition
   coherence;
 end;
 
-theorem Th22:
+theorem Th20:
   (i in dom p implies [#](p,d).i = p.i) & (not i in dom p implies
   [#](p,d).i = d)
 proof
@@ -831,7 +831,7 @@ A2: dom p = Seg k by FINSEQ_1:def 3;
     assume
 A3: x in Seg k;
     then (f|Seg k).x = f.x by A1,FUNCT_1:47;
-    hence (f|Seg k).x = p.x by A2,A3,Th22;
+    hence (f|Seg k).x = p.x by A2,A3,Th20;
   end;
   hence thesis by A1,A2,FUNCT_1:2;
 end;
@@ -854,7 +854,7 @@ A3: Seg(len(p^q)) = dom (p^q) & Seg k c= Seg len(p^q) by FINSEQ_1:5,def 3;
     assume
 A4: x in Seg k;
     then (f|Seg k).x = f.x by A1,FUNCT_1:47;
-    hence (f|Seg k).x = (p^q).x by A4,A3,Th22
+    hence (f|Seg k).x = (p^q).x by A4,A3,Th20
       .= p.x by A2,A4,FINSEQ_1:def 7;
   end;
   hence thesis by A1,A2,FUNCT_1:2;
@@ -876,12 +876,12 @@ A2:   y = [#](p,d).x by FUNCT_1:def 3;
         per cases;
         case
 A3:       i in dom p;
-          then y = p.i by A2,Th22;
+          then y = p.i by A2,Th20;
           hence y in rng p by A3,FUNCT_1:def 3;
         end;
         case
           not i in dom p;
-          then y = d by A2,Th22;
+          then y = d by A2,Th20;
           hence y in {d} by TARSKI:def 1;
         end;
       end;
@@ -896,7 +896,7 @@ A4: y in rng p \/ {d};
         then consider i being Nat such that
 A5:     i in dom p and
 A6:     y = p.i by FINSEQ_2:10;
-        y = [#](p,d).i by A5,A6,Th22;
+        y = [#](p,d).i by A5,A6,Th20;
         hence y in rng [#](p,d) by A5,FUNCT_2:4;
       end;
       suppose
@@ -905,7 +905,7 @@ A7:     y in {d};
         then
 A8:     not len p + 1 in dom p by Lm2;
         y = d by A7,TARSKI:def 1;
-        then y = [#](p,d).(len p + 1) by A8,Th22;
+        then y = [#](p,d).(len p + 1) by A8,Th20;
         hence y in rng [#](p,d) by FUNCT_2:4;
       end;
     end;
@@ -925,14 +925,14 @@ A2: len(h*p) = len p & Seg len p = dom p by FINSEQ_1:def 3,FINSEQ_2:33;
       per cases;
       suppose
 A3:     i in dom p;
-        hence h.([#](p,d).i) = h.(p.i) by Th22
+        hence h.([#](p,d).i) = h.(p.i) by Th20
           .= (h*p).i by A3,FUNCT_1:13
-          .= [#](h*p,h.d).i by A2,A1,A3,Th22;
+          .= [#](h*p,h.d).i by A2,A1,A3,Th20;
       end;
       suppose
 A4:     not i in dom p;
-        hence h.([#](p,d).i) = h.d by Th22
-          .= [#](h*p,h.d).i by A2,A1,A4,Th22;
+        hence h.([#](p,d).i) = h.d by Th20
+          .= [#](h*p,h.d).i by A2,A1,A4,Th20;
       end;
     end;
     hence (h*[#](p,d)).i = [#](h*p,h.d).i by FUNCT_2:15;
@@ -957,16 +957,16 @@ A6: dom q = Seg len q by FINSEQ_1:def 3;
       per cases;
       suppose
 A7:     i in dom p;
-        hence F.([#](p,e).i,[#](q,e).i) = F.(p.i,[#](q,e).i) by Th22
-          .= F.(p.i,q.i) by A1,A5,A6,A7,Th22
+        hence F.([#](p,e).i,[#](q,e).i) = F.(p.i,[#](q,e).i) by Th20
+          .= F.(p.i,q.i) by A1,A5,A6,A7,Th20
           .= r.i by A3,A5,A4,A7,FUNCOP_1:22
-          .= [#](r,e).i by A3,A5,A4,A7,Th22;
+          .= [#](r,e).i by A3,A5,A4,A7,Th20;
       end;
       suppose
 A8:     not i in dom p;
-        hence F.([#](p,e).i,[#](q,e).i) = F.(e,[#](q,e).i) by Th22
-          .= e by A1,A2,A5,A6,A8,Th22
-          .= [#](r,e).i by A3,A5,A4,A8,Th22;
+        hence F.([#](p,e).i,[#](q,e).i) = F.(e,[#](q,e).i) by Th20
+          .= e by A1,A2,A5,A6,A8,Th20
+          .= [#](r,e).i by A3,A5,A4,A8,Th20;
       end;
     end;
     hence F.:([#](p,e),[#](q,e)).i = [#](r,e).i by FUNCOP_1:37;
@@ -987,14 +987,14 @@ FINSEQ_1:def 3,FINSEQ_2:84;
       per cases;
       suppose
 A4:     i in dom p;
-        hence F.([#](p,e).i,d) = F.(p.i,d) by Th22
+        hence F.([#](p,e).i,d) = F.(p.i,d) by Th20
           .= (F[:](p,d)).i by A3,A2,A4,FUNCOP_1:27
-          .= ([#](F[:](p,d),e)).i by A3,A2,A4,Th22;
+          .= ([#](F[:](p,d),e)).i by A3,A2,A4,Th20;
       end;
       suppose
 A5:     not i in dom p;
-        hence F.([#](p,e).i,d) = F.(e,d) by Th22
-          .= ([#](F[:](p,d),e)).i by A1,A3,A2,A5,Th22;
+        hence F.([#](p,e).i,d) = F.(e,d) by Th20
+          .= ([#](F[:](p,d),e)).i by A1,A3,A2,A5,Th20;
       end;
     end;
     hence (F[:]([#](p,e),d)).i = ([#](F[:](p,d),e)).i by FUNCOP_1:48;
@@ -1015,14 +1015,14 @@ FINSEQ_1:def 3,FINSEQ_2:78;
       per cases;
       suppose
 A4:     i in dom p;
-        hence F.(d,[#](p,e).i) = F.(d,p.i) by Th22
+        hence F.(d,[#](p,e).i) = F.(d,p.i) by Th20
           .= (F[;](d,p)).i by A3,A2,A4,FUNCOP_1:32
-          .= ([#](F[;](d,p),e)).i by A3,A2,A4,Th22;
+          .= ([#](F[;](d,p),e)).i by A3,A2,A4,Th20;
       end;
       suppose
 A5:     not i in dom p;
-        hence F.(d,[#](p,e).i) = F.(d,e) by Th22
-          .= ([#](F[;](d,p),e)).i by A1,A3,A2,A5,Th22;
+        hence F.(d,[#](p,e).i) = F.(d,e) by Th20
+          .= ([#](F[;](d,p),e)).i by A1,A3,A2,A5,Th20;
       end;
     end;
     hence (F[;](d,[#](p,e))).i = ([#](F[;](d,p),e)).i by FUNCOP_1:53;
@@ -1056,7 +1056,7 @@ A1: ( F is having_a_unity or len p >= 1)& F is associative commutative;
   compatibility by A1,FINSOP_1:3;
 end;
 
-theorem Th35:
+theorem Th25:
   F is having_a_unity implies F"**"(i|->the_unity_wrt F) = the_unity_wrt F
 proof
   set e = the_unity_wrt F;
@@ -1079,7 +1079,7 @@ A4: X[0];
   hence thesis;
 end;
 
-theorem Th37:
+theorem Th26:
   F is associative & (i>=1 & j>=1 or F is having_a_unity) implies
   F"**"((i+j)|->d) = F.(F"**"(i|->d),F"**"(j|->d))
 proof
@@ -1109,7 +1109,7 @@ A4: now
         i = 0;
         then i|->d = <*>D;
         then F"**"(i|->d) = e by A2,A3,FINSOP_1:10;
-        hence F"**"(j|->(F"**"(i|->d))) = e by A2,A3,Th35;
+        hence F"**"(j|->(F"**"(i|->d))) = e by A2,A3,Th25;
       end;
       suppose
         j = 0;
@@ -1142,9 +1142,9 @@ A9:       j >= 1+0;
           then
 A10:      i*j >= 1+0 by NAT_1:13;
           F"**"((i*(j+1))|->d) = F"**"((i*j+i*1)|->d)
-            .= F.(F"**"((i*j)|->d),F"**"(i|->d)) by A1,A2,A10,Th37
+            .= F.(F"**"((i*j)|->d),F"**"(i|->d)) by A1,A2,A10,Th26
             .= F.(F"**"((i*j)|->d),F"**"(1|->(F"**"(i|->d)))) by FINSOP_1:16
-            .= F"**"((j+1)|->(F"**"(i|->d))) by A1,A7,A9,Th37;
+            .= F"**"((j+1)|->(F"**"(i|->d))) by A1,A7,A9,Th26;
           hence thesis;
         end;
       end;
@@ -1156,7 +1156,7 @@ A11: X[0];
   end;
 end;
 
-theorem Th39:
+theorem Th28:
   F is having_a_unity & H is having_a_unity & h.the_unity_wrt F =
 the_unity_wrt H & (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2)) implies h.(F
   "**"p) = H "**"(h*p)
@@ -1178,7 +1178,7 @@ A6: h.(F"**"q) = H "**"(h*q);
   end;
   h.(F"**"<*>D) = h.(the_unity_wrt F) by A1,FINSOP_1:10
     .= H "**"(<*>E) by A2,A3,FINSOP_1:10
-    .= H "**"(h*<*>D) by RELAT_1:39;
+    .= H "**"(h*<*>D);
   then
 A7: X[<*>D];
   X[q] from FINSEQ_2:sch 2(A7,A5);
@@ -1192,7 +1192,7 @@ proof
   assume
 A1: F is having_a_unity & u.the_unity_wrt F = the_unity_wrt F;
   assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
-  hence thesis by A1,Th39;
+  hence thesis by A1,Th28;
 end;
 
 theorem
@@ -1210,7 +1210,7 @@ A4: G is_distributive_wrt F;
   then
 A5: for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2) by BINOP_1:def 12;
   G[;](d,id D).e = e by A1,A2,A3,A4,FINSEQOP:69;
-  hence thesis by A2,A5,Th39;
+  hence thesis by A2,A5,Th28;
 end;
 
 theorem
@@ -1227,10 +1227,10 @@ A3: F is having_an_inverseOp;
   then
 A4: for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2) by BINOP_1:def 12;
   u.e = e by A1,A2,A3,FINSEQOP:61;
-  hence thesis by A2,A4,Th39;
+  hence thesis by A2,A4,Th28;
 end;
 
-theorem Th43:
+theorem Th32:
   F is commutative associative & F is having_a_unity & e =
 the_unity_wrt F & G.(e,e) = e & (for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))=
 G.(F.(d1,d3),F.(d2,d4))) & len p = len q implies G.(F"**"p,F"**"q) = F "**"(G.:
@@ -1248,21 +1248,21 @@ A7: dom q = Seg len q by FINSEQ_1:def 3;
 A8: dom p = Seg len p by FINSEQ_1:def 3;
   thus G.(F "**"p,F "**"q) = G.(F $$(findom p,[#](p,e)),F "**"q) by A1,Def2
     .= G.(F $$(findom p,[#](p,e)),F $$(findom q,[#](q,e))) by A1,Def2
-    .= F $$(findom p,G.:([#](p,e),[#](q,e))) by A1,A2,A3,A4,A8,A7,Th11
+    .= F $$(findom p,G.:([#](p,e),[#](q,e))) by A1,A2,A3,A4,A8,A7,Th9
     .= F $$(findom(G.:(p,q)),[#](G.:(p,q),e)) by A2,A4,A5,A8,A6,Lm4
     .= F "**"(G.:(p,q)) by A1,Def2;
 end;
 
-theorem Th44:
+theorem Th33:
   F is commutative associative & F is having_a_unity & e =
 the_unity_wrt F & G.(e,e) = e & (for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))=
   G.(F.(d1,d3),F.(d2,d4))) implies G.(F"**"T1,F"**"T2) = F "**"(G.:(T1,T2))
 proof
   len T1 = i & len T2 = i by CARD_1:def 7;
-  hence thesis by Th43;
+  hence thesis by Th32;
 end;
 
-theorem Th45:
+theorem Th34:
   F is commutative associative & F is having_a_unity & len p = len
   q implies F.(F"**"p,F"**"q) = F "**"(F.:(p,q))
 proof
@@ -1272,24 +1272,24 @@ A1: F is commutative & F is associative & F is having_a_unity;
   then
   F.(e,e) = e & for d1,d2,d3,d4 holds F.(F.(d1,d2),F.(d3,d4))= F.(F.(d1,d3
   ),F. (d2,d4)) by Lm3,SETWISEO:15;
-  hence thesis by A1,Th43;
+  hence thesis by A1,Th32;
 end;
 
-theorem Th46:
-  F is commutative associative & F is having_a_unity implies F.(F
-  "**"T1,F"**"T2) = F "**"(F.:(T1,T2))
+theorem Th35:
+  F is commutative associative & F is having_a_unity implies
+  F.(F"**"T1,F"**"T2) = F "**"(F.:(T1,T2))
 proof
   len T1 = i & len T2 = i by CARD_1:def 7;
-  hence thesis by Th45;
+  hence thesis by Th34;
 end;
 
 theorem
-  F is commutative associative & F is having_a_unity implies F"**"(i|->(
-  F.(d1,d2))) = F.(F"**"(i|->d1),F"**"(i|->d2))
+  F is commutative associative & F is having_a_unity implies
+  F"**"(i|->(F.(d1,d2))) = F.(F"**"(i|->d1),F"**"(i|->d2))
 proof
   reconsider T1 = i|->d1, T2 = i|->d2 as Element of i-tuples_on D;
   i|->(F.(d1,d2)) = F.:(T1,T2) by FINSEQOP:17;
-  hence thesis by Th46;
+  hence thesis by Th35;
 end;
 
 theorem
@@ -1303,10 +1303,10 @@ A2: F is having_an_inverseOp & G = F*(id D,the_inverseOp_wrt F);
   set e = the_unity_wrt F;
   G.(e,e) = e & for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3
   ),F. (d2,d4)) by A1,A2,FINSEQOP:86,89;
-  hence thesis by A1,Th44;
+  hence thesis by A1,Th33;
 end;
 
-theorem Th49:
+theorem Th38:
   F is commutative associative & F is having_a_unity & e =
 the_unity_wrt F & G is_distributive_wrt F & G.(d,e) = e implies G.(d,F"**"p) =
   F "**"(G[;](d,p))
@@ -1319,12 +1319,12 @@ A3: G.(d,e) = e;
 A4: len p = len(G[;](d,p)) & Seg len p = dom p by FINSEQ_1:def 3,FINSEQ_2:78;
 A5: Seg len(G[;](d,p)) = dom(G[;](d,p)) by FINSEQ_1:def 3;
   thus G.(d,F"**"p) = G.(d,F$$(findom p,[#](p,e))) by A1,Def2
-    .= F $$(findom p,G[;](d,[#](p,e))) by A1,A2,A3,Th14
+    .= F $$(findom p,G[;](d,[#](p,e))) by A1,A2,A3,Th12
     .= F $$(findom p,[#](G[;](d,p),e)) by A3,Lm6
     .= F "**"(G[;](d,p)) by A1,A4,A5,Def2;
 end;
 
-theorem Th50:
+theorem Th39:
   F is commutative associative & F is having_a_unity & e =
 the_unity_wrt F & G is_distributive_wrt F & G.(e,d) = e implies G.(F"**"p,d) =
   F "**"(G[:](p,d))
@@ -1337,7 +1337,7 @@ A3: G.(e,d) = e;
 A4: len p = len(G[:](p,d)) & Seg len p = dom p by FINSEQ_1:def 3,FINSEQ_2:84;
 A5: Seg len(G[:](p,d)) = dom(G[:](p,d)) by FINSEQ_1:def 3;
   thus G.(F"**"p,d) = G.(F$$(findom p,[#](p,e)),d) by A1,Def2
-    .= F $$(findom p,G[:]([#](p,e),d)) by A1,A2,A3,Th15
+    .= F $$(findom p,G[:]([#](p,e),d)) by A1,A2,A3,Th13
     .= F $$(findom p,[#](G[:](p,d),e)) by A3,Lm5
     .= F "**"(G[:](p,d)) by A1,A4,A5,Def2;
 end;
@@ -1353,7 +1353,7 @@ A2: F is having_an_inverseOp and
 A3: G is_distributive_wrt F;
   set e = the_unity_wrt F;
   G.(d,e) = e by A1,A2,A3,FINSEQOP:66;
-  hence thesis by A1,A3,Th49;
+  hence thesis by A1,A3,Th38;
 end;
 
 theorem
@@ -1367,5 +1367,5 @@ A2: F is having_an_inverseOp and
 A3: G is_distributive_wrt F;
   set e = the_unity_wrt F;
   G.(e,d) = e by A1,A2,A3,FINSEQOP:66;
-  hence thesis by A1,A3,Th50;
+  hence thesis by A1,A3,Th39;
 end;

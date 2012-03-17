@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received November 29, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,27 +14,24 @@
 
 environ
 
- vocabularies NUMBERS, SUBSET_1, CARD_1, XBOOLE_0, STRUCT_0, SCMFSA7B,
-      FUNCSDOM, AMI_3, AMI_1, AMI_2, FUNCT_7, TARSKI, RELAT_1, ZFMISC_1, FSM_1,
-      FUNCT_1, CAT_1, FINSEQ_1, GRAPHSP, FUNCT_2, CARD_3, ORDINAL1, ARYTM_3,
-      ARYTM_1, SUPINF_2, FUNCOP_1, SCMRING1, GLIB_000, FUNCT_4, ALGSTR_0,
-      RECDEF_2, COMPOS_1, AMISTD_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1,
-      FUNCT_1, CARD_1, FUNCT_2, RECDEF_2, STRUCT_0, ALGSTR_0, FUNCSDOM,
-      MCART_1, CARD_3, FINSEQ_1, NUMBERS, FUNCOP_1, FUNCT_4, FUNCT_7, MEMSTR_0,
-      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMRING1;
- constructors XXREAL_0, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1, PRE_POLY,
-      RECDEF_2, FUNCT_7, MEMSTR_0, RELSET_1;
- registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_1,
-      CARD_3, STRUCT_0, AMI_3, SCMRING1, AMI_2, FUNCT_1, FUNCT_2, ALGSTR_0,
-      ALGSTR_1, GCD_1, COMPOS_1, EXTPRO_1, MEMSTR_0, CARD_1;
+ vocabularies NUMBERS, SUBSET_1, CARD_1, XBOOLE_0, STRUCT_0, FUNCSDOM, AMI_3,
+      AMI_1, AMI_2, FUNCT_7, TARSKI, RELAT_1, FSM_1, FUNCT_1, CAT_1, FINSEQ_1,
+      GRAPHSP, FUNCT_2, CARD_3, ORDINAL1, ARYTM_3, ARYTM_1, SUPINF_2, FUNCOP_1,
+      SCMRING1, GLIB_000, FUNCT_4, RECDEF_2, GOBRD13, MEMSTR_0;
+ notations TARSKI, XBOOLE_0,
+      XTUPLE_0, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1, CARD_1,
+      FUNCT_2, RECDEF_2, STRUCT_0, ALGSTR_0, FUNCSDOM, CARD_3,
+      FINSEQ_1, NUMBERS, FUNCOP_1, FUNCT_4, FUNCT_7, MEMSTR_0, COMPOS_0,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMRINGI, SCMRING1;
+ constructors FINSEQ_4, REALSET1, AMI_3, SCMRING1, PRE_POLY, FUNCT_7, RELSET_1;
+ registrations ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_1, CARD_3, STRUCT_0, AMI_3,
+      SCMRING1, AMI_2, FUNCT_1, EXTPRO_1, SCMRINGI, SCM_INST, XTUPLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions STRUCT_0, AMI_3, FUNCOP_1, SCMRING1, COMPOS_1, EXTPRO_1, CARD_1,
-      NAT_1, AMI_2, MEMSTR_0;
- theorems AMI_2, AMI_3, AMI_5, CARD_3, FUNCOP_1, ENUMSET1, FUNCT_4, MCART_1,
-      SCMRING1, TARSKI, ZFMISC_1, XBOOLE_0, XBOOLE_1, FUNCT_7, ARYTM_3, NAT_1,
-      FINSEQ_1, FUNCT_1, PARTFUN1, PBOOLE, RELAT_1, RECDEF_2, COMPOS_1,
-      EXTPRO_1, MEMSTR_0;
+ definitions XBOOLE_0, STRUCT_0, AMI_3, FUNCOP_1, SCMRING1, COMPOS_1, EXTPRO_1,
+      CARD_1, NAT_1, AMI_2, MEMSTR_0, COMPOS_0, SCMRINGI, XTUPLE_0;
+ theorems AMI_2, AMI_3, AMI_5, CARD_3, FUNCOP_1, ENUMSET1, FUNCT_4, SCMRING1,
+      TARSKI, ZFMISC_1, XBOOLE_0, XBOOLE_1, FUNCT_7, NAT_1, FUNCT_1, PARTFUN1,
+      RELAT_1, RECDEF_2, EXTPRO_1, MEMSTR_0, SCMRINGI;
 
 begin  :: { \bf SCM } over ring
 
@@ -44,103 +41,93 @@ reserve I for Element of Segm 8,
   x for set,
   k for Element of NAT;
 
-registration
-  cluster strict trivial for Ring;
-  existence
-  proof
-    take the strict 1-element doubleLoopStr;
-    thus thesis;
-  end;
-end;
+ reserve R for Ring, T for InsType of SCM-Instr R;
 
 definition
-  let R be good Ring;
-  func SCM R -> strict AMI-Struct over { the carrier of R } means
+  let R be Ring;
+  func SCM R -> strict AMI-Struct over 2 means
   :Def1:
   the carrier of it = SCM-Memory & the ZeroF of it = NAT &
-  the Instructions of it = SCM-Instr R & the haltF of it = [0,{},{}] &
-  the Object-Kind of it = SCM-OK R & the
-  Execution of it = SCM-Exec R;
+  the InstructionsF of it = SCM-Instr R &
+  the Object-Kind of it = SCM-OK &
+  the ValuesF of it = SCM-VAL R &
+  the Execution of it = SCM-Exec R;
   existence
   proof
     take AMI-Struct (#SCM-Memory,In(NAT,SCM-Memory),
-      SCM-Instr R, In([0,{},{}],SCM-Instr R),
-      SCM-OK R, SCM-Exec R#);
-     [0,{},{}] in SCM-Instr R by SCMRING1:18;
-    hence thesis by AMI_2:22,FUNCT_7:def 1;
+      SCM-Instr R,
+      SCM-OK, SCM-VAL R, SCM-Exec R#);
+    thus thesis by AMI_2:22,FUNCT_7:def 1;
   end;
   uniqueness;
 end;
 
 registration
-  let R be good Ring;
-  cluster SCM R -> non empty standard-ins;
+  let R be Ring;
+  cluster SCM R -> non empty;
+  coherence by Def1;
+end;
+
+Lm1:
+ now let R be Ring;
+  thus the_Values_of SCM R = (the ValuesF of SCM R)*(the Object-Kind of SCM R)
+        .= (the ValuesF of SCM R)*SCM-OK by Def1
+        .= (SCM-VAL R)*SCM-OK by Def1;
+ end;
+
+registration
+  let R be Ring;
+  cluster SCM R -> with_non-empty_values;
   coherence
+   proof
+     the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
+    hence the_Values_of SCM R is non-empty;
+   end;
+end;
+
+Lm2: for R being Ring holds
+ (the carrier of SCM R) \ {NAT} = SCM-Data-Loc
+proof let R be Ring;
+A1: not NAT in SCM-Data-Loc by AMI_2:20;
+ thus (the carrier of SCM R) \ {NAT}
+     = SCM-Memory \ {NAT} by Def1
+    .= {NAT} \/ SCM-Data-Loc \ {NAT}
+    .= SCM-Data-Loc by A1,ZFMISC_1:117;
+end;
+
+registration
+ let R be Ring;
+ cluster Int-like for Object of SCM R;
+ existence
   proof
-    thus the carrier of SCM R is non empty by Def1;
-    consider X being non empty set such that
-A1:   proj2 SCM-Instr R c= X* by FINSEQ_1:85;
-    take X;
-A2:   SCM-Instr R c= [:NAT,NAT*,proj2 SCM-Instr R:] by SCMRING1:17;
-     [:NAT,NAT*,proj2 SCM-Instr R:] c= [:NAT,NAT*,X*:] by A1,MCART_1:73;
-     then SCM-Instr R c= [:NAT,NAT*,X*:] by A2,XBOOLE_1:1;
-    hence the Instructions of SCM R c= [:NAT,NAT*,X*:] by Def1;
+ the carrier of SCM R = SCM-Memory by Def1;
+    then reconsider x = the Element of SCM-Data-Loc as Object of SCM R;
+   take x;
+   thus thesis by AMI_2:def 16;
   end;
 end;
 
 definition
-  let R be good Ring;
-  mode Data-Location of R -> Object of SCM R means
-:Def2: it in (the carrier of SCM R) \ ({NAT});
-  existence
-  proof
-    [1,1] in Data-Locations SCM by AMI_2:24,AMI_3:27;
-    then reconsider a = [1,1] as Object of SCM R by Def1;
-    take a;
-A1: now
-      assume a in {NAT};
-      then a = NAT by TARSKI:def 1;
-      hence contradiction by ARYTM_3:30;
-    end;
-    not a in {NAT} by A1;
-    hence thesis by XBOOLE_0:def 5;
-  end;
+  let R be Ring;
+  mode Data-Location of R is Int-like Object of SCM R;
+  canceled;
 end;
 
-reserve R for good Ring,
+reserve R for Ring,
   r for Element of R,
   a, b, c, d1, d2 for Data-Location of R,
   i1 for Element of NAT;
 
 theorem Th1:
   x is Data-Location of R iff x in Data-Locations SCM
-proof
-A1:  IC SCM R = NAT by Def1;
-A2:  IC SCM = NAT by AMI_3:1;
-A3:   the carrier of SCM R = SCM-Memory by Def1
-        .= the carrier of SCM;
-A4: the carrier of SCM R = SCM-Memory by Def1;
-A5: the carrier of SCM R = {IC SCM R} \/ Data-Locations SCM R
-        by XBOOLE_1:45;
-  thus x is Data-Location of R implies x in Data-Locations SCM
-       by Def2,A2,A3;
-  assume
-A9: x in Data-Locations SCM;
-  then x is Data-Location by AMI_3:27,def 2;
-  then x <> NAT by AMI_3:1,AMI_5:2;
-  then
-A10: not x in {NAT} by TARSKI:def 1;
-  not x in {NAT} by A10;
-  then x in (the carrier of SCM R) \ ({NAT}) by A4,A9,XBOOLE_0:def 5;
-  hence thesis by Def2;
-end;
+    by Def1,AMI_2:def 16,AMI_3:27;
 
 definition
-  let R be good Ring, s be State of SCM R, a be Data-Location of R;
+  let R be Ring, s be State of SCM R, a be Data-Location of R;
   redefine func s.a -> Element of R;
   coherence
   proof
-  the Object-Kind of SCM R = SCM-OK R by Def1;
+    the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
     then reconsider S = s as SCM-State of R by CARD_3:107;
     a is Element of Data-Locations SCM by Th1;
     then reconsider a as Element of SCM-Data-Loc by AMI_3:27;
@@ -149,94 +136,48 @@ definition
   end;
 end;
 
+theorem
+  [0,{},{}] is Instruction of SCM R
+proof
+  halt SCM R = [0,{},{}];
+ hence thesis;
+end;
+
 theorem Th3:
-  [0,{},{}] is Instruction of SCM R by Def1;
+  x in {1,2,3,4} implies [x,{},<*d1,d2*>] in SCM-Instr S
+   proof
+     reconsider d1,d2 as Element of SCM-Data-Loc by Th1,AMI_3:27;
+      x in {1,2,3,4} implies [x,{},<*d1,d2*>] in SCM-Instr S by SCMRINGI:8;
+    hence thesis;
+   end;
 
 theorem Th4:
-  x in {1,2,3,4} implies [x,{},<*d1,d2*>] in SCM-Instr S
-proof
-  reconsider D1 = d1, D2 = d2 as Element of Data-Locations SCM by Th1;
-  assume
-A1: x in {1,2,3,4};
-  then x=1 or x=2 or x=3 or x=4 by ENUMSET1:def 2;
-  then reconsider x as Element of Segm 8 by NAT_1:44;
-  [x,{},<*D1,D2*>] in { [I,{},<*a,b*>]
-    where a,b is Element of Data-Locations SCM: I
-  in { 1,2,3,4 } } by A1;
-  then [x,{},<*D1,D2*>] in { [0,{},{}] } \/ { [I,{},<*a,b*>]
-  where a,b is Element of
-  Data-Locations SCM: I in { 1,2,3,4 } } by XBOOLE_0:def 3;
-  then [x,{},<*D1,D2*>] in { [0,{},{}] } \/ { [I,{},<*a,b*>]
-  where a,b is Element of
-Data-Locations SCM: I in { 1,2,3,4 } } \/ { [6,<*i*>,{}]
-where i is Element of NAT: not
-  contradiction } by XBOOLE_0:def 3;
-  then [x,{},<*D1,D2*>] in { [0,{},{}] } \/ { [I,{},<*a,b*>]
-  where a,b is Element of
-Data-Locations SCM: I in { 1,2,3,4 } } \/ { [6,<*i*>,{}]
-where i is Element of NAT: not
-  contradiction } \/ { [7,<*i*>,<*a*>] where i is Element of NAT,
-  a is Element of
-  Data-Locations SCM: not contradiction } by XBOOLE_0:def 3;
-  hence thesis by AMI_3:27,XBOOLE_0:def 3;
-end;
+  [5,{},<*d1,t*>] in SCM-Instr S
+   proof
+     reconsider d1 as Element of SCM-Data-Loc by Th1,AMI_3:27;
+      [5,{},<*d1,t*>] in SCM-Instr S by SCMRINGI:9;
+    hence thesis;
+   end;
 
 theorem Th5:
-  [5,{},<*d1,t*>] in SCM-Instr S
-proof
-  reconsider D1 = d1 as Element of Data-Locations SCM by Th1;
-  [5,{},<*D1,t*>] in { [5,{},<*i,a*>]
-    where i is Element of Data-Locations SCM, a is
-  Element of S : not contradiction };
-  hence thesis by AMI_3:27,XBOOLE_0:def 3;
-end;
+  [6,<*i1*>,{}] in SCM-Instr S by SCMRINGI:10;
 
 theorem Th6:
-  [6,<*i1*>,{}] in SCM-Instr S
-proof
-  reconsider I1 = i1 as Element of NAT;
-  [6,<*I1*>,{}] in {[6,<*i*>,{}] where i is Element of NAT: not contradiction};
-  then [6,<*I1*>,{}] in { [0,{},{}] } \/ { [I,{},<*a,b*>]
-  where a,b is Element of
-  Data-Locations SCM: I in { 1,2,3,4 } } \/ {[6,<*i*>,{}]
-  where i is Element of NAT: not
-  contradiction} by XBOOLE_0:def 3;
-  then [6,<*I1*>,{}] in { [0,{},{}] } \/ { [I,{},<*a,b*>]
-  where a,b is Element of
-  Data-Locations SCM: I in { 1,2,3,4 } } \/ {[6,<*i*>,{}]
-  where i is Element of NAT: not
-  contradiction} \/ { [7,<*i*>,<*a*>] where i is Element of NAT,
-  a is Element of
-  Data-Locations SCM: not contradiction } by XBOOLE_0:def 3;
-  hence thesis by AMI_3:27,XBOOLE_0:def 3;
-end;
-
-theorem Th7:
   [7,<*i1*>,<*d1*>] in SCM-Instr S
-proof
-  reconsider D1 = d1 as Element of Data-Locations SCM by Th1;
-  reconsider I1 = i1 as Element of NAT;
-  [7,<*I1*>,<*D1*>] in { [7,<*i*>,<*a*>]
-  where i is Element of NAT, a is Element
-  of Data-Locations SCM: not contradiction };
-  then [7,<*I1*>,<*D1*>] in { [0,{},{}] } \/ { [I,{},<*a,b*>]
-  where a,b is Element of
-  Data-Locations SCM: I in { 1,2,3,4 } } \/ {[6,<*i*>,{}]
-  where i is Element of NAT: not
-  contradiction} \/ { [7,<*i*>,<*a*>]
-  where i is Element of NAT, a is Element of
-  Data-Locations SCM: not contradiction } by XBOOLE_0:def 3;
-  hence thesis by AMI_3:27,XBOOLE_0:def 3;
-end;
+   proof
+     reconsider d1 as Element of SCM-Data-Loc by Th1,AMI_3:27;
+     [7,<*i1*>,<*d1*>] in SCM-Instr S by SCMRINGI:11;
+    hence thesis;
+   end;
 
 definition
-  let R be good Ring, a, b be Data-Location of R;
+  let R be Ring, a, b be Data-Location of R;
   func a := b -> Instruction of SCM R equals
   [1,{},<*a,b*>];
   coherence
   proof
     1 in { 1,2,3,4} by ENUMSET1:def 2;
-    then [1,{},<*a,b*>] in SCM-Instr R by Th4;
+    then [1,{},<*a,b*>] in SCM-Instr R by Th3;
     hence thesis by Def1;
   end;
   func AddTo(a,b) -> Instruction of SCM R equals
@@ -244,7 +185,7 @@ definition
   coherence
   proof
     2 in { 1,2,3,4} by ENUMSET1:def 2;
-    then [2,{},<*a,b*>] in SCM-Instr R by Th4;
+    then [2,{},<*a,b*>] in SCM-Instr R by Th3;
     hence thesis by Def1;
   end;
   func SubFrom(a,b) -> Instruction of SCM R equals
@@ -252,7 +193,7 @@ definition
   coherence
   proof
     3 in { 1,2,3,4} by ENUMSET1:def 2;
-    then [3,{},<*a,b*>] in SCM-Instr R by Th4;
+    then [3,{},<*a,b*>] in SCM-Instr R by Th3;
     hence thesis by Def1;
   end;
   func MultBy(a,b) -> Instruction of SCM R equals
@@ -260,46 +201,46 @@ definition
   coherence
   proof
     4 in { 1,2,3,4} by ENUMSET1:def 2;
-    then [4,{},<*a,b*>] in SCM-Instr R by Th4;
+    then [4,{},<*a,b*>] in SCM-Instr R by Th3;
     hence thesis by Def1;
   end;
 end;
 
 definition
-  let R be good Ring, a be Data-Location of R, r be Element of R;
+  let R be Ring, a be Data-Location of R, r be Element of R;
   func a := r -> Instruction of SCM R equals
   [5,{},<*a,r*>];
   coherence
   proof
-    [5,{},<*a,r*>] in SCM-Instr R by Th5;
+    [5,{},<*a,r*>] in SCM-Instr R by Th4;
     hence thesis by Def1;
   end;
 end;
 
 definition
-  let R be good Ring, l be Element of NAT;
+  let R be Ring, l be Element of NAT;
   func goto(l,R) -> Instruction of SCM R equals
   [6,<*l*>,{}];
   coherence
   proof
-    [6,<*l*>,{}] in SCM-Instr R by Th6;
+    [6,<*l*>,{}] in SCM-Instr R by Th5;
     hence thesis by Def1;
   end;
 end;
 
 definition
-  let R be good Ring, l be Element of NAT, a be Data-Location
+  let R be Ring, l be Element of NAT, a be Data-Location
   of R;
   func a=0_goto l -> Instruction of SCM R equals
   [7,<*l*>,<*a*>];
   coherence
   proof
-    [7,<*l*>,<*a*>] in SCM-Instr R by Th7;
+    [7,<*l*>,<*a*>] in SCM-Instr R by Th6;
     hence thesis by Def1;
   end;
 end;
 
-theorem Th8:
+theorem Th7:
   for I being set holds I is Instruction of SCM R iff I = [0,{},{}] or
 (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I = SubFrom(a,
 b)) or (ex a,b st I = MultBy(a,b)) or (ex i1 st I = goto(i1,R)) or
@@ -307,7 +248,7 @@ b)) or (ex a,b st I = MultBy(a,b)) or (ex i1 st I = goto(i1,R)) or
   a=0_goto i1) or ex a,r st I = a:=r
 proof
   let J be set;
-A1: the Instructions of SCM R = SCM-Instr R by Def1;
+A1: the InstructionsF of SCM R = SCM-Instr R by Def1;
   thus J is Instruction of SCM R implies J = [0,{},{}] or
    (ex a,b st J = a:=b) or
   (ex a,b st J = AddTo(a,b)) or (ex a,b st J = SubFrom(a,b)) or (ex a,b st J =
@@ -400,23 +341,20 @@ A6:   J = [I,{},<*a,b*>] & I in { 1,2,3,4 };
       hence thesis;
     end;
   end;
-  thus thesis by A1,SCMRING1:18;
+  thus thesis by A1,SCMRINGI:6;
 end;
 
 reserve s for State of SCM R;
 
 registration
-  let R;
-  cluster SCM R -> proper-halt IC-Ins-separated;
+  let R be non empty Ring;
+  cluster SCM R -> IC-Ins-separated;
   coherence
   proof
-    the haltF of SCM R = [0,{},{}] by Def1;
-    then JumpPart halt SCM R is empty by RECDEF_2:def 2;
-    then halt SCM R is ins-loc-free by COMPOS_1:def 16;
-   hence SCM R is proper-halt by COMPOS_1:def 18;
-    thus ObjectKind IC SCM R = (SCM-OK R).IC SCM R by Def1
-      .= (SCM-OK R).NAT by Def1
-      .= NAT by AMI_2:22,SCMRING1:def 3;
+A1:  the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
+    IC SCM R = NAT by Def1;
+    then Values IC SCM R = NAT by A1,SCMRING1:2;
+    hence SCM R is IC-Ins-separated by MEMSTR_0:def 6;
   end;
 end;
 
@@ -428,7 +366,7 @@ theorem
 
 
 
-theorem Th12:
+theorem Th10:
   for I being Instruction of SCM R for i being Element of
   SCM-Instr R st i = I for S being SCM-State of R st S = s holds Exec(I,s) =
   SCM-Exec-Res(i,S)
@@ -437,31 +375,32 @@ proof
 A1: i = I;
   let S be SCM-State of R;
   assume S = s;
-  hence Exec(I,s) = ((SCM-Exec R).i qua Element of Funcs(product SCM-OK R,
-  product SCM-OK R)).S by A1,Def1
+  hence Exec(I,s) = ((SCM-Exec R).i qua Element of
+   Funcs(product((SCM-VAL R)*SCM-OK),
+          product((SCM-VAL R)*SCM-OK))).S by A1,Def1
     .= SCM-Exec-Res(i,S) by SCMRING1:def 15;
 end;
 
 begin :: Users guide
 
-theorem Th13:
+theorem Th11:
   Exec(a := b, s).IC SCM R = succ IC s & Exec(a := b, s).a = s.b &
   for c st c <> a holds Exec(a := b, s).c = s.c
 proof
 A1: a is Element of Data-Locations SCM by Th1;
-A2: the Object-Kind of SCM R = SCM-OK R by Def1;
+A2: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider S = s as SCM-State of R by A2,CARD_3:107;
   reconsider I = a := b as Element of SCM-Instr R by Def1;
   set S1 = SCM-Chg(S, I address_1,S.(I address_2));
   reconsider i = 1 as Element of Segm 8 by NAT_1:44;
 A3: IC s = IC S by Def1;
 A4: b is Element of Data-Locations SCM by Th1;
-A5: Exec(a := b, s) = SCM-Exec-Res(I,S) by Th12
+A5: Exec(a := b, s) = SCM-Exec-Res(I,S) by Th10
     .= (SCM-Chg(S1, succ IC S)) by A1,A4,AMI_3:27,SCMRING1:def 14;
 A6: I = [i,{},<*a,b*>];
   then
-A7: I address_1 = a by A1,A4,AMI_3:27,SCMRING1:13;
-A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRING1:13;
+A7: I address_1 = a by A1,A4,AMI_3:27,SCMRINGI:1;
+A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRINGI:1;
   thus Exec(a := b, s).IC SCM R = Exec(a := b, s).NAT by Def1
     .= succ IC s by A3,A5,SCMRING1:7;
   thus Exec(a := b, s).a = S1.a by A1,A5,AMI_3:27,SCMRING1:8
@@ -474,24 +413,24 @@ A10: c is Element of Data-Locations SCM by Th1;
     .= s.c by A7,A9,A10,AMI_3:27,SCMRING1:12;
 end;
 
-theorem Th14:
+theorem Th12:
   Exec(AddTo(a,b), s).IC SCM R = succ IC s & Exec(AddTo(a,b), s).a
   = s.a + s.b & for c st c <> a holds Exec(AddTo(a,b), s).c = s.c
 proof
 A1: a is Element of Data-Locations SCM by Th1;
-A2: the Object-Kind of SCM R = SCM-OK R by Def1;
+A2: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider S = s as SCM-State of R by A2,CARD_3:107;
   reconsider I = AddTo(a,b) as Element of SCM-Instr R by Def1;
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)+S.(I address_2));
   reconsider i = 2 as Element of Segm 8 by NAT_1:44;
 A3: IC s = IC S by Def1;
 A4: b is Element of Data-Locations SCM by Th1;
-A5: Exec(AddTo(a,b), s) = SCM-Exec-Res(I,S) by Th12
+A5: Exec(AddTo(a,b), s) = SCM-Exec-Res(I,S) by Th10
     .= (SCM-Chg(S1, succ IC S)) by A1,A4,AMI_3:27,SCMRING1:def 14;
 A6: I = [i,{},<*a,b*>];
   then
-A7: I address_1 = a by A1,A4,AMI_3:27,SCMRING1:13;
-A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRING1:13;
+A7: I address_1 = a by A1,A4,AMI_3:27,SCMRINGI:1;
+A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRINGI:1;
   thus Exec(AddTo(a,b), s).IC SCM R = Exec(AddTo(a,b), s).NAT by Def1
     .= succ IC s by A3,A5,SCMRING1:7;
   thus Exec(AddTo(a,b), s).a = S1.a by A1,A5,AMI_3:27,SCMRING1:8
@@ -504,24 +443,24 @@ A10: c is Element of Data-Locations SCM by Th1;
     .= s.c by A7,A9,A10,AMI_3:27,SCMRING1:12;
 end;
 
-theorem Th15:
+theorem Th13:
   Exec(SubFrom(a,b), s).IC SCM R = succ IC s & Exec(SubFrom(a,b),
   s).a = s.a - s.b & for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c
 proof
 A1: a is Element of Data-Locations SCM by Th1;
-A2: the Object-Kind of SCM R = SCM-OK R by Def1;
+A2: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider S = s as SCM-State of R by A2,CARD_3:107;
   reconsider I = SubFrom(a,b) as Element of SCM-Instr R by Def1;
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)-S.(I address_2));
   reconsider i = 3 as Element of Segm 8 by NAT_1:44;
 A3: IC s = IC S by Def1;
 A4: b is Element of Data-Locations SCM by Th1;
-A5: Exec(SubFrom(a,b), s) = SCM-Exec-Res(I,S) by Th12
+A5: Exec(SubFrom(a,b), s) = SCM-Exec-Res(I,S) by Th10
     .= (SCM-Chg(S1, succ IC S)) by A1,A4,AMI_3:27,SCMRING1:def 14;
 A6: I = [i,{},<*a,b*>];
   then
-A7: I address_1 = a by A1,A4,AMI_3:27,SCMRING1:13;
-A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRING1:13;
+A7: I address_1 = a by A1,A4,AMI_3:27,SCMRINGI:1;
+A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRINGI:1;
   thus Exec(SubFrom(a,b), s).IC SCM R = Exec(SubFrom(a,b), s).NAT by Def1
     .= succ IC s by A3,A5,SCMRING1:7;
   thus Exec(SubFrom(a,b), s).a = S1.a by A1,A5,AMI_3:27,SCMRING1:8
@@ -534,24 +473,24 @@ A10: c is Element of Data-Locations SCM by Th1;
     .= s.c by A7,A9,A10,AMI_3:27,SCMRING1:12;
 end;
 
-theorem Th16:
+theorem Th14:
   Exec(MultBy(a,b), s).IC SCM R = succ IC s & Exec(MultBy(a,b), s)
   .a = s.a * s.b & for c st c <> a holds Exec(MultBy(a,b), s).c = s.c
 proof
 A1: a is Element of Data-Locations SCM by Th1;
-A2: the Object-Kind of SCM R = SCM-OK R by Def1;
+A2: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider S = s as SCM-State of R by A2,CARD_3:107;
   reconsider I = MultBy(a,b) as Element of SCM-Instr R by Def1;
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)*S.(I address_2));
   reconsider i = 4 as Element of Segm 8 by NAT_1:44;
 A3: IC s = IC S by Def1;
 A4: b is Element of Data-Locations SCM by Th1;
-A5: Exec(MultBy(a,b), s) = SCM-Exec-Res(I,S) by Th12
+A5: Exec(MultBy(a,b), s) = SCM-Exec-Res(I,S) by Th10
     .= (SCM-Chg(S1, succ IC S)) by A1,A4,AMI_3:27,SCMRING1:def 14;
 A6: I = [i,{},<*a,b*>];
   then
-A7: I address_1 = a by A1,A4,AMI_3:27,SCMRING1:13;
-A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRING1:13;
+A7: I address_1 = a by A1,A4,AMI_3:27,SCMRINGI:1;
+A8: I address_2 = b by A6,A1,A4,AMI_3:27,SCMRINGI:1;
   thus Exec(MultBy(a,b), s).IC SCM R = Exec(MultBy(a,b), s).NAT by Def1
     .= succ IC s by A3,A5,SCMRING1:7;
   thus Exec(MultBy(a,b), s).a = S1.a by A1,A5,AMI_3:27,SCMRING1:8
@@ -567,14 +506,14 @@ end;
 theorem
   Exec(goto(i1,R), s).IC SCM R = i1 & Exec(goto(i1,R), s).c = s.c
 proof
-A1: the Object-Kind of SCM R = SCM-OK R by Def1;
+A1: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider S = s as SCM-State of R by A1,CARD_3:107;
   reconsider i = 6 as Element of Segm 8 by NAT_1:44;
   reconsider I = goto(i1,R) as Element of SCM-Instr R by Def1;
   I = [i,<*i1*>,{}];
   then
-A2: I jump_address = i1 by SCMRING1:14;
-A3: Exec(goto(i1,R), s) = SCM-Exec-Res(I,S) by Th12
+A2: I jump_address = i1 by SCMRINGI:2;
+A3: Exec(goto(i1,R), s) = SCM-Exec-Res(I,S) by Th10
     .= (SCM-Chg(S,I jump_address)) by SCMRING1:def 14;
   thus Exec(goto(i1,R), s).IC SCM R = Exec(goto(i1,R), s).NAT by Def1
     .= i1 by A3,A2,SCMRING1:7;
@@ -582,17 +521,17 @@ A3: Exec(goto(i1,R), s) = SCM-Exec-Res(I,S) by Th12
   hence thesis by A3,AMI_3:27,SCMRING1:8;
 end;
 
-theorem Th18:
+theorem Th16:
   (s.a = 0.R implies Exec(a =0_goto i1, s).IC SCM R = i1) & (s.a
 <> 0.R implies Exec(a =0_goto i1, s).IC SCM R = succ IC s) & Exec(a =0_goto i1,
   s).c = s.c
 proof
-A1: the Object-Kind of SCM R = SCM-OK R by Def1;
+A1: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider S = s as SCM-State of R by A1,CARD_3:107;
   reconsider I = a =0_goto i1 as Element of SCM-Instr R by Def1;
   reconsider i = 7 as Element of Segm 8 by NAT_1:44;
 A2: a is Element of Data-Locations SCM & i1 is Element of NAT by Th1;
-A3: Exec(a =0_goto i1, s) = SCM-Exec-Res(I,S) by Th12
+A3: Exec(a =0_goto i1, s) = SCM-Exec-Res(I,S) by Th10
     .= SCM-Chg(S,IFEQ(S.(I cond_address),0.R,I cjump_address,succ IC S)) by A2,
 AMI_3:27,SCMRING1:def 14;
 A4: I = [i,<*i1*>,<*a*>];
@@ -600,19 +539,19 @@ A4: I = [i,<*i1*>,<*a*>];
   proof
     assume s.a = 0.R;
     then
-A5: S.(I cond_address)=0.R by A4,A2,AMI_3:27,SCMRING1:15;
+A5: S.(I cond_address)=0.R by A4,A2,AMI_3:27,SCMRINGI:3;
     thus Exec(a =0_goto i1, s).IC SCM R = Exec(a =0_goto i1, s).NAT by Def1
       .= IFEQ(S.(I cond_address),0.R,I cjump_address,succ IC S) by A3,
 SCMRING1:7
       .= I cjump_address by A5,FUNCOP_1:def 8
-      .= i1 by A4,A2,AMI_3:27,SCMRING1:15;
+      .= i1 by A4,A2,AMI_3:27,SCMRINGI:3;
   end;
 A6: IC s = IC S by Def1;
   thus s.a <> 0.R implies Exec(a =0_goto i1, s).IC SCM R = succ IC s
   proof
     assume s.a <> 0.R;
     then
-A7: S.(I cond_address) <> 0.R by A4,A2,AMI_3:27,SCMRING1:15;
+A7: S.(I cond_address) <> 0.R by A4,A2,AMI_3:27,SCMRINGI:3;
     thus Exec(a =0_goto i1, s).IC SCM R = Exec(a =0_goto i1, s).NAT by Def1
       .= IFEQ(S.(I cond_address),0.R,I cjump_address,succ IC S) by A3,
 SCMRING1:7
@@ -622,12 +561,12 @@ SCMRING1:7
   hence thesis by A3,AMI_3:27,SCMRING1:8;
 end;
 
-theorem Th19:
+theorem Th17:
   Exec(a := r, s).IC SCM R = succ IC s & Exec(a := r, s).a = r &
   for c st c <> a holds Exec(a := r, s).c = s.c
 proof
 A1: a is Element of Data-Locations SCM by Th1;
-A2: the Object-Kind of SCM R = SCM-OK R by Def1;
+A2: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider S = s as SCM-State of R by A2,CARD_3:107;
   reconsider I = a := r as Element of SCM-Instr R by Def1;
   set S1 = SCM-Chg(S, I const_address, I const_value);
@@ -635,9 +574,9 @@ A2: the Object-Kind of SCM R = SCM-OK R by Def1;
 A3: IC s = IC S by Def1;
 A4: I = [ i,{}, <*a, r*>];
   then
-A5: I const_address = a by A1,AMI_3:27,SCMRING1:16;
-A6: I const_value = r by A4,A1,AMI_3:27,SCMRING1:16;
-A7: Exec(a := r, s) = SCM-Exec-Res(I,S) by Th12
+A5: I const_address = a by A1,AMI_3:27,SCMRINGI:4;
+A6: I const_value = r by A4,A1,AMI_3:27,SCMRINGI:4;
+A7: Exec(a := r, s) = SCM-Exec-Res(I,S) by Th10
     .= (SCM-Chg(S1, succ IC S)) by A1,AMI_3:27,SCMRING1:def 14;
   thus Exec(a := r, s).IC SCM R = Exec(a := r, s).NAT by Def1
     .= succ IC s by A3,A7,SCMRING1:7;
@@ -653,14 +592,14 @@ end;
 
 begin  :: Halt instruction
 
-theorem Th20:
+theorem Th18:
   for I being Instruction of SCM R st ex s st Exec(I,s).IC SCM R =
   succ IC s holds I is non halting
 proof
   let I be Instruction of SCM R;
   given s such that
 A1: Exec(I, s).IC SCM R = succ IC s;
-A2: the Object-Kind of SCM R = SCM-OK R by Def1;
+A2: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider t = s as SCM-State of R by A2,CARD_3:107;
   IC t = t.NAT;
   then reconsider w = t.NAT as Element of NAT;
@@ -672,7 +611,7 @@ A4: I is halting;
   hence contradiction by A3;
 end;
 
-theorem Th21:
+theorem Th19:
   for I being Instruction of SCM R st I = [0,{},{}] holds I is
   halting
 proof
@@ -692,58 +631,58 @@ A5: ( not(ex mk being Element of NAT st I = [ 6, <*mk*>,{}]))&
 not(ex mk being
 Element of NAT, ml being Element of Data-Locations SCM st
  I = [ 7,<*mk*>,<*ml*>]) by RECDEF_2:def 2;
-  reconsider L = I as Element of SCM-Instr R by A1,SCMRING1:18;
+  reconsider L = I as Element of SCM-Instr R by A1,SCMRINGI:6;
   let s be State of SCM R;
-A6: the Object-Kind of SCM R = SCM-OK R by Def1;
+A6: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider t = s as SCM-State of R by A6,CARD_3:107;
 A7: ( not(ex mk, ml being Element of Data-Locations SCM
 st I = [ 3,{}, <*mk, ml*>]))&
   not( ex mk, ml being Element of Data-Locations SCM
   st I = [ 4,{}, <*mk, ml*>]) by A2,RECDEF_2:def 3;
-  thus Exec(I,s) = SCM-Exec-Res(L,t) by Th12
+  thus Exec(I,s) = SCM-Exec-Res(L,t) by Th10
     .= s by A3,A7,A5,A4,AMI_3:27,SCMRING1:def 14;
 end;
 
-Lm1: a := b is non halting
+Lm3: a := b is non halting
 proof
   set s =the  State of SCM R;
-  Exec(a := b,s).IC SCM R = succ IC s by Th13;
-  hence thesis by Th20;
+  Exec(a := b,s).IC SCM R = succ IC s by Th11;
+  hence thesis by Th18;
 end;
 
-Lm2: AddTo(a,b) is non halting
+Lm4: AddTo(a,b) is non halting
 proof
   set s =the  State of SCM R;
-  Exec(AddTo(a,b),s).IC SCM R = succ IC s by Th14;
-  hence thesis by Th20;
+  Exec(AddTo(a,b),s).IC SCM R = succ IC s by Th12;
+  hence thesis by Th18;
 end;
 
-Lm3: SubFrom(a,b) is non halting
+Lm5: SubFrom(a,b) is non halting
 proof
   set s =the  State of SCM R;
-  Exec(SubFrom(a,b),s).IC SCM R = succ IC s by Th15;
-  hence thesis by Th20;
+  Exec(SubFrom(a,b),s).IC SCM R = succ IC s by Th13;
+  hence thesis by Th18;
 end;
 
-Lm4: MultBy(a,b) is non halting
+Lm6: MultBy(a,b) is non halting
 proof
   set s =the  State of SCM R;
-  Exec(MultBy(a,b),s).IC SCM R = succ IC s by Th16;
-  hence thesis by Th20;
+  Exec(MultBy(a,b),s).IC SCM R = succ IC s by Th14;
+  hence thesis by Th18;
 end;
 
-Lm5: goto(i1,R) is non halting
+Lm7: goto(i1,R) is non halting
 proof
   reconsider i5 = i1 as Element of NAT;
   set s =the  SCM-State of R;
   set t = s +* (NAT .--> succ i1);
-  set f = the Object-Kind of SCM R;
+  set f = the_Values_of SCM R;
 A1: {NAT} c= SCM-Memory by AMI_2:22,ZFMISC_1:31;
 A2: dom t = dom s \/ dom (NAT .--> succ i1) by FUNCT_4:def 1
-    .= SCM-Memory \/ dom (NAT .--> succ i1) by PARTFUN1:def 2
+    .= SCM-Memory \/ dom (NAT .--> succ i1) by SCMRING1:19
     .= SCM-Memory \/ {NAT} by FUNCOP_1:13
     .= SCM-Memory by A1,XBOOLE_1:12;
-A3: f = SCM-OK R by Def1;
+A3: f = (SCM-VAL R)*SCM-OK by Lm1;
 A4: dom(NAT .--> succ i1) = {NAT} by FUNCOP_1:13;
   then NAT in dom (NAT .--> succ i1) by TARSKI:def 1;
   then
@@ -758,7 +697,7 @@ A8: x in dom t;
     per cases;
     suppose
 A9:  x = NAT;
-      then f.x = NAT by A3,AMI_2:22,SCMRING1:2;
+      then f.x = NAT by A3,SCMRING1:2;
       hence thesis by A5,A9;
     end;
     suppose
@@ -768,7 +707,7 @@ A9:  x = NAT;
       hence thesis by A3,A8,A6,CARD_3:9;
     end;
   end;
-A10: the Object-Kind of SCM R = SCM-OK R by Def1;
+A10: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   dom t = the carrier of SCM R by A2,Def1;
   then reconsider t as PartState of SCM R by A7,FUNCT_1:def 14,RELAT_1:def 18;
   dom t = the carrier of SCM R by A2,Def1;
@@ -784,26 +723,26 @@ A11: (w +* (NAT .--> i1)).NAT = (NAT .--> i1).NAT by FUNCT_4:13
 A12: goto(i1,R) is halting;
 A13: 6 is Element of Segm 8 by NAT_1:44;
   w +* (NAT .--> i1) = SCM-Chg(w,i5)
-    .= SCM-Chg(w,V jump_address) by A13,SCMRING1:14
+    .= SCM-Chg(w,V jump_address) by A13,SCMRINGI:2
     .= SCM-Exec-Res(V,w) by SCMRING1:def 14
-    .= Exec(goto(i1,R),t) by Th12
+    .= Exec(goto(i1,R),t) by Th10
     .= t by A12,EXTPRO_1:def 3;
   hence contradiction by A5,A11;
 end;
 
-Lm6: a =0_goto i1 is non halting
+Lm8: a =0_goto i1 is non halting
 proof
   reconsider i5 = i1 as Element of NAT;
   set s =the  SCM-State of R;
   set t = s +* (NAT .--> succ i1);
-  set f = the Object-Kind of SCM R;
+  set f = the_Values_of SCM R;
   reconsider V = a =0_goto i1 as Element of SCM-Instr R by Def1;
 A1: {NAT} c= SCM-Memory by AMI_2:22,ZFMISC_1:31;
 A2: dom t = dom s \/ dom (NAT .--> succ i1) by FUNCT_4:def 1
-    .= SCM-Memory \/ dom (NAT .--> succ i1) by PARTFUN1:def 2
+    .= SCM-Memory \/ dom (NAT .--> succ i1) by SCMRING1:19
     .= SCM-Memory \/ {NAT} by FUNCOP_1:13
     .= SCM-Memory by A1,XBOOLE_1:12;
-A3: f = SCM-OK R by Def1;
+A3: f = (SCM-VAL R)*SCM-OK by Lm1;
 A4: dom(NAT .--> succ i1) = {NAT} by FUNCOP_1:13;
   then NAT in dom (NAT .--> succ i1) by TARSKI:def 1;
   then
@@ -818,7 +757,7 @@ A8: x in dom t;
     per cases;
     suppose
 A9:   x = NAT;
-      then f.x = NAT by A3,AMI_2:22,SCMRING1:2;
+      then f.x = NAT by A3,SCMRING1:2;
       hence thesis by A5,A9;
     end;
     suppose
@@ -832,7 +771,7 @@ A9:   x = NAT;
   then reconsider t as PartState of SCM R by A7,FUNCT_1:def 14,RELAT_1:def 18;
   dom t = the carrier of SCM R by A2,Def1;
   then reconsider t as State of SCM R by PARTFUN1:def 2;
-A10: the Object-Kind of SCM R = SCM-OK R by Def1;
+A10: the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
   reconsider w = t as SCM-State of R by A10,CARD_3:107;
   dom(NAT .--> i1) = {NAT} by FUNCOP_1:13;
   then NAT in dom (NAT .--> i1) by TARSKI:def 1;
@@ -852,70 +791,70 @@ A16: IC t = IC w by Def1;
     then
 A17: Exec(a =0_goto i1,t).IC SCM R = w.NAT by A14,EXTPRO_1:def 3;
     a is Element of Data-Locations SCM by Th1;
-    then t.a <> 0.R by A12,A15,AMI_3:27,SCMRING1:15;
-    then Exec(a =0_goto i1,t).IC SCM R = succ e by A16,Th18;
+    then t.a <> 0.R by A12,A15,AMI_3:27,SCMRINGI:3;
+    then Exec(a =0_goto i1,t).IC SCM R = succ e by A16,Th16;
     hence contradiction by A17;
   end;
   suppose
 A18: w.(V cond_address) = 0.R;
     w +* (NAT .--> i1) = SCM-Chg(w,i5)
-      .= SCM-Chg(w,V cjump_address) by A12,A13,AMI_3:27,SCMRING1:15
+      .= SCM-Chg(w,V cjump_address) by A12,A13,AMI_3:27,SCMRINGI:3
 
       .= SCM-Chg(w,IFEQ(w.(V cond_address),0.R,V cjump_address,succ IC w))
     by A18,FUNCOP_1:def 8
 
       .= SCM-Exec-Res(V,w) by A13,AMI_3:27,SCMRING1:def 14
-      .= Exec(a =0_goto i1,t) by Th12
+      .= Exec(a =0_goto i1,t) by Th10
       .= t by A14,EXTPRO_1:def 3;
     hence contradiction by A5,A11;
   end;
 end;
 
-Lm7: a := r is non halting
+Lm9: a := r is non halting
 proof
   set s =the  State of SCM R;
-  Exec(a := r,s).IC SCM R = succ IC s by Th19;
-  hence thesis by Th20;
+  Exec(a := r,s).IC SCM R = succ IC s by Th17;
+  hence thesis by Th18;
 end;
 
 registration
   let R, a, b;
   cluster a:=b -> non halting;
-  coherence by Lm1;
-  cluster AddTo(a,b) -> non halting;
-  coherence by Lm2;
-  cluster SubFrom(a,b) -> non halting;
   coherence by Lm3;
-  cluster MultBy(a,b) -> non halting;
+  cluster AddTo(a,b) -> non halting;
   coherence by Lm4;
+  cluster SubFrom(a,b) -> non halting;
+  coherence by Lm5;
+  cluster MultBy(a,b) -> non halting;
+  coherence by Lm6;
 end;
 
 registration
   let R, i1;
   cluster goto(i1,R) -> non halting;
-  coherence by Lm5;
+  coherence by Lm7;
 end;
 
 registration
   let R, a, i1;
   cluster a =0_goto i1 -> non halting;
-  coherence by Lm6;
+  coherence by Lm8;
 end;
 
 registration
   let R, a, r;
   cluster a:=r -> non halting;
-  coherence by Lm7;
+  coherence by Lm9;
 end;
 
-Lm8: for W being Instruction of SCM R st W is halting holds W = [0,{},{}]
+Lm10: for W being Instruction of SCM R st W is halting holds W = [0,{},{}]
 proof
   set I = [0,{},{}];
   let W be Instruction of SCM R such that
 A1: W is halting;
   assume
 A2: I <> W;
-  per cases by Th8;
+  per cases by Th7;
   suppose
     W = [0,{},{}];
     hence thesis by A2;
@@ -955,32 +894,18 @@ registration
   cluster SCM R -> halting;
   coherence
   proof
-     the haltF of SCM R = [0,{},{}] by Def1;
-    hence the haltF of SCM R is halting by Th21;
+    thus halt SCM R is halting by Th19;
   end;
 end;
 
-
-
-theorem Th29:
+theorem
   for I being Instruction of SCM R st I is halting holds I = halt
-  SCM R
-proof
-  let I be Instruction of SCM R;
-  assume I is halting;
-  then I = [0,{},{}] by Lm8;
-  hence thesis by Lm8;
-end;
+  SCM R by Lm10;
 
 theorem
-  halt SCM R = [0,{},{}]
-proof
-  reconsider I = [0,{},{}] as Instruction of SCM R by Th3;
-  I is halting by Th21;
-  hence thesis by Th29;
-end;
+  halt SCM R = [0,{},{}];
 
-theorem Th31:
+theorem Th22:
   Data-Locations SCM R = Data-Locations SCM
 proof
   Data-Locations SCM misses {NAT} by AMI_2:20,AMI_3:27,ZFMISC_1:50;
@@ -997,6 +922,14 @@ end;
 theorem
   x is Data-Location of R iff x in Data-Locations SCM R
  proof
-   Data-Locations SCM R = Data-Locations SCM by Th31;
+   Data-Locations SCM R = Data-Locations SCM by Th22;
   hence thesis by Th1;
  end;
+
+theorem
+ for R being Ring
+  holds the_Values_of SCM R = (SCM-VAL R)*SCM-OK by Lm1;
+
+theorem
+ for R being Ring holds
+ (the carrier of SCM R) \ {NAT} = SCM-Data-Loc by Lm2;

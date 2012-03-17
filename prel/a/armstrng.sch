@@ -10,6 +10,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
@@ -18,9 +19,9 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="ARMSTRNG"/>
 </Signature>
@@ -128,7 +129,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>

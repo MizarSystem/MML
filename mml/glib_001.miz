@@ -2,7 +2,7 @@
 ::  by Gilbert Lee
 ::
 :: Received February 22, 2005
-:: Copyright (c) 2005-2011 Association of Mizar Users
+:: Copyright (c) 2005-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,19 +20,20 @@ environ
       ORDINAL4, GRAPH_1, FUNCT_4, FUNCOP_1, MCART_1, GLIB_001;
  notations TARSKI, XBOOLE_0, CARD_1, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0,
       DOMAIN_1, RELAT_1, FUNCT_1, FINSEQ_1, GRAPH_2, FINSEQ_5, RELSET_1,
-      MCART_1, FINSET_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000, ABIAN;
+      XTUPLE_0, MCART_1, FINSET_1, ORDINAL1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4,
+      GLIB_000, ABIAN;
  constructors DOMAIN_1, FUNCT_4, NAT_D, RECDEF_1, FINSEQ_5, GLIB_000, ABIAN,
-      GRAPH_2, XXREAL_2, RELSET_1, FINSEQ_2, RAT_1;
+      GRAPH_2, XXREAL_2, RELSET_1, FINSEQ_2, RAT_1, XTUPLE_0;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, GLIB_000, ABIAN, GRAPH_2,
-      GRAPH_3, CARD_1, SUBSET_1;
+      GRAPH_3, CARD_1, SUBSET_1, XTUPLE_0;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
- definitions FUNCOP_1;
+ definitions FUNCOP_1, XTUPLE_0;
  theorems CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
-      FINSEQ_4, FINSEQ_5, FINSEQ_6, FINSET_1, FUNCT_1, FUNCT_4, GLIB_000,
-      GRAPH_2, GRAPH_5, INT_1, JORDAN12, MCART_1, NAT_1, NAT_2, PEPIN, RELAT_1,
-      TARSKI, XBOOLE_0, XBOOLE_1, XREAL_1, PRE_CIRC, XXREAL_0, ABIAN, ORDINAL1,
-      NAT_D;
+      FINSEQ_4, FINSEQ_5, FINSET_1, FUNCT_1, FUNCT_4, GLIB_000, GRAPH_2,
+      GRAPH_5, INT_1, JORDAN12, MCART_1, NAT_1, NAT_2, PEPIN, RELAT_1, TARSKI,
+      XBOOLE_0, XBOOLE_1, XREAL_1, PRE_CIRC, XXREAL_0, ABIAN, ORDINAL1, NAT_D,
+      XTUPLE_0;
  schemes FINSEQ_1, FUNCT_1, NAT_1, RECDEF_1;
 
 begin :: Preliminaries
@@ -53,79 +54,7 @@ proof
   hence thesis;
 end;
 
-theorem Th2:
-  for X being set, k being Element of NAT st X c= Seg k holds for m
-  ,n being Element of NAT st m in dom (Sgm X) & n = (Sgm X).m holds m <= n
-proof
-  let X be set, k be Element of NAT;
-  defpred P[Nat] means ($1 in dom (Sgm X) & (ex n being Element of NAT st n=(
-  Sgm X).$1 & $1 <= n)) or (not $1 in dom (Sgm X));
-  assume
-A1: X c= Seg k;
-  now
-    let x be non empty Nat;
-    assume
-A2: P[x];
-    now
-      per cases by A2;
-      suppose
-A3:     x in dom (Sgm X) & ex n being Element of NAT st n = (Sgm X).x & x <= n;
-A4:     x+0 < x+1 by XREAL_1:8;
-        consider n being Element of NAT such that
-A5:     n = Sgm(X).x and
-A6:     x <= n by A3;
-A7:     1 <= x by A3,FINSEQ_3:25;
-        now
-          set n1 = (Sgm X).(x+1);
-          assume
-A8:       x+1 in dom (Sgm X);
-          then (Sgm X).(x+1) in rng (Sgm X) by FUNCT_1:3;
-          then reconsider n1 as Element of NAT;
-          take n1;
-          thus n1 = (Sgm X).(x+1);
-          x+1 <= len Sgm X by A8,FINSEQ_3:25;
-          then n < n1 by A1,A7,A4,A5,FINSEQ_1:def 13;
-          then x < n1 by A6,XXREAL_0:2;
-          hence x+1 <= n1 by NAT_1:13;
-        end;
-        hence P[x+1];
-      end;
-      suppose
-        not x in dom (Sgm X);
-        then x < 0+1 or x > len Sgm X by FINSEQ_3:25;
-        then x+1 > len Sgm X + 0 by NAT_1:13;
-        hence P[x+1] by FINSEQ_3:25;
-      end;
-    end;
-    hence P[x+1];
-  end;
-  then
-A9: for x being non empty Nat st P[x] holds P[x+1];
-  let m, n be Element of NAT;
-  assume that
-A10: m in dom (Sgm X) and
-A11: n = (Sgm X).m;
-  reconsider m9=m as non empty Element of NAT by A10,FINSEQ_3:25;
-  now
-    set n = (Sgm X).1;
-A12: m <= len (Sgm X) by A10,FINSEQ_3:25;
-    1 <= m by A10,FINSEQ_3:25;
-    then 1 <= len (Sgm X) by A12,XXREAL_0:2;
-    hence 1 in dom (Sgm X) by FINSEQ_3:25;
-    then
-A13: (Sgm X).1 in rng (Sgm X) by FUNCT_1:3;
-    then reconsider n as Element of NAT;
-    take n;
-    thus n = (Sgm X).1;
-    rng (Sgm X) = X by A1,FINSEQ_1:def 13;
-    hence 1 <= n by A1,A13,FINSEQ_1:1;
-  end;
-  then
-A14: P[1];
-  for x being non empty Nat holds P[x] from NAT_1:sch 10(A14,A9);
-  then P[m9];
-  hence thesis by A10,A11;
-end;
+canceled;
 
 theorem Th3:
   for X being set, fs being FinSequence of X, fss being Subset of
@@ -168,7 +97,7 @@ A6: n in dom fs by FUNCT_1:1;
 A7: m in dom f by A3,FUNCT_1:11;
 A8: (Seq fss).m = fs.n by A5,FUNCT_1:1;
   k in NAT by ORDINAL1:def 12;
-  hence thesis by A7,A6,A8,A1,Th2;
+  hence thesis by A7,A6,A8,A1,FINSEQ_3:152;
 end;
 
 theorem Th5:
@@ -243,8 +172,7 @@ end;
 definition
   let G be _Graph;
   mode Walk of G -> FinSequence of the_Vertices_of G \/ the_Edges_of G means
-    :
-    Def3: len
+:Def3: len
  it is odd & it.1 in the_Vertices_of G & for n being odd Element of
     NAT st n < len it holds it.(n+1) Joins it.n, it.(n+2), G;
   existence
@@ -452,6 +380,7 @@ A8:   W.(rn2+1) Joins W.rn2, W.(rn2+2), G by Def3;
     end;
     hence thesis by Def3;
   end;
+ involutiveness;
 end;
 
 definition
@@ -2740,7 +2669,7 @@ A13:  1 <= rn by A12,FINSEQ_3:25;
   hence W is Trail-like implies W.reverse() is Trail-like;
   assume W.reverse() is Trail-like;
   then W.reverse().reverse() is Trail-like by A1;
-  hence thesis by FINSEQ_6:25;
+  hence thesis;
 end;
 
 Lm59: for G being _Graph, W being Walk of G, m,n being Element of NAT holds W
@@ -2981,7 +2910,7 @@ A13:  rm <= len W by A9,FINSEQ_3:25;
   hence W is Path-like implies W.reverse() is Path-like;
   assume W.reverse() is Path-like;
   then W.reverse().reverse() is Path-like by A1;
-  hence thesis by FINSEQ_6:25;
+  hence thesis;
 end;
 
 Lm64: for G being _Graph, W being Walk of G, m, n being Element of NAT st W is
@@ -4776,7 +4705,7 @@ A50:            now
 A51:              xb in Seg(naa1 div 2) by A48,FINSEQ_1:1;
                   [xb, b] in Sgm(dom esb) by A46,A47,FUNCT_1:1;
                   then [xb, b] in ses by A51,RELAT_1:def 11;
-                  then b in rng ses by RELAT_1:def 5;
+                  then b in rng ses by XTUPLE_0:def 13;
                   then [b, esbes1.b] in es by A45,RELAT_1:def 11;
                   hence contradiction by A44,XBOOLE_0:def 5;
                 end;
@@ -4856,7 +4785,7 @@ A66:            [x, Sgm(dom esb).x] in Sgm(dom esb) by FUNCT_1:1;
                 x in Seg (naa1 div 2) by A30,A63,A64,FINSEQ_1:1;
                 then [x, Sgm(dom esb).x] in ses by A66,RELAT_1:def 11;
                 then
-A67:            Sgm(dom esb).x in rng ses by RELAT_1:def 5;
+A67:            Sgm(dom esb).x in rng ses by XTUPLE_0:def 13;
                 Sgm(dom esb).x in dom esb by A21,A61,A65,FUNCT_1:11;
                 then [Sgm(dom esb).x, esb.(Sgm(dom esb).x)] in esb by FUNCT_1:1
 ;
@@ -4937,7 +4866,7 @@ A87:            es.x = y by A84,A85,FUNCT_1:1;
                   suppose
 A88:                x in dom ((k+1) .--> e);
                     then reconsider x9 = x as Element of NAT by A76;
-A89:                x = k+1 by A76,A88,TARSKI:def 1;
+A89:                x = k+1 by A88,TARSKI:def 1;
                     then
 A90:                1 <= x9 by NAT_1:12;
                     then
@@ -4970,7 +4899,7 @@ A95:          Sgm(dom es)=Sgm(dom esb) ^ Sgm({k+1}) by A23,A77,A72,FINSEQ_3:42
                 assume dom esb /\ dom ((k+1).-->e) <> {};
                 then consider x being set such that
 A96:            x in dom esb /\ dom ((k+1).-->e) by XBOOLE_0:def 1;
-                x in {k+1} by A76,A96,XBOOLE_0:def 4;
+                x in {k+1} by A96;
                 then
 A97:            x = k+1 by TARSKI:def 1;
                 x in dom esb by A96,XBOOLE_0:def 4;
@@ -5224,10 +5153,12 @@ A10:    W.edgeSeq().a1 = b1 by A2,A4,A7,FUNCT_1:1;
         consider a2,b2 being set such that
 A11:    x2 = [a2,b2] by A2,A5,RELAT_1:def 1;
 A12:    a2 in dom W.edgeSeq() by A2,A5,A11,FUNCT_1:1;
+X1:     [a1,b1]`2 = b1;
+X2:     [a2,b2]`2 = b2;
         f.x1 = x1`2 by A2,A4;
         then
-A13:    b1 = f.x1 by A7,MCART_1:def 2
-          .= b2 by A6,A9,A11,MCART_1:def 2;
+A13:    b1 = f.x1 by A7,X1
+          .= b2 by A6,A9,A11,X2;
         then W.edgeSeq().a2 = b1 by A2,A5,A11,FUNCT_1:1;
         hence x1 = x2 by A7,A11,A13,A3,A8,A10,A12,FUNCT_1:def 4;
       end;
@@ -5241,9 +5172,10 @@ A15:    x in dom f and
 A16:    f.x = y by FUNCT_1:def 3;
         consider a,b being set such that
 A17:    x = [a,b] by A2,A15,RELAT_1:def 1;
+X:      [a,b]`2 = b;
         y = x`2 by A2,A15,A16;
-        then y = b by A17,MCART_1:def 2;
-        then y in rng W.edgeSeq() by A2,A15,A17,RELAT_1:def 5;
+        then y = b by A17,X;
+        then y in rng W.edgeSeq() by A2,A15,A17,XTUPLE_0:def 13;
         hence y in (the_Edges_of G);
       end;
       then rng f c= the_Edges_of G by TARSKI:def 3;
@@ -5352,7 +5284,7 @@ theorem
   for n being odd Element of NAT st n <= len W holds W.n in
   the_Vertices_of G by Lm1;
 
-theorem Th9:
+theorem Th8:
   for n being even Element of NAT st n in dom W holds W.n in the_Edges_of G
 proof
   let n be even Element of NAT;
@@ -5371,7 +5303,7 @@ theorem
 Element of NAT st naa1 = n-1 & n-1 in dom W & n+1 in dom W & W.n Joins W.(naa1)
   , W.(n+1),G by Lm2;
 
-theorem Th11:
+theorem Th10:
   for n being odd Element of NAT st n < len W holds W.(n+1) in W
   .vertexAt(n).edgesInOut()
 proof
@@ -5384,7 +5316,7 @@ A2: W.vertexAt(n) = W.n by Def8;
   hence thesis by A2,GLIB_000:62;
 end;
 
-theorem Th12:
+theorem Th11:
   for n being odd Element of NAT st 1 < n & n <= len W holds W.(n-
   1) in W.vertexAt(n).edgesInOut()
 proof
@@ -5425,7 +5357,7 @@ A5: n+1 <= len W by NAT_1:13;
   hence thesis by A4,A1,A2,A3,A5,FINSEQ_3:25;
 end;
 
-theorem Th14:
+theorem Th13:
   len G.walkOf(v) = 1 & G.walkOf(v).1 = v & G.walkOf(v).first() =
   v & G.walkOf(v).last() = v & G.walkOf(v) is_Walk_from v,v
 proof
@@ -5437,7 +5369,7 @@ A2: G.walkOf(v).first() = v by FINSEQ_1:40;
   hence thesis by A2,Def23;
 end;
 
-theorem Th15:
+theorem Th14:
   e Joins x,y,G implies len G.walkOf(x,e,y) = 3
 proof
   assume e Joins x,y,G;
@@ -5445,7 +5377,7 @@ proof
   hence thesis by FINSEQ_1:45;
 end;
 
-theorem Th16:
+theorem Th15:
   e Joins x,y,G implies G.walkOf(x,e,y).first() = x & G.walkOf(x,e
   ,y).last() = y & G.walkOf(x,e,y) is_Walk_from x,y
 proof
@@ -5464,7 +5396,7 @@ theorem
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds W1
   .first() = W2.first() & W1.last() = W2.last();
 
-theorem Th18:
+theorem Th17:
   W is_Walk_from x,y iff W.1 = x & W.(len W) = y
 proof
   W is_Walk_from x,y iff W.first() = x & W.last() = y by Def23;
@@ -5523,7 +5455,7 @@ theorem
   len W = len W.reverse() & dom W = dom W.reverse() & rng W = rng W
   .reverse() by FINSEQ_5:57,def 3;
 
-theorem Th23:
+theorem Th22:
   W.first() = W.reverse().last() & W.last() = W.reverse().first()
 proof
   len W = len W.reverse() by FINSEQ_5:def 3;
@@ -5531,31 +5463,31 @@ proof
   thus thesis by FINSEQ_5:62;
 end;
 
-theorem Th24:
+theorem Th23:
   W is_Walk_from x,y iff W.reverse() is_Walk_from y, x
 proof
 A1: len W = len W.reverse() by FINSEQ_5:def 3;
   hereby
     assume
 A2: W is_Walk_from x, y;
-    then W.(len W) = y by Th18;
+    then W.(len W) = y by Th17;
     then
 A3: W.reverse().1 = y by FINSEQ_5:62;
-    W.1 = x by A2,Th18;
+    W.1 = x by A2,Th17;
     then W.reverse().(len W) = x by FINSEQ_5:62;
-    hence W.reverse() is_Walk_from y,x by A1,A3,Th18;
+    hence W.reverse() is_Walk_from y,x by A1,A3,Th17;
   end;
   assume
 A4: W.reverse() is_Walk_from y,x;
-  then W.reverse().1=y by Th18;
+  then W.reverse().1=y by Th17;
   then
 A5: W.(len W) = y by FINSEQ_5:62;
-  W.reverse().(len W.reverse())=x by A4,Th18;
+  W.reverse().(len W.reverse())=x by A4,Th17;
   then W.1 = x by A1,FINSEQ_5:62;
-  hence thesis by A5,Th18;
+  hence thesis by A5,Th17;
 end;
 
-theorem Th25:
+theorem Th24:
   n in dom W implies W.n = W.reverse().(len W - n + 1) & (len W -
   n + 1) in dom W.reverse()
 proof
@@ -5577,8 +5509,7 @@ theorem
   n in dom W.reverse() implies W.reverse().n = W.(len W - n + 1) & (len
   W - n + 1) in dom W by Lm8;
 
-theorem
-  W.reverse().reverse() = W by FINSEQ_6:25;
+canceled;
 
 theorem
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds W1
@@ -5597,7 +5528,7 @@ theorem
   .append(W2).last() = W2.last() & W1.append(W2) is_Walk_from W1.first(), W2
   .last() by Lm11;
 
-theorem Th32:
+theorem Th31:
   W1 is_Walk_from x,y & W2 is_Walk_from y,z implies W1.append(W2)
   is_Walk_from x,z
 proof
@@ -5623,7 +5554,7 @@ theorem
   n in dom W1.append(W2) implies n in dom W1 or ex k being Element of
   NAT st k < len W2 & n = len W1 + k by Lm14;
 
-theorem Th36:
+theorem Th35:
   for W1A, W1B being Walk of G1, W2A,W2B being Walk of G2 st W1A =
   W2A & W1B = W2B holds W1A.append(W1B) = W2A.append(W2B)
 proof
@@ -5668,7 +5599,7 @@ theorem
 theorem
   W.cut(1,len W) = W by Lm18;
 
-theorem Th41:
+theorem Th40:
   for n being odd Element of NAT st n < len W holds G.walkOf(W.n,
   W.(n+1), W.(n+2)) = W.cut(n,n+2)
 proof
@@ -5685,7 +5616,7 @@ A4: len W.cut(n,n+2) + n = 1 + (2+n) by A2,Lm15;
 A5: e Joins v1,v2,G by A1,Def3;
   then
 A6: G.walkOf(v1,e,v2) = <*v1,e,v2*> by Def5;
-A7: len W1 = 3 by A5,Th15;
+A7: len W1 = 3 by A5,Th14;
   then
 A8: dom W1 = Seg 3 by FINSEQ_1:def 3;
   now
@@ -5720,7 +5651,7 @@ A11: W2.x = W.(n+xaa1) by A3,A2,A4,A10,Lm15;
   hence thesis by A4,A7,FINSEQ_2:9;
 end;
 
-theorem Th42:
+theorem Th41:
   for m,n being odd Element of NAT st m <= n & n < len W holds W
   .cut(m,n).addEdge(W.(n+1)) = W.cut(m,n+2)
 proof
@@ -5737,7 +5668,7 @@ A4: W1.last() = W.n by A1,A2,Lm16;
   then W1.last().adj(e) = W.vertexAt(n+2) by GLIB_000:66;
   then W1.last().adj(e) = W.(n+2) by A3,Def8;
   then
-A5: G.walkOf(W1.last(),e,W1.last().adj(e)) = W.cut(n,n+2) by A2,A4,Th41;
+A5: G.walkOf(W1.last(),e,W1.last().adj(e)) = W.cut(n,n+2) by A2,A4,Th40;
   n <= n+2 by Th1;
   hence thesis by A1,A3,A5,Lm17;
 end;
@@ -5780,7 +5711,7 @@ A4: iaa1 < len W.cut(m,n) - 0 by XREAL_1:15;
   hence thesis by A1,A2,A4,Lm15;
 end;
 
-theorem Th49:
+theorem Th48:
   for W1 being Walk of G1, W2 being Walk of G2, m, n being Element
   of NAT st W1 = W2 holds W1.cut(m,n) = W2.cut(m,n)
 proof
@@ -5835,7 +5766,7 @@ theorem
   for m,n being odd Element of NAT st m <= n & n <= len W & W.m = W.n
   holds len W.remove(m,n) = len W + m - n by Lm31;
 
-theorem Th58:
+theorem Th57:
   for m being Element of NAT st W.m = W.last() holds W.remove(m,
   len W) = W.cut(1,m)
 proof
@@ -5894,10 +5825,10 @@ A1: W1 = W2;
     per cases;
     suppose
 A2:   m is odd & n is odd & m <= n & n <= len W1 & W1.m = W1.n;
-A3:   W1.cut(n,len W1) = W2.cut(n,len W2) by A1,Th49;
-A4:   W1.cut(1,m) = W2.cut(1,m) by A1,Th49;
+A3:   W1.cut(n,len W1) = W2.cut(n,len W2) by A1,Th48;
+A4:   W1.cut(1,m) = W2.cut(1,m) by A1,Th48;
       W1.remove(m,n) = W1.cut(1,m).append(W1.cut(n,len W1)) by A2,Def12;
-      then W1.remove(m,n) = W2.cut(1,m).append(W2.cut(n,len W2)) by A4,A3,Th36;
+      then W1.remove(m,n) = W2.cut(1,m).append(W2.cut(n,len W2)) by A4,A3,Th35;
       hence thesis by A1,A2,Def12;
     end;
     suppose
@@ -5928,7 +5859,7 @@ theorem
   W is_Walk_from x,y & e Joins y,z,G implies W.addEdge(e) is_Walk_from x
   ,z by Lm39;
 
-theorem Th68:
+theorem Th67:
   1 <= len W.vertexSeq()
 proof
   now
@@ -5941,7 +5872,7 @@ proof
   hence thesis;
 end;
 
-theorem Th69:
+theorem Th68:
   for n being odd Element of NAT st n <= len W holds 2 * ((n+1)
   div 2) - 1 = n & 1 <= (n+1) div 2 & (n+1) div 2 <= len W.vertexSeq()
 proof
@@ -5981,13 +5912,13 @@ proof
   set VS = G.walkOf(v).vertexSeq();
   len G.walkOf(v) + 1 = 2 * len VS by Def14;
   then
-A1: 1 + 1 = 2 * len VS by Th14;
+A1: 1 + 1 = 2 * len VS by Th13;
   then VS.1 = G.walkOf(v).(2*1-1) by Def14
-    .= v by Th14;
+    .= v by Th13;
   hence thesis by A1,FINSEQ_1:40;
 end;
 
-theorem Th71:
+theorem Th70:
   e Joins x,y,G implies G.walkOf(x,e,y).vertexSeq() = <*x,y*>
 proof
   set W = G.walkOf(x,e,y);
@@ -6009,7 +5940,7 @@ theorem
   W.first() = W.vertexSeq().1 & W.last() = W.vertexSeq().(len W .vertexSeq())
 proof
 A1: len W + 1 = 2*len W.vertexSeq() by Def14;
-A2: 1 <= len W.vertexSeq() by Th68;
+A2: 1 <= len W.vertexSeq() by Th67;
   then W.vertexSeq().1 = W.(2*1-1) by Def14;
   hence W.vertexSeq().1 = W.first();
   W.vertexSeq().(len W.vertexSeq()) = W.(2*len W.vertexSeq()-1) by A2,Def14;
@@ -6025,14 +5956,14 @@ proof
   assume
 A1: n <= len W;
   then
-A2: 2 * m - 1 = n by Th69;
-A3: m <= len W.vertexSeq() by A1,Th69;
-A4: 1 <= m by A1,Th69;
+A2: 2 * m - 1 = n by Th68;
+A3: m <= len W.vertexSeq() by A1,Th68;
+A4: 1 <= m by A1,Th68;
   W.vertexAt(n) = W.n by A1,Def8;
   hence thesis by A2,A4,A3,Def14;
 end;
 
-theorem Th74:
+theorem Th73:
   n in dom W.vertexSeq() iff 2*n-1 in dom W
 proof
   hereby
@@ -6085,7 +6016,7 @@ A4:     y = f.x by A2,A3,FUNCT_1:1;
 A5:     x in dom f by A2,A3,FUNCT_1:1;
         then reconsider x as Element of NAT;
 A6:     x <= len f by A5,FINSEQ_3:25;
-A7:     2*x-1 in dom W.cut(1,n) by A5,Th74;
+A7:     2*x-1 in dom W.cut(1,n) by A5,Th73;
         then 2*x-1 <= len W.cut(1,n) by FINSEQ_3:25;
         then 2*x-1 <= n by A1,Lm22;
         then
@@ -6093,7 +6024,7 @@ A8:     2*x-1 <= len W by A1,XXREAL_0:2;
         1 <= 2*x-1 by A7,FINSEQ_3:25;
         then 2*x-1 in dom W by A7,A8,FINSEQ_3:25;
         then
-A9:     x in dom W.vertexSeq() by Th74;
+A9:     x in dom W.vertexSeq() by Th73;
         then
 A10:    x <= len W.vertexSeq() by FINSEQ_3:25;
         1 <= x by A5,FINSEQ_3:25;
@@ -6114,7 +6045,7 @@ A11:    y = W.(2*x-1) by A1,A7,Lm23;
   hence thesis;
 end;
 
-theorem Th76:
+theorem Th75:
   e Joins W.last(),x,G implies W.addEdge(e).vertexSeq() = W
   .vertexSeq() ^ <*x*>
 proof
@@ -6142,7 +6073,7 @@ A7: k in dom W3 by A3,A4,A5,FINSEQ_3:25;
       suppose
 A8:     k in dom W.vertexSeq();
         then
-A9:     2*k-1 in dom W by Th74;
+A9:     2*k-1 in dom W by Th73;
 A10:    1 <= k by A8,FINSEQ_3:25;
 A11:    k <= len W.vertexSeq() by A8,FINSEQ_3:25;
         W3.k = W.vertexSeq().k by A8,FINSEQ_1:def 7;
@@ -6171,7 +6102,7 @@ A15:    2*k = 2*len W.vertexSeq() + 2*1 by A13
   hence thesis by A3,FINSEQ_1:14;
 end;
 
-theorem Th77:
+theorem Th76:
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds W1
   .vertexSeq() = W2.vertexSeq()
 proof
@@ -6225,14 +6156,14 @@ theorem
   e Joins W.last(),x,G implies W.addEdge(e).edgeSeq() = W.edgeSeq() ^ <*
   e*> by Lm44;
 
-theorem Th84:
+theorem Th83:
   e Joins x,y,G iff G.walkOf(x,e,y).edgeSeq() = <*e*>
 proof
   set W = G.walkOf(x,e,y);
   hereby
     assume
 A1: e Joins x,y, G;
-    then len W = 3 by Th15;
+    then len W = 3 by Th14;
     then
 A2: 2+1 = 2*len W.edgeSeq()+1 by Def15;
 A3: W = <*x,e,y*> by A1,Def5;
@@ -6256,7 +6187,7 @@ A8: len W = 2*1+1 by Def15;
   now
     assume not e Joins x,y,G;
     then W = G.walkOf(choose the_Vertices_of G) by Def5;
-    hence contradiction by A8,Th14;
+    hence contradiction by A8,Th13;
   end;
   hence thesis;
 end;
@@ -6373,7 +6304,7 @@ A21:    W3.(2*n) = W2.(2kaa1+1) by A4,A17,A20,GRAPH_2:15
   hence thesis by A1,A3,FINSEQ_1:14;
 end;
 
-theorem Th87:
+theorem Th86:
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds W1
   .edgeSeq() = W2.edgeSeq()
 proof
@@ -6403,7 +6334,7 @@ theorem
   x in W.vertices() iff ex n being odd Element of NAT st n <= len W & W.
   n = x by Lm45;
 
-theorem Th89:
+theorem Th88:
   W.first() in W.vertices() & W.last() in W.vertices()
 proof
   1 <= len W by ABIAN:12;
@@ -6411,7 +6342,7 @@ proof
   thus thesis by Lm45;
 end;
 
-theorem Th90:
+theorem Th89:
   for n being odd Element of NAT st n <= len W holds W.vertexAt(n)
   in W.vertices()
 proof
@@ -6434,26 +6365,26 @@ A1: 1 <= len G.walkOf(v) by ABIAN:12;
 A2:   n <= len G.walkOf(v) and
 A3:   G.walkOf(v).n = x by Lm45;
 A4:   1 <= n by ABIAN:12;
-      n <= 1 by A2,Th14;
+      n <= 1 by A2,Th13;
       then x = G.walkOf(v).1 by A3,A4,XXREAL_0:1;
-      then x = v by Th14;
+      then x = v by Th13;
       hence x in {v} by TARSKI:def 1;
     end;
     assume x in {v};
     then
 A5: x = v by TARSKI:def 1;
-    G.walkOf(v).1 = v by Th14;
+    G.walkOf(v).1 = v by Th13;
     hence x in G.walkOf(v).vertices() by A5,A1,Lm45,JORDAN12:2;
   end;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th92:
+theorem Th91:
   e Joins x,y,G implies G.walkOf(x,e,y).vertices() = {x,y}
 proof
   set W = G.walkOf(x,e,y);
   assume e Joins x, y, G;
-  then W.vertexSeq() = <*x,y*> by Th71;
+  then W.vertexSeq() = <*x,y*> by Th70;
   hence thesis by FINSEQ_2:127;
 end;
 
@@ -6479,7 +6410,7 @@ A4:   n in dom W by A1,FINSEQ_3:25;
       then lenW-n+1 <= len W by FINSEQ_3:25;
       then
 A5:   lenW-n+1 <= len W.reverse() by FINSEQ_5:def 3;
-      W.reverse().(len W - n + 1) = x by A2,A4,Th25;
+      W.reverse().(len W - n + 1) = x by A2,A4,Th24;
       hence x in W.reverse().vertices() by A3,A5,Lm45;
     end;
     assume x in W.reverse().vertices();
@@ -6501,7 +6432,7 @@ A11: lenW-n+1 <= len W by FINSEQ_1:1;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th94:
+theorem Th93:
   W1.last() = W2.first() implies W1.append(W2).vertices() = W1
   .vertices() \/ W2.vertices()
 proof
@@ -6556,7 +6487,7 @@ A15:      0+1 <= k by NAT_1:13;
           then
 A16:      k + 1 + len W1 - len W1 <= len W2 + len W1 - len W1 by XREAL_1:13;
           then
-A17:      W2.vertexAt(k+1) in W2.vertices() by Th90;
+A17:      W2.vertexAt(k+1) in W2.vertices() by Th89;
           k < len W2 - 1 + 1 by A16,NAT_1:13;
           then W2.(k+1) = v by A2,A10,A14,A15,GRAPH_2:15;
           then v in W2.vertices() by A16,A17,Def8;
@@ -6619,7 +6550,7 @@ A6: m+naa1 <= len W by FINSEQ_3:25;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th96:
+theorem Th95:
   e Joins W.last(),x,G implies W.addEdge(e).vertices() = W .vertices() \/ {x}
 proof
   set W2 = G.walkOf(W.last(), e, W.last().adj(e));
@@ -6628,9 +6559,9 @@ proof
 A1: e Joins W.last(), x, G;
   then reconsider x9=x as Vertex of G by GLIB_000:13;
 A2: W.last().adj(e) = x9 by A1,GLIB_000:66;
-  then W2.first() = W.last() by A1,Th16;
+  then W2.first() = W.last() by A1,Th15;
   then
-A3: W3.vertices() = WV \/ W2.vertices() by Th94;
+A3: W3.vertices() = WV \/ W2.vertices() by Th93;
 A4: now
     let y be set;
     hereby
@@ -6648,7 +6579,7 @@ A6:       y in {W.last(), x};
             per cases by A6,TARSKI:def 2;
             suppose
               y = W.last();
-              then y in WV by Th89;
+              then y in WV by Th88;
               hence y in WV \/ {x} by XBOOLE_0:def 3;
             end;
             suppose
@@ -6679,7 +6610,7 @@ A7: y in WV \/ {x};
     end;
     hence y in WV \/ {W.last(), x};
   end;
-  W2.vertices() = {W.last(), x} by A1,A2,Th92;
+  W2.vertices() = {W.last(), x} by A1,A2,Th91;
   hence thesis by A3,A4,TARSKI:1;
 end;
 
@@ -6692,7 +6623,7 @@ proof
   assume that
 A1: e Joins W.last(),x,G and
 A2: not x in W.vertices();
-  card W.addEdge(e).vertices() = card (W.vertices()\/{x}) by A1,Th96;
+  card W.addEdge(e).vertices() = card (W.vertices()\/{x}) by A1,Th95;
   hence thesis by A2,CARD_2:41;
 end;
 
@@ -6719,7 +6650,7 @@ A6: W.n = y by A2,Lm45;
     suppose
       n <= m;
       then W.cut(n,m) is_Walk_from y, x by A3,A4,A6,Lm16;
-      then W.cut(n,m).reverse() is_Walk_from x, y by Th24;
+      then W.cut(n,m).reverse() is_Walk_from x, y by Th23;
       hence thesis;
     end;
   end;
@@ -6728,13 +6659,13 @@ end;
 
 theorem
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds W1
-  .vertices() = W2.vertices() by Th77;
+  .vertices() = W2.vertices() by Th76;
 
 theorem
   e in W.edges() iff ex n being even Element of NAT st 1 <= n & n <= len
   W & W.n = e by Lm46;
 
-theorem Th101:
+theorem Th100:
   e in W.edges() iff ex n being odd Element of NAT st n < len W & W.(n+1) = e
 proof
   hereby
@@ -6757,7 +6688,7 @@ A6: 1 <= n+1 by NAT_1:12;
   hence thesis by A5,A6,Lm46;
 end;
 
-theorem Th102:
+theorem Th101:
   rng W = W.vertices() \/ W.edges()
 proof
   now
@@ -6816,7 +6747,7 @@ A11: 1 <= x by A8,FINSEQ_3:25;
   hence thesis by A7,XBOOLE_0:def 10;
 end;
 
-theorem Th103:
+theorem Th102:
   W1.last() = W2.first() implies W1.append(W2).edges() = W1
   .edges() \/ W2.edges()
 proof
@@ -6907,7 +6838,7 @@ theorem
   Element of NAT st n+2 <= len W & v1 = W.n & e = W.(n+1) & v2 = W.(n+2) & e
   Joins v1, v2,G by Lm47;
 
-theorem Th105:
+theorem Th104:
   e in W.edges() iff ex n being Element of NAT st n in dom W
   .edgeSeq() & W.edgeSeq().n = e
 proof
@@ -6967,7 +6898,7 @@ A8:     e = W.(m+xaa1) by A1,A4,A5,Lm15;
   hence thesis;
 end;
 
-theorem Th108:
+theorem Th107:
   W.edges() = W.reverse().edges()
 proof
   now
@@ -6980,11 +6911,11 @@ A2:   n <= len W and
 A3:   W.n = e by Lm46;
 A4:   n in dom W by A1,A2,FINSEQ_3:25;
       then
-A5:   (len W - n + 1) in dom W.reverse() by Th25;
+A5:   (len W - n + 1) in dom W.reverse() by Th24;
       then reconsider rn = len W - n + 1 as even Element of NAT;
 A6:   1 <= rn by A5,FINSEQ_3:25;
 A7:   rn <= len W.reverse() by A5,FINSEQ_3:25;
-      e = W.reverse().(len W - n + 1) by A3,A4,Th25;
+      e = W.reverse().(len W - n + 1) by A3,A4,Th24;
       hence e in W.reverse().edges() by A6,A7,Lm46;
     end;
     assume e in W.reverse().edges();
@@ -6994,12 +6925,12 @@ A9: n <= len W.reverse() and
 A10: W.reverse().n = e by Lm46;
 A11: n in dom W.reverse() by A8,A9,FINSEQ_3:25;
     then
-A12: (len W.reverse() - n + 1) in dom W.reverse().reverse() by Th25;
+A12: (len W.reverse() - n + 1) in dom W.reverse().reverse() by Th24;
     then reconsider rn = len W.reverse() - n + 1 as even Element of NAT;
-    e = W.reverse().reverse().(len W.reverse() - n + 1) by A10,A11,Th25;
+    e = W.reverse().reverse().(len W.reverse() - n + 1) by A10,A11,Th24;
     then
-A13: e = W.rn by FINSEQ_6:25;
-    rn in dom W by A12,FINSEQ_6:25;
+A13: e = W.rn;
+    rn in dom W by A12;
     then
 A14: rn <= len W by FINSEQ_3:25;
     1 <= rn by A12,FINSEQ_3:25;
@@ -7008,13 +6939,13 @@ A14: rn <= len W by FINSEQ_3:25;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th109:
+theorem Th108:
   e Joins x,y,G iff G.walkOf(x,e,y).edges() = {e}
 proof
   set W = G.walkOf(x,e,y);
   hereby
     assume e Joins x,y,G;
-    then W.edgeSeq() = <*e*> by Th84;
+    then W.edgeSeq() = <*e*> by Th83;
     hence W.edges() = {e} by FINSEQ_1:39;
   end;
   assume W.edges() = {e};
@@ -7027,7 +6958,7 @@ A3: 2*0+1 < n by A1,XXREAL_0:1;
   now
     assume not e Joins x,y,G;
     then W = G.walkOf(choose the_Vertices_of G) by Def5;
-    hence contradiction by A2,A3,Th14;
+    hence contradiction by A2,A3,Th13;
   end;
   hence thesis;
 end;
@@ -7056,7 +6987,7 @@ end;
 
 theorem
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds W1
-  .edges() = W2.edges() by Th87;
+  .edges() = W2.edges() by Th86;
 
 theorem
   e Joins W.last(),x,G implies W.addEdge(e).edges() = W.edges() \/ {e}
@@ -7067,9 +6998,9 @@ proof
   then
 A1: e Joins W.last(), W.last().adj(e), G by GLIB_000:67;
   then
-A2: WB.first() = W.last() by Th16;
-  WB.edges() = {e} by A1,Th109;
-  hence thesis by A2,Th103;
+A2: WB.first() = W.last() by Th15;
+  WB.edges() = {e} by A1,Th108;
+  hence thesis by A2,Th102;
 end;
 
 theorem
@@ -7091,9 +7022,9 @@ end;
 
 theorem
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds W1
-  .length() = W2.length() by Th87;
+  .length() = W2.length() by Th86;
 
-theorem Th116:
+theorem Th115:
   for n being odd Element of NAT st n <= len W holds W.find(W.n)
   <= n & W.rfind(W.n) >= n
 proof
@@ -7119,7 +7050,7 @@ A1: W1 = W2;
 A2:   v in W1.vertices();
       then
 A3:   W2.(W1.find(v)) = v by A1,Def19;
-A4:   v in W2.vertices() by A1,A2,Th77;
+A4:   v in W2.vertices() by A1,A2,Th76;
 A5:   for n being odd Nat st n <= len W2 & W2.n = v holds W1.find(v) <= n
       by A1,A2,Def19;
       W1.find(v) <= len W2 by A1,A2,Def19;
@@ -7133,7 +7064,7 @@ A7:   for n being odd Element of NAT st n <= len W2 & W2.n = v holds n <=
     suppose
 A8:   not v in W1.vertices();
       then
-A9:   not v in W2.vertices() by A1,Th77;
+A9:   not v in W2.vertices() by A1,Th76;
       thus W1.find(v) = len W2 by A1,A8,Def19
         .= W2.find(v) by A9,Def19;
       thus W1.rfind(v) = len W2 by A1,A8,Def21
@@ -7147,7 +7078,7 @@ theorem
   for n being odd Element of NAT st n <= len W holds W.find(n) <= n & W
   .rfind(n) >= n by Lm49,Lm50;
 
-theorem Th119:
+theorem Th118:
   W is closed iff W.1 = W.(len W)
 proof
   hereby
@@ -7181,8 +7112,8 @@ theorem
   W is closed iff W.reverse() is closed
 proof
   W is closed iff W.first() = W.last() by Def24;
-  then W is closed iff W.reverse().last() = W.last() by Th23;
-  then W is closed iff W.reverse().last() = W.reverse().first() by Th23;
+  then W is closed iff W.reverse().last() = W.last() by Th22;
+  then W is closed iff W.reverse().last() = W.reverse().first() by Th22;
   hence thesis by Def24;
 end;
 
@@ -7194,8 +7125,8 @@ proof
   assume that
 A1: W1 = W2 and
 A2: W1 is closed;
-  W2.1 = W2.(len W2) by A1,A2,Th119;
-  hence thesis by Th119;
+  W2.1 = W2.(len W2) by A1,A2,Th118;
+  hence thesis by Th118;
 end;
 
 theorem
@@ -7283,7 +7214,7 @@ A3: len W.cut(m,n) + m = n + 1 by A1,A2,Lm15;
   hence thesis by A3,Lm55;
 end;
 
-theorem Th133:
+theorem Th132:
   e Joins W.last(),x,G implies W.addEdge(e) is non trivial
 proof
   assume e Joins W.last(), x, G;
@@ -7293,7 +7224,7 @@ A1: len W.addEdge(e) = len W + 2 by Lm37;
   hence thesis by A1,Lm55;
 end;
 
-theorem Th134:
+theorem Th133:
   W is non trivial implies ex lenW2 being odd Element of NAT st
   lenW2 = len W - 2 & W.cut(1,lenW2).addEdge(W.(lenW2+1)) = W
 proof
@@ -7305,11 +7236,11 @@ proof
   take lenW2;
   thus lenW2 = len W - 2;
   lenW2 < len W - 0 by XREAL_1:15;
-  hence W1.addEdge(e) = W.cut(1,lenW2+2) by Th42,ABIAN:12,JORDAN12:2
+  hence W1.addEdge(e) = W.cut(1,lenW2+2) by Th41,ABIAN:12,JORDAN12:2
     .= W by Lm18;
 end;
 
-theorem Th135:
+theorem Th134:
   W2 is non trivial & W2.edges() c= W1.edges() implies W2
   .vertices() c= W1.vertices()
 proof
@@ -7350,13 +7281,13 @@ A15:    maa1+2 <= len W1 by A12,Th1;
         then W1.(maa1+2) = W1.vertexAt(maa1+2) by Def8;
         then v = W1.vertexAt(maa1) or v = W1.vertexAt(maa1+2) by A5,A8,A11,A13
 ,A14,GLIB_000:15;
-        hence v in W1.vertices() by A12,A15,Th90;
+        hence v in W1.vertices() by A12,A15,Th89;
       end;
       suppose
         n <> len W2;
         then
 A16:    n < len W2 by A4,XXREAL_0:1;
-        then W2.(n+1) in W2.edges() by Th101;
+        then W2.(n+1) in W2.edges() by Th100;
         then consider m being even Element of NAT such that
 A17:    1 <= m and
 A18:    m <= len W1 and
@@ -7371,7 +7302,7 @@ A24:    maa1+2 <= len W1 by A21,Th1;
         then W1.(maa1+2) = W1.vertexAt(maa1+2) by Def8;
         then v = W1.vertexAt(maa1) or v = W1.vertexAt(maa1+2) by A20,A22,A23,
 GLIB_000:15;
-        hence v in W1.vertices() by A21,A24,Th90;
+        hence v in W1.vertices() by A21,A24,Th89;
       end;
     end;
     hence v in W1.vertices();
@@ -7488,8 +7419,8 @@ A10: 1 < n by A5,A7,XXREAL_0:1;
 A11: 1+1-1 <= n-1 by XREAL_1:13;
 A12: n < len W by A4,A5,A8,XXREAL_0:1;
     then
-A13: W.(n+1) in v.edgesInOut() by A6,Th11;
-    W.(n-1) in v.edgesInOut() by A4,A6,A10,Th12;
+A13: W.(n+1) in v.edgesInOut() by A6,Th10;
+    W.(n-1) in v.edgesInOut() by A4,A6,A10,Th11;
     then
 A14: W.(n-1) = e by A3,TARSKI:def 1;
     n+1 <= len W by A12,NAT_1:13;
@@ -7522,10 +7453,12 @@ A9: W.edgeSeq().a1 = b1 by A1,A3,A6,FUNCT_1:1;
     consider a2,b2 being set such that
 A10: x2 = [a2,b2] by A1,A4,RELAT_1:def 1;
 A11: a2 in dom W.edgeSeq() by A1,A4,A10,FUNCT_1:1;
+X1: [a1,b1]`2 = b1;
+X2: [a2,b2]`2 = b2;
     f.x1 = x1`2 by A1,A3;
     then
-A12: b1 = f.x1 by A6,MCART_1:def 2
-      .= b2 by A5,A8,A10,MCART_1:def 2;
+A12: b1 = f.x1 by A6,X1
+      .= b2 by A5,A8,A10,X2;
     then W.edgeSeq().a2 = b1 by A1,A4,A10,FUNCT_1:1;
     hence x1 = x2 by A6,A10,A12,A2,A7,A9,A11,FUNCT_1:def 4;
   end;
@@ -7539,9 +7472,10 @@ A14: x in dom f and
 A15: f.x = y by FUNCT_1:def 3;
     consider a,b being set such that
 A16: x = [a,b] by A1,A14,RELAT_1:def 1;
+X:  [a,b]`2 = b;
     y = x`2 by A1,A14,A15;
-    then y = b by A16,MCART_1:def 2;
-    then y in rng W.edgeSeq() by A1,A14,A16,RELAT_1:def 5;
+    then y = b by A16,X;
+    then y in rng W.edgeSeq() by A1,A14,A16,XTUPLE_0:def 13;
     hence y in (the_Edges_of G);
   end;
   then rng f c= the_Edges_of G by TARSKI:def 3;
@@ -7574,7 +7508,7 @@ A4: W.m = W.n;
     then
 A5: n = len W by A2,A3,Def28;
     m = 1 by A2,A3,A4,Def28;
-    hence contradiction by A1,A4,A5,Th119;
+    hence contradiction by A1,A4,A5,Th118;
   end;
   hence thesis;
 end;
@@ -7586,7 +7520,7 @@ theorem
   for W being Path of G, m, n being Element of NAT holds W.cut(m,n) is
   Path-like;
 
-theorem Th151:
+theorem Th150:
   for W being Path of G, e,v being set st e Joins W.last(),v,G &
   not e in W.edges() & (W is trivial or W is open) & for n being odd Element of
   NAT st 1 < n & n <= len W holds W.n <> v holds W.addEdge(e) is Path-like
@@ -7666,7 +7600,7 @@ A19:          1 <= m by ABIAN:12;
       suppose
         W is trivial;
         then ex v being Vertex of G st W = G.walkOf(v) by Lm56;
-        then len W = 1 by Th14;
+        then len W = 1 by Th13;
         then
 A20:    len W2 = 1 + 2 by A1,Lm37;
 A21:    m+1 <= n by A6,NAT_1:13;
@@ -7706,9 +7640,9 @@ A2: now
     assume
 A3: x <= len W;
     then
-A4: W.rfind(W.x) >= x by Th116;
+A4: W.rfind(W.x) >= x by Th115;
 A5: W.find(W.x) = W.rfind(W.x) by A1,A3;
-    W.find(W.x) <= x by A3,Th116;
+    W.find(W.x) <= x by A3,Th115;
     hence W.find(W.x) = x & W.rfind(W.x) = x by A4,A5,XXREAL_0:1;
   end;
   now
@@ -7796,7 +7730,7 @@ proof
       then W is non trivial by Lm55;
       then consider lenW2 being odd Element of NAT such that
 A1:   lenW2 = len W - 2 and
-A2:   W.cut(1,lenW2).addEdge(W.(lenW2+1)) = W by Th134;
+A2:   W.cut(1,lenW2).addEdge(W.(lenW2+1)) = W by Th133;
       set W2 = W.cut(1,lenW2), vs1 = W2.vertexSeq();
       consider f being Function such that
 A3:   dom f = vs1 & for x being set st x in vs1 holds f.x = x`2 from
@@ -7813,15 +7747,17 @@ A8:     f.x1 = f.x2;
         consider a1,b1 being set such that
 A9:     x1 = [a1,b1] by A3,A6,RELAT_1:def 1;
 A10:    b1 = vs1.a1 by A3,A6,A9,FUNCT_1:1;
+X1:    [a1,b1]`2 = b1;
 A11:    f.x1 = x1`2 by A3,A6
-          .= b1 by A9,MCART_1:def 2;
+          .= b1 by A9,X1;
         consider a2,b2 being set such that
 A12:    x2 = [a2,b2] by A3,A7,RELAT_1:def 1;
 A13:    a2 in dom vs1 by A3,A7,A12,FUNCT_1:1;
 A14:    a1 in dom vs1 by A3,A6,A9,FUNCT_1:1;
 A15:    b2 = vs1.a2 by A3,A7,A12,FUNCT_1:1;
+X2:     [a2,b2]`2 = b2;
 A16:    f.x2 = x2`2 by A3,A7
-          .= b2 by A12,MCART_1:def 2;
+          .= b2 by A12,X2;
         reconsider a1,a2 as Element of NAT by A14,A13;
 A17:    now
           let n1,n2 be Element of NAT;
@@ -7830,8 +7766,8 @@ A18:      n1<n2 and
 A19:      n1 in dom vs1 and
 A20:      n2 in dom vs1 and
 A21:      vs1.n1 = vs1.n2;
-A22:      2*n2-1 in dom W2 by A20,Th74;
-A23:      2*n1-1 in dom W2 by A19,Th74;
+A22:      2*n2-1 in dom W2 by A20,Th73;
+A23:      2*n1-1 in dom W2 by A19,Th73;
           then reconsider a = 2*n1-1, b=2*n2-1 as odd Element of NAT by A22;
 A24:      W2.b = W.b by A4,A22,Lm23;
 A25:      n2 <= len vs1 by A20,FINSEQ_3:25;
@@ -7880,9 +7816,10 @@ A33:    x in dom f and
 A34:    f.x = y by FUNCT_1:def 3;
         consider a,b being set such that
 A35:    x = [a,b] by A3,A33,RELAT_1:def 1;
+X:      [a,b]`2 = b;
         y = x`2 by A3,A33,A34;
         then
-A36:    y = b by A35,MCART_1:def 2;
+A36:    y = b by A35,X;
 A37:    b = vs1.a by A3,A33,A35,FUNCT_1:1;
         a in dom vs1 by A3,A33,A35,FUNCT_1:1;
         then y in rng vs1 by A36,A37,FUNCT_1:def 3;
@@ -7899,7 +7836,7 @@ A39:  lenW2 < len W - 0 by A1,XREAL_1:15;
 A40:  W.(lenW2+1) Joins W.lenW2, W.(lenW2+2), G by Def3;
       1 <= lenW2 by ABIAN:12;
       then W2.last() = W.lenW2 by A39,Lm16,JORDAN12:2;
-      then W.vertexSeq() = vs1 ^ <*W.(lenW2+2)*> by A2,A40,Th76;
+      then W.vertexSeq() = vs1 ^ <*W.(lenW2+2)*> by A2,A40,Th75;
       then len W.vertexSeq() = len vs1 + len <*W.(lenW2+2)*> by FINSEQ_1:22;
       hence thesis by A38,FINSEQ_1:39;
     end;
@@ -7991,7 +7928,7 @@ theorem
 proof
   set W = G.walkOf(x,e,x);
   assume e Joins x,x,G;
-  then len W = 3 by Th15;
+  then len W = 3 by Th14;
   then W is non trivial by Lm54;
   hence thesis by Def31;
 end;
@@ -8033,9 +7970,9 @@ A16: m+0 < n+1 by A13,XREAL_1:8;
   then
 A17: WB is_Walk_from W1.last(), v1 by A3,Def24;
 A18: WA is_Walk_from v2, W1.(len W1) by A4,A7,Lm16;
-  then WA.append(WB) is_Walk_from v2,v1 by A17,Th32;
+  then WA.append(WB) is_Walk_from v2,v1 by A17,Th31;
   then
-A19: WA.append(WB).reverse() is_Walk_from v1,v2 by Th24;
+A19: WA.append(WB).reverse() is_Walk_from v1,v2 by Th23;
 A20: now
     assume e in WA.edges();
     then consider m being even Element of NAT such that
@@ -8057,11 +7994,11 @@ A27: n+1+0 < n+2+maa1 by XREAL_1:8;
     hence contradiction by A3,A6,A26,A25,A27,Lm57;
   end;
   WB.first() = W1.last() by A17,Def23;
-  then WA.append(WB).edges() = WA.edges() \/ WB.edges() by A9,Th103;
+  then WA.append(WB).edges() = WA.edges() \/ WB.edges() by A9,Th102;
   then
 A28: not e in WA.append(WB).edges() by A20,A11,XBOOLE_0:def 3;
   then
-A29: not e in WA.append(WB).reverse().edges() by Th108;
+A29: not e in WA.append(WB).reverse().edges() by Th107;
   now
     per cases by A1,A8,GLIB_000:15;
     suppose
@@ -8070,7 +8007,7 @@ A29: not e in WA.append(WB).reverse().edges() by Th108;
     end;
     suppose
       x = v2 & y = v1;
-      hence thesis by A18,A17,A28,Th32;
+      hence thesis by A18,A17,A28,Th31;
     end;
   end;
   hence thesis;
@@ -8107,7 +8044,7 @@ A6: W2.last() = y by Def23;
   hence thesis by A1,A6,Def32;
 end;
 
-theorem Th162:
+theorem Th161:
   W1 is Subwalk of W2 implies W1.first() = W2.first() & W1.last() = W2.last()
 proof
   assume W1 is Subwalk of W2;
@@ -8118,7 +8055,7 @@ end;
 theorem
   W1 is Subwalk of W2 implies len W1 <= len W2 by Lm72;
 
-theorem Th164:
+theorem Th163:
   W1 is Subwalk of W2 implies W1.edges() c= W2.edges() & W1
   .vertices() c= W2.vertices()
 proof
@@ -8138,7 +8075,7 @@ A6: W1.n = (Seq es).(n div 2) by A2,A3,A4,Lm40;
     then
     ex m being Element of NAT st m in dom W2.edgeSeq() & n div 2 <= m &
     W1.n = W2.edgeSeq().m by A6,Th4;
-    hence e in W2.edges() by A5,Th105;
+    hence e in W2.edges() by A5,Th104;
   end;
   hence
 A7: W1.edges() c= W2.edges() by TARSKI:def 3;
@@ -8155,20 +8092,20 @@ A10:    W1.n = v by Lm45;
 A11:    1 <= n by ABIAN:12;
         n <= 1 by A8,A9,Lm55;
         then v = W1.first() by A10,A11,XXREAL_0:1;
-        then v = W2.first() by A1,Th162;
-        hence v in W2.vertices() by Th89;
+        then v = W2.first() by A1,Th161;
+        hence v in W2.vertices() by Th88;
       end;
       hence thesis by TARSKI:def 3;
     end;
     suppose
       W1 is non trivial;
-      hence thesis by A7,Th135;
+      hence thesis by A7,Th134;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th165:
+theorem Th164:
   W1 is Subwalk of W2 implies for m being odd Element of NAT st m
 <= len W1 holds ex n being odd Element of NAT st m <= n & n <= len W2 & W1.m =
   W2.n
@@ -8231,7 +8168,7 @@ A19:  m = len W1;
       then
 A20:  m <= len W2 by A2,XXREAL_0:2;
       W1.m = W1.last() by A19
-        .= W2.last() by A1,Th162
+        .= W2.last() by A1,Th161
         .= W2.(len W2);
       hence thesis by A20;
     end;
@@ -8285,8 +8222,8 @@ A2: 1 < len W1 by A1,XXREAL_0:1;
 A3:   W1 is open;
       set P = the Path of W1;
       take P;
-A4:   P.first() = W1.first() by Th162;
-A5:   P.last() = W1.last() by Th162;
+A4:   P.first() = W1.first() by Th161;
+A5:   P.last() = W1.last() by Th161;
       W1.first() <> W1.last() by A3,Def24;
       hence P is non trivial by A4,A5,Lm55;
     end;
@@ -8310,7 +8247,7 @@ A9:   W5.edgeSeq() = Seq es5 by Def32;
 A10:  W4.edgeSeq() c= W3.edgeSeq() by Lm43;
       W1.k = W1.last() by A8;
       then
-A11:  W3 = W1.cut(1,k) by Th58;
+A11:  W3 = W1.cut(1,k) by Th57;
       then W3.edgeSeq() c= W1.edgeSeq() by Lm43;
       then W4.edgeSeq() c= W1.edgeSeq() by A10,XBOOLE_1:1;
       then reconsider es5 as Subset of W1.edgeSeq() by XBOOLE_1:1;
@@ -8328,7 +8265,7 @@ A17:  W5.last() = W1.k2 by A8,A16,A11,Lm23;
       W4.first() = W3.1 by A14,A15,Lm16;
       then
 A18:  W5.first() = W3.1 by A12,Def23;
-A19:  W1.1 = W1.(len W1) by A6,Th119;
+A19:  W1.1 = W1.(len W1) by A6,Th118;
 A20:  now
         1 <= len W3 by ABIAN:12;
         then
@@ -8369,7 +8306,7 @@ A33:    m <= len W5;
         consider n being odd Element of NAT such that
 A34:    m <= n and
 A35:    n <= len W4 and
-A36:    W5.m = W4.n by A33,Th165;
+A36:    W5.m = W4.n by A33,Th164;
 A37:    1 < n by A32,A34,XXREAL_0:2;
         then n in dom W4 by A35,FINSEQ_3:25;
         then
@@ -8387,7 +8324,7 @@ A41:  k2+1 <= len W1 by A8,XXREAL_0:2;
       now
         assume
 A42:    e in W5.edges();
-        W5.edges() c= W4.edges() by Th164;
+        W5.edges() c= W4.edges() by Th163;
         then consider n being even Element of NAT such that
 A43:    1 <= n and
 A44:    n <= len W4 and
@@ -8401,7 +8338,7 @@ A47:    n in dom W3 by A13,A43,FINSEQ_3:25;
         then W1.(k2+1) = W1.n by A8,A11,A47,Lm23;
         hence contradiction by A41,A43,A46,Lm57;
       end;
-      then reconsider W2 as Path of G by A28,A17,A20,A31,Th151;
+      then reconsider W2 as Path of G by A28,A17,A20,A31,Th150;
       set g = ((k2+1) div 2) .--> e, es = es5 +* g;
 A48:  dom es = dom es5 \/ dom g by FUNCT_4:def 1;
 A49:  dom g = {(k2+1) div 2} by FUNCOP_1:13;
@@ -8419,7 +8356,7 @@ A55:    y = es.x by A52,A53,FUNCT_1:1;
           suppose
 A56:        x in dom g;
             then
-A57:        x = (k2+1) div 2 by A49,TARSKI:def 1;
+A57:        x = (k2+1) div 2 by TARSKI:def 1;
 A58:        1 <= k2+1 by NAT_1:12;
             then W1.(k2+1) = W1.edgeSeq().x by A41,A57,Lm40;
             then
@@ -8457,7 +8394,7 @@ A65:    y in dom g;
         then
 A66:    2*x+1 <= k2 by A30,Def15;
 A67:    2 divides k2+1 by PEPIN:22;
-        y = (k2+1) div 2 by A49,A65,TARSKI:def 1;
+        y = (k2+1) div 2 by A65,TARSKI:def 1;
         then 2*y = k2+1 by A67,NAT_D:3;
         then 2*x+1 < 2*y by A66,NAT_1:13;
         then
@@ -8477,7 +8414,7 @@ A71:  W5.last() = W1.k2 by A8,A16,A11,Lm23;
 A72:      x in dom es5 /\ dom g by XBOOLE_0:def 1;
           x in dom g by A72,XBOOLE_0:def 4;
           then
-A73:      x = (k2+1) div 2 by A49,TARSKI:def 1;
+A73:      x = (k2+1) div 2 by TARSKI:def 1;
           x in dom es5 by A72,XBOOLE_0:def 4;
           then (k2+1) div 2 <= len W4.edgeSeq() by A63,A73,FINSEQ_3:25;
           then
@@ -8587,13 +8524,13 @@ A105: W2.edgeSeq() = Seq es by FINSEQ_1:14;
       then W2 is_Walk_from W1.first(), W1.last() by A8,A28,Lm39;
       then reconsider W2 as Path of W1 by A105,Def32;
       take W2;
-      thus W2 is non trivial by A28,A17,Th133;
+      thus W2 is non trivial by A28,A17,Th132;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th168:
+theorem Th167:
   for G1 being _Graph, G2 being Subgraph of G1, W being Walk of
   G2 holds W is Walk of G1
 proof
@@ -8618,7 +8555,7 @@ A2: now
   hence thesis by A2,Def3;
 end;
 
-theorem Th169:
+theorem Th168:
   for G1 being _Graph, G2 being Subgraph of G1, W being Walk of
   G1 st W is trivial & W.first() in the_Vertices_of G2 holds W is Walk of G2
 proof
@@ -8628,12 +8565,12 @@ A1: W is trivial and
 A2: W.first() in the_Vertices_of G2;
   consider v being Vertex of G1 such that
 A3: W = G1.walkOf(v) by A1,Lm56;
-  reconsider v9= v as Vertex of G2 by A2,A3,Th14;
+  reconsider v9= v as Vertex of G2 by A2,A3,Th13;
   W = G2.walkOf(v9) by A3;
   hence thesis;
 end;
 
-theorem Th170:
+theorem Th169:
   for G1 being _Graph, G2 being Subgraph of G1, W being Walk of
   G1 st W is non trivial & W.edges() c= the_Edges_of G2 holds W is Walk of G2
 proof
@@ -8685,7 +8622,7 @@ A11:    1 <= n+1 by NAT_1:12;
     let y be set;
     assume y in rng W;
     then
-A12: y in WV \/ WE by Th102;
+A12: y in WV \/ WE by Th101;
     now
       per cases by A12,XBOOLE_0:def 3;
       suppose
@@ -8722,7 +8659,7 @@ A16: W.(n+1) Joins W.n, W.(n+2), G1 by Def3;
   hence thesis by A13,Def3;
 end;
 
-theorem Th171:
+theorem Th170:
   for G1 being _Graph, G2 being Subgraph of G1, W being Walk of
 G1 st W.vertices() c= the_Vertices_of G2 & W.edges() c= the_Edges_of G2 holds W
   is Walk of G2
@@ -8735,12 +8672,12 @@ A2: W.edges() c= the_Edges_of G2;
     per cases;
     suppose
       W is non trivial;
-      hence thesis by A2,Th170;
+      hence thesis by A2,Th169;
     end;
     suppose
 A3:   W is trivial;
-      W.first() in W.vertices() by Th89;
-      hence thesis by A1,A3,Th169;
+      W.first() in W.vertices() by Th88;
+      hence thesis by A1,A3,Th168;
     end;
   end;
   hence thesis;
@@ -8809,7 +8746,7 @@ A15:      y in v.edgesIn() \/ v.edgesOut() by GLIB_000:60;
             end;
           end;
           then v = W2.vertexAt(xaa1) or v = W2.vertexAt(x+1) by A13,A12,Def8;
-          hence contradiction by A1,A13,A12,Th90;
+          hence contradiction by A1,A13,A12,Th89;
         end;
         y in the_Edges_of G1 by A4,A11,GLIB_000:def 13;
         then y in EG2 by A14,XBOOLE_0:def 5;
@@ -8826,7 +8763,7 @@ FINSEQ_1:def 4;
   now
     reconsider lenW2 = len W2 as odd Element of NAT;
     thus len W2 is odd;
-    W.first() in W.vertices() by Th89;
+    W.first() in W.vertices() by Th88;
     then
 A16: not W2.1 in {v} by A1,TARSKI:def 1;
     W.first() in the_Vertices_of G1;
@@ -8872,10 +8809,10 @@ A3: x in W.edges();
 A4: W.edges() c= the_Edges_of G2 by TARSKI:def 3;
   the_Vertices_of G2 = the_Vertices_of G1 by GLIB_000:53;
   then W.vertices() c= the_Vertices_of G2;
-  hence thesis by A4,Th171;
+  hence thesis by A4,Th170;
 end;
 
-theorem Th174:
+theorem Th173:
   for G1 being _Graph, G2 being Subgraph of G1, x,y,e being set
   st e Joins x,y,G2 holds G1.walkOf(x, e, y) = G2.walkOf(x, e, y)
 proof
@@ -8902,11 +8839,11 @@ A2: e in W2.last().edgesInOut();
   set W1B = G1.walkOf(W1.last(), e, W1.last().adj(e));
 A3: e Joins W2.last(),W2.last().adj(e),G2 by A2,GLIB_000:67;
   W1.last().adj(e) = W2.last().adj(e) by A1,A2,GLIB_000:80;
-  then W1B = W2B by A1,A3,Th174;
-  hence thesis by A1,Th36;
+  then W1B = W2B by A1,A3,Th173;
+  hence thesis by A1,Th35;
 end;
 
-theorem Th176:
+theorem Th175:
   for G1 being _Graph, G2 being Subgraph of G1, W being Walk of
 G2 holds (W is closed implies W is closed Walk of G1) & (W is directed implies
 W is directed Walk of G1) & (W is trivial implies W is trivial Walk of G1) & (W
@@ -8915,7 +8852,7 @@ W is directed Walk of G1) & (W is trivial implies W is trivial Walk of G1) & (W
   Walk of G1)
 proof
   let G1 be _Graph, G2 be Subgraph of G1, W be Walk of G2;
-  reconsider W9=W as Walk of G1 by Th168;
+  reconsider W9=W as Walk of G1 by Th167;
   hereby
     assume W is closed;
     then W.first() = W.last() by Def24;
@@ -8933,7 +8870,7 @@ A3:   n < len W9;
       then n+1 <= len W9 by NAT_1:13;
       then n+1 in dom W9 by A2,FINSEQ_3:25;
       then
-A4:   W9.(n+1) in the_Edges_of G2 by Th9;
+A4:   W9.(n+1) in the_Edges_of G2 by Th8;
       (the_Source_of G2).(W9.(n+1)) = W9.n by A1,A3,Def25;
       hence (the_Source_of G1).(W9.(n+1)) = W9.n by A4,GLIB_000:def 32;
     end;
@@ -8967,7 +8904,7 @@ A6: W is Path-like;
   end;
 end;
 
-theorem Th177:
+theorem Th176:
   for G1 being _Graph, G2 being Subgraph of G1, W1 being Walk of
 G1, W2 being Walk of G2 st W1 = W2 holds (W1 is closed iff W2 is closed) & (W1
   is directed iff W2 is directed) & (W1 is trivial iff W2 is trivial) & (W1 is
@@ -8993,7 +8930,7 @@ A5:     1 <= n+1 by NAT_1:12;
 A6:     n < len W2;
         then n+1 <= len W2 by NAT_1:13;
         then n+1 in dom W2 by A5,FINSEQ_3:25;
-        then W2.(n+1) in the_Edges_of G2 by Th9;
+        then W2.(n+1) in the_Edges_of G2 by Th8;
         then
         (the_Source_of G2).(W2.(n+1)) = (the_Source_of G1).(W2.(n +1)) by
 GLIB_000:def 32;
@@ -9002,7 +8939,7 @@ GLIB_000:def 32;
       hence W2 is directed by Def25;
     end;
     assume W2 is directed;
-    hence W1 is directed Walk of G1 by A1,Th176;
+    hence W1 is directed Walk of G1 by A1,Th175;
   end;
   hence W1 is directed iff W2 is directed;
   W1 is trivial iff len W2 = 1 by A1,Lm55;
@@ -9125,5 +9062,5 @@ proof
 A1: G1 == G2 and
 A2: W1 = W2;
   G1 is Subgraph of G2 by A1,GLIB_000:87;
-  hence thesis by A2,Th177;
+  hence thesis by A2,Th176;
 end;

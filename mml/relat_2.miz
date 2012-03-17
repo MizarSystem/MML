@@ -2,7 +2,7 @@
 ::  by Edmund Woronowicz and Anna Zalewska
 ::
 :: Received March 15, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,10 +16,11 @@ environ
 
  vocabularies RELAT_1, TARSKI, XBOOLE_0, ZFMISC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1;
- constructors TARSKI, SUBSET_1, RELAT_1;
- registrations RELAT_1;
- requirements SUBSET;
- theorems TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1;
+ constructors TARSKI, SUBSET_1, RELAT_1, XTUPLE_0;
+ registrations RELAT_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ theorems TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, XTUPLE_0;
+ definitions RELAT_1;
 
 begin
 
@@ -82,40 +83,80 @@ definition
   R is_transitive_in field R;
 end;
 
+registration
+  cluster empty -> reflexive irreflexive symmetric antisymmetric asymmetric
+          connected strongly_connected transitive for Relation;
+  coherence
+  proof
+    let R be Relation;
+    assume
+A1: R is empty;
+    thus R is reflexive
+    proof
+      let x;
+      thus thesis by A1,RELAT_1:40;
+    end;
+    thus R is irreflexive
+    proof
+      let x;
+      thus thesis by A1;
+    end;
+    thus R is symmetric
+    proof
+      let x;
+      thus thesis by A1;
+    end;
+    thus R is antisymmetric
+    proof
+      let x;
+      thus thesis by A1;
+    end;
+    thus R is asymmetric
+    proof
+      let x;
+      thus thesis by A1;
+    end;
+    thus R is connected
+    proof
+      let x;
+      thus thesis by A1,RELAT_1:40;
+    end;
+    thus R is strongly_connected
+    proof
+      let x;
+      thus thesis by A1,RELAT_1:40;
+    end;
+    let x;
+    thus thesis by A1;
+  end;
+end;
+
 theorem
   R is reflexive iff id field R c= R
 proof
-A1: now
+  hereby
     assume
-A2: id field R c= R;
-    now
-      let a;
-      assume a in field R;
-      then [a,a] in id field R by RELAT_1:def 10;
-      hence [a,a] in R by A2;
-    end;
-    then R is_reflexive_in field R by Def1;
-    hence R is reflexive by Def9;
-  end;
-  now
-    assume R is reflexive;
-    then
-A3: R is_reflexive_in field R by Def9;
-    now
+A3: R is reflexive;
+    thus id field R c= R
+    proof
       let a,b;
       assume [a,b] in id field R;
       then a in field R & a = b by RELAT_1:def 10;
-      hence [a,b] in R by A3,Def1;
+      hence [a,b] in R by A3,Def1,Def9;
     end;
-    hence id field R c= R by RELAT_1:def 3;
   end;
-  hence thesis by A1;
+  assume
+A2: id field R c= R;
+  let a;
+  assume a in field R;
+  then [a,a] in id field R by RELAT_1:def 10;
+  hence [a,a] in R by A2;
 end;
 
 theorem
   R is irreflexive iff id field R misses R
 proof
-A1: now
+  hereby
     assume R is irreflexive;
     then
 A2: R is_irreflexive_in field R by Def10;
@@ -129,32 +170,24 @@ A4:   a in field R & a = b by RELAT_1:def 10;
       [a,b] in R by A3,XBOOLE_0:def 4;
       hence contradiction by A2,A4,Def2;
     end;
-    then id (field R) /\ R = {} by RELAT_1:37;
-    hence id (field R) misses R by XBOOLE_0:def 7;
+    hence id (field R) misses R by RELAT_1:37,XBOOLE_0:def 7;
   end;
-  now
-    assume
+  assume
 A5: id (field R) misses R;
-    now
-      let a;
-      assume a in field R;
-      then [a,a] in id field R by RELAT_1:def 10;
-      hence not [a,a] in R by A5,XBOOLE_0:3;
-    end;
-    then R is_irreflexive_in field R by Def2;
-    hence R is irreflexive by Def10;
-  end;
-  hence thesis by A1;
+  let a;
+  assume a in field R;
+  then [a,a] in id field R by RELAT_1:def 10;
+  hence thesis by A5,XBOOLE_0:3;
 end;
 
 theorem
   R is_antisymmetric_in X iff R \ id X is_asymmetric_in X
 proof
-  thus R is_antisymmetric_in X implies R \ id X is_asymmetric_in X
-  proof
+  hereby
     assume
 A1: R is_antisymmetric_in X;
-    now
+    thus R \ id X is_asymmetric_in X
+    proof
       let x,y;
       assume that
 A2:   x in X and
@@ -167,32 +200,22 @@ A5:   x <> y by A2,RELAT_1:def 10;
       then not [y,x] in R by A1,A2,A3,A5,Def4;
       hence not [y,x] in R \ id X by XBOOLE_0:def 5;
     end;
-    hence thesis by Def5;
   end;
-  thus R \ id X is_asymmetric_in X implies R is_antisymmetric_in X
-  proof
-    assume
+  assume
 A6: R \ id X is_asymmetric_in X;
-    now
-      let x,y;
-      assume that
-A7:   x in X & y in X and
-A8:   [x,y] in R and
-A9:   [y,x] in R;
-      now
-        assume
-A10:    x <> y;
-        then not [y,x] in id X by RELAT_1:def 10;
-        then
-A11:    [y,x] in R \ id X by A9,XBOOLE_0:def 5;
-        not [x,y] in id X by A10,RELAT_1:def 10;
-        then [x,y] in R \ id X by A8,XBOOLE_0:def 5;
-        hence contradiction by A6,A7,A11,Def5;
-      end;
-      hence x = y;
-    end;
-    hence thesis by Def4;
-  end;
+  let x,y;
+  assume that
+A7: x in X & y in X and
+A8: [x,y] in R and
+A9: [y,x] in R;
+  assume
+A10: x <> y;
+  then not [y,x] in id X by RELAT_1:def 10;
+  then
+A11: [y,x] in R \ id X by A9,XBOOLE_0:def 5;
+  not [x,y] in id X by A10,RELAT_1:def 10;
+  then [x,y] in R \ id X by A8,XBOOLE_0:def 5;
+  hence contradiction by A6,A7,A11,Def5;
 end;
 
 theorem
@@ -200,63 +223,58 @@ theorem
 proof
   assume
 A1: R is_asymmetric_in X;
-  now
-    let x,y;
-    assume that
+  let x,y;
+  assume that
 A2: x in X & y in X and
 A3: [x,y] in R \/ id X and
 A4: [y,x] in R \/ id X;
-    now
-      assume
-A5:   x <> y;
-      then not [y,x] in id X by RELAT_1:def 10;
-      then
-A6:   [y,x] in R by A4,XBOOLE_0:def 3;
-      not [x,y] in id X by A5,RELAT_1:def 10;
-      then [x,y] in R by A3,XBOOLE_0:def 3;
-      hence contradiction by A1,A2,A6,Def5;
-    end;
-    hence x = y;
-  end;
-  hence thesis by Def4;
+  assume
+A5: x <> y;
+  then not [y,x] in id X by RELAT_1:def 10;
+  then
+A6: [y,x] in R by A4,XBOOLE_0:def 3;
+  not [x,y] in id X by A5,RELAT_1:def 10;
+  then [x,y] in R by A3,XBOOLE_0:def 3;
+  hence contradiction by A1,A2,A6,Def5;
 end;
 
-theorem Th22:
-  R is symmetric & R is transitive implies R is reflexive
+canceled 7;
+
+registration
+  cluster symmetric transitive -> reflexive for Relation;
+coherence
 proof
+  let R be Relation;
   assume that
 A1: R is symmetric and
 A2: R is transitive;
 A3: R is_transitive_in field R by A2,Def16;
 A4: R is_symmetric_in field R by A1,Def11;
-  now
     let a;
 A5: now
       assume a in dom R;
       then consider b such that
-A6:   [a,b] in R by RELAT_1:def 4;
+A6:   [a,b] in R by XTUPLE_0:def 12;
 A7:   a in field R & b in field R by A6,RELAT_1:15;
       then [b,a] in R by A4,A6,Def3;
       hence [a,a] in R by A3,A6,A7,Def8;
     end;
-A8: now
+    now
       assume a in rng R;
       then consider b such that
-A9:   [b,a] in R by RELAT_1:def 5;
+A9:   [b,a] in R by XTUPLE_0:def 13;
 A10:  a in field R & b in field R by A9,RELAT_1:15;
       then [a,b] in R by A4,A9,Def3;
       hence [a,a] in R by A3,A9,A10,Def8;
     end;
-    assume a in field R;
-    then a in dom R \/ rng R by RELAT_1:def 6;
-    hence [a,a] in R by A5,A8,XBOOLE_0:def 3;
+    hence thesis by A5,XBOOLE_0:def 3;
   end;
-  then R is_reflexive_in field R by Def1;
-  hence thesis by Def9;
 end;
 
-theorem Th23:
-  id X is symmetric transitive
+registration
+  let X;
+  cluster id X -> symmetric transitive antisymmetric;
+coherence
 proof
   thus id X is symmetric
   proof
@@ -271,128 +289,95 @@ A1: [a,b] in id X;
   thus id X is transitive
   proof
     let a,b,c;
-    assume that
-    a in field id X and
-    b in field id X and
-    c in field id X and
-A2: [a,b] in id X & [b,c] in id X;
-    thus thesis by A2,RELAT_1:def 10;
+    thus thesis by RELAT_1:def 10;
   end;
-end;
-
-theorem
-  id X is antisymmetric reflexive
-proof
   thus id X is antisymmetric
   proof
     let a,b;
-    assume that
-    a in field(id X) and
-    b in field(id X) and
-A1: [a,b] in id X and
-    [b,a] in id X;
-    thus thesis by A1,RELAT_1:def 10;
+    thus thesis by RELAT_1:def 10;
   end;
-  id X is symmetric & id X is transitive by Th23;
-  hence id X is reflexive by Th22;
+end;
 end;
 
-theorem
-  R is irreflexive transitive implies R is asymmetric
+registration
+  cluster irreflexive transitive -> asymmetric for Relation;
+coherence
 proof
+  let R be Relation;
   assume that
-A1: R is irreflexive and
-A2: R is transitive;
-A3: R is_transitive_in field R by A2,Def16;
-A4: R is_irreflexive_in field R by A1,Def10;
-  now
-    let a,b;
-    assume that
+A4: R is_irreflexive_in field R and
+A3: R is_transitive_in field R;
+  let a,b;
+  assume that
 A5: a in field R and
 A6: b in field R;
-    not [a,a] in R by A4,A5,Def2;
-    hence [a,b] in R implies not [b,a] in R by A3,A5,A6,Def8;
-  end;
-  then R is_asymmetric_in field R by Def5;
-  hence thesis by Def13;
+  not [a,a] in R by A4,A5,Def2;
+  hence thesis by A3,A5,A6,Def8;
 end;
-
-theorem
-  R is asymmetric implies R is irreflexive antisymmetric
+  cluster asymmetric -> irreflexive antisymmetric for Relation;
+coherence
 proof
-  assume R is asymmetric;
-  then
-A1: R is_asymmetric_in field R by Def13;
+  let R be Relation;
+  assume
+A1: R is_asymmetric_in field R;
   then for x holds x in field R implies not [x,x] in R by Def5;
-  then R is_irreflexive_in field R by Def2;
-  hence R is irreflexive by Def10;
+  hence R is irreflexive by Def2,Def10;
   for x,y holds x in field R & y in field R & [x,y] in R & [y,x] in R
   implies x = y by A1,Def5;
-  then R is_antisymmetric_in field R by Def4;
-  hence thesis by Def12;
+  hence thesis by Def4,Def12;
+end;
 end;
 
-theorem Th27:
-  R is reflexive implies R~ is reflexive
+registration
+  let R be reflexive Relation;
+  cluster R~ -> reflexive;
+coherence
 proof
-  assume R is reflexive;
-  then
 A1: R is_reflexive_in field R by Def9;
-  now
-    let x;
-    assume x in field(R~);
-    then x in field R by RELAT_1:21;
-    then [x,x] in R by A1,Def1;
-    hence [x,x] in R~ by RELAT_1:def 7;
-  end;
-  then R~ is_reflexive_in field(R~) by Def1;
-  hence thesis by Def9;
+  let x;
+  assume x in field(R~);
+  then x in field R by RELAT_1:21;
+  then [x,x] in R by A1,Def1;
+  hence [x,x] in R~ by RELAT_1:def 7;
+end;
 end;
 
-theorem
-  R is irreflexive implies R~ is irreflexive
+registration
+  let R be irreflexive Relation;
+  cluster R~ -> irreflexive;
+coherence
 proof
-  assume R is irreflexive;
-  then
 A1: R is_irreflexive_in field R by Def10;
-  now
-    let x;
-    assume x in field(R~);
-    then x in field R by RELAT_1:21;
-    then not [x,x] in R by A1,Def2;
-    hence not [x,x] in R~ by RELAT_1:def 7;
-  end;
-  then R~ is_irreflexive_in field(R~) by Def2;
-  hence thesis by Def10;
+  let x;
+  assume x in field(R~);
+  then x in field R by RELAT_1:21;
+  then not [x,x] in R by A1,Def2;
+  hence thesis by RELAT_1:def 7;
+end;
 end;
 
 theorem
   R is reflexive implies dom R = dom(R~) & rng R = rng(R~)
 proof
   assume
-A1: R is reflexive;
-  then
+A1: R is reflexive; then
 A2: R is_reflexive_in field R by Def9;
-  R~ is reflexive by A1,Th27;
-  then
-A3: R~ is_reflexive_in field(R~) by Def9;
+A3: R~ is_reflexive_in field(R~) by A1,Def9;
   now
     let x;
 A4: now
       assume x in dom(R~);
-      then x in dom(R~) \/ rng(R~) by XBOOLE_0:def 3;
-      then x in field(R~) by RELAT_1:def 6;
-      then [x,x] in R~ by A3,Def1;
+      then x in field(R~) by XBOOLE_0:def 3;
+      then [x,x] in R~ by A1,Def1,Def9;
       then [x,x] in R by RELAT_1:def 7;
-      hence x in dom R by RELAT_1:def 4;
+      hence x in dom R by XTUPLE_0:def 12;
     end;
     now
       assume x in dom R;
-      then x in dom R \/ rng R by XBOOLE_0:def 3;
-      then x in field R by RELAT_1:def 6;
-      then [x,x] in R by A2,Def1;
+      then x in field R by XBOOLE_0:def 3;
+      then [x,x] in R by A1,Def1,Def9;
       then [x,x] in R~ by RELAT_1:def 7;
-      hence x in dom(R~) by RELAT_1:def 4;
+      hence x in dom(R~) by XTUPLE_0:def 12;
     end;
     hence x in dom R iff x in dom(R~) by A4;
   end;
@@ -401,29 +386,27 @@ A4: now
     let x;
 A5: now
       assume x in rng(R~);
-      then x in dom(R~) \/ rng(R~) by XBOOLE_0:def 3;
-      then x in field(R~) by RELAT_1:def 6;
+      then x in field(R~) by XBOOLE_0:def 3;
       then [x,x] in R~ by A3,Def1;
       then [x,x] in R by RELAT_1:def 7;
-      hence x in rng R by RELAT_1:def 5;
+      hence x in rng R by XTUPLE_0:def 13;
     end;
     now
       assume x in rng R;
-      then x in dom R \/ rng R by XBOOLE_0:def 3;
-      then x in field R by RELAT_1:def 6;
+      then x in field R by XBOOLE_0:def 3;
       then [x,x] in R by A2,Def1;
       then [x,x] in R~ by RELAT_1:def 7;
-      hence x in rng(R~) by RELAT_1:def 5;
+      hence x in rng(R~) by XTUPLE_0:def 13;
     end;
     hence x in rng R iff x in rng(R~) by A5;
   end;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th30:
+theorem Th13:
   R is symmetric iff R = R~
 proof
-A1: now
+  hereby
     assume R is symmetric;
     then
 A2: R is_symmetric_in field R by Def11;
@@ -447,25 +430,19 @@ A5:     [a,b] in R;
     end;
     hence R = R~ by RELAT_1:def 2;
   end;
-  now
-    assume R = R~;
-    then for a,b holds a in field R & b in field R & [a,b] in R implies [b,a]
-    in R by RELAT_1:def 7;
-    then R is_symmetric_in field R by Def3;
-    hence R is symmetric by Def11;
-  end;
-  hence thesis by A1;
+  assume R = R~;
+  then for a,b holds a in field R & b in field R & [a,b] in R implies [b,a]
+  in R by RELAT_1:def 7;
+  hence thesis by Def3,Def11;
 end;
 
-theorem
-  P is reflexive & R is reflexive implies P \/ R is reflexive & P /\ R
-  is reflexive
+registration
+  let P,R be reflexive Relation;
+  cluster P \/ R -> reflexive;
+coherence
 proof
-  assume that
-A1: P is reflexive and
-A2: R is reflexive;
-A3: R is_reflexive_in field R by A2,Def9;
-A4: P is_reflexive_in field P by A1,Def9;
+A3: R is_reflexive_in field R by Def9;
+A4: P is_reflexive_in field P by Def9;
   now
     let a;
 A5: now
@@ -482,8 +459,13 @@ A6: now
     then a in field P \/ field R by RELAT_1:18;
     hence [a,a] in P \/ R by A5,A6,XBOOLE_0:def 3;
   end;
-  then P \/ R is_reflexive_in field(P \/ R) by Def1;
-  hence P \/ R is reflexive by Def9;
+  hence P \/ R is reflexive by Def1,Def9;
+end;
+  cluster P /\ R -> reflexive;
+coherence
+proof
+A3: R is_reflexive_in field R by Def9;
+A4: P is_reflexive_in field P by Def9;
   now
     let a;
     assume
@@ -496,20 +478,17 @@ A9: [a,a] in R by A3,Def1;
     then [a,a] in P by A4,Def1;
     hence [a,a] in P /\ R by A9,XBOOLE_0:def 4;
   end;
-  then P /\ R is_reflexive_in field(P /\ R) by Def1;
-  hence thesis by Def9;
+  hence thesis by Def1,Def9;
+end;
 end;
 
-theorem
-  P is irreflexive & R is irreflexive implies P \/ R is irreflexive & P
-  /\ R is irreflexive
+registration
+  let P,R be irreflexive Relation;
+  cluster P \/ R -> irreflexive;
+coherence
 proof
-  assume that
-A1: P is irreflexive and
-A2: R is irreflexive;
-A3: P is_irreflexive_in field P by A1,Def10;
-A4: R is_irreflexive_in field R by A2,Def10;
-  now
+A3: P is_irreflexive_in field P by Def10;
+A4: R is_irreflexive_in field R by Def10;
     let a;
 A5: now
       assume a in field P;
@@ -531,65 +510,60 @@ A10:  not a in field P implies not [a,a] in P by RELAT_1:15;
     then a in field P \/ field R by RELAT_1:18;
     hence not [a,a] in P \/ R by A5,A8,XBOOLE_0:def 3;
   end;
-  then P \/ R is_irreflexive_in field(P \/ R) by Def2;
-  hence P \/ R is irreflexive by Def10;
-  now
-    let a;
-    assume
+  cluster P /\ R -> irreflexive;
+coherence
+proof
+  let a;
+  assume
 A11: a in field(P /\ R);
-    field(P /\ R) c= (field P) /\ (field R) by RELAT_1:19;
-    then a in field P by A11,XBOOLE_0:def 4;
-    then not [a,a] in P by A3,Def2;
-    hence not [a,a] in P /\ R by XBOOLE_0:def 4;
-  end;
-  then P /\ R is_irreflexive_in field(P /\ R) by Def2;
-  hence thesis by Def10;
+  field(P /\ R) c= (field P) /\ (field R) by RELAT_1:19;
+  then a in field P by A11,XBOOLE_0:def 4;
+  then not [a,a] in P by Def10,Def2;
+  hence thesis by XBOOLE_0:def 4;
+end;
 end;
 
-theorem
-  P is irreflexive implies P \ R is irreflexive
+registration
+  let P be irreflexive Relation;
+  let R be Relation;
+  cluster P \ R -> irreflexive;
+coherence
 proof
-  assume P is irreflexive;
-  then
 A1: P is_irreflexive_in field P by Def10;
-  now
     let a;
 A2: now
       assume a in dom(P \ R);
       then consider b such that
-A3:   [a,b] in P \ R by RELAT_1:def 4;
+A3:   [a,b] in P \ R by XTUPLE_0:def 12;
       [a,b] in P by A3,XBOOLE_0:def 5;
       then a in field P by RELAT_1:15;
       hence not [a,a] in P by A1,Def2;
     end;
-A4: now
+    now
       assume a in rng(P \ R);
       then consider b such that
-A5:   [b,a] in P \ R by RELAT_1:def 5;
+A5:   [b,a] in P \ R by XTUPLE_0:def 13;
       [b,a] in P by A5,XBOOLE_0:def 5;
       then a in field P by RELAT_1:15;
       hence not [a,a] in P by A1,Def2;
     end;
-    assume a in field(P \ R);
-    then a in dom(P \ R) \/ rng(P \ R) by RELAT_1:def 6;
-    hence not [a,a] in P \ R by A2,A4,XBOOLE_0:def 3,def 5;
-  end;
-  then P \ R is_irreflexive_in field(P \ R) by Def2;
-  hence thesis by Def10;
+    hence thesis by A2,XBOOLE_0:def 3,def 5;
+end;
 end;
 
-theorem
-  R is symmetric implies R~ is symmetric by Th30;
+registration
+  let R be symmetric Relation;
+  cluster R~ -> symmetric;
+  coherence by Th13;
+end;
 
-theorem
-  P is symmetric & R is symmetric implies P \/ R is symmetric & P /\ R
-  is symmetric & P \ R is symmetric
+registration
+  let P,R be symmetric Relation;
+  cluster P \/ R -> symmetric;
+coherence
 proof
-  assume that
-A1: P is symmetric and
-A2: R is symmetric;
-A3: R is_symmetric_in field R by A2,Def11;
-A4: P is_symmetric_in field P by A1,Def11;
+A3: R is_symmetric_in field R by Def11;
+A4: P is_symmetric_in field P by Def11;
   now
     let a,b;
     assume that
@@ -612,8 +586,13 @@ A8:   [a,b] in P;
     end;
     hence [b,a] in P \/ R by A5,A6,XBOOLE_0:def 3;
   end;
-  then P \/ R is_symmetric_in field(P \/ R) by Def3;
-  hence P \/ R is symmetric by Def11;
+  hence thesis by Def3,Def11;
+end;
+  cluster P /\ R -> symmetric;
+coherence
+proof
+A3: R is_symmetric_in field R by Def11;
+A4: P is_symmetric_in field P by Def11;
   now
     let a,b;
     assume that
@@ -629,8 +608,13 @@ A14: [a,b] in P by A10,XBOOLE_0:def 4;
     then [b,a] in P by A4,A14,Def3;
     hence [b,a] in P /\ R by A13,XBOOLE_0:def 4;
   end;
-  then P /\ R is_symmetric_in field(P /\ R) by Def3;
-  hence P /\ R is symmetric by Def11;
+  hence thesis by Def3,Def11;
+end;
+  cluster P \ R -> symmetric;
+coherence
+proof
+A3: R is_symmetric_in field R by Def11;
+A4: P is_symmetric_in field P by Def11;
   now
     let a,b;
     assume that
@@ -644,75 +628,72 @@ A17: [a,b] in P by A15,XBOOLE_0:def 5;
     then a in field P & b in field P by RELAT_1:15;
     then
 A18: [b,a] in P by A4,A17,Def3;
-    ( not b in field R or not a in field R ) implies not [b,a] in R by
-RELAT_1:15;
+    ( not b in field R or not a in field R ) implies not [b,a] in R
+    by RELAT_1:15;
     hence [b,a] in P \ R by A18,A16,XBOOLE_0:def 5;
   end;
-  then P \ R is_symmetric_in field(P \ R) by Def3;
-  hence thesis by Def11;
+  hence thesis by Def3,Def11;
+end;
 end;
 
-theorem
-  R is asymmetric implies R~ is asymmetric
+registration
+  let R be asymmetric Relation;
+  cluster R~ -> asymmetric;
+coherence
 proof
-  assume R is asymmetric;
-  then
 A1: R is_asymmetric_in field R by Def13;
-  now
-    let x,y;
-    assume that
+  let x,y;
+  assume that
 A2: x in field(R~) & y in field(R~) and
 A3: [x,y] in R~;
 A4: [y,x] in R by A3,RELAT_1:def 7;
-    x in field R & y in field R by A2,RELAT_1:21;
-    then not [x,y] in R by A1,A4,Def5;
-    hence not [y,x] in R~ by RELAT_1:def 7;
-  end;
-  then R~ is_asymmetric_in field(R~) by Def5;
-  hence thesis by Def13;
+  x in field R & y in field R by A2,RELAT_1:21;
+  then not [x,y] in R by A1,A4,Def5;
+  hence thesis by RELAT_1:def 7;
+end;
 end;
 
-theorem
-  R is asymmetric implies P /\ R is asymmetric
+registration
+  let P be Relation;
+  let R be asymmetric Relation;
+  cluster P /\ R -> asymmetric;
+coherence
 proof
-  assume R is asymmetric;
-  then
 A1: R is_asymmetric_in field R by Def13;
 A2: field(P /\ R) c= (field P) /\ (field R) by RELAT_1:19;
-  now
-    let a,b;
-    assume that
+  let a,b;
+  assume that
 A3: a in field(P /\ R) & b in field(P /\ R) and
 A4: [a,b] in P /\ R;
 A5: [a,b] in R by A4,XBOOLE_0:def 4;
-    a in field R & b in field R by A2,A3,XBOOLE_0:def 4;
-    then not [b,a] in R by A1,A5,Def5;
-    hence not [b,a] in P /\ R by XBOOLE_0:def 4;
-  end;
-  then P /\ R is_asymmetric_in field(P /\ R) by Def5;
-  hence thesis by Def13;
+  a in field R & b in field R by A2,A3,XBOOLE_0:def 4;
+  then not [b,a] in R by A1,A5,Def5;
+  hence thesis by XBOOLE_0:def 4;
+end;
+  cluster R /\ P -> asymmetric;
+coherence;
 end;
 
-theorem
-  P is asymmetric implies P \ R is asymmetric
+registration
+  let P be asymmetric Relation;
+  let R be Relation;
+  cluster P \ R -> asymmetric;
+coherence
 proof
-  assume P is asymmetric;
-  then
 A1: P is_asymmetric_in field P by Def13;
-  now
-    let a,b;
-    assume that
-    a in field(P \ R) and
-    b in field(P \ R) and
+  let a,b;
+  assume that
+  a in field(P \ R) and
+  b in field(P \ R) and
 A2: [a,b] in P \ R;
 A3: [a,b] in P by A2,XBOOLE_0:def 5;
-    then a in field P & b in field P by RELAT_1:15;
-    then not [b,a] in P by A1,A3,Def5;
-    hence not [b,a] in P \ R by XBOOLE_0:def 5;
-  end;
-  then P \ R is_asymmetric_in field(P \ R) by Def5;
-  hence thesis by Def13;
+  then a in field P & b in field P by RELAT_1:15;
+  then not [b,a] in P by A1,A3,Def5;
+  hence thesis by XBOOLE_0:def 5;
 end;
+end;
+
+canceled 8;
 
 theorem
   R is antisymmetric iff R /\ (R~) c= id (dom R)
@@ -729,7 +710,7 @@ A3:   [a,b] in R /\ (R~);
       then
 A4:   [b,a] in R by RELAT_1:def 7;
       then
-A5:   b in dom R by RELAT_1:def 4;
+A5:   b in dom R by XTUPLE_0:def 12;
 A6:   [a,b] in R by A3,XBOOLE_0:def 4;
       then a in field R & b in field R by RELAT_1:15;
       then a = b by A2,A6,A4,Def4;
@@ -751,129 +732,116 @@ A9:   [b,a] in R;
       then [a,b] in R /\ (R~) by A8,XBOOLE_0:def 4;
       hence a = b by A7,RELAT_1:def 10;
     end;
-    then R is_antisymmetric_in field R by Def4;
-    hence R is antisymmetric by Def12;
+    hence R is antisymmetric by Def4,Def12;
   end;
   hence thesis by A1;
 end;
 
-theorem
-  R is antisymmetric implies R~ is antisymmetric
+registration
+  let R be antisymmetric Relation;
+  cluster R~ -> antisymmetric;
+coherence
 proof
-  assume R is antisymmetric;
-  then
-A1: R is_antisymmetric_in field R by Def12;
-  now
-    let x,y;
-    assume that
+  let x,y;
+  assume that
 A2: x in field(R~) & y in field(R~) and
 A3: [x,y] in R~ & [y,x] in R~;
 A4: [y,x] in R & [x,y] in R by A3,RELAT_1:def 7;
-    x in field R & y in field R by A2,RELAT_1:21;
-    hence x = y by A1,A4,Def4;
-  end;
-  then R~ is_antisymmetric_in field(R~) by Def4;
-  hence thesis by Def12;
+  x in field R & y in field R by A2,RELAT_1:21;
+  hence x = y by A4,Def4,Def12;
+end;
 end;
 
-theorem
-  P is antisymmetric implies P /\ R is antisymmetric & P \ R is antisymmetric
+registration
+  let P be antisymmetric Relation;
+  let R be Relation;
+  cluster P /\ R -> antisymmetric;
+coherence
 proof
-  assume P is antisymmetric;
-  then
 A1: P is_antisymmetric_in field P by Def12;
-  now
-    let a,b;
-    assume that
-    a in field(P /\ R) and
-    b in field(P /\ R) and
+  let a,b;
+  assume that
+  a in field(P /\ R) & b in field(P /\ R) and
 A2: [a,b] in (P /\ R) and
 A3: [b,a] in (P /\ R);
 A4: [b,a] in P by A3,XBOOLE_0:def 4;
 A5: [a,b] in P by A2,XBOOLE_0:def 4;
-    then a in field P & b in field P by RELAT_1:15;
-    hence a = b by A1,A5,A4,Def4;
-  end;
-  then P /\ R is_antisymmetric_in field(P /\ R) by Def4;
-  hence P /\ R is antisymmetric by Def12;
-  now
-    let a,b;
-    assume that
-    a in field(P \ R) and
-    b in field(P \ R) and
+  then a in field P & b in field P by RELAT_1:15;
+  hence a = b by A1,A5,A4,Def4;
+end;
+  cluster R /\ P -> antisymmetric;
+coherence;
+  cluster P \ R -> antisymmetric;
+coherence
+proof
+A1: P is_antisymmetric_in field P by Def12;
+  let a,b;
+  assume that
+  a in field(P \ R) & b in field(P \ R) and
 A6: [a,b] in P \ R and
 A7: [b,a] in P \ R;
 A8: [b,a] in P by A7,XBOOLE_0:def 5;
 A9: [a,b] in P by A6,XBOOLE_0:def 5;
-    then a in field P & b in field P by RELAT_1:15;
-    hence a = b by A1,A9,A8,Def4;
-  end;
-  then P \ R is_antisymmetric_in field(P \ R) by Def4;
-  hence thesis by Def12;
+  then a in field P & b in field P by RELAT_1:15;
+  hence thesis by A1,A9,A8,Def4;
+end;
 end;
 
-theorem
-  R is transitive implies R~ is transitive
+registration
+  let R be transitive Relation;
+  cluster R~ -> transitive;
+coherence
 proof
-  assume R is transitive;
-  then
 A1: R is_transitive_in field R by Def16;
-  now
-    let x,y,z;
-    assume that
+  let x,y,z;
+  assume that
 A2: x in field(R~) & y in field(R~) and
 A3: z in field(R~) and
 A4: [x,y] in R~ and
 A5: [y,z] in R~;
 A6: x in field R & y in field R by A2,RELAT_1:21;
 A7: [y,x] in R by A4,RELAT_1:def 7;
-    z in field R & [z,y] in R by A3,A5,RELAT_1:21,def 7;
-    then [z,x] in R by A1,A6,A7,Def8;
-    hence [x,z] in R~ by RELAT_1:def 7;
-  end;
-  then R~ is_transitive_in field(R~) by Def8;
-  hence thesis by Def16;
+  z in field R & [z,y] in R by A3,A5,RELAT_1:21,def 7;
+  then [z,x] in R by A1,A6,A7,Def8;
+  hence thesis by RELAT_1:def 7;
+end;
 end;
 
-theorem
-  P is transitive & R is transitive implies P /\ R is transitive
+registration
+  let P,R be transitive Relation;
+  cluster P /\ R -> transitive;
+coherence
 proof
+A3: R is_transitive_in field R by Def16;
+A4: P is_transitive_in field P by Def16;
+  let a,b,c;
   assume that
-A1: P is transitive and
-A2: R is transitive;
-A3: R is_transitive_in field R by A2,Def16;
-A4: P is_transitive_in field P by A1,Def16;
-  now
-    let a,b,c;
-    assume that
-    a in field(P /\ R) and
-    b in field(P /\ R) and
-    c in field(P /\ R) and
+  a in field(P /\ R) & b in field(P /\ R) & c in field(P /\ R) and
 A5: [a,b] in P /\ R and
 A6: [b,c] in P /\ R;
 A7: [b,c] in R by A6,XBOOLE_0:def 4;
-    then
+  then
 A8: c in field R by RELAT_1:15;
 A9: [a,b] in R by A5,XBOOLE_0:def 4;
-    then a in field R & b in field R by RELAT_1:15;
-    then
+  then a in field R & b in field R by RELAT_1:15;
+  then
 A10: [a,c] in R by A3,A9,A7,A8,Def8;
 A11: [b,c] in P by A6,XBOOLE_0:def 4;
-    then
+  then
 A12: c in field P by RELAT_1:15;
 A13: [a,b] in P by A5,XBOOLE_0:def 4;
-    then a in field P & b in field P by RELAT_1:15;
-    then [a,c] in P by A4,A13,A11,A12,Def8;
-    hence [a,c] in P /\ R by A10,XBOOLE_0:def 4;
-  end;
-  then P /\ R is_transitive_in field (P /\ R) by Def8;
-  hence thesis by Def16;
+  then a in field P & b in field P by RELAT_1:15;
+  then [a,c] in P by A4,A13,A11,A12,Def8;
+  hence thesis by A10,XBOOLE_0:def 4;
 end;
+end;
+
+canceled 4;
 
 theorem
   R is transitive iff R*R c= R
 proof
-A1: now
+  hereby
     assume R is transitive;
     then
 A2: R is_transitive_in field R by Def16;
@@ -889,29 +857,19 @@ A5:   c in field R by A3,RELAT_1:15;
     end;
     hence R*R c= R by RELAT_1:def 3;
   end;
-  now
-    assume
+  assume
 A6: R*R c= R;
-    now
-      let a,b,c;
-      assume that
-      a in field R and
-      b in field R and
-      c in field R and
-A7:   [a,b] in R & [b,c] in R;
-      [a,c] in R*R by A7,RELAT_1:def 8;
-      hence [a,c] in R by A6;
-    end;
-    then R is_transitive_in field R by Def8;
-    hence R is transitive by Def16;
-  end;
-  hence thesis by A1;
+  let a,b,c;
+  assume a in field R & b in field R & c in field R;
+  assume [a,b] in R & [b,c] in R;
+  then [a,c] in R*R by RELAT_1:def 8;
+  hence thesis by A6;
 end;
 
 theorem
   R is connected iff [:field R,field R:] \ id (field R) c= R \/ R~
 proof
-A1: now
+  hereby
     assume R is connected;
     then
 A2: R is_connected_in field R by Def14;
@@ -935,54 +893,42 @@ A6:     x = [y,z] by ZFMISC_1:def 2;
     end;
     hence [:field R, field R:] \ id (field R) c= R \/ R~ by TARSKI:def 3;
   end;
-  now
-    assume
+  assume
 A7: [:field R, field R:] \ id (field R) c= R \/ R~;
-    now
-      let a,b;
-      [a,b] in [:field R, field R:] \ id (field R) implies [a,b] in R \/
-      R~ by A7;
-      then
-      [a,b] in [:field R, field R:] & not [a,b] in id (field R) implies [
-      a,b] in R \/ R~ by XBOOLE_0:def 5;
-      then
-A8:   a in field R & b in field R & a <> b implies [a,b] in R or [a,b] in
-      R~ by RELAT_1:def 10,XBOOLE_0:def 3,ZFMISC_1:87;
-      assume a in field R & b in field R & a <> b;
-      hence [a,b] in R or [b,a] in R by A8,RELAT_1:def 7;
-    end;
-    then R is_connected_in field R by Def6;
-    hence R is connected by Def14;
-  end;
-  hence thesis by A1;
+  let a,b;
+  [a,b] in [:field R, field R:] \ id (field R) implies [a,b] in R \/ R~ by A7;
+  then
+  [a,b] in [:field R, field R:] & not [a,b] in id (field R) implies
+  [a,b] in R \/ R~ by XBOOLE_0:def 5;
+  then a in field R & b in field R & a <> b implies
+  [a,b] in R or [a,b] in R~ by RELAT_1:def 10,XBOOLE_0:def 3,ZFMISC_1:87;
+  hence thesis by RELAT_1:def 7;
 end;
 
-theorem
-  R is strongly_connected implies R is connected reflexive
+registration
+  cluster strongly_connected -> connected reflexive for Relation;
+coherence
 proof
-  assume R is strongly_connected;
-  then
-A1: R is_strongly_connected_in field R by Def15;
+  let R be Relation;
+  assume
+A1: R is_strongly_connected_in field R;
   then
   for x,y holds x in field R & y in field R & x <> y implies ( [x,y] in R
   or [y,x] in R) by Def7;
-  then R is_connected_in field R by Def6;
-  hence R is connected by Def14;
-  thus R is reflexive
-  proof
-    let x;
-    assume x in field R;
-    hence thesis by A1,Def7;
-  end;
+  hence R is connected by Def6,Def14;
+  let x;
+  thus thesis by A1,Def7;
 end;
+end;
+
+canceled;
 
 theorem
   R is strongly_connected iff [:field R, field R:] = R \/ R~
 proof
-A1: now
-    assume R is strongly_connected;
-    then
-A2: R is_strongly_connected_in field R by Def15;
+  hereby
+    assume
+A2: R is strongly_connected;
     now
       let x;
 A3:   now
@@ -1000,7 +946,7 @@ A5:     x = [y,z] by RELAT_1:def 1;
         then consider y,z such that
 A6:     y in field R & z in field R and
 A7:     x = [y,z] by ZFMISC_1:def 2;
-        [y,z] in R or [z,y] in R by A2,A6,Def7;
+        [y,z] in R or [z,y] in R by A2,A6,Def7,Def15;
         then [y,z] in R or [y,z] in R~ by RELAT_1:def 7;
         hence x in R \/ R~ by A7,XBOOLE_0:def 3;
       end;
@@ -1008,41 +954,31 @@ A7:     x = [y,z] by ZFMISC_1:def 2;
     end;
     hence [:field R, field R:] = R \/ R~ by TARSKI:1;
   end;
-  now
-    assume
+  assume
 A8: [:field R, field R:] = R \/ R~;
-    now
-      let a,b;
-      a in field R & b in field R implies [a,b] in R \/ R~ by A8,ZFMISC_1:87;
-      then a in field R & b in field R implies [a,b] in R or [a,b] in R~ by
-XBOOLE_0:def 3;
-      hence a in field R & b in field R implies [a,b] in R or [b,a] in R by
-RELAT_1:def 7;
-    end;
-    then R is_strongly_connected_in field R by Def7;
-    hence R is strongly_connected by Def15;
-  end;
-  hence thesis by A1;
+  let a,b;
+  a in field R & b in field R implies [a,b] in R \/ R~ by A8,ZFMISC_1:87;
+  then a in field R & b in field R implies [a,b] in R or [a,b] in R~
+  by XBOOLE_0:def 3;
+  hence thesis by RELAT_1:def 7;
 end;
 
 theorem
   R is transitive iff for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R
 proof
   hereby
-    assume R is transitive;
-    then
-A1: R is_transitive_in field R by Def16;
+    assume
+A1: R is transitive;
     let x,y,z;
     assume that
 A2: [x,y] in R and
 A3: [y,z] in R;
 A4: z in field R by A3,RELAT_1:15;
     x in field R & y in field R by A2,RELAT_1:15;
-    hence [x,z] in R by A1,A2,A3,A4,Def8;
+    hence [x,z] in R by A1,A2,A3,A4,Def8,Def16;
   end;
   assume for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R;
   then x in field R & y in field R & z in field R & [x,y] in R & [y,z] in R
   implies [x,z] in R;
-  then R is_transitive_in field R by Def8;
-  hence thesis by Def16;
+  hence R is_transitive_in field R by Def8;
 end;

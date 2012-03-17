@@ -9,6 +9,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSUB_1"/>
@@ -25,13 +26,19 @@
 </Signature>
 <FCluster aid="CQC_SIM1" nr="1">
 <ArgTypes>
+<Typ kind="M" nr="8">
+<Cluster/>
+</Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="175"/>
+<Func kind="K" nr="191">
+<LocusVar nr="1"/>
+</Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
+<LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>

@@ -7,6 +7,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="PARTFUN1"/>
@@ -24,7 +25,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="58"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PETRI_2" nr="2">
@@ -33,10 +34,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PETRI_2" nr="3">
@@ -45,22 +46,23 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="49"/>
 <Adjective nr="52"/>
-<Adjective nr="54"/>
+<Adjective nr="53"/>
+<Adjective nr="58"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PETRI_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="120"/>
+<Func kind="K" nr="128"/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 </Registrations>

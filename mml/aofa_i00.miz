@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received March 18, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,28 +16,29 @@ environ
 
  vocabularies NUMBERS, FUNCT_1, FUNCOP_1, RELAT_1, AOFA_000, FUNCT_4, XBOOLE_0,
       SUBSET_1, TARSKI, ZFMISC_1, FUNCT_2, ZF_LANG, VALUED_0, XREAL_0,
-      ORDINAL1, VALUED_1, REAL_3, INT_1, XXREAL_0, CARD_1, ARYTM_3, ARYTM_1,
-      FINSET_1, ORDINAL2, MEMBER_1, CARD_3, NAT_1, POWER, ORDINAL4, EUCLMETR,
-      FREEALG, TREES_4, LANG1, MCART_1, STRUCT_0, GRAPHSP, ABIAN, FUNCT_7,
-      REALSET1, NEWTON, PRE_FF, INT_2, COMPLEX1, AOFA_I00;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, ORDINAL1, RELAT_1,
-      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, LANG1, REAL_3, BINOP_1,
+      ORDINAL1, VALUED_1, INT_1, XXREAL_0, CARD_1, ARYTM_3, ARYTM_1, FINSET_1,
+      ORDINAL2, MEMBER_1, CARD_3, NAT_1, POWER, ORDINAL4, EUCLMETR, FREEALG,
+      TREES_4, LANG1, MCART_1, STRUCT_0, GRAPHSP, ABIAN, FUNCT_7, REALSET1,
+      NEWTON, PRE_FF, INT_2, COMPLEX1, AOFA_I00;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XTUPLE_0, MCART_1, ORDINAL1,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, LANG1, BINOP_1,
       CARD_1, CARD_2, CARD_3, VALUED_0, PRE_FF, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, POWER, INT_1, INT_2, NAT_1, NAT_D, NEWTON, ABIAN, FUNCOP_1,
       FUNCT_4, FUNCT_7, STRUCT_0, FREEALG, TREES_4, AOFA_000, VALUED_1;
  constructors REAL_1, BORSUK_1, PREPOWER, POWER, NAT_D, NEWTON, ABIAN,
-      SQUARE_1, PRE_FF, WSIERP_1, WELLORD2, CARD_2, CAT_2, PRALG_3, AOFA_000;
+      SQUARE_1, PRE_FF, WSIERP_1, WELLORD2, CARD_2, CAT_2, AOFA_000, XTUPLE_0;
  registrations RELSET_1, FUNCT_1, FUNCOP_1, FUNCT_2, NUMBERS, NAT_1, STRUCT_0,
       FREEALG, INT_1, CARD_5, CARD_1, CARD_3, VALUED_0, VALUED_1, MEMBERED,
-      XREAL_0, XCMPLX_0, XXREAL_0, XBOOLE_0, FINSET_1, POWER, AOFA_000, ABIAN;
+      XREAL_0, XCMPLX_0, XXREAL_0, XBOOLE_0, FINSET_1, POWER, AOFA_000, ABIAN,
+      XTUPLE_0;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
- definitions VALUED_0, XCMPLX_0, CARD_2, TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2,
-      FREEALG, BINOP_1, AOFA_000, FUNCOP_1, VALUED_1;
+ definitions XCMPLX_0, CARD_2, TARSKI, XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2,
+      FREEALG, BINOP_1, AOFA_000, FUNCOP_1, VALUED_1, XTUPLE_0;
  theorems XBOOLE_1, ZFMISC_1, RELAT_1, FUNCT_2, FUNCOP_1, TARSKI, NEWTON,
       XREAL_1, INT_1, FUNCT_7, NAT_1, ORDINAL1, FUNCT_4, FREEALG, PRE_FF,
       INT_2, ABSVALUE, WSIERP_1, TREES_4, NUMBERS, FUNCT_1, CARD_2, CARD_1,
       WELLORD2, FUNCT_5, AOFA_000, MCART_1, XXREAL_0, POWER, FIB_NUM2,
-      ORDINAL3, NAT_D, PREPOWER, VALUED_1, CARD_3;
+      ORDINAL3, NAT_D, PREPOWER, VALUED_1, CARD_3, XTUPLE_0;
  schemes FUNCT_1, FUNCT_2, XBOOLE_0, AOFA_000, TARSKI, CLASSES1;
 
 begin :: Preliminaries
@@ -52,18 +53,17 @@ A2: b <> c and
 A3: c <> a;
   set fb = b.-->y;
 A4: dom fb = {b} by FUNCOP_1:13;
-  then
 A5: a nin dom fb by A1,TARSKI:def 1;
 A6: b in dom fb by A4,TARSKI:def 1;
   set fc = c.-->z;
   set fa = a.-->x;
   take f = fa+*fb+*fc;
 A7: dom fc = {c} by FUNCOP_1:13;
-  then a nin dom fc by A3,TARSKI:def 1;
+  a nin dom fc by A3,TARSKI:def 1;
   hence f.a = (fa+*fb).a by FUNCT_4:11
     .= fa.a by A5,FUNCT_4:11
     .= x by FUNCOP_1:72;
-  b nin dom fc by A2,A7,TARSKI:def 1;
+  b nin dom fc by A2,TARSKI:def 1;
   hence f.b = (fa+*fb).b by FUNCT_4:11
     .= fb.b by A6,FUNCT_4:13
     .= y by FUNCOP_1:72;
@@ -120,126 +120,102 @@ notation
 end;
 
 definition
-  let t1,t2 be integer-yielding Function;
-  func t1 div t2 -> integer-yielding Function means
+  let t1,t2 be INT-valued Function;
+  func t1 div t2 -> INT-valued Function means
   : Def3:
-  dom it = (dom t1)
-  /\ (dom t2) & for s being set st s in dom it holds it.s = (t1.s) div (t2.s);
+  dom it = (dom t1) /\ (dom t2) &
+  for s being set st s in dom it holds it.s = (t1.s) div (t2.s);
   correctness
   proof
     deffunc F(set) = (t1.$1) div (t2.$1);
     consider f being Function such that
 A1: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1) /\
     (dom t2) holds f.x = F(x) from FUNCT_1:sch 3;
-    f is integer-yielding
+    f is INT-valued
     proof
-      let x be set;
-      assume x in dom f;
-      then f.x = F(x) by A1;
-      hence thesis;
+      let y be set;
+      assume y in rng f;
+      then consider x being set such that
+A2:   x in dom f and
+A3:   f.x = y by FUNCT_1:def 3;
+      f.x = F(x) by A1,A2;
+      hence thesis by A3,INT_1:def 2;
     end;
-    hence ex f being integer-yielding Function st dom f = (dom t1)/\(dom t2) &
+    hence ex f being INT-valued Function st dom f = (dom t1)/\(dom t2) &
     for x being set st x in dom f holds f.x = F(x) by A1;
-    let f1,f2 be integer-yielding Function such that
-A2: dom f1 = (dom t1) /\ dom t2 and
-A3: for s being set st s in dom f1 holds f1.s = F(s) and
-A4: dom f2 = (dom t1) /\ dom t2 and
-A5: for s being set st s in dom f2 holds f2.s = F(s);
+    let f1,f2 be INT-valued Function such that
+A4: dom f1 = (dom t1) /\ dom t2 and
+A5: for s being set st s in dom f1 holds f1.s = F(s) and
+A6: dom f2 = (dom t1) /\ dom t2 and
+A7: for s being set st s in dom f2 holds f2.s = F(s);
     now
       let s be set;
       assume
-A6:   s in (dom t1) /\ dom t2;
-      hence f1.s = F(s) by A2,A3
-        .= f2.s by A4,A5,A6;
+A8:   s in (dom t1) /\ dom t2;
+      hence f1.s = F(s) by A4,A5
+        .= f2.s by A6,A7,A8;
     end;
-    hence thesis by A2,A4,FUNCT_1:2;
+    hence thesis by A4,A6,FUNCT_1:2;
   end;
-  func t1 mod t2 -> integer-yielding Function means
+  func t1 mod t2 -> INT-valued Function means
   : Def4:
-  dom it = (dom t1)
-  /\ (dom t2) & for s being set st s in dom it holds it.s = (t1.s) mod (t2.s);
+  dom it = (dom t1) /\ (dom t2) &
+  for s being set st s in dom it holds it.s = (t1.s) mod (t2.s);
   correctness
   proof
     deffunc F(set) = (t1.$1) mod (t2.$1);
     consider f being Function such that
-A7: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
+A9: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
     /\ (dom t2) holds f.x = F(x) from FUNCT_1:sch 3;
-    f is integer-yielding
+    f is INT-valued
     proof
-      let x be set;
-      assume x in dom f;
-      then f.x = F(x) by A7;
-      hence thesis;
+      let y be set;
+      assume y in rng f;
+      then consider x being set such that
+A10:   x in dom f and
+A11:   f.x = y by FUNCT_1:def 3;
+      f.x = F(x) by A9,A10;
+      hence thesis by A11,INT_1:def 2;
     end;
-    hence ex f being integer-yielding Function st dom f = (dom t1)/\(dom t2) &
-    for x being set st x in dom f holds f.x = F(x) by A7;
-    let f1,f2 be integer-yielding Function such that
-A8: dom f1 = (dom t1) /\ dom t2 and
-A9: for s being set st s in dom f1 holds f1.s = F(s) and
-A10: dom f2 = (dom t1) /\ dom t2 and
-A11: for s being set st s in dom f2 holds f2.s = F(s);
+    hence ex f being INT-valued Function st dom f = (dom t1)/\(dom t2) &
+    for x being set st x in dom f holds f.x = F(x) by A9;
+    let f1,f2 be INT-valued Function such that
+A12: dom f1 = (dom t1) /\ dom t2 and
+A13: for s being set st s in dom f1 holds f1.s = F(s) and
+A14: dom f2 = (dom t1) /\ dom t2 and
+A15: for s being set st s in dom f2 holds f2.s = F(s);
     now
       let s be set;
       assume
-A12:  s in (dom t1) /\ dom t2;
-      hence f1.s = F(s) by A8,A9
-        .= f2.s by A10,A11,A12;
+A16:  s in (dom t1) /\ dom t2;
+      hence f1.s = F(s) by A12,A13
+        .= f2.s by A14,A15,A16;
     end;
-    hence thesis by A8,A10,FUNCT_1:2;
+    hence thesis by A12,A14,FUNCT_1:2;
   end;
-  func leq(t1,t2) -> integer-yielding Function means
+  func leq(t1,t2) -> INT-valued Function means
   : Def5:
-  dom it = (dom t1)
-/\ (dom t2) & for s being set st s in dom it holds it.s = IFGT(t1.s,t2.s,0,1);
+  dom it = (dom t1) /\ (dom t2) &
+  for s being set st s in dom it holds it.s = IFGT(t1.s,t2.s,0,1);
   correctness
   proof
     deffunc F(set) = IFGT(t1.$1,t2.$1,0,1);
     consider f being Function such that
-A13: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
+A17: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
     /\ (dom t2) holds f.x = F(x) from FUNCT_1:sch 3;
-    f is integer-yielding
+    f is INT-valued
     proof
-      let x be set;
-      assume x in dom f;
-      then f.x = F(x) by A13;
-      hence thesis;
+      let y be set;
+      assume y in rng f;
+      then consider x being set such that
+A18:   x in dom f and
+A19:   f.x = y by FUNCT_1:def 3;
+      f.x = F(x) by A17,A18;
+      hence thesis by A19,INT_1:def 2;
     end;
-    hence ex f being integer-yielding Function st dom f = (dom t1)/\(dom t2) &
-    for x being set st x in dom f holds f.x = F(x) by A13;
-    let f1,f2 be integer-yielding Function such that
-A14: dom f1 = (dom t1) /\ dom t2 and
-A15: for s being set st s in dom f1 holds f1.s = F(s) and
-A16: dom f2 = (dom t1) /\ dom t2 and
-A17: for s being set st s in dom f2 holds f2.s = F(s);
-    now
-      let s be set;
-      assume
-A18:  s in (dom t1) /\ dom t2;
-      hence f1.s = F(s) by A14,A15
-        .= f2.s by A16,A17,A18;
-    end;
-    hence thesis by A14,A16,FUNCT_1:2;
-  end;
-  func gt(t1,t2) -> integer-yielding Function means
-  : Def6:
-  dom it = (dom t1)
-/\ (dom t2) & for s being set st s in dom it holds it.s = IFGT(t1.s,t2.s,1,0);
-  correctness
-  proof
-    deffunc F(set) = IFGT(t1.$1,t2.$1,1,0);
-    consider f being Function such that
-A19: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
-    /\ (dom t2) holds f.x = F(x) from FUNCT_1:sch 3;
-    f is integer-yielding
-    proof
-      let x be set;
-      assume x in dom f;
-      then f.x = F(x) by A19;
-      hence thesis;
-    end;
-    hence ex f being integer-yielding Function st dom f = (dom t1)/\(dom t2) &
-    for x being set st x in dom f holds f.x = F(x) by A19;
-    let f1,f2 be integer-yielding Function such that
+    hence ex f being INT-valued Function st dom f = (dom t1)/\(dom t2) &
+    for x being set st x in dom f holds f.x = F(x) by A17;
+    let f1,f2 be INT-valued Function such that
 A20: dom f1 = (dom t1) /\ dom t2 and
 A21: for s being set st s in dom f1 holds f1.s = F(s) and
 A22: dom f2 = (dom t1) /\ dom t2 and
@@ -253,38 +229,77 @@ A24:  s in (dom t1) /\ dom t2;
     end;
     hence thesis by A20,A22,FUNCT_1:2;
   end;
-  func eq(t1,t2) -> integer-yielding Function means
+  func gt(t1,t2) -> INT-valued Function means
+  : Def6:
+  dom it = (dom t1) /\ (dom t2) &
+  for s being set st s in dom it holds it.s = IFGT(t1.s,t2.s,1,0);
+  correctness
+  proof
+    deffunc F(set) = IFGT(t1.$1,t2.$1,1,0);
+    consider f being Function such that
+A25: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
+    /\ (dom t2) holds f.x = F(x) from FUNCT_1:sch 3;
+    f is INT-valued
+    proof
+      let y be set;
+      assume y in rng f;
+      then consider x being set such that
+A26:   x in dom f and
+A27:   f.x = y by FUNCT_1:def 3;
+      f.x = F(x) by A25,A26;
+      hence thesis by A27,INT_1:def 2;
+    end;
+    hence ex f being INT-valued Function st dom f = (dom t1)/\(dom t2) &
+    for x being set st x in dom f holds f.x = F(x) by A25;
+    let f1,f2 be INT-valued Function such that
+A28: dom f1 = (dom t1) /\ dom t2 and
+A29: for s being set st s in dom f1 holds f1.s = F(s) and
+A30: dom f2 = (dom t1) /\ dom t2 and
+A31: for s being set st s in dom f2 holds f2.s = F(s);
+    now
+      let s be set;
+      assume
+A32:  s in (dom t1) /\ dom t2;
+      hence f1.s = F(s) by A28,A29
+        .= f2.s by A30,A31,A32;
+    end;
+    hence thesis by A28,A30,FUNCT_1:2;
+  end;
+  func eq(t1,t2) -> INT-valued Function means
   : Def7:
-  dom it = (dom t1)
-/\ (dom t2) & for s being set st s in dom it holds it.s = IFEQ(t1.s,t2.s,1,0);
+  dom it = (dom t1) /\ (dom t2) &
+  for s being set st s in dom it holds it.s = IFEQ(t1.s,t2.s,1,0);
   correctness
   proof
     deffunc F(set) = IFEQ(t1.$1,t2.$1,1,0);
     consider f being Function such that
-A25: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
+A33: dom f = (dom t1) /\ (dom t2) & for x being set st x in (dom t1)
     /\ (dom t2) holds f.x = F(x) from FUNCT_1:sch 3;
-    f is integer-yielding
+    f is INT-valued
     proof
-      let x be set;
-      assume x in dom f;
-      then f.x = F(x) by A25;
-      hence thesis;
+      let y be set;
+      assume y in rng f;
+      then consider x being set such that
+A34:   x in dom f and
+A35:   f.x = y by FUNCT_1:def 3;
+      f.x = F(x) by A33,A34;
+      hence thesis by A35,INT_1:def 2;
     end;
-    hence ex f being integer-yielding Function st dom f = (dom t1)/\(dom t2) &
-    for x being set st x in dom f holds f.x = F(x) by A25;
-    let f1,f2 be integer-yielding Function such that
-A26: dom f1 = (dom t1) /\ dom t2 and
-A27: for s being set st s in dom f1 holds f1.s = F(s) and
-A28: dom f2 = (dom t1) /\ dom t2 and
-A29: for s being set st s in dom f2 holds f2.s = F(s);
+    hence ex f being INT-valued Function st dom f = (dom t1)/\(dom t2) &
+    for x being set st x in dom f holds f.x = F(x) by A33;
+    let f1,f2 be INT-valued Function such that
+A36: dom f1 = (dom t1) /\ dom t2 and
+A37: for s being set st s in dom f1 holds f1.s = F(s) and
+A38: dom f2 = (dom t1) /\ dom t2 and
+A39: for s being set st s in dom f2 holds f2.s = F(s);
     now
       let s be set;
       assume
-A30:  s in (dom t1) /\ dom t2;
-      hence f1.s = F(s) by A26,A27
-        .= f2.s by A28,A29,A30;
+A40:  s in (dom t1) /\ dom t2;
+      hence f1.s = F(s) by A36,A37
+        .= f2.s by A38,A39,A40;
     end;
-    hence thesis by A26,A28,FUNCT_1:2;
+    hence thesis by A36,A38,FUNCT_1:2;
   end;
 end;
 
@@ -349,7 +364,7 @@ A9: dom f = X by FUNCT_2:def 1;
 VALUED_1:def 5;
 A10: dom ti = X by FUNCT_2:def 1;
     assume for s being Element of X holds ti.s = f.s*x;
-    then for s being set st s in dom (f*x) holds ti.s = x*f.s by A8;
+    then for s being set st s in dom (f*x) holds ti.s = x*f.s;
     hence thesis by A8,A9,A10,VALUED_1:def 5;
   end;
   coherence
@@ -368,84 +383,44 @@ definition
 A1: dom g = X by FUNCT_2:def 1;
 A2: dom (f div g) = (dom f) /\ dom g by Def3;
 A3: dom f = X by FUNCT_2:def 1;
-    rng (f div g) c= INT
-    proof
-      let y be set;
-      assume y in rng (f div g);
-      then consider a being set such that
-      a in dom (f div g) and
-A4:   y = (f div g).a by FUNCT_1:def 3;
-      thus thesis by A4,INT_1:def 2;
-    end;
+    rng (f div g) c= INT;
     hence thesis by A2,A3,A1,FUNCT_2:2;
   end;
   redefine func f mod g -> Function of X, INT;
   coherence
   proof
-A5: dom g = X by FUNCT_2:def 1;
-A6: dom (f mod g) = (dom f) /\ dom g by Def4;
-A7: dom f = X by FUNCT_2:def 1;
-    rng (f mod g) c= INT
-    proof
-      let y be set;
-      assume y in rng (f mod g);
-      then consider a being set such that
-      a in dom (f mod g) and
-A8:  y = (f mod g).a by FUNCT_1:def 3;
-      thus thesis by A8,INT_1:def 2;
-    end;
-    hence thesis by A6,A7,A5,FUNCT_2:2;
+A4: dom g = X by FUNCT_2:def 1;
+A5: dom (f mod g) = (dom f) /\ dom g by Def4;
+A6: dom f = X by FUNCT_2:def 1;
+    rng (f mod g) c= INT;
+    hence thesis by A5,A6,A4,FUNCT_2:2;
   end;
   redefine func leq(f,g) -> Function of X, INT;
   coherence
   proof
-A9: dom g = X by FUNCT_2:def 1;
-A10: dom leq(f,g) = (dom f) /\ dom g by Def5;
-A11: dom f = X by FUNCT_2:def 1;
-    rng leq(f,g) c= INT
-    proof
-      let y be set;
-      assume y in rng leq(f,g);
-      then consider a being set such that
-      a in dom leq(f,g) and
-A12:  y = leq(f,g).a by FUNCT_1:def 3;
-      thus thesis by A12,INT_1:def 2;
-    end;
-    hence thesis by A10,A11,A9,FUNCT_2:2;
+A7: dom g = X by FUNCT_2:def 1;
+A8: dom leq(f,g) = (dom f) /\ dom g by Def5;
+A9: dom f = X by FUNCT_2:def 1;
+    rng leq(f,g) c= INT;
+    hence thesis by A8,A9,A7,FUNCT_2:2;
   end;
   redefine func gt(f,g) -> Function of X, INT;
   coherence
   proof
-A13: dom g = X by FUNCT_2:def 1;
-A14: dom gt(f,g) = (dom f) /\ dom g by Def6;
-A15: dom f = X by FUNCT_2:def 1;
-    rng gt(f,g) c= INT
-    proof
-      let y be set;
-      assume y in rng gt(f,g);
-      then consider a being set such that
-      a in dom gt(f,g) and
-A16:  y = gt(f,g).a by FUNCT_1:def 3;
-      thus thesis by A16,INT_1:def 2;
-    end;
-    hence thesis by A14,A15,A13,FUNCT_2:2;
+A10: dom g = X by FUNCT_2:def 1;
+A11: dom gt(f,g) = (dom f) /\ dom g by Def6;
+A12: dom f = X by FUNCT_2:def 1;
+    rng gt(f,g) c= INT;
+    hence thesis by A11,A12,A10,FUNCT_2:2;
   end;
   redefine func eq(f,g) -> Function of X, INT;
   coherence
   proof
-A17: dom g = X by FUNCT_2:def 1;
-A18: dom eq(f,g) = (dom f) /\ dom g by Def7;
-A19: dom f = X by FUNCT_2:def 1;
-    rng eq(f,g) c= INT
-    proof
-      let y be set;
-      assume y in rng eq(f,g);
-      then consider a being set such that
-      a in dom eq(f,g) and
-A20:  y = eq(f,g).a by FUNCT_1:def 3;
-      thus thesis by A20,INT_1:def 2;
-    end;
-    hence thesis by A18,A19,A17,FUNCT_2:2;
+A13: dom g = X by FUNCT_2:def 1;
+A14: dom eq(f,g) = (dom f) /\ dom g by Def7;
+A15: dom f = X by FUNCT_2:def 1;
+    rng eq(f,g) c= INT;
+    hence thesis by A14,A15,A13,FUNCT_2:2;
   end;
 end;
 
@@ -1032,19 +1007,19 @@ definition
   let X be non empty set;
   let T be Subset of Funcs(X, INT);
   let f be ExecutionFunction of A, Funcs(X, INT), T such that
-A1: ex I being Element of A st I is_assignment_wrt A,X,f;
+B1: ex I being Element of A st I is_assignment_wrt A,X,f;
   mode INT-Variable of A,f -> INT-Variable of X means
     ex t being INT-Expression of X st it,t form_assignment_wrt f;
   existence
   proof
     consider I being Element of A such that
-A2: I is_assignment_wrt A,X,f by A1;
+A1: I is_assignment_wrt A,X,f by B1;
     consider v being (INT-Variable of X), t being INT-Expression of X such
     that
-A3: for s being Element of Funcs(X, INT) holds f.(s, I) = s+*(v.s,t.s)
-    by A2,Def14;
+A2: for s being Element of Funcs(X, INT) holds f.(s, I) = s+*(v.s,t.s)
+    by A1,Def14;
     take v,t,I;
-    thus thesis by A2,A3,Def14;
+    thus thesis by A1,A2,Def14;
   end;
 end;
 
@@ -1053,19 +1028,19 @@ definition
   let X be non empty set;
   let T be Subset of Funcs(X, INT);
   let f be ExecutionFunction of A, Funcs(X, INT), T such that
-A1: ex I being Element of A st I is_assignment_wrt A,X,f;
+B1: ex I being Element of A st I is_assignment_wrt A,X,f;
   mode INT-Expression of A,f -> INT-Expression of X means
     ex v being INT-Variable of X st v,it form_assignment_wrt f;
   existence
   proof
     consider I being Element of A such that
-A2: I is_assignment_wrt A,X,f by A1;
+A1: I is_assignment_wrt A,X,f by B1;
     consider v being (INT-Variable of X), t being INT-Expression of X such
     that
-A3: for s being Element of Funcs(X, INT) holds f.(s, I) = s+*(v.s,t.s)
-    by A2,Def14;
+A2: for s being Element of Funcs(X, INT) holds f.(s, I) = s+*(v.s,t.s)
+    by A1,Def14;
     take t,v,I;
-    thus thesis by A2,A3,Def14;
+    thus thesis by A1,A2,Def14;
   end;
 end;
 
@@ -1229,8 +1204,7 @@ end;
 
 definition
   func INT-ElemIns -> infinite disjoint_with_NAT set equals
-  [:Funcs(Funcs(NAT,
-  INT), NAT), Funcs(Funcs(NAT, INT), INT):];
+  [:Funcs(Funcs(NAT, INT), NAT), Funcs(Funcs(NAT, INT), INT):];
   coherence;
 end;
 
@@ -1303,13 +1277,13 @@ A15: [s,I] in [:Q,ElementaryInstructions A:] by ZFMISC_1:87;
     being Element of Funcs(Q, INT) such that
 A16: [s,I] = [s9, root-tree [v9,e9]] and
 A17: g.[s,I] = s9+*(v9.s9,e9.s9) by A13;
-    I = root-tree [v9,e9] by A16,ZFMISC_1:27;
+    I = root-tree [v9,e9] by A16,XTUPLE_0:1;
     then
 A18: [v,e] = [v9,e9] by TREES_4:4;
     then
-A19: v = v9 by ZFMISC_1:27;
-A20: e = e9 by A18,ZFMISC_1:27;
-    s = s9 by A16,ZFMISC_1:27;
+A19: v = v9 by XTUPLE_0:1;
+A20: e = e9 by A18,XTUPLE_0:1;
+    s = s9 by A16,XTUPLE_0:1;
     hence thesis by A14,A15,A17,A19,A20,FUNCT_1:49;
   end;
 end;
@@ -1392,13 +1366,13 @@ A15: [s,I] in [:Q,ElementaryInstructions A:] by ZFMISC_1:87;
     being Element of Funcs(Q, INT) such that
 A16: [s,I] = [s9, root-tree [v9,e9]] and
 A17: g.[s,I] = s9+*(v9.s9,e9.s9) by A13;
-    I = root-tree [v9,e9] by A16,ZFMISC_1:27;
+    I = root-tree [v9,e9] by A16,XTUPLE_0:1;
     then
 A18: [v,e] = [v9,e9] by TREES_4:4;
     then
-A19: v = v9 by ZFMISC_1:27;
-A20: e = e9 by A18,ZFMISC_1:27;
-    s = s9 by A16,ZFMISC_1:27;
+A19: v = v9 by XTUPLE_0:1;
+A20: e = e9 by A18,XTUPLE_0:1;
+    s = s9 by A16,XTUPLE_0:1;
     hence thesis by A14,A15,A17,A19,A20,FUNCT_1:49;
   end;
 end;
@@ -1424,28 +1398,28 @@ Funcs(Funcs(X, INT), INT) holds it.(s, root-tree [(c*v)**(c,NAT),e**(c,NAT)]) =
     set S = ECIW-signature, G = INT-ElemIns;
     set A = FreeUnivAlgNSG(S,G);
     reconsider q0 = X-->i0 as Element of Q by FUNCT_2:8;
-A2: Terminals DTConUA(S,G) = G by FREEALG:3;
+A1: Terminals DTConUA(S,G) = G by FREEALG:3;
     defpred P[set,set] means ex s being (Element of Q) st $1`1 = s & (($2 = s
 & not ex v being (Element of Funcs(Q, X)), e being Element of Funcs(Q, INT) st
 $1`2 = root-tree [(c*v)**(c9,NAT),e**(c9,NAT)]) or ex v being (Element of Funcs
 (Q, X)), e being Element of Funcs(Q, INT) st $1`2 = root-tree [(c*v)**(c9,NAT),
     e**(c9,NAT)] & $2 = s+*(v.s,e.s));
-A3: ElementaryInstructions A = FreeGenSetNSG(S,G) by AOFA_000:70;
-A4: for x being set st x in [:Q,ElementaryInstructions A:] ex y being set
+A2: ElementaryInstructions A = FreeGenSetNSG(S,G) by AOFA_000:70;
+A3: for x being set st x in [:Q,ElementaryInstructions A:] ex y being set
     st y in Q & P[x,y]
     proof
       let x be set;
       assume x in [:Q,ElementaryInstructions A:];
       then consider s, I being set such that
-A5:   s in Q and
-A6:   I in ElementaryInstructions A and
-A7:   x = [s,I] by ZFMISC_1:def 2;
-A8:   x`1 = s by A7,MCART_1:7;
-      reconsider s as Element of Q by A5;
-A9:   x`2 = I by A7,MCART_1:7;
+A4:   s in Q and
+A5:   I in ElementaryInstructions A and
+A6:   x = [s,I] by ZFMISC_1:def 2;
+A7:   x`1 = s by A6,MCART_1:7;
+      reconsider s as Element of Q by A4;
+A8:   x`2 = I by A6,MCART_1:7;
       consider a being Symbol of DTConUA(S,G) such that
-A10:  I = root-tree a and
-      a in Terminals DTConUA(S,G) by A3,A6;
+A9:  I = root-tree a and
+      a in Terminals DTConUA(S,G) by A2,A5;
       per cases;
       suppose
         ex v being (Element of Funcs(Q, X)), e being Element of Funcs
@@ -1453,30 +1427,30 @@ A10:  I = root-tree a and
         then consider
         v being (Element of Funcs(Q, X)), e being Element of Funcs(Q,
         INT) such that
-A11:    a = [(c*v)**(c9,NAT),e**(c9,NAT)];
+A10:    a = [(c*v)**(c9,NAT),e**(c9,NAT)];
         take y = s+*(v.s,e.s);
         thus y in Q by FUNCT_2:8;
-        thus thesis by A8,A9,A10,A11;
+        thus thesis by A7,A8,A9,A10;
       end;
       suppose
-A12:    not ex v being (Element of Funcs(Q, X)), e being Element of
+A11:    not ex v being (Element of Funcs(Q, X)), e being Element of
         Funcs(Q, INT) st a = [(c*v)**(c9,NAT),e**(c9,NAT)];
         take y = s;
         thus y in Q;
         not ex v being (Element of Funcs(Q, X)), e being Element of Funcs
-(Q, INT) st x`2 = root-tree [(c*v)**(c9,NAT),e**(c9,NAT)] by A9,A10,A12,
+(Q, INT) st x`2 = root-tree [(c*v)**(c9,NAT),e**(c9,NAT)] by A8,A9,A11,
 TREES_4:4;
-        hence thesis by A8;
+        hence thesis by A7;
       end;
     end;
     consider g being Function such that
-A13: dom g = [:Q,ElementaryInstructions A:] & rng g c= Q and
-A14: for x being set st x in [:Q,ElementaryInstructions A:] holds P[x,
-    g.x] from FUNCT_1:sch 5(A4);
-    reconsider g as Function of [:Q,ElementaryInstructions A:], Q by A13,
+A12: dom g = [:Q,ElementaryInstructions A:] & rng g c= Q and
+A13: for x being set st x in [:Q,ElementaryInstructions A:] holds P[x,
+    g.x] from FUNCT_1:sch 5(A3);
+    reconsider g as Function of [:Q,ElementaryInstructions A:], Q by A12,
 FUNCT_2:2;
     consider f being ExecutionFunction of A, Q, T such that
-A15: f|[:Q,ElementaryInstructions A:] = g and
+A14: f|[:Q,ElementaryInstructions A:] = g and
     for s being Element of Q for C,I being Element of A st not f
 iteration_terminates_for I\;C, f.(s,C) holds f.(s, while(C,I)) = q0 by
 AOFA_000:91;
@@ -1489,36 +1463,34 @@ AOFA_000:91;
 ;
     set v0 = cv**(c9,NAT), e0 = e**(c9,NAT);
     set I = root-tree [v0,e0];
-A16: [s,I]`2 = I by MCART_1:7;
-A17: [s,I]`1 = s by MCART_1:7;
     [v0,e0] in G by ZFMISC_1:87;
-    then I in ElementaryInstructions A by A3,A2;
+    then I in ElementaryInstructions A by A2,A1;
     then
-A18: [s,I] in [:Q,ElementaryInstructions A:] by ZFMISC_1:87;
-    then P[[s,I],g.[s,I]] by A14;
+A15: [s,I] in [:Q,ElementaryInstructions A:] by ZFMISC_1:87;
+    then P[[s,I],g.[s,I]] by A13;
     then consider
     v9 being (Element of Funcs(Q, X)), e9 being Element of Funcs(Q,
     INT) such that
-A19: [s,I]`2 = root-tree [(c*v9)**(c9,NAT),e9**(c9,NAT)] and
-A20: g.[s,I] = s+*(v9.s,e9.s) by A16,A17;
-A21: dom (c9*v9) = Q by FUNCT_2:def 1;
-A22: dom e = Q by FUNCT_2:def 1;
-A23: dom v = Q by FUNCT_2:def 1;
-A24: dom cv = Q by FUNCT_2:def 1;
-A25: dom c9 = X by FUNCT_2:def 1;
-A26: rng v c= X;
-A27: dom e9 = Q by FUNCT_2:def 1;
-A28: dom v9 = Q by FUNCT_2:def 1;
-A29: [v0,e0] = [(c*v9)**(c9,NAT),e9**(c9,NAT)] by A19,MCART_1:7,TREES_4:4;
-    then v0 = (c*v9)**(c9,NAT) by ZFMISC_1:27;
+A16: [s,I]`2 = root-tree [(c*v9)**(c9,NAT),e9**(c9,NAT)] and
+A17: g.[s,I] = s+*(v9.s,e9.s);
+A18: dom (c9*v9) = Q by FUNCT_2:def 1;
+A19: dom e = Q by FUNCT_2:def 1;
+A20: dom v = Q by FUNCT_2:def 1;
+A21: dom cv = Q by FUNCT_2:def 1;
+A22: dom c9 = X by FUNCT_2:def 1;
+A23: rng v c= X;
+A24: dom e9 = Q by FUNCT_2:def 1;
+A25: dom v9 = Q by FUNCT_2:def 1;
+A26: [v0,e0] = [(c*v9)**(c9,NAT),e9**(c9,NAT)] by A16,TREES_4:4;
+    then v0 = (c*v9)**(c9,NAT) by XTUPLE_0:1;
     then
-A30: cv = c*v9 by A24,A21,Th5;
-    e0 = e9**(c9,NAT) by A29,ZFMISC_1:27;
+A27: cv = c*v9 by A21,A18,Th5;
+    e0 = e9**(c9,NAT) by A26,XTUPLE_0:1;
     then
-A31: e = e9 by A22,A27,Th5;
+A28: e = e9 by A19,A24,Th5;
     rng v9 c= X;
-    then v = v9 by A26,A25,A28,A23,A30,FUNCT_1:27;
-    hence thesis by A15,A18,A20,A31,FUNCT_1:49;
+    then v = v9 by A23,A22,A25,A20,A27,FUNCT_1:27;
+    hence thesis by A14,A15,A17,A28,FUNCT_1:49;
   end;
 end;
 
@@ -3352,7 +3324,7 @@ end;
 theorem
   for n,s,i being Variable of g st ex d being Function st d.n = 1 & d.s
   = 2 & d.i = 3 & d.b = 4 for q being Element of Funcs(X, INT) for N being
-natural number st N = q.n holds g.(q, s:=1\;for-do(i:=2, i leq n, i+=1, s*=i)).
+Nat st N = q.n holds g.(q, s:=1\;for-do(i:=2, i leq n, i+=1, s*=i)).
   s = N!
 proof
   set f = g;
@@ -3366,7 +3338,7 @@ A5: n <> i & n <> b & i <> b by A1,A3,A4;
   set S = Funcs(X,INT);
   let q be Element of Funcs(X, INT);
   reconsider q1 = f.(q, s:=1) as Element of S;
-  defpred P[Element of S] means ex K being natural number st K = $1.i-1 & $1.s
+  defpred P[Element of S] means ex K being Nat st K = $1.i-1 & $1.s
   = K!;
   reconsider a = .(2,A,f) as INT-Expression of A,g;
   reconsider q2 = f.(q1, i:=2) as Element of S;
@@ -3382,7 +3354,7 @@ A11: for q being Element of Funcs(X,INT) st P[q] holds P[f.(q,I\;i+=1)] & P[
   f.(q, i leq n)]
   proof
     let q be Element of Funcs(X,INT);
-    given Ki being natural number such that
+    given Ki being Nat such that
 A12: Ki = q.i-1 and
 A13: q.s = Ki!;
     reconsider q3 = f.(q,I) as Element of S;
@@ -3401,7 +3373,7 @@ A17: q9.i = q.i by A5,Th35;
     hence thesis by A12,A13,A17;
   end;
   reconsider F = for-do(i:=a, i leq n, i+=1, I) as Element of A;
-  let N be natural number;
+  let N be Nat;
   assume
 A18: N = q.n;
 A19: F = for-do(i:=a, i leq n, i+=1, I);
@@ -3454,7 +3426,7 @@ end;
 theorem
   for x,n,s,i being Variable of g st ex d being Function st d.x = 0 & d.
 n = 1 & d.s = 2 & d.i = 3 & d.b = 4 for q being Element of Funcs(X, INT) for N
-being natural number st N = q.n holds g.(q, s:=1\;for-do(i:=1, i leq n, i+=1, s
+being Nat st N = q.n holds g.(q, s:=1\;for-do(i:=1, i leq n, i+=1, s
   *=x)).s = (q.x)|^N
 proof
   set f = g;
@@ -3473,7 +3445,7 @@ A6: n <> i & n <> b & i <> b by A2,A4,A5;
 A7: s <> i by A3,A4;
   then
 A8: q2.s = q1.s by Th25;
-  defpred P[Element of S] means ex K being natural number st K = $1.i-1 & $1.s
+  defpred P[Element of S] means ex K being Nat st K = $1.i-1 & $1.s
   = (q.x)|^K & $1.x = q.x;
   set I = s*=x;
   set q0 = q;
@@ -3487,7 +3459,7 @@ A13: for q being Element of Funcs(X,INT) st P[q] holds P[f.(q,I\;i+=1)] & P[
   f.(q, i leq n)]
   proof
     let q be Element of Funcs(X,INT);
-    given Ki being natural number such that
+    given Ki being Nat such that
 A14: Ki = q.i-1 and
 A15: q.s = (q0.x)|^Ki and
 A16: q.x = q0.x;
@@ -3522,7 +3494,7 @@ implies f.(q1,F).i = a.q1) & f.(q1,F).n = q1.n from ForToIteration(A23,A27,A13,
   A11,A6);
 A29: q.n+1-1 = q.n;
 A30: q1.n = q.n by A10,Th25;
-  let N be natural number;
+  let N be Nat;
   assume
 A31: N = q.n;
 A32: N = 0 or N >= 1 by NAT_1:25;
@@ -3999,16 +3971,12 @@ A33: s9.y > 0 implies s99.b = 1 by Th38;
     R[g.(s,I\;C) qua Element of S] iff g.(s,I\;C) in T by A9,A28,A30,A31,A32
 ,Th2,Th38;
 A34: s9.x = s.y by A9;
-    max(2*ny,2*nn+1) = 2*ny or max(2*ny,2*nn+1) = 2*nn+1 by XXREAL_0:16;
-    then
 A35: F(s99) = IFEQ(nn,0,0, IFEQ(ny,0,2, IFEQ(ny,nn,1,max(2*ny,2*nn+1))))
     by A31,A34,FUNCT_7:def 1;
     2*ny+1 > 2*ny by NAT_1:13;
     then
 A36: max(2*nx,2*ny+1) > 2*ny by XXREAL_0:30;
 A37: s99.y = s9.y by A1,A3,Th38;
-    max(2*nx,2*ny+1) = 2*nx or max(2*nx,2*ny+1) = 2*ny+1 by XXREAL_0:16;
-    then
 A38: F(s) = IFEQ(ny,0,0, IFEQ(nx,0,2, IFEQ(nx,ny,1,max(2*nx,2*ny+1)))) by
 FUNCT_7:def 1
       .= IFEQ(nx,0,2, IFEQ(nx,ny,1,max(2*nx,2*ny+1))) by A28,FUNCOP_1:def 8;
@@ -4342,8 +4310,6 @@ A19:  sJ.m <= 0 implies sC.b = 0 by Th38;
       hence R[g.(s,J\;C)] iff g.(s,J\;C) in T by A19,A18,Th2,Th38;
       set q2 = g.(q1,m/=2);
       set q3 = g.(q2,x*=x);
-      q0 in T or q0 nin T;
-      then
 A20:  q1 = g.(q0, y*=x) or q1 = g.(q0, EmptyIns A) by A6,AOFA_000:def 30;
       q2 = g.(s,I\;m/=2) by AOFA_000:def 29;
       then q3 = g.(s,J) by AOFA_000:def 29;
@@ -4438,8 +4404,6 @@ A20: sJ.m <= 0 implies sC.b = 0 by Th38;
     hence R[g.(s,J\;C)] iff g.(s,J\;C) in T by A20,A19,Th2,Th38;
     set q2 = g.(q1,m/=2);
     set q3 = g.(q2,x*=x);
-    q0 in T or q0 nin T;
-    then
 A21: q1 = g.(q0, y*=x) or q1 = g.(q0, EmptyIns A) by A1,AOFA_000:def 30;
     q2 = g.(s,I\;m/=2) by AOFA_000:def 29;
     then q3 = g.(s,J) by AOFA_000:def 29;
@@ -4476,8 +4440,6 @@ A27: (q.x)|^n = (s.y)*(((s.x)to_power((sm div 2)*2))*((s.x)to_power(sm mod
     set sJ = g.(s,J);
     set q2 = g.(q1,m/=2);
     set q3 = g.(q2,x*=x);
-    q0 in T or q0 nin T;
-    then
 A28: q1 = g.(q0, y*=x) or q1 = g.(q0, EmptyIns A) by A1,AOFA_000:def 30;
 A29: q2.x = q1.x by A15,Th45
       .= q0.x by A24,A28,Th33,AOFA_000:def 28;

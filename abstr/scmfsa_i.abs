@@ -1,0 +1,148 @@
+:: The Instructions for SCM+FSA Computer
+::  by Andrzej Trybulec , Yatsuka Nakamura and Piotr Rudnicki
+::
+:: Received February 3, 1996
+:: Copyright (c) 1996-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, AMI_2, XBOOLE_0, TARSKI, CARD_1, FINSEQ_1,
+      ZFMISC_1, RELAT_1, AMI_1, XXREAL_0, FUNCT_1, PARTFUN1, SCMFSA_1,
+      RECDEF_2, UNIALG_1, AMISTD_2, VALUED_0, COMPOS_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, CARD_1, NUMBERS,
+      MCART_1, RELAT_1, FUNCT_1, PARTFUN1, VALUED_0, FINSEQ_1, XXREAL_0,
+      RECDEF_2, COMPOS_0, SCM_INST;
+ constructors AMI_3, VALUED_0, XTUPLE_0;
+ registrations XBOOLE_0, FUNCT_1, ORDINAL1, XREAL_0, FINSEQ_1, GR_CY_1,
+      RELAT_1, COMPOS_0, SCM_INST, VALUED_0, XTUPLE_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin
+
+reserve x,y,z for set,
+  k for Element of NAT;
+
+definition
+  func SCM+FSA-Data*-Loc equals
+:: SCMFSA_I:def 1
+  INT \ NAT;
+end;
+
+registration
+  cluster SCM+FSA-Data*-Loc -> non empty;
+end;
+
+reserve J,J1,K for Element of Segm 13,
+  a for Element of NAT,
+  b,b1,b2,c,c1,c2 for Element of SCM-Data-Loc,
+  f,f1,f2 for Element of SCM+FSA-Data*-Loc;
+
+definition
+  func SCM+FSA-Instr -> non empty set equals
+:: SCMFSA_I:def 2
+  SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} };
+end;
+
+theorem :: SCMFSA_I:1
+  SCM-Instr c= SCM+FSA-Instr;
+
+registration
+ cluster proj2 SCM+FSA-Instr -> FinSequence-membered;
+end;
+
+registration
+  cluster SCM+FSA-Instr -> standard-ins non empty;
+end;
+
+theorem :: SCMFSA_I:2
+  for I being Element of SCM+FSA-Instr st I`1_3 <= 8 holds I in SCM-Instr;
+
+theorem :: SCMFSA_I:3
+  [0,{},{}] in SCM+FSA-Instr;
+
+theorem :: SCMFSA_I:4
+  x in {9,10} implies [x,{},<*c,f,b*>] in SCM+FSA-Instr;
+
+theorem :: SCMFSA_I:5
+  x in {11,12} implies [x,{},<*c,f*>] in SCM+FSA-Instr;
+
+definition
+  let x be Element of SCM+FSA-Instr;
+  given c,f,b,J such that
+ x = [J,{},<*c,f,b*>];
+  func x int_addr1 -> Element of SCM-Data-Loc means
+:: SCMFSA_I:def 3
+  ex c,f,b st <*c,f,b*> = x`3_3 & it = c;
+  func x int_addr2 -> Element of SCM-Data-Loc means
+:: SCMFSA_I:def 4
+  ex c,f,b st <*c,f,b*> = x`3_3 & it = b;
+  func x coll_addr1 -> Element of SCM+FSA-Data*-Loc means
+:: SCMFSA_I:def 5
+  ex c,f,b st <*c,f,b*> = x`3_3 & it = f;
+end;
+
+definition
+  let x be Element of SCM+FSA-Instr;
+  given c such that
+ x = [ 13,{}, <*c*>];
+  func x int_addr -> Element of SCM-Data-Loc means
+:: SCMFSA_I:def 6
+  ex c st <*c*> = x`3_3 & it = c;
+end;
+
+definition
+  let x be Element of SCM+FSA-Instr;
+  given c,f,J such that
+ x = [ J,{}, <*c,f*>];
+  func x int_addr3 -> Element of SCM-Data-Loc means
+:: SCMFSA_I:def 7
+  ex c,f st <*c,f*> = x`3_3 & it = c;
+  func x coll_addr2 -> Element of SCM+FSA-Data*-Loc means
+:: SCMFSA_I:def 8
+  ex c,f st <*c,f*> = x`3_3 & it = f;
+
+end;
+
+theorem :: SCMFSA_I:6
+ SCM+FSA-Instr c= [:NAT,NAT*,proj2 SCM+FSA-Instr:];
+
+theorem :: SCMFSA_I:7
+ for x being Element of SCM+FSA-Instr holds
+  x in SCM-Instr &
+   (InsCode x = 0 or InsCode x = 1 or InsCode x = 2 or InsCode x = 3 or
+    InsCode x = 4 or InsCode x = 5 or InsCode x = 6 or InsCode x = 7 or
+      InsCode x = 8) or
+  x in { [J,{},<*c,f,b*>] : J in {9,10} }
+        & (InsCode x = 9 or InsCode x = 10) or
+  x in { [K,{},<*c1,f1*>] : K in {11,12} }
+    & (InsCode x = 11 or InsCode x = 12);
+
+registration
+ cluster SCM+FSA-Instr -> homogeneous;
+end;
+
+reserve T for InsType of SCM+FSA-Instr;
+
+theorem :: SCMFSA_I:8
+  T = 9 or T =10 implies JumpParts T = {{}};
+
+theorem :: SCMFSA_I:9
+  T = 11 or T = 12 implies JumpParts T = {{}};
+
+registration
+ cluster SCM+FSA-Instr -> J/A-independent;
+end;
+
+registration
+ cluster SCM+FSA-Instr -> with_halt;
+end;

@@ -1,0 +1,565 @@
+:: Operations of Points on Elliptic Curve in Projective Coordinates
+::  by Yuichi Futa , Hiroyuki Okazaki , Daichi Mizushima and Yasunari Shidama
+::
+:: Received November 3, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, CARD_1, FUNCT_1, RELAT_1, XBOOLE_0, ARYTM_3, NEWTON,
+      MCART_1, ORDINAL1, SUBSET_1, ARYTM_1, XXREAL_0, INT_2, NAT_1, ZFMISC_1,
+      SUPINF_2, ALGSTR_0, GROUP_1, MESFUNC1, INT_1, VECTSP_1, STRUCT_0,
+      EC_PF_1, EC_PF_2, RECDEF_2, XTUPLE_0;
+ notations XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, FUNCT_1, ORDINAL1, MCART_1,
+      FUNCT_2, BINOP_1, DOMAIN_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1,
+      INT_2, NEWTON, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, BINOM,
+      EC_PF_1;
+ constructors NAT_D, PEPIN, EUCLID, REALSET1, RELSET_1, BINOM, EC_PF_1,
+      BINOP_2, DOMAIN_1;
+ registrations XBOOLE_0, STRUCT_0, XREAL_0, ORDINAL1, INT_1, RELAT_1, VECTSP_1,
+      INT_3, SUBSET_1, XTUPLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: 1.Arithmetic in $\bf{GF}(p)$
+
+reserve x for set;
+reserve i,j for Integer;
+reserve n,n1,n2,n3 for Nat;
+reserve K for Field;
+reserve p for Prime;
+reserve a,b,c,d for Element of GF(p);
+reserve a1,a2,a3,a4,a5,a6 for Element of K;
+
+theorem :: EC_PF_2:1
+  a1 = -a2 implies a1|^2 = a2|^2;
+
+theorem :: EC_PF_2:2
+  (1.K)" = 1.K;
+
+theorem :: EC_PF_2:3
+  a2 <> 0.K & a4 <> 0.K & a1*a2" = a3*a4" implies a1*a4 = a2*a3;
+
+theorem :: EC_PF_2:4
+  a2 <> 0.K & a4 <> 0.K & a1*a4 = a2*a3 implies a1*a2" = a3*a4";
+
+theorem :: EC_PF_2:5
+  a1 = 0.K & n > 1 implies a1 |^ n = 0.K;
+
+theorem :: EC_PF_2:6
+  a1 = -a2 implies -a1 = a2;
+
+theorem :: EC_PF_2:7
+  a1 + a2 + a3 + a4 = a4 + a2 + a3 + a1 &
+  a1 + a2 + a3 + a4 = a1 + a4 + a3 + a2;
+
+theorem :: EC_PF_2:8
+  a1 + a2 + a3 + a4 = a1 + (a2 + a3 + a4) &
+  a1 + a2 + a3 + a4 + a5 = a1 + (a2 + a3 + a4 + a5);
+
+theorem :: EC_PF_2:9
+  a1 + a2 + a3 + a4 + a5 + a6 = a1 + (a2 + a3 + a4 + a5 + a6);
+
+theorem :: EC_PF_2:10
+  a1 * a2 * a3 * a4 = a4 * a2 * a3 * a1 &
+  a1 * a2 * a3 * a4 = a1 * a4 * a3 * a2;
+
+theorem :: EC_PF_2:11
+  a1 * a2 * a3 * a4 = a1 * (a2 * a3 * a4) &
+  a1 * a2 * a3 * a4 * a5 = a1 * (a2 * a3 * a4 * a5);
+
+theorem :: EC_PF_2:12
+  a1 * a2 * a3 * a4 * a5 * a6 = a1 * (a2 * a3 * a4 * a5 * a6) &
+  a1 * a2 * a3 * a4 * a5 * a6 = a1 * (a2 * a3 * a4) * a5 * a6;
+
+theorem :: EC_PF_2:13
+  (a1*a2*a3) |^n = (a1 |^n)*(a2 |^n)*(a3 |^n);
+
+theorem :: EC_PF_2:14
+  a1*(a2+a3+a4) = a1*a2+a1*a3+a1*a4
+  & a1*(a2+a3-a4) = a1*a2+a1*a3-a1*a4
+  & a1*(a2-a3+a4) = a1*a2-a1*a3+a1*a4
+  & a1*(a2-a3-a4) = a1*a2-a1*a3-a1*a4
+  & a1*(-a2+a3+a4) = -a1*a2+a1*a3+a1*a4
+  & a1*(-a2+a3-a4) = -a1*a2+a1*a3-a1*a4
+  & a1*(-a2-a3+a4) = -a1*a2-a1*a3+a1*a4
+  & a1*(-a2-a3-a4) = -a1*a2-a1*a3-a1*a4;
+
+theorem :: EC_PF_2:15
+  (a1 + a2)*(a1 - a2) = a1 |^2 - a2 |^2;
+
+theorem :: EC_PF_2:16
+  (a1 + a2)*(a1 |^2 - a1*a2 + a2 |^2) = a1 |^3 + a2 |^3;
+
+theorem :: EC_PF_2:17
+  (a1 - a2)*(a1 |^2 + a1*a2 + a2 |^2) = a1 |^3 - a2 |^3;
+
+definition
+  let n, p be natural number;
+  attr p is n_or_greater means
+:: EC_PF_2:def 1
+  n <= p;
+end;
+
+registration
+  cluster 5_or_greater prime for natural number;
+end;
+
+theorem :: EC_PF_2:18
+  for gi, gj, gij, a be Element of GF(p) st
+  gi = i mod p & gj = j mod p & gij = (i+j) mod p holds
+  gi*a + gj*a = gij*a;
+
+theorem :: EC_PF_2:19
+  for gi, gj, a be Element of GF(p) st
+  gi = i mod p & gj = j mod p & j = i + 1 holds
+  gi*a + a = gj*a;
+
+theorem :: EC_PF_2:20
+  for g2, a be Element of GF(p) st g2 = 2 mod p holds a + a = g2 * a;
+
+theorem :: EC_PF_2:21
+  for gi, gj, gij, a be Element of GF(p) st
+  gi = i mod p & gj = j mod p & gij = (i-j) mod p holds
+  gi*a - gj*a = gij*a;
+
+theorem :: EC_PF_2:22
+  for gi, gj, a be Element of GF(p) st
+  gi = i mod p & gj = j mod p & i = j + 1 holds
+  gi*a - gj*a = a;
+
+theorem :: EC_PF_2:23
+  for gi, gj, a be Element of GF(p) st
+  gi = i mod p & gj = j mod p & i = j + 1 holds
+  gi*a - a = gj*a;
+
+theorem :: EC_PF_2:24
+  for g2, a be Element of GF(p) st g2 = 2 mod p holds g2*a - a = a;
+
+theorem :: EC_PF_2:25
+  for g2, a, b be Element of GF(p) st g2 = 2 mod p
+  holds (a + b) |^2 = a |^2 + g2*a*b + b |^2;
+
+theorem :: EC_PF_2:26
+  for g2, a, b be Element of GF(p) st g2 = 2 mod p
+  holds (a - b) |^2 = a |^2 - g2*a*b + b |^2;
+
+theorem :: EC_PF_2:27
+  for g2, a, b, c, d be Element of GF(p) st g2 = 2 mod p holds
+  (a*c+b*d) |^2 = (a |^2)*(c |^2) + g2*a*b*c*d + (b |^2)*(d |^2);
+
+theorem :: EC_PF_2:28
+  for p be Prime, n be Nat, g2 be Element of GF(p) st p > 2 & g2 = 2 mod p
+  holds g2 <> 0.GF(p) & g2 |^n <> 0.GF(p);
+
+theorem :: EC_PF_2:29
+  for p be Prime, n be Nat, g2, g3 be Element of GF(p) st p > 3 &
+  g3 = 3 mod p holds g3 <> 0.GF(p) & g3 |^n <> 0.GF(p);
+
+begin :: 2.Parameters of an elliptic curve
+
+definition
+  let p be 5_or_greater Prime;
+  func EC_WParam p -> Subset of
+  [:the carrier of GF(p),the carrier of GF(p):] equals
+:: EC_PF_2:def 2
+  {[a,b] where a,b is Element of GF(p) : Disc(a,b,p) <> 0.GF(p) };
+end;
+
+registration
+  let p be 5_or_greater Prime;
+  cluster EC_WParam p -> non empty;
+end;
+
+definition
+  let p be 5_or_greater Prime;
+  let z be Element of EC_WParam p;
+  redefine func z`1 -> Element of GF(p);
+  redefine func z`2 -> Element of GF(p);
+end;
+
+theorem :: EC_PF_2:30
+  for p be 5_or_greater Prime,
+  z be Element of EC_WParam p holds
+  p > 3 & Disc(z`1,z`2,p) <> 0.GF(p);
+
+reserve px,py,pz for set;
+reserve Px,Py,Pz for Element of GF(p);
+reserve P for Element of ProjCo(GF(p));
+reserve O for Element of EC_SetProjCo(a,b,p);
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  let P be Element of EC_SetProjCo(a,b,p);
+  func P`1_3 -> Element of GF(p) means
+:: EC_PF_2:def 3
+
+  P = [px,py,pz] implies it = px;
+  func P`2_3 -> Element of GF(p) means
+:: EC_PF_2:def 4
+
+  P = [px,py,pz] implies it = py;
+  func P`3_3 -> Element of GF(p) means
+:: EC_PF_2:def 5
+
+  P = [px,py,pz] implies it = pz;
+end;
+
+theorem :: EC_PF_2:31
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of EC_SetProjCo(a,b,p)
+  holds P = [P`1_3,P`2_3,P`3_3];
+
+theorem :: EC_PF_2:32
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of EC_SetProjCo(a,b,p),
+  Q be Element of ProjCo(GF(p))
+  holds P = Q iff P`1_3 = Q`1_3 & P`2_3 = Q`2_3 & P`3_3 = Q`3_3;
+
+theorem :: EC_PF_2:33
+  for p be Prime, a, b, Px, Py, Pz be Element of GF(p),
+  P be Element of EC_SetProjCo(a,b,p) st P = [Px, Py, Pz]
+  holds P`1_3 = Px & P`2_3 = Py & P`3_3 = Pz;
+
+definition
+  let p be Prime;
+  let P be Element of ProjCo(GF(p));
+  let CEQ be Function of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):], GF(p);
+  pred P is_on_curve CEQ means
+:: EC_PF_2:def 6
+  CEQ.P = 0.GF(p);
+end;
+
+theorem :: EC_PF_2:34
+  P is_on_curve EC_WEqProjCo(a,b,p) iff P is Element of EC_SetProjCo(a,b,p);
+
+theorem :: EC_PF_2:35
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of EC_SetProjCo(a,b,p) holds
+  ((P`2_3) |^2)*(P`3_3) - ((P`1_3) |^3 +
+    a*(P`1_3)*(P`3_3) |^2 + b*(P`3_3) |^3) = 0.GF(p);
+
+definition
+  let p be Prime;
+  let P be Element of ProjCo(GF(p));
+  func rep_pt(P) -> Element of ProjCo(GF(p)) equals
+:: EC_PF_2:def 7
+
+  [P`1_3*(P`3_3)",P`2_3*(P`3_3)",1] if P`3_3 <> 0,
+  [0, 1, 0] if P`3_3 = 0;
+end;
+
+theorem :: EC_PF_2:36
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P be Element of EC_SetProjCo(z`1,z`2,p)
+  holds rep_pt(P) _EQ_ P & rep_pt(P) in EC_SetProjCo(z`1,z`2,p);
+
+theorem :: EC_PF_2:37
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of ProjCo(GF(p))
+  holds (rep_pt(P))`3_3 = 0 implies rep_pt(P) = [0, 1, 0] & P`3_3 = 0;
+
+theorem :: EC_PF_2:38
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of ProjCo(GF(p))
+  holds (rep_pt(P))`3_3 <> 0 implies
+  rep_pt(P) = [(P`1_3)*(P`3_3)", (P`2_3)*(P`3_3)", 1] & P`3_3 <> 0;
+
+theorem :: EC_PF_2:39
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p)
+  holds P _EQ_ Q iff rep_pt(P) = rep_pt(Q);
+
+begin
+
+definition
+  let p be 5_or_greater Prime;
+  let z be Element of EC_WParam p;
+  func compell_ProjCo(z,p) ->
+  Function of EC_SetProjCo(z`1,z`2,p), EC_SetProjCo(z`1,z`2,p) means
+:: EC_PF_2:def 8
+
+  for P be Element of EC_SetProjCo(z`1,z`2,p)
+  holds it.P = [P`1_3,-P`2_3,P`3_3];
+end;
+
+definition
+  let p be 5_or_greater Prime, z be Element of EC_WParam p;
+  let F be Function of EC_SetProjCo(z`1,z`2,p), EC_SetProjCo(z`1,z`2,p);
+  let P be Element of EC_SetProjCo(z`1,z`2,p);
+  redefine func F.P -> Element of EC_SetProjCo(z`1,z`2,p);
+end;
+
+theorem :: EC_PF_2:40
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  O be Element of EC_SetProjCo(z`1,z`2,p) st O = [0, 1, 0] holds
+  (compell_ProjCo(z,p)).O _EQ_ O;
+
+theorem :: EC_PF_2:41
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P be Element of EC_SetProjCo(z`1,z`2,p)
+  holds compell_ProjCo(z,p).(compell_ProjCo(z,p).P) = P;
+
+theorem :: EC_PF_2:42
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P be Element of EC_SetProjCo(z`1,z`2,p) st P`3_3 <> 0
+  holds rep_pt(compell_ProjCo(z,p).P) = compell_ProjCo(z,p).(rep_pt(P));
+
+theorem :: EC_PF_2:43
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p) holds
+  P = Q iff compell_ProjCo(z,p).P = compell_ProjCo(z,p).Q;
+
+theorem :: EC_PF_2:44
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P be Element of EC_SetProjCo(z`1,z`2,p) st P`3_3 <> 0 holds
+  P _EQ_ compell_ProjCo(z,p).P iff P`2_3 = 0;
+
+theorem :: EC_PF_2:45
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p) st P`3_3 <> 0 holds
+  (P`1_3 = Q`1_3 & P`3_3 = Q`3_3) iff P = Q or P = compell_ProjCo(z,p).Q;
+
+theorem :: EC_PF_2:46
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p)
+  holds P _EQ_ Q iff compell_ProjCo(z,p).P _EQ_ compell_ProjCo(z,p).Q;
+
+theorem :: EC_PF_2:47
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p)
+  holds P _EQ_ compell_ProjCo(z,p).Q iff compell_ProjCo(z,p).P _EQ_ Q;
+
+theorem :: EC_PF_2:48
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p)
+  st P`3_3 <> 0 & Q`3_3 <> 0 holds
+  rep_pt(P) = compell_ProjCo(z,p).(rep_pt(Q)) iff
+  P _EQ_ compell_ProjCo(z,p).Q;
+
+theorem :: EC_PF_2:49
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p) holds
+  P _EQ_ Q implies P`2_3*(Q`3_3) = Q`2_3*(P`3_3);
+
+theorem :: EC_PF_2:50
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p)
+  st P`3_3 <> 0 & Q`3_3 <> 0 holds
+  P _EQ_ Q or P _EQ_ compell_ProjCo(z,p).Q iff P`1_3*(Q`3_3) = Q`1_3*(P`3_3);
+
+theorem :: EC_PF_2:51
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p)
+  st P`3_3 <> 0 & Q`3_3 <> 0 & P`2_3 <> 0 holds
+  P _EQ_ compell_ProjCo(z,p).Q implies P`2_3*(Q`3_3) <> Q`2_3*(P`3_3);
+
+theorem :: EC_PF_2:52
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p) holds
+  (not P _EQ_ Q) & P _EQ_ compell_ProjCo(z,p).Q
+    implies P`2_3*(Q`3_3) <> Q`2_3*(P`3_3);
+
+theorem :: EC_PF_2:53
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g3 be Element of GF(p), P be Element of EC_SetProjCo(z`1,z`2,p)
+  st g3 = 3 mod p & P`2_3 = 0 & P`3_3 <> 0 holds
+  (z`1)*(P`3_3 |^2) + g3*(P`1_3 |^2) <> 0;
+
+theorem :: EC_PF_2:54
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, gf1, gf2, gf3 be Element of GF(p),
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & gf1 = Q`2_3*(P`3_3) - P`2_3*(Q`3_3) &
+    gf2 = Q`1_3*(P`3_3) - P`1_3*(Q`3_3) &
+  gf3 = (gf1 |^2)*(P`3_3)*(Q`3_3) - (gf2 |^3) - g2*(gf2 |^2)*(P`1_3)*(Q`3_3) &
+  R = [gf2*gf3, gf1 * ((gf2 |^2)*(P`1_3)*(Q`3_3)-gf3)
+         - (gf2 |^3)*(P`2_3)*(Q`3_3),
+  (gf2 |^3)*(P`3_3)*(Q`3_3)]
+  holds gf2*(P`3_3)*(R`2_3)
+     = - (gf1*(R`1_3*(P`3_3) - P`1_3*(R`3_3)) + gf2*(P`2_3)*(R`3_3));
+
+theorem :: EC_PF_2:55
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, gf1, gf2, gf3 be Element of GF(p),
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & gf1 = Q`2_3*(P`3_3) - P`2_3*(Q`3_3) &
+         gf2 = Q`1_3*(P`3_3) - P`1_3*(Q`3_3) &
+  gf3 = (gf1 |^2)*(P`3_3)*(Q`3_3) - (gf2 |^3) - g2*(gf2 |^2)*(P`1_3)*(Q`3_3) &
+  R = [gf2*gf3, gf1 * ((gf2 |^2)*(P`1_3)*(Q`3_3)-gf3)
+        - (gf2 |^3)*(P`2_3)*(Q`3_3),
+  (gf2 |^3)*(P`3_3)*(Q`3_3)]
+  holds -(gf2 |^2)*(P`3_3*(Q`3_3)*(R`1_3)
+    +P`3_3*(Q`1_3)*(R`3_3)+P`1_3*(Q`3_3)*(R`3_3))
+  + P`3_3*(Q`3_3)*(R`3_3)*(gf1 |^2) = 0.GF(p);
+
+theorem :: EC_PF_2:56
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, gf1, gf2, gf3 be Element of GF(p),
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & gf1 = Q`2_3*(P`3_3) - P`2_3*(Q`3_3) &
+          gf2 = Q`1_3*(P`3_3) - P`1_3*(Q`3_3) &
+  gf3 = (gf1 |^2)*(P`3_3)*(Q`3_3) - (gf2 |^3) - g2*(gf2 |^2)*(P`1_3)*(Q`3_3) &
+  R = [gf2*gf3,
+       gf1 * ((gf2 |^2)*(P`1_3)*(Q`3_3)-gf3) - (gf2 |^3)*(P`2_3)*(Q`3_3),
+  (gf2 |^3)*(P`3_3)*(Q`3_3)]
+  holds z`2*(gf2 |^2)*(P`3_3 |^2)*(Q`3_3)*(R`3_3)
+    = -(gf2 |^2)*(P`3_3)*(P`1_3)*(Q`1_3)*(R`1_3)
+  + ((gf2*(P`2_3) - gf1*(P`1_3)) |^2)*(Q`3_3)*(R`3_3);
+
+theorem :: EC_PF_2:57
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, gf1, gf2, gf3 be Element of GF(p),
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & gf1 = Q`2_3*(P`3_3) - P`2_3*(Q`3_3) &
+    gf2 = Q`1_3*(P`3_3) - P`1_3*(Q`3_3) &
+  gf3 = (gf1 |^2)*(P`3_3)*(Q`3_3) - (gf2 |^3) - g2*(gf2 |^2)*(P`1_3)*(Q`3_3) &
+  R = [gf2*gf3,
+     gf1 * ((gf2 |^2)*(P`1_3)*(Q`3_3)-gf3) - (gf2 |^3)*(P`2_3)*(Q`3_3),
+  (gf2 |^3)*(P`3_3)*(Q`3_3)]
+  holds z`1*(gf2 |^2)*(P`3_3)*(Q`3_3)*(R`3_3) =
+  (gf2 |^2)*(P`1_3*(Q`1_3)*(R`3_3)+P`3_3*(Q`1_3)*(R`1_3)+P`1_3*(Q`3_3)*(R`1_3))
+  + g2*gf1*(Q`3_3)*(R`3_3)*(gf2*(P`2_3) - gf1*(P`1_3));
+
+theorem :: EC_PF_2:58
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, gf1, gf2, gf3 be Element of GF(p),
+  P, Q be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & gf1 = Q`2_3*(P`3_3) - P`2_3*(Q`3_3) &
+         gf2 = Q`1_3*(P`3_3) - P`1_3*(Q`3_3) &
+  gf3 = (gf1 |^2)*(P`3_3)*(Q`3_3) - (gf2 |^3) - g2*(gf2 |^2)*(P`1_3)*(Q`3_3) &
+  R = [gf2*gf3,
+       gf1 * ((gf2 |^2)*(P`1_3)*(Q`3_3)-gf3) - (gf2 |^3)*(P`2_3)*(Q`3_3),
+  (gf2 |^3)*(P`3_3)*(Q`3_3)]
+  holds (gf2 |^2)*(P`3_3 |^2)*(Q`3_3)*
+  ((R`2_3 |^2)*(R`3_3) - ((R`1_3 |^3)
+    + z`1*(R`1_3)*(R`3_3 |^2) + z`2*(R`3_3 |^3))) = 0.GF(p);
+
+theorem :: EC_PF_2:59
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, g3, g4, g8, gf1, gf2, gf3, gf4 be Element of GF(p),
+  P be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & g3 = 3 mod p & g4 = 4 mod p & g8 = 8 mod p &
+  gf1 = z`1*(P`3_3 |^2) + g3*(P`1_3 |^2) & gf2 = P`2_3*(P`3_3) &
+  gf3 = P`1_3*(P`2_3)*gf2 & gf4 = (gf1 |^2) - g8*gf3 &
+  R = [g2*gf4*gf2, gf1*(g4*gf3-gf4) - g8*(P`2_3 |^2)*(gf2 |^2), g8*(gf2 |^3)]
+  holds g2*gf2*(P`3_3)*(R`2_3)
+   = -(gf1*(P`3_3*(R`1_3) - P`1_3*(R`3_3)) + g2*gf2*(P`2_3)*(R`3_3));
+
+theorem :: EC_PF_2:60
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, g3, g4, g8, gf1, gf2, gf3, gf4 be Element of GF(p),
+  P be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & g3 = 3 mod p & g4 = 4 mod p & g8 = 8 mod p &
+  gf1 = z`1*(P`3_3 |^2) + g3*(P`1_3 |^2) & gf2 = P`2_3*(P`3_3) &
+  gf3 = P`1_3*(P`2_3)*gf2 & gf4 = (gf1 |^2) - g8*gf3 &
+  R = [g2*gf4*gf2, gf1*(g4*gf3-gf4) - g8*(P`2_3 |^2)*(gf2 |^2), g8*(gf2 |^3)]
+  holds g4*(gf2 |^2)*(P`3_3)*(R`1_3)
+   = R`3_3*((gf1 |^2)*(P`3_3) - g8*(gf2 |^2)*(P`1_3));
+
+theorem :: EC_PF_2:61
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, g3, g4, g8, gf1, gf2, gf3, gf4 be Element of GF(p),
+  P be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & g3 = 3 mod p & g4 = 4 mod p & g8 = 8 mod p &
+  gf1 = z`1*(P`3_3 |^2) + g3*(P`1_3 |^2) & gf2 = P`2_3*(P`3_3) &
+  gf3 = P`1_3*(P`2_3)*gf2 & gf4 = (gf1 |^2) - g8*gf3 &
+  R = [g2*gf4*gf2, gf1*(g4*gf3-gf4) - g8*(P`2_3 |^2)*(gf2 |^2), g8*(gf2 |^3)]
+  holds g4*(gf2 |^2)*(P`3_3 |^2)*(z`2*(R`3_3))
+         = R`3_3*((g2*gf2*(P`2_3)-gf1*(P`1_3)) |^2)
+  - g4*(gf2 |^2)*(P`1_3 |^2)*(R`1_3);
+
+theorem :: EC_PF_2:62
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, g3, g4, g8, gf1, gf2, gf3, gf4 be Element of GF(p),
+  P be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & g3 = 3 mod p & g4 = 4 mod p & g8 = 8 mod p &
+  gf1 = z`1*(P`3_3 |^2) + g3*(P`1_3 |^2) & gf2 = P`2_3*(P`3_3) &
+  gf3 = P`1_3*(P`2_3)*gf2 & gf4 = (gf1 |^2) - g8*gf3 &
+  R = [g2*gf4*gf2, gf1*(g4*gf3-gf4) - g8*(P`2_3 |^2)*(gf2 |^2), g8*(gf2 |^3)]
+  holds g2*(gf2 |^2)*(P`3_3 |^2)*(z`1*(R`3_3))
+    = gf1*(P`3_3)*(R`3_3)*(g2*gf2*(P`2_3)-gf1*(P`1_3))
+  + (gf2 |^2)*(g4*(P`1_3)*(P`3_3)*(R`1_3)+g2*(P`1_3 |^2)*(R`3_3));
+
+theorem :: EC_PF_2:63
+  for p be 5_or_greater Prime, z be Element of EC_WParam p,
+  g2, g3, g4, g8, gf1, gf2, gf3, gf4 be Element of GF(p),
+  P be Element of EC_SetProjCo(z`1,z`2,p),
+  R be Element of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):]
+  st g2 = 2 mod p & g3 = 3 mod p & g4 = 4 mod p & g8 = 8 mod p &
+  gf1 = z`1*(P`3_3 |^2) + g3*(P`1_3 |^2) & gf2 = P`2_3*(P`3_3) &
+  gf3 = P`1_3*(P`2_3)*gf2 & gf4 = (gf1 |^2) - g8*gf3 &
+  R = [g2*gf4*gf2, gf1*(g4*gf3-gf4) - g8*(P`2_3 |^2)*(gf2 |^2), g8*(gf2 |^3)]
+  holds g4*(gf2 |^2)*(P`3_3 |^2)*
+  ((R`2_3 |^2)*(R`3_3) - ((R`1_3 |^3) +
+    z`1*(R`1_3)*(R`3_3 |^2) + z`2*(R`3_3 |^3))) = 0.GF(p);
+
+definition
+  let p be 5_or_greater Prime,
+      z be Element of EC_WParam p;
+  func addell_ProjCo(z,p) -> Function of
+  [:EC_SetProjCo(z`1,z`2,p),EC_SetProjCo(z`1,z`2,p):],
+  EC_SetProjCo(z`1,z`2,p) means
+:: EC_PF_2:def 9
+  for P, Q, O being Element of EC_SetProjCo(z`1,z`2,p) st
+  O = [0,1,0]
+  holds
+  (P _EQ_ O implies it.(P,Q) = Q) &
+  ((Q _EQ_ O & not P _EQ_ O) implies it.(P,Q) = P) &
+  ((not P _EQ_ O & not Q _EQ_ O & not P _EQ_ Q) implies
+  for g2, gf1, gf2, gf3 being Element of GF(p) st g2 = 2 mod p &
+  gf1 = Q`2_3*(P`3_3) - P`2_3*(Q`3_3) &
+  gf2 = Q`1_3*(P`3_3) - P`1_3*(Q`3_3) &
+  gf3 = (gf1 |^2)*(P`3_3)*(Q`3_3) - (gf2 |^3) - g2*(gf2 |^2)*(P`1_3)*(Q`3_3)
+  holds it.(P,Q) = [gf2*gf3,
+  gf1 * ((gf2 |^2)*(P`1_3)*(Q`3_3)-gf3)
+   - (gf2 |^3)*(P`2_3)*(Q`3_3), (gf2 |^3)*(P`3_3)*(Q`3_3)]) &
+  ((not P _EQ_ O & not Q _EQ_ O & P _EQ_ Q) implies
+  for g2, g3, g4, g8, gf1, gf2, gf3, gf4 being Element of GF(p) st
+  g2 = 2 mod p & g3 = 3 mod p & g4 = 4 mod p & g8 = 8 mod p &
+  gf1 = (z`1)*(P`3_3 |^2) + g3*(P`1_3 |^2) &
+  gf2 = P`2_3*(P`3_3) &
+  gf3 = P`1_3*(P`2_3)*gf2 &
+  gf4 = (gf1 |^2) - g8*gf3
+  holds it.(P,Q) = [g2*gf4*gf2,
+  gf1*(g4 * gf3-gf4) - g8*(P`2_3 |^2)*(gf2 |^2),
+  g8*(gf2 |^3)]);
+end;
+
+definition
+  let p be 5_or_greater Prime, z be Element of EC_WParam p;
+  let F be Function of
+  [:EC_SetProjCo(z`1,z`2,p),EC_SetProjCo(z`1,z`2,p):],
+  EC_SetProjCo(z`1,z`2,p);
+  let Q,R be Element of EC_SetProjCo(z`1,z`2,p);
+  redefine func F.(Q,R) -> Element of EC_SetProjCo(z`1,z`2,p);
+end;

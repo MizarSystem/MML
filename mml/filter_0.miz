@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received July 3, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,15 +17,15 @@ environ
  vocabularies LATTICES, SUBSET_1, XBOOLE_0, PBOOLE, EQREL_1, CARD_FIL,
       STRUCT_0, TARSKI, ORDINAL1, ZFMISC_1, SETFAM_1, INT_2, XBOOLEAN, BINOP_1,
       REALSET1, FUNCT_1, RELAT_1, MCART_1, XXREAL_2, RELAT_2, FILTER_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FUNCT_1, MCART_1,
-      ORDINAL1, RELAT_2, FUNCT_2, BINOP_1, REALSET1, STRUCT_0, LATTICES,
-      DOMAIN_1, RELAT_1, RELSET_1, EQREL_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FUNCT_1, XTUPLE_0,
+      MCART_1, ORDINAL1, RELAT_2, FUNCT_2, BINOP_1, REALSET1, STRUCT_0,
+      LATTICES, DOMAIN_1, RELAT_1, RELSET_1, EQREL_1;
  constructors SETFAM_1, RELAT_2, ORDINAL1, PARTFUN1, BINOP_1, REALSET1,
-      LATTICES, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES;
+      LATTICES, RELSET_1, XTUPLE_0;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES, XTUPLE_0;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, LATTICES, RELAT_1, RELAT_2, BINOP_1, REALSET1,
-      STRUCT_0;
+      STRUCT_0, XTUPLE_0;
  theorems TARSKI, ZFMISC_1, SETFAM_1, FUNCT_1, MCART_1, FUNCT_2, LATTICES,
       RELAT_1, ORDERS_1, RLSUB_2, WELLSET1, RELSET_1, ORDINAL1, XBOOLE_0,
       XBOOLE_1, PARTFUN1, RELAT_2, SUBSET_1;
@@ -48,7 +48,7 @@ proof
 A1: p "\/" q = q;
   thus (r "\/" p) "\/" (r "\/" q) = r "\/" (r "\/" p) "\/" q by LATTICES:def 5
     .= r "\/" r "\/" p "\/" q by LATTICES:def 5
-    .= r "\/" p "\/" q by LATTICES:1
+    .= r "\/" p "\/" q
     .= r "\/" q by A1,LATTICES:def 5;
 end;
 
@@ -115,7 +115,7 @@ meet-absorbing meet-commutative non empty LattStr, a, b, c being Element of L
 proof
   let L be join-absorbing join-commutative join-associative meet-absorbing
   meet-commutative non empty LattStr, a, b, c be Element of L;
-  c"\/"c = c by LATTICES:1;
+  c"\/"c = c;
   hence thesis by Th4;
 end;
 
@@ -126,7 +126,7 @@ meet-associative non empty LattStr, a, b, c being Element of L st a [= b & a
 proof
   let L be meet-absorbing meet-commutative join-absorbing meet-associative
   non empty LattStr, a, b, c be Element of L;
-  a "/\" a = a by LATTICES:2;
+  a "/\" a = a;
   hence thesis by Th5;
 end;
 
@@ -186,7 +186,7 @@ proof
   hence thesis by Th9;
 end;
 
-theorem Th12:
+theorem Th11:
   L is 1_Lattice implies Top L in H
 proof
   assume L is 1_Lattice;
@@ -228,7 +228,7 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th15:
+theorem Th14:
   the carrier of L is Filter of L
 proof
    the carrier of L =[#]L;
@@ -239,7 +239,7 @@ definition
   let L;
   func <.L.) -> Filter of L equals
   the carrier of L;
-  coherence by Th15;
+  coherence by Th14;
 end;
 
 definition
@@ -269,8 +269,7 @@ A2:   p "/\" p [= r "/\" p by LATTICES:9;
       then ex q1 st q = q1 & p [= q1;
       then
 A3:   p "/\" r [= q "/\" r by LATTICES:9;
-      p "/\" p = p by LATTICES:2;
-      then p [= r "/\" q by A3,A2,LATTICES:7;
+      p [= r "/\" q by A3,A2,LATTICES:7;
       hence r "/\" q in F;
     end;
     now
@@ -286,21 +285,21 @@ A4:   ex r1 st r = r1 & p [= r1;
   end;
 end;
 
-theorem Th18:
+theorem Th15:
   q in <.p.) iff p [= q
 proof
   q in <.p.) iff ex r st q = r & p [= r;
   hence thesis;
 end;
 
-theorem Th19:
+theorem Th16:
   p in <.p.) & p "\/" q in <.p.) & q "\/" p in <.p.)
 proof
   p [= p "\/" q by LATTICES:5;
   hence thesis;
 end;
 
-theorem Th20:
+theorem Th17:
   L is 0_Lattice implies <.L.) = <.Bottom L.)
 proof
   assume L is 0_Lattice;
@@ -310,7 +309,7 @@ proof
     let x;
     assume x in <.L.);
     then reconsider x as Element of L9;
-    Bottom L in <.Bottom L.) & x "/\" Bottom L9 = Bottom L9 by LATTICES:15;
+    Bottom L in <.Bottom L.) & x "/\" Bottom L9 = Bottom L9;
     hence thesis by Th8;
   end;
   thus thesis;
@@ -319,11 +318,11 @@ end;
 definition
   let L,F;
   attr F is being_ultrafilter means
-  : Def4:
+  : Def3:
   F <> the carrier of L & for H st F c= H & H <> the carrier of L holds F = H;
 end;
 
-theorem Th22:
+theorem Th18:
   L is lower-bounded implies for F st F <> the carrier of L ex H
   st F c= H & H is being_ultrafilter
 proof
@@ -466,17 +465,17 @@ A34: G <> the carrier of L;
   hence thesis by A28,A29,A33;
 end;
 
-theorem Th23:
+theorem Th19:
   (ex r st p "/\" r <> p) implies <.p.) <> the carrier of L
 proof
   given r such that
 A1: p "/\" r <> p;
   p "/\" r [= p by LATTICES:6;
   then not p [= p "/\" r by A1,LATTICES:8;
-  hence thesis by Th18;
+  hence thesis by Th15;
 end;
 
-theorem Th24:
+theorem Th20:
   L is 0_Lattice & p <> Bottom L implies ex H st p in H & H is
   being_ultrafilter
 proof
@@ -485,9 +484,9 @@ A1: L is 0_Lattice and
 A2: p <> Bottom L;
   reconsider L9 = L as 0_Lattice by A1;
   reconsider p9 = p as Element of L9;
-  p9 "/\" Bottom L9 = Bottom L9 by LATTICES:15;
+  p9 "/\" Bottom L9 = Bottom L9;
   then consider H such that
-A3: <.p.) c= H & H is being_ultrafilter by A2,Th22,Th23;
+A3: <.p.) c= H & H is being_ultrafilter by A2,Th18,Th19;
   take H;
   p in <.p.);
   hence thesis by A3;
@@ -498,7 +497,7 @@ reserve D for non empty Subset of L;
 definition
   let L,D;
   func <.D.) -> Filter of L means
-  : Def5:
+  : Def4:
   D c= it & for F st D c= F holds it c= F;
   existence
   proof
@@ -580,38 +579,38 @@ A8:     Z in X;
   end;
 end;
 
-theorem Th26:
+theorem Th21:
   <.F.) = F
 proof
   for H st F c= H holds F c= H;
-  hence thesis by Def5;
+  hence thesis by Def4;
 end;
 
 reserve D1,D2 for non empty Subset of L;
 
-theorem Th27:
+theorem Th22:
   D1 c= D2 implies <.D1.) c= <.D2.)
 proof
   assume
 A1: D1 c= D2;
-  D2 c= <.D2.) by Def5;
+  D2 c= <.D2.) by Def4;
   then D1 c= <.D2.) by A1,XBOOLE_1:1;
-  hence thesis by Def5;
+  hence thesis by Def4;
 end;
 
-theorem Th29:
+theorem Th23:
   p in D implies <.p.) c= <.D.)
 proof
   assume
 A1: p in D;
   let x;
-A2: D c= <.D.) by Def5;
+A2: D c= <.D.) by Def4;
   assume x in <.p.);
   then ex q st x = q & p [= q;
   hence thesis by A1,A2,Th9;
 end;
 
-theorem Th30:
+theorem Th24:
   D = {p} implies <.D.) = <.p.)
 proof
   assume
@@ -623,28 +622,28 @@ A1: D = {p};
     then x = p by A1,TARSKI:def 1;
     hence thesis;
   end;
-  hence <.D.) c= <.p.) by Def5;
+  hence <.D.) c= <.p.) by Def4;
   p in D by A1,TARSKI:def 1;
-  hence thesis by Th29;
+  hence thesis by Th23;
 end;
 
-theorem Th31:
+theorem Th25:
   L is 0_Lattice & Bottom L in D implies <.D.) = <.L.) & <.D.) =
   the carrier of L
 proof
   assume that
 A1: L is 0_Lattice and
 A2: Bottom L in D;
-A3: <.Bottom L.) = <.L.) by A1,Th20;
-  hence <.D.) c= <.L.) & <.L.) c= <.D.) by A2,Th29;
-  thus <.D.) c= the carrier of L & the carrier of L c= <.D.) by A2,A3,Th29;
+A3: <.Bottom L.) = <.L.) by A1,Th17;
+  hence <.D.) c= <.L.) & <.L.) c= <.D.) by A2,Th23;
+  thus <.D.) c= the carrier of L & the carrier of L c= <.D.) by A2,A3,Th23;
 end;
 
-theorem Th32:
+theorem Th26:
   L is 0_Lattice & Bottom L in F implies F = <.L.) & F = the carrier of L
 proof
-  F = <.F.) by Th26;
-  hence thesis by Th31;
+  F = <.F.) by Th21;
+  hence thesis by Th25;
 end;
 
 definition
@@ -653,7 +652,7 @@ definition
   p "\/" q in F iff p in F or q in F;
 end;
 
-theorem Th34:
+theorem Th27:
   L is B_Lattice implies for p,q holds p "/\" (p` "\/" q) [= q &
   for r st p "/\" r [= q holds r [= p` "\/" q
 proof
@@ -666,7 +665,7 @@ proof
   reconsider p9 = p, q9 = q as Element of K;
   reconsider p99 = p as Element of S;
 A1: p99 "/\" p99` = Bottom L & Bottom K "\/" (p9 "/\" q9) = p9 "/\" q9 by
-LATTICES:14,20;
+LATTICES:20;
   reconsider K = S as D_Lattice;
   reconsider p9 = p, q9 = q, r9 = r as Element of K;
   p9 "/\" r9 = (p9 "/\" p9`) "\/" (p9 "/\" q9) by LATTICES:def 11;
@@ -675,7 +674,7 @@ LATTICES:14,20;
   reconsider r19 = r1 as Element of K;
   reconsider pp = p, r99 = r1 as Element of J;
 A2: p99` "\/" p99 = Top L & Top J "/\" (pp` "\/" r99) = pp` "\/" r99 by
-LATTICES:17,21;
+LATTICES:21;
   assume p "/\" r1 [= q;
   then
 A3: p` "\/" (p "/\" r1) [= r by Th1;
@@ -687,7 +686,7 @@ end;
 definition
   let IT be non empty LattStr;
   attr IT is implicative means
-  : Def7:
+  : Def6:
   for p,q being Element of IT ex r being
   Element of IT st p "/\" r [= q & for r1 being Element of IT st p "/\" r1 [= q
   holds r1 [= r;
@@ -703,9 +702,9 @@ registration
       reconsider r = p` "\/" q as Element of L;
       take r;
       thus p "/\" r [= q & for r1 being Element of L st p "/\" r1 [= q holds
-      r1 [= r by Th34;
+      r1 [= r by Th27;
     end;
-    then L is implicative by Def7;
+    then L is implicative by Def6;
     hence thesis;
   end;
 end;
@@ -719,9 +718,9 @@ definition
   assume
 A1: L is I_Lattice;
   func p => q -> Element of L means
-  : Def8:
+  : Def7:
   p "/\" it [= q & for r st p "/\" r [= q holds r [= it;
-  existence by A1,Def7;
+  existence by A1,Def6;
   correctness
   proof
     let r1,r2 be Element of L;
@@ -745,19 +744,19 @@ proof
   let j;
   i "/\" j [= i by LATTICES:6;
   then
-A1: j [= k by Def8;
+A1: j [= k by Def7;
   j "\/" k = k "\/" j;
   hence thesis by A1,LATTICES:def 3;
 end;
 end;
 
-theorem Th38:
+theorem Th28:
   i => i = Top I
 proof
   now
     let j;
     i "/\" j [= i by LATTICES:6;
-    then j [= i => i by Def8;
+    then j [= i => i by Def7;
     hence j"\/"(i => i) = i => i by LATTICES:def 3;
   end;
   hence thesis by RLSUB_2:65;
@@ -771,16 +770,16 @@ proof
   let i,j,k;
   i"/\"k [= (i"/\"k)"\/"(i"/\"j) by LATTICES:5;
   then
-A1: k [= i => ((i"/\"j)"\/"(i"/\" k)) by Def8;
+A1: k [= i => ((i"/\"j)"\/"(i"/\" k)) by Def7;
   i"/\"j [= (i"/\"j)"\/"(i"/\"k) by LATTICES:5;
-  then j [= i => ((i"/\"j)"\/"(i"/\"k)) by Def8;
+  then j [= i => ((i"/\"j)"\/"(i"/\"k)) by Def7;
   then j"\/"k [= i => ((i"/\"j)"\/"(i"/\"k)) by A1,Th6;
   then
 A2: i"/\"(j"\/"k) [= i"/\"(i => ((i"/\"j)"\/"(i"/\"k))) by LATTICES:9;
   i"/\"j [= i"/\"(j"\/"k) & i"/\"k [= i"/\"(j"\/"k) by LATTICES:5,9;
   then
 A3: (i"/\"j)"\/"(i"/\"k) [= i"/\"(j"\/"k) by Th6;
-  i"/\"(i => ((i"/\"j)"\/"(i"/\"k))) [= (i"/\"j)"\/"(i"/\" k) by Def8;
+  i"/\"(i => ((i"/\"j)"\/"(i"/\"k))) [= (i"/\"j)"\/"(i"/\" k) by Def7;
   then i"/\"(j"\/"k) [= (i"/\"j)"\/"(i"/\"k) by A2,LATTICES:7;
   hence i"/\"(j"\/"k) = (i"/\"j)"\/"(i"/\"k) by A3,LATTICES:8;
 end;
@@ -797,7 +796,7 @@ proof
   let p,q be Element of B;
   take r = p` "\/" q;
   thus p "/\" r [= q & for r1 being Element of B st p "/\" r1 [= q holds r1 [=
-  r by Th34;
+  r by Th27;
 end;
 end;
 
@@ -811,21 +810,21 @@ reserve I for I_Lattice,
   DI for non empty Subset of I,
   FI for Filter of I;
 
-theorem Th41:
+theorem Th29:
   i in FI & i => j in FI implies j in FI
 proof
   assume i in FI & i => j in FI;
   then
 A1: i "/\" (i => j) in FI by Th8;
-  i "/\" (i => j) [= j by Def8;
+  i "/\" (i => j) [= j by Def7;
   hence thesis by A1,Th9;
 end;
 
-theorem Th42:
+theorem Th30:
   j in FI implies i => j in FI
 proof
   j"/\"i [= j by LATTICES:6;
-  then j [= i => j by Def8;
+  then j [= i => j by Def7;
   hence thesis by Th9;
 end;
 
@@ -868,7 +867,7 @@ theorem
 theorem
   x in D1 "/\" D2 implies ex p,q st x = p"/\"q & p in D1 & q in D2;
 
-theorem Th46:
+theorem Th33:
   D1 "/\" D2 = D2 "/\" D1
 proof
   now
@@ -922,20 +921,20 @@ A10: p"\/"(p1"/\"q1) = (p"\/"p1)"/\"(p"\/"q1) & q"\/"(p1"/\"q1) = (q"\/"p1
   end;
 end;
 
-theorem Th47:
+theorem Th34:
   <.D1 \/ D2.) = <.<.D1.) \/ D2.) & <.D1 \/ D2.) = <.D1 \/ <.D2.) .)
 proof
   now
     let D1,D2;
-    D2 c= D1 \/ D2 & D1 \/ D2 c= <.D1 \/ D2.) by Def5,XBOOLE_1:7;
+    D2 c= D1 \/ D2 & D1 \/ D2 c= <.D1 \/ D2.) by Def4,XBOOLE_1:7;
     then
 A1: D2 c= <.D1 \/ D2.) by XBOOLE_1:1;
-    D1 c= <.D1.) by Def5;
+    D1 c= <.D1.) by Def4;
     then D1 \/ D2 c= <.D1.) \/ D2 by XBOOLE_1:9;
-    hence <.D1 \/ D2.) c= <.<.D1.) \/ D2.) by Th27;
-    <.D1.) c= <.D1 \/ D2.) by Th27,XBOOLE_1:7;
+    hence <.D1 \/ D2.) c= <.<.D1.) \/ D2.) by Th22;
+    <.D1.) c= <.D1 \/ D2.) by Th22,XBOOLE_1:7;
     then <.D1.) \/ D2 c= <.D1 \/ D2.) by A1,XBOOLE_1:8;
-    hence <.<.D1.) \/ D2.) c= <.D1 \/ D2.) by Def5;
+    hence <.<.D1.) \/ D2.) c= <.D1 \/ D2.) by Def4;
   end;
   hence <.D1 \/ D2.) c= <.<.D1.) \/ D2.) & <.<.D1.) \/ D2.) c= <.D1 \/ D2.) &
   <.D1 \/ D2.) c= <.D1 \/ <.D2.).) & <.D1 \/ <.D2.).) c= <.D1 \/ D2.);
@@ -1014,13 +1013,13 @@ A13: H c= D
     hence thesis by A2;
   end;
   then F \/ H c= D by A13,XBOOLE_1:8;
-  hence <.F \/ H.) c= X by Def5;
+  hence <.F \/ H.) c= X by Def4;
   let x;
   assume x in X;
   then consider r such that
 A14: x = r and
 A15: ex p,q st p"/\"q [= r & p in F & q in H;
-A16: F \/ H c= <.F \/ H.) by Def5;
+A16: F \/ H c= <.F \/ H.) by Def4;
   H c= F \/ H by XBOOLE_1:7;
   then
 A17: H c= <.F \/ H.) by A16,XBOOLE_1:1;
@@ -1033,7 +1032,7 @@ A19: p in F & q in H by A15;
   hence thesis by A14,A18,Th9;
 end;
 
-theorem Th49:
+theorem Th36:
   F c= F "/\" H & H c= F "/\" H
 proof
 A1: now
@@ -1054,16 +1053,16 @@ A4:   i"/\"(i"\/"p) = i by LATTICES:4;
       hence thesis by A2,A4;
     end;
   end;
-  F "/\" H = H "/\" F by Th46;
+  F "/\" H = H "/\" F by Th33;
   hence thesis by A1;
 end;
 
-theorem Th50:
+theorem Th37:
   <.F \/ H.) = <.F "/\" H.)
 proof
-  F c= F "/\" H & H c= F "/\" H by Th49;
+  F c= F "/\" H & H c= F "/\" H by Th36;
   then F \/ H c= F "/\" H by XBOOLE_1:8;
-  hence <.F \/ H.) c= <.F "/\" H.) by Th27;
+  hence <.F \/ H.) c= <.F "/\" H.) by Th22;
   F"/\"H c= <.F \/ H.)
   proof
     let x;
@@ -1075,57 +1074,57 @@ A3: q in H;
     H c= F \/ H by XBOOLE_1:7;
     then
 A4: q in F \/ H by A3;
-A5: F \/ H c= <.F \/ H.) by Def5;
+A5: F \/ H c= <.F \/ H.) by Def4;
     F c= F \/ H by XBOOLE_1:7;
     then p in F \/ H by A2;
     hence thesis by A1,A4,A5,Th9;
   end;
-  then <.F"/\"H.) c= <.<.F \/ H.).) by Th27;
-  hence thesis by Th26;
+  then <.F"/\"H.) c= <.<.F \/ H.).) by Th22;
+  hence thesis by Th21;
 end;
 
 reserve F1,F2 for Filter of I;
 
-theorem Th51:
+theorem Th38:
   <.F1 \/ F2.) = F1 "/\" F2
 proof
-  F1 "/\" F2 = <.F1 "/\" F2.) by Th26;
-  hence thesis by Th50;
+  F1 "/\" F2 = <.F1 "/\" F2.) by Th21;
+  hence thesis by Th37;
 end;
 
 theorem
   <.FB \/ HB.) = FB "/\" HB
 proof
-  FB "/\" HB = <.FB "/\" HB.) by Th26;
-  hence thesis by Th50;
+  FB "/\" HB = <.FB "/\" HB.) by Th21;
+  hence thesis by Th37;
 end;
 
-theorem Th53:
+theorem Th40:
   j in <.DI \/ {i}.) implies i => j in <.DI.)
 proof
   assume
 A1: j in <.DI \/ {i}.);
-  <.DI \/ {i}.) = <.<.DI.) \/ {i}.) by Th47
-    .= <.<.DI.) \/ <.{i}.).) by Th47
-    .= <.<.DI.) \/ <.i.).) by Th30
-    .= <.DI.) "/\" <.i.) by Th51;
+  <.DI \/ {i}.) = <.<.DI.) \/ {i}.) by Th34
+    .= <.<.DI.) \/ <.{i}.).) by Th34
+    .= <.<.DI.) \/ <.i.).) by Th24
+    .= <.DI.) "/\" <.i.) by Th38;
   then consider i1,i2 being Element of I such that
 A2: j = i1"/\"i2 and
 A3: i1 in <.DI.) and
 A4: i2 in <.i.) by A1;
-  i [= i2 by A4,Th18;
+  i [= i2 by A4,Th15;
   then i1"/\"i [= i1"/\"i2 by LATTICES:9;
-  then i1 [= i => j by A2,Def8;
+  then i1 [= i => j by A2,Def7;
   hence thesis by A3,Th9;
 end;
 
-theorem Th54:
+theorem Th41:
   i => j in FI & j => k in FI implies i => k in FI
 proof
   assume that
 A1: i => j in FI and
 A2: j => k in FI;
-A3: FI \/ {i} c= <.FI \/ {i}.) by Def5;
+A3: FI \/ {i} c= <.FI \/ {i}.) by Def4;
   {i} c= FI \/ {i} by XBOOLE_1:7;
   then
 A4: {i} c= <.FI \/ {i}.) by A3,XBOOLE_1:1;
@@ -1133,24 +1132,24 @@ A4: {i} c= <.FI \/ {i}.) by A3,XBOOLE_1:1;
   then
 A5: FI c= <.FI \/ {i}.) by A3,XBOOLE_1:1;
   i in {i} by TARSKI:def 1;
-  then j in <.FI \/ {i}.) by A1,A5,A4,Th41;
+  then j in <.FI \/ {i}.) by A1,A5,A4,Th29;
   then
-A6: k in <.FI \/ {i}.) by A2,A5,Th41;
-  <.FI.) = FI by Th26;
-  hence thesis by A6,Th53;
+A6: k in <.FI \/ {i}.) by A2,A5,Th29;
+  <.FI.) = FI by Th21;
+  hence thesis by A6,Th40;
 end;
 
 reserve a,b,c for Element of B;
 
-theorem Th55:
+theorem Th42:
   a => b = a` "\/" b
 proof
-  a "/\" (a` "\/" b) [= b & for c st a "/\" c [= b holds c [= a` "\/" b by Th34
+  a "/\" (a` "\/" b) [= b & for c st a "/\" c [= b holds c [= a` "\/" b by Th27
 ;
-  hence thesis by Def8;
+  hence thesis by Def7;
 end;
 
-theorem Th56:
+theorem Th43:
   a [= b iff a"/\"b` = Bottom B
 proof
   reconsider B9 = B as 0_Lattice;
@@ -1165,17 +1164,17 @@ proof
     then a = a"/\"b by LATTICES:4;
     hence a"/\"b` = a"/\"(b"/\"b`) by LATTICES:def 7
       .= a9"/\"Bottom B9 by LATTICES:20
-      .= Bottom B by LATTICES:15;
+      .= Bottom B;
   end;
   assume a"/\"b` = Bottom B;
   then b = b9"\/"c9 by LATTICES:14
     .= (b1"\/"a1)"/\"(b1"\/"b1`) by LATTICES:11
     .= (b99"\/"a99)"/\"Top B99 by LATTICES:21
-    .= a"\/"b by LATTICES:17;
+    .= a"\/"b;
   hence thesis by LATTICES:def 3;
 end;
 
-theorem Th57:
+theorem Th44:
   FB is being_ultrafilter iff FB <> the carrier of B & for a holds
   a in FB or a` in FB
 proof
@@ -1190,7 +1189,7 @@ A2: for HB st FB c= HB & HB <> the carrier of B holds FB = HB;
     let a such that
 A3: not a in FB;
 A4: a in <.a.);
-A5: FB \/ <.a.) c= <.FB \/ <.a.).) by Def5;
+A5: FB \/ <.a.) c= <.FB \/ <.a.).) by Def4;
     <.a.) c= FB \/ <.a.) by XBOOLE_1:7;
     then <.a.) c= <.FB \/ <.a.).) by A5,XBOOLE_1:1;
     then FB c= FB \/ <.a.) & FB <> <.FB \/ <.a.).) by A3,A4,XBOOLE_1:7;
@@ -1199,13 +1198,13 @@ A5: FB \/ <.a.) c= <.FB \/ <.a.).) by Def5;
 A6: a` in <.FB \/ <.a.).);
     reconsider a9 = a as Element of I;
     reconsider FI = FB as Filter of I;
-A7: a => a` = a`"\/"a` by Th55;
-    <.{a}.) = <.a.) by Th30;
+A7: a => a` = a`"\/"a` by Th42;
+    <.{a}.) = <.a.) by Th24;
     then
-A8: a9` in <.FI \/ {a9}.) by A6,Th47;
-    FB = <.FB.) by Th26;
-    then a => a` in FB by A8,Th53;
-    hence thesis by A7,LATTICES:1;
+A8: a9` in <.FI \/ {a9}.) by A6,Th34;
+    FB = <.FB.) by Th21;
+    then a => a` in FB by A8,Th40;
+    hence thesis by A7;
   end;
   assume that
 A9: FB <> the carrier of B and
@@ -1225,8 +1224,8 @@ A15: not x in FB by A11;
   then x`"/\"x in HB by A11,Th8;
   then
 A16: Bottom B in HB by LATTICES:20;
-  HB = <.HB.) by Th26;
-  hence contradiction by A12,A16,Th31;
+  HB = <.HB.) by Th21;
+  hence contradiction by A12,A16,Th25;
 end;
 
 theorem
@@ -1241,34 +1240,34 @@ A2: for a,b holds a"\/"b in FB iff a in FB or b in FB;
       let a such that
 A3:   not a in FB;
       a"\/"a` = Top B by LATTICES:21;
-      then a"\/"a` in FB by Th12;
+      then a"\/"a` in FB by Th11;
       hence a` in FB by A2,A3;
     end;
-    hence thesis by A1,Th57;
+    hence thesis by A1,Th44;
   end;
   assume
 A4: FB is being_ultrafilter;
-  hence FB <> <.B.) by Th57;
+  hence FB <> <.B.) by Th44;
   let a,b;
-A5: FB <> the carrier of B by A4,Th57;
+A5: FB <> the carrier of B by A4,Th44;
   thus a"\/"b in FB implies a in FB or b in FB
   proof
     assume that
 A6: a"\/"b in FB and
 A7: ( not a in FB)& not b in FB;
-    a` in FB & b` in FB by A4,A7,Th57;
+    a` in FB & b` in FB by A4,A7,Th44;
     then a`"/\"b` in FB by Th8;
     then (a"\/"b)` in FB by LATTICES:24;
     then a"\/"b"/\"(a"\/"b)` in FB by A6,Th8;
     then
 A8: Bottom B in FB by LATTICES:20;
-    FB = <.FB.) by Th26;
-    hence contradiction by A5,A8,Th31;
+    FB = <.FB.) by Th21;
+    hence contradiction by A5,A8,Th25;
   end;
   thus thesis by Th10;
 end;
 
-theorem Th59:
+theorem Th46:
   FB is being_ultrafilter implies for a holds a in FB iff not a` in FB
 proof
   assume
@@ -1279,10 +1278,10 @@ A1: FB is being_ultrafilter;
     assume a in FB & a` in FB;
     then a"/\"a` in FB by Th8;
     then Bottom B in FB by LATTICES:20;
-    then FB = the carrier of B by Th32;
-    hence contradiction by A1,Def4;
+    then FB = the carrier of B by Th26;
+    hence contradiction by A1,Def3;
   end;
-  thus thesis by A1,Th57;
+  thus thesis by A1,Th44;
 end;
 
 theorem
@@ -1291,16 +1290,16 @@ theorem
 proof
   assume a <> b;
   then not a [= b or not b [= a by LATTICES:8;
-  then a"/\"b` <> Bottom B or b"/\"a` <> Bottom B by Th56;
+  then a"/\"b` <> Bottom B or b"/\"a` <> Bottom B by Th43;
   then (ex FB st a"/\"b` in FB & FB is being_ultrafilter) or ex FB st b"/\"a`
-  in FB & FB is being_ultrafilter by Th24;
+  in FB & FB is being_ultrafilter by Th20;
   then consider FB such that
 A1: FB is being_ultrafilter and
 A2: a"/\"b` in FB or b"/\"a` in FB;
   take FB;
   thus FB is being_ultrafilter by A1;
   a in FB & b` in FB or b in FB & a` in FB by A2,Th8;
-  hence thesis by A1,Th59;
+  hence thesis by A1,Th46;
 end;
 
 reserve o1,o2 for BinOp of F;
@@ -1308,7 +1307,7 @@ reserve o1,o2 for BinOp of F;
 definition
   let L,F;
   func latt F -> Lattice means
-  : Def10:
+  : Def9:
   ex o1,o2 st o1 = (the L_join of L)||F
   & o2 = (the L_meet of L)||F & it = LattStr (#F, o1, o2#);
   uniqueness;
@@ -1421,7 +1420,7 @@ registration
   coherence
   proof
     ex o1,o2 st o1 = (the L_join of L)||F & o2 = (the L_meet of L)||F &
-    latt F = LattStr (#F, o1, o2#) by Def10;
+    latt F = LattStr (#F, o1, o2#) by Def9;
     hence thesis;
   end;
 end;
@@ -1437,19 +1436,19 @@ A1: the L_meet of L = (the L_meet of L)||the carrier of L by RELAT_1:68;
   dom the L_join of L = [:the carrier of L, the carrier of L:] by FUNCT_2:def 1
 ;
   then the L_join of L = (the L_join of L)||the carrier of L by RELAT_1:68;
-  hence thesis by A1,Def10;
+  hence thesis by A1,Def9;
 end;
 
-theorem Th63:
+theorem Th49:
   the carrier of latt F = F & the L_join of latt F = (the L_join
   of L)||F & the L_meet of latt F = (the L_meet of L)||F
 proof
   ex o1,o2 st o1 = (the L_join of L)||F & o2 = (the L_meet of L)||F & latt
-  F = LattStr (#F, o1, o2#) by Def10;
+  F = LattStr (#F, o1, o2#) by Def9;
   hence thesis;
 end;
 
-theorem Th64:
+theorem Th50:
   for p9,q9 being Element of latt F st p = p9 & q = q9 holds p"\/"
   q = p9"\/"q9 & p"/\"q = p9"/\"q9
 proof
@@ -1458,7 +1457,7 @@ A1: p = p9 & q = q9;
   consider o1,o2 such that
 A2: o1 = (the L_join of L)||F and
 A3: o2 = (the L_meet of L)||F and
-A4: latt F = LattStr (#F, o1, o2#) by Def10;
+A4: latt F = LattStr (#F, o1, o2#) by Def9;
   dom o1 = [:F,F:] by FUNCT_2:def 1;
   then [p,q] in dom o1 by A1,A4,ZFMISC_1:87;
   hence p"\/"q = p9"\/"q9 by A1,A2,A4,FUNCT_1:47;
@@ -1467,7 +1466,7 @@ A4: latt F = LattStr (#F, o1, o2#) by Def10;
   hence thesis by A1,A3,A4,FUNCT_1:47;
 end;
 
-theorem Th65:
+theorem Th51:
   for p9,q9 being Element of latt F st p = p9 & q = q9 holds p [=
   q iff p9 [= q9
 proof
@@ -1475,10 +1474,10 @@ proof
 A1: p [= q iff p"\/"q = q by LATTICES:def 3;
 A2: p9 [= q9 iff p9"\/"q9 = q9 by LATTICES:def 3;
   assume p = p9 & q = q9;
-  hence thesis by A1,A2,Th64;
+  hence thesis by A1,A2,Th50;
 end;
 
-theorem Th66:
+theorem Th52:
   L is upper-bounded implies latt F is upper-bounded
 proof
   given p such that
@@ -1486,13 +1485,13 @@ A1: p"\/"q = p & q"\/"p = p;
   consider q such that
 A2: q in F by SUBSET_1:4;
 A3: ex o1,o2 st o1 = (the L_join of L)||F & o2 = (the L_meet of L)||F & latt
-  F = LattStr (#F, o1, o2#) by Def10;
+  F = LattStr (#F, o1, o2#) by Def9;
   p"\/"q = p by A1;
   then reconsider p9 = p as Element of latt F by A2,A3,Th10;
   take p9;
   let r be Element of latt F;
   reconsider r9 = r as Element of F by A3;
-  thus p9"\/"r = p"\/"r9 by Th64
+  thus p9"\/"r = p"\/"r9 by Th50
     .= p9 by A1;
   hence thesis;
 end;
@@ -1505,29 +1504,29 @@ A1: for a,b,c being Element of L st a [= c holds a"\/"(b"/\"c) = (a"\/"b
   )"/\"c;
   let a,b,c be Element of latt F such that
 A2: a [= c;
-  reconsider p = a, q = b, r = c as Element of F by Th63;
-  b"/\"c = q"/\"r by Th64;
+  reconsider p = a, q = b, r = c as Element of F by Th49;
+  b"/\"c = q"/\"r by Th50;
   then
-A3: a"\/"(b"/\"c) = p"\/"(q"/\"r) by Th64;
-  a"\/"b = p"\/"q by Th64;
+A3: a"\/"(b"/\"c) = p"\/"(q"/\"r) by Th50;
+  a"\/"b = p"\/"q by Th50;
   then
-A4: (a"\/"b)"/\"c = (p"\/"q)"/\" r by Th64;
-  p [= r by A2,Th65;
+A4: (a"\/"b)"/\"c = (p"\/"q)"/\" r by Th50;
+  p [= r by A2,Th51;
   hence a"\/"(b"/\"c) = (a"\/"b)"/\"c by A1,A3,A4;
 end;
 
-theorem Th68:
+theorem Th54:
   L is distributive implies latt F is distributive
 proof
   assume
 A1: for p,q,r holds p"/\"(q"\/"r) = (p"/\"q)"\/"(p"/\"r);
   let p9,q9,r9 be Element of latt F;
-  reconsider p = p9, q = q9, r = r9, qr = q9"\/"r9 as Element of F by Th63;
-A2: p9"/\"q9 = p"/\"q & p9"/\"r9 = p"/\"r by Th64;
-  thus p9"/\"(q9"\/"r9) = p"/\"qr by Th64
-    .= p"/\"(q"\/"r) by Th64
+  reconsider p = p9, q = q9, r = r9, qr = q9"\/"r9 as Element of F by Th49;
+A2: p9"/\"q9 = p"/\"q & p9"/\"r9 = p"/\"r by Th50;
+  thus p9"/\"(q9"\/"r9) = p"/\"qr by Th50
+    .= p"/\"(q"\/"r) by Th50
     .= (p"/\"q)"\/"(p"/\"r) by A1
-    .= (p9"/\"q9)"\/"(p9"/\"r9) by A2,Th64;
+    .= (p9"/\"q9)"\/"(p9"/\"r9) by A2,Th50;
 end;
 
 theorem
@@ -1538,24 +1537,24 @@ A1: L is I_Lattice;
   then reconsider I = L as I_Lattice;
   reconsider FI = F as Filter of I;
   let p9,q9 be Element of latt F;
-  reconsider p = p9, q = q9 as Element of F by Th63;
+  reconsider p = p9, q = q9 as Element of F by Th49;
   consider r such that
 A2: p"/\"r [= q and
-A3: for r1 st p"/\"r1 [= q holds r1 [= r by A1,Def7;
+A3: for r1 st p"/\"r1 [= q holds r1 [= r by A1,Def6;
   reconsider i = p, j = q as Element of I;
-A4: i => j in FI by Th42;
-  i => j = r by A2,A3,Def8;
-  then reconsider r9 = r as Element of latt F by A4,Th63;
+A4: i => j in FI by Th30;
+  i => j = r by A2,A3,Def7;
+  then reconsider r9 = r as Element of latt F by A4,Th49;
   take r9;
-  p"/\"r = p9"/\"r9 by Th64;
-  hence p9"/\"r9 [= q9 by A2,Th65;
+  p"/\"r = p9"/\"r9 by Th50;
+  hence p9"/\"r9 [= q9 by A2,Th51;
   let s9 be Element of latt F such that
 A5: p9"/\"s9 [= q9;
-  reconsider s = s9 as Element of F by Th63;
-  p"/\"s = p9"/\"s9 by Th64;
-  then p"/\"s [= q by A5,Th65;
+  reconsider s = s9 as Element of F by Th49;
+  p"/\"s = p9"/\"s9 by Th50;
+  then p"/\"s [= q by A5,Th51;
   then s [= r by A3;
-  hence thesis by Th65;
+  hence thesis by Th51;
 end;
 
 registration
@@ -1563,90 +1562,90 @@ registration
   cluster latt <.p.) -> lower-bounded;
   coherence
 proof
-  the carrier of latt <.p.) = <.p.) by Th63;
-  then reconsider p9 = p as Element of latt <.p.) by Th19;
+  the carrier of latt <.p.) = <.p.) by Th49;
+  then reconsider p9 = p as Element of latt <.p.) by Th16;
   take p9;
   let q9 be Element of latt <.p.);
-  reconsider q = q9 as Element of <.p.) by Th63;
-  p [= q by Th18;
+  reconsider q = q9 as Element of <.p.) by Th49;
+  p [= q by Th15;
   then p"/\"q = p by LATTICES:4;
-  hence thesis by Th64;
+  hence thesis by Th50;
 end;
 end;
 
-theorem Th71:
+theorem Th56:
   Bottom latt <.p.) = p
 proof
   consider q9 being Element of latt <.p.) such that
 A1: for r9 being Element of latt <.p.) holds q9"/\"r9 = q9 & r9"/\"q9 =
   q9 by LATTICES:def 13;
-  the carrier of latt <.p.) = <.p.) by Th63;
-  then reconsider p9 = p as Element of latt <.p.) by Th19;
-  reconsider q = q9 as Element of <.p.) by Th63;
+  the carrier of latt <.p.) = <.p.) by Th49;
+  then reconsider p9 = p as Element of latt <.p.) by Th16;
+  reconsider q = q9 as Element of <.p.) by Th49;
   q9"/\"p9 = q9 by A1;
   then q9 [= p9 by LATTICES:4;
   then
-A2: q [= p by Th65;
-A3: p [= q by Th18;
+A2: q [= p by Th51;
+A3: p [= q by Th15;
   q9 = Bottom latt <.p.) by A1,RLSUB_2:64;
   hence thesis by A2,A3,LATTICES:8;
 end;
 
-theorem Th72:
+theorem Th57:
   L is upper-bounded implies Top latt <.p.) = Top L
 proof
   given q such that
 A1: for r holds q"\/"r = q & r"\/"q = q;
   L is 1_Lattice by A1,LATTICES:def 14;
-  then Top L in <.p.) by Th12;
-  then reconsider q9 = Top L as Element of latt <.p.) by Th63;
+  then Top L in <.p.) by Th11;
+  then reconsider q9 = Top L as Element of latt <.p.) by Th49;
 A2: q = Top L by A1,RLSUB_2:65;
   now
     let r9 be Element of latt <.p.);
-    reconsider r = r9 as Element of <.p.) by Th63;
-    thus r9"\/"q9 = q"\/"r by A2,Th64
+    reconsider r = r9 as Element of <.p.) by Th49;
+    thus r9"\/"q9 = q"\/"r by A2,Th50
       .= q9 by A1,A2;
   end;
   hence thesis by RLSUB_2:65;
 end;
 
-theorem Th73:
+theorem Th58:
   L is 1_Lattice implies latt <.p.) is bounded
 proof
   assume L is 1_Lattice;
-  hence latt <.p.) is lower-bounded & latt <.p.) is upper-bounded by Th66;
+  hence latt <.p.) is lower-bounded & latt <.p.) is upper-bounded by Th52;
 end;
 
-theorem Th74:
+theorem Th59:
   L is C_Lattice & L is M_Lattice implies latt <.p.) is C_Lattice
 proof
   assume that
 A1: L is C_Lattice and
 A2: L is M_Lattice;
   reconsider B = L as C_Lattice by A1;
-  reconsider M = latt <.p.) as 01_Lattice by A1,Th73;
+  reconsider M = latt <.p.) as 01_Lattice by A1,Th58;
   M is complemented
   proof
     let r9 be Element of M;
-    reconsider r = r9 as Element of <.p.) by Th63;
+    reconsider r = r9 as Element of <.p.) by Th49;
     reconsider p1 = p as Element of B;
     consider q such that
 A3: q is_a_complement_of r by A1,LATTICES:def 19;
-    the carrier of latt <.p.) = <.p.) by Th63;
-    then reconsider q9 = p"\/"q as Element of M by Th19;
+    the carrier of latt <.p.) = <.p.) by Th49;
+    then reconsider q9 = p"\/"q as Element of M by Th16;
     take q9;
-    thus q9"\/"r9 = p"\/"q"\/"r by Th64
+    thus q9"\/"r9 = p"\/"q"\/"r by Th50
       .= p"\/"(q"\/"r) by LATTICES:def 5
       .= p1"\/"Top B by A3,LATTICES:def 18
-      .= Top L by LATTICES:18
-      .= Top M by A1,Th72;
+      .= Top L
+      .= Top M by A1,Th57;
     hence r9"\/"q9= Top M;
-    p [= r by Th18;
+    p [= r by Th15;
     then (p"\/"q)"/\"r = p"\/"(q"/\"r) by A2,LATTICES:def 12;
-    hence q9"/\"r9 = p"\/"(q"/\"r) by Th64
+    hence q9"/\"r9 = p"\/"(q"/\"r) by Th50
       .= p1"\/"Bottom B by A3,LATTICES:def 18
-      .= p by LATTICES:14
-      .= Bottom M by Th71;
+      .= p
+      .= Bottom M by Th56;
     hence thesis;
   end;
   hence thesis;
@@ -1656,7 +1655,7 @@ theorem
   L is B_Lattice implies latt <.p.) is B_Lattice
 proof
   assume L is B_Lattice;
-  then latt <.p.) is bounded complemented distributive Lattice by Th68,Th74;
+  then latt <.p.) is bounded complemented distributive Lattice by Th54,Th59;
   hence thesis;
 end;
 
@@ -1670,23 +1669,23 @@ end;
 theorem
   p <=> q = q <=> p;
 
-theorem Th78:
+theorem Th62:
   i <=> j in FI & j <=> k in FI implies i <=> k in FI
 proof
   assume
 A1: i <=> j in FI & j <=> k in FI;
   then j => i in FI & k => j in FI by Th8;
   then
-A2: k => i in FI by Th54;
+A2: k => i in FI by Th41;
   i => j in FI & j => k in FI by A1,Th8;
-  then i => k in FI by Th54;
+  then i => k in FI by Th41;
   hence thesis by A2,Th8;
 end;
 
 definition
   let L,F;
   func equivalence_wrt F -> Relation means
-  :Def12:
+  :Def11:
   field it c= the carrier of L & for p,q holds [p,q] in it iff p <=> q in F;
   existence
   proof
@@ -1737,7 +1736,7 @@ A7: [x,y] in R2;
   end;
 end;
 
-theorem Th80:
+theorem Th63:
   equivalence_wrt F is Relation of the carrier of L
 proof
   equivalence_wrt F c= [:the carrier of L, the carrier of L:]
@@ -1746,13 +1745,13 @@ proof
     assume [y,z] in equivalence_wrt F;
     then
 A1: y in field equivalence_wrt F & z in field equivalence_wrt F by RELAT_1:15;
-    field equivalence_wrt F c= the carrier of L by Def12;
+    field equivalence_wrt F c= the carrier of L by Def11;
     hence thesis by A1,ZFMISC_1:87;
   end;
   hence thesis;
 end;
 
-theorem Th81:
+theorem Th64:
   L is I_Lattice implies equivalence_wrt F is_reflexive_in the carrier of L
 proof
   assume
@@ -1760,25 +1759,25 @@ A1: L is I_Lattice;
   let x;
   assume x in the carrier of L;
   then reconsider p = x as Element of L;
-  p => p = Top L by A1,Th38;
-  then p <=> p = Top L by LATTICES:2;
-  then p <=> p in F by A1,Th12;
-  hence thesis by Def12;
+  p => p = Top L by A1,Th28;
+  then p <=> p = Top L;
+  then p <=> p in F by A1,Th11;
+  hence thesis by Def11;
 end;
 
-theorem Th82:
+theorem Th65:
   equivalence_wrt F is_symmetric_in the carrier of L
 proof
   let x,y;
   assume x in the carrier of L & y in the carrier of L;
   then reconsider p = x, q = y as Element of L;
   assume [x,y] in equivalence_wrt F;
-  then p <=> q in F by Def12;
+  then p <=> q in F by Def11;
   then q <=> p in F;
-  hence thesis by Def12;
+  hence thesis by Def11;
 end;
 
-theorem Th83:
+theorem Th66:
   L is I_Lattice implies equivalence_wrt F is_transitive_in the carrier of L
 proof
   assume
@@ -1787,23 +1786,23 @@ A1: L is I_Lattice;
   assume x in the carrier of L & y in the carrier of L & z in the carrier of L;
   then reconsider p = x, q = y, r = z as Element of L;
   assume [x,y] in equivalence_wrt F & [y,z] in equivalence_wrt F;
-  then p <=> q in F & q <=> r in F by Def12;
-  then p <=> r in F by A1,Th78;
-  hence thesis by Def12;
+  then p <=> q in F & q <=> r in F by Def11;
+  then p <=> r in F by A1,Th62;
+  hence thesis by Def11;
 end;
 
-theorem Th84:
+theorem Th67:
   L is I_Lattice implies equivalence_wrt F is Equivalence_Relation
   of the carrier of L
 proof
-  reconsider R = equivalence_wrt F as Relation of the carrier of L by Th80;
-A1: R is_symmetric_in the carrier of L by Th82;
+  reconsider R = equivalence_wrt F as Relation of the carrier of L by Th63;
+A1: R is_symmetric_in the carrier of L by Th65;
   assume
 A2: L is I_Lattice;
-  then R is_reflexive_in the carrier of L by Th81;
+  then R is_reflexive_in the carrier of L by Th64;
   then
 A3: field R = the carrier of L & dom R = the carrier of L by ORDERS_1:13;
-  R is_transitive_in the carrier of L by A2,Th83;
+  R is_transitive_in the carrier of L by A2,Th66;
   hence thesis by A3,A1,PARTFUN1:def 2,RELAT_2:def 11,def 16;
 end;
 
@@ -1811,43 +1810,42 @@ theorem
   L is I_Lattice implies field equivalence_wrt F = the carrier of L
 proof
   assume L is I_Lattice;
-  then equivalence_wrt F is Equivalence_Relation of the carrier of L by Th84;
+  then equivalence_wrt F is Equivalence_Relation of the carrier of L by Th67;
   hence thesis by ORDERS_1:12;
 end;
 
 definition
   let I,FI;
   redefine func equivalence_wrt FI -> Equivalence_Relation of the carrier of I;
-  coherence by Th84;
+  coherence by Th67;
 end;
 
 definition
   let B,FB;
   redefine func equivalence_wrt FB -> Equivalence_Relation of the carrier of B;
-  coherence by Th84;
+  coherence by Th67;
 end;
 
 definition
   let L,F,p,q;
   pred p,q are_equivalence_wrt F means
-  :Def13:
+  :Def12:
   p <=> q in F;
 end;
 
 theorem
   p,q are_equivalence_wrt F iff [p,q] in equivalence_wrt F
 proof
-  p,q are_equivalence_wrt F iff p <=> q in F by Def13;
-  hence thesis by Def12;
+  p,q are_equivalence_wrt F iff p <=> q in F by Def12;
+  hence thesis by Def11;
 end;
 
 theorem
   i,i are_equivalence_wrt FI & a,a are_equivalence_wrt FB
 proof
-A1: Top B"/\"Top B = Top B & I is 1_Lattice by LATTICES:2;
-A2: a => a = Top B by Th38;
-  i => i = Top I & Top I"/\"Top I = Top I by Th38,LATTICES:2;
-  hence i <=> i in FI & a <=> a in FB by A2,A1,Th12;
+A2: a => a = Top B by Th28;
+  i => i = Top I & Top I"/\"Top I = Top I by Th28;
+  hence i <=> i in FI & a <=> a in FB by A2,Th11;
 end;
 
 theorem
@@ -1866,10 +1864,10 @@ proof
   are_equivalence_wrt FI
   proof
     assume i <=> j in FI & j <=> k in FI;
-    hence i <=> k in FI by Th78;
+    hence i <=> k in FI by Th62;
   end;
   assume a <=> b in FB & b <=> c in FB;
-  hence a <=> c in FB by Th78;
+  hence a <=> c in FB by Th62;
 end;
 
 begin :: Addenda

@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -26,11 +27,11 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SHEFFER2" nr="2">
@@ -39,132 +40,132 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="61"/>
-<Adjective nr="73"/>
-<Adjective nr="75"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
+<Adjective nr="79"/>
+<Adjective nr="81"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 <CCluster aid="SHEFFER2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 <Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="94"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER2" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
 </Cluster>
 <Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="61"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER2" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="61"/>
-<Adjective nr="73"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
+<Adjective nr="79"/>
+<Adjective nr="90"/>
 </Cluster>
 <Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER2" nr="4">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
 </Cluster>
 <Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="94"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER2" nr="5">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="94"/>
 </Cluster>
 <Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER2" nr="6">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="84"/>
-<Adjective nr="88"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="90"/>
+<Adjective nr="94"/>
 </Cluster>
 <Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="61"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER2" nr="7">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="61"/>
-<Adjective nr="73"/>
-<Adjective nr="84"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
+<Adjective nr="79"/>
+<Adjective nr="90"/>
 </Cluster>
 <Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="94"/>
 </Cluster>
 </CCluster>
 </Registrations>

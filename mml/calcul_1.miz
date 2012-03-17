@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,17 +19,18 @@ environ
       FUNCT_1, ORDINAL4, FINSEQ_2, ZFMISC_1, CQC_THE1, MCART_1, XBOOLEAN,
       BVFUNC_2, ZF_MODEL, SUBSTUT2, SUBLEMMA, FUNCOP_1, FUNCT_4, FINSET_1,
       ORDINAL1, CALCUL_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1,
       QC_LANG1, CARD_1, NUMBERS, ORDINAL1, FINSEQ_2, XXREAL_0, NAT_1, FUNCOP_1,
       CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, PARTFUN1, FUNCT_2,
       DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2,
-      CQC_THE1, SUBSTUT2, RELSET_1;
+      CQC_THE1, SUBSTUT2, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, QC_LANG1, CQC_LANG, CARD_1,
-      FINSEQ_2, RELAT_1;
+      FINSEQ_2, RELAT_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, FINSEQ_2, FUNCOP_1;
+ definitions TARSKI, XBOOLE_0, FINSEQ_2, FUNCOP_1, XTUPLE_0;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, QC_LANG1, ZFMISC_1,
       RELAT_1, QC_LANG3, QC_LANG2, SUBSTUT1, FUNCT_4, SUBLEMMA, NAT_1,
       FINSEQ_1, FINSEQ_3, VALUAT_1, FINSEQ_2, SUBSTUT2, FUNCOP_1, CQC_THE1,
@@ -39,16 +40,18 @@ environ
 
 begin :: Preliminaries
 
+reserve Al for QC-alphabet;
+
 reserve a,b,c,d for set,
   i,j,k,m,n for Element of NAT,
-  p,q,r for Element of CQC-WFF,
-  x,y,y0 for bound_QC-variable,
-  X for Subset of CQC-WFF,
+  p,q,r for Element of CQC-WFF(Al),
+  x,y,y0 for bound_QC-variable of Al,
+  X for Subset of CQC-WFF(Al),
   A for non empty set,
-  J for interpretation of A,
-  v,w for Element of Valuations_in A,
-  Sub for CQC_Substitution,
-  f,f1,g,h,h1 for FinSequence of CQC-WFF;
+  J for interpretation of Al,A,
+  v,w for Element of Valuations_in(Al,A),
+  Sub for CQC_Substitution of Al,
+  f,f1,g,h,h1 for FinSequence of CQC-WFF(Al);
 
 definition
   let D be non empty set, f be FinSequence of D;
@@ -103,19 +106,27 @@ A7:   len f = j+1 by A4,NAT_1:6;
 end;
 
 definition
-  let D be non empty set, f be FinSequence of D;
-  assume
-A1: len f > 0;
-  func Suc(f) -> Element of D equals
+  let Al;
+  let f be FinSequence of CQC-WFF(Al);
+  func Suc(f) -> Element of CQC-WFF(Al) equals
   :Def2:
-  f.(len f);
+  f.(len f) if len f > 0
+  otherwise VERUM(Al);
   coherence
   proof
-    0+1 <= len f by A1,NAT_1:13;
-    then len f in dom f by FINSEQ_3:25;
-    then f.(len f) in rng f by FUNCT_1:3;
-    hence thesis;
+    per cases;
+    suppose len f > 0;
+      then 0+1 <= len f by NAT_1:13;
+      then len f in dom f by FINSEQ_3:25;
+      then f.(len f) in rng f by FUNCT_1:3;
+      hence thesis;
+    end;
+    suppose
+A1:   not len f > 0;
+      thus thesis by A1;
+    end;
   end;
+  consistency;
 end;
 
 definition
@@ -132,8 +143,7 @@ Lm1: now
   then consider i being set such that
 A1: i in dom f and
 A2: f.i = p by FUNCT_1:def 3;
-  ex n being Nat st dom f = Seg n by FINSEQ_1:def 2;
-  then reconsider i as Element of NAT by A1;
+  reconsider i as Element of NAT by A1;
   take i;
   thus i in dom f & f.i = p by A1,A2;
 end;
@@ -146,7 +156,7 @@ Lm2: now
 end;
 
 definition
-  let f,g;
+  let Al,f,g;
   pred f is_Subsequence_of g means
   :Def4:
   ex N being Subset of NAT st f c= Seq (g|N);
@@ -511,8 +521,8 @@ end;
 begin :: A Sequent calculus
 
 definition
-  let f;
-  func still_not-bound_in f -> Subset of bound_QC-variables means
+  let Al,f;
+  func still_not-bound_in f -> Subset of bound_QC-variables(Al) means
   :Def5:
   a in it iff ex i,p st i in dom f & p = f.i & a in still_not-bound_in p;
   existence
@@ -520,16 +530,16 @@ definition
     defpred P[set] means ex i,p st i in dom f & p = f.i & $1 in
     still_not-bound_in p;
     consider X being set such that
-A1: for a holds a in X iff a in bound_QC-variables & P[a] from
+A1: for a holds a in X iff a in bound_QC-variables(Al) & P[a] from
     XBOOLE_0:sch 1;
     take X;
-    for a st a in X holds a in bound_QC-variables by A1;
-    hence X is Subset of bound_QC-variables by TARSKI:def 3;
+    for a st a in X holds a in bound_QC-variables(Al) by A1;
+    hence X is Subset of bound_QC-variables(Al) by TARSKI:def 3;
     thus thesis by A1;
   end;
   uniqueness
   proof
-    let X,Y be Subset of bound_QC-variables;
+    let X,Y be Subset of bound_QC-variables(Al);
     assume that
 A2: for a holds a in X iff ex i,p st i in dom f & p = f.i & a in
     still_not-bound_in p and
@@ -546,14 +556,15 @@ A3: for a holds a in Y iff ex i,p st i in dom f & p = f.i & a in
 end;
 
 definition
-  func set_of_CQC-WFF-seq means
+  let Al;
+  func set_of_CQC-WFF-seq(Al) means
   :Def6:
-  a in it iff a is FinSequence of CQC-WFF;
+  a in it iff a is FinSequence of CQC-WFF(Al);
   existence
   proof
-    defpred P[set] means $1 is FinSequence of CQC-WFF;
+    defpred P[set] means $1 is FinSequence of CQC-WFF(Al);
     consider X being set such that
-A1: for a holds a in X iff a in bool [:NAT,CQC-WFF:] & P[a] from
+A1: for a holds a in X iff a in bool [:NAT,CQC-WFF(Al):] & P[a] from
     XBOOLE_0:sch 1;
     take X;
     thus thesis by A1;
@@ -561,26 +572,27 @@ A1: for a holds a in X iff a in bool [:NAT,CQC-WFF:] & P[a] from
   uniqueness
   proof
     let X,Y be set such that
-A2: a in X iff a is FinSequence of CQC-WFF and
-A3: a in Y iff a is FinSequence of CQC-WFF;
+A2: a in X iff a is FinSequence of CQC-WFF(Al) and
+A3: a in Y iff a is FinSequence of CQC-WFF(Al);
     now
       let a;
-      a in X iff a is FinSequence of CQC-WFF by A2;
+      a in X iff a is FinSequence of CQC-WFF(Al) by A2;
       hence a in X iff a in Y by A3;
     end;
     hence thesis by TARSKI:1;
   end;
 end;
 
-reserve PR,PR1 for FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+reserve PR,PR1 for FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 
 definition
-  let PR;
+  let Al,PR;
   let n be Nat;
   pred PR,n is_a_correct_step means
   :Def7:
   ex f st Suc(f) is_tail_of Ant(f) &
-  (PR.n)`1 = f if (PR.n)`2 = 0, ex f st (PR.n)`1 = f^<*VERUM*> if (PR.n)`2 = 1,
+  (PR.n)`1 = f if (PR.n)`2 = 0, ex f st (PR.n)`1 = f^<*VERUM(Al)*>
+  if (PR.n)`2 = 1,
 ex i,f,g st 1 <= i & i < n & Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g)
 & (PR.i)`1 = f & (PR.n)`1 = g if (PR.n)`2 = 2, ex i,j,f,g st 1 <= i & i < n & 1
   <= j & j < i & len f > 1 & len g > 1 & Ant(Ant(f)) = Ant(Ant(g)) & 'not' Suc(
@@ -601,7 +613,7 @@ in still_not-bound_in (Ant(f)) & not y in still_not-bound_in All(x,p) & f = (PR
 end;
 
 definition
-  let PR;
+  let Al,PR;
   attr PR is a_proof means
   :Def8:
   PR <> {} & for n being Nat st 1 <= n & n <=
@@ -609,50 +621,47 @@ definition
 end;
 
 definition
-  let f;
+  let Al,f;
   pred |- f means
   :Def9:
   ex PR st PR is a_proof & f = (PR.(len PR))`1;
 end;
 
 definition
-  let p,X;
+  let Al,p,X;
   pred p is_formal_provable_from X means
   :Def10:
   ex f st rng Ant(f) c= X & Suc (f) = p & |- f;
 end;
 
 definition
-  let X;
-  let A;
-  let J;
-  let v;
+  let Al,X,A,J,v;
   pred J,v |= X means
   :Def11:
   p in X implies J,v |= p;
 end;
 
 definition
-  let X,p;
+  let Al,X,p;
   pred X |= p means
   J,v |= X implies J,v |= p;
 end;
 
 definition
-  let p;
+  let Al,p;
   pred |= p means
-  {}(CQC-WFF) |= p;
+  {}(CQC-WFF(Al)) |= p;
 end;
 
 definition
-  let f, A, J, v;
+  let Al,f, A, J, v;
   pred J,v |= f means
   :Def14:
   J,v |= rng(f);
 end;
 
 definition
-  let f, p;
+  let Al, f, p;
   pred f |= p means
   :Def15:
   J,v |= f implies J,v |= p;
@@ -826,7 +835,7 @@ theorem Th23:
   J,v |= [p,Sub] iff J,v |= p
 proof
   J,v |= [p,Sub] iff J,v |= [p,Sub]`1 by SUBLEMMA:def 2;
-  hence thesis by MCART_1:7;
+  hence thesis;
 end;
 
 reserve a for Element of A;
@@ -839,10 +848,10 @@ A1: J,v |= CQC_Sub([p,Sbst(x,y)]) iff J,v.Val_S(v,[p,Sbst(x,y)]) |= [p,Sbst(
 A2: J,v.Val_S(v,[p,Sbst(x,y)]) |= [p,Sbst(x,y)] iff J,v.Val_S(v,[p,Sbst(x,y)
   ]) |= p by Th23;
   Val_S(v,[p,Sbst(x,y)]) = v*(@[p,Sbst(x,y)]`2) by SUBLEMMA:def 1;
-  then Val_S(v,[p,Sbst(x,y)]) = v*@Sbst(x,y) by MCART_1:7;
+  then Val_S(v,[p,Sbst(x,y)]) = v*@Sbst(x,y);
   then
 A3: Val_S(v,[p,Sbst(x,y)]) = v*(x .--> y) by SUBSTUT1:def 2;
-  y in bound_QC-variables;
+  y in bound_QC-variables(Al);
   then y in dom v by SUBLEMMA:58;
   then Val_S(v,[p,Sbst(x,y)]) = x .--> v.y by A3,FUNCOP_1:17;
   hence thesis by A1,A2,SUBSTUT2:def 1;
@@ -866,11 +875,11 @@ A2: J,v |= All(x,p) by A1,Def15;
 end;
 
 theorem Th26:
-  for X being set st X c= bound_QC-variables holds not x in X
+  for X being set st X c= bound_QC-variables(Al) holds not x in X
   implies v.(x|a)|X = v|X
 proof
   let X be set such that
-A1: X c= bound_QC-variables and
+A1: X c= bound_QC-variables(Al) and
 A2: not x in X;
   set f2 = v|X;
   set f1 = v.(x|a)|X;
@@ -878,7 +887,7 @@ A3: dom f1 = dom f2 by A1,SUBLEMMA:63;
   now
     let b such that
 A4: b in dom f1;
-    x <> b by A1,A2,A4,SUBLEMMA:63;
+    x <> b by A2,A4;
     then
 A5: v.(x|a).b = v.b by SUBLEMMA:48;
     v.(x|a).b = f1.b by A4,FUNCT_1:47;
@@ -960,11 +969,11 @@ A5: J,v.(y|a).(x|a) |= p by SUBLEMMA:49;
 end;
 
 theorem Th30:
-  Ant(f^<*VERUM*>) |= Suc(f^<*VERUM*>)
+  Ant(f^<*VERUM(Al)*>) |= Suc(f^<*VERUM(Al)*>)
 proof
   let A,J,v such that
-  J,v |= Ant(f^<*VERUM*>);
-  Suc(f^<*VERUM*>) = VERUM by Th5;
+  J,v |= Ant(f^<*VERUM(Al)*>);
+  Suc(f^<*VERUM(Al)*>) = VERUM(Al) by Th5;
   hence thesis by VALUAT_1:32;
 end;
 
@@ -982,12 +991,12 @@ proof
   hence thesis by NAT_1:33;
 end;
 
-Lm3: 1 <= n & n <= len PR implies (PR.n)`1 is FinSequence of CQC-WFF
+Lm3: 1 <= n & n <= len PR implies (PR.n)`1 is FinSequence of CQC-WFF(Al)
 proof
   assume 1 <= n & n <= len PR;
   then n in dom PR by FINSEQ_3:25;
   then PR.n in rng PR by FUNCT_1:def 3;
-  then (PR.n)`1 in set_of_CQC-WFF-seq by MCART_1:10;
+  then (PR.n)`1 in set_of_CQC-WFF-seq(Al) by MCART_1:10;
   hence thesis by Def6;
 end;
 
@@ -1025,7 +1034,7 @@ A14: now
 A15:  m = k+1;
       take g = (PR.m)`1;
       thus g = (PR.m)`1;
-      reconsider g = (PR.m)`1 as FinSequence of CQC-WFF by A11,A13,Lm3;
+      reconsider g = (PR.m)`1 as FinSequence of CQC-WFF(Al) by A11,A13,Lm3;
 A16:  PR,m is_a_correct_step by A4,A11,A13,Def8;
       now
         per cases by A11,A13,Th31;
@@ -1036,7 +1045,7 @@ A16:  PR,m is_a_correct_step by A4,A11,A13,Def8;
         end;
         suppose
           (PR.m)`2 = 1;
-          then ex f st g = f^<*VERUM*> by A16,Def7;
+          then ex f st g = f^<*VERUM(Al)*> by A16,Def7;
           hence Ant(g) |= Suc(g) by Th30;
         end;
         suppose
@@ -1196,13 +1205,13 @@ A1: rng PR = {[f,0]} by FINSEQ_1:38;
     assume a in rng PR;
     then
 A2: a = [f,0] by A1,TARSKI:def 1;
-    f in set_of_CQC-WFF-seq by Def6;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A2,CQC_THE1:21
+    f in set_of_CQC-WFF-seq(Al) by Def6;
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A2,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng PR c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by TARSKI:def 3;
+  then rng PR c= [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by TARSKI:def 3;
   then reconsider
-  PR as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds :] by
+  PR as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds :] by
 FINSEQ_1:def 4;
   assume
 A3: Suc(f) is_tail_of Ant(f);
@@ -1672,24 +1681,25 @@ A2: |- f;
   consider PR such that
 A3: PR is a_proof and
 A4: (PR.(len PR))`1 = f by A2,Def9;
-A5: g in set_of_CQC-WFF-seq by Def6;
+A5: g in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[g,2]*>;
     then a in {[g,2]} by FINSEQ_1:38;
     then a = [g,2] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A5,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng <*[g,2]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by TARSKI:def 3
+  then rng <*[g,2]*> c= [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:]
+   by TARSKI:def 3
 ;
-  then reconsider PR1 = <*[g,2]*> as FinSequence of [:set_of_CQC-WFF-seq,
+  then reconsider PR1 = <*[g,2]*> as FinSequence of [:set_of_CQC-WFF-seq(Al),
   Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A6: 1 in dom PR1 by FINSEQ_1:38;
   set PR2 = PR^PR1;
-  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
@@ -1753,24 +1763,24 @@ A5: g = (PR1.(len PR1))`1 by A3,Def9;
   consider PR such that
 A6: PR is a_proof and
 A7: f = (PR.(len PR))`1 by A2,Def9;
-A8: Ant(Ant(f))^<*Suc(f)*> in set_of_CQC-WFF-seq by Def6;
+A8: Ant(Ant(f))^<*Suc(f)*> in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[Ant(Ant(f))^<*Suc(f)*>,3]*>;
     then a in {[Ant(Ant(f))^<*Suc(f)*>,3]} by FINSEQ_1:38;
     then a = [Ant(Ant(f))^<*Suc(f)*>,3] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A8,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A8,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng <*[Ant(Ant(f))^<*Suc(f)*>,3]*> c= [:set_of_CQC-WFF-seq,
+  then rng <*[Ant(Ant(f))^<*Suc(f)*>,3]*> c= [:set_of_CQC-WFF-seq(Al),
   Proof_Step_Kinds:] by TARSKI:def 3;
   then reconsider PR2 = <*[Ant(Ant(f))^<*Suc(f)*>,3]*> as FinSequence of [:
-  set_of_CQC-WFF-seq,Proof_Step_Kinds:] by FINSEQ_1:def 4;
+  set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A9: 1 in dom PR2 by FINSEQ_1:38;
   set PR3 = PR^PR1^PR2;
-  reconsider PR3 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR3 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A10: PR <> {} by A6,Def8;
   now
     let n be Nat;
@@ -1875,24 +1885,24 @@ A5: g = (PR1.(len PR1))`1 by A3,Def9;
   consider PR such that
 A6: PR is a_proof and
 A7: f = (PR.(len PR))`1 by A2,Def9;
-A8: Ant(Ant(f))^<*p*> in set_of_CQC-WFF-seq by Def6;
+A8: Ant(Ant(f))^<*p*> in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[Ant(Ant(f))^<*p*>,4]*>;
     then a in {[Ant(Ant(f))^<*p*>,4]} by FINSEQ_1:38;
     then a = [Ant(Ant(f))^<*p*>,4] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A8,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A8,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng <*[Ant(Ant(f))^<*p*>,4]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds
-  :] by TARSKI:def 3;
+  then rng <*[Ant(Ant(f))^<*p*>,4]*> c=
+   [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by TARSKI:def 3;
   then reconsider PR2 = <*[Ant(Ant(f))^<*p*>,4]*> as FinSequence of [:
-  set_of_CQC-WFF-seq,Proof_Step_Kinds:] by FINSEQ_1:def 4;
+  set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A9: 1 in dom PR2 by FINSEQ_1:38;
   set PR3 = PR^PR1^PR2;
-  reconsider PR3 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR3 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A10: PR <> {} by A6,Def8;
   now
     let n be Nat;
@@ -1995,25 +2005,25 @@ A5: g = (PR1.(len PR1))`1 by A3,Def9;
   consider PR such that
 A6: PR is a_proof and
 A7: f = (PR.(len PR))`1 by A2,Def9;
-A8: Ant(f)^<*(Suc(f)) '&' (Suc(g))*> in set_of_CQC-WFF-seq by Def6;
+A8: Ant(f)^<*(Suc(f)) '&' (Suc(g))*> in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]*>;
     then a in {[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]} by FINSEQ_1:38;
     then a = [Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A8,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A8,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng <*[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]*> c= [:set_of_CQC-WFF-seq,
-  Proof_Step_Kinds:] by TARSKI:def 3;
+  then rng <*[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]*> c=
+   [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by TARSKI:def 3;
   then reconsider
   PR2 = <*[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]*> as FinSequence of
-  [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by FINSEQ_1:def 4;
+  [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A9: 1 in dom PR2 by FINSEQ_1:38;
   set PR3 = PR^PR1^PR2;
-  reconsider PR3 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR3 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A10: PR <> {} by A6,Def8;
   now
     let n be Nat;
@@ -2112,25 +2122,25 @@ A2: |- f;
   consider PR such that
 A3: PR is a_proof and
 A4: (PR.(len PR))`1 = f by A2,Def9;
-A5: Ant(f)^<*p*> in set_of_CQC-WFF-seq by Def6;
+A5: Ant(f)^<*p*> in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[Ant(f)^<*p*>,6]*>;
     then a in {[Ant(f)^<*p*>,6]} by FINSEQ_1:38;
     then a = [Ant(f)^<*p*>,6] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A5,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng <*[Ant(f)^<*p*>,6]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by
-TARSKI:def 3;
+  then rng <*[Ant(f)^<*p*>,6]*> c= [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:]
+   by TARSKI:def 3;
   then reconsider
-  PR1 = <*[Ant(f)^<*p*>,6]*> as FinSequence of [:set_of_CQC-WFF-seq
+  PR1 = <*[Ant(f)^<*p*>,6]*> as FinSequence of [:set_of_CQC-WFF-seq(Al)
   ,Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A6: 1 in dom PR1 by FINSEQ_1:38;
   set PR2 = PR^PR1;
-  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
@@ -2187,25 +2197,25 @@ A2: |- f;
   consider PR such that
 A3: PR is a_proof and
 A4: (PR.(len PR))`1 = f by A2,Def9;
-A5: Ant(f)^<*q*> in set_of_CQC-WFF-seq by Def6;
+A5: Ant(f)^<*q*> in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[Ant(f)^<*q*>,7]*>;
     then a in {[Ant(f)^<*q*>,7]} by FINSEQ_1:38;
     then a = [Ant(f)^<*q*>,7] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A5,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng <*[Ant(f)^<*q*>,7]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by
-TARSKI:def 3;
+  then rng <*[Ant(f)^<*q*>,7]*> c= [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:]
+   by TARSKI:def 3;
   then reconsider
-  PR1 = <*[Ant(f)^<*q*>,7]*> as FinSequence of [:set_of_CQC-WFF-seq
+  PR1 = <*[Ant(f)^<*q*>,7]*> as FinSequence of [:set_of_CQC-WFF-seq(Al)
   ,Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A6: 1 in dom PR1 by FINSEQ_1:38;
   set PR2 = PR^PR1;
-  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
@@ -2262,25 +2272,25 @@ A2: |- f;
   consider PR such that
 A3: PR is a_proof and
 A4: (PR.(len PR))`1 = f by A2,Def9;
-A5: Ant(f)^<*p.(x,y)*> in set_of_CQC-WFF-seq by Def6;
+A5: Ant(f)^<*p.(x,y)*> in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[Ant(f)^<*p.(x,y)*>,8]*>;
     then a in {[Ant(f)^<*p.(x,y)*>,8]} by FINSEQ_1:38;
     then a = [Ant(f)^<*p.(x,y)*>,8] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A5,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
   then
-  rng <*[Ant(f)^<*p.(x,y)*>,8]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds
+  rng <*[Ant(f)^<*p.(x,y)*>,8]*> c= [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds
   :] by TARSKI:def 3;
   then reconsider PR1 = <*[Ant(f)^<*p.(x,y)*>,8]*> as FinSequence of [:
-  set_of_CQC-WFF-seq,Proof_Step_Kinds:] by FINSEQ_1:def 4;
+  set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A6: 1 in dom PR1 by FINSEQ_1:38;
   set PR2 = PR^PR1;
-  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
@@ -2339,24 +2349,24 @@ A2: |- f;
   consider PR such that
 A3: PR is a_proof and
 A4: (PR.(len PR))`1 = f by A2,Def9;
-A5: Ant(f)^<*All(x,p)*> in set_of_CQC-WFF-seq by Def6;
+A5: Ant(f)^<*All(x,p)*> in set_of_CQC-WFF-seq(Al) by Def6;
   now
     let a be set;
     assume a in rng <*[Ant(f)^<*All(x,p)*>,9]*>;
     then a in {[Ant(f)^<*All(x,p)*>,9]} by FINSEQ_1:38;
     then a = [Ant(f)^<*All(x,p)*>,9] by TARSKI:def 1;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:21
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A5,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng <*[Ant(f)^<*All(x,p)*>,9]*> c= [:set_of_CQC-WFF-seq,
+  then rng <*[Ant(f)^<*All(x,p)*>,9]*> c= [:set_of_CQC-WFF-seq(Al),
   Proof_Step_Kinds:] by TARSKI:def 3;
   then reconsider PR1 = <*[Ant(f)^<*All(x,p)*>,9]*> as FinSequence of [:
-  set_of_CQC-WFF-seq,Proof_Step_Kinds:] by FINSEQ_1:def 4;
+  set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by FINSEQ_1:def 4;
   1 in Seg 1 by FINSEQ_1:2,TARSKI:def 1;
   then
 A6: 1 in dom PR1 by FINSEQ_1:38;
   set PR2 = PR^PR1;
-  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+  reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
@@ -2448,9 +2458,8 @@ A5: len Ant(f2) in dom Ant(f2) by Th10;
   then (Ant(f2)).(len Ant(f) + 1) = 'not' Suc(f) by Th5;
   then (Ant(f2)).(len Ant(f) + 1) = Suc(f2) by Th5;
   then (Ant(f2)).(len Ant(f2)) = Suc(f2) by A4,FINSEQ_2:16;
-  then Suc(f2) is_tail_of Ant(f2) by A5,Lm2;
   then
-A6: |- f2 by Th33;
+A6: |- f2 by A5,Lm2,Th33;
   set f4 = Ant(f1)^<*p*>;
   f2 = Ant(f1)^<*'not' Suc(f)*> by Th5;
   then
@@ -2519,11 +2528,10 @@ A11: 1 < len (Ant(f2)^<* 'not' p*>) by Th9;
   then
 A12: |- f2 by A1,A10,A9,Th13,Th36;
   1 in dom <*'not' q,p*> by Th14;
-  then len f+1 in dom (Ant(f3)) by A3,A7,FINSEQ_1:28;
   then
-A13: Suc(f3) is_tail_of Ant(f3) by A8,Lm2;
+A13: len f+1 in dom (Ant(f3)) by A3,A7,FINSEQ_1:28;
   Suc(f2) = q & Ant(f2) = Ant(Ant(f1))^<*'not' q*>^<*p*> by Th5;
-  then |- Ant(f2)^<*'not' Suc(f2)*> by A13,Th33;
+  then |- Ant(f2)^<*'not' Suc(f2)*> by A8,A13,Lm2,Th33;
   then
 A14: |- Ant(f2)^<* 'not' p*> by A12,Th44;
 A15: Ant(f4) = Ant(Ant(f1))^<*'not' q*>^<*'not' p*> by Th5;
@@ -2535,9 +2543,8 @@ A16: Ant(f4) = Ant(Ant(f1))^<*'not' q,'not' p*> by FINSEQ_1:def 9;
 A17: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*'not' q,'not' p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A3,A16,FINSEQ_1:28;
-  then Suc(f4) is_tail_of Ant(f4) by A17,Lm2;
   then
-A18: |- f4 by Th33;
+A18: |- f4 by A17,Lm2,Th33;
 A19: Ant(Ant(f2)^<* 'not' p*>) = Ant(Ant(f1))^<*'not' q*>^<*p*> by A10,Th5;
   then Suc(Ant(Ant(f2)^<* 'not' p*>)) = p by Th5;
   then
@@ -2578,9 +2585,8 @@ A10: Ant(f3) = Ant(Ant(f1))^<*q,'not' p*> by FINSEQ_1:def 9;
 A11: (Ant(f3)).(len f+1) = Suc(f3) by Th5;
   1 in dom <*q,'not' p*> by Th14;
   then len f+1 in dom (Ant(f3)) by A5,A10,FINSEQ_1:28;
-  then Suc(f3) is_tail_of Ant(f3) by A11,Lm2;
   then
-A12: |- f3 by Th33;
+A12: |- f3 by A11,Lm2,Th33;
 A13: Suc(Ant(f3)^<*p*>) = p by Th5;
   then
 A14: Suc(Ant(f3)^<*p*>) = Suc(f4) by Th5;
@@ -2599,9 +2605,8 @@ A18: Ant(f4) = Ant(Ant(f1))^<*q,p*> by FINSEQ_1:def 9;
 A19: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*q,p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A5,A18,FINSEQ_1:28;
-  then Suc(f4) is_tail_of Ant(f4) by A19,Lm2;
   then
-A20: |- f4 by Th33;
+A20: |- f4 by A19,Lm2,Th33;
 A21: Ant(Ant(f3)^<*p*>) = Ant(Ant(f1))^<*q*>^<*'not' p*> by A8,Th5;
   then Suc(Ant(Ant(f3)^<*p*>)) = 'not' p by Th5;
   then
@@ -2636,9 +2641,8 @@ A5: Ant(f3) = Ant(Ant(f1))^<*'not' q,'not' p*> by FINSEQ_1:def 9;
   then
 A6: (Ant(f3)).(len f+1) = Suc(f3) by Th5;
   1 in dom <*'not' q,'not' p*> by Th14;
-  then len f+1 in dom (Ant(f3)) by A3,A5,FINSEQ_1:28;
   then
-A7: Suc(f3) is_tail_of Ant(f3) by A6,Lm2;
+A7: len f+1 in dom (Ant(f3)) by A3,A5,FINSEQ_1:28;
   Suc(f1) = q by Th5;
   then
 A8: Suc(f1) = Suc(f2) by Th5;
@@ -2649,7 +2653,7 @@ A10: 1 < len (Ant(f2)^<* p*>) by Th9;
   then
 A11: |- f2 by A1,A9,A8,Th13,Th36;
   Suc(f2) = q & Ant(f2) = Ant(Ant(f1))^<*'not' q*>^<*'not' p*> by Th5;
-  then |- Ant(f2)^<*'not' Suc(f2)*> by A7,Th33;
+  then |- Ant(f2)^<*'not' Suc(f2)*> by A6,A7,Lm2,Th33;
   then
 A12: |- Ant(f2)^<*p*> by A11,Th44;
 A13: Ant(f4) = Ant(Ant(f1))^<*'not' q*>^<*p*> by Th5;
@@ -2661,9 +2665,8 @@ A14: Ant(f4) = Ant(Ant(f1))^<*'not' q,p*> by FINSEQ_1:def 9;
 A15: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*'not' q,p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A3,A14,FINSEQ_1:28;
-  then Suc(f4) is_tail_of Ant(f4) by A15,Lm2;
   then
-A16: |- f4 by Th33;
+A16: |- f4 by A15,Lm2,Th33;
 A17: Ant(Ant(f2)^<*p*>) = Ant(Ant(f1))^<*'not' q*>^<*'not' p*> by A9,Th5;
   then Ant(Ant(Ant(f2)^<*p*>)) = Ant(Ant(f1))^<*'not' q*> by Th5;
   then
@@ -2708,9 +2711,8 @@ A10: Ant(f3) = Ant(Ant(f1))^<*q,p*> by FINSEQ_1:def 9;
 A11: (Ant(f3)).(len f+1) = Suc(f3) by Th5;
   1 in dom <*q,p*> by Th14;
   then len f+1 in dom (Ant(f3)) by A5,A10,FINSEQ_1:28;
-  then Suc(f3) is_tail_of Ant(f3) by A11,Lm2;
   then
-A12: |- f3 by Th33;
+A12: |- f3 by A11,Lm2,Th33;
 A13: Suc(Ant(f3)^<*'not' p*>) = 'not' p by Th5;
   then
 A14: Suc(Ant(f3)^<*'not' p*>) = Suc(f4) by Th5;
@@ -2729,9 +2731,8 @@ A18: Ant(f4) = Ant(Ant(f1))^<*q,'not' p*> by FINSEQ_1:def 9;
 A19: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*q,'not' p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A5,A18,FINSEQ_1:28;
-  then Suc(f4) is_tail_of Ant(f4) by A19,Lm2;
   then
-A20: |- f4 by Th33;
+A20: |- f4 by A19,Lm2,Th33;
 A21: Ant(Ant(f3)^<*'not' p*>) = Ant(Ant(f1))^<*q*>^<*p*> by A8,Th5;
   then Suc(Ant(Ant(f3)^<*'not' p*>)) = p by Th5;
   then
@@ -2854,9 +2855,8 @@ A9: Ant(f1) = f^<*p,'not' p *> by FINSEQ_1:def 9;
   then
 A10: len f+1 in dom Ant(f1) by FINSEQ_3:25;
   (Ant(f1)).(len f+1) = p by A9,Th14;
-  then Suc(f1) is_tail_of Ant(f1) by A2,A10,Lm2;
   then
-A11: |- f1 by Th33;
+A11: |- f1 by A2,A10,Lm2,Th33;
 A12: 1 < len f4 by Th9;
   0+1 <= len f2 by Th10;
   then
@@ -2878,16 +2878,14 @@ A19: Suc(f2) = 'not' p by Th5;
   then
 A20: 'not' Suc(f1) = Suc(f2) by Th5;
   (Ant(f2)).(len f+2) = 'not' p by A17,Th14;
-  then Suc(f2) is_tail_of Ant(f2) by A19,A18,Lm2;
   then
-A21: |- f2 by Th33;
+A21: |- f2 by A18,A19,Lm2,Th33;
 A22: Suc(f4) = 'not' 'not' p by Th5;
   then
 A23: Suc(f3) = Suc(f4) by Th5;
   (Ant(f4)).(len f+2) = 'not' 'not' p by A6,Th14;
-  then Suc(f4) is_tail_of Ant(f4) by A22,A15,Lm2;
   then
-A24: |- f4 by Th33;
+A24: |- f4 by A15,A22,Lm2,Th33;
   Ant(f1) = Ant(f2) by A16,Th5;
   then
 A25: |- Ant(f1)^<*'not' 'not' p*> by A11,A21,A13,A20,Th44;
@@ -2920,9 +2918,8 @@ A5: Ant(f1) = f^<*'not' 'not' p,'not' p *> by FINSEQ_1:def 9;
   then
 A6: len f+2 in dom Ant(f1) by A3,Th10;
   (Ant(f1)).(len f+2) = 'not' p by A5,Th14;
-  then Suc(f1) is_tail_of Ant(f1) by A2,A6,Lm2;
   then
-A7: |- f1 by Th33;
+A7: |- f1 by A2,A6,Lm2,Th33;
 A8: 1 < len f4 by Th9;
 A9: Ant(f2) = f^<*'not' 'not' p*>^<*'not' p*> by Th5;
   then Ant(f2) = f^(<*'not' 'not' p*>^<*'not' p*>) by FINSEQ_1:32;
@@ -2953,16 +2950,14 @@ A19: Suc(f2) = 'not' 'not' p by Th5;
   then
 A20: 'not' Suc(f1) = Suc(f2) by Th5;
   (Ant(f2)).(len f+1) = 'not' 'not' p by A10,Th14;
-  then Suc(f2) is_tail_of Ant(f2) by A19,A11,Lm2;
   then
-A21: |- f2 by Th33;
+A21: |- f2 by A11,A19,Lm2,Th33;
 A22: Suc(f4) = p by Th5;
   then
 A23: Suc(f3) = Suc(f4) by Th5;
   (Ant(f4)).(len f+2) = p by A15,Th14;
-  then Suc(f4) is_tail_of Ant(f4) by A22,A18,Lm2;
   then
-A24: |- f4 by Th33;
+A24: |- f4 by A18,A22,Lm2,Th33;
   Ant(f1) = Ant(f2) by A9,Th5;
   then
 A25: |- Ant(f1)^<*p*> by A7,A21,A12,A20,Th44;
@@ -2995,9 +2990,8 @@ A7: (Ant(f3)).(len f+1) = q by FINSEQ_1:42;
   then
 A8: len f+1 in dom Ant(f3) by A6,Th10;
   Suc(f3) = q by Th5;
-  then Suc(f3) is_tail_of Ant(f3) by A7,A8,Lm2;
   then
-A9: |- f3 by Th33;
+A9: |- f3 by A7,A8,Lm2,Th33;
 A10: Ant(f2) = f^<*'not' p*> by Th5;
   len f+1 = len f + len <*'not' p *> by FINSEQ_1:39;
   then len f+1 = len Ant(f2) by A10,FINSEQ_1:22;
@@ -3007,9 +3001,8 @@ A12: Suc(f2) = 'not' p by Th5;
   then
 A13: 'not' Suc(f1) = Suc(f2) by Th5;
   (Ant(f2)).(len f+1) = 'not' p by A10,FINSEQ_1:42;
-  then Suc(f2) is_tail_of Ant(f2) by A12,A11,Lm2;
   then
-A14: |- f2 by Th33;
+A14: |- f2 by A11,A12,Lm2,Th33;
   Ant(f1) = Ant(f2) by A10,Th5;
   then
 A15: |- Ant(f1)^<*'not' Suc(f1)*> by A14,A5,A13,Th3;
@@ -3043,7 +3036,7 @@ theorem Th57:
   ('not' p).(x,y) = 'not' (p.(x,y))
 proof
   set S = [p,Sbst(x,y)];
-  S`1 = p & S`2 = Sbst(x,y) by MCART_1:7;
+  S`1 = p & S`2 = Sbst(x,y);
   then ('not' p).(x,y) = CQC_Sub(['not' p,Sbst(x,y)]) & Sub_not S = ['not' p,
   Sbst(x,y)] by SUBSTUT1:def 20,SUBSTUT2:def 1;
   then ('not' p).(x,y) = 'not' CQC_Sub(S) by SUBSTUT1:29;
@@ -3247,7 +3240,7 @@ A5: for a being set st a in dom f ex b st P[a,b]
     let a be set;
     assume a in dom f;
     then f.a in rng f by FUNCT_1:3;
-    then reconsider p = f.a as Element of CQC-WFF;
+    then reconsider p = f.a as Element of CQC-WFF(Al);
     take still_not-bound_in p;
     thus thesis;
   end;
@@ -3288,23 +3281,29 @@ A14: rng F = X by A7,TARSKI:1;
 end;
 
 theorem Th64:
-  card bound_QC-variables = omega & not bound_QC-variables is finite
+  card bound_QC-variables(Al) = card QC-symbols(Al) &
+  not bound_QC-variables(Al) is finite
 proof
-  card bound_QC-variables = card [:NAT,{4}:] by CARD_2:4,QC_LANG1:def 2;
-  hence thesis by CARD_1:47,CARD_4:19;
+  NAT c= QC-symbols(Al) by QC_LANG1:3;
+  then
+A1: not QC-symbols(Al) is finite;
+  bound_QC-variables(Al) = [: {4}, QC-symbols(Al) :] by QC_LANG1:def 4;
+  then card bound_QC-variables(Al) = card [:QC-symbols(Al),{4}:] by CARD_2:4;
+  hence thesis by A1,CARD_4:19;
 end;
 
 theorem Th65:
   ex x st not x in still_not-bound_in f
 proof
-  still_not-bound_in f <> bound_QC-variables by Th63,Th64;
+  still_not-bound_in f is finite by Th63;
+  then still_not-bound_in f <> bound_QC-variables(Al) by Th64;
   then
-  not ( for b holds b in still_not-bound_in f iff b in bound_QC-variables)
-  by TARSKI:1;
+  not ( for b holds b in still_not-bound_in f iff
+   b in bound_QC-variables(Al)) by TARSKI:1;
   then consider b such that
 A1: not b in still_not-bound_in f and
-A2: b in bound_QC-variables;
-  reconsider x = b as bound_QC-variable by A2;
+A2: b in bound_QC-variables(Al);
+  reconsider x = b as bound_QC-variable of Al by A2;
   take x;
   thus thesis by A1;
 end;
@@ -3386,6 +3385,6 @@ end;
 definition
   let f be FinSequence, p be set;
   redefine pred p is_tail_of f means
-  ex i being Element of NAT st i in dom f & f.i =  p;
+  ex i being Element of NAT st i in dom f & f.i = p;
   compatibility by Lm1,Lm2;
 end;

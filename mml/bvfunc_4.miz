@@ -2,7 +2,7 @@
 ::  by Shunichi Kobayashi and Yatsuka Nakamura
 ::
 :: Received March 13, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,7 +21,7 @@ environ
  constructors BINARITH, BVFUNC_1, BVFUNC_2;
  registrations XBOOLE_0, XBOOLEAN, MARGREL1;
  requirements SUBSET, BOOLE, ARITHM;
- definitions BVFUNC_1, XBOOLEAN, BVFUNC_2;
+ definitions BVFUNC_1, XBOOLEAN, BVFUNC_2, FUNCT_2;
  theorems FUNCT_1, FUNCT_2, BVFUNC_1, BVFUNC_2, MARGREL1, XBOOLEAN, EQREL_1;
 
 begin
@@ -31,10 +31,10 @@ begin
 reserve Y for non empty set;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a '<' (b 'imp' c)
+ for a,b,c being Function of Y,BOOLEAN holds a '<' (b 'imp' c)
   implies a '&' b '<' c
 proof
-  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  let a,b,c be Function of Y,BOOLEAN;
   assume
 A1: a '<' (b 'imp' c);
   for x being Element of Y holds (a '&' b 'imp' c).x = TRUE
@@ -53,10 +53,10 @@ A3: (a '&' b 'imp' c).x =('not' (a '&' b).x) 'or' c.x by BVFUNC_1:def 8
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a '&' b '<' c
+  for a,b,c being Function of Y,BOOLEAN holds a '&' b '<' c
   implies a '<' (b 'imp' c)
 proof
-  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  let a,b,c be Function of Y,BOOLEAN;
   assume
 A1: a '&' b '<' c;
   for x being Element of Y holds (a 'imp' (b 'imp' c)).x = TRUE
@@ -75,236 +75,91 @@ A3: (a '&' b 'imp' c).x =('not' (a '&' b).x) 'or' c.x by BVFUNC_1:def 8
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a 'or' (a '&' b) = a
+  for a,b being Function of Y,BOOLEAN holds a 'or' (a '&' b) = a
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a 'or' (a '&' b))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'or' (a '&' b)).x = a.x
-  proof
-    let x be Element of Y;
-A5: (a 'or' (a '&' b)).x =a.x 'or' (a '&' b).x by BVFUNC_1:def 4
-      .=a.x 'or' (a.x '&' b.x) by MARGREL1:def 20;
-    now
-      per cases by XBOOLEAN:def 3;
-      case
-        a.x=TRUE;
-        hence thesis by A5;
-      end;
-      case
-        a.x=FALSE;
-        hence thesis by A5;
-      end;
-    end;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'or' (a '&' b)).x = a.x 'or' (a '&' b).x by BVFUNC_1:def 4
+       .= a.x 'or' a.x '&' b.x by MARGREL1:def 20
+       .= a.x by XBOOLEAN:5;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a '&' (a 'or' b) = a
+  for a,b being Function of Y,BOOLEAN holds a '&' (a 'or' b) = a
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a '&' (a 'or' b))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a '&' (a 'or' b)).x = a.x
-  proof
-    let x be Element of Y;
-A5: (a '&' (a 'or' b)).x =a.x '&' (a 'or' b).x by MARGREL1:def 20
-      .=a.x '&' (a.x 'or' b.x) by BVFUNC_1:def 4;
-    now
-      per cases by XBOOLEAN:def 3;
-      case
-        a.x=TRUE;
-        hence thesis by A5;
-      end;
-      case
-        a.x=FALSE;
-        hence thesis by A5;
-      end;
-    end;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a '&' (a 'or' b)).x = a.x '&' (a 'or' b).x by MARGREL1:def 20
+     .= a.x '&' (a.x 'or' b.x) by BVFUNC_1:def 4
+     .= a.x by XBOOLEAN:6;
 end;
 
 theorem Th5:
-  for a being Element of Funcs(Y,BOOLEAN) holds a '&' 'not' a = O_el(Y)
+  for a being Function of Y,BOOLEAN holds a '&' 'not' a = O_el(Y)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a '&' 'not' a)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: O_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a '&' 'not' a).x = (O_el Y).x
-  proof
-    let x be Element of Y;
-A5: (a '&' 'not' a).x =a.x '&' ('not' a).x by MARGREL1:def 20
-      .=a.x '&' 'not' a.x by MARGREL1:def 19;
-    now
-      per cases by XBOOLEAN:def 3;
-      case
-        a.x=TRUE;
-        hence thesis by A5,BVFUNC_1:def 10;
-      end;
-      case
-        a.x=FALSE;
-        hence thesis by A5,BVFUNC_1:def 10;
-      end;
-    end;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a '&' 'not' a).x = a.x '&' ('not' a).x by MARGREL1:def 20
+     .= a.x '&' 'not' a.x by MARGREL1:def 19
+     .= FALSE by XBOOLEAN:138               
+     .= O_el(Y).x by BVFUNC_1:def 10;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds a 'or' 'not' a = I_el(Y)
+  for a being Function of Y,BOOLEAN holds a 'or' 'not' a = I_el(Y)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a 'or' 'not' a)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: I_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'or' 'not' a).x = (I_el Y).x
-  proof
-    let x be Element of Y;
-    (a 'or' 'not' a).x =a.x 'or' ('not' a).x by BVFUNC_1:def 4
-      .=a.x 'or' 'not' a.x by MARGREL1:def 19
-      .=TRUE by XBOOLEAN:102;
-    hence thesis by BVFUNC_1:def 11;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'or' 'not' a).x = a.x 'or' ('not' a).x by BVFUNC_1:def 4
+     .= a.x 'or' 'not' a.x by MARGREL1:def 19
+     .= TRUE by XBOOLEAN:102
+     .= I_el(Y).x by BVFUNC_1:def 11;
 end;
 
 theorem Th7:
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a 'eqv' b = (a
-  'imp' b) '&' (b 'imp' a)
+  for a,b being Function of Y,BOOLEAN
+   holds a 'eqv' b = (a 'imp' b) '&' (b 'imp' a)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a 'eqv' b)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: ((a 'imp' b) '&' (b 'imp' a))=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'eqv' b).x = ((a 'imp' b) '&' (b 'imp'
-  a)).x
-  proof
-    let x be Element of Y;
-    (a 'eqv' b).x ='not' (a.x 'xor' b.x) by BVFUNC_1:def 9
-      .=((a.x 'or' 'not' b.x) '&' 'not' a.x) 'or' ((a.x 'or' 'not' b.x) '&'
-    b.x) by XBOOLEAN:8
-      .=(('not' a.x '&' a.x) 'or' ('not' a.x '&' 'not' b.x)) 'or' (b.x '&' (
-    a.x 'or' 'not' b.x)) by XBOOLEAN:8
-      .=(('not' a.x '&' a.x) 'or' ('not' a.x '&' 'not' b.x)) 'or' ((b.x '&'
-    a.x) 'or' (b.x '&' 'not' b.x)) by XBOOLEAN:8
-      .=(FALSE 'or' ('not' a.x '&' 'not' b.x)) 'or' ((b.x '&' a.x) 'or' (b.x
-    '&' 'not' b.x)) by XBOOLEAN:138
-      .=('not' a.x '&' 'not' b.x) 'or' ((b.x '&' a.x) 'or' FALSE) by
-XBOOLEAN:138
-      .=(('not' a.x '&' 'not' b.x) 'or' b.x) '&' (('not' a.x '&' 'not' b.x)
-    'or' a.x) by XBOOLEAN:9
-      .=((b.x 'or' 'not' a.x) '&' (b.x 'or' 'not' b.x)) '&' (a.x 'or' ('not'
-    a.x '&' 'not' b.x)) by XBOOLEAN:9
-      .=((b.x 'or' 'not' a.x) '&' (b.x 'or' 'not' b.x)) '&' ((a.x 'or' 'not'
-    a.x) '&' (a.x 'or' 'not' b.x)) by XBOOLEAN:9
-      .=((b.x 'or' 'not' a.x) '&' TRUE) '&' ((a.x 'or' 'not' a.x) '&' (a.x
-    'or' 'not' b.x)) by XBOOLEAN:102
-      .=(b.x 'or' 'not' a.x) '&' (TRUE '&' (a.x 'or' 'not' b.x)) by
-XBOOLEAN:102
-      .=(a 'imp' b).x '&' ('not' b.x 'or' a.x) by BVFUNC_1:def 8
-      .=(a 'imp' b).x '&' (b 'imp' a).x by BVFUNC_1:def 8
-      .=((a 'imp' b) '&' (b 'imp' a)).x by MARGREL1:def 20;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'eqv' b).x = a.x <=> b.x by BVFUNC_1:def 9
+     .= (a.x => b.x) '&' (b.x => a.x)
+     .= (a 'imp' b).x '&' (b.x => a.x) by BVFUNC_1:def 8
+     .= (a 'imp' b).x '&' (b 'imp' a).x by BVFUNC_1:def 8
+     .= ((a 'imp' b) '&' (b 'imp' a)).x by MARGREL1:def 20;
 end;
 
 theorem Th8:
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a 'imp' b = 'not' a 'or' b
+  for a,b being Function of Y,BOOLEAN holds a 'imp' b = 'not' a 'or' b
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a 'imp' b)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: ('not' a 'or' b)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'imp' b).x = ('not' a 'or' b).x
-  proof
-    let x be Element of Y;
-    (a 'imp' b).x =('not' a.x) 'or' b.x by BVFUNC_1:def 8
-      .=('not' a).x 'or' b.x by MARGREL1:def 19
-      .=('not' a 'or' b).x by BVFUNC_1:def 4;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'imp' b).x = a.x => b.x by BVFUNC_1:def 8
+      .= 'not' a.x 'or' b.x
+      .= ('not' a).x 'or' b.x by MARGREL1:def 19
+      .= ('not' a 'or' b).x by BVFUNC_1:def 4;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a 'xor' b = ('not' a
-  '&' b) 'or' (a '&' 'not' b)
+  for a,b being Function of Y,BOOLEAN
+    holds a 'xor' b = ('not' a '&' b) 'or' (a '&' 'not' b)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a 'xor' b)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (('not' a '&' b) 'or' (a '&' 'not' b))=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'xor' b).x = (('not' a '&' b) 'or' (a
-  '&' 'not' b)).x
-  proof
-    let x be Element of Y;
-    (a 'xor' b).x =a.x 'xor' b.x by BVFUNC_1:def 5
-      .=(('not' a).x '&' b.x) 'or' (a.x '&' 'not' b.x) by MARGREL1:def 19
-      .=(('not' a).x '&' b.x) 'or' (a.x '&' ('not' b).x) by MARGREL1:def 19
-      .=('not' a '&' b).x 'or' (a.x '&' ('not' b).x) by MARGREL1:def 20
-      .=('not' a '&' b).x 'or' (a '&' 'not' b).x by MARGREL1:def 20
-      .=(('not' a '&' b) 'or' (a '&' 'not' b)).x by BVFUNC_1:def 4;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'xor' b).x = a.x 'xor' b.x by BVFUNC_1:def 5
+     .= 'not' a.x '&' b.x 'or' a.x '&' 'not' b.x
+     .= 'not' a.x '&' b.x 'or' a.x '&' ('not' b).x by MARGREL1:def 19
+     .= ('not' a).x '&' b.x 'or' a.x '&' ('not' b).x by MARGREL1:def 19
+     .= ('not' a '&' b).x 'or' a.x '&' ('not' b).x by MARGREL1:def 20
+     .= ('not' a '&' b).x 'or' (a '&' 'not' b).x by MARGREL1:def 20
+     .= (('not' a '&' b) 'or' (a '&' 'not' b)).x by BVFUNC_1:def 4;
 end;
 
 theorem Th10:
-  for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b)=I_el
+  for a,b being Function of Y,BOOLEAN holds (a 'eqv' b)=I_el
   (Y) iff (a 'imp' b)=I_el(Y) & (b 'imp' a)=I_el(Y)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   thus (a 'eqv' b)=I_el(Y) implies (a 'imp' b)=I_el(Y) & (b 'imp' a)=I_el(Y)
   proof
     assume (a 'eqv' b)=I_el(Y);
@@ -317,50 +172,50 @@ proof
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a 'eqv' b=I_el(Y)
+  for a,b being Function of Y,BOOLEAN holds a 'eqv' b=I_el(Y)
   implies 'not' a 'eqv' 'not' b=I_el(Y)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   assume (a 'eqv' b)=I_el(Y);
   then a = b by BVFUNC_1:17;
   hence thesis by BVFUNC_1:17;
 end;
 
 theorem
-  for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b)=I_el(Y
+  for a,b,c,d being Function of Y,BOOLEAN holds (a 'eqv' b)=I_el(Y
   ) & (c 'eqv' d)=I_el(Y) implies ((a '&' c) 'eqv' (b '&' d))=I_el(Y)
 proof
-  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  let a,b,c,d be Function of Y,BOOLEAN;
   assume a 'eqv' b=I_el(Y) & c 'eqv' d=I_el(Y);
   then a = b & c = d by BVFUNC_1:17;
   hence thesis by BVFUNC_1:17;
 end;
 
 theorem
-  for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b)=I_el(Y
+  for a,b,c,d being Function of Y,BOOLEAN holds (a 'eqv' b)=I_el(Y
   ) & (c 'eqv' d)=I_el(Y) implies ((a 'imp' c) 'eqv' (b 'imp' d))=I_el(Y)
 proof
-  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  let a,b,c,d be Function of Y,BOOLEAN;
   assume a 'eqv' b=I_el(Y) & c 'eqv' d=I_el(Y);
   then a = b & c = d by BVFUNC_1:17;
   hence thesis by BVFUNC_1:17;
 end;
 
 theorem
-  for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b)=I_el(Y
+  for a,b,c,d being Function of Y,BOOLEAN holds (a 'eqv' b)=I_el(Y
   ) & (c 'eqv' d)=I_el(Y) implies ((a 'or' c) 'eqv' (b 'or' d))=I_el(Y)
 proof
-  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  let a,b,c,d be Function of Y,BOOLEAN;
   assume a 'eqv' b=I_el(Y) & c 'eqv' d=I_el(Y);
   then a = b & c = d by BVFUNC_1:17;
   hence thesis by BVFUNC_1:17;
 end;
 
 theorem
-  for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b)=I_el(Y
+  for a,b,c,d being Function of Y,BOOLEAN holds (a 'eqv' b)=I_el(Y
   ) & (c 'eqv' d)=I_el(Y) implies ((a 'eqv' c) 'eqv' (b 'eqv' d))=I_el(Y)
 proof
-  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  let a,b,c,d be Function of Y,BOOLEAN;
   assume a 'eqv' b=I_el(Y) & c 'eqv' d=I_el(Y);
   then a = b & c = d by BVFUNC_1:17;
   hence thesis by BVFUNC_1:17;
@@ -371,38 +226,24 @@ begin
 ::Chap. 2  Predicate Calculus
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
-  PARTITIONS(Y), PA being a_partition of Y holds All(a 'eqv' b,PA,G) = All(a
-  'imp' b,PA,G) '&' All(b 'imp' a,PA,G)
+  for a,b being Function of Y,BOOLEAN, G being Subset of
+  PARTITIONS(Y), PA being a_partition of Y
+   holds All(a 'eqv' b,PA,G) = All(a 'imp' b,PA,G) '&' All(b 'imp' a,PA,G)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
-  consider k3 being Function such that
-A1: (All(a 'eqv' b,PA,G))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (All(a 'imp' b,PA,G) '&' All(b 'imp' a,PA,G))=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for z being Element of Y holds All(a 'eqv' b,PA,G).z = (All(a 'imp' b,PA
-  ,G) '&' All(b 'imp' a,PA,G)).z
-  proof
     let z be Element of Y;
     All(a 'eqv' b,PA,G).z =(All((a 'imp' b) '&' (b 'imp' a),PA,G)).z by Th7
       .=(All(a 'imp' b,PA,G) '&' All(b 'imp' a,PA,G)).z by BVFUNC_1:39;
     hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(
+  for a being Function of Y,BOOLEAN, G being Subset of PARTITIONS(
   Y), PA,PB being a_partition of Y holds All(a,PA,G) '<' Ex(a,PB,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA,PB be a_partition of Y;
   All(a,PA,G) '<' a & a '<' Ex(a,PB,G) by BVFUNC_2:11,12;
@@ -410,11 +251,11 @@ proof
 end;
 
 theorem
-  for a,u being Element of Funcs(Y,BOOLEAN), G being Subset of
+  for a,u being Function of Y,BOOLEAN, G being Subset of
 PARTITIONS(Y), PA being a_partition of Y st a 'imp' u = I_el(Y) holds All(a,PA,
   G) 'imp' u = I_el(Y)
 proof
-  let a,u be Element of Funcs(Y,BOOLEAN);
+  let a,u be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   assume
@@ -450,11 +291,11 @@ BVFUNC_1:def 8
 end;
 
 theorem
-  for u being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(
+  for u being Function of Y,BOOLEAN, G being Subset of PARTITIONS(
 Y), PA being a_partition of Y st u is_independent_of PA,G holds Ex(u,PA,G) '<'
   u
 proof
-  let u be Element of Funcs(Y,BOOLEAN);
+  let u be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   assume u is_independent_of PA,G;
@@ -488,11 +329,11 @@ EQREL_1:def 6;
 end;
 
 theorem
-  for u being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(
+  for u being Function of Y,BOOLEAN, G being Subset of PARTITIONS(
 Y), PA being a_partition of Y st u is_independent_of PA,G holds u '<' All(u,PA,
   G)
 proof
-  let u be Element of Funcs(Y,BOOLEAN);
+  let u be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   assume u is_independent_of PA,G;
@@ -526,11 +367,11 @@ EQREL_1:def 6;
 end;
 
 theorem
-  for u being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(
+  for u being Function of Y,BOOLEAN, G being Subset of PARTITIONS(
 Y), PA,PB being a_partition of Y st u is_independent_of PB,G holds All(u,PA,G)
   '<' All(u,PB,G)
 proof
-  let u be Element of Funcs(Y,BOOLEAN);
+  let u be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA,PB be a_partition of Y;
   assume u is_independent_of PB,G;
@@ -567,11 +408,11 @@ A4: z in EqClass(z,CompF(PA,G)) by EQREL_1:def 6;
 end;
 
 theorem
-  for u being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(
+  for u being Function of Y,BOOLEAN, G being Subset of PARTITIONS(
   Y), PA,PB being a_partition of Y st u is_independent_of PA,G holds Ex(u,PA,G)
   '<' Ex(u,PB,G)
 proof
-  let u be Element of Funcs(Y,BOOLEAN);
+  let u be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA,PB be a_partition of Y;
   assume u is_independent_of PA,G;
@@ -608,11 +449,11 @@ EQREL_1:def 6;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
+  for a,b being Function of Y,BOOLEAN, G being Subset of
 PARTITIONS(Y), PA being a_partition of Y holds All(a 'eqv' b,PA,G) '<' All(a,PA
   ,G) 'eqv' All(b,PA,G)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   let z be Element of Y;
@@ -677,11 +518,11 @@ holds a.x=TRUE) & not (for x being Element of Y st x in EqClass(z,CompF(PA,G))
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
+  for a,b being Function of Y,BOOLEAN, G being Subset of
 PARTITIONS(Y), PA being a_partition of Y holds All(a '&' b,PA,G) '<' a '&' All(
   b,PA,G)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   let z be Element of Y;
@@ -721,11 +562,11 @@ A9: B_INF(b,CompF(PA,G)).z = TRUE by BVFUNC_1:def 16;
 end;
 
 theorem
-  for a,u being Element of Funcs(Y,BOOLEAN), G being Subset of
+  for a,u being Function of Y,BOOLEAN, G being Subset of
   PARTITIONS(Y), PA being a_partition of Y holds All(a,PA,G) 'imp' u '<' Ex(a
   'imp' u,PA,G)
 proof
-  let a,u be Element of Funcs(Y,BOOLEAN);
+  let a,u be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   let z be Element of Y;
@@ -771,11 +612,11 @@ A7:   u.z=TRUE;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
+  for a,b being Function of Y,BOOLEAN, G being Subset of
 PARTITIONS(Y), PA being a_partition of Y holds (a 'eqv' b)=I_el(Y) implies (All
   (a,PA,G) 'eqv' All(b,PA,G))=I_el(Y)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   assume
@@ -876,11 +717,11 @@ A23:  for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds b .x= TRUE;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
+  for a,b being Function of Y,BOOLEAN, G being Subset of
 PARTITIONS(Y), PA being a_partition of Y holds (a 'eqv' b)=I_el(Y) implies (Ex(
   a,PA,G) 'eqv' Ex(b,PA,G))=I_el(Y)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
   assume

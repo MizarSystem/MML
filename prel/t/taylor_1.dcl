@@ -13,28 +13,28 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="LIMFUNC1"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
 <FCluster aid="TAYLOR_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="130"/>
+<Func kind="K" nr="131"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="7"/>
-<Adjective nr="24">
-<Func kind="K" nr="50"/>
-<Func kind="K" nr="50"/>
+<Adjective nr="27">
+<Func kind="K" nr="48"/>
+<Func kind="K" nr="48"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="TAYLOR_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="103">
-<Func kind="K" nr="55"/>
+<Func kind="K" nr="105">
+<Func kind="K" nr="53"/>
 </Func>
 <Cluster>
 <Adjective nr="11" value="false"/>

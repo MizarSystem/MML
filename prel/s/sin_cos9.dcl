@@ -17,6 +17,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SIN_COS"/>
@@ -24,17 +25,17 @@
 </Signature>
 <FCluster aid="SIN_COS9" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="72">
-<Func kind="K" nr="147"/>
+<Func kind="K" nr="70">
+<Func kind="K" nr="154"/>
 <Func kind="K" nr="63">
 <Func kind="K" nr="43">
 <Func kind="K" nr="52">
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="157"/>
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="K" nr="52">
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="157"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -46,11 +47,11 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="72">
-<Func kind="K" nr="148"/>
+<Func kind="K" nr="70">
+<Func kind="K" nr="155"/>
 <Func kind="K" nr="63">
 <Func kind="K" nr="33"/>
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="157"/>
 </Func>
 </Func>
 <Cluster>
@@ -60,7 +61,7 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="151"/>
+<Func kind="K" nr="158"/>
 <Cluster>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
@@ -68,7 +69,7 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="152"/>
+<Func kind="K" nr="159"/>
 <Cluster>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
@@ -76,17 +77,17 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="72">
-<Func kind="K" nr="147"/>
+<Func kind="K" nr="70">
+<Func kind="K" nr="154"/>
 <Func kind="K" nr="62">
 <Func kind="K" nr="43">
 <Func kind="K" nr="52">
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="157"/>
 <Num nr="4"/>
 </Func>
 </Func>
 <Func kind="K" nr="52">
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="157"/>
 <Num nr="4"/>
 </Func>
 </Func>
@@ -98,11 +99,11 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="72">
-<Func kind="K" nr="148"/>
+<Func kind="K" nr="70">
+<Func kind="K" nr="155"/>
 <Func kind="K" nr="62">
 <Func kind="K" nr="52">
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="157"/>
 <Num nr="4"/>
 </Func>
 <Func kind="K" nr="50">
@@ -110,7 +111,7 @@
 <Num nr="3"/>
 <Num nr="4"/>
 </Func>
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="157"/>
 </Func>
 </Func>
 </Func>

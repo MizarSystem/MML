@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -29,7 +30,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -49,7 +50,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -66,16 +67,16 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="31">
+<Adjective nr="35">
 <Num nr="1"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="21">
+<Func kind="K" nr="19">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="19">
+<Func kind="K" nr="17">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

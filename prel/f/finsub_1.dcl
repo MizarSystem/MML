@@ -17,9 +17,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FINSUB_1" nr="1">
@@ -32,7 +32,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSUB_1" nr="2">
@@ -41,38 +41,38 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="39">
+<Func kind="K" nr="37">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FINSUB_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
+<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FINSUB_1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="18"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
+<Adjective nr="21"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FINSUB_1" nr="3">
@@ -84,7 +84,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="39">
+<Func kind="K" nr="37">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz and Konrad Raczkowski
 ::
 :: Received December 29, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,13 +16,13 @@ environ
 
  vocabularies TARSKI, XBOOLE_0, CLASSES1, ZFMISC_1, EQREL_1, TOLER_1, SETFAM_1,
       SUBSET_1, FUNCT_2, FUNCT_1, RELAT_1, MCART_1, GRAPH_1, ENS_1, PARTFUN1,
-      CAT_1, COH_SP;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
-      MCART_1, FUNCT_1, PARTFUN1, CLASSES1, FUNCT_2, BINOP_1, EQREL_1, TOLER_1,
-      CAT_1;
- constructors BINOP_1, EQREL_1, CLASSES1, TOLER_1, CAT_1, RELSET_1;
+      CAT_1, COH_SP, STRUCT_0, MONOID_0, RELAT_2, BINOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, SETFAM_1, RELAT_1,
+      RELSET_1, MCART_1, FUNCT_1, PARTFUN1, CLASSES1, FUNCT_2, BINOP_1,
+      EQREL_1, TOLER_1, STRUCT_0, GRAPH_1, CAT_1;
+ constructors BINOP_1, EQREL_1, CLASSES1, TOLER_1, CAT_1, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      EQREL_1, CAT_2;
+      EQREL_1, CAT_2, RELAT_1, CAT_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
 
 
@@ -197,7 +197,6 @@ end;
 
 definition
   let X,l;
-
   func dom l -> Element of CSp(X) equals
 :: COH_SP:def 7
   l`1`1;
@@ -257,24 +256,26 @@ definition
   func CComp X -> PartFunc of [:MapsC(X),MapsC(X):],MapsC(X) means
 :: COH_SP:def 13
 
-  (
-for l2,l1 holds [l2,l1] in dom it iff dom l2 = cod l1) & for l2,l1 st dom l2 =
-  cod l1 holds it.[l2,l1] = l2*l1;
-  func CId X -> Function of CSp(X),MapsC(X) means
-:: COH_SP:def 14
-
-  for C holds it.C = id$ C;
+  (for l2,l1 holds [l2,l1] in dom it iff dom l2 = cod l1) &
+   for l2,l1 st dom l2 = cod l1 holds it.[l2,l1] = l2*l1;
 end;
 
-theorem :: COH_SP:26
-  CatStr(# CSp(X),MapsC(X),CDom X,CCod X,CComp X,CId X #) is Category;
+canceled;
 
 definition
+ canceled;
   let X;
-  func CohCat(X) -> Category equals
+  func CohCat(X) -> non empty non void strict CatStr equals
 :: COH_SP:def 15
-  CatStr(# CSp(X),MapsC(X),CDom X,CCod X,
-    CComp X,CId X #);
+  CatStr(# CSp(X),MapsC(X),CDom X,CCod X,CComp X #);
+end;
+
+registration let X;
+ cluster CohCat X -> Category-like transitive associative reflexive;
+end;
+
+registration let X;
+ cluster CohCat X -> with_identities;
 end;
 
 begin :: Category of Tolerances
@@ -477,19 +478,23 @@ definition
   (
 for m2,m1 holds [m2,m1] in dom it iff dom m2 = cod m1) & for m2,m1 st dom m2 =
   cod m1 holds it.[m2,m1] = m2*m1;
-  func fId X -> Function of TOL(X),MapsT(X) means
-:: COH_SP:def 28
-
-  for T holds it.T = id$ T;
 end;
-
-theorem :: COH_SP:48
-  CatStr(# TOL(X),MapsT(X),fDom X,fCod X,fComp X,fId X #) is Category;
 
 definition
+ canceled;
   let X;
-  func TolCat(X) -> Category equals
+  func TolCat(X) -> non empty non void strict CatStr equals
 :: COH_SP:def 29
-  CatStr(# TOL(X),MapsT(X),fDom X,fCod X,
-    fComp X,fId X #);
+  CatStr(# TOL(X),MapsT(X),fDom X,fCod X,fComp X#);
 end;
+
+registration
+  let X;
+  cluster TolCat(X) -> Category-like transitive associative reflexive;
+end;
+
+registration
+  let X;
+  cluster TolCat(X) -> with_identities;
+end;
+

@@ -2,7 +2,7 @@
 ::  by Takashi Mitsuishi , Katsumi Wasaki and Yasunari Shidama
 ::
 :: Received December 7, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,18 +16,19 @@ environ
 
  vocabularies XBOOLE_0, SUBSET_1, PARTFUN1, NUMBERS, XREAL_0, ORDINAL1,
       RELAT_1, ARYTM_3, CARD_1, COMPLEX1, ORDINAL4, FUNCT_1, ARYTM_1, VALUED_1,
-      TARSKI, XXREAL_2, XXREAL_0, CFUNCT_1;
+      TARSKI, XXREAL_2, XXREAL_0, CFUNCT_1, XCMPLX_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, FUNCT_1, RELSET_1, PARTFUN1, RFUNCT_1, COMPLEX1, VALUED_1,
-      SEQ_2;
+      COMSEQ_2, SEQ_2;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, VALUED_1,
-      RFUNCT_1, SEQ_1, SEQ_2, NAT_1, RELSET_1;
- registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, VALUED_0, RFUNCT_1;
+      RFUNCT_1, SEQ_1, SEQ_2, NAT_1, RELSET_1, COMSEQ_2;
+ registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, VALUED_0, RFUNCT_1,
+      COMSEQ_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0, VALUED_1, SEQ_2;
+ definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0, VALUED_1, SEQ_2, COMSEQ_2;
  theorems TARSKI, SUBSET_1, FUNCT_1, PARTFUN1, PARTFUN2, RFUNCT_1, COMPLEX1,
       RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0,
-      VALUED_1, SEQ_2;
+      VALUED_1, COMSEQ_2;
  schemes PARTFUN2;
 
 begin
@@ -44,7 +45,7 @@ reserve r,q,cr1,cr2 for Element of COMPLEX;
 ::
 
 definition
-  mode Complex is Element of COMPLEX;
+  mode Complex is complex number;
 end;
 
 definition
@@ -100,7 +101,7 @@ C st c in dom f holds f/.c = F(c)) & (dom g=X & for c be Element of C st c in
   end;
 end;
 
-theorem Th3:
+theorem Th1:
   dom (f1+f2) = dom f1 /\ dom f2 & for c st c in dom(f1+f2) holds (
   f1+f2)/.c = (f1/.c) + (f2/.c)
 proof
@@ -122,7 +123,7 @@ A4: f2.c = f2/.c by PARTFUN1:def 6;
   hence thesis;
 end;
 
-theorem Th4:
+theorem Th2:
   dom (f1-f2) = dom f1 /\ dom f2 & for c st c in dom(f1-f2) holds (
   f1-f2)/.c = (f1/.c) - (f2/.c)
 proof
@@ -144,7 +145,7 @@ A4: f1/.c = f1.c by PARTFUN1:def 6;
   hence thesis;
 end;
 
-theorem Th5:
+theorem Th3:
   dom(f1(#)f2)=dom f1 /\ dom f2 & for c st c in dom(f1(#)f2) holds
   (f1(#)f2)/.c =(f1/.c) * (f2/.c)
 proof
@@ -166,7 +167,7 @@ A4: f2.c = f2/.c by PARTFUN1:def 6;
   hence thesis;
 end;
 
-theorem Th7:
+theorem Th4:
   dom (r(#)f) = dom f & for c st c in dom (r(#)f) holds (r(#)f)/.c = r * (f/.c)
 proof
   thus
@@ -182,7 +183,7 @@ A2: c in dom (r(#)f);
   hence thesis;
 end;
 
-theorem Th9:
+theorem Th5:
   dom (-f) = dom f & for c st c in dom (-f) holds (-f)/.c = -f/.c
 proof
   thus
@@ -200,7 +201,7 @@ end;
 
 Lm1: x in f"Y iff x in dom f & f/.x in Y by PARTFUN2:26;
 
-theorem Th15:
+theorem Th6:
   dom (g^) c= dom g & dom g /\ (dom g \ g"{0}) = dom g \ g"{0}
 proof
   dom (g^) = dom g \ g"{0c} by Def2;
@@ -208,7 +209,7 @@ proof
   thus thesis by XBOOLE_1:28,36;
 end;
 
-theorem Th16:
+theorem Th7:
   dom (f1(#)f2) \ (f1(#)f2)"{0} = (dom f1 \ (f1)"{0}) /\ (dom f2 \ (f2)"{0})
 proof
   thus dom (f1(#)f2) \ (f1(#)f2)"{0} c= (dom f1 \ (f1)"{0}) /\ (dom f2 \ (f2)"
@@ -224,12 +225,12 @@ A2: x in dom (f1(#)f2) by XBOOLE_0:def 5;
     then not (f1(#)f2)/.x1 in {0c} by A2,PARTFUN2:26;
     then (f1(#)f2)/.x1 <> 0c by TARSKI:def 1;
     then
-A3: (f1/.x1) * (f2/.x1) <> 0c by A2,Th5;
+A3: (f1/.x1) * (f2/.x1) <> 0c by A2,Th3;
     then (f2/.x1) <> 0c;
     then not (f2/.x1) in {0c } by TARSKI:def 1;
     then
 A4: not x1 in (f2)"{0c} by PARTFUN2:26;
-A5: x1 in dom f1 /\ dom f2 by A2,Th5;
+A5: x1 in dom f1 /\ dom f2 by A2,Th3;
     then x1 in dom f2 by XBOOLE_0:def 4;
     then
 A6: x in dom f2 \ (f2)"{0c} by A4,XBOOLE_0:def 5;
@@ -260,19 +261,19 @@ A12: x in dom f1 \ (f1)"{0c} by A8,XBOOLE_0:def 4;
 A13: x in dom f1 by XBOOLE_0:def 5;
     then x1 in dom f1 /\ dom f2 by A10,XBOOLE_0:def 4;
     then
-A14: x1 in dom (f1(#)f2) by Th5;
+A14: x1 in dom (f1(#)f2) by Th3;
     not x in (f1)"{0c} by A12,XBOOLE_0:def 5;
     then not (f1/.x1) in {0c} by A13,PARTFUN2:26;
     then (f1/.x1) <> 0c by TARSKI:def 1;
     then (f1/.x1) * (f2/.x1) <>0c by A11,XCMPLX_1:6;
-    then (f1(#)f2)/.x1 <> 0c by A14,Th5;
+    then (f1(#)f2)/.x1 <> 0c by A14,Th3;
     then not (f1(#)f2)/.x1 in {0c} by TARSKI:def 1;
     then not x in (f1(#)f2)"{0c} by PARTFUN2:26;
     hence thesis by A14,XBOOLE_0:def 5;
   end;
 end;
 
-theorem Th17:
+theorem Th8:
   c in dom (f^) implies (f/.c) <> 0
 proof
   assume that
@@ -295,7 +296,7 @@ A4: not c in f"{0c} by XBOOLE_0:def 5;
   hence contradiction;
 end;
 
-theorem Th18:
+theorem Th9:
   (f^)"{0} = {}
 proof
   set x = the Element of (f^)"{0c};
@@ -314,7 +315,7 @@ A4: not f/.x in {0c} by PARTFUN2:26;
   hence contradiction by A4,TARSKI:def 1,XCMPLX_1:202;
 end;
 
-theorem Th19:
+theorem Th10:
   |.f.|"{0} = f"{0} & (-f)"{0} = f"{0}
 proof
 A1: dom |.f.| = dom f by VALUED_1:def 11;
@@ -361,10 +362,10 @@ A9:   c in (-f)"{0c};
 A10:  c in dom (-f) by PARTFUN2:26;
       (-f)/.c in {0c} by A9,PARTFUN2:26;
       then (-f)/.c = 0c by TARSKI:def 1;
-      then --((f/.c)) = -0c by A10,Th9;
+      then --((f/.c)) = -0c by A10,Th5;
       then
 A11:  (f/.c) in {0c} by TARSKI:def 1;
-      c in dom f by A10,Th9;
+      c in dom f by A10,Th5;
       hence thesis by A11,PARTFUN2:26;
     end;
     assume
@@ -373,27 +374,27 @@ A12: c in (f)"{0c};
     then
 A13: (f/.c) = 0c by TARSKI:def 1;
 A14: c in dom f by A12,PARTFUN2:26;
-    then c in dom (-f) by Th9;
-    then (-f)/.c = -0c by A13,Th9;
+    then c in dom (-f) by Th5;
+    then (-f)/.c = -0c by A13,Th5;
     then
 A15: (-f)/.c in {0c} by TARSKI:def 1;
-    c in dom (-f) by A14,Th9;
+    c in dom (-f) by A14,Th5;
     hence c in (-f)"{0c} by A15,PARTFUN2:26;
   end;
   hence thesis by SUBSET_1:3;
 end;
 
-theorem Th20:
+theorem Th11:
   dom (f^^) = dom (f|(dom (f^)))
 proof
 A1: dom (f^) = dom f \ f"{0c} by Def2;
   thus dom (f^^) = dom (f^) \(f^)"{0c} by Def2
-    .= dom (f^) \ {} by Th18
+    .= dom (f^) \ {} by Th9
     .= dom f /\ dom (f^) by A1,XBOOLE_1:28,36
     .= dom (f|(dom (f^))) by RELAT_1:61;
 end;
 
-theorem Th21:
+theorem Th12:
   r<>0 implies (r(#)f)"{0} = f"{0}
 proof
   assume
@@ -408,11 +409,11 @@ A2:   c in (r(#)f)"{0c};
 A3:   c in dom (r(#)f) by PARTFUN2:26;
       (r(#)f)/.c in {0c} by A2,PARTFUN2:26;
       then (r(#)f)/.c = 0c by TARSKI:def 1;
-      then r*(f/.c) = 0c by A3,Th7;
+      then r*(f/.c) = 0c by A3,Th4;
       then (f/.c) = 0c by A1,XCMPLX_1:6;
       then
 A4:   (f/.c) in {0c} by TARSKI:def 1;
-      c in dom f by A3,Th7;
+      c in dom f by A3,Th4;
       hence thesis by A4,PARTFUN2:26;
     end;
     assume
@@ -422,11 +423,11 @@ A5: c in (f)"{0c};
     then
 A6: r*(f/.c) = 0c;
 A7: c in dom f by A5,PARTFUN2:26;
-    then c in dom (r(#)f) by Th7;
-    then (r(#)f)/.c = 0c by A6,Th7;
+    then c in dom (r(#)f) by Th4;
+    then (r(#)f)/.c = 0c by A6,Th4;
     then
 A8: (r(#)f)/.c in {0c} by TARSKI:def 1;
-    c in dom (r(#)f) by A7,Th7;
+    c in dom (r(#)f) by A7,Th4;
     hence c in (r(#)f)"{0c} by A8,PARTFUN2:26;
   end;
   hence thesis by SUBSET_1:3;
@@ -456,52 +457,52 @@ A3: c in dom (f1 + f2) by XBOOLE_0:def 4;
     c in dom f1 /\ dom (f2 + f3) by A1,A2,VALUED_1:def 1;
     then
 A4: c in dom (f2 + f3) by XBOOLE_0:def 4;
-    thus (f1 + f2 + f3)/.c = (f1 + f2)/.c + (f3/.c) by A2,Th3
-      .= ((f1/.c)) + ((f2/.c)) + (f3/.c) by A3,Th3
+    thus (f1 + f2 + f3)/.c = (f1 + f2)/.c + (f3/.c) by A2,Th1
+      .= ((f1/.c)) + ((f2/.c)) + (f3/.c) by A3,Th1
       .= ((f1/.c)) + (((f2/.c)) + (f3/.c))
-      .= ((f1/.c)) + (f2 + f3)/.c by A4,Th3
-      .= (f1 + (f2 + f3))/.c by A1,A2,Th3;
+      .= ((f1/.c)) + (f2 + f3)/.c by A4,Th1
+      .= (f1 + (f2 + f3))/.c by A1,A2,Th1;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th23:
+theorem Th14:
   (f1 (#) f2) (#) f3 = f1 (#) (f2 (#) f3)
 proof
-A1: dom (f1 (#) f2 (#) f3) = dom (f1 (#) f2) /\ dom f3 by Th5
-    .= dom f1 /\ dom f2 /\ dom f3 by Th5
+A1: dom (f1 (#) f2 (#) f3) = dom (f1 (#) f2) /\ dom f3 by Th3
+    .= dom f1 /\ dom f2 /\ dom f3 by Th3
     .= dom f1 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
-    .= dom f1 /\ dom (f2 (#) f3) by Th5
-    .= dom (f1 (#) (f2 (#) f3)) by Th5;
+    .= dom f1 /\ dom (f2 (#) f3) by Th3
+    .= dom (f1 (#) (f2 (#) f3)) by Th3;
   now
     let c;
     assume
 A2: c in dom (f1(#)f2(#)f3);
-    then c in dom (f1 (#) f2) /\ dom f3 by Th5;
+    then c in dom (f1 (#) f2) /\ dom f3 by Th3;
     then
 A3: c in dom (f1 (#) f2) by XBOOLE_0:def 4;
-    c in dom f1 /\ dom (f2(#)f3) by A1,A2,Th5;
+    c in dom f1 /\ dom (f2(#)f3) by A1,A2,Th3;
     then
 A4: c in dom (f2 (#) f3) by XBOOLE_0:def 4;
-    thus (f1 (#) f2 (#) f3)/.c = (f1 (#) f2)/.c * (f3/.c) by A2,Th5
-      .= ((f1/.c)) * ((f2/.c)) * (f3/.c) by A3,Th5
+    thus (f1 (#) f2 (#) f3)/.c = (f1 (#) f2)/.c * (f3/.c) by A2,Th3
+      .= ((f1/.c)) * ((f2/.c)) * (f3/.c) by A3,Th3
       .= ((f1/.c)) * (((f2/.c)) * (f3/.c))
-      .= ((f1/.c)) * ((f2 (#) f3)/.c) by A4,Th5
-      .= (f1 (#) (f2 (#) f3))/.c by A1,A2,Th5;
+      .= ((f1/.c)) * ((f2 (#) f3)/.c) by A4,Th3
+      .= (f1 (#) (f2 (#) f3))/.c by A1,A2,Th3;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th24:
+theorem Th15:
   (f1 + f2) (#) f3=f1 (#) f3 + f2 (#) f3
 proof
-A1: dom ((f1 + f2) (#) f3) = dom (f1 + f2) /\ dom f3 by Th5
+A1: dom ((f1 + f2) (#) f3) = dom (f1 + f2) /\ dom f3 by Th3
     .= dom f1 /\ dom f2 /\ (dom f3 /\ dom f3) by VALUED_1:def 1
     .= dom f1 /\ dom f2 /\ dom f3 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ dom f2 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
-    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Th5
-    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Th5
+    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Th3
+    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Th3
     .= dom (f1 (#) f3 + f2 (#) f3) by VALUED_1:def 1;
   now
     let c;
@@ -511,132 +512,132 @@ A2: c in dom ((f1 + f2)(#)f3);
 A3: c in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,VALUED_1:def 1;
     then
 A4: c in dom (f1(#)f3) by XBOOLE_0:def 4;
-    c in dom (f1 + f2) /\ dom f3 by A2,Th5;
+    c in dom (f1 + f2) /\ dom f3 by A2,Th3;
     then
 A5: c in dom (f1 + f2) by XBOOLE_0:def 4;
 A6: c in dom (f2 (#) f3) by A3,XBOOLE_0:def 4;
-    thus ((f1 + f2) (#) f3)/.c = (f1 + f2)/.c * (f3/.c) by A2,Th5
-      .= (((f1/.c)) + ((f2/.c))) * (f3/.c) by A5,Th3
+    thus ((f1 + f2) (#) f3)/.c = (f1 + f2)/.c * (f3/.c) by A2,Th3
+      .= (((f1/.c)) + ((f2/.c))) * (f3/.c) by A5,Th1
       .= ((f1/.c)) * (f3/.c) + ((f2/.c)) * (f3/.c)
-      .= (f1 (#) f3)/.c + ((f2/.c))* (f3/.c) by A4,Th5
-      .= (f1 (#) f3)/.c + (f2 (#) f3)/.c by A6,Th5
-      .=((f1 (#) f3) + (f2 (#) f3))/.c by A1,A2,Th3;
+      .= (f1 (#) f3)/.c + ((f2/.c))* (f3/.c) by A4,Th3
+      .= (f1 (#) f3)/.c + (f2 (#) f3)/.c by A6,Th3
+      .=((f1 (#) f3) + (f2 (#) f3))/.c by A1,A2,Th1;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
 theorem
-  f3 (#) (f1 + f2)=f3(#)f1 + f3(#)f2 by Th24;
+  f3 (#) (f1 + f2)=f3(#)f1 + f3(#)f2 by Th15;
 
-theorem Th26:
+theorem Th17:
   r(#)(f1(#)f2)=r(#)f1(#)f2
 proof
-A1: dom (r(#)(f1 (#) f2)) = dom (f1 (#) f2) by Th7
-    .= dom f1 /\ dom f2 by Th5
-    .= dom (r(#)f1) /\ dom f2 by Th7
-    .= dom (r(#)f1(#)f2) by Th5;
+A1: dom (r(#)(f1 (#) f2)) = dom (f1 (#) f2) by Th4
+    .= dom f1 /\ dom f2 by Th3
+    .= dom (r(#)f1) /\ dom f2 by Th4
+    .= dom (r(#)f1(#)f2) by Th3;
   now
     let c;
     assume
 A2: c in dom (r(#)(f1(#)f2));
     then
-A3: c in dom (f1(#)f2) by Th7;
-    c in dom (r(#)f1) /\ dom f2 by A1,A2,Th5;
+A3: c in dom (f1(#)f2) by Th4;
+    c in dom (r(#)f1) /\ dom f2 by A1,A2,Th3;
     then
 A4: c in dom (r(#)f1) by XBOOLE_0:def 4;
-    thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Th7
-      .= r*(((f1/.c)) * ((f2/.c))) by A3,Th5
+    thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Th4
+      .= r*(((f1/.c)) * ((f2/.c))) by A3,Th3
       .= (r*((f1/.c))) * ((f2/.c))
-      .= (r(#)f1)/.c * ((f2/.c)) by A4,Th7
-      .= (r(#)f1 (#) f2)/.c by A1,A2,Th5;
+      .= (r(#)f1)/.c * ((f2/.c)) by A4,Th4
+      .= (r(#)f1 (#) f2)/.c by A1,A2,Th3;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th27:
+theorem Th18:
   r(#)(f1(#)f2)=f1(#)(r(#)f2)
 proof
-A1: dom (r(#)(f1 (#) f2)) = dom (f1 (#) f2) by Th7
-    .= dom f1 /\ dom f2 by Th5
-    .= dom f1 /\ dom (r(#)f2) by Th7
-    .= dom (f1(#)(r(#)f2)) by Th5;
+A1: dom (r(#)(f1 (#) f2)) = dom (f1 (#) f2) by Th4
+    .= dom f1 /\ dom f2 by Th3
+    .= dom f1 /\ dom (r(#)f2) by Th4
+    .= dom (f1(#)(r(#)f2)) by Th3;
   now
     let c;
     assume
 A2: c in dom (r(#)(f1(#)f2));
     then
-A3: c in dom (f1(#)f2) by Th7;
-    c in dom f1 /\ dom (r(#)f2) by A1,A2,Th5;
+A3: c in dom (f1(#)f2) by Th4;
+    c in dom f1 /\ dom (r(#)f2) by A1,A2,Th3;
     then
 A4: c in dom (r(#)f2) by XBOOLE_0:def 4;
-    thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Th7
-      .= r * (((f1/.c)) * ((f2/.c))) by A3,Th5
+    thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Th4
+      .= r * (((f1/.c)) * ((f2/.c))) by A3,Th3
       .= ((f1/.c)) * (r * ((f2/.c)))
-      .= ((f1/.c)) * ((r(#)f2)/.c) by A4,Th7
-      .= (f1(#)(r(#)f2))/.c by A1,A2,Th5;
+      .= ((f1/.c)) * ((r(#)f2)/.c) by A4,Th4
+      .= (f1(#)(r(#)f2))/.c by A1,A2,Th3;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th28:
+theorem Th19:
   (f1 - f2)(#)f3=f1(#)f3 - f2(#)f3
 proof
-A1: dom ((f1 - f2) (#) f3) = dom (f1 - f2) /\ dom f3 by Th5
-    .= dom f1 /\ dom f2 /\ (dom f3 /\ dom f3) by Th4
+A1: dom ((f1 - f2) (#) f3) = dom (f1 - f2) /\ dom f3 by Th3
+    .= dom f1 /\ dom f2 /\ (dom f3 /\ dom f3) by Th2
     .= dom f1 /\ dom f2 /\ dom f3 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ dom f2 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
-    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Th5
-    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Th5
-    .= dom (f1 (#) f3 - f2 (#) f3) by Th4;
+    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Th3
+    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Th3
+    .= dom (f1 (#) f3 - f2 (#) f3) by Th2;
   now
     let c;
     assume
 A2: c in dom ((f1 - f2)(#)f3);
-    then c in dom (f1 - f2) /\ dom f3 by Th5;
+    then c in dom (f1 - f2) /\ dom f3 by Th3;
     then
 A3: c in dom (f1 - f2) by XBOOLE_0:def 4;
-A4: c in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,A2,Th4;
+A4: c in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,A2,Th2;
     then
 A5: c in dom (f1(#)f3) by XBOOLE_0:def 4;
 A6: c in dom (f2 (#) f3) by A4,XBOOLE_0:def 4;
-    thus ((f1 - f2) (#) f3)/.c = (f1 - f2)/.c * (f3/.c) by A2,Th5
-      .= (((f1/.c)) - ((f2/.c))) * (f3/.c) by A3,Th4
+    thus ((f1 - f2) (#) f3)/.c = (f1 - f2)/.c * (f3/.c) by A2,Th3
+      .= (((f1/.c)) - ((f2/.c))) * (f3/.c) by A3,Th2
       .= ((f1/.c)) * (f3/.c) - ((f2/.c)) * (f3/.c)
-      .= (f1 (#) f3)/.c - ((f2/.c)) * (f3/.c) by A5,Th5
-      .= (f1 (#) f3)/.c - (f2 (#) f3)/.c by A6,Th5
-      .=((f1 (#) f3) - (f2 (#) f3))/.c by A1,A2,Th4;
+      .= (f1 (#) f3)/.c - ((f2/.c)) * (f3/.c) by A5,Th3
+      .= (f1 (#) f3)/.c - (f2 (#) f3)/.c by A6,Th3
+      .=((f1 (#) f3) - (f2 (#) f3))/.c by A1,A2,Th2;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
 theorem
-  f3(#)f1 - f3(#)f2 = f3(#)(f1 - f2) by Th28;
+  f3(#)f1 - f3(#)f2 = f3(#)(f1 - f2) by Th19;
 
 theorem
   r(#)(f1 + f2) = r(#)f1 + r(#)f2
 proof
-A1: dom (r(#)(f1 + f2)) = dom (f1 + f2) by Th7
+A1: dom (r(#)(f1 + f2)) = dom (f1 + f2) by Th4
     .= dom f1 /\ dom f2 by VALUED_1:def 1
-    .= dom f1 /\ dom (r(#)f2) by Th7
-    .= dom (r(#)f1) /\ dom (r(#)f2) by Th7
+    .= dom f1 /\ dom (r(#)f2) by Th4
+    .= dom (r(#)f1) /\ dom (r(#)f2) by Th4
     .= dom (r(#)f1 + r(#)f2) by VALUED_1:def 1;
   now
     let c;
     assume
 A2: c in dom (r(#)(f1 + f2));
     then
-A3: c in dom (f1 + f2) by Th7;
+A3: c in dom (f1 + f2) by Th4;
 A4: c in dom (r(#)f1) /\ dom (r(#)f2) by A1,A2,VALUED_1:def 1;
     then
 A5: c in dom (r(#)f1) by XBOOLE_0:def 4;
 A6: c in dom (r(#)f2) by A4,XBOOLE_0:def 4;
-    thus (r(#)(f1 + f2))/.c = r * ((f1 + f2)/.c) by A2,Th7
-      .= r * (((f1/.c)) + ((f2/.c))) by A3,Th3
+    thus (r(#)(f1 + f2))/.c = r * ((f1 + f2)/.c) by A2,Th4
+      .= r * (((f1/.c)) + ((f2/.c))) by A3,Th1
       .= r * ((f1/.c)) + r * ((f2/.c))
-      .= (r(#)f1)/.c + r * ((f2/.c)) by A5,Th7
-      .= (r(#)f1)/.c + (r(#)f2)/.c by A6,Th7
-      .= (r(#)f1 + r(#)f2)/.c by A1,A2,Th3;
+      .= (r(#)f1)/.c + r * ((f2/.c)) by A5,Th4
+      .= (r(#)f1)/.c + (r(#)f2)/.c by A6,Th4
+      .= (r(#)f1 + r(#)f2)/.c by A1,A2,Th1;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -644,19 +645,19 @@ end;
 theorem
   (r*q)(#)f = r(#)(q(#)f)
 proof
-A1: dom ((r*q) (#) f) = dom f by Th7
-    .= dom (q(#)f) by Th7
-    .= dom (r(#)(q(#)f)) by Th7;
+A1: dom ((r*q) (#) f) = dom f by Th4
+    .= dom (q(#)f) by Th4
+    .= dom (r(#)(q(#)f)) by Th4;
   now
     let c;
     assume
 A2: c in dom ((r*q)(#)f);
     then
-A3: c in dom (q(#)f) by A1,Th7;
-    thus ((r*q)(#)f)/.c = r*q * (f/.c) by A2,Th7
+A3: c in dom (q(#)f) by A1,Th4;
+    thus ((r*q)(#)f)/.c = r*q * (f/.c) by A2,Th4
       .= r*(q * (f/.c))
-      .= r * ((q(#)f)/.c) by A3,Th7
-      .= (r(#)(q(#)f))/.c by A1,A2,Th7;
+      .= r * ((q(#)f)/.c) by A3,Th4
+      .= (r(#)(q(#)f))/.c by A1,A2,Th4;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -664,27 +665,27 @@ end;
 theorem
   r(#)(f1 - f2) = r(#)f1 - r(#)f2
 proof
-A1: dom (r(#)(f1 - f2)) = dom (f1 - f2) by Th7
-    .= dom f1 /\ dom f2 by Th4
-    .= dom f1 /\ dom (r(#)f2) by Th7
-    .= dom (r(#)f1) /\ dom (r(#)f2) by Th7
-    .= dom (r(#)f1 - r(#)f2) by Th4;
+A1: dom (r(#)(f1 - f2)) = dom (f1 - f2) by Th4
+    .= dom f1 /\ dom f2 by Th2
+    .= dom f1 /\ dom (r(#)f2) by Th4
+    .= dom (r(#)f1) /\ dom (r(#)f2) by Th4
+    .= dom (r(#)f1 - r(#)f2) by Th2;
   now
     let c;
     assume
 A2: c in dom (r(#)(f1 - f2));
     then
-A3: c in dom (f1 - f2) by Th7;
-A4: c in dom (r(#)f1) /\ dom (r(#)f2) by A1,A2,Th4;
+A3: c in dom (f1 - f2) by Th4;
+A4: c in dom (r(#)f1) /\ dom (r(#)f2) by A1,A2,Th2;
     then
 A5: c in dom (r(#)f1) by XBOOLE_0:def 4;
 A6: c in dom (r(#)f2) by A4,XBOOLE_0:def 4;
-    thus (r(#)(f1 - f2))/.c = r * ((f1 - f2)/.c) by A2,Th7
-      .= r * (((f1/.c)) - ((f2/.c))) by A3,Th4
+    thus (r(#)(f1 - f2))/.c = r * ((f1 - f2)/.c) by A2,Th4
+      .= r * (((f1/.c)) - ((f2/.c))) by A3,Th2
       .= r * ((f1/.c)) - r * ((f2/.c))
-      .= (r(#)f1)/.c - r * ((f2/.c)) by A5,Th7
-      .= (r(#)f1)/.c - (r(#)f2)/.c by A6,Th7
-      .= (r(#)f1 - r(#)f2)/.c by A1,A2,Th4;
+      .= (r(#)f1)/.c - r * ((f2/.c)) by A5,Th4
+      .= (r(#)f1)/.c - (r(#)f2)/.c by A6,Th4
+      .= (r(#)f1 - r(#)f2)/.c by A1,A2,Th2;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -692,18 +693,18 @@ end;
 theorem
   f1-f2 = (-1r)(#)(f2-f1)
 proof
-A1: dom (f1 - f2) = dom f2 /\ dom f1 by Th4
-    .= dom (f2 - f1) by Th4
-    .= dom ((-1r)(#)(f2 - f1)) by Th7;
+A1: dom (f1 - f2) = dom f2 /\ dom f1 by Th2
+    .= dom (f2 - f1) by Th2
+    .= dom ((-1r)(#)(f2 - f1)) by Th4;
   now
-A2: dom (f1 - f2) = dom f2 /\ dom f1 by Th4
-      .= dom (f2 - f1) by Th4;
+A2: dom (f1 - f2) = dom f2 /\ dom f1 by Th2
+      .= dom (f2 - f1) by Th2;
     let c such that
 A3: c in dom (f1-f2);
-    thus (f1 - f2)/.c = ((f1/.c)) - ((f2/.c)) by A3,Th4
+    thus (f1 - f2)/.c = ((f1/.c)) - ((f2/.c)) by A3,Th2
       .= (-1)*(((f2/.c)) - ((f1/.c)))
-      .= (-1r)*((f2 - f1)/.c) by A3,A2,Th4,COMPLEX1:def 4
-      .= ((-1r)(#)(f2 - f1))/.c by A1,A3,Th7;
+      .= (-1r)*((f2 - f1)/.c) by A3,A2,Th2,COMPLEX1:def 4
+      .= ((-1r)(#)(f2 - f1))/.c by A1,A3,Th4;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -711,26 +712,26 @@ end;
 theorem
   f1 - (f2 + f3) = f1 - f2 - f3
 proof
-A1: dom (f1 - (f2 + f3)) = dom f1 /\ dom (f2 + f3) by Th4
+A1: dom (f1 - (f2 + f3)) = dom f1 /\ dom (f2 + f3) by Th2
     .= dom f1 /\ (dom f2 /\ dom f3) by VALUED_1:def 1
     .= dom f1 /\ dom f2 /\ dom f3 by XBOOLE_1:16
-    .= dom (f1 - f2) /\ dom f3 by Th4
-    .= dom (f1 - f2 - f3) by Th4;
+    .= dom (f1 - f2) /\ dom f3 by Th2
+    .= dom (f1 - f2 - f3) by Th2;
   now
     let c;
     assume
 A2: c in dom (f1 - (f2 + f3));
-    then c in dom f1 /\ dom (f2 + f3) by Th4;
+    then c in dom f1 /\ dom (f2 + f3) by Th2;
     then
 A3: c in dom (f2 + f3) by XBOOLE_0:def 4;
-    c in dom (f1 - f2) /\ dom f3 by A1,A2,Th4;
+    c in dom (f1 - f2) /\ dom f3 by A1,A2,Th2;
     then
 A4: c in dom (f1 - f2) by XBOOLE_0:def 4;
-    thus (f1 - (f2 + f3))/.c = ((f1/.c)) - (f2 + f3)/.c by A2,Th4
-      .= ((f1/.c)) - (((f2/.c)) + (f3/.c)) by A3,Th3
+    thus (f1 - (f2 + f3))/.c = ((f1/.c)) - (f2 + f3)/.c by A2,Th2
+      .= ((f1/.c)) - (((f2/.c)) + (f3/.c)) by A3,Th1
       .= ((f1/.c)) - ((f2/.c)) - (f3/.c)
-      .= (f1 - f2)/.c - (f3/.c) by A4,Th4
-      .= (f1 - f2 - f3)/.c by A1,A2,Th4;
+      .= (f1 - f2)/.c - (f3/.c) by A4,Th2
+      .= (f1 - f2 - f3)/.c by A1,A2,Th2;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -741,20 +742,20 @@ proof
 A1: now
     let c;
     assume c in dom (1r(#)f);
-    hence (1r(#)f)/.c = 1r * (f/.c) by Th7
+    hence (1r(#)f)/.c = 1r * (f/.c) by Th4
       .= (f/.c) by COMPLEX1:def 4;
   end;
-  dom (1r(#)f) = dom f by Th7;
+  dom (1r(#)f) = dom f by Th4;
   hence thesis by A1,PARTFUN2:1;
 end;
 
 theorem
   f1 - (f2 - f3) = f1 - f2 + f3
 proof
-A1: dom (f1 - (f2 - f3)) = dom f1 /\ dom (f2 - f3) by Th4
-    .= dom f1 /\ (dom f2 /\ dom f3) by Th4
+A1: dom (f1 - (f2 - f3)) = dom f1 /\ dom (f2 - f3) by Th2
+    .= dom f1 /\ (dom f2 /\ dom f3) by Th2
     .= dom f1 /\ dom f2 /\ dom f3 by XBOOLE_1:16
-    .= dom (f1 - f2) /\ dom f3 by Th4
+    .= dom (f1 - f2) /\ dom f3 by Th2
     .= dom (f1 - f2 + f3) by VALUED_1:def 1;
   now
     let c;
@@ -763,14 +764,14 @@ A2: c in dom (f1 - (f2 - f3));
     then c in dom (f1 - f2) /\ dom f3 by A1,VALUED_1:def 1;
     then
 A3: c in dom (f1 - f2) by XBOOLE_0:def 4;
-    c in dom f1 /\ dom (f2 - f3) by A2,Th4;
+    c in dom f1 /\ dom (f2 - f3) by A2,Th2;
     then
 A4: c in dom (f2 - f3) by XBOOLE_0:def 4;
-    thus (f1 - (f2 - f3))/.c = ((f1/.c)) - (f2 - f3)/.c by A2,Th4
-      .= ((f1/.c)) - (((f2/.c)) - (f3/.c)) by A4,Th4
+    thus (f1 - (f2 - f3))/.c = ((f1/.c)) - (f2 - f3)/.c by A2,Th2
+      .= ((f1/.c)) - (((f2/.c)) - (f3/.c)) by A4,Th2
       .= ((f1/.c)) - ((f2/.c)) + (f3/.c)
-      .= (f1 - f2)/.c + (f3/.c) by A3,Th4
-      .= (f1 - f2 + f3)/.c by A1,A2,Th3;
+      .= (f1 - f2)/.c + (f3/.c) by A3,Th2
+      .= (f1 - f2 + f3)/.c by A1,A2,Th1;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -779,10 +780,10 @@ theorem
   f1 + (f2 - f3) =f1 + f2 - f3
 proof
 A1: dom (f1 + (f2 - f3)) = dom f1 /\ dom (f2 - f3) by VALUED_1:def 1
-    .= dom f1 /\ (dom f2 /\ dom f3) by Th4
+    .= dom f1 /\ (dom f2 /\ dom f3) by Th2
     .= dom f1 /\ dom f2 /\ dom f3 by XBOOLE_1:16
     .= dom (f1 + f2) /\ dom f3 by VALUED_1:def 1
-    .= dom (f1 + f2 - f3) by Th4;
+    .= dom (f1 + f2 - f3) by Th2;
   now
     let c;
     assume
@@ -790,23 +791,23 @@ A2: c in dom (f1 + (f2 - f3));
     then c in dom f1 /\ dom (f2 - f3) by VALUED_1:def 1;
     then
 A3: c in dom (f2 - f3) by XBOOLE_0:def 4;
-    c in dom (f1 + f2) /\ dom f3 by A1,A2,Th4;
+    c in dom (f1 + f2) /\ dom f3 by A1,A2,Th2;
     then
 A4: c in dom (f1 + f2) by XBOOLE_0:def 4;
-    thus (f1 + (f2 - f3))/.c = ((f1/.c)) + (f2 - f3)/.c by A2,Th3
-      .= ((f1/.c)) + (((f2/.c)) - (f3/.c)) by A3,Th4
+    thus (f1 + (f2 - f3))/.c = ((f1/.c)) + (f2 - f3)/.c by A2,Th1
+      .= ((f1/.c)) + (((f2/.c)) - (f3/.c)) by A3,Th2
       .= ((f1/.c)) + ((f2/.c)) - (f3/.c)
-      .= (f1 + f2)/.c - (f3/.c) by A4,Th3
-      .= (f1 + f2 - f3)/.c by A1,A2,Th4;
+      .= (f1 + f2)/.c - (f3/.c) by A4,Th1
+      .= (f1 + f2 - f3)/.c by A1,A2,Th2;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th38:
+theorem Th29:
   |.f1(#)f2.| = |.f1.|(#)|.f2.|
 proof
 A1: dom (|.f1 (#) f2.|) = dom (f1 (#) f2) by VALUED_1:def 11
-    .= dom f1 /\ dom f2 by Th5
+    .= dom f1 /\ dom f2 by Th3
     .= dom f1 /\ dom (|.f2.|) by VALUED_1:def 11
     .= dom (|.f1.|) /\ dom (|.f2.|) by VALUED_1:def 11
     .= dom (|.f1.|(#)|.f2.|) by VALUED_1:def 4;
@@ -827,7 +828,7 @@ A7: f1.c = f1/.c by A3,PARTFUN1:def 6;
 A8: f2/.c = f2.c by A2,PARTFUN1:def 6;
     thus (|.(f1(#)f2).|).c = |.(f1(#)f2).c.| by VALUED_1:18
       .= |.(f1(#)f2)/.c.| by A5,PARTFUN1:def 6
-      .= |.((f1/.c)) * ((f2/.c)).| by A5,Th5
+      .= |.((f1/.c)) * ((f2/.c)).| by A5,Th3
       .= |.((f1/.c)).| * |.((f2/.c)).| by COMPLEX1:65
       .= ((|.f1.|).c) *( |.((f2/.c)).|) by A7,VALUED_1:18
       .= ((|.f1.|).c) * ((|.f2.|).c) by A8,VALUED_1:18
@@ -836,12 +837,12 @@ A8: f2/.c = f2.c by A2,PARTFUN1:def 6;
   hence thesis by A1,PARTFUN1:5;
 end;
 
-theorem Th39:
+theorem Th30:
   |.r(#)f.| = |.r.|(#)|.f.|
 proof
 A1: dom f = dom (|.f.|) by VALUED_1:def 11;
 A2: dom (|.r(#)f.|) = dom (r(#)f) by VALUED_1:def 11
-    .= dom f by Th7
+    .= dom f by Th4
     .= dom (|.r.|(#)|.f.|) by A1,VALUED_1:def 5;
   now
     let c;
@@ -852,7 +853,7 @@ A4: c in dom (r(#)f) by VALUED_1:def 11;
 A5: c in dom (|.f.|) by A2,A3,VALUED_1:def 5;
     thus (|.r(#)f.|).c = |.(r(#)f).c.| by VALUED_1:18
       .=|.(r(#)f)/.c.| by A4,PARTFUN1:def 6
-      .=|.r*((f/.c)).| by A4,Th7
+      .=|.r*((f/.c)).| by A4,Th4
       .=|.r.|*|.((f/.c)).| by COMPLEX1:65
       .=|.r.|*|.((f.c)).| by A1,A5,PARTFUN1:def 6
       .=|.r.|*((|.f.|).c) by VALUED_1:18
@@ -864,16 +865,15 @@ end;
 theorem
   -f = (-1r)(#)f by COMPLEX1:def 4;
 
-theorem
-  -(-f) = f;
+canceled;
 
 theorem
   f1 - (-f2) = f1 + f2;
 
-theorem Th44:
+theorem Th34:
   f^^ = f|(dom (f^))
 proof
-A1: dom (f^^) = dom (f|(dom (f^))) by Th20;
+A1: dom (f^^) = dom (f|(dom (f^))) by Th11;
   now
     let c;
     assume
@@ -888,14 +888,14 @@ A3: c in dom (f^) by XBOOLE_0:def 4;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th45:
+theorem Th35:
   (f1(#)f2)^ = (f1^)(#)(f2^)
 proof
 A1: dom ((f1(#)f2)^) = dom (f1(#)f2) \ (f1(#)f2)"{0c} by Def2
-    .= (dom f1 \ f1"{0c}) /\ (dom f2 \ (f2)"{0c}) by Th16
+    .= (dom f1 \ f1"{0c}) /\ (dom f2 \ (f2)"{0c}) by Th7
     .= dom (f1^) /\ (dom f2 \ (f2)"{0c}) by Def2
     .= dom (f1^) /\ dom (f2^) by Def2
-    .= dom ((f1^) (#) (f2^)) by Th5;
+    .= dom ((f1^) (#) (f2^)) by Th3;
   now
     let c;
     assume
@@ -903,44 +903,44 @@ A2: c in dom ((f1(#)f2)^);
     then c in dom (f1(#)f2) \ (f1(#)f2)"{0c} by Def2;
     then
 A3: c in dom (f1(#)f2) by XBOOLE_0:def 5;
-A4: c in dom (f1^) /\ dom (f2^) by A1,A2,Th5;
+A4: c in dom (f1^) /\ dom (f2^) by A1,A2,Th3;
     then
 A5: c in dom (f1^) by XBOOLE_0:def 4;
 A6: c in dom (f2^) by A4,XBOOLE_0:def 4;
     thus ((f1(#)f2)^)/.c = ((f1(#)f2)/.c)" by A2,Def2
-      .= (((f1/.c)) * ((f2/.c)))" by A3,Th5
+      .= (((f1/.c)) * ((f2/.c)))" by A3,Th3
       .= (((f1/.c)))"* (((f2/.c)))" by XCMPLX_1:204
       .= ((f1^)/.c)*(((f2/.c)))" by A5,Def2
       .= ((f1^)/.c) *((f2^)/.c) by A6,Def2
-      .= ((f1^) (#) (f2^))/.c by A1,A2,Th5;
+      .= ((f1^) (#) (f2^))/.c by A1,A2,Th3;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th46:
+theorem Th36:
   r<>0 implies (r(#)f)^ = r" (#) (f^)
 proof
   assume
 A1: r<>0;
 A2: dom ((r(#)f)^) = dom (r(#)f) \ (r(#)f)"{0c} by Def2
-    .= dom (r(#)f) \ f"{0c} by A1,Th21
-    .= dom f \ f"{0c} by Th7
+    .= dom (r(#)f) \ f"{0c} by A1,Th12
+    .= dom f \ f"{0c} by Th4
     .= dom (f^) by Def2
-    .= dom (r"(#)(f^)) by Th7;
+    .= dom (r"(#)(f^)) by Th4;
   now
     let c;
     assume
 A3: c in dom ((r(#)f)^);
     then
-A4: c in dom (f^) by A2,Th7;
+A4: c in dom (f^) by A2,Th4;
     c in dom (r(#)f) \ (r(#)f)"{0c} by A3,Def2;
     then
 A5: c in dom (r(#)f) by XBOOLE_0:def 5;
     thus ((r(#)f)^)/.c = ((r(#)f)/.c)" by A3,Def2
-      .= (r*((f/.c)))" by A5,Th7
+      .= (r*((f/.c)))" by A5,Th4
       .= r"* ((f/.c))" by XCMPLX_1:204
       .= r"* ((f^)/.c) by A4,Def2
-      .= (r" (#) (f^))/.c by A2,A3,Th7;
+      .= (r" (#) (f^))/.c by A2,A3,Th4;
   end;
   hence thesis by A2,PARTFUN2:1;
 end;
@@ -948,14 +948,14 @@ end;
 Lm2: (-1r)"=-1r by COMPLEX1:def 4;
 
 theorem
-  (-f)^ = (-1r)(#)(f^) by Lm2,Th46,COMPLEX1:def 4;
+  (-f)^ = (-1r)(#)(f^) by Lm2,Th36,COMPLEX1:def 4;
 
-theorem Th50:
+theorem Th38:
   |.f.|^ = |. f^ .|
 proof
 A1: dom ((|.f.|)^) = dom (|.f.|) \ (|.f.|)"{0} by RFUNCT_1:def 2
     .= dom f \ (|.f.|)"{0} by VALUED_1:def 11
-    .= dom f \ f"{0c} by Th19
+    .= dom f \ f"{0c} by Th10
     .= dom (f^) by Def2
     .= dom (|.(f^).|) by VALUED_1:def 11;
   now
@@ -981,7 +981,7 @@ A5: c in dom (|.f.|) by XBOOLE_0:def 5;
   hence thesis by A1,PARTFUN1:5;
 end;
 
-theorem Th51:
+theorem Th39:
   f/g = f(#) (g^)
 proof
 A1: now
@@ -993,33 +993,33 @@ A2: c in dom (f/g);
 A3: c in dom f /\ dom (g^) by Def2;
     then
 A4: c in dom (g^) by XBOOLE_0:def 4;
-A5: c in dom (f (#) (g^)) by A3,Th5;
+A5: c in dom (f (#) (g^)) by A3,Th3;
     thus (f/g)/.c = (f/.c) * (g/.c)" by A2,Def1
       .= (f/.c) * ((g^)/.c) by A4,Def2
-      .= (f (#) (g^))/.c by A5,Th5;
+      .= (f (#) (g^))/.c by A5,Th3;
   end;
   dom (f/g) = dom f /\ (dom g \ g"{0c}) by Def1
     .= dom f /\ dom (g^) by Def2
-    .= dom (f(#)(g^)) by Th5;
+    .= dom (f(#)(g^)) by Th3;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th52:
+theorem Th40:
   r(#)(g/f) = (r(#)g)/f
 proof
-  thus r(#)(g/f) = r(#)(g(#)(f^)) by Th51
-    .= (r(#)g)(#)(f^) by Th26
-    .= (r(#)g)/f by Th51;
+  thus r(#)(g/f) = r(#)(g(#)(f^)) by Th39
+    .= (r(#)g)(#)(f^) by Th17
+    .= (r(#)g)/f by Th39;
 end;
 
 theorem
   (f/g)(#)g = (f|dom(g^))
 proof
-A1: dom ((f/g)(#)g) = dom (f/g) /\ dom g by Th5
+A1: dom ((f/g)(#)g) = dom (f/g) /\ dom g by Th3
     .= dom f /\ (dom g \ g"{0c}) /\ dom g by Def1
     .= dom f /\ ((dom g \ g"{0c}) /\ dom g) by XBOOLE_1:16
     .= dom f /\ (dom (g^) /\ dom g) by Def2
-    .= dom f /\ dom (g^) by Th15,XBOOLE_1:28
+    .= dom f /\ dom (g^) by Th6,XBOOLE_1:28
     .= dom (f|(dom (g^))) by RELAT_1:61;
   now
     let c;
@@ -1028,13 +1028,13 @@ A2: c in dom ((f/g)(#)g);
     then
 A3: c in dom f /\ dom (g^) by A1,RELAT_1:61;
     then
-A4: c in dom (f(#)(g^)) by Th5;
+A4: c in dom (f(#)(g^)) by Th3;
 A5: c in dom (g^) by A3,XBOOLE_0:def 4;
     then
-A6: g/.c <> 0c by Th17;
-    thus ((f/g)(#)g)/.c = ((f/g)/.c) * (g/.c )by A2,Th5
-      .= (f(#)(g^))/.c * (g/.c) by Th51
-      .= ((f/.c)) *((g^)/.c) * (g/.c) by A4,Th5
+A6: g/.c <> 0c by Th8;
+    thus ((f/g)(#)g)/.c = ((f/g)/.c) * (g/.c )by A2,Th3
+      .= (f(#)(g^))/.c * (g/.c) by Th39
+      .= ((f/.c)) *((g^)/.c) * (g/.c) by A4,Th3
       .= ((f/.c))*(g/.c)"*(g/.c) by A5,Def2
       .= ((f/.c))*((g/.c)" * (g/.c))
       .= ((f/.c))*1r by A6,COMPLEX1:def 4,XCMPLX_0:def 7
@@ -1043,54 +1043,54 @@ A6: g/.c <> 0c by Th17;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th54:
+theorem Th42:
   (f/g)(#)(f1/g1) = (f(#)f1)/(g(#)g1)
 proof
 A1: now
     let c;
     assume
 A2: c in dom ((f/g)(#)(f1/g1));
-    then c in dom (f/g) /\ dom (f1/g1) by Th5;
+    then c in dom (f/g) /\ dom (f1/g1) by Th3;
     then
-A3: c in dom (f (#)(g^)) /\ dom (f1/g1) by Th51;
+A3: c in dom (f (#)(g^)) /\ dom (f1/g1) by Th39;
     then
 A4: c in dom (f (#)(g^)) by XBOOLE_0:def 4;
     then
-A5: c in dom f /\ dom(g^) by Th5;
-    c in dom (f (#)(g^)) /\ dom (f1(#)(g1^)) by A3,Th51;
+A5: c in dom f /\ dom(g^) by Th3;
+    c in dom (f (#)(g^)) /\ dom (f1(#)(g1^)) by A3,Th39;
     then
 A6: c in dom (f1(#)(g1^)) by XBOOLE_0:def 4;
     then
-A7: c in dom f1 /\ dom(g1^) by Th5;
+A7: c in dom f1 /\ dom(g1^) by Th3;
     then
 A8: c in dom f1 by XBOOLE_0:def 4;
     c in dom f by A5,XBOOLE_0:def 4;
     then c in dom f /\ dom f1 by A8,XBOOLE_0:def 4;
     then
-A9: c in dom (f(#)f1) by Th5;
+A9: c in dom (f(#)f1) by Th3;
 A10: c in dom(g1^) by A7,XBOOLE_0:def 4;
     c in dom(g^) by A5,XBOOLE_0:def 4;
     then c in dom (g^) /\ dom (g1^) by A10,XBOOLE_0:def 4;
     then
-A11: c in dom((g^)(#)(g1^)) by Th5;
-    then c in dom((g(#)g1)^) by Th45;
+A11: c in dom((g^)(#)(g1^)) by Th3;
+    then c in dom((g(#)g1)^) by Th35;
     then c in dom (f(#)f1) /\ dom((g(#)g1)^) by A9,XBOOLE_0:def 4;
     then
-A12: c in dom ((f(#)f1)(#)((g(#)g1)^)) by Th5;
-    thus ((f/g)(#)(f1/g1))/.c = ((f/g)/.c)* ((f1/g1)/.c) by A2,Th5
-      .= ((f(#)(g^))/.c) * ((f1/g1)/.c) by Th51
-      .= ((f(#)(g^))/.c) * ((f1(#)(g1^))/.c) by Th51
-      .= ((f/.c)) * ((g^)/.c) *((f1(#)(g1^))/.c) by A4,Th5
-      .= ((f/.c)) * ((g^)/.c) * ((((f1/.c)))* ((g1^)/.c)) by A6,Th5
+A12: c in dom ((f(#)f1)(#)((g(#)g1)^)) by Th3;
+    thus ((f/g)(#)(f1/g1))/.c = ((f/g)/.c)* ((f1/g1)/.c) by A2,Th3
+      .= ((f(#)(g^))/.c) * ((f1/g1)/.c) by Th39
+      .= ((f(#)(g^))/.c) * ((f1(#)(g1^))/.c) by Th39
+      .= ((f/.c)) * ((g^)/.c) *((f1(#)(g1^))/.c) by A4,Th3
+      .= ((f/.c)) * ((g^)/.c) * ((((f1/.c)))* ((g1^)/.c)) by A6,Th3
       .= ((f/.c)) * ((((f1/.c))) * (((g^)/.c) * ((g1^)/.c)))
-      .= ((f/.c)) * ((((f1/.c))) * (((g^)(#)(g1^))/.c)) by A11,Th5
+      .= ((f/.c)) * ((((f1/.c))) * (((g^)(#)(g1^))/.c)) by A11,Th3
       .= ((f/.c)) * (((f1/.c))) * (((g^)(#)(g1^))/.c)
-      .= ((f/.c)) * (((f1/.c))) * (((g(#)g1)^)/.c) by Th45
-      .= ((f(#)f1)/.c) * (((g(#)g1)^)/.c) by A9,Th5
-      .= ((f(#)f1)(#)((g(#)g1)^))/.c by A12,Th5
-      .= ((f(#)f1)/(g(#)g1))/.c by Th51;
+      .= ((f/.c)) * (((f1/.c))) * (((g(#)g1)^)/.c) by Th35
+      .= ((f(#)f1)/.c) * (((g(#)g1)^)/.c) by A9,Th3
+      .= ((f(#)f1)(#)((g(#)g1)^))/.c by A12,Th3
+      .= ((f(#)f1)/(g(#)g1))/.c by Th39;
   end;
-  dom ((f/g)(#)(f1/g1)) = dom (f/g) /\ dom (f1/g1) by Th5
+  dom ((f/g)(#)(f1/g1)) = dom (f/g) /\ dom (f1/g1) by Th3
     .= dom f /\ (dom g \ g"{0c}) /\ dom (f1/g1) by Def1
     .= dom f /\ (dom g \ g"{0c}) /\ (dom f1 /\ (dom g1 \ g1"{0c})) by Def1
     .= dom f /\ ((dom g \ g"{0c}) /\ (dom f1 /\ (dom g1 \ g1"{0c}))) by
@@ -1099,67 +1099,67 @@ XBOOLE_1:16
 XBOOLE_1:16
     .= dom f /\ dom f1 /\ ((dom g \ g"{0c}) /\ (dom g1 \ g1"{0c})) by
 XBOOLE_1:16
-    .= dom (f(#)f1) /\ ((dom g \ g"{0c}) /\ (dom g1 \ g1"{0c})) by Th5
-    .= dom (f(#)f1) /\ (dom (g(#)g1) \ (g(#)g1)"{0c}) by Th16
+    .= dom (f(#)f1) /\ ((dom g \ g"{0c}) /\ (dom g1 \ g1"{0c})) by Th3
+    .= dom (f(#)f1) /\ (dom (g(#)g1) \ (g(#)g1)"{0c}) by Th7
     .= dom ((f(#)f1)/(g(#)g1)) by Def1;
   hence thesis by A1,PARTFUN2:1;
 end;
 
-theorem Th55:
+theorem Th43:
   (f1/f2)^ = (f2|dom(f2^))/f1
 proof
-  thus (f1/f2)^ = (f1(#)(f2^))^ by Th51
-    .= (f1^)(#)(f2^^) by Th45
-    .= (f2|dom(f2^))(#)(f1^) by Th44
-    .= (f2|dom(f2^))/f1 by Th51;
+  thus (f1/f2)^ = (f1(#)(f2^))^ by Th39
+    .= (f1^)(#)(f2^^) by Th35
+    .= (f2|dom(f2^))(#)(f1^) by Th34
+    .= (f2|dom(f2^))/f1 by Th39;
 end;
 
-theorem Th56:
+theorem Th44:
   g (#) (f1/f2) = (g (#) f1)/f2
 proof
-  thus g (#) (f1/f2) = g (#) (f1 (#) (f2^)) by Th51
-    .= g (#) f1 (#) (f2^) by Th23
-    .= (g (#) f1)/f2 by Th51;
+  thus g (#) (f1/f2) = g (#) (f1 (#) (f2^)) by Th39
+    .= g (#) f1 (#) (f2^) by Th14
+    .= (g (#) f1)/f2 by Th39;
 end;
 
 theorem
   g/(f1/f2) = (g(#)(f2|dom(f2^)))/f1
 proof
-  thus g/(f1/f2) = g (#) ((f1/f2)^) by Th51
-    .= g (#) ((f2|dom(f2^))/f1) by Th55
-    .= (g (#) (f2|dom(f2^)))/f1 by Th56;
+  thus g/(f1/f2) = g (#) ((f1/f2)^) by Th39
+    .= g (#) ((f2|dom(f2^))/f1) by Th43
+    .= (g (#) (f2|dom(f2^)))/f1 by Th44;
 end;
 
 theorem
   -f/g = (-f)/g & f/(-g) = -f/g
 proof
   thus -f/g = (-1r)(#)(f/g) by COMPLEX1:def 4
-    .= (-f)/g by Th52,COMPLEX1:def 4;
-  thus f/(-g) = f (#) ((-g)^) by Th51
-    .= f (#) ((-1r) (#) (g^)) by Lm2,Th46,COMPLEX1:def 4
-    .= -(f (#) (g^)) by Th27,COMPLEX1:def 4
-    .= -(f/g) by Th51;
+    .= (-f)/g by Th40,COMPLEX1:def 4;
+  thus f/(-g) = f (#) ((-g)^) by Th39
+    .= f (#) ((-1r) (#) (g^)) by Lm2,Th36,COMPLEX1:def 4
+    .= -(f (#) (g^)) by Th18,COMPLEX1:def 4
+    .= -(f/g) by Th39;
 end;
 
 theorem
   f1/f + f2/f = (f1 + f2)/f & f1/f - f2/f = (f1 - f2)/f
 proof
-  thus f1/f + f2/f = f1(#)(f^) +f2/f by Th51
-    .= f1(#)(f^) + f2(#)(f^) by Th51
-    .= (f1+f2) (#) (f^) by Th24
-    .= (f1+f2)/f by Th51;
-  thus f1/f - f2/f = f1(#)(f^) - f2/f by Th51
-    .= f1(#)(f^) -f2(#)(f^) by Th51
-    .= (f1-f2)(#)(f^) by Th28
-    .= (f1-f2)/f by Th51;
+  thus f1/f + f2/f = f1(#)(f^) +f2/f by Th39
+    .= f1(#)(f^) + f2(#)(f^) by Th39
+    .= (f1+f2) (#) (f^) by Th15
+    .= (f1+f2)/f by Th39;
+  thus f1/f - f2/f = f1(#)(f^) - f2/f by Th39
+    .= f1(#)(f^) -f2(#)(f^) by Th39
+    .= (f1-f2)(#)(f^) by Th19
+    .= (f1-f2)/f by Th39;
 end;
 
-theorem Th60:
+theorem Th48:
   f1/f + g1/g = (f1(#)g + g1(#)f)/(f(#)g)
 proof
 A1: now
     let c;
-A2: dom (f^) c= dom f by Th15;
+A2: dom (f^) c= dom f by Th6;
     assume
 A3: c in dom ((f1/f) + (g1/g));
     then
@@ -1167,45 +1167,45 @@ A4: c in dom (f1/f) /\ dom (g1/g) by VALUED_1:def 1;
     then
 A5: c in dom (f1/f) by XBOOLE_0:def 4;
 A6: c in dom (g1/g) by A4,XBOOLE_0:def 4;
-A7: c in dom (f1 (#)(f^)) /\ dom (g1/g) by A4,Th51;
+A7: c in dom (f1 (#)(f^)) /\ dom (g1/g) by A4,Th39;
     then c in dom (f1 (#)(f^)) by XBOOLE_0:def 4;
     then
-A8: c in dom f1 /\ dom(f^) by Th5;
+A8: c in dom f1 /\ dom(f^) by Th3;
     then
 A9: c in dom(f^) by XBOOLE_0:def 4;
     then
-A10: (f/.c) <> 0c by Th17;
-    c in dom (f1 (#)(f^)) /\ dom (g1(#)(g^)) by A7,Th51;
+A10: (f/.c) <> 0c by Th8;
+    c in dom (f1 (#)(f^)) /\ dom (g1(#)(g^)) by A7,Th39;
     then c in dom (g1(#)(g^)) by XBOOLE_0:def 4;
     then
-A11: c in dom g1 /\ dom(g^) by Th5;
+A11: c in dom g1 /\ dom(g^) by Th3;
     then
 A12: c in dom(g^) by XBOOLE_0:def 4;
     then
-A13: g/.c <> 0c by Th17;
+A13: g/.c <> 0c by Th8;
     c in dom g1 by A11,XBOOLE_0:def 4;
     then c in dom g1 /\ dom f by A9,A2,XBOOLE_0:def 4;
     then
-A14: c in dom (g1(#)f) by Th5;
-A15: dom (g^) c= dom g by Th15;
+A14: c in dom (g1(#)f) by Th3;
+A15: dom (g^) c= dom g by Th6;
     then c in dom f /\ dom g by A9,A12,A2,XBOOLE_0:def 4;
     then
-A16: c in dom (f(#)g) by Th5;
+A16: c in dom (f(#)g) by Th3;
     c in dom f1 by A8,XBOOLE_0:def 4;
     then c in dom f1 /\ dom g by A12,A15,XBOOLE_0:def 4;
     then
-A17: c in dom (f1(#)g) by Th5;
+A17: c in dom (f1(#)g) by Th3;
     then c in dom (f1(#)g) /\ dom (g1(#)f) by A14,XBOOLE_0:def 4;
     then
 A18: c in dom (f1(#)g + g1(#)f) by VALUED_1:def 1;
     c in dom (f^) /\ dom (g^) by A9,A12,XBOOLE_0:def 4;
-    then c in dom ((f^)(#)(g^)) by Th5;
-    then c in dom ((f(#)g)^) by Th45;
+    then c in dom ((f^)(#)(g^)) by Th3;
+    then c in dom ((f(#)g)^) by Th35;
     then c in dom (f1(#)g + g1(#)f) /\ dom ((f(#)g)^) by A18,XBOOLE_0:def 4;
-    then c in dom ((f1(#)g + g1(#)f)(#)((f(#)g)^)) by Th5;
+    then c in dom ((f1(#)g + g1(#)f)(#)((f(#)g)^)) by Th3;
     then
-A19: c in dom ((f1(#)g + g1(#)f)/(f(#)g)) by Th51;
-    thus (f1/f + g1/g)/.c = (f1/f)/.c + (g1/g)/.c by A3,Th3
+A19: c in dom ((f1(#)g + g1(#)f)/(f(#)g)) by Th39;
+    thus (f1/f + g1/g)/.c = (f1/f)/.c + (g1/g)/.c by A3,Th1
       .= (((f1/.c))) * ((f/.c))" + (g1/g)/.c by A5,Def1
       .= (((f1/.c))) *(1r*((f/.c))") + (g1/.c) * 1r * (g/.c)" by A6,Def1,
 COMPLEX1:def 4
@@ -1218,23 +1218,23 @@ COMPLEX1:def 4
       .= (((f1/.c))) *((g/.c) *(((f/.c)* (g/.c))")) + (g1/.c) * (((f/.c)) *(
     ((f/.c) * (g/.c))")) by XCMPLX_1:204
       .= (((f1/.c))) *((g/.c) * ((f(#)g)/.c)") + (g1/.c) * (((f/.c)) *(((f/.
-    c) * (g/.c))")) by A16,Th5
+    c) * (g/.c))")) by A16,Th3
       .= (((f1/.c))) *(g/.c) * ((f(#)g)/.c)" + (g1/.c) * (((f/.c)) * ((f(#)
-    g)/.c)") by A16,Th5
+    g)/.c)") by A16,Th3
       .= (f1(#)g)/.c * ((f(#)g)/.c)" + (g1/.c) *(f/.c) *((f(#)g)/.c)" by A17
-,Th5
-      .= (f1(#)g)/.c * ((f(#)g)/.c)" + (g1(#)f)/.c *((f(#)g)/.c)" by A14,Th5
+,Th3
+      .= (f1(#)g)/.c * ((f(#)g)/.c)" + (g1(#)f)/.c *((f(#)g)/.c)" by A14,Th3
       .= ((f1(#)g)/.c + (g1(#)f)/.c) *((f(#)g)/.c)"
-      .= (f1(#)g + g1(#)f)/.c *((f(#)g)/.c)" by A18,Th3
+      .= (f1(#)g + g1(#)f)/.c *((f(#)g)/.c)" by A18,Th1
       .= ((f1(#)g + g1(#)f)/(f(#)g))/.c by A19,Def1;
   end;
   dom ((f1/f) + (g1/g)) = dom (f1/f) /\ dom (g1/g) by VALUED_1:def 1
     .= dom f1 /\ (dom f \ f"{0c}) /\ dom (g1/g) by Def1
     .= dom f1 /\ (dom f \ f"{0c}) /\ (dom g1 /\ (dom g \ g"{0c})) by Def1
     .= dom f1 /\ (dom f /\ (dom f \ f"{0c})) /\ (dom g1 /\ (dom g \ g"{0c}))
-  by Th15
+  by Th6
     .= dom f /\ (dom f \ f"{0c}) /\ dom f1 /\ (dom g /\ (dom g \ g"{0c}) /\
-  dom g1) by Th15
+  dom g1) by Th6
     .= dom f /\ (dom f \ f"{0c}) /\ (dom f1 /\ (dom g /\ (dom g \ g"{0c}) /\
   dom g1)) by XBOOLE_1:16
     .= dom f /\ (dom f \ f"{0c}) /\ (dom f1 /\ (dom g /\ (dom g \ g"{0c}))
@@ -1242,7 +1242,7 @@ COMPLEX1:def 4
     .= dom f /\ (dom f \ f"{0c}) /\ (dom f1 /\ dom g /\ (dom g \ g"{0c}) /\
   dom g1) by XBOOLE_1:16
     .= dom f /\ (dom f \ f"{0c}) /\ (dom (f1(#) g) /\ (dom g \ g"{0c}) /\
-  dom g1) by Th5
+  dom g1) by Th3
     .= dom f /\ (dom f \ f"{0c}) /\ (dom (f1(#)g) /\ (dom g1 /\ (dom g \ g"{
   0c}))) by XBOOLE_1:16
     .= dom (f1(#)g) /\ ((dom f \ f"{0c}) /\ dom f /\ (dom g1 /\ (dom g \ g"{
@@ -1252,14 +1252,14 @@ COMPLEX1:def 4
     .= dom (f1(#)g) /\ ((dom f \ f"{0c}) /\ (dom g1 /\ dom f /\ (dom g \ g"{
   0c}))) by XBOOLE_1:16
     .= dom (f1(#)g) /\ ((dom f \ f"{0c}) /\ (dom (g1(#)f) /\ (dom g \ g"{0c}
-  ))) by Th5
+  ))) by Th3
     .= dom (f1(#)g) /\ (dom (g1(#)f) /\ ((dom f \ f"{0c}) /\ (dom g \ g"{0c}
   ))) by XBOOLE_1:16
     .= dom (f1(#)g) /\ dom (g1(#)f) /\ ((dom f \ f"{0c}) /\ (dom g \ g"{0c})
   ) by XBOOLE_1:16
     .= dom (f1(#)g + g1(#)f) /\ ((dom f \ f"{0c}) /\ (dom g \ g"{0c})) by
 VALUED_1:def 1
-    .= dom (f1(#)g + g1(#)f) /\ (dom (f(#)g) \ (f(#)g)"{0c}) by Th16
+    .= dom (f1(#)g + g1(#)f) /\ (dom (f(#)g) \ (f(#)g)"{0c}) by Th7
     .= dom ((f1(#)g + g1(#)f)/(f(#)g)) by Def1;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -1267,29 +1267,29 @@ end;
 theorem
   (f/g)/(f1/g1) = (f(#)(g1|dom(g1^)))/(g(#)f1)
 proof
-  thus (f/g)/(f1/g1) = (f/g)(#)((f1/g1)^) by Th51
-    .= (f/g)(#)(((g1|dom(g1^)))/f1) by Th55
-    .= (f(#)(g1|dom(g1^)))/(g(#)f1) by Th54;
+  thus (f/g)/(f1/g1) = (f/g)(#)((f1/g1)^) by Th39
+    .= (f/g)(#)(((g1|dom(g1^)))/f1) by Th43
+    .= (f(#)(g1|dom(g1^)))/(g(#)f1) by Th42;
 end;
 
 theorem
   f1/f - g1/g = (f1(#)g - g1(#)f)/(f(#)g)
 proof
-  thus f1/f - g1/g = f1/f + ((-1r)(#) g1)/g by Th52,COMPLEX1:def 4
-    .= (f1(#)g + (-1r)(#) g1(#)f)/(f(#)g) by Th60
-    .= (f1(#)g - (g1(#)f))/(f(#)g) by Th26,COMPLEX1:def 4;
+  thus f1/f - g1/g = f1/f + ((-1r)(#) g1)/g by Th40,COMPLEX1:def 4
+    .= (f1(#)g + (-1r)(#) g1(#)f)/(f(#)g) by Th48
+    .= (f1(#)g - (g1(#)f))/(f(#)g) by Th17,COMPLEX1:def 4;
 end;
 
 theorem
   |.f1/f2.| = |.f1.|/|.f2.|
 proof
-  thus |.f1/f2.| = |.f1(#)(f2^).| by Th51
-    .= |.f1.|(#)|.(f2^).| by Th38
-    .= |.f1.|(#)((|.f2.|)^) by Th50
+  thus |.f1/f2.| = |.f1(#)(f2^).| by Th39
+    .= |.f1.|(#)|.(f2^).| by Th29
+    .= |.f1.|(#)((|.f2.|)^) by Th38
     .= |.f1.|/|.f2.| by RFUNCT_1:31;
 end;
 
-theorem Th64:
+theorem Th52:
   (f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1 + f2|X
 proof
 A1: now
@@ -1315,10 +1315,10 @@ A8: c in dom (f1|X) by RELAT_1:61;
     then
 A9: c in dom ((f1|X) + (f2|X)) by VALUED_1:def 1;
     thus ((f1+f2)|X)/.c = (f1+f2)/.c by A2,PARTFUN2:15
-      .= (((f1/.c))) + (((f2/.c))) by A5,Th3
+      .= (((f1/.c))) + (((f2/.c))) by A5,Th1
       .= ((f1|X)/.c) + (((f2/.c))) by A8,PARTFUN2:15
       .= ((f1|X)/.c) + ((f2|X)/.c) by A7,PARTFUN2:15
-      .= ((f1|X)+(f2|X))/.c by A9,Th3;
+      .= ((f1|X)+(f2|X))/.c by A9,Th1;
   end;
   dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:61
     .= dom f1 /\ dom f2 /\ (X /\ X) by VALUED_1:def 1
@@ -1349,9 +1349,9 @@ A16: c in dom (f1|X) by RELAT_1:61;
     then
 A17: c in dom ((f1|X) + f2) by VALUED_1:def 1;
     thus ((f1+f2)|X)/.c = (f1+f2)/.c by A11,PARTFUN2:15
-      .= (((f1/.c))) +(((f2/.c))) by A14,Th3
+      .= (((f1/.c))) +(((f2/.c))) by A14,Th1
       .= ((f1|X)/.c) +(((f2/.c))) by A16,PARTFUN2:15
-      .= ((f1|X)+f2)/.c by A17,Th3;
+      .= ((f1|X)+f2)/.c by A17,Th1;
   end;
   dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:61
     .= dom f1 /\ dom f2 /\ X by VALUED_1:def 1
@@ -1379,9 +1379,9 @@ A24: c in dom (f2|X) by RELAT_1:61;
     then
 A25: c in dom (f1 + (f2|X)) by VALUED_1:def 1;
     thus ((f1+f2)|X)/.c = (f1+f2)/.c by A19,PARTFUN2:15
-      .= (((f1/.c))) +(((f2/.c))) by A22,Th3
+      .= (((f1/.c))) +(((f2/.c))) by A22,Th1
       .= (((f1/.c))) +((f2|X)/.c) by A24,PARTFUN2:15
-      .= (f1+(f2|X))/.c by A25,Th3;
+      .= (f1+(f2|X))/.c by A25,Th1;
   end;
   dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:61
     .= dom f1 /\ dom f2 /\ X by VALUED_1:def 1
@@ -1391,7 +1391,7 @@ A25: c in dom (f1 + (f2|X)) by VALUED_1:def 1;
   hence thesis by A18,PARTFUN2:1;
 end;
 
-theorem Th65:
+theorem Th53:
   (f1(#)f2)|X = f1|X (#) f2|X & (f1(#)f2)|X = f1|X (#) f2 & (f1(#)
   f2)|X = f1 (#) f2|X
 proof
@@ -1405,7 +1405,7 @@ A3: c in dom (f1(#)f2) /\ X by RELAT_1:61;
 A4: c in X by XBOOLE_0:def 4;
 A5: c in dom (f1(#)f2) by A3,XBOOLE_0:def 4;
     then
-A6: c in dom f1 /\ dom f2 by Th5;
+A6: c in dom f1 /\ dom f2 by Th3;
     then c in dom f2 by XBOOLE_0:def 4;
     then c in dom f2 /\ X by A4,XBOOLE_0:def 4;
     then
@@ -1416,21 +1416,21 @@ A7: c in dom (f2|X) by RELAT_1:61;
 A8: c in dom (f1|X) by RELAT_1:61;
     then c in dom (f1|X) /\ dom (f2|X) by A7,XBOOLE_0:def 4;
     then
-A9: c in dom ((f1|X) (#) (f2|X)) by Th5;
+A9: c in dom ((f1|X) (#) (f2|X)) by Th3;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A2,PARTFUN2:15
-      .= (((f1/.c))) *(((f2/.c))) by A5,Th5
+      .= (((f1/.c))) *(((f2/.c))) by A5,Th3
       .= ((f1|X)/.c) *(((f2/.c))) by A8,PARTFUN2:15
       .= ((f1|X)/.c) *((f2|X)/.c) by A7,PARTFUN2:15
-      .= ((f1|X)(#)(f2|X))/.c by A9,Th5;
+      .= ((f1|X)(#)(f2|X))/.c by A9,Th3;
   end;
   dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:61
-    .= dom f1 /\ dom f2 /\ (X /\ X) by Th5
+    .= dom f1 /\ dom f2 /\ (X /\ X) by Th3
     .= dom f1 /\ (dom f2 /\ (X /\ X)) by XBOOLE_1:16
     .= dom f1 /\ (dom f2 /\ X /\ X) by XBOOLE_1:16
     .= dom f1 /\ (X /\ dom (f2|X)) by RELAT_1:61
     .= dom f1 /\ X /\ dom (f2|X) by XBOOLE_1:16
     .= dom (f1|X) /\ dom (f2|X) by RELAT_1:61
-    .= dom ((f1|X)(#)(f2|X)) by Th5;
+    .= dom ((f1|X)(#)(f2|X)) by Th3;
   hence (f1(#)f2)|X = f1|X (#) f2|X by A1,PARTFUN2:1;
 A10: now
     let c;
@@ -1442,7 +1442,7 @@ A12: c in dom (f1(#)f2) /\ X by RELAT_1:61;
 A13: c in X by XBOOLE_0:def 4;
 A14: c in dom (f1(#)f2) by A12,XBOOLE_0:def 4;
     then
-A15: c in dom f1 /\ dom f2 by Th5;
+A15: c in dom f1 /\ dom f2 by Th3;
     then c in dom f1 by XBOOLE_0:def 4;
     then c in dom f1 /\ X by A13,XBOOLE_0:def 4;
     then
@@ -1450,17 +1450,17 @@ A16: c in dom (f1|X) by RELAT_1:61;
     c in dom f2 by A15,XBOOLE_0:def 4;
     then c in dom (f1|X) /\ dom f2 by A16,XBOOLE_0:def 4;
     then
-A17: c in dom ((f1|X) (#) f2) by Th5;
+A17: c in dom ((f1|X) (#) f2) by Th3;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A11,PARTFUN2:15
-      .= (((f1/.c))) *(((f2/.c))) by A14,Th5
+      .= (((f1/.c))) *(((f2/.c))) by A14,Th3
       .= ((f1|X)/.c) *(((f2/.c))) by A16,PARTFUN2:15
-      .= ((f1|X)(#)f2)/.c by A17,Th5;
+      .= ((f1|X)(#)f2)/.c by A17,Th3;
   end;
   dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:61
-    .= dom f1 /\ dom f2 /\ X by Th5
+    .= dom f1 /\ dom f2 /\ X by Th3
     .= dom f1 /\ X /\ dom f2 by XBOOLE_1:16
     .= dom (f1|X) /\ dom f2 by RELAT_1:61
-    .= dom ((f1|X)(#) f2) by Th5;
+    .= dom ((f1|X)(#) f2) by Th3;
   hence (f1(#)f2)|X = f1|X (#) f2 by A10,PARTFUN2:1;
 A18: now
     let c;
@@ -1472,7 +1472,7 @@ A20: c in dom (f1(#)f2) /\ X by RELAT_1:61;
 A21: c in X by XBOOLE_0:def 4;
 A22: c in dom (f1(#)f2) by A20,XBOOLE_0:def 4;
     then
-A23: c in dom f1 /\ dom f2 by Th5;
+A23: c in dom f1 /\ dom f2 by Th3;
     then c in dom f2 by XBOOLE_0:def 4;
     then c in dom f2 /\ X by A21,XBOOLE_0:def 4;
     then
@@ -1480,21 +1480,21 @@ A24: c in dom (f2|X) by RELAT_1:61;
     c in dom f1 by A23,XBOOLE_0:def 4;
     then c in dom f1 /\ dom (f2|X) by A24,XBOOLE_0:def 4;
     then
-A25: c in dom (f1 (#) (f2|X)) by Th5;
+A25: c in dom (f1 (#) (f2|X)) by Th3;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A19,PARTFUN2:15
-      .= (((f1/.c))) *(((f2/.c))) by A22,Th5
+      .= (((f1/.c))) *(((f2/.c))) by A22,Th3
       .= (((f1/.c))) *((f2|X)/.c) by A24,PARTFUN2:15
-      .= (f1(#)(f2|X))/.c by A25,Th5;
+      .= (f1(#)(f2|X))/.c by A25,Th3;
   end;
   dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:61
-    .= dom f1 /\ dom f2 /\ X by Th5
+    .= dom f1 /\ dom f2 /\ X by Th3
     .= dom f1 /\ (dom f2 /\ X) by XBOOLE_1:16
     .= dom f1 /\ dom (f2|X) by RELAT_1:61
-    .= dom (f1 (#) (f2|X)) by Th5;
+    .= dom (f1 (#) (f2|X)) by Th3;
   hence thesis by A18,PARTFUN2:1;
 end;
 
-theorem Th66:
+theorem Th54:
   (-f)|X = -(f|X) & (f^)|X = (f|X)^ & (|.f.|)|X = |.(f|X).|
 proof
 A1: dom ((f^)|X) = dom (f^) /\ X by RELAT_1:61
@@ -1512,23 +1512,23 @@ A4: c in dom (-f) /\ X by RELAT_1:61;
     then
 A5: c in X by XBOOLE_0:def 4;
 A6: c in dom (-f) by A4,XBOOLE_0:def 4;
-    then c in dom f by Th9;
+    then c in dom f by Th5;
     then c in dom f /\ X by A5,XBOOLE_0:def 4;
     then
 A7: c in dom (f|X) by RELAT_1:61;
     then
-A8: c in dom (-(f|X)) by Th9;
+A8: c in dom (-(f|X)) by Th5;
     thus ((-f)|X)/.c = (-f)/.c by A3,PARTFUN2:15
-      .= -((f/.c)) by A6,Th9
+      .= -((f/.c)) by A6,Th5
       .= -((f|X)/.c) by A7,PARTFUN2:15
-      .= (-(f|X))/.c by A8,Th9;
+      .= (-(f|X))/.c by A8,Th5;
   end;
   dom ((-f)|X) = dom (-f) /\ X by RELAT_1:61
-    .= dom f /\ X by Th9
+    .= dom f /\ X by Th5
     .= dom (f|X) by RELAT_1:61
-    .= dom (-(f|X)) by Th9;
+    .= dom (-(f|X)) by Th5;
   hence (-f)|X = -(f|X) by A2,PARTFUN2:1;
-A9: dom ((f|X)^) c= dom (f|X) by Th15;
+A9: dom ((f|X)^) c= dom (f|X) by Th6;
   now
     let c;
     assume
@@ -1569,28 +1569,28 @@ end;
 theorem
   (f1-f2)|X = f1|X - f2|X & (f1-f2)|X = f1|X - f2 &(f1-f2)|X = f1 - f2|X
 proof
-  thus (f1-f2)|X = (f1|X)+ (-f2)|X by Th64
-    .= (f1|X) - (f2|X) by Th66;
-  thus (f1-f2)|X = (f1|X)+ -f2 by Th64
+  thus (f1-f2)|X = (f1|X)+ (-f2)|X by Th52
+    .= (f1|X) - (f2|X) by Th54;
+  thus (f1-f2)|X = (f1|X)+ -f2 by Th52
     .= (f1|X) - f2;
-  thus (f1-f2)|X = f1+ (-f2)|X by Th64
-    .= f1 - (f2|X) by Th66;
+  thus (f1-f2)|X = f1+ (-f2)|X by Th52
+    .= f1 - (f2|X) by Th54;
 end;
 
 theorem
   (f1/f2)|X = f1|X / f2|X & (f1/f2)|X = f1|X / f2 &(f1/f2)|X = f1 / f2|X
 proof
-  thus (f1/f2)|X = (f1(#)(f2^))|X by Th51
-    .= (f1|X) (#) (f2^|X) by Th65
-    .= (f1|X) (#) ((f2|X)^) by Th66
-    .= (f1|X)/(f2|X) by Th51;
-  thus (f1/f2)|X = (f1(#)(f2^))|X by Th51
-    .= (f1|X) (#) (f2^) by Th65
-    .= (f1|X)/f2 by Th51;
-  thus (f1/f2)|X = (f1(#)(f2^))|X by Th51
-    .= f1 (#) (f2^)|X by Th65
-    .= f1 (#) ((f2|X)^) by Th66
-    .= f1/(f2|X) by Th51;
+  thus (f1/f2)|X = (f1(#)(f2^))|X by Th39
+    .= (f1|X) (#) (f2^|X) by Th53
+    .= (f1|X) (#) ((f2|X)^) by Th54
+    .= (f1|X)/(f2|X) by Th39;
+  thus (f1/f2)|X = (f1(#)(f2^))|X by Th39
+    .= (f1|X) (#) (f2^) by Th53
+    .= (f1|X)/f2 by Th39;
+  thus (f1/f2)|X = (f1(#)(f2^))|X by Th39
+    .= f1 (#) (f2^)|X by Th53
+    .= f1 (#) ((f2|X)^) by Th54
+    .= f1/(f2|X) by Th39;
 end;
 
 theorem
@@ -1605,21 +1605,21 @@ A3: c in dom (r(#)f) /\ X by RELAT_1:61;
     then
 A4: c in X by XBOOLE_0:def 4;
 A5: c in dom (r(#)f) by A3,XBOOLE_0:def 4;
-    then c in dom f by Th7;
+    then c in dom f by Th4;
     then c in dom f /\ X by A4,XBOOLE_0:def 4;
     then
 A6: c in dom (f|X) by RELAT_1:61;
     then
-A7: c in dom (r(#)(f|X)) by Th7;
+A7: c in dom (r(#)(f|X)) by Th4;
     thus ((r(#)f)|X)/.c = (r(#)f)/.c by A2,PARTFUN2:15
-      .= r*((f/.c)) by A5,Th7
+      .= r*((f/.c)) by A5,Th4
       .= r*((f|X)/.c) by A6,PARTFUN2:15
-      .= (r(#)(f|X))/.c by A7,Th7;
+      .= (r(#)(f|X))/.c by A7,Th4;
   end;
   dom ((r(#)f)|X) = dom (r(#)f) /\ X by RELAT_1:61
-    .= dom f /\ X by Th7
+    .= dom f /\ X by Th4
     .= dom (f|X) by RELAT_1:61
-    .= dom (r(#)(f|X)) by Th7;
+    .= dom (r(#)(f|X)) by Th4;
   hence thesis by A1,PARTFUN2:1;
 end;
 
@@ -1629,7 +1629,7 @@ begin
 :: TOTAL PARTIAL FUNCTIONS FROM A DOMAIN, TO COMPLEX
 ::
 
-theorem Th70:
+theorem Th58:
   (f1 is total & f2 is total iff f1+f2 is total) & (f1 is total &
   f2 is total iff f1-f2 is total) & (f1 is total & f2 is total iff f1(#)f2 is
   total)
@@ -1655,12 +1655,12 @@ proof
     proof
       assume f1 is total & f2 is total;
       then dom f1 = C & dom f2 = C by PARTFUN1:def 2;
-      hence dom (f1-f2) = C /\ C by Th4
+      hence dom (f1-f2) = C /\ C by Th2
         .= C;
     end;
     assume f1-f2 is total;
     then dom (f1-f2) = C by PARTFUN1:def 2;
-    then dom f1 /\ dom f2 = C by Th4;
+    then dom f1 /\ dom f2 = C by Th2;
     then C c= dom f1 & C c= dom f2 by XBOOLE_1:17;
     hence dom f1 = C & dom f2 = C by XBOOLE_0:def 10;
   end;
@@ -1668,31 +1668,31 @@ proof
   proof
     assume f1 is total & f2 is total;
     then dom f1 = C & dom f2 = C by PARTFUN1:def 2;
-    hence dom (f1(#)f2) = C /\ C by Th5
+    hence dom (f1(#)f2) = C /\ C by Th3
       .= C;
   end;
   assume f1(#)f2 is total;
   then dom (f1(#)f2) = C by PARTFUN1:def 2;
-  then dom f1 /\ dom f2 = C by Th5;
+  then dom f1 /\ dom f2 = C by Th3;
   then C c= dom f1 & C c= dom f2 by XBOOLE_1:17;
   hence dom f1 = C & dom f2 = C by XBOOLE_0:def 10;
 end;
 
-theorem Th71:
+theorem Th59:
   f is total iff r(#)f is total
 proof
   thus f is total implies r(#)f is total
   proof
     assume f is total;
     then dom f = C by PARTFUN1:def 2;
-    hence dom (r(#)f) = C by Th7;
+    hence dom (r(#)f) = C by Th4;
   end;
   assume r(#)f is total;
   then dom (r(#)f) = C by PARTFUN1:def 2;
-  hence dom f = C by Th7;
+  hence dom f = C by Th4;
 end;
 
-theorem Th72:
+theorem Th60:
   f is total iff -f is total
 proof
 A1: -f = (-1r)(#)f by COMPLEX1:def 4;
@@ -1700,13 +1700,13 @@ A1: -f = (-1r)(#)f by COMPLEX1:def 4;
   proof
 A2: -f = (-1r)(#)f by COMPLEX1:def 4;
     assume f is total;
-    hence thesis by A2,Th71;
+    hence thesis by A2,Th59;
   end;
   assume -f is total;
-  hence thesis by A1,Th71;
+  hence thesis by A1,Th59;
 end;
 
-theorem Th73:
+theorem Th61:
   f is total iff |.f.| is total
 proof
   thus f is total implies |.f.| is total
@@ -1720,7 +1720,7 @@ proof
   hence dom f = C by VALUED_1:def 11;
 end;
 
-theorem Th74:
+theorem Th62:
   f^ is total iff f"{0} = {} & f is total
 proof
   thus f^ is total implies f"{0} = {} & f is total
@@ -1740,7 +1740,7 @@ A2: f"{0} = {} & f is total;
     .= C by A2,PARTFUN1:def 2;
 end;
 
-theorem Th75:
+theorem Th63:
   f1 is total & f2"{0} = {} & f2 is total iff f1/f2 is total
 proof
   thus f1 is total & f2"{0} = {} & f2 is total implies f1/f2 is total
@@ -1748,16 +1748,16 @@ proof
     assume that
 A1: f1 is total and
 A2: f2"{0} = {} & f2 is total;
-    f2^ is total by A2,Th74;
-    then f1(#)(f2^) is total by A1,Th70;
-    hence thesis by Th51;
+    f2^ is total by A2,Th62;
+    then f1(#)(f2^) is total by A1,Th58;
+    hence thesis by Th39;
   end;
   assume f1/f2 is total;
   then
-A3: f1(#)(f2^) is total by Th51;
-  hence f1 is total by Th70;
-  f2^ is total by A3,Th70;
-  hence thesis by Th74;
+A3: f1(#)(f2^) is total by Th39;
+  hence f1 is total by Th58;
+  f2^ is total by A3,Th58;
+  hence thesis by Th62;
 end;
 
 theorem
@@ -1766,24 +1766,24 @@ theorem
 proof
   assume
 A1: f1 is total & f2 is total;
-  then f1+f2 is total by Th70;
+  then f1+f2 is total by Th58;
   then dom (f1+f2) = C by PARTFUN1:def 2;
-  hence (f1+f2)/.c = ((f1/.c)) + ((f2/.c)) by Th3;
-  f1-f2 is total by A1,Th70;
+  hence (f1+f2)/.c = ((f1/.c)) + ((f2/.c)) by Th1;
+  f1-f2 is total by A1,Th58;
   then dom (f1-f2) = C by PARTFUN1:def 2;
-  hence (f1-f2)/.c = ((f1/.c)) - ((f2/.c)) by Th4;
-  f1(#)f2 is total by A1,Th70;
+  hence (f1-f2)/.c = ((f1/.c)) - ((f2/.c)) by Th2;
+  f1(#)f2 is total by A1,Th58;
   then dom (f1(#)f2) = C by PARTFUN1:def 2;
-  hence thesis by Th5;
+  hence thesis by Th3;
 end;
 
 theorem
   f is total implies (r(#)f)/.c = r * ((f/.c))
 proof
   assume f is total;
-  then r(#)f is total by Th71;
+  then r(#)f is total by Th59;
   then dom (r(#)f) = C by PARTFUN1:def 2;
-  hence thesis by Th7;
+  hence thesis by Th4;
 end;
 
 theorem
@@ -1791,12 +1791,12 @@ theorem
 proof
   assume
 A1: f is total;
-  then |.f.| is total by Th73;
+  then |.f.| is total by Th61;
   then
 A2: dom |.f.| = dom f & dom (|.f.|) = C by PARTFUN1:def 2,VALUED_1:def 11;
-  -f is total by A1,Th72;
+  -f is total by A1,Th60;
   then dom (-f) = C by PARTFUN1:def 2;
-  hence (-f)/.c = - (f/.c) by Th9;
+  hence (-f)/.c = - (f/.c) by Th5;
   thus (|.f.|).c = |. (f.c) .| by VALUED_1:18
     .= |. (f/.c) .| by A2,PARTFUN1:def 6;
 end;
@@ -1815,8 +1815,8 @@ proof
   assume that
 A1: f1 is total and
 A2: f2^ is total;
-  f2"{0c} = {} & f2 is total by A2,Th74;
-  then f1/f2 is total by A1,Th75;
+  f2"{0c} = {} & f2 is total by A2,Th62;
+  then f1/f2 is total by A1,Th63;
   then dom (f1/f2) = C by PARTFUN1:def 2;
   hence thesis by Def1;
 end;
@@ -1834,7 +1834,7 @@ A1: dom f = dom |.f.| by VALUED_1:def 11;
   proof
     assume |.f.| is bounded;
     then consider r1 being real number such that
-A2: for y st y in dom |.f.| holds abs(|.f.|.y) < r1 by SEQ_2:def 5;
+A2: for y st y in dom |.f.| holds abs(|.f.|.y) < r1 by COMSEQ_2:def 3;
     take r1;
     let y;
     assume
@@ -1853,10 +1853,10 @@ A5: y in dom |.f.|;
     then abs(|.f.y.|) <r1 by A1,A4;
     hence abs(|.f.|.y) <r1 by A5,VALUED_1:def 11;
   end;
-  hence thesis by SEQ_2:def 5;
+  hence thesis by COMSEQ_2:def 3;
 end;
 
-theorem Th81:
+theorem Th69:
   f|Y is bounded iff ex p be real number st for c st c in Y /\ dom
   f holds |.(f/.c).|<= p
 proof
@@ -1915,10 +1915,10 @@ theorem
 proof
   assume X /\ dom f = {};
   then for c holds c in X /\ dom f implies |.(f/.c).| <= 0;
-  hence thesis by Th81;
+  hence thesis by Th69;
 end;
 
-theorem Th84:
+theorem Th72:
   f|Y is bounded implies (r(#)f)|Y is bounded
 proof
   assume
@@ -1926,7 +1926,7 @@ A1: f|Y is bounded;
   |.f.||Y = |.f|Y.| by RFUNCT_1:46;
   then |.f.||Y is bounded by A1,Lm3;
   then (|.r.|(#)|.f.|)|Y is bounded by RFUNCT_1:80;
-  then |.r(#)f.||Y = |.(r(#)f)|Y.| & |.r(#)f.||Y is bounded by Th39,RFUNCT_1:46
+  then |.r(#)f.||Y = |.(r(#)f)|Y.| & |.r(#)f.||Y is bounded by Th30,RFUNCT_1:46
 ;
   hence thesis by Lm3;
 end;
@@ -1948,7 +1948,7 @@ A2: c in dom (|.f.|) by XBOOLE_0:def 4;
   hence thesis by RFUNCT_1:71;
 end;
 
-theorem Th86:
+theorem Th74:
   f|Y is bounded implies |.f.||Y is bounded & (-f)|Y is bounded
 proof
   assume
@@ -1956,19 +1956,19 @@ A1: f|Y is bounded;
   |.f.||Y = |.f|Y.| by RFUNCT_1:46;
   hence |.f.||Y is bounded by A1,Lm3;
   (-1r)(#)(f|Y) = ((-1r)(#)f)|Y by RFUNCT_1:49;
-  hence thesis by A1,Th84,COMPLEX1:def 4;
+  hence thesis by A1,Th72,COMPLEX1:def 4;
 end;
 
-theorem Th87:
+theorem Th75:
   f1|X is bounded & f2|Y is bounded implies (f1+f2)|(X /\ Y) is bounded
 proof
   assume that
 A1: f1|X is bounded and
 A2: f2|Y is bounded;
   consider r1 such that
-A3: for c st c in X /\ dom f1 holds |.((f1/.c)).| <= r1 by A1,Th81;
+A3: for c st c in X /\ dom f1 holds |.((f1/.c)).| <= r1 by A1,Th69;
   consider r2 such that
-A4: for c st c in Y /\ dom f2 holds |.((f2/.c)).| <= r2 by A2,Th81;
+A4: for c st c in Y /\ dom f2 holds |.((f2/.c)).| <= r2 by A2,Th69;
   ex p1 st for c st c in X /\ Y /\ dom (f1+f2) holds |.(f1+f2)/.c.| <= p1
   proof
     take r0=r1+r2;
@@ -1993,12 +1993,12 @@ A12: |.((f2/.c)).| <= r2 by A4;
     then |.((f1/.c)).| <= r1 by A3;
     then |.((f1/.c)).|+|.((f2/.c)).| <= r0 by A12,XREAL_1:7;
     then |.((f1/.c)) + ((f2/.c)).| <= r0 by A5,XXREAL_0:2;
-    hence thesis by A10,Th3;
+    hence thesis by A10,Th1;
   end;
-  hence thesis by Th81;
+  hence thesis by Th69;
 end;
 
-theorem Th88:
+theorem Th76:
   f1|X is bounded & f2|Y is bounded implies (f1(#)f2)|(X /\ Y) is
   bounded & (f1-f2)|(X /\ Y) is bounded
 proof
@@ -2006,9 +2006,9 @@ proof
 A1: f1|X is bounded and
 A2: f2|Y is bounded;
   consider r1 such that
-A3: for c st c in X /\ dom f1 holds |.((f1/.c)).| <= r1 by A1,Th81;
+A3: for c st c in X /\ dom f1 holds |.((f1/.c)).| <= r1 by A1,Th69;
   consider r2 such that
-A4: for c st c in Y /\ dom f2 holds |.((f2/.c)).| <= r2 by A2,Th81;
+A4: for c st c in Y /\ dom f2 holds |.((f2/.c)).| <= r2 by A2,Th69;
   now
     take r=r1*r2;
     let c;
@@ -2020,7 +2020,7 @@ A6: c in X /\ Y by XBOOLE_0:def 4;
 A7: c in X by XBOOLE_0:def 4;
 A8: c in dom (f1(#)f2) by A5,XBOOLE_0:def 4;
     then
-A9: c in dom f1 /\ dom f2 by Th5;
+A9: c in dom f1 /\ dom f2 by Th3;
     then c in dom f1 by XBOOLE_0:def 4;
     then c in X /\ dom f1 by A7,XBOOLE_0:def 4;
     then
@@ -2033,11 +2033,11 @@ A12: |.((f2/.c)).| <= r2 by A4;
     0<=|.((f1/.c)).| & 0<=|.((f2/.c)).| by COMPLEX1:46;
     then |.((f1/.c)).|*|.((f2/.c)).| <= r by A10,A12,XREAL_1:66;
     then |.((f1/.c)) * ((f2/.c)).| <= r by COMPLEX1:65;
-    hence |.(f1(#)f2)/.c.| <= r by A8,Th5;
+    hence |.(f1(#)f2)/.c.| <= r by A8,Th3;
   end;
-  hence (f1(#)f2)|(X /\ Y) is bounded by Th81;
-  (-f2)|Y is bounded by A2,Th86;
-  hence thesis by A1,Th87;
+  hence (f1(#)f2)|(X /\ Y) is bounded by Th69;
+  (-f2)|Y is bounded by A2,Th74;
+  hence thesis by A1,Th75;
 end;
 
 theorem
@@ -2085,7 +2085,7 @@ A11: c in Y by A6,XBOOLE_0:def 4;
     c in dom f2 by A9,XBOOLE_0:def 4;
     then
 A12: c in Y /\ dom f2 by A11,XBOOLE_0:def 4;
-    thus (f1+f2)/.c =((f1/.c)) + ((f2/.c)) by A8,Th3
+    thus (f1+f2)/.c =((f1/.c)) + ((f2/.c)) by A8,Th1
       .= cr1 + ((f2/.c)) by A3,A10
       .= cr1 + cr2 by A4,A12;
   end;
@@ -2100,7 +2100,7 @@ A14: c in X /\ Y by XBOOLE_0:def 4;
 A15: c in X by XBOOLE_0:def 4;
 A16: c in dom (f1-f2) by A13,XBOOLE_0:def 4;
     then
-A17: c in (dom f1 /\ dom f2) by Th4;
+A17: c in (dom f1 /\ dom f2) by Th2;
     then c in dom f1 by XBOOLE_0:def 4;
     then
 A18: c in X /\ dom f1 by A15,XBOOLE_0:def 4;
@@ -2108,7 +2108,7 @@ A19: c in Y by A14,XBOOLE_0:def 4;
     c in dom f2 by A17,XBOOLE_0:def 4;
     then
 A20: c in Y /\ dom f2 by A19,XBOOLE_0:def 4;
-    thus (f1-f2)/.c = ((f1/.c)) - ((f2/.c)) by A16,Th4
+    thus (f1-f2)/.c = ((f1/.c)) - ((f2/.c)) by A16,Th2
       .= cr1 - ((f2/.c)) by A3,A18
       .= cr1 - cr2 by A4,A20;
   end;
@@ -2123,7 +2123,7 @@ A22: c in X /\ Y by XBOOLE_0:def 4;
 A23: c in X by XBOOLE_0:def 4;
 A24: c in dom (f1(#)f2) by A21,XBOOLE_0:def 4;
     then
-A25: c in (dom f1 /\ dom f2) by Th5;
+A25: c in (dom f1 /\ dom f2) by Th3;
     then c in dom f1 by XBOOLE_0:def 4;
     then
 A26: c in X /\ dom f1 by A23,XBOOLE_0:def 4;
@@ -2131,14 +2131,14 @@ A27: c in Y by A22,XBOOLE_0:def 4;
     c in dom f2 by A25,XBOOLE_0:def 4;
     then
 A28: c in Y /\ dom f2 by A27,XBOOLE_0:def 4;
-    thus (f1(#)f2)/.c =((f1/.c)) * ((f2/.c)) by A24,Th5
+    thus (f1(#)f2)/.c =((f1/.c)) * ((f2/.c)) by A24,Th3
       .= cr1 * ((f2/.c)) by A3,A26
       .= cr1 * cr2 by A4,A28;
   end;
   hence thesis by PARTFUN2:35;
 end;
 
-theorem Th91:
+theorem Th79:
   f|Y is constant implies (q(#)f)|Y is constant
 proof
   assume f|Y is constant;
@@ -2151,16 +2151,16 @@ A2: c in Y /\ dom (q(#)f);
     then
 A3: c in Y by XBOOLE_0:def 4;
 A4: c in dom (q(#)f) by A2,XBOOLE_0:def 4;
-    then c in dom f by Th7;
+    then c in dom f by Th4;
     then
 A5: c in Y /\ dom f by A3,XBOOLE_0:def 4;
-    thus (q(#)f)/.c = q * (f/.c) by A4,Th7
+    thus (q(#)f)/.c = q * (f/.c) by A4,Th4
       .= q*r by A1,A5;
   end;
   hence thesis by PARTFUN2:35;
 end;
 
-theorem Th92:
+theorem Th80:
   f|Y is constant implies |.f.||Y is constant & (-f)|Y is constant
 proof
   assume f|Y is constant;
@@ -2186,16 +2186,16 @@ A4: c in Y /\ dom f by A3,XBOOLE_0:def 4;
     let c;
     assume
 A5: c in Y /\ dom (-f);
-    then c in Y /\ dom f by Th9;
+    then c in Y /\ dom f by Th5;
     then
 A6: -(f/.c) = p by A1;
     c in dom (-f) by A5,XBOOLE_0:def 4;
-    hence (-f)/.c = p by A6,Th9;
+    hence (-f)/.c = p by A6,Th5;
   end;
   hence thesis by PARTFUN2:35;
 end;
 
-theorem Th93:
+theorem Th81:
   f|Y is constant implies f|Y is bounded
 proof
   assume f|Y is constant;
@@ -2207,7 +2207,7 @@ A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:35;
     assume c in Y /\ dom f;
     hence |.(f/.c).| <= p by A1;
   end;
-  hence thesis by Th81;
+  hence thesis by Th69;
 end;
 
 theorem
@@ -2216,20 +2216,20 @@ theorem
 proof
   assume
 A1: f|Y is constant;
-  hence for r holds (r(#)f)|Y is bounded by Th91,Th93;
-  thus (-f)|Y is bounded by A1,Th92,Th93;
-  |.f.||Y is constant by A1,Th92;
+  hence for r holds (r(#)f)|Y is bounded by Th79,Th81;
+  thus (-f)|Y is bounded by A1,Th80,Th81;
+  |.f.||Y is constant by A1,Th80;
   hence thesis;
 end;
 
-theorem Th95:
+theorem Th83:
   f1|X is bounded & f2|Y is constant implies (f1+f2)|(X /\ Y) is bounded
 proof
   assume that
 A1: f1|X is bounded and
 A2: f2|Y is constant;
-  f2|Y is bounded by A2,Th93;
-  hence thesis by A1,Th87;
+  f2|Y is bounded by A2,Th81;
+  hence thesis by A1,Th75;
 end;
 
 theorem
@@ -2239,11 +2239,11 @@ proof
   assume that
 A1: f1|X is bounded and
 A2: f2|Y is constant;
-  (-f2)|Y is constant by A2,Th92;
-  hence (f1-f2)|(X /\ Y) is bounded by A1,Th95;
-A3: f2|Y is bounded by A2,Th93;
-  hence (f2-f1)|(X /\ Y) is bounded by A1,Th88;
-  thus thesis by A1,A3,Th88;
+  (-f2)|Y is constant by A2,Th80;
+  hence (f1-f2)|(X /\ Y) is bounded by A1,Th83;
+A3: f2|Y is bounded by A2,Th81;
+  hence (f2-f1)|(X /\ Y) is bounded by A1,Th76;
+  thus thesis by A1,A3,Th76;
 end;
 
 theorem

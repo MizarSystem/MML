@@ -2,7 +2,7 @@
 ::  by Wojciech A. Trybulec and Grzegorz Bancerek
 ::
 :: Received September 19, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -22,11 +22,11 @@ environ
  constructors RELAT_2, WELLORD1, PARTFUN1, DOMAIN_1, ORDERS_1, PRE_TOPC,
       RELSET_1, SETFAM_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, ORDERS_1, STRUCT_0, PARTFUN1,
-      CARD_1, ORDINAL1;
+      CARD_1, ORDINAL1, RELAT_2;
  requirements BOOLE, SUBSET, NUMERALS;
  definitions RELAT_1, RELAT_2, TARSKI, WELLORD1, STRUCT_0, XBOOLE_0, ORDERS_1;
  theorems RELAT_1, RELAT_2, TARSKI, WELLORD1, ZFMISC_1, XBOOLE_0, XBOOLE_1,
-      PARTFUN1, ORDERS_1;
+      PARTFUN1, ORDERS_1, XTUPLE_0;
  schemes XBOOLE_0;
 
 begin :: Original ORDERS_1
@@ -49,16 +49,16 @@ definition
   let A be RelStr;
 
   attr A is total means
-  :Def3:
+  :Def1:
   the InternalRel of A is total;
   attr A is reflexive means
-  :Def4:
+  :Def2:
   the InternalRel of A is_reflexive_in the carrier of A;
   attr A is transitive means
-  :Def5:
+  :Def3:
   the InternalRel of A is_transitive_in the carrier of A;
   attr A is antisymmetric means
-  :Def6:
+  :Def4:
   the InternalRel of A is_antisymmetric_in the carrier of A;
 end;
 
@@ -68,7 +68,6 @@ registration
   proof
     set R = the Order of {{}};
     take L = RelStr(#{{}},R#);
-:::    thus the carrier of L is non empty;
 A1: field R = the carrier of L by ORDERS_1:12;
     hence the InternalRel of L is_reflexive_in the carrier of L by
 RELAT_2:def 9;
@@ -88,7 +87,7 @@ registration
   proof
     let L be RelStr;
     assume L is reflexive;
-    then the InternalRel of L is_reflexive_in the carrier of L by Def4;
+    then the InternalRel of L is_reflexive_in the carrier of L by Def2;
     then dom the InternalRel of L = the carrier of L by ORDERS_1:13;
     hence the InternalRel of L is total by PARTFUN1:def 2;
   end;
@@ -101,7 +100,7 @@ end;
 registration
   let A be total RelStr;
   cluster the InternalRel of A -> total;
-  coherence by Def3;
+  coherence by Def1;
 end;
 
 registration
@@ -110,10 +109,10 @@ registration
   coherence
   proof
     set R = the InternalRel of A;
-    R is_reflexive_in the carrier of A by Def4;
+    R is_reflexive_in the carrier of A by Def2;
     then
 A1: field R = the carrier of A by ORDERS_1:13;
-    the InternalRel of A is_reflexive_in the carrier of A by Def4;
+    the InternalRel of A is_reflexive_in the carrier of A by Def2;
     hence thesis by A1,RELAT_2:def 9;
   end;
 end;
@@ -125,7 +124,7 @@ registration
   proof
     set R = the InternalRel of A;
     field R = the carrier of A & the InternalRel of A is_antisymmetric_in
-    the carrier of A by Def6,ORDERS_1:12;
+    the carrier of A by Def4,ORDERS_1:12;
     hence thesis by RELAT_2:def 12;
   end;
 end;
@@ -137,7 +136,7 @@ registration
   proof
     set R = the InternalRel of A;
     field R = the carrier of A & the InternalRel of A is_transitive_in the
-    carrier of A by Def5,ORDERS_1:12;
+    carrier of A by Def3,ORDERS_1:12;
     hence thesis by RELAT_2:def 16;
   end;
 end;
@@ -192,7 +191,7 @@ definition
   let a1,a2 be Element of A;
 
   pred a1 <= a2 means
-  :Def9:
+  :Def5:
   [a1,a2] in the InternalRel of A;
 end;
 
@@ -206,7 +205,7 @@ definition
   let A be RelStr;
   let a1,a2 be Element of A;
   pred a1 < a2 means
-  :Def10:
+  :Def6:
   a1 <= a2 & a1 <> a2;
   irreflexivity;
 end;
@@ -217,23 +216,23 @@ notation
   synonym a2 > a1 for a1 < a2;
 end;
 
-theorem Th24:
+theorem Th1:
   for A being reflexive non empty RelStr, a being Element of A holds a <= a
 proof
   let A be reflexive non empty RelStr, a be Element of A;
-  the InternalRel of A is_reflexive_in the carrier of A by Def4;
+  the InternalRel of A is_reflexive_in the carrier of A by Def2;
   then [a,a] in the InternalRel of A by RELAT_2:def 1;
-  hence thesis by Def9;
+  hence thesis by Def5;
 end;
 
 definition
   let A be reflexive non empty RelStr;
   let a1,a2 be Element of A;
   redefine pred a1 <= a2;
-  reflexivity by Th24;
+  reflexivity by Th1;
 end;
 
-theorem Th25:
+theorem Th2:
   for A being antisymmetric RelStr, a1,a2 being Element of A st a1
   <= a2 & a2 <= a1 holds a1 = a2
 proof
@@ -241,12 +240,12 @@ proof
   assume that
 A1: [a1,a2] in the InternalRel of A and
 A2: [a2,a1] in the InternalRel of A;
-A3: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+A3: the InternalRel of A is_antisymmetric_in the carrier of A by Def4;
   a1 in the carrier of A by A1,ZFMISC_1:87;
   hence thesis by A1,A2,A3,RELAT_2:def 4;
 end;
 
-theorem Th26:
+theorem Th3:
   for A being transitive RelStr, a1,a2,a3 being Element of A holds
   a1 <= a2 & a2 <= a3 implies a1 <= a3
 proof
@@ -254,12 +253,12 @@ proof
   assume that
 A1: [a1,a2] in the InternalRel of A and
 A2: [a2,a3] in the InternalRel of A;
-A3: the InternalRel of A is_transitive_in the carrier of A by Def5;
+A3: the InternalRel of A is_transitive_in the carrier of A by Def3;
   a1 in the carrier of A by A1,ZFMISC_1:87;
   hence [a1,a3] in the InternalRel of A by A1,A2,A3,RELAT_2:def 8;
 end;
 
-theorem Th28:
+theorem Th4:
   for A being antisymmetric RelStr, a1,a2 being Element of A holds
   not(a1 < a2 & a2 < a1)
 proof
@@ -267,11 +266,11 @@ proof
   assume that
 A1: a1 < a2 and
 A2: a2 < a1;
-  a1 <= a2 & a2 <= a1 by A1,A2,Def10;
-  hence thesis by A1,Th25;
+  a1 <= a2 & a2 <= a1 by A1,A2,Def6;
+  hence thesis by A1,Th2;
 end;
 
-theorem Th29:
+theorem Th5:
   for A being transitive antisymmetric RelStr for a1,a2,a3 being
   Element of A holds a1 < a2 & a2 < a3 implies a1 < a3
 proof
@@ -279,12 +278,12 @@ proof
   let a1,a2,a3 be Element of A;
   assume
 A1: a1 < a2 & a2 < a3;
-  then a1 <= a2 & a2 <= a3 by Def10;
-  hence a1 <= a3 by Th26;
-  thus thesis by A1,Th28;
+  then a1 <= a2 & a2 <= a3 by Def6;
+  hence a1 <= a3 by Th3;
+  thus thesis by A1,Th4;
 end;
 
-theorem Th30:
+theorem Th6:
   for A being antisymmetric RelStr, a1,a2 being Element of A holds
   a1 <= a2 implies not a2 < a1
 proof
@@ -292,11 +291,11 @@ proof
   assume that
 A1: a1 <= a2 and
 A2: a2 < a1;
-  a2 <= a1 by A2,Def10;
-  hence thesis by A1,A2,Th25;
+  a2 <= a1 by A2,Def6;
+  hence thesis by A1,A2,Th2;
 end;
 
-theorem Th32:
+theorem Th7:
   for A being transitive antisymmetric RelStr for a1,a2,a3 being
   Element of A holds a1 < a2 & a2 <= a3 or a1 <= a2 & a2 < a3 implies a1 < a3
 proof
@@ -306,17 +305,17 @@ A1: now
     assume that
 A2: a1 < a2 and
 A3: a2 <= a3;
-    a1 <= a2 by A2,Def10;
-    then a1 <= a3 & a1 <> a3 by A2,A3,Th25,Th26;
-    hence thesis by Def10;
+    a1 <= a2 by A2,Def6;
+    then a1 <= a3 & a1 <> a3 by A2,A3,Th2,Th3;
+    hence thesis by Def6;
   end;
 A4: now
     assume that
 A5: a1 <= a2 and
 A6: a2 < a3;
-    a2 <= a3 by A6,Def10;
-    then a1 <= a3 & a1 <> a3 by A5,A6,Th25,Th26;
-    hence thesis by Def10;
+    a2 <= a3 by A6,Def6;
+    then a1 <= a3 & a1 <> a3 by A5,A6,Th2,Th3;
+    hence thesis by Def6;
   end;
   assume a1 < a2 & a2 <= a3 or a1 <= a2 & a2 < a3;
   hence thesis by A1,A4;
@@ -330,7 +329,7 @@ definition
   let A be RelStr;
   let IT be Subset of A;
   attr IT is strongly_connected means
-  :Def11:
+  :Def7:
   the InternalRel of A is_strongly_connected_in IT;
 end;
 
@@ -362,12 +361,12 @@ definition
   mode Chain of A is strongly_connected Subset of A;
 end;
 
-theorem Th35:
+theorem Th8:
   for A being non empty reflexive RelStr for a being Element of A
   holds {a} is Chain of A
 proof
   let A be non empty reflexive RelStr, a be Element of A;
-A1: the InternalRel of A is_reflexive_in the carrier of A by Def4;
+A1: the InternalRel of A is_reflexive_in the carrier of A by Def2;
   {a} is strongly_connected
   proof
     let x1,x2 be set;
@@ -378,7 +377,7 @@ A1: the InternalRel of A is_reflexive_in the carrier of A by Def4;
   hence thesis;
 end;
 
-theorem Th36:
+theorem Th9:
   for A being non empty reflexive RelStr, a1,a2 being Element of A
   holds {a1,a2} is Chain of A iff a1 <= a2 or a2 <= a1
 proof
@@ -388,12 +387,12 @@ A1: a2 <= a2;
   proof
     assume {a1,a2} is Chain of A;
     then
-A2: the InternalRel of A is_strongly_connected_in {a1,a2} by Def11;
+A2: the InternalRel of A is_strongly_connected_in {a1,a2} by Def7;
     a1 in {a1,a2} & a2 in {a1,a2} by TARSKI:def 2;
     then
     [a1,a2] in the InternalRel of A or [a2,a1] in the InternalRel of A by A2,
 RELAT_2:def 7;
-    hence thesis by Def9;
+    hence thesis by Def5;
   end;
   assume
 A3: a1 <= a2 or a2 <= a1;
@@ -407,19 +406,19 @@ A5: x in {a1,a2} & y in {a1,a2};
       per cases by A5,TARSKI:def 2;
       suppose
         x = a1 & y = a1;
-        hence thesis by A4,Def9;
+        hence thesis by A4,Def5;
       end;
       suppose
         x = a1 & y = a2;
-        hence thesis by A3,Def9;
+        hence thesis by A3,Def5;
       end;
       suppose
         x = a2 & y = a1;
-        hence thesis by A3,Def9;
+        hence thesis by A3,Def5;
       end;
       suppose
         x = a2 & y = a2;
-        hence thesis by A1,Def9;
+        hence thesis by A1,Def5;
       end;
     end;
     hence thesis;
@@ -434,12 +433,12 @@ proof
   let A be RelStr, C be Chain of A, S be Subset of A;
   assume
 A1: S c= C;
-  the InternalRel of A is_strongly_connected_in C by Def11;
+  the InternalRel of A is_strongly_connected_in C by Def7;
   then the InternalRel of A is_strongly_connected_in S by A1,ORDERS_1:11;
-  hence thesis by Def11;
+  hence thesis by Def7;
 end;
 
-theorem Th38:
+theorem Th11:
   for A being reflexive RelStr, a1,a2 being Element of A holds (ex
   C being Chain of A st a1 in C & a2 in C) iff a1 <= a2 or a2 <= a1
 proof
@@ -450,24 +449,24 @@ proof
   proof
     given C being Chain of A such that
 A1: a1 in C & a2 in C;
-    the InternalRel of A is_strongly_connected_in C by Def11;
+    the InternalRel of A is_strongly_connected_in C by Def7;
     then
     [a1,a2] in the InternalRel of A or [a2,a1] in the InternalRel of A by A1,
 RELAT_2:def 7;
-    hence thesis by Def9;
+    hence thesis by Def5;
   end;
   assume
 A2: a1 <= a2 or a2 <= a1;
   then
-  [a1,a2] in the InternalRel of A or [a2,a1] in the InternalRel of A by Def9;
+  [a1,a2] in the InternalRel of A or [a2,a1] in the InternalRel of A by Def5;
   then reconsider B = A as non empty reflexive RelStr;
   reconsider b1 = a1, b2 = a2 as Element of B;
-  reconsider Y = {b1,b2} as Chain of A by A2,Th36;
+  reconsider Y = {b1,b2} as Chain of A by A2,Th9;
   take Y;
   thus thesis by TARSKI:def 2;
 end;
 
-theorem Th39:
+theorem Th12:
   for A being reflexive antisymmetric RelStr, a1,a2 being Element
 of A holds (ex C being Chain of A st a1 in C & a2 in C) iff (a1 < a2 iff not a2
   <= a1)
@@ -479,19 +478,19 @@ proof
   proof
     given C being Chain of A such that
 A1: a1 in C & a2 in C;
-    thus a1 < a2 implies not a2 <= a1 by Th30;
+    thus a1 < a2 implies not a2 <= a1 by Th6;
     assume that
 A2: not a2 <= a1 and
 A3: not a1 < a2;
-    not a1 <= a2 or a1 = a2 by A3,Def10;
-    hence thesis by A1,A2,Th38;
+    not a1 <= a2 or a1 = a2 by A3,Def6;
+    hence thesis by A1,A2,Th11;
   end;
   assume a1 < a2 iff not a2 <= a1;
-  then a1 <= a2 or a2 <= a1 by Def10;
-  hence thesis by Th38;
+  then a1 <= a2 or a2 <= a1 by Def6;
+  hence thesis by Th11;
 end;
 
-theorem Th40:
+theorem Th13:
   for A being RelStr, T being Subset of A holds the InternalRel of
   A well_orders T implies T is Chain of A
 proof
@@ -500,7 +499,7 @@ proof
   then the InternalRel of A is_connected_in T & the InternalRel of A
   is_reflexive_in T by WELLORD1:def 5;
   then the InternalRel of A is_strongly_connected_in T by ORDERS_1:7;
-  hence thesis by Def11;
+  hence thesis by Def7;
 end;
 
 ::
@@ -547,7 +546,7 @@ definition
   end;
 end;
 
-theorem Th43:
+theorem Th14:
   UpperCone({}(A)) = the carrier of A
 proof
   thus UpperCone({}(A)) c= the carrier of A;
@@ -595,7 +594,7 @@ proof
   thus thesis by XBOOLE_1:2;
 end;
 
-theorem Th47:
+theorem Th18:
   a in S implies not a in UpperCone(S)
 proof
   assume that
@@ -609,10 +608,10 @@ theorem
   not a in UpperCone{a}
 proof
   a in {a} by TARSKI:def 1;
-  hence thesis by Th47;
+  hence thesis by Th18;
 end;
 
-theorem Th49:
+theorem Th20:
   a in S implies not a in LowerCone(S)
 proof
   assume that
@@ -622,11 +621,11 @@ A2: a in LowerCone(S);
   hence thesis by A1;
 end;
 
-theorem Th50:
+theorem Th21:
   not a in LowerCone{a}
 proof
   a in {a} by TARSKI:def 1;
-  hence thesis by Th49;
+  hence thesis by Th20;
 end;
 
 theorem
@@ -645,7 +644,7 @@ A1: ex a1 st a1 = a & for a2 st a2 in {c} holds a2 < a1;
   hence thesis by A1;
 end;
 
-theorem Th52:
+theorem Th23:
   a < c iff a in LowerCone{c}
 proof
   thus a < c implies a in LowerCone{c}
@@ -678,7 +677,7 @@ definition
   let A;
   let S;
   mode Initial_Segm of S -> Subset of A means
-    :Def15:
+    :Def11:
     ex a st a in S & it = InitSegm(S,a) if S <> {} otherwise it = {};
   existence
   proof
@@ -695,17 +694,17 @@ definition
   consistency;
 end;
 
-theorem Th57:
+theorem Th24:
   a in InitSegm(S,b) iff a < b & a in S
 proof
   a in InitSegm(S,b) iff a in LowerCone{b} & a in S by XBOOLE_0:def 4;
-  hence thesis by Th52;
+  hence thesis by Th23;
 end;
 
 theorem
   InitSegm({}(A),a) = {};
 
-theorem Th62:
+theorem Th26:
   not a in InitSegm(S,a)
 proof
   assume not thesis;
@@ -730,7 +729,7 @@ A3: a = x and
 A4: for b st b in {a1} holds a < b;
   a1 in {a1} by TARSKI:def 1;
   then a < a1 by A4;
-  then a < a2 by A1,Th29;
+  then a < a2 by A1,Th5;
   then for b holds b in {a2} implies a < b by TARSKI:def 1;
   then
 A5: x in LowerCone{a2} by A3;
@@ -738,7 +737,7 @@ A5: x in LowerCone{a2} by A3;
   hence thesis by A5,XBOOLE_0:def 4;
 end;
 
-theorem Th65:
+theorem Th28:
   S c= T implies InitSegm(S,a) c= InitSegm(T,a)
 proof
   assume
@@ -749,37 +748,37 @@ A1: S c= T;
   hence thesis by A1,XBOOLE_0:def 4;
 end;
 
-theorem Th67:
+theorem Th29:
   for I being Initial_Segm of S holds I c= S
 proof
   let I be Initial_Segm of S;
   per cases;
   suppose
     S = {};
-    hence thesis by Def15;
+    hence thesis by Def11;
   end;
   suppose
     S <> {};
-    then ex a st a in S & I = InitSegm(S,a) by Def15;
+    then ex a st a in S & I = InitSegm(S,a) by Def11;
     hence thesis by XBOOLE_1:17;
   end;
 end;
 
-theorem Th68:
+theorem Th30:
   S <> {} iff not S is Initial_Segm of S
 proof
   thus S <> {} implies not S is Initial_Segm of S
   proof
     assume S <> {} & S is Initial_Segm of S;
     then consider a such that
-A1: a in S & S = InitSegm(S,a) by Def15;
+A1: a in S & S = InitSegm(S,a) by Def11;
     a in LowerCone{a} by A1,XBOOLE_0:def 4;
-    hence thesis by Th50;
+    hence thesis by Th21;
   end;
-  thus thesis by Def15;
+  thus thesis by Def11;
 end;
 
-theorem Th69:
+theorem Th31:
   S <> {} & S is Initial_Segm of T implies not T is Initial_Segm of S
 proof
   assume that
@@ -794,16 +793,16 @@ A3: T is Initial_Segm of S;
     end;
     suppose
       T = {};
-      hence thesis by A1,A2,Def15;
+      hence thesis by A1,A2,Def11;
     end;
     suppose
 A4:   S <> {} & T <> {};
       then consider a2 such that
 A5:   a2 in T and
-A6:   S = InitSegm(T,a2) by A2,Def15;
+A6:   S = InitSegm(T,a2) by A2,Def11;
       consider a1 such that
 A7:   a1 in S and
-A8:   T = InitSegm(S,a1) by A3,A4,Def15;
+A8:   T = InitSegm(S,a1) by A3,A4,Def11;
       a1 in LowerCone{a2} by A7,A6,XBOOLE_0:def 4;
       then
 A9:   ex a st a = a1 & for b st b in {a2} holds a < b;
@@ -815,13 +814,13 @@ A10:  ex a3 st a3 = a2 & for b st b in {a1} holds a3 < b;
 A11:  a2 < a1 by A10;
       a2 in {a2} by TARSKI:def 1;
       then a1 < a2 by A9;
-      hence thesis by A11,Th28;
+      hence thesis by A11,Th4;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th70:
+theorem Th32:
   a1 < a2 & a1 in S & a2 in T & T is Initial_Segm of S implies a1 in T
 proof
   assume that
@@ -831,7 +830,7 @@ A3: a2 in T and
 A4: T is Initial_Segm of S;
   consider a such that
   a in S and
-A5: T = InitSegm(S,a) by A2,A4,Def15;
+A5: T = InitSegm(S,a) by A2,A4,Def11;
   now
     let b;
     assume b in {a};
@@ -842,19 +841,19 @@ A6: b = a by TARSKI:def 1;
 A7: ex a3 st a3 = a2 & for c st c in {a} holds a3 < c;
     a in {a} by TARSKI:def 1;
     then a2 < a by A7;
-    hence a1 < b by A1,A6,Th29;
+    hence a1 < b by A1,A6,Th5;
   end;
   then a1 in LowerCone{a};
   hence thesis by A2,A5,XBOOLE_0:def 4;
 end;
 
-theorem Th71:
+theorem Th33:
   a in S & S is Initial_Segm of T implies InitSegm(S,a) = InitSegm (T,a)
 proof
   assume that
 A1: a in S and
 A2: S is Initial_Segm of T;
-A3: S c= T by A2,Th67;
+A3: S c= T by A2,Th29;
   thus InitSegm(S,a) c= InitSegm(T,a)
   proof
     let x;
@@ -873,7 +872,7 @@ A7: for a2 st a2 in {a} holds a1 < a2;
 A8: a1 in T by A4,A6,XBOOLE_0:def 4;
   a in {a} by TARSKI:def 1;
   then a1 < a by A7;
-  then x in S by A1,A2,A6,A8,Th70;
+  then x in S by A1,A2,A6,A8,Th32;
   hence thesis by A5,XBOOLE_0:def 4;
 end;
 
@@ -916,9 +915,9 @@ A10:      not a < a1;
 A11:      a1 = x by A9,TARSKI:def 1;
           then
 A12:      a1 <> a by A5,A8,XBOOLE_0:def 5;
-          T is Chain of A by A2,Th40;
-          then a1 <= a by A1,A7,A8,A10,A11,Th39;
-          then a1 < a by A12,Def10;
+          T is Chain of A by A2,Th13;
+          then a1 <= a by A1,A7,A8,A10,A11,Th12;
+          then a1 < a by A12,Def6;
           then a1 in S by A3,A8;
           hence contradiction by A5,A11,XBOOLE_0:def 5;
         end;
@@ -936,9 +935,9 @@ A16:  now
         assume y in Y;
         then [x,y] in the InternalRel of A by A6;
         then
-A17:    x <= a by A14,Def9;
+A17:    x <= a by A14,Def5;
         x in {x} by TARSKI:def 1;
-        hence contradiction by A15,A17,Th30;
+        hence contradiction by A15,A17,Th6;
       end;
       y in T by A13,XBOOLE_0:def 4;
       hence thesis by A16,XBOOLE_0:def 5;
@@ -951,7 +950,7 @@ A17:    x <= a by A14,Def9;
   end;
 end;
 
-theorem Th73:
+theorem Th35:
   S c= T & the InternalRel of A well_orders T & (for a1,a2 st a2
 in S & a1 in T & a1 < a2 holds a1 in S) implies S = T or S is Initial_Segm of T
 proof
@@ -990,9 +989,9 @@ A10:      not a < a1;
 A11:      a1 = x by A9,TARSKI:def 1;
           then
 A12:      a1 <> a by A5,A8,XBOOLE_0:def 5;
-          T is Chain of A by A2,Th40;
-          then a1 <= a by A1,A7,A8,A10,A11,Th39;
-          then a1 < a by A12,Def10;
+          T is Chain of A by A2,Th13;
+          then a1 <= a by A1,A7,A8,A10,A11,Th12;
+          then a1 < a by A12,Def6;
           then a1 in S by A3,A7,A8,A11;
           hence contradiction by A5,A11,XBOOLE_0:def 5;
         end;
@@ -1010,9 +1009,9 @@ A16:  now
         assume y in Y;
         then [x,y] in the InternalRel of A by A6;
         then
-A17:    x <= a by A14,Def9;
+A17:    x <= a by A14,Def5;
         x in {x} by TARSKI:def 1;
-        hence contradiction by A15,A17,Th30;
+        hence contradiction by A15,A17,Th6;
       end;
       y in T by A13,XBOOLE_0:def 4;
       hence thesis by A16,XBOOLE_0:def 5;
@@ -1035,7 +1034,7 @@ definition
   let A;
   let f;
   mode Chain of f -> Chain of A means
-    :Def16:
+    :Def12:
     it <> {} & the InternalRel of A
     well_orders it & for a st a in it holds f.UpperCone(InitSegm(it,a)) = a;
   existence
@@ -1043,16 +1042,16 @@ definition
     set AC = the carrier of A;
     AC in BOOL AC & not {} in BOOL AC by ORDERS_1:1,2;
     then reconsider aa = f.AC as Element of A by ORDERS_1:def 1;
-    reconsider X = {aa} as Chain of A by Th35;
+    reconsider X = {aa} as Chain of A by Th8;
     take X;
     thus X <> {};
-A1: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+A1: the InternalRel of A is_antisymmetric_in the carrier of A by Def4;
     the InternalRel of A is_reflexive_in the carrier of A & the
-    InternalRel of A is_transitive_in the carrier of A by Def4,Def5;
+    InternalRel of A is_transitive_in the carrier of A by Def2,Def3;
     hence the InternalRel of A is_reflexive_in X & the InternalRel of A
     is_transitive_in X & the InternalRel of A is_antisymmetric_in X by A1,
 ORDERS_1:8,9,10;
-    the InternalRel of A is_strongly_connected_in X by Def11;
+    the InternalRel of A is_strongly_connected_in X by Def7;
     hence the InternalRel of A is_connected_in X by ORDERS_1:7;
     thus the InternalRel of A is_well_founded_in X
     proof
@@ -1093,19 +1092,19 @@ A8:   ex a1 st x = a1 & for a2 st a2 in {a} holds a1 < a2;
       hence thesis by A6,A8;
     end;
     then LowerCone{a} /\ X = {}(A);
-    hence thesis by A6,Th43;
+    hence thesis by A6,Th14;
   end;
 end;
 
 reserve fC,fC1,fC2 for Chain of f;
 
-theorem Th78:
+theorem Th36:
   {f.(the carrier of A)} is Chain of f
 proof
   set AC = the carrier of A;
   AC in BOOL AC & not {} in BOOL AC by ORDERS_1:1,2;
   then reconsider aa = f.AC as Element of A by ORDERS_1:def 1;
-  reconsider X = {aa} as Chain of A by Th35;
+  reconsider X = {aa} as Chain of A by Th8;
 A1: the InternalRel of A is_well_founded_in X
   proof
     reconsider x = aa as set;
@@ -1147,27 +1146,27 @@ A9:   ex a1 st x = a1 & for a2 st a2 in {a} holds a1 < a2;
       hence thesis by A7,A9;
     end;
     then LowerCone{a} /\ X = {}(A);
-    hence thesis by A7,Th43;
+    hence thesis by A7,Th14;
   end;
-  the InternalRel of A is_strongly_connected_in X by Def11;
+  the InternalRel of A is_strongly_connected_in X by Def7;
   then
 A10: the InternalRel of A is_connected_in X by ORDERS_1:7;
-  the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+  the InternalRel of A is_antisymmetric_in the carrier of A by Def4;
   then
 A11: the InternalRel of A is_antisymmetric_in X by ORDERS_1:9;
-  the InternalRel of A is_transitive_in the carrier of A by Def5;
+  the InternalRel of A is_transitive_in the carrier of A by Def3;
   then
 A12: the InternalRel of A is_transitive_in X by ORDERS_1:10;
-  the InternalRel of A is_reflexive_in the carrier of A by Def4;
+  the InternalRel of A is_reflexive_in the carrier of A by Def2;
   then the InternalRel of A is_reflexive_in X by ORDERS_1:8;
   then the InternalRel of A well_orders X by A12,A11,A10,A1,WELLORD1:def 5;
-  hence thesis by A6,Def16;
+  hence thesis by A6,Def12;
 end;
 
-theorem Th79:
+theorem Th37:
   f.(the carrier of A) in fC
 proof
-  the InternalRel of A well_orders fC & fC <> {} by Def16;
+  the InternalRel of A well_orders fC & fC <> {} by Def12;
   then consider x such that
 A1: x in fC and
 A2: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:5;
@@ -1183,22 +1182,22 @@ A5: ex a1 st a = a1 & for a2 st a2 in {x} holds a1 < a2;
     y in fC by A4,XBOOLE_0:def 4;
     then [x,y] in the InternalRel of A by A2;
     then
-A6: x <= a by Def9;
+A6: x <= a by Def5;
     x in {x} by TARSKI:def 1;
-    hence contradiction by A6,A5,Th30;
+    hence contradiction by A6,A5,Th6;
   end;
   LowerCone{x} /\ fC = InitSegm(fC,x);
-  then f.UpperCone(LowerCone{x} /\ fC) = x by A1,Def16;
-  hence thesis by A1,A3,Th43;
+  then f.UpperCone(LowerCone{x} /\ fC) = x by A1,Def12;
+  hence thesis by A1,A3,Th14;
 end;
 
-theorem Th80:
+theorem Th38:
   a in fC & b = f.(the carrier of A) implies b <= a
 proof
   assume that
 A1: a in fC and
 A2: b = f.(the carrier of A);
-  the InternalRel of A well_orders fC & fC <> {} by Def16;
+  the InternalRel of A well_orders fC & fC <> {} by Def12;
   then consider x such that
 A3: x in fC and
 A4: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:5;
@@ -1214,16 +1213,16 @@ A7: ex a1 st a = a1 & for a2 st a2 in {x} holds a1 < a2;
     y in fC by A6,XBOOLE_0:def 4;
     then [x,y] in the InternalRel of A by A4;
     then
-A8: x <= a by Def9;
+A8: x <= a by Def5;
     x in {x} by TARSKI:def 1;
-    hence contradiction by A8,A7,Th30;
+    hence contradiction by A8,A7,Th6;
   end;
   LowerCone{x} /\ fC = InitSegm(fC,x);
-  then f.UpperCone(LowerCone{x} /\ fC) = x by A3,Def16;
+  then f.UpperCone(LowerCone{x} /\ fC) = x by A3,Def12;
   then
-A9: f.(the carrier of A) = x by A5,Th43;
+A9: f.(the carrier of A) = x by A5,Th14;
   [x,a] in the InternalRel of A by A1,A4;
-  hence thesis by A2,A9,Def9;
+  hence thesis by A2,A9,Def5;
 end;
 
 theorem
@@ -1233,7 +1232,7 @@ proof
   assume
 A1: a = f.(the carrier of A);
   then
-A2: a in fC by Th79;
+A2: a in fC by Th37;
   assume
 A3: InitSegm(fC,a) <> {};
   then reconsider b = x as Element of A by Lm1;
@@ -1244,18 +1243,18 @@ A4: ex a1 st a1 = b & for a2 st a2 in {a} holds a1 < a2;
   then
 A5: b < a by A4;
 A6: x in fC by A3,XBOOLE_0:def 4;
-  then a <= b by A1,Th80;
-  hence contradiction by A2,A6,A5,Th39;
+  then a <= b by A1,Th38;
+  hence contradiction by A2,A6,A5,Th12;
 end;
 
 theorem
   fC1 meets fC2
 proof
-  f.(the carrier of A) in fC1 & f.(the carrier of A) in fC2 by Th79;
+  f.(the carrier of A) in fC1 & f.(the carrier of A) in fC2 by Th37;
   hence thesis by XBOOLE_0:3;
 end;
 
-theorem Th83:
+theorem Th41:
   fC1 <> fC2 implies (fC1 is Initial_Segm of fC2 iff not fC2 is
   Initial_Segm of fC1)
 proof
@@ -1293,25 +1292,25 @@ A9: InitSegm(fC1,a1) = InitSegm(fC2,a1)
         assume
 A10:    x in InitSegm(fC1,a1);
         then reconsider b = x as Element of A;
-A11:    b in fC1 by A10,Th57;
-A12:    b < a1 by A10,Th57;
-        then b < a2 by A7,Th29;
-        then b in InitSegm(fC1,a2) by A11,Th57;
-        then b in fC2 by A8,Th57;
-        hence thesis by A12,Th57;
+A11:    b in fC1 by A10,Th24;
+A12:    b < a1 by A10,Th24;
+        then b < a2 by A7,Th5;
+        then b in InitSegm(fC1,a2) by A11,Th24;
+        then b in fC2 by A8,Th24;
+        hence thesis by A12,Th24;
       end;
       let x;
       assume
 A13:  x in InitSegm(fC2,a1);
       then reconsider b = x as Element of A;
-A14:  b in fC2 by A13,Th57;
-A15:  b < a1 by A13,Th57;
-      then b < a2 by A7,Th29;
-      then b in InitSegm(fC2,a2) by A14,Th57;
-      then b in fC1 by A8,Th57;
-      hence thesis by A15,Th57;
+A14:  b in fC2 by A13,Th24;
+A15:  b < a1 by A13,Th24;
+      then b < a2 by A7,Th5;
+      then b in InitSegm(fC2,a2) by A14,Th24;
+      then b in fC1 by A8,Th24;
+      hence thesis by A15,Th24;
     end;
-    a1 in InitSegm(fC2,a2) by A6,A7,A8,Th57;
+    a1 in InitSegm(fC2,a2) by A6,A7,A8,Th24;
     then a1 in fC2 by XBOOLE_0:def 4;
     then a1 in fC1 /\ fC2 by A6,XBOOLE_0:def 4;
     hence a1 in N by A9;
@@ -1332,42 +1331,42 @@ A21: InitSegm(fC1,a1) = InitSegm(fC2,a1)
         assume
 A22:    x in InitSegm(fC1,a1);
         then reconsider b = x as Element of A;
-A23:    b in fC1 by A22,Th57;
-A24:    b < a1 by A22,Th57;
-        then b < a2 by A19,Th29;
-        then b in InitSegm(fC1,a2) by A23,Th57;
-        then b in fC2 by A20,Th57;
-        hence thesis by A24,Th57;
+A23:    b in fC1 by A22,Th24;
+A24:    b < a1 by A22,Th24;
+        then b < a2 by A19,Th5;
+        then b in InitSegm(fC1,a2) by A23,Th24;
+        then b in fC2 by A20,Th24;
+        hence thesis by A24,Th24;
       end;
       let x;
       assume
 A25:  x in InitSegm(fC2,a1);
       then reconsider b = x as Element of A;
-A26:  b in fC2 by A25,Th57;
-A27:  b < a1 by A25,Th57;
-      then b < a2 by A19,Th29;
-      then b in InitSegm(fC2,a2) by A26,Th57;
-      then b in fC1 by A20,Th57;
-      hence thesis by A27,Th57;
+A26:  b in fC2 by A25,Th24;
+A27:  b < a1 by A25,Th24;
+      then b < a2 by A19,Th5;
+      then b in InitSegm(fC2,a2) by A26,Th24;
+      then b in fC1 by A20,Th24;
+      hence thesis by A27,Th24;
     end;
-    a1 in InitSegm(fC1,a2) by A18,A19,A20,Th57;
+    a1 in InitSegm(fC1,a2) by A18,A19,A20,Th24;
     then a1 in fC1 by XBOOLE_0:def 4;
     then a1 in fC1 /\ fC2 by A18,XBOOLE_0:def 4;
     hence a1 in N by A21;
   end;
 A28: the InternalRel of A well_orders fC1 & the InternalRel of A well_orders
-  fC2 by Def16;
+  fC2 by Def12;
   now
-    per cases by A2,A4,A28,A3,A16,Th73;
+    per cases by A2,A4,A28,A3,A16,Th35;
     suppose
 A29:  N is Initial_Segm of fC1 & N = fC2;
-      fC1 <> {} by Def16;
-      hence thesis by A29,Th69;
+      fC1 <> {} by Def12;
+      hence thesis by A29,Th31;
     end;
     suppose
 A30:  N is Initial_Segm of fC2 & N = fC1;
-      fC2 <> {} by Def16;
-      hence thesis by A30,Th69;
+      fC2 <> {} by Def12;
+      hence thesis by A30,Th31;
     end;
     suppose
       N = fC1 & N = fC2;
@@ -1375,25 +1374,25 @@ A30:  N is Initial_Segm of fC2 & N = fC1;
     end;
     suppose
 A31:  N is Initial_Segm of fC1 & N is Initial_Segm of fC2;
-      fC2 <> {} by Def16;
+      fC2 <> {} by Def12;
       then consider b such that
 A32:  b in fC2 and
-A33:  N = InitSegm(fC2,b) by A31,Def15;
-      fC1 <> {} by Def16;
+A33:  N = InitSegm(fC2,b) by A31,Def11;
+      fC1 <> {} by Def12;
       then consider a such that
 A34:  a in fC1 and
-A35:  N = InitSegm(fC1,a) by A31,Def15;
-A36:  a = f.UpperCone(InitSegm(fC2,b)) by A34,A35,A33,Def16
-        .= b by A32,Def16;
+A35:  N = InitSegm(fC1,a) by A31,Def11;
+A36:  a = f.UpperCone(InitSegm(fC2,b)) by A34,A35,A33,Def12
+        .= b by A32,Def12;
       then a in fC1 /\ fC2 by A34,A32,XBOOLE_0:def 4;
       then a in N by A35,A33,A36;
-      hence thesis by A35,Th62;
+      hence thesis by A35,Th26;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th84:
+theorem Th42:
   fC1 c< fC2 iff fC1 is Initial_Segm of fC2
 proof
   thus fC1 c< fC2 implies fC1 is Initial_Segm of fC2
@@ -1403,20 +1402,20 @@ A1: fC1 c< fC2;
     now
       assume
 A2:   fC2 is Initial_Segm of fC1;
-      fC1 <> {} by Def16;
-      then ex a st a in fC1 & fC2 = InitSegm(fC1,a) by A2,Def15;
+      fC1 <> {} by Def12;
+      then ex a st a in fC1 & fC2 = InitSegm(fC1,a) by A2,Def11;
       then fC2 c= fC1 by XBOOLE_1:17;
       hence contradiction by A1,XBOOLE_0:def 8;
     end;
-    hence thesis by A1,Th83;
+    hence thesis by A1,Th41;
   end;
   assume
 A3: fC1 is Initial_Segm of fC2;
-A4: fC2 <> {} by Def16;
-  then ex a st a in fC2 & fC1 = InitSegm(fC2,a) by A3,Def15;
+A4: fC2 <> {} by Def12;
+  then ex a st a in fC2 & fC1 = InitSegm(fC2,a) by A3,Def11;
   then
 A5: fC1 c= fC2 by XBOOLE_1:17;
-  fC1 <> fC2 by A3,A4,Th68;
+  fC1 <> fC2 by A3,A4,Th30;
   hence thesis by A5,XBOOLE_0:def 8;
 end;
 
@@ -1424,7 +1423,7 @@ definition
   let A;
   let f;
   func Chains f -> set means
-  :Def17:
+  :Def13:
   x in it iff x is Chain of f;
   existence
   proof
@@ -1466,7 +1465,7 @@ registration
   coherence
   proof
     set x = the Chain of f;
-    x in Chains f by Def17;
+    x in Chains f by Def13;
     hence thesis;
   end;
 end;
@@ -1476,7 +1475,7 @@ proof
   now
     let X;
     assume X in Chains(f);
-    then X is Chain of f by Def17;
+    then X is Chain of f by Def13;
     hence X c= the carrier of A;
   end;
   hence thesis by ZFMISC_1:76;
@@ -1497,9 +1496,9 @@ A4: X in Chains(f) by A1,TARSKI:def 4;
     consider Y such that
 A5: y in Y and
 A6: Y in Chains(f) by A2,TARSKI:def 4;
-    reconsider X,Y as Chain of f by A4,A6,Def17;
-A7: the InternalRel of A is_strongly_connected_in X by Def11;
-A8: the InternalRel of A is_strongly_connected_in Y by Def11;
+    reconsider X,Y as Chain of f by A4,A6,Def13;
+A7: the InternalRel of A is_strongly_connected_in X by Def7;
+A8: the InternalRel of A is_strongly_connected_in Y by Def7;
     now
       per cases;
       suppose
@@ -1509,16 +1508,16 @@ A8: the InternalRel of A is_strongly_connected_in Y by Def11;
       suppose
 A9:     X <> Y;
         now
-          per cases by A9,Th83;
+          per cases by A9,Th41;
           suppose
             X is Initial_Segm of Y;
-            then X c< Y by Th84;
+            then X c< Y by Th42;
             then X c= Y by XBOOLE_0:def 8;
             hence thesis by A3,A5,A8,RELAT_2:def 7;
           end;
           suppose
             Y is Initial_Segm of X;
-            then Y c< X by Th84;
+            then Y c< X by Th42;
             then Y c= X by XBOOLE_0:def 8;
             hence thesis by A3,A5,A7,RELAT_2:def 7;
           end;
@@ -1528,25 +1527,25 @@ A9:     X <> Y;
     end;
     hence thesis;
   end;
-  hence thesis by Def11;
+  hence thesis by Def7;
 end;
 
-theorem Th87:
+theorem Th43:
   union(Chains(f)) <> {}
 proof
-  {f.(the carrier of A)} is Chain of f by Th78;
-  then {f.(the carrier of A)} in Chains(f) by Def17;
+  {f.(the carrier of A)} is Chain of f by Th36;
+  then {f.(the carrier of A)} in Chains(f) by Def13;
   hence thesis by ORDERS_1:6;
 end;
 
-theorem Th88:
+theorem Th44:
   fC <> union(Chains(f)) & S = union(Chains(f)) implies fC is Initial_Segm of S
 proof
   assume that
 A1: fC <> union(Chains(f)) and
 A2: S = union(Chains(f));
   set x = the Element of S \ fC;
-  fC in Chains(f) by Def17;
+  fC in Chains(f) by Def13;
   then fC c= union(Chains(f)) by ZFMISC_1:74;
   then not union(Chains(f)) c= fC by A1,XBOOLE_0:def 10;
   then
@@ -1557,14 +1556,14 @@ A4: not x in fC by XBOOLE_0:def 5;
   then consider X such that
 A5: x in X and
 A6: X in Chains(f) by A2,TARSKI:def 4;
-  reconsider X as Chain of f by A6,Def17;
+  reconsider X as Chain of f by A6,Def13;
   not X c= fC by A3,A5,XBOOLE_0:def 5;
   then not X c< fC by XBOOLE_0:def 8;
-  then not X is Initial_Segm of fC by Th84;
-  then fC is Initial_Segm of X by A5,A4,Th83;
+  then not X is Initial_Segm of fC by Th42;
+  then fC is Initial_Segm of X by A5,A4,Th41;
   then consider a such that
 A7: a in X and
-A8: fC = InitSegm(X,a) by A5,Def15;
+A8: fC = InitSegm(X,a) by A5,Def11;
 A9: X c= S by A2,A6,ZFMISC_1:74;
   InitSegm(S,a) = InitSegm(X,a)
   proof
@@ -1582,7 +1581,7 @@ A13:  for a2 st a2 in {a} holds b < a2;
       then consider Y such that
 A14:  b in Y and
 A15:  Y in Chains(f) by A2,TARSKI:def 4;
-      reconsider Y as Chain of f by A15,Def17;
+      reconsider Y as Chain of f by A15,Def13;
       a in {a} by TARSKI:def 1;
       then
 A16:  b < a by A13;
@@ -1595,15 +1594,15 @@ A16:  b < a by A13;
         suppose
 A17:      X <> Y;
           now
-            per cases by A17,Th83;
+            per cases by A17,Th41;
             suppose
               X is Initial_Segm of Y;
-              then x in X by A7,A12,A16,A14,Th70;
+              then x in X by A7,A12,A16,A14,Th32;
               hence thesis by A11,XBOOLE_0:def 4;
             end;
             suppose
               Y is Initial_Segm of X;
-              then Y c< X by Th84;
+              then Y c< X by Th42;
               then Y c= X by XBOOLE_0:def 8;
               hence thesis by A11,A12,A14,XBOOLE_0:def 4;
             end;
@@ -1618,10 +1617,10 @@ A17:      X <> Y;
     then x in LowerCone{a} & x in X by XBOOLE_0:def 4;
     hence thesis by A9,XBOOLE_0:def 4;
   end;
-  hence thesis by A7,A8,A9,Def15;
+  hence thesis by A7,A8,A9,Def11;
 end;
 
-theorem Th89:
+theorem Th45:
   union(Chains(f)) is Chain of f
 proof
   reconsider C = union(Chains(f)) as Chain of A by Lm3;
@@ -1631,22 +1630,22 @@ A1: now
     then consider X such that
 A2: a in X and
 A3: X in Chains(f) by TARSKI:def 4;
-    reconsider X as Chain of f by A3,Def17;
+    reconsider X as Chain of f by A3,Def13;
     now
-        InitSegm(C,a) = InitSegm(X,a) by A2,Th71,Th88;
-        hence f.UpperCone(InitSegm(C,a)) = a by A2,Def16;
+        InitSegm(C,a) = InitSegm(X,a) by A2,Th33,Th44;
+        hence f.UpperCone(InitSegm(C,a)) = a by A2,Def12;
     end;
     hence f.UpperCone(InitSegm(C,a)) = a;
   end;
 A4: the InternalRel of A well_orders C
   proof
-A5: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+A5: the InternalRel of A is_antisymmetric_in the carrier of A by Def4;
     the InternalRel of A is_reflexive_in the carrier of A & the
-    InternalRel of A is_transitive_in the carrier of A by Def4,Def5;
+    InternalRel of A is_transitive_in the carrier of A by Def2,Def3;
     hence the InternalRel of A is_reflexive_in C & the InternalRel of A
     is_transitive_in C & the InternalRel of A is_antisymmetric_in C by A5,
 ORDERS_1:8,9,10;
-    the InternalRel of A is_strongly_connected_in C by Def11;
+    the InternalRel of A is_strongly_connected_in C by Def7;
     hence the InternalRel of A is_connected_in C by ORDERS_1:7;
     let Y;
     set x = the Element of Y;
@@ -1657,8 +1656,8 @@ A7: Y <> {};
     then consider X such that
 A8: x in X and
 A9: X in Chains(f) by TARSKI:def 4;
-    reconsider X as Chain of f by A9,Def17;
-A10: the InternalRel of A well_orders X by Def16;
+    reconsider X as Chain of f by A9,Def13;
+A10: the InternalRel of A well_orders X by Def12;
     X /\ Y <> {} by A7,A8,XBOOLE_0:def 4;
     then consider a being set such that
 A11: a in X /\ Y and
@@ -1681,13 +1680,13 @@ A15:  y in (the InternalRel of A)-Seg(a) by A13,XBOOLE_0:def 4;
 A16:  y <> a by WELLORD1:1;
       [y,a] in the InternalRel of A by A15,WELLORD1:1;
       then
-A17:  b <= aa by Def9;
+A17:  b <= aa by Def5;
       now
         per cases;
         suppose
 A18:      X <> C;
-          a in X & b < aa by A11,A16,A17,Def10,XBOOLE_0:def 4;
-          hence y in X by A6,A14,A18,Th70,Th88;
+          a in X & b < aa by A11,A16,A17,Def6,XBOOLE_0:def 4;
+          hence y in X by A6,A14,A18,Th32,Th44;
         end;
         suppose
           X = C;
@@ -1696,13 +1695,13 @@ A18:      X <> C;
       end;
       then y in X /\ Y by A14,XBOOLE_0:def 4;
       then [a,y] in the InternalRel of A by A12;
-      then aa <= b by Def9;
-      hence thesis by A16,A17,Th25;
+      then aa <= b by Def5;
+      hence thesis by A16,A17,Th2;
     end;
     thus thesis by XBOOLE_1:2;
   end;
-  C <> {} by Th87;
-  hence thesis by A4,A1,Def16;
+  C <> {} by Th43;
+  hence thesis by A4,A1,Def12;
 end;
 
 begin :: From original ORDERS_2
@@ -1717,7 +1716,7 @@ reserve R for Relation,
 ::  Orders.
 ::
 
-theorem Th107:
+theorem Th46:
   field((the InternalRel of A) |_2 S) = S
 proof
   set P = (the InternalRel of A) |_2 S;
@@ -1729,10 +1728,10 @@ proof
 A1: x in S;
     then
 A2: [x,x] in [:S,S:] by ZFMISC_1:87;
-    the InternalRel of A is_reflexive_in the carrier of A by Def4;
+    the InternalRel of A is_reflexive_in the carrier of A by Def2;
     then [x,x] in the InternalRel of A by A1,RELAT_2:def 1;
     then [x,x] in P by A2,XBOOLE_0:def 4;
-    then x in dom P by RELAT_1:def 4;
+    then x in dom P by XTUPLE_0:def 12;
     hence thesis by XBOOLE_0:def 3;
   end;
 end;
@@ -1743,7 +1742,7 @@ proof
   assume (the InternalRel of A) |_2 S is being_linear-order;
   then
 A1: (the InternalRel of A) |_2 S is connected by ORDERS_1:def 5;
-  field((the InternalRel of A) |_2 S) = S by Th107;
+  field((the InternalRel of A) |_2 S) = S by Th46;
   then
 A2: (the InternalRel of A) |_2 S is_connected_in S by A1,RELAT_2:def 14;
   S is strongly_connected
@@ -1757,7 +1756,7 @@ A3: x in S & y in S;
       suppose
         x = y;
         then a <= b;
-        hence thesis by Def9;
+        hence thesis by Def5;
       end;
       suppose
         x <> y;
@@ -1782,7 +1781,7 @@ A1: P is_connected_in C
 A2: x in C & y in C;
     then
 A3: [x,y] in [:C,C:] & [y,x] in [:C,C:] by ZFMISC_1:87;
-    the InternalRel of A is_strongly_connected_in C by Def11;
+    the InternalRel of A is_strongly_connected_in C by Def7;
     then
     [x,y] in the InternalRel of A or [y,x] in the InternalRel of A by A2,
 RELAT_2:def 7;
@@ -1792,7 +1791,7 @@ RELAT_2:def 7;
   then P is being_partial-order by ORDERS_1:26;
   hence P is reflexive & P is transitive & P is antisymmetric by ORDERS_1:def 4
 ;
-  C = field P by Th107;
+  C = field P by Th46;
   hence thesis by A1,RELAT_2:def 14;
 end;
 
@@ -1803,19 +1802,19 @@ proof
   then the InternalRel of A is_reflexive_in S & the InternalRel of A
   is_connected_in S by ORDERS_1:def 8;
   then the InternalRel of A is_strongly_connected_in S by ORDERS_1:7;
-  hence thesis by Def11;
+  hence thesis by Def7;
 end;
 
 theorem
   the InternalRel of A linearly_orders C
 proof
-A1: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+A1: the InternalRel of A is_antisymmetric_in the carrier of A by Def4;
   the InternalRel of A is_reflexive_in the carrier of A & the InternalRel
-  of A is_transitive_in the carrier of A by Def4,Def5;
+  of A is_transitive_in the carrier of A by Def2,Def3;
   hence the InternalRel of A is_reflexive_in C & the InternalRel of A
   is_transitive_in C & the InternalRel of A is_antisymmetric_in C by A1,
 ORDERS_1:8,9,10;
-  the InternalRel of A is_strongly_connected_in C by Def11;
+  the InternalRel of A is_strongly_connected_in C by Def7;
   hence thesis by ORDERS_1:7;
 end;
 
@@ -1829,8 +1828,8 @@ A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:15;
 A2: a is_minimal_in the InternalRel of A;
     let b;
     a = b or not [b,a] in the InternalRel of A by A1,A2,ORDERS_1:def 12;
-    then a = b or not b <= a by Def9;
-    hence thesis by Def10;
+    then a = b or not b <= a by Def5;
+    hence thesis by Def6;
   end;
   assume
 A3: for b holds not b < a;
@@ -1841,8 +1840,8 @@ A4: y in field(the InternalRel of A) and
 A5: y <> a and
 A6: [y,a] in the InternalRel of A;
   reconsider b = y as Element of A by A4,ORDERS_1:15;
-  b <= a by A6,Def9;
-  then b < a by A5,Def10;
+  b <= a by A6,Def5;
+  then b < a by A5,Def6;
   hence thesis by A3;
 end;
 
@@ -1856,8 +1855,8 @@ A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:15;
 A2: a is_maximal_in the InternalRel of A;
     let b;
     a = b or not [a,b] in the InternalRel of A by A1,A2,ORDERS_1:def 11;
-    then a = b or not a <= b by Def9;
-    hence thesis by Def10;
+    then a = b or not a <= b by Def5;
+    hence thesis by Def6;
   end;
   assume
 A3: for b holds not a < b;
@@ -1868,8 +1867,8 @@ A4: y in field(the InternalRel of A) and
 A5: y <> a and
 A6: [a,y] in the InternalRel of A;
   reconsider b = y as Element of A by A4,ORDERS_1:15;
-  a <= b by A6,Def9;
-  then a < b by A5,Def10;
+  a <= b by A6,Def5;
+  then a < b by A5,Def6;
   hence thesis by A3;
 end;
 
@@ -1886,8 +1885,8 @@ A2: a is_superior_of the InternalRel of A;
     assume
 A3: a <> b;
     then [b,a] in the InternalRel of A by A1,A2,ORDERS_1:def 13;
-    then b <= a by Def9;
-    hence thesis by A3,Def10;
+    then b <= a by Def5;
+    hence thesis by A3,Def6;
   end;
   assume
 A4: for b st a <> b holds b < a;
@@ -1897,8 +1896,8 @@ A4: for b st a <> b holds b < a;
   then reconsider b = y as Element of A by ORDERS_1:15;
   assume y <> a;
   then b < a by A4;
-  then b <= a by Def10;
-  hence thesis by Def9;
+  then b <= a by Def6;
+  hence thesis by Def5;
 end;
 
 theorem
@@ -1914,8 +1913,8 @@ A2: a is_inferior_of the InternalRel of A;
     assume
 A3: a <> b;
     then [a,b] in the InternalRel of A by A1,A2,ORDERS_1:def 14;
-    then a <= b by Def9;
-    hence thesis by A3,Def10;
+    then a <= b by Def5;
+    hence thesis by A3,Def6;
   end;
   assume
 A4: for b st a <> b holds a < b;
@@ -1925,8 +1924,8 @@ A4: for b st a <> b holds a < b;
   then reconsider b = y as Element of A by ORDERS_1:15;
   assume y <> a;
   then a < b by A4;
-  then a <= b by Def10;
-  hence thesis by Def9;
+  then a <= b by Def6;
+  hence thesis by Def5;
 end;
 
 Lm4: R is_connected_in X & Y c= X implies R is_connected_in Y
@@ -1960,12 +1959,12 @@ end;
 ::  Kuratowski - Zorn Lemma.
 ::
 
-theorem Th162:
+theorem Th55:
   (for C ex a st for b st b in C holds b <= a) implies ex a st
   for b holds not a < b
 proof
   set f = the Choice_Function of BOOL(the carrier of A);
-  reconsider F = union(Chains(f)) as Chain of f by Th89;
+  reconsider F = union(Chains(f)) as Chain of f by Th45;
   assume for C ex a st for b st b in C holds b <= a;
   then consider a such that
 A1: for b st b in F holds b <= a;
@@ -1977,7 +1976,7 @@ A2: a < b;
     let a1;
     assume a1 in F;
     then a1 <= a by A1;
-    hence a1 < b by A2,Th32;
+    hence a1 < b by A2,Th7;
   end;
   then b in {a1 : for a2 st a2 in F holds a2 < a1};
   then not UpperCone(F) in {{}} by TARSKI:def 1;
@@ -2000,22 +1999,22 @@ A7: x in Z & y in Z;
       per cases by A7,XBOOLE_0:def 3;
       suppose
         x1 in F & y1 in F;
-        then x1 <= y1 or y1 <= x1 by Th38;
-        hence thesis by Def9;
+        then x1 <= y1 or y1 <= x1 by Th11;
+        hence thesis by Def5;
       end;
       suppose
 A8:     x1 in F & y1 in {c};
         then y1 = c by TARSKI:def 1;
         then x1 < y1 by A5,A8;
-        then x1 <= y1 by Def10;
-        hence thesis by Def9;
+        then x1 <= y1 by Def6;
+        hence thesis by Def5;
       end;
       suppose
 A9:     x1 in {c} & y1 in F;
         then x1 = c by TARSKI:def 1;
         then y1 < x1 by A5,A9;
-        then y1 <= x1 by Def10;
-        hence thesis by Def9;
+        then y1 <= x1 by Def6;
+        hence thesis by Def5;
       end;
       suppose
 A10:    x1 in {c} & y1 in {c};
@@ -2046,7 +2045,7 @@ A15:        not x in F;
             then
 A16:        x = c by TARSKI:def 1;
             x in LowerCone{c} by A14,XBOOLE_0:def 4;
-            hence contradiction by A16,Th50;
+            hence contradiction by A16,Th21;
           end;
           let x;
           assume
@@ -2054,7 +2053,7 @@ A17:      x in F;
           then reconsider y = x as Element of A;
           y < c by A5,A17;
           then
-A18:      x in LowerCone{c} by Th52;
+A18:      x in LowerCone{c} by Th23;
           x in Z by A17,XBOOLE_0:def 3;
           hence thesis by A18,XBOOLE_0:def 4;
         end;
@@ -2083,23 +2082,23 @@ A24:        ex c1 st c1 = c & for c2 st c2 in {a1} holds c1 < c2 by A22;
 A25:        a1 < c by A5,A19;
             a1 in {a1} by TARSKI:def 1;
             then c < a1 by A24;
-            hence contradiction by A25,Th28;
+            hence contradiction by A25,Th4;
           end;
           hence thesis by A22,XBOOLE_0:def 4;
         end;
-        InitSegm(F,a1) c= InitSegm(Z,a1) by Th65,XBOOLE_1:7;
+        InitSegm(F,a1) c= InitSegm(Z,a1) by Th28,XBOOLE_1:7;
         then InitSegm(Z,a1) = InitSegm(F,a1) by A20,XBOOLE_0:def 10;
-        hence f.UpperCone(InitSegm(Z,a1)) = a1 by A19,Def16;
+        hence f.UpperCone(InitSegm(Z,a1)) = a1 by A19,Def12;
       end;
     end;
     hence f.UpperCone(InitSegm(Z,a1)) = a1;
   end;
-  the InternalRel of A is_reflexive_in the carrier of A by Def4;
+  the InternalRel of A is_reflexive_in the carrier of A by Def2;
   then
 A26: the InternalRel of A is_reflexive_in Z by ORDERS_1:8;
   then the InternalRel of A is_strongly_connected_in Z by A6,ORDERS_1:7;
   then
-A27: Z is Chain of A by Def11;
+A27: Z is Chain of A by Def7;
 A28: the InternalRel of A is_well_founded_in Z
   proof
     let Y;
@@ -2137,7 +2136,7 @@ A38:      not x in F;
           then x in {c} by A29,A38,XBOOLE_0:def 3;
           hence thesis by A37,XBOOLE_0:def 5;
         end;
-        the InternalRel of A well_orders F by Def16;
+        the InternalRel of A well_orders F by Def12;
         then the InternalRel of A well_orders X by A36,Lm5;
         then the InternalRel of A is_well_founded_in X by WELLORD1:def 5;
         then consider x such that
@@ -2157,11 +2156,11 @@ A43:        now
 A44:          c in (the InternalRel of A)-Seg(x9);
               then [c,x9] in the InternalRel of A by WELLORD1:1;
               then
-A45:          c <= x99 by Def9;
+A45:          c <= x99 by Def5;
 A46:          x99 < c by A5,A36,A39;
               c <> x99 by A44,WELLORD1:1;
-              then c < x99 by A45,Def10;
-              hence contradiction by A46,Th28;
+              then c < x99 by A45,Def6;
+              hence contradiction by A46,Th4;
             end;
 A47:        now
               set x = the Element of (the InternalRel of A)-Seg(x9) /\ {c };
@@ -2189,17 +2188,17 @@ XBOOLE_1:23
     end;
     hence thesis;
   end;
-  the InternalRel of A is_transitive_in the carrier of A by Def5;
+  the InternalRel of A is_transitive_in the carrier of A by Def3;
   then
 A49: the InternalRel of A is_transitive_in Z by ORDERS_1:10;
-  the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+  the InternalRel of A is_antisymmetric_in the carrier of A by Def4;
   then the InternalRel of A is_antisymmetric_in Z by ORDERS_1:9;
   then the InternalRel of A well_orders Z by A26,A49,A6,A28,WELLORD1:def 5;
-  then reconsider Z as Chain of f by A27,A11,Def16;
+  then reconsider Z as Chain of f by A27,A11,Def12;
   c in {c} by TARSKI:def 1;
   then
 A50: c in Z by XBOOLE_0:def 3;
-  Z in Chains(f) by Def17;
+  Z in Chains(f) by Def13;
   then c in F by A50,TARSKI:def 4;
   hence thesis by A5;
 end;
@@ -2216,10 +2215,9 @@ A2: for a,b being Element of A holds [a,b] in R iff b <= a
   proof
     let a,b be Element of A;
     [a,b] in R iff [b,a] in the InternalRel of A by RELAT_1:def 7;
-    hence thesis by Def9;
+    hence thesis by Def5;
   end;
-  reconsider R as Order of the carrier of A by A1,PARTFUN1:def 2,RELAT_2:10,23
-,25;
+  reconsider R as Order of the carrier of A by A1,PARTFUN1:def 2;
   set B = RelStr (# the carrier of A, R #);
   assume
 A3: for C ex a st for b st b in C holds a <= b;
@@ -2235,23 +2233,23 @@ A3: for C ex a st for b st b in C holds a <= b;
 A4:   x in C & y in C;
       then reconsider e = x, f = y as Element of B;
       reconsider e1 = e, f1 = f as Element of A;
-A5:   e <= f or f <= e by A4,Th38;
+A5:   e <= f or f <= e by A4,Th11;
       now
-        per cases by A5,Def9;
+        per cases by A5,Def5;
         suppose
           [e,f] in R;
           then f1 <= e1 by A2;
-          hence thesis by Def9;
+          hence thesis by Def5;
         end;
         suppose
           [f,e] in R;
           then e1 <= f1 by A2;
-          hence thesis by Def9;
+          hence thesis by Def5;
         end;
       end;
       hence thesis;
     end;
-    then reconsider C as Chain of A by Def11;
+    then reconsider C as Chain of A by Def7;
     consider a such that
 A6: for b st b in C holds a <= b by A3;
     reconsider e = a as Element of B;
@@ -2261,20 +2259,20 @@ A6: for b st b in C holds a <= b by A3;
     assume f in E;
     then a <= b by A6;
     then [f,e] in R by A2;
-    hence thesis by Def9;
+    hence thesis by Def5;
   end;
   then consider e being Element of B such that
-A7: for f being Element of B holds not e < f by Th162;
+A7: for f being Element of B holds not e < f by Th55;
   reconsider d = e as Element of A;
   take d;
   let b;
   reconsider f = b as Element of B;
   assume
 A8: b < d;
-  then b <= d by Def10;
+  then b <= d by Def6;
   then [e,f] in R by A2;
-  then e <= f by Def9;
-  then e < f by A8,Def10;
+  then e <= f by Def5;
+  then e < f by A8,Def6;
   hence thesis by A7;
 end;
 

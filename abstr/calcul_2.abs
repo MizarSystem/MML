@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,20 +19,22 @@ environ
       FUNCT_1, CALCUL_1, FUNCT_2, CQC_THE1, QC_LANG1, XBOOLEAN, FINSEQ_5,
       ARYTM_1, FINSEQ_2, CALCUL_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, CARD_1, NUMBERS,
-      XXREAL_0, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, CQC_LANG, FINSET_1,
-      FINSEQ_5, FINSEQ_2, RELSET_1, FUNCT_2, WELLORD2, CALCUL_1;
+      XXREAL_0, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, QC_LANG1, CQC_LANG,
+      FINSET_1, FINSEQ_5, FINSEQ_2, RELSET_1, FUNCT_2, WELLORD2, CALCUL_1;
  constructors PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1, FINSEQ_2,
-      FINSEQ_5, CALCUL_1, RELSET_1;
+      FINSEQ_5, CALCUL_1, RELSET_1, QC_LANG1;
  registrations FUNCT_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      FINSEQ_1, CQC_LANG, FUNCT_2, FINSEQ_2, CARD_1;
+      FINSEQ_1, QC_LANG1, CQC_LANG, FUNCT_2, FINSEQ_2, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: f is Subsequence of g^f
 
-reserve p,q,p1,p2,q1 for Element of CQC-WFF,
+reserve Al for QC-alphabet;
+
+reserve p,q,p1,p2,q1 for Element of CQC-WFF(Al),
   k,m,n,i for Element of NAT,
-  f, f1,f2,g for FinSequence of CQC-WFF,
+  f, f1,f2,g for FinSequence of CQC-WFF(Al),
   a,b,b1,b2,c for natural number;
 
 definition
@@ -71,6 +73,7 @@ registration
 end;
 
 registration
+  let Al;
   let f;
   cluster len f -> finite;
 end;
@@ -130,24 +133,24 @@ theorem :: CALCUL_2:20
 begin :: The Ordering of the Antecedent is Irrelevant
 
 definition
-  let f;
-  func Begin(f) -> Element of CQC-WFF means
+  let Al,f;
+  func Begin(f) -> Element of CQC-WFF(Al) means
 :: CALCUL_2:def 3
 
-  it = f.1 if 1 <= len f otherwise it = VERUM;
+  it = f.1 if 1 <= len f otherwise it = VERUM(Al);
 end;
 
 definition
-  let f;
+  let Al,f;
   assume
  1 <= len f;
-  func Impl(f) -> Element of CQC-WFF means
+  func Impl(f) -> Element of CQC-WFF(Al) means
 :: CALCUL_2:def 4
 
   ex F being FinSequence of
-CQC-WFF st it = F.(len f) & len F = len f & (F.1 = Begin(f) or len f = 0) & for
-n st 1 <= n & n < len f holds ex p,q st p = f.(n+1) & q = F.n & F.(n+1) = p =>
-  q;
+CQC-WFF(Al) st it = F.(len f) & len F = len f & (F.1 = Begin(f) or len f = 0)
+ & for n st 1 <= n & n < len f holds ex p,q st p = f.(n+1) &
+  q = F.n & F.(n+1) = p => q;
 end;
 
 :: Some details about the calculus in CALCUL_1

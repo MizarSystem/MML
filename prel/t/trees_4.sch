@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -20,13 +21,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -35,7 +36,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Not>
@@ -44,7 +45,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="28"/>
+<Adjective nr="32"/>
 </Cluster>
 </Typ>
 <And>
@@ -77,8 +78,8 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="64">
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="76">
+<Func kind="K" nr="59"/>
 <Var nr="3"/>
 <Var nr="4"/>
 </Func>
@@ -116,8 +117,8 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="64">
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="76">
+<Func kind="K" nr="59"/>
 <Var nr="3"/>
 <Var nr="4"/>
 </Func>

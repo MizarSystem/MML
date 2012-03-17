@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec , Piotr Rudnicki and Artur Korni{\l}owicz
 ::
 :: Received April 14, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,28 +18,32 @@ environ
       FUNCT_4, FUNCOP_1, RELAT_1, TARSKI, STRUCT_0, FUNCT_1, CARD_3, ZFMISC_1,
       CIRCUIT2, CAT_1, NAT_1, GLIB_000, XXREAL_0, PARTFUN1, FINSEQ_1, ARYTM_3,
       CARD_1, GOBOARD5, FUNCT_2, FINSEQ_4, ARYTM_1, FINSET_1, FRECHET,
-      AMISTD_1, SCMNORM, AFINSQ_1, COMPOS_1, AMISTD_2, PBOOLE, SCMFSA6B;
+      AMISTD_1, EXTPRO_1, AFINSQ_1, COMPOS_1, AMISTD_2, PBOOLE, SCMFSA6B,
+      QUANTAL1, GOBRD13, MEMSTR_0, UNIALG_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
       CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, FUNCT_1, RELSET_1,
-      PARTFUN1, MCART_1, VALUED_1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4,
-      FUNCOP_1, FINSET_1, FUNCT_4, FUNCT_7, AFINSQ_1, PBOOLE, STRUCT_0,
-      GRAPH_2, NAT_D, XXREAL_2, MEMSTR_0, COMPOS_1, EXTPRO_1, FUNCT_2;
+      PARTFUN1, XTUPLE_0, MCART_1, VALUED_1, DOMAIN_1, CARD_3, FINSEQ_1,
+      FINSEQ_4, FUNCOP_1, FINSET_1, FUNCT_4, FUNCT_7, AFINSQ_1, PBOOLE,
+      MEASURE6, STRUCT_0, GRAPH_2, NAT_D, XXREAL_2, MEMSTR_0, COMPOS_0,
+      COMPOS_1, EXTPRO_1, FUNCT_2;
  constructors WELLORD2, REAL_1, FINSEQ_4, REALSET1, NAT_D, XXREAL_2, COMPOS_1,
       EXTPRO_1, RELSET_1, PRE_POLY, GRAPH_2, AFINSQ_1, MCART_1, FUNCT_7,
-      PBOOLE, XXREAL_1, FUNCT_4, MEMSTR_0;
+      PBOOLE, XXREAL_1, FUNCT_4, MEASURE6, MEMSTR_0, XTUPLE_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FUNCOP_1, FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3,
       REALSET1, FUNCT_7, STRUCT_0, CARD_1, XXREAL_2, RELSET_1, FUNCT_4,
       AFINSQ_1, ORDINAL1, ZFMISC_1, SUBSET_1, VALUED_1, COMPOS_1, EXTPRO_1,
-      PBOOLE, PRE_POLY, MEMSTR_0;
+      PBOOLE, PRE_POLY, MEMSTR_0, MEASURE6, COMPOS_0, XTUPLE_0;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
- definitions TARSKI, STRUCT_0, COMPOS_1, EXTPRO_1, XBOOLE_0, MEMSTR_0, FUNCT_1,
-      FUNCOP_1, NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, VALUED_1;
+ definitions TARSKI, STRUCT_0, COMPOS_1, EXTPRO_1, XBOOLE_0, MEMSTR_0,
+      FUNCOP_1, NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, VALUED_1, FUNCT_1,
+      COMPOS_0, XTUPLE_0;
  theorems TARSKI, FINSEQ_4, FINSEQ_1, NAT_1, FUNCT_4, FUNCT_1, FUNCT_2,
       ENUMSET1, ZFMISC_1, CARD_1, FUNCOP_1, CARD_3, ORDINAL1, MCART_1,
       FINSEQ_3, INT_1, SETFAM_1, REVROT_1, EXTPRO_1, RELSET_1, XBOOLE_0,
       XBOOLE_1, XREAL_1, XXREAL_0, COMPOS_1, FUNCT_7, PARTFUN1, XREAL_0, NAT_D,
-      PBOOLE, AFINSQ_1, RECDEF_2, MEMSTR_0, GRFUNC_1, PARTFUN2;
+      PBOOLE, AFINSQ_1, RECDEF_2, MEMSTR_0, GRFUNC_1, PARTFUN2, MEASURE6,
+      COMPOS_0, RELAT_1;
  schemes NAT_1, FINSEQ_2, FUNCT_2;
 
 begin :: AMI-Struct
@@ -47,38 +51,46 @@ begin :: AMI-Struct
 reserve x for set,
   D for non empty set,
   k, n for Element of NAT,
-  z for natural number;
+  z for Nat;
 
 reserve
-  N for with_non-empty_elements non empty set,
-  S for IC-Ins-separated non empty AMI-Struct over N,
-  i for Element of the Instructions of S,
+  N for with_zero set,
+  S for IC-Ins-separated non empty
+          with_non-empty_values AMI-Struct over N,
+  i for Element of the InstructionsF of S,
   l, l1, l2, l3 for Element of NAT,
   s for State of S;
 
 registration
-
-  let N be with_non-empty_elements set, S be
-   AMI-Struct over N, i be Element of the Instructions of S, s be State of S;
+  let N be with_zero set, S be
+   with_non-empty_values AMI-Struct over N,
+      i be Element of the InstructionsF of S, s be State of S;
   cluster ((the Execution of S).i).s -> Function-like Relation-like;
   coherence
   proof
-    reconsider A =(the Execution of S).i as Function of product the
-    Object-Kind of S, product the Object-Kind of S by FUNCT_2:66;
-  reconsider s as Element of product the Object-Kind of S
+    reconsider A =(the Execution of S).i
+     as Function of product the_Values_of S, product the_Values_of S
+             by FUNCT_2:66;
+  reconsider s as Element of product the_Values_of S
    by CARD_3:107;
-    A.s in product the Object-Kind of S;
+    A.s in product the_Values_of S;
     hence thesis;
   end;
 end;
 
-
+registration let N;
+ cluster non empty with_non-empty_values for AMI-Struct over N;
+   existence
+   proof
+    take Trivial-AMI N;
+    thus thesis;
+   end;
+end;
 
 definition
-  let N be with_non-empty_elements non empty set;
-  let S be non empty standard-ins AMI-Struct over N;
-  let T be InsType of S;
-
+  let N be with_zero set;
+  let S be non empty with_non-empty_values AMI-Struct over N;
+  let T be InsType of the InstructionsF of S;
   attr T is jump-only means
   for s being State of S, o being Object of S, I
   being Instruction of S st InsCode I = T &
@@ -87,19 +99,18 @@ definition
 end;
 
 definition
-
-  let N be with_non-empty_elements non empty set;
-  let S be non empty standard-ins AMI-Struct over N;
+  let N be with_zero set;
+  let S be non empty with_non-empty_values AMI-Struct over N;
   let I be Instruction of S;
   attr I is jump-only means
   InsCode I is jump-only;
 end;
 
-reserve ss for Element of product the Object-Kind of S;
+reserve ss for Element of product the_Values_of S;
 
 definition
   let N,S; let l be Nat;
-  let i be Element of the Instructions of S;
+  let i be Element of the InstructionsF of S;
   func NIC(i,l) -> Subset of NAT equals
    { IC Exec(i,ss) : IC ss = l };
   coherence
@@ -119,28 +130,28 @@ Lm1:
  now
   let N;
   let S be IC-Ins-separated
-  non empty
-  AMI-Struct over N, i be Element of the Instructions of S, l be
+  non empty with_non-empty_values AMI-Struct over N,
+  i be Element of the InstructionsF of S, l be
   Element of NAT, s be State of S,
   P be Instruction-Sequence of S;
-  reconsider t = s+*(IC S,l) as Element of product the Object-Kind of S
+  reconsider t = s+*(IC S,l) as Element of product the_Values_of S
    by CARD_3:107;
     l in NAT;
     then
 A1: l in dom P by PARTFUN1:def 2;
     IC S in dom s by MEMSTR_0:2;
     then
-A4: IC t = l by FUNCT_7:31;
+A2: IC t = l by FUNCT_7:31;
    then CurInstr(P+*(l,i),t) = (P+*(l,i)).l by PBOOLE:143
        .= i by A1,FUNCT_7:31;
-  hence IC Following(P+*(l,i),s+*(IC S,l)) in NIC(i,l) by A4;
+  hence IC Following(P+*(l,i),s+*(IC S,l)) in NIC(i,l) by A2;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   S be IC-Ins-separated
-   non empty AMI-Struct over N, i be Element of the
-  Instructions of S, l be Element of NAT;
+   non empty with_non-empty_values AMI-Struct over N, i be Element of the
+  InstructionsF of S, l be Element of NAT;
   cluster NIC(i,l) -> non empty;
   coherence by Lm1;
 end;
@@ -188,12 +199,12 @@ end;
 
 
 
-theorem Th14:
-  for i being Element of the Instructions of S
+theorem Th1:
+  for i being Element of the InstructionsF of S
    st for l being Element of NAT holds NIC(i,l)={l}
   holds JUMP i is empty
 proof
-  let i be Element of the Instructions of S;
+  let i be Element of the InstructionsF of S;
   set p = 0, q = 1;
   set X = { NIC(i, l) where l is Element of NAT: not contradiction};
   reconsider p,q as Element of NAT;
@@ -212,20 +223,21 @@ A3: x in {p} by A2,SETFAM_1:def 1;
   hence contradiction by A3,TARSKI:def 1;
 end;
 
-theorem Th15:
-  for S being IC-Ins-separated non empty AMI-Struct over N,
+theorem Th2:
+  for S being IC-Ins-separated non empty with_non-empty_values
+         AMI-Struct over N,
       il being Element of NAT, i being Instruction of S st i is halting
   holds NIC(i,il) = {il}
 proof
   let S be IC-Ins-separated
-   non empty
-  AMI-Struct over N, il be Element of NAT, i be Instruction of S
+   non empty with_non-empty_values AMI-Struct over N,
+  il be Element of NAT, i be Instruction of S
   such that
 A1: for s being State of S holds Exec(i,s) = s;
   hereby
     let n be set;
     assume n in NIC(i,il);
-    then ex s being Element of product the Object-Kind of S
+    then ex s being Element of product the_Values_of S
     st n = IC Exec(i,s) & IC s = il;
     then n = il by A1;
     hence n in {il} by TARSKI:def 1;
@@ -236,18 +248,18 @@ A1: for s being State of S holds Exec(i,s) = s;
   assume
  n in {il};
   then
-B2: n = il by TARSKI:def 1;
+A2: n = il by TARSKI:def 1;
     il in NAT;
     then
-A5: il in dom P by PARTFUN1:def 2;
-C3: IC S in dom s by MEMSTR_0:2;
+A3: il in dom P by PARTFUN1:def 2;
+A4: IC S in dom s by MEMSTR_0:2;
    then IC(s+*(IC S,il)) = il by FUNCT_7:31;
    then CurInstr(P+*(il,i),s+*(IC S,il))
          = (P+*(il,i)).il by PBOOLE:143
-        .= i by A5,FUNCT_7:31;
+        .= i by A3,FUNCT_7:31;
    then IC Following(P+*(il,i),s+*(IC S,il))
       = IC(s+*(IC S,il)) by A1
-     .= n by B2,C3,FUNCT_7:31;
+     .= n by A2,A4,FUNCT_7:31;
   hence n in NIC(i,il) by Lm1;
 end;
 
@@ -257,7 +269,7 @@ definition
 
   let N, S;
   attr S is standard means
-  :Def10:
+  :Def6:
   for m, n being Element of NAT holds m <= n iff
    ex f being non empty FinSequence of NAT st f/.1 = m & f/.len f = n &
     for n st 1 <= n & n < len f holds f/.(n+1) in SUCC(f/.n,S);
@@ -277,7 +289,7 @@ Lm2:
 
 
 
-theorem Th19:
+theorem Th3:
    S is standard iff
    for k being Element of NAT holds k+1 in SUCC(k,S) &
     for j being Element of NAT st j in SUCC(k,S) holds k <= j
@@ -290,7 +302,7 @@ A1:  S is standard;
     then consider F being non empty FinSequence of NAT such that
 A2: F/.1 = k and
 A3: F/.len F = k+1 and
-A4: for n st 1 <= n & n < len F holds F/.(n+1) in SUCC(F/.n,S) by A1,Def10;
+A4: for n st 1 <= n & n < len F holds F/.(n+1) in SUCC(F/.n,S) by A1,Def6;
     set F1 = F -| (k+1);
     set x = (k+1)..F;
 A5: k+1 in rng F by A3,REVROT_1:3;
@@ -388,12 +400,12 @@ A41:  n+1 in dom F1 by A34,A35,FINSEQ_3:25;
     F2/.1 = F2.1 by A27,PARTFUN1:def 6
       .= m by FINSEQ_1:44;
     then
-A42: m <= k+1 by A1,A26,A28,Def10;
+A42: m <= k+1 by A1,A26,A28,Def6;
 A43: 1 in dom F1 by A16,FINSEQ_3:25;
     then F1/.1 = F1.1 by PARTFUN1:def 6
       .= F.1 by A5,A43,FINSEQ_4:36
       .= k by A2,A11,PARTFUN1:def 6;
-    then k <= m by A1,A19,A31,Def10;
+    then k <= m by A1,A19,A31,Def6;
     then m = k or m = k+1 by A42,NAT_1:9;
     hence k+1 in SUCC(k,S) by A4,A16,A10,A9,A20;
     let j be Element of NAT;
@@ -423,7 +435,7 @@ A51:  F/.n = F.1 by A46,PARTFUN1:def 6
     end;
     F/.len F = F.2 by A44,A45,PARTFUN1:def 6
       .= j by FINSEQ_1:44;
-    hence k <= j by A1,A47,A49,Def10;
+    hence k <= j by A1,A47,A49,Def6;
   end;
   assume
 A52: for k being Element of NAT holds k+1 in SUCC(k,S) & for j
@@ -541,175 +553,179 @@ set III = {[1,0,0],[0,0,0]};
 begin :: Standard trivial computer
 
 definition
-  let N be with_non-empty_elements set;
+  let N be with_zero set;
   func STC N -> strict AMI-Struct over N means
-  :Def11:
+  :Def7:
   the carrier of it = {0} & the ZeroF of it = 0 &
-  the Instructions of it = {[0,0,0],[1,0,0]} &
-  the haltF of it = [0,0,0] &
-  the Object-Kind of it = (0 .-->NAT) &
-  ex f being Function of product the Object-Kind of it,
-                         product the Object-Kind of it st
-  (for s being Element of product the Object-Kind of it holds
+  the InstructionsF of it = {[0,0,0],[1,0,0]} &
+:::  the haltF of it = [0,0,0] &
+  the Object-Kind of it = (0 .--> 0) &
+  the ValuesF of it = N --> NAT &
+  ex f being Function of product the_Values_of it,
+                         product the_Values_of it st
+  (for s being Element of product the_Values_of it holds
    f.s = s+*(0 .-->succ(s.0))) &
   the Execution of it = ([1,0,0] .--> f) +*
-    ([0,0,0] .--> id product the Object-Kind of it);
+    ([0,0,0] .--> id product the_Values_of it);
   existence
   proof
     set O = {0};
+    set V = N --> NAT;
     reconsider IC1 = 0 as Element of O by TARSKI:def 1;
-A1:  0 in NAT* by FINSEQ_1:49;
-    0 in ((union N) \/ O)* by FINSEQ_1:49;
-    then [1,0,0] in [:NAT, NAT*, ((union N) \/ O)*:] &
-    [0,0,0] in [:NAT, NAT*, ((union N) \/ O)*:] by A1,MCART_1:69;
-    then reconsider
-    ins = III as non empty Subset of [:NAT, NAT*, ((union N) \/ O)*:]
-       by ZFMISC_1:32;
-    reconsider i = [0,0,0] as Element of ins by TARSKI:def 2;
-A2: dom (0 .-->NAT) = O by FUNCOP_1:13;
-A3:   {NAT} c= N \/ {NAT} by XBOOLE_1:7;
-    rng ((0 .-->NAT)) c= N \/ {NAT} by A3,FUNCOP_1:8;
-    then reconsider
-    Ok = (0 .-->NAT) as Function of O, N \/ {NAT}
-     by A2,RELSET_1:4;
-    deffunc F(Element of product Ok) = $1+*(0 .-->succ($1.0));
-A4: now
-      let s be Element of product Ok;
-      now
+    reconsider i = [0,0,0] as Element of III by TARSKI:def 2;
+A1: 0 in N by MEASURE6:def 2;
+    then
+A2:  V*(0 .-->0) = 0 .--> NAT by FUNCOP_1:89;
+    then
+A3: dom(V*(0 .-->0)) = O by FUNCOP_1:13;
+A4: dom(0 .-->0) = O by FUNCOP_1:13;
+    rng(0 .-->0) = {0} by FUNCOP_1:88;
+    then rng(0 .-->0) c= N by A1,ZFMISC_1:31;
+    then reconsider Ok = (0 .-->0) as Function of O, N by A4,RELSET_1:4;
+    deffunc F(Element of product(V*Ok)) = $1+*(0 .-->succ($1.0));
+A5: now
+      let s be Element of product(V*Ok);
+     now
         thus dom (s+*(0 .-->succ(s.0)))
            = dom s \/ dom (0 .-->succ(s.0)) by FUNCT_4:def 1
           .= dom s \/ {0} by FUNCOP_1:13
           .= {0} \/ {0} by PARTFUN1:def 2
-          .= dom Ok by FUNCOP_1:13;
+          .= dom(V*Ok) by A3;
         let o be set;
-A5:     dom (0 .-->succ(s.0)) = {0} by FUNCOP_1:13;
+A6:     dom (0 .-->succ(s.0)) = {0} by FUNCOP_1:13;
         assume
-Z:        o in dom Ok;
-A8:       o = 0 by Z,TARSKI:def 1;
-A10:       Ok.o = NAT by Z,FUNCOP_1:7;
-A12:      (s+*(0 .-->succ(s.0))).o = (0 .-->succ(s.0)).o by A5,Z,FUNCT_4:13
-            .= succ(s.0) by Z,FUNCOP_1:7;
-          0 in dom Ok by A2,TARSKI:def 1;
-          then reconsider k = s.0 as Element of NAT by A8,A10,CARD_3:9;
+A7:        o in dom(V*Ok);
+A8:       o = 0 by A7,TARSKI:def 1;
+A9:      (V*Ok).o = NAT by A7,A2,FUNCOP_1:7;
+A10:      (s+*(0 .-->succ(s.0))).o = (0 .-->succ(s.0)).o by A6,A7,FUNCT_4:13
+            .= succ(s.0) by A7,FUNCOP_1:7;
+          0 in dom(V*Ok) by A3,TARSKI:def 1;
+          then reconsider k = s.0 as Element of NAT by A8,A9,CARD_3:9;
           succ k in NAT;
-          hence (s+*(0 .-->succ(s.0))).o in Ok.o by Z,FUNCOP_1:7,A12;
+          hence (s+*(0 .-->succ(s.0))).o in (V*Ok).o by A9,A10;
       end;
-      hence F(s) in product Ok by CARD_3:9;
+      hence F(s) in product(V*Ok) by CARD_3:9;
     end;
-    consider f being Function of product Ok, product Ok such that
-A13: for s being Element of product Ok holds f.s= F(s) from FUNCT_2:
-    sch 8 (A4);
-    set E = ([1,0,0] .--> f) +* ([0,0,0] .--> id product Ok);
-A14: dom E = dom ([1,0,0] .--> f) \/ dom ([0,0,0] .--> id product Ok) by
+    consider f being Function of product(V*Ok), product(V*Ok) such that
+A11: for s being Element of product(V*Ok) holds f.s= F(s) from FUNCT_2:
+    sch 8 (A5);
+    set E = ([1,0,0] .--> f) +* ([0,0,0] .--> id product(V*Ok));
+A12: dom E = dom ([1,0,0] .--> f) \/ dom ([0,0,0] .--> id product(V*Ok)) by
 FUNCT_4:def 1
-      .= {[1,0,0]} \/ dom ([0,0,0] .--> id product Ok) by FUNCOP_1:13
+      .= {[1,0,0]} \/ dom ([0,0,0] .--> id product(V*Ok)) by FUNCOP_1:13
       .= {[1,0,0]} \/ {[0,0,0]} by FUNCOP_1:13
-      .= ins by ENUMSET1:1;
-A15: rng ([1,0,0] .--> f) c= {f} & rng ([0,0,0] .--> id product Ok) c= {id
-    product Ok } by FUNCOP_1:13;
-A16: rng E c= rng ([1,0,0] .--> f) \/ rng ([0,0,0] .--> id product Ok) by
+      .= III by ENUMSET1:1;
+A13: rng ([1,0,0] .--> f) c= {f} & rng ([0,0,0] .--> id product(V*Ok)) c= {id
+    product(V*Ok)} by FUNCOP_1:13;
+A14: rng E c= rng ([1,0,0] .--> f) \/ rng ([0,0,0] .--> id product(V*Ok)) by
 FUNCT_4:17;
-    rng E c= Funcs(product Ok, product Ok)
+    rng E c= Funcs(product(V*Ok), product(V*Ok))
     proof
       let e be set;
       assume e in rng E;
       then e in rng ([1,0,0] .--> f) or
-      e in rng ([0,0,0] .--> id product Ok) by A16,XBOOLE_0:def 3;
-      then e = f or e = id product Ok by A15,TARSKI:def 1;
+      e in rng ([0,0,0] .--> id product(V*Ok)) by A14,XBOOLE_0:def 3;
+      then e = f or e = id product(V*Ok) by A13,TARSKI:def 1;
       hence thesis by FUNCT_2:9;
     end;
-    then reconsider
-    E as Function of ins, Funcs(product Ok, product Ok) by A14,FUNCT_2:def 1
-,RELSET_1:4;
-    set M = AMI-Struct(# O, IC1, ins, i, Ok, E#);
+    then reconsider E as Function of III, Funcs(product(V*Ok), product(V*Ok))
+     by A12,FUNCT_2:def 1,RELSET_1:4;
+    set V = N --> NAT;
+    set M = AMI-Struct(# O, IC1, III, Ok, V, E#);
     take M qua strict AMI-Struct over N;
     thus the carrier of M = {0};
     thus the ZeroF of M = 0;
-    thus the Instructions of M = {[0,0,0],[1,0,0]};
-    thus  the haltF of M = [0,0,0];
-    thus the Object-Kind of M = (0 .-->NAT);
-    reconsider f as Function of product the Object-Kind of M, product the
-    Object-Kind of M;
+    thus the InstructionsF of M = {[0,0,0],[1,0,0]};
+    thus the Object-Kind of M = (0 .-->0);
+    thus the ValuesF of M = N --> NAT;
+    reconsider f as Function of product the_Values_of M,
+    product the_Values_of M;
     take f;
-    thus for s being Element of product the Object-Kind of M
-     holds f.s = s+*(0 .-->succ(s.0)) by A13;
+    thus for s being Element of product the_Values_of M
+     holds f.s = s+*(0 .-->succ(s.0)) by A11;
     thus thesis;
   end;
   uniqueness
   proof
     let it1, it2 be strict AMI-Struct over N such that
-A17: the carrier of it1 = {0} & the ZeroF of it1 = 0
-    & the Instructions of it1 = {[0,0,0],[1,0,0]} &
-    the haltF of it1 = [0,0,0]
+A15: the carrier of it1 = {0} & the ZeroF of it1 = 0
+    & the InstructionsF of it1 = {[0,0,0],[1,0,0]}
     and
-A18: the Object-Kind of it1 = (0 .-->NAT);
-    given f1 being Function of product the Object-Kind of it1, product the
-    Object-Kind of it1 such that
-A19: for s being Element of product the Object-Kind of it1 holds f1.s
+A16: the Object-Kind of it1 = (0 .-->0) and
+A17:    the ValuesF of it1 = N --> NAT;
+    given f1 being Function of product the_Values_of it1,
+     product the_Values_of it1 such that
+A18: for s being Element of product the_Values_of it1 holds f1.s
     = s+* (0 .-->succ(s.0)) and
-A20: the Execution of it1 = ([1,0,0] .--> f1) +* ([0,0,0] .--> id product
-    the Object-Kind of it1);
+A19: the Execution of it1 = ([1,0,0] .--> f1) +* ([0,0,0] .--> id product
+    the_Values_of it1);
     assume that
-A21: the carrier of it2 = {0} & the ZeroF of it2 = 0
-     & the Instructions of it2 = {[0,0,0],[1,0,0]}  &
-    the haltF of it2 = [0,0,0]
-and
-A22: the Object-Kind of it2 = (0 .-->NAT);
-    given f2 being Function of product the Object-Kind of it2, product the
-    Object-Kind of it2 such that
-A23: for s being Element of product the Object-Kind of it2 holds f2.s
+A20: the carrier of it2 = {0} & the ZeroF of it2 = 0
+     & the InstructionsF of it2 = {[0,0,0],[1,0,0]} and
+A21: the Object-Kind of it2 = (0 .-->0) and
+A22:    the ValuesF of it2 = N --> NAT;
+    given f2 being Function of product the_Values_of it2, product
+    the_Values_of it2 such that
+A23: for s being Element of product the_Values_of it2 holds f2.s
     = s+* (0 .-->succ(s.0)) and
 A24: the Execution of it2 = ([1,0,0] .--> f2) +* ([0,0,0] .--> id product
-    the Object-Kind of it2);
+    the_Values_of it2);
+A25:  the_Values_of it1 = the_Values_of it2 by A16,A17,A21,A22;
     now
-      let c be Element of product the Object-Kind of it1;
-      thus f1.c = c+*(0 .-->succ(c.0)) by A19
-        .= f2.c by A18,A22,A23;
+      let c be Element of product the_Values_of it1;
+      thus f1.c = c+*(0 .-->succ(c.0)) by A18
+        .= f2.c by A23,A25;
     end;
-    hence thesis by A17,A18,A20,A21,A22,A24,FUNCT_2:63;
+    hence thesis by A15,A16,A19,A20,A21,A24,A17,A22,FUNCT_2:63;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements set;
+  let N be with_zero set;
   cluster STC N -> finite non empty;
-  coherence by Def11;
+  coherence by Def7;
 end;
 
 registration
-  let N be with_non-empty_elements set;
-  cluster STC N -> non empty standard-ins;
+  let N be with_zero set;
+  cluster STC N -> with_non-empty_values;
   coherence
   proof
-    thus the carrier of STC N is non empty;
-A1: the Instructions of STC N = {[0,0,0],[1,0,0]} by Def11;
-    take X=(union N) \/ the carrier of STC N;
-A2:   0 in X* by FINSEQ_1:49;
-     0 in NAT* by FINSEQ_1:49;
-     then [0,0,0] in [:NAT,NAT*,X*:] & [1,0,0] in [:NAT,NAT*,X*:]
-      by A2,MCART_1:69;
-   hence the Instructions of STC N c= [:NAT,NAT*,X*:] by A1,ZFMISC_1:32;
+   let n be set;
+    set S = STC N, F = the_Values_of S;
+   assume
+A1:   n in dom F;
+    then
+A2:  (the Object-Kind of S).n in dom the ValuesF of S by FUNCT_1:11;
+A3:  the ValuesF of S = N --> NAT by Def7;
+A4:  (the Object-Kind of S).n in N by A2;
+    F.n =(the ValuesF of S).((the Object-Kind of S).n) by A1,FUNCT_1:12
+       .= NAT by A4,A3,FUNCOP_1:7;
+   hence F.n is non empty;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements set;
+  let N be with_zero set;
   cluster STC N -> IC-Ins-separated;
   coherence
   proof
     set IT = STC N;
-    set Ok = the Object-Kind of IT;
+    set Ok = the_Values_of IT;
 A1: 0 in {0} by TARSKI:def 1;
-    Ok.0 = (0 .-->NAT).0 by Def11
+A2: the_Values_of IT = (the ValuesF of IT)*(the Object-Kind of IT)
+       .= (the ValuesF of IT)*(0.-->0) by Def7
+       .= (N-->NAT)*(0.-->0) by Def7;
+    0 in N by MEASURE6:def 2;
+    then Ok.0 = (0 .-->NAT).0 by A2,FUNCOP_1:89
       .= NAT by A1,FUNCOP_1:7;
-    then ObjectKind IC IT = NAT by Def11;
-    hence STC N is IC-Ins-separated by MEMSTR_0:def 3;
+    then Values IC IT = NAT by Def7;
+    hence STC N is IC-Ins-separated by MEMSTR_0:def 6;
   end;
 end;
 
-Lm4: for i being Instruction of STC N, s being State of STC N st InsCode i = 1
+Lm3: for i being Instruction of STC N, s being State of STC N st InsCode i = 1
 holds Exec(i,s).IC STC N = succ (IC s)
-
 proof
   let i be Instruction of STC N, s be State of STC N;
   set M = STC N;
@@ -720,7 +736,7 @@ A2: now
     then i = [0,0,0] by TARSKI:def 1;
     hence contradiction by A1,RECDEF_2:def 1;
   end;
-  the Instructions of M = III by Def11;
+  the InstructionsF of M = III by Def7;
   then i = [1,0,0] or i = [0,0,0] by TARSKI:def 2;
   then
 A3: i in {[1,0,0]} by A1,RECDEF_2:def 1,TARSKI:def 1;
@@ -728,23 +744,21 @@ A4: 0 in {0} by TARSKI:def 1;
   then
 A5: 0 in dom (0 .-->succ(s.0)) by FUNCOP_1:13;
 
-  consider f be Function of product the Object-Kind of M, product the
-  Object-Kind of M such that
-A6: for s being Element of product the Object-Kind of M holds f.s = s+*(
+  consider f be Function of product the_Values_of M, product
+  the_Values_of M such that
+A6: for s being Element of product the_Values_of M holds f.s = s+*(
   0 .-->succ(s.0)) and
 
-A7: the Execution of M = ([1,0,0] .--> f) +* ([0,0,0] .--> id product the
-  Object-Kind of M) by Def11;
+A7: the Execution of M = ([1,0,0] .--> f) +* ([0,0,0] .-->
+    id product the_Values_of M) by Def7;
 A8: for s being State of M holds f.s = s+*(0 .-->succ(s.0))
  proof let s be State of M;
-  reconsider s as Element of product the Object-Kind of M by CARD_3:107;
+  reconsider s as Element of product the_Values_of M by CARD_3:107;
   f.s = s+*(0 .-->succ(s.0)) by A6;
   hence thesis;
  end;
-
-A9: the ZeroF of M = 0 by Def11;
-
-  dom ([0,0,0] .--> id product the Object-Kind of M) = {[0,0,0]}
+A9: the ZeroF of M = 0 by Def7;
+  dom ([0,0,0] .--> id product the_Values_of M) = {[0,0,0]}
    by FUNCOP_1:13;
 
   then (the Execution of M).i = ([1,0,0] .--> f).i by A7,A2,FUNCT_4:11
@@ -754,29 +768,30 @@ A9: the ZeroF of M = 0 by Def11;
     .= succ (IC s) by A9,A4,FUNCOP_1:7;
 end;
 
-theorem Th20:
+theorem Th4:
   for i being Instruction of STC N st InsCode i = 0 holds i is halting
 proof
   let i be Instruction of STC N;
   set M = STC N;
-  the Instructions of M = III by Def11;
+  the InstructionsF of M = III by Def7;
   then
 A1: i = [1,0,0] or i = [0,0,0] by TARSKI:def 2;
   assume InsCode i = 0;
   then
 A2: i in {[0,0,0]} by A1,RECDEF_2:def 1,TARSKI:def 1;
   let s be State of M;
-  reconsider s as Element of product the Object-Kind of M by CARD_3:107;
-  (ex f be Function of product the Object-Kind of M, product the
-Object-Kind of M st ( for s being Element of product the Object-Kind of M holds
+  reconsider s as Element of product the_Values_of M by CARD_3:107;
+  (ex f be Function of product the_Values_of M, product
+         the_Values_of M
+ st ( for s being Element of product the_Values_of M holds
 f.s = s+*(0 .-->succ(s.0)))&
    the Execution of M = ([1,0,0] .--> f) +* ([0,0,0]
-  .--> id product the Object-Kind of M) )& dom ([0,0,0] .--> id product the
-  Object-Kind of M) = {[0,0,0]} by Def11,FUNCOP_1:13;
+  .--> id product the_Values_of M) )& dom ([0,0,0] .--> id product
+  the_Values_of M) = {[0,0,0]} by Def7,FUNCOP_1:13;
   then
-  (the Execution of M).i = ({[0,0,0]} --> id product the Object-Kind of M).i
+  (the Execution of M).i = ({[0,0,0]} --> id product the_Values_of M).i
   by A2,FUNCT_4:13
-    .= id product the Object-Kind of M by A2,FUNCOP_1:7;
+    .= id product the_Values_of M by A2,FUNCOP_1:7;
    then (the Execution of M).i.s = s by FUNCT_1:18;
   hence thesis;
 end;
@@ -789,18 +804,18 @@ proof
   set s =the  State of M;
   assume InsCode i = 1;
   then
-A1: Exec(i,s).IC M = succ (IC s) by Lm4;
+A1: Exec(i,s).IC M = succ (IC s) by Lm3;
   assume for s being State of M holds Exec(i,s) = s;
   then Exec(i,s).IC M = IC s;
   hence thesis by A1;
 end;
 
-theorem Th22:
-  for i being Element of the Instructions of STC N
+theorem Th6:
+  for i being Element of the InstructionsF of STC N
     holds InsCode i = 1 or InsCode i = 0
 proof
-  let i be Element of the Instructions of STC N;
-  the Instructions of STC N = III by Def11;
+  let i be Element of the InstructionsF of STC N;
+  the InstructionsF of STC N = III by Def7;
   then i = [1,0,0] or i = [0,0,0] by TARSKI:def 2;
   hence thesis by RECDEF_2:def 1;
 end;
@@ -813,8 +828,8 @@ proof
   let s be State of M, o be Object of M, I be Instruction of M such that
   InsCode I = InsCode i and
 A1: o in Data-Locations M;
-A2: the ZeroF of M = 0 by Def11;
-  Data-Locations M = ({0}) \ ({0}) by A2,Def11
+A2: the ZeroF of M = 0 by Def7;
+  Data-Locations M = ({0}) \ ({0}) by A2,Def7
        .= {} by XBOOLE_1:37;
    hence thesis by A1;
 end;
@@ -823,58 +838,58 @@ registration let N;
  cluster -> ins-loc-free for Instruction of STC N;
  coherence
   proof let I be Instruction of STC N;
-    I in the Instructions of STC N;
-    then I in {[0,0,0],[1,0,0]} by Def11;
+    I in the InstructionsF of STC N;
+    then I in {[0,0,0],[1,0,0]} by Def7;
     then I = [0,0,0] or I = [1,0,0] by TARSKI:def 2;
    hence JumpPart I is empty by RECDEF_2:def 2;
   end;
 end;
 
-Lm5: for l being Element of NAT, i being Element of the
-Instructions of STC N st l = z & InsCode i = 1 holds NIC(i, l) = {z+1}
+Lm4: for l being Element of NAT, i being Element of the
+InstructionsF of STC N st l = z & InsCode i = 1 holds NIC(i, l) = {z+1}
 proof
-  let l be Element of NAT, i be Element of the Instructions of STC N;
+  let l be Element of NAT, i be Element of the InstructionsF of STC N;
   assume that
 A1: l = z and
 A2: InsCode i = 1;
   set M = STC N;
   set F = { IC Exec(i,ss)
-   where ss is Element of product the Object-Kind of STC N: IC ss = l};
+   where ss is Element of product the_Values_of STC N: IC ss = l};
   now
     set f = NAT --> i;
     set w =the  State of M;
-    reconsider l9 = l as Element of ObjectKind IC M by MEMSTR_0:def 3;
+    reconsider l9 = l as Element of Values IC M by MEMSTR_0:def 6;
     set u = (IC M).-->l9;
 A3: dom u = {IC M} by FUNCOP_1:13;
     let y be set;
-    reconsider t = w+*u as Element of product the Object-Kind of STC N
+    reconsider t = w+*u as Element of product the_Values_of STC N
      by CARD_3:107;
-A6:  f/.l = i by FUNCOP_1:7;
+A4:  f/.l = i by FUNCOP_1:7;
     hereby
       assume y in F;
-      then ex s being Element of product the Object-Kind of STC N
+      then ex s being Element of product the_Values_of STC N
       st y = IC Exec(i,s) & IC s = l;
-      then y = succ z by A1,A2,Lm4
+      then y = succ z by A1,A2,Lm3
         .= z+1;
       hence y in {z+1} by TARSKI:def 1;
     end;
     assume y in {z+1};
     then
-A7: y = succ z by TARSKI:def 1;
+A5: y = succ z by TARSKI:def 1;
     IC M in dom u by A3,TARSKI:def 1;
     then
-A8: IC t = u.IC M by FUNCT_4:13
+A6: IC t = u.IC M by FUNCT_4:13
       .= z by A1,FUNCOP_1:72;
-    then IC Following(f,t) = succ z by A1,A2,A6,Lm4;
-    hence y in F by A1,A7,A8,A6;
+    then IC Following(f,t) = succ z by A1,A2,A4,Lm3;
+    hence y in F by A1,A5,A6,A4;
   end;
   hence thesis by TARSKI:1;
 end;
 
-Lm6: for i being Element of the Instructions of STC N holds JUMP i is empty
+Lm5: for i being Element of the InstructionsF of STC N holds JUMP i is empty
 proof
-  let i be Element of the Instructions of STC N;
-  per cases by Th22;
+  let i be Element of the InstructionsF of STC N;
+  per cases by Th6;
   suppose
 A1: InsCode i = 1;
     reconsider l1 = 0, l2 = 1 as Element of NAT;
@@ -886,12 +901,12 @@ A1: InsCode i = 1;
     then consider x being set such that
 A2: x in meet X by XBOOLE_0:def 1;
     NIC(i, l1) in X;
-    then {0+1} in X by A1,Lm5;
+    then {0+1} in X by A1,Lm4;
     then x in {1} by A2,SETFAM_1:def 1;
     then
 A3: x = 1 by TARSKI:def 1;
     NIC(i, l2) in X;
-    then {1+1} in X by A1,Lm5;
+    then {1+1} in X by A1,Lm4;
     then x in {2} by A2,SETFAM_1:def 1;
     hence contradiction by A3,TARSKI:def 1;
   end;
@@ -899,40 +914,40 @@ A3: x = 1 by TARSKI:def 1;
 A4: InsCode i = 0;
     reconsider i as Instruction of STC N;
 
-    for l being Element of NAT holds NIC(i,l)={l} by A4,Th15,Th20;
+    for l being Element of NAT holds NIC(i,l)={l} by A4,Th2,Th4;
 
-    hence thesis by Th14;
+    hence thesis by Th1;
   end;
 end;
 
-theorem Th24:
+theorem Th8:
   for l being Element of NAT st l = z holds SUCC(l,STC N) = {z, z+1}
 proof
   let l be Element of NAT such that
 A1: l = z;
   set M = STC N;
-  set K = { NIC(i,l) \ JUMP i where i is Element of the Instructions of STC N
+  set K = { NIC(i,l) \ JUMP i where i is Element of the InstructionsF of STC N
   : not contradiction };
   now
     let y be set;
     hereby
       assume y in K;
-      then consider ii being Element of the Instructions of STC N such that
+      then consider ii being Element of the InstructionsF of STC N such that
 A2:   y = NIC(ii,l) \ JUMP ii and
       not contradiction;
       reconsider ii as Instruction of STC N;
       now
-        per cases by Th22;
+        per cases by Th6;
         suppose
 A3:       InsCode ii = 1;
-          JUMP ii = {} by Lm6;
-          then y = {z+1} by A1,A2,A3,Lm5;
+          JUMP ii = {} by Lm5;
+          then y = {z+1} by A1,A2,A3,Lm4;
           hence y in {{z},{z+1}} by TARSKI:def 2;
         end;
         suppose
 A4:       InsCode ii = 0;
-          JUMP ii = {} by Lm6;
-          then y = {z} by A1,A2,A4,Th15,Th20;
+          JUMP ii = {} by Lm5;
+          then y = {z} by A1,A2,A4,Th2,Th4;
           hence y in {{z},{z+1}} by TARSKI:def 2;
         end;
       end;
@@ -943,18 +958,19 @@ A5: y in {{z},{z+1}};
     per cases by A5,TARSKI:def 2;
     suppose
 A6:   y = {z};
-      reconsider i = [0,0,0] as Instruction of M by Def11;
-      JUMP i = {} & InsCode i = 0 by Lm6,RECDEF_2:def 1;
-      then NIC(i,l) \ JUMP i = y by A1,A6,Th15,Th20;
+      halt M = [0,{},{}];
+      then reconsider i = [0,0,0] as Instruction of M;
+      JUMP i = {} & InsCode i = 0 by Lm5,RECDEF_2:def 1;
+      then NIC(i,l) \ JUMP i = y by A1,A6,Th2,Th4;
       hence y in K;
     end;
     suppose
 A7:   y = {z+1};
       set i = [1,0,0];
       i in III by TARSKI:def 2;
-      then reconsider i as Instruction of M by Def11;
-      JUMP i = {} & InsCode i = 1 by Lm6,RECDEF_2:def 1;
-      then NIC(i,l) \ JUMP i = y by A1,A7,Lm5;
+      then reconsider i as Instruction of M by Def7;
+      JUMP i = {} & InsCode i = 1 by Lm5,RECDEF_2:def 1;
+      then NIC(i,l) \ JUMP i = y by A1,A7,Lm4;
       hence y in K;
     end;
   end;
@@ -963,40 +979,39 @@ A7:   y = {z+1};
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   cluster STC N -> standard;
   coherence
   proof
     set M = STC N;
     now
       let k be Element of NAT;
-A1:   SUCC(k,STC N) = {k,k+1} by Th24;
+A1:   SUCC(k,STC N) = {k,k+1} by Th8;
       thus k+1 in SUCC(k,STC N) by A1,TARSKI:def 2;
       let j be Element of NAT;
       assume j in SUCC(k,STC N);
       then j = k or j = k+1 by A1,TARSKI:def 2;
       hence k <= j by NAT_1:11;
     end;
-    hence thesis by Th19;
+    hence thesis by Th3;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   cluster STC N -> halting;
   coherence
   proof
-    set I = the haltF of STC N;
-    I = [0,0,0] by Def11;
-    then InsCode I = 0 by RECDEF_2:def 1;
-    hence I is halting by Th20;
+    set I = halt STC N;
+    InsCode I = 0 by RECDEF_2:def 1;
+    hence I is halting by Th4;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster standard halting standard-ins for IC-Ins-separated
-      non empty AMI-Struct over N;
+  let N be with_zero set;
+  cluster standard halting for IC-Ins-separated
+      non empty with_non-empty_values AMI-Struct over N;
   existence
   proof
     take STC N;
@@ -1004,71 +1019,73 @@ registration
   end;
 end;
 
-reserve T for standard IC-Ins-separated non empty AMI-Struct over N;
+reserve T for standard IC-Ins-separated non empty
+     with_non-empty_values AMI-Struct over N;
 
 theorem
   for i being Instruction of STC N, s being State of STC N st InsCode i = 1
-   holds Exec(i,s).IC STC N = succ IC s by Lm4;
+   holds Exec(i,s).IC STC N = succ IC s by Lm3;
 
 theorem
   for l being Element of NAT, i being Element of the
-  Instructions of STC N st InsCode i = 1 holds NIC(i, l) = {succ l} by Lm5;
+  InstructionsF of STC N st InsCode i = 1 holds NIC(i, l) = {succ l} by Lm4;
 
 theorem
-  for l being Element of NAT holds SUCC(l,STC N) = {l, succ l} by Th24;
+  for l being Element of NAT holds SUCC(l,STC N) = {l, succ l} by Th8;
 
 definition
-
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   S be IC-Ins-separated
-   non empty AMI-Struct over N,
+   non empty with_non-empty_values AMI-Struct over N,
   i be Instruction of S;
   attr i is sequential means
   for s being State of S holds Exec(i, s).IC S = succ IC s;
 end;
 
-theorem Th41:
-  for S being IC-Ins-separated non empty AMI-Struct over N,
+theorem Th12:
+  for S being IC-Ins-separated non empty with_non-empty_values
+         AMI-Struct over N,
       il being Element of NAT, i being Instruction of S st i is sequential
        holds NIC(i,il) = {succ il}
 proof
   let S be IC-Ins-separated
-   non empty AMI-Struct over N, il be Element of NAT, i be
+   non empty with_non-empty_values AMI-Struct over N,
+     il be Element of NAT, i be
   Instruction of S such that
 A1: for s being State of S holds Exec(i, s).IC S = succ IC s;
   now
     let x be set;
 A2: now
-      reconsider il1 = il as Element of ObjectKind IC S by MEMSTR_0:def 3;
+      reconsider il1 = il as Element of Values IC S by MEMSTR_0:def 6;
       set I = i;
       set t = the  State of S, P = the Instruction-Sequence of S;
       assume
 A3:   x = succ il;
       reconsider u = t+*(IC S,il1) as
-       Element of product the Object-Kind of S by CARD_3:107;
+       Element of product the_Values_of S by CARD_3:107;
       il in NAT;
       then
-X:     il in dom P by PARTFUN1:def 2;
-A6:   (P+*(il,i))/.il = (P+*(il,i)).il by PBOOLE:143
-         .= i by X,FUNCT_7:31;
+A4:     il in dom P by PARTFUN1:def 2;
+A5:   (P+*(il,i))/.il = (P+*(il,i)).il by PBOOLE:143
+         .= i by A4,FUNCT_7:31;
       IC S in dom t by MEMSTR_0:2;
       then
-A7:   IC u = il by FUNCT_7:31;
-      then IC Following(P+*(il,i),u) = succ il by A1,A6;
+A6:   IC u = il by FUNCT_7:31;
+      then IC Following(P+*(il,i),u) = succ il by A1,A5;
       hence x in {IC Exec(i,ss)
-       where ss is Element of product the Object-Kind of S
-        : IC ss = il} by A3,A7,A6;
+       where ss is Element of product the_Values_of S
+        : IC ss = il} by A3,A6,A5;
     end;
     now
       assume x in {IC Exec(i,ss)
-       where ss is Element of product the Object-Kind of S : IC ss = il};
-      then ex s being Element of product the Object-Kind of S
+       where ss is Element of product the_Values_of S : IC ss = il};
+      then ex s being Element of product the_Values_of S
        st x = IC Exec(i,s) & IC s = il;
       hence x = succ il by A1;
     end;
     hence
     x in {succ il} iff x in {IC Exec(i,ss)
-       where ss is Element of product the Object-Kind of S
+       where ss is Element of product the_Values_of S
      : IC ss = il } by A2,TARSKI:def 1;
   end;
   hence thesis by TARSKI:1;
@@ -1077,27 +1094,27 @@ end;
 registration
   let N;
   let S be IC-Ins-separated
-   non empty AMI-Struct over N;
+   non empty with_non-empty_values AMI-Struct over N;
   cluster sequential -> non halting for Instruction of S;
   coherence
 proof
   let i be Instruction of S such that
 A1: i is sequential;
   set s =the  State of S;
-  NIC(i,IC s) = {succ IC s} by A1,Th41;
+  NIC(i,IC s) = {succ IC s} by A1,Th12;
   then NIC(i,IC s) <> {IC s} by ORDINAL1:9,ZFMISC_1:3;
-  hence thesis by Th15;
+  hence thesis by Th2;
 end;
   cluster halting -> non sequential for Instruction of S;
   coherence;
 end;
 
 theorem
- for T being IC-Ins-separated non empty AMI-Struct over N
+ for T being IC-Ins-separated non empty with_non-empty_values AMI-Struct over N
   for i being Instruction of T st JUMP i is non empty holds i is non
   sequential
 proof
- let T be IC-Ins-separated non empty AMI-Struct over N;
+ let T be IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
   let i be Instruction of T;
   set X = { NIC(i,l1) where l1 is Element of NAT: not contradiction
   };
@@ -1107,7 +1124,7 @@ A1: l in JUMP i by XBOOLE_0:def 1;
   reconsider l as Element of NAT by A1;
   NIC(i,l) in X;
   then l in NIC(i,l) by A1,SETFAM_1:def 1;
-  then consider s being Element of product the Object-Kind of T
+  then consider s being Element of product the_Values_of T
   such that
 A2: l = IC Exec(i,s) & IC s = l;
   take s;
@@ -1117,18 +1134,19 @@ end;
 begin :: Closedness of finite partial states
 
 definition
-  let N be with_non-empty_elements non empty set;
-  let S be IC-Ins-separated non empty AMI-Struct over N;
+  let N be with_zero set;
+  let S be IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N;
   let F be finite preProgram of S;
   attr F is really-closed means
-  :Def17:
+  :Def9:
   for l being Element of NAT st l in dom F holds NIC (F/.l, l) c= dom F;
 end;
 
 definition
-  let N be with_non-empty_elements non empty set;
-  let S be IC-Ins-separated non empty AMI-Struct over N;
-  let F be NAT-defined (the Instructions of S)-valued Function;
+  let N be with_zero set;
+  let S be IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
+  let F be NAT-defined (the InstructionsF of S)-valued Function;
   attr F is paraclosed means
   for s being 0-started State of S
   for P being Instruction-Sequence of S st F c= P
@@ -1136,24 +1154,26 @@ definition
 end;
 
 definition
-  let N be with_non-empty_elements non empty set;
-  let S be halting IC-Ins-separated non empty AMI-Struct over N;
-  let F be NAT-defined (the Instructions of S)-valued Function;
+  let N be with_zero set;
+  let S be halting IC-Ins-separated non empty with_non-empty_values
+         AMI-Struct over N;
+  let F be NAT-defined (the InstructionsF of S)-valued Function;
   attr F is parahalting means
   for s being 0-started State of S
   for P being Instruction-Sequence of S st F c= P
    holds P halts_on s;
 end;
 
-theorem Th45:
- for N being with_non-empty_elements non empty set
- for S being IC-Ins-separated non empty AMI-Struct over N
+theorem Th14:
+ for N being with_zero set
+ for S being IC-Ins-separated non empty with_non-empty_values AMI-Struct over N
  for F being finite preProgram of S
   holds F is really-closed iff
   for s being State of S st IC s in dom F
    for k being Element of NAT holds IC Comput(F,s,k) in dom F
- proof let N be with_non-empty_elements non empty set;
-  let S be IC-Ins-separated non empty AMI-Struct over N;
+ proof let N be with_zero set;
+  let S be IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N;
   let F be finite preProgram of S;
   thus F is really-closed implies
    for s being State of S st IC s in dom F
@@ -1167,44 +1187,45 @@ A3: now
        let k be Element of NAT such that
 A4: P[k];
        reconsider t = Comput(F,s,k)
-        as Element of product the Object-Kind of S by CARD_3:107;
+        as Element of product the_Values_of S by CARD_3:107;
        set l = IC Comput(F,s,k);
 A5: IC Following(F,t) in NIC(F/.l,l);
 A6: Comput(F,s,k+1) = Following(F,t) by EXTPRO_1:3;
-       NIC(F/.l, l) c= dom F by A1,A4,Def17;
+       NIC(F/.l, l) c= dom F by A1,A4,Def9;
        hence P[k+1] by A5,A6;
      end;
-A7: P[0] by A2,EXTPRO_1:2;
+A7: P[0] by A2;
      thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A3);
    end;
   assume
-Z1: for s being State of S st IC s in dom F
+A8: for s being State of S st IC s in dom F
      for k being Element of NAT holds IC Comput(F,s,k) in dom F;
   let l being Element of NAT such that
-Z2: l in dom F;
+A9: l in dom F;
   let x;
   assume x in NIC(F/.l, l);
-   then consider ss being Element of product the Object-Kind of S
+   then consider ss being Element of product the_Values_of S
     such that
-W1: x = IC Exec(F/.l,ss) and
-W2: IC ss = l;
+A10: x = IC Exec(F/.l,ss) and
+A11: IC ss = l;
    reconsider ss as State of S;
    IC Comput(F,ss,0+1) = IC Following(F,Comput(F,ss,0)) by EXTPRO_1:3
-      .= IC Following(F,ss) by EXTPRO_1:2
+      .= IC Following(F,ss)
       .= IC Exec(F/.IC ss,ss);
-  hence x in dom F by W1,W2,Z1,Z2;
+  hence x in dom F by A10,A11,A8,A9;
  end;
 
-Lm45:
- for N being with_non-empty_elements non empty set
- for S being IC-Ins-separated non empty AMI-Struct over N
+Lm6:
+ for N being with_zero set
+ for S being IC-Ins-separated non empty
+ with_non-empty_values AMI-Struct over N
  for F being finite preProgram of S
   holds F is really-closed iff
   for s being State of S st IC s in dom F
   for P being Instruction-Sequence of S st F c= P
    for k being Element of NAT holds IC Comput(P,s,k) in dom F
- proof let N be with_non-empty_elements non empty set;
-  let S be IC-Ins-separated non empty AMI-Struct over N;
+ proof let N be with_zero set;
+  let S be IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
   let F be finite preProgram of S;
   thus F is really-closed implies
    for s being State of S st IC s in dom F
@@ -1215,117 +1236,117 @@ A1: F is really-closed;
      let s be State of S such that
 A2: IC s in dom F;
     let P be Instruction-Sequence of S such that
-Z1:  F c= P;
+A3:  F c= P;
      defpred P[Element of NAT] means IC Comput(P,s,$1) in dom F;
-A3: now
+A4: now
        let k be Element of NAT such that
-A4: P[k];
+A5: P[k];
        reconsider t = Comput(P,s,k)
-        as Element of product the Object-Kind of S by CARD_3:107;
+        as Element of product the_Values_of S by CARD_3:107;
        set l = IC Comput(P,s,k);
-A5: IC Following(P,t) in NIC(P/.l,l);
-A6: Comput(P,s,k+1) = Following(P,t) by EXTPRO_1:3;
-       P/.l = F/.l by A4,Z1,PARTFUN2:61;
-       then NIC(P/.l, l) c= dom F by A1,A4,Def17;
-       hence P[k+1] by A5,A6;
+A6: IC Following(P,t) in NIC(P/.l,l);
+A7: Comput(P,s,k+1) = Following(P,t) by EXTPRO_1:3;
+       P/.l = F/.l by A5,A3,PARTFUN2:61;
+       then NIC(P/.l, l) c= dom F by A1,A5,Def9;
+       hence P[k+1] by A6,A7;
      end;
-A7: P[0] by A2,EXTPRO_1:2;
-     thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A3);
+A8: P[0] by A2;
+     thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A4);
    end;
   assume
-Z1: for s being State of S st IC s in dom F
+A9: for s being State of S st IC s in dom F
     for P being Instruction-Sequence of S st F c= P
      for k being Element of NAT holds IC Comput(P,s,k) in dom F;
    for s being State of S st IC s in dom F
     for k being Element of NAT holds IC Comput(F,s,k) in dom F
    proof let s be State of S such that
-Z2:   IC s in dom F;
+A10:   IC s in dom F;
     consider P being Instruction-Sequence of S such that
-W1:   F c= P by PBOOLE:145;
+A11:   F c= P by PBOOLE:145;
     let k be Element of NAT;
-A:   IC Comput(P,s,k) in dom F by Z1,Z2,W1;
+A12:   IC Comput(P,s,k) in dom F by A9,A10,A11;
    defpred P[Nat] means Comput(P,s,$1) = Comput(F,s,$1);
-   Comput(P,s,0) = s by EXTPRO_1:2
-     .= Comput(F,s,0) by EXTPRO_1:2;
-    then
-B:  P[0];
-C:  for k being Nat st P[k] holds P[k+1]
+A13:  P[0];
+A14:  for k being Nat st P[k] holds P[k+1]
      proof let k be Nat;
       assume
-Z:     P[k];
+A15:     P[k];
       reconsider kk = k as Element of NAT by ORDINAL1:def 12;
-E:   IC Comput(P,s,kk) in dom F by Z1,Z2,W1;
-       Comput(P,s,k+1) = Following(P,Comput(F,s,k)) by EXTPRO_1:3,Z
-          .= Following(F,Comput(F,s,k)) by E,W1,PARTFUN2:61,Z
+A16:   IC Comput(P,s,kk) in dom F by A9,A10,A11;
+       Comput(P,s,k+1) = Following(P,Comput(F,s,k)) by A15,EXTPRO_1:3
+          .= Following(F,Comput(F,s,k)) by A16,A11,A15,PARTFUN2:61
           .= Comput(F,s,k+1) by EXTPRO_1:3;
       hence P[k+1];
      end;
-    for k being Nat holds P[k] from NAT_1:sch 2(B,C);
-    hence IC Comput(F,s,k) in dom F by A;
+    for k being Nat holds P[k] from NAT_1:sch 2(A13,A14);
+    hence IC Comput(F,s,k) in dom F by A12;
    end;
-   hence thesis by Th45;
+   hence thesis by Th14;
  end;
 
-theorem Th44:
-  for S being standard IC-Ins-separated non empty AMI-Struct over N,
-   F being NAT-defined (the Instructions of S)-valued
+theorem Th15:
+  for S being standard IC-Ins-separated non empty
+        with_non-empty_values AMI-Struct over N,
+   F being NAT-defined (the InstructionsF of S)-valued
   finite Function st F is really-closed & 0 in dom F holds F is
   paraclosed
 proof
-  let S be standard IC-Ins-separated non empty AMI-Struct over N,
-      F be NAT-defined (the Instructions of S)-valued finite Function;
+  let S be standard IC-Ins-separated non empty
+       with_non-empty_values AMI-Struct over N,
+      F be NAT-defined (the InstructionsF of S)-valued finite Function;
   assume
-Z:  F is really-closed;
+A1:  F is really-closed;
   assume
-B1: 0 in dom F ;
+A2: 0 in dom F ;
   let s be 0-started State of S;
-Z1: IC s = 0 by MEMSTR_0:def 8;
+A3: IC s = 0 by MEMSTR_0:def 11;
   let P be Instruction-Sequence of S such that
-Z2:  F c= P;
+A4:  F c= P;
   let k be Element of NAT;
-  thus IC Comput(P,s,k) in dom F by Z,Z1,Z2,Lm45,B1;
+  thus IC Comput(P,s,k) in dom F by A1,A3,A4,Lm6,A2;
 end;
 
-theorem Th46:
+theorem Th16:
   for S being standard halting IC-Ins-separated
- non empty AMI-Struct over N holds 0 .-->
-  halt S qua NAT-defined (the Instructions of S)-valued
+ non empty with_non-empty_values AMI-Struct over N holds 0 .-->
+  halt S qua NAT-defined (the InstructionsF of S)-valued
    finite Function is really-closed
 proof
   let S be standard halting IC-Ins-separated
-    non empty AMI-Struct over N;
+    non empty with_non-empty_values AMI-Struct over N;
   reconsider F = 0 .--> halt S as
-   NAT-defined (the Instructions of S)-valued finite Function;
+   NAT-defined (the InstructionsF of S)-valued finite Function;
   let l be Element of NAT;
   assume
 A1: l in dom(0 .--> halt S);
 A2: dom F = {0} by FUNCOP_1:13;
-  then
 A3: l = 0 by A1,TARSKI:def 1;
   F/.l = F.l by A1,PARTFUN1:def 6
     .= halt S by A3,FUNCOP_1:72;
-  hence thesis by A2,A3,Th15;
+  hence thesis by A2,A3,Th2;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be standard IC-Ins-separated non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be standard IC-Ins-separated non empty
+     with_non-empty_values AMI-Struct over N;
   cluster really-closed initial non empty -> paraclosed for NAT-defined
-    (the Instructions of S)-valued finite Function;
+    (the InstructionsF of S)-valued finite Function;
   coherence
   proof
-    let F be NAT-defined (the Instructions of S)-valued finite Function;
+    let F be NAT-defined (the InstructionsF of S)-valued finite Function;
     assume
 A1: F is really-closed;
     assume F is initial non empty;
     then 0 in dom F by AFINSQ_1:65;
-    hence thesis by A1,Th44;
+    hence thesis by A1,Th15;
   end;
 end;
 
 Lm7: now
   let N;
-  let S be standard halting IC-Ins-separated non empty AMI-Struct over N;
+  let S be standard halting IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N;
   set F = <%halt S%>;
 A1: dom F = {0} by FUNCOP_1:13;
   then
@@ -1339,76 +1360,77 @@ A3: LastLoc F = card F -' 1 by AFINSQ_1:70
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  let S be standard halting IC-Ins-separated non empty AMI-Struct over N;
+  let N be with_zero set;
+  let S be standard halting IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N;
   cluster trivial really-closed initial non empty
-   for NAT-defined (the Instructions of S)-valued finite Function;
+   for NAT-defined (the InstructionsF of S)-valued finite Function;
   existence
   proof
     reconsider F = <%halt S%> as initial non empty NAT-defined
-    (the Instructions of S)-valued finite Function;
+    (the InstructionsF of S)-valued finite Function;
     take F;
-    thus thesis by Th46;
+    thus thesis by Th16;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  let S be standard halting IC-Ins-separated non empty AMI-Struct over N;
+  let N be with_zero set;
+  let S be standard halting IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N;
   cluster halt-ending unique-halt trivial really-closed
    for initial non empty NAT-defined
-    (the Instructions of S)-valued finite Function;
+    (the InstructionsF of S)-valued finite Function;
   existence
   proof
     reconsider F = <%halt S%> as initial non empty NAT-defined
-    (the Instructions of S)-valued finite Function;
+    (the InstructionsF of S)-valued finite Function;
     take F;
     thus F.(LastLoc F) = halt S by Lm7;
     thus for f being Nat st F.f = halt S & f in dom F
     holds f = LastLoc F by Lm7;
-    thus thesis by Th46;
+    thus thesis by Th16;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  let S be standard halting IC-Ins-separated non empty AMI-Struct over N;
-  cluster really-closed for pre-Macro of S;
+  let N be with_zero set;
+  let S be standard halting IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N;
+  cluster really-closed for MacroInstruction of S;
   existence
   proof
     reconsider F = <%halt S%> as Program of S;
     F.(LastLoc F) = halt S & for l being Element of NAT st F.l
       = halt S & l in dom F holds l = LastLoc F by Lm7;
-    then reconsider F as pre-Macro of S by COMPOS_1:def 8;
+    then reconsider F as MacroInstruction of S by COMPOS_1:def 14;
     take F;
-    thus thesis by Th46;
+    thus thesis by Th16;
   end;
 end;
-
-
 
 theorem
   for i being Instruction of Trivial-AMI(N) holds i is halting
 proof
   let i be Instruction of Trivial-AMI(N);
   set M = Trivial-AMI(N);
-A1: the Instructions of M = {[0,{},{}]} by EXTPRO_1:def 1;
+A1: the InstructionsF of M = {[0,{},{}]} by EXTPRO_1:def 1;
   let s be State of M;
-  reconsider s as Element of product the Object-Kind of M by CARD_3:107;
-  the Object-Kind of M = NAT .--> NAT by EXTPRO_1:def 1;
-  then
-  (the Execution of M).i = ([0,{},{}] .--> id product the Object-Kind of M).i
-  by EXTPRO_1:def 1
-    .= id product the Object-Kind of M by A1,FUNCOP_1:7;
+  reconsider s as Element of product the_Values_of M by CARD_3:107;
+A2:  the Object-Kind of M = 0 .--> 0 &
+  the ValuesF of M = N --> NAT by EXTPRO_1:def 1;
+  (the Execution of M).i = ([0,{},{}] .--> id product the_Values_of M).i
+         by A2,EXTPRO_1:def 1
+    .= id product the_Values_of M by A1,FUNCOP_1:7;
   then (the Execution of M).i.s = s by FUNCT_1:18;
   hence thesis;
 end;
 
 theorem
-  for i being Element of the Instructions of Trivial-AMI(N) holds InsCode i = 0
+  for i being Element of the InstructionsF of Trivial-AMI N holds InsCode i = 0
 proof
-  let i be Element of the Instructions of Trivial-AMI(N);
-  the Instructions of Trivial-AMI(N) = {[0,{},{}]} by EXTPRO_1:def 1;
+  let i be Element of the InstructionsF of Trivial-AMI(N);
+  the InstructionsF of Trivial-AMI(N) = {[0,{},{}]} by EXTPRO_1:def 1;
   then i = [0,{},{}] by TARSKI:def 1;
   hence thesis by RECDEF_2:def 1;
 end;
@@ -1418,14 +1440,14 @@ begin :: Addenda
 :: from SCMPDS_9, 2008.03.10, A.T.
 
 theorem
-  for N being with_non-empty_elements non empty set, S
-being IC-Ins-separated non empty AMI-Struct over N,
+  for N being with_zero set, S
+being IC-Ins-separated non empty with_non-empty_values AMI-Struct over N,
  i being Instruction of S, l being Element of NAT
  holds JUMP(i) c= NIC(i,l)
 proof
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   S be IC-Ins-separated non
-  empty AMI-Struct over N, i be Instruction of S, l be
+  empty with_non-empty_values AMI-Struct over N, i be Instruction of S, l be
   Element of NAT;
   set X = { NIC(i,k) where k is Element of NAT: not contradiction };
   let x be set;
@@ -1447,25 +1469,25 @@ A2: now
     then i = [0,0,0] by TARSKI:def 1;
     hence contradiction by A1,RECDEF_2:def 1;
   end;
-  the Instructions of M = III by Def11;
+  the InstructionsF of M = III by Def7;
   then i = [1,0,0] or i = [0,0,0] by TARSKI:def 2;
   then
 A3: i in {[1,0,0]} by A1,RECDEF_2:def 1,TARSKI:def 1;
-  consider f be Function of product the Object-Kind of M, product the
-  Object-Kind of M such that
-A4: for s being Element of product the Object-Kind of M
+  consider f be Function of product the_Values_of M, product
+  the_Values_of M such that
+A4: for s being Element of product the_Values_of M
    holds f.s = s+*(0 .-->succ(s.0)) and
-A5: the Execution of M = ([1,0,0] .--> f) +* ([0,0,0] .--> id product the
-  Object-Kind of M) by Def11;
+A5: the Execution of M = ([1,0,0] .--> f) +* ([0,0,0] .--> id product
+  the_Values_of M) by Def7;
 A6: for s being State of M holds f.s = s+*(0 .-->succ(s.0))
  proof let s be State of M;
-  reconsider s as Element of product the Object-Kind of M by CARD_3:107;
+  reconsider s as Element of product the_Values_of M by CARD_3:107;
   f.s = s+*(0 .-->succ(s.0)) by A4;
   hence thesis;
  end;
-A7: the ZeroF of M = 0 by Def11;
+A7: the ZeroF of M = 0 by Def7;
 A8: Start-At(IC s+1,M) = 0 .-->succ(s.0) by A7,NAT_1:38;
-  dom ([0,0,0] .--> id product the Object-Kind of M) = {[0,0,0]}
+  dom ([0,0,0] .--> id product the_Values_of M) = {[0,0,0]}
    by FUNCOP_1:13;
   then (the Execution of M).i = ([1,0,0] .--> f).i by A5,A2,FUNCT_4:11
     .= f by A3,FUNCOP_1:7;
@@ -1477,19 +1499,46 @@ registration let N; let p be PartState of STC N;
  coherence
   proof
    Data-Locations STC N
-      = (the carrier of STC N) \ ({0}) by Def11
-     .= ({0}) \ ({0}) by Def11
+      = (the carrier of STC N) \ ({0}) by Def7
+     .= ({0}) \ ({0}) by Def7
      .= {} by XBOOLE_1:37;
   hence thesis;
   end;
 end;
 
 theorem
- for N being with_non-empty_elements non empty set
- for S being IC-Ins-separated non empty AMI-Struct over N
+ for N being with_zero set
+ for S being IC-Ins-separated non empty with_non-empty_values AMI-Struct over N
  for F being finite preProgram of S
   holds F is really-closed iff
   for s being State of S st IC s in dom F
   for P being Instruction-Sequence of S st F c= P
-   for k being Element of NAT holds IC Comput(P,s,k) in dom F by Lm45;
+   for k being Element of NAT holds IC Comput(P,s,k) in dom F by Lm6;
 
+registration
+  let N be with_zero set;
+  let S be halting IC-Ins-separated non empty with_non-empty_values
+         AMI-Struct over N;
+ cluster parahalting
+    for finite non halt-free non empty
+       NAT-defined (the InstructionsF of S)-valued Function;
+ existence
+  proof
+   take Stop S;
+   let s be 0-started State of S;
+   let P be Instruction-Sequence of S such that
+A1:  Stop S c= P;
+  take 0;
+A2: 0 in dom Stop S by COMPOS_1:3;
+   dom Stop S c= dom P by A1,RELAT_1:11;
+   then
+A3: 0 in dom P by A2;
+A4:  IC s = 0 by MEMSTR_0:def 11;
+   hence IC Comput(P,s,0) in dom P by A3;
+   thus CurInstr(P,Comput(P,s,0))
+        = P/.0 by A4
+       .= P.0 by A3,PARTFUN1:def 6
+       .= (Stop S).0 by A1,A2,GRFUNC_1:2
+       .= halt S by AFINSQ_1:34;
+  end;
+end;

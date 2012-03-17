@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received June 8, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,17 +16,20 @@ environ
 
  vocabularies XBOOLE_0, RELAT_1, PBOOLE, SUBSET_1, CAT_5, CAT_1, MCART_1,
       GRCAT_1, GRAPH_1, STRUCT_0, FUNCT_1, FUNCOP_1, PARTFUN1, ZFMISC_1,
-      ARYTM_0, TARSKI, GROUP_6, CAT_2, FUNCT_3, INDEX_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, PARTFUN1, PBOOLE, FUNCOP_1, STRUCT_0, GRAPH_1, CAT_1,
-      CAT_2, OPPCAT_1, CAT_5;
- constructors PARTFUN1, DOMAIN_1, OPPCAT_1, CAT_5, RELSET_1, PBOOLE;
+      ARYTM_0, TARSKI, GROUP_6, CAT_2, FUNCT_3, INDEX_1, MONOID_0, ISOCAT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
+      BINOP_1, PARTFUN1, PBOOLE, FUNCOP_1, FUNCT_2, STRUCT_0, GRAPH_1, CAT_1,
+      CAT_2, OPPCAT_1, CAT_5, ISOCAT_1;
+ constructors DOMAIN_1, OPPCAT_1, CAT_5, RELSET_1, PBOOLE, XTUPLE_0, ISOCAT_1,
+      REALSET1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, PBOOLE, CAT_2, CAT_5,
-      STRUCT_0, RELSET_1, PRE_CIRC;
+      STRUCT_0, RELSET_1, CAT_1, XTUPLE_0, OPPCAT_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, PBOOLE, CAT_5, FUNCOP_1, CAT_1, BINOP_1, GRAPH_1;
+ definitions TARSKI, FUNCT_1, PBOOLE, CAT_5, FUNCOP_1, CAT_1, BINOP_1, GRAPH_1,
+      XTUPLE_0, FUNCT_2, OPPCAT_1;
  theorems MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, PARTFUN1, FUNCT_4,
-      CAT_1, CAT_2, OPPCAT_1, CAT_5, RELSET_1;
+      CAT_1, CAT_2, OPPCAT_1, CAT_5, RELSET_1, ISOCAT_1;
  schemes CLASSES1, PBOOLE, CAT_5;
 
 begin :: Category Yielding Functions
@@ -56,7 +59,7 @@ end;
 
 theorem
   for C being Categorial Category, f,g being Morphism of C st dom g =
-  cod f holds g*f = [[dom f, cod g], g`2*f`2]
+  cod f holds g(*)f = [[dom f, cod g], g`2*f`2]
 proof
   let C be Categorial Category;
   let f,g be Morphism of C;
@@ -69,7 +72,7 @@ A4: f = [[dom f, cod f], ff] by A1,A2,CAT_5:def 6;
 A5: g`12 = cod g by CAT_5:13;
   then consider gg being Functor of g`11, g`12 such that
 A6: g = [[dom g, cod g], gg] by A1,CAT_5:def 6;
-  thus g*f = [[dom f, cod g], gg*ff] by A3,A1,A5,A2,A6,A4,CAT_5:def 6
+  thus g(*)f = [[dom f, cod g], gg*ff] by A3,A1,A5,A2,A6,A4,CAT_5:def 6
     .= [[dom f, cod g], gg*f`2] by A4,MCART_1:7
     .= [[dom f, cod g], g`2*f`2] by A6,MCART_1:7;
 end;
@@ -86,7 +89,7 @@ A2: now
     let x be set;
     assume x in the carrier of C;
     then reconsider a = x as Object of C;
-A3: a = dom id a by CAT_1:19;
+A3: a = dom id a;
     hence (Obj F).x = dom (F.(id a qua Morphism of C)) by CAT_1:69
       .= (F.(id a qua Morphism of C))`11 by CAT_5:13
       .= dom (G.(id a qua Morphism of C)) by A1,CAT_5:13
@@ -506,7 +509,7 @@ definition
   Function-yielding_on_second ManySortedSet of A,B;
   coherence
   proof
-    [f,g]`1 = f & [f,g]`2 = g by MCART_1:7;
+    [f,g]`1 = f & [f,g]`2 = g;
     hence thesis by Def5,Def6;
   end;
 end;
@@ -695,7 +698,7 @@ definition
   let c be PartFunc of [:B,B:], B;
   let i be Function of A,B;
   given C being Category such that
-A1: C = CatStr(#A, B, F, G, c, i#);
+A1: C = CatStr(#A, B, F, G, c#);
   mode Indexing of F, G, c, i -> Indexing of F,G means
     : Def10:
     (for a being
@@ -705,8 +708,8 @@ Element of A holds it`2.(i.a) = id (it`1.a)) & for m1, m2 being Element of B st
   proof
     set I2 = B --> id C;
     set I1 = A --> C;
-A2: [I1,I2]`1 = I1 by MCART_1:7;
-A3: [I1,I2]`2 = I2 by MCART_1:7;
+A2: [I1,I2]`1 = I1;
+A3: [I1,I2]`2 = I2;
     I2 is ManySortedFunctor of I1*F, I1*G
     proof
       let a be Element of B;
@@ -724,8 +727,10 @@ A4:   I2.a = id C & (I1*F).a = C by FUNCOP_1:7,FUNCT_1:12;
         .= id (I`1.a) by A2,FUNCOP_1:7;
     end;
     let m1, m2 be Element of B;
+     reconsider mm1=m1, mm2=m2 as Morphism of C by A1;
     assume F.m2 = G.m1;
-    then [m2,m1] in dom c by A1,CAT_1:def 5;
+    then cod mm1 = dom mm2 by A1;
+    then [m2,m1] in dom c by A1,CAT_1:def 6;
     then
 A5: I`2.(c.[m2,m1]) = id C by A3,FUNCOP_1:7,PARTFUN1:4;
     I`2.m1 = id C & I`2.m2 = id C by A3,FUNCOP_1:7;
@@ -736,48 +741,53 @@ end;
 definition
   let C be Category;
   mode Indexing of C is Indexing of the Source of C, the Target of C, the Comp
-    of C, the Id of C;
+    of C, IdMap C;
   mode coIndexing of C is Indexing of the Target of C, the Source of C, ~(the
-    Comp of C), the Id of C;
+    Comp of C), IdMap C;
 end;
 
 theorem Th6:
   for C being Category, I being Indexing of the Source of C, the
 Target of C holds I is Indexing of C iff (for a being Object of C holds I`2.id
 a = id (I`1.a)) & for m1, m2 being Morphism of C st dom m2 = cod m1 holds I`2.(
-  m2*m1) = (I`2.m2)*(I`2.m1)
+  m2(*)m1) = (I`2.m2)*(I`2.m1)
 proof
   let C be Category;
   reconsider D = the CatStr of C as Category by CAT_5:1;
   let I be Indexing of the Source of C, the Target of C;
 A1: D = CatStr(# the carrier of C, the carrier' of C, the Source of C, the
-    Target of C, the Comp of C, the Id of C#);
+    Target of C, the Comp of C#);
   hereby
     assume
 A2: I is Indexing of C;
-    hence for a being Object of C holds I`2.id a = id (I`1.a) by A1,Def10;
+   thus for a being Object of C holds I`2.id a = id (I`1.a)
+     proof let a be Object of C;
+ id a = (IdMap C).a by ISOCAT_1:def 12;
+      hence thesis by A1,Def10,A2;
+     end;
     let m1, m2 be Morphism of C;
     assume
 A3: dom m2 = cod m1;
     then I`2.((the Comp of C).(m2,m1)) = (I`2.m2)*(I`2.m1) by A1,A2,Def10;
-    hence I`2.(m2*m1) = (I`2.m2)*(I`2.m1) by A3,CAT_1:16;
+    hence I`2.(m2(*)m1) = (I`2.m2)*(I`2.m1) by A3,CAT_1:16;
   end;
   assume that
 A4: for a being Object of C holds I`2.id a = id (I`1.a) and
-A5: for m1, m2 being Morphism of C st dom m2 = cod m1 holds I`2.(m2*m1)
+A5: for m1, m2 being Morphism of C st dom m2 = cod m1 holds I`2.(m2(*)m1)
   = (I`2.m2)*(I`2.m1);
   thus ex D being Category st D = CatStr(# the carrier of C, the carrier' of C
-    , the Source of C, the Target of C, the Comp of C, the Id of C#) by A1;
+    , the Source of C, the Target of C, the Comp of C#) by A1;
   hereby
     let a be Object of C;
-    thus I`2.((the Id of C).a) = I`2.id a .= id (I`1.a) by A4;
+ id a = (IdMap C).a by ISOCAT_1:def 12;
+    hence I`2.((IdMap C).a) = I`2.id a .= id (I`1.a) by A4;
   end;
   let m1, m2 be Morphism of C;
   assume (the Source of C).m2 = (the Target of C).m1;
   then
 A6: dom m2 = cod m1;
   then
-A7: I`2.(m2*m1) = (I`2.m2)*(I`2.m1) by A5;
+A7: I`2.(m2(*)m1) = (I`2.m2)*(I`2.m1) by A5;
   thus I`2.((the Comp of C).[m2,m1]) = I`2.((the Comp of C).(m2,m1))
     .= (I`2.m2)*(I`2.m1) by A6,A7,CAT_1:16;
 end;
@@ -786,16 +796,20 @@ theorem Th7:
   for C being Category, I being Indexing of the Target of C, the
 Source of C holds I is coIndexing of C iff (for a being Object of C holds I`2.
 id a = id (I`1.a)) & for m1, m2 being Morphism of C st dom m2 = cod m1 holds I
-  `2.(m2*m1) = (I`2.m1)*(I`2.m2)
+  `2.(m2(*)m1) = (I`2.m1)*(I`2.m2)
 proof
   let C be Category;
   let I be Indexing of the Target of C, the Source of C;
 A1: C opp = CatStr(# the carrier of C, the carrier' of C, the Target of C,
-    the Source of C, ~the Comp of C, the Id of C#) by OPPCAT_1:def 1;
+    the Source of C, ~the Comp of C#);
   hereby
     assume
 A2: I is coIndexing of C;
-    hence for a be Object of C holds I`2.id a = id (I`1.a) by A1,Def10;
+    thus for a be Object of C holds I`2.id a = id (I`1.a)
+     proof let a be Object of C;
+ id a = (IdMap C).a by ISOCAT_1:def 12;
+      hence thesis by A1,Def10,A2;
+     end;
     let m1, m2 be Morphism of C;
     assume
 A3: dom m2 = cod m1;
@@ -803,23 +817,24 @@ A3: dom m2 = cod m1;
 A4: [m2,m1] in dom the Comp of C by CAT_1:15;
     I`2.((~the Comp of C).(m1,m2)) = (I`2.m1)*(I`2.m2) by A1,A2,A3,Def10;
     then I`2.((the Comp of C).(m2,m1)) = (I`2.m1)*(I`2.m2) by A4,FUNCT_4:def 2;
-    hence I`2.(m2*m1) = (I`2.m1)*(I`2.m2) by A3,CAT_1:16;
+    hence I`2.(m2(*)m1) = (I`2.m1)*(I`2.m2) by A3,CAT_1:16;
   end;
   assume that
 A5: for a being Object of C holds I`2.id a = id (I`1.a) and
-A6: for m1, m2 being Morphism of C st dom m2 = cod m1 holds I`2.(m2*m1)
+A6: for m1, m2 being Morphism of C st dom m2 = cod m1 holds I`2.(m2(*)m1)
   = (I`2.m1)*(I`2.m2);
   thus ex D being Category st D = CatStr(# the carrier of C, the carrier' of C
-    , the Target of C, the Source of C, ~the Comp of C, the Id of C#) by A1;
+    , the Target of C, the Source of C, ~the Comp of C#) by A1;
   hereby
     let a be Object of C;
-    thus I`2.((the Id of C).a) = I`2.id a .= id (I`1.a) by A5;
+ id a = (IdMap C).a by ISOCAT_1:def 12;
+    hence I`2.((IdMap C).a) = I`2.id a .= id (I`1.a) by A5;
   end;
   let m1, m2 be Morphism of C;
   assume (the Target of C).m2 = (the Source of C).m1;
   then
 A7: dom m1 = cod m2;
-  then I`2.(m1*m2) = (I`2.m2)*(I`2.m1) by A6;
+  then I`2.(m1(*)m2) = (I`2.m2)*(I`2.m1) by A6;
   then
 A8: I`2.((the Comp of C).(m1,m2)) = (I`2.m2)*(I`2.m1) by A7,CAT_1:16;
 A9: [m1,m2] in dom the Comp of C by A7,CAT_1:15;
@@ -827,14 +842,23 @@ A9: [m1,m2] in dom the Comp of C by A7,CAT_1:15;
     .= (I`2.m2)*(I`2.m1) by A8,A9,FUNCT_4:def 2;
 end;
 
+Lm2: for C being Category holds IdMap C = IdMap(C opp)
+ proof let C be Category;
+  thus the carrier of C = the carrier of C opp;
+  let o be Element of the carrier of C;
+  thus (IdMap C).o = id o by ISOCAT_1:def 12
+     .= id(o opp) by OPPCAT_1:71
+     .= (IdMap(C opp)).(o opp) by ISOCAT_1:def 12
+     .= (IdMap(C opp)).o;
+ end;
+
 theorem
   for C being Category, x be set holds x is coIndexing of C iff x is
   Indexing of C opp
 proof
   let C be Category, x be set;
-  C opp = CatStr(# the carrier of C, the carrier' of C, the Target of C,
-    the Source of C, ~the Comp of C, the Id of C#) by OPPCAT_1:def 1;
-  hence thesis;
+A1: IdMap C = IdMap(C opp) by Lm2;
+  thus thesis by A1;
 end;
 
 theorem
@@ -914,16 +938,15 @@ A6: now
       assume that
 A7:   g1 = F(f1) & g2 = F(f2) and
 A8:   dom f2 = cod f1;
-A9:   dom (f2*f1) = dom f1 & cod (f2*f1) = cod f2 by A8,CAT_1:17;
+A9:   dom (f2(*)f1) = dom f1 & cod (f2(*)f1) = cod f2 by A8,CAT_1:17;
 A10:  I`2.f1 is Functor of I`1.dom f1, I`1.cod f1 & I`2.f2 is Functor of
       I`1.dom f2, I`1.cod f2 by Th4;
-      I`2.(f2*f1) = (I`2.f2)*(I`2.f1) by A8,Th6;
-      hence F(f2*f1) = g2*g1 by A7,A8,A10,A9,CAT_5:def 6;
+      I`2.(f2(*)f1) = (I`2.f2)*(I`2.f1) by A8,Th6;
+      hence F(f2(*)f1) = g2(*)g1 by A7,A8,A10,A9,CAT_5:def 6;
     end;
 A11: now
       let a be Object of C;
-      dom id a = a & cod id a = a by CAT_1:19;
-      hence F(id a) = [[I1.a, I1.a], id (I`1.a)] by Th6
+      thus F(id a) = [[I1.a, I1.a], id (I`1.a)] by Th6
         .= id O(a) by CAT_5:def 6;
     end;
     thus ex F being Functor of C,T st for f being Morphism of C holds F.f = F(
@@ -944,7 +967,7 @@ A13: for f being Morphism of C holds F2.f = [[I`1.dom f, I`1.cod f], I `2.f];
   end;
 end;
 
-Lm2: for C being Category, I being Indexing of C for T being TargetCat of I
+Lm3: for C being Category, I being Indexing of C for T being TargetCat of I
 holds Obj (I-functor(C,T)) = I`1
 proof
   let C be Category, I be Indexing of C;
@@ -953,8 +976,8 @@ A1: now
     let x be set;
     assume x in the carrier of C;
     then reconsider a = x as Object of C;
-A2: dom id a = a & cod id a = a by CAT_1:19;
-    (Obj (I-functor(C,T))).a = dom id ((Obj (I-functor(C,T))).a) by CAT_1:19
+A2: dom id a = a & cod id a = a;
+    (Obj (I-functor(C,T))).a = dom id ((Obj (I-functor(C,T))).a)
       .= dom ((I-functor(C,T)).(id a qua Morphism of C)) by CAT_1:68
       .= ((I-functor(C,T) qua Function).id a)`11 by CAT_5:2
       .= [[I`1.a, I`1.a], I`2.id a]`11 by A2,Def11;
@@ -986,8 +1009,8 @@ A2: now
     let x be set;
     assume x in the carrier of C;
     then reconsider a = x as Object of C;
-    thus (Obj (I-functor(C,T1))).x = I`1.a by Lm2
-      .= (Obj (I-functor(C,T2))).x by Lm2;
+    thus (Obj (I-functor(C,T1))).x = I`1.a by Lm3
+      .= (Obj (I-functor(C,T2))).x by Lm3;
   end;
   dom Obj (I-functor(C,T1)) = the carrier of C & dom Obj (I-functor(C,T2))
   = the carrier of C by FUNCT_2:def 1;
@@ -996,11 +1019,11 @@ end;
 
 theorem
   for C being Category, I being Indexing of C for T being TargetCat of I
-  holds Obj (I-functor(C,T)) = I`1 by Lm2;
+  holds Obj (I-functor(C,T)) = I`1 by Lm3;
 
 theorem
   for C being Category, I being Indexing of C for T being TargetCat of I
-  , x being Object of C holds (I-functor(C,T)).x = I`1.x by Lm2;
+  , x being Object of C holds (I-functor(C,T)).x = I`1.x by Lm3;
 
 definition
   let C be Category;
@@ -1026,7 +1049,7 @@ A2: for T being TargetCat of I holds T2 = Image (I-functor(C,T));
     proof
       the carrier of T = rng Obj (I-functor(C,S)) by CAT_5:def 3;
       then
-A3:   the carrier of T = rng I`1 by Lm2;
+A3:   the carrier of T = rng I`1 by Lm3;
       dom I`1 = the carrier of C by PARTFUN1:def 2;
       hence for a being Object of C holds I`1.a is Object of T by A3,
 FUNCT_1:def 3;
@@ -1101,28 +1124,6 @@ definition
   end;
 end;
 
-Lm3: now
-  let C,D be Category;
-  set F = (the carrier of C) --> D, G = (the carrier' of C) --> id D;
-  set H = [F,G];
-  let m be Morphism of C;
-  dom (H`1*(the Source of C)) = the carrier' of C by PARTFUN1:def 2;
-  then
-A1: (H`1*(the Source of C)).m = H`1.((the Source of C).m) by FUNCT_1:12
-    .= F.((the Source of C).m) by MCART_1:7
-    .= D by FUNCOP_1:7;
-  dom (H`1*(the Target of C)) = the carrier' of C by PARTFUN1:def 2;
-  then
-A2: (H`1*(the Target of C)).m = H`1.((the Target of C).m) by FUNCT_1:12
-    .= F.((the Target of C).m) by MCART_1:7
-    .= D by FUNCOP_1:7;
-  H`2.m = G.m by MCART_1:7
-    .= id D by FUNCOP_1:7;
-  hence
-  H`2.m is Functor of (H`1*(the Source of C)).m, (H`1*(the Target of C)).
-  m by A1,A2;
-end;
-
 Lm4: now
   let C,D be Category;
   set F = (the carrier of C) --> D, G = (the carrier' of C) --> id D;
@@ -1131,14 +1132,36 @@ Lm4: now
   dom (H`1*(the Source of C)) = the carrier' of C by PARTFUN1:def 2;
   then
 A1: (H`1*(the Source of C)).m = H`1.((the Source of C).m) by FUNCT_1:12
-    .= F.((the Source of C).m) by MCART_1:7
+    .= F.((the Source of C).m)
     .= D by FUNCOP_1:7;
   dom (H`1*(the Target of C)) = the carrier' of C by PARTFUN1:def 2;
   then
 A2: (H`1*(the Target of C)).m = H`1.((the Target of C).m) by FUNCT_1:12
-    .= F.((the Target of C).m) by MCART_1:7
+    .= F.((the Target of C).m)
     .= D by FUNCOP_1:7;
-  H`2.m = G.m by MCART_1:7
+  H`2.m = G.m
+    .= id D by FUNCOP_1:7;
+  hence
+  H`2.m is Functor of (H`1*(the Source of C)).m, (H`1*(the Target of C)).
+  m by A1,A2;
+end;
+
+Lm5: now
+  let C,D be Category;
+  set F = (the carrier of C) --> D, G = (the carrier' of C) --> id D;
+  set H = [F,G];
+  let m be Morphism of C;
+  dom (H`1*(the Source of C)) = the carrier' of C by PARTFUN1:def 2;
+  then
+A1: (H`1*(the Source of C)).m = H`1.((the Source of C).m) by FUNCT_1:12
+    .= F.((the Source of C).m)
+    .= D by FUNCOP_1:7;
+  dom (H`1*(the Target of C)) = the carrier' of C by PARTFUN1:def 2;
+  then
+A2: (H`1*(the Target of C)).m = H`1.((the Target of C).m) by FUNCT_1:12
+    .= F.((the Target of C).m)
+    .= D by FUNCOP_1:7;
+  H`2.m = G.m
     .= id D by FUNCOP_1:7;
   hence
   H`2.m is Functor of (H`1*(the Target of C)).m, (H`1*(the Source of C)).
@@ -1152,15 +1175,14 @@ of C) --> id D] is Indexing of C & [(the carrier of C) --> D, (the carrier' of
 proof
   let C,D be Category;
   set H = [(the carrier of C) --> D, (the carrier' of C) --> id D], I = H;
-A1: H`2 = (the carrier' of C) --> id D by MCART_1:7;
-A2: H`1 = (the carrier of C) --> D by MCART_1:7;
-A3: now
+A1: H`2 = (the carrier' of C) --> id D;
+A2: now
     let a be Object of C;
-    thus H`2.id a = id D by A1,FUNCOP_1:7
-      .= id (H`1.a) by A2,FUNCOP_1:7;
+    thus H`2.id a = id D by FUNCOP_1:7
+      .= id (H`1.a) by FUNCOP_1:7;
   end;
   for m being Morphism of C holds H`2.m is Functor of (H`1*(the Source of
-  C)).m, (H`1*(the Target of C)).m by Lm3;
+  C)).m, (H`1*(the Target of C)).m by Lm4;
   then
   H`2 is ManySortedFunctor of H`1*(the Source of C), H`1*(the Target of C)
   by Def7;
@@ -1168,13 +1190,13 @@ A3: now
   now
     let m1, m2 be Morphism of C;
     assume dom m2 = cod m1;
-A4: H`2.m1 = id D by A1,FUNCOP_1:7;
-    H`2.(m2*m1) = id D & H`2.m2 = id D by A1,FUNCOP_1:7;
-    hence H`2.(m2*m1) = (H`2.m2)*(H`2.m1) by A4,FUNCT_2:17;
+A3: H`2.m1 = id D by A1,FUNCOP_1:7;
+    H`2.(m2(*)m1) = id D & H`2.m2 = id D by A1,FUNCOP_1:7;
+    hence H`2.(m2(*)m1) = (H`2.m2)*(H`2.m1) by A3,FUNCT_2:17;
   end;
-  hence I is Indexing of C by A3,Th6;
+  hence I is Indexing of C by A2,Th6;
   for m being Morphism of C holds H`2.m is Functor of (H`1*(the Target of
-  C)).m, (H`1*(the Source of C)).m by Lm4;
+  C)).m, (H`1*(the Source of C)).m by Lm5;
   then
   H`2 is ManySortedFunctor of H`1*(the Target of C), H`1*(the Source of C
   ) by Def7;
@@ -1182,11 +1204,11 @@ A4: H`2.m1 = id D by A1,FUNCOP_1:7;
   now
     let m1, m2 be Morphism of C;
     assume dom m2 = cod m1;
-A5: H`2.m1 = id D by A1,FUNCOP_1:7;
-    H`2.(m2*m1) = id D & H`2.m2 = id D by A1,FUNCOP_1:7;
-    hence H`2.(m2*m1) = (H`2.m1)*(H`2.m2) by A5,FUNCT_2:17;
+A4: H`2.m1 = id D by A1,FUNCOP_1:7;
+    H`2.(m2(*)m1) = id D & H`2.m2 = id D by A1,FUNCOP_1:7;
+    hence H`2.(m2(*)m1) = (H`2.m1)*(H`2.m2) by A4,FUNCT_2:17;
   end;
-  hence thesis by A3,Th7;
+  hence thesis by A2,Th7;
 end;
 
 begin :: Indexing vs Functor into Categorial Categories
@@ -1211,12 +1233,12 @@ theorem Th16:
 proof
   let C be Category, D be Categorial Category, F be Functor of C,D;
   set I = [Obj F, pr2 F];
-A1: I`1 = Obj F by MCART_1:7;
+A1: I`1 = Obj F;
 A2: dom F = the carrier' of C by FUNCT_2:def 1;
   dom Obj F = the carrier of C by FUNCT_2:def 1;
   then
 A3: Obj F is ManySortedSet of the carrier of C by PARTFUN1:def 2;
-A4: I`2 = pr2 F by MCART_1:7;
+A4: I`2 = pr2 F;
 A5: dom pr2 F = dom F by MCART_1:def 13;
   then pr2 F is ManySortedSet of the carrier' of C by A2,PARTFUN1:def 2
 ,RELAT_1:def 18;
@@ -1271,10 +1293,10 @@ A16: cod h1 = h1`12 by CAT_5:13;
     dom h1 = h1`11 by CAT_5:13;
     then consider f1 being Functor of h1`11, h1`12 such that
 A17: h1 = [[h1`11, h1`12], f1] by A16,CAT_5:def 6;
-    thus I`2.(m2*m1) = (F.(m2*m1))`2 by A4,A10,MCART_1:def 13
-      .= (h2*h1)`2 by A12,CAT_1:64
+    thus I`2.(m2(*)m1) = (F.(m2(*)m1))`2 by A4,A10,MCART_1:def 13
+      .= (h2(*)h1)`2 by A12,CAT_1:64
       .= [[h1`11, h2`12], f2*f1]`2 by A14,A16,A15,A17,A13,CAT_5:def 6
-      .= f2*f1 by MCART_1:7
+      .= f2*f1
       .= h2`2*f1 by A15,MCART_1:7
       .= h2`2*h1`2 by A17,MCART_1:7
       .= (I`2.m2)*h1`2 by A4,A10,MCART_1:def 13
@@ -1286,7 +1308,7 @@ A17: h1 = [[h1`11, h1`12], f1] by A16,CAT_5:def 6;
     thus I`2.id a = (F.(id a qua Morphism of C))`2 by A4,A10,MCART_1:def 13
       .= (id i qua Morphism of D)`2 by CAT_1:68
       .= [[I`1.a, I`1.a], id (I`1.a)]`2 by A1,CAT_5:def 6
-      .= id (I`1.a) by MCART_1:7;
+      .= id (I`1.a);
   end;
   hence thesis by A11,Th6;
 end;
@@ -1386,14 +1408,14 @@ proof
   set F = I-functor(C,T);
 A1: ex f being (ManySortedSet of the carrier of C), g being ManySortedSet of
   the carrier' of C st I = [f,g] by Def4;
-  thus F-indexing_of C = [I`1, pr2 F] by Lm2
+  thus F-indexing_of C = [I`1, pr2 F] by Lm3
     .= [I`1, I`2] by Th20
     .= I by A1,MCART_1:8;
 end;
 
 begin :: Composing Indexings and Functors
 
-Lm5: now
+Lm6: now
   let c,d be Category, e be Subcategory of d;
   let f be Functor of c,e;
   (incl e)*f = (id e)*f by CAT_2:def 5
@@ -1415,7 +1437,7 @@ A1: Image F is Subcategory of E;
   proof
     reconsider A = Image F as Subcategory of E by A1;
     reconsider G = F as Functor of C, A by CAT_5:8;
-    reconsider G as Functor of C, E by Lm5;
+    reconsider G as Functor of C, E by Lm6;
     take (I-functor(E,rng I)*G)-indexing_of C;
     thus thesis;
   end;
@@ -1428,7 +1450,7 @@ A2: for F9 being Functor of C,E st F9 = F holds J1 = (I-functor(E,rng
     I)*F9)-indexing_of C and
 A3: for F9 being Functor of C,E st F9 = F holds J2 = (I-functor(E,rng
     I)*F9)-indexing_of C;
-    reconsider G as Functor of C, E by Lm5;
+    reconsider G as Functor of C, E by Lm6;
     thus J1 = (I-functor(E,rng I)*G)-indexing_of C by A2
       .= J2 by A3;
   end;
@@ -1446,7 +1468,7 @@ A1: Image F is Subcategory of E and
 A2: Image G is Subcategory of E and
 A3: F = G;
   reconsider F9 = F as Functor of C, Image F by CAT_5:8;
-  reconsider F9 as Functor of C,E by A1,Lm5;
+  reconsider F9 as Functor of C,E by A1,Lm6;
   I*F = (I-functor(E,rng I)*F9)-indexing_of C by A1,Def16;
   hence thesis by A2,A3,Def16;
 end;
@@ -1534,9 +1556,9 @@ Functor of T,E st T = D & G = F holds it = (G*(I-functor(C,T)))-indexing_of C;
     reconsider G = F as Functor of T,E;
     let J1, J2 be Indexing of C;
     assume
-A2: not thesis;
+A1: not thesis;
     then J1 = (G*(I-functor(C,T)))-indexing_of C;
-    hence thesis by A2;
+    hence thesis by A1;
   end;
 end;
 
@@ -1759,3 +1781,6 @@ proof
     .= K*(J*(I-functor(C,D))) by Th37
     .= K*(J*I) by Th32;
 end;
+
+theorem
+ for C being Category holds IdMap C = IdMap(C opp) by Lm2;

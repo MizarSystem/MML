@@ -2,7 +2,7 @@
 ::  by Piotr Rudnicki
 ::
 :: Received June 3, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,26 +15,27 @@
 environ
 
  vocabularies AMI_1, SCMFSA_2, SCMFSA7B, SCMFSA6A, SF_MASTR, GRAPHSP, AMI_3,
-      SCMFSA6B, TURING_1, AOFA_I00, SCMFSA8C, SCMFSA8B, SCMFSA8A, CARD_1,
-      AMISTD_2, RELAT_1, TARSKI, XXREAL_0, ARYTM_3, FSM_1, XBOOLE_0, FUNCT_4,
-      NUMBERS, SCMFSA6C, UNIALG_2, CIRCUIT2, FUNCT_1, MSUALG_1, SUBSET_1,
-      NAT_1, STRUCT_0, FINSET_1, SCMFSA_1, ZFMISC_1, SCMNORM, PRE_FF, ARYTM_1,
-      SFMASTR1, PARTFUN1, RELOC, PBOOLE, FUNCOP_1, COMPOS_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
-      XCMPLX_0, FINSET_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
-      FUNCOP_1, PBOOLE, FUNCT_7, PRE_FF, STRUCT_0, MEMSTR_0, COMPOS_1,
-      EXTPRO_1, AMISTD_1, AMISTD_2, SCMFSA_1, SCMFSA_2, SCMFSA6A, SCMFSA6B,
-      SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, XXREAL_0,
-      SEQ_4;
+      SCMFSA6B, AOFA_I00, SCMFSA8C, SCMFSA8B, SCMFSA8A, CARD_1, AMISTD_2,
+      RELAT_1, TARSKI, XXREAL_0, ARYTM_3, FSM_1, XBOOLE_0, FUNCT_4, NUMBERS,
+      SCMFSA6C, UNIALG_2, CIRCUIT2, FUNCT_1, MSUALG_1, SUBSET_1, NAT_1,
+      STRUCT_0, FINSET_1, EXTPRO_1, PRE_FF, ARYTM_1, SFMASTR1, PARTFUN1, RELOC,
+      FUNCOP_1, COMPOS_1, SCMPDS_4;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
+      FINSET_1, ORDINAL1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
+      FUNCOP_1, PBOOLE, VALUED_1, FUNCT_7, PRE_FF, AMI_2, STRUCT_0, MEMSTR_0,
+      COMPOS_0, COMPOS_1, EXTPRO_1, AMISTD_1, AMISTD_2, SCMFSA_1, SCMFSA_2,
+      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      SCMFSA8C, XXREAL_0, SEQ_4, SCMFSA_M;
  constructors DOMAIN_1, SETWISEO, SEQ_4, PRE_FF, SCM_1, SCMFSA6A, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, RELSET_1, PRE_POLY,
       AMISTD_2, SCMFSA7B, SCMFSA_1, PBOOLE, AMISTD_1, COMPLEX1, INT_2, NAT_D,
-      XXREAL_1, MEMSTR_0;
+      XXREAL_1, MEMSTR_0, SCMFSA_M, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, FINSET_1,
       NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, AMI_5, SCMFSA_2, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C, SCMFSA_9, XXREAL_2,
       RELAT_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1, PBOOLE, FUNCT_4,
-      FUNCOP_1, SCMFSA6A, STRUCT_0, MEMSTR_0;
+      FUNCOP_1, SCMFSA6A, STRUCT_0, MEMSTR_0, FINSEQ_1, AMI_3, COMPOS_0,
+      SCMFSA_M;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -102,13 +103,13 @@ end;
 
 registration
   let i, j be good Instruction of SCM+FSA;
-  cluster i ';' j -> good;
+  cluster i ";" j -> good;
 end;
 
 registration
   let i be good Instruction of SCM+FSA, I be good Program of SCM+FSA;
-  cluster i ';' I -> good;
-  cluster I ';' i -> good;
+  cluster i ";" I -> good;
+  cluster I ";" i -> good;
 end;
 
 registration
@@ -123,7 +124,7 @@ end;
 
 theorem :: SFMASTR1:1
   for a being Int-Location, I being Program of SCM+FSA st not a in
-  UsedIntLoc I holds not I destroys a;
+  UsedIntLoc I holds I does not destroy a;
 
 begin :: Composition of non parahalting macro instructions
 
@@ -136,55 +137,54 @@ reserve s, S for State of SCM+FSA,
   f for FinSeq-Location;
 
 
-
 theorem :: SFMASTR1:2
   I is_halting_on Initialized S,P & I is_closed_on Initialized S,P &
   J is_closed_on IExec(I,P,S),P implies
-  I ';' J is_closed_on Initialized S,P;
+  I ";" J is_closed_on Initialized S,P;
 
 theorem :: SFMASTR1:3  :: SCMFSA6B:27
   I is_halting_on Initialized S,P & J is_halting_on IExec(I,P,S),P & I
   is_closed_on Initialized S,P & J is_closed_on IExec(I,P,S),P implies
-   I ';' J is_halting_on Initialized S,P;
+   I ";" J is_halting_on Initialized S,P;
 
 theorem :: SFMASTR1:4  :: SCMFSA6B:27
  for s being 0-started State of SCM+FSA
   st I is_closed_on s,p & I c= p & p halts_on s
  for m being Element of NAT st m <= LifeSpan(p,s) holds
-   Comput(p, s,m) =  Comput(p+*(I ';' J),s,m);
+   Comput(p, s,m) =  Comput(p+*(I ";" J),s,m);
 
 theorem :: SFMASTR1:5
   Ig is_halting_on Initialized s,p & J is_halting_on IExec(Ig,p,s),p &
   Ig is_closed_on Initialized s,p & J is_closed_on IExec(Ig,p,s),p
- implies LifeSpan(p +* (Ig ';' J),Initialized s)
+ implies LifeSpan(p +* (Ig ";" J),Initialized s)
  = LifeSpan(p +* Ig,Initialized s) + 1 +
    LifeSpan(p +* Ig +* J,Initialized Result(p +* Ig,Initialized s));
 
 theorem :: SFMASTR1:6  :: Main theorem
   Ig is_halting_on Initialized s,p & J is_halting_on IExec(Ig,p,s),p & Ig
 is_closed_on Initialized s,p & J is_closed_on IExec(Ig,p,s),p
-implies IExec(Ig ';' J,p,s) = IExec(J,p,IExec(Ig,p,s))+*
+implies IExec(Ig ";" J,p,s) = IExec(J,p,IExec(Ig,p,s))+*
   Start-At(IC IExec(J,p,IExec(Ig,p,s))+card Ig,SCM+FSA);
 
 theorem :: SFMASTR1:7
   (Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
 is_closed_on Initialized s,p) & (J is parahalting or
     J is_halting_on IExec(Ig,p,s),p
-& J is_closed_on IExec(Ig,p,s),p) implies IExec(Ig ';' J,p,s).a
+& J is_closed_on IExec(Ig,p,s),p) implies IExec(Ig ";" J,p,s).a
  = IExec(J,p,IExec(Ig,p,s)).a;
 
 theorem :: SFMASTR1:8
   (Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
 is_closed_on Initialized s,p) & (J is parahalting or
  J is_halting_on IExec(Ig,p,s),p
-& J is_closed_on IExec(Ig,p,s),p) implies IExec(Ig ';' J,p,s).f
+& J is_closed_on IExec(Ig,p,s),p) implies IExec(Ig ";" J,p,s).f
  = IExec(J,p,IExec(Ig,p,s)).f;
 
 theorem :: SFMASTR1:9
   (Ig is parahalting or Ig is_halting_on Initialized s,p & Ig is_closed_on
   Initialized s,p) & (J is parahalting or J is_halting_on IExec(Ig,p,s),p
    & J
-is_closed_on IExec(Ig,p,s),p) implies DataPart IExec(Ig ';' J,p,s)
+is_closed_on IExec(Ig,p,s),p) implies DataPart IExec(Ig ";" J,p,s)
  = DataPart IExec
   (J,p,IExec(Ig,p,s));
 
@@ -196,33 +196,33 @@ DataPart Initialized IExec(Ig,p,s)
 
 theorem :: SFMASTR1:11
   Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
-is_closed_on Initialized s,p implies IExec(Ig ';' j,p,s).a
+is_closed_on Initialized s,p implies IExec(Ig ";" j,p,s).a
 = Exec(j, IExec(Ig,p,s)).a;
 
 theorem :: SFMASTR1:12
   Ig is parahalting or Ig is_halting_on Initialized s,p & Ig
-is_closed_on Initialized s,p implies IExec(Ig ';' j,p,s).f
+is_closed_on Initialized s,p implies IExec(Ig ";" j,p,s).f
 = Exec(j, IExec(Ig,p,s)).f;
 
 theorem :: SFMASTR1:13
   Ig is parahalting or Ig is_halting_on Initialized s,p & Ig is_closed_on
-Initialized s,p implies DataPart IExec(Ig ';' j,p,s) =
+Initialized s,p implies DataPart IExec(Ig ";" j,p,s) =
 DataPart Exec(j, IExec(Ig,p,s));
 
 theorem :: SFMASTR1:14
   J is parahalting or J is_halting_on Exec(i, Initialized s),p & J
-is_closed_on Exec(i, Initialized s),p implies IExec(i ';' J,p,s).a
+is_closed_on Exec(i, Initialized s),p implies IExec(i ";" J,p,s).a
 = IExec(J,p,Exec(i,Initialized s)).a;
 
 theorem :: SFMASTR1:15
   J is parahalting or J is_halting_on Exec(i, Initialized s),p & J
-is_closed_on Exec(i, Initialized s),p implies IExec(i ';' J,p,s).f
+is_closed_on Exec(i, Initialized s),p implies IExec(i ";" J,p,s).f
 = IExec(J,p,Exec(i,Initialized s)).f;
 
 theorem :: SFMASTR1:16
   J is parahalting or J is_halting_on Exec(i, Initialized s),p & J
   is_closed_on Exec(i, Initialized s),p implies
-  DataPart IExec(i ';' J,p,s) =
+  DataPart IExec(i ";" J,p,s) =
   DataPart IExec(J,p,Exec(i,Initialized s));
 
 begin :: Memory allocation
@@ -231,68 +231,7 @@ reserve L for finite Subset of Int-Locations,
   m, n for Element of NAT;
 
 definition
-  let d be Int-Location;
-  redefine func { d } -> Subset of Int-Locations;
-  let e be Int-Location;
-  redefine func { d, e } -> Subset of Int-Locations;
-  let f be Int-Location;
-  redefine func { d, e, f } -> Subset of Int-Locations;
-  let g be Int-Location;
-  redefine func { d, e, f, g } -> Subset of Int-Locations;
-end;
-
-definition
-  let L be finite Subset of Int-Locations;
-  func RWNotIn-seq L -> Function of NAT, bool NAT means
-:: SFMASTR1:def 2
-
-  it.0 = {k where
-k is Element of NAT : not intloc k in L & k <> 0} & (for i being Element of NAT
-, sn being non empty Subset of NAT st it.i = sn holds it.(i+1) = sn \ {min sn})
-  & for i being Element of NAT holds it.i is infinite;
-end;
-
-registration
-  let L be finite Subset of Int-Locations, n be Element of NAT;
-  cluster (RWNotIn-seq L).n -> non empty;
-end;
-
-theorem :: SFMASTR1:17
-  not 0 in (RWNotIn-seq L).n & for m st m in (RWNotIn-seq L).n
-  holds not intloc m in L;
-
-theorem :: SFMASTR1:18
-  min ((RWNotIn-seq L).n) < min ((RWNotIn-seq L).(n+1));
-
-theorem :: SFMASTR1:19
-  n < m implies min ((RWNotIn-seq L).n) < min ((RWNotIn-seq L).m);
-
-definition
-  let n be Element of NAT, L be finite Subset of Int-Locations;
-  func n-thRWNotIn L -> Int-Location equals
-:: SFMASTR1:def 3
-  intloc min ((RWNotIn-seq L).n);
-end;
-
-notation
-  let n be Element of NAT, L be finite Subset of Int-Locations;
-  synonym n-stRWNotIn L for n-thRWNotIn L;
-  synonym n-ndRWNotIn L for n-thRWNotIn L;
-  synonym n-rdRWNotIn L for n-thRWNotIn L;
-end;
-
-registration
-  let n be Element of NAT, L be finite Subset of Int-Locations;
-  cluster n-thRWNotIn L -> read-write;
-end;
-
-theorem :: SFMASTR1:20
-  not n-thRWNotIn L in L;
-
-theorem :: SFMASTR1:21
-  n <> m implies n-thRWNotIn L <> m-thRWNotIn L;
-
-definition
+ canceled 2;
   let n be Element of NAT, p be preProgram of SCM+FSA;
   func n-thNotUsed p -> Int-Location equals
 :: SFMASTR1:def 4
@@ -313,6 +252,8 @@ end;
 
 begin :: A macro for the Fibonacci sequence
 
+canceled 5;
+
 theorem :: SFMASTR1:22
   a in UsedIntLoc swap(a, b) & b in UsedIntLoc swap(a, b);
 
@@ -321,12 +262,12 @@ definition
   func Fib_macro (N, result) -> Program of SCM+FSA equals
 :: SFMASTR1:def 5
   2-ndRWNotIn
-  UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ';' (SubFrom(result,
-result)) ';' (1-stRWNotIn {N, result} := intloc 0) ';' ((1-stRWNotIn UsedIntLoc
+  UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ";" (SubFrom(result,
+result)) ";" (1-stRWNotIn {N, result} := intloc 0) ";" ((1-stRWNotIn UsedIntLoc
 swap(result, 1-stRWNotIn {N, result})) := (2-ndRWNotIn UsedIntLoc swap(result,
-  1-stRWNotIn {N, result}))) ';' Times(1-stRWNotIn UsedIntLoc swap(result, 1
--stRWNotIn {N, result}), AddTo(result, 1-stRWNotIn {N, result}) ';' swap(result
-  , 1-stRWNotIn {N, result}) ) ';' (N := (2-ndRWNotIn UsedIntLoc swap(result, 1
+  1-stRWNotIn {N, result}))) ";" Times(1-stRWNotIn UsedIntLoc swap(result, 1
+-stRWNotIn {N, result}), AddTo(result, 1-stRWNotIn {N, result}) ";" swap(result
+  , 1-stRWNotIn {N, result}) ) ";" (N := (2-ndRWNotIn UsedIntLoc swap(result, 1
   -stRWNotIn {N, result})));
 end;
 ::  set next = 1-stRWNotIn {N, result};

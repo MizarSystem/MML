@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz and Konrad Raczkowski
 ::
 :: Received January 10, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,15 +19,15 @@ environ
       XREAL_0, ORDINAL1, XXREAL_0, COMPLEX1, NAT_1, TARSKI, VALUED_1, FUNCT_2,
       FUNCOP_1, XXREAL_1, FCONT_1, SQUARE_1, XBOOLE_0, ORDINAL4, LIMFUNC1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, COMPLEX1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, VALUED_0, VALUED_1,
-      SEQ_1, RELSET_1, SEQ_2, PARTFUN1, SQUARE_1, PARTFUN2, RFUNCT_1, RCOMP_1,
-      FCONT_1, FDIFF_1, LIMFUNC1, RECDEF_1;
+      XREAL_0, COMPLEX1, REAL_1, SQUARE_1, NAT_1, FUNCT_1, FUNCT_2, VALUED_0,
+      VALUED_1, SEQ_1, RELSET_1, COMSEQ_2, SEQ_2, PARTFUN1, PARTFUN2, RFUNCT_1,
+      RCOMP_1, FCONT_1, FDIFF_1, LIMFUNC1, RECDEF_1;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3,
       PROB_1, RCOMP_1, PARTFUN2, RFUNCT_1, RFUNCT_2, FCONT_1, LIMFUNC1,
-      FDIFF_1, SEQ_1, VALUED_1, RECDEF_1, RELSET_1, BINOP_2, RVSUM_1;
+      FDIFF_1, SEQ_1, VALUED_1, RECDEF_1, RELSET_1, BINOP_2, RVSUM_1, COMSEQ_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, FDIFF_1, FCONT_3, VALUED_0,
-      VALUED_1, FUNCT_2, FUNCOP_1, SEQ_4;
+      VALUED_1, FUNCT_2, FUNCOP_1, SEQ_4, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -37,16 +37,16 @@ reserve x for set;
 reserve x0,r,r1,r2,g,g1,g2,p for Real;
 reserve n,m,k,l for Element of NAT;
 reserve a,b,d for Real_Sequence;
-reserve h,h1,h2 for convergent_to_0 Real_Sequence;
+reserve h,h1,h2 for non-zero 0-convergent Real_Sequence;
 reserve c,c1 for constant Real_Sequence;
 reserve A for open Subset of REAL;
 reserve f,f1,f2 for PartFunc of REAL,REAL;
-reserve L for LINEAR;
-reserve R for REST;
+reserve L for LinearFunc;
+reserve R for RestFunc;
 
-definition
+registration
   let h;
-  redefine func -h -> convergent_to_0 Real_Sequence;
+  cluster -h -> non-zero convergent;
 end;
 
 theorem :: FDIFF_2:1
@@ -67,7 +67,7 @@ theorem :: FDIFF_2:5
   rng a = {r} & rng b = {r} implies a = b;
 
 theorem :: FDIFF_2:6
-  a is subsequence of h implies a is convergent_to_0 Real_Sequence;
+  a is subsequence of h implies a is 0-convergent non-zero Real_Sequence;
 
 theorem :: FDIFF_2:7
   (for h,c st rng c = {g} & rng (h + c) c= dom f & {g} c= dom f
@@ -100,10 +100,11 @@ c= dom f) & for h,c st rng c = {x0} & rng (h + c) c= dom f holds h"(#)(f/*(h+c)
   - f/*c) is convergent;
 
 theorem :: FDIFF_2:12
-  f is_differentiable_in x0 & diff(f,x0) = g iff (ex N be
-  Neighbourhood of x0 st N c= dom f) & for h,c st rng c = {x0} & rng (h + c) c=
-dom f holds h"(#)(f/*(h+c) - f/*c) is convergent & lim (h"(#)(f/*(h+c) - f/*c))
-  = g;
+  f is_differentiable_in x0 & diff(f,x0) = g iff
+  (ex N be Neighbourhood of x0 st N c= dom f) &
+  for h,c st rng c = {x0} & rng (h + c) c= dom f holds
+  h"(#)(f/*(h+c) - f/*c) is convergent &
+  lim (h"(#)(f/*(h+c) - f/*c)) = g;
 
 theorem :: FDIFF_2:13
   f1 is_differentiable_in x0 & f2 is_differentiable_in f1.x0

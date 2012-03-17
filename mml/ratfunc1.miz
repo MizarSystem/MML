@@ -1,0 +1,3280 @@
+:: Introduction to Rational Functions
+::  by Christoph Schwarzweller
+:: 
+:: Received February 8, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies ARYTM_3, POLYNOM2, POLYNOM1, ARYTM_1, FUNCT_1, FINSEQ_5,
+      POLYNOM3, RELAT_1, RLVECT_1, FINSEQ_1, GCD_1, VECTSP_1, CARD_1, ALGSEQ_1,
+      ALGSTR_1, CARD_3, SGRAPH1, INT_1, FUNCT_4, ALGSTR_0, POLYNOM5, RFINSEQ,
+      MCART_1, HURWITZ, ZFMISC_1, XBOOLE_0, TARSKI, YELLOW_8, LATTICES,
+      XCMPLX_0, VECTSP_2, MSALIMIT, STRUCT_0, SUBSET_1, SUPINF_2, NAT_1,
+      NUMBERS, MESFUNC1, XXREAL_0, RATFUNC1, GROUP_1, FINSEQ_3, BINOP_1,
+      PARTFUN1, ORDINAL4, ORDINAL1;
+ notations TARSKI, SUBSET_1, ORDINAL1, XCMPLX_0, PARTFUN1, XXREAL_0, NAT_D,
+      GROUP_4, FUNCT_7, VECTSP_2, NUMBERS, XTUPLE_0, MCART_1, ALGSTR_0,
+      ALGSTR_1, VECTSP_1, RLVECT_1, ARYTM_3, RELSET_1, FINSEQ_1, FUNCT_1,
+      FUNCT_2, NAT_1, GROUP_1, INT_1, FINSEQ_3, VFUNCT_1, RFINSEQ, NORMSP_1,
+      POLYNOM3, POLYNOM4, FINSEQ_5, POLYNOM5, STRUCT_0, ALGSEQ_1, HURWITZ;
+ constructors BINOP_1, REAL_1, SQUARE_1, VECTSP_2, POLYNOM4, POLYNOM5,
+      XTUPLE_0, ALGSTR_2, HURWITZ, FUNCT_4, RELSET_1, ARYTM_3, FUNCT_7,
+      GROUP_4, NAT_D, VFUNCT_1, RFINSEQ, FINSEQ_5, NAT_1;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, XCMPLX_0, XXREAL_0, XREAL_0,
+      NAT_1, INT_1, MEMBERED, FINSEQ_1, STRUCT_0, VECTSP_1, ALGSTR_1, GCD_1,
+      POLYNOM3, POLYNOM4, POLYNOM5, POLYNOM1, FUNCT_2, VFUNCT_1, CARD_1,
+      RELAT_1, XTUPLE_0;
+ requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
+ definitions FINSEQ_1, POLYNOM3, SQUARE_1, STRUCT_0, ALGSTR_0, VECTSP_1,
+      RFINSEQ, FINSEQ_5, VECTSP_2, XREAL_0, XXREAL_0, ALGSTR_1, ARYTM_3,
+      ALGSEQ_1, POLYNOM4, POLYNOM5, HURWITZ, FINSEQ_3, ALGSTR_2, GROUP_1;
+ theorems GROUP_1, VECTSP_1, ALGSEQ_1, NAT_1, FUNCT_1, FUNCT_2, XREAL_1,
+      VECTSP_2, INT_1, FINSEQ_1, RLVECT_1, POLYNOM4, FUNCT_7, TARSKI, POLYNOM3,
+      POLYNOM2, FUNCOP_1, POLYNOM5, XXREAL_0, FINSEQ_3, ORDINAL1, PARTFUN1,
+      HURWITZ, MCART_1, STRUCT_0, XREAL_0, FINSEQ_4, GROUP_4, ALGSTR_0,
+      FINSEQ_5, RFINSEQ, XTUPLE_0;
+ schemes NAT_1, INT_1;
+
+begin :: Preliminaries
+
+theorem df:
+for L being add-associative right_zeroed right_complementable
+            right-distributive non empty doubleLoopStr
+for a being Element of L
+for p,q being FinSequence of L
+st len p = len q &
+   for i being Element of NAT st i in dom p holds q/.i = a * (p/.i)
+holds Sum q = a * Sum p
+proof
+let L be add-associative right_zeroed right_complementable
+         right-distributive non empty doubleLoopStr,
+    a be Element of L,
+    p,q be FinSequence of L;
+assume AS: len p = len q &
+           for i being Element of NAT st i in dom p
+           holds q/.i = a * (p/.i);
+consider fq being Function of NAT,the carrier of L such that
+A6: Sum q = fq.(len q) and
+A7: fq.0 = 0.L and
+A8: for j being Element of NAT, v being Element of L
+    st j < len q & v = q.(j + 1)
+    holds fq.(j + 1) = fq.j + v by RLVECT_1:def 12;
+consider fp being Function of NAT,the carrier of L such that
+A12: Sum p = fp.(len p) and
+A13: fp.0 = 0.L and
+A14: for j being Element of NAT, v being Element of L
+     st j < len p & v = p.(j + 1)
+     holds fp.(j + 1) = fp.j + v by RLVECT_1:def 12;
+defpred P[Element of NAT] means fq.($1) = a * fp.($1);
+B1: P[0] by A13,A7,VECTSP_1:6;
+B2: for j being Element of NAT st 0 <= j & j < len p
+    holds P[j] implies P[j+1]
+    proof
+    let j be Element of NAT;
+    assume A18: 0 <= j & j < len p;
+    assume A19: P[j];
+    B3: 1 <= j + 1 by NAT_1:11;
+    B4: j + 1 <= len p by A18,NAT_1:13;
+    then j+1 in Seg(len q) by B3,AS;
+    then A20: j+1 in dom q by FINSEQ_1:def 3;
+    j+1 in Seg(len p) by B3,B4;
+    then A20a: j+1 in dom p by FINSEQ_1:def 3;
+    set vq = q/.(j+1), vp = p/.(j+1);
+    A21: vq = q.(j+1) by A20,PARTFUN1:def 6;
+    A21a: vp = p.(j+1) by A20a,PARTFUN1:def 6;
+    fq.(j+1) = (a * fp.j) + vq by A19,AS,A21,A18,A8
+            .= (a * fp.j) + (a * vp) by AS,A20a
+            .= a * (fp.j + vp) by VECTSP_1:def 2
+            .= a * fp.(j+1) by A21a,A18,A14;
+    hence P[j+1];
+    end;
+for j being Element of NAT st 0 <= j & j <= len p
+  holds P[j] from INT_1:sch 7(B1,B2);
+hence thesis by AS,A12,A6;
+end;
+
+theorem del1a:
+for L being add-associative right_zeroed right_complementable
+            right-distributive non empty doubleLoopStr
+for f being FinSequence of L
+for i,j being Element of NAT
+st i in dom f & j = i-1 holds Ins(Del(f,i),j,f/.i) = f
+proof
+let L be add-associative right_zeroed right_complementable
+         right-distributive non empty doubleLoopStr;
+let f be FinSequence of L;
+let i,j be Element of NAT;
+set g = Ins(Del(f,i),j,f/.i);
+assume AS: i in dom f & j = i-1;
+then consider n being Nat such that
+H0: len f = n+1 & len Del(f,i) = n by FINSEQ_3:104;
+dom f = Seg(n+1) by H0,FINSEQ_1:def 3;
+then consider ii being Element of NAT such that
+H1: i = ii & 1 <= ii & ii <= n + 1 by AS;
+i-1 < i-0 by XREAL_1:15;
+then j < n+1 by AS,H1,XXREAL_0:2;
+then H2: j <= n by NAT_1:13;
+H3: len g = (len Del(f,i) + 1) by FINSEQ_5:69;
+now let k be Nat;
+  assume B: 1 <= k & k <= len g;
+  then k in Seg(len g) by FINSEQ_1:1;
+  then D: k in dom g by FINSEQ_1:def 3;
+  now per cases by XXREAL_0:1;
+  suppose C: k < i;
+    then k+1 <= i by NAT_1:13;
+    then k+1-1 <= i - 1 by XREAL_1:9;
+    then 1 <= k & k <= len(Del(f,i)|j) by B,AS,H2,H0,FINSEQ_1:59;
+    then k in Seg(len(Del(f,i)|j)) by FINSEQ_1:1;
+    then D1: k in dom(Del(f,i)|j) by FINSEQ_1:def 3;
+    k < n+1 by H1,C,XXREAL_0:2;
+    then k <= n by NAT_1:13;
+    then k in Seg(len(Del(f,i))) by H0,B,FINSEQ_1:1;
+    then D2: k in dom(Del(f,i)) by FINSEQ_1:def 3;
+    g/.k = Del(f,i)/.k by D1,FINSEQ_5:72
+             .= Del(f,i).k by D2,PARTFUN1:def 6
+             .= f.k by C,FINSEQ_3:110;
+    hence g.k = f.k by D,PARTFUN1:def 6;
+    end;
+  suppose C: k = i;
+    then k = j + 1 by AS;
+    then E: g/.k = f/.i by H0,H2,FINSEQ_5:73;
+    thus g.k = g/.k by D,PARTFUN1:def 6
+            .= f.k by AS,C,E,PARTFUN1:def 6;
+    end;
+  suppose C: k > i;
+    then reconsider k1 = k-1 as Element of NAT by H1,XXREAL_0:2,INT_1:5;
+    C2: k-1 <= n+1-1 by B,H0,H3,XREAL_1:9;
+    1 < k1+1 by C,H1,XXREAL_0:2;
+    then 1 <= k1 by NAT_1:13;
+    then k1 in Seg(n) by C2;
+    then D1: k1 in dom(Del(f,i)) by H0,FINSEQ_1:def 3;
+    i < k1 + 1 by C;
+    then C1: j+1 <= k-1 by AS,NAT_1:13;
+    then g/.(k1+1) = Del(f,i)/.k1 by C2,H0,FINSEQ_5:74
+                  .= Del(f,i).k1 by D1,PARTFUN1:def 6
+                  .= f.(k1+1) by C1,C2,H0,AS,FINSEQ_3:111;
+    hence f.k = g.k by D,PARTFUN1:def 6;
+    end;
+  end;
+  hence g.k = f.k;
+  end;
+hence thesis by H0,FINSEQ_5:69,FINSEQ_1:14;
+end;
+
+theorem del1:
+for L being add-associative right_zeroed right_complementable
+            associative unital right-distributive commutative
+            non empty doubleLoopStr
+for f being FinSequence of L
+for i being Element of NAT st i in dom f
+holds Product f = (f/.i) * Product Del(f,i)
+proof
+let L be add-associative right_zeroed right_complementable
+associative unital right-distributive commutative
+non empty doubleLoopStr;
+let f be FinSequence of L;
+let i be Element of NAT;
+assume AS: i in dom f;
+then i in Seg(len f) by FINSEQ_1:def 3;
+then consider ii being Element of NAT such that
+H: ii = i & 1 <= ii & ii <= len f;
+reconsider j = i-1 as Element of NAT by H,INT_1:5;
+set g = Del(f,i);
+thus Product f = Product( Ins(g,j,f/.i) ) by AS,del1a
+         .= Product((g|j)^<*f/.i*>) * Product(g/^j) by GROUP_4:5
+         .= (Product(g|j) * f/.i) * Product(g/^j) by GROUP_4:6
+         .= f/.i * (Product(g|j) * Product(g/^j)) by GROUP_1:def 3
+         .= f/.i * (Product((g|j)^(g/^j))) by GROUP_4:5
+         .= f/.i * Product g by RFINSEQ:8;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable
+         well-unital associative left-distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let x,y be non zero Element of L;
+cluster x / y -> non zero;
+coherence
+proof
+  x <> 0.L & y <> 0.L;
+  then y" * y = 1.L by VECTSP_1:def 10;
+  then y" <> 0.L by VECTSP_1:7;
+  hence x / y <> 0.L by VECTSP_2:def 1;
+end;
+end;
+
+registration
+cluster domRing-like -> almost_left_cancelable
+        for add-associative right_zeroed right_complementable
+            right-distributive non empty doubleLoopStr;
+coherence
+proof
+let L be add-associative right_zeroed right_complementable
+         right-distributive non empty doubleLoopStr;
+assume B: L is domRing-like;
+ let x be Element of L;
+ assume A: x <> 0.L;
+ let y,z be Element of L;
+ assume x*y = x*z;
+ then (x*y) - (x*z) = 0.L by RLVECT_1:15;
+ then x * (y-z) = 0.L by VECTSP_1:11;
+ then y - z = 0.L by A,B,VECTSP_2:def 1;
+ hence y = z by RLVECT_1:21;
+end;
+cluster domRing-like -> almost_right_cancelable
+        for add-associative right_zeroed right_complementable
+            left-distributive non empty doubleLoopStr;
+coherence
+proof
+let L be add-associative right_zeroed right_complementable
+         left-distributive non empty doubleLoopStr;
+ assume B: L is domRing-like;
+ let x be Element of L;
+ assume A: x <> 0.L;
+ let y,z be Element of L;
+ assume y*x = z*x;
+ then (y*x) - (z*x) = 0.L by RLVECT_1:15;
+ then (y-z) * x = 0.L by VECTSP_1:13;
+ then y - z = 0.L by A,B,VECTSP_2:def 1;
+ hence y = z by RLVECT_1:21;
+end;
+end;
+
+registration
+let x,y be Integer;
+cluster max(x,y) -> integer;
+coherence by XXREAL_0:16;
+cluster min(x,y) -> integer;
+coherence by XXREAL_0:15;
+end;
+
+theorem maxx:
+for x,y,z being Integer holds max(x+y,x+z) = x + max(y,z)
+proof
+let x,y,z be Integer;
+per cases;
+suppose A: y <= z;
+  then x+y <= x+z by XREAL_1:6;
+  hence max(x+y,x+z) = x+z by XXREAL_0:def 10
+                    .= x + max(y,z) by A,XXREAL_0:def 10;
+  end;
+suppose A: y > z;
+  then x+y > x+z by XREAL_1:8;
+  hence max(x+y,x+z) = x+y by XXREAL_0:def 10
+                    .= x + max(y,z) by A,XXREAL_0:def 10;
+  end;
+end;
+
+
+begin :: More on Polynomials
+
+definition
+let L be non empty ZeroStr;
+let p be Polynomial of L;
+attr p is zero means :defzer:
+  p = 0_.(L);
+attr p is constant means :defconst:
+  deg p <= 0;
+end;
+
+registration
+let L be non trivial ZeroStr;
+cluster non zero for Polynomial of L;
+existence
+ proof
+ now assume AS: not(ex x being Element of the carrier of L st x <> 0.L);
+   now let x,y be Element of the carrier of L;
+     thus y = 0.L by AS .= x by AS;
+     end;
+   hence contradiction by STRUCT_0:def 10;
+   end;
+ then consider x being Element of the carrier of L such that
+ C: x <> 0.L;
+ set p = 0_.(L)+*(0,x);
+ ex n being Nat st for i being Nat st i >= n holds p.i = 0.L
+   proof
+   take 1;
+   now let i be Nat;
+     assume AS: i >= 1;
+     B: i in NAT by ORDINAL1:def 12;
+     thus p.i = (0_.(L)).i by AS,FUNCT_7:32
+             .= 0.L by B,FUNCOP_1:7;
+     end;
+   hence thesis;
+   end;
+ then reconsider p as Polynomial of L by ALGSEQ_1:def 1;
+ take p;
+ now let i be Nat;
+   assume i < 1;
+   then A: i = 0 by NAT_1:14;
+   i in NAT by ORDINAL1:def 12;
+   then 0 in dom(0_.L) by A,FUNCT_2:def 1;
+   hence p.i <> 0.L by C,A,FUNCT_7:31;
+   end;
+ then len p <> 0 by ALGSEQ_1:9;
+ hence p <> 0_.L by POLYNOM4:3;
+ end;
+end;
+
+registration
+let L be non empty ZeroStr;
+cluster 0_.(L) -> zero constant;
+coherence
+ proof
+ deg 0_.(L) = -1 by HURWITZ:20;
+ hence thesis by defconst,defzer;
+ end;
+end;
+
+registration
+let L be non degenerated multLoopStr_0;
+cluster 1_.(L) -> non zero;
+coherence
+ proof
+ A: (1_.(L)).0 = 1.L by POLYNOM3:30;
+ (0_.(L)).0 = 0.L by FUNCOP_1:7;
+ hence thesis by defzer,A;
+ end;
+end;
+
+registration
+let L be non empty multLoopStr_0;
+cluster 1_.(L) -> constant;
+coherence
+ proof
+ set p = 1_.(L);
+ now per cases;
+ suppose I: 0.L = 1.L;
+   A: dom p = NAT by FUNCT_2:def 1 .= dom(0_.(L)) by FUNCT_2:def 1;
+   now let x be set;
+     assume x in dom p;
+     then reconsider xx = x as Element of NAT;
+     B: (0_.(L)).xx = 0.L by FUNCOP_1:7;
+     xx = 0 or xx <> 0;
+     hence p.x = (0_.(L)).x by I,B,POLYNOM3:30;
+   end;
+   hence thesis by A,FUNCT_1:2;
+   end;
+ suppose I: 0.L <> 1.L;
+ now let i be Nat;
+   assume AS: i >= 1;
+     B: i in NAT by ORDINAL1:def 12;
+     thus p.i = (0_.(L)).i by AS,FUNCT_7:32
+             .= 0.L by B,FUNCOP_1:7;
+   end;
+ then D: 1 is_at_least_length_of p by ALGSEQ_1:def 2;
+ now let m be Nat;
+   assume AS: m is_at_least_length_of p;
+   now assume m < 1;
+     then m < 1 + 0;
+     then m <= 0 by NAT_1:13;
+     then E: p.0 = 0.L by AS,ALGSEQ_1:def 2;
+     dom(0_.(L)) = NAT by FUNCOP_1:13;
+     hence contradiction by I,E,FUNCT_7:31;
+     end;
+   hence 1 <= m;
+   end;
+ then len p = 1 by D,ALGSEQ_1:def 3;
+ then deg p = 0;
+ hence thesis by defconst;
+ end;
+ end;
+ hence thesis;
+ end;
+end;
+
+registration
+let L be non empty ZeroStr;
+cluster zero -> constant for Polynomial of L;
+coherence
+ proof
+ let p be Polynomial of L;
+ assume p is zero;
+ then p = 0_.(L) by defzer;
+ hence thesis;
+ end;
+end;
+
+registration
+let L be non empty ZeroStr;
+cluster non constant -> non zero for Polynomial of L;
+coherence;
+end;
+
+registration
+let L be non trivial ZeroStr;
+cluster non constant for Polynomial of L;
+existence
+ proof
+ now assume AS: not(ex x being Element of the carrier of L st x <> 0.L);
+   now let x,y be Element of the carrier of L;
+     thus y = 0.L by AS .= x by AS;
+     end;
+   hence contradiction by STRUCT_0:def 10;
+   end;
+ then consider x being Element of the carrier of L such that
+ C: x <> 0.L;
+ set p = (0_.(L)+*(0,x))+*(1,x);
+ ex n being Nat st for i being Nat st i >= n holds p.i = 0.L
+   proof
+   take 2;
+   now let i be Nat;
+     assume AS: i >= 2;
+     then C: 1 <> i;
+     B: i in NAT by ORDINAL1:def 12;
+     thus p.i = (0_.(L)+*(0,x)).i by C,FUNCT_7:32
+             .= (0_.(L)).i by AS,FUNCT_7:32
+             .= 0.L by B,FUNCOP_1:7;
+     end;
+   hence thesis;
+   end;
+ then reconsider p as Polynomial of L by ALGSEQ_1:def 1;
+ take p;
+ now let i be Nat;
+   assume AS: i >= 2;
+     then C: 1 <> i;
+     B: i in NAT by ORDINAL1:def 12;
+     thus p.i = (0_.(L)+*(0,x)).i by C,FUNCT_7:32
+             .= (0_.(L)).i by AS,FUNCT_7:32
+             .= 0.L by B,FUNCOP_1:7;
+   end;
+ then D: 2 is_at_least_length_of p by ALGSEQ_1:def 2;
+ now let m be Nat;
+   assume AS: m is_at_least_length_of p;
+   now assume m < 2;
+     then m < 1 + 1;
+     then m <= 1 by NAT_1:13;
+     then E: p.1 = 0.L by AS,ALGSEQ_1:def 2;
+     dom(0_.(L)) = NAT by FUNCOP_1:13;
+     then dom(0_.(L)+*(0,x)) = NAT by FUNCT_7:30;
+     hence contradiction by C,E,FUNCT_7:31;
+     end;
+   hence 2 <= m;
+   end;
+ then len p = 2 by D,ALGSEQ_1:def 3;
+ then deg p = 1;
+ hence thesis by defconst;
+ end;
+end;
+
+registration
+let L be well-unital non degenerated non empty doubleLoopStr;
+let z be Element of L;
+let k be Element of NAT;
+cluster rpoly(k,z) -> non zero;
+coherence
+  proof
+  deg rpoly(k,z) = k by HURWITZ:27;
+  then rpoly(k,z) <> 0_.(L) by HURWITZ:20;
+  hence thesis by defzer;
+  end;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         non degenerated doubleLoopStr;
+cluster Polynom-Ring(L) -> non degenerated;
+coherence
+  proof
+  set S = Polynom-Ring(L);
+  0.S = 0_.(L) & 1.S = 1_.(L) by POLYNOM3:def 10;
+  hence thesis by STRUCT_0:def 8;
+  end;
+end;
+
+registration
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+cluster Polynom-Ring(L) -> domRing-like;
+coherence
+ proof
+ set Q = Polynom-Ring(L);
+  let x,y be Element of Q;
+  assume aa: x*y = 0.Q;
+  assume AS: x <> 0.Q & y <> 0.Q;
+  reconsider p = x as Polynomial of L by POLYNOM3:def 10;
+  reconsider q = y as Polynomial of L by POLYNOM3:def 10;
+  p <> 0_.(L) by AS,POLYNOM3:def 10;
+  then reconsider p as non zero Polynomial of L by defzer;
+  q <> 0_.(L) by AS,POLYNOM3:def 10;
+  then reconsider q as non zero Polynomial of L by defzer;
+  p <> 0_.(L);
+  then deg p <> -1 by HURWITZ:20;
+  then Ap: len p <> 0;
+  len p + 1 > 0 + 1 by Ap,XREAL_1:8;
+  then Dp: len p >= 1 by NAT_1:13;
+  then len p - 1 >= 1 - 1 by XREAL_1:9;
+  then Cp: len p -' 1 = len p - 1 by XREAL_0:def 2;
+  then reconsider lp = len p - 1 as Nat;
+  q <> 0_.(L);
+  then deg q <> -1 by HURWITZ:20;
+  then Aq: len q <> 0;
+  len q + 1 > 0 + 1 by Aq,XREAL_1:8;
+  then Dq: len q >= 1 by NAT_1:13;
+  then Eq: len q - 1 >= 1 - 1 by XREAL_1:9;
+  then len q -' 1 = len q - 1 by XREAL_0:def 2;
+  then reconsider lq = len q - 1 as Nat;
+  set m = len p + len q - 2;
+  len p + len q >= 1 + 1 by Dp,Dq,XREAL_1:7;
+  then len p + len q - 2 >= 2 - 2 by XREAL_1:9;
+  then reconsider m as Element of NAT by INT_1:3;
+  consider r being FinSequence of the carrier of L such that
+  X: len r = m+1 & (p*'q).m = Sum r &
+     for k be Element of NAT st k in dom r holds r.k = p.(k-'1) * q.(m+1-'k)
+     by POLYNOM3:def 9;
+  (len p + len q - 2) + 1 - len p = lq;
+  then X1a: (m+1)-' len p = lq by XREAL_0:def 2;
+  X6: len p + 0 <= len p + (len q - 1) by Eq,XREAL_1:6;
+  then len p in Seg(len r) by Dp,X;
+  then X1: len p in dom r by FINSEQ_1:def 3;
+  then X2: r.(len p) = p.lp * q.lq by X1a,Cp,X;
+  X4: now let k be Element of NAT;
+      assume Y: k in dom r & k <> len p;
+      now per cases;
+      suppose k > len p;
+        then k >= len p + 1 by NAT_1:13;
+        then H: k-1 >= (len p + 1) - 1 by XREAL_1:9;
+        k-'1 >= len p by H,XREAL_0:def 2;
+        then p.(k-'1)= 0.L by ALGSEQ_1:8;
+        then p.(k-'1) * q.(m+1-'k) = 0.L by VECTSP_1:7;
+        hence r.k = 0.L by Y,X;
+        end;
+      suppose U:  k <= len p;
+        k < len p by Y,U,XXREAL_0:1;
+        then (m+1) - k > (m+1) - len p by XREAL_1:10;
+        then m+1 - k >= len q - 1 + 1 by INT_1:7;
+        then m+1 -' k >= len q by XREAL_0:def 2;
+        then q.(m+1-'k)= 0.L by ALGSEQ_1:8;
+        then p.(k-'1) * q.(m+1-'k) = 0.L by VECTSP_1:6;
+        hence r.k = 0.L by Y,X;
+       end;
+      end;
+      hence r.k = 0.L;
+      end;
+  X3: now let i be Element of NAT;
+      assume Y: i in dom r & i <> len p;
+      then i in Seg(len r) by FINSEQ_1:def 3;
+      then 1 <= i & i <= len r by FINSEQ_1:1;
+      hence r/.i = r.i by FINSEQ_4:15 .= 0.L by Y,X4;
+      end;
+  X5: (p*'q).m = r/.(len p) by X,X1,X3,POLYNOM2:3
+              .= p.lp * q.lq by X2,X6,Dp,X,FINSEQ_4:15;
+  len p = lp + 1;
+  then XX: p.lp <> 0.L by ALGSEQ_1:10;
+  len q = lq + 1;
+  then q.lq <> 0.L by ALGSEQ_1:10;
+  then X6: (p*'q).m <> 0.L by XX,X5,VECTSP_2:def 1;
+  (0_.(L)).m = 0.L by FUNCOP_1:7;
+  then p*'q <> 0.Q by X6,POLYNOM3:def 10;
+  hence thesis by aa,POLYNOM3:def 10;
+ end;
+end;
+
+theorem
+for L being add-associative right_zeroed right_complementable
+            right-distributive associative non empty doubleLoopStr
+for p,q being Polynomial of L
+for a being Element of L
+holds (a * p) *' q = a * (p *' q)
+proof
+let L be add-associative right_zeroed right_complementable
+         right-distributive associative non empty doubleLoopStr;
+let p,q be Polynomial of L;
+let a being Element of L;
+set f = (a * p) *' q, g = a * (p *' q);
+A: dom f = NAT by FUNCT_2:def 1 .= dom g by FUNCT_2:def 1;
+now let i be set;
+  assume i in dom f;
+  then reconsider n = i as Element of NAT;
+  consider fr being FinSequence of the carrier of L such that
+  A1: len fr = n+1 & f.i = Sum fr &
+      for k being Element of NAT st k in dom fr
+      holds fr.k = (a*p).(k-'1) * q.(n+1-'k) by POLYNOM3:def 9;
+  consider fa being FinSequence of the carrier of L such that
+  A2: len fa = n+1 & (p *' q).i = Sum fa &
+      for k being Element of NAT st k in dom fa
+      holds fa.k = p.(k-'1) * q.(n+1-'k) by POLYNOM3:def 9;
+  Seg(len fa) = dom fr by A1,A2,FINSEQ_1:def 3;
+  then A4: dom fa = dom fr by FINSEQ_1:def 3;
+  A3: now let k be Element of NAT;
+      assume A3a: k in dom fa;
+      then fa.k = fa/.k by PARTFUN1:def 6;
+      then reconsider x = fa.k as Element of L;
+      thus fr/.k = fr.k by A3a,A4,PARTFUN1:def 6
+        .= (a*p).(k-'1) * q.(n+1-'k) by A4,A3a,A1
+        .= (a * p.(k-'1)) * q.(n+1-'k) by POLYNOM5:def 3
+        .= a* (p.(k-'1) * q.(n+1-'k)) by GROUP_1:def 3
+        .= a * x by A3a,A2
+        .= a * (fa/.k) by A3a,PARTFUN1:def 6;
+      end;
+  g.n = a * (Sum fa) by A2,POLYNOM5:def 3
+     .= f.n by A3,A2,A1,df;
+  hence f.i = g.i;
+  end;
+hence thesis by A,FUNCT_1:2;
+end;
+
+theorem
+for L being add-associative right_zeroed right_complementable
+            right-distributive commutative associative
+            non empty doubleLoopStr
+for p,q being Polynomial of L
+for a being Element of L
+holds p *' (a * q) = a * (p *' q)
+proof
+let L be add-associative right_zeroed right_complementable
+right-distributive commutative associative non empty doubleLoopStr;
+let p,q be Polynomial of L;
+let a being Element of L;
+set f = p *' (a * q) , g = a * (p *' q);
+A: dom f = NAT by FUNCT_2:def 1 .= dom g by FUNCT_2:def 1;
+now let i be set;
+  assume i in dom f;
+  then reconsider n = i as Element of NAT;
+  consider fr being FinSequence of the carrier of L such that
+  A1: len fr = n+1 & f.i = Sum fr &
+      for k being Element of NAT st k in dom fr
+      holds fr.k = p.(k-'1) * (a*q).(n+1-'k) by POLYNOM3:def 9;
+  consider fa being FinSequence of the carrier of L such that
+  A2: len fa = n+1 & (p *' q).i = Sum fa &
+      for k being Element of NAT st k in dom fa
+      holds fa.k = p.(k-'1) * q.(n+1-'k) by POLYNOM3:def 9;
+  Seg(len fa) = dom fr by A1,A2,FINSEQ_1:def 3;
+  then A4: dom fa = dom fr by FINSEQ_1:def 3;
+  A3: now let k be Element of NAT;
+      assume A3a: k in dom fa;
+      then fa.k = fa/.k by PARTFUN1:def 6;
+      then reconsider x = fa.k as Element of L;
+      thus fr/.k = fr.k by A3a,A4,PARTFUN1:def 6
+        .= p.(k-'1) * (a*q).(n+1-'k) by A4,A3a,A1
+        .= p.(k-'1) * (a * q.(n+1-'k)) by POLYNOM5:def 3
+        .= a* (p.(k-'1) * q.(n+1-'k)) by GROUP_1:def 3
+        .= a * x by A3a,A2
+        .= a * (fa/.k) by A3a,PARTFUN1:def 6;
+      end;
+  g.n = a * (Sum fa) by A2,POLYNOM5:def 3
+     .= f.n by A3,df,A2,A1;
+  hence f.i = g.i;
+  end;
+hence thesis by A,FUNCT_1:2;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable
+         well-unital commutative associative distributive
+         almost_left_invertible non trivial doubleLoopStr;
+let p be non zero Polynomial of L;
+let a be non zero Element of L;
+cluster a * p -> non zero;
+coherence
+ proof
+ a <> 0.L;
+ then len(a*p) = len p by POLYNOM5:25;
+ then a*p <> 0_.(L) by POLYNOM4:3,POLYNOM4:5;
+ hence thesis by defzer;
+ end;
+end;
+
+registration
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+let p1,p2 be non zero Polynomial of L;
+cluster p1 *' p2 -> non zero;
+coherence
+proof
+reconsider x1 = p1 as Element of Polynom-Ring(L) by POLYNOM3:def 10;
+reconsider x2 = p2 as Element of Polynom-Ring(L) by POLYNOM3:def 10;
+p1 <> 0_.(L); then
+A: x1 <> 0.Polynom-Ring(L) by POLYNOM3:def 10;
+p2 <> 0_.(L); then
+x2 <> 0.Polynom-Ring(L) by POLYNOM3:def 10;
+then x1 * x2 <> 0.Polynom-Ring(L) by A,VECTSP_2:def 1;
+then p1 *' p2 <> 0.Polynom-Ring(L) by POLYNOM3:def 10;
+then p1 *' p2 <> 0_.(L) by POLYNOM3:def 10;
+hence thesis by defzer;
+end;
+end;
+
+theorem thequiv1:
+for L being add-associative right_zeroed right_complementable distributive
+            Abelian domRing-like non trivial doubleLoopStr
+for p1,p2 being Polynomial of L
+for p3 being non zero Polynomial of L
+st p1 *' p3 = p2 *' p3 holds p1 = p2
+proof
+let L be add-associative right_zeroed right_complementable distributive
+         Abelian domRing-like non trivial doubleLoopStr;
+let p1,p2 be Polynomial of L;
+let p3 be non zero Polynomial of L;
+assume AS: p1 *' p3 = p2 *' p3;
+reconsider x1 = p1 as Element of Polynom-Ring(L) by POLYNOM3:def 10;
+reconsider x2 = p2 as Element of Polynom-Ring(L) by POLYNOM3:def 10;
+reconsider x3 = p3 as Element of Polynom-Ring(L) by POLYNOM3:def 10;
+p3 <> 0_.(L); then
+A: x3 <> 0.Polynom-Ring(L) by POLYNOM3:def 10;
+B: x1 * x3 = p2 *' p3 by AS,POLYNOM3:def 10
+          .= x2 * x3 by POLYNOM3:def 10;
+x3 is right_mult-cancelable by A,ALGSTR_0:def 37;
+hence thesis by B,ALGSTR_0:def 21;
+end;
+
+registration
+let L be non trivial ZeroStr;
+let p be non zero Polynomial of L;
+cluster degree p -> natural;
+coherence
+ proof
+ p <> 0_.(L);
+ then deg p <> -1 by HURWITZ:20;
+ then len p <> 0;
+ then deg p + 1 > 0;
+ then deg p in NAT by INT_1:7,INT_1:3;
+ hence thesis;
+ end;
+end;
+
+theorem degrat2:
+for L being add-associative right_zeroed right_complementable
+            unital right-distributive non empty doubleLoopStr
+for p being Polynomial of L st deg p = 0
+for x being Element of L holds eval(p,x) <> 0.L
+proof
+let L be add-associative right_zeroed right_complementable
+         unital right-distributive non empty doubleLoopStr;
+let p be Polynomial of L;
+assume AS: deg p = 0;
+let x be Element of L;
+assume eval(p,x) = 0.L;
+then x is_a_root_of p by POLYNOM5:def 6;
+then p is with_roots by POLYNOM5:def 7;
+hence contradiction by AS,HURWITZ:24;
+end;
+
+theorem div1:
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible non degenerated doubleLoopStr
+for p being Polynomial of L
+for x being Element of L
+holds eval(p,x) = 0.L iff rpoly(1,x) divides p
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative commutative distributive
+         almost_left_invertible non degenerated doubleLoopStr;
+let p be Polynomial of L;
+let x be Element of L;
+A: now assume rpoly(1,x) divides p;
+   then p mod rpoly(1,x) = 0_.(L) by HURWITZ:def 7;
+   then (p - (p div rpoly(1,x)) *' rpoly(1,x))
+                               + (p div rpoly(1,x)) *' rpoly(1,x)
+         = (p div rpoly(1,x)) *' rpoly(1,x) by POLYNOM3:28;
+   then B: (p div rpoly(1,x)) *' rpoly(1,x)
+     = p + (-(p div rpoly(1,x)) *' rpoly(1,x)
+                 + (p div rpoly(1,x)) *' rpoly(1,x)) by POLYNOM3:26
+    .= p + ( ((p div rpoly(1,x)) *' rpoly(1,x))
+           - ((p div rpoly(1,x)) *' rpoly(1,x)) )
+    .= p + 0_.(L) by POLYNOM3:29
+    .= p by POLYNOM3:28;
+   C: eval(rpoly(1,x),x) = x - x by HURWITZ:29 .= 0.L by RLVECT_1:15;
+   thus eval(p,x) = eval(p div rpoly(1,x),x) * 0.L by C,B,POLYNOM4:24
+                 .= 0.L by VECTSP_1:6;
+   end;
+   eval(p,x) = 0.L implies rpoly(1,x) divides p by HURWITZ:35,POLYNOM5:def 6;
+ hence thesis by A;
+end;
+
+theorem div3:
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible domRing-like
+            non degenerated doubleLoopStr
+for p,q being Polynomial of L
+for x being Element of L st rpoly(1,x) divides (p*'q)
+holds rpoly(1,x) divides p or rpoly(1,x) divides q
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative commutative distributive domRing-like
+         almost_left_invertible non degenerated doubleLoopStr;
+let p,q be Polynomial of L;
+let x be Element of L;
+assume rpoly(1,x) divides (p*'q);
+then eval(p*'q,x) = 0.L by div1;
+then A: eval(p,x) * eval(q,x) = 0.L by POLYNOM4:24;
+per cases by A,VECTSP_2:def 1;
+suppose eval(p,x) = 0.L;
+  hence thesis by div1;
+  end;
+suppose eval(q,x) = 0.L;
+  hence thesis by div1;
+  end;
+end;
+
+theorem div4:
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible non degenerated doubleLoopStr
+for f being FinSequence of Polynom-Ring(L)
+st for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z)
+for p being Polynomial of L st p = Product f
+holds p <> 0_.(L)
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative commutative distributive
+         almost_left_invertible non degenerated doubleLoopStr;
+let f be FinSequence of Polynom-Ring(L);
+assume AS1:
+for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z);
+let p be Polynomial of L;
+assume AS2: p = Product f;
+defpred P[Nat] means
+for f being FinSequence of Polynom-Ring(L)
+st len f = $1 &
+   for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z)
+for p being Polynomial of L st p = Product f
+holds p <> 0_.(L);
+
+now let f be FinSequence of Polynom-Ring(L);
+  assume A1: len f = 0 &
+  for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z);
+  let p be Polynomial of L;
+  assume A2: p = Product f;
+  f = <*>(the carrier of Polynom-Ring(L)) by A1;
+  then p = 1_(Polynom-Ring(L)) by A2,GROUP_4:8
+        .= 1.(Polynom-Ring(L));
+  then p <> 0.(Polynom-Ring(L));
+  hence p <> 0_.(L) by POLYNOM3:def 10;
+  end;
+then IA: P[0];
+IS:now let n be Nat;
+  assume IV: P[n];
+  now let f be FinSequence of Polynom-Ring(L);
+  assume A1: len f = n+1 &
+  for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z);
+  let p be Polynomial of L;
+  assume A2: p = Product f;
+  f <> {} by A1;
+  then consider g being FinSequence, u being set such that
+  A6: f = g ^ <*u*> by FINSEQ_1:46;
+  reconsider g as FinSequence of Polynom-Ring(L) by A6,FINSEQ_1:36;
+  A2c: dom f = Seg(n+1) by A1,FINSEQ_1:def 3;
+  1 <= n+1 by NAT_1:11;
+  then A2a: n+1 in dom f by A2c;
+  A2c: n+1 = len g + len <*u*> by A1,A6,FINSEQ_1:22
+          .= len g + 1 by FINSEQ_1:40;
+  then f.(n+1) = u by A6,FINSEQ_1:42;
+  then consider z being Element of L such that
+  U: u = rpoly(1,z) by A1,A2a;
+  reconsider u as Element of Polynom-Ring(L) by U,POLYNOM3:def 10;
+  reconsider q = Product g as Polynomial of L by POLYNOM3:def 10;
+  A4: Product f = (Product g) * u by A6,GROUP_4:6;
+  A3: u <> 0.(Polynom-Ring(L)) by U,POLYNOM3:def 10;
+  now let i be Nat;
+    assume G: i in dom g;
+    then H: g.i = f.i by A6,FINSEQ_1:def 7;
+    dom g c= dom f by A6,FINSEQ_1:26;
+    hence ex z being Element of L st g.i = rpoly(1,z) by G,H,A1;
+    end;
+  then q <> 0_.(L) by IV,A2c;
+  then q <> 0.(Polynom-Ring(L)) by POLYNOM3:def 10;
+  then p <> 0.(Polynom-Ring(L)) by A2,A3,A4,VECTSP_2:def 1;
+  hence p <> 0_.(L) by POLYNOM3:def 10;
+  end;
+  hence P[n+1];
+ end;
+I: for n being Nat holds P[n] from NAT_1:sch 2(IA,IS);
+ len f is Nat;
+hence thesis by AS1,AS2,I;
+end;
+
+theorem div2:
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible domRing-like
+            non degenerated doubleLoopStr
+for f being FinSequence of Polynom-Ring(L)
+st for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z)
+for p being Polynomial of L st p = Product f
+for x being Element of L
+holds eval(p,x) = 0.L iff
+      ex i being Nat st i in dom f & f.i = rpoly(1,x)
+proof
+let L be Field;
+let f be FinSequence of Polynom-Ring(L);
+assume AS1: for i being Nat st i in dom f
+            ex z being Element of L st f.i = rpoly(1,z);
+let p be Polynomial of L;
+assume AS2: p = Product f;
+let x be Element of L;
+A: now assume ex i being Nat st i in dom f & f.i = rpoly(1,x); then
+   consider i being Nat such that
+   A1: i in dom f & f.i = rpoly(1,x);
+   reconsider g = Del(f,i) as FinSequence of Polynom-Ring(L) by FINSEQ_3:105;
+   reconsider q = Product g as Polynomial of L by POLYNOM3:def 10;
+   A2: f/.i = rpoly(1,x) by A1,PARTFUN1:def 6;
+   Product f = (f/.i) * Product g by A1,del1;
+   then p = rpoly(1,x) *' q by AS2,A2,POLYNOM3:def 10;
+   then A3: eval(p,x) = eval(rpoly(1,x),x) * eval(q,x) by POLYNOM4:24;
+   eval(rpoly(1,x),x) = x - x by HURWITZ:29 .= 0.L by RLVECT_1:15;
+   hence eval(p,x) = 0.L by A3,VECTSP_1:7;
+   end;
+now assume A0: eval(p,x) = 0.L;
+  defpred P[Nat] means
+  for f being FinSequence of Polynom-Ring(L)
+  st len f = $1 & for i being Nat st i in dom f
+                  ex z being Element of L st f.i = rpoly(1,z)
+  for p being Polynomial of L st p = Product f
+  for x being Element of L holds
+  eval(p,x) = 0.L implies ex i being Nat st i in dom f & f.i = rpoly(1,x);
+
+now let f be FinSequence of Polynom-Ring(L);
+  assume A1: len f = 0 & for i being Nat st i in dom f
+                         ex z being Element of L st f.i = rpoly(1,z);
+  let p be Polynomial of L;
+  assume A2: p = Product f;
+  let x be Element of L;
+  assume A3: eval(p,x) = 0.L;
+  f = <*>(the carrier of Polynom-Ring(L)) by A1;
+  then p = 1_(Polynom-Ring(L)) by A2,GROUP_4:8
+        .= 1_.(L) by POLYNOM3:def 10;
+  hence ex i being Nat st i in dom f & f.i = rpoly(1,x) by A3,POLYNOM4:18;
+  end;
+then IA: P[0];
+IS:now let n be Nat;
+  assume IV: P[n];
+  now let f be FinSequence of Polynom-Ring(L);
+  assume A1: len f = n+1 & for i being Nat st i in dom f
+                           ex z being Element of L st f.i = rpoly(1,z);
+  let p be Polynomial of L;
+  assume A2: p = Product f;
+  let x be Element of L;
+  assume A3: eval(p,x) = 0.L;
+  f <> {} by A1;
+  then consider g being FinSequence, u being set such that
+  A6: f = g ^ <*u*> by FINSEQ_1:46;
+  reconsider g as FinSequence of Polynom-Ring(L) by A6,FINSEQ_1:36;
+  A2c: dom f = Seg(n+1) by A1,FINSEQ_1:def 3;
+  1 <= n+1 by NAT_1:11;
+  then A2a: n+1 in dom f by A2c;
+  A2c: n+1 = len g + len <*u*> by A1,A6,FINSEQ_1:22
+          .= len g + 1 by FINSEQ_1:40;
+  A2b: f.(n+1) = u by A2c,A6,FINSEQ_1:42;
+  then consider z being Element of L such that
+  U: u = rpoly(1,z) by A1,A2a;
+  reconsider u as Element of Polynom-Ring(L) by U,POLYNOM3:def 10;
+  reconsider q = Product g as Polynomial of L by POLYNOM3:def 10;
+  Product f = (Product g) * u by A6,GROUP_4:6
+           .= q *' rpoly(1,z) by U,POLYNOM3:def 10;
+  then A4: eval(p,x)
+         = eval(q,x) * eval(rpoly(1,z),x) by A2,POLYNOM4:24;
+  A10: now let i be Nat;
+       assume C1: i in dom g;
+       C2: dom g c= dom f by A6,FINSEQ_1:26;
+       g.i = f.i by C1,A6,FINSEQ_1:def 7;
+       hence ex z being Element of L st g.i = rpoly(1,z) by C1,C2,A1;
+       end;
+  now per cases by A4,A3,VECTSP_2:def 1;
+  suppose eval(q,x) = 0.L;
+    then consider i being Nat such that
+    B1: i in dom g & g.i = rpoly(1,x) by A2c,A10,IV;
+    B2: dom g c= dom f by A6,FINSEQ_1:26;
+    f.i = rpoly(1,x) by B1,A6,FINSEQ_1:def 7;
+    hence ex i being Nat st i in dom f & f.i = rpoly(1,x) by B2,B1;
+    end;
+  suppose eval(rpoly(1,z),x) = 0.L;
+    then x - z = 0.L by HURWITZ:29;
+    then x = z by RLVECT_1:21;
+    hence ex i being Nat st i in dom f & f.i = rpoly(1,x)
+       by A2a,A2b,U;
+    end;
+  end;
+  hence ex i being Nat st i in dom f & f.i = rpoly(1,x);
+  end;
+  hence P[n+1];
+  end;
+I: for n being Nat holds P[n] from NAT_1:sch 2(IA,IS);
+len f is Nat;
+hence ex i being Nat st i in dom f & f.i = rpoly(1,x) by A0,AS1,AS2,I;
+  end;
+hence thesis by A;
+end;
+
+
+begin :: Common Roots of Polynomials
+
+definition
+let L be unital non empty doubleLoopStr;
+let p1,p2 be Polynomial of L;
+let x be Element of L;
+pred x is_a_common_root_of p1,p2 means :root1:
+  x is_a_root_of p1 & x is_a_root_of p2;
+end;
+
+definition
+let L be unital non empty doubleLoopStr;
+let p1,p2 be Polynomial of L;
+pred p1,p2 have_a_common_root means :root2:
+ex x being Element of L st x is_a_common_root_of p1,p2;
+end;
+
+notation
+let L be unital non empty doubleLoopStr;
+let p1,p2 be Polynomial of L;
+synonym p1,p2 have_common_roots for p1,p2 have_a_common_root;
+antonym p1,p2 have_no_common_roots for p1,p2 have_a_common_root;
+end;
+
+theorem root3:
+for L being Abelian add-associative right_zeroed right_complementable
+            unital distributive non empty doubleLoopStr
+for p being Polynomial of L
+for x being Element of L
+st x is_a_root_of p holds x is_a_root_of (-p)
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         unital distributive non empty doubleLoopStr;
+let p be Polynomial of L;
+let x be Element of L;
+assume AS: x is_a_root_of p;
+eval(-p,x) = - eval(p,x) by POLYNOM4:20
+          .= - 0.L by AS,POLYNOM5:def 6
+          .= 0.L by RLVECT_1:12;
+hence x is_a_root_of -p by POLYNOM5:def 6;
+end;
+
+theorem root4:
+for L being Abelian add-associative right_zeroed right_complementable
+            unital left-distributive non empty doubleLoopStr
+for p1,p2 being Polynomial of L
+for x being Element of L
+st x is_a_common_root_of p1,p2 holds x is_a_root_of p1 + p2
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         unital left-distributive non empty doubleLoopStr;
+let p1,p2 be Polynomial of L;
+let x be Element of L;
+assume x is_a_common_root_of p1,p2;
+then x is_a_root_of p1 & x is_a_root_of p2 by root1;
+then AS: eval(p1,x) = 0.L & eval(p2,x) = 0.L by POLYNOM5:def 6;
+eval(p1+p2,x) = 0.L + 0.L by AS,POLYNOM4:19
+             .= 0.L by RLVECT_1:def 4;
+hence x is_a_root_of p1+p2 by POLYNOM5:def 6;
+end;
+
+theorem
+for L being Abelian add-associative right_zeroed right_complementable
+            unital distributive non empty doubleLoopStr
+for p1,p2 being Polynomial of L
+for x being Element of L
+st x is_a_common_root_of p1,p2 holds x is_a_root_of -(p1 + p2)
+by root3,root4;
+
+theorem
+for L being Abelian add-associative right_zeroed right_complementable
+            unital distributive non empty doubleLoopStr
+for p,q being Polynomial of L
+for x being Element of L
+st x is_a_common_root_of p,q holds x is_a_root_of p+q
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         unital distributive non empty doubleLoopStr;
+let p,q be Polynomial of L;
+let x be Element of L;
+assume x is_a_common_root_of p,q;
+then H: x is_a_root_of p & x is_a_root_of q by root1;
+then H1: eval(p,x) = 0.L by POLYNOM5:def 6;
+H2: eval(q,x) = 0.L by H,POLYNOM5:def 6;
+eval(p+q,x) = 0.L + 0.L by H1,H2,POLYNOM4:19
+           .= 0.L by RLVECT_1:def 4;
+hence thesis by POLYNOM5:def 6;
+end;
+
+theorem
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible non trivial doubleLoopStr
+for p1,p2 being Polynomial of L
+st p1 divides p2 & p1 is with_roots holds p1,p2 have_common_roots
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+  well-unital associative commutative distributive almost_left_invertible
+ non trivial doubleLoopStr;
+let p1,p2 be Polynomial of L;
+assume AS: p1 divides p2 & p1 is with_roots;
+per cases;
+suppose A: p1 = 0_.(L);
+  p2 mod p1 = 0_.(L) by AS,HURWITZ:def 7;
+  then 0_.(L) = p2 - 0_.(L)by A,POLYNOM3:34
+             .= p2 + 0_.(L) by HURWITZ:9;
+  then B: p2 = 0_.(L) by POLYNOM3:28;
+  eval(0_.(L),0.L) = 0.L by POLYNOM4:17;
+  then 0.L is_a_root_of 0_.(L) by POLYNOM5:def 6;
+  then 0.L is_a_common_root_of p1,p2 by A,B,root1;
+  hence thesis by root2;
+  end;
+suppose p1 <> 0_.(L);
+  then consider s being Polynomial of L such that
+  A: s *' p1 = p2 by AS,HURWITZ:34;
+  consider x being Element of L such that
+  B: x is_a_root_of p1 by AS,POLYNOM5:def 7;
+  C: eval(p1,x) = 0.L by B,POLYNOM5:def 6;
+  eval(p2,x) = eval(s,x) * eval(p1,x) by A,POLYNOM4:24
+            .= 0.L by C,VECTSP_1:6;
+  then x is_a_root_of p2 by POLYNOM5:def 6;
+  then x is_a_common_root_of p1,p2 by B,root1;
+  hence thesis by root2;
+  end;
+end;
+
+definition
+let L be unital non empty doubleLoopStr;
+let p,q be Polynomial of L;
+func Common_Roots(p,q) -> Subset of L equals
+  { x where x is Element of L : x is_a_common_root_of p,q };
+coherence
+ proof
+ set M = { x where x is Element of L : x is_a_common_root_of p,q };
+ now let u be set;
+   assume u in M;
+   then ex x being Element of L st u = x & x is_a_common_root_of p,q;
+   hence u in the carrier of L;
+   end;
+ hence M is Subset of L by TARSKI:def 3;
+ end;
+end;
+
+
+begin :: Normalized Polynomials
+
+definition
+let L be non empty ZeroStr;
+let p be Polynomial of L;
+func Leading-Coefficient(p) -> Element of L equals
+  p.(len p-'1);
+coherence;
+end;
+
+notation
+let L be non empty ZeroStr;
+let p be Polynomial of L;
+synonym LC p for Leading-Coefficient(p);
+end;
+
+registration
+let L be non trivial doubleLoopStr;
+let p be non zero Polynomial of L;
+cluster LC p -> non zero;
+coherence
+proof
+p <> 0_.(L);
+then len p <> 0 by POLYNOM4:5;
+then 0 + 1 < len p + 1 by XREAL_1:8;
+then len p >= 1 by NAT_1:13;
+then (len p-'1) + 1 = len p by XREAL_1:235;
+then p.(len p-'1) <> 0.L by ALGSEQ_1:10;
+hence thesis by STRUCT_0:def 12;
+end;
+end;
+
+theorem lcp1:
+for L being add-associative right_zeroed right_complementable
+            well-unital commutative associative distributive
+            almost_left_invertible non empty doubleLoopStr
+for p being Polynomial of L
+for a being Element of L holds LC(a * p) = a * LC(p)
+proof
+let L be add-associative right_zeroed right_complementable
+         well-unital commutative associative distributive
+         almost_left_invertible non empty doubleLoopStr;
+let p be Polynomial of L;
+let a be Element of L;
+per cases;
+suppose A: a = 0.L;
+  then B: a * LC(p) = 0.L by VECTSP_1:6;
+  a * p = 0_.(L) by A,POLYNOM5:26;
+  hence thesis by B,FUNCOP_1:7;
+  end;
+suppose A: a <> 0.L;
+  thus LC(a * p) = a * (p.(len(a*p)-'1)) by POLYNOM5:def 3
+                .= a * LC(p) by A,POLYNOM5:25;
+  end;
+end;
+
+definition
+let L be non empty doubleLoopStr;
+let p be Polynomial of L;
+attr p is normalized means :defnormp:
+  LC p = 1.L;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable
+         well-unital commutative associative distributive
+         almost_left_invertible non trivial doubleLoopStr;
+let p be non zero Polynomial of L;
+cluster (1.L / LC p) * p -> normalized;
+coherence
+proof
+A: LC p <> 0.L;
+LC((1.L / LC p) * p) = (1.L / LC p) * LC(p) by lcp1
+                    .= 1.L * ((LC p)" * LC(p)) by GROUP_1:def 3
+                    .= 1.L * 1.L by A,VECTSP_1:def 10
+                    .= 1.L by VECTSP_1:def 4;
+hence thesis by defnormp;
+end;
+end;
+
+registration
+let L be Field;
+let p be non zero Polynomial of L;
+cluster NormPolynomial(p) -> normalized;
+coherence
+proof
+set q = NormPolynomial p;
+A: p <> 0_.L;
+then q.(len p-'1) = 1.L by POLYNOM5:56,POLYNOM4:5;
+then LC q = 1.L by A,POLYNOM5:57,POLYNOM4:5;
+hence thesis by defnormp;
+end;
+end;
+
+
+begin :: Rational Functions
+
+definition
+let L be non trivial multLoopStr_0;
+mode rational_function of L means :defratf:
+  ex p1 being Polynomial of L st
+  ex p2 being non zero Polynomial of L st it = [p1,p2];
+existence
+ proof
+ take [the Polynomial of L,the non zero Polynomial of L];
+ thus thesis;
+ end;
+end;
+
+definition
+let L be non trivial multLoopStr_0;
+let p1 be Polynomial of L;
+let p2 be non zero Polynomial of L;
+redefine func [p1,p2] -> rational_function of L;
+coherence by defratf;
+end;
+
+definition
+let L be non trivial multLoopStr_0;
+let z be rational_function of L;
+redefine func z`1 -> Polynomial of L;
+coherence
+ proof
+ consider p1 being Polynomial of L such that
+ H: ex p2 being non zero Polynomial of L st z = [p1,p2] by defratf;
+ consider p2 being non zero Polynomial of L such that
+ H1: z = [p1,p2] by H;
+ thus thesis by H1,XTUPLE_0:def 2;
+ end;
+redefine func z`2 -> non zero Polynomial of L;
+coherence
+ proof
+ consider p1 being Polynomial of L such that
+ H: ex p2 being non zero Polynomial of L st z = [p1,p2] by defratf;
+ consider p2 being non zero Polynomial of L such that
+ H1: z = [p1,p2] by H;
+ thus thesis by H1,XTUPLE_0:def 3;
+ end;
+end;
+
+definition
+let L be non trivial multLoopStr_0;
+let z be rational_function of L;
+attr z is zero means :defzerrat:
+  z`1 = 0_.(L);
+end;
+
+registration
+let L be non trivial multLoopStr_0;
+cluster non zero for rational_function of L;
+existence
+ proof
+ set p1 = the non zero Polynomial of L;
+ set p2 = the non zero Polynomial of L;
+ take [p1,p2];
+ H: p1 = [p1,p2]`1;
+ p1 <> 0_.(L);
+ hence thesis by H,defzerrat;
+ end;
+end;
+
+theorem ttt:
+for L being non trivial multLoopStr_0
+for z being rational_function of L holds z = [z`1,z`2]
+proof
+let L be non trivial multLoopStr_0;
+let z be rational_function of L;
+consider p1 being Polynomial of L such that
+H1: ex p2 being non zero Polynomial of L st z = [p1,p2] by defratf;
+consider p2 being non zero Polynomial of L such that
+H2: z = [p1,p2] by H1;
+z`1 = p1 & z`2 = p2 by H2,XTUPLE_0:def 2,XTUPLE_0:def 3;
+hence thesis by H2;
+end;
+
+definition
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+let z be rational_function of L;
+attr z is irreducible means :defirred:
+   z`1, z`2 have_no_common_roots;
+end;
+
+notation
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+let z be rational_function of L;
+antonym z is reducible for z is irreducible;
+end;
+
+definition
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+let z be rational_function of L;
+attr z is normalized means :defnorm:
+  z is irreducible & z`2 is normalized;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+cluster normalized -> irreducible for rational_function of L;
+coherence by defnorm;
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+cluster LC(z`2) -> non zero;
+coherence;
+end;
+
+definition
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+func NormRationalFunction z -> rational_function of L equals
+ [(1.L / LC(z`2)) * z`1, (1.L / LC(z`2)) * z`2];
+coherence;
+end;
+
+notation
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+synonym NormRatF z for NormRationalFunction z;
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be non zero rational_function of L;
+cluster NormRationalFunction z -> non zero;
+coherence
+proof
+z`1 <> 0_.(L) by defzerrat; then
+reconsider z1 = z`1 as non zero Polynomial of L by defzer;
+(1.L / LC(z`2)) * z1 is non zero;
+then (NormRatF z)`1 <> 0_.(L) by XTUPLE_0:def 2;
+hence thesis by defzerrat;
+end;
+end;
+
+definition
+let L be non degenerated multLoopStr_0;
+func 0._(L) -> rational_function of L equals
+  [ 0_.(L), 1_.(L) ];
+coherence;
+func 1._(L) -> rational_function of L equals
+  [ 1_.(L), 1_.(L) ];
+coherence;
+end;
+
+registration
+  let L be add-associative right_zeroed right_complementable distributive
+           associative well-unital non degenerated doubleLoopStr;
+ cluster 0._(L) -> normalized;
+ coherence
+ proof
+ set z = [ 0_.(L), 1_.(L) ]; set p1 = z`1, p2 = z`2;
+ now assume p1, p2 have_a_common_root;
+   then consider x being Element of L such that
+   B: x is_a_common_root_of p1,p2 by root2;
+   x is_a_root_of p2 by B,root1;
+   then eval(p2,x) = 0.L by POLYNOM5:def 6;
+   hence contradiction by POLYNOM4:18;
+   end;
+ then B: z is irreducible by defirred;
+ C: len(1_.(L)) = 1 by POLYNOM4:4;
+ len(1_.(L))-'1 = 1 - 1 by C,XREAL_0:def 2;
+ then LC(1_.(L)) = 1.L by POLYNOM3:30;
+ then p2 is normalized by defnormp;
+ hence thesis by B,defnorm;
+end;
+end;
+
+registration
+let L be non degenerated multLoopStr_0;
+cluster 1._(L) -> non zero;
+coherence
+proof
+ (1._(L))`1 <> 0_.(L) by XTUPLE_0:def 2;
+ hence thesis by defzerrat;
+end;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster 1._(L) -> irreducible;
+coherence
+ proof
+ set z = [ 1_.(L), 1_.(L) ];
+ set p1 = z`1, p2 = z`2;
+ now
+   assume p1, p2 have_a_common_root;
+   then consider x being Element of L such that
+B: x is_a_common_root_of p1,p2 by root2;
+   x is_a_root_of p2 by B,root1;
+   then eval(p2,x) = 0.L by POLYNOM5:def 6;
+   hence contradiction by POLYNOM4:18;
+ end;
+ hence thesis by defirred;
+end;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster irreducible non zero for rational_function of L;
+existence
+ proof
+ take 1._(L);
+ thus thesis;
+ end;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         Abelian associative well-unital non degenerated doubleLoopStr;
+let x be Element of L;
+cluster [ rpoly(1,x), rpoly(1,x) ] -> reducible non zero
+        for rational_function of L;
+coherence
+proof
+set z = [ rpoly(1,x), rpoly(1,x) ];
+C: [ rpoly(1,x), rpoly(1,x) ]`1 = rpoly(1,x);
+x is_a_root_of rpoly(1,x) by HURWITZ:30;
+then x is_a_root_of z`1;
+then x is_a_common_root_of z`1,z`2 by root1;
+then z`1, z`2 have_common_roots by root2;
+then z is reducible by defirred;
+hence thesis by C,defzerrat;
+end;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         Abelian associative well-unital non degenerated doubleLoopStr;
+cluster reducible non zero for rational_function of L;
+existence
+proof
+set x = the Element of L;
+take z = [ rpoly(1,x), rpoly(1,x) ];
+thus thesis;
+end;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster normalized for rational_function of L;
+existence
+ proof
+ take 0._(L);
+ thus thesis;
+ end;
+end;
+
+registration
+let L be non degenerated multLoopStr_0;
+cluster 0._(L) -> zero;
+coherence
+proof
+(0._(L))`1 = 0_.(L) by XTUPLE_0:def 2;
+hence thesis by defzerrat;
+end;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster 1._(L) -> normalized;
+coherence
+ proof
+ len(1_.(L)) = 1 by POLYNOM4:4;
+ then len(1_.(L))-'1 = 1 - 1 by XREAL_0:def 2;
+ then LC(1_.(L)) = 1.L by POLYNOM3:30;
+ then [ 1_.(L), 1_.(L) ]`2 is normalized by defnormp;
+ hence 1._(L) is normalized by defnorm;
+ end;
+end;
+
+definition
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+let p,q be rational_function of L;
+func p + q -> rational_function of L equals
+  [ p`1 *' q`2 + p`2 *' q`1, p`2 *' q`2];
+coherence;
+end;
+
+definition
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+let p,q be rational_function of L;
+func p *' q -> rational_function of L equals
+  [ p`1 *' q`1, p`2  *' q`2];
+coherence;
+end;
+
+theorem tw2:
+for L being add-associative right_zeroed right_complementable
+            well-unital commutative associative distributive
+            almost_left_invertible non trivial doubleLoopStr
+for p being rational_function of L
+for a being non zero Element of L
+holds [a * p`1, a * p`2] is irreducible iff p is irreducible
+proof
+let L be add-associative right_zeroed right_complementable
+         well-unital commutative associative distributive
+         almost_left_invertible non trivial doubleLoopStr;
+let p be rational_function of L;
+let a be non zero Element of L;
+set ap = [a * p`1, a * p`2];
+A: now assume A0: p is irreducible;
+   assume ap is reducible;
+   then ap`1, ap`2 have_common_roots by defirred;
+   then consider x being Element of L such that
+   A1: x is_a_common_root_of ap`1, ap`2 by root2;
+   x is_a_root_of ap`1 & x is_a_root_of ap`2 by A1,root1;
+   then A2: eval(ap`1,x) = 0.L & eval(ap`2,x) = 0.L by POLYNOM5:def 6;
+   then eval(a * p`1,x) = 0.L;
+   then a * eval(p`1,x) = 0.L by POLYNOM5:30;
+   then eval(p`1,x) = 0.L by VECTSP_2:def 1;
+   then A3: x is_a_root_of p`1 by POLYNOM5:def 6;
+   eval(a * p`2,x) = 0.L by A2;
+   then a * eval(p`2,x) = 0.L by POLYNOM5:30;
+   then eval(p`2,x) = 0.L by VECTSP_2:def 1;
+   then x is_a_root_of p`2 by POLYNOM5:def 6;
+   then x is_a_common_root_of p`1,p`2 by A3,root1;
+   then p`1,p`2 have_common_roots by root2;
+   hence [a * p`1, a * p`2] is irreducible by A0,defirred;
+   end;
+now assume A0: ap is irreducible;
+   assume p is reducible;
+   then p`1, p`2 have_common_roots by defirred;
+   then consider x being Element of L such that
+   A1: x is_a_common_root_of p`1, p`2 by root2;
+   x is_a_root_of p`1 & x is_a_root_of p`2 by A1,root1;
+   then A2: eval(p`1,x) = 0.L & eval(p`2,x) = 0.L by POLYNOM5:def 6;
+   then a * eval(p`1,x) = 0.L by VECTSP_1:6;
+   then eval(a * p`1,x) = 0.L by POLYNOM5:30;
+   then eval(ap`1,x) = 0.L;
+   then A3: x is_a_root_of ap`1 by POLYNOM5:def 6;
+   a * eval(p`2,x) = 0.L by A2,VECTSP_1:6;
+   then eval(a * p`2,x) = 0.L by POLYNOM5:30;
+   then eval(ap`2,x) = 0.L;
+   then x is_a_root_of ap`2 by POLYNOM5:def 6;
+   then x is_a_common_root_of ap`1,ap`2 by A3,root1;
+   then ap`1,ap`2 have_common_roots by root2;
+   hence p is irreducible by A0,defirred;
+   end;
+hence thesis by A;
+end;
+
+
+begin :: Normalized Rational Functions
+
+polynormirred:
+for L be Abelian add-associative right_zeroed right_complementable
+             well-unital associative distributive commutative
+             domRing-like non trivial doubleLoopStr
+for z be rational_function of L holds
+z is irreducible implies
+ex z1 being rational_function of L,
+   z2 being non zero Polynomial of L
+  st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x)
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+  assume AS: z is irreducible;
+  take z;
+  reconsider e = 1_.(L) as non zero Polynomial of L;
+  take e;
+  reconsider f = <*>(the carrier of Polynom-Ring(L))
+                                  as FinSequence of Polynom-Ring(L);
+  thus z = [z`1,z`2] by ttt .= [e*'z`1,z`2] by POLYNOM3:35
+                            .= [e*'z`1,e*'z`2] by POLYNOM3:35;
+  thus z is irreducible by AS;
+  take f;
+  Product f = 1_(Polynom-Ring(L)) by GROUP_4:8;
+  hence thesis by POLYNOM3:def 10;
+end;
+
+theorem ratfuncNF:
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative distributive commutative
+            domRing-like non trivial doubleLoopStr
+for z being rational_function of L
+ex z1 being rational_function of L,
+   z2 being non zero Polynomial of L
+st z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+   ex f being FinSequence of Polynom-Ring(L)
+   st z2 = Product f &
+      for i being Element of NAT st i in dom f
+      ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                 f.i = rpoly(1,x)
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+defpred P[Nat] means
+  for z being rational_function of L st max(deg(z`1),deg(z`2)) = $1
+  ex z1 being rational_function of L,
+     z2 being non zero Polynomial of L
+  st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x);
+
+now let z be rational_function of L;
+  assume max(deg(z`1),deg(z`2)) = 0;
+  then deg(z`2) <= 0 by XXREAL_0:25;
+  then B: deg(z`2) = 0;
+  A:now assume ex x be Element of L st x is_a_root_of z`2;
+    then consider y being Element of L such that
+    H: y is_a_root_of z`2;
+    eval(z`2,y) = 0.L by H,POLYNOM5:def 6;
+    hence contradiction by B,degrat2;
+    end;
+  now assume z is reducible;
+    then z`1,z`2 have_common_roots by defirred;
+    then consider x being Element of L such that
+    H: x is_a_common_root_of z`1,z`2 by root2;
+    x is_a_root_of z`2 by H,root1;
+    hence contradiction by A;
+    end;
+  hence
+  ex z1 being rational_function of L,
+     z2 being non zero Polynomial of L
+  st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x) by polynormirred;
+  end;
+then IA: P[0];
+
+IS: now let n be Nat;
+  assume AS: P[n];
+  for z being rational_function of L st max(deg(z`1),deg(z`2)) = n+1
+  ex z1 being rational_function of L,
+     z2 being non zero Polynomial of L
+  st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x)
+  proof
+  let z being rational_function of L;
+  assume AS1: max(deg(z`1),deg(z`2)) = n+1;
+  per cases;
+  suppose z is irreducible;
+    hence thesis by polynormirred;
+    end;
+  suppose z is reducible;
+    then z`1,z`2 have_common_roots by defirred;
+    then consider x being Element of L such that
+    H: x is_a_common_root_of z`1,z`2 by root2;
+    H3: x is_a_root_of z`1 & x is_a_root_of z`2 by H,root1;
+    consider q2 being Polynomial of L such that
+    H2: z`2 = rpoly(1,x) *' q2 by H3,HURWITZ:33;
+    consider q1 being Polynomial of L such that
+    H1: z`1 = rpoly(1,x) *' q1 by H3,HURWITZ:33;
+    q2 <> 0_.(L) by H2,POLYNOM3:34;
+    then reconsider q2 as non zero Polynomial of L by defzer;
+    set q = [q1,q2];
+    max(deg(q`1),deg(q`2)) = n
+      proof
+      A2: deg(z`2) = deg(rpoly(1,x)) + deg(q2) by H2,HURWITZ:23
+                   .= 1 + deg(q2) by HURWITZ:27;
+      per cases by XXREAL_0:16;
+      suppose A5: max(deg(z`1),deg(z`2)) = deg(z`1);
+        then z`1 <> 0_.(L) by AS1,HURWITZ:20;
+        then q1 <> 0_.(L) by H1,POLYNOM3:34; then
+        A3: deg(z`1) = deg(rpoly(1,x)) + deg(q1) by H1,HURWITZ:23
+                    .= 1 + deg(q1) by HURWITZ:27;
+        A6: deg(z`2) <= n + 1 by AS1,XXREAL_0:25;
+        deg q2 + 1 - 1 <= n + 1 - 1 by A2,A6,XREAL_1:9;
+        hence thesis by A3,A5,AS1,XXREAL_0:def 10;
+        end;
+      suppose A3: max(deg(z`1),deg(z`2)) = deg(z`2);
+        A6: deg(z`1) <= n + 1 by AS1,XXREAL_0:25;
+        now per cases;
+        suppose q1 = 0_.(L);
+          hence deg q1 <= deg q2 by HURWITZ:20;
+          end;
+        suppose q1 <> 0_.(L); then
+          deg(z`1) = deg(rpoly(1,x)) + deg(q1) by H1,HURWITZ:23
+                  .= 1 + deg(q1) by HURWITZ:27;
+          hence deg q1 <= deg q2 by A6,A2,A3,AS1,XREAL_1:9;
+          end;
+        end;
+        hence thesis by A3,A2,AS1,XXREAL_0:def 10;
+        end;
+      end;
+    then consider z1q being rational_function of L,
+                  z2q being non zero Polynomial of L such that
+    IQ: q = [z2q*'z1q`1,z2q*'z1q`2] & z1q is irreducible &
+        ex f being FinSequence of Polynom-Ring(L)
+        st z2q = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                                   f.i = rpoly(1,x) by AS;
+    take z1 = z1q;
+    set z2 = rpoly(1,x) *' z2q;
+    reconsider z2 as non zero Polynomial of L;
+    take z2;
+    consider fq being FinSequence of Polynom-Ring(L) such that
+    IQ2: z2q = Product fq &
+         for i being Element of NAT st i in dom fq
+         ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                                    fq.i = rpoly(1,x) by IQ;
+    reconsider rp = rpoly(1,x) as Element of Polynom-Ring(L)
+       by POLYNOM3:def 10;
+    set f = <*rp*> ^ fq;
+    IQ3: Product f = rp * Product(fq) by GROUP_4:7
+                  .= z2 by IQ2,POLYNOM3:def 10;
+    IQ4: z = [z2*'z1`1,z2*'z1`2]
+         proof
+         X: q1 = z2q*' z1q`1 by IQ,XTUPLE_0:def 2;
+         Z: q2 = z2q*' z1q`2 by IQ,XTUPLE_0:def 3;
+         Y: (z2 *' z1`1) = z`1 by X,H1,POLYNOM3:33;
+         A: (z2 *' z1`2) = z`2 by Z,H2,POLYNOM3:33;
+         thus z = [z2*'z1`1,z2*'z1`2] by Y,A,ttt;
+         end;
+    IQ5: now let i be Element of NAT;
+         assume C1: i in dom f;
+         now per cases by C1,FINSEQ_1:25;
+         suppose C2: i in dom<*rp*>;
+           then C3: i in {1} by FINSEQ_1:2,FINSEQ_1:38;
+           f.i = <*rp*>.i by C2,FINSEQ_1:def 7
+              .= <*rp*>.1 by C3,TARSKI:def 1
+              .= rpoly(1,x) by FINSEQ_1:40;
+           hence ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                            f.i = rpoly(1,x) by H;
+           end;
+         suppose ex n being Nat st n in dom fq & i = len<*rp*> + n;
+           then consider n being Nat such that
+           C2: n in dom fq & i = len<*rp*> + n;
+           f.i = fq.n by C2,FINSEQ_1:def 7;
+           then consider y being Element of L such that
+           C3: y is_a_common_root_of q`1,q`2 & f.i = rpoly(1,y) by C2,IQ2;
+           C4: y is_a_root_of q`1 & y is_a_root_of q`2 by C3,root1;
+           then C5: 0.L = eval(q1,y) by POLYNOM5:def 6;
+           C8: eval(z`1,y) = eval(rpoly(1,x),y) * eval(q1,y) by H1,POLYNOM4:24
+                          .= 0.L by C5,VECTSP_1:7;
+           C6: 0.L = eval(q2,y) by C4,POLYNOM5:def 6;
+           eval(z`2,y) = eval(rpoly(1,x),y) * eval(q2,y) by H2,POLYNOM4:24
+                      .= 0.L by C6,VECTSP_1:7;
+           then y is_a_root_of z`1 & y is_a_root_of z`2 by C8,POLYNOM5:def 6;
+           then y is_a_common_root_of z`1,z`2 by root1;
+           hence ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                            f.i = rpoly(1,x) by C3;
+           end;
+         end;
+         hence ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                          f.i = rpoly(1,x);
+         end;
+    thus thesis by IQ,IQ3,IQ4,IQ5;
+    end;
+  end;
+  hence P[n+1];
+  end;
+I: for n being Nat holds P[n] from NAT_1:sch 2(IA,IS);
+max(deg(z`1),deg(z`2)) >= deg(z`2) by XXREAL_0:25;
+then max(deg(z`1),deg(z`2)) >= 0;
+then max(deg(z`1),deg(z`2)) in NAT by INT_1:3;
+hence thesis by I;
+end;
+
+ratfuncNFunique1:
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z be rational_function of L st z is irreducible
+for z1 being rational_function of L,
+    z2 being non zero Polynomial of L
+  st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x)
+for g1 being rational_function of L,
+     g2 being non zero Polynomial of L
+  st z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st g2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x)
+holds z2 = 1_.(L) & g2 = 1_.(L) & z1 = g1
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+assume AS: z is irreducible;
+let z1 be rational_function of L,
+    z2 be non zero Polynomial of L;
+assume A: z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x);
+let g1 be rational_function of L,
+    g2 be non zero Polynomial of L;
+assume B: z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st g2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x);
+consider f being FinSequence of Polynom-Ring(L) such that
+     C: z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x) by A;
+now assume f <> <*>(the carrier of Polynom-Ring(L));
+  then G: dom f <> {};
+  let i be Element of dom f;
+  reconsider i as Nat;
+  D1: i in dom f by G;
+  consider x being Element of L such that
+  D2: x is_a_common_root_of z`1,z`2 &  f.i = rpoly(1,x) by D1,C;
+  z`1,z`2 have_common_roots by D2,root2;
+  hence contradiction by AS,defirred;
+  end;
+hence D2: z2 = 1_(Polynom-Ring(L)) by C,GROUP_4:8
+            .= 1_.(L) by POLYNOM3:def 10;
+then D1: z2 *' z1`1 = z1`1 by POLYNOM3:35;
+z2 *' z1`2 = z1`2 by D2,POLYNOM3:35;
+then D: z = z1 by D1,A,ttt;
+consider h being FinSequence of Polynom-Ring(L) such that
+     E: g2 = Product h &
+        for i being Element of NAT st i in dom h
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   h.i = rpoly(1,x) by B;
+now assume h <> <*>(the carrier of Polynom-Ring(L));
+  then G: dom h <> {};
+  let i be Element of dom h;
+  reconsider i as Nat;
+  D1: i in dom h by G;
+  consider x being Element of L such that
+  D2: x is_a_common_root_of z`1,z`2 &  h.i = rpoly(1,x) by D1,E;
+  z`1,z`2 have_common_roots by D2,root2;
+  hence contradiction by AS,defirred;
+  end;
+hence E2: g2 = 1_(Polynom-Ring(L)) by E,GROUP_4:8
+            .= 1_.(L) by POLYNOM3:def 10;
+then E1: g2 *' g1`1 = g1`1 by POLYNOM3:35;
+g2 *' g1`2 = g1`2 by E2,POLYNOM3:35;
+hence z1 = g1 by D,E1,B,ttt;
+end;
+
+ratfuncNFunique2:
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z be non zero rational_function of L
+for z1 being rational_function of L,
+    z2 being non zero Polynomial of L
+     st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+       ex f being FinSequence of Polynom-Ring(L)
+       st z2 = Product f &
+          for i being Element of NAT st i in dom f
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     f.i = rpoly(1,x)
+for g1 being rational_function of L,
+    g2 being non zero Polynomial of L
+     st z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+        ex g being FinSequence of Polynom-Ring(L)
+        st g2 = Product g &
+           for i being Element of NAT st i in dom g
+           ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                      g.i = rpoly(1,x)
+holds z1 = g1
+proof
+let L be Field; let z be non zero rational_function of L;
+let z1 be rational_function of L,
+    z2 be non zero Polynomial of L;
+assume H1: z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+       ex f being FinSequence of Polynom-Ring(L)
+       st z2 = Product f &
+          for i being Element of NAT st i in dom f
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     f.i = rpoly(1,x);
+let g1 be rational_function of L,
+    g2 be non zero Polynomial of L;
+assume H2: z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+        ex g being FinSequence of Polynom-Ring(L)
+        st g2 = Product g &
+           for i being Element of NAT st i in dom g
+           ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                      g.i = rpoly(1,x);
+
+defpred P[Nat] means
+for z be non zero rational_function of L st max(deg(z`1),deg(z`2)) = $1
+for z1 being rational_function of L,
+    z2 being non zero Polynomial of L
+     st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+       ex f being FinSequence of Polynom-Ring(L)
+       st z2 = Product f &
+          for i being Element of NAT st i in dom f
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     f.i = rpoly(1,x)
+for g1 being rational_function of L,
+    g2 being non zero Polynomial of L
+     st z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+        ex g being FinSequence of Polynom-Ring(L)
+        st g2 = Product g &
+           for i being Element of NAT st i in dom g
+           ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                      g.i = rpoly(1,x)
+holds z1 = g1;
+
+now let z be non zero rational_function of L;
+  assume max(deg(z`1),deg(z`2)) = 0;
+  then deg(z`2) <= 0 by XXREAL_0:25;
+  then B: deg(z`2) = 0;
+  let z1 be rational_function of L,
+      z2 be non zero Polynomial of L;
+  assume H1: z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+       ex f being FinSequence of Polynom-Ring(L)
+       st z2 = Product f &
+          for i being Element of NAT st i in dom f
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     f.i = rpoly(1,x);
+  let g1 be rational_function of L,
+      g2 be non zero Polynomial of L;
+  assume H2: z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+        ex g being FinSequence of Polynom-Ring(L)
+        st g2 = Product g &
+           for i being Element of NAT st i in dom g
+           ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                      g.i = rpoly(1,x);
+  A:now assume ex x be Element of L st x is_a_root_of z`2;
+    then consider y being Element of L such that
+    H: y is_a_root_of z`2;
+    eval(z`2,y) = 0.L by H,POLYNOM5:def 6;
+    hence contradiction by B,degrat2;
+    end;
+  B:now assume z is reducible;
+    then z`1,z`2 have_common_roots by defirred;
+    then consider x being Element of L such that
+    H: x is_a_common_root_of z`1,z`2 by root2;
+    x is_a_root_of z`2 by H,root1;
+    hence contradiction by A;
+    end;
+  thus g1 = z1 by B,H1,H2,ratfuncNFunique1;
+  end;
+then IA: P[0];
+
+IS: now let n be Nat;
+  assume IV: P[n];
+  for z be non zero rational_function of L st max(deg(z`1),deg(z`2)) = n+1
+  for z1 being rational_function of L,
+      z2 being non zero Polynomial of L
+     st z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+       ex f being FinSequence of Polynom-Ring(L)
+       st z2 = Product f &
+          for i being Element of NAT st i in dom f
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     f.i = rpoly(1,x)
+  for g1 being rational_function of L,
+      g2 being non zero Polynomial of L
+     st z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+        ex g being FinSequence of Polynom-Ring(L)
+        st g2 = Product g &
+           for i being Element of NAT st i in dom g
+           ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                      g.i = rpoly(1,x)
+  holds z1 = g1
+  proof
+  let z be non zero rational_function of L;
+  assume AS1: max(deg(z`1),deg(z`2)) = n+1;
+  let z1 be rational_function of L,
+      z2 be non zero Polynomial of L such that
+     H1: z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+       ex f being FinSequence of Polynom-Ring(L)
+       st z2 = Product f &
+          for i being Element of NAT st i in dom f
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     f.i = rpoly(1,x);
+  consider f being FinSequence of Polynom-Ring(L) such that
+     H1a: z2 = Product f &
+          for i being Element of NAT st i in dom f
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     f.i = rpoly(1,x) by H1;
+  let g1 be rational_function of L,
+      g2 be non zero Polynomial of L such that
+     H2: z = [g2*'g1`1,g2*'g1`2] & g1 is irreducible &
+        ex g being FinSequence of Polynom-Ring(L)
+        st g2 = Product g &
+           for i being Element of NAT st i in dom g
+           ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                      g.i = rpoly(1,x);
+
+  consider g being FinSequence of Polynom-Ring(L) such that
+     H2a: g2 = Product g &
+          for i being Element of NAT st i in dom g
+          ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                     g.i = rpoly(1,x) by H2;
+
+  per cases;
+  suppose B: z is irreducible;
+    thus g1 = z1 by B,H1,H2,ratfuncNFunique1;
+    end;
+  suppose z is reducible;
+    then z`1,z`2 have_common_roots by defirred;
+    then consider x being Element of L such that
+    H: x is_a_common_root_of z`1,z`2 by root2;
+    H3: x is_a_root_of z`1 & x is_a_root_of z`2 by H,root1;
+    consider q2 being Polynomial of L such that
+    HY: z`2 = rpoly(1,x) *' q2 by H3,HURWITZ:33;
+    consider q1 being Polynomial of L such that
+    HX: z`1 = rpoly(1,x) *' q1 by H3,HURWITZ:33;
+    q2 <> 0_.(L) by HY,POLYNOM3:34;
+    then reconsider q2 as non zero Polynomial of L by defzer;
+
+    set q = [q1,q2];
+    z`1 <> 0_.(L) by defzerrat; then
+    q1 <> 0_.(L) by HX,POLYNOM3:34; then
+    q`1 <> 0_.(L); then
+    reconsider q as non zero rational_function of L by defzerrat;
+
+   AS2: max(deg(q`1),deg(q`2)) = n
+      proof
+      A2: deg(z`2) = deg(rpoly(1,x)) + deg(q2) by HY,HURWITZ:23
+                  .= 1 + deg(q2) by HURWITZ:27;
+      A7: max(deg(q`1),deg(q`2))
+        = max(deg(q1),deg(q`2)) by XTUPLE_0:def 2
+       .= max(deg(q1),deg(q2)) by XTUPLE_0:def 3;
+      per cases by XXREAL_0:16;
+      suppose A5: max(deg(z`1),deg(z`2)) = deg(z`1);
+        then z`1 <> 0_.(L) by AS1,HURWITZ:20;
+        then q1 <> 0_.(L) by HX,POLYNOM3:34; then
+        A3: deg(z`1) = deg(rpoly(1,x)) + deg(q1) by HX,HURWITZ:23
+                .= 1 + deg(q1) by HURWITZ:27;
+        deg(z`2) <= n + 1 by AS1,XXREAL_0:25;
+        then deg q2 + 1 - 1 <= n + 1 - 1 by A2,XREAL_1:9;
+        hence thesis by A7,A3,A5,AS1,XXREAL_0:def 10;
+        end;
+      suppose A3: max(deg(z`1),deg(z`2)) = deg(z`2);
+        A6: deg(z`1) <= n + 1 by AS1,XXREAL_0:25;
+        now per cases;
+        suppose q1 = 0_.(L);
+          hence deg q1 <= deg q2 by HURWITZ:20;
+          end;
+        suppose q1 <> 0_.(L); then
+          deg(z`1) = deg(rpoly(1,x)) + deg(q1) by HX,HURWITZ:23
+                  .= 1 + deg(q1) by HURWITZ:27;
+          hence deg q1 <= deg q2 by A6,A3,A2,AS1,XREAL_1:9;
+          end;
+        end;
+        hence thesis by A7,A2,A3,AS1,XXREAL_0:def 10;
+        end;
+      end;
+    ZZ1: now let i be Nat;
+         assume i in dom f;
+         then ex x being Element of L st
+         x is_a_common_root_of z`1,z`2 & f.i = rpoly(1,x) by H1a;
+         hence ex z being Element of L st f.i = rpoly(1,z);
+         end;
+    ex i being Nat st i in dom f & f.i = rpoly(1,x)
+        proof
+        z2*'z1`1 = rpoly(1,x)*'q1 by HX,H1,XTUPLE_0:def 2;
+        then Z11: rpoly(1,x) divides (z2 *' z1`1) by HURWITZ:34;
+        z2*'z1`2 = rpoly(1,x)*'q2 by HY,H1,XTUPLE_0:def 3;
+        then Z11a: rpoly(1,x) divides (z2 *' z1`2) by HURWITZ:34;
+        now per cases by Z11,Z11a,div3;
+        case rpoly(1,x) divides z2;
+          then eval(z2,x) = 0.L by div1;
+          then consider i being Nat such that
+          Z3: i in dom f & f.i = rpoly(1,x) by div2,H1a,ZZ1;
+          take i;
+          thus thesis by Z3;
+          end;
+        case rpoly(1,x) divides z1`1 & rpoly(1,x) divides z1`2;
+          then eval(z1`1,x) = 0.L & eval(z1`2,x) = 0.L by div1;
+          then x is_a_root_of z1`1 & x is_a_root_of z1`2 by POLYNOM5:def 6;
+          then Z3: x is_a_common_root_of z1`1,z1`2 by root1;
+          z1`1,z1`2 have_no_common_roots by H1,defirred;
+          hence thesis by Z3,root2;
+          end;
+        end;
+        hence thesis;
+        end;
+    then consider i being Nat such that H5: i in dom f & f.i = rpoly(1,x);
+    ZZ1a: now let j be Nat;
+         assume j in dom g;
+         then consider x being Element of L such that
+         A: x is_a_common_root_of z`1,z`2 & g.j = rpoly(1,x) by H2a;
+         thus ex z being Element of L st g.j = rpoly(1,z) by A;
+         end;
+    ex j being Nat st j in dom g & g.j = rpoly(1,x)
+        proof
+        g2*'g1`1 = rpoly(1,x)*'q1 by HX,H2,XTUPLE_0:def 2;
+        then Z11: rpoly(1,x) divides (g2 *' g1`1) by HURWITZ:34;
+        g2*'g1`2 = rpoly(1,x)*'q2 by HY,H2,XTUPLE_0:def 3;
+        then Z11a: rpoly(1,x) divides (g2 *' g1`2) by HURWITZ:34;
+        now per cases by Z11,Z11a,div3;
+        case rpoly(1,x) divides g2;
+          then eval(g2,x) = 0.L by div1;
+          then consider i being Nat such that
+          Z3: i in dom g & g.i = rpoly(1,x) by div2,H2a,ZZ1a;
+          take i;
+          thus thesis by Z3;
+          end;
+        case rpoly(1,x) divides g1`1 & rpoly(1,x) divides g1`2;
+          then eval(g1`1,x) = 0.L & eval(g1`2,x) = 0.L by div1;
+          then x is_a_root_of g1`1 & x is_a_root_of g1`2 by POLYNOM5:def 6;
+          then Z3: x is_a_common_root_of g1`1,g1`2 by root1;
+          g1`1,g1`2 have_no_common_roots by H2,defirred;
+          hence thesis by Z3,root2;
+          end;
+        end;
+        hence thesis;
+        end;
+    then consider j being Nat such that H6: j in dom g & g.j = rpoly(1,x);
+
+    reconsider fq = Del(f,i) as FinSequence of Polynom-Ring(L) by FINSEQ_3:105;
+    reconsider gq = Del(g,j) as FinSequence of Polynom-Ring(L) by FINSEQ_3:105;
+
+    X100: now let k be Nat;
+        assume H11: k in dom fq;
+        consider m being Nat such that
+        H14: len f = m + 1 & len fq = m by H5,FINSEQ_3:104;
+        H14a: k in Seg m by H11,H14,FINSEQ_1:def 3;
+        Seg m c= Seg(m+1) by FINSEQ_3:18;
+        then k in Seg(m+1) by H14a;
+        then H13: k in dom f by H14,FINSEQ_1:def 3;
+        H14b: k <= m by H14a,FINSEQ_1:1;
+        then H14d: k+1 <= m+1 by XREAL_1:6;
+        1 <= k+1 by NAT_1:11;
+        then k+1 in Seg(m+1) by H14d;
+        then H14c: k+1 in dom f by H14,FINSEQ_1:def 3;
+        now per cases;
+        suppose H12: k < i;
+           ex y being Element of L st
+           y is_a_common_root_of z`1,z`2 & f.k = rpoly(1,y) by H13,H1a;
+           hence ex x being Element of L
+           st fq.k = rpoly(1,x) by H12,FINSEQ_3:110;
+           end;
+        suppose H12: i <= k;
+           ex y being Element of L st
+           y is_a_common_root_of z`1,z`2 & f.(k+1) = rpoly(1,y) by H1a,H14c;
+           hence ex x being Element of L
+           st fq.k = rpoly(1,x) by H12,H14b,H5,H14,FINSEQ_3:111;
+           end;
+        end;
+        hence ex x being Element of L st fq.k = rpoly(1,x);
+        end;
+    X101: now let k be Nat;
+        assume H11: k in dom gq;
+        consider m being Nat such that
+        H14: len g = m + 1 & len gq = m by H6,FINSEQ_3:104;
+        H14a: k in Seg m by H11,H14,FINSEQ_1:def 3;
+        Seg m c= Seg(m+1) by FINSEQ_3:18;
+        then k in Seg(m+1) by H14a;
+        then H13: k in dom g by H14,FINSEQ_1:def 3;
+        H14b: k <= m by H14a,FINSEQ_1:1;
+        then H14d: k+1 <= m+1 by XREAL_1:6;
+        1 <= k+1 by NAT_1:11;
+        then k+1 in Seg(m+1) by H14d;
+        then H14c: k+1 in dom g by H14,FINSEQ_1:def 3;
+        now per cases;
+        suppose H12: k < j;
+           ex y being Element of L st
+           y is_a_common_root_of z`1,z`2 & g.k = rpoly(1,y) by H13,H2a;
+           hence ex x being Element of L
+           st gq.k = rpoly(1,x) by H12,FINSEQ_3:110;
+           end;
+        suppose H12: j <= k;
+           ex y being Element of L st
+           y is_a_common_root_of z`1,z`2 & g.(k+1) = rpoly(1,y) by H2a,H14c;
+           hence ex x being Element of L
+           st gq.k = rpoly(1,x) by H12,H14b,H6,H14,FINSEQ_3:111;
+           end;
+        end;
+        hence ex x being Element of L st gq.k = rpoly(1,x);
+        end;
+
+    reconsider z2q = Product fq as Polynomial of L by POLYNOM3:def 10;
+    z2q <> 0_.(L) by X100,div4; then
+    reconsider z2q as non zero Polynomial of L by defzer;
+    reconsider g2q = Product gq as Polynomial of L by POLYNOM3:def 10;
+    g2q <> 0_.(L) by X101,div4; then
+    reconsider g2q as non zero Polynomial of L by defzer;
+    H7: Product f = f/.i * Product fq by H5,del1;
+    H7a: Product g = g/.j * Product gq by H6,del1;
+
+    Seg(len f) = dom f by FINSEQ_1:def 3;
+    then 1 <= i & i <= len f by H5,FINSEQ_1:1;
+    then f/.i = rpoly(1,x) by H5,FINSEQ_4:15;
+    then H9: rpoly(1,x) *' z2q  = Product f by H7,POLYNOM3:def 10;
+    then H8: rpoly(1,x) *' (z2q *' z1`1) = z2 *' z1`1 by H1a,POLYNOM3:33
+                    .= rpoly(1,x) *' q1 by HX,H1,XTUPLE_0:def 2
+                    .= rpoly(1,x) *' q`1 by XTUPLE_0:def 2;
+    then H8b: z2q *' z1`1 = q`1 by thequiv1;
+    H8a: rpoly(1,x) *' (z2q *' z1`2) = z2 *' z1`2 by H9,H1a,POLYNOM3:33
+                    .= rpoly(1,x) *' q2 by HY,H1,XTUPLE_0:def 3
+                    .= rpoly(1,x) *' q`2 by XTUPLE_0:def 3;
+    then z2q *' z1`2 = q`2 by thequiv1;
+
+    then I1: q = [z2q*'z1`1,z2q*'z1`2] by H8b,MCART_1:8;
+
+    I3: now let k be Element of NAT;
+        assume H11: k in dom fq;
+        consider m being Nat such that
+        H14: len f = m + 1 & len fq = m by H5,FINSEQ_3:104;
+        H14a: k in Seg m by H11,H14,FINSEQ_1:def 3;
+        Seg m c= Seg(m+1) by FINSEQ_3:18;
+        then k in Seg(m+1) by H14a;
+        then H13: k in dom f by H14,FINSEQ_1:def 3;
+        H14b: k <= m by H14a,FINSEQ_1:1;
+        then H14d: k+1 <= m+1 by XREAL_1:6;
+        1 <= k+1 by NAT_1:11;
+        then k+1 in Seg(m+1) by H14d;
+        then H14c: k+1 in dom f by H14,FINSEQ_1:def 3;
+        now per cases;
+        suppose H12: k < i;
+           then H12a: f.k = fq.k by FINSEQ_3:110;
+           consider y being Element of L such that
+           H10: y is_a_common_root_of z`1,z`2 & f.k = rpoly(1,y)
+                by H13,H1a;
+           H25: eval(z2q,y) = 0.L by H12a,H10,H11,X100,div2;
+           then 0.L = eval(z2q,y) * eval(z1`1,y) by VECTSP_1:7
+                   .= eval(z2q*'z1`1,y) by POLYNOM4:24
+                   .= eval(q`1,y) by H8,thequiv1;
+           then A1: y is_a_root_of q`1 by POLYNOM5:def 6;
+           0.L = eval(z2q,y) * eval(z1`2,y) by VECTSP_1:7,H25
+              .= eval(z2q*'z1`2,y) by POLYNOM4:24
+              .= eval(q`2,y) by H8a,thequiv1;
+           then y is_a_root_of q`2 by POLYNOM5:def 6;
+           then y is_a_common_root_of q`1,q`2 by A1,root1;
+           hence ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                 fq.k = rpoly(1,x) by H10,H12,FINSEQ_3:110;
+           end;
+        suppose H12: i <= k;
+           then H12a: f.(k+1) = fq.k by H14b,H5,H14,FINSEQ_3:111;
+           consider y being Element of L such that
+           H10: y is_a_common_root_of z`1,z`2 & f.(k+1) = rpoly(1,y)
+               by H1a,H14c;
+           H25: eval(z2q,y) = 0.L by H12a,H10,H11,X100,div2;
+           then 0.L = eval(z2q,y) * eval(z1`1,y) by VECTSP_1:7
+                   .= eval(z2q*'z1`1,y) by POLYNOM4:24
+                   .= eval(q`1,y) by H8,thequiv1;
+           then A1: y is_a_root_of q`1 by POLYNOM5:def 6;
+           0.L = eval(z2q,y) * eval(z1`2,y) by VECTSP_1:7,H25
+              .= eval(z2q*'z1`2,y) by POLYNOM4:24
+              .= eval(q`2,y) by H8a,thequiv1;
+           then y is_a_root_of q`2 by POLYNOM5:def 6;
+           then y is_a_common_root_of q`1,q`2 by A1,root1;
+           hence ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                 fq.k = rpoly(1,x) by H10,H12,H14b,H5,H14,FINSEQ_3:111;
+           end;
+        end;
+        hence ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                                   fq.k = rpoly(1,x);
+        end;
+
+    Seg(len g) = dom g by FINSEQ_1:def 3;
+    then 1 <= j & j <= len g by H6,FINSEQ_1:1;
+    then g/.j = rpoly(1,x) by H6,FINSEQ_4:15;
+    then H9: rpoly(1,x) *' g2q  = Product g by H7a,POLYNOM3:def 10;
+    then H8: rpoly(1,x) *' (g2q *' g1`1) = g2 *' g1`1 by H2a,POLYNOM3:33
+                    .= z`1 by H2,XTUPLE_0:def 2
+                    .= rpoly(1,x) *' q`1 by HX,XTUPLE_0:def 2;
+    then H8b: g2q *' g1`1 = q`1 by thequiv1;
+    H8a: rpoly(1,x) *' (g2q *' g1`2) = g2 *' g1`2 by H9,H2a,POLYNOM3:33
+                    .= z`2 by H2,XTUPLE_0:def 3
+                    .= rpoly(1,x) *' q`2 by HY,XTUPLE_0:def 3;
+    then g2q *' g1`2 = q`2 by thequiv1;
+
+    then I2: q = [g2q*'g1`1,g2q*'g1`2] by H8b,MCART_1:8;
+
+    I4: now let k be Element of NAT;
+        assume H11: k in dom gq;
+        consider m being Nat such that
+        H14: len g = m + 1 & len gq = m by H6,FINSEQ_3:104;
+        H14a: k in Seg m by H11,H14,FINSEQ_1:def 3;
+        Seg m c= Seg(m+1) by FINSEQ_3:18;
+        then k in Seg(m+1) by H14a;
+        then H13: k in dom g by H14,FINSEQ_1:def 3;
+        H14b: k <= m by H14a,FINSEQ_1:1;
+        then H14d: k+1 <= m+1 by XREAL_1:6;
+        1 <= k+1 by NAT_1:11;
+        then k+1 in Seg(m+1) by H14d;
+        then H14c: k+1 in dom g by H14,FINSEQ_1:def 3;
+        now per cases;
+        suppose H12: k < j;
+           then H12a: g.k = gq.k by FINSEQ_3:110;
+           consider y being Element of L such that
+           H10: y is_a_common_root_of z`1,z`2 & g.k = rpoly(1,y)
+                by H13,H2a;
+           H25: eval(g2q,y) = 0.L by H12a,H10,H11,X101,div2;
+           then 0.L = eval(g2q,y) * eval(g1`1,y) by VECTSP_1:7
+                   .= eval(g2q*'g1`1,y) by POLYNOM4:24
+                   .= eval(q`1,y) by H8,thequiv1;
+           then A1: y is_a_root_of q`1 by POLYNOM5:def 6;
+           0.L = eval(g2q,y) * eval(g1`2,y) by VECTSP_1:7,H25
+              .= eval(g2q*'g1`2,y) by POLYNOM4:24
+              .= eval(q`2,y) by H8a,thequiv1;
+           then y is_a_root_of q`2 by POLYNOM5:def 6;
+           then y is_a_common_root_of q`1,q`2 by A1,root1;
+           hence ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                             gq.k = rpoly(1,x) by H10,H12,FINSEQ_3:110;
+           end;
+        suppose H12: j <= k;
+           then H13: g.(k+1) = gq.k by H14b,H6,H14,FINSEQ_3:111;
+           consider y being Element of L such that
+           H10: y is_a_common_root_of z`1,z`2 & g.(k+1) = rpoly(1,y)
+               by H2a,H14c;
+           H25: eval(g2q,y) = 0.L by H13,H10,H11,X101,div2;
+           then 0.L = eval(g2q,y) * eval(g1`1,y) by VECTSP_1:7
+                   .= eval(g2q*'g1`1,y) by POLYNOM4:24
+                   .= eval(q`1,y) by H8,thequiv1;
+           then A1: y is_a_root_of q`1 by POLYNOM5:def 6;
+           0.L = eval(g2q,y) * eval(g1`2,y) by VECTSP_1:7,H25
+              .= eval(g2q*'g1`2,y) by POLYNOM4:24
+              .= eval(q`2,y) by H8a,thequiv1;
+           then y is_a_root_of q`2 by POLYNOM5:def 6;
+           then y is_a_common_root_of q`1,q`2 by A1,root1;
+           hence ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                            gq.k = rpoly(1,x)
+             by H10,H12,H14b,H6,H14,FINSEQ_3:111;
+           end;
+        end;
+        hence ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                                   gq.k = rpoly(1,x);
+        end;
+    thus z1 = g1 by H1,H2,I1,I2,I3,I4,AS2,IV;
+    end;
+   end;
+hence P[n+1];
+end;
+
+I: for n being Nat holds P[n] from NAT_1:sch 2(IA,IS);
+max(deg(z`1),deg(z`2)) >= deg(z`2) by XXREAL_0:25;
+then max(deg(z`1),deg(z`2)) >= 0;
+then max(deg(z`1),deg(z`2)) in NAT by INT_1:3;
+hence z1 = g1 by I,H1,H2;
+end;
+
+definition
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+func NF z -> rational_function of L means :defNF:
+  ex z1 being rational_function of L,
+     z2 being non zero Polynomial of L
+  st z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+     it = NormRationalFunction z1 &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x)
+  if z is non zero otherwise it = 0._(L);
+existence
+ proof
+ per cases;
+ suppose z is non zero;
+  consider z1 being rational_function of L,
+           z2 being non zero Polynomial of L such that
+  H: z = [z2*'z1`1,z2*'z1`2] & z1 is irreducible &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x) by ratfuncNF;
+  reconsider nfz = NormRatF z1 as rational_function of L;
+  ex zz1 being rational_function of L,
+     zz2 being non zero Polynomial of L
+  st nfz = NormRatF zz1 & zz1 is irreducible &
+     (ex f being FinSequence of Polynom-Ring(L)
+     st zz2 = Product f & z = [zz2*'zz1`1,zz2*'zz1`2] &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x)) by H;
+   hence thesis;
+   end;
+ suppose z is zero;
+  hence thesis;
+  end;
+ end;
+uniqueness by ratfuncNFunique2;
+consistency;
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+cluster NF z -> normalized irreducible;
+coherence
+proof
+per cases;
+suppose z is non zero;
+  then consider z1 being rational_function of L,
+                z2 being non zero Polynomial of L such that
+  H: z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+     NF z = NormRatF z1 &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x) by defNF;
+  A: NF z is irreducible by H,tw2;
+  (NF z)`2 = (1.L / LC(z1`2)) * z1`2 by H,XTUPLE_0:def 3;
+  hence thesis by A,defnorm;
+  end;
+suppose z is zero;
+  then NF z = 0._(L) by defNF;
+  hence thesis;
+  end;
+end;
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be non zero rational_function of L;
+cluster NF z -> non zero;
+coherence
+proof
+consider z1 being rational_function of L,
+         z2 being non zero Polynomial of L such that
+H: z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+   NF z = NormRatF z1 &
+   ex f being FinSequence of Polynom-Ring(L)
+   st z2 = Product f &
+      for i being Element of NAT st i in dom f
+      ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                 f.i = rpoly(1,x) by defNF;
+now assume z1`1 = 0_.(L);
+  then 0_.(L) = z2 *' z1`1 by POLYNOM3:34 .= z`1 by H,XTUPLE_0:def 2;
+  hence contradiction by defzerrat;
+  end;
+then z1 is non zero by defzerrat;
+hence thesis by H;
+end;
+end;
+
+defnf1a:
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative distributive commutative
+            almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being irreducible non zero rational_function of L
+holds NF z = NormRationalFunction z
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be irreducible non zero rational_function of L;
+consider z1 being rational_function of L,
+         z2 being non zero Polynomial of L such that
+A1: z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+    NF z = NormRatF z1 &
+   ex f being FinSequence of Polynom-Ring(L)
+   st z2 = Product f &
+      for i being Element of NAT st i in dom f
+      ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                 f.i = rpoly(1,x) by defNF;
+consider f being FinSequence of Polynom-Ring(L) such that
+A2: z2 = Product f & z = [z2 *' z1`1, z2 *' z1`2] &
+    for i being Element of NAT st i in dom f
+    ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                               f.i = rpoly(1,x) by A1;
+now assume AS: f <> <*>(the carrier of Polynom-Ring(L));
+   let i be Element of dom f;
+   dom f <> {} by AS;
+   then i in dom f;
+   then reconsider i as Element of NAT;
+   consider x being Element of L such that
+   A4: x is_a_common_root_of z`1,z`2 & f.i = rpoly(1,x) by A2,AS;
+   z`1,z`2 have_common_roots by A4,root2;
+   hence contradiction by defirred;
+   end;
+then A5: Product f = 1_(Polynom-Ring(L)) by GROUP_4:8
+                  .= 1_.(L) by POLYNOM3:def 10;
+then z = [z1`1, z2 *' z1`2] by A2,POLYNOM3:35
+      .= [z1`1,z1`2] by A2,A5,POLYNOM3:35
+      .= z1 by ttt;
+hence thesis by A1;
+end;
+
+theorem
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z be non zero rational_function of L
+for z1 being rational_function of L,
+    z2 being non zero Polynomial of L
+st z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+   ex f being FinSequence of Polynom-Ring(L)
+   st z2 = Product f &
+      for i being Element of NAT st i in dom f
+      ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                 f.i = rpoly(1,x)
+holds NF z = NormRationalFunction z1 by defNF;
+
+theorem
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+holds NF 0._(L) = 0._(L) by defNF;
+
+theorem
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+holds NF 1._(L) = 1._(L)
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+set z = 1._(L);
+B: NF z = NormRatF z by defnf1a
+       .= [(1.L / LC(z`2)) * z`1, (1.L / LC(z`2)) * z`2];
+z`2 is normalized by defnorm;
+then D: LC(z`2) = 1.L by defnormp;
+C: 1.L / LC(z`2) = 1.L by D,VECTSP_1:def 10;
+hence NF z = [z`1, (1.L / LC(z`2)) * z`2] by B,POLYNOM5:27
+          .= [z`1, z`2] by C,POLYNOM5:27
+          .= z by ttt;
+end;
+
+theorem
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative distributive commutative
+            almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being irreducible non zero rational_function of L
+holds NF z = NormRationalFunction z by defnf1a;
+
+tt2:
+for L being Abelian add-associative right_zeroed right_complementable unital
+            domRing-like left_zeroed distributive non trivial doubleLoopStr
+for p1,p2 being Polynomial of L
+holds p1 *' p2 = 0_.(L) implies p1 = 0_.(L) or p2 = 0_.(L)
+proof
+let L be Abelian add-associative right_zeroed right_complementable unital
+         domRing-like left_zeroed distributive non trivial doubleLoopStr;
+let p1,p2 be Polynomial of L;
+assume AS: p1 *' p2 = 0_.(L);
+now assume p1 <> 0_.(L) & p2 <> 0_.(L);
+  then reconsider x1 = p1, x2 = p2 as non zero Polynomial of L by defzer;
+  x1 *' x2 is non zero;
+  hence contradiction by AS;
+  end;
+hence thesis;
+end;
+
+theorem nfequiv:
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z be rational_function of L
+for x being Element of L
+holds NF [rpoly(1,x) *' z`1, rpoly(1,x) *' z`2] = NF z
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+let x be Element of L;
+per cases;
+suppose A: z is non zero; then
+consider z1 being rational_function of L,
+         z2 being non zero Polynomial of L such that
+A1: z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+    NF z = NormRatF z1 &
+   ex f being FinSequence of Polynom-Ring(L)
+   st z2 = Product f &
+      for i being Element of NAT st i in dom f
+      ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                 f.i = rpoly(1,x) by defNF;
+consider f being FinSequence of Polynom-Ring(L) such that
+A2: z2 = Product f &
+    for i being Element of NAT st i in dom f
+    ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                               f.i = rpoly(1,x) by A1;
+set q = [rpoly(1,x) *' z`1, rpoly(1,x) *' z`2];
+now assume q`1 = 0_.(L);
+  then rpoly(1,x) *' z`1 = 0_.(L);
+  then z`1 = 0_.(L) by tt2;
+  hence contradiction by A,defzerrat;
+  end;
+then reconsider q as non zero rational_function of L by defzerrat;
+reconsider rp = rpoly(1,x) as Element of Polynom-Ring(L) by POLYNOM3:def 10;
+set g = <*rp*> ^ f;
+reconsider g as FinSequence of Polynom-Ring(L);
+set g2 = Product g;
+now let i be Nat;
+  assume Y: i in dom g;
+    now per cases by Y,FINSEQ_1:25;
+    suppose X: i in dom <*rp*>;
+       then i in {1} by FINSEQ_1:2,FINSEQ_1:38;
+       then i = 1 by TARSKI:def 1;
+       then g.i = <*rp*>.1 by X,FINSEQ_1:def 7
+               .= rp by FINSEQ_1:40;
+       hence ex z being Element of L st g.i = rpoly(1,z);
+       end;
+    suppose ex n being Nat st n in dom f & i = len(<*rp*>) + n;
+       then consider n being Nat such that
+       H: n in dom f & i = len(<*rp*>) + n;
+       J: g.i = f.n by H,FINSEQ_1:def 7;
+       ex x being Element of L st
+       x is_a_common_root_of z`1,z`2 & f.n = rpoly(1,x) by H,A2;
+       hence ex z being Element of L st g.i = rpoly(1,z) by J;
+       end;
+    end;
+  hence ex z being Element of L st g.i = rpoly(1,z);
+  end;
+then g2 <> 0_.(L) by div4;
+then reconsider g2 as non zero Polynomial of L by defzer,POLYNOM3:def 10;
+A3: now let i be Element of NAT;
+    assume Y: i in dom g;
+    now per cases by Y,FINSEQ_1:25;
+    suppose X: i in dom <*rp*>;
+       then i in {1} by FINSEQ_1:2,FINSEQ_1:38;
+       then i = 1 by TARSKI:def 1;
+       then I: g.i = <*rp*>.1 by X,FINSEQ_1:def 7
+               .= rp by FINSEQ_1:40;
+       H: eval(rpoly(1,x),x) = x - x by HURWITZ:29 .= 0.L by RLVECT_1:15;
+       then 0.L = eval(rpoly(1,x),x) * eval(z`1,x) by VECTSP_1:7
+               .= eval(rpoly(1,x) *' z`1,x) by POLYNOM4:24;
+       then x is_a_root_of rpoly(1,x) *' z`1 by POLYNOM5:def 6;
+       then J: x is_a_root_of q`1 by XTUPLE_0:def 2;
+       0.L = eval(rpoly(1,x),x) * eval(z`2,x) by H,VECTSP_1:7
+          .= eval(rpoly(1,x) *' z`2,x) by POLYNOM4:24;
+       then x is_a_root_of rpoly(1,x) *' z`2 by POLYNOM5:def 6;
+       then x is_a_root_of q`2 by XTUPLE_0:def 3;
+       then x is_a_common_root_of q`1,q`2 by J,root1;
+       hence ex z being Element of L st z is_a_common_root_of q`1,q`2 &
+                                        g.i = rpoly(1,z) by I;
+       end;
+    suppose ex n being Nat st n in dom f & i = len(<*rp*>) + n;
+       then consider n being Nat such that
+       H: n in dom f & i = len(<*rp*>) + n;
+       J: g.i = f.n by H,FINSEQ_1:def 7;
+       consider y being Element of L such that
+       I: y is_a_common_root_of z`1,z`2 & f.n = rpoly(1,y) by H,A2;
+       y is_a_root_of z`1 by I,root1;
+       then eval(z`1,y) = 0.L by POLYNOM5:def 6;
+       then 0.L = eval(rpoly(1,x),y) * eval(z`1,y) by VECTSP_1:6
+               .= eval(rpoly(1,x) *' z`1,y) by POLYNOM4:24;
+       then y is_a_root_of rpoly(1,x) *' z`1 by POLYNOM5:def 6;
+       then K: y is_a_root_of q`1 by XTUPLE_0:def 2;
+       y is_a_root_of z`2 by I,root1;
+       then eval(z`2,y) = 0.L by POLYNOM5:def 6;
+       then 0.L = eval(rpoly(1,x),y) * eval(z`2,y) by VECTSP_1:6
+               .= eval(rpoly(1,x) *' z`2,y) by POLYNOM4:24;
+       then y is_a_root_of rpoly(1,x) *' z`2 by POLYNOM5:def 6;
+       then y is_a_root_of q`2 by XTUPLE_0:def 3;
+       then y is_a_common_root_of q`1,q`2 by K,root1;
+       hence ex z being Element of L st z is_a_common_root_of q`1,q`2 &
+                                        g.i = rpoly(1,z) by J,I;
+       end;
+    end;
+    hence ex x being Element of L st x is_a_common_root_of q`1,q`2 &
+                                     g.i = rpoly(1,x);
+    end;
+A4: Product g = rp * Product f by GROUP_4:7;
+A5: q`1 = rpoly(1,x) *' z`1 by XTUPLE_0:def 2
+       .= rpoly(1,x) *' (z2 *' z1`1) by A1,XTUPLE_0:def 2
+       .= (rpoly(1,x) *' z2) *' z1`1 by POLYNOM3:33
+       .= g2 *' z1`1 by A4,A2,POLYNOM3:def 10;
+q`2 = rpoly(1,x) *' z`2 by XTUPLE_0:def 3
+   .= rpoly(1,x) *' (z2 *' z1`2) by A1,XTUPLE_0:def 3
+   .= (rpoly(1,x) *' z2) *' z1`2 by POLYNOM3:33
+   .= g2 *' z1`2 by A4,A2,POLYNOM3:def 10;
+then q = [g2 *' z1`1, g2 *' z1`2] by A5,ttt;
+hence thesis by A1,A3,defNF;
+end;
+suppose A: z is zero;
+then z`1 = 0_.(L) by defzerrat;
+then rpoly(1,x) *' z`1 = 0_.(L) by POLYNOM3:34;
+then [rpoly(1,x) *' z`1, rpoly(1,x) *' z`2]`1 = 0_.(L);
+then [rpoly(1,x) *' z`1, rpoly(1,x) *' z`2] is zero by defzerrat;
+then NF [rpoly(1,x) *' z`1, rpoly(1,x) *' z`2] = 0._(L) by defNF;
+hence thesis by A,defNF;
+end;
+end;
+
+theorem
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being rational_function of L
+holds NF (NF z) = NF z
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+set nfz = NF z;
+per cases;
+suppose z is zero;
+ then A: NF z = 0._(L) by defNF;
+ thus thesis by A,defNF;
+ end;
+suppose A: z is non zero;
+ H: 1.L <> 0.L;
+ B: NF nfz = NormRatF nfz by A,defnf1a
+               .= [(1.L/LC(nfz`2)) * nfz`1, (1.L/LC(nfz`2)) * nfz`2];
+ nfz`2 is normalized by defnorm;
+ then D: LC(nfz`2) = 1.L by defnormp;
+ C: 1.L / LC(nfz`2) = 1.L by H,D,VECTSP_1:def 10;
+ then NF nfz = [nfz`1, (1.L / LC(nfz`2)) * nfz`2] by B,POLYNOM5:27
+            .= [nfz`1, nfz`2] by C,POLYNOM5:27
+            .= nfz by ttt;
+ hence thesis;
+ end;
+end;
+
+theorem th3:
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non degenerated doubleLoopStr
+for z being non zero rational_function of L
+holds z is irreducible iff
+ex a being Element of L st a <> 0.L & [a * (z`1), a * (z`2)] = NF(z)
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non degenerated doubleLoopStr;
+let z be non zero rational_function of L;
+set q = z`2;
+set a = (LC(z`2))";
+now assume AB: a = 0.L;
+    then AC: a * (LC q) = 0.L by VECTSP_1:7;
+    a <> 1.L by AB;
+    hence contradiction by AC,VECTSP_1:def 10;
+    end;
+then reconsider a as non zero Element of L by STRUCT_0:def 12;
+reconsider x = [a * (z`1), a * (z`2)] as rational_function of L;
+A: now assume z is irreducible;
+   then NF z = NormRatF z by defnf1a
+              .= [(1.L / LC(z`2)) * z`1, (1.L / LC(z`2)) * z`2];
+   hence ex a being Element of L st a <> 0.L &
+                          [a * (z`1), a * (z`2)] = NF(z);
+   end;
+now assume
+  ex a being Element of L st a <> 0.L & [a * (z`1), a * (z`2)] = NF(z);
+  then consider a being Element of L such that
+  H0: a <> 0.L & [a * (z`1), a * (z`2)] = NF(z);
+  reconsider x = [a * (z`1), a * (z`2)] as rational_function of L by H0;
+  H1: x`1 = a * (z`1) &  x`2 = a * (z`2) by XTUPLE_0:def 2, XTUPLE_0:def 3;
+  now assume z`1, z`2 have_a_common_root;
+    then consider u being Element of L such that
+    C1: u is_a_common_root_of z`1, z`2 by root2;
+    u is_a_root_of z`1 & u is_a_root_of z`2 by root1,C1;
+    then C3: eval(z`1,u) = 0.L & eval(z`2,u) = 0.L by POLYNOM5:def 6;
+    eval(x`1,u) = a * eval(z`1,u) by H1,POLYNOM5:30;
+    then eval(x`1,u) = 0.L by C3,VECTSP_1:6;
+    then C2: u is_a_root_of x`1 by POLYNOM5:def 6;
+    eval(x`2,u) = a * eval(z`2,u) by H1,POLYNOM5:30;
+    then eval(x`2,u) = 0.L by C3,VECTSP_1:7;
+    then u is_a_root_of x`2 by POLYNOM5:def 6;
+    then u is_a_common_root_of x`1, x`2 by C2,root1;
+    then x`1,x`2 have_a_common_root by root2;
+    hence contradiction by defirred,H0;
+    end;
+  hence z is irreducible by defirred;
+  end;
+hence thesis by A;
+end;
+
+
+begin  :: Degree of Rational Functions
+
+definition
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+func degree z -> Integer equals
+  max(degree((NF z)`1),degree((NF z)`2));
+coherence;
+end;
+
+notation
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+synonym deg z for degree z;
+end;
+
+th1a:
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being non zero rational_function of L
+st z is irreducible holds degree z = max(degree(z`1),degree(z`2))
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be non zero rational_function of L;
+assume z is irreducible;
+then consider a being Element of L such that
+H: a <> 0.L & [a * (z`1), a * (z`2)] = NF(z) by th3;
+a is non zero by H,STRUCT_0:def 12; then
+reconsider az2 = a * (z`2) as non zero Polynomial of L;
+H3: (NF z)`2 = a * (z`2) by H,XTUPLE_0:def 3;
+thus degree z
+    = max(deg(a * (z`1)), deg(a * (z`2))) by H,XTUPLE_0:def 2,H3
+   .= max(deg(z`1),deg(az2)) by H,POLYNOM5:25
+   .= max(degree(z`1),degree(z`2)) by H,POLYNOM5:25;
+end;
+
+theorem th1:
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being rational_function of L
+holds degree(z) <= max(degree(z`1),degree(z`2))
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+per cases;
+suppose H: z is zero;
+ then A: NF z = 0._(L) by defNF .= [0_.(L),1_.(L)];
+ z`1 = 0_.(L) by H,defzerrat;
+ then B: deg(z`1) = -1 by HURWITZ:20;
+ E: deg 1_.(L) = 1 - 1 by POLYNOM4:4;
+ deg z = max(deg 0_.(L),degree((NF z)`2)) by A,XTUPLE_0:def 2
+      .= max(deg 0_.(L),deg 1_.(L)) by A,XTUPLE_0:def 3
+      .= max(-1,deg 1_.(L)) by HURWITZ:20
+      .= 0 by E,XXREAL_0:def 10;
+ hence thesis by B,XXREAL_0:def 10;
+ end;
+suppose A: z is non zero;
+ defpred P[Nat] means
+  for z be non zero rational_function of L
+  st max(degree(z`1),degree(z`2)) = $1
+  holds max(degree((NF z)`1),degree((NF z)`2))
+                           <= max(degree(z`1),degree(z`2));
+  now let z be non zero rational_function of L,
+          z1 be rational_function of L,
+          z2 be non zero Polynomial of L;
+  let f be FinSequence of Polynom-Ring(L);
+  assume AS: max(degree(z`1),degree(z`2)) = 0;
+  now per cases by AS,XXREAL_0:16;
+  suppose H: degree(z`1) = 0;
+    now assume z`1,z`2 have_common_roots;
+      then consider x being Element of L such that
+      HH: x is_a_common_root_of z`1,z`2 by root2;
+      x is_a_root_of z`1 by HH,root1;
+      then z`1 is with_roots by POLYNOM5:def 7;
+      hence contradiction by HURWITZ:24,H;
+      end;
+    hence z`1,z`2 have_no_common_roots;
+    end;
+  suppose H: degree(z`2) = 0;
+    now assume z`1,z`2 have_common_roots;
+      then consider x being Element of L such that
+      HH: x is_a_common_root_of z`1,z`2 by root2;
+      x is_a_root_of z`2 by HH,root1;
+      then z`2 is with_roots by POLYNOM5:def 7;
+      hence contradiction by HURWITZ:24,H;
+      end;
+    hence z`1,z`2 have_no_common_roots;
+    end;
+  end;
+  then z is irreducible by defirred;
+  then degree z = max(degree(z`1),degree(z`2)) by th1a;
+  hence max(degree((NF z)`1),degree((NF z)`2))
+                           <= max(degree(z`1),degree(z`2));
+  end;
+ then IA: P[0];
+ IS: now let n be Nat;
+     assume IV: P[n];
+     now let z be non zero rational_function of L;
+     assume AS: max(degree(z`1),degree(z`2)) = n+1;
+     per cases;
+     suppose z is irreducible;
+       then degree z = max(degree(z`1),degree(z`2)) by th1a;
+       hence max(degree((NF z)`1),degree((NF z)`2))
+                           <= max(degree(z`1),degree(z`2));
+       end;
+     suppose z is reducible;
+       then z`1,z`2 have_common_roots by defirred;
+       then consider x being Element of L such that
+       H: x is_a_common_root_of z`1,z`2 by root2;
+       H3: x is_a_root_of z`1 & x is_a_root_of z`2 by H,root1;
+       consider q2 being Polynomial of L such that
+       HY: z`2 = rpoly(1,x) *' q2 by H3,HURWITZ:33;
+       consider q1 being Polynomial of L such that
+       HX: z`1 = rpoly(1,x) *' q1 by H3,HURWITZ:33;
+       q1 <> 0_.(L) by defzerrat,HX,POLYNOM3:34;
+       then reconsider q1 as non zero Polynomial of L by defzer;
+       q2 <> 0_.(L) by HY,POLYNOM3:34;
+       then reconsider q2 as non zero Polynomial of L by defzer;
+       set q = [q1,q2];
+       now assume q is zero;
+         then q`1 = 0_.(L) by defzerrat;
+         hence contradiction;
+       end;
+       then reconsider q as non zero rational_function of L;
+       z = [rpoly(1,x) *' q1,rpoly(1,x) *' q2] by ttt,HX,HY
+        .= [rpoly(1,x) *' q`1,rpoly(1,x) *' q2] by XTUPLE_0:def 2
+        .= [rpoly(1,x) *' q`1,rpoly(1,x) *' q`2] by XTUPLE_0:def 3;
+       then HZ: NF z = NF q by nfequiv;
+       HV: n <= n+1 by NAT_1:11;
+       W4: deg z`1 = deg rpoly(1,x) + deg q1 by HX,HURWITZ:23
+                  .= 1 + deg q1 by HURWITZ:27
+                  .= 1 + deg q`1 by XTUPLE_0:def 2;
+       deg z`2 = deg rpoly(1,x) + deg q2 by HY,HURWITZ:23
+              .= 1 + deg q2 by HURWITZ:27
+              .= 1 + deg q`2 by XTUPLE_0:def 3;
+       then HU: max(degree(z`1),degree(z`2))
+          = 1 + max(degree(q`1), degree(q`2)) by W4,maxx;
+       then max(degree((NF z)`1),degree((NF z)`2))
+                 <= max(degree(q`1),degree(q`2)) by IV,HZ,AS;
+       hence max(degree((NF z)`1),degree((NF z)`2))
+                 <= max(degree(z`1),degree(z`2)) by HV,HU,AS,XXREAL_0:2;
+       end;
+     end;
+     hence P[n+1];
+     end;
+ I: for n being Nat holds P[n] from NAT_1:sch 2(IA,IS);
+ max(degree(z`1),degree(z`2)) >= 0 by XXREAL_0:25;
+ then max(degree(z`1),degree(z`2)) in NAT by INT_1:3;
+ hence thesis by A,I;
+ end;
+end;
+
+theorem
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being non zero rational_function of L
+holds z is irreducible iff degree z = max( degree(z`1), degree(z`2) )
+proof
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be non zero rational_function of L;
+set p1 = z`1, p2 = z`2;
+A: now assume z is irreducible;
+   then consider a being Element of L such that
+   A1: a <> 0.L & [a * (z`1), a * (z`2)] = NF(z) by th3;
+   A2: degree(a * (z`1)) = degree(z`1) by POLYNOM5:25,A1;
+   A3: degree(a * (z`2)) = degree(z`2) by POLYNOM5:25,A1;
+   degree((NF(z))`1) = degree(z`1) by A2,A1,XTUPLE_0:def 2;
+   hence degree z = max(degree(z`1),degree(z`2)) by A3,A1,XTUPLE_0:def 3;
+   end;
+now assume AS: degree z = max( degree(z`1), degree(z`2));
+   now assume not(z is irreducible);
+     then p1, p2 have_a_common_root by defirred;
+     then consider x being Element of L such that
+     A1: x is_a_common_root_of p1,p2 by root2;
+     A2: x is_a_root_of p1 & x is_a_root_of p2 by A1,root1;
+     then consider q1 being Polynomial of L such that
+     A3: p1 = rpoly(1,x) *' q1 by HURWITZ:33;
+     consider q2 being Polynomial of L such that
+     A4: p2 = rpoly(1,x) *' q2 by A2,HURWITZ:33;
+     q2 <> 0_.(L) by A4,POLYNOM3:34;
+     then reconsider q2 as non zero Polynomial of L by defzer;
+     set zz = [q1,q2];
+     H1: zz`1 = q1 & zz`2 = q2;
+     z = [rpoly(1,x) *' zz`1,rpoly(1,x) *' zz`2] by ttt,A3,A4;
+     then NF(z) = NF(zz) by nfequiv;
+     then degree z =  degree zz;
+     then A8: degree(z) <= max(degree(q1),degree(q2)) by th1,H1;
+     now per cases;
+     suppose B0: p1 = 0_.(L);
+       B4: q1 = 0_.(L) by B0,A3,tt2;
+       deg(rpoly(1,x)*'q2) + 0
+           = deg(rpoly(1,x)) + deg(q2) by HURWITZ:23
+          .= 1 + deg(q2) by HURWITZ:27;
+       then C: deg(q2) < deg(p2) by A4,XREAL_1:8;
+       deg(p1) <= deg(p2) by HURWITZ:20,B0;
+       then B3: max(deg(p1),deg(p2)) = deg(p2) by XXREAL_0:def 10;
+       deg(q1) <= deg(q2) by HURWITZ:20,B4;
+       hence contradiction by B3,C,AS,A8,XXREAL_0:def 10;
+     end;
+     suppose p1 <> 0_.(L);
+       then reconsider p1 as non zero Polynomial of L by defzer;
+       now assume q1 = 0_.(L);
+          then p1 = 0_.(L) by A3,POLYNOM3:34;
+          hence contradiction;
+          end;
+       then reconsider q1 as non zero Polynomial of L by defzer;
+       deg(p1) + 0 = deg(rpoly(1,x)) + deg(q1) by A3,HURWITZ:23
+                 .= 1 + deg(q1) by HURWITZ:27;
+       then H2: deg(q1) < deg(p1) by XREAL_1:8;
+       deg(p2) + 0 = deg(rpoly(1,x)) + deg(q2) by A4,HURWITZ:23
+                  .= 1 + deg(q2) by HURWITZ:27;
+       then deg(q2) < deg(p2) by XREAL_1:8;
+       hence contradiction by AS,A8,H2,XXREAL_0:27;
+       end;
+     end;
+     hence contradiction;
+     end;
+   hence z is irreducible;
+   end;
+hence thesis by A;
+end;
+
+
+begin :: Evaluation of Rational Functions
+
+definition
+let L be Field;
+let z be rational_function of L;
+let x be Element of L;
+func eval(z,x) -> Element of L equals
+  eval(z`1,x) / eval(z`2,x);
+coherence;
+end;
+
+theorem ev0:
+for L being Field
+for x being Element of L holds eval(0._(L),x) = 0.L
+proof
+let L be Field; let x be Element of L;
+thus eval(0._(L),x) = eval(0_.(L),x) * eval((0._(L))`2,x)" by XTUPLE_0:def 2
+                    .= 0.L * eval((0._(L))`2,x)" by POLYNOM4:17
+                    .= 0.L by VECTSP_1:7;
+end;
+
+theorem
+for L being Field
+for x being Element of L holds eval(1._(L),x) = 1.L
+proof
+let L be Field; let x be Element of L;
+A: 1.L <> 0.L;
+thus eval(1._(L),x) = eval(1_.(L),x) * eval((1._(L))`2,x)" by XTUPLE_0:def 2
+                   .= 1.L * eval((1._(L))`2,x)" by POLYNOM4:18
+                   .= 1.L * eval(1_.(L),x)" by XTUPLE_0:def 3
+                   .= 1.L * (1.L)" by POLYNOM4:18
+                   .= 1.L by A,VECTSP_1:def 10;
+end;
+
+theorem
+for L being Field
+for p,q being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L & eval(q`2,x) <> 0.L
+holds eval(p+q,x) = eval(p,x) + eval(q,x)
+proof
+let L be Field; let p,q be rational_function of L; let x be Element of L;
+assume AS: eval(p`2,x) <> 0.L & eval(q`2,x) <> 0.L;
+thus eval(p+q,x)
+   = eval(p`1 *' q`2 + p`2 *' q`1,x) * eval((p+q)`2,x)" by XTUPLE_0:def 2
+  .= eval(p`1 *' q`2 + p`2 *' q`1,x) * eval(p`2 *' q`2,x)" by XTUPLE_0:def 3
+  .= eval(p`1 *' q`2 + p`2 *' q`1,x) * (eval(p`2,x) * eval(q`2,x))"
+     by POLYNOM4:24
+  .= eval(p`1 *' q`2 + p`2 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")
+     by AS,VECTSP_2:11
+  .= (eval(p`1 *' q`2,x) + eval(p`2 *' q`1,x)) * (eval(q`2,x)" * eval(p`2,x)")
+     by POLYNOM4:19
+  .= (eval(p`1 *' q`2,x) * (eval(q`2,x)" * eval(p`2,x)")) +
+     (eval(p`2 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")) by VECTSP_1:def 3
+  .= ((eval(p`1,x) * eval(q`2,x)) * (eval(q`2,x)" * eval(p`2,x)")) +
+     (eval(p`2 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")) by POLYNOM4:24
+  .= (eval(p`1,x) * (eval(q`2,x) * (eval(q`2,x)" * eval(p`2,x)"))) +
+     (eval(p`2 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")) by GROUP_1:def 3
+  .= (eval(p`1,x) * ((eval(q`2,x) * eval(q`2,x)") * eval(p`2,x)")) +
+     (eval(p`2 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")) by GROUP_1:def 3
+  .= (eval(p`1,x) * (1.L * eval(p`2,x)")) +
+     (eval(p`2 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")) by AS,VECTSP_1:def 10
+  .= (eval(p`1,x) * eval(p`2,x)") +
+     (eval(p`2 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")) by VECTSP_1:def 8
+  .= (eval(p`1,x) * eval(p`2,x)") +
+     ((eval(p`2,x) * eval(q`1,x)) * (eval(q`2,x)" * eval(p`2,x)"))
+     by POLYNOM4:24
+  .= (eval(p`1,x) * eval(p`2,x)") +
+     (eval(q`1,x) * (eval(p`2,x) * (eval(p`2,x)" * eval(q`2,x)")))
+     by GROUP_1:def 3
+  .= (eval(p`1,x) * eval(p`2,x)") +
+     (eval(q`1,x) * ((eval(p`2,x) * eval(p`2,x)") * eval(q`2,x)"))
+     by GROUP_1:def 3
+  .= (eval(p`1,x) * eval(p`2,x)") +
+     (eval(q`1,x) * (1.L * eval(q`2,x)")) by AS,VECTSP_1:def 10
+  .= eval(p,x) + eval(q,x) by VECTSP_1:def 8;
+end;
+
+theorem
+for L being Field
+for p,q being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L & eval(q`2,x) <> 0.L
+holds eval(p*'q,x) = eval(p,x) * eval(q,x)
+proof
+let L be Field; let p,q be rational_function of L; let x be Element of L;
+assume AS: eval(p`2,x) <> 0.L & eval(q`2,x) <> 0.L;
+thus eval(p*'q,x)
+   = eval(p`1 *' q`1,x) * eval((p*'q)`2,x)" by XTUPLE_0:def 2
+  .= eval(p`1 *' q`1,x) * eval(p`2 *' q`2,x)" by XTUPLE_0:def 3
+  .= eval(p`1 *' q`1,x) * (eval(p`2,x) * eval(q`2,x))"
+     by POLYNOM4:24
+  .= eval(p`1 *' q`1,x) * (eval(q`2,x)" * eval(p`2,x)")
+     by AS,VECTSP_2:11
+  .= (eval(p`1,x) * eval(q`1,x)) * (eval(q`2,x)" * eval(p`2,x)")
+     by POLYNOM4:24
+  .= eval(p`1,x) * (eval(q`1,x) * (eval(q`2,x)" * eval(p`2,x)"))
+     by  GROUP_1:def 3
+  .= eval(p`1,x) * (eval(p`2,x)" * (eval(q`2,x)" * eval(q`1,x)))
+     by GROUP_1:def 3
+  .= eval(p,x) * eval(q,x) by GROUP_1:def 3;
+end;
+
+theorem ev4:
+for L being Field
+for p being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L
+holds eval(NormRationalFunction p,x) = eval(p,x)
+proof
+let L be Field; let p be rational_function of L; let x be Element of L;
+assume AS: eval(p`2,x) <> 0.L;
+set np = NormRationalFunction p;
+H: 1.L / LC(p`2) <> 0.L;
+thus eval(np,x)
+   = eval(1.L / LC(p`2) * p`1,x) * eval(np`2,x)" by XTUPLE_0:def 2
+  .= eval(1.L / LC(p`2) * p`1,x) * eval(1.L / LC(p`2) * p`2,x)"
+     by XTUPLE_0:def 3
+  .= (1.L / LC(p`2) * eval(p`1,x)) * eval(1.L / LC(p`2) * p`2,x)"
+     by POLYNOM5:30
+  .= (1.L / LC(p`2) * eval(p`1,x)) * (1.L / LC(p`2) * eval(p`2,x))"
+     by POLYNOM5:30
+  .= (1.L / LC(p`2) * eval(p`1,x)) * ((1.L / LC(p`2))" * eval(p`2,x)")
+     by AS,VECTSP_2:11
+  .= eval(p`1,x) * (1.L / LC(p`2) * ((1.L / LC(p`2))" * eval(p`2,x)"))
+     by GROUP_1:def 3
+  .= eval(p`1,x) * ((1.L / LC(p`2) * (1.L / LC(p`2))") * eval(p`2,x)")
+     by GROUP_1:def 3
+  .= eval(p`1,x) * (1.L * eval(p`2,x)") by H,VECTSP_1:def 10
+  .= eval(p,x) by VECTSP_1:def 8;
+end;
+
+theorem
+for L being Field
+for p being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L
+holds x is_a_common_root_of p`1,p`2 or eval(NF p,x) = eval(p,x)
+proof
+let L be Field;
+let p be rational_function of L;
+let x be Element of L;
+assume AS1: eval(p`2,x) <> 0.L;
+assume AS: not(x is_a_common_root_of p`1,p`2);
+per cases;
+suppose H: p is zero;
+  then H1: p`1 = 0_.(L) by defzerrat;
+  H2: NF p = 0._(L) by H,defNF;
+  thus eval(p,x)
+          = 0.L * (eval(p`2,x))" by H1,POLYNOM4:17
+         .= 0.L by VECTSP_1:7
+         .= eval(NF p,x) by H2,ev0;
+  end;
+suppose p is non zero;
+  then consider z1 being rational_function of L,
+                z2 being non zero Polynomial of L such that
+  H: p = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+     NF p = NormRatF z1 &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of p`1,p`2 &
+                                   f.i = rpoly(1,x) by defNF;
+  H1: p`1 = z2 *' z1`1 by H,XTUPLE_0:def 2;
+  H2: p`2 = z2 *' z1`2 by H,XTUPLE_0:def 3;
+  H3: now assume A: eval(z2,x) = 0.L;
+      eval(z2 *' z1`1,x) = eval(z2,x) * eval(z1`1,x) by POLYNOM4:24
+                        .= 0.L by A,VECTSP_1:7;
+      then B: x is_a_root_of p`1 by H1,POLYNOM5:def 6;
+      eval(z2 *' z1`2,x) = eval(z2,x) * eval(z1`2,x) by POLYNOM4:24
+                        .= 0.L by A,VECTSP_1:7;
+      then x is_a_root_of p`2 by H2,POLYNOM5:def 6;
+      hence contradiction by AS,B,root1;
+      end;
+  H6: now assume eval(z1`2,x) = 0.L;
+      then 0.L = eval(z2,x) * eval(z1`2,x)  by VECTSP_1:7
+              .= eval(z2 *' z1`2,x) by POLYNOM4:24;
+      hence contradiction by H,XTUPLE_0:def 3,AS1;
+      end;
+  eval(p,x) = eval(z2 *' z1`1,x) * (eval(z2 *' z1`2,x))"
+              by H,XTUPLE_0:def 3,H1
+          .= (eval(z2,x) * eval(z1`1,x)) * (eval(z2 *' z1`2,x))"
+              by POLYNOM4:24
+           .= (eval(z2,x) * eval(z1`1,x)) *
+              ((eval(z2,x) * eval(z1`2,x))" ) by POLYNOM4:24
+           .= (eval(z2,x) * eval(z1`1,x)) *
+              (eval(z1`2,x)" * eval(z2,x)") by H3,H6,VECTSP_2:11
+           .= eval(z2,x) * (eval(z1`1,x) *
+              (eval(z1`2,x)" * eval(z2,x)")) by GROUP_1:def 3
+           .= eval(z2,x) * (((eval(z1`1,x)) *
+              eval(z1`2,x)") * eval(z2,x)") by GROUP_1:def 3
+           .= (eval(z2,x) * eval(z2,x)") *
+              (eval(z1`1,x) * eval(z1`2,x)") by GROUP_1:def 3
+           .= 1.L * (eval(z1`1,x) * eval(z1`2,x)")
+              by H3,VECTSP_1:def 10
+           .= eval(z1,x) by VECTSP_1:def 8;
+  hence eval(NF p,x) = eval(p,x) by H,H6,ev4;
+  end;
+end;
+

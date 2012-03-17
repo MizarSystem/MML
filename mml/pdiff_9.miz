@@ -1,0 +1,3639 @@
+:: Higher Order Partial Differentiation
+::  by Noboru Endou , Hiroyuki Okazaki and Yasunari Shidama
+::
+:: Received November 20, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies PRE_TOPC, RLVECT_1, FUNCT_1, ARYTM_3, ARYTM_1, FINSEQ_1,
+      FINSEQ_2, FCONT_1, XXREAL_2, RVSUM_1, RELAT_1, COMPLEX1, SQUARE_1,
+      ORDINAL2, RCOMP_1, XBOOLE_0, PARTFUN1, NORMSP_1, XXREAL_1, ORDINAL4,
+      LOPBAN_1, FDIFF_1, PDIFF_1, REAL_NS1, FUNCT_2, EUCLID, AFINSQ_1, XREAL_0,
+      NUMBERS, STRUCT_0, CFCONT_1, RFINSEQ, ORDINAL1, REAL_1, SUBSET_1, CARD_1,
+      TARSKI, XXREAL_0, CARD_3, NAT_1, VALUED_1, SEQ_4, SEQ_2, SEQFUNC,
+      PDIFF_9;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, NUMBERS, XXREAL_0, XREAL_0, REAL_1, SQUARE_1, NAT_1,
+      COMPLEX1, NAT_D, BINOP_2, XXREAL_2, FINSEQ_1, VALUED_1, FINSEQ_2, SEQ_1,
+      SEQ_2, RVSUM_1, VALUED_2, RFINSEQ, SEQ_4, RCOMP_1, FDIFF_1, SEQFUNC,
+      FINSEQ_7, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_0, NORMSP_1, VFUNCT_1,
+      EUCLID, LOPBAN_1, NFCONT_1, NDIFF_1, REAL_NS1, PDIFF_1, INTEGR15,
+      PDIFF_6, PDIFF_7, NFCONT_4;
+ constructors REAL_1, SQUARE_1, RSSPACE3, NORMSP_2, FINSEQ_7, NFCONT_1,
+      FDIFF_1, NDIFF_1, SEQ_1, PDIFF_1, BINOP_2, MONOID_0, INTEGR15, RELSET_1,
+      RFINSEQ, NAT_D, PDIFF_6, SEQ_4, MEASURE6, VFUNCT_1, PDIFF_7, VALUED_2,
+      NFCONT_4, SEQFUNC, COMSEQ_2;
+ registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, MEMBERED, VALUED_0, FINSEQ_1,
+      FINSEQ_2, STRUCT_0, EUCLID, LOPBAN_1, REAL_NS1, NORMSP_1, SEQ_2,
+      VALUED_2, VALUED_1, PARTFUN1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, FINSEQ_1, VALUED_1, NORMSP_0, EUCLID, LOPBAN_1, PDIFF_1,
+      FINSEQ_2, PDIFF_7, INTEGR15;
+ theorems TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, EUCLID, XREAL_1, COMPLEX1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_3, RFINSEQ, ORDINAL1, NAT_1, XXREAL_0,
+      FINSEQ_7, RVSUM_1, RELAT_1, FUNCT_1, FUNCT_2, SQUARE_1, FINSEQ_5,
+      NORMSP_1, LOPBAN_1, PARTFUN1, PARTFUN2, NFCONT_1, FDIFF_1, NDIFF_1,
+      REAL_NS1, VALUED_1, PDIFF_1, TOPREAL7, XXREAL_2, PDIFF_6, SEQ_4, PDIFF_7,
+      PDIFF_8, NFCONT_4, SEQ_2, VALUED_2, RFUNCT_2, RCOMP_1, INT_1, XREAL_0,
+      INTEGR15;
+ schemes SEQ_1, NAT_1, RECDEF_1;
+
+begin :: Preliminaries
+
+reserve m,n for non empty Element of NAT;
+reserve i,j,k for Element of NAT;
+reserve Z for set;
+
+theorem LM01CPre2:
+for S,T be RealNormSpace,
+    f be Point of R_NormSpace_of_BoundedLinearOperators(S,T),
+    r be Real st
+  0 <= r &
+  for x be Point of S st ||.x.|| <= 1 holds ||. f.x .|| <= r * ||.x.||
+ holds ||.f.|| <= r
+proof
+   let S,T be RealNormSpace,
+       f be Point of R_NormSpace_of_BoundedLinearOperators(S,T),
+       r be Real;
+   assume
+AS: 0 <= r &
+    for x be Point of S st ||.x.|| <= 1 holds ||. f.x .|| <= r * ||.x.||;
+
+P1:now let x be Point of S;
+    assume ||.x.|| <= 1; then
+    ||. f.x .|| <=  r * ||.x.|| & r * ||.x.|| <= r * 1 by AS,XREAL_1:64;
+    hence ||. f.x .|| <= r by XXREAL_0:2;
+   end;
+
+   reconsider g = f as Lipschitzian LinearOperator of S,T by LOPBAN_1:def 9;
+
+   set PreNormS = PreNorms(modetrans(f,S,T));
+
+Q1:for y be ext-real set st y in PreNorms(modetrans(f,S,T)) holds y <= r
+   proof
+    let y be ext-real set;
+    assume y in PreNormS; then
+    consider x be VECTOR of S such that
+Q2:  y = ||. modetrans(f,S,T).x .|| & ||.x.|| <= 1;
+    y = ||. g.x .|| by Q2,LOPBAN_1:29;
+    hence thesis by P1,Q2;
+   end;
+
+   set UBPreNormS = upper_bound PreNormS;
+   set dif = UBPreNormS - r;
+
+   now assume UBPreNormS > r; then
+D2: dif > 0 by XREAL_1:50;
+    r is UpperBound of PreNormS by Q1,XXREAL_2:def 1; then
+    PreNormS is bounded_above by XXREAL_2:def 10; then
+    ex w being real set st
+      w in PreNormS & UBPreNormS - dif < w by D2,SEQ_4:def 1;
+    hence contradiction by Q1;
+   end; then
+   upper_bound PreNorms(g) <= r by LOPBAN_1:def 11;
+   hence thesis by LOPBAN_1:30;
+end;
+
+theorem NFCONT125:
+for S be RealNormSpace, f be PartFunc of S,REAL
+  holds
+    f is_continuous_on Z
+ iff
+    Z c= dom f
+  & for s1 be sequence of S
+     st rng s1 c= Z & s1 is convergent & lim s1 in Z
+     holds f/*s1 is convergent & f/.(lim s1) = lim (f/*s1)
+proof
+   let S be RealNormSpace, f be PartFunc of S,REAL;
+   thus f is_continuous_on Z implies Z c= dom f & for s1 be sequence of S
+          st rng s1 c= Z & s1 is convergent & lim s1 in Z
+          holds f/*s1 is convergent & f/.(lim s1) = lim (f/*s1)
+   proof
+    assume A1: f is_continuous_on Z; then
+A2: Z c= dom f by NFCONT_1:def 8;
+    now let s1 be sequence of S;
+     assume A3: rng s1 c= Z & s1 is convergent & lim s1 in Z; then
+A6:  f|Z is_continuous_in (lim s1) by A1,NFCONT_1:def 8;
+     dom (f|Z) = dom f /\ Z by PARTFUN2:15; then
+A7:  dom (f|Z) = Z by A2,XBOOLE_1:28;
+     now let n be Element of NAT;
+      dom s1 = NAT by FUNCT_2:def 1; then
+A8:   s1.n in rng s1 by FUNCT_1:3;
+      thus ((f|Z)/*s1).n = (f|Z)/.(s1.n) by A3,A7,FUNCT_2:109
+          .= f/.(s1.n) by A3,A7,A8,PARTFUN2:15
+          .= (f/*s1).n by A2,A3,FUNCT_2:109,XBOOLE_1:1;
+     end; then
+A9:  (f|Z)/*s1 = f/*s1 by FUNCT_2:63;
+     f/.(lim s1) = (f|Z)/.(lim s1) by A3,A7,PARTFUN2:15;
+     hence f/*s1 is convergent & f/.(lim s1) = lim (f/*s1)
+        by A3,A7,A6,A9,NFCONT_1:def 6;
+    end;
+    hence thesis by A1,NFCONT_1:def 8;
+   end;
+
+   assume that
+A10: Z c= dom f and
+A11: for s1 be sequence of S
+      st rng s1 c= Z & s1 is convergent & lim s1 in Z
+       holds f/*s1 is convergent & f/.(lim s1) = lim (f/*s1);
+   dom (f|Z) = dom f /\ Z by PARTFUN2:15; then
+A12:dom (f|Z) = Z by A10,XBOOLE_1:28;
+
+   now let x1 be Point of S;
+    assume A13: x1 in Z;
+    now let s1 be sequence of S such that
+A14:  rng s1 c= dom (f|Z) & s1 is convergent & lim s1=x1;
+     now let n be Element of NAT;
+      dom s1 = NAT by FUNCT_2:def 1; then
+A17:  s1.n in rng s1 by FUNCT_1:3;
+      thus ((f|Z)/*s1).n = (f|Z)/.(s1.n) by A14,FUNCT_2:109
+          .= f/.(s1.n) by A14,A17,PARTFUN2:15
+          .= (f/*s1).n by A10,A12,A14,FUNCT_2:109,XBOOLE_1:1;
+     end; then
+A18: (f|Z)/*s1 = f/*s1 by FUNCT_2:63;
+     (f|Z)/.(lim s1) = f/.(lim s1) by A13,A12,A14,PARTFUN2:15;
+     hence (f|Z)/*s1 is convergent & (f|Z)/.x1 = lim ((f|Z)/*s1)
+        by A11,A13,A12,A14,A18;
+    end;
+    hence f|Z is_continuous_in x1 by A13,A12,NFCONT_1:def 6;
+   end;
+   hence thesis by A10,NFCONT_1:def 8;
+end;
+
+theorem LMXTh0:
+for f be PartFunc of REAL i,REAL holds dom <>*f = dom f
+proof
+   let f be PartFunc of REAL i,REAL;
+   rng f c= dom (proj(1,1) qua Function") by PDIFF_1:2;
+   hence thesis by RELAT_1:27;
+end;
+
+theorem
+for f be PartFunc of REAL i,REAL st Z c= dom f holds dom ((<>*f) |Z) = Z
+proof
+   let f be PartFunc of REAL i,REAL;
+   assume Z c= dom f; then
+   Z c= dom (<>*f) by LMXTh0;
+   hence thesis by RELAT_1:62;
+end;
+
+theorem LMXTh1:
+for f be PartFunc of REAL i,REAL holds <>*(f|Z) = (<>*f) |Z
+proof
+   let f be PartFunc of REAL i,REAL;
+
+   set W = proj(1,1) qua Function";
+
+   rng (f|Z) c= dom W by PDIFF_1:2; then
+   dom(W*(f|Z)) = dom (f|Z) by RELAT_1:27
+               .= dom f /\ Z by RELAT_1:61; then
+P3:dom(W*(f|Z)) = (dom <>*f) /\ Z by LMXTh0;
+
+   now let x be set;
+    assume A1: x in dom ((<>*f) | Z); then
+    x in (dom <>*f) /\ Z by RELAT_1:61; then
+    x in dom f /\ Z by LMXTh0; then
+A2: x in Z & x in dom f by XBOOLE_0:def 4;
+
+    dom(W*(f|Z)) = dom ((<>*f) | Z) by P3,RELAT_1:61; then
+    (<>*(f|Z)).x = W.((f|Z).x) by A1,FUNCT_1:12
+                .= W.(f.x) by A2,FUNCT_1:49
+                .= (W*f).x by A2,FUNCT_1:13;
+    hence (<>*(f|Z)).x =((<>*f) |Z).x by A1,FUNCT_1:47;
+   end;
+   hence thesis by P3,FUNCT_1:2,RELAT_1:61;
+end;
+
+theorem XTh30:
+for f be PartFunc of REAL i,REAL, x be Element of REAL i st
+  x in dom f holds (<>*f).x = <* f.x *> & (<>*f)/.x = <* f/.x *>
+proof
+   let f be PartFunc of REAL i,REAL, x be Element of REAL i;
+   set I=proj(1,1) qua Function";
+   assume A1: x in dom f; then
+   (<>*f).x = I.(f.x) by FUNCT_1:13;
+   hence A2: (<>*f).x = <* f.x *> by PDIFF_1:1;
+   x in dom <>*f by A1,LMXTh0; then
+   (<>*f)/.x = (<>*f).x by PARTFUN1:def 6;
+   hence (<>*f)/.x = <* f/.x *> by A1,A2,PARTFUN1:def 6;
+end;
+
+theorem LMXTh10:
+for f,g be PartFunc of REAL i,REAL
+ holds <>*(f+g) = <>*f + <>*g & <>*(f-g) = <>*f - <>*g
+proof
+   let f,g be PartFunc of REAL i,REAL;
+P1:dom (<>*(f+g)) = dom (f+g) & dom (<>*(f-g)) = dom (f-g) &
+   dom (<>*f) = dom f & dom (<>*g) = dom g by LMXTh0; then
+   dom (<>*(f+g)) = dom (<>*f) /\ dom (<>*g) &
+   dom (<>*(f-g)) = dom (<>*f) /\ dom (<>*g) by VALUED_1:12,def 1; then
+P4:dom (<>*(f+g)) = dom (<>*f+<>*g) &
+   dom (<>*(f-g)) = dom (<>*f-<>*g) by VALUED_2:def 45,def 46;
+
+   now let x be set;
+    assume A0:x in dom (<>*(f+g)); then
+    x in dom f /\ dom g by P1,VALUED_1:def 1; then
+    x in dom f & x in dom g by XBOOLE_0:def 4; then
+A4: <* f.x *> = (<>*f).x & <* g.x *> = (<>*g).x by XTh30;
+
+    (<>*(f+g)).x = <* (f+g).x *> by XTh30,A0,P1
+                .= <* f.x+g.x *> by A0,P1,VALUED_1:def 1
+                .= (<>*f).x + (<>*g).x by A4,RVSUM_1:13;
+    hence (<>*(f+g)).x = (<>*f+ <>*g).x by P4,A0,VALUED_2:def 45;
+   end;
+   hence <>*(f+g) = <>*f + <>*g by P4,FUNCT_1:2;
+
+   now let x be set;
+    assume A0:x in dom (<>*(f-g)); then
+    x in dom f /\ dom g by P1,VALUED_1:12; then
+    x in dom f & x in dom g by XBOOLE_0:def 4; then
+A4: <* f.x *> = (<>*f).x & <* g.x *> = (<>*g).x by XTh30;
+
+    thus
+    (<>*(f-g)).x = <* (f-g).x *> by XTh30,A0,P1
+                .= <* f.x-g.x *> by A0,P1,VALUED_1:13
+                .= (<>*f).x - (<>*g).x by A4,RVSUM_1:29
+                .= (<>*f- <>*g).x by P4,A0,VALUED_2:def 46;
+   end;
+   hence thesis by P4,FUNCT_1:2;
+end;
+
+theorem LMXTh11:
+for f be PartFunc of REAL i,REAL, r be real number
+ holds <>*(r(#)f) = r(#)(<>*f)
+proof
+   let f be PartFunc of REAL i,REAL, r be real number;
+P1:dom (<>*(r(#)f)) = dom (r(#)f) by LMXTh0; then
+P2:dom (<>*(r(#)f)) = dom f by VALUED_1:def 5; then
+P4:dom (<>*(r(#)f)) = dom (<>*f) by LMXTh0
+                   .= dom (r(#)(<>*f)) by VALUED_2:def 39;
+
+   now let x be set;
+    assume A0:x in dom (<>*(r(#)f)); then
+    (<>*(r(#)f)).x = <* (r(#)f).x *> by P1,XTh30
+                  .= <* r*(f.x) *> by A0,P1,VALUED_1:def 5
+                  .= r(#)<* f.x *> by RVSUM_1:47
+                  .= r(#)(<>*f).x by A0,P2,XTh30;
+    hence (<>*(r(#)f)).x = (r(#)(<>*f)).x by A0,P4,VALUED_2:def 39;
+   end;
+   hence thesis by P4,FUNCT_1:2;
+end;
+
+XTh30D:
+for x be Real, y be Element of REAL 1 st <*x*> = y holds |.x.| = |.y.|
+proof
+   let x be Real, y be Element of REAL 1;
+   assume A1: <*x*> = y;
+
+   reconsider I=proj(1,1) qua Function" as Function of REAL,REAL 1
+     by PDIFF_1:2;
+   reconsider y0=y as Point of REAL-NS 1 by REAL_NS1:def 4;
+   I.x = y by A1,PDIFF_1:1; then
+   |.x.| = ||.y0.|| by PDIFF_1:3;
+   hence thesis by REAL_NS1:1;
+end;
+
+theorem LMXTh13:
+for f be PartFunc of REAL i,REAL, g be PartFunc of REAL i,REAL 1
+ st <>*f = g holds |.f.| = |.g.|
+proof
+   let f be PartFunc of REAL i,REAL, g be PartFunc of REAL i,REAL 1;
+   assume AS: <>*f = g;
+A1:dom |.g.| = dom g by NFCONT_4:def 2
+            .= dom f by AS,LMXTh0; then
+A2:dom |.g.| = dom |.f.| by VALUED_1:def 11;
+
+   now let x be Element of REAL i;
+    assume A3: x in dom |.g.|; then
+A6: g/.x = <* f/.x *> by AS,A1,XTh30;
+    thus
+    (|.g.|).x = (|.g.|)/.x by A3,PARTFUN1:def 6
+      .= |. g/.x .| by A3,NFCONT_4:def 2
+      .= |. f/.x .| by A6,XTh30D
+      .= |. f.x .| by A1,A3,PARTFUN1:def 6
+      .= (|.f.|).x by VALUED_1:18;
+   end;
+   hence thesis by A2,PARTFUN1:5;
+end;
+
+theorem OPEN:
+for X be Subset of REAL m, Y be Subset of REAL-NS m st
+  X = Y holds X is open iff Y is open
+proof
+   let X be Subset of REAL m, Y be Subset of REAL-NS m;
+   assume A1: X = Y;
+   hereby assume X is open; then
+    ex X0 be Subset of REAL-NS m st X0 = X & X0 is open by PDIFF_7:def 3;
+    hence Y is open by A1;
+   end;
+   thus thesis by A1,PDIFF_7:def 3;
+end;
+
+theorem PDIFF75:
+for q be Element of REAL
+ st 1 <= i & i <= j holds |. reproj(i,0*j).q .| = |.q.|
+proof
+   let q be Element of REAL;
+   assume A1: 1 <= i & i <= j;
+   set y = 0*j;
+
+A3:reproj(i,0*j).q = Replace(y,i,q) by PDIFF_1:def 5;
+   y in j-tuples_on REAL; then
+   ex s be Element of REAL* st s=y & len s = j; then
+A4:reproj(i,0*j ).q = (y| (i-'1))^<*q*>^(y/^i) by A1,A3,FINSEQ_7:def 1;
+
+   sqrt Sum sqr(y| (i-'1)) = |. 0*(i-'1) .| by A1,PDIFF_7:2; then
+   sqrt Sum sqr(y| (i-'1)) = 0 by EUCLID:7; then
+A5:Sum sqr(y| (i-'1)) = 0 by RVSUM_1:86,SQUARE_1:24;
+
+   sqrt Sum sqr(y/^i) = |. 0*(j-'i) .| by PDIFF_7:3; then
+A6:sqrt Sum sqr(y/^i) = 0 by EUCLID:7;
+
+   sqr((y| (i-'1))^<*q*>^(y/^i))
+     = sqr((y| (i-'1))^<*q*>)^sqr(y/^i) by TOPREAL7:10
+    .= sqr(y| (i-'1))^sqr<*q*>^sqr(y/^i) by TOPREAL7:10
+    .= sqr(y| (i-'1))^<*q^2*>^sqr(y/^i) by RVSUM_1:55; then
+   Sum sqr((y| (i-'1))^<*q*>^(y/^i))
+     = Sum(sqr(y| (i-'1))^<*q^2*>) + Sum sqr(y/^i) by RVSUM_1:75
+    .= Sum sqr(y| (i-'1)) + q^2 + Sum sqr(y/^i) by RVSUM_1:74
+    .= q^2 by A5,A6,RVSUM_1:86,SQUARE_1:24;
+   hence thesis by A4,COMPLEX1:72;
+end;
+
+Lm5:
+for x be Element of REAL m, Z be Subset of REAL m st
+  Z is open & x in Z & 1 <= i & i <= m
+ ex N be Neighbourhood of proj(i,m).x st
+  for z be Element of REAL st z in N holds (reproj(i,x)).z in Z
+proof
+   let x be Element of REAL m, Z be Subset of REAL m;
+   assume that
+A1: Z is open & x in Z and
+A3: 1 <= i & i <= m;
+   consider r be Real such that
+A4: 0 < r & {y where y is Element of REAL m : |. y - x .| < r} c= Z
+      by A1,PDIFF_7:31;
+   set N = ]. proj(i,m).x-r,proj(i,m).x+r.[;
+
+   reconsider N as Neighbourhood of proj(i,m).x by A4,RCOMP_1:def 6;
+   take N;
+    let z be Element of REAL;
+    assume z in N; then
+A5: |. z - proj(i,m).x .| < r by RCOMP_1:1;
+    |. (reproj(i,x)).z - x .|
+      = |. reproj(i, 0*m ).(z - proj(i,m).x) .| by PDIFF_7:6
+     .= |. z - proj(i,m).x .| by A3,PDIFF75; then
+   (reproj(i,x)).z in {y where y is Element of REAL m : |. y - x .| < r}
+      by A5;
+   hence thesis by A4;
+end;
+
+theorem LMMMTh6:
+for x be Element of REAL j holds x = reproj(i,x).(proj(i,j).x)
+proof
+   let x be Element of REAL j;
+   set q=reproj(i,x).(proj(i,j).x);
+
+A1:dom q = Seg j & dom x = Seg j by FINSEQ_1:89;
+A3:len x = j by A1,FINSEQ_1:def 3;
+
+   for k be Nat st k in dom x holds x.k = q.k
+   proof
+    let k be Nat;
+    assume A5: k in dom x; then
+A6: 1 <= k & k <= j by A1,FINSEQ_1:1;
+    q = Replace(x,i,proj(i,j).x) by PDIFF_1:def 5; then
+A9: q.k = Replace(x,i,proj(i,j).x)/.k by A5,A1,PARTFUN1:def 6;
+    per cases;
+    suppose A10: k = i; then
+     q.k = proj(i,j).x by A3,A6,A9,FINSEQ_7:8;
+     hence x.k = q.k by A10,PDIFF_1:def 1;
+    end;
+    suppose k <> i; then
+     q.k = x/.k by A3,A6,A9,FINSEQ_7:10;
+     hence x.k = q.k by A5,PARTFUN1:def 6;
+    end;
+   end;
+   hence  x = reproj(i,x).(proj(i,j).x) by A1,FINSEQ_1:13;
+end;
+
+begin  :: Continuity and Differentiability
+
+theorem MPDIFF633:
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL n st
+ f is_differentiable_on X holds X is open
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL n;
+   assume f is_differentiable_on X; then
+   ex X0 be Subset of REAL-NS m st X=X0 & X0 is open by PDIFF_6:33;
+   hence thesis by PDIFF_7:def 3;
+end;
+
+theorem MPDIFF632:
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL n st X is open holds
+  ( f is_differentiable_on X
+ iff
+    X c=dom f &
+    for x be Element of REAL m st x in X holds f is_differentiable_in x )
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL n;
+   assume X is open; then
+   ex X0 be Subset of REAL-NS m st X=X0 & X0 is open by PDIFF_7:def 3;
+   hence thesis by PDIFF_6:32;
+end;
+
+definition
+  let m,n be non empty Element of NAT, Z be set,
+      f be PartFunc of REAL m,REAL n;
+  assume A1: Z c= dom f;
+  func f`|Z -> PartFunc of REAL m, Funcs(REAL m,REAL n) means :Def1:
+  dom it = Z &
+  for x be Element of REAL m st x in Z holds it/.x = diff(f,x);
+existence
+proof
+   defpred P[Element of REAL m,set] means $1 in Z & $2 = diff(f,$1);
+   consider F being PartFunc of REAL m,Funcs(REAL m,REAL n) such that
+A2: (for x be Element of REAL m  holds x in dom F iff
+       (ex z be Element of Funcs(REAL m,REAL n) st P[x,z]))
+  & for x be Element of REAL m st x in dom F holds P[x,F.x]
+      from SEQ_1:sch 2;
+   take F;
+A3:Z is Subset of REAL m by A1,XBOOLE_1:1;
+   now let x be set;
+    assume
+AS1: x in Z; then
+    reconsider z = x as Element of REAL m by A3;
+    reconsider y = diff(f,z) as Element of Funcs(REAL m,REAL n) by FUNCT_2:8;
+
+    P[z,y] by AS1;
+    hence x in dom F by A2;
+   end; then
+A4:Z c= dom F by TARSKI:def 3;
+
+   for y be set st y in dom F holds y in Z by A2; then
+   dom F c= Z by TARSKI:def 3;
+   hence dom F = Z by A4,XBOOLE_0:def 10;
+
+   let x be Element of REAL m;
+   assume A5: x in Z; then
+   F.x = diff(f,x) by A2,A4;
+   hence F/.x = diff(f,x) by A5,A4,PARTFUN1:def 6;
+end;
+uniqueness
+proof
+   let F,G be PartFunc of REAL m,Funcs(REAL m,REAL n);
+   assume that
+A6: dom F = Z and
+A7: for x be Element of REAL m st x in Z holds F/.x = diff(f,x) and
+A8: dom G = Z and
+A9: for x be Element of REAL m st x in Z holds G/.x = diff(f,x);
+   now let x be Element of REAL m;
+    assume A10: x in dom F; then
+    F/.x = diff(f,x) by A6,A7;
+    hence F/.x = G/.x by A6,A9,A10;
+   end;
+   hence thesis by A6,A8,PARTFUN2:1;
+end;
+end;
+
+theorem
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL n st
+  f is_differentiable_on X & g is_differentiable_on X
+ holds
+   f+g is_differentiable_on X
+ & for x be Element of REAL m st x in X
+     holds ((f+g)`|X)/.x = diff(f,x) + diff(g,x)
+proof
+   let X be Subset of REAL m, f,g be PartFunc of REAL m,REAL n;
+   assume AS: f is_differentiable_on X & g is_differentiable_on X; then
+A1:X is open by MPDIFF633; then
+A2:X c=dom f & X c=dom g by AS,MPDIFF632;
+   dom (f+g) = dom f /\ dom g by VALUED_2:def 45; then
+A3:X c= dom (f+g) by A2,XBOOLE_1:19;
+   now let x be Element of REAL m;
+    assume x in X; then
+    f is_differentiable_in x & g is_differentiable_in x by AS,A1,MPDIFF632;
+    hence f+g is_differentiable_in x by PDIFF_6:20;
+   end;
+   hence f+g is_differentiable_on X by A3,A1,MPDIFF632;
+   let x be Element of REAL m;
+    assume A5:x in X; then
+    f is_differentiable_in x & g is_differentiable_in x
+      by AS,A1,MPDIFF632; then
+    diff(f+g,x) = diff(f,x)+ diff(g,x) by PDIFF_6:20;
+    hence ((f+g)`|X)/.x = diff(f,x)+ diff(g,x) by A3,A5,Def1;
+end;
+
+theorem
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL n st
+ f is_differentiable_on X & g is_differentiable_on X
+ holds
+    f-g is_differentiable_on X
+  & for x be Element of REAL m st x in X
+      holds ((f-g)`|X)/.x = diff(f,x)- diff(g,x)
+proof
+   let X be Subset of REAL m, f,g be PartFunc of REAL m,REAL n;
+   assume
+AS1:f is_differentiable_on X & g is_differentiable_on X; then
+AS11: X is open by MPDIFF633; then
+P1:X c= dom f & X c= dom g by AS1,MPDIFF632;
+
+   dom (f-g) = dom f /\ dom g by VALUED_2:def 46; then
+P3:X c= dom (f-g) by P1,XBOOLE_1:19;
+
+   now let x be Element of REAL m;
+    assume x in X; then
+    f is_differentiable_in x & g is_differentiable_in x by AS1,AS11,MPDIFF632;
+    hence f-g is_differentiable_in x by PDIFF_6:21;
+   end;
+   hence f-g is_differentiable_on X by P3,AS11,MPDIFF632;
+
+   let x be Element of REAL m;
+   assume P7: x in X; then
+   f is_differentiable_in x & g is_differentiable_in x
+   by AS1,AS11,MPDIFF632; then
+   diff(f-g,x) = diff(f,x)- diff(g,x) by PDIFF_6:21;
+   hence ((f-g)`|X)/.x = diff(f,x)- diff(g,x) by P3,P7,Def1;
+end;
+
+theorem
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL n, r be Real
+ st f is_differentiable_on X
+ holds
+    r(#)f is_differentiable_on X
+  & for x be Element of REAL m st x in X holds ((r(#)f)`|X)/.x = r(#)diff(f,x)
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL n, r be Real;
+   assume AS1: f is_differentiable_on X; then
+AS11: X is open by MPDIFF633; then
+   X c=dom f by AS1,MPDIFF632; then
+P3:X c= dom (r(#)f) by VALUED_2:def 39;
+
+   now let x be Element of REAL m;
+    assume x in X; then
+    f is_differentiable_in x by AS1,AS11,MPDIFF632;
+    hence r(#)f is_differentiable_in x by PDIFF_6:22;
+   end;
+   hence r(#)f is_differentiable_on X by P3,AS11,MPDIFF632;
+
+   let x be Element of REAL m;
+   assume P7:x in X; then
+   f is_differentiable_in x by AS1,AS11,MPDIFF632; then
+   diff(r(#)f,x) = r(#)diff(f,x) by PDIFF_6:22;
+   hence ((r(#)f)`|X)/.x = r(#)diff(f,x) by P3,P7,Def1;
+end;
+
+theorem LM01A:
+for f be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS j)
+  ex p be Point of REAL-NS j st
+   p = f.<*1*>
+ & (for r be Real, x be Point of REAL-NS 1 st x = <*r*> holds f.x = r*p)
+ & (for x be Point of REAL-NS 1 holds ||. f.x .|| =  ||.p.|| * ||.x.||)
+proof
+   let f be Point of
+          R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS j);
+
+   reconsider One = <*1*> as Element of REAL 1 by FINSEQ_2:98;
+   reconsider L = f as Lipschitzian LinearOperator of REAL-NS 1,REAL-NS j
+      by LOPBAN_1:def 9;
+   the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4; then
+   dom L = REAL 1 by FUNCT_2:def 1; then
+   reconsider p = f.<*1*> as Point of REAL-NS j by FINSEQ_2:98,PARTFUN1:4;
+   reconsider OneNS = One as VECTOR of REAL-NS 1 by REAL_NS1:def 4;
+
+A1:now let r be Real, x be Point of REAL-NS 1;
+    assume x = <*r*>; then
+P0: f.x = L.<*r*>;
+
+    <*r*> = <* r*1 *>
+         .= r*<*1*> by RVSUM_1:47
+         .= r*OneNS by REAL_NS1:3;
+    hence f.x = r*p by P0,LOPBAN_1:def 5;
+   end;
+
+   now let x be Point of REAL-NS 1;
+B0: the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4; then
+    reconsider x0=x as FinSequence of REAL by FINSEQ_2:def 3;
+
+    consider r be Element of REAL such that
+B2:  x0 = <*r*> by B0,FINSEQ_2:97;
+
+    thus
+    ||. f.x .|| = ||. r*p .|| by A1,B2
+               .= abs r * ||.p.|| by NORMSP_1:def 1
+               .= ||.p.|| * ||.x.|| by B2,PDIFF_8:2;
+   end;
+   hence thesis by A1;
+end;
+
+theorem LM01C:
+for f be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS j)
+  ex p be Point of REAL-NS j st p = f.<*1*> & ||.p.|| = ||.f.||
+proof
+   let f be Point of
+        R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS j);
+
+   reconsider g = f as Lipschitzian LinearOperator of REAL-NS 1,REAL-NS j
+     by LOPBAN_1:def 9;
+   consider p be Point of REAL-NS j such that
+P1: p = f.<*1*>
+  & (for r be Real, x be Point of REAL-NS 1 st x = <*r*> holds f.x = r*p)
+  & (for x be Point of REAL-NS 1 holds ||. f.x .|| =  ||.p.|| * ||.x.||)
+       by LM01A;
+
+   <*1*> in REAL 1 by FINSEQ_2:98; then
+   reconsider One = <*1*> as Point of REAL-NS 1 by REAL_NS1:def 4;
+
+   ||. g.One .|| <= ||.f.|| * ||.One.|| by LOPBAN_1:32; then
+   ||. g.One .|| <= ||.f.|| * abs 1 by PDIFF_8:2; then
+P2: ||. f.One .|| <= ||.f.|| * 1 by ABSVALUE:def 1;
+
+   for x be Point of REAL-NS 1 st
+     ||.x.|| <= 1 holds ||. f.x .|| <= ||.p.|| * ||.x.|| by P1; then
+   ||.f.|| <= ||.p.|| by LM01CPre2;
+   hence thesis by P1,P2,XXREAL_0:1;
+end;
+
+theorem LM01:
+for f be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS j),
+    x be Point of REAL-NS 1 holds
+  ||. f.x .|| = ||.f.|| * ||.x.||
+proof
+   let f be Point of
+           R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS j),
+       x be Point of REAL-NS 1;
+P1:ex p be Point of REAL-NS j st
+    p = f.<*1*>
+  & (for r be Real, x be Point of REAL-NS 1 st x = <*r*> holds f.x = r*p)
+  & (for x be Point of REAL-NS 1 holds ||. f.x .|| =  ||.p.|| * ||.x.||)
+       by LM01A;
+   ex q be Point of REAL-NS j st q = f.<*1*> & ||.f.|| = ||.q.|| by LM01C;
+   hence thesis by P1;
+end;
+
+theorem LM02:
+for f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL m, Y be Subset of REAL-NS m st
+  1 <= i & i <= m & X is open & g = f & X = Y &
+  f is_partial_differentiable_on X,i
+holds
+   for x be Element of REAL m, y be Point of REAL-NS m st x in X & x = y
+     holds partdiff(f,x,i) = partdiff(g,y,i).<*1*>
+proof
+   let f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+       X be Subset of REAL m, Y be Subset of REAL-NS m;
+   assume
+AS0: 1 <= i & i <= m & X is open & g = f & X = Y
+     & f is_partial_differentiable_on X,i;
+
+   let x be Element of REAL m, y be Point of REAL-NS m;
+   assume AS: x in X & x = y; then
+   f is_partial_differentiable_in x,i by AS0,PDIFF_7:34; then
+   ex g0 be PartFunc of REAL-NS m,REAL-NS n, y0 be Point of REAL-NS m st
+    f = g0 & x = y0 & partdiff(f,x,i) = partdiff(g0,y0,i).<*1*>
+      by PDIFF_1:def 14;
+   hence partdiff(f,x,i) = partdiff(g,y,i).<*1*> by AS0,AS;
+end;
+
+theorem LM03:
+for f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL m, Y be Subset of REAL-NS m st
+  1 <= i & i <= m & X is open & g = f & X = Y &
+  f is_partial_differentiable_on X,i
+holds
+   for x0,x1 be Element of REAL m, y0,y1 be Point of REAL-NS m st
+     x0 = y0 & x1 = y1 & x0 in X & x1 in X
+     holds
+       |. f`partial|(X,i)/.x1 - f`partial|(X,i)/.x0 .|
+         = ||. (g`partial|(Y,i))/.y1 - (g`partial|(Y,i))/.y0 .||
+proof
+   let f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+       X be Subset of REAL m, Y be Subset of REAL-NS m;
+   assume
+AS0:1 <=i & i <= m & X is open & g = f & X = Y
+  & f is_partial_differentiable_on X,i;
+   let x0,x1 be Element of REAL m, y0,y1 be Point of REAL-NS m;
+   assume AS1: x0 = y0 & x1 = y1 & x0 in X & x1 in X;
+
+   <*1*> is Element of REAL 1 by FINSEQ_2:98; then
+   reconsider Pt1 = <*1*> as Point of REAL-NS 1 by REAL_NS1:def 4;
+
+   f`partial|(X,i)/.x1 = partdiff(f,x1,i)
+   & f`partial|(X,i)/.x0 = partdiff(f,x0,i) by AS1,AS0,PDIFF_7:def 5; then
+   f`partial|(X,i)/.x1 = partdiff(g,y1,i).Pt1
+   & f`partial|(X,i)/.x0 = partdiff(g,y0,i).Pt1 by LM02,AS0,AS1; then
+   f`partial|(X,i)/.x1 - f`partial|(X,i)/.x0
+    = partdiff(g,y1,i).Pt1 - partdiff(g,y0,i).Pt1 by REAL_NS1:5; then
+A3:f`partial|(X,i)/.x1 - f`partial|(X,i)/.x0
+    = (partdiff(g,y1,i) - partdiff(g,y0,i)).Pt1 by LOPBAN_1:40;
+
+   ||.Pt1.|| = abs 1 by PDIFF_8:2; then
+   ||.Pt1.|| = 1 by ABSVALUE:def 1; then
+A4: ||. (partdiff(g,y1,i) - partdiff(g,y0,i)).Pt1 .||
+    = ||. partdiff(g,y1,i) - partdiff(g,y0,i) .|| * 1 by LM01;
+
+   g is_partial_differentiable_on Y,i by AS0,PDIFF_7:33; then
+   g`partial|(Y,i)/.y1 = partdiff(g,y1,i) &
+   g`partial|(Y,i)/.y0 = partdiff(g,y0,i) by AS0,AS1,PDIFF_1:def 20;
+   hence thesis by A3,A4,REAL_NS1:1;
+end;
+
+theorem LM1Direct:
+for f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL m, Y be Subset of REAL-NS m
+  st 1 <=i & i <= m & X is open & g = f & X = Y
+ holds
+   (f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X)
+     iff
+   (g is_partial_differentiable_on Y,i & g`partial|(Y,i) is_continuous_on Y)
+proof
+   let f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+       X be Subset of REAL m, Y be Subset of REAL-NS m;
+   assume
+AS: 1 <=i & i <= m & X is open & g = f & X = Y;
+
+   hereby assume
+A2: (f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X);
+    hence g is_partial_differentiable_on Y,i by AS,PDIFF_7:33; then
+A3: dom (g`partial|(Y,i)) = Y by PDIFF_1:def 20;
+
+    for y0 be Point of REAL-NS m, r be Real st y0 in Y & 0 < r
+    ex s be Real st 0 < s & for y1 be Point of REAL-NS m st
+      y1 in Y & ||. y1- y0 .|| < s holds
+        ||. (g`partial|(Y,i))/.y1 - (g`partial|(Y,i))/.y0 .|| < r
+    proof
+     let y0 be Point of REAL-NS m, r be Real;
+     reconsider x0 = y0 as Element of REAL m by REAL_NS1:def 4;
+     assume
+A4:   y0 in Y & 0 < r; then
+     consider s be Real such that
+A5:   0 < s & for x1 be Element of REAL m st x1 in X & |. x1-x0 .| <s holds
+       |. f`partial|(X,i)/.x1 - f`partial|(X,i)/.x0 .| < r
+         by AS,A2,PDIFF_7:38;
+     take s;
+     thus 0 < s by A5;
+     let y1 be Point of REAL-NS m;
+     reconsider x1 = y1 as Element of REAL m by REAL_NS1:def 4;
+     assume
+A6:   y1 in Y & ||. y1- y0 .|| < s; then
+A7:  |. x1- x0 .| < s by REAL_NS1:1,5;
+
+     |. f`partial|(X,i)/.x1 - f`partial|(X,i)/.x0 .|
+       = ||. (g`partial|(Y,i))/.y1 - (g`partial|(Y,i))/.y0 .||
+          by A4,A6,AS,A2,LM03;
+     hence ||. (g`partial|(Y,i))/.y1 - (g`partial|(Y,i))/.y0 .|| < r
+       by A7,A5,A6,AS;
+    end;
+    hence g`partial|(Y,i) is_continuous_on Y by A3,NFCONT_1:19;
+   end;
+
+   assume
+B1: g is_partial_differentiable_on Y,i
+  & g`partial|(Y,i) is_continuous_on Y; then
+B2:f is_partial_differentiable_on X,i by AS,PDIFF_7:33; then
+B3:dom (f`partial|(X,i)) = X by PDIFF_7:def 5;
+
+   for x0 be Element of REAL m, r be Real st x0 in X & 0 < r
+   ex s be Real st 0 < s & for x1 be Element of REAL m
+    st x1 in X & |. x1 - x0 .| < s holds
+     |. (f`partial|(X,i))/.x1 - (f`partial|(X,i))/.x0 .| < r
+   proof
+    let x0 be Element of REAL m, r be Real;
+    reconsider y0 = x0 as Point of REAL-NS m by REAL_NS1:def 4;
+    assume
+B4:  x0 in X & 0 < r; then
+    consider s be Real such that
+B5:  0 < s
+     & for y1 be Point of REAL-NS m st y1 in Y & ||. y1- y0 .|| < s holds
+        ||. g`partial|(Y,i)/.y1 - g`partial|(Y,i)/.y0 .|| < r
+           by AS,B1,NFCONT_1:19;
+    take s;
+    thus 0 < s by B5;
+    let x1 be Element of REAL m;
+    reconsider y1 = x1 as Element of REAL-NS m by REAL_NS1:def 4;
+    assume
+B6:  x1 in X & |. x1- x0 .| < s;
+
+    |. x1 - x0 .| = ||. y1 - y0 .|| by REAL_NS1:1,5; then
+    ||. g`partial|(Y,i)/.y1 - g`partial|(Y,i)/.y0 .|| < r by B5,B6,AS;
+    hence
+    |. f`partial|(X,i)/.x1 - f`partial|(X,i)/.x0 .| < r by B4,B6,AS,B2,LM03;
+   end;
+   hence (f is_partial_differentiable_on X,i &
+      f`partial|(X,i) is_continuous_on X) by B1,B3,AS,PDIFF_7:33,38;
+end;
+
+theorem ThGdiff:
+for f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL m, Y be Subset of REAL-NS m
+ st X = Y & X is open & f = g
+ holds
+  (for i st 1 <= i & i <= m holds
+    f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X)
+ iff
+  g is_differentiable_on Y & g`|Y is_continuous_on Y
+proof
+   let f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+       X be Subset of REAL m, Y be Subset of REAL-NS m;
+   assume AS0: X = Y & X is open & f = g; then
+A1:Y is open by OPEN;
+
+   hereby assume
+AS1:for i be Element of NAT st 1 <=i & i <= m holds
+     f is_partial_differentiable_on X,i &
+     f`partial|(X,i) is_continuous_on X;
+
+    now let i be Element of NAT;
+     assume AS2: 1 <=i & i <= m; then
+     f is_partial_differentiable_on X,i &
+     f`partial|(X,i) is_continuous_on X by AS1;
+     hence g is_partial_differentiable_on Y,i &
+      g`partial|(Y,i) is_continuous_on Y by AS0,AS2,LM1Direct;
+    end;
+    hence g is_differentiable_on Y & g`|Y is_continuous_on Y
+      by A1,PDIFF_8:22;
+   end;
+
+   assume AS3: g is_differentiable_on Y & g`|Y is_continuous_on Y;
+   let i be Element of NAT;
+   assume AS4: 1 <=i & i <= m; then
+   g is_partial_differentiable_on Y,i &
+   g`partial|(Y,i) is_continuous_on Y by A1,AS3,PDIFF_8:22;
+   hence thesis by AS0,AS4,LM1Direct;
+end;
+
+theorem LM2:
+for f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL m, Y be Subset of REAL-NS m st
+  X is open & X c= dom f & g = f & X = Y
+ holds
+  (g is_differentiable_on Y & g`|Y is_continuous_on Y)
+    iff
+  (f is_differentiable_on X &
+   for x0 be Element of REAL m,r be Real
+    st x0 in X & 0 < r
+     ex s be Real
+      st 0 < s & for x1 be Element of REAL m
+       st x1 in X & |. x1- x0 .| < s
+        holds for v be Element of REAL m
+         holds |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.|)
+proof
+   let f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+       X be Subset of REAL m, Y be Subset of REAL-NS m;
+   assume
+AS: X is open & X c= dom f & g = f & X = Y; then
+O1:Y is open by OPEN;
+
+   hereby assume
+AS1: g is_differentiable_on Y & g`|Y is_continuous_on Y;
+    hence Z1: f is_differentiable_on X by AS,PDIFF_6:30;
+    let x0 be Element of REAL m,r be Real;
+    assume
+P2: x0 in X & 0 < r;
+     reconsider xx0 = x0 as Point of REAL-NS m by REAL_NS1:def 4;
+     consider s be Real such that
+P3:   0 < s &
+      for xx1 be Point of REAL-NS m st xx1 in Y & ||. xx1-xx0 .|| < s
+       holds ||. (g`|Y)/.xx1 - (g`|Y)/.xx0 .|| <r by AS,AS1,P2,NFCONT_1:19;
+     take s;
+     thus 0 < s by P3;
+     let x1 be Element of REAL m;
+     assume
+P4:   x1 in X & |. x1-x0 .| < s;
+     reconsider xx1 = x1 as Point of REAL-NS m by REAL_NS1:def 4;
+
+     ||. xx1- xx0 .|| < s by P4,REAL_NS1:1,5; then
+P5:  ||. (g`|Y)/.xx1 - (g`|Y)/.xx0 .|| < r by P3,P4,AS;
+     let v be Element of REAL m;
+     reconsider vv = v as Point of REAL-NS m by REAL_NS1:def 4;
+
+     f is_differentiable_in x0 by P2,AS,Z1,O1,PDIFF_6:32; then
+     ex g be PartFunc of REAL-NS m,REAL-NS n,
+        y be Point of REAL-NS m
+      st f = g & x0 = y & diff(f,x0) = diff(g,y) by PDIFF_1:def 8; then
+P8:  ((g`|Y)/.xx0).vv = diff(f,x0).v by AS,P2,AS1,NDIFF_1:def 9;
+
+     f is_differentiable_in x1 by P4,AS,Z1,O1,PDIFF_6:32; then
+     ex g be PartFunc of REAL-NS m,REAL-NS n,
+        y be Point of REAL-NS m
+      st f = g & x1 = y & diff(f,x1) = diff(g,y) by PDIFF_1:def 8; then
+P7:  ((g`|Y)/.xx1).vv = diff(f,x1).v by AS,P4,AS1,NDIFF_1:def 9;
+
+     reconsider g10 = (g`|Y)/.xx1 - (g`|Y)/.xx0 as Lipschitzian LinearOperator
+         of REAL-NS m,REAL-NS n by LOPBAN_1:def 9;
+
+     ((g`|Y)/.xx1).vv - ((g`|Y)/.xx0).vv = g10.vv by LOPBAN_1:40; then
+D2:  ||. ((g`|Y)/.xx1).vv - ((g`|Y)/.xx0).vv .||
+      <= ||. (g`|Y)/.xx1 - (g`|Y)/.xx0 .|| * ||.vv.|| by LOPBAN_1:32;
+
+     ||. (g`|Y)/.xx1 - (g`|Y)/.xx0 .|| * ||.vv.|| <= r*||.vv.||
+        by P5,XREAL_1:64; then
+     ||. ((g`|Y)/.xx1).vv - ((g`|Y)/.xx0).vv .|| <= r*||.vv.||
+        by D2,XXREAL_0:2; then
+     |. diff(f,x1).v - diff(f,x0).v.| <= r*||.vv.|| by P7,P8,REAL_NS1:1,5;
+     hence |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.| by REAL_NS1:1;
+    end;
+
+    assume
+P1:  f is_differentiable_on X
+   & for x0 be Element of REAL m,r be Real
+      st x0 in X & 0<r
+       ex s be Real
+        st 0<s & for x1 be Element of REAL m
+         st x1 in X & |. x1- x0 .| < s
+           holds for v be Element of REAL m
+             holds |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.|;
+    hence Z1: g is_differentiable_on Y by AS,PDIFF_6:30; then
+Z2: dom (g`|Y) = Y by NDIFF_1:def 9;
+
+    for x0 be Point of REAL-NS m,r be Real
+     st x0 in Y & 0 < r
+      ex s be Real st 0<s
+       & for x1 be Point of REAL-NS m
+          st x1 in Y & ||. x1- x0 .|| < s
+           holds ||. (g`|Y)/.x1 - (g`|Y)/.x0 .|| < r
+    proof
+     let xx0 be Point of REAL-NS m,r0 be Real;
+     assume P2: xx0 in Y & 0 < r0;
+     set r = r0/2;
+P21: 0 < r & r < r0 by P2,XREAL_1:216;
+
+     reconsider x0 = xx0 as Element of REAL m by REAL_NS1:def 4;
+     consider s be Real such that
+P3:   0 < s & for x1 be Element of REAL m
+       st x1 in X & |. x1- x0 .| < s
+        holds for v be Element of REAL m
+         holds |. diff(f,x1).v  - diff(f,x0).v.| <= r * |.v.| by P1,AS,P2;
+     take s;
+     thus 0 < s by P3;
+     let xx1 be Point of REAL-NS m;
+     assume
+P4:   xx1 in Y & ||. xx1- xx0 .|| < s;
+
+     reconsider x1 = xx1 as Element of REAL m by REAL_NS1:def 4;
+
+P5:  |. x1- x0 .| < s by P4,REAL_NS1:1,5;
+
+     now let vv be Point of  REAL-NS m;
+      assume ||.vv.|| <= 1;
+      reconsider v = vv as Element of REAL m by REAL_NS1:def 4;
+
+      f is_differentiable_in x0 by P2,AS,P1,O1,PDIFF_6:32; then
+      ex g be PartFunc of REAL-NS m,REAL-NS n,
+         y be Point of REAL-NS m
+       st f = g & x0 = y & diff(f,x0) = diff(g,y) by PDIFF_1:def 8; then
+P8:   ((g`|Y)/.xx0).vv = diff(f,x0).v by AS,Z1,P2,NDIFF_1:def 9;
+
+      f is_differentiable_in x1 by P4,AS,P1,O1,PDIFF_6:32; then
+      ex g be PartFunc of REAL-NS m,REAL-NS n,
+         y be Point of REAL-NS m
+       st f = g & x1 = y & diff(f,x1) = diff(g,y) by PDIFF_1:def 8; then
+P7:   ((g`|Y)/.xx1).vv = diff(f,x1).v by AS,Z1,P4,NDIFF_1:def 9;
+
+      |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.| by P5,P3,P4,AS; then
+      |. diff(f,x1).v - diff(f,x0).v.| <= r*||.vv.|| by REAL_NS1:1; then
+      ||. ((g`|Y)/.xx1).vv - ((g`|Y)/.xx0).vv .|| <= r*||.vv.||
+         by P7,P8,REAL_NS1:1,5;
+      hence
+      ||. ((g`|Y)/.xx1 - (g`|Y)/.xx0).vv .|| <= r*||.vv.|| by LOPBAN_1:40;
+     end; then
+     ||. (g`|Y)/.xx1 - (g`|Y)/.xx0 .|| <= r by P2,LM01CPre2;
+     hence ||. (g`|Y)/.xx1 - (g`|Y)/.xx0 .|| < r0 by P21,XXREAL_0:2;
+    end;
+    hence g`|Y is_continuous_on Y by Z2,NFCONT_1:19;
+end;
+
+theorem CW01:
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL n st
+ X is open & X c= dom f holds
+   (for i be Element of NAT st 1 <= i & i <= m holds
+     f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X)
+  iff
+   (f is_differentiable_on X &
+    for x0 be Element of REAL m,r be Real st x0 in X & 0 < r
+     ex s be Real st
+      0 < s
+      & for x1 be Element of REAL m st x1 in X & |. x1-x0 .| < s
+         holds for v be Element of REAL m
+          holds |. diff(f,x1).v  - diff(f,x0).v.| <= r * |.v.|)
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL n;
+   assume AS0: X is open & X c= dom f;
+
+   reconsider Y = X as Subset of REAL-NS m by REAL_NS1:def 4;
+
+   the carrier of REAL-NS m = REAL m
+ & the carrier of REAL-NS n = REAL n by REAL_NS1:def 4; then
+   reconsider g = f as PartFunc of REAL-NS m,REAL-NS n;
+
+   hereby assume
+     for i be Element of NAT st 1 <=i & i <= m holds
+       f is_partial_differentiable_on X,i &
+       f`partial|(X,i) is_continuous_on X; then
+    g is_differentiable_on Y & g`|Y is_continuous_on Y by AS0,ThGdiff;
+    hence
+    f is_differentiable_on X &
+      for x0 be Element of REAL m,r be Real
+        st x0 in X & 0 < r
+          ex s be Real
+            st 0 < s & for x1 be Element of REAL m
+             st x1 in X & |. x1- x0 .| < s
+               holds for v be Element of REAL m
+                 holds |. diff(f,x1).v  - diff(f,x0).v.| <= r * |.v.|
+                   by AS0,LM2;
+   end;
+
+   assume
+    (f is_differentiable_on X &
+       for x0 be Element of REAL m,r be Real
+         st x0 in X & 0 < r
+           ex s be Real
+             st 0 < s & for x1 be Element of REAL m
+              st x1 in X & |. x1- x0 .| < s
+                holds for v be Element of REAL m
+                  holds |. diff(f,x1).v  - diff(f,x0).v.| <= r * |.v.|); then
+   g is_differentiable_on Y & g`|Y is_continuous_on Y by AS0,LM2;
+   hence thesis by AS0,ThGdiff;
+end;
+
+theorem
+for f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n
+  st f = g & f is_differentiable_on Z
+    holds f`|Z = g`|Z
+proof
+   let f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n;
+   assume
+AS: f = g & f is_differentiable_on Z;
+   then P1: g is_differentiable_on Z by PDIFF_6:30; then
+P3:dom (g`|Z) = Z by NDIFF_1:def 9;
+AK: Z c= dom f by AS,PDIFF_6:def 4; then
+P2:dom (f`|Z) = Z by Def1;
+   now let x0 be set;
+    assume P4: x0 in dom (f`|Z); then
+    reconsider x = x0 as Element of REAL m;
+    reconsider Z1 = Z as Subset of REAL-NS m by P1,NDIFF_1:30;
+    reconsider z = x as Point of REAL-NS m by REAL_NS1:def 4;
+    Z1 is open by P1,NDIFF_1:32; then
+    f is_differentiable_in x by AS,P2,P4,PDIFF_6:32; then
+P6: ex g0 be PartFunc of REAL-NS m,REAL-NS n, y0 be Point of REAL-NS m st
+      f = g0 & x = y0 & diff(f,x) = diff(g0,y0) by PDIFF_1:def 8;
+    thus (f`|Z).x0 = (f`|Z)/.x by P4,PARTFUN1:def 6
+                  .= diff(g,z) by AK,P2,P4,P6,AS,Def1
+                  .= (g`|Z)/.x by P4,P2,P1,NDIFF_1:def 9
+                  .= (g`|Z).x0 by P4,P2,P3,PARTFUN1:def 6;
+   end;
+   hence thesis by P2,P3,FUNCT_1:2;
+end;
+
+theorem
+for f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+    X be Subset of REAL m, Y be Subset of REAL-NS m
+ st X = Y & X is open & f = g
+ holds
+  (for i be Element of NAT st 1 <= i & i <= m holds
+     f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X )
+ iff
+  f is_differentiable_on X & g`|Y is_continuous_on Y
+proof
+   let f be PartFunc of REAL m,REAL n, g be PartFunc of REAL-NS m,REAL-NS n,
+       X be Subset of REAL m, Y be Subset of REAL-NS m;
+   assume
+AS0:X = Y & X is open & f = g; then
+A1:Y is open by OPEN;
+
+   hereby assume
+AS1:for i be Element of NAT st 1 <=i & i <= m holds
+     f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X;
+
+    now let i be Element of NAT;
+     assume
+AS2:  1 <=i & i <= m; then
+     f is_partial_differentiable_on X,i &
+     f`partial|(X,i) is_continuous_on X by AS1;
+     hence
+      g is_partial_differentiable_on Y,i &
+      g`partial|(Y,i) is_continuous_on Y by AS0,AS2,LM1Direct;
+    end; then
+    g is_differentiable_on Y & g`|Y is_continuous_on Y by A1,PDIFF_8:22;
+    hence f is_differentiable_on X & g`|Y is_continuous_on Y by AS0,PDIFF_6:30;
+   end;
+
+   assume f is_differentiable_on X & g`|Y is_continuous_on Y; then
+B2:g is_differentiable_on Y & g`|Y is_continuous_on Y by AS0,PDIFF_6:30;
+
+   let i be Element of NAT;
+    assume
+AS4: 1 <=i & i <= m; then
+    g is_partial_differentiable_on Y,i &
+    g`partial|(Y,i) is_continuous_on Y by A1,B2,PDIFF_8:22;
+    hence thesis by AS0,AS4,LM1Direct;
+end;
+
+theorem XTh350:
+for f,g be PartFunc of REAL m,REAL n, x be Element of REAL m
+ st f is_continuous_in x & g is_continuous_in x
+ holds f+g is_continuous_in x & f-g is_continuous_in x
+proof
+   let f,g be PartFunc of REAL m,REAL n,
+       x be Element of REAL m;
+   assume A1: f is_continuous_in x & g is_continuous_in x;
+   reconsider y=x as Point of REAL-NS m by REAL_NS1:def 4;
+A20:the carrier of REAL-NS m = REAL m &
+   the carrier of REAL-NS n = REAL n by REAL_NS1:def 4; then
+   reconsider f1=f, g1=g as PartFunc of REAL-NS m, REAL-NS n;
+   f1 is_continuous_in y & g1 is_continuous_in y by A1,PDIFF_7:35; then
+A2:f1+g1 is_continuous_in y & f1-g1 is_continuous_in y by NFCONT_1:15;
+   f+g=f1+g1 & f-g=f1-g1 by NFCONT_4:5,10,A20;
+   hence thesis by A2,PDIFF_7:35;
+end;
+
+theorem XTh351:
+for f be PartFunc of REAL m,REAL n, x be Element of REAL m, r be Real
+ st f is_continuous_in x holds r(#)f is_continuous_in x
+proof
+   let f be PartFunc of REAL m,REAL n, x be Element of REAL m, r be Real;
+   assume A1: f is_continuous_in x;
+
+   reconsider y=x as Point of REAL-NS m by REAL_NS1:def 4;
+A20:the carrier of REAL-NS m = REAL m &
+   the carrier of REAL-NS n = REAL n by REAL_NS1:def 4; then
+   reconsider f1=f as PartFunc of REAL-NS m,REAL-NS n;
+   f1 is_continuous_in y by A1,PDIFF_7:35; then
+A2:r(#)f1 is_continuous_in y by NFCONT_1:16;
+   r(#)f=r(#)f1 by NFCONT_4:6,A20;
+   hence thesis by A2,PDIFF_7:35;
+end;
+
+theorem
+for f be PartFunc of REAL m,REAL n, x be Element of REAL m
+  st f is_continuous_in x holds -f is_continuous_in x
+proof
+   let f be PartFunc of REAL m,REAL n, x be Element of REAL m;
+A1:-1 is Real by XREAL_0:def 1;
+   assume f is_continuous_in x; then
+   (-1)(#)f is_continuous_in x by A1,XTh351;
+   hence thesis by NFCONT_4:7;
+end;
+
+theorem YTh354:
+for f be PartFunc of REAL m,REAL n, x be Element of REAL m
+  st f is_continuous_in x holds |.f.| is_continuous_in x
+proof
+   let f be PartFunc of REAL m,REAL n, x be Element of REAL m;
+   assume A1: f is_continuous_in x;
+   reconsider y=x as Point of REAL-NS m by REAL_NS1:def 4;
+A20:the carrier of REAL-NS m = REAL m &
+   the carrier of REAL-NS n = REAL n by REAL_NS1:def 4; then
+   reconsider f1=f as PartFunc of REAL-NS m,REAL-NS n;
+   f1 is_continuous_in y by A1,PDIFF_7:35; then
+A2: ||.f1.|| is_continuous_in y by NFCONT_1:17;
+   |.f.|=||.f1.|| by NFCONT_4:9,A20;
+   hence thesis by A2,NFCONT_4:21;
+end;
+
+theorem XTh350X:
+for Z be set, f,g be PartFunc of REAL m,REAL n
+  st f is_continuous_on Z & g is_continuous_on Z
+  holds f+g is_continuous_on Z & f-g is_continuous_on Z
+proof
+   let Z be set, f,g be PartFunc of REAL m,REAL n;
+   assume A1: f is_continuous_on Z & g is_continuous_on Z;
+A2:the carrier of REAL-NS m = REAL m &
+   the carrier of REAL-NS n = REAL n by REAL_NS1:def 4; then
+   reconsider f1=f, g1=g as PartFunc of REAL-NS m,REAL-NS n;
+
+   f1 is_continuous_on Z & g1 is_continuous_on Z by A1,PDIFF_7:37; then
+A3:f1+g1 is_continuous_on Z & f1-g1 is_continuous_on Z by NFCONT_1:25;
+   f+g = f1+g1 & f-g=f1-g1 by NFCONT_4:5,10,A2;
+   hence thesis by A3,PDIFF_7:37;
+end;
+
+theorem XTh351X:
+for r be Real, f,g be PartFunc of REAL m,REAL n
+  st f is_continuous_on Z holds r(#)f is_continuous_on Z
+proof
+   let r be Real, f,g be PartFunc of REAL m,REAL n;
+   assume A1: f is_continuous_on Z;
+A2:the carrier of REAL-NS m = REAL m &
+   the carrier of REAL-NS n = REAL n by REAL_NS1:def 4; then
+   reconsider f1=f as PartFunc of REAL-NS m,REAL-NS n;
+   f1 is_continuous_on Z by A1,PDIFF_7:37; then
+A3:r(#)f1 is_continuous_on Z by NFCONT_1:27;
+   r(#)f1=r(#)f by NFCONT_4:6,A2;
+   hence r(#)f is_continuous_on Z by A3,PDIFF_7:37;
+end;
+
+theorem
+for f,g be PartFunc of REAL m,REAL n st
+  f is_continuous_on Z holds -f is_continuous_on Z
+proof
+   let f,g be PartFunc of REAL m,REAL n;
+   assume A1: f is_continuous_on Z;
+   -1 is Real by XREAL_0:def 1; then
+   (-1)(#)f is_continuous_on Z by A1,XTh351X;
+   hence thesis by NFCONT_4:7;
+end;
+
+theorem XDef60:
+for f be PartFunc of REAL i,REAL, x0 be Element of REAL i holds
+  f is_continuous_in x0
+    iff
+ ( x0 in dom f &
+   for r be Real st 0 < r
+     ex s be Real st
+       0 < s
+     & for x be Element of REAL i st x in dom f & |. x-x0 .| < s
+         holds |. f/.x - f/.x0 .| < r )
+proof
+   let f be PartFunc of REAL i,REAL, x0 be Element of REAL i;
+   hereby assume f is_continuous_in x0; then
+    consider y0 be Point of REAL-NS i,
+             g be PartFunc of REAL-NS i,REAL such that
+P1:  x0 = y0 & f = g & g is_continuous_in y0 by NFCONT_4:def 4;
+
+    thus x0 in dom f by P1,NFCONT_1:8;
+    let r be Real;
+     assume 0 < r; then
+     consider s be Real such that
+P3:   0 < s
+    & for y1 be Point of REAL-NS i st y1 in dom g & ||. y1- y0 .|| < s
+        holds |. g/.y1-g/.y0 .|<r by P1,NFCONT_1:8;
+     take s;
+     thus 0<s by P3;
+     let a be Element of REAL i;
+     assume P4: a in dom f & |. a-x0 .| < s;
+     reconsider y1=a as Point of REAL-NS i by REAL_NS1:def 4;
+     ||. y1 -y0 .|| = |. a-x0 .| by P1,REAL_NS1:1,5;
+     hence |. f/.a-f/.x0 .|<r by P1,P3,P4;
+   end;
+
+   assume
+P1:  x0 in dom f
+   & for r be Real st 0 < r
+       ex s be Real st 0<s &
+         for a be Element of REAL i st a in dom f & |. a-x0 .| < s
+           holds |. f/.a-f/.x0 .| < r;
+
+    reconsider y0=x0 as Point of REAL-NS i by REAL_NS1:def 4;
+    reconsider g=f as PartFunc of REAL-NS i,REAL by REAL_NS1:def 4;
+
+    now let r be Real;
+     assume 0 < r; then
+     consider s be Real such that
+P3:   0 < s
+    & for a be Element of REAL i
+       st a in dom f & |. a-x0 .| < s holds |. f/.a-f/.x0 .| < r by P1;
+     take s;
+     thus 0 < s by P3;
+     hereby let y1 be Point of REAL-NS i;
+      assume P4: y1 in dom g & ||. y1- y0 .|| < s;
+      reconsider a=y1 as Element  of REAL i by REAL_NS1:def 4;
+      ||. y1 -y0 .|| = |. a-x0 .| by REAL_NS1:1,5;
+      hence |. g/.y1-g/.y0 .| < r by P3,P4;
+     end;
+    end; then
+    g is_continuous_in y0 by P1,NFCONT_1:8;
+    hence f is_continuous_in x0 by NFCONT_4:def 4;
+   end;
+
+theorem XTh35:
+for f be PartFunc of REAL m,REAL, x0 be Element of REAL m holds
+  f is_continuous_in x0 iff <>*f is_continuous_in x0
+proof
+   let f be PartFunc of REAL m,REAL, x0 be Element of REAL m;
+   set g = <>*f;
+   hereby assume P1: f is_continuous_in x0; then
+P2: x0 in dom f by XDef60; then
+P3: x0 in dom g by LMXTh0;
+    now let r be Real;
+     assume 0 < r; then
+     consider s be Real such that
+P5:   0 < s
+    & for x1 be Element of REAL m st x1 in dom f & |. x1- x0 .| < s
+        holds |. f/.x1-f/.x0 .| < r by P1,XDef60;
+     take s;
+     thus 0 < s by P5;
+     hereby let x1 be Element of REAL m;
+      assume P6: x1 in dom g & |. x1- x0 .| < s; then
+P8:   x1 in dom f by LMXTh0; then
+P7:   |. f/.x1-f/.x0 .|<r by P5,P6;
+      g/.x1 = <* f/.x1 *> & g/.x0 = <* f/.x0 *> by P2,P8,XTh30; then
+      g/.x1-g/.x0 = <* f/.x1 - f/.x0 *> by RVSUM_1:29;
+      hence |. g/.x1-g/.x0 .| < r by P7,XTh30D;
+     end;
+    end;
+    hence g is_continuous_in x0 by P3,PDIFF_7:36;
+   end;
+
+   assume A1:g is_continuous_in x0; then
+    x0 in dom g by PDIFF_7:36; then
+P2: x0 in dom f by LMXTh0;
+
+    now let r be Real;
+     assume 0<r; then
+     consider s be Real such that
+P4:   0 < s
+    & for x1 be Element of REAL m st x1 in dom g & |. x1- x0 .| < s
+       holds |. g/.x1 - g/.x0 .| < r by A1,PDIFF_7:36;
+     take s;
+     thus 0<s by P4;
+     hereby let x1 be Element of REAL m;
+      assume P5: x1 in dom f & |. x1- x0 .| < s; then
+      x1 in dom g by LMXTh0; then
+P6:   |. g/.x1 - g/.x0 .| < r by P4,P5;
+      g/.x1 = <* f/.x1 *>  & g/.x0 = <* f/.x0 *> by P2,P5,XTh30; then
+      g/.x1-g/.x0 = <* f/.x1 - f/.x0 *> by RVSUM_1:29;
+      hence |. f/.x1-f/.x0 .| < r by P6,XTh30D;
+     end;
+    end;
+    hence thesis by P2,XDef60;
+end;
+
+theorem
+for f,g be PartFunc of REAL m,REAL, x0 be Element of REAL m
+ st f is_continuous_in x0 & g is_continuous_in x0
+ holds f+g is_continuous_in x0 & f-g is_continuous_in x0
+proof
+   let f,g be PartFunc of REAL m,REAL, x0 be Element of REAL m;
+   assume f is_continuous_in x0 & g is_continuous_in x0; then
+   <>*f is_continuous_in x0 & <>*g is_continuous_in x0 by XTh35; then
+A2:<>*f + <>*g is_continuous_in x0 & <>*f - <>*g is_continuous_in x0 by XTh350;
+   <>*f + <>*g = <>*(f+g) & <>*f - <>*g = <>*(f-g) by LMXTh10;
+   hence thesis by A2,XTh35;
+end;
+
+theorem
+for f be PartFunc of REAL m,REAL, x0 be Element of REAL m, r be Real
+ st f is_continuous_in x0 holds r(#)f is_continuous_in x0
+proof
+   let f be PartFunc of REAL m,REAL, x0 be Element of REAL m, r be Real;
+   assume f is_continuous_in x0; then
+   <>*f is_continuous_in x0 by XTh35; then
+A2:r(#)(<>*f) is_continuous_in x0 by XTh351;
+   r(#)(<>*f) = <>*(r(#)f) by LMXTh11;
+   hence thesis by A2,XTh35;
+end;
+
+theorem
+for f be PartFunc of REAL m,REAL, x0 be Element of REAL m
+ st f is_continuous_in x0 holds |.f.| is_continuous_in x0
+proof
+   let f be PartFunc of REAL m,REAL, x0 be Element of REAL m;
+   assume f is_continuous_in x0; then
+   <>*f is_continuous_in x0 by XTh35; then
+   |. <>*f .| is_continuous_in x0 by YTh354;
+   hence thesis by LMXTh13;
+end;
+
+XTh360:
+for f be PartFunc of REAL i,REAL,
+    g be PartFunc of REAL-NS i,REAL,
+    x be Element of REAL i, y be Point of REAL-NS i
+ st f = g & x = y holds
+   f is_continuous_in x
+ iff
+   y in dom g
+ & (for s be sequence of REAL-NS i
+      st rng s c= dom g & s is convergent & lim s = y
+      holds g/*s is convergent & g/.y = lim (g/*s) )
+proof
+   let f be PartFunc of REAL i,REAL,
+       g be PartFunc of REAL-NS i,REAL,
+       x be Element of REAL i, y be Point of REAL-NS i;
+   assume AS: f=g & x=y;
+   hereby assume f is_continuous_in x; then
+    g is_continuous_in y by AS,NFCONT_4:21;
+    hence y in dom g & for s1 be sequence of REAL-NS i
+     st rng s1 c= dom g & s1 is convergent & lim s1 = y
+      holds g/*s1 is convergent & g/.y = lim (g/*s1) by NFCONT_1:def 6;
+   end;
+
+   hereby assume y in dom g & (for s be sequence of REAL-NS i st rng s c= dom g
+        & s is convergent & lim s = y
+        holds g/*s is convergent & g/.y = lim (g/*s) ); then
+    g is_continuous_in y by NFCONT_1:def 6;
+    hence f is_continuous_in x by AS,NFCONT_4:21;
+   end;
+end;
+
+theorem
+for f,g be PartFunc of REAL i,REAL, x be Element of REAL i
+ st f is_continuous_in x & g is_continuous_in x holds f(#)g is_continuous_in x
+proof
+   let g1,g2 be PartFunc of REAL i,REAL, x be Element of REAL i;
+   assume A2: g1 is_continuous_in x & g2 is_continuous_in x;
+   reconsider y=x as Point of REAL-NS i by REAL_NS1:def 4;
+   reconsider f1=g1, f2=g2 as PartFunc of REAL-NS i,REAL
+      by REAL_NS1:def 4;
+A3:dom (f1(#)f2) = dom f1 /\ dom f2 by VALUED_1:def 4;
+   f1 is_continuous_in y & f2 is_continuous_in y by A2,NFCONT_4:21; then
+X1:y in dom f1 & y in dom f2 by NFCONT_1:def 6; then
+X2:y in dom (f1(#)f2) by A3,XBOOLE_0:def 4;
+
+   now let s1 be sequence of REAL-NS i;
+    assume that
+A22: rng s1 c= dom(f1(#)f2) and
+A23: s1 is convergent & lim s1=y;
+
+    dom (f1(#)f2) c= dom f1 & dom (f1(#)f2) c= dom f2 by A3,XBOOLE_1:17; then
+A24:rng s1 c= dom f1 & rng s1 c= dom f2 by A22,XBOOLE_1:1; then
+A25:f1/*s1 is convergent & f2/*s1 is convergent by A2,A23,XTh360; then
+    (f1/*s1)(#)(f2/*s1) is convergent;
+    hence (f1(#)f2)/*s1 is convergent by A3,A22,RFUNCT_2:8;
+
+    f1.y = f1/.y & f2.y = f2/.y by X1,PARTFUN1:def 6; then
+A29:f1.y = lim (f1/*s1) & f2.y = lim (f2/*s1) by A2,A23,A24,XTh360;
+
+    thus (f1(#)f2)/.y = (f1(#)f2).y by X2,PARTFUN1:def 6
+      .= f1.y * f2.y by VALUED_1:5
+      .= lim ((f1/*s1)(#)(f2/*s1)) by A29,A25,SEQ_2:15
+      .= lim ((f1(#)f2)/*s1) by A3,A22,RFUNCT_2:8;
+   end;
+   hence thesis by XTh360,X2;
+end;
+
+definition
+  let m be non empty Element of NAT;
+  let Z be set;
+  let f be PartFunc of REAL m,REAL;
+  pred f is_continuous_on Z means :XDef7:
+  for x0 be Element of REAL m st x0 in Z holds f|Z is_continuous_in x0;
+end;
+
+theorem XTh360B:
+for f be PartFunc of REAL m,REAL,
+    g be PartFunc of REAL-NS m,REAL
+ st f = g holds Z c= dom f & f is_continuous_on Z iff g is_continuous_on Z
+proof
+   let f be PartFunc of REAL m,REAL,
+       g be PartFunc of REAL-NS m,REAL;
+   assume AS: f = g;
+   hereby
+     assume
+P2:  Z c= dom f;
+     assume P0: f is_continuous_on Z;
+    now let x0 be Point of REAL-NS m;
+     assume P3: x0 in Z;
+     reconsider y0=x0 as Element of REAL m by REAL_NS1:def 4;
+     f|Z is_continuous_in y0 by P3,P0,XDef7;
+     hence g|Z is_continuous_in x0 by AS,NFCONT_4:21;
+    end;
+    hence g is_continuous_on Z by AS,P2,NFCONT_1:def 8;
+   end;
+   assume P1: g is_continuous_on Z;
+   hence Z c= dom f by AS,NFCONT_1:def 8;
+   let x0 be Element of REAL m;
+   assume P3: x0 in Z;
+   reconsider y0=x0 as Point of  REAL-NS m by REAL_NS1:def 4;
+   g|Z is_continuous_in y0 by P3,P1,NFCONT_1:def 8;
+   hence f|Z is_continuous_in x0 by AS,NFCONT_4:21;
+ end;
+
+theorem XTh360C:
+for f be PartFunc of REAL m,REAL,
+    g be PartFunc of REAL-NS m,REAL
+ st f = g & Z c= dom f holds
+   f is_continuous_on Z
+ iff
+   for s be sequence of REAL-NS m st rng s c= Z & s is convergent & lim s in Z
+      holds g/*s is convergent & g/.(lim s) = lim (g/*s)
+proof
+   let f be PartFunc of REAL m,REAL,
+       g be PartFunc of REAL-NS m,REAL;
+   assume AS: f = g;
+   assume A0: Z c= dom f;
+hereby assume f is_continuous_on Z; then
+    g is_continuous_on Z by A0,XTh360B,AS;
+    hence for s1 be sequence of REAL-NS m
+    st rng s1 c= Z & s1 is convergent & lim s1 in Z
+      holds g/*s1 is convergent & g/.(lim s1) = lim (g/*s1) by NFCONT125;
+   end;
+   assume for s be sequence of REAL-NS m st rng s c= Z
+     & s is convergent & lim s in Z
+       holds g/*s is convergent & g/.(lim s) = lim (g/*s); then
+    g is_continuous_on Z by AS,A0,NFCONT125;
+    hence f is_continuous_on Z by XTh360B,AS;
+end;
+
+theorem XTh37:
+for f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1
+ st <>*f = g holds Z c= dom f & f is_continuous_on Z iff g is_continuous_on Z
+proof
+   let f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1;
+   assume A1: <>*f=g; then
+A0:<>*(f|Z) =g|Z by LMXTh1;
+   hereby
+     assume
+AK:  Z c= dom f;
+    assume A2: f is_continuous_on Z;
+A3: Z c= dom g by LMXTh0,A1,AK;
+    now let x0 be Element of REAL m;
+     assume x0 in Z; then
+     f|Z is_continuous_in x0 by A2,XDef7;
+     hence g|Z is_continuous_in x0 by A0,XTh35;
+    end;
+    hence g is_continuous_on Z by A3,PDIFF_7:def 7;
+   end;
+   assume A5: g is_continuous_on Z; then
+   Z c= dom g by PDIFF_7:def 7;
+   hence Z c= dom f by LMXTh0,A1;
+   let x0 be Element of REAL m;
+   assume x0 in Z; then
+   g|Z is_continuous_in x0 by A5,PDIFF_7:def 7;
+   hence f|Z is_continuous_in x0 by A0,XTh35;
+end;
+
+theorem XTh38:
+for f be PartFunc of REAL m,REAL st Z c= dom f holds
+   f is_continuous_on Z
+ iff
+  for x0 be Element of REAL m, r be Real st x0 in Z & 0 < r
+     ex s be Real st 0 < s
+     & for x1 be Element of REAL m st x1 in Z & |. x1- x0 .| < s
+          holds |. f/.x1 - f/.x0 .| < r
+proof
+   let f be PartFunc of REAL m,REAL;
+   set g = <>*f;
+   assume A2: Z c= dom f;
+
+   hereby assume f is_continuous_on Z; then
+A1: g is_continuous_on Z by A2,XTh37;
+
+    thus for x0 be Element of REAL m, r be Real st x0 in Z & 0<r ex s be Real
+         st 0 <s & for x1 be Element of REAL m
+         st x1 in Z & |. x1- x0 .| <s holds |. f/.x1-f/.x0 .|<r
+    proof
+     let x0 be Element of REAL m, r be Real;
+     assume A3: x0 in Z & 0<r; then
+     consider s be Real such that
+A4:   0<s & for x1 be Element of REAL m st x1 in Z & |. x1- x0 .| < s
+       holds |. g/.x1-g/.x0 .|<r by A1,PDIFF_7:38;
+     take s;
+     thus 0 < s by A4;
+
+     hereby let x1 be Element of REAL m;
+      assume A5: x1 in Z & |. x1- x0 .| < s; then
+A6:   |. g/.x1-g/.x0 .|<r by A4;
+      g/.x1 = <*f/.x1*> & g/.x0 = <*f/.x0*> by A5,A2,A3,XTh30; then
+      g/.x1-g/.x0 = <* f/.x1 - f/.x0 *> by RVSUM_1:29;
+      hence |. f/.x1-f/.x0 .|<r by A6,XTh30D;
+     end;
+    end;
+   end;
+
+   assume
+A7: for x0 be Element of REAL m,
+     r be Real st x0 in Z & 0<r ex s be Real
+     st 0<s & for x1 be Element of REAL m
+     st x1 in Z & |. x1- x0 .| <s holds |. f/.x1-f/.x0 .|<r;
+A70:Z c= dom g by A2,LMXTh0;
+
+   for y0 be Element of REAL m, r be Real st y0 in Z & 0<r ex s be Real
+    st 0 <s & for y1 be Element of REAL m
+    st y1 in Z & |. y1- y0 .| < s
+      holds |. g/.y1-g/.y0 .| < r
+   proof
+    let x0 be Element of REAL m,r be Real;
+    assume A8: x0 in Z & 0<r; then
+    consider s be Real such that
+A9:  0<s & for x1 be Element of REAL m st x1 in Z & |. x1- x0 .| < s
+       holds |. f/.x1-f/.x0 .|<r by A7;
+    take s;
+    thus 0 < s by A9;
+    hereby let x1 be Element of REAL m;
+     assume A10: x1 in Z & |. x1- x0 .| < s; then
+A11: |. f/.x1-f/.x0 .|<r by A9;
+     g/.x1 = <*f/.x1*> & g/.x0 = <*f/.x0*> by A2,A10,A8,XTh30; then
+     g/.x1-g/.x0 = <* f/.x1 - f/.x0 *> by RVSUM_1:29;
+     hence |. g/.x1-g/.x0 .|<r by A11,XTh30D;
+    end;
+   end; then
+   g is_continuous_on Z by A70,PDIFF_7:38;
+   hence f is_continuous_on Z by XTh37;
+end;
+
+theorem
+for f,g be PartFunc of REAL m,REAL
+  st f is_continuous_on Z & g is_continuous_on Z & Z c= dom f & Z c= dom g
+  holds f+g is_continuous_on Z & f-g is_continuous_on Z
+proof
+   let f,g be PartFunc of REAL m,REAL;
+   assume f is_continuous_on Z & g is_continuous_on Z &
+   Z c= dom f & Z c= dom g;
+   then
+   <>*f is_continuous_on Z & <>*g is_continuous_on Z by XTh37; then
+P2:<>*f + <>*g is_continuous_on Z & <>*f - <>*g is_continuous_on Z by XTh350X;
+   <>*f + <>*g = <>*(f+g) & <>*f - <>*g = <>*(f-g) by LMXTh10;
+   hence thesis by P2,XTh37;
+end;
+
+theorem
+for f be PartFunc of REAL m,REAL, r be Real
+  st Z c= dom f & f is_continuous_on Z holds r(#)f is_continuous_on Z
+proof
+   let f be PartFunc of REAL m,REAL, r be Real;
+   assume Z c= dom f & f is_continuous_on Z; then
+   <>*f is_continuous_on Z by XTh37; then
+P2:r(#)(<>*f) is_continuous_on Z by XTh351X;
+   r(#)(<>*f) = <>*(r(#)f) by LMXTh11;
+   hence thesis by P2,XTh37;
+end;
+
+theorem
+for f,g be PartFunc of REAL m,REAL
+ st f is_continuous_on Z & g is_continuous_on Z & Z c= dom f & Z c= dom g
+ holds f(#)g is_continuous_on Z
+proof
+   let f,g be PartFunc of REAL m,REAL;
+   assume A1: f is_continuous_on Z & g is_continuous_on Z;
+   assume AK: Z c= dom f & Z c= dom g;
+   reconsider f1=f, g1=g as PartFunc of REAL-NS m,REAL
+      by REAL_NS1:def 4;
+P2:Z c= dom f1 /\ dom g1 by AK,XBOOLE_1:19;
+AA:dom (f1(#)g1) = dom f1 /\ dom g1 by VALUED_1:def 4;
+   now let s1 be sequence of REAL-NS m;
+    assume A23:rng s1 c= Z & s1 is convergent & lim s1 in Z; then
+A25:f1/*s1 is convergent & g1/*s1 is convergent by AK,XTh360C,A1; then
+A28:(f1/*s1)(#)(g1/*s1) is convergent;
+
+A26:rng s1 c= dom f1 /\ dom g1 by P2,A23,XBOOLE_1:1;
+    hence (f1(#)g1)/*s1 is convergent by A28,RFUNCT_2:8;
+
+    set y = lim s1;
+
+    f1.y =f1/.y & g1.y =g1/.y by A23,AK,PARTFUN1:def 6; then
+A29:f1.y = lim (f1/*s1) & g1.y = lim (g1/*s1) by A23,AK,XTh360C,A1;
+
+    thus (f1(#)g1)/.(lim s1)
+      = (f1(#)g1).y by A23,P2,AA,PARTFUN1:def 6
+     .= f1.y * g1.y by VALUED_1:5
+     .= lim ((f1/*s1)(#)(g1/*s1)) by A29,A25,SEQ_2:15
+     .= lim ((f1(#)g1)/*s1) by A26,RFUNCT_2:8;
+   end;
+   hence thesis by P2,AA,XTh360C;
+end;
+
+theorem PDIFF736X:
+for f be PartFunc of REAL m,REAL, g be PartFunc of REAL-NS m,REAL
+  st f=g holds Z c= dom f & f is_continuous_on Z iff g is_continuous_on Z
+proof
+   let f be PartFunc of REAL m,REAL, g be PartFunc of REAL-NS m,REAL;
+   assume AS0: f = g;
+   hereby assume
+P0: Z c= dom f;
+    assume Q0: f is_continuous_on Z;
+    now let y0 be Point of REAL-NS m,r be Real;
+     reconsider x0 = y0 as Element of REAL m by REAL_NS1:def 4;
+     assume y0 in Z & 0 < r; then
+     consider s be Real such that
+A7:   0 < s
+    & for x1 be Element of REAL m st x1 in Z & |. x1- x0 .| < s
+        holds |. f/.x1-f/.x0 .|<r by P0,Q0,XTh38;
+     take s;
+     thus 0 < s by A7;
+     let y1 be Point of REAL-NS m;
+     assume A8: y1 in Z & ||. y1- y0 .|| < s;
+     reconsider x1=y1 as Element of REAL m by REAL_NS1:def 4;
+     ||. y1- y0 .|| = |. x1- x0 .| by REAL_NS1:1,5;
+     hence |. g/.y1-g/.y0 .|<r by AS0,A8,A7;
+    end;
+    hence g is_continuous_on Z by AS0,P0,NFCONT_1:20;
+   end;
+   assume Q1: g is_continuous_on Z; then
+A60:Z c= dom f by AS0,NFCONT_1:20;
+    now let x0 be Element of REAL m, r be Real;
+     reconsider y0 = x0 as Point of  REAL-NS m by REAL_NS1:def 4;
+     assume x0 in Z & 0 < r; then
+     consider s be Real such that
+A7:   0<s
+    & for y1 be Point of REAL-NS m st y1 in Z & ||. y1- y0 .|| < s
+        holds |. g/.y1-g/.y0 .|<r by Q1,NFCONT_1:20;
+     take s;
+     thus 0 < s by A7;
+     let x1 be Element of REAL m;
+     assume A8: x1 in Z & |. x1- x0 .| < s;
+     reconsider y1=x1 as Point of REAL-NS m by REAL_NS1:def 4;
+     ||. y1- y0 .|| = |. x1- x0 .| by REAL_NS1:1,5;
+     hence |. f/.x1-f/.x0 .|<r by AS0,A8,A7;
+    end;
+    hence thesis by A60,XTh38;
+end;
+
+theorem
+for f,g be PartFunc of REAL m,REAL n st
+  f is_continuous_on Z holds |.f.| is_continuous_on Z
+proof
+   let f,g be PartFunc of REAL m,REAL n;
+   assume A1: f is_continuous_on Z;
+
+A2:the carrier of REAL-NS m = REAL m &
+   the carrier of REAL-NS n = REAL n by REAL_NS1:def 4; then
+   reconsider f1=f as PartFunc of REAL-NS m,REAL-NS n;
+
+   f1 is_continuous_on Z by A1,PDIFF_7:37; then
+A3: ||. f1 .|| is_continuous_on Z by NFCONT_1:28;
+   ||.f1.||= |.f.| by NFCONT_4:9,A2;
+   hence |.f.| is_continuous_on Z by A3,PDIFF736X;
+end;
+
+theorem PDIFF620X:
+for f,g be PartFunc of REAL m,REAL, x be Element of REAL m
+  st f is_differentiable_in x & g is_differentiable_in x
+holds
+  f+g is_differentiable_in x & diff(f+g,x) = diff(f,x) + diff(g,x)
+& f-g is_differentiable_in x & diff(f-g,x) = diff(f,x) - diff(g,x)
+proof
+   let f,g be PartFunc of REAL m,REAL, x be Element of REAL m;
+   assume f is_differentiable_in x & g is_differentiable_in x; then
+P2:<>*f is_differentiable_in x & <>*g is_differentiable_in x
+      by PDIFF_7:def 1; then
+P4:<>*f + <>*g is_differentiable_in x
+ & <>*f - <>*g is_differentiable_in x by PDIFF_6:20,21;
+
+   <>*f + <>*g = <>*(f+g) by LMXTh10;
+   hence f+g is_differentiable_in x by P4,PDIFF_7:def 1;
+   thus diff(f+g,x) = proj(1,1)*diff(<>*f + <>*g,x) by LMXTh10
+              .= proj(1,1)*(diff(<>*f,x) + diff(<>*g,x)) by P2,PDIFF_6:20
+              .= diff(f,x) + diff(g,x) by INTEGR15:15;
+
+   <>*f - <>*g = <>*(f-g) by LMXTh10;
+   hence f-g is_differentiable_in x by P4,PDIFF_7:def 1;
+   thus diff(f-g,x) = proj(1,1)*diff(<>*f - <>*g,x) by LMXTh10
+              .= proj(1,1)*(diff(<>*f,x) - diff(<>*g,x)) by P2,PDIFF_6:21
+              .= diff(f,x) - diff(g,x) by INTEGR15:15;
+end;
+
+theorem  PDIFF622X:
+for f be PartFunc of REAL m,REAL, r be Real, x be Element of REAL m st
+  f is_differentiable_in x holds
+   r(#)f is_differentiable_in x & diff(r(#)f,x) = r(#)diff(f,x)
+proof
+   let f be PartFunc of REAL m,REAL, r be Real, x be Element of REAL m;
+   assume f is_differentiable_in x; then
+P1:<>*f is_differentiable_in x by PDIFF_7:def 1; then
+P2:r(#)(<>*f) is_differentiable_in x by PDIFF_6:22;
+
+   r(#)(<>*f) = <>*(r(#)f) by LMXTh11;
+   hence r(#)f is_differentiable_in x by P2,PDIFF_7:def 1;
+   thus diff(r(#)f,x) = proj(1,1)*diff(r(#)(<>*f),x) by LMXTh11
+              .= proj(1,1)*(r(#)diff(<>*f,x)) by P1,PDIFF_6:22
+              .= r(#)diff(f,x) by INTEGR15:16;
+end;
+
+definition
+  let Z be set;
+  let m be non empty Element of NAT;
+  let f be PartFunc of REAL m,REAL;
+  pred f is_differentiable_on Z means :XDef4:
+  for x be Element of REAL m st x in Z holds f|Z is_differentiable_in x;
+end;
+
+theorem YTh30:
+for f be PartFunc of REAL m,REAL,
+    g be PartFunc of REAL m,REAL 1 st <>*f = g holds
+  Z c= dom f & f is_differentiable_on Z iff g is_differentiable_on Z
+proof
+   let f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1;
+   assume A1: <>*f=g;
+AN:dom <>*f = dom f by LMXTh0;
+   hereby
+     assume
+AK:  Z c= dom f;
+     assume
+A3:  f is_differentiable_on Z;
+A40:Z c= dom g by AK,LMXTh0,A1;
+    now let x be Element of REAL m;
+     assume x in Z; then
+     f|Z is_differentiable_in x by A3,XDef4; then
+     <>*(f|Z) is_differentiable_in x by PDIFF_7:def 1;
+     hence g|Z is_differentiable_in x by A1,LMXTh1;
+    end;
+    hence g is_differentiable_on Z by A40,PDIFF_6:def 4;
+   end;
+   assume A5: g is_differentiable_on Z;
+   hence Z c= dom f by AN,A1,PDIFF_6:def 4;
+   hereby let x be Element of REAL m;
+    assume x in Z; then
+A60:g|Z is_differentiable_in x by A5,PDIFF_6:def 4;
+    g|Z = <>*(f|Z) by A1,LMXTh1;
+    hence f|Z is_differentiable_in x by A60,PDIFF_7:def 1;
+   end;
+end;
+
+theorem YTh32:
+  for X be Subset of REAL m, f be PartFunc of REAL m,REAL st
+  X c= dom f & X is open
+holds
+   f is_differentiable_on X
+ iff
+   for x be Element of REAL m st x in X holds f is_differentiable_in x
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL;
+   set  g=<>*f;
+   assume
+AK: X c= dom f;
+   assume X is open; then
+   ex Z0 be Subset of REAL-NS m st Z0=X & Z0 is open by PDIFF_7:def 3; then
+A2:g is_differentiable_on X
+    iff
+   X c=dom g &
+   for x be Element of REAL m st x in X holds g is_differentiable_in x
+              by PDIFF_6:32;
+
+   hereby assume A3: f is_differentiable_on X;
+    let x be Element of REAL m;
+    assume x in X; then
+    g is_differentiable_in x by AK,A2,A3,YTh30;
+    hence f is_differentiable_in x by PDIFF_7:def 1;
+   end;
+   assume
+A4: for x be Element of REAL m st x in X holds f is_differentiable_in x;
+   now let x be  Element of REAL m;
+    assume x in X; then
+    f is_differentiable_in x by A4;
+    hence g is_differentiable_in x by PDIFF_7:def 1;
+   end;
+   hence f is_differentiable_on X by AK,A2,LMXTh0,YTh30;
+end;
+
+theorem YTh33:
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL st
+ X c= dom f & f is_differentiable_on X holds X is open
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL;
+   reconsider g=<>*f as PartFunc of REAL m,REAL 1;
+   assume X c= dom f & f is_differentiable_on X; then
+   g is_differentiable_on X by YTh30; then
+   ex Z0 be Subset of REAL-NS m st X=Z0 & Z0 is open by PDIFF_6:33;
+   hence thesis by PDIFF_7:def 3;
+end;
+
+definition
+  let m be non empty Element of NAT;
+  let Z be set;
+  let f be PartFunc of REAL m,REAL;
+  assume AK: Z c= dom f;
+  func f`|Z -> PartFunc of REAL m, Funcs(REAL m,REAL) means :XDef1:
+  dom it = Z & for x be Element of REAL m st x in Z holds it/.x = diff(f,x);
+existence
+proof
+   defpred P[Element of REAL m,set] means $1 in Z & $2 = diff(f,$1);
+   consider F being PartFunc of REAL m,Funcs(REAL m,REAL) such that
+A2: (for x be Element of REAL m  holds x in dom F iff
+      (ex z be Element of Funcs(REAL m,REAL) st P[x,z]))
+  & for x be Element of REAL m st x in dom F holds P[x,F.x] from SEQ_1:sch 2;
+   take F;
+A3:Z is Subset of REAL m by AK,XBOOLE_1:1;
+   now let x be set;
+    assume AS1: x in Z; then
+    reconsider z = x as Element of REAL m by A3;
+    reconsider y = diff(f,z) as Element of Funcs(REAL m,REAL) by FUNCT_2:8;
+    P[z,y] by AS1;
+    hence x in dom F by A2;
+   end; then
+A4:Z c= dom F by TARSKI:def 3;
+   for y be set st y in dom F holds y in Z by A2; then
+   dom F c= Z by TARSKI:def 3;
+   hence dom F = Z by A4,XBOOLE_0:def 10;
+   hereby let x be Element of REAL m;
+    assume A5: x in Z; then
+    F.x = diff(f,x) by A2,A4;
+    hence F/.x = diff(f,x) by A5,A4,PARTFUN1:def 6;
+   end;
+end;
+uniqueness
+proof
+   let F,G be PartFunc of REAL m,Funcs(REAL m,REAL);
+   assume that
+A6: dom F = Z & for x be Element of REAL m st x in Z holds F/.x = diff(f,x) and
+A8: dom G = Z & for x be Element of REAL m st x in Z holds G/.x = diff(f,x);
+   now let x be Element of REAL m;
+    assume A10: x in dom F; then
+    F/.x = diff(f,x) by A6;
+    hence F/.x = G/.x by A6,A8,A10;
+   end;
+   hence thesis by A6,A8,PARTFUN2:1;
+end;
+end;
+
+theorem
+for X be Subset of REAL m,
+  f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1 st
+ <>*f = g & X c= dom f & f is_differentiable_on X
+  holds g is_differentiable_on X
+    & for x be Element of REAL m st x in X
+        holds ((f`|X)/.x) = proj(1,1)*((g`|X)/.x)
+proof
+   let X be Subset of REAL m;
+   let f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1;
+   assume AS: <>*f = g & X c= dom f & f is_differentiable_on X;
+   hence g is_differentiable_on X by YTh30;
+AA: dom f = dom <>*f by LMXTh0;
+   let x be Element of REAL m;
+   assume P4: x in X; then
+   (f`|X)/.x = diff(f,x) by AS,XDef1;
+   hence thesis by AA,AS,P4,Def1;
+end;
+
+theorem
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL
+  st X c= dom f & X c= dom g &
+  f is_differentiable_on X & g is_differentiable_on X
+ holds
+  f+g is_differentiable_on X
+& for x be Element of REAL m st x in X
+    holds ((f+g)`|X)/.x = (f`|X)/.x + (g`|X)/.x
+proof
+   let X be Subset of REAL m;
+   let f,g be PartFunc of REAL m,REAL;
+   assume AK: X c= dom f & X c= dom g;
+   assume AS1: f is_differentiable_on X & g is_differentiable_on X; then
+P0:X is open by AK,YTh33;
+   dom (f+g) = dom f /\ dom g by VALUED_1:def 1; then
+P3:X c= dom (f+g) by AK,XBOOLE_1:19;
+P5:now let x be Element of REAL m;
+    assume x in X; then
+    f is_differentiable_in x & g is_differentiable_in x by AK,AS1,P0,YTh32;
+    hence f+g is_differentiable_in x & diff(f+g,x) = diff(f,x)+ diff(g,x)
+        by PDIFF620X;
+   end; then
+   for x be Element of REAL m st x in X holds f+g is_differentiable_in x;
+   hence f+g is_differentiable_on X by P3,P0,YTh32;
+   let x be Element of REAL m;
+   assume P7:x in X; then
+   ((f+g)`|X)/.x = diff(f+g,x) by P3,XDef1; then
+   ((f+g)`|X)/.x = diff(f,x)+ diff(g,x) by P7,P5; then
+   ((f+g)`|X)/.x = (f`|X)/.x + diff(g,x) by AK,P7,XDef1;
+   hence ((f+g)`|X)/.x = (f`|X)/.x + (g`|X)/.x by AK,P7,XDef1;
+end;
+
+theorem
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL st
+  X c= dom f & X c= dom g &
+  f is_differentiable_on X & g is_differentiable_on X
+holds
+  f-g is_differentiable_on X
+& for x be Element of REAL m st x in X
+    holds ((f-g)`|X)/.x = (f`|X)/.x - (g`|X)/.x
+proof
+   let X be Subset of REAL m, f,g be PartFunc of REAL m,REAL;
+   assume AK: X c= dom f & X c= dom g;
+   assume AS1: f is_differentiable_on X & g is_differentiable_on X; then
+P0:X is open by AK,YTh33;
+   dom (f-g) = dom f /\ dom g by VALUED_1:12; then
+P3:X c= dom (f-g) by AK,XBOOLE_1:19;
+P5:now let x be Element of REAL m;
+    assume x in X; then
+    f is_differentiable_in x & g is_differentiable_in x by AK,AS1,P0,YTh32;
+    hence f-g is_differentiable_in x & diff(f-g,x) = diff(f,x)- diff(g,x)
+     by PDIFF620X;
+   end; then
+   for x be Element of REAL m st x in X holds f-g is_differentiable_in x;
+   hence f-g is_differentiable_on X by P3,P0,YTh32;
+   let x be Element of REAL m;
+   assume P7:x in X; then
+   ((f-g)`|X)/.x = diff(f-g,x) by P3,XDef1; then
+   ((f-g)`|X)/.x = diff(f,x)- diff(g,x) by P7,P5; then
+   ((f-g)`|X)/.x = (f`|X)/.x - diff(g,x) by AK,P7,XDef1;
+   hence ((f-g)`|X)/.x = (f`|X)/.x - (g`|X)/.x by AK,P7,XDef1;
+end;
+
+theorem
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL, r be Real st
+  X c= dom f & f is_differentiable_on X
+holds
+  r(#)f is_differentiable_on X
+& for x be Element of REAL m st x in X
+    holds ((r(#)f)`|X)/.x = r(#)((f`|X)/.x)
+proof
+   let X be Subset of REAL m;
+   let f be PartFunc of REAL m,REAL, r be Real;
+   assume AK: X c= dom f;
+   assume AS1: f is_differentiable_on X; then
+P0:X is open by AK,YTh33;
+P3:X c= dom (r(#)f) by AK,VALUED_1:def 5;
+P5:now let x be Element of REAL m;
+    assume x in X; then
+    f is_differentiable_in x by AS1,P0,AK,YTh32;
+    hence r(#)f is_differentiable_in x
+     & diff(r(#)f,x) = r(#)diff(f,x) by PDIFF622X;
+   end; then
+   for x be Element of REAL m st x in X holds r(#)f is_differentiable_in x;
+   hence r(#)f is_differentiable_on X by P3,P0,YTh32;
+   let x be Element of REAL m;
+   assume P7:x in X; then
+   ((r(#)f)`|X)/.x = diff(r(#)f,x) by P3,XDef1;
+   hence ((r(#)f)`|X)/.x = r(#)diff(f,x) by P7,P5
+   .= r(#)((f`|X)/.x) by AK,P7,XDef1;
+end;
+
+definition
+  let m be non empty Element of NAT;
+  let Z be set;
+  let i be Element of NAT;
+  let f be PartFunc of REAL m,REAL;
+pred f is_partial_differentiable_on Z,i means :CWDef19:
+  Z c=dom f
+& for x be Element of REAL m st x in Z
+    holds f|Z is_partial_differentiable_in x,i;
+end;
+
+definition
+  let m be non empty Element of NAT;
+  let Z be set;
+  let i be Element of NAT;
+  let f be PartFunc of REAL m,REAL;
+  assume A1:f is_partial_differentiable_on Z,i;
+func f `partial|(Z,i) -> PartFunc of REAL m,REAL means :DefPDX:
+  dom it = Z
+& for x be Element of REAL m st x in Z holds it/.x = partdiff(f,x,i);
+existence
+proof
+   deffunc F(Element of REAL m) = partdiff(f,$1,i);
+   defpred P[Element of REAL m] means $1 in Z;
+   consider F being PartFunc of REAL m,REAL such that
+A2: (for x be Element of REAL m holds x in dom F iff P[x])
+  & for x be Element of REAL m st x in dom F holds F.x = F(x) from SEQ_1:sch 3;
+   take F;
+   now
+    Z c= dom f by A1,CWDef19; then
+A3: Z is Subset of REAL m by XBOOLE_1:1;
+    let y be set;
+    assume y in Z;
+    hence y in dom F by A2,A3;
+   end; then
+A4:Z c= dom F by TARSKI:def 3;
+
+   for y be set st y in dom F holds y in Z by A2; then
+   dom F c= Z by TARSKI:def 3;
+   hence dom F = Z by A4,XBOOLE_0:def 10;
+
+   hereby let x be Element of REAL m;
+    assume x in Z; then
+A5: x in dom F by A2; then
+    F.x = partdiff(f,x,i) by A2;
+    hence F/.x = partdiff(f,x,i) by A5,PARTFUN1:def 6;
+   end;
+end;
+uniqueness
+proof
+   let F,G be PartFunc of REAL m,REAL;
+   assume that
+A6: dom F = Z
+  & for x be Element of REAL m st x in Z holds F/.x = partdiff(f,x,i) and
+A8: dom G = Z
+  & for x be Element of REAL m st x in Z holds G/.x = partdiff(f,x,i);
+   now let x be Element of REAL m;
+    assume A10: x in dom F; then
+    F/.x = partdiff(f,x,i) by A6;
+    hence F/.x=G/.x by A6,A8,A10;
+   end;
+   hence thesis by A6,A8,PARTFUN2:1;
+end;
+end;
+
+theorem PDIFF734:
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL st
+ X is open & 1 <= i & i <= m holds
+  ( f is_partial_differentiable_on X,i
+     iff
+    X c=dom f &
+    for x be Element of REAL m st x in X holds
+     f is_partial_differentiable_in x,i )
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL;
+   assume that
+A1: X is open and
+A2: 1 <= i & i <= m;
+
+   thus f is_partial_differentiable_on X,i implies X c=dom f &
+         for x be Element of REAL m st x in X holds
+           f is_partial_differentiable_in x,i
+   proof
+    assume A3: f is_partial_differentiable_on X,i;
+    hence A4: X c=dom f by CWDef19;
+    let nx0 be Element of REAL m;
+    reconsider x0=proj(i,m).nx0 as Element of REAL;
+    assume A5: nx0 in X; then
+    f|X is_partial_differentiable_in nx0,i by A3,CWDef19; then
+    (f|X)*reproj(i,nx0) is_differentiable_in x0 by PDIFF_1:def 11; then
+    consider N0 being Neighbourhood of x0 such that
+A6:  N0 c= dom((f|X)*reproj(i,nx0)) and
+A7:  ex L be LinearFunc,R be RestFunc st
+      for x be Real st x in N0 holds
+       ((f|X)*reproj(i,nx0)).x-((f|X)*reproj(i,nx0)).x0
+         = L.( x-x0)+R.(x-x0) by FDIFF_1:def 4;
+    consider L be LinearFunc,R be RestFunc such that
+A8:  for x be Element of REAL st x in N0 holds
+      ((f|X)*reproj(i,nx0)).x - ((f|X)*reproj(i,nx0)).x0
+        = L.(x-x0) + R.(x-x0) by A7;
+    consider N1 being Neighbourhood of x0 such that
+A9: for x be Element of REAL st x in N1 holds
+      (reproj(i,nx0)).x in X by A1,A2,A5,Lm5;
+A10:now let x be Element of REAL;
+     assume x in N1; then
+     (reproj(i,nx0)).x in X by A9; then
+     (reproj(i,nx0)).x in dom f /\ X by A4,XBOOLE_0:def 4;
+     hence (reproj(i,nx0)).x in dom(f|X) by RELAT_1:61;
+    end;
+    consider N being Neighbourhood of x0 such that
+NXX: N c= N0 & N c= N1 by RCOMP_1:17;
+
+    (f|X)*reproj(i,nx0) c= f*reproj(i,nx0) by RELAT_1:29,59; then
+A11:dom((f|X)*reproj(i,nx0)) c= dom(f*reproj(i,nx0)) by RELAT_1:11;
+    N c= dom((f|X)*reproj(i,nx0)) by A6,NXX,XBOOLE_1:1; then
+A12:N c= dom(f*reproj(i,nx0)) by A11,XBOOLE_1:1;
+
+    now let x be Element of REAL;
+     assume A13: x in N; then
+     (reproj(i,nx0)).x in dom(f|X) by A10,NXX; then
+A17: (reproj(i,nx0)).x in dom f & (reproj(i,nx0)).x in X by RELAT_1:57;
+     (reproj(i,nx0)).x0 in dom(f|X) by A10,RCOMP_1:16; then
+A19: (reproj(i,nx0)).x0 in dom f & (reproj(i,nx0)).x0 in X by RELAT_1:57;
+
+A15: dom(reproj(i,nx0)) = REAL by FUNCT_2:def 1; then
+A20: ((f|X)*reproj(i,nx0)).x =(f|X).(reproj(i,nx0).x) by FUNCT_1:13
+       .= f.(reproj(i,nx0).x) by A17,FUNCT_1:49
+       .= (f*reproj(i,nx0)).x by A15,FUNCT_1:13;
+     ((f|X)*reproj(i,nx0)).x0 =(f|X).(reproj(i,nx0).x0) by A15,FUNCT_1:13
+       .= f.(reproj(i,nx0).x0) by A19,FUNCT_1:49
+       .= (f*reproj(i,nx0)).x0 by A15,FUNCT_1:13;
+     hence (f*reproj(i,nx0)).x-(f*reproj(i,nx0)).x0 =L.(x-x0)+R.(x-x0)
+       by A8,A13,NXX,A20;
+    end; then
+    f*reproj(i,nx0) is_differentiable_in x0 by A12,FDIFF_1:def 4;
+    hence f is_partial_differentiable_in nx0,i by PDIFF_1:def 11;
+   end;
+
+   assume that
+A21:X c=dom f and
+A22:for nx be Element of REAL m st nx in X holds
+     f is_partial_differentiable_in nx,i;
+   thus X c=dom f by A21;
+
+   now let nx0 be Element of REAL m;
+    assume A23: nx0 in X; then
+A24:f is_partial_differentiable_in nx0,i by A22;
+    reconsider x0=proj(i,m).nx0 as Element of REAL;
+    f*reproj(i,nx0) is_differentiable_in x0 by A24,PDIFF_1:def 11; then
+    consider N0 being Neighbourhood of x0 such that
+     N0 c= dom (f*reproj(i,nx0)) and
+A25: ex L be LinearFunc,R be RestFunc st
+      for x be Element of REAL st x in N0 holds
+       (f*reproj(i,nx0)).x-(f*reproj(i,nx0)).x0
+         = L.(x-x0)+R.(x-x0) by FDIFF_1:def 4;
+    consider N1 being Neighbourhood of x0 such that
+A26: for x be Element of REAL st x in N1 holds
+       (reproj(i,nx0)).x in X by A1,A2,A23,Lm5;
+A27:now let x be Element of REAL;
+     assume x in N1; then
+     (reproj(i,nx0)).x in X by A26; then
+     (reproj(i,nx0)).x in dom f /\ X by A21,XBOOLE_0:def 4;
+     hence (reproj(i,nx0)).x in dom(f|X) by RELAT_1:61;
+    end;
+
+A28:N1 c= dom((f|X)*reproj(i,nx0))
+    proof
+     let z be set;
+     assume A29:z in N1; then
+A30: z in REAL;
+     reconsider x=z as Element of REAL by A29;
+A31: (reproj(i,nx0)).x in dom(f|X) by A29,A27;
+     z in dom reproj(i,nx0) by A30,FUNCT_2:def 1;
+     hence z in dom((f|X)*reproj(i,nx0)) by A31,FUNCT_1:11;
+    end;
+    consider N being Neighbourhood of x0 such that
+NXX: N c= N0 & N c= N1 by RCOMP_1:17;
+A32:N c= dom((f|X)*reproj(i,nx0)) by NXX,A28,XBOOLE_1:1;
+    consider L be LinearFunc,R be RestFunc such that
+A33: for x be Element of REAL st x in N0 holds
+      (f*reproj(i,nx0)).x-(f*reproj(i,nx0)).x0=L.(x-x0)+R.(x-x0) by A25;
+    now let x be Element of REAL;
+     assume A34: x in N;
+A36: dom reproj(i,nx0) = REAL by FUNCT_2:def 1;
+     (reproj(i,nx0)).x in dom(f|X) by A27,A34,NXX; then
+A38: (reproj(i,nx0)).x in dom f /\ X by RELAT_1:61;
+     (reproj(i,nx0)).x0 in dom(f|X) by A27,RCOMP_1:16; then
+A41: (reproj(i,nx0)).x0 in dom f /\ X by RELAT_1:61;
+
+A43: ((f|X)*reproj(i,nx0)).x = (f|X).(reproj(i,nx0)/.x) by A36,FUNCT_1:13
+       .= f.(reproj(i,nx0).x) by A38,FUNCT_1:48
+       .= (f*reproj(i,nx0)).x by A36,FUNCT_1:13;
+     ((f|X)*reproj(i,nx0)).x0 = (f|X).(reproj(i,nx0).x0) by A36,FUNCT_1:13
+       .= f.(reproj(i,nx0).x0) by A41,FUNCT_1:48
+       .= (f*reproj(i,nx0)).x0 by A36,FUNCT_1:13;
+     hence ((f|X)*reproj(i,nx0)).x -((f|X)*reproj(i,nx0)).x0
+             = L.(x-x0)+R.(x-x0) by A43,A34,A33,NXX;
+    end; then
+    (f|X)*reproj(i,nx0) is_differentiable_in x0 by A32,FDIFF_1:def 4;
+    hence (f|X) is_partial_differentiable_in nx0,i by PDIFF_1:def 11;
+   end;
+   hence thesis;
+end;
+
+theorem CW020:
+for X be Subset of REAL m,
+    f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1 st
+ <>*f = g & X is open & 1 <= i & i <= m holds
+  f is_partial_differentiable_on X,i iff g is_partial_differentiable_on X,i
+proof
+   let X be Subset of REAL m;
+   let f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1;
+   assume AS: <>*f = g & X is open & 1 <= i & i <= m;
+   hereby assume P2: f is_partial_differentiable_on X,i; then
+    X c=dom f by AS,PDIFF734; then
+P3: X c= dom g by LMXTh0,AS;
+    now let x be Element of REAL m;
+     assume x in X; then
+     f is_partial_differentiable_in x,i by P2,AS,PDIFF734;
+     hence g is_partial_differentiable_in x,i by AS,PDIFF_1:18;
+    end;
+    hence g is_partial_differentiable_on X,i by P3,AS,PDIFF_7:34;
+   end;
+
+   hereby assume
+P3: g is_partial_differentiable_on X,i; then
+    X c= dom g by AS,PDIFF_7:34; then
+P4: X c= dom f by LMXTh0,AS;
+    now let x be Element of REAL m;
+     assume x in X; then
+     g is_partial_differentiable_in x,i by P3,AS,PDIFF_7:34;
+     hence f is_partial_differentiable_in x,i by AS,PDIFF_1:18;
+    end;
+    hence f is_partial_differentiable_on X,i by AS,PDIFF734,P4;
+   end;
+end;
+
+theorem CW021:
+for X be Subset of REAL m,
+    f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1 st
+<>*f = g & X is open & 1<=i & i<=m & f is_partial_differentiable_on X,i holds
+  f`partial|(X,i) is_continuous_on X iff g`partial|(X,i) is_continuous_on X
+proof
+   let X be Subset of REAL m;
+   let f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1;
+   assume AS: <>*f = g & X is open & 1 <= i & i <= m
+            & f is_partial_differentiable_on X,i; then
+P1:g is_partial_differentiable_on X,i by CW020;
+
+   set ff= f`partial|(X,i);
+   set gg= g`partial|(X,i);
+
+EQ1:
+   for x,y be Element of REAL m st x in X & y in X holds
+     |. (f`partial|(X,i))/.x - (f`partial|(X,i))/.y .|
+       = |. (g`partial|(X,i))/.x - (g`partial|(X,i))/.y .|
+   proof
+    let x,y be Element of REAL m;
+    assume EQ2: x in X & y in X; then
+EQ3: (f`partial|(X,i))/.x = partdiff(f,x,i) &
+    (f`partial|(X,i))/.y = partdiff(f,y,i) by AS,DefPDX;
+
+EQ5:(g`partial|(X,i))/.x = partdiff(g,x,i) &
+    (g`partial|(X,i))/.y = partdiff(g,y,i) by P1,EQ2,PDIFF_7:def 5;
+
+    g is_partial_differentiable_in x,i &
+    g is_partial_differentiable_in y,i by P1,EQ2,AS,PDIFF_7:34; then
+    partdiff(g,x,i) = <*partdiff(f,x,i)*> &
+    partdiff(g,y,i) = <*partdiff(f,y,i)*> by AS,PDIFF_1:19; then
+    (g`partial|(X,i))/.x - (g`partial|(X,i))/.y
+     = <* (f`partial|(X,i))/.x - (f`partial|(X,i))/.y *> by EQ3,EQ5,RVSUM_1:29;
+    hence thesis by XTh30D;
+   end;
+
+D1:dom gg = X by P1,PDIFF_7:def 5;
+D2:dom ff = X by DefPDX,AS;
+
+   hereby assume Q2: f`partial|(X,i) is_continuous_on X;
+    now let x0 be Element of REAL m, r be Real;
+     assume Q40: x0 in X & 0<r; then
+     consider s be Real such that
+Q41:  0<s & for x1 be Element of REAL m st x1 in X & |. x1- x0 .| < s
+        holds |. ff/.x1 - ff/.x0 .| < r by D2,Q2,XTh38;
+     take s;
+     thus 0<s by Q41;
+     let x1 be Element of REAL m;
+     assume Q42: x1 in X & |. x1- x0 .| < s; then
+     |. ff/.x1 - ff/.x0 .| < r by Q41;
+     hence |. gg/.x1 - gg/.x0 .| < r by Q40,Q42,EQ1;
+    end;
+    hence g`partial|(X,i) is_continuous_on X by D1,PDIFF_7:38;
+   end;
+
+   hereby assume Q2: g`partial|(X,i) is_continuous_on X;
+    now let x0 be Element of REAL m, r be Real;
+     assume Q40: x0 in X & 0<r; then
+     consider s be Real such that
+Q41:  0<s & for x1 be Element of REAL m st x1 in X & |. x1- x0 .| < s
+       holds |. gg/.x1 - gg/.x0 .| < r by Q2,PDIFF_7:38;
+     take s;
+     thus 0<s by Q41;
+     let x1 be Element of REAL m;
+     assume Q42: x1 in X & |. x1- x0 .| < s; then
+     |. gg/.x1 - gg/.x0 .| < r by Q41;
+     hence |. ff/.x1 - ff/.x0 .| < r by Q40,Q42,EQ1;
+    end;
+    hence f`partial|(X,i) is_continuous_on X by XTh38,D2;
+   end;
+end;
+
+CW022:
+for f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1,
+    x1,x0,v be Element of REAL m
+ st <>*f = g holds
+  |. diff(f,x1).v - diff(f,x0).v .| = |. diff(g,x1).v - diff(g,x0).v .|
+proof
+   let f be PartFunc of REAL m,REAL, g be PartFunc of REAL m,REAL 1,
+       x1,x0,v be Element of REAL m;
+   assume AS: <>*f = g;
+
+   set I=proj(1,1);
+
+   reconsider w0 = diff(g,x0).v, w1 = diff(g,x1).v
+     as Point of REAL-NS 1 by REAL_NS1:def 4;
+
+   dom diff(g,x1) = REAL m & dom diff(g,x0) = REAL m by FUNCT_2:def 1; then
+   diff(f,x0).v = I.w0 & diff(f,x1).v = I.w1 by AS,FUNCT_1:13; then
+   diff(f,x1).v - diff(f,x0).v = I.(w1-w0) by PDIFF_1:4; then
+   |. diff(f,x1).v - diff(f,x0).v .| = ||. w1-w0 .|| by PDIFF_1:4;
+   hence thesis by REAL_NS1:1,5;
+end;
+
+theorem
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL st
+ X is open & X c= dom f holds
+  ( ( for i be Element of NAT st 1 <= i & i <= m holds
+     f is_partial_differentiable_on X,i &
+     f`partial|(X,i) is_continuous_on X )
+        iff
+    ( f is_differentiable_on X
+    & for x0 be Element of REAL m,r be Real st x0 in X & 0 < r
+       ex s be Real st
+         0 < s
+       & for x1 be Element of REAL m st x1 in X & |. x1- x0 .| < s holds
+          for v be Element of REAL m
+            holds |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.| ) )
+proof
+   let X be Subset of REAL m, f be PartFunc of REAL m,REAL;
+   set g = <>*f;
+   assume AS1: X is open & X c= dom f; then
+AS2:
+   X c= dom g by LMXTh0;
+
+   hereby assume
+P1: for i be Element of NAT st 1 <= i & i <= m holds
+     f is_partial_differentiable_on X,i &
+     f`partial|(X,i) is_continuous_on X;
+
+P3: for i be Element of NAT st 1 <= i & i <= m holds
+     g is_partial_differentiable_on X,i &
+     g`partial|(X,i) is_continuous_on X
+    proof
+     let i be Element of NAT;
+     assume P20: 1 <= i & i <= m; then
+     f is_partial_differentiable_on X,i
+   & f`partial|(X,i) is_continuous_on X by P1;
+     hence g is_partial_differentiable_on X,i
+       & g`partial|(X,i) is_continuous_on X by AS1,CW020,CW021,P20;
+    end; then
+    g is_differentiable_on X by CW01,AS1,AS2;
+    hence f is_differentiable_on X by YTh30;
+
+    thus
+      for x0 be Element of REAL m,r be Real
+        st x0 in X & 0 < r
+          ex s be Real
+            st 0 < s & for x1 be Element of REAL m
+             st x1 in X & |. x1- x0 .| < s
+               holds for v be Element of REAL m
+                 holds |. diff(f,x1).v  - diff(f,x0).v.| <= r * |.v.|
+    proof
+     let x0 be Element of REAL m,r be Real;
+     assume x0 in X & 0 < r; then
+     consider s be Real such that
+Q2:   0 < s
+    & for x1 be Element of REAL m st x1 in X & |. x1- x0 .| < s holds
+       for v be Element of REAL m holds
+        |. diff(g,x1).v - diff(g,x0).v.| <= r * |.v.| by P3,CW01,AS1,AS2;
+     take s;
+     thus 0 < s by Q2;
+     let x1 be Element of REAL m;
+     assume Q3: x1 in X & |. x1- x0 .| < s;
+     let v be Element of REAL m;
+     |. diff(g,x1).v  - diff(g,x0).v.| <= r * |.v.| by Q3,Q2;
+     hence |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.| by CW022;
+    end;
+   end;
+   now assume
+P1: f is_differentiable_on X &
+    for x0 be Element of REAL m,r be Real st x0 in X & 0 < r
+     ex s be Real st 0 < s
+     & for x1 be Element of REAL m st x1 in X & |. x1- x0 .| < s holds
+        for v be Element of REAL m
+          holds |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.|; then
+P2: g is_differentiable_on X by AS1,YTh30;
+
+P3: for x0 be Element of REAL m,r be Real st x0 in X & 0 < r
+     ex s be Real
+      st 0 < s
+       & for x1 be Element of REAL m st x1 in X & |. x1- x0 .| < s
+          holds for v be Element of REAL m
+            holds |. diff(g,x1).v  - diff(g,x0).v.| <= r * |.v.|
+    proof
+     let x0 be Element of REAL m,r be Real;
+     assume x0 in X & 0 < r; then
+     consider s be Real such that
+Q2:   0 < s & for x1 be Element of REAL m st x1 in X & |. x1- x0 .| < s
+       holds for v be Element of REAL m
+        holds |. diff(f,x1).v  - diff(f,x0).v.| <= r * |.v.| by P1;
+     take s;
+     thus 0 < s by Q2;
+     let x1 be Element of REAL m;
+     assume Q3: x1 in X & |. x1- x0 .| < s;
+     let v be Element of REAL m;
+     |. diff(f,x1).v - diff(f,x0).v.| <= r * |.v.| by Q3,Q2;
+     hence |. diff(g,x1).v - diff(g,x0).v.| <= r * |.v.| by CW022;
+    end;
+
+    thus for i be Element of NAT st 1 <= i & i <= m holds
+     f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X
+    proof
+     let i be Element of NAT;
+     assume P4: 1 <= i & i <= m; then
+P5:  g is_partial_differentiable_on X,i &
+     g`partial|(X,i) is_continuous_on X by P3,CW01,AS2,AS1,P2;
+     hence f is_partial_differentiable_on X,i by P4,CW020,AS1;
+     hence f`partial|(X,i) is_continuous_on X by P4,P5,CW021,AS1;
+    end;
+   end;
+   hence thesis;
+end;
+
+LM1291:
+for f,g be PartFunc of REAL i,REAL, x be Element of REAL i
+ holds (f*reproj(k,x))(#)(g*reproj(k,x)) = (f(#)g)*reproj(k,x)
+proof
+   let f1,f2 be PartFunc of REAL i,REAL, x be Element of REAL i;
+A1:dom(reproj(k,x))=REAL by FUNCT_2:def 1;
+A2:dom(f1(#)f2) = dom f1 /\ dom f2 by VALUED_1:def 4;
+
+   for s be Element of REAL holds s in dom((f1(#)f2)*reproj(k,x))
+  iff s in dom((f1*reproj(k,x))(#)(f2*reproj(k,x)))
+   proof
+    let s be Element of REAL;
+    s in dom((f1(#)f2)*reproj(k,x))
+     iff reproj(k,x).s in dom f1 /\ dom f2 by A2,A1,FUNCT_1:11; then
+    s in dom((f1(#)f2)*reproj(k,x))
+     iff reproj(k,x).s in dom f1 & reproj(k,x).s in dom f2
+       by XBOOLE_0:def 4; then
+    s in dom((f1(#)f2)*reproj(k,x))
+     iff s in dom(f1*reproj(k,x)) & s in dom(f2*reproj(k,x))
+       by A1,FUNCT_1:11; then
+    s in dom((f1(#)f2)*reproj(k,x))
+     iff s in dom(f1*reproj(k,x)) /\ dom(f2*reproj(k,x)) by XBOOLE_0:def 4;
+    hence thesis by VALUED_1:def 4;
+   end; then
+   for s be set holds s in dom((f1(#)f2)*reproj(k,x))
+    iff s in dom((f1*reproj(k,x))(#)(f2*reproj(k,x))); then
+A3:dom((f1(#)f2)*reproj(k,x))
+     = dom((f1*reproj(k,x))(#)(f2*reproj(k,x))) by TARSKI:1;
+
+   for z being Element of REAL st z in dom((f1(#)f2)*reproj(k,x)) holds
+    ((f1(#)f2)*reproj(k,x)).z = ((f1*reproj(k,x))(#)(f2*reproj(k,x))).z
+   proof
+    let z be Element of REAL;
+    assume
+A5: z in dom((f1(#)f2)*reproj(k,x)); then
+    reproj(k,x).z in dom f1 /\ dom f2 by A2,FUNCT_1:11; then
+    reproj(k,x).z in dom f1 & reproj(k,x).z in dom f2 by XBOOLE_0:def 4; then
+    z in dom(f1*reproj(k,x)) & z in dom(f2*reproj(k,x)) by A1,FUNCT_1:11; then
+A13:f1.(reproj(k,x).z) =(f1*reproj(k,x)).z
+  & f2.(reproj(k,x).z) =(f2*reproj(k,x)).z by FUNCT_1:12;
+    thus ((f1(#)f2)*reproj(k,x)).z
+       = (f1(#)f2).(reproj(k,x).z) by A5,FUNCT_1:12
+      .= f1.(reproj(k,x).z) * f2.(reproj(k,x).z) by VALUED_1:5
+      .=((f1*reproj(k,x))(#)(f2*reproj(k,x))).z
+           by A3,A5,A13,VALUED_1:def 4;
+   end;
+   hence thesis by A3,PARTFUN1:5;
+end;
+
+theorem  MPDIFF129:
+for f,g be PartFunc of REAL m,REAL, x be Element of REAL m
+ st f is_partial_differentiable_in x,i
+  & g is_partial_differentiable_in x,i
+holds
+   f(#)g is_partial_differentiable_in x,i
+ & partdiff(f(#)g,x,i) = partdiff(f,x,i)*(g.x) +(f.x)*partdiff(g,x,i)
+proof
+   let f,g be PartFunc of REAL m,REAL, x be Element of REAL m;
+   assume f is_partial_differentiable_in x,i
+            & g is_partial_differentiable_in x,i; then
+P1:f*reproj(i,x) is_differentiable_in proj(i,m).x &
+   g*reproj(i,x) is_differentiable_in proj(i,m).x by PDIFF_1:def 11;
+   set y=proj(i,m).x;
+   dom(reproj(i,x))=REAL by FUNCT_2:def 1; then
+P7:(f*reproj(i,x)).y = f.(reproj(i,x).y) &
+   (g*reproj(i,x)).y = g.(reproj(i,x).y) by FUNCT_1:13; then
+P6:(f*reproj(i,x)).y = f.x by LMMMTh6;
+
+   (f*reproj(i,x))(#)(g*reproj(i,x)) = (f(#)g)*reproj(i,x) by LM1291; then
+   (f(#)g)*reproj(i,x) is_differentiable_in proj(i,m).x by P1,FDIFF_1:16;
+   hence (f(#)g) is_partial_differentiable_in x,i by PDIFF_1:def 11;
+
+   thus partdiff((f(#)g),x,i)
+     = diff((f*reproj(i,x))(#)(g*reproj(i,x)),y) by LM1291
+    .= ((g*reproj(i,x)).y)*partdiff(f,x,i)
+     + ((f*reproj(i,x)).y)*diff((g*reproj(i,x)),y) by P1,FDIFF_1:16
+    .= partdiff(f,x,i)*(g.x) +(f.x)*partdiff(g,x,i) by P6,P7,LMMMTh6;
+end;
+
+theorem XXX1:
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL st
+ X is open & 1 <= i & i <= m
+  & f is_partial_differentiable_on X,i & g is_partial_differentiable_on X,i
+ holds
+   (f+g) is_partial_differentiable_on X,i
+ & (f+g)`partial|(X,i) = f`partial|(X,i) + g`partial|(X,i)
+ & for x be Element of REAL m st x in X holds
+     (f+g)`partial|(X,i)/.x = partdiff(f,x,i) + partdiff(g,x,i)
+proof
+   let X be Subset of REAL m, f,g be PartFunc of REAL m,REAL;
+   assume AS: X is open & 1 <= i & i <= m
+   & f is_partial_differentiable_on X,i & g is_partial_differentiable_on X,i;
+
+P1:X c= dom f & X c= dom g by AS,PDIFF734;
+
+Q1:dom(f`partial|(X,i)) = X & dom(g`partial|(X,i)) = X by DefPDX,AS;
+
+   dom (f+g) = dom f /\ dom g by VALUED_1:def 1; then
+P3:X c= dom(f+g) by P1,XBOOLE_1:19;
+
+XX1:
+   now let x be Element of REAL m;
+    assume x in X; then
+    f is_partial_differentiable_in x,i &
+    g is_partial_differentiable_in x,i by AS,PDIFF734;
+    hence f+g is_partial_differentiable_in x,i
+     & partdiff(f+g,x,i) = partdiff(f,x,i) + partdiff(g,x,i) by PDIFF_1:29;
+   end; then
+P7:for x be Element of REAL m st x in X
+     holds f+g is_partial_differentiable_in x,i; then
+P8:(f+g) is_partial_differentiable_on X,i by P3,PDIFF734,AS; then
+P9:dom ((f+g)`partial|(X,i)) = X by DefPDX;
+
+P10:
+   now let x be Element of REAL m;
+    assume P10:x in X; then
+    ((f+g)`partial|(X,i))/.x = partdiff(f+g,x,i) by P8,DefPDX;
+    hence ((f+g)`partial|(X,i))/.x = partdiff(f,x,i) + partdiff(g,x,i)
+      by XX1,P10;
+   end;
+
+P11:
+   dom ((f`partial|(X,i)) + (g`partial|(X,i)))
+     = dom (f`partial|(X,i)) /\ dom (g`partial|(X,i)) by VALUED_1:def 1;
+   now let x be Element of REAL m;
+    assume A1: x in X;
+    thus ((f+g)`partial|(X,i)).x
+     = ((f+g)`partial|(X,i))/.x by A1,P9,PARTFUN1:def 6
+    .= partdiff(f,x,i) + partdiff(g,x,i) by P10,A1
+    .= ((f`partial|(X,i))/.x) + partdiff(g,x,i) by A1,DefPDX,AS
+    .= ((f`partial|(X,i))/.x) + ((g`partial|(X,i))/.x) by A1,DefPDX,AS
+    .= ((f`partial|(X,i)).x) + ((g`partial|(X,i))/.x) by A1,Q1,PARTFUN1:def 6
+    .= ((f`partial|(X,i)).x) + ((g`partial|(X,i)).x) by A1,Q1,PARTFUN1:def 6
+    .= ((f`partial|(X,i))+(g`partial|(X,i))).x by A1,P11,Q1,VALUED_1:def 1;
+   end;
+   hence thesis by P7,P3,PDIFF734,AS,P9,P10,P11,Q1,PARTFUN1:5;
+end;
+
+theorem XXX2:
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL st
+   X is open & 1 <= i & i <= m
+ & f is_partial_differentiable_on X,i
+ & g is_partial_differentiable_on X,i
+holds
+   f-g is_partial_differentiable_on X,i
+ & (f-g)`partial|(X,i) = f`partial|(X,i) - g`partial|(X,i)
+ & for x be Element of REAL m st x in X holds
+    (f-g)`partial|(X,i)/.x = partdiff(f,x,i) - partdiff(g,x,i)
+proof
+   let X be Subset of REAL m, f,g be PartFunc of REAL m,REAL;
+   assume AS: X is open & 1 <= i & i <= m
+    & f is_partial_differentiable_on X,i & g is_partial_differentiable_on X,i;
+
+P1:X c=dom f & X c=dom g by AS,PDIFF734;
+
+Q1:dom (f`partial|(X,i)) = X & dom (g`partial|(X,i)) = X by DefPDX,AS;
+
+   dom (f-g) = dom f /\ dom g by VALUED_1:12; then
+P3:X c= dom (f-g) by P1,XBOOLE_1:19;
+
+XX1:
+   now let x be Element of REAL m;
+    assume x in X; then
+    f is_partial_differentiable_in x,i & g is_partial_differentiable_in x,i
+      by AS,PDIFF734;
+    hence f-g is_partial_differentiable_in x,i
+        & partdiff(f-g,x,i) = partdiff(f,x,i) - partdiff(g,x,i) by PDIFF_1:31;
+   end; then
+P7:for x be Element of REAL m st x in X
+     holds f-g is_partial_differentiable_in x,i; then
+P8:f-g is_partial_differentiable_on X,i by P3,PDIFF734,AS; then
+B1:dom ((f-g)`partial|(X,i)) = X by DefPDX;
+
+P10:
+   now let x be Element of REAL m;
+    assume P10:x in X; then
+    ((f-g)`partial|(X,i))/.x = partdiff((f-g),x,i) by P8,DefPDX;
+    hence ((f-g)`partial|(X,i))/.x = partdiff(f,x,i) - partdiff(g,x,i)
+       by XX1,P10;
+   end;
+
+B2:dom ((f`partial|(X,i)) - (g`partial|(X,i)) )
+     = dom (f`partial|(X,i)) /\ dom (g`partial|(X,i)) by VALUED_1:12;
+   now let x be Element of REAL m;
+    assume A1: x in X;
+    thus ((f-g)`partial|(X,i)).x
+     = ((f-g)`partial|(X,i))/.x by A1,B1,PARTFUN1:def 6
+    .= partdiff(f,x,i) - partdiff(g,x,i) by P10,A1
+    .= (f`partial|(X,i))/.x - partdiff(g,x,i) by A1,DefPDX,AS
+    .= (f`partial|(X,i))/.x - (g`partial|(X,i))/.x by A1,DefPDX,AS
+    .= (f`partial|(X,i)).x - (g`partial|(X,i))/.x by A1,Q1,PARTFUN1:def 6
+    .= (f`partial|(X,i)).x - (g`partial|(X,i)).x by A1,Q1,PARTFUN1:def 6
+    .= ( f`partial|(X,i) - g`partial|(X,i) ).x by A1,B2,Q1,VALUED_1:13;
+   end;
+   hence thesis by B1,B2,Q1,P7,P10,P3,PDIFF734,AS,PARTFUN1:5;
+end;
+
+theorem XXX3:
+for X be Subset of REAL m, r be Real, f be PartFunc of REAL m,REAL st
+  X is open & 1 <= i & i <= m & f is_partial_differentiable_on X,i
+holds
+   r(#)f is_partial_differentiable_on X,i
+ & (r(#)f) `partial|(X,i) = r(#)(f`partial|(X,i))
+ & for x be Element of REAL m st x in X holds
+    (r(#)f)`partial|(X,i)/.x = r*partdiff(f,x,i)
+proof
+   let X be Subset of REAL m, r be Real, f be PartFunc of REAL m,REAL;
+   assume AS: X is open & 1 <= i & i <= m & f is_partial_differentiable_on X,i;
+
+Q1:dom (f`partial|(X,i)) = X by DefPDX,AS;
+
+   dom (r(#)f) = dom f by VALUED_1:def 5; then
+P3:X c= dom (r(#)f) by AS,PDIFF734;
+
+XX1:
+   now let x be Element of REAL m;
+    assume x in X; then
+    f is_partial_differentiable_in x,i by AS,PDIFF734;
+    hence r(#)f is_partial_differentiable_in x,i
+       & partdiff(r(#)f,x,i) = r*partdiff(f,x,i) by PDIFF_1:33;
+   end; then
+P7:for x be Element of REAL m st x in X
+     holds r(#)f is_partial_differentiable_in x,i; then
+P8:r(#)f is_partial_differentiable_on X,i by P3,PDIFF734,AS; then
+P9:dom ((r(#)f)`partial|(X,i)) = X by DefPDX;
+
+P10:
+   now let x be Element of REAL m;
+    assume P10:x in X; then
+    ((r(#)f)`partial|(X,i))/.x = partdiff((r(#)f),x,i) by P8,DefPDX;
+    hence ((r(#)f)`partial|(X,i))/.x = r*partdiff(f,x,i) by XX1,P10;
+   end;
+
+   dom (r(#)(f`partial|(X,i))) = dom (f`partial|(X,i)) by VALUED_1:def 5; then
+P11:dom (r(#)(f`partial|(X,i))) = X by DefPDX,AS;
+
+   now let x be Element of REAL m;
+    assume A1: x in X;
+    thus ((r(#)f)`partial|(X,i)).x
+      = ((r(#)f)`partial|(X,i))/.x by A1,P9,PARTFUN1:def 6
+     .= r*partdiff(f,x,i) by P10,A1
+     .= r*((f`partial|(X,i))/.x) by A1,DefPDX,AS
+     .= r*((f`partial|(X,i)).x) by A1,Q1,PARTFUN1:def 6
+     .= (r(#)(f`partial|(X,i))).x by A1,P11,VALUED_1:def 5;
+   end;
+   hence thesis by P9,P11,P7,P10,P3,PDIFF734,AS,PARTFUN1:5;
+end;
+
+theorem XXX4:
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL st
+  X is open & 1 <= i & i <= m
+  & f is_partial_differentiable_on X,i & g is_partial_differentiable_on X,i
+holds
+    f(#)g is_partial_differentiable_on X,i
+  & (f(#)g)`partial|(X,i) =(f`partial|(X,i))(#)g + f(#)(g`partial|(X,i))
+  & for x be Element of REAL m st x in X holds
+     (f(#)g)`partial|(X,i)/.x = partdiff(f,x,i)*(g.x) + (f.x)* partdiff(g,x,i)
+proof
+   let X be Subset of REAL m, f,g be PartFunc of REAL m,REAL;
+   assume AS: X is open & 1 <= i & i <= m
+    & f is_partial_differentiable_on X,i & g is_partial_differentiable_on X,i;
+
+P1:X c=dom f & X c=dom g by AS,PDIFF734;
+
+Q1:dom (f`partial|(X,i)) = X & dom (g`partial|(X,i)) = X
+    by DefPDX,AS;
+
+   dom (f(#)g) = dom f /\ dom g by VALUED_1:def 4; then
+P3:X c= dom (f(#)g) by P1,XBOOLE_1:19;
+
+XX1:
+   now let x be Element of REAL m;
+    assume x in X; then
+    f is_partial_differentiable_in x,i &
+    g is_partial_differentiable_in x,i by AS,PDIFF734;
+    hence f(#)g is_partial_differentiable_in x,i
+     & partdiff(f(#)g,x,i) = partdiff(f,x,i)*(g.x) + (f.x)* partdiff(g,x,i)
+       by MPDIFF129;
+   end; then
+P7:for x be Element of REAL m st x in X
+     holds f(#)g is_partial_differentiable_in x,i; then
+P8:f(#)g is_partial_differentiable_on X,i by P3,PDIFF734,AS; then
+P9:dom ((f(#)g)`partial|(X,i)) = X by DefPDX;
+
+P10:
+   now let x be Element of REAL m;
+    assume P10:x in X; then
+    ((f(#)g) `partial|(X,i))/.x = partdiff((f(#)g),x,i) by P8,DefPDX;
+    hence ((f(#)g)`partial|(X,i))/.x
+      = partdiff(f,x,i)*(g.x) + (f.x)*partdiff(g,x,i) by XX1,P10;
+   end;
+   dom (f`partial|(X,i)(#)g) = dom (f`partial|(X,i)) /\  dom g &
+   dom (f(#)(g`partial|(X,i))) = dom f /\ dom (g`partial|(X,i))
+                       by VALUED_1:def 4; then
+P12:
+   dom (f`partial|(X,i)(#)g) = X &
+   dom (f(#)(g`partial|(X,i))) = X by Q1,P1,XBOOLE_1:28;
+
+P14:dom ((f`partial|(X,i))(#)g + f(#)(g`partial|(X,i)))
+    = dom ((f`partial|(X,i))(#)g) /\ dom(f(#)(g`partial|(X,i)))
+        by VALUED_1:def 1;
+   now let x be Element of REAL m;
+    assume A1: x in X;
+    thus ((f(#)g)`partial|(X,i)).x
+     = ((f(#)g)`partial|(X,i))/.x by A1,P9,PARTFUN1:def 6
+    .= partdiff(f,x,i)*(g.x) + (f.x)*partdiff(g,x,i) by P10,A1
+    .= ((f`partial|(X,i))/.x)*(g.x) + (f.x)*partdiff(g,x,i)
+                by A1,DefPDX,AS
+    .= ((f`partial|(X,i))/.x)*(g.x) + (f.x)*((g`partial|(X,i))/.x)
+                 by A1,DefPDX,AS
+    .= ((f`partial|(X,i)).x)*(g.x) + (f.x)*((g`partial|(X,i))/.x)
+              by A1,Q1,PARTFUN1:def 6
+    .= ((f`partial|(X,i)).x)*(g.x) + (f.x)*((g`partial|(X,i)).x)
+              by A1,Q1,PARTFUN1:def 6
+    .= ((f`partial|(X,i))(#)g).x + (f.x)*((g`partial|(X,i)).x)
+              by VALUED_1:5
+    .= ((f`partial|(X,i))(#)g).x + (f(#)(g`partial|(X,i))).x
+              by VALUED_1:5
+    .= ( (f`partial|(X,i)(#)g) + f(#)(g`partial|(X,i)) ).x
+                 by A1,P14,P12,VALUED_1:def 1;
+   end;
+   hence thesis by P7,P10,P3,PDIFF734,AS,P9,P12,P14,PARTFUN1:5;
+end;
+
+begin :: Higher Order Partial Differentiation
+
+definition
+ let m be non empty Element of NAT, Z be set, I be FinSequence of NAT,
+     f be PartFunc of REAL m,REAL;
+func PartDiffSeq(f,Z,I) -> Functional_Sequence of REAL m,REAL means :TDef5:
+   it.0 = f
+ & for i be natural number holds it.(i+1) = (it.i)`partial|(Z,I/.(i+1));
+existence
+proof
+   reconsider fZ = f as Element of PFuncs(REAL m,REAL) by PARTFUN1:45;
+   defpred R[set,set,set] means ex k be Element of NAT,
+      h being PartFunc of REAL m, REAL
+    st $1=k & $2 = h & $3 = h`partial|(Z,I/.(k+1));
+A1:for n being Element of NAT
+    for x being Element of PFuncs(REAL m,REAL)
+     ex y being Element of PFuncs(REAL m,REAL) st R[n,x,y]
+   proof
+    let n be Element of NAT;
+    let x be Element of PFuncs (REAL m,REAL);
+
+    reconsider x9 = x as PartFunc of REAL m, REAL by PARTFUN1:46;
+    reconsider y = x9`partial|(Z,I/.(n+1))
+          as Element of PFuncs (REAL m,REAL) by PARTFUN1:45;
+    ex h being PartFunc of REAL m, REAL
+             st x = h & y = h`partial|(Z,I/.(n+1));
+    hence thesis;
+   end;
+   consider g be Function of NAT, PFuncs (REAL m,REAL) such that
+A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)]
+       from RECDEF_1:sch 2(A1);
+   reconsider g as Functional_Sequence of REAL m,REAL;
+   take g;
+   thus g.0 = f by A2;
+   let i be natural number;
+   i is Element of NAT by ORDINAL1:def 12; then
+   R[i,g.i,g.(i+1)] by A2;
+   hence thesis;
+end;
+uniqueness
+proof
+   let seq1,seq2 be Functional_Sequence of REAL m,REAL;
+   assume that
+A3: seq1.0=f and
+A4: for n be natural number holds seq1.(n+1)
+                =( seq1.n )`partial|(Z,I/.(n+1))
+     and
+A5: seq2.0=f and
+A6: for n be natural number holds seq2.(n+1)
+               =( seq2.n )`partial|(Z,I/.(n+1));
+   defpred P[Element of NAT] means seq1.$1 = seq2.$1;
+A7:for k be Element of NAT st P[k] holds P[k+1]
+   proof
+    let k be Element of NAT;
+    assume A8: P[k];
+    seq1.(k+1) = ( seq1.k )`partial|(Z,I/.(k+1)) by A4;
+    hence seq1.(k+1) = seq2.(k+1) by A6,A8;
+   end;
+A9:P[0] by A3,A5;
+   for n be Element of NAT holds P[n] from NAT_1:sch 1(A9,A7);
+   hence seq1 = seq2 by FUNCT_2:63;
+end;
+end;
+
+definition
+  let m be non empty Element of NAT;
+  let Z be set, I be FinSequence of NAT;
+  let f be PartFunc of REAL m,REAL;
+pred f is_partial_differentiable_on Z,I means :TDef6:
+  for i be Element of NAT st i <= (len I)-1
+    holds (PartDiffSeq(f,Z,I)).i is_partial_differentiable_on Z,I/.(i+1);
+end;
+
+definition
+  let m be non empty Element of NAT;
+  let Z be set, I be FinSequence of NAT;
+  let f be PartFunc of REAL m,REAL;
+func f`partial|(Z,I) -> PartFunc of REAL m,REAL equals
+   (PartDiffSeq(f,Z,I)).(len I);
+correctness;
+end;
+
+XCWLM1:
+for I be non empty FinSequence of NAT, X be set
+ st 1 <=i & i <= len I & rng I c= X holds I/.i in X
+proof
+   let I be non empty FinSequence of NAT, X be set;
+   assume AS: 1 <=i & i <= len I & rng I c= X; then
+   i in Seg (len I); then
+X1:i in dom I by FINSEQ_1:def 3; then
+   I.i in rng I by FUNCT_1:3; then
+   I/.i in rng I by X1,PARTFUN1:def 6;
+   hence I/.i in X by AS;
+end;
+
+theorem XCW010:
+for X be Subset of REAL m, I be non empty FinSequence of NAT,
+    f,g be PartFunc of REAL m,REAL st
+  X is open & rng I c= Seg m & f is_partial_differentiable_on X,I
+  & g is_partial_differentiable_on X,I
+holds
+ for i st i <= (len I) - 1 holds
+   (PartDiffSeq(f+g,X,I)).i is_partial_differentiable_on X,I/.(i+1)
+ & (PartDiffSeq(f+g,X,I)).i = PartDiffSeq(f,X,I).i + PartDiffSeq(g,X,I).i
+proof
+   let Z be Subset of REAL m, I be non empty FinSequence of NAT;
+   let f,g be PartFunc of REAL m,REAL;
+   assume AS: Z is open & rng I c= Seg m & f is_partial_differentiable_on Z,I
+       & g is_partial_differentiable_on Z,I;
+
+   thus
+   for i be Element of NAT st i <= (len I)-1 holds
+      (PartDiffSeq(f+g,Z,I)).i is_partial_differentiable_on Z,I/.(i+1)
+    & (PartDiffSeq(f+g,Z,I)).i = PartDiffSeq(f,Z,I).i + PartDiffSeq(g,Z,I).i
+   proof
+    defpred P[Element of NAT] means
+    $1 <= (len I)-1 implies
+       (PartDiffSeq(f+g,Z,I)).$1 is_partial_differentiable_on Z,I/.($1+1)
+     & (PartDiffSeq(f+g,Z,I)).$1
+          = (PartDiffSeq(f,Z,I)).$1 + (PartDiffSeq(g,Z,I)).$1;
+    reconsider Z0=0 as Element of NAT;
+
+A9: P[0]
+    proof
+     assume 0 <= (len I)-1; then
+Q2:  (PartDiffSeq(f,Z,I)).Z0 is_partial_differentiable_on Z,I/.(Z0+1)
+   & (PartDiffSeq(g,Z,I)).Z0 is_partial_differentiable_on Z,I/.(Z0+1)
+        by AS,TDef6;
+
+Q0:  f = (PartDiffSeq(f,Z,I)).Z0 & (PartDiffSeq(f+g,Z,I)).Z0 = f+g by TDef5;
+
+     1 <= len I by FINSEQ_1:20; then
+     I/.1 in Seg m by AS,XCWLM1; then
+     1<=I/.1 & I/.1 <= m by FINSEQ_1:1; then
+     (PartDiffSeq(f,Z,I)).Z0 + (PartDiffSeq(g,Z,I)).Z0
+       is_partial_differentiable_on Z,I/.(Z0+1) by AS,Q2,XXX1;
+     hence thesis by Q0,TDef5;
+    end;
+
+A7: for k be Element of NAT st P[k] holds P[k+1]
+    proof
+     let k be Element of NAT;
+     assume
+A8:  P[k];
+     assume A81: k+1 <=(len I)-1;
+A83: k <= k+1 by NAT_1:11; then
+A82: k <= (len I)-1 by A81,XXREAL_0:2;
+
+A84: (PartDiffSeq(f,Z,I)).(k+1) is_partial_differentiable_on Z,I/.((k+1)+1)
+   & (PartDiffSeq(g,Z,I)).(k+1) is_partial_differentiable_on Z,I/.((k+1)+1)
+        by A81,AS,TDef6;
+
+     k+1 <= (len I)-1 + 1 by A82,XREAL_1:6; then
+     I/.(k+1) in Seg m by AS,XCWLM1,NAT_1:11; then
+Q4:  1<=I/.(k+1) & I/.(k+1) <= m by FINSEQ_1:1;
+
+A840:(PartDiffSeq(f,Z,I)).k is_partial_differentiable_on Z,I/.(k+1)
+   & (PartDiffSeq(g,Z,I)).k is_partial_differentiable_on Z,I/.(k+1)
+        by A82,AS,TDef6;
+R1:  (PartDiffSeq(f,Z,I)).(k+1)
+       = ((PartDiffSeq(f,Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5;
+     (k+1)+1 <=(len I)-1 +1 by A81,XREAL_1:6; then
+     I/.((k+1)+1) in Seg m by AS,XCWLM1,NAT_1:11; then
+Q5:  1 <= I/.((k+1)+1) & I/.((k+1)+1) <= m by FINSEQ_1:1;
+
+A86: (PartDiffSeq(f+g,Z,I)).(k+1)
+       = ((PartDiffSeq(f,Z,I)).k + (PartDiffSeq(g,Z,I)).k)`partial|(Z,I/.(k+1))
+           by A83,A8,A81,TDef5,XXREAL_0:2
+      .= ((PartDiffSeq(f,Z,I)).k)`partial|(Z,I/.(k+1))
+        + ((PartDiffSeq(g,Z,I)).k)`partial|(Z,I/.(k+1)) by A840,AS,Q4,XXX1
+      .= (PartDiffSeq(f,Z,I)).(k+1) + (PartDiffSeq(g,Z,I)).(k+1) by R1,TDef5;
+     hence
+      (PartDiffSeq(f+g,Z,I)).(k+1) is_partial_differentiable_on Z,I/.((k+1)+1)
+        by AS,A84,Q5,XXX1;
+     thus (PartDiffSeq(f+g,Z,I)).(k+1)
+       = (PartDiffSeq(f,Z,I)).(k+1) + (PartDiffSeq(g,Z,I)).(k+1) by A86;
+    end;
+    for n be Element of NAT holds P[ n ] from NAT_1:sch 1(A9,A7);
+    hence thesis;
+   end;
+end;
+
+theorem XCW011:
+for X be Subset of REAL m, I be non empty FinSequence of NAT,
+    f,g be PartFunc of REAL m,REAL st
+  X is open & rng I c= Seg m
+  & f is_partial_differentiable_on X,I
+  & g is_partial_differentiable_on X,I
+holds
+    f+g is_partial_differentiable_on X,I
+  & (f+g)`partial|(X,I) = f`partial|(X,I) + g`partial|(X,I)
+proof
+   let Z be Subset of REAL m, I be non empty FinSequence of NAT,
+       f,g be PartFunc of REAL m,REAL;
+   assume AS: Z is open & rng I c= Seg m
+       & f is_partial_differentiable_on Z,I
+       & g is_partial_differentiable_on Z,I; then
+   for i be Element of NAT st i <= (len I)-1 holds
+    (PartDiffSeq(f+g,Z,I)).i is_partial_differentiable_on Z,I/.(i+1) by XCW010;
+   hence f+g is_partial_differentiable_on Z,I by TDef6;
+
+   1 <= len I by FINSEQ_1:20; then
+   reconsider  k=(len I)-1 as Element of NAT by INT_1:5;
+
+P1:(PartDiffSeq(f,Z,I)).k is_partial_differentiable_on Z,I/.(k+1) &
+   (PartDiffSeq(g,Z,I)).k is_partial_differentiable_on Z,I/.(k+1) by AS,TDef6;
+
+   1 <= k+1 by NAT_1:11; then
+   I/.(k+1) in Seg m by AS,XCWLM1; then
+Q4:1<=I/.(k+1) & I/.(k+1) <= m by FINSEQ_1:1;
+
+R1:(PartDiffSeq(f+g,Z,I)).(k+1)
+     = ((PartDiffSeq((f+g),Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5
+    .= ((PartDiffSeq(f,Z,I).k)
+          + (PartDiffSeq(g,Z,I).k))`partial|(Z,I/.(k+1)) by AS,XCW010
+    .= (PartDiffSeq(f,Z,I).k)`partial|(Z,I/.(k+1))
+          + (PartDiffSeq(g,Z,I).k)`partial|(Z,I/.(k+1)) by P1,AS,Q4,XXX1;
+   (PartDiffSeq(f,Z,I)).(k+1)
+     = ((PartDiffSeq(f,Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5;
+   hence (f+g)`partial|(Z,I) = f`partial|(Z,I) + g`partial|(Z,I) by R1,TDef5;
+end;
+
+theorem XCW020:
+for X be Subset of REAL m, I be non empty FinSequence of NAT,
+    f,g be PartFunc of REAL m,REAL st
+  X is open & rng I c= Seg m
+  & f is_partial_differentiable_on X,I
+  & g is_partial_differentiable_on X,I
+holds
+  for i st i <= (len I)-1 holds
+   (PartDiffSeq(f-g,X,I)).i is_partial_differentiable_on X,I/.(i+1)
+ & (PartDiffSeq(f-g,X,I)).i = (PartDiffSeq(f,X,I).i)-(PartDiffSeq(g,X,I).i)
+proof
+   let Z be Subset of REAL m, I be non empty FinSequence of NAT,
+       f,g be PartFunc of REAL m,REAL;
+   assume AS: Z is open & rng I c= Seg m
+       & f is_partial_differentiable_on Z,I
+       & g is_partial_differentiable_on Z,I;
+
+   defpred P[Element of NAT] means
+     $1 <= (len I)-1 implies
+     (  (PartDiffSeq(f-g,Z,I)).$1 is_partial_differentiable_on Z,I/.($1+1)
+      & (PartDiffSeq(f-g,Z,I)).$1
+         = (PartDiffSeq(f,Z,I)).$1 - (PartDiffSeq(g,Z,I)).$1 );
+   reconsider Z0=0 as Element of NAT;
+
+A9:P[0]
+   proof
+    assume 0 <= (len I)-1; then
+Q2: (PartDiffSeq(f,Z,I)).Z0 is_partial_differentiable_on Z,I/.(Z0 + 1) &
+    (PartDiffSeq(g,Z,I)).Z0 is_partial_differentiable_on Z,I/.(Z0 + 1)
+       by AS,TDef6;
+
+    f = (PartDiffSeq(f,Z,I)).Z0 & f-g = (PartDiffSeq(f-g,Z,I)).Z0
+      by TDef5; then
+Q5: (PartDiffSeq(f-g,Z,I)).Z0
+      = (PartDiffSeq(f,Z,I)).Z0-(PartDiffSeq(g,Z,I)).Z0 by TDef5;
+
+    1 <= len I by FINSEQ_1:20; then
+    I/.1 in Seg m by AS,XCWLM1; then
+    1<=I/.1 & I/.1 <= m by FINSEQ_1:1;
+    hence thesis by Q5,AS,Q2,XXX2;
+   end;
+
+A7:for k be Element of NAT st P[k] holds P[k+1]
+   proof
+    let k be Element of NAT;
+    assume A8: P[k];
+    assume A81: k+1 <=(len I)-1;
+B1: k <= k+1 by NAT_1:11; then
+A82:k <=(len I)-1 by A81,XXREAL_0:2;
+
+A84:(PartDiffSeq(f,Z,I)).(k+1) is_partial_differentiable_on Z,I/.((k+1)+1) &
+    (PartDiffSeq(g,Z,I)).(k+1) is_partial_differentiable_on Z,I/.((k+1)+1)
+        by A81,AS,TDef6;
+
+    k+1 <= (len I)-1 + 1 by A82,XREAL_1:6; then
+    I/.(k+1) in Seg m by AS,XCWLM1,NAT_1:11; then
+Q4: 1<=I/.(k+1) & I/.(k+1) <= m by FINSEQ_1:1;
+
+A85:(PartDiffSeq(f,Z,I)).k is_partial_differentiable_on Z,I/.(k+1) &
+    (PartDiffSeq(g,Z,I)).k is_partial_differentiable_on Z,I/.(k+1)
+        by A82,AS,TDef6;
+
+R1: (PartDiffSeq(f,Z,I)).(k+1)
+       = ((PartDiffSeq(f,Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5;
+
+    (k+1)+1 <=(len I)-1 +1 by A81,XREAL_1:6; then
+    I/.((k+1)+1) in Seg m by AS,XCWLM1,NAT_1:11; then
+Q5: 1<=I/.((k+1)+1) & I/.((k+1)+1) <= m by FINSEQ_1:1;
+
+A86:(PartDiffSeq(f-g,Z,I)).(k+1)
+        = ((PartDiffSeq(f-g,Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5
+       .= ((PartDiffSeq(f,Z,I)).k)`partial|(Z,I/.(k+1))
+            - ((PartDiffSeq(g,Z,I)).k)`partial|(Z,I/.(k+1))
+              by A85,AS,Q4,XXX2,B1,A8,A81,XXREAL_0:2
+       .= (PartDiffSeq(f,Z,I)).(k+1) - (PartDiffSeq(g,Z,I)).(k+1)
+              by R1,TDef5;
+    hence
+     (PartDiffSeq(f-g,Z,I)).(k+1) is_partial_differentiable_on Z,I/.((k+1)+1)
+        by AS,A84,Q5,XXX2;
+    thus (PartDiffSeq(f-g,Z,I)).(k+1)
+        = (PartDiffSeq(f,Z,I)).(k+1) - (PartDiffSeq(g,Z,I)).(k+1) by A86;
+   end;
+   for n be Element of NAT holds P[ n ] from NAT_1:sch 1(A9,A7);
+   hence thesis;
+end;
+
+theorem XCW021:
+for X be Subset of REAL m, I be non empty FinSequence of NAT,
+    f,g be PartFunc of REAL m,REAL st
+   X is open & rng I c= Seg m
+   & f is_partial_differentiable_on X,I
+   & g is_partial_differentiable_on X,I
+holds
+    f-g is_partial_differentiable_on X,I
+  & (f-g)`partial|(X,I) = f`partial|(X,I) - g`partial|(X,I)
+proof
+   let Z be Subset of REAL m, I be non empty FinSequence of NAT,
+       f,g be PartFunc of REAL m,REAL;
+   assume AS: Z is open & rng I c= Seg m
+       & f is_partial_differentiable_on Z,I
+       & g is_partial_differentiable_on Z,I; then
+   for i be Element of NAT st i <= (len I)-1 holds
+    (PartDiffSeq(f-g,Z,I)).i
+     is_partial_differentiable_on Z,I/.(i+1) by XCW020;
+   hence f-g is_partial_differentiable_on Z,I by TDef6;
+
+   1 <= len I by FINSEQ_1:20; then
+   reconsider k=(len I)-1 as Element of NAT by INT_1:5;
+
+P1:(PartDiffSeq(f,Z,I)).k is_partial_differentiable_on Z,I/.(k+1) &
+   (PartDiffSeq(g,Z,I)).k
+     is_partial_differentiable_on Z,I/.(k+1) by AS,TDef6;
+
+   1 <= k+1 by NAT_1:11; then
+   I/.(k+1) in Seg m by AS,XCWLM1; then
+Q4:1<=I/.(k+1) & I/.(k+1) <= m by FINSEQ_1:1;
+   (PartDiffSeq(f-g,Z,I)).(k+1)
+     = ((PartDiffSeq((f-g),Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5
+    .= ((PartDiffSeq(f,Z,I).k)
+           -(PartDiffSeq(g,Z,I).k))`partial|(Z,I/.(k+1)) by AS,XCW020; then
+R1:(PartDiffSeq(f-g,Z,I)).(k+1)
+     = (PartDiffSeq(f,Z,I).k)`partial|(Z,I/.(k+1))
+          - (PartDiffSeq(g,Z,I).k)`partial|(Z,I/.(k+1)) by P1,AS,Q4,XXX2;
+   (PartDiffSeq(f,Z,I)).(k+1)
+     = ((PartDiffSeq(f,Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5;
+   hence (f-g)`partial|(Z,I) = f`partial|(Z,I) - g`partial|(Z,I) by R1,TDef5;
+end;
+
+theorem XCW030:
+for X be Subset of REAL m, r be Real, I be non empty FinSequence of NAT,
+    f be PartFunc of REAL m,REAL st
+  X is open & rng I c= Seg m & f is_partial_differentiable_on X,I
+holds
+   for i st i <= (len I)-1 holds
+     (PartDiffSeq(r(#)f,X,I)).i is_partial_differentiable_on X,I/.(i+1)
+   & (PartDiffSeq(r(#)f,X,I)).i = r(#)(PartDiffSeq(f,X,I).i)
+proof
+   let Z be Subset of REAL m, r be Real, I be non empty FinSequence of NAT,
+       f be PartFunc of REAL m,REAL;
+   assume AS: Z is open & rng I c= Seg m
+        & f is_partial_differentiable_on Z,I;
+
+   defpred P[Element of NAT] means
+    $1 <= (len I)-1 implies
+     ( (PartDiffSeq(r(#)f,Z,I)).$1 is_partial_differentiable_on Z,I/.($1+1)
+     & (PartDiffSeq(r(#)f,Z,I)).$1 = r(#)((PartDiffSeq(f,Z,I)).$1) );
+
+   reconsider Z0=0 as Element of NAT;
+A9:P[0]
+   proof
+    assume 0 <= (len I)-1; then
+Q2: (PartDiffSeq(f,Z,I)).Z0
+     is_partial_differentiable_on Z,I/.( Z0 + 1) by AS,TDef6;
+
+    (PartDiffSeq(r(#)f,Z,I)).Z0 = r(#)f by TDef5; then
+Q5: (PartDiffSeq(r(#)f,Z,I)).Z0 = r(#)((PartDiffSeq(f,Z,I)).Z0) by TDef5;
+
+    1 <= len I by FINSEQ_1:20; then
+    I/.1 in Seg m by AS,XCWLM1; then
+    1<=I/.1 & I/.1 <= m by FINSEQ_1:1;
+    hence thesis by Q5,AS,Q2,XXX3;
+   end;
+
+A7:for k be Element of NAT st P[k] holds P[k+1]
+   proof
+    let k be Element of NAT;
+    assume A8: P[k];
+    assume A81: k+1 <=(len I)-1;
+B1: k <= k+1 by NAT_1:11; then
+A82:k <=(len I)-1 by A81,XXREAL_0:2;
+
+A84:(PartDiffSeq(f,Z,I)).(k+1)
+      is_partial_differentiable_on Z,I/.((k+1)+1) by A81,AS,TDef6;
+
+    k+1 <= (len I)-1 + 1 by A82,XREAL_1:6; then
+    I/.(k+1) in Seg m by AS,XCWLM1,NAT_1:11; then
+Q4: 1<=I/.(k+1) & I/.(k+1) <= m by FINSEQ_1:1;
+
+A85:(PartDiffSeq(f,Z,I)).k
+       is_partial_differentiable_on Z,I/.(k+1) by A82,AS,TDef6;
+
+    (k+1)+1 <=(len I)-1 +1 by A81,XREAL_1:6; then
+    I/.((k+1)+1) in Seg m by AS,XCWLM1,NAT_1:11; then
+Q5: 1<=I/.((k+1)+1) & I/.((k+1)+1) <= m by FINSEQ_1:1;
+
+A86:(PartDiffSeq(r(#)f,Z,I)).(k+1)
+      = (r(#)(PartDiffSeq(f,Z,I)).k )`partial|(Z,I/.(k+1))
+          by B1,A81,A8,TDef5,XXREAL_0:2
+     .= r(#)(((PartDiffSeq(f,Z,I)).k)`partial|(Z,I/.(k+1)))
+          by A85,AS,Q4,XXX3
+     .= r(#)((PartDiffSeq(f,Z,I)).(k+1)) by TDef5;
+    hence (PartDiffSeq(r(#)f,Z,I)).(k+1)
+        is_partial_differentiable_on Z,I/.((k+1)+1) by AS,A84,Q5,XXX3;
+    thus (PartDiffSeq(r(#)f,Z,I)).(k+1)
+        = r(#)(PartDiffSeq(f,Z,I)).(k+1) by A86;
+   end;
+   for n be Element of NAT holds P[ n ] from NAT_1:sch 1(A9,A7);
+   hence thesis;
+end;
+
+theorem XCW031:
+for X be Subset of REAL m, r be Real, I be non empty FinSequence of NAT,
+    f be PartFunc of REAL m,REAL st
+  X is open & rng I c= Seg m & f is_partial_differentiable_on X,I
+holds
+   r(#)f is_partial_differentiable_on X,I
+ & (r(#)f)`partial|(X,I) = r(#)(f`partial|(X,I))
+proof
+   let Z be Subset of REAL m, r be Real, I be non empty FinSequence of NAT,
+       f be PartFunc of REAL m,REAL;
+   assume AS: Z is open & rng I c= Seg m
+       & f is_partial_differentiable_on Z,I; then
+   for i be Element of NAT st i <= (len I)-1 holds
+     (PartDiffSeq(r(#)f,Z,I)).i
+       is_partial_differentiable_on Z,I/.(i+1) by XCW030;
+   hence r(#)f is_partial_differentiable_on Z,I by TDef6;
+   1 <= len I by FINSEQ_1:20; then
+   reconsider k=(len I)-1 as Element of NAT by INT_1:5;
+PP1:(PartDiffSeq(f,Z,I)).k
+     is_partial_differentiable_on Z,I/.(k+1) by AS,TDef6;
+   1 <= k+1 by NAT_1:11; then
+   I/.(k+1) in Seg m by AS,XCWLM1; then
+Q4:1<=I/.(k+1) & I/.(k+1) <= m by FINSEQ_1:1;
+   (PartDiffSeq(r(#)f,Z,I)).(k+1)
+     = ((PartDiffSeq((r(#)f),Z,I)).k)`partial|(Z,I/.(k+1)) by TDef5
+    .= (r(#)(PartDiffSeq(f,Z,I).k))`partial|(Z,I/.(k+1)) by AS,XCW030
+    .= r(#)((PartDiffSeq(f,Z,I).k)`partial|(Z,I/.(k+1)))
+        by PP1,AS,Q4,XXX3;
+   hence (r(#)f)`partial|(Z,I) = r(#)(f`partial|(Z,I)) by TDef5;
+end;
+
+definition
+  let m be non empty Element of NAT;
+  let f be PartFunc of REAL m,REAL;
+  let k be Element of NAT;
+  let Z be set;
+  pred f is_partial_differentiable_up_to_order k,Z means :TDef9:
+  for I be non empty FinSequence of NAT st len I <= k & rng I c= Seg m
+  holds f is_partial_differentiable_on Z,I;
+end;
+
+theorem XCW040:
+for f be PartFunc of REAL m,REAL,
+    I,G be non empty FinSequence of NAT
+ holds f is_partial_differentiable_on Z,G^I
+   iff f is_partial_differentiable_on Z,G
+     & f`partial|(Z,G) is_partial_differentiable_on Z,I
+proof
+   let f be PartFunc of REAL m,REAL,
+       I,G be non empty FinSequence of NAT;
+   set g = f`partial|(Z,G);
+   reconsider Z0 = 0 as Element of NAT;
+S1:dom G c= dom (G^I) by FINSEQ_1:26;
+Y0:for i be Element of NAT st i <= len G - 1
+      holds (G^I)/.(i+1) = G/.(i+1)
+   proof
+    let i be Element of NAT;
+    assume i <= len G - 1; then
+    1 <= i+1 & i+1 <= len G by NAT_1:11,XREAL_1:19; then
+D3: i+1 in dom G by FINSEQ_3:25; then
+    (G^I)/.(i+1) = (G^I).(i+1) by S1,PARTFUN1:def 6; then
+    (G^I)/.(i+1) = G.(i+1) by D3,FINSEQ_1:def 7;
+    hence (G^I)/.(i+1) = G/.(i+1) by D3,PARTFUN1:def 6;
+   end;
+
+X2:len (G^I) = len G + len I by FINSEQ_1:22;
+
+X3:for i be Element of NAT st i <= (len I)-1
+     holds (G^I)/.(len G + (i+1)) = I/.(i+1)
+   proof
+    let i be Element of NAT;
+    assume i <= len I - 1; then
+D2: i+1 <= len I by XREAL_1:19;
+
+    1 <= i+1 by NAT_1:11; then
+D3: i+1 in dom I by D2,FINSEQ_3:25;
+
+D9: 1 <= len G + (i+1) by NAT_1:11,XREAL_1:38;
+
+    len G + (i+1) <= len (G^I) by X2,D2,XREAL_1:7; then
+    len G + (i+1) in dom (G^I) by D9,FINSEQ_3:25;
+    hence (G^I)/.(len G + (i+1)) =(G^I).(len G + (i+1)) by PARTFUN1:def 6
+            .= I.(i+1) by D3,FINSEQ_1:def 7
+            .= I/.(i+1) by D3,PARTFUN1:def 6;
+   end;
+
+   defpred P0[Element of NAT] means
+    $1 <= len G - 1 implies
+     (PartDiffSeq(f,Z,G^I)).$1 =(PartDiffSeq(f,Z,G)).$1;
+B1:P0[0]
+   proof
+    assume 0 <= len G - 1;
+    (PartDiffSeq(f,Z,G^I)).0 = f by TDef5;
+    hence (PartDiffSeq(f,Z,G^I)).0 = (PartDiffSeq(f,Z,G)).0 by TDef5;
+   end;
+
+B2:for k be Element of NAT st P0[k] holds P0[k+1]
+   proof
+    let k be Element of NAT;
+    assume D1: P0[k];
+    assume D2: k+1 <= len G - 1;
+D20:k <= k+1 by NAT_1:11;
+    thus (PartDiffSeq(f,Z,G^I)).(k+1)
+        = ((PartDiffSeq(f,Z,G^I)).k)`partial|(Z,(G^I)/.(k+1)) by TDef5
+       .= ((PartDiffSeq(f,Z,G)).k)`partial|(Z,G/.(k+1))
+             by D20,Y0,D1,D2,XXREAL_0:2
+       .= (PartDiffSeq(f,Z,G)).(k+1) by TDef5;
+   end;
+Y1:for n be Element of NAT holds P0[n] from NAT_1:sch 1(B1,B2);
+   1 <= len G by FINSEQ_1:20; then
+   reconsider j= (len G)-1 as Element of NAT by INT_1:5;
+
+Y11:
+   (PartDiffSeq(f,Z,G^I)).(len G)
+     = ((PartDiffSeq(f,Z,G^I)).j)`partial|(Z,(G^I)/.(j+1)) by TDef5
+    .= ((PartDiffSeq(f,Z,G)).j)`partial|(Z,(G^I)/.(j+1)) by Y1
+    .= ((PartDiffSeq(f,Z,G)).j)`partial|(Z,G/.(j+1)) by Y0
+    .= (PartDiffSeq(f,Z,G)).(len G) by TDef5;
+   defpred P[Element of NAT] means
+    $1 <= (len I) -1 implies
+      (PartDiffSeq(g,Z,I)).$1 =(PartDiffSeq(f,Z,(G^I))).(len G + $1);
+A1:P[0] by Y11,TDef5;
+
+A2:for k be Element of NAT st P[k] holds P[k+1]
+   proof
+    let k be Element of NAT;
+    assume A3: P[k];
+    set i = (len G) + k;
+    assume P0: k+1 <= (len I) -1;
+P1: k <= k+1 by NAT_1:11;
+    (G^I)/.(i+1) = (G^I)/.(len G + (k+1)); then
+P2: (G^I)/.(i+1) = I/.(k+1) by X3,P1,P0,XXREAL_0:2;
+    (PartDiffSeq(f,Z,(G^I))).(len G + (k+1))
+      = ((PartDiffSeq(f,Z,(G^I))).i)`partial|(Z,(G^I)/.(i+1)) by TDef5;
+    hence thesis by P1,P0,A3,P2,TDef5,XXREAL_0:2;
+   end;
+X1:for n be Element of NAT holds P[ n ] from NAT_1:sch 1(A1,A2);
+
+   hereby assume P1: f is_partial_differentiable_on Z,G^I;
+    now let i be Element of NAT;
+     assume D1: i <= (len G)-1; then
+     i + Z0 <= (len G) -1 + (len I) by XREAL_1:7; then
+     i <= (len (G^I)) -1 by X2; then
+P2:  (PartDiffSeq(f,Z,(G^I))).i
+       is_partial_differentiable_on Z,(G^I)/.(i+1) by TDef6,P1;
+
+     (G^I)/.(i+1) = G/.(i+1) by D1,Y0;
+     hence (PartDiffSeq(f,Z,G)).i is_partial_differentiable_on Z,G/.(i+1)
+       by P2,D1,Y1;
+    end;
+    hence f is_partial_differentiable_on Z,G by TDef6;
+    now let i be Element of NAT;
+     assume S1: i <= (len I)-1; then
+     len G + i <= len G + ((len I)-1) by XREAL_1:6; then
+     len G + i <= len (G^I) -1 by X2; then
+X4:  (PartDiffSeq(f,Z,(G^I))).(len G + i)
+       is_partial_differentiable_on Z,(G^I)/.((len G + i)+1) by TDef6,P1;
+     (G^I)/.((len G + i)+1) = (G^I)/.(len G + (i+1)); then
+     (G^I)/.((len G + i)+1) = I/.(i+1) by S1,X3;
+     hence (PartDiffSeq(g,Z,I)).i
+              is_partial_differentiable_on Z,I/.(i+1) by X4,S1,X1;
+    end;
+    hence g is_partial_differentiable_on Z,I by TDef6;
+   end;
+   now assume P0: f is_partial_differentiable_on Z,G
+                & g is_partial_differentiable_on Z,I;
+    now let i be Element of NAT;
+     assume Q1: i <= (len (G^I))-1;
+     per cases;
+     suppose Q2: i <= (len G) -1; then
+Q3:   (PartDiffSeq(f,Z,G)).i is_partial_differentiable_on Z,G/.(i+1)
+          by TDef6,P0;
+      G/.(i+1) =(G^I)/.(i+1) by Q2,Y0;
+      hence (PartDiffSeq(f,Z,G^I)).i
+         is_partial_differentiable_on Z,(G^I)/.(i+1) by Q2,Y1,Q3;
+     end;
+     suppose not (i <= (len G) -1); then
+      len G < i+1 by XREAL_1:19; then
+      len G <= i by NAT_1:13; then
+      reconsider k = i - len G as Element of NAT by INT_1:5;
+R5:   i - len G <=(len G)+(len I)-1 - len G by Q1,X2,XREAL_1:9; then
+Q5:   k <= (len I) -1 & i = k+len G; then
+Q6:   (PartDiffSeq(g,Z,I)).k
+          is_partial_differentiable_on Z,I/.(k+1) by TDef6,P0;
+      i+1 = (k+1) + len G; then
+      I/.(k+1) = (G^I)/.(i+1) by R5,X3;
+      hence (PartDiffSeq(f,Z,(G^I))).i
+        is_partial_differentiable_on Z,(G^I)/.(i+1) by Q6,Q5,X1;
+     end;
+    end;
+    hence f is_partial_differentiable_on Z,(G^I) by TDef6;
+   end;
+   hence thesis;
+end;
+
+set Z0 = 0;
+
+theorem XCW041:
+for f be PartFunc of REAL m,REAL holds
+ f is_partial_differentiable_on Z,<*i*> iff f is_partial_differentiable_on Z,i
+proof
+   let f be PartFunc of REAL m,REAL;
+   set I = <*i*>;
+P0:len I = 1 by FINSEQ_1:39;
+P1:(PartDiffSeq(f,Z,I)).0 = f by TDef5;
+   1 in Seg 1; then
+X2:1 in dom I by FINSEQ_1:38;
+   I/.(Z0 + 1) =I.1 by X2,PARTFUN1:def 6; then
+Q1:I/.(Z0 + 1) = i by FINSEQ_1:40;
+   hereby assume PX1: f is_partial_differentiable_on Z,I;
+    Z0 <= len I - 1 by P0;
+    hence f is_partial_differentiable_on Z,i by Q1,P1,PX1,TDef6;
+   end;
+   assume P3: f is_partial_differentiable_on Z,i;
+    now let k be Element of NAT;
+     assume  k <= len I - 1; then
+P5:  k = 0 by P0; then
+     I/.(k+1) = I.1 by X2,PARTFUN1:def 6; then
+     I/.(k+1) = i by FINSEQ_1:40;
+     hence (PartDiffSeq(f,Z,I)).k is_partial_differentiable_on Z,I/.(k+1)
+       by P3,P5,TDef5;
+    end;
+    hence thesis by TDef6;
+end;
+
+theorem XCW042:
+for f be PartFunc of REAL m,REAL holds f`partial|(Z,<*i*>) = f`partial|(Z,i)
+proof
+   let f be PartFunc of REAL m,REAL;
+   set I = <*i*>;
+   1 in Seg 1; then
+   1 in dom I by FINSEQ_1:38; then
+   I/.(Z0 + 1) = I.1 by PARTFUN1:def 6; then
+Q1:I/.(Z0 + 1) = i by FINSEQ_1:40;
+   thus f`partial|(Z,I) = (PartDiffSeq(f,Z,I)).1 by FINSEQ_1:39
+                  .= (PartDiffSeq(f,Z,I).Z0)`partial|(Z,I/.(Z0+1)) by TDef5
+                  .= f`partial|(Z,i) by Q1,TDef5;
+end;
+
+theorem XCW0400:
+for f be PartFunc of REAL m,REAL,
+    I be non empty FinSequence of NAT
+ st f is_partial_differentiable_up_to_order (i+j),Z
+  & rng I c= Seg m & len I = j
+holds
+  f`partial|(Z,I) is_partial_differentiable_up_to_order i,Z
+proof
+   let f be PartFunc of REAL m,REAL,
+       I be non empty FinSequence of NAT;
+   assume AS: f is_partial_differentiable_up_to_order (i+j),Z
+            & rng I c= Seg m & len I = j;
+   let J be non empty FinSequence of NAT;
+    assume AS1: len J <= i & rng J c= Seg m;
+    reconsider G = I^J as non empty FinSequence of NAT;
+P1: rng G = rng I \/ rng J by FINSEQ_1:31;
+    len G = len I + len J by FINSEQ_1:22; then
+    len G <= i+j & rng G c= Seg m by AS1,P1,AS,XBOOLE_1:8,XREAL_1:6; then
+    f is_partial_differentiable_on Z,G by AS,TDef9;
+    hence thesis by XCW040;
+end;
+
+theorem XCW0410:
+for f be PartFunc of REAL m,REAL
+  st f is_partial_differentiable_up_to_order i,Z & j <= i
+holds f is_partial_differentiable_up_to_order j,Z
+proof
+  let f be PartFunc of REAL m,REAL;
+  assume AS: f is_partial_differentiable_up_to_order i,Z & j <= i;
+  let I be non empty FinSequence of NAT;
+  assume AS1: len I <= j & rng I c= Seg m; then
+  len I <= i by AS,XXREAL_0:2;
+  hence thesis by AS,AS1,TDef9;
+end;
+
+theorem
+for X be Subset of REAL m, f,g be PartFunc of REAL m,REAL
+ st X is open & f is_partial_differentiable_up_to_order i,X
+  & g is_partial_differentiable_up_to_order i,X
+holds f+g is_partial_differentiable_up_to_order i,X
+    & f-g is_partial_differentiable_up_to_order i,X
+proof
+  let Z be Subset of REAL m, f,g be PartFunc of REAL m,REAL;
+  assume AS: Z is open & f is_partial_differentiable_up_to_order i,Z
+  & g is_partial_differentiable_up_to_order i,Z;
+  hereby let I be non empty FinSequence of NAT;
+    assume P1:len I <= i & rng I c= Seg m; then
+    f is_partial_differentiable_on Z,I
+    & g is_partial_differentiable_on Z,I by AS,TDef9;
+    hence f+g is_partial_differentiable_on Z,I by AS,P1,XCW011;
+  end;
+  let I be non empty FinSequence of NAT;
+  assume P1:len I <= i & rng I c= Seg m; then
+  f is_partial_differentiable_on Z,I
+  & g is_partial_differentiable_on Z,I by AS,TDef9;
+  hence thesis by AS,P1,XCW021;
+end;
+
+theorem
+for X be Subset of REAL m, f be PartFunc of REAL m,REAL, r be Real
+  st X is open & f is_partial_differentiable_up_to_order i,X
+ holds r(#)f is_partial_differentiable_up_to_order i,X
+proof
+  let Z be Subset of REAL m, f be PartFunc of REAL m,REAL, r be Real;
+  assume AS: Z is open & f is_partial_differentiable_up_to_order i,Z;
+  let I be non empty FinSequence of NAT;
+  assume P1:len I <= i & rng I c= Seg m; then
+  f is_partial_differentiable_on Z,I by AS,TDef9;
+  hence thesis by AS,P1,XCW031;
+end;
+
+theorem
+for X be Subset of REAL m st X is open holds
+ for i be Element of NAT, f,g be PartFunc of REAL m,REAL
+  st f is_partial_differentiable_up_to_order i,X
+   & g is_partial_differentiable_up_to_order i,X
+ holds f(#)g is_partial_differentiable_up_to_order i,X
+proof
+   let Z be Subset of REAL m;
+   assume AS: Z is open;
+   defpred P[Element of NAT] means
+     for f,g be PartFunc of REAL m,REAL
+       st f is_partial_differentiable_up_to_order $1,Z
+        & g is_partial_differentiable_up_to_order $1,Z
+     holds f(#)g is_partial_differentiable_up_to_order $1,Z;
+P9:P[0]
+   proof
+    let f,g be PartFunc of REAL m,REAL;
+    assume f is_partial_differentiable_up_to_order 0,Z
+         & g is_partial_differentiable_up_to_order 0,Z;
+    for I be non empty FinSequence of NAT st len I <= Z0 & rng I c= Seg m
+     holds f(#)g is_partial_differentiable_on Z,I by FINSEQ_1:20;
+    hence f(#)g is_partial_differentiable_up_to_order 0,Z by TDef9;
+   end;
+
+P7:for k be Element of NAT st P[k] holds P[k+1]
+   proof
+    let k be Element of NAT;
+    assume P71: P[k];
+    let f,g be PartFunc of REAL m,REAL;
+    assume R71: f is_partial_differentiable_up_to_order k+1,Z
+              & g is_partial_differentiable_up_to_order k+1,Z; then
+R711:
+    f is_partial_differentiable_up_to_order k,Z
+  & g is_partial_differentiable_up_to_order k,Z by XCW0410,NAT_1:11;
+
+    now let I be non empty FinSequence of NAT;
+     assume P72:len I <= k+1 & rng I c= Seg m; then
+R721:f is_partial_differentiable_on Z,I
+   & g is_partial_differentiable_on Z,I by R71,TDef9;
+
+RRRR:1 <= len I by FINSEQ_1:20; then
+T1:  1 in dom I by FINSEQ_3:25; then
+T4:  I/.1 = I.1 by PARTFUN1:def 6;
+T2:  I.1 in rng I by T1,FUNCT_1:3; then
+     I.1 in Seg m by P72; then
+     reconsider i = I.1 as Element of NAT;
+P75: 1 <= i & i <= m by T2,P72,FINSEQ_1:1;
+     per cases;
+     suppose 1 = len I; then
+T3:   I = <*I/.1*> by FINSEQ_5:14; then
+      f is_partial_differentiable_on Z,i
+    & g is_partial_differentiable_on Z,i by XCW041,R721,T4; then
+      f(#)g is_partial_differentiable_on Z,i by P75,XXX4,AS;
+      hence f(#)g is_partial_differentiable_on Z,I by XCW041,T3,T4;
+     end;
+     suppose 1 <> len I; then
+      1 < len I by RRRR,XXREAL_0:1; then
+      1+1 <= len I by NAT_1:13; then
+      1 <= len I - 1 by XREAL_1:19; then
+      1 <= len (I/^1) by RRRR,RFINSEQ:def 1; then
+      reconsider J = I/^1 as non empty FinSequence of NAT by FINSEQ_1:20;
+      set I1 = <*i*>;
+      len I - 1 <= k by P72,XREAL_1:20; then
+P74:  len J <= k by RRRR,RFINSEQ:def 1;
+V1:   I = <*I/.1*>^(I/^1) by FINSEQ_5:29; then
+U1:   rng I1 c= rng I & rng J c= rng I by T4,FINSEQ_1:29,30; then
+P76:  rng J c= Seg m by P72,XBOOLE_1:1;
+      I = I1^J by T4,FINSEQ_5:29; then
+      f is_partial_differentiable_on Z,I1
+    & g is_partial_differentiable_on Z,I1 by XCW040,R721; then
+P79:  f is_partial_differentiable_on Z,i
+    & g is_partial_differentiable_on Z,i by XCW041; then
+      (f(#)g) is_partial_differentiable_on Z,i by P75,XXX4,AS; then
+P86:  (f(#)g) is_partial_differentiable_on Z,I1 by XCW041;
+
+P87:  (f(#)g)`partial|(Z,I1) = (f(#)g)`partial|(Z,i) by XCW042
+         .=(f`partial|(Z,i))(#)g + f(#)(g`partial|(Z,i))
+               by P79,P75,XXX4,AS
+         .= f`partial|(Z,I1)(#)g + f(#)(g`partial|(Z,i)) by XCW042
+         .= f`partial|(Z,I1)(#)g + f(#)(g`partial|(Z,I1)) by XCW042;
+
+      len I1 =1 & rng I1 c= Seg m by U1,P72,FINSEQ_1:39,XBOOLE_1:1; then
+      f`partial|(Z,I1) is_partial_differentiable_up_to_order k,Z
+    & g`partial|(Z,I1) is_partial_differentiable_up_to_order k,Z
+           by XCW0400,R71; then
+      f`partial|(Z,I1)(#)g is_partial_differentiable_up_to_order k,Z
+    & f(#)(g`partial|(Z,I1)) is_partial_differentiable_up_to_order k,Z
+           by P71,R711; then
+      f`partial|(Z,I1)(#)g is_partial_differentiable_on Z,J
+    & f(#)(g`partial|(Z,I1)) is_partial_differentiable_on Z,J
+           by P74,P76,TDef9; then
+      f`partial|(Z,I1) (#)g + f(#)(g`partial|(Z,I1))
+         is_partial_differentiable_on Z,J by AS,P76,XCW011;
+      hence (f(#)g) is_partial_differentiable_on Z,I
+         by P86,V1,T4,P87,XCW040;
+     end;
+    end;
+    hence f(#)g is_partial_differentiable_up_to_order k+1,Z by TDef9;
+   end;
+   for n be Element of NAT holds P[ n ] from NAT_1:sch 1(P9,P7);
+   hence thesis;
+end;

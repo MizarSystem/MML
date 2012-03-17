@@ -2,7 +2,7 @@
 ::  by Bing Xie , Xiquan Liang and Xiuzhuan Shen
 ::
 :: Received December 16, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,18 +17,17 @@ environ
  vocabularies NUMBERS, SUBSET_1, REAL_1, SEQ_1, PARTFUN1, FDIFF_1, XBOOLE_0,
       FUNCT_1, PDIFF_1, FINSEQ_1, RCOMP_1, TARSKI, RELAT_1, PDIFF_2, ARYTM_1,
       ARYTM_3, XREAL_0, ORDINAL1, CARD_1, XXREAL_1, VALUED_0, SEQ_2, ORDINAL2,
-      XXREAL_0, NAT_1, VALUED_1, FUNCT_2, FINSEQ_2, CARD_3, FCONT_1, PDIFF_3;
+      XXREAL_0, NAT_1, VALUED_1, FUNCT_2, CARD_3, FCONT_1, PDIFF_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_2, RELSET_1, PARTFUN1, XXREAL_0,
-      XCMPLX_0, XREAL_0, NAT_1, ORDINAL1, NUMBERS, REAL_1, VALUED_0, VALUED_1,
-      SEQ_1, SEQ_2, FINSEQ_1, FINSEQ_2, RCOMP_1, EUCLID, FDIFF_1, FCONT_1,
-      PDIFF_1, PDIFF_2;
- constructors REAL_1, SEQ_2, PARTFUN1, RFUNCT_2, RCOMP_1, FDIFF_1, SEQ_1,
-      NAT_1, FCONT_1, PDIFF_1, PARTFUN2, PDIFF_2, SEQM_3, FUNCT_2, COMPLEX1,
-      RELSET_1, BINOP_2, RVSUM_1;
+      XCMPLX_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, VALUED_0, VALUED_1, SEQ_1,
+      SEQ_2, FINSEQ_1, FINSEQ_2, RCOMP_1, EUCLID, FDIFF_1, FCONT_1, PDIFF_1,
+      PDIFF_2;
+ constructors REAL_1, SEQ_2, RCOMP_1, FDIFF_1, SEQ_1, FCONT_1, PDIFF_1,
+      PDIFF_2, RELSET_1, BINOP_2, RVSUM_1, COMSEQ_2;
  registrations RELSET_1, XREAL_0, MEMBERED, FDIFF_1, FUNCT_2, NAT_1, NUMBERS,
-      XBOOLE_0, XXREAL_0, VALUED_0, VALUED_1;
+      XBOOLE_0, XXREAL_0, VALUED_0, VALUED_1, EUCLID;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions EUCLID, RCOMP_1;
+ definitions RCOMP_1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, XREAL_1, RCOMP_1, SEQ_4, SEQ_1, SEQ_2,
       FINSEQ_1, FINSEQ_2, RFUNCT_2, PARTFUN1, FDIFF_1, PDIFF_2, VALUED_1,
       XCMPLX_0, XCMPLX_1, FUNCT_2, VALUED_0, ORDINAL1, PDIFF_1;
@@ -39,14 +38,13 @@ begin :: Second-order Partial Derivatives
 reserve x,x0,x1,y,y0,y1,r,r1,s,p,p1 for Real;
 reserve z,z0 for Element of REAL 2;
 reserve n for Element of NAT;
-
 reserve s1 for Real_Sequence;
 reserve f,f1,f2 for PartFunc of REAL 2,REAL;
-reserve R,R1 for REST;
-reserve L,L1 for LINEAR;
+reserve R,R1 for RestFunc;
+reserve L,L1 for LinearFunc;
 
 registration
-  cluster -> total for REST;
+  cluster -> total for RestFunc;
   coherence by FDIFF_1:def 2;
 end;
 
@@ -199,7 +197,7 @@ A27: for n holds s1.n = F(n) from SEQ_1:sch 1;
     then
 A28: s1 is non-zero by SEQ_1:5;
     s1 is convergent & lim s1 = 0 by A27,SEQ_4:31;
-    then reconsider h = s1 as convergent_to_0 Real_Sequence by A28,
+    then reconsider h = s1 as 0-convergent non-zero Real_Sequence by A28,
 FDIFF_1:def 1;
 A29: for n ex x st x in N & x in N1 & h.n = x-x0
     proof
@@ -245,8 +243,6 @@ A39:  (R.(h.n))/(h.n) = (R.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R.(h.n))*(h".n) by VALUED_1:10
         .= ((R/*h).n)*(h".n) by A37,A36,FUNCT_2:108
         .= ((h")(#)(R/*h)).n by VALUED_1:5;
-      h is non-zero by FDIFF_1:def 1;
-      then
 A40:  h.n <> 0 by A37,SEQ_1:5;
 A41:  (R1.(h.n))/(h.n) = (R1.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R1.(h.n))*(h".n) by VALUED_1:10
@@ -365,7 +361,7 @@ A27: for n holds s1.n = F(n) from SEQ_1:sch 1;
     then
 A28: s1 is non-zero by SEQ_1:5;
     s1 is convergent & lim s1 = 0 by A27,SEQ_4:31;
-    then reconsider h = s1 as convergent_to_0 Real_Sequence by A28,
+    then reconsider h = s1 as 0-convergent non-zero Real_Sequence by A28,
 FDIFF_1:def 1;
 A29: for n ex y st y in N & y in N1 & h.n = y-y0
     proof
@@ -410,8 +406,6 @@ A39:  (R.(h.n))/(h.n) = (R.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R.(h.n))*(h".n) by VALUED_1:10
         .= ((R/*h).n)*(h".n) by A37,A36,FUNCT_2:108
         .= ((h")(#)(R/*h)).n by VALUED_1:5;
-      h is non-zero by FDIFF_1:def 1;
-      then
 A40:  h.n <> 0 by A37,SEQ_1:5;
 A41:  (R1.(h.n))/(h.n) = (R1.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R1.(h.n))*(h".n) by VALUED_1:10
@@ -530,7 +524,7 @@ A27: for n holds s1.n = F(n) from SEQ_1:sch 1;
     then
 A28: s1 is non-zero by SEQ_1:5;
     s1 is convergent & lim s1 = 0 by A27,SEQ_4:31;
-    then reconsider h = s1 as convergent_to_0 Real_Sequence by A28,
+    then reconsider h = s1 as 0-convergent non-zero Real_Sequence by A28,
 FDIFF_1:def 1;
 A29: for n ex x st x in N & x in N1 & h.n = x-x0
     proof
@@ -575,8 +569,6 @@ A39:  (R.(h.n))/(h.n) = (R.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R.(h.n))*(h".n) by VALUED_1:10
         .= ((R/*h).n)*(h".n) by A37,A36,FUNCT_2:108
         .= ((h")(#)(R/*h)).n by VALUED_1:5;
-      h is non-zero by FDIFF_1:def 1;
-      then
 A40:  h.n <> 0 by A37,SEQ_1:5;
 A41:  (R1.(h.n))/(h.n) = (R1.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R1.(h.n))*(h".n) by VALUED_1:10
@@ -695,7 +687,7 @@ A27: for n holds s1.n = F(n) from SEQ_1:sch 1;
     then
 A28: s1 is non-zero by SEQ_1:5;
     s1 is convergent & lim s1 = 0 by A27,SEQ_4:31;
-    then reconsider h = s1 as convergent_to_0 Real_Sequence by A28,
+    then reconsider h = s1 as 0-convergent non-zero Real_Sequence by A28,
 FDIFF_1:def 1;
 A29: for n ex y st y in N & y in N1 & h.n = y-y0
     proof
@@ -740,8 +732,6 @@ A39:  (R.(h.n))/(h.n) = (R.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R.(h.n))*(h".n) by VALUED_1:10
         .= ((R/*h).n)*(h".n) by A37,A36,FUNCT_2:108
         .= ((h")(#)(R/*h)).n by VALUED_1:5;
-      h is non-zero by FDIFF_1:def 1;
-      then
 A40:  h.n <> 0 by A37,SEQ_1:5;
 A41:  (R1.(h.n))/(h.n) = (R1.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R1.(h.n))*(h".n) by VALUED_1:10
@@ -1276,8 +1266,7 @@ theorem Th13:
   f is_hpartial_differentiable`11_in z implies hpartdiff11(f,z) =
   partdiff(pdiff1(f,1),z,1)
 proof
-  z is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A1: z = <*x0,y0*> by FINSEQ_2:100;
   assume
 A2: f is_hpartial_differentiable`11_in z;
@@ -1292,8 +1281,7 @@ theorem Th14:
   f is_hpartial_differentiable`12_in z implies hpartdiff12(f,z) =
   partdiff(pdiff1(f,1),z,2)
 proof
-    z is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A1: z = <*x0,y0*> by FINSEQ_2:100;
   assume
 A2: f is_hpartial_differentiable`12_in z;
@@ -1308,8 +1296,7 @@ theorem Th15:
   f is_hpartial_differentiable`21_in z implies hpartdiff21(f,z) =
   partdiff(pdiff1(f,2),z,1)
 proof
-    z is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A1: z = <*x0,y0*> by FINSEQ_2:100;
   assume
 A2: f is_hpartial_differentiable`21_in z;
@@ -1324,8 +1311,7 @@ theorem Th16:
   f is_hpartial_differentiable`22_in z implies hpartdiff22(f,z) =
   partdiff(pdiff1(f,2),z,2)
 proof
-    z is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A1: z = <*x0,y0*> by FINSEQ_2:100;
   assume
 A2: f is_hpartial_differentiable`22_in z;
@@ -1339,7 +1325,8 @@ end;
 theorem
   for z0 being Element of REAL 2 for N being Neighbourhood of proj(1,2).
   z0 st f is_hpartial_differentiable`11_in z0 & N c= dom SVF1(1,pdiff1(f,1),z0)
-  holds for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence st
+  holds for h be 0-convergent non-zero Real_Sequence,
+  c be constant Real_Sequence st
 rng c = {proj(1,2).z0} & rng (h+c) c= N holds h"(#)(SVF1(1,pdiff1(f,1),z0)/*(h+
 c) - SVF1(1,pdiff1(f,1),z0)/*c) is convergent & hpartdiff11(f,z0) = lim (h"(#)(
   SVF1(1,pdiff1(f,1),z0)/*(h+c) - SVF1(1,pdiff1(f,1),z0)/*c))
@@ -1349,11 +1336,10 @@ proof
   assume that
 A1: f is_hpartial_differentiable`11_in z0 and
 A2: N c= dom SVF1(1,pdiff1(f,1),z0);
-  let h be convergent_to_0 Real_Sequence, c be constant Real_Sequence such
-  that
+  let h be 0-convergent non-zero Real_Sequence,
+  c be constant Real_Sequence such that
 A3: rng c = {proj(1,2).z0} & rng (h+c) c= N;
-    z0 is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A4: z0 = <*x0,y0*> by FINSEQ_2:100;
 A5: pdiff1(f,1) is_partial_differentiable_in z0,1 by A1,Th9;
   then partdiff(pdiff1(f,1),z0,1) = diff(SVF1(1,pdiff1(f,1),z0),x0) by A4,
@@ -1365,7 +1351,8 @@ end;
 theorem
   for z0 being Element of REAL 2 for N being Neighbourhood of proj(2,2).
   z0 st f is_hpartial_differentiable`12_in z0 & N c= dom SVF1(2,pdiff1(f,1),z0)
-  holds for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence st
+  holds for h be 0-convergent non-zero Real_Sequence,
+  c be constant Real_Sequence st
 rng c = {proj(2,2).z0} & rng (h+c) c= N holds h"(#)(SVF1(2,pdiff1(f,1),z0)/*(h+
 c) - SVF1(2,pdiff1(f,1),z0)/*c) is convergent & hpartdiff12(f,z0) = lim (h"(#)(
   SVF1(2,pdiff1(f,1),z0)/*(h+c) - SVF1(2,pdiff1(f,1),z0)/*c))
@@ -1375,11 +1362,11 @@ proof
   assume that
 A1: f is_hpartial_differentiable`12_in z0 and
 A2: N c= dom SVF1(2,pdiff1(f,1),z0);
-  let h be convergent_to_0 Real_Sequence, c be constant Real_Sequence such
+  let h be 0-convergent non-zero Real_Sequence,
+      c be constant Real_Sequence such
   that
 A3: rng c = {proj(2,2).z0} & rng (h+c) c= N;
-    z0 is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A4: z0 = <*x0,y0*> by FINSEQ_2:100;
 A5: pdiff1(f,1) is_partial_differentiable_in z0,2 by A1,Th10;
   then partdiff(pdiff1(f,1),z0,2) = diff(SVF1(2,pdiff1(f,1),z0),y0) by A4,
@@ -1391,7 +1378,8 @@ end;
 theorem
   for z0 being Element of REAL 2 for N being Neighbourhood of proj(1,2).
   z0 st f is_hpartial_differentiable`21_in z0 & N c= dom SVF1(1,pdiff1(f,2),z0)
-  holds for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence st
+  holds for h be 0-convergent non-zero Real_Sequence,
+  c be constant Real_Sequence st
 rng c = {proj(1,2).z0} & rng (h+c) c= N holds h"(#)(SVF1(1,pdiff1(f,2),z0)/*(h+
 c) - SVF1(1,pdiff1(f,2),z0)/*c) is convergent & hpartdiff21(f,z0) = lim (h"(#)(
   SVF1(1,pdiff1(f,2),z0)/*(h+c) - SVF1(1,pdiff1(f,2),z0)/*c))
@@ -1401,11 +1389,11 @@ proof
   assume that
 A1: f is_hpartial_differentiable`21_in z0 and
 A2: N c= dom SVF1(1,pdiff1(f,2),z0);
-  let h be convergent_to_0 Real_Sequence, c be constant Real_Sequence such
+  let h be 0-convergent non-zero Real_Sequence,
+  c be constant Real_Sequence such
   that
 A3: rng c = {proj(1,2).z0} & rng (h+c) c= N;
-    z0 is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A4: z0 = <*x0,y0*> by FINSEQ_2:100;
 A5: pdiff1(f,2) is_partial_differentiable_in z0,1 by A1,Th11;
   then partdiff(pdiff1(f,2),z0,1) = diff(SVF1(1,pdiff1(f,2),z0),x0) by A4,
@@ -1417,7 +1405,8 @@ end;
 theorem
   for z0 being Element of REAL 2 for N being Neighbourhood of proj(2,2).
   z0 st f is_hpartial_differentiable`22_in z0 & N c= dom SVF1(2,pdiff1(f,2),z0)
-  holds for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence st
+  holds for h be 0-convergent non-zero Real_Sequence,
+  c be constant Real_Sequence st
 rng c = {proj(2,2).z0} & rng (h+c) c= N holds h"(#)(SVF1(2,pdiff1(f,2),z0)/*(h+
 c) - SVF1(2,pdiff1(f,2),z0)/*c) is convergent & hpartdiff22(f,z0) = lim (h"(#)(
   SVF1(2,pdiff1(f,2),z0)/*(h+c) - SVF1(2,pdiff1(f,2),z0)/*c))
@@ -1427,11 +1416,10 @@ proof
   assume that
 A1: f is_hpartial_differentiable`22_in z0 and
 A2: N c= dom SVF1(2,pdiff1(f,2),z0);
-  let h be convergent_to_0 Real_Sequence, c be constant Real_Sequence such
-  that
+  let h be 0-convergent non-zero Real_Sequence,
+  c be constant Real_Sequence such that
 A3: rng c = {proj(2,2).z0} & rng (h+c) c= N;
-    z0 is Tuple of 2,REAL by FINSEQ_2:131;
-  then consider x0,y0 being Real such that
+  consider x0,y0 being Real such that
 A4: z0 = <*x0,y0*> by FINSEQ_2:100;
 A5: pdiff1(f,2) is_partial_differentiable_in z0,2 by A1,Th12;
   then partdiff(pdiff1(f,2),z0,2) = diff(SVF1(2,pdiff1(f,2),z0),y0) by A4,

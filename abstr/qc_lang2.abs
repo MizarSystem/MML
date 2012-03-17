@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received November 23, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,17 +18,19 @@ environ
       XXREAL_0, CARD_1, ORDINAL4, BVFUNC_2, FUNCT_1, CLASSES2, MCART_1,
       REALSET1, ARYTM_3, NAT_1, RELAT_1, ARYTM_1, TARSKI, XBOOLE_0, QC_LANG2;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
-      NUMBERS, NAT_1, FINSEQ_1, MCART_1, QC_LANG1, XXREAL_0;
- constructors ENUMSET1, XXREAL_0, XREAL_0, NAT_1, QC_LANG1;
- registrations RELSET_1, XREAL_0, FINSEQ_1, ORDINAL1;
+      ORDINAL1, NUMBERS, NAT_1, FINSEQ_1, XTUPLE_0, MCART_1, QC_LANG1,
+      XXREAL_0;
+ constructors ENUMSET1, XXREAL_0, XREAL_0, NAT_1, QC_LANG1, XTUPLE_0;
+ registrations RELSET_1, XREAL_0, FINSEQ_1, ORDINAL1, XTUPLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
+reserve A for QC-alphabet;
 reserve sq for FinSequence,
-  x,y,z for bound_QC-variable,
-  p,q,p1,p2,q1 for Element of QC-WFF;
+  x,y,z for bound_QC-variable of A,
+  p,q,p1,p2,q1 for Element of QC-WFF(A);
 
 theorem :: QC_LANG2:1
   the_argument_of 'not' p = p;
@@ -53,34 +55,37 @@ theorem :: QC_LANG2:7
   bound_in All(x,p) = x & the_scope_of All(x,p) = p;
 
 definition
-  func FALSUM -> QC-formula equals
+  let A be QC-alphabet;
+  func FALSUM(A) -> QC-formula of A equals
 :: QC_LANG2:def 1
-  'not' VERUM;
-  let p,q be Element of QC-WFF;
-  func p => q -> QC-formula equals
+  'not' VERUM(A);
+  let p,q be Element of QC-WFF(A);
+  func p => q -> QC-formula of A equals
 :: QC_LANG2:def 2
   'not' (p '&' 'not' q);
-  func p 'or' q -> QC-formula equals
+  func p 'or' q -> QC-formula of A equals
 :: QC_LANG2:def 3
   'not' ('not' p '&' 'not' q);
 end;
 
 definition
-  let p,q be Element of QC-WFF;
-  func p <=> q -> QC-formula equals
+  let A be QC-alphabet;
+  let p,q be Element of QC-WFF(A);
+  func p <=> q -> QC-formula of A equals
 :: QC_LANG2:def 4
   (p => q) '&' (q => p);
 end;
 
 definition
-  let x be bound_QC-variable, p be Element of QC-WFF;
-  func Ex(x,p) -> QC-formula equals
+  let A be QC-alphabet;
+  let x be bound_QC-variable of A, p be Element of QC-WFF(A);
+  func Ex(x,p) -> QC-formula of A equals
 :: QC_LANG2:def 5
   'not' All(x,'not' p);
 end;
 
 theorem :: QC_LANG2:8
-  FALSUM is negative & the_argument_of FALSUM = VERUM;
+  FALSUM(A) is negative & the_argument_of FALSUM(A) = VERUM(A);
 
 theorem :: QC_LANG2:9
   p 'or' q = 'not' p => q;
@@ -98,11 +103,12 @@ theorem :: QC_LANG2:13
   Ex(x,p) = Ex(y,q) implies x = y & p = q;
 
 definition
-  let x,y be bound_QC-variable, p be Element of QC-WFF;
-  func All(x,y,p) -> QC-formula equals
+  let A be QC-alphabet;
+  let x,y be bound_QC-variable of A, p be Element of QC-WFF(A);
+  func All(x,y,p) -> QC-formula of A equals
 :: QC_LANG2:def 6
   All(x,All(y,p));
-  func Ex(x,y,p) -> QC-formula equals
+  func Ex(x,y,p) -> QC-formula of A equals
 :: QC_LANG2:def 7
   Ex(x,Ex(y,p));
 end;
@@ -111,14 +117,14 @@ theorem :: QC_LANG2:14
   All(x,y,p) = All(x,All(y,p)) & Ex(x,y,p) = Ex(x,Ex(y,p));
 
 theorem :: QC_LANG2:15
-  for x1,x2,y1,y2 being bound_QC-variable st All(x1,y1,p1) = All(
+  for x1,x2,y1,y2 being bound_QC-variable of A st All(x1,y1,p1) = All(
   x2,y2,p2) holds x1 = x2 & y1 = y2 & p1 = p2;
 
 theorem :: QC_LANG2:16
   All(x,y,p) = All(z,q) implies x = z & All(y,p) = q;
 
 theorem :: QC_LANG2:17
-  for x1,x2,y1,y2 being bound_QC-variable st Ex(x1,y1,p1) = Ex(x2,
+  for x1,x2,y1,y2 being bound_QC-variable of A st Ex(x1,y1,p1) = Ex(x2,
   y2,p2) holds x1 = x2 & y1 = y2 & p1 = p2;
 
 theorem :: QC_LANG2:18
@@ -129,11 +135,12 @@ theorem :: QC_LANG2:19
   ,y,p) = All(y,p);
 
 definition
-  let x,y,z be bound_QC-variable, p be Element of QC-WFF;
-  func All(x,y,z,p) -> QC-formula equals
+  let A be QC-alphabet;
+  let x,y,z be bound_QC-variable of A, p be Element of QC-WFF(A);
+  func All(x,y,z,p) -> QC-formula of A equals
 :: QC_LANG2:def 8
   All(x,All(y,z,p));
-  func Ex(x,y,z,p) -> QC-formula equals
+  func Ex(x,y,z,p) -> QC-formula of A equals
 :: QC_LANG2:def 9
   Ex(x,Ex(y,z,p));
 end;
@@ -142,10 +149,10 @@ theorem :: QC_LANG2:20
   All(x,y,z,p) = All(x,All(y,z,p)) & Ex(x,y,z,p) = Ex(x,Ex(y,z,p));
 
 theorem :: QC_LANG2:21
-  for x1,x2,y1,y2,z1,z2 being bound_QC-variable st All(x1,y1,z1,p1) =
+  for x1,x2,y1,y2,z1,z2 being bound_QC-variable of A st All(x1,y1,z1,p1) =
   All(x2,y2,z2,p2) holds x1 = x2 & y1 = y2 & z1 = z2 & p1 = p2;
 
-reserve s,t for bound_QC-variable;
+reserve s,t for bound_QC-variable of A;
 
 theorem :: QC_LANG2:22
   All(x,y,z,p) = All(t,q) implies x = t & All(y,z,p) = q;
@@ -154,7 +161,7 @@ theorem :: QC_LANG2:23
   All(x,y,z,p) = All(t,s,q) implies x = t & y = s & All(z,p) = q;
 
 theorem :: QC_LANG2:24
-  for x1,x2,y1,y2,z1,z2 being bound_QC-variable st Ex(x1,y1,z1,p1) = Ex(
+  for x1,x2,y1,y2,z1,z2 being bound_QC-variable of A st Ex(x1,y1,z1,p1) = Ex(
   x2,y2,z2,p2) holds x1 = x2 & y1 = y2 & z1 = z2 & p1 = p2;
 
 theorem :: QC_LANG2:25
@@ -168,61 +175,65 @@ theorem :: QC_LANG2:27
   All(x,y,z,p) = All(y,z,p);
 
 definition
-  let H be Element of QC-WFF;
+  let A be QC-alphabet;
+  let H be Element of QC-WFF(A);
   attr H is disjunctive means
 :: QC_LANG2:def 10
-  ex p,q being Element of QC-WFF st H = p 'or' q;
+  ex p,q being Element of QC-WFF(A) st H = p 'or' q;
   attr H is conditional means
 :: QC_LANG2:def 11
 
-  ex p,q being Element of QC-WFF st H = p => q;
+  ex p,q being Element of QC-WFF(A) st H = p => q;
   attr H is biconditional means
 :: QC_LANG2:def 12
-  ex p,q being Element of QC-WFF st H = p <=> q;
+  ex p,q being Element of QC-WFF(A) st H = p <=> q;
   attr H is existential means
 :: QC_LANG2:def 13
 
-  ex x being bound_QC-variable, p being Element of QC-WFF st H = Ex(x,p);
+  ex x being bound_QC-variable of A, p being Element of QC-WFF(A)
+   st H = Ex(x,p);
 end;
 
 theorem :: QC_LANG2:28
   Ex(x,y,p) is existential & Ex(x,y,z,p) is existential;
 
 definition
-  let H be Element of QC-WFF;
-  func the_left_disjunct_of H -> QC-formula equals
+  let A be QC-alphabet;
+  let H be Element of QC-WFF(A);
+  func the_left_disjunct_of H -> QC-formula of A equals
 :: QC_LANG2:def 14
   the_argument_of
   the_left_argument_of the_argument_of H;
-  func the_right_disjunct_of H -> QC-formula equals
+  func the_right_disjunct_of H -> QC-formula of A equals
 :: QC_LANG2:def 15
   the_argument_of
   the_right_argument_of the_argument_of H;
-  func the_antecedent_of H -> QC-formula equals
+  func the_antecedent_of H -> QC-formula of A equals
 :: QC_LANG2:def 16
   the_left_argument_of
   the_argument_of H;
 end;
 
 notation
-  let H be Element of QC-WFF;
+  let A be QC-alphabet;
+  let H be Element of QC-WFF(A);
   synonym the_consequent_of H for the_right_disjunct_of H;
 end;
 
 definition
-  let H be Element of QC-WFF;
-
-  func the_left_side_of H -> QC-formula equals
+  let A be QC-alphabet;
+  let H be Element of QC-WFF(A);
+  func the_left_side_of H -> QC-formula of A equals
 :: QC_LANG2:def 17
   the_antecedent_of
   the_left_argument_of H;
-  func the_right_side_of H -> QC-formula equals
+  func the_right_side_of H -> QC-formula of A equals
 :: QC_LANG2:def 18
   the_consequent_of
   the_left_argument_of H;
 end;
 
-reserve F,G,H,H1 for Element of QC-WFF;
+reserve F,G,H,H1 for Element of QC-WFF(A);
 
 theorem :: QC_LANG2:29
   the_left_disjunct_of(F 'or' G) = F & the_right_disjunct_of(F
@@ -277,22 +288,23 @@ theorem :: QC_LANG2:40
 ::
 
 definition
-  let G,H be Element of QC-WFF;
+  let A be QC-alphabet;
+  let G,H be Element of QC-WFF(A);
   pred G is_immediate_constituent_of H means
 :: QC_LANG2:def 19
 
   H = 'not' G or (ex F
-  being Element of QC-WFF st H = G '&' F or H = F '&' G) or ex x being
-  bound_QC-variable st H = All(x,G);
+  being Element of QC-WFF(A) st H = G '&' F or H = F '&' G) or ex x being
+  bound_QC-variable of A st H = All(x,G);
 end;
 
-reserve x,y,z for bound_QC-variable,
+reserve x,y,z for bound_QC-variable of A,
   k,n,m for Element of NAT,
-  P for ( QC-pred_symbol of k),
-  V for QC-variable_list of k;
+  P for ( QC-pred_symbol of k, A),
+  V for QC-variable_list of k, A;
 
 theorem :: QC_LANG2:41
-  not H is_immediate_constituent_of VERUM;
+  not H is_immediate_constituent_of VERUM(A);
 
 theorem :: QC_LANG2:42
   not H is_immediate_constituent_of P!V;
@@ -301,7 +313,7 @@ theorem :: QC_LANG2:43
   F is_immediate_constituent_of 'not' H iff F = H;
 
 theorem :: QC_LANG2:44
-  H is_immediate_constituent_of FALSUM iff H = VERUM;
+  H is_immediate_constituent_of FALSUM(A) iff H = VERUM(A);
 
 theorem :: QC_LANG2:45
   F is_immediate_constituent_of G '&' H iff F = G or F = H;
@@ -331,18 +343,20 @@ theorem :: QC_LANG2:50
 reserve L,L9 for FinSequence;
 
 definition
-  let G,H;
+  let A be QC-alphabet;
+  let G,H be Element of QC-WFF(A);
   pred G is_subformula_of H means
 :: QC_LANG2:def 20
 
   ex n,L st 1 <= n & len L = n & L.1
-= G & L.n = H & for k st 1 <= k & k < n ex G1,H1 being Element of QC-WFF st L.k
-  = G1 & L.(k+1) = H1 & G1 is_immediate_constituent_of H1;
+= G & L.n = H & for k st 1 <= k & k < n ex G1,H1 being Element of QC-WFF(A)
+st L.k = G1 & L.(k+1) = H1 & G1 is_immediate_constituent_of H1;
   reflexivity;
 end;
 
 definition
-  let H,F;
+  let A be QC-alphabet;
+  let H,F be Element of QC-WFF(A);
   pred H is_proper_subformula_of F means
 :: QC_LANG2:def 21
 
@@ -396,7 +410,7 @@ theorem :: QC_LANG2:63
   is_proper_subformula_of H implies F is_proper_subformula_of H;
 
 theorem :: QC_LANG2:64
-  not F is_proper_subformula_of VERUM;
+  not F is_proper_subformula_of VERUM(A);
 
 theorem :: QC_LANG2:65
   not F is_proper_subformula_of P!V;
@@ -408,7 +422,7 @@ theorem :: QC_LANG2:67
   'not' F is_subformula_of H implies F is_proper_subformula_of H;
 
 theorem :: QC_LANG2:68
-  F is_proper_subformula_of FALSUM iff F is_subformula_of VERUM;
+  F is_proper_subformula_of FALSUM(A) iff F is_subformula_of VERUM(A);
 
 theorem :: QC_LANG2:69
   F is_subformula_of G or F is_subformula_of H iff F
@@ -449,24 +463,26 @@ theorem :: QC_LANG2:78
   H is universal implies the_scope_of H is_proper_subformula_of H;
 
 theorem :: QC_LANG2:79
-  H is_subformula_of VERUM iff H = VERUM;
+  H is_subformula_of VERUM(A) iff H = VERUM(A);
 
 theorem :: QC_LANG2:80
   H is_subformula_of P!V iff H = P!V;
 
 theorem :: QC_LANG2:81
-  H is_subformula_of FALSUM iff H = FALSUM or H = VERUM;
+  H is_subformula_of FALSUM(A) iff H = FALSUM(A) or H = VERUM(A);
 
 ::
 ::   Set of subformulae of QC-formulae
 ::
 
 definition
-  let H;
+  let A be QC-alphabet;
+  let H be Element of QC-WFF(A);
   func Subformulae H -> set means
 :: QC_LANG2:def 22
 
-  for a being set holds a in it iff ex F st F = a & F is_subformula_of H;
+  for a being set holds a in it iff ex F being Element of QC-WFF(A)
+   st F = a & F is_subformula_of H;
 end;
 
 theorem :: QC_LANG2:82
@@ -479,13 +495,13 @@ theorem :: QC_LANG2:84
   G in Subformulae H implies Subformulae G c= Subformulae H;
 
 theorem :: QC_LANG2:85
-  Subformulae(VERUM) = { VERUM };
+  Subformulae(VERUM(A)) = { VERUM(A) };
 
 theorem :: QC_LANG2:86
   Subformulae(P!V) = { P!V };
 
 theorem :: QC_LANG2:87
-  Subformulae(FALSUM) = { VERUM, FALSUM };
+  Subformulae(FALSUM(A)) = { VERUM(A), FALSUM(A) };
 
 theorem :: QC_LANG2:88
   Subformulae 'not' H = Subformulae H \/ { 'not' H };
@@ -509,7 +525,7 @@ theorem :: QC_LANG2:93
   '&' 'not' G, F => G, 'not' F, G '&' 'not' F, G => F, F <=> G };
 
 theorem :: QC_LANG2:94
-  H = VERUM or H is atomic iff Subformulae H = { H };
+  H = VERUM(A) or H is atomic iff Subformulae H = { H };
 
 theorem :: QC_LANG2:95
   H is negative implies Subformulae H = Subformulae the_argument_of H \/ { H };

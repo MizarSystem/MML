@@ -1,0 +1,5793 @@
+:: Simple Graphs as Simplicial Complexes: the {M}ycielskian of a Graph
+::  by Piotr Rudnicki and Lorna Stewart
+:: 
+:: Received February 8, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies MATROID0, NAT_1, FINSET_1, CARD_1, ARYTM_3, SUBSET_1, XXREAL_0,
+      CLASSES1, SGRAPH1, SIMPLEX0, TARSKI, GRAPH_1, GLIB_000, PBOOLE, XBOOLE_0,
+      ZFMISC_1, NUMBERS, FUNCT_1, RELAT_1, COMBGRAS, MYCIELSK, DILWORTH,
+      CIRCUIT2, AOFA_000, EQREL_1, PEPIN, CIRCUIT1, FUNCT_2, ARYTM_1, ORDINAL1,
+      PROB_1, BSPACE, STRUCT_0, NEWTON, STIRL2_1, UPROOTS, FINSEQ_1, CARD_3,
+      FINSEQ_2, PROB_2, GROUP_10, RAMSEY_1, SCMYCIEL;
+ notations TARSKI, XBOOLE_0, ORDINAL1, RELAT_1, FUNCT_1, FUNCT_2, MATROID0,
+      XCMPLX_0, NAT_1, FINSET_1, ENUMSET1, FINSEQ_1, FINSEQ_2, CARD_1,
+      SUBSET_1, XXREAL_0, ZFMISC_1, NUMBERS, NEWTON, UPROOTS, RVSUM_1, PROB_2,
+      FUNCOP_1, CLASSES1, AOFA_000, EQREL_1, BSPACE, STIRL2_1, PBOOLE,
+      CARD_LAR, MYCIELSK, GROUP_10, RAMSEY_1, CARD_3;
+ constructors MATROID0, LEXBFS, UPROOTS, CARD_LAR, RVSUM_1, BSPACE, STIRL2_1,
+      BINOP_2, PROB_2, DOMAIN_1, CLASSES1, MYCIELSK, RAMSEY_1, RELSET_1,
+      COHSP_1;
+ registrations LEXBFS, FINSET_1, XXREAL_0, ORDINAL1, SETFAM_1, RELSET_1,
+      XREAL_0, NAT_1, CARD_FIN, SUBSET_1, EQREL_1, CARD_1, NEWTON, VALUED_0,
+      XBOOLE_0, PARTFUN1, FUNCT_2, SIMPLEX0, MYCIELSK, ZFMISC_1, FINSEQ_1,
+      COHSP_1;
+ requirements SUBSET, NUMERALS, REAL, ARITHM, BOOLE;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, MYCIELSK, CLASSES1, BSPACE, UPROOTS,
+      FINSEQ_2, SUBSET_1, GROUP_10, EQREL_1, CARD_3, MATROID0, FINSET_1;
+ theorems TARSKI, XXREAL_0, XBOOLE_0, NAT_1, ZFMISC_1, ORDINAL1, ENUMSET1,
+      CARD_1, CARD_2, EULER_1, FUNCT_1, FUNCT_2, EQREL_1, FINSET_1, XREAL_1,
+      MYCIELSK, XBOOLE_1, BSPACE, CLASSES1, XREGULAR, WELLORD2, STIRL2_1,
+      RVSUM_1, DIST_1, FINSEQ_3, UPROOTS, FINSEQ_1, FUNCOP_1, PROB_2, FINSEQ_2,
+      CARD_FIN, DILWORTH, PENCIL_1, RELAT_1, PARTFUN1, PBOOLE, NEWTON,
+      RAMSEY_1, TOPGEN_2, SUBSET_1, ORDERS_1, FINSEQ_4, XTUPLE_0;
+ schemes CLASSES1, FUNCT_1, FUNCT_2, NAT_1, FRAENKEL, SUBSET_1, RECDEF_1,
+      PRE_CIRC, FINSEQ_2;
+
+begin  :: Preliminaries
+       :: Could not find in MML
+
+theorem Aux1:
+for x, X being set holds not [x,X] in X
+proof
+  let x, X be set;
+  assume A: [x,X] in X;
+  B: X in {x, X} by TARSKI:def 2;
+     {x, X} in {{x, X}, {x}} by TARSKI:def 2;
+  hence contradiction by A, B, XREGULAR:7;
+end;
+
+theorem Aux2:
+for x, X being set holds [x,X] <> X
+proof
+ let x, X be set;
+ assume [x,X] = X;
+  then {x,X} in X by TARSKI:def 2;
+ hence contradiction by TARSKI:def 2;
+end;
+
+theorem Aux3:
+for x, X being set holds [x,X] <> x
+proof
+ let x, X be set;
+ assume [x,X] = x;
+  then {x,X} in x by TARSKI:def 2;
+ hence contradiction by TARSKI:def 2;
+end;
+
+theorem Aux4:
+for x1,y1,x2,y2,X being set
+ st x1 in X & x2 in X & {x1,[y1,X]} = {x2,[y2,X]}
+  holds x1 = x2 & y1 = y2
+proof
+ let x1,y1,x2,y2,X be set;
+ assume that Ax1: x1 in X and  Ax2: x2 in X;
+ assume A: {x1,[y1,X]} = {x2,[y2,X]};
+ per cases by A, ZFMISC_1:6;
+ suppose x1 = x2 & [y1,X] = [y2,X];
+  hence x1 = x2 & y1 = y2 by XTUPLE_0:1;
+ end;
+ suppose x1 = x2 & [y1,X] = x2;
+  hence x1 = x2 & y1 = y2 by Aux1, Ax2;
+ end;
+ suppose x1 = [y2,X] & [y1,X] = x2;
+  hence x1 = x2 & y1 = y2 by Aux1, Ax2;
+ end;
+ suppose x1 = [y2,X] & [y1,X] = [y2,X];
+  hence x1 = x2 & y1 = y2 by Aux1, Ax1;
+ end;
+end;
+
+theorem card3:  :: belongs to PENCIL_1
+for X, v being set st 3 c= card X
+  ex v1, v2 being set st v1 in X & v2 in X & v1<>v & v2<>v & v1<>v2
+proof
+ let X, v be set;
+ assume 3 c= card X;
+ then consider x,y,z being set such that
+C: x in X and
+D: y in X and
+E: z in X and
+F: x<>y and
+G: x<>z and
+H: y<>z by PENCIL_1:5;
+   v <> x & v <> y & v <> z or v = x or v = y or v = z;
+  hence ex v1, v2 being set
+   st v1 in X & v2 in X & v1<>v & v2<>v & v1<>v2 by C,D,E,F,G,H;
+end;
+
+theorem Singletons0:
+for x being set holds singletons {x} = { {x} }
+proof
+ let x be set;
+A: {x} c= {x};
+ thus singletons {x} c= { {x} } proof
+   let a be set;
+   assume a in singletons {x};
+    then consider f being Subset of {x} such that
+   A: a = f and
+   B: f is 1-element;
+    f = {} or f = {x} by ZFMISC_1:33;
+   hence thesis by A, B, TARSKI:def 1;
+ end;
+   let a be set;
+   assume a in {{x}};
+   then a = {x} by TARSKI:def 1;
+   hence thesis by A;
+end;
+
+registration
+ cluster finite-yielding for FinSequence;
+ existence proof
+  reconsider f = <*{}*> as FinSequence;
+   take f;
+   now
+   let x be set;
+   assume x in rng f;
+    then x in {{}} by FINSEQ_1:39;
+   hence x is finite;
+   end;
+   hence thesis by FINSET_1:def 2;
+ end;
+end;
+
+theorem Part0:
+for X being non empty finite set, P being a_partition of X
+ st card P < card X
+  ex p, x, y being set st p in P & x in p & y in p & x <> y
+proof
+  let X be non empty finite set, P be a_partition of X such that
+A: card P < card X;
+Aa: card P in card X by A, NAT_1:44;
+  consider x,y being set such that
+C: x in X and
+D: y in X and
+E: x <> y and
+F: (proj P).x = (proj P).y by Aa, FINSEQ_4:65;
+  take p = (proj P).x;
+  take x, y;
+  thus p in P by C, FUNCT_2:5;
+  thus x in p & y in p by C, D, F, EQREL_1:def 9;
+  thus x <> y by E;
+end;
+
+registration
+ cluster union {{}} -> empty;
+ correctness by ZFMISC_1:25;
+end;
+
+theorem SingleVertices:
+for x being set holds union { {}, {x} } = {x}
+proof
+ let x be set;
+   {x} = union bool {x} by ZFMISC_1:81;
+ hence thesis by ZFMISC_1:24;
+end;
+
+theorem BSPACEdef9:  :: variant of SUBSET_1:46 or CARD_1:65
+for X being set, s being Subset of X
+ st s is 1-element
+  ex x being set st x in X & s = {x}
+proof
+ let X be set, s be Subset of X;
+ assume s is 1-element;
+ then s is trivial non empty;
+ then consider x being Element of s such that
+A: s = {x} by SUBSET_1:46;
+ take x;
+   x in s by A;
+ hence x in X;
+ thus s = {x} by A;
+end;
+
+theorem McopyV:
+for X being set holds
+ card { {X,[x,X]} where x is Element of X : x in X } = card X
+proof
+ let X be set;
+ set uG = X;  set A = { {uG,[x,uG]} where x is Element of uG : x in uG };
+ deffunc F(set) = {uG,[$1,uG]};
+ consider f being Function such that
+B: dom f = uG and
+D: for x being set st x in uG holds f.x = F(x) from FUNCT_1:sch 3;
+   now
+     let x1,x2 be set;
+     assume that A1: x1 in dom f and B1: x2 in dom f and C1: f.x1 = f.x2;
+       F(x1) = f.x1 & F(x2) = f.x2 by A1, B1, B, D;
+      then [x1,uG] = uG or [x1,uG] = [x2,uG] by C1, ZFMISC_1:6;
+     hence x1 = x2 by Aux2, XTUPLE_0:1;
+   end;
+then X: f is one-to-one by FUNCT_1:def 4;
+Y: rng f = A proof
+     thus rng f c= A proof
+       let y be set;
+       assume y in rng f;
+       then consider a being set such that
+     A1: a in dom f and
+     B1: f.a = y by FUNCT_1:def 3;
+       y = {uG,[a,uG]} by A1, B1, B, D;
+      hence thesis by A1, B;
+     end;
+     thus A c= rng f proof
+       let a be set;
+       assume a in A;
+       then consider x being Element of uG such that
+     A1: a = {uG,[x,uG]} and
+     B1: x in uG;
+       f.x = a by A1, B1, D;
+      hence thesis by B, B1, FUNCT_1:def 3;
+     end;
+   end;
+   A, uG are_equipotent by B, X, Y, WELLORD2:def 4;
+ hence card A = card uG by CARD_1:5;
+end;
+
+definition
+  let G be set;
+  func PairsOf G -> Subset of G means                      :LEdges:
+    for e being set holds e in it iff e in G & card e = 2 ;
+  existence proof
+    defpred P[set] means card $1 = 2;
+    consider X being Subset of G such that
+  A: for x being set holds x in X iff x in G & P[x] from SUBSET_1:sch 1;
+    take X;
+    thus thesis by A;
+  end;
+  uniqueness proof
+   let it1, it2 be Subset of G such that
+  A: for e being set holds e in it1 iff e in G & card e = 2 and
+  B: for e being set holds e in it2 iff e in G & card e = 2;
+   now
+     let x be set;
+         x in it2 iff x in G & card x = 2 by B;
+      hence x in it1 iff x in it2 by A;
+   end;
+   hence it1 = it2 by TARSKI:1;
+  end;
+end;
+
+theorem SG4:
+for X being set, e being set
+ st e in PairsOf X
+  ex x, y being set st x <> y & x in union X & y in union X & e = {x, y}
+proof
+ let G be set, e be set; assume
+A: e in PairsOf G;
+   card e = 2 by A, LEdges; then
+   consider x, y being set such that
+D: x <> y and
+E: e = {x,y} by CARD_2:60;
+   x in e & y in e by E, TARSKI:def 2;
+  then x in union G & y in union G by A, TARSKI:def 4;
+  hence thesis by D,E;
+end;
+
+theorem SG4a:
+for X, x, y being set st x <> y & {x, y} in X holds {x, y} in PairsOf X
+proof
+ let X, x, y be set such that
+A: x <> y and
+B: {x, y} in X;
+  card {x,y} = 2 by A, CARD_2:57;
+ hence {x, y} in PairsOf X by B, LEdges;
+end;
+
+theorem SG5:
+for X, x, y being set
+ st {x, y} in PairsOf X holds x <> y & x in union X & y in union X
+proof
+  let G, a, b be set;
+  assume {a, b} in PairsOf G;
+   then consider x, y being set such that
+  C: x <> y and
+  A: x in union G & y in union G and
+  B: {a,b} = {x, y} by SG4;
+    a = x & b = y or a = y & b = x by B, ZFMISC_1:6;
+  hence thesis by A, C;
+end;
+
+theorem SG6e:
+for G, H being set st G c= H holds PairsOf G c= PairsOf H
+proof
+ let G, H be set; assume
+A: G c= H;
+ let e be set;
+ assume AA: e in PairsOf G;
+E: card e = 2 by AA, LEdges;
+  e in G by AA;
+  hence thesis by A, E, LEdges;
+end;
+
+theorem MnewE:
+for X being finite set holds
+ card { {x,[y, union X]} where x, y is Element of union X
+                         : {x,y} in PairsOf X } = 2 * card PairsOf X
+proof
+ let G be finite set; set Y = union G;
+   set A = { {x,[y,Y]} where x, y is Element of union G : {x,y} in PairsOf G };
+   set EG = PairsOf G; set uG = union G;
+   set s = canFS(EG);
+Aa: len s = card EG by UPROOTS:3;
+Ac: rng s = EG by FUNCT_2:def 3;
+   defpred P[set,set] means
+    for a, b being set st $1 = {a, b} holds $2 = {{a,[b,Y]},{b,[a,Y]}};
+P0: for x,y1,y2 being set st x in EG & P[x,y1] & P[x,y2] holds y1 = y2 proof
+      let x,v1,v2 be set such that
+    A1: x in EG and
+    B1: P[x,v1] and
+    C1: P[x,v2];
+       consider x1, y1 being set such that
+             x1 <> y1 and x1 in union G and y1 in union G and
+    F1: x = {x1, y1} by A1, SG4;
+        v2 = {{x1,[y1,Y]},{y1,[x1,Y]}} by F1, C1;
+     hence v1 = v2 by F1, B1;
+    end;
+P1: for x being set st x in EG ex y being set st P[x,y] proof
+      let x be set;
+      assume x in EG;
+       then consider x1, y1 being set such that
+            x1 <> y1 and x1 in union G and y1 in union G and
+    F1: x = {x1, y1} by SG4;
+        take y = {{x1,[y1,Y]},{y1,[x1,Y]}};
+        let a, b be set;
+        assume x = {a, b};
+          then a=x1 & b=y1 or a=y1 & b = x1 by F1, ZFMISC_1:6;
+        hence y = {{a,[b,Y]},{b,[a,Y]}};
+    end;
+   consider f being Function such that
+A: dom f = EG and
+B: for x being set st x in EG holds P[x,f.x] from FUNCT_1:sch 2(P0,P1);
+   now
+    let y be set;
+    assume y in rng (f*s);
+     then y in rng f by FUNCT_1:14;
+     then consider x being set such that
+    A1: x in dom f and
+    B1: y = f.x by FUNCT_1:def 3;
+       consider x1, y1 being set such that
+        x1 <> y1 and x1 in union G and y1 in union G and
+    F1: x = {x1, y1} by A1, A, SG4;
+        y = {{x1,[y1,Y]},{y1,[x1,Y]}} by F1, B1, A1, A, B;
+    hence y is finite;
+   end;
+   then reconsider S = f*s as finite-yielding FinSequence
+    by Ac, A, FINSEQ_1:16, FINSET_1:def 2;
+Ca: dom S = dom s by Ac, A, RELAT_1:27;
+   deffunc F(set) = card (S.$1);
+   consider L being FinSequence of NAT such that
+C: len L = len S and
+D: for j being Nat st j in dom L holds L.j = F(j) from FINSEQ_2:sch 1;
+Ea: dom S = dom L by C, FINSEQ_3:29;
+Eb: for i be Nat st i in dom S holds S.i is finite & L.i = card (S.i) by Ea, D;
+    now
+      let x, y be set;
+      assume A11: x <> y;
+      per cases;
+      suppose that S1x: x in dom S and S1y: y in dom S;
+         A1: x in dom s & s.x in dom f by S1x, FUNCT_1:11;
+         B1: y in dom s & s.y in dom f by S1y, FUNCT_1:11;
+             consider x1,y1 being set such that
+                x1 <> y1 and
+         D1x: x1 in union G & y1 in union G and
+         E1x: s.x = {x1, y1} by A1, A, SG4;
+             consider x2,y2 being set such that
+              x2 <> y2 and
+         D1y: x2 in union G & y2 in union G and
+         E1y: s.y = {x2, y2} by B1, A, SG4;
+         F1x: S.x = f.(s.x) by S1x, FUNCT_1:12;
+         F1y: S.y = f.(s.y) by S1y, FUNCT_1:12;
+         G1x: S.x = {{x1,[y1,Y]},{y1,[x1,Y]}} by E1x, F1x, A1, A, B;
+         G1y: S.y = {{x2,[y2,Y]},{y2,[x2,Y]}} by E1y, F1y, B1, A, B;
+        assume S.x meets S.y;
+          then consider a being set such that
+        Jx: a in S.x and
+        Jy: a in S.y by XBOOLE_0:3;
+        Kx: a = {x1,[y1,Y]} or a = {y1,[x1,Y]} by Jx, G1x, TARSKI:def 2;
+        Ky: a = {x2,[y2,Y]} or a = {y2,[x2,Y]} by Jy, G1y, TARSKI:def 2;
+            x1 = x2 & y1 = y2 or x1 = y2 & y1 = x2 or y1 = x2 & x1 = y2
+             by D1x, D1y, Kx, Ky, Aux4;
+        hence contradiction by E1x, E1y, A11, A1, B1, FUNCT_1:def 4;
+      end;
+      suppose not (x in dom S & y in dom S);
+         then S.x = {} or S.y = {} by FUNCT_1:def 2;
+        hence S.x misses S.y by XBOOLE_1:65;
+      end;
+    end; then
+Ec: S is disjoint_valued by PROB_2:def 2;
+   Union S = union rng S; then
+E: card (union rng S) = Sum L by Ea, Eb, Ec, DIST_1:17;
+Fa: dom ((len L) |-> 2) = Seg len L by FUNCOP_1:13
+      .= dom L by FINSEQ_1:def 3;
+   now let j be Nat such that
+   A1: j in dom L;
+   C1: S.j = f.(s.j) by A1, Ea, FUNCT_1:12;
+       consider x, y being set such that
+   D1: x <> y and x in union G and  y in union G and
+   G1: s.j = {x, y} by SG4, A1, Ea, Ca, Ac, FUNCT_1:3;
+   H1: f.(s.j) = {{x,[y,Y]},{y,[x,Y]}} by G1, B, A1, Ea, Ca, Ac, FUNCT_1:3;
+   I1: now assume {x,[y,Y]} = {y,[x,Y]};
+         then x= y or x = [x,Y] by ZFMISC_1:6;
+        hence contradiction by D1, Aux3;
+       end;
+   J1: j in Seg len L by A1, FINSEQ_1:def 3;
+     thus L.j = card (S.j) by A1, D
+             .= 2 by I1, H1, C1, CARD_2:57
+             .= ((len L) |-> 2).j by J1, FINSEQ_2:57;
+   end;
+   then
+F: L = (len L) |-> 2 by Fa, FINSEQ_1:13;
+G: len L = card EG by C, Ca, Aa, FINSEQ_3:29;
+   union rng S = A proof
+    thus union rng S c= A proof
+      let a be set;
+      assume a in union rng S;
+      then consider YY being set such that
+    A1: a in YY and
+    B1: YY in rng S by TARSKI:def 4;
+        consider b being set such that
+    C1: b in dom S and
+    D1a: YY = S.b by B1, FUNCT_1:def 3;
+    D1b: S.b = f.(s.b) by C1, FUNCT_1:12;
+    C1a: s.b in EG by C1, Ca, Ac, FUNCT_1:3;
+        consider x, y being set such that x <> y and
+    E1: x in union G and
+    F1: y in union G and
+    G1: s.b = {x, y} by SG4, C1, Ca, Ac, FUNCT_1:3;
+        f.(s.b) = {{x,[y,Y]},{y,[x,Y]}} by G1, B, C1, Ca, Ac, FUNCT_1:3;
+        then a = {x,[y,Y]} or a = {y,[x,Y]} by A1, D1a, D1b, TARSKI:def 2;
+      hence a in A by G1, C1a, E1, F1;
+    end;
+    thus A c= union rng S proof
+      let a be set;
+      assume a in A;
+      then consider x, y being Element of uG such that
+    A1: a = {x,[y,Y]} and
+    B1: {x,y} in EG;
+        consider c being set such that c in dom s and
+    D1: s.c = {x,y} by B1, Ac, FUNCT_1:def 3;
+        rng S = rng f by A, Ac, RELAT_1:28;
+then E1: f.(s.c) in rng S by A, D1, B1, FUNCT_1:3;
+         f.(s.c) = {{x,[y,Y]},{y,[x,Y]}} by D1, B1, B;
+        then a in f.(s.c) by A1, TARSKI:def 2;
+      hence a in union rng S by E1, TARSKI:def 4;
+    end;
+   end;
+ hence card A = 2 * card EG by E, F, G, RVSUM_1:80;
+end;
+
+theorem :: ordunordpairs:
+for X being finite set holds
+ card {[x, y] where x, y is Element of union X
+                         : {x,y} in PairsOf X } = 2 * card PairsOf X
+proof
+ let X be finite set;
+ set Y = union X;
+ set B = {[x, y] where x, y is Element of Y : {x,y} in PairsOf X };
+ set A = { {x,[y,Y]} where x, y is Element of Y : {x,y} in PairsOf X };
+ per cases;
+ suppose S1: B is empty;
+   now
+     assume A is non empty;
+     then consider a being set such that
+   A1: a in A by XBOOLE_0:def 1;
+     consider x, y being Element of union X such that a = {x, [y, Y]} and
+   C1: {x,y} in PairsOf X by A1;
+       [x,y] in B by C1;
+    hence contradiction by S1;
+   end;
+  hence card B = 2 * card PairsOf X by S1, MnewE;
+ end;
+ suppose S1: B is non empty;
+     then consider b being set such that
+  Aa1: b in B by XBOOLE_0:def 1;
+     consider x, y being Element of Y such that b = [x, y] and
+  Ca1: {x,y} in PairsOf X by Aa1;
+  Ea1: x in {x,y} by TARSKI:def 2;
+  S1a: Y <> {} by Ca1, Ea1, TARSKI:def 4;
+  defpred P[set, set] means
+    for a, b being Element of Y st a in Y & b in Y & $1 = {a,[b,Y]}
+     holds $2 = [a,b];
+  P: for c being set st c in A ex d being set st d in B & P[c,d] proof
+      let c be set;
+      assume c in A;
+       then consider x, y being Element of union X such that
+      B2: c = {x, [y, Y]} and
+      C2: {x,y} in PairsOf X;
+       take d = [x,y];
+       thus d in B by C2;
+       thus P[c,d] proof
+         let a, b be Element of Y;
+         assume A3: a in Y & b in Y;
+         assume c = {a,[b,Y]};
+          then a = x & b = y by B2, A3, Aux4;
+         hence d = [a,b];
+       end;
+     end;
+  consider f being Function of A, B such that
+  A1: for c being set st c in A holds P[c,f.c] from FUNCT_2:sch 1(P);
+  domf: dom f = A by S1, FUNCT_2:def 1;
+  B1: f is one-to-one proof
+        let c1,c2 be set such that
+      A2: c1 in dom f and
+      B2: c2 in dom f and
+      C2: f.c1 = f.c2;
+          consider x1, y1 being Element of Y such that
+      E2: c1 = {x1,[y1,Y]} and {x1,y1} in PairsOf X by A2, domf;
+          consider x2, y2 being Element of Y such that
+      G2: c2 = {x2,[y2,Y]} and {x2,y2} in PairsOf X by B2, domf;
+      I2: f.c1 = [x1,y1] by A1, A2, domf, S1a, E2;
+      J2: f.c2 = [x2,y2] by A1, B2, domf, S1a, G2;
+          x1 = x2 & y1 = y2 by C2, I2, J2, XTUPLE_0:1;
+        hence c1 = c2 by E2, G2;
+      end;
+  C1a: rng f = B proof
+       thus rng f c= B proof
+         let b be set;
+         assume b in rng f;
+         then consider a being set such that
+       A2: a in dom f and
+       B2: b = f.a by FUNCT_1:def 3;
+          consider x, y being Element of Y such that
+       C2: a = {x,[y,Y]} and
+       D2: {x,y} in PairsOf X by A2, domf;
+       F2: b = [x,y] by B2, A2, A1, domf, S1a, C2;
+         thus b in B by F2, D2;
+       end;
+       thus B c= rng f proof
+        let b be set;
+        assume A2: b in B;
+         consider x, y being Element of Y such that
+     B2: b = [x, y] and
+     C2: {x,y} in PairsOf X by A2;
+         set a = {x,[y,Y]};
+     D2: a in A by C2;
+     F2: f.a = b by D2, A1, B2, S1a;
+        thus b in rng f by D2, F2, domf, FUNCT_1:3;
+       end;
+      end;
+  C1: f is onto by C1a, FUNCT_2:def 3;
+  thus card B = card A by B1, C1, S1, EULER_1:11
+             .= 2 * card PairsOf X by MnewE;
+ end;
+end;
+
+registration
+  let X be finite set;
+  cluster PairsOf X -> finite;
+  coherence;
+end;
+
+definition
+  let X be set;
+  attr X is void means      :Lvoid:
+    X = {{}};
+end;
+
+registration
+  cluster void for set;
+  existence by Lvoid;
+end;
+
+registration
+ cluster void -> finite for set;
+ coherence by Lvoid;
+end;
+
+registration
+  let G be void set;
+  cluster union G -> empty;
+  coherence proof
+   G = {{}} by Lvoid;
+   hence thesis;
+  end;
+end;
+
+theorem VoidGE:
+for X being set st X is void holds PairsOf X = {}
+proof
+  let G be set such that
+A: G is void;
+  assume PairsOf G <> {};
+  then consider x being set such that
+B: x in PairsOf G by XBOOLE_0:def 1;
+D: card x = 2 by B, LEdges;
+   G = {{}} by A, Lvoid;
+   then x = {} by B, TARSKI:def 1;
+  hence thesis by D;
+end;
+
+theorem uVoid1:
+for X being set st union X = {} holds X = {} or X = {{}}
+proof
+ let X be set such that
+A: union X = {};
+ assume X <> {};
+ then consider x being set such that
+B: x in X by XBOOLE_0:def 1;
+ thus X = {{}} proof
+    thus X c= {{}} proof
+      let a be set;
+      assume a in X;
+      then a = {} by A, ORDERS_1:6;
+      hence thesis by TARSKI:def 1;
+    end;
+    let a be set;
+    assume a in {{}};
+    then a = {} by TARSKI:def 1;
+    hence a in X by B, A, ORDERS_1:6;
+  end;
+end;
+
+definition
+  let X be set;
+  attr X is pairfree means     :Ledgeless:
+    PairsOf X is empty;
+end;
+
+theorem GsingleE:
+for X, x being set st card union X = 1 holds X is pairfree
+proof
+ let G, x be set;
+ assume A: card union G = 1;
+ assume not G is pairfree;
+ then PairsOf G <> {} by Ledgeless;
+ then consider e being set such that
+C: e in PairsOf G by XBOOLE_0:def 1;
+   consider x, y being set such that
+D: x <> y and
+E: x in union G and
+F: y in union G and
+   e = {x, y} by C, SG4;
+   consider w being set such that
+H: union G = {w} by A, CARD_2:42;
+   x = w by E, H, TARSKI:def 1;
+  hence contradiction by D, F, H, TARSKI:def 1;
+end;
+
+CSGLem1:
+for X being set
+ holds union { V where V is finite Subset of X : card V <= 2} = X
+proof
+ let X be set;
+ set G = { V where V is finite Subset of X : card V <= 2};
+     thus union G c= X proof
+       let x be set;
+       assume x in union G;
+        then consider a being set such that
+     Ax: x in a and
+     Ay: a in G by TARSKI:def 4;
+         consider V being finite Subset of X such that
+     A2: a = V & card V <= 2 by Ay;
+       thus x in X by Ax, A2;
+     end;
+     thus X c= union G proof
+       let x be set;
+       A2a: card {x} = 1 by CARD_1:30;
+       B2: x in {x} by TARSKI:def 1;
+       assume x in X;
+       then {x} c= X by ZFMISC_1:31;
+       then {x} in G by A2a;
+       hence x in union G by B2, TARSKI:def 4;
+     end;
+end;
+
+registration
+ cluster finite-membered non empty for set;
+ existence proof
+   take {{}};
+   thus thesis;
+ end;
+end;
+
+registration
+  let X be finite-membered set, Y be set;
+  cluster X /\ Y -> finite-membered;
+  coherence proof
+   let x be set;
+   assume x in X /\ Y;
+   then x in X by XBOOLE_0:def 4;
+   hence thesis;
+  end;
+  cluster X \ Y -> finite-membered;
+  coherence;
+end;
+
+begin  :: Simple graphs as simplicial complexes
+
+definition
+  let n be Nat;
+  let X be set;
+  attr X is n-at_most_dimensional means                    :Lnatmost:
+  for x being set st x in X holds card x c= n+1;
+end;
+
+registration
+  let n be Nat;
+  cluster n-at_most_dimensional -> finite-membered for set;
+  correctness proof
+    let X be set;
+    assume A: X is n-at_most_dimensional;
+    thus X is finite-membered proof
+      let x be set;
+      assume x in X;
+       then card x c= n+1 by A, Lnatmost;
+      hence x is finite;
+    end;
+  end;
+end;
+
+Void0:
+for n being Nat holds {{}} is n-at_most_dimensional
+proof
+  let n be Nat;
+  set E = {{}};
+  thus {{}} is n-at_most_dimensional proof
+   let x be set;
+    assume x in E;
+      then x = {} by TARSKI:def 1;
+    hence card x c= n+1;
+  end;
+end;
+
+registration
+  let n be Nat;
+  cluster n-at_most_dimensional subset-closed non empty for set;
+  existence proof
+    set E = {{}};
+    take E;
+   thus thesis by Void0;
+  end;
+end;
+
+theorem SG1:
+for G being subset-closed non empty set holds {} in G
+proof let G be subset-closed non empty set;
+   consider z being set such that
+A2: z in G by XBOOLE_0:def 1;
+   {} c= z by XBOOLE_1:2;
+   hence {} in G by A2, CLASSES1:def 1;
+end;
+
+theorem Lnatmost1:
+for n being natural number, X being n-at_most_dimensional set,
+    x being Element of X
+ st x in X holds card x <= n+1 by Lnatmost,NAT_1:39;
+
+registration
+  let n be Nat;
+  let X, Y be n-at_most_dimensional set;
+  cluster X \/ Y -> n-at_most_dimensional;
+  coherence proof
+  let x be set;
+  assume A: x in X \/ Y;
+     x in X or x in Y by A, XBOOLE_0:def 3;
+  hence card x c= n+1 by Lnatmost;
+  end;
+end;
+
+registration
+  let n be Nat;
+  let X be n-at_most_dimensional set, Y be set;
+  cluster X /\ Y -> n-at_most_dimensional;
+  coherence proof
+  let x be set;
+  assume x in X /\ Y;
+   then x in X by XBOOLE_0:def 4;
+  hence card x c= n+1 by Lnatmost;
+  end;
+  cluster X \ Y -> n-at_most_dimensional;
+  coherence proof
+  let x be set;
+  assume x in X \ Y;
+  hence card x c= n+1 by Lnatmost;
+  end;
+end;
+
+registration
+  let n be Nat, X be n-at_most_dimensional set;
+  cluster -> n-at_most_dimensional for Subset of X;
+  correctness proof
+    let Y be Subset of X;
+    let x be set;
+    assume x in Y;
+    hence card x c= n+1 by Lnatmost;
+  end;
+end;
+
+definition
+  let s be set;
+  attr s is SimpleGraph-like means :LSGlike:
+       s is 1-at_most_dimensional subset-closed non empty;
+end;
+
+registration
+ cluster SimpleGraph-like ->
+         1-at_most_dimensional subset-closed non empty for set;
+ correctness by LSGlike;
+ cluster 1-at_most_dimensional subset-closed non empty
+         -> SimpleGraph-like for set;
+ correctness by LSGlike;
+end;
+
+theorem eSG1:
+{{}} is SimpleGraph-like
+proof
+  {{}} is 1-at_most_dimensional by Void0;
+  hence thesis;
+end;
+
+registration
+  cluster {{}} -> SimpleGraph-like;
+  correctness by eSG1;
+end;
+
+registration
+  cluster SimpleGraph-like for set;
+  existence by eSG1;
+end;
+
+definition
+ mode SimpleGraph is SimpleGraph-like set;
+end;
+
+registration
+  cluster void for SimpleGraph;
+  existence proof
+     reconsider G = {{}} as SimpleGraph;
+     take G;
+     thus thesis by Lvoid;
+  end;
+  cluster finite for SimpleGraph;
+  existence by eSG1;
+end;
+
+notation  :: meant for graphs
+  let G be set;
+  synonym Vertices G for union G;
+  synonym Edges G for PairsOf G;
+end;
+
+notation
+  let X be set;
+  synonym X is edgeless for X is pairfree;
+end;
+
+theorem FinSG:
+for G being SimpleGraph st Vertices G is finite holds G is finite
+proof
+  let G be SimpleGraph;
+  assume A: Vertices G is finite;
+  G c= bool Vertices G by ZFMISC_1:82;
+  hence G is finite by A;
+end;
+
+theorem Vertices0:
+for G being SimpleGraph, x being set holds x in Vertices G iff {x} in G
+proof
+  let G be SimpleGraph, x be set;
+  thus x in Vertices G implies {x} in G proof
+    assume x in Vertices G;
+    then consider y being set such that
+  A1: x in y and
+  B1: y in G by TARSKI:def 4;
+      {x} c= y by A1, ZFMISC_1:31;
+    hence {x} in G by B1, CLASSES1:def 1;
+  end;
+   x in {x} by TARSKI:def 1;
+  hence thesis by TARSKI:def 4;
+end;
+
+theorem SingleVertex:
+for x being set holds { {}, {x} } is SimpleGraph
+proof
+  let x be set;
+   set H = { {}, {x} };
+B: H is 1-at_most_dimensional proof
+    let a be set such that
+    A1: a in H;
+    per cases by A1, TARSKI:def 2;
+    suppose a = {};
+      hence card a c= 1+1;
+    end;
+    suppose a = {x};
+      then card a = 1 by CARD_1:30;
+      hence card a c= 1+1 by NAT_1:39;
+    end;
+   end;
+   H is subset-closed proof
+    let X,Y be set such that
+   A1: X in H and
+   B1: Y c= X;
+    per cases by A1, TARSKI:def 2;
+    suppose X = {};
+      then Y = {} by B1;
+      hence Y in H by TARSKI:def 2;
+    end;
+    suppose S1: X = {x};
+       per cases by S1, B1, ZFMISC_1:33;
+       suppose Y = {};
+         hence Y in H by TARSKI:def 2;
+       end;
+       suppose Y = {x};
+         hence Y in H by TARSKI:def 2;
+       end;
+    end;
+   end;
+  hence { {}, {x} } is SimpleGraph by B;
+end;
+
+definition  :: meant for graphs
+  let X be finite finite-membered set;
+  func order X -> Nat equals
+   card union X;
+  coherence;
+end;
+
+definition  :: meant for graphs
+  let X be finite set;
+  func size X -> Nat equals card PairsOf X;
+  coherence;
+end;
+
+theorem Lorder1:
+for G being finite SimpleGraph holds order G <= card G
+proof
+  let G be finite SimpleGraph;
+  set uG = union G;
+A: card singletons uG = card uG by BSPACE:41;
+    singletons uG c= G proof
+     let x be set;
+     assume x in singletons uG;
+     then consider f being Subset of uG such that
+B: x = f and
+C: f is 1-element;
+     consider a being set such that
+D: a in uG and
+E: f = {a} by C, BSPACEdef9;
+     consider y being set such that
+F: a in y and
+G: y in G by D, TARSKI:def 4;
+     {a} c= y by F, ZFMISC_1:31;
+     hence x in G by G, E, B, CLASSES1:def 1;
+    end;
+  hence order G <= card G by A, NAT_1:43;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Vertex of G is Element of Vertices G;
+  mode Edge of G is Element of Edges G;
+end;
+
+theorem SG0:
+for G being SimpleGraph holds G = { {} } \/ singletons Vertices G \/ Edges G
+proof let G be SimpleGraph;
+ thus G c= { {} } \/ singletons Vertices G \/ Edges G proof
+  let x be set;
+  assume A: x in G;
+    reconsider v = x as finite set by A;
+  B: card v <= 1+1 by A, Lnatmost1;
+   per cases by B, NAT_1:26;
+   suppose card v = 0;
+      then v = {};
+      then v in {{}} by TARSKI:def 1;
+      then v in {{}} \/ singletons Vertices G by XBOOLE_0:def 3;
+     hence thesis by XBOOLE_0:def 3;
+   end;
+   suppose card v = 1;
+      then consider a being set such that
+   A1: v = {a} by CARD_2:42;
+   B1: a in v by A1, TARSKI:def 1;
+   C1: a in union G by B1, A, TARSKI:def 4;
+       reconsider v as Subset of Vertices G by C1, A1, ZFMISC_1:31;
+       v in singletons Vertices G by A1;
+       then v in {{}} \/ singletons Vertices G by XBOOLE_0:def 3;
+       hence thesis by XBOOLE_0:def 3;
+   end;
+   suppose card v = 2;
+     then v in Edges G by A, LEdges;
+     hence thesis by XBOOLE_0:def 3;
+   end;
+ end;
+ thus { {} } \/ singletons Vertices G \/ Edges G c= G proof
+   let x be set;
+   assume x in { {} } \/ singletons Vertices G \/ Edges G;
+   then A1: x in { {} } \/ singletons Vertices G or x in Edges G
+     by XBOOLE_0:def 3;
+   per cases by A1, XBOOLE_0:def 3;
+   suppose S1: x in { {} };
+      consider z being set such that
+   A2: z in G by XBOOLE_0:def 1;
+   B2: {} c= z by XBOOLE_1:2;
+       x = {} by S1, TARSKI:def 1;
+     hence x in G by B2, A2, CLASSES1:def 1;
+   end;
+   suppose x in singletons Vertices G;
+      then consider f being Subset of Vertices G such that
+   A2: x = f and
+   B2: f is 1-element;
+      consider v being set such that
+   C2: v in Vertices G and
+   D2: f = {v} by B2, BSPACEdef9;
+     thus x in G by A2,C2,D2,Vertices0;
+   end;
+   suppose x in Edges G;
+     hence x in G;
+   end;
+ end;
+end;
+
+theorem VoidGV:
+for G being SimpleGraph st Vertices G = {} holds G is void by uVoid1,Lvoid;
+
+theorem SG2:
+for G being SimpleGraph, x being set
+ st x in G & x <> {}
+  holds (ex y being set st x = {y} & y in Vertices G) or x in Edges G
+proof
+ let G be SimpleGraph, x be set such that
+A: x in G and
+B: x <> {};
+   x in { {} } \/ singletons Vertices G \/ Edges G by A, SG0;
+   then x in {{}} \/ singletons Vertices G or x in Edges G by XBOOLE_0:def 3;
+   then C: x in {{}} or x in singletons Vertices G or x in Edges G
+     by XBOOLE_0:def 3;
+   per cases by C, B, TARSKI:def 1;
+   suppose x in singletons Vertices G;
+      then consider f being Subset of Vertices G such that
+   A2: x = f and
+   B2: f is 1-element;
+      consider v being set such that
+   C2: v in Vertices G and
+   D2: f = {v} by B2, BSPACEdef9;
+     thus thesis by D2, C2, A2;
+   end;
+   suppose x in Edges G;
+     hence thesis;
+   end;
+end;
+
+theorem :: Gsingle:
+for G being SimpleGraph, x being set st Vertices G = {x} holds G = { {}, {x} }
+proof
+ let G be SimpleGraph, a be set such that
+A: Vertices G = {a};
+B: now
+  assume Edges G <> {};
+   then consider e being set such that
+ C: e in Edges G by XBOOLE_0:def 1;
+    consider x, y being set such that
+ D: x <> y and
+ E: x in Vertices G and
+ F: y in Vertices G and e = {x, y} by C, SG4;
+   x = a by E, A, TARSKI:def 1;
+  hence contradiction by D, F, A, TARSKI:def 1;
+ end;
+C: singletons Vertices G = { {a} } by A, Singletons0;
+  thus G = { {} } \/ singletons Vertices G \/ Edges G by SG0
+    .= { {}, {a} } by C, B, ENUMSET1:1;
+end;
+
+theorem size0SG:
+for X being set ex G being SimpleGraph st G is edgeless & Vertices G = X
+proof
+  let X be set;
+  set G = {{}} \/ singletons X;
+A:  G is subset-closed proof
+      let x,y be set; assume that
+    A1: x in G and
+    B1: y c= x;
+    per cases by A1, XBOOLE_0:def 3;
+    suppose x in {{}};
+       then x = {} by TARSKI:def 1;
+       then y = {} by B1;
+        then y in {{}} by TARSKI:def 1;
+        hence y in G by XBOOLE_0:def 3;
+    end;
+    suppose x in singletons X;
+       then consider f being Subset of X such that
+     A2: x = f and
+     B2: f is 1-element;
+         consider v being set such that v in X and
+     D2: f = {v} by B2, BSPACEdef9;
+       per cases by B1, A2, D2, ZFMISC_1:33;
+       suppose y = {};
+         then y in {{}} by TARSKI:def 1;
+        hence y in G by XBOOLE_0:def 3;
+       end;
+       suppose y = {v};
+        hence y in G by A1, D2, A2;
+       end;
+    end;
+    end;
+B:  G is 1-at_most_dimensional proof
+      let x be set;
+      assume Aa: x in G;
+      per cases by Aa, XBOOLE_0:def 3;
+      suppose x in {{}};
+        then x = {} by TARSKI:def 1;
+       hence card x c= 1+1;
+    end;
+    suppose x in singletons X;
+       then consider f being Subset of X such that
+     A2: x = f and
+     B2: f is 1-element;
+         consider v being set such that v in X and
+     D2: f = {v} by B2, BSPACEdef9;
+         card x = 1 by A2, D2, CARD_1:30;
+      hence card x c= 1+1 by NAT_1:39;
+     end;
+    end;
+  reconsider G as SimpleGraph by A,B;
+  take G;
+  now
+   assume Edges G <> {};
+    then consider e being set such that
+   A: e in Edges G by XBOOLE_0:def 1;
+   B: e in G & card e = 2 by A, LEdges;
+   per cases by A, XBOOLE_0:def 3;
+   suppose e in {{}};
+    hence contradiction by B, CARD_1:27, TARSKI:def 1;
+   end;
+   suppose e in singletons X;
+       then consider f being Subset of X such that
+     A2: e = f and
+     B2: f is 1-element;
+         consider v being set such that v in X and
+     D2: f = {v} by B2, BSPACEdef9;
+     thus contradiction by B, A2, D2, CARD_1:30;
+     end;
+  end;
+  hence G is edgeless by Ledgeless;
+  thus Vertices G = X proof
+   thus Vertices G c= X proof
+     let x be set;
+     assume x in Vertices G;
+       then consider y being set such that
+   A1: x in y and
+   B1: y in G by TARSKI:def 4;
+   per cases by B1, XBOOLE_0:def 3;
+   suppose y in {{}};
+    hence thesis by A1, TARSKI:def 1;
+   end;
+   suppose y in singletons X;
+       then consider f being Subset of X such that
+     A2: y = f and
+         f is 1-element;
+     thus x in X by A2, A1;
+   end;
+   end;
+   thus X c= Vertices G proof
+     let x be set;
+     assume x in X;
+       then reconsider f = {x} as Subset of X by ZFMISC_1:31;
+       f is 1-element;
+     then {x} in singletons X;
+     then {x} in G by XBOOLE_0:def 3;
+    hence x in Vertices G by Vertices0;
+   end;
+  end;
+end;
+
+definition
+ let G be SimpleGraph, v be Element of Vertices G;
+ func Adjacent v -> Subset of Vertices G  means      :Ladj:
+  for x being Element of Vertices G holds x in it iff {v, x} in Edges G;
+ existence proof
+   set A = {x where x is Element of Vertices G: {v,x} in Edges G};
+   A c= Vertices G proof
+    let a be set;
+    assume a in A;
+     then consider x being Element of Vertices G such that
+    A1: a = x and
+    B1: {v,x} in Edges G;
+    thus a in Vertices G by A1, B1, SG5;
+   end;
+   then reconsider A as Subset of Vertices G;
+   take A;
+   let x be Element of Vertices G;
+   hereby assume x in A;
+     then consider a being Element of Vertices G such that
+    A1: x = a and
+    B1: {v,a} in Edges G;
+     thus {v,x} in Edges G by A1, B1;
+   end;
+   thus thesis;
+ end;
+ uniqueness proof
+  let A1, A2 be Subset of Vertices G such that
+A1: for x being Element of Vertices G holds x in A1 iff {v, x} in Edges G and
+A2: for x being Element of Vertices G holds x in A2 iff {v, x} in Edges G;
+  thus A1 c= A2 proof
+   let x be set;
+   assume B1: x in A1;
+    then {v,x} in Edges G by A1;
+   hence thesis by A2, B1;
+  end;
+  thus A2 c= A1 proof
+   let x be set;
+   assume B1: x in A2;
+    then {v,x} in Edges G by A2;
+   hence thesis by A1, B1;
+  end;
+ end;
+end;
+
+definition
+  let X be set;
+  mode SimpleGraph of X -> SimpleGraph means       :LSGofX:
+    Vertices it = X;
+  existence proof
+    consider G being SimpleGraph such that G is edgeless and
+  A: Vertices G = X by size0SG;
+    take G;
+    thus thesis by A;
+  end;
+end;
+
+definition
+ let X be set;
+ func CompleteSGraph X -> SimpleGraph of X equals
+   { V where V is finite Subset of X : card V <= 2};
+ coherence proof
+   set G = { V where V is finite Subset of X : card V <= 2};
+  A: G is subset-closed proof
+       let x,y be set such that
+    A1: x in G and
+    B1: y c= x;
+       consider V be finite Subset of X such that
+    C1: x = V and
+    D1: card V <= 2 by A1;
+        reconsider y1 = y as finite Subset of X by C1,B1, XBOOLE_1:1;
+        card y1 <= card V by B1, C1, NAT_1:43;
+        then card y1 <= 2 by D1, XXREAL_0:2;
+     hence y in G;
+    end;
+   B: G is 1-at_most_dimensional proof
+      let x be set;
+      assume x in G;
+       then consider V being finite Subset of X such that
+      C1: x = V and
+      D1: card V <= 2;
+      thus card x c= 1+1 by C1, D1, NAT_1:39;
+    end;
+    Z1: {} c= X by XBOOLE_1:2;
+    card {} <= 2; then
+    {} in G by Z1;
+   then reconsider G as SimpleGraph by A, B;
+    Vertices G = X by CSGLem1;
+   hence thesis by LSGofX;
+ end;
+end;
+
+theorem CSGdef:
+for G being SimpleGraph
+  st (for x, y being set st x in Vertices G & y in Vertices G
+        holds {x, y} in G)
+   holds G = CompleteSGraph Vertices G
+proof
+  let G be SimpleGraph such that
+A: for x, y being set st x in Vertices G & y in Vertices G
+        holds {x, y} in G;
+   set C = { V where V is finite Subset of Vertices G : card V <= 2};
+   C = G proof
+    thus C c= G proof
+      let a be set;
+      assume a in C;
+       then consider V being finite Subset of Vertices G such that
+      B1: a = V and
+      C1: card V <= 2;
+       per cases by C1, NAT_1:26;
+       suppose card V = 0;
+         then V = {};
+        hence a in G by B1, SG1;
+       end;
+       suppose card V = 1;
+         then consider c being set such that
+       B2: V = {c} by CARD_2:42;
+         c in V by B2, TARSKI:def 1;
+         then {c,c} in G by A;
+        hence a in G by B2, B1, ENUMSET1:29;
+       end;
+       suppose card V = 2;
+         then consider c,d being set such that
+          c <> d and
+       B2: V = {c, d} by CARD_2:60;
+         c in V & d in V by B2, TARSKI:def 2;
+        hence a in G by A, B2, B1;
+       end;
+    end;
+    thus G c= C proof
+     let a be set;
+     assume A1: a in G;
+       then reconsider aa = a as finite set;
+     B1: card aa <= 1+1 by A1, Lnatmost1;
+       a c= union G by A1, ZFMISC_1:74;
+     hence a in C by B1;
+    end;
+   end;
+  hence G = CompleteSGraph Vertices G;
+end;
+
+registration
+ let X be finite set;
+ cluster CompleteSGraph X -> finite;
+ correctness proof
+  set G = CompleteSGraph X;
+  G c= bool X proof
+   let x be set;
+   assume x in G;
+   then consider V being finite Subset of X such that
+  A: x = V and card V <= 2;
+   thus x in bool X by A;
+  end;
+  hence G is finite;
+ end;
+end;
+
+theorem CSG1a:
+for X being set, x being set st x in X holds {x} in CompleteSGraph X
+proof
+  let X be set, x be set such that
+A: x in X;
+B: {x} c= X by A, ZFMISC_1:31;
+C: card {x} = 1 by CARD_1:30;
+  thus {x} in CompleteSGraph X by C, B;
+end;
+
+theorem CSG1:
+for X being set, x, y being set st x in X & y in X
+  holds {x,y} in CompleteSGraph X
+proof
+  let X be set, x,y be set such that
+A: x in X and
+Aa: y in X;
+B: {x, y} c= X by A,Aa,ZFMISC_1:32;
+C: card {x,y} <= 2 by CARD_2:50;
+  thus {x,y} in CompleteSGraph X by C, B;
+end;
+
+theorem eCSG0:
+CompleteSGraph {} = {{}}
+proof
+  for x, y being set st x in union {{}} & y in union {{}}
+   holds {x,y} in {{}};
+ hence CompleteSGraph {} = {{}} by CSGdef;
+end;
+
+theorem P1:
+for  x being set holds CompleteSGraph {x} = {{},{x}}
+proof
+ let x be set;
+ thus CompleteSGraph {x} c= {{},{x}} proof
+  let a be set;
+  assume a in CompleteSGraph {x};
+   then consider V being finite Subset of {x} such that
+  A: a = V and card V <= 2;
+     a = {} or a = {x} by A, ZFMISC_1:33;
+   hence thesis by TARSKI:def 2;
+ end;
+Aa: {x} = Vertices CompleteSGraph {x} by CSGLem1;
+Ab: x in {x} by TARSKI:def 1;
+ thus {{},{x}} c= CompleteSGraph {x} proof
+   let a be set;
+   assume a in {{},{x}};
+   then a = {} or a = {x} by TARSKI:def 2;
+   hence thesis by Aa, Ab, SG1, Vertices0;
+ end;
+end;
+
+theorem P2:
+for  x, y being set holds CompleteSGraph {x,y} = {{},{x},{y},{x,y}}
+proof
+  let x, y be set;
+  thus CompleteSGraph {x,y} c= {{},{x},{y},{x,y}} proof
+   let a be set;
+   assume a in CompleteSGraph {x,y};
+   then consider V being finite Subset of {x,y} such that
+  A: a = V and card V <= 2;
+     a = {} or a = {x} or a = {y} or a = {x,y} by A, ZFMISC_1:36;
+   hence thesis by ENUMSET1:def 2;
+  end;
+Aa: {x,y} = Vertices CompleteSGraph {x,y} by CSGLem1;
+Ab: x in {x,y} by TARSKI:def 2;
+Ac: y in {x,y} by TARSKI:def 2;
+Ad: card {x,y} <= 2 by CARD_2:50;
+Ae: {x,y} c= {x,y};
+  thus {{},{x},{y},{x,y}} c= CompleteSGraph {x,y} proof
+    let a be set;
+    assume a in {{},{x},{y},{x,y}};
+    then a = {} or a = {x} or a = {y} or a = {x,y} by ENUMSET1:def 2;
+    hence thesis by Aa,Ab,Ac,Ad,Ae,SG1,Vertices0;
+  end;
+end;
+
+theorem
+for X, Y being set st X c= Y holds CompleteSGraph X c= CompleteSGraph Y
+proof
+ let X, Y be set such that
+A: X c= Y;
+ let a be set;
+ assume a in CompleteSGraph X;
+ then consider V being finite Subset of X such that
+ A1: a = V and
+ B1: card V <= 2;
+ V is Subset of Y by A, XBOOLE_1:1;
+ hence a in CompleteSGraph Y by A1, B1;
+end;
+
+theorem CSGsingle:
+for G being SimpleGraph, x being set st x in Vertices G
+  holds CompleteSGraph {x} c= G
+proof
+ let G be SimpleGraph, x be set such that
+A: x in Vertices G;
+B: CompleteSGraph {x} = { {}, {x} } by P1;
+C: {} in G by SG1;
+D: {x} in G by A,Vertices0;
+  thus CompleteSGraph {x} c= G by B,C,D,ZFMISC_1:32;
+end;
+
+registration
+  let G be SimpleGraph;
+  cluster SimpleGraph-like for Subset of G;
+  existence proof
+    G c= G; then
+    reconsider H = G as Subset of G;
+    take H;
+    thus thesis;
+  end;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Subgraph of G is SimpleGraph-like Subset of G;
+end;
+
+CisSG: for G being SimpleGraph
+ holds (CompleteSGraph Vertices G) \ Edges G is SimpleGraph
+proof
+  let G be SimpleGraph;
+  set CSGVG = CompleteSGraph Vertices G;
+  set C = CSGVG \ Edges G;
+  Z1: {} in CSGVG by SG1;
+       now assume {} in Edges G;
+         then consider x, y being set such that
+          x <> y & x in Vertices G & y in Vertices G and
+       A1: {} = {x, y} by SG4;
+         thus contradiction by A1;
+       end;
+      then reconsider C as non empty set by Z1, XBOOLE_0:def 5;
+   C is subset-closed proof
+     let X, Y be set such that
+   A1: X in C and
+   B1: Y c= X;
+     assume Y nin C;
+     then C1: Y nin CSGVG or Y in Edges G by XBOOLE_0:def 5;
+   D1: X in CSGVG & not X in Edges G by A1, XBOOLE_0:def 5;
+   E1: Y in Edges G by B1, C1, D1, CLASSES1:def 1;
+   F1: card Y = 2 by E1, LEdges;
+       reconsider X as finite set by A1;
+   G1: card X <= 1+1 by A1, Lnatmost1;
+   H1: 2 <= card X by F1, B1, NAT_1:43;
+       card X = 2 by G1, H1, XXREAL_0:1;
+     hence contradiction by D1, C1, B1, F1, CARD_FIN:1;
+   end;
+  hence thesis;
+ end;
+
+Compl1:
+ for G being SimpleGraph
+  holds Vertices G = Vertices ((CompleteSGraph Vertices G) \ Edges G)
+proof
+ let G being SimpleGraph;
+ set CG = ((CompleteSGraph Vertices G) \ Edges G);
+Aa: CG is SimpleGraph by CisSG;
+ now
+   let a be set;
+   hereby assume a in Vertices G;
+       then A1: {a} in CompleteSGraph Vertices G by CSG1a;
+         now assume {a} in Edges G;
+           then {a, a} in Edges G by ENUMSET1:29;
+          hence contradiction by SG5;
+         end;
+       then {a} in CG by A1, XBOOLE_0:def 5;
+     hence a in Vertices CG by Aa, Vertices0;
+   end;
+  assume a in Vertices CG;
+    then {a} in CG by Aa, Vertices0;
+    then a in Vertices CompleteSGraph Vertices G by Vertices0;
+  hence a in Vertices G by CSGLem1;
+ end;
+ hence Vertices G = Vertices CG by TARSKI:1;
+end;
+
+Compl1a:
+for G being SimpleGraph, x, y being set
+ st x <> y & x in Vertices G & y in Vertices G
+  holds {x,y} in Edges G
+    iff {x,y} nin Edges ((CompleteSGraph Vertices G) \ Edges G)
+proof
+ let G be SimpleGraph, x, y be set such that
+A: x <> y and
+B: x in Vertices G and
+C: y in Vertices G;
+ set CG = ((CompleteSGraph Vertices G) \ Edges G);
+ thus {x,y} in Edges G implies {x,y} nin Edges CG by XBOOLE_0:def 5;
+ assume D: {x,y} nin Edges CG;
+ assume E: {x,y} nin Edges G;
+ {x,y} in CompleteSGraph Vertices G by B, C, CSG1;
+ then {x,y} in CG by E, XBOOLE_0:def 5;
+ hence contradiction by D, A, SG4a;
+end;
+
+Compl2:
+for G, CG being SimpleGraph st CG = ((CompleteSGraph Vertices G) \ Edges G)
+  holds ((CompleteSGraph Vertices CG) \ Edges CG) = G
+proof
+ let G, CG be SimpleGraph such that
+AAa: CG = ((CompleteSGraph Vertices G) \ Edges G);
+    set CCG = ((CompleteSGraph Vertices CG) \ Edges CG);
+A: Vertices G = Vertices CG by AAa, Compl1;
+Aa: Vertices CG = Vertices CCG by Compl1;
+   CCG is SimpleGraph by CisSG; then
+B: CCG = { {} } \/ singletons Vertices CCG \/ Edges CCG by SG0;
+D: G = { {} } \/ singletons Vertices G \/ Edges G by SG0;
+   now let a be set;
+     hereby assume S1: a in Edges CCG;
+       then consider x, y being set such that
+     A0: x <> y and
+     A1: x in Vertices CCG & y in Vertices CCG and
+     B1: a = {x, y} by SG4;
+         {x,y} nin Edges CG by A0, Aa, S1, B1, A1, Compl1a;
+     hence a in Edges G by A0, Aa, A, A1, B1, AAa,Compl1a;
+     end;
+     assume S1: a in Edges G;
+       then consider x, y being set such that
+     A0: x <> y and
+     A1: x in Vertices G & y in Vertices G and
+     B1: a = {x, y} by SG4;
+         {x,y} nin Edges CG by A0, S1, B1, A1, AAa,Compl1a;
+     hence a in Edges CCG by A0, A, A1, B1, Compl1a;
+   end;
+   hence thesis by A, Aa, B, D, TARSKI:1;
+end;
+
+definition
+ let G be SimpleGraph;
+ func Complement G -> SimpleGraph equals
+  (CompleteSGraph Vertices G) \ Edges G;
+ correctness by CisSG;
+ involutiveness by Compl2;
+end;
+
+theorem :: Compl1:
+ for G being SimpleGraph holds Vertices G = Vertices Complement G by Compl1;
+
+theorem :: Compl1a:
+for G being SimpleGraph, x, y being set
+ st x <> y & x in Vertices G & y in Vertices G
+  holds {x,y} in Edges G iff {x,y} nin Edges Complement G by Compl1a;
+
+begin :: Induced Subgraphs
+
+definition
+ let G be SimpleGraph, L be set;
+ func G SubgraphInducedBy L -> Subset of G equals
+   G /\ bool L;
+ coherence by XBOOLE_1:17;
+end;
+
+registration
+ let G be SimpleGraph, L be set;
+ cluster G SubgraphInducedBy L -> SimpleGraph-like;
+ coherence proof
+   set S = G /\ bool L;
+ Aa: {} in G by SG1;
+     {} c= L by XBOOLE_1:2;
+   then reconsider S as non empty set by Aa, XBOOLE_0:def 4;
+   S is subset-closed by XBOOLE_0:def 4,CLASSES1:def 1,XBOOLE_1:1;
+   hence thesis;
+ end;
+end;
+
+theorem :: Sub3b:
+for G being SimpleGraph holds G = G SubgraphInducedBy Vertices G
+proof
+ let G be SimpleGraph;
+ thus G c= G SubgraphInducedBy Vertices G proof
+   let x be set;
+   assume A1: x in G;
+   B1: x c= union G by A1, ZFMISC_1:74;
+   thus thesis by A1, B1, XBOOLE_0:def 4;
+ end;
+ thus thesis;
+end;
+
+theorem Sub3a:
+for G being SimpleGraph, L being set
+ holds G SubgraphInducedBy L = G SubgraphInducedBy (L /\ Vertices G)
+proof
+ let G be SimpleGraph, L be set;
+ thus G SubgraphInducedBy L c= G SubgraphInducedBy (L /\ Vertices G) proof
+   let x be set;
+   assume A1: x in G SubgraphInducedBy L;
+       then C1a: x in bool L by XBOOLE_0:def 4;
+   D1: x c= Vertices G by A1, ZFMISC_1:74;
+   E1: x c= L /\ Vertices G by C1a, D1, XBOOLE_1:19;
+   thus x in G SubgraphInducedBy (L /\ Vertices G) by A1,E1,XBOOLE_0:def 4;
+ end;
+ thus G SubgraphInducedBy (L /\ Vertices G) c= G SubgraphInducedBy L proof
+   let x be set;
+   assume A1: x in G SubgraphInducedBy (L /\ Vertices G);
+       then x in bool (L /\ Vertices G) by XBOOLE_0:def 4; then
+   D1: x c= L by XBOOLE_1:18;
+   thus thesis by A1, D1, XBOOLE_0:def 4;
+ end;
+end;
+
+registration
+ let G be finite SimpleGraph, L be set;
+ cluster G SubgraphInducedBy L -> finite;
+ coherence;
+end;
+
+registration
+ let G be SimpleGraph, L be finite set;
+ cluster G SubgraphInducedBy L -> finite;
+ coherence;
+end;
+
+theorem Sub0b:
+for G, H being SimpleGraph
+ st G c= H holds G c= H SubgraphInducedBy Vertices G
+proof
+  let G, H be SimpleGraph;
+  assume A: G c= H;
+  set L = Vertices G;
+  let g be set;
+  assume A1: g in G;
+      g c= Vertices G by A1, ZFMISC_1:74;
+  hence g in H SubgraphInducedBy L by A1, A, XBOOLE_0:def 4;
+end;
+
+Sub1:
+for G being SimpleGraph, L being set, x being set
+ st x in Vertices (G SubgraphInducedBy L) holds x in L
+proof
+ let G be SimpleGraph, L be set;
+   set S = G /\ bool L;
+ let  x be set; assume
+A: x in Vertices (G SubgraphInducedBy L);
+   consider Y being set such that
+B: x in Y and
+C: Y in S by A, TARSKI:def 4;
+   set y = Y;
+   Y in bool L by C, XBOOLE_0:def 4;
+ hence x in L by B;
+end;
+
+Sub3:
+for G being SimpleGraph, L being set, x being set
+ st x in L & x in Vertices G holds x in Vertices (G SubgraphInducedBy L)
+proof
+ let G be SimpleGraph, L be set, x be set such that
+A: x in L and
+B: x in Vertices G;
+C: {x} in G by B,Vertices0;
+D: {x} c= L by A,ZFMISC_1:31;
+E: {x} in (G SubgraphInducedBy L) by C,D,XBOOLE_0:def 4;
+  thus x in Vertices (G SubgraphInducedBy L) by E,Vertices0;
+end;
+
+theorem Sub5:
+for G being SimpleGraph, L being set
+ holds Vertices (G SubgraphInducedBy L) = (Vertices G) /\ L
+proof
+let G be SimpleGraph, L be set;
+ set S= G SubgraphInducedBy L; set uS = union S; set uG = union G;
+  union (G /\ bool L) c= union G /\ union bool L by ZFMISC_1:79;
+ hence uS c= uG /\ L by ZFMISC_1:81;
+ thus uG /\ L c= uS proof
+   let a be set;
+   assume a in uG /\ L;
+    then a in uG & a in L by XBOOLE_0:def 4;
+   hence a in uS by Sub3;
+ end;
+end;
+
+Sub0c:
+for G being SimpleGraph, L being set
+  st L c= Vertices G holds Vertices (G SubgraphInducedBy L) = L
+proof
+  let G be SimpleGraph, L be set such that
+A: L c= union G;
+  thus Vertices (G SubgraphInducedBy L) = (Vertices G) /\ L by Sub5
+    .= L by A, XBOOLE_1:28;
+end;
+
+Sub6:
+for G being SimpleGraph, L, x, y being set
+ st x in L & y in L & {x, y} in G holds {x,y} in G SubgraphInducedBy L
+proof
+  let G be SimpleGraph, L, x, y being set such that
+A: x in L and
+B: y in L and
+C: {x, y} in G;
+   {x,y} c= L by A, B, ZFMISC_1:32;
+  hence {x,y} in G SubgraphInducedBy L by C, XBOOLE_0:def 4;
+end;
+
+theorem SingleSub:
+for G being SimpleGraph, x being set
+ st x in Vertices G holds G SubgraphInducedBy {x} = { {}, {x} }
+proof
+  let G be SimpleGraph, x being set such that
+A: x in Vertices G;
+   set Gx = G SubgraphInducedBy {x};
+  thus Gx c= { {}, {x} } proof
+    let a be set;
+    assume a in Gx;
+    then a in bool {x} by XBOOLE_0:def 4;
+    then a = {} or a = {x} by ZFMISC_1:33;
+   hence thesis by TARSKI:def 2;
+  end;
+  thus { {}, {x} } c= Gx proof
+    let a be set;
+  A1: {} in G & {x} in G by SG1, A, Vertices0;
+    assume a in { {}, {x} };
+    then B1: a = {} or a = {x} by TARSKI:def 2;
+    then a c= {x} by ZFMISC_1:33;
+    hence thesis by A1, B1, XBOOLE_0:def 4;
+  end;
+end;
+
+begin :: Clique, clique number, clique cover
+
+definition
+  let G be SimpleGraph;
+  attr G is clique means                                 :Lclique:
+    G = CompleteSGraph Vertices G;
+end;
+
+theorem Lclique1:
+for G being SimpleGraph
+ st for x, y being set st x <> y & x in Vertices G & y in Vertices G
+      holds {x,y} in Edges G
+  holds G is clique
+proof
+ let G be SimpleGraph such that
+A: for x, y being set st x <> y & x in Vertices G & y in Vertices G
+      holds {x,y} in Edges G;
+   now
+     let x, y be set such that
+   A1: x in Vertices G and
+   B1: y in Vertices G;
+     per cases;
+     suppose x <> y;
+       then {x,y} in Edges G by A1, B1, A;
+       hence {x, y} in G;
+     end;
+     suppose x = y;
+       then {x,y} = {x} by ENUMSET1:29;
+      hence {x,y} in G by A1, Vertices0;
+     end;
+   end;
+  then G = CompleteSGraph Vertices G by CSGdef;
+ hence G is clique by Lclique;
+end;
+
+theorem eclique:
+{{}} is clique
+proof
+  thus {{}} = CompleteSGraph Vertices {{}} by eCSG0;
+end;
+
+registration
+  cluster clique for SimpleGraph;
+  existence by eclique;
+
+  let G be SimpleGraph;
+  cluster clique for Subgraph of G;
+  existence proof
+    {} in G by SG1;
+    then reconsider S = {{}} as Subgraph of G by ZFMISC_1:31;
+    take S;
+    thus thesis by eclique;
+  end;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Clique of G is clique Subgraph of G;
+end;
+
+theorem cliqueCSG0:
+for X being set holds (CompleteSGraph X) is clique
+proof
+  let X be set;
+  CompleteSGraph X = CompleteSGraph Vertices CompleteSGraph X by CSGLem1;
+  hence (CompleteSGraph X) is clique by Lclique;
+end;
+
+registration
+ let X be set;
+ cluster CompleteSGraph X -> clique;
+ correctness by cliqueCSG0;
+end;
+
+theorem SingleClique:
+for G being SimpleGraph, x being set st x in Vertices G
+ holds { {}, {x} } is Clique of G
+proof
+ let G be SimpleGraph, x be set such that
+A: x in Vertices G;
+   set C = CompleteSGraph {x};
+B: C = { {}, {x} } by P1;
+ thus { {}, {x} } is Clique of G by B, A, CSGsingle;
+end;
+
+theorem Cliqueon2:
+for G being SimpleGraph, x, y being set
+ st x in Vertices G & y in Vertices G & {x,y} in G
+  holds { {}, {x}, {y}, {x,y} } is Clique of G
+proof
+ let G be SimpleGraph, x, y be set such that
+A: x in Vertices G and
+B: y in Vertices G and
+AB: {x,y} in G;
+  set C = CompleteSGraph {x,y};
+D: C = { {}, {x}, {y}, {x,y} } by P2;
+   C c= G proof
+     let a be set;
+     assume A1: a in C;
+     per cases by A1, D, ENUMSET1:def 2;
+     suppose a = {};
+      hence thesis by SG1;
+     end;
+     suppose a = {x};
+       hence thesis by A, Vertices0;
+     end;
+     suppose a = {y};
+       hence thesis by B, Vertices0;
+     end;
+     suppose a = {x,y};
+       hence thesis by AB;
+     end;
+   end;
+ hence { {}, {x}, {y}, {x,y} } is Clique of G by P2;
+end;
+
+registration
+ let G be SimpleGraph;
+ cluster finite for Clique of G;
+ existence proof
+    {} in G by SG1;
+    then reconsider C = {{}} as Subgraph of G by ZFMISC_1:31;
+    C is clique by eclique;
+    hence thesis;
+ end;
+end;
+
+theorem CliqueS:
+for G being SimpleGraph, x being set st x in union G
+ ex C being finite Clique of G st Vertices C = {x}
+proof
+ let G be SimpleGraph, x be set such that
+A: x in union G;
+ set C = CompleteSGraph {x};
+B: C = { {}, {x} } by P1;
+ reconsider C as finite Clique of G by A, B, SingleClique;
+ take C;
+ thus Vertices C = {x} by B, SingleVertices;
+end;
+
+theorem Clique2a:
+for C being clique SimpleGraph, u, v being set
+ st u in Vertices C & v in Vertices C holds {u, v} in C
+proof
+ let C be clique SimpleGraph, u, v be set such that
+A: u in Vertices C and
+B: v in Vertices C;
+   C = CompleteSGraph Vertices C by Lclique;
+  hence thesis by A, B, CSG1;
+end;
+
+definition
+  let G be SimpleGraph;
+  attr G is with_finite_clique# means               :Lwfcno:
+   ex C being finite Clique of G
+    st for D being finite Clique of G holds order D <= order C;
+end;
+
+registration
+  cluster with_finite_clique# for SimpleGraph;
+  existence proof
+    take G = the void SimpleGraph;
+    {} in G by SG1; then {{}} c= G by ZFMISC_1:31;
+    then reconsider C = {{}} as finite Clique of G by eclique;
+    take C;
+    let D be finite Clique of G;
+    union D c= union G by ZFMISC_1:77;
+    hence order D <= order C;
+  end;
+end;
+
+registration
+  cluster finite -> with_finite_clique# for SimpleGraph;
+  coherence proof
+   let G be SimpleGraph;
+   assume G is finite;
+    then reconsider R9 = G as finite SimpleGraph;
+    defpred P[Nat] means ex c being finite Clique of G st order c = $1;
+  A1: for k being Nat st P[k] holds k <= card R9
+      proof
+        let k be Nat;
+        assume P[k];
+         then consider c being finite Clique of G such that
+      C2: order c = k;
+      D2: card c <= card R9 by NAT_1:43;
+          order c <= card c by Lorder1;
+        hence k <= card R9 by C2, D2, XXREAL_0:2;
+      end;
+      {} in G by SG1; then {{}} c= G by ZFMISC_1:31; then
+      reconsider E = {{}} as finite Clique of G by eclique;
+      order E = 0; then
+  A2: ex k being Nat st P[k];
+    consider k being Nat such that
+  A3: P[k] and
+  A4: for n being Nat st P[n] holds n <= k from NAT_1:sch 6(A1,A2);
+    consider c being finite Clique of G such that
+  A5: order c = k by A3;
+    for D be finite Clique of G holds order(D) <= order(c) by A5,A4;
+   hence G is with_finite_clique# by Lwfcno;
+  end;
+end;
+
+definition
+  let G be with_finite_clique# SimpleGraph;
+  func clique# G -> Nat means                        :Lcliqueno:
+  (ex C being finite Clique of G st order C = it)
+    & for T being finite Clique of G holds order T <= it;
+  existence proof
+    consider C be finite Clique of G such that
+A: for D being finite Clique of G holds order D <= order C by Lwfcno;
+    take itt = order C;
+    thus ex A being finite Clique of G st order A = itt;
+    let T being finite Clique of G;
+    thus order T <= itt by A;
+  end;
+  uniqueness proof
+   let it1, it2 be Nat such that
+A1: ex C being finite Clique of G st order C = it1 and
+B1: for T being finite Clique of G holds order T <= it1 and
+A2: ex C being finite Clique of G st order C = it2 and
+B2: for T being finite Clique of G holds order T <= it2;
+    consider C1 being finite Clique of G such that
+C1: order C1 = it1 by A1;
+    consider C2 being finite Clique of G such that
+D1: order C2 = it2 by A2;
+    it1 <= it2 & it2 <= it1 by B1, B2, C1, D1;
+   hence it1 = it2 by XXREAL_0:1;
+  end;
+end;
+
+theorem Cno0:
+for G being with_finite_clique# SimpleGraph
+  st clique# G = 0 holds Vertices G = {}
+proof
+ let G be with_finite_clique# SimpleGraph;
+ assume
+Aa: clique# G = 0;
+  assume Vertices G <> {};
+     then consider v being set such that
+   Aa1: v in Vertices G by XBOOLE_0:def 1;
+     consider D being finite Clique of G  such that
+   B1: Vertices D = {v} by Aa1, CliqueS;
+     order D <= 0 by Aa, Lcliqueno;
+    hence contradiction by B1;
+end;
+
+theorem
+for G being void SimpleGraph holds clique# G = 0
+proof
+ let G be void SimpleGraph;
+ assume A: clique# G <> 0;
+   consider C being finite Clique of G such that
+B: order C = clique# G by Lcliqueno;
+   Vertices C c= Vertices G by ZFMISC_1:77;
+   hence contradiction by A, B;
+end;
+
+theorem Th8:
+for G being SimpleGraph, x, y being set
+ st {x,y} in G holds G SubgraphInducedBy {x,y} is Clique of G
+proof
+ let G be SimpleGraph, x, y be set such that
+C: {x,y} in G;
+   set S = G SubgraphInducedBy {x,y};
+   now
+     let a, b be set such that
+   B1: a in union S and
+   C1: b in union S;
+   D1: a in {x,y} & b in {x,y} by B1, C1, Sub1;
+       then E1: (a = x or a = y) & (b = x or b = y) by TARSKI:def 2;
+     per cases;
+     suppose a = b;
+       then {a,b} = {a} by ENUMSET1:29;
+       hence {a,b} in S by B1, Vertices0;
+     end;
+     suppose a <> b;
+       hence {a,b} in S by D1, E1, C, Sub6;
+     end;
+    end;
+   then S = CompleteSGraph Vertices S by CSGdef;
+  hence G SubgraphInducedBy {x,y} is Clique of G;
+end;
+
+theorem Cno2:
+for G being with_finite_clique# SimpleGraph
+  st Edges G <> {} holds clique# G >= 2
+proof
+  let G be with_finite_clique# SimpleGraph such that
+A: Edges G <> {};
+  consider e being set such that
+B: e in Edges G by A, XBOOLE_0:def 1;
+  consider x, y being set such that
+C: x <> y and
+D: x in Vertices G and
+E: y in Vertices G and
+F: e = {x, y} by B, SG4;
+   reconsider S = G SubgraphInducedBy {x,y} as finite Clique of G by F, B, Th8;
+G: Vertices S = (Vertices G) /\ {x,y} by Sub5;
+H: {x,y} c= Vertices G by D, E, ZFMISC_1:32;
+   Vertices S = {x,y} by G, H, XBOOLE_1:28;
+   then order S = 2 by C, CARD_2:57;
+  hence clique# G >= 2 by Lcliqueno;
+end;
+
+theorem CliqueSubno0: :: CliqueSubno0:
+for G, H being with_finite_clique# SimpleGraph
+ st G c= H holds clique# G <= clique# H
+proof
+  let G, H be with_finite_clique# SimpleGraph such that
+A: G c= H;
+  consider D being finite Clique of G such that
+C: order D = clique# G by Lcliqueno;
+   D is Clique of H by A, XBOOLE_1:1;
+  hence clique# G <= clique# H by C, Lcliqueno;
+end;
+
+theorem cliqueCSG:
+for X being finite set holds clique# CompleteSGraph X = card X
+proof
+  let X be finite set;
+  set G = CompleteSGraph X;
+B: order G = card X by CSGLem1;
+C: G c= G;
+  for T being finite Clique of G holds order T <= order G
+     by NAT_1:43, ZFMISC_1:77;
+  hence clique# CompleteSGraph X = card X by B, C, Lcliqueno;
+end;
+
+definition
+  let G be SimpleGraph, P be a_partition of Vertices G;
+  attr P is Clique-wise means                             :LCliquewise:
+    for x being set st x in P holds G SubgraphInducedBy x is Clique of G;
+end;
+
+registration
+ let G be SimpleGraph;
+ cluster Clique-wise for a_partition of Vertices G;
+ correctness proof
+   set VG = Vertices G;
+   per cases;
+   suppose VG is empty;
+     then reconsider S = {} as a_partition of VG by EQREL_1:45;
+     take S;
+     for x being set st x in S holds G SubgraphInducedBy x is Clique of G;
+     hence S is Clique-wise by LCliquewise;
+   end;
+   suppose VG is non empty;
+     then reconsider cRp1 = VG as non empty set;
+     set S = SmallestPartition VG;
+   A3: S = {{x} where x is Element of cRp1: not contradiction} by  EQREL_1:37;
+    take S;
+     now let z being set;
+       assume A5: z in S;
+       consider x being Element of cRp1 such that
+     B2: z = {x} and not contradiction by A3, A5;
+         G SubgraphInducedBy z = { {}, {x} } by B2, SingleSub;
+      hence G SubgraphInducedBy z is Clique of G by SingleClique;
+     end;
+     hence S is Clique-wise by LCliquewise;
+   end;
+  end;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Clique-partition of G is Clique-wise a_partition of Vertices G;
+end;
+
+registration
+ let G be void SimpleGraph;
+ cluster empty -> Clique-wise for a_partition of Vertices G;
+ correctness proof
+  let P be a_partition of Vertices G;
+  assume P is empty;
+  for x being set st x in P holds G SubgraphInducedBy x is Clique of G;
+  hence P is Clique-wise by LCliquewise;
+ end;
+end;
+
+definition
+  let G be SimpleGraph;
+  attr G is with_finite_cliquecover# means        :Lwfclicov:
+  ex C being Clique-partition of G st C is finite;
+end;
+
+registration
+  cluster finite -> with_finite_cliquecover# for SimpleGraph;
+  correctness proof
+   let G be SimpleGraph;
+   assume A1: G is finite; set VG = Vertices G;
+   per cases;
+   suppose VG is empty;
+     then reconsider S = {} as a_partition of VG by EQREL_1:45;
+     for x being set st x in S holds G SubgraphInducedBy x is Clique of G;
+     then reconsider S as Clique-partition of G by LCliquewise;
+     take S;
+     thus S is finite;
+   end;
+   suppose A2: VG is non empty;
+     reconsider cRp1 = VG as finite non empty set by A2,A1;
+     set S = SmallestPartition VG;
+       deffunc F(set) = {$1};
+       defpred P[set] means not contradiction;
+    A3: S = {F(x) where x is Element of cRp1: P[x]} by EQREL_1:37;
+    A4: {F(x) where x is Element of cRp1: P[x]} is finite from PRE_CIRC:sch 1;
+     now let z being set;
+       assume A5: z in S;
+       consider x being Element of VG such that
+     B2: z = {x} and not contradiction by A5,A3;
+         G SubgraphInducedBy z = { {}, {x} } by B2, A2, SingleSub;
+      hence G SubgraphInducedBy z is Clique of G by A2, SingleClique;
+     end;
+     then reconsider S as Clique-partition of G by LCliquewise;
+     take S;
+     thus thesis by A4;
+   end;
+  end;
+end;
+
+registration
+  let G be with_finite_cliquecover# SimpleGraph;
+  cluster finite for Clique-partition of G;
+  correctness by Lwfclicov;
+end;
+
+registration
+  let G be with_finite_cliquecover# SimpleGraph, S be Subset of Vertices G;
+  cluster G SubgraphInducedBy S -> with_finite_cliquecover#;
+  correctness proof
+   set H = G SubgraphInducedBy S;
+   consider C being Clique-partition of G such that
+A: C is finite by Lwfclicov;
+   reconsider VH = Vertices H as Subset of Vertices G by ZFMISC_1:77;
+   reconsider D = C | VH as a_partition of Vertices H;
+   now
+     let p being set such that
+   A1: p in D;
+       set Hp = H SubgraphInducedBy p;
+       now
+         let x, y be set such that
+       B2: x in union Hp and
+       C2: y in union Hp;
+          consider c being Element of C such that
+       D2: p = c /\ VH and c meets VH by A1;
+       G2: x in p by B2, Sub1;
+       H2: y in p by C2, Sub1;
+       I2a: x in VH by D2, G2, XBOOLE_0:def 4;
+       I2aa: y in VH by D2, H2, XBOOLE_0:def 4;
+           set Gc = G SubgraphInducedBy c;
+       I2: Gc is Clique of G by I2a, LCliquewise;
+       I2b: Gc = CompleteSGraph Vertices Gc by I2, Lclique;
+           x in c & y in c by G2, H2, D2, XBOOLE_0:def 4;
+           then x in Vertices Gc & y in Vertices Gc by Sub3;
+           then F2aa: {x,y} in Gc by I2b, CSG1;
+            x in S & y in S by I2a, I2aa, Sub1;
+           then {x, y} c= S by ZFMISC_1:32;
+           then F2: {x, y} in H by F2aa, XBOOLE_0:def 4;
+           {x,y} c= p by G2, H2, ZFMISC_1:32;
+         hence {x,y} in Hp by F2, XBOOLE_0:def 4;
+       end;
+       then Hp = CompleteSGraph Vertices Hp by CSGdef;
+      hence Hp is Clique of H;
+   end;
+   then reconsider D as Clique-partition of H by LCliquewise;
+    take D;
+    thus D is finite by A;
+  end;
+end;
+
+definition
+  let G be with_finite_cliquecover# SimpleGraph;
+  func cliquecover# G -> Nat means                  :Lclicovno:
+  (ex C being finite Clique-partition of G st card C = it)
+   & for C being finite Clique-partition of G holds it <= card C;
+  existence proof
+   defpred P[Nat] means ex C being finite Clique-partition of G st card C = $1;
+    consider C being Clique-partition of G such that
+ A1: C is finite by Lwfclicov;
+    card C = card C; then
+ A2: ex k being Nat st P[k] by A1;
+    consider n being Nat such that
+ A3: P[n] and
+ A4: for k being Nat st P[k] holds n <= k from NAT_1:sch 5(A2);
+   take n;
+   thus ex C being finite Clique-partition of G st card C = n by A3;
+   let C be finite Clique-partition of G;
+   thus n <= card C by A4;
+  end;
+  uniqueness proof
+    let it1, it2 be Nat such that
+A1: (ex C being finite Clique-partition of G st card C = it1) and
+A1a: for C being finite Clique-partition of G holds it1 <= card C and
+A2: (ex C being finite Clique-partition of G st card C = it2) and
+A2a: for C being finite Clique-partition of G holds it2 <= card C;
+   consider C1 being finite Clique-partition of G such that
+B1: card C1 = it1 by A1;
+   consider C2 being finite Clique-partition of G such that
+B2: card C2 = it2 by A2;
+   it1 <= card C2 & it2 <= card C1 by A1a, A2a;
+   hence it1 = it2 by B1, B2, XXREAL_0:1;
+  end;
+end;
+
+begin :: Stable set, coloring
+
+definition
+ let G be SimpleGraph, S be Subset of Vertices G;
+ attr S is stable means                                    :Lstable:
+  for x, y being set st x <> y & x in S & y in S holds {x,y} nin G;
+end;
+
+theorem stable0:
+for G being SimpleGraph holds {}(Vertices G) is stable
+proof
+ let G be SimpleGraph;
+ let x, y be set such that
+  x <> y and
+ A: x in {}(Vertices G) and y in {}(Vertices G);
+  thus {x,y} nin G by A;
+end;
+
+theorem stable1:
+for G being SimpleGraph, S being Subset of Vertices G, v being set
+ st S = {v} holds S is stable
+proof
+  let G be SimpleGraph, S be Subset of Vertices G, v be set such that
+A: S = {v};
+  let x, y be set such that
+B: x <> y and
+C: x in S & y in S;
+   x = v & y = v by A, C, TARSKI:def 1;
+  hence {x,y} nin G by B;
+end;
+
+registration
+  let G be SimpleGraph;
+  cluster trivial -> stable for Subset of Vertices G;
+  coherence proof
+   let S be Subset of Vertices G;
+   assume A: S is trivial;
+   per cases by A, ZFMISC_1:131;
+    suppose S is empty;
+      then S = {}(Vertices G);
+     hence thesis by stable0;
+    end;
+    suppose ex c being set st S = {c};
+     then consider c being set such that
+    A1: S = {c};
+     thus thesis by A1, stable1;
+    end;
+  end;
+end;
+
+registration
+  let G be SimpleGraph;
+  cluster stable for Subset of Vertices G;
+  existence proof
+    take {}(Vertices G);
+    thus thesis;
+  end;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode StableSet of G is stable Subset of Vertices G;
+    :: other possible names: AntiChain of R, IndependentSet of R
+end;
+
+theorem Th14:
+for G being SimpleGraph, x, y being set
+ st x in Vertices G & y in Vertices G & {x,y} nin G
+  holds {x, y} is StableSet of G
+proof
+ let G be SimpleGraph, x, y be set such that
+A: x in Vertices G and
+B: y in Vertices G and
+C: {x,y} nin G;
+   reconsider S = {x,y} as Subset of Vertices G by A, B, ZFMISC_1:32;
+  S is stable proof
+   let a, b be set such that
+  A1: a <> b and
+  B1: a in S and
+  C1: b in S;
+      (a = x or a = y) & (b = x or b = y) by B1,C1,TARSKI:def 2;
+   hence {a,b} nin G by C, A1;
+  end;
+  hence {x, y} is StableSet of G;
+end;
+
+theorem Th19: :: Height4:
+for G being with_finite_clique# SimpleGraph st clique# G = 1
+  holds Vertices G is StableSet of G
+proof
+ let R be with_finite_clique# SimpleGraph;
+ assume A1: clique# R = 1;
+ set cR = Vertices R;
+A2a: cR c= cR;
+ now
+   let a, b be set such that
+ A3: a <> b & a in cR & b in cR;
+ A3a: {a,b} c= cR by A3, ZFMISC_1:32;
+   assume {a, b} in R;
+   then reconsider H = R SubgraphInducedBy {a,b} as finite Clique of R
+          by Th8;
+    Vertices H = {a,b} by A3a, Sub0c;
+    then order H = 2 by A3,CARD_2:57;
+   hence contradiction by A1,Lcliqueno;
+ end;
+ hence cR is StableSet of R by A2a, Lstable;
+end;
+
+registration
+  let G be SimpleGraph;
+  cluster finite for StableSet of G;
+  existence proof
+    take {}(Vertices G);
+    thus thesis;
+  end;
+end;
+
+theorem Th16: :: AChain0:
+for G being SimpleGraph, A being StableSet of G, B being Subset of A
+ holds B is StableSet of G
+proof
+ let R be SimpleGraph, A be StableSet of R, B be Subset of A;
+ set VR = Vertices R;
+ reconsider BB = B as Subset of VR by XBOOLE_1:1;
+ BB is stable proof
+   let x, y be set such that
+ A1: x <> y & x in BB & y in BB;
+   thus {x, y} nin R by A1,Lstable;
+ end;
+ hence thesis;
+end;
+
+definition
+  let G be SimpleGraph, P be a_partition of Vertices G;
+  attr P is StableSet-wise means                   :LStableSetwise:
+    for x being set st x in P holds x is StableSet of G;
+end;
+
+theorem Coloring1:
+for G being SimpleGraph holds SmallestPartition Vertices G is StableSet-wise
+proof
+ let G be SimpleGraph;
+  set C = SmallestPartition Vertices G;
+    let c be set such that
+  A: c in C;
+     consider a being set such that
+     a in Vertices G and
+  Ab: c = Class(id Vertices G, a) by A, EQREL_1:def 3;
+     reconsider cc = c as Subset of Vertices G by A;
+  Z: cc is stable proof
+       let x, y be set such that
+     A1: x <> y and
+     B1: x in cc and
+     C1: y in cc;
+     D1: [a,x] in id Vertices G by B1, Ab, RELAT_1:169;
+     E1: [a,y] in id Vertices G by C1, Ab, RELAT_1:169;
+     E1a: a = y by E1, RELAT_1:def 10;
+       thus {x,y} nin G by D1, E1a, A1, RELAT_1:def 10;
+     end;
+    thus c is StableSet of G by Z;
+end;
+
+registration
+  let G be SimpleGraph;
+  cluster StableSet-wise for a_partition of Vertices G;
+  existence proof
+    take SmallestPartition Vertices G;
+    thus thesis by Coloring1;
+  end;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Coloring of G is StableSet-wise a_partition of Vertices G;
+end;
+
+definition
+  let G be SimpleGraph;
+  attr G is finitely_colorable means                             :Lfc:
+   ex C being Coloring of G st C is finite;
+end;
+
+registration
+  cluster finitely_colorable for SimpleGraph;
+  existence proof
+   take G = the finite SimpleGraph;
+    SmallestPartition Vertices G is Coloring of G by Coloring1;
+   hence thesis by Lfc;
+  end;
+end;
+
+registration
+  cluster finite -> finitely_colorable for SimpleGraph;
+  correctness proof
+   let G be SimpleGraph;
+   assume A: G is finite;
+    SmallestPartition Vertices G is Coloring of G by Coloring1;
+   hence thesis by A, Lfc;
+  end;
+end;
+
+registration
+  let G be finitely_colorable SimpleGraph;
+  cluster finite for Coloring of G;
+  existence by Lfc;
+end;
+
+theorem SGClique0:
+for G being SimpleGraph, S being Clique of G, L being set
+ st L c= Vertices S holds G SubgraphInducedBy L is Clique of G
+proof
+ let G be SimpleGraph, S be Clique of G, L be set such that
+AA: L c= Vertices S;
+  set g = G SubgraphInducedBy L;
+ now let x, y be set such that
+   B1: x in union g and
+   C1: y in union g;
+   G1: x in L by B1, Sub1;
+   H1: y in L by C1, Sub1;
+   F1a: {x,y} in S by G1, H1, AA, Clique2a;
+     thus {x,y} in g by G1, H1, F1a, Sub6;
+   end;
+  then g = CompleteSGraph Vertices g by CSGdef;
+ hence g is Clique of G;
+end;
+
+theorem Tsr0:
+for G being SimpleGraph, C being Coloring of G, S being Subset of Vertices G
+  holds C | S is Coloring of (G SubgraphInducedBy S)
+proof
+ let G be SimpleGraph, C be Coloring of G, S be Subset of Vertices G;
+  set g = G SubgraphInducedBy S;
+A: Vertices g = S /\ Vertices G by Sub5 .= S by XBOOLE_1:28;
+  reconsider CS =  C | S as a_partition of Vertices g by A;
+  CS is StableSet-wise proof
+    let x be set such that
+  A1: x in CS;
+      reconsider xx = x as Subset of Vertices g by A1;
+      consider z being Element of C such that
+  B1: xx = z /\ S and z meets S by A1;
+      xx is stable proof
+        let x, y be set such that
+      A2: x <> y and
+      B2: x in xx and
+      C2: y in xx;
+        assume D2a: {x,y} in g;
+      E2: x in z by B1, B2, XBOOLE_0:def 4;
+      F2: y in z by C2, B1, XBOOLE_0:def 4;
+          z is StableSet of G by B1, B2, LStableSetwise;
+        hence contradiction by D2a, A2, E2, F2, Lstable;
+      end;
+    hence x is StableSet of g;
+  end;
+ hence C | S is Coloring of g;
+end;
+
+registration
+ let G be finitely_colorable SimpleGraph, S be set;
+ cluster G SubgraphInducedBy S -> finitely_colorable;
+ coherence proof
+   consider C being Coloring of G such that
+A: C is finite by Lfc;
+   reconsider C as finite Coloring of G by A;
+   reconsider SX = S /\ Vertices G as Subset of Vertices G by XBOOLE_1:17;
+C: G SubgraphInducedBy SX = G SubgraphInducedBy S by Sub3a;
+   reconsider D = C | SX as Coloring of G SubgraphInducedBy S by Tsr0, C;
+   take D;
+   thus D is finite;
+ end;
+end;
+
+definition
+  let G be finitely_colorable SimpleGraph;
+  func chromatic# G -> Nat means                                  :Lchro:
+  (ex C being finite Coloring of G st card C = it)
+   & for C being finite Coloring of G holds it <= card C;
+  existence proof
+   defpred P[Nat] means ex C being finite Coloring of G st card C = $1;
+    consider C being Coloring of G such that
+ A1: C is finite by Lfc;
+    card C = card C; then
+ A2: ex k being Nat st P[k] by A1;
+    consider n being Nat such that
+ A3: P[n] and
+ A4: for k being Nat st P[k] holds n <= k from NAT_1:sch 5(A2);
+   take n;
+   thus ex C being finite Coloring of G st card C = n by A3;
+   let C be finite Coloring of G;
+   thus n <= card C by A4;
+  end;
+  uniqueness proof
+  let it1, it2 be Nat such that
+ A5: ex C being finite Coloring of G st card C = it1 and
+ A6: for C being finite Coloring of G holds it1 <= card C and
+ A7: ex C being finite Coloring of G st card C = it2 and
+ A8: for C being finite Coloring of G holds it2 <= card C;
+   consider C1 being finite Coloring of G such that
+ A9: card C1 = it1 by A5;
+   consider C2 being finite Coloring of G such that
+ A10: card C2 = it2 by A7;
+    it1 <= card C2 & it2 <= card C1 by A6,A8;
+  hence it1 = it2 by A9,A10,XXREAL_0:1;
+  end;
+end;
+
+theorem Subchro:
+for G, H being finitely_colorable SimpleGraph
+ st G c= H holds chromatic# G <= chromatic# H
+proof
+ let G, H be finitely_colorable SimpleGraph;
+ assume A: G c= H;
+  then reconsider S = Vertices G as Subset of Vertices H by ZFMISC_1:77;
+  set g = H SubgraphInducedBy S;
+Aa: G c= g by A, Sub0b;
+  consider C being finite Coloring of H such that
+B: card C = chromatic# H by Lchro;
+  reconsider g as finitely_colorable SimpleGraph;
+  reconsider Cg = C | S as finite Coloring of g by Tsr0;
+Ca: Vertices G = Vertices g by Sub0c;
+Cb: G c= g proof
+      let a be set;
+      assume a in G;
+       then a in { {} } \/ singletons Vertices G \/ Edges G by SG0;
+       then A1: a in { {} } \/ singletons Vertices G or a in Edges G
+            by XBOOLE_0:def 3;
+       per cases by A1, XBOOLE_0:def 3;
+       suppose a in {{}};
+          then a = {} by TARSKI:def 1;
+         hence a in g by SG1;
+       end;
+       suppose a in singletons Vertices G;
+          then a in {{}} \/ singletons Vertices g by Ca, XBOOLE_0:def 3;
+          then a in {{}} \/ singletons Vertices g \/ Edges g by XBOOLE_0:def 3;
+         hence a in g by SG0;
+       end;
+       suppose a in Edges G;
+           then a in G;
+         hence a in g by Aa;
+       end;
+    end;
+   reconsider Cg1 = Cg as a_partition of Vertices G;
+   Cg1 is StableSet-wise proof
+     let x be set such that
+   A1: x in Cg1;
+       reconsider xx = x as Subset of Vertices G by A1;
+       reconsider xxx = x as Subset of Vertices g by A1;
+     xx is stable proof
+      let x, y be set such that
+     A2: x <> y and
+     B2: x in xx and
+     C2: y in xx;
+     D2: xxx is stable by A1, LStableSetwise;
+       assume {x,y} in G;
+       hence contradiction by Cb, A2, B2, C2, D2, Lstable;
+     end;
+     hence x is StableSet of G;
+   end; then
+D: card Cg >= chromatic# G by Lchro;
+   card C >= card (C | S) by MYCIELSK:8;
+ hence chromatic# G <= chromatic# H by D, B, XXREAL_0:2;
+end;
+
+theorem chromaticCSG:
+for X being finite set holds chromatic# CompleteSGraph X = card X
+proof
+ let X be finite set;
+  set n = card X;  set G = CompleteSGraph X;  set D = SmallestPartition X;
+B: card D = card X by TOPGEN_2:12;
+D: Vertices G = X by CSGLem1;
+   reconsider D as a_partition of Vertices G by CSGLem1;
+  Ca: D is StableSet-wise proof
+        let x be set;
+        assume AA: x in D;
+         then reconsider xx = x as Subset of Vertices G;
+         xx is stable proof
+           let x, y be set such that
+         A1: x <> y and
+         B1: x in xx and
+         C1: y in xx;
+               X is non empty by AA;
+               then D = {{a} where a is Element of X: not contradiction}
+                 by EQREL_1:37;
+               then consider a being Element of X such that
+         D1: xx = {a} and not contradiction by AA;
+             a = x & y = a by D1, B1, C1, TARSKI:def 1;
+          hence {x,y} nin G by A1;
+         end;
+        hence x is StableSet of G;
+      end;
+   for C being finite Coloring of G holds card X <= card C proof
+    let C be finite Coloring of G;
+    assume Aa: card X > card C;
+    then X is non empty;
+    then consider p, x, y being set such that
+   A1: p in C and
+   B1: x in p and
+   C1: y in p and
+   D1: x <> y by Aa, D, Part0;
+   E1: p is StableSet of G by A1, LStableSetwise;
+       reconsider p as Subset of Vertices G by A1;
+   F1: {x,y} nin G by E1, B1, C1, D1, Lstable;
+       p c= X by D;
+    hence contradiction by B1, C1, F1, CSG1;
+   end;
+ hence chromatic# CompleteSGraph X = n by B, Ca, Lchro;
+end;
+
+theorem AdjCol:
+for G being finitely_colorable SimpleGraph,
+    C being finite Coloring of G, c being set
+ st c in C & card C = chromatic# G
+  ex v being Element of Vertices G st v in c &
+   for d being Element of C st d <> c
+    ex w being Element of Vertices G st w in Adjacent(v) & w in d
+proof
+ let G be finitely_colorable SimpleGraph,
+     C be finite Coloring of G, c be set such that
+A1: c in C and
+A2: card C = chromatic# G;
+   assume
+A3: not thesis;
+   set uG = Vertices G;
+A4: union C = uG by EQREL_1:def 4;
+   reconsider c as Subset of uG by A1;
+   set Cc = C\{c};
+A6: c in {c} by TARSKI:def 1;
+   per cases;
+   suppose A7: Cc is empty;
+     consider v being set such that
+   A8: v in c by A1,XBOOLE_0:def 1;
+     reconsider v as Element of uG by A8;
+     consider d being Element of C such that
+   A9: d <> c and for w being Element of uG
+                        holds not (w in Adjacent(v) & w in d) by A8,A3;
+     0 = card C - card{c} by A1,A7,CARD_1:27,EULER_1:4;
+     then 0+1 = card C - 1 +1 by CARD_1:30;
+     then consider x being set such that
+   A10: C = {x} by CARD_2:42;
+      c = x & d = x by A1,A10,TARSKI:def 1;
+     hence thesis by A9;
+   end;
+   suppose Cc is non empty;
+     then reconsider Cc as non empty set;
+   defpred P[set, set] means
+   for vv being Element of uG st $1 = vv
+    holds $2 <> c & $2 in C &
+    for w being Element of uG holds not (w in Adjacent(vv) & w in $2);
+A11: for e being set st e in c ex u being set st P[e,u] proof
+      let v be set such that
+    A12: v in c;
+        reconsider vv = v as Element of uG by A12;
+        consider d being Element of C such that
+    A13: d <> c and
+    A14: for w being Element of uG
+         holds not (w in Adjacent(vv) & w in d) by A12,A3;
+         take d;
+         thus thesis by A13,A14,A1;
+    end;
+   consider r being Function such that
+A15: dom r = c and
+A16: for e being set st e in c holds P[e,r.e] from CLASSES1:sch 1(A11);
+   defpred DP[set] means not contradiction;
+   deffunc DF(set) = $1 \/ r"{$1};
+   reconsider Cc as finite non empty set;
+   set D = { DF(d) where d is Element of Cc : DP[d] };
+   consider d being set such that
+A17: d in Cc by XBOOLE_0:def 1;
+A18: d \/ r"{d} in D by A17;
+A19: D c= bool uG proof
+    let x be set;
+    assume x in D;
+      then consider d being Element of Cc such that
+    A20: x = d \/ r"{d};
+    A21: r"{d} c= c by A15,RELAT_1:132;
+    A22: r"{d} c= uG by A21,XBOOLE_1:1;
+        d in C by XBOOLE_0:def 5;
+        then x c= uG by A20,A22,XBOOLE_1:8;
+     hence x in bool uG;
+   end;
+A23: union D = uG proof
+     thus union D c= uG proof
+       let x be set;
+       assume x in union D;
+        then consider Y being set such that
+     A24: x in Y and
+     A25: Y in D by TARSKI:def 4;
+        thus x in uG by A24,A25,A19;
+     end;
+     thus uG c= union D proof
+       let x be set;
+       assume A26: x in uG;
+       then consider d being set such that
+     A27: x in d and
+     A28: d in C by A4,TARSKI:def 4;
+         reconsider xp1 = x as Element of uG by A26;
+       per cases;
+       suppose A29: d = c;
+         then r.xp1 <> c by A27,A16;
+         then A30: not r.xp1 in {c} by TARSKI:def 1;
+           r.xp1 in C by A27,A29,A16; then
+         A31: r.xp1 in Cc by A30,XBOOLE_0:def 5;
+           r.xp1 in {r.xp1} by TARSKI:def 1;
+           then x in r"{r.xp1} by A27,A29,A15,FUNCT_1:def 7;
+           then A32: x in r.xp1 \/ r"{r.xp1} by XBOOLE_0:def 3;
+           r.xp1 \/ r"{r.xp1} in D by A31;
+         hence x in union D by A32,TARSKI:def 4;
+       end;
+       suppose d <> c;
+         then not d in {c} by TARSKI:def 1;
+         then d in Cc by A28,XBOOLE_0:def 5;
+         then A33: d \/ r"{d} in D;
+           x in d \/ r"{d} by A27,XBOOLE_0:def 3;
+         hence x in union D by A33,TARSKI:def 4;
+       end;
+     end;
+   end;
+A34: for A being Subset of uG st A in D holds A <> {} &
+    for B being Subset of uG st B in D holds A = B or A misses B proof
+     let A be Subset of uG;
+     assume A in D;
+       then consider da being Element of Cc such that
+     A35: A = da \/ r"{da};
+     A36: da in C by XBOOLE_0:def 5;
+     hence A <> {} by A35;
+     let B be Subset of uG;
+     assume B in D;
+       then consider db being Element of Cc such that
+     A37: B = db \/ r"{db};
+     A38: db in C by XBOOLE_0:def 5;
+     per cases;
+     suppose da = db;
+      hence A = B or A misses B by A35,A37;
+     end;
+     suppose A39: da <> db;
+       then A40: da misses db by A36,A38,EQREL_1:def 4;
+       A41: r"{da} misses r"{db} by A39,FUNCT_1:71,ZFMISC_1:11;
+      assume A <> B;
+      assume A meets B;
+        then consider x being set such that
+      A42: x in A and
+      A43: x in B by XBOOLE_0:3;
+      per cases by A42,A43,A35,A37,XBOOLE_0:def 3;
+      suppose x in da & x in db;
+        hence contradiction by A40,XBOOLE_0:3;
+      end;
+      suppose that A44: x in da and A45: x in r"{db};
+      A46: da <> c by A6,XBOOLE_0:def 5;
+        r"{db} c= c by A15,RELAT_1:132;
+        then da meets c by A44,A45,XBOOLE_0:3;
+        hence contradiction by A46,A36,A1,EQREL_1:def 4;
+      end;
+      suppose that A47: x in r"{da} and A48: x in db;
+      A49: db <> c by A6,XBOOLE_0:def 5;
+        r"{da} c= c by A15,RELAT_1:132;
+        then db meets c by A47,A48,XBOOLE_0:3;
+        hence contradiction by A49,A38,A1,EQREL_1:def 4;
+      end;
+      suppose x in r"{da} & x in r"{db};
+        hence contradiction by A41,XBOOLE_0:3;
+      end;
+     end;
+   end;
+   reconsider D as a_partition of uG by A19,A23,A34,EQREL_1:def 4;
+   now
+     let x be set;
+     assume A50: x in D;
+     then reconsider S = x as Subset of uG;
+       consider d being Element of Cc such that
+   A51: x = d \/ r"{d} by A50;
+   A52: r"{d} c= c by A15,RELAT_1:132;
+   A53: d in C by XBOOLE_0:def 5;
+   A54: d is StableSet of G by A53,LStableSetwise;
+   A55: c is StableSet of G by A1,LStableSetwise;
+     S is stable proof
+       let a, b be set such that
+     A58: a <> b and
+     A56: a in S and
+     A57: b in S;
+          reconsider aa = a, bb = b as Vertex of G by A56, A57;
+       per cases by A56,A57,A51,XBOOLE_0:def 3;
+       suppose a in d & b in d;
+         hence not {a,b} in G by A54,A58,Lstable;
+       end;
+       suppose that A59: a in d and A60: b in r"{d};
+             r.b in {d} by A60,FUNCT_1:def 7;
+             then r.b = d by TARSKI:def 1;
+             then not a in Adjacent(bb) by A59,A52,A60,A16;
+             then not {aa,bb} in Edges G by Ladj;
+         hence not {a,b} in G by A58, SG4a;
+       end;
+       suppose that A61: a in r"{d} and A62: b in d;
+             r.a in {d} by A61,FUNCT_1:def 7;
+             then r.a = d by TARSKI:def 1;
+             then not b in Adjacent(aa) by A62,A52,A61,A16;
+             then not {bb,aa} in Edges G by Ladj;
+         hence not {a, b} in G by A58, SG4a;
+       end;
+       suppose a in r"{d} & b in r"{d};
+         hence not {a,b} in G by A52,A55,A58,Lstable;
+       end;
+     end;
+     hence x is StableSet of G;
+   end;
+   then reconsider D as Coloring of G by LStableSetwise;
+   card Cc = card C - card{c} by A1,EULER_1:4;
+   then card Cc + 1 = card C -1+1 by CARD_1:30;
+   then A63: card Cc < card C by NAT_1:13;
+
+   deffunc FS(set) = $1 \/ r"{$1};
+   consider s being Function such that
+A64: dom s = Cc and
+A65: for x being set st x in Cc holds s.x = FS(x) from FUNCT_1:sch 3;
+A66:  rng s c= D proof
+      let y be set;
+      assume y in rng s;
+      then consider d being set such that
+    A67: d in dom s and
+    A68: y = s.d by FUNCT_1:def 3;
+        y = d \/ r"{d} by A64,A65,A67,A68;
+      hence y in D by A67,A64;
+    end;
+   then reconsider s as Function of Cc, D by A64,FUNCT_2:2;
+A69: s is one-to-one proof
+      let x1, x2 be set such that
+    A70: x1 in dom s and
+    A71: x2 in dom s and
+    A72: s.x1 = s.x2;
+    A73: s.x1 = x1 \/ r"{x1} by A70,A65, A64;
+    A74: s.x2 = x2 \/ r"{x2} by A71,A65, A64;
+        thus x1 c= x2 proof
+          let x be set;
+          assume A75: x in x1;
+            then A76: x in s.x1 by A73,XBOOLE_0:def 3;
+          per cases by A76,A72,A74,XBOOLE_0:def 3;
+          suppose x in x2;
+            hence thesis;
+          end;
+          suppose A77: x in r"{x2};
+            A78: r"{x2} c= dom r by RELAT_1:132;
+            A79: x1 in C by A64, A70,XBOOLE_0:def 5;
+             reconsider x1 as Subset of uG by A64, A70;
+            x1 meets c by A78,A77,A15,A75,XBOOLE_0:3;
+            then x1 = c by A79,A1,EQREL_1:def 4;
+          hence thesis by A6, A64, A70,XBOOLE_0:def 5;
+          end;
+        end;
+        thus x2 c= x1 proof
+          let x be set;
+          assume A80: x in x2;
+            then A81: x in s.x2 by A74,XBOOLE_0:def 3;
+          per cases by A81,A72,A73,XBOOLE_0:def 3;
+          suppose x in x1;
+            hence thesis;
+          end;
+          suppose A82: x in r"{x1};
+            A83:  r"{x1} c= dom r by RELAT_1:132;
+          A84: x2 in C by A64, A71,XBOOLE_0:def 5;
+             reconsider x2 as Subset of uG by A64, A71;
+            x2 meets c by A83,A82,A15,A80,XBOOLE_0:3;
+            then x2 = c by A84,A1,EQREL_1:def 4;
+          hence thesis by A6,A64, A71,XBOOLE_0:def 5;
+          end;
+        end;
+    end;
+    D c= rng s proof
+     let x be set;
+     assume x in D;
+     then consider d being Element of Cc such that
+    A85: x = d \/ r"{d};
+        s.d = d \/ r"{d} by A65;
+     hence x in rng s by A85,A64,FUNCT_1:def 3;
+    end;
+    then D = rng s by A66,XBOOLE_0:def 10;
+    then s is onto by FUNCT_2:def 3;
+   then A86: card Cc = card D by A69,A18,EULER_1:11;
+   then D is finite;
+  hence contradiction by A63,A86,A2,Lchro;
+ end;
+end;
+
+definition
+  let G be SimpleGraph;
+  attr G is with_finite_stability# means       :Lwfstab:
+   ex A being finite StableSet of G
+    st for B being finite StableSet of G holds card B <= card A;
+end;
+
+registration
+  cluster finite -> with_finite_stability# for SimpleGraph;
+  correctness proof
+    let R be SimpleGraph;
+    assume R is finite;
+    then reconsider R9 = R as finite SimpleGraph;
+    reconsider VR = Vertices R9 as finite set;
+    defpred P[Nat] means
+    ex A being finite StableSet of R9 st card A = $1;
+  A1: for k being Nat st P[k] holds k <= card VR by NAT_1:43;
+      {}VR is StableSet of R & card {} = 0;
+  then A2: ex k being Nat st P[k];
+      consider k being Nat such that
+  A3: P[k] and
+  A4: for n being Nat st P[n] holds n <= k from NAT_1:sch 6(A1, A2);
+   consider S being finite StableSet of R such that
+  A5: card S = k by A3;
+    take S;
+    let T be finite StableSet of R;
+    thus card T <= card S by A5,A4;
+  end;
+end;
+
+registration
+  let G be with_finite_stability# SimpleGraph;
+  cluster -> finite for StableSet of G;
+  correctness proof
+   consider A being finite StableSet of G such that
+  A1: for B being finite StableSet of G holds card(A) >= card(B) by Lwfstab;
+   given B being StableSet of G such that
+  A2: B is infinite;
+   consider C being finite Subset of B such that
+  A3: card C > card A by A2,DILWORTH:5;
+     C is StableSet of G by Th16;
+   hence contradiction by A1,A3;
+  end;
+end;
+
+registration
+  cluster with_finite_stability# non void for SimpleGraph;
+  existence proof
+   reconsider G = { {}, {{}} } as SimpleGraph by SingleVertex;
+   set A = union G;
+   A = {{}} by SingleVertices;
+   then G is non void;
+   hence thesis;
+  end;
+end;
+
+definition
+  let G be with_finite_stability# SimpleGraph;
+  func stability# G -> Nat means                   :Lstabno:
+   (ex A being finite StableSet of G st card(A) = it)
+     & for T being finite StableSet of G holds card T <= it;
+  existence proof
+    consider A being finite StableSet of G such that
+  A1: for B being finite StableSet of G holds card(A) >= card(B) by Lwfstab;
+    take itt = card A;
+    thus ex A being finite StableSet of G st card A = itt;
+    let T being finite StableSet of G;
+    thus card(T) <= itt by A1;
+  end;
+  uniqueness proof
+    let it1, it2 be Nat such that
+  A2: ex S1 being finite StableSet of G st card S1 = it1 and
+  A3: for T being finite StableSet of G holds card(T) <= it1 and
+  A4: ex S2 being finite StableSet of G st card S2 = it2 and
+  A5: for T being finite StableSet of G holds card(T) <= it2;
+      consider S1 being finite StableSet of G such that
+  A6: card S1 = it1 by A2;
+      consider S2 being finite StableSet of G such that
+  A7: card S2 = it2 by A4;
+    it1 <= it2 & it2 <= it1 by A3,A5,A6,A7;
+   hence it1 = it2 by XXREAL_0:1;
+  end;
+end;
+
+registration
+  let G be with_finite_stability# non void SimpleGraph;
+  cluster stability# G -> positive;
+  correctness proof
+   Vertices G <> {} by VoidGV;
+   then consider v being set such that
+A: v in Vertices G by XBOOLE_0:def 1;
+   reconsider S = {v} as finite Subset of Vertices G by A, ZFMISC_1:31;
+   card S <= stability# G by Lstabno;
+   hence thesis;
+  end;
+end;
+
+theorem Th21: :: Width4:
+for G being with_finite_stability# SimpleGraph
+  st stability# G = 1 holds G is clique
+proof
+ let R be with_finite_stability# SimpleGraph;
+ assume A1: stability# R = 1;
+ set cR = Vertices R;
+ now
+   let a, b be set such that
+ A3: a <> b and
+ A2: a in cR & b in cR;
+   assume {a, b} nin Edges R;
+   then {a,b} nin R by A3, SG4a;
+   then A5: {a,b} is StableSet of R by A2, Th14;
+   card {a,b} = 2 by A3,CARD_2:57;
+   hence contradiction by A1,A5,Lstabno;
+ end;
+ hence R is clique by Lclique1;
+end;
+
+registration  :: see analoguous in DILWORTH
+:: I have done it through Ramsey.  How else to prove it?
+:: For posets one gets it directly from Dilworth.
+ cluster with_finite_clique# with_finite_stability# -> finite for SimpleGraph;
+ correctness proof
+    let R be SimpleGraph;
+    assume A1: R is with_finite_clique#;
+    assume A2: R is with_finite_stability#;
+    assume A3: R is infinite;
+    set VR = Vertices R;
+A3a: Vertices R is infinite by A3, FinSG;
+A3bb: R c= R;
+    reconsider R as with_finite_clique# with_finite_stability# SimpleGraph
+     by A1,A2;
+    consider C being finite Clique of R such that
+  A4: order C = clique# R by Lcliqueno;
+    reconsider VC = Vertices C as finite Subset of VR by ZFMISC_1:77;
+    consider An being finite StableSet of R such that
+  A5: card(An) = stability# R by Lstabno;
+    reconsider VAn = An as finite Subset of VR;
+     set h = clique# R, w = stability# R;
+     A6:  0+1 <= h by A3a, Cno0, NAT_1:14;
+      R is non void by A3; then
+  A7: 0+1 <= w by NAT_1:13;
+  per cases by A6,A7,XXREAL_0:1;
+  suppose h = 1;
+    then A9: VR is StableSet of R by Th19;
+    consider Y being finite Subset of VR such that
+  A10: card Y > w by A3a,DILWORTH:5;
+    Y is StableSet of R by A9,Th16;
+    hence thesis by A10,Lstabno;
+  end;
+  suppose w = 1;
+    then A11: R is Clique of R by A3bb, Th21;
+    consider Y being finite Subset of VR such that
+  A12: card Y > h by A3a,DILWORTH:5;
+  A12a: (R SubgraphInducedBy Y) is Clique of R by A11,SGClique0;
+       order (R SubgraphInducedBy Y) = card Y by Sub0c;
+    hence thesis by A12,A12a,Lcliqueno;
+  end;
+  suppose A13: h > 1 & w > 1;
+    set m = max(clique# R, stability# R) +1;
+    reconsider m as natural number;
+    consider r being natural number such that
+  A14: for X being finite set, P being a_partition of the_subsets_of_card(2,X)
+     st card X >= r & card P = 2 holds
+      ex S being Subset of X st card S >= m & S is_homogeneous_for P
+     by RAMSEY_1:17;
+     consider Y being finite Subset of VR such that
+  A15: card Y > r by A3a,DILWORTH:5;
+     set X = Y \/ VAn \/ VC;
+     reconsider X as finite Subset of VR;
+     Y c= Y \/ An  & Y \/ An c= Y \/ An \/ VC by XBOOLE_1:7;
+     then
+  A16: card Y <= card X by NAT_1:43,XBOOLE_1:1;
+     set A = { {x,y} where x,y is Element of VR :
+                x<>y & x in X & y in X & {x, y} in Edges R };
+     set B = { {x,y} where x,y is Element of VR :
+                x<>y & x in X & y in X & {x, y} nin Edges R };
+     set E = the_subsets_of_card(2,X);     set P = { A, B };
+  A17: A c= E proof
+       let x be set;
+       assume x in A;
+       then consider xx, yy being Element of VR such that
+        A18: {xx,yy} = x and
+        A19: xx<>yy and
+        A20: xx in X and
+        A21: yy in X and {xx,yy} in Edges R;
+            x is Subset of X & card x = 2
+                by A18,A19,A20,A21,CARD_2:57,ZFMISC_1:32;
+            hence thesis;
+     end;
+  A22: B c= E proof
+        let x be set;
+        assume  x in B;
+        then consider xx, yy being Element of VR such that
+        A23: {xx,yy} = x and
+        A24: xx<>yy and
+        A25: xx in X and
+        A26: yy in X and {xx,yy} nin Edges R;
+            x is Subset of X & card x = 2
+                by A23,A24,A25,A26,CARD_2:57,ZFMISC_1:32;
+            hence thesis;
+     end;
+  A27: A in P & B in P by TARSKI:def 2;
+  A28: now
+       assume A29: A = B;
+       consider a, b being set such that
+      A30: a in An and
+      A31: b in An and
+      A32: a <> b by A13,A5,NAT_1:59;
+          reconsider a, b as Element of VR by A30,A31;
+      A33: {a, b} nin Edges R by A30,A31,A32,Lstable;
+          a in Y \/ An & b in Y \/ An by A30,A31,XBOOLE_0:def 3;
+          then a in X & b in X by XBOOLE_0:def 3;
+         then {a,b} in B by A33,A32;
+         then consider aa, bb being Element of VR such that
+      A34: {a,b} = {aa, bb} and
+         aa <> bb & aa in X & bb in X and
+      A35: {aa, bb} in Edges R by A29;
+       thus contradiction by A35,A30,A31,A32,Lstable,A34;
+      end;
+  A36: P c= bool E proof
+       let x be set;
+       assume x in P;
+       then x c= E by A17,A22,TARSKI:def 2;
+       hence thesis;
+      end;
+  A37: union P = E proof
+        thus union P c= E proof
+          let x be set;
+          assume x in union P;
+          then consider Y being set such that
+        A38: x in Y and
+        A39: Y in P by TARSKI:def 4;
+            Y = A or Y = B by A39,TARSKI:def 2;
+          hence thesis by A38,A17,A22;
+        end;
+        thus E c= union P proof
+          let x be set;
+          assume x in E;
+            then consider xx being Subset of X such that
+        A40: x = xx and
+        A41: card xx = 2;
+            consider a, b being set such that
+        A42: a <> b and
+        A43: xx = {a,b} by A41,CARD_2:60;
+            a in xx & b in xx by A43,TARSKI:def 2;
+            then a in X & b in X;
+            then reconsider a, b as Element of VR;
+        A44: a in xx & b in xx by A43,TARSKI:def 2;
+            {a,b} in Edges R or {a,b} nin Edges R;
+            then {a,b} in A or {a,b} in B by A44,A42;
+          hence x in union P by A40,A43,A27,TARSKI:def 4;
+        end;
+      end;
+      for a being Subset of E st a in P holds a<>{} &
+        for b being Subset of E st b in P holds a = b or a misses b proof
+       let a be Subset of E such that
+    A45: a in P;
+       thus a<>{} proof
+         per cases by A45,TARSKI:def 2;
+         suppose A46: a = A;
+           consider aa, bb being set such that
+         A47: aa in VC and
+         A48: bb in VC and
+         A49: aa <> bb by A13,A4,NAT_1:59;
+          reconsider aa, bb as Element of VR by A47,A48;
+            {aa, bb} in C by A47,A48,Clique2a;
+         then A51: {aa, bb} in Edges R by A49, SG4a;
+          aa in Y \/ An \/ VC & bb in Y \/ An \/ VC by A47,A48,XBOOLE_0:def 3;
+          then {aa,bb} in A by A49,A51;
+          hence thesis by A46;
+         end;
+         suppose A51: a = B;
+           consider aa, bb being set such that
+         A52: aa in An and
+         A53: bb in An and
+         A54: aa <> bb by A13,A5,NAT_1:59;
+          reconsider aa, bb as Element of VR by A52,A53;
+         A55a: {aa,bb} nin Edges R by A52,A53,A54,Lstable;
+          aa in Y \/ An & bb in Y \/ An by A52,A53,XBOOLE_0:def 3;
+          then aa in X & bb in X by XBOOLE_0:def 3;
+          then {aa,bb} in B by A54,A55a;
+          hence thesis by A51;
+         end;
+       end;
+       let b be Subset of E such that
+    A56: b in P;
+       assume A57: a <> b;
+       assume A58: a meets b;
+        (a = A or a = B) & (b = A or b = B) by A45,A56,TARSKI:def 2;
+       then A /\ B <> {} by A57,A58,XBOOLE_0:def 7;
+       then consider x being set such that
+    A59: x in A /\ B by XBOOLE_0:def 1;
+        x in A by A59,XBOOLE_0:def 4;
+        then consider xx, yy being Element of VR such that
+    A60: {xx,yy} = x and xx<>yy & xx in X & yy in X and
+    A61: {xx, yy} in Edges R;
+        x in B by A59,XBOOLE_0:def 4;
+        then consider x2, y2 being Element of VR such that
+    A62: {x2,y2} = x and x2<>y2 & x2 in X & y2 in X and
+    A63: {x2, y2} nin Edges R;
+       thus contradiction by A61,A63, A60,A62;
+      end;
+     then reconsider P as a_partition of E by A37,A36,EQREL_1:def 4;
+   card P = 2 by A28,CARD_2:57;
+     then consider S being Subset of X such that
+  A64: card S >= m and
+  A65: S is_homogeneous_for P  by A16,A14,A15,XXREAL_0:2;
+     reconsider S as finite Subset of VR by XBOOLE_1:1;
+      max(clique# R, stability# R) >= clique# R by XXREAL_0:25;
+      then m > clique# R by NAT_1:13;
+      then
+  A66: card S > clique# R by A64,XXREAL_0:2;
+      max(clique# R, stability# R) >= stability# R by XXREAL_0:25;
+      then m > stability# R by NAT_1:13;
+      then
+  A67: card S > stability# R by A64,XXREAL_0:2;
+     consider p being Element of P such that
+  A68: the_subsets_of_card(2,S) c= p by A65,RAMSEY_1:def 1;
+     per cases by TARSKI:def 2;
+     suppose A69: p = A;
+     set H = R SubgraphInducedBy S;
+     B72: Vertices H = S by Sub0c;
+       now
+        let x, y  be set such that
+     A72: x <> y and
+     A70: x in union H and
+     A71: y in union H;
+           {x,y} is Subset of S & card {x,y} = 2
+               by B72,A70,A71,A72,CARD_2:57,ZFMISC_1:32;
+           then {x,y} in the_subsets_of_card(2,S);
+           then {x,y} in A by A69,A68;
+           then consider xx, yy being Element of VR such that
+        A73: {xx,yy} = {x,y} and xx<>yy & xx in X & yy in X and
+        A74: {xx, yy} in Edges R;
+             {x, y} in H by A74, A70,A71, B72, Sub6, A73;
+         hence {x, y} in Edges H by A72, SG4a;
+       end;
+       then H is finite Clique of R by Lclique1;
+       then order H <= clique# R by Lcliqueno;
+       hence contradiction by A66, Sub0c;
+     end;
+     suppose A75: p = B;
+       now
+         let x, y be set such that
+       A78: x <> y and
+       A76: x in S and
+       A77: y in S;
+           {x,y} is Subset of S & card {x,y} = 2
+               by A76,A77,A78,CARD_2:57,ZFMISC_1:32;
+           then {x,y} in the_subsets_of_card(2,S);
+           then {x,y} in B by A75,A68;
+           then consider xx, yy being Element of VR such that
+        A79: {xx,yy} = {x,y} and xx<>yy & xx in X & yy in X and
+        A80: {xx, yy} nin Edges R;
+         thus {x,y} nin R by A78, A80, SG4a, A79;
+       end;
+       then S is stable by Lstable;
+       hence contradiction by A67,Lstabno;
+     end;
+  end;
+  end;
+end;
+
+theorem CliStaCompl:
+for G being SimpleGraph, C being Clique of G
+  holds Vertices C is StableSet of Complement G
+proof
+ let G be SimpleGraph, C be Clique of G; set CG = Complement G;
+A: Vertices G = Vertices CG by Compl1;
+   reconsider uC = union C as Subset of Vertices CG by A, ZFMISC_1:77;
+    now
+      let x, y be set such that
+    A3: x <> y and
+    A1: x in uC and
+    A2: y in uC;
+      {x,y} in C by A1,A2,Clique2a;
+      then {x,y} in Edges G by A3, SG4a;
+     hence {x,y} nin CG by XBOOLE_0:def 5;
+    end;
+   hence union C is StableSet of Complement G by Lstable;
+end;
+
+theorem CliComplSta:
+for G being SimpleGraph, C being Clique of Complement G
+  holds Vertices C is StableSet of G
+proof
+ let G be SimpleGraph, C be Clique of Complement G;
+   Vertices C is StableSet of Complement Complement G by CliStaCompl;
+ hence Vertices C is StableSet of G;
+end;
+
+theorem StaCliCompl:
+for G being SimpleGraph, C being StableSet of G
+  holds (Complement G) SubgraphInducedBy C is Clique of Complement G
+proof
+ let G be SimpleGraph, C be StableSet of G; set CG = Complement G;
+   set CGSC = CG SubgraphInducedBy C; set uCGSC = union CGSC;
+  now let a, b be set such that
+  A4: a <> b and
+  A2: a in uCGSC and
+  A3: b in uCGSC;
+  B1: a in C & b in C by A2, A3, Sub1;
+  D1: {a,b} nin Edges G by B1, A4, Lstable;
+      E1: {a,b} in CompleteSGraph Vertices G by B1, CSG1;
+      {a,b} in CG by D1, E1, XBOOLE_0:def 5;
+     then {a, b} in CGSC by B1, Sub6;
+    hence {a, b} in Edges CGSC by A4, SG4a;
+  end;
+ hence CGSC is Clique of Complement G by Lclique1;
+end;
+
+theorem StaComplCli:
+for G being SimpleGraph, C being StableSet of Complement G
+  holds G SubgraphInducedBy C is Clique of G
+proof
+ let G be SimpleGraph, C be StableSet of Complement G;
+   (Complement Complement G) SubgraphInducedBy C
+       is Clique of Complement Complement G by StaCliCompl;
+ hence G SubgraphInducedBy C is Clique of G;
+end;
+
+registration
+  let G be with_finite_clique# SimpleGraph;
+  cluster Complement G -> with_finite_stability#;
+  correctness proof
+  set CG = Complement G;
+  consider A being finite Clique of G such that
+A: for B being finite Clique of G holds order B <= order A by Lwfcno;
+B: Vertices G = Vertices CG by Compl1;
+  set C = union A;
+  reconsider C as finite StableSet of CG by CliStaCompl;
+  take C;
+  let D be finite StableSet of CG;
+  A1: G SubgraphInducedBy D is finite Clique of G by StaComplCli;
+      order (G SubgraphInducedBy D) <= order A by A1, A;
+  hence card D <= card C by B, Sub0c;
+  end;
+end;
+
+registration
+  let G be with_finite_stability# SimpleGraph;
+  cluster Complement G -> with_finite_clique#;
+  correctness proof
+  set CG = Complement G;
+  consider A being finite StableSet of G such that
+A: for B being finite StableSet of G holds card B <= card A by Lwfstab;
+B: Vertices G = Vertices CG by Compl1;
+  set C = CG SubgraphInducedBy A;
+  reconsider C as finite Clique of CG by StaCliCompl;
+  take C;
+  let D be finite Clique of CG;
+  A1: union D is StableSet of G by CliComplSta;
+      A = union C by B, Sub0c;
+  hence order D <= order C by A, A1;
+ end;
+end;
+
+theorem cliRstaCR:
+for G being with_finite_clique# SimpleGraph
+  holds clique# G = stability# Complement G
+proof
+let G be with_finite_clique# SimpleGraph;
+ set CG = Complement G; set sCG = stability# Complement G, cG = clique# G;
+  consider C being finite Clique of G such that
+A: order C = cG by Lcliqueno;
+B: Vertices G = Vertices CG by Compl1;
+  reconsider A = union C as StableSet of CG by CliStaCompl;
+X: card A = cG by A;
+  now let T be finite StableSet of CG;
+   G SubgraphInducedBy T is Clique of G by StaComplCli;
+      then order (G SubgraphInducedBy T) <= cG by Lcliqueno;
+    hence card T <= cG by B, Sub0c;
+  end;
+ hence cG = sCG by X, Lstabno;
+end;
+
+theorem :: staRcliCR:
+for G being with_finite_stability# SimpleGraph
+ holds stability# G = clique# Complement G
+proof
+ let G be with_finite_stability# SimpleGraph;
+   Complement Complement G = G;
+ hence thesis by cliRstaCR;
+end;
+
+theorem ClicoComplChr:
+for G being SimpleGraph, C being Clique-partition of Complement G
+  holds C is Coloring of G
+proof
+ let G be SimpleGraph, C be Clique-partition of Complement G;
+   set CG = Complement G;
+    now
+      let x be set;
+      assume A0: x in C;
+  then A1: (Complement G) SubgraphInducedBy x is Clique of CG by LCliquewise;
+       union ((Complement G) SubgraphInducedBy x) = x by A0, Sub0c;
+      hence x is StableSet of G by A1, CliComplSta;
+    end;
+ hence C is Coloring of G by Compl1, LStableSetwise;
+end;
+
+theorem ClicoChrCompl:
+for G being SimpleGraph, C being Clique-partition of G
+  holds C is Coloring of Complement G
+proof
+ let G be SimpleGraph, C being Clique-partition of G;
+   Complement Complement G = G;
+ hence thesis by ClicoComplChr;
+end;
+
+theorem ChrClicoCompl:
+for G being SimpleGraph, C being Coloring of G
+  holds C is Clique-partition of Complement G
+proof
+ let G be SimpleGraph, C be Coloring of G;
+   set CG = Complement G;
+    now
+      let x be set;
+      assume x in C;
+       then x is StableSet of G by LStableSetwise;
+      hence CG SubgraphInducedBy x is Clique of CG by StaCliCompl;
+    end;
+ hence C is Clique-partition of CG by Compl1, LCliquewise;
+end;
+
+theorem :: ChrComplClico:
+for G being SimpleGraph, C being Coloring of Complement G
+  holds C is Clique-partition of G
+proof
+ let G be SimpleGraph, C being Coloring of Complement G;
+   Complement Complement G = G;
+ hence thesis by ChrClicoCompl;
+end;
+
+registration
+  let G be finitely_colorable SimpleGraph;
+  cluster Complement G -> with_finite_cliquecover#;
+  correctness proof
+    consider C being Coloring of G such that
+  A1: C is finite by Lfc;
+    C is Clique-partition of Complement G by ChrClicoCompl;
+   hence thesis by A1,Lwfclicov;
+  end;
+end;
+
+registration
+  let G be with_finite_cliquecover# SimpleGraph;
+  cluster Complement G -> finitely_colorable;
+  correctness proof
+    consider C being Clique-partition of G such that
+  A1: C is finite by Lwfclicov;
+    C is Coloring of Complement G by ClicoChrCompl;
+   hence thesis by A1, Lfc;
+  end;
+end;
+
+theorem chrRcovCR:
+for G being finitely_colorable SimpleGraph
+ holds chromatic# G = cliquecover# Complement G
+proof
+ let G be finitely_colorable SimpleGraph;
+ set CG = Complement G; set k = cliquecover# CG;
+   consider C being finite Clique-partition of CG such that
+ A1: card C = k by Lclicovno;
+ A2a: C is Coloring of G by ClicoComplChr;
+   now
+    let C be finite Coloring of G;
+    assume A3: k > card C;
+     C is Clique-partition of CG by  ChrClicoCompl;
+    hence contradiction by A3, Lclicovno;
+   end;
+ hence chromatic# G = cliquecover# Complement G by A2a, A1, Lchro;
+end;
+
+theorem :: covRchrCR:
+for G being with_finite_cliquecover# SimpleGraph
+  holds cliquecover# G = chromatic# Complement G
+proof
+ let G be with_finite_cliquecover# SimpleGraph;
+   Complement Complement G = G;
+ hence thesis by chrRcovCR;
+end;
+
+begin  :: Mycielskian of a graph
+
+definition
+  let G be SimpleGraph;
+  func Mycielskian G -> SimpleGraph equals
+   { {} } \/
+   { {x} where x is Element of (union G) \/ [:union G,{union G}:] \/ {union G}
+             : not contradiction } \/
+   (Edges G) \/
+   { {x,[y,union G]} where x, y is Element of union G : {x,y} in Edges G } \/
+   { {union G,[x,union G]} where x is Element of union G : x in Vertices G };
+  correctness proof
+ set uG = union G;
+ set C = { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+               : not contradiction };
+ set A = { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+ set B = { {uG,[x,uG]} where x is Element of uG : x in Vertices G };
+
+   set M =    { {} } \/ C \/ (Edges G) \/ A \/ B;
+   reconsider N = M as non empty set;
+B: M is subset-closed proof
+    let a,b be set such that
+   A1: a in M and
+   B1: b c= a;
+   C1a: {} in {{}} by TARSKI:def 1; then
+   C1: {} in M by MYCIELSK:4;
+    per cases by A1, MYCIELSK:4;
+    suppose a in { {} };
+       then a = {} by TARSKI:def 1;
+      hence b in M by B1, C1;
+    end;
+    suppose a in C;
+      then consider x being Element of (uG) \/ [:uG,{uG}:] \/ {uG} such that
+    A2: a = {x} and not contradiction;
+      thus b in M by C1, A2, A1, B1, ZFMISC_1:33;
+    end;
+    suppose a in Edges G;
+       then consider x, y being set such that x <> y and
+    B2: x in Vertices G and
+    C2: y in Vertices G and
+    D2: a = {x, y} by SG4;
+    E2: b = {} or b = {x} or b = {y} or b = {x,y} by D2, B1, ZFMISC_1:36;
+        x in (uG) \/ [:uG,{uG}:] & y in (uG) \/ [:uG,{uG}:]
+         by B2, C2,XBOOLE_0:def 3;
+     then x in (uG) \/ [:uG,{uG}:] \/ {uG} & y in (uG) \/ [:uG,{uG}:] \/ {uG}
+         by XBOOLE_0:def 3;
+        then {x} in C & {y} in C;
+      hence b in M by E2, C1a, D2, A1, MYCIELSK:4;
+    end;
+    suppose a in A;
+      then consider x, y being Element of uG such that
+    A2: a  = {x,[y,uG]} and
+    B2: {x,y} in Edges G;
+    C2: x in uG by B2, SG5;
+    E2: b = {} or b = {x} or b = {[y,uG]} or b = {x,[y,uG]}
+         by A2, B1, ZFMISC_1:36;
+        x in (uG) \/ [:uG,{uG}:] by C2, XBOOLE_0:def 3;
+        then x in (uG) \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+        then F2: {x} in C;
+        y in uG & uG in {uG} by B2, SG5, TARSKI:def 1;
+        then [y,uG] in [:uG,{uG}:] by ZFMISC_1:def 2;
+        then [y,uG] in uG \/ [:uG,{uG}:] by XBOOLE_0:def 3;
+        then [y,uG] in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+        then {[y,uG]} in C;
+      hence b in M by A2, A1, E2, C1a, F2, MYCIELSK:4;
+    end;
+    suppose a in B;
+      then consider x being Element of uG such that
+    A2: a = {uG,[x,uG]} and
+    C2: x in Vertices G;
+    E2: b = {} or b = {uG} or b = {[x,uG]} or b = {uG,[x,uG]}
+         by A2, B1, ZFMISC_1:36;
+        uG in {uG} by TARSKI:def 1;
+        then uG in (uG) \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+        then F2: {uG} in C;
+        x in uG & uG in {uG} by C2, TARSKI:def 1;
+        then [x,uG] in [:uG,{uG}:] by ZFMISC_1:def 2;
+        then [x,uG] in uG \/ [:uG,{uG}:] by XBOOLE_0:def 3;
+        then [x,uG] in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+        then {[x,uG]} in C;
+      hence b in M by A2, A1, E2, C1a, F2, MYCIELSK:4;
+    end;
+   end;
+C: N is 1-at_most_dimensional proof
+     let a be set;
+     assume Aa: a in N;
+     per cases by Aa, MYCIELSK:4;
+     suppose a in { {} };
+       then a = {} by TARSKI:def 1;
+      hence card a c= 1+1;
+     end;
+     suppose a in C;
+       then consider x being Element of (uG) \/ [:uG,{uG}:] \/ {uG} such that
+       A1: a = {x} and not contradiction;
+        card a = 1 by A1, CARD_1:30;
+       hence card a c= 1+1 by NAT_1:39;
+     end;
+     suppose a in Edges G;
+       hence card a c= 1+1 by Lnatmost;
+     end;
+     suppose a in A;
+       then consider x, y being Element of uG such that
+       A1: a  = {x,[y,uG]} and {x,y} in Edges G;
+        card {x,[y,uG]} <= 2 by CARD_2:50;
+       hence card a c= 1+1 by A1, NAT_1:39;
+     end;
+     suppose a in B;
+       then consider x being Element of uG such that
+       A1: a = {uG,[x,uG]} and x in Vertices G;
+         card {uG,[x,uG]} <= 2 by CARD_2:50;
+       hence card a c= 1+1 by A1, NAT_1:39;
+     end;
+   end;
+   thus M is SimpleGraph by B, C;
+  end;
+end;
+
+theorem M0: :: Mycielskian0:
+for G being SimpleGraph holds G c= Mycielskian G
+proof
+ let G be SimpleGraph;
+ set MG = Mycielskian G; set uG = union G;
+ let x be set;
+ assume x in G;
+  then x in  { {} } \/ singletons uG \/ Edges G by SG0;
+  then A: x in  { {} } \/ singletons uG or x in Edges G by XBOOLE_0:def 3;
+  per cases by A, XBOOLE_0:def 3;
+  suppose x in { {} };
+     then x = {} by TARSKI:def 1;
+    hence x in MG by SG1;
+  end;
+  suppose x in singletons uG;
+     then consider f being Subset of uG such that
+  B: x = f and
+  C: f is 1-element;
+     consider a being set such that
+  D: a in uG and
+  E: f = {a} by C, BSPACEdef9;
+     a in uG \/ [:uG,{uG}:] by D, XBOOLE_0:def 3;
+     then a in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+     then x in { {xx} where xx is Element of  uG \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction } by B, E;
+    hence x in MG by MYCIELSK:4;
+  end;
+  suppose B: x in Edges G;
+    Edges G c= MG by MYCIELSK:3;
+   hence x in MG by B;
+  end;
+end;
+
+theorem M0v1:
+for G being SimpleGraph, v being set
+ holds v in Vertices Mycielskian G
+   iff v in union G or (ex x being set st x in union G & v = [x,union G])
+       or v = union G
+proof
+  let G be SimpleGraph, v be set;
+  set uG = union G; set MG = Mycielskian G; set uMG = union MG;
+  hereby
+  assume v in Vertices MG;
+  then consider g being set such that
+B: v in g and
+C: g in MG by TARSKI:def 4;
+  defpred Thesis[] means
+          v in union G or (ex x being set st x in union G & v = [x,union G])
+       or v = union G;
+  per cases by C, MYCIELSK:4;
+  suppose g in { {} };
+   hence Thesis[] by B, TARSKI:def 1;
+  end;
+  suppose g in { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction };
+     then consider h being Element of uG \/ [:uG,{uG}:] \/ {uG} such that
+  A1: g = {h} and not contradiction;
+  B1: h in uG \/ [:uG,{uG}:] or h in {uG} by XBOOLE_0:def 3;
+  C1: v = h by A1, B, TARSKI:def 1;
+     per cases by B1, XBOOLE_0:def 3;
+     suppose h in uG;
+      hence Thesis[] by A1, B, TARSKI:def 1;
+     end;
+     suppose h in [:uG,{uG}:];
+       then consider h1, h2 being set such that
+    A2: h1 in uG and
+    B2: h2 in {uG} and
+    C2: h = [h1,h2] by ZFMISC_1:def 2;
+        h2 = uG by B2, TARSKI:def 1;
+      hence Thesis[] by C1,C2,A2;
+     end;
+     suppose h in {uG};
+      hence Thesis[] by C1, TARSKI:def 1;
+     end;
+  end;
+  suppose g in Edges G;
+     then consider g1, g2 being set such that g1 <> g2 and
+  A1: g1 in Vertices G and
+  B1: g2 in Vertices G and
+  C1: g = {g1, g2} by SG4;
+   thus Thesis[] by A1, B1, B, C1, TARSKI:def 2;
+  end;
+  suppose g in { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+    then consider g1, g2 being Element of uG such that
+  A1: g = {g1,[g2,uG]} and
+  B1: {g1,g2} in Edges G;
+  C1: g1 in uG & g2 in uG by B1, SG5;
+      v = g1 or v = [g2,uG] by A1, B, TARSKI:def 2;
+   hence Thesis[] by C1;
+  end;
+  suppose g in { {uG,[x,uG]} where x is Element of uG : x in Vertices G };
+     then consider x being Element of uG such that
+  A1: g = {uG,[x,uG]} and
+  B1: x in uG;
+      v = uG or v = [x,uG] by B, A1, TARSKI:def 2;
+   hence Thesis[] by B1;
+  end;
+ end;
+ assume A: v in union G or (ex x being set st x in union G & v = [x,union G])
+        or v = union G;
+B: for a being set st a in uG \/ [:uG,{uG}:] \/ {uG} holds a in uMG
+   proof
+     let a be set;
+     assume a in uG \/ [:uG,{uG}:] \/ {uG};
+     then C2: {a} in { {x} where x is Element of uG \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction };
+   B2a: { {x} where x is Element of uG \/ [:uG,{uG}:] \/ {uG}
+           : not contradiction } c= MG by MYCIELSK:3;
+      a in {a} by TARSKI:def 1;
+     hence a in uMG by B2a, C2, TARSKI:def 4;
+   end;
+ per cases by A;
+ suppose v in union G;
+    then v in uG \/ [:uG,{uG}:] by XBOOLE_0:def 3;
+    then v in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+   hence thesis by B;
+  end;
+ suppose (ex x being set st x in union G & v = [x,union G]);
+  then consider x being set such that
+ A2: x in union G and
+ B2: v = [x,union G];
+  union G in {union G} by TARSKI:def 1;
+  then v in [:uG,{uG}:] by A2, B2, ZFMISC_1:def 2;
+    then v in uG \/ [:uG,{uG}:] by XBOOLE_0:def 3;
+    then v in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+   hence thesis by B;
+  end;
+ suppose v = union G; then
+    v in {uG} by TARSKI:def 1;
+    then v in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+   hence thesis by B;
+ end;
+end;
+
+theorem M0v2:
+for G being SimpleGraph
+ holds Vertices Mycielskian G = union G \/ [:union G,{union G}:] \/ {union G}
+proof
+ let G be SimpleGraph;
+ set uG = union G; set MG = Mycielskian G; set uMG = union MG;
+A: uG in {uG} by TARSKI:def 1;
+ thus uMG c= uG \/ [:uG,{uG}:] \/ {uG} proof
+    let v be set;
+    assume A2: v in uMG;
+    per cases by A2, M0v1;
+    suppose v in uG;
+      then v in uG \/ ([:uG,{uG}:] \/ {uG}) by XBOOLE_0:def 3;
+     hence v in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_1:4;
+    end;
+    suppose ex x being set st x in uG & v = [x,uG];
+      then consider x being set such that
+    B2: x in uG and
+    C2: v = [x,uG];
+      v in [:uG,{uG}:] by A, B2, C2, ZFMISC_1:def 2;
+      then v in uG \/ [:uG,{uG}:] by XBOOLE_0:def 3;
+      hence v in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+    end;
+    suppose v = union G; then
+     v in {uG} by TARSKI:def 1;
+     hence thesis by XBOOLE_0:def 3;
+    end;
+ end;
+ thus uG \/ [:uG,{uG}:] \/ {uG} c= uMG proof
+  let v be set;
+  assume v in uG \/ [:uG,{uG}:] \/ {uG};
+  then A2: v in uG \/ [:uG,{uG}:] or v in {uG} by XBOOLE_0:def 3;
+  per cases by A2, XBOOLE_0:def 3;
+  suppose v in uG;
+   hence thesis by M0v1;
+  end;
+  suppose v in [:uG,{uG}:];
+    then consider x, y being set such that
+    A3: x in uG and
+    B3: y in {uG} and
+    C3: v = [x,y] by ZFMISC_1:def 2;
+       y = uG by B3, TARSKI:def 1;
+   hence thesis by A3, C3, M0v1;
+  end;
+  suppose v in {uG};
+    then v = uG by TARSKI:def 1;
+   hence thesis by M0v1;
+  end;
+ end;
+end;
+
+theorem M00:
+for G being SimpleGraph holds union G in union Mycielskian G
+proof
+ let G be SimpleGraph;
+ union G in {union G} by TARSKI:def 1;
+ then union G in (union G) \/ [:union G,{union G}:] \/ {union G}
+    by XBOOLE_0:def 3;
+ hence union G in union Mycielskian G by M0v2;
+end;
+
+theorem MGvoid:
+for G being void SimpleGraph holds Mycielskian G = {{},{union G}}
+proof
+  let G be void SimpleGraph;
+  set uG = union G;
+A: { {uG,[x,uG]} where x is Element of uG : x in Vertices G } = {} proof
+     assume not thesis;
+       then consider e being set such that
+   A1: e in { {uG,[x,uG]} where x is Element of uG : x in Vertices G }
+       by XBOOLE_0:def 1;
+       consider x being Element of uG such that e = {uG,[x,uG]} and
+   B1: x in Vertices G by A1;
+     thus thesis by B1;
+   end;
+B: { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G } = {} proof
+     assume not thesis;
+      then consider e being set such that
+     A1: e in { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G }
+                     by XBOOLE_0:def 1;
+         consider x, y being Element of uG such that e = {x,[y,uG]} and
+     B1: {x,y} in Edges G by A1;
+     thus thesis by B1, SG5;
+   end;
+C: Edges G = {} proof
+    assume not thesis;
+    then consider e being set such that
+   A1: e in Edges G by XBOOLE_0:def 1;
+       consider x, y being set such that x <> y and
+   B1: x in Vertices G and y in Vertices G & e = {x, y} by A1, SG4;
+    thus contradiction by B1;
+   end;
+D: { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction } = {{uG}} proof
+    thus { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+          : not contradiction } c= {{uG}} proof
+      let a be set;
+      assume a in { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+          : not contradiction };
+        then consider x being Element of (uG) \/ [:uG,{uG}:] \/ {uG} such that
+      A1: a = {x} and not contradiction;
+        x = uG by TARSKI:def 1;
+     hence a in {{uG}} by A1, TARSKI:def 1;
+    end;
+    thus {{uG}} c= { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction } proof
+      let a be set;
+      assume a in {{uG}};
+        then A1: a = {uG} by TARSKI:def 1;
+        uG in (uG) \/ [:uG,{uG}:] \/ {uG} by TARSKI:def 1;
+      hence thesis by A1;
+    end;
+   end;
+ thus Mycielskian G = {{},{uG}} by A, B, C, D, ENUMSET1:1;
+end;
+
+registration
+ let G be finite SimpleGraph;
+ cluster Mycielskian G -> finite;
+ correctness proof
+ set uG = union G; set MG = Mycielskian G;
+ set C = { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction };
+ set A = { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+ set B = { {uG,[x,uG]} where x is Element of uG : x in Vertices G };
+ per cases;
+ suppose G is void;
+    then MG = {{},{union G}} by MGvoid;
+  hence thesis;
+ end;
+ suppose G is non void;
+   then reconsider uGf = uG as non empty set by VoidGV;
+Ba: uGf is finite;
+   deffunc FB(set) = {uG,[$1,uG]};
+Bb: { FB(x) where x is Element of uGf : x in uGf } is finite
+     from FRAENKEL:sch 21(Ba);
+Aa: uG is finite;
+   deffunc FA(set,set) = {$1,[$2,uG]};
+   set AA = { FA(x,y) where x is Element of uGf, y is Element of uGf
+                      : x in uG & y in uG };
+Ab: AA is finite from FRAENKEL:sch 22(Aa, Aa);
+Ac: A c= AA proof
+     let a be set;
+     assume a in A;
+     then consider x, y being Element of uG such that
+   A1: a = {x,[y,uG]} and {x,y} in Edges G;
+     thus a in AA by A1;
+   end;
+   defpred PC[set] means not contradiction;
+   deffunc FC(set) = {$1};
+{ FC(x) where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG} : PC[x] } is finite
+       from PRE_CIRC:sch 1;
+hence MG is finite by Bb, Ab, Ac;
+  end;
+ end;
+end;
+
+theorem M0order:
+for G being finite SimpleGraph holds order Mycielskian G = 2*(order G) + 1
+proof
+ let G be finite SimpleGraph;
+ set uG = union G; set MG = Mycielskian G;
+B: card [:uG,{uG}:] = order G by CARD_2:6;
+C: uG misses [:uG,{uG}:] proof
+    assume uG meets [:uG,{uG}:];
+    then consider a being set such that
+   A0: a in uG and
+   B0: a in [:uG,{uG}:] by XBOOLE_0:3;
+      consider x,y being set such that x in uG and
+   B1: y in {uG} and
+   C1: a = [x,y] by B0, ZFMISC_1:def 2;
+      y = uG by B1, TARSKI:def 1;
+     hence contradiction by C1, A0, Aux1;
+   end;
+D: now assume uG in (uG) \/ [:uG,{uG}:];
+     then uG in uG or uG in [:uG,{uG}:] by XBOOLE_0:def 3;
+     then consider x,y being set such that x in uG and
+   B1: y in {uG} and
+   C1: uG = [x,y] by ZFMISC_1:def 2;
+     y = uG by B1, TARSKI:def 1;
+    hence contradiction by C1, Aux2;
+   end;
+ thus order MG = card ((uG) \/ [:uG,{uG}:] \/ {uG}) by M0v2
+  .= card ((uG) \/ [:uG,{uG}:]) + 1 by D, CARD_2:41
+  .= (card uG) + (card [:uG,{uG}:]) + 1 by C, CARD_2:40
+  .= 2*(order G) + 1 by B;
+end;
+
+theorem M0e0:
+for G being SimpleGraph, e being set
+ holds e in Edges Mycielskian G iff
+  e in Edges G or
+  (ex x, y being Element of union G st e = {x,[y,union G]} & {x,y} in Edges G)
+or (ex y being Element of union G st e = {union G,[y,union G]} & y in union G)
+proof
+ let G be SimpleGraph, e be set;
+ set uG = union G; set MG = Mycielskian G;
+ set C = { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction };
+ set A = { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+ set B = { {uG,[x,uG]} where x is Element of uG : x in Vertices G };
+ hereby assume A0: e in Edges Mycielskian G;
+  then consider x, y being set such that
+ A1: x <> y and x in Vertices MG and y in Vertices MG and
+ D1: e = {x, y} by SG4;
+  per cases by A0, MYCIELSK:4;
+  suppose e in { {} };
+   hence e in Edges G
+    or (ex x, y being Element of uG st e = {x,[y,uG]} & {x,y} in Edges G)
+ or (ex y being Element of uG st e = {uG,[y,uG]} & y in uG)
+   by D1, TARSKI:def 1;
+  end;
+  suppose e in C;
+    then consider a being Element of (uG) \/ [:uG,{uG}:] \/ {uG} such that
+    A2: e = {a} and not contradiction;
+   thus e in Edges G
+    or (ex x, y being Element of uG st e = {x,[y,uG]} & {x,y} in Edges G)
+    or (ex y being Element of uG st e = {uG,[y,uG]} & y in uG)
+        by A2, D1, A1, ZFMISC_1:5;
+  end;
+  suppose e in Edges G or e in A or e in B;
+   hence e in Edges G
+    or (ex x, y being Element of uG st e = {x,[y,uG]} & {x,y} in Edges G)
+   or (ex y being Element of uG st e = {uG,[y,uG]} & y in uG);
+  end;
+ end;
+ assume B: e in Edges G
+    or (ex x, y being Element of uG st e = {x,[y,uG]} & {x,y} in Edges G)
+    or (ex y being Element of uG st e = {uG,[y,uG]} & y in uG);
+  per cases by B;
+  suppose S1: e in Edges G;
+  A2: card e = 2 by S1, LEdges;
+      e in MG by S1, MYCIELSK:4;
+   hence e in Edges Mycielskian G by A2, LEdges;
+  end;
+  suppose ex x, y being Element of uG st e = {x,[y,uG]} & {x,y} in Edges G;
+    then consider x, y being Element of uG such that
+  A2: e = {x,[y,uG]} and
+  B2: {x,y} in Edges G;
+  C2: e in A by A2, B2;
+  D2: e in MG by C2, MYCIELSK:4;
+      y in uG by B2, SG5;
+      then x <> [y,uG] by Aux1;
+      then card e = 2 by A2, CARD_2:57;
+   hence e in Edges Mycielskian G by D2, LEdges;
+  end;
+  suppose ex y being Element of uG st e = {uG,[y,uG]} & y in uG;
+    then consider y being Element of uG such that
+  A2: e = {uG,[y,uG]} and
+  B2: y in uG;
+  C2: e in B by A2, B2;
+  D2: e in MG by C2, MYCIELSK:4;
+      card e = 2 by Aux2, A2, CARD_2:57;
+   hence e in Edges Mycielskian G by D2, LEdges;
+  end;
+end;
+
+theorem M0e:
+for G being SimpleGraph
+ holds Edges Mycielskian G = (Edges G)
+  \/ { {x,[y,union G]} where x, y is Element of union G : {x,y} in Edges G }
+  \/ { {union G,[y,union G]} where y is Element of union G : y in union G }
+proof
+ let G be SimpleGraph;
+ set uG = union G;
+ set A = { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+ set B = { {uG,[y,uG]} where y is Element of uG : y in uG };
+ thus Edges Mycielskian G c= (Edges G) \/ A \/ B
+ proof let e be set; assume
+ A: e in Edges Mycielskian G;
+  per cases by A, M0e0;
+  suppose e in Edges G;
+     then e in (Edges G) \/ A by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  suppose ex x, y being Element of union G
+           st e = {x,[y,union G]} & {x,y} in Edges G;
+     then e in A;
+     then e in (Edges G) \/ A by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  suppose ex y being Element of union G st e = {uG,[y,uG]} & y in uG;
+     then e in B;
+   hence thesis by XBOOLE_0:def 3;
+  end;
+ end;
+
+ thus (Edges G) \/ A \/ B c= Edges Mycielskian G proof
+  let e be set;
+  assume e in (Edges G) \/ A \/ B;
+  then A: e in (Edges G) \/ A or e in B by XBOOLE_0:def 3;
+  per cases by A, XBOOLE_0:def 3;
+  suppose e in Edges G;
+   hence thesis by M0e0;
+  end;
+  suppose e in A;
+    then consider x, y being Element of uG such that
+  B: e = {x,[y,uG]} & {x,y} in Edges G;
+   thus thesis by B, M0e0;
+  end;
+  suppose e in B;
+   then consider y being Element of uG such that
+  B: e = {union G,[y,union G]} & y in uG;
+   thus thesis by B, M0e0;
+  end;
+ end;
+end;
+
+theorem M0size:
+for G being finite SimpleGraph holds size Mycielskian G = 3*(size G) + order G
+proof
+ let G be finite SimpleGraph;
+ set uG = union G; set MG = Mycielskian G;
+ set A = { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+ set B = { {uG,[y,uG]} where y is Element of uG : y in union G };
+ per cases;
+ suppose S1: G is void;
+  then M1: MG = {{},{uG}} by MGvoid;
+  B1: size G = 0 by S1, VoidGE, CARD_1:27;
+      size MG = 0 proof
+       assume not thesis;
+        then Edges MG <> {};
+        then consider e being set such that
+      A2: e in Edges MG by XBOOLE_0:def 1;
+         consider x, y being set such that
+      B2: x <> y and x in Vertices MG & y in Vertices MG and
+      C2: e = {x, y} by A2, SG4;
+          e = {} or e = {uG} by M1, A2, TARSKI:def 2;
+        hence thesis by C2, B2, ZFMISC_1:5;
+      end;
+   hence thesis by S1, B1;
+ end;
+ suppose G is non void;
+   then reconsider uGf = uG as non empty set by VoidGV;
+Ba: uGf is finite;
+   deffunc FB(set) = {uG,[$1,uG]};
+   { FB(x) where x is Element of uGf : x in uGf } is finite
+      from FRAENKEL:sch 21(Ba);
+   then reconsider B as finite set;
+Aa: uG is finite;
+   deffunc FA(set,set) = {$1,[$2,uG]};
+   set AA = { FA(x,y) where x is Element of uGf, y is Element of uGf
+     : x in uG & y in uG };
+Ab: AA is finite from FRAENKEL:sch 22(Aa, Aa);
+   A c= AA proof
+     let a be set;
+     assume a in A;
+     then consider x, y being Element of uG such that
+   A1: a = {x,[y,uG]} and {x,y} in Edges G;
+     thus a in AA by A1;
+   end;
+   then reconsider A as finite set by Ab;
+B: card B = order G by McopyV;
+C: card A = 2 * size G by MnewE;
+D: now assume B meets (Edges G) \/ A;
+     then consider a being set such that
+   A1: a in B and
+   B1: a in (Edges G) \/ A by XBOOLE_0:3;
+       consider y being Element of uG such that
+   C1: a = {uG,[y,uG]} and y in union G by A1;
+       per cases by B1, XBOOLE_0:def 3;
+       suppose a in Edges G;
+         then consider xa, ya being set such that xa <> ya and
+       B2: xa in Vertices G and ya in Vertices G and
+       D2: a = {xa, ya} by SG4;
+         per cases by C1, D2, ZFMISC_1:6;
+         suppose xa = uG;
+          hence contradiction by B2;
+         end;
+         suppose xa = [y,uG];
+          hence contradiction by B2, Aux1;
+         end;
+       end;
+       suppose a in A;
+         then consider xa, ya being Element of uG such that
+       A2: a = {xa,[ya,uG]} and
+       B2: {xa,ya} in Edges G;
+       C2: xa in uG by B2, SG5;
+         per cases by C1, A2, ZFMISC_1:6;
+         suppose xa = uG;
+          hence contradiction by C2;
+         end;
+         suppose xa = [y,uG];
+          hence contradiction by C2, Aux1;
+         end;
+       end;
+   end;
+E: now assume A meets Edges G;
+       then consider a being set such that
+   A1: a in A and
+   B1: a in Edges G by XBOOLE_0:3;
+          consider xa, ya being Element of uG such that
+       A2: a = {xa,[ya,uG]} and {xa,ya} in Edges G by A1;
+          consider xe, ye being set such that xe <> ye and
+       B2a: xe in Vertices G and
+       C2a: ye in Vertices G and
+       D2a: a = {xe, ye} by B1, SG4;
+           per cases by A2, D2a, ZFMISC_1:6;
+         suppose xe = [ya,uG];
+          hence contradiction by B2a, Aux1;
+         end;
+         suppose ye = [ya,uG];
+          hence contradiction by C2a, Aux1;
+         end;
+   end;
+ thus size Mycielskian G = card ((Edges G) \/ A \/ B) by M0e
+   .= card ((Edges G) \/ A) + order G by B, D, CARD_2:40
+   .= card (Edges G) + 2*(size G) + order G by C, E, CARD_2:40
+   .= 3*(size G) + order G;
+ end;
+end;
+
+theorem M0e1:
+for G being SimpleGraph, s, t being set
+ st {s, t} in Edges Mycielskian G
+  holds {s, t} in Edges G or
+        (s in union G or s = union G)
+           & (ex y being set st y in union G & t = [y,union G]) or
+        (t in union G or t = union G)
+           & (ex y being set st y in union G & s = [y,union G])
+proof
+  let G be SimpleGraph, s, t be set such that
+A: {s, t} in Edges Mycielskian G ;
+  set uG = union G;
+   per cases by A, M0e0;
+   suppose {s, t} in Edges G;
+     hence thesis;
+   end;
+   suppose ex x, y being Element of uG
+            st {s,t} = {x,[y,uG]} & {x,y} in Edges G;
+      then consider x, y being Element of uG such that
+   A1: {s,t} = {x,[y,uG]} and
+   B1: {x,y} in Edges G;
+   C1: x in uG & y in uG by B1, SG5;
+       s = x & t = [y,uG] or t = x & s = [y,uG] by A1, ZFMISC_1:6;
+     hence thesis by C1;
+   end;
+   suppose ex y being Element of uG st {s,t} = {uG,[y,uG]} & y in uG;
+      then consider y being Element of uG such that
+   A1: {s,t} = {uG,[y,uG]} and
+   B1: y in uG;
+       s = uG & t = [y,uG] or t = uG & s = [y,uG] by A1, ZFMISC_1:6;
+     hence thesis by B1;
+   end;
+end;
+
+theorem M0e2:
+for G being SimpleGraph, u being set
+ st { union G, u } in Edges Mycielskian G
+  holds ex x being set st x in union G & u = [x, union G]
+proof
+   let G be SimpleGraph, u be set such that
+A: { union G, u } in Edges Mycielskian G;
+   set uG = union G;
+   per cases by A, M0e1;
+   suppose {uG, u} in Edges G;
+     then uG in uG by SG5;
+     hence ex x being set st x in uG & u = [x, uG];
+   end;
+   suppose (uG in uG or uG = uG)
+           & (ex y being set st y in uG & u = [y,uG]);
+     hence ex x being set st x in uG & u = [x, union G];
+   end;
+   suppose (u in uG or u = uG)
+           & (ex y being set st y in uG & uG = [y,uG]);
+       then consider y being set such that y in uG and
+   A1: uG = [y,uG];
+     thus ex x being set st x in uG & u = [x, uG] by A1, Aux2;
+   end;
+end;
+
+theorem M0e2aa:
+for G being SimpleGraph, u being set
+ st u in Vertices G holds { [u, union G] } in Mycielskian G
+proof
+  let G be SimpleGraph, u be set such that
+A: u in Vertices G;
+   { [u, union G], union G} in Edges Mycielskian G by A, M0e0;
+   then [u, union G] in Vertices Mycielskian G by SG5;
+  hence { [u, union G] } in Mycielskian G by Vertices0;
+end;
+
+theorem M0e2a:
+for G being SimpleGraph, u being set
+ st u in Vertices G holds { [u, union G], union G} in Mycielskian G
+proof
+  let G be SimpleGraph, u be set such that
+A: u in Vertices G;
+   { [u, union G], union G} in Edges Mycielskian G by A, M0e0;
+  hence { [u, union G], union G} in Mycielskian G;
+end;
+
+theorem M0e3:
+for G being SimpleGraph, x, y being set
+ holds not {[x,union G],[y,union G]} in Edges Mycielskian G
+proof
+let G be SimpleGraph, x, y be set such that
+A: {[x,union G],[y,union G]} in Edges Mycielskian G;
+Ab: union G in {x,union G} by TARSKI:def 2;
+Ac: {x,union G} in {{x},{x,union G}} by TARSKI:def 2;
+B: not [x,union G] in union G by Ab, Ac, XREGULAR:7;
+C: not [x,union G] = union G by Ab, TARSKI:def 2;
+Ab1: union G in {y,union G} by TARSKI:def 2;
+Ac1: {y,union G} in {{y},{y,union G}} by TARSKI:def 2;
+B1: not [y,union G] in union G by Ab1, Ac1, XREGULAR:7;
+C1: not [y,union G] = union G by Ab1, TARSKI:def 2;
+   {[x,union G],[y,union G]} in Edges G by A, B,C, B1, C1, M0e1;
+ hence contradiction by B, SG5;
+end;
+
+theorem M0e3a:
+for G being SimpleGraph, x, y being set
+ st x <> y holds not {[x,union G],[y,union G]} in Mycielskian G
+proof
+  let G be SimpleGraph, x, y be set such that
+A: x <> y and
+B: {[x,union G],[y,union G]} in Mycielskian G;
+   [x,union G] <> [y,union G] by A, XTUPLE_0:1;
+   then card {[x,union G],[y,union G]} = 2 by CARD_2:57;
+   then {[x,union G],[y,union G]} in Edges Mycielskian G by B, LEdges;
+  hence contradiction by M0e3;
+end;
+
+theorem M0e4:
+for G being SimpleGraph, x, y being set
+ st {[x,union G], y} in Edges Mycielskian G
+  holds x <> y & x in union G &  (y in union G or y = union G)
+proof
+  let G be SimpleGraph, x, y be set such that
+A: {[x,union G], y} in Edges Mycielskian G;
+   set uG = union G; set e = {[x,union G],y};
+   per cases by A, M0e0;
+   suppose e in Edges G;
+      then [x,uG] in uG by SG5;
+    hence x<>y & x in union G &  (y in union G or y = union G) by Aux1;
+  end;
+  suppose ex x, y being Element of uG
+           st e = {x,[y,union G]} & {x,y} in Edges G;
+    then consider xa, ya being Element of uG such that
+  A1: e = {xa,[ya,union G]} and
+  B1: {xa,ya} in Edges G;
+     consider xx, yy being set such that
+  C1: xx <> yy and
+  D1: xx in Vertices G & yy in Vertices G and
+  E1: {xa,ya} = {xx, yy} by B1, SG4;
+  F1: xa = xx & ya = yy or xa =yy & ya = xx by E1, ZFMISC_1:6;
+      per cases by A1, ZFMISC_1:6;
+      suppose xa = [x,uG] & y = [ya,uG];
+       hence thesis by D1, Aux1;
+      end;
+      suppose xa = y & [ya,uG] = [x,uG];
+    hence x<>y & x in union G & (y in union G or y = union G)
+     by C1, D1, F1, XTUPLE_0:1;
+      end;
+  end;
+  suppose ex y being Element of union G
+           st e = {union G,[y,union G]} & y in union G;
+     then consider yy being Element of uG such that
+  A1: e = {union G,[yy,union G]} and
+  B1: yy in union G;
+  C1: uG = [x,uG] & y = [yy,uG] or uG = y & [x,uG] = [yy, uG]
+       by A1, ZFMISC_1:6;
+      x = yy by C1, Aux2, XTUPLE_0:1;
+    hence x<>y & x in union G & (y in union G or y = union G) by C1, B1;
+  end;
+end;
+
+theorem M0e4a:
+for G being SimpleGraph, x, y being set
+ st {[x,union G], y} in Mycielskian G holds x <> y
+proof
+  let G be SimpleGraph, x, y be set;
+  set MG = Mycielskian G; set uG = union G;
+  assume A: {[x,uG], y} in MG;
+  assume B: x = y;
+  then [x,uG] <> y by Aux3;
+  then {[x,uG], y} in Edges MG by A, SG4a;
+  hence thesis by B, M0e4;
+end;
+
+theorem M0e4b:
+for G being SimpleGraph, x, y being set
+ st y in union G & {[x,union G], y} in Mycielskian G holds {x, y} in G
+proof
+  let G be SimpleGraph;
+  set MG = Mycielskian G; set uG = union G;
+  set A = { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+  set B = { {uG,[y,uG]} where y is Element of uG : y in uG };
+  let x, y be set;
+  assume A0: y in uG;
+  assume {[x,uG], y} in MG;
+  then {[x,uG], y} in { {} } \/ singletons Vertices MG \/ Edges MG by SG0;
+  then A: {[x,uG], y} in { {} } \/ singletons Vertices MG
+           or {[x,uG], y} in Edges MG by XBOOLE_0:def 3;
+  per cases by A, XBOOLE_0:def 3;
+  suppose {[x,uG], y} in { {} };
+   hence thesis by TARSKI:def 1;
+  end;
+  suppose {[x,uG], y} in singletons Vertices MG;
+     then consider f being Subset of Vertices MG such that
+  A1: f = {[x,uG], y} and
+  B1: f is 1-element;
+     consider s being set such that s in Vertices MG and
+  D1: f = {s} by B1, BSPACEdef9;
+  E1: card f = 1 by D1, CARD_1:30;
+      y = [x,uG] by E1, A1, CARD_2:57;
+   hence thesis by A0, Aux1;
+  end;
+  suppose {[x,uG], y} in Edges MG;
+   then {[x,uG], y} in (Edges G) \/ A \/ B by M0e;
+   then A2: {[x,uG], y} in (Edges G) \/ A or {[x,uG], y} in B
+        by XBOOLE_0:def 3;
+   per cases by A2, XBOOLE_0:def 3;
+   suppose {[x,uG], y} in Edges G;
+      then [x,uG] in uG by SG5;
+    hence thesis by Aux1;
+   end;
+   suppose {[x,uG], y} in A;
+     then consider xx, yy being Element of uG such that
+   A3: {[x,uG], y} = {xx,[yy,uG]} and
+   B3: {xx,yy} in Edges G;
+   C3: xx in uG & yy in uG by B3, SG5;
+       [x,uG] = xx & y = [yy,uG] or [x,uG] = [yy,uG] & y = xx
+        by A3, ZFMISC_1:6;
+    then x = yy & y = xx by XTUPLE_0:1, C3, Aux1;
+    hence thesis by B3;
+   end;
+   suppose {[x,uG], y} in B;
+     then consider yy being Element of uG such that
+   A3: {[x,uG], y} = {uG,[yy,uG]} and yy in uG;
+       [x,uG] = uG & y = [yy,uG] or [x,uG] = [yy,uG] & y = uG
+        by A3, ZFMISC_1:6;
+    hence thesis by Aux1, A0;
+   end;
+  end;
+end;
+
+theorem M0e4c:
+for G being SimpleGraph, x, y being set
+ st {x, y} in Edges G holds {[x,union G], y} in Mycielskian G
+proof
+  let G be SimpleGraph;
+  set uG = union G;
+  let x, y be set;
+A0: { {xx,[yy,uG]} where xx, yy is Element of uG : {xx,yy} in Edges G }
+       c= Mycielskian G by MYCIELSK:3;
+  assume A: {x, y} in Edges G;
+   then x in uG & y in uG by  SG5;
+   then {[x,uG], y} in
+     { {xx,[yy,uG]} where xx, yy is Element of uG : {xx,yy} in Edges G } by A;
+  hence {[x,union G], y} in Mycielskian G by A0;
+end;
+
+theorem M1:
+for G being SimpleGraph, x, y being set
+ st x in Vertices G & y in Vertices G & {x, y} in Mycielskian G
+  holds {x, y} in G
+proof
+ let G be SimpleGraph, s, t be set such that
+A: s in Vertices G and
+B: t in Vertices G and
+C: {s, t} in Mycielskian G;
+ per cases;
+ suppose s = t;
+   then {s,t} = {s} by ENUMSET1:29;
+  hence {s, t} in G by A, Vertices0;
+ end;
+ suppose s<>t;
+  then card {s,t} = 2 by CARD_2:57;
+  then A1: {s, t} in Edges Mycielskian G by C, LEdges;
+  per cases by A1, M0e1;
+  suppose {s, t} in Edges G;
+    hence {s, t} in G;
+  end;
+  suppose (s in union G or s = union G)
+    & (ex y being set st y in union G & t = [y,union G]);
+    then consider y be set such that y in union G and
+  B1: t = [y,union G];
+    thus {s, t} in G by B1, B, Aux1;
+  end;
+  suppose (t in union G or t = union G)
+    & (ex y being set st y in union G & s = [y,union G]);
+    then consider y being set such that y in union G and
+  B1: s = [y,union G];
+    thus {s, t} in G by B1, A, Aux1;
+  end;
+ end;
+end;
+
+theorem GsubMG:
+for G being SimpleGraph holds G = (Mycielskian G) SubgraphInducedBy Vertices G
+proof
+ let G be SimpleGraph;
+ set L = Vertices G, MG = Mycielskian G;
+ thus G c= MG SubgraphInducedBy L by M0, Sub0b;
+ thus MG SubgraphInducedBy L c= G proof
+   let a be set;
+   assume Aa: a in MG SubgraphInducedBy L;
+   set m = a;
+   C1a: m in bool L by Aa, XBOOLE_0:def 4;
+   per cases by Aa, MYCIELSK:4;
+   suppose m in { {} };
+      then m = {} by TARSKI:def 1;
+    hence a in G by SG1;
+   end;
+   suppose m in { {x} where x is Element of L \/ [:L,{L}:] \/ {L}
+                          : not contradiction };
+      then consider x being Element of L \/ [:L,{L}:] \/ {L} such that
+   A2: m = {x} and not contradiction;
+       x in m by A2, TARSKI:def 1;
+    hence a in G by C1a, A2, Vertices0;
+   end;
+   suppose m in Edges G;
+    hence a in G;
+   end;
+   suppose  m in { {x,[y,L]} where x, y is Element of L :
+            {x,y} in Edges G };
+     then consider x, y being Element of L such that
+   A2: m = {x,[y,L]} and {x,y} in Edges G;
+       [y,L] in m by A2, TARSKI:def 2;
+    hence a in G by C1a, Aux1;
+   end;
+   suppose m in { {L,[x,L]} where x is Element of L : x in Vertices G };
+     then consider x being Element of L such that
+   A2: m = {L,[x,L]} and x in Vertices G;
+       L in m by A2, TARSKI:def 2;
+       then L in L by C1a;
+    hence a in G;
+   end;
+ end;
+end;
+
+theorem MClique3:
+for G being SimpleGraph, C being finite Clique of Mycielskian G
+ st 3 <= order C for v being Vertex of C holds v <> union G
+proof
+  let G be SimpleGraph, C be finite Clique of Mycielskian G such that
+A: 3 <= order C;
+  set MG = Mycielskian G;
+  let v be Vertex of C such that
+B: v = union G;
+   3 c= order C by A, NAT_1:39;
+   then consider v1, v2 being set such that
+D: v1 in Vertices C and
+E: v2 in Vertices C and
+F: v1<>v and
+G: v2<>v and
+H: v1<>v2 by card3;
+Ia: {v,v1} in C by D, Clique2a;
+Ja: {v,v2} in C by E, Clique2a;
+I1: {v, v1} in Edges MG by Ia, F, SG4a;
+J1: {v, v2} in Edges MG by G, Ja, SG4a;
+    consider x1 being set such that x1 in union G and
+Kb: v1 = [x1, union G] by B, I1, M0e2;
+    consider x2 being set such that x2 in union G and
+Lb: v2 = [x2, union G] by B, J1, M0e2;
+    {v1, v2} in C by D,E,Clique2a;
+  hence contradiction by Kb, Lb, H, M0e3a;
+end;
+
+theorem MClique0: :: MClique0
+for G being with_finite_clique# SimpleGraph st clique# G = 0
+for D being finite Clique of Mycielskian G holds order D <= 1
+proof
+  let G be with_finite_clique# SimpleGraph such that
+A: clique# G = 0;
+   set uG = union G;
+B: Vertices G = {} by A, Cno0;
+C: G is void by B, VoidGV;
+D: union Mycielskian G
+    = union {{},{uG}} by C, MGvoid
+   .= {} \/ {uG} by ZFMISC_1:75
+   .= {uG};
+  let D be finite Clique of Mycielskian G;
+    Vertices D c= {uG} by D, ZFMISC_1:77;
+  then card Vertices D c= card {uG} by CARD_1:11;
+  then card Vertices D <= card {uG} by NAT_1:39;
+  hence order D <= 1 by CARD_1:30;
+end;
+
+theorem :: MGsingle:
+for G being SimpleGraph, x being set st Vertices G = {x}
+holds Mycielskian G = {{},{x},{[x,union G]}, {union G}, {[x,union G],union G}}
+proof
+ let G be SimpleGraph, a be set such that Aa: Vertices G = {a};
+A: card Vertices G = 1 by Aa, CARD_1:30;
+B: a in Vertices G by Aa, TARSKI:def 1;
+   set uG = union G; set MG = Mycielskian G;
+   set A = {{x} where x is Element of (union G)\/[:uG,{uG}:] \/ {uG}
+                                                    : not contradiction };
+   set B = {{x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+   set C = { {uG,[x,uG]} where x is Element of uG : x in Vertices G };
+   consider aa being set such that
+Ca: uG = {aa} by A, CARD_2:42;
+C:  a = aa by Ca, B, TARSKI:def 1;
+D: [:uG,{uG}:] = {[a,uG]} by Ca, C, ZFMISC_1:29;
+E0: G is edgeless by A, GsingleE;
+ thus Mycielskian G c= {{},{a},{[a,uG]}, {uG}, {[a,uG],uG}} proof
+   let e be set;
+   assume A1: e in MG;
+   per cases by A1, MYCIELSK:4;
+   suppose e in {{}};
+     then e = {} by TARSKI:def 1;
+    hence e in {{},{a},{[a,uG]}, {uG}, {[a,uG],uG}} by ENUMSET1:def 3;
+   end;
+   suppose e in A;
+     then consider x being Element of uG \/ [:uG,{uG}:] \/ {uG} such that
+   B1: e = {x} and not contradiction;
+       x in uG \/ [:uG,{uG}:] or x in {uG} by XBOOLE_0:def 3;
+       then x in uG or x in [:uG,{uG}:] or x in {uG} by XBOOLE_0:def 3;
+       then x = a or x = [a,uG] or x = uG by Ca, C, D, TARSKI:def 1;
+    hence thesis by B1, ENUMSET1:def 3;
+   end;
+   suppose e in Edges G;
+    hence thesis by E0, Ledgeless;
+   end;
+   suppose e in B;
+      then consider x, y being Element of uG such that e = {x,[y,uG]} and
+   B1: {x,y} in Edges G;
+    thus thesis by B1, E0, Ledgeless;
+   end;
+   suppose e in C;
+      then consider x being Element of uG such that
+   A1: e = {uG,[x,uG]} and x in Vertices G;
+       x = a by Ca, C, TARSKI:def 1;
+    hence thesis by A1, ENUMSET1:def 3;
+   end;
+ end;
+ thus {{},{a},{[a,union G]}, {union G}, {[a,union G],union G}} c= Mycielskian G
+ proof
+   let e be set;
+   assume A1: e in {{},{a},{[a,union G]}, {union G}, {[a,union G],union G}};
+   per cases by A1, ENUMSET1:def 3;
+   suppose e = {};
+    hence e in MG by SG1;
+   end;
+   suppose S1: e = {a};
+     a in uG \/ [:uG,{uG}:] by B, XBOOLE_0:def 3;
+     then a in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+     then e in A by S1;
+    hence e in MG by MYCIELSK:4;
+   end;
+   suppose S1: e = {[a,union G]};
+       [a,union G] in [:uG,{uG}:] by D, TARSKI:def 1;
+       then [a,union G] in uG \/ [:uG,{uG}:] by XBOOLE_0:def 3;
+       then [a,union G] in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+       then e in A by S1;
+    hence e in MG by MYCIELSK:4;
+   end;
+   suppose S1: e = {uG};
+      uG in {uG} by TARSKI:def 1;
+      then uG in uG \/ [:uG,{uG}:] \/ {uG} by XBOOLE_0:def 3;
+      then e in A by S1;
+    hence e in MG by MYCIELSK:4;
+   end;
+   suppose e = {[a,uG],uG};
+      then e in C by B;
+    hence e in MG by MYCIELSK:4;
+   end;
+ end;
+end;
+
+theorem MClique1: :: MClique1
+for G being with_finite_clique# SimpleGraph st clique# G = 1
+for D being finite Clique of Mycielskian G holds order D <= 2
+proof
+  let G be with_finite_clique# SimpleGraph such that
+A: clique# G = 1;
+   set uG = union G; set MG = Mycielskian G; set uMG = union MG;
+  let D be finite Clique of Mycielskian G;
+   set uD = union D;
+  assume H0: order D > 2;
+   then H: order D >= 2+1 by NAT_1:13;
+   uD is non empty by H0;
+   then consider v being set such that
+A0: v in uD by XBOOLE_0:def 1;
+C: v <> uG by A0, H, MClique3;
+   3 c= order D by H, NAT_1:39;
+   then consider v1, v2 being set such that
+B1: v1 in uD and v2 in uD and
+B3: v1<>v and v2<>v and v1<>v2 by card3;
+C1: v1 <> uG by B1, H, MClique3;
+    set e = {v,v1};
+    e in D by A0, B1, Clique2a;
+    then F0: e in Edges MG by B3, SG4a;
+    per cases by F0, M0e0;
+    suppose e in Edges G;
+     hence contradiction by A, Cno2;
+    end;
+    suppose ex x, y being Element of union G
+             st e = {x,[y,uG]} & {x,y} in Edges G;
+       then consider x, y being Element of uG such that e = {x,[y,uG]} and
+    H1: {x,y} in Edges G;
+     thus contradiction by A, H1, Cno2;
+    end;
+    suppose ex y being Element of union G st e = {uG,[y,uG]} & y in uG;
+      then consider y being Element of uG such that
+    H1: e = {uG,[y,uG]} and y in uG;
+     thus contradiction by C, C1, H1, ZFMISC_1:6;
+    end;
+end;
+
+theorem MClique2: :: MClique2
+for G being with_finite_clique# SimpleGraph st 2 <= clique# G
+for D being finite Clique of Mycielskian G holds order D <= clique# G
+proof
+ let G be with_finite_clique# SimpleGraph such that
+A: 2 <= clique# G;
+ let D be finite Clique of Mycielskian G such that
+Ba: order D > clique# G;
+   set MG = Mycielskian G, uG = union G;
+Da1: Vertices D c= Vertices MG by ZFMISC_1:77;
+Da2: Edges D c= Edges MG by SG6e;
+   2 < order D by Ba, A, XXREAL_0:2;
+then Fz: 2+1 <= order D by NAT_1:13;
+   per cases;
+   suppose D c= G;
+    hence contradiction by Ba, Lcliqueno;
+   end;
+   suppose not D c= G;
+          then consider e being set such that
+      B2: e in D and
+      C2: not e in G by TARSKI:def 3;
+     now
+      assume A3: Vertices D c= Vertices G;
+      B3za: e <> {} by C2, SG1;
+          now assume not e in Edges D;
+          then consider y being set such that
+      A4: e = {y} and
+      B4: y in Vertices D by B3za, B2, SG2;
+          thus contradiction by C2, A4, B4, A3, Vertices0;
+        end;
+        then consider x, y being set such that x <> y and
+      D3a: x in Vertices D and
+      D3b: y in Vertices D and
+      D3: e = {x, y} by SG4;
+      thus contradiction by B2, A3, D3, C2, M1, D3a, D3b;
+    end;
+    then consider v being set such that
+   A1: v in Vertices D and
+   B1: not v in Vertices G by TARSKI:def 3;
+        3 c= order D by Fz, NAT_1:39;
+        then consider v1, v2 being set such that
+   C1a: v1 in Vertices D and
+   C1b: v2 in Vertices D and
+   C1c: v1<>v and
+   C1d: v2<>v and
+   C1e: v1<>v2 by card3;
+        {v,v1} in D by A1, C1a, Clique2a; then
+   E1a: {v, v1} in Edges D by C1c, SG4a;
+        {v,v2} in D by A1, C1b, Clique2a; then
+   E1b: {v, v2} in Edges D by C1d, SG4a;
+        {v1,v2} in D by  C1a, C1b, Clique2a; then
+   E1c: {v1, v2} in Edges D by C1e, SG4a;
+    per cases by A1, Da1, B1, M0v1;
+    suppose S2: v = uG;
+        consider x being set such that x in union G and
+   F1a: v1 = [x, union G] by S2, E1a, Da2, M0e2;
+        consider y being set such that y in union G and
+   F1b: v2 = [y, union G] by S2, E1b, Da2, M0e2;
+      thus contradiction by E1c, Da2, F1a, F1b, M0e3;
+    end;
+    suppose ex x being set st x in union G & v = [x,union G];
+      then consider x being set such that
+    S2a: x in uG and
+    S2b: v = [x,uG];
+    set E = D SubgraphInducedBy union G;
+    reconsider F = G SubgraphInducedBy ({x} \/ union E) as finite SimpleGraph;
+    Z2b: Vertices F = {x} \/ Vertices E proof
+         thus Vertices F c= {x} \/ Vertices E proof
+           let a be set;
+           assume a in Vertices F;
+            then a in (union G) /\ ({x} \/ union E) by Sub5;
+then     C5: a in {x} \/ union E by XBOOLE_0:def 4;
+           per cases by C5, XBOOLE_0:def 3;
+           suppose a in {x};
+            hence thesis by XBOOLE_0:def 3;
+           end;
+           suppose a in union E;
+            hence thesis by XBOOLE_0:def 3;
+           end;
+         end;
+         let a be set;
+         assume A3: a in {x} \/ Vertices E;
+         per cases by A3, XBOOLE_0:def 3;
+         suppose a in {x};
+then     A4: a = x by TARSKI:def 1;
+           x in {x} by TARSKI:def 1;
+then       x in {x} \/ union E by XBOOLE_0:def 3;
+then       x in (union G) /\ ({x} \/ union E) by S2a, XBOOLE_0:def 4;
+          hence a in Vertices F by A4, Sub5;
+         end;
+         suppose a in Vertices E;
+then         a in (union D) /\ union G by Sub5;
+then         a in union G by XBOOLE_0:def 4;
+then         a in (union G) /\ ({x} \/ union E) by A3, XBOOLE_0:def 4;
+           hence a in Vertices F by Sub5;
+         end;
+         end;
+    Z2d: union E c= union D by ZFMISC_1:77;
+    Z2c: now
+           assume x in union E;
+            then {[x,uG],x} in D by Z2d, A1, S2b, Clique2a;
+           hence contradiction by M0e4a;
+         end;
+         reconsider Fs = F as SimpleGraph-like Subset of G;
+       now
+         let a, b be set such that
+       A4: a <> b and
+       B4: a in union Fs and
+       C4: b in union Fs;
+       D4ba:  a in (union G) /\ ({x} \/ union E) by B4, Sub5;
+  then D4b: a in union G & a in {x} \/ union E by XBOOLE_0:def 4;
+       E4ba: b in (union G) /\ ({x} \/ union E) by C4, Sub5;
+  then E4b: b in union G & b in {x} \/ union E by XBOOLE_0:def 4;
+       F4a: a in Vertices G by D4ba, XBOOLE_0:def 4;
+       F4b: b in Vertices G by E4ba, XBOOLE_0:def 4;
+            x in {x} by TARSKI:def 1;
+   then H4: x in {x} \/ union E by XBOOLE_0:def 3;
+        {a,b} in Fs proof
+         per cases by D4b, E4b, XBOOLE_0:def 3;
+         suppose a in {x} & b in {x};
+           then A5: a = x & b = x by TARSKI:def 1;
+           then {a,b} = {x} by ENUMSET1:29;
+          hence {a,b} in Fs by A5, B4, Vertices0;
+         end;
+         suppose S4: a in {x} & b in union E;
+    then A5: a = x by TARSKI:def 1;
+             b in (union D) /\ union G by S4, Sub5;
+    then B5: b in union D & b in uG by XBOOLE_0:def 4;
+    then     {[x,uG], b} in D by A1, S2b, Clique2a;
+    then     {x,b} in G by B5, M0e4b;
+         hence {a,b} in Fs by H4, A5, E4b, Sub6;
+         end;
+         suppose S4: b in {x} & a in union E;
+    then A5: b = x by TARSKI:def 1;
+             a in (union D) /\ union G by S4, Sub5;
+    then B5: a in union D & a in uG by XBOOLE_0:def 4;
+    then     {[x,uG], a} in D by A1, S2b, Clique2a;
+    then     {x,a} in G by B5, M0e4b;
+         hence {a,b} in Fs by H4, A5, D4b, Sub6;
+         end;
+         suppose a in union E & b in union E;
+           then a in (union D) /\ union G & b in (union D) /\ union G by Sub5;
+           then a in union D & b in union D by XBOOLE_0:def 4;
+           then {a,b} in D by Clique2a;
+           then {a,b} in G by F4a, F4b, M1;
+          hence {a,b} in Fs by D4b, E4b, Sub6;
+         end;
+         end;
+         hence {a,b} in Edges Fs by A4, SG4a;
+        end; then
+    Y2a: Fs is clique by Lclique1;
+    U2: Vertices D c= {v} \/ Vertices E proof
+          let a be set such that
+      A3: a in Vertices D;
+          per cases;
+          suppose a = v;
+            then a in {v} by TARSKI:def 1;
+            hence thesis by XBOOLE_0:def 3;
+          end;
+          suppose S3: a <> v;
+               {a,[x,uG]} in D by S2b, A1, A3, Clique2a; then
+               {a,[x,uG]} in Edges D by S3, S2b, SG4a;
+               then a in uG or a = uG by Da2, M0e4;
+               then a in Vertices E by Fz, MClique3, A3, Sub3;
+            hence thesis by XBOOLE_0:def 3;
+          end;
+        end;
+    U2a: Vertices E c= Vertices D by ZFMISC_1:77;
+    Z2a1: {v} \/ Vertices E c= Vertices D proof
+          let a be set;
+          assume a in {v} \/ Vertices E;
+          then a in {v} or a in Vertices E by XBOOLE_0:def 3;
+          hence thesis by A1, U2a, TARSKI:def 1;
+         end;
+    Z2d: not v in Vertices E by S2b, Sub1, Aux1;
+       order F = 1 + card Vertices E by Z2b, Z2c, CARD_2:41
+              .= card ({v} \/ Vertices E) by Z2d, CARD_2:41
+              .= order D by Z2a1, U2, XBOOLE_0:def 10;
+      hence contradiction by Ba, Y2a, Lcliqueno;
+    end;
+   end;
+end;
+
+registration
+  let G be with_finite_clique# SimpleGraph;
+  cluster Mycielskian G -> with_finite_clique#;
+  coherence proof
+   set MG = Mycielskian G;   set uG = union G;
+   per cases by NAT_1:25;
+   suppose S1: clique# G = 0;
+    then uG = {} by Cno0;
+    then {} in union MG by M00;
+    then consider C being finite Clique of MG such that
+   A1: Vertices C = {{}} by CliqueS;
+    take C;
+    order C = 1 by A1, CARD_1:30;
+    hence for D being finite Clique of MG holds order D <= order C
+       by S1, MClique0;
+   end;
+   suppose S1: clique# G = 1;
+    then consider C being finite Clique of G such that
+   A1: order C = 1 by Lcliqueno;
+   A1b: union C c= union G by ZFMISC_1:77;
+       Vertices C <> {} by A1;
+       then consider v being set such that
+   B1: v in Vertices C by XBOOLE_0:def 1;
+   C1: [v,uG] in union MG by B1,A1b,M0v1;
+   D1: uG in union MG by M00;
+   E1: {[v,uG],uG} in MG by B1,A1b,M0e2a;
+       reconsider CC = {{},{[v,uG]},{uG},{[v,uG],uG}}
+           as finite Clique of MG by C1,D1,E1,Cliqueon2;
+   B1a: CC = CompleteSGraph {[v,uG],uG} by P2;
+   B1d: Vertices CC = {[v,uG],uG} by B1a, CSGLem1;
+     take CC;
+     order CC = 2 by B1d, Aux2, CARD_2:57;
+     hence for D being finite Clique of MG holds order D <= order CC
+       by S1, MClique1;
+   end;
+   suppose clique# G > 1;
+     then A1: clique# G >= 1+1 by NAT_1:13;
+     consider C being finite Clique of G such that
+   B1: order C = clique# G by Lcliqueno;
+     G c= MG by M0; then
+     reconsider CC = C as finite Clique of MG by XBOOLE_1:1;
+     take CC;
+     thus for D being finite Clique of MG holds order D <= order CC
+        by B1, A1, MClique2;
+   end;
+  end;
+end;
+
+theorem MClique: :: MClique
+for G being with_finite_clique# SimpleGraph
+ st 2 <= clique# G holds clique# Mycielskian G = clique# G
+proof
+  let G be with_finite_clique# SimpleGraph such that
+A: 2 <= clique# G and
+B: clique# Mycielskian G <> clique# G;
+   set MG = Mycielskian G;
+   consider D being finite Clique of MG such that
+D: order D = clique# MG by Lcliqueno;
+   clique# G <= clique# MG by M0, CliqueSubno0;
+   then clique# G < clique# MG by B, XXREAL_0:1;
+  hence contradiction by A, D, MClique2;
+end;
+
+theorem Mfc1:
+for G being finitely_colorable SimpleGraph
+ ex E being Coloring of Mycielskian G st card E = 1 + chromatic# G
+proof
+ let  G be finitely_colorable SimpleGraph;
+  set uG = union G;
+  set MG = Mycielskian G; set uMG = union MG;
+  set cnG = chromatic# G;
+  consider C being finite Coloring of G such that
+A: card C = cnG by Lchro;
+  defpred P[set,set] means
+     $2 = { [x,uG] where x is Element of uG : x in $1 };
+P: for e being set st e in C ex u being set st P[e,u];
+   consider r being Function such that dom r = C and
+C: for e being set st e in C holds P[e,r.e] from CLASSES1:sch 1(P);
+   set D = { d \/ r.d where d is Element of C : d in C };
+D1: card D = card C proof
+     per cases;
+     suppose A7: D is empty;
+       now assume C is non empty;
+         then consider c being set such that
+         A8: c in C by XBOOLE_0:def 1;
+         c \/ r.c in D by A8;
+         hence contradiction by A7;
+       end;
+       hence thesis by A7;
+     end;
+     suppose A9: D is non empty;
+       defpred R[set,set] means $2 = $1 \/ r.$1;
+     A10: for e being set st e in C ex u being set st R[e,u];
+        consider s being Function such that
+     A11: dom s = C and
+     A12: for e being set st e in C holds R[e,s.e] from CLASSES1:sch 1(A10);
+     A13: rng s c= D proof
+           let y be set;
+           assume y in rng s;
+           then consider x being set such that
+          A14: x in dom s and
+          A15: y = s.x by FUNCT_1:def 3;
+               y = x \/ r.x by A14, A15, A11, A12;
+             hence y in D by A14, A11;
+          end;
+          then reconsider s as Function of C, D by A11, FUNCT_2:2;
+          D c= rng s proof
+            let x be set;
+            assume x in D;
+              then consider c being Element of C such that
+          A16: x = c \/ r.c and
+          A17: c in C;
+               x = s.c by A16, A17, A12;
+            hence x in rng s by A17, A11, FUNCT_1:def 3;
+          end;
+          then rng s = D by A13, XBOOLE_0:def 10;
+          then
+         A18: s is onto by FUNCT_2:def 3;
+            s is one-to-one proof
+              let x1,x2 be set such that
+            A19: x1 in dom s and
+            A20: x2 in dom s and
+            A21: s.x1 = s.x2;
+            A22: s.x1 = x1 \/ r.x1 by A19, A11, A12;
+            A23: s.x2 = x2 \/ r.x2 by A20, A11, A12;
+              thus x1 c= x2 proof
+                let x be set;
+                assume A24: x in x1;
+                  A25: x in s.x1 by A22, A24, XBOOLE_0:def 3;
+                  per cases by A25, A21, A23, XBOOLE_0:def 3;
+                  suppose x in x2;
+                    hence thesis;
+                  end;
+                  suppose x in r.x2;
+                    then x in { [xx,uG] where xx is Element of uG : xx in x2 }
+                                 by C, A11, A20;
+                    then consider xx being Element of uG such that
+                  A26: x = [xx,uG] and xx in x2;
+                   thus thesis by A26, A19, A24, A11, Aux1;
+                  end;
+              end;
+              thus x2 c= x1 proof
+                let x be set;
+                assume A27: x in x2;
+                  A28: x in s.x2 by A23, A27, XBOOLE_0:def 3;
+                  per cases by A28, A21, A22, XBOOLE_0:def 3;
+                  suppose x in x1;
+                    hence thesis;
+                  end;
+                  suppose x in r.x1;
+                    then x in { [xx,uG] where xx is Element of uG : xx in x1 }
+                                 by C, A11, A19;
+                    then consider xx being Element of uG such that
+                  A26: x = [xx,uG] and xx in x1;
+                   thus thesis by A26, A20, A27, A11, Aux1;
+                  end;
+              end;
+            end;
+         hence thesis by A18, A9, EULER_1:11;
+        end;
+      end;
+D1a: D is finite by D1;
+   set E = D \/ {{uG}};
+E1: union E = uMG proof
+    thus union E c= uMG proof
+      let x be set;
+      assume x in union E;
+      then consider Y being set such that
+    A2: x in Y and
+    B2: Y in E by TARSKI:def 4;
+      per cases by B2, XBOOLE_0:def 3;
+      suppose Y in D;
+       then consider d being Element of C such that
+     A3: Y = d \/ r.d and
+     B3: d in C;
+        per cases by A3, A2, XBOOLE_0:def 3;
+        suppose S3: x in d;
+        B4: uG c= uMG by M0, ZFMISC_1:77;
+            x in uG by S3;
+         hence x in uMG by B4;
+        end;
+        suppose x in r.d;
+            then x in { [yy,uG] where yy is Element of uG : yy in d } by B3, C;
+            then consider yy being Element of uG such that
+          A8: x = [yy,uG] and
+          B8: yy in d;
+              {x} in MG by A8, B8, M0e2aa;
+         hence x in uMG by Vertices0;
+        end;
+      end;
+      suppose Y in {{uG}};
+        then Y = {uG} by TARSKI:def 1;
+        then x = uG by A2, TARSKI:def 1;
+       hence x in uMG by M00;
+      end;
+    end;
+    thus uMG c= union E proof
+      let a be set;
+      assume a in uMG;
+        then consider Y being set such that
+    A2: a in Y and
+    B2: Y in MG by TARSKI:def 4;
+    C2: a in uG implies a in union E proof
+          assume a in uG;
+             then a in union C by EQREL_1:def 4;
+             then consider d being set such that
+          D4: a in d and
+          E4: d in C by TARSKI:def 4;
+          F4: a in d \/ r.d by D4, XBOOLE_0:def 3;
+              d \/ r.d in D by E4;
+              then d \/ r.d in E by XBOOLE_0:def 3;
+           hence a in union E by F4, TARSKI:def 4;
+        end;
+    D2: now let x be set;
+           assume A4: a = [x,uG];
+           assume B4: x in uG; then
+              x in union C by EQREL_1:def 4;
+              then consider d being set such that
+          D4: x in d and
+          E4: d in C by TARSKI:def 4;
+              d \/ r.d in D by E4;
+     then G4: d \/ r.d in E by XBOOLE_0:def 3;
+              a in { [xx,uG] where xx is Element of uG : xx in d }
+                 by D4, A4, B4;
+              then a in r.d by E4, C;
+              then a in d \/ r.d by XBOOLE_0:def 3;
+           hence a in union E by G4, TARSKI:def 4;
+        end;
+      per cases by B2, MYCIELSK:4;
+      suppose Y in { {} };
+       hence a in union E by A2, TARSKI:def 1;
+      end;
+      suppose Y in { {x} where x is Element of (uG) \/ [:uG,{uG}:] \/ {uG}
+             : not contradiction };
+        then consider x being Element of (uG) \/ [:uG,{uG}:] \/ {uG} such that
+      A3: Y = {x} and not contradiction;
+      C3: a = x by A3, A2, TARSKI:def 1;
+      D3: a in (uG) \/ [:uG,{uG}:] or a in {uG} by C3, XBOOLE_0:def 3;
+          per cases by D3, XBOOLE_0:def 3;
+          suppose a in uG;
+           hence a in union E by C2;
+          end;
+          suppose a in [:uG,{uG}:];
+             then consider x, y being set such that
+          A4: x in uG and
+          B4: y in {uG} and
+          C4: a = [x,y] by ZFMISC_1:def 2;
+              y = uG by B4, TARSKI:def 1;
+           hence a in union E by A4, C4, D2;
+          end;
+          suppose S4: a in {uG};
+            {uG} in {{uG}} by TARSKI:def 1;
+            then {uG} in E by XBOOLE_0:def 3;
+           hence a in union E by S4, TARSKI:def 4;
+          end;
+      end;
+      suppose Y in (Edges G);
+       then consider p, r being set such that p <> r and
+      B3: p in Vertices G and
+      C3: r in Vertices G and
+      D3: Y = {p, r} by SG4;
+       thus a in union E by C2, B3, C3, D3, A2, TARSKI:def 2;
+      end;
+    suppose Y in { {x,[y,uG]} where x, y is Element of uG : {x,y} in Edges G };
+        then consider x, y being Element of uG such that
+      A3: Y = {x,[y,uG]} and
+      B3: {x,y} in Edges G;
+      C3: a = x or a = [y,uG] by A2, A3, TARSKI:def 2;
+          x in uG by B3,SG5;
+       hence a in union E by C3,C2,D2;
+      end;
+      suppose Y in { {uG,[x,uG]} where x is Element of uG : x in Vertices G };
+         then consider x being Element of uG such that
+      A3: Y = {uG,[x,uG]} and
+      B3: x in Vertices G;
+        per cases by A2, A3, TARSKI:def 2;
+        suppose a = uG;
+         then A4: a in {uG} by TARSKI:def 1;
+          {uG} in {{uG}} by TARSKI:def 1;
+          then {uG} in E by XBOOLE_0:def 3;
+         hence a in union E by A4, TARSKI:def 4;
+        end;
+        suppose A4: a = [x,uG];
+       thus a in union E by A4, D2, B3;
+       end;
+      end;
+    end;
+    end;
+F1: now let A be Subset of uMG such that
+    A2: A in E;
+    per cases by A2, XBOOLE_0:def 3;
+    suppose A in D;
+       then consider d being Element of C such that
+     A3: A = d \/ r.d and
+     B3: d in C;
+      thus  A<>{} by A3, B3;
+     thus for B being Subset of uMG st B in E holds A = B or A misses B proof
+       let B be Subset of uMG such that
+     A4: B in E;
+       per cases by A4, XBOOLE_0:def 3;
+       suppose B in D;
+         then consider e being Element of C such that
+       A5: B = e \/ r.e and
+       B5: e in C;
+         now assume A meets B;
+           then consider x being set such that
+         A6: x in A and
+         B6: x in B by XBOOLE_0:3;
+          per cases by A6, B6, A5, A3, XBOOLE_0:def 3;
+          suppose x in d & x in e;
+            then d = e by EQREL_1:70;
+           hence A = B by A5, A3;
+          end;
+          suppose A7: x in d & x in r.e;
+            x in { [yy,uG] where yy is Element of uG : yy in e } by A7, C;
+            then consider yy being Element of uG such that
+          A8: x = [yy,uG] and yy in e;
+            thus A = B by A8, Aux1, A7;
+          end;
+          suppose A7: x in r.d & x in e;
+            x in { [yy,uG] where yy is Element of uG : yy in d } by A7, C;
+            then consider yy being Element of uG such that
+          A8: x = [yy,uG] and yy in d;
+            thus A = B by A8, Aux1, A7;
+          end;
+          suppose A7: x in r.d & x in r.e;
+            x in { [yy,uG] where yy is Element of uG : yy in d } by A7, B3, C;
+            then consider yy being Element of uG such that
+          A8: x = [yy,uG] and
+          B8: yy in d;
+            x in { [zz,uG] where zz is Element of uG : zz in e } by A7, B5, C;
+            then consider zz being Element of uG such that
+          C8: x = [zz,uG] and
+          D8: zz in e;
+            yy = zz by A8, C8, XTUPLE_0:1;
+            then d = e by B8, D8, EQREL_1:70;
+           hence A = B by A5, A3;
+          end;
+         end;
+        hence A = B or A misses B;
+       end;
+       suppose B in {{uG}};
+         then B5: B = {uG} by TARSKI:def 1;
+         now assume A meets B;
+           then consider x being set such that
+         A4: x in A and
+         B4: x in B by XBOOLE_0:3;
+         C4: x = uG by B4, B5, TARSKI:def 1;
+           per cases by C4, A4, A3, XBOOLE_0:def 3;
+           suppose uG in d;
+             then uG in uG;
+            hence contradiction;
+           end;
+           suppose uG in r.d;
+          then uG in { [yy,uG] where yy is Element of uG : yy in d } by B3, C;
+            then consider yy being Element of uG such that
+          A4: uG = [yy,uG] and yy in d;
+            thus contradiction by A4,Aux2;
+           end;
+         end;
+        hence A = B or A misses B;
+       end;
+      end;
+    end;
+    suppose A2a: A in {{uG}};
+     then A2: A = {uG} by TARSKI:def 1;
+     thus A<>{} by A2a;
+     thus for B being Subset of uMG st B in E holds A = B or A misses B proof
+      let B be Subset of uMG such that
+      B2: B in E;
+      per cases by B2, XBOOLE_0:def 3;
+      suppose B in D;
+       then consider d being Element of C such that
+     A3: B = d \/ r.d and
+     B3: d in C;
+         now assume A meets B;
+           then consider x being set such that
+         A4: x in A and
+         B4: x in B by XBOOLE_0:3;
+         C4: x = uG by A4, A2, TARSKI:def 1;
+           per cases by C4, B4, A3, XBOOLE_0:def 3;
+           suppose uG in d;
+             then uG in uG;
+            hence contradiction;
+           end;
+           suppose uG in r.d;
+        then uG in { [yy,uG] where yy is Element of uG : yy in d } by B3, C;
+            then consider yy being Element of uG such that
+          A4: uG = [yy,uG] and yy in d;
+            thus contradiction by A4,Aux2;
+           end;
+         end;
+        hence A = B or A misses B;
+      end;
+      suppose B in {{uG}};
+       hence A = B or A misses B by A2,TARSKI:def 1;
+      end;
+     end;
+     end;
+    end;
+G1: E c= bool uMG proof
+     let x be set;
+     assume A2: x in E;
+     per cases by A2, XBOOLE_0:def 3;
+     suppose x in D;
+       then consider d being Element of C such that
+     A3: x = d \/ r.d and
+     B3: d in C;
+     E3: uG c= uMG by M0, ZFMISC_1:77;
+     C3: d c= uMG by E3,XBOOLE_1:1;
+        r.d c= uMG proof
+          let y be set;
+          assume y in r.d;
+          then y in { [yy,uG] where yy is Element of uG : yy in d } by B3, C;
+            then consider yy being Element of uG such that
+          A4: y = [yy,uG] and
+          B4: yy in d;
+            {y} in MG by A4,B4, M0e2aa;
+          hence y in uMG by Vertices0;
+        end;
+        then x c= uMG by A3, C3, XBOOLE_1:8;
+       hence x in bool uMG;
+     end;
+     suppose x in {{uG}};
+        then A3: x = {uG} by TARSKI:def 1;
+        uG in uMG by M00;
+        then x c= uMG by A3, ZFMISC_1:31;
+       hence x in bool uMG;
+     end;
+    end;
+   reconsider E as a_partition of uMG by E1,F1,G1,EQREL_1:def 4;
+   E is StableSet-wise proof
+    let e be set such that
+   A1: e in E;
+      reconsider e1 = e as Subset of uMG by A1;
+      e1 is stable proof
+       let x, y be set such that
+      A2: x <> y and
+      B2: x in e1 and
+      C2: y in e1;
+       per cases by A1, XBOOLE_0:def 3;
+       suppose e in D;
+        then consider d being Element of C such that
+       A3: e = d \/ r.d and
+       B3: d in C;
+       C3: P[d,r.d] by C, B3;
+       D3: d is stable by B3, LStableSetwise;
+        per cases by A3, B2, C2, XBOOLE_0:def 3;
+        suppose S3: x in d & y in d;
+          then {x,y} nin G by D3, A2, Lstable;
+         hence {x,y} nin MG by S3, M1;
+        end;
+        suppose that S3a: x in d and S3b: y in r.d;
+          consider x1 being Element of uG such that
+        A4: y = [x1,uG] and
+        B4: x1 in d by S3b, C3;
+          per cases;
+          suppose x1 = x;
+            hence {x,y} nin MG by A4, M0e4a;
+          end;
+          suppose x1 <> x;
+            then {x1,x} nin G by S3a, B4, D3, Lstable;
+           hence {x,y} nin MG by S3a, A4, M0e4b;
+          end;
+        end;
+        suppose that S3a: x in r.d and S3b: y in d;
+          consider x1 being Element of uG such that
+        A4: x = [x1,uG] and
+        B4: x1 in d by S3a, C3;
+          per cases;
+          suppose x1 = y;
+            hence {x,y} nin MG by A4, M0e4a;
+          end;
+          suppose x1 <> y;
+            then {x1,y} nin G by S3b, B4, D3, Lstable;
+           hence {x,y} nin MG by A4, S3b, M0e4b;
+          end;
+        end;
+        suppose that S3a: x in r.d and S3b: y in r.d;
+          consider x1 being Element of uG such that
+        A4: x = [x1,uG] and x1 in d by S3a, C3;
+          consider y1 being Element of uG such that
+        C4: y = [y1,uG] and y1 in d by S3b, C3;
+         thus {x,y} nin MG by A4, C4, A2, M0e3a;
+        end;
+       end;
+       suppose e in {{uG}};
+         then e = {uG} by TARSKI:def 1;
+         then x = uG & y = uG by B2, C2, TARSKI:def 1;
+        hence thesis by A2;
+       end;
+      end;
+    hence e is StableSet of MG;
+   end;
+   then reconsider E as Coloring of MG;
+   take E;
+   now
+     assume {uG} in D;
+     then consider d being Element of C such that
+   A2: {uG} = d \/ r.d and
+   A2a: d in C;
+   B2: uG in d \/ r.d by A2, TARSKI:def 1;
+     per cases by B2, XBOOLE_0:def 3;
+     suppose uG in d;
+        then uG in uG;
+       hence contradiction;
+     end;
+     suppose uG in r.d;
+       then uG in { [x,uG] where x is Element of uG : x in d } by A2a,C;
+       then consider x being Element of uG such that
+     A3: uG = [x,uG] and x in d;
+       thus contradiction by A3, Aux2;
+     end;
+   end;
+   hence card E = 1 + cnG by D1, D1a, A, CARD_2:41;
+end;
+
+registration
+ let G be finitely_colorable SimpleGraph;
+ cluster Mycielskian G -> finitely_colorable;
+ coherence proof
+   consider E being Coloring of Mycielskian G such that
+ A: card E = 1+chromatic# G by Mfc1;
+    E is finite by A;
+   hence thesis by Lfc;
+ end;
+end;
+
+theorem Mcn1:
+for G being finitely_colorable SimpleGraph
+ holds chromatic# Mycielskian G = 1 + chromatic# G
+proof :: Mfc1 + contradiction that there is a smaller one
+ let G be finitely_colorable SimpleGraph;
+  set uG = union G; set MG = Mycielskian G; set uMG = union MG;
+  set cnG = chromatic# G; set cnMG = chromatic# MG;
+  consider D being Coloring of MG such that
+A: card D = 1+cnG by Mfc1;
+   D is finite by A; then
+Z: cnMG <= 1 + cnG by A, Lchro;
+   now
+     assume A1: 1+cnG > cnMG;
+   B1: cnG >= cnMG by A1, NAT_1:13;
+   C1: cnG <= cnMG by M0, Subchro;
+   D1: cnG = cnMG by B1,C1,XXREAL_0:1;
+       consider E being finite Coloring of MG such that
+   E1: card E = cnMG by Lchro;
+   E1a: union E = union MG by EQREL_1:def 4;
+   EE: G = MG SubgraphInducedBy uG by GsubMG;
+       reconsider S = uG as Subset of Vertices MG by M0, ZFMISC_1:77;
+       reconsider C = E | S as finite Coloring of G by EE, Tsr0;
+   F1: card C >= cnG by Lchro;
+   G1: card C <= cnG by D1, E1, MYCIELSK:8;
+   H1: card C = cnG by F1, G1, XXREAL_0:1;
+   H1a: uG in union MG by M00;
+       then consider EuG being set such that
+   I1: uG in EuG and
+   J1: EuG in E by E1a, TARSKI:def 4;
+       reconsider EuG as Subset of Vertices MG by J1;
+       reconsider uG as Element of Vertices MG by I1, J1;
+       set se = EuG /\ S;
+   K1: EuG meets S by J1, D1, E1, H1, MYCIELSK:9;
+       se in C by J1, K1;
+       then consider sev being Element of Vertices G such that
+   M1: sev in se and
+   N1: for d being Element of C st d <> se
+       ex w being Element of Vertices G st w in Adjacent(sev) & w in d
+         by F1, G1, XXREAL_0:1, AdjCol;
+   N1a: uG is non empty by XBOOLE_1:65,K1;
+        then {[sev,uG]} in MG by M0e2aa;
+       then reconsider csev = [sev,uG] as Element of Vertices MG by Vertices0;
+       csev in Vertices MG by H1a;
+       then csev in union E by EQREL_1: def 4;
+       then consider Ecse being set such that
+   O1: csev in Ecse and
+   P1: Ecse in E by TARSKI:def 4;
+       reconsider Ecse as Subset of Vertices MG by P1;
+   Q1: now assume A2: EuG <> Ecse;
+          set sf = Ecse /\ S;
+       B2: Ecse meets S by P1, D1, E1, H1, MYCIELSK:9;
+       C2: sf in C by B2, P1;
+          now assume se = sf;
+            then sev in EuG & sev in Ecse by M1, XBOOLE_0:def 4;
+            then EuG meets Ecse by XBOOLE_0:3;
+           hence contradiction by A2, P1, J1, EQREL_1:def 4;
+          end;
+          then consider w being Element of Vertices G such that
+       D2: w in Adjacent(sev) and
+       E2: w in sf by C2, N1;
+       F2: w in Ecse by E2, XBOOLE_0:def 4;
+       G2: Ecse is stable by P1, LStableSetwise;
+       H2: csev <> w by N1a, Aux1;
+           {sev, w} in Edges G by D2, Ladj;
+           then {csev,w} in MG by M0e4c;
+        hence contradiction by G2, H2, F2, O1, Lstable;
+       end;
+     R1a: {csev,uG} in Edges MG by N1a, M0e0;
+   S1: csev <> uG by Aux2;
+       EuG is stable by J1, LStableSetwise;
+     hence contradiction by S1, R1a, Q1, O1, I1, Lstable;
+   end;
+  hence thesis by Z, XXREAL_0:1;
+end;
+
+definition
+  let G be SimpleGraph;
+  func MycielskianSeq G -> ManySortedSet of NAT means    :LMycielskianSeq:
+  ex myc being Function
+   st it = myc & myc.0 = G &
+     for k being Nat, G being SimpleGraph
+       st G = myc.k holds myc.(k+1) = Mycielskian G;
+  existence proof
+   defpred P[Nat,set,set] means
+    ($2 is SimpleGraph implies
+      ex G being SimpleGraph st $2 = G & $3 = Mycielskian G) &
+    (not $2 is SimpleGraph implies $3 = $2);
+   P: for n being Element of NAT, x being set ex y being set st P[n,x,y] proof
+        let n be Element of NAT, x be set;
+        per cases;
+        suppose x is SimpleGraph;
+          then reconsider G = x as SimpleGraph;
+          Mycielskian G = Mycielskian G;
+         hence ex y being set st P[n,x,y];
+        end;
+        suppose not x is SimpleGraph;
+         hence thesis;
+        end;
+      end;
+    consider f being Function such that
+A: dom f = NAT and
+B: f.0 = G and
+C: for n being Element of NAT holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 1(P);
+   reconsider f as NAT-defined Function by A, RELAT_1:def 18;
+   reconsider f as ManySortedSet of NAT by A, PARTFUN1:def 2;
+   take f;
+   take myc = f;
+   thus f = myc;
+   thus myc.0 = G by B;
+   let k be Nat, G be SimpleGraph such that
+Z: G = myc.k;
+    k in NAT by ORDINAL1:def 12;
+    then ex G being SimpleGraph st f.k = G & f.(k+1) = Mycielskian G by C, Z;
+   hence myc.(k+1) = Mycielskian G by Z;
+  end;
+  uniqueness proof
+   let it1, it2 be ManySortedSet of NAT;
+   given myc1 being Function such that
+A1: it1 = myc1  and
+B1: myc1.0 = G  and
+C1: for k being Nat, G being SimpleGraph
+      st G = myc1.k holds myc1.(k+1) = Mycielskian G;
+   given myc2 being Function such that
+A2: it2 = myc2  and
+B2: myc2.0 = G  and
+C2: for k being Nat, G being SimpleGraph
+      st G = myc2.k holds myc2.(k+1) = Mycielskian G;
+    defpred P[Nat] means myc1.$1 is SimpleGraph & myc1.$1 = myc2.$1;
+P0: P[0] by B1,B2;
+P1: for k being Nat st P[k] holds P[k+1] proof
+     let k be Nat;
+     assume IH: P[k];
+       reconsider H = myc1.k as SimpleGraph by IH;
+       myc1.(k+1) = Mycielskian H by C1;
+     hence myc1.(k+1) is SimpleGraph;
+     thus myc1.(k+1) = Mycielskian H by C1 .= myc2.(k+1) by IH, C2;
+    end;
+D: for k being Nat holds P[k] from NAT_1:sch 2(P0,P1);
+    for i being set st i in NAT holds myc1.i = myc2.i by D;
+   hence it1 = it2 by A1, A2, PBOOLE:3;
+  end;
+end;
+
+theorem MSeq0:
+for G being SimpleGraph holds (MycielskianSeq G).0 = G
+proof
+ let G be SimpleGraph;
+ consider myc being Function such that
+A: MycielskianSeq G = myc and
+B: myc.0 = G  and
+      for k being Nat, G being SimpleGraph
+        st G = myc.k holds myc.(k+1) = Mycielskian G by LMycielskianSeq;
+ thus (MycielskianSeq G).0 = G by A, B;
+end;
+
+theorem MGS0:
+for G being SimpleGraph, n be Nat holds (MycielskianSeq G).n is SimpleGraph
+proof
+  let G be SimpleGraph, n be Nat;
+  set MG = MycielskianSeq G;
+  defpred P[Nat] means MG.$1 is SimpleGraph;
+  consider myc being Function such that
+A: MycielskianSeq G = myc and
+B: myc.0 = G and
+C: for k being Nat, G being SimpleGraph
+       st G = myc.k holds myc.(k+1) = Mycielskian G by LMycielskianSeq;
+P0: P[0] by A, B;
+P1: for k being Nat st P[k] holds P[k+1] proof
+      let k be Nat;
+      assume P[k];
+       then reconsider H = MG.k as SimpleGraph;
+       MG.(k+1) = Mycielskian H by A, C;
+      hence P[k+1];
+    end;
+  for k being Nat holds P[k] from NAT_1:sch 2(P0,P1);
+  hence thesis;
+end;
+
+registration
+  let G be SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> SimpleGraph-like;
+  coherence by MGS0;
+end;
+
+theorem MSeq1:
+for G, H being SimpleGraph, n be Nat
+  holds (MycielskianSeq G).(n+1) = Mycielskian (MycielskianSeq G).n
+proof
+ let G, H be SimpleGraph, n be Nat;
+ set H = (MycielskianSeq G).n;
+ consider myc being Function such that
+A: MycielskianSeq G = myc and myc.0 = G  and
+C: for k being Nat, G being SimpleGraph
+        st G = myc.k holds myc.(k+1) = Mycielskian G by LMycielskianSeq;
+ thus (MycielskianSeq G).(n+1) = Mycielskian H by A, C;
+end;
+
+registration
+  let G be with_finite_clique# SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> with_finite_clique#;
+  coherence proof
+  set MG = MycielskianSeq G;
+  defpred P[Nat] means MG.$1 is with_finite_clique#;
+  consider myc being Function such that
+A: MycielskianSeq G = myc and
+B: myc.0 = G and
+C: for k being Nat, G being SimpleGraph
+       st G = myc.k holds myc.(k+1) = Mycielskian G by LMycielskianSeq;
+P0: P[0] by A, B;
+P1: for k being Nat st P[k] holds P[k+1] proof
+      let k be Nat;
+      assume P[k];
+       then reconsider H = MG.k as with_finite_clique# SimpleGraph;
+       MG.(k+1) = Mycielskian H by A, C;
+      hence P[k+1];
+    end;
+  for k being Nat holds P[k] from NAT_1:sch 2(P0,P1);
+  hence thesis;
+  end;
+end;
+
+registration
+  let G be finitely_colorable SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> finitely_colorable;
+  coherence proof
+  set MG = MycielskianSeq G;
+  defpred P[Nat] means MG.$1 is finitely_colorable;
+  consider myc being Function such that
+A: MycielskianSeq G = myc and
+B: myc.0 = G and
+C: for k being Nat, G being SimpleGraph
+       st G = myc.k holds myc.(k+1) = Mycielskian G by LMycielskianSeq;
+P0: P[0] by A, B;
+P1: for k being Nat st P[k] holds P[k+1] proof
+      let k be Nat;
+      assume P[k];
+       then reconsider H = MG.k as finitely_colorable SimpleGraph;
+       MG.(k+1) = Mycielskian H by A, C;
+      hence P[k+1];
+    end;
+  for k being Nat holds P[k] from NAT_1:sch 2(P0,P1);
+  hence thesis;
+  end;
+end;
+
+registration
+  let G be finite SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> finite;
+  coherence proof
+  defpred P[Nat] means (MycielskianSeq G).$1 is finite;
+P0: P[0] by MSeq0;
+P1: now let k be Nat;
+      assume A: P[k];
+      set H = (MycielskianSeq G).k;
+        (MycielskianSeq G).(k+1) = Mycielskian H by MSeq1;
+      hence P[k+1] by A;
+    end;
+  for k being Nat holds P[k] from NAT_1:sch 2(P0,P1);
+  hence thesis;
+  end;
+end;
+
+theorem MSnorder:
+for G being finite SimpleGraph, n being Nat
+ holds order ((MycielskianSeq G).n) = 2|^n*(order G) + 2|^n - 1
+proof
+ let G be finite SimpleGraph, n being Nat;
+ set g = order G;
+  set MG = MycielskianSeq G;
+  defpred P[Nat] means
+   order ((MG).$1) = 2|^$1*g + 2|^$1 - 1;
+P0: P[0] proof
+     thus order (MG.0)
+        = g + 1 - 1 by MSeq0
+       .= 1*g+2|^0-1 by NEWTON:4
+       .= 2|^0*g+2|^0-1 by NEWTON:4;
+    end;
+P1: for n being Nat st P[n] holds P[n+1] proof
+     let n be Nat such that
+    A1: P[n];
+     thus order ((MG).(n+1))
+      = order (Mycielskian ((MG.n))) by MSeq1
+     .= 2*(2|^n*g + 2|^n - 1) + 1 by A1, M0order
+     .= 2*(2|^n)*g + 2*(2|^n) - 2*1 + 1
+     .= 2|^(n+1)*g + 2*(2|^n) - 2*1 + 1 by NEWTON:6
+     .= 2|^(n+1)*g + 2|^(n+1) - 2 + 1 by NEWTON:6
+     .= 2|^(n+1)*g + 2|^(n+1) - 1;
+    end;
+  for n being Nat holds P[n] from NAT_1:sch 2(P0,P1);
+ hence order ((MG).n) = 2|^n*g + 2|^n - 1;
+end;
+
+theorem :: MSnsize:
+for G being finite SimpleGraph, n being Nat
+ holds size (MycielskianSeq G).n
+     = 3|^n*(size G) + (3|^n - 2|^n)*(order G) + (n+1) block 3
+proof
+ let G be finite SimpleGraph, n being Nat;
+ set g = order G; set s = size G;
+  set MG = MycielskianSeq G;
+  defpred P[Nat] means
+   size ((MG)).$1 = 3|^$1*s + (3|^$1 - 2|^$1)*g + ($1+1) block 3;
+P0: P[0] proof
+     thus size ((MG).0)
+        = 1*s + 0*g + 0 by MSeq0
+       .= 3|^0*s + (1 - 1)*g + 0 by NEWTON:4
+       .= 3|^0*s + (3|^0 - 1)*g + 0 by NEWTON:4
+       .= 3|^0*s + (3|^0 - 2|^0)*g + 0 by NEWTON:4
+       .= 3|^0*s + (3|^0 - 2|^0)*g + (0+1) block 3 by STIRL2_1:29;
+    end;
+P1: for n being Nat st P[n] holds P[n+1] proof
+     let n be Nat such that
+    A1: P[n];
+    C1: n+1 >= 0+1 by XREAL_1:6;
+    B1: 1/2*(2|^(n+1) - 2)
+       = 1/2*(2*2|^n - 2*1) by NEWTON:6
+      .= 2|^n -1;
+     thus size ((MG).(n+1))
+      = size (Mycielskian ((MG.n))) by MSeq1
+     .= 3*(3|^n*s + (3|^n - 2|^n)*g + (n+1) block 3) + order (MG.n)
+        by A1, M0size
+     .= 3*3|^n*s + 3*(3|^n - 2|^n)*g + 3*((n+1) block 3) + order (MG.n)
+     .= 3|^(n+1)*s + 3*(3|^n - 2|^n)*g + 3*((n+1) block 3) + order (MG.n)
+        by NEWTON:6
+     .= 3|^(n+1)*s + 3*(3|^n - 2|^n)*g + 3*((n+1) block 3) + (2|^n*g + 2|^n -1)
+        by MSnorder
+   .= 3|^(n+1)*s + 3*(3|^n - 2|^n)*g + 2|^n*g + (3*((n+1) block 3) + (2|^n -1))
+   .= 3|^(n+1)*s + 3*(3|^n - 2|^n)*g + 2|^n*g + ((2+1)*((n+1) block (2+1))
+      + ((n+1) block 2)) by B1, C1, STIRL2_1:47
+   .= 3|^(n+1)*s + (3*3|^n*g - (2*2|^n*g+2|^n*g) + 2|^n*g) + ((n+1)+1) block 3
+       by STIRL2_1:46
+  .= 3|^(n+1)*s + (3*3|^n*g - (2|^(n+1)*g+2|^n*g) + 2|^n*g) + ((n+1)+1) block 3
+       by NEWTON:6
+  .= 3|^(n+1)*s + (3*3|^n*g - 2|^(n+1)*g - 2|^n*g + 2|^n*g) + ((n+1)+1) block 3
+  .= 3|^(n+1)*s + (3|^(n+1)*g - 2|^(n+1)*g-2|^n*g+2|^n*g) + ((n+1)+1) block 3
+     by NEWTON:6
+     .= 3|^(n+1)*s + (3|^(n+1) - 2|^(n+1))*g + ((n+1)+1) block 3;
+    end;
+ for n being Nat holds P[n] from NAT_1:sch 2(P0,P1);
+ hence size ((MG).n) = 3|^n*s + (3|^n - 2|^n)*g + (n+1) block 3;
+end;
+
+theorem MycTh:
+for n being Nat
+ holds clique# ((MycielskianSeq CompleteSGraph 2).n) = 2 &
+       chromatic# ((MycielskianSeq CompleteSGraph 2).n) = n+2
+proof
+Aa: card 2 = 2 by CARD_1:50, CARD_2:57;
+  set P2 = CompleteSGraph 2;
+  defpred P[Nat] means
+   clique# ((MycielskianSeq P2).$1) = 2 &
+   chromatic# ((MycielskianSeq P2).$1) = $1+2;
+A: clique# ((MycielskianSeq P2).0) = clique# P2 by MSeq0 .= 2 by Aa, cliqueCSG;
+   chromatic# ((MycielskianSeq P2).0) = chromatic# P2 by MSeq0
+    .= 0+2 by Aa, chromaticCSG;
+   then
+P0: P[0] by A;
+P1: for n being Nat st P[n] holds P[n+1] proof
+     let n be Nat;
+     assume IH: P[n];
+      thus clique# ((MycielskianSeq P2).(n+1))
+         = clique# Mycielskian((MycielskianSeq P2).n) by MSeq1
+        .= 2 by MClique, IH;
+      thus chromatic# ((MycielskianSeq P2).(n+1))
+         = chromatic# Mycielskian((MycielskianSeq P2).n) by MSeq1
+        .= 1+(n+2) by IH, Mcn1
+        .= (n+1)+2;
+    end;
+ for n being Nat holds P[n] from NAT_1:sch 2(P0,P1);
+ hence thesis;
+end;
+
+theorem
+for n being Nat
+ ex G being finite SimpleGraph st clique# G = 2 & chromatic# G > n
+proof
+ let n be Nat;
+ set P2 = CompleteSGraph 2;
+ reconsider G = (MycielskianSeq P2).n as finite SimpleGraph;
+ take G;
+  n+1+1 > n+1 & n+1 > n by NAT_1:13;
+  then n+2 > n by XXREAL_0:2;
+ hence thesis by MycTh;
+end;
+
+theorem
+for n being Nat
+ ex G being finite SimpleGraph st stability# G = 2 & cliquecover# G > n
+proof
+ let n be Nat;
+ set G = (MycielskianSeq CompleteSGraph 2).n;
+  n+1+1 > n+1 & n+1 > n by NAT_1:13;
+  then n+2 > n by XXREAL_0:2;
+ then A1: clique# G = 2 & chromatic# G > n by MycTh;
+ take S = Complement G;
+ thus stability# S = 2 by A1, cliRstaCR;
+ thus cliquecover# S > n by A1,chrRcovCR;
+end;
+

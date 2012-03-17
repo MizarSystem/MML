@@ -3,7 +3,7 @@
 ::  by Adam Naumowicz
 ::
 :: Received December 20, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,15 +17,15 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, REAL_1, COMSEQ_1, COMPLEX1, RELAT_1, ARYTM_1,
       ARYTM_3, CARD_1, XXREAL_0, FUNCT_1, XREAL_0, ORDINAL1, XBOOLE_0,
-      PARTFUN1, VALUED_0, VALUED_1, XXREAL_2, FUNCOP_1, SEQ_2, ORDINAL2, SEQ_1,
-      XCMPLX_0;
- notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1,
-      REAL_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1,
-      SEQ_2, NAT_1, COMSEQ_1, XXREAL_0;
- constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2,
-      VALUED_1, SEQ_1, RELSET_1;
+      PARTFUN1, VALUED_0, VALUED_1, XXREAL_2, FUNCOP_1, SEQ_2, ORDINAL2,
+      XCMPLX_0, PBOOLE, TARSKI;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      COMPLEX1, RELAT_1, REAL_1, FUNCT_1, PBOOLE, RELSET_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, VALUED_0, VALUED_1, SEQ_1, NAT_1, COMSEQ_1, XXREAL_0;
+ constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1,
+      SEQ_1, RELSET_1, PBOOLE;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, VALUED_1, VALUED_0;
+      XREAL_0, MEMBERED, VALUED_1, VALUED_0, PBOOLE, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -45,28 +45,34 @@ theorem :: COMSEQ_2:2
 begin :: Conjugate Sequences
 
 definition
-  let C be non empty set;
-  let f be PartFunc of C,COMPLEX;
-  func f*' ->PartFunc of C,COMPLEX means
+  let f be complex-valued Function;
+  func f*' -> complex-valued Function means
 :: COMSEQ_2:def 1
 
-  dom it = dom f & for c being
-  Element of C st c in dom it holds it.c = (f/.c)*';
+  dom it = dom f &
+  for c being set st c in dom it holds it.c = (f.c)*';
+ involutiveness;
 end;
 
 definition
   let C be non empty set;
   let f be Function of C,COMPLEX;
-  redefine func f*' means
+  redefine func f*' -> Function of C,COMPLEX means
 :: COMSEQ_2:def 2
 
   dom it = C & for n being Element of C holds it.n=(f.n)*';
 end;
 
 registration
+ let C be non empty set;
+ let s be complex-valued ManySortedSet of C;
+ cluster s*' -> C-defined;
+end;
+
+registration
   let C be non empty set;
-  let seq be Function of C,COMPLEX;
-  cluster seq*' -> total;
+  let seq be complex-valued ManySortedSet of C;
+  cluster seq*' -> total for C-defined Function;
 end;
 
 theorem :: COMSEQ_2:3
@@ -87,9 +93,18 @@ theorem :: COMSEQ_2:7
 begin :: BOUNDED COMPLEX SEQUENCES
 
 definition
+  let f be complex-valued Function;
+  attr f is bounded means
+:: COMSEQ_2:def 3
+:: SEQ_2:def 5
+  ex r being real number st
+   for y being set st y in dom f holds abs(f.y) <r;
+end;
+
+definition
   let s;
   redefine attr s is bounded means
-:: COMSEQ_2:def 3
+:: COMSEQ_2:def 4
 
   ex r being Real st for n holds |.s.n .|<r;
 end;
@@ -107,9 +122,9 @@ begin
 ::  The Limit of Complex Sequences
 
 definition
-  let s;
+  let s be complex-valued ManySortedSet of NAT;
   attr s is convergent means
-:: COMSEQ_2:def 4
+:: COMSEQ_2:def 5
 
   ex g st for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p;
 end;
@@ -119,7 +134,7 @@ definition
   assume
  s is convergent;
   func lim s -> Element of COMPLEX means
-:: COMSEQ_2:def 5
+:: COMSEQ_2:def 6
 
   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-it.|<p;
 end;
@@ -136,94 +151,83 @@ end;
 
 registration
   let s be convergent Complex_Sequence;
-  cluster |.s.| -> convergent for Real_Sequence;
+  cluster s*' -> convergent for Complex_Sequence;
 end;
 
-theorem :: COMSEQ_2:11
-  s is convergent implies lim |.s.| = |.lim s.|;
-
-registration
-  let s be convergent Complex_Sequence;
-  cluster s*' -> convergent;
-end;
+canceled;
 
 theorem :: COMSEQ_2:12
   s is convergent implies lim(s*') = (lim s)*';
 
 begin :: Main Theorems
 
-theorem :: COMSEQ_2:13
-  s is convergent & s9 is convergent implies s + s9 is convergent;
-
 registration
   let s1,s2 be convergent Complex_Sequence;
   cluster s1 + s2 -> convergent for Complex_Sequence;
 end;
 
-theorem :: COMSEQ_2:14
-  s is convergent & s9 is convergent implies lim (s + s9)=(lim s)+ (lim s9);
+canceled;
 
-theorem :: COMSEQ_2:15
-  s is convergent & s9 is convergent implies lim |.(s + s9).| = |.(lim s
-  )+(lim s9).|;
+theorem :: COMSEQ_2:14
+ for s,s9 being convergent Complex_Sequence
+  holds lim (s + s9)=(lim s)+ (lim s9);
+
+canceled;
 
 theorem :: COMSEQ_2:16
-  s is convergent & s9 is convergent implies lim (s + s9)*' = (lim s)*'
-  + (lim s9)*';
+ for s,s9 being convergent Complex_Sequence
+  holds lim (s + s9)*' = (lim s)*' + (lim s9)*';
 
 registration
   let s be convergent Complex_Sequence, c be complex number;
   cluster c(#)s -> convergent for Complex_Sequence;
 end;
 
-theorem :: COMSEQ_2:17
-  s is convergent implies r(#)s is convergent;
+canceled;
 
 theorem :: COMSEQ_2:18
-  for r being complex number holds s is convergent implies lim(r
-  (#)s)=r*(lim s);
+  for s being convergent Complex_Sequence, r being complex number
+   holds lim(r(#)s)=r*(lim s);
 
-theorem :: COMSEQ_2:19
-  s is convergent implies lim |.(r(#)s).| = |.r.|*|.(lim s).|;
+canceled;
 
 theorem :: COMSEQ_2:20
-  s is convergent implies lim (r(#)s)*' = (r*')*(lim s)*';
+  for s being convergent Complex_Sequence
+  holds lim (r(#)s)*' = (r*')*(lim s)*';
 
 registration
   let s be convergent Complex_Sequence;
   cluster -s -> convergent for Complex_Sequence;
 end;
 
-theorem :: COMSEQ_2:21
-  s is convergent implies - s is convergent;
+canceled;
 
 theorem :: COMSEQ_2:22
-  s is convergent implies lim(-s)=-(lim s);
+  for s being convergent Complex_Sequence
+  holds lim(-s)=-(lim s);
 
-theorem :: COMSEQ_2:23
-  s is convergent implies lim |.-s.| = |.lim s.|;
+canceled;
 
 theorem :: COMSEQ_2:24
-  s is convergent implies lim (-s)*' = -(lim s)*';
-
-theorem :: COMSEQ_2:25
-  s is convergent & s9 is convergent implies s - s9 is convergent;
+ for s being convergent Complex_Sequence
+  holds lim (-s)*' = -(lim s)*';
 
 registration
   let s1,s2 be convergent Complex_Sequence;
   cluster s1 - s2 -> convergent for Complex_Sequence;
 end;
 
-theorem :: COMSEQ_2:26
-  s is convergent & s9 is convergent implies lim(s - s9)=(lim s)-( lim s9);
+canceled;
 
-theorem :: COMSEQ_2:27
-  s is convergent & s9 is convergent implies lim |.s - s9.| = |.(lim s)
-  - (lim s9).|;
+theorem :: COMSEQ_2:26
+  for s,s9 being convergent Complex_Sequence
+  holds lim(s - s9)=(lim s)-( lim s9);
+
+canceled;
 
 theorem :: COMSEQ_2:28
-  s is convergent & s9 is convergent implies lim (s - s9)*' = (lim s)*'
-  - (lim s9)*';
+  for s,s9 being convergent Complex_Sequence
+  holds lim (s - s9)*' = (lim s)*' - (lim s9)*';
 
 registration
   cluster convergent -> bounded for Complex_Sequence;
@@ -233,40 +237,35 @@ registration
   cluster non bounded -> non convergent for Complex_Sequence;
 end;
 
-theorem :: COMSEQ_2:29
-  s is convergent Complex_Sequence & s9 is convergent
-  Complex_Sequence implies s (#) s9 is convergent;
-
 registration
   let s1,s2 be convergent Complex_Sequence;
   cluster s1 (#) s2 -> convergent for Complex_Sequence;
 end;
 
-theorem :: COMSEQ_2:30
-  s is convergent Complex_Sequence & s9 is convergent
-  Complex_Sequence implies lim(s(#)s9)=(lim s)*(lim s9);
+canceled;
 
-theorem :: COMSEQ_2:31
-  s is convergent & s9 is convergent implies lim |.s(#)s9.| = |.lim s.|*
-  |.lim s9.|;
+theorem :: COMSEQ_2:30
+ for s,s9 being convergent Complex_Sequence
+  holds lim(s(#)s9)=(lim s)*(lim s9);
+
+canceled;
 
 theorem :: COMSEQ_2:32
-  s is convergent & s9 is convergent implies lim (s(#)s9)*' = (lim s)*'
-  * (lim s9)*';
+  for s,s9 being convergent Complex_Sequence
+  holds lim (s(#)s9)*' = (lim s)*' * (lim s9)*';
 
 theorem :: COMSEQ_2:33
-  s is convergent implies ((lim s)<>0c implies ex n st for m st n
-  <=m holds |.(lim s).|/2<|.s.m.|);
+  for s being convergent Complex_Sequence st lim s <> 0c
+   ex n st for m st n <=m holds |.(lim s).|/2<|.s.m.|;
 
 theorem :: COMSEQ_2:34
-  s is convergent & (lim s)<>0c & s is non-zero implies s" is convergent;
+  for s being convergent Complex_Sequence st lim s <> 0c & s is non-zero
+   holds s" is convergent;
 
 theorem :: COMSEQ_2:35
   s is convergent & (lim s)<>0c & s is non-zero implies lim s"=( lim s)";
 
-theorem :: COMSEQ_2:36
-  s is convergent & (lim s)<>0c & s is non-zero implies lim |.s".| = (|.
-  lim s.|)";
+canceled;
 
 theorem :: COMSEQ_2:37
   s is convergent & (lim s)<>0c & s is non-zero implies lim (s")*' = ((
@@ -280,9 +279,7 @@ theorem :: COMSEQ_2:39
   s9 is convergent & s is convergent & (lim s)<>0c & s is non-zero
   implies lim(s9/"s)=(lim s9)/(lim s);
 
-theorem :: COMSEQ_2:40
-  s9 is convergent & s is convergent & (lim s)<>0c & s is non-zero
-  implies lim |.(s9/"s).|=|.(lim s9).|/|.(lim s).|;
+canceled;
 
 theorem :: COMSEQ_2:41
   s9 is convergent & s is convergent & (lim s)<>0c & s is non-zero
@@ -294,8 +291,7 @@ theorem :: COMSEQ_2:42
 theorem :: COMSEQ_2:43
   s is convergent & s1 is bounded & (lim s)=0c implies lim(s(#)s1) =0c;
 
-theorem :: COMSEQ_2:44
-  s is convergent & s1 is bounded & (lim s)=0c implies lim |.s(#)s1.| = 0;
+canceled;
 
 theorem :: COMSEQ_2:45
   s is convergent & s1 is bounded & (lim s)=0c implies lim (s(#)s1)*' = 0c;

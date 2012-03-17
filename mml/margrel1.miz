@@ -2,7 +2,7 @@
 ::  by Edmund Woronowicz
 ::
 :: Received June 1, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,13 +17,14 @@ environ
  vocabularies SUBSET_1, NUMBERS, XBOOLE_0, FUNCOP_1, FUNCT_2, RELAT_1, TARSKI,
       FINSEQ_1, CARD_3, FUNCT_1, ZFMISC_1, ORDINAL4, CARD_1, XBOOLEAN,
       MARGREL1, PARTFUN1, NAT_1, UNIALG_1, FINSEQ_2, UNIALG_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, RELAT_1,
-      NAT_1, FUNCT_2, XBOOLEAN, CARD_3, FINSEQ_1, FINSEQ_2, FUNCOP_1, PARTFUN1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, FUNCT_1,
+      RELAT_1, NAT_1, FUNCT_2, XBOOLEAN, CARD_3, FINSEQ_1, FINSEQ_2, FUNCOP_1,
+      PARTFUN1;
  constructors FUNCOP_1, XCMPLX_0, FINSEQ_1, XBOOLEAN, RELSET_1, CARD_3,
       FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XBOOLEAN, FINSEQ_1,
       FINSEQ_2, ORDINAL1, RELSET_1, PARTFUN1, FUNCOP_1, XXREAL_0, CARD_1,
-      CARD_3;
+      CARD_3, FUNCT_2;
  requirements SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, XBOOLEAN, FINSEQ_1, CARD_3, FUNCT_1, FUNCOP_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, FUNCT_2, FUNCOP_1, XBOOLE_0, XBOOLE_1,
@@ -38,15 +39,13 @@ reserve k for Element of NAT;
 reserve D for non empty set;
 
 definition
-  let B,A be non empty set, b be Element of B;
-  redefine func A --> b -> Element of Funcs(A,B);
+  let B be non empty set, A be set, b be Element of B;
+  redefine func A --> b -> Function of A,B;
   coherence
   proof
     set f = A --> b;
 A1: dom f = A by FUNCOP_1:13;
-A2: rng f = {b} by FUNCOP_1:8;
-    {b} c= B by ZFMISC_1:31;
-    hence thesis by A1,A2,FUNCT_2:def 2;
+    thus thesis by A1;
   end;
 end;
 
@@ -104,15 +103,7 @@ theorem
 proof
   for z st z in {a} holds z is FinSequence by TARSKI:def 1;
   then reconsider X ={a} as FinSequence-membered set by FINSEQ_1:def 18;
-  X is with_common_domain
-  proof
-    let a1,a2;
-    assume that
-A1: a1 in X and
-A2: a2 in X;
-    a1 = a by A1,TARSKI:def 1;
-    hence thesis by A2,TARSKI:def 1;
-  end;
+  X is with_common_domain;
  hence thesis;
 end;
 
@@ -187,7 +178,7 @@ A1:   X is empty;
   end;
 end;
 
-theorem Th9:
+theorem Th3:
   for p st for a holds not a in p holds p = {}
 proof
   let p such that
@@ -207,7 +198,7 @@ A1: p <> {};
   existence
   proof
     consider c being FinSequence such that
-A2: c in p by A1,Th9;
+A2: c in p by A1,Th3;
     for a st a in p holds len c = len a by A2,Def1;
     hence thesis;
   end;
@@ -218,7 +209,7 @@ A2: c in p by A1,Th9;
 A3: for a st a in p holds n1 = len a and
 A4: for a st a in p holds n2 = len a;
     consider a such that
-A5: a in p by A1,Th9;
+A5: a in p by A1,Th3;
     len a = n1 by A3,A5;
     hence thesis by A4,A5;
   end;
@@ -246,13 +237,13 @@ definition
   end;
 end;
 
-theorem Th20:
+theorem Th4:
   {} is relation of X
 proof
   thus a in {} implies rng a c= X;
 end;
 
-theorem Th21:
+theorem Th5:
   {} is relation_length of k
 proof
   thus a in {} implies len a = k;
@@ -265,14 +256,14 @@ definition
   existence
   proof
     take {};
-    thus thesis by Th20,Th21;
+    thus thesis by Th4,Th5;
   end;
 end;
 
 definition
   let D;
   func relations_on D -> set means
-  :Def8:
+  :Def7:
   for X holds X in it iff X c= D* &
   for a,b being FinSequence of D st a in X & b in X holds len a = len b;
   existence
@@ -362,7 +353,7 @@ A2: for x holds x in XX iff x in bool(D*) & P[x] from XBOOLE_0:sch 1;
       end;
       thus thesis by A2;
     end;
-    hence thesis by Def8;
+    hence thesis by Def7;
   end;
 end;
 
@@ -380,10 +371,10 @@ proof
   assume
 A1: X c= r;
   then
-A2: for a,b st a in X & b in X holds len a = len b by Def8;
-  r c= D* by Def8;
+A2: for a,b st a in X & b in X holds len a = len b by Def7;
+  r c= D* by Def7;
   then X c= D* by A1,XBOOLE_1:1;
-  hence thesis by A2,Def8;
+  hence thesis by A2,Def7;
 end;
 
 theorem
@@ -401,7 +392,7 @@ A3: a2 in {a};
   end;
   a in D* by FINSEQ_1:def 11;
   then {a} c= D* by ZFMISC_1:31;
-  hence thesis by A1,Def8;
+  hence thesis by A1,Def7;
 end;
 
 theorem
@@ -421,13 +412,13 @@ A3: a2 in {<*x,y*>};
   <*x*>^<*y*> is FinSequence of D;
   then <*x,y*> in D* by FINSEQ_1:def 11;
   then {<*x,y*>} c= D* by ZFMISC_1:31;
-  hence thesis by A1,Def8;
+  hence thesis by A1,Def7;
 end;
 
 definition
   let D,p,r;
   redefine pred p = r means
-  :Def9:
+  :Def8:
   for a holds a in p iff a in r;
   compatibility
   proof
@@ -441,14 +432,14 @@ A1:   for a holds a in p iff a in r;
 A2:     now
           assume
 A3:       x in r;
-          r is Subset of D* by Def8;
+          r is Subset of D* by Def7;
           then x is FinSequence of D by A3,FINSEQ_1:def 11;
           hence x in p by A1,A3;
         end;
         now
           assume
 A4:       x in p;
-          p is Subset of D* by Def8;
+          p is Subset of D* by Def7;
           then x is FinSequence of D by A4,FINSEQ_1:def 11;
           hence x in r by A1,A4;
         end;
@@ -480,7 +471,7 @@ A6: ex d being FinSequence of D() st P[d] & b = d by A2,A5;
   end;
   for x holds x in X implies x in D()* by A2;
   then X c= D()* by TARSKI:def 3;
-  then reconsider r = X as Element of relations_on D() by A3,Def8;
+  then reconsider r = X as Element of relations_on D() by A3,Def7;
   for a being FinSequence of D() holds a in r iff P[a]
   proof
     let a be FinSequence of D();
@@ -502,7 +493,7 @@ end;
 definition
   let D;
   func empty_rel(D) -> Element of relations_on D means
-  :Def10:
+  :Def9:
   not a in it;
   existence
   proof
@@ -520,7 +511,7 @@ A2: for a holds a in r iff P[a] from relDexist(A1);
 A3: not a in r1 and
 A4: not a in r2;
     for a holds ( a in r1 iff a in r2) by A3,A4;
-    hence r1 = r2 by Def9;
+    hence r1 = r2 by Def8;
   end;
 end;
 
@@ -530,11 +521,11 @@ proof
   assume
 A1: not thesis;
   set x = the Element of empty_rel(D);
-  empty_rel(D) is Subset of D* by Def8;
+  empty_rel(D) is Subset of D* by Def7;
   then x in D* by A1,TARSKI:def 3;
   then reconsider a = x as FinSequence of D by FINSEQ_1:def 11;
   a in empty_rel(D) by A1;
-  hence contradiction by Def10;
+  hence contradiction by Def9;
 end;
 
 definition
@@ -546,8 +537,8 @@ A1: p <> empty_rel(D);
   existence
   proof
     consider c being FinSequence of D such that
-A2: c in p by A1,Def10;
-    a in p implies len c = len a by A2,Def8;
+A2: c in p by A1,Def9;
+    a in p implies len c = len a by A2,Def7;
     hence thesis;
   end;
   uniqueness
@@ -557,7 +548,7 @@ A2: c in p by A1,Def10;
 A3: a in p implies n1 = len a and
 A4: a in p implies n2 = len a;
     consider a such that
-A5: a in p by A1,Def10;
+A5: a in p by A1,Def9;
     len a = n1 by A3,A5;
     hence thesis by A4,A5;
   end;
@@ -583,7 +574,7 @@ A5: ex d being FinSequence of D() st len d = k() & P[d] & b = d by A1,A4;
   end;
   for x holds x in X implies x in D()* by A1;
   then X c= D()* by TARSKI:def 3;
-  then reconsider r = X as Element of relations_on D() by A2,Def8;
+  then reconsider r = X as Element of relations_on D() by A2,Def7;
   for a being FinSequence of D() st len a = k() holds a in r iff P[a]
   proof
     let a be FinSequence of D() such that
@@ -625,7 +616,7 @@ end;
 definition
   let x be set;
   redefine attr x is boolean means
-  :Def13:
+  :Def12:
   x in BOOLEAN;
   compatibility
   proof
@@ -641,7 +632,7 @@ end;
 
 registration
   cluster -> boolean for Element of BOOLEAN;
-  coherence by Def13;
+  coherence by Def12;
 end;
 
 reserve u,v,w for boolean set;
@@ -676,14 +667,13 @@ end;
 definition
   let v be Element of BOOLEAN;
   redefine func 'not' v -> Element of BOOLEAN;
-  correctness by Def13;
+  correctness by Def12;
   let w be Element of BOOLEAN;
   redefine func v '&' w -> Element of BOOLEAN;
-  correctness by Def13;
+  correctness by Def12;
 end;
 
-theorem
-  'not' 'not' v = v;
+canceled;
 
 theorem
   (v = FALSE iff 'not' v = TRUE) & (v = TRUE iff 'not' v = FALSE);
@@ -707,7 +697,7 @@ theorem
 definition
   let X;
   func ALL(X) equals
-  :Def16:
+  :Def15:
   TRUE if not FALSE in X otherwise FALSE;
   correctness;
 end;
@@ -715,26 +705,26 @@ end;
 registration
   let X;
   cluster ALL X -> boolean;
-  correctness by Def16;
+  correctness by Def15;
 end;
 
 definition
   let X;
   redefine func ALL X -> Element of BOOLEAN;
-  correctness by Def13;
+  correctness by Def12;
 end;
 
 theorem
   (not FALSE in X iff ALL(X) = TRUE) & (FALSE in X iff ALL(X) = FALSE)
-  by Def16;
+  by Def15;
 
 begin :: Addenda
 :: from VALUAT_1, 2007.03.15, A.T.
 
 definition
-  let f be Function;
+  let f be Relation;
   attr f is boolean-valued means
-  :Def17:
+  :Def16:
   rng f c= BOOLEAN;
 end;
 
@@ -760,7 +750,7 @@ registration
     end;
     suppose
 A1:   x in dom f;
-A2:   rng f c= BOOLEAN by Def17;
+A2:   rng f c= BOOLEAN by Def16;
       f.x in rng f by A1,FUNCT_1:def 3;
       hence f.x in BOOLEAN by A2;
     end;
@@ -770,7 +760,7 @@ end;
 definition
   let p be boolean-valued Function;
   func 'not' p -> boolean-valued Function means
-  :Def18:
+  :Def17:
   dom it = dom p & for x being set st x in dom p holds it.x = 'not'(p.x);
   existence
   proof
@@ -822,7 +812,7 @@ A12: x in dom q;
   end;
   let q be boolean-valued Function;
   func p '&' q -> boolean-valued Function means
-  :Def19:
+  :Def18:
   dom it = dom p /\ dom
   q & for x being set st x in dom it holds it.x = (p.x) '&' (q.x);
   existence
@@ -868,33 +858,29 @@ end;
 
 registration
   let A be set;
-  cluster -> boolean-valued for Element of Funcs(A,BOOLEAN);
+  cluster -> boolean-valued for Function of A,BOOLEAN;
   coherence
   proof
-    let F be Element of Funcs(A,BOOLEAN);
-    ex f being Function st F = f & dom f = A & rng f c= BOOLEAN by
-FUNCT_2:def 2;
-    hence rng F c= BOOLEAN;
+   let F be Function of A,BOOLEAN;
+   thus rng F c= BOOLEAN by RELAT_1:def 19;
   end;
 end;
 
 definition
   let A be non empty set;
-  let p be Element of Funcs(A,BOOLEAN);
-  redefine func 'not' p -> Element of Funcs(A,BOOLEAN) means
+  let p be Function of A,BOOLEAN;
+  redefine func 'not' p -> Function of A,BOOLEAN means
   for x being Element of A holds it.x = 'not'(p.x);
   coherence
   proof
-    ex f being Function st p = f & dom f = A & rng f c= BOOLEAN by
-FUNCT_2:def 2;
-    then
-A1: dom 'not' p = A by Def18;
-    rng 'not' p c= BOOLEAN by Def17;
-    hence thesis by A1,FUNCT_2:def 2;
+A1: dom 'not' p = dom p by Def17
+      .= A by PARTFUN1:def 2;
+    rng 'not' p c= BOOLEAN by Def16;
+    hence thesis by A1,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
+    let IT be Function of A,BOOLEAN;
 A2: dom IT = A by FUNCT_2:def 1;
     hereby
       assume
@@ -902,47 +888,44 @@ A3:   IT = 'not' p;
       let x be Element of A;
       x in A;
       then x in dom p by FUNCT_2:def 1;
-      hence IT.x = 'not'(p.x) by A3,Def18;
+      hence IT.x = 'not'(p.x) by A3,Def17;
     end;
 A4: dom p = A by FUNCT_2:def 1;
     assume for x being Element of A holds IT.x = 'not'(p.x);
     then for x being set st x in dom p holds IT.x = 'not'(p.x) by A4;
-    hence thesis by A2,A4,Def18;
+    hence thesis by A2,A4,Def17;
   end;
-  let q be Element of Funcs(A,BOOLEAN);
-  redefine func p '&' q -> Element of Funcs(A,BOOLEAN) means
+  let q be Function of A,BOOLEAN;
+  redefine func p '&' q -> Function of A,BOOLEAN means
   for x being Element of A holds it.x = (p.x) '&' (q.x);
   coherence
   proof
-A5: rng(p '&' q) c= BOOLEAN by Def17;
-A6: ex f being Function st q = f & dom f = A & rng f c= BOOLEAN by
-FUNCT_2:def 2;
-    ex f being Function st p = f & dom f = A & rng f c= BOOLEAN by
-FUNCT_2:def 2;
-    then dom(p '&' q) = A /\ A by A6,Def19
+A5: rng(p '&' q) c= BOOLEAN by Def16;
+    dom p = A & dom q = A by PARTFUN1:def 2;
+    then dom(p '&' q) = A /\ A by Def18
       .= A;
-    hence thesis by A5,FUNCT_2:def 2;
+    hence thesis by A5,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
-A7: dom IT = A by FUNCT_2:def 1;
+    let IT be Function of A,BOOLEAN;
+A6: dom IT = A by FUNCT_2:def 1;
     hereby
       assume
-A8:   IT = p '&' q;
+A7:   IT = p '&' q;
       let x be Element of A;
-A9:   dom q = A by FUNCT_2:def 1;
+A8:   dom q = A by FUNCT_2:def 1;
       dom p = A by FUNCT_2:def 1;
-      then dom(p '&' q) = A /\ A by A9,Def19
+      then dom(p '&' q) = A /\ A by A8,Def18
         .= A;
-      hence IT.x = (p.x) '&' (q.x) by A8,Def19;
+      hence IT.x = (p.x) '&' (q.x) by A7,Def18;
     end;
-A10: dom q = A by FUNCT_2:def 1;
-A11: dom IT = A /\ A by FUNCT_2:def 1
-      .= dom p /\ dom q by A10,FUNCT_2:def 1;
+A9: dom q = A by FUNCT_2:def 1;
+A10: dom IT = A /\ A by FUNCT_2:def 1
+      .= dom p /\ dom q by A9,FUNCT_2:def 1;
     assume for x being Element of A holds IT.x = (p.x) '&' (q.x);
-    then for x being set st x in dom IT holds IT.x = (p.x) '&' (q.x) by A7;
-    hence thesis by A11,Def19;
+    then for x being set st x in dom IT holds IT.x = (p.x) '&' (q.x) by A6;
+    hence thesis by A10,Def18;
   end;
 end;
 
@@ -956,14 +939,14 @@ reserve A,z for set,
 definition
   let IT be Relation;
   attr IT is homogeneous means
-:Def22: dom IT is with_common_domain;
+:Def21: dom IT is with_common_domain;
 end;
 
 definition
   let A;
   let IT be PartFunc of A*,A;
   attr IT is quasi_total means
-:Def23: for x,y st len x = len y & x in dom IT holds y in dom IT;
+:Def22: for x,y st len x = len y & x in dom IT holds y in dom IT;
 end;
 
 registration
@@ -1047,10 +1030,10 @@ end;
 
 registration let R be homogeneous Relation;
  cluster dom R -> with_common_domain;
- coherence by Def22;
+ coherence by Def21;
 end;
 
-theorem Th54:
+theorem Th18:
   for A being non empty set, a being Element of A holds <*>A .-->a
   is homogeneous quasi_total non empty PartFunc of A*,A
 proof
@@ -1132,7 +1115,7 @@ definition
   let A;
   let IT be PFuncFinSequence of A;
   attr IT is homogeneous means
-  :Def24:
+  :Def23:
   for n,h st n in dom IT & h = IT.n holds h is homogeneous;
 end;
 
@@ -1140,7 +1123,7 @@ definition
   let A;
   let IT be PFuncFinSequence of A;
   attr IT is quasi_total means
-  :Def25:
+  :Def24:
   for n,h st n in dom IT & h = IT.n holds h is quasi_total;
 end;
 
@@ -1161,7 +1144,7 @@ registration
   existence
   proof
     set a = the Element of A;
-    reconsider f = <*>A .-->a as PartFunc of A*,A by Th54;
+    reconsider f = <*>A .-->a as PartFunc of A*,A by Th18;
     reconsider f as Element of PFuncs(A*,A) by PARTFUN1:45;
     take <*f*>;
     thus <*f*> is homogeneous
@@ -1174,7 +1157,7 @@ A2:   h =<*f*>.n;
       n in {1} by A1,FINSEQ_1:2,def 8;
       then h = <*f*>.1 by A2,TARSKI:def 1;
       then h = f by FINSEQ_1:def 8;
-      hence thesis by Th54;
+      hence thesis by Th18;
     end;
     thus <*f*> is quasi_total
     proof
@@ -1186,7 +1169,7 @@ A4:   h =<*f*>.n;
       n in {1} by A3,FINSEQ_1:2,def 8;
       then h = <*f*>.1 by A4,TARSKI:def 1;
       then h = f by FINSEQ_1:def 8;
-      hence thesis by Th54;
+      hence thesis by Th18;
     end;
     thus <*f*> is non-empty
     proof
@@ -1214,7 +1197,7 @@ A1:   i in dom f;
 A2:   rng f c= PFuncs(A*,A) by RELAT_1:def 19;
       f.i in rng f by A1,FUNCT_1:3;
       then f.i is PartFunc of A*,A by A2,PARTFUN1:46;
-      hence thesis by A1,Def24;
+      hence thesis by A1,Def23;
     end;
     suppose
 A3:   not i in dom f;
@@ -1244,7 +1227,7 @@ A4: h =<*x*>.n;
     n in {1} by A3,FINSEQ_1:2,def 8;
     then h = <*x*>.1 by A4,TARSKI:def 1;
     then h = x by FINSEQ_1:def 8;
-    hence thesis by A1,Th54;
+    hence thesis by A1,Th18;
   end;
 A5: for n,h st n in dom <*x*> & h = <*x*>.n holds h is quasi_total
   proof
@@ -1255,7 +1238,7 @@ A7: h =<*x*>.n;
     n in {1} by A6,FINSEQ_1:2,def 8;
     then h = <*x*>.1 by A7,TARSKI:def 1;
     then h = x by FINSEQ_1:def 8;
-    hence thesis by A1,Th54;
+    hence thesis by A1,Th18;
   end;
   for n being set st n in dom <*x*> holds <*x*>.n is non empty
   proof
@@ -1265,13 +1248,13 @@ A7: h =<*x*>.n;
     then <*x*>.n = <*x*>.1 by TARSKI:def 1;
     hence thesis by A1,FINSEQ_1:def 8;
   end;
-  hence thesis by A2,A5,Def24,Def25,FUNCT_1:def 9;
+  hence thesis by A2,A5,Def23,Def24,FUNCT_1:def 9;
 end;
 
 definition
   let f be homogeneous Relation;
   func arity(f) -> Nat means
-:Def26:  for x being FinSequence st x in dom f holds it =
+:Def25:  for x being FinSequence st x in dom f holds it =
   len x if ex x being FinSequence st x in dom f otherwise it = 0;
   consistency;
   existence
@@ -1345,7 +1328,7 @@ A2: y in D* by TARSKI:def 3;
     assume
 A3: x in dom f;
     then reconsider x9 = x as FinSequence of D by A1,FINSEQ_1:def 11;
-    len x9 = arity f by A3,Def26;
+    len x9 = arity f by A3,Def25;
     then x9 is Element of (arity(f))-tuples_on D by FINSEQ_2:92;
     hence thesis;
   end;
@@ -1355,14 +1338,14 @@ A3: x in dom f;
   then x in {s where s is Element of D* : len s = arity(f)} by FINSEQ_2:def 4;
   then
 A4: ex s being Element of D* st x = s & len s = arity(f);
-  len y = arity f by Def26;
-  hence thesis by A4,Def23;
+  len y = arity f by Def25;
+  hence thesis by A4,Def22;
 end;
 
 definition
   let D be non empty set;
   mode PFuncsDomHQN of D -> non empty set means
-    :Def27:
+    :Def26:
     for x be Element of it
     holds x is homogeneous quasi_total non empty PartFunc of D*,D;
   existence
@@ -1372,7 +1355,7 @@ definition
     take A;
     let x be Element of A;
     x= <*>D .-->a by TARSKI:def 1;
-    hence thesis by Th54;
+    hence thesis by Th18;
   end;
 end;
 
@@ -1380,5 +1363,5 @@ definition
   let D be non empty set, P be PFuncsDomHQN of D;
   redefine mode Element of P -> homogeneous quasi_total non empty PartFunc of
     D*,D;
-  coherence by Def27;
+  coherence by Def26;
 end;

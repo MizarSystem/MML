@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received October 25, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,20 +15,22 @@
 environ
 
  vocabularies GRAPH_1, STRUCT_0, FUNCT_1, PARTFUN1, ZFMISC_1, SUBSET_1,
-      XBOOLE_0, CARD_1, FUNCOP_1, RELAT_1, TARSKI, ALGSTR_0, WELLORD1, CAT_1;
+      XBOOLE_0, CARD_1, FUNCOP_1, RELAT_1, TARSKI, ALGSTR_0, WELLORD1, CAT_1,
+      MONOID_0, RELAT_2, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, NUMBERS, BINOP_1, FUNCOP_1, STRUCT_0, GRAPH_1;
  constructors PARTFUN1, WELLORD2, BINOP_1, PBOOLE, GRAPH_1, RELSET_1;
- registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0, RELAT_1;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0, RELAT_1,
+      ZFMISC_1;
  requirements SUBSET, BOOLE;
 
 
 begin :: Structure of a Category
 
 definition
-  struct(MultiGraphStruct) CatStr (# carrier,carrier' -> set, Source,Target ->
-Function of the carrier', the carrier, Comp -> PartFunc of [:the carrier', the
-    carrier' :],the carrier', Id -> Function of the carrier, the carrier' #);
+  struct(MultiGraphStruct) CatStr (# carrier,carrier' -> set,
+     Source,Target -> Function of the carrier', the carrier,
+     Comp -> PartFunc of [:the carrier', the carrier' :],the carrier' #);
 end;
 
 reserve C for CatStr;
@@ -48,29 +50,20 @@ registration
 end;
 
 definition
-
   let C,f,g;
   assume
  [g,f] in dom(the Comp of C);
-  func g*f -> Morphism of C equals
+  func g(*)f -> Morphism of C equals
 :: CAT_1:def 1
-
-  ( the Comp of C ).(g,f);
+ ( the Comp of C ).(g,f);
 end;
 
 definition
-  let C be non void non empty CatStr, a be Object of C;
-  func id (a) -> Morphism of C equals
-:: CAT_1:def 2
-  ( the Id of C ).a;
-end;
-
-definition
+ canceled 2;
   let C be non void non empty CatStr, a,b be Object of C;
   func Hom(a,b) -> Subset of the carrier' of C equals
-:: CAT_1:def 3
-  { f where f is Morphism
-  of C : dom(f)=a & cod(f)=b };
+:: CAT_1:def 4
+  {f where f is Morphism of C : dom f = a & cod f = b};
 end;
 
 reserve C for non void non empty CatStr,
@@ -88,13 +81,11 @@ definition
   assume
  Hom(a,b)<>{};
   mode Morphism of a,b -> Morphism of C means
-:: CAT_1:def 4
-
-    it in Hom(a,b);
+:: CAT_1:def 5
+ it in Hom(a,b);
 end;
 
-theorem :: CAT_1:3
-  for f being set st f in Hom(a,b) holds f is Morphism of a,b;
+canceled;
 
 theorem :: CAT_1:4
   for f being Morphism of C holds f is Morphism of dom(f),cod(f);
@@ -121,55 +112,100 @@ theorem :: CAT_1:9
 :: Category
 
 definition
-  let C be CatStr;
+  let C be non empty non void CatStr;
   attr C is Category-like means
-:: CAT_1:def 5
+:: CAT_1:def 6
 
-  (for f,g being Element of the carrier'
-of C holds [g,f] in dom(the Comp of C) iff (the Source of C).g=(the Target of C
-).f) & (for f,g being Element of the carrier' of C st (the Source of C).g=(the
-Target of C).f holds (the Source of C).((the Comp of C).(g,f)) = (the Source of
-C).f & (the Target of C).((the Comp of C).(g,f)) = (the Target of C).g) & (for
-  f,g,h being Element of the carrier' of C st (the Source of C).h = (the Target
-of C).g & (the Source of C).g = (the Target of C).f holds (the Comp of C).(h,(
-  the Comp of C).(g,f)) = (the Comp of C).((the Comp of C).(h,g),f) ) & for b
-being Element of C holds (the Source of C).((the Id of C).b) = b
-  & (the Target of C).((the Id of C).b) = b & (for f being Element of the
-carrier' of C st (the Target of C).f = b holds (the Comp of C).((the Id of C).b
-,f) = f ) & for g being Element of the carrier' of C st (the Source of C).g = b
-  holds (the Comp of C).(g,(the Id of C).b) = g;
+  for f,g being Morphism of C
+   holds [g,f] in dom(the Comp of C) iff dom g = cod f;
+
+  attr C is transitive means
+:: CAT_1:def 7
+
+   for f,g being Morphism of C st dom g = cod f
+    holds dom(g(*)f) = dom f & cod(g(*)f) = cod g;
+
+  attr C is associative means
+:: CAT_1:def 8
+
+   for f,g,h being Morphism of C
+     st dom h = cod g & dom g = cod f
+    holds h(*)(g(*)f) = (h(*)g)(*)f;
+
+  attr C is reflexive means
+:: CAT_1:def 9
+
+   for b being Element of C holds Hom(b,b) <> {};
+
+  attr C is with_identities means
+:: CAT_1:def 10
+
+  for a being Element of C
+   ex i being Morphism of a,a st
+    for b being Element of C holds
+     (Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g) &
+     (Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f);
+end;
+
+definition
+  let o,m be set;
+  func 1Cat(o,m) -> strict CatStr equals
+:: CAT_1:def 11
+  CatStr(# {o},{m},m:->o,m:->o,(m,m):->m #);
+end;
+
+registration let o,m be set;
+ cluster 1Cat(o,m) -> non empty trivial non void trivial';
 end;
 
 registration
-  cluster Category-like non void non empty strict for CatStr;
+ cluster non empty trivial -> transitive reflexive
+    for non empty non void CatStr;
+end;
+
+registration
+ cluster non void trivial' -> associative with_identities
+    for non empty non void CatStr;
+end;
+
+registration let o,m be set;
+ cluster 1Cat(o,m) -> Category-like;
+end;
+
+registration
+  cluster reflexive transitive associative with_identities Category-like
+   non void non empty strict for non empty non void CatStr;
 end;
 
 definition
-  mode Category is Category-like non void non empty CatStr;
+  mode Category is reflexive transitive associative with_identities
+   Category-like non void non empty CatStr;
 end;
 
-theorem :: CAT_1:10
-  for C being non void non empty CatStr st ( for f,g being Morphism of C
-  holds [g,f] in dom(the Comp of C) iff dom g = cod f ) & ( for f,g being
-Morphism of C st dom g = cod f holds dom(g*f) = dom f & cod (g*f) = cod g ) & (
-for f,g,h being Morphism of C st dom h = cod g & dom g = cod f holds h*(g*f) =
-(h*g)*f ) & ( for b being Object of C holds dom id b = b & cod id b = b & (for
-f being Morphism of C st cod f = b holds (id b)*f = f) & (for g being Morphism
-  of C st dom g = b holds g*(id b) = g) ) holds C is Category-like;
+registration let C be reflexive non void non empty CatStr,
+    a be Object of C;
+ cluster Hom(a,a) -> non empty;
+end;
+
+definition
+  let C be with_identities reflexive non void non empty CatStr,
+     a be Object of C;
+  func id a -> Morphism of a,a means
+:: CAT_1:def 12
+  for b being Object of C holds
+     (Hom(a,b) <> {} implies
+       for f being Morphism of a,b holds f(*)it = f)
+   & (Hom(b,a) <> {} implies
+     for f being Morphism of b,a holds it(*)f = f);
+end;
+
+canceled;
 
 reserve o,m for set;
 
-definition
-  let o,m;
-  func 1Cat(o,m) -> strict Category equals
-:: CAT_1:def 6
-  CatStr(# {o},{m},m:->o,m:->o,(m,m)
-    :->m,o:->m #);
-end;
-
 theorem :: CAT_1:11
-  for a,b being Object of 1Cat(o,m) for f being Morphism of 1Cat(o
-  ,m) holds f in Hom(a,b);
+  for a,b being Object of 1Cat(o,m) for f being Morphism of 1Cat(o,m)
+   holds f in Hom(a,b);
 
 theorem :: CAT_1:12
   for a,b being Object of 1Cat(o,m) for f being Morphism of 1Cat(o,m)
@@ -190,50 +226,23 @@ theorem :: CAT_1:15
   dom(g) = cod(f) iff [g,f] in dom(the Comp of C);
 
 theorem :: CAT_1:16
-  dom(g) = cod(f) implies g*f = ( the Comp of C ).(g,f);
+  dom(g) = cod(f) implies g(*)f = ( the Comp of C ).(g,f);
 
 theorem :: CAT_1:17
-  for f,g being Morphism of C st dom(g) = cod(f) holds dom(g*f) =
-  dom(f) & cod(g*f) = cod(g);
+  for f,g being Morphism of C st dom(g) = cod(f) holds dom(g(*)f) =
+  dom(f) & cod(g(*)f) = cod(g);
 
 theorem :: CAT_1:18
   for f,g,h being Morphism of C st dom(h) = cod(g) & dom(g) = cod(
-  f) holds h*(g*f) = (h*g)*f;
+  f) holds h(*)(g(*)f) = (h(*)g)(*)f;
 
-theorem :: CAT_1:19
-  dom(id b) = b & cod(id b) = b;
-
-theorem :: CAT_1:20
-  id a = id b implies a = b;
+canceled 2;
 
 theorem :: CAT_1:21
-  for f being Morphism of C st cod(f) = b holds (id b)*f = f;
+  for f being Morphism of C st cod(f) = b holds (id b)(*)f = f;
 
 theorem :: CAT_1:22
-  for g being Morphism of C st dom(g) = b holds g*(id b) = g;
-
-definition
-  let C,g;
-  attr g is monic means
-:: CAT_1:def 7
-  for f1,f2 st dom f1 = dom f2 & cod f1 = dom g & cod f2
-  = dom g & g*f1=g * f2 holds f1=f2;
-end;
-
-definition
-  let C,f;
-  attr f is epi means
-:: CAT_1:def 8
-  for g1,g2 st dom g1 = cod f & dom g2 = cod f & cod g1 =
-  cod g2 & g1*f=g2 * f holds g1=g2;
-end;
-
-definition
-  let C,f;
-  attr f is invertible means
-:: CAT_1:def 9
-  ex g st dom g = cod f & cod g = dom f & f*g = id cod f & g*f = id dom f;
-end;
+  for g being Morphism of C st dom(g) = b holds g(*)(id b) = g;
 
 reserve f,f1,f2 for Morphism of a,b;
 reserve f9 for Morphism of b,a;
@@ -241,34 +250,28 @@ reserve g for Morphism of b,c;
 reserve h,h1,h2 for Morphism of c,d;
 
 theorem :: CAT_1:23
-  Hom(a,b)<>{} & Hom(b,c)<>{} implies g*f in Hom(a,c);
-
-theorem :: CAT_1:24
-  Hom(a,b)<>{} & Hom(b,c)<>{} implies Hom(a,c)<>{};
+  Hom(a,b)<>{} & Hom(b,c)<>{} implies g(*)f in Hom(a,c);
 
 definition
   let C,a,b,c,f,g;
   assume
  Hom(a,b)<>{} & Hom(b,c)<>{};
   func g*f -> Morphism of a,c equals
-:: CAT_1:def 10
+:: CAT_1:def 13
 
-  g*f;
+  g(*)f;
 end;
+
+theorem :: CAT_1:24
+  Hom(a,b)<>{} & Hom(b,c)<>{} implies Hom(a,c)<>{};
 
 theorem :: CAT_1:25
   Hom(a,b)<>{} & Hom(b,c)<>{} & Hom(c,d)<>{} implies (h*g)*f=h*(g* f);
 
-theorem :: CAT_1:26
-  id a in Hom(a,a);
+canceled;
 
 theorem :: CAT_1:27
-  Hom(a,a) <> {};
-
-definition
-  let C,a;
-  redefine func id a -> Morphism of a,a;
-end;
+ id a in Hom(a,a);
 
 theorem :: CAT_1:28
   Hom(a,b)<>{} implies (id b)*f=f;
@@ -276,17 +279,49 @@ theorem :: CAT_1:28
 theorem :: CAT_1:29
   Hom(b,c)<>{} implies g*(id b)=g;
 
+registration let C,a; let f be Morphism of a,a;
+ reduce f*id a to f;
+ reduce (id a)*f to f;
+end;
+
 theorem :: CAT_1:30
   (id a)*(id a) = id a;
 
 :: Monics, Epis
+
+definition
+  let C be Category, b,c be Object of C, g be Morphism of b,c;
+  attr g is monic means
+:: CAT_1:def 14
+  Hom(b,c) <> {} &
+   for a being Object of C st Hom(a,b) <> {}
+  for f1,f2 being Morphism of a,b
+   st g*f1=g*f2 holds f1=f2;
+end;
+
+definition
+  let C be Category, a,b be Object of C, f be Morphism of a,b;
+  attr f is epi means
+:: CAT_1:def 15
+ Hom(a,b) <> {} &
+   for c being Object of C st Hom(b,c) <> {}
+  for g1,g2 being Morphism of b,c st g1*f=g2*f holds g1=g2;
+end;
+
+definition
+  let C be Category, a,b be Object of C, f be Morphism of a,b;
+  attr f is invertible means
+:: CAT_1:def 16
+  Hom(a,b) <> {} & Hom(b,a) <> {} &
+  ex g being Morphism of b,a st f*g = id b & g*f = id a;
+end;
 
 theorem :: CAT_1:31
   Hom(b,c) <> {} implies (g is monic iff for a for f1,f2 being
   Morphism of a,b st Hom(a,b)<>{} & g*f1=g*f2 holds f1=f2);
 
 theorem :: CAT_1:32
-  Hom(b,c)<>{} & Hom(c,d)<>{} & g is monic & h is monic implies h*g is monic;
+  g is monic & h is monic implies h*g is monic;
 
 theorem :: CAT_1:33
   Hom(b,c)<>{} & Hom(c,d)<>{} & h*g is monic implies g is monic;
@@ -303,7 +338,7 @@ theorem :: CAT_1:36
   Morphism of b,c st Hom(b,c)<>{} & g1*f=g2*f holds g1=g2);
 
 theorem :: CAT_1:37
-  Hom(a,b)<>{} & Hom(b,c)<>{} & f is epi & g is epi implies g*f is epi;
+  f is epi & g is epi implies g*f is epi;
 
 theorem :: CAT_1:38
   Hom(a,b)<>{} & Hom(b,c)<>{} & g*f is epi implies g is epi;
@@ -326,48 +361,47 @@ theorem :: CAT_1:42
 definition
   let C,a,b,f;
   assume that
- Hom(a,b) <> {} and
  f is invertible;
   func f" -> Morphism of b,a means
-:: CAT_1:def 11
+:: CAT_1:def 17
 
   f*it = id b & it*f = id a;
 end;
 
 theorem :: CAT_1:43
-  Hom(a,b)<>{} & f is invertible implies f is monic & f is epi;
+  f is invertible implies f is monic & f is epi;
 
 theorem :: CAT_1:44
   id a is invertible;
 
 theorem :: CAT_1:45
-  Hom(a,b) <> {} & Hom(b,c) <> {} & f is invertible & g is
-  invertible implies g*f is invertible;
+  f is invertible & g is invertible implies g*f is invertible;
 
 theorem :: CAT_1:46
-  Hom(a,b)<>{} & f is invertible implies f" is invertible;
+  f is invertible implies f" is invertible;
 
 theorem :: CAT_1:47
-  Hom(a,b) <> {} & Hom(b,c) <> {} & f is invertible & g is invertible
+  f is invertible & g is invertible
   implies (g*f)" = f"*g";
 
 definition
   let C,a;
   attr a is terminal means
-:: CAT_1:def 12
+:: CAT_1:def 18
 
   Hom(b,a)<>{} & ex f being Morphism of b,a
   st for g being Morphism of b,a holds f=g;
   attr a is initial means
-:: CAT_1:def 13
+:: CAT_1:def 19
 
   Hom(a,b)<>{} & ex f being Morphism of a,b st
   for g being Morphism of a,b holds f=g;
   let b;
   pred a,b are_isomorphic means
-:: CAT_1:def 14
-
-  Hom(a,b)<>{} & ex f st f is invertible;
+:: CAT_1:def 20
+   ex f st f is invertible;
+ reflexivity;
+ symmetry;
 end;
 
 theorem :: CAT_1:48
@@ -401,11 +435,16 @@ theorem :: CAT_1:56
 theorem :: CAT_1:57
   Hom(a,b) <> {} & a is terminal implies f is monic;
 
+registration let C,a;
+ reduce dom id a to a;
+ reduce cod id a to a;
+end;
+
 theorem :: CAT_1:58
-  a,a are_isomorphic;
+ dom id a = a & cod id a =a;
 
 theorem :: CAT_1:59
-  a,b are_isomorphic implies b,a are_isomorphic;
+ id a = id b implies a = b;
 
 theorem :: CAT_1:60
   a,b are_isomorphic & b,c are_isomorphic implies a,c are_isomorphic;
@@ -415,42 +454,44 @@ theorem :: CAT_1:60
 definition
   let C,D;
   mode Functor of C,D -> Function of the carrier' of C,the carrier' of D means
-:: CAT_1:def 15
+:: CAT_1:def 21
 
-    ( for c being Element of C ex d being Element
- of D st it.((the Id of C).c) = (the Id of D).d ) & ( for f being
-Element of the carrier' of C holds it.((the Id of C).((the Source of C).f)) = (
-the Id of D).((the Source of D).(it.f)) & it.((the Id of C).((the Target of C).
-f)) = (the Id of D).((the Target of D).(it.f)) ) & for f,g being Element of the
-carrier' of C st [g,f] in dom(the Comp of C) holds it.((the Comp of C).(g,f)) =
-    (the Comp of D).(it.g,it.f);
+    (for c being Element of C ex d being Element of D st it.id c = id d ) &
+    (for f being Element of the carrier' of C
+      holds it.(id dom f) = id dom(it.f) &
+     it.(id cod f) = id cod(it.f)) &
+     for f,g being Element of the carrier' of C
+       st [g,f] in dom(the Comp of C)
+     holds it.(g(*)f) = (it.g)(*)(it.f);
 end;
 
 theorem :: CAT_1:61
-  for T being Function of the carrier' of C,the carrier' of D st (
-  for c being Object of C ex d being Object of D st T.(id c) = id d ) & ( for f
-being Morphism of C holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (
-T.f) ) & ( for f,g being Morphism of C st dom g = cod f holds T.(g*f) = (T.g)*(
-  T.f)) holds T is Functor of C,D;
+  for T being Function of the carrier' of C,the carrier' of D st
+   (for c being Object of C ex d being Object of D st T.(id c) = id d) &
+   (for f being Morphism of C
+     holds T.(id dom f) = id dom (T.f) &
+           T.(id cod f) = id cod (T.f)) &
+   (for f,g being Morphism of C st dom g = cod f
+     holds T.(g(*)f) = (T.g)(*)(T.f)) holds T is Functor of C,D;
 
 theorem :: CAT_1:62
   for T being Functor of C,D for c being Object of C ex d being
   Object of D st T.(id c) = id d;
 
 theorem :: CAT_1:63
-  for T being Functor of C,D for f being Morphism of C holds T.(id dom f
-  ) = id dom (T.f) & T.(id cod f) = id cod (T.f);
+  for T being Functor of C,D for f being Morphism of C
+  holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f);
 
 theorem :: CAT_1:64
   for T being Functor of C,D for f,g being Morphism of C st dom g
-  = cod f holds dom(T.g) = cod(T.f) & T.(g*f) = (T.g)*(T.f);
+  = cod f holds dom(T.g) = cod(T.f) & T.(g(*)f) = (T.g)(*)(T.f);
 
 theorem :: CAT_1:65
   for T being Function of the carrier' of C,the carrier' of D for
 F being Function of the carrier of C, the carrier of D st ( for c being Object
 of C holds T.(id c) = id(F.c) ) & ( for f being Morphism of C holds F.(dom f) =
 dom (T.f) & F.(cod f) = cod (T.f) ) & ( for f,g being Morphism of C st dom g =
-  cod f holds T.(g*f) = (T.g)*(T.f)) holds T is Functor of C,D;
+  cod f holds T.(g(*)f) = (T.g)(*)(T.f)) holds T is Functor of C,D;
 
 :: Object Function of a Functor
 
@@ -459,12 +500,12 @@ definition
   let F be Function of the carrier' of C,the carrier' of D;
   assume
  for c being Element of C ex d being Element
- of D st F.((the Id of C).c) = (the Id of D).d;
+ of D st F.id c = id d;
   func Obj(F) -> Function of the carrier of C,the carrier of D means
-:: CAT_1:def 16
+:: CAT_1:def 22
 
 for c being Element of C for d being Element of D
-  st F.((the Id of C).c) = (the Id of D).d holds it.c = d;
+  st F.id c = id d holds it.c = d;
 end;
 
 theorem :: CAT_1:66
@@ -489,7 +530,7 @@ definition
   let T be Functor of C,D;
   let c be Object of C;
   func T.c -> Object of D equals
-:: CAT_1:def 17
+:: CAT_1:def 23
   (Obj T).c;
 end;
 
@@ -534,7 +575,7 @@ theorem :: CAT_1:76
 definition
   let C;
   func id C -> Functor of C,C equals
-:: CAT_1:def 18
+:: CAT_1:def 24
   id the carrier' of C;
 end;
 
@@ -551,16 +592,16 @@ definition
   let C,D be Category;
   let T be Functor of C,D;
   attr T is isomorphic means
-:: CAT_1:def 19
+:: CAT_1:def 25
   T is one-to-one & rng T = the carrier' of D & rng Obj T = the carrier of D;
   attr T is full means
-:: CAT_1:def 20
+:: CAT_1:def 26
 
   for c,c9 being Object of C st Hom(T.c,T.c9) <>
 {} for g being Morphism of T.c,T.c9 holds Hom(c,c9) <> {} & ex f being Morphism
   of c,c9 st g = T.f;
   attr T is faithful means
-:: CAT_1:def 21
+:: CAT_1:def 27
 
   for c,c9 being Object of C st Hom(c,c9) <>
   {} for f1,f2 being Morphism of c,c9 holds T.f1 = T.f2 implies f1 = f2;
@@ -602,7 +643,7 @@ definition
   let T be Functor of C,D;
   let c,c9 be Object of C;
   func hom(T,c,c9) -> Function of Hom(c,c9) , Hom(T.c,T.c9) equals
-:: CAT_1:def 22
+:: CAT_1:def 28
   T|Hom(c,c9);
 end;
 

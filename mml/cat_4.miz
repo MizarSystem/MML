@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received October 27, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,15 +17,15 @@ environ
  vocabularies CAT_1, WELLORD1, XBOOLE_0, RELAT_1, FINSET_1, FUNCT_1, STRUCT_0,
       CAT_3, GRAPH_1, CARD_1, FUNCOP_1, PARTFUN1, NAT_1, ARYTM_3, SUBSET_1,
       TARSKI, ARYTM_1, FUNCT_4, FUNCT_6, ZFMISC_1, ALGSTR_1, MCART_1, DIRAF,
-      PBOOLE, EQREL_1, CAT_4;
+      PBOOLE, EQREL_1, CAT_4, MONOID_0, RELAT_2, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, BINOP_1, ALGSTR_1, XCMPLX_0,
-      NAT_1, CARD_1, FUNCT_4, STRUCT_0, GRAPH_1, CAT_1, CAT_3;
- constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, ALGSTR_1, CAT_3, RELSET_1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XREAL_0, NAT_1, ORDINAL1,
-      CARD_1, STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1;
+      ORDINAL1, CARD_1, FUNCT_4, STRUCT_0, GRAPH_1, CAT_1, CAT_3;
+ constructors BINOP_1, REAL_1, NAT_1, ALGSTR_1, CAT_3, RELSET_1;
+ registrations XBOOLE_0, FUNCT_1, FINSET_1, XREAL_0, NAT_1, ORDINAL1, CARD_1,
+      STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1, CAT_1;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions CAT_1, CAT_3, FUNCOP_1;
+ definitions CAT_1, CAT_3, FUNCOP_1, GRAPH_1;
  theorems TARSKI, ZFMISC_1, FUNCT_2, FUNCOP_1, FUNCT_4, CARD_1, CARD_2, CAT_1,
       CAT_3, FUNCT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
  schemes NAT_1;
@@ -75,8 +75,7 @@ A1: for I being finite set, F being Function of I,the carrier of C ex
     that
     cods F9 = F and
 A2: a is_a_product_wrt F9;
-    a is terminal by A2,CAT_3:50;
-    hence ex a being Object of C st a is terminal;
+    thus ex a being Object of C st a is terminal by A2,CAT_3:50;
     let a,b be Object of C;
     set F = (0,1)-->(a,b);
     consider c being Object of C, F9 being Projections_family of c,{0,1} such
@@ -115,8 +114,7 @@ A12: card I = n+1;
     reconsider sx = {x} as finite set;
     reconsider G = F|(I\{x}) as Function of I\{x},the carrier of C by
 FUNCT_2:32;
-    {x} c= I by A12,CARD_1:27,ZFMISC_1:31;
-    then card(Ix) = card(I) - card(sx) by CARD_2:44
+    card(Ix) = card(I) - card(sx) by CARD_2:44,A12,CARD_1:27,ZFMISC_1:31
       .= card(I) - 1 by CARD_1:30
       .= n by A12,XCMPLX_1:26;
     then consider
@@ -142,7 +140,7 @@ A22: dom(G9*p1) \/ dom(x .-->p2) = I \/ {x} by A20,XBOOLE_1:39
     then dom F9 = I by FUNCT_4:def 1;
     then reconsider F9 as Function of I, the carrier' of C by A21,FUNCT_2:def 1
 ,RELSET_1:4;
-A23: doms G9 = (I\{x})-->a by CAT_3:def 12;
+A23: doms G9 = (I\{x})-->a by CAT_3:def 13;
     now
       let y be set;
       assume
@@ -170,20 +168,20 @@ A28:      y in I\{x} by A24,A26,ZFMISC_1:56;
           hence (doms F9)/.y = dom((G9*p1)/.y) by A24,CAT_3:def 1
             .= (doms(G9*p1))/.y by A28,CAT_3:def 1
             .= ((I\{x})-->c)/.y by A15,A17,A23,CAT_3:16
-            .= c by A28,CAT_3:2
+            .= c by A24,A26,ZFMISC_1:56,CAT_3:2
             .= (I --> c).y by A24,FUNCOP_1:7;
         end;
       end;
       hence (doms F9).y = (I --> c).y by A24,FUNCT_2:def 13;
     end;
-    then doms F9 = I --> c by FUNCT_2:12;
-    then reconsider F9 as Projections_family of c,I by CAT_3:def 12;
+    then reconsider F9 as Projections_family of c,I
+        by CAT_3:def 13,FUNCT_2:12;
     take c,F9;
-    now
+B35:  now
       let y be set;
       assume
 A29:  y in I;
-      now
+   now
         per cases;
         suppose
 A30:      y = x;
@@ -206,21 +204,21 @@ A34:      y in I\{x} by A29,A32,ZFMISC_1:56;
             .= (cods(G9*p1))/.y by A34,CAT_3:def 2
             .= G/.y by A13,A17,A23,CAT_3:16
             .= G.y by A34,FUNCT_2:def 13
-            .= F.y by A34,FUNCT_1:49
+            .= F.y by A29,A32,ZFMISC_1:56,FUNCT_1:49
             .= F/.y by A29,FUNCT_2:def 13;
         end;
       end;
       hence (cods F9)/.y = F/.y;
     end;
     hence
-A35: cods F9 = F by CAT_3:1;
+ cods F9 = F by CAT_3:1;
     thus F9 is Projections_family of c,I;
     let d be Object of C;
     let F99 be Projections_family of d,I such that
 A36: cods F9 = cods F99;
     reconsider G99 = F99|(I\{x}) as Function of I\{x},the carrier' of C by
 FUNCT_2:32;
-    now
+ now
       let y be set;
       assume
 A37:  y in I\{x};
@@ -231,8 +229,8 @@ A37:  y in I\{x};
         .= d by A37,CAT_3:41
         .= ((I\{x})-->d)/.y by A37,CAT_3:2;
     end;
-    then doms G99 = I\{x} --> d by CAT_3:1;
-    then reconsider G99 as Projections_family of d,I\{x} by CAT_3:def 12;
+    then reconsider G99 as Projections_family of d,I\{x}
+               by CAT_3:def 13,1;
     now
       let y be set;
       assume
@@ -244,14 +242,14 @@ A39:  G/.y = G.y by FUNCT_2:def 13
       F99/.y = F99.y by A38,FUNCT_2:def 13
         .= G99.y by A38,FUNCT_1:49
         .= G99/.y by A38,FUNCT_2:def 13;
-      hence (cods G9)/.y = cod(G99/.y) by A13,A35,A36,A38,A39,CAT_3:def 2
+      hence (cods G9)/.y = cod(G99/.y)
+            by A13,A36,A38,A39,CAT_3:def 2,1,B35
         .= (cods G99)/.y by A38,CAT_3:def 2;
     end;
-    then cods G9 = cods G99 by CAT_3:1;
     then consider h9 being Morphism of C such that
 A40: h9 in Hom(d,a) and
 A41: for k being Morphism of C st k in Hom(d,a) holds (for y being set
-    st y in I\{x} holds (G9/.y)*k = G99/.y) iff h9 = k by A14,CAT_3:def 13;
+    st y in I\{x} holds (G9/.y)(*)k = G99/.y) iff h9 = k by A14,CAT_3:def 14,1;
 A42: x in {x} by TARSKI:def 1;
     set g = F99/.x;
 A43: dom g = d by A12,CARD_1:27,CAT_3:41;
@@ -263,20 +261,20 @@ A44: F9/.x = F9.x by A12,CARD_1:27,FUNCT_2:def 13
     then g in Hom(d,cod p2) by A43;
     then consider h being Morphism of C such that
 A45: h in Hom(d,c) and
-A46: for k being Morphism of C st k in Hom(d,c) holds p1*k = h9 & p2*k
-    = g iff h = k by A17,A19,A40,CAT_3:def 14;
+A46: for k being Morphism of C st k in Hom(d,c) holds p1(*)k = h9 & p2(*)k
+    = g iff h = k by A17,A19,A40,CAT_3:def 15;
     take h;
     thus h in Hom(d,c) by A45;
     let k be Morphism of C such that
 A47: k in Hom(d,c);
-    thus (for y being set st y in I holds (F9/.y)*k = F99/.y) implies h = k
+    thus (for y being set st y in I holds (F9/.y)(*)k = F99/.y) implies h = k
     proof
 A48:  cod k = c by A47,CAT_1:1;
       then
-A49:  cod(p1*k) = a by A15,A17,CAT_1:17;
+A49:  cod(p1(*)k) = a by A15,A17,CAT_1:17;
       assume
-A50:  for y being set st y in I holds (F9/.y)*k = F99/.y;
-A51:  for y being set st y in I\{x} holds (G9/.y)*(p1*k) = G99/.y
+A50:  for y being set st y in I holds (F9/.y)(*)k = F99/.y;
+A51:  for y being set st y in I\{x} holds (G9/.y)(*)(p1(*)k) = G99/.y
       proof
         let y be set;
         assume
@@ -287,19 +285,19 @@ A54:    F9/.y = F9.y by A52,FUNCT_2:def 13
           .= (G9*p1).y by A20,A22,A52,A53,FUNCT_4:def 1
           .= (G9*p1)/.y by A52,FUNCT_2:def 13;
         dom(G9/.y) = a by A52,CAT_3:41;
-        hence (G9/.y)*(p1*k) = ((G9/.y)*p1)*k by A15,A17,A48,CAT_1:18
-          .= ((G9*p1)/.y)*k by A52,CAT_3:def 5
+        hence (G9/.y)(*)(p1(*)k) = ((G9/.y)(*)p1)(*)k by A15,A17,A48,CAT_1:18
+          .= ((G9*p1)/.y)(*)k by A52,CAT_3:def 5
           .= F99/.y by A50,A52,A54
           .= F99.y by A52,FUNCT_2:def 13
           .= G99.y by A52,FUNCT_1:49
           .= G99/.y by A52,FUNCT_2:def 13;
       end;
       dom k = d by A47,CAT_1:1;
-      then dom(p1*k) = d by A15,A48,CAT_1:17;
-      then p1*k in Hom(d,a) by A49;
+      then dom(p1(*)k) = d by A15,A48,CAT_1:17;
+      then p1(*)k in Hom(d,a) by A49;
       then
-A55:  p1*k = h9 by A41,A51;
-      p2*k = g by A12,A44,A50,CARD_1:27;
+A55:  p1(*)k = h9 by A41,A51;
+      p2(*)k = g by A12,A44,A50,CARD_1:27;
       hence thesis by A46,A47,A55;
     end;
     assume
@@ -323,17 +321,16 @@ A60:    y <> x;
 A61:    not y in {x} by TARSKI:def 1;
 A62:    cod k = c by A47,CAT_1:1;
 A63:    y in I\{x} by A57,A60,ZFMISC_1:56;
-        then
-A64:    dom(G9/.y) = a by CAT_3:41;
+A64:    dom(G9/.y) = a by CAT_3:41,A57,A60,ZFMISC_1:56;
         F9/.y = F9.y by A57,FUNCT_2:def 13
           .= (G9*p1).y by A20,A22,A57,A61,FUNCT_4:def 1
           .= (G9*p1)/.y by A63,FUNCT_2:def 13
-          .= (G9/.y)*p1 by A63,CAT_3:def 5;
-        hence (F9/.y)*k = (G9/.y)*(p1*k) by A15,A17,A62,A64,CAT_1:18
-          .= (G9/.y)*h9 by A46,A47,A56
+          .= (G9/.y)(*)p1 by A63,CAT_3:def 5;
+        hence (F9/.y)(*)k = (G9/.y)(*)(p1(*)k) by A15,A17,A62,A64,CAT_1:18
+          .= (G9/.y)(*)h9 by A46,A47,A56
           .= G99/.y by A40,A41,A63
           .= G99.y by A63,FUNCT_2:def 13
-          .= F99.y by A63,FUNCT_1:49
+          .= F99.y by A57,A60,ZFMISC_1:56,FUNCT_1:49
           .= F99/.y by A57,FUNCT_2:def 13;
       end;
     end;
@@ -361,7 +358,7 @@ end;
 definition
   struct (CatStr)ProdCatStr (# carrier,carrier' -> set, Source,Target ->
 Function of the carrier', the carrier, Comp -> PartFunc of [:the carrier', the
-    carrier' :],the carrier', Id -> Function of the carrier, the carrier',
+    carrier' :],the carrier',
 TerminalObj -> Element of the carrier, CatProd -> Function of [:the carrier,the
 carrier:],the carrier, Proj1,Proj2 -> Function of [:the carrier,the carrier:],
     the carrier' #);
@@ -372,7 +369,7 @@ registration
   existence
   proof
     set o = the set;
-    take ProdCatStr(# {o},{o},o:->o,o:->o,(o,o):->o,o:->o, Extract(o),(o,o):->
+    take ProdCatStr(# {o},{o},o:->o,o:->o,(o,o):->o,Extract(o),(o,o):->
       o,(o,o):->o,(o,o):->o #);
     thus thesis;
   end;
@@ -398,82 +395,53 @@ end;
 definition
   let o,m;
   func c1Cat(o,m) -> strict ProdCatStr equals
-  ProdCatStr(# {o},{m},m:->o,m:->o
-    ,(m,m):->m,o:->m, Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
+  ProdCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,
+  Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
   correctness;
 end;
 
-registration
-  let o,m;
-  cluster c1Cat(o,m) -> non void non empty;
-  coherence;
+registration let o,m be set;
+ cluster c1Cat(o,m) -> non empty trivial non void trivial';
+ coherence;
 end;
 
 theorem
   the CatStr of c1Cat(o,m) = 1Cat(o,m);
 
-Lm1: c1Cat(o,m) is Category-like
+Lm1a: c1Cat(o,m) is Category-like
 proof
   set C = c1Cat(o,m);
-  set CP = the Comp of C, CD = the Source of C, CC = the Target of C, CI = the
-  Id of C;
-  thus for f,g being Morphism of C holds [g,f] in dom CP iff CD.g=CC.f
+  set CP = the Comp of C, CD = the Source of C, CC = the Target of C;
+  thus
+ for f,g being Morphism of C holds [g,f] in dom CP iff dom g = cod f
   proof
     let f,g be Morphism of C;
 A1: dom CP = {[m,m]} by FUNCOP_1:13;
     f = m & g = m by TARSKI:def 1;
     hence thesis by A1,TARSKI:def 1;
   end;
-  thus for f,g being Morphism of C st CD.g=CC.f holds CD.(CP.(g,f)) = CD.f &
-  CC.(CP.(g,f)) = CC.g
-  proof
-    let f,g be Morphism of C;
-    CP.(g,f) = m by FUNCOP_1:77;
-    then reconsider gf = CP.(g,f) as Morphism of C by TARSKI:def 1;
-    CD.gf = o by FUNCT_2:50;
-    hence thesis by FUNCT_2:50;
-  end;
-  thus for f,g,h being Morphism of C st CD.h = CC.g & CD.g = CC.f holds CP.(h,
-  CP.(g,f)) = CP.(CP.(h,g),f)
-  proof
-    let f,g,h be Morphism of C;
-    CP.(g,f) = m & CP.(h,g) = m by FUNCOP_1:77;
-    then reconsider gf = CP.(g,f),hg = CP.(h,g) as Morphism of C by
-TARSKI:def 1;
-    CP.(h,gf) = m & CP.(hg,f) = m by FUNCOP_1:77;
-    hence thesis;
-  end;
-  let b be Object of C;
-  b = o by TARSKI:def 1;
-  hence CD.(CI.b) = b & CC.(CI.b) = b by FUNCT_2:50;
-  thus for f being Morphism of C st CC.f = b holds CP.(CI.b,f) = f
-  proof
-    let f be Morphism of C;
-    f = m by TARSKI:def 1;
-    hence thesis by FUNCOP_1:77;
-  end;
-  let g be Morphism of C;
-  assume CD.g = b;
-  g = m by TARSKI:def 1;
-  hence CP.(g,CI.b) = g by FUNCOP_1:77;
 end;
 
 registration
-  cluster strict Category-like non void non empty for ProdCatStr;
+  cluster strict Category-like reflexive transitive
+   associative with_identities
+   non void non empty for non void non empty ProdCatStr;
   existence
   proof
-    c1Cat(0,1) is Category-like by Lm1;
+    c1Cat(0,1) is Category-like transitive reflexive associative
+     with_identities by Lm1a;
     hence thesis;
   end;
 end;
 
 registration
   let o,m be set;
-  cluster c1Cat(o,m) -> Category-like;
-  coherence by Lm1;
+  cluster c1Cat(o,m) -> Category-like reflexive transitive
+   associative with_identities non empty non void;
+  coherence by Lm1a;
 end;
 
-theorem Th4:
+theorem Th3:
   for a,b being Object of c1Cat(o,m) holds a = b
 proof
   let a,b be Object of c1Cat(o,m);
@@ -481,7 +449,7 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th6:
+theorem Th4:
   for f,g being Morphism of c1Cat(o,m) holds f = g
 proof
   let f,g be Morphism of c1Cat(o,m);
@@ -489,7 +457,7 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th7:
+theorem Th5:
   for a,b being Object of c1Cat(o,m), f being Morphism of c1Cat(o,m
   ) holds f in Hom(a,b)
 proof
@@ -507,71 +475,78 @@ theorem
   holds f is Morphism of a,b
 proof
   let a,b be Object of c1Cat(o,m), f be Morphism of c1Cat(o,m);
-  f in Hom(a,b) by Th7;
-  hence thesis by CAT_1:def 4;
+  f in Hom(a,b) by Th5;
+  hence thesis by CAT_1:def 5;
 end;
 
 theorem
-  for a,b being Object of c1Cat(o,m) holds Hom(a,b) <> {} by Th7;
+  for a,b being Object of c1Cat(o,m) holds Hom(a,b) <> {} by Th5;
 
-theorem Th10:
+theorem Th8:
   for a being Object of c1Cat(o,m) holds a is terminal
 proof
   let a be Object of c1Cat(o,m);
   let b be Object of c1Cat(o,m);
   set f = the Morphism of b,a;
-  thus Hom(b,a)<>{} by Th7;
+  thus Hom(b,a)<>{} by Th5;
   take f;
-  thus thesis by Th6;
+  thus thesis by Th4;
 end;
 
-theorem Th11:
+theorem Th9:
   for c being Object of c1Cat(o,m), p1,p2 being Morphism of c1Cat(
   o,m) holds c is_a_product_wrt p1,p2
 proof
   let c be Object of c1Cat(o,m), p1,p2 be Morphism of c1Cat(o,m);
-  thus dom p1 = c & dom p2 = c by Th4;
+  thus dom p1 = c & dom p2 = c by Th3;
   let d be Object of c1Cat(o,m),f,g be Morphism of c1Cat(o,m) such that
   f in Hom(d,cod p1) and
   g in Hom(d,cod p2);
   take h = p1;
-  thus h in Hom(d,c) by Th7;
-  thus thesis by Th6;
+  thus h in Hom(d,c) by Th5;
+  thus thesis by Th4;
 end;
 
 definition
-  let IT be Category-like non void non empty ProdCatStr;
+  let IT be Category-like reflexive transitive
+    associative with_identities
+    non void non empty ProdCatStr;
   attr IT is Cartesian means
-  :Def9:
+  :Def8:
   the TerminalObj of IT is terminal & for a,
 b being Object of IT holds cod((the Proj1 of IT).(a,b)) = a & cod((the Proj2 of
 IT).(a,b)) = b & (the CatProd of IT).(a,b) is_a_product_wrt (the Proj1 of IT).(
   a,b),(the Proj2 of IT).(a,b);
 end;
 
-theorem Th12:
+theorem Th10:
   for o,m being set holds c1Cat(o,m) is Cartesian
 proof
   let o,m be set;
   set 1PCat = c1Cat(o,m);
-  thus the TerminalObj of 1PCat is terminal by Th10;
+  thus the TerminalObj of 1PCat is terminal by Th8;
   let a,b be Object of 1PCat;
-  thus cod((the Proj1 of 1PCat).(a,b)) = a by Th4;
-  thus cod((the Proj2 of 1PCat).(a,b)) = b by Th4;
-  thus thesis by Th11;
+  thus cod((the Proj1 of 1PCat).(a,b)) = a by Th3;
+  thus cod((the Proj2 of 1PCat).(a,b)) = b by Th3;
+  thus thesis by Th9;
 end;
 
 registration
-  cluster strict Cartesian for Category-like non void non empty ProdCatStr;
+  cluster strict Cartesian
+  for Category-like reflexive transitive associative with_identities
+   non void non empty ProdCatStr;
   existence
   proof
-    c1Cat(0,1) is Cartesian by Th12;
+    c1Cat(0,1) is Cartesian by Th10;
     hence thesis;
   end;
 end;
 
 definition
-  mode Cartesian_category is Cartesian Category-like non void non empty
+  mode Cartesian_category is Cartesian
+   Category-like non void non empty
+     reflexive transitive associative with_identities
+   non void non empty
     ProdCatStr;
 end;
 
@@ -579,24 +554,24 @@ reserve C for Cartesian_category;
 reserve a,b,c,d,e,s for Object of C;
 
 theorem
-  [1]C is terminal by Def9;
+  [1]C is terminal by Def8;
 
-theorem Th14:
+theorem Th12:
   for f1,f2 being Morphism of a,[1]C holds f1 = f2
 proof
   let f1,f2 be Morphism of a,[1]C;
-  [1]C is terminal by Def9;
+  [1]C is terminal by Def8;
   then consider f being Morphism of a,[1]C such that
-A1: for g being Morphism of a,[1]C holds f = g by CAT_1:def 12;
+A1: for g being Morphism of a,[1]C holds f = g by CAT_1:def 18;
   thus f1 = f by A1
     .= f2 by A1;
 end;
 
-theorem Th15:
+theorem Th13:
   Hom(a,[1]C) <> {}
 proof
-  [1]C is terminal by Def9;
-  hence thesis by CAT_1:def 12;
+  [1]C is terminal by Def8;
+  hence thesis by CAT_1:def 18;
 end;
 
 definition
@@ -604,44 +579,44 @@ definition
   func term(a) -> Morphism of a,[1]C means
   not contradiction;
   existence;
-  uniqueness by Th14;
+  uniqueness by Th12;
 end;
 
-theorem Th16:
+theorem Th14:
   term a = term(a,[1]C)
 proof
-  [1]C is terminal by Def9;
+  [1]C is terminal by Def8;
   hence thesis by CAT_3:37;
 end;
 
 theorem
   dom(term a) = a & cod(term a) = [1]C
 proof
-  [1]C is terminal & term a = term(a,[1]C) by Def9,Th16;
+  [1]C is terminal & term a = term(a,[1]C) by Def8,Th14;
   hence thesis by CAT_3:35;
 end;
 
 theorem
   Hom(a,[1]C) = {term a}
 proof
-  for f2 being Morphism of a,[1]C holds term a = f2 by Th14;
-  hence thesis by Th15,CAT_1:8;
+  for f2 being Morphism of a,[1]C holds term a = f2 by Th12;
+  hence thesis by Th13,CAT_1:8;
 end;
 
-theorem Th19:
+theorem Th17:
   dom pr1(a,b) = a[x]b & cod pr1(a,b) = a
 proof
   set p1 = (the Proj1 of C).(a,b), p2 = (the Proj2 of C).(a,b);
-  a[x]b is_a_product_wrt p1,p2 by Def9;
-  hence thesis by Def9,CAT_3:def 14;
+  a[x]b is_a_product_wrt p1,p2 by Def8;
+  hence thesis by Def8,CAT_3:def 15;
 end;
 
-theorem Th20:
+theorem Th18:
   dom pr2(a,b) = a[x]b & cod pr2(a,b) = b
 proof
   set p1 = (the Proj1 of C).(a,b), p2 = (the Proj2 of C).(a,b);
-  a[x]b is_a_product_wrt p1,p2 by Def9;
-  hence thesis by Def9,CAT_3:def 14;
+  a[x]b is_a_product_wrt p1,p2 by Def8;
+  hence thesis by Def8,CAT_3:def 15;
 end;
 
 definition
@@ -649,31 +624,31 @@ definition
   redefine func pr1(a,b) -> Morphism of a[x]b,a;
   coherence
   proof
-    dom pr1(a,b) = a[x]b & cod pr1(a,b) = a by Th19;
+    dom pr1(a,b) = a[x]b & cod pr1(a,b) = a by Th17;
     hence thesis by CAT_1:4;
   end;
   redefine func pr2(a,b) -> Morphism of a[x]b,b;
   coherence
   proof
-    dom pr2(a,b) = a[x]b & cod pr2(a,b) = b by Th20;
+    dom pr2(a,b) = a[x]b & cod pr2(a,b) = b by Th18;
     hence thesis by CAT_1:4;
   end;
 end;
 
-theorem Th21:
+theorem Th19:
   Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {}
 proof
   set c = (the CatProd of C).(a,b), p1 = (the Proj1 of C).(a,b), p2 = (the
   Proj2 of C).(a,b);
-  c is_a_product_wrt p1,p2 by Def9;
+  c is_a_product_wrt p1,p2 by Def8;
   then
-A1: dom p1 = c & dom p2 = c by CAT_3:def 14;
-  cod(p1) = a & cod(p2) = b by Def9;
+A1: dom p1 = c & dom p2 = c by CAT_3:def 15;
+  cod(p1) = a & cod(p2) = b by Def8;
   hence thesis by A1,CAT_1:1;
 end;
 
 theorem
-  a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def9;
+  a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def8;
 
 theorem
   C is with_finite_product
@@ -683,19 +658,19 @@ A1: for a,b ex c being Object of C, p1,p2 being Morphism of C st dom p1 = c
   proof
     let a,b;
     take a[x]b, pr1(a,b), pr2(a,b);
-    thus thesis by Def9,Th19,Th20;
+    thus thesis by Def8,Th17,Th18;
   end;
-  [1]C is terminal by Def9;
+  [1]C is terminal by Def8;
   hence thesis by A1,Th1;
 end;
 
 theorem
-  Hom(a,b) <> {} & Hom(b,a) <> {} implies pr1(a,b) is retraction & pr2(a
-  ,b) is retraction
+  Hom(a,b) <> {} & Hom(b,a) <> {}
+  implies pr1(a,b) is retraction & pr2(a,b) is retraction
 proof
-A1: cod pr2(a,b) = b by Def9;
-  a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) & cod pr1(a,b) = a by Def9;
-  hence thesis by A1,CAT_3:57;
+X: Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th19;
+  a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) & cod pr1(a,b) = a by Def8;
+  hence thesis by X,CAT_3:57;
 end;
 
 definition
@@ -704,12 +679,12 @@ definition
   assume
 A1: Hom(c,a) <> {} & Hom(c,b) <> {};
   func <:f,g:> -> Morphism of c,a[x]b means
-  :Def11:
+  :Def10:
   pr1(a,b)*it = f & pr2(a,b) *it = g;
   existence
   proof
-A2: a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def9;
-    Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th21;
+A2: a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def8;
+    Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th19;
     then consider h being Morphism of c,a[x]b such that
 A3: for h1 being Morphism of c,a[x]b holds pr1(a,b)*h1 = f & pr2(a,b)*
     h1 = g iff h = h1 by A1,A2,CAT_3:55;
@@ -718,8 +693,8 @@ A3: for h1 being Morphism of c,a[x]b holds pr1(a,b)*h1 = f & pr2(a,b)*
   end;
   uniqueness
   proof
-A4: a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def9;
-    Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th21;
+A4: a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def8;
+    Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th19;
     then consider h being Morphism of c,a[x]b such that
 A5: for h1 being Morphism of c,a[x]b holds pr1(a,b)*h1 = f & pr2(a,b)*
     h1 = g iff h = h1 by A1,A4,CAT_3:55;
@@ -731,26 +706,26 @@ A7: pr1(a,b)*h2 = f & pr2(a,b)*h2 = g;
   end;
 end;
 
-theorem Th25:
+theorem Th23:
   Hom(c,a) <> {} & Hom(c,b) <> {} implies Hom(c,a[x]b) <> {}
 proof
-A1: a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def9;
-  Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th21;
+A1: a[x]b is_a_product_wrt pr1(a,b),pr2(a,b) by Def8;
+  Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th19;
   hence thesis by A1,CAT_3:55;
 end;
 
-theorem Th26:
+theorem Th24:
   <:pr1(a,b),pr2(a,b):> = id(a[x]b)
 proof
-A1: Hom(a[x]b,b) <> {} by Th21;
+A1: Hom(a[x]b,b) <> {} by Th19;
   then
 A2: pr2(a,b)*(id(a[x]b)) = pr2(a,b) by CAT_1:29;
-A3: Hom(a[x]b,a) <> {} by Th21;
+A3: Hom(a[x]b,a) <> {} by Th19;
   then pr1(a,b)*(id(a[x]b)) = pr1(a,b) by CAT_1:29;
-  hence thesis by A3,A1,A2,Def11;
+  hence thesis by A3,A1,A2,Def10;
 end;
 
-theorem Th27:
+theorem Th25:
   for f being Morphism of c,a, g being Morphism of c,b, h being
 Morphism of d,c st Hom(c,a)<>{} & Hom(c,b)<>{} & Hom(d,c)<>{} holds <:f*h,g*h:>
   = <:f,g:>*h
@@ -759,27 +734,27 @@ proof
   assume that
 A1: Hom(c,a)<>{} & Hom(c,b)<>{} and
 A2: Hom(d,c)<>{};
-A3: Hom(c,a[x]b) <> {} by A1,Th25;
-A4: Hom(a[x]b,b) <> {} by Th21;
-  (pr2(a,b)*<:f,g:>)*h = g*h by A1,Def11;
+A3: Hom(c,a[x]b) <> {} by A1,Th23;
+A4: Hom(a[x]b,b) <> {} by Th19;
+  (pr2(a,b)*<:f,g:>)*h = g*h by A1,Def10;
   then
 A5: pr2(a,b)*(<:f,g:>*h) = g*h by A2,A4,A3,CAT_1:25;
-A6: Hom(a[x]b,a) <> {} by Th21;
+A6: Hom(a[x]b,a) <> {} by Th19;
 A7: Hom(d,a) <> {} & Hom(d,b) <> {} by A1,A2,CAT_1:24;
-  (pr1(a,b)*<:f,g:>)*h = f*h by A1,Def11;
+  (pr1(a,b)*<:f,g:>)*h = f*h by A1,Def10;
   then pr1(a,b)*(<:f,g:>*h) = f*h by A2,A6,A3,CAT_1:25;
-  hence thesis by A5,A7,Def11;
+  hence thesis by A5,A7,Def10;
 end;
 
-theorem Th28:
+theorem Th26:
   for f,k being Morphism of c,a, g,h being Morphism of c,b st Hom(
   c,a) <> {} & Hom(c,b) <> {} & <:f,g:> = <:k,h:> holds f = k & g = h
 proof
   let f,k be Morphism of c,a, g,h be Morphism of c,b;
   assume
 A1: Hom(c,a) <> {} & Hom(c,b) <> {};
-  then pr1(a,b)*<:f,g:> = f & pr2(a,b)*<:f,g:> = g by Def11;
-  hence thesis by A1,Def11;
+  then pr1(a,b)*<:f,g:> = f & pr2(a,b)*<:f,g:> = g by Def10;
+  hence thesis by A1,Def10;
 end;
 
 theorem
@@ -798,8 +773,8 @@ A5: g is monic;
 A6: Hom(d,c)<>{} and
 A7: <:f,g:>*f1 = <:f,g:>*f2;
 A8: Hom(d,a) <> {} & Hom(d,b) <> {} by A1,A2,A6,CAT_1:24;
-    <:f*f1,g*f1:> = <:f,g:>*f1 & <:f*f2,g*f2:> = <:f,g:>*f2 by A1,A2,A6,Th27;
-    then g*f1 = g*f2 by A7,A8,Th28;
+    <:f*f1,g*f1:> = <:f,g:>*f1 & <:f*f2,g*f2:> = <:f,g:>*f2 by A1,A2,A6,Th25;
+    then g*f1 = g*f2 by A7,A8,Th26;
     hence f1 = f2 by A2,A5,A6,CAT_1:31;
   end;
 A9: now
@@ -810,19 +785,19 @@ A10: f is monic;
 A11: Hom(d,c)<>{} and
 A12: <:f,g:>*f1 = <:f,g:>*f2;
 A13: Hom(d,a) <> {} & Hom(d,b) <> {} by A1,A2,A11,CAT_1:24;
-    <:f*f1,g*f1:> = <:f,g:>*f1 & <:f*f2,g*f2:> = <:f,g:>*f2 by A1,A2,A11,Th27;
-    then f*f1 = f*f2 by A12,A13,Th28;
+    <:f*f1,g*f1:> = <:f,g:>*f1 & <:f*f2,g*f2:> = <:f,g:>*f2 by A1,A2,A11,Th25;
+    then f*f1 = f*f2 by A12,A13,Th26;
     hence f1 = f2 by A1,A10,A11,CAT_1:31;
   end;
-  Hom(c,a[x]b) <> {} by A1,A2,Th25;
+  Hom(c,a[x]b) <> {} by A1,A2,Th23;
   hence thesis by A3,A9,A4,CAT_1:31;
 end;
 
-theorem Th30:
+theorem Th28:
   Hom(a,a[x][1]C) <> {} & Hom(a,[1]C[x]a) <> {}
 proof
-  Hom(a,[1]C) <> {} & Hom(a,a) <> {} by Th15,CAT_1:27;
-  hence thesis by Th25;
+  Hom(a,[1]C) <> {} & Hom(a,a) <> {} by Th13;
+  hence thesis by Th23;
 end;
 
 definition
@@ -841,25 +816,25 @@ definition
   correctness;
 end;
 
-theorem Th31:
+theorem Th29:
   lambda(a)*lambda'(a) = id a & lambda'(a)*lambda(a) = id([1]C[x]a
   ) & rho(a)*rho'(a) = id a & rho'(a)*rho(a) = id(a[x][1]C)
 proof
-A1: (term a)*pr2([1]C,a) = pr1([1]C,a) by Th14;
-A2: Hom(a,[1]C) <> {} & Hom(a,a) <> {} by Th15,CAT_1:27;
-  hence id a = lambda(a)*lambda'(a) by Def11;
-A3: Hom([1]C[x]a,a) <> {} by Th21;
+A1: (term a)*pr2([1]C,a) = pr1([1]C,a) by Th12;
+A2: Hom(a,[1]C) <> {} & Hom(a,a) <> {} by Th13;
+  hence id a = lambda(a)*lambda'(a) by Def10;
+A3: Hom([1]C[x]a,a) <> {} by Th19;
   then (id a)*pr2([1]C,a) = pr2([1]C,a) by CAT_1:28;
   then <:term a,id a:>*pr2([1]C,a) = <:pr1([1]C,a),pr2([1]C,a):> by A2,A3,A1
-,Th27;
-  hence id([1]C[x]a) = lambda'(a)*lambda(a) by Th26;
-  thus id a = rho(a)*rho'(a) by A2,Def11;
-A4: (term a)*pr1(a,[1]C) = pr2(a,[1]C) by Th14;
-A5: Hom(a[x][1]C,a) <> {} by Th21;
+,Th25;
+  hence id([1]C[x]a) = lambda'(a)*lambda(a) by Th24;
+  thus id a = rho(a)*rho'(a) by A2,Def10;
+A4: (term a)*pr1(a,[1]C) = pr2(a,[1]C) by Th12;
+A5: Hom(a[x][1]C,a) <> {} by Th19;
   then (id a)*pr1(a,[1]C) = pr1(a,[1]C) by CAT_1:28;
   then <:id a,term a:>*pr1(a,[1]C) = <:pr1(a,[1]C),pr2(a,[1]C):> by A2,A5,A4
-,Th27;
-  hence thesis by Th26;
+,Th25;
+  hence thesis by Th24;
 end;
 
 theorem
@@ -867,13 +842,13 @@ theorem
 proof
   thus a,a[x][1]C are_isomorphic
   proof
-    thus Hom(a,a[x][1]C) <> {} & Hom(a[x][1]C,a) <> {} by Th21,Th30;
+    thus Hom(a,a[x][1]C) <> {} & Hom(a[x][1]C,a) <> {} by Th19,Th28;
     take rho'(a), rho(a);
-    thus thesis by Th31;
+    thus thesis by Th29;
   end;
-  thus Hom(a,[1]C[x]a) <> {} & Hom([1]C[x]a,a) <> {} by Th21,Th30;
+  thus Hom(a,[1]C[x]a) <> {} & Hom([1]C[x]a,a) <> {} by Th19,Th28;
   take lambda'(a), lambda(a);
-  thus thesis by Th31;
+  thus thesis by Th29;
 end;
 
 definition
@@ -883,32 +858,32 @@ definition
   correctness;
 end;
 
-theorem Th33:
+theorem Th31:
   Hom(a[x]b,b[x]a)<>{}
 proof
-  Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th21;
-  hence thesis by Th25;
+  Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th19;
+  hence thesis by Th23;
 end;
 
-theorem Th34:
+theorem Th32:
   Switch(a,b)*Switch(b,a) = id(b[x]a)
 proof
-A1: Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th21;
-A2: Hom(b[x]a,b) <> {} & Hom(b[x]a,a) <> {} by Th21;
-  then Hom(b[x]a,a[x]b)<>{} by Th25;
+A1: Hom(a[x]b,a) <> {} & Hom(a[x]b,b) <> {} by Th19;
+A2: Hom(b[x]a,b) <> {} & Hom(b[x]a,a) <> {} by Th19;
+  then Hom(b[x]a,a[x]b)<>{} by Th23;
   hence Switch(a,b)*Switch(b,a) = <:pr2(a,b)*<:pr2(b,a),pr1(b,a):>,pr1(a,b)*<:
-  pr2(b,a),pr1(b,a):>:> by A1,Th27
-    .= <:pr1(b,a),pr1(a,b)*<:pr2(b,a),pr1(b,a):>:> by A2,Def11
-    .= <:pr1(b,a),pr2(b,a):> by A2,Def11
-    .= id(b[x]a) by Th26;
+  pr2(b,a),pr1(b,a):>:> by A1,Th25
+    .= <:pr1(b,a),pr1(a,b)*<:pr2(b,a),pr1(b,a):>:> by A2,Def10
+    .= <:pr1(b,a),pr2(b,a):> by A2,Def10
+    .= id(b[x]a) by Th24;
 end;
 
 theorem
   a[x]b,b[x]a are_isomorphic
 proof
-  thus Hom(a[x]b,b[x]a)<>{} & Hom(b[x]a,a[x]b)<>{} by Th33;
+  thus Hom(a[x]b,b[x]a)<>{} & Hom(b[x]a,a[x]b)<>{} by Th31;
   take Switch(a,b), Switch(b,a);
-  thus thesis by Th34;
+  thus thesis by Th32;
 end;
 
 definition
@@ -921,8 +896,8 @@ end;
 theorem
   Hom(a,a[x]a) <> {}
 proof
-  Hom(a,a) <> {} by CAT_1:27;
-  hence thesis by Th25;
+  Hom(a,a) <> {};
+  hence thesis by Th23;
 end;
 
 theorem
@@ -930,8 +905,8 @@ theorem
 proof
   let f be Morphism of a,b such that
 A1: Hom(a,b) <> {};
-  Hom(b,b) <> {} & (id b)*f = f by A1,CAT_1:27,28;
-  hence thesis by A1,Th27;
+  Hom(b,b) <> {} & (id b)*f = f by A1,CAT_1:28;
+  hence thesis by A1,Th25;
 end;
 
 definition
@@ -946,32 +921,32 @@ definition
   correctness;
 end;
 
-theorem Th38:
+theorem Th36:
   Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} & Hom(a[x](b[x]c),(a[x]b)[x]c ) <> {}
 proof
-A1: Hom((a[x]b)[x]c,a[x]b) <> {} by Th21;
-  Hom(a[x]b,b) <> {} by Th21;
+A1: Hom((a[x]b)[x]c,a[x]b) <> {} by Th19;
+  Hom(a[x]b,b) <> {} by Th19;
   then
 A2: Hom((a[x]b)[x]c,b) <> {} by A1,CAT_1:24;
-  Hom(a[x]b,a) <> {} by Th21;
+  Hom(a[x]b,a) <> {} by Th19;
   then
 A3: Hom((a[x]b)[x]c,a) <> {} by A1,CAT_1:24;
-  Hom((a[x]b)[x]c,c) <> {} by Th21;
-  then Hom((a[x]b)[x]c,b[x]c) <> {} by A2,Th25;
-  hence Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} by A3,Th25;
-A4: Hom(a[x](b[x]c),b[x]c) <> {} by Th21;
-  Hom(b[x]c,c) <> {} by Th21;
+  Hom((a[x]b)[x]c,c) <> {} by Th19;
+  then Hom((a[x]b)[x]c,b[x]c) <> {} by A2,Th23;
+  hence Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} by A3,Th23;
+A4: Hom(a[x](b[x]c),b[x]c) <> {} by Th19;
+  Hom(b[x]c,c) <> {} by Th19;
   then
 A5: Hom(a[x](b[x]c),c) <> {} by A4,CAT_1:24;
-  Hom(b[x]c,b) <> {} by Th21;
+  Hom(b[x]c,b) <> {} by Th19;
   then
 A6: Hom(a[x](b[x]c),b) <> {} by A4,CAT_1:24;
-  Hom(a[x](b[x]c),a) <> {} by Th21;
-  then Hom(a[x](b[x]c),a[x]b) <> {} by A6,Th25;
-  hence thesis by A5,Th25;
+  Hom(a[x](b[x]c),a) <> {} by Th19;
+  then Hom(a[x](b[x]c),a[x]b) <> {} by A6,Th23;
+  hence thesis by A5,Th23;
 end;
 
-theorem Th39:
+theorem Th37:
   Alpha(a,b,c)*Alpha'(a,b,c) = id(a[x](b[x]c)) & Alpha'(a,b,c)*
   Alpha(a,b,c) = id((a[x]b)[x]c)
 proof
@@ -979,68 +954,68 @@ proof
   set l = <:pr1(a,b[x]c),pr1(b,c)*pr2(a,b[x]c):>;
   set f = <:pr1(a,b)*pr1(a[x]b,c),k:>;
   set g = <:l,pr2(b,c)*pr2(a,b[x]c):>;
-A1: Hom((a[x]b)[x]c,a[x]b) <> {} by Th21;
-A2: Hom(a[x]b,b) <> {} by Th21;
+A1: Hom((a[x]b)[x]c,a[x]b) <> {} by Th19;
+A2: Hom(a[x]b,b) <> {} by Th19;
   then
 A3: Hom((a[x]b)[x]c,b) <> {} by A1,CAT_1:24;
-A4: Hom((a[x]b)[x]c,c) <> {} by Th21;
+A4: Hom((a[x]b)[x]c,c) <> {} by Th19;
   then
-A5: Hom((a[x]b)[x]c,b[x]c) <> {} by A3,Th25;
-A6: Hom(a[x]b,a) <> {} by Th21;
+A5: Hom((a[x]b)[x]c,b[x]c) <> {} by A3,Th23;
+A6: Hom(a[x]b,a) <> {} by Th19;
   then
 A7: Hom((a[x]b)[x]c,a) <> {} by A1,CAT_1:24;
-A8: Hom(a[x](b[x]c),b[x]c) <> {} by Th21;
-A9: Hom(b[x]c,c) <> {} by Th21;
+A8: Hom(a[x](b[x]c),b[x]c) <> {} by Th19;
+A9: Hom(b[x]c,c) <> {} by Th19;
   then
 A10: Hom(a[x](b[x]c),c) <> {} by A8,CAT_1:24;
-A11: Hom(b[x]c,b) <> {} by Th21;
+A11: Hom(b[x]c,b) <> {} by Th19;
   then
 A12: Hom(a[x](b[x]c),b) <> {} by A8,CAT_1:24;
-A13: Hom(a[x](b[x]c),a) <> {} by Th21;
+A13: Hom(a[x](b[x]c),a) <> {} by Th19;
   then
-A14: Hom(a[x](b[x]c),a[x]b) <> {} by A12,Th25;
-A15: Hom(a[x](b[x]c),(a[x]b)[x]c) <> {} by Th38;
+A14: Hom(a[x](b[x]c),a[x]b) <> {} by A12,Th23;
+A15: Hom(a[x](b[x]c),(a[x]b)[x]c) <> {} by Th36;
   then pr2(a,b)*pr1(a[x]b,c)*g = pr2(a,b)*(pr1(a[x]b,c)*g) by A1,A2,CAT_1:25
-    .= pr2(a,b)*l by A10,A14,Def11
-    .= pr1(b,c)*pr2(a,b[x]c) by A12,A13,Def11;
+    .= pr2(a,b)*l by A10,A14,Def10
+    .= pr1(b,c)*pr2(a,b[x]c) by A12,A13,Def10;
   then
-A16: k*g = <:pr1(b,c)*pr2(a,b[x]c),pr2(a[x]b,c)*g:> by A3,A4,A15,Th27
-    .= <:pr1(b,c)*pr2(a,b[x]c),pr2(b,c)*pr2(a,b[x]c):> by A10,A14,Def11
-    .= <:pr1(b,c),pr2(b,c):>*pr2(a,b[x]c) by A11,A8,A9,Th27
-    .= id(b[x]c)*pr2(a,b[x]c) by Th26
+A16: k*g = <:pr1(b,c)*pr2(a,b[x]c),pr2(a[x]b,c)*g:> by A3,A4,A15,Th25
+    .= <:pr1(b,c)*pr2(a,b[x]c),pr2(b,c)*pr2(a,b[x]c):> by A10,A14,Def10
+    .= <:pr1(b,c),pr2(b,c):>*pr2(a,b[x]c) by A11,A8,A9,Th25
+    .= id(b[x]c)*pr2(a,b[x]c) by Th24
     .= pr2(a,b[x]c) by A8,CAT_1:28;
-A17: Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} by Th38;
+A17: Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} by Th36;
   then pr1(b,c)*pr2(a,b[x]c)*f = pr1(b,c)*(pr2(a,b[x]c)*f) by A11,A8,CAT_1:25
-    .= pr1(b,c)*k by A7,A5,Def11
-    .= pr2(a,b)*pr1(a[x]b,c) by A3,A4,Def11;
+    .= pr1(b,c)*k by A7,A5,Def10
+    .= pr2(a,b)*pr1(a[x]b,c) by A3,A4,Def10;
   then
-A18: l*f = <:pr1(a,b[x]c)*f,pr2(a,b)*pr1(a[x]b,c):> by A17,A12,A13,Th27
-    .= <:pr1(a,b)*pr1(a[x]b,c),pr2(a,b)*pr1(a[x]b,c):> by A7,A5,Def11
-    .= <:pr1(a,b),pr2(a,b):>*pr1(a[x]b,c) by A6,A1,A2,Th27
-    .= id(a[x]b)*pr1(a[x]b,c) by Th26
+A18: l*f = <:pr1(a,b[x]c)*f,pr2(a,b)*pr1(a[x]b,c):> by A17,A12,A13,Th25
+    .= <:pr1(a,b)*pr1(a[x]b,c),pr2(a,b)*pr1(a[x]b,c):> by A7,A5,Def10
+    .= <:pr1(a,b),pr2(a,b):>*pr1(a[x]b,c) by A6,A1,A2,Th25
+    .= id(a[x]b)*pr1(a[x]b,c) by Th24
     .= pr1(a[x]b,c) by A1,CAT_1:28;
   pr1(a,b)*pr1(a[x]b,c)*g = pr1(a,b)*(pr1(a[x]b,c)*g) by A6,A1,A15,CAT_1:25
-    .= pr1(a,b)*l by A10,A14,Def11
-    .= pr1(a,b[x]c) by A12,A13,Def11;
+    .= pr1(a,b)*l by A10,A14,Def10
+    .= pr1(a,b[x]c) by A12,A13,Def10;
   hence
   Alpha(a,b,c)*Alpha'(a,b,c) = <:pr1(a,b[x]c),pr2(a,b[x]c):> by A7,A5,A15,A16
-,Th27
-    .= id(a[x](b[x]c)) by Th26;
+,Th25
+    .= id(a[x](b[x]c)) by Th24;
   pr2(b,c)*pr2(a,b[x]c)*f = pr2(b,c)*(pr2(a,b[x]c)*f) by A17,A8,A9,CAT_1:25
-    .= pr2(b,c)*k by A7,A5,Def11
-    .= pr2(a[x]b,c) by A3,A4,Def11;
+    .= pr2(b,c)*k by A7,A5,Def10
+    .= pr2(a[x]b,c) by A3,A4,Def10;
   hence Alpha'(a,b,c)*Alpha(a,b,c) = <:pr1(a[x]b,c),pr2(a[x]b,c):> by A17,A10
-,A14,A18,Th27
-    .= id((a[x]b)[x]c) by Th26;
+,A14,A18,Th25
+    .= id((a[x]b)[x]c) by Th24;
 end;
 
 theorem
   (a[x]b)[x]c,a[x](b[x]c) are_isomorphic
 proof
   thus Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} & Hom(a[x](b[x]c),(a[x]b)[x]c) <> {}
-  by Th38;
+  by Th36;
   take Alpha(a,b,c), Alpha'(a,b,c);
-  thus thesis by Th39;
+  thus thesis by Th37;
 end;
 
 definition
@@ -1057,26 +1032,26 @@ proof
   assume that
 A1: Hom(a,c) <> {} and
 A2: Hom(b,d) <> {};
-  Hom(a[x]b,b) <> {} by Th21;
+  Hom(a[x]b,b) <> {} by Th19;
   then
 A3: Hom(a[x]b,d) <> {} by A2,CAT_1:24;
-  Hom(a[x]b,a) <> {} by Th21;
+  Hom(a[x]b,a) <> {} by Th19;
   then Hom(a[x]b,c) <> {} by A1,CAT_1:24;
-  hence thesis by A3,Th25;
+  hence thesis by A3,Th23;
 end;
 
 theorem
   (id a)[x](id b) = id(a[x]b)
 proof
-  Hom(a[x]b,b) <> {} by Th21;
+  Hom(a[x]b,b) <> {} by Th19;
   then
 A1: (id b)*pr2(a,b) = pr2(a,b) by CAT_1:28;
-  Hom(a[x]b,a) <> {} by Th21;
+  Hom(a[x]b,a) <> {} by Th19;
   then (id a)*pr1(a,b) = pr1(a,b) by CAT_1:28;
-  hence thesis by A1,Th26;
+  hence thesis by A1,Th24;
 end;
 
-theorem Th43:
+theorem Th41:
   for f being Morphism of a,b, h being Morphism of c,d, g being
   Morphism of e,a, k being Morphism of e,c st Hom(a,b) <> {} & Hom(c,d) <> {} &
   Hom(e,a) <> {} & Hom(e,c) <> {} holds (f[x]h)*<:g,k:> = <:f*g,h*k:>
@@ -1087,19 +1062,19 @@ proof
 A1: Hom(a,b) <> {} and
 A2: Hom(c,d) <> {} and
 A3: Hom(e,a) <> {} & Hom(e,c) <> {};
-A4: Hom(e,a[x]c) <> {} by A3,Th25;
-A5: Hom(a[x]c,c) <> {} by Th21;
+A4: Hom(e,a[x]c) <> {} by A3,Th23;
+A5: Hom(a[x]c,c) <> {} by Th19;
   then
 A6: Hom(a[x]c,d) <> {} by A2,CAT_1:24;
-A7: Hom(a[x]c,a) <> {} by Th21;
+A7: Hom(a[x]c,a) <> {} by Th19;
   then
 A8: Hom(a[x]c,b) <> {} by A1,CAT_1:24;
-  pr2(a,c)*<:g,k:> = k by A3,Def11;
+  pr2(a,c)*<:g,k:> = k by A3,Def10;
   then
 A9: h*k = (h*pr2(a,c))*<:g,k:> by A2,A4,A5,CAT_1:25;
-  pr1(a,c)*<:g,k:> = g by A3,Def11;
+  pr1(a,c)*<:g,k:> = g by A3,Def10;
   then f*g = (f*pr1(a,c))*<:g,k:> by A1,A4,A7,CAT_1:25;
-  hence thesis by A4,A8,A6,A9,Th27;
+  hence thesis by A4,A8,A6,A9,Th25;
 end;
 
 theorem
@@ -1109,8 +1084,8 @@ proof
   let f be Morphism of c,a, g be Morphism of c,b such that
 A1: Hom(c,a) <> {} and
 A2: Hom(c,b) <> {};
-  Hom(c,c) <> {} by CAT_1:27;
-  hence (f[x]g)*Delta(c) = <:f*(id c),g*(id c):> by A1,A2,Th43
+  Hom(c,c) <> {};
+  hence (f[x]g)*Delta(c) = <:f*(id c),g*(id c):> by A1,A2,Th41
     .= <:f,g*(id c):> by A1,CAT_1:29
     .= <:f,g:> by A2,CAT_1:29;
 end;
@@ -1127,15 +1102,15 @@ A1: Hom(a,b) <> {} and
 A2: Hom(c,d) <> {} and
 A3: Hom(e,a) <> {} and
 A4: Hom(s,c) <> {};
-A5: Hom(e[x]s,s) <> {} by Th21;
+A5: Hom(e[x]s,s) <> {} by Th19;
   then
 A6: Hom(e[x]s,c) <> {} by A4,CAT_1:24;
-A7: Hom(e[x]s,e) <> {} by Th21;
+A7: Hom(e[x]s,e) <> {} by Th19;
   then f*(g*pr1(e,s)) = (f*g)*pr1(e,s) by A1,A3,CAT_1:25;
   then
 A8: (f*g)[x](h*k) = <:f*(g*pr1(e,s)),h*(k*pr2(e,s)):> by A2,A4,A5,CAT_1:25;
   Hom(e[x]s,a) <> {} by A3,A7,CAT_1:24;
-  hence thesis by A1,A2,A6,A8,Th43;
+  hence thesis by A1,A2,A6,A8,Th41;
 end;
 
 begin :: Categories with Finite Coproducts
@@ -1148,7 +1123,7 @@ definition
   Injections_family of a,I st doms F9 = F & a is_a_coproduct_wrt F9;
 end;
 
-theorem Th46:
+theorem Th44:
   for C being Category holds C is with_finite_coproduct iff (ex a
   being Object of C st a is initial) & for a,b being Object of C ex c being
 Object of C, i1,i2 being Morphism of C st dom i1 = a & dom i2 = b & cod i1 = c
@@ -1170,8 +1145,7 @@ A2: for I being finite set, F being Function of I,the carrier of C ex
     a being Object of C, F9 being Injections_family of a,{} such that
     doms F9 = F and
 A3: a is_a_coproduct_wrt F9;
-    a is initial by A3,CAT_3:75;
-    hence ex a being Object of C st a is initial;
+    thus ex a being Object of C st a is initial by CAT_3:75,A3;
     let a,b be Object of C;
     set F = (0,1)-->(a,b);
     consider c being Object of C, F9 being Injections_family of c,{0,1} such
@@ -1209,8 +1183,7 @@ A12: card I = n+1;
     reconsider sx = {x} as finite set;
     reconsider G = F|(I\{x}) as Function of I\{x},the carrier of C by
 FUNCT_2:32;
-    {x} c= I by A12,CARD_1:27,ZFMISC_1:31;
-    then card(Ix) = card(I) - card(sx) by CARD_2:44
+    card(Ix) = card(I) - card(sx) by CARD_2:44,A12,CARD_1:27,ZFMISC_1:31
       .= card(I) - 1 by CARD_1:30
       .= n by A12,XCMPLX_1:26;
     then consider
@@ -1237,7 +1210,7 @@ A22: dom(i1*G9) \/ dom(x .-->i2) = I \/ {x} by A20,XBOOLE_1:39
     then dom F9 = I by FUNCT_4:def 1;
     then reconsider F9 as Function of I, the carrier' of C by A21,FUNCT_2:def 1
 ,RELSET_1:4;
-A23: cods G9 = (I\{x})-->a by CAT_3:def 15;
+A23: cods G9 = (I\{x})-->a by CAT_3:def 16;
     now
       let y be set;
       assume
@@ -1265,16 +1238,16 @@ A28:      y in I\{x} by A24,A26,ZFMISC_1:56;
           hence (cods F9)/.y = cod((i1*G9)/.y) by A24,CAT_3:def 2
             .= (cods(i1*G9))/.y by A28,CAT_3:def 2
             .= ((I\{x})-->c)/.y by A15,A17,A23,CAT_3:17
-            .= c by A28,CAT_3:2
+            .= c by A24,A26,ZFMISC_1:56,CAT_3:2
             .= (I --> c).y by A24,FUNCOP_1:7;
         end;
       end;
       hence (cods F9).y = (I --> c).y by A24,FUNCT_2:def 13;
     end;
-    then cods F9 = I --> c by FUNCT_2:12;
-    then reconsider F9 as Injections_family of c,I by CAT_3:def 15;
+    then reconsider F9 as Injections_family of c,I
+               by CAT_3:def 16,FUNCT_2:12;
     take c,F9;
-    now
+B35:  now
       let y be set;
       assume
 A29:  y in I;
@@ -1301,14 +1274,14 @@ A34:      y in I\{x} by A29,A32,ZFMISC_1:56;
             .= (doms(i1*G9))/.y by A34,CAT_3:def 1
             .= G/.y by A13,A15,A23,CAT_3:17
             .= G.y by A34,FUNCT_2:def 13
-            .= F.y by A34,FUNCT_1:49
+            .= F.y by A29,A32,ZFMISC_1:56,FUNCT_1:49
             .= F/.y by A29,FUNCT_2:def 13;
         end;
       end;
       hence (doms F9)/.y = F/.y;
     end;
     hence
-A35: doms F9 = F by CAT_3:1;
+ doms F9 = F by CAT_3:1;
     thus F9 is Injections_family of c,I;
     let d be Object of C;
     let F99 be Injections_family of d,I such that
@@ -1326,8 +1299,8 @@ A37:  y in I\{x};
         .= d by A37,CAT_3:62
         .= ((I\{x})-->d)/.y by A37,CAT_3:2;
     end;
-    then cods G99 = I\{x} --> d by CAT_3:1;
-    then reconsider G99 as Injections_family of d,I\{x} by CAT_3:def 15;
+    then reconsider G99 as Injections_family of d,I\{x}
+               by CAT_3:def 16,1;
     now
       let y be set;
       assume
@@ -1339,14 +1312,13 @@ A39:  G/.y = G.y by FUNCT_2:def 13
       F99/.y = F99.y by A38,FUNCT_2:def 13
         .= G99.y by A38,FUNCT_1:49
         .= G99/.y by A38,FUNCT_2:def 13;
-      hence (doms G9)/.y = dom(G99/.y) by A13,A35,A36,A38,A39,CAT_3:def 1
+      hence (doms G9)/.y = dom(G99/.y) by A13,B35,A36,A38,A39,CAT_3:def 1,1
         .= (doms G99)/.y by A38,CAT_3:def 1;
     end;
-    then doms G9 = doms G99 by CAT_3:1;
     then consider h9 being Morphism of C such that
 A40: h9 in Hom(a,d) and
 A41: for k being Morphism of C st k in Hom(a,d) holds (for y being set
-    st y in I\{x} holds k*(G9/.y) = G99/.y) iff h9 = k by A14,CAT_3:def 16;
+    st y in I\{x} holds k(*)(G9/.y) = G99/.y) iff h9 = k by A14,CAT_3:def 17,1;
 A42: x in {x} by TARSKI:def 1;
     set g = F99/.x;
 A43: cod g = d by A12,CARD_1:27,CAT_3:62;
@@ -1358,20 +1330,20 @@ A44: F9/.x = F9.x by A12,CARD_1:27,FUNCT_2:def 13
     then g in Hom(dom i2,d) by A43;
     then consider h being Morphism of C such that
 A45: h in Hom(c,d) and
-A46: for k being Morphism of C st k in Hom(c,d) holds k*i1 = h9 & k*i2
-    = g iff h = k by A15,A19,A40,CAT_3:def 17;
+A46: for k being Morphism of C st k in Hom(c,d) holds k(*)i1 = h9 & k(*)i2
+    = g iff h = k by A15,A19,A40,CAT_3:def 18;
     take h;
     thus h in Hom(c,d) by A45;
     let k be Morphism of C such that
 A47: k in Hom(c,d);
-    thus (for y being set st y in I holds k*(F9/.y) = F99/.y) implies h = k
+    thus (for y being set st y in I holds k(*)(F9/.y) = F99/.y) implies h = k
     proof
 A48:  dom k = c by A47,CAT_1:1;
       then
-A49:  dom(k*i1) = a by A15,A17,CAT_1:17;
+A49:  dom(k(*)i1) = a by A15,A17,CAT_1:17;
       assume
-A50:  for y being set st y in I holds k*(F9/.y) = F99/.y;
-A51:  for y being set st y in I\{x} holds k*i1*(G9/.y) = G99/.y
+A50:  for y being set st y in I holds k(*)(F9/.y) = F99/.y;
+A51:  for y being set st y in I\{x} holds k(*)i1(*)(G9/.y) = G99/.y
       proof
         let y be set;
         assume
@@ -1382,19 +1354,19 @@ A54:    F9/.y = F9.y by A52,FUNCT_2:def 13
           .= (i1*G9).y by A20,A22,A52,A53,FUNCT_4:def 1
           .= (i1*G9)/.y by A52,FUNCT_2:def 13;
         cod(G9/.y) = a by A52,CAT_3:62;
-        hence k*i1*(G9/.y) = k*(i1*(G9/.y)) by A15,A17,A48,CAT_1:18
-          .= k*((i1*G9)/.y) by A52,CAT_3:def 6
+        hence k(*)i1(*)(G9/.y) = k(*)(i1(*)(G9/.y)) by A15,A17,A48,CAT_1:18
+          .= k(*)((i1*G9)/.y) by A52,CAT_3:def 6
           .= F99/.y by A50,A52,A54
           .= F99.y by A52,FUNCT_2:def 13
           .= G99.y by A52,FUNCT_1:49
           .= G99/.y by A52,FUNCT_2:def 13;
       end;
       cod k = d by A47,CAT_1:1;
-      then cod(k*i1) = d by A17,A48,CAT_1:17;
-      then k*i1 in Hom(a,d) by A49;
+      then cod(k(*)i1) = d by A17,A48,CAT_1:17;
+      then k(*)i1 in Hom(a,d) by A49;
       then
-A55:  k*i1 = h9 by A41,A51;
-      k*i2 = g by A12,A44,A50,CARD_1:27;
+A55:  k(*)i1 = h9 by A41,A51;
+      k(*)i2 = g by A12,A44,A50,CARD_1:27;
       hence thesis by A46,A47,A55;
     end;
     assume
@@ -1418,17 +1390,16 @@ A60:    y <> x;
 A61:    not y in {x} by TARSKI:def 1;
 A62:    dom k = c by A47,CAT_1:1;
 A63:    y in I\{x} by A57,A60,ZFMISC_1:56;
-        then
-A64:    cod(G9/.y) = a by CAT_3:62;
+A64:    cod(G9/.y) = a by CAT_3:62,A57,A60,ZFMISC_1:56;
         F9/.y = F9.y by A57,FUNCT_2:def 13
           .= (i1*G9).y by A20,A22,A57,A61,FUNCT_4:def 1
           .= (i1*G9)/.y by A63,FUNCT_2:def 13
-          .= i1*(G9/.y) by A63,CAT_3:def 6;
-        hence k*(F9/.y) = k*i1*(G9/.y) by A15,A17,A62,A64,CAT_1:18
-          .= h9*(G9/.y) by A46,A47,A56
+          .= i1(*)(G9/.y) by A63,CAT_3:def 6;
+        hence k(*)(F9/.y) = k(*)i1(*)(G9/.y) by A15,A17,A62,A64,CAT_1:18
+          .= h9(*)(G9/.y) by A46,A47,A56
           .= G99/.y by A40,A41,A63
           .= G99.y by A63,FUNCT_2:def 13
-          .= F99.y by A63,FUNCT_1:49
+          .= F99.y by A57,A60,ZFMISC_1:56,FUNCT_1:49
           .= F99/.y by A57,FUNCT_2:def 13;
       end;
     end;
@@ -1456,7 +1427,8 @@ end;
 definition
   struct (CatStr)CoprodCatStr (# carrier,carrier' -> set, Source,Target ->
 Function of the carrier', the carrier, Comp -> PartFunc of [:the carrier', the
-carrier' :],the carrier', Id -> Function of the carrier, the carrier', Initial
+carrier' :],the carrier',
+  Initial
 -> Element of the carrier, Coproduct -> Function of [:the carrier,the carrier:]
     ,the carrier, Incl1,Incl2 -> Function of [:the carrier,the carrier:],the
     carrier' #);
@@ -1467,7 +1439,7 @@ registration
   existence
   proof
     set o = the set;
-    take CoprodCatStr(# {o},{o},o:->o,o:->o,(o,o):->o,o:->o, Extract(o),(o,o)
+    take CoprodCatStr(# {o},{o},o:->o,o:->o,(o,o):->o,Extract(o),(o,o)
       :->o,(o,o):->o,(o,o):->o #);
     thus thesis;
   end;
@@ -1493,82 +1465,57 @@ end;
 definition
   let o,m;
   func c1Cat*(o,m) -> strict CoprodCatStr equals
-  CoprodCatStr(# {o},{m},m:->o,
-    m:->o,(m,m):->m,o:->m, Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
+  CoprodCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,
+Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
   correctness;
 end;
 
-theorem
-  the CatStr of c1Cat*(o,m) = 1Cat(o,m);
+canceled;
 
 registration
   let o,m;
-  cluster c1Cat*(o,m) -> non void non empty;
+  cluster c1Cat*(o,m) -> non void non empty trivial trivial';
   coherence;
 end;
 
-Lm2: c1Cat*(o,m) is Category-like
+Lm2a: c1Cat*(o,m) is Category-like
 proof
   set C = c1Cat*(o,m);
-  set CP = the Comp of C, CD = the Source of C, CC = the Target of C, CI = the
-  Id of C;
-  thus for f,g being Morphism of C holds [g,f] in dom CP iff CD.g=CC.f
+  set CP = the Comp of C, CD = the Source of C, CC = the Target of C;
+  thus
+ for f,g being Morphism of C holds [g,f] in dom CP iff dom g=cod f
   proof
     let f,g be Morphism of C;
 A1: dom CP = {[m,m]} by FUNCOP_1:13;
-    f = m & g = m by TARSKI:def 1;
-    hence thesis by A1,TARSKI:def 1;
+Y:  f = m & g = m by TARSKI:def 1;
+    thus [g,f] in dom CP implies dom g=cod f
+       by ZFMISC_1:def 10;
+    thus thesis by A1,Y,TARSKI:def 1;
   end;
-  thus for f,g being Morphism of C st CD.g=CC.f holds CD.(CP.(g,f)) = CD.f &
-  CC.(CP.(g,f)) = CC.g
-  proof
-    let f,g be Morphism of C;
-    CP.(g,f) = m by FUNCOP_1:77;
-    then reconsider gf = CP.(g,f) as Morphism of C by TARSKI:def 1;
-    CD.gf = o by FUNCT_2:50;
-    hence thesis by FUNCT_2:50;
-  end;
-  thus for f,g,h being Morphism of C st CD.h = CC.g & CD.g = CC.f holds CP.(h,
-  CP.(g,f)) = CP.(CP.(h,g),f)
-  proof
-    let f,g,h be Morphism of C;
-    CP.(g,f) = m & CP.(h,g) = m by FUNCOP_1:77;
-    then reconsider gf = CP.(g,f),hg = CP.(h,g) as Morphism of C by
-TARSKI:def 1;
-    CP.(h,gf) = m & CP.(hg,f) = m by FUNCOP_1:77;
-    hence thesis;
-  end;
-  let b be Object of C;
-  b = o by TARSKI:def 1;
-  hence CD.(CI.b) = b & CC.(CI.b) = b by FUNCT_2:50;
-  thus for f being Morphism of C st CC.f = b holds CP.(CI.b,f) = f
-  proof
-    let f be Morphism of C;
-    f = m by TARSKI:def 1;
-    hence thesis by FUNCOP_1:77;
-  end;
-  let g be Morphism of C;
-  assume CD.g = b;
-  g = m by TARSKI:def 1;
-  hence CP.(g,CI.b) = g by FUNCOP_1:77;
-end;
+ end;
 
 registration
-  cluster strict Category-like non void non empty for CoprodCatStr;
+  cluster strict Category-like
+    reflexive transitive associative with_identities
+   for  non void non empty CoprodCatStr;
   existence
   proof
-    c1Cat*(0,1) is Category-like by Lm2;
+    c1Cat*(0,1) is
+    reflexive transitive associative with_identities
+   Category-like by Lm2a;
     hence thesis;
   end;
 end;
 
 registration
   let o,m be set;
-  cluster c1Cat*(o,m) -> Category-like non void non empty;
-  coherence by Lm2;
+  cluster c1Cat*(o,m) -> Category-like
+    reflexive transitive associative with_identities
+   non void non empty;
+  coherence by Lm2a;
 end;
 
-theorem Th49:
+theorem Th46:
   for a,b being Object of c1Cat*(o,m) holds a = b
 proof
   let a,b be Object of c1Cat*(o,m);
@@ -1576,7 +1523,7 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th51:
+theorem Th47:
   for f,g being Morphism of c1Cat*(o,m) holds f = g
 proof
   let f,g be Morphism of c1Cat*(o,m);
@@ -1584,7 +1531,7 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th52:
+theorem Th48:
   for a,b being Object of c1Cat*(o,m), f being Morphism of c1Cat*(
   o,m) holds f in Hom(a,b)
 proof
@@ -1602,72 +1549,77 @@ theorem
   holds f is Morphism of a,b
 proof
   let a,b be Object of c1Cat*(o,m), f be Morphism of c1Cat*(o,m);
-  f in Hom(a,b) by Th52;
-  hence thesis by CAT_1:def 4;
+  f in Hom(a,b) by Th48;
+  hence thesis by CAT_1:def 5;
 end;
 
 theorem
-  for a,b being Object of c1Cat*(o,m) holds Hom(a,b) <> {} by Th52;
+  for a,b being Object of c1Cat*(o,m) holds Hom(a,b) <> {} by Th48;
 
-theorem Th55:
+theorem Th51:
   for a being Object of c1Cat*(o,m) holds a is initial
 proof
   let a be Object of c1Cat*(o,m);
   let b be Object of c1Cat*(o,m);
   set f = the Morphism of a,b;
-  thus Hom(a,b)<>{} by Th52;
+  thus Hom(a,b)<>{} by Th48;
   take f;
-  thus thesis by Th51;
+  thus thesis by Th47;
 end;
 
-theorem Th56:
+theorem Th52:
   for c being Object of c1Cat*(o,m), i1,i2 being Morphism of
   c1Cat*(o,m) holds c is_a_coproduct_wrt i1,i2
 proof
   let c be Object of c1Cat*(o,m), i1,i2 be Morphism of c1Cat*(o,m);
-  thus cod i1 = c & cod i2 = c by Th49;
+  thus cod i1 = c & cod i2 = c by Th46;
   let d be Object of c1Cat*(o,m), f,g be Morphism of c1Cat*(o,m) such that
   f in Hom(dom i1,d) and
   g in Hom(dom i2,d);
   take h = i1;
-  thus h in Hom(c,d) by Th52;
-  thus thesis by Th51;
+  thus h in Hom(c,d) by Th48;
+  thus thesis by Th47;
 end;
 
 definition
-  let IT be Category-like non void non empty CoprodCatStr;
+  let IT be Category-like
+   reflexive transitive associative with_identities
+    non void non empty CoprodCatStr;
   attr IT is Cocartesian means
-  :Def27:
+  :Def26:
   the Initial of IT is initial & for a,b
   being Object of IT holds dom((the Incl1 of IT).(a,b)) = a & dom((the Incl2 of
   IT).(a,b)) = b & (the Coproduct of IT).(a,b) is_a_coproduct_wrt (the Incl1 of
   IT).(a,b),(the Incl2 of IT).(a,b);
 end;
 
-theorem Th57:
+theorem Th53:
   for o,m being set holds c1Cat*(o,m) is Cocartesian
 proof
   let o,m be set;
   set 1PCat = c1Cat*(o,m);
-  thus the Initial of 1PCat is initial by Th55;
+  thus the Initial of 1PCat is initial by Th51;
   let a,b be Object of 1PCat;
-  thus dom((the Incl1 of 1PCat).(a,b)) = a by Th49;
-  thus dom((the Incl2 of 1PCat).(a,b)) = b by Th49;
-  thus thesis by Th56;
+  thus dom((the Incl1 of 1PCat).(a,b)) = a by Th46;
+  thus dom((the Incl2 of 1PCat).(a,b)) = b by Th46;
+  thus thesis by Th52;
 end;
 
 registration
   cluster strict Cocartesian for
+    reflexive transitive associative with_identities
 Category-like non void non empty CoprodCatStr;
   existence
   proof
-    c1Cat*(0,1) is Cocartesian by Th57;
+    c1Cat*(0,1) is Cocartesian by Th53;
     hence thesis;
   end;
 end;
 
 definition
-  mode Cocartesian_category is Cocartesian Category-like non void non empty
+  mode Cocartesian_category is Cocartesian
+    reflexive transitive associative with_identities
+Category-like non void non empty
     CoprodCatStr;
 end;
 
@@ -1675,15 +1627,15 @@ reserve C for Cocartesian_category;
 reserve a,b,c,d,e,s for Object of C;
 
 theorem
-  [[0]]C is initial by Def27;
+  [[0]]C is initial by Def26;
 
-theorem Th59:
+theorem Th55:
   for f1,f2 being Morphism of [[0]]C,a holds f1 = f2
 proof
   let f1,f2 be Morphism of [[0]]C,a;
-  [[0]]C is initial by Def27;
+  [[0]]C is initial by Def26;
   then consider f being Morphism of [[0]]C,a such that
-A1: for g being Morphism of [[0]]C, a holds f = g by CAT_1:def 13;
+A1: for g being Morphism of [[0]]C, a holds f = g by CAT_1:def 19;
   thus f1 = f by A1
     .= f2 by A1;
 end;
@@ -1693,67 +1645,67 @@ definition
   func init a -> Morphism of [[0]]C, a means
   not contradiction;
   existence;
-  uniqueness by Th59;
+  uniqueness by Th55;
 end;
 
-theorem Th60:
+theorem Th56:
   Hom([[0]]C,a) <> {}
 proof
-  [[0]]C is initial by Def27;
-  hence thesis by CAT_1:def 13;
+  [[0]]C is initial by Def26;
+  hence thesis by CAT_1:def 19;
 end;
 
-theorem Th61:
+theorem Th57:
   init a = init([[0]]C,a)
 proof
-  [[0]]C is initial by Def27;
+  [[0]]C is initial by Def26;
   hence thesis by CAT_3:40;
 end;
 
 theorem
   dom(init a) = [[0]]C & cod(init a) = a
 proof
-  [[0]]C is initial & init a = init([[0]]C,a) by Def27,Th61;
+  [[0]]C is initial & init a = init([[0]]C,a) by Def26,Th57;
   hence thesis by CAT_3:38;
 end;
 
 theorem
   Hom([[0]]C,a) = {init a}
 proof
-  for f2 being Morphism of [[0]]C,a holds init a = f2 by Th59;
-  hence thesis by Th60,CAT_1:8;
+  for f2 being Morphism of [[0]]C,a holds init a = f2 by Th55;
+  hence thesis by Th56,CAT_1:8;
 end;
 
-theorem Th64:
+theorem Th60:
   dom in1(a,b) = a & cod in1(a,b) = a+b
 proof
   set i1 = (the Incl1 of C).(a,b), i2 = (the Incl2 of C).(a,b);
-  a+b is_a_coproduct_wrt i1,i2 by Def27;
-  hence thesis by Def27,CAT_3:def 17;
+  a+b is_a_coproduct_wrt i1,i2 by Def26;
+  hence thesis by Def26,CAT_3:def 18;
 end;
 
-theorem Th65:
+theorem Th61:
   dom in2(a,b) = b & cod in2(a,b) = a+b
 proof
   set i1 = (the Incl1 of C).(a,b), i2 = (the Incl2 of C).(a,b);
-  a+b is_a_coproduct_wrt i1,i2 by Def27;
-  hence thesis by Def27,CAT_3:def 17;
+  a+b is_a_coproduct_wrt i1,i2 by Def26;
+  hence thesis by Def26,CAT_3:def 18;
 end;
 
-theorem Th66:
+theorem Th62:
   Hom(a,a+b) <> {} & Hom(b,a+b) <> {}
 proof
   set c = (the Coproduct of C).(a,b);
   set i1 = (the Incl1 of C).(a,b), i2 = (the Incl2 of C).(a,b);
-  c is_a_coproduct_wrt i1,i2 by Def27;
+  c is_a_coproduct_wrt i1,i2 by Def26;
   then
-A1: cod i1 = c & cod i2 = c by CAT_3:def 17;
-  dom(i1) = a & dom(i2) = b by Def27;
+A1: cod i1 = c & cod i2 = c by CAT_3:def 18;
+  dom(i1) = a & dom(i2) = b by Def26;
   hence thesis by A1,CAT_1:1;
 end;
 
 theorem
-  a+b is_a_coproduct_wrt in1(a,b),in2(a,b) by Def27;
+  a+b is_a_coproduct_wrt in1(a,b),in2(a,b) by Def26;
 
 theorem
   C is with_finite_coproduct
@@ -1763,19 +1715,10 @@ A1: for a,b ex c being Object of C, i1,i2 being Morphism of C st dom i1 = a
   proof
     let a,b;
     take a+b, in1(a,b), in2(a,b);
-    thus thesis by Def27,Th64,Th65;
+    thus thesis by Def26,Th60,Th61;
   end;
-  [[0]]C is initial by Def27;
-  hence thesis by A1,Th46;
-end;
-
-theorem
-  Hom(a,b) <> {} & Hom(b,a) <> {} implies in1(a,b) is coretraction & in2
-  (a,b) is coretraction
-proof
-A1: dom in2(a,b) = b by Def27;
-  a+b is_a_coproduct_wrt in1(a,b),in2(a,b) & dom in1(a,b) = a by Def27;
-  hence thesis by A1,CAT_3:82;
+  [[0]]C is initial by Def26;
+  hence thesis by A1,Th44;
 end;
 
 definition
@@ -1783,14 +1726,39 @@ definition
   redefine func in1(a,b) -> Morphism of a,a+b;
   coherence
   proof
-    cod in1(a,b) = a+b & dom in1(a,b) = a by Th64;
+    dom in1(a,b) = a & cod in1(a,b) = a+b by Th60;
     hence thesis by CAT_1:4;
   end;
   redefine func in2(a,b) -> Morphism of b,a+b;
   coherence
   proof
-    cod in2(a,b) = a+b & dom in2(a,b) = b by Th65;
+    dom in2(a,b) = b & cod in2(a,b) = a+b by Th61;
     hence thesis by CAT_1:4;
+  end;
+end;
+
+theorem
+  Hom(a,b) <> {} & Hom(b,a) <> {} implies in1(a,b) is coretraction & in2
+  (a,b) is coretraction
+proof
+X:  Hom(a,a+b) <> {} & Hom(b,a+b) <> {} by Th62;
+  a+b is_a_coproduct_wrt in1(a,b),in2(a,b) & dom in1(a,b) = a by Def26;
+  hence thesis by X,CAT_3:82;
+end;
+
+definition
+  let C,a,b;
+  redefine func in1(a,b) -> Morphism of a,a+b;
+  coherence
+  proof
+    cod in1(a,b) = a+b & dom in1(a,b) = a by Th60;
+    hence thesis;
+  end;
+  redefine func in2(a,b) -> Morphism of b,a+b;
+  coherence
+  proof
+    cod in2(a,b) = a+b & dom in2(a,b) = b by Th61;
+    hence thesis;
   end;
 end;
 
@@ -1800,12 +1768,12 @@ definition
   assume
 A1: Hom(a,c) <> {} & Hom(b,c) <> {};
   func [$f,g$] -> Morphism of a+b,c means
-  :Def29:
+  :Def28:
   it*in1(a,b) = f & it*in2(a,b ) = g;
   existence
   proof
-A2: a+b is_a_coproduct_wrt in1(a,b),in2(a,b) by Def27;
-    Hom(a,a+b) <> {} & Hom(b,a+b) <> {} by Th66;
+A2: a+b is_a_coproduct_wrt in1(a,b),in2(a,b) by Def26;
+    Hom(a,a+b) <> {} & Hom(b,a+b) <> {} by Th62;
     then consider h being Morphism of a+b,c such that
 A3: for k being Morphism of a+b,c holds k*in1(a,b) = f & k*in2(a,b) =
     g iff h = k by A1,A2,CAT_3:81;
@@ -1814,8 +1782,8 @@ A3: for k being Morphism of a+b,c holds k*in1(a,b) = f & k*in2(a,b) =
   end;
   uniqueness
   proof
-A4: Hom(b,a+b) <> {} by Th66;
-    a+b is_a_coproduct_wrt in1(a,b),in2(a,b) & Hom(a,a+b) <> {} by Def27,Th66;
+A4: Hom(b,a+b) <> {} by Th62;
+    a+b is_a_coproduct_wrt in1(a,b),in2(a,b) & Hom(a,a+b) <> {} by Def26,Th62;
     then consider h being Morphism of a+b,c such that
 A5: for k being Morphism of a+b,c holds k*in1(a,b) = f & k*in2(a,b) =
     g iff h = k by A1,A4,CAT_3:81;
@@ -1827,26 +1795,26 @@ A7: h2*in1(a,b) = f & h2*in2(a,b) = g;
   end;
 end;
 
-theorem Th70:
+theorem Th66:
   Hom(a,c) <> {} & Hom(b,c) <> {} implies Hom(a+b,c) <> {}
 proof
-A1: a+b is_a_coproduct_wrt in1(a,b),in2(a,b) by Def27;
-  Hom(a,a+b) <> {} & Hom(b,a+b) <> {} by Th66;
+A1: a+b is_a_coproduct_wrt in1(a,b),in2(a,b) by Def26;
+  Hom(a,a+b) <> {} & Hom(b,a+b) <> {} by Th62;
   hence thesis by A1,CAT_3:81;
 end;
 
-theorem Th71:
+theorem Th67:
   [$in1(a,b),in2(a,b)$] = id(a+b)
 proof
-A1: Hom(b,a+b) <> {} by Th66;
+A1: Hom(b,a+b) <> {} by Th62;
   then
 A2: (id(a+b))*in2(a,b) = in2(a,b) by CAT_1:28;
-A3: Hom(a,a+b) <> {} by Th66;
+A3: Hom(a,a+b) <> {} by Th62;
   then (id(a+b))*in1(a,b) = in1(a,b) by CAT_1:28;
-  hence thesis by A3,A1,A2,Def29;
+  hence thesis by A3,A1,A2,Def28;
 end;
 
-theorem Th72:
+theorem Th68:
   for f being Morphism of a,c, g being Morphism of b,c, h being
 Morphism of c,d st Hom(a,c)<>{} & Hom(b,c)<>{} & Hom(c,d)<>{} holds [$h*f,h*g$]
   = h*[$f,g$]
@@ -1855,27 +1823,27 @@ proof
   assume that
 A1: Hom(a,c)<>{} & Hom(b,c)<>{} and
 A2: Hom(c,d)<>{};
-A3: Hom(a+b,c) <> {} by A1,Th70;
-A4: Hom(b,a+b) <> {} by Th66;
-  h*([$f,g$]*in2(a,b)) = h*g by A1,Def29;
+A3: Hom(a+b,c) <> {} by A1,Th66;
+A4: Hom(b,a+b) <> {} by Th62;
+  h*([$f,g$]*in2(a,b)) = h*g by A1,Def28;
   then
 A5: h*[$f,g$]*in2(a,b) = h*g by A2,A4,A3,CAT_1:25;
-A6: Hom(a,a+b) <> {} by Th66;
+A6: Hom(a,a+b) <> {} by Th62;
 A7: Hom(a,d) <> {} & Hom(b,d) <> {} by A1,A2,CAT_1:24;
-  h*([$f,g$]*in1(a,b)) = h*f by A1,Def29;
+  h*([$f,g$]*in1(a,b)) = h*f by A1,Def28;
   then h*[$f,g$]*in1(a,b) = h*f by A2,A6,A3,CAT_1:25;
-  hence thesis by A5,A7,Def29;
+  hence thesis by A5,A7,Def28;
 end;
 
-theorem Th73:
+theorem Th69:
   for f,k being Morphism of a,c, g,h being Morphism of b,c st Hom(
   a,c) <> {} & Hom(b,c) <> {} & [$f,g$] = [$k,h$] holds f = k & g = h
 proof
   let f,k be Morphism of a,c, g,h be Morphism of b,c;
   assume
 A1: Hom(a,c) <> {} & Hom(b,c) <> {};
-  then [$f,g$]*in1(a,b) = f & [$f,g$]*in2(a,b) = g by Def29;
-  hence thesis by A1,Def29;
+  then [$f,g$]*in1(a,b) = f & [$f,g$]*in2(a,b) = g by Def28;
+  hence thesis by A1,Def28;
 end;
 
 theorem
@@ -1894,8 +1862,8 @@ A5: g is epi;
 A6: Hom(c,d)<>{} and
 A7: f1*[$f,g$] = f2*[$f,g$];
 A8: Hom(a,d) <> {} & Hom(b,d) <> {} by A1,A2,A6,CAT_1:24;
-    [$f1*f,f1*g$] = f1*[$f,g$] & [$f2*f,f2*g$] = f2*[$f,g$] by A1,A2,A6,Th72;
-    then f1*g = f2*g by A7,A8,Th73;
+    [$f1*f,f1*g$] = f1*[$f,g$] & [$f2*f,f2*g$] = f2*[$f,g$] by A1,A2,A6,Th68;
+    then f1*g = f2*g by A7,A8,Th69;
     hence f1 = f2 by A2,A5,A6,CAT_1:36;
   end;
 A9: now
@@ -1906,57 +1874,57 @@ A10: f is epi;
 A11: Hom(c,d)<>{} and
 A12: f1*[$f,g$] = f2*[$f,g$];
 A13: Hom(a,d) <> {} & Hom(b,d) <> {} by A1,A2,A11,CAT_1:24;
-    [$f1*f,f1*g$] = f1*[$f,g$] & [$f2*f,f2*g$] = f2*[$f,g$] by A1,A2,A11,Th72;
-    then f1*f = f2*f by A12,A13,Th73;
+    [$f1*f,f1*g$] = f1*[$f,g$] & [$f2*f,f2*g$] = f2*[$f,g$] by A1,A2,A11,Th68;
+    then f1*f = f2*f by A12,A13,Th69;
     hence f1 = f2 by A1,A10,A11,CAT_1:36;
   end;
-  Hom(a+b,c) <> {} by A1,A2,Th70;
+  Hom(a+b,c) <> {} by A1,A2,Th66;
   hence thesis by A3,A9,A4,CAT_1:36;
 end;
 
 theorem
   a, a+[[0]]C are_isomorphic & a,[[0]]C+a are_isomorphic
 proof
-A1: in2([[0]]C,a)*init a = in1([[0]]C,a) by Th59;
-A2: Hom([[0]]C,a) <> {} & Hom(a,a) <> {} by Th60,CAT_1:27;
+A1: in2([[0]]C,a)*init a = in1([[0]]C,a) by Th55;
+A2: Hom([[0]]C,a) <> {} & Hom(a,a) <> {} by Th56;
   thus a,a+[[0]]C are_isomorphic
   proof
     thus
-A3: Hom(a,a+[[0]]C) <> {} by Th66;
-    thus Hom(a+[[0]]C,a) <> {} by A2,Th70;
+A3: Hom(a,a+[[0]]C) <> {} by Th62;
+    thus Hom(a+[[0]]C,a) <> {} by A2,Th66;
     take g = in1(a,[[0]]C), f = [$id a,init a$];
-A4: in1(a,[[0]]C)*init a = in2(a,[[0]]C) by Th59;
+A4: in1(a,[[0]]C)*init a = in2(a,[[0]]C) by Th55;
     in1(a,[[0]]C)*id(a) = in1(a,[[0]]C) by A3,CAT_1:29;
-    then g*f = [$in1(a,[[0]]C),in2(a,[[0]]C)$] by A2,A3,A4,Th72;
-    hence thesis by A2,Def29,Th71;
+    then g*f = [$in1(a,[[0]]C),in2(a,[[0]]C)$] by A2,A3,A4,Th68;
+    hence thesis by A2,Def28,Th67;
   end;
   thus
-A5: Hom(a,[[0]]C+a) <> {} by Th66;
-  thus Hom([[0]]C+a,a) <> {} by A2,Th70;
+A5: Hom(a,[[0]]C+a) <> {} by Th62;
+  thus Hom([[0]]C+a,a) <> {} by A2,Th66;
   take g = in2([[0]]C,a), f = [$init a,id a$];
   in2([[0]]C,a)*id(a) = in2([[0]]C,a) by A5,CAT_1:29;
-  then g*f = [$in1([[0]]C,a),in2([[0]]C,a)$] by A2,A5,A1,Th72;
-  hence thesis by A2,Def29,Th71;
+  then g*f = [$in1([[0]]C,a),in2([[0]]C,a)$] by A2,A5,A1,Th68;
+  hence thesis by A2,Def28,Th67;
 end;
 
 theorem
   a+b,b+a are_isomorphic
 proof
-A1: Hom(a,b+a) <> {} & Hom(b,b+a) <> {} by Th66;
+A1: Hom(a,b+a) <> {} & Hom(b,b+a) <> {} by Th62;
   hence
-A2: Hom(a+b,b+a)<>{} by Th70;
-A3: Hom(a,a+b) <> {} & Hom(b,a+b) <> {} by Th66;
+A2: Hom(a+b,b+a)<>{} by Th66;
+A3: Hom(a,a+b) <> {} & Hom(b,a+b) <> {} by Th62;
   hence
-A4: Hom(b+a,a+b)<>{} by Th70;
+A4: Hom(b+a,a+b)<>{} by Th66;
   take f9 = [$in2(b,a),in1(b,a)$], f = [$in2(a,b),in1(a,b)$];
-  thus f9*f = [$f9*in2(a,b),f9*in1(a,b)$] by A2,A3,Th72
-    .= [$in1(b,a),f9*in1(a,b)$] by A1,Def29
-    .= [$in1(b,a),in2(b,a)$] by A1,Def29
-    .= id(b+a) by Th71;
-  thus f*f9 = [$f*in2(b,a),f*in1(b,a)$] by A1,A4,Th72
-    .= [$in1(a,b),f*in1(b,a)$] by A3,Def29
-    .= [$in1(a,b),in2(a,b)$] by A3,Def29
-    .= id(a+b) by Th71;
+  thus f9*f = [$f9*in2(a,b),f9*in1(a,b)$] by A2,A3,Th68
+    .= [$in1(b,a),f9*in1(a,b)$] by A1,Def28
+    .= [$in1(b,a),in2(b,a)$] by A1,Def28
+    .= id(b+a) by Th67;
+  thus f*f9 = [$f*in2(b,a),f*in1(b,a)$] by A1,A4,Th68
+    .= [$in1(a,b),f*in1(b,a)$] by A3,Def28
+    .= [$in1(a,b),in2(a,b)$] by A3,Def28
+    .= id(a+b) by Th67;
 end;
 
 theorem
@@ -1964,60 +1932,60 @@ theorem
 proof
   set k = [$in1(a+b,c)*in2(a,b),in2(a+b,c)$];
   set l = [$in1(a,b+c),in2(a,b+c)*in1(b,c)$];
-A1: Hom(b+c,a+(b+c)) <> {} by Th66;
-A2: Hom(b,b+c) <> {} by Th66;
+A1: Hom(b+c,a+(b+c)) <> {} by Th62;
+A2: Hom(b,b+c) <> {} by Th62;
   then
 A3: Hom(b,a+(b+c)) <> {} by A1,CAT_1:24;
-A4: Hom(a,a+(b+c)) <> {} by Th66;
+A4: Hom(a,a+(b+c)) <> {} by Th62;
   then
-A5: Hom(a+b,a+(b+c)) <> {} by A3,Th70;
-A6: Hom(c,b+c) <> {} by Th66;
+A5: Hom(a+b,a+(b+c)) <> {} by A3,Th66;
+A6: Hom(c,b+c) <> {} by Th62;
   then
 A7: Hom(c,a+(b+c)) <> {} by A1,CAT_1:24;
   hence
-A8: Hom((a+b)+c,a+(b+c)) <> {} by A5,Th70;
-A9: Hom(a+b,(a+b)+c) <> {} by Th66;
-A10: Hom(b,a+b) <> {} by Th66;
+A8: Hom((a+b)+c,a+(b+c)) <> {} by A5,Th66;
+A9: Hom(a+b,(a+b)+c) <> {} by Th62;
+A10: Hom(b,a+b) <> {} by Th62;
   then
 A11: Hom(b,(a+b)+c) <> {} by A9,CAT_1:24;
-A12: Hom(c,(a+b)+c) <> {} by Th66;
+A12: Hom(c,(a+b)+c) <> {} by Th62;
   then
-A13: Hom(b+c,(a+b)+c) <> {} by A11,Th70;
-A14: Hom(a,a+b) <> {} by Th66;
+A13: Hom(b+c,(a+b)+c) <> {} by A11,Th66;
+A14: Hom(a,a+b) <> {} by Th62;
   then
 A15: Hom(a,(a+b)+c) <> {} by A9,CAT_1:24;
   hence
-A16: Hom(a+(b+c),(a+b)+c) <> {} by A13,Th70;
+A16: Hom(a+(b+c),(a+b)+c) <> {} by A13,Th66;
   take g = [$l,in2(a,b+c)*in2(b,c)$];
   g*(in1(a+b,c)*in2(a,b)) = (g*in1(a+b,c))*in2(a,b) by A8,A9,A10,CAT_1:25
-    .= l*in2(a,b) by A7,A5,Def29
-    .= in2(a,b+c)*in1(b,c) by A3,A4,Def29;
+    .= l*in2(a,b) by A7,A5,Def28
+    .= in2(a,b+c)*in1(b,c) by A3,A4,Def28;
   then
-A17: g*k = [$in2(a,b+c)*in1(b,c),g*in2(a+b,c)$] by A8,A11,A12,Th72
-    .= [$in2(a,b+c)*in1(b,c),in2(a,b+c)*in2(b,c)$] by A7,A5,Def29
-    .= in2(a,b+c)*[$in1(b,c),in2(b,c)$] by A2,A1,A6,Th72
-    .= in2(a,b+c)*id(b+c) by Th71
+A17: g*k = [$in2(a,b+c)*in1(b,c),g*in2(a+b,c)$] by A8,A11,A12,Th68
+    .= [$in2(a,b+c)*in1(b,c),in2(a,b+c)*in2(b,c)$] by A7,A5,Def28
+    .= in2(a,b+c)*[$in1(b,c),in2(b,c)$] by A2,A1,A6,Th68
+    .= in2(a,b+c)*id(b+c) by Th67
     .= in2(a,b+c) by A1,CAT_1:29;
   take f = [$in1(a+b,c)*in1(a,b),k$];
   f*(in2(a,b+c)*in1(b,c)) = (f*in2(a,b+c))*in1(b,c) by A2,A1,A16,CAT_1:25
-    .= k*in1(b,c) by A15,A13,Def29
-    .= in1(a+b,c)*in2(a,b) by A11,A12,Def29;
+    .= k*in1(b,c) by A15,A13,Def28
+    .= in1(a+b,c)*in2(a,b) by A11,A12,Def28;
   then
-A18: f*l = [$f*in1(a,b+c),in1(a+b,c)*in2(a,b)$] by A3,A4,A16,Th72
-    .= [$in1(a+b,c)*in1(a,b),in1(a+b,c)*in2(a,b)$] by A15,A13,Def29
-    .= in1(a+b,c)*[$in1(a,b),in2(a,b)$] by A14,A9,A10,Th72
-    .= in1(a+b,c)*id(a+b) by Th71
+A18: f*l = [$f*in1(a,b+c),in1(a+b,c)*in2(a,b)$] by A3,A4,A16,Th68
+    .= [$in1(a+b,c)*in1(a,b),in1(a+b,c)*in2(a,b)$] by A15,A13,Def28
+    .= in1(a+b,c)*[$in1(a,b),in2(a,b)$] by A14,A9,A10,Th68
+    .= in1(a+b,c)*id(a+b) by Th67
     .= in1(a+b,c) by A9,CAT_1:29;
   g*(in1(a+b,c)*in1(a,b)) = g*in1(a+b,c)*in1(a,b) by A8,A14,A9,CAT_1:25
-    .= l*in1(a,b) by A7,A5,Def29
-    .= in1(a,b+c) by A3,A4,Def29;
-  hence g*f = [$in1(a,b+c),in2(a,b+c)$] by A8,A15,A13,A17,Th72
-    .= id(a+(b+c)) by Th71;
+    .= l*in1(a,b) by A7,A5,Def28
+    .= in1(a,b+c) by A3,A4,Def28;
+  hence g*f = [$in1(a,b+c),in2(a,b+c)$] by A8,A15,A13,A17,Th68
+    .= id(a+(b+c)) by Th67;
   f*(in2(a,b+c)*in2(b,c)) = (f*in2(a,b+c))*in2(b,c) by A1,A6,A16,CAT_1:25
-    .= k*in2(b,c) by A15,A13,Def29
-    .= in2(a+b,c) by A11,A12,Def29;
-  hence f*g = [$in1(a+b,c),in2(a+b,c)$] by A7,A5,A16,A18,Th72
-    .= id((a+b)+c) by Th71;
+    .= k*in2(b,c) by A15,A13,Def28
+    .= in2(a+b,c) by A11,A12,Def28;
+  hence f*g = [$in1(a+b,c),in2(a+b,c)$] by A7,A5,A16,A18,Th68
+    .= id((a+b)+c) by Th67;
 end;
 
 definition
@@ -2041,26 +2009,26 @@ proof
   assume that
 A1: Hom(a,c) <> {} and
 A2: Hom(b,d) <> {};
-  Hom(d,c+d) <> {} by Th66;
+  Hom(d,c+d) <> {} by Th62;
   then
 A3: Hom(b,c+d) <> {} by A2,CAT_1:24;
-  Hom(c,c+d) <> {} by Th66;
+  Hom(c,c+d) <> {} by Th62;
   then Hom(a,c+d) <> {} by A1,CAT_1:24;
-  hence thesis by A3,Th70;
+  hence thesis by A3,Th66;
 end;
 
 theorem
   (id a)+(id b) = id(a+b)
 proof
-  Hom(b,a+b) <> {} by Th66;
+  Hom(b,a+b) <> {} by Th62;
   then
 A1: in2(a,b)*(id b) = in2(a,b) by CAT_1:29;
-  Hom(a,a+b) <> {} by Th66;
+  Hom(a,a+b) <> {} by Th62;
   then in1(a,b)*(id a) = in1(a,b) by CAT_1:29;
-  hence thesis by A1,Th71;
+  hence thesis by A1,Th67;
 end;
 
-theorem Th80:
+theorem Th76:
   for f being Morphism of a,c, h being Morphism of b,d, g being
   Morphism of c,e, k being Morphism of d,e st Hom(a,c) <> {} & Hom(b,d) <> {} &
   Hom(c,e) <> {} & Hom(d,e) <> {} holds [$g,k$]*(f+h) = [$g*f,k*h$]
@@ -2071,19 +2039,19 @@ proof
 A1: Hom(a,c) <> {} and
 A2: Hom(b,d) <> {} and
 A3: Hom(c,e) <> {} & Hom(d,e) <> {};
-A4: Hom(c+d,e) <> {} by A3,Th70;
-A5: Hom(d,c+d) <> {} by Th66;
+A4: Hom(c+d,e) <> {} by A3,Th66;
+A5: Hom(d,c+d) <> {} by Th62;
   then
 A6: Hom(b,c+d) <> {} by A2,CAT_1:24;
-A7: Hom(c,c+d) <> {} by Th66;
+A7: Hom(c,c+d) <> {} by Th62;
   then
 A8: Hom(a,c+d) <> {} by A1,CAT_1:24;
-  [$g,k$]*in2(c,d) = k by A3,Def29;
+  [$g,k$]*in2(c,d) = k by A3,Def28;
   then
 A9: k*h = [$g,k$]*(in2(c,d)*h) by A2,A4,A5,CAT_1:25;
-  [$g,k$]*in1(c,d) = g by A3,Def29;
+  [$g,k$]*in1(c,d) = g by A3,Def28;
   then g*f = [$g,k$]*(in1(c,d)*f) by A1,A4,A7,CAT_1:25;
-  hence thesis by A4,A8,A6,A9,Th72;
+  hence thesis by A4,A8,A6,A9,Th68;
 end;
 
 theorem
@@ -2093,8 +2061,8 @@ proof
   let f be Morphism of a,c, g be Morphism of b,c such that
 A1: Hom(a,c) <> {} and
 A2: Hom(b,c) <> {};
-  Hom(c,c) <> {} by CAT_1:27;
-  hence nabla(c)*(f+g) = [$(id c)*f,(id c)*g$] by A1,A2,Th80
+  Hom(c,c) <> {};
+  hence nabla(c)*(f+g) = [$(id c)*f,(id c)*g$] by A1,A2,Th76
     .= [$f,(id c)*g$] by A1,CAT_1:28
     .= [$f,g$] by A2,CAT_1:28;
 end;
@@ -2111,13 +2079,13 @@ A1: Hom(a,c) <> {} and
 A2: Hom(b,d) <> {} and
 A3: Hom(c,e) <> {} and
 A4: Hom(d,s) <> {};
-A5: Hom(s,e+s) <> {} by Th66;
+A5: Hom(s,e+s) <> {} by Th62;
   then
 A6: Hom(d,e+s) <> {} by A4,CAT_1:24;
-A7: Hom(e,e+s) <> {} by Th66;
+A7: Hom(e,e+s) <> {} by Th62;
   then in1(e,s)*g*f = in1(e,s)*(g*f) by A1,A3,CAT_1:25;
   then
 A8: (g*f)+(k*h) = [$in1(e,s)*g*f,in2(e,s)*k*h$] by A2,A4,A5,CAT_1:25;
   Hom(c,e+s) <> {} by A3,A7,CAT_1:24;
-  hence thesis by A1,A2,A6,A8,Th80;
+  hence thesis by A1,A2,A6,A8,Th76;
 end;

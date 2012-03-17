@@ -2,7 +2,7 @@
 ::  by JingChao Chen
 ::
 :: Received June 15, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,19 +15,18 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, STRUCT_0, AMI_1, AMI_2, FUNCT_7, SCMPDS_1,
-      RELAT_1, FINSEQ_1, CARD_1, XBOOLE_0, TARSKI, ZFMISC_1, FSM_1, CAT_1,
-      AMI_3, INT_1, XXREAL_0, FUNCT_1, COMPLEX1, ARYTM_3, GRAPHSP, ORDINAL1,
-      ARYTM_1, NAT_1, FUNCOP_1, FUNCT_4, GLIB_000, SCMPDS_2, RECDEF_2,
-      COMPOS_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, FUNCT_1, FUNCT_2,
-      INT_1, NAT_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, ZFMISC_1, STRUCT_0,
-      RELAT_1, FUNCT_4, FINSEQ_1, FINSEQ_4, FUNCT_7, NUMBERS, MEMSTR_0,
-      COMPOS_1, EXTPRO_1, AMI_2, SCMPDS_1, AMI_3, INT_2, XXREAL_0, RECDEF_2;
- constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2, FINSEQ_4, CAT_2, AMI_3,
-      SCMPDS_1, RELSET_1, RECDEF_2, FUNCT_7, MEMSTR_0;
- registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, NUMBERS,
-      XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_2, SCMPDS_1, XXREAL_0, MEMSTR_0,
-      FUNCT_1, GR_CY_1, FINSEQ_4, FUNCT_2, RELSET_1, COMPOS_1, EXTPRO_1;
+      RELAT_1, FINSEQ_1, CARD_1, XBOOLE_0, TARSKI, FSM_1, CAT_1, AMI_3, INT_1,
+      XXREAL_0, FUNCT_1, COMPLEX1, ARYTM_3, GRAPHSP, ORDINAL1, ARYTM_1, NAT_1,
+      FUNCOP_1, FUNCT_4, GLIB_000, SCMPDS_2, MEMSTR_0, GOBRD13;
+ notations TARSKI, XBOOLE_0, ENUMSET1, XTUPLE_0, SUBSET_1, XCMPLX_0, RELAT_1,
+      FUNCT_1, FUNCT_2, INT_1, ORDINAL1, NAT_1, FUNCOP_1, CARD_1, STRUCT_0,
+      FUNCT_4, FUNCT_7, FINSEQ_1, FINSEQ_4, NUMBERS, MEMSTR_0, COMPOS_0,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, INT_2, XXREAL_0, SCMPDS_I, SCMPDS_1;
+ constructors DOMAIN_1, REAL_1, FINSEQ_4, AMI_3, SCMPDS_1, RELSET_1, FUNCT_7,
+      NAT_D, VALUED_0;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, XREAL_0, INT_1,
+      CARD_3, AMI_2, XXREAL_0, FUNCT_1, FUNCT_2, RELSET_1, EXTPRO_1, AMI_3,
+      MEASURE6, PBOOLE, COMPOS_0, SCM_INST, SCMPDS_I, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -37,59 +36,44 @@ reserve x for set,
   k for Element of NAT;
 
 definition
-  func SCMPDS -> strict AMI-Struct over { INT } equals
+  func SCMPDS -> strict AMI-Struct over 2 equals
 :: SCMPDS_2:def 1
   AMI-Struct(#
     SCM-Memory,In(NAT,SCM-Memory),
-    SCMPDS-Instr, In([0,{},<*0*>],SCMPDS-Instr),
-    SCMPDS-OK,SCMPDS-Exec#);
+    SCMPDS-Instr,
+    SCM-OK,SCM-VAL,SCMPDS-Exec#);
 end;
 
 registration
- cluster proj2 SCMPDS-Instr -> FinSequence-membered;
+  cluster SCMPDS -> non empty;
 end;
 
 registration
-  cluster SCMPDS -> non empty standard-ins;
+  cluster SCMPDS -> with_non-empty_values IC-Ins-separated;
 end;
-
-
-
-registration
-  cluster SCMPDS -> IC-Ins-separated;
-end;
-
-theorem :: SCMPDS_2:1
-  the Instructions of SCMPDS <> INT & NAT <> the Instructions of SCMPDS;
-
-
 
 reserve s for State of SCMPDS;
+
+canceled;
 
 theorem :: SCMPDS_2:2
   IC SCMPDS = NAT;
 
 begin :: The Memory Structure
 
-definition
-  mode Int_position -> Object of SCMPDS means
-:: SCMPDS_2:def 2
-
-    it in SCM-Data-Loc;
+registration
+ cluster Int-like for Object of SCMPDS;
 end;
 
+definition
+  mode Int_position is Int-like Object of SCMPDS;
+ canceled;
+end;
 
-
-theorem :: SCMPDS_2:3
-  x in SCM-Data-Loc implies x is Int_position;
-
-
-
-theorem :: SCMPDS_2:4
-  for I being Int_position holds I is Data-Location;
+canceled 2;
 
 theorem :: SCMPDS_2:5
-  for l being Int_position holds ObjectKind l = INT;
+  for l being Int_position holds Values l = INT;
 
 begin :: The Instruction Structure
 
@@ -99,26 +83,23 @@ reserve d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
 
 reserve I for Instruction of SCMPDS;
 
-
-
 theorem :: SCMPDS_2:6
-  for I being Instruction of SCMPDS holds InsCode I <= 13;
+  for I being Instruction of SCMPDS holds InsCode I <= 14;
 
-definition
+registration
   let s be State of SCMPDS, d be Int_position;
-  redefine func s.d -> Integer;
+  cluster s.d -> integer;
 end;
 
 definition
   let m,n be Integer;
-
   func DataLoc(m,n) -> Int_position equals
 :: SCMPDS_2:def 3
   [1,abs(m+n)];
 end;
 
 theorem :: SCMPDS_2:7
-  [0,{},<*k1*>] in SCMPDS-Instr;
+  [14,{},<*k1*>] in SCMPDS-Instr;
 
 theorem :: SCMPDS_2:8
   [1,{},<*d1*>] in SCMPDS-Instr;
@@ -139,7 +120,7 @@ definition
   let k1;
   func goto k1 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 4
-  [0,{},<*k1*>];
+  [14,{},<*k1*>];
 end;
 
 definition
@@ -198,7 +179,7 @@ definition
 end;
 
 theorem :: SCMPDS_2:12
-  InsCode (goto k1) = 0;
+  InsCode (goto k1) = 14;
 
 theorem :: SCMPDS_2:13
   InsCode (return a) = 1;
@@ -240,7 +221,7 @@ theorem :: SCMPDS_2:25
   InsCode ((a,k1) := (b,k2)) = 13;
 
 theorem :: SCMPDS_2:26
-  for ins being Instruction of SCMPDS st InsCode ins = 0 holds ex k1 st
+  for ins being Instruction of SCMPDS st InsCode ins = 14 holds ex k1 st
   ins = goto k1;
 
 theorem :: SCMPDS_2:27
@@ -307,16 +288,12 @@ theorem :: SCMPDS_2:42
 theorem :: SCMPDS_2:43
   for dl being Int_position holds dl <> IC SCMPDS;
 
-
-
 theorem :: SCMPDS_2:44
-  for s1,s2 being State of SCMPDS st IC s1 = IC s2 & (for a being
-  Int_position holds s1.a = s2.a)
+  for s1,s2 being State of SCMPDS st IC s1 = IC s2
+   & (for a being Int_position holds s1.a = s2.a)
    holds s1 = s2;
 
 begin :: Execution semantics of the SCMPDS instructions
-
-
 
 theorem :: SCMPDS_2:45
   Exec( a:=k1, s).IC SCMPDS = succ IC s & Exec( a:=k1, s).a = k1 &
@@ -414,7 +391,8 @@ theorem :: SCMPDS_2:62
   s be State of SCMPDS st s.NAT=loc & for d being Int_position holds s.d = k;
 
 theorem :: SCMPDS_2:63
-  goto 0 is halting;
+  for I being Instruction of SCMPDS st I = [0,{},{}]
+  holds I is halting;
 
 theorem :: SCMPDS_2:64
   for I being Instruction of SCMPDS st ex s st Exec(I,s).IC SCMPDS
@@ -463,7 +441,9 @@ theorem :: SCMPDS_2:78
   saveIC(a,k1) is non halting;
 
 theorem :: SCMPDS_2:79
-  for I being set holds I is Instruction of SCMPDS implies (ex k1 st I
+  for I being set holds I is Instruction of SCMPDS implies
+   I = [0,{},{}] or
+   (ex k1 st I
 = goto k1) or (ex a st I = return a) or (ex a,k1 st I = saveIC(a,k1)) or (ex a,
 k1 st I = a:=k1) or (ex a,k1,k2 st I = (a,k1):=k2) or (ex a,k1,k2 st I = (a,k1)
 <>0_goto k2) or (ex a,k1,k2 st I = (a,k1)<=0_goto k2) or (ex a,k1,k2 st I = (a,
@@ -472,25 +452,104 @@ AddTo(a,k1,b,k2)) or (ex a,b,k1,k2 st I = SubFrom(a,k1,b,k2)) or (ex a,b,k1,k2
 st I = MultBy(a,k1,b,k2)) or (ex a,b,k1,k2 st I = Divide(a,k1,b,k2)) or ex a,b,
   k1,k2 st I = (a,k1):=(b,k2);
 
+:: Poniewaz zostal dodany prawdziwy halt,
+:: tego lematu nie mozna udowodnic.
+::Lm11: for W being Instruction of SCMPDS st W is halting holds W = goto 0
+::proof
+::  set I = goto 0;
+::  let W be Instruction of SCMPDS such that
+::A1: W is halting;
+::  assume
+::A2: I <> W;
+::  per cases by Th91;
+::  suppose
+::    ex k1 st W=goto k1;
+::    hence thesis by A1,A2,Th85;
+::  end;
+::  suppose
+::    ex a st W = return a;
+::    hence thesis by A1,Th89;
+::  end;
+::  suppose
+::    ex a,k1 st W = saveIC(a,k1);
+::    hence thesis by A1,Th90;
+::  end;
+::  suppose
+::    ex a,k1 st W = a:=k1;
+::    hence thesis by A1,Th77;
+::  end;
+::  suppose
+::    ex a,k1,k2 st W=(a,k1):=k2;
+::    hence thesis by A1,Th78;
+::  end;
+::  suppose
+::    ex a,k1,k2 st W = (a,k1)<>0_goto k2;
+::    hence thesis by A1,Th86;
+::  end;
+::  suppose
+::    ex a,k1,k2 st W = (a,k1)<=0_goto k2;
+::    hence thesis by A1,Th87;
+::  end;
+::  suppose
+::    ex a,k1,k2 st W = (a,k1)>=0_goto k2;
+::    hence thesis by A1,Th88;
+::  end;
+::  suppose
+::    ex a,b,k1,k2 st W = AddTo(a,k1,k2);
+::    hence thesis by A1,Th80;
+::  end;
+::  suppose
+::    ex a,b,k1,k2 st W = AddTo(a,k1,b,k2);
+::    hence thesis by A1,Th81;
+::  end;
+::  suppose
+::    ex a,b,k1,k2 st W = SubFrom(a,k1,b,k2);
+::    hence thesis by A1,Th82;
+::  end;
+::  suppose
+::    ex a,b,k1,k2 st W = MultBy(a,k1,b,k2);
+::    hence thesis by A1,Th83;
+::  end;
+::  suppose
+::    ex a,b,k1,k2 st W = Divide(a,k1,b,k2);
+::    hence thesis by A1,Th84;
+::  end;
+::  suppose
+::    ex a,b,k1,k2 st W = (a,k1):=(b,k2);
+::    hence thesis by A1,Th79;
+::  end;
+::end;
+
 registration
   cluster SCMPDS -> halting;
 end;
 
+::Dopoki sa przeskoki, to jednoznacznosc instrukcji, ktora jest halting
+:: i tak sie nie uda udowodnic.
+::theorem Th92:
+::  for I being Instruction of SCMPDS st I is halting holds I = halt
+::  SCMPDS
+::proof
+::  let I be Instruction of SCMPDS;
+::  assume I is halting;
+::  then I = goto 0 by Lm11;
+::  hence thesis by Lm11;
+::end;
+
 theorem :: SCMPDS_2:80
-  for I being Instruction of SCMPDS st I is halting holds I = halt
-  SCMPDS;
+  halt SCMPDS = [0,{},{}];
 
-theorem :: SCMPDS_2:81
-  halt SCMPDS = goto 0;
-
-
+canceled;
 
 theorem :: SCMPDS_2:82
-  for i being Element of NAT holds IC SCMPDS <> dl.i & IC SCMPDS <> i;
+  for i being Element of NAT holds IC SCMPDS <> dl.i;
 
-theorem :: SCMPDS_2:83
-  for I being Instruction of SCMPDS st I = goto 0 holds I is halting;
+canceled;
 
 theorem :: SCMPDS_2:84
   Data-Locations SCMPDS = SCM-Data-Loc;
 
+canceled;
+
+theorem :: SCMPDS_2:86
+ InsCode I = 0 implies Exec(I,s) = s;

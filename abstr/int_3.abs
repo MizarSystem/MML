@@ -2,7 +2,7 @@
 ::  by Christoph Schwarzweller
 ::
 :: Received February 4, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,17 +17,17 @@ environ
  vocabularies NUMBERS, BINOP_2, SUBSET_1, FUNCT_1, BINOP_1, RELAT_1, ARYTM_1,
       ALGSTR_0, FUNCT_7, CARD_1, STRUCT_0, XBOOLE_0, INT_1, ARYTM_3, SUPINF_2,
       VECTSP_1, MESFUNC1, GROUP_1, RLVECT_1, LATTICES, VECTSP_2, COMPLEX1,
-      XXREAL_0, EUCLID, TARSKI, NAT_1, FUNCSDOM, GCD_1, ORDINAL1, INT_2,
-      XCMPLX_0, MCART_1, NEWTON, INT_3, MEMBERED;
- notations TARSKI, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
+      XXREAL_0, EUCLID, TARSKI, NAT_1, FUNCSDOM, GCD_1, INT_2, XCMPLX_0,
+      MCART_1, NEWTON, INT_3, MEMBERED, FINSET_1;
+ notations TARSKI, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, COMPLEX1, XTUPLE_0,
       MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCSDOM, BINOP_1, EUCLID, XXREAL_0,
       BINOP_2, GR_CY_1, INT_1, FUNCT_7, NEWTON, INT_2, NAT_D, MEMBERED,
-      STRUCT_0, ALGSTR_0, RLVECT_1, GCD_1, GROUP_1, VECTSP_1, VECTSP_2, NAT_1;
- constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2, NEWTON,
-      FUNCT_7, GR_CY_1, EUCLID, GCD_1, SEQ_1, RELSET_1, GROUP_2;
+      STRUCT_0, ALGSTR_0, RLVECT_1, GCD_1, GROUP_1, VECTSP_1, VECTSP_2;
+ constructors REAL_1, NAT_D, BINOP_2, NEWTON, FUNCT_7, GR_CY_1, EUCLID, GCD_1,
+      SEQ_1, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, NEWTON, STRUCT_0, VECTSP_1, GR_CY_1, GCD_1,
-      VALUED_0, REAL_1, MEMBERED;
+      VALUED_0, MEMBERED, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -203,7 +203,7 @@ right_zeroed non empty doubleLoopStr for f being Function of the carrier of F
 begin :: Modulo Integers
 
 definition
-  let n be natural number such that
+  let n be Nat such that
  n > 0;
   func multint(n) -> BinOp of Segm(n) means
 :: INT_3:def 10
@@ -212,7 +212,7 @@ definition
 end;
 
 definition
-  let n be natural number such that
+  let n be Nat such that
  n > 0;
   func compint(n) -> UnOp of Segm(n) means
 :: INT_3:def 11
@@ -221,21 +221,21 @@ definition
 end;
 
 theorem :: INT_3:7
-  for n being natural number st n > 0 for a,b being Element of
+  for n being Nat st n > 0 for a,b being Element of
   Segm(n) holds (a + b < n iff (addint(n)).(a,b) = a + b) & (a + b >= n iff (
   addint(n)).(a,b) = (a + b) - n);
 
 theorem :: INT_3:8
-  for n being natural number st n > 0 for a,b being Element of
-  Segm(n) for k being natural number holds k * n <= a * b & a * b < (k + 1) * n
+  for n being Nat st n > 0 for a,b being Element of
+  Segm(n) for k being Nat holds k * n <= a * b & a * b < (k + 1) * n
   iff (multint(n)).(a,b) = a * b - k * n;
 
 theorem :: INT_3:9
-  for n being natural number st n > 0 for a being Element of Segm(n)
+  for n being Nat st n > 0 for a being Element of Segm(n)
 holds (a = 0 iff (compint(n)).(a) = 0) & (a <> 0 iff (compint(n)).(a) = n - a);
 
 definition
-  let n be natural number;
+  let n be Nat;
   func INT.Ring(n) -> doubleLoopStr equals
 :: INT_3:def 12
   doubleLoopStr(#Segm(n),addint(n),
@@ -243,7 +243,7 @@ definition
 end;
 
 registration
-  let n be non zero natural number;
+  let n be non zero Nat;
   cluster INT.Ring(n) -> strict non empty;
 end;
 
@@ -257,11 +257,11 @@ registration
 end;
 
 theorem :: INT_3:11
-  for n being natural number st n > 1 holds INT.Ring(n) is non
+  for n being Nat st n > 1 holds INT.Ring(n) is non
   degenerated & INT.Ring(n) is well-unital distributive commutative Ring;
 
 theorem :: INT_3:12
-  for p being natural number st p > 1 holds INT.Ring(p) is
+  for p being Nat st p > 1 holds INT.Ring(p) is
   add-associative right_zeroed right_complementable Abelian commutative
   associative well-unital distributive almost_left_invertible non degenerated
   non empty doubleLoopStr iff p is Prime;
@@ -281,4 +281,17 @@ theorem :: INT_3:13
   1.INT.Ring = 1;
 
 theorem :: INT_3:14
-  for n being natural number st 1 < n holds 1.INT.Ring(n) = 1;
+  for n being Nat st 1 < n holds 1.INT.Ring(n) = 1;
+
+begin
+
+:: from SCMRING3, 2011.08.19, A.T.
+
+registration
+  cluster INT.Ring -> infinite;
+end;
+
+registration
+  cluster strict infinite for Ring;
+end;
+

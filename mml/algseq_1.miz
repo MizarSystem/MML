@@ -3,7 +3,7 @@
 ::  by Micha{\l} Muzalewski and Les{\l}aw W. Szczerba
 ::
 :: Received September 13, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,8 +18,8 @@ environ
  vocabularies NUMBERS, NAT_1, CARD_1, ARYTM_3, XBOOLE_0, XXREAL_0, TARSKI,
       STRUCT_0, FUNCT_1, SUPINF_2, FUNCOP_1, SUBSET_1, FINSEQ_1, PRE_POLY,
       RELAT_1, AFINSQ_1, ALGSEQ_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, RELAT_1,
-      FUNCT_1, FUNCOP_1, STRUCT_0, FUNCT_2, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, ORDINAL1, NAT_1,
+      RELAT_1, FUNCT_1, FUNCOP_1, STRUCT_0, FUNCT_2, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, RLVECT_1, RELSET_1;
  registrations ORDINAL1, RELSET_1, XREAL_0, STRUCT_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
@@ -67,7 +67,7 @@ definition
 
   let F be sequence of R;
   attr F is finite-Support means
-  :Def2:
+  :Def1:
   ex n st for i st i >= n holds F.i = 0. R;
 end;
 
@@ -97,19 +97,19 @@ definition
   let R,p;
   let k be Nat;
   pred k is_at_least_length_of p means
-  :Def3:
+  :Def2:
   for i st i>=k holds p.i=0.R;
 end;
 
 Lm1: ex m st m is_at_least_length_of p
 proof
   consider n such that
-A1: for i st i >= n holds p.i = 0.R by Def2;
+A1: for i st i >= n holds p.i = 0.R by Def1;
   take n;
-  thus thesis by A1,Def3;
+  thus thesis by A1,Def2;
 end;
 
-Lm3: k is_at_least_length_of p & (for m st m is_at_least_length_of p holds k<=
+Lm2: k is_at_least_length_of p & (for m st m is_at_least_length_of p holds k<=
 m) & l is_at_least_length_of p & (for m st m is_at_least_length_of p holds l<=m
 ) implies k=l
 proof
@@ -123,7 +123,7 @@ end;
 definition
   let R,p;
   func len p -> Element of NAT means
-  :Def4:
+  :Def3:
   it is_at_least_length_of p & for m st m is_at_least_length_of p holds it<=m;
   existence
 proof
@@ -135,19 +135,19 @@ A2: k is_at_least_length_of p & for n st n is_at_least_length_of p holds k<=n;
   take k;
   thus thesis by A2,ORDINAL1:def 12;
 end;
-  uniqueness by Lm3;
+  uniqueness by Lm2;
 end;
 
-theorem Th22:
+theorem Th8:
   i>=len p implies p.i=0.R
 proof
   assume
 A1: i>=len p;
-  len p is_at_least_length_of p by Def4;
-  hence thesis by A1,Def3;
+  len p is_at_least_length_of p by Def3;
+  hence thesis by A1,Def2;
 end;
 
-theorem Th24:
+theorem Th9:
   (for i st i < k holds p.i<>0.R) implies len p>=k
 proof
   assume
@@ -157,22 +157,22 @@ A1: for i st i < k holds p.i<>0.R;
     let i;
     assume i<k;
     then p.i<>0.R by A1;
-    hence thesis by Th22;
+    hence thesis by Th8;
   end;
   hence thesis;
 end;
 
-theorem Th25:
+theorem Th10:
   len p=k+1 implies p.k<>0.R
 proof
   assume
 A1: len p=k+1;
   then k<len p by XREAL_1:29;
-  then not k is_at_least_length_of p by Def4;
+  then not k is_at_least_length_of p by Def3;
   then consider i such that
 A2: i>=k and
-A3: p.i<>0.R by Def3;
-  i<k+1 by A1,A3,Th22;
+A3: p.i<>0.R by Def2;
+  i<k+1 by A1,A3,Th8;
   then i<=k by NAT_1:13;
   hence thesis by A2,A3,XXREAL_0:1;
 end;
@@ -214,7 +214,7 @@ A2: for x being Element of NAT holds x<A()&f.x=F(x) or x>=A()&f.x=0.R();
     i in NAT by ORDINAL1:def 12;
     hence thesis by A2;
   end;
-  then reconsider f as AlgSequence of R() by Def2;
+  then reconsider f as AlgSequence of R() by Def1;
   take f;
   now
     let i;
@@ -223,14 +223,14 @@ A3: i>=A();
     i in NAT by ORDINAL1:def 12;
     hence f.i=0.R() by A2,A3;
   end;
-  then A() is_at_least_length_of f by Def3;
-  hence len f <= A() by Def4;
+  then A() is_at_least_length_of f by Def2;
+  hence len f <= A() by Def3;
   let k;
   k in NAT by ORDINAL1:def 12;
   hence thesis by A2;
 end;
 
-theorem Th28:
+theorem Th12:
   len p = len q & (for k st k < len p holds p.k = q.k) implies p=q
 proof
   assume that
@@ -245,8 +245,8 @@ A3: for x st x in NAT holds p.x=q.x
     proof
       assume
 A4:   k >= len p;
-      then p.k = 0.R by Th22;
-      hence thesis by A1,A4,Th22;
+      then p.k = 0.R by Th8;
+      hence thesis by A1,A4,Th8;
     end;
     hence thesis by A2;
   end;
@@ -269,7 +269,7 @@ A2: t <> 0.R by ZFMISC_1:35;
   consider p being AlgSequence of R such that
 A3: len p <= k & for i st i < k holds p.i=F(i) from AlgSeqLambdaF;
   for i st i < k holds p.i<>0.R by A2,A3;
-  then len p >= k by Th24;
+  then len p >= k by Th9;
   then len p = k by A3,XXREAL_0:1;
   hence thesis;
 end;
@@ -283,7 +283,7 @@ reserve x for Element of R;
 definition
   let R,x;
   func <%x%> -> AlgSequence of R means
-  :Def6:
+  :Def5:
   len it <= 1 & it.0 = x;
   existence
   proof
@@ -304,10 +304,10 @@ A6: 1 = 0 + 1;
 A7: now
       assume
 A8:   x=0.R;
-      then len p<1 by A2,A3,A6,Th25,XXREAL_0:1;
+      then len p<1 by A2,A3,A6,Th10,XXREAL_0:1;
       then
 A9:   len p=0 by NAT_1:14;
-      len q<1 by A4,A5,A6,A8,Th25,XXREAL_0:1;
+      len q<1 by A4,A5,A6,A8,Th10,XXREAL_0:1;
       hence len p=len q by A9,NAT_1:14;
     end;
 A10: for k st k < len p holds p.k = q.k
@@ -321,50 +321,50 @@ A10: for k st k < len p holds p.k = q.k
     now
       assume
 A11:  x<>0.R;
-      then len p=1 by A2,A3,A6,Th22,NAT_1:8;
-      hence len p=len q by A4,A5,A6,A11,Th22,NAT_1:8;
+      then len p=1 by A2,A3,A6,Th8,NAT_1:8;
+      hence len p=len q by A4,A5,A6,A11,Th8,NAT_1:8;
     end;
-    hence thesis by A7,A10,Th28;
+    hence thesis by A7,A10,Th12;
   end;
 end;
 
-Lm4: p=<%0.R%> implies len p = 0
+Lm3: p=<%0.R%> implies len p = 0
 proof
   assume p=<%0.R%>;
   then
-A1: p.0=0.R & len p<=1 by Def6;
+A1: p.0=0.R & len p<=1 by Def5;
   0+1=1;
-  then len p<1 by A1,Th25,XXREAL_0:1;
+  then len p<1 by A1,Th10,XXREAL_0:1;
   hence thesis by NAT_1:14;
 end;
 
-theorem Th31:
+theorem Th14:
   p=<%0.R%> iff len p = 0
 proof
-  thus p=<%0.R%> implies len p = 0 by Lm4;
+  thus p=<%0.R%> implies len p = 0 by Lm3;
   thus len p=0 implies p=<%0.R%>
   proof
     assume len p=0;
-    then len p=len <%0.R%> & for k st k < len p holds p.k = <%0.R%>.k by Lm4,
+    then len p=len <%0.R%> & for k st k < len p holds p.k = <%0.R%>.k by Lm3,
 NAT_1:2;
-    hence thesis by Th28;
+    hence thesis by Th12;
   end;
 end;
 
 theorem
-  p=<%0.R%> iff support p = {} by Th31;
+  p=<%0.R%> iff support p = {} by Th14;
 
-theorem Th33:
+theorem Th16:
   <%0.R%>.i=0.R
 proof
   set p0=<%0.R%>;
   now
     assume i<>0;
     then i>0 by NAT_1:3;
-    then i>=len p0 by Th31;
-    hence thesis by Th22;
+    then i>=len p0 by Th14;
+    hence thesis by Th8;
   end;
-  hence thesis by Def6;
+  hence thesis by Def5;
 end;
 
 theorem
@@ -382,7 +382,7 @@ A1: p=<%0.R%>;
 A2:   i in dom p and
 A3:   x = p.i by FUNCT_1:def 3;
       reconsider i as Element of NAT by A2,FUNCT_2:def 1;
-      p.i=0.R by A1,Th33;
+      p.i=0.R by A1,Th16;
       hence thesis by A3,TARSKI:def 1;
     end;
     thus {0.R} c= rng p
@@ -391,7 +391,7 @@ A3:   x = p.i by FUNCT_1:def 3;
       assume x in {0.R};
       then x = 0.R by TARSKI:def 1;
       then
-A4:   p.0 = x by A1,Def6;
+A4:   p.0 = x by A1,Def5;
       dom p = NAT by FUNCT_2:def 1;
       hence thesis by A4,FUNCT_1:def 3;
     end;
@@ -409,9 +409,9 @@ A5: rng p={0.R};
       hence thesis by A5,TARSKI:def 1;
     end;
     then
-A6: 0 is_at_least_length_of p by Def3;
+A6: 0 is_at_least_length_of p by Def2;
     for m st m is_at_least_length_of p holds 0<=m by NAT_1:2;
-    then len p=0 by A6,Def4;
-    hence thesis by Th31;
+    then len p=0 by A6,Def3;
+    hence thesis by Th14;
   end;
 end;

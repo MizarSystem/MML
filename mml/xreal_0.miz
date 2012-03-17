@@ -2,7 +2,7 @@
 ::  by Library Committee
 ::
 :: Received February 11, 2003
-:: Copyright (c) 2003-2011 Association of Mizar Users
+:: Copyright (c) 2003-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -24,7 +24,7 @@ environ
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XCMPLX_0, XXREAL_0, ARYTM_3;
  theorems XBOOLE_0, ARYTM_1, ZFMISC_1, TARSKI, ARYTM_2, ARYTM_0, XCMPLX_0,
-      NUMBERS, XXREAL_0, ORDINAL1;
+      NUMBERS, XXREAL_0, ORDINAL1, XTUPLE_0, XREGULAR;
 
 begin
 
@@ -36,12 +36,21 @@ definition
 end;
 
 registration
+  cluster -> real for Element of REAL;
+  coherence
+  proof
+    let r be Element of REAL;
+    thus r in REAL;
+  end;
+end;
+
+registration
   cluster -infty -> non real;
   coherence
   proof
 A1: {0,REAL} in {{0,REAL},{0}} & REAL in {0,REAL} by TARSKI:def 2;
     assume -infty in REAL;
-    hence contradiction by A1,ORDINAL1:1;
+    hence contradiction by A1,XREGULAR:7;
   end;
   cluster +infty -> non real;
   coherence
@@ -112,15 +121,13 @@ A2: -x = [*y1,y2*] and
 A3: 0 = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
     +(x2,y2) = 0 & x2 = 0 by A1,A3,Lm1;
     then y2 = 0 by ARYTM_0:11;
-    then -x = y1 by A2,ARYTM_0:def 5;
-    hence thesis by Def1;
+    hence thesis by A2,ARYTM_0:def 5;
   end;
   cluster x" -> real;
   coherence
   proof
     per cases;
-    suppose
-      x = 0;
+    suppose x = 0;
       hence thesis by XCMPLX_0:def 7;
     end;
     suppose
@@ -134,8 +141,7 @@ A7:   1 = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by XCMPLX_0:def 5
       +(*(x1,y2),*(x2,y1)) = 0 & x2 = 0 by A5,A7,Lm1;
       then 0 = *(x1,y2) by ARYTM_0:11,12;
       then x1 = 0 or y2 = 0 by ARYTM_0:21;
-      then x" = y1 by A4,A5,A6,Lm1,ARYTM_0:def 5;
-      hence thesis by Def1;
+      hence thesis by A4,A5,A6,Lm1,ARYTM_0:def 5;
     end;
   end;
   let y be real number;
@@ -147,8 +153,7 @@ A8: x = [*x1,x2*] & y = [*y1,y2*] and
 A9: x+y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
     x2 = 0 & y2 = 0 by A8,Lm1;
     then +(x2,y2) = 0 by ARYTM_0:11;
-    then x + y = +(x1,y1) by A9,ARYTM_0:def 5;
-    hence thesis by Def1;
+    hence thesis by A9,ARYTM_0:def 5;
   end;
   cluster x * y -> real;
   coherence
@@ -169,7 +174,7 @@ A15: opp*(x2,y2) = 0 by ARYTM_0:15;
     then +(*(x1,y2),*(x2,y1)) = 0 by A13,ARYTM_0:11;
     then x * y = +(*(x1,y1),0) by A12,A15,ARYTM_0:def 5
       .= *(x1,y1) by ARYTM_0:11;
-    hence thesis by Def1;
+    hence thesis;
   end;
 end;
 
@@ -220,8 +225,7 @@ A1: r <= s and
 A2: s <= r;
 A3: r in REAL & s in REAL by Def1;
   per cases by A3,NUMBERS:def 1,XBOOLE_0:def 3;
-  suppose
-    r in REAL+ & s in REAL+;
+  suppose r in REAL+ & s in REAL+;
     then
     (ex r9,s9 being Element of REAL+ st r = r9 & s = s9 & r9 <=' s9 )& ex
 s99, r99 being Element of REAL+ st s = s99 & r = r99 & s99 <=' r99 by A1,A2,
@@ -250,7 +254,7 @@ A8: s9 <=' r9 by A1,A6,XXREAL_0:def 5;
     consider s99,r99 being Element of REAL+ such that
 A9: s = [0,s99] & r = [0,r99] and
 A10: r99 <=' s99 by A2,A6,XXREAL_0:def 5;
-    r9 = r99 & s9 = s99 by A7,A9,ZFMISC_1:27;
+    r9 = r99 & s9 = s99 by A7,A9,XTUPLE_0:1;
     hence thesis by A8,A9,A10,ARYTM_1:4;
   end;
 end;
@@ -342,8 +346,8 @@ A34: s99 <=' x99 by A8,A26,A27,XXREAL_0:def 5;
 A35: r = [0,x9] and
 A36: t = t9 and
 A37: +(x1,z1) = t9 - x9 by A26,A28,ARYTM_0:def 1;
-A38: x9 = x99 by A32,A35,ZFMISC_1:27;
-A39: s9 = s99 by A33,A29,ZFMISC_1:27;
+A38: x9 = x99 by A32,A35,XTUPLE_0:1;
+A39: s9 = s99 by A33,A29,XTUPLE_0:1;
     now
       per cases;
       suppose
@@ -396,7 +400,7 @@ A54: +(y1,z1) = s9 - t99 by A50,A51,ARYTM_0:def 1;
 A55: r = x9 and
 A56: t = [0,t9] and
 A57: +(x1,z1) = x9 - t9 by A49,A51,ARYTM_0:def 1;
-A58: t9 = t99 by A56,A53,ZFMISC_1:27;
+A58: t9 = t99 by A56,A53,XTUPLE_0:1;
 A59: ex x99,s99 being Element of REAL+ st r = x99 & s = s99 & x99 <=' s99
     by A8,A49,A50,XXREAL_0:def 5;
     now
@@ -453,7 +457,7 @@ A74: +(x1,z1) in [:{0},REAL+:] by A73,Lm3,ZFMISC_1:87;
     s = s9 and
 A75: t = [0,t99] and
 A76: +(y1,z1) = s9 - t99 by A70,A71,ARYTM_0:def 1;
-A77: t9 = t99 by A72,A75,ZFMISC_1:27;
+A77: t9 = t99 by A72,A75,XTUPLE_0:1;
     now
       per cases;
       suppose
@@ -492,13 +496,13 @@ A89: r = [0,x9] and
 A90: t = [0,t9] and
 A91: +(x1,z1) = [0,x9 + t9] by ARYTM_0:def 1;
 A92: +(x1,z1) in [:{0},REAL+:] by A91,Lm3,ZFMISC_1:87;
-A93: t9 = t99 by A90,A86,ZFMISC_1:27;
+A93: t9 = t99 by A90,A86,XTUPLE_0:1;
     consider x99,s99 being Element of REAL+ such that
 A94: r = [0,x99] and
 A95: s = [0,s99] and
 A96: s99 <=' x99 by A8,A82,A83,XXREAL_0:def 5;
-A97: s9 = s99 by A95,A85,ZFMISC_1:27;
-    x9 = x99 by A94,A89,ZFMISC_1:27;
+A97: s9 = s99 by A95,A85,XTUPLE_0:1;
+    x9 = x99 by A94,A89,XTUPLE_0:1;
     then s9 + t9 <=' x9 + t99 by A96,A97,A93,ARYTM_1:7;
     hence thesis by A6,A7,A91,A87,A93,A92,A88,Lm2;
   end;
@@ -559,7 +563,7 @@ A22: t9 <=' s99 by A2,A18,A19,XXREAL_0:def 5;
 A23: r = [0,x9] and
 A24: s = [0,s9] and
 A25: s9 <=' x9 by A1,A17,A18,XXREAL_0:def 5;
-    s9 = s99 by A24,A20,ZFMISC_1:27;
+    s9 = s99 by A24,A20,XTUPLE_0:1;
     then t9 <=' x9 by A25,A22,ARYTM_1:3;
     hence thesis by A17,A19,A23,A21,Lm2;
   end;
@@ -685,13 +689,13 @@ A28: *(y1,z1) in [:{0},REAL+:] by A27,Lm3,ZFMISC_1:87;
 A29: r = [0,x99] and
 A30: s = [0,s99] and
 A31: s99 <=' x99 by A1,A23,A24,XXREAL_0:def 5;
-A32: s9 = s99 by A30,A25,ZFMISC_1:27;
+A32: s9 = s99 by A30,A25,XTUPLE_0:1;
     consider x9,t9 being Element of REAL+ such that
 A33: r = [0,x9] and
 A34: t = t9 and
 A35: *(x1,z1) = [0,t9 *' x9] by A3,A13,A23,ARYTM_0:def 2;
 A36: *(x1,z1) in [:{0},REAL+:] by A35,Lm3,ZFMISC_1:87;
-    x9 = x99 by A29,A33,ZFMISC_1:27;
+    x9 = x99 by A29,A33,XTUPLE_0:1;
     then s9 *' t9 <=' x9 *' t9 by A31,A32,ARYTM_1:8;
     hence contradiction by A11,A12,A34,A35,A26,A27,A36,A28,Lm2;
   end;
@@ -1015,8 +1019,6 @@ registration
   cluster max(r,s) -> real;
   coherence by XXREAL_0:16;
 end;
-
-begin
 
 definition
   let r,s be real number;

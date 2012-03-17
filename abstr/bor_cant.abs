@@ -2,7 +2,7 @@
 ::  by Peter Jaeger
 ::
 :: Received January 31, 2011
-:: Copyright (c) 2011 Association of Mizar Users
+:: Copyright (c) 2011-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,17 +20,18 @@ environ
       XBOOLE_0, SUBSET_1, PROB_2, SERIES_1, NAT_1, FUNCT_1, PROB_3, SERIES_3,
       LIMFUNC1, SETLIM_1, XXREAL_2, FUNCOP_1;
  notations XXREAL_0, XCMPLX_0, XREAL_0, ORDINAL1, REAL_1, XBOOLE_0, SUBSET_1,
-      NUMBERS, NAT_1, COMPLEX1, SEQ_1, SEQ_2, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FUNCOP_1, PROB_1, PROB_2, SETLIM_1, SERIES_1, PROB_3,
-      VALUED_0, VALUED_1, ZFMISC_1, LIMFUNC1, SERIES_3, NEWTON, ABIAN, SIN_COS;
+      NUMBERS, NAT_1, COMPLEX1, SEQ_1, COMSEQ_2, SEQ_2, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, PROB_1, PROB_2, SETLIM_1,
+      SERIES_1, PROB_3, VALUED_0, VALUED_1, ZFMISC_1, LIMFUNC1, SERIES_3,
+      NEWTON, ABIAN, SIN_COS;
  constructors RELSET_1, BINARITH, SQUARE_1, COMSEQ_3, RVSUM_1, SIN_COS, REAL_1,
       LIMFUNC1, SETLIM_1, SEQ_2, SERIES_1, KURATO_0, RINFSUP1, SEQ_1, PROB_3,
       SERIES_3, ABIAN, NEWTON, NUMBERS, NAT_D, SEQ_4, RFUNCT_1, RCOMP_1,
-      SEQM_3, FUNCT_4;
+      SEQM_3, FUNCT_4, COMSEQ_2;
  registrations FUNCT_2, FINSEQ_2, XCMPLX_0, XBOOLE_0, SUBSET_1, ORDINAL1,
       NUMBERS, XREAL_0, NAT_1, MEMBERED, VALUED_0, VALUED_1, ABIAN, XXREAL_0,
       RELAT_1, SEQ_4, FINSEQ_1, NEWTON, FUNCOP_1, PROB_2, PROB_3, SETLIM_1,
-      RELSET_1;
+      RELSET_1, COMSEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -160,29 +161,6 @@ definition
   for n being Element of NAT holds it.n = Union (A^\n);
 end;
 
-:::definition
-:::  let Omega be non empty set,
-:::  Sigma be SigmaField of Omega,
-:::  A be SetSequence of Sigma;
-:::  func @Union_Shift_Seq A -> SetSequence of Sigma equals
-:::  Union_Shift_Seq A;
-:::  coherence
-:::  proof
-:::    defpred P[set] means (Union_Shift_Seq A).$1 is Event of Sigma;
-:::    (Union_Shift_Seq A).0 = Union (A^\0) by Def9; then
-:::    A1: P[0] by PROB_1:46;
-:::    A2: for k be Element of NAT st P[k] holds P[k+1]
-:::    proof
-:::      let k be Element of NAT;
-:::      assume (Union_Shift_Seq A).k is Event of Sigma;
-:::      Union (A^\(k+1)) in Sigma by PROB_1:46;
-:::      hence thesis by Def9;
-:::    end;
-:::    for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
-:::    hence thesis by PROB_1:57;
-:::  end;
-:::end;
-
 registration
   let Omega be non empty set,
   Sigma be SigmaField of Omega,
@@ -204,53 +182,6 @@ definition
 :: BOR_CANT:def 9
   for n being Element of NAT holds it.n = Intersection (A^\n);
 end;
-
-:::definition
-:::  let Omega be non empty set,
-:::  Sigma be SigmaField of Omega,
-:::  A be SetSequence of Sigma;
-:::  func @Intersect_Shift_Seq A -> SetSequence of Sigma equals
-:::  Intersect_Shift_Seq A;
-:::coherence
-:::  proof
-:::    defpred P[set] means (Intersect_Shift_Seq A).$1 is Event of Sigma;
-:::    for n being Element of NAT holds (Complement (A^\0)).n
-:::     is Event of Sigma
-:::    proof
-:::     let n be Element of NAT;
-:::     ((A^\0).n)` is Event of Sigma by PROB_1:50;
-:::     hence thesis by PROB_1:def 4;
-:::    end; then
-:::    A1: (Complement (A^\0)) is SetSequence of Sigma
-:::        by PROB_1:57;
-:::    A2: Union Complement (A^\0) is Event of Sigma
-:::     by A1,PROB_1:58;
-:::    (Intersect_Shift_Seq A).0 =
-:::     Intersection (A^\0) by Def12; then
-:::   A3: P[0] by A2,PROB_1:50;
-:::   A4: for k be Element of NAT st P[k] holds P[k+1]
-:::       proof
-:::        let k be Element of NAT;
-:::        assume (Intersect_Shift_Seq A).k is Event of Sigma;
-:::        for n being Element of NAT holds
-:::             (Complement (A^\(k+1))).n is Event of Sigma
-:::             proof
-:::              let n be Element of NAT;
-:::              ((A^\(k+1)).n)` is Event of Sigma by PROB_1:50;
-:::              hence thesis by PROB_1:def 4;
-:::             end; then
-:::        A5: (Complement (A^\(k+1))) is SetSequence of Sigma
-:::               by PROB_1:57;
-:::        A6: Union Complement (A^\(k+1)) is Event of Sigma
-:::         by A5,PROB_1:58;
-:::        (Intersect_Shift_Seq A).(k+1) = Intersection (A^\(k+1))
-:::         by Def12;
-:::        hence thesis by A6,PROB_1:50;
-:::       end;
-:::    for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
-:::    hence thesis by PROB_1:57;
-:::  end;
-:::end;
 
 registration
   let Omega be non empty set,

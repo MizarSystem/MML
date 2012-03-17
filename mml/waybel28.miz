@@ -2,7 +2,7 @@
 ::  by Bart{\l}omiej Skorulski
 ::
 :: Received January 6, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -202,7 +202,7 @@ definition
   uniqueness;
 end;
 
-theorem Th7:
+theorem Th6:
   for L being non empty 1-sorted, N being non empty NetStr over L,
   f being Function of N, N holds the carrier of N * f = the carrier of N
 proof
@@ -212,7 +212,7 @@ proof
   hence thesis;
 end;
 
-theorem Th8:
+theorem Th7:
   for L being non empty 1-sorted, N being non empty NetStr over L,
 f being Function of N,N holds N * f = NetStr(#the carrier of N,the InternalRel
     of N,(the mapping of N)*f#)
@@ -223,7 +223,7 @@ proof
   hence thesis by Def2;
 end;
 
-theorem Th9:
+theorem Th8:
   for L being non empty 1-sorted, N being transitive directed non
   empty RelStr, f being Function of the carrier of N,the carrier of L holds
   NetStr (#the carrier of N,the InternalRel of N,f#) is net of L
@@ -242,16 +242,16 @@ registration
   Function of the carrier of N,the carrier of L;
   cluster NetStr (#the carrier of N,the InternalRel of N,f#) -> transitive
     directed non empty;
-  correctness by Th9;
+  correctness by Th8;
 end;
 
-theorem Th10:
+theorem Th9:
   for L being non empty 1-sorted, N being net of L, p being
   Function of N,N holds N * p is net of L
 proof
   let L be non empty 1-sorted, N be net of L, p be Function of N,N;
   N * p = NetStr(#the carrier of N,the InternalRel of N,(the mapping of N
-    ) * p #) by Th8;
+    ) * p #) by Th7;
   hence thesis;
 end;
 
@@ -259,10 +259,10 @@ registration
   let L be non empty 1-sorted, N be net of L;
   let p be Function of N,N;
   cluster N * p -> transitive directed;
-  correctness by Th10;
+  correctness by Th9;
 end;
 
-theorem Th11:
+theorem Th10:
   for L being non empty 1-sorted, N being net of L, p being
   Function of N,N st N in NetUniv L holds N * p in NetUniv L
 proof
@@ -271,7 +271,7 @@ proof
   then
 A1: ex N1 being strict net of L st N1 = N & the carrier of N1 in
   the_universe_of the carrier of L by YELLOW_6:def 11;
-  the carrier of N * p = the carrier of N by Th7;
+  the carrier of N * p = the carrier of N by Th6;
   hence thesis by A1,YELLOW_6:def 11;
 end;
 
@@ -309,7 +309,7 @@ A5: for p being Element of N st n <= p holds m <= f.p by A4;
   hence thesis by YELLOW_6:def 9;
 end;
 
-theorem Th13:
+theorem Th12:
   for L being non empty 1-sorted, N being net of L, p being
   greater_or_equal_to_id Function of N,N holds N * p is subnet of N
 proof
@@ -320,17 +320,17 @@ proof
 mapping of N)*f & for m being Element of N ex n being Element of (N * p) st for
   k being Element of (N * p) st n <= k holds m <= f.k
   proof
-    the carrier of N * p = the carrier of N by Th7;
+    the carrier of N * p = the carrier of N by Th6;
     then reconsider f=p as Function of (N * p), N;
     take f;
     thus the mapping of (N * p) = (the mapping of N)*f by Def2;
     let m be Element of N;
-    reconsider n=m as Element of (N * p) by Th7;
+    reconsider n=m as Element of (N * p) by Th6;
     take n;
     let k be Element of (N * p);
     assume
 A1: n <= k;
-    reconsider k1 = k as Element of N by Th7;
+    reconsider k1 = k as Element of N by Th6;
 A2: k1 <= p.k1 by Def1;
     the RelStr of N*p = the RelStr of N by Def2;
     then m <= k1 by A1,YELLOW_0:1;
@@ -344,16 +344,16 @@ definition
   let N be net of L;
   let p be greater_or_equal_to_id Function of N,N;
   redefine func N * p -> strict subnet of N;
-  correctness by Th13;
+  correctness by Th12;
 end;
 
 theorem ::3.1 Proposition (2)=>(3)
   for L being complete LATTICE, N being net of L, x being Element of L
 st N in NetUniv L holds (x=lim_inf N & for M being subnet of N st M in NetUniv
   L holds x >= inf M) implies x=lim_inf N & for p being greater_or_equal_to_id
-  Function of N,N holds x >= inf (N * p) by Th11;
+  Function of N,N holds x >= inf (N * p) by Th10;
 
-theorem Th15:
+theorem Th14:
   for L being complete LATTICE, N being net of L, x being Element
   of L holds (x=lim_inf N & for p being greater_or_equal_to_id Function of N,N
   holds x >= inf (N * p) ) implies for M being subnet of N holds x = lim_inf M
@@ -445,8 +445,8 @@ A21: {(N*p).j where j is Element of (N*p):not contradiction} c= {M.k where
       assume y in {(N*p).j where j is Element of (N*p): not contradiction};
       then consider j being Element of (N*p) such that
 A22:  y = (N*p).j;
-      reconsider j9=j as Element of N by Th7;
-A23:  the carrier of (N*p)= the carrier of N by Th7;
+      reconsider j9=j as Element of N by Th6;
+A23:  the carrier of (N*p)= the carrier of N by Th6;
       y = (the mapping of (N*p)).j by A22,WAYBEL_0:def 8
         .= ((the mapping of N)*(f*g)).j by Def2
         .= ((the mapping of M)*g).j by A3,RELAT_1:36
@@ -598,13 +598,13 @@ A2: for M being subnet of N st M in NetUniv L holds x = lim_inf M;
   then for M being subnet of N st M in NetUniv L holds x >= inf M by A1,Th3;
   then
 A3: for p being greater_or_equal_to_id Function of N,N holds x >= inf (N * p
-  ) by A1,Th11;
+  ) by A1,Th10;
   x=lim_inf N by A1,A2,Th3;
-  then for M being subnet of N holds x = lim_inf M by A3,Th15;
+  then for M being subnet of N holds x = lim_inf M by A3,Th14;
   hence thesis by A1,Def3;
 end;
 
-theorem Th17:
+theorem Th16:
   for L being non empty RelStr, N being constant net of L, M being
   subnet of N holds M is constant & the_value_of N = the_value_of M
 proof
@@ -657,8 +657,8 @@ proof
 A1: for M being subnet of N holds the_value_of N = lim_inf M
   proof
     let M be subnet of N;
-A2: M is constant by Th17;
-    thus the_value_of N = the_value_of M by Th17
+A2: M is constant by Th16;
+    thus the_value_of N = the_value_of M by Th16
       .= lim_inf M by A2,WAYBEL11:23;
   end;
   assume N in NetUniv L;
@@ -702,9 +702,9 @@ A3: ex N1 being strict net of L st N1=N & the carrier of N1 in
   not for M being subnet of N holds x = lim_inf M by A1,A2,Def3;
   then
 A4: not (x=lim_inf N & for p being greater_or_equal_to_id Function of N,N
-  holds x >= inf (N * p)) by Th15;
+  holds x >= inf (N * p)) by Th14;
 A5: lim_inf-Convergence L c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 18;
-  per cases by A1,A4,Th11;
+  per cases by A1,A4,Th10;
   suppose
 A6: not x=lim_inf N & x<=lim_inf N;
     reconsider N9=N as subnet of N by YELLOW_6:14;
@@ -778,7 +778,7 @@ A1: lim_inf-Convergence L c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 18;
   hence thesis by A1,ZFMISC_1:87;
 end;
 
-theorem Th22:
+theorem Th21:
   for L being non empty 1-sorted, C1,C2 being Convergence-Class of
 L holds C1 c= C2 implies the topology of ConvergenceSpace C2 c= the topology of
   ConvergenceSpace C1
@@ -814,7 +814,7 @@ A4: p in V1;
   hence thesis by YELLOW_6:def 24;
 end;
 
-theorem Th23:
+theorem Th22:
   for L being non empty reflexive RelStr holds lim_inf-Convergence
   L c= Scott-Convergence L
 proof
@@ -835,7 +835,7 @@ A4: N in NetUniv L by A2,A1,A3,ZFMISC_1:87;
   hence thesis by A3,A4,WAYBEL11:def 8;
 end;
 
-theorem Th24:
+theorem Th23:
   for X,Y being set holds X c= Y implies X in the_universe_of Y
 proof
   let X,Y be set;
@@ -850,18 +850,18 @@ A2: the_transitive-closure_of Y in Tarski-Class the_transitive-closure_of Y
   hence thesis by A2,CLASSES1:def 1;
 end;
 
-theorem Th25:
+theorem Th24:
   for L being non empty transitive reflexive RelStr, D being
   directed non empty Subset of L holds Net-Str D in NetUniv L
 proof
   let L be non empty transitive reflexive RelStr;
   let D be directed non empty Subset of L;
-  D in the_universe_of the carrier of L & the carrier of Net-Str D = D by Th24,
+  D in the_universe_of the carrier of L & the carrier of Net-Str D = D by Th23,
 WAYBEL21:32;
   hence thesis by YELLOW_6:def 11;
 end;
 
-theorem Th26:
+theorem Th25:
   for L being complete LATTICE, D being directed non empty Subset
   of L holds for M being subnet of Net-Str D holds lim_inf M = sup D
 proof
@@ -893,21 +893,21 @@ A4: g.i in D by WAYBEL21:32;
   end;
   then lim_inf Net-Str D =sup D & for p being greater_or_equal_to_id Function
   of Net-Str(D),Net-Str(D) holds sup D >= inf (Net-Str(D)*p) by WAYBEL17:10;
-  hence thesis by Th15;
+  hence thesis by Th14;
 end;
 
-theorem Th27:
+theorem Th26:
   for L being non empty complete LATTICE, D being directed non
   empty Subset of L holds [Net-Str D,sup D] in lim_inf-Convergence L
 proof
   let L be non empty complete LATTICE;
   let D be directed non empty Subset of L;
   Net-Str D in NetUniv L & for M being subnet of Net-Str D holds lim_inf M
-  = sup D by Th25,Th26;
+  = sup D by Th24,Th25;
   hence thesis by Def3;
 end;
 
-theorem Th28:
+theorem Th27:
   for L being complete LATTICE, U1 being Subset of L holds U1 in
   xi(L) implies U1 is property(S)
 proof
@@ -924,7 +924,7 @@ A1: ex V being Subset of L st U1=V & for p being Element of L st p in V for N
   let D be non empty directed Subset of L;
   assume
 A2: sup D in U1;
-  [Net-Str D,sup D] in lim_inf-Convergence L by Th27;
+  [Net-Str D,sup D] in lim_inf-Convergence L by Th26;
   then (Net-Str D) is_eventually_in U1 by A1,A2;
   then consider y being Element of (Net-Str D) such that
 A3: for x being Element of (Net-Str D) st y <= x holds (Net-Str D).x in
@@ -948,7 +948,7 @@ A7: Net-Str D is full SubRelStr of L by WAYBEL21:32;
   hence thesis by A3,A6,A7,YELLOW_0:60;
 end;
 
-theorem Th29:
+theorem Th28:
   for L being non empty reflexive RelStr, A being Subset of L
   holds A in sigma L implies A in xi L
 proof
@@ -956,11 +956,11 @@ proof
   assume
 A1: A in sigma L;
   the topology of ConvergenceSpace Scott-Convergence L c= the topology of
-  ConvergenceSpace lim_inf-Convergence L by Th22,Th23;
+  ConvergenceSpace lim_inf-Convergence L by Th21,Th22;
   hence thesis by A1;
 end;
 
-theorem Th30:
+theorem Th29:
   for L being complete LATTICE, A being Subset of L st A is upper
   holds A in xi L implies A in sigma L
 proof
@@ -973,7 +973,7 @@ A1: the RelStr of T = the RelStr of L by YELLOW_9:def 4;
   then
 A2: A9 is upper by A1,WAYBEL_0:25;
   assume A in xi L;
-  then A9 is property(S) by A1,Th28,YELLOW12:19;
+  then A9 is property(S) by A1,Th27,YELLOW12:19;
   then A9 is open by A2,WAYBEL11:15;
   then A9 in the topology of T by PRE_TOPC:def 2;
   hence thesis by YELLOW_9:51;
@@ -995,7 +995,7 @@ A3: A1` is upper;
   thus A` in xi L implies A is closed_under_directed_sups
   proof
     assume A` in xi L;
-    then A9` in sigma L by A3,A2,Th30;
+    then A9` in sigma L by A3,A2,Th29;
     then A9` in the topology of T by YELLOW_9:51;
     then A9` is open by PRE_TOPC:def 2;
     then A9 is closed by TOPS_1:3;
@@ -1010,5 +1010,5 @@ A4: A9 is directly_closed by A2,YELLOW12:20;
   then A9` is open by TOPS_1:3;
   then A9` in the topology of T by PRE_TOPC:def 2;
   then A` in sigma L by A2,YELLOW_9:51;
-  hence thesis by Th29;
+  hence thesis by Th28;
 end;

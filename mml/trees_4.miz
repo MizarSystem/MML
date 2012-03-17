@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received October 8, 1993
-:: Copyright (c) 1993-2011 Association of Mizar Users
+:: Copyright (c) 1993-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,9 +18,9 @@ environ
       TREES_1, XXREAL_0, ARYTM_3, CARD_1, FUNCOP_1, XBOOLE_0, TREES_3,
       ZFMISC_1, NAT_1, FINSEQ_2, TREES_A, ORDINAL4, FUNCT_6, FINSEQ_4, MCART_1,
       PARTFUN1, TREES_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
-      FUNCT_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSEQ_1, FINSEQ_2, TREES_1,
-      TREES_2, FUNCT_6, TREES_3, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, NAT_1,
+      RELAT_1, FUNCT_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSEQ_1, FINSEQ_2,
+      TREES_1, TREES_2, FUNCT_6, TREES_3, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FUNCT_5, FINSEQ_2,
       FUNCT_6, TREES_3, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XREAL_0,
@@ -286,18 +286,18 @@ end;
 
 definition
   let x, p such that
-A1: p is DTree-yielding;
+B1: p is DTree-yielding;
   func x-tree(p) -> DecoratedTree means
   : Def4:
   ( ex q being DTree-yielding FinSequence st p = q & dom it = tree(doms q)) &
   it.{} = x & for n st n < len p holds it|<*n*> = p.(n+1);
   existence
   proof
-A2: dom doms p = dom p by A1,TREES_3:37;
-    reconsider q = doms p as Tree-yielding FinSequence by A1;
+A1: dom doms p = dom p by B1,TREES_3:37;
+    reconsider q = doms p as Tree-yielding FinSequence by B1;
     defpred X[set,set] means $1 = {} & $2 = x or $1 <> {} &
     ex n,r st $1 = <*n*>^r & $2 = p..(n+1,r);
-A3: for y st y in tree(q) ex z st X[y,z]
+A2: for y st y in tree(q) ex z st X[y,z]
     proof
       let y;
       assume y in tree(q);
@@ -306,83 +306,83 @@ A3: for y st y in tree(q) ex z st X[y,z]
         assume y <> {};
         then consider w being (FinSequence of NAT),
         n being Element of NAT such that
-A4:     s = <*n*>^w by FINSEQ_2:130;
+A3:     s = <*n*>^w by FINSEQ_2:130;
         reconsider w as FinSequence;
         take z = p..(n+1,w);
         thus y = {} & z = x or y <> {} &
-        ex n,r st y = <*n*>^r & z = p..(n+1,r) by A4;
+        ex n,r st y = <*n*>^r & z = p..(n+1,r) by A3;
       end;
       hence thesis;
     end;
     consider T being Function such that
-A5: dom T = tree(q) & for y st y in tree(q) holds X[y,T.y]
-    from CLASSES1:sch 1(A3);
-    reconsider T as DecoratedTree by A5,TREES_2:def 8;
+A4: dom T = tree(q) & for y st y in tree(q) holds X[y,T.y]
+    from CLASSES1:sch 1(A2);
+    reconsider T as DecoratedTree by A4,TREES_2:def 8;
     take T;
     thus
     ex q being DTree-yielding FinSequence st p = q & dom T = tree(doms q)
-    by A1,A5;
+    by B1,A4;
  {} in tree(q) by TREES_1:22;
-    hence T.{} = x by A5;
-A6: len p = len q by A2,FINSEQ_3:29;
+    hence T.{} = x by A4;
+A5: len p = len q by A1,FINSEQ_3:29;
     let n;
     assume
-A7: n < len p;
-then A8: n+1 in dom p by Lm2;
-    then reconsider t = p.(n+1) as DecoratedTree by A1,TREES_3:24;
-A9: dom t = q.(n+1) by A8,FUNCT_6:22;
-A10: dom t = q.(n+1) by A8,FUNCT_6:22
-      .= (dom T)|<*n*> by A5,A6,A7,TREES_3:49;
-A11: (dom T)|<*n*> = dom (T|<*n*>) by TREES_2:def 10;
+A6: n < len p;
+then A7: n+1 in dom p by Lm2;
+    then reconsider t = p.(n+1) as DecoratedTree by B1,TREES_3:24;
+A8: dom t = q.(n+1) by A7,FUNCT_6:22;
+A9: dom t = q.(n+1) by A7,FUNCT_6:22
+      .= (dom T)|<*n*> by A4,A5,A6,TREES_3:49;
+A10: (dom T)|<*n*> = dom (T|<*n*>) by TREES_2:def 10;
  now
       let r be FinSequence of NAT;
       assume
-A12:  r in dom t;
-then   <*n*>^r in dom T by A5,A6,A7,A9,TREES_3:def 15;
+A11:  r in dom t;
+then   <*n*>^r in dom T by A4,A5,A6,A8,TREES_3:def 15;
       then consider m being Element of NAT, s being FinSequence such that
-A13:  <*n*>^r = <*m*>^s and
-A14:  T.(<*n*>^r) = p..(m+1,s) by A5;
-A15:  (<*n*>^r).1 = n & (<*m*>^s).1 = m by FINSEQ_1:41;
-then   m+1 in dom p & r = s by A7,A13,Lm2,FINSEQ_1:33;
-then   p..(m+1,s) = t.r by A12,A13,A15,FUNCT_5:38;
-      hence (T|<*n*>).r = t.r by A10,A12,A14,TREES_2:def 10;
+A12:  <*n*>^r = <*m*>^s and
+A13:  T.(<*n*>^r) = p..(m+1,s) by A4;
+A14:  (<*n*>^r).1 = n & (<*m*>^s).1 = m by FINSEQ_1:41;
+then   m+1 in dom p & r = s by A6,A12,Lm2,FINSEQ_1:33;
+then   p..(m+1,s) = t.r by A11,A12,A14,FUNCT_5:38;
+      hence (T|<*n*>).r = t.r by A9,A11,A13,TREES_2:def 10;
     end;
-    hence thesis by A10,A11,TREES_2:31;
+    hence thesis by A9,A10,TREES_2:31;
   end;
   uniqueness
   proof
     let T1, T2 be DecoratedTree;
     given q1 being DTree-yielding FinSequence such that
-A16: p = q1 and
-A17: dom T1 = tree(doms q1);
+A15: p = q1 and
+A16: dom T1 = tree(doms q1);
     assume that
-A18: T1.{} = x and
-A19: for n st n < len p holds T1|<*n*> = p.(n+1);
+A17: T1.{} = x and
+A18: for n st n < len p holds T1|<*n*> = p.(n+1);
     given q2 being DTree-yielding FinSequence such that
-A20: p = q2 & dom T2 = tree(doms q2);
+A19: p = q2 & dom T2 = tree(doms q2);
     assume that
-A21: T2.{} = x and
-A22: for n st n < len p holds T2|<*n*> = p.(n+1);
+A20: T2.{} = x and
+A21: for n st n < len p holds T2|<*n*> = p.(n+1);
  now
       let q be FinSequence of NAT;
       assume
-A23:  q in dom T1;
+A22:  q in dom T1;
   now
         assume q <> {};
         then consider s being FinSequence of NAT,
         n being Element of NAT such that
-A24:    q = <*n*>^s by FINSEQ_2:130;
-A25:    <*n*> in dom T1 by A23,A24,TREES_1:21;
-A26:    n < len doms q1 by A17,A23,A24,TREES_3:48;
-    len doms q1 = len p by A16,TREES_3:38;
-then A27:    T1|<*n*> = p.(n+1) & T2|<*n*> = p.(n+1) by A19,A22,A26;
-A28:    s in (dom T1)|<*n*> by A23,A24,A25,TREES_1:def 6;
-then     T1.q = (T1|<*n*>).s by A24,TREES_2:def 10;
-        hence T1.q = T2.q by A16,A17,A20,A24,A27,A28,TREES_2:def 10;
+A23:    q = <*n*>^s by FINSEQ_2:130;
+A24:    <*n*> in dom T1 by A22,A23,TREES_1:21;
+A25:    n < len doms q1 by A16,A22,A23,TREES_3:48;
+    len doms q1 = len p by A15,TREES_3:38;
+then A26:    T1|<*n*> = p.(n+1) & T2|<*n*> = p.(n+1) by A18,A21,A25;
+A27:    s in (dom T1)|<*n*> by A22,A23,A24,TREES_1:def 6;
+then     T1.q = (T1|<*n*>).s by A23,TREES_2:def 10;
+        hence T1.q = T2.q by A15,A16,A19,A23,A26,A27,TREES_2:def 10;
       end;
-      hence T1.q = T2.q by A18,A21;
+      hence T1.q = T2.q by A17,A20;
     end;
-    hence thesis by A16,A17,A20,TREES_2:31;
+    hence thesis by A15,A16,A19,TREES_2:31;
   end;
 end;
 

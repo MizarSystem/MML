@@ -1,0 +1,164 @@
+:: Routh's, {M}enelaus' and Generalized {C}eva's Theorems
+::  by Boris A. Shminke
+:: 
+:: Received January 16, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies PRE_TOPC, EUCLID, REAL_1, EUCLID_6, ARYTM_1, CARD_1, ARYTM_3,
+      MCART_1, RELAT_1, PARSP_2, RLTOPSP1, XXREAL_0, COMPLEX1, SIN_COS,
+      COMPLEX2, ZFMISC_1, EUCLID_3, PROJPL_1, INCSP_1, TARSKI, SQUARE_1, AFF_1,
+      SUBSET_1, PROJRED2, RUSUB_5, SUPINF_2, XBOOLE_0;
+ notations XBOOLE_0, XXREAL_0, PRE_TOPC, REAL_1, EUCLID_6, BINOP_2, NUMBERS,
+      RLVECT_1, RLTOPSP1, SIN_COS, EUCLID_3, EUCLID, ZFMISC_1, COMPLEX2,
+      TARSKI, SQUARE_1, XREAL_0, ORDINAL1, SUBSET_1, EUCLID_4, STRUCT_0;
+ constructors XXREAL_0, PRE_TOPC, REAL_1, EUCLID_6, BINOP_2, NUMBERS, RLVECT_1,
+      RLTOPSP1, SIN_COS, EUCLID_3, EUCLID, MONOID_0, ZFMISC_1, COMPLEX2,
+      TARSKI, SQUARE_1, XREAL_0, ORDINAL1, SUBSET_1, EUCLID_4, STRUCT_0;
+ registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
+      MONOID_0, STRUCT_0, EUCLID, XCMPLX_0, TOPMETR, FUNCT_2, PRE_TOPC,
+      METRIC_1, BORSUK_1, SIN_COS6, VALUED_0, RVSUM_1, RLTOPSP1, SQUARE_1,
+      REAL_1, SUBSET_1;
+ requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
+
+
+begin :: Some Properties of the Area of Triangle
+
+ reserve A, B, C, A1, B1, C1, A2, B2, C2, C3 for Point of TOP-REAL 2,
+  lambda, mu, nu, alpha, beta, gamma for Real,
+  X, Y, Z for Subset of TOP-REAL 2;
+
+notation
+ let X,Y;
+ synonym X is_parallel_to Y for X misses Y;
+end;
+
+definition
+  let X, Y, Z;
+  pred X, Y, Z are_concurrent means
+:: MENELAUS:def 1
+  ((X is_parallel_to Y & Y is_parallel_to Z & Z is_parallel_to X) or
+  ex A st (A in X & A in Y & A in Z));
+end;
+
+theorem :: MENELAUS:1
+   (A + B) `1 = A `1 + B `1 & (A + B) `2 = A `2 + B `2;
+
+theorem :: MENELAUS:2
+   (lambda * A) `1 = lambda * A `1 & (lambda * A) `2 = lambda * A `2;
+
+theorem :: MENELAUS:3
+   (- A) `1 = - A `1 & (- A) `2 = - A `2;
+
+theorem :: MENELAUS:4
+   (lambda * A + mu * B) `1 = lambda * A `1 + mu * B `1 &
+  (lambda * A + mu * B) `2 = lambda * A `2 + mu * B `2;
+
+theorem :: MENELAUS:5
+  ((- lambda) * A) `1 = - lambda * A `1 &
+  ((- lambda) * A) `2 = - lambda * A `2;
+
+theorem :: MENELAUS:6
+  (lambda * A - mu * B) `1 = lambda * A `1 - mu * B `1 &
+  (lambda * A - mu * B) `2 = lambda * A `2 - mu * B `2;
+
+theorem :: MENELAUS:7
+   the_area_of_polygon3((1 - lambda) * A + lambda * A1, B, C) =
+  (1 - lambda) * the_area_of_polygon3(A, B, C) +
+  lambda * the_area_of_polygon3(A1, B, C);
+
+theorem :: MENELAUS:8
+   (angle(A, B, C) = 0 & A, B, C are_mutually_different) implies
+  (angle(B, C, A) = PI or angle(B, A, C) = PI);
+
+theorem :: MENELAUS:9
+   A, B, C is_collinear iff the_area_of_polygon3(A, B, C) = 0;
+
+theorem :: MENELAUS:10
+   the_area_of_polygon3(0. (TOP-REAL 2), B, C) =
+  (B `1 * C `2 - C `1 * B `2) / 2;
+
+theorem :: MENELAUS:11
+  the_area_of_polygon3(A + A1, B, C) = the_area_of_polygon3(A, B, C) +
+  the_area_of_polygon3(A1, B, C) - the_area_of_polygon3(0. (TOP-REAL 2), B, C);
+
+theorem :: MENELAUS:12
+   A in LSeg(B, C) implies A in Line(B, C);
+
+theorem :: MENELAUS:13
+   B <> C implies (A, B, C is_collinear iff A in Line(B, C));
+
+theorem :: MENELAUS:14
+   A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C implies
+  A <> A1;
+
+theorem :: MENELAUS:15
+   A, B, C is_a_triangle implies A, C, B is_a_triangle &
+  B, A, C is_a_triangle & B, C, A is_a_triangle & C, A, B is_a_triangle &
+  C, B, A is_a_triangle;
+
+theorem :: MENELAUS:16
+   (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A  & mu <> 1) implies ((1 - mu) + lambda * mu <> 0
+  iff not Line(A, A1) is_parallel_to Line(B, B1));
+
+begin :: Ceva's Theorem and Others
+
+:: Pre-Routh's Theorem
+theorem :: MENELAUS:17
+   (A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B) implies
+  the_area_of_polygon3(A1, B1, C1) = ((1 - lambda) * (1 - mu) * (1 - nu) +
+  lambda * mu * nu) * the_area_of_polygon3(A, B, C);
+
+:: Menelaus' Theorem
+theorem :: MENELAUS:18
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 &
+  mu <> 1 & nu <> 1) implies (A1, B1, C1 is_collinear iff
+  (lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) = -1);
+
+:: Routh's Theorem
+theorem :: MENELAUS:19
+   (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 &
+  mu <> 1 & nu <> 1 & A, A1, C2 is_collinear & B, B1, C2 is_collinear &
+  B, B1, A2 is_collinear & C, C1, A2 is_collinear & A, A1, B2 is_collinear &
+  C, C1, B2 is_collinear) implies (((1 - mu) + lambda * mu) * ((1 - lambda) +
+  nu * lambda) * ((1 - nu) + mu * nu)) <> 0 & the_area_of_polygon3(A2, B2, C2)
+  = ((mu * nu * lambda - (1 - mu) * (1 - nu) * (1 - lambda)) ^2 / (((1 - mu) +
+  lambda * mu) * ((1 - lambda) + nu * lambda) * ((1 - nu) + mu * nu))) *
+  the_area_of_polygon3(A, B, C);
+
+:: Feynman's (one-seventh area) Triangle
+theorem :: MENELAUS:20
+  (A, B, C is_a_triangle & A1 = (2 / 3) * B + (1 / 3) * C &
+  B1 = (2 / 3) * C + (1 / 3) * A & C1 = (2 / 3) * A + (1 / 3) * B &
+  A, A1, C2 is_collinear & B, B1, C2 is_collinear & B, B1, A2 is_collinear &
+  C, C1, A2 is_collinear & A, A1, B2 is_collinear & C, C1, B2 is_collinear)
+  implies the_area_of_polygon3(A2, B2, C2) = the_area_of_polygon3(A, B, C) / 7;
+
+:: Ceva's Theorem
+theorem :: MENELAUS:21
+   (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C & B1 = (1
+  - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 & mu <> 1 &
+  nu <> 1 & ((1 - mu) + lambda * mu) <> 0 & ((1 - lambda) + nu * lambda) <> 0
+  & ((1 - nu) + mu * nu) <> 0) implies ((lambda / (1 - lambda)) * (mu / (1 -
+  mu)) * (nu / (1 - nu)) = 1 iff (ex A2 st A, A1, A2 is_collinear & B, B1, A2
+  is_collinear & C, C1, A2 is_collinear));
+
+:: Generalized Ceva's Theorem
+theorem :: MENELAUS:22
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C & B1 = (1 - mu)
+  * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 & mu <> 1 & nu <> 1)
+  implies ((lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) = 1 iff
+  Line(A, A1), Line(B, B1), Line(C, C1) are_concurrent);

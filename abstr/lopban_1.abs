@@ -2,7 +2,7 @@
 ::  by Yasunari Shidama
 ::
 :: Received December 22, 2003
-:: Copyright (c) 2003-2011 Association of Mizar Users
+:: Copyright (c) 2003-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,18 +19,21 @@ environ
       STRUCT_0, RLVECT_1, REAL_1, SUPINF_2, ARYTM_3, ARYTM_1, FUNCSDOM,
       MONOID_0, TARSKI, MSSUBFAM, UNIALG_1, RLSUB_1, RSSPACE, NORMSP_1, NAT_1,
       PRE_TOPC, SEQ_2, ORDINAL2, XXREAL_0, CARD_1, COMPLEX1, XXREAL_2, SEQ_4,
-      REWRITE1, RSSPACE3, SEQ_1, VALUED_1, LOPBAN_1, METRIC_1, RELAT_2;
+      REWRITE1, RSSPACE3, SEQ_1, VALUED_1, LOPBAN_1, METRIC_1, RELAT_2,
+      FCONT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XXREAL_0,
-      XXREAL_2, XCMPLX_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0, XREAL_0,
-      ORDINAL1, NUMBERS, MONOID_0, RLVECT_1, RLSUB_1, NORMSP_0, NORMSP_1,
-      RSSPACE, RSSPACE3, VALUED_1, SEQ_1, SEQ_2, SEQ_4, FUNCSDOM, GRCAT_1;
+      XXREAL_2, XCMPLX_0, COMPLEX1, REAL_1, ORDINAL1, NAT_1, STRUCT_0,
+      ALGSTR_0, XREAL_0, NUMBERS, MONOID_0, RLVECT_1, RLSUB_1, NORMSP_0,
+      NORMSP_1, RSSPACE, RSSPACE3, VALUED_1, SEQ_1, COMSEQ_2, SEQ_2, SEQ_4,
+      FUNCSDOM, VECTSP_1;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQM_3,
       RLSUB_1, FUNCSDOM, MONOID_0, MEASURE6, RSSPACE3, SEQ_1, XXREAL_2,
-      NORMSP_1, SEQ_4, RELSET_1, GRCAT_1, BINOP_2, RVSUM_1, SEQ_2;
+      NORMSP_1, SEQ_4, RELSET_1, BINOP_2, RVSUM_1, SEQ_2, COMSEQ_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, NORMSP_1, MONOID_0,
-      RSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4, FUNCT_1, NORMSP_0;
+      RSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4, FUNCT_1, NORMSP_0,
+      COMSEQ_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -167,7 +170,6 @@ begin :: Real Vector Space of Linear Operators
 definition
   let X, Y be non empty RLSStruct;
   let IT be Function of X,Y;
-
   attr IT is homogeneous means
 :: LOPBAN_1:def 5
 
@@ -272,20 +274,20 @@ theorem :: LOPBAN_1:20
 definition
   let X, Y be RealNormSpace;
   let IT be LinearOperator of X,Y;
-  attr IT is bounded means
+  attr IT is Lipschitzian means
 :: LOPBAN_1:def 8
 
-  ex K being Real st 0 <= K & for x being
-  VECTOR of X holds ||. IT.x .|| <= K * ||. x .||;
+  ex K being Real st 0 <= K &
+  for x being VECTOR of X holds ||. IT.x .|| <= K * ||. x .||;
 end;
 
 theorem :: LOPBAN_1:21
   for X, Y be RealNormSpace holds for f be LinearOperator of X,Y
-  st (for x be VECTOR of X holds f.x=0.Y) holds f is bounded;
+  st (for x be VECTOR of X holds f.x=0.Y) holds f is Lipschitzian;
 
 registration
   let X, Y be RealNormSpace;
-  cluster bounded for LinearOperator of X,Y;
+  cluster Lipschitzian for LinearOperator of X,Y;
 end;
 
 definition
@@ -294,7 +296,7 @@ definition
   R_VectorSpace_of_LinearOperators(X,Y) means
 :: LOPBAN_1:def 9
 
-  for x being set holds x in it iff x is bounded LinearOperator of X,Y;
+  for x being set holds x in it iff x is Lipschitzian LinearOperator of X,Y;
 end;
 
 registration
@@ -369,7 +371,7 @@ definition
   let X, Y be RealNormSpace;
   let f be set such that
  f in BoundedLinearOperators(X,Y);
-  func modetrans(f,X,Y) -> bounded LinearOperator of X,Y equals
+  func modetrans(f,X,Y) -> Lipschitzian LinearOperator of X,Y equals
 :: LOPBAN_1:def 11
 
   f;
@@ -385,12 +387,12 @@ definition
 end;
 
 theorem :: LOPBAN_1:27
-  for X, Y be RealNormSpace for g be bounded LinearOperator of X,Y
+  for X, Y be RealNormSpace for g be Lipschitzian LinearOperator of X,Y
   holds PreNorms(g) is bounded_above;
 
 theorem :: LOPBAN_1:28
   for X, Y be RealNormSpace for g be LinearOperator of X,Y holds g is
-  bounded iff PreNorms(g) is bounded_above;
+  Lipschitzian iff PreNorms(g) is bounded_above;
 
 definition
   let X, Y be RealNormSpace;
@@ -403,11 +405,11 @@ definition
 end;
 
 theorem :: LOPBAN_1:29
-  for X, Y be RealNormSpace for f be bounded LinearOperator of X,Y
+  for X, Y be RealNormSpace for f be Lipschitzian LinearOperator of X,Y
   holds modetrans(f,X,Y)=f;
 
 theorem :: LOPBAN_1:30
-  for X, Y be RealNormSpace for f be bounded LinearOperator of X,Y
+  for X, Y be RealNormSpace for f be Lipschitzian LinearOperator of X,Y
   holds BoundedLinearOperatorsNorm(X,Y).f = upper_bound PreNorms(f);
 
 definition
@@ -426,7 +428,8 @@ theorem :: LOPBAN_1:31
 
 theorem :: LOPBAN_1:32
   for X, Y be RealNormSpace for f being Point of
-R_NormSpace_of_BoundedLinearOperators(X,Y) for g be bounded LinearOperator of X
+R_NormSpace_of_BoundedLinearOperators(X,Y)
+for g be Lipschitzian LinearOperator of X
   ,Y st g=f holds for t be VECTOR of X holds ||.g.t.|| <= ||.f.|| * ||.t.||;
 
 theorem :: LOPBAN_1:33

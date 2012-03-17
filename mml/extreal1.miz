@@ -2,7 +2,7 @@
 ::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
 ::
 :: Received September 7, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,16 +19,16 @@ environ
       SUBSET_1, SUPINF_2, NAT_1, FUNCT_2, FUNCOP_1, XBOOLE_0, TARSKI, ORDINAL4,
       PARTFUN1, RFINSEQ, XCMPLX_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, ORDINAL1, NUMBERS, XXREAL_3,
-      XCMPLX_0, XREAL_0, REAL_1, FUNCT_1, RELSET_1, PARTFUN1, BINOP_1, FUNCT_2,
-      SEQ_1, DOMAIN_1, BINOP_2, RFINSEQ, RFUNCT_3, RVSUM_1, FUNCOP_1, FINSEQ_1,
-      FINSEQ_4, XXREAL_0, NAT_1, NAT_D, SUPINF_1, SUPINF_2, MEASURE6;
+      XCMPLX_0, XREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, BINOP_1,
+      FUNCT_2, SEQ_1, DOMAIN_1, BINOP_2, RFINSEQ, RFUNCT_3, RVSUM_1, FUNCOP_1,
+      FINSEQ_1, FINSEQ_4, XXREAL_0, NAT_1, NAT_D, SUPINF_1, SUPINF_2, MEASURE6;
  constructors BINOP_1, DOMAIN_1, REAL_1, NAT_1, FINSEQ_4, FINSOP_1, RVSUM_1,
       SUPINF_2, RFINSEQ, RFUNCT_3, MEASURE6, BINARITH, SEQ_1, BINOP_2,
       SUPINF_1, CLASSES1, NAT_D, RELSET_1, XXREAL_3, FINSEQ_1, FUNCT_1,
       FUNCT_2, INT_1, FUNCOP_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
-      VALUED_0, CARD_1, XXREAL_3;
+      VALUED_0, CARD_1, XXREAL_3, RELAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions XXREAL_3, XCMPLX_0;
  theorems FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5, NAT_1, TARSKI,
@@ -44,7 +44,7 @@ definition
   coherence by XXREAL_0:def 1;
 end;
 
-theorem Th13:
+theorem Th1:
   for x,y being R_eal holds for a,b being Real holds x = a & y = b
   implies x * y = a * b by XXREAL_3:def 5;
 
@@ -54,7 +54,7 @@ definition
   coherence by XXREAL_0:def 1;
 end;
 
-theorem Th32:
+theorem Th2:
   for x,y being R_eal holds for a,b being Real st x = a & y = b
   holds x / y = a / b
 proof
@@ -72,27 +72,44 @@ A3: y" = c" by A1,XXREAL_3:def 6;
 end;
 
 definition
-
   let x be R_eal;
   func |. x .| -> R_eal equals
-  :Def3:
+  :Def1:
   x if 0 <= x otherwise -x;
   coherence;
   consistency;
+  projectivity;
 end;
 
 theorem
-  for x being R_eal st 0 < x holds |. x .| = x by Def3;
+  for x being R_eal st 0 <= x holds |. x .| = x by Def1;
 
 theorem
-  for x being R_eal st x < 0 holds |. x .| = -x by Def3;
+  for x being R_eal st x < 0 holds |. x .| = -x by Def1;
+
+registration let x be R_eal;
+ cluster |.x.| -> non negative;
+ coherence
+  proof per cases;
+   suppose
+A1:   0 <= x;
+     then |. x .| = x by Def1;
+    hence thesis by A1;
+   end;
+   suppose
+A2:   x < 0;
+     then |. x .| = -x by Def1;
+    hence thesis by A2;
+   end;
+  end;
+end;
 
 theorem
   for a,b being Real holds a*b = R_EAL a * R_EAL b
 proof
   let a,b be Real;
   R_EAL a = a & R_EAL b = b by MEASURE6:def 1;
-  hence thesis by Th13;
+  hence thesis by Th1;
 end;
 
 theorem
@@ -100,7 +117,7 @@ theorem
 proof
   let a,b be Real;
   R_EAL a = a & R_EAL b = b by MEASURE6:def 1;
-  hence thesis by Th32;
+  hence thesis by Th2;
 end;
 
 begin :: Sum of Finite Sequence of Extended Real Numbers
@@ -109,7 +126,7 @@ begin :: Sum of Finite Sequence of Extended Real Numbers
 definition
   let F be FinSequence of ExtREAL;
   func Sum(F) -> R_eal means
-  :Def4:
+  :Def2:
   ex f being Function of NAT, ExtREAL st it
 = f.(len F) & f.0 = 0. & for i being Element of NAT st i < len F holds f.(i+1)=
   f.i+F.(i+1);
@@ -230,16 +247,16 @@ A26: P[0] by A18,A21;
   end;
 end;
 
-theorem Th40:
+theorem Th7:
   Sum(<*> ExtREAL) = 0.
 proof
   reconsider F = <*> ExtREAL as FinSequence of ExtREAL;
   ex f being Function of NAT, ExtREAL st Sum F = f.(len F) & f.0 = 0. &
-  for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1) by Def4;
+  for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1) by Def2;
   hence thesis;
 end;
 
-theorem Th41:
+theorem Th8:
   for a being R_eal holds Sum<*a*> = a
 proof
   let a be R_eal;
@@ -248,7 +265,7 @@ proof
 A1: Sum F = f.(len F) and
 A2: f.0 = 0. and
 A3: for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1)
-  by Def4;
+  by Def2;
 A4: f.(0+1) = f.0+F.(0+1) by A3;
   Sum F = f.1 by A1,FINSEQ_1:39;
   then Sum F = F.1 by A2,A4,XXREAL_3:4
@@ -264,7 +281,7 @@ proof
 A1: Sum(F^<*x*>) = f.(len(F^<*x*>)) and
 A2: f.0 = 0. and
 A3: for i being Element of NAT st i < len (F^<*x*>) holds f.(i+1)=f.i+(F
-  ^<*x*>).(i+1) by Def4;
+  ^<*x*>).(i+1) by Def2;
 A4: len(F^<*x*>) = (len F)+(len <*x*>) by FINSEQ_1:22
     .= (len F)+1 by FINSEQ_1:39;
   for i being Element of NAT st i < len F holds f.(i+1)=f.i+F.(i+1)
@@ -282,7 +299,7 @@ A7: i+1 in dom F by FINSEQ_1:def 3;
     hence thesis by A7,FINSEQ_1:def 7;
   end;
   then
-A8: Sum F = f.(len F) by A2,Def4;
+A8: Sum F = f.(len F) by A2,Def2;
   len F < len(F^<*x*>) by A4,NAT_1:13;
   then f.((len F)+1)=f.(len F)+(F^<*x*>).((len F)+1) by A3;
   hence thesis by A1,A4,A8,FINSEQ_1:42;
@@ -294,7 +311,7 @@ proof
   let a,b be R_eal;
   thus Sum<*a,b*> = Sum(<*a*>^<*b*>) by FINSEQ_1:def 9
     .= Sum<*a*> + b by Lm1
-    .= a + b by Th41;
+    .= a + b by Th8;
 end;
 
 Lm2: for F being FinSequence of ExtREAL st not -infty in rng F holds Sum F <>
@@ -318,12 +335,12 @@ A4: not -infty in rng F \/ rng <*x*> by FINSEQ_1:31;
     then x <> -infty by TARSKI:def 1;
     hence thesis by A2,A4,A3,XBOOLE_0:def 3,XXREAL_3:17;
   end;
-A5: P[<*> ExtREAL] by Th40;
+A5: P[<*> ExtREAL] by Th7;
   thus for F being FinSequence of ExtREAL holds P[F] from FINSEQ_2:sch 2 (A5,
   A1);
 end;
 
-theorem Th43:
+theorem Th10:
   for F,G being FinSequence of ExtREAL st not -infty in rng F & not
   -infty in rng G holds Sum(F^G) = Sum(F)+Sum(G)
 proof
@@ -365,7 +382,7 @@ A9: P[<*> ExtREAL]
     set H = <*> ExtREAL;
     assume not -infty in rng H;
     thus Sum(F^H) = Sum F by FINSEQ_1:34
-      .= Sum F + Sum H by Th40,XXREAL_3:4;
+      .= Sum F + Sum H by Th7,XXREAL_3:4;
   end;
   for H being FinSequence of ExtREAL holds P[H] from FINSEQ_2:sch 2 (A9,
   A2);
@@ -853,12 +870,12 @@ A53: H|(n+1) = H | Seg(n+1) by FINSEQ_1:def 15;
   then
 A54: H = H1^<*H.(n+1)*> by A12,A43,A53,FINSEQ_1:4,FINSEQ_5:10;
 A55: not -infty in rng(H1/^(q-'1)) by A44,XBOOLE_0:def 3;
-  thus Sum F = Sum((F|(q-'1))^<*F.q*>) + Sum(F/^q) by A40,A47,A51,Th43
+  thus Sum F = Sum((F|(q-'1))^<*F.q*>) + Sum(F/^q) by A40,A47,A51,Th10
     .= Sum(F|(q-'1)) + F.q + Sum(F/^q) by Lm1
     .= Sum(F|(q-'1)) + Sum(F/^q) + F.q by A50,A49,A52,XXREAL_3:29
     .= Sum(H1|(q-'1)) + Sum(H1/^(q-'1)) + H.(n+1) by A16,A27,A18,A42,A39,
 FINSEQ_1:14
-    .= Sum H1 + H.(n+1) by A8,A45,A55,Th43
+    .= Sum H1 + H.(n+1) by A8,A45,A55,Th10
     .= Sum H by A54,Lm1;
 end;
 
@@ -867,9 +884,10 @@ theorem
   F st G = F*s & not -infty in rng F holds Sum(F) = Sum(G)
 proof
   let F,G be FinSequence of ExtREAL, s be Permutation of dom F;
-  defpred P[Nat] means for F,G being FinSequence of ExtREAL, s being
-Permutation of Seg $1 st len F = $1 & G = F*s & not -infty in rng F holds Sum(F
-  ) = Sum(G);
+  defpred P[Nat] means
+   for F,G being FinSequence of ExtREAL, s being Permutation of Seg $1
+    st len F = $1 & G = F*s & not -infty in rng F
+    holds Sum F = Sum G;
 A1: P[0]
   proof
     let F,G be FinSequence of ExtREAL, s be Permutation of Seg 0;

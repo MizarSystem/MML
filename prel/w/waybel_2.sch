@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -24,13 +25,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="68"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="74"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -45,8 +46,8 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="68"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="74"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -78,7 +79,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="68">
+<Func kind="K" nr="76">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -92,7 +93,7 @@
 <Var nr="2"/>
 </Func>
 <Func kind="F" nr="3">
-<Func kind="K" nr="36">
+<Func kind="K" nr="48">
 <Func kind="U" nr="6">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>

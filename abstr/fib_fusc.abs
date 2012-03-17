@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek and Piotr Rudnicki
 ::
 :: Received October 8, 1993
-:: Copyright (c) 1993-2011 Association of Mizar Users
+:: Copyright (c) 1993-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,22 +17,20 @@ environ
  vocabularies NUMBERS, CARD_1, INT_1, POWER, SUBSET_1, XXREAL_0, RELAT_1,
       ARYTM_3, ARYTM_1, NAT_1, AMI_3, AFINSQ_1, AMI_1, ORDINAL4, GRAPHSP,
       SCM_1, FINSEQ_1, MSUALG_1, FUNCT_1, PRE_FF, FSM_1, NEWTON, FIB_FUSC,
-      SCMNORM, PARTFUN1, TARSKI;
- notations TARSKI, ENUMSET1, XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON,
-      POWER, CARD_3, ORDINAL4, RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, FINSEQ_1,
-      MEMSTR_0, COMPOS_1, EXTPRO_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, NEWTON, POWER, PRE_FF, SCM_1, AFINSQ_1,
-      ORDINAL4, FINSUB_1, CARD_3, ENUMSET1, PRE_POLY, NAT_D, MEMSTR_0;
- registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, AMI_3, XBOOLE_0, ORDINAL1,
-      AFINSQ_1, CARD_3, FUNCT_1, RELSET_1, COMPOS_1, SCM_1, PBOOLE, REAL_1,
-      MEMSTR_0;
+      EXTPRO_1, PARTFUN1, TARSKI;
+ notations ENUMSET1, XCMPLX_0, SUBSET_1, NUMBERS, INT_1, ORDINAL1, NAT_1,
+      NEWTON, POWER, RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, FINSEQ_1, MEMSTR_0,
+      COMPOS_1, EXTPRO_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
+ constructors REAL_1, NEWTON, POWER, PRE_FF, SCM_1, ENUMSET1, PRE_POLY;
+ registrations XREAL_0, INT_1, AMI_3, ORDINAL1, AFINSQ_1, SCM_1, PBOOLE,
+      COMPOS_0;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
 
 
 begin
 
 definition
-  func Fib_Program -> XFinSequence of the Instructions of SCM equals
+  func Fib_Program -> XFinSequence of the InstructionsF of SCM equals
 :: FIB_FUSC:def 1
   <% dl.1>0_goto 2 %> ^ <% halt SCM %> ^ <% dl.3 := dl.0 %> ^
   <% SubFrom(dl.1, dl.0) %> ^ <% dl.1 =0_goto 1 %> ^
@@ -41,12 +39,12 @@ definition
 end;
 
 reserve F for total
- NAT-defined (the Instructions of SCM)-valued Function;
+ NAT-defined (the InstructionsF of SCM)-valued Function;
 
 theorem :: FIB_FUSC:1
   Fib_Program c= F implies
   for N being Element of NAT,
-      s being 0-started State-consisting of 0, <*1*>^<*N*>^<*0*>^<*0*>
+      s being 0-started State-consisting of <%1,N,0,0%>
    holds F halts_on s &
    (N = 0 implies LifeSpan(F,s) = 1) &
    (N > 0 implies LifeSpan(F,s) = 6 * N - 2) &
@@ -64,7 +62,7 @@ definition
 end;
 
 definition
-  func Fusc_Program -> XFinSequence of the Instructions of SCM equals
+  func Fusc_Program -> XFinSequence of the InstructionsF of SCM equals
 :: FIB_FUSC:def 3
   <% dl.1 =0_goto 8 %> ^
   <% dl.4 := dl.0 %> ^
@@ -80,16 +78,17 @@ end;
 theorem :: FIB_FUSC:2
   Fusc_Program c= F implies
   for N being Element of NAT st N > 0
-  for s being 0-started State-consisting of 0,
-  <*2*>^<*N*>^<*1*>^<*0*> holds F halts_on s &
+  for s being 0-started State-consisting of <%2,N,1,0%>
+:::  <*2*>^<*N*>^<*1*>^<*0*>
+   holds F halts_on s &
   (Result(F,s)).dl.3 = Fusc N &
   LifeSpan(F,s) = 6 * ([\ log(2, N) /] + 1) + 1;
 
 theorem :: FIB_FUSC:3
   Fib_Program c= F implies
   for N being Element of NAT, k, Fk, Fk1 being Element of NAT,
-      s being 3-started State-consisting of 0,
-      <* 1 *>^<* N *>^<* Fk *>^<* Fk1 *> st N > 0 & Fk = Fib k &
+      s being 3-started State-consisting of
+      <% 1, N, Fk, Fk1 %> st N > 0 & Fk = Fib k &
       Fk1 = Fib (k+1) holds F halts_on s &
       LifeSpan(F,s) = 6 * N - 4 &
       ex m being Element of NAT st m = k+N-1 &
@@ -99,8 +98,9 @@ theorem :: FIB_FUSC:3
 theorem :: FIB_FUSC:4
  Fusc_Program c= F implies
   for n being Element of NAT, N, A, B being Element of NAT,
-      s being 0-started State-consisting of 0,
-         <*2*>^<*n*>^<*A*>^<*B*> st N > 0 &
+      s being 0-started State-consisting of <%2,n,A,B%>
+:::         <*2*>^<*n*>^<*A*>^<*B*>
+   st N > 0 &
   Fusc N = A * Fusc n + B * Fusc (n+1)
   holds F halts_on s &
   (Result(F,s)).dl.3 = Fusc N &
@@ -110,8 +110,9 @@ theorem :: FIB_FUSC:4
 theorem :: FIB_FUSC:5
  Fusc_Program c= F implies
   for N being Element of NAT st N > 0
-  for s being 0-started State-consisting of 0,
-     <*2*>^<*N*>^<*1*>^<*0*> holds F halts_on s &
+  for s being 0-started State-consisting of <%2,N,1,0%>
+:::     <*2*>^<*N*>^<*1*>^<*0*>
+   holds F halts_on s &
   Result(F ,s).dl.3 = Fusc N &
   (N = 0 implies LifeSpan(F,s) = 1) &
   (N > 0 implies LifeSpan(F,s) = 6 * ([\ log(2, N) /] + 1)+1);

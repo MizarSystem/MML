@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received April 24, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,19 +17,19 @@ environ
  vocabularies XBOOLE_0, FUNCT_1, SUBSET_1, MCART_1, ZFMISC_1, TARSKI, PBOOLE,
       RELAT_1, FUNCT_2, FUNCOP_1, MEMBER_1, STRUCT_0, ALTCAT_1, RELAT_2,
       MSUALG_6, CAT_1, ALTCAT_2, FUNCT_3, MSUALG_3, ENS_1, WELLORD1, FUNCTOR0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
       PBOOLE, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, FUNCT_3, FUNCT_4,
       STRUCT_0, MSUALG_3, ALTCAT_1, ALTCAT_2;
- constructors FUNCT_3, MSUALG_3, ALTCAT_2, RELSET_1, PBOOLE, REALSET1, CARD_3,
-      PRALG_2;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, PBOOLE,
-      STRUCT_0, ALTCAT_1, ALTCAT_2, PARTFUN1, RELSET_1;
+ constructors FUNCT_3, MSUALG_3, ALTCAT_2, RELSET_1, XTUPLE_0;
+ registrations SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, PBOOLE, STRUCT_0,
+      ALTCAT_1, ALTCAT_2, PARTFUN1, RELSET_1, FUNCT_3, XTUPLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, ALTCAT_2, MSUALG_3, FUNCT_1, FUNCT_2, XBOOLE_0, PBOOLE,
-      BINOP_1;
+ definitions TARSKI, MSUALG_3, FUNCT_1, FUNCT_2, XBOOLE_0, PBOOLE, BINOP_1,
+      XTUPLE_0;
  theorems ALTCAT_2, FUNCT_4, FUNCOP_1, ZFMISC_1, ALTCAT_1, FUNCT_2, FUNCT_1,
       PBOOLE, FUNCT_3, RELAT_1, MCART_1, DOMAIN_1, MSUALG_3, ISOCAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
+      RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1, XTUPLE_0;
  schemes ALTCAT_2;
 
 begin :: Preliminaries
@@ -85,11 +85,11 @@ proof
     hence thesis by RELSET_1:12;
   end;
   suppose A <> {};
-    hence thesis by FUNCT_2:def 1,RELSET_1:12;
+    thus thesis by FUNCT_2:def 1,RELSET_1:12;
   end;
 end;
 
-theorem Th3:
+theorem Th2:
   for I being set for M being ManySortedSet of I holds M*id I = M
 proof
   let I be set;
@@ -121,7 +121,7 @@ registration
   end;
 end;
 
-theorem Th4:
+theorem Th3:
   for A being set, f being Function holds f.:id A = (~f).:id A
 proof
   let A be set, f be Function;
@@ -156,7 +156,7 @@ A12: x in dom f by A7,A10,FUNCT_4:42;
   hence thesis by A8,A9,A10,A12,FUNCT_1:def 6;
 end;
 
-theorem Th5:
+theorem Th4:
   for X,Y being set, f being Function of X,Y holds
   f is onto iff [:f,f:] is onto
 proof
@@ -172,7 +172,7 @@ registration
   coherence;
 end;
 
-theorem Th6:
+theorem Th5:
   for A,B being set, a being set holds ~([:A,B:] --> a) = [:B,A:] --> a
 proof
   let A,B be set, a be set;
@@ -204,14 +204,13 @@ A8: [y,z] in dom([:A,B:] --> a);
     then
 A9: y in A by ZFMISC_1:87;
     z in B by A8,ZFMISC_1:87;
-    then [z,y] in [:B,A:] by A9,ZFMISC_1:87;
-    hence ([:B,A:] --> a).(z,y) = a by FUNCOP_1:7
+    hence ([:B,A:] --> a).(z,y) = a by A9,FUNCOP_1:7,ZFMISC_1:87
       .= ([:A,B:] --> a).(y,z) by A8,FUNCOP_1:7;
   end;
   hence thesis by A1,FUNCT_4:def 2;
 end;
 
-theorem Th7:
+theorem Th6:
   for f,g being Function st f is one-to-one & g is one-to-one holds
   [:f,g:]" = [:f",g":]
 proof
@@ -219,7 +218,7 @@ proof
   assume that
 A1: f is one-to-one and
 A2: g is one-to-one;
-A3: [:f,g:] is one-to-one by A1,A2,ISOCAT_1:1;
+A3: [:f,g:] is one-to-one by A1,A2;
 A4: dom(f") = rng f by A1,FUNCT_1:33;
 A5: dom(g") = rng g by A2,FUNCT_1:33;
 A6: dom([:f,g:]") = rng[:f,g:] by A3,FUNCT_1:33
@@ -246,12 +245,12 @@ A14: f.(f".x) = (f*f").x by A7,FUNCT_1:13
       .= (id dom(g")).y by A2,FUNCT_1:39
       .= y by A8,FUNCT_1:18;
     then [:f,g:].(f".x,g".y) = [x,y] by A9,A13,A14,FUNCT_3:65;
-    hence thesis by A3,A13,FUNCT_1:32;
+    hence thesis by A1,A2,A13,FUNCT_1:32;
   end;
   hence thesis by A6,FUNCT_3:def 8;
 end;
 
-theorem Th8:
+theorem Th7:
   for f being Function st [:f,f:] is one-to-one holds f is one-to-one
 proof
   let f be Function such that
@@ -267,10 +266,10 @@ A7: [x2,x2] in dom[:f,f:] by A3,A5,ZFMISC_1:87;
   [:f,f:].(x1,x1) = [f.x2,f.x2] by A4,A5,A6,FUNCT_3:65
     .= [:f,f:].(x2,x2) by A5,A7,FUNCT_3:65;
   then [x1,x1] = [x2,x2] by A1,A6,A7,FUNCT_1:def 4;
-  hence thesis by ZFMISC_1:27;
+  hence thesis by XTUPLE_0:1;
 end;
 
-theorem Th9:
+theorem Th8:
   for f being Function st f is one-to-one holds ~f is one-to-one
 proof
   let f be Function such that
@@ -295,11 +294,11 @@ A9: [x22,x21] in dom f by A5,A6,FUNCT_4:42;
     .= f.(x22,x21) by A5,A6,FUNCT_4:43;
   then
 A10: [x12,x11] = [x22,x21] by A1,A8,A9,FUNCT_1:def 4;
-  then x12 = x22 by ZFMISC_1:27;
-  hence thesis by A4,A6,A10,ZFMISC_1:27;
+  then x12 = x22 by XTUPLE_0:1;
+  hence thesis by A4,A6,A10,XTUPLE_0:1;
 end;
 
-theorem Th10:
+theorem Th9:
   for f,g being Function st ~[:f,g:] is one-to-one holds [:g,f:] is one-to-one
 proof
   let f,g be Function such that
@@ -328,8 +327,8 @@ A12: [:g,f:].x1 = [:g,f:].x2;
 A13: [:g,f:].(x11,x12) = [g.x11,f.x12] by A4,A5,FUNCT_3:def 8;
 A14: [:g,f:].(x21,x22) = [g.x21,f.x22] by A7,A8,FUNCT_3:def 8;
   then
-A15: f.x22 = f.x12 by A6,A9,A12,A13,ZFMISC_1:27;
-A16: g.x11 = g.x21 by A6,A9,A12,A13,A14,ZFMISC_1:27;
+A15: f.x22 = f.x12 by A6,A9,A12,A13,XTUPLE_0:1;
+A16: g.x11 = g.x21 by A6,A9,A12,A13,A14,XTUPLE_0:1;
   (~[:f,g:]).[x11,x12] = (~[:f,g:]).(x11,x12)
     .= [:f,g:].(x12,x11) by A6,A10,FUNCT_4:43
     .= [f.x22,g.x21] by A4,A5,A15,A16,FUNCT_3:def 8
@@ -339,91 +338,89 @@ A16: g.x11 = g.x21 by A6,A9,A12,A13,A14,ZFMISC_1:27;
   hence thesis by A1,A6,A9,A10,A11,FUNCT_1:def 4;
 end;
 
-theorem Th11:
+theorem Th10:
   for f,g being Function st f is one-to-one & g is one-to-one holds
   ~[:f,g:]" = ~([:g,f:]")
 proof
   let f,g be Function such that
 A1: f is one-to-one and
 A2: g is one-to-one;
-A3: [:g,f:]" = [:g",f":] by A1,A2,Th7;
+A3: [:g,f:]" = [:g",f":] by A1,A2,Th6;
   then
 A4: dom([:g,f:]") = [:dom(g"), dom(f"):] by FUNCT_3:def 8;
 A5: dom[:f,g:] = [:dom f, dom g:] by FUNCT_3:def 8;
 A6: dom[:g,f:] = [:dom g, dom f:] by FUNCT_3:def 8;
-A7: [:g,f:] is one-to-one by A1,A2,ISOCAT_1:1;
-A8: [:f,g:] is one-to-one by A1,A2,ISOCAT_1:1;
-  then
-A9: ~[:f,g:] is one-to-one by Th9;
-A10: [:f,g:]" = [:f",g":] by A1,A2,Th7;
-A11: dom~([:g,f:]") = [:dom(f"), dom(g"):] by A4,FUNCT_4:46
+A7: [:g,f:] is one-to-one by A1,A2;
+A8: ~[:f,g:] is one-to-one by Th8,A1,A2;
+A9: [:f,g:]" = [:f",g":] by A1,A2,Th6;
+A10: dom~([:g,f:]") = [:dom(f"), dom(g"):] by A4,FUNCT_4:46
     .= dom [:f", g":] by FUNCT_3:def 8
-    .= rng[:f,g:] by A8,A10,FUNCT_1:32
+    .= rng[:f,g:] by A1,A2,A9,FUNCT_1:32
     .= rng~[:f,g:] by A5,FUNCT_4:47;
   now
     let y,x be set;
     hereby
       assume that
-A12:  y in rng~[:f,g:] and
-A13:  x = (~([:g,f:]")).y;
-      y in rng[:f,g:] by A5,A12,FUNCT_4:47;
+A11:  y in rng~[:f,g:] and
+A12:  x = (~([:g,f:]")).y;
+      y in rng[:f,g:] by A5,A11,FUNCT_4:47;
       then y in [:rng f,rng g:] by FUNCT_3:67;
       then consider y1,y2 being set such that
-A14:  y1 in rng f and
-A15:  y2 in rng g and
-A16:  y = [y1,y2] by ZFMISC_1:84;
+A13:  y1 in rng f and
+A14:  y2 in rng g and
+A15:  y = [y1,y2] by ZFMISC_1:84;
       set x1 = f".y1, x2 = g".y2;
-A17:  y2 in dom(g") by A2,A15,FUNCT_1:32;
-A18:  y1 in dom(f") by A1,A14,FUNCT_1:32;
-      then [y2,y1] in dom([:g,f:]") by A4,A17,ZFMISC_1:87;
+A16:  y2 in dom(g") by A2,A14,FUNCT_1:32;
+A17:  y1 in dom(f") by A1,A13,FUNCT_1:32;
+      then [y2,y1] in dom([:g,f:]") by A4,A16,ZFMISC_1:87;
       then
-A19:  (~([:g,f:]")).(y1,y2) = [:g",f":].(y2,y1) by A3,FUNCT_4:def 2
-        .= [x2,x1] by A17,A18,FUNCT_3:def 8;
-A20:  y1 in dom(f") by A1,A14,FUNCT_1:32;
-A21:  y2 in dom(g") by A2,A15,FUNCT_1:32;
-A22:  x1 in rng(f") by A20,FUNCT_1:def 3;
-A23:  x2 in rng(g") by A21,FUNCT_1:def 3;
-A24:  x1 in dom f by A1,A22,FUNCT_1:33;
-A25:  x2 in dom g by A2,A23,FUNCT_1:33;
+A18:  (~([:g,f:]")).(y1,y2) = [:g",f":].(y2,y1) by A3,FUNCT_4:def 2
+        .= [x2,x1] by A16,A17,FUNCT_3:def 8;
+A19:  y1 in dom(f") by A1,A13,FUNCT_1:32;
+A20:  y2 in dom(g") by A2,A14,FUNCT_1:32;
+A21:  x1 in rng(f") by A19,FUNCT_1:def 3;
+A22:  x2 in rng(g") by A20,FUNCT_1:def 3;
+A23:  x1 in dom f by A1,A21,FUNCT_1:33;
+A24:  x2 in dom g by A2,A22,FUNCT_1:33;
       then
-A26:  [x2,x1] in dom[:g,f:] by A6,A24,ZFMISC_1:87;
+A25:  [x2,x1] in dom[:g,f:] by A6,A23,ZFMISC_1:87;
       then
-A27:  [x2,x1] in dom~[:f,g:] by A5,A6,FUNCT_4:46;
+A26:  [x2,x1] in dom~[:f,g:] by A5,A6,FUNCT_4:46;
       thus
-      x in dom~[:f,g:] by A5,A6,A13,A16,A19,A26,FUNCT_4:46;
-A28:  f.x1 = y1 by A1,A14,FUNCT_1:32;
-A29:  g.x2 = y2 by A2,A15,FUNCT_1:32;
-      thus (~[:f,g:]).x = ~[:f,g:].(x2,x1) by A13,A16,A19
-        .= [:f,g:].(x1,x2) by A27,FUNCT_4:43
-        .= y by A16,A24,A25,A28,A29,FUNCT_3:def 8;
+      x in dom~[:f,g:] by A5,A6,A12,A15,A18,A25,FUNCT_4:46;
+A27:  f.x1 = y1 by A1,A13,FUNCT_1:32;
+A28:  g.x2 = y2 by A2,A14,FUNCT_1:32;
+      thus (~[:f,g:]).x = ~[:f,g:].(x2,x1) by A12,A15,A18
+        .= [:f,g:].(x1,x2) by A26,FUNCT_4:43
+        .= y by A15,A23,A24,A27,A28,FUNCT_3:def 8;
     end;
     assume that
-A30: x in dom~[:f,g:] and
-A31: (~[:f,g:]).x = y;
-    thus y in rng~[:f,g:] by A30,A31,FUNCT_1:def 3;
-    x in dom[:g,f:] by A5,A6,A30,FUNCT_4:46;
+A29: x in dom~[:f,g:] and
+A30: (~[:f,g:]).x = y;
+    thus y in rng~[:f,g:] by A29,A30,FUNCT_1:def 3;
+    x in dom[:g,f:] by A5,A6,A29,FUNCT_4:46;
     then consider x1,x2 being set such that
-A32: x1 in dom g and
-A33: x2 in dom f and
-A34: x = [x1,x2] by A6,ZFMISC_1:84;
-A35: (~[:f,g:]).(x1,x2) = [:f,g:].(x2,x1) by A30,A34,FUNCT_4:43
-      .= [f.x2,g.x1] by A32,A33,FUNCT_3:def 8;
-A36: g.x1 in rng g by A32,FUNCT_1:def 3;
-    f.x2 in rng f by A33,FUNCT_1:def 3;
-    then [g.x1,f.x2] in [:rng g, rng f:] by A36,ZFMISC_1:87;
+A31: x1 in dom g and
+A32: x2 in dom f and
+A33: x = [x1,x2] by A6,ZFMISC_1:84;
+A34: (~[:f,g:]).(x1,x2) = [:f,g:].(x2,x1) by A29,A33,FUNCT_4:43
+      .= [f.x2,g.x1] by A31,A32,FUNCT_3:def 8;
+A35: g.x1 in rng g by A31,FUNCT_1:def 3;
+    f.x2 in rng f by A32,FUNCT_1:def 3;
+    then [g.x1,f.x2] in [:rng g, rng f:] by A35,ZFMISC_1:87;
     then [g.x1,f.x2] in rng[:g,f:] by FUNCT_3:67;
     then
-A37: [g.x1,f.x2] in dom([:g,f:]") by A7,FUNCT_1:33;
-    [x1,x2] in dom[:g,f:] by A6,A32,A33,ZFMISC_1:87;
-    hence x = ([:g,f:]").([:g,f:].(x1,x2)) by A7,A34,FUNCT_1:34
-      .= ([:g,f:]").(g.x1,f.x2) by A32,A33,FUNCT_3:def 8
-      .= (~([:g,f:]")).(f.x2,g.x1) by A37,FUNCT_4:def 2
-      .= (~([:g,f:]")).y by A31,A34,A35;
+A36: [g.x1,f.x2] in dom([:g,f:]") by A7,FUNCT_1:33;
+    [x1,x2] in dom[:g,f:] by A6,A31,A32,ZFMISC_1:87;
+    hence x = ([:g,f:]").([:g,f:].(x1,x2)) by A1,A2,A33,FUNCT_1:34
+      .= ([:g,f:]").(g.x1,f.x2) by A31,A32,FUNCT_3:def 8
+      .= (~([:g,f:]")).(f.x2,g.x1) by A36,FUNCT_4:def 2
+      .= (~([:g,f:]")).y by A30,A33,A34;
   end;
-  hence thesis by A9,A11,FUNCT_1:32;
+  hence thesis by A8,A10,FUNCT_1:32;
 end;
 
-theorem Th12:
+theorem Th11:
   for A,B be set, f being Function of A,B st f is onto
   holds id B c= [:f,f:].:id A
 proof
@@ -447,7 +444,7 @@ A9: [y,y] in id A by A6,RELAT_1:def 10;
   hence thesis by A2,A9,FUNCT_2:35;
 end;
 
-theorem Th13:
+theorem Th12:
   for F,G being Function-yielding Function, f be Function
   holds (G**F)*f = (G*f)**(F*f)
 proof
@@ -489,7 +486,7 @@ A1:   C = {};
   end;
 end;
 
-theorem Th14:
+theorem Th13:
   for A,B,C being set, f being Function of [:A,B:],C st ~f is onto
   holds f is onto
 proof
@@ -500,7 +497,7 @@ A1: rng~f c= rng f by FUNCT_4:41;
   hence rng f = C by A1,XBOOLE_0:def 10;
 end;
 
-theorem Th15:
+theorem Th14:
   for A be set, B being non empty set, f being Function of A,B
   holds [:f,f:].:id A c= id B
 proof
@@ -534,14 +531,14 @@ definition
   let A,B be set, f be bifunction of A,B;
 
   attr f is Covariant means
-  :Def2:
+  :Def1:
   ex g being Function of A,B st f = [:g,g:];
   attr f is Contravariant means
-  :Def3:
+  :Def2:
   ex g being Function of A,B st f = ~[:g,g:];
 end;
 
-theorem Th16:
+theorem Th15:
   for A be set, B be non empty set,
   b being Element of B, f being bifunction of A,B st f = [:A,A:] --> [b,b]
   holds f is Covariant Contravariant
@@ -556,7 +553,7 @@ A1: f = [:A,A:] --> [b,b];
     thus thesis by A1,ALTCAT_2:1;
   end;
   take g;
-  [:A,A:] --> [b,b] = ~([:A,A:] --> [b,b]) by Th6;
+  [:A,A:] --> [b,b] = ~([:A,A:] --> [b,b]) by Th5;
   hence thesis by A1,ALTCAT_2:1;
 end;
 
@@ -588,7 +585,7 @@ A2:   B <> {};
       [b,b] in [:B,B:] by A2,ZFMISC_1:87;
       then reconsider f as bifunction of A,B by FUNCOP_1:45;
       take f;
-      thus thesis by A2,Th16;
+      thus thesis by A2,Th15;
     end;
   end;
 end;
@@ -601,9 +598,9 @@ proof
   let A,B be non empty set;
   let f be Covariant Contravariant bifunction of A,B;
   consider g1 being Function of A,B such that
-A1: f = [:g1,g1:] by Def2;
+A1: f = [:g1,g1:] by Def1;
   consider g2 being Function of A,B such that
-A2: f = ~[:g2,g2:] by Def3;
+A2: f = ~[:g2,g2:] by Def2;
   set a = the Element of A;
   take b = g1.a;
 A3: dom f = [:A,A:] by FUNCT_2:def 1;
@@ -622,13 +619,13 @@ A9: dom g2 = A by FUNCT_2:def 1;
       .= [:g2,g2:].(a1,a) by A2,A8,FUNCT_4:def 2
       .= [g2.a1,g2.a] by A9,FUNCT_3:def 8;
     then
-A10: g2.a1 = b by ZFMISC_1:27;
+A10: g2.a1 = b by XTUPLE_0:1;
 A11: [a2,a] in dom[:g2,g2:] by A5,A7,ZFMISC_1:87;
     [b,g1.a2] = f.(a,a2) by A1,A6,FUNCT_3:def 8
       .= [:g2,g2:].(a2,a) by A2,A11,FUNCT_4:def 2
       .= [g2.a2,g2.a] by A9,FUNCT_3:def 8;
     then
-A12: g2.a2 = b by ZFMISC_1:27;
+A12: g2.a2 = b by XTUPLE_0:1;
 A13: [a2,a1] in dom[:g2,g2:] by A5,A7,ZFMISC_1:87;
     thus f.z = [:g1,g1:].(a1,a2) by A1,A4
       .= [:g2,g2:].(a2,a1) by A1,A2,A13,FUNCT_4:def 2
@@ -643,7 +640,7 @@ definition
   let I1,I2 be set, f be Function of I1,I2;
   let A be ManySortedSet of I1, B be ManySortedSet of I2;
   mode MSUnTrans of f,A,B -> ManySortedSet of I1 means
-    :Def4:
+    :Def3:
     ex I29 being non empty set, B9 being ManySortedSet of I29,
     f9 being Function of I1,I29 st f = f9 & B = B9 &
     it is ManySortedFunction of A,B9*f9 if I2 <> {} otherwise it = [[0]]I1;
@@ -672,7 +669,7 @@ definition
   let I1 be set, I2 be non empty set, f be Function of I1,I2;
   let A be ManySortedSet of I1, B be ManySortedSet of I2;
   redefine mode MSUnTrans of f,A,B means
-    :Def5:
+    :Def4:
     it is ManySortedFunction of A,B*f;
   compatibility
   proof
@@ -681,10 +678,10 @@ definition
       assume M is MSUnTrans of f,A,B;
       then ex I29 being non empty set, B9 being ManySortedSet of I29,
       f9 being Function of I1,I29 st f = f9 & B = B9 &
-      M is ManySortedFunction of A,B9*f9 by Def4;
+      M is ManySortedFunction of A,B9*f9 by Def3;
       hence M is ManySortedFunction of A,B*f;
     end;
-    thus thesis by Def4;
+    thus thesis by Def3;
   end;
 end;
 
@@ -700,17 +697,17 @@ registration
     suppose I2 <> {};
       then ex I29 being non empty set, B9 being ManySortedSet of I29,
       f9 being Function of I1,I29 st f = f9 & B = B9 &
-      M is ManySortedFunction of A,B9*f9 by Def4;
+      M is ManySortedFunction of A,B9*f9 by Def3;
       hence thesis;
     end;
     suppose I2 = {};
-      then M = [[0]]I1 by Def4;
+      then M = [[0]]I1 by Def3;
       hence thesis;
     end;
   end;
 end;
 
-theorem Th18:
+theorem Th17:
   for I1 being set, I2,I3 being non empty set,
   f being Function of I1,I2, g being Function of I2,I3,
   B being ManySortedSet of I2, C being ManySortedSet of I3,
@@ -720,7 +717,7 @@ proof
   f be Function of I1,I2, g be Function of I2,I3,
   B be ManySortedSet of I2, C be ManySortedSet of I3, G be MSUnTrans of g,B,C;
 A1: C*(g*f) = C*g*f by RELAT_1:36;
-  G is ManySortedFunction of B,C*g by Def5;
+  G is ManySortedFunction of B,C*g by Def4;
   hence G*f is ManySortedFunction of B*f,C*(g*f) by A1,ALTCAT_2:5;
 end;
 
@@ -731,13 +728,13 @@ definition
   redefine func ~F -> MSUnTrans of [:f,f:],~A,~B;
   coherence
   proof
-    reconsider G = F as ManySortedFunction of A,B*[:f,f:] by Def5;
+    reconsider G = F as ManySortedFunction of A,B*[:f,f:] by Def4;
     ~G is ManySortedFunction of ~A,~B*[:f,f:] by ALTCAT_2:3;
-    hence ~F is MSUnTrans of [:f,f:],~A,~B by Def5;
+    hence ~F is MSUnTrans of [:f,f:],~A,~B by Def4;
   end;
 end;
 
-theorem Th19:
+theorem Th18:
   for I1,I2 being non empty set,
   A being ManySortedSet of I1, B being ManySortedSet of I2,
   o being Element of I2 st B.o <> {}
@@ -777,10 +774,10 @@ A8: m in (B*f).i by A7,FUNCT_1:13;
     hence Xm.i is Function of A.i, (B*f).i by A8,FUNCOP_1:45;
   end;
   then Xm is ManySortedFunction of A,B*f by PBOOLE:def 15;
-  hence thesis by Def5;
+  hence thesis by Def4;
 end;
 
-theorem Th20:
+theorem Th19:
   for I1 being set, I2,I3 being non empty set,
   f being Function of I1,I2, g being Function of I2,I3,
   A being ManySortedSet of I1, B being ManySortedSet of I2,
@@ -797,8 +794,8 @@ proof
   G be MSUnTrans of g*f,B*f,C such that
 A1: for ii being set st ii in I1 & (B*f).ii = {}
   holds A.ii = {} or (C*(g*f)).ii = {};
-  reconsider G as ManySortedFunction of B*f,C*(g*f) by Def5;
-  reconsider F as ManySortedFunction of A,B*f by Def5;
+  reconsider G as ManySortedFunction of B*f,C*(g*f) by Def4;
+  reconsider F as ManySortedFunction of A,B*f by Def4;
 A2: dom G = I1 by PARTFUN1:def 2;
 A3: dom F = I1 by PARTFUN1:def 2;
 A4: dom(G**F) = dom G /\ dom F by PBOOLE:def 19
@@ -816,7 +813,7 @@ A5: ii in I1;
     then Gi*Fi is Function of A.ii, (C*(g*f)).ii by FUNCT_2:13;
     hence thesis by A4,A5,PBOOLE:def 19;
   end;
-  hence thesis by Def5;
+  hence thesis by Def4;
 end;
 
 begin :: Functors
@@ -839,23 +836,23 @@ end;
 definition
   let A,B be 1-sorted, F be BimapStr over A,B;
   attr F is one-to-one means
-  :Def7:
+  :Def6:
   the ObjectMap of F is one-to-one;
   attr F is onto means
-  :Def8:
+  :Def7:
   the ObjectMap of F is onto;
   attr F is reflexive means
-  :Def9:
+  :Def8:
   (the ObjectMap of F).:id the carrier of A c= id the carrier of B;
   attr F is coreflexive means
-  :Def10:
+  :Def9:
   id the carrier of B c= (the ObjectMap of F).:id the carrier of A;
 end;
 
 definition
   let A,B be non empty AltGraph, F be BimapStr over A,B;
   redefine attr F is reflexive means
-  :Def11:
+  :Def10:
   for o being object of A holds (the ObjectMap of F).(o,o) = [F.o,F.o];
   compatibility
   proof
@@ -863,7 +860,7 @@ definition
       assume F is reflexive;
       then
       A1:   (
-the ObjectMap of F).:id the carrier of A c= id the carrier of B by Def9;
+the ObjectMap of F).:id the carrier of A c= id the carrier of B by Def8;
       let o be object of A;
       [o,o] in id the carrier of A by RELAT_1:def 10;
       then
@@ -891,7 +888,7 @@ A8: y = [o,o9] by A5,DOMAIN_1:1;
   end;
 end;
 
-theorem Th21:
+theorem Th20:
   for A,B being reflexive non empty AltGraph,
   F being BimapStr over A,B st F is coreflexive for o being object of B
   ex o9 being object of A st F.o9 = o
@@ -899,7 +896,7 @@ proof
   let A,B be reflexive non empty AltGraph, F be BimapStr over A,B;
   assume F is coreflexive;
   then
-A1: id the carrier of B c= (the ObjectMap of F).:id the carrier of A by Def10;
+A1: id the carrier of B c= (the ObjectMap of F).:id the carrier of A by Def9;
   let o be object of B;
   reconsider oo = [o,o] as
   Element of [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
@@ -920,7 +917,7 @@ definition
   let C1, C2 be non empty AltGraph;
   let F be BimapStr over C1,C2;
   attr F is feasible means
-  :Def12:
+  :Def11:
   for o1,o2 being object of C1 st <^o1,o2^> <> {} holds
   (the Arrows of C2).((the ObjectMap of F).(o1,o2)) <> {};
 end;
@@ -937,10 +934,10 @@ definition
   let C1,C2 be 1-sorted;
   let IT be BimapStr over C1,C2;
   attr IT is Covariant means
-  :Def13:
+  :Def12:
   the ObjectMap of IT is Covariant;
   attr IT is Contravariant means
-  :Def14:
+  :Def13:
   the ObjectMap of IT is Contravariant;
 end;
 
@@ -993,18 +990,18 @@ definition
     f9 being Function of [:the carrier of C1,the carrier of C1:],I29 such that
 A1: the ObjectMap of F = f9 and
 A2: the Arrows of C2 = B9 and
-A3: the MorphMap of F is ManySortedFunction of the Arrows of C1,B9*f9 by Def4;
+A3: the MorphMap of F is ManySortedFunction of the Arrows of C1,B9*f9 by Def3;
 A4: (the Arrows of C1).[o1,o2] = (the Arrows of C1).(o1,o2)
       .= <^o1,o2^> by ALTCAT_1:def 1;
 A5: [o1,o2] in [:the carrier of C1, the carrier of C1:] by ZFMISC_1:87;
-    the ObjectMap of F is Covariant by Def13;
+    the ObjectMap of F is Covariant by Def12;
     then consider g being Function of the carrier of C1, the carrier of C2
     such that
-A6: the ObjectMap of F = [:g,g:] by Def2;
+A6: the ObjectMap of F = [:g,g:] by Def1;
 A7: F.o1 = [g.o1,g.o1]`1 by A6,FUNCT_3:75
-      .= g.o1 by MCART_1:7;
+      .= g.o1;
 A8: F.o2 = [g.o2,g.o2]`1 by A6,FUNCT_3:75
-      .= g.o2 by MCART_1:7;
+      .= g.o2;
     dom f9 = [:the carrier of C1, the carrier of C1:] by FUNCT_2:def 1;
     then (B9*f9).[o1,o2] = B9.(f9.(o1,o2)) by A5,FUNCT_1:13
       .= (the Arrows of C2).(F.o1,F.o2) by A1,A2,A6,A7,A8,FUNCT_3:75
@@ -1021,7 +1018,7 @@ A1: <^o1,o2^> <> {} and
 A2: <^F.o1,F.o2^> <> {};
   let m be Morphism of o1,o2;
   func F.m -> Morphism of F.o1, F.o2 equals
-  :Def16:
+  :Def15:
   Morph-Map(F,o1,o2).m;
   coherence
   proof
@@ -1044,27 +1041,27 @@ definition
     f9 being Function of [:the carrier of C1,the carrier of C1:],I29 such that
 A1: the ObjectMap of F = f9 and
 A2: the Arrows of C2 = B9 and
-A3: the MorphMap of F is ManySortedFunction of the Arrows of C1,B9*f9 by Def4;
+A3: the MorphMap of F is ManySortedFunction of the Arrows of C1,B9*f9 by Def3;
 A4: (the Arrows of C1).[o1,o2] = (the Arrows of C1).(o1,o2)
       .= <^o1,o2^> by ALTCAT_1:def 1;
 A5: [o1,o2] in [:the carrier of C1, the carrier of C1:] by ZFMISC_1:87;
-    the ObjectMap of F is Contravariant by Def14;
+    the ObjectMap of F is Contravariant by Def13;
     then consider g being Function of the carrier of C1, the carrier of C2
     such that
-A6: the ObjectMap of F = ~[:g,g:] by Def3;
+A6: the ObjectMap of F = ~[:g,g:] by Def2;
 A7: dom f9 = [:the carrier of C1, the carrier of C1:] by FUNCT_2:def 1;
     then [o1,o1] in dom~[:g,g:] by A1,A6,ZFMISC_1:87;
     then [o1,o1] in dom[:g,g:] by FUNCT_4:42;
     then
 A8: F.o1 = ([:g,g:].(o1,o1))`1 by A6,FUNCT_4:def 2
       .= [g.o1,g.o1]`1 by FUNCT_3:75
-      .= g.o1 by MCART_1:7;
+      .= g.o1;
     [o2,o2] in dom~[:g,g:] by A1,A6,A7,ZFMISC_1:87;
     then [o2,o2] in dom[:g,g:] by FUNCT_4:42;
     then
 A9: F.o2 = ([:g,g:].(o2,o2))`1 by A6,FUNCT_4:def 2
       .= [g.o2,g.o2]`1 by FUNCT_3:75
-      .= g.o2 by MCART_1:7;
+      .= g.o2;
     [o1,o2] in dom~[:g,g:] by A1,A6,A7,ZFMISC_1:87;
     then
 A10: [o2,o1] in dom[:g,g:] by FUNCT_4:42;
@@ -1084,7 +1081,7 @@ A1: <^o1,o2^> <> {} and
 A2: <^F.o2,F.o1^> <> {};
   let m be Morphism of o1,o2;
   func F.m -> Morphism of F.o2, F.o1 equals
-  :Def17:
+  :Def16:
   Morph-Map(F,o1,o2).m;
   coherence
   proof
@@ -1099,10 +1096,10 @@ end;
 definition
   let C1,C2 be non empty AltGraph;
   let o be object of C2 such that
-A1: <^o,o^> <> {};
+B1: <^o,o^> <> {};
   let m be Morphism of o,o;
   func C1 --> m -> strict FunctorStr over C1,C2 means
-  :Def18:
+  :Def17:
   the ObjectMap of it = [:the carrier of C1,the carrier of C1:] --> [o,o] &
   the MorphMap of it =
   { [[o1,o2],<^o1,o2^> --> m] where o1 is object of C1, o2 is object of C1:
@@ -1119,7 +1116,7 @@ A1: <^o,o^> <> {};
     reconsider f as bifunction of the carrier of C1,the carrier of C2;
     set M = { [[o1,o2],<^o1,o2^> --> m]
     where o1 is object of C1, o2 is object of C1: not contradiction };
-A2: M = { [o9,A.o9 --> m] where o9 is Element of I1: not contradiction }
+A1: M = { [o9,A.o9 --> m] where o9 is Element of I1: not contradiction }
     proof
       thus M c=
       { [o9,A.o9 --> m] where o9 is Element of I1: not contradiction }
@@ -1127,9 +1124,9 @@ A2: M = { [o9,A.o9 --> m] where o9 is Element of I1: not contradiction }
         let x be set;
         assume x in M;
         then consider o3,o4 being object of C1 such that
-A3:     x = [[o3,o4],<^o3,o4^> --> m];
+A2:     x = [[o3,o4],<^o3,o4^> --> m];
         reconsider oo = [o3,o4] as Element of I1 by ZFMISC_1:87;
-        x = [oo,A.(o3,o4) --> m] by A3,ALTCAT_1:def 1
+        x = [oo,A.(o3,o4) --> m] by A2,ALTCAT_1:def 1
           .= [oo,A.oo --> m];
         hence thesis;
       end;
@@ -1137,23 +1134,23 @@ A3:     x = [[o3,o4],<^o3,o4^> --> m];
       assume x in { [o9,A.o9 --> m] where o9 is Element of I1: not
       contradiction };
       then consider o9 being Element of I1 such that
-A4:   x = [o9,A.o9 --> m];
+A3:   x = [o9,A.o9 --> m];
       reconsider o1 = o9`1, o2 = o9`2 as Element of C1 by MCART_1:10;
       reconsider o1, o2 as object of C1;
       o9 = [o1,o2] by MCART_1:21;
-      then x = [[o1,o2],A.(o1,o2) --> m] by A4
+      then x = [[o1,o2],A.(o1,o2) --> m] by A3
         .= [[o1,o2],<^o1,o2^> --> m] by ALTCAT_1:def 1;
       hence thesis;
     end;
-    B.(o,o) <> {} by A1,ALTCAT_1:def 1;
-    then reconsider M as MSUnTrans of f, A, B by A2,Th19;
+    B.(o,o) <> {} by B1,ALTCAT_1:def 1;
+    then reconsider M as MSUnTrans of f, A, B by A1,Th18;
     take FunctorStr(#f,M#);
     thus thesis;
   end;
   uniqueness;
 end;
 
-theorem Th22:
+theorem Th21:
   for C1,C2 being non empty AltGraph, o2 being object of C2 st <^o2,o2^> <> {}
   for m be Morphism of o2,o2, o1 being object of C1 holds (C1 --> m).o1 = o2
 proof
@@ -1163,9 +1160,9 @@ A1: <^o2,o2^> <> {};
 A2: [o1,o1] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:87;
   thus (C1 --> m).o1 =
   (([:the carrier of C1,the carrier of C1:] --> [o2,o2]).(o1,o1))`1
-  by A1,Def18
+  by A1,Def17
     .= [o2,o2]`1 by A2,FUNCOP_1:7
-    .= o2 by MCART_1:7;
+    .= o2;
 end;
 
 registration
@@ -1177,8 +1174,8 @@ registration
     <^o,o^> <> {} by ALTCAT_2:def 7;
     then
 A1: the ObjectMap of C1 --> m
-    = [:the carrier of C1,the carrier of C1:] --> [o,o] by Def18;
-    hence the ObjectMap of C1 --> m is Covariant Contravariant by Th16;
+    = [:the carrier of C1,the carrier of C1:] --> [o,o] by Def17;
+    hence the ObjectMap of C1 --> m is Covariant Contravariant by Th15;
     let o1,o2 be object of C1 such that <^o1,o2^> <> {};
     [o1,o2] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:87;
     then (the Arrows of C2).((the ObjectMap of C1 --> m).(o1,o2))
@@ -1198,21 +1195,21 @@ registration
   end;
 end;
 
-theorem Th23:
+theorem Th22:
   for C1, C2 being non empty AltGraph,
   F being Covariant FunctorStr over C1,C2, o1,o2 being object of C1
   holds (the ObjectMap of F).(o1,o2) = [F.o1,F.o2]
 proof
   let C1, C2 be non empty AltGraph, F be Covariant FunctorStr over C1,C2,
   o1,o2 be object of C1;
-  the ObjectMap of F is Covariant by Def13;
+  the ObjectMap of F is Covariant by Def12;
   then consider f being Function of the carrier of C1, the carrier of C2 such
   that
-A1: the ObjectMap of F = [:f,f:] by Def2;
+A1: the ObjectMap of F = [:f,f:] by Def1;
 A2: F.o1 = ([f.o1,f.o1])`1 by A1,FUNCT_3:75
-    .= f.o1 by MCART_1:7;
+    .= f.o1;
   F.o2 = ([f.o2,f.o2])`1 by A1,FUNCT_3:75
-    .= f.o2 by MCART_1:7;
+    .= f.o2;
   hence thesis by A1,A2,FUNCT_3:75;
 end;
 
@@ -1220,7 +1217,7 @@ definition
   let C1, C2 be non empty AltGraph;
   let F be Covariant FunctorStr over C1,C2;
   redefine attr F is feasible means
-  :Def19:
+  :Def18:
   for o1,o2 being object of C1 st <^o1,o2^> <> {} holds <^F.o1,F.o2^> <> {};
   compatibility
   proof
@@ -1231,8 +1228,8 @@ A1:   F is feasible;
       assume
 A2:   <^o1,o2^> <> {};
       <^F.o1,F.o2^> = (the Arrows of C2).(F.o1,F.o2) by ALTCAT_1:def 1
-        .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th23;
-      hence <^F.o1,F.o2^> <> {} by A1,A2,Def12;
+        .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th22;
+      hence <^F.o1,F.o2^> <> {} by A1,A2,Def11;
     end;
     assume
     A3: for
@@ -1241,33 +1238,33 @@ A2:   <^o1,o2^> <> {};
     assume
 A4: <^o1,o2^> <> {};
     <^F.o1,F.o2^> = (the Arrows of C2).(F.o1,F.o2) by ALTCAT_1:def 1
-      .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th23;
+      .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th22;
     hence thesis by A3,A4;
   end;
 end;
 
-theorem Th24:
+theorem Th23:
   for C1, C2 being non empty AltGraph,
   F being Contravariant FunctorStr over C1,C2, o1,o2 being object of C1
   holds (the ObjectMap of F).(o1,o2) = [F.o2,F.o1]
 proof
   let C1, C2 be non empty AltGraph, F be Contravariant FunctorStr over C1,C2,
   o1,o2 be object of C1;
-  the ObjectMap of F is Contravariant by Def14;
+  the ObjectMap of F is Contravariant by Def13;
   then consider f being Function of the carrier of C1, the carrier of C2 such
   that
-A1: the ObjectMap of F = ~[:f,f:] by Def3;
+A1: the ObjectMap of F = ~[:f,f:] by Def2;
 A2: dom[:f,f:] = [:the carrier of C1, the carrier of C1:] by FUNCT_2:def 1;
   then [o1,o1] in dom[:f,f:] by ZFMISC_1:87;
   then
 A3: F.o1 = ([:f,f:].(o1,o1))`1 by A1,FUNCT_4:def 2
     .= ([f.o1,f.o1])`1 by FUNCT_3:75
-    .= f.o1 by MCART_1:7;
+    .= f.o1;
   [o2,o2] in dom[:f,f:] by A2,ZFMISC_1:87;
   then
 A4: F.o2 = ([:f,f:].(o2,o2))`1 by A1,FUNCT_4:def 2
     .= ([f.o2,f.o2])`1 by FUNCT_3:75
-    .= f.o2 by MCART_1:7;
+    .= f.o2;
   [o2,o1] in dom[:f,f:] by A2,ZFMISC_1:87;
   hence (the ObjectMap of F).(o1,o2) = [:f,f:].(o2,o1) by A1,FUNCT_4:def 2
     .= [F.o2,F.o1] by A3,A4,FUNCT_3:75;
@@ -1277,7 +1274,7 @@ definition
   let C1, C2 be non empty AltGraph;
   let F be Contravariant FunctorStr over C1,C2;
   redefine attr F is feasible means
-  :Def20:
+  :Def19:
   for o1,o2 being object of C1 st <^o1,o2^> <> {} holds <^F.o2,F.o1^> <> {};
   compatibility
   proof
@@ -1288,8 +1285,8 @@ A1:   F is feasible;
       assume
 A2:   <^o1,o2^> <> {};
       <^F.o2,F.o1^> = (the Arrows of C2).(F.o2,F.o1) by ALTCAT_1:def 1
-        .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th24;
-      hence <^F.o2,F.o1^> <> {} by A1,A2,Def12;
+        .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th23;
+      hence <^F.o2,F.o1^> <> {} by A1,A2,Def11;
     end;
     assume
     A3: for
@@ -1298,7 +1295,7 @@ A2:   <^o1,o2^> <> {};
     assume
 A4: <^o1,o2^> <> {};
     <^F.o2,F.o1^> = (the Arrows of C2).(F.o2,F.o1) by ALTCAT_1:def 1
-      .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th24;
+      .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by Th23;
     hence thesis by A3,A4;
   end;
 end;
@@ -1325,11 +1322,11 @@ definition
   let C1,C2 be with_units non empty AltCatStr;
   let F be FunctorStr over C1,C2;
   attr F is id-preserving means
-  :Def21:
+  :Def20:
   for o being object of C1 holds Morph-Map(F,o,o).idm o = idm F.o;
 end;
 
-theorem Th25:
+theorem Th24:
   for C1,C2 being non empty AltGraph, o2 being object of C2 st <^o2,o2^> <> {}
   for m be Morphism of o2,o2, o,o9 being object of C1, f being Morphism of o,o9
   st <^o,o9^> <> {} holds Morph-Map(C1 --> m,o,o9).f = m
@@ -1364,7 +1361,7 @@ A6: e = [[o1,o19],(the Arrows of C1).(o1,o19) --> m];
   end;
   defpred P[set,set] means not contradiction;
   deffunc F(Element of C1,Element of C1) = (the Arrows of C1).($1,$2) --> m;
-  the MorphMap of C1 --> m = X by A1,Def18;
+  the MorphMap of C1 --> m = X by A1,Def17;
   then
 A7: the MorphMap of C1 --> m = { [[o1,o19],F(o1,o19)]
   where o1 is Element of C1, o19 is Element of C1: P[o1,o19] }
@@ -1390,8 +1387,8 @@ registration
     let o1 be object of C1;
 A1: <^o2,o2^> <> {} by ALTCAT_2:def 7;
     <^o1,o1^> <> {} by ALTCAT_2:def 7;
-    hence Morph-Map(C1 --> idm o2,o1,o1).idm o1 = idm o2 by A1,Th25
-      .= idm(C1 --> idm o2).o1 by A1,Th22;
+    hence Morph-Map(C1 --> idm o2,o1,o1).idm o1 = idm o2 by A1,Th24
+      .= idm(C1 --> idm o2).o1 by A1,Th21;
   end;
 end;
 
@@ -1408,7 +1405,7 @@ A1: [o,o] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:87;
     <^o2,o2^> <> {} by ALTCAT_2:def 7;
     then
 A2: (the ObjectMap of C1 --> m).(o,o)
-    = ([:the carrier of C1,the carrier of C1:] --> [o2,o2]).[o,o] by Def18
+    = ([:the carrier of C1,the carrier of C1:] --> [o2,o2]).[o,o] by Def17
       .= [o2,o2] by A1,FUNCOP_1:7;
     then (C1 --> m).o = o2 by MCART_1:7;
     hence thesis by A2;
@@ -1440,7 +1437,7 @@ definition
   let C1,C2 be non empty AltCatStr;
   let F be FunctorStr over C1,C2;
   attr F is comp-preserving means
-  :Def22:
+  :Def21:
   for o1,o2,o3 being object of C1 st <^o1,o2^> <> {} & <^o2,o3^> <> {}
   for f being Morphism of o1,o2, g being Morphism of o2,o3
   ex f9 being Morphism of F.o1,F.o2, g9 being Morphism of F.o2,F.o3 st
@@ -1452,7 +1449,7 @@ definition
   let C1,C2 be non empty AltCatStr;
   let F be FunctorStr over C1,C2;
   attr F is comp-reversing means
-  :Def23:
+  :Def22:
   for o1,o2,o3 being object of C1 st <^o1,o2^> <> {} & <^o2,o3^> <> {}
   for f being Morphism of o1,o2, g being Morphism of o2,o3
   ex f9 being Morphism of F.o2,F.o1, g9 being Morphism of F.o3,F.o2 st
@@ -1481,14 +1478,14 @@ A3:   <^o2,o3^> <> {};
       such that
 A4:   f9 = Morph-Map(F,o1,o2).f and
 A5:   g9 = Morph-Map(F,o2,o3).g and
-A6:   Morph-Map(F,o1,o3).(g*f) = g9*f9 by A1,A2,A3,Def22;
-A7:   <^F.o1,F.o2^> <> {} by A2,Def19;
-A8:   <^F.o2,F.o3^> <> {} by A3,Def19;
-A9:   f9 = F.f by A2,A4,A7,Def16;
-A10:  g9 = F.g by A3,A5,A8,Def16;
+A6:   Morph-Map(F,o1,o3).(g*f) = g9*f9 by A1,A2,A3,Def21;
+A7:   <^F.o1,F.o2^> <> {} by A2,Def18;
+A8:   <^F.o2,F.o3^> <> {} by A3,Def18;
+A9:   f9 = F.f by A2,A4,A7,Def15;
+A10:  g9 = F.g by A3,A5,A8,Def15;
 A11:  <^o1,o3^> <> {} by A2,A3,ALTCAT_1:def 2;
-      then <^F.o1,F.o3^> <> {} by Def19;
-      hence F.(g*f) = (F.g)*(F.f) by A6,A9,A10,A11,Def16;
+      then <^F.o1,F.o3^> <> {} by Def18;
+      hence F.(g*f) = (F.g)*(F.f) by A6,A9,A10,A11,Def15;
     end;
     assume
 A12: for o1,o2,o3 being object of C1 st <^o1,o2^> <> {} & <^o2,o3^> <> {}
@@ -1498,19 +1495,19 @@ A12: for o1,o2,o3 being object of C1 st <^o1,o2^> <> {} & <^o2,o3^> <> {}
 A13: <^o1,o2^> <> {} and
 A14: <^o2,o3^> <> {};
     let f be Morphism of o1,o2, g be Morphism of o2,o3;
-A15: <^F.o1,F.o2^> <> {} by A13,Def19;
+A15: <^F.o1,F.o2^> <> {} by A13,Def18;
     then reconsider f9 = Morph-Map(F,o1,o2).f as Morphism of F.o1,F.o2
     by A13,FUNCT_2:5;
-A16: <^F.o2,F.o3^> <> {} by A14,Def19;
+A16: <^F.o2,F.o3^> <> {} by A14,Def18;
     then reconsider g9 = Morph-Map(F,o2,o3).g as Morphism of F.o2,F.o3
     by A14,FUNCT_2:5;
     take f9, g9;
     thus f9 = Morph-Map(F,o1,o2).f & g9 = Morph-Map(F,o2,o3).g;
-A17: f9 = F.f by A13,A15,Def16;
-A18: g9 = F.g by A14,A16,Def16;
+A17: f9 = F.f by A13,A15,Def15;
+A18: g9 = F.g by A14,A16,Def15;
 A19: <^o1,o3^> <> {} by A13,A14,ALTCAT_1:def 2;
-    then <^F.o1,F.o3^> <> {} by Def19;
-    hence Morph-Map(F,o1,o3).(g*f) = F.(g*f) by A19,Def16
+    then <^F.o1,F.o3^> <> {} by Def18;
+    hence Morph-Map(F,o1,o3).(g*f) = F.(g*f) by A19,Def15
       .= g9*f9 by A12,A13,A14,A17,A18;
   end;
 end;
@@ -1536,14 +1533,14 @@ A3:   <^o2,o3^> <> {};
       such that
 A4:   f9 = Morph-Map(F,o1,o2).f and
 A5:   g9 = Morph-Map(F,o2,o3).g and
-A6:   Morph-Map(F,o1,o3).(g*f) = f9*g9 by A1,A2,A3,Def23;
-A7:   <^F.o2,F.o1^> <> {} by A2,Def20;
-A8:   <^F.o3,F.o2^> <> {} by A3,Def20;
-A9:   f9 = F.f by A2,A4,A7,Def17;
-A10:  g9 = F.g by A3,A5,A8,Def17;
+A6:   Morph-Map(F,o1,o3).(g*f) = f9*g9 by A1,A2,A3,Def22;
+A7:   <^F.o2,F.o1^> <> {} by A2,Def19;
+A8:   <^F.o3,F.o2^> <> {} by A3,Def19;
+A9:   f9 = F.f by A2,A4,A7,Def16;
+A10:  g9 = F.g by A3,A5,A8,Def16;
 A11:  <^o1,o3^> <> {} by A2,A3,ALTCAT_1:def 2;
-      then <^F.o3,F.o1^> <> {} by Def20;
-      hence F.(g*f) = (F.f)*(F.g) by A6,A9,A10,A11,Def17;
+      then <^F.o3,F.o1^> <> {} by Def19;
+      hence F.(g*f) = (F.f)*(F.g) by A6,A9,A10,A11,Def16;
     end;
     assume
 A12: for o1,o2,o3 being object of C1 st <^o1,o2^> <> {} & <^o2,o3^> <> {}
@@ -1553,24 +1550,24 @@ A12: for o1,o2,o3 being object of C1 st <^o1,o2^> <> {} & <^o2,o3^> <> {}
 A13: <^o1,o2^> <> {} and
 A14: <^o2,o3^> <> {};
     let f be Morphism of o1,o2, g be Morphism of o2,o3;
-A15: <^F.o2,F.o1^> <> {} by A13,Def20;
+A15: <^F.o2,F.o1^> <> {} by A13,Def19;
     then reconsider f9 = Morph-Map(F,o1,o2).f as Morphism of F.o2,F.o1
     by A13,FUNCT_2:5;
-A16: <^F.o3,F.o2^> <> {} by A14,Def20;
+A16: <^F.o3,F.o2^> <> {} by A14,Def19;
     then reconsider g9 = Morph-Map(F,o2,o3).g as Morphism of F.o3,F.o2
     by A14,FUNCT_2:5;
     take f9, g9;
     thus f9 = Morph-Map(F,o1,o2).f & g9 = Morph-Map(F,o2,o3).g;
-A17: f9 = F.f by A13,A15,Def17;
-A18: g9 = F.g by A14,A16,Def17;
+A17: f9 = F.f by A13,A15,Def16;
+A18: g9 = F.g by A14,A16,Def16;
 A19: <^o1,o3^> <> {} by A13,A14,ALTCAT_1:def 2;
-    then <^F.o3,F.o1^> <> {} by Def20;
-    hence Morph-Map(F,o1,o3).(g*f) = F.(g*f) by A19,Def17
+    then <^F.o3,F.o1^> <> {} by Def19;
+    hence Morph-Map(F,o1,o3).(g*f) = F.(g*f) by A19,Def16
       .= f9*g9 by A12,A13,A14,A17,A18;
   end;
 end;
 
-theorem Th26:
+theorem Th25:
   for C1 being non empty AltGraph, C2 being non empty reflexive AltGraph,
   o2 being object of C2, m be Morphism of o2,o2,
   F being Covariant feasible FunctorStr over C1,C2 st F = C1 --> m
@@ -1586,12 +1583,12 @@ A2: F = C1 --> m;
   let o,o9 be object of C1, f be Morphism of o,o9;
   assume
 A3: <^o,o9^> <> {};
-  then <^F.o,F.o9^> <> {} by Def19;
-  hence F.f = Morph-Map(F,o,o9).f by A3,Def16
-    .= m by A1,A2,A3,Th25;
+  then <^F.o,F.o9^> <> {} by Def18;
+  hence F.f = Morph-Map(F,o,o9).f by A3,Def15
+    .= m by A1,A2,A3,Th24;
 end;
 
-theorem Th27:
+theorem Th26:
   for C1 being non empty AltGraph, C2 being non empty reflexive AltGraph,
   o2 being object of C2, m be Morphism of o2,o2,
   o,o9 being object of C1, f being Morphism of o,o9 st <^o,o9^> <> {}
@@ -1605,9 +1602,9 @@ A1: <^o2,o2^> <> {} by ALTCAT_2:def 7;
   let o,o9 be object of C1, f be Morphism of o,o9;
   assume
 A2: <^o,o9^> <> {};
-  then <^F.o9,F.o^> <> {} by Def20;
-  hence F.f = Morph-Map(F,o,o9).f by A2,Def17
-    .= m by A1,A2,Th25;
+  then <^F.o9,F.o^> <> {} by Def19;
+  hence F.f = Morph-Map(F,o,o9).f by A2,Def16
+    .= m by A1,A2,Th24;
 end;
 
 registration
@@ -1628,12 +1625,12 @@ A2:   <^o1,o2^> <> {} and
 A3:   <^o2,o3^> <> {};
 A4:   <^o1,o3^> <> {} by A2,A3,ALTCAT_1:def 2;
       let f be Morphism of o1,o2, g be Morphism of o2,o3;
-A5:   G.g = idm o by A3,Th26;
-A6:   G.f = idm o by A2,Th26;
-A7:   G.o1 = o by A1,Th22;
-A8:   G.o2 = o by A1,Th22;
-A9:   G.o3 = o by A1,Th22;
-      thus G.(g*f) = idm o by A4,Th26
+A5:   G.g = idm o by A3,Th25;
+A6:   G.f = idm o by A2,Th25;
+A7:   G.o1 = o by A1,Th21;
+A8:   G.o2 = o by A1,Th21;
+A9:   G.o3 = o by A1,Th21;
+      thus G.(g*f) = idm o by A4,Th25
         .= (G.g)*(G.f) by A1,A5,A6,A7,A8,A9,ALTCAT_1:20;
     end;
     hence F is comp-preserving;
@@ -1643,12 +1640,12 @@ A10: <^o1,o2^> <> {} and
 A11: <^o2,o3^> <> {};
 A12: <^o1,o3^> <> {} by A10,A11,ALTCAT_1:def 2;
     let f be Morphism of o1,o2, g be Morphism of o2,o3;
-A13: F.g = idm o by A11,Th27;
-A14: F.f = idm o by A10,Th27;
-A15: F.o1 = o by A1,Th22;
-A16: F.o2 = o by A1,Th22;
-A17: F.o3 = o by A1,Th22;
-    thus F.(g*f) = idm o by A12,Th27
+A13: F.g = idm o by A11,Th26;
+A14: F.f = idm o by A10,Th26;
+A15: F.o1 = o by A1,Th21;
+A16: F.o2 = o by A1,Th21;
+A17: F.o3 = o by A1,Th21;
+    thus F.(g*f) = idm o by A12,Th26
       .= (F.f)*(F.g) by A1,A13,A14,A15,A16,A17,ALTCAT_1:20;
   end;
 end;
@@ -1657,7 +1654,7 @@ definition
   let C1 be transitive with_units non empty AltCatStr,
   C2 be with_units non empty AltCatStr;
   mode Functor of C1,C2 -> FunctorStr over C1,C2 means
-    :Def26:
+    :Def25:
     it is feasible id-preserving &
     (it is Covariant comp-preserving or it is Contravariant comp-reversing);
   existence
@@ -1671,17 +1668,17 @@ definition
   let C1 be transitive with_units non empty AltCatStr,
   C2 be with_units non empty AltCatStr, F be Functor of C1,C2;
   attr F is covariant means
-  :Def27:
+  :Def26:
   F is Covariant comp-preserving;
   attr F is contravariant means
-  :Def28:
+  :Def27:
   F is Contravariant comp-reversing;
 end;
 
 definition
   let A be AltCatStr, B be SubCatStr of A;
   func incl B -> strict FunctorStr over B,A means
-  :Def29:
+  :Def28:
   the ObjectMap of it = id [:the carrier of B, the carrier of B:] &
   the MorphMap of it = id the Arrows of B;
   existence
@@ -1722,7 +1719,7 @@ A3:       the Arrows of B cc= the Arrows of A by ALTCAT_2:def 11;
       end;
       case [:the carrier of A,the carrier of A:] = {};
         then CC = {};
-        hence thesis by PBOOLE:122;
+        hence thesis;
       end;
     end;
     then reconsider MM as MSUnTrans of OM, the Arrows of B, the Arrows of A;
@@ -1735,7 +1732,7 @@ end;
 definition
   let A be AltGraph;
   func id A -> strict FunctorStr over A,A means
-  :Def30:
+  :Def29:
   the ObjectMap of it = id [:the carrier of A, the carrier of A:] &
   the MorphMap of it = id the Arrows of A;
   existence
@@ -1766,7 +1763,7 @@ A1:       i in [:the carrier of A,the carrier of A:];
       end;
       case
         [:the carrier of A,the carrier of A:] = {};
-        hence thesis by PBOOLE:122;
+        hence thesis;
       end;
     end;
     then reconsider MM as MSUnTrans of OM, the Arrows of A, the Arrows of A;
@@ -1787,12 +1784,12 @@ registration
     Function of the carrier of B, the carrier of A;
     take f;
     thus
-    the ObjectMap of incl B = id[:the carrier of B,the carrier of B:] by Def29
+    the ObjectMap of incl B = id[:the carrier of B,the carrier of B:] by Def28
       .= [:f,f:] by FUNCT_3:69;
   end;
 end;
 
-theorem Th28:
+theorem Th27:
   for A being non empty AltCatStr, B being non empty SubCatStr of A,
   o being object of B holds (incl B).o = o
 proof
@@ -1800,12 +1797,12 @@ proof
   o be object of B;
 A1: [o,o] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   thus
-  (incl B).o = ((id[:the carrier of B,the carrier of B:]).[o,o])`1 by Def29
+  (incl B).o = ((id[:the carrier of B,the carrier of B:]).[o,o])`1 by Def28
     .= [o,o]`1 by A1,FUNCT_1:18
-    .= o by MCART_1:7;
+    .= o;
 end;
 
-theorem Th29:
+theorem Th28:
   for A being non empty AltCatStr, B being non empty SubCatStr of A,
   o1,o2 being object of B holds <^o1,o2^> c= <^(incl B).o1,(incl B).o2^>
 proof
@@ -1814,8 +1811,8 @@ proof
 A1: [o1,o2] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
 A2: <^o1,o2^> = (the Arrows of B).(o1,o2) by ALTCAT_1:def 1
     .= (the Arrows of B).[o1,o2];
-A3: (incl B).o1 = o1 by Th28;
-  (incl B).o2 = o2 by Th28;
+A3: (incl B).o1 = o1 by Th27;
+  (incl B).o2 = o2 by Th27;
   then
 A4: <^(incl B).o1,(incl B).o2^> = (the Arrows of A).(o1,o2) by A3,
 ALTCAT_1:def 1
@@ -1830,21 +1827,21 @@ registration
   coherence
   proof
     let o1,o2 be object of B;
-    thus thesis by Th29,XBOOLE_1:3;
+    thus thesis by Th28,XBOOLE_1:3;
   end;
 end;
 
 definition
   let A,B be AltGraph, F be FunctorStr over A,B;
   attr F is faithful means
-  :Def31:
+  :Def30:
   the MorphMap of F is "1-1";
 end;
 
 definition
   let A,B be AltGraph, F be FunctorStr over A,B;
   attr F is full means
-  :Def32:
+  :Def31:
   ex B9 being ManySortedSet of [:the carrier of A, the carrier of A:],
   f being ManySortedFunction of (the Arrows of A),B9 st
   B9 = (the Arrows of B)*the ObjectMap of F & f = the MorphMap of F
@@ -1854,7 +1851,7 @@ end;
 definition
   let A be AltGraph, B be non empty AltGraph, F be FunctorStr over A,B;
   redefine attr F is full means
-  :Def33:
+  :Def32:
   ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st f = the MorphMap of F & f is "onto";
   compatibility
@@ -1866,7 +1863,7 @@ definition
       f being ManySortedFunction of (the Arrows of A),B9 such that
 A1:   B9 = (the Arrows of B)*the ObjectMap of F and
 A2:   f = the MorphMap of F and
-A3:   f is "onto" by Def32;
+A3:   f is "onto" by Def31;
       reconsider f as ManySortedFunction of (the Arrows of A),
       (the Arrows of B)*the ObjectMap of F by A1;
       take f;
@@ -1885,17 +1882,17 @@ end;
 definition
   let A,B be AltGraph, F be FunctorStr over A,B;
   attr F is injective means
-  :Def34:
+  :Def33:
   F is one-to-one faithful;
   attr F is surjective means
-  :Def35:
+  :Def34:
   F is full onto;
 end;
 
 definition
   let A,B be AltGraph, F be FunctorStr over A,B;
   attr F is bijective means
-  :Def36:
+  :Def35:
   F is injective surjective;
 end;
 
@@ -1904,23 +1901,23 @@ registration
   cluster strict covariant contravariant feasible for Functor of A,B;
   existence
   proof set o = the object of B;
-    reconsider F = A --> idm o as Functor of A,B by Def26;
+    reconsider F = A --> idm o as Functor of A,B by Def25;
     take F;
-    thus thesis by Def27,Def28;
+    thus thesis by Def26,Def27;
   end;
 end;
 
-theorem Th30:
+theorem Th29:
   for A being non empty AltGraph, o being object of A holds (id A).o = o
 proof
   let A be non empty AltGraph, o be object of A;
 A1: [o,o] in [:the carrier of A,the carrier of A:] by ZFMISC_1:87;
-  thus (id A).o = ((id[:the carrier of A,the carrier of A:]).[o,o])`1 by Def30
+  thus (id A).o = ((id[:the carrier of A,the carrier of A:]).[o,o])`1 by Def29
     .= ([o,o])`1 by A1,FUNCT_1:18
-    .= o by MCART_1:7;
+    .= o;
 end;
 
-theorem Th31:
+theorem Th30:
   for A being non empty AltGraph, o1,o2 being object of A st <^o1,o2^> <> {}
   for m being Morphism of o1,o2 holds Morph-Map(id A,o1,o2).m = m
 proof
@@ -1928,7 +1925,7 @@ proof
 A1: <^o1,o2^> <> {};
   let m be Morphism of o1,o2;
 A2: [o1,o2] in [:the carrier of A, the carrier of A:] by ZFMISC_1:87;
-  Morph-Map(id A,o1,o2) = (id the Arrows of A).[o1,o2] by Def30;
+  Morph-Map(id A,o1,o2) = (id the Arrows of A).[o1,o2] by Def29;
   hence Morph-Map(id A,o1,o2).m
   = (id((the Arrows of A).(o1,o2))).m by A2,MSUALG_3:def 1
     .= (id<^o1,o2^>).m by ALTCAT_1:def 1
@@ -1945,7 +1942,7 @@ registration
       let o1,o2 be object of A;
 A1:   [o1,o2] in [:the carrier of A, the carrier of A:] by ZFMISC_1:87;
       (the ObjectMap of id A).(o1,o2)
-      = (id[:the carrier of A, the carrier of A:]).[o1,o2] by Def30
+      = (id[:the carrier of A, the carrier of A:]).[o1,o2] by Def29
         .= [o1,o2] by A1,FUNCT_1:18;
       then (the Arrows of A).((the ObjectMap of id A).(o1,o2))
       = (the Arrows of A).(o1,o2)
@@ -1956,7 +1953,7 @@ A1:   [o1,o2] in [:the carrier of A, the carrier of A:] by ZFMISC_1:87;
     proof
       take I = id the carrier of A;
       thus
-      the ObjectMap of id A = id[:the carrier of A,the carrier of A:] by Def30
+      the ObjectMap of id A = id[:the carrier of A,the carrier of A:] by Def29
         .= [:I,I:] by FUNCT_3:69;
     end;
   end;
@@ -1972,7 +1969,7 @@ registration
   end;
 end;
 
-theorem Th32:
+theorem Th31:
   for A being non empty AltGraph, o1,o2 being object of A st <^o1,o2^> <> {}
   for F being Covariant feasible FunctorStr over A,A st F = id A
   for m being Morphism of o1,o2 holds F.m = m
@@ -1982,9 +1979,9 @@ A1: <^o1,o2^> <> {};
   let F be Covariant feasible FunctorStr over A,A such that
 A2: F = id A;
   let m be Morphism of o1,o2;
-  <^F.o1,F.o2^> <> {} by A1,Def19;
-  hence F.m = Morph-Map(F,o1,o2).m by A1,Def16
-    .= m by A1,A2,Th31;
+  <^F.o1,F.o2^> <> {} by A1,Def18;
+  hence F.m = Morph-Map(F,o1,o2).m by A1,Def15
+    .= m by A1,A2,Th30;
 end;
 
 registration
@@ -1996,8 +1993,8 @@ registration
     proof
       let o be object of A;
       <^o,o^> <> {} by ALTCAT_2:def 7;
-      hence Morph-Map(id A,o,o).idm o = idm o by Th31
-        .= idm (id A).o by Th30;
+      hence Morph-Map(id A,o,o).idm o = idm o by Th30
+        .= idm (id A).o by Th29;
     end;
     set F = id A;
     F is comp-preserving
@@ -2007,12 +2004,12 @@ A1:   <^o1,o2^> <> {} and
 A2:   <^o2,o3^> <> {};
       let f be Morphism of o1,o2, g be Morphism of o2,o3;
 A3:   <^o1,o3^> <> {} by A1,A2,ALTCAT_1:def 2;
-A4:   F.o1 = o1 by Th30;
-A5:   F.o2 = o2 by Th30;
-A6:   F.o3 = o3 by Th30;
-A7:   F.g = g by A2,Th32;
-      F.f = f by A1,Th32;
-      hence thesis by A3,A4,A5,A6,A7,Th32;
+A4:   F.o1 = o1 by Th29;
+A5:   F.o2 = o2 by Th29;
+A6:   F.o3 = o3 by Th29;
+A7:   F.g = g by A2,Th31;
+      F.f = f by A1,Th31;
+      hence thesis by A3,A4,A5,A6,A7,Th31;
     end;
     hence thesis;
   end;
@@ -2021,7 +2018,7 @@ end;
 definition
   let A be transitive with_units non empty AltCatStr;
   redefine func id A -> strict covariant Functor of A,A;
-  coherence by Def26,Def27;
+  coherence by Def25,Def26;
 end;
 
 registration
@@ -2030,8 +2027,8 @@ registration
   coherence
   proof
     set CC=[:the carrier of A,the carrier of A:];
-A1: the ObjectMap of id A = id CC by Def30;
-    hence id A is one-to-one by Def7;
+A1: the ObjectMap of id A = id CC by Def29;
+    hence id A is one-to-one by Def6;
     thus id A is faithful
     proof
       per cases;
@@ -2040,13 +2037,11 @@ A2:     the carrier of A <> {};
         let i be set, f be Function such that
 A3:     i in dom(the MorphMap of id A) and
 A4:     (the MorphMap of id A).i = f;
-        dom(the MorphMap of id A) = [:the carrier of A,the carrier of A:]
-        by PARTFUN1:def 2;
-        then consider o1,o2 being Element of A such that
+        consider o1,o2 being Element of A such that
 A5:     i = [o1,o2] by A2,A3,DOMAIN_1:1;
         reconsider o1,o2 as object of A;
 A6:     [o1,o2] in [:the carrier of A, the carrier of A:] by A2,ZFMISC_1:87;
-        f = (id the Arrows of A).(o1,o2) by A4,A5,Def30
+        f = (id the Arrows of A).(o1,o2) by A4,A5,Def29
           .= id((the Arrows of A).[o1,o2]) by A6,MSUALG_3:def 1;
         hence thesis;
       end;
@@ -2068,7 +2063,7 @@ A8:     i in dom(the MorphMap of id A) and
         proof
           reconsider f = the MorphMap of id A as
           ManySortedFunction of (the Arrows of A),
-          (the Arrows of A)*the ObjectMap of id A by Def5;
+          (the Arrows of A)*the ObjectMap of id A by Def4;
           take f;
           thus f = the MorphMap of id A;
           let i be set;
@@ -2079,7 +2074,7 @@ A10:      i = [o1,o2] by DOMAIN_1:1;
           reconsider o1,o2 as object of A;
 A11:      [o1,o2] in [:the carrier of A, the carrier of A:] by ZFMISC_1:87;
 A12:      dom(the ObjectMap of id A) = CC by A1,RELAT_1:45;
-          f.i = (id the Arrows of A).(o1,o2) by A10,Def30
+          f.i = (id the Arrows of A).(o1,o2) by A10,Def29
             .= id((the Arrows of A).[o1,o2]) by A11,MSUALG_3:def 1;
           hence rng(f.i) = (the Arrows of A).[o1,o2] by RELAT_1:45
 .= (the Arrows of A).((the ObjectMap of id A).i) by A1,A9,A10,FUNCT_1:18
@@ -2090,9 +2085,9 @@ A12:      dom(the ObjectMap of id A) = CC by A1,RELAT_1:45;
       suppose A is empty;
         then
 A13:    the carrier of A = {};
-the ObjectMap of id A = id [:the carrier of A, the carrier of A:] by Def30;
+the ObjectMap of id A = id [:the carrier of A, the carrier of A:] by Def29;
         then reconsider B = (the Arrows of A)*the ObjectMap of id A as
-        ManySortedSet of [:the carrier of A, the carrier of A:] by Th3;
+        ManySortedSet of [:the carrier of A, the carrier of A:] by Th2;
         reconsider f = the MorphMap of id A as
         ManySortedSet of [:the carrier of A, the carrier of A:];
         f is ManySortedFunction of (the Arrows of A),B
@@ -2108,9 +2103,9 @@ the ObjectMap of id A = id [:the carrier of A, the carrier of A:] by Def30;
         thus thesis by A13,ZFMISC_1:90;
       end;
     end;
-    rng id CC = CC by RELAT_1:45;
+    rng id CC = CC;
     then the ObjectMap of id A is onto by A1,FUNCT_2:def 3;
-    hence id A is onto by Def8;
+    hence id A is onto by Def7;
   end;
 end;
 
@@ -2120,7 +2115,7 @@ definition
   let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph;
   let F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3;
   func G*F -> strict FunctorStr over C1,C3 means
-  :Def37:
+  :Def36:
   the ObjectMap of it = (the ObjectMap of G)*the ObjectMap of F &
   the MorphMap of it =
   ((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F;
@@ -2131,7 +2126,7 @@ definition
     set I1 = [:the carrier of C1,the carrier of C1:];
     reconsider H = (the MorphMap of G)*the ObjectMap of F
     as MSUnTrans of O,(the Arrows of C2)*the ObjectMap of F,the Arrows of C3
-    by Th18;
+    by Th17;
     for ii being set st ii in I1 &
     ((the Arrows of C2)*the ObjectMap of F).ii = {}
     holds (the Arrows of C1).ii = {} or ((the Arrows of C3)*O).ii = {}
@@ -2147,11 +2142,11 @@ A4:   (the Arrows of C2).((the ObjectMap of F).(o1,o2))
       = {} by A1,A2,A3,FUNCT_1:13;
       (the Arrows of C1).ii = (the Arrows of C1).(o1,o2) by A1,MCART_1:21
         .= <^o1,o2^> by ALTCAT_1:def 1
-        .= {} by A4,Def12;
+        .= {} by A4,Def11;
       hence thesis;
     end;
     then reconsider M = H**the MorphMap of F
-    as MSUnTrans of O, the Arrows of C1, the Arrows of C3 by Th20;
+    as MSUnTrans of O, the Arrows of C1, the Arrows of C3 by Th19;
     take FunctorStr(#O,M#);
     thus thesis;
   end;
@@ -2165,17 +2160,17 @@ registration
   cluster G*F -> Covariant;
   correctness
   proof
-    the ObjectMap of F is Covariant by Def13;
+    the ObjectMap of F is Covariant by Def12;
     then consider f being Function of the carrier of C1, the carrier of C2
     such that
-A1: the ObjectMap of F = [:f,f:] by Def2;
-    the ObjectMap of G is Covariant by Def13;
+A1: the ObjectMap of F = [:f,f:] by Def1;
+    the ObjectMap of G is Covariant by Def12;
     then consider g being Function of the carrier of C2, the carrier of C3
     such that
-A2: the ObjectMap of G = [:g,g:] by Def2;
+A2: the ObjectMap of G = [:g,g:] by Def1;
     take g*f;
     thus
-    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def36
       .= [:g*f,g*f:] by A1,A2,FUNCT_3:71;
   end;
 end;
@@ -2187,17 +2182,17 @@ registration
   cluster G*F -> Contravariant;
   correctness
   proof
-    the ObjectMap of F is Contravariant by Def14;
+    the ObjectMap of F is Contravariant by Def13;
     then consider f being Function of the carrier of C1, the carrier of C2
     such that
-A1: the ObjectMap of F = ~[:f,f:] by Def3;
-    the ObjectMap of G is Covariant by Def13;
+A1: the ObjectMap of F = ~[:f,f:] by Def2;
+    the ObjectMap of G is Covariant by Def12;
     then consider g being Function of the carrier of C2, the carrier of C3
     such that
-A2: the ObjectMap of G = [:g,g:] by Def2;
+A2: the ObjectMap of G = [:g,g:] by Def1;
     take g*f;
     thus
-    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def36
       .= ~([:g,g:]*[:f,f:]) by A1,A2,ALTCAT_2:2
       .= ~[:g*f,g*f:] by FUNCT_3:71;
   end;
@@ -2210,17 +2205,17 @@ registration
   cluster G*F -> Contravariant;
   correctness
   proof
-    the ObjectMap of F is Covariant by Def13;
+    the ObjectMap of F is Covariant by Def12;
     then consider f being Function of the carrier of C1, the carrier of C2
     such that
-A1: the ObjectMap of F = [:f,f:] by Def2;
-    the ObjectMap of G is Contravariant by Def14;
+A1: the ObjectMap of F = [:f,f:] by Def1;
+    the ObjectMap of G is Contravariant by Def13;
     then consider g being Function of the carrier of C2, the carrier of C3
     such that
-A2: the ObjectMap of G = ~[:g,g:] by Def3;
+A2: the ObjectMap of G = ~[:g,g:] by Def2;
     take g*f;
     thus
-    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def36
       .= ~([:g,g:]*[:f,f:]) by A1,A2,ALTCAT_2:3
       .= ~[:g*f,g*f:] by FUNCT_3:71;
   end;
@@ -2233,17 +2228,17 @@ registration
   cluster G*F -> Covariant;
   correctness
   proof
-    the ObjectMap of F is Contravariant by Def14;
+    the ObjectMap of F is Contravariant by Def13;
     then consider f being Function of the carrier of C1, the carrier of C2
     such that
-A1: the ObjectMap of F = ~[:f,f:] by Def3;
-    the ObjectMap of G is Contravariant by Def14;
+A1: the ObjectMap of F = ~[:f,f:] by Def2;
+    the ObjectMap of G is Contravariant by Def13;
     then consider g being Function of the carrier of C2, the carrier of C3
     such that
-A2: the ObjectMap of G = ~[:g,g:] by Def3;
+A2: the ObjectMap of G = ~[:g,g:] by Def2;
     take g*f;
     thus
-    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def37
+    the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F by Def36
       .= ~(~[:g,g:]*[:f,f:]) by A1,A2,ALTCAT_2:2
       .= ~~([:g,g:]*[:f,f:]) by ALTCAT_2:3
       .= [:g,g:]*[:f,f:] by FUNCT_4:53
@@ -2268,12 +2263,12 @@ A1: <^o1,o2^> <> {};
 A2: [o1,o2] in dom the ObjectMap of F by FUNCT_2:def 1;
 A3: ((the ObjectMap of F).(o1,o2)) = [p1,p2] by MCART_1:21;
 A4: ((the ObjectMap of(G*F)).(o1,o2))
-    = ((the ObjectMap of G)*the ObjectMap of F).[o1,o2] by Def37
+    = ((the ObjectMap of G)*the ObjectMap of F).[o1,o2] by Def36
       .= (the ObjectMap of G).(p1,p2) by A2,A3,FUNCT_1:13;
     <^p1,p2^> = (the Arrows of C2).(p1,p2) by ALTCAT_1:def 1
       .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by MCART_1:21;
-    then <^p1,p2^> <> {} by A1,Def12;
-    hence thesis by A4,Def12;
+    then <^p1,p2^> <> {} by A1,Def11;
+    hence thesis by A4,Def11;
   end;
 end;
 
@@ -2286,30 +2281,30 @@ proof
   let C1 be non empty AltGraph, C2,C3,C4 be non empty reflexive AltGraph,
   F be feasible FunctorStr over C1,C2,
   G be feasible FunctorStr over C2,C3, H be FunctorStr over C3,C4;
-A1: the ObjectMap of H*G*F = (the ObjectMap of H*G)*the ObjectMap of F by Def37
-    .= (the ObjectMap of H)*(the ObjectMap of G)*the ObjectMap of F by Def37
+A1: the ObjectMap of H*G*F = (the ObjectMap of H*G)*the ObjectMap of F by Def36
+    .= (the ObjectMap of H)*(the ObjectMap of G)*the ObjectMap of F by Def36
     .= (the ObjectMap of H)*((the ObjectMap of G)*the ObjectMap of F)
   by RELAT_1:36
-    .= (the ObjectMap of H)*the ObjectMap of(G*F) by Def37
-    .= the ObjectMap of H*(G*F) by Def37;
+    .= (the ObjectMap of H)*the ObjectMap of(G*F) by Def36
+    .= the ObjectMap of H*(G*F) by Def36;
   the MorphMap of H*G*F
-  = ((the MorphMap of H*G)*the ObjectMap of F)**the MorphMap of F by Def37
+  = ((the MorphMap of H*G)*the ObjectMap of F)**the MorphMap of F by Def36
     .= ((the MorphMap of H)*(the ObjectMap of G)**the MorphMap of G)
-  *(the ObjectMap of F)**the MorphMap of F by Def37
+  *(the ObjectMap of F)**the MorphMap of F by Def36
     .= (the MorphMap of H)*(the ObjectMap of G)*(the ObjectMap of F)
-  **((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F by Th13
+  **((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F by Th12
     .= (the MorphMap of H)*((the ObjectMap of G)*the ObjectMap of F)
   **((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F by RELAT_1:36
     .= ((the MorphMap of H)*the ObjectMap of G*F)**
-  ((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F by Def37
+  ((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F by Def36
     .= ((the MorphMap of H)*the ObjectMap of G*F)**
   (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F) by PBOOLE:140
-    .= ((the MorphMap of H)*the ObjectMap of G*F)**the MorphMap of G*F by Def37
-    .= the MorphMap of H*(G*F) by Def37;
+    .= ((the MorphMap of H)*the ObjectMap of G*F)**the MorphMap of G*F by Def36
+    .= the MorphMap of H*(G*F) by Def36;
   hence thesis by A1;
 end;
 
-theorem Th34:
+theorem Th33:
   for C1 being non empty AltCatStr, C2,C3 being non empty reflexive AltCatStr,
   F be feasible reflexive FunctorStr over C1,C2, G be FunctorStr over C2,C3,
   o be object of C1 holds (G*F).o = G.(F.o)
@@ -2321,12 +2316,12 @@ proof
   by FUNCT_2:def 1;
   then
 A1: [o,o] in dom the ObjectMap of F by ZFMISC_1:87;
-  thus (G*F).o = (((the ObjectMap of G)*the ObjectMap of F).(o,o))`1 by Def37
+  thus (G*F).o = (((the ObjectMap of G)*the ObjectMap of F).(o,o))`1 by Def36
     .= ((the ObjectMap of G).((the ObjectMap of F).[o,o]))`1 by A1,FUNCT_1:13
-    .= G.(F.o) by Def11;
+    .= G.(F.o) by Def10;
 end;
 
-theorem Th35:
+theorem Th34:
   for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
   F be feasible reflexive FunctorStr over C1,C2, G be FunctorStr over C2,C3,
   o be object of C1
@@ -2353,10 +2348,10 @@ A2: [o,o] in dom((the MorphMap of G)*the ObjectMap of F) by ZFMISC_1:87;
   by PBOOLE:def 19;
 A4: ((the MorphMap of G)*the ObjectMap of F).[o,o]
   = (the MorphMap of G).((the ObjectMap of F).(o,o)) by A2,FUNCT_1:12
-    .= Morph-Map(G,F.o,F.o) by Def11;
+    .= Morph-Map(G,F.o,F.o) by Def10;
   thus Morph-Map(G*F,o,o)
   = (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F).(o,o)
-  by Def37
+  by Def36
     .= Morph-Map(G,F.o,F.o)*Morph-Map(F,o,o) by A3,A4,PBOOLE:def 19;
 end;
 
@@ -2372,24 +2367,24 @@ A1: [o,o] in [:the carrier of C1,the carrier of C1:] by ZFMISC_1:87;
     then [o,o] in dom the ObjectMap of F by FUNCT_2:def 1;
     then ((the Arrows of C2)*the ObjectMap of F).[o,o]
     = (the Arrows of C2).((the ObjectMap of F).(o,o)) by FUNCT_1:13
-      .= (the Arrows of C2).(F.o,F.o) by Def11
+      .= (the Arrows of C2).(F.o,F.o) by Def10
       .= <^F.o,F.o^> by ALTCAT_1:def 1;
     then
 A2: ((the Arrows of C2)*the ObjectMap of F).[o,o] <> {} by ALTCAT_2:def 7;
     the MorphMap of F is ManySortedFunction of the Arrows of C1,
-    (the Arrows of C2)*the ObjectMap of F by Def5;
+    (the Arrows of C2)*the ObjectMap of F by Def4;
     then Morph-Map(F,o,o) is Function of (the Arrows of C1).[o,o],
     ((the Arrows of C2)*the ObjectMap of F).[o,o] by A1,PBOOLE:def 15;
     then
 A3: dom Morph-Map(F,o,o) = (the Arrows of C1).(o,o) by A2,FUNCT_2:def 1
       .= <^o,o^> by ALTCAT_1:def 1;
     thus Morph-Map(G*F,o,o).idm o
-    = (Morph-Map(G,F.o,F.o)*Morph-Map(F,o,o)).idm o by Th35
+    = (Morph-Map(G,F.o,F.o)*Morph-Map(F,o,o)).idm o by Th34
       .= Morph-Map(G,F.o,F.o).(Morph-Map(F,o,o).idm o) by A3,ALTCAT_1:19
 ,FUNCT_1:13
-      .= Morph-Map(G,F.o,F.o).idm F.o by Def21
-      .= idm G.(F.o) by Def21
-      .= idm (G*F).o by Th34;
+      .= Morph-Map(G,F.o,F.o).idm F.o by Def20
+      .= idm G.(F.o) by Def20
+      .= idm (G*F).o by Th33;
   end;
 end;
 
@@ -2409,7 +2404,7 @@ definition
   assume
 A1: F is bijective;
   func F" -> strict FunctorStr over B,A means
-  :Def39:
+  :Def38:
   the ObjectMap of it = (the ObjectMap of F)" &
   ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st
@@ -2417,27 +2412,27 @@ A1: F is bijective;
   existence
   proof
     set OF = the ObjectMap of F;
-    F is injective by A1,Def36;
-    then F is one-to-one by Def34;
+    F is injective by A1,Def35;
+    then F is one-to-one by Def33;
     then
-A2: OF is one-to-one by Def7;
-    F is surjective by A1,Def36;
-    then F is onto by Def35;
-    then OF is onto by Def8;
+A2: OF is one-to-one by Def6;
+    F is surjective by A1,Def35;
+    then F is onto by Def34;
+    then OF is onto by Def7;
     then
 A3: rng OF = [:the carrier of B,the carrier of B:] by FUNCT_2:def 3;
     then reconsider OM = (the ObjectMap of F)" as
     bifunction of the carrier of B, the carrier of A by A2,FUNCT_2:25;
     reconsider f = the MorphMap of F as
-    ManySortedFunction of (the Arrows of A), (the Arrows of B)*OF by Def5;
+    ManySortedFunction of (the Arrows of A), (the Arrows of B)*OF by Def4;
     (the Arrows of B)*OF*OM = (the Arrows of B)*(OF*OM) by RELAT_1:36
       .= (the Arrows of B)*id[:the carrier of B,the carrier of B:]
     by A2,A3,FUNCT_2:29
-      .= the Arrows of B by Th3;
+      .= the Arrows of B by Th2;
     then f""*OM is ManySortedFunction of the Arrows of B, (the Arrows of A)*OM
     by ALTCAT_2:5;
     then reconsider MM = f""*OM
-    as MSUnTrans of OM, the Arrows of B, the Arrows of A by Def5;
+    as MSUnTrans of OM, the Arrows of B, the Arrows of A by Def4;
     take G = FunctorStr(#OM,MM#);
     thus the ObjectMap of G = OF";
     take f;
@@ -2446,7 +2441,7 @@ A3: rng OF = [:the carrier of B,the carrier of B:] by FUNCT_2:def 3;
   uniqueness;
 end;
 
-theorem Th36:
+theorem Th35:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible FunctorStr over A,B st F is bijective
   holds F" is bijective feasible
@@ -2455,39 +2450,39 @@ proof
   let F be feasible FunctorStr over A,B such that
 A1: F is bijective;
   set G = F";
-A2: the ObjectMap of G = (the ObjectMap of F)" by A1,Def39;
-A3: F is injective by A1,Def36;
-  then F is one-to-one by Def34;
+A2: the ObjectMap of G = (the ObjectMap of F)" by A1,Def38;
+A3: F is injective by A1,Def35;
+  then F is one-to-one by Def33;
   then
-A4: the ObjectMap of F is one-to-one by Def7;
+A4: the ObjectMap of F is one-to-one by Def6;
   hence the ObjectMap of G is one-to-one by A2;
-  F is faithful by A3,Def34;
+  F is faithful by A3,Def33;
   then
-A5: the MorphMap of F is "1-1" by Def31;
-A6: F is surjective by A1,Def36;
-  then F is onto by Def35;
+A5: the MorphMap of F is "1-1" by Def30;
+A6: F is surjective by A1,Def35;
+  then F is onto by Def34;
   then
-A7: the ObjectMap of F is onto by Def8;
+A7: the ObjectMap of F is onto by Def7;
   consider h being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F such that
 A8: h = the MorphMap of F and
-A9: the MorphMap of G = h""*(the ObjectMap of F)" by A1,Def39;
-  F is full by A6,Def35;
+A9: the MorphMap of G = h""*(the ObjectMap of F)" by A1,Def38;
+  F is full by A6,Def34;
   then
 A10: ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st
-  f = the MorphMap of F & f is "onto" by Def33;
+  f = the MorphMap of F & f is "onto" by Def32;
   set AA = [:the carrier of A,the carrier of A:],
   BB = [:the carrier of B,the carrier of B:];
 A11: rng the ObjectMap of F = BB by A7,FUNCT_2:def 3;
   reconsider f = the MorphMap of G as ManySortedFunction of
-  (the Arrows of B),(the Arrows of A)*the ObjectMap of G by Def5;
+  (the Arrows of B),(the Arrows of A)*the ObjectMap of G by Def4;
   f is "1-1"
   proof
     let i be set, g be Function such that
 A12: i in dom f and
 A13: f.i = g;
-    i in BB by A12,PARTFUN1:def 2;
+    i in BB by A12;
     then
 A14: i in dom((the ObjectMap of F)") by A4,A11,FUNCT_1:33;
     then (the ObjectMap of F)".i in rng((the ObjectMap of F)") by FUNCT_1:def 3
@@ -2531,7 +2526,7 @@ A24: now
       assume (the Arrows of A).j <> {};
       then (the Arrows of A).(o1,o2) <> {} by A23;
       then <^o1,o2^> <> {} by ALTCAT_1:def 1;
-      then (the Arrows of B).((the ObjectMap of F).(o1,o2)) <> {} by Def12;
+      then (the Arrows of B).((the ObjectMap of F).(o1,o2)) <> {} by Def11;
       hence ((the Arrows of B)*the ObjectMap of F).j <> {} by A2,A20,A23,
 FUNCT_1:13;
     end;
@@ -2571,7 +2566,7 @@ MSUALG_3:def 3
   hence contradiction by A25;
 end;
 
-theorem Th37:
+theorem Th36:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible reflexive FunctorStr over A,B st F is bijective coreflexive
   holds F" is reflexive
@@ -2581,30 +2576,30 @@ proof
 A1: F is bijective and
 A2: F is coreflexive;
   set G = F";
-A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def39;
+A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def38;
   let o be object of B;
 A4: dom the ObjectMap of F = [:the carrier of A,the carrier of A:]
   by FUNCT_2:def 1;
   consider p being object of A such that
-A5: o = F.p by A2,Th21;
-  F is injective by A1,Def36;
-  then F is one-to-one by Def34;
+A5: o = F.p by A2,Th20;
+  F is injective by A1,Def35;
+  then F is one-to-one by Def33;
   then
-A6: the ObjectMap of F is one-to-one by Def7;
+A6: the ObjectMap of F is one-to-one by Def6;
 A7: [p,p] in dom the ObjectMap of F by A4,ZFMISC_1:87;
-A8: G.(F.p) = (G*F).p by Th34
-    .= (((the ObjectMap of G)*the ObjectMap of F).(p,p))`1 by Def37
+A8: G.(F.p) = (G*F).p by Th33
+    .= (((the ObjectMap of G)*the ObjectMap of F).(p,p))`1 by Def36
     .= ((id dom the ObjectMap of F).[p,p])`1 by A3,A6,FUNCT_1:39
     .= [p,p]`1 by A7,FUNCT_1:18
-    .= p by MCART_1:7;
+    .= p;
   thus (the ObjectMap of G).(o,o)
-  = (the ObjectMap of G).((the ObjectMap of F).(p,p)) by A5,Def11
+  = (the ObjectMap of G).((the ObjectMap of F).(p,p)) by A5,Def10
     .= ((the ObjectMap of G)*(the ObjectMap of F)).[p,p] by A7,FUNCT_1:13
     .= (id dom the ObjectMap of F).[p,p] by A3,A6,FUNCT_1:39
     .= [G.o,G.o] by A5,A7,A8,FUNCT_1:18;
 end;
 
-theorem Th38:
+theorem Th37:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible reflexive id-preserving FunctorStr over A,B
   st F is bijective coreflexive holds F" is id-preserving
@@ -2613,38 +2608,38 @@ proof
   F be feasible reflexive id-preserving FunctorStr over A,B such that
 A1: F is bijective coreflexive;
   set G = F";
-  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th36,Th37;
-A2: the ObjectMap of G = (the ObjectMap of F)" by A1,Def39;
+  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th35,Th36;
+A2: the ObjectMap of G = (the ObjectMap of F)" by A1,Def38;
   consider f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F such that
 A3: f = the MorphMap of F and
-A4: the MorphMap of G = f""*(the ObjectMap of F)" by A1,Def39;
+A4: the MorphMap of G = f""*(the ObjectMap of F)" by A1,Def38;
   let o be object of B;
-A5: F is injective by A1,Def36;
-  then F is one-to-one by Def34;
+A5: F is injective by A1,Def35;
+  then F is one-to-one by Def33;
   then
-A6: the ObjectMap of F is one-to-one by Def7;
-  F is faithful by A5,Def34;
+A6: the ObjectMap of F is one-to-one by Def6;
+  F is faithful by A5,Def33;
   then
-A7: the MorphMap of F is "1-1" by Def31;
-  F is surjective by A1,Def36;
-  then F is full by Def35;
+A7: the MorphMap of F is "1-1" by Def30;
+  F is surjective by A1,Def35;
+  then F is full by Def34;
   then
 A8: ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st
-  f = the MorphMap of F & f is "onto" by Def33;
+  f = the MorphMap of F & f is "onto" by Def32;
 A9: [G.o,G.o] in [:the carrier of A,the carrier of A:] by ZFMISC_1:87;
 A10: [o,o] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
 A11: [o,o] in dom the ObjectMap of G by FUNCT_2:def 1;
 A12: (the ObjectMap of F*H).(o,o)
-  = ((the ObjectMap of F)*the ObjectMap of H).[o,o] by Def37
-    .= ((the ObjectMap of F)*(the ObjectMap of F)").[o,o] by A1,Def39
+  = ((the ObjectMap of F)*the ObjectMap of H).[o,o] by Def36
+    .= ((the ObjectMap of F)*(the ObjectMap of F)").[o,o] by A1,Def38
     .= (id rng the ObjectMap of F).[o,o] by A6,FUNCT_1:39
     .= (id dom(the ObjectMap of G)).[o,o] by A2,A6,FUNCT_1:33
     .= (id[:the carrier of B,the carrier of B:]).[o,o] by FUNCT_2:def 1
     .= [o,o] by A10,FUNCT_1:18;
-A13: F.(G.o) = (F*H).o by Th34
+A13: F.(G.o) = (F*H).o by Th33
     .= o by A12,MCART_1:7;
   dom the MorphMap of F = [:the carrier of A,the carrier of A:]
   by PARTFUN1:def 2;
@@ -2654,7 +2649,7 @@ A14: Morph-Map(F,G.o,G.o) is one-to-one by A7,MSUALG_3:def 2;
   [G.o,G.o] in dom the ObjectMap of F by A9,FUNCT_2:def 1;
   then ((the Arrows of B)*the ObjectMap of F).[G.o,G.o]
   = (the Arrows of B).((the ObjectMap of F).(G.o,G.o)) by FUNCT_1:13
-    .= (the Arrows of B).(F.(G.o),F.(G.o)) by Def11;
+    .= (the Arrows of B).(F.(G.o),F.(G.o)) by Def10;
   then
 A15: ((the Arrows of B)*the ObjectMap of F).[G.o,G.o] <> {} by ALTCAT_2:def 6;
   Morph-Map(F,G.o,G.o) is Function of (the Arrows of A).[G.o,G.o],
@@ -2665,11 +2660,11 @@ A16: dom Morph-Map(F,G.o,G.o)
     .= <^G.o,G.o^> by ALTCAT_1:def 1;
   ((the Arrows of A)*the ObjectMap of G).[o,o]
   = (the Arrows of A).((the ObjectMap of H).(o,o)) by A11,FUNCT_1:13
-    .= (the Arrows of A).(G.o,G.o) by Def11;
+    .= (the Arrows of A).(G.o,G.o) by Def10;
   then
 A17: ((the Arrows of A)*the ObjectMap of G).[o,o] <> {} by ALTCAT_2:def 6;
   the MorphMap of G is ManySortedFunction of
-  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
+  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def4;
   then Morph-Map(G,o,o) is Function of (the Arrows of B).[o,o],
   ((the Arrows of A)*the ObjectMap of G).[o,o] by A10,PBOOLE:def 15;
   then
@@ -2679,7 +2674,7 @@ A18: dom Morph-Map(G,o,o) = (the Arrows of B).(o,o) by A17,FUNCT_2:def 1
 A19: idm o in dom Morph-Map(G,o,o) by ALTCAT_1:19;
 A20: Morph-Map(G,o,o)
   = f"".((the ObjectMap of G).(o,o)) by A2,A4,A11,FUNCT_1:13
-    .= f"".[H.o,H.o] by Def11
+    .= f"".[H.o,H.o] by Def10
     .= Morph-Map(F,G.o,G.o)" by A3,A7,A8,A9,MSUALG_3:def 4;
   Morph-Map(G,o,o).idm o in rng Morph-Map(G,o,o) by A19,FUNCT_1:def 3;
   then
@@ -2689,11 +2684,11 @@ A21: Morph-Map(G,o,o).idm o in dom Morph-Map(F,G.o,G.o) by A14,A20,FUNCT_1:33;
     .= (id rng Morph-Map(F,G.o,G.o)).idm o by A14,A20,FUNCT_1:39
     .= (id dom Morph-Map(G,o,o)).idm o by A14,A20,FUNCT_1:33
     .= idm F.(G.o) by A13,A18,ALTCAT_1:19,FUNCT_1:18
-    .= Morph-Map(F,G.o,G.o).idm G.o by Def21;
+    .= Morph-Map(F,G.o,G.o).idm G.o by Def20;
   hence thesis by A14,A16,A21,FUNCT_1:def 4;
 end;
 
-theorem Th39:
+theorem Th38:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible FunctorStr over A,B st F is bijective Covariant
   holds F" is Covariant
@@ -2702,19 +2697,19 @@ proof
   F be feasible FunctorStr over A,B;
   assume
 A1: F is bijective Covariant;
-  then F is injective by Def36;
-  then F is one-to-one by Def34;
+  then F is injective by Def35;
+  then F is one-to-one by Def33;
   then
-A2: the ObjectMap of F is one-to-one by Def7;
-  F is surjective by A1,Def36;
-  then F is onto by Def35;
+A2: the ObjectMap of F is one-to-one by Def6;
+  F is surjective by A1,Def35;
+  then F is onto by Def34;
   then
-A3: the ObjectMap of F is onto by Def8;
-  the ObjectMap of F is Covariant by A1,Def13;
+A3: the ObjectMap of F is onto by Def7;
+  the ObjectMap of F is Covariant by A1,Def12;
   then consider f being Function of the carrier of A, the carrier of B
   such that
-A4: the ObjectMap of F = [:f,f:] by Def2;
-A5: f is one-to-one by A2,A4,Th8;
+A4: the ObjectMap of F = [:f,f:] by Def1;
+A5: f is one-to-one by A2,A4,Th7;
   then
 A6: dom(f") = rng f by FUNCT_1:33;
 A7: rng(f") = dom f by A5,FUNCT_1:33;
@@ -2724,11 +2719,11 @@ A8: rng[:f,f:] = [:the carrier of B,the carrier of B:] by A3,A4,FUNCT_2:def 3;
   then reconsider g = f" as Function of the carrier of B, the carrier of A
   by A6,A7,FUNCT_2:def 1,RELSET_1:4;
   take g;
-  [:f,f:]" = [:g,g:] by A5,Th7;
-  hence thesis by A1,A4,Def39;
+  [:f,f:]" = [:g,g:] by A5,Th6;
+  hence thesis by A1,A4,Def38;
 end;
 
-theorem Th40:
+theorem Th39:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible FunctorStr over A,B st F is bijective Contravariant
   holds F" is Contravariant
@@ -2737,25 +2732,25 @@ proof
   F be feasible FunctorStr over A,B;
   assume
 A1: F is bijective Contravariant;
-  then F is injective by Def36;
-  then F is one-to-one by Def34;
+  then F is injective by Def35;
+  then F is one-to-one by Def33;
   then
-A2: the ObjectMap of F is one-to-one by Def7;
-  F is surjective by A1,Def36;
-  then F is onto by Def35;
+A2: the ObjectMap of F is one-to-one by Def6;
+  F is surjective by A1,Def35;
+  then F is onto by Def34;
   then
-A3: the ObjectMap of F is onto by Def8;
-  the ObjectMap of F is Contravariant by A1,Def14;
+A3: the ObjectMap of F is onto by Def7;
+  the ObjectMap of F is Contravariant by A1,Def13;
   then consider f being Function of the carrier of A, the carrier of B
   such that
-A4: the ObjectMap of F = ~[:f,f:] by Def3;
-  [:f,f:] is one-to-one by A2,A4,Th10;
+A4: the ObjectMap of F = ~[:f,f:] by Def2;
+  [:f,f:] is one-to-one by A2,A4,Th9;
   then
-A5: f is one-to-one by Th8;
+A5: f is one-to-one by Th7;
   then
 A6: dom(f") = rng f by FUNCT_1:33;
 A7: rng(f") = dom f by A5,FUNCT_1:33;
-  [:f,f:] is onto by A3,A4,Th14;
+  [:f,f:] is onto by A3,A4,Th13;
   then
 A8: rng[:f,f:] = [:the carrier of B,the carrier of B:] by FUNCT_2:def 3;
   rng[:f,f:] = [:rng f,rng f:] by FUNCT_3:67;
@@ -2763,12 +2758,12 @@ A8: rng[:f,f:] = [:the carrier of B,the carrier of B:] by FUNCT_2:def 3;
   then reconsider g = f" as Function of the carrier of B, the carrier of A
   by A6,A7,FUNCT_2:def 1,RELSET_1:4;
   take g;
-A9: [:f,f:]" = [:g,g:] by A5,Th7;
-  thus the ObjectMap of F" = (the ObjectMap of F)" by A1,Def39
-    .= ~[:g,g:] by A4,A5,A9,Th11;
+A9: [:f,f:]" = [:g,g:] by A5,Th6;
+  thus the ObjectMap of F" = (the ObjectMap of F)" by A1,Def38
+    .= ~[:g,g:] by A4,A5,A9,Th10;
 end;
 
-theorem Th41:
+theorem Th40:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible reflexive FunctorStr over A,B
   st F is bijective coreflexive Covariant
@@ -2779,23 +2774,23 @@ proof
   F be feasible reflexive FunctorStr over A,B such that
 A1: F is bijective coreflexive Covariant;
   set G = F";
-A2: G is Covariant by A1,Th39;
-  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th36,Th37;
-A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def39;
+A2: G is Covariant by A1,Th38;
+  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th35,Th36;
+A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def38;
   consider f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F such that
 A4: f = the MorphMap of F and
-A5: the MorphMap of G = f""*(the ObjectMap of F)" by A1,Def39;
-  F is injective by A1,Def36;
-  then F is faithful by Def34;
+A5: the MorphMap of G = f""*(the ObjectMap of F)" by A1,Def38;
+  F is injective by A1,Def35;
+  then F is faithful by Def33;
   then
-A6: the MorphMap of F is "1-1" by Def31;
-  F is surjective by A1,Def36;
-  then F is full by Def35;
+A6: the MorphMap of F is "1-1" by Def30;
+  F is surjective by A1,Def35;
+  then F is full by Def34;
   then
 A7: ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st
-  f = the MorphMap of F & f is "onto" by Def33;
+  f = the MorphMap of F & f is "onto" by Def32;
   let o1,o2 be object of B, m be Morphism of o1,o2 such that
 A8: <^o1,o2^> <> {};
 A9: [G.o1,G.o2] in [:the carrier of A,the carrier of A:] by ZFMISC_1:87;
@@ -2809,12 +2804,12 @@ A11: [o1,o2] in dom the ObjectMap of G by FUNCT_2:def 1;
 A12: Morph-Map(F,G.o1,G.o2) is one-to-one by A6,MSUALG_3:def 2;
   ((the Arrows of A)*the ObjectMap of G).[o1,o2]
   = (the Arrows of A).((the ObjectMap of H).(o1,o2)) by A11,FUNCT_1:13
-    .= (the Arrows of A).(H.o1,H.o2) by A2,Th23
+    .= (the Arrows of A).(H.o1,H.o2) by A2,Th22
     .= <^H.o1,H.o2^> by ALTCAT_1:def 1;
   then
-A13: ((the Arrows of A)*the ObjectMap of G).[o1,o2] <> {} by A2,A8,Def19;
+A13: ((the Arrows of A)*the ObjectMap of G).[o1,o2] <> {} by A2,A8,Def18;
   the MorphMap of G is ManySortedFunction of
-  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
+  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def4;
   then Morph-Map(G,o1,o2) is Function of (the Arrows of B).[o1,o2],
   ((the Arrows of A)*the ObjectMap of G).[o1,o2] by A10,PBOOLE:def 15;
   then
@@ -2822,7 +2817,7 @@ A14: dom Morph-Map(G,o1,o2) = (the Arrows of B).(o1,o2) by A13,FUNCT_2:def 1
     .= <^o1,o2^> by ALTCAT_1:def 1;
 A15: Morph-Map(G,o1,o2)
   = f"".((the ObjectMap of G).(o1,o2)) by A3,A5,A11,FUNCT_1:13
-    .= f"".[H.o1,H.o2] by A2,Th23
+    .= f"".[H.o1,H.o2] by A2,Th22
     .= Morph-Map(F,G.o1,G.o2)" by A4,A6,A7,A9,MSUALG_3:def 4;
   thus Morph-Map(F,G.o1,G.o2).(Morph-Map(G,o1,o2).m)
   = (Morph-Map(F,G.o1,G.o2)*Morph-Map(G,o1,o2)).m by A8,A14,FUNCT_1:13
@@ -2831,7 +2826,7 @@ A15: Morph-Map(G,o1,o2)
     .= m by A8,A14,FUNCT_1:18;
 end;
 
-theorem Th42:
+theorem Th41:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible reflexive FunctorStr over A,B
   st F is bijective coreflexive Contravariant
@@ -2842,23 +2837,23 @@ proof
   F be feasible reflexive FunctorStr over A,B such that
 A1: F is bijective coreflexive Contravariant;
   set G = F";
-A2: G is Contravariant by A1,Th40;
-  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th36,Th37;
-A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def39;
+A2: G is Contravariant by A1,Th39;
+  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th35,Th36;
+A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def38;
   consider f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F such that
 A4: f = the MorphMap of F and
-A5: the MorphMap of G = f""*(the ObjectMap of F)" by A1,Def39;
-  F is injective by A1,Def36;
-  then F is faithful by Def34;
+A5: the MorphMap of G = f""*(the ObjectMap of F)" by A1,Def38;
+  F is injective by A1,Def35;
+  then F is faithful by Def33;
   then
-A6: the MorphMap of F is "1-1" by Def31;
-  F is surjective by A1,Def36;
-  then F is full by Def35;
+A6: the MorphMap of F is "1-1" by Def30;
+  F is surjective by A1,Def35;
+  then F is full by Def34;
   then
 A7: ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st
-  f = the MorphMap of F & f is "onto" by Def33;
+  f = the MorphMap of F & f is "onto" by Def32;
   let o1,o2 be object of B, m be Morphism of o1,o2 such that
 A8: <^o1,o2^> <> {};
 A9: [G.o2,G.o1] in [:the carrier of A,the carrier of A:] by ZFMISC_1:87;
@@ -2872,12 +2867,12 @@ A11: [o1,o2] in dom the ObjectMap of G by FUNCT_2:def 1;
 A12: Morph-Map(F,G.o2,G.o1) is one-to-one by A6,MSUALG_3:def 2;
   ((the Arrows of A)*the ObjectMap of G).[o1,o2]
   = (the Arrows of A).((the ObjectMap of H).(o1,o2)) by A11,FUNCT_1:13
-    .= (the Arrows of A).(H.o2,H.o1) by A2,Th24
+    .= (the Arrows of A).(H.o2,H.o1) by A2,Th23
     .= <^H.o2,H.o1^> by ALTCAT_1:def 1;
   then
-A13: ((the Arrows of A)*the ObjectMap of G).[o1,o2] <> {} by A2,A8,Def20;
+A13: ((the Arrows of A)*the ObjectMap of G).[o1,o2] <> {} by A2,A8,Def19;
   the MorphMap of G is ManySortedFunction of
-  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
+  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def4;
   then Morph-Map(G,o1,o2) is Function of (the Arrows of B).[o1,o2],
   ((the Arrows of A)*the ObjectMap of G).[o1,o2] by A10,PBOOLE:def 15;
   then
@@ -2885,7 +2880,7 @@ A14: dom Morph-Map(G,o1,o2) = (the Arrows of B).(o1,o2) by A13,FUNCT_2:def 1
     .= <^o1,o2^> by ALTCAT_1:def 1;
 A15: Morph-Map(G,o1,o2)
   = f"".((the ObjectMap of G).(o1,o2)) by A3,A5,A11,FUNCT_1:13
-    .= f"".[H.o2,H.o1] by A2,Th24
+    .= f"".[H.o2,H.o1] by A2,Th23
     .= Morph-Map(F,G.o2,G.o1)" by A4,A6,A7,A9,MSUALG_3:def 4;
   thus Morph-Map(F,F".o2,F".o1).(Morph-Map(F",o1,o2).m)
   = (Morph-Map(F,G.o2,G.o1)*Morph-Map(G,o1,o2)).m by A8,A14,FUNCT_1:13
@@ -2894,7 +2889,7 @@ A15: Morph-Map(G,o1,o2)
     .= m by A8,A14,FUNCT_1:18;
 end;
 
-theorem Th43:
+theorem Th42:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible reflexive FunctorStr over A,B st
   F is bijective comp-preserving Covariant coreflexive
@@ -2904,45 +2899,45 @@ proof
   F be feasible reflexive FunctorStr over A,B such that
 A1: F is bijective comp-preserving Covariant coreflexive;
   set G = F";
-A2: G is Covariant by A1,Th39;
-  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th36,Th37;
-A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def39;
+A2: G is Covariant by A1,Th38;
+  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th35,Th36;
+A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def38;
   consider ff being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F such that
 A4: ff = the MorphMap of F and
-A5: the MorphMap of G = ff""*(the ObjectMap of F)" by A1,Def39;
-A6: F is injective by A1,Def36;
-  then F is one-to-one by Def34;
+A5: the MorphMap of G = ff""*(the ObjectMap of F)" by A1,Def38;
+A6: F is injective by A1,Def35;
+  then F is one-to-one by Def33;
   then
-A7: the ObjectMap of F is one-to-one by Def7;
-  F is faithful by A6,Def34;
+A7: the ObjectMap of F is one-to-one by Def6;
+  F is faithful by A6,Def33;
   then
-A8: the MorphMap of F is "1-1" by Def31;
-  F is surjective by A1,Def36;
-  then F is full by Def35;
+A8: the MorphMap of F is "1-1" by Def30;
+  F is surjective by A1,Def35;
+  then F is full by Def34;
   then
 A9: ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st
-  f = the MorphMap of F & f is "onto" by Def33;
+  f = the MorphMap of F & f is "onto" by Def32;
   let o1,o2,o3 be object of B;
   assume
 A10: <^o1,o2^> <> {};
   then
-A11: <^H.o1,H.o2^> <> {} by A2,Def19;
+A11: <^H.o1,H.o2^> <> {} by A2,Def18;
   assume
 A12: <^o2,o3^> <> {};
   then
-A13: <^H.o2,H.o3^> <> {} by A2,Def19;
+A13: <^H.o2,H.o3^> <> {} by A2,Def18;
 A14: <^o1,o3^> <> {} by A10,A12,ALTCAT_1:def 2;
   then
-A15: <^H.o1,H.o3^> <> {} by A2,Def19;
+A15: <^H.o1,H.o3^> <> {} by A2,Def18;
   then
-A16: <^F.(G.o1),F.(G.o3)^> <> {} by A1,Def19;
+A16: <^F.(G.o1),F.(G.o3)^> <> {} by A1,Def18;
   let f be Morphism of o1,o2, g be Morphism of o2,o3;
-  reconsider K = G as Covariant FunctorStr over B,A by A1,Th39;
-  K.f = Morph-Map(K,o1,o2).f by A10,A11,Def16;
+  reconsider K = G as Covariant FunctorStr over B,A by A1,Th38;
+  K.f = Morph-Map(K,o1,o2).f by A10,A11,Def15;
   then reconsider f9 = Morph-Map(K,o1,o2).f as Morphism of G.o1,G.o2;
-  K.g = Morph-Map(K,o2,o3).g by A12,A13,Def16;
+  K.g = Morph-Map(K,o2,o3).g by A12,A13,Def15;
   then reconsider g9 = Morph-Map(K,o2,o3).g as Morphism of G.o2,G.o3;
   take f9,g9;
   thus f9 = Morph-Map(G,o1,o2).f;
@@ -2951,9 +2946,9 @@ A16: <^F.(G.o1),F.(G.o3)^> <> {} by A1,Def19;
   g99 being Morphism of F.(G.o2),F.(G.o3) such that
 A17: f99 = Morph-Map(F,G.o1,G.o2).f9 and
 A18: g99 = Morph-Map(F,G.o2,G.o3).g9 and
-A19: Morph-Map(F,G.o1,G.o3).(g9*f9) = g99*f99 by A1,A11,A13,Def22;
-A20: g = g99 by A1,A12,A18,Th41;
-A21: f = f99 by A1,A10,A17,Th41;
+A19: Morph-Map(F,G.o1,G.o3).(g9*f9) = g99*f99 by A1,A11,A13,Def21;
+A20: g = g99 by A1,A12,A18,Th40;
+A21: f = f99 by A1,A10,A17,Th40;
 A22: [G.o1,G.o3] in [:the carrier of A,the carrier of A:] by ZFMISC_1:87;
 A23: [o1,o3] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
@@ -2967,7 +2962,7 @@ A25: Morph-Map(F,G.o1,G.o3) is one-to-one by A8,MSUALG_3:def 2;
   then
 A26: ((the Arrows of B)*the ObjectMap of F).[G.o1,G.o3]
   = (the Arrows of B).((the ObjectMap of F).(G.o1,G.o3)) by FUNCT_1:13
-    .= (the Arrows of B).(F.(G.o1),F.(G.o3)) by A1,Th23
+    .= (the Arrows of B).(F.(G.o1),F.(G.o3)) by A1,Th22
     .= <^F.(G.o1),F.(G.o3)^> by ALTCAT_1:def 1;
   Morph-Map(F,G.o1,G.o3) is Function of (the Arrows of A).[G.o1,G.o3],
   ((the Arrows of B)*the ObjectMap of F).[G.o1,G.o3] by A4,A22,PBOOLE:def 15;
@@ -2977,10 +2972,10 @@ A27: dom Morph-Map(F,G.o1,G.o3)
     .= <^G.o1,G.o3^> by ALTCAT_1:def 1;
 A28: ((the Arrows of A)*the ObjectMap of G).[o1,o3]
   = (the Arrows of A).((the ObjectMap of H).(o1,o3)) by A24,FUNCT_1:13
-    .= (the Arrows of A).(G.o1,G.o3) by A2,Th23
+    .= (the Arrows of A).(G.o1,G.o3) by A2,Th22
     .= <^G.o1,G.o3^> by ALTCAT_1:def 1;
   the MorphMap of G is ManySortedFunction of
-  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
+  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def4;
   then Morph-Map(G,o1,o3) is Function of (the Arrows of B).[o1,o3],
   ((the Arrows of A)*the ObjectMap of G).[o1,o3] by A23,PBOOLE:def 15;
   then
@@ -2989,38 +2984,38 @@ A29: dom Morph-Map(G,o1,o3)
     .= <^o1,o3^> by ALTCAT_1:def 1;
 A30: Morph-Map(G,o1,o3)
   = ff"".((the ObjectMap of G).(o1,o3)) by A3,A5,A24,FUNCT_1:13
-    .= ff"".[H.o1,H.o3] by A2,Th23
+    .= ff"".[H.o1,H.o3] by A2,Th22
     .= Morph-Map(F,G.o1,G.o3)" by A4,A8,A9,A22,MSUALG_3:def 4;
-A31: the ObjectMap of F*H = (the ObjectMap of F)*the ObjectMap of H by Def37
-    .= (the ObjectMap of F)*(the ObjectMap of F)" by A1,Def39
+A31: the ObjectMap of F*H = (the ObjectMap of F)*the ObjectMap of H by Def36
+    .= (the ObjectMap of F)*(the ObjectMap of F)" by A1,Def38
     .= id rng the ObjectMap of F by A7,FUNCT_1:39
     .= id dom the ObjectMap of G by A3,A7,FUNCT_1:33
     .= id[:the carrier of B,the carrier of B:] by FUNCT_2:def 1;
   [o1,o1] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
 A32: (the ObjectMap of F*H).(o1,o1) = [o1,o1] by A31,FUNCT_1:18;
-A33: F.(G.o1) = (F*H).o1 by Th34
+A33: F.(G.o1) = (F*H).o1 by Th33
     .= o1 by A32,MCART_1:7;
   [o2,o2] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
 A34: (the ObjectMap of F*H).(o2,o2) = [o2,o2] by A31,FUNCT_1:18;
-A35: F.(G.o2) = (F*H).o2 by Th34
+A35: F.(G.o2) = (F*H).o2 by Th33
     .= o2 by A34,MCART_1:7;
   [o3,o3] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
 A36: (the ObjectMap of F*H).(o3,o3) = [o3,o3] by A31,FUNCT_1:18;
-A37: F.(G.o3) = (F*H).o3 by Th34
+A37: F.(G.o3) = (F*H).o3 by Th33
     .= o3 by A36,MCART_1:7;
   Morph-Map(G,o1,o3).(g*f) in rng Morph-Map(G,o1,o3) by A14,A29,FUNCT_1:def 3;
   then
 A38: Morph-Map(G,o1,o3).(g*f) in dom Morph-Map(F,G.o1,G.o3) by A25,A30,
 FUNCT_1:33;
   Morph-Map(F,G.o1,G.o3).(Morph-Map(G,o1,o3).(g*f))
-  = Morph-Map(F,G.o1,G.o3).(g9*f9) by A1,A14,A19,A20,A21,A33,A35,A37,Th41;
+  = Morph-Map(F,G.o1,G.o3).(g9*f9) by A1,A14,A19,A20,A21,A33,A35,A37,Th40;
   hence thesis by A25,A27,A38,FUNCT_1:def 4;
 end;
 
-theorem Th44:
+theorem Th43:
   for A,B being transitive with_units non empty AltCatStr,
   F being feasible reflexive FunctorStr over A,B st
   F is bijective comp-reversing Contravariant coreflexive
@@ -3030,45 +3025,45 @@ proof
   F be feasible reflexive FunctorStr over A,B such that
 A1: F is bijective comp-reversing Contravariant coreflexive;
   set G = F";
-A2: G is Contravariant by A1,Th40;
-  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th36,Th37;
-A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def39;
+A2: G is Contravariant by A1,Th39;
+  reconsider H = G as feasible reflexive FunctorStr over B,A by A1,Th35,Th36;
+A3: the ObjectMap of G = (the ObjectMap of F)" by A1,Def38;
   consider ff being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F such that
 A4: ff = the MorphMap of F and
-A5: the MorphMap of G = ff""*(the ObjectMap of F)" by A1,Def39;
-A6: F is injective by A1,Def36;
-  then F is one-to-one by Def34;
+A5: the MorphMap of G = ff""*(the ObjectMap of F)" by A1,Def38;
+A6: F is injective by A1,Def35;
+  then F is one-to-one by Def33;
   then
-A7: the ObjectMap of F is one-to-one by Def7;
-  F is faithful by A6,Def34;
+A7: the ObjectMap of F is one-to-one by Def6;
+  F is faithful by A6,Def33;
   then
-A8: the MorphMap of F is "1-1" by Def31;
-  F is surjective by A1,Def36;
-  then F is full by Def35;
+A8: the MorphMap of F is "1-1" by Def30;
+  F is surjective by A1,Def35;
+  then F is full by Def34;
   then
 A9: ex f being ManySortedFunction of (the Arrows of A),
   (the Arrows of B)*the ObjectMap of F st
-  f = the MorphMap of F & f is "onto" by Def33;
+  f = the MorphMap of F & f is "onto" by Def32;
   let o1,o2,o3 be object of B;
   assume
 A10: <^o1,o2^> <> {};
   then
-A11: <^H.o2,H.o1^> <> {} by A2,Def20;
+A11: <^H.o2,H.o1^> <> {} by A2,Def19;
   assume
 A12: <^o2,o3^> <> {};
   then
-A13: <^H.o3,H.o2^> <> {} by A2,Def20;
+A13: <^H.o3,H.o2^> <> {} by A2,Def19;
 A14: <^o1,o3^> <> {} by A10,A12,ALTCAT_1:def 2;
   then
-A15: <^H.o3,H.o1^> <> {} by A2,Def20;
+A15: <^H.o3,H.o1^> <> {} by A2,Def19;
   then
-A16: <^F.(G.o1),F.(G.o3)^> <> {} by A1,Def20;
+A16: <^F.(G.o1),F.(G.o3)^> <> {} by A1,Def19;
   let f be Morphism of o1,o2, g be Morphism of o2,o3;
-  reconsider K = G as Contravariant FunctorStr over B,A by A1,Th40;
-  K.f = Morph-Map(K,o1,o2).f by A10,A11,Def17;
+  reconsider K = G as Contravariant FunctorStr over B,A by A1,Th39;
+  K.f = Morph-Map(K,o1,o2).f by A10,A11,Def16;
   then reconsider f9 = Morph-Map(K,o1,o2).f as Morphism of G.o2,G.o1;
-  K.g = Morph-Map(K,o2,o3).g by A12,A13,Def17;
+  K.g = Morph-Map(K,o2,o3).g by A12,A13,Def16;
   then reconsider g9 = Morph-Map(K,o2,o3).g as Morphism of G.o3,G.o2;
   take f9,g9;
   thus f9 = Morph-Map(G,o1,o2).f;
@@ -3077,9 +3072,9 @@ A16: <^F.(G.o1),F.(G.o3)^> <> {} by A1,Def20;
   f99 being Morphism of F.(G.o1),F.(G.o2) such that
 A17: g99 = Morph-Map(F,G.o3,G.o2).g9 and
 A18: f99 = Morph-Map(F,G.o2,G.o1).f9 and
-A19: Morph-Map(F,G.o3,G.o1).(f9*g9) = g99*f99 by A1,A11,A13,Def23;
-A20: g = g99 by A1,A12,A17,Th42;
-A21: f = f99 by A1,A10,A18,Th42;
+A19: Morph-Map(F,G.o3,G.o1).(f9*g9) = g99*f99 by A1,A11,A13,Def22;
+A20: g = g99 by A1,A12,A17,Th41;
+A21: f = f99 by A1,A10,A18,Th41;
 A22: [G.o3,G.o1] in [:the carrier of A,the carrier of A:] by ZFMISC_1:87;
 A23: [o1,o3] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
@@ -3093,7 +3088,7 @@ A25: Morph-Map(F,G.o3,G.o1) is one-to-one by A8,MSUALG_3:def 2;
   then
 A26: ((the Arrows of B)*the ObjectMap of F).[G.o3,G.o1]
   = (the Arrows of B).((the ObjectMap of F).(G.o3,G.o1)) by FUNCT_1:13
-    .= (the Arrows of B).(F.(G.o1),F.(G.o3)) by A1,Th24
+    .= (the Arrows of B).(F.(G.o1),F.(G.o3)) by A1,Th23
     .= <^F.(G.o1),F.(G.o3)^> by ALTCAT_1:def 1;
   Morph-Map(F,G.o3,G.o1) is Function of (the Arrows of A).[G.o3,G.o1],
   ((the Arrows of B)*the ObjectMap of F).[G.o3,G.o1] by A4,A22,PBOOLE:def 15;
@@ -3103,10 +3098,10 @@ A27: dom Morph-Map(F,G.o3,G.o1)
     .= <^G.o3,G.o1^> by ALTCAT_1:def 1;
 A28: ((the Arrows of A)*the ObjectMap of G).[o1,o3]
   = (the Arrows of A).((the ObjectMap of H).(o1,o3)) by A24,FUNCT_1:13
-    .= (the Arrows of A).(G.o3,G.o1) by A2,Th24
+    .= (the Arrows of A).(G.o3,G.o1) by A2,Th23
     .= <^G.o3,G.o1^> by ALTCAT_1:def 1;
   the MorphMap of G is ManySortedFunction of
-  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
+  the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def4;
   then Morph-Map(G,o1,o3) is Function of (the Arrows of B).[o1,o3],
   ((the Arrows of A)*the ObjectMap of G).[o1,o3] by A23,PBOOLE:def 15;
   then
@@ -3115,34 +3110,34 @@ A29: dom Morph-Map(G,o1,o3)
     .= <^o1,o3^> by ALTCAT_1:def 1;
 A30: Morph-Map(G,o1,o3)
   = ff"".((the ObjectMap of G).(o1,o3)) by A3,A5,A24,FUNCT_1:13
-    .= ff"".[H.o3,H.o1] by A2,Th24
+    .= ff"".[H.o3,H.o1] by A2,Th23
     .= Morph-Map(F,G.o3,G.o1)" by A4,A8,A9,A22,MSUALG_3:def 4;
-A31: the ObjectMap of F*H = (the ObjectMap of F)*the ObjectMap of H by Def37
-    .= (the ObjectMap of F)*(the ObjectMap of F)" by A1,Def39
+A31: the ObjectMap of F*H = (the ObjectMap of F)*the ObjectMap of H by Def36
+    .= (the ObjectMap of F)*(the ObjectMap of F)" by A1,Def38
     .= id rng the ObjectMap of F by A7,FUNCT_1:39
     .= id dom the ObjectMap of G by A3,A7,FUNCT_1:33
     .= id[:the carrier of B,the carrier of B:] by FUNCT_2:def 1;
   [o1,o1] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
 A32: (the ObjectMap of F*H).(o1,o1) = [o1,o1] by A31,FUNCT_1:18;
-A33: F.(G.o1) = (F*H).o1 by Th34
+A33: F.(G.o1) = (F*H).o1 by Th33
     .= o1 by A32,MCART_1:7;
   [o2,o2] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
 A34: (the ObjectMap of F*H).(o2,o2) = [o2,o2] by A31,FUNCT_1:18;
-A35: F.(G.o2) = (F*H).o2 by Th34
+A35: F.(G.o2) = (F*H).o2 by Th33
     .= o2 by A34,MCART_1:7;
   [o3,o3] in [:the carrier of B,the carrier of B:] by ZFMISC_1:87;
   then
 A36: (the ObjectMap of F*H).(o3,o3) = [o3,o3] by A31,FUNCT_1:18;
-A37: F.(G.o3) = (F*H).o3 by Th34
+A37: F.(G.o3) = (F*H).o3 by Th33
     .= o3 by A36,MCART_1:7;
   Morph-Map(G,o1,o3).(g*f) in rng Morph-Map(G,o1,o3) by A14,A29,FUNCT_1:def 3;
   then
 A38: Morph-Map(G,o1,o3).(g*f) in dom Morph-Map(F,G.o3,G.o1) by A25,A30,
 FUNCT_1:33;
   Morph-Map(F,G.o3,G.o1).(Morph-Map(G,o1,o3).(g*f))
-  = Morph-Map(F,G.o3,G.o1).(f9*g9) by A1,A14,A19,A20,A21,A33,A35,A37,Th42;
+  = Morph-Map(F,G.o3,G.o1).(f9*g9) by A1,A14,A19,A20,A21,A33,A35,A37,Th41;
   hence thesis by A25,A27,A38,FUNCT_1:def 4;
 end;
 
@@ -3153,11 +3148,11 @@ registration
   proof
     let M be BimapStr over C1,C2;
     assume M is Covariant;
-    then the ObjectMap of M is Covariant by Def13;
+    then the ObjectMap of M is Covariant by Def12;
     then ex f being Function of the carrier of C1, the carrier of C2
-    st the ObjectMap of M = [:f,f:] by Def2;
+    st the ObjectMap of M = [:f,f:] by Def1;
     hence
-    (the ObjectMap of M).:id the carrier of C1 c= id the carrier of C2 by Th15;
+    (the ObjectMap of M).:id the carrier of C1 c= id the carrier of C2 by Th14;
   end;
 end;
 
@@ -3168,18 +3163,18 @@ registration
   proof
     let M be BimapStr over C1,C2;
     assume M is Contravariant;
-    then the ObjectMap of M is Contravariant by Def14;
+    then the ObjectMap of M is Contravariant by Def13;
     then consider f being Function of the carrier of C1, the carrier of C2
     such that
-A1: the ObjectMap of M = ~[:f,f:] by Def3;
-    (~[:f,f:]).:id the carrier of C1 = [:f,f:].:id the carrier of C1 by Th4;
+A1: the ObjectMap of M = ~[:f,f:] by Def2;
+    (~[:f,f:]).:id the carrier of C1 = [:f,f:].:id the carrier of C1 by Th3;
     hence
     (the ObjectMap of M).:id the carrier of C1 c= id the carrier of C2
-    by A1,Th15;
+    by A1,Th14;
   end;
 end;
 
-theorem Th45:
+theorem Th44:
   for C1,C2 being 1-sorted, M being BimapStr over C1,C2
   st M is Covariant onto holds M is coreflexive
 proof
@@ -3187,18 +3182,18 @@ proof
   let M be BimapStr over C1,C2;
   assume
 A1: M is Covariant onto;
-  then the ObjectMap of M is Covariant by Def13;
+  then the ObjectMap of M is Covariant by Def12;
   then consider f being Function of the carrier of C1, the carrier of C2
   such that
-A2: the ObjectMap of M = [:f,f:] by Def2;
-  the ObjectMap of M is onto by A1,Def8;
-  then f is onto by A2,Th5;
+A2: the ObjectMap of M = [:f,f:] by Def1;
+  the ObjectMap of M is onto by A1,Def7;
+  then f is onto by A2,Th4;
   hence
   id the carrier of C2 c= (the ObjectMap of M).:id the carrier of C1
-  by A2,Th12;
+  by A2,Th11;
 end;
 
-theorem Th46:
+theorem Th45:
   for C1,C2 being 1-sorted, M being BimapStr over C1,C2
   st M is Contravariant onto holds M is coreflexive
 proof
@@ -3206,19 +3201,19 @@ proof
   let M be BimapStr over C1,C2;
   assume
 A1: M is Contravariant onto;
-  then the ObjectMap of M is Contravariant by Def14;
+  then the ObjectMap of M is Contravariant by Def13;
   then consider f being Function of the carrier of C1, the carrier of C2
   such that
-A2: the ObjectMap of M = ~[:f,f:] by Def3;
-  the ObjectMap of M is onto by A1,Def8;
-  then [:f,f:] is onto by A2,Th14;
+A2: the ObjectMap of M = ~[:f,f:] by Def2;
+  the ObjectMap of M is onto by A1,Def7;
+  then [:f,f:] is onto by A2,Th13;
   then
-A3: f is onto by Th5;
+A3: f is onto by Th4;
   (the ObjectMap of M).:id the carrier of C1
-  = [:f,f:].:id the carrier of C1 by A2,Th4;
+  = [:f,f:].:id the carrier of C1 by A2,Th3;
   hence
   id the carrier of C2 c= (the ObjectMap of M).:id the carrier of C1
-  by A3,Th12;
+  by A3,Th11;
 end;
 
 registration
@@ -3229,7 +3224,7 @@ registration
   proof
     let F be Functor of C1,C2;
     assume F is covariant;
-    then reconsider F as Covariant FunctorStr over C1,C2 by Def27;
+    then reconsider F as Covariant FunctorStr over C1,C2 by Def26;
     F is reflexive;
     hence thesis;
   end;
@@ -3243,13 +3238,13 @@ registration
   proof
     let F be Functor of C1,C2;
     assume F is contravariant;
-    then reconsider F as Contravariant FunctorStr over C1,C2 by Def28;
+    then reconsider F as Contravariant FunctorStr over C1,C2 by Def27;
     F is reflexive;
     hence thesis;
   end;
 end;
 
-theorem Th47:
+theorem Th46:
   for C1 being transitive with_units non empty AltCatStr,
   C2 being with_units non empty AltCatStr,
   F being Functor of C1,C2 st F is covariant onto holds F is coreflexive
@@ -3259,11 +3254,11 @@ proof
   let F be Functor of C1,C2;
   assume
 A1: F is covariant onto;
-  then F is Covariant by Def27;
-  hence thesis by A1,Th45;
+  then F is Covariant by Def26;
+  hence thesis by A1,Th44;
 end;
 
-theorem Th48:
+theorem Th47:
   for C1 being transitive with_units non empty AltCatStr,
   C2 being with_units non empty AltCatStr,
   F being Functor of C1,C2 st F is contravariant onto holds F is coreflexive
@@ -3273,11 +3268,11 @@ proof
   let F be Functor of C1,C2;
   assume
 A1: F is contravariant onto;
-  then F is Contravariant by Def28;
-  hence thesis by A1,Th46;
+  then F is Contravariant by Def27;
+  hence thesis by A1,Th45;
 end;
 
-theorem Th49:
+theorem Th48:
   for A,B being transitive with_units non empty AltCatStr,
   F being covariant Functor of A,B st F is bijective
   ex G being Functor of B,A st G = F" & G is bijective covariant
@@ -3286,28 +3281,28 @@ proof
   F be covariant Functor of A,B;
   assume
 A1: F is bijective;
-  then F is injective by Def36;
-  then F is one-to-one by Def34;
+  then F is injective by Def35;
+  then F is one-to-one by Def33;
   then
-A2: the ObjectMap of F is one-to-one by Def7;
-A3: F is feasible by Def26;
+A2: the ObjectMap of F is one-to-one by Def6;
+A3: F is feasible by Def25;
   then
-A4: F" is bijective feasible by A1,Th36;
-A5: F is id-preserving by Def26;
-A6: F is comp-preserving by Def27;
-  F is surjective by A1,Def36;
+A4: F" is bijective feasible by A1,Th35;
+A5: F is id-preserving by Def25;
+A6: F is comp-preserving by Def26;
+  F is surjective by A1,Def35;
   then
-A7: F is onto by Def35;
+A7: F is onto by Def34;
   then
-A8: the ObjectMap of F is onto by Def8;
-A9: F is Covariant by Def27;
-A10: F is coreflexive by A7,Th47;
-A11: F" is Covariant proof F is Covariant by Def27;
-    then the ObjectMap of F is Covariant by Def13;
+A8: the ObjectMap of F is onto by Def7;
+A9: F is Covariant by Def26;
+A10: F is coreflexive by A7,Th46;
+A11: F" is Covariant proof F is Covariant by Def26;
+    then the ObjectMap of F is Covariant by Def12;
     then consider f being Function of the carrier of A, the carrier of B
     such that
-A12: the ObjectMap of F = [:f,f:] by Def2;
-A13: f is one-to-one by A2,A12,Th8;
+A12: the ObjectMap of F = [:f,f:] by Def1;
+A13: f is one-to-one by A2,A12,Th7;
     then
 A14: dom(f") = rng f by FUNCT_1:33;
 A15: rng(f") = dom f by A13,FUNCT_1:33;
@@ -3318,20 +3313,20 @@ A16: rng[:f,f:] = [:the carrier of B,the carrier of B:]
     then reconsider g = f" as Function of the carrier of B, the carrier of A
     by A14,A15,FUNCT_2:def 1,RELSET_1:4;
     take g;
-    [:f,f:]" = [:g,g:] by A13,Th7;
-    hence thesis by A1,A12,Def39;
+    [:f,f:]" = [:g,g:] by A13,Th6;
+    hence thesis by A1,A12,Def38;
   end;
-A17: F" is id-preserving by A1,A3,A5,A10,Th38;
-  F" is comp-preserving by A1,A3,A6,A9,A10,Th43;
-  then reconsider G = F" as Functor of B,A by A4,A11,A17,Def26;
+A17: F" is id-preserving by A1,A3,A5,A10,Th37;
+  F" is comp-preserving by A1,A3,A6,A9,A10,Th42;
+  then reconsider G = F" as Functor of B,A by A4,A11,A17,Def25;
   take G;
   thus G = F";
-  thus G is bijective by A1,A3,Th36;
+  thus G is bijective by A1,A3,Th35;
   thus G is Covariant by A11;
-  thus thesis by A1,A3,A6,A9,A10,Th43;
+  thus thesis by A1,A3,A6,A9,A10,Th42;
 end;
 
-theorem Th50:
+theorem Th49:
   for A,B being transitive with_units non empty AltCatStr,
   F being contravariant Functor of A,B st F is bijective
   ex G being Functor of B,A st G = F" & G is bijective contravariant
@@ -3340,34 +3335,34 @@ proof
   F be contravariant Functor of A,B;
   assume
 A1: F is bijective;
-  then F is injective by Def36;
-  then F is one-to-one by Def34;
+  then F is injective by Def35;
+  then F is one-to-one by Def33;
   then
-A2: the ObjectMap of F is one-to-one by Def7;
-A3: F is feasible by Def26;
+A2: the ObjectMap of F is one-to-one by Def6;
+A3: F is feasible by Def25;
   then
-A4: F" is bijective feasible by A1,Th36;
-A5: F is id-preserving by Def26;
-A6: F is comp-reversing by Def28;
-  F is surjective by A1,Def36;
+A4: F" is bijective feasible by A1,Th35;
+A5: F is id-preserving by Def25;
+A6: F is comp-reversing by Def27;
+  F is surjective by A1,Def35;
   then
-A7: F is onto by Def35;
+A7: F is onto by Def34;
   then
-A8: the ObjectMap of F is onto by Def8;
-A9: F is Contravariant by Def28;
-A10: F is coreflexive by A7,Th48;
-A11: F" is Contravariant proof F is Contravariant by Def28;
-    then the ObjectMap of F is Contravariant by Def14;
+A8: the ObjectMap of F is onto by Def7;
+A9: F is Contravariant by Def27;
+A10: F is coreflexive by A7,Th47;
+A11: F" is Contravariant proof F is Contravariant by Def27;
+    then the ObjectMap of F is Contravariant by Def13;
     then consider f being Function of the carrier of A, the carrier of B
     such that
-A12: the ObjectMap of F = ~[:f,f:] by Def3;
-    [:f,f:] is one-to-one by A2,A12,Th10;
+A12: the ObjectMap of F = ~[:f,f:] by Def2;
+    [:f,f:] is one-to-one by A2,A12,Th9;
     then
-A13: f is one-to-one by Th8;
+A13: f is one-to-one by Th7;
     then
 A14: dom(f") = rng f by FUNCT_1:33;
 A15: rng(f") = dom f by A13,FUNCT_1:33;
-    [:f,f:] is onto by A8,A12,Th14;
+    [:f,f:] is onto by A8,A12,Th13;
     then
 A16: rng[:f,f:] = [:the carrier of B,the carrier of B:] by FUNCT_2:def 3;
     rng[:f,f:] = [:rng f,rng f:] by FUNCT_3:67;
@@ -3375,18 +3370,18 @@ A16: rng[:f,f:] = [:the carrier of B,the carrier of B:] by FUNCT_2:def 3;
     then reconsider g = f" as Function of the carrier of B, the carrier of A
     by A14,A15,FUNCT_2:def 1,RELSET_1:4;
     take g;
-A17: [:f,f:]" = [:g,g:] by A13,Th7;
-    thus the ObjectMap of F" = (the ObjectMap of F)" by A1,Def39
-      .= ~[:g,g:] by A12,A13,A17,Th11;
+A17: [:f,f:]" = [:g,g:] by A13,Th6;
+    thus the ObjectMap of F" = (the ObjectMap of F)" by A1,Def38
+      .= ~[:g,g:] by A12,A13,A17,Th10;
   end;
-A18: F" is id-preserving by A1,A3,A5,A10,Th38;
-  F" is comp-reversing by A1,A3,A6,A9,A10,Th44;
-  then reconsider G = F" as Functor of B,A by A4,A11,A18,Def26;
+A18: F" is id-preserving by A1,A3,A5,A10,Th37;
+  F" is comp-reversing by A1,A3,A6,A9,A10,Th43;
+  then reconsider G = F" as Functor of B,A by A4,A11,A18,Def25;
   take G;
   thus G = F";
-  thus G is bijective by A1,A3,Th36;
+  thus G is bijective by A1,A3,Th35;
   thus G is Contravariant by A11;
-  thus thesis by A1,A3,A6,A9,A10,Th44;
+  thus thesis by A1,A3,A6,A9,A10,Th43;
 end;
 
 definition
@@ -3405,7 +3400,7 @@ definition
     given F being Functor of A,B such that
 A1: F is bijective covariant;
     consider G being Functor of B,A such that G = F" and
-A2: G is bijective covariant by A1,Th49;
+A2: G is bijective covariant by A1,Th48;
     take G;
     thus thesis by A2;
   end;
@@ -3417,7 +3412,7 @@ A2: G is bijective covariant by A1,Th49;
     given F being Functor of A,B such that
 A3: F is bijective contravariant;
     consider G being Functor of B,A such that G = F" and
-A4: G is bijective contravariant by A3,Th50;
+A4: G is bijective contravariant by A3,Th49;
     take G;
     thus thesis by A4;
   end;

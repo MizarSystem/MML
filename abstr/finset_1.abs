@@ -2,7 +2,7 @@
 ::  by Agata Darmochwa\l
 ::
 :: Received April 6, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,14 +16,14 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, ORDINAL1, XBOOLE_0, FUNCOP_1, ORDINAL3,
       ORDINAL2, TARSKI, SUBSET_1, SETFAM_1, ZFMISC_1, MCART_1, FUNCT_4,
-      FINSET_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCOP_1,
-      MCART_1, SETFAM_1, ORDINAL1, ORDINAL2, ORDINAL3, SUBSET_1, DOMAIN_1,
-      RELSET_1, FUNCT_2, FUNCT_3, FUNCT_4;
+      FINSET_1, MATROID0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, XTUPLE_0, RELAT_1, FUNCT_1,
+      FUNCOP_1, MCART_1, SETFAM_1, ORDINAL1, ORDINAL2, ORDINAL3, SUBSET_1,
+      DOMAIN_1, RELSET_1, FUNCT_2, FUNCT_3, FUNCT_4;
  constructors DOMAIN_1, FUNCT_3, FUNCOP_1, ORDINAL3, FUNCT_4, SETFAM_1,
-      RELSET_1;
+      RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ORDINAL2,
-      RELSET_1;
+      RELSET_1, FUNCOP_1, XTUPLE_0;
  requirements SUBSET, BOOLE, NUMERALS;
 
 
@@ -294,13 +294,20 @@ definition
   for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
 end;
 
+definition
+ let f be Function;
+  redefine attr f is finite-yielding means
+:: FINSET_1:def 4
+ for i being set st i in dom f holds f.i is finite;
+end;
+
 :: from PRE_CIRC, 2009.03.04, A.T.
 
 definition
   let I be set;
   let IT be I-defined Function;
   redefine attr IT is finite-yielding means
-:: FINSET_1:def 4
+:: FINSET_1:def 5
   for i being set st i in I holds IT.i is finite;
 end;
 
@@ -322,8 +329,13 @@ registration
 end;
 
 registration
+ let X,Y be non empty set;
+ cluster X-defined Y-valued non empty finite for Function;
+end;
+
+registration
   let A be set, F be finite Relation;
-  cluster A|F -> finite;
+  cluster A|`F -> finite;
 end;
 
 registration
@@ -361,3 +373,60 @@ registration
   cluster (x,y) --> (a,b) -> finite;
 end;
 
+:: from MATROID0, 2011.07.25, A.T.
+
+definition
+  let A be set;
+  attr A is finite-membered means
+:: FINSET_1:def 6
+ for B being set st B in A holds B is finite;
+end;
+
+registration
+ cluster empty -> finite-membered for set;
+end;
+
+registration
+  let A be finite-membered set;
+  cluster -> finite for Element of A;
+end;
+
+registration
+  cluster non empty finite finite-membered for set;
+end;
+
+:: from SIMPLEX0, 2011.07.25, A.T.
+
+registration
+  let X be finite set;
+  cluster {X} -> finite-membered;
+  cluster bool X -> finite-membered;
+  let Y be finite set;
+  cluster {X,Y} -> finite-membered;
+end;
+
+registration
+  let X be finite-membered set;
+  cluster -> finite-membered for Subset of X;
+  let Y be finite-membered set;
+  cluster X \/ Y -> finite-membered;
+end;
+
+registration
+  let X be finite finite-membered set;
+  cluster union X -> finite;
+end;
+
+registration
+  cluster non empty finite-yielding for Function;
+  cluster empty -> finite-yielding for Relation;
+end;
+
+registration
+  let F be finite-yielding Function, x be set;
+  cluster F.x -> finite;
+end;
+
+registration let F be finite-yielding Relation;
+ cluster rng F -> finite-membered;
+end;

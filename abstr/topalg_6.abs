@@ -1,0 +1,561 @@
+:: Fundamental Group of $n$-sphere for $n \geq 2$
+::  by Marco Riccardi and Artur Korni{\l}owicz
+::
+:: Received November 3, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies PRE_TOPC, FUNCT_1, EUCLID, RELAT_1, ARYTM_1, BORSUK_2, GRAPH_1,
+      ALGSTR_1, WAYBEL20, EQREL_1, NAT_1, XBOOLE_0, ARYTM_3, TOPALG_1, TOPS_2,
+      TOPREALB, T_0TOPSP, STRUCT_0, BORSUK_1, FUNCOP_1, SUBSET_1, TOPALG_3,
+      TARSKI, XREAL_0, FUNCT_2, XXREAL_0, ZFMISC_1, ORDINAL1, NUMBERS, RCOMP_1,
+      ORDINAL2, CARD_1, XXREAL_1, CONNSP_2, TOPMETR, MFOLD_2, PARTFUN1,
+      METRIC_1, CONVEX1, INCSP_1, RLTOPSP1, RVSUM_1, REAL_1, COMPLEX1,
+      FINSEQ_1, MEASURE5, XXREAL_2, FINSET_1, FINSEQ_2, MFOLD_1, VALUED_0,
+      SERIES_1, CARD_3, ORDINAL4, MEMBERED, SUPINF_2, TREAL_1, TOPREAL1,
+      FUNCT_4, TOPALG_6;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1, RELAT_1, COMPLEX1,
+      FUNCOP_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, RVSUM_1, REAL_1, BINOP_1,
+      ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, XCMPLX_0, NAT_1, FINSET_1,
+      STRUCT_0, PRE_TOPC, TOPS_2, BORSUK_1, CONNSP_2, TOPMETR, EUCLID,
+      BORSUK_2, TOPALG_1, TOPALG_3, TOPREALB, VALUED_0, METRIC_1, TOPREAL9,
+      TOPALG_2, RLTOPSP1, COMPTS_1, FINSEQ_1, TBSP_1, FINSEQ_2, METRIZTS,
+      RLVECT_1, XXREAL_1, XXREAL_2, NAT_D, BORSUK_6, MEMBERED, RCOMP_1,
+      MFOLD_1, MFOLD_2, TOPREAL1, FUNCT_4;
+ constructors BORSUK_6, BORSUK_3, TOPALG_3, SEQ_4, TOPREAL9, TOPREALB, MFOLD_2,
+      BINOP_2, FUNCSDOM, CONVEX1, MONOID_0, COMPTS_1, TBSP_1, SEQ_1, MFOLD_1,
+      METRIZTS, NAT_D, TREAL_1, TOPREAL1, WAYBEL23;
+ registrations RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, BORSUK_1,
+      EUCLID, BORSUK_2, TOPALG_1, PRE_TOPC, ZFMISC_1, TOPGRP_1, TOPMETR,
+      RCOMP_3, XXREAL_2, TEX_1, TOPALG_3, FUNCT_2, FUNCT_1, FUNCOP_1, MFOLD_2,
+      XBOOLE_0, RELAT_1, PARTFUN1, NAT_1, MONOID_0, VALUED_0, FINSET_1,
+      FINSEQ_1, FINSEQ_2, NUMBERS, TOPALG_2, TOPREAL9, TBSP_1, MFOLD_1,
+      BORSUK_3, TOPREAL6, TOPREALB;
+ requirements REAL, ARITHM, BOOLE, SUBSET, NUMERALS;
+
+
+begin :: Preliminaries
+
+reserve T,U for non empty TopSpace;
+reserve t for Point of T;
+reserve n for Nat;
+
+registration
+  let S be TopSpace, T be non empty TopSpace;
+  cluster constant -> continuous for Function of S,T;
+end;
+
+theorem :: TOPALG_6:1
+  L[01](0,1,0,1) = id Closed-Interval-TSpace(0,1);
+
+theorem :: TOPALG_6:2
+  for r1,r2,r3,r4,r5,r6 being real number
+  st r1 < r2 & r3 <= r4 & r5 < r6
+  holds L[01](r1,r2,r3,r4)*L[01](r5,r6,r1,r2) = L[01](r5,r6,r3,r4);
+
+registration
+  let n be positive Nat;
+  cluster TOP-REAL n -> infinite;
+  cluster n-locally_euclidean -> infinite for non empty TopSpace;
+end;
+
+theorem :: TOPALG_6:3
+  for p being Point of TOP-REAL n st p in Sphere(0.TOP-REAL n,1)
+  holds -p in Sphere(0.TOP-REAL n,1) \ {p};
+
+theorem :: TOPALG_6:4
+  for T being non empty TopStruct, t1,t2 being Point of T
+  for p being Path of t1,t2
+  holds inf dom p = 0 & sup dom p = 1;
+
+theorem :: TOPALG_6:5
+  for C1,C2 being constant Loop of t holds
+  C1, C2 are_homotopic;
+
+theorem :: TOPALG_6:6
+  for S being non empty SubSpace of T,
+      t1,t2 being Point of T, s1,s2 being Point of S,
+      A,B being Path of t1,t2, C,D being Path of s1,s2 st
+  s1,s2 are_connected & t1,t2 are_connected & A = C & B = D & C,D are_homotopic
+  holds A,B are_homotopic;
+
+theorem :: TOPALG_6:7
+  for S being non empty SubSpace of T,
+      t1,t2 being Point of T, s1,s2 being Point of S,
+      A,B being Path of t1,t2, C,D being Path of s1,s2 st
+  s1,s2 are_connected & t1,t2 are_connected & A = C & B = D &
+  Class(EqRel(S,s1,s2),C) = Class(EqRel(S,s1,s2),D) holds
+  Class(EqRel(T,t1,t2),A) = Class(EqRel(T,t1,t2),B);
+
+theorem :: TOPALG_6:8
+  for T being trivial non empty TopSpace
+  for t being Point of T, L being Loop of t holds
+  the carrier of pi_1(T,t) = { Class(EqRel(T,t),L) };
+
+theorem :: TOPALG_6:9
+  for p being Point of TOP-REAL n, S being Subset of TOP-REAL n
+  st n >= 2 & S = ([#]TOP-REAL n) \ {p}
+  holds (TOP-REAL n) | S is pathwise_connected;
+
+theorem :: TOPALG_6:10
+  for S being non empty Subset of T
+  st n >= 2 & S = ([#]T) \ {t} & TOP-REAL n, T are_homeomorphic
+  holds T | S is pathwise_connected;
+
+registration
+  let n be Element of NAT;
+  let p,q be Point of TOP-REAL n;
+  cluster TPlane(p,q) -> convex;
+end;
+
+begin :: Fundamental groups
+
+definition
+  let T;
+  attr T is having_trivial_Fundamental_Group means
+:: TOPALG_6:def 1
+  for t being Point of T holds pi_1(T,t) is trivial;
+end;
+
+definition
+  let T;
+  attr T is simply_connected means
+:: TOPALG_6:def 2
+  T is having_trivial_Fundamental_Group pathwise_connected;
+end;
+
+registration
+  cluster simply_connected ->
+          having_trivial_Fundamental_Group pathwise_connected
+          for non empty TopSpace;
+  cluster having_trivial_Fundamental_Group pathwise_connected ->
+          simply_connected for non empty TopSpace;
+end;
+
+theorem :: TOPALG_6:11
+  T is having_trivial_Fundamental_Group implies
+  for t being Point of T, P,Q being Loop of t holds
+  P,Q are_homotopic;
+
+registration
+  let n be Nat;
+  cluster TOP-REAL n -> having_trivial_Fundamental_Group;
+end;
+
+registration
+  cluster trivial -> having_trivial_Fundamental_Group for non empty TopSpace;
+end;
+
+theorem :: TOPALG_6:12
+  T is simply_connected iff
+  for t1,t2 being Point of T holds t1,t2 are_connected &
+  for P, Q being Path of t1,t2 holds
+  Class(EqRel(T,t1,t2),P) = Class(EqRel(T,t1,t2),Q);
+
+registration
+  let T be having_trivial_Fundamental_Group non empty TopSpace;
+  let t be Point of T;
+  cluster pi_1(T,t) -> trivial;
+end;
+
+theorem :: TOPALG_6:13
+  for S, T being non empty TopSpace st S,T are_homeomorphic holds
+  S is having_trivial_Fundamental_Group implies
+  T is having_trivial_Fundamental_Group;
+
+theorem :: TOPALG_6:14
+  for S, T being non empty TopSpace st S,T are_homeomorphic holds
+  S is simply_connected implies T is simply_connected;
+
+theorem :: TOPALG_6:15
+  for T being having_trivial_Fundamental_Group non empty TopSpace,
+      t being Point of T, P1,P2 being Loop of t
+  holds P1,P2 are_homotopic;
+
+definition
+  let T, t;
+  let l be Loop of t;
+  attr l is nullhomotopic means
+:: TOPALG_6:def 3
+  ex c being constant Loop of t st l,c are_homotopic;
+end;
+
+registration
+  let T, t;
+  cluster constant -> nullhomotopic for Loop of t;
+end;
+
+registration
+  let T, t;
+  cluster constant for Loop of t;
+end;
+
+theorem :: TOPALG_6:16
+  for f being Loop of t, g being continuous Function of T,U st
+   f is nullhomotopic holds g*f is nullhomotopic;
+
+registration
+  let T, U be non empty TopSpace,
+      t be Point of T,
+      f be nullhomotopic Loop of t,
+      g be continuous Function of T,U;
+  cluster g*f -> nullhomotopic for Loop of g.t;
+end;
+
+registration
+  let T be having_trivial_Fundamental_Group non empty TopSpace;
+  let t be Point of T;
+  cluster -> nullhomotopic for Loop of t;
+end;
+
+theorem :: TOPALG_6:17
+  (for t being Point of T, f being Loop of t holds f is nullhomotopic)
+  implies T is having_trivial_Fundamental_Group;
+
+registration
+  let n be Element of NAT;
+  let p,q be Point of TOP-REAL n;
+  cluster TPlane(p,q) -> having_trivial_Fundamental_Group;
+end;
+
+theorem :: TOPALG_6:18
+  for S being non empty SubSpace of T, s being Point of S,
+      f being Loop of t, g being Loop of s st
+   t = s & f = g & g is nullhomotopic
+  holds f is nullhomotopic;
+
+begin :: Curves
+
+reserve T for TopStruct;
+reserve f for PartFunc of R^1, T;
+
+definition
+  let T,f;
+  attr f is parametrized-curve means
+:: TOPALG_6:def 4
+  dom f is interval Subset of REAL &
+  ex S being SubSpace of R^1, g being Function of S, T
+  st f = g & S = R^1|dom f & g is continuous;
+end;
+
+registration
+  let T;
+  cluster parametrized-curve for PartFunc of R^1, T;
+end;
+
+theorem :: TOPALG_6:19
+  {} is parametrized-curve PartFunc of R^1, T;
+
+definition
+  let T;
+  func Curves T -> Subset of PFuncs(REAL, [#]T) equals
+:: TOPALG_6:def 5
+  {f where f is Element of PFuncs(REAL, [#]T) :
+     f is parametrized-curve PartFunc of R^1, T};
+end;
+
+registration
+  let T;
+  cluster Curves T -> non empty;
+end;
+
+definition
+  let T;
+  mode Curve of T is Element of Curves T;
+end;
+
+reserve c for Curve of T;
+
+theorem :: TOPALG_6:20
+  for f being parametrized-curve PartFunc of R^1, T holds f is Curve of T;
+
+theorem :: TOPALG_6:21
+  {} is Curve of T;
+
+theorem :: TOPALG_6:22
+  for t1,t2 being Point of T
+  for p being Path of t1,t2 st t1,t2 are_connected holds p is Curve of T;
+
+theorem :: TOPALG_6:23
+  c is parametrized-curve PartFunc of R^1, T;
+
+theorem :: TOPALG_6:24
+  dom c c= REAL & rng c c= [#]T;
+
+registration
+  let T,c;
+  cluster dom c -> real-membered;
+end;
+
+definition
+  let T,c;
+  attr c is with_first_point means
+:: TOPALG_6:def 6
+  dom c is left_end;
+  attr c is with_last_point means
+:: TOPALG_6:def 7
+  dom c is right_end;
+end;
+
+definition
+  let T,c;
+  attr c is with_endpoints means
+:: TOPALG_6:def 8
+  c is with_first_point with_last_point;
+end;
+
+registration
+  let T;
+  cluster with_first_point with_last_point -> with_endpoints for Curve of T;
+  cluster with_endpoints -> with_first_point with_last_point for Curve of T;
+end;
+
+reserve T for non empty TopStruct;
+
+registration
+  let T;
+  cluster with_endpoints for Curve of T;
+end;
+
+registration
+  let T;
+  let c be with_first_point Curve of T;
+  cluster dom c -> non empty;
+  cluster inf dom c -> real;
+end;
+
+registration
+  let T;
+  let c be with_last_point Curve of T;
+  cluster dom c -> non empty;
+  cluster sup dom c -> real;
+end;
+
+registration
+  let T;
+  cluster with_first_point -> non empty for Curve of T;
+  cluster with_last_point -> non empty for Curve of T;
+end;
+
+definition
+  let T;
+  let c be with_first_point Curve of T;
+  func the_first_point_of c -> Point of T equals
+:: TOPALG_6:def 9
+  c.(inf dom c);
+end;
+
+definition
+  let T;
+  let c be with_last_point Curve of T;
+  func the_last_point_of c -> Point of T equals
+:: TOPALG_6:def 10
+  c.(sup dom c);
+end;
+
+theorem :: TOPALG_6:25
+  for t1,t2 being Point of T
+  for p being Path of t1,t2 st t1,t2 are_connected
+  holds p is with_endpoints Curve of T;
+
+theorem :: TOPALG_6:26
+  for c being Curve of T
+  for r1,r2 being real number
+  holds c | [.r1, r2.] is Curve of T;
+
+theorem :: TOPALG_6:27
+  for c being with_endpoints Curve of T holds
+  dom c = [.inf dom c, sup dom c.];
+
+theorem :: TOPALG_6:28
+  for c being with_endpoints Curve of T st dom c = [.0,1.]
+  holds c is Path of the_first_point_of c,the_last_point_of c;
+
+theorem :: TOPALG_6:29
+  for c being with_endpoints Curve of T holds
+  c*L[01](0,1,inf dom c,sup dom c)
+  is Path of the_first_point_of c,the_last_point_of c;
+
+theorem :: TOPALG_6:30
+  for c being with_endpoints Curve of T,
+      t1,t2 being Point of T
+  st c*L[01](0,1,inf dom c,sup dom c) is Path of t1,t2 & t1,t2 are_connected
+  holds t1 = the_first_point_of c & t2 = the_last_point_of c;
+
+theorem :: TOPALG_6:31
+  for c being with_endpoints Curve of T
+  holds the_first_point_of c in rng c & the_last_point_of c in rng c;
+
+theorem :: TOPALG_6:32
+  for r1,r2 being real number
+  for t1,t2 being Point of T
+  for p1 being Path of t1,t2
+  st t1,t2 are_connected & r1 < r2
+  holds p1*L[01](r1,r2,0,1) is with_endpoints Curve of T;
+
+theorem :: TOPALG_6:33
+  for c being with_endpoints Curve of T
+  holds the_first_point_of c, the_last_point_of c are_connected;
+
+definition
+  let T be non empty TopStruct;
+  let c1,c2 be with_endpoints Curve of T;
+  pred c1,c2 are_homotopic means
+:: TOPALG_6:def 11
+  ex a,b being Point of T, p1,p2 being Path of a,b st
+  p1 = c1*L[01](0,1,inf dom c1,sup dom c1) &
+  p2 = c2*L[01](0,1,inf dom c2,sup dom c2) &
+  p1,p2 are_homotopic;
+  symmetry;
+end;
+
+definition
+  let T be non empty TopSpace;
+  let c1,c2 be with_endpoints Curve of T;
+  redefine pred c1,c2 are_homotopic;
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: TOPALG_6:34
+  for T being non empty TopStruct,
+      c1,c2 being with_endpoints Curve of T,
+      a,b being Point of T,
+      p1,p2 being Path of a,b
+  st c1 = p1 & c2 = p2 & a,b are_connected
+  holds c1,c2 are_homotopic iff p1,p2 are_homotopic;
+
+theorem :: TOPALG_6:35
+  for c1,c2 being with_endpoints Curve of T
+  st c1, c2 are_homotopic
+  holds the_first_point_of c1 = the_first_point_of c2 &
+  the_last_point_of c1 = the_last_point_of c2;
+
+theorem :: TOPALG_6:36
+  for T being non empty TopSpace
+  for c1,c2 being with_endpoints Curve of T
+  for S being Subset of R^1
+  st dom c1 = dom c2 & S = dom c1 holds c1,c2 are_homotopic iff
+   ex f being Function of [:R^1|S,I[01]:], T, a,b being Point of T
+   st f is continuous &
+   (for t being Point of R^1|S holds f.(t,0) = c1.t & f.(t,1) = c2.t) &
+   (for t being Point of I[01] holds f.(inf S,t) = a & f.(sup S,t) = b);
+
+definition
+  let T be TopStruct;
+  let c1, c2 be Curve of T;
+  func c1 + c2 -> Curve of T equals
+:: TOPALG_6:def 12
+  c1 \/ c2 if c1 \/ c2 is Curve of T otherwise {};
+end;
+
+theorem :: TOPALG_6:37
+  for c being with_endpoints Curve of T
+  for r being real number holds
+  ex c1,c2 being Element of Curves T
+  st c = c1 + c2 & c1 = c | [.inf dom c, r.] & c2 = c | [.r, sup dom c.];
+
+theorem :: TOPALG_6:38
+  for T being non empty TopSpace
+  for c1,c2 being with_endpoints Curve of T
+  st sup dom c1 = inf dom c2 & the_last_point_of c1 = the_first_point_of c2
+  holds c1 + c2 is with_endpoints &
+         dom(c1 + c2) = [.inf dom c1, sup dom c2.] &
+         (c1+c2).inf dom c1 = the_first_point_of c1 &
+         (c1+c2).sup dom c2 = the_last_point_of c2;
+
+theorem :: TOPALG_6:39
+  for T being non empty TopSpace
+  for c1,c2,c3,c4,c5,c6 being with_endpoints Curve of T
+  st c1,c2 are_homotopic & dom c1 = dom c2 &
+     c3,c4 are_homotopic & dom c3 = dom c4 &
+     c5 = c1 + c3 & c6 = c2 + c4
+  & the_last_point_of c1 = the_first_point_of c3
+  & sup dom c1 = inf dom c3
+  holds c5,c6 are_homotopic;
+
+definition
+  let T be TopStruct;
+  let f be FinSequence of Curves T;
+  func Partial_Sums f -> FinSequence of Curves T means
+:: TOPALG_6:def 13
+  len f = len it & f.1 = it.1 & for i being Nat
+  st 1<=i & i<len f holds it.(i+1) = (it/.i) + (f/.(i+1));
+end;
+
+definition
+  let T be TopStruct;
+  let f be FinSequence of Curves T;
+  func Sum f -> Curve of T equals
+:: TOPALG_6:def 14
+    (Partial_Sums f).len f if len f > 0 otherwise {};
+end;
+
+theorem :: TOPALG_6:40
+  for c being Curve of T holds Sum <*c*> = c;
+
+theorem :: TOPALG_6:41
+  for c being Curve of T,
+      f being FinSequence of Curves T holds Sum(f ^ <*c*>) = Sum f + c;
+
+theorem :: TOPALG_6:42
+  for X being set, f being FinSequence of Curves T
+  st (for i being Nat st 1 <= i & i <= len f holds rng(f/.i) c= X)
+  holds rng Sum f c= X;
+
+theorem :: TOPALG_6:43
+  for T being non empty TopSpace
+  for f being FinSequence of Curves T
+  st len f > 0 &
+     (for i being Nat st 1 <= i & i < len f
+       holds (f/.i).sup dom(f/.i) = (f/.(i+1)).inf dom(f/.(i+1))
+       & sup dom(f/.i) = inf dom(f/.(i+1))) &
+     (for i being Nat st 1 <= i & i <= len f
+       holds f/.i is with_endpoints)
+  holds ex c being with_endpoints Curve of T st
+    Sum f = c & dom c = [.inf dom(f/.1), sup dom(f/.(len f)).] &
+    the_first_point_of c = (f/.1).(inf dom(f/.1)) &
+    the_last_point_of c = (f/.(len f)).(sup dom(f/.(len f)));
+
+theorem :: TOPALG_6:44
+  for T being non empty TopSpace
+  for f1,f2 being FinSequence of Curves T
+  for c1,c2 being with_endpoints Curve of T
+  st len f1 > 0 & len f1 = len f2 & Sum f1 = c1 & Sum f2 = c2 &
+     (for i being Nat st 1 <= i & i < len f1
+       holds (f1/.i).sup dom(f1/.i) = (f1/.(i+1)).inf dom(f1/.(i+1))
+       & sup dom(f1/.i) = inf dom(f1/.(i+1))) &
+     (for i being Nat st 1 <= i & i < len f2
+       holds (f2/.i).sup dom(f2/.i) = (f2/.(i+1)).inf dom(f2/.(i+1))
+       & sup dom(f2/.i) = inf dom(f2/.(i+1)) ) &
+     (for i being Nat st 1 <= i & i <= len f1 holds
+       ex c3,c4 being with_endpoints Curve of T st c3 = f1/.i & c4 = f2/.i
+        & c3,c4 are_homotopic & dom c3 = dom c4)
+  holds c1,c2 are_homotopic;
+
+theorem :: TOPALG_6:45
+  for c being with_endpoints Curve of T
+  for h being FinSequence of REAL
+  st len h >= 2 & h.1 = inf dom c & h.len h = sup dom c & h is increasing
+  holds
+    ex f being FinSequence of Curves T
+    st len f = len h - 1 & c = Sum f &
+    (for i being Nat st 1 <= i & i <= len f
+      holds f/.i = c | ([.h/.i,h/.(i+1).]));
+
+theorem :: TOPALG_6:46
+  n >= 2 implies TUnitSphere(n) is having_trivial_Fundamental_Group;
+
+theorem :: TOPALG_6:47
+  for n being non empty Nat, r being positive real number,
+      x being Point of TOP-REAL n st n >= 3 holds
+  Tcircle(x,r) is having_trivial_Fundamental_Group;

@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,30 +19,32 @@ environ
       FUNCT_1, ORDINAL4, FINSEQ_2, ZFMISC_1, CQC_THE1, MCART_1, XBOOLEAN,
       BVFUNC_2, ZF_MODEL, SUBSTUT2, SUBLEMMA, FUNCOP_1, FUNCT_4, FINSET_1,
       ORDINAL1, CALCUL_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1,
-      QC_LANG1, CARD_1, NUMBERS, ORDINAL1, FINSEQ_2, XXREAL_0, NAT_1, FUNCOP_1,
-      CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, PARTFUN1, FUNCT_2,
-      DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, FINSEQ_1, RELAT_1,
+      FUNCT_1, QC_LANG1, CARD_1, NUMBERS, ORDINAL1, FINSEQ_2, XXREAL_0, NAT_1,
+      FUNCOP_1, CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, PARTFUN1,
+      FUNCT_2, DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2,
-      CQC_THE1, SUBSTUT2, RELSET_1;
+      CQC_THE1, SUBSTUT2, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, QC_LANG1, CQC_LANG, CARD_1,
-      FINSEQ_2, RELAT_1;
+      FINSEQ_2, RELAT_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Preliminaries
 
+reserve Al for QC-alphabet;
+
 reserve a,b,c,d for set,
   i,j,k,m,n for Element of NAT,
-  p,q,r for Element of CQC-WFF,
-  x,y,y0 for bound_QC-variable,
-  X for Subset of CQC-WFF,
+  p,q,r for Element of CQC-WFF(Al),
+  x,y,y0 for bound_QC-variable of Al,
+  X for Subset of CQC-WFF(Al),
   A for non empty set,
-  J for interpretation of A,
-  v,w for Element of Valuations_in A,
-  Sub for CQC_Substitution,
-  f,f1,g,h,h1 for FinSequence of CQC-WFF;
+  J for interpretation of Al,A,
+  v,w for Element of Valuations_in(Al,A),
+  Sub for CQC_Substitution of Al,
+  f,f1,g,h,h1 for FinSequence of CQC-WFF(Al);
 
 definition
   let D be non empty set, f be FinSequence of D;
@@ -53,13 +55,13 @@ definition
 end;
 
 definition
-  let D be non empty set, f be FinSequence of D;
-  assume
- len f > 0;
-  func Suc(f) -> Element of D equals
+  let Al;
+  let f be FinSequence of CQC-WFF(Al);
+  func Suc(f) -> Element of CQC-WFF(Al) equals
 :: CALCUL_1:def 2
 
-  f.(len f);
+  f.(len f) if len f > 0
+  otherwise VERUM(Al);
 end;
 
 definition
@@ -71,7 +73,7 @@ definition
 end;
 
 definition
-  let f,g;
+  let Al,f,g;
   pred f is_Subsequence_of g means
 :: CALCUL_1:def 4
 
@@ -128,30 +130,32 @@ theorem :: CALCUL_1:14
 begin :: A Sequent calculus
 
 definition
-  let f;
-  func still_not-bound_in f -> Subset of bound_QC-variables means
+  let Al,f;
+  func still_not-bound_in f -> Subset of bound_QC-variables(Al) means
 :: CALCUL_1:def 5
 
   a in it iff ex i,p st i in dom f & p = f.i & a in still_not-bound_in p;
 end;
 
 definition
-  func set_of_CQC-WFF-seq means
+  let Al;
+  func set_of_CQC-WFF-seq(Al) means
 :: CALCUL_1:def 6
 
-  a in it iff a is FinSequence of CQC-WFF;
+  a in it iff a is FinSequence of CQC-WFF(Al);
 end;
 
-reserve PR,PR1 for FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
+reserve PR,PR1 for FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:];
 
 definition
-  let PR;
+  let Al,PR;
   let n be Nat;
   pred PR,n is_a_correct_step means
 :: CALCUL_1:def 7
 
   ex f st Suc(f) is_tail_of Ant(f) &
-  (PR.n)`1 = f if (PR.n)`2 = 0, ex f st (PR.n)`1 = f^<*VERUM*> if (PR.n)`2 = 1,
+  (PR.n)`1 = f if (PR.n)`2 = 0, ex f st (PR.n)`1 = f^<*VERUM(Al)*>
+  if (PR.n)`2 = 1,
 ex i,f,g st 1 <= i & i < n & Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g)
 & (PR.i)`1 = f & (PR.n)`1 = g if (PR.n)`2 = 2, ex i,j,f,g st 1 <= i & i < n & 1
   <= j & j < i & len f > 1 & len g > 1 & Ant(Ant(f)) = Ant(Ant(g)) & 'not' Suc(
@@ -171,7 +175,7 @@ in still_not-bound_in (Ant(f)) & not y in still_not-bound_in All(x,p) & f = (PR
 end;
 
 definition
-  let PR;
+  let Al,PR;
   attr PR is a_proof means
 :: CALCUL_1:def 8
 
@@ -180,7 +184,7 @@ definition
 end;
 
 definition
-  let f;
+  let Al,f;
   pred |- f means
 :: CALCUL_1:def 9
 
@@ -188,7 +192,7 @@ definition
 end;
 
 definition
-  let p,X;
+  let Al,p,X;
   pred p is_formal_provable_from X means
 :: CALCUL_1:def 10
 
@@ -196,10 +200,7 @@ definition
 end;
 
 definition
-  let X;
-  let A;
-  let J;
-  let v;
+  let Al,X,A,J,v;
   pred J,v |= X means
 :: CALCUL_1:def 11
 
@@ -207,21 +208,21 @@ definition
 end;
 
 definition
-  let X,p;
+  let Al,X,p;
   pred X |= p means
 :: CALCUL_1:def 12
   J,v |= X implies J,v |= p;
 end;
 
 definition
-  let p;
+  let Al,p;
   pred |= p means
 :: CALCUL_1:def 13
-  {}(CQC-WFF) |= p;
+  {}(CQC-WFF(Al)) |= p;
 end;
 
 definition
-  let f, A, J, v;
+  let Al,f, A, J, v;
   pred J,v |= f means
 :: CALCUL_1:def 14
 
@@ -229,7 +230,7 @@ definition
 end;
 
 definition
-  let f, p;
+  let Al, f, p;
   pred f |= p means
 :: CALCUL_1:def 15
 
@@ -277,7 +278,7 @@ theorem :: CALCUL_1:25
   Suc(f) = All(x,p) & Ant(f) |= Suc(f) implies for y holds Ant(f) |= p.(x,y);
 
 theorem :: CALCUL_1:26
-  for X being set st X c= bound_QC-variables holds not x in X
+  for X being set st X c= bound_QC-variables(Al) holds not x in X
   implies v.(x|a)|X = v|X;
 
 theorem :: CALCUL_1:27
@@ -294,7 +295,7 @@ still_not-bound_in Ant(f) & not y in still_not-bound_in All(x,p) implies Ant(f)
   |= All(x,p);
 
 theorem :: CALCUL_1:30
-  Ant(f^<*VERUM*>) |= Suc(f^<*VERUM*>);
+  Ant(f^<*VERUM(Al)*>) |= Suc(f^<*VERUM(Al)*>);
 
 theorem :: CALCUL_1:31
   for n being Nat holds 1 <= n & n <= len PR implies (PR.n)`2 = 0
@@ -410,7 +411,8 @@ theorem :: CALCUL_1:63
   still_not-bound_in f is finite;
 
 theorem :: CALCUL_1:64
-  card bound_QC-variables = omega & not bound_QC-variables is finite;
+  card bound_QC-variables(Al) = card QC-symbols(Al) &
+  not bound_QC-variables(Al) is finite;
 
 theorem :: CALCUL_1:65
   ex x st not x in still_not-bound_in f;
@@ -428,5 +430,5 @@ definition
   let f be FinSequence, p be set;
   redefine pred p is_tail_of f means
 :: CALCUL_1:def 16
-  ex i being Element of NAT st i in dom f & f.i =  p;
+  ex i being Element of NAT st i in dom f & f.i = p;
 end;

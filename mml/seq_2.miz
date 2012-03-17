@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz
 ::
 :: Received July 4, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,17 +16,20 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, VALUED_0, FUNCT_1,
       ARYTM_1, ARYTM_3, COMPLEX1, XXREAL_0, CARD_1, RELAT_1, XXREAL_2, NAT_1,
-      ORDINAL2, REAL_1, VALUED_1, SEQ_2, FUNCOP_1;
+      ORDINAL2, REAL_1, VALUED_1, SEQ_2, FUNCOP_1, COMSEQ_1, XCMPLX_0,
+      SQUARE_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1,
-      NAT_1, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, FUNCOP_1, SEQ_1, XXREAL_0;
+      NAT_1, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, FUNCOP_1, SEQ_1, XXREAL_0,
+      SQUARE_1, COMSEQ_1, COMSEQ_2;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, PARTFUN1, VALUED_1, SEQ_1,
-      RELSET_1, FUNCOP_1;
+      RELSET_1, FUNCOP_1, COMSEQ_2, SQUARE_1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, XBOOLE_0,
-      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, FUNCOP_1;
+      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, FUNCOP_1, COMSEQ_2, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions VALUED_1;
+ definitions SQUARE_1, COMPLEX1, VALUED_1, COMSEQ_2;
  theorems SEQ_1, ABSVALUE, NAT_1, XREAL_0, XCMPLX_0, XCMPLX_1, XREAL_1,
-      COMPLEX1, XXREAL_0, VALUED_1, FUNCT_2, VALUED_0, FUNCOP_1;
+      COMPLEX1, XXREAL_0, VALUED_1, FUNCT_2, VALUED_0, FUNCOP_1, COMSEQ_2,
+      NUMBERS, SQUARE_1;
  schemes NAT_1;
 
 begin
@@ -36,7 +39,7 @@ reserve n,n1,n2,m for Element of NAT,
   seq,seq9,seq1 for Real_Sequence,
   y for set;
 
-theorem Th9:
+theorem Th1:
   -g<r & r<g iff abs(r)<g
 proof
   thus -g<r & r<g implies abs(r)<g
@@ -63,7 +66,7 @@ A5: abs(r)<g;
 A6: -g<=r by ABSVALUE:5;
 A7: 0<=abs(r) by COMPLEX1:46;
 A8: 0<g by A5,COMPLEX1:46;
-A9: -g<-0 by A5,A7,XREAL_1:24;
+A9: -g<-0 by A5,A7;
   now
     assume r=-g;
     then abs(r)=--g by A9,ABSVALUE:def 1
@@ -74,7 +77,7 @@ A9: -g<-0 by A5,A7,XREAL_1:24;
   thus thesis by A5,A8,ABSVALUE:def 1;
 end;
 
-theorem Th11:
+theorem Th2:
   g<>0 & r<>0 implies abs(g"-r")=abs(g-r)/(abs(g)*abs(r))
 proof
   assume that
@@ -143,12 +146,6 @@ A5: for n holds r < seq.n;
   end;
 end;
 
-definition
-  let f be complex-valued Function;
-  attr f is bounded means
-  ex r st for y st y in dom f holds abs(f.y) <r;
-end;
-
 registration
   cluster bounded -> bounded_above bounded_below for real-valued Function;
   coherence
@@ -201,11 +198,11 @@ A9: f.y<g by XREAL_1:8;
     then
 A10: -abs(r1)-abs(r2)+-1<f.y+0 by XREAL_1:8;
     -abs(r1)-abs(r2)-1=-g;
-    hence abs(f.y)<g by A9,A10,Th9;
+    hence abs(f.y)<g by A9,A10,Th1;
   end;
 end;
 
-theorem Th15:
+theorem Th3:
   seq is bounded iff ex r st (0<r & for n holds abs(seq.n)<r)
 proof
   thus seq is bounded implies ex r st (0<r & for n holds abs(seq.n)<r)
@@ -232,7 +229,7 @@ A5: seq.n<g by XREAL_1:8;
     then
 A6: -abs(r1)-abs(r2)+-1<seq.n+0 by XREAL_1:8;
     -abs(r1)-abs(r2)-1=-g;
-    hence thesis by A5,A6,Th9;
+    hence thesis by A5,A6,Th1;
   end;
   given r such that 0<r and
 A7: for n holds abs(seq.n)<r;
@@ -243,7 +240,7 @@ A7: for n holds abs(seq.n)<r;
   hence thesis by A7;
 end;
 
-theorem Th16:
+theorem Th4:
   for n ex r st (0<r & for m st m<=n holds abs(seq.m)<r)
 proof
   defpred X[Nat] means ex r1 st 0<r1 & for m st m<=$1 holds abs(seq.m)<r1;
@@ -320,10 +317,50 @@ end;
 ::
 
 definition
+ canceled;
   let seq;
-  attr seq is convergent means
+  redefine attr seq is convergent means
   :Def6:
   ex g st for p st 0<p ex n st for m st n<=m holds abs (seq.m-g) < p;
+  compatibility
+   proof
+    thus seq is convergent implies
+     ex g st for p st 0<p ex n st for m st n<=m holds abs (seq.m-g) < p
+     proof assume seq is convergent;
+       then consider g being Element of COMPLEX such that
+A1:     for p be Real st 0<p ex n st for m st n<=m holds |.seq.m-g.|<p
+              by COMSEQ_2:def 5;
+A2:     Re g+(Im g)*<i> = g by COMPLEX1:13;
+       now assume
+A3:       g is not real;
+A4:       Im g <> 0 by A2,A3;
+         set p = abs Im g;
+A5:       p > 0 by A4,COMPLEX1:47;
+         not ex n st for m st n<=m holds |.seq.m-g.|< p
+          proof let n; take n; thus n<=n;
+A6:          Im(seq.n) = 0 by COMPLEX1:def 2;
+A7:          Im(seq.n-g) = Im(seq.n)-Im g by COMPLEX1:19;
+A8:          |.seq.n-g.| = sqrt ((Re(seq.n-g))^2 + (Im g)^2) by A7,A6;
+            (Re(seq.n-g))^2 >= 0 by XREAL_1:63;
+            then sqrt((Re(seq.n-g))^2+|.Im g.|^2) >= |.Im g.| by SQUARE_1:58;
+           hence |.seq.n-g.| >= |.Im g.| by A8,COMPLEX1:75;
+          end;
+        hence contradiction by A1,A5;
+       end;
+       then reconsider g as real number;
+      take g;
+      let p;
+       reconsider p as Real by XREAL_0:def 1;
+       0<p implies ex n st for m st n<=m holds abs (seq.m-g) < p by A1;
+      hence thesis;
+     end;
+    given g such that
+A9:   for p st 0<p ex n st for m st n<=m holds abs (seq.m-g) < p;
+     g in REAL by XREAL_0:def 1;
+     then reconsider g as Element of COMPLEX by NUMBERS:11;
+    take g;
+    thus thesis by A9;
+   end;
 end;
 
 definition
@@ -347,9 +384,9 @@ A5: now
     end;
 A6: 0<=abs(g1-g2) by COMPLEX1:46;
     then consider n1 such that
-A7: for m st n1<=m holds abs(seq.m-g1)<abs(g1-g2)/4 by A2,A5,XREAL_1:224;
+A7: for m st n1<=m holds abs(seq.m-g1)<abs(g1-g2)/4 by A2,A5;
     consider n2 such that
-A8: for m st n2<=m holds abs(seq.m-g2)<abs(g1-g2)/4 by A3,A5,A6,XREAL_1:224;
+A8: for m st n2<=m holds abs(seq.m-g2)<abs(g1-g2)/4 by A3,A5,A6;
 A9: abs(seq.(n1+n2)-g1)<abs(g1-g2)/4 by A7,NAT_1:12;
     abs(seq.(n1+n2)-g2)<abs(g1-g2)/4 by A8,NAT_1:12;
     then
@@ -408,7 +445,7 @@ registration
   end;
 end;
 
-theorem Th19:
+theorem Th5:
   seq is convergent & seq9 is convergent implies seq + seq9 is convergent
 proof
   assume that
@@ -423,9 +460,9 @@ A4: for p st 0<p ex n st for m st n<=m holds abs(seq9.m-g2)<p by A2,Def6;
   assume
 A5: 0<p;
   then consider n1 such that
-A6: for m st n1<=m holds abs(seq.m-g1)<p/2 by A3,XREAL_1:215;
+A6: for m st n1<=m holds abs(seq.m-g1)<p/2 by A3;
   consider n2 such that
-A7: for m st n2<=m holds abs(seq9.m-g2)<p/2 by A4,A5,XREAL_1:215;
+A7: for m st n2<=m holds abs(seq9.m-g2)<p/2 by A4,A5;
   take k=n1+n2;
   let m such that
 A8: k<=m;
@@ -447,10 +484,10 @@ end;
 registration
   let seq1,seq2 be convergent Real_Sequence;
   cluster seq1 + seq2 -> convergent for Real_Sequence;
-  coherence by Th19;
+  coherence by Th5;
 end;
 
-theorem Th20:
+theorem Th6:
   seq is convergent & seq9 is convergent implies
   lim (seq + seq9)=(lim seq)+(lim seq9)
 proof
@@ -461,7 +498,7 @@ A2: seq9 is convergent;
     let p;
     assume 0<p;
     then
-A3: 0<p/2 by XREAL_1:215;
+A3: 0<p/2;
     then consider n1 such that
 A4: for m st n1<=m holds abs(seq.m-(lim seq))<p/2 by A1,Def7;
     consider n2 such that
@@ -488,7 +525,7 @@ A9: abs(((seq+seq9).m)-((lim seq)+(lim seq9)))
   hence thesis by A1,A2,Def7;
 end;
 
-theorem Th21:
+theorem Th7:
   seq is convergent implies r(#)seq is convergent
 proof
   assume seq is convergent;
@@ -514,9 +551,8 @@ A6: 0<abs(r) by COMPLEX1:47;
     let p such that
 A7: 0<p;
 A8: 0<>abs(r) by A5,COMPLEX1:47;
-    0/abs(r)=0;
-    then consider n1 such that
-A9: for m st n1<=m holds abs(seq.m-g1)<p/abs(r) by A1,A6,A7,XREAL_1:74;
+    consider n1 such that
+A9: for m st n1<=m holds abs(seq.m-g1)<p/abs(r) by A1,A6,A7;
     take k=n1;
     let m;
     assume k<=m;
@@ -538,10 +574,10 @@ registration
   let r be real number;
   let seq be convergent Real_Sequence;
   cluster r(#)seq -> convergent for Real_Sequence;
-  coherence by Th21;
+  coherence by Th7;
 end;
 
-theorem Th22:
+theorem Th8:
   seq is convergent implies lim(r(#)seq)=r*(lim seq)
 proof
   assume
@@ -565,8 +601,7 @@ A6: 0<abs(r) by COMPLEX1:47;
     let p such that
 A7: 0<p;
 A8: 0<>abs(r) by A5,COMPLEX1:47;
-    0/abs(r)=0;
-    then 0<p/abs(r) by A6,A7,XREAL_1:74;
+    0<p/abs(r) by A6,A7;
     then consider n1 such that
 A9: for m st n1<=m holds abs(seq.m-(lim seq))<p/abs(r) by A1,Def7;
     take k=n1;
@@ -595,15 +630,15 @@ registration
   coherence;
 end;
 
-theorem Th24:
+theorem Th10:
   seq is convergent implies lim(-seq) = -(lim seq)
 proof
   assume seq is convergent;
-  then lim ((-1)(#)seq)=(-1)*(lim seq) by Th22;
+  then lim ((-1)(#)seq)=(-1)*(lim seq) by Th8;
   hence thesis;
 end;
 
-theorem Th25:
+theorem Th11:
   seq is convergent & seq9 is convergent implies seq - seq9 is convergent
 proof
   assume that
@@ -616,22 +651,22 @@ end;
 registration
   let seq1,seq2 be convergent Real_Sequence;
   cluster seq1 - seq2 -> convergent for Real_Sequence;
-  coherence by Th25;
+  coherence by Th11;
 end;
 
-theorem Th26:
+theorem Th12:
   seq is convergent & seq9 is convergent implies
   lim(seq - seq9)=(lim seq)-(lim seq9)
 proof
   assume that
 A1: seq is convergent and
 A2: seq9 is convergent;
-  thus lim(seq - seq9)=(lim seq)+(lim(- seq9)) by A1,A2,Th20
-    .=(lim seq)+-(lim seq9) by A2,Th24
+  thus lim(seq - seq9)=(lim seq)+(lim(- seq9)) by A1,A2,Th6
+    .=(lim seq)+-(lim seq9) by A2,Th10
     .=(lim seq)-(lim seq9);
 end;
 
-theorem Th27:
+theorem Th13:
   seq is convergent implies seq is bounded
 proof
   assume seq is convergent;
@@ -658,7 +693,7 @@ A6: 0<r1 and
 A7: for m st n1<=m holds abs(seq.m)<r1 by A3;
     consider r2 such that
 A8: 0<r2 and
-A9: for m st m<=n1 holds abs(seq.m)<r2 by Th16;
+A9: for m st m<=n1 holds abs(seq.m)<r2 by Th4;
     take r=r1+r2;
     thus 0<r by A6,A8;
 A10: r1+0<r by A8,XREAL_1:8;
@@ -676,15 +711,15 @@ A12: now
     end;
     hence abs(seq.m)<r by A12;
   end;
-  hence thesis by Th15;
+  hence thesis by Th3;
 end;
 
 registration
   cluster convergent -> bounded for Real_Sequence;
-  coherence by Th27;
+  coherence by Th13;
 end;
 
-theorem Th28:
+theorem Th14:
   seq is convergent & seq9 is convergent implies seq (#) seq9 is convergent
 proof
   assume that
@@ -697,16 +732,16 @@ A4: for p st 0<p ex n st for m st n<=m holds abs(seq9.m-g2)<p by A2,Def6;
   take g=g1*g2;
   consider r such that
 A5: 0<r and
-A6: for n holds abs(seq.n)<r by A1,Th15;
+A6: for n holds abs(seq.n)<r by A1,Th3;
 A7: 0<=abs(g2) by COMPLEX1:46;
 A8: 0+0<abs(g2)+r by A5,COMPLEX1:46,XREAL_1:8;
   let p;
   assume
 A9: 0<p;
   then consider n1 such that
-A10: for m st n1<=m holds abs(seq.m-g1)<p/(abs(g2)+r) by A3,A8,XREAL_1:139;
+A10: for m st n1<=m holds abs(seq.m-g1)<p/(abs(g2)+r) by A3,A8;
   consider n2 such that
-A11: for m st n2<=m holds abs(seq9.m-g2)<p/(abs(g2)+r) by A4,A8,A9,XREAL_1:139;
+A11: for m st n2<=m holds abs(seq9.m-g2)<p/(abs(g2)+r) by A4,A8,A9;
   take n=n1+n2;
   let m such that
 A12: n<=m;
@@ -742,10 +777,10 @@ end;
 registration
   let seq1,seq2 be convergent Real_Sequence;
   cluster seq1 (#) seq2 -> convergent for Real_Sequence;
-  coherence by Th28;
+  coherence by Th14;
 end;
 
-theorem Th29:
+theorem Th15:
   seq is convergent & seq9 is convergent implies
   lim(seq(#)seq9)=(lim seq)*(lim seq9)
 proof
@@ -754,14 +789,14 @@ A1: seq is convergent and
 A2: seq9 is convergent;
    consider r such that
 A3: 0<r and
-A4: for n holds abs(seq.n)<r by A1,Th15;
+A4: for n holds abs(seq.n)<r by A1,Th3;
 A5: 0<=abs((lim seq9)) by COMPLEX1:46;
 A6: 0+0<abs((lim seq9))+r by A3,COMPLEX1:46,XREAL_1:8;
   now
     let p;
     assume 0<p;
     then
-A7: 0<p/(abs((lim seq9))+r) by A6,XREAL_1:139;
+A7: 0<p/(abs((lim seq9))+r) by A6;
     then consider n1 such that
 A8: for m st n1<=m holds abs(seq.m-(lim seq))<p/(abs((lim seq9))+r) by A1,Def7;
     consider n2 such that
@@ -809,7 +844,7 @@ A17: abs((seq.m-(lim seq))*(lim seq9))<=abs((lim seq9))*
   hence thesis by A1,A2,Def7;
 end;
 
-theorem Th30:
+theorem Th16:
   seq is convergent implies (lim seq<>0 implies
   ex n st for m st n<=m holds abs(lim seq)/2<abs(seq.m))
 proof
@@ -817,7 +852,7 @@ proof
 A1: seq is convergent and
 A2: lim seq<>0;
   0<abs(lim seq) by A2,COMPLEX1:47;
-  then 0<abs(lim seq)/2 by XREAL_1:215;
+  then 0<abs(lim seq)/2;
   then consider n1 such that
 A3: for m st n1<=m holds abs(seq.m-(lim seq))<abs(lim seq)/2 by A1,Def7;
   take n=n1;
@@ -835,14 +870,14 @@ A7: abs(lim seq)/2+(abs(seq.m)-abs(lim seq)/2) = abs(seq.m);
   hence thesis by A6,A7,XREAL_1:6;
 end;
 
-theorem Th31:
+theorem Th17:
   seq is convergent & (for n holds 0<=seq.n) implies 0<=lim seq
 proof
   assume that
 A1: seq is convergent and
 A2: for n holds 0<=seq.n and
 A3: not 0<=(lim seq);
-  0<-(lim seq) by A3,XREAL_1:58;
+  0<-(lim seq) by A3;
   then consider n1 such that
 A4: for m st n1<=m holds abs(seq.m-(lim seq))<-(lim seq) by A1,Def7;
   abs(seq.n1-(lim seq))<=-(lim seq) by A4;
@@ -876,13 +911,13 @@ A4: seq.n-seq.n<=seq9.n-seq.n by XREAL_1:9;
     hence 0<=(seq9-seq).n by A4;
   end;
   then
-A5: 0<=lim(seq9-seq) by A1,A2,Th31;
-  lim (seq9-seq)=(lim seq9)- (lim seq) by A1,A2,Th26;
+A5: 0<=lim(seq9-seq) by A1,A2,Th17;
+  lim (seq9-seq)=(lim seq9)- (lim seq) by A1,A2,Th12;
   then 0+(lim seq)<=(lim seq9)-(lim seq)+(lim seq) by A5,XREAL_1:6;
   hence thesis;
 end;
 
-theorem Th33:
+theorem Th19:
   seq is convergent & seq9 is convergent &
   (for n holds seq.n<=(seq1.n) & seq1.n<=seq9.n) & (lim seq)=(lim seq9)
   implies seq1 is convergent
@@ -907,12 +942,12 @@ A8: n<=m;
   then n2<=m by A8,XXREAL_0:2;
   then abs(seq9.m-(lim seq))<p by A7;
   then
-A9: seq9.m-(lim seq)<p by Th9;
+A9: seq9.m-(lim seq)<p by Th1;
   n1<=n1+n2 by NAT_1:12;
   then n1<=m by A8,XXREAL_0:2;
   then abs(seq.m-(lim seq))<p by A6;
   then
-A10: -p<seq.m-(lim seq) by Th9;
+A10: -p<seq.m-(lim seq) by Th1;
   seq.m<=seq1.m by A3;
   then seq.m-(lim seq)<=seq1.m-(lim seq) by XREAL_1:9;
   then
@@ -920,7 +955,7 @@ A11: -p<seq1.m-(lim seq) by A10,XXREAL_0:2;
   seq1.m<=seq9.m by A3;
   then seq1.m-(lim seq)<=seq9.m-(lim seq) by XREAL_1:9;
   then seq1.m-(lim seq)<p by A9,XXREAL_0:2;
-  hence thesis by A11,Th9;
+  hence thesis by A11,Th1;
 end;
 
 theorem
@@ -933,7 +968,7 @@ A1: seq is convergent and
 A2: seq9 is convergent and
 A3: for n holds seq.n<=(seq1.n) & seq1.n<=seq9.n and
 A4: lim seq = lim seq9;
-A5: seq1 is convergent by A1,A2,A3,A4,Th33;
+A5: seq1 is convergent by A1,A2,A3,A4,Th19;
   now
     let p;
     assume
@@ -949,12 +984,12 @@ A9: n<=m;
     then n2<=m by A9,XXREAL_0:2;
     then abs(seq9.m-(lim seq))<p by A8;
     then
-A10: seq9.m-(lim seq)<p by Th9;
+A10: seq9.m-(lim seq)<p by Th1;
     n1<=n1+n2 by NAT_1:12;
     then n1<=m by A9,XXREAL_0:2;
     then abs(seq.m-(lim seq))<p by A7;
     then
-A11: -p<seq.m-(lim seq) by Th9;
+A11: -p<seq.m-(lim seq) by Th1;
     seq.m<=seq1.m by A3;
     then seq.m-(lim seq)<=seq1.m-(lim seq) by XREAL_1:9;
     then
@@ -962,12 +997,12 @@ A12: -p<seq1.m-(lim seq) by A11,XXREAL_0:2;
     seq1.m<=seq9.m by A3;
     then seq1.m-(lim seq)<=seq9.m-(lim seq) by XREAL_1:9;
     then seq1.m-(lim seq)<p by A10,XXREAL_0:2;
-    hence abs(seq1.m-(lim seq))<p by A12,Th9;
+    hence abs(seq1.m-(lim seq))<p by A12,Th1;
   end;
   hence thesis by A5,Def7;
 end;
 
-theorem Th35:
+theorem Th21:
   seq is convergent & lim seq <> 0 & seq is non-zero implies seq" is convergent
 proof
   assume that
@@ -977,15 +1012,15 @@ A3: seq is non-zero;
 A4: 0<abs(lim seq) by A2,COMPLEX1:47;
 A5: 0<>abs(lim seq) by A2,COMPLEX1:47;
   consider n1 such that
-A6: for m st n1<=m holds abs(lim seq)/2<abs(seq.m) by A1,A2,Th30;
-  0*0<abs(lim seq)*abs(lim seq) by A4,XREAL_1:96;
+A6: for m st n1<=m holds abs(lim seq)/2<abs(seq.m) by A1,A2,Th16;
+  0*0<abs(lim seq)*abs(lim seq) by A4;
   then
-A7: 0<(abs(lim seq)*abs(lim seq))/2 by XREAL_1:215;
+A7: 0<(abs(lim seq)*abs(lim seq))/2;
   take (lim seq)";
   let p;
   assume
 A8: 0<p;
-  then 0*0<p*((abs(lim seq)*abs(lim seq))/2) by A7,XREAL_1:96;
+  then 0*0<p*((abs(lim seq)*abs(lim seq))/2) by A7;
   then consider n2 such that
 A9: for m st n2<=m holds
   abs(seq.m-(lim seq))<p*((abs(lim seq)*abs(lim seq))/2) by A1,Def7;
@@ -1001,7 +1036,7 @@ A11: abs(seq.m-(lim seq))<p*((abs(lim seq)*abs(lim seq))/2) by A9;
   then
 A12: abs(lim seq)/2<abs(seq.m) by A6;
 A13: seq.m<>0 by A3,SEQ_1:5;
-  then seq.m*(lim seq)<>0 by A2,XCMPLX_1:6;
+  then seq.m*(lim seq)<>0 by A2;
   then 0<abs(seq.m*(lim seq)) by COMPLEX1:47;
   then 0<abs(seq.m)*abs(lim seq) by COMPLEX1:65;
   then
@@ -1019,10 +1054,10 @@ A15: (p*((abs(lim seq)*abs(lim seq))/2))/(abs(seq.m)*abs(lim seq))
     .=p*(abs(lim seq)/2)*abs(seq.m)"
     .=(p*(abs(lim seq)/2))/abs(seq.m) by XCMPLX_0:def 9;
 A16: abs((seq").m-(lim seq)")=abs((seq.m)"-(lim seq)") by VALUED_1:10
-    .=abs(seq.m-(lim seq))/(abs(seq.m)*abs(lim seq)) by A2,A13,Th11;
-A17: 0<abs(lim seq)/2 by A4,XREAL_1:215;
+    .=abs(seq.m-(lim seq))/(abs(seq.m)*abs(lim seq)) by A2,A13,Th2;
+A17: 0<abs(lim seq)/2 by A4;
 A18: 0<>abs(lim seq)/2 by A2,COMPLEX1:47;
-  0*0<p*(abs(lim seq)/2) by A8,A17,XREAL_1:96;
+  0*0<p*(abs(lim seq)/2) by A8,A17;
   then
 A19: (p*(abs(lim seq)/2))/abs(seq.m)<
   (p*(abs(lim seq)/2))/(abs(lim seq)/2) by A12,A17,XREAL_1:76;
@@ -1034,7 +1069,7 @@ A19: (p*(abs(lim seq)/2))/abs(seq.m)<
   hence thesis by A14,A15,A16,A19,XXREAL_0:2;
 end;
 
-theorem Th36:
+theorem Th22:
   seq is convergent & lim seq <> 0 & seq is non-zero
   implies lim seq"=(lim seq)"
 proof
@@ -1042,19 +1077,19 @@ proof
 A1: seq is convergent and
 A2: (lim seq)<>0 and
 A3: seq is non-zero;
-A4: seq" is convergent by A1,A2,A3,Th35;
+A4: seq" is convergent by A1,A2,A3,Th21;
 A5: 0<abs(lim seq) by A2,COMPLEX1:47;
 A6: 0<>abs(lim seq) by A2,COMPLEX1:47;
   consider n1 such that
-A7: for m st n1<=m holds abs(lim seq)/2<abs(seq.m) by A1,A2,Th30;
-  0*0<abs(lim seq)*abs(lim seq) by A5,XREAL_1:96;
+A7: for m st n1<=m holds abs(lim seq)/2<abs(seq.m) by A1,A2,Th16;
+  0*0<abs(lim seq)*abs(lim seq) by A5;
   then
-A8: 0<(abs(lim seq)*abs(lim seq))/2 by XREAL_1:215;
+A8: 0<(abs(lim seq)*abs(lim seq))/2;
   now
     let p;
     assume
 A9: 0<p;
-    then 0*0<p*((abs(lim seq)*abs(lim seq))/2) by A8,XREAL_1:96;
+    then 0*0<p*((abs(lim seq)*abs(lim seq))/2) by A8;
     then consider n2 such that
 A10: for m st n2<=m holds
     abs(seq.m-(lim seq))<p*((abs(lim seq)*abs(lim seq))/2) by A1,Def7;
@@ -1070,7 +1105,7 @@ A12: abs(seq.m-(lim seq))<p*((abs(lim seq)*abs(lim seq))/2) by A10;
     then
 A13: abs(lim seq)/2<abs(seq.m) by A7;
 A14: seq.m<>0 by A3,SEQ_1:5;
-    then seq.m*(lim seq)<>0 by A2,XCMPLX_1:6;
+    then seq.m*(lim seq)<>0 by A2;
     then 0<abs(seq.m*(lim seq)) by COMPLEX1:47;
     then 0<abs(seq.m)*abs(lim seq) by COMPLEX1:65;
     then
@@ -1088,10 +1123,10 @@ A16: (p*((abs(lim seq)*abs(lim seq))/2))/(abs(seq.m)*abs(lim seq))
       .=p*(abs(lim seq)/2)*abs(seq.m)"
       .=(p*(abs(lim seq)/2))/abs(seq.m) by XCMPLX_0:def 9;
 A17: abs((seq").m-(lim seq)")=abs((seq.m)"-(lim seq)") by VALUED_1:10
-      .=abs(seq.m-(lim seq))/(abs(seq.m)*abs(lim seq)) by A2,A14,Th11;
-A18: 0<abs(lim seq)/2 by A5,XREAL_1:215;
+      .=abs(seq.m-(lim seq))/(abs(seq.m)*abs(lim seq)) by A2,A14,Th2;
+A18: 0<abs(lim seq)/2 by A5;
 A19: 0<>abs(lim seq)/2 by A2,COMPLEX1:47;
-    0*0<p*(abs(lim seq)/2) by A9,A18,XREAL_1:96;
+    0*0<p*(abs(lim seq)/2) by A9,A18;
     then
 A20: (p*(abs(lim seq)/2))/abs(seq.m)<
     (p*(abs(lim seq)/2))/(abs(lim seq)/2) by A13,A18,XREAL_1:76;
@@ -1114,7 +1149,7 @@ A1: seq9 is convergent and
 A2: seq is convergent and
 A3: (lim seq)<>0 and
 A4: seq is non-zero;
-  seq" is convergent by A2,A3,A4,Th35;
+  seq" is convergent by A2,A3,A4,Th21;
   hence thesis by A1;
 end;
 
@@ -1127,14 +1162,14 @@ A1: seq9 is convergent and
 A2: seq is convergent and
 A3: (lim seq)<>0 and
 A4: seq is non-zero;
-  seq" is convergent by A2,A3,A4,Th35;
-  then lim (seq9(#)(seq"))=(lim seq9)*(lim seq") by A1,Th29
-    .=(lim seq9)*(lim seq)" by A2,A3,A4,Th36
+  seq" is convergent by A2,A3,A4,Th21;
+  then lim (seq9(#)(seq"))=(lim seq9)*(lim seq") by A1,Th15
+    .=(lim seq9)*(lim seq)" by A2,A3,A4,Th22
     .=(lim seq9)/(lim seq) by XCMPLX_0:def 9;
   hence thesis;
 end;
 
-theorem Th39:
+theorem Th25:
   seq is convergent & seq1 is bounded & lim seq=0 implies
   seq(#)seq1 is convergent
 proof
@@ -1148,8 +1183,8 @@ A3: lim seq=0;
 A4: 0<p;
   consider r such that
 A5: 0<r and
-A6: for m holds abs(seq1.m)<r by A2,Th15;
-A7: 0<p/r by A4,A5,XREAL_1:139;
+A6: for m holds abs(seq1.m)<r by A2,Th3;
+A7: 0<p/r by A4,A5;
   then consider n1 such that
 A8: for m st n1<=m holds abs(seq.m-0)<p/r by A1,A3,Def7;
   take n=n1;
@@ -1183,14 +1218,14 @@ proof
 A1: seq is convergent and
 A2: seq1 is bounded and
 A3: lim seq=0;
-A4: seq(#)seq1 is convergent by A1,A2,A3,Th39;
+A4: seq(#)seq1 is convergent by A1,A2,A3,Th25;
   now
     let p such that
 A5: 0<p;
     consider r such that
 A6: 0<r and
-A7: for m holds abs(seq1.m)<r by A2,Th15;
-A8: 0<p/r by A5,A6,XREAL_1:139;
+A7: for m holds abs(seq1.m)<r by A2,Th3;
+A8: 0<p/r by A5,A6;
     then consider n1 such that
 A9: for m st n1<=m holds abs(seq.m-0)<p/r by A1,A3,Def7;
     take n=n1;
@@ -1216,3 +1251,154 @@ A13:  (p/r)*abs(seq1.m)<p by A7,A8,XREAL_1:68;
   end;
   hence thesis by A4,Def7;
 end;
+
+:: from COMSEQ_2, 2011.07.10, A.T.
+
+reserve g for Element of COMPLEX;
+
+registration
+  let s be convergent Complex_Sequence;
+  cluster |.s.| -> convergent for Real_Sequence;
+  coherence
+  proof
+    |.s.| is convergent
+    proof
+      consider g such that
+A1:   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p
+        by COMSEQ_2:def 5;
+      take |.g.|;
+      let p be real number;
+      assume
+A2:   0<p;
+      p is Real by XREAL_0:def 1;
+      then consider n such that
+A3:   for m st n<=m holds |.s.m-g.|<p by A1,A2;
+      take n;
+      let m;
+      assume n<=m;
+      then |.s.m-g.|<p by A3;
+      then abs(|.s.m.|- |.g.|) + |.s.m-g.| < p+|.s.m-g.| by COMPLEX1:64
+,XREAL_1:8;
+      then
+      abs(|.s.m.|- |.g.|) + |.s.m-g.|- |.s.m-g.| < p+|.s.m-g.|- |.s.m-g.|
+      by XREAL_1:9;
+      hence thesis by VALUED_1:18;
+    end;
+    hence thesis;
+  end;
+end;
+
+reserve s,s1,s9 for Complex_Sequence;
+
+theorem Th27:
+  s is convergent implies lim |.s.| = |.lim s.|
+proof
+  set g = lim s;
+  assume
+A1: s is convergent;
+  then reconsider s1 = s as convergent Complex_Sequence;
+  reconsider w = |.s1.| as Real_Sequence;
+A2: w is convergent;
+  reconsider w = |.lim s.| as Real;
+  now
+    let p be real number;
+    assume
+A3: 0<p;
+    p is Real by XREAL_0:def 1;
+    then consider n such that
+A4: for m st n<=m holds |.s.m-g.|<p by A1,A3,COMSEQ_2:def 6;
+    take n;
+    let m;
+    assume n<=m;
+    then |.s.m-g.|<p by A4;
+    then abs(|.s.m.|- |.g.|) + |.s.m-g.| < p+|.s.m-g.|
+      by COMPLEX1:64,XREAL_1:8;
+    then abs(|.s.m.|- |.g.|) + |.s.m-g.|- |.s.m-g.| < p+|.s.m-g.|- |.s.m-g.|
+    by XREAL_1:9;
+    hence abs(|.s.|.m - w) < p by VALUED_1:18;
+  end;
+  hence thesis by A2,Def7;
+end;
+
+theorem
+ for s,s9 being convergent Complex_Sequence
+  holds lim |.(s + s9).| = |.(lim s)+(lim s9).|
+proof
+ let s,s9 be convergent Complex_Sequence;
+  thus lim |.(s + s9).| = |.lim (s + s9).| by Th27
+    .= |.(lim s)+(lim s9).| by COMSEQ_2:14;
+end;
+
+theorem
+  for s being convergent Complex_Sequence
+   holds lim |.(r(#)s).| = |.r.|*|.(lim s).|
+proof
+  let s being convergent Complex_Sequence;
+  thus lim |.(r(#)s).| = |.lim (r(#)s).| by Th27
+    .= |.r*(lim s).| by COMSEQ_2:18
+    .= |.r.|*|.(lim s).| by COMPLEX1:65;
+end;
+
+theorem
+  for s being convergent Complex_Sequence
+  holds lim |.-s.| = |.lim s.|
+proof
+  let s being convergent Complex_Sequence;
+  thus lim |.-s.| = |.lim (-s).| by Th27
+    .= |.-(lim s).| by COMSEQ_2:22
+    .= |.lim s.| by COMPLEX1:52;
+end;
+
+theorem
+    for s,s9 being convergent Complex_Sequence
+  holds lim |.s - s9.| = |.(lim s) - (lim s9).|
+proof
+  let s,s9 be convergent Complex_Sequence;
+  thus lim |.s - s9.| = |.lim (s - s9).| by Th27
+    .= |.(lim s) - (lim s9).| by COMSEQ_2:26;
+end;
+
+theorem
+  for s,s9 being convergent Complex_Sequence
+  holds lim |.s(#)s9.| = |.lim s.|*|.lim s9.|
+proof
+  let s,s9 be convergent Complex_Sequence;
+  thus lim |.s(#)s9.| = |.lim (s(#)s9).| by Th27
+    .= |.(lim s)*(lim s9).| by COMSEQ_2:30
+    .= |.lim s.|*|.lim s9.| by COMPLEX1:65;
+end;
+
+theorem
+  s is convergent & (lim s)<>0c & s is non-zero implies lim |.s".| = (|.
+  lim s.|)"
+proof
+  assume
+A1: s is convergent & (lim s)<>0c & s is non-zero;
+  then s" is convergent by COMSEQ_2:34;
+  hence lim |.s".| = |.lim s".| by Th27
+    .= |.(lim s)".| by A1,COMSEQ_2:35
+    .= (|.lim s.|)" by COMPLEX1:66;
+end;
+
+theorem
+  s9 is convergent & s is convergent & (lim s)<>0c & s is non-zero
+  implies lim |.(s9/"s).|=|.(lim s9).|/|.(lim s).|
+proof
+  assume
+A1: s9 is convergent & s is convergent & (lim s)<>0c & s is non-zero;
+  then s9/"s is convergent by COMSEQ_2:38;
+  hence lim |.s9/"s.| = |.lim (s9/"s).| by Th27
+    .= |.(lim s9)/(lim s).| by A1,COMSEQ_2:39
+    .= |.(lim s9).|/|.(lim s).| by COMPLEX1:67;
+end;
+
+theorem
+  s is convergent & s1 is bounded & (lim s)=0c implies lim |.s(#)s1.| = 0
+proof
+  assume
+A1: s is convergent & s1 is bounded & (lim s)=0c;
+  then s(#)s1 is convergent by COMSEQ_2:42;
+  hence lim |.s(#)s1.| = |.(lim (s(#)s1)).| by Th27
+    .= 0 by A1,COMSEQ_2:43,COMPLEX1:44;
+end;
+

@@ -1,0 +1,4401 @@
+:: Fundamental Group of $n$-sphere for $n \geq 2$
+::  by Marco Riccardi and Artur Korni{\l}owicz
+::
+:: Received November 3, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies PRE_TOPC, FUNCT_1, EUCLID, RELAT_1, ARYTM_1, BORSUK_2, GRAPH_1,
+      ALGSTR_1, WAYBEL20, EQREL_1, NAT_1, XBOOLE_0, ARYTM_3, TOPALG_1, TOPS_2,
+      TOPREALB, T_0TOPSP, STRUCT_0, BORSUK_1, FUNCOP_1, SUBSET_1, TOPALG_3,
+      TARSKI, XREAL_0, FUNCT_2, XXREAL_0, ZFMISC_1, ORDINAL1, NUMBERS, RCOMP_1,
+      ORDINAL2, CARD_1, XXREAL_1, CONNSP_2, TOPMETR, MFOLD_2, PARTFUN1,
+      METRIC_1, CONVEX1, INCSP_1, RLTOPSP1, RVSUM_1, REAL_1, COMPLEX1,
+      FINSEQ_1, MEASURE5, XXREAL_2, FINSET_1, FINSEQ_2, MFOLD_1, VALUED_0,
+      SERIES_1, CARD_3, ORDINAL4, MEMBERED, SUPINF_2, TREAL_1, TOPREAL1,
+      FUNCT_4, TOPALG_6;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1, RELAT_1, COMPLEX1,
+      FUNCOP_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, RVSUM_1, REAL_1, BINOP_1,
+      ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, XCMPLX_0, NAT_1, FINSET_1,
+      STRUCT_0, PRE_TOPC, TOPS_2, BORSUK_1, CONNSP_2, TOPMETR, EUCLID,
+      BORSUK_2, TOPALG_1, TOPALG_3, TOPREALB, VALUED_0, METRIC_1, TOPREAL9,
+      TOPALG_2, RLTOPSP1, COMPTS_1, FINSEQ_1, TBSP_1, FINSEQ_2, METRIZTS,
+      RLVECT_1, XXREAL_1, XXREAL_2, NAT_D, BORSUK_6, MEMBERED, RCOMP_1,
+      MFOLD_1, MFOLD_2, TOPREAL1, FUNCT_4;
+ constructors BORSUK_6, BORSUK_3, TOPALG_3, SEQ_4, TOPREAL9, TOPREALB, MFOLD_2,
+      BINOP_2, FUNCSDOM, CONVEX1, MONOID_0, COMPTS_1, TBSP_1, SEQ_1, MFOLD_1,
+      METRIZTS, NAT_D, TREAL_1, TOPREAL1, WAYBEL23;
+ registrations RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, BORSUK_1,
+      EUCLID, BORSUK_2, TOPALG_1, PRE_TOPC, ZFMISC_1, TOPGRP_1, TOPMETR,
+      RCOMP_3, XXREAL_2, TEX_1, TOPALG_3, FUNCT_2, FUNCT_1, FUNCOP_1, MFOLD_2,
+      XBOOLE_0, RELAT_1, PARTFUN1, NAT_1, MONOID_0, VALUED_0, FINSET_1,
+      FINSEQ_1, FINSEQ_2, NUMBERS, TOPALG_2, TOPREAL9, TBSP_1, MFOLD_1,
+      BORSUK_3, TOPREAL6, TOPREALB;
+ requirements REAL, ARITHM, BOOLE, SUBSET, NUMERALS;
+ definitions TARSKI, XBOOLE_0, STRUCT_0, T_0TOPSP, BORSUK_2, TOPALG_1,
+      PRE_TOPC;
+ theorems FUNCT_2, XBOOLE_0, ZFMISC_1, TOPALG_1, TARSKI, EQREL_1, BORSUK_2,
+      BORSUK_6, TOPALG_3, JORDAN, TOPS_2, KNASTER, TOPREALC, PRE_TOPC, TSEP_1,
+      TOPREALA, XXREAL_1, XXREAL_0, TOPMETR, MFOLD_2, BINOP_1, BORSUK_1, NAT_D,
+      FUNCOP_1, TOPREALB, T_0TOPSP, TOPALG_2, RLTOPSP1, JGRAPH_1, EUCLID,
+      EUCLID_2, TOPREAL9, XBOOLE_1, FUNCT_1, JORDAN16, JGRAPH_8, RELAT_1,
+      FINSEQ_1, FINSEQ_2, NAT_1, XREAL_1, MFOLD_1, METRIZTS, CARD_1, ORDINAL1,
+      EUCLID_7, PARTFUN1, TBSP_1, METRIC_1, COMPLEX1, JORDAN2C, SUBSET_1,
+      RELSET_1, XXREAL_2, FINSEQ_3, FINSEQ_4, MEMBERED, VALUED_0, RFUNCT_2,
+      TREAL_1, SYSREL, TOPREAL1, RAMSEY_1, CHORD, XCMPLX_1, BORSUK_3, COMPTS_1,
+      HEINE, FUNCT_4, FUNCT_3, XREAL_0, XTUPLE_0;
+ schemes NAT_1, FUNCT_1, FINSEQ_1;
+
+begin :: Preliminaries
+
+reserve T,U for non empty TopSpace;
+reserve t for Point of T;
+reserve n for Nat;
+
+registration
+  let S be TopSpace, T be non empty TopSpace;
+  cluster constant -> continuous for Function of S,T;
+  correctness
+  proof
+    let f be Function of S,T;
+    assume
+A1: f is constant;
+    per cases;
+    suppose
+A2:   S is empty;
+      for P1 being Subset of T st P1 is closed holds f"P1 is closed by A2;
+      hence thesis by PRE_TOPC:def 6;
+    end;
+    suppose S is not empty;
+      then consider y be Element of T such that
+A3:   rng f = {y} by A1,FUNCT_2:111;
+      y in rng f by A3,TARSKI:def 1;
+      then ex x being set st x in dom f & y = f.x by FUNCT_1:def 3;
+      then
+A4:   the_value_of f = y by A1,FUNCT_1:def 12;
+      f = (dom f) --> the_value_of f by A1,FUNCOP_1:80;
+      then f = S --> y by A4,FUNCT_2:def 1;
+      hence thesis;
+    end;
+  end;
+end;
+
+theorem Th1:
+  L[01](0,1,0,1) = id Closed-Interval-TSpace(0,1)
+  proof
+    L[01](0,1,0,1) =
+    (id Closed-Interval-TSpace(0,1))*(id Closed-Interval-TSpace(0,1))
+    by BORSUK_6:def 1,TREAL_1:10,14;
+    hence thesis by SYSREL:12;
+  end;
+
+theorem Th2:
+  for r1,r2,r3,r4,r5,r6 being real number
+  st r1 < r2 & r3 <= r4 & r5 < r6
+  holds L[01](r1,r2,r3,r4)*L[01](r5,r6,r1,r2) = L[01](r5,r6,r3,r4)
+  proof
+    let r1,r2,r3,r4,r5,r6 be real number;
+    set f1 = L[01](r1,r2,r3,r4);
+    set f2 = L[01](r5,r6,r1,r2);
+    set f3 = L[01](r5,r6,r3,r4);
+    assume
+A1: r1 < r2 & r3 <= r4 & r5 < r6;
+A2: dom(f1*f2) = [#]Closed-Interval-TSpace(r5,r6) by FUNCT_2:def 1
+    .= dom f3 by FUNCT_2:def 1;
+    for x being set st x in dom(f1*f2) holds (f1*f2).x = f3.x
+    proof
+      let x be set;
+      assume
+A3:   x in dom(f1*f2);
+      then
+A4:   x in [#]Closed-Interval-TSpace(r5,r6);
+      then
+A5:   x in [.r5,r6.] by A1,TOPMETR:18;
+      reconsider r = x as real number by A3;
+A6:   r5 <= r & r <= r6 by A5,XXREAL_1:1;
+A7:   rng f2 c= [#]Closed-Interval-TSpace(r1,r2) by RELAT_1:def 19;
+      reconsider s = f2.x as real number;
+      x in dom f2 by A4,FUNCT_2:def 1;
+      then s in rng f2 by FUNCT_1:3;
+      then s in [#]Closed-Interval-TSpace(r1,r2) by A7;
+      then s in [.r1,r2.] by A1,TOPMETR:18;
+      then r1 <= s & s <= r2 by XXREAL_1:1;
+      then
+A8:  f1.s = (r4 - r3) / (r2 - r1) * (s - r1) + r3 by A1,BORSUK_6:35;
+A9:  r2 - r1 <> 0 by A1;
+A10:  (r4 - r3) / (r2 - r1) * s
+      = (r4 - r3) / (r2 - r1) * ((r2 - r1) / (r6 - r5) * (r - r5) + r1)
+      by A1,A6,BORSUK_6:35
+      .= ((r4 - r3) / (r2 - r1)) * ((r2 - r1) / (r6 - r5)) * (r - r5) +
+      (r4 - r3) / (r2 - r1) * r1
+      .= ((r4 - r3) / (r6 - r5)) * ((r2 - r1) / (r2 - r1)) * (r - r5) +
+      (r4 - r3) / (r2 - r1) * r1 by XCMPLX_1:85
+      .= ((r4 - r3) / (r6 - r5)) * 1 * (r - r5) +
+      (r4 - r3) / (r2 - r1) * r1 by A9,XCMPLX_1:60
+      .= (r4 - r3) / (r6 - r5) * (r - r5) + (r4 - r3) / (r2 - r1) * r1;
+      thus (f1*f2).x = f1.(f2.x) by A3,FUNCT_1:12
+      .= f3.x by A10,A8,A1,A6,BORSUK_6:35;
+    end;
+    hence thesis by A2,FUNCT_1:2;
+  end;
+
+registration
+  let n be positive Nat;
+  cluster TOP-REAL n -> infinite;
+  correctness
+  proof
+A1: the carrier of TOP-REAL n = REAL n by EUCLID:22
+    .= n-tuples_on REAL by EUCLID:def 1;
+    deffunc F(Element of n-tuples_on REAL) = $1.1;
+    consider f be Function such that
+A2: dom f = n-tuples_on REAL &
+    for d be Element of n-tuples_on REAL holds f.d = F(d) from FUNCT_1:sch 4;
+    for y being set holds y in f.:(n-tuples_on REAL) iff y in REAL
+    proof
+      let y be set;
+      0+1 < n+1 by XREAL_1:6;
+      then 1 <= n by NAT_1:13;
+      then
+A3:   1 in Seg n by FINSEQ_1:1;
+      hereby
+        assume y in f.:(n-tuples_on REAL);
+        then consider x be set such that
+A4:     x in dom f & x in n-tuples_on REAL & y = f.x by FUNCT_1:def 6;
+        reconsider x as Element of n-tuples_on REAL by A4;
+A5:     y = x.1 by A2,A4;
+        x in Funcs(Seg n,REAL) by A4,FINSEQ_2:93;
+        then ex f1 being Function st x = f1 & dom f1 = Seg n & rng f1 c= REAL
+        by FUNCT_2:def 2;
+        then y in rng x by A3,A5,FUNCT_1:3;
+        hence y in REAL;
+      end;
+      assume y in REAL;
+      then
+A6:   {y} c= REAL by ZFMISC_1:31;
+      set x = Seg n --> y;
+A7:   dom x = Seg n & rng x c= {y} by FUNCOP_1:13;
+      rng x c= REAL by A6,XBOOLE_1:1;
+      then x in Funcs(Seg n,REAL) by A7,FUNCT_2:def 2;
+      then reconsider x as Element of n-tuples_on REAL by FINSEQ_2:93;
+      f.x = x.1 by A2 .= y by A3,FUNCOP_1:7;
+      hence y in f.:(n-tuples_on REAL) by A2,FUNCT_1:def 6;
+    end;
+    hence thesis by A1,TARSKI:1;
+  end;
+  cluster n-locally_euclidean -> infinite for non empty TopSpace;
+  correctness
+  proof
+    let M be non empty TopSpace;
+    assume
+A8: M is n-locally_euclidean;
+    consider p be set such that
+A9: p in the carrier of M by XBOOLE_0:def 1;
+    reconsider p as Point of M by A9;
+    consider U be a_neighborhood of p such that
+A10: U,[#]TOP-REAL n are_homeomorphic by A8,MFOLD_1:13;
+    M|U, (TOP-REAL n) | ([#]TOP-REAL n) are_homeomorphic by A10,METRIZTS:def 1;
+    then
+    consider f be Function of (TOP-REAL n) | ([#]TOP-REAL n), M|U such that
+A11: f is being_homeomorphism by T_0TOPSP:def 1;
+A12: dom f = [#]((TOP-REAL n) | ([#]TOP-REAL n)) & rng f = [#](M | U)
+    & f is one-to-one by A11,TOPS_2:58;
+    [#]((TOP-REAL n) | ([#]TOP-REAL n)) is infinite by PRE_TOPC:def 5;
+    hence thesis by A12,CARD_1:59;
+  end;
+end;
+
+theorem Th3:
+  for p being Point of TOP-REAL n st p in Sphere(0.TOP-REAL n,1)
+  holds -p in Sphere(0.TOP-REAL n,1) \ {p}
+  proof
+    let p be Point of TOP-REAL n;
+    reconsider n1=n as Element of NAT by ORDINAL1:def 12;
+    reconsider p1=p as Point of TOP-REAL n1;
+    assume p in Sphere(0.TOP-REAL n,1);
+    then |.p1 - 0.TOP-REAL n1.| = 1 by TOPREAL9:9;
+    then |.p1 + -0.TOP-REAL n1.| = 1 by EUCLID:41;
+    then |.p + (-1)*0.TOP-REAL n.| = 1 by EUCLID:39;
+    then |.p + 0.TOP-REAL n.| = 1 by EUCLID:28;
+    then
+A1: |. p .| = 1 by EUCLID:27;
+    reconsider r1 = 1 as real number;
+    |. 0.TOP-REAL n .| <> |. p .| by A1,EUCLID_2:39;
+    then 0.TOP-REAL n <> (1+1)*p by EUCLID:31;
+    then 0.TOP-REAL n <> r1*p + r1*p by EUCLID:33;
+    then 0.TOP-REAL n <> r1*p + p by EUCLID:29;
+    then 0.TOP-REAL n <> p + p by EUCLID:29;
+    then p + -p <> p + p by EUCLID:36;
+    then
+A2: not -p in {p} by TARSKI:def 1;
+    |. -p .| = 1 by A1,EUCLID:71;
+    then |.-p + 0.TOP-REAL n.| = 1 by EUCLID:27;
+    then |.-p + (-1)*0.TOP-REAL n.| = 1 by EUCLID:28;
+    then |.-p + -0.TOP-REAL n.| = 1 by EUCLID:39;
+    then |.-p1 - 0.TOP-REAL n1.| = 1 by EUCLID:41;
+    then
+    -p1 in Sphere(0.TOP-REAL n1,1) by TOPREAL9:9;
+    hence -p in Sphere(0.TOP-REAL n,1) \ {p} by A2,XBOOLE_0:def 5;
+  end;
+
+theorem Th4:
+  for T being non empty TopStruct, t1,t2 being Point of T
+  for p being Path of t1,t2
+  holds inf dom p = 0 & sup dom p = 1
+  proof
+    let T be non empty TopStruct;
+    let t1,t2 be Point of T;
+    let p be Path of t1,t2;
+    [.0,1.] = dom p by BORSUK_1:40,FUNCT_2:def 1;
+    hence thesis by XXREAL_2:25,29;
+  end;
+
+theorem Th5:
+  for C1,C2 being constant Loop of t holds
+  C1, C2 are_homotopic
+  proof
+    let C1,C2 be constant Loop of t;
+    C1 = I[01] --> t by BORSUK_2:5 .= C2 by BORSUK_2:5;
+    hence thesis by BORSUK_2:12;
+  end;
+
+theorem Th6:
+  for S being non empty SubSpace of T,
+      t1,t2 being Point of T, s1,s2 being Point of S,
+      A,B being Path of t1,t2, C,D being Path of s1,s2 st
+  s1,s2 are_connected & t1,t2 are_connected & A = C & B = D & C,D are_homotopic
+  holds A,B are_homotopic
+  proof
+    let S be non empty SubSpace of T;
+    let t1,t2 be Point of T;
+    let s1,s2 be Point of S;
+    let A,B be Path of t1,t2;
+    let C,D be Path of s1,s2 such that
+A1: s1,s2 are_connected & t1,t2 are_connected and
+A2: A = C & B = D;
+    given f being Function of [:I[01],I[01]:],S such that
+A3: f is continuous and
+A4: for t being Point of I[01] holds f.(t,0) = C.t & f.(t,1) = D.t &
+    f.(0,t) = s1 & f.(1,t) = s2;
+    reconsider g = f as Function of [:I[01],I[01]:],T by TOPREALA:7;
+    take g;
+    thus g is continuous by A3,PRE_TOPC:26;
+    s1 = C.0 & s2 = C.1 & t1 = A.0 & t2 = A.1 by A1,BORSUK_2:def 2;
+    hence thesis by A2,A4;
+  end;
+
+theorem
+  for S being non empty SubSpace of T,
+      t1,t2 being Point of T, s1,s2 being Point of S,
+      A,B being Path of t1,t2, C,D being Path of s1,s2 st
+  s1,s2 are_connected & t1,t2 are_connected & A = C & B = D &
+  Class(EqRel(S,s1,s2),C) = Class(EqRel(S,s1,s2),D) holds
+  Class(EqRel(T,t1,t2),A) = Class(EqRel(T,t1,t2),B)
+  proof
+    let S be non empty SubSpace of T;
+    let t1,t2 be Point of T;
+    let s1,s2 be Point of S;
+    let A,B be Path of t1,t2;
+    let C,D be Path of s1,s2 such that
+A1: s1,s2 are_connected and
+A2: t1,t2 are_connected and
+A3: A = C & B = D;
+    assume Class(EqRel(S,s1,s2),C) = Class(EqRel(S,s1,s2),D);
+    then C,D are_homotopic by A1,TOPALG_1:46;
+    then A,B are_homotopic by A1,A2,A3,Th6;
+    hence thesis by A2,TOPALG_1:46;
+  end;
+
+theorem Th8:
+  for T being trivial non empty TopSpace
+  for t being Point of T, L being Loop of t holds
+  the carrier of pi_1(T,t) = { Class(EqRel(T,t),L) }
+  proof
+    let T be trivial non empty TopSpace;
+    let t be Point of T;
+    set E = EqRel(T,t);
+    let L be Loop of t;
+    thus the carrier of pi_1(T,t) c= { Class(E,L) }
+    proof
+      let x be set;
+      assume x in the carrier of pi_1(T,t);
+      then consider P being Loop of t such that
+A1:   x = Class(E,P) by TOPALG_1:47;
+      P = I[01] --> t by TOPREALC:22
+      .= L by TOPREALC:22;
+      hence x in { Class(E,L) } by A1,TARSKI:def 1;
+    end;
+    let x be set;
+    assume x in { Class(E,L) };
+    then
+A2: x = Class(E,L) by TARSKI:def 1;
+    L in Loops t by TOPALG_1:def 1;
+    then x in Class E by A2,EQREL_1:def 3;
+    hence thesis by TOPALG_1:def 5;
+  end;
+
+theorem Th9:
+  for p being Point of TOP-REAL n, S being Subset of TOP-REAL n
+  st n >= 2 & S = ([#]TOP-REAL n) \ {p}
+  holds (TOP-REAL n) | S is pathwise_connected
+  proof
+    let p be Point of TOP-REAL n;
+    let S be Subset of TOP-REAL n;
+    assume
+A1: n >= 2;
+    assume
+A2: S = ([#]TOP-REAL n) \ {p};
+    then S is infinite by A1,RAMSEY_1:4;
+    then reconsider T = (TOP-REAL n) | S as non empty SubSpace of TOP-REAL n;
+A3:[#]T = ([#]TOP-REAL n) \ {p} by A2,PRE_TOPC:def 5;
+A4: for a,b being Point of T, a1,b1 being Point of TOP-REAL n
+    st not p in LSeg(a1,b1) & a1=a & b1=b
+    holds a, b are_connected
+    proof
+      let a,b be Point of T;
+      let a1,b1 be Point of TOP-REAL n;
+      assume
+A5:   not p in LSeg(a1,b1);
+      assume
+A6:   a1 = a & b1 = b;
+      per cases;
+      suppose
+A7:     a1 <> b1;
+A8:      [#]((TOP-REAL n) | LSeg(a1,b1)) = LSeg(a1,b1) by PRE_TOPC:def 5;
+A9:      LSeg(a1,b1) c= ([#]TOP-REAL n) \ {p} by A5,ZFMISC_1:34;
+          reconsider Y = (TOP-REAL n) | LSeg(a1,b1) as
+          non empty SubSpace of T by A3,A9,A8,RLTOPSP1:68,TSEP_1:4;
+          LSeg(a1,b1) is_an_arc_of a1,b1 by A7,TOPREAL1:9;
+          then consider
+          h being Function of I[01], Y such that
+A10:       h is being_homeomorphism and
+A11:       h.0 = a1 & h.1 = b1 by TOPREAL1:def 1;
+          reconsider f = h as Function of I[01], T by A3,A9,A8,FUNCT_2:7;
+          take f;
+          thus f is continuous by A10,PRE_TOPC:26;
+          thus thesis by A6,A11;
+      end;
+      suppose a1 = b1; hence a, b are_connected by A6; end;
+    end;
+    for a,b being Point of T holds a, b are_connected
+    proof
+      let a,b be Point of T;
+A12:   the carrier of T is Subset of TOP-REAL n by TSEP_1:1;
+      a in the carrier of T & b in the carrier of T;
+      then reconsider a1 = a, b1 = b as Point of TOP-REAL n by A12;
+      per cases;
+      suppose
+A13:     a1 <> b1;
+        per cases;
+        suppose
+A14:      p in LSeg(a1,b1);
+          reconsider n1 = n as Element of NAT by ORDINAL1:def 12;
+          reconsider aa1=a1,bb1=b1 as Point of TOP-REAL n1;
+          consider s be Real such that
+A15:      0<=s & s<=1 & p=(1-s)*aa1+s*bb1 by A14,JGRAPH_1:35;
+          set q1 = b1 - a1;
+          reconsider k = n - 1 as Nat by A1,CHORD:1;
+          k + 1 > 1 by A1,XXREAL_0:2;
+          then
+A16:       k >= 1 by NAT_1:13;
+          q1 <> 0.TOP-REAL(k+1) by A13,EUCLID:43;
+          then TPlane(q1, p) is k-manifold by MFOLD_2:30;
+          then [#]TPlane(q1, p) is infinite by A16;
+          then [#]( (TOP-REAL n) | Plane(q1, p)) is infinite by MFOLD_2:def 3;
+          then
+A17:       Plane(q1, p) is infinite;
+          reconsider X = Plane(q1, p) as set;
+          X \ {p} is infinite by A17,RAMSEY_1:4;
+          then consider x be set such that
+A18:       x in (X \ {p}) by XBOOLE_0:def 1;
+A19:       x in X & not x in {p} by A18,XBOOLE_0:def 5;
+          then x in {y where y is Point of TOP-REAL n: |( q1,y-p )| = 0 }
+          by MFOLD_2:def 2;
+          then consider c1 be Point of TOP-REAL n such that
+A20:       c1 = x & |( q1,c1-p )| = 0;
+A21:      |( q1 , q1 )| <> 0
+          proof
+            assume |( q1 , q1 )| = 0;
+            then q1 = 0.TOP-REAL n by EUCLID_2:41;
+            hence contradiction by A13,EUCLID:43;
+          end;
+A22:      not p in LSeg(a1,c1)
+          proof
+            assume
+A23:         p in LSeg(a1,c1);
+            reconsider cc1=c1 as Point of TOP-REAL n1;
+            consider r be Real such that
+A24:         0<=r & r<=1 & p=(1-r)*aa1+r*cc1 by A23,JGRAPH_1:35;
+A25:        1-r <> 0
+            proof
+              assume 1-r = 0;
+              then p = 0.TOP-REAL(n) + (1 qua real number)*c1 by A24,EUCLID:29
+              .= 0.TOP-REAL(n) + c1 by EUCLID:29
+              .= c1 by EUCLID:27;
+              hence contradiction by A19,A20,TARSKI:def 1;
+            end;
+            set q2 = c1 - a1;
+            c1-p
+            = c1 -(1-r)*a1 - r*c1 by A24,EUCLID:46
+            .= c1 + (-(1-r)*a1) - r*c1 by EUCLID:41
+            .= c1 + (-(1-r))*a1 - r*c1 by EUCLID:40
+            .= c1 + (-1+r)*a1 - r*c1
+            .= c1 + ((-1)*a1 + r*a1) - r*c1 by EUCLID:33
+            .= c1 + (-a1 + r*a1) - r*c1 by EUCLID:39
+            .= c1 + -a1 + r*a1 - r*c1 by EUCLID:26
+            .= c1 - a1 + r*a1 - r*c1 by EUCLID:41
+            .= c1 - a1 + r*a1 + -r*c1 by EUCLID:41
+            .= q2 + r*a1 + r*(-c1) by EUCLID:40
+            .= q2 + (r*a1 + r*(-c1)) by EUCLID:26
+            .= q2 + r*(a1 + -c1) by EUCLID:32
+            .= q2 + r*(-q2) by EUCLID:44
+            .= q2 + -r*q2 by EUCLID:40
+            .= q2 + (-r)*q2 by EUCLID:40
+            .= (1 qua real number)*q2 + (-r)*q2 by EUCLID:29
+            .= (1+(-r))*q2 by EUCLID:33
+            .= (1-r)*q2;
+            then (1-r)*|( q1,q2 )| = 0 by A20,EUCLID_2:20;
+            then
+A26:         |( q1,q2 )| = 0 by A25,XCMPLX_1:6;
+            0.TOP-REAL n
+            = (1-r)*a1+r*c1 + -((1-s)*a1+s*b1) by A15,A24,EUCLID:36
+            .= (1-r)*a1 + -((1-s)*a1+s*b1) + r*c1 by EUCLID:26
+            .= (1-r)*a1 + (-(1-s)*a1 -s*b1) + r*c1 by EUCLID:38
+            .= (1-r)*a1 + (-(1-s)*a1 + -s*b1) + r*c1 by EUCLID:41
+            .= (1-r)*a1 + -(1-s)*a1 + -s*b1 + r*c1 by EUCLID:26
+            .= (1-r)*a1 + (-(1-s))*a1 + -s*b1 + r*c1 by EUCLID:40
+            .= ((1-r) + (-(1-s)))*a1 + -s*b1 + r*c1 by EUCLID:33
+            .= (s+(-r))*a1 + -s*b1 + r*c1
+            .= s*a1 + (-r)*a1 + -s*b1 + r*c1 by EUCLID:33
+            .= s*a1 + -s*b1 + (-r)*a1 + r*c1 by EUCLID:26
+            .= s*a1 + s*(-b1) + (-r)*a1 + r*c1 by EUCLID:40
+            .= s*(a1 + -b1) + (-r)*a1 + r*c1 by EUCLID:32
+            .= s*(-(b1-a1)) + (-r)*a1 + r*c1 by EUCLID:44
+            .= s*(-q1) + ((-r)*a1 + r*c1) by EUCLID:26
+            .= s*(-q1) + (r*c1 + -r*a1) by EUCLID:40
+            .= s*(-q1) + (r*c1 + r*(-a1)) by EUCLID:40
+            .= s*(-q1) + r*(c1 + -a1) by EUCLID:32
+            .= s*(-q1) + r*q2 by EUCLID:41;
+            then
+A27:         0 = |( s*(-q1) + r*q2, s*(-q1) + r*q2 )| by EUCLID_2:34
+            .= |( s*(-q1) , s*(-q1) )| +2*|( s*(-q1) , r*q2 )|
+            +|( r*q2, r*q2 )| by EUCLID_2:30;
+A28:         |( s*(-q1) , s*(-q1) )| = s*|( -q1 , s*(-q1) )| by EUCLID_2:19
+            .= s*(s*|( -q1 , -q1 )|) by EUCLID_2:20
+            .= s*(s*|( q1 , q1 )|) by EUCLID_2:23
+            .= s*s*|( q1 , q1 )|;
+A29:         |( r*q2 , r*q2 )| = r*|( q2 , r*q2 )| by EUCLID_2:19
+            .= r*(r*|( q2 , q2 )|) by EUCLID_2:20
+            .= r*r*|( q2 , q2 )|;
+A30:       |( s*(-q1) , r*q2 )| = s*|( -q1 , r*q2 )| by EUCLID_2:19
+            .= s*(r*|( -q1 , q2 )|) by EUCLID_2:20
+            .= s*(r*(-|( q1 , q2 )|)) by EUCLID_2:21
+            .= 0 by A26;
+A31:        s*s >= 0 by XREAL_1:63;
+A32:        r*r >= 0 by XREAL_1:63;
+A33:        |( q1 , q1 )| >= 0 by EUCLID_2:35;
+A34:        |( q2 , q2 )| >= 0 by EUCLID_2:35;
+A35:        s*s <> 0
+            proof
+              assume s*s = 0;
+              then s = 0 by XCMPLX_1:6;
+              then p
+              = (1 qua real number)*a1 + 0.TOP-REAL n by A15,EUCLID:29
+              .= (1 qua real number)*a1 by EUCLID:27
+              .= a1 by EUCLID:29;
+              then not p in {p} by A3,XBOOLE_0:def 5;
+              hence contradiction by TARSKI:def 1;
+            end;
+            thus contradiction
+            by A28,A29,A27,A30,A31,A32,A33,A34,A35,A21,XREAL_1:71;
+          end;
+A36:      not p in LSeg(c1,b1)
+          proof
+            assume
+A37:        p in LSeg(c1,b1);
+            reconsider cc1=c1 as Point of TOP-REAL n1;
+            consider r be Real such that
+A38:         0<=r & r<=1 & p=(1-r)*bb1+r*cc1 by A37,JGRAPH_1:35;
+A39:        1-r <> 0
+            proof
+              assume 1-r = 0;
+              then p = 0.TOP-REAL(n) + (1 qua real number)*c1 by A38,EUCLID:29
+              .= 0.TOP-REAL(n) + c1 by EUCLID:29
+              .= c1 by EUCLID:27;
+              hence contradiction by A19,A20,TARSKI:def 1;
+            end;
+            set q2 = c1 - b1;
+            c1-p = c1 -(1-r)*b1 - r*c1 by A38,EUCLID:46
+            .= c1 + (-(1-r)*b1) - r*c1 by EUCLID:41
+            .= c1 + (-(1-r))*b1 - r*c1 by EUCLID:40
+            .= c1 + (-1+r)*b1 - r*c1
+            .= c1 + ((-1)*b1 + r*b1) - r*c1 by EUCLID:33
+            .= c1 + (-b1 + r*b1) - r*c1 by EUCLID:39
+            .= c1 + -b1 + r*b1 - r*c1 by EUCLID:26
+            .= c1 - b1 + r*b1 - r*c1 by EUCLID:41
+            .= c1 - b1 + r*b1 + -r*c1 by EUCLID:41
+            .= q2 + r*b1 + r*(-c1) by EUCLID:40
+            .= q2 + (r*b1 + r*(-c1)) by EUCLID:26
+            .= q2 + r*(b1 + -c1) by EUCLID:32
+            .= q2 + r*(-q2) by EUCLID:44
+            .= q2 + -r*q2 by EUCLID:40
+            .= q2 + (-r)*q2 by EUCLID:40
+            .= (1 qua real number)*q2 + (-r)*q2 by EUCLID:29
+            .= (1+(-r))*q2 by EUCLID:33
+            .= (1-r)*q2;
+            then (1-r)*|( q1,q2 )| = 0 by A20,EUCLID_2:20;
+            then
+A40:         |( q1,q2 )| = 0 by A39,XCMPLX_1:6;
+A41:         0.TOP-REAL n = (1+(-r))*b1+r*c1 + -((1-s)*a1+s*b1)
+            by A38,A15,EUCLID:36
+            .= (1 qua real number)*b1+(-r)*b1+r*c1
+               + -((1-s)*a1+s*b1) by EUCLID:33
+            .= b1+(-r)*b1+r*c1 + -((1-s)*a1+s*b1) by EUCLID:29
+            .= b1+((-r)*b1+r*c1) + -((1-s)*a1+s*b1) by EUCLID:26
+            .= b1+(-r*b1+r*c1) + -((1-s)*a1+s*b1) by EUCLID:40
+            .= b1+(r*(-b1)+r*c1) + -((1-s)*a1+s*b1) by EUCLID:40
+            .= b1+(r*(-b1+c1)) + -((1-s)*a1+s*b1) by EUCLID:32
+            .= b1+r*q2 + -((1-s)*a1+s*b1) by EUCLID:41
+            .= b1 + -((1-s)*a1+s*b1)+r*q2 by EUCLID:26
+            .= b1 + (-1)*(s*b1+(1-s)*a1)+r*q2 by EUCLID:39
+            .= b1 + ((-1)*(s*b1)+(-1)*((1-s)*a1))+r*q2 by EUCLID:32
+            .= b1 + (((-1)*s)*b1+(-1)*((1-s)*a1))+r*q2 by EUCLID:30
+            .= b1 + ((-s)*b1+ -((1-s)*a1))+r*q2 by EUCLID:39
+            .= b1 + (-s)*b1+ -((1-s)*a1) +r*q2 by EUCLID:26
+            .= (1 qua real number)*b1+(-s)*b1+ -((1-s)*a1) +r*q2 by EUCLID:29
+            .= (1+(-s))*b1+ -((1-s)*a1) +r*q2 by EUCLID:33
+            .= (1-s)*b1 +(1-s)*(-a1) +r*q2 by EUCLID:40
+            .= (1-s)*(b1 + -a1) +r*q2 by EUCLID:32
+            .= (1-s)*q1 + r*q2 by EUCLID:41;
+            set t = 1-s;
+A42:         0 = |( t*q1 + r*q2, t*q1 + r*q2 )| by A41,EUCLID_2:34
+            .= |( t*q1 , t*q1 )| +2*|( t*q1 , r*q2 )|
+            +|( r*q2, r*q2 )| by EUCLID_2:30;
+A43:         |( t*q1 , t*q1 )| = t*|( q1 , t*q1 )| by EUCLID_2:19
+            .= t*(t*|( q1 , q1 )|) by EUCLID_2:20
+            .= t*t*|( q1 , q1 )|;
+A44:         |( r*q2 , r*q2 )| = r*|( q2 , r*q2 )| by EUCLID_2:19
+            .= r*(r*|( q2 , q2 )|) by EUCLID_2:20
+            .= r*r*|( q2 , q2 )|;
+A45:       |( t*q1 , r*q2 )| = t*|( q1 , r*q2 )| by EUCLID_2:19
+            .= t*(r*|( q1 , q2 )|) by EUCLID_2:20
+            .= 0 by A40;
+A46:        t*t >= 0 by XREAL_1:63;
+A47:        r*r >= 0 by XREAL_1:63;
+A48:        |( q1 , q1 )| >= 0 by EUCLID_2:35;
+A49:        |( q2 , q2 )| >= 0 by EUCLID_2:35;
+A50:        t*t <> 0
+            proof
+              assume t*t = 0;
+              then t = 0 by XCMPLX_1:6;
+              then p
+              = 0.TOP-REAL n + (1 qua real number)*b1  by A15,EUCLID:29
+              .= (1 qua real number)*b1 by EUCLID:27
+              .= b1 by EUCLID:29;
+              then not p in {p} by A3,XBOOLE_0:def 5;
+              hence contradiction by TARSKI:def 1;
+            end;
+            thus contradiction
+            by A50,A21,A43,A44,A42,A45,A46,A47,A48,A49,XREAL_1:71;
+          end;
+          reconsider c = c1 as Point of T by A20,A19,A3,XBOOLE_0:def 5;
+          a,c are_connected & c,b are_connected by A22,A36,A4;
+          hence thesis by BORSUK_6:42;
+        end;
+        suppose not p in LSeg(a1,b1); hence thesis by A4; end;
+      end;
+      suppose a1 = b1; hence a, b are_connected; end;
+    end;
+    hence thesis by BORSUK_2:def 3;
+  end;
+
+theorem Th10:
+  for S being non empty Subset of T
+  st n >= 2 & S = ([#]T) \ {t} & TOP-REAL n, T are_homeomorphic
+  holds T | S is pathwise_connected
+  proof
+    let S be non empty Subset of T;
+    assume
+A1: n >= 2 & S = ([#]T) \ {t} & TOP-REAL n, T are_homeomorphic;
+    then consider f be Function of T, TOP-REAL n such that
+A2: f is being_homeomorphism by T_0TOPSP:def 1;
+    reconsider p = f.t as Point of TOP-REAL n;
+    reconsider SN = ([#]TOP-REAL n) \ {p}
+    as non empty Subset of TOP-REAL n by A1,RAMSEY_1:4;
+A3: (TOP-REAL n) | SN is pathwise_connected by A1,Th9;
+A4:dom f = [#]T & rng f = [#]TOP-REAL n by A2,TOPS_2:58;
+    then
+A5: f"([#]TOP-REAL n) = [#]T by RELAT_1:134;
+    consider x be set such that
+A6:f"{p} = {x} by A4,A2,FUNCT_1:74;
+A7: x in f"{p} by A6,TARSKI:def 1;
+    then x in dom f & f.x in {p} by FUNCT_1:def 7;
+    then p = f.x by TARSKI:def 1;
+    then x = t by A2,A7,A4,FUNCT_1:def 4;
+    then
+A8: f"SN = S by A1,A5,A6,FUNCT_1:69;
+A9: dom(SN |` f) = f"SN by MFOLD_2:1 .= [#](T | f"SN) by PRE_TOPC:def 5;
+    rng(SN |` f) c= SN;
+    then rng(SN |` f) c= [#]((TOP-REAL n) | SN) by PRE_TOPC:def 5;
+    then reconsider g = SN|`f as Function of T | f"SN, (TOP-REAL n) | SN
+    by A9,FUNCT_2:2;
+    g is being_homeomorphism by A2,MFOLD_2:4;
+    then (TOP-REAL n) | SN, T | S are_homeomorphic by A8,T_0TOPSP:def 1;
+    hence T | S is pathwise_connected by A3,TOPALG_3:9;
+  end;
+
+registration
+  let n be Element of NAT;
+  let p,q be Point of TOP-REAL n;
+  cluster TPlane(p,q) -> convex;
+  correctness
+  proof
+    set P = Plane(p,q);
+    for w1,w2 being Point of TOP-REAL n
+    st w1 in P & w2 in P holds LSeg(w1,w2) c= P
+    proof
+      let w1,w2 be Point of TOP-REAL n;
+      assume
+A1:   w1 in P & w2 in P;
+      reconsider n0 = n as Nat;
+      reconsider p0 = p, q0 = q as Point of TOP-REAL n0;
+A2:   P = {y where y is Point of TOP-REAL n0 : |( p0, y-q0 )| = 0}
+      by MFOLD_2:def 2;
+      consider v1 be Point of TOP-REAL n0 such that
+A3:   w1 = v1 & |( p0, v1-q0 )| = 0 by A1,A2;
+      consider v2 be Point of TOP-REAL n0 such that
+A4:   w2 = v2 & |( p0, v2-q0 )| = 0 by A1,A2;
+      for x being set st x in LSeg(w1,w2) holds x in P
+      proof
+        let x be set;
+        assume
+A5:     x in LSeg(w1,w2);
+        then reconsider w = x as Point of TOP-REAL n0;
+        reconsider r1 = 1 as real number;
+        consider r be Real such that
+A6:     0<=r & r<=1 & w=(1-r)*w1+r*w2 by A5,JGRAPH_1:35;
+A7:     |( p0, (1-r)*(v1-q0) )| = (1-r)*0 by A3,EUCLID_2:20 .= 0;
+A8:     |( p0, r*(v2-q0) )| = r*0 by A4,EUCLID_2:20 .= 0;
+A9:    (1-r)*(v1-q0) + r*(v2-q0)
+        = (1-r)*(w1-q) + (r*w2 -r*q) by A3,A4,EUCLID:49
+        .= (1-r)*w1 - (1-r)*q + (r*w2 -r*q) by EUCLID:49
+        .= (1-r)*w1 + -(1-r)*q + (r*w2 -r*q) by EUCLID:41
+        .= (1-r)*w1 + (-(1-r))*q + (r*w2 -r*q) by EUCLID:40
+        .= (1-r)*w1 + (r-1)*q + (r*w2 -r*q)
+        .= (1-r)*w1 + (r*q -r1*q) + (r*w2 -r*q) by EUCLID:50
+        .= (1-r)*w1 + ((r*q -r1*q) + (r*w2 -r*q)) by EUCLID:26
+        .= (1-r)*w1 + ((r*q -r1*q) + (r*w2 + -r*q)) by EUCLID:41
+        .= (1-r)*w1 + ((r*q + -r1*q) + (r*w2 + -r*q)) by EUCLID:41
+        .= (1-r)*w1 + ( -r1*q + r*q + -r*q + r*w2) by EUCLID:26
+        .= (1-r)*w1 + ( -r1*q + (r*q + -r*q) + r*w2) by EUCLID:26
+        .= (1-r)*w1 + ( -r1*q + (r*q - r*q) + r*w2) by EUCLID:41
+        .= (1-r)*w1 + ( -r1*q + 0.TOP-REAL n + r*w2) by EUCLID:42
+        .= (1-r)*w1 + ( -r1*q + r*w2) by EUCLID:27
+        .= (1-r)*w1 + r*w2 + -r1*q by EUCLID:26
+        .= w + -q0 by A6,EUCLID:29
+        .= w -q0 by EUCLID:41;
+        0 = |( p0, (1-r)*(v1-q0) )| + |( p0, r*(v2-q0) )| by A7,A8
+        .= |( p0, w-q0 )| by A9,EUCLID_2:26;
+        hence x in P by A2;
+      end;
+      hence thesis by TARSKI:def 3;
+    end;
+    then P is convex Subset of TOP-REAL n by RLTOPSP1:22;
+    then [#]((TOP-REAL n) | P) is convex Subset of TOP-REAL n
+    by PRE_TOPC:def 5;
+    then [#]TPlane(p,q) is convex Subset of TOP-REAL n by MFOLD_2:def 3;
+    hence thesis by TOPALG_2:def 1;
+  end;
+end;
+
+begin :: Fundamental groups
+
+definition
+  let T;
+  attr T is having_trivial_Fundamental_Group means :Def1:
+  for t being Point of T holds pi_1(T,t) is trivial;
+end;
+
+definition
+  let T;
+  attr T is simply_connected means :Def2:
+  T is having_trivial_Fundamental_Group pathwise_connected;
+end;
+
+registration
+  cluster simply_connected ->
+          having_trivial_Fundamental_Group pathwise_connected
+          for non empty TopSpace;
+  coherence by Def2;
+  cluster having_trivial_Fundamental_Group pathwise_connected ->
+          simply_connected for non empty TopSpace;
+  coherence by Def2;
+end;
+
+theorem Th11:
+  T is having_trivial_Fundamental_Group implies
+  for t being Point of T, P,Q being Loop of t holds
+  P,Q are_homotopic
+  proof
+    assume
+A1: T is having_trivial_Fundamental_Group;
+    let t be Point of T, P,Q be Loop of t;
+    set E = EqRel(T,t);
+A2: pi_1(T,t) is trivial by A1,Def1;
+    Class(E,P) in the carrier of pi_1(T,t) &
+    Class(E,Q) in the carrier of pi_1(T,t) by TOPALG_1:47;
+    then Class(E,P) = Class(E,Q) by A2,ZFMISC_1:def 10;
+    hence thesis by TOPALG_1:46;
+  end;
+
+registration
+  let n be Nat;
+  cluster TOP-REAL n -> having_trivial_Fundamental_Group;
+  coherence
+  proof
+    let o be Point of TOP-REAL(n);
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster trivial -> having_trivial_Fundamental_Group for non empty TopSpace;
+  coherence
+  proof
+    let T be non empty TopSpace such that
+A1: T is trivial;
+    let t be Point of T;
+    reconsider L = I[01] --> t as Loop of t by JORDAN:41;
+    the carrier of pi_1(T,t) = { Class(EqRel(T,t),L) } by A1,Th8;
+    hence thesis;
+  end;
+end;
+
+theorem Th12:
+  T is simply_connected iff
+  for t1,t2 being Point of T holds t1,t2 are_connected &
+  for P, Q being Path of t1,t2 holds
+  Class(EqRel(T,t1,t2),P) = Class(EqRel(T,t1,t2),Q)
+  proof
+    hereby
+      assume
+A1:   T is simply_connected;
+      let t1,t2 be Point of T;
+      thus
+A2:   t1,t2 are_connected by A1,BORSUK_2:def 3;
+      let P, Q be Path of t1,t2;
+      set E = EqRel(T,t1,t2);
+A3:   P,P+-Q+Q are_homotopic by A1,TOPALG_1:22;
+      set C = the constant Loop of t1;
+      P+-Q,C are_homotopic by A1,Th11;
+      then
+A4:   P+-Q+Q,C+Q are_homotopic by A1,BORSUK_6:76;
+      C+Q,Q are_homotopic by A1,BORSUK_6:83;
+      then P+-Q+Q,Q are_homotopic by A4,BORSUK_6:79;
+      then P,Q are_homotopic by A3,BORSUK_6:79;
+      hence Class(E,P) = Class(E,Q) by A2,TOPALG_1:46;
+    end;
+    assume
+A5: for t1,t2 being Point of T holds t1,t2 are_connected &
+    for P, Q being Path of t1,t2 holds
+    Class(EqRel(T,t1,t2),P) = Class(EqRel(T,t1,t2),Q);
+    thus T is having_trivial_Fundamental_Group
+    proof
+      let t be Point of T;
+      let x, y be Element of pi_1(T,t);
+      (ex P being Loop of t st x = Class(EqRel(T,t),P)) &
+      ex P being Loop of t st y = Class(EqRel(T,t),P) by TOPALG_1:47;
+      hence thesis by A5;
+    end;
+    thus thesis by A5,BORSUK_2:def 3;
+end;
+
+registration
+  let T be having_trivial_Fundamental_Group non empty TopSpace;
+  let t be Point of T;
+  cluster pi_1(T,t) -> trivial;
+  coherence by Def1;
+end;
+
+theorem Th13:
+  for S, T being non empty TopSpace st S,T are_homeomorphic holds
+  S is having_trivial_Fundamental_Group implies
+  T is having_trivial_Fundamental_Group
+  proof
+    let S, T be non empty TopSpace;
+    given f being Function of S,T such that
+A1: f is being_homeomorphism;
+    assume
+A2: for s being Point of S holds pi_1(S,s) is trivial;
+    let t be Point of T;
+    rng f = [#]T by A1,TOPS_2:def 5;
+    then consider s being Point of S such that
+A3: f.s = t by FUNCT_2:113;
+A4: FundGrIso(f,s) is bijective by A1,TOPALG_3:31;
+    pi_1(S,s) is trivial by A2;
+    hence thesis by A3,A4,KNASTER:11,TOPREALC:1;
+  end;
+
+theorem Th14:
+  for S, T being non empty TopSpace st S,T are_homeomorphic holds
+  S is simply_connected implies T is simply_connected
+  proof
+    let S, T be non empty TopSpace;
+    assume S,T are_homeomorphic & S is simply_connected;
+    hence T is having_trivial_Fundamental_Group pathwise_connected
+    by Th13,TOPALG_3:9;
+  end;
+
+theorem Th15:
+  for T being having_trivial_Fundamental_Group non empty TopSpace,
+      t being Point of T, P1,P2 being Loop of t
+  holds P1,P2 are_homotopic
+  proof
+    let T be having_trivial_Fundamental_Group non empty TopSpace;
+    let t be Point of T, P1,P2 be Loop of t;
+    Class(EqRel(T,t),P1) in the carrier of pi_1(T,t) &
+    Class(EqRel(T,t),P2) in the carrier of pi_1(T,t) by TOPALG_1:47;
+    then Class(EqRel(T,t),P1) = Class(EqRel(T,t),P2) by ZFMISC_1:def 10;
+    hence thesis by TOPALG_1:46;
+  end;
+
+definition
+  let T, t;
+  let l be Loop of t;
+  attr l is nullhomotopic means :Def3:
+  ex c being constant Loop of t st l,c are_homotopic;
+end;
+
+registration
+  let T, t;
+  cluster constant -> nullhomotopic for Loop of t;
+  coherence
+  proof
+    let l be Loop of t;
+    assume l is constant;
+    then reconsider l as constant Loop of t;
+    take l;
+    thus thesis by BORSUK_6:88;
+  end;
+end;
+
+registration
+  let T, t;
+  cluster constant for Loop of t;
+  existence
+  proof
+    reconsider l = I[01] --> t as constant Loop of t by JORDAN:41;
+    take l;
+    thus thesis;
+  end;
+end;
+
+theorem Th16:
+  for f being Loop of t, g being continuous Function of T,U st
+   f is nullhomotopic holds g*f is nullhomotopic
+  proof
+    let f be Loop of t, g be continuous Function of T,U;
+    given c being constant Loop of t such that
+A1: f,c are_homotopic;
+    consider F being Function of [:I[01],I[01]:], T such that
+A2: F is continuous and
+A3: for s being Point of I[01] holds F.(s,0) = f.s & F.(s,1) = c.s &
+    F.(0,s) = t & F.(1,s) = t by A1,BORSUK_2:def 7;
+    reconsider d = I[01] --> g.t as constant Loop of g.t by JORDAN:41;
+    reconsider G = g*F as Function of [:I[01],I[01]:], U;
+    take d, G;
+    thus G is continuous by A2;
+    let s be Point of I[01];
+    reconsider j0 = 0, j1 = 1 as Point of I[01] by BORSUK_1:def 14,def 15;
+    set I = the carrier of I[01];
+A4: the carrier of [:I[01],I[01]:] = [:I,I:] by BORSUK_1:def 2;
+    thus G.(s,0) = g.(F.(s,j0)) by A4,BINOP_1:18
+    .= g.(f.s) by A3
+    .= (g*f).s by FUNCT_2:15;
+    thus G.(s,1) = g.(F.(s,j1)) by A4,BINOP_1:18
+    .= g.(c.s) by A3
+    .= g.t by TOPALG_3:21
+    .= d.s by FUNCOP_1:7;
+    thus G.(0,s) = g.(F.(j0,s)) by A4,BINOP_1:18
+    .= g.t by A3;
+    thus G.(1,s) = g.(F.(j1,s)) by A4,BINOP_1:18
+    .= g.t by A3;
+  end;
+
+registration
+  let T, U be non empty TopSpace,
+      t be Point of T,
+      f be nullhomotopic Loop of t,
+      g be continuous Function of T,U;
+  cluster g*f -> nullhomotopic for Loop of g.t;
+  coherence by Th16;
+end;
+
+registration
+  let T be having_trivial_Fundamental_Group non empty TopSpace;
+  let t be Point of T;
+  cluster -> nullhomotopic for Loop of t;
+  coherence
+  proof
+    let l be Loop of t;
+    reconsider c = I[01] --> t as constant Loop of t by JORDAN:41;
+    take c;
+    thus thesis by Th15;
+  end;
+end;
+
+theorem Th17:
+  (for t being Point of T, f being Loop of t holds f is nullhomotopic)
+  implies T is having_trivial_Fundamental_Group
+  proof
+    assume
+A1: for t being Point of T, f being Loop of t holds f is nullhomotopic;
+    for t being Point of T holds pi_1(T,t) is trivial
+    proof
+      let t be Point of T;
+      set C = the constant Loop of t;
+      the carrier of pi_1(T,t) = { Class(EqRel(T,t),C) }
+      proof
+        set E = EqRel(T,t);
+        hereby
+          let x be set;
+          assume x in the carrier of pi_1(T,t);
+          then consider P be Loop of t such that
+    A2:   x = Class(E,P) by TOPALG_1:47;
+          P is nullhomotopic by A1;
+          then consider C1 be constant Loop of t such that
+    A3:   P, C1 are_homotopic by Def3;
+          C1, C are_homotopic by Th5;
+          then P, C are_homotopic by A3,BORSUK_6:79;
+          then x = Class(E,C) by A2,TOPALG_1:46;
+          hence x in { Class(E,C) } by TARSKI:def 1;
+        end;
+        let x be set;
+        assume x in { Class(E,C) };
+        then
+    A4: x = Class(E,C) by TARSKI:def 1;
+        C in Loops t by TOPALG_1:def 1;
+        then x in Class E by A4,EQREL_1:def 3;
+        hence thesis by TOPALG_1:def 5;
+      end;
+      hence thesis;
+    end;
+    hence thesis by Def1;
+  end;
+
+registration
+  let n be Element of NAT;
+  let p,q be Point of TOP-REAL n;
+  cluster TPlane(p,q) -> having_trivial_Fundamental_Group;
+  correctness
+  proof
+    for t being Point of TPlane(p,q) holds pi_1(TPlane(p,q),t) is trivial;
+    hence thesis by Def1;
+  end;
+end;
+
+theorem Th18:
+  for S being non empty SubSpace of T, s being Point of S,
+      f being Loop of t, g being Loop of s st
+   t = s & f = g & g is nullhomotopic
+  holds f is nullhomotopic
+  proof
+    let S be non empty SubSpace of T;
+    let s be Point of S;
+    let f be Loop of t;
+    let g be Loop of s such that
+A1: t = s & f = g and
+A2: g is nullhomotopic;
+    consider c be constant Loop of s such that
+A3: g,c are_homotopic by A2,Def3;
+    c = I[01] --> s by BORSUK_2:5 .= I[01] --> t by A1;
+    then reconsider c as constant Loop of t by JORDAN:41;
+    f,c are_homotopic by A1,A3,Th6;
+    hence thesis by Def3;
+  end;
+
+begin :: Curves
+
+reserve T for TopStruct;
+reserve f for PartFunc of R^1, T;
+
+definition
+  let T,f;
+  attr f is parametrized-curve means :Def4:
+  dom f is interval Subset of REAL &
+  ex S being SubSpace of R^1, g being Function of S, T
+  st f = g & S = R^1|dom f & g is continuous;
+end;
+
+Lm1:
+  f = {} implies f is parametrized-curve
+  proof
+    assume
+A1: f = {};
+    reconsider f as PartFunc of R^1, T;
+    dom f = {} by A1;
+    then
+A2: dom f c= REAL by XBOOLE_1:2;
+    reconsider A = {} as Subset of R^1 by XBOOLE_1:2;
+    reconsider S = R^1 | A as SubSpace of R^1;
+    {} c= [: [#]S, [#]T :];
+    then reconsider g = f as Relation of [#]S, [#]T by A1;
+A3: A = dom g;
+    reconsider g as Function of S, T;
+    for P1 being Subset of T st P1 is closed holds g"P1 is closed;
+    then g is continuous by PRE_TOPC:def 6;
+    hence thesis by A3,A2,Def4;
+  end;
+
+registration
+  let T;
+  cluster parametrized-curve for PartFunc of R^1, T;
+  correctness
+  proof
+    reconsider c = {} as PartFunc of R^1, T by XBOOLE_1:2;
+    take c;
+    thus thesis by Lm1;
+  end;
+end;
+
+theorem
+  {} is parametrized-curve PartFunc of R^1, T by Lm1,XBOOLE_1:2;
+
+definition
+  let T;
+  func Curves T -> Subset of PFuncs(REAL, [#]T) equals
+  {f where f is Element of PFuncs(REAL, [#]T) :
+     f is parametrized-curve PartFunc of R^1, T};
+  coherence
+  proof
+    set C = {f where f is Element of PFuncs(REAL, [#]T) :
+     f is parametrized-curve PartFunc of R^1, T};
+    for x being set st x in C holds x in PFuncs(REAL, [#]T)
+    proof
+      let x be set;
+      assume x in C;
+      then ex f be Element of PFuncs(REAL, [#]T) st
+      x = f & f is parametrized-curve PartFunc of R^1, T;
+      hence thesis;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+end;
+
+registration
+  let T;
+  cluster Curves T -> non empty;
+  coherence
+  proof
+    reconsider c = {} as PartFunc of R^1, T by XBOOLE_1:2;
+    reconsider f1 = c as Element of PFuncs(REAL, [#]T)
+    by PARTFUN1:45,TOPMETR:17;
+    f1 is parametrized-curve PartFunc of R^1, T by Lm1;
+    then f1 in Curves T;
+    hence thesis;
+  end;
+end;
+
+definition
+  let T;
+  mode Curve of T is Element of Curves T;
+  correctness;
+end;
+
+reserve c for Curve of T;
+
+theorem Th20:
+  for f being parametrized-curve PartFunc of R^1, T holds f is Curve of T
+  proof
+    let f be parametrized-curve PartFunc of R^1, T;
+    reconsider f1 = f as Element of PFuncs(REAL, [#]T)
+    by PARTFUN1:45,TOPMETR:17;
+    f1 in Curves T;
+    hence thesis;
+  end;
+
+theorem Th21:
+  {} is Curve of T
+  proof
+    reconsider f = {} as parametrized-curve PartFunc of R^1, T
+    by Lm1,XBOOLE_1:2;
+    f is Curve of T by Th20;
+    hence thesis;
+  end;
+
+theorem Th22:
+  for t1,t2 being Point of T
+  for p being Path of t1,t2 st t1,t2 are_connected holds p is Curve of T
+  proof
+    let t1,t2 be Point of T;
+    let p be Path of t1,t2;
+    assume t1,t2 are_connected;
+    then
+A1: p is continuous & p.0 = t1 & p.1 = t2 by BORSUK_2:def 2;
+    per cases;
+    suppose T is non empty;
+      then
+A2:   [#]I[01] = dom p by FUNCT_2:def 1;
+      then
+A3:  dom p c= [#]R^1 by PRE_TOPC:def 4;
+      then reconsider A = dom p as Subset of R^1;
+A4:  I[01] = R^1 | A by A2,BORSUK_1:40,TOPMETR:19,20;
+      rng p c= [#]T;
+      then reconsider c = p as PartFunc of R^1, T by A3,RELSET_1:4;
+      reconsider c as parametrized-curve PartFunc of R^1, T
+      by A2,A4,Def4,A1,BORSUK_1:40;
+      c is Element of Curves T by Th20;
+      hence thesis;
+    end;
+    suppose
+A5:   T is empty;
+      then reconsider c = p as PartFunc of R^1, T;
+      c = {} by A5;
+      then reconsider c as parametrized-curve PartFunc of R^1,T by Lm1;
+      c is Element of Curves T by Th20;
+      hence thesis;
+    end;
+  end;
+
+theorem Th23:
+  c is parametrized-curve PartFunc of R^1, T
+  proof
+    c in {f where f is Element of PFuncs(REAL, [#]T) :
+     f is parametrized-curve PartFunc of R^1, T};
+    then consider f be Element of PFuncs(REAL, [#]T) such that
+A1: c = f & f is parametrized-curve PartFunc of R^1, T;
+    thus thesis by A1;
+  end;
+
+theorem Th24:
+  dom c c= REAL & rng c c= [#]T
+  proof
+    reconsider f = c as parametrized-curve PartFunc of R^1, T by Th23;
+    dom f c= [#]R^1 & rng f c= [#]T;
+    hence thesis by TOPMETR:17;
+  end;
+
+registration
+  let T,c;
+  cluster dom c -> real-membered;
+  correctness
+  proof
+    for x being set st x in dom c holds x is real
+    proof
+      let x be set;
+      assume
+A1:   x in dom c;
+      dom c c= REAL by Th24;
+      hence thesis by A1;
+    end;
+    hence thesis by MEMBERED:def 3;
+  end;
+end;
+
+definition
+  let T,c;
+  attr c is with_first_point means :Def6:
+  dom c is left_end;
+  attr c is with_last_point means :Def7:
+  dom c is right_end;
+end;
+
+definition
+  let T,c;
+  attr c is with_endpoints means :Def8:
+  c is with_first_point with_last_point;
+end;
+
+registration
+  let T;
+  cluster with_first_point with_last_point -> with_endpoints for Curve of T;
+  correctness by Def8;
+  cluster with_endpoints -> with_first_point with_last_point for Curve of T;
+  correctness by Def8;
+end;
+
+reserve T for non empty TopStruct;
+
+registration
+  let T;
+  cluster with_endpoints for Curve of T;
+  correctness
+  proof
+    set t = the Point of T;
+    set f = I[01] --> t;
+A1: f.0 = t & f.1 = t by BORSUK_1:def 14,def 15,FUNCOP_1:7;
+    set p = the Path of t, t;
+    t, t are_connected by A1,BORSUK_2:def 1;
+    then reconsider c = p as Curve of T by Th22;
+    take c;
+A2: dom c = [.0,1.] by BORSUK_1:40,FUNCT_2:def 1;
+    set S = [.0,1.];
+    inf S = 0 by XXREAL_2:25;
+    then inf S in S by XXREAL_1:1;
+    hence dom c is left_end by A2,XXREAL_2:def 5;
+    sup S = 1 by XXREAL_2:29;
+    then sup S in S by XXREAL_1:1;
+    hence dom c is right_end by A2,XXREAL_2:def 6;
+  end;
+end;
+
+registration
+  let T;
+  let c be with_first_point Curve of T;
+  cluster dom c -> non empty;
+  correctness
+  proof
+    dom c is left_end by Def6;
+    hence thesis;
+  end;
+  cluster inf dom c -> real;
+  correctness
+  proof
+    dom c is left_end by Def6;
+    hence thesis;
+  end;
+end;
+
+registration
+  let T;
+  let c be with_last_point Curve of T;
+  cluster dom c -> non empty;
+  correctness
+  proof
+    dom c is right_end by Def7;
+    hence thesis;
+  end;
+  cluster sup dom c -> real;
+  correctness
+  proof
+    dom c is right_end by Def7;
+    hence thesis;
+  end;
+end;
+
+registration
+  let T;
+  cluster with_first_point -> non empty for Curve of T;
+  coherence
+  proof
+    let C be Curve of T;
+    assume C is with_first_point empty;
+    then reconsider c = {} as with_first_point Curve of T;
+    dom c is left_end;
+    hence thesis;
+  end;
+  cluster with_last_point -> non empty for Curve of T;
+  coherence
+  proof
+    let C be Curve of T;
+    assume C is with_last_point empty;
+    then reconsider c = {} as with_last_point Curve of T;
+    dom c is right_end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let T;
+  let c be with_first_point Curve of T;
+  func the_first_point_of c -> Point of T equals
+  c.(inf dom c);
+  correctness
+  proof
+A1: rng c c= [#]T by Th24;
+    dom c is left_end by Def6;
+    then inf dom c in dom c by XXREAL_2:def 5;
+    then c.(inf dom c) in rng c by FUNCT_1:3;
+    hence thesis by A1;
+  end;
+end;
+
+definition
+  let T;
+  let c be with_last_point Curve of T;
+  func the_last_point_of c -> Point of T equals
+  c.(sup dom c);
+  correctness
+  proof
+A1: rng c c= [#]T by Th24;
+    dom c is right_end by Def7;
+    then sup dom c in dom c by XXREAL_2:def 6;
+    then c.(sup dom c) in rng c by FUNCT_1:3;
+    hence thesis by A1;
+  end;
+end;
+
+theorem Th25:
+  for t1,t2 being Point of T
+  for p being Path of t1,t2 st t1,t2 are_connected
+  holds p is with_endpoints Curve of T
+  proof
+    let t1,t2 be Point of T;
+    let p be Path of t1,t2;
+    assume t1,t2 are_connected;
+    then reconsider c = p as Curve of T by Th22;
+A1: [.0,1.] = dom c by BORSUK_1:40,FUNCT_2:def 1;
+    0 in [.0,1.] by XXREAL_1:1;
+    then inf dom c in dom c by A1,Th4;
+    then dom c is left_end by XXREAL_2:def 5;
+    then
+A2: c is with_first_point by Def6;
+    1 in [.0,1.] by XXREAL_1:1;
+    then sup dom c in dom c by A1,Th4;
+    then dom c is right_end by XXREAL_2:def 6;
+    then c is with_last_point by Def7;
+    hence thesis by A2;
+  end;
+
+theorem Th26:
+  for c being Curve of T
+  for r1,r2 being real number
+  holds c | [.r1, r2.] is Curve of T
+  proof
+    let c be Curve of T;
+    let r1,r2 be real number;
+    reconsider f = c as parametrized-curve PartFunc of R^1, T
+    by Th23;
+    set f1 = f | [.r1, r2.];
+    reconsider A = dom f as interval Subset of REAL by Def4;
+    reconsider B = [.r1,r2.] as interval Subset of REAL;
+A1: A /\ B is interval Subset of REAL;
+    then
+A2: dom f1 is interval Subset of REAL by RELAT_1:61;
+    consider S be SubSpace of R^1, g be Function of S,T such that
+A3: f = g & S = R^1|dom f & g is continuous by Def4;
+    reconsider A0 = dom f as Subset of R^1;
+A4: [#]S = A0 by A3,PRE_TOPC:def 5;
+    reconsider K0 = (dom f)/\[.r1,r2.] as Subset of S by A4,XBOOLE_1:17;
+    reconsider g1 = g|K0 as Function of S|K0,T by PRE_TOPC:9;
+A5: g1 is continuous by A3,TOPMETR:7;
+A6: g1 = (f|dom f) | [.r1,r2.] by A3,RELAT_1:71 .= f1;
+A7:(dom f)/\[.r1,r2.] = dom f1 by RELAT_1:61;
+    reconsider K1 = K0 as Subset of R^1|A0 by A3;
+    reconsider D1 = dom f1 as Subset of R^1 by A1,RELAT_1:61,TOPMETR:17;
+    S|K0 = R^1 | D1 by A3,A7,PRE_TOPC:7,XBOOLE_1:17;
+    then reconsider f1 as parametrized-curve PartFunc of R^1, T
+    by A2,A5,A6,Def4;
+    c | [.r1, r2.] = f1;
+    hence thesis by Th20;
+  end;
+
+theorem Th27:
+  for c being with_endpoints Curve of T holds
+  dom c = [.inf dom c, sup dom c.]
+  proof
+    let c be with_endpoints Curve of T;
+    reconsider f = c as parametrized-curve PartFunc of R^1, T
+    by Th23;
+    dom f is interval Subset of REAL by Def4;
+    then reconsider A = dom c as left_end right_end interval
+    ext-real-membered set by Def6,Def7;
+    A = [. min A, max A.]  by XXREAL_2:75;
+    hence thesis;
+  end;
+
+theorem Th28:
+  for c being with_endpoints Curve of T st dom c = [.0,1.]
+  holds c is Path of the_first_point_of c,the_last_point_of c
+  proof
+    let c be with_endpoints Curve of T;
+    assume
+A1: dom c = [.0,1.];
+    set t1 = the_first_point_of c,t2 = the_last_point_of c;
+    reconsider f = c as parametrized-curve PartFunc of R^1,T
+    by Th23;
+    consider S be SubSpace of R^1, p be Function of S, T such that
+A2: f = p & S = R^1|dom f & p is continuous by Def4;
+    reconsider p as Function of I[01],T by A2,A1,BORSUK_1:40,FUNCT_2:def 1;
+A3: S = I[01] by A2,A1,TOPMETR:19,20;
+A4: p.0 = t1 by A1,A2,XXREAL_2:25;
+A5: p.1 = t2 by A2,A1,XXREAL_2:29;
+    then t1,t2 are_connected by A2,A3,A4,BORSUK_2:def 1;
+    hence thesis by A3,A4,A5,A2,BORSUK_2:def 2;
+  end;
+
+theorem Th29:
+  for c being with_endpoints Curve of T holds
+  c*L[01](0,1,inf dom c,sup dom c)
+  is Path of the_first_point_of c,the_last_point_of c
+  proof
+    let c be with_endpoints Curve of T;
+    set t1 = the_first_point_of c, t2 = the_last_point_of c;
+    reconsider c0 = c as parametrized-curve PartFunc of R^1, T
+    by Th23;
+    consider S be SubSpace of R^1, g be Function of S, T such that
+A1:c0 = g & S = R^1|dom c0 & g is continuous by Def4;
+    reconsider S as non empty TopStruct by A1;
+A2:inf dom c <= sup dom c by XXREAL_2:40;
+    then
+A3:L[01](0,1,inf dom c,sup dom c) is continuous
+    Function of Closed-Interval-TSpace(0,1),
+    Closed-Interval-TSpace(inf dom c,sup dom c) by BORSUK_6:34;
+A4:dom c0 = [.inf dom c,sup dom c.] by Th27;
+    then
+A5:Closed-Interval-TSpace(inf dom c,sup dom c) = S by A2,A1,TOPMETR:19;
+    reconsider f = L[01](0,1,inf dom c,sup dom c) as Function of I[01],S
+    by A4,A2,A1,TOPMETR:19,20;
+    reconsider p = g*f as Function of I[01],T;
+A6: 0 in [.0,1.] & 1 in [.0,1.] by XXREAL_1:1;
+A7:dom L[01](0,1,inf dom c,sup dom c)
+    = the carrier of Closed-Interval-TSpace(0,1) by FUNCT_2:def 1
+    .= [.0,1.] by TOPMETR:18;
+A8:L[01](0,1,inf dom c,sup dom c).0
+    = (sup dom c - inf dom c)/(1 - 0) * (0 - 0) + inf dom c
+    by A2,BORSUK_6:35 .= inf dom c;
+A9:L[01](0,1,inf dom c,sup dom c).1
+    = (sup dom c - inf dom c)/(1 - 0) * (1 - 0) + inf dom c
+    by A2,BORSUK_6:35 .= sup dom c;
+A10: p is continuous by A1,A3,A5,TOPMETR:20,TOPS_2:46;
+A11: p.0 = t1 by A8,A1,A6,A7,FUNCT_1:13;
+A12: p.1 = t2 by A9,A1,A6,A7,FUNCT_1:13;
+    then t1,t2 are_connected by A10,A11,BORSUK_2:def 1;
+    hence thesis by A1,A10,A11,A12,BORSUK_2:def 2;
+  end;
+
+theorem
+  for c being with_endpoints Curve of T,
+      t1,t2 being Point of T
+  st c*L[01](0,1,inf dom c,sup dom c) is Path of t1,t2 & t1,t2 are_connected
+  holds t1 = the_first_point_of c & t2 = the_last_point_of c
+  proof
+    let c be with_endpoints Curve of T;
+    let t1,t2 be Point of T;
+    assume
+A1: c*L[01](0,1,inf dom c,sup dom c) is Path of t1,t2 & t1,t2 are_connected;
+A2: inf dom c <= sup dom c by XXREAL_2:40;
+A3: 0 in [.0,1.] & 1 in [.0,1.] by XXREAL_1:1;
+A4: dom L[01](0,1,inf dom c,sup dom c)
+    = the carrier of Closed-Interval-TSpace(0,1) by FUNCT_2:def 1
+    .= [.0,1.] by TOPMETR:18;
+A5: L[01](0,1,inf dom c,sup dom c).0
+    = (sup dom c - inf dom c)/(1 - 0) * (0 - 0) + inf dom c
+    by A2,BORSUK_6:35 .= inf dom c;
+A6:L[01](0,1,inf dom c,sup dom c).1
+    = (sup dom c - inf dom c)/(1 - 0) * (1 - 0) + inf dom c
+    by A2,BORSUK_6:35 .= sup dom c;
+    reconsider p = c*L[01](0,1,inf dom c,sup dom c) as Path of t1,t2 by A1;
+A7: p.0 = the_first_point_of c by A5,A3,A4,FUNCT_1:13;
+    p.1 = the_last_point_of c by A6,A3,A4,FUNCT_1:13;
+    hence thesis by A7,A1,BORSUK_2:def 2;
+  end;
+
+theorem Th31:
+  for c being with_endpoints Curve of T
+  holds the_first_point_of c in rng c & the_last_point_of c in rng c
+  proof
+    let c be with_endpoints Curve of T;
+A1: inf dom c <= sup dom c by XXREAL_2:40;
+    dom c = [.inf dom c,sup dom c.] by Th27;
+    then inf dom c in dom c & sup dom c in dom c by A1,XXREAL_1:1;
+    hence thesis by FUNCT_1:3;
+  end;
+
+theorem Th32:
+  for r1,r2 being real number
+  for t1,t2 being Point of T
+  for p1 being Path of t1,t2
+  st t1,t2 are_connected & r1 < r2
+  holds p1*L[01](r1,r2,0,1) is with_endpoints Curve of T
+  proof
+    let r1,r2 be real number;
+    let t1,t2 be Point of T;
+    let p1 be Path of t1,t2;
+    assume
+A1: t1,t2 are_connected;
+    assume
+A2:r1 < r2;
+    then
+A3: L[01](r1,r2,0,1) is continuous
+    Function of Closed-Interval-TSpace(r1,r2),Closed-Interval-TSpace(0,1)
+    by BORSUK_6:34;
+A4: p1 is continuous & p1.0 = t1 & p1.1 = t2 by A1,BORSUK_2:def 2;
+    set c = p1*L[01](r1,r2,0,1);
+    rng L[01](r1,r2,0,1) c= [#]Closed-Interval-TSpace(0,1) by RELAT_1:def 19;
+    then rng L[01](r1,r2,0,1) c= dom p1 by FUNCT_2:def 1,TOPMETR:20;
+    then dom c = dom L[01](r1,r2,0,1) by RELAT_1:27;
+    then dom c = [#]Closed-Interval-TSpace(r1,r2) by FUNCT_2:def 1;
+    then
+A5:dom c = [.r1,r2.] by A2,TOPMETR:18;
+A6:rng c c= [#]T;
+    then reconsider c as PartFunc of R^1, T by A5,RELSET_1:4,TOPMETR:17;
+    set S = R^1|dom c;
+    dom c = [#]S by PRE_TOPC:def 5;
+    then reconsider g = c as Function of S, T by A6,FUNCT_2:2;
+A7: S = Closed-Interval-TSpace(r1,r2) by A2,A5,TOPMETR:19;
+    reconsider p2 = p1 as Function of Closed-Interval-TSpace(0,1),T
+    by TOPMETR:20;
+    g is continuous by A4,A7,A3,TOPMETR:20,TOPS_2:46;
+    then c is parametrized-curve by A5,Def4;
+    then reconsider c as Curve of T by Th20;
+    dom c is left_end & dom c is right_end by A2,A5,XXREAL_2:33;
+    then c is with_first_point & c is with_last_point by Def6,Def7;
+    hence thesis;
+  end;
+
+theorem Th33:
+  for c being with_endpoints Curve of T
+  holds the_first_point_of c, the_last_point_of c are_connected
+  proof
+    let c be with_endpoints Curve of T;
+    set t1 = the_first_point_of c, t2 = the_last_point_of c;
+    reconsider f = c as parametrized-curve PartFunc of R^1,T
+    by Th23;
+    consider S be SubSpace of R^1, g be Function of S, T such that
+A1: f = g & S = R^1|dom f & g is continuous by Def4;
+    set r1 = inf dom c, r2 = sup dom c;
+    set p = g*L[01](0,1,r1,r2);
+A2: r1 <= r2 by XXREAL_2:40;
+    then
+A3: L[01](0,1,r1,r2) is continuous
+    Function of Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(r1,r2)
+    by BORSUK_6:34;
+    rng L[01](0,1,r1,r2) c= [#]Closed-Interval-TSpace(r1,r2) by RELAT_1:def 19;
+    then rng L[01](0,1,r1,r2) c= [.r1,r2.] by A2,TOPMETR:18;
+    then rng L[01](0,1,r1,r2) c= dom c by Th27;
+    then dom p = dom L[01](0,1,r1,r2) by A1,RELAT_1:27;
+    then
+A4:dom p = [#]Closed-Interval-TSpace(0,1) by FUNCT_2:def 1;
+    rng p c= [#]T;
+    then reconsider p as Function of I[01],T by A4,FUNCT_2:2,TOPMETR:20;
+    dom f = [.r1,r2.] by Th27;
+    then S = Closed-Interval-TSpace(r1,r2) by A1,A2,TOPMETR:19;
+    then
+A5: p is continuous by A1,A3,TOPMETR:20,TOPS_2:46;
+    dom p = [.0,1.] by A4,TOPMETR:18;
+    then
+A6: 0 in dom p & 1 in dom p by XXREAL_1:1;
+A7: L[01](0,1,r1,r2).0
+    = ((r2 - r1)/(1 - 0)) * (0  - 0) + r1 by A2,BORSUK_6:35 .= r1;
+A8: L[01](0,1,r1,r2).1
+    = ((r2 - r1)/(1 - 0)) * (1  - 0) + r1 by A2,BORSUK_6:35 .= r2;
+A9: p.0
+    = t1 by A1,A7,A6,FUNCT_1:12;
+    p.1
+    = t2 by A1,A8,A6,FUNCT_1:12;
+    hence thesis by A5,A9,BORSUK_2:def 1;
+  end;
+
+definition
+  let T be non empty TopStruct;
+  let c1,c2 be with_endpoints Curve of T;
+  pred c1,c2 are_homotopic means :Def11:
+  ex a,b being Point of T, p1,p2 being Path of a,b st
+  p1 = c1*L[01](0,1,inf dom c1,sup dom c1) &
+  p2 = c2*L[01](0,1,inf dom c2,sup dom c2) &
+  p1,p2 are_homotopic;
+  symmetry;
+end;
+
+definition
+  let T be non empty TopSpace;
+  let c1,c2 be with_endpoints Curve of T;
+  redefine pred c1,c2 are_homotopic;
+  reflexivity
+  proof
+    let c be with_endpoints Curve of T;
+    reconsider p = c*L[01](0,1,inf dom c,sup dom c) as
+    Path of the_first_point_of c,the_last_point_of c by Th29;
+    p,p are_homotopic by Th33,BORSUK_2:12;
+    hence thesis by Def11;
+  end;
+  symmetry;
+end;
+
+theorem Th34:
+  for T being non empty TopStruct,
+      c1,c2 being with_endpoints Curve of T,
+      a,b being Point of T,
+      p1,p2 being Path of a,b
+  st c1 = p1 & c2 = p2 & a,b are_connected
+  holds c1,c2 are_homotopic iff p1,p2 are_homotopic
+  proof
+    let T be non empty TopStruct;
+    let c1,c2 be with_endpoints Curve of T;
+    let a,b be Point of T;
+    let p1,p2 be Path of a,b;
+    assume
+A1: c1 = p1 & c2 = p2;
+    assume
+A2: a,b are_connected;
+A3: 0 is Point of I[01] & 1 is Point of I[01] by BORSUK_1:40,XXREAL_1:1;
+A4: inf dom c1 = 0 & sup dom c1 = 1 & inf dom c2 = 0 & sup dom c2 = 1
+    by A1,Th4;
+A5: dom p1 = the carrier of I[01] &
+    dom p2 = the carrier of I[01] by FUNCT_2:def 1;
+    thus c1,c2 are_homotopic implies p1,p2 are_homotopic
+    proof
+      assume c1,c2 are_homotopic;
+      then consider aa,bb be Point of T, pp1,pp2 be Path of aa,bb such that
+A6:   pp1 = c1*L[01](0,1,inf dom c1,sup dom c1) &
+      pp2 = c2*L[01](0,1,inf dom c2,sup dom c2) &
+      pp1,pp2 are_homotopic by Def11;
+      consider f be Function of [:I[01],I[01]:], T such that
+A7:   f is continuous & for t being Point of I[01]
+      holds f.(t,0) = pp1.t & f.(t,1) = pp2.t
+      & f.(0,t) = aa & f.(1,t) = bb by A6,BORSUK_2:def 7;
+A8:   pp1 = p1 & pp2 = p2 by A1,A6,A4,A5,Th1,RELAT_1:52,TOPMETR:20;
+A9:  f.(0,0)=pp1.0 & f.(0,1)=pp2.0 & f.(0,0)=aa & f.(0,1)=aa by A7,A3;
+A10:  f.(1,0)=pp1.1 & f.(1,1)=pp2.1 & f.(1,0)=bb & f.(1,1)=bb by A7,A3;
+      aa = a & bb = b by A8,A9,A10,A2,BORSUK_2:def 2;
+      hence p1,p2 are_homotopic by A7,A8,BORSUK_2:def 7;
+    end;
+    assume
+A11: p1,p2 are_homotopic;
+     p1 = p1*L[01](0,1,0,1) & p2 = p2*L[01](0,1,0,1)
+     by A5,Th1,RELAT_1:52,TOPMETR:20;
+     hence c1,c2 are_homotopic by A4,A1,A11,Def11;
+  end;
+
+theorem Th35:
+  for c1,c2 being with_endpoints Curve of T
+  st c1, c2 are_homotopic
+  holds the_first_point_of c1 = the_first_point_of c2 &
+  the_last_point_of c1 = the_last_point_of c2
+  proof
+    let c1,c2 be with_endpoints Curve of T;
+    assume c1, c2 are_homotopic;
+    then consider a,b be Point of T, p1,p2 be Path of a,b such that
+A1: p1 = c1*L[01](0,1,inf dom c1,sup dom c1) &
+    p2 = c2*L[01](0,1,inf dom c2,sup dom c2) &
+    p1,p2 are_homotopic by Def11;
+A2: 0 is Point of I[01] & 1 is Point of I[01] by BORSUK_1:40,XXREAL_1:1;
+    consider f be Function of [:I[01],I[01]:], T such that
+A3: f is continuous & for t being Point of I[01] holds f.(t,0) = p1.t &
+    f.(t,1) = p2.t & f.(0,t) = a & f.(1,t) = b by A1,BORSUK_2:def 7;
+A4:  f.(0,0)=p1.0 & f.(0,1)=p2.0 & f.(0,0)=a & f.(0,1)=a by A3,A2;
+A5:  f.(1,0)=p1.1 & f.(1,1)=p2.1 & f.(1,0)=b & f.(1,1)=b by A3,A2;
+A6: 0 in [.0,1.] & 1 in [.0,1.] by XXREAL_1:1;
+A7:dom L[01](0,1,inf dom c1,sup dom c1)
+    = the carrier of Closed-Interval-TSpace(0,1) by FUNCT_2:def 1
+    .= [.0,1.] by TOPMETR:18;
+A8:dom L[01](0,1,inf dom c2,sup dom c2)
+    = the carrier of Closed-Interval-TSpace(0,1) by FUNCT_2:def 1
+    .= [.0,1.] by TOPMETR:18;
+A9:inf dom c1 <= sup dom c1 by XXREAL_2:40;
+A10:inf dom c2 <= sup dom c2 by XXREAL_2:40;
+A11:L[01](0,1,inf dom c2,sup dom c2).0
+    = (sup dom c2 - inf dom c2)/(1 - 0) * (0 - 0) + inf dom c2
+    by A10,BORSUK_6:35 .= inf dom c2;
+    L[01](0,1,inf dom c1,sup dom c1).0
+    = (sup dom c1 - inf dom c1)/(1 - 0) * (0 - 0) + inf dom c1
+    by A9,BORSUK_6:35 .= inf dom c1;
+    then p1.0 = c1.(inf dom c1) by A1,A6,A7,FUNCT_1:13;
+    hence the_first_point_of c1 = the_first_point_of c2
+    by A4,A1,A11,A6,A8,FUNCT_1:13;
+A12:L[01](0,1,inf dom c2,sup dom c2).1
+    = (sup dom c2 - inf dom c2)/(1 - 0) * (1 - 0) + inf dom c2
+    by A10,BORSUK_6:35 .= sup dom c2;
+    L[01](0,1,inf dom c1,sup dom c1).1
+    = (sup dom c1 - inf dom c1)/(1 - 0) * (1 - 0) + inf dom c1
+    by A9,BORSUK_6:35 .= sup dom c1;
+    then p1.1 = c1.(sup dom c1) by A1,A6,A7,FUNCT_1:13;
+    hence the_last_point_of c1 = the_last_point_of c2
+    by A5,A1,A12,A6,A8,FUNCT_1:13;
+  end;
+
+theorem Th36:
+  for T being non empty TopSpace
+  for c1,c2 being with_endpoints Curve of T
+  for S being Subset of R^1
+  st dom c1 = dom c2 & S = dom c1 holds c1,c2 are_homotopic iff
+   ex f being Function of [:R^1|S,I[01]:], T, a,b being Point of T
+   st f is continuous &
+   (for t being Point of R^1|S holds f.(t,0) = c1.t & f.(t,1) = c2.t) &
+   (for t being Point of I[01] holds f.(inf S,t) = a & f.(sup S,t) = b)
+  proof
+    let T be non empty TopSpace;
+    let c1,c2 be with_endpoints Curve of T;
+    let S be Subset of R^1;
+    assume
+A1: dom c1 = dom c2 & S = dom c1;
+A2:     inf dom c1 <= sup dom c1 by XXREAL_2:40;
+A3:    S = [.inf dom c1,sup dom c1.] by A1,Th27;
+A4:     0 in [#]I[01] by BORSUK_1:40,XXREAL_1:1;
+A5:    1 in [#]I[01] by BORSUK_1:40,XXREAL_1:1;
+A6:      inf S in S by A3,A2,A1,XXREAL_1:1;
+A7:      sup S in S by A3,A2,A1,XXREAL_1:1;
+    thus c1,c2 are_homotopic implies
+      ex f being Function of [:R^1|S,I[01]:],T, a,b being Point of T
+      st f is continuous &
+      (for t being Point of R^1|S holds f.(t,0) = c1.t & f.(t,1) = c2.t) &
+      (for t being Point of I[01] holds f.(inf S,t) = a & f.(sup S,t) = b)
+    proof
+      assume
+A8:   c1,c2 are_homotopic;
+      per cases;
+      suppose
+A9:     inf dom c1 < sup dom c1;
+        consider a,b be Point of T, p1,p2 be Path of a,b such that
+A10:     p1 = c1*L[01](0,1,inf dom c1,sup dom c1) &
+        p2 = c2*L[01](0,1,inf dom c2,sup dom c2) &
+        p1,p2 are_homotopic by A8,Def11;
+        consider f be Function of [:I[01],I[01]:], T such that
+A11:     f is continuous &
+        for t being Point of I[01] holds f.(t,0) = p1.t & f.(t,1) = p2.t
+        & f.(0,t) = a & f.(1,t) = b by A10,BORSUK_2:def 7;
+        set f1 = L[01](inf dom c1,sup dom c1,0,1);
+        set f2 = L[01](0,1,0,1);
+        reconsider S1 = R^1|S as non empty TopSpace by A1;
+A12:     Closed-Interval-TSpace(inf dom c1,sup dom c1) = S1
+        by A3,A9,TOPMETR:19;
+        reconsider f1 as continuous Function of S1,I[01]
+        by A9,A12,BORSUK_6:34,TOPMETR:20;
+        reconsider f2 as continuous Function of I[01],I[01]
+        by BORSUK_6:34,TOPMETR:20;
+        set h = f * [:f1,f2:];
+        reconsider h as Function of [:R^1|S,I[01]:],T;
+        take h,a,b;
+        thus h is continuous by A11;
+A13:     dom f1 = [#](R^1|S) by FUNCT_2:def 1;
+A14:     dom f2
+        = [.0,1.] by BORSUK_1:40,FUNCT_2:def 1;
+A15:    f2.0 = (1 - 0)/(1 - 0) * (0 - 0) + 0 by BORSUK_6:35 .= 0;
+A16:    f2.1 = (1 - 0)/(1 - 0) * (1 - 0) + 0 by BORSUK_6:35 .= 1;
+A17:    rng f1 c= [#]I[01] by RELAT_1:def 19;
+A18:     0 in dom f2 by A14,XXREAL_1:1;
+A19:    1 in dom f2 by A14,XXREAL_1:1;
+A20:    sup dom c1 - inf dom c1 <> 0 by A9;
+        thus for t being Point of R^1|S holds h.(t,0) = c1.t & h.(t,1) = c2.t
+        proof
+          let t be Point of R^1|S;
+A21:       t in dom f1 by A13;
+          [t,0] in [:dom f1,dom f2:] by A13,A18,ZFMISC_1:def 2;
+          then
+A22:       [t,0] in dom [:f1,f2:] by FUNCT_3:def 8;
+          [t,1] in [:dom f1,dom f2:] by A13,A19,ZFMISC_1:def 2;
+          then
+A23:      [t,1] in dom [:f1,f2:] by FUNCT_3:def 8;
+A24:     f1.t in rng f1 by A13,FUNCT_1:3;
+A25:      t in S by A21,A13,PRE_TOPC:def 5;
+          t in [#]Closed-Interval-TSpace(inf dom c1,sup dom c1) by A12;
+          then
+A26:      t in dom L[01](inf dom c1,sup dom c1,inf dom c1,sup dom c1)
+          by FUNCT_2:def 1;
+A27:      inf dom c1 <= t & t <= sup dom c1 by A25,A3,XXREAL_1:1;
+A28:      L[01](inf dom c1,sup dom c1,inf dom c1,sup dom c1).t
+          = (sup dom c1 - inf dom c1)/(sup dom c1 - inf dom c1) *
+          (t - inf dom c1) + inf dom c1 by A27,A9,BORSUK_6:35
+          .= 1 * (t - inf dom c1) + inf dom c1 by A20,XCMPLX_1:60
+          .= t;
+          thus h.(t,0) = h.([t,0]) by BINOP_1:def 1
+          .= f.([:f1,f2:].([t,0])) by A22,FUNCT_1:13
+          .= f.([:f1,f2:].(t,0)) by BINOP_1:def 1
+          .= f.([f1.t,f2.0]) by A13,A18,FUNCT_3:def 8
+          .= f.(f1.t, 0) by A15,BINOP_1:def 1
+          .= p1.(f1.t) by A24,A11,A17
+          .= (c1*L[01](0,1,inf dom c1,sup dom c1)*f1).t by A10,A13,FUNCT_1:13
+          .= (c1*(L[01](0,1,inf dom c1,sup dom c1)*f1)).t by RELAT_1:36
+          .= (c1*L[01](inf dom c1,sup dom c1,inf dom c1,sup dom c1)).t
+          by Th2,A9
+          .= c1.t by A28,A26,FUNCT_1:13;
+          thus h.(t,1) = h.([t,1]) by BINOP_1:def 1
+          .= f.([:f1,f2:].([t,1])) by A23,FUNCT_1:13
+          .= f.([:f1,f2:].(t,1)) by BINOP_1:def 1
+          .= f.([f1.t,f2.1]) by A13,A19,FUNCT_3:def 8
+          .= f.(f1.t, 1) by A16,BINOP_1:def 1
+          .= p2.(f1.t) by A24,A11,A17
+          .= (c2*L[01](0,1,inf dom c1,sup dom c1)*f1).t by A10,A1,A13,
+FUNCT_1:13
+          .= (c2*(L[01](0,1,inf dom c1,sup dom c1)*f1)).t by RELAT_1:36
+          .= (c2*L[01](inf dom c1,sup dom c1,inf dom c1,sup dom c1)).t
+          by Th2,A9
+          .= c2.t by A28,A26,FUNCT_1:13;
+        end;
+        thus for t being Point of I[01] holds h.(inf S,t) = a & h.(sup S,t) = b
+        proof
+          let t be Point of I[01];
+A29:      inf S in dom f1 by A6,A13,PRE_TOPC:def 5;
+A30:      sup S in dom f1 by A7,A13,PRE_TOPC:def 5;
+          t in [#]I[01];
+          then
+A31:       t in dom f2 by FUNCT_2:def 1;
+          [inf S,t] in [:dom f1,dom f2:] by A31,A29,ZFMISC_1:def 2;
+          then
+A32:       [inf S,t] in dom [:f1,f2:] by FUNCT_3:def 8;
+          [sup S,t] in [:dom f1,dom f2:] by A31,A30,ZFMISC_1:def 2;
+          then
+A33:      [sup S,t] in dom [:f1,f2:] by FUNCT_3:def 8;
+          0 <= t & t <= 1 by BORSUK_1:40,XXREAL_1:1;
+          then
+A34:      f2.t = (1 - 0)/(1 - 0) * (t - 0) + 0 by BORSUK_6:35 .= t;
+A35:      f1.(inf S)
+          = (1 - 0)/(sup dom c1 - inf dom c1) *
+          (inf dom c1 - inf dom c1) + 0 by A1,A9,BORSUK_6:35
+          .= 0;
+A36:     f1.(sup S)
+          = (1 - 0)/(sup dom c1 - inf dom c1) *
+          (sup dom c1 - inf dom c1) + 0 by A1,A9,BORSUK_6:35
+          .= (sup dom c1 - inf dom c1)/(sup dom c1 - inf dom c1)*1
+          by XCMPLX_1:75
+          .= 1 by A20,XCMPLX_1:60;
+          thus h.(inf S,t) = h.([inf S,t]) by BINOP_1:def 1
+          .= f.([:f1,f2:].([inf S,t])) by A32,FUNCT_1:13
+          .= f.([:f1,f2:].(inf S,t)) by BINOP_1:def 1
+          .= f.([f1.(inf S),f2.t]) by A31,A29,FUNCT_3:def 8
+          .= f.(f1.(inf S), t) by A34,BINOP_1:def 1
+          .= a by A11,A35;
+          thus h.(sup S,t) = h.([sup S,t]) by BINOP_1:def 1
+          .= f.([:f1,f2:].([sup S,t])) by A33,FUNCT_1:13
+          .= f.([:f1,f2:].(sup S,t)) by BINOP_1:def 1
+          .= f.([f1.(sup S),f2.t]) by A31,A30,FUNCT_3:def 8
+          .= f.(f1.(sup S), t) by A34,BINOP_1:def 1
+          .= b by A11,A36;
+        end;
+      end;
+      suppose
+        not inf dom c1 < sup dom c1;
+        then inf dom c1 = sup dom c1 by A2,XXREAL_0:1;
+        then dom c1 = [.inf dom c1, inf dom c1.] by Th27;
+        then
+A37:     dom c1 = {inf dom c1} by XXREAL_1:17;
+        set a = the_first_point_of c1;
+        set f = [:R^1|S,I[01]:] --> a;
+A38:     for t being Point of R^1|S holds f.(t,0) = c1.t & f.(t,1) = c2.t
+        proof
+          let t be Point of R^1|S;
+A39:       t in [#](R^1|S) by A1,SUBSET_1:def 1;
+A40:      [t,0] in [:[#](R^1|S),[#]I[01]:] by A4,A1,ZFMISC_1:def 2;
+A41:      [t,1] in [:[#](R^1|S),[#]I[01]:] by A5,A1,ZFMISC_1:def 2;
+A42:     t in S by A39,PRE_TOPC:def 5;
+          then
+A43:       t = inf dom c1 by A1,A37,TARSKI:def 1;
+          thus f.(t,0) = f.([t,0]) by BINOP_1:def 1
+          .= c1.t by A43,A40,FUNCOP_1:7;
+          thus f.(t,1) = f.([t,1]) by BINOP_1:def 1 .= a by A41,FUNCOP_1:7
+          .= the_first_point_of c2 by A8,Th35 .= c2.t
+          by A1,A42,A37,TARSKI:def 1;
+        end;
+        for t being Point of I[01] holds f.(inf S,t) = a & f.(sup S,t) = a
+        proof
+          let t be Point of I[01];
+A44:      inf S in [#](R^1|S) by A6,PRE_TOPC:def 5;
+A45:      sup S in [#](R^1|S) by A7,PRE_TOPC:def 5;
+A46:       [inf S,t] in [:[#](R^1|S),[#]I[01]:] by A44,ZFMISC_1:def 2;
+A47:      [sup S,t] in [:[#](R^1|S),[#]I[01]:] by A45,ZFMISC_1:def 2;
+          thus f.(inf S,t) = f.([inf S,t]) by BINOP_1:def 1
+          .= a by A46,FUNCOP_1:7;
+          thus f.(sup S,t) = f.([sup S,t]) by BINOP_1:def 1
+          .= a by A47,FUNCOP_1:7;
+        end;
+        hence thesis by A38;
+      end;
+    end;
+    given f be Function of [:R^1|S,I[01]:], T, a,b be Point of T such that
+A48: f is continuous &
+    (for t being Point of R^1|S holds f.(t,0) = c1.t & f.(t,1) = c2.t) &
+    (for t being Point of I[01] holds f.(inf S,t) = a & f.(sup S,t) = b);
+A49:inf S in [#](R^1|S) by A6,PRE_TOPC:def 5;
+A50:sup S in [#](R^1|S) by A7,PRE_TOPC:def 5;
+A51: a = f.(inf S,0) by A4,A48
+    .= the_first_point_of c1 by A1,A49,A48;
+    b = f.(sup S,0) by A4,A48
+    .= the_last_point_of c1 by A1,A50,A48;
+    then reconsider p1 = c1*L[01](0,1,inf dom c1,sup dom c1) as Path of a,b
+    by A51,Th29;
+A52: a = f.(inf S,1) by A5,A48
+    .= the_first_point_of c2 by A1,A49,A48;
+    b = f.(sup S,1) by A5,A48
+    .= the_last_point_of c2 by A1,A50,A48;
+    then reconsider p2 = c2*L[01](0,1,inf dom c2,sup dom c2) as Path of a,b
+    by A52,Th29;
+      set f1 = L[01](0,1,inf dom c1,sup dom c1);
+      set f2 = L[01](0,1,0,1);
+        reconsider S1 = R^1|S as non empty TopSpace by A1;
+A53:     Closed-Interval-TSpace(inf dom c1,sup dom c1) = S1
+        by A3,A2,TOPMETR:19;
+        reconsider f1 as continuous Function of I[01],S1
+        by A2,A53,BORSUK_6:34,TOPMETR:20;
+        reconsider f2 as continuous Function of I[01],I[01]
+        by BORSUK_6:34,TOPMETR:20;
+        set h = f * [:f1,f2:];
+        reconsider h as Function of [:I[01],I[01]:],T;
+A54:     dom f1 = [#]I[01] by FUNCT_2:def 1;
+A55:     dom f2
+        = [.0,1.] by BORSUK_1:40,FUNCT_2:def 1;
+A56:    f2.0 = (1 - 0)/(1 - 0) * (0 - 0) + 0 by BORSUK_6:35 .= 0;
+A57:    f2.1 = (1 - 0)/(1 - 0) * (1 - 0) + 0 by BORSUK_6:35 .= 1;
+A58:     0 in dom f2 by A55,XXREAL_1:1;
+A59:    1 in dom f2 by A55,XXREAL_1:1;
+      for t being Point of I[01] holds h.(t,0) = p1.t & h.(t,1) = p2.t
+      & h.(0,t) = a & h.(1,t) = b
+      proof
+        let t be Point of I[01];
+        [t,0] in [:dom f1,dom f2:] by A54,A58,ZFMISC_1:def 2;
+        then
+A60:     [t,0] in dom [:f1,f2:] by FUNCT_3:def 8;
+        [t,1] in [:dom f1,dom f2:] by A54,A59,ZFMISC_1:def 2;
+        then
+A61:    [t,1] in dom [:f1,f2:] by FUNCT_3:def 8;
+A62:     0 in dom f1 by A54,BORSUK_1:40,XXREAL_1:1;
+A63:    1 in dom f1 by A54,BORSUK_1:40,XXREAL_1:1;
+        [0,t] in [:dom f1,dom f2:] by A62,A55,BORSUK_1:40,ZFMISC_1:def 2;
+        then
+A64:    [0,t] in dom [:f1,f2:] by FUNCT_3:def 8;
+        [1,t] in [:dom f1,dom f2:] by A63,A55,BORSUK_1:40,ZFMISC_1:def 2;
+        then
+A65:   [1,t] in dom [:f1,f2:] by FUNCT_3:def 8;
+A66:   f1.0 = (sup dom c1 - inf dom c1)/(1 - 0) *
+        (0 - 0) + inf dom c1 by A2,BORSUK_6:35
+        .= inf S by A1;
+A67:   f1.1 = (sup dom c1 - inf dom c1)/(1 - 0) *
+        (1 - 0) + inf dom c1 by A2,BORSUK_6:35
+        .= sup S by A1;
+        0 <= t & t <= 1 by BORSUK_1:40,XXREAL_1:1;
+        then
+A68:   f2.t = (1 - 0)/(1 - 0) * (t - 0) + 0 by BORSUK_6:35 .= t;
+        thus h.(t,0) = h.([t,0]) by BINOP_1:def 1
+        .= f.([:f1,f2:].([t,0])) by A60,FUNCT_1:13
+        .= f.([:f1,f2:].(t,0)) by BINOP_1:def 1
+        .= f.([f1.t,f2.0]) by A54,A58,FUNCT_3:def 8
+        .= f.(f1.t, 0) by A56,BINOP_1:def 1
+        .= c1.(f1.t) by A48
+        .= p1.t by A54,FUNCT_1:13;
+        thus h.(t,1) = h.([t,1]) by BINOP_1:def 1
+        .= f.([:f1,f2:].([t,1])) by A61,FUNCT_1:13
+        .= f.([:f1,f2:].(t,1)) by BINOP_1:def 1
+        .= f.([f1.t,f2.1]) by A54,A59,FUNCT_3:def 8
+        .= f.(f1.t, 1) by A57,BINOP_1:def 1
+        .= c2.(f1.t) by A48
+        .= p2.t by A1,A54,FUNCT_1:13;
+        thus h.(0,t) = h.([0,t]) by BINOP_1:def 1
+        .= f.([:f1,f2:].([0,t])) by A64,FUNCT_1:13
+        .= f.([:f1,f2:].(0,t)) by BINOP_1:def 1
+        .= f.([f1.0,f2.t]) by A62,A55,BORSUK_1:40,FUNCT_3:def 8
+        .= f.(inf S, t) by A66,A68,BINOP_1:def 1
+        .= a by A48;
+        thus h.(1,t) = h.([1,t]) by BINOP_1:def 1
+        .= f.([:f1,f2:].([1,t])) by A65,FUNCT_1:13
+        .= f.([:f1,f2:].(1,t)) by BINOP_1:def 1
+        .= f.([f1.1,f2.t]) by A63,A55,BORSUK_1:40,FUNCT_3:def 8
+        .= f.(sup S, t) by A67,A68,BINOP_1:def 1
+        .= b by A48;
+      end;
+      then p1,p2 are_homotopic by A48,BORSUK_2:def 7;
+      hence c1,c2 are_homotopic by Def11;
+  end;
+
+definition
+  let T be TopStruct;
+  let c1, c2 be Curve of T;
+  func c1 + c2 -> Curve of T equals :Def12:
+  c1 \/ c2 if c1 \/ c2 is Curve of T otherwise {};
+  correctness
+  proof
+    now
+      assume not c1 \/ c2 is Curve of T;
+      {} is parametrized-curve PartFunc of R^1, T by Lm1,XBOOLE_1:2;
+      hence {} is Curve of T by Th20;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th37:
+  for c being with_endpoints Curve of T
+  for r being real number holds
+  ex c1,c2 being Element of Curves T
+  st c = c1 + c2 & c1 = c | [.inf dom c, r.] & c2 = c | [.r, sup dom c.]
+  proof
+    let c be with_endpoints Curve of T;
+    let r be real number;
+    set c1 = c | [.inf dom c, r.];
+    set c2 = c | [.r, sup dom c.];
+    reconsider c1 as Curve of T by Th26;
+    reconsider c2 as Curve of T by Th26;
+    take c1,c2;
+    c1 \/ c2 = c
+    proof
+      per cases;
+      suppose
+A1:     r < inf dom c;
+        then [.inf dom c, r.] = {} by XXREAL_1:29;
+        then
+A2:     c1 = {};
+        [.inf dom c, sup dom c.] c= [.r, sup dom c.] by A1,XXREAL_1:34;
+        then dom c c= [.r, sup dom c.] by Th27;
+        hence thesis by A2,RELAT_1:68;
+      end;
+      suppose
+A3:     r >= inf dom c;
+        per cases;
+        suppose
+A4:      r > sup dom c;
+          then [.r, sup dom c.] = {} by XXREAL_1:29;
+          then
+A5:       c2 = {};
+          [.inf dom c, sup dom c.] c= [.inf dom c, r.] by A4,XXREAL_1:34;
+          then dom c c= [.inf dom c, r.] by Th27;
+          hence thesis by A5,RELAT_1:68;
+        end;
+        suppose
+A6:       r <= sup dom c;
+          dom c = [.inf dom c, sup dom c.] by Th27
+          .= [.inf dom c,r.] \/ [.r, sup dom c.] by A6,A3,XXREAL_1:165;
+          then c | dom c
+          = c1 \/ c2 by RELAT_1:78;
+          hence thesis;
+        end;
+      end;
+    end;
+    hence thesis by Def12;
+  end;
+
+theorem Th38:
+  for T being non empty TopSpace
+  for c1,c2 being with_endpoints Curve of T
+  st sup dom c1 = inf dom c2 & the_last_point_of c1 = the_first_point_of c2
+  holds c1 + c2 is with_endpoints &
+         dom(c1 + c2) = [.inf dom c1, sup dom c2.] &
+         (c1+c2).inf dom c1 = the_first_point_of c1 &
+         (c1+c2).sup dom c2 = the_last_point_of c2
+  proof
+    let T be non empty TopSpace;
+    let c1,c2 be with_endpoints Curve of T;
+    assume
+A1: sup dom c1 = inf dom c2;
+    assume
+A2: the_last_point_of c1 = the_first_point_of c2;
+    set f = c1 \/ c2;
+A3: dom(c1 \/ c2) = dom c1 \/ dom c2 by RELAT_1:1;
+    reconsider f1 = c1 as parametrized-curve PartFunc of R^1, T
+    by Th23;
+A4:dom f1 is interval Subset of REAL by Def4;
+    reconsider f2 = c2 as parametrized-curve PartFunc of R^1, T
+    by Th23;
+A5:dom f2 is interval Subset of REAL by Def4;
+A6: dom c1 \/ dom c2 c= REAL by A4,A5,XBOOLE_1:8;
+    rng f1 c= [#]T & rng f2 c= [#]T;
+    then rng c1 \/ rng c2 c= [#]T by XBOOLE_1:8;
+    then
+A7:rng f c= [#]T by RELAT_1:12;
+A8: dom f c= [#]R^1 by A6,RELAT_1:1,TOPMETR:17;
+    reconsider S0 = dom f as Subset of R^1 by A6,RELAT_1:1,TOPMETR:17;
+A9: inf dom c2 <= sup dom c2 by XXREAL_2:40;
+A10: inf dom c1 <= sup dom c1 by XXREAL_2:40;
+A11: dom f1 = [.inf dom c1, sup dom c1.] by Th27;
+A12: dom f2 = [.inf dom c2, sup dom c2.] by Th27;
+A13:dom f1 /\ dom f2 = {sup dom c1} by A11,A12,A1,A9,A10,XXREAL_1:418;
+A14:dom f1 /\ dom f2 c= dom f by A3,XBOOLE_1:29;
+    set S = R^1|S0;
+    consider S1 be SubSpace of R^1, g1 be Function of S1, T such that
+A15: f1 = g1 & S1 = R^1|dom f1 & g1 is continuous by Def4;
+    consider S2 be SubSpace of R^1, g2 be Function of S2, T such that
+A16: f2 = g2 & S2 = R^1|dom f2 & g2 is continuous by Def4;
+    sup dom c1 in dom f by A13,A14,ZFMISC_1:31;
+    then sup dom c1 in [#]S by PRE_TOPC:def 5;
+    then reconsider p = sup dom c1 as Point of S;
+    reconsider S1,S2 as SubSpace of S by A15,A16,A3,TOPMETR:22,XBOOLE_1:7;
+A17: [#]S1 \/ [#]S2 = dom f1 \/ [#]S2 by A15,PRE_TOPC:def 5
+    .= dom f1 \/ dom f2 by A16,PRE_TOPC:def 5
+    .= [#]S by A3,PRE_TOPC:def 5;
+A18: [#]S1 /\ [#]S2 = dom f1 /\ [#]S2 by A15,PRE_TOPC:def 5
+    .= {p} by A13,A16,PRE_TOPC:def 5;
+    S1 = Closed-Interval-TSpace(inf dom c1,sup dom c1) by A11,A10,A15,
+TOPMETR:19;
+    then
+A19: S1 is compact by A10,HEINE:4;
+    S2 = Closed-Interval-TSpace(inf dom c2,sup dom c2) by A12,A9,A16,TOPMETR:19
+;
+    then
+A20: S2 is compact by A9,HEINE:4;
+A21: S is T_2 by TOPMETR:2;
+A22: g1+*g2 is continuous Function of S,T
+    by A17,A18,A19,A20,A21,A15,A16,A1,A2,COMPTS_1:20;
+    for x,y1,y2 being set st [x,y1] in f & [x,y2] in f holds y1 = y2
+    proof
+      let x,y1,y2 be set;
+      assume
+A23:   [x,y1] in f & [x,y2] in f;
+      per cases by A23,XBOOLE_0:def 3;
+      suppose [x,y1] in c1 & [x,y2] in c1; hence thesis by FUNCT_1:def 1; end;
+      suppose [x,y1] in c2 & [x,y2] in c2; hence thesis by FUNCT_1:def 1; end;
+      suppose
+A24:     [x,y1] in c1 & [x,y2] in c2;
+        then x in dom c1 & x in dom c2 by XTUPLE_0:def 12;
+        then x in (dom c1 /\ dom c2) by XBOOLE_0:def 4;
+        then x = p by A13,TARSKI:def 1;
+        then c1.p = y1 & c2.p = y2 by A24,FUNCT_1:1;
+        hence thesis by A1,A2;
+      end;
+      suppose
+A25:     [x,y1] in c2 & [x,y2] in c1;
+        then x in dom c2 & x in dom c1 by XTUPLE_0:def 12;
+        then x in (dom c2 /\ dom c1) by XBOOLE_0:def 4;
+        then x = p by A13,TARSKI:def 1;
+        then c2.p = y1 & c1.p = y2 by A25,FUNCT_1:1;
+        hence thesis by A1,A2;
+      end;
+    end;
+    then reconsider f as Function by FUNCT_1:def 1;
+A26: dom f = dom g1 \/ dom g2 by A15,A16,RELAT_1:1;
+    for x being set st x in dom g1 \/ dom g2 holds
+    (x in dom g2 implies f.x = g2.x) &
+    (not x in dom g2 implies f.x = g1.x)
+    proof
+      let x be set;
+      assume
+A27:   x in dom g1 \/ dom g2;
+      thus x in dom g2 implies f.x = g2.x
+      proof
+        assume x in dom g2;
+        then [x,g2.x] in g2 by FUNCT_1:1;
+        then [x,g2.x] in f by A16,XBOOLE_0:def 3;
+        hence thesis by FUNCT_1:1;
+      end;
+      thus not x in dom g2 implies f.x = g1.x
+      proof
+        assume not x in dom g2;
+        then x in dom g1 by A27,XBOOLE_0:def 3;
+        then [x,g1.x] in g1 by FUNCT_1:1;
+        then [x,g1.x] in f by A15,XBOOLE_0:def 3;
+        hence thesis by FUNCT_1:1;
+      end;
+    end;
+    then
+A28: f = g1+*g2 by A26,FUNCT_4:def 1;
+    reconsider f as PartFunc of R^1, T by A7,A8,RELSET_1:4;
+    dom c1 meets dom c2 by A13,XBOOLE_0:def 7;
+    then dom f is interval Subset of REAL
+    by A4,A5,A3,XBOOLE_1:8,XXREAL_2:89;
+    then f is parametrized-curve by A22,A28,Def4;
+    then
+A29: c1 \/ c2 is Curve of T by Th20;
+    then
+A30: c1 + c2 = c1 \/ c2 by Def12;
+A31: dom(c1 \/ c2)
+    = [.inf dom c1, sup dom c2.] by A3,A11,A12,A1,A9,A10,XXREAL_1:165;
+A32:inf dom c1 in dom f1 by A11,A10,XXREAL_1:1;
+    then inf dom c1 in dom f by A3,XBOOLE_0:def 3;
+    then inf dom f in dom f by A31,A1,A9,A10,XXREAL_0:2,XXREAL_2:25;
+    then dom(c1 + c2) is left_end by A30,XXREAL_2:def 5;
+    then
+A33: c1 + c2 is with_first_point by Def6;
+A34:sup dom c2 in dom f2 by A12,A9,XXREAL_1:1;
+    then sup dom c2 in dom f by A3,XBOOLE_0:def 3;
+    then sup [.inf dom c1, sup dom c2.] in dom f
+    by A1,A9,A10,XXREAL_0:2,XXREAL_2:29;
+    then dom(c1 + c2) is right_end by A31,A30,XXREAL_2:def 6;
+    then
+A35: c1 + c2 is with_last_point by Def7;
+    thus c1 + c2 is with_endpoints & dom(c1 + c2) = [.inf dom c1, sup dom c2.]
+    by A33,A35,A30,A3,A11,A12,A1,A9,A10,XXREAL_1:165;
+A36: (c1+c2).inf dom c1 = c1.inf dom c1
+    proof
+A37:   (c1+c2).inf dom c1 = f.inf dom c1 by A29,Def12;
+      [inf dom c1, c1.inf dom c1] in c1 by A32,FUNCT_1:1;
+      then [inf dom c1, c1.inf dom c1] in f by XBOOLE_0:def 3;
+      hence thesis by A37,FUNCT_1:1;
+    end;
+    thus (c1+c2).inf dom c1 = the_first_point_of c1 by A36;
+A38: (c1+c2).sup dom c2 = c2.sup dom c2
+    proof
+A39:   (c1+c2).sup dom c2 = f.sup dom c2 by A29,Def12;
+      [sup dom c2, c2.sup dom c2] in c2 by A34,FUNCT_1:1;
+      then [sup dom c2, c2.sup dom c2] in f by XBOOLE_0:def 3;
+      hence thesis by A39,FUNCT_1:1;
+    end;
+    thus (c1+c2).sup dom c2 = the_last_point_of c2 by A38;
+  end;
+
+theorem Th39:
+  for T being non empty TopSpace
+  for c1,c2,c3,c4,c5,c6 being with_endpoints Curve of T
+  st c1,c2 are_homotopic & dom c1 = dom c2 &
+     c3,c4 are_homotopic & dom c3 = dom c4 &
+     c5 = c1 + c3 & c6 = c2 + c4
+  & the_last_point_of c1 = the_first_point_of c3
+  & sup dom c1 = inf dom c3
+  holds c5,c6 are_homotopic
+  proof
+    let T be non empty TopSpace;
+    let c1,c2,c3,c4,c5,c6 be with_endpoints Curve of T;
+    assume
+A1: c1,c2 are_homotopic & dom c1 = dom c2;
+    reconsider S1 = [.inf dom c1, sup dom c1.] as non empty Subset of R^1
+    by Th27,TOPMETR:17;
+A2: dom c1 = S1 by Th27;
+    then consider H1 be Function of [:R^1|S1,I[01]:], T,
+       a1,b1 be Point of T such that
+A3: H1 is continuous &
+    (for t being Point of R^1|S1 holds H1.(t,0) = c1.t & H1.(t,1) = c2.t) &
+    (for t being Point of I[01] holds H1.(inf S1,t) = a1 & H1.(sup S1,t) = b1)
+    by A1,Th36;
+    assume
+A4: c3,c4 are_homotopic & dom c3 = dom c4;
+    reconsider S2 = [.inf dom c3, sup dom c3.] as non empty Subset of R^1
+    by Th27,TOPMETR:17;
+A5: dom c3 = S2 by Th27;
+    then consider H2 be Function of [:R^1|S2,I[01]:], T,
+       a2,b2 be Point of T such that
+A6: H2 is continuous &
+    (for t being Point of R^1|S2 holds H2.(t,0) = c3.t & H2.(t,1) = c4.t) &
+    (for t being Point of I[01] holds H2.(inf S2,t) = a2 & H2.(sup S2,t) = b2)
+    by A4,Th36;
+    assume
+A7: c5 = c1 + c3;
+A8: c5 = c1 \/ c3
+    proof
+      per cases;
+      suppose c1 \/ c3 is Curve of T; hence thesis by A7,Def12; end;
+      suppose not c1 \/ c3 is Curve of T;
+        hence thesis by A7,Def12;
+      end;
+    end;
+    assume
+A9: c6 = c2 + c4;
+A10: c6 = c2 \/ c4
+    proof
+      per cases;
+      suppose c2 \/ c4 is Curve of T; hence thesis by A9,Def12; end;
+      suppose not c2 \/ c4 is Curve of T;
+        hence thesis by A9,Def12;
+      end;
+    end;
+    assume
+A11: the_last_point_of c1 = the_first_point_of c3;
+    assume
+A12:sup dom c1 = inf dom c3;
+A13: dom c5
+    = dom c1 \/ dom c3 by A8,RELAT_1:1
+    .= dom c6 by A10,A1,A4,RELAT_1:1;
+    reconsider S3 = S1 \/ S2 as Subset of R^1;
+A14: dom c5
+    = dom c1 \/ dom c3 by A8,RELAT_1:1
+    .= S3 by A5,Th27;
+    set T1 = [:R^1|S1,I[01]:];
+    set T2 = [:R^1|S2,I[01]:];
+    set T3 = [:R^1|S3,I[01]:];
+A15:I[01] is SubSpace of I[01] by TSEP_1:2;
+    R^1|S1 is SubSpace of R^1|S3 by TOPMETR:4;
+    then
+A16: T1 is SubSpace of T3 by A15,BORSUK_3:21;
+    R^1|S2 is SubSpace of R^1|S3 by TOPMETR:4;
+    then
+A17: T2 is SubSpace of T3 by A15,BORSUK_3:21;
+A18: [#](R^1|S1) \/ [#](R^1|S2)
+    = S1 \/ [#](R^1|S2) by PRE_TOPC:def 5
+    .= S3 by PRE_TOPC:def 5
+    .= [#](R^1|S3) by PRE_TOPC:def 5;
+A19: [#]T1 \/ [#]T2 = [:[#](R^1|S1),[#]I[01]:] \/ [#][:R^1|S2,I[01]:]
+    by BORSUK_1:def 2
+    .= [:[#](R^1|S1),[#]I[01]:] \/ [:[#](R^1|S2),[#]I[01]:] by BORSUK_1:def 2
+    .= [:[#](R^1|S3),[#]I[01]:] by A18,ZFMISC_1:97
+    .= [#]T3 by BORSUK_1:def 2;
+A20: inf dom c1 <= sup dom c1 by XXREAL_2:40;
+    R^1|S1 = Closed-Interval-TSpace(inf dom c1,sup dom c1)
+    by A20,TOPMETR:19;
+    then
+A21:R^1|S1 is compact by A20,HEINE:4;
+A22: inf dom c3 <= sup dom c3 by XXREAL_2:40;
+    R^1|S2 = Closed-Interval-TSpace(inf dom c3,sup dom c3)
+    by A22,TOPMETR:19;
+    then
+A23:R^1|S2 is compact by A22,HEINE:4;
+    T3 is SubSpace of [:R^1,I[01]:] by A15,BORSUK_3:21;
+    then
+A24: T3 is T_2 by TOPMETR:2;
+    for p be set st p in [#]T1 /\ [#]T2 holds H1.p = H2.p
+    proof
+      let p be set;
+      assume
+A25:   p in [#]T1 /\ [#]T2;
+A26:   [#]T1 /\ [#]T2 = [:[#](R^1|S1),[#]I[01]:] /\ [#][:R^1|S2,I[01]:]
+      by BORSUK_1:def 2
+      .= [:[#](R^1|S1),[#]I[01]:] /\ [:[#](R^1|S2),[#]I[01]:] by BORSUK_1:def 2
+      .= [:[#](R^1|S1) /\ [#](R^1|S2),[#]I[01]:] by ZFMISC_1:99;
+A27:   [#](R^1|S1) /\ [#](R^1|S2) = S1 /\ [#](R^1|S2) by PRE_TOPC:def 5
+      .= S1 /\ S2 by PRE_TOPC:def 5;
+A28:   S1 /\ S2
+      = {sup dom c1} by A22,A20,A12,XXREAL_1:418;
+      then consider x,y be set such that
+A29:   x in {sup dom c1} & y in [#]I[01] & p = [x,y] by A25,A27,A26,
+ZFMISC_1:def 2;
+      reconsider y as Point of I[01] by A29;
+A30:  x = sup S1 by A2,A29,TARSKI:def 1;
+A31:  x = inf S2 by A5,A12,A29,TARSKI:def 1;
+A32:  0 in [#]I[01] by BORSUK_1:40,XXREAL_1:1;
+A33:  sup S1 in [#](R^1|S1) by A30,A27,A28,A29,XBOOLE_0:def 4;
+      thus H1.p
+      = H1.(sup S1,y) by A29,A30,BINOP_1:def 1
+      .= b1 by A3
+      .= H1.(sup S1,0) by A3,A32
+      .= the_last_point_of c1 by A2,A3,A33
+      .= H2.(inf S2, 0) by A6,A31,A27,A28,A29,A11,A5
+      .= a2 by A32,A6
+      .= H2.(inf S2,y) by A6
+      .= H2.p by A29,A30,A2,A5,A12,BINOP_1:def 1;
+    end;
+    then consider H3 be Function of T3,T such that
+A34:H3 = H1+*H2 & H3 is continuous by A16,A17,A19,A21,A23,A24,A3,A6,BORSUK_2:1;
+A35:for t being Point of R^1|S3 holds H3.(t,0) = c5.t & H3.(t,1) = c6.t
+    proof
+      let t be Point of R^1|S3;
+A36:  0 in [#]I[01] by BORSUK_1:40,XXREAL_1:1;
+      then [t,0] in [:[#](R^1|S3),[#]I[01]:] by ZFMISC_1:def 2;
+      then [t,0] in [#]T3;
+      then [t,0] in dom H3 by FUNCT_2:def 1;
+      then
+A37:   [t,0] in dom H1 \/ dom H2 by A34,FUNCT_4:def 1;
+A38:  1 in [#]I[01] by BORSUK_1:40,XXREAL_1:1;
+      then [t,1] in [:[#](R^1|S3),[#]I[01]:] by ZFMISC_1:def 2;
+      then [t,1] in [#]T3;
+      then [t,1] in dom H3 by FUNCT_2:def 1;
+      then
+A39:  [t,1] in dom H1 \/ dom H2 by A34,FUNCT_4:def 1;
+      per cases;
+      suppose
+A40:     [t,0] in dom H2;
+        then [t,0] in [#]T2;
+        then [t,0] in [:[#](R^1|S2),[#]I[01]:] by BORSUK_1:def 2;
+        then
+A41:     t in [#](R^1|S2) by ZFMISC_1:87;
+        then
+A42:     t in dom c3 by A5,PRE_TOPC:def 5;
+        then t in dom c1 \/ dom c3 by XBOOLE_0:def 3;
+        then
+A43:     t in dom c5 by A8,RELAT_1:1;
+        [t,c3.t] in c3 by A42,FUNCT_1:1;
+        then
+A44:     [t,c3.t] in c5 by A8,XBOOLE_0:def 3;
+        thus H3.(t,0) = H3.([t,0]) by BINOP_1:def 1
+        .= H2.([t,0]) by A37,A40,A34,FUNCT_4:def 1
+        .= H2.(t,0) by BINOP_1:def 1
+        .= c3.t by A6,A41
+        .= c5.t by A44,A43,FUNCT_1:def 2;
+        [t,1] in [:[#](R^1|S2),[#]I[01]:] by A41,A38,ZFMISC_1:def 2;
+        then [t,1] in [#]T2;
+        then
+A45:    [t,1] in dom H2 by FUNCT_2:def 1;
+        t in dom c2 \/ dom c4 by A42,A4,XBOOLE_0:def 3;
+        then
+A46:    t in dom c6 by A10,RELAT_1:1;
+        [t,c4.t] in c4 by A42,A4,FUNCT_1:1;
+        then
+A47:   [t,c4.t] in c6 by A10,XBOOLE_0:def 3;
+        thus H3.(t,1) = H3.([t,1]) by BINOP_1:def 1
+        .= H2.([t,1]) by A39,A45,A34,FUNCT_4:def 1
+        .= H2.(t,1) by BINOP_1:def 1
+        .= c4.t by A6,A41
+        .= c6.t by A47,A46,FUNCT_1:def 2;
+      end;
+      suppose
+A48:    not [t,0] in dom H2;
+        [t,0] in dom H1 or [t,0] in dom H2 by A37,XBOOLE_0:def 3;
+        then [t,0] in [#]T1 by A48;
+        then [t,0] in [:[#](R^1|S1),[#]I[01]:] by BORSUK_1:def 2;
+        then
+A49:     t in [#](R^1|S1) by ZFMISC_1:87;
+        then
+A50:     t in dom c1 by A2,PRE_TOPC:def 5;
+        then t in dom c1 \/ dom c3 by XBOOLE_0:def 3;
+        then
+A51:     t in dom c5 by A8,RELAT_1:1;
+        [t,c1.t] in c1 by A50,FUNCT_1:1;
+        then
+A52:    [t,c1.t] in c5 by A8,XBOOLE_0:def 3;
+        thus H3.(t,0) = H3.([t,0]) by BINOP_1:def 1
+        .= H1.([t,0]) by A48,A37,A34,FUNCT_4:def 1
+        .= H1.(t,0) by BINOP_1:def 1
+        .= c1.t by A3,A49
+        .= c5.t by A52,A51,FUNCT_1:def 2;
+        t in dom c2 \/ dom c4 by A50,A1,XBOOLE_0:def 3;
+        then
+A53:    t in dom c6 by A10,RELAT_1:1;
+        [t,c2.t] in c2 by A50,A1,FUNCT_1:1;
+        then
+A54:   [t,c2.t] in c6 by A10,XBOOLE_0:def 3;
+A55:   not [t,1] in dom H2
+        proof
+          assume [t,1] in dom H2;
+          then [t,1] in [#]T2;
+          then [t,1] in [:[#](R^1|S2),[#]I[01]:] by BORSUK_1:def 2;
+          then t in [#](R^1|S2) by ZFMISC_1:87;
+          then [t,0] in [:[#](R^1|S2),[#]I[01]:] by A36,ZFMISC_1:def 2;
+          then [t,0] in [#]T2;
+          hence contradiction by A48,FUNCT_2:def 1;
+        end;
+        thus H3.(t,1) = H3.([t,1]) by BINOP_1:def 1
+        .= H1.([t,1]) by A55,A39,A34,FUNCT_4:def 1
+        .= H1.(t,1) by BINOP_1:def 1
+        .= c2.t by A3,A49
+        .= c6.t by A54,A53,FUNCT_1:def 2;
+      end;
+    end;
+    for t being Point of I[01] holds H3.(inf S3,t) = a1 & H3.(sup S3,t) = b2
+    proof
+      let t be Point of I[01];
+A56:   inf S1 = inf dom c1 by Th27
+      .= inf [.inf dom c1,sup dom c3.] by A22,A20,A12,XXREAL_0:2,XXREAL_2:25
+      .= inf S3 by A22,A20,A12,XXREAL_1:165;
+      inf S1 in S1 by A2,A20,XXREAL_1:1;
+      then inf S1 in [#](R^1|S1) by PRE_TOPC:def 5;
+      then [inf S1,t] in [:[#](R^1|S1),[#]I[01]:] by ZFMISC_1:def 2;
+      then [inf S1,t] in [#]T1;
+      then [inf S1,t] in dom H1 by FUNCT_2:def 1;
+      then
+A57:   [inf S3,t] in dom H1 \/ dom H2 by A56,XBOOLE_0:def 3;
+
+      thus H3.(inf S3,t) = a1
+      proof
+        per cases;
+        suppose
+A58:       [inf S3,t] in dom H2;
+          then [inf S3,t] in [#]T2;
+          then [inf S3,t] in [:[#](R^1|S2),[#]I[01]:] by BORSUK_1:def 2;
+          then inf S3 in [#](R^1|S2) by ZFMISC_1:87;
+          then inf S3 in S2 by PRE_TOPC:def 5;
+          then inf dom c3 <= inf S1 & inf S1 <= sup dom c3 by A56,XXREAL_1:1;
+          then
+A59:      inf dom c3 <= inf dom c1 by Th27;
+A60:      inf dom c3 = inf dom c1 by A59,A12,A20,XXREAL_0:1;
+A61:       inf S2 = inf dom c3 by Th27
+          .= inf S1 by A60,Th27;
+A62:      inf S1 = inf dom c1 by Th27
+          .= inf dom c3 by A59,A12,A20,XXREAL_0:1
+          .= sup S1 by A12,Th27;
+A63:      0 in [#]I[01] by BORSUK_1:40,XXREAL_1:1;
+          sup dom c1 = sup S1 by Th27;
+          then sup S1 in S1 by A20,XXREAL_1:1;
+          then
+A64:      sup S1 in [#](R^1|S1) by PRE_TOPC:def 5;
+          inf dom c3 = inf S2 by Th27;
+          then inf S2 in S2 by A22,XXREAL_1:1;
+          then
+A65:      inf S2 in [#](R^1|S2) by PRE_TOPC:def 5;
+A66:      sup S1 = sup dom c1 by Th27;
+A67:      inf S2 = inf dom c3 by Th27;
+A68:       a1 = H1.(inf S1,0) by A3,A63
+          .= the_last_point_of c1 by A66,A62,A64,A3
+          .= H2.(inf S2,0) by A65,A6,A67,A11
+          .= a2 by A6,A63;
+          H3.(inf S3,t) = H3.([inf S3,t]) by BINOP_1:def 1
+          .= H2.([inf S3,t]) by A57,A58,A34,FUNCT_4:def 1
+          .= H2.(inf S2,t) by A56,A61,BINOP_1:def 1
+          .= a1 by A6,A68;
+          hence thesis;
+        end;
+        suppose
+A69:       not [inf S3,t] in dom H2;
+          H3.(inf S3,t) = H3.([inf S3,t]) by BINOP_1:def 1
+          .= H1.([inf S3,t]) by A57,A69,A34,FUNCT_4:def 1
+          .= H1.(inf S3,t) by BINOP_1:def 1
+          .= a1 by A56,A3;
+          hence thesis;
+        end;
+      end;
+A70:  sup S2 = sup dom c3 by Th27
+      .= sup [.inf dom c1,sup dom c3.] by A22,A20,A12,XXREAL_0:2,XXREAL_2:29
+      .= sup S3 by A22,A20,A12,XXREAL_1:165;
+      sup S2 in S2 by A5,A22,XXREAL_1:1;
+      then sup S2 in [#](R^1|S2) by PRE_TOPC:def 5;
+      then [sup S2,t] in [:[#](R^1|S2),[#]I[01]:] by ZFMISC_1:def 2;
+      then
+A71: [sup S2,t] in [#]T2;
+      then [sup S2,t] in dom H2 by FUNCT_2:def 1;
+      then
+A72:  [sup S3,t] in dom H1 \/ dom H2 by A70,XBOOLE_0:def 3;
+A73:   [sup S3,t] in dom H2 by A71,A70,FUNCT_2:def 1;
+      H3.(sup S3,t) = H3.([sup S3,t]) by BINOP_1:def 1
+      .= H2.([sup S3,t]) by A72,A73,A34,FUNCT_4:def 1
+      .= H2.(sup S2,t) by A70,BINOP_1:def 1
+      .= b2 by A6;
+      hence H3.(sup S3,t) = b2;
+    end;
+    hence c5,c6 are_homotopic by A13,A14,A35,A34,Th36;
+  end;
+
+definition
+  let T be TopStruct;
+  let f be FinSequence of Curves T;
+  func Partial_Sums f -> FinSequence of Curves T means :Def13:
+  len f = len it & f.1 = it.1 & for i being Nat
+  st 1<=i & i<len f holds it.(i+1) = (it/.i) + (f/.(i+1));
+  existence
+  proof
+    per cases;
+    suppose
+A1:   len f>0;
+      reconsider q=<* f/.1 *> as FinSequence of Curves T;
+A2:   0+1<=len f by A1,NAT_1:13;
+      then f/.1=f.1 by FINSEQ_4:15;
+      then
+A3:   q.1=f.1 by FINSEQ_1:40;
+      defpred P[Nat] means $1+1<=len f implies
+      ex g being FinSequence of Curves T st $1+1 =len g & f.1=g.1 &
+      (for i being Nat st 1<=i & i<$1+1 holds g.(i+1)=(g/.i)+(f/.(i+1)));
+A4:   for i being Nat st 1<=i & i<0+1 holds q.(i+1)=(q/.i)+(f/.(i+1));
+A5:   for k being Nat st P[k] holds P[k + 1]
+      proof
+        let k be Nat;
+        assume
+A6:     P[k];
+        now
+          per cases;
+          case
+A7:         k+1+1<=len f;
+            k+1<k+1+1 by XREAL_1:29;
+            then consider g being FinSequence of Curves T such that
+A8:         k+1 =len g and
+A9:         f.1=g.1 and
+A10:        for i being Nat st 1<=i & i< k+1 holds g.(i+1)=(g/.i)+(f
+            /.(i+1)) by A6,A7,XXREAL_0:2;
+            reconsider g2 = g ^ (<* g/.(k+1)+(f/.(k+1+1)) *>) as FinSequence of
+            Curves T;
+A11:        Seg len g = dom g by FINSEQ_1:def 3;
+A12:        len g2=len g+ len (<* g/.(k+1)+(f/.(k+1+1)) *>) by FINSEQ_1:22
+              .= k+1+1 by A8,FINSEQ_1:40;
+A13:        for i being Nat st 1<=i & i< k+1+1 holds g2.(i+1)=(g2/.i)+(f
+            /.(i+1))
+            proof
+              let i be Nat;
+              assume that
+A14:          1<=i and
+A15:          i< k+1+1;
+A16:          i<=k+1 by A15,NAT_1:13;
+              per cases by A16,XXREAL_0:1;
+              suppose
+A17:            i<k+1;
+A18:            1<=i+1 by NAT_1:12;
+                i+1<=k+1 by A17,NAT_1:13;
+                then i+1 in Seg len g by A8,A18,FINSEQ_1:1;
+                then
+A19:            g2.(i+1)=g.(i+1) by A11,FINSEQ_1:def 7;
+                i in Seg len g by A8,A14,A16,FINSEQ_1:1;
+                then
+A20:            g2.i=g.i by A11,FINSEQ_1:def 7;
+A21:            g/.i=g.i by A8,A14,A17,FINSEQ_4:15;
+                g2/.i=g2.i by A12,A14,A15,FINSEQ_4:15;
+                hence thesis by A10,A14,A17,A19,A20,A21;
+              end;
+              suppose
+A22:            i=k+1;
+A23:            g2/.i=g2.i by A12,A14,A15,FINSEQ_4:15;
+                i in Seg len g by A8,A14,A16,FINSEQ_1:1;
+                then
+A24:            g.i=g2.i by A11,FINSEQ_1:def 7;
+                g/.i=g.i by A8,A14,A16,FINSEQ_4:15;
+                hence thesis by A8,A22,A24,A23,FINSEQ_1:42;
+              end;
+            end;
+            1<=k+1 by NAT_1:11;
+            then 1 in Seg len g by A8,FINSEQ_1:1;
+            then g2.1=f.1 by A9,A11,FINSEQ_1:def 7;
+            hence P[k+1] by A12,A13;
+          end;
+          case
+            k+1+1>len f;
+            hence P[k+1];
+          end;
+        end;
+        hence P[k + 1];
+      end;
+      len f-'1=len f -1 by A2,XREAL_1:233;
+      then
+A25:  len f-'1+1=len f;
+      len q=1 by FINSEQ_1:40;
+      then
+A26:  P[0] by A3,A4;
+      for k being Nat holds P[k] from NAT_1:sch 2(A26,A5);
+      hence thesis by A25;
+    end;
+    suppose
+A27:  len f <= 0;
+      take f;
+      thus len f = len f & f.1 = f.1;
+      let i be Nat;
+      thus thesis by A27;
+    end;
+  end;
+  uniqueness
+  proof
+    let g1,g2 be FinSequence of Curves T;
+    assume that
+A28: len f=len g1 and
+A29: f.1=g1.1 and
+A30: for i being Nat st 1<=i & i<len f holds g1.(i+1)=(g1/.i)+(f/.(i+1 ));
+    defpred P[Nat] means 1<=$1 & $1<=len f implies g1.$1=g2.$1;
+    assume that
+A31: len f=len g2 and
+A32: f.1=g2.1 and
+A33: for i being Nat st 1<=i & i<len f holds g2.(i+1)=(g2/.i)+(f/.(i+1 ));
+A34: for k being Nat st P[k] holds P[k+1]
+    proof
+      let k be Nat;
+      assume
+A35:  P[k];
+      1<=k+1 & k+1<=len f implies g1.(k+1)=g2.(k+1)
+      proof
+        assume that
+        1<=k+1 and
+A36:    k+1<=len f;
+A37:    k<k+1 by XREAL_1:29;
+        then
+A38:    k< len f by A36,XXREAL_0:2;
+        per cases;
+        suppose
+A39:      1<=k;
+          then
+A40:      g2.(k+1)=(g2/.k)+(f/.(k+1)) by A33,A38;
+A41:      k<=len g2 by A31,A36,A37,XXREAL_0:2;
+A42:      g1/.k=g1.k by A28,A38,A39,FINSEQ_4:15;
+          g1.(k+1)=(g1/.k)+(f/.(k+1)) by A30,A38,A39;
+          hence thesis by A35,A36,A37,A39,A40,A42,A41,FINSEQ_4:15,XXREAL_0:2;
+        end;
+        suppose
+          1>k;
+          then 0+1>k;
+          then k=0 by NAT_1:13;
+          hence g1.(k+1)=g2.(k+1) by A29,A32;
+        end;
+      end;
+      hence P[k+1];
+    end;
+A43: P[0];
+    for k being Nat holds P[k] from NAT_1:sch 2(A43,A34);
+    hence g1=g2 by A28,A31,FINSEQ_1:14;
+  end;
+end;
+
+definition
+  let T be TopStruct;
+  let f be FinSequence of Curves T;
+  func Sum f -> Curve of T equals :Def14:
+    (Partial_Sums f).len f if len f > 0 otherwise {};
+  coherence
+  proof
+A1: len f = len Partial_Sums f by Def13;
+    now per cases;
+      case len f > 0;
+        then 0+1 <= len f by NAT_1:13;
+        then len f in dom Partial_Sums f by A1,FINSEQ_3:25;
+        then (Partial_Sums f).len f in rng Partial_Sums f by FUNCT_1:def 3;
+        hence (Partial_Sums f).len f is Element of Curves T;
+      end;
+      case
+A2:     len f <= 0;
+        {} is parametrized-curve PartFunc of R^1, T by Lm1,XBOOLE_1:2;
+        hence thesis by A2,Th20;
+      end;
+    end;
+    hence thesis;
+  end;
+  consistency;
+end;
+
+theorem Th40:
+  for c being Curve of T holds Sum <*c*> = c
+  proof
+    let c be Curve of T;
+    set f = <*c*>;
+    len f = 1 by FINSEQ_1:40;
+    hence Sum f = (Partial_Sums f).1 by Def14
+    .= f.1 by Def13 .= c by FINSEQ_1:40;
+  end;
+
+Lm2:
+  for f1,f2 being FinSequence of Curves T holds
+  Partial_Sums(f1 ^ f2).(len f1) = (Partial_Sums f1).(len f1)
+  proof
+    defpred P[Nat] means
+    for f1,f2 being FinSequence of Curves T st len f1 = $1
+    holds Partial_Sums(f1 ^ f2).(len f1) = (Partial_Sums f1).(len f1);
+A1: P[0]
+    proof
+      let f1,f2 be FinSequence of Curves T;
+      assume
+A2:   len f1 = 0;
+      then not len f1 in Seg len Partial_Sums(f1 ^ f2) by FINSEQ_1:1;
+      then
+A3:   not len f1 in dom Partial_Sums(f1 ^ f2) by FINSEQ_1:def 3;
+      not len f1 in Seg len Partial_Sums f1 by A2,FINSEQ_1:1;
+      then
+A4:   not len f1 in dom Partial_Sums f1 by FINSEQ_1:def 3;
+      thus Partial_Sums(f1 ^ f2).(len f1) = {} by A3,FUNCT_1:def 2
+      .= (Partial_Sums f1).(len f1) by A4,FUNCT_1:def 2;
+    end;
+A5: for k be Nat st P[k] holds P[k + 1]
+    proof
+      let k be Nat;
+      assume
+A6:   P[k];
+      let f1,f2 be FinSequence of Curves T;
+      assume
+A7:   len f1 = k+1;
+      then consider f3 be FinSequence of Curves T,
+               c be Element of Curves T such that
+A8:   f1 = f3 ^ <*c*> by FINSEQ_2:19;
+      set f4 = <*c*>^f2;
+A9:   f1 ^ f2
+      = f3 ^ f4 by A8,FINSEQ_1:32;
+A10:   len f1 = len f3 + 1 by A8,FINSEQ_2:16;
+      per cases;
+      suppose
+A11:    1 > k;
+        then
+A12:     len f3 = 0 by A10,A7,NAT_1:14;
+        f3 = {} by A11,A10,A7,FINSEQ_1:20;
+        then
+A13:     f1 = <*c*> by A8,FINSEQ_1:34;
+        thus Partial_Sums(f1 ^ f2).(len f1)
+        = (f1 ^ f2).1 by A12,A10,Def13
+        .= c by A13,FINSEQ_1:41
+        .= f1.1 by A13,FINSEQ_1:40
+        .= (Partial_Sums f1).(len f1) by A12,A10,Def13;
+      end;
+      suppose
+A14:     1 <= k;
+A15:    k < len f1 by A7,NAT_1:16;
+A16:   len f4 = len<*c*> + len f2 by FINSEQ_1:22
+        .= 1 + len f2 by FINSEQ_1:39;
+        len(f3^f4) = k + len f4 by A10,A7,FINSEQ_1:22;
+        then
+A17:    k < len(f3^f4) by A16,NAT_1:16;
+        then k in Seg len (f3 ^ f4) by A14,FINSEQ_1:1;
+        then k in Seg len Partial_Sums(f3 ^ f4) by Def13;
+        then
+A18:     k in dom Partial_Sums(f3 ^ f4) by FINSEQ_1:def 3;
+        k in Seg len f3 by A14,A10,A7,FINSEQ_1:1;
+        then k in Seg len Partial_Sums f3 by Def13;
+        then
+A19:     k in dom Partial_Sums f3 by FINSEQ_1:def 3;
+        k in Seg len f1 by A14,A15,FINSEQ_1:1;
+        then k in Seg len Partial_Sums f1 by Def13;
+        then
+A20:     k in dom Partial_Sums f1 by FINSEQ_1:def 3;
+A21:     Partial_Sums(f3 ^ f4)/.k
+        = Partial_Sums(f3 ^ f4).k by A18,PARTFUN1:def 6
+        .= (Partial_Sums f3).k by A10,A7,A6
+        .= (Partial_Sums f3)/.k by A19,PARTFUN1:def 6;
+A22:    Partial_Sums(f1)/.k
+        = Partial_Sums(f1).k by A20,PARTFUN1:def 6
+        .= (Partial_Sums f3).k by A8,A10,A7,A6
+        .= (Partial_Sums f3)/.k by A19,PARTFUN1:def 6;
+        1+1 <= k+1 by A14,XREAL_1:6;
+        then
+A23:    1 <= k+1 by XXREAL_0:2;
+        0+len f1 <= len f1+len f2 by XREAL_1:6;
+        then k+1 <= len(f1^f2) by A7,FINSEQ_1:22;
+        then k+1 in Seg len(f1^f2) by A23,FINSEQ_1:1;
+        then
+A24:     k+1 in dom (f1^f2) by FINSEQ_1:def 3;
+        k+1 in Seg len f1 by A7,A23,FINSEQ_1:1;
+        then
+A25:     k+1 in dom f1 by FINSEQ_1:def 3;
+A26:    (f1^f2)/.(k+1)
+        = (f1^f2).(k+1) by A24,PARTFUN1:def 6
+        .= f1.(k+1) by A25,FINSEQ_1:def 7
+        .= f1/.(k+1) by A25,PARTFUN1:def 6;
+        thus Partial_Sums(f1 ^ f2).(len f1)
+        = (Partial_Sums f1)/.k + f1/.(k+1) by A7,A9,A21,A22,A26,A14,A17,Def13
+        .= Partial_Sums(f1).(len f1) by A14,A7,A15,Def13;
+      end;
+    end;
+A27: for k being Nat holds P[k] from NAT_1:sch 2(A1,A5);
+    let f1,f2 be FinSequence of Curves T;
+    thus thesis by A27;
+  end;
+
+theorem Th41:
+  for c being Curve of T,
+      f being FinSequence of Curves T holds Sum(f ^ <*c*>) = Sum f + c
+  proof
+    let c be Curve of T;
+    let f be FinSequence of Curves T;
+    per cases;
+    suppose
+A1:   len f <= 0;
+A2:   f = {} by A1,FINSEQ_1:20;
+      reconsider c0 = {} as Curve of T by Th21;
+      thus Sum(f ^ <*c*>) = Sum <*c*> by A2,FINSEQ_1:34
+      .= c0 \/ c by Th40
+      .= c0 + c by Def12
+      .= Sum f + c by Def14,A1;
+    end;
+    suppose
+A3:   len f > 0;
+      set f1 = f ^ <*c*>;
+A4:   len f1 = len f + len <*c*> by FINSEQ_1:22
+      .= len f + 1 by FINSEQ_1:39;
+A5:   Sum f1 = (Partial_Sums f1).len f1 by A4,Def14;
+      0 < 0 + len f by A3;
+      then
+A6:  1 <= len f by NAT_1:19;
+A7:  len f < len f1 by A4,NAT_1:13;
+      len f in Seg len f1 by A6,A7,FINSEQ_1:1;
+      then len f in Seg len Partial_Sums f1 by Def13;
+      then len f in dom Partial_Sums f1 by FINSEQ_1:def 3;
+      then
+A8:   Partial_Sums(f1)/.(len f) = Partial_Sums(f1).(len f) by PARTFUN1:def 6
+      .= (Partial_Sums f).(len f) by Lm2
+      .= Sum f by A3,Def14;
+      len f1 in Seg len f1 by A4,FINSEQ_1:3;
+      then len f1 in dom f1 by FINSEQ_1:def 3;
+      then
+A9:   f1/.(len f +1) = f1.(len f + 1) by A4,PARTFUN1:def 6
+      .= c by FINSEQ_1:42;
+      thus Sum(f ^ <*c*>) = Sum f + c by A8,A9,A5,A7,A4,A6,Def13;
+    end;
+  end;
+
+theorem Th42:
+  for X being set, f being FinSequence of Curves T
+  st (for i being Nat st 1 <= i & i <= len f holds rng(f/.i) c= X)
+  holds rng Sum f c= X
+  proof
+    let X be set;
+    defpred P[Nat] means
+    for f being FinSequence of Curves T st len f = $1
+    & (for i being Nat st 1 <= i & i <= len f holds rng(f/.i) c= X)
+    holds rng Sum f c= X;
+A1: P[0]
+    proof
+      let f be FinSequence of Curves T;
+      assume len f = 0;
+      then Sum f = {} by Def14;
+      then rng Sum f = {};
+      hence thesis by XBOOLE_1:2;
+    end;
+A2: for k be Nat st P[k] holds P[k + 1]
+    proof
+      let k be Nat;
+      assume
+A3:   P[k];
+      let f be FinSequence of Curves T;
+      assume
+A4:   len f = k+1;
+      then consider f1 be FinSequence of Curves T,
+               c be Element of Curves T such that
+A5:   f = f1 ^ <*c*> by FINSEQ_2:19;
+      assume
+A6:   for i being Nat st 1 <= i & i <= len f holds rng(f/.i) c= X;
+A7: len f = len f1 + len<*c*> by A5,FINSEQ_1:22
+      .= len f1 + 1 by FINSEQ_1:39;
+A8:  Sum f = Sum f1 + c by A5,Th41;
+      per cases;
+      suppose not Sum f1 \/ c is Curve of T;
+        then Sum f = {} by A8,Def12;
+        then rng Sum f = {};
+        hence thesis by XBOOLE_1:2;
+      end;
+      suppose Sum f1 \/ c is Curve of T;
+        then
+A9:     Sum f = Sum f1 \/ c by A8,Def12;
+A10:     for i being Nat st 1 <= i & i <= len f1
+        holds rng(f1/.i) c= X
+        proof
+          let i be Nat;
+          assume
+A11:       1 <= i & i <= len f1;
+          then
+A12:       i+1 <= len f1 + 1 by XREAL_1:6;
+          i <= i+1 by NAT_1:12;
+          then
+A13:       i <= len f by A12,A7,XXREAL_0:2;
+          then
+A14:       rng(f/.i) c= X by A6,A11;
+          i in Seg len f by A11,A13,FINSEQ_1:1;
+          then i in dom f by FINSEQ_1:def 3;
+          then
+A15:       rng(f.i) c= X by A14,PARTFUN1:def 6;
+          i in Seg len f1 by A11,FINSEQ_1:1;
+          then
+A16:       i in dom f1 by FINSEQ_1:def 3;
+          then f.i = f1.i by A5,FINSEQ_1:def 7;
+          hence thesis by A15,A16,PARTFUN1:def 6;
+        end;
+A17:     rng Sum f1 c= X by A3,A7,A4,A10;
+        len f in Seg len f by A7,FINSEQ_1:3;
+        then
+A18:     len f in dom f by FINSEQ_1:def 3;
+        f.(len f) = c by A7,A5,FINSEQ_1:42;
+        then
+A19:    f/.(len f) = c by A18,PARTFUN1:def 6;
+        0 + 1 <= len f1 + 1 by XREAL_1:6;
+        then
+A20:     rng c c= X by A7,A19,A6;
+        rng Sum f = rng(Sum f1) \/ rng c by A9,RELAT_1:12;
+        hence thesis by A17,A20,XBOOLE_1:8;
+      end;
+    end;
+A21: for k being Nat holds P[k] from NAT_1:sch 2(A1,A2);
+    let f be FinSequence of Curves T;
+    thus thesis by A21;
+  end;
+
+theorem Th43:
+  for T being non empty TopSpace
+  for f being FinSequence of Curves T
+  st len f > 0 &
+     (for i being Nat st 1 <= i & i < len f
+       holds (f/.i).sup dom(f/.i) = (f/.(i+1)).inf dom(f/.(i+1))
+       & sup dom(f/.i) = inf dom(f/.(i+1))) &
+     (for i being Nat st 1 <= i & i <= len f
+       holds f/.i is with_endpoints)
+  holds ex c being with_endpoints Curve of T st
+    Sum f = c & dom c = [.inf dom(f/.1), sup dom(f/.(len f)).] &
+    the_first_point_of c = (f/.1).(inf dom(f/.1)) &
+    the_last_point_of c = (f/.(len f)).(sup dom(f/.(len f)))
+  proof
+    let T be non empty TopSpace;
+    defpred P[Nat] means
+    for f being FinSequence of Curves T
+    st len f = $1 & len f > 0 &
+     (for i being Nat st 1 <= i & i < len f
+       holds (f/.i).sup dom(f/.i) = (f/.(i+1)).inf dom(f/.(i+1))
+       & sup dom(f/.i) = inf dom(f/.(i+1))) &
+     (for i being Nat st 1 <= i & i <= len f
+       holds f/.i is with_endpoints)
+    holds ex c being with_endpoints Curve of T st
+      Sum f = c & dom c = [.inf dom(f/.1), sup dom(f/.(len f)).] &
+      the_first_point_of c = (f/.1).(inf dom(f/.1)) &
+      the_last_point_of c = (f/.(len f)).(sup dom(f/.(len f)));
+A1: P[0];
+A2: for k be Nat st P[k] holds P[k + 1]
+    proof
+      let k be Nat;
+      assume
+A3:   P[k];
+      let f be FinSequence of Curves T;
+      assume
+A4:   len f = k+1 & len f > 0;
+      consider f1 be FinSequence of Curves T,
+               c2 be Element of Curves T such that
+A5:   f = f1 ^ <*c2*> by A4,FINSEQ_2:19;
+A6:   len f = len f1 + len<*c2*> by A5,FINSEQ_1:22
+      .= len f1 + 1 by FINSEQ_1:39;
+      assume
+A7:  for i being Nat st 1 <= i & i < len f
+      holds (f/.i).sup dom(f/.i) = (f/.(i+1)).inf dom(f/.(i+1))
+       & sup dom(f/.i) = inf dom(f/.(i+1));
+      assume
+A8:  for i being Nat st 1 <= i & i <= len f
+      holds f/.i is with_endpoints;
+A9:  1<=len f by A4,NAT_1:12;
+      len f in Seg len f by A4,FINSEQ_1:3;
+      then
+A10:  len f in dom f by FINSEQ_1:def 3;
+      c2 = f.(len f) by A5,A6,FINSEQ_1:42
+      .= f/.(len f) by A10,PARTFUN1:def 6;
+      then reconsider c2 as with_endpoints Curve of T by A9,A8;
+A11:   for i being Nat st 1 <= i & i < len f1
+      holds (f1/.i).sup dom(f1/.i) = (f1/.(i+1)).inf dom(f1/.(i+1))
+       & sup dom(f1/.i) = inf dom(f1/.(i+1))
+      proof
+        let i be Nat;
+        assume
+A12:     1<=i & i < len f1;
+A13:    i < len f by A6,A12,NAT_1:13;
+        i in Seg len f1 by A12,FINSEQ_1:1;
+        then
+A14:     i in dom f1 by FINSEQ_1:def 3;
+A15:    dom f1 c= dom f by A5,FINSEQ_1:26;
+A16:     f/.i = f.i by A15,A14,PARTFUN1:def 6
+        .= f1.i by A5,A14,FINSEQ_1:def 7
+        .= f1/.i by A14,PARTFUN1:def 6;
+        1+1<=i+1 by A12,XREAL_1:6;
+        then
+A17:    1 <= i+1 by XXREAL_0:2;
+        i+1 <= len f1 by A12,NAT_1:13;
+        then i+1 in Seg len f1 by A17,FINSEQ_1:1;
+        then
+A18:    i+1 in dom f1 by FINSEQ_1:def 3;
+A19:     f/.(i+1) = f.(i+1) by A18,A15,PARTFUN1:def 6
+        .= f1.(i+1) by A5,A18,FINSEQ_1:def 7
+        .= f1/.(i+1) by A18,PARTFUN1:def 6;
+        thus thesis by A16,A19,A13,A12,A7;
+      end;
+A20:   for i being Nat st 1 <= i & i <= len f1
+      holds f1/.i is with_endpoints
+      proof
+        let i be Nat;
+        assume
+A21:     1<=i & i <= len f1;
+A22:    i <= len f by A6,A21,NAT_1:13;
+        i in Seg len f1 by A21,FINSEQ_1:1;
+        then
+A23:     i in dom f1 by FINSEQ_1:def 3;
+A24:     dom f1 c= dom f by A5,FINSEQ_1:26;
+        f/.i = f.i by A24,A23,PARTFUN1:def 6
+        .= f1.i by A5,A23,FINSEQ_1:def 7
+        .= f1/.i by A23,PARTFUN1:def 6;
+        hence thesis by A22,A21,A8;
+      end;
+      per cases;
+      suppose len f1 = 0;
+        then f1 = {} by FINSEQ_1:20;
+        then
+A25:     f = <*c2*> by A5,FINSEQ_1:34;
+        take c2;
+        1 in Seg 1 by FINSEQ_1:3;
+        then
+A26:    1 in dom f by A25,FINSEQ_1:38;
+A27:     f/.1 = f.1 by A26,PARTFUN1:def 6 .= c2 by A25,FINSEQ_1:40;
+A28:     f/.(len f) = c2 by A27,A25,FINSEQ_1:40;
+        thus thesis by A25,Th40,A27,A28,Th27;
+      end;
+      suppose
+A29:   not len f1 = 0;
+        consider c1 be with_endpoints Curve of T such that
+A30:    Sum f1 = c1 & dom c1 = [.inf dom(f1/.1), sup dom(f1/.(len f1)).] &
+        the_first_point_of c1 = (f1/.1).(inf dom(f1/.1)) &
+        the_last_point_of c1 = (f1/.(len f1)).(sup dom(f1/.(len f1)))
+        by A4,A6,A11,A20,A3,A29;
+        set c = c1 + c2;
+A31:    0+1<len f1+1 by A29,XREAL_1:6;
+        then
+A32:    1 <= len f1 by NAT_1:13;
+A33:   len f1 < len f by A6,NAT_1:13;
+        then
+A34:    (f/.(len f1)).sup dom(f/.len f1)
+        = (f/.(len f1+1)).inf dom(f/.(len f1+1))
+        & sup dom(f/.len f1) = inf dom(f/.(len f1+1)) by A32,A7;
+        len f1+1 in Seg len f by A6,A31,FINSEQ_1:1;
+        then
+A35:    len f1+1 in dom f by FINSEQ_1:def 3;
+A36:    f/.(len f1+1) = f.(len f1+1) by A35,PARTFUN1:def 6
+        .= c2 by A5,FINSEQ_1:42;
+A37:    inf dom(f1/.1) <= sup dom(f1/.(len f1)) by A30,XXREAL_1:29;
+A38:    dom f1 c= dom f by A5,FINSEQ_1:26;
+        len f1 in Seg len f1 by A29,FINSEQ_1:3;
+        then
+A39:    len f1 in dom f1 by FINSEQ_1:def 3;
+A40:    f1/.(len f1) = f1.(len f1) by A39,PARTFUN1:def 6
+        .= f.(len f1) by A5,A39,FINSEQ_1:def 7
+        .= f/.(len f1) by A39,A38,PARTFUN1:def 6;
+A41:    sup dom c1 = inf dom c2 by A36,A34,A40,A30,XXREAL_1:29,XXREAL_2:29;
+A42:    the_last_point_of c1 = the_first_point_of c2
+        by A36,A30,A40,A33,A32,A7;
+A43:    c1 + c2 is with_endpoints &
+        dom(c1 + c2) = [.inf dom c1, sup dom c2.] &
+        (c1+c2).inf dom c1 = the_first_point_of c1 &
+        (c1+c2).sup dom c2 = the_last_point_of c2 by A41,A42,Th38;
+        1 in Seg len f1 by A32,FINSEQ_1:1;
+        then
+A44:    1 in dom f1 by FINSEQ_1:def 3;
+A45:    f1/.1 = f1.1 by A44,PARTFUN1:def 6
+        .= f.1 by A44,A5,FINSEQ_1:def 7
+        .= f/.1 by A44,A38,PARTFUN1:def 6;
+        reconsider c as with_endpoints Curve of T by A41,A42,Th38;
+        take c;
+        inf dom c1 <= sup dom c2 by A43,XXREAL_1:29;
+        hence thesis by A43,A45,A37,A30,A5,Th41,A36,A6,XXREAL_2:25,29;
+      end;
+    end;
+    for k being Nat holds P[k] from NAT_1:sch 2(A1,A2);
+    hence thesis;
+  end;
+
+theorem Th44:
+  for T being non empty TopSpace
+  for f1,f2 being FinSequence of Curves T
+  for c1,c2 being with_endpoints Curve of T
+  st len f1 > 0 & len f1 = len f2 & Sum f1 = c1 & Sum f2 = c2 &
+     (for i being Nat st 1 <= i & i < len f1
+       holds (f1/.i).sup dom(f1/.i) = (f1/.(i+1)).inf dom(f1/.(i+1))
+       & sup dom(f1/.i) = inf dom(f1/.(i+1))) &
+     (for i being Nat st 1 <= i & i < len f2
+       holds (f2/.i).sup dom(f2/.i) = (f2/.(i+1)).inf dom(f2/.(i+1))
+       & sup dom(f2/.i) = inf dom(f2/.(i+1)) ) &
+     (for i being Nat st 1 <= i & i <= len f1 holds
+       ex c3,c4 being with_endpoints Curve of T st c3 = f1/.i & c4 = f2/.i
+        & c3,c4 are_homotopic & dom c3 = dom c4)
+  holds c1,c2 are_homotopic
+  proof
+    let T be non empty TopSpace;
+    defpred P[Nat] means
+    for f1,f2 being FinSequence of Curves T
+    for c1,c2 being with_endpoints Curve of T
+    st len f1 = $1 & len f1 > 0 & len f1 = len f2 & Sum f1 = c1 & Sum f2 = c2 &
+     (for i being Nat st 1 <= i & i < len f1
+       holds (f1/.i).sup dom(f1/.i) = (f1/.(i+1)).inf dom(f1/.(i+1))
+       & sup dom(f1/.i) = inf dom(f1/.(i+1))) &
+     (for i being Nat st 1 <= i & i < len f2
+       holds (f2/.i).sup dom(f2/.i) = (f2/.(i+1)).inf dom(f2/.(i+1))
+       & sup dom(f2/.i) = inf dom(f2/.(i+1)) ) &
+     (for i being Nat st 1 <= i & i <= len f1 holds
+       ex c3,c4 being with_endpoints Curve of T st c3 = f1/.i & c4 = f2/.i
+        & c3,c4 are_homotopic & dom c3 = dom c4)
+    holds c1,c2 are_homotopic;
+A1: P[0];
+A2: for k be Nat st P[k] holds P[k + 1]
+    proof
+      let k be Nat;
+      assume
+A3:   P[k];
+      let f1,f2 be FinSequence of Curves T;
+      let c1,c2 be with_endpoints Curve of T;
+      assume
+A4:   len f1 = k+1 & len f1 > 0;
+      consider f1a be FinSequence of Curves T,
+               c1b be Element of Curves T such that
+A5:   f1 = f1a ^ <*c1b*> by A4,FINSEQ_2:19;
+A6:   len f1 = len f1a + len<*c1b*> by A5,FINSEQ_1:22
+      .= len f1a + 1 by FINSEQ_1:39;
+      assume
+A7:   len f1 = len f2;
+      consider f2a be FinSequence of Curves T,
+               c2b be Element of Curves T such that
+A8:   f2 = f2a ^ <*c2b*> by A7,A4,FINSEQ_2:19;
+A9:  len f2 = len f2a + len<*c2b*> by A8,FINSEQ_1:22
+      .= len f2a + 1 by FINSEQ_1:39;
+      assume
+A10:  Sum f1 = c1 & Sum f2 = c2;
+      assume
+A11:  for i being Nat st 1 <= i & i < len f1
+       holds (f1/.i).sup dom(f1/.i) = (f1/.(i+1)).inf dom(f1/.(i+1))
+       & sup dom(f1/.i) = inf dom(f1/.(i+1));
+      assume
+A12:  for i being Nat st 1 <= i & i < len f2
+       holds (f2/.i).sup dom(f2/.i) = (f2/.(i+1)).inf dom(f2/.(i+1))
+       & sup dom(f2/.i) = inf dom(f2/.(i+1));
+      assume
+A13:  for i being Nat st 1 <= i & i <= len f1 holds
+       ex c3,c4 being with_endpoints Curve of T st c3 = f1/.i & c4 = f2/.i
+        & c3,c4 are_homotopic & dom c3 = dom c4;
+A14:  dom f1 = Seg len f1 by FINSEQ_1:def 3 .= dom f2 by A7,FINSEQ_1:def 3;
+A15:  1 <= len f1 by A4,NAT_1:11;
+      then len f1 in Seg len f1 by FINSEQ_1:1;
+      then
+A16:  len f1 in dom f1 by FINSEQ_1:def 3;
+      then
+A17:  f1/.(len f1) = f1.(len f1) by PARTFUN1:def 6;
+      consider c1bb, c2bb be with_endpoints Curve of T such that
+A18:  c1bb = f1/.(len f1) & c2bb = f2/.(len f1) &
+      c1bb,c2bb are_homotopic & dom c1bb = dom c2bb by A13,A15;
+A19:  f1.(len f1) = c1b by A5,A6,FINSEQ_1:42;
+A20:  f2.(len f2) = c2b by A8,A9,FINSEQ_1:42;
+A21:  c1bb = c1b & c2bb = c2b
+      by A7,A16,A14,A18,A19,A20,PARTFUN1:def 6;
+      reconsider c1b, c2b as with_endpoints Curve of T
+      by A7,A20,A18,A14,A16,A17,A5,A6,FINSEQ_1:42,PARTFUN1:def 6;
+      per cases;
+      suppose
+A22:     len f1a > 0;
+A23:     for i being Nat st 1 <= i & i < len f1a
+        holds (f1a/.i).sup dom(f1a/.i) = (f1a/.(i+1)).inf dom(f1a/.(i+1))
+        & sup dom(f1a/.i) = inf dom(f1a/.(i+1))
+        proof
+          let i be Nat;
+          assume
+A24:       1 <= i & i < len f1a;
+          then
+A25:       i + 1 < len f1a + 1 by XREAL_1:6;
+          i <= i + 1 by NAT_1:11;
+          then
+A26:      i < len f1 by A6,A25,XXREAL_0:2;
+          i in Seg len f1 by A24,A26,FINSEQ_1:1;
+          then
+A27:       i in dom f1 by FINSEQ_1:def 3;
+          i in Seg len f1a by A24,FINSEQ_1:1;
+          then
+A28:       i in dom f1a by FINSEQ_1:def 3;
+A29:       f1/.i = f1.i by A27,PARTFUN1:def 6
+          .= f1a.i by A28,A5,FINSEQ_1:def 7
+          .= f1a/.i by A28,PARTFUN1:def 6;
+A30:      1 <= i+1 by NAT_1:11;
+          i+1 in Seg len f1 by A30,A25,A6,FINSEQ_1:1;
+          then
+A31:      i+1 in dom f1 by FINSEQ_1:def 3;
+          i+1 <= len f1a by A24,NAT_1:13;
+          then i+1 in Seg len f1a by A30,FINSEQ_1:1;
+          then
+A32:      i+1 in dom f1a by FINSEQ_1:def 3;
+          f1/.(i+1) = f1.(i+1) by A31,PARTFUN1:def 6
+          .= f1a.(i+1) by A32,A5,FINSEQ_1:def 7
+          .= f1a/.(i+1) by A32,PARTFUN1:def 6;
+          hence thesis by A26,A29,A24,A11;
+        end;
+        for i being Nat st 1 <= i & i <= len f1a
+        holds f1a/.i is with_endpoints
+        proof
+          let i be Nat;
+          assume
+A33:       1 <= i & i <= len f1a;
+          then
+A34:       i + 1 <= len f1a + 1 by XREAL_1:6;
+          i <= i + 1 by NAT_1:11;
+          then
+A35:      i <= len f1 by A6,A34,XXREAL_0:2;
+          i in Seg len f1 by A33,A35,FINSEQ_1:1;
+          then
+A36:       i in dom f1 by FINSEQ_1:def 3;
+          i in Seg len f1a by A33,FINSEQ_1:1;
+          then
+A37:       i in dom f1a by FINSEQ_1:def 3;
+A38:       ex c3,c4 being with_endpoints Curve of T st c3 = f1/.i & c4 = f2/.i
+          & c3,c4 are_homotopic & dom c3 = dom c4 by A33,A35,A13;
+          f1/.i = f1.i by A36,PARTFUN1:def 6
+          .= f1a.i by A37,A5,FINSEQ_1:def 7
+          .= f1a/.i by A37,PARTFUN1:def 6;
+          hence thesis by A38;
+        end;
+        then consider c1a be with_endpoints Curve of T such that
+A39:     Sum f1a = c1a &
+        dom c1a = [.inf dom(f1a/.1), sup dom(f1a/.(len f1a)).] &
+        the_first_point_of c1a = (f1a/.1).(inf dom(f1a/.1)) &
+        the_last_point_of c1a = (f1a/.(len f1a)).(sup dom(f1a/.(len f1a)))
+        by A22,A23,Th43;
+A40:     for i being Nat st 1 <= i & i < len f2a
+        holds (f2a/.i).sup dom(f2a/.i) = (f2a/.(i+1)).inf dom(f2a/.(i+1))
+        & sup dom(f2a/.i) = inf dom(f2a/.(i+1))
+        proof
+          let i be Nat;
+          assume
+A41:       1 <= i & i < len f2a;
+          then
+A42:       i + 1 < len f2a + 1 by XREAL_1:6;
+          i <= i + 1 by NAT_1:11;
+          then
+A43:      i < len f2 by A9,A42,XXREAL_0:2;
+          i in Seg len f2 by A41,A43,FINSEQ_1:1;
+          then
+A44:       i in dom f2 by FINSEQ_1:def 3;
+          i in Seg len f2a by A41,FINSEQ_1:1;
+          then
+A45:       i in dom f2a by FINSEQ_1:def 3;
+A46:       f2/.i = f2.i by A44,PARTFUN1:def 6
+          .= f2a.i by A45,A8,FINSEQ_1:def 7
+          .= f2a/.i by A45,PARTFUN1:def 6;
+A47:      1 <= i+1 by NAT_1:11;
+          i+1 in Seg len f2 by A47,A42,A9,FINSEQ_1:1;
+          then
+A48:      i+1 in dom f2 by FINSEQ_1:def 3;
+          i+1 <= len f2a by A41,NAT_1:13;
+          then i+1 in Seg len f2a by A47,FINSEQ_1:1;
+          then
+A49:      i+1 in dom f2a by FINSEQ_1:def 3;
+          f2/.(i+1) = f2.(i+1) by A48,PARTFUN1:def 6
+          .= f2a.(i+1) by A49,A8,FINSEQ_1:def 7
+          .= f2a/.(i+1) by A49,PARTFUN1:def 6;
+          hence thesis by A43,A46,A41,A12;
+        end;
+        for i being Nat st 1 <= i & i <= len f2a
+        holds f2a/.i is with_endpoints
+        proof
+          let i be Nat;
+          assume
+A50:       1 <= i & i <= len f2a;
+          then
+A51:       i + 1 <= len f2a + 1 by XREAL_1:6;
+          i <= i + 1 by NAT_1:11;
+          then
+A52:      i <= len f2 by A9,A51,XXREAL_0:2;
+          i in Seg len f2 by A50,A52,FINSEQ_1:1;
+          then
+A53:       i in dom f2 by FINSEQ_1:def 3;
+          i in Seg len f2a by A50,FINSEQ_1:1;
+          then
+A54:       i in dom f2a by FINSEQ_1:def 3;
+A55:       ex c3,c4 being with_endpoints Curve of T st c3 = f1/.i & c4 = f2/.i
+          & c3,c4 are_homotopic & dom c3 = dom c4 by A7,A50,A52,A13;
+          f2/.i = f2.i by A53,PARTFUN1:def 6
+          .= f2a.i by A54,A8,FINSEQ_1:def 7
+          .= f2a/.i by A54,PARTFUN1:def 6;
+          hence thesis by A55;
+        end;
+        then consider c2a be with_endpoints Curve of T such that
+A56:     Sum f2a = c2a &
+        dom c2a = [.inf dom(f2a/.1), sup dom(f2a/.(len f2a)).] &
+        the_first_point_of c2a = (f2a/.1).(inf dom(f2a/.1)) &
+        the_last_point_of c2a = (f2a/.(len f2a)).(sup dom(f2a/.(len f2a)))
+        by A6,A7,A9,A22,A40,Th43;
+        for i being Nat st 1 <= i & i <= len f1a holds
+        ex c3,c4 being with_endpoints Curve of T st c3 = f1a/.i & c4 = f2a/.i
+        & c3,c4 are_homotopic & dom c3 = dom c4
+        proof
+          let i be Nat;
+          assume
+A57:       1 <= i & i <= len f1a;
+          then
+A58:       i + 1 <= len f1a + 1 by XREAL_1:6;
+          i <= i + 1 by NAT_1:11;
+          then
+A59:      i <= len f1 by A6,A58,XXREAL_0:2;
+          i in Seg len f1 by A57,A59,FINSEQ_1:1;
+          then
+A60:       i in dom f1 by FINSEQ_1:def 3;
+          i in Seg len f1a by A57,FINSEQ_1:1;
+          then
+A61:       i in dom f1a by FINSEQ_1:def 3;
+          i in Seg len f2 by A57,A59,A7,FINSEQ_1:1;
+          then
+A62:      i in dom f2 by FINSEQ_1:def 3;
+          i in Seg len f2a by A57,A6,A7,A9,FINSEQ_1:1;
+          then
+A63:      i in dom f2a by FINSEQ_1:def 3;
+          consider c3,c4 be with_endpoints Curve of T such that
+A64:      c3 = f1/.i & c4 = f2/.i & c3,c4 are_homotopic &
+          dom c3 = dom c4 by A57,A59,A13;
+          take c3,c4;
+A65:       f1/.i = f1.i by A60,PARTFUN1:def 6
+          .= f1a.i by A61,A5,FINSEQ_1:def 7
+          .= f1a/.i by A61,PARTFUN1:def 6;
+           f2/.i = f2.i by A62,PARTFUN1:def 6
+          .= f2a.i by A63,A8,FINSEQ_1:def 7
+          .= f2a/.i by A63,PARTFUN1:def 6;
+          hence thesis by A64,A65;
+        end;
+        then
+A66:     c1a, c2a are_homotopic by A3,A4,A23,A6,A22,A40,A7,A9,A39,A56;
+A67:     c1 = c1a + c1b by A10,A5,A39,Th41;
+A68:     c2 = c2a + c2b by A10,A8,A56,Th41;
+A69:     f1/.(len f1) = c1b by A5,A6,A17,FINSEQ_1:42;
+A70:    0 + 1 < len f1a +1 by A22,XREAL_1:6;
+        then
+A71:     1 <= len f1a & len f1a < len f1 by A6,NAT_1:13;
+        then len f1a in Seg len f1 by FINSEQ_1:1;
+        then
+A72:    len f1a in dom f1 by FINSEQ_1:def 3;
+        len f1a in Seg len f1a by A71,FINSEQ_1:1;
+        then
+A73:    len f1a in dom f1a by FINSEQ_1:def 3;
+        then
+A74:     f1a/.(len f1a) = f1a.(len f1a) by PARTFUN1:def 6
+        .= f1.(len f1a) by A5,A73,FINSEQ_1:def 7
+        .= f1/.(len f1a) by A72,PARTFUN1:def 6;
+        len f2a in Seg len f2 by A71,A6,A9,A7,FINSEQ_1:1;
+        then
+A75:   len f2a in dom f2 by FINSEQ_1:def 3;
+        len f2a in Seg len f2a by A71,A6,A7,A9,FINSEQ_1:1;
+        then
+A76:   len f2a in dom f2a by FINSEQ_1:def 3;
+        then
+A77:    f2a/.(len f2a) = f2a.(len f2a) by PARTFUN1:def 6
+        .= f2.(len f2a) by A8,A76,FINSEQ_1:def 7
+        .= f2/.(len f2a) by A75,PARTFUN1:def 6;
+        1 in Seg len f1 by A70,A6,FINSEQ_1:1;
+        then
+A78:   1 in dom f1 by FINSEQ_1:def 3;
+        1 in Seg len f1a by A71,FINSEQ_1:1;
+        then
+A79:   1 in dom f1a by FINSEQ_1:def 3;
+        then
+A80:    f1a/.1 = f1a.1 by PARTFUN1:def 6
+        .= f1.1 by A5,A79,FINSEQ_1:def 7
+        .= f1/.1 by A78,PARTFUN1:def 6;
+        1 in Seg len f2 by A70,A7,A6,FINSEQ_1:1;
+        then
+A81:   1 in dom f2 by FINSEQ_1:def 3;
+        1 in Seg len f2a by A71,A6,A7,A9,FINSEQ_1:1;
+        then
+A82:   1 in dom f2a by FINSEQ_1:def 3;
+        then
+A83:    f2a/.1 = f2a.1 by PARTFUN1:def 6
+        .= f2.1 by A8,A82,FINSEQ_1:def 7
+        .= f2/.1 by A81,PARTFUN1:def 6;
+A84:    ex c3,c4 being with_endpoints Curve of T st
+        c3 = f1/.1 & c4 = f2/.1
+        & c3,c4 are_homotopic & dom c3 = dom c4 by A13,A15;
+A85:    ex c3,c4 being with_endpoints Curve of T st
+        c3 = f1/.(len f1a) & c4 = f2/.(len f1a)
+        & c3,c4 are_homotopic & dom c3 = dom c4 by A71,A13;
+A86:     the_last_point_of c1a
+        = the_first_point_of c1b by A69,A6,A74,A11,A71,A39;
+        sup dom c1a = sup dom(f1/.(len f1a))
+        by A74,A39,XXREAL_1:29,XXREAL_2:29
+        .= inf dom(f1/.(len f1a+1)) by A11,A71
+        .= inf dom c1b by A5,A6,A17,FINSEQ_1:42;
+        hence c1,c2 are_homotopic
+        by A66,A67,A68,A18,A21,A86,Th39,A56,A84,A85,A80,A83,A6,A7,A9,A74,A77
+,A39;
+      end;
+      suppose
+A87:     not len f1a > 0;
+        then f1a = {} by FINSEQ_1:20;
+        then f1 = <*c1b*> by A5,FINSEQ_1:34;
+        then
+A88:     Sum f1 = c1b by Th40;
+        f2a = {} by A87,A6,A7,A9,FINSEQ_1:20;
+        then f2 = <*c2b*> by A8,FINSEQ_1:34;
+        hence thesis by A88,A18,A21,A10,Th40;
+      end;
+    end;
+    for k being Nat holds P[k] from NAT_1:sch 2(A1,A2);
+    hence thesis;
+  end;
+
+theorem Th45:
+  for c being with_endpoints Curve of T
+  for h being FinSequence of REAL
+  st len h >= 2 & h.1 = inf dom c & h.len h = sup dom c & h is increasing
+  holds
+    ex f being FinSequence of Curves T
+    st len f = len h - 1 & c = Sum f &
+    (for i being Nat st 1 <= i & i <= len f
+      holds f/.i = c | ([.h/.i,h/.(i+1).]))
+  proof
+    defpred P[Nat] means
+    for c being with_endpoints Curve of T
+    for h being FinSequence of REAL
+      st len h = $1
+      & len h >= 2 & h.1 = inf dom c & h.len h = sup dom c & h is increasing
+      holds
+      ex f being FinSequence of Curves T
+      st len f = len h - 1 & c = Sum f &
+      (for i being Nat st 1 <= i & i <= len f
+       holds f/.i = c | ([.h/.i,h/.(i+1).]));
+A1: P[0];
+A2: for k be Nat st P[k] holds P[k + 1]
+    proof
+      let k be Nat;
+      assume
+A3:  P[k];
+      let c be with_endpoints Curve of T;
+      let h be FinSequence of REAL such that
+A4:   len h = k+1 & len h >= 2 & h.1 = inf dom c & h.len h = sup dom c &
+      h is increasing;
+      consider h1 be FinSequence of REAL, r be Element of REAL such that
+A5:   h = h1 ^ <*r*> by A4,FINSEQ_2:19;
+A6:  len h = len h1 + 1 by A5,FINSEQ_2:16;
+      reconsider r1 = h.k as real number;
+      consider c1,c2 be Element of Curves T such that
+A7:   c = c1 + c2 & c1 = c | [.inf dom c, r1.] & c2 = c | [.r1, sup dom c.]
+      by Th37;
+A8:  k < k+1 by NAT_1:13;
+      1 <= 1+k by NAT_1:12;
+      then 1 in Seg len h by A4,FINSEQ_1:1;
+      then
+A9: 1 in dom h by FINSEQ_1:def 3;
+      per cases;
+      suppose len h1 < 2;
+        then len h1 < 1 + 1;
+        then
+A10:     len h1 <= 1 by NAT_1:13;
+        per cases;
+        suppose h1 = {};
+          then h = <*r*> by A5,FINSEQ_1:34;
+          then len h = 1 by FINSEQ_1:40;
+          hence thesis by A4;
+        end;
+        suppose h1 <> {};
+          then len h1 >= 1 by FINSEQ_1:20;
+          then
+A11:       len h1 = 1 by A10,XXREAL_0:1;
+          set f = <*c*>;
+          take f;
+A12:       len f = 1 by FINSEQ_1:40;
+          thus len f = len h - 1 by A11,A6,FINSEQ_1:40;
+          thus c = Sum f by Th40;
+          thus for i being Nat st 1 <= i & i <= len f
+          holds f/.i = c | ([.h/.i,h/.(i+1).])
+          proof
+            let i be Nat;
+            assume
+A13:         1 <= i & i <= len f;
+            then
+A14:         i = 1 by A12,XXREAL_0:1;
+            i in Seg len f by A13,FINSEQ_1:1;
+            then
+A15:         i in dom f by FINSEQ_1:def 3;
+A16:         h/.i = inf dom c by A4,A14,A9,PARTFUN1:def 6;
+            len h in Seg len h by A6,FINSEQ_1:3;
+            then len h in dom h by FINSEQ_1:def 3;
+            then
+A17:        h/.(i+1) = sup dom c by A4,A6,A11,A14,PARTFUN1:def 6;
+            thus f/.i = f.i by A15,PARTFUN1:def 6
+            .= c by A14,FINSEQ_1:40
+            .= c | dom c
+            .= c | ([.h/.i,h/.(i+1).]) by A16,A17,Th27;
+          end;
+        end;
+      end;
+      suppose
+A18:     len h1 >= 2;
+        then
+A19:   1<k by A4,A6,XXREAL_0:2;
+        then k in Seg len h by A4,A8,FINSEQ_1:1;
+        then
+A20:    k in dom h by FINSEQ_1:def 3;
+        k+1 in Seg len h by A4,FINSEQ_1:4;
+        then
+A21:    (k+1) in dom h by FINSEQ_1:def 3;
+        h.k <= h.(k+1) by A8,A20,A21,A4,VALUED_0:def 13;
+        then [.inf dom c, r1.] c= [.inf dom c, sup dom c.] by A4,XXREAL_1:34;
+        then
+A22:     [.inf dom c, r1.] c= dom c by Th27;
+A23:     dom c1 = dom c /\ [.inf dom c, r1.] by A7,RELAT_1:61
+        .= [.inf dom c, r1.] by A22,XBOOLE_1:28;
+A24:    inf dom c <= r1 by A4,A19,A9,A20,VALUED_0:def 13;
+        then
+A25:     r1 = sup dom c1 by A23,XXREAL_2:29;
+A26:    inf dom c1 = inf dom c by A24,A23,XXREAL_2:25;
+        then inf dom c1 in [.inf dom c, r1.] by A24,XXREAL_1:1;
+        then dom c1 is left_end by A23,XXREAL_2:def 5;
+        then
+A27:     c1 is with_first_point by Def6;
+        r1 in [.inf dom c, r1.] by A24,XXREAL_1:1;
+        then dom c1 is right_end by A25,A23,XXREAL_2:def 6;
+        then
+A28:     c1 is with_last_point by Def7;
+        reconsider c1 as with_endpoints Curve of T by A27,A28;
+A29:     h1 = h|dom h1 by A5,FINSEQ_1:21;
+        1 in Seg k by A19,FINSEQ_1:1;
+        then
+A30:     1 in dom h1 by A4,A6,FINSEQ_1:def 3;
+        k in Seg k by A19,FINSEQ_1:1;
+        then
+A31:     len h1 in dom h1 by A4,A6,FINSEQ_1:def 3;
+A32:     h1.1 = inf dom c1 by A4,A26,A29,A30,FUNCT_1:49;
+A33:     h1.len h1 = h.k by A6,A4,A29,A31,FUNCT_1:49
+        .= sup dom c1 by A24,A23,XXREAL_2:29;
+A34:     dom h c= REAL by XBOOLE_1:1;
+        rng h c= REAL;
+        then reconsider h0 = h as PartFunc of REAL,REAL by A34,RELSET_1:4;
+A35:     h0|dom h0 is increasing by A4;
+        len h1 <= len h by A6,NAT_1:19;
+        then Seg len h1 c= Seg len h by FINSEQ_1:5;
+        then Seg len h1 c= dom h by FINSEQ_1:def 3;
+        then
+A36:    dom h1 c= dom h by FINSEQ_1:def 3;
+        then
+A37:     h1 is increasing by A29,A35,RFUNCT_2:28;
+        consider f1 be FinSequence of Curves T such that
+A38:    len f1 = len h1 - 1 & c1 = Sum f1 &
+        (for i being Nat st 1 <= i & i <= len f1
+         holds f1/.i = c1 | ([.h1/.i,h1/.(i+1).])) by A3,A4,A6,A18,A32,A33,A37;
+        set f = f1 ^ <*c2*>;
+        take f;
+A39:     len f = len f1 + len <*c2*> by FINSEQ_1:22
+        .= len f1 + 1 by FINSEQ_1:40;
+        thus len f
+        = len h - 1 by A6,A38,A39;
+        thus c
+        = Sum f by Th41,A7,A38;
+        thus for i being Nat st 1 <= i & i <= len f
+         holds f/.i = c | ([.h/.i,h/.(i+1).])
+        proof
+          let i be Nat;
+          assume
+A40:       1 <= i & i <= len f;
+          then i in Seg len f by FINSEQ_1:1;
+          then
+A41:       i in dom f by FINSEQ_1:def 3;
+          per cases;
+          suppose
+A42:        i = len f;
+A43:         h/.i = r1 by A42,A39,A38,A4,A6,A20,PARTFUN1:def 6;
+            1+1<=i+1 by A40,XREAL_1:6;
+            then 1 < len h by A42,A39,A38,A6,XXREAL_0:2;
+            then len h in Seg len h by FINSEQ_1:1;
+            then len h in dom h by FINSEQ_1:def 3;
+            then
+A44:         h/.(i+1)
+            = sup dom c by A4,A42,A39,A38,A6,PARTFUN1:def 6;
+            thus f/.i = f.i by A41,PARTFUN1:def 6
+            .= c | ([.h/.i,h/.(i+1).]) by A43,A44,A7,A42,A39,FINSEQ_1:42;
+          end;
+          suppose i <> len f;
+            then
+A45:        i < len f1 + 1 by A39,A40,XXREAL_0:1;
+            then
+A46:         i <= len f1 by NAT_1:13;
+            then i in Seg len f1 by A40,FINSEQ_1:1;
+            then
+A47:         i in dom f1 by FINSEQ_1:def 3;
+            i in Seg len h1 by A38,A40,A39,FINSEQ_1:1;
+            then
+A48:        i in dom h1 by FINSEQ_1:def 3;
+A49:        h1/.i = h1.i by A48,PARTFUN1:def 6
+            .= (h|dom h1).i by A5,FINSEQ_1:21
+            .= h.i by A48,FUNCT_1:49
+            .= h/.i by A48,A36,PARTFUN1:def 6;
+A50:        i+1 <= len h1 by A38,A45,NAT_1:13;
+            1 <= i+1 by NAT_1:12;
+            then i+1 in Seg len h1 by A50,FINSEQ_1:1;
+            then
+A51:        i+1 in dom h1 by FINSEQ_1:def 3;
+A52:        h1/.(i+1) = h1.(i+1) by A51,PARTFUN1:def 6
+            .= (h|dom h1).(i+1) by A5,FINSEQ_1:21
+            .= h.(i+1) by A51,FUNCT_1:49
+            .= h/.(i+1) by A51,A36,PARTFUN1:def 6;
+A53:        i+1 <= len f1+1 by A45,NAT_1:13;
+            h.(i+1) <= h.k
+            proof
+              per cases;
+              suppose i+1 = k; hence thesis; end;
+              suppose i+1 <> k;
+                then i+1 < k by A38,A6,A4,A53,XXREAL_0:1;
+                hence thesis by A51,A36,A20,A4,VALUED_0:def 13;
+              end;
+            end;
+            then
+A54:        h/.(i+1) <= r1 by A51,A36,PARTFUN1:def 6;
+            h.1 <= h.i
+            proof
+              per cases;
+              suppose i = 1; hence thesis; end;
+              suppose i <> 1;
+                then 1 < i by A40,XXREAL_0:1;
+                hence thesis by A36,A48,A9,A4,VALUED_0:def 13;
+              end;
+            end;
+            then
+A55:       inf dom c <= h/.i by A4,A36,A48,PARTFUN1:def 6;
+           f.i = f1.i by A47,FINSEQ_1:def 7
+           .= f1/.i by A47,PARTFUN1:def 6
+           .= (c | [.inf dom c, r1.]) | ([.h1/.i,h1/.(i+1).])
+           by A7,A38,A40,A46
+           .= c | ([.h1/.i,h1/.(i+1).])
+           by A55,A52,A49,A54,RELAT_1:74,XXREAL_1:34;
+           hence f/.i = c | ([.h/.i,h/.(i+1).])
+           by A41,A52,A49,PARTFUN1:def 6;
+          end;
+        end;
+      end;
+    end;
+    for k being Nat holds P[k] from NAT_1:sch 2(A1,A2);
+    hence thesis;
+  end;
+
+Lm3:
+  for t being Point of TUnitSphere(n), f being Loop of t
+  st rng f <> the carrier of TUnitSphere(n) holds f is nullhomotopic
+  proof
+    let t be Point of TUnitSphere(n), f be Loop of t;
+    assume
+A1: rng f <> the carrier of TUnitSphere(n);
+    for x being set holds x in rng f
+    implies x in the carrier of TUnitSphere(n);
+    then consider x be set such that
+A2: x in the carrier of TUnitSphere(n) and
+A3: not x in rng f by A1,TARSKI:1;
+    reconsider n1=n+1 as Nat;
+A4: [#] Tunit_circle(n1) c= [#] TOP-REAL(n1) by PRE_TOPC:def 4;
+A5: x in the carrier of Tunit_circle(n1) by A2,MFOLD_2:def 4;
+    then reconsider p = x as Point of TOP-REAL n1 by A4;
+    p in the carrier of Tcircle(0.TOP-REAL n1,1) by A5,TOPREALB:def 7;
+    then
+A6:p in Sphere(0.TOP-REAL n1,1) by TOPREALB:9;
+    then -p in Sphere(0.TOP-REAL n1,1) \ {p} by Th3;
+    then reconsider S = (TOP-REAL n1) | (Sphere(0.TOP-REAL n1,1) \ {p})
+    as non empty SubSpace of TOP-REAL n1;
+A7: [#]S = Sphere(0.TOP-REAL n1,1) \ {p} by PRE_TOPC:def 5;
+    then stereographic_projection(S,p) is being_homeomorphism
+    by A6,MFOLD_2:31;
+    then
+A8: TPlane(p,0.TOP-REAL n1), S are_homeomorphic by T_0TOPSP:def 1;
+A9: S is having_trivial_Fundamental_Group by A8,Th13;
+    Tunit_circle(n1) is SubSpace of TOP-REAL n1;
+    then
+A10: TUnitSphere(n) is SubSpace of TOP-REAL n1 by MFOLD_2:def 4;
+    Sphere(0.TOP-REAL n1,1) \ {p} c= Sphere(0.TOP-REAL n1,1) by XBOOLE_1:36;
+    then Sphere(0.TOP-REAL n1,1) \ {p} c=
+       the carrier of Tcircle(0.TOP-REAL n1,1) by TOPREALB:9;
+    then Sphere(0.TOP-REAL n1,1) \ {p} c= the carrier of Tunit_circle(n1)
+    by TOPREALB:def 7;
+    then Sphere(0.TOP-REAL n1,1) \ {p} c= the carrier of TUnitSphere(n)
+    by MFOLD_2:def 4;
+    then reconsider S0 = S as non empty SubSpace of TUnitSphere(n)
+    by A7,A10,TOPMETR:3;
+    0 in the carrier of I[01] by BORSUK_1:43;
+    then
+A11: 0 in dom f by FUNCT_2:def 1;
+    t,t are_connected;
+    then
+A12: f is continuous & f.0 = t & f.1 = t by BORSUK_2:def 2;
+    then
+    t in rng f by A11,FUNCT_1:3;
+    then
+A13: not t in {p} by A3,TARSKI:def 1;
+A14: the carrier of TUnitSphere(n)
+    = the carrier of Tunit_circle(n1) by MFOLD_2:def 4
+    .= the carrier of Tcircle(0.TOP-REAL n1,1) by TOPREALB:def 7
+    .= Sphere(0.TOP-REAL n1,1) by TOPREALB:9;
+    reconsider t0 = t as Point of S0 by A7,A14,A13,XBOOLE_0:def 5;
+    dom f = the carrier of I[01] by FUNCT_2:def 1;
+    then reconsider f0 = f as Function of I[01],S0
+    by A7,A3,A14,FUNCT_2:2,ZFMISC_1:34;
+A15: t0,t0 are_connected;
+    f0 is continuous by JORDAN16:8;
+    then reconsider f0 = f as Loop of t0 by A12,A15,BORSUK_2:def 2;
+    f0 is nullhomotopic by A9;
+    hence thesis by Th18;
+end;
+
+Lm4:
+  for t being Point of TUnitSphere(n)
+  for f being Loop of t
+  st n>=2 & rng f = the carrier of TUnitSphere(n) holds
+  ex g being Loop of t st
+  g, f are_homotopic & rng g <> the carrier of TUnitSphere(n)
+  proof
+    let t be Point of TUnitSphere(n), f be Loop of t such that
+A1: n>=2 and
+A2: rng f = the carrier of TUnitSphere(n);
+    reconsider n1 = n+1 as Element of NAT;
+    Tunit_circle(n1) is SubSpace of TOP-REAL n1;
+    then
+A3: TUnitSphere(n) is SubSpace of TOP-REAL n1 by MFOLD_2:def 4;
+    [#] Tunit_circle(n1) c= [#] TOP-REAL(n1) by PRE_TOPC:def 4;
+    then
+A4: rng f c= the carrier of TOP-REAL n1 by A2,MFOLD_2:def 4;
+    dom f = the carrier of I[01] by FUNCT_2:def 1;
+    then reconsider f1 = f as Function of I[01],TOP-REAL n1 by A4,FUNCT_2:2;
+    f1 is continuous by A3,PRE_TOPC:26;
+    then consider h be FinSequence of REAL such that
+A5: h.1=0 & h.len h=1 & 5<=len h & rng h c= the carrier of I[01] &
+    h is increasing &
+    (for i being Element of NAT,Q being Subset of I[01],
+     W being Subset of Euclid n1 st 1<=i & i<len h &
+     Q=[.h/.i,h/.(i+1).] & W=f1.:(Q) holds diameter(W) < 1) by JGRAPH_8:1;
+    set f2 = f*h;
+    for x being set holds x in rng f2
+    implies x in the carrier of TUnitSphere(n);
+    then consider x be set such that
+A6: x in the carrier of TUnitSphere(n) &
+    not x in rng f2 by A1,TARSKI:1;
+A7: [#] Tunit_circle(n1) c= [#] TOP-REAL(n1) by PRE_TOPC:def 4;
+A8:x in the carrier of Tunit_circle(n1) by A6,MFOLD_2:def 4;
+    then reconsider p = x as Point of TOP-REAL n1 by A7;
+    p in the carrier of Tcircle(0.TOP-REAL n1,1) by A8,TOPREALB:def 7;
+    then
+A9:p in Sphere(0.TOP-REAL n1,1) by TOPREALB:9;
+    then
+A10: -p in Sphere(0.TOP-REAL n1,1) \ {p} by Th3;
+    then reconsider U = (TOP-REAL n1) | (Sphere(0.TOP-REAL n1,1) \ {p})
+    as non empty SubSpace of TOP-REAL n1;
+A11: [#]U = Sphere(0.TOP-REAL n1,1) \ {p} by PRE_TOPC:def 5;
+A12:-p in Sphere(0.TOP-REAL n1,1) by A10,XBOOLE_0:def 5;
+    then
+A13: --p in Sphere(0.TOP-REAL n1,1) \ {-p} by Th3;
+    then reconsider V = (TOP-REAL n1) | (Sphere(0.TOP-REAL n1,1) \ {-p})
+    as non empty SubSpace of TOP-REAL n1;
+A14: [#]V = Sphere(0.TOP-REAL n1,1) \ {-p} by PRE_TOPC:def 5;
+A15: for i being Element of NAT st 1<=i & i<len h
+    holds f.:([.h/.i,h/.(i+1).]) c= the carrier of U or
+     f.:([.h/.i,h/.(i+1).]) c= the carrier of V
+    proof
+      let i be Element of NAT;
+      assume
+A16:   1<=i & i<len h;
+      i in Seg len h by A16,FINSEQ_1:1;
+      then
+A17:   i in dom h by FINSEQ_1:def 3;
+      reconsider h1 = h as real-valued FinSequence;
+      reconsider i1 = i+1 as Nat;
+A18:  i1 <= len h & 1 <= i1 by A16,NAT_1:13;
+      then
+      i1 in Seg len h by FINSEQ_1:1;
+      then
+A19:   i1 in dom h by FINSEQ_1:def 3;
+      h1.(i+1) <= 1 by A5,A18,EUCLID_7:7;
+      then
+A20:   h/.(i+1) <= 1 by A19,PARTFUN1:def 6;
+      h1.1 <= h1.i by A5,A16,EUCLID_7:7;
+      then 0 <= h/.i by A5,A17,PARTFUN1:def 6;
+      then reconsider Q = [.h/.i,h/.(i+1).] as Subset of I[01]
+      by A20,BORSUK_1:40,XXREAL_1:34;
+      f.:Q c= the carrier of TUnitSphere(n);
+      then f.:Q c= [#] Tunit_circle(n1) by MFOLD_2:def 4;
+      then f.:Q c= the carrier of Tcircle(0.TOP-REAL n1,1) by TOPREALB:def 7;
+      then
+A21:   f.:Q c= Sphere(0.TOP-REAL n1,1) by TOPREALB:9;
+      reconsider W = f1.:Q as Subset of Euclid n1 by EUCLID:67;
+A22:  diameter(W) < 1 by A16,A5;
+      Sphere(0.TOP-REAL n1,1) is bounded Subset of Euclid n1 by JORDAN2C:11;
+      then
+A23:  W is bounded by A21,TBSP_1:14;
+      not (p in f.:Q & -p in f.:Q)
+      proof
+        assume
+A24:     p in f.:Q & -p in f.:Q;
+        reconsider p1=p,p2=-p as Point of Euclid n1 by EUCLID:67;
+A25:   dist(p1,p2) <= diameter(W) by A24,A23,TBSP_1:def 8;
+A26:     Euclid n1 = MetrStruct(# REAL n1, Pitag_dist n1 #) by EUCLID:def 7;
+        reconsider p3=p1,p4=p2 as Element of REAL n1 by A26;
+        reconsider r1 = 1 as real number;
+        dist(p1,p2) = (the distance of Euclid n1).(p1,p2) by METRIC_1:def 1
+        .= |. p3 - p4 .| by A26,EUCLID:def 6;
+        then |.p-(-p).| < 1 by A25,A22,XXREAL_0:2;
+        then |.p+(--p).| < 1 by EUCLID:41;
+        then |.(r1*p)+p.| < 1 by EUCLID:29;
+        then |.(r1*p)+(r1*p).| < 1 by EUCLID:29;
+        then |.(1+1)*p.| < 1 by EUCLID:33;
+        then
+A27:     abs(2)*|.p.| < 1 by EUCLID:11;
+        |.p - 0.TOP-REAL n1.| = 1 by A9,TOPREAL9:9;
+        then |.p + -0.TOP-REAL n1.| = 1 by EUCLID:41;
+        then |.p + (-1)*0.TOP-REAL n1.| = 1 by EUCLID:39;
+        then |.p + 0.TOP-REAL n1.| = 1 by EUCLID:28;
+        then
+A28:   |. p .| = 1 by EUCLID:27;
+        |. 2 .| = 2 by COMPLEX1:43;
+        hence contradiction by A28,A27;
+      end;
+      hence thesis by A14,A11,A21,ZFMISC_1:34;
+    end;
+    f is Path of t,t & t,t are_connected;
+    then reconsider c = f as with_endpoints Curve of TUnitSphere(n) by Th25;
+A29: 2 <= len h by A5,XXREAL_0:2;
+A30: inf dom f = 0 & sup dom f = 1 by Th4;
+    then consider fc1 be FinSequence of Curves TUnitSphere(n) such that
+A31: len fc1 = len h - 1 & c = Sum fc1 &
+    (for i being Nat st 1 <= i & i <= len fc1
+    holds fc1/.i = c | ([.h/.i,h/.(i+1).])) by A5,A29,Th45;
+A32: for i being Nat st 1 <= i & i <= len fc1
+    holds rng(fc1/.i) c= the carrier of U or rng(fc1/.i) c= the carrier of V
+    proof
+      let i be Nat;
+      assume
+A33:   1 <= i & i <= len fc1;
+      then
+A34:   i < len h - 1 + 1 by A31,NAT_1:13;
+      reconsider i0=i as Element of NAT by ORDINAL1:def 12;
+      f.:([.h/.i0,h/.(i0+1).]) = rng(f | [.h/.i0,h/.(i0+1).]) by RELAT_1:115
+      .= rng(fc1/.i) by A33,A31;
+      hence thesis by A33,A34,A15;
+    end;
+A35: for c1 being with_endpoints Curve of TUnitSphere(n)
+    st rng(c1) c= the carrier of V &
+       the_first_point_of c1 <> p & the_last_point_of c1 <> p &
+       not inf dom c1 = sup dom c1
+    holds
+    ex c2 being with_endpoints Curve of TUnitSphere(n)
+    st c1,c2 are_homotopic & rng(c2) c= the carrier of U & dom c1 = dom c2
+    proof
+      let c1 be with_endpoints Curve of TUnitSphere(n);
+      assume
+A36:  rng(c1) c= the carrier of V;
+      assume
+A37:  the_first_point_of c1 <> p & the_last_point_of c1 <> p;
+      assume
+A38:  not inf dom c1 = sup dom c1;
+      set t1 = the_first_point_of c1;
+      set t2 = the_last_point_of c1;
+      reconsider p1 = c1*L[01](0,1,inf dom c1,sup dom c1) as Path of t1,t2
+      by Th29;
+      stereographic_projection(V,-p) is being_homeomorphism
+      by A12,A14,MFOLD_2:31;
+      then
+A39:  TPlane(-p,0.TOP-REAL n1), V are_homeomorphic by T_0TOPSP:def 1;
+      -p <> 0.TOP-REAL n1
+      proof
+        assume -p = 0.TOP-REAL n1;
+        then -p - 0.TOP-REAL n1 = 0.TOP-REAL n1 by EUCLID:42;
+        then |. 0.TOP-REAL n1 .| = 1 by A12,TOPREAL9:9;
+        hence contradiction by EUCLID_2:39;
+      end;
+      then
+A40: TOP-REAL n, TPlane(-p,0.TOP-REAL n1) are_homeomorphic by MFOLD_2:29;
+      then
+      TOP-REAL n, V are_homeomorphic by A39,BORSUK_3:3;
+      then consider fh be Function of TOP-REAL n, V such that
+A41:  fh is being_homeomorphism by T_0TOPSP:def 1;
+A42:  dom fh = [#]TOP-REAL n & rng fh = [#]V by A41,TOPS_2:58;
+A43:  [#]V is infinite by A1,A41,A42,CARD_1:59;
+      reconsider v = p as Point of V by A13,A14;
+      reconsider S = ([#]V) \ {v} as non empty Subset of V by A43,RAMSEY_1:4;
+A44:  V | S is pathwise_connected by A1,A40,Th10,A39,BORSUK_3:3;
+A45: t1 in rng c1 by Th31;
+A46:  not t1 in {v} by A37,TARSKI:def 1;
+A47: t2 in rng c1 by Th31;
+A48:  not t2 in {v} by A37,TARSKI:def 1;
+      t1 in S & t2 in S by A45,A46,A47,A36,A48,XBOOLE_0:def 5;
+      then t1 in [#](V|S) & t2 in [#](V|S) by PRE_TOPC:def 5;
+      then reconsider v1 = t1, v2 = t2 as Point of V|S;
+A49:   v1,v2 are_connected by A44,BORSUK_2:def 3;
+      then consider p3 be Function of I[01],V|S such that
+A50:   p3 is continuous & p3.0 = v1 & p3.1 = v2 by BORSUK_2:def 1;
+      reconsider p3 as Path of v1,v2 by A50,A49,BORSUK_2:def 2;
+A51:  Tcircle(0.TOP-REAL n1,1) = Tunit_circle(n1) by TOPREALB:def 7
+      .= TUnitSphere(n) by MFOLD_2:def 4;
+A52: V is SubSpace of (TOP-REAL n1) | (Sphere (0.TOP-REAL n1,1))
+      by TOPMETR:22,XBOOLE_1:36;
+      then
+A53:  V is SubSpace of Tcircle(0.TOP-REAL n1,1) by TOPREALB:def 6;
+
+      reconsider S0 = V as non empty SubSpace of TUnitSphere(n)
+      by A51,A52,TOPREALB:def 6;
+      reconsider s1 = t1, s2 = t2 as Point of S0 by A45,A47,A36;
+A54:  dom p3 = [#]I[01] by FUNCT_2:def 1;
+A55:  [#]S0 c= [#]TUnitSphere(n) by PRE_TOPC:def 4;
+      rng p3 c= [#](V|S);
+      then
+A56:  rng p3 c= S by PRE_TOPC:def 5;
+      then
+      rng p3 c= [#]S0 by XBOOLE_1:1;
+      then reconsider p3 as Function of I[01],TUnitSphere(n)
+      by A54,A55,FUNCT_2:2,XBOOLE_1:1;
+      V|S is SubSpace of TUnitSphere(n) by A53,A51,TSEP_1:7;
+      then
+A57:  p3 is continuous by A50,PRE_TOPC:26;
+      then
+A58:   t1,t2 are_connected by A50,BORSUK_2:def 1;
+      then reconsider p2 = p3 as Path of t1,t2 by A50,A57,BORSUK_2:def 2;
+      rng p1 c= rng c1 by RELAT_1:26;
+      then
+A59:  rng p1 c= [#]V by A36,XBOOLE_1:1;
+A60:  rng p2 c= [#]V by A56,XBOOLE_1:1;
+A61:   s1,s2 are_connected by A58,A60,JORDAN:29;
+      reconsider p5=p1, p6=p2 as Path of s1,s2 by A58,A60,A59,JORDAN:29;
+      reconsider n0 = n as Element of NAT by ORDINAL1:def 12;
+      S0 is simply_connected by Th14,A39;
+      then Class(EqRel(S0,s1,s2),p5) = Class(EqRel(S0,s1,s2),p6) by Th12;
+      then p5,p6 are_homotopic by A61,TOPALG_1:46;
+      then
+A62:   p1,p2 are_homotopic by A58,A61,Th6;
+      set r1 = inf dom c1, r2 = sup dom c1;
+A63: r1 <= r2 by XXREAL_2:40;
+      then
+A64:  r1 < r2 by A38,XXREAL_0:1;
+      then reconsider c2 = p2*L[01](r1,r2,0,1)
+      as with_endpoints Curve of TUnitSphere(n) by A58,Th32;
+      take c2;
+      rng L[01](r1,r2,0,1) c= [#]Closed-Interval-TSpace(0,1) by RELAT_1:def 19;
+      then rng L[01](r1,r2,0,1) c= dom p2 by FUNCT_2:def 1,TOPMETR:20;
+      then dom c2 = dom L[01](r1,r2,0,1) by RELAT_1:27;
+      then dom c2 = [#]Closed-Interval-TSpace(r1,r2) by FUNCT_2:def 1;
+      then
+A65:  dom c2 = [.r1,r2.] by A63,TOPMETR:18;
+A66:  c2*L[01](0,1,r1,r2)
+      = p2*(L[01](r1,r2,0,1)*L[01](0,1,r1,r2)) by RELAT_1:36
+      .= p2*(id Closed-Interval-TSpace(0,1)) by Th1,A64,Th2
+      .= p2 by FUNCT_2:17,TOPMETR:20;
+      inf dom c1 = inf dom c2 & sup dom c1 = sup dom c2 by A65,Th27;
+      hence c1,c2 are_homotopic by A62,A66,Def11;
+A67:  rng c2 c= rng p2 by RELAT_1:26;
+A68:  (Sphere(0.TOP-REAL n1,1) \ {p}) \ {-p} c= Sphere(0.TOP-REAL n1,1) \ {p}
+      by XBOOLE_1:36;
+      rng c2 c= ([#]V) \ {p} by A56,A67,XBOOLE_1:1;
+      then rng c2 c= Sphere(0.TOP-REAL n1,1) \ ({-p} \/ {p})
+      by A14,XBOOLE_1:41;
+      then rng c2 c= (Sphere(0.TOP-REAL n1,1) \ {p}) \ {-p} by XBOOLE_1:41;
+      hence rng c2 c= the carrier of U by A11,A68,XBOOLE_1:1;
+      thus dom c1
+      = dom c2 by A65,Th27;
+    end;
+A69: for i being Nat st 1 <= i & i <= len fc1
+    holds i+1 in dom h & i in dom h & dom(fc1/.i) = [.h/.i,h/.(i+1).] &
+    h/.i < h/.(i+1)
+    proof
+      let i be Nat;
+      assume
+A70:  1 <= i & i <= len fc1;
+A71:    1 <= 1+i by NAT_1:11;
+A72:   i+1 <= len h - 1 + 1 by A70,A31,XREAL_1:6;
+        then
+        i+1 in Seg len h by A71,FINSEQ_1:1;
+        hence
+A73:    i+1 in dom h by FINSEQ_1:def 3;
+A74:    i < i+1 by NAT_1:13;
+        i <= len h by A72,NAT_1:13;
+        then i in Seg len h by A70,FINSEQ_1:1;
+        hence
+A75:    i in dom h by FINSEQ_1:def 3;
+A76:    h/.i = h.i by A75,PARTFUN1:def 6;
+A77:    h/.(i+1) = h.(i+1) by A73,PARTFUN1:def 6;
+A78:    0 <= h.i
+        proof
+          per cases;
+          suppose i = 1; hence thesis by A5; end;
+          suppose not i = 1;
+            then
+A79:        1 < i by A70,XXREAL_0:1;
+            1 <= len h by A72,A71,XXREAL_0:2;
+            then 1 in Seg len h by FINSEQ_1:1;
+            then 1 in dom h by FINSEQ_1:def 3;
+            hence thesis by A5,A75,A79,VALUED_0:def 13;
+          end;
+        end;
+A80:    h.(i+1) <= 1
+        proof
+          per cases;
+          suppose i+1 = len h; hence thesis by A5; end;
+          suppose not i+1 = len h;
+            then
+A81:        i+1 < len h by A72,XXREAL_0:1;
+            len h in Seg len h by A5,FINSEQ_1:3;
+            then
+A82:        len h in dom h by FINSEQ_1:def 3;
+            i+1 in Seg len h by A72,A71,FINSEQ_1:1;
+            then i+1 in dom h by FINSEQ_1:def 3;
+            hence thesis by A5,A81,A82,VALUED_0:def 13;
+          end;
+        end;
+        [.h.i,h.(i+1).] c= [.0,1.] by A78,A80,XXREAL_1:34;
+        then
+A83:   [.h.i,h.(i+1).] c= dom c by A30,Th27;
+A84:    fc1/.i = c | ([.h/.i,h/.(i+1).]) by A31,A70;
+      thus
+      dom(fc1/.i)
+        = [.h/.i,h/.(i+1).] by A84,A83,A76,A77,RELAT_1:62;
+      thus h/.i < h/.(i+1) by A77,A76,A75,A73,A74,A5,VALUED_0:def 13;
+    end;
+A85: for i being Nat st 1 <= i & i <= len fc1
+    holds fc1/.i is with_endpoints &
+    (for c1 being with_endpoints Curve of TUnitSphere(n) st c1 = fc1/.i
+    ex c2 being with_endpoints Curve of TUnitSphere(n)
+    st c1,c2 are_homotopic & rng(c2) c= the carrier of U & dom c1 = dom c2
+    & dom c1 = [. h/.i, h/.(i+1) .])
+    proof
+      let i be Nat;
+      assume
+A86:  1 <= i & i <= len fc1;
+A87:    fc1/.i = c | ([.h/.i,h/.(i+1).]) by A31,A86;
+A88:  i+1 in dom h by A69,A86;
+A89:  i in dom h by A69,A86;
+A90:    i < i+1 by NAT_1:13;
+A91:    h.i < h.(i+1) by A89,A88,A90,A5,VALUED_0:def 13;
+A92:  dom(fc1/.i) = [.h/.i,h/.(i+1).] by A69,A86;
+      h/.i < h/.(i+1) by A69,A86;
+      then dom(fc1/.i) is left_end right_end by A92,XXREAL_2:33;
+      then (fc1/.i) is with_first_point with_last_point by Def7,Def6;
+      hence (fc1/.i) is with_endpoints;
+      let c1 be with_endpoints Curve of TUnitSphere(n);
+      assume
+A93: c1 = fc1/.i;
+A94:  dom c1 = [.inf dom c1, sup dom c1.] by Th27;
+A95:  inf dom c1 <= sup dom c1 by XXREAL_2:40;
+A96:  inf dom c1 = h/.i by A93,A94,A95,A92,XXREAL_1:66;
+A97: h/.i = h.i by A89,PARTFUN1:def 6;
+A98:  sup dom c1 = h/.(i+1) by A93,A94,A95,A92,XXREAL_1:66;
+A99: h/.(i+1) = h.(i+1) by A88,PARTFUN1:def 6;
+      per cases by A32,A86,A93;
+      suppose
+A100:    rng(c1) c= the carrier of U;
+        take c1;
+        thus thesis by A100,A93,A69,A86;
+      end;
+      suppose
+A101:  rng(c1) c= the carrier of V;
+A102:  rng h c= dom f by A5,FUNCT_2:def 1;
+        then
+A103:    dom f2 = dom h by RELAT_1:27;
+A104:    i+1 in dom f2 by A102,A88,RELAT_1:27;
+A105:     the_first_point_of c1 <> p
+        proof
+          assume
+A106:    the_first_point_of c1 = p;
+          inf dom c1 in dom c1 by A94,A95,XXREAL_1:1;
+          then c1.(inf dom c1)
+          = f.(h.i) by A96,A97,A93,A87,FUNCT_1:47
+          .= f2.i by A103,A89,FUNCT_1:12;
+          hence contradiction by A6,A106,A103,A89,FUNCT_1:3;
+        end;
+A107:     the_last_point_of c1 <> p
+        proof
+          assume
+A108:    the_last_point_of c1 = p;
+          sup dom c1 in dom c1 by A94,A95,XXREAL_1:1;
+          then c1.(sup dom c1)
+          = f.(h.(i+1)) by A98,A99,A93,A87,FUNCT_1:47
+          .= f2.(i+1) by A104,FUNCT_1:12;
+          hence contradiction by A6,A108,A104,FUNCT_1:3;
+        end;
+        consider c2 be with_endpoints Curve of TUnitSphere(n) such that
+A109:    c1,c2 are_homotopic & rng(c2) c= the carrier of U & dom c1 = dom c2
+        by A35,A101,A105,A107,A96,A98,A91,A97,A99;
+        take c2;
+        thus thesis by A109,A93,A69,A86;
+      end;
+    end;
+    defpred P[set,set] means
+    for i being Nat, c1 being with_endpoints Curve of TUnitSphere(n)
+    st i=$1 & c1 = fc1/.i holds
+    ex c2 being with_endpoints Curve of TUnitSphere(n) st c2 = $2 &
+    c2,c1 are_homotopic & rng(c2) c= the carrier of U & dom c1 = dom c2 &
+    dom c1 = [. h/.i, h/.(i+1) .];
+A110: for k being Nat st k in Seg len fc1
+    ex x being Element of Curves TUnitSphere(n) st P[k,x]
+    proof
+      let k be Nat;
+      assume k in Seg len fc1;
+      then
+A111:   1 <= k & k <= len fc1 by FINSEQ_1:1;
+      set c1 = fc1/.k;
+      reconsider c1 as with_endpoints Curve of TUnitSphere(n) by A111,A85;
+      consider c2 be with_endpoints Curve of TUnitSphere(n) such that
+A112:   c1,c2 are_homotopic & rng(c2) c= the carrier of U & dom c1 = dom c2 &
+      dom c1 = [. h/.k, h/.(k+1) .]
+      by A85,A111;
+      reconsider x = c2 as Element of Curves TUnitSphere(n);
+      take x;
+      thus thesis by A112;
+    end;
+    ex p being FinSequence of Curves TUnitSphere(n)
+    st dom p = Seg len fc1 &
+    for k being Nat st k in Seg len fc1 holds P[k,p.k]
+    from FINSEQ_1:sch 5(A110);
+    then consider fc2 be FinSequence of Curves TUnitSphere(n) such that
+A113: dom fc2 = Seg len fc1 &
+    for k being Nat st k in Seg len fc1 holds P[k,fc2.k];
+A114: len fc2 = len fc1 by A113,FINSEQ_1:def 3;
+A115: 2-1 <= len h -1 by A29,XREAL_1:9;
+    then
+A116: len fc2 > 0 by A31,A113,FINSEQ_1:def 3;
+A117: for i being Nat st 1 <= i & i < len fc2
+       holds (fc2/.i).sup dom(fc2/.i) = (fc2/.(i+1)).inf dom(fc2/.(i+1))
+       & sup dom(fc2/.i) = inf dom(fc2/.(i+1))
+    proof
+      let i be Nat;
+      assume
+A118:   1 <= i & i < len fc2;
+      then 1<=i & i <= len fc1 by A113,FINSEQ_1:def 3;
+      then
+A119:  i in Seg len fc1 by FINSEQ_1:1;
+      set ci = fc1/.i;
+      reconsider ci as with_endpoints Curve of TUnitSphere(n) by A118,A114,A85;
+      consider di be with_endpoints Curve of TUnitSphere(n) such that
+A120:   di = fc2.i & di,ci are_homotopic & rng(di) c= the carrier of U &
+      dom ci = dom di & dom ci = [. h/.i,h/.(i+1) .] by A119,A113;
+      1+1 <= i+1 by A118,XREAL_1:6;
+      then
+A121:   1 <= i+1 by XXREAL_0:2;
+A122:   i+1 <= len fc2 by A118,NAT_1:13;
+      then
+A123:  i+1 in Seg len fc1 by A114,A121,FINSEQ_1:1;
+      set ci1 = fc1/.(i+1);
+      reconsider ci1 as with_endpoints Curve of TUnitSphere(n)
+      by A121,A122,A114,A85;
+      consider di1 be with_endpoints Curve of TUnitSphere(n) such that
+A124: di1 = fc2.(i+1) & di1,ci1 are_homotopic & rng(di1) c= the carrier of U &
+      dom ci1 = dom di1 & dom ci1 = [. h/.(i+1),h/.((i+1)+1) .] by A123,A113;
+A125:  i+1 in dom fc2 by A122,A113,A114,A121,FINSEQ_1:1;
+A126:  h/.i < h/.(i+1) by A69,A118,A114;
+A127:  h/.(i+1) < h/.((i+1)+1) by A69,A121,A122,A114;
+A128:  dom(fc1/.i) = [.h/.i,h/.(i+1).] by A69,A118,A114;
+A129:  dom(fc1/.(i+1)) = [.h/.(i+1),h/.((i+1)+1).] by A69,A121,A122,A114;
+A130:  h/.(i+1) in [.h/.i,h/.(i+1).] by A126,XXREAL_1:1;
+A131:  h/.(i+1) in [.h/.(i+1),h/.((i+1)+1).] by A127,XXREAL_1:1;
+A132:  fc2/.i = fc2.i by A119,A113,PARTFUN1:def 6;
+A133:  fc2/.(i+1) = fc2.(i+1) by A125,PARTFUN1:def 6;
+      thus (fc2/.i).sup dom(fc2/.i) = the_last_point_of di by A120,A132
+      .= the_last_point_of ci by A120,Th35
+      .= (fc1/.i).(h/.(i+1)) by A126,A128,XXREAL_2:29
+      .= (c | ([.h/.i,h/.(i+1).])).(h/.(i+1)) by A31,A118,A114
+      .= c.(h/.(i+1)) by A130,FUNCT_1:49
+      .= (c | ([.h/.(i+1),h/.((i+1)+1).])).(h/.(i+1)) by A131,FUNCT_1:49
+      .= (fc1/.(i+1)).(h/.(i+1)) by A31,A121,A122,A114
+      .= the_first_point_of ci1 by A127,A129,XXREAL_2:25
+      .= the_first_point_of di1 by A124,Th35
+      .= (fc2/.(i+1)).inf dom(fc2/.(i+1)) by A124,A133;
+A134:  dom(fc2/.i) = [. h/.i,h/.(i+1) .]
+      by A120,A119,A113,PARTFUN1:def 6;
+A135:  dom(fc2/.(i+1))
+      = [. h/.(i+1),h/.(i+2) .] by A124,A125,PARTFUN1:def 6;
+      thus sup dom(fc2/.i) = h/.(i+1) by A134,A126,XXREAL_2:29
+      .= inf dom(fc2/.(i+1)) by A135,A127,XXREAL_2:25;
+    end;
+A136: for i being Nat st 1 <= i & i <= len fc2
+     holds fc2/.i is with_endpoints
+    proof
+      let i be Nat;
+      assume
+A137: 1 <= i & i <= len fc2;
+      then
+A138:  i in Seg len fc1 by A114,FINSEQ_1:1;
+      set ci = fc1/.i;
+      reconsider ci as with_endpoints Curve of TUnitSphere(n)
+      by A137,A114,A85;
+      consider di be with_endpoints Curve of TUnitSphere(n) such that
+A139:   di = fc2.i & di,ci are_homotopic & rng(di) c= the carrier of U &
+      dom ci = dom di & dom ci = [. h/.i,h/.(i+1) .] by A138,A113;
+      thus fc2/.i is with_endpoints
+      by A139,A138,A113,PARTFUN1:def 6;
+    end;
+    consider c0 be with_endpoints Curve of TUnitSphere(n) such that
+A140: Sum fc2 = c0 & dom c0 = [.inf dom(fc2/.1), sup dom(fc2/.(len fc2)).] &
+    the_first_point_of c0 = (fc2/.1).(inf dom(fc2/.1)) &
+    the_last_point_of c0 = (fc2/.(len fc2)).(sup dom(fc2/.(len fc2)))
+    by A117,A136,A116,Th43;
+A141: for i being Nat st 1 <= i & i < len fc1
+     holds (fc1/.i).sup dom(fc1/.i) = (fc1/.(i+1)).inf dom(fc1/.(i+1))
+     & sup dom(fc1/.i) = inf dom(fc1/.(i+1))
+    proof
+      let i be Nat;
+      assume
+A142:   1 <= i & i < len fc1;
+A143: i in Seg len fc1 by A142,FINSEQ_1:1;
+      set ci = fc1/.i;
+      reconsider ci as with_endpoints Curve of TUnitSphere(n) by A142,A85;
+      consider di be with_endpoints Curve of TUnitSphere(n) such that
+A144:   di = fc2.i & di,ci are_homotopic & rng(di) c= the carrier of U &
+      dom ci = dom di & dom ci = [. h/.i,h/.(i+1) .] by A143,A113;
+      1+1 <= i+1 by A142,XREAL_1:6;
+      then
+A145:   1 <= i+1 by XXREAL_0:2;
+A146:   i+1 <= len fc2 by A114,A142,NAT_1:13;
+      then
+A147: i+1 in Seg len fc1 by A114,A145,FINSEQ_1:1;
+      set ci1 = fc1/.(i+1);
+      reconsider ci1 as with_endpoints Curve of TUnitSphere(n)
+      by A145,A146,A114,A85;
+      consider di1 be with_endpoints Curve of TUnitSphere(n) such that
+A148: di1 = fc2.(i+1) & di1,ci1 are_homotopic & rng(di1) c= the carrier of U &
+      dom ci1 = dom di1 & dom ci1 = [. h/.(i+1),h/.((i+1)+1) .] by A147,A113;
+A149:  h/.i < h/.(i+1) by A69,A142;
+A150:  h/.(i+1) < h/.((i+1)+1) by A69,A145,A146,A114;
+A151:  dom(fc1/.i) = [.h/.i,h/.(i+1).] by A69,A142;
+A152:  dom(fc1/.(i+1)) = [.h/.(i+1),h/.((i+1)+1).] by A69,A145,A146,A114;
+A153:  h/.(i+1) in [.h/.i,h/.(i+1).] by A149,XXREAL_1:1;
+A154:  h/.(i+1) in [.h/.(i+1),h/.((i+1)+1).] by A150,XXREAL_1:1;
+      thus (fc1/.i).sup dom(fc1/.i)
+      = (fc1/.i).(h/.(i+1)) by A149,A151,XXREAL_2:29
+      .= (c | ([.h/.i,h/.(i+1).])).(h/.(i+1)) by A31,A142
+      .= c.(h/.(i+1)) by A153,FUNCT_1:49
+      .= (c | ([.h/.(i+1),h/.((i+1)+1).])).(h/.(i+1)) by A154,FUNCT_1:49
+      .= (fc1/.(i+1)).(h/.(i+1)) by A31,A145,A146,A114
+      .= (fc1/.(i+1)).inf dom(fc1/.(i+1)) by A150,A152,XXREAL_2:25;
+      thus sup dom(fc1/.i) = h/.(i+1) by A144,A149,XXREAL_2:29
+      .= inf dom(fc1/.(i+1)) by A148,A150,XXREAL_2:25;
+    end;
+    for i being Nat st 1 <= i & i <= len fc2 holds
+        ex c3,c4 being with_endpoints Curve of TUnitSphere(n)
+        st c3 = fc2/.i & c4 = fc1/.i & c3,c4 are_homotopic & dom c3 = dom c4
+    proof
+      let i be Nat;
+      assume
+A155: 1 <= i & i <= len fc2;
+      then
+A156:  i in Seg len fc1 by A114,FINSEQ_1:1;
+      set ci = fc1/.i;
+      reconsider ci as with_endpoints Curve of TUnitSphere(n)
+      by A155,A114,A85;
+      consider di be with_endpoints Curve of TUnitSphere(n) such that
+A157:   di = fc2.i & di,ci are_homotopic & rng(di) c= the carrier of U &
+      dom ci = dom di & dom ci = [. h/.i,h/.(i+1) .] by A156,A113;
+A158:  i in dom fc2 by A155,A114,A113,FINSEQ_1:1;
+      take di,ci;
+      thus thesis by A157,A158,PARTFUN1:def 6;
+    end;
+    then
+A159: c0, c are_homotopic by A117,A141,A140,Th44,A114,A115,A31;
+A160: dom c0 = [.0,1.]
+    proof
+A161: 0+1 < len fc1 + 1 by A115,A31,XREAL_1:6;
+A162: 1 in Seg len fc1 by A115,A31,FINSEQ_1:1;
+      set ci = fc1/.1;
+      reconsider ci as with_endpoints Curve of TUnitSphere(n) by A115,A31,A85;
+      consider di be with_endpoints Curve of TUnitSphere(n) such that
+A163:   di = fc2.1 & di,ci are_homotopic & rng(di) c= the carrier of U &
+      dom ci = dom di & dom ci = [. h/.1,h/.(1+1) .] by A162,A113;
+      1 in Seg len fc2 by A115,A31,A114,FINSEQ_1:1;
+      then 1 in dom fc2 by FINSEQ_1:def 3;
+      then
+A164:  dom(fc2/.1) = [.h/.1,h/.(1+1).] by A163,PARTFUN1:def 6;
+A165:  h/.1 < h/.(1+1) by A69,A115,A31;
+      1 in Seg len h by A161,A31,FINSEQ_1:1;
+      then
+A166:  1 in dom h by FINSEQ_1:def 3;
+A167:  inf dom(fc2/.1) = h/.1 by A165,A164,XXREAL_2:25
+      .= 0 by A5,A166,PARTFUN1:def 6;
+A168: len fc1 in Seg len fc1 by A115,A31,FINSEQ_1:1;
+      set ci1 = fc1/.(len fc1);
+      reconsider ci1 as with_endpoints Curve of TUnitSphere(n)
+      by A115,A31,A85;
+      consider di1 be with_endpoints Curve of TUnitSphere(n) such that
+A169:   di1 = fc2.(len fc1) & di1,ci1 are_homotopic &
+      rng(di1) c= the carrier of U &
+      dom ci1 = dom di1 & dom ci1 = [. h/.(len fc1),h/.(len fc1+1) .]
+      by A168,A113;
+      len fc1 in Seg len fc2 by A114,A115,A31,FINSEQ_1:1;
+      then len fc1 in dom fc2 by FINSEQ_1:def 3;
+      then
+A170: dom(fc2/.len fc2) = [.h/.len fc1,h/.(len fc1+1).]
+      by A169,A114,PARTFUN1:def 6;
+A171: h/.len fc1 < h/.(len fc1+1) by A69,A115,A31;
+      len h in Seg len h by A161,A31,FINSEQ_1:1;
+      then
+A172: len h in dom h by FINSEQ_1:def 3;
+A173: sup dom(fc2/.(len fc2)) = h/.(len fc1+1) by A171,A170,XXREAL_2:29
+      .= 1 by A5,A31,A172,PARTFUN1:def 6;
+      thus thesis by A140,A167,A173;
+    end;
+    for i being Nat st 1 <= i & i <= len fc2
+    holds rng(fc2/.i) c= the carrier of U
+    proof
+      let i be Nat;
+      assume
+A174:  1 <= i & i <= len fc2;
+      then i in Seg len fc2 by FINSEQ_1:1;
+      then
+A175:   i in dom fc2 by FINSEQ_1:def 3;
+A176:  i in Seg len fc1 by A114,A174,FINSEQ_1:1;
+      reconsider c1 = fc1/.i as with_endpoints Curve of TUnitSphere(n)
+      by A85,A174,A114;
+      consider c2 be with_endpoints Curve of TUnitSphere(n) such that
+A177:   c2 = fc2.i & c2,c1 are_homotopic & rng(c2) c= the carrier of U &
+      dom c1 = dom c2 & dom c1 = [. h/.i, h/.(i+1) .] by A176,A113;
+      thus thesis by A175,A177,PARTFUN1:def 6;
+    end;
+    then
+A178: rng c0 c= the carrier of U by A140,Th42;
+A179: t,t are_connected;
+A180: t
+     = the_first_point_of c by A30,A179,BORSUK_2:def 2
+    .= the_first_point_of c0 by Th35,A159;
+A181: t
+    = the_last_point_of c by A30,A179,BORSUK_2:def 2
+    .= the_last_point_of c0 by Th35,A159;
+    reconsider f0 = c0 as Loop of t by A160,A180,A181,Th28;
+A182: f0, f are_homotopic by A159,A179,Th34;
+    not p in rng f0
+    proof
+      assume p in rng f0;
+      then not p in {p} by A11,A178,XBOOLE_0:def 5;
+      hence contradiction by TARSKI:def 1;
+    end;
+    hence thesis by A6,A182;
+  end;
+
+theorem Th46:
+  n >= 2 implies TUnitSphere(n) is having_trivial_Fundamental_Group
+  proof
+    assume
+A1: n >= 2;
+    set T = TUnitSphere(n);
+    for t being Point of T, f being Loop of t holds f is nullhomotopic
+    proof
+      let t be Point of T, f be Loop of t;
+      per cases;
+      suppose rng f <> the carrier of TUnitSphere(n);
+        hence f is nullhomotopic by Lm3;
+      end;
+      suppose rng f = the carrier of TUnitSphere(n);
+        then consider g be Loop of t such that
+        A2: g, f are_homotopic and
+        A3: rng g <> the carrier of TUnitSphere(n) by A1,Lm4;
+        g is nullhomotopic by A3,Lm3;
+        then consider C be constant Loop of t such that
+        A4: g, C are_homotopic by Def3;
+        f, C are_homotopic by A2,A4,BORSUK_6:79;
+        hence f is nullhomotopic by Def3;
+      end;
+    end;
+    hence thesis by Th17;
+  end;
+
+theorem
+  for n being non empty Nat, r being positive real number,
+      x being Point of TOP-REAL n st n >= 3 holds
+  Tcircle(x,r) is having_trivial_Fundamental_Group
+  proof
+    let n be non empty Nat;
+    let r be positive real number;
+    let x be Point of TOP-REAL n;
+    assume
+A1: n >= 3;
+    then n-1 >= 3-1 by XREAL_1:9;
+    then 0 <= n-1 by XXREAL_0:2;
+    then
+A2: n-'1+1 = n-1+1 by XREAL_0:def 2;
+    2+1 = 3;
+    then 2 <= n-'1 by A1,NAT_D:49;
+    then
+A3: TUnitSphere(n-'1) is having_trivial_Fundamental_Group by Th46;
+A4: TUnitSphere(n-'1) = Tunit_circle(n-'1+1) by MFOLD_2:def 4;
+A5: Tunit_circle(n) = Tcircle(0.TOP-REAL n,1) by TOPREALB:def 7;
+    n in NAT by ORDINAL1:def 12;
+    then Tcircle(x,r), Tcircle(0.TOP-REAL n,1) are_homeomorphic by TOPREALB:20;
+    hence thesis by A2,A3,A4,A5,Th13;
+  end;

@@ -2,7 +2,7 @@
 ::  by Konrad Raczkowski and Andrzej N\c{e}dzusiak
 ::
 :: Received October 15, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,17 +17,18 @@ environ
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, ARYTM_3, CARD_1,
       FUNCT_1, POWER, SEQ_2, ORDINAL2, ARYTM_1, XXREAL_0, COMPLEX1, RELAT_1,
       INT_1, NAT_1, REAL_1, CARD_3, VALUED_1, FUNCOP_1, VALUED_0, XXREAL_2,
-      PREPOWER, NEWTON, SERIES_1, ABIAN, MEMBERED, XBOOLE_0, IDEAL_1, XCMPLX_0;
+      PREPOWER, NEWTON, SERIES_1, ABIAN, MEMBERED, XBOOLE_0, IDEAL_1, PBOOLE,
+      TARSKI;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1,
-      REAL_1, NAT_1, MEMBERED, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, SEQ_1,
-      SEQ_2, FUNCT_2, INT_1, NEWTON, ABIAN, PREPOWER, POWER, FUNCOP_1,
-      XXREAL_0;
+      REAL_1, NAT_1, MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, VALUED_0,
+      VALUED_1, SEQ_1, COMSEQ_2, SEQ_2, PBOOLE, FUNCT_2, INT_1, NEWTON, ABIAN,
+      PREPOWER, POWER, FUNCOP_1, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, SEQ_2, SEQM_3, NEWTON,
       PREPOWER, POWER, PARTFUN1, SEQ_1, VALUED_1, SEQ_4, RELSET_1, ABIAN,
-      BINOP_2;
+      BINOP_2, COMSEQ_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       MEMBERED, NEWTON, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, POWER, FUNCOP_1,
-      SEQ_2, SEQ_4, XCMPLX_0;
+      SEQ_2, SEQ_4, XCMPLX_0, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
 
 
@@ -42,7 +43,7 @@ theorem :: SERIES_1:1
   s is convergent & lim s = 0;
 
 theorem :: SERIES_1:2
-  for n being natural number holds abs(a) to_power n = abs(a to_power n);
+  for n being Nat holds abs(a) to_power n = abs(a to_power n);
 
 theorem :: SERIES_1:3
   abs(a)<1 & (for n holds s.n=a to_power (n+1)) implies s is
@@ -55,13 +56,21 @@ definition
 end;
 
 definition
-  let X be complex-membered set;
-  let s be sequence of X such that
- X is non empty add-closed;
-  func Partial_Sums(s) -> sequence of X means
+  let s be complex-valued ManySortedSet of NAT;
+  func Partial_Sums(s) -> complex-valued ManySortedSet of NAT means
 :: SERIES_1:def 1
 
   it.0 = s.0 & for n holds it.(n+1) = it.n + s.(n+1);
+end;
+
+registration
+  let s be real-valued ManySortedSet of NAT;
+ cluster Partial_Sums s -> real-valued;
+end;
+
+definition
+  let s be Real_Sequence;
+  redefine func Partial_Sums s -> Real_Sequence;
 end;
 
 definition
@@ -115,8 +124,8 @@ theorem :: SERIES_1:14
   <=Partial_Sums(s2).n;
 
 theorem :: SERIES_1:15
-  s is summable implies for n holds Sum(s) = Partial_Sums(s).n + Sum(s^\
-  (n+1 ) );
+  s is summable implies
+   for n holds Sum(s) = Partial_Sums(s).n + Sum(s^\(n+1));
 
 theorem :: SERIES_1:16
   (for n holds 0<=s.n) implies Partial_Sums(s) is non-decreasing;
@@ -198,16 +207,18 @@ theorem :: SERIES_1:33
 
 definition
   let s;
-
   attr s is absolutely_summable means
 :: SERIES_1:def 4
-
-  abs(s) is summable;
+ abs s is summable;
 end;
 
 theorem :: SERIES_1:34
   for n,m st n<=m holds abs(Partial_Sums(s).m - Partial_Sums(s).n)
   <= abs(Partial_Sums(abs(s)).m - Partial_Sums(abs(s)).n);
+
+registration
+ cluster absolutely_summable -> summable for Real_Sequence;
+end;
 
 theorem :: SERIES_1:35
   s is absolutely_summable implies s is summable;

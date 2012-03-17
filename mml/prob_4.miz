@@ -3,7 +3,7 @@
 ::  by Bo Zhang , Hiroshi Yamazaki and Yatsuka Nakamura
 ::
 :: Received November 23, 2005
-:: Copyright (c) 2005-2011 Association of Mizar Users
+:: Copyright (c) 2005-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,7 +25,7 @@ environ
       NUMBERS, SUPINF_1, PARTFUN1, FUNCT_2, FUNCT_7, PROB_1, PROB_3, MEASURE1,
       FUNCOP_1, SEQM_3, SERIES_1, RINFSUP1, ZFMISC_1, MEASURE6, PROB_2;
  constructors REAL_1, SERIES_1, MEASURE3, MEASURE6, PARTFUN3, KURATO_0,
-      RINFSUP1, PROB_3, SEQ_1, SUPINF_1, FUNCT_7, RELSET_1;
+      RINFSUP1, PROB_3, SEQ_1, SUPINF_1, FUNCT_7, RELSET_1, COMSEQ_2;
  registrations SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, MEASURE1, MEASURE3, VALUED_0, SEQ_2, SEQ_4,
       FUNCT_7, PROB_1, RELSET_1, PROB_3;
@@ -160,7 +160,7 @@ registration
   end;
 end;
 
-theorem Th4:
+theorem Th3:
   for A, B being Subset of X st A misses B holds (A,B) followed_by
   {} is disjoint_valued
 proof
@@ -218,7 +218,7 @@ A9:   m <> 0 & m <> 1;
   hence thesis;
 end;
 
-theorem Th5:
+theorem Th4:
   for S being non empty set holds S is SigmaField of X iff S c=
   bool X & (for A1 being SetSequence of X st rng A1 c= S holds Union A1 in S) &
   for A being Subset of X st A in S holds A` in S
@@ -263,7 +263,7 @@ A4: rng A1 c= S;
   hence thesis by A1,A3,PROB_1:15;
 end;
 
-theorem Th6:
+theorem Th5:
   for A,B being Event of Sigma holds P.(A \ B) = P.(A \/ B) - P.B
 proof
   let A,B be Event of Sigma;
@@ -271,7 +271,7 @@ proof
   hence thesis;
 end;
 
-theorem Th7:
+theorem Th6:
   for A,B being Event of Sigma st A c= B & P.B = 0 holds P.A = 0
 proof
   let A,B be Event of Sigma;
@@ -280,7 +280,7 @@ proof
   hence thesis by PROB_1:def 8;
 end;
 
-theorem Th8:
+theorem Th7:
   (for n holds P.(ASeq.n) = 0) iff P.(Union ASeq) = 0
 proof
   hereby
@@ -334,11 +334,11 @@ A8: P.(Union ASeq) = 0;
     ASeq.n in rng ASeq by SETLIM_1:4;
     then ASeq.n c= union rng ASeq by ZFMISC_1:74;
     then Y1 c= Y2 by CARD_3:def 4;
-    hence P.(ASeq.n) = 0 by A8,Th7;
+    hence P.(ASeq.n) = 0 by A8,Th6;
   end;
 end;
 
-theorem Th9:
+theorem Th8:
   (for A being set st A in rng ASeq holds P.A = 0) iff P.(union rng ASeq) = 0
 proof
   hereby
@@ -350,7 +350,7 @@ A1: for A being set st A in rng ASeq holds P.A = 0;
       ASeq.n in rng ASeq by SETLIM_1:4;
       hence thesis by A1;
     end;
-    then P.(Union ASeq) = 0 by Th8;
+    then P.(Union ASeq) = 0 by Th7;
     hence P.(union rng ASeq) = 0 by CARD_3:def 4;
   end;
   assume P.(union rng ASeq) = 0;
@@ -360,11 +360,11 @@ A2: P.(Union ASeq) = 0 by CARD_3:def 4;
     let A be set;
     assume A in rng ASeq;
     then ex n1 being Element of NAT st A = ASeq.n1 by SETLIM_1:4;
-    hence P.A = 0 by A2,Th8;
+    hence P.A = 0 by A2,Th7;
   end;
 end;
 
-theorem Th10:
+theorem Th9:
   for seq being Function of NAT,REAL, Eseq being Function of NAT,
   ExtREAL st seq = Eseq holds Partial_Sums seq = Ser Eseq
 proof
@@ -391,7 +391,7 @@ A4: P[0];
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th11:
+theorem Th10:
   for seq being Function of NAT,REAL, Eseq being Function of NAT,
   ExtREAL st seq = Eseq & seq is bounded_above
   holds upper_bound seq = sup rng Eseq
@@ -434,7 +434,7 @@ A8: s <= sup rng Eseq
   hence thesis by A8,XXREAL_0:1;
 end;
 
-theorem Th12:
+theorem Th11:
   for seq being Function of NAT,REAL, Eseq being Function of NAT,
   ExtREAL st seq = Eseq & seq is bounded_below
    holds lower_bound seq = inf rng Eseq
@@ -477,7 +477,7 @@ A8: inf rng Eseq <= s
   hence thesis by A8,XXREAL_0:1;
 end;
 
-theorem Th13:
+theorem Th12:
   for seq being Function of NAT,REAL, Eseq being Function of NAT,
   ExtREAL st seq = Eseq & seq is nonnegative summable holds Sum seq = SUM Eseq
 proof
@@ -488,12 +488,12 @@ A3: for n holds seq.n >= 0 by A2,RINFSUP1:def 3;
   Partial_Sums seq is convergent by A2,SERIES_1:def 2;
   then
 A4: Partial_Sums seq is bounded;
-  then upper_bound Partial_Sums seq = sup rng Ser Eseq by A1,Th10,Th11;
+  then upper_bound Partial_Sums seq = sup rng Ser Eseq by A1,Th9,Th10;
   then upper_bound Partial_Sums seq = SUM Eseq by SUPINF_2:def 17;
   hence thesis by A4,A3,RINFSUP1:24,SERIES_1:16;
 end;
 
-theorem Th14:
+theorem Th13:
   P is sigma_Measure of Sigma
 proof
   set Z = Sigma;
@@ -522,7 +522,7 @@ A4: rng P1 is nonnegative by SUPINF_2:def 9;
 A5: P * F2 is nonnegative by RINFSUP1:def 3;
     Partial_Sums(P * F2) is convergent by PROB_3:45;
     then P * F2 is summable by SERIES_1:def 2;
-    then P.(Union F2) = Sum(P * F2) & Sum(P * F2) = SUM(P1 * F) by A5,Th13,
+    then P.(Union F2) = Sum(P * F2) & Sum(P * F2) = SUM(P1 * F) by A5,Th12,
 PROB_3:46;
     hence thesis by CARD_3:def 4;
   end;
@@ -533,10 +533,10 @@ definition
   let Omega,Sigma,P;
   func P2M(P) -> sigma_Measure of Sigma equals
   P;
-  coherence by Th14;
+  coherence by Th13;
 end;
 
-theorem Th15:
+theorem Th14:
   for X being non empty set, S being SigmaField of X, M being
   sigma_Measure of S st M.X = R_EAL(1) holds M is Probability of S
 proof
@@ -590,7 +590,7 @@ A10:  (M*F).n = M.(F.n) & (M*F).(n+1) = M.(F.(n+1)) by FUNCT_1:12;
     then
 A11: P1*ASeq is non-increasing by SEQM_3:def 9;
     then lim (P1*ASeq) = lower_bound (P1*ASeq) by A7,RINFSUP1:25
-      .= inf(rng (M*F)) by A7,Th12;
+      .= inf(rng (M*F)) by A7,Th11;
     then lim (P1 * ASeq) = M.(meet rng F) by A8,A9,MEASURE3:12
       .= P1.Intersection ASeq by SETLIM_1:8;
     hence thesis by A7,A11;
@@ -616,7 +616,7 @@ definition
 A1: M.X = R_EAL(1);
   func M2P(M) -> Probability of S equals
   M;
-  coherence by A1,Th15;
+  coherence by A1,Th14;
 end;
 
 Lm2: A1 is non-descending implies for n holds (Partial_Union A1).n = A1.n
@@ -636,7 +636,7 @@ A5: P[0] by PROB_3:def 2;
   thus for k holds P[k] from NAT_1:sch 1(A5,A2);
 end;
 
-theorem Th16:
+theorem Th15:
   A1 is non-descending implies Partial_Union A1 = A1
 proof
   assume A1 is non-descending;
@@ -644,7 +644,7 @@ proof
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th17:
+theorem Th16:
   A1 is non-descending implies (Partial_Diff_Union A1).0 = A1.0 &
   for n holds (Partial_Diff_Union A1).(n+1) = A1.(n+1) \ A1.n
 proof
@@ -678,27 +678,27 @@ A2: A1.n c= A1.(n+1) by A1,PROB_2:7;
   end;
 end;
 
-theorem Th19:
+theorem Th18:
   A1 is non-descending implies for n holds (Partial_Diff_Union A1)
   .(n+1) misses A1.n
 proof
   assume
 A1: A1 is non-descending;
   let n;
-  (Partial_Diff_Union A1).(n+1) = A1.(n+1) \ A1.n by A1,Th17;
+  (Partial_Diff_Union A1).(n+1) = A1.(n+1) \ A1.n by A1,Th16;
   hence thesis by XBOOLE_1:79;
 end;
 
 theorem
-  XSeq is non-descending implies Partial_Union XSeq = XSeq by Th16;
+  XSeq is non-descending implies Partial_Union XSeq = XSeq by Th15;
 
 theorem
   XSeq is non-descending implies (Partial_Diff_Union XSeq).0 = XSeq.0 &
-  for n holds (Partial_Diff_Union XSeq).(n+1) = XSeq.(n+1) \ XSeq.n by Th17;
+  for n holds (Partial_Diff_Union XSeq).(n+1) = XSeq.(n+1) \ XSeq.n by Th16;
 
 theorem
   XSeq is non-descending implies for n holds (Partial_Diff_Union XSeq).
-  (n+1) misses XSeq.n by Th19;
+  (n+1) misses XSeq.n by Th18;
 
 definition
   let Omega,Sigma,P;
@@ -741,7 +741,7 @@ definition
   end;
 end;
 
-theorem Th24:
+theorem Th23:
   for Y being Subset of Omega holds Y is thin of P iff Y is thin of P2M(P)
 proof
   let Y be Subset of Omega;
@@ -755,14 +755,14 @@ proof
   hence thesis by Def4;
 end;
 
-theorem Th25:
+theorem Th24:
   {} is thin of P
 proof
   P.{} = 0 & {} in Sigma by PROB_1:4,VALUED_0:def 19;
   hence thesis by Def4;
 end;
 
-theorem Th26:
+theorem Th25:
   for B1,B2 being set st B1 in Sigma & B2 in Sigma holds for C1,C2
   being thin of P holds B1 \/ C1 = B2 \/ C2 implies P.B1 = P.B2
 proof
@@ -805,7 +805,7 @@ being set holds A in it iff ex B being set st B in Sigma & ex C being thin of P
   st A = B \/ C;
   existence
   proof
-A1: {} is thin of P by Th25;
+A1: {} is thin of P by Th24;
 A2: for A being set st A = {} holds ex B being set st B in Sigma & ex C
     being thin of P st A = B \/ C
     proof
@@ -878,7 +878,7 @@ A12: for A being set holds (A in D2 iff ex B being set st (B in Sigma
   end;
 end;
 
-theorem Th27:
+theorem Th26:
   for C being thin of P holds C in COM(Sigma,P)
 proof
   let C be thin of P;
@@ -887,7 +887,7 @@ proof
   hence thesis;
 end;
 
-theorem Th28:
+theorem Th27:
   COM(Sigma,P) = COM(Sigma,P2M P)
 proof
 A1: COM( Sigma,P2M P) c= COM(Sigma,P)
@@ -899,7 +899,7 @@ A2: B in Sigma and
 A3: ex C being thin of P2M(P) st x = B \/ C by MEASURE3:def 3;
     consider C being thin of P2M(P) such that
 A4: x = B \/ C by A3;
-    reconsider C1=C as thin of P by Th24;
+    reconsider C1=C as thin of P by Th23;
     x = B \/ C1 by A4;
     hence thesis by A2,Def5;
   end;
@@ -912,7 +912,7 @@ A5: B in Sigma and
 A6: ex C being thin of P st x = B \/ C by Def5;
     consider C being thin of P such that
 A7: x = B \/ C by A6;
-    reconsider C1=C as thin of P2M(P) by Th24;
+    reconsider C1=C as thin of P2M(P) by Th23;
     x = B \/ C1 by A7;
     hence thesis by A5,MEASURE3:def 3;
   end;
@@ -924,13 +924,13 @@ definition
   let A be Element of COM(Sigma,P);
   func P_COM2M_COM(A) -> Element of COM(Sigma,P2M(P)) equals
   A;
-  correctness by Th28;
+  correctness by Th27;
 end;
 
-theorem Th29:
+theorem Th28:
   Sigma c= COM(Sigma,P)
 proof
-  reconsider C={} as thin of P by Th25;
+  reconsider C={} as thin of P by Th24;
   let A be set such that
 A1: A in Sigma;
   A = A \/ C;
@@ -1036,7 +1036,7 @@ A1: MeasPart(P_COM2M_COM(A)) c= ProbPart(A)
 A2: x in MeasPart(P_COM2M_COM A);
     P_COM2M_COM(A) \ x is thin of P2M(P) by A2,MEASURE3:def 4;
     then
-A3: A \ x is thin of P by Th24;
+A3: A \ x is thin of P by Th23;
     x in Sigma & x c= P_COM2M_COM(A) by A2,MEASURE3:def 4;
     hence thesis by A3,Def7;
   end;
@@ -1046,7 +1046,7 @@ A3: A \ x is thin of P by Th24;
 A4: x in ProbPart(A);
     A \ x is thin of P by A4,Def7;
     then
-A5: P_COM2M_COM(A) \ x is thin of P2M(P) by Th24;
+A5: P_COM2M_COM(A) \ x is thin of P2M(P) by Th23;
     x in Sigma & x c= A by A4,Def7;
     hence thesis by A5,MEASURE3:def 4;
   end;
@@ -1068,10 +1068,10 @@ A3: A2 c= A by A2,Def7;
 A4: A1 \/ C1 = A by XBOOLE_1:45
     .= A2 \/ C2 by A3,XBOOLE_1:45;
   A1 in Sigma & A2 in Sigma by A1,A2,Def7;
-  hence thesis by A4,Th26;
+  hence thesis by A4,Th25;
 end;
 
-theorem Th32:
+theorem Th31:
   for F being Function of NAT,COM(Sigma,P) holds ex BSeq being
   SetSequence of Sigma st for n holds BSeq.n in ProbPart(F.n)
 proof
@@ -1097,7 +1097,7 @@ A2: for t being Element of NAT holds for n being Element of NAT for y
   thus thesis by A2;
 end;
 
-theorem Th33:
+theorem Th32:
   for F being Function of NAT,COM(Sigma,P), BSeq being SetSequence
 of Sigma holds ex CSeq being SetSequence of Omega st for n holds CSeq.n = F.n \
   BSeq.n
@@ -1122,7 +1122,7 @@ A2: for t being Element of NAT holds for n being Element of NAT for y
   thus thesis by A2;
 end;
 
-theorem Th34:
+theorem Th33:
   for BSeq being SetSequence of Omega st (for n holds BSeq.n is
   thin of P) holds ex CSeq being SetSequence of Sigma st for n holds BSeq.n c=
   CSeq.n & P.(CSeq.n) = 0
@@ -1154,7 +1154,7 @@ A5: for t being Element of NAT holds for n being Element of NAT for y
   thus thesis by A5;
 end;
 
-theorem Th35:
+theorem Th34:
   for D being non empty Subset-Family of Omega holds (for A being
 set holds (A in D iff ex B being set st B in Sigma & ex C being thin of P st A
   = B \/ C)) implies D is SigmaField of Omega
@@ -1187,9 +1187,9 @@ A5: for n holds ex B being set st B in Sigma & ex C being thin of P st F.
     then for n being set st n in NAT holds F.n in COM(Sigma,P);
     then reconsider F as Function of NAT,COM(Sigma,P) by A3,FUNCT_2:3;
     consider BSeq being SetSequence of Sigma such that
-A6: for n holds BSeq.n in ProbPart(F.n) by Th32;
+A6: for n holds BSeq.n in ProbPart(F.n) by Th31;
     consider CSeq being SetSequence of Omega such that
-A7: for n holds CSeq.n = F.n \ BSeq.n by Th33;
+A7: for n holds CSeq.n = F.n \ BSeq.n by Th32;
 A8: for n being Element of NAT holds BSeq.n in Sigma & BSeq.n c= F.n & F.
     n \ BSeq.n is thin of P
     proof
@@ -1204,7 +1204,7 @@ A8: for n being Element of NAT holds BSeq.n in Sigma & BSeq.n c= F.n & F.
       hence thesis by A7;
     end;
     then consider DSeq being SetSequence of Sigma such that
-A9: for n holds CSeq.n c= DSeq.n & P.(DSeq.n) = 0 by Th34;
+A9: for n holds CSeq.n c= DSeq.n & P.(DSeq.n) = 0 by Th33;
 A10: Union A1 = union rng A1 by CARD_3:def 4;
     ex B being set st B in Sigma & ex C being thin of P st Union A1 = B \/ C
     proof
@@ -1278,7 +1278,7 @@ A28:      dom DSeq = NAT by FUNCT_2:def 1;
           hence thesis by A9;
         end;
         then
-A29:    P.(union rng DSeq) = 0 by Th9;
+A29:    P.(union rng DSeq) = 0 by Th8;
         union rng CSeq c= union rng DSeq
         proof
           let x be set;
@@ -1347,7 +1347,7 @@ A45:  ex W being thin of P st Omega \ A = Q \/ W
     end;
     hence thesis by A1;
   end;
-  hence thesis by A2,Th5;
+  hence thesis by A2,Th4;
 end;
 
 registration
@@ -1357,17 +1357,17 @@ registration
   proof
     for A being set holds (A in COM(Sigma,P) iff ex B being set st B in
     Sigma & ex C being thin of P st A=B \/ C ) by Def5;
-    hence thesis by Th35;
+    hence thesis by Th34;
   end;
 end;
 
 definition
   let Omega,Sigma,P;
   redefine mode thin of P -> Event of COM(Sigma,P);
-  coherence by Th27;
+  coherence by Th26;
 end;
 
-theorem Th36:
+theorem Th35:
   for A being set holds (A in COM(Sigma,P) iff ex A1,A2 being set
   st A1 in Sigma & A2 in Sigma & A1 c= A & A c= A2 & P.(A2 \ A1) = 0)
 proof
@@ -1390,7 +1390,7 @@ A6: P.D = 0 by Def4;
     reconsider E = D \/ B as Event of Sigma;
 A7: P.(D \/ B) <= P.D + P.B by PROB_1:39;
     P.(E \ B) = P.(D \ B) by XBOOLE_1:40
-      .= P.(D \/ B) - P.B by Th6;
+      .= P.(D \/ B) - P.B by Th5;
     then P.(E \ B) <= 0 by A6,A7,XREAL_1:47;
     then
 A8: P.(E \ B) = 0 by PROB_1:def 8;
@@ -1440,7 +1440,7 @@ A1: for A being set holds (A in C iff ex A1,A2 being set st A1 in Sigma
     let A be set;
     A in C iff ex A1,A2 being set st A1 in Sigma & A2 in Sigma & A1 c= A &
     A c= A2 & P.(A2 \ A1) = 0 by A1;
-    hence A in C iff A in COM(Sigma,P) by Th36;
+    hence A in C iff A in COM(Sigma,P) by Th35;
   end;
   hence thesis by TARSKI:1;
 end;
@@ -1452,12 +1452,12 @@ definition
   for B being set st B in Sigma for C being thin of P holds it.(B \/ C) = P.B;
   existence
   proof
-    reconsider C = {} as thin of P by Th25;
+    reconsider C = {} as thin of P by Th24;
     defpred P[set,set] means for x,y being set st x in COM(Sigma,P) holds (x =
 $1 & y = $2 implies (for B being set st B in Sigma for C being thin of P holds
     (x = B \/ C implies y = P.B)));
     set B = {};
-A1: {} is thin of P by Th25;
+A1: {} is thin of P by Th24;
 A2: for x being set st x in COM(Sigma,P) ex y being set st y in REAL & P[x ,y]
     proof
       let x be set;
@@ -1465,7 +1465,7 @@ A2: for x being set st x in COM(Sigma,P) ex y being set st y in REAL & P[x ,y]
       then consider B being set such that
 A3:   B in Sigma & ex C being thin of P st x = B \/ C by Def5;
       take P.B;
-      thus thesis by A3,Th26,FUNCT_2:5;
+      thus thesis by A3,Th25,FUNCT_2:5;
     end;
     consider comP being Function of COM(Sigma,P),REAL such that
 A4: for x being set st x in COM(Sigma,P) holds P[x,comP.x] from
@@ -1489,13 +1489,13 @@ A8:   BSeq is disjoint_valued;
       rng F c= COM(Sigma,P) by RELAT_1:def 19;
       then reconsider F as Function of NAT,COM(Sigma,P) by FUNCT_2:6;
       consider CSeq being SetSequence of Sigma such that
-A9:   for n holds CSeq.n in ProbPart(F.n) by Th32;
+A9:   for n holds CSeq.n in ProbPart(F.n) by Th31;
       consider B being set such that
 A10:  B = union rng CSeq;
       Union CSeq in Sigma by PROB_1:17;
       then reconsider B as Element of Sigma by A10,CARD_3:def 4;
       consider DSeq being SetSequence of Omega such that
-A11:  for n holds DSeq.n = F.n \ CSeq.n by Th33;
+A11:  for n holds DSeq.n = F.n \ CSeq.n by Th32;
 A12:  for n being Element of NAT holds CSeq.n in Sigma & CSeq.n c= F.n &
       F.n \ CSeq.n is thin of P
       proof
@@ -1510,7 +1510,7 @@ A12:  for n being Element of NAT holds CSeq.n in Sigma & CSeq.n c= F.n &
         hence thesis by A11;
       end;
       then consider ESeq being SetSequence of Sigma such that
-A13:  for n holds DSeq.n c= ESeq.n & P.(ESeq.n) = 0 by Th34;
+A13:  for n holds DSeq.n c= ESeq.n & P.(ESeq.n) = 0 by Th33;
 A14:  dom BSeq = NAT by FUNCT_2:def 1;
 A15:  B c= union rng F
       proof
@@ -1580,7 +1580,7 @@ A32:      dom ESeq = NAT by FUNCT_2:def 1;
           hence thesis by A13;
         end;
         then
-A33:    P.(union rng ESeq) = 0 by Th9;
+A33:    P.(union rng ESeq) = 0 by Th8;
         Union ESeq in Sigma by PROB_1:17;
         then
 A34:    union rng ESeq in Sigma by CARD_3:def 4;
@@ -1762,7 +1762,7 @@ A64:    m=2+k by NAT_1:10;
       then
 A65:  Union BSeq = A \/ B & Sum(comP * BSeq) = comP.A + comP.B by DYNKIN:3
 ,PROB_1:1;
-      BSeq is disjoint_valued by A53,Th4;
+      BSeq is disjoint_valued by A53,Th3;
       hence thesis by A7,A65;
     end;
 A66: for A,B being Event of COM(Sigma,P) st A c= B holds comP.(B \ A) =
@@ -1851,15 +1851,15 @@ A80:      BSeq.k c= BSeq.(k+1) by A76,PROB_2:7;
           ).(k+1) by A79,SERIES_1:def 1
             .=comP.(BSeq.k) + (comP * CSeq).(k+1) by FUNCT_2:15
             .=comP.(BSeq.k) + comP.(CSeq.(k+1)) by FUNCT_2:15
-            .=comP.(BSeq.k \/ CSeq.(k+1)) by A52,A76,Th19
-            .=comP.(BSeq.k \/ (BSeq.(k+1) \ BSeq.k)) by A76,Th17
+            .=comP.(BSeq.k \/ CSeq.(k+1)) by A52,A76,Th18
+            .=comP.(BSeq.k \/ (BSeq.(k+1) \ BSeq.k)) by A76,Th16
             .=comP.(BSeq.k \/ BSeq.(k+1)) by XBOOLE_1:39
             .=comP.(BSeq.(k+1)) by A80,XBOOLE_1:12
             .=(comP * BSeq).(k+1) by FUNCT_2:15;
         end;
         Partial_Sums(comP * CSeq).0 = (comP * CSeq).0 by SERIES_1:def 1
           .= comP.(CSeq.0) by FUNCT_2:15
-          .= comP.(BSeq.0) by A76,Th17
+          .= comP.(BSeq.0) by A76,Th16
           .= (comP * BSeq).0 by FUNCT_2:15;
         then
 A81:    P[0];
@@ -1900,7 +1900,7 @@ theorem
   COM(P) = COM(P2M P)
 proof
   set Y = COM(P);
-  COM(Sigma,P) = COM(Sigma,P2M P) by Th28;
+  COM(Sigma,P) = COM(Sigma,P2M P) by Th27;
   then reconsider Y1=P2M(Y) as sigma_Measure of COM(Sigma,P2M(P));
   for B being set st B in Sigma for C being thin of P2M(P) holds Y1.(B \/
   C) = (P2M(P)).B
@@ -1908,7 +1908,7 @@ proof
     let B be set such that
 A1: B in Sigma;
     let C be thin of P2M(P);
-    reconsider C1=C as thin of P by Th24;
+    reconsider C1=C as thin of P by Th23;
     Y.(B \/ C1) = P.B by A1,Def8;
     hence thesis;
   end;
@@ -1964,16 +1964,16 @@ A12:  C1 is thin of P by Def4;
   hence thesis by Def3;
 end;
 
-theorem Th40:
+theorem Th39:
   for A being Event of Sigma holds P.A = (COM P).A
 proof
-  reconsider C = {} as thin of P by Th25;
+  reconsider C = {} as thin of P by Th24;
   let A be Event of Sigma;
   thus P.A = (COM P).(A \/ C) by Def8
     .= (COM P).A;
 end;
 
-theorem Th41:
+theorem Th40:
   for C being thin of P holds (COM P).C = 0
 proof
   let C be thin of P;
@@ -1982,8 +1982,8 @@ A1: A in Sigma and
 A2: C c= A and
 A3: P.A = 0 by Def4;
   reconsider A as Event of Sigma by A1;
-A4: (COM P).A = 0 by A3,Th40;
-  Sigma c= COM(Sigma,P) by Th29;
+A4: (COM P).A = 0 by A3,Th39;
+  Sigma c= COM(Sigma,P) by Th28;
   then reconsider A as Event of COM(Sigma,P) by A1;
   (COM P).C <= (COM P).A by A2,PROB_1:34;
   hence thesis by A4,PROB_1:def 8;
@@ -2000,15 +2000,15 @@ A2: B in Sigma by A1,Def7;
   B c= A by A1,Def7;
   then
 A3: A = B \/ C by XBOOLE_1:45;
-  Sigma c= COM(Sigma,P) by Th29;
+  Sigma c= COM(Sigma,P) by Th28;
   then reconsider B as Event of COM(Sigma,P) by A2;
   reconsider A as Event of COM(Sigma,P);
   B misses C by XBOOLE_1:79;
   then
 A4: (COM P).A = (COM P).B + (COM P).C by A3,PROB_1:def 8
-    .= (COM P).B + 0 by Th41
+    .= (COM P).B + 0 by Th40
     .= (COM P).B;
   reconsider B as Event of Sigma by A1,Def7;
-  (COM P).A = P.B by A4,Th40;
+  (COM P).A = P.B by A4,Th39;
   hence thesis;
 end;

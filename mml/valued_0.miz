@@ -2,7 +2,7 @@
 ::  by Library Committee
 ::
 :: Received November 22, 2007
-:: Copyright (c) 2007-2011 Association of Mizar Users
+:: Copyright (c) 2007-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -48,33 +48,35 @@ definition
   attr f is real-valued means
   :Def3:
   rng f c= REAL;
-  attr f is rational-valued means
-  :Def4:
-  rng f c= RAT;
-  attr f is integer-valued means
-  :Def5:
-  rng f c= INT;
+  canceled 2;
   attr f is natural-valued means
   :Def6:
   rng f c= NAT;
 end;
 
 registration
-  cluster natural-valued -> integer-valued for Relation;
+  cluster natural-valued -> INT-valued for Relation;
   coherence
   proof
     let R be Relation;
     assume rng R c= NAT;
     hence rng R c= INT by NUMBERS:17,XBOOLE_1:1;
   end;
-  cluster integer-valued -> rational-valued for Relation;
+  cluster INT-valued -> RAT-valued for Relation;
   coherence
   proof
     let R be Relation;
     assume rng R c= INT;
     hence rng R c= RAT by NUMBERS:14,XBOOLE_1:1;
   end;
-  cluster rational-valued -> real-valued for Relation;
+  cluster INT-valued -> real-valued for Relation;
+  coherence
+  proof
+    let R be Relation;
+    assume rng R c= INT;
+    hence rng R c= REAL by XBOOLE_1:1,NUMBERS:15;
+  end;
+  cluster RAT-valued -> real-valued for Relation;
   coherence
   proof
     let R be Relation;
@@ -94,6 +96,20 @@ registration
     let R be Relation;
     assume rng R c= REAL;
     hence rng R c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
+  end;
+  cluster natural-valued -> RAT-valued for Relation;
+  coherence
+  proof
+    let R be Relation;
+    assume rng R c= NAT;
+    hence rng R c= RAT by NUMBERS:18,XBOOLE_1:1;
+  end;
+  cluster natural-valued -> real-valued for Relation;
+  coherence
+  proof
+    let R be Relation;
+    assume rng R c= NAT;
+    hence rng R c= REAL by XBOOLE_1:1;
   end;
 end;
 
@@ -147,23 +163,15 @@ registration
 end;
 
 registration
-  let R be rational-valued Relation;
+  let R be RAT-valued Relation;
   cluster rng R -> rational-membered;
-  coherence
-  proof
-    rng R c= RAT by Def4;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
-  let R be integer-valued Relation;
+  let R be INT-valued Relation;
   cluster rng R -> integer-membered;
-  coherence
-  proof
-    rng R c= INT by Def5;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
@@ -213,27 +221,11 @@ A1: rng R c= rng S by RELAT_1:11;
   hence rng R c= REAL by A1,XBOOLE_1:1;
 end;
 
-theorem Th4:
-  for S being rational-valued Relation st R c= S holds R is rational-valued
-proof
-  let S be rational-valued Relation;
-  assume R c= S;
-  then
-A1: rng R c= rng S by RELAT_1:11;
-  rng S c= RAT by Def4;
-  hence rng R c= RAT by A1,XBOOLE_1:1;
-end;
+theorem
+  for S being RAT-valued Relation st R c= S holds R is RAT-valued;
 
-theorem Th5:
-  for S being integer-valued Relation st R c= S holds R is integer-valued
-proof
-  let S be integer-valued Relation;
-  assume R c= S;
-  then
-A1: rng R c= rng S by RELAT_1:11;
-  rng S c= INT by Def5;
-  hence rng R c= INT by A1,XBOOLE_1:1;
-end;
+theorem
+  for S being INT-valued Relation st R c= S holds R is INT-valued;
 
 theorem Th6:
   for S being natural-valued Relation st R c= S holds R is natural-valued
@@ -265,15 +257,15 @@ registration
 end;
 
 registration
-  let R be rational-valued Relation;
-  cluster -> rational-valued for Subset of R;
-  coherence by Th4;
+  let R be RAT-valued Relation;
+  cluster -> RAT-valued for Subset of R;
+  coherence;
 end;
 
 registration
-  let R be integer-valued Relation;
-  cluster -> integer-valued for Subset of R;
-  coherence by Th5;
+  let R be INT-valued Relation;
+  cluster -> INT-valued for Subset of R;
+  coherence;
 end;
 
 registration
@@ -316,25 +308,15 @@ A1: rng(R \/ S) = rng R \/ rng S by RELAT_1:12;
 end;
 
 registration
-  let R,S be rational-valued Relation;
-  cluster R \/ S -> rational-valued;
-  coherence
-  proof
-A1: rng(R \/ S) = rng R \/ rng S by RELAT_1:12;
-    rng R c= RAT & rng S c= RAT by Def4;
-    hence rng(R \/ S) c= RAT by A1,XBOOLE_1:8;
-  end;
+  let R,S be RAT-valued Relation;
+  cluster R \/ S -> RAT-valued;
+  coherence;
 end;
 
 registration
-  let R,S be integer-valued Relation;
-  cluster R \/ S -> integer-valued;
-  coherence
-  proof
-A1: rng(R \/ S) = rng R \/ rng S by RELAT_1:12;
-    rng R c= INT & rng S c= INT by Def5;
-    hence rng(R \/ S) c= INT by A1,XBOOLE_1:8;
-  end;
+  let R,S be INT-valued Relation;
+  cluster R \/ S -> INT-valued;
+  coherence;
 end;
 
 registration
@@ -397,34 +379,20 @@ A1: rng(R /\ S) c= rng R by RELAT_1:11;
 end;
 
 registration
-  let R be rational-valued Relation;
+  let R be RAT-valued Relation;
   let S;
-  cluster R /\ S -> rational-valued;
-  coherence
-  proof
-    R /\ S c= R by XBOOLE_1:17;
-    then
-A1: rng(R /\ S) c= rng R by RELAT_1:11;
-    rng R c= RAT by Def4;
-    hence rng(R /\ S) c= RAT by A1,XBOOLE_1:1;
-  end;
-  cluster R \ S -> rational-valued;
+  cluster R /\ S -> RAT-valued;
+  coherence;
+  cluster R \ S -> RAT-valued;
   coherence;
 end;
 
 registration
-  let R be integer-valued Relation;
+  let R be INT-valued Relation;
   let S;
-  cluster R /\ S -> integer-valued;
-  coherence
-  proof
-    R /\ S c= R by XBOOLE_1:17;
-    then
-A1: rng(R /\ S) c= rng R by RELAT_1:11;
-    rng R c= INT by Def5;
-    hence rng(R /\ S) c= INT by A1,XBOOLE_1:1;
-  end;
-  cluster R \ S -> integer-valued;
+  cluster R /\ S -> INT-valued;
+  coherence;
+  cluster R \ S -> INT-valued;
   coherence;
 end;
 
@@ -463,14 +431,14 @@ registration
 end;
 
 registration
-  let R,S be rational-valued Relation;
-  cluster R \+\ S -> rational-valued;
+  let R,S be RAT-valued Relation;
+  cluster R \+\ S -> RAT-valued;
   coherence;
 end;
 
 registration
-  let R,S be integer-valued Relation;
-  cluster R \+\ S -> integer-valued;
+  let R,S be INT-valued Relation;
+  cluster R \+\ S -> INT-valued;
   coherence;
 end;
 
@@ -514,7 +482,7 @@ registration
 end;
 
 registration
-  let R be rational-valued Relation;
+  let R be RAT-valued Relation;
   let X;
   cluster R.:X -> rational-membered;
   coherence
@@ -525,7 +493,7 @@ registration
 end;
 
 registration
-  let R be integer-valued Relation;
+  let R be INT-valued Relation;
   let X;
   cluster R.:X -> integer-membered;
   coherence
@@ -568,14 +536,14 @@ registration
 end;
 
 registration
-  let R be rational-valued Relation;
+  let R be RAT-valued Relation;
   let x;
   cluster Im(R,x) -> rational-membered;
   coherence;
 end;
 
 registration
-  let R be integer-valued Relation;
+  let R be INT-valued Relation;
   let x;
   cluster Im(R,x) -> integer-membered;
   coherence;
@@ -622,25 +590,17 @@ registration
 end;
 
 registration
-  let R be rational-valued Relation;
+  let R be RAT-valued Relation;
   let X;
-  cluster R|X -> rational-valued;
-  coherence
-  proof
-    rng R c= RAT & rng(R|X) c= rng R by Def4,RELAT_1:70;
-    hence rng(R|X) c= RAT by XBOOLE_1:1;
-  end;
+  cluster R|X -> RAT-valued;
+  coherence;
 end;
 
 registration
-  let R be integer-valued Relation;
+  let R be INT-valued Relation;
   let X;
-  cluster R|X -> integer-valued;
-  coherence
-  proof
-    rng R c= INT & rng(R|X) c= rng R by Def5,RELAT_1:70;
-    hence rng(R|X) c= INT by XBOOLE_1:1;
-  end;
+  cluster R|X -> INT-valued;
+  coherence;
 end;
 
 registration
@@ -683,7 +643,7 @@ end;
 
 registration
   let X be rational-membered set;
-  cluster id X -> rational-valued;
+  cluster id X -> RAT-valued;
   coherence
   proof
     thus rng id X c= RAT by MEMBERED:4;
@@ -692,7 +652,7 @@ end;
 
 registration
   let X be integer-membered set;
-  cluster id X -> integer-valued;
+  cluster id X -> INT-valued;
   coherence
   proof
     thus rng id X c= INT by MEMBERED:5;
@@ -743,24 +703,16 @@ end;
 
 registration
   let R;
-  let S be rational-valued Relation;
-  cluster R*S -> rational-valued;
-  coherence
-  proof
-    rng S c= RAT & rng(R*S) c= rng S by Def4,RELAT_1:26;
-    hence rng(R*S) c= RAT by XBOOLE_1:1;
-  end;
+  let S be RAT-valued Relation;
+  cluster R*S -> RAT-valued;
+  coherence;
 end;
 
 registration
   let R;
-  let S be integer-valued Relation;
-  cluster R*S -> integer-valued;
-  coherence
-  proof
-    rng S c= INT & rng(R*S) c= rng S by Def5,RELAT_1:26;
-    hence rng(R*S) c= INT by XBOOLE_1:1;
-  end;
+  let S be INT-valued Relation;
+  cluster R*S -> INT-valued;
+  coherence;
 end;
 
 registration
@@ -848,54 +800,7 @@ A9: for x st x in dom f holds f.x is real;
     then y is real by A9;
     hence thesis by XREAL_0:def 1;
   end;
-  redefine attr f is rational-valued means
-  :Def10:
-  for x st x in dom f holds f.x is rational;
-  compatibility
-  proof
-    thus f is rational-valued implies for x st x in dom f holds f.x is rational
-    proof
-      assume
-A10:  f is rational-valued;
-      let x;
-      assume
-A11:  x in dom f;
-      reconsider f as rational-valued Function by A10;
-      f.x in rng f by A11,FUNCT_1:3;
-      hence thesis;
-    end;
-    assume
-A12: for x st x in dom f holds f.x is rational;
-    let y;
-    assume y in rng f;
-    then ex x st x in dom f & y = f.x by FUNCT_1:def 3;
-    then y is rational by A12;
-    hence thesis by RAT_1:def 2;
-  end;
-  redefine attr f is integer-valued means
-  :Def11:
-  for x st x in dom f holds f.x is integer;
-  compatibility
-  proof
-    thus f is integer-valued implies for x st x in dom f holds f.x is integer
-    proof
-      assume
-A13:  f is integer-valued;
-      let x;
-      assume
-A14:  x in dom f;
-      reconsider f as integer-valued Function by A13;
-      f.x in rng f by A14,FUNCT_1:3;
-      hence thesis;
-    end;
-    assume
-A15: for x st x in dom f holds f.x is integer;
-    let y;
-    assume y in rng f;
-    then ex x st x in dom f & y = f.x by FUNCT_1:def 3;
-    then y is integer by A15;
-    hence thesis by INT_1:def 2;
-  end;
+  canceled 2;
   redefine attr f is natural-valued means
   :Def12:
   for x st x in dom f holds f.x is natural;
@@ -904,20 +809,20 @@ A15: for x st x in dom f holds f.x is integer;
     thus f is natural-valued implies for x st x in dom f holds f.x is natural
     proof
       assume
-A16:  f is natural-valued;
+A10:  f is natural-valued;
       let x;
       assume
-A17:  x in dom f;
-      reconsider f as natural-valued Function by A16;
-      f.x in rng f by A17,FUNCT_1:3;
+A11:  x in dom f;
+      reconsider f as natural-valued Function by A10;
+      f.x in rng f by A11,FUNCT_1:3;
       hence thesis;
     end;
     assume
-A18: for x st x in dom f holds f.x is natural;
+A12: for x st x in dom f holds f.x is natural;
     let y;
     assume y in rng f;
     then ex x st x in dom f & y = f.x by FUNCT_1:def 3;
-    then y is natural by A18;
+    then y is natural by A12;
     hence thesis by ORDINAL1:def 12;
   end;
 end;
@@ -989,47 +894,55 @@ A1: f is real-valued;
 end;
 
 theorem Th10:
-  f is rational-valued iff for x holds f.x is rational
+  f is RAT-valued iff for x holds f.x is rational
 proof
   hereby
     assume
-A1: f is rational-valued;
+A1: f is RAT-valued;
     let x;
     per cases;
-    suppose
-      x in dom f;
-      hence f.x is rational by A1,Def10;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 3;
+      hence f.x is rational by A1;
     end;
-    suppose
-      not x in dom f;
+    suppose not x in dom f;
       hence f.x is rational by FUNCT_1:def 2;
     end;
   end;
-  assume for x holds f.x is rational;
-  then for x st x in dom f holds f.x is rational;
-  hence thesis by Def10;
+  assume
+A2: for x holds f.x is rational;
+  let y be set;
+  assume y in rng f;
+  then consider x such that x in dom f and
+A3: f.x = y by FUNCT_1:def 3;
+  f.x is rational by A2;
+  hence thesis by A3,RAT_1:def 2;
 end;
 
 theorem Th11:
-  f is integer-valued iff for x holds f.x is integer
+  f is INT-valued iff for x holds f.x is integer
 proof
   hereby
     assume
-A1: f is integer-valued;
+A1: f is INT-valued;
     let x;
     per cases;
-    suppose
-      x in dom f;
-      hence f.x is integer by A1,Def11;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 3;
+      hence f.x is integer by A1;
     end;
-    suppose
-      not x in dom f;
+    suppose not x in dom f;
       hence f.x is integer by FUNCT_1:def 2;
     end;
   end;
-  assume for x holds f.x is integer;
-  then for x st x in dom f holds f.x is integer;
-  hence thesis by Def11;
+  assume
+A2: for x holds f.x is integer;
+  let y be set;
+  assume y in rng f;
+  then consider x such that x in dom f and
+A3: f.x = y by FUNCT_1:def 3;
+  f.x is integer by A2;
+  hence thesis by A3,INT_1:def 2;
 end;
 
 theorem Th12:
@@ -1076,14 +989,14 @@ registration
 end;
 
 registration
-  let f be rational-valued Function;
+  let f be RAT-valued Function;
   let x;
   cluster f.x -> rational;
   coherence by Th10;
 end;
 
 registration
-  let f be integer-valued Function;
+  let f be INT-valued Function;
   let x;
   cluster f.x -> integer;
   coherence by Th11;
@@ -1132,28 +1045,28 @@ end;
 registration
   let X;
   let x be rational number;
-  cluster X --> x -> rational-valued;
+  cluster X --> x -> RAT-valued;
   coherence
   proof
     rng(X --> x) c= RAT by MEMBERED:4;
-    hence thesis by Def4;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
 registration
   let X;
   let x be integer number;
-  cluster X --> x -> integer-valued;
+  cluster X --> x -> INT-valued;
   coherence
   proof
     rng(X --> x) c= INT by MEMBERED:5;
-    hence thesis by Def5;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
 registration
   let X;
-  let x be natural number;
+  let x be Nat;
   cluster X --> x -> natural-valued;
   coherence
   proof
@@ -1196,24 +1109,24 @@ registration
 end;
 
 registration
-  let f,g be rational-valued Function;
-  cluster f +* g -> rational-valued;
+  let f,g be RAT-valued Function;
+  cluster f +* g -> RAT-valued;
   coherence
   proof
     rng(f +* g) c= rng f \/ rng g by FUNCT_4:17;
     then rng(f +* g) c= RAT by MEMBERED:4;
-    hence thesis by Def4;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
 registration
-  let f,g be integer-valued Function;
-  cluster f +* g -> integer-valued;
+  let f,g be INT-valued Function;
+  cluster f +* g -> INT-valued;
   coherence
   proof
     rng(f +* g) c= rng f \/ rng g by FUNCT_4:17;
     then rng(f +* g) c= INT by MEMBERED:5;
-    hence thesis by Def5;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
@@ -1252,20 +1165,20 @@ end;
 registration
   let x;
   let y be rational number;
-  cluster x .--> y -> rational-valued;
+  cluster x .--> y -> RAT-valued;
   coherence;
 end;
 
 registration
   let x;
   let y be integer number;
-  cluster x .--> y -> integer-valued;
+  cluster x .--> y -> INT-valued;
   coherence;
 end;
 
 registration
   let x;
-  let y be natural number;
+  let y be Nat;
   cluster x .--> y -> natural-valued;
   coherence;
 end;
@@ -1306,7 +1219,7 @@ end;
 registration
   let X;
   let Y be rational-membered set;
-  cluster -> rational-valued for Relation of X,Y;
+  cluster -> RAT-valued for Relation of X,Y;
   coherence
   proof
     let R be Relation of X,Y;
@@ -1317,7 +1230,7 @@ end;
 registration
   let X;
   let Y be integer-membered set;
-  cluster -> integer-valued for Relation of X,Y;
+  cluster -> INT-valued for Relation of X,Y;
   coherence
   proof
     let R be Relation of X,Y;
@@ -1372,7 +1285,7 @@ end;
 registration
   let X;
   let Y be rational-membered set;
-  cluster [:X,Y:] -> rational-valued;
+  cluster [:X,Y:] -> RAT-valued;
   coherence
   proof
     rng [:X,Y:] c= Y by RELAT_1:159;
@@ -1383,7 +1296,7 @@ end;
 registration
   let X;
   let Y be integer-membered set;
-  cluster [:X,Y:] -> integer-valued;
+  cluster [:X,Y:] -> INT-valued;
   coherence
   proof
     rng [:X,Y:] c= Y by RELAT_1:159;
@@ -1408,7 +1321,7 @@ notation
 end;
 
 registration
-  cluster non empty constant natural-valued for Function;
+  cluster non empty constant natural-valued INT-valued RAT-valued for Function;
   existence
   proof
     take 1 .--> 1;
@@ -1456,10 +1369,10 @@ A2: x in dom f by XBOOLE_0:def 1;
 end;
 
 theorem
-  for f being non empty constant rational-valued Function ex r being
+  for f being non empty constant RAT-valued Function ex r being
   rational number st for x st x in dom f holds f.x = r
 proof
-  let f be non empty constant rational-valued Function;
+  let f be non empty constant RAT-valued Function;
   consider r being set such that
 A1: for x st x in dom f holds f.x = r by FUNCOP_1:78;
   consider x being set such that
@@ -1469,10 +1382,10 @@ A2: x in dom f by XBOOLE_0:def 1;
 end;
 
 theorem
-  for f being non empty constant integer-valued Function ex r being
+  for f being non empty constant INT-valued Function ex r being
   integer number st for x st x in dom f holds f.x = r
 proof
-  let f be non empty constant integer-valued Function;
+  let f be non empty constant INT-valued Function;
   consider r being set such that
 A1: for x st x in dom f holds f.x = r by FUNCOP_1:78;
   consider x being set such that
@@ -1483,7 +1396,7 @@ end;
 
 theorem
   for f being non empty constant natural-valued Function ex r being
-  natural number st for x st x in dom f holds f.x = r
+  Nat st for x st x in dom f holds f.x = r
 proof
   let f be non empty constant natural-valued Function;
   consider r being set such that
@@ -1784,19 +1697,17 @@ end;
 definition
   let s be ManySortedSet of NAT;
   mode subsequence of s -> ManySortedSet of NAT means
-    :Def17:
-    ex N being increasing sequence of NAT st it = s * N;
+  :Def17:
+  ex N being increasing sequence of NAT st it = s * N;
   existence
   proof
-    reconsider N = id NAT as increasing sequence of NAT;
-    take s;
-    take N;
-     dom s = NAT by PARTFUN1:def 2;
-    hence s = s * N by RELAT_1:52;
+    take s,id NAT;
+    dom s = NAT by PARTFUN1:def 2;
+    hence thesis by RELAT_1:52;
   end;
 end;
 
-LmX:
+Lm1:
  for x being non empty set, M be ManySortedSet of NAT,
      s be subsequence of M
    holds rng s c= rng M
@@ -1811,9 +1722,8 @@ registration
  cluster -> X-valued for subsequence of s;
  coherence
   proof let ss be subsequence of s;
-X:  rng ss c= rng s by LmX;
-   rng s c= X by RELAT_1:def 19;
-   hence rng ss c= X by X,XBOOLE_1:1;
+    rng ss c= rng s by Lm1;
+   hence rng ss c= X by XBOOLE_1:1;
   end;
 end;
 
@@ -1822,7 +1732,7 @@ definition
   redefine mode subsequence of s -> sequence of X;
   coherence
   proof let ss be subsequence of s;
-    rng ss c= X & dom ss = NAT by PARTFUN1:def 2,RELAT_1:def 19;
+    rng ss c= X & dom ss = NAT by PARTFUN1:def 2;
    hence ss is sequence of X by RELSET_1:4;
   end;
 end;
@@ -1863,14 +1773,13 @@ reserve XX for non empty set,
 theorem
   ss is subsequence of ss
 proof
-  reconsider N = id NAT as increasing sequence of NAT;
-  take N;
+  take id NAT;
   thus thesis by FUNCT_2:17;
 end;
 
 theorem
-  ss1 is subsequence of ss2 & ss2 is subsequence of ss3 implies ss1 is
-  subsequence of ss3
+  ss1 is subsequence of ss2 & ss2 is subsequence of ss3 implies
+  ss1 is subsequence of ss3
 proof
   given N1 being increasing sequence of NAT such that
 A1: ss1 = ss2*N1;
@@ -1888,14 +1797,12 @@ registration
   existence
   proof
     per cases;
-    suppose
-      X = {};
+    suppose X = {};
       then reconsider s = {} as sequence of X by FUNCT_2:def 1,RELSET_1:12;
       take s;
       thus thesis;
     end;
-    suppose
-      X <> {};
+    suppose X <> {};
       then consider x such that
 A1:   x in X by XBOOLE_0:def 1;
       reconsider s = NAT --> x as sequence of X by A1,FUNCOP_1:45;
@@ -1909,24 +1816,16 @@ theorem Th21:
   for ss1 being subsequence of ss holds rng ss1 c= rng ss
 proof
   let ss1 be subsequence of ss;
-  per cases;
-  suppose
-    XX = {};
-    hence thesis;
-  end;
-  suppose
- XX <> {};
-    let x;
-    consider N being increasing sequence of NAT such that
-A2: ss1 = ss * N by Def17;
+  let x;
+  consider N being increasing sequence of NAT such that
+A1: ss1 = ss * N by Def17;
     assume x in rng ss1;
     then consider n being set such that
-A3: n in NAT and
-A4: x = ss1.n by FUNCT_2:11;
-A5: N.n in NAT by A3,FUNCT_2:5;
-    x = ss.(N.n) by A2,A3,A4,FUNCT_2:15;
-    hence thesis by A5,FUNCT_2:4;
-  end;
+A2: n in NAT and
+A3: x = ss1.n by FUNCT_2:11;
+A4: N.n in NAT by A2,FUNCT_2:5;
+    x = ss.(N.n) by A1,A2,A3,FUNCT_2:15;
+    hence thesis by A4,FUNCT_2:4;
 end;
 
 registration
@@ -1946,10 +1845,7 @@ end;
 definition
   let X be non empty set, N be increasing sequence of NAT, s be sequence of X;
   redefine func s*N -> subsequence of s;
-  correctness
-  proof
-    thus s*N is subsequence of s by Def17;
-  end;
+  correctness by Def17;
 end;
 
 :: from RFUNCT_2 etc. 2008.09.10, A.T.
@@ -2003,45 +1899,39 @@ end;
 reserve i,j for Nat;
 
 definition
-  let X,s;
+  let X be non empty set, s be sequence of X;
   redefine attr s is constant means
-  ex x st for n being Nat holds s.n=x;
+  ex x being Element of X st for n being Nat holds s.n=x;
   compatibility
   proof
     hereby
       assume s is constant;
-      then consider x such that
+      then consider x being Element of X such that
 A1:   for n being Element of NAT st n in dom s holds s.n = x by PARTFUN2:def 1;
       take x;
       let n be Nat;
       dom s = NAT & n in NAT by FUNCT_2:def 1,ORDINAL1:def 12;
       hence s.n = x by A1;
     end;
-    given x such that
+    given x be Element of X such that
 A2: for n being Nat holds s.n=x;
     take x;
-    let n be Element of NAT;
-    assume n in dom s;
-    thus s.n = x by A2;
+    thus thesis by A2;
   end;
 end;
 
 theorem Th23:
-  for X being set for s being constant sequence of X holds s.i =s. j
+  for X being set for s being constant sequence of X holds s.i = s.j
 proof
   let X be set;
   let s be constant sequence of X;
   per cases;
   suppose
 A1: X is empty;
-    then not i in dom s;
-    then
-A2: s.i = {} by FUNCT_1:def 2;
-    not j in dom s by A1;
-    hence thesis by A2,FUNCT_1:def 2;
+    then s.i = {};
+    hence thesis by A1;
   end;
-  suppose
-    X is not empty;
+  suppose X is not empty;
     then dom s = NAT by FUNCT_2:def 1;
     then i in dom s & j in dom s by ORDINAL1:def 12;
     hence thesis by FUNCT_1:def 10;
@@ -2086,7 +1976,7 @@ A6:   P[0] by NAT_1:3;
 end;
 
 theorem
-  s is constant & s1 is subsequence of s implies s=s1
+  s is constant & s1 is subsequence of s implies s = s1
 proof
   assume that
 A1: s is constant and
@@ -2210,20 +2100,6 @@ registration
     assume R is REAL-valued;
     hence rng R c= REAL by RELAT_1:def 19;
   end;
-  cluster RAT-valued -> rational-valued for Relation;
-  coherence
-  proof
-    let R be Relation;
-    assume R is RAT-valued;
-    hence rng R c= RAT by RELAT_1:def 19;
-  end;
-  cluster INT-valued -> integer-valued for Relation;
-  coherence
-  proof
-    let R be Relation;
-    assume R is INT-valued;
-    hence rng R c= INT by RELAT_1:def 19;
-  end;
   cluster NAT-valued -> natural-valued for Relation;
   coherence
   proof
@@ -2239,25 +2115,35 @@ definition
   ex x being set st for n being Nat holds s.n=x;
   compatibility
   proof
-F: dom s = NAT by PARTFUN1:def 2;
+A1: dom s = NAT by PARTFUN1:def 2;
     hereby
       assume
-Z:     s is constant;
+A2:     s is constant;
       take x = s.0;
       let n be Nat;
-       0 in dom s & n in dom s by F,ORDINAL1:def 12;
-      hence s.n = x by Z,FUNCT_1:def 10;
+       0 in dom s & n in dom s by A1,ORDINAL1:def 12;
+      hence s.n = x by A2,FUNCT_1:def 10;
     end;
     given x being set such that
-A2: for n being Nat holds s.n=x;
+A3: for n being Nat holds s.n=x;
   let n1,n2 be set;
    assume
-Z:  n1 in dom s & n2 in dom s;
-   hence s.n1 = x by F,A2 .= s.n2 by A2,Z,F;
+A4:  n1 in dom s & n2 in dom s;
+   hence s.n1 = x by A3 .= s.n2 by A3,A4;
  end;
 end;
 
 theorem
  for x being non empty set, M be ManySortedSet of NAT,
      s be subsequence of M
-   holds rng s c= rng M by LmX;
+   holds rng s c= rng M by Lm1;
+
+registration
+  let X be set;
+  cluster natural-valued for ManySortedSet of X;
+  existence
+  proof
+    take X --> 0;
+    thus thesis;
+  end;
+end;

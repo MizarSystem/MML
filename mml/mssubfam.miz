@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received October 27, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,12 +23,12 @@ environ
  constructors SETFAM_1, FUNCT_4, FUNCT_6, MBOOLEAN, PZFMISC1, PARTFUN1,
       RELSET_1, ORDINAL1, PBOOLE, FINSET_1;
  registrations XBOOLE_0, FUNCT_1, FUNCOP_1, FINSET_1, PBOOLE, PRE_CIRC,
-      MBOOLEAN, PZFMISC1, FUNCT_2, PARTFUN1, CARD_1, RELSET_1;
+      MBOOLEAN, PZFMISC1, FUNCT_2, PARTFUN1, CARD_1, RELSET_1, RELAT_1;
  requirements SUBSET, BOOLE;
  definitions XBOOLE_0, PBOOLE, FINSET_1, ORDINAL1, FUNCOP_1;
  theorems FUNCOP_1, FINSET_1, ORDERS_1, FRAENKEL, FUNCT_2, FUNCT_4, FUNCT_6,
-      MBOOLEAN, PBOOLE, FUNCT_1, PZFMISC1, SETFAM_1, TARSKI, RELSET_1,
-      XBOOLE_0, XBOOLE_1, RELAT_1, PARTFUN1;
+      MBOOLEAN, PBOOLE, PZFMISC1, SETFAM_1, TARSKI, RELSET_1, XBOOLE_0,
+      XBOOLE_1, RELAT_1, PARTFUN1;
  schemes FUNCT_2, PBOOLE;
 
 begin :: Preliminaries
@@ -76,16 +76,6 @@ reserve I, G, H, i, x for set,
   sf, sg, sh for Subset-Family of I,
   v, w for Subset of I,
   F for ManySortedFunction of I;
-
-Lm1: for A being finite-yielding ManySortedSet of I st i in I holds A.i is
-finite
-proof
-  let A be finite-yielding ManySortedSet of I;
-  assume i in I;
-  then i in dom A by PARTFUN1:def 2;
-  then A.i in rng A by FUNCT_1:3;
-  hence thesis by FINSET_1:def 2;
-end;
 
 scheme
   MSFExFunc { I() -> set, A, B() -> ManySortedSet of I(), P[set,set,set] } :
@@ -341,16 +331,15 @@ proof
     let i;
     assume i in I;
     then reconsider f = F.i as Function of A.i, [[0]]I.i by PBOOLE:def 15;
-    [[0]]I.i = {} by PBOOLE:5;
-    then f = {};
-    hence F.i = [[0]]I.i by PBOOLE:5;
+    f = {};
+    hence F.i = [[0]]I.i;
   end;
   hence thesis by PBOOLE:3;
 end;
 
 theorem
-  A is_transformable_to B & F is ManySortedFunction of A, B implies doms
-  F = A & rngs F c= B
+  A is_transformable_to B & F is ManySortedFunction of A, B implies
+  doms F = A & rngs F c= B
 proof
   assume that
 A1: A is_transformable_to B and
@@ -384,7 +373,7 @@ registration
 A1: A is empty-yielding;
     let i;
     assume i in I;
-    then reconsider B = A.i as empty set by A1,PBOOLE:def 12;
+    reconsider B = A.i as empty set by A1;
     B is finite;
     hence thesis;
   end;
@@ -416,7 +405,7 @@ proof
 A1: A c= B & B is finite-yielding;
   let i;
   assume i in I;
-  then A.i c= B.i & B.i is finite by A1,Lm1,PBOOLE:def 2;
+  then A.i c= B.i & B.i is finite by A1,PBOOLE:def 2;
   hence thesis;
 end;
 
@@ -442,8 +431,7 @@ registration
     let i;
     assume
 A1: i in I;
-    then A.i is finite & B.i is finite by Lm1;
-    then A.i \/ B.i is finite;
+    A.i \/ B.i is finite;
     hence thesis by A1,PBOOLE:def 4;
   end;
 end;
@@ -457,8 +445,7 @@ registration
     let i;
     assume
 A1: i in I;
-    then B.i is finite by Lm1;
-    then A.i /\ B.i is finite;
+    A.i /\ B.i is finite;
     hence thesis by A1,PBOOLE:def 5;
   end;
 end;
@@ -479,8 +466,7 @@ registration
     let i;
     assume
 A1: i in I;
-    then A.i is finite by Lm1;
-    then A.i \ B.i is finite;
+    A.i \ B.i is finite;
     hence thesis by A1,PBOOLE:def 6;
   end;
 end;
@@ -494,8 +480,7 @@ registration
     let i such that
 A1: i in I;
     reconsider f = F.i as Function;
-    A.i is finite by A1,Lm1;
-    then f.:(A.i) is finite;
+    f.:(A.i) is finite;
     hence thesis by A1,PBOOLE:def 20;
   end;
 end;
@@ -509,8 +494,7 @@ registration
     let i;
     assume
 A1: i in I;
-    then A.i is finite & B.i is finite by Lm1;
-    then [:A.i,B.i:] is finite;
+    [:A.i,B.i:] is finite;
     hence thesis by A1,PBOOLE:def 16;
   end;
 end;
@@ -524,7 +508,7 @@ A2: [|A,B|] is finite-yielding;
   let i;
   assume
 A3: i in I;
-  then [|A,B|].i is finite by A2,Lm1;
+  [|A,B|].i is finite by A2;
   then [:A.i,B.i:] is finite by A3,PBOOLE:def 16;
   hence thesis by A1,A3;
 end;
@@ -538,7 +522,7 @@ A2: [|A,B|] is finite-yielding;
   let i;
   assume
 A3: i in I;
-  then [|A,B|].i is finite by A2,Lm1;
+  [|A,B|].i is finite by A2;
   then [:A.i,B.i:] is finite by A3,PBOOLE:def 16;
   hence thesis by A1,A3;
 end;
@@ -553,7 +537,7 @@ A1: A is finite-yielding;
     let i;
     assume
 A2: i in I;
-    then A.i is finite by A1,Lm1;
+    A.i is finite by A1;
     then bool (A.i) is finite;
     hence thesis by A2,MBOOLEAN:def 1;
   end;
@@ -562,7 +546,7 @@ A3: bool A is finite-yielding;
   let i;
   assume
 A4: i in I;
-  then (bool A).i is finite by A3,Lm1;
+  (bool A).i is finite by A3;
   then bool (A.i) is finite by A4,MBOOLEAN:def 1;
   hence thesis;
 end;
@@ -620,9 +604,9 @@ A9:   j in I;
       hence thesis;
     end;
     then K is finite-yielding by A2;
-    hence thesis by A3,A8,Lm1;
+    hence thesis by A8;
   end;
-  A.i is finite by A1,A3,Lm1;
+  A.i is finite by A1;
   then union (A.i) is finite by A4,FINSET_1:7;
   hence thesis by A3,MBOOLEAN:def 2;
 end;
@@ -638,7 +622,7 @@ A1: union A is finite-yielding;
     let i;
     assume
 A2: i in I;
-    then (union A).i is finite by A1,Lm1;
+    (union A).i is finite by A1;
     then union (A.i) is finite by A2,MBOOLEAN:def 2;
     hence thesis by FINSET_1:7;
   end;
@@ -647,7 +631,7 @@ A3: M in A;
   let i;
   assume
 A4: i in I;
-  then (union A).i is finite by A1,Lm1;
+  (union A).i is finite by A1;
   then
 A5: union (A.i) is finite by A4,MBOOLEAN:def 2;
   M.i in A.i by A3,A4,PBOOLE:def 1;
@@ -662,7 +646,7 @@ A1: doms F is finite-yielding;
   let i such that
 A2: i in I;
   reconsider f = F.i as Function;
-  (doms F).i is finite by A1,A2,Lm1;
+  (doms F).i is finite by A1;
   then dom f is finite by A2,Th14;
   then rng f is finite by FINSET_1:8;
   hence thesis by A2,Th13;
@@ -688,16 +672,13 @@ end;
 registration
   let I;
   let A, B be finite-yielding ManySortedSet of I;
-  cluster MSFuncs(A,B) -> finite-yielding;
+  cluster (Funcs)(A,B) -> finite-yielding;
   coherence
   proof
     let i;
-    assume
-A1: i in I;
-    then
-A2: B.i is finite by Lm1;
-    MSFuncs(A,B).i = Funcs(A.i, B.i) & A.i is finite by A1,Lm1,PBOOLE:def 17;
-    hence thesis by A2,FRAENKEL:6;
+    assume i in I;
+    then (Funcs)(A,B).i = Funcs(A.i,B.i) & A.i is finite by PBOOLE:def 17;
+    hence thesis by FRAENKEL:6;
   end;
 end;
 
@@ -727,7 +708,7 @@ A4: i in I;
     then X.i c= [|Y,Z|].i by A2,PBOOLE:def 2;
     then
 A5: X.i c= [:Y.i,Z.i:] by A4,PBOOLE:def 16;
-    X.i is finite by A1,A4,Lm1;
+    X.i is finite by A1;
     hence thesis by A5,FINSET_1:13;
   end;
   consider A be ManySortedSet of I such that
@@ -788,7 +769,7 @@ A4: i in I;
     then X.i c= [|Y,Z|].i by A2,PBOOLE:def 2;
     then
 A5: X.i c= [:Y.i, Z.i:] by A4,PBOOLE:def 16;
-    X.i is finite by A1,A4,Lm1;
+    X.i is finite by A1;
     then consider A9 be set such that
 A6: A9 is finite & A9 c= Y.i & X.i c= [:A9,Z.i:] by A5,FINSET_1:14;
     take A9;
@@ -905,7 +886,7 @@ A15:    j in I;
       hence thesis by A3,A13,A14,A10,PBOOLE:def 2;
     end;
     then consider m9 be set such that
-A16: m9 in M.i & for D9 be set st D9 in M.i holds m9 c= D9 by A3,Lm1,
+A16: m9 in M.i & for D9 be set st D9 in M.i holds m9 c= D9 by A3,
 FINSET_1:11;
     take m9;
     thus thesis by A16;
@@ -1017,7 +998,7 @@ A15:    j in I;
       hence thesis by A3,A13,A14,A10,PBOOLE:def 2;
     end;
     then consider m9 be set such that
-A16: m9 in M.i & for D9 be set st D9 in M.i holds D9 c= m9 by A3,Lm1,
+A16: m9 in M.i & for D9 be set st D9 in M.i holds D9 c= m9 by A3,
 FINSET_1:12;
     take m9;
     thus thesis by A16;
@@ -1061,7 +1042,7 @@ A4: i in I;
     then rng f = (rngs F).i by Th13;
     then
 A5: Z.i c= rng f by A2,A4,PBOOLE:def 2;
-    Z.i is finite by A1,A4,Lm1;
+    Z.i is finite by A1;
     then consider y be set such that
 A6: y c= dom f & y is finite & f.:y = Z.i by A5,ORDERS_1:85;
     take y, f;
@@ -1259,7 +1240,7 @@ definition
   let I, M, SF;
 
   func meet SF -> ManySortedSet of I means
-  :Def2:
+  :Def1:
   for i be set st i in I holds
   ex Q be Subset-Family of (M.i) st Q = SF.i & it.i = Intersect Q;
   existence
@@ -1308,7 +1289,7 @@ definition
     assume i in I;
     then
     ex Q be Subset-Family of (M.i) st Q = SF.i & (meet SF).i = Intersect Q
-    by Def2;
+    by Def1;
     hence thesis;
   end;
 end;
@@ -1323,8 +1304,8 @@ A1: SF = [[0]]I;
     assume i in I;
     then consider Q be Subset-Family of (M.i) such that
 A2: Q = SF.i and
-A3: (meet SF).i = Intersect Q by Def2;
-    Q = {} by A1,A2,PBOOLE:5;
+A3: (meet SF).i = Intersect Q by Def1;
+    Q = {} by A1,A2;
     hence (meet SF).i = M.i by A3,SETFAM_1:def 9;
   end;
   hence thesis by PBOOLE:3;
@@ -1338,7 +1319,7 @@ proof
 A1: i in I;
   then consider Q be Subset-Family of (M.i) such that
 A2: Q = SFe.i and
-A3: (meet SFe).i = Intersect Q by Def2;
+A3: (meet SFe).i = Intersect Q by Def1;
   meet Q c= union Q & Intersect Q = meet Q by A1,A2,SETFAM_1:2,def 9;
   hence thesis by A1,A2,A3,MBOOLEAN:def 2;
 end;
@@ -1353,7 +1334,7 @@ A1: A in SF;
 A2: i in I;
   then consider Q be Subset-Family of (M.i) such that
 A3: Q = SF.i and
-A4: (meet SF).i = Intersect Q by Def2;
+A4: (meet SF).i = Intersect Q by Def1;
 A5: A.i in SF.i by A1,A2,PBOOLE:def 1;
   then Intersect Q = meet Q by A3,SETFAM_1:def 9;
   hence thesis by A3,A4,A5,SETFAM_1:3;
@@ -1370,14 +1351,14 @@ A1: [[0]]I in SF;
 A2: i in I;
     then consider Q be Subset-Family of (M.i) such that
 A3: Q = SF.i and
-A4: (meet SF).i = Intersect Q by Def2;
+A4: (meet SF).i = Intersect Q by Def1;
     [[0]]I.i in Q by A1,A2,A3,PBOOLE:def 1;
     then
-A5: {} in Q by PBOOLE:5;
+A5: {} in Q;
     [[0]]I.i in SF.i by A1,A2,PBOOLE:def 1;
     then Intersect Q = meet Q by A3,SETFAM_1:def 9;
     then Intersect Q = {} by A5,SETFAM_1:4;
-    hence (meet SF).i = [[0]]I.i by A4,PBOOLE:5;
+    hence (meet SF).i = [[0]]I.i by A4;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -1396,7 +1377,7 @@ A2: T in SF by PBOOLE:134;
 A3: i in I;
   then consider Q be Subset-Family of (M.i) such that
 A4: Q = SF.i and
-A5: (meet SF).i = Intersect Q by Def2;
+A5: (meet SF).i = Intersect Q by Def1;
 A6: for Z9 be set st Z9 in Q holds Z.i c= Z9
   proof
     let Z9 be set such that
@@ -1442,10 +1423,10 @@ A1: SF c= SG;
 A2: i in I;
   then consider Qf be Subset-Family of (M.i) such that
 A3: Qf = SF.i and
-A4: (meet SF).i = Intersect Qf by Def2;
+A4: (meet SF).i = Intersect Qf by Def1;
   consider Qg be Subset-Family of (M.i) such that
 A5: Qg = SG.i and
-A6: (meet SG).i = Intersect Qg by A2,Def2;
+A6: (meet SG).i = Intersect Qg by A2,Def1;
   Qf c= Qg by A1,A2,A3,A5,PBOOLE:def 2;
   hence thesis by A4,A6,SETFAM_1:44;
 end;
@@ -1463,7 +1444,7 @@ A3: i in I;
 A4: A.i c= B.i by A2,PBOOLE:def 2;
   consider Q be Subset-Family of (M.i) such that
 A5: Q = SF.i and
-A6: (meet SF).i = Intersect Q by A3,Def2;
+A6: (meet SF).i = Intersect Q by A3,Def1;
 A7: A.i in SF.i by A1,A3,PBOOLE:def 1;
   then Intersect Q = meet Q by A5,SETFAM_1:def 9;
   hence thesis by A5,A6,A7,A4,SETFAM_1:7;
@@ -1481,15 +1462,15 @@ A2: A /\ B = [[0]]I;
 A3: i in I;
     then consider Q be Subset-Family of (M.i) such that
 A4: Q = SF.i and
-A5: (meet SF).i = Intersect Q by Def2;
+A5: (meet SF).i = Intersect Q by Def1;
 A6: A.i in SF.i by A1,A3,PBOOLE:def 1;
     A.i /\ B.i = [[0]]I.i by A2,A3,PBOOLE:def 5;
-    then A.i /\ B.i = {} by PBOOLE:5;
+    then A.i /\ B.i = {};
     then A.i misses B.i by XBOOLE_0:def 7;
     then meet Q misses B.i by A4,A6,SETFAM_1:8;
     then meet Q /\ B.i = {} by XBOOLE_0:def 7;
     then
-A7: meet Q /\ B.i = [[0]]I.i by PBOOLE:5;
+A7: meet Q /\ B.i = [[0]]I.i;
     Intersect Q = meet Q by A4,A6,SETFAM_1:def 9;
     hence (meet SF /\ B).i = [[0]]I.i by A3,A5,A7,PBOOLE:def 5;
   end;
@@ -1507,13 +1488,13 @@ A1: SH = SF \/ SG;
 A2: i in I;
     then consider Qf be Subset-Family of (M.i) such that
 A3: Qf = SF.i and
-A4: (meet SF).i = Intersect Qf by Def2;
+A4: (meet SF).i = Intersect Qf by Def1;
     consider Qh be Subset-Family of (M.i) such that
 A5: Qh = SH.i and
-A6: (meet SH).i = Intersect Qh by A2,Def2;
+A6: (meet SH).i = Intersect Qh by A2,Def1;
     consider Qg be Subset-Family of (M.i) such that
 A7: Qg = SG.i and
-A8: (meet SG).i = Intersect Qg by A2,Def2;
+A8: (meet SG).i = Intersect Qg by A2,Def1;
 A9: Qh = Qf \/ Qg by A1,A2,A3,A7,A5,PBOOLE:def 4;
     now
       per cases;
@@ -1559,7 +1540,7 @@ A1: SF = {V};
 A2: i in I;
     then consider Q be Subset-Family of (M.i) such that
 A3: Q = SF.i and
-A4: (meet SF).i = Intersect Q by Def2;
+A4: (meet SF).i = Intersect Q by Def1;
     thus (meet SF).i = meet Q by A1,A2,A3,A4,SETFAM_1:def 9
       .= meet {V.i} by A1,A2,A3,PZFMISC1:def 1
       .= V.i by SETFAM_1:10;
@@ -1578,7 +1559,7 @@ A1: SF = { V,W };
 A2: i in I;
     then
     ex Q be Subset-Family of (M.i) st Q = SF.i & (meet SF).i = Intersect Q
-    by Def2;
+    by Def1;
     hence (meet SF).i = meet ({V,W}.i) by A1,A2,SETFAM_1:def 9
       .= meet {V.i,W.i} by A2,PZFMISC1:def 2
       .= V.i /\ W.i by SETFAM_1:11
@@ -1601,7 +1582,7 @@ A3: i in I;
 A4: A.i in (meet SF).i by A1,PBOOLE:def 1;
 A5: B.i in SF.i by A2,A3,PBOOLE:def 1;
   ex Q be Subset-Family of (M.i) st Q = SF.i & (meet SF).i = Intersect Q by A3
-,Def2;
+,Def1;
   hence thesis by A4,A5,SETFAM_1:43;
 end;
 
@@ -1621,7 +1602,7 @@ A3: T in SF by PBOOLE:134;
 A4: i in I;
   then consider Q be Subset-Family of (M.i) such that
 A5: Q = SF.i and
-A6: (meet SF).i = Intersect Q by Def2;
+A6: (meet SF).i = Intersect Q by Def1;
 A7: for B9 be set st B9 in Q holds A.i in B9
   proof
     let B9 be set such that
@@ -1663,22 +1644,22 @@ definition
   attr IT is additive means
   for A, B st A in IT & B in IT holds A \/ B in IT;
   attr IT is absolutely-additive means
-  :Def4:
+  :Def3:
   for F be MSSubsetFamily of M st F c= IT holds union F in IT;
   attr IT is multiplicative means
   for A, B st A in IT & B in IT holds A /\ B in IT;
   attr IT is absolutely-multiplicative means
-  :Def6:
+  :Def5:
   for F be MSSubsetFamily of M st F c= IT holds meet F in IT;
   attr IT is properly-upper-bound means
-  :Def7:
+  :Def6:
   M in IT;
   attr IT is properly-lower-bound means
-  :Def8:
+  :Def7:
   [[0]]I in IT;
 end;
 
-Lm2: bool M is additive absolutely-additive multiplicative
+Lm1: bool M is additive absolutely-additive multiplicative
 absolutely-multiplicative properly-upper-bound properly-lower-bound
 proof
   thus bool M is additive
@@ -1714,10 +1695,10 @@ A1: A in bool M and
     hence thesis by MBOOLEAN:18;
   end;
   M in bool M by MBOOLEAN:18;
-  hence bool M is properly-upper-bound by Def7;
+  hence bool M is properly-upper-bound by Def6;
   [[0]]I c= M by MBOOLEAN:5;
   then [[0]]I in bool M by MBOOLEAN:1;
-  hence bool M is properly-lower-bound by Def8;
+  hence bool M is properly-lower-bound by Def7;
 end;
 
 registration
@@ -1728,7 +1709,7 @@ registration
   existence
   proof
     take bool M;
-    thus thesis by Lm2;
+    thus thesis by Lm1;
   end;
 end;
 
@@ -1737,7 +1718,7 @@ definition
   redefine func bool M -> additive absolutely-additive multiplicative
   absolutely-multiplicative properly-upper-bound properly-lower-bound
   MSSubsetFamily of M;
-  coherence by Lm2;
+  coherence by Lm1;
 end;
 
 registration
@@ -1761,7 +1742,7 @@ A5: B c= M by PBOOLE:def 18;
     A is ManySortedSubset of M by A2,Th33;
     then A c= M by PBOOLE:def 18;
     then {A,B} is MSSubsetFamily of M by A5,Th39;
-    then union {A,B} in SF by A1,A4,Def4;
+    then union {A,B} in SF by A1,A4,Def3;
     hence thesis by PZFMISC1:32;
   end;
 end;
@@ -1786,7 +1767,7 @@ A6: A is ManySortedSubset of M by A2,Th33;
     {A} c= SF & {B} c= SF by A2,A3,PZFMISC1:33;
     then {A} \/ {B} c= SF by PBOOLE:16;
     then {A,B} c= SF by PZFMISC1:10;
-    then meet ab in SF by A1,Def6;
+    then meet ab in SF by A1,Def5;
     hence thesis by A6,A4,Th51;
   end;
 end;
@@ -1803,7 +1784,7 @@ MSSubsetFamily of
     let SF be MSSubsetFamily of M such that
 A1: SF is absolutely-multiplicative;
     meet a = M & [[0]]I c= SF by Th41,PBOOLE:43;
-    hence M in SF by A1,Def6;
+    hence M in SF by A1,Def5;
   end;
 end;
 
@@ -1815,7 +1796,7 @@ registration
     let SF be MSSubsetFamily of M;
     assume SF is properly-upper-bound;
     then
-A1: M in SF by Def7;
+A1: M in SF by Def6;
     let i;
     assume i in I;
     hence thesis by A1,PBOOLE:def 1;
@@ -1832,7 +1813,7 @@ registration
     let SF be MSSubsetFamily of M such that
 A1: SF is absolutely-additive;
     union a = [[0]]I & [[0]]I c= SF by MBOOLEAN:21,PBOOLE:43;
-    hence [[0]]I in SF by A1,Def4;
+    hence [[0]]I in SF by A1,Def3;
   end;
 end;
 
@@ -1844,7 +1825,7 @@ registration
     let SF be MSSubsetFamily of M;
     assume SF is properly-lower-bound;
     then
-A1: [[0]]I in SF by Def8;
+A1: [[0]]I in SF by Def7;
     let i;
     assume i in I;
     hence thesis by A1,PBOOLE:def 1;

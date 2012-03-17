@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received February 9, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,18 +19,19 @@ environ
       FUNCT_4, RLTOPSP1, TARSKI, REWRITE1, FUNCOP_1, FINSEQ_1, ARYTM_3,
       FUNCT_7, CARD_1, XXREAL_0, ORDINAL4, MSUALG_4, CIRCUIT2, MCART_1,
       ZFMISC_1, EQREL_1, RELAT_2, MSUALG_5, MSUALG_6;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, MCART_1,
-      STRUCT_0, RELAT_1, RELAT_2, RELSET_1, EQREL_1, REWRITE1, FUNCT_1, PBOOLE,
-      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_3, FUNCOP_1, MSUALG_1, MSUALG_3,
-      MSUALG_4, MSUALG_5, FUNCT_7, XXREAL_0;
- constructors XXREAL_0, NAT_1, NAT_D, REWRITE1, FUNCT_7, MSUALG_3, MSUALG_5,
-      RELSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, NAT_1,
+      XTUPLE_0, MCART_1, STRUCT_0, RELAT_1, RELAT_2, RELSET_1, EQREL_1,
+      REWRITE1, FUNCT_1, PBOOLE, PARTFUN1, FUNCT_2, FINSEQ_1, CARD_3, FUNCOP_1,
+      MSUALG_1, MSUALG_3, MSUALG_4, MSUALG_5, FUNCT_7, XXREAL_0;
+ constructors NAT_1, NAT_D, REWRITE1, FUNCT_7, MSUALG_3, MSUALG_5, RELSET_1,
+      XTUPLE_0;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1,
       XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, PBOOLE, REWRITE1, FUNCT_7, STRUCT_0,
-      MSUALG_1, MSUALG_3, MSUALG_4, MSUALG_5, ORDINAL1, CARD_1, RELSET_1;
+      MSUALG_1, MSUALG_3, MSUALG_4, MSUALG_5, ORDINAL1, CARD_1, RELSET_1,
+      XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RELAT_1, REWRITE1, FUNCT_1, PBOOLE, MSUALG_3, MSUALG_4,
-      FUNCT_7, FUNCOP_1;
+      FUNCT_7, FUNCOP_1, XTUPLE_0;
  theorems TARSKI, NAT_1, MCART_1, ZFMISC_1, RELAT_1, RELSET_1, EQREL_1,
       FUNCT_1, FINSEQ_1, FINSEQ_3, FUNCT_2, CARD_3, FUNCT_7, REWRITE1, PBOOLE,
       PRALG_2, MSUALG_3, MSUALG_4, MSUALG_5, FINSEQ_5, XBOOLE_0, PARTFUN1,
@@ -733,7 +734,7 @@ definition
   let S be non empty non void ManySortedSign;
   let A be non-empty MSAlgebra over S;
   let s1,s2 be SortSymbol of S such that
-A1: TranslationRel S reduces s1,s2;
+B1: TranslationRel S reduces s1,s2;
   mode Translation of A,s1,s2 -> Function of (the Sorts of A).s1,(the Sorts of
     A).s2 means
     : Def6:
@@ -745,76 +746,76 @@ Function, s1,s2 being SortSymbol of S st i in dom p & f = p.i & s1 = q.i & s2 =
   existence
   proof
     consider q being RedSequence of TranslationRel S such that
-A2: q.1 = s1 and
-A3: q.len q = s2 by A1,REWRITE1:def 3;
+A1: q.1 = s1 and
+A2: q.len q = s2 by B1,REWRITE1:def 3;
     defpred Z[set,set] means ex f being Function, s1,s2 being SortSymbol of S,
     i being Element of NAT st $2 = f & i = $1 & s1 = q.i & s2 = q.(i+1) & f
     is_e.translation_of A,s1,s2;
     len q >= 0+1 by NAT_1:13;
     then consider n being Nat such that
-A4: len q = 1+n by NAT_1:10;
+A3: len q = 1+n by NAT_1:10;
     reconsider n as Element of NAT by ORDINAL1:def 12;
-A5: dom q = Seg len q by FINSEQ_1:def 3;
-A6: for x being set st x in Seg n ex y being set st Z[x,y]
+A4: dom q = Seg len q by FINSEQ_1:def 3;
+A5: for x being set st x in Seg n ex y being set st Z[x,y]
     proof
       let x be set;
       assume
-A7:   x in Seg n;
+A6:   x in Seg n;
       then reconsider i = x as Element of NAT;
-A8:   i <= n by A7,FINSEQ_1:1;
+A7:   i <= n by A6,FINSEQ_1:1;
       then
-A9:   i+1 <= len q by A4,XREAL_1:6;
-A10:  i >= 1 by A7,FINSEQ_1:1;
+A8:   i+1 <= len q by A3,XREAL_1:6;
+A9:  i >= 1 by A6,FINSEQ_1:1;
       then i+1 >= 1 by NAT_1:13;
       then
-A11:  i+1 in dom q by A5,A9,FINSEQ_1:1;
-      i <= n+1 by A8,NAT_1:13;
-      then i in dom q by A4,A5,A10,FINSEQ_1:1;
+A10:  i+1 in dom q by A4,A8,FINSEQ_1:1;
+      i <= n+1 by A7,NAT_1:13;
+      then i in dom q by A3,A4,A9,FINSEQ_1:1;
       then
-A12:  [q.i, q.(i+1)] in TranslationRel S by A11,REWRITE1:def 2;
+A11:  [q.i, q.(i+1)] in TranslationRel S by A10,REWRITE1:def 2;
       then reconsider s1 = q.i, s2 = q.(i+1) as SortSymbol of S by ZFMISC_1:87
 ;
       consider o being OperSymbol of S such that
-A13:  the_result_sort_of o = s2 and
-A14:  ex i being Element of NAT st i in dom the_arity_of o & (
-      the_arity_of o)/.i = s1 by A12,Def3;
+A12:  the_result_sort_of o = s2 and
+A13:  ex i being Element of NAT st i in dom the_arity_of o & (
+      the_arity_of o)/.i = s1 by A11,Def3;
       set a = the Element of Args(o,A);
       consider j being Element of NAT such that
-A15:  j in dom the_arity_of o and
-A16:  (the_arity_of o)/.j = s1 by A14;
+A14:  j in dom the_arity_of o and
+A15:  (the_arity_of o)/.j = s1 by A13;
       take transl(o,j,a,A);
       take transl(o,j,a,A), s1,s2,i;
-      thus thesis by A13,A15,A16,Def5;
+      thus thesis by A12,A14,A15,Def5;
     end;
     consider p being Function such that
-A17: dom p = Seg n & for x being set st x in Seg n holds Z[x,p.x] from
-    CLASSES1:sch 1(A6);
+A16: dom p = Seg n & for x being set st x in Seg n holds Z[x,p.x] from
+    CLASSES1:sch 1(A5);
     p is Function-yielding
     proof
       let j be set;
       assume j in dom p;
       then ex f being Function, s1,s2 being SortSymbol of S, i being Element
 of NAT st p.j = f & i = j & s1 = q.i & s2 = q.(i+1) & f is_e.translation_of A,
-      s1,s2 by A17;
+      s1,s2 by A16;
       hence thesis;
     end;
-    then reconsider p as Function-yielding FinSequence by A17,FINSEQ_1:def 2;
-A18: now
+    then reconsider p as Function-yielding FinSequence by A16,FINSEQ_1:def 2;
+A17: now
       let i be Element of NAT;
       let f be Function, s1,s2 be SortSymbol of S;
       assume i in dom p;
       then ex f being Function, s1,s2 being SortSymbol of S, j being Element
 of NAT st p.i = f & j = i & s1 = q.j & s2 = q.(j+1) & f is_e.translation_of A,
-      s1,s2 by A17;
+      s1,s2 by A16;
       hence f = p.i & s1 = q.i & s2 = q.(i+1) implies f is_e.translation_of A,
       s1,s2;
     end;
-    len p = n by A17,FINSEQ_1:def 3;
+    len p = n by A16,FINSEQ_1:def 3;
     then reconsider
     t = compose(p, (the Sorts of A).s1) as Function of (the Sorts
-    of A).s1, (the Sorts of A).s2 by A2,A3,A4,A18,Th14;
+    of A).s1, (the Sorts of A).s2 by A1,A2,A3,A17,Th14;
     take t, q, p;
-    thus thesis by A2,A3,A4,A17,A18,FINSEQ_1:def 3;
+    thus thesis by A1,A2,A3,A16,A17,FINSEQ_1:def 3;
   end;
 end;
 
@@ -1162,7 +1163,7 @@ A35: len p = 0;
     then len p >= 0+1 by NAT_1:13;
     then
 A36: len p in dom p by FINSEQ_3:25;
-A37: p|dom p = p by RELAT_1:69;
+A37: p|dom p = p;
     dom p = Seg len p by FINSEQ_1:def 3;
     then ex s being SortSymbol of S, t being Translation of A,s1,s, p9 being
 Function-yielding FinSequence st p9 = p & s = q.(len p+1) & TranslationRel S
@@ -1696,9 +1697,9 @@ A3: i in I();
   take R;
   let i be Element of I();
   let a,b be Element of A().i;
-A4: [a,b]`2 = b by MCART_1:7;
+A4: [a,b]`2 = b;
 A5: [a,b] in [:A().i,A().i:] by ZFMISC_1:87;
-  [a,b]`1 = a by MCART_1:7;
+  [a,b]`1 = a;
   hence thesis by A2,A4,A5;
 end;
 
@@ -1970,7 +1971,8 @@ A1: R c= Q1 and
 A2: for Q being invariant ManySortedRelation of A st R c= Q holds Q1 c= Q and
 A3: R c= Q2 and
 A4: for Q being invariant ManySortedRelation of A st R c= Q holds Q2 c= Q;
-    thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+    Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+   hence thesis by PBOOLE:146;
   end;
   existence
   proof
@@ -2013,7 +2015,7 @@ A2: R c= Q by A1,Lm1;
 A3: Q c= InvCl R by A1,Lm1;
   InvCl R c= Q by A2,Def11;
   then
-A4: InvCl R = Q by A3,PBOOLE:def 10;
+A4: InvCl R = Q by A3,PBOOLE:146;
   hereby
     assume [a,b] in (InvCl P).s;
     then
@@ -2135,7 +2137,8 @@ A1: R c= Q1 and
 A2: for Q being stable ManySortedRelation of A st R c= Q holds Q1 c= Q and
 A3: R c= Q2 and
 A4: for Q being stable ManySortedRelation of A st R c= Q holds Q2 c= Q;
-    thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+     Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+   hence thesis by PBOOLE:146;
   end;
   existence
   proof
@@ -2178,7 +2181,7 @@ A2: R c= Q by A1,Lm2;
 A3: Q c= StabCl R by A1,Lm2;
   StabCl R c= Q by A2,Def12;
   then
-A4: StabCl R = Q by A3,PBOOLE:def 10;
+A4: StabCl R = Q by A3,PBOOLE:146;
   hereby
     assume [a,b] in (StabCl P).s;
     then
@@ -2213,7 +2216,8 @@ A2: for Q being invariant stable ManySortedRelation of A st R c= Q
 A3: R c= Q2 and
 A4: for Q being invariant stable ManySortedRelation of A st R c= Q
     holds Q2 c= Q;
-    thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+    Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+   hence thesis by PBOOLE:146;
   end;
   existence
   proof
@@ -2279,21 +2283,24 @@ theorem
   for R being invariant ManySortedRelation of A holds InvCl R = R
 proof
   let R be invariant ManySortedRelation of A;
-  thus InvCl R c= R & R c= InvCl R by Def11;
+   InvCl R c= R & R c= InvCl R by Def11;
+  hence thesis by PBOOLE:146;
 end;
 
 theorem
   for R being stable ManySortedRelation of A holds StabCl R = R
 proof
   let R be stable ManySortedRelation of A;
-  thus StabCl R c= R & R c= StabCl R by Def12;
+   StabCl R c= R & R c= StabCl R by Def12;
+  hence thesis by PBOOLE:146;
 end;
 
 theorem
   for R being invariant stable ManySortedRelation of A holds TRS R = R
 proof
   let R be invariant stable ManySortedRelation of A;
-  thus TRS R c= R & R c= TRS R by Def13;
+   TRS R c= R & R c= TRS R by Def13;
+  hence thesis by PBOOLE:146;
 end;
 
 theorem
@@ -2310,11 +2317,13 @@ proof
 A1: StabCl R c= InvCl StabCl R by Def11;
   R c= TRS R by Def13;
   then StabCl R c= TRS R by Def12;
-  hence InvCl StabCl R c= TRS R by Def11;
-A2: InvCl StabCl R is invariant stable ManySortedRelation of A by Th30;
+  then
+A2: InvCl StabCl R c= TRS R by Def11;
+A3: InvCl StabCl R is invariant stable ManySortedRelation of A by Th30;
   R c= StabCl R by Def12;
   then R c= InvCl StabCl R by A1,PBOOLE:13;
-  hence thesis by A2,Def13;
+  then TRS R c= InvCl StabCl R by A3,Def13;
+  hence thesis by A2,PBOOLE:146;
 end;
 
 theorem
@@ -2805,7 +2814,8 @@ A1: R c= Q1 and
 A2: for Q being EquationalTheory of A st R c= Q holds Q1 c= Q and
 A3: R c= Q2 and
 A4: for Q being EquationalTheory of A st R c= Q holds Q2 c= Q;
-    thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+   Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+  hence thesis by PBOOLE:146;
   end;
   existence
   proof
@@ -2912,8 +2922,10 @@ proof
 A1: TRS R c= EqCl(TRS R,A) by Th43;
   R c= TRS R by Def13;
   then R c= EqCl(TRS R,A) by A1,PBOOLE:13;
-  hence EqTh R c= EqCl(TRS R,A) by Def15;
+  then
+A2: EqTh R c= EqCl(TRS R,A) by Def15;
   R c= EqTh R by Def15;
   then TRS R c= EqTh R by Def13;
-  hence thesis by Th44;
+  then EqCl(TRS R,A) c= EqTh R by Th44;
+ hence thesis by A2,PBOOLE:146;
 end;

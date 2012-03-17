@@ -2,7 +2,7 @@
 ::  by Hirofumi Fukura and Yatsuka Nakamura
 ::
 :: Received August 12, 2005
-:: Copyright (c) 2005-2011 Association of Mizar Users
+:: Copyright (c) 2005-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,11 +17,11 @@ environ
  vocabularies NUMBERS, XBOOLE_0, FINSEQ_1, ORDINAL4, RELAT_1, CARD_1, SUBSET_1,
       XXREAL_0, RFINSEQ, ARYTM_1, ARYTM_3, JORDAN3, FUNCT_1, FINSEQ_5, NAT_1,
       PARTFUN1, FINSEQ_8, FILEREC1;
- notations XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, NAT_D,
-      RELAT_1, RFINSEQ, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+ notations XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, ORDINAL1, NAT_1,
+      NAT_D, RELAT_1, RFINSEQ, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4,
       FINSEQ_6, FINSEQ_5, FINSEQ_8;
- constructors XXREAL_0, NAT_1, PARTFUN1, RFINSEQ, NAT_D, FINSEQ_4, FINSEQ_5,
-      CQC_LANG, FINSEQ_6, FINSEQ_8, REAL_1, RELSET_1;
+ constructors NAT_1, RFINSEQ, NAT_D, FINSEQ_4, FINSEQ_5, CQC_LANG, FINSEQ_6,
+      FINSEQ_8, REAL_1, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, XXREAL_0, XREAL_0, FINSEQ_1,
       FINSEQ_5, ORDINAL1, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -529,7 +529,7 @@ definition
   or r is_preposition_of addcr(f,CR)) & r is_terminated_by CR;
 end;
 
-theorem Th22:
+theorem Th21:
   for D being non empty set,r being FinSequence of D holds ovlpart
   (<*>D,r)=<*>D & ovlpart(r,<*>D)=<*>D
 proof
@@ -538,7 +538,7 @@ proof
   hence thesis by FINSEQ_8:14;
 end;
 
-theorem Th23:
+theorem Th22:
   for D being non empty set,CR being FinSequence of D holds CR
   is_a_record_of <*>D,CR
 proof
@@ -546,7 +546,7 @@ proof
 A1: CR is_terminated_by CR by FINSEQ_8:28;
   addcr(<*>D,CR)=ovlcon(<*>D,CR) by FINSEQ_8:def 11
     .=<*>D^(CR/^(len ovlpart(<*>D,CR))) by FINSEQ_8:def 3
-    .=<*>D^(CR/^(len <*>D)) by Th22
+    .=<*>D^(CR/^(len <*>D)) by Th21
     .=<*>D^(CR/^0)
     .=(CR/^0) by FINSEQ_1:34
     .=CR by FINSEQ_5:28;
@@ -620,7 +620,7 @@ FINSEQ_8:28,def 12;
   hence thesis by A11,A9,Def1;
 end;
 
-theorem Th25:
+theorem Th24:
   for D being non empty set,f,CR being File of D holds f is_preposition_of f^CR
 proof
   let D be non empty set,f,CR be File of D;
@@ -648,10 +648,10 @@ proof
   let D be non empty set,f,CR be File of D;
   addcr(f,CR)=ovlcon(f,CR) by FINSEQ_8:def 11
     .=f^(CR/^(len ovlpart(f,CR))) by FINSEQ_8:def 3;
-  hence thesis by Th25;
+  hence thesis by Th24;
 end;
 
-theorem Th27:
+theorem Th26:
   for D being non empty set,r,CR being File of D st CR
   is_postposition_of r holds 0<=len r-len CR
 proof
@@ -662,7 +662,7 @@ proof
   hence thesis;
 end;
 
-theorem Th28:
+theorem Th27:
   for D being non empty set,CR,r being File of D st CR
   is_postposition_of r holds r=addcr(r,CR)
 proof
@@ -673,7 +673,7 @@ A2: CR is_postposition_of r;
   then
 A3: len CR = len Rev CR & Rev CR is_preposition_of Rev r by FINSEQ_5:def 3
 ,FINSEQ_8:def 9;
-  0<=len r - len CR by A2,Th27;
+  0<=len r - len CR by A2,Th26;
   then
 A4: 0+len CR<=len r-len CR+len CR by XREAL_1:7;
   per cases;
@@ -682,7 +682,7 @@ A5: len CR>0;
     then Rev mid(Rev r,1,len CR)=Rev Rev CR by A3,FINSEQ_8:def 8;
     then
 A6: mid(Rev r,len CR,1)=Rev Rev CR by JORDAN4:18
-      .=CR by FINSEQ_6:25;
+      .=CR;
 A7: len Rev r = len Rev r - len CR +len CR;
 A8: mid(r,(len r+1) -' len CR,len r)=CR & len CR >=0+1 by A2,A5,FINSEQ_8:24
 ,NAT_1:13;
@@ -700,7 +700,7 @@ FINSEQ_6:def 3
           .=Rev (((Rev r)/^0)|len CR) by A10,NAT_2:8
           .=Rev (Rev r|len CR) by FINSEQ_5:28
           .=Rev (Rev r)/^(len (Rev r)-'len CR) by A7,A11,FINSEQ_6:85
-          .=r/^(len r-'len CR) by A1,FINSEQ_6:25;
+          .=r/^(len r-'len CR) by A1;
         then
 A12:    ovlpart(r,CR) = ovlpart((r|(len r-'len CR))^CR,CR) by A6,RFINSEQ:8
           .= CR by FINSEQ_8:14;
@@ -730,7 +730,7 @@ A14:    CR/^len CR={} by REVROT_1:2;
     then
 A15: CR={} by NAT_1:2;
     then
-A16: len ovlpart(r,CR)=len <*>D by Th22
+A16: len ovlpart(r,CR)=len <*>D by Th21
       .=0;
     thus addcr(r,CR)=ovlcon(r,CR) by FINSEQ_8:def 11
       .=r^(CR/^(len ovlpart(r,CR))) by FINSEQ_8:def 3
@@ -739,7 +739,7 @@ A16: len ovlpart(r,CR)=len <*>D by Th22
   end;
 end;
 
-theorem Th29:
+theorem Th28:
   for D being non empty set,CR,r being File of D st r
   is_terminated_by CR holds r=addcr(r,CR)
 proof
@@ -753,7 +753,7 @@ A1: r is_terminated_by CR;
     then len Rev CR=0 by FINSEQ_5:def 3;
     then Rev CR is_preposition_of Rev r by FINSEQ_8:def 8;
     then CR is_postposition_of r by FINSEQ_8:def 9;
-    hence thesis by Th28;
+    hence thesis by Th27;
   end;
   suppose
 A2: len CR>0;
@@ -803,7 +803,7 @@ A14: (r/^(len r -'len CR)) |(len CR)=CR by A5,A10,A12,FINSEQ_5:28;
     then mid(Rev r,1,len Rev CR)=Rev CR by FINSEQ_5:def 3;
     then Rev CR is_preposition_of Rev r by A3,FINSEQ_8:def 8;
     then CR is_postposition_of r by FINSEQ_8:def 9;
-    hence thesis by Th28;
+    hence thesis by Th27;
   end;
 end;
 
@@ -825,7 +825,7 @@ A1: f is_terminated_by g;
   end;
 end;
 
-theorem Th31:
+theorem Th30:
   for D being non empty set,f,CR being File of D holds len addcr(f
   ,CR) >= len f & len addcr(f,CR) >= len CR
 proof
@@ -839,7 +839,7 @@ FINSEQ_1:22;
   hence thesis by A1,NAT_1:12;
 end;
 
-theorem Th32:
+theorem Th31:
   for D being non empty set,f,g being FinSequence of D holds g =
   ovlpart(f,g)^ovlrdiff(f,g)
 proof
@@ -859,7 +859,7 @@ theorem
 proof
   let D be non empty set,f,g be FinSequence of D;
   ovlcon(f,g) = ovlldiff(f,g)^(ovlpart(f,g)^ovlrdiff(f,g)) by FINSEQ_8:12;
-  hence thesis by Th32;
+  hence thesis by Th31;
 end;
 
 theorem
@@ -869,11 +869,11 @@ proof
   let D be non empty set,CR,r be File of D;
   addcr(r,CR) = ovlcon(r,CR) by FINSEQ_8:def 11
     .= ovlldiff(r,CR)^(ovlpart(r,CR)^ovlrdiff(r,CR)) by FINSEQ_8:12
-    .= ovlldiff(r,CR)^CR by Th32;
+    .= ovlldiff(r,CR)^CR by Th31;
   hence thesis;
 end;
 
-theorem Th35:
+theorem Th34:
   for D being non empty set,r1,r2,f being File of D st f = r1 ^ r2
   holds r1 is_substring_of f,1 & r2 is_substring_of f,1
 proof
@@ -950,7 +950,7 @@ A16:    (1-'1)+len r1=0+len r1 by XREAL_1:232
   hence thesis by A3;
 end;
 
-theorem Th36:
+theorem Th35:
   for D being non empty set,r1,r2,r3,f being File of D st f = r1 ^
   r2 ^ r3 holds r1 is_substring_of f,1 & r2 is_substring_of f,1 & r3
   is_substring_of f,1
@@ -1002,10 +1002,10 @@ A13:    i=len r1+1;
     end;
   end;
   f=r1^(r2^r3) by A1,FINSEQ_1:32;
-  hence thesis by A1,A4,Th35;
+  hence thesis by A1,A4,Th34;
 end;
 
-theorem Th37:
+theorem Th36:
   for D being non empty set,CR,r1,r2 being File of D st r1
 is_terminated_by CR & r2 is_terminated_by CR holds CR^r2 is_substring_of addcr(
   r1^r2,CR),1
@@ -1014,11 +1014,11 @@ proof
   assume that
 A1: r1 is_terminated_by CR and
 A2: r2 is_terminated_by CR;
-  r2 = addcr(r2,CR) by A2,Th29;
+  r2 = addcr(r2,CR) by A2,Th28;
   then r2 = ovlcon(r2,CR) by FINSEQ_8:def 11;
   then
 A3: r2 = r2^(CR/^len ovlpart(r2,CR)) by FINSEQ_8:def 3;
-  r1 = addcr(r1,CR) by A1,Th29;
+  r1 = addcr(r1,CR) by A1,Th28;
   then r1 = ovlcon(r1,CR) by FINSEQ_8:def 11;
   then
 A4: r1 ^r2=((r1|(len r1-'len ovlpart(r1,CR)))^CR)^(r2^(CR/^len ovlpart(r2,CR
@@ -1029,10 +1029,10 @@ A4: r1 ^r2=((r1|(len r1-'len ovlpart(r1,CR)))^CR)^(r2^(CR/^len ovlpart(r2,CR
   CR/^(len ovlpart(r1^r2,CR))) by A4,Th1
     .=(r1|(len r1-'len ovlpart(r1,CR)))^(CR^r2)^ ( (CR/^len ovlpart(r2,CR))^
   (CR/^(len ovlpart(r1^r2,CR))) ) by FINSEQ_1:32;
-  hence thesis by Th36;
+  hence thesis by Th35;
 end;
 
-theorem Th38:
+theorem Th37:
   for D being non empty set,f,g being File of D,n being Element of
   NAT st 0<n & g={} holds instr(n,f,g)=n
 proof
@@ -1073,10 +1073,10 @@ A3: len (f/^(instr(n,f,g)-'1)) < 1;
   then len g>=0 & g is_preposition_of f/^(instr(n,f,g)-'1) by FINSEQ_8:def 10
 ,NAT_1:2;
   then g={} by A3,FINSEQ_8:def 8;
-  hence thesis by A1,A2,Th38;
+  hence thesis by A1,A2,Th37;
 end;
 
-theorem Th40:
+theorem Th39:
   for D being non empty set,f,CR being File of D holds CR
   is_substring_of ovlcon(f,CR),1
 proof
@@ -1129,16 +1129,16 @@ A9: 1<=i4 & i4<=len ovlcon(f,CR) by FINSEQ_1:22,NAT_1:11;
   end;
 end;
 
-theorem Th41:
+theorem Th40:
   for D being non empty set,f,CR being File of D holds CR
   is_substring_of addcr(f,CR),1
 proof
   let D be non empty set,f,CR be File of D;
   addcr(f,CR)=ovlcon(f,CR) by FINSEQ_8:def 11;
-  hence thesis by Th40;
+  hence thesis by Th39;
 end;
 
-theorem Th42:
+theorem Th41:
   for D being non empty set,f,g being FinSequence of D, n being
 Element of NAT st g is_substring_of f|n,1 & len g>0 holds g is_substring_of f,1
 proof
@@ -1199,7 +1199,7 @@ A1: i0<>0
   proof
     assume i0=0;
     then not CR is_substring_of addcr(f,CR),1 by FINSEQ_8:def 10;
-    hence contradiction by Th41;
+    hence contradiction by Th40;
   end;
   then i0>0 by NAT_1:3;
   then
@@ -1211,7 +1211,7 @@ A3: i0-'1=i0-1 by XREAL_0:def 2;
   suppose
     len f = 0;
     then f= <*>D;
-    hence thesis by Th23;
+    hence thesis by Th22;
   end;
   suppose
 A4: len f<>0;
@@ -1417,7 +1417,7 @@ A51:      i0+len CR-'1+1=i0 +len CR -1+1 by XREAL_0:def 2
           assume len r + 1 -'len CR=0;
           then instr(1,addcr(f,CR),CR)=0 by A3,A18,A51,A50,FINSEQ_1:59;
           then not CR is_substring_of addcr(f,CR),1 by FINSEQ_8:def 10;
-          hence thesis by A16,Th42;
+          hence thesis by A16,Th41;
         end;
         then
 A52:    instr(1,r,CR) = len r + 1 -'len CR by FINSEQ_8:def 10;
@@ -1462,7 +1462,7 @@ proof
   assume r is_a_record_of f,CR;
   then
 A1: r is_terminated_by CR by Def1;
-  then r is_preposition_of addcr(r,CR) by Th29;
+  then r is_preposition_of addcr(r,CR) by Th28;
   hence thesis by A1,Def1;
 end;
 
@@ -1491,7 +1491,7 @@ A5: r1 is_preposition_of addcr(f,CR) by FINSEQ_8:def 8;
     len r1=0 by A4,NAT_1:2;
     then
 A6: f = r2 by A3,Th3;
-    then f is_preposition_of addcr(f,CR) by A2,Th29;
+    then f is_preposition_of addcr(f,CR) by A2,Th28;
     hence thesis by A1,A2,A5,A6,Def1;
   end;
   suppose
@@ -1508,7 +1508,7 @@ A9: mid(addcr(f,CR),1,len r1)=addcr(f,CR)|len r1 by FINSEQ_6:116
       .=(r1^(r2^(CR/^(len ovlpart(f,CR)))))|len r1 by A3,FINSEQ_1:32
       .= r1|len r1 by FINSEQ_5:22
       .= r1 by FINSEQ_1:58;
-    len f<= len addcr(f,CR) by Th31;
+    len f<= len addcr(f,CR) by Th30;
     then
     len r1>0 implies 1<=len addcr(f,CR) & mid(addcr(f,CR),1,len r1)=r1 by A8,A9
 ,XXREAL_0:2;
@@ -1530,13 +1530,13 @@ A13: mid(addcr(f,CR),1,len r1)=addcr(f,CR)|len r1 by FINSEQ_6:116
       .=(r1^(r2^(CR/^(len ovlpart(f,CR)))))|len r1 by A3,FINSEQ_1:32
       .= r1|len r1 by FINSEQ_5:22
       .= r1 by FINSEQ_1:58;
-    len f<= len addcr(f,CR) by Th31;
+    len f<= len addcr(f,CR) by Th30;
     then
     len r1>0 implies 1<=len addcr(f,CR) & mid(addcr(f,CR),1,len r1)=r1 by A12
 ,A13,XXREAL_0:2;
     then
 A14: r1 is_preposition_of addcr(f,CR) by FINSEQ_8:def 8;
-    CR^r2 is_substring_of addcr(r1^r2,CR),1 by A1,A2,Th37;
+    CR^r2 is_substring_of addcr(r1^r2,CR),1 by A1,A2,Th36;
     hence thesis by A1,A2,A3,A14,Def1;
   end;
 end;

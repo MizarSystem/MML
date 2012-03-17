@@ -2,7 +2,7 @@
 ::  by Edmund Woronowicz
 ::
 :: Received June 1, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,10 +17,12 @@ environ
  vocabularies SUBSET_1, NUMBERS, XBOOLE_0, FUNCT_2, QC_LANG1, FUNCT_1, RELAT_1,
       TARSKI, MARGREL1, XBOOLEAN, CQC_LANG, ARYTM_3, FINSEQ_1, NAT_1, XXREAL_0,
       ZF_LANG, FUNCOP_1, REALSET1, BVFUNC_2, ZF_MODEL, ZF_LANG1, QC_LANG3,
-      CARD_1, CLASSES2, VALUAT_1;
+      CARD_1, CLASSES2, VALUAT_1, ORDINAL1, FUNCT_7;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, FUNCT_2,
-      NAT_1, FINSEQ_1, QC_LANG1, QC_LANG3, CQC_LANG, MARGREL1, XXREAL_0;
- constructors XXREAL_0, MEMBERED, MARGREL1, QC_LANG3, CQC_LANG, RELSET_1;
+      FUNCT_7, ORDINAL1, NAT_1, FINSEQ_1, QC_LANG1, QC_LANG3, CQC_LANG,
+      MARGREL1, XXREAL_0;
+ constructors XXREAL_0, MEMBERED, MARGREL1, QC_LANG3, CQC_LANG, RELSET_1,
+      FUNCT_7;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, MEMBERED, MARGREL1, QC_LANG1,
       CQC_LANG, XXREAL_0, FUNCT_2, CARD_1;
  requirements NUMERALS, SUBSET, BOOLE;
@@ -28,125 +30,136 @@ environ
 
 begin
 
+reserve Al for QC-alphabet;
 reserve i,j,k for Element of NAT,
   A,D for non empty set;
 
 definition
+  let Al;
   let A be set;
-  func Valuations_in A -> set equals
+  func Valuations_in(Al,A) -> set equals
 :: VALUAT_1:def 1
-  Funcs(bound_QC-variables, A);
+  Funcs(bound_QC-variables(Al), A);
 end;
 
 registration
-  let A;
-  cluster Valuations_in A -> non empty functional;
+  let Al,A;
+  cluster Valuations_in(Al,A) -> non empty functional;
 end;
 
 theorem :: VALUAT_1:1
-  for x being set st x is Element of Valuations_in A holds x is
-  Function of bound_QC-variables ,A;
+  for x being set st x is Element of Valuations_in(Al,A) holds x is
+  Function of bound_QC-variables(Al) ,A;
 
 definition
-  let A;
-  redefine func Valuations_in A -> FUNCTION_DOMAIN of bound_QC-variables, A;
+  let Al,A;
+  redefine func Valuations_in(Al,A) ->
+       FUNCTION_DOMAIN of bound_QC-variables(Al), A;
 end;
 
-reserve f1,f2 for Element of Funcs(Valuations_in A,BOOLEAN),
-  x,x1,y for bound_QC-variable,
-  v,v1 for Element of Valuations_in A;
+reserve f1,f2 for Element of Funcs(Valuations_in(Al,A),BOOLEAN),
+  x,x1,y for bound_QC-variable of Al,
+  v,v1 for Element of Valuations_in(Al,A);
 
 definition
-
-  let A, x;
-  let p be Element of Funcs(Valuations_in A,BOOLEAN);
-  func FOR_ALL(x,p) -> Element of Funcs(Valuations_in A,BOOLEAN) means
+  let Al, A, x;
+  let p be Element of Funcs(Valuations_in(Al,A),BOOLEAN);
+  func FOR_ALL(x,p) -> Element of Funcs(Valuations_in(Al,A),BOOLEAN) means
 :: VALUAT_1:def 2
 
-for v holds it.v = ALL{p.v9 where v9 is Element of Valuations_in A: for y st x
-  <> y holds v9.y = v.y};
+for v holds it.v =
+   ALL{p.v9 where v9 is Element of Valuations_in(Al,A) :
+       for y st x <> y holds v9.y = v.y};
 end;
 
 theorem :: VALUAT_1:2
-  for p being Element of Funcs(Valuations_in A,BOOLEAN) holds
-FOR_ALL(x,p).v = FALSE iff ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y =
+  for p being Element of Funcs(Valuations_in(Al,A),BOOLEAN) holds
+FOR_ALL(x,p).v = FALSE iff ex v1 st p.v1 = FALSE & for y st x <> y holds
+v1.y =
   v.y;
 
 theorem :: VALUAT_1:3
-  for p being Element of Funcs(Valuations_in A,BOOLEAN) holds
-FOR_ALL(x,p).v = TRUE iff for v1 st for y st x <> y holds v1.y = v.y holds p.v1
+  for p being Element of Funcs(Valuations_in(Al,A),BOOLEAN) holds
+FOR_ALL(x,p).v = TRUE iff for v1 st for y st x <> y holds v1.y = v.y holds
+p.v1
   = TRUE;
 
-reserve ll for CQC-variable_list of k;
+reserve ll for CQC-variable_list of k,Al;
 
 notation
-  let A, k, ll, v;
+  let Al, A, k, ll, v;
   synonym v*'ll for v*ll;
 end;
 
 definition
+  let Al;
   let A, k, ll, v;
   redefine func v*'ll -> FinSequence of A means
 :: VALUAT_1:def 3
 
-  len it = k & for i be Nat st 1 <= i & i <= k holds it.i = v.(ll.i);
+  len it = k & for i be natural number st
+  1 <= i & i <= k holds it.i = v.(ll.i);
 end;
 
 definition
+  let Al;
   let A, k, ll;
   let r be Element of relations_on A;
-  func ll 'in' r -> Element of Funcs(Valuations_in A,BOOLEAN) means
+  func ll 'in' r -> Element of Funcs(Valuations_in(Al,A),BOOLEAN) means
 :: VALUAT_1:def 4
 
   for
-  v being Element of Valuations_in A holds (v*'ll in r implies it.v = TRUE) & (
-  not v*'ll in r implies it.v = FALSE);
+  v being Element of Valuations_in(Al,A) holds
+   (v*'ll in r iff it.v = TRUE) & (not v*'ll in r iff it.v = FALSE);
 end;
 
 definition
-  let A;
-  let F be Function of CQC-WFF,Funcs(Valuations_in A, BOOLEAN);
-  let p be Element of CQC-WFF;
-  redefine func F.p -> Element of Funcs(Valuations_in A, BOOLEAN);
+  let Al, A;
+  let F be Function of CQC-WFF(Al),Funcs(Valuations_in(Al,A), BOOLEAN);
+  let p be Element of CQC-WFF(Al);
+  redefine func F.p -> Element of Funcs(Valuations_in(Al,A), BOOLEAN);
 end;
 
 definition
-  let D;
-  mode interpretation of D -> Function of QC-pred_symbols, relations_on D
+  let Al, D;
+  mode interpretation of Al,D -> Function of QC-pred_symbols(Al),
+                                             relations_on D
     means
 :: VALUAT_1:def 5
-    for P being (Element of QC-pred_symbols), r being Element of relations_on
+    for P being (Element of QC-pred_symbols(Al)),
+    r being Element of relations_on
     D st it.P = r holds r = empty_rel(D) or the_arity_of P = the_arity_of r;
 end;
 
-reserve p,q,s,t for Element of CQC-WFF,
-  J for interpretation of A,
-  P for QC-pred_symbol of k,
+reserve p,q,s,t for Element of CQC-WFF(Al),
+  J for interpretation of Al,A,
+  P for QC-pred_symbol of k,Al,
   r for Element of relations_on A;
 
 definition
-  let A, k, J, P;
+  let Al, A, k, J, P;
   redefine func J.P -> Element of relations_on A;
 end;
 
 definition
-  let A, J, p;
-  func Valid(p,J) -> Element of Funcs(Valuations_in A, BOOLEAN) means
+  let Al, A, J, p;
+  func Valid(p,J) -> Element of Funcs(Valuations_in(Al,A), BOOLEAN) means
 :: VALUAT_1:def 6
 
-ex F being Function of CQC-WFF,Funcs(Valuations_in A, BOOLEAN) st it = F.p & F.
-VERUM = (Valuations_in A --> TRUE) & for p,q being Element of CQC-WFF, x being
-  bound_QC-variable, k being Element of NAT, ll being CQC-variable_list of k, P
-  being QC-pred_symbol of k holds F.(P!ll) = (ll 'in' (J.P)) & F.('not' p) =
-'not'(F.p) & (F.(p '&' q)) = ((F.p) '&' (F.q)) & F.(All(x,p)) = (FOR_ALL(x,F.p)
-  );
+ex F being Function of CQC-WFF(Al),Funcs(Valuations_in(Al,A), BOOLEAN)
+st it = F.p & F.VERUM(Al) = Valuations_in(Al,A) --> TRUE &
+for p,q being Element of CQC-WFF(Al), x being bound_QC-variable of Al,
+k being Element of NAT, ll being CQC-variable_list of k,Al, P
+  being QC-pred_symbol of k,Al holds F.(P!ll) = (ll 'in' (J.P)) & F.('not' p) =
+'not'(F.p) & (F.(p '&' q)) = ((F.p) '&' (F.q)) & F.(All(x,p)) =
+(FOR_ALL(x,F.p));
 end;
 
 theorem :: VALUAT_1:4
-  Valid(VERUM,J) = Valuations_in A --> TRUE;
+  Valid(VERUM(Al),J) = Valuations_in(Al,A) --> TRUE;
 
 theorem :: VALUAT_1:5
-  Valid(VERUM,J).v = TRUE;
+  Valid(VERUM(Al),J).v = TRUE;
 
 theorem :: VALUAT_1:6
   Valid(P!ll,J) = ll 'in' (J.P);
@@ -179,7 +192,7 @@ theorem :: VALUAT_1:15
   Valid('not'(p '&' 'not' p),J).v = TRUE;
 
 definition
-  let A, p, J, v;
+  let Al, A, p, J, v;
   pred J,v |= p means
 :: VALUAT_1:def 7
 
@@ -215,11 +228,11 @@ theorem :: VALUAT_1:24
   J,v |= p => q iff (J,v |= p implies J,v |= q);
 
 theorem :: VALUAT_1:25
-  for p being Element of Funcs(Valuations_in A,BOOLEAN) holds
+  for p being Element of Funcs(Valuations_in(Al,A),BOOLEAN) holds
   FOR_ALL(x,p).v = TRUE implies p.v = TRUE;
 
 definition
-  let A, J, p;
+  let Al, A, J, p;
   pred J |= p means
 :: VALUAT_1:def 8
 
@@ -228,14 +241,14 @@ end;
 
 reserve u,w,z for Element of BOOLEAN;
 
-reserve w,v2 for Element of Valuations_in A,
-  z for bound_QC-variable;
+reserve w,v2 for Element of Valuations_in(Al,A),
+  z for bound_QC-variable of Al;
 
 theorem :: VALUAT_1:26
-  for A be non empty set, Y, Z be bound_QC-variable,
-   V1, V2 be Element of Valuations_in A
-  ex v being Element of Valuations_in A st
-   (for x being bound_QC-variable st x <> Y holds v.x = V1.x) &
+  for A be non empty set, Y, Z be bound_QC-variable of Al,
+   V1, V2 be Element of Valuations_in(Al,A)
+  ex v being Element of Valuations_in(Al,A) st
+   (for x being bound_QC-variable of Al st x <> Y holds v.x = V1.x) &
    v.Y = V2.Z;
 
 theorem :: VALUAT_1:27
@@ -249,8 +262,8 @@ theorem :: VALUAT_1:28
 theorem :: VALUAT_1:29
   J,v |= All(x,p) iff for w st for y st x<>y holds w.y = v.y holds J,w |= p;
 
-reserve u,w for Element of Valuations_in A;
-reserve s9 for QC-formula;
+reserve u,w for Element of Valuations_in(Al,A);
+reserve s9 for QC-formula of Al;
 
 theorem :: VALUAT_1:30
   x <> y & p = s9.x & q = s9.y implies for v st v.x = v.y holds
@@ -261,7 +274,7 @@ theorem :: VALUAT_1:31
   still_not-bound_in (s9.y);
 
 theorem :: VALUAT_1:32
-  J,v |= VERUM;
+  J,v |= VERUM(Al);
 
 theorem :: VALUAT_1:33
   J,v |= p '&' q => q '&' p;
@@ -282,7 +295,7 @@ theorem :: VALUAT_1:38
   J,v |= All(x,p) => p;
 
 theorem :: VALUAT_1:39
-  J |= VERUM;
+  J |= VERUM(Al);
 
 theorem :: VALUAT_1:40
   J |= p '&' q => q '&' p;
@@ -306,5 +319,5 @@ theorem :: VALUAT_1:46
   J |= p => q & not x in still_not-bound_in p implies J |= p => All(x,q);
 
 theorem :: VALUAT_1:47
-  for s being QC-formula st p = s.x & q = s.y & not x in
+  for s being QC-formula of Al st p = s.x & q = s.y & not x in
   still_not-bound_in s & J |= p holds J |= q;

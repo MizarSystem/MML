@@ -11,6 +11,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -33,7 +35,7 @@
 <Func kind="K" nr="6">
 <Func kind="K" nr="7">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="60">
+<Func kind="K" nr="77">
 <LocusVar nr="1"/>
 <Func kind="K" nr="34"/>
 </Func>
@@ -47,27 +49,27 @@
 <Func kind="K" nr="32"/>
 </Adjective>
 <Adjective nr="16">
-<Func kind="K" nr="60">
+<Func kind="K" nr="77">
 <LocusVar nr="1"/>
 <Func kind="K" nr="34"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
-<Adjective nr="22">
+<Adjective nr="28">
 <Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="23">
+<Adjective nr="29">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="60">
+<Func kind="K" nr="77">
 <LocusVar nr="1"/>
 <Func kind="K" nr="34"/>
 </Func>
 </Adjective>
-<Adjective nr="41">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 <Func kind="K" nr="34"/>
 </Adjective>
-<Adjective nr="43">
+<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -2,7 +2,7 @@
 ::  by Stanis{\l}aw \.Zukowski
 ::
 :: Received April 14, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -60,27 +60,21 @@ registration
   proof
     set u = the BinOp of bool {};
     take L =  \/-SemiLattStr (# bool {}, u #);
-     the carrier of L = {{}} by ZFMISC_1:1;
-     then the carrier of L is 1-element;
-    hence thesis by STRUCT_0:def 19;
+    thus thesis by STRUCT_0:def 19,ZFMISC_1:1;
   end;
   cluster 1-element strict for /\-SemiLattStr;
   existence
   proof
     set u = the BinOp of bool {};
     take L = /\-SemiLattStr (# bool {}, u #);
-     the carrier of L = {{}} by ZFMISC_1:1;
-     then the carrier of L is 1-element;
-    hence thesis by STRUCT_0:def 19;
+    thus thesis by STRUCT_0:def 19,ZFMISC_1:1;
   end;
   cluster 1-element strict for LattStr;
   existence
   proof
     set u = the BinOp of bool {};
     take L = LattStr (# bool {}, u, u #);
-     the carrier of L = {{}} by ZFMISC_1:1;
-     then the carrier of L is 1-element;
-    hence thesis by STRUCT_0:def 19;
+    thus thesis by STRUCT_0:def 19,ZFMISC_1:1;
   end;
 end;
 
@@ -485,27 +479,31 @@ definition
   mode B_Lattice is Boolean Lattice;
 end;
 
-theorem Th17:
-  for L being meet-absorbing join-absorbing meet-commutative non
-  empty LattStr, a being Element of L holds a "\/" a = a
-proof
-  let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
+registration
+ let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
   a be Element of L;
+ reduce a "\/" a to a;
+ reducibility
+proof
   thus a"\/"a = ( a "/\" ( a"\/"a ) ) "\/" a by Def9
     .= a by Def8;
 end;
-
-theorem
-  for L being meet-absorbing join-absorbing meet-commutative non empty
-  LattStr, a being Element of L holds a "/\" a = a
-proof
-  let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
-  a be Element of L;
-  a"/\"( a"\/"a ) = a by Def9;
-  hence thesis by Th17;
 end;
 
-theorem Th19:
+registration
+  let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
+  a be Element of L;
+ reduce a "/\" a to a;
+ reducibility
+proof
+  a"/\"( a"\/"a ) = a by Def9;
+  hence thesis;
+end;
+end;
+
+canceled 2;
+
+theorem Th3:
   for L being Lattice holds (for a,b,c being Element of L holds a
   "/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c)) iff for a,b,c being Element of L holds a
   "\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c)
@@ -531,7 +529,7 @@ A2: for a,b,c be Element of L holds a"\/"(b"/\"c)=(a"\/"b)"/\"(a"\/"c);
     .=(a"/\"b)"\/"(a"/\"c) by A2;
 end;
 
-theorem Th21:
+theorem Th4:
   for L being meet-absorbing join-absorbing non empty LattStr, a
   , b being Element of L holds a [= b iff a"/\"b = a
 proof
@@ -541,17 +539,17 @@ proof
   hence thesis by Def8,Def9;
 end;
 
-theorem Th22:
+theorem Th5:
   for L being meet-absorbing join-absorbing join-associative
 meet-commutative non empty LattStr, a, b being Element of L holds a [= a"\/"b
 proof
   let L be meet-absorbing join-absorbing join-associative meet-commutative
   non empty LattStr, a, b be Element of L;
   thus a"\/"( a"\/"b) = (a"\/"a)"\/"b by Def5
-    .= a"\/"b by Th17;
+    .= a"\/"b;
 end;
 
-theorem Th23:
+theorem Th6:
   for L being meet-absorbing meet-commutative non empty LattStr,
   a, b being Element of L holds a"/\"b [= a
 proof
@@ -567,7 +565,7 @@ definition
   reflexivity
   proof
     let a be Element of L;
-    thus a"\/"a = a by Th17;
+    thus a"\/"a = a;
   end;
 end;
 
@@ -581,7 +579,7 @@ proof
   hence a"\/"c = c by Def5;
 end;
 
-theorem Th26:
+theorem Th8:
   for L being join-commutative non empty \/-SemiLattStr, a, b
   being Element of L holds a [= b & b [= a implies a=b
 proof
@@ -590,7 +588,7 @@ proof
   hence thesis;
 end;
 
-theorem Th27:
+theorem Th9:
   for L being meet-absorbing join-absorbing meet-associative non
 empty LattStr, a, b, c being Element of L holds a [= b implies a"/\"c [= b"/\"
   c
@@ -598,7 +596,7 @@ proof
   let L be meet-absorbing join-absorbing meet-associative non empty LattStr,
   a, b, c be Element of L;
   assume a [= b;
-  hence (a"/\"c)"\/"(b"/\"c) = ((a"/\"b)"/\"c)"\/"(b"/\"c) by Th21
+  hence (a"/\"c)"\/"(b"/\"c) = ((a"/\"b)"/\"c)"\/"(b"/\"c) by Th4
     .= (a"/\"(b"/\"c))"\/"(b"/\"c) by Def7
     .= b"/\"c by Def8;
 end;
@@ -622,15 +620,13 @@ A3: c [= a;
       .= (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a) by Def7
       .= (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a) by A1
       .= (a"/\"b)"\/"((b"/\"c)"\/"(c"/\"a)) by Def5
-      .= (a"/\"b)"\/"((b"/\"c)"\/"c) by A3,Th21
+      .= (a"/\"b)"\/"((b"/\"c)"\/"c) by A3,Th4
       .= (a"/\"b)"\/"c by Def8;
   end;
   let a,b,c be Element of L;
-  ((a"/\"b)"\/"(c"/\"a))"\/"a = (a"/\"b)"\/"((c"/\"a)"\/"a) by Def5
+B4: ((a"/\"b)"\/"(c"/\"a))"\/"a = (a"/\"b)"\/"((c"/\"a)"\/"a) by Def5
     .= (a"/\"b)"\/"a by Def8
     .= a by Def8;
-  then
-A4: (a"/\"b)"\/"(c"/\"a) [= a by Def3;
   thus a"/\"(b"\/"c) = (a"/\"(c"\/"a))"/\"(b"\/"c) by Def9
     .= a"/\"((c"\/"a)"/\"(b"\/"c)) by Def7
     .= (a"/\"(a"\/"b))"/\"((c"\/"a)"/\"(b"\/"c)) by Def9
@@ -638,7 +634,7 @@ A4: (a"/\"b)"\/"(c"/\"a) [= a by Def3;
     .= a"/\"((a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a)) by Def7
     .= a"/\"((b"/\"c)"\/"(a"/\"b)"\/"(c"/\"a)) by A1
     .= a"/\"((b"/\"c)"\/"((a"/\"b)"\/"(c"/\"a))) by Def5
-    .= (a"/\"(b"/\"c))"\/"((a"/\"b)"\/"(c"/\"a)) by A2,A4
+    .= (a"/\"(b"/\"c))"\/"((a"/\"b)"\/"(c"/\"a)) by A2,B4,Def3
     .= (a"/\"b"/\"c)"\/"((a"/\"b)"\/"(c"/\"a)) by Def7
     .= ((a"/\"b"/\"c)"\/"(a"/\"b))"\/"(c"/\"a) by Def5
     .= (a"/\"b)"\/"(a"/\"c) by Def8;
@@ -647,14 +643,14 @@ end;
 reserve L for D_Lattice;
 reserve a, b, c for Element of L;
 
-theorem Th31:
+theorem Th11:
   a"\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c)
 proof
   for a,b,c holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c) by Def11;
-  hence thesis by Th19;
+  hence thesis by Th3;
 end;
 
-theorem Th32:
+theorem Th12:
   c"/\"a = c"/\"b & c"\/"a = c"\/"b implies a=b
 proof
   assume that
@@ -679,7 +675,6 @@ proof
     .= ((a"/\"b)"\/"(c"/\"a))"\/"((c"/\"a)"\/"(b"/\"c)) by Def11
     .= (a"/\"b)"\/"((c"/\"a)"\/"((c"/\"a)"\/"(b"/\"c))) by Def5
     .= (a"/\"b)"\/"(((c"/\"a)"\/"(c"/\"a))"\/"(b"/\"c)) by Def5
-    .= (a"/\"b)"\/"((b"/\"c)"\/"(c"/\"a)) by Th17
     .= (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a) by Def5;
 end;
 
@@ -692,48 +687,60 @@ registration
 A1: L is distributive;
     let a,b,c be Element of L;
     assume a"\/"c = c;
-    hence a"\/"(b"/\"c) = (a"\/"b)"/\"c by A1,Th31;
+    hence a"\/"(b"/\"c) = (a"\/"b)"/\"c by A1,Th11;
   end;
 end;
 
-theorem Th39:
-  for L being 0_Lattice, a being Element of L holds Bottom L "\/" a = a
-proof
+registration
   let L be 0_Lattice, a be Element of L;
+ reduce Bottom L "\/" a to a;
+ reducibility
+proof
   thus Bottom L"\/"a = ( Bottom L"/\"a )"\/"a by Def16
     .= a by Def8;
 end;
+ reduce Bottom L "/\" a to Bottom L;
+ reducibility by Def16;
+end;
 
 theorem
-  for L being 0_Lattice, a being Element of L holds Bottom L "/\" a =
-  Bottom L by Def16;
+  for L being 0_Lattice, a being Element of L holds Bottom L "\/" a = a;
 
-theorem Th41:
+theorem
+  for L being 0_Lattice, a being Element of L holds Bottom L "/\" a = Bottom L;
+
+theorem Th16:
   for L being 0_Lattice, a being Element of L holds Bottom L [= a
 proof
   let L be 0_Lattice, a be Element of L;
-  Bottom L [= Bottom L "\/" a by Th22;
-  hence thesis by Th39;
+  Bottom L [= Bottom L "\/" a by Th5;
+  hence thesis;
 end;
 
-theorem Th43:
-  for L being 1_Lattice, a being Element of L holds Top L"/\"a = a
-proof
+registration
   let L be 1_Lattice, a be Element of L;
+ reduce Top L"/\"a to a;
+ reducibility
+proof
   thus Top L"/\"a = ( Top L"\/"a )"/\"a by Def17
     .= a by Def9;
 end;
+ reduce Top L"\/"a to Top L;
+ reducibility by Def17;
+end;
 
 theorem
-  for L being 1_Lattice, a being Element of L holds Top L"\/"a = Top L
-  by Def17;
+  for L being 1_Lattice, a being Element of L holds Top L"/\"a = a;
+
+theorem
+  for L being 1_Lattice, a being Element of L holds Top L"\/"a = Top L;
 
 theorem
   for L being 1_Lattice, a being Element of L holds a [= Top L
 proof
   let L be 1_Lattice, a be Element of L;
-  Top L"/\"a [= Top L by Th23;
-  hence thesis by Th43;
+  Top L"/\"a [= Top L by Th6;
+  hence thesis;
 end;
 
 definition
@@ -751,55 +758,58 @@ A2: a is_a_complement_of x and
 A3: b is_a_complement_of x;
 A4: x"\/"b = Top L & x"/\"b = Bottom L by A3,Def18;
     x"\/"a = Top L & x"/\"a = Bottom L by A2,Def18;
-    hence thesis by A1,A4,Th32;
+    hence thesis by A1,A4,Th12;
   end;
 end;
 
 reserve L for B_Lattice;
 reserve a, b for Element of L;
 
-theorem Th47:
+theorem Th20:
   a`"/\"a = Bottom L
 proof
   a` is_a_complement_of a by Def21;
   hence thesis by Def18;
 end;
 
-theorem Th48:
+theorem Th21:
   a`"\/"a = Top L
 proof
   a` is_a_complement_of a by Def21;
   hence thesis by Def18;
 end;
 
-theorem Th49:
-  a`` = a
+registration let L,a;
+ reduce a`` to a;
+ reducibility
 proof
   a` is_a_complement_of a by Def21;
   then
 A1: a"\/"a` =Top L & a "/\"a`= Bottom L by Def18;
   a`` is_a_complement_of a` by Def21;
   then a``"\/"a` = Top L & a``"/\"a` = Bottom L by Def18;
-  hence thesis by A1,Th32;
+  hence thesis by A1,Th12;
+end;
 end;
 
-theorem Th50:
+theorem
+  a`` = a;
+
+theorem Th23:
   ( a"/\"b )` = a`"\/" b`
 proof
 A1: (a`"\/"b`)"/\"(a"/\"b) = ((a`"\/"b`)"/\"a)"/\"b by Def7
     .= ((a`"/\"a)"\/"(b`"/\"a))"/\"b by Def11
-    .= (Bottom L"\/"(b`"/\"a))"/\"b by Th47
-    .= b"/\"(b`"/\"a) by Th39
+    .= (Bottom L"\/"(b`"/\"a))"/\"b by Th20
     .= (b"/\"b`)"/\"a by Def7
-    .= Bottom L"/\"a by Th47
-    .= Bottom L by Def16;
+    .= Bottom L"/\"a by Th20
+    .= Bottom L;
   (a`"\/"b`)"\/"(a"/\"b) = a`"\/"(b`"\/"(a"/\"b)) by Def5
-    .= a`"\/"((b`"\/"a)"/\"(b`"\/"b)) by Th31
-    .= a`"\/"((b`"\/"a)"/\"Top L) by Th48
-    .= (b`"\/"a)"\/"a` by Th43
+    .= a`"\/"((b`"\/"a)"/\"(b`"\/"b)) by Th11
+    .= a`"\/"((b`"\/"a)"/\"Top L) by Th21
     .= b`"\/"(a"\/"a`) by Def5
-    .= b`"\/"Top L by Th48
-    .= Top L by Def17;
+    .= b`"\/"Top L by Th21
+    .= Top L;
   then a`"\/"b` is_a_complement_of a"/\"b by A1,Def18;
   hence thesis by Def21;
 end;
@@ -807,34 +817,33 @@ end;
 theorem
   ( a"\/"b )` = a`"/\" b`
 proof
-  thus (a"\/"b)` = (a``"\/"b)` by Th49
-    .= (a``"\/"b``)` by Th49
-    .= (a`"/\"b`)`` by Th50
-    .= a`"/\"b` by Th49;
+  thus (a"\/"b)` = (a``"\/"b``)`
+    .= (a`"/\"b`)`` by Th23
+    .= a`"/\"b`;
 end;
 
-theorem Th52:
+theorem Th25:
   b"/\"a = Bottom L iff b [= a`
 proof
   thus b"/\"a = Bottom L implies b [= a`
   proof
     assume
 A1: b"/\"a = Bottom L;
-    b = b"/\"Top L by Th43
-      .= b"/\"(a"\/"a`) by Th48
+    b = b"/\"Top L
+      .= b"/\"(a"\/"a`) by Th21
       .= Bottom L"\/"(b"/\"a`) by A1,Def11
-      .= b"/\"a` by Th39;
+      .= b"/\"a`;
     then b"\/"a` = a` by Def8;
     hence thesis by Def3;
   end;
   thus thesis
   proof
     assume b [= a`;
-    then b"/\"a [= a`"/\"a by Th27;
+    then b"/\"a [= a`"/\"a by Th9;
     then
-A2: b"/\"a [= Bottom L by Th47;
-    Bottom L [= b"/\"a by Th41;
-    hence thesis by A2,Th26;
+A2: b"/\"a [= Bottom L by Th20;
+    Bottom L [= b"/\"a by Th16;
+    hence thesis by A2,Th8;
   end;
 end;
 
@@ -842,12 +851,12 @@ theorem
   a [= b implies b` [= a`
 proof
   assume a [= b;
-  then b`"/\"a [= b`"/\"b by Th27;
+  then b`"/\"a [= b`"/\"b by Th9;
   then
-A1: b`"/\"a [= Bottom L by Th47;
-  Bottom L [= b`"/\"a by Th41;
-  then b `"/\"a = Bottom L by A1,Th26;
-  hence thesis by Th52;
+A1: b`"/\"a [= Bottom L by Th20;
+  Bottom L [= b`"/\"a by Th16;
+  then b `"/\"a = Bottom L by A1,Th8;
+  hence thesis by Th25;
 end;
 
 begin :: Addenda
@@ -902,8 +911,7 @@ A1:  S is empty;
 A2:  S is initial;
    let p,q be Element of L such that p in S and
 A3: q in S;
-    p "/\" q [= q by Th23;
-   hence p "/\" q in S by A2,A3,Def22;
+   thus p "/\" q in S by A2,A3,Def22,Th6;
   end;
  cluster final -> join-closed for Subset of L;
  coherence
@@ -911,8 +919,7 @@ A3: q in S;
 A4:  S is final;
    let p,q be Element of L such that p in S and
 A5: q in S;
-    q [= p "\/" q by Th22;
-   hence p "\/" q in S by A4,A5,Def23;
+   thus p "\/" q in S by A4,A5,Def23,Th5;
   end;
 end;
 
@@ -926,11 +933,8 @@ A1:  p in S by SUBSET_1:4;
     proof let x be Element of L;
      thus x in S implies x in [#]L;
      assume x in [#]L;
-      x "/\" p [= p by Th23;
-      then
-A2:     x "/\" p in S by A1,Def22;
-      x "/\" p [= x by Th23;
-     hence x in S by A2,Def23;
+A2:     x "/\" p in S by A1,Def22,Th6;
+     thus x in S by A2,Def23,Th6;
     end;
   hence S = [#]L by SUBSET_1:3;
  end;

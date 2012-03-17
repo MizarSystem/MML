@@ -2,7 +2,7 @@
 ::  by J\'ozef Bia{\l}as
 ::
 :: Received September 27, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -47,7 +47,7 @@ definition
 
   let X be ext-real-membered set;
   func SetMajorant(X) -> ext-real-membered set means
-  :Def14:
+  :Def1:
   for x being ext-real number holds x in it iff x is UpperBound of X;
   existence
   proof
@@ -75,7 +75,7 @@ registration
   coherence
   proof
     set x = the UpperBound of X;
-    x in SetMajorant(X) by Def14;
+    x in SetMajorant(X) by Def1;
     hence thesis;
   end;
 end;
@@ -89,15 +89,15 @@ proof
 A1: X c= Y;
   let x be ext-real number;
   assume x in SetMajorant(Y);
-  then x is UpperBound of Y by Def14;
+  then x is UpperBound of Y by Def1;
   then x is UpperBound of X by A1,XXREAL_2:6;
-  hence thesis by Def14;
+  hence thesis by Def1;
 end;
 
 definition
   let X be ext-real-membered set;
   func SetMinorant(X) -> ext-real-membered set means
-  :Def15:
+  :Def2:
   for x being ext-real number holds x in it iff x is LowerBound of X;
   existence
   proof
@@ -125,7 +125,7 @@ registration
   coherence
   proof
     set x = the LowerBound of X;
-    x in SetMinorant(X) by Def15;
+    x in SetMinorant(X) by Def2;
     hence thesis;
   end;
 end;
@@ -139,9 +139,9 @@ proof
 A1: X c= Y;
   let x be ext-real number;
   assume x in SetMinorant(Y);
-  then x is LowerBound of Y by Def15;
+  then x is LowerBound of Y by Def2;
   then x is LowerBound of X by A1,XXREAL_2:5;
-  hence thesis by Def15;
+  hence thesis by Def2;
 end;
 
 ::
@@ -157,25 +157,25 @@ proof
   proof
     let y be ext-real number;
     assume y in SetMajorant X;
-    then y is UpperBound of X by Def14;
+    then y is UpperBound of X by Def1;
     hence thesis by XXREAL_2:def 3;
   end;
   then
 A1: sup X is LowerBound of SetMajorant X by XXREAL_2:def 2;
   inf X is LowerBound of X by XXREAL_2:def 4;
   then
-A2: inf X in SetMinorant X by Def15;
+A2: inf X in SetMinorant X by Def2;
   for y being ext-real number st y in SetMinorant X holds y <= inf X
   proof
     let y be ext-real number;
     assume y in SetMinorant X;
-    then y is LowerBound of X by Def15;
+    then y is LowerBound of X by Def2;
     hence thesis by XXREAL_2:def 4;
   end;
   then
 A3: inf X is UpperBound of SetMinorant X by XXREAL_2:def 1;
   sup X is UpperBound of X by XXREAL_2:def 3;
-  then sup X in SetMajorant X by Def14;
+  then sup X in SetMajorant X by Def1;
   hence thesis by A1,A2,A3,XXREAL_2:55,56;
 end;
 
@@ -201,7 +201,7 @@ definition
   let F be bool_DOMAIN of ExtREAL;
 
   func SUP(F) -> ext-real-membered set means
-  :Def19:
+  :Def3:
   for a being ext-real
 number holds a in it iff ex A being non empty ext-real-membered set st A in F &
   a = sup A;
@@ -245,11 +245,11 @@ registration
     set A = the Element of F;
     reconsider A as non empty ext-real-membered set by SETFAM_1:def 8;
     sup A = sup A;
-    hence thesis by Def19;
+    hence thesis by Def3;
   end;
 end;
 
-theorem Th112:
+theorem Th4:
   for F being bool_DOMAIN of ExtREAL, S being non empty
   ext-real-membered number st S = union F holds sup S is UpperBound of SUP(F)
 proof
@@ -262,7 +262,7 @@ A1: S = union F;
     assume x in SUP(F);
     then consider A being non empty ext-real-membered set such that
 A2: A in F and
-A3: x = sup A by Def19;
+A3: x = sup A by Def3;
     A c= S
     proof
       let a be ext-real number;
@@ -274,7 +274,7 @@ A3: x = sup A by Def19;
   hence thesis by XXREAL_2:def 1;
 end;
 
-theorem Th113:
+theorem Th5:
   for F being bool_DOMAIN of ExtREAL, S being ext-real-membered
   set st S = union F holds sup SUP(F) is UpperBound of S
 proof
@@ -292,7 +292,7 @@ A3: Z in F by A1,TARSKI:def 4;
     consider a being set such that
 A4: a = sup Z;
     reconsider a as ext-real number by A4;
-    sup Z is UpperBound of Z & a in SUP(F) by A3,A4,Def19,XXREAL_2:def 3;
+    sup Z is UpperBound of Z & a in SUP(F) by A3,A4,Def3,XXREAL_2:def 3;
     hence thesis by A2,A4,XXREAL_2:61,def 1;
   end;
   hence thesis by XXREAL_2:def 1;
@@ -307,10 +307,10 @@ proof
   set b = sup SUP(F);
   assume
 A1: S = union F;
-  then sup S is UpperBound of SUP(F) by Th112;
+  then sup S is UpperBound of SUP(F) by Th4;
   then
 A2: b <= a by XXREAL_2:def 3;
-  sup SUP(F) is UpperBound of S by A1,Th113;
+  sup SUP(F) is UpperBound of S by A1,Th5;
   then a <= b by XXREAL_2:def 3;
   hence thesis by A2,XXREAL_0:1;
 end;
@@ -318,7 +318,7 @@ end;
 definition
   let F be bool_DOMAIN of ExtREAL;
   func INF F -> ext-real-membered set means
-  :Def20:
+  :Def4:
   for a being ext-real
 number holds a in it iff ex A being non empty ext-real-membered set st A in F &
   a = inf A;
@@ -373,11 +373,11 @@ registration
     set A = the Element of F;
     reconsider A as non empty ext-real-membered set by SETFAM_1:def 8;
     inf A = inf A;
-    hence thesis by Def20;
+    hence thesis by Def4;
   end;
 end;
 
-theorem Th117:
+theorem Th7:
   for F being bool_DOMAIN of ExtREAL, S being non empty
   ext-real-membered set st S = union F holds inf S is LowerBound of INF(F)
 proof
@@ -390,7 +390,7 @@ A1: S = union F;
     assume x in INF(F);
     then consider A being non empty ext-real-membered set such that
 A2: A in F and
-A3: x = inf A by Def20;
+A3: x = inf A by Def4;
     A c= S
     proof
       let a be ext-real number;
@@ -402,7 +402,7 @@ A3: x = inf A by Def20;
   hence thesis by XXREAL_2:def 2;
 end;
 
-theorem Th118:
+theorem Th8:
   for F being bool_DOMAIN of ExtREAL, S being ext-real-membered
   set st S = union F holds inf INF(F) is LowerBound of S
 proof
@@ -420,7 +420,7 @@ A3: Z in F by A1,TARSKI:def 4;
     consider a being set such that
 A4: a = inf Z;
     reconsider a as ext-real number by A4;
-    inf Z is LowerBound of Z & a in INF(F) by A3,A4,Def20,XXREAL_2:def 4;
+    inf Z is LowerBound of Z & a in INF(F) by A3,A4,Def4,XXREAL_2:def 4;
     hence thesis by A2,A4,XXREAL_2:62,def 2;
   end;
   hence thesis by XXREAL_2:def 2;
@@ -435,10 +435,10 @@ proof
   set b = inf INF(F);
   assume
 A1: S = union F;
-  then inf S is LowerBound of INF(F) by Th117;
+  then inf S is LowerBound of INF(F) by Th7;
   then
 A2: a <= b by XXREAL_2:def 4;
-  inf INF(F) is LowerBound of S by A1,Th118;
+  inf INF(F) is LowerBound of S by A1,Th8;
   then b <= a by XXREAL_2:def 4;
   hence thesis by A2,XXREAL_0:1;
 end;

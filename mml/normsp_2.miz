@@ -2,7 +2,7 @@
 ::  by Noboru Endou , Yasunari Shidama and Katsumasa Okamura
 ::
 :: Received November 21, 2006
-:: Copyright (c) 2006-2011 Association of Mizar Users
+:: Copyright (c) 2006-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -27,22 +27,20 @@ environ
       FRECHET2, YELLOW_8, DOMAIN_1, WAYBEL_3, RLVECT_1, CONVEX1, COMPTS_1,
       TBSP_1, TMAP_1, CONNSP_2, CARD_3, METRIC_1, METRIC_6, PCOMPS_1, NORMSP_0,
       NORMSP_1, RUSUB_4, RLTOPSP1, SQUARE_1, NFCONT_1, SEQ_1, KURATO_2;
- constructors SETFAM_1, DOMAIN_1, REAL_1, SQUARE_1, NAT_1, NEWTON, CARD_3,
-      COMPTS_1, CONNSP_2, PCOMPS_1, TBSP_1, RUSUB_4, CONVEX1, TMAP_1, METRIC_6,
-      WAYBEL_3, YELLOW_8, FRECHET, FRECHET2, NFCONT_1, RLTOPSP1, SEQ_1,
-      NORMSP_1, RELSET_1, TOPS_2;
+ constructors SETFAM_1, DOMAIN_1, REAL_1, SQUARE_1, NEWTON, CONNSP_2, TBSP_1,
+      RUSUB_4, CONVEX1, TMAP_1, METRIC_6, WAYBEL_3, YELLOW_8, FRECHET,
+      FRECHET2, NFCONT_1, RLTOPSP1, RELSET_1, TOPS_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, STRUCT_0, TOPS_1, METRIC_1, PCOMPS_1, HAUSDORF,
-      KURATO_2, RLTOPSP1, FRECHET;
+      XREAL_0, STRUCT_0, TOPS_1, METRIC_1, PCOMPS_1, HAUSDORF, KURATO_2,
+      RLTOPSP1, FRECHET;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, RLVECT_1, METRIC_1, COMPTS_1, PCOMPS_1, CONVEX1, RUSUB_4,
-      RLTOPSP1, SUBSET_1, STRUCT_0, ALGSTR_0, PRE_TOPC;
+ definitions TARSKI, RLVECT_1, METRIC_1, PCOMPS_1, CONVEX1, RUSUB_4, RLTOPSP1,
+      SUBSET_1, STRUCT_0, ALGSTR_0, PRE_TOPC;
  theorems TARSKI, XBOOLE_1, RLVECT_1, FRECHET, FRECHET2, YELLOW_8, WAYBEL12,
       ZFMISC_1, TMAP_1, CONNSP_2, FUNCT_2, XBOOLE_0, XREAL_1, COMPLEX1,
       XCMPLX_1, NORMSP_1, METRIC_1, METRIC_6, PCOMPS_1, SUBSET_1, PRE_TOPC,
       BINOP_1, TOPS_1, NFCONT_1, NEWTON, XXREAL_0, MCART_1, FUNCT_1, TBSP_1,
-      NAT_1, ORDINAL1, TOPREAL6, PREPOWER, PARTFUN1, RELSET_1, TOPS_2,
-      NORMSP_0;
+      NAT_1, ORDINAL1, TOPREAL6, PREPOWER, PARTFUN1, RELSET_1, TOPS_2;
  schemes BINOP_1, RECDEF_1, NAT_1;
 
 begin :: Baire's Category Theorem
@@ -478,38 +476,36 @@ real number holds ex x be Point of X st x = z & Ball(z,r) = {y where y is Point
   of X:||.x-y.|| < r}
 proof
   let X be RealNormSpace, z be Element of MetricSpaceNorm X, r be real number;
+  set M = MetricSpaceNorm X;
   reconsider x=z as Point of X;
-  consider M9 being non empty MetrStruct, z9 being Element of M9 such that
-A1: M9 = MetricSpaceNorm X and
-A2: z9 = z and
-A3: Ball(z,r) = {q where q is Element of M9:dist(z9,q) < r} by METRIC_1:def 14;
+A1: Ball(z,r) = {q where q is Element of M:dist(z,q) < r} by METRIC_1:def 14;
   now
     let a be set;
     assume a in {y where y is Point of X: ||.x-y.|| < r};
     then consider y be Point of X such that
-A4: a=y & ||.x-y.|| < r;
-    reconsider t=y as Element of M9 by A1;
-    ||.x-y.|| = dist(z9,t) by A1,A2,Def1;
-    hence a in {q where q is Element of M9 : dist(z9,q) < r} by A4;
+A2: a=y & ||.x-y.|| < r;
+    reconsider t=y as Element of M;
+    ||.x-y.|| = dist(z,t) by Def1;
+    hence a in {q where q is Element of M : dist(z,q) < r} by A2;
   end;
   then
-A5: {y where y is Point of X: ||.x-y.|| < r} c= {q where q is Element of M9
-  : dist(z9,q) < r} by TARSKI:def 3;
+A3: {y where y is Point of X: ||.x-y.|| < r} c= {q where q is Element of M
+  : dist(z,q) < r} by TARSKI:def 3;
   now
     let a be set;
-    assume a in {q where q is Element of M9:dist(z9,q) < r};
-    then consider q be Element of M9 such that
-A6: a=q & dist(z9,q) < r;
-    reconsider t=q as Point of X by A1;
-    ||.x-t.|| = dist(z9,q) by A1,A2,Def1;
-    hence a in {y where y is Point of X: ||.x-y.|| < r} by A6;
+    assume a in {q where q is Element of M:dist(z,q) < r};
+    then consider q be Element of M such that
+A4: a=q & dist(z,q) < r;
+    reconsider t=q as Point of X;
+    ||.x-t.|| = dist(z,q) by Def1;
+    hence a in {y where y is Point of X: ||.x-y.|| < r} by A4;
   end;
   then
-  {q where q is Element of M9 : dist(z9,q) < r} c= {y where y is Point of
+  {q where q is Element of M : dist(z,q) < r} c= {y where y is Point of
 X: ||.x-y.|| < r} by TARSKI:def 3;
-  then {q where q is Element of M9:dist(z9,q) < r} = {y where y is Point of X
-  :||.x -y.|| < r} by A5,XBOOLE_0:def 10;
-  hence thesis by A3;
+  then {q where q is Element of M:dist(z,q) < r} = {y where y is Point of X
+  :||.x -y.|| < r} by A3,XBOOLE_0:def 10;
+  hence thesis by A1;
 end;
 
 theorem Th3:
@@ -519,39 +515,37 @@ theorem Th3:
 proof
   let X be RealNormSpace, z be Element of MetricSpaceNorm X, r be real number;
   reconsider x=z as Point of X;
-  consider M9 being non empty MetrStruct, z9 being Element of M9 such that
-A1: M9 = MetricSpaceNorm X and
-A2: z9 = z and
-A3: cl_Ball(z,r) = {q where q is Element of M9 : dist(z9,q) <= r} by
+  set M = MetricSpaceNorm X;
+A1: cl_Ball(z,r) = {q where q is Element of M : dist(z,q) <= r} by
 METRIC_1:def 15;
   now
     let a be set;
     assume a in {y where y is Point of X: ||.x-y.|| <= r};
     then consider y be Point of X such that
-A4: a=y & ||.x-y.|| <= r;
-    reconsider t=y as Element of M9 by A1;
-    ||.x-y.|| = dist(z9,t) by A1,A2,Def1;
-    hence a in {q where q is Element of M9 : dist(z9,q) <= r} by A4;
+A2: a=y & ||.x-y.|| <= r;
+    reconsider t=y as Element of M;
+    ||.x-y.|| = dist(z,t) by Def1;
+    hence a in {q where q is Element of M : dist(z,q) <= r} by A2;
   end;
   then
-A5: {y where y is Point of X: ||.x-y.|| <= r} c= {q where q is Element of
-M9: dist(z9,q) <= r} by TARSKI:def 3;
+A3: {y where y is Point of X: ||.x-y.|| <= r}
+     c= {q where q is Element of M: dist(z,q) <= r} by TARSKI:def 3;
   now
     let a be set;
-    assume a in {q where q is Element of M9 : dist(z9,q) <= r};
-    then consider q be Element of M9 such that
-A6: a=q & dist(z9,q) <= r;
-    reconsider t=q as Point of X by A1;
-    ||.x-t.|| = dist(z9,q) by A1,A2,Def1;
-    hence a in {y where y is Point of X: ||.x-y.|| <= r} by A6;
+    assume a in {q where q is Element of M : dist(z,q) <= r};
+    then consider q be Element of M such that
+A4: a=q & dist(z,q) <= r;
+    reconsider t=q as Point of X;
+    ||.x-t.|| = dist(z,q) by Def1;
+    hence a in {y where y is Point of X: ||.x-y.|| <= r} by A4;
   end;
   then
-  {q where q is Element of M9 : dist(z9,q) <= r} c= {y where y is Point of
+  {q where q is Element of M : dist(z,q) <= r} c= {y where y is Point of
 X: ||.x-y.|| <= r} by TARSKI:def 3;
   then
-  {q where q is Element of M9 : dist(z9,q) <= r} = {y where y is Point of
-X: ||.x-y.|| <= r} by A5,XBOOLE_0:def 10;
-  hence thesis by A3;
+  {q where q is Element of M : dist(z,q) <= r} = {y where y is Point of
+X: ||.x-y.|| <= r} by A3,XBOOLE_0:def 10;
+  hence thesis by A1;
 end;
 
 theorem Th4:
@@ -1455,8 +1449,7 @@ registration
       reconsider x=xt as Point of TopSpaceNorm X by Def4;
       consider B be Basis of x such that
 A1:   B is countable by FRECHET:def 2;
-      B is Subset-Family of LinearTopSpaceNorm X by Def4;
-      then reconsider Bt=B as Basis of xt by Th25;
+      reconsider Bt=B as Basis of xt by Th25,Def4;
       take Bt;
       thus Bt is countable by A1;
     end;

@@ -9,12 +9,14 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="RFINSEQ"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -46,34 +48,34 @@
 <Cluster>
 <Adjective nr="15" value="false"/>
 <Adjective nr="18" value="false"/>
-<Adjective nr="38">
+<Adjective nr="45">
 <Func kind="U" nr="1">
-<Func kind="K" nr="302">
+<Func kind="K" nr="323">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="159"/>
-<Adjective nr="160"/>
-<Adjective nr="164"/>
-<Adjective nr="165"/>
+<Adjective nr="166"/>
+<Adjective nr="167"/>
+<Adjective nr="171"/>
+<Adjective nr="172"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="302">
+<Func kind="K" nr="323">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="75">
-<LocusVar nr="1"/>
+<Func kind="K" nr="87">
 <Num nr="1"/>
+<LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="28"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 </Registrations>

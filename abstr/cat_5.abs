@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received October 24, 1994
-:: Copyright (c) 1994-2011 Association of Mizar Users
+:: Copyright (c) 1994-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,34 +16,24 @@ environ
 
  vocabularies XBOOLE_0, SUBSET_1, ZFMISC_1, MCART_1, CAT_1, STRUCT_0, RELAT_1,
       GRAPH_1, FUNCT_1, CARD_1, TARSKI, PARTFUN1, CAT_2, REALSET1, GROUP_6,
-      SETFAM_1, GRCAT_1, FUNCT_3, CAT_5;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, DOMAIN_1,
-      RELAT_1, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NUMBERS,
-      BINOP_1, STRUCT_0, GRAPH_1, CAT_1, CAT_2;
- constructors SETFAM_1, PARTFUN1, REALSET1, NATTRA_1, FUNCOP_1, RELSET_1;
+      SETFAM_1, GRCAT_1, FUNCT_3, CAT_5, MONOID_0, RELAT_2, BINOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, SETFAM_1, MCART_1,
+      DOMAIN_1, RELAT_1, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      NUMBERS, BINOP_1, STRUCT_0, GRAPH_1, CAT_1, CAT_2;
+ constructors SETFAM_1, PARTFUN1, REALSET1, NATTRA_1, FUNCOP_1, RELSET_1,
+      XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, REALSET1, CAT_1, CAT_2,
-      STRUCT_0, RELAT_1;
+      STRUCT_0, RELAT_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
 
 
 begin :: Categories with Triple-like Morphisms
 
-definition
-  let D1,D2,D be non empty set;
-  let x be Element of [:[:D1,D2:],D:];
-  redefine func x`11 -> Element of D1;
-  redefine func x`12 -> Element of D2;
-end;
-
-definition
-  let D1,D2 be non empty set;
-  let x be Element of [:D1,D2:];
-  redefine func x`2 -> Element of D2;
-end;
-
 theorem :: CAT_5:1
-  for C,D being CatStr st the CatStr of C = the CatStr of D holds
-  C is Category-like implies D is Category-like;
+  for C being Category,
+    D being non empty non void CatStr
+   st the CatStr of C = the CatStr of D holds
+      D is Category-like transitive associative reflexive with_identities;
 
 definition
   let IT be non void non empty CatStr;
@@ -74,20 +64,22 @@ scheme :: CAT_5:sch 1
   ex C being with_triple-like_morphisms strict Category st
   the carrier of C = A() &
   (for a,b being Element of A(), f being Element of B() st
-  P[a,b,f] holds [[a,b],f] is Morphism of C) & (for m being Morphism of C
+      P[a,b,f] holds [[a,b],f] is Morphism of C) &
+  (for m being Morphism of C
   ex a,b being Element of A(), f being Element of B() st
-  m = [[a,b],f] & P[a,b,f]) &
-  for m1,m2 being (Morphism of C), a1,a2,a3 being Element of A(),
-  f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
-  holds m2*m1 = [[a1,a3], F(f2,f1)]
+    m = [[a,b],f] & P[a,b,f]) &
+    for m1,m2 being (Morphism of C), a1,a2,a3 being Element of A(),
+        f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+  holds m2(*)m1 = [[a1,a3], F(f2,f1)]
 provided
  for a,b,c being Element of A(), f,g being Element of B() st
-P[a,b,f] & P[b,c,g] holds F(g,f) in B() & P[a,c,F(g,f)] and
- for a being Element of A() ex f being Element of B() st P[a,a,f] &
-for b being Element of A(), g being Element of B() holds
-(P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g) and
+   P[a,b,f] & P[b,c,g] holds F(g,f) in B() & P[a,c,F(g,f)] and
+ for a being Element of A()
+   ex f being Element of B() st P[a,a,f] &
+    for b being Element of A(), g being Element of B() holds
+    (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g) and
  for a,b,c,d being Element of A(), f,g,h being Element of B() st
-P[a,b,f] & P[b,c,g] & P[c,d,h] holds F(h, F(g,f)) = F(F(h,g), f);
+   P[a,b,f] & P[b,c,g] & P[c,d,h] holds F(h, F(g,f)) = F(F(h,g), f);
 
 scheme :: CAT_5:sch 2
  CatUniq
@@ -100,14 +92,14 @@ scheme :: CAT_5:sch 2
   m = [[a,b],f] & P[a,b,f]) &
   (for m1,m2 being (Morphism of C1), a1,a2,a3 being Element of A(),
   f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
-  holds m2*m1 = [[a1,a3], F(f2,f1)]) & the carrier of C2 = A() &
+  holds m2(*)m1 = [[a1,a3], F(f2,f1)]) & the carrier of C2 = A() &
   (for a,b being Element of A(), f being Element of B() st
   P[a,b,f] holds [[a,b],f] is Morphism of C2) & (for m being Morphism of C2
   ex a,b being Element of A(), f being Element of B() st
   m = [[a,b],f] & P[a,b,f]) &
   for m1,m2 being (Morphism of C2), a1,a2,a3 being Element of A(),
   f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
-  holds m2*m1 = [[a1,a3], F(f2,f1)] holds C1 = C2
+  holds m2(*)m1 = [[a1,a3], F(f2,f1)] holds C1 = C2
 provided
  for a being Element of A() ex f being Element of B() st P[a,a,f] &
 for b being Element of A(), g being Element of B() holds
@@ -123,7 +115,7 @@ for g being Morphism of B() st g = F(f) holds
 dom g = O(dom f) & cod g = O(cod f) and
  for a being Object of A() holds F(id a) = id O(a) and
  for f1,f2 being Morphism of A() for g1,g2 being Morphism of B() st
-g1 = F(f1) & g2 = F(f2) & dom f2 = cod f1 holds F(f2*f1) = g2*g1;
+g1 = F(f1) & g2 = F(f2) & dom f2 = cod f1 holds F(f2(*)f1) = g2(*)g1;
 
 theorem :: CAT_5:3
   for C1 being Category, C2 being Subcategory of C1 st C1 is Subcategory of C2
@@ -147,8 +139,7 @@ definition
   the carrier' of it = (the carrier' of C1) /\ the carrier' of C2 &
   the Source of it = (the Source of C1)|the carrier' of C2 &
   the Target of it = (the Target of C1)|the carrier' of C2 &
-  the Comp of it = (the Comp of C1)||the carrier' of C2 &
-  the Id of it = (the Id of C1)|the carrier of C2;
+  the Comp of it = (the Comp of C1)||the carrier' of C2;
 end;
 
 reserve C for Category,
@@ -224,7 +215,7 @@ definition
   ex F being Functor of A,B st m = [[A,B], F]) & for m1,m2 being Morphism of C
   for A,B,C being Category for F being Functor of A,B
   for G being Functor of B,C st m1 = [[A,B],F] & m2 = [[B,C],G]
-  holds m2*m1 = [[A,C],G*F];
+  holds m2(*)m1 = [[A,C],G*F];
 end;
 
 registration
@@ -375,38 +366,37 @@ theorem :: CAT_5:26
 
 theorem :: CAT_5:27
   for C being Category, f being (Morphism of C), g being Element of Hom dom f
-  holds f*g in Hom cod f;
+  holds f(*)g in Hom cod f;
 
 theorem :: CAT_5:28
   for C being Category, f being (Morphism of C),
-  g being Element of (cod f) Hom holds g*f in (dom f) Hom;
+  g being Element of (cod f) Hom holds g(*)f in (dom f) Hom;
 
 definition
   let C be Category, o be Object of C;
   func C-SliceCat(o) -> strict with_triple-like_morphisms Category means
 :: CAT_5:def 11
-
-   the carrier of it = Hom o &
+ the carrier of it = Hom o &
   (for a,b being Element of Hom o, f being Morphism of C st
-  dom b = cod f & a = b*f holds [[a,b],f] is Morphism of it) &
+  dom b = cod f & a = b(*)f holds [[a,b],f] is Morphism of it) &
   (for m being Morphism of it
   ex a,b being Element of Hom o, f being Morphism of C st
-  m = [[a,b],f] & dom b = cod f & a = b*f) &
+  m = [[a,b],f] & dom b = cod f & a = b(*)f) &
   for m1,m2 being (Morphism of it), a1,a2,a3 being Element of Hom o,
   f1,f2 being Morphism of C st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
-  holds m2*m1 = [[a1,a3], f2*f1];
+  holds m2(*)m1 = [[a1,a3], f2(*)f1];
   func o-SliceCat(C) -> strict with_triple-like_morphisms Category means
 :: CAT_5:def 12
 
    the carrier of it = o Hom &
   (for a,b being Element of o Hom, f being Morphism of C st
-  dom f = cod a & f*a = b holds [[a,b],f] is Morphism of it) &
+  dom f = cod a & f(*)a = b holds [[a,b],f] is Morphism of it) &
   (for m being Morphism of it
   ex a,b being Element of o Hom, f being Morphism of C st
-  m = [[a,b],f] & dom f = cod a & f*a = b) &
+  m = [[a,b],f] & dom f = cod a & f(*)a = b) &
   for m1,m2 being (Morphism of it), a1,a2,a3 being Element of o Hom,
   f1,f2 being Morphism of C st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
-  holds m2*m1 = [[a1,a3], f2*f1];
+  holds m2(*)m1 = [[a1,a3], f2(*)f1];
 end;
 
 definition
@@ -420,7 +410,7 @@ end;
 
 theorem :: CAT_5:29
   for C being Category, a being Object of C, m being Morphism of C-SliceCat a
-  holds m = [[m`11,m`12],m`2] & dom m`12 = cod m`2 & m`11 = m`12*m`2 &
+  holds m = [[m`11,m`12],m`2] & dom m`12 = cod m`2 & m`11 = m`12(*)m`2 &
   dom m = m`11 & cod m = m`12;
 
 theorem :: CAT_5:30
@@ -438,7 +428,7 @@ end;
 
 theorem :: CAT_5:31
   for C being Category, a being Object of C, m being Morphism of a-SliceCat C
-  holds m = [[m`11,m`12],m`2] & dom m`2 = cod m`11 & m`2*m`11 = m`12 &
+  holds m = [[m`11,m`12],m`2] & dom m`2 = cod m`11 & m`2(*)m`11 = m`12 &
   dom m = m`11 & cod m = m`12;
 
 theorem :: CAT_5:32
@@ -453,19 +443,19 @@ definition
 :: CAT_5:def 13
 
    for m being Morphism of C-SliceCat dom f holds
-  it.m = [[f*m`11, f*m`12], m`2];
+  it.m = [[f(*)m`11, f(*)m`12], m`2];
   func SliceContraFunctor f ->
   Functor of (cod f)-SliceCat C, (dom f)-SliceCat C means
 :: CAT_5:def 14
 
    for m being Morphism of (cod f)-SliceCat C holds
-  it.m = [[m`11*f, m`12*f], m`2];
+  it.m = [[m`11(*)f, m`12(*)f], m`2];
 end;
 
 theorem :: CAT_5:33
   for C being Category, f,g being Morphism of C st dom g = cod f holds
-  SliceFunctor (g*f) = (SliceFunctor g)*(SliceFunctor f);
+  SliceFunctor (g(*)f) = (SliceFunctor g)*(SliceFunctor f);
 
 theorem :: CAT_5:34
   for C being Category, f,g being Morphism of C st dom g = cod f holds
-  SliceContraFunctor (g*f) = (SliceContraFunctor f)*(SliceContraFunctor g);
+  SliceContraFunctor (g(*)f) = (SliceContraFunctor f)*(SliceContraFunctor g);

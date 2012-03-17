@@ -2,7 +2,7 @@
 ::  by Takashi Mitsuishi and Grzegorz Bancerek
 ::
 :: Received November 23, 2003
-:: Copyright (c) 2003-2011 Association of Mizar Users
+:: Copyright (c) 2003-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,9 +25,8 @@ environ
       RFUNCT_1, SUBSET_1, XREAL_0, NAT_1, SEQ_1, SEQ_4, VALUED_0, RCOMP_1,
       RELSET_1, STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_1,
       WAYBEL_3, FUZZY_1, FUZZY_2, FUZZY_4, FUNCOP_1, LFUZZY_0, XXREAL_0;
- constructors DOMAIN_1, SQUARE_1, NAT_1, BINOP_2, RFUNCT_1, MONOID_0, PSCOMP_1,
-      WAYBEL_3, FUZZY_2, FUZZY_4, LFUZZY_0, SEQ_1, XXREAL_2, SEQ_4, RELSET_1,
-      FUNCOP_1, FUZZY_1;
+ constructors DOMAIN_1, SQUARE_1, RFUNCT_1, MONOID_0, WAYBEL_3, FUZZY_2,
+      FUZZY_4, LFUZZY_0, SEQ_1, SEQ_4, RELSET_1, FUNCOP_1, FUZZY_1;
  registrations XBOOLE_0, SUBSET_1, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
       STRUCT_0, LATTICE3, MONOID_0, YELLOW_1, WAYBEL10, WAYBEL17, LFUZZY_0,
       RELAT_1, FUNCT_2, NUMBERS, FUZZY_1, RELSET_1;
@@ -887,13 +886,13 @@ begin :: Transitive closure of a fuzzy relation
 definition
   let X be non empty set;
   let R be RMembership_Func of X,X;
-  let n be natural number;
+  let n be Nat;
 
   func n iter R -> RMembership_Func of X,X means
-  :Def10:
+  :Def9:
   ex F being Function
   of NAT,Funcs([:X,X:],[. 0,1 .]) st it = F.n & F.0 = Imf(X,X) & for k being
-  natural number ex Q being RMembership_Func of X,X st F.k = Q & F.(k + 1) = Q
+  Nat ex Q being RMembership_Func of X,X st F.k = Q & F.(k + 1) = Q
   (#) R;
   existence
   proof
@@ -919,16 +918,16 @@ A2: F.0 = ([:X,X:],Imf(X,X))@ & for k being Element of NAT holds P[k,F
     reconsider IT9 = @(IT) as RMembership_Func of X,X;
     take IT9;
     thus ex F being Function of NAT,Funcs([:X,X:],[. 0,1 .]) st IT9 = F.n & F.
-0 = Imf(X,X) & for k being natural number ex Q being RMembership_Func of X,X st
+0 = Imf(X,X) & for k being Nat ex Q being RMembership_Func of X,X st
     F.k = Q & F.(k + 1) = Q (#) R
     proof
       take F;
       thus IT9 = F.n by LFUZZY_0:def 5;
       thus F.0 = Imf(X,X) by A2,LFUZZY_0:def 6;
-      thus for k being natural number ex Q being RMembership_Func of X,X st F.
+      thus for k being Nat ex Q being RMembership_Func of X,X st F.
       k = Q & F.(k + 1) = Q (#) R
       proof
-        let k be natural number;
+        let k be Nat;
         reconsider n=k as Element of NAT by ORDINAL1:def 12;
         reconsider Q9 = F.n as Element of D by LFUZZY_0:14;
         reconsider Q = @Q9 as RMembership_Func of X,X;
@@ -945,17 +944,17 @@ A2: F.0 = ([:X,X:],Imf(X,X))@ & for k being Element of NAT holds P[k,F
     given F being Function of NAT,Funcs([:X,X:],[. 0,1 .]) such that
 A3: S = F.n and
 A4: F.0 = Imf(X,X) and
-A5: for k being natural number ex Q being RMembership_Func of X,X st F
+A5: for k being Nat ex Q being RMembership_Func of X,X st F
     . k = Q & F.(k + 1) = Q (#) R;
     given G being Function of NAT,Funcs([:X,X:],[. 0,1 .]) such that
 A6: T = G.n and
 A7: G.0 = Imf(X,X) and
-A8: for k being natural number ex Q being RMembership_Func of X,X st G
+A8: for k being Nat ex Q being RMembership_Func of X,X st G
     . k = Q & G.(k + 1) = Q (#) R;
-    defpred P[natural number] means F.$1 = G.$1;
-A9: for k being natural number st P[k] holds P[k+1]
+    defpred P[Nat] means F.$1 = G.$1;
+A9: for k being Nat st P[k] holds P[k+1]
     proof
-      let k be natural number;
+      let k be Nat;
       assume
 A10:  F.k = G.k;
       (ex Q being RMembership_Func of X,X st G.k = Q & G.(k + 1) = Q (#)
@@ -964,7 +963,7 @@ A5,A8;
       hence thesis by A10;
     end;
 A11: P[0] by A4,A7;
-    for k being natural number holds P[k] from NAT_1:sch 2(A11,A9);
+    for k being Nat holds P[k] from NAT_1:sch 2(A11,A9);
     hence S=T by A3,A6;
   end;
 end;
@@ -1090,8 +1089,8 @@ theorem Th24:
   0 iter R = Imf(X,X)
 proof
   ex F being Function of NAT,Funcs([:X,X:],[. 0,1 .]) st 0 iter R = F.0 & F
-  .0 = Imf(X,X) & for k being natural number ex Q being RMembership_Func of X,X
-  st F.k = Q & F.(k + 1) = Q (#) R by Def10;
+  .0 = Imf(X,X) & for k being Nat ex Q being RMembership_Func of X,X
+  st F.k = Q & F.(k + 1) = Q (#) R by Def9;
   hence thesis;
 end;
 
@@ -1100,32 +1099,32 @@ theorem Th25:
 proof
   consider F being Function of NAT,Funcs([:X,X:],[. 0,1 .]) such that
 A1: 1 iter R = F.1 & F.0 = Imf(X,X) and
-A2: for k being natural number ex Q being RMembership_Func of X,X st F.k
-  = Q & F.(k + 1) = Q (#) R by Def10;
+A2: for k being Nat ex Q being RMembership_Func of X,X st F.k
+  = Q & F.(k + 1) = Q (#) R by Def9;
   ex Q being RMembership_Func of X,X st F.0 = Q & F.(0 + 1 ) = Q (#) R by A2;
   hence thesis by A1,Th22;
 end;
 
 theorem Th26:
-  for n being natural number holds (n+1) iter R = (n iter R) (#) R
+  for n being Nat holds (n+1) iter R = (n iter R) (#) R
 proof
-  let n be natural number;
+  let n be Nat;
   consider f being Function of NAT,Funcs([:X,X:],[. 0,1 .]) such that
 A1: (n+1) iter R = f.(n+1) & f.0 = Imf(X,X) and
-A2: for k being natural number ex Q being RMembership_Func of X,X st f.k
-  = Q & f.(k + 1) = Q (#) R by Def10;
+A2: for k being Nat ex Q being RMembership_Func of X,X st f.k
+  = Q & f.(k + 1) = Q (#) R by Def9;
   ex Q being RMembership_Func of X,X st f.n = Q & f.(n + 1) = Q(#)R by A2;
-  hence thesis by A1,A2,Def10;
+  hence thesis by A1,A2,Def9;
 end;
 
 theorem Th27:
-  for m,n being natural number holds (m+n) iter R = (m iter R) (#) (n iter R)
+  for m,n being Nat holds (m+n) iter R = (m iter R) (#) (n iter R)
 proof
-  let m,n be natural number;
-  defpred P[natural number] means (m+ $1) iter R = (m iter R) (#) ($1 iter R);
-A1: for n being natural number st P[n] holds P[n+1]
+  let m,n be Nat;
+  defpred P[Nat] means (m+ $1) iter R = (m iter R) (#) ($1 iter R);
+A1: for n being Nat st P[n] holds P[n+1]
   proof
-    let n be natural number;
+    let n be Nat;
     assume
 A2: (m+n) iter R = (m iter R) (#) (n iter R);
     thus ((m) iter R) (#) ((n+1) iter R) = (m iter R) (#) ((n iter R) (#)R )
@@ -1138,18 +1137,18 @@ A2: (m+n) iter R = (m iter R) (#) (n iter R);
     .= m iter R by Th23;
   then
 A3: P[0];
-  for m being natural number holds P[m] from NAT_1:sch 2(A3,A1);
+  for m being Nat holds P[m] from NAT_1:sch 2(A3,A1);
   hence thesis;
 end;
 
 theorem
-  for m,n being natural number holds (m*n) iter R = m iter (n iter R)
+  for m,n being Nat holds (m*n) iter R = m iter (n iter R)
 proof
-  let m,n be natural number;
-  defpred P[natural number] means ($1 * n) iter R = $1 iter (n iter R);
-A1: for m being natural number st P[m] holds P[m+1]
+  let m,n be Nat;
+  defpred P[Nat] means ($1 * n) iter R = $1 iter (n iter R);
+A1: for m being Nat st P[m] holds P[m+1]
   proof
-    let m be natural number;
+    let m be Nat;
     assume
 A2: (m*n) iter R = m iter (n iter R);
 A3: (m+1) iter (n iter R) = (m iter (n iter R)) (#) (1 iter (n iter R)) by Th27
@@ -1162,7 +1161,7 @@ A3: (m+1) iter (n iter R) = (m iter (n iter R)) (#) (1 iter (n iter R)) by Th27
     .= 0 iter (n iter R) by Th24;
   then
 A4: P[0];
-  for m being natural number holds P[m] from NAT_1:sch 2(A4,A1);
+  for m being Nat holds P[m] from NAT_1:sch 2(A4,A1);
   hence thesis;
 end;
 
@@ -1231,9 +1230,9 @@ A2: R. [x,y] in pi(Q, [x,y]) by CARD_3:def 6;
 end;
 
 theorem Th31:
-  for n being natural number st n > 0 holds n iter R c= TrCl R
+  for n being Nat st n > 0 holds n iter R c= TrCl R
 proof
-  let n9 be natural number;
+  let n9 be Nat;
   assume
 A1: n9 > 0;
   for c being Element of [: X,X :] holds (n9 iter R).c <= (TrCl R).c
@@ -2043,11 +2042,11 @@ A8:   "\/"(pi(A,c),RP) <<= (TrCl R).c by YELLOW_0:32;
 end;
 
 theorem Th37:
-  for R being RMembership_Func of X,X, n being natural number st R
+  for R being RMembership_Func of X,X, n being Nat st R
   is transitive & n > 0 holds n iter R c= R
 proof
   let R be RMembership_Func of X,X;
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: R is transitive and
 A2: n > 0;
@@ -2116,17 +2115,17 @@ A8: TrCl R c= R by FUZZY_1:def 2;
 end;
 
 theorem Th39:
-  for R,S being RMembership_Func of X,X, n being natural number st
+  for R,S being RMembership_Func of X,X, n being Nat st
   R c= S holds n iter R c= n iter S
 proof
   let R,S be RMembership_Func of X,X;
-  let n be natural number;
-  defpred P[natural number] means $1 iter R c= $1 iter S;
+  let n be Nat;
+  defpred P[Nat] means $1 iter R c= $1 iter S;
   assume
 A1: R c= S;
-A2: for k being natural number st P[k] holds P[k+1]
+A2: for k being Nat st P[k] holds P[k+1]
   proof
-    let k be natural number;
+    let k be Nat;
     assume
 A3: P[k];
     (k iter R) (#) R = (k+1) iter R & (k iter S) (#) S = (k+1) iter S by Th26;
@@ -2136,7 +2135,7 @@ A3: P[k];
     .= 0 iter S by Th24;
   then
 A4: P[0];
-  for k being natural number holds P[k] from NAT_1:sch 2(A4,A2);
+  for k being Nat holds P[k] from NAT_1:sch 2(A4,A2);
   hence thesis;
 end;
 

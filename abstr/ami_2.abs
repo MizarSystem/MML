@@ -2,7 +2,7 @@
 ::  by Yatsuka Nakamura and Andrzej Trybulec
 ::
 :: Received December 29, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,43 +15,35 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, XBOOLE_0, CARD_1, ZFMISC_1, FINSEQ_1, FUNCT_1,
-      CARD_3, RELAT_1, AMI_1, NAT_1, FUNCT_4, FUNCOP_1, INT_1, MCART_1,
-      PARTFUN1, ORDINAL1, ARYTM_3, ARYTM_1, XXREAL_0, FUNCT_2, FUNCT_5, TARSKI,
-      AMI_2, GROUP_9, FINSET_1, RECDEF_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1,
-      NUMBERS, XCMPLX_0, FINSET_1, CARD_3, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      XXREAL_0, BINOP_1, MCART_1, DOMAIN_1, INT_1, NAT_1, FUNCOP_1, FUNCT_4,
-      CAT_2, FINSEQ_1, FINSEQ_4, RECDEF_2;
- constructors DOMAIN_1, XXREAL_0, NAT_D, FINSEQ_4, CAT_2, CARD_3, ABIAN,
-      SETFAM_1, RELSET_1, FINSEQ_2, RECDEF_2;
- registrations XBOOLE_0, SETFAM_1, ORDINAL1, FUNCOP_1, NUMBERS, XXREAL_0,
-      XREAL_0, INT_1, FINSEQ_1, CARD_3, RELAT_1, FINSET_1, ORDINAL2, CARD_1,
-      FUNCT_1, CARD_2, RELSET_1, FUNCT_2;
- requirements NUMERALS, REAL, SUBSET, BOOLE;
+      CARD_3, RELAT_1, AMI_1, NAT_1, FUNCT_4, FUNCOP_1, INT_1, ORDINAL1,
+      ARYTM_3, ARYTM_1, XXREAL_0, FUNCT_5, TARSKI, AMI_2, GROUP_9, PBOOLE,
+      AFINSQ_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, ORDINAL1, CARD_1,
+      NUMBERS, XCMPLX_0, CARD_3, RELAT_1, FUNCT_1, FUNCT_2, PBOOLE, AFINSQ_1,
+      XXREAL_0, BINOP_1, MCART_1, INT_1, FUNCOP_1, FUNCT_4, CAT_2, FINSEQ_1,
+      FUNCT_5, SCM_INST;
+ constructors DOMAIN_1, CAT_2, CARD_3, ABIAN, RELSET_1, AFINSQ_1, VALUED_1,
+      SCM_INST, FUNCT_5, XTUPLE_0;
+ registrations XBOOLE_0, FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, INT_1, CARD_3,
+      FINSET_1, ORDINAL2, CARD_1, FUNCT_1, RELSET_1, FUNCT_2, AFINSQ_1,
+      SCM_INST, XTUPLE_0;
+ requirements NUMERALS, SUBSET, BOOLE;
 
 
 begin :: A small concrete machine
 
 reserve x,y,z for set;
 
-notation
-  synonym SCM-Halt for {};
-end;
+:: Na razie potrzebny w SCM_INST
+::definition
+::  func SCM-Data-Loc equals
+::  [:{1},NAT:];
+::  coherence;
+::end;
 
 definition
-  redefine func SCM-Halt -> Element of Segm 9;
-end;
-
-definition
-  func SCM-Data-Loc equals
-:: AMI_2:def 1
-  [:{1},NAT:];
-end;
-
-definition
-
   func SCM-Memory equals
-:: AMI_2:def 2
+:: AMI_2:def 1
   {NAT} \/ SCM-Data-Loc;
 end;
 
@@ -63,87 +55,71 @@ definition
   redefine func SCM-Data-Loc -> Subset of SCM-Memory;
 end;
 
-registration
-  cluster SCM-Data-Loc -> non empty;
-end;
+::registration
+::  cluster SCM-Data-Loc -> non empty;
+::  coherence;
+::end;
 
 reserve I,J,K for Element of Segm 9,
-  a,a1,a2 for Element of NAT,
+  i,a,a1,a2 for Element of NAT,
   b,b1,b2,c,c1 for Element of SCM-Data-Loc;
 
 definition
-  func SCM-Instr -> non empty set equals
-:: AMI_2:def 3
-  {[SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
-   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } }
-   \/ { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
-end;
-
-theorem :: AMI_2:1
-  [0,{},{}] in SCM-Instr;
-
-registration
-  cluster SCM-Instr -> non empty;
-end;
-
-theorem :: AMI_2:2
-  [6,<*a2*>,{}] in SCM-Instr;
-
-theorem :: AMI_2:3
-  x in { 7, 8 } implies [x,<*a2*>,<*b2*>] in SCM-Instr;
-
-theorem :: AMI_2:4
-  x in { 1,2,3,4,5} implies [x,{},<*b1,c1*>] in SCM-Instr;
-
-definition
-  func SCM-OK -> Function of SCM-Memory, {INT} \/ { NAT } means
+ canceled 2;
+  func SCM-OK -> Function of SCM-Memory, 2 means
 :: AMI_2:def 4
  for k being Element of SCM-Memory
-   holds (k = NAT implies it.k = NAT) &
-         (k in SCM-Data-Loc implies it.k = INT);
+   holds (k = NAT implies it.k = 0) &
+         (k in SCM-Data-Loc implies it.k = 1);
 end;
 
-registration let x,y,z be set;
- cluster [x,y,z] -> finite;
-end;
-
-registration let x,y,z be set;
- cluster [x,y,z] -> non natural;
-end;
-
-theorem :: AMI_2:5
-  SCM-Instr <> INT & NAT <> SCM-Instr;
-
-theorem :: AMI_2:6
-  for i being Element of SCM-Memory holds SCM-OK.i = NAT iff i = NAT;
-
-theorem :: AMI_2:7
-  for i being Element of SCM-Memory holds SCM-OK.i = INT iff i in SCM-Data-Loc;
+canceled;
 
 definition
-  mode SCM-State is Element of product SCM-OK;
+ func SCM-VAL -> ManySortedSet of 2 equals
+:: AMI_2:def 5
+  <%NAT,INT%>;
+end;
+
+canceled 4;
+
+theorem :: AMI_2:6
+   (SCM-VAL*SCM-OK).NAT = NAT;
+
+theorem :: AMI_2:7
+  for i being Element of SCM-Memory
+   holds i in SCM-Data-Loc implies (SCM-VAL*SCM-OK).i = INT;
+
+registration
+ cluster SCM-VAL*SCM-OK -> non-empty;
+end;
+
+definition
+  mode SCM-State is Element of product(SCM-VAL*SCM-OK);
 end;
 
 theorem :: AMI_2:8
-  for a being Element of SCM-Data-Loc holds SCM-OK.a = INT;
+  for a being Element of SCM-Data-Loc
+      holds (SCM-VAL*SCM-OK).a = INT;
 
 theorem :: AMI_2:9
-  pi(product SCM-OK,NAT) = NAT;
+  pi(product(SCM-VAL*SCM-OK),NAT) = NAT;
 
 theorem :: AMI_2:10
-  for a being Element of SCM-Data-Loc holds pi(product SCM-OK,a) = INT;
+  for a being Element of SCM-Data-Loc
+   holds pi(product(SCM-VAL*SCM-OK),a) = INT;
 
 definition
   let s be SCM-State;
   func IC(s) -> Element of NAT equals
-:: AMI_2:def 5
+:: AMI_2:def 6
   s.NAT;
 end;
 
 definition
   let s be SCM-State, u be Nat;
   func SCM-Chg(s,u) -> SCM-State equals
-:: AMI_2:def 6
+:: AMI_2:def 7
   s +* (NAT .--> u);
 end;
 
@@ -160,7 +136,7 @@ theorem :: AMI_2:13
 definition
   let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer;
   func SCM-Chg(s,t,u) -> SCM-State equals
-:: AMI_2:def 7
+:: AMI_2:def 8
   s +* (t .--> u);
 end;
 
@@ -177,67 +153,16 @@ theorem :: AMI_2:16
 Integer, mk being Element of SCM-Data-Loc st mk <> t holds SCM-Chg(s,t,u).mk =
   s.mk;
 
-definition
-  let x be Element of SCM-Instr;
-  given mk, ml being Element of SCM-Data-Loc, I such that
- x = [ I, {}, <*mk, ml*>];
-  func x address_1 -> Element of SCM-Data-Loc means
-:: AMI_2:def 8
-
-  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.1;
-  func x address_2 -> Element of SCM-Data-Loc means
-:: AMI_2:def 9
-
-  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.2;
-end;
-
-theorem :: AMI_2:17
-  for x being Element of SCM-Instr, mk, ml being Element of SCM-Data-Loc, I
-   st x = [ I, {}, <*mk, ml*>] holds x address_1 = mk & x address_2 = ml;
-
-definition
-  let x be Element of SCM-Instr;
-  given mk being Element of NAT, I such that
- x = [ I, <*mk*>, {}];
-  func x jump_address -> Element of NAT means
-:: AMI_2:def 10
- ex f being FinSequence of NAT st f = x`2_3 & it = f/.1;
-end;
-
-theorem :: AMI_2:18
-  for x being Element of SCM-Instr, mk being Element of NAT, I st x = [
-  I, <*mk*>, {}] holds x jump_address = mk;
-
-definition
-  let x be Element of SCM-Instr;
-  given mk being Element of NAT, ml being Element of SCM-Data-Loc, I such that
- x = [ I, <*mk*>, <*ml*>];
-  func x cjump_address -> Element of NAT means
-:: AMI_2:def 11
-
-  ex mk being Element of NAT st <*mk*> = x`2_3 & it = <*mk*>/.1;
-  func x cond_address -> Element of SCM-Data-Loc means
-:: AMI_2:def 12
-
-  ex ml being Element of SCM-Data-Loc st <*ml*> = x`3_3 & it = <*ml*>/.1;
-end;
-
-theorem :: AMI_2:19
-  for x being Element of SCM-Instr, mk being Element of NAT, ml being
-Element of SCM-Data-Loc, I
- st x = [ I, <*mk*>, <*ml*>] holds x cjump_address = mk &
-  x cond_address = ml;
-
 registration
   let s be SCM-State, a be Element of SCM-Data-Loc;
   cluster s.a -> integer;
 end;
 
 definition
-
+ canceled 5;
   let x be Element of SCM-Instr, s be SCM-State;
   func SCM-Exec-Res(x,s) -> SCM-State equals
-:: AMI_2:def 13
+:: AMI_2:def 14
   SCM-Chg(SCM-Chg(s, x address_1,s.(x address_2)), succ IC s)
    if ex mk, ml being Element of SCM-Data-Loc st x = [1, {}, <*mk, ml*>],
   SCM-Chg(SCM-Chg(s,x address_1, s.(x address_1)+s.(x address_2)),succ IC s)
@@ -262,8 +187,8 @@ definition
 end;
 
 definition
-  func SCM-Exec -> Action of SCM-Instr, product SCM-OK means
-:: AMI_2:def 14
+  func SCM-Exec -> Action of SCM-Instr, product(SCM-VAL*SCM-OK) means
+:: AMI_2:def 15
   for x being Element of SCM-Instr, y being SCM-State holds (it.x).y =
   SCM-Exec-Res(x,y);
 end;
@@ -271,11 +196,12 @@ end;
 begin :: Addenda
 :: missing, 2007.07.27, A.T.
 
+canceled 3;
+
 theorem :: AMI_2:20
   not NAT in SCM-Data-Loc;
 
-theorem :: AMI_2:21
-  SCM-Data-Loc misses NAT;
+canceled;
 
 theorem :: AMI_2:22
   NAT in SCM-Memory;
@@ -284,11 +210,23 @@ theorem :: AMI_2:23
   x in SCM-Data-Loc implies ex k being Element of NAT st x = [1,k];
 
 theorem :: AMI_2:24
-  for k being natural number holds [1,k] in SCM-Data-Loc;
+  for k being Nat holds [1,k] in SCM-Data-Loc;
 
-theorem :: AMI_2:25
- SCM-Instr c= [:NAT,NAT*,proj2 SCM-Instr:];
+canceled;
 
-registration
- cluster proj2 SCM-Instr -> FinSequence-membered;
+theorem :: AMI_2:26
+  for k being Element of SCM-Memory
+   holds k = NAT or k in SCM-Data-Loc;
+
+theorem :: AMI_2:27
+  dom(SCM-VAL*SCM-OK) = SCM-Memory;
+
+theorem :: AMI_2:28
+ for s being SCM-State holds dom s = SCM-Memory;
+
+definition let x be set;
+ attr x is Int-like means
+:: AMI_2:def 16
+  x in SCM-Data-Loc;
 end;
+

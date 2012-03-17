@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received October 20, 2009
-:: Copyright (c) 2009-2011 Association of Mizar Users
+:: Copyright (c) 2009-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,24 +20,25 @@ environ
  notations XBOOLE_0, TARSKI, RELAT_1, FUNCT_1, SUBSET_1, FINSET_1, NUMBERS,
       MATROID0, ORDINAL1, NAT_1, XXREAL_0, NEWTON, ORDINAL2, AFINSQ_1,
       ORDINAL3, ORDINAL4, CARD_3;
- constructors NEWTON, NAT_1, XXREAL_0, AFINSQ_1, ORDINAL3, CARD_3, ORDINAL4;
+ constructors NEWTON, NAT_1, AFINSQ_1, ORDINAL3, CARD_3;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, NAT_1, XXREAL_0, XREAL_0,
       ORDINAL2, ORDINAL4, CARD_1, CARD_5, CARD_LAR, NEWTON, AFINSQ_1, FINSET_1;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, ORDINAL2, CARD_3;
  theorems TARSKI, FUNCT_1, FINSET_1, NAT_1, ORDERS_1, AFINSQ_1, RELAT_1,
       ORDINAL1, ORDINAL2, ORDINAL3, ORDINAL4, CARD_2, CARD_3, CARD_5, XBOOLE_0,
-      XBOOLE_1, ZFMISC_1, NEWTON, XXREAL_0, NAT_4, PEPIN, CARD_1;
+      XBOOLE_1, ZFMISC_1, NEWTON, XXREAL_0, NAT_4, PEPIN, CARD_1, XREGULAR;
  schemes NAT_1, ORDINAL1, ORDINAL2, AFINSQ_1;
 
 begin :: Preliminaries
 
-reserve a,b,c,d,e for ordinal number, m,n for natural number,
+reserve a,b,c,d,e for ordinal number, m,n for Nat,
   f for Ordinal-Sequence,
   x for set;
 
 theorem Th1:
-  a c= succ b implies a c= b or a = succ b proof assume
+  a c= succ b implies a c= b or a = succ b
+proof assume
 A1: a c= succ b;
     assume a c/= b; then
 A2: b in a by ORDINAL1:16;
@@ -93,7 +94,7 @@ theorem Th2:
   proof assume
 A1: dom S = a+^b;
     set S1 = S|a;
-    a c= a+^b by ORDINAL3:24; then
+B2: a c= a+^b by ORDINAL3:24; then
 A2: dom S1 = a by A1,RELAT_1:62;
     deffunc F(Ordinal) = S.(a+^$1);
     consider S2 such that
@@ -113,7 +114,7 @@ A7:     c in b & z = a+^c;
         thus S.x = S2.c by A3,A7 .= s.x by A7,A2,A3,ORDINAL4:def 1;
       end;
     end;
-    hence thesis by A2,A3,A4,FUNCT_1:2;
+    hence thesis by B2,A3,A4,FUNCT_1:2,A1,RELAT_1:62;
   end;
 
 theorem Th3:
@@ -206,14 +207,14 @@ A1: for a,b st a in b & b in dom f holds f.b in f.a;
 A2: 0 in omega & omega c= dom f by Th5; then
     f.0 in X by FUNCT_1:def 6; then
     consider x being set such that
-A3: x in X & not ex y being set st y in X & y in x by TARSKI:2;
+A3: x in X & X misses x by XREGULAR:1;
     consider a being set such that
 A4: a in dom f & a in omega & x = f.a by A3,FUNCT_1:def 6;
     reconsider a as Ordinal by A4;
 A5: succ a in omega by A4,ORDINAL1:28; then
     a in succ a & succ a in dom f by A2,ORDINAL1:6; then
     f.succ a in x & f.succ a in X by A1,A4,A5,FUNCT_1:def 6;
-    hence thesis by A3;
+    hence thesis by A3,XBOOLE_0:3;
   end;
   cluster -> decreasing increasing for empty set;
   coherence
@@ -567,7 +568,7 @@ theorem
   end;
 
 theorem
-  for n being natural number holds 0 |^|^ (2*n) = 1 & 0 |^|^ (2*n+1) = 0
+  for n being Nat holds 0 |^|^ (2*n) = 1 & 0 |^|^ (2*n+1) = 0
   proof
     defpred P[Nat] means 0 |^|^ (2*$1) = 1 & 0 |^|^ (2*$1+1) = 0;
 A1: P[0] by Th13,Th16;
@@ -606,8 +607,8 @@ A4:   1 in c;
 A5:   H[{}] proof let a,b;
         assume
 A6:     a c= b & b c= {}; then
-        b = {} by XBOOLE_1:3;
-        hence thesis by A6,XBOOLE_1:3;
+        b = {};
+        hence thesis by A6;
       end;
 A7:   now let d such that
 A8:     H[d];
@@ -742,12 +743,12 @@ A2: n = m+1+k by NAT_1:10;
     defpred P[Nat] means a |^|^ m in a |^|^ (m+1+$1);
     a|^|^0 = 1 by Th13; then
 A3: Q[0] by A1,Th16;
-A4: now let n; assume Q[n]; then
-A5:   exp(a, a|^|^n) in exp(a, a|^|^(n+1)) by A1,ORDINAL4:24;
+A4: now let n; assume
+B4:   Q[n];
       succ n = n+1 & succ (n+1) = n+1+1 by NAT_1:38; then
       a|^|^(n+1) = exp(a, a|^|^n) & a|^|^((n+1)+1) = exp(a, a|^|^(n+1)) by Th14
 ;
-      hence Q[n+1] by A5;
+      hence Q[n+1] by B4,A1,ORDINAL4:24;
     end;
 A6: for n holds Q[n] from NAT_1:sch 2(A3,A4); then
 A7: P[0];
@@ -772,8 +773,8 @@ A2: dom f c= omega and
 A3: for n being Ordinal st n in dom f holds f.n = a|^|^n;
     let b,c; assume
 A4: b in c & c in dom f; then
-A5: b in dom f by ORDINAL1:10; then
-    reconsider b,c as Element of omega by A2,A4;
+A5: b in dom f by ORDINAL1:10;
+    reconsider b,c as Element of omega by A2,A4,ORDINAL1:10;
     f.b = a|^|^b & f.c = a|^|^c & b < c by A3,A4,A5,NAT_1:44;
     hence thesis by A1,Th24;
   end;
@@ -782,11 +783,10 @@ theorem Th26:
   1 in a & 1 in b implies a in a |^|^ b proof assume
 A1: 1 in a;
     assume 1 in b; then
-    succ 1 c= b by ORDINAL1:21; then
-A2: 2 c= b;
+B2: succ 1 c= b by ORDINAL1:21;
     0 in 1 by NAT_1:44; then
  0 in a by A1,ORDINAL1:10;
-    then a|^|^1 in a|^|^2 & a|^|^2 c= a|^|^b by A1,A2,Th21,Th24; then
+    then a|^|^1 in a|^|^2 & a|^|^2 c= a|^|^b by A1,B2,Th21,Th24; then
     a|^|^1 in a|^|^b;
     hence a in a |^|^ b by Th16;
   end;
@@ -826,7 +826,7 @@ registration
 A1: O[0] by Th13;
 A2: now let k be Nat;
       assume O[k]; then
-      reconsider nk = n|^|^k as natural number;
+      reconsider nk = n|^|^k as Nat;
       k+1 = succ k by NAT_1:38; then
       n|^|^(k+1) = exp(n, nk) by Th14;
       hence O[k+1];
@@ -937,11 +937,10 @@ A5:   dom E = a|^|^omega & for b st b in a|^|^omega holds E.b = E(b)
       from ORDINAL2:sch 3;
       0 in 1 by NAT_1:44; then
       0 in a & 0 in omega by A3,ORDINAL1:10; then
-      a c= a|^|^omega by Th23; then
-A6:   a|^|^omega is non empty limit_ordinal by A3,Th30;
+B6:   a c= a|^|^omega by Th23;
       E is increasing Ordinal-Sequence by A3,A5,ORDINAL4:25; then
       lim E = exp(a, a|^|^omega) & Union E is_limes_of E
-      by A5,A6,Th6,ORDINAL2:45; then
+      by A5,B6,Th6,ORDINAL2:45,A3,Th30; then
 A7:   exp(a, a|^|^omega) = Union E by ORDINAL2:def 10;
       T is increasing Ordinal-Sequence by A3,A4,Th25; then
       lim T = a|^|^omega & Union T is_limes_of T by A4,Th15,Th6; then
@@ -1105,7 +1104,7 @@ A24:      n+1 = succ n & n+1+1 = succ (n+1) &
           n+1 in omega & n+1+1 in omega by NAT_1:38; then
           phi.(n+1) = phi(phi.n) & phi.(n+1+1) = phi(phi.(n+1)) by A18; then
           phi.n c= phi.(n+1) & phi.(n+1) in phi.(n+1+1) by A1,A6,A23,A24;
-          hence N[n+1] by A23,A24,XBOOLE_1:1;
+          hence N[n+1] by A23,NAT_1:38,XBOOLE_1:1;
         end;
         for n being Nat holds N[n] from NAT_1:sch 2(A21,A22); then
         N[a];
@@ -1118,8 +1117,7 @@ A25:  dom fi = Union phi & for a st a in Union phi holds fi.a = phi(a)
       1 = succ 0; then
       f().1 = phi(a()) by A3,A4; then
       phi(a()) in rng phi by A3,FUNCT_1:def 3; then
-      phi(a()) c= Union phi by ZFMISC_1:74; then
-A26:  Union phi <> {} by A17;
+B26:  phi(a()) c= Union phi by ZFMISC_1:74;
       now
         let c; assume c in Union phi; then
         consider x being set such that
@@ -1130,7 +1128,7 @@ A27:     x in dom phi & c in phi.x by CARD_5:2;
         hence succ c in Union phi by A3,CARD_5:2;
       end; then
 A28: Union phi is limit_ordinal by ORDINAL1:28; then
-A29:  phi(Union phi) is_limes_of fi by A2,A25,A26;
+A29:  phi(Union phi) is_limes_of fi by A2,A25,B26,A17;
       fi is increasing
       proof
         let a,b;
@@ -1139,7 +1137,7 @@ A30:    a in b & b in dom fi; then
         fi.a = phi(a) & fi.b = phi(b) by A25,ORDINAL1:10;
         hence thesis by A1,A30;
       end; then
-A31:  sup fi = lim fi by A25,A26,A28,ORDINAL4:8
+A31:  sup fi = lim fi by A25,B26,A28,ORDINAL4:8,A17
       .= phi(Union phi) by A29,ORDINAL2:def 10;
       thus phi(Union phi) c= Union phi
       proof
@@ -1350,7 +1348,7 @@ A4:   dom phi = a & for b st b in a holds phi.b = phi(b);
         let b,c; assume
 A5:     b in c & c in dom phi; then
         phi.b = phi(b) & phi.c = phi(c) by A4,ORDINAL1:10; then
-        phi.b in phi.c by A5,A1;
+        phi.b in phi.c by A5,ORDINAL4:24;
         hence thesis by ORDINAL1:def 2;
       end; then
       Union phi is_limes_of phi & phi(a) = lim phi by A3,A4,Th6,ORDINAL2:45;
@@ -1430,7 +1428,7 @@ A4:   dom phi = a & for b st b in a holds phi.b = phi(b);
         let b,c; assume
 A5:     b in c & c in dom phi; then
         phi.b = phi(b) & phi.c = phi(c) by A4,ORDINAL1:10; then
-        phi.b in phi.c by A5,A1;
+        phi.b in phi.c by A5,ORDINAL4:24;
         hence thesis by ORDINAL1:def 2;
       end; then
       Union phi is_limes_of phi & phi(a) = lim phi by A3,A4,Th6,ORDINAL2:45;
@@ -1458,7 +1456,7 @@ A11: 1 c= Union f & phi(Union f) = Union f &
     end; then
     reconsider e = Union f as epsilon Ordinal;
     defpred I[Nat] means f.$1 = omega |^|^ $1;
-A12: I[0] by A9,Th13;
+A12: I[0] by A7,Th13;
 A13: for n st I[n] holds I[n+1]
     proof
       let n such that
@@ -1468,28 +1466,27 @@ A15:   n+1 = succ n & n in omega by NAT_1:38,ORDINAL1:def 12;
     end;
 A16: for n holds I[n] from NAT_1:sch 2(A12,A13); then
     for c st c in omega holds f.c = omega |^|^ c; then
-A17: omega |^|^ omega = lim f by A9,Th15;
+A17: omega |^|^ omega = lim f by A6,Th15;
     f is non-decreasing
     proof
       let a,b; assume
 A18:   a in b & b in dom f; then
-      reconsider n = a, m = b as Element of omega by A9,ORDINAL1:10;
+      reconsider n = a, m = b as Element of omega by A6,ORDINAL1:10;
       a c= b by A18,ORDINAL1:def 2; then
       omega |^|^ a c= omega |^|^ b by Th21; then
       f.n c= omega |^|^ m by A16;
       hence thesis by A16;
     end; then
-    e is_limes_of f by A9,Th6; then
+    e is_limes_of f by A6,Th6; then
 A19: omega |^|^ omega = e by A17,ORDINAL2:def 10;
 A20: succ 0 = 1; then
-    0 in 1 by ORDINAL1:6; then
-A21: 0 in e by A11;
+B21: 0 in 1 by ORDINAL1:6;
     now let b be epsilon Ordinal;
       assume 0 in b; then
       1 c= b & phi(b) = b by A20,Def5,ORDINAL1:21;
       hence e c= b by A11;
     end;
-    hence thesis by A19,A21,Def6;
+    hence thesis by A19,B21,Def6,A11;
   end;
 
 theorem Th37:
@@ -1499,7 +1496,7 @@ theorem Th37:
 A1: exp(omega, e) = e by Def5;
 A2: exp(omega,0) = 1 & exp(omega,1) = omega & 1 in omega
     by ORDINAL2:43,46; then
-A3: e <> 0 & e <> 1 & succ 0 = 1 & succ 1 = 2 by A1; then
+A3: e <> 0 & e <> 1 & succ 0 = 1 & succ 1 = 2 by Def5; then
     0 in e by ORDINAL3:8; then
     1 c= e by A3,ORDINAL1:21; then
     1 c< e by A3,XBOOLE_0:def 8; then
@@ -1595,15 +1592,14 @@ A11: succ e c= Union f & phi(Union f) = Union f &
       thus phi(Union f) = Union f by A11;
     end; then
     reconsider e9 = Union f as epsilon Ordinal;
-    now e in succ e by ORDINAL1:6;
+B12: now e in succ e by ORDINAL1:6;
       hence e in e9 by A11;
       let b be epsilon Ordinal; assume e in b; then
       succ e c= b & phi(b) = b by Def5,ORDINAL1:21;
       hence e9 c= b by A11;
-    end; then
-A12: e9 = first_epsilon_greater_than e by Def6;
+    end;
 A13: succ 0 = 1 & succ 1 = 2 & succ 2 = 3; then
-A14: f.1 = phi(succ e) by A9,A8 .= omega*^phi(e) by ORDINAL2:44
+A14: f.1 = phi(succ e) by A7,A8 .= omega*^phi(e) by ORDINAL2:44
     .= omega*^e by Def5; then
 A15: f.2 = phi(omega*^e) by A13,A8 .= exp(phi(e), omega) by ORDINAL4:31
     .= exp(e, omega) by Def5; then
@@ -1616,7 +1612,7 @@ A19: e in exp(e, e) & e in exp(e, omega) by ORDINAL2:46;
     defpred I[Nat] means e|^|^$1 in f.($1+1) & f.$1 in e|^|^($1+2);
     e in exp(e,e) & exp(e,e) is limit_ordinal
       by A17,A18,Th24,Th9,ORDINAL3:8; then
-A20: I[0] by A9,A14,A17,ORDINAL1:28,ORDINAL3:32;
+A20: I[0] by A7,A14,A17,ORDINAL1:28,ORDINAL3:32;
 A21: for n st I[n] holds I[n+1]
     proof
       let n such that
@@ -1628,7 +1624,7 @@ A24:   f.(n+1) = phi(f.n) & f.(n+1+1) = phi(f.(n+1)) by A10;
       proof
         per cases by NAT_1:23;
         suppose n = 0;
-          hence thesis by A15,A17,A19;
+          hence thesis by A15,Th16,A19;
         end;
         suppose n = 1;
           hence thesis by A16,A17,A18,A19,ORDINAL4:24;
@@ -1676,7 +1672,7 @@ A31:   a in dom g & x in g.a by CARD_5:2;
       g.a in Union f by A6,CARD_5:2;
       hence thesis by A31,ORDINAL1:10;
     end;
-    hence thesis by A12,A29;
+    hence thesis by B12,A29,Def6;
   end;
 
 definition
@@ -1777,7 +1773,7 @@ theorem Th44:
 A1: P[0] by ORDINAL1:10;
 A2: P[c] implies P[succ c] proof assume
 A3:   P[c];
-      epsilon_succ c = (epsilon_c) |^|^ omega by Th42; then
+B4:   epsilon_succ c = (epsilon_c) |^|^ omega by Th42; then
 A4:   epsilon_c in epsilon_succ c by A3,Th26;
       hence 1 in epsilon_succ c by A3,ORDINAL1:10;
       let a,b; assume
@@ -1796,7 +1792,7 @@ A7:     b = succ c & a in c; then
       end;
       suppose
         b = succ c & a = c;
-        hence thesis by A4;
+        hence thesis by A3,B4,Th26;
       end;
     end;
 A8: c <> {} & c is limit_ordinal & (for b st b in c holds P[b]) implies P[c]
@@ -1891,7 +1887,6 @@ theorem Th48:
   a c= epsilon_a
   proof
     defpred P[Ordinal] means $1 c= epsilon_$1;
-    0 in omega & omega c= epsilon_0 by Th23,Th41; then
 A1: P[0];
 A2: P[b] implies P[succ b] proof assume
 A3:   P[b];
@@ -1966,8 +1961,8 @@ A2: for a st a in X holds first_epsilon_greater_than a in X;
     now
       let x; assume
 A3:   x in X;
-      hence x is epsilon Ordinal by A1; then
-      reconsider a = x as Ordinal;
+      hence x is epsilon Ordinal by A1;
+      reconsider a = x as Ordinal by A1,A3;
       take e = first_epsilon_greater_than a;
       thus x in e & e in X by A2,A3,Def6;
     end;
@@ -2164,10 +2159,14 @@ end;
 theorem Th52:
   Sum^ {} = 0
   proof
-    ex f being Ordinal-Sequence st Sum^ {} = last f & dom f = succ dom {} &
-    f.0 = 0 & for n being Nat st n in dom {} holds f.(n+1) = f.n +^ {}.n
-    by Def8;
-    hence thesis by ORDINAL2:6;
+   reconsider A = {} as finite Ordinal-Sequence;
+   consider f being Ordinal-Sequence such that
+A1:  Sum^ A = last f and
+A2:  dom f = succ dom A and
+A3:  f.0 = 0 and
+  for n being Nat st n in dom A holds f.(n+1) = f.n +^ A.n by Def8;
+     dom f = succ 0 implies last f = f.0 by ORDINAL2:6;
+    hence Sum^ {} = 0 by A1,A2,A3;
   end;
 
 theorem Th53:
@@ -2205,16 +2204,16 @@ A7:   P[n] and
 A8:   n+1 in succ dom A;
       n+1 = succ n by NAT_1:38; then
 A9:   n in dom A by A8,ORDINAL3:3; then
-A10:   n in succ dom A by A4,ORDINAL1:10; then
+   n in succ dom A by A4,ORDINAL1:10; then
       g.(n+1) = g.n +^ A.n & f.(n+1) = f.n+^(A^<%a%>).n by A1,A2,A3,A9;
-      hence thesis by A7,A9,A10,ORDINAL4:def 1;
+      hence thesis by A7,A9,A4,ORDINAL1:10,ORDINAL4:def 1;
     end;
 A11: P[n] from NAT_1:sch 2(A5,A6);
     thus Sum^ (A^<%a%>) = f.((dom A)+^1) by A1,A3,ORDINAL2:6
     .= f.(dA+1) by CARD_2:36
-    .= f.(dom A)+^(A^<%a%>).len A by A1,A3,A4
+    .= f.(dom A)+^(A^<%a%>).len A by A1,A3,ORDINAL1:6
     .= f.(dom A) +^ a by AFINSQ_1:36
-    .= g.(dom A) +^ a by A4,A11
+    .= g.(dom A) +^ a by ORDINAL1:6,A11
     .= (Sum^ A) +^ a by A2,ORDINAL2:6;
   end;
 
@@ -2224,7 +2223,6 @@ theorem Th55:
     defpred P[finite T-Sequence] means
     for f being finite Ordinal-Sequence st f = $1
     holds Sum^(<%a%>^f) = a +^ Sum^ f;
-    <%a%>^{} = <%a%> by AFINSQ_1:29; then
     Sum^(<%a%>^{}) = a by Th53; then
 A1: P[{}] by Th52,ORDINAL2:27;
 A2: for f being finite T-Sequence, x st P[f] holds P[f^<%x%>]
@@ -2259,9 +2257,7 @@ theorem Th56:
     let A be finite Ordinal-Sequence;
     defpred P[finite T-Sequence] means
     for A being finite Ordinal-Sequence st $1 = A holds A.0 c= Sum^ A;
-    dom {} = {}; then
-    {}.0 = 0 by FUNCT_1:def 2; then
-A1: P[{}] by XBOOLE_1:2;
+A1: P[{}];
 A2: for f being finite T-Sequence, x st P[f] holds P[f^<%x%>]
     proof
       let f be finite T-Sequence;
@@ -2280,8 +2276,9 @@ A6:   rng f c= b & rng <%x%> c= b by A4,XBOOLE_1:11; then
       reconsider x as Ordinal;
       per cases;
       suppose f = {}; then
-        g = <%x%> by A5,AFINSQ_1:29; then
-        g.0 = x & Sum^ g = x by Th53,AFINSQ_1:def 4;
+        g = {}^<%x%> by A5;
+        then g = <%x%>;
+        then g.0 = x & Sum^ g = x by Th53,AFINSQ_1:def 4;
         hence g.0 c= Sum^ g;
       end;
       suppose f <> {}; then
@@ -2351,10 +2348,11 @@ A6:     exp(b,d) c= a & d c/= c; then
         a in a by A6;
         hence contradiction;
       end;
-      suppose a c< exp(b,c); then
+      suppose
+B7:     a c< exp(b,c); then
 A7:     a in exp(b,c) by ORDINAL1:11;
         succ 0 c= a by A1,ORDINAL1:21; then
-        1 in exp(b,c) & exp(b,0) = 1 by A7,ORDINAL1:12,ORDINAL2:43; then
+        1 in exp(b,c) & exp(b,0) = 1 by B7,ORDINAL1:11,12,ORDINAL2:43; then
 A8:     c <> 0;
         now assume c is limit_ordinal; then
           consider d such that
@@ -2427,7 +2425,7 @@ theorem Th58:
 A1: 0 in n & n in b; then
 A2: succ 0 c= n by ORDINAL1:21; then
 A3: 1*^exp(b,a) = exp(b,a) & 1*^exp(b,a) c= n*^exp(b,a) by ORDINAL2:39,41;
-A4: exp(b,a) <> 0 & n <> 0 by A1,ORDINAL4:22; then
+ exp(b,a) <> 0 & n <> 0 by A1,ORDINAL4:22; then
     0 <> n*^exp(b,a) by ORDINAL3:31; then
 A5: 1 in b & 0 in n*^exp(b,a) by A2,A1,ORDINAL1:12,ORDINAL3:8;
     now let c; assume
@@ -2437,7 +2435,7 @@ A6:   exp(b,c) c= n*^exp(b,a) & c c/= a; then
 A7:   exp(b, succ a) c= exp(b, c) by A1,ORDINAL4:27;
       exp(b, succ a) = b*^exp(b, a) by ORDINAL2:44; then
       b*^exp(b, a) c= n*^exp(b,a) by A6,A7,XBOOLE_1:1; then
-      b c= n by A4,ORDINAL3:35; then
+      b c= n by A1,ORDINAL4:22,ORDINAL3:35; then
       n in n by A1;
       hence contradiction;
     end;
@@ -2711,8 +2709,7 @@ A4:   a = n*^exp(omega, omega-exponent(a))+^b & 0 in n &
       reconsider s = n*^exp(omega, omega-exponent(a)) as
       Cantor-component Ordinal by A4,Def9;
       set c = omega-exponent(a);
-      exp(omega, c) c= a by A3,Def10; then
-A5:   P[b] by A2,A4;
+B5:   exp(omega, c) c= a by A3,Def10;
       per cases by ORDINAL3:8;
       suppose
 A6:     b = 0;
@@ -2726,19 +2723,18 @@ A6:     b = 0;
         0 in b; then
         consider A being non empty Cantor-normal-form Ordinal-Sequence
         such that
-A7:     b = Sum^ A by A5;
+A7:     b = Sum^ A by B5,A2,A4;
 A8:     A.0 in exp(omega, omega-exponent(a)) by A4,A7,Th56,ORDINAL1:12;
         0 in dom A by ORDINAL3:8; then
         A.0 is Cantor-component Ordinal by Def11; then
         0 in A.0 by ORDINAL3:8; then
         exp(omega, omega-exponent(A.0)) c= A.0 by Def10; then
-        exp(omega, omega-exponent(A.0)) in exp(omega, omega-exponent(a))
-        by A8,ORDINAL1:12; then
-A9:     omega-exponent(A.0) in omega-exponent(a) by Th12;
+B9:     exp(omega, omega-exponent(A.0)) in exp(omega, omega-exponent(a))
+        by A8,ORDINAL1:12;
         n in omega by ORDINAL1:def 12; then
         omega-exponent(s) = omega-exponent(a) by A4,Th58; then
         reconsider B = <%s%>^A as non empty Cantor-normal-form Ordinal-Sequence
-        by A9,Th68;
+        by B9,Th68,Th12;
         take B;
         thus a = Sum^ B by A4,A7,Th55;
       end;

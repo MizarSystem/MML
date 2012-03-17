@@ -2,7 +2,7 @@
 ::  by Peter Jaeger
 ::
 :: Received March 22, 2011
-:: Copyright (c) 2011 Association of Mizar Users
+:: Copyright (c) 2011-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,10 +20,10 @@ environ
       MESFUNC1, RANDOM_1, RANDOM_2, FUNCOP_1, VALUED_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XXREAL_0, NAT_1, XREAL_0,
       NUMBERS, FUNCT_1, RELSET_1, FUNCT_2, PROB_3, SERIES_1, PROB_1, MEASURE6,
-      SEQ_1, BINOP_2, MESFUNC1, MESFUNC6, RANDOM_1, INT_1, KOLMOG01, XXREAL_1,
-      RCOMP_1, FUNCOP_1, VALUED_1, RANDOM_2;
+      SEQ_1, BINOP_2, MESFUNC1, MESFUNC6, RANDOM_1, XXREAL_1, RCOMP_1,
+      FUNCOP_1, VALUED_1, RANDOM_2;
  constructors REAL_1, SEQ_1, PROB_3, SERIES_1, BINOP_2, RELSET_1, MEASURE6,
-      RCOMP_1, MESFUNC1, MESFUNC6, KOLMOG01, RANDOM_2, FUNCOP_1;
+      RCOMP_1, MESFUNC1, MESFUNC6, RANDOM_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
       MEMBERED, PROB_1, VALUED_0, XXREAL_0, NAT_1, XCMPLX_0, VALUED_1, FUNCT_2;
  requirements SUBSET, NUMERALS, BOOLE, ARITHM, REAL;
@@ -76,7 +76,7 @@ definition
 end;
 
 definition
-  let d be natural number;
+  let d be Nat;
   let phi,jpi be Real_Sequence;
   func BuyPortfolioExt(phi,jpi,d) -> Element of REAL equals
 :: FINANCE1:def 3
@@ -151,14 +151,13 @@ definition
 end;
 
 definition
-  let r be real number;
   let Omega be non empty set;
   let F be SigmaField of Omega;
   let X be non empty set;
   let w be Element of Omega;
   let G be Function of NAT,X;
   let phi be Real_Sequence;
-  func ElementsOfPortfolioValue_fut(r,phi,F,w,G) -> Real_Sequence means
+  func ElementsOfPortfolioValue_fut(phi,F,w,G) -> Real_Sequence means
 :: FINANCE1:def 10
 
   for n being Element of NAT holds
@@ -166,21 +165,20 @@ definition
 end;
 
 definition
-  let r be real number;
-  let d be natural number;
+  let d be Nat;
   let phi be Real_Sequence;
   let Omega be non empty set;
   let F be SigmaField of Omega;
   let X be non empty set;
   let G be Function of NAT,X;
   let w be Element of Omega;
-  func PortfolioValueFutExt(r,d,phi,F,G,w) -> Element of REAL equals
+  func PortfolioValueFutExt(d,phi,F,G,w) -> Element of REAL equals
 :: FINANCE1:def 11
-  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).d;
+  Partial_Sums(ElementsOfPortfolioValue_fut(phi,F,w,G)).d;
 
-  func PortfolioValueFut(r,d,phi,F,G,w) -> Element of REAL equals
+  func PortfolioValueFut(d,phi,F,G,w) -> Element of REAL equals
 :: FINANCE1:def 12
-  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).(d-1);
+  Partial_Sums(ElementsOfPortfolioValue_fut(phi,F,w,G)^\1).(d-1);
 end;
 
 registration
@@ -205,7 +203,7 @@ theorem :: FINANCE1:6
   Intersection half_open_sets(a,b) = [.a,b.];
 
 theorem :: FINANCE1:7
-  for a,b being real number, n being natural number holds
+  for a,b being real number, n being Nat holds
   (Partial_Intersection half_open_sets(a,b)).n is Element of Borel_Sets;
 
 theorem :: FINANCE1:8
@@ -237,21 +235,21 @@ theorem :: FINANCE1:10
 
 theorem :: FINANCE1:11
   for phi being Real_Sequence, jpi being pricefunction,
-      d being natural number st d>0 holds
+      d being Nat st d>0 holds
   BuyPortfolioExt(phi,jpi,d) = phi.0 + BuyPortfolio(phi,jpi,d);
 
 theorem :: FINANCE1:12
-for d being natural number st d>0 holds
+for d being Nat st d>0 holds
 for r being real number
 for phi being Real_Sequence
 for G being Function of NAT,set_of_random_variables_on(F,Borel_Sets) st
  Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
  for w being Element of Omega holds
-PortfolioValueFutExt(r,d,phi,F,G,w)
-       = ((1+r) * phi.0) + PortfolioValueFut(r,d,phi,F,G,w);
+PortfolioValueFutExt(d,phi,F,G,w)
+       = ((1+r) * phi.0) + PortfolioValueFut(d,phi,F,G,w);
 
 theorem :: FINANCE1:13
-for d being natural number st d>0 holds
+for d being Nat st d>0 holds
 for r being real number st r>-1 holds
 for phi being Real_Sequence,
     jpi being pricefunction holds
@@ -259,11 +257,11 @@ for G being Function of NAT,set_of_random_variables_on(F,Borel_Sets) st
  Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
 for w being Element of Omega holds
  BuyPortfolioExt(phi,jpi,d)<=0 implies
-(PortfolioValueFutExt(r,d,phi,F,G,w) <=
- PortfolioValueFut(r,d,phi,F,G,w) - (1+r)*BuyPortfolio(phi,jpi,d));
+(PortfolioValueFutExt(d,phi,F,G,w) <=
+ PortfolioValueFut(d,phi,F,G,w) - (1+r)*BuyPortfolio(phi,jpi,d));
 
 theorem :: FINANCE1:14
-for d being natural number st d>0 holds
+for d being Nat st d>0 holds
 for r being real number st r>-1 holds
 for phi being Real_Sequence,
     jpi being pricefunction holds
@@ -271,12 +269,12 @@ for G being Function of NAT,set_of_random_variables_on (F,Borel_Sets) st
  Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
 (BuyPortfolioExt(phi,jpi,d)<=0 implies
 ({w where w is Element of Omega:
-      PortfolioValueFutExt(r,d,phi,F,G,w) >= 0} c=
+      PortfolioValueFutExt(d,phi,F,G,w) >= 0} c=
      {w where w is Element of Omega:
-      PortfolioValueFut(r,d,phi,F,G,w)
+      PortfolioValueFut(d,phi,F,G,w)
                     >= (1+r)*BuyPortfolio(phi,jpi,d)} &
-{w where w is Element of Omega: PortfolioValueFutExt(r,d,phi,F,G,w) > 0} c=
-{w where w is Element of Omega: PortfolioValueFut(r,d,phi,F,G,w)
+{w where w is Element of Omega: PortfolioValueFutExt(d,phi,F,G,w) > 0} c=
+{w where w is Element of Omega: PortfolioValueFut(d,phi,F,G,w)
                     > (1+r)*BuyPortfolio(phi,jpi,d)}));
 
 theorem :: FINANCE1:15

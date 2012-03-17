@@ -10,6 +10,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
@@ -18,23 +19,22 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
 <ArticleID name="SETFAM_1"/>
-<ArticleID name="RECDEF_2"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
 <ArticleID name="AFINSQ_1"/>
+<ArticleID name="COMPOS_0"/>
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="MEMSTR_0"/>
 <ArticleID name="EXTPRO_1"/>
+<ArticleID name="SCM_INST"/>
+<ArticleID name="AMI_2"/>
 <ArticleID name="SCMFSA_2"/>
-<ArticleID name="FINSUB_1"/>
-<ArticleID name="SF_MASTR"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="SCMFSA_M"/>
 <ArticleID name="SCMFSA7B"/>
 <ArticleID name="SFMASTR2"/>
 </Signature>
@@ -43,44 +43,49 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="13"/>
-<Adjective nr="16">
+<Adjective nr="16"/>
+<Adjective nr="19">
 <Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="17">
+<Adjective nr="20">
 <Func kind="U" nr="1">
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
 </Func>
 </Adjective>
-<Adjective nr="18"/>
-<Adjective nr="27"/>
-<Adjective nr="44"/>
-<Adjective nr="89"/>
+<Adjective nr="21"/>
+<Adjective nr="30"/>
+<Adjective nr="48"/>
+<Adjective nr="93"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="12">
-<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="91"/>
+</Cluster>
+<Func kind="U" nr="2">
+<Func kind="K" nr="262"/>
+</Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="310">
+<Func kind="K" nr="299">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="13"/>
-<Adjective nr="16">
+<Adjective nr="16"/>
+<Adjective nr="19">
 <Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="17">
+<Adjective nr="20">
 <Func kind="U" nr="1">
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="262"/>
 </Func>
 </Adjective>
-<Adjective nr="18"/>
-<Adjective nr="27"/>
-<Adjective nr="44"/>
-<Adjective nr="89"/>
+<Adjective nr="21"/>
+<Adjective nr="30"/>
+<Adjective nr="48"/>
+<Adjective nr="93"/>
 </Cluster>
 </FCluster>
 </Registrations>

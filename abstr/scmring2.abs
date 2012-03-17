@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received November 29, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,20 +14,17 @@
 
 environ
 
- vocabularies NUMBERS, SUBSET_1, CARD_1, XBOOLE_0, STRUCT_0, SCMFSA7B,
-      FUNCSDOM, AMI_3, AMI_1, AMI_2, FUNCT_7, TARSKI, RELAT_1, ZFMISC_1, FSM_1,
-      FUNCT_1, CAT_1, FINSEQ_1, GRAPHSP, FUNCT_2, CARD_3, ORDINAL1, ARYTM_3,
-      ARYTM_1, SUPINF_2, FUNCOP_1, SCMRING1, GLIB_000, FUNCT_4, ALGSTR_0,
-      RECDEF_2, COMPOS_1, AMISTD_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1,
-      FUNCT_1, CARD_1, FUNCT_2, RECDEF_2, STRUCT_0, ALGSTR_0, FUNCSDOM,
-      MCART_1, CARD_3, FINSEQ_1, NUMBERS, FUNCOP_1, FUNCT_4, FUNCT_7, MEMSTR_0,
-      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMRING1;
- constructors XXREAL_0, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1, PRE_POLY,
-      RECDEF_2, FUNCT_7, MEMSTR_0, RELSET_1;
- registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_1,
-      CARD_3, STRUCT_0, AMI_3, SCMRING1, AMI_2, FUNCT_1, FUNCT_2, ALGSTR_0,
-      ALGSTR_1, GCD_1, COMPOS_1, EXTPRO_1, MEMSTR_0, CARD_1;
+ vocabularies NUMBERS, SUBSET_1, CARD_1, XBOOLE_0, STRUCT_0, FUNCSDOM, AMI_3,
+      AMI_1, AMI_2, FUNCT_7, TARSKI, RELAT_1, FSM_1, FUNCT_1, CAT_1, FINSEQ_1,
+      GRAPHSP, FUNCT_2, CARD_3, ORDINAL1, ARYTM_3, ARYTM_1, SUPINF_2, FUNCOP_1,
+      SCMRING1, GLIB_000, FUNCT_4, RECDEF_2, GOBRD13, MEMSTR_0;
+ notations TARSKI, XBOOLE_0, XTUPLE_0, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
+      CARD_1, FUNCT_2, RECDEF_2, STRUCT_0, ALGSTR_0, FUNCSDOM, CARD_3,
+      FINSEQ_1, NUMBERS, FUNCOP_1, FUNCT_4, FUNCT_7, MEMSTR_0, COMPOS_0,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMRINGI, SCMRING1;
+ constructors FINSEQ_4, REALSET1, AMI_3, SCMRING1, PRE_POLY, FUNCT_7, RELSET_1;
+ registrations ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_1, CARD_3, STRUCT_0, AMI_3,
+      SCMRING1, AMI_2, FUNCT_1, EXTPRO_1, SCMRINGI, SCM_INST, XTUPLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -39,34 +36,42 @@ reserve I for Element of Segm 8,
   x for set,
   k for Element of NAT;
 
-registration
-  cluster strict trivial for Ring;
-end;
+ reserve R for Ring, T for InsType of SCM-Instr R;
 
 definition
-  let R be good Ring;
-  func SCM R -> strict AMI-Struct over { the carrier of R } means
+  let R be Ring;
+  func SCM R -> strict AMI-Struct over 2 means
 :: SCMRING2:def 1
 
   the carrier of it = SCM-Memory & the ZeroF of it = NAT &
-  the Instructions of it = SCM-Instr R & the haltF of it = [0,{},{}] &
-  the Object-Kind of it = SCM-OK R & the
-  Execution of it = SCM-Exec R;
+  the InstructionsF of it = SCM-Instr R &
+  the Object-Kind of it = SCM-OK &
+  the ValuesF of it = SCM-VAL R &
+  the Execution of it = SCM-Exec R;
 end;
 
 registration
-  let R be good Ring;
-  cluster SCM R -> non empty standard-ins;
+  let R be Ring;
+  cluster SCM R -> non empty;
+end;
+
+registration
+  let R be Ring;
+  cluster SCM R -> with_non-empty_values;
+end;
+
+registration
+ let R be Ring;
+ cluster Int-like for Object of SCM R;
 end;
 
 definition
-  let R be good Ring;
-  mode Data-Location of R -> Object of SCM R means
-:: SCMRING2:def 2
- it in (the carrier of SCM R) \ ({NAT});
+  let R be Ring;
+  mode Data-Location of R is Int-like Object of SCM R;
+  canceled;
 end;
 
-reserve R for good Ring,
+reserve R for Ring,
   r for Element of R,
   a, b, c, d1, d2 for Data-Location of R,
   i1 for Element of NAT;
@@ -75,7 +80,7 @@ theorem :: SCMRING2:1
   x is Data-Location of R iff x in Data-Locations SCM;
 
 definition
-  let R be good Ring, s be State of SCM R, a be Data-Location of R;
+  let R be Ring, s be State of SCM R, a be Data-Location of R;
   redefine func s.a -> Element of R;
 end;
 
@@ -95,7 +100,7 @@ theorem :: SCMRING2:6
   [7,<*i1*>,<*d1*>] in SCM-Instr S;
 
 definition
-  let R be good Ring, a, b be Data-Location of R;
+  let R be Ring, a, b be Data-Location of R;
   func a := b -> Instruction of SCM R equals
 :: SCMRING2:def 3
   [1,{},<*a,b*>];
@@ -111,21 +116,21 @@ definition
 end;
 
 definition
-  let R be good Ring, a be Data-Location of R, r be Element of R;
+  let R be Ring, a be Data-Location of R, r be Element of R;
   func a := r -> Instruction of SCM R equals
 :: SCMRING2:def 7
   [5,{},<*a,r*>];
 end;
 
 definition
-  let R be good Ring, l be Element of NAT;
+  let R be Ring, l be Element of NAT;
   func goto(l,R) -> Instruction of SCM R equals
 :: SCMRING2:def 8
   [6,<*l*>,{}];
 end;
 
 definition
-  let R be good Ring, l be Element of NAT, a be Data-Location
+  let R be Ring, l be Element of NAT, a be Data-Location
   of R;
   func a=0_goto l -> Instruction of SCM R equals
 :: SCMRING2:def 9
@@ -142,8 +147,8 @@ b)) or (ex a,b st I = MultBy(a,b)) or (ex i1 st I = goto(i1,R)) or
 reserve s for State of SCM R;
 
 registration
-  let R;
-  cluster SCM R -> proper-halt IC-Ins-separated;
+  let R be non empty Ring;
+  cluster SCM R -> IC-Ins-separated;
 end;
 
 theorem :: SCMRING2:8
@@ -227,8 +232,6 @@ registration
   cluster SCM R -> halting;
 end;
 
-
-
 theorem :: SCMRING2:20
   for I being Instruction of SCM R st I is halting holds I = halt
   SCM R;
@@ -241,3 +244,11 @@ theorem :: SCMRING2:22
 
 theorem :: SCMRING2:23
   x is Data-Location of R iff x in Data-Locations SCM R;
+
+theorem :: SCMRING2:24
+ for R being Ring
+  holds the_Values_of SCM R = (SCM-VAL R)*SCM-OK;
+
+theorem :: SCMRING2:25
+ for R being Ring holds
+ (the carrier of SCM R) \ {NAT} = SCM-Data-Loc;

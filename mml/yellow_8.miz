@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received January 8, 1997
-:: Copyright (c) 1997-2011 Association of Mizar Users
+:: Copyright (c) 1997-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -29,8 +29,8 @@ environ
  definitions TARSKI, CANTOR_1, STRUCT_0, PRE_TOPC, WELLORD2, FUNCT_1, CARD_3,
       WAYBEL_3, COMPTS_1, XBOOLE_0, SUBSET_1;
  theorems TOPS_1, PRE_TOPC, PCOMPS_1, CANTOR_1, TARSKI, ZFMISC_1, TOPS_3,
-      COMPTS_1, TEX_2, URYSOHN1, TSP_1, FINSUB_1, SETFAM_1, SUBSET_1, FUNCT_1,
-      CARD_1, REALSET1, WAYBEL_3, XBOOLE_0, XBOOLE_1, TOPS_2;
+      COMPTS_1, URYSOHN1, TSP_1, FINSUB_1, SETFAM_1, SUBSET_1, FUNCT_1, CARD_1,
+      WAYBEL_3, XBOOLE_0, XBOOLE_1, TOPS_2;
  schemes DOMAIN_1, FUNCT_1;
 
 begin :: Preliminaries
@@ -68,7 +68,7 @@ end;
 
 begin :: Families of complements
 
-theorem Th4:
+theorem Th3:
   for X being set, F being Subset-Family of X holds F,COMPLEMENT F
   are_equipotent
 proof
@@ -110,7 +110,7 @@ A9: Y` in F by A8,SETFAM_1:def 7;
   hence thesis by A1,A9,FUNCT_1:def 3;
 end;
 
-theorem Th5:
+theorem Th4:
   for X,Y being set st X,Y are_equipotent & X is countable holds Y is countable
 proof
   let X,Y be set;
@@ -127,7 +127,7 @@ proof
   hence thesis by SETFAM_1:def 7;
 end;
 
-theorem Th15:
+theorem Th6:
   for X being 1-sorted, F being Subset-Family of X holds Intersect
   COMPLEMENT F = (union F)`
 proof
@@ -148,13 +148,13 @@ A1: F <> {};
   end;
 end;
 
-theorem Th16:
+theorem Th7:
   for X being 1-sorted, F being Subset-Family of X holds union
   COMPLEMENT F = (Intersect F)`
 proof
   let X be 1-sorted, F be Subset-Family of X;
   thus union COMPLEMENT F = (union COMPLEMENT F)``
-    .= (Intersect COMPLEMENT COMPLEMENT F)` by Th15
+    .= (Intersect COMPLEMENT COMPLEMENT F)` by Th6
     .= (Intersect F)`;
 end;
 
@@ -173,7 +173,7 @@ A2: for C being Subset of T st B c= C & C is closed holds A c= C;
   thus thesis by A1,TOPS_1:5;
 end;
 
-theorem Th18:
+theorem Th9:
   for T being TopStruct, B being Basis of T, V being Subset of T
   st V is open holds V = union { G where G is Subset of T: G in B & G c= V }
 proof
@@ -208,7 +208,7 @@ A8: Y in X;
   hence thesis by TARSKI:def 4;
 end;
 
-theorem Th19:
+theorem Th10:
   for T being TopStruct, B being Basis of T, S being Subset of T
   st S in B holds S is open
 proof
@@ -235,7 +235,7 @@ proof
 A1:   e = G and
 A2:   G in B and
 A3:   G c= V;
-      G c= Int V by A2,A3,Th19,TOPS_1:24;
+      G c= Int V by A2,A3,Th10,TOPS_1:24;
       hence thesis by A1,A2;
     end;
     let e be set;
@@ -247,7 +247,7 @@ A5: G c= Int V;
     then G c= V by A5,XBOOLE_1:1;
     hence thesis by A4;
   end;
-  hence thesis by Th18;
+  hence thesis by Th9;
 end;
 
 begin :: Baire Spaces
@@ -256,7 +256,7 @@ definition
 
   let T be non empty TopStruct, x be Point of T, F be Subset-Family of T;
   attr F is x-quasi_basis means
-    :Def2:
+    :Def1:
   x in Intersect F &
   for S being Subset of T st S is open & x in S ex V being Subset of T st
   V in F & V c= S;
@@ -303,7 +303,7 @@ definition
   mode Basis of x is open x-quasi_basis Subset-Family of T;
 end;
 
-theorem Th21:
+theorem Th12:
   for T being non empty TopStruct, x being Point of T, B being
   Basis of x, V being Subset of T st V in B holds V is open & x in V
 proof
@@ -312,14 +312,14 @@ proof
 A1: V in B;
   B c= the topology of T by TOPS_2:64;
   hence V is open by A1,PRE_TOPC:def 2;
-  x in Intersect B by Def2;
+  x in Intersect B by Def1;
   hence thesis by A1,SETFAM_1:43;
 end;
 
 theorem
   for T being non empty TopStruct, x being Point of T, B being Basis of
 x, V being Subset of T st x in V & V is open ex W being Subset of T st W in B &
-  W c= V by Def2;
+  W c= V by Def1;
 
 theorem
   for T being non empty TopStruct, P being Subset-Family of T st P c=
@@ -357,10 +357,10 @@ A6:   B c= P by A2;
       S is open by A3,PRE_TOPC:def 2;
       then consider W being Subset of T such that
 A7:   W in B and
-A8:   W c= S by A5,Def2;
+A8:   W c= S by A5,Def1;
       reconsider Z = W as set;
       take Z;
-      thus u in Z by A7,Th21;
+      thus u in Z by A7,Th12;
       thus Z in X by A6,A7,A8;
     end;
     given Z being set such that
@@ -378,7 +378,7 @@ end;
 definition
   let T be non empty TopSpace;
   attr T is Baire means
-  :Def3:
+  :Def2:
   for F being Subset-Family of T st F is
 countable & for S being Subset of T st S in F holds S is everywhere_dense ex I
   being Subset of T st I = Intersect F & I is dense;
@@ -405,9 +405,9 @@ A4: for S being Subset of T st S in G holds S is everywhere_dense
       then S` is nowhere_dense by A3;
       hence thesis by TOPS_3:39;
     end;
-    G is countable by A2,Th4,Th5;
-    then ex I being Subset of T st I = Intersect G & I is dense by A1,A4,Def3;
-    then (union F)` is dense by Th15;
+    G is countable by A2,Th3,Th4;
+    then ex I being Subset of T st I = Intersect G & I is dense by A1,A4,Def2;
+    then (union F)` is dense by Th6;
     hence union F is boundary by TOPS_1:def 4;
   end;
   assume
@@ -428,9 +428,9 @@ A8: for S being Subset of T st S in G holds S is nowhere_dense
     then S` is everywhere_dense by A7;
     hence thesis by TOPS_3:40;
   end;
-  G is countable by A6,Th4,Th5;
+  G is countable by A6,Th3,Th4;
   then union G is boundary by A5,A8;
-  then (Intersect F)` is boundary by Th16;
+  then (Intersect F)` is boundary by Th7;
   hence thesis by TOPS_3:18;
 end;
 
@@ -439,7 +439,7 @@ begin :: Sober Spaces
 definition
   let T be TopStruct, S be Subset of T;
   attr S is irreducible means
-  :Def4:
+  :Def3:
   S is non empty closed & for S1,S2 being
 Subset of T st S1 is closed & S2 is closed & S = S1 \/ S2 holds S1 = S or S2 =
   S;
@@ -448,14 +448,14 @@ end;
 registration
   let T be TopStruct;
   cluster irreducible -> non empty for Subset of T;
-  coherence by Def4;
+  coherence by Def3;
 end;
 
 definition
   let T be non empty TopSpace, S be Subset of T;
   let p be Point of T;
   pred p is_dense_point_of S means
-  :Def5:
+  :Def4:
   p in S & S c= Cl{p};
 end;
 
@@ -473,7 +473,7 @@ A3: S c= Cl{p};
   hence thesis by A3,XBOOLE_0:def 10;
 end;
 
-theorem Th26:
+theorem Th17:
   for T being non empty TopSpace, p being Point of T holds Cl{p} is irreducible
 proof
   let T be non empty TopSpace, p be Point of T;
@@ -483,7 +483,7 @@ A1: not thesis;
   then consider S1,S2 being Subset of T such that
 A2: S1 is closed & S2 is closed and
 A3: Cl{p} = S1 \/ S2 and
-A4: S1 <> Cl{p} & S2 <> Cl{p} by A1,Def4;
+A4: S1 <> Cl{p} & S2 <> Cl{p} by A1,Def3;
   {p} c= Cl{p} & p in {p} by PRE_TOPC:18,TARSKI:def 1;
   then p in S1 or p in S2 by A3,XBOOLE_0:def 3;
   then {p} c= S1 or {p} c= S2 by ZFMISC_1:31;
@@ -499,7 +499,7 @@ registration
   existence
   proof
     set p = the Point of T;
-    Cl{p} is irreducible by Th26;
+    Cl{p} is irreducible by Th17;
     hence thesis;
   end;
 end;
@@ -507,13 +507,13 @@ end;
 definition
   let T be non empty TopSpace;
   attr T is sober means
-  :Def6:
+  :Def5:
   for S being irreducible Subset of T ex p being
   Point of T st p is_dense_point_of S & for q being Point of T st q
   is_dense_point_of S holds p = q;
 end;
 
-theorem Th27:
+theorem Th18:
   for T being non empty TopSpace, p being Point of T holds p
   is_dense_point_of Cl{p}
 proof
@@ -523,7 +523,7 @@ proof
   thus thesis;
 end;
 
-theorem Th28:
+theorem Th19:
   for T being non empty TopSpace, p being Point of T holds p
   is_dense_point_of {p}
 proof
@@ -532,7 +532,7 @@ proof
   thus thesis by PRE_TOPC:18;
 end;
 
-theorem Th29:
+theorem Th20:
   for T being non empty TopSpace, G,F being Subset of T st G is
   open & F is closed holds F \ G is closed
 proof
@@ -542,36 +542,36 @@ A1: G is open & F is closed;
   hence thesis by A1;
 end;
 
-theorem Th30:
+theorem Th21:
   for T being Hausdorff non empty TopSpace, S being irreducible
   Subset of T holds S is trivial
 proof
   let T be Hausdorff non empty TopSpace, S be irreducible Subset of T;
   assume S is non trivial;
   then consider x,y being Point of T such that
-B1: x in S & y in S and
-A1: x <> y by SUBSET_1:45;
+A1: x in S & y in S and
+A2: x <> y by SUBSET_1:45;
   consider W,V being Subset of T such that
-A2: W is open & V is open and
-A3: x in W & y in V and
-A4: W misses V by A1,PRE_TOPC:def 10;
+A3: W is open & V is open and
+A4: x in W & y in V and
+A5: W misses V by A2,PRE_TOPC:def 10;
   set S1 = S \ W, S2 = S \ V;
-A5: S1 <> S & S2 <> S by A3,B1,XBOOLE_0:def 5;
-  S is closed by Def4;
+A6: S1 <> S & S2 <> S by A4,A1,XBOOLE_0:def 5;
+  S is closed by Def3;
   then
-A6: S1 is closed & S2 is closed by A2,Th29;
-A7: W /\ V = {} by A4,XBOOLE_0:def 7;
+A7: S1 is closed & S2 is closed by A3,Th20;
+A8: W /\ V = {} by A5,XBOOLE_0:def 7;
   S1 \/ S2 = S \ W /\ V by XBOOLE_1:54
-    .= S by A7;
-  hence contradiction by A6,A5,Def4;
+    .= S by A8;
+  hence contradiction by A7,A6,Def3;
 end;
             registration
   let T be Hausdorff non empty TopSpace;
   cluster irreducible -> trivial for Subset of T;
-  coherence by Th30;
+  coherence by Th21;
 end;
 
-theorem Th31:
+theorem Th22:
   for T being Hausdorff non empty TopSpace holds T is sober
 proof
   let T be Hausdorff non empty TopSpace;
@@ -580,16 +580,16 @@ proof
 A1: S = {d} by SUBSET_1:46;
   reconsider d as Point of T;
   take d;
-  thus d is_dense_point_of S by A1,Th28;
+  thus d is_dense_point_of S by A1,Th19;
   let p be Point of T;
   assume p is_dense_point_of S;
-  then p in S by Def5;
+  then p in S by Def4;
   hence thesis by A1,TARSKI:def 1;
 end;
 
 registration
   cluster Hausdorff -> sober for non empty TopSpace;
-  coherence by Th31;
+  coherence by Th22;
 end;
 
 registration
@@ -602,7 +602,7 @@ registration
   end;
 end;
 
-theorem Th32:
+theorem Th23:
   for T being non empty TopSpace holds T is T_0 iff for p,q being
   Point of T st Cl{p} = Cl{q} holds p = q
 proof
@@ -614,7 +614,7 @@ proof
   hence thesis by TSP_1:def 5;
 end;
 
-theorem Th33:
+theorem Th24:
   for T being sober non empty TopSpace holds T is T_0
 proof
   let T be sober non empty TopSpace;
@@ -622,25 +622,25 @@ proof
   proof
     let p,q be Point of T such that
 A1: Cl{p} = Cl{q};
-    Cl{p} is irreducible by Th26;
+    Cl{p} is irreducible by Th17;
     then consider r being Point of T such that
     r is_dense_point_of Cl{p} and
-A2: for q being Point of T st q is_dense_point_of Cl{p} holds r = q by Def6;
-    p = r by A2,Th27;
-    hence thesis by A1,A2,Th27;
+A2: for q being Point of T st q is_dense_point_of Cl{p} holds r = q by Def5;
+    p = r by A2,Th18;
+    hence thesis by A1,A2,Th18;
   end;
-  hence thesis by Th32;
+  hence thesis by Th23;
 end;
 
 registration
   cluster sober -> T_0 for non empty TopSpace;
-  coherence by Th33;
+  coherence by Th24;
 end;
 
 definition
   let X be set;
   func CofinTop X -> strict TopStruct means
-  :Def7:
+  :Def6:
   the carrier of it = X & COMPLEMENT the topology of it = {X} \/ Fin X;
   existence
   proof
@@ -657,7 +657,7 @@ end;
 registration
   let X be non empty set;
   cluster CofinTop X -> non empty;
-  coherence by Def7;
+  coherence by Def6;
 end;
 
 registration
@@ -670,8 +670,8 @@ registration
     set IT = CofinTop X;
     reconsider XX as Subset-Family of X;
     reconsider F as Subset-Family of X;
-A1: the carrier of IT = X by Def7;
-A2: COMPLEMENT the topology of IT = {X} \/ Fin X by Def7;
+A1: the carrier of IT = X by Def6;
+A2: COMPLEMENT the topology of IT = {X} \/ Fin X by Def6;
 A3: the topology of IT = COMPLEMENT COMPLEMENT the topology of IT
       .= COMPLEMENT XX \/ COMPLEMENT F by A1,A2,SETFAM_1:39
       .= {{}} \/ COMPLEMENT F by SETFAM_1:40;
@@ -716,7 +716,7 @@ A9:     COMPLEMENT b c= Fin X by SETFAM_1:37;
     let a,b be Subset of IT such that
 A10: a in the topology of IT and
 A11: b in the topology of IT;
-    reconsider a9=a, b9=b as Subset of X by Def7;
+    reconsider a9=a, b9=b as Subset of X by Def6;
     per cases;
     suppose
       a = {} or b = {};
@@ -739,7 +739,7 @@ A13:  b9` in Fin X by SETFAM_1:def 7;
   end;
 end;
 
-theorem Th34:
+theorem Th25:
   for X being non empty set, P being Subset of CofinTop X holds P
   is closed iff P = X or P is finite
 proof
@@ -752,23 +752,23 @@ A2: P <> X;
     P` in the topology of T by A1,PRE_TOPC:def 2;
     then P in COMPLEMENT the topology of T by SETFAM_1:def 7;
     then
-A3: P in {X} \/ Fin X by Def7;
+A3: P in {X} \/ Fin X by Def6;
     not P in {X} by A2,TARSKI:def 1;
     then P in Fin X by A3,XBOOLE_0:def 3;
     hence P is finite;
   end;
   assume
 A4: P = X or P is finite;
-  the carrier of T = X by Def7;
+  the carrier of T = X by Def6;
   then P in {X} or P in Fin X by A4,FINSUB_1:def 5,TARSKI:def 1;
   then P in {X} \/ Fin X by XBOOLE_0:def 3;
-  then P in COMPLEMENT the topology of T by Def7;
+  then P in COMPLEMENT the topology of T by Def6;
   then P` in the topology of T by SETFAM_1:def 7;
   then P` is open by PRE_TOPC:def 2;
   hence thesis by TOPS_1:3;
 end;
 
-theorem Th35:
+theorem Th26:
   for T being non empty TopSpace st T is T_1 for p being Point of
   T holds Cl{p} = {p}
 proof
@@ -787,7 +787,7 @@ registration
   cluster CofinTop X -> T_1;
   coherence
   proof
-    for p being Point of CofinTop X holds {p} is closed by Th34;
+    for p being Point of CofinTop X holds {p} is closed by Th25;
     hence thesis by URYSOHN1:19;
   end;
 end;
@@ -798,16 +798,16 @@ registration
   coherence
   proof
     set T = CofinTop X;
-    reconsider S = [#]X as Subset of T by Def7;
+    reconsider S = [#]X as Subset of T by Def6;
     S is irreducible
     proof
-      X = [#]T by Def7;
+      X = [#]T by Def6;
       hence S is non empty closed;
       let S1,S2 be Subset of T such that
 A1:   S1 is closed & S2 is closed and
 A2:   S = S1 \/ S2;
       assume S1 <> S & S2 <> S;
-      then reconsider S19=S1, S29=S2 as finite set by A1,Th34;
+      then reconsider S19=S1, S29=S2 as finite set by A1,Th25;
       S = S19 \/ S29 by A2;
       hence contradiction;
     end;
@@ -816,9 +816,9 @@ A2:   S = S1 \/ S2;
     let p be Point of T;
     now
       assume p is_dense_point_of S;
-      then S c= Cl{p} by Def5;
+      then S c= Cl{p} by Def4;
       then Cl{p} is infinite;
-      hence contradiction by Th35;
+      hence contradiction by Th26;
     end;
     hence thesis;
   end;
@@ -836,7 +836,7 @@ end;
 
 begin :: More on regular spaces
 
-theorem Th36:
+theorem Th27:
   for T being non empty TopSpace holds T is regular iff for p
 being Point of T, P being Subset of T st p in Int P ex Q being Subset of T st Q
   is closed & Q c= P & p in Int Q
@@ -934,7 +934,7 @@ A6: Y is compact by A3;
   then consider Q being Subset of T such that
 A7: Q is closed and
 A8: Q c= X /\ Y and
-A9: x in Int Q by A1,Th36;
+A9: x in Int Q by A1,Th27;
   take Q;
   thus x in Int Q by A9;
   X /\ Y c= X by XBOOLE_1:17;

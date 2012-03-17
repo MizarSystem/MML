@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received February 14, 2001
-:: Copyright (c) 2001-2011 Association of Mizar Users
+:: Copyright (c) 2001-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -28,13 +28,14 @@ environ
  definitions BVFUNC_1, TARSKI, RELAT_2, XBOOLE_0, XBOOLEAN, RELSET_1, EQREL_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, BVFUNC_1, BVFUNC_2, RELSET_1, PARTIT1,
       SETFAM_1, SUBSET_1, FUNCT_4, RELAT_1, EQREL_1, RELAT_2, XBOOLE_0,
-      XBOOLE_1, PARTFUN1, ORDERS_1, XBOOLEAN, MARGREL1, CARD_1, ZFMISC_1;
+      XBOOLE_1, PARTFUN1, ORDERS_1, XBOOLEAN, MARGREL1, CARD_1, ZFMISC_1,
+      XTUPLE_0;
  schemes FUNCT_2;
 
 begin :: Preliminaries
 
 reserve Y for non empty set,
-  a for Element of Funcs(Y,BOOLEAN),
+  a for Function of Y,BOOLEAN,
   G for Subset of PARTITIONS(Y),
   P,Q for a_partition of Y;
 
@@ -235,10 +236,10 @@ end;
 begin :: Boolean-valued Functions
 
 theorem Th11:
-  for a,b being Element of Funcs(Y,BOOLEAN) st a '<' b holds
+  for a,b being Function of Y,BOOLEAN st a '<' b holds
   'not' b '<' 'not' a
 proof
-  let a,b being Element of Funcs(Y,BOOLEAN) such that
+  let a,b being Function of Y,BOOLEAN such that
 A1: a '<' b;
   let x be Element of Y;
   assume
@@ -251,11 +252,11 @@ A2: ('not' b).x= TRUE;
     .=TRUE;
 end;
 
-theorem Th13:
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(Y),
+theorem Th12:
+  for a,b being Function of Y,BOOLEAN, G being Subset of PARTITIONS(Y),
       P being a_partition of Y st a '<' b holds All(a,P,G) '<' All(b,P,G)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN), G be Subset of PARTITIONS(Y), P be
+  let a,b be Function of Y,BOOLEAN, G be Subset of PARTITIONS(Y), P be
   a_partition of Y such that
 A1: a '<' b;
   let x be Element of Y;
@@ -274,17 +275,17 @@ A4: for y being Element of Y st y in EqClass(x,CompF(P,G)) holds b.y=TRUE
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN),
+  for a,b being Function of Y,BOOLEAN,
       G being Subset of PARTITIONS(Y), P being a_partition of Y st
     a '<' b holds Ex(a,P,G) '<' Ex(b,P,G)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN), G be Subset of PARTITIONS(Y), P be
+  let a,b be Function of Y,BOOLEAN, G be Subset of PARTITIONS(Y), P be
   a_partition of Y;
 A1: Ex(b,P,G) = Ex('not' 'not' b,P,G) .= 'not' All('not' b,P,G) by BVFUNC_2:18;
   assume a '<' b;
   then 'not' b '<' 'not' a by Th11;
   then
-A2: All('not' b,P,G) '<' All('not' a,P,G) by Th13;
+A2: All('not' b,P,G) '<' All('not' a,P,G) by Th12;
   Ex(a,P,G) = Ex('not' 'not' a,P,G) .= 'not' All('not' a,P,G) by BVFUNC_2:18;
   hence thesis by A1,A2,Th11;
 end;
@@ -356,7 +357,8 @@ A21: for d being Element of G9 holds bool Y meets P(d)
       hence bool Y meets d by XBOOLE_1:63;
     end;
     consider h9 being Function of G9, bool Y such that
-A22: for d being Element of G9 holds h9.d in P(d) from FUNCT_2:sch 11(A21);
+A22: for d being Element of G9 holds h9.d in P(d) from FUNCT_2:sch
+10(A21);
     set h = h9 +* hP9 +* hQ9;
 A23: dom hQ9 = Q by FUNCT_2:def 1;
 A24: dom hP9 = P by FUNCT_2:def 1;
@@ -515,7 +517,7 @@ A58: t in B9 by SETFAM_1:43;
   end;
 end;
 
-theorem Th16:
+theorem Th14:
   G is independent implies for P,Q being Subset of PARTITIONS Y st
   P c= G & Q c= G holds ERl('/\'P)*ERl('/\'Q) = ERl('/\'Q)*ERl('/\'P)
 proof
@@ -528,7 +530,7 @@ A1: G is independent;
   hence thesis by XBOOLE_0:def 10;
 end;
 
-theorem Th17:
+theorem Th15:
   G is independent implies All(All(a,P,G),Q,G) = All(All(a,Q,G),P,G)
 proof
   set A = G \ {P}, B = G \ {Q};
@@ -537,7 +539,7 @@ A2: A c= G & B c= G by XBOOLE_1:36;
 A3: CompF(Q,G) = '/\' B by BVFUNC_2:def 7;
   assume G is independent;
   then
-A4: ERl('/\'A)*ERl '/\'B = ERl ('/\'B)*ERl '/\'A by A2,Th16;
+A4: ERl('/\'A)*ERl '/\'B = ERl ('/\'B)*ERl '/\'A by A2,Th14;
 A5: for y being Element of Y holds ( (for x being Element of Y st x in
 EqClass(y,CompF(Q,G)) holds B_INF(a,CompF(P,G)).x=TRUE) implies B_INF( B_INF(a,
   CompF(Q,G)),CompF(P,G)).y = TRUE ) & (not (for x being Element of Y st x in
@@ -611,24 +613,24 @@ A1: G is independent;
   thus Ex(Ex(a,P,G),Q,G) = 'not' 'not' Ex(Ex(a,P,G),Q,G)
     .= 'not' All('not' Ex(a,P,G),Q,G) by BVFUNC_2:19
     .= 'not' All(All('not' a,P,G),Q,G) by BVFUNC_2:19
-    .= 'not' All(All('not' a,Q,G),P,G) by A1,Th17
+    .= 'not' All(All('not' a,Q,G),P,G) by A1,Th15
     .= 'not' All('not' Ex(a,Q,G),P,G) by BVFUNC_2:19
     .= 'not' 'not' Ex(Ex(a,Q,G),P,G) by BVFUNC_2:19
     .= Ex(Ex(a,Q,G),P,G);
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(
+  for a being Function of Y,BOOLEAN, G being Subset of PARTITIONS(
 Y), P,Q being a_partition of Y st G is independent holds Ex(All(a,P,G),Q,G) '<'
   All(Ex(a,Q,G),P,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN), G be Subset of PARTITIONS(Y), P,Q be
+  let a be Function of Y,BOOLEAN, G be Subset of PARTITIONS(Y), P,Q be
   a_partition of Y such that
 A1: G is independent;
   set A = G \ {P}, B = G \ {Q};
   A c= G & B c= G by XBOOLE_1:36;
   then
-A2: ERl('/\'A)*ERl '/\'B = ERl ('/\'B)*ERl '/\'A by A1,Th16;
+A2: ERl('/\'A)*ERl '/\'B = ERl ('/\'B)*ERl '/\'A by A1,Th14;
 A3: CompF(P,G) = '/\' A by BVFUNC_2:def 7;
 A4: Ex(All(a,P,G),Q,G) = B_SUP(All(a,P,G),CompF(Q,G)) by BVFUNC_2:def 10;
 A5: CompF(Q,G) = '/\' B by BVFUNC_2:def 7;
@@ -697,7 +699,7 @@ end;
 theorem
   field id X = X
 proof
-  dom id X = X & rng id X = X by RELAT_1:45;
+  dom id X = X & rng id X = X;
   then field id X = X \/ X by RELAT_1:def 6;
   hence thesis;
 end;
@@ -843,7 +845,7 @@ A4: x in S \ (field R) implies not [x,x] in R
     then x in (S \ dom R) /\ (S \ rng R) by XBOOLE_1:53;
     then x in (S \ rng R) by XBOOLE_0:def 4;
     then not x in rng R by XBOOLE_0:def 5;
-    hence thesis by RELAT_1:def 5;
+    hence thesis by XTUPLE_0:def 13;
   end;
   R is_irreflexive_in field R by A1,RELAT_2:def 10;
   hence thesis by A3,A4,RELAT_2:def 2;
@@ -890,16 +892,16 @@ definition
   let f be UnOp of X;
   redefine attr f is involutive means
   for x being Element of X holds f.(f.x) = x;
- compatibility
+  compatibility
   proof
-  dom f = X by PARTFUN1:def 2;
+   dom f = X by PARTFUN1:def 2;
    hence f is involutive implies for x being Element of X holds f.(f.x) = x
-                      by Def2;
+   by Def2;
    assume
-A1:   for x being Element of X holds f.(f.x) = x;
+A1: for x being Element of X holds f.(f.x) = x;
    let x be set;
    assume x in dom f;
-   hence f.(f.x) = x by A1;
+   hence thesis by A1;
   end;
 end;
 
@@ -915,14 +917,14 @@ registration
 end;
 end;
 
-registration let X;
+registration let X be set;
   cluster id X -> involutive;
   coherence
 proof
   set f = id X;
   let a be set;
   assume a in dom f;
-  then a in X by RELAT_1:45;
+  then a in X;
   then f.a = a by FUNCT_1:17;
   hence thesis;
 end;

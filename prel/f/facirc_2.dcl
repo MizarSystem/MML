@@ -10,6 +10,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
@@ -46,8 +47,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="58"/>
-<Adjective nr="67"/>
+<Adjective nr="62"/>
+<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FACIRC_2" nr="1">
@@ -56,13 +57,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="369">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="49" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="67"/>
+<Adjective nr="53" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="73"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FACIRC_2" nr="2">
@@ -71,63 +72,63 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16"/>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="40">
+<Func kind="K" nr="38">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="103" value="false"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FACIRC_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="92"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16"/>
-<Adjective nr="34"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16"/>
-<Adjective nr="34"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="103"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FACIRC_2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="62"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FACIRC_2" nr="2">
@@ -139,7 +140,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="103" value="false"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FACIRC_2" nr="3">
@@ -155,7 +156,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16"/>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </CCluster>
 </Registrations>

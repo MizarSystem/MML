@@ -2,7 +2,7 @@
 ::  by Hiroshi Imura and Masayoshi Eguchi
 ::
 :: Received November 27, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,14 +18,13 @@ environ
       PARTFUN1, TARSKI, NAT_1, CARD_1, XBOOLE_0, FINSET_1, FUNCT_1, RELAT_1,
       ORDINAL1, COMPLEX1, ARYTM_1, STRUCT_0, ORDERS_2, EQREL_1, FUNCOP_1,
       FUNCT_2, RELAT_2, SETFAM_1, RCOMP_1, FIN_TOPO;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
-      XCMPLX_0, FINSET_1, SETFAM_1, RELAT_1, EQREL_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FUNCOP_1, DOMAIN_1, RELSET_1, FINSEQ_1, INT_2, NAT_1, XXREAL_0,
-      STRUCT_0, ORDERS_2;
- constructors SETFAM_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, INT_2,
-      EQREL_1, FINSEQ_4, ORDERS_2, SEQ_1, RELSET_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
+      FINSET_1, SETFAM_1, EQREL_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1,
+      DOMAIN_1, RELSET_1, FINSEQ_1, INT_2, NAT_1, XXREAL_0, STRUCT_0, ORDERS_2;
+ constructors DOMAIN_1, FUNCOP_1, REAL_1, INT_2, EQREL_1, FINSEQ_4, ORDERS_2,
+      SEQ_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCOP_1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, STRUCT_0, FINSET_1, FINSEQ_1;
+      XREAL_0, NAT_1, INT_1, STRUCT_0, FINSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, STRUCT_0, ORDINAL1, XBOOLE_0, SUBSET_1, RELAT_2, ORDERS_2,
       RELAT_1, FUNCOP_1, SETFAM_1;
@@ -177,7 +176,7 @@ A17: rng f c= bool A()
   proof
     let x be set;
     assume x in rng f;
-    then x in f.:NAT by FUNCT_2:37;
+    then x in f.:NAT by RELSET_1:22;
     then ex k being Element of NAT st k in NAT & f.k=x by FUNCT_2:65;
     then x c= A() by A9;
     hence thesis;
@@ -188,7 +187,7 @@ A18: m in rng f and
 A19: for C being set st C in rng f holds C c= m by A1,A17,A12,FINSET_1:12;
   deffunc G(Nat) = f.(abs($1-1));
   defpred P[set] means $1 in NAT & f.$1=m;
-  m in f.:NAT by A18,FUNCT_2:37;
+  m in f.:NAT by A18,RELSET_1:22;
   then ex k being Element of NAT st P[k] by FUNCT_2:65;
   then
 A20: ex k being Nat st P[k];
@@ -414,7 +413,7 @@ A2: for x being Element of IT holds x in U_FT x;
   end;
 end;
 
-theorem Th7:
+theorem Th3:
   FT{0} is filled
 proof
   let x be Element of FT{0};
@@ -424,12 +423,12 @@ end;
 
 registration
   cluster FT{0} -> filled finite;
-  coherence by Th7;
+  coherence by Th3;
 end;
 
 registration
   cluster finite filled strict for non empty RelStr;
-  existence by Th7;
+  existence by Th3;
 end;
 
 theorem
@@ -461,7 +460,7 @@ definition
   end;
 end;
 
-theorem Th10:
+theorem Th5:
   x in A^delta iff U_FT x meets A & U_FT x meets A`
 proof
   thus x in A^delta implies U_FT x meets A & U_FT x meets A`
@@ -554,11 +553,11 @@ end;
 definition
   let IT be non empty RelStr;
   attr IT is symmetric means
-  :Def15:
+  :Def13:
   for x, y being Element of IT holds y in U_FT x implies x in U_FT y;
 end;
 
-theorem Th12:
+theorem Th7:
   x in A^i iff U_FT x c= A
 proof
   thus x in A^i implies U_FT x c= A
@@ -571,7 +570,7 @@ proof
   hence thesis;
 end;
 
-theorem Th13:
+theorem Th8:
   x in A^b iff U_FT x meets A
 proof
   thus x in A^b implies U_FT x meets A
@@ -584,7 +583,7 @@ proof
   hence thesis;
 end;
 
-theorem Th14:
+theorem Th9:
   x in A^s iff x in A & U_FT x \ {x} misses A
 proof
   thus x in A^s implies x in A & U_FT x \ {x} misses A
@@ -609,11 +608,11 @@ proof
   assume that
 A1: x in A and
 A2: U_FT x \ {x} meets A;
-  not x in A^s by A2,Th14;
+  not x in A^s by A2,Th9;
   hence thesis by A1,XBOOLE_0:def 5;
 end;
 
-theorem Th16:
+theorem Th11:
   x in A^f iff ex y st y in A & x in U_FT y
 proof
   thus x in A^f implies ex y st y in A & x in U_FT y
@@ -640,13 +639,13 @@ A1: FT is symmetric;
       assume
 A2:   x in A^b;
       then reconsider y = x as Element of FT;
-      U_FT y meets A by A2,Th13;
+      U_FT y meets A by A2,Th8;
       then consider z be set such that
 A3:   z in U_FT y /\ A by XBOOLE_0:4;
       reconsider z as Element of FT by A3;
       z in U_FT y by A3,XBOOLE_0:def 4;
       then
-A4:   y in U_FT z by A1,Def15;
+A4:   y in U_FT z by A1,Def13;
       z in A by A3,XBOOLE_0:def 4;
       hence thesis by A4;
     end;
@@ -656,8 +655,8 @@ A5: x in A^f;
     then reconsider y = x as Element of FT;
     consider z such that
 A6: z in A and
-A7: y in U_FT z by A5,Th16;
-    z in U_FT y by A1,A7,Def15;
+A7: y in U_FT z by A5,Th11;
+    z in U_FT y by A1,A7,Def13;
     then U_FT y meets A by A6,XBOOLE_0:3;
     hence thesis;
   end;
@@ -668,7 +667,7 @@ A8: for A being Subset of FT holds A^b = A^f;
   then U_FT x meets {y} by ZFMISC_1:48;
   then x in {y}^b;
   then x in {y}^f by A8;
-  then ex z st z in {y} & x in U_FT z by Th16;
+  then ex z st z in {y} & x in U_FT z by Th11;
   hence thesis by TARSKI:def 1;
 end;
 
@@ -678,13 +677,13 @@ definition
   let FT;
   let IT be Subset of FT;
   attr IT is open means
-  :Def16:
+  :Def14:
   IT = IT^i;
   attr IT is closed means
-  :Def17:
+  :Def15:
   IT = IT^b;
   attr IT is connected means
-  :Def18:
+  :Def16:
   for B,C being Subset of FT st IT = B \/ C
   & B <> {} & C <> {} & B misses C holds B^b meets C;
 end;
@@ -726,7 +725,7 @@ definition
   end;
 end;
 
-theorem Th18:
+theorem Th13:
   for FT being filled non empty RelStr, A being Subset of FT holds A c= A^b
 proof
   let FT be filled non empty RelStr;
@@ -740,7 +739,7 @@ A1: x in A;
   hence thesis;
 end;
 
-theorem Th19:
+theorem Th14:
   for FT being non empty RelStr, A, B being Subset of FT holds A
   c= B implies A^b c= B^b
 proof
@@ -752,7 +751,7 @@ A1: A c= B;
   assume
 A2: x in A^b;
   then reconsider y=x as Element of FT;
-  U_FT y meets A by A2,Th13;
+  U_FT y meets A by A2,Th8;
   then ex w being set st w in U_FT y & w in A by XBOOLE_0:3;
   then U_FT y meets B by A1,XBOOLE_0:3;
   hence thesis;
@@ -782,7 +781,7 @@ A3: for B being Subset of FT st B c= A holds B c= F(B) & F(B) c= A
     proof
       let B be Subset of FT such that
 A4:   B c= A;
-      B c= B^b by Th18;
+      B c= B^b by Th13;
       hence B c= B^b /\ A by A4,XBOOLE_1:19;
       thus thesis by XBOOLE_1:17;
     end;
@@ -835,7 +834,7 @@ A19: C <> {} by XBOOLE_1:37;
 A20: B misses C & B^b misses C by XBOOLE_0:def 7,XBOOLE_1:79;
     B \/ C = B \/ A by XBOOLE_1:39
       .= A by A9,XBOOLE_1:12,17;
-    hence contradiction by A1,A19,A18,A20,Def18;
+    hence contradiction by A1,A19,A18,A20,Def16;
   end;
   assume
 A21: for x being Element of FT st x in A ex S being FinSequence of bool
@@ -861,7 +860,7 @@ A31: len S = k + 1 by A27,NAT_1:6;
   B^b /\ C = {} by A26,XBOOLE_0:def 7;
   then
 A32: B^b /\ A = B^b /\ B \/ {} by A22,XBOOLE_1:23
-    .= B by Th18,XBOOLE_1:28;
+    .= B by Th13,XBOOLE_1:28;
 A33: now
     let i be Element of NAT;
     assume
@@ -870,7 +869,7 @@ A34: P[i];
     proof
       assume
 A35:  i+1 < len S;
-      then S/.(i+1)^b c= B^b by A34,Th19,NAT_1:13;
+      then S/.(i+1)^b c= B^b by A34,Th14,NAT_1:13;
       then S/.(i+1)^b /\ A c= B^b /\ A by XBOOLE_1:26;
       hence thesis by A32,A29,A35;
     end;
@@ -890,7 +889,7 @@ A40: A = B by A39,A38,XBOOLE_0:def 10;
   hence contradiction by A22,A24,A40,XBOOLE_1:7,28;
 end;
 
-theorem Th22:
+theorem Th16:
   ((A`)^i)` = A^b
 proof
   for x being set holds x in ((A`)^i)` iff x in A^b
@@ -913,16 +912,16 @@ A3:   not z in A` by TARSKI:def 3;
     assume
 A4: x in A^b;
     then reconsider y=x as Element of FT;
-    U_FT y meets A by A4,Th13;
+    U_FT y meets A by A4,Th8;
     then ex z being set st z in U_FT y & z in A by XBOOLE_0:3;
     then not U_FT y c= A` by XBOOLE_0:def 5;
-    then not y in (A`)^i by Th12;
+    then not y in (A`)^i by Th7;
     hence thesis by SUBSET_1:29;
   end;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th23:
+theorem Th17:
   ((A`)^b)` = A^i
 proof
   for x being set holds x in ((A`)^b)` iff x in A^i
@@ -943,11 +942,11 @@ A1:   x in ((A`)^b)`;
     assume
 A2: x in A^i;
     then reconsider y=x as Element of FT;
-    U_FT y c= A by A2,Th12;
+    U_FT y c= A by A2,Th7;
     then U_FT y \ A = {} by XBOOLE_1:37;
     then U_FT y /\ A` = {} by SUBSET_1:13;
     then U_FT y misses A` by XBOOLE_0:def 7;
-    then not y in (A`)^b by Th13;
+    then not y in (A`)^b by Th8;
     hence thesis by SUBSET_1:29;
   end;
   hence thesis by TARSKI:1;
@@ -964,10 +963,10 @@ proof
       assume
 A1:   x in A^delta;
       then reconsider y=x as Element of FT;
-      U_FT y meets A` by A1,Th10;
+      U_FT y meets A` by A1,Th5;
       then
 A2:   x in (A`)^b;
-      U_FT y meets A by A1,Th10;
+      U_FT y meets A by A1,Th5;
       then x in A^b;
       hence thesis by A2,XBOOLE_0:def 4;
     end;
@@ -976,9 +975,9 @@ A3: x in (A^b) /\ ((A`)^b);
     then reconsider y=x as Element of FT;
     x in ((A`)^b) by A3,XBOOLE_0:def 4;
     then
-A4: U_FT y meets A` by Th13;
+A4: U_FT y meets A` by Th8;
     x in A^b by A3,XBOOLE_0:def 4;
-    then U_FT y meets A by Th13;
+    then U_FT y meets A by Th8;
     hence thesis by A4;
   end;
   hence thesis by TARSKI:1;
@@ -995,13 +994,13 @@ proof
       assume
 A1:   x in (A`)^delta;
       then reconsider y=x as Element of FT;
-      U_FT y meets (A`) & U_FT y meets (A`)` by A1,Th10;
+      U_FT y meets (A`) & U_FT y meets (A`)` by A1,Th5;
       hence thesis;
     end;
     assume
 A2: x in A^delta;
     then reconsider y=x as Element of FT;
-    U_FT y meets (A`)` & U_FT y meets A` by A2,Th10;
+    U_FT y meets (A`)` & U_FT y meets A` by A2,Th5;
     hence thesis;
   end;
   hence thesis by TARSKI:1;
@@ -1011,7 +1010,7 @@ theorem
   x in A^s implies not x in (A \ {x})^b
 proof
   assume x in A^s;
-  then A misses (U_FT x \ {x}) by Th14;
+  then A misses (U_FT x \ {x}) by Th9;
   then A /\ (U_FT x \ {x}) = {} by XBOOLE_0:def 7;
   then
 A1: (A /\ U_FT x) \ {x} = {} by XBOOLE_1:49;
@@ -1029,7 +1028,7 @@ A1: (A /\ U_FT x) \ {x} = {} by XBOOLE_1:49;
       hence (A \ {x}) misses U_FT x by XBOOLE_0:def 7;
     end;
   end;
-  hence thesis by Th13;
+  hence thesis by Th8;
 end;
 
 theorem
@@ -1042,14 +1041,14 @@ A2: card A <> 1;
 A3: z in A^s by A1,SUBSET_1:4;
   set C = {z};
   set B = A \ {z};
-  card {z} = 1 & A <> {} by A3,Th14,CARD_1:30;
+  card {z} = 1 & A <> {} by A3,Th9,CARD_1:30;
   then
 A4: B <> {} by A2,ZFMISC_1:58;
-  z in A by A3,Th14;
+  z in A by A3,Th9;
   then {z} is Subset of A by SUBSET_1:41;
   then
 A5: A = B \/ C by XBOOLE_1:45;
-A6: (U_FT z \ {z}) misses A by A3,Th14;
+A6: (U_FT z \ {z}) misses A by A3,Th9;
 A7: B^b misses C
   proof
     assume B^b meets C;
@@ -1058,7 +1057,7 @@ A8: x in B^b and
 A9: x in C by XBOOLE_0:3;
     reconsider x as Element of FT by A8;
 A10: x = z by A9,TARSKI:def 1;
-    U_FT x meets B by A8,Th13;
+    U_FT x meets B by A8,Th8;
     then consider y being set such that
 A11: y in U_FT x and
 A12: y in B by XBOOLE_0:3;
@@ -1071,7 +1070,7 @@ A13: ex w being set st w in (U_FT z \ {z}) /\ B by XBOOLE_0:4;
     hence contradiction by A6,A13,XBOOLE_0:4;
   end;
   B misses C by XBOOLE_1:79;
-  hence thesis by A5,A4,A7,Def18;
+  hence thesis by A5,A4,A7,Def16;
 end;
 
 theorem
@@ -1084,7 +1083,7 @@ proof
 A1: x in A^i;
   then reconsider y=x as Element of FT;
 A2: y in U_FT y by Def4;
-  U_FT y c= A by A1,Th12;
+  U_FT y c= A by A1,Th7;
   hence thesis by A2;
 end;
 
@@ -1093,9 +1092,9 @@ theorem
 proof
   assume A is open;
   then
-A1: A = A^i by Def16;
-  A^i = ((A`)^b)` by Th23;
-  hence thesis by A1,Def17;
+A1: A = A^i by Def14;
+  A^i = ((A`)^b)` by Th17;
+  hence thesis by A1,Def15;
 end;
 
 theorem
@@ -1103,7 +1102,7 @@ theorem
 proof
   assume A is closed;
   then
-A1: A = A^b by Def17;
-  A^b = ((A`)^i)` by Th22;
-  hence thesis by A1,Def16;
+A1: A = A^b by Def15;
+  A^b = ((A`)^i)` by Th16;
+  hence thesis by A1,Def14;
 end;

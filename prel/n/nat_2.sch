@@ -13,6 +13,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -46,7 +47,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
+<Func kind="K" nr="126">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -55,7 +56,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="68">
+<Func kind="K" nr="66">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Num nr="1"/>
@@ -92,15 +93,15 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="68">
+<Func kind="K" nr="66">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="68">
+<Func kind="K" nr="66">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="99">
+<Func kind="K" nr="107">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -189,7 +190,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="99">
+<Func kind="K" nr="107">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

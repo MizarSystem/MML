@@ -2,7 +2,7 @@
 ::  by JingChao Chen and Yatsuka Nakamura
 ::
 :: Received June 17, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,22 +18,24 @@ environ
       CIRCUIT2, RELAT_1, FUNCT_1, CARD_1, FUNCOP_1, FUNCT_4, XBOOLE_0,
       SCMFSA6B, NAT_1, XXREAL_0, ARYTM_3, AMI_3, SF_MASTR, GRAPHSP, MSUALG_1,
       AMISTD_2, TURING_1, STRUCT_0, VALUED_1, SCMFSA6C, SCMFSA7B, UNIALG_2,
-      SCMFSA8B, ARYTM_1, SCMFSA8C, SCMFSA8A, SCM_HALT, PARTFUN1, SCMNORM,
-      RELOC, COMPOS_1;
+      SCMFSA8B, ARYTM_1, SCMFSA8C, SCMFSA8A, SCM_HALT, PARTFUN1, EXTPRO_1,
+      RELOC, COMPOS_1, SCMPDS_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, PBOOLE,
-      VALUED_1, STRUCT_0, MEMSTR_0, COMPOS_1, EXTPRO_1, AMISTD_1, AMISTD_2,
-      SCMFSA_2, FUNCOP_1, SCMFSA6B, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B,
-      SFMASTR1, SCMFSA8C, SCMFSA7B, NAT_D, SCMFSA_3, SCMFSA6C, XXREAL_0;
+      ORDINAL1, NAT_1, RELAT_1, FINSEQ_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7,
+      PBOOLE, VALUED_1, STRUCT_0, MEMSTR_0, COMPOS_0, COMPOS_1, EXTPRO_1,
+      AMISTD_1, AMISTD_2, SCMFSA_2, FUNCOP_1, SCMFSA6B, SCMFSA6A, SF_MASTR,
+      SCMFSA8A, SCMFSA8B, SFMASTR1, SCMFSA8C, SCMFSA7B, NAT_D, SCMFSA_3,
+      SCMFSA6C, XXREAL_0, SCMFSA_M;
  constructors SFMASTR1, DOMAIN_1, XXREAL_0, REAL_1, SCM_1, SCMFSA_3, SCMFSA6A,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, AMISTD_1,
       AMISTD_2, NAT_D, RELSET_1, VALUED_1, SCMFSA7B, SCMFSA_9, AMISTD_5,
-      PBOOLE, PRE_POLY, MEMSTR_0;
+      PBOOLE, PRE_POLY, MEMSTR_0, SCMFSA_1, SCMFSA_M, FUNCT_7;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
       SCMFSA8A, SCMFSA8C, SCMFSA_9, ORDINAL1, RELAT_1, SCMFSA10, AMISTD_2,
       COMPOS_1, SFMASTR1, EXTPRO_1, SCMFSA_4, PBOOLE, FUNCT_4, FUNCT_7,
-      PRE_POLY, STRUCT_0, FUNCOP_1, MEMSTR_0;
+      PRE_POLY, STRUCT_0, FUNCOP_1, MEMSTR_0, FINSEQ_1, AMI_3, COMPOS_0,
+      SCMFSA_M;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -71,9 +73,7 @@ definition
   for k being Element of NAT holds (Comput(p,s,k)).intloc 0 = 1;
 end;
 
-theorem :: SCM_HALT:1
-  for x being set,i,m,n being Element of NAT st x in dom (((intloc
-  i) .--> m) +* Start-At(n,SCM+FSA)) holds x=intloc i or x=IC SCM+FSA;
+canceled;
 
 theorem :: SCM_HALT:2
   Macro halt SCM+FSA is InitHalting;
@@ -81,10 +81,6 @@ theorem :: SCM_HALT:2
 registration
   cluster InitHalting for Program of SCM+FSA;
 end;
-
-theorem :: SCM_HALT:3
-  for I being Program of SCM+FSA,s being State of SCM+FSA st
-  Initialize ((intloc 0) .--> 1) c= s holds s.intloc 0 =1;
 
 registration
   cluster paraclosed -> InitClosed for Program of SCM+FSA;
@@ -99,6 +95,8 @@ registration
   cluster keepInt0_1 -> InitClosed for Program of SCM+FSA;
   cluster keeping_0 -> keepInt0_1 for Program of SCM+FSA;
 end;
+
+canceled;
 
 theorem :: SCM_HALT:4
   for I being InitHalting Program of SCM+FSA, a being read-write
@@ -166,7 +164,7 @@ theorem :: SCM_HALT:10
   SCM+FSA st Initialize ((intloc 0) .--> 1) c= s & I c= p &
    p halts_on s
    for m st m <= LifeSpan(p,s) holds
-   Comput(p,s,m) =  Comput(p+*(I ';' J),s,m);
+   Comput(p,s,m) =  Comput(p+*(I ";" J),s,m);
 
 
 
@@ -197,12 +195,12 @@ theorem :: SCM_HALT:14
    for J being Program of SCM+FSA, k being Element of NAT
     st k <= LifeSpan(p +* I,Initialized s )
    holds  Comput(p +* I, (Initialized s),k)
-    =  Comput(p +* (I ';' J), (Initialized s),k);
+    =  Comput(p +* (I ";" J), (Initialized s),k);
 
 theorem :: SCM_HALT:15
   for I being keepInt0_1 InitHalting Program of SCM+FSA, J being
 InitHalting Program of SCM+FSA, s being State of SCM+FSA st
- Initialize ((intloc 0) .--> 1) c= s & I ';' J c= p
+ Initialize ((intloc 0) .--> 1) c= s & I ";" J c= p
   holds IC Comput(p, s,LifeSpan(p +* I,s) + 1) =  card I &
    DataPart Comput(p, s,LifeSpan(p +* I,s) + 1) =
     DataPart(Comput(p +* I, s,LifeSpan(p +* I,s))
@@ -217,30 +215,30 @@ Result(p +* I,s) +*Initialize ((intloc 0) .--> 1)) & (J is keeping_0 implies
 registration
   let I be keepInt0_1 InitHalting Program of SCM+FSA, J be InitHalting Program
   of SCM+FSA;
-  cluster I ';' J -> InitHalting;
+  cluster I ";" J -> InitHalting;
 end;
 
 theorem :: SCM_HALT:16
   for I being keepInt0_1 Program of SCM+FSA st p+*I halts_on s
   for J being InitClosed Program of SCM+FSA st
-   Initialize ((intloc 0) .--> 1) c= s & I ';' J c= p
+   Initialize ((intloc 0) .--> 1) c= s & I ";" J c= p
 for k being Element of NAT holds (Comput(p +* I +* J,
 (Result(p +* I,s) +* Initialize ((intloc 0) .--> 1)),k) +*
   Start-At (IC Comput(p +* I +* J, (
   Result(p +* I,s) +* Initialize ((intloc 0) .--> 1)),k) + card I,SCM+FSA))
-  =  Comput(p +* (I ';' J), s,LifeSpan(p +* I,s)+1+k);
+  =  Comput(p +* (I ";" J), s,LifeSpan(p +* I,s)+1+k);
 
 theorem :: SCM_HALT:17
   for I being keepInt0_1 Program of SCM+FSA
    st not p+*I halts_on Initialized s
  for J being Program of SCM+FSA, k being Element of NAT
   holds  Comput(p +* I, Initialized s,k)
-   =  Comput(p +* (I ';' J), Initialized s,k);
+   =  Comput(p +* (I ";" J), Initialized s,k);
 
 theorem :: SCM_HALT:18
   for I being keepInt0_1 InitHalting Program of SCM+FSA, J being
   InitHalting Program of SCM+FSA holds
-   LifeSpan(p +* (I ';' J),Initialized s)
+   LifeSpan(p +* (I ";" J),Initialized s)
      = LifeSpan(p+*I,Initialized s) + 1 +
        LifeSpan(p +* I +* J,
            Result(p+*I,Initialized s)
@@ -249,7 +247,7 @@ theorem :: SCM_HALT:18
 theorem :: SCM_HALT:19
   for I being keepInt0_1 InitHalting Program of SCM+FSA, J being
 InitHalting Program of SCM+FSA holds
- IExec(I ';' J,p,s) = IncIC(IExec(J,p,IExec(I,p,s)),card I);
+ IExec(I ";" J,p,s) = IncIC(IExec(J,p,IExec(I,p,s)),card I);
 
 registration
   let i be parahalting Instruction of SCM+FSA;
@@ -259,51 +257,51 @@ end;
 registration
   let i be parahalting Instruction of SCM+FSA, J be parahalting Program of
   SCM+FSA;
-  cluster i ';' J -> InitHalting;
+  cluster i ";" J -> InitHalting;
 end;
 
 registration
   let i be keeping_0 parahalting Instruction of SCM+FSA, J be InitHalting
   Program of SCM+FSA;
-  cluster i ';' J -> InitHalting;
+  cluster i ";" J -> InitHalting;
 end;
 
 registration
   let I, J be keepInt0_1 Program of SCM+FSA;
-  cluster I ';' J -> keepInt0_1;
+  cluster I ";" J -> keepInt0_1;
 end;
 
 registration
   let j be keeping_0 parahalting Instruction of SCM+FSA, I be keepInt0_1
   InitHalting Program of SCM+FSA;
-  cluster I ';' j -> InitHalting keepInt0_1;
+  cluster I ";" j -> InitHalting keepInt0_1;
 end;
 
 registration
   let i be keeping_0 parahalting Instruction of SCM+FSA, J be keepInt0_1
   InitHalting Program of SCM+FSA;
-  cluster i ';' J -> InitHalting keepInt0_1;
+  cluster i ";" J -> InitHalting keepInt0_1;
 end;
 
 registration
   let j be parahalting Instruction of SCM+FSA, I be parahalting Program of
   SCM+FSA;
-  cluster I ';' j -> InitHalting;
+  cluster I ";" j -> InitHalting;
 end;
 
 registration
   let i,j be parahalting Instruction of SCM+FSA;
-  cluster i ';' j -> InitHalting;
+  cluster i ";" j -> InitHalting;
 end;
 
 theorem :: SCM_HALT:20
   for I being keepInt0_1 InitHalting Program of SCM+FSA, J being
-InitHalting Program of SCM+FSA holds IExec(I ';' J,p,s).a
+InitHalting Program of SCM+FSA holds IExec(I ";" J,p,s).a
  = IExec(J,p,IExec(I,p,s)).a;
 
 theorem :: SCM_HALT:21
   for I being keepInt0_1 InitHalting Program of SCM+FSA, J being
-InitHalting Program of SCM+FSA holds IExec(I ';' J,p,s).f
+InitHalting Program of SCM+FSA holds IExec(I ";" J,p,s).f
  = IExec(J,p,IExec(I,p,s)).f;
 
 theorem :: SCM_HALT:22
@@ -312,12 +310,12 @@ theorem :: SCM_HALT:22
 
 theorem :: SCM_HALT:23
   for I being keepInt0_1 InitHalting Program of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(I ';' j,p,s).a
+parahalting Instruction of SCM+FSA holds IExec(I ";" j,p,s).a
  = Exec(j,IExec(I,p,s)).a;
 
 theorem :: SCM_HALT:24
   for I being keepInt0_1 InitHalting Program of SCM+FSA, j being
-parahalting Instruction of SCM+FSA holds IExec(I ';' j,p,s).f
+parahalting Instruction of SCM+FSA holds IExec(I ";" j,p,s).f
  = Exec(j,IExec(I,p,s)).f;
 
 definition
@@ -364,13 +362,13 @@ end;
 theorem :: SCM_HALT:28
   for s being State of SCM+FSA, i being keeping_0 parahalting
   Instruction of SCM+FSA, J being InitHalting Program of SCM+FSA, a being
-  Int-Location holds IExec(i ';' J,p,s).a
+  Int-Location holds IExec(i ";" J,p,s).a
    = IExec(J,p,Exec(i,Initialized s)).a;
 
 theorem :: SCM_HALT:29
   for s being State of SCM+FSA, i being keeping_0 parahalting
   Instruction of SCM+FSA, J being InitHalting Program of SCM+FSA, f being
-  FinSeq-Location holds IExec(i ';' J,p,s).f
+  FinSeq-Location holds IExec(i ";" J,p,s).f
    = IExec(J,p,Exec(i,Initialized s)).f;
 
 theorem :: SCM_HALT:30
@@ -538,9 +536,9 @@ theorem :: SCM_HALT:53
 theorem :: SCM_HALT:54
   for s be State of SCM+FSA,I be keepInt0_1 InitHalting Program of
   SCM+FSA, a being read-write Int-Location st I does not destroy a holds
-Comput(p +* (I ';' SubFrom(a,intloc 0)),
+Comput(p +* (I ";" SubFrom(a,intloc 0)),
  Initialize Initialized s,
- LifeSpan(p +* (I ';' SubFrom(a,intloc 0)),
+ LifeSpan(p +* (I ";" SubFrom(a,intloc 0)),
  Initialize Initialized s)).a
   = s.a - 1;
 
@@ -584,8 +582,7 @@ theorem :: SCM_HALT:59
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
   is_closed_onInit s,p & I is_halting_onInit s,p
    holds CurInstr(p +* loop I,
-   Comput(p +* loop I, Initialized s,
-LifeSpan(p+*I,Initialized s)))
+   Comput(p +* loop I, Initialized s, LifeSpan(p+*I,Initialized s)))
     = goto  0 & for m
   being Element of NAT st
    m <= LifeSpan(p+*I,Initialized s)
@@ -597,13 +594,13 @@ theorem :: SCM_HALT:60
   for I being good InitHalting Program
 of SCM+FSA, a being read-write Int-Location st
    I does not destroy a & s.intloc 0 = 1 &
-   s.a > 0 holds loop if=0(a,Goto  2,I ';' SubFrom(a,intloc 0))
+   s.a > 0 holds loop if=0(a,Goto  2,I ";" SubFrom(a,intloc 0))
   is_pseudo-closed_on s,p;
 
 theorem :: SCM_HALT:61
   for s being State of SCM+FSA, I being good InitHalting Program of
   SCM+FSA, a being read-write Int-Location st I does not destroy a & s.a > 0
-  holds loop if=0(a,Goto  2,I ';' SubFrom(a,intloc 0))
+  holds loop if=0(a,Goto  2,I ";" SubFrom(a,intloc 0))
   is_pseudo-closed_on Initialized s,p;
 
 theorem :: SCM_HALT:62
@@ -628,9 +625,9 @@ theorem :: SCM_HALT:64
    p2 being Instruction-Sequence of SCM+FSA,
    k being Element of NAT st
    s2 = Initialized s &
-   p2 = p +* loop if=0(a,Goto 2, I ';' SubFrom(a,intloc 0)) &
+   p2 = p +* loop if=0(a,Goto 2, I ";" SubFrom(a,intloc 0)) &
    k =
-LifeSpan(p +* (if=0(a,Goto 2, I ';' SubFrom(a,intloc 0))),Initialized s)
+LifeSpan(p +* (if=0(a,Goto 2, I ";" SubFrom(a,intloc 0))),Initialized s)
   + 1 & Comput(p2,s2,k).a = s.a - 1 & Comput(p2,s2,k)
 .intloc 0 = 1 & (for b
 being read-write Int-Location st b <> a holds Comput(p2,s2,k).b =
@@ -639,7 +636,7 @@ IExec(I,p,s).
 IExec(I,p,s).f) &
 IC Comput(p2,s2,k) =  0 & for n being Element of NAT st n <= k
 holds IC
-Comput(p2, s2,n) in dom loop if=0(a,Goto 2,I ';' SubFrom(a,
+Comput(p2, s2,n) in dom loop if=0(a,Goto 2,I ";" SubFrom(a,
 intloc 0));
 
 theorem :: SCM_HALT:65
@@ -650,9 +647,9 @@ of SCM+FSA, a being read-write Int-Location st s.intloc 0 = 1 & s.a <= 0 holds
 theorem :: SCM_HALT:66
   for s being State of SCM+FSA, I being good InitHalting Program
   of SCM+FSA, a being read-write Int-Location st I does not destroy a & s.a > 0
-holds IExec(I ';' SubFrom(a,intloc 0),p,s).a = s.a - 1 &
+holds IExec(I ";" SubFrom(a,intloc 0),p,s).a = s.a - 1 &
  DataPart IExec(Times(a,I),p,s)
-  = DataPart IExec(Times(a,I),p,IExec(I ';' SubFrom(a,intloc 0),p,s));
+  = DataPart IExec(Times(a,I),p,IExec(I ";" SubFrom(a,intloc 0),p,s));
 
 theorem :: SCM_HALT:67
   for s be State of SCM+FSA, I be good InitHalting Program of SCM+FSA, f
@@ -668,13 +665,13 @@ theorem :: SCM_HALT:69
   for s be State of SCM+FSA, I be good InitHalting Program of SCM+FSA, f
 be FinSeq-Location,a be read-write Int-Location st I does not destroy a & s.a >
 0 holds IExec(Times(a,I),p,s).f
- =IExec(Times(a,I),p,IExec(I ';' SubFrom(a,intloc 0),p,s)).f;
+ =IExec(Times(a,I),p,IExec(I ";" SubFrom(a,intloc 0),p,s)).f;
 
 theorem :: SCM_HALT:70
   for s be State of SCM+FSA, I be good InitHalting Program of SCM+FSA, b
 be Int-Location,a be read-write Int-Location st I does not destroy a & s.a > 0
 holds IExec(Times(a,I),p,s).b
- =IExec(Times(a,I),p,IExec(I ';' SubFrom(a,intloc 0),p,s)).b;
+ =IExec(Times(a,I),p,IExec(I ";" SubFrom(a,intloc 0),p,s)).b;
 
 definition
   let i be Instruction of SCM+FSA;
@@ -682,10 +679,5 @@ definition
 :: SCM_HALT:def 6
 
   i does not destroy intloc 0;
-end;
-
-registration
-  let n be Element of NAT;
-  cluster intloc (n+1) -> read-write;
 end;
 

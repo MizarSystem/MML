@@ -13,19 +13,10 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="CARD_3"/>
-<ArticleID name="NAT_1"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="PROB_1"/>
-<ArticleID name="MESFUNC1"/>
 <ArticleID name="RADIX_1"/>
 <ArticleID name="RADIX_3"/>
 </Signature>
@@ -37,7 +28,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="115">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -52,7 +43,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="211">
+<Func kind="K" nr="116">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

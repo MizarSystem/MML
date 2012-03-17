@@ -2,7 +2,7 @@
 ::  by Waldemar Korczy\'nski
 ::
 :: Received August 10, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -127,7 +127,7 @@ end;
 :: The above definition defines a Petri net as a TYPE of the structure
 :: PT_net_Str. The type is not empty.
 
-theorem Th11:
+theorem Th4:
   for N being Pnet holds not (x in the carrier of N & x in the carrier' of N)
 proof
   let N be Pnet;
@@ -139,7 +139,7 @@ end;
 :: proof of the correctness of a definition of a function bellow. (See
 :: the definition of the functions Enter and Exit.)
 
-theorem Th12:
+theorem Th5:
   for N being Pnet holds [x,y] in Flow N & x in the
   carrier' of N implies y in the carrier of N
 proof
@@ -147,7 +147,7 @@ proof
   assume that
 A1: [x,y] in Flow N and
 A2: x in the carrier' of N;
-A3: not x in the carrier of N by A2,Th11;
+A3: not x in the carrier of N by A2,Th4;
   (Flow N) c= [:the carrier of N, the carrier' of N:] \/ [:the
   carrier' of N, the carrier of N:] by Def2;
   then [x,y] in [:the carrier of N, the carrier' of N:] or [x,y] in [:the
@@ -155,7 +155,7 @@ A3: not x in the carrier of N by A2,Th11;
   hence thesis by A3,ZFMISC_1:87;
 end;
 
-theorem Th13:
+theorem Th6:
   for N being Pnet holds [x,y] in Flow N & y in the
   carrier' of N implies x in the carrier of N
 proof
@@ -163,7 +163,7 @@ proof
   assume that
 A1: [x,y] in Flow N and
 A2: y in the carrier' of N;
-A3: not y in the carrier of N by A2,Th11;
+A3: not y in the carrier of N by A2,Th4;
   (Flow N) c= [:the carrier of N, the carrier' of N:] \/ [:the
   carrier' of N, the carrier of N:] by Def2;
   then [x,y] in [:the carrier of N, the carrier' of N:] or [x,y] in [:the
@@ -179,7 +179,7 @@ proof
   assume that
 A1: [x,y] in Flow N and
 A2: x in the carrier of N;
-A3: not x in the carrier' of N by A2,Th11;
+A3: not x in the carrier' of N by A2,Th4;
   (Flow N) c= [:the carrier of N, the carrier' of N:] \/ [:the
   carrier' of N,the carrier of N :] by Def2;
   then [x,y] in [:the carrier' of N, the carrier of N:] or [x,y] in [:the
@@ -195,7 +195,7 @@ proof
   assume that
 A1: [x,y] in Flow N and
 A2: y in the carrier of N;
-A3: not y in the carrier' of N by A2,Th11;
+A3: not y in the carrier' of N by A2,Th4;
   (Flow N) c= [:the carrier of N, the carrier' of N:] \/ [:the
   carrier' of N,the carrier of N :] by Def2;
   then [x,y] in [:the carrier' of N, the carrier of N:] or [x,y] in [:the
@@ -208,10 +208,10 @@ definition
   let x,y;
 
   pred pre N,x,y means
-  :Def6:
+  :Def4:
   [y,x] in Flow N & x in the carrier' of N;
   pred post N,x,y means
-  :Def7:
+  :Def5:
   [x,y] in Flow N & x in the carrier' of N;
 end;
 
@@ -219,7 +219,7 @@ definition
   let N be PT_net_Str;
   let x be Element of Elements(N);
   func Pre(N,x) means
-  :Def8:
+  :Def6:
   y in it iff y in Elements(N) & [y,x] in Flow N;
   existence
   proof
@@ -247,7 +247,7 @@ A3: y in Y implies y in X
     hence thesis by A3,TARSKI:1;
   end;
   func Post(N,x) means
-  :Def9:
+  :Def7:
   y in it iff y in Elements(N) & [x,y] in Flow N;
   existence
   proof
@@ -276,33 +276,33 @@ A6: y in Y implies y in X
   end;
 end;
 
-theorem Th16:
+theorem Th9:
   for N being Pnet for x being Element of Elements(N) holds Pre(N,
   x) c= Elements(N)
 proof
   let N be Pnet;
   let x be Element of Elements(N);
-  for y holds y in Pre(N,x) implies y in Elements(N) by Def8;
+  for y holds y in Pre(N,x) implies y in Elements(N) by Def6;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem
   for N being Pnet for x being Element of Elements N holds Pre(N,x) c=
-  Elements N by Th16;
+  Elements N by Th9;
 
-theorem Th18:
+theorem Th11:
   for N being Pnet for x being Element of Elements(N) holds Post(N
   ,x) c= Elements(N)
 proof
   let N be Pnet;
   let x be Element of Elements(N);
-  for y holds y in Post(N,x) implies y in Elements(N) by Def9;
+  for y holds y in Post(N,x) implies y in Elements(N) by Def7;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem
   for N being Pnet for x being Element of Elements N holds Post(N,x) c=
-  Elements N by Th18;
+  Elements N by Th11;
 
 theorem
   for N being Pnet for y being Element of Elements(N) holds y in the
@@ -316,16 +316,16 @@ A2: pre N,y,x implies x in Pre(N,y)
   proof
     assume pre N,y,x;
     then
-A3: [x,y] in Flow N by Def6;
-    then x in the carrier of N by A1,Th13;
+A3: [x,y] in Flow N by Def4;
+    then x in the carrier of N by A1,Th6;
     then x in Elements(N) by XBOOLE_0:def 3;
-    hence thesis by A3,Def8;
+    hence thesis by A3,Def6;
   end;
   x in Pre(N,y) implies pre N,y,x
   proof
     assume x in Pre(N,y);
-    then [x,y] in Flow N by Def8;
-    hence thesis by A1,Def6;
+    then [x,y] in Flow N by Def6;
+    hence thesis by A1,Def4;
   end;
   hence thesis by A2;
 end;
@@ -342,16 +342,16 @@ A2: post N,y,x implies x in Post(N,y)
   proof
     assume post N,y,x;
     then
-A3: [y,x] in Flow N by Def7;
-    then x in the carrier of N by A1,Th12;
+A3: [y,x] in Flow N by Def5;
+    then x in the carrier of N by A1,Th5;
     then x in Elements(N) by XBOOLE_0:def 3;
-    hence thesis by A3,Def9;
+    hence thesis by A3,Def7;
   end;
   x in Post(N,y) implies post N,y,x
   proof
     assume x in Post(N,y);
-    then [y,x] in Flow N by Def9;
-    hence thesis by A1,Def7;
+    then [y,x] in Flow N by Def7;
+    hence thesis by A1,Def5;
   end;
   hence thesis by A2;
 end;
@@ -362,18 +362,18 @@ definition
   assume
 A1: Elements(N) <> {};
   func enter(N,x) means
-  :Def10:
+  :Def8:
   (x in the carrier of N implies it = {x}) & (x in
   the carrier' of N implies it = Pre(N,x));
   existence
   proof
-    not(x in the carrier of N & x in the carrier' of N) by Th11;
+    not(x in the carrier of N & x in the carrier' of N) by Th4;
     hence thesis;
   end;
   uniqueness by A1,XBOOLE_0:def 3;
 end;
 
-theorem Th22:
+theorem Th15:
   for N being Pnet for x being Element of Elements(N) holds
   Elements(N) <> {} implies enter(N,x) ={x} or enter(N,x) = Pre(N,x)
 proof
@@ -381,10 +381,10 @@ proof
   let x be Element of Elements(N);
   assume Elements(N) <> {};
   then x in (the carrier of N) or x in (the carrier' of N) by XBOOLE_0:def 3;
-  hence thesis by Def10;
+  hence thesis by Def8;
 end;
 
-theorem Th23:
+theorem Th16:
   for N being Pnet for x being Element of Elements(N) holds
   Elements(N) <> {} implies enter(N,x) c= Elements(N)
 proof
@@ -400,13 +400,13 @@ A3: for y holds y in {x} implies y in Elements(N) by TARSKI:def 1;
     assume enter(N,x) ={x};
     hence thesis by A3,TARSKI:def 3;
   end;
-  enter(N,x) ={x} or enter(N,x) = Pre(N,x) by A1,Th22;
-  hence thesis by A2,Th16;
+  enter(N,x) ={x} or enter(N,x) = Pre(N,x) by A1,Th15;
+  hence thesis by A2,Th9;
 end;
 
 theorem
   for N being Pnet for x being Element of Elements N holds Elements N <>
-  {} implies enter(N,x) c= Elements N by Th23;
+  {} implies enter(N,x) c= Elements N by Th16;
 
 definition
   let N be Pnet;
@@ -414,18 +414,18 @@ definition
   assume
 A1: Elements(N) <> {};
   func exit(N,x) -> set means
-  :Def11:
+  :Def9:
   (x in the carrier of N implies it = {x})
   & (x in the carrier' of N implies it = Post(N,x));
   existence
   proof
-    not(x in the carrier of N & x in the carrier' of N) by Th11;
+    not(x in the carrier of N & x in the carrier' of N) by Th4;
     hence thesis;
   end;
   uniqueness by A1,XBOOLE_0:def 3;
 end;
 
-theorem Th25:
+theorem Th18:
   for N being Pnet for x being Element of Elements(N) holds
   Elements(N) <> {} implies exit(N,x) ={x} or exit(N,x) = Post(N,x)
 proof
@@ -433,10 +433,10 @@ proof
   let x be Element of Elements(N);
   assume Elements(N) <> {};
   then x in (the carrier of N) or x in (the carrier' of N) by XBOOLE_0:def 3;
-  hence thesis by Def11;
+  hence thesis by Def9;
 end;
 
-theorem Th26:
+theorem Th19:
   for N being Pnet for x being Element of Elements(N) holds
   Elements(N) <> {} implies exit(N,x) c= Elements(N)
 proof
@@ -452,13 +452,13 @@ A3: for y holds y in {x} implies y in Elements(N) by TARSKI:def 1;
     assume exit(N,x) ={x};
     hence thesis by A3,TARSKI:def 3;
   end;
-  exit(N,x) ={x} or exit(N,x) = Post(N,x) by A1,Th25;
-  hence thesis by A2,Th18;
+  exit(N,x) ={x} or exit(N,x) = Post(N,x) by A1,Th18;
+  hence thesis by A2,Th11;
 end;
 
 theorem
   for N being Pnet for x being Element of Elements N holds Elements N <>
-  {} implies exit(N,x) c= Elements N by Th26;
+  {} implies exit(N,x) c= Elements N by Th19;
 
 definition
   let N be Pnet;
@@ -531,7 +531,7 @@ definition
   let N be Pnet;
   let X be set;
   func Entr(N,X) means
-  :Def15:
+  :Def13:
   x in it iff x c= Elements N & ex y being
   Element of Elements N st y in X & x = enter(N,y);
   existence
@@ -570,7 +570,7 @@ A4: x in Y implies x in W
     hence thesis by A4,TARSKI:1;
   end;
   func Ext(N,X) means
-  :Def16:
+  :Def14:
   x in it iff x c= Elements N & ex y being Element
   of Elements N st y in X & x = exit(N,y);
   existence
@@ -610,7 +610,7 @@ A8: x in Y implies x in W
   end;
 end;
 
-theorem Th28:
+theorem Th21:
   for N being Pnet for x being Element of Elements(N) for X being
   set holds Elements(N) <> {} & x in X implies enter(N,x) in Entr(N,X)
 proof
@@ -620,11 +620,11 @@ proof
   assume that
 A1: Elements(N) <> {} and
 A2: x in X;
-  enter(N,x) c= Elements N by A1,Th23;
-  hence thesis by A2,Def15;
+  enter(N,x) c= Elements N by A1,Th16;
+  hence thesis by A2,Def13;
 end;
 
-theorem Th29:
+theorem Th22:
   for N being Pnet for x being Element of Elements(N) for X being
   set holds Elements(N) <> {} & x in X implies exit(N,x) in Ext(N,X)
 proof
@@ -634,8 +634,8 @@ proof
   assume that
 A1: Elements(N) <> {} and
 A2: x in X;
-  exit(N,x) c= Elements N by A1,Th26;
-  hence thesis by A2,Def16;
+  exit(N,x) c= Elements N by A1,Th19;
+  hence thesis by A2,Def14;
 end;
 
 definition
@@ -664,7 +664,7 @@ A1: x in Input(N,X) implies ex y being Element of Elements(N) st y in X & x
     then consider y being set such that
 A2: x in y and
 A3: y in Entr(N,X) by TARSKI:def 4;
-    ex z being Element of Elements(N) st z in X & y = enter(N,z) by A3,Def15;
+    ex z being Element of Elements(N) st z in X & y = enter(N,z) by A3,Def13;
     hence thesis by A2;
   end;
   assume
@@ -675,7 +675,7 @@ A4: X c= Elements(N);
     given y being Element of Elements(N) such that
 A5: y in X and
 A6: x in enter(N,y);
-    enter(N,y) in Entr(N,X) by A4,A5,Th28;
+    enter(N,y) in Entr(N,X) by A4,A5,Th21;
     hence thesis by A6,TARSKI:def 4;
   end;
   hence thesis by A1;
@@ -696,7 +696,7 @@ A1: x in Output(N,X) implies ex y being Element of Elements(N) st y in X & x
     then consider y being set such that
 A2: x in y and
 A3: y in Ext(N,X) by TARSKI:def 4;
-    ex z being Element of Elements(N) st z in X & y = exit(N,z) by A3,Def16;
+    ex z being Element of Elements(N) st z in X & y = exit(N,z) by A3,Def14;
     hence thesis by A2;
   end;
   assume
@@ -707,7 +707,7 @@ A4: X c= Elements(N);
     given y being Element of Elements(N) such that
 A5: y in X and
 A6: x in exit(N,y);
-    exit(N,y) in Ext(N,X) by A4,A5,Th29;
+    exit(N,y) in Ext(N,X) by A4,A5,Th22;
     hence thesis by A6,TARSKI:def 4;
   end;
   hence thesis by A1;
@@ -732,11 +732,11 @@ A2: (ex y being Element of Elements(N) st y in X & y in the carrier'
 A3:   y in X and
 A4:   y in the carrier' of N and
 A5:   pre N,y,x;
-      [x,y] in Flow N by A5,Def6;
-      then x in Pre(N,y) by A4,Def8;
+      [x,y] in Flow N by A5,Def4;
+      then x in Pre(N,y) by A4,Def6;
       then
-A6:   x in enter(N,y) by A4,Def10;
-      enter(N,y) in Entr(N,X) by A3,Th28;
+A6:   x in enter(N,y) by A4,Def8;
+      enter(N,y) in Entr(N,X) by A3,Th21;
       hence thesis by A6,TARSKI:def 4;
     end;
 A7: x in X & x in the carrier of N implies x in Input(N,X)
@@ -744,9 +744,9 @@ A7: x in X & x in the carrier of N implies x in Input(N,X)
       assume that
 A8:   x in X and
 A9:   x in the carrier of N;
-      enter(N,x) = {x} & {x} c= Elements(N) by A9,Def10,ZFMISC_1:31;
+      enter(N,x) = {x} & {x} c= Elements(N) by A9,Def8,ZFMISC_1:31;
       then
-A10:  {x} in Entr(N,X) by A8,Def15;
+A10:  {x} in Entr(N,X) by A8,Def13;
       x in {x} by TARSKI:def 1;
       hence thesis by A10,TARSKI:def 4;
     end;
@@ -766,19 +766,19 @@ A12: y in Entr(N,X) and
 A13: x in y;
     consider z being Element of Elements(N) such that
 A14: z in X and
-A15: y = enter(N,z) by A12,Def15;
-A16: z in the carrier' of N implies y = Pre(N,z) by A15,Def10;
+A15: y = enter(N,z) by A12,Def13;
+A16: z in the carrier' of N implies y = Pre(N,z) by A15,Def8;
 A17: z in the carrier' of N implies ex y being Element of Elements(N)
     st y in X & y in the carrier' of N & pre N,y,x
     proof
       assume
 A18:  z in the carrier' of N;
       take z;
-      [x,z] in Flow N by A13,A16,A18,Def8;
-      hence thesis by A14,A18,Def6;
+      [x,z] in Flow N by A13,A16,A18,Def6;
+      hence thesis by A14,A18,Def4;
     end;
 A19: z in the carrier of N or z in the carrier' of N by A11,XBOOLE_0:def 3;
-    z in the carrier of N implies y = {z} by A15,Def10;
+    z in the carrier of N implies y = {z} by A15,Def8;
     hence thesis by A13,A14,A19,A17,TARSKI:def 1;
   end;
   hence thesis by A1;
@@ -803,11 +803,11 @@ A2: (ex y being Element of Elements(N) st y in X & y in the carrier'
 A3:   y in X and
 A4:   y in the carrier' of N and
 A5:   post N,y,x;
-      [y,x] in Flow N by A5,Def7;
-      then x in Post(N,y) by A4,Def9;
+      [y,x] in Flow N by A5,Def5;
+      then x in Post(N,y) by A4,Def7;
       then
-A6:   x in exit(N,y) by A4,Def11;
-      exit(N,y) in Ext(N,X) by A3,Th29;
+A6:   x in exit(N,y) by A4,Def9;
+      exit(N,y) in Ext(N,X) by A3,Th22;
       hence thesis by A6,TARSKI:def 4;
     end;
 A7: x in X & x in the carrier of N implies x in Output(N,X)
@@ -815,9 +815,9 @@ A7: x in X & x in the carrier of N implies x in Output(N,X)
       assume that
 A8:   x in X and
 A9:   x in the carrier of N;
-      exit(N,x) = {x} & {x} c= Elements(N) by A9,Def11,ZFMISC_1:31;
+      exit(N,x) = {x} & {x} c= Elements(N) by A9,Def9,ZFMISC_1:31;
       then
-A10:  {x} in Ext(N,X) by A8,Def16;
+A10:  {x} in Ext(N,X) by A8,Def14;
       x in {x} by TARSKI:def 1;
       hence thesis by A10,TARSKI:def 4;
     end;
@@ -837,19 +837,19 @@ A12: y in Ext(N,X) and
 A13: x in y;
     consider z being Element of Elements(N) such that
 A14: z in X and
-A15: y = exit(N,z) by A12,Def16;
-A16: z in the carrier' of N implies y = Post(N,z) by A15,Def11;
+A15: y = exit(N,z) by A12,Def14;
+A16: z in the carrier' of N implies y = Post(N,z) by A15,Def9;
 A17: z in the carrier' of N implies ex y being Element of Elements(N)
     st y in X & y in the carrier' of N & post N,y,x
     proof
       assume
 A18:  z in the carrier' of N;
       take z;
-      [z,x] in Flow N by A13,A16,A18,Def9;
-      hence thesis by A14,A18,Def7;
+      [z,x] in Flow N by A13,A16,A18,Def7;
+      hence thesis by A14,A18,Def5;
     end;
 A19: z in the carrier of N or z in the carrier' of N by A11,XBOOLE_0:def 3;
-    z in the carrier of N implies y = {z} by A15,Def11;
+    z in the carrier of N implies y = {z} by A15,Def9;
     hence thesis by A13,A14,A19,A17,TARSKI:def 1;
   end;
   hence thesis by A1;

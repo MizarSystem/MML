@@ -2,7 +2,7 @@
 ::  by JingChao Chen
 ::
 :: Received June 15, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,22 +15,20 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, AMI_1, SCMPDS_2, SCMFSA_7, CARD_1, FUNCOP_1,
-      RELAT_1, FUNCT_1, NAT_1, ARYTM_3, XBOOLE_0, TARSKI, VALUED_1, SCMNORM,
-      FSM_1, INT_1, FUNCT_4, GRAPHSP, AMI_3, AMI_2, STRUCT_0, SCMPDS_1,
-      COMPLEX1, XXREAL_0, ARYTM_1, TURING_1, AMISTD_2, SCMFSA6B, MSUALG_1,
-      CIRCUIT2, SCMPDS_4, ORDINAL1, PARTFUN1, SCMFSA6C, ORDINAL4, PBOOLE,
-      FINSET_1, COMPOS_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, FINSET_1, NUMBERS,
-      XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, VALUED_1, FUNCT_4,
-      FUNCT_7, INT_1, NAT_1, INT_2, XXREAL_0, PBOOLE, STRUCT_0, MEMSTR_0,
-      COMPOS_1, EXTPRO_1, AMI_2, AMISTD_2, SCMPDS_1, SCMPDS_2;
- constructors WELLORD2, XXREAL_0, INT_2, SCMPDS_1, SCMPDS_3, DOMAIN_1,
-      RELSET_1, PRE_POLY, ORDINAL5, AMI_3, AMISTD_2, AMISTD_1, FUNCT_7,
+      RELAT_1, FUNCT_1, NAT_1, ARYTM_3, XBOOLE_0, TARSKI, VALUED_1, EXTPRO_1,
+      FSM_1, INT_1, FUNCT_4, GRAPHSP, AMI_3, AMI_2, STRUCT_0, COMPLEX1,
+      XXREAL_0, ARYTM_1, TURING_1, AMISTD_2, SCMFSA6B, MSUALG_1, CIRCUIT2,
+      SCMPDS_4, ORDINAL1, PARTFUN1, ORDINAL4, FINSET_1, COMPOS_1, GOBRD13,
       MEMSTR_0;
- registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, SCMPDS_2, AMI_2, FINSET_1, CARD_1, VALUED_1,
-      FUNCT_4, RELAT_1, PRE_POLY, AFINSQ_1, COMPOS_1, ORDINAL5, EXTPRO_1,
-      FUNCOP_1, FUNCT_7, SCMPDS_3, AMISTD_2, PBOOLE, MEMSTR_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, XTUPLE_0, SUBSET_1, CARD_1, FINSET_1,
+      NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, VALUED_1,
+      FUNCT_4, FUNCT_7, INT_1, ORDINAL1, NAT_1, INT_2, XXREAL_0, STRUCT_0,
+      MEMSTR_0, COMPOS_0, COMPOS_1, EXTPRO_1, AMI_2, SCMPDS_2;
+ constructors INT_2, SCMPDS_1, SCMPDS_3, DOMAIN_1, RELSET_1, PRE_POLY, AMI_3,
+      FUNCT_7;
+ registrations FUNCT_1, ORDINAL1, XXREAL_0, XREAL_0, NAT_1, INT_1, SCMPDS_2,
+      FINSET_1, FUNCT_4, PRE_POLY, AFINSQ_1, COMPOS_1, ORDINAL5, EXTPRO_1,
+      FUNCT_7, MEMSTR_0, AMI_3, COMPOS_0, CARD_3, STRUCT_0, RELSET_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -48,9 +46,7 @@ reserve a,b,c for Int_position,
 
 
 theorem :: SCMPDS_4:1
-  InsCode i in {0,1,4,5,6} or Exec(i,s).IC SCMPDS = succ IC s;
-
-
+  InsCode i in {0,1,4,5,6,14} or Exec(i,s).IC SCMPDS = succ IC s;
 
 theorem :: SCMPDS_4:2
   for s1,s2 being State of SCMPDS st IC s1 = IC s2 & for a being
@@ -79,10 +75,7 @@ theorem :: SCMPDS_4:6
   for s being State of SCMPDS, x being set st x in dom s holds x is
   Int_position or x = IC SCMPDS;
 
-
-
-theorem :: SCMPDS_4:7
-  for i being Element of NAT holds not i in SCM-Data-Loc;
+canceled;
 
 theorem :: SCMPDS_4:8
   for s1,s2 being State of SCMPDS holds (for a being Int_position
@@ -168,11 +161,6 @@ reserve l,l1,loc for Element of NAT;
 theorem :: SCMPDS_4:18
   not a in dom Start-At(l,SCMPDS);
 
-
-
-theorem :: SCMPDS_4:19
-  not a in dom (I+*Start-At(l,SCMPDS));
-
 definition
   let s be State of SCMPDS, li be Int_position, k be Integer;
   redefine func s+*(li,k) -> PartState of SCMPDS;
@@ -211,6 +199,8 @@ registration
   cluster parahalting for Program of SCMPDS;
 end;
 
+canceled;
+
 theorem :: SCMPDS_4:20
  for P,Q being Instruction-Sequence of SCMPDS
   st Q = P +*((IC s,succ IC s) --> (goto 1, goto -1))
@@ -240,7 +230,7 @@ definition
   pred i valid_at n means
 :: SCMPDS_4:def 8
 
-  (InsCode i= 0 implies ex k1 st i = goto k1 &
+  (InsCode i= 14 implies ex k1 st i = goto k1 &
   n+k1 >= 0) & (InsCode i= 4 implies ex a,k1,k2 st i = (a,k1)<>0_goto k2 & n+k2
 >= 0 ) & (InsCode i= 5 implies ex a,k1,k2 st i = (a,k1)<=0_goto k2 & n+k2 >= 0
   ) & (InsCode i= 6 implies ex a,k1,k2 st i = (a,k1)>=0_goto k2 & n+k2 >= 0);
@@ -249,15 +239,13 @@ end;
 reserve l for Element of NAT;
 
 definition
-  let IT be finite (the Instructions of SCMPDS)-valued NAT-defined Function;
+  let IT be finite (the InstructionsF of SCMPDS)-valued NAT-defined Function;
   attr IT is shiftable means
 :: SCMPDS_4:def 9
 
   for n,i st  n in dom IT & i=IT.(n)
    holds InsCode i <> 1 & InsCode i <> 3 & i valid_at n;
 end;
-
-
 
 theorem :: SCMPDS_4:22
   for i be Instruction of SCMPDS,m,n be Element of NAT st i
@@ -272,7 +260,7 @@ definition
   attr i is shiftable means
 :: SCMPDS_4:def 10
 
-  InsCode i = 2 or InsCode i > 6;
+  InsCode i = 2 or InsCode i <> 14 & InsCode i > 6;
 end;
 
 registration
@@ -381,8 +369,9 @@ Integer st IC s1= m & m+k1>=0 & IC s1 + n = IC s2
 theorem :: SCMPDS_4:28
   for s1,s2 being State of SCMPDS, n,m being Element of NAT, i
 being Instruction of SCMPDS holds IC s1= m & i valid_at m & InsCode i <>
-  1 & InsCode i <> 3 & IC s1 + n = IC s2 & DataPart s1 = DataPart s2 implies IC
-  Exec(i,s1) + n = IC Exec(i,s2) & DataPart Exec(i,s1) = DataPart Exec(i,s2);
+  1 & InsCode i <> 3 & IC s1 + n = IC s2 & DataPart s1 = DataPart s2 implies
+  IC Exec(i,s1) + n = IC Exec(i,s2) & DataPart Exec(i,s1) = DataPart Exec(i,s2)
+;
 
 theorem :: SCMPDS_4:29
   for P1,P2 being Instruction-Sequence of SCMPDS

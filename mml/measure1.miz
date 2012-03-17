@@ -2,7 +2,7 @@
 ::  by J\'ozef Bia{\l}as
 ::
 :: Received October 15, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,8 +19,9 @@ environ
       FUNCOP_1, ARYTM_1, RELAT_1, CARD_3, CARD_1, NAT_1, EQREL_1, PROB_2,
       SUPINF_1, MEASURE1, FUNCT_7;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
-      RELAT_1, FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NAT_1, SETFAM_1,
-      FUNCOP_1, PROB_1, PROB_2, VALUED_0, FUNCT_7, SUPINF_1, SUPINF_2;
+      RELAT_1, FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, NAT_1,
+      SETFAM_1, FUNCOP_1, PROB_1, PROB_2, VALUED_0, FUNCT_7, SUPINF_1,
+      SUPINF_2;
  constructors ENUMSET1, PARTFUN1, FUNCOP_1, FINSUB_1, REAL_1, NAT_1, PROB_2,
       SUPINF_2, SUPINF_1, RELSET_1, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
@@ -131,7 +132,7 @@ A1: x in S by SUBSET_1:4;
   end;
 end;
 
-theorem Th15:
+theorem Th4:
   for S being non empty Subset-Family of X holds meet S = X \
   union (X \ S) & union S = X \ meet (X \ S)
 proof
@@ -218,7 +219,7 @@ definition
   let IT be Subset-Family of X;
 
   redefine attr IT is compl-closed means
-  :Def3:
+  :Def1:
   for A being set holds A in IT implies X\A in IT;
   compatibility
   proof
@@ -252,14 +253,14 @@ A1: S is cup-closed compl-closed;
   assume that
 A2: A in S and
 A3: B in S;
-  X \ A in S & X \ B in S by A1,A2,A3,Def3;
+  X \ A in S & X \ B in S by A1,A2,A3,Def1;
   then
 A4: (X \ A) \/ (X \ B) in S by A1,FINSUB_1:def 1;
   A /\ B c= A by XBOOLE_1:17;
   then A /\ B = X /\ (A /\ B) by A2,XBOOLE_1:1,28
     .= X \ (X \ (A /\ B)) by XBOOLE_1:48
     .= X \ ((X \ A) \/ (X \ B)) by XBOOLE_1:54;
-  hence thesis by A1,A4,Def3;
+  hence thesis by A1,A4,Def1;
 end;
   cluster cap-closed compl-closed -> cup-closed for Subset-Family of X;
   coherence
@@ -270,13 +271,13 @@ A5: S is cap-closed compl-closed;
     let A,B be set;
     assume
 A6: A in S & B in S;
-    then X \ A in S & X \ B in S by A5,Def3;
+    then X \ A in S & X \ B in S by A5,Def1;
     then
 A7: (X \ A) /\ (X \ B) in S by A5,FINSUB_1:def 2;
     A \/ B = X /\ (A \/ B) by A6,XBOOLE_1:8,28
       .= X \ (X \ (A \/ B)) by XBOOLE_1:48
       .= X \ ((X \ A) /\ (X \ B)) by XBOOLE_1:53;
-    hence thesis by A5,A7,Def3;
+    hence thesis by A5,A7,Def1;
   end;
 end;
 
@@ -317,7 +318,7 @@ A3: A in S and
 A4: B in S;
 A5: A /\ (X \ B) = (A /\ X) \ B by XBOOLE_1:49
     .= A \ B by A3,XBOOLE_1:28;
-   X \ B in S by A4,A1,Def3;
+   X \ B in S by A4,A1,Def1;
   hence thesis by A3,A5,A2,FINSUB_1:def 2;
 end;
 end;
@@ -332,7 +333,7 @@ theorem
 definition
   let X be non empty set, F be Function of X,ExtREAL;
   redefine attr F is nonnegative means
-  :Def4:
+  :Def2:
   for A being Element of X holds 0. <= F.A;
   compatibility by SUPINF_2:39;
 end;
@@ -341,7 +342,7 @@ definition
   let X be set, S be Field_Subset of X;
   let F be Function of S,ExtREAL;
   attr F is additive means
-  :Def5:
+  :Def3:
   for A,B being Element of S st A misses B holds F.(A \/ B) = F.A + F.B;
 end;
 
@@ -364,7 +365,7 @@ A2:   M.A = 0. & M.B = 0. by FUNCOP_1:7;
     take M;
     ( for x being Element of S holds 0.<= M.x)& M.{} = 0. by FUNCOP_1:7
 ,PROB_1:4;
-    hence thesis by A1,Def4,Def5,VALUED_0:def 19;
+    hence thesis by A1,Def2,Def3,VALUED_0:def 19;
   end;
 end;
 
@@ -373,22 +374,22 @@ definition
   mode Measure of S is nonnegative additive zeroed Function of S,ExtREAL;
 end;
 
-theorem Th25:
+theorem Th8:
   for S being Field_Subset of X, M being Measure of S, A,B being
   Element of S holds A c= B implies M.A <= M.B
 proof
   let S be Field_Subset of X, M be Measure of S, A,B be Element of S;
   reconsider C = B \ A as Element of S;
-A1: 0.<= M.C by Def4;
+A1: 0.<= M.C by Def2;
   A misses C by XBOOLE_1:79;
   then
-A2: M.(A \/ C) = M.A + M.C by Def5;
+A2: M.(A \/ C) = M.A + M.C by Def3;
   assume A c= B;
   then M.B = M.A + M.C by A2,XBOOLE_1:45;
   hence thesis by A1,XXREAL_3:39;
 end;
 
-theorem Th26:
+theorem Th9:
   for S being Field_Subset of X, M being Measure of S, A,B being
   Element of S holds A c= B & M.A < +infty implies M.(B \ A) = M.B - M.A
 proof
@@ -397,9 +398,9 @@ proof
   assume that
 A1: A c= B and
 A2: M.A < +infty;
-A3: 0.<= M.A by Def4;
+A3: 0.<= M.A by Def2;
   A misses C by XBOOLE_1:79;
-  then M.(A \/ C) = M.A + M.C by Def5;
+  then M.(A \/ C) = M.A + M.C by Def3;
   then M.B = M.A + M.C by A1,XBOOLE_1:45;
   hence thesis by A2,A3,XXREAL_3:28;
 end;
@@ -429,29 +430,29 @@ definition
   coherence by FINSUB_1:def 3;
 end;
 
-theorem Th27:
+theorem Th10:
   for S being Field_Subset of X, M being Measure of S, A,B being
   Element of S holds M.(A \/ B) <= M.A + M.B
 proof
   let S be Field_Subset of X, M be Measure of S, A,B be Element of S;
   set C = B \ A;
 A1: A misses C by XBOOLE_1:79;
-A2: M.C <= M.B by Th25,XBOOLE_1:36;
+A2: M.C <= M.B by Th8,XBOOLE_1:36;
   M.(A \/ B) = M.(A \/ C) by XBOOLE_1:39
-    .= M.A + M.C by A1,Def5;
+    .= M.A + M.C by A1,Def3;
   hence thesis by A2,XXREAL_3:36;
 end;
 
 theorem
   for S being Field_Subset of X, M being Measure of S holds {} in S & X
 in S & for A,B being set st A in S & B in S holds X \ A in S & A \/ B in S & A
-  /\ B in S by Def3,FINSUB_1:def 1,def 2,PROB_1:4,5;
+  /\ B in S by Def1,FINSUB_1:def 1,def 2,PROB_1:4,5;
 
 definition
 
   let X be set, S be Field_Subset of X, M be Measure of S;
   mode measure_zero of M -> Element of S means
-    :Def7:
+    :Def4:
     M.it = 0.;
   existence
   proof
@@ -468,12 +469,12 @@ proof
   let S be Field_Subset of X, M be Measure of S, A be Element of S, B be
   measure_zero of M;
   assume A c= B;
-  then M.A <= M.B by Th25;
+  then M.A <= M.B by Th8;
   then
-A1: M.A <= 0. by Def7;
-  0.<= M.A by Def4;
+A1: M.A <= 0. by Def4;
+  0.<= M.A by Def2;
   then M.A = 0.by A1,XXREAL_0:1;
-  hence thesis by Def7;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -482,22 +483,22 @@ measure_zero of M holds A \/ B is measure_zero of M & A /\ B is measure_zero of
   M & A \ B is measure_zero of M
 proof
   let S be Field_Subset of X, M be Measure of S, A,B be measure_zero of M;
-A1: 0.<= M.(A /\ B) by Def4;
-A2: 0.<= M.(A \ B) by Def4;
-A3: M.A = 0. by Def7;
-  then M.(A \ B) <= 0.by Th25,XBOOLE_1:36;
+A1: 0.<= M.(A /\ B) by Def2;
+A2: 0.<= M.(A \ B) by Def2;
+A3: M.A = 0. by Def4;
+  then M.(A \ B) <= 0.by Th8,XBOOLE_1:36;
   then
 A4: M.(A \ B) = 0.by A2,XXREAL_0:1;
-  M.B = 0. by Def7;
-  then M.(A \/ B) <= 0.+ 0.by A3,Th27;
+  M.B = 0. by Def4;
+  then M.(A \/ B) <= 0.+ 0.by A3,Th10;
   then
 A5: M.(A \/ B) <= 0.by XXREAL_3:4;
-  0.<= M.(A \/ B) by Def4;
+  0.<= M.(A \/ B) by Def2;
   then
 A6: M.(A \/ B) = 0.by A5,XXREAL_0:1;
-  M.(A /\ B) <= 0.by A3,Th25,XBOOLE_1:17;
+  M.(A /\ B) <= 0.by A3,Th8,XBOOLE_1:17;
   then M.(A /\ B) = 0.by A1,XXREAL_0:1;
-  hence thesis by A6,A4,Def7;
+  hence thesis by A6,A4,Def4;
 end;
 
 theorem
@@ -508,18 +509,18 @@ proof
   let S be Field_Subset of X, M be Measure of S, A be Element of S, B be
   measure_zero of M;
 A1: M.A = M.((A /\ B) \/ (A \ B)) by XBOOLE_1:51;
-A2: M.B = 0.by Def7;
+A2: M.B = 0.by Def4;
   then
-A3: M.(A /\ B) <= 0.by Th25,XBOOLE_1:17;
-A4: 0.<= M.(A /\ B) by Def4;
+A3: M.(A /\ B) <= 0.by Th8,XBOOLE_1:17;
+A4: 0.<= M.(A /\ B) by Def2;
   then M.(A /\ B) = 0.by A3,XXREAL_0:1;
-  then M.A <= 0.+ M.(A \ B) by A1,Th27;
+  then M.A <= 0.+ M.(A \ B) by A1,Th10;
   then
 A5: M.A <= M.(A \ B) by XXREAL_3:4;
-  M.(A \/ B) <= M.A + 0.by A2,Th27;
+  M.(A \/ B) <= M.A + 0.by A2,Th10;
   then
 A6: M.(A \/ B) <= M.A by XXREAL_3:4;
-  M.A <= M.(A \/ B) & M.(A \ B) <= M.A by Th25,XBOOLE_1:7,36;
+  M.A <= M.(A \/ B) & M.(A \ B) <= M.A by Th8,XBOOLE_1:7,36;
   hence thesis by A4,A6,A3,A5,XXREAL_0:1;
 end;
 
@@ -527,7 +528,7 @@ end;
 ::       sigma_Field Subset of X and sigma_additive nonnegative measure
 ::
 
-theorem Th34:
+theorem Th15:
   for A being Subset of X ex F being Function of NAT,bool X st rng F = {A}
 proof
   let A be Subset of X;
@@ -535,7 +536,7 @@ proof
   thus thesis by FUNCOP_1:8;
 end;
 
-theorem Th35:
+theorem Th16:
   for A being set ex F being Function of NAT,{A} st
   for n being Element of NAT holds F.n = A
 proof
@@ -553,7 +554,7 @@ registration
     take S;
     thus S is non empty;
     {}X is Subset of X;
-    hence S is empty or ex F being Function of NAT,bool X st S = rng F by Th34;
+    hence S is empty or ex F being Function of NAT,bool X st S = rng F by Th15;
   end;
 end;
 
@@ -562,7 +563,7 @@ definition
   mode N_Sub_set_fam of X is non empty countable Subset-Family of X;
 end;
 
-theorem Th38:
+theorem Th17:
   for A,B,C being Subset of X ex F being Function of NAT,bool X st
   rng F = {A,B,C} & F.0 = A & F.1 = B & for n being Element of NAT st 1 < n
   holds F.n = C
@@ -577,11 +578,11 @@ theorem
 proof
   let A,B be Subset of X;
   ex F being Function of NAT,bool X st rng F = {A,B,{}X} & F.0 = A & F.1 = B
-  & for n being Element of NAT st 1 < n holds F.n = {}X by Th38;
+  & for n being Element of NAT st 1 < n holds F.n = {}X by Th17;
   hence thesis by SUPINF_2:def 8;
 end;
 
-theorem Th40:
+theorem Th19:
   for A,B being Subset of X ex F being Function of NAT,bool X st
   rng F = {A,B} & F.0 = A & for n being Element of NAT st 0 < n holds F.n = B
 proof
@@ -595,11 +596,11 @@ theorem
 proof
   let A,B be Subset of X;
   ex F being Function of NAT,bool X st (rng F = {A,B} & F.0 = A & for n
-  being Element of NAT st 0 < n holds F.n = B) by Th40;
+  being Element of NAT st 0 < n holds F.n = B) by Th19;
   hence thesis by SUPINF_2:def 8;
 end;
 
-theorem Th42:
+theorem Th21:
   for S being N_Sub_set_fam of X holds X \ S is N_Sub_set_fam of X
 proof
   let S be N_Sub_set_fam of X;
@@ -652,7 +653,7 @@ definition
   let IT be Subset-Family of X;
 
   attr IT is sigma-additive means
-  :Def9:
+  :Def5:
   for M being N_Sub_set_fam of X st M c= IT holds union M in IT;
 end;
 
@@ -752,7 +753,7 @@ A11:  f.n in rng f by NAT_1:51;
       e = (f.n)` by A10,PROB_1:def 2;
       hence thesis by A6,A8,A11,PROB_1:def 1;
     end;
-    then Intersection f = (union M)` & union M in F by A7,Def9,CARD_3:def 4;
+    then Intersection f = (union M)` & union M in F by A7,Def5,CARD_3:def 4;
     hence thesis by A6,PROB_1:def 1;
   end;
 end;
@@ -763,7 +764,7 @@ registration
   coherence;
 end;
 
-theorem Th49:
+theorem Th22:
   for S being non empty Subset-Family of X holds (for A being set
   holds A in S implies X\A in S) & (for M being N_Sub_set_fam of X st M c= S
   holds meet M in S) iff S is SigmaField of X
@@ -788,13 +789,13 @@ A5:     y in X \ M;
         then B`` in S by A1,A3;
         hence thesis;
       end;
-      X \ M is N_Sub_set_fam of X by Th42;
+      X \ M is N_Sub_set_fam of X by Th21;
       then X \ meet (X \ M) in S by A1,A2,A4;
-      hence thesis by Th15;
+      hence thesis by Th4;
     end;
     then reconsider
     S9 = S as non empty compl-closed sigma-additive Subset-Family
-    of X by A1,Def3,Def9;
+    of X by A1,Def1,Def5;
     S9 is SigmaField of X;
     hence S is SigmaField of X;
   end;
@@ -815,12 +816,12 @@ A9:   y in X \ M;
       then B`` in S by A6,A7,PROB_1:def 1;
       hence thesis;
     end;
-    X \ M is N_Sub_set_fam of X by Th42;
-    then union (X \ M) in S by A6,A8,Def9;
-    then X \ union (X \ M) in S by A6,Def3;
-    hence thesis by Th15;
+    X \ M is N_Sub_set_fam of X by Th21;
+    then union (X \ M) in S by A6,A8,Def5;
+    then X \ union (X \ M) in S by A6,Def1;
+    hence thesis by Th4;
   end;
-  hence thesis by A6,Def3;
+  hence thesis by A6,Def1;
 end;
 
 registration
@@ -830,7 +831,7 @@ registration
   existence
   proof
     consider F being Function of NAT,{{}} such that
-A1: for n being Element of NAT holds F.n = {} by Th35;
+A1: for n being Element of NAT holds F.n = {} by Th16;
     {} in S by PROB_1:4;
     then {{}} c= S by ZFMISC_1:31;
     then reconsider F as Function of NAT,S by FUNCT_2:7;
@@ -875,7 +876,7 @@ definition
   end;
 end;
 
-theorem Th52:
+theorem Th23:
   for S being SigmaField of X, F being Function of NAT,S holds rng
   F is N_Sub_set_fam of X
 proof
@@ -891,16 +892,16 @@ proof
   hence thesis by SUPINF_2:def 8;
 end;
 
-theorem Th53:
+theorem Th24:
   for S being SigmaField of X, F being Function of NAT,S holds
   union rng F is Element of S
 proof
   let S be SigmaField of X, F be Function of NAT,S;
-  rng F is N_Sub_set_fam of X & rng F c= S by Th52,RELAT_1:def 19;
-  hence thesis by Def9;
+  rng F is N_Sub_set_fam of X & rng F c= S by Th23,RELAT_1:def 19;
+  hence thesis by Def5;
 end;
 
-theorem Th54:
+theorem Th25:
   for Y,S being non empty set, F being Function of Y,S, M being
   Function of S,ExtREAL st M is nonnegative holds M*F is nonnegative
 proof
@@ -914,12 +915,12 @@ A1: M is nonnegative;
     let n be Element of Y;
     dom (M*F) = Y by FUNCT_2:def 1;
     then (M*F).n = M.(F.n) by FUNCT_1:12;
-    hence thesis by A1,Def4;
+    hence thesis by A1,Def2;
   end;
   hence thesis by SUPINF_2:39;
 end;
 
-theorem Th55:
+theorem Th26:
   for S being SigmaField of X, a,b being R_eal holds ex M being
 Function of S,ExtREAL st for A being Element of S holds (A = {} implies M.A = a
   ) & (A <> {} implies M.A = b)
@@ -944,16 +945,16 @@ end;
 theorem
   for S being SigmaField of X ex M being Function of S,ExtREAL st for A
   being Element of S holds (A = {} implies M.A = 0.) & (A <> {} implies M.A =
-  +infty) by Th55;
+  +infty) by Th26;
 
-theorem Th57:
+theorem Th28:
   for S being SigmaField of X ex M being Function of S,ExtREAL st
   for A being Element of S holds M.A = 0.
 proof
   let S be SigmaField of X;
   consider M being Function of S,ExtREAL such that
 A1: for A being Element of S holds (A = {} implies M.A = 0.) & (A <> {}
-  implies M.A = 0.) by Th55;
+  implies M.A = 0.) by Th26;
   take M;
   thus thesis by A1;
 end;
@@ -964,7 +965,7 @@ definition
   let F be Function of S,ExtREAL;
 
   attr F is sigma-additive means
-  :Def11:
+  :Def6:
   for s being Sep_Sequence of S holds SUM(F*s) = F.(union rng s);
 end;
 
@@ -975,11 +976,11 @@ registration
   existence
   proof
     consider M being Function of S,ExtREAL such that
-A1: for A being Element of S holds M.A = 0. by Th57;
+A1: for A being Element of S holds M.A = 0. by Th28;
     take M;
     for A being Element of S holds 0.<= M.A by A1;
     hence
-A2: M is nonnegative by Def4;
+A2: M is nonnegative by Def2;
     thus M is sigma-additive
     proof
       let F be Sep_Sequence of S;
@@ -990,10 +991,10 @@ A3:   for r being Element of NAT st 0 <= r holds (M*F).r = 0.
         then (M*F).r = M.(F.r) by FUNCT_1:12;
         hence thesis by A1;
       end;
-      M*F is nonnegative by A2,Th54;
+      M*F is nonnegative by A2,Th25;
       then
 A4:   SUM(M*F) = Ser(M*F).0 by A3,SUPINF_2:48;
-      union rng F is Element of S by Th53;
+      union rng F is Element of S by Th24;
       then
 A5:   M.(union rng F) = 0.by A1;
       Ser(M*F).0 = (M*F).0 by SUPINF_2:44;
@@ -1020,7 +1021,7 @@ non empty Subset-Family
   coherence;
 end;
 
-theorem Th60:
+theorem Th29:
   for S being SigmaField of X, M being sigma_Measure of S holds M
   is Measure of S
 proof
@@ -1037,7 +1038,7 @@ A2: A in S & B in S;
     then consider F being Function of NAT,bool X such that
 A3: rng F = {A,B,{}} and
 A4: F.0 = A & F.1 = B and
-A5: for n being Element of NAT st 1 < n holds F.n = {} by Th38;
+A5: for n being Element of NAT st 1 < n holds F.n = {} by Th17;
     {} in S by PROB_1:4;
     then for x being set holds x in {A,B,{}} implies x in S by A2,
 ENUMSET1:def 1;
@@ -1140,7 +1141,7 @@ A22:  for r being Element of NAT holds (M*F).r = M.(F.r)
     set H = M*F;
 A23: 0 + 1 = 0 + 1;
     set y1 = Ser H.1;
-A24: H is nonnegative by Th54;
+A24: H is nonnegative by Th25;
     reconsider A,B as Element of S;
     Ser H.n2 = y1 + H.n2 by SUPINF_2:44;
     then Ser H.n2 = y1 + 0.by A21
@@ -1148,9 +1149,9 @@ A24: H is nonnegative by Th54;
       .= Ser H.0 + H.1 by A23,SUPINF_2:44
       .= M.A + M.B by A21,SUPINF_2:44;
     then SUM(M*F) = M.A + M.B by A21,A24,SUPINF_2:48;
-    hence thesis by A20,Def11;
+    hence thesis by A20,Def6;
   end;
-  hence thesis by Def5;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -1160,19 +1161,19 @@ proof
   let S be SigmaField of X, M be sigma_Measure of S, A,B be Element of S;
   assume
 A1: A misses B;
-  M is Measure of S by Th60;
-  hence thesis by A1,Def5;
+  M is Measure of S by Th29;
+  hence thesis by A1,Def3;
 end;
 
-theorem Th62:
+theorem Th31:
   for S being SigmaField of X, M being sigma_Measure of S, A,B
   being Element of S st A c= B holds M.A <= M.B
 proof
   let S be SigmaField of X, M be sigma_Measure of S, A,B be Element of S;
   assume
 A1: A c= B;
-  M is Measure of S by Th60;
-  hence thesis by A1,Th25;
+  M is Measure of S by Th29;
+  hence thesis by A1,Th8;
 end;
 
 theorem
@@ -1182,23 +1183,23 @@ proof
   let S be SigmaField of X, M be sigma_Measure of S, A,B be Element of S;
   assume
 A1: A c= B & M.A < +infty;
-  M is Measure of S by Th60;
-  hence thesis by A1,Th26;
+  M is Measure of S by Th29;
+  hence thesis by A1,Th9;
 end;
 
-theorem Th64:
+theorem Th33:
   for S being SigmaField of X, M being sigma_Measure of S, A,B
   being Element of S holds M.(A \/ B) <= M.A + M.B
 proof
   let S be SigmaField of X, M be sigma_Measure of S, A,B be Element of S;
-  M is Measure of S by Th60;
-  hence thesis by Th27;
+  M is Measure of S by Th29;
+  hence thesis by Th10;
 end;
 
 theorem
   for S being SigmaField of X, M being sigma_Measure of S holds {} in S
 & X in S & for A,B being set st A in S & B in S holds X \ A in S & A \/ B in S
-  & A /\ B in S by Def3,FINSUB_1:def 1,def 2,PROB_1:4,5;
+  & A /\ B in S by Def1,FINSUB_1:def 1,def 2,PROB_1:4,5;
 
 theorem
   for S being SigmaField of X, M being sigma_Measure of S, T being
@@ -1214,14 +1215,14 @@ A1: for A being set st A in T holds A in S;
     assume x in T;
     hence thesis by A1;
   end;
-  hence thesis by Def9,Th49;
+  hence thesis by Def5,Th22;
 end;
 
 definition
 
   let X be set, S be SigmaField of X, M be sigma_Measure of S;
   mode measure_zero of M -> Element of S means
-    :Def13:
+    :Def7:
     M.it = 0.;
   existence
   proof
@@ -1240,12 +1241,12 @@ proof
   let S be SigmaField of X, M be sigma_Measure of S, A be Element of S, B be
   measure_zero of M;
   assume A c= B;
-  then M.A <= M.B by Th62;
+  then M.A <= M.B by Th31;
   then
-A1: M.A <= 0. by Def13;
-  0.<= M.A by Def4;
+A1: M.A <= 0. by Def7;
+  0.<= M.A by Def2;
   then M.A = 0.by A1,XXREAL_0:1;
-  hence thesis by Def13;
+  hence thesis by Def7;
 end;
 
 theorem
@@ -1254,22 +1255,22 @@ measure_zero of M holds A \/ B is measure_zero of M & A /\ B is measure_zero of
   M & A \ B is measure_zero of M
 proof
   let S be SigmaField of X, M be sigma_Measure of S, A,B be measure_zero of M;
-A1: 0.<= M.(A /\ B) by Def4;
-A2: 0.<= M.(A \ B) by Def4;
-A3: M.A = 0. by Def13;
-  then M.(A \ B) <= 0.by Th62,XBOOLE_1:36;
+A1: 0.<= M.(A /\ B) by Def2;
+A2: 0.<= M.(A \ B) by Def2;
+A3: M.A = 0. by Def7;
+  then M.(A \ B) <= 0.by Th31,XBOOLE_1:36;
   then
 A4: M.(A \ B) = 0.by A2,XXREAL_0:1;
-  M.B = 0. by Def13;
-  then M.(A \/ B) <= 0.+ 0.by A3,Th64;
+  M.B = 0. by Def7;
+  then M.(A \/ B) <= 0.+ 0.by A3,Th33;
   then
 A5: M.(A \/ B) <= 0.by XXREAL_3:4;
-  0.<= M.(A \/ B) by Def4;
+  0.<= M.(A \/ B) by Def2;
   then
 A6: M.(A \/ B) = 0.by A5,XXREAL_0:1;
-  M.(A /\ B) <= 0.by A3,Th62,XBOOLE_1:17;
+  M.(A /\ B) <= 0.by A3,Th31,XBOOLE_1:17;
   then M.(A /\ B) = 0.by A1,XXREAL_0:1;
-  hence thesis by A6,A4,Def13;
+  hence thesis by A6,A4,Def7;
 end;
 
 theorem
@@ -1280,17 +1281,17 @@ proof
   let S be SigmaField of X, M be sigma_Measure of S, A be Element of S, B be
   measure_zero of M;
 A1: M.A = M.((A /\ B) \/ (A \ B)) by XBOOLE_1:51;
-A2: M.B = 0.by Def13;
+A2: M.B = 0.by Def7;
   then
-A3: M.(A /\ B) <= 0.by Th62,XBOOLE_1:17;
-A4: 0.<= M.(A /\ B) by Def4;
+A3: M.(A /\ B) <= 0.by Th31,XBOOLE_1:17;
+A4: 0.<= M.(A /\ B) by Def2;
   then M.(A /\ B) = 0.by A3,XXREAL_0:1;
-  then M.A <= 0.+ M.(A \ B) by A1,Th64;
+  then M.A <= 0.+ M.(A \ B) by A1,Th33;
   then
 A5: M.A <= M.(A \ B) by XXREAL_3:4;
-  M.(A \/ B) <= M.A + 0.by A2,Th64;
+  M.(A \/ B) <= M.A + 0.by A2,Th33;
   then
 A6: M.(A \/ B) <= M.A by XXREAL_3:4;
-  M.A <= M.(A \/ B) & M.(A \ B) <= M.A by Th62,XBOOLE_1:7,36;
+  M.A <= M.(A \/ B) & M.(A \ B) <= M.A by Th31,XBOOLE_1:7,36;
   hence thesis by A4,A6,A3,A5,XXREAL_0:1;
 end;

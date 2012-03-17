@@ -2,7 +2,7 @@
 ::  by Michal Muzalewski
 ::
 :: Received October 3, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,20 +17,24 @@ environ
  vocabularies XBOOLE_0, CLASSES2, TARSKI, ZFMISC_1, SUBSET_1, FUNCT_5, FUNCT_1,
       FUNCT_2, ALGSTR_0, MIDSP_2, ROBBINS1, SUPINF_2, ARYTM_3, ARYTM_1, CAT_1,
       STRUCT_0, RELAT_1, GRAPH_1, VECTSP_1, PARTFUN1, REALSET1, MIDSP_1, CAT_2,
-      FUNCOP_1, MSSUBFAM, RLVECT_1, ENS_1, ALGSTR_1, GRCAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
-      REALSET1, PARTFUN1, FUNCT_2, ORDINAL1, CLASSES2, BINOP_1, FUNCT_5,
-      STRUCT_0, ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1,
+      FUNCOP_1, MSSUBFAM, RLVECT_1, ENS_1, ALGSTR_1, GRCAT_1, MONOID_0,
+      RELAT_2, BINOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
+      REALSET1, PARTFUN1, FUNCT_2, ORDINAL1, CLASSES2, BINOP_1, FUNCOP_1,
+      FUNCT_5,
+      STRUCT_0, ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1,
       CAT_2, ALGSTR_1, MIDSP_2;
  constructors PARTFUN1, CLASSES1, CLASSES2, REALSET1, TOPS_2, VECTSP_2, CAT_2,
-      ALGSTR_1, MIDSP_2, FUNCOP_1, RELSET_1;
+      ALGSTR_1, MIDSP_2, FUNCOP_1, RELSET_1, FUNCT_5, XTUPLE_0;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, CLASSES2, STRUCT_0, ALGSTR_1,
-      MIDSP_2, ALGSTR_0, CAT_2;
+      MIDSP_2, ALGSTR_0, CAT_2, XTUPLE_0, CAT_1, REALSET1, SUBSET_1;
  requirements SUBSET, BOOLE;
- definitions BINOP_1, STRUCT_0, ALGSTR_1, ALGSTR_0, GRAPH_1;
+ definitions BINOP_1, STRUCT_0, ALGSTR_1, ALGSTR_0, GRAPH_1, VECTSP_1, CAT_1,
+      XTUPLE_0;
  theorems CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2, MCART_1,
       VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, ORDINAL1, XBOOLE_0,
-      TOPS_2, BINOP_1, CARD_1, SUBSET_1;
+      TOPS_2, BINOP_1, CARD_1, SUBSET_1, XTUPLE_0;
  schemes FUNCT_2, BINOP_1, TARSKI, XBOOLE_0;
 
 begin ::  0a. Auxiliary theorems: sets and universums
@@ -39,19 +43,18 @@ reserve x, y for set;
 reserve D for non empty set;
 reserve UN for Universe;
 
-theorem Th3:
+theorem Th1:
   for u1,u2,u3,u4 being Element of UN holds [u1,u2,u3] in UN & [u1,
   u2,u3,u4] in UN
 proof
   let u1,u2,u3,u4 be Element of UN;
-  [u1,u2,u3] = [[u1,u2],u3] & [u1,u2,u3,u4] = [[u1,u2,u3],u4] by MCART_1:def 3
-,def 4;
+  [u1,u2,u3] = [[u1,u2],u3] & [u1,u2,u3,u4] = [[u1,u2,u3],u4];
   hence thesis by CLASSES2:58;
 end;
 
 ::  0c. Auxiliary theorems: Trivial Group
 
-theorem Th5:
+theorem Th2:
   op2.({},{}) = {} & op1.{} = {} & op0 = {}
 proof
   [{},{}] in [:{{}},{{}}:] by ZFMISC_1:28;
@@ -61,7 +64,7 @@ proof
   thus thesis;
 end;
 
-theorem Th6:
+theorem Th3:
   {{}} in UN & [{{}},{{}}] in UN & [:{{}},{{}}:] in UN & op2 in UN & op1 in UN
 proof
   set D = {{}};
@@ -131,24 +134,20 @@ definition
   (the Target of C)|Morphs(O);
   coherence by CAT_2:20;
   func comp(O) -> PartFunc of [:Morphs(O),(Morphs(O)):],Morphs(O) equals
-  (the
-  Comp of C)||Morphs(O);
+  (the Comp of C)||Morphs(O);
   coherence by CAT_2:20;
-  func ID(O) -> Function of O,Morphs(O) equals
-  (the Id of C)|O;
-  coherence by CAT_2:20;
+ canceled;
 end;
 
 definition
   let C,O;
   func cat(O) -> Subcategory of C equals
-  CatStr (# O,Morphs(O),dom(O),cod(O),
-    comp(O),ID(O)#);
+  CatStr (# O,Morphs(O),dom(O),cod(O),comp(O)#);
   coherence
   proof
-    CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
-    is_full_subcategory_of C by CAT_2:21;
-    hence thesis by CAT_2:def 6;
+    CatStr (# O,Morphs(O),dom(O),cod(O),comp(O)#)
+    is full Subcategory of C by CAT_2:21;
+    hence thesis;
   end;
 end;
 
@@ -171,14 +170,7 @@ definition
   coherence;
 end;
 
-definition
-  let G,H be non empty addMagma;
-  let f be Function of G,H;
-  attr f is additive means
-:Def13: for x,y being Element of G holds f.(x+y) = f.x+f.y;
-end;
-
-theorem Th13:
+theorem Th6:
   comp Trivial-addLoopStr = op1
 proof
   reconsider f = comp Trivial-addLoopStr as Function of {{}}, {{}} by CARD_1:49
@@ -189,7 +181,7 @@ proof
     assume x in {{}};
     then reconsider x as Element of Trivial-addLoopStr by CARD_1:49;
     x = {} by CARD_1:49,TARSKI:def 1;
-    then op1.x = -x by Th5,CARD_1:49,TARSKI:def 1
+    then op1.x = -x by Th2,CARD_1:49,TARSKI:def 1
       .= f.x by VECTSP_1:def 13;
     hence thesis;
   end;
@@ -219,7 +211,7 @@ registration
   end;
 end;
 
-theorem Th14:
+theorem Th7:
   for G1,G2,G3 being non empty addMagma, f being Function of G1,
   G2, g being Function of G2,G3 st f is additive & g is additive holds g*f is
   additive
@@ -233,10 +225,10 @@ A2: g is additive;
     let x,y be Element of G1;
 A3: g.(f.x) = h.x & g.(f.y) = h.y by FUNCT_2:15;
     thus h.(x+y) = g.(f.(x+y)) by FUNCT_2:15
-      .= g.(f.x+f.y) by A1,Def13
-      .= h.x+h.y by A2,A3,Def13;
+      .= g.(f.x+f.y) by A1,VECTSP_1:def 20
+      .= h.x+h.y by A2,A3,VECTSP_1:def 20;
   end;
-  hence thesis by Def13;
+  hence thesis by VECTSP_1:def 20;
 end;
 
 registration
@@ -245,7 +237,7 @@ registration
      f being additive Function of G1, G2,
      g being additive Function of G2, G3;
  cluster g*f -> additive for Function of G1, G3;
- coherence by Th14;
+ coherence by Th7;
 end;
 
 ::  1b. carrier of groups
@@ -258,6 +250,7 @@ definition
 end;
 
 definition
+ canceled;
   let f be GroupMorphismStr;
   func dom(f) -> AddGroup equals
   the Source of f;
@@ -295,7 +288,7 @@ end;
 definition
   let IT be GroupMorphismStr;
   attr IT is GroupMorphism-like means
-  :Def18:
+  :Def13:
   fun(IT) is additive;
 end;
 
@@ -306,7 +299,7 @@ registration
     set G = the AddGroup;
     set z = ZERO(G,G);
     fun(z) is additive;
-    then z is GroupMorphism-like by Def18;
+    then z is GroupMorphism-like by Def13;
     hence thesis;
   end;
 end;
@@ -315,12 +308,12 @@ definition
   mode GroupMorphism is GroupMorphism-like GroupMorphismStr;
 end;
 
-theorem Th18:
+theorem Th9:
   for F being GroupMorphism holds the Fun of F is additive
 proof
   let F be GroupMorphism;
   the Fun of F = fun(F);
-  hence thesis by Def18;
+  hence thesis by Def13;
 end;
 
 registration
@@ -330,14 +323,14 @@ registration
   proof
     set z = ZERO(G,H);
     fun(z) is additive;
-    hence thesis by Def18;
+    hence thesis by Def13;
   end;
 end;
 
 definition
   let G,H;
   mode Morphism of G,H -> GroupMorphism means
-    :Def19:
+    :Def14:
     dom(it) = G & cod(it) = H;
   existence
   proof
@@ -352,12 +345,12 @@ registration
   existence
   proof
     dom(ZERO(G,H)) = G & cod(ZERO(G,H)) = H;
-    then ZERO(G,H) is Morphism of G,H by Def19;
+    then ZERO(G,H) is Morphism of G,H by Def14;
     hence thesis;
   end;
 end;
 
-theorem Th19:
+theorem Th10:
   for f being strict GroupMorphismStr st dom(f) = G & cod(f) = H &
   fun(f) is additive holds f is strict Morphism of G,H
 proof
@@ -365,12 +358,12 @@ proof
   assume that
 A1: dom(f) = G & cod(f) = H and
 A2: fun(f) is additive;
-  reconsider f9 = f as strict GroupMorphism by A2,Def18;
-  f9 is strict Morphism of G,H by A1,Def19;
+  reconsider f9 = f as strict GroupMorphism by A2,Def13;
+  f9 is strict Morphism of G,H by A1,Def14;
   hence thesis;
 end;
 
-theorem Th20:
+theorem Th11:
   for f being Function of G,H st f is additive holds
   GroupMorphismStr (# G,H,f#) is strict Morphism of G,H
 proof
@@ -378,7 +371,7 @@ proof
 A1: f is additive;
   set F = GroupMorphismStr (# G,H,f#);
   fun(F) = f;
-  hence thesis by A1,Th19;
+  hence thesis by A1,Th10;
 end;
 
 registration let G be non empty addMagma;
@@ -400,7 +393,7 @@ definition
   proof
     set i = GroupMorphismStr(# G,G,id G#);
     fun(i) = id G;
-    hence thesis by Th19;
+    hence thesis by Th10;
   end;
 end;
 
@@ -417,41 +410,41 @@ definition
   proof
     set i = ZERO(G,H);
     fun(i) = ZeroMap(G,H);
-    hence thesis by Th19;
+    hence thesis by Th10;
   end;
 end;
 
-theorem Th22:
+theorem Th12:
   for F being Morphism of G,H ex f being Function of G,H st the
   GroupMorphismStr of F = GroupMorphismStr(# G,H,f#) & f is additive
 proof
   let F be Morphism of G,H;
-A1: the Target of F = cod(F) .= H by Def19;
-A2: the Source of F = dom(F) .= G by Def19;
+A1: the Target of F = cod(F) .= H by Def14;
+A2: the Source of F = dom(F) .= G by Def14;
   then reconsider f = the Fun of F as Function of G,H by A1;
   take f;
-  thus thesis by A2,A1,Th18;
+  thus thesis by A2,A1,Th9;
 end;
 
-theorem Th23:
+theorem Th13:
   for F being strict Morphism of G,H ex f being Function of G,H st
   F = GroupMorphismStr(# G,H,f#)
 proof
   let F be strict Morphism of G,H;
   consider f being Function of G,H such that
 A1: F = GroupMorphismStr(# G,H,f#) and
-  f is additive by Th22;
+  f is additive by Th12;
   take f;
   thus thesis by A1;
 end;
 
-theorem Th24:
+theorem Th14:
   for F being GroupMorphism ex G,H st F is Morphism of G,H
 proof
   let F be GroupMorphism;
   take G = the Source of F,H = the Target of F;
   dom(F) = G & cod(F) = H;
-  hence thesis by Def19;
+  hence thesis by Def14;
 end;
 
 theorem
@@ -461,15 +454,15 @@ Function of G,H st F is Morphism of G,H & F = GroupMorphismStr(# G,H,f#) & f is
 proof
   let F be strict GroupMorphism;
   consider G,H such that
-A1: F is Morphism of G,H by Th24;
+A1: F is Morphism of G,H by Th14;
   reconsider F9 = F as Morphism of G,H by A1;
   consider f being Function of G,H such that
-A2: F9 = GroupMorphismStr(# G,H,f#) & f is additive by Th22;
+A2: F9 = GroupMorphismStr(# G,H,f#) & f is additive by Th12;
   take G,H,f;
   thus thesis by A2;
 end;
 
-theorem Th26:
+theorem Th16:
   for g,f being GroupMorphism st dom(g) = cod(f) ex G1,G2,G3 being
   AddGroup st g is Morphism of G2,G3 & f is Morphism of G1,G2
 proof
@@ -477,11 +470,11 @@ proof
   let g,f be GroupMorphism such that
 A1: P[g,f];
   consider G2,G3 being AddGroup such that
-A2: g is Morphism of G2,G3 by Th24;
+A2: g is Morphism of G2,G3 by Th14;
   consider G1,G29 being AddGroup such that
-A3: f is Morphism of G1,G29 by Th24;
-A4: G29 = cod(f) by A3,Def19;
-  G2 = dom(g) by A2,Def19;
+A3: f is Morphism of G1,G29 by Th14;
+A4: G29 = cod(f) by A3,Def14;
+  G2 = dom(g) by A2,Def14;
   hence thesis by A1,A2,A3,A4;
 end;
 
@@ -490,7 +483,7 @@ definition
   assume
 A1: dom(G) = cod(F);
   func G*F -> strict GroupMorphism means
-  :Def21:
+  :Def16:
   for G1,G2,G3 being AddGroup,
 g being Function of G2,G3, f being Function of G1,G2 st the GroupMorphismStr of
 G = GroupMorphismStr(# G2,G3,g#) & the GroupMorphismStr of F = GroupMorphismStr
@@ -499,31 +492,31 @@ G = GroupMorphismStr(# G2,G3,g#) & the GroupMorphismStr of F = GroupMorphismStr
   proof
     consider G19,G29,G39 being AddGroup such that
 A2: G is Morphism of G29,G39 and
-A3: F is Morphism of G19,G29 by A1,Th26;
+A3: F is Morphism of G19,G29 by A1,Th16;
     consider f9 being Function of G19,G29 such that
 A4: the GroupMorphismStr of F = GroupMorphismStr(# G19,G29,f9#) and
-A5: f9 is additive by A3,Th22;
+A5: f9 is additive by A3,Th12;
     consider g9 being Function of G29,G39 such that
 A6: the GroupMorphismStr of G = GroupMorphismStr(# G29,G39,g9#) and
-A7: g9 is additive by A2,Th22;
+A7: g9 is additive by A2,Th12;
     g9*f9 is additive by A7,A5;
     then reconsider T9 = (GroupMorphismStr(# G19,G39,g9*f9#)) as strict
-    GroupMorphism by Th20;
+    GroupMorphism by Th11;
     take T9;
     thus thesis by A6,A4;
   end;
   uniqueness
   proof
     consider G19,G299 being AddGroup such that
-A8: F is Morphism of G19,G299 by Th24;
+A8: F is Morphism of G19,G299 by Th14;
     reconsider F9 = F as Morphism of G19,G299 by A8;
     consider G29,G39 being AddGroup such that
-A9: G is Morphism of G29,G39 by Th24;
-    G29 = dom(G) by A9,Def19;
-    then reconsider F9 as Morphism of G19,G29 by A1,Def19;
+A9: G is Morphism of G29,G39 by Th14;
+    G29 = dom(G) by A9,Def14;
+    then reconsider F9 as Morphism of G19,G29 by A1,Def14;
     consider f9 being Function of G19,G29 such that
 A10: the GroupMorphismStr of F9 = GroupMorphismStr(# G19,G29,f9#) and
-    f9 is additive by Th22;
+    f9 is additive by Th12;
     reconsider G9 = G as Morphism of G29,G39 by A9;
     let S1,S2 be strict GroupMorphism such that
 A11: for G1,G2,G3 being AddGroup, g being Function of G2,G3, f being
@@ -536,37 +529,37 @@ Function of G1,G2 st the GroupMorphismStr of G = GroupMorphismStr(# G2,G3,g#) &
     GroupMorphismStr(# G1,G3,g*f#);
     consider g9 being Function of G29,G39 such that
 A13: the GroupMorphismStr of G9 = GroupMorphismStr(# G29,G39,g9#) and
-    g9 is additive by Th22;
+    g9 is additive by Th12;
     thus S1 = (GroupMorphismStr(# G19,G39,g9*f9#)) by A11,A13,A10
       .= S2 by A12,A13,A10;
   end;
 end;
 
-theorem Th28:
+theorem Th17:
   for G1,G2,G3 being AddGroup, G being Morphism of G2,G3, F being
   Morphism of G1,G2 holds G*F is Morphism of G1,G3
 proof
   let G1,G2,G3 be AddGroup, G be Morphism of G2,G3, F be Morphism of G1,G2;
   consider g being Function of G2,G3 such that
 A1: the GroupMorphismStr of G = GroupMorphismStr(# G2,G3,g#) and
-  g is additive by Th22;
+  g is additive by Th12;
   consider f being Function of G1,G2 such that
 A2: the GroupMorphismStr of F = GroupMorphismStr(# G1,G2,f#) and
-  f is additive by Th22;
-  dom(G) = G2 by Def19
-    .= cod(F) by Def19;
-  then G*F = GroupMorphismStr(# G1,G3,g*f#) by A1,A2,Def21;
+  f is additive by Th12;
+  dom(G) = G2 by Def14
+    .= cod(F) by Def14;
+  then G*F = GroupMorphismStr(# G1,G3,g*f#) by A1,A2,Def16;
   then dom(G*F) = G1 & cod(G*F) = G3;
-  hence thesis by Def19;
+  hence thesis by Def14;
 end;
 
 definition
   let G1,G2,G3 be AddGroup, G be Morphism of G2,G3, F be Morphism of G1,G2;
   redefine func G*F -> strict Morphism of G1,G3;
-  coherence by Th28;
+  coherence by Th17;
 end;
 
-theorem Th29:
+theorem Th18:
   for G1,G2,G3 being AddGroup, G being Morphism of G2,G3, F being
 Morphism of G1,G2, g being Function of G2,G3, f being Function of G1,G2 st G =
   GroupMorphismStr(# G2,G3,g#) & F = GroupMorphismStr(# G1,G2,f#) holds G*F =
@@ -575,12 +568,12 @@ proof
   let G1,G2,G3 be AddGroup, G be Morphism of G2,G3, F be Morphism of G1,G2, g
   be Function of G2,G3, f be Function of G1,G2 such that
 A1: G = GroupMorphismStr(# G2,G3,g#) & F = GroupMorphismStr(# G1,G2,f#);
-  dom(G) = G2 by Def19
-    .= cod(F) by Def19;
-  hence thesis by A1,Def21;
+  dom(G) = G2 by Def14
+    .= cod(F) by Def14;
+  hence thesis by A1,Def16;
 end;
 
-theorem Th30:
+theorem Th19:
   for f,g being strict GroupMorphism st dom g = cod f holds ex G1,
 G2,G3 being AddGroup, f0 being Function of G1,G2, g0 being Function of G2,G3 st
   f = GroupMorphismStr(# G1,G2,f0#) & g = GroupMorphismStr(# G2,G3,g0#) & g*f =
@@ -589,17 +582,17 @@ proof
   let f,g be strict GroupMorphism such that
 A1: dom g = cod f;
   set G1 = dom f,G2 = cod f, G3 = cod g;
-  reconsider f9 = f as strict Morphism of G1,G2 by Def19;
-  reconsider g9 = g as strict Morphism of G2,G3 by A1,Def19;
+  reconsider f9 = f as strict Morphism of G1,G2 by Def14;
+  reconsider g9 = g as strict Morphism of G2,G3 by A1,Def14;
   consider f0 being Function of G1,G2 such that
 A2: f9 = GroupMorphismStr(# G1,G2,f0#);
   consider g0 being Function of G2,G3 such that
-A3: g9 = GroupMorphismStr(# G2,G3,g0#) by Th23;
+A3: g9 = GroupMorphismStr(# G2,G3,g0#) by Th13;
   take G1,G2,G3,f0,g0;
-  thus thesis by A2,A3,Th29;
+  thus thesis by A2,A3,Th18;
 end;
 
-theorem Th31:
+theorem Th20:
   for f,g being strict GroupMorphism st dom g = cod f holds dom(g*
   f) = dom f & cod (g*f) = cod g
 proof
@@ -608,12 +601,12 @@ proof
   then
 A1: ex G1,G2,G3 being AddGroup, f0 being Function of G1,G2, g0 being Function
 of G2,G3 st f = GroupMorphismStr(# G1,G2,f0#) & g = GroupMorphismStr(# G2,G3,g0
-  #) & g*f = GroupMorphismStr(# G1,G3,g0*f0#) by Th30;
+  #) & g*f = GroupMorphismStr(# G1,G3,g0*f0#) by Th19;
   hence dom(g*f) = dom f;
   thus thesis by A1;
 end;
 
-theorem Th32:
+theorem Th21:
   for G1,G2,G3,G4 being AddGroup, f being strict Morphism of G1,G2
 , g being strict Morphism of G2,G3, h being strict Morphism of G3,G4 holds h*(g
   *f) = (h*g)*f
@@ -621,20 +614,20 @@ proof
   let G1,G2,G3,G4 be AddGroup, f be strict Morphism of G1,G2, g be strict
   Morphism of G2,G3, h be strict Morphism of G3,G4;
   consider f0 being Function of G1,G2 such that
-A1: f = GroupMorphismStr(# G1,G2,f0#) by Th23;
+A1: f = GroupMorphismStr(# G1,G2,f0#) by Th13;
   consider g0 being Function of G2,G3 such that
-A2: g = GroupMorphismStr(# G2,G3,g0#) by Th23;
+A2: g = GroupMorphismStr(# G2,G3,g0#) by Th13;
   consider h0 being Function of G3,G4 such that
-A3: h = GroupMorphismStr(# G3,G4,h0#) by Th23;
-A4: h*g = GroupMorphismStr(# G2,G4,h0*g0#) by A2,A3,Th29;
-  g*f = GroupMorphismStr(# G1,G3,g0*f0#) by A1,A2,Th29;
-  then h*(g*f) = GroupMorphismStr(# G1,G4,h0*(g0*f0)#) by A3,Th29
+A3: h = GroupMorphismStr(# G3,G4,h0#) by Th13;
+A4: h*g = GroupMorphismStr(# G2,G4,h0*g0#) by A2,A3,Th18;
+  g*f = GroupMorphismStr(# G1,G3,g0*f0#) by A1,A2,Th18;
+  then h*(g*f) = GroupMorphismStr(# G1,G4,h0*(g0*f0)#) by A3,Th18
     .= GroupMorphismStr(# G1,G4,(h0*g0)*f0#) by RELAT_1:36
-    .= (h*g)*f by A1,A4,Th29;
+    .= (h*g)*f by A1,A4,Th18;
   hence thesis;
 end;
 
-theorem Th33:
+theorem Th22:
   for f,g,h being strict GroupMorphism st dom h = cod g & dom g =
   cod f holds h*(g*f) = (h*g)*f
 proof
@@ -642,14 +635,14 @@ proof
 A1: dom h = cod g and
 A2: dom g = cod f;
   set G2 = cod f, G3 = cod g;
-  reconsider h9 = h as Morphism of G3,(cod h) by A1,Def19;
-  reconsider g9 = g as Morphism of G2,G3 by A2,Def19;
-  reconsider f9 = f as Morphism of (dom f),G2 by Def19;
-  h9*(g9*f9) = (h9*g9)*f9 by Th32;
+  reconsider h9 = h as Morphism of G3,(cod h) by A1,Def14;
+  reconsider g9 = g as Morphism of G2,G3 by A2,Def14;
+  reconsider f9 = f as Morphism of (dom f),G2 by Def14;
+  h9*(g9*f9) = (h9*g9)*f9 by Th21;
   hence thesis;
 end;
 
-theorem Th34:
+theorem
   dom ID(G) = G & cod ID(G) = G & (for f being strict
   GroupMorphism st cod f = G holds (ID G)*f = f) & for g being strict
   GroupMorphism st dom g = G holds g*(ID G) = g
@@ -662,22 +655,22 @@ proof
     let f be strict GroupMorphism such that
 A1: cod f = G;
     set H = dom(f);
-    reconsider f9 = f as Morphism of H,G by A1,Def19;
+    reconsider f9 = f as Morphism of H,G by A1,Def14;
     consider m being Function of H,G such that
-A2: f9 = GroupMorphismStr(# H,G,m#) by Th23;
+A2: f9 = GroupMorphismStr(# H,G,m#) by Th13;
     dom(i) = G & (id G)*m = m by FUNCT_2:17;
-    hence thesis by A1,A2,Def21;
+    hence thesis by A1,A2,Def16;
   end;
   thus for g being strict GroupMorphism st dom g = G holds g*(ID G) = g
   proof
     let f be strict GroupMorphism such that
 A3: dom f = G;
     set H = cod(f);
-    reconsider f9 = f as Morphism of G,H by A3,Def19;
+    reconsider f9 = f as Morphism of G,H by A3,Def14;
     consider m being Function of G,H such that
-A4: f9 = GroupMorphismStr(# G,H,m#) by Th23;
+A4: f9 = GroupMorphismStr(# G,H,m#) by Th13;
     cod(i) = G & m*(id G) = m by FUNCT_2:17;
-    hence thesis by A3,A4,Def21;
+    hence thesis by A3,A4,Def16;
   end;
 end;
 
@@ -686,7 +679,7 @@ end;
 definition
   let IT be set;
   attr IT is Group_DOMAIN-like means
-  :Def22:
+  :Def17:
   for x being set st x in IT holds x is strict AddGroup;
 end;
 
@@ -697,7 +690,7 @@ registration
     set D = {Trivial-addLoopStr};
     take D;
     for x be set st x in D holds x is strict AddGroup by TARSKI:def 1;
-    hence thesis by Def22;
+    hence thesis by Def17;
   end;
 end;
 
@@ -710,7 +703,7 @@ reserve V for Group_DOMAIN;
 definition
   let V;
   redefine mode Element of V -> AddGroup;
-  coherence by Def22;
+  coherence by Def17;
 end;
 
 registration
@@ -719,7 +712,7 @@ registration
   existence
   proof
     set v = the Element of V;
-    v is strict AddGroup by Def22;
+    v is strict AddGroup by Def17;
     hence thesis;
   end;
 end;
@@ -729,7 +722,7 @@ end;
 definition
   let IT be set;
   attr IT is GroupMorphism_DOMAIN-like means
-  :Def23:
+  :Def18:
   for x being set st x in IT holds x is strict GroupMorphism;
 end;
 
@@ -741,7 +734,7 @@ registration
     take {ID G};
     for x being set st x in {ID G} holds x is strict GroupMorphism by
 TARSKI:def 1;
-    hence thesis by Def23;
+    hence thesis by Def18;
   end;
 end;
 
@@ -752,7 +745,7 @@ end;
 definition
   let M be GroupMorphism_DOMAIN;
   redefine mode Element of M -> GroupMorphism;
-  coherence by Def23;
+  coherence by Def18;
 end;
 
 registration
@@ -761,47 +754,47 @@ registration
   existence
   proof
     set m = the Element of M;
-    m is strict GroupMorphism by Def23;
+    m is strict GroupMorphism by Def18;
     hence thesis;
   end;
 end;
 
-theorem Th37:
+theorem Th24:
   for f being strict GroupMorphism holds {f} is GroupMorphism_DOMAIN
 proof
   let f be strict GroupMorphism;
   for x being set st x in {f} holds x is strict GroupMorphism by TARSKI:def 1;
-  hence thesis by Def23;
+  hence thesis by Def18;
 end;
 
 definition
   let G,H;
   mode GroupMorphism_DOMAIN of G,H -> GroupMorphism_DOMAIN means
-    :Def24:
+    :Def19:
     for x being Element of it holds x is strict Morphism of G,H;
   existence
   proof
-    reconsider D = {ZERO(G,H)} as GroupMorphism_DOMAIN by Th37;
+    reconsider D = {ZERO(G,H)} as GroupMorphism_DOMAIN by Th24;
     take D;
     thus thesis by TARSKI:def 1;
   end;
 end;
 
-theorem Th38:
+theorem Th25:
   D is GroupMorphism_DOMAIN of G,H iff for x being Element of D
   holds x is strict Morphism of G,H
 proof
   thus D is GroupMorphism_DOMAIN of G,H implies for x being Element of D holds
-  x is strict Morphism of G,H by Def24;
+  x is strict Morphism of G,H by Def19;
   thus (for x being Element of D holds x is strict Morphism of G,H) implies D
   is GroupMorphism_DOMAIN of G,H
   proof
     assume
 A1: for x being Element of D holds x is strict Morphism of G,H;
     then for x being set st x in D holds x is strict GroupMorphism;
-    then reconsider D9 = D as GroupMorphism_DOMAIN by Def23;
+    then reconsider D9 = D as GroupMorphism_DOMAIN by Def18;
     for x being Element of D9 holds x is strict Morphism of G,H by A1;
-    hence thesis by Def24;
+    hence thesis by Def19;
   end;
 end;
 
@@ -810,13 +803,13 @@ theorem
 proof
   let f be strict Morphism of G,H;
   for x being Element of {f} holds x is strict Morphism of G,H by TARSKI:def 1;
-  hence thesis by Th38;
+  hence thesis by Th25;
 end;
 
 definition
   let G,H be 1-sorted;
   mode MapsSet of G,H means
-    :Def25:
+    :Def20:
     for x being set st x in it holds x is Function of G,H;
   existence
   proof
@@ -858,13 +851,13 @@ definition
   let G be 1-sorted, H be non empty 1-sorted;
   let M be non empty MapsSet of G,H;
   redefine mode Element of M -> Function of G,H;
-  coherence by Def25;
+  coherence by Def20;
 end;
 
 definition
   let G,H;
   func Morphs(G,H) -> GroupMorphism_DOMAIN of G,H means
-  :Def27:
+  :Def22:
   x in it iff x is strict Morphism of G,H;
   existence
   proof
@@ -879,7 +872,7 @@ A1: x in D implies x is strict Morphism of G,H
       then
       ex f being Element of Maps(G,H) st x = GroupMorphismStr (# G,H,f#) &
       f is additive;
-      hence thesis by Th20;
+      hence thesis by Th11;
     end;
     then
 A2: for x being Element of D holds x is strict Morphism of G,H;
@@ -887,14 +880,14 @@ A3: x is strict Morphism of G,H implies x in D
     proof
       assume x is strict Morphism of G,H;
       then reconsider x as strict Morphism of G,H;
-A4:   dom(x) = G & cod(x) = H by Def19;
+A4:   dom(x) = G & cod(x) = H by Def14;
       then reconsider f = the Fun of x as Function of G,H;
       reconsider g = f as Element of Maps(G,H) by FUNCT_2:8;
 A5:   x = GroupMorphismStr(# G,H,g #) by A4;
-      (the Fun of x) is additive by Th18;
+      (the Fun of x) is additive by Th9;
       hence thesis by A5;
     end;
-    reconsider D as GroupMorphism_DOMAIN of G,H by A2,Th38;
+    reconsider D as GroupMorphism_DOMAIN of G,H by A2,Th25;
     take D;
     thus thesis by A1,A3;
   end;
@@ -926,7 +919,7 @@ definition
   let G,H;
   let M be GroupMorphism_DOMAIN of G,H;
   redefine mode Element of M -> Morphism of G,H;
-  coherence by Def24;
+  coherence by Def19;
 end;
 
 registration
@@ -936,7 +929,7 @@ registration
   existence
   proof
     set m = the Element of M;
-    m is strict Morphism of G,H by Def24;
+    m is strict Morphism of G,H by Def19;
     hence thesis;
   end;
 end;
@@ -946,13 +939,13 @@ end;
 definition
   let x,y;
   pred GO x,y means
-  :Def28:
+  :Def23:
   ex x1,x2,x3,x4 being set st x = [x1,x2,x3,x4] & ex
 G being strict AddGroup st y = G & x1 = the carrier of G & x2 = the addF of G &
   x3 = comp G & x4 = 0.G;
 end;
 
-theorem Th40:
+theorem Th27:
   for x,y1,y2 being set st GO x,y1 & GO x,y2 holds y1 = y2
 proof
   let x,y1,y2 be set such that
@@ -961,7 +954,7 @@ A2: GO x,y2;
   consider a1,a2,a3,a4 being set such that
 A3: x = [a1,a2,a3,a4] and
 A4: ex G being strict AddGroup st y1 = G & a1 = the carrier of G & a2 =
-  the addF of G & a3 = comp G & a4 = 0.G by A1,Def28;
+  the addF of G & a3 = comp G & a4 = 0.G by A1,Def23;
   consider G1 being strict AddGroup such that
 A5: y1 = G1 and
 A6: a1 = the carrier of G1 & a2 = the addF of G1 and
@@ -970,28 +963,28 @@ A7: a4 = 0.G1 by A4;
   consider b1,b2,b3,b4 being set such that
 A8: x = [b1,b2,b3,b4] and
 A9: ex G being strict AddGroup st y2 = G & b1 = the carrier of G & b2 =
-  the addF of G & b3 = comp G & b4 = 0.G by A2,Def28;
+  the addF of G & b3 = comp G & b4 = 0.G by A2,Def23;
   consider G2 being strict AddGroup such that
 A10: y2 = G2 and
 A11: b1 = the carrier of G2 & b2 = the addF of G2 and
   b3 = comp G2 and
 A12: b4 = 0.G2 by A9;
   the carrier of G1 = the carrier of G2 & the addF of G1 = the addF of G2
-  by A3,A8,A6,A11,MCART_1:29;
-  hence thesis by A3,A8,A5,A7,A10,A12,MCART_1:29;
+  by A3,A8,A6,A11,XTUPLE_0:5;
+  hence thesis by A3,A8,A5,A7,A10,A12,XTUPLE_0:5;
 end;
 
-theorem Th41:
+theorem Th28:
   ex x st x in UN & GO x,Trivial-addLoopStr
 proof
-  reconsider x2 = op2 as Element of UN by Th6;
-  reconsider x3 = comp Trivial-addLoopStr as Element of UN by Th6,Th13;
+  reconsider x2 = op2 as Element of UN by Th3;
+  reconsider x3 = comp Trivial-addLoopStr as Element of UN by Th3,Th6;
   reconsider u = {} as Element of UN by CLASSES2:56;
   set x1 = {u};
   Extract {} = u;
   then reconsider x4 = Extract {} as Element of UN;
   take x = [x1,x2,x3,x4];
-  thus x in UN by Th3;
+  thus x in UN by Th1;
   take x1,x2,x3,x4;
   thus x = [x1,x2,x3,x4];
   take Trivial-addLoopStr;
@@ -1001,12 +994,12 @@ end;
 definition
   let UN;
   func GroupObjects(UN) -> set means
-  :Def29:
+  :Def24:
   for y holds y in it iff ex x st x in UN & GO x,y;
   existence
   proof
     defpred P[set,set] means GO $1,$2;
-A1: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by Th40;
+A1: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by Th27;
     consider Y being set such that
 A2: for y holds y in Y iff ex x st x in UN & P[x,y] from TARSKI:sch 1(
     A1);
@@ -1022,29 +1015,29 @@ A2: for y holds y in Y iff ex x st x in UN & P[x,y] from TARSKI:sch 1(
   end;
 end;
 
-theorem Th42:
+theorem Th29:
   Trivial-addLoopStr in GroupObjects(UN)
 proof
-  ex x st x in UN & GO x,Trivial-addLoopStr by Th41;
-  hence thesis by Def29;
+  ex x st x in UN & GO x,Trivial-addLoopStr by Th28;
+  hence thesis by Def24;
 end;
 
 registration
   let UN;
   cluster GroupObjects(UN) -> non empty;
-  coherence by Th42;
+  coherence by Th29;
 end;
 
-theorem Th43:
+theorem Th30:
   for x being Element of GroupObjects(UN) holds x is strict AddGroup
 proof
   let x be Element of GroupObjects(UN);
   consider u being set such that
   u in UN and
-A1: GO u,x by Def29;
+A1: GO u,x by Def24;
   ex x1,x2,x3,x4 being set st u = [x1,x2,x3,x4] & ex G being strict
 AddGroup st x = G & x1 = the carrier of G & x2 = the addF of G & x3 = comp G &
-  x4 = 0.G by A1,Def28;
+  x4 = 0.G by A1,Def23;
   hence thesis;
 end;
 
@@ -1052,10 +1045,8 @@ registration
   let UN;
   cluster GroupObjects(UN) -> Group_DOMAIN-like;
   coherence
-  proof
-    for x being set st x in GroupObjects(UN) holds x is strict AddGroup by Th43
-;
-    hence thesis by Def22;
+  proof let x;
+   thus thesis by Th30;
   end;
 end;
 
@@ -1064,7 +1055,7 @@ end;
 definition
   let V;
   func Morphs(V) -> GroupMorphism_DOMAIN means
-  :Def30:
+  :Def25:
   for x holds x in it iff
   ex G,H being strict Element of V st x is strict Morphism of G,H;
   existence
@@ -1072,7 +1063,7 @@ definition
     set G0 = the strict Element of V;
     set M = Morphs(G0,G0), S = { Morphs(G,H) where G is strict Element of V, H
     is strict Element of V : not contradiction };
-    (ZERO(G0,G0)) is Element of M & M in S by Def27;
+    (ZERO(G0,G0)) is Element of M & M in S by Def22;
     then reconsider T = union S as non empty set by TARSKI:def 4;
 A1: for x holds x in T iff ex G,H being strict Element of V st x is strict
     Morphism of G,H
@@ -1088,7 +1079,7 @@ A3:     Y in S by TARSKI:def 4;
         consider G,H being strict Element of V such that
 A4:     Y = Morphs(G,H) by A3;
         take G,H;
-        thus thesis by A2,A4,Def27;
+        thus thesis by A2,A4,Def22;
       end;
       thus (ex G,H being strict Element of V st x is strict Morphism of G,H)
       implies x in T
@@ -1097,7 +1088,7 @@ A4:     Y = Morphs(G,H) by A3;
 A5:     x is strict Morphism of G,H;
         set M = Morphs(G,H);
 A6:     M in S;
-        x in M by A5,Def27;
+        x in M by A5,Def22;
         hence thesis by A6,TARSKI:def 4;
       end;
     end;
@@ -1108,7 +1099,7 @@ A6:     M in S;
 A1;
       hence x is strict GroupMorphism;
     end;
-    then reconsider T9 = T as GroupMorphism_DOMAIN by Def23;
+    then reconsider T9 = T as GroupMorphism_DOMAIN by Def18;
     take T9;
     thus thesis by A1;
   end;
@@ -1140,18 +1131,18 @@ definition
   coherence
   proof
     consider G,H being strict Element of V such that
-A1: F is strict Morphism of G,H by Def30;
+A1: F is strict Morphism of G,H by Def25;
     reconsider F9 = F as Morphism of G,H by A1;
-    dom(F9) = G by Def19;
+    dom(F9) = G by Def14;
     hence thesis;
   end;
   redefine func cod(F) -> strict Element of V;
   coherence
   proof
     consider G,H being strict Element of V such that
-A2: F is strict Morphism of G,H by Def30;
+A2: F is strict Morphism of G,H by Def25;
     reconsider F9 = F as Morphism of G,H by A2;
-    cod(F9) = H by Def19;
+    cod(F9) = H by Def14;
     hence thesis;
   end;
 end;
@@ -1163,8 +1154,8 @@ definition
   ID(G);
   coherence
   proof
-    reconsider G9 = G as strict Element of V by Def22;
-    ID(G9) is strict Element of Morphs(V) by Def30;
+    reconsider G9 = G as strict Element of V by Def17;
+    ID(G9) is strict Element of Morphs(V) by Def25;
     hence thesis;
   end;
 end;
@@ -1172,7 +1163,7 @@ end;
 definition
   let V;
   func dom(V) -> Function of Morphs(V),V means
-  :Def32:
+  :Def27:
   for f being Element of Morphs(V) holds it.f = dom(f);
   existence
   proof
@@ -1196,7 +1187,7 @@ A3: for f being Element of Morphs(V) holds F2.f = dom(f);
     hence thesis by FUNCT_2:63;
   end;
   func cod(V) -> Function of Morphs(V),V means
-  :Def33:
+  :Def28:
   for f being Element of Morphs(V) holds it.f = cod(f);
   existence
   proof
@@ -1219,36 +1210,13 @@ A6: for f being Element of Morphs(V) holds F2.f = cod(f);
     end;
     hence thesis by FUNCT_2:63;
   end;
-  func ID(V) -> Function of V,Morphs(V) means
-  :Def34:
-  for G being Element of V holds it.G = ID(G);
-  existence
-  proof
-    deffunc F(Element of V) = ID $1;
-    consider F being Function of V,Morphs(V) such that
-A7: for G being Element of V holds F.G = F(G) from FUNCT_2:sch 4;
-    take F;
-    thus thesis by A7;
-  end;
-  uniqueness
-  proof
-    let F1,F2 be Function of V,Morphs(V) such that
-A8: for G being Element of V holds F1.G = ID(G) and
-A9: for G being Element of V holds F2.G = ID(G);
-    now
-      let G be Element of V;
-      F1.G = ID(G) by A8;
-      hence F1.G = F2.G by A9;
-    end;
-    hence thesis by FUNCT_2:63;
-  end;
 end;
 
 ::
 ::  4d. Category of groups - superposition
 ::
 
-theorem Th44:
+theorem Th31:
   for g,f being Element of Morphs(V) st dom(g) = cod(f) ex G1,G2,
 G3 being strict Element of V st g is Morphism of G2,G3 & f is Morphism of G1,G2
 proof
@@ -1257,15 +1225,15 @@ proof
   let g,f be Element of X such that
 A1: P[g,f];
   consider G2,G3 being strict Element of V such that
-A2: g is strict Morphism of G2,G3 by Def30;
+A2: g is strict Morphism of G2,G3 by Def25;
   consider G1,G29 being strict Element of V such that
-A3: f is strict Morphism of G1,G29 by Def30;
-A4: G29 = cod(f) by A3,Def19;
-  G2 = dom(g) by A2,Def19;
+A3: f is strict Morphism of G1,G29 by Def25;
+A4: G29 = cod(f) by A3,Def14;
+  G2 = dom(g) by A2,Def14;
   hence thesis by A1,A2,A3,A4;
 end;
 
-theorem Th45:
+theorem Th32:
   for g,f being Element of Morphs(V) st dom(g) = cod(f) holds g*f in Morphs(V)
 proof
   set X = Morphs(V);
@@ -1274,17 +1242,17 @@ proof
   assume P[g,f];
   then consider G1,G2,G3 being strict Element of V such that
 A1: g is Morphism of G2,G3 and
-A2: f is Morphism of G1,G2 by Th44;
+A2: f is Morphism of G1,G2 by Th31;
   reconsider f9 = f as Morphism of G1,G2 by A2;
   reconsider g9 = g as Morphism of G2,G3 by A1;
   g9*f9 is Morphism of G1,G3;
-  hence thesis by Def30;
+  hence thesis by Def25;
 end;
 
 definition
   let V;
   func comp(V) -> PartFunc of [:Morphs(V),Morphs(V):],Morphs(V) means
-  :Def35:
+  :Def30:
 (for g,f being Element of Morphs(V) holds [g,f] in dom it iff dom(g) = cod(f))
   & for g,f being Element of Morphs(V) st [g,f] in dom it holds it.(g,f) = g*f;
   existence
@@ -1292,7 +1260,7 @@ definition
     set X = Morphs(V);
     defpred P[Element of X,Element of X] means dom($1) = cod($2);
     deffunc F(Element of X,Element of X) = $1*$2;
-A1: for g,f being Element of X st P[g,f] holds F(g,f) in X by Th45;
+A1: for g,f being Element of X st P[g,f] holds F(g,f) in X by Th32;
     consider c being PartFunc of [:X,X:],X such that
 A2: ( for g,f being Element of X holds [g,f] in dom c iff P[g,f])& for
 g,f being Element of X st [g,f] in dom c holds c.(g,f) = F(g,f) from BINOP_1:
@@ -1353,10 +1321,10 @@ end;
 
 definition
   let UN;
-  func GroupCat(UN) -> CatStr equals
+  func GroupCat(UN) -> non empty non void strict CatStr equals
   CatStr(# GroupObjects(UN),Morphs(
     GroupObjects(UN)), dom(GroupObjects(UN)),cod(GroupObjects(UN)), comp(
-    GroupObjects(UN)),ID(GroupObjects(UN))#);
+    GroupObjects(UN))#);
   coherence;
 end;
 
@@ -1366,7 +1334,7 @@ registration
   coherence;
 end;
 
-theorem Th46:
+theorem Th33:
   for f,g being Morphism of GroupCat(UN) holds [g,f] in dom(the
   Comp of GroupCat(UN)) iff dom g = cod f
 proof
@@ -1374,11 +1342,11 @@ proof
   let f,g be Morphism of C;
   reconsider f9 = f as Element of Morphs(V);
   reconsider g9 = g as Element of Morphs(V);
-  dom g = dom(g9) & cod f = cod(f9) by Def32,Def33;
-  hence thesis by Def35;
+  dom g = dom(g9) & cod f = cod(f9) by Def27,Def28;
+  hence thesis by Def30;
 end;
 
-theorem Th47:
+theorem Th34:
   for f being (Morphism of GroupCat(UN)), f9 being Element of
   Morphs(GroupObjects(UN)), b being Object of GroupCat(UN), b9 being Element of
 GroupObjects(UN) holds f is strict Element of Morphs(GroupObjects(UN)) & f9 is
@@ -1391,34 +1359,28 @@ proof
   Element of V;
   consider x such that
   x in UN and
-A1: GO x,b by Def29;
-  ex G,H being strict Element of V st f is strict Morphism of G,H by Def30;
+A1: GO x,b by Def24;
+  ex G,H being strict Element of V st f is strict Morphism of G,H by Def25;
   hence f is strict Element of X;
   thus f9 is Morphism of C;
   ex x1,x2,x3,x4 being set st x = [x1,x2,x3,x4] & ex G being strict
 AddGroup st b = G & x1 = the carrier of G & x2 = the addF of G & x3 = comp G &
-  x4 = 0.G by A1,Def28;
+  x4 = 0.G by A1,Def23;
   hence b is strict Element of V;
   thus thesis;
 end;
 
-theorem Th48:
-  for b being Object of GroupCat(UN), b9 being Element of
-  GroupObjects(UN) st b = b9 holds id b = ID(b9)
-proof
-  set C = GroupCat(UN), V = GroupObjects(UN);
-  let b be Object of C, b9 be Element of V;
-  assume b = b9;
-  hence id b = (ID(V)).b9 by CAT_1:def 2
-    .= ID(b9) by Def34;
-end;
+canceled;
 
-theorem Th50:
-  for f,g being (Morphism of GroupCat(UN)), f9,g9 being Element of
-  Morphs(GroupObjects(UN)) st f = f9 & g = g9 holds (dom g = cod f iff dom g9 =
-cod f9) & (dom g = cod f iff [g9,f9] in dom comp(GroupObjects(UN))) & (dom g =
-cod f implies g*f = g9*f9) & (dom f = dom g iff dom f9 = dom g9) & (cod f = cod
-  g iff cod f9 = cod g9)
+theorem Th36:
+  for f,g being (Morphism of GroupCat(UN)),
+      f9,g9 being Element of Morphs(GroupObjects(UN)) st f = f9 & g = g9
+ holds
+  (dom g = cod f iff dom g9 = cod f9) &
+  (dom g = cod f iff [g9,f9] in dom comp(GroupObjects(UN))) &
+  (dom g = cod f implies g(*)f = g9*f9) &
+  (dom f = dom g iff dom f9 = dom g9) &
+  (cod f = cod g iff cod f9 = cod g9)
 proof
   set C = GroupCat(UN), V = GroupObjects(UN);
   set X = Morphs(V);
@@ -1427,110 +1389,194 @@ proof
   assume that
 A1: f = f9 and
 A2: g = g9;
-A3: cod f = cod f9 by A1,Def33;
-  hence dom g = cod f iff dom g9 = cod f9 by A2,Def32;
-  dom g = dom g9 by A2,Def32;
+A3: cod f = cod f9 by A1,Def28;
+  hence dom g = cod f iff dom g9 = cod f9 by A2,Def27;
+  dom g = dom g9 by A2,Def27;
   hence
-A4: dom g = cod f iff [g9,f9] in dom comp(V) by A3,Def35;
-  thus dom g = cod f implies g*f = g9*f9
+A4: dom g = cod f iff [g9,f9] in dom comp(V) by A3,Def30;
+  thus dom g = cod f implies g(*)f = g9*f9
   proof
     assume
 A5: dom g = cod f;
-    then [g,f] in dom (the Comp of C) by Th46;
-    hence g*f = (comp(V)).(g9,f9) by A1,A2,CAT_1:def 1
-      .= g9*f9 by A4,A5,Def35;
+    then [g,f] in dom (the Comp of C) by Th33;
+    hence g(*)f = (comp(V)).(g9,f9) by A1,A2,CAT_1:def 1
+      .= g9*f9 by A4,A5,Def30;
   end;
-  dom f = dom f9 by A1,Def32;
-  hence dom f = dom g iff dom f9 = dom g9 by A2,Def32;
-  cod g = cod g9 by A2,Def33;
-  hence thesis by A1,Def33;
+  dom f = dom f9 by A1,Def27;
+  hence dom f = dom g iff dom f9 = dom g9 by A2,Def27;
+  cod g = cod g9 by A2,Def28;
+  hence thesis by A1,Def28;
 end;
 
-Lm1: for f,g being Morphism of GroupCat(UN) st dom g = cod f holds dom(g*f) =
-dom f & cod (g*f) = cod g
+Lm1: for f,g being Morphism of GroupCat(UN) st dom g = cod f
+ holds dom(g(*)f) = dom f & cod (g(*)f) = cod g
 proof
   set X = Morphs(GroupObjects(UN));
   let f,g be Morphism of GroupCat(UN) such that
 A1: dom g = cod f;
-  reconsider g9 = g as strict Element of X by Th47;
-  reconsider f9 = f as strict Element of X by Th47;
-A2: dom g9 = cod f9 by A1,Th50;
-  then reconsider gf = g9*f9 as Element of X by Th45;
-A3: gf = g*f by A1,Th50;
-  dom(g9*f9) = dom f9 & cod (g9*f9) = cod g9 by A2,Th31;
-  hence thesis by A3,Th50;
-end;
-
-Lm2: for f,g,h being Morphism of GroupCat(UN) st dom h = cod g & dom g = cod f
-holds h*(g*f) = (h*g)*f
-proof
-  set X = Morphs( (GroupObjects(UN)));
-  let f,g,h be Morphism of (GroupCat(UN)) such that
-A1: dom h = cod g & dom g = cod f;
-  reconsider f9=f, g9=g, h9=h as strict Element of X by Th47;
-A2: h9*g9 = h*g & dom(h*g) = cod(f) by A1,Lm1,Th50;
-A3: dom h9 = cod g9 & dom g9 = cod f9 by A1,Th50;
-  then reconsider gf = g9*f9, hg = h9*g9 as Element of X by Th45;
-  g9*f9 = g*f & dom(h) = cod(g*f) by A1,Lm1,Th50;
-  then h*(g*f) = h9*gf by Th50
-    .= hg*f9 by A3,Th33
-    .= (h*g)*f by A2,Th50;
-  hence thesis;
-end;
-
-Lm3: for b being Object of GroupCat(UN) holds dom id b = b & cod id b = b & (
-for f being Morphism of GroupCat(UN) st cod f = b holds (id b)*f = f) & for g
-being Morphism of GroupCat(UN) st dom g = b holds g*(id b) = g
-proof
-  set C = GroupCat(UN), V = GroupObjects(UN);
-  set X = Morphs(V);
-  let b be Object of C;
-  reconsider b9 = b as Element of V;
-  reconsider b99 = b9 as AddGroup;
-A1: id b = ID(b9) by Th48;
-  hence
-A2: dom id b = dom ID(b99) by Def32
-    .= b;
-  thus
-A3: cod id b = cod ID(b99) by A1,Def33
-    .= b;
-  thus for f being Morphism of C st cod f = b holds (id b)*f = f
-  proof
-    let f be Morphism of C such that
-A4: cod f = b;
-    reconsider f1 = f as strict Element of X by Th47;
-    reconsider f9 = f1 as strict GroupMorphism;
-A5: cod f9 = b99 by A4,Def33;
-    thus (id b)*f = ID(b99)*f9 by A1,A2,A4,Th50
-      .= f by A5,Th34;
-  end;
-  thus for g being Morphism of C st dom g = b holds g*(id b) = g
-  proof
-    let f be Morphism of C such that
-A6: dom f = b;
-    reconsider f1 = f as strict Element of X by Th47;
-    reconsider f9 = f1 as strict GroupMorphism;
-A7: dom f9 = b99 by A6,Def32;
-    thus f*(id b) = f9*ID(b99) by A1,A3,A6,Th50
-      .= f by A7,Th34;
-  end;
+  reconsider g9 = g as strict Element of X by Th34;
+  reconsider f9 = f as strict Element of X by Th34;
+A2: dom g9 = cod f9 by A1,Th36;
+  then reconsider gf = g9*f9 as Element of X by Th32;
+A3: gf = g(*)f by A1,Th36;
+  dom(g9*f9) = dom f9 & cod (g9*f9) = cod g9 by A2,Th20;
+  hence thesis by A3,Th36;
 end;
 
 registration
   let UN;
-  cluster GroupCat(UN) -> Category-like;
+  cluster GroupCat UN -> reflexive Category-like;
   coherence
-  proof
-A1: ( for f,g,h being Morphism of GroupCat(UN) st dom h = cod g & dom g =
-cod f holds h*(g*f) = (h*g)*f)& for b being Object of GroupCat(UN) holds dom id
-b = b & cod id b = b & (for f being Morphism of GroupCat(UN) st cod f = b holds
-(id b)*f = f) & for g being Morphism of GroupCat(UN) st dom g = b holds g*(id b
-    ) = g by Lm2,Lm3;
-    ( for f,g being Morphism of GroupCat(UN) holds [g,f] in dom(the Comp
-of GroupCat(UN)) iff dom g = cod f)& for f,g being Morphism of GroupCat(UN) st
-    dom g = cod f holds dom(g*f) = dom f & cod (g*f) = cod g by Lm1,Th46;
-    hence thesis by A1,CAT_1:10;
+  proof set C = GroupCat UN;
+  thus C is reflexive
+   proof let a be Element of C;
+     reconsider G = a as Element of GroupObjects UN;
+     consider x such that
+   x in UN and
+W2:   GO x,G by Def24;
+     set ii = ID G;
+     consider x1,x2,x3,x4 being set such that x = [x1,x2,x3,x4] and
+W3:   ex H being strict AddGroup st G = H & x1 = the carrier of H &
+         x2 = the addF of H & x3 = comp H & x4 = 0.H by W2,Def23;
+     reconsider G as strict Element of GroupObjects UN by W3;
+     reconsider ii as Morphism of C;
+     reconsider ia = ii as GroupMorphismStr;
+A:   dom ii = dom ia by Def27
+       .= a;
+     cod ii = cod ia by Def28
+       .= a;
+     then ii in Hom(a,a) by A;
+    hence Hom(a,a)<>{};
+   end;
+  let f,g be Morphism of C;
+    reconsider ff=f, gg=g as Element of Morphs GroupObjects UN;
+   thus [g,f] in dom(the Comp of C) iff dom g = cod f by Th36;
   end;
+end;
+
+Lm3:
+  for a being Element of GroupCat UN,
+      aa being Element of GroupObjects UN st a = aa
+   for i being Morphism of a,a st i = ID aa
+    for b being Element of GroupCat UN holds
+     (Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g) &
+     (Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f)
+ proof
+  let a be Element of GroupCat UN,
+      aa be Element of GroupObjects UN such that
+ a = aa;
+  let i be Morphism of a,a such that
+Z2: i = ID aa;
+  let b be Element of GroupCat UN;
+  thus Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g
+   proof assume
+Z3:  Hom(a,b)<>{};
+    let g be Morphism of a,b;
+     reconsider gg=g, ii=i as Element of Morphs GroupObjects UN;
+     consider G1,H1 being strict Element of GroupObjects UN such that
+W1:   gg is strict Morphism of G1,H1 by Def25;
+     consider f being Function of G1,H1 such that
+W2:   gg = GroupMorphismStr(#G1,H1,f#) by W1,Th13;
+D:   ii =  GroupMorphismStr(# aa,aa,id aa#) by Z2;
+C:   cod ii = aa by Z2;
+C2:  dom gg = G1 by W2;
+E:   Hom(a,a) <> {};
+     dom g = a by Z3,CAT_1:5 .= cod i by E,CAT_1:5;
+     then
+C1:   dom gg = cod ii by Th36;
+     then aa =  dom gg by C;
+     then
+B:   aa = G1 by C2;
+     then reconsider f as Function of aa,H1;
+G1:  the GroupMorphismStr of gg = GroupMorphismStr(#aa,H1,f#) by W2,B;
+A:   [gg,ii] in dom comp GroupObjects UN by Def30,C1;
+     then [g,i] in dom the Comp of GroupCat UN;
+    hence g(*)i = (the Comp of GroupCat UN).(g,i) by CAT_1:def 1
+        .= (comp GroupObjects UN).(g,i)
+        .= gg*ii by A,Def30
+        .= GroupMorphismStr(# aa,H1,f*id aa#) by D,Def16,G1,C1
+        .= GroupMorphismStr(# aa,H1,f#) by FUNCT_2:17
+        .= g by B,W2;
+   end;
+  thus Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f
+   proof assume
+Z3:  Hom(b,a)<>{};
+    let g be Morphism of b,a;
+     reconsider gg=g, ii=i as Element of Morphs GroupObjects UN;
+     consider G1,H1 being strict Element of GroupObjects UN such that
+W1:   gg is strict Morphism of G1,H1 by Def25;
+     consider f being Function of G1,H1 such that
+W2:   gg = GroupMorphismStr(#G1,H1,f#) by W1,Th13;
+D:   ii =  GroupMorphismStr(# aa,aa,id aa#) by Z2;
+C:   dom ii = aa by Z2;
+C2:  cod gg = H1 by W2;
+E:   Hom(a,a) <> {};
+     cod g = a by Z3,CAT_1:5 .= dom i by E,CAT_1:5;
+     then
+C1:   cod gg = dom ii by Th36;
+     then aa =  cod gg by C;
+     then
+B:   aa = H1 by C2;
+     then reconsider f as Function of G1,aa;
+G1:  the GroupMorphismStr of gg = GroupMorphismStr(#G1,aa,f#) by W2,B;
+A:   [ii,gg] in dom comp GroupObjects UN by Def30,C1;
+     then [i,g] in dom the Comp of GroupCat UN;
+    hence i(*)g = (the Comp of GroupCat UN).(i,g) by CAT_1:def 1
+        .= (comp GroupObjects UN).(i,g)
+        .= ii*gg by A,Def30
+        .= GroupMorphismStr(# G1,aa,(id aa)*f#) by D,Def16,G1,C1
+        .= GroupMorphismStr(# G1,aa,f#) by FUNCT_2:17
+        .= g by B,W2;
+   end;
+ end;
+
+registration
+  let UN;
+  cluster GroupCat UN ->
+   transitive associative with_identities;
+  coherence
+  proof set C = GroupCat UN;
+   set X = Morphs(GroupObjects(UN));
+   thus C is transitive
+    proof
+  let f,g be Morphism of GroupCat(UN) such that
+A1: dom g = cod f;
+  reconsider g9 = g as strict Element of X by Th34;
+  reconsider f9 = f as strict Element of X by Th34;
+A2: dom g9 = cod f9 by A1,Th36;
+  then reconsider gf = g9*f9 as Element of X by Th32;
+A3: gf = g(*)f by A1,Th36;
+  dom(g9*f9) = dom f9 & cod (g9*f9) = cod g9 by A2,Th20;
+  hence thesis by A3,Th36;
+    end;
+   thus C is associative
+   proof
+  let f,g,h be Morphism of (GroupCat(UN)) such that
+A1: dom h = cod g & dom g = cod f;
+  reconsider f9=f, g9=g, h9=h as strict Element of X by Th34;
+A2: h9*g9 = h(*)g & dom(h(*)g) = cod(f) by A1,Lm1,Th36;
+A3: dom h9 = cod g9 & dom g9 = cod f9 by A1,Th36;
+  then reconsider gf = g9*f9, hg = h9*g9 as Element of X by Th32;
+  g9*f9 = g(*)f & dom(h) = cod(g(*)f) by A1,Lm1,Th36;
+  then h(*)(g(*)f) = h9*gf by Th36
+    .= hg*f9 by A3,Th22
+    .= (h(*)g)(*)f by A2,Th36;
+  hence thesis;
+  end;
+  thus C is with_identities
+   proof let a be Element of C;
+     reconsider aa = a as Element of GroupObjects(UN);
+    reconsider ii = ID aa as Morphism of C;
+    reconsider ia = ii as GroupMorphismStr;
+ A: dom ii = dom ia by Def27
+       .= a;
+    cod ii = cod ia by Def28
+       .= a;
+    then reconsider ii as Morphism of a,a by A,CAT_1:4;
+    take ii;
+    thus thesis by Lm3;
+   end;
+end;
 end;
 
 definition
@@ -1552,23 +1598,23 @@ where G is Element of GroupCat(UN) : ex H being AbGroup st G = H
   end;
 end;
 
-theorem Th51:
+theorem Th37:
   Trivial-addLoopStr in AbGroupObjects(UN)
 proof
-  Trivial-addLoopStr in the carrier of GroupCat(UN) by Th42;
+  Trivial-addLoopStr in the carrier of GroupCat(UN) by Th29;
   hence thesis;
 end;
 
 registration
   let UN;
   cluster AbGroupObjects(UN) -> non empty;
-  coherence by Th51;
+  coherence by Th37;
 end;
 
 definition
   let UN;
-  func AbGroupCat(UN) -> Subcategory of GroupCat(UN) equals
-  cat(AbGroupObjects(UN));
+  func AbGroupCat UN -> Subcategory of GroupCat(UN) equals
+  cat AbGroupObjects UN;
   coherence;
 end;
 
@@ -1612,7 +1658,7 @@ registration
     set D2 = the carrier of AbGroupCat(UN);
     set D1 = {G where G is Element of D2 : ex H being midpoint_operator
     AbGroup st G = H};
-    T in D2 by Th51;
+    T in D2 by Th37;
     then T in D1;
     then reconsider D1 as non empty set;
     now
@@ -1628,9 +1674,8 @@ end;
 
 definition
   let UN;
-  func MidOpGroupCat(UN) -> Subcategory of AbGroupCat(UN) equals
-  cat(
-  MidOpGroupObjects(UN));
+  func MidOpGroupCat UN -> Subcategory of AbGroupCat(UN) equals
+  cat MidOpGroupObjects UN;
   coherence;
 end;
 
@@ -1646,7 +1691,7 @@ theorem
 theorem
   Trivial-addLoopStr in MidOpGroupObjects(UN)
 proof
-  Trivial-addLoopStr in the carrier of AbGroupCat(UN) by Th51;
+  Trivial-addLoopStr in the carrier of AbGroupCat(UN) by Th37;
   hence thesis;
 end;
 
@@ -1665,3 +1710,25 @@ A3: rng f = the carrier of T by FUNCT_2:def 3;
 ,TOPS_2:49;
   hence thesis by A2,A3,A1,FUNCT_2:def 3,TOPS_2:50,52;
 end;
+
+theorem
+  for a being Object of GroupCat(UN), aa being Element of
+  GroupObjects(UN) st a = aa holds id a = ID aa
+ proof let a be Object of GroupCat UN, aa be Element of GroupObjects UN;
+  set C = GroupCat UN;
+  assume
+Z:  a = aa;
+   reconsider ii = ID aa as Morphism of C;
+   reconsider ia = ii as GroupMorphismStr;
+A: dom ii = dom ia by Def27
+      .= a by Z;
+   cod ii = cod ia by Def28
+      .= a by Z;
+   then reconsider ii as Morphism of a,a by A,CAT_1:4;
+  for b being Object of C holds
+     (Hom(a,b) <> {} implies
+       for f being Morphism of a,b holds f(*)ii = f)
+   & (Hom(b,a) <> {} implies
+     for f being Morphism of b,a holds ii(*)f = f) by Z,Lm3;
+  hence id a = ID aa by CAT_1:def 12;              
+ end;

@@ -2,7 +2,7 @@
 ::  by Michal Muzalewski
 ::
 :: Received October 3, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,15 +17,16 @@ environ
  vocabularies XBOOLE_0, CLASSES2, TARSKI, ZFMISC_1, SUBSET_1, FUNCT_5, FUNCT_1,
       FUNCT_2, ALGSTR_0, MIDSP_2, ROBBINS1, SUPINF_2, ARYTM_3, ARYTM_1, CAT_1,
       STRUCT_0, RELAT_1, GRAPH_1, VECTSP_1, PARTFUN1, REALSET1, MIDSP_1, CAT_2,
-      FUNCOP_1, MSSUBFAM, RLVECT_1, ENS_1, ALGSTR_1, GRCAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
-      REALSET1, PARTFUN1, FUNCT_2, ORDINAL1, CLASSES2, BINOP_1, FUNCT_5,
-      STRUCT_0, ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1,
-      CAT_2, ALGSTR_1, MIDSP_2;
+      FUNCOP_1, MSSUBFAM, RLVECT_1, ENS_1, ALGSTR_1, GRCAT_1, MONOID_0,
+      RELAT_2, BINOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, RELAT_1, FUNCT_1,
+      MCART_1, REALSET1, PARTFUN1, FUNCT_2, ORDINAL1, CLASSES2, BINOP_1,
+      FUNCOP_1, FUNCT_5, STRUCT_0, ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1,
+      VECTSP_1, CAT_2, ALGSTR_1, MIDSP_2;
  constructors PARTFUN1, CLASSES1, CLASSES2, REALSET1, TOPS_2, VECTSP_2, CAT_2,
-      ALGSTR_1, MIDSP_2, FUNCOP_1, RELSET_1;
+      ALGSTR_1, MIDSP_2, FUNCOP_1, RELSET_1, FUNCT_5, XTUPLE_0;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, CLASSES2, STRUCT_0, ALGSTR_1,
-      MIDSP_2, ALGSTR_0, CAT_2;
+      MIDSP_2, ALGSTR_0, CAT_2, XTUPLE_0, CAT_1, REALSET1, SUBSET_1;
  requirements SUBSET, BOOLE;
 
 
@@ -85,19 +86,15 @@ definition
   (the Target of C)|Morphs(O);
   func comp(O) -> PartFunc of [:Morphs(O),(Morphs(O)):],Morphs(O) equals
 :: GRCAT_1:def 4
-  (the
-  Comp of C)||Morphs(O);
-  func ID(O) -> Function of O,Morphs(O) equals
-:: GRCAT_1:def 5
-  (the Id of C)|O;
+  (the Comp of C)||Morphs(O);
+ canceled;
 end;
 
 definition
   let C,O;
   func cat(O) -> Subcategory of C equals
 :: GRCAT_1:def 6
-  CatStr (# O,Morphs(O),dom(O),cod(O),
-    comp(O),ID(O)#);
+  CatStr (# O,Morphs(O),dom(O),cod(O),comp(O)#);
 end;
 
 registration
@@ -116,14 +113,6 @@ definition
   func ZeroMap(G,H) -> Function of G,H equals
 :: GRCAT_1:def 7
   (the carrier of G) --> 0.H;
-end;
-
-definition
-  let G,H be non empty addMagma;
-  let f be Function of G,H;
-  attr f is additive means
-:: GRCAT_1:def 8
- for x,y being Element of G holds f.(x+y) = f.x+f.y;
 end;
 
 theorem :: GRCAT_1:6
@@ -162,6 +151,7 @@ definition
 end;
 
 definition
+ canceled;
   let f be GroupMorphismStr;
   func dom(f) -> AddGroup equals
 :: GRCAT_1:def 9
@@ -543,10 +533,6 @@ definition
 :: GRCAT_1:def 28
 
   for f being Element of Morphs(V) holds it.f = cod(f);
-  func ID(V) -> Function of V,Morphs(V) means
-:: GRCAT_1:def 29
-
-  for G being Element of V holds it.G = ID(G);
 end;
 
 ::
@@ -564,7 +550,7 @@ theorem :: GRCAT_1:32
 definition
   let V;
   func comp(V) -> PartFunc of [:Morphs(V),Morphs(V):],Morphs(V) means
-:: GRCAT_1:def 30
+:: GRCAT_1:def 29
 
 (for g,f being Element of Morphs(V) holds [g,f] in dom it iff dom(g) = cod(f))
   & for g,f being Element of Morphs(V) st [g,f] in dom it holds it.(g,f) = g*f;
@@ -576,11 +562,11 @@ end;
 
 definition
   let UN;
-  func GroupCat(UN) -> CatStr equals
-:: GRCAT_1:def 31
+  func GroupCat(UN) -> non empty non void strict CatStr equals
+:: GRCAT_1:def 30
   CatStr(# GroupObjects(UN),Morphs(
     GroupObjects(UN)), dom(GroupObjects(UN)),cod(GroupObjects(UN)), comp(
-    GroupObjects(UN)),ID(GroupObjects(UN))#);
+    GroupObjects(UN))#);
 end;
 
 registration
@@ -599,26 +585,33 @@ GroupObjects(UN) holds f is strict Element of Morphs(GroupObjects(UN)) & f9 is
   Morphism of GroupCat(UN) & b is strict Element of GroupObjects(UN) & b9 is
   Object of GroupCat(UN);
 
-theorem :: GRCAT_1:35
-  for b being Object of GroupCat(UN), b9 being Element of
-  GroupObjects(UN) st b = b9 holds id b = ID(b9);
+canceled;
 
 theorem :: GRCAT_1:36
-  for f,g being (Morphism of GroupCat(UN)), f9,g9 being Element of
-  Morphs(GroupObjects(UN)) st f = f9 & g = g9 holds (dom g = cod f iff dom g9 =
-cod f9) & (dom g = cod f iff [g9,f9] in dom comp(GroupObjects(UN))) & (dom g =
-cod f implies g*f = g9*f9) & (dom f = dom g iff dom f9 = dom g9) & (cod f = cod
-  g iff cod f9 = cod g9);
+  for f,g being (Morphism of GroupCat(UN)),
+      f9,g9 being Element of Morphs(GroupObjects(UN)) st f = f9 & g = g9
+ holds
+  (dom g = cod f iff dom g9 = cod f9) &
+  (dom g = cod f iff [g9,f9] in dom comp(GroupObjects(UN))) &
+  (dom g = cod f implies g(*)f = g9*f9) &
+  (dom f = dom g iff dom f9 = dom g9) &
+  (cod f = cod g iff cod f9 = cod g9);
 
 registration
   let UN;
-  cluster GroupCat(UN) -> Category-like;
+  cluster GroupCat UN -> reflexive Category-like;
+end;
+
+registration
+  let UN;
+  cluster GroupCat UN ->
+   transitive associative with_identities;
 end;
 
 definition
   let UN;
   func AbGroupObjects(UN) -> Subset of the carrier of GroupCat(UN) equals
-:: GRCAT_1:def 32
+:: GRCAT_1:def 31
   {G
 where G is Element of GroupCat(UN) : ex H being AbGroup st G = H
   };
@@ -634,9 +627,9 @@ end;
 
 definition
   let UN;
-  func AbGroupCat(UN) -> Subcategory of GroupCat(UN) equals
-:: GRCAT_1:def 33
-  cat(AbGroupObjects(UN));
+  func AbGroupCat UN -> Subcategory of GroupCat(UN) equals
+:: GRCAT_1:def 32
+  cat AbGroupObjects UN;
 end;
 
 registration
@@ -652,7 +645,7 @@ theorem :: GRCAT_1:38
 definition
   let UN;
   func MidOpGroupObjects(UN) -> Subset of the carrier of AbGroupCat(UN) equals
-:: GRCAT_1:def 34
+:: GRCAT_1:def 33
   {G where G is Element of AbGroupCat(UN) : ex H being
   midpoint_operator AbGroup st G = H};
 end;
@@ -664,10 +657,9 @@ end;
 
 definition
   let UN;
-  func MidOpGroupCat(UN) -> Subcategory of AbGroupCat(UN) equals
-:: GRCAT_1:def 35
-  cat(
-  MidOpGroupObjects(UN));
+  func MidOpGroupCat UN -> Subcategory of AbGroupCat(UN) equals
+:: GRCAT_1:def 34
+  cat MidOpGroupObjects UN;
 end;
 
 registration
@@ -684,3 +676,7 @@ theorem :: GRCAT_1:40
 theorem :: GRCAT_1:41 :: WAYBEL29:1
   for S, T being non empty 1-sorted for f being Function of S, T st f is
   one-to-one onto holds f*f" = id T & f"*f = id S & f" is one-to-one onto;
+
+theorem :: GRCAT_1:42
+  for a being Object of GroupCat(UN), aa being Element of
+  GroupObjects(UN) st a = aa holds id a = ID aa;

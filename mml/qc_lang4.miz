@@ -2,7 +2,7 @@
 ::  by Oleg Okhotnikov
 ::
 :: Received October 2, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,16 +17,16 @@ environ
  vocabularies NUMBERS, SUBSET_1, FINSEQ_1, RELAT_1, TREES_1, XBOOLE_0, ARYTM_3,
       XXREAL_0, ORDINAL4, CARD_1, FUNCT_1, TARSKI, TREES_2, TREES_9, ORDINAL1,
       NAT_1, FINSET_1, QC_LANG1, ZF_LANG, CLASSES2, TREES_4, QC_LANG4;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1, FINSEQ_4,
-      TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1,
-      XXREAL_0;
+ notations TARSKI, XBOOLE_0,
+      XTUPLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, ORDINAL1,
+      NAT_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1, FINSEQ_4,
+      TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, XXREAL_0;
  constructors BINOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_4, TREES_4, TREES_9,
-      QC_LANG2, RELSET_1;
+      QC_LANG2, RELSET_1, XTUPLE_0;
  registrations SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XREAL_0, NAT_1,
-      FINSEQ_1, TREES_1, TREES_2, TREES_A, TREES_9, CARD_1, RELAT_1;
+      FINSEQ_1, TREES_1, TREES_2, TREES_A, TREES_9, CARD_1, RELAT_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, TREES_2, TREES_4, BINOP_1;
+ definitions TARSKI, XBOOLE_0, TREES_2, TREES_4, BINOP_1, XTUPLE_0;
  theorems TARSKI, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, TREES_1, TREES_2, TREES_9,
       GRFUNC_1, QC_LANG1, QC_LANG2, XBOOLE_0, XBOOLE_1, FINSEQ_6, XREAL_1,
       XXREAL_0, ORDINAL1;
@@ -34,11 +34,11 @@ environ
 
 begin
 
+reserve A for QC-alphabet;
 reserve n,k,m for Element of NAT;
+reserve F,G,G9,H,H9 for Element of QC-WFF(A);
 
-reserve F, G, G9,H, H9 for Element of QC-WFF;
-
-theorem Th28:
+theorem Th1:
   F is_subformula_of G implies len @ F <= len @ G
 proof
   assume
@@ -70,119 +70,123 @@ A2: len @ F = len @ G;
 end;
 
 definition
-  let p be Element of QC-WFF;
-  func list_of_immediate_constituents(p) -> FinSequence of QC-WFF equals
-  :Def1
-  :
-  <*> QC-WFF if p = VERUM or p is atomic, <* the_argument_of p *> if p is
+  let A;
+  let p be Element of QC-WFF(A);
+  func list_of_immediate_constituents(p) -> FinSequence of QC-WFF(A) equals
+  :Def1:
+  <*> QC-WFF(A) if p = VERUM(A) or
+  p is atomic, <* the_argument_of p *> if p is
   negative, <* the_left_argument_of p, the_right_argument_of p *> if p is
   conjunctive otherwise <* the_scope_of p *>;
   coherence;
-  consistency by QC_LANG1:18;
+  consistency by QC_LANG1:20;
 end;
 
-theorem Th30:
+theorem Th3:
   k in dom list_of_immediate_constituents(F) & G = (
   list_of_immediate_constituents(F)).k implies G is_immediate_constituent_of F
 proof
   assume that
 A1: k in dom list_of_immediate_constituents(F) and
 A2: G = (list_of_immediate_constituents(F)).k;
-A3: F <> VERUM & not F is atomic by A1,Def1,RELAT_1:38;
-  per cases by A3,QC_LANG1:7;
+A3:  list_of_immediate_constituents(F) <> <*>QC-WFF(A) by A1;
+A4: F <> VERUM(A) & not F is atomic by Def1,A3;
+  per cases by A4,QC_LANG1:9;
   suppose
-A4: F is negative;
+A5: F is negative;
     then
-A5: list_of_immediate_constituents(F) = <* the_argument_of F *> by Def1;
+A6: list_of_immediate_constituents(F) = <* the_argument_of F *> by Def1;
     then k in Seg 1 by A1,FINSEQ_1:def 8;
     then k = 1 by FINSEQ_1:2,TARSKI:def 1;
-    then G = the_argument_of F by A2,A5,FINSEQ_1:def 8;
-    hence thesis by A4,QC_LANG2:48;
+    then G = the_argument_of F by A2,A6,FINSEQ_1:def 8;
+    hence thesis by A5,QC_LANG2:48;
   end;
   suppose
-A6: F is universal;
+A7: F is universal;
     then
-A7: not F is conjunctive by QC_LANG1:18;
-    ( not F is atomic)& not F is negative by A6,QC_LANG1:18;
+A8: not F is conjunctive by QC_LANG1:20;
+    (not F is atomic)& not F is negative by A7,QC_LANG1:20;
     then
-A8: list_of_immediate_constituents(F) = <* the_scope_of F *> by A6,A7,Def1,
-QC_LANG1:18;
+A9: list_of_immediate_constituents(F) = <* the_scope_of F *>
+      by A8,Def1,A4;
     then k in Seg 1 by A1,FINSEQ_1:def 8;
     then k = 1 by FINSEQ_1:2,TARSKI:def 1;
-    then G = the_scope_of F by A2,A8,FINSEQ_1:def 8;
-    hence thesis by A6,QC_LANG2:50;
+    then G = the_scope_of F by A2,A9,FINSEQ_1:def 8;
+    hence thesis by A7,QC_LANG2:50;
   end;
   suppose
-A9: F is conjunctive;
-A10: <* the_left_argument_of F, the_right_argument_of F *>.2 =
+A10: F is conjunctive;
+A11: <* the_left_argument_of F, the_right_argument_of F *>.2 =
     the_right_argument_of F by FINSEQ_1:44;
-A11: <* the_left_argument_of F, the_right_argument_of F *>.1 =
+A12: <* the_left_argument_of F, the_right_argument_of F *>.1 =
     the_left_argument_of F by FINSEQ_1:44;
-A12: list_of_immediate_constituents(F) = <* the_left_argument_of F,
-    the_right_argument_of F *> by A9,Def1;
+A13: list_of_immediate_constituents(F) = <* the_left_argument_of F,
+    the_right_argument_of F *> by A10,Def1;
     len <* the_left_argument_of F, the_right_argument_of F *> = 2 by
 FINSEQ_1:44;
     then
-A13: k in {1,2} by A1,A12,FINSEQ_1:2,def 3;
+A14: k in {1,2} by A1,A13,FINSEQ_1:2,def 3;
     now
-      per cases by A13,TARSKI:def 2;
+      per cases by A14,TARSKI:def 2;
       suppose
         k = 1;
-        hence thesis by A2,A9,A12,A11,QC_LANG2:49;
+        hence thesis by A2,A10,A13,A12,QC_LANG2:49;
       end;
       suppose
         k = 2;
-        hence thesis by A2,A9,A12,A10,QC_LANG2:49;
+        hence thesis by A2,A10,A13,A11,QC_LANG2:49;
       end;
     end;
     hence thesis;
   end;
   suppose
-A14: F is universal;
+A15: F is universal;
     then
-A15: not F is conjunctive by QC_LANG1:18;
-    ( not F is atomic)& not F is negative by A14,QC_LANG1:18;
+A16: not F is conjunctive by QC_LANG1:20;
+    (not F is atomic)& not F is negative by A15,QC_LANG1:20;
     then
-A16: list_of_immediate_constituents(F) = <* the_scope_of F *> by A14,A15,Def1,
-QC_LANG1:18;
+A17: list_of_immediate_constituents(F) = <* the_scope_of F *>
+      by A16,Def1,A4;
     then k in Seg 1 by A1,FINSEQ_1:def 8;
     then k = 1 by FINSEQ_1:2,TARSKI:def 1;
-    then G = the_scope_of F by A2,A16,FINSEQ_1:def 8;
-    hence thesis by A14,QC_LANG2:50;
+    then G = the_scope_of F by A2,A17,FINSEQ_1:def 8;
+    hence thesis by A15,QC_LANG2:50;
   end;
 end;
 
-theorem Th31:
+theorem Th4:
   rng list_of_immediate_constituents(F) = { G where G is Element
-  of QC-WFF : G is_immediate_constituent_of F }
+  of QC-WFF(A) : G is_immediate_constituent_of F }
 proof
   thus rng list_of_immediate_constituents(F) c= { G where G is Element of
-  QC-WFF : G is_immediate_constituent_of F }
+  QC-WFF(A) : G is_immediate_constituent_of F }
   proof
     let y be set;
     assume
 A1: y in rng list_of_immediate_constituents(F);
-    rng list_of_immediate_constituents(F) c= QC-WFF by FINSEQ_1:def 4;
-    then reconsider G = y as Element of QC-WFF by A1;
+    rng list_of_immediate_constituents(F) c= QC-WFF(A) by FINSEQ_1:def 4;
+    then reconsider G = y as Element of QC-WFF(A) by A1;
     ex x being set st x in dom list_of_immediate_constituents(F) & y = (
     list_of_immediate_constituents(F)).x by A1,FUNCT_1:def 3;
-    then G is_immediate_constituent_of F by Th30;
+    then G is_immediate_constituent_of F by Th3;
     hence thesis;
   end;
-  thus { G where G is Element of QC-WFF : G is_immediate_constituent_of F } c=
+  thus { G where G is Element of QC-WFF(A) :
+    G is_immediate_constituent_of F } c=
   rng list_of_immediate_constituents(F)
   proof
     let x be set;
     assume
-    x in { G where G is Element of QC-WFF : G is_immediate_constituent_of F };
+    x in { G where G is Element of QC-WFF(A) :
+    G is_immediate_constituent_of F };
     then consider G such that
 A2: x = G and
 A3: G is_immediate_constituent_of F;
     ex n st n in dom list_of_immediate_constituents(F) & G = (
     list_of_immediate_constituents(F)).n
     proof
-A4:   F <> VERUM by A3,QC_LANG2:41;
-      per cases by A3,A4,QC_LANG1:7,QC_LANG2:47;
+A4:   F <> VERUM(A) by A3,QC_LANG2:41;
+      per cases by A3,A4,QC_LANG1:9,QC_LANG2:47;
       suppose
         F is negative;
         then
@@ -225,11 +229,11 @@ A12:        G = the_left_argument_of F;
       suppose
 A13:    F is universal;
         then
-A14:    not F is conjunctive by QC_LANG1:18;
-        ( not F is atomic)& not F is negative by A13,QC_LANG1:18;
+A14:    not F is conjunctive by QC_LANG1:20;
+        ( not F is atomic)& not F is negative by A13,QC_LANG1:20;
         then
-A15:    list_of_immediate_constituents(F) = <* the_scope_of F *> by A13,A14
-,Def1,QC_LANG1:18;
+A15:    list_of_immediate_constituents(F) = <* the_scope_of F *> by A14
+,Def1,A4;
         consider n such that
 A16:    n = 1;
 A17:    G = the_scope_of F by A3,A13,QC_LANG2:50;
@@ -243,22 +247,24 @@ A17:    G = the_scope_of F by A3,A13,QC_LANG2:50;
 end;
 
 definition
-  let p be Element of QC-WFF;
-  func tree_of_subformulae(p) -> finite DecoratedTree of QC-WFF means
+  let A;
+  let p be Element of QC-WFF(A);
+  func tree_of_subformulae(p) -> finite DecoratedTree of QC-WFF(A) means
   :Def2:
   it.{} = p & for x being Element of dom it holds succ(it,x) =
   list_of_immediate_constituents(it.x);
   existence
   proof
-    deffunc F(Element of QC-WFF) = len @ $1;
-    consider W being finite-branching DecoratedTree of QC-WFF such that
-A1: W.{} = p & for x being Element of dom W, w being Element of QC-WFF
-st w = W.x holds succ(W,x) = list_of_immediate_constituents w
+    deffunc F(Element of QC-WFF(A)) = len @ $1;
+    deffunc G(Element of QC-WFF(A)) = list_of_immediate_constituents $1;
+    consider W being finite-branching DecoratedTree of QC-WFF(A) such that
+A1: W.{} = p & for x being Element of dom W, w being Element of QC-WFF(A)
+st w = W.x holds succ(W,x) = G(w)
         from TREES_9:sch 2;
-A2: for t,t9 being Element of dom W, d being Element of QC-WFF st t9 in
+A2: for t,t9 being Element of dom W, d being Element of QC-WFF(A) st t9 in
     succ t & d = W.t9 holds F(d) < F(W.t)
     proof
-      let t,t9 be Element of dom W, d be Element of QC-WFF such that
+      let t,t9 be Element of dom W, d be Element of QC-WFF(A) such that
 A3:   t9 in succ t and
 A4:   d = W.t9;
       consider n such that
@@ -269,22 +275,23 @@ A6:   W.t9 = succ(W,t).(n+1) by A5,TREES_9:40
       dom list_of_immediate_constituents(W.t) = dom succ(W,t) by A1
         .= dom (t succ) by TREES_9:38;
       then n+1 in dom list_of_immediate_constituents(W.t) by A5,TREES_9:39;
-      hence thesis by A4,A6,Th30,QC_LANG2:51;
+      hence thesis by A4,A6,Th3,QC_LANG2:51;
     end;
     W is finite from TREES_9:sch 3(A2);
-    then reconsider W as finite DecoratedTree of QC-WFF;
+    then reconsider W as finite DecoratedTree of QC-WFF(A);
     take W;
     thus thesis by A1;
   end;
   uniqueness
   proof
-    let t1, t2 be finite DecoratedTree of QC-WFF;
-A7: for t1, t2 being finite DecoratedTree of QC-WFF st ( t1.{} = p & for
+    let t1, t2 be finite DecoratedTree of QC-WFF(A);
+A7: for t1, t2 being finite DecoratedTree of QC-WFF(A) st
+  ( t1.{} = p & for
 x being Element of dom t1 holds succ(t1,x) = list_of_immediate_constituents(t1.
     x) ) & ( t2.{} = p & for x being Element of dom t2 holds succ(t2,x) =
     list_of_immediate_constituents(t2.x) ) holds t1 c= t2
     proof
-      let t1, t2 be finite DecoratedTree of QC-WFF;
+      let t1, t2 be finite DecoratedTree of QC-WFF(A);
       assume that
 A8:   t1.{} = p and
 A9:   for x being Element of dom t1 holds succ(t1,x) =
@@ -334,7 +341,7 @@ end;
 
 reserve t, t9, t99 for Element of dom tree_of_subformulae(F);
 
-theorem Th34:
+theorem Th5:
   F in rng tree_of_subformulae(F)
 proof
   (tree_of_subformulae(F)).{} = F & {} in dom tree_of_subformulae(F) by Def2,
@@ -342,7 +349,7 @@ TREES_1:22;
   hence thesis by FUNCT_1:def 3;
 end;
 
-theorem Th35:
+theorem Th6:
   t^<*n*> in dom tree_of_subformulae(F) implies ex G st G = (
   tree_of_subformulae(F)).(t^<*n*>) & G is_immediate_constituent_of (
   tree_of_subformulae(F)).t
@@ -352,8 +359,8 @@ A1: succ t = {t^<*k*>: t^<*k*> in dom tree_of_subformulae(F)};
   then consider t9 such that
 A2: t9 = t^<*n*>;
 A3: rng list_of_immediate_constituents((tree_of_subformulae(F)).t) = { G1
-  where G1 is Element of QC-WFF : G1 is_immediate_constituent_of (
-  tree_of_subformulae(F)).t } by Th31;
+  where G1 is Element of QC-WFF(A) : G1 is_immediate_constituent_of (
+  tree_of_subformulae(F)).t } by Th4;
   consider G such that
 A4: G = (tree_of_subformulae(F)).t9;
   t9 in {t^<*k*>: t^<*k*> in dom tree_of_subformulae(F)} by A2;
@@ -363,7 +370,7 @@ Def2;
   hence thesis by A2,A4,A3;
 end;
 
-theorem Th36:
+theorem Th7:
   H is_immediate_constituent_of (tree_of_subformulae(F)).t iff ex
 n st t^<*n*> in dom tree_of_subformulae(F) & H = (tree_of_subformulae(F)).(t^<*
   n*>)
@@ -371,10 +378,10 @@ proof
   now
     set G = (tree_of_subformulae(F)).t;
     assume H is_immediate_constituent_of (tree_of_subformulae(F)).t;
-    then H in {H1 where H1 is Element of QC-WFF : H1
+    then H in {H1 where H1 is Element of QC-WFF(A) : H1
     is_immediate_constituent_of G };
     then
-A1: H in rng list_of_immediate_constituents(G) by Th31;
+A1: H in rng list_of_immediate_constituents(G) by Th4;
     succ(tree_of_subformulae(F),t) = list_of_immediate_constituents(G) by Def2;
     then consider t9 such that
 A2: H = (tree_of_subformulae(F)).t9 and
@@ -390,11 +397,11 @@ st t^<*n*> in dom tree_of_subformulae(F) & H = (tree_of_subformulae(F)).(t^<*n
 A4: t^<*n*> in dom tree_of_subformulae(F) and
 A5: H = (tree_of_subformulae(F)).(t^<*n*>);
   ex G st G = (tree_of_subformulae(F)).(t^<*n*>) & G
-  is_immediate_constituent_of (tree_of_subformulae(F)).t by A4,Th35;
+  is_immediate_constituent_of (tree_of_subformulae(F)).t by A4,Th6;
   hence thesis by A5;
 end;
 
-theorem Th37:
+theorem Th8:
   G in rng tree_of_subformulae(F) & H is_immediate_constituent_of
   G implies H in rng tree_of_subformulae(F)
 proof
@@ -407,11 +414,11 @@ A4: G = (tree_of_subformulae(F)).x by A1,FUNCT_1:def 3;
   consider t such that
 A5: t = x by A3;
   ex n st t^<*n*> in dom tree_of_subformulae(F) & H = ( tree_of_subformulae
-  (F)).(t^<*n*>) by A2,A4,A5,Th36;
+  (F)).(t^<*n*>) by A2,A4,A5,Th7;
   hence thesis by FUNCT_1:def 3;
 end;
 
-theorem Th38:
+theorem Th9:
   G in rng tree_of_subformulae(F) & H is_subformula_of G implies H
   in rng tree_of_subformulae(F)
 proof
@@ -423,7 +430,8 @@ A3: 1 <= n and
 A4: len L = n and
 A5: L.1 = H and
 A6: L.n = G and
-A7: for k st 1 <= k & k < n ex H1,G1 being Element of QC-WFF st L.k = H1
+A7: for k st 1 <= k & k < n ex H1,G1 being Element of QC-WFF(A) st
+   L.k = H1
   & L.(k+1) = G1 & H1 is_immediate_constituent_of G1 by A2,QC_LANG2:def 20;
   defpred P[Nat] means ex H9 st H9 = L.($1+1) & ($1+1) in dom L & H9 in rng
   tree_of_subformulae(F);
@@ -444,13 +452,13 @@ A13: 0+1 <= k by NAT_1:13;
 A14: k+1 <= n by A4,A11,FINSEQ_1:1;
     then k in NAT & k < n by NAT_1:13,ORDINAL1:def 12;
     then
-A15: ex H1,G1 being Element of QC-WFF st L.k = H1 & L.(k+1) = G1 & H1
+A15: ex H1,G1 being Element of QC-WFF(A) st L.k = H1 & L.(k+1) = G1 & H1
     is_immediate_constituent_of G1 by A7,A13;
     k <= n by A14,NAT_1:13;
     then
 A16: k in dom L by A13,A9,FINSEQ_1:1;
     m < k by A12,NAT_1:13;
-    hence thesis by A11,A12,A15,A16,Th37;
+    hence thesis by A11,A12,A15,A16,Th8;
   end;
 A17: ex k being Nat st P[k]
   proof
@@ -464,7 +472,7 @@ A18: ex k being Nat st k+1 = n by NAT_1:6;
   hence thesis by A5;
 end;
 
-theorem Th39:
+theorem Th10:
   G in rng tree_of_subformulae(F) iff G is_subformula_of F
 proof
   now
@@ -482,15 +490,15 @@ A3: for t being Element of T, n st P[t] & t^<*n*> in T holds P[t^<*n*>]
       assume that
 A4:   P[t] and
 A5:   t^<*n*> in T;
-      (tree_of_subformulae(F)).(t^<*n*>) is Element of QC-WFF by A5,FUNCT_1:102
-;
+      (tree_of_subformulae(F)).(t^<*n*>) is Element of QC-WFF(A)
+         by A5,FUNCT_1:102;
       then consider H9 such that
 A6:   (tree_of_subformulae(F)).(t^<*n*>) = H9;
       consider H such that
 A7:   (tree_of_subformulae(F)).t = H and
 A8:   H is_subformula_of F by A4;
       ex G9 st G9 = (tree_of_subformulae(F)).(t^<*n*>) & G9
-      is_immediate_constituent_of (tree_of_subformulae(F)).t by A5,Th35;
+      is_immediate_constituent_of (tree_of_subformulae(F)).t by A5,Th6;
       then H9 is_subformula_of H by A7,A6,QC_LANG2:52;
       hence thesis by A8,A6,QC_LANG2:57;
     end;
@@ -505,7 +513,7 @@ A9: P[{}]
   end;
   hence G in rng tree_of_subformulae(F) implies G is_subformula_of F;
   assume G is_subformula_of F;
-  hence thesis by Th34,Th38;
+  hence thesis by Th5,Th9;
 end;
 
 theorem
@@ -516,10 +524,10 @@ proof
     let y be set;
     assume
 A1: y in rng tree_of_subformulae(F);
-    then y is Element of QC-WFF by RELAT_1:167;
+    then y is Element of QC-WFF(A) by RELAT_1:167;
     then consider G such that
 A2: G = y;
-    G is_subformula_of F by A1,A2,Th39;
+    G is_subformula_of F by A1,A2,Th10;
     hence thesis by A2,QC_LANG2:def 22;
   end;
   thus Subformulae(F) c= rng tree_of_subformulae(F)
@@ -527,7 +535,7 @@ A2: G = y;
     let y be set;
     assume y in Subformulae(F);
     then ex G st G = y & G is_subformula_of F by QC_LANG2:def 22;
-    hence thesis by Th39;
+    hence thesis by Th10;
   end;
 end;
 
@@ -537,12 +545,12 @@ theorem
 proof
   assume t9 in succ t;
   then ex n st t9 = t^<*n*> & t^<*n*> in dom tree_of_subformulae(F);
-  hence thesis by Th36;
+  hence thesis by Th7;
 end;
 
 reserve x for set;
 
-theorem Th42:
+theorem Th13:
   t is_a_prefix_of t9 implies (tree_of_subformulae(F)).t9
   is_subformula_of (tree_of_subformulae(F)).t
 proof
@@ -552,7 +560,8 @@ A1: t9 = t^r by TREES_1:1;
   reconsider r as FinSequence of NAT by A1,FINSEQ_1:36;
   consider n such that
 A2: n = len r;
-  defpred P[set,set] means ex G being QC-formula, m,k1 being Nat, r1 being
+  defpred P[set,set] means ex G being QC-formula of A,
+  m,k1 being Nat, r1 being
   FinSequence st G = $2 & m = $1 & m+k1 = n+1 & r1 = r|Seg k1 & G = (
   tree_of_subformulae(F)).(t^r1);
 A3: for k be Nat st k in Seg(n+1) ex x st P[k,x]
@@ -573,7 +582,7 @@ A5: r1 = r|Seg k1;
       hence thesis by A1,A5,FINSEQ_6:13,TREES_1:20;
     end;
     then reconsider t1 = t^r1 as Element of dom tree_of_subformulae(F);
-    consider G being QC-formula such that
+    consider G being QC-formula of A such that
 A6: G = (tree_of_subformulae(F)).t1;
     take G,G,k,k1,r1;
     thus thesis by A4,A5,A6;
@@ -582,11 +591,12 @@ A6: G = (tree_of_subformulae(F)).t1;
   +1) holds P[k,L.k] from FINSEQ_1:sch 1(A3);
   then consider L being FinSequence such that
 A7: dom L = Seg (n+1) and
-A8: for k be Nat st k in Seg (n+1) holds ex G being QC-formula, m,k1
+A8: for k be Nat st k in Seg (n+1) holds ex G being QC-formula of A, m,k1
 being Nat, r1 being FinSequence st G = L.k & m = k & m+k1 = n+1 & r1 = r|Seg k1
   & G = (tree_of_subformulae(F)).(t^r1);
 A9: len L = n+1 by A7,FINSEQ_1:def 3;
-A10: for k st 1 <= k & k <= n+1 ex G being QC-formula, k1 being Nat, r1
+A10: for k st 1 <= k & k <= n+1 ex G being QC-formula of A,
+k1 being Nat, r1
   being FinSequence st G = L.k & k+k1 = n+1 & r1 = r|Seg k1 & G = (
   tree_of_subformulae(F)).(t^r1)
   proof
@@ -594,26 +604,30 @@ A10: for k st 1 <= k & k <= n+1 ex G being QC-formula, k1 being Nat, r1
     assume 1 <= k & k <= n+1;
     then k in Seg (n+1) by FINSEQ_1:1;
     then
-    ex G being QC-formula, m,k1 being Nat, r1 being FinSequence st G = L.k
+    ex G being QC-formula of A, m,k1 being Nat,
+     r1 being FinSequence st G = L.k
 & m = k & m+k1 = n+1 & r1 = r|Seg k1 & G = ( tree_of_subformulae(F)).(t^r1) by
 A8;
     hence thesis;
   end;
-A11: for k st 1 <= k & k < n+1 ex H1,G1 being Element of QC-WFF st L.k = H1
+A11: for k st 1 <= k & k < n+1 ex H1,G1 being Element of QC-WFF(A)
+  st L.k = H1
   & L.(k+1) = G1 & H1 is_immediate_constituent_of G1
   proof
     let k;
     assume that
 A12: 1 <= k and
 A13: k < n+1;
-    consider H1 being QC-formula, k1 being Nat, r1 being FinSequence such that
+    consider H1 being QC-formula of A, k1 being Nat,
+     r1 being FinSequence such that
 A14: H1 = L.k and
 A15: k+k1 = n+1 and
 A16: r1 = r|Seg k1 and
 A17: H1 = (tree_of_subformulae(F)).(t^r1) by A10,A12,A13;
     1 <= k+1 & k+1 <= n+1 by A12,A13,NAT_1:13;
     then consider
-    G1 being QC-formula, k2 being Nat, r2 being FinSequence such that
+    G1 being QC-formula of A,
+      k2 being Nat, r2 being FinSequence such that
 A18: G1 = L.(k+1) and
 A19: (k+1)+k2 = n+1 and
 A20: r2 = r|Seg k2 and
@@ -637,21 +651,22 @@ A23: t2^<*m*> = t^r1 by A22,FINSEQ_1:32;
        by TREES_9:32;
       hence thesis by A1,A16,A23,FINSEQ_6:13,TREES_1:20;
     end;
-    then H1 is_immediate_constituent_of G1 by A17,A21,A23,Th36;
+    then H1 is_immediate_constituent_of G1 by A17,A21,A23,Th7;
     hence thesis by A14,A18;
   end;
   0 < n+1 by NAT_1:3;
   then
 A24: 0+1 <= n+1 by NAT_1:13;
   then consider
-  G being QC-formula, k1 being Nat, r1 being FinSequence such that
+  G being QC-formula of A, k1 being Nat, r1 being FinSequence such that
 A25: G = L.1 and
 A26: 1+k1 = n+1 and
 A27: r1 = r|Seg k1 and
 A28: G = (tree_of_subformulae(F)).(t^r1) by A10;
 A29: L.(n+1) = (tree_of_subformulae(F)).t
   proof
-    consider G being QC-formula, k1 being Nat, r1 being FinSequence such that
+    consider G being QC-formula of A,
+    k1 being Nat, r1 being FinSequence such that
 A30: G = L.(n+1) and
 A31: (n+1)+k1 = n+1 & r1 = r|Seg k1 and
 A32: G = (tree_of_subformulae(F)).(t^r1) by A24,A10;
@@ -663,7 +678,7 @@ A32: G = (tree_of_subformulae(F)).(t^r1) by A24,A10;
   hence thesis by A24,A9,A25,A28,A29,A11,QC_LANG2:def 20;
 end;
 
-theorem Th43:
+theorem Th14:
   t is_a_proper_prefix_of t9 implies len @((tree_of_subformulae(F)
   ).t9) < len @((tree_of_subformulae(F)).t)
 proof
@@ -734,31 +749,31 @@ A13: t1 = t^r1 and
 A14: H1 is_immediate_constituent_of G
     proof
       ex m being Element of NAT st r1 = <*m*> by A5,A12,TREES_9:34;
-      hence thesis by A13,Th36;
+      hence thesis by A13,Th7;
     end;
     r1 is_a_prefix_of r by A12,TREES_1:def 1;
     then t1 is_a_prefix_of t9 by A4,A13,FINSEQ_6:13;
     then
-A15: len @ H <= len @ H1 by Th28,Th42;
+A15: len @ H <= len @ H1 by Th1,Th13;
     assume len @ H = len @ G;
     hence contradiction by A15,A14,QC_LANG2:51;
   end;
-  len @ H <= len @ G by A2,Th28,Th42;
+  len @ H <= len @ G by A2,Th1,Th13;
   hence thesis by A3,XXREAL_0:1;
 end;
 
-theorem Th44:
+theorem Th15:
   t is_a_proper_prefix_of t9 implies (tree_of_subformulae(F)).t9
   <> (tree_of_subformulae(F)).t
 proof
   set G = (tree_of_subformulae(F)).t;
   set H = (tree_of_subformulae(F)).t9;
   assume t is_a_proper_prefix_of t9;
-  then len @H < len @G by Th43;
+  then len @H < len @G by Th14;
   hence thesis;
 end;
 
-theorem Th45:
+theorem Th16:
   t is_a_proper_prefix_of t9 implies (tree_of_subformulae(F)).t9
   is_proper_subformula_of (tree_of_subformulae(F)).t
 proof
@@ -768,8 +783,8 @@ proof
 A1: t is_a_proper_prefix_of t9;
   then t is_a_prefix_of t9 by XBOOLE_0:def 8;
   then
-A2: H is_subformula_of G by Th42;
-  H <> G by A1,Th44;
+A2: H is_subformula_of G by Th13;
+  H <> G by A1,Th15;
   hence thesis by A2,QC_LANG2:def 21;
 end;
 
@@ -784,7 +799,7 @@ A2: t1 is_a_prefix_of t by XBOOLE_1:2;
     assume t <> {};
     then t1 is_a_proper_prefix_of t by A2,XBOOLE_0:def 8;
     then (tree_of_subformulae(F)).t is_proper_subformula_of (
-    tree_of_subformulae(F)).t1 by Th45;
+    tree_of_subformulae(F)).t1 by Th16;
     hence contradiction by A1,Def2;
   end;
   hence (tree_of_subformulae(F)).t = F implies t = {};
@@ -792,7 +807,7 @@ A2: t1 is_a_prefix_of t by XBOOLE_1:2;
   hence thesis by Def2;
 end;
 
-theorem Th47:
+theorem Th18:
   t <> t9 & (tree_of_subformulae(F)).t = (tree_of_subformulae(F)).
   t9 implies not t,t9 are_c=-comparable
 proof
@@ -805,17 +820,18 @@ A3: t,t9 are_c=-comparable;
   suppose
     t is_a_prefix_of t9;
     then t is_a_proper_prefix_of t9 by A1,XBOOLE_0:def 8;
-    hence contradiction by A2,Th45;
+    hence contradiction by A2,Th16;
   end;
   suppose
     t9 is_a_prefix_of t;
     then t9 is_a_proper_prefix_of t by A1,XBOOLE_0:def 8;
-    hence contradiction by A2,Th45;
+    hence contradiction by A2,Th16;
   end;
 end;
 
 definition
-  let F, G be Element of QC-WFF;
+  let A;
+  let F, G be Element of QC-WFF(A);
   func F-entry_points_in_subformula_tree_of G -> AntiChain_of_Prefixes of dom
   tree_of_subformulae(F) means
   :Def3:
@@ -838,7 +854,7 @@ A5:     p1 <> p2;
         (ex t1 being Element of dom tree_of_subformulae(F) st t1 = p1 & (
         tree_of_subformulae(F)).t1 = G )& ex t2 being Element of dom
 tree_of_subformulae(F) st t2 = p2 & (tree_of_subformulae(F)).t2 = G by A1,A4;
-        hence thesis by A5,Th47;
+        hence thesis by A5,Th18;
       end;
       for x being set st x in X holds x is FinSequence
       proof
@@ -908,7 +924,7 @@ A9:   x in P2;
   end;
 end;
 
-theorem Th49:
+theorem Th19:
   F-entry_points_in_subformula_tree_of G = { t where t is Element
   of dom tree_of_subformulae(F) : (tree_of_subformulae(F)).t = G }
 proof
@@ -935,12 +951,12 @@ A1: x in F-entry_points_in_subformula_tree_of G;
   end;
 end;
 
-theorem Th50:
+theorem Th20:
   G is_subformula_of F iff F-entry_points_in_subformula_tree_of G <> {}
 proof
   now
     assume G is_subformula_of F;
-    then G in rng tree_of_subformulae(F) by Th39;
+    then G in rng tree_of_subformulae(F) by Th10;
     then ex x being set st x in dom tree_of_subformulae(F) & G = (
     tree_of_subformulae(F)).x by FUNCT_1:def 3;
     hence F-entry_points_in_subformula_tree_of G <> {} by Def3;
@@ -951,13 +967,13 @@ proof
   then consider x being set such that
 A1: x in F-entry_points_in_subformula_tree_of G by XBOOLE_0:def 1;
   x in { t where t is Element of dom tree_of_subformulae(F) : (
-  tree_of_subformulae(F)).t = G } by A1,Th49;
+  tree_of_subformulae(F)).t = G } by A1,Th19;
   then ex t st x = t & (tree_of_subformulae(F)).t = G;
   then G in rng tree_of_subformulae(F) by FUNCT_1:def 3;
-  hence thesis by Th39;
+  hence thesis by Th10;
 end;
 
-theorem Th51:
+theorem Th21:
   t9 = t^<*m*> & (tree_of_subformulae(F)).t is negative implies (
 tree_of_subformulae(F)).t9 = the_argument_of (tree_of_subformulae(F)).t & m = 0
 proof
@@ -976,12 +992,12 @@ TREES_9:def 6;
   then m+1 in dom <* the_argument_of G *> by A1,TREES_9:39;
   then
 A5: m+1 = 0+1 by A3,FINSEQ_1:2,TARSKI:def 1;
-  H is_immediate_constituent_of G by A1,Th36;
+  H is_immediate_constituent_of G by A1,Th7;
   hence thesis by A2,A5,QC_LANG2:48;
 
 end;
 
-theorem Th52:
+theorem Th22:
   t9 = t^<*m*> & (tree_of_subformulae(F)).t is conjunctive implies
 (tree_of_subformulae(F)).t9 = the_left_argument_of (tree_of_subformulae(F)).t &
   m = 0 or (tree_of_subformulae(F)).t9 = the_right_argument_of (
@@ -1024,7 +1040,7 @@ A8: m = 1;
   end;
 end;
 
-theorem Th53:
+theorem Th23:
   t9 = t^<*m*> & (tree_of_subformulae(F)).t is universal implies (
   tree_of_subformulae(F)).t9 = the_scope_of (tree_of_subformulae(F)).t & m = 0
 proof
@@ -1038,18 +1054,19 @@ A4: succ(tree_of_subformulae(F),t) = list_of_immediate_constituents(G) & ex
   q being Element of dom tree_of_subformulae(F) st q = t & succ(
   tree_of_subformulae(F),t) = tree_of_subformulae(F)*(q succ) by Def2,
 TREES_9:def 6;
-  G is non atomic non negative non conjunctive by A2,QC_LANG1:18;
-  then list_of_immediate_constituents(G) = <* the_scope_of G *> by A2,Def1,
-QC_LANG1:18;
+   VERUM(A) is not universal by QC_LANG1:20; then
+A5: G <> VERUM(A) by A2;
+  G is non atomic non negative non conjunctive by A2,QC_LANG1:20;
+  then list_of_immediate_constituents(G) = <* the_scope_of G *> by Def1,A5;
   then dom <* the_scope_of G *> = dom (t succ) by A4,TREES_9:37;
   then m+1 in dom <* the_scope_of G *> by A1,TREES_9:39;
   then
-A5: m+1 = 0+1 by A3,FINSEQ_1:2,TARSKI:def 1;
-  H is_immediate_constituent_of G by A1,Th36;
-  hence thesis by A2,A5,QC_LANG2:50;
+A6: m+1 = 0+1 by A3,FINSEQ_1:2,TARSKI:def 1;
+  H is_immediate_constituent_of G by A1,Th7;
+  hence thesis by A2,A6,QC_LANG2:50;
 end;
 
-theorem Th54:
+theorem Th24:
   (tree_of_subformulae(F)).t is negative implies t^<*0*> in dom
 tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>) = the_argument_of (
   tree_of_subformulae(F)).t
@@ -1063,9 +1080,9 @@ A2: G is negative;
   then H is_immediate_constituent_of G by A1,QC_LANG2:48;
   then consider m such that
 A3: t^<*m*> in dom tree_of_subformulae(F) and
-  H = (tree_of_subformulae(F)).(t^<*m*>) by Th36;
-  m = 0 by A2,A3,Th51;
-  hence thesis by A2,A3,Th51;
+  H = (tree_of_subformulae(F)).(t^<*m*>) by Th7;
+  m = 0 by A2,A3,Th21;
+  hence thesis by A2,A3,Th21;
 end;
 
 reserve x,y for set;
@@ -1076,7 +1093,7 @@ proof
     .= Seg 2 by FINSEQ_1:44;
 end;
 
-theorem Th55:
+theorem Th25:
   (tree_of_subformulae(F)).t is conjunctive implies t^<*0*> in dom
   tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>) =
   the_left_argument_of (tree_of_subformulae(F)).t & t^<*1*> in dom
@@ -1119,7 +1136,7 @@ A4: 1+1 in {1,2} by TARSKI:def 2;
   hence thesis by A2,A4,TREES_9:39;
 end;
 
-theorem Th56:
+theorem Th26:
   (tree_of_subformulae(F)).t is universal implies t^<*0*> in dom
   tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>) = the_scope_of (
   tree_of_subformulae(F)).t
@@ -1133,15 +1150,15 @@ A2: G is universal;
   then H is_immediate_constituent_of G by A1,QC_LANG2:50;
   then consider m such that
 A3: t^<*m*> in dom tree_of_subformulae(F) and
-  H = (tree_of_subformulae(F)).(t^<*m*>) by Th36;
-  m = 0 by A2,A3,Th53;
-  hence thesis by A2,A3,Th53;
+  H = (tree_of_subformulae(F)).(t^<*m*>) by Th7;
+  m = 0 by A2,A3,Th23;
+  hence thesis by A2,A3,Th23;
 end;
 
 reserve t for Element of dom tree_of_subformulae(F),
   s for Element of dom tree_of_subformulae(G);
 
-theorem Th57:
+theorem Th27:
   t in F-entry_points_in_subformula_tree_of G & s in G
   -entry_points_in_subformula_tree_of H implies t^s in F
   -entry_points_in_subformula_tree_of H
@@ -1182,28 +1199,28 @@ A12:  t9 = t^s9 by A11;
 A13:  H9 = (tree_of_subformulae(F)).t9 by A11,A12,Def3;
 A14:  s = s9^<*m*> by A7;
       then
-A15:  H is_immediate_constituent_of H9 by A5,A10,Th36;
+A15:  H is_immediate_constituent_of H9 by A5,A10,Th7;
 A16:  H = (tree_of_subformulae(F)).(t9^<*m*>) & t9^<*m*> in dom
       tree_of_subformulae(F)
       proof
-A17:    H9 <> VERUM by A15,QC_LANG2:41;
+A17:    H9 <> VERUM(A) by A15,QC_LANG2:41;
         now
-          per cases by A15,A17,QC_LANG1:7,QC_LANG2:47;
+          per cases by A15,A17,QC_LANG1:9,QC_LANG2:47;
           suppose
 A18:        H9 is negative;
-            then H = the_argument_of H9 & m = 0 by A5,A14,A10,Th51;
-            hence thesis by A13,A18,Th54;
+            then H = the_argument_of H9 & m = 0 by A5,A14,A10,Th21;
+            hence thesis by A13,A18,Th24;
           end;
           suppose
 A19:        H9 is conjunctive;
             then H = the_left_argument_of H9 & m = 0 or H =
-            the_right_argument_of H9 & m = 1 by A5,A14,A10,Th52;
-            hence thesis by A13,A19,Th55;
+            the_right_argument_of H9 & m = 1 by A5,A14,A10,Th22;
+            hence thesis by A13,A19,Th25;
           end;
           suppose
 A20:        H9 is universal;
-            then H = the_scope_of H9 & m = 0 by A5,A14,A10,Th53;
-            hence thesis by A13,A20,Th56;
+            then H = the_scope_of H9 & m = 0 by A5,A14,A10,Th23;
+            hence thesis by A13,A20,Th26;
           end;
         end;
         hence thesis;
@@ -1237,7 +1254,7 @@ end;
 reserve t for Element of dom tree_of_subformulae(F),
   s for FinSequence;
 
-theorem Th58:
+theorem Th28:
   t in F-entry_points_in_subformula_tree_of G & t^s in F
   -entry_points_in_subformula_tree_of H implies s in G
   -entry_points_in_subformula_tree_of H
@@ -1260,7 +1277,7 @@ A5:   len s = k+1;
 A6:   s = v^<*x*> and
 A7:   len v = k by A5,TREES_2:3;
       F-entry_points_in_subformula_tree_of H = { t1 where t1 is Element
-of dom tree_of_subformulae(F) : (tree_of_subformulae(F)).t1 = H } by Th49;
+of dom tree_of_subformulae(F) : (tree_of_subformulae(F)).t1 = H } by Th19;
       then consider t99 such that
 A8:   t99 = t^s and
 A9:   (tree_of_subformulae(F)).t99 = H by A4;
@@ -1285,33 +1302,33 @@ A15:  H9 = (tree_of_subformulae(F)).t9;
       then
 A16:  v in G-entry_points_in_subformula_tree_of H9 by A2,A3,A7;
       G-entry_points_in_subformula_tree_of H9 = { v1 where v1 is Element
-of dom tree_of_subformulae(G) : (tree_of_subformulae(G)).v1 = H9 } by Th49;
+of dom tree_of_subformulae(G) : (tree_of_subformulae(G)).v1 = H9 } by Th19;
       then
 A17:  ex v1 being Element of dom tree_of_subformulae(G) st v = v1 & (
       tree_of_subformulae(G)).v1 = H9 by A16;
       then reconsider v as Element of dom tree_of_subformulae(G);
-A18:  H is_immediate_constituent_of H9 by A9,A14,A15,Th36;
+A18:  H is_immediate_constituent_of H9 by A9,A14,A15,Th7;
       H = (tree_of_subformulae(G)).(v^<*m*>) & v^<*m*> in dom
       tree_of_subformulae(G)
       proof
-A19:    H9 <> VERUM by A18,QC_LANG2:41;
+A19:    H9 <> VERUM(A) by A18,QC_LANG2:41;
         now
-          per cases by A18,A19,QC_LANG1:7,QC_LANG2:47;
+          per cases by A18,A19,QC_LANG1:9,QC_LANG2:47;
           suppose
 A20:        H9 is negative;
-            then H = the_argument_of H9 & m = 0 by A9,A14,A15,Th51;
-            hence thesis by A17,A20,Th54;
+            then H = the_argument_of H9 & m = 0 by A9,A14,A15,Th21;
+            hence thesis by A17,A20,Th24;
           end;
           suppose
 A21:        H9 is conjunctive;
             then H = the_left_argument_of H9 & m = 0 or H =
-            the_right_argument_of H9 & m = 1 by A9,A14,A15,Th52;
-            hence thesis by A17,A21,Th55;
+            the_right_argument_of H9 & m = 1 by A9,A14,A15,Th22;
+            hence thesis by A17,A21,Th25;
           end;
           suppose
 A22:        H9 is universal;
-            then H = the_scope_of H9 & m = 0 by A9,A14,A15,Th53;
-            hence thesis by A17,A22,Th56;
+            then H = the_scope_of H9 & m = 0 by A9,A14,A15,Th23;
+            hence thesis by A17,A22,Th26;
           end;
         end;
         hence thesis;
@@ -1331,7 +1348,7 @@ A27: s = {} by A26;
 TREES_1:22;
 A28: G = (tree_of_subformulae(G)).s9 by A27,Def2;
     F-entry_points_in_subformula_tree_of H = { t1 where t1 is Element of
-    dom tree_of_subformulae(F) : (tree_of_subformulae(F)).t1 = H } by Th49;
+    dom tree_of_subformulae(F) : (tree_of_subformulae(F)).t1 = H } by Th19;
     then ex t9 st t9 = t^s & (tree_of_subformulae(F)).t9 = H by A25;
     then H = G by A24,A27,FINSEQ_1:34;
     hence thesis by A28,Def3;
@@ -1346,7 +1363,7 @@ A29: G = (tree_of_subformulae(F)).t & t^s in F
   hence thesis by A29,Def3;
 end;
 
-theorem Th59:
+theorem Th29:
   for F,G,H holds { t^s where t is Element of dom
   tree_of_subformulae(F), s is Element of dom tree_of_subformulae(G) : t in F
   -entry_points_in_subformula_tree_of G & s in G
@@ -1363,10 +1380,10 @@ proof
   ex t being Element of dom tree_of_subformulae(F), s being Element of dom
 tree_of_subformulae(G) st x = t^s & t in F -entry_points_in_subformula_tree_of
   G & s in G -entry_points_in_subformula_tree_of H;
-  hence thesis by Th57;
+  hence thesis by Th27;
 end;
 
-theorem Th60:
+theorem Th30:
   (tree_of_subformulae(F))|t = tree_of_subformulae(( tree_of_subformulae(F)).t)
 proof
   set T1 = (tree_of_subformulae(F))|t;
@@ -1389,7 +1406,7 @@ TREES_1:def 6;
 A5:   H = (tree_of_subformulae(F)).t9;
 A6:   G-entry_points_in_subformula_tree_of H c= dom T2 by A2,TREES_1:def 11;
       t9 in F-entry_points_in_subformula_tree_of H by A5,Def3;
-      then p in G-entry_points_in_subformula_tree_of H by A3,A4,Th58;
+      then p in G-entry_points_in_subformula_tree_of H by A3,A4,Th28;
       hence p in dom T2 by A6;
     end;
     hence p in dom T1 implies p in dom T2;
@@ -1404,7 +1421,7 @@ A9:   s in G-entry_points_in_subformula_tree_of H by A8,Def3;
 A10:  F-entry_points_in_subformula_tree_of H c= dom tree_of_subformulae(F
       ) by TREES_1:def 11;
       t in F-entry_points_in_subformula_tree_of G by A7,Def3;
-      then t^s in F-entry_points_in_subformula_tree_of H by A9,Th57;
+      then t^s in F-entry_points_in_subformula_tree_of H by A9,Th27;
       then s in (dom tree_of_subformulae(F))|t by A10,TREES_1:def 6;
       hence p in dom T1 by TREES_2:def 10;
     end;
@@ -1423,20 +1440,20 @@ A13: H = T1.p;
 A14: t in F-entry_points_in_subformula_tree_of G by A11,Def3;
     T1.p = (tree_of_subformulae(F)).(t^p) by A12,TREES_2:def 10;
     then t9 in F-entry_points_in_subformula_tree_of H by A13,Def3;
-    then s in G-entry_points_in_subformula_tree_of H by A14,Th58;
+    then s in G-entry_points_in_subformula_tree_of H by A14,Th28;
     hence T1.p = T2.p by A11,A13,Def3;
   end;
   hence for p being Node of T1 holds T1.p = T2.p;
 end;
 
-theorem Th61:
+theorem Th31:
   t in F-entry_points_in_subformula_tree_of G iff (
   tree_of_subformulae(F))|t = tree_of_subformulae(G)
 proof
   now
     assume t in F-entry_points_in_subformula_tree_of G;
     then (tree_of_subformulae(F)).t = G by Def3;
-    hence (tree_of_subformulae(F))|t = tree_of_subformulae(G) by Th60;
+    hence (tree_of_subformulae(F))|t = tree_of_subformulae(G) by Th30;
   end;
   hence t in F-entry_points_in_subformula_tree_of G implies (
   tree_of_subformulae(F))|t = tree_of_subformulae(G);
@@ -1463,7 +1480,7 @@ A1: x in F-entry_points_in_subformula_tree_of G;
     F-entry_points_in_subformula_tree_of G c= dom tree_of_subformulae(F)
     by TREES_1:def 11;
     then reconsider t9 = x as Element of dom tree_of_subformulae(F) by A1;
-    (tree_of_subformulae(F))|t9 = tree_of_subformulae(G) by A1,Th61;
+    (tree_of_subformulae(F))|t9 = tree_of_subformulae(G) by A1,Th31;
     hence thesis;
   end;
   thus { t where t is Element of dom tree_of_subformulae(F) : (
@@ -1475,7 +1492,7 @@ A1: x in F-entry_points_in_subformula_tree_of G;
     tree_of_subformulae(F))|t = tree_of_subformulae(G) };
     then
     ex t9 st t9 = x & (tree_of_subformulae(F))|t9 = tree_of_subformulae(G);
-    hence thesis by Th61;
+    hence thesis by Th31;
   end;
 end;
 
@@ -1503,24 +1520,26 @@ A7: t9,t99 are_c=-comparable by A4,A6,TREES_2:def 3;
   per cases by A7,XBOOLE_0:def 9;
   suppose
     t9 is_a_prefix_of t99;
-    hence thesis by A3,A5,Th42;
+    hence thesis by A3,A5,Th13;
   end;
   suppose
     t99 is_a_prefix_of t9;
-    hence thesis by A3,A5,Th42;
+    hence thesis by A3,A5,Th13;
   end;
 end;
 
 definition
-  let F be Element of QC-WFF;
-  mode Subformula of F -> Element of QC-WFF means
+  let A;
+  let F be Element of QC-WFF(A);
+  mode Subformula of F -> Element of QC-WFF(A) means
     :Def4:
     it is_subformula_of F;
   existence;
 end;
 
 definition
-  let F be Element of QC-WFF;
+  let A;
+  let F be Element of QC-WFF(A);
   let G be Subformula of F;
   mode Entry_Point_in_Subformula_Tree of G -> Element of dom
     tree_of_subformulae(F) means
@@ -1529,7 +1548,7 @@ definition
   existence
   proof
     G is_subformula_of F by Def4;
-    then G in rng tree_of_subformulae(F) by Th39;
+    then G in rng tree_of_subformulae(F) by Th10;
     then ex x being set st x in dom tree_of_subformulae(F) & (
     tree_of_subformulae(F)).x = G by FUNCT_1:def 3;
     hence thesis;
@@ -1545,11 +1564,12 @@ proof
   assume
 A1: t <> t9;
   (tree_of_subformulae(F)).t = G & (tree_of_subformulae(F)).t9 = G by Def5;
-  hence thesis by A1,Th47;
+  hence thesis by A1,Th18;
 end;
 
 definition
-  let F be Element of QC-WFF;
+  let A;
+  let F be Element of QC-WFF(A);
   let G be Subformula of F;
   func entry_points_in_subformula_tree(G) -> non empty AntiChain_of_Prefixes
   of dom tree_of_subformulae(F) equals
@@ -1557,18 +1577,18 @@ definition
   coherence
   proof
     G is_subformula_of F by Def4;
-    hence thesis by Th50;
+    hence thesis by Th20;
   end;
 end;
 
-theorem Th67:
+theorem Th35:
   t in entry_points_in_subformula_tree(G)
 proof
   (tree_of_subformulae(F)).t = G by Def5;
   hence thesis by Def3;
 end;
 
-theorem Th68:
+theorem Th36:
   entry_points_in_subformula_tree(G) = { t where t is
   Entry_Point_in_Subformula_Tree of G : t = t }
 proof
@@ -1578,7 +1598,7 @@ proof
     let x be set;
     assume x in entry_points_in_subformula_tree(G);
     then x in { t where t is Element of dom tree_of_subformulae(F) : (
-    tree_of_subformulae(F)).t = G } by Th49;
+    tree_of_subformulae(F)).t = G } by Th19;
     then consider t9 being Element of dom tree_of_subformulae(F) such that
 A1: t9 = x and
 A2: (tree_of_subformulae(F)).t9 = G;
@@ -1592,7 +1612,7 @@ A2: (tree_of_subformulae(F)).t9 = G;
     let x be set;
     assume x in { t where t is Entry_Point_in_Subformula_Tree of G : t = t };
     then ex t st t = x & t = t;
-    hence thesis by Th67;
+    hence thesis by Th35;
   end;
 end;
 
@@ -1600,7 +1620,7 @@ reserve G1, G2 for Subformula of F,
   t1 for Entry_Point_in_Subformula_Tree of G1,
   s for Element of dom tree_of_subformulae(G1);
 
-theorem Th69:
+theorem Th37:
   s in G1-entry_points_in_subformula_tree_of G2 implies t1^s is
   Entry_Point_in_Subformula_Tree of G2
 proof
@@ -1609,7 +1629,7 @@ proof
 A1: t1 in F-entry_points_in_subformula_tree_of G1 by Def3;
   assume s in G1-entry_points_in_subformula_tree_of G2;
   then
-A2: t1^s in F-entry_points_in_subformula_tree_of G2 by A1,Th57;
+A2: t1^s in F-entry_points_in_subformula_tree_of G2 by A1,Th27;
   F-entry_points_in_subformula_tree_of G2 c= dom tree_of_subformulae(F) by
 TREES_1:def 11;
   then reconsider t9 = t1^s as Element of dom tree_of_subformulae(F) by A2;
@@ -1632,11 +1652,11 @@ A2: t1 in F-entry_points_in_subformula_tree_of G1 by Def3;
   then
   t9 in { t2 where t2 is Entry_Point_in_Subformula_Tree of G2 : t2 = t2 }
   by A1;
-  then t9 in entry_points_in_subformula_tree(G2) by Th68;
-  hence thesis by A2,A1,Th58;
+  then t9 in entry_points_in_subformula_tree(G2) by Th36;
+  hence thesis by A2,A1,Th28;
 end;
 
-theorem Th71:
+theorem Th39:
   for F,G1,G2 holds { t^s where t is
 Entry_Point_in_Subformula_Tree of G1, s is Element of dom tree_of_subformulae(
   G1) : s in G1-entry_points_in_subformula_tree_of G2 } = { t^s where t is
@@ -1697,8 +1717,8 @@ proof
 dom tree_of_subformulae(G1) : s in G1-entry_points_in_subformula_tree_of G2 } =
   { t^s where t is Element of dom tree_of_subformulae(F), s is Element of dom
   tree_of_subformulae(G1) : t in F-entry_points_in_subformula_tree_of G1 & s in
-  G1-entry_points_in_subformula_tree_of G2 } by Th71;
-  hence thesis by Th59;
+  G1-entry_points_in_subformula_tree_of G2 } by Th39;
+  hence thesis by Th29;
 end;
 
 reserve G1, G2 for Subformula of F,
@@ -1711,7 +1731,7 @@ proof
   given t1,t2 such that
 A1: t1 is_a_prefix_of t2;
   (tree_of_subformulae(F)).t1 = G1 & (tree_of_subformulae(F)).t2 = G2 by Def5;
-  hence thesis by A1,Th42;
+  hence thesis by A1,Th13;
 end;
 
 theorem
@@ -1721,13 +1741,13 @@ proof
 A1: G2 is_subformula_of G1;
   now
     let t1;
-    consider H being Element of QC-WFF such that
+    consider H being Element of QC-WFF(A) such that
 A2: H = G2;
     reconsider H as Subformula of G1 by A1,A2,Def4;
     set s = the Entry_Point_in_Subformula_Tree of H;
     (tree_of_subformulae(G1)).s = H by Def5;
     then s in G1-entry_points_in_subformula_tree_of G2 by A2,Def3;
-    then t1^s is Entry_Point_in_Subformula_Tree of G2 by Th69;
+    then t1^s is Entry_Point_in_Subformula_Tree of G2 by Th37;
     then consider t2 such that
 A3: t2 = t1^s;
     take t2;

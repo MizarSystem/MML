@@ -2,7 +2,7 @@
 ::  by Czes\l aw Byli\'nski
 ::
 :: Received February 13, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,7 +15,8 @@
 environ
 
  vocabularies CAT_1, XBOOLE_0, PARTFUN1, ZFMISC_1, RELAT_1, STRUCT_0, GRAPH_1,
-      SUBSET_1, FUNCT_1, ARYTM_0, ALGSTR_0, FUNCT_2, ARYTM_3, OPPCAT_1;
+      SUBSET_1, FUNCT_1, ARYTM_0, ALGSTR_0, FUNCT_2, ARYTM_3, OPPCAT_1, TARSKI,
+      MONOID_0, RELAT_2, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
       BINOP_1, PARTFUN1, FUNCT_4, STRUCT_0, GRAPH_1, CAT_1;
  constructors PARTFUN1, BINOP_1, FUNCT_4, CAT_1, RELSET_1;
@@ -35,16 +36,13 @@ end;
 
 :: Opposite Category
 
-theorem :: OPPCAT_1:1
-  CatStr (#the carrier of C, the carrier' of C, the Target of C,
-    the Source of C, ~(the Comp of C), the Id of C#) is Category;
 
 definition
   let C;
-  func C opp -> strict Category equals
+  func C opp -> strict non empty non void CatStr equals
 :: OPPCAT_1:def 1
   CatStr (#the carrier of C, the carrier'
-    of C, the Target of C, the Source of C, ~(the Comp of C), the Id of C#);
+    of C, the Target of C, the Source of C, ~the Comp of C#);
 end;
 
 definition
@@ -55,6 +53,11 @@ definition
   c;
 end;
 
+registration let C;
+ cluster C opp -> Category-like
+  transitive associative reflexive with_identities;
+end;
+
 definition
   let C;
   let c be Object of C opp;
@@ -62,6 +65,8 @@ definition
 :: OPPCAT_1:def 3
   c opp;
 end;
+
+canceled;
 
 theorem :: OPPCAT_1:2
   for c being Object of C holds c opp opp = c;
@@ -71,6 +76,14 @@ theorem :: OPPCAT_1:3
 
 theorem :: OPPCAT_1:4
   for c being Object of C opp holds (opp c) opp = c;
+
+theorem :: OPPCAT_1:5
+  for a,b being Object of C
+   holds Hom(a,b) = Hom(b opp,a opp);
+
+theorem :: OPPCAT_1:6
+  for a,b being Object of C opp
+  holds Hom(a,b) = Hom(opp b,opp a);
 
 definition
   let C;
@@ -88,60 +101,78 @@ definition
   f opp;
 end;
 
-theorem :: OPPCAT_1:5
-  for f being Morphism of C holds f opp opp = f;
+definition let C; let a,b be Object of C such that
+ Hom(a,b) <> {};
+ let f be Morphism of a,b;
+ func f opp -> Morphism of b opp, a opp equals
+:: OPPCAT_1:def 6
+  f;
+end;
 
-theorem :: OPPCAT_1:6
-  for f being Morphism of C holds opp(f opp) = f;
+definition let C; let a,b be Object of C such that
+ Hom(a opp,b opp) <> {};
+ let f be Morphism of a opp, b opp;
+ func opp f -> Morphism of b, a equals
+:: OPPCAT_1:def 7
+  f;
+end;
 
 theorem :: OPPCAT_1:7
-  for f being Morphism of C opp holds (opp f)opp = f;
+  for a,b being Object of C st Hom(a,b)<>{}
+  for f being Morphism of a,b holds f opp opp = f;
 
 theorem :: OPPCAT_1:8
-  for f being Morphism of C holds dom(f opp) = cod f & cod(f opp) = dom f;
+  for a,b being Object of C st Hom(a,b)<>{}
+  for f being Morphism of a,b holds opp(f opp) = f;
 
 theorem :: OPPCAT_1:9
-  for f being Morphism of C opp holds dom(opp f) = cod f & cod(opp f) = dom f;
+  for a,b being Object of C opp
+  for f being Morphism of a,b holds (opp f)opp = f;
 
 theorem :: OPPCAT_1:10
-  for f being Morphism of C holds (dom f) opp = cod (f opp) & (cod f)
-  opp = dom (f opp);
+  for a,b being Object of C st Hom(a,b)<>{}
+  for f being Morphism of a,b holds dom(f opp) = cod f & cod(f opp) = dom f;
 
 theorem :: OPPCAT_1:11
-  for f being Morphism of C opp holds opp (dom f) = cod (opp f) & opp (
-  cod f) = dom (opp f);
+  for a,b being Object of C opp
+  for f being Morphism of a,b
+   holds dom(opp f) = cod f & cod(opp f) = dom f;
 
 theorem :: OPPCAT_1:12
-  for a,b being Object of C for f being Morphism of C holds f in
-  Hom(a,b) iff f opp in Hom(b opp,a opp);
+  for a,b being Object of C st Hom(a,b)<>{}
+  for f being Morphism of a,b
+ holds (dom f) opp = cod (f opp) & (cod f)opp = dom (f opp);
 
 theorem :: OPPCAT_1:13
-  for a,b being Object of C opp, f being Morphism of C opp holds f
-  in Hom(a,b) iff opp f in Hom(opp b,opp a);
+  for a,b being Object of C opp st Hom(a,b)<>{}
+  for f being Morphism of a,b
+  holds opp (dom f) = cod (opp f) & opp (cod f) = dom (opp f);
 
-theorem :: OPPCAT_1:14
-  for a,b being Object of C, f being Morphism of a,b st Hom(a,b)
-  <> {} holds f opp is Morphism of b opp,a opp;
+canceled;
 
 theorem :: OPPCAT_1:15
-  for a,b being Object of C opp,f being Morphism of a,b st Hom(a,b
-  ) <> {} holds opp f is Morphism of opp b,opp a;
+ for a,b being Object of C opp,f being Morphism of a,b st Hom(a,b) <> {}
+  holds opp f is Morphism of opp b,opp a;
 
 theorem :: OPPCAT_1:16
-  for f,g being Morphism of C st dom g = cod f holds (g*f) opp = (
-  f opp)*(g opp);
+  for a,b,c being Object of C st Hom(a,b) <> {} & Hom(b,c) <> {}
+  for f being Morphism of a,b, g being Morphism of b,c
+   holds (g(*)f) opp = (f opp)(*)(g opp);
 
 theorem :: OPPCAT_1:17
-  for f,g being Morphism of C st cod(g opp) = dom(f opp) holds (g*
-  f) opp = (f opp)*(g opp);
+  for a,b,c being Object of C
+st Hom(b opp,a opp) <> {} & Hom(c opp,b opp) <> {}
+  for f be Morphism of a,b, g being Morphism of b,c
+  holds (g(*)f) opp = (f opp)(*)(g opp);
 
 theorem :: OPPCAT_1:18
-  for f,g being Morphism of C opp st dom g = cod f holds opp (g*f)
-  = (opp f)*(opp g);
+  for f,g being Morphism of C opp st dom g = cod f holds opp (g(*)f)
+  = (opp f)(*)(opp g);
 
 theorem :: OPPCAT_1:19
   for a,b,c being Object of C, f being Morphism of a,b, g being Morphism
-  of b, c st Hom(a,b) <> {} & Hom(b,c) <> {} holds (g*f) opp = (f opp)*(g opp);
+  of b, c st Hom(a,b) <> {} & Hom(b,c) <> {}
+    holds (g*f) opp = (f opp)(*)(g opp);
 
 theorem :: OPPCAT_1:20
   for a being Object of C holds (id a) opp = id(a opp);
@@ -150,13 +181,16 @@ theorem :: OPPCAT_1:21
   for a being Object of C opp holds opp id a = id opp a;
 
 theorem :: OPPCAT_1:22
-  for f being Morphism of C holds f opp is monic iff f is epi;
+ for a,b being Object of C
+  for f being Morphism of a,b holds f opp is monic iff f is epi;
 
 theorem :: OPPCAT_1:23
-  for f being Morphism of C holds f opp is epi iff f is monic;
+  for b,c being Object of C st Hom(b,c) <> {}
+  for f being Morphism of b,c holds f opp is epi iff f is monic;
 
 theorem :: OPPCAT_1:24
-  for f being Morphism of C holds f opp is invertible iff f is invertible;
+  for a,b being Object of C
+  for f being Morphism of a,b holds f opp is invertible iff f is invertible;
 
 theorem :: OPPCAT_1:25
   for c being Object of C holds c is initial iff c opp is terminal;
@@ -170,7 +204,7 @@ definition
   let C,B;
   let S be Function of the carrier' of C opp,the carrier' of B;
   func /*S -> Function of the carrier' of C,the carrier' of B means
-:: OPPCAT_1:def 6
+:: OPPCAT_1:def 8
 
   for f being Morphism of C holds it.f = S.(f opp);
 end;
@@ -191,12 +225,17 @@ definition
   let C,D;
   mode Contravariant_Functor of C,D -> Function of the carrier' of C,the
     carrier' of D means
-:: OPPCAT_1:def 7
+:: OPPCAT_1:def 9
 
-    ( for c being Object of C ex d being Object of D st
-it.(id c) = id d ) & ( for f being Morphism of C holds it.(id dom f) = id cod (
-it.f) & it.(id cod f) = id dom (it.f) ) & for f,g being Morphism of C st dom g
-    = cod f holds it.(g*f) = (it.f)*(it.g);
+    ( for c being Object of C ex d being Object of D st it.(id c) = id d ) &
+    ( for f being Morphism of C holds it.(id dom f) = id cod (it.f) &
+         it.(id cod f) = id dom (it.f) ) &
+:::   for a,b,c being Object of C st Hom(a,b)<>{} & Hom(b,c)<> {}
+:::   for f being Morphism of a,b,
+:::       g being Morphism of b,c
+    for f,g being Morphism of C
+     st dom g = cod f
+    holds it.(g(*)f) = (it.f)(*)(it.g);
 end;
 
 theorem :: OPPCAT_1:30
@@ -239,11 +278,11 @@ definition
   let C,B;
   let S be Function of the carrier' of C,the carrier' of B;
   func *'S -> Function of the carrier' of C opp,the carrier' of B means
-:: OPPCAT_1:def 8
+:: OPPCAT_1:def 10
 
   for f being Morphism of C opp holds it.f = S.(opp f);
   func S*' -> Function of the carrier' of C,the carrier' of B opp means
-:: OPPCAT_1:def 9
+:: OPPCAT_1:def 11
 
   for f being Morphism of C holds it.f = (S.f) opp;
 end;
@@ -354,10 +393,10 @@ theorem :: OPPCAT_1:64
 definition
   let C;
   func id* C -> Contravariant_Functor of C,C opp equals
-:: OPPCAT_1:def 10
+:: OPPCAT_1:def 12
   (id C)*';
   func *id C -> Contravariant_Functor of C opp,C equals
-:: OPPCAT_1:def 11
+:: OPPCAT_1:def 13
   *'(id C);
 end;
 
@@ -376,3 +415,14 @@ theorem :: OPPCAT_1:68
 theorem :: OPPCAT_1:69
   for S being Function of the carrier' of C,the carrier' of D holds *'S
   = S*(*id C) & S*' = (id* D)*S;
+
+theorem :: OPPCAT_1:70
+  for a,b,c being Object of C st Hom(a,b) <> {} & Hom(b,c) <> {}
+  for f being Morphism of a,b, g being Morphism of b,c
+   holds g*f = (f opp)*(g opp);
+
+theorem :: OPPCAT_1:71
+ for a being Object of C holds id a = id(a opp);
+
+theorem :: OPPCAT_1:72
+ for a being Object of C opp holds id a = id opp a;

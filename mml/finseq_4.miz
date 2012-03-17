@@ -2,7 +2,7 @@
 ::  by Wojciech A. Trybulec
 ::
 :: Received April 8, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,16 +17,16 @@ environ
  vocabularies NUMBERS, FUNCT_1, FINSEQ_1, NAT_1, RELAT_1, FINSET_1, CARD_1,
       XBOOLE_0, TARSKI, XXREAL_0, SUBSET_1, PARTFUN1, ARYTM_1, ARYTM_3,
       ORDINAL4, FINSEQ_4, FUNCT_2, EQREL_1, CARD_3, SETFAM_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, CARD_1, SETFAM_1,
-      EQREL_1, NUMBERS, XCMPLX_0, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
-      FINSEQ_1, FINSEQ_3, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, RELAT_1, CARD_1,
+      SETFAM_1, EQREL_1, NUMBERS, XCMPLX_0, FUNCT_1, PARTFUN1, FUNCT_2,
+      FINSET_1, NAT_1, FINSEQ_1, FINSEQ_3, XXREAL_0;
  constructors ENUMSET1, WELLORD2, FUNCT_2, XXREAL_0, REAL_1, PARTFUN1, NAT_1,
       INT_1, FINSEQ_3, RELSET_1, EQREL_1, SETFAM_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XREAL_0, INT_1, FINSEQ_1,
       ORDINAL1, CARD_1, RELSET_1, SUBSET_1, EQREL_1, NAT_1, PARTFUN1, FUNCT_2,
       XXREAL_0, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCT_1, TARSKI, XBOOLE_0, FINSEQ_1;
+ definitions RELAT_1, FUNCT_1, TARSKI, XBOOLE_0, FINSEQ_1;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1,
       FUNCT_2, INT_1, NAT_1, PARTFUN1, TARSKI, WELLORD2, ZFMISC_1, RELAT_1,
       XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, GRFUNC_1, EQREL_1,
@@ -48,7 +48,7 @@ definition
   f"Im(f,x) = {x};
 end;
 
-theorem Th2:
+theorem Th1:
   f is_one-to-one_at x implies x in dom f
 proof
   assume f is_one-to-one_at x;
@@ -57,7 +57,7 @@ proof
   hence thesis by FUNCT_1:def 7;
 end;
 
-theorem Th3:
+theorem Th2:
   f is_one-to-one_at x iff x in dom f & f " {f.x} = {x}
 proof
   thus f is_one-to-one_at x implies x in dom f & f " {f.x} = {x}
@@ -65,7 +65,7 @@ proof
     assume
 A1: f is_one-to-one_at x;
     hence
-A2: x in dom f by Th2;
+A2: x in dom f by Th1;
     f"Im(f,x) = {x} by A1,Def1;
     hence thesis by A2,FUNCT_1:59;
   end;
@@ -73,7 +73,7 @@ A2: x in dom f by Th2;
   hence f"Im(f,x) = {x} by FUNCT_1:59;
 end;
 
-theorem Th4:
+theorem Th3:
   f is_one-to-one_at x iff x in dom f & for z st z in dom f & x <>
   z holds f.x <> f.z
 proof
@@ -82,7 +82,7 @@ proof
   proof
     assume
 A1: f is_one-to-one_at x;
-    hence x in dom f by Th2;
+    hence x in dom f by Th1;
     let z;
     assume that
 A2: z in dom f and
@@ -90,14 +90,14 @@ A3: x <> z and
 A4: f.x = f.z;
     f.x in {f.x} by TARSKI:def 1;
     then z in f " {f.x} by A2,A4,FUNCT_1:def 7;
-    then z in {x} by A1,Th3;
+    then z in {x} by A1,Th2;
     hence thesis by A3,TARSKI:def 1;
   end;
   assume that
 A5: x in dom f and
 A6: for z st z in dom f & x <> z holds f.x <> f.z and
 A7: not f is_one-to-one_at x;
-  f " {f.x} <> {x} by A5,A7,Th3;
+  f " {f.x} <> {x} by A5,A7,Th2;
   then consider y such that
 A8: y in f " {f.x} & not y in {x} or y in {x} & not y in f " {f.x} by TARSKI:1;
   f.x in {f.x} by TARSKI:def 1;
@@ -133,7 +133,7 @@ A1: for x st x in dom f holds f is_one-to-one_at x;
 A2: x1 in dom f and
 A3: x2 in dom f & f.x1 = f.x2;
     f is_one-to-one_at x1 by A1,A2;
-    hence thesis by A3,Th4;
+    hence thesis by A3,Th3;
   end;
   assume
 A4: f is one-to-one;
@@ -141,21 +141,21 @@ A4: f is one-to-one;
   assume
 A5: x in dom f;
   then for z holds z in dom f & x <> z implies f.x <> f.z by A4,FUNCT_1:def 4;
-  hence thesis by A5,Th4;
+  hence thesis by A5,Th3;
 end;
 
 definition
-  let f,y;
-  pred f just_once_values y means
+  let R be Relation, y be set;
+  pred R just_once_values y means
   :Def2:
-  ex B being finite set st B = f " {y} & card B = 1;
+  card Coim(R,y) = 1;
 end;
 
-theorem Th7:
+theorem Th5:
   f just_once_values y implies y in rng f
 proof
   assume f just_once_values y;
-  then ex B being finite set st B = f " {y} & card B = 1 by Def2;
+  then card Coim(f,y) = 1 by Def2;
   then rng f meets {y} by CARD_1:27,RELAT_1:138;
   then consider x being set such that
 A1: x in rng f /\ {y} by XBOOLE_0:4;
@@ -164,33 +164,30 @@ A1: x in rng f /\ {y} by XBOOLE_0:4;
   hence thesis by A1,XBOOLE_0:def 4;
 end;
 
-theorem Th8:
+theorem Th6:
   f just_once_values y iff ex x st {x} = f " {y}
 proof
   thus f just_once_values y implies ex x st {x} = f " {y}
   proof
     assume
 A1: f just_once_values y;
-    then y in rng f by Th7;
+    then y in rng f by Th5;
     then consider x such that
 A2: x in dom f and
 A3: f.x = y by FUNCT_1:def 3;
     take x;
-    ex B being finite set st B = f " {y} & card B = 1 by A1,Def2;
+    card Coim(f,y) = 1 by A1,Def2;
     then consider z such that
 A4: f " {y} = {z} by CARD_2:42;
     f.x in {y} by A3,TARSKI:def 1;
     then x in {z} by A2,A4,FUNCT_1:def 7;
     hence thesis by A4,TARSKI:def 1;
   end;
-  given x such that
-A5: {x} = f " {y};
-  reconsider B = f " {y} as finite set by A5;
-  take B;
-  thus thesis by A5,CARD_1:30;
+  assume ex x st {x} = f " {y};
+  hence card Coim(f,y) = 1 by CARD_1:30;
 end;
 
-theorem Th9:
+theorem Th7:
   f just_once_values y iff ex x st x in dom f & y = f.x & for z st
   z in dom f & z <> x holds f.z <> y
 proof
@@ -200,8 +197,8 @@ proof
     assume
 A1: f just_once_values y;
     then
-A2: ex B being finite set st B = f " {y} & card B = 1 by Def2;
-    y in rng f by A1,Th7;
+A2: card Coim(f,y) = 1 by Def2;
+    y in rng f by A1,Th5;
     then consider x1 such that
 A3: x1 in dom f and
 A4: f.x1 = y by FUNCT_1:def 3;
@@ -215,44 +212,44 @@ A5: x1 in f " {y} by A3,FUNCT_1:def 7;
 A6: z in dom f and
 A7: z <> x1 and
 A8: f.z = y;
+A9: f"{y} is finite by A2;
     f.z in {y} by A8,TARSKI:def 1;
     then z in f " {y} by A6,FUNCT_1:def 7;
     then {z,x1} c= f " {y} by A5,ZFMISC_1:32;
-    then card{z,x1} <= 1 by A2,NAT_1:43;
+    then card{z,x1} <= 1 by A9,A2,NAT_1:43;
     then 2 <= 1 by A7,CARD_2:57;
     hence thesis;
   end;
   given x such that
-A9: x in dom f and
-A10: y = f.x and
-A11: for z st z in dom f & z <> x holds f.z <> y;
-A12: {x} = f " {y}
+A10: x in dom f and
+A11: y = f.x and
+A12: for z st z in dom f & z <> x holds f.z <> y;
+A13: {x} = f " {y}
   proof
     thus {x} c= f " {y}
     proof
       let x1;
       assume x1 in {x};
       then
-A13:  x1 = x by TARSKI:def 1;
-      f.x in {y} by A10,TARSKI:def 1;
-      hence thesis by A9,A13,FUNCT_1:def 7;
+A14:  x1 = x by TARSKI:def 1;
+      f.x in {y} by A11,TARSKI:def 1;
+      hence thesis by A10,A14,FUNCT_1:def 7;
     end;
     let x1;
     assume
-A14: x1 in f " {y};
+A15: x1 in f " {y};
     then f.x1 in {y} by FUNCT_1:def 7;
     then
-A15: f.x1 = y by TARSKI:def 1;
-    x1 in dom f by A14,FUNCT_1:def 7;
-    then x1 = x by A11,A15;
+A16: f.x1 = y by TARSKI:def 1;
+    x1 in dom f by A15,FUNCT_1:def 7;
+    then x1 = x by A12,A16;
     hence thesis by TARSKI:def 1;
   end;
-  then reconsider B = f " {y} as finite set;
-  card B = 1 by A12,CARD_1:30;
+  card Coim(f,y) = 1 by A13,CARD_1:30;
   hence thesis by Def2;
 end;
 
-theorem Th10:
+theorem Th8:
   f is one-to-one iff for y st y in rng f holds f just_once_values y
 proof
   thus f is one-to-one implies for y st y in rng f holds f just_once_values y
@@ -264,7 +261,7 @@ A1: f is one-to-one;
     then consider x such that
 A2: x in dom f & f.x = y by FUNCT_1:def 3;
     for z holds z in dom f & z <> x implies f.z <> y by A1,A2,FUNCT_1:def 4;
-    hence thesis by A2,Th9;
+    hence thesis by A2,Th7;
   end;
   assume
 A3: for y st y in rng f holds f just_once_values y;
@@ -275,7 +272,7 @@ A5: y in dom f & f.x = f.y;
   f.x in rng f by A4,FUNCT_1:def 3;
   then f just_once_values f.x by A3;
   then consider x1 such that
-A6: {x1} = f " {f.x} by Th8;
+A6: {x1} = f " {f.x} by Th6;
 A7: f.x in {f.x} by TARSKI:def 1;
   then
 A8: y in f "{f.x} by A5,FUNCT_1:def 7;
@@ -284,26 +281,26 @@ A8: y in f "{f.x} by A5,FUNCT_1:def 7;
   hence thesis by A6,A8,TARSKI:def 1;
 end;
 
-theorem Th11:
+theorem Th9:
   f is_one-to-one_at x iff x in dom f & f just_once_values f.x
 proof
   thus f is_one-to-one_at x implies x in dom f & f just_once_values f.x
   proof
     assume
 A1: f is_one-to-one_at x;
-    hence x in dom f by Th2;
-    {x} = f " {f.x} by A1,Th3;
-    hence thesis by Th8;
+    hence x in dom f by Th1;
+    {x} = f " {f.x} by A1,Th2;
+    hence thesis by Th6;
   end;
   assume that
 A2: x in dom f and
 A3: f just_once_values f.x;
   consider z such that
-A4: f " {f.x} = {z} by A3,Th8;
+A4: f " {f.x} = {z} by A3,Th6;
   f.x in {f.x} by TARSKI:def 1;
   then x in {z} by A2,A4,FUNCT_1:def 7;
   then x = z by TARSKI:def 1;
-  hence thesis by A2,A4,Th3;
+  hence thesis by A2,A4,Th2;
 end;
 
 definition
@@ -315,7 +312,7 @@ A1: f just_once_values y;
   it in dom f & f.it = y;
   existence
   proof
-    y in rng f by A1,Th7;
+    y in rng f by A1,Th5;
     then consider x such that
 A2: x in dom f & f.x = y by FUNCT_1:def 3;
     take x;
@@ -330,7 +327,7 @@ A4: x2 in dom f & f.x2 = y;
     consider x such that
     x in dom f and
     f.x = y and
-A5: for z st z in dom f & z <> x holds f.z <> y by A1,Th9;
+A5: for z st z in dom f & z <> x holds f.z <> y by A1,Th7;
     x = x1 by A3,A5;
     hence thesis by A4,A5;
   end;
@@ -346,13 +343,13 @@ A1: f just_once_values y;
     .= {y} by A1,Def3;
 end;
 
-theorem Th17:
+theorem Th11:
   f just_once_values y implies f " {y} = {f <- y}
 proof
   assume
 A1: f just_once_values y;
   then consider x such that
-A2: {x} = f " {y} by Th8;
+A2: {x} = f " {y} by Th6;
 A3: x in f " {y} by A2,ZFMISC_1:31;
   then f.x in {y} by FUNCT_1:def 7;
   then
@@ -369,7 +366,7 @@ A1: f is one-to-one and
 A2: y in rng f;
   consider x such that
 A3: x in dom f & f.x = y by A2,FUNCT_1:def 3;
-  f just_once_values y by A1,A2,Th10;
+  f just_once_values y by A1,A2,Th8;
   then x = f <- y by A3,Def3;
   hence thesis by A1,A3,FUNCT_1:32;
 end;
@@ -378,7 +375,7 @@ theorem
   f is_one-to-one_at x implies f <- (f.x) = x
 proof
   assume f is_one-to-one_at x;
-  then x in dom f & f just_once_values f.x by Th11;
+  then x in dom f & f just_once_values f.x by Th9;
   hence thesis by Def3;
 end;
 
@@ -394,7 +391,7 @@ A2: now
     hence f.x <> f.(f <- y) by A1,Def3;
   end;
   f <- y in dom f by A1,Def3;
-  hence thesis by A2,Th4;
+  hence thesis by A2,Th3;
 end;
 
 reserve D for non empty set;
@@ -455,19 +452,16 @@ A3: 3 in {1,2,3} by FINSEQ_3:1;
 end;
 
 definition
-  let p;
-  let x;
-
+  let p,x;
   func x..p -> Element of NAT equals
   Sgm(p " {x}).1;
   coherence
   proof
     set q = Sgm(p " {x});
     per cases;
-    suppose
-      not 1 in dom q;
+    suppose not 1 in dom q;
       then q.1 = 0 by FUNCT_1:def 2;
-      hence thesis by FUNCT_1:def 2;
+      hence thesis;
     end;
     suppose
 A1:   1 in dom q;
@@ -478,7 +472,7 @@ A2:   rng q c= NAT by FINSEQ_1:def 4;
   end;
 end;
 
-theorem Th29:
+theorem Th19:
   x in rng p implies p.(x..p) = x
 proof
   set q = Sgm(p " {x});
@@ -494,7 +488,7 @@ A2: q.1 in rng q by FUNCT_1:def 3;
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th30:
+theorem Th20:
   x in rng p implies x..p in dom p
 proof
 A1: p " {x} c= dom p & dom p = Seg(len p) by FINSEQ_1:def 3,RELAT_1:132;
@@ -507,36 +501,36 @@ A1: p " {x} c= dom p & dom p = Seg(len p) by FINSEQ_1:def 3,RELAT_1:132;
   hence thesis by FUNCT_1:def 7;
 end;
 
-theorem Th31:
+theorem Th21:
   x in rng p implies 1 <= x..p & x..p <= len p
 proof
   assume x in rng p;
-  then x..p in dom p by Th30;
+  then x..p in dom p by Th20;
   hence thesis by FINSEQ_3:25;
 end;
 
-theorem Th32:
+theorem Th22:
   x in rng p implies x..p - 1 is Element of NAT & len p - x..p is
   Element of NAT
 proof
   assume x in rng p;
-  then 1 <= x..p & x..p <= len p by Th31;
+  then 1 <= x..p & x..p <= len p by Th21;
   hence thesis by INT_1:5;
 end;
 
-theorem Th33:
+theorem Th23:
   x in rng p implies x..p in p " {x}
 proof
   assume
 A1: x in rng p;
-  then p.(x..p) = x by Th29;
+  then p.(x..p) = x by Th19;
   then
 A2: p.(x..p) in {x} by TARSKI:def 1;
-  x..p in dom p by A1,Th30;
+  x..p in dom p by A1,Th20;
   hence thesis by A2,FUNCT_1:def 7;
 end;
 
-theorem Th34:
+theorem Th24:
   for k st k in dom p & k < x..p holds p.k <> x
 proof
   let k;
@@ -563,17 +557,17 @@ A8: now
   hence contradiction by A2,A5,A7,A8,FINSEQ_1:def 13;
 end;
 
-theorem Th35:
+theorem Th25:
   p just_once_values x implies p <- x = x..p
 proof
   assume
 A1: p just_once_values x;
-  then x in rng p by Th7;
-  then x..p in dom p & p.(x..p) = x by Th29,Th30;
+  then x in rng p by Th5;
+  then x..p in dom p & p.(x..p) = x by Th19,Th20;
   hence thesis by A1,Def3;
 end;
 
-theorem Th36:
+theorem Th26:
   p just_once_values x implies for k st k in dom p & k <> x..p holds p.k <> x
 proof
   assume
@@ -581,11 +575,11 @@ A1: p just_once_values x;
   let k;
   assume
 A2: k in dom p & k <> x..p & p.k = x;
-  p <- x = x..p by A1,Th35;
+  p <- x = x..p by A1,Th25;
   hence thesis by A1,A2,Def3;
 end;
 
-theorem Th37:
+theorem Th27:
   x in rng p & (for k st k in dom p & k <> x..p holds p.k <> x)
   implies p just_once_values x
 proof
@@ -593,19 +587,19 @@ proof
 A1: x in rng p and
 A2: for k st k in dom p & k <> x..p holds p.k <> x;
 A3: for z st z in dom p & z <> x..p holds p.z <> x by A2;
-  p.(x..p) = x & x..p in dom p by A1,Th29,Th30;
-  hence thesis by A3,Th9;
+  p.(x..p) = x & x..p in dom p by A1,Th19,Th20;
+  hence thesis by A3,Th7;
 end;
 
-theorem Th38:
+theorem Th28:
   p just_once_values x iff x in rng p & {x..p} = p " {x}
 proof
   thus p just_once_values x implies x in rng p & {x..p} = p " {x}
   proof
     assume
 A1: p just_once_values x;
-    then x..p = p <- x by Th35;
-    hence thesis by A1,Th7,Th17;
+    then x..p = p <- x by Th25;
+    hence thesis by A1,Th5,Th11;
   end;
   assume that
 A2: x in rng p and
@@ -620,8 +614,8 @@ A7: p.z = x;
     then z in p " {x} by A5,FUNCT_1:def 7;
     hence contradiction by A3,A6,TARSKI:def 1;
   end;
-  p.(x..p) = x & x..p in dom p by A2,Th29,Th30;
-  hence thesis by A4,Th9;
+  p.(x..p) = x & x..p in dom p by A2,Th19,Th20;
+  hence thesis by A4,Th7;
 end;
 
 theorem
@@ -635,7 +629,7 @@ A2: x in rng p;
     let y;
     assume y in {x..p};
     then y = x..p by TARSKI:def 1;
-    hence thesis by A2,Th33;
+    hence thesis by A2,Th23;
   end;
   let y;
   assume
@@ -645,30 +639,31 @@ A4: y in dom p by FUNCT_1:def 7;
   p.y in {x} by A3,FUNCT_1:def 7;
   then
 A5: p.y = x by TARSKI:def 1;
-  p.(x..p) = x & x..p in dom p by A2,Th29,Th30;
+  p.(x..p) = x & x..p in dom p by A2,Th19,Th20;
   then x..p = y by A1,A4,A5,FUNCT_1:def 4;
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th40:
+theorem Th30:
   p just_once_values x iff len(p - {x}) = len p - 1
 proof
   thus p just_once_values x implies len(p - {x}) = len p - 1
   proof
     assume p just_once_values x;
-    then len(p - {x}) = len p - card(p " {x}) & p " {x} = {x..p} by Th38,
+    then len(p - {x}) = len p - card(p " {x}) & p " {x} = {x..p} by Th28,
 FINSEQ_3:59;
     hence thesis by CARD_1:30;
   end;
+A1: p"{x} = Coim(p,x);
   assume len(p - {x}) = len p - 1;
-  then len p + (- 1) = len p - card(p " {x}) by FINSEQ_3:59
-    .= len p + (- card(p " {x}));
-  hence thesis by Def2;
+  then len p + -1 = len p - card(p " {x}) by FINSEQ_3:59
+    .= len p + - (card (p"{x}));
+  hence thesis by A1,Def2;
 end;
 
 reserve L,M for Element of NAT;
 
-theorem Th41:
+theorem Th31:
   p just_once_values x implies for k st k in dom(p - {x}) holds (k
 < x..p implies (p - {x}).k = p.k) & (x..p <= k implies (p - {x}).k = p.(k + 1))
 proof
@@ -692,12 +687,12 @@ A4: k < x..p;
       y = L and
 A5:   L in dom p & L <= k and
 A6:   p.L in {x};
-      p.L <> x by A1,A4,A5,Th36;
+      p.L <> x by A1,A4,A5,Th26;
       hence thesis by A6,TARSKI:def 1;
     end;
     then
 A7: A = {};
-    p.k <> x by A1,A2,A3,A4,Th36;
+    p.k <> x by A1,A2,A3,A4,Th26;
     then not p.k in {x} by TARSKI:def 1;
     then q.(k - 0) = p.k by A2,A3,A7,CARD_1:27,FINSEQ_3:85;
     hence thesis;
@@ -705,7 +700,7 @@ A7: A = {};
   set B = {M : M in dom p & M <= k + 1 & p.M in {x}};
   assume
 A8: x..p <= k;
-A9: x in rng p by A1,Th7;
+A9: x in rng p by A1,Th5;
 A10: B = {x..p}
   proof
     thus B c= {x..p}
@@ -718,21 +713,21 @@ A12:  M in dom p and
       M <= k + 1 and
 A13:  p.M in {x};
       p.M = x by A13,TARSKI:def 1;
-      then M = x..p by A1,A12,Th36;
+      then M = x..p by A1,A12,Th26;
       hence thesis by A11,TARSKI:def 1;
     end;
     let y;
     assume y in {x..p};
     then
 A14: y = x..p by TARSKI:def 1;
-    p.(x..p) = x by A9,Th29;
+    p.(x..p) = x by A9,Th19;
     then
 A15: p.(x..p) in {x} by TARSKI:def 1;
-    x..p in dom p & x..p <= k + 1 by A9,A8,Th30,NAT_1:12;
+    x..p in dom p & x..p <= k + 1 by A9,A8,Th20,NAT_1:12;
     hence thesis by A14,A15;
   end;
   then reconsider B as finite set;
-  dom q = Seg(len q) & len(p - {x}) = len p - 1 by A1,Th40,FINSEQ_1:def 3;
+  dom q = Seg(len q) & len(p - {x}) = len p - 1 by A1,Th30,FINSEQ_1:def 3;
   then k <= len p - 1 by A2,FINSEQ_1:1;
   then 1 <= k + 1 & k + 1 <= len p by NAT_1:12,XREAL_1:19;
   then k + 1 in Seg(len p);
@@ -741,7 +736,7 @@ A16: k + 1 in dom p by FINSEQ_1:def 3;
   now
     x..p <> k + 1 by A8,XREAL_1:29;
     then
-A17: p.(k + 1) <> x by A1,A16,Th36;
+A17: p.(k + 1) <> x by A1,A16,Th26;
     assume p.(k + 1) in {x};
     hence contradiction by A17,TARSKI:def 1;
   end;
@@ -761,8 +756,8 @@ A2: x in rng p;
   let k;
   assume
 A3: k in dom(p - {x});
-A4: p just_once_values x by A1,A2,Th10;
-  then dom q = Seg(len q) & len(p - {x}) = len p - 1 by Th40,FINSEQ_1:def 3;
+A4: p just_once_values x by A1,A2,Th8;
+  then dom q = Seg(len q) & len(p - {x}) = len p - 1 by Th30,FINSEQ_1:def 3;
   then k <= len p - 1 by A3,FINSEQ_1:1;
   then 1 <= k + 1 & k + 1 <= len p by NAT_1:12,XREAL_1:19;
   then k + 1 in Seg(len p);
@@ -773,21 +768,21 @@ A5: dom(p - {x}) c= dom p & k + 1 in dom p by FINSEQ_1:def 3,FINSEQ_3:63;
     assume that
 A6: (p - {x}).k = p.k and
 A7: not k < x..p;
-    q.k = p.(k + 1) by A4,A3,A7,Th41;
+    q.k = p.(k + 1) by A4,A3,A7,Th31;
     then k + 0 = k + 1 by A1,A3,A5,A6,FUNCT_1:def 4;
     hence thesis;
   end;
-  thus k < x..p implies (p - {x}).k = p.k by A4,A3,Th41;
+  thus k < x..p implies (p - {x}).k = p.k by A4,A3,Th31;
   thus (p - {x}).k = p.(k + 1) implies x..p <= k
   proof
     assume
 A8: (p - {x}).k = p.(k + 1);
     assume not x..p <= k;
-    then p.(k + 1) = p.k by A4,A3,A8,Th41;
+    then p.(k + 1) = p.k by A4,A3,A8,Th31;
     then k + 0 = k + 1 by A1,A3,A5,FUNCT_1:def 4;
     hence thesis;
   end;
-  thus thesis by A4,A3,Th41;
+  thus thesis by A4,A3,Th31;
 end;
 
 definition
@@ -796,11 +791,11 @@ definition
   assume
 A1: x in rng p;
   func p -| x -> FinSequence means
-  :Def6:
+  :Def5:
   ex n st n = x..p - 1 & it = p | Seg n;
   existence
   proof
-    reconsider n = x..p - 1 as Element of NAT by A1,Th32;
+    reconsider n = x..p - 1 as Element of NAT by A1,Th22;
     reconsider q = p | Seg n as FinSequence by FINSEQ_1:15;
     take q;
     thus thesis;
@@ -808,66 +803,66 @@ A1: x in rng p;
   uniqueness;
 end;
 
-theorem Th45:
+theorem Th33:
   x in rng p & n = x..p - 1 implies p | Seg n = p -| x
 proof
   assume x in rng p;
-  then ex m st m = x..p - 1 & p | Seg m = p -| x by Def6;
+  then ex m st m = x..p - 1 & p | Seg m = p -| x by Def5;
   hence thesis;
 end;
 
-theorem Th46:
+theorem Th34:
   x in rng p implies len(p -| x) = x..p - 1
 proof
   assume
 A1: x in rng p;
   then consider n such that
 A2: n = x..p - 1 and
-A3: p | Seg n = p -| x by Def6;
+A3: p | Seg n = p -| x by Def5;
 A4: n <= n + 1 by NAT_1:12;
-  n + 1 <= len p by A1,A2,Th31;
+  n + 1 <= len p by A1,A2,Th21;
   then n <= len p by A4,XXREAL_0:2;
   hence thesis by A2,A3,FINSEQ_1:17;
 end;
 
-theorem Th47:
+theorem Th35:
   x in rng p & n = x..p - 1 implies dom(p -| x) = Seg n
 proof
   assume x in rng p;
-  then len(p -| x) = x..p - 1 by Th46;
+  then len(p -| x) = x..p - 1 by Th34;
   hence thesis by FINSEQ_1:def 3;
 end;
 
-theorem Th48:
+theorem Th36:
   x in rng p & k in dom(p -| x) implies p.k = (p -| x).k
 proof
   assume that
 A1: x in rng p and
 A2: k in dom(p -| x);
-  ex n st n = x..p - 1 & p | Seg n = p -| x by A1,Def6;
+  ex n st n = x..p - 1 & p | Seg n = p -| x by A1,Def5;
   hence thesis by A2,FUNCT_1:47;
 end;
 
-theorem Th49:
+theorem Th37:
   x in rng p implies not x in rng(p -| x)
 proof
   assume that
 A1: x in rng p and
 A2: x in rng(p -| x);
-  reconsider n = x..p - 1 as Element of NAT by A1,Th32;
+  reconsider n = x..p - 1 as Element of NAT by A1,Th22;
   set r = p | Seg n;
-A3: r = p -| x by A1,Th45;
+A3: r = p -| x by A1,Th33;
   then consider y such that
 A4: y in dom r and
 A5: r.y = x by A2,FUNCT_1:def 3;
-A6: dom r = Seg n by A1,A3,Th47;
+A6: dom r = Seg n by A1,A3,Th35;
   then reconsider y as Element of NAT by A4;
   y <= n by A4,A6,FINSEQ_1:1;
   then
 A7: y + 1 <= x..p by XREAL_1:19;
   y < y + 1 by XREAL_1:29;
   then dom r c= dom p & y < x..p by A7,RELAT_1:60,XXREAL_0:2;
-  then p.y <> x by A4,Th34;
+  then p.y <> x by A4,Th24;
   hence thesis by A4,A5,FUNCT_1:47;
 end;
 
@@ -875,7 +870,7 @@ theorem
   x in rng p implies rng(p -| x) misses {x}
 proof
   assume x in rng p;
-  then not x in rng(p -| x) by Th49;
+  then not x in rng(p -| x) by Th37;
   then for y st y in rng(p -| x) holds not y in {x} by TARSKI:def 1;
   hence thesis by XBOOLE_0:3;
 end;
@@ -884,7 +879,7 @@ theorem
   x in rng p implies rng(p -| x) c= rng p
 proof
   assume x in rng p;
-  then ex n st n = x..p - 1 & p | Seg n = p -| x by Def6;
+  then ex n st n = x..p - 1 & p | Seg n = p -| x by Def5;
   hence thesis by RELAT_1:70;
 end;
 
@@ -897,14 +892,14 @@ A1: x in rng p;
   proof
     assume
 A2: x..p = 1;
-    len(p -| x) = x..p - 1 by A1,Th46
+    len(p -| x) = x..p - 1 by A1,Th34
       .= 0 by A2;
     hence thesis;
   end;
   assume p -| x = {};
   then
 A3: len(p -| x) = 0;
-  len(p -| x) = x..p - 1 by A1,Th46;
+  len(p -| x) = x..p - 1 by A1,Th34;
   hence thesis by A3;
 end;
 
@@ -912,7 +907,7 @@ theorem
   x in rng p & p is FinSequence of D implies p -| x is FinSequence of D
 proof
   assume x in rng p;
-  then ex n st n = x..p - 1 & p | Seg n = p -| x by Def6;
+  then ex n st n = x..p - 1 & p | Seg n = p -| x by Def5;
   hence thesis by FINSEQ_1:18;
 end;
 
@@ -922,12 +917,12 @@ definition
   assume
 A1: x in rng p;
   func p |-- x -> FinSequence means
-  :Def7:
+  :Def6:
   len it = len p - x..p & for k st k in dom it holds it.k = p.(k + x..p);
   existence
   proof
     deffunc F(Nat) = p.($1 + x..p);
-    reconsider n = len p - x..p as Element of NAT by A1,Th32;
+    reconsider n = len p - x..p as Element of NAT by A1,Th22;
     consider q such that
 A2: len q = n & for k be Nat st k in dom q holds q.k = F(k) from
     FINSEQ_1:sch 2;
@@ -955,22 +950,22 @@ A8:   k in dom q;
   end;
 end;
 
-theorem Th57:
+theorem Th42:
   x in rng p & n = len p - x..p implies dom(p |-- x) = Seg n
 proof
   assume x in rng p;
-  then len(p |-- x) = len p - x..p by Def7;
+  then len(p |-- x) = len p - x..p by Def6;
   hence thesis by FINSEQ_1:def 3;
 end;
 
-theorem Th58:
+theorem Th43:
   x in rng p & n in dom(p |-- x) implies n + x..p in dom p
 proof
   assume that
 A1: x in rng p and
 A2: n in dom(p |-- x);
-  reconsider m = len p - x..p as Element of NAT by A1,Th32;
-  n in Seg m by A1,A2,Th57;
+  reconsider m = len p - x..p as Element of NAT by A1,Th22;
+  n in Seg m by A1,A2,Th42;
   then n <= len p - x..p by FINSEQ_1:1;
   then
 A3: n + x..p <= len p by XREAL_1:19;
@@ -990,11 +985,11 @@ A1: x in rng p;
 A2: z in dom(p |-- x) and
 A3: (p |-- x).z = y by FUNCT_1:def 3;
   reconsider z as Element of NAT by A2;
-  y = p.(z + x..p) & z + x..p in dom p by A1,A2,A3,Def7,Th58;
+  y = p.(z + x..p) & z + x..p in dom p by A1,A2,A3,Def6,Th43;
   hence thesis by FUNCT_1:def 3;
 end;
 
-theorem Th60:
+theorem Th45:
   p just_once_values x iff x in rng p & not x in rng(p |-- x)
 proof
   thus p just_once_values x implies x in rng p & not x in rng(p |-- x)
@@ -1002,14 +997,14 @@ proof
     assume
 A1: p just_once_values x;
     hence
-A2: x in rng p by Th7;
+A2: x in rng p by Th5;
     assume x in rng(p |-- x);
     then consider z such that
 A3: z in dom(p |-- x) and
 A4: (p |-- x).z = x by FUNCT_1:def 3;
     reconsider z as Element of NAT by A3;
-    (p |-- x).z = p.(z + x..p) & z + x..p in dom p by A2,A3,Def7,Th58;
-    then z + x..p = 0 + x..p by A1,A4,Th36;
+    (p |-- x).z = p.(z + x..p) & z + x..p in dom p by A2,A3,Def6,Th43;
+    then z + x..p = 0 + x..p by A1,A4,Th26;
     hence thesis by A3,FINSEQ_3:24;
   end;
   assume that
@@ -1028,13 +1023,13 @@ A9: p.k = x;
         then k + 1 <= x..p by NAT_1:13;
         then k <= x..p - 1 by XREAL_1:19;
         then
-A10:    k <= len(p -| x) by A5,Th46;
+A10:    k <= len(p -| x) by A5,Th34;
         1 <= k by A7,FINSEQ_3:25;
         then
 A11:    k in dom(p -| x) by A10,FINSEQ_3:25;
-        then x = (p -| x).k by A5,A9,Th48;
+        then x = (p -| x).k by A5,A9,Th36;
         then x in rng(p -| x) by A11,FUNCT_1:def 3;
-        hence contradiction by A5,Th49;
+        hence contradiction by A5,Th37;
       end;
       suppose
 A12:    x..p < k;
@@ -1046,39 +1041,39 @@ A13:    k = x..p + m by NAT_1:10;
 A14:    0 + 1 <= m by NAT_1:13;
         m + x..p <= len p by A7,A13,FINSEQ_3:25;
         then m <= len p - x..p by XREAL_1:19;
-        then m <= len(p |-- x) by A5,Def7;
+        then m <= len(p |-- x) by A5,Def6;
         then
 A15:    m in dom(p |-- x) by A14,FINSEQ_3:25;
-        then (p |-- x).m = p.k by A5,A13,Def7;
+        then (p |-- x).m = p.k by A5,A13,Def6;
         hence contradiction by A6,A9,A15,FUNCT_1:def 3;
       end;
     end;
     hence contradiction;
   end;
-  hence thesis by A5,Th37;
+  hence thesis by A5,Th27;
 end;
 
-theorem Th61:
+theorem Th46:
   x in rng p & p is one-to-one implies not x in rng(p |-- x)
 proof
   assume that
 A1: x in rng p and
 A2: p is one-to-one and
 A3: x in rng(p |-- x);
-A4: len(p |-- x) = len p - x..p by A1,Def7;
+A4: len(p |-- x) = len p - x..p by A1,Def6;
   consider y such that
 A5: y in dom(p |-- x) and
 A6: (p |-- x).y = x by A3,FUNCT_1:def 3;
   reconsider y as Element of NAT by A5;
-A7: 1 <= y + x..p by A1,Th31,NAT_1:12;
+A7: 1 <= y + x..p by A1,Th21,NAT_1:12;
 A8: y in Seg(len(p |-- x)) by A5,FINSEQ_1:def 3;
   then y <= len(p |-- x) by FINSEQ_1:1;
   then y + x..p <= len p by A4,XREAL_1:19;
   then y + x..p in Seg(len p) by A7;
   then
 A9: y + x..p in dom p by FINSEQ_1:def 3;
-A10: x..p in dom p & p.(x..p) = x by A1,Th29,Th30;
-  (p |-- x).y = p.(y + x..p) by A1,A5,Def7;
+A10: x..p in dom p & p.(x..p) = x by A1,Th19,Th20;
+  (p |-- x).y = p.(y + x..p) by A1,A5,Def6;
   then 0 + x..p = y + x..p by A2,A6,A10,A9,FUNCT_1:def 4;
   hence thesis by A8,FINSEQ_1:1;
 end;
@@ -1090,11 +1085,11 @@ proof
   proof
     assume
 A1: p just_once_values x;
-    hence x in rng p by Th60;
+    hence x in rng p by Th45;
     assume not rng(p |-- x) misses {x};
     then
 A2: ex y st y in rng(p |-- x) & y in {x} by XBOOLE_0:3;
-    not x in rng(p |-- x) by A1,Th60;
+    not x in rng(p |-- x) by A1,Th45;
     hence thesis by A2,TARSKI:def 1;
   end;
   assume that
@@ -1105,14 +1100,14 @@ A5: x in {x} by TARSKI:def 1;
     assume x in rng(p |-- x);
     hence contradiction by A4,A5,XBOOLE_0:3;
   end;
-  hence thesis by A3,Th60;
+  hence thesis by A3,Th45;
 end;
 
 theorem
   x in rng p & p is one-to-one implies rng(p |-- x) misses {x}
 proof
   assume x in rng p & p is one-to-one;
-  then not x in rng(p |-- x) by Th61;
+  then not x in rng(p |-- x) by Th46;
   then for y st y in rng(p |-- x) holds not y in {x} by TARSKI:def 1;
   hence thesis by XBOOLE_0:3;
 end;
@@ -1126,14 +1121,14 @@ A1: x in rng p;
   proof
     assume
 A2: x..p = len p;
-    len(p |-- x) = len p - x..p by A1,Def7
+    len(p |-- x) = len p - x..p by A1,Def6
       .= 0 by A2;
     hence thesis;
   end;
   assume p |-- x = {};
   then
 A3: len(p |-- x) = 0;
-  len(p |-- x) = len p - x..p by A1,Def7;
+  len(p |-- x) = len p - x..p by A1,Def6;
   hence thesis by A3;
 end;
 
@@ -1145,7 +1140,7 @@ A1: x in rng p and
 A2: p is FinSequence of D;
   rng(p |-- x) c= D
   proof
-A3: len(p |-- x) = len p - x..p by A1,Def7;
+A3: len(p |-- x) = len p - x..p by A1,Def6;
     let y;
     assume y in rng(p |-- x);
     then consider z such that
@@ -1156,11 +1151,11 @@ A5: (p |-- x).z = y by FUNCT_1:def 3;
     then z <= len(p |-- x) by A4,FINSEQ_1:1;
     then
 A6: z + x..p <= len p by A3,XREAL_1:19;
-    1 <= z + x..p by A1,Th31,NAT_1:12;
+    1 <= z + x..p by A1,Th21,NAT_1:12;
     then z + x..p in Seg(len p) by A6;
     then
 A7: z + x..p in dom p by FINSEQ_1:def 3;
-    y = p.(z + x..p) by A1,A4,A5,Def7;
+    y = p.(z + x..p) by A1,A4,A5,Def6;
     then
 A8: y in rng p by A7,FUNCT_1:def 3;
     rng p c= D by A2,FINSEQ_1:def 4;
@@ -1169,7 +1164,7 @@ A8: y in rng p by A7,FUNCT_1:def 3;
   hence thesis by FINSEQ_1:def 4;
 end;
 
-theorem Th66:
+theorem Th51:
   x in rng p implies p = (p -| x) ^ <* x *> ^ (p |-- x)
 proof
   set q1 = p -| x;
@@ -1180,8 +1175,8 @@ A1: x in rng p;
 A2: now
     let k be Element of NAT;
     assume k in dom q2;
-    then q2.k = p.(x..p - 1 + 1 + k) by A1,Def7
-      .= p.(len q1 + 1 + k) by A1,Th46
+    then q2.k = p.(x..p - 1 + 1 + k) by A1,Def6
+      .= p.(len q1 + 1 + k) by A1,Th34
       .= p.(len q1 + len<* x *> + k) by FINSEQ_1:40
       .= p.(len r + k) by FINSEQ_1:22;
     hence p.(len r + k) = q2.k;
@@ -1195,7 +1190,7 @@ A4: k in dom r;
       suppose
 A5:     k in dom q1;
         hence r.k = q1.k by FINSEQ_1:def 7
-          .= p.k by A1,A5,Th48;
+          .= p.k by A1,A5,Th36;
       end;
       suppose
         ex n be Nat st n in dom<* x *> & k = len q1 + n;
@@ -1207,14 +1202,14 @@ A7:     k = len q1 + n;
 A8:     n = 1 by TARSKI:def 1;
         hence r.k = <* x *>.1 by A6,A7,FINSEQ_1:def 7
           .= x by FINSEQ_1:def 8
-          .= p.(x..p - 1 + 1) by A1,Th29
-          .= p.k by A1,A7,A8,Th46;
+          .= p.(x..p - 1 + 1) by A1,Th19
+          .= p.k by A1,A7,A8,Th34;
       end;
     end;
     hence p.k = r.k;
   end;
-  len p = len p - x..p + x..p .= x..p - 1 + 1 + len q2 by A1,Def7
-    .= len q1 + 1 + len q2 by A1,Th46
+  len p = len p - x..p + x..p .= x..p - 1 + 1 + len q2 by A1,Def6
+    .= len q1 + 1 + len q2 by A1,Th34
     .= len q1 + len<* x *> + len q2 by FINSEQ_1:40
     .= len r + len q2 by FINSEQ_1:22;
   hence thesis by A3,A2,FINSEQ_3:38;
@@ -1224,7 +1219,7 @@ theorem
   x in rng p & p is one-to-one implies p -| x is one-to-one
 proof
   assume x in rng p;
-  then p = (p -| x) ^ <* x *> ^ (p |-- x) by Th66
+  then p = (p -| x) ^ <* x *> ^ (p |-- x) by Th51
     .= (p -| x) ^ (<* x *> ^ (p |-- x)) by FINSEQ_1:32;
   hence thesis by FINSEQ_3:91;
 end;
@@ -1233,11 +1228,11 @@ theorem
   x in rng p & p is one-to-one implies p |-- x is one-to-one
 proof
   assume x in rng p;
-  then p = (p -| x) ^ <* x *> ^ (p |-- x) by Th66;
+  then p = (p -| x) ^ <* x *> ^ (p |-- x) by Th51;
   hence thesis by FINSEQ_3:91;
 end;
 
-theorem Th69:
+theorem Th54:
   p just_once_values x iff x in rng p & p - {x} = (p -| x) ^ (p |-- x)
 proof
   set q = p - {x};
@@ -1249,12 +1244,12 @@ proof
     assume
 A1: p just_once_values x;
     hence
-A2: x in rng p by Th7;
+A2: x in rng p by Th5;
 A3: now
-      x..p <= len p by A2,Th31;
+      x..p <= len p by A2,Th21;
       then x..p - 1 <= len p - 1 by XREAL_1:9;
-      then len r <= len p - 1 by A2,Th46;
-      then len r <= len q by A1,Th40;
+      then len r <= len p - 1 by A2,Th34;
+      then len r <= len q by A1,Th30;
       then
 A4:   Seg(len r) c= Seg(len q) by FINSEQ_1:5;
       let k be Nat;
@@ -1263,23 +1258,23 @@ A5:   Seg(len r) = dom r & Seg(len q) = dom q by FINSEQ_1:def 3;
 A6:   k in dom r;
       then k in Seg(len r) by FINSEQ_1:def 3;
       then k <= len r by FINSEQ_1:1;
-      then k <= x..p - 1 by A2,Th46;
+      then k <= x..p - 1 by A2,Th34;
       then
 A7:   k + 1 <= x..p by XREAL_1:19;
       k < k + 1 by XREAL_1:29;
       then
 A8:   k < x..p by A7,XXREAL_0:2;
-      r.k = p.k by A2,A6,Th48;
-      hence q.k = r.k by A1,A6,A4,A5,A8,Th41;
+      r.k = p.k by A2,A6,Th36;
+      hence q.k = r.k by A1,A6,A4,A5,A8,Th31;
     end;
 A9: now
-      reconsider m = x..p - 1 as Element of NAT by A2,Th32;
+      reconsider m = x..p - 1 as Element of NAT by A2,Th22;
       let k be Nat;
       set z = k + m;
       assume
 A10:  k in dom s;
       then
-A11:  s.k = p.(k + x..p) by A2,Def7;
+A11:  s.k = p.(k + x..p) by A2,Def6;
 A12:  dom s = Seg(len s) by FINSEQ_1:def 3;
       then
 A13:  1 <= k by A10,FINSEQ_1:1;
@@ -1287,25 +1282,25 @@ A13:  1 <= k by A10,FINSEQ_1:1;
       then
 A14:  x..p <= k + x..p - 1 by XREAL_1:19;
       k <= len s by A10,A12,FINSEQ_1:1;
-      then k <= len p - x..p by A2,Def7;
+      then k <= len p - x..p by A2,Def6;
       then k + x..p <= len p by XREAL_1:19;
       then k + x..p - 1 <= len p - 1 by XREAL_1:9;
       then
-A15:  k + x..p - 1 <= len q by A1,Th40;
-      1 <= x..p by A2,Th31;
+A15:  k + x..p - 1 <= len q by A1,Th30;
+      1 <= x..p by A2,Th21;
       then 1 + 1 <= k + x..p by A13,XREAL_1:7;
       then
 A16:  1 <= k + x..p - 1 by XREAL_1:19;
       dom q = Seg(len q) by FINSEQ_1:def 3;
       then z in dom q by A16,A15;
-      then q.z = p.(z + 1) by A1,A14,Th41
+      then q.z = p.(z + 1) by A1,A14,Th31
         .= p.(k + x..p);
-      hence q.(len r + k) = s.k by A2,A11,Th46;
+      hence q.(len r + k) = s.k by A2,A11,Th34;
     end;
-    len r + len s = (x..p - 1) + len s by A2,Th46
-      .= (x..p - 1) + (len p - x..p) by A2,Def7
+    len r + len s = (x..p - 1) + len s by A2,Th34
+      .= (x..p - 1) + (len p - x..p) by A2,Def6
       .= len p - 1
-      .= len q by A1,Th40;
+      .= len q by A1,Th30;
     then dom q = Seg(len r + len s) by FINSEQ_1:def 3;
     hence thesis by A3,A9,FINSEQ_1:def 7;
   end;
@@ -1325,7 +1320,7 @@ A21: p.k = x;
       assume
 A22:  y in {x..p,k};
 A23:  x in {x} by TARSKI:def 1;
-      x..p in dom p & p.(x..p) = x by A17,Th29,Th30;
+      x..p in dom p & p.(x..p) = x by A17,Th19,Th20;
       then
 A24:  x..p in p " {x} by A23,FUNCT_1:def 7;
       k in p " {x} by A19,A21,A23,FUNCT_1:def 7;
@@ -1337,23 +1332,23 @@ A25: 2 <= card(p " {x}) by A20,CARD_2:57;
 A26: len q = len p - card(p " {x}) by FINSEQ_3:59
       .= len p + (- card(p " {x}));
     len q = len r + len s by A18,FINSEQ_1:22
-      .= (x..p - 1) + len s by A17,Th46
-      .= (x..p - 1) + (len p - x..p) by A17,Def7
+      .= (x..p - 1) + len s by A17,Th34
+      .= (x..p - 1) + (len p - x..p) by A17,Def6
       .= len p + (- 1);
     hence contradiction by A26,A25;
   end;
-  hence thesis by A17,Th37;
+  hence thesis by A17,Th27;
 end;
 
 theorem
   x in rng p & p is one-to-one implies p - {x} = (p -| x) ^ (p |-- x)
 proof
   assume x in rng p & p is one-to-one;
-  then p just_once_values x by Th10;
-  hence thesis by Th69;
+  then p just_once_values x by Th8;
+  hence thesis by Th54;
 end;
 
-theorem Th71:
+theorem Th56:
   x in rng p & p - {x} is one-to-one & p - {x} = (p -| x) ^ (p |--
   x) implies p is one-to-one
 proof
@@ -1368,7 +1363,7 @@ A4: x1 in dom p and
 A5: x2 in dom p and
 A6: p.x1 = p.x2;
   reconsider k1 = x1, k2 = x2 as Element of NAT by A4,A5;
-A7: p just_once_values x by A1,A3,Th69;
+A7: p just_once_values x by A1,A3,Th54;
   now
     per cases by XXREAL_0:1;
     suppose
@@ -1377,147 +1372,143 @@ A7: p just_once_values x by A1,A3,Th69;
     end;
     suppose
       x1 = x..p & x..p < k2;
-      hence thesis by A1,A5,A6,A7,Th29,Th36;
+      hence thesis by A1,A5,A6,A7,Th19,Th26;
     end;
     suppose
       x1 = x..p & k2 < x..p;
-      hence thesis by A1,A5,A6,A7,Th29,Th36;
+      hence thesis by A1,A5,A6,A7,Th19,Th26;
     end;
     suppose
       k1 < x..p & x..p = x2;
-      hence thesis by A1,A4,A6,A7,Th29,Th36;
+      hence thesis by A1,A4,A6,A7,Th19,Th26;
     end;
     suppose
 A8:   k1 < x..p & x..p < k2;
-      x..p <= len p by A1,Th31;
+      x..p <= len p by A1,Th21;
       then k1 < len p by A8,XXREAL_0:2;
       then k1 + 1 <= len p by NAT_1:13;
       then k1 <= len p - 1 by XREAL_1:19;
       then
-A9:   k1 <= len q by A7,Th40;
+A9:   k1 <= len q by A7,Th30;
       k1 in Seg(len p) by A4,FINSEQ_1:def 3;
       then 1 <= k1 by FINSEQ_1:1;
       then k1 in Seg(len q) by A9;
       then
 A10:  k1 in dom q by FINSEQ_1:def 3;
       then
-A11:  q.k1 = p.k1 by A7,A8,Th41;
-      k2 <> 0 by A8;
-      then consider m2 be Nat such that
-A12:  k2 = m2 + 1 by NAT_1:6;
+A11:  q.k1 = p.k1 by A7,A8,Th31;
+      consider m2 be Nat such that
+A12:  k2 = m2 + 1 by A8,NAT_1:6;
       reconsider m2 as Element of NAT by ORDINAL1:def 12;
 A13:  x..p <= m2 by A8,A12,NAT_1:13;
       k2 in Seg(len p) by A5,FINSEQ_1:def 3;
       then k2 <= len p by FINSEQ_1:1;
       then m2 <= len p - 1 by A12,XREAL_1:19;
       then
-A14:  m2 <= len q by A7,Th40;
-      1 <= x..p by A1,Th31;
+A14:  m2 <= len q by A7,Th30;
+      1 <= x..p by A1,Th21;
       then 1 <= m2 by A13,XXREAL_0:2;
       then m2 in Seg(len q) by A14;
       then
 A15:  m2 in dom(p - {x}) by FINSEQ_1:def 3;
-      then q.m2 = p.k2 by A7,A12,A13,Th41;
+      then q.m2 = p.k2 by A7,A12,A13,Th31;
       hence thesis by A2,A6,A8,A10,A13,A15,A11,FUNCT_1:def 4;
     end;
     suppose
 A16:  k1 < x..p & k2 < x..p;
-A17:  x..p <= len p by A1,Th31;
+A17:  x..p <= len p by A1,Th21;
       then k2 < len p by A16,XXREAL_0:2;
       then k2 + 1 <= len p by NAT_1:13;
       then k2 <= len p - 1 by XREAL_1:19;
       then
-A18:  k2 <= len q by A7,Th40;
+A18:  k2 <= len q by A7,Th30;
       k2 in Seg(len p) by A5,FINSEQ_1:def 3;
       then 1 <= k2 by FINSEQ_1:1;
       then k2 in Seg(len q) by A18;
       then
 A19:  k2 in dom q by FINSEQ_1:def 3;
       then
-A20:  p.k2 = (p - {x}).k2 by A7,A16,Th41;
+A20:  p.k2 = (p - {x}).k2 by A7,A16,Th31;
       k1 < len p by A16,A17,XXREAL_0:2;
       then k1 + 1 <= len p by NAT_1:13;
       then k1 <= len p - 1 by XREAL_1:19;
       then
-A21:  k1 <= len q by A7,Th40;
+A21:  k1 <= len q by A7,Th30;
       k1 in Seg(len p) by A4,FINSEQ_1:def 3;
       then 1 <= k1 by FINSEQ_1:1;
       then k1 in Seg(len q) by A21;
       then
 A22:  k1 in dom q by FINSEQ_1:def 3;
-      then p.k1 = (p - {x}).k1 by A7,A16,Th41;
+      then p.k1 = (p - {x}).k1 by A7,A16,Th31;
       hence thesis by A2,A6,A22,A19,A20,FUNCT_1:def 4;
     end;
     suppose
 A23:  x..p < k1 & x..p < k2;
-      then k2 <> 0;
       then consider m2 be Nat such that
 A24:  k2 = m2 + 1 by NAT_1:6;
-      k1 <> 0 by A23;
-      then consider m1 be Nat such that
-A25:  k1 = m1 + 1 by NAT_1:6;
+      consider m1 be Nat such that
+A25:  k1 = m1 + 1 by A23,NAT_1:6;
       reconsider m1, m2 as Element of NAT by ORDINAL1:def 12;
       k2 in Seg(len p) by A5,FINSEQ_1:def 3;
       then k2 <= len p by FINSEQ_1:1;
       then m2 <= len p - 1 by A24,XREAL_1:19;
       then
-A26:  m2 <= len q by A7,Th40;
-A27:  1 <= x..p by A1,Th31;
+A26:  m2 <= len q by A7,Th30;
+A27:  1 <= x..p by A1,Th21;
 A28:  x..p <= m2 by A23,A24,NAT_1:13;
       then 1 <= m2 by A27,XXREAL_0:2;
       then m2 in Seg(len q) by A26;
       then
 A29:  m2 in dom(p - {x}) by FINSEQ_1:def 3;
       then
-A30:  p.k2 = (p - {x}).m2 by A7,A24,A28,Th41;
+A30:  p.k2 = (p - {x}).m2 by A7,A24,A28,Th31;
       k1 in Seg(len p) by A4,FINSEQ_1:def 3;
       then k1 <= len p by FINSEQ_1:1;
       then m1 <= len p - 1 by A25,XREAL_1:19;
       then
-A31:  m1 <= len q by A7,Th40;
+A31:  m1 <= len q by A7,Th30;
 A32:  x..p <= m1 by A23,A25,NAT_1:13;
       then 1 <= m1 by A27,XXREAL_0:2;
       then m1 in Seg(len q) by A31;
       then
 A33:  m1 in dom(p - {x}) by FINSEQ_1:def 3;
-      then p.k1 = (p - {x}).m1 by A7,A25,A32,Th41;
+      then p.k1 = (p - {x}).m1 by A7,A25,A32,Th31;
       hence thesis by A2,A6,A25,A24,A33,A29,A30,FUNCT_1:def 4;
     end;
     suppose
       x..p < k1 & x..p = x2;
-      hence thesis by A1,A4,A6,A7,Th29,Th36;
+      hence thesis by A1,A4,A6,A7,Th19,Th26;
     end;
     suppose
 A34:  x..p < k1 & k2 < x..p;
-      x..p <= len p by A1,Th31;
+      x..p <= len p by A1,Th21;
       then k2 < len p by A34,XXREAL_0:2;
       then k2 + 1 <= len p by NAT_1:13;
       then k2 <= len p - 1 by XREAL_1:19;
       then
-A35:  k2 <= len q by A7,Th40;
+A35:  k2 <= len q by A7,Th30;
       k2 in Seg(len p) by A5,FINSEQ_1:def 3;
       then 1 <= k2 by FINSEQ_1:1;
       then k2 in Seg(len q) by A35;
       then
 A36:  k2 in dom q by FINSEQ_1:def 3;
       then
-A37:  q.k2 = p.k2 by A7,A34,Th41;
-      k1 <> 0 by A34;
-      then consider m2 be Nat such that
-A38:  k1 = m2 + 1 by NAT_1:6;
+A37:  q.k2 = p.k2 by A7,A34,Th31;
+      consider m2 be Nat such that
+A38:  k1 = m2 + 1 by A34,NAT_1:6;
       reconsider m2 as Element of NAT by ORDINAL1:def 12;
 A39:  x..p <= m2 by A34,A38,NAT_1:13;
       k1 in Seg len p by A4,FINSEQ_1:def 3;
       then k1 <= len p by FINSEQ_1:1;
       then m2 <= len p - 1 by A38,XREAL_1:19;
       then
-A40:  m2 <= len q by A7,Th40;
-      1 <= x..p by A1,Th31;
+A40:  m2 <= len q by A7,Th30;
+      1 <= x..p by A1,Th21;
       then 1 <= m2 by A39,XXREAL_0:2;
       then m2 in Seg len q by A40;
       then
 A41:  m2 in dom(p - {x}) by FINSEQ_1:def 3;
-      then q.m2 = p.k1 by A7,A38,A39,Th41;
+      then q.m2 = p.k1 by A7,A38,A39,Th31;
       hence thesis by A2,A6,A34,A36,A39,A41,A37,FUNCT_1:def 4;
     end;
   end;
@@ -1530,12 +1521,12 @@ proof
   assume that
 A1: x in rng p and
 A2: p is one-to-one;
-  p = (p -| x) ^ <* x *> ^ (p |-- x) by A1,Th66;
+  p = (p -| x) ^ <* x *> ^ (p |-- x) by A1,Th51;
   then rng(p |-- x) misses rng((p -| x) ^ <* x *>) by A2,FINSEQ_3:91;
   hence thesis by FINSEQ_1:29,XBOOLE_1:63;
 end;
 
-theorem Th73:
+theorem Th58:
   A is finite implies ex p st rng p = A & p is one-to-one
 proof
   defpred P[set] means ex p st rng p = $1 & p is one-to-one;
@@ -1628,7 +1619,7 @@ A27: A is finite;
   thus P[A] from FINSET_1:sch 2(A27,A1,A26);
 end;
 
-theorem Th74:
+theorem Th59:
   rng p c= dom p & p is one-to-one implies rng p = dom p
 proof
   defpred P[Nat] means for q st len q = $1 & rng q c= dom q & q is one-to-one
@@ -1727,7 +1718,7 @@ A25: P[0];
   hence thesis by A1;
 end;
 
-theorem Th75:
+theorem Th60:
   rng p = dom p implies p is one-to-one
 proof
   defpred P[Nat] means for p st len p = $1 & rng p = dom p holds p is
@@ -1754,7 +1745,7 @@ A7:   k + 1 in rng p by A5,FINSEQ_1:4;
         then card(rng q) = k by FINSEQ_1:57;
         then
 A8:     card k = card(rng q);
-        p.(x..p) = x by A5,A6,Th29,FINSEQ_1:4;
+        p.(x..p) = x by A5,A6,Th19,FINSEQ_1:4;
         then
 A9:     p.(x..p) in {k + 1} by TARSKI:def 1;
         let l;
@@ -1766,7 +1757,7 @@ A13:    card{x..p,l} = 2 by A11,CARD_2:57;
         p.l in {k + 1} by A12,TARSKI:def 1;
         then
 A14:    l in p " {x} by A10,FUNCT_1:def 7;
-        x..p in dom p by A5,A6,Th30,FINSEQ_1:4;
+        x..p in dom p by A5,A6,Th20,FINSEQ_1:4;
         then x..p in p " {x} by A9,FUNCT_1:def 7;
         then {x..p,l} c= p " {k + 1} by A14,ZFMISC_1:32;
         then
@@ -1788,15 +1779,15 @@ CARD_1:12,FINSEQ_1:57;
         hence contradiction by XREAL_1:6;
       end;
       then
-A17:  p just_once_values k + 1 by A7,Th37;
+A17:  p just_once_values k + 1 by A7,Th27;
       then
-A18:  len q = (k + 1) - 1 by A4,Th40
+A18:  len q = (k + 1) - 1 by A4,Th30
         .= k;
-A19:  q = (p -| (k + 1)) ^ (p |-- (k + 1)) by A17,Th69;
+A19:  q = (p -| (k + 1)) ^ (p |-- (k + 1)) by A17,Th54;
       rng q = Seg(k + 1) \ {k + 1} by A5,A6,FINSEQ_3:65
         .= Seg k by FINSEQ_1:10;
       then dom q = rng q by A18,FINSEQ_1:def 3;
-      hence thesis by A3,A7,A18,A19,Th71;
+      hence thesis by A3,A7,A18,A19,Th56;
     end;
   end;
 A20: P[0]
@@ -1825,7 +1816,7 @@ A5: dom (q" * p) = dom p by RELAT_1:27
   rng r = rng(q") by A4,RELAT_1:28
     .= dom q by A3,FUNCT_1:33
     .= Seg(len q) by FINSEQ_1:def 3;
-  then r is one-to-one by A2,A5,Th75;
+  then r is one-to-one by A2,A5,Th60;
   hence thesis by A4,FUNCT_1:26;
 end;
 
@@ -1839,7 +1830,7 @@ A2: rng f = B;
 A3: A,B are_equipotent by A1,CARD_1:5;
   consider p such that
 A4: rng p = A and
-A5: p is one-to-one by Th73;
+A5: p is one-to-one by Th58;
   dom p,p .: (dom p) are_equipotent by A5,CARD_1:33;
   then dom p,A are_equipotent by A4,RELAT_1:113;
   then
@@ -1847,7 +1838,7 @@ A6: dom p,B are_equipotent by A3,WELLORD2:15;
   reconsider X = dom p as finite set;
   consider q such that
 A7: rng q = B and
-A8: q is one-to-one by Th73;
+A8: q is one-to-one by Th58;
 A9: dom q = Seg(len q) by FINSEQ_1:def 3;
   dom q,q .: (dom q) are_equipotent by A8,CARD_1:33;
   then dom q,B are_equipotent by A7,RELAT_1:113;
@@ -1882,7 +1873,7 @@ A13:  dom(q" * f * p) = dom p by RELAT_1:27
         .= dom q by A8,FUNCT_1:33
         .= Seg(len q) by FINSEQ_1:def 3;
       then
-A14:  g is one-to-one by A10,A13,Th75;
+A14:  g is one-to-one by A10,A13,Th60;
       q * g = q * (q " * (f * p)) by RELAT_1:36
         .= q * q" * (f * p) by RELAT_1:36
         .= id(rng q) * (f * p) by A8,FUNCT_1:39
@@ -1898,7 +1889,7 @@ A14:  g is one-to-one by A10,A13,Th75;
   hence thesis;
 end;
 
-theorem Th77:
+theorem Th62:
   p is one-to-one iff card(rng p) = len p
 proof
   thus p is one-to-one implies card(rng p) = len p
@@ -1938,14 +1929,14 @@ A2: f is one-to-one;
 A3: A,B are_equipotent by A1,CARD_1:5;
   consider p such that
 A4: rng p = A and
-A5: p is one-to-one by Th73;
+A5: p is one-to-one by Th58;
   dom p,p .: (dom p) are_equipotent by A5,CARD_1:33;
   then dom p,A are_equipotent by A4,RELAT_1:113;
   then
 A6: dom p,B are_equipotent by A3,WELLORD2:15;
   consider q such that
 A7: rng q = B and
-A8: q is one-to-one by Th73;
+A8: q is one-to-one by Th58;
 A9: dom q = Seg(len q) by FINSEQ_1:def 3;
   dom q,q .: (dom q) are_equipotent by A8,CARD_1:33;
   then dom q,B are_equipotent by A7,RELAT_1:113;
@@ -1974,7 +1965,7 @@ A12: dom(q" * f * p) = dom p by RELAT_1:27
     then rng g c= rng(q") by RELAT_1:26;
     then rng g c= dom q by A8,FUNCT_1:33;
     then rng g c= dom g by A10,A12,FINSEQ_1:def 3;
-    then rng g = dom g by A2,A5,A8,Th74;
+    then rng g = dom g by A2,A5,A8,Th59;
     then rng g = dom q by A10,A12,FINSEQ_1:def 3;
     then
 A13: rng(q * g) = B by A7,RELAT_1:28;
@@ -1989,7 +1980,7 @@ A15: rng p = dom f by A4,A11,FUNCT_2:def 1;
   end;
 end;
 
-theorem Th79:
+theorem
   for A,B being finite set, f being Function of A,B st card A = card B &
   rng f = B holds f is one-to-one by Lm1;
 
@@ -2015,7 +2006,7 @@ A5: card A = card(rng f) by A4,CARD_1:5;
   hence contradiction by A1,CARD_1:4;
 end;
 
-theorem Th81:
+theorem Th66:
   card A in card B implies ex x st x in B & for y st y in A holds f.y <> x
 proof
   assume that
@@ -2126,26 +2117,25 @@ proof
 A1: n <= card X;
   consider p being FinSequence such that
 A2: rng p = X and
-A3: p is one-to-one by Th73;
+A3: p is one-to-one by Th58;
   reconsider q = p|Seg n as FinSequence by FINSEQ_1:15;
-  n <= len p by A1,A2,A3,Th77;
+  n <= len p by A1,A2,A3,Th62;
   then
 A4: len q = n by FINSEQ_1:17;
   reconsider A = rng q as Subset of X by A2,RELAT_1:70;
   q is one-to-one by A3,FUNCT_1:52;
-  then card A = n by A4,Th77;
+  then card A = n by A4,Th62;
   hence thesis;
 end;
 
 reserve f for Function;
 
 theorem
-  f is one-to-one & x in rng f implies card(f"{x}) = 1
+  f is one-to-one & x in rng f implies card Coim (f,x) = 1
 proof
   assume f is one-to-one & x in rng f;
-  then f just_once_values x by Th10;
-  then ex B being finite set st B = f"{x} & card B = 1 by Def2;
-  hence thesis;
+  then f just_once_values x by Th8;
+  hence thesis by Def2;
 end;
 
 :: form SCMPDS_1, 2006.03.24, A.T.
@@ -2201,7 +2191,7 @@ end;
 
 reserve x1,x2,x3,x4,x5 for set;
 
-theorem Th89:
+theorem Th74:
   <*x1,x2,x3,x4*>=<*x1,x2,x3*>^<*x4*> & <*x1,x2,x3,x4*>=<*x1,x2*>^
 <*x3,x4*> & <*x1,x2,x3,x4*>=<*x1*>^<*x2,x3,x4*> & <*x1,x2,x3,x4*>=<*x1*>^<*x2*>
   ^<*x3*>^<*x4*>
@@ -2213,7 +2203,7 @@ proof
   thus thesis;
 end;
 
-theorem Th90:
+theorem Th75:
   <*x1,x2,x3,x4,x5*>=<*x1,x2,x3*>^<*x4,x5*> & <*x1,x2,x3,x4,x5*>=
 <*x1,x2,x3,x4*>^<*x5*> & <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>
 & <*x1,x2,x3,x4,x5*>=<*x1,x2*>^<*x3,x4,x5*> & <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2,x3
@@ -2226,12 +2216,12 @@ A1: <*x1,x2,x3,x4,x5*>=<*x1,x2,x3,x4*>^<*x5*> by FINSEQ_1:32;
   thus <*x1,x2,x3,x4,x5*>=<*x1,x2*>^(<*x3*>^<*x4*>)^<*x5*> by A1,FINSEQ_1:32
     .=<*x1,x2*>^<*x3,x4,x5*> by FINSEQ_1:32;
   hence <*x1,x2,x3,x4,x5*>=<*x1*>^(<*x2*>^<*x3,x4,x5*>) by FINSEQ_1:32
-    .=<*x1*>^<*x2,x3,x4,x5*> by Th89;
+    .=<*x1*>^<*x2,x3,x4,x5*> by Th74;
 end;
 
 reserve p for FinSequence;
 
-theorem Th91:
+theorem Th76:
   p = <*x1,x2,x3,x4*> iff len p = 4 & p.1 = x1 & p.2 = x2 & p.3=x3 & p.4= x4
 proof
   thus p = <*x1,x2,x3,x4*> implies len p = 4 & p.1 = x1 & p.2 = x2 & p.3 = x3
@@ -2308,7 +2298,7 @@ end;
 
 canceled;
 
-theorem Th93:
+theorem Th78:
   p = <*x1,x2,x3,x4,x5*> iff len p = 5 & p.1 = x1 & p.2 = x2 & p.3
   =x3 & p.4= x4 & p.5= x5
 proof
@@ -2323,27 +2313,27 @@ A1: 1 in dom <*x5*> by FINSEQ_1:2,def 8;
     assume
 A2: p =<*x1,x2,x3,x4,x5*>;
     then
-A3: p = (p4^<*x5*>) by Th90;
-    thus len p = len (<*x1,x2,x3,x4*>^<*x5*>) by A2,Th90
+A3: p = (p4^<*x5*>) by Th75;
+    thus len p = len (<*x1,x2,x3,x4*>^<*x5*>) by A2,Th75
       .=len <*x1,x2,x3,x4*> + len <*x5*> by FINSEQ_1:22
-      .=4 + len <*x5*> by Th91
+      .=4 + len <*x5*> by Th76
       .=4+1 by FINSEQ_1:40
       .=5;
 A4: dom p4 ={1,2,3,4} by FINSEQ_1:89,FINSEQ_3:2;
     then 1 in dom p4 by ENUMSET1:def 2;
     hence p.1 = p4.1 by A3,FINSEQ_1:def 7
-      .=x1 by Th91;
+      .=x1 by Th76;
     2 in dom p4 by A4,ENUMSET1:def 2;
     hence p.2 = p4.2 by A3,FINSEQ_1:def 7
-      .=x2 by Th91;
+      .=x2 by Th76;
     3 in dom p4 by A4,ENUMSET1:def 2;
     hence p.3 = p4.3 by A3,FINSEQ_1:def 7
-      .=x3 by Th91;
+      .=x3 by Th76;
     4 in dom p4 by A4,ENUMSET1:def 2;
     hence p.4 = p4.4 by A3,FINSEQ_1:def 7
-      .=x4 by Th91;
-    thus p.5 = (p4^<*x5*>).(4+1) by A2,Th90
-      .=(p4^<*x5*>).(len p4+ 1) by Th91
+      .=x4 by Th76;
+    thus p.5 = (p4^<*x5*>).(4+1) by A2,Th75
+      .=(p4^<*x5*>).(len p4+ 1) by Th76
       .= <*x5*>.1 by A1,FINSEQ_1:def 7
       .= x5 by FINSEQ_1:def 8;
   end;
@@ -2356,7 +2346,7 @@ A9: p.4=x4 and
 A10: p.5=x5;
 A11: for k be Nat st k in dom p4 holds p.k=p4.k
   proof
-A12: len p4 = 4 by Th91;
+A12: len p4 = 4 by Th76;
     let k be Nat;
     assume k in dom p4;
     then
@@ -2364,19 +2354,19 @@ A13: k in {1,2,3,4} by A12,FINSEQ_1:def 3,FINSEQ_3:2;
     per cases by A13,ENUMSET1:def 2;
     suppose
       k=1;
-      hence thesis by A6,Th91;
+      hence thesis by A6,Th76;
     end;
     suppose
       k=2;
-      hence thesis by A7,Th91;
+      hence thesis by A7,Th76;
     end;
     suppose
       k=3;
-      hence thesis by A8,Th91;
+      hence thesis by A8,Th76;
     end;
     suppose
       k=4;
-      hence thesis by A9,Th91;
+      hence thesis by A9,Th76;
     end;
   end;
 A14: for k be Nat st k in dom <*x5*> holds p.( len p4 + k) = <*x5*>.k
@@ -2386,14 +2376,14 @@ A14: for k be Nat st k in dom <*x5*> holds p.( len p4 + k) = <*x5*>.k
     then k in {1} by FINSEQ_1:2,def 8;
     then
 A15: k = 1 by TARSKI:def 1;
-    hence p.( len p4 + k) = p.(4+1) by Th91
+    hence p.( len p4 + k) = p.(4+1) by Th76
       .=<*x5*>.k by A10,A15,FINSEQ_1:def 8;
   end;
   dom p = Seg(4+1) by A5,FINSEQ_1:def 3
-    .= Seg(len p4 + 1) by Th91
+    .= Seg(len p4 + 1) by Th76
     .= Seg(len p4 + len <*x5*>) by FINSEQ_1:39;
   hence p=p4^<*x5*> by A11,A14,FINSEQ_1:def 7
-    .=<*x1,x2,x3,x4,x5*> by Th90;
+    .=<*x1,x2,x3,x4,x5*> by Th75;
 end;
 
 reserve ND for non empty set;
@@ -2407,10 +2397,10 @@ theorem
 proof
   set s = <* y1,y2,y3,y4 *>;
 A1: 2 in {1,2,3,4} & 3 in {1,2,3,4} by FINSEQ_3:2;
-A2: s.2 = y2 & s.3 = y3 by Th91;
+A2: s.2 = y2 & s.3 = y3 by Th76;
 A3: 4 in {1,2,3,4} by FINSEQ_3:2;
-A4: s.4 = y4 & 1 in {1,2,3,4} by Th91,FINSEQ_3:2;
-  dom s = {1,2,3,4} & s.1 = y1 by Th91,FINSEQ_1:89,FINSEQ_3:2;
+A4: s.4 = y4 & 1 in {1,2,3,4} by Th76,FINSEQ_3:2;
+  dom s = {1,2,3,4} & s.1 = y1 by Th76,FINSEQ_1:89,FINSEQ_3:2;
   hence thesis by A2,A4,A1,A3,PARTFUN1:def 6;
 end;
 
@@ -2421,10 +2411,10 @@ proof
   set s = <* y1,y2,y3,y4,y5 *>, i5={1,2,3,4,5};
 A1: 1 in i5 & 2 in i5 by FINSEQ_3:3;
 A2: 3 in i5 & 4 in i5 by FINSEQ_3:3;
-A3: s.4 = y4 & s.5=y5 by Th93;
-A4: s.2 = y2 & s.3 = y3 by Th93;
+A3: s.4 = y4 & s.5=y5 by Th78;
+A4: s.2 = y2 & s.3 = y3 by Th78;
 A5: 5 in i5 by FINSEQ_3:3;
-  dom s =i5 & s.1 = y1 by Th93,FINSEQ_1:89,FINSEQ_3:3;
+  dom s =i5 & s.1 = y1 by Th78,FINSEQ_1:89,FINSEQ_3:3;
   hence thesis by A4,A3,A1,A2,A5,PARTFUN1:def 6;
 end;
 
@@ -2466,7 +2456,7 @@ end;
 
 :: form SCMFSA_7, 2007.07.22, A.T.
 
-theorem Th97:
+theorem Th82:
   for D being non empty set, p,q being FinSequence of D st p c= q
   holds ex p9 being FinSequence of D st p ^ p9 = q
 proof
@@ -2531,7 +2521,7 @@ proof
   let D be non empty set, p,q be FinSequence of D, i be Element of NAT;
   assume p c= q;
   then
-A1: ex p9 being FinSequence of D st p ^ p9 = q by Th97;
+A1: ex p9 being FinSequence of D st p ^ p9 = q by Th82;
   assume 1 <= i & i <= len p;
   hence thesis by A1,FINSEQ_1:64;
 end;
@@ -2675,7 +2665,7 @@ reserve X, A for non empty finite set,
   PX for a_partition of X,
   PA1, PA2 for a_partition of A;
 
-theorem Th102:
+theorem Th87:
   for X being non empty set, PX being a_partition of X for Pi
   being set st Pi in PX ex x being Element of X st x in Pi
 proof
@@ -2698,10 +2688,10 @@ proof
   then card card X in card card PX by NAT_1:41;
   then consider Pi being set such that
 A1: Pi in PX and
-A2: for x being set st x in X holds (proj PX).x <> Pi by Th81;
+A2: for x being set st x in X holds (proj PX).x <> Pi by Th66;
   reconsider Pi as Element of PX by A1;
   consider q being Element of X such that
-A3: q in Pi by Th102;
+A3: q in Pi by Th87;
   reconsider Pq = (proj PX).q as Element of PX;
 A4: Pq = Pi or Pq misses Pi by EQREL_1:def 4;
   q in Pq by EQREL_1:def 9;
@@ -2722,17 +2712,17 @@ A2: for e being set st e in PA1 holds P[e,f.e] from FUNCT_2:sch 1 (A1);
   then card card PA1 in card card PA2 by NAT_1:41;
   then consider p2i being set such that
 A3: p2i in PA2 and
-A4: for x being set st x in PA1 holds f.x <> p2i by Th81;
+A4: for x being set st x in PA1 holds f.x <> p2i by Th66;
   reconsider p2i as Element of PA2 by A3;
   consider q being Element of A such that
-A5: q in p2i by Th102;
+A5: q in p2i by Th87;
   reconsider p2q = f.((proj PA1).q) as Element of PA2;
 A6: p2q=p2i or p2q misses p2i by EQREL_1:def 4;
   q in (proj PA1).q & (proj PA1).q c= p2q by A2,EQREL_1:def 9;
   hence contradiction by A4,A5,A6,XBOOLE_0:3;
 end;
 
-theorem Th105:
+theorem Th90:
   PA1 is_finer_than PA2 implies for p2 being Element of PA2 ex p1
   being Element of PA1 st p1 c=p2
 proof
@@ -2776,12 +2766,12 @@ A6: PA2 c= rng f
     assume p2 in PA2;
     then reconsider p29 = p2 as Element of PA2;
     consider p1 being Element of PA1 such that
-A7: p1 c= p29 by A1,Th105;
+A7: p1 c= p29 by A1,Th90;
     reconsider fp1 = f.p1 as Subset of A by TARSKI:def 3;
 A8: p1 c= f.p1 by A4;
     p29 meets f.p1
     proof
-      ex x being Element of A st x in p1 by Th102;
+      ex x being Element of A st x in p1 by Th87;
       hence thesis by A7,A8,XBOOLE_0:3;
     end;
     then p29 = fp1 by EQREL_1:def 4;
@@ -2790,7 +2780,7 @@ A8: p1 c= f.p1 by A4;
   rng f c= PA2 by RELAT_1:def 19;
   then rng f = PA2 by A6,XBOOLE_0:def 10;
   then
-A9: f is one-to-one by A2,Th79;
+A9: f is one-to-one by A2,Lm1;
 A10: for x being Element of PA1 holds x = f.x
   proof
     let x be Element of PA1;
@@ -2833,7 +2823,7 @@ A17: x = f.y by A6,FUNCT_1:def 3;
 end;
 
 registration
-  let D be non empty set, M be FinSequence of D*;
+  let D be set, M be FinSequence of D*;
   let k;
   cluster M/.k  -> Function-like Relation-like; ::: !!!
   coherence;
@@ -2841,18 +2831,9 @@ registration
 end;
 
 registration
-  let D be non empty set, M be FinSequence of D*;
+  let D be set, M be FinSequence of D*;
   let k;
-  cluster M/.k  -> FinSequence-like D-valued for Function;
-  coherence
-   proof let f be Function such that
-Z:   f = M/.k;
-B:   f is Element of D* by Z;
-     then f is FinSequence of D by FINSEQ_1:def 11;
-     then
-C:    f is D-valued;
-     f is FinSequence-like by B;
-    hence thesis by C;
-   end;
+  cluster M/.k -> FinSequence-like D-valued for Function;
+  coherence by FINSEQ_1:def 11;
 end;
 

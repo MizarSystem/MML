@@ -2,7 +2,7 @@
 ::  by Yozo Toda
 ::
 :: Received September 8, 1994
-:: Copyright (c) 1994-2011 Association of Mizar Users
+:: Copyright (c) 1994-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,18 +14,17 @@
 
 environ
 
- vocabularies NUMBERS, SUBSET_1, FINSEQ_1, XXREAL_0, ORDINAL1, CARD_1,
-      XBOOLE_0, ARYTM_3, TARSKI, FINSET_1, ZFMISC_1, STRUCT_0, FUNCT_1,
-      FUNCT_2, FINSUB_1, SETWISEO, MCART_1, RELAT_1, ORDINAL4, SGRAPH1;
+ vocabularies NUMBERS, SUBSET_1, FINSEQ_1, XXREAL_0, CARD_1, XBOOLE_0, ARYTM_3,
+      TARSKI, FINSET_1, ZFMISC_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSUB_1,
+      SETWISEO, MCART_1, RELAT_1, ORDINAL4, SGRAPH1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, ORDINAL1,
-      NAT_1, MCART_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, FINSEQ_2,
-      FINSUB_1, SETWISEO, XXREAL_0;
- constructors WELLORD2, SETWISEO, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, REALSET1,
-      STRUCT_0;
+      NAT_1, XTUPLE_0, MCART_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1,
+      FINSEQ_2, FINSUB_1, SETWISEO, XXREAL_0;
+ constructors WELLORD2, SETWISEO, NAT_1, FINSEQ_2, STRUCT_0, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, FINSUB_1,
-      XXREAL_0, NAT_1, FINSEQ_1, REALSET1, CARD_1, ZFMISC_1;
+      XXREAL_0, NAT_1, FINSEQ_1, CARD_1, ZFMISC_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI;
+ definitions TARSKI, XTUPLE_0;
  theorems TARSKI, ENUMSET1, ZFMISC_1, NAT_1, FINSEQ_1, FINSEQ_3, FINSUB_1,
       REALSET1, MCART_1, CARD_1, CARD_2, FINSET_1, XBOOLE_0, XBOOLE_1,
       XXREAL_0;
@@ -53,7 +52,7 @@ end;
 :: now nat_interval has the very natural definition, I think (-:
 
 definition
-  let m,n be natural number;
+  let m,n be Nat;
   func nat_interval(m,n) -> Subset of NAT equals
   {i where i is Element of NAT
   : m<=i & i<=n};
@@ -92,12 +91,12 @@ A3: IT c= ({0} \/ (Seg n)) by TARSKI:def 3;
 end;
 
 notation
-  let m,n be natural number;
+  let m,n be Nat;
   synonym Seg (m,n) for nat_interval (m,n);
 end;
 
 registration
-  let m,n be natural number;
+  let m,n be Nat;
   cluster nat_interval(m,n) -> finite;
   coherence
   proof
@@ -171,7 +170,7 @@ A2: Seg n c= nat_interval (1,n) by TARSKI:def 3;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
-theorem Th5:
+theorem Th4:
   for m,n being Element of NAT st 1 <= m holds nat_interval(m,n) c= Seg n
 proof
   let m,n be Element of NAT;
@@ -190,7 +189,7 @@ A4: i<=n;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th6:
+theorem Th5:
   for k,m,n being Element of NAT st k<m holds Seg k misses nat_interval(m,n)
 proof
   let k,m,n be Element of NAT;
@@ -263,11 +262,11 @@ definition
   coherence;
 end;
 
-theorem Th9:
+theorem Th7:
   for A be set, e be set holds (e in TWOELEMENTSETS(A) iff ex z
   being finite Subset of A st e = z & (card z)=2 );
 
-theorem Th10:
+theorem Th8:
   for A be set, e be set holds (e in TWOELEMENTSETS(A) iff (e is
 finite Subset of A & ex x,y being set st x in A & y in A & x<>y & e = {x,y} ))
 proof
@@ -304,20 +303,20 @@ A7: e={x,y} by A4;
   hence thesis;
 end;
 
-theorem Th11:
+theorem Th9:
   for A being set holds TWOELEMENTSETS(A) c= (bool A)
 proof
   let A be set;
   now
     let x be set;
     assume x in TWOELEMENTSETS(A);
-    then x is finite Subset of A by Th10;
+    then x is finite Subset of A by Th8;
     hence x in (bool A);
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th12:
+theorem Th10:
   for A being set, e1,e2 being set st {e1,e2} in TWOELEMENTSETS(A)
   holds e1 in A & e2 in A & e1<>e2
 proof
@@ -326,13 +325,13 @@ proof
 A1: {e1,e2} in TWOELEMENTSETS(A);
   then consider x,y being set such that
 A2: x in A & y in A & not x=y and
-A3: {e1,e2} = {x,y} by Th10;
+A3: {e1,e2} = {x,y} by Th8;
   per cases by A3,ZFMISC_1:6;
   suppose
     e1=x & e2=x;
     then {x} in TWOELEMENTSETS(A) by A1,ENUMSET1:29;
     then ex x1,x2 being set st x1 in A & x2 in A &( not x1=x2)& { x} = {x1,x2}
-    by Th10;
+    by Th8;
     hence thesis by ZFMISC_1:5;
   end;
   suppose
@@ -347,13 +346,13 @@ A3: {e1,e2} = {x,y} by Th10;
     e1=y & e2=y;
     then {y} in TWOELEMENTSETS(A) by A1,ENUMSET1:29;
     then
-    ex x1,x2 being set st x1 in A & x2 in A &( not x1=x2)& { y}={x1,x2} by Th10
+    ex x1,x2 being set st x1 in A & x2 in A &( not x1=x2)& { y}={x1,x2} by Th8
 ;
     hence thesis by ZFMISC_1:5;
   end;
 end;
 
-theorem Th13:
+theorem Th11:
   TWOELEMENTSETS {} = {}
 proof
   TWOELEMENTSETS {} c= {}
@@ -362,7 +361,7 @@ proof
     assume a in TWOELEMENTSETS({});
     then
     ex a1,a2 being set st a1 in {} & a2 in {} &( not a1=a2)& a = {a1,a2} by
-Th10;
+Th8;
     hence thesis;
   end;
   hence thesis;
@@ -377,15 +376,15 @@ A1: t c= u;
   let e be set;
   assume
 A2: e in TWOELEMENTSETS(t);
-  then e is finite Subset of t by Th10;
+  then e is finite Subset of t by Th8;
   then
 A3: e is finite Subset of u by A1,XBOOLE_1:1;
-  ex x,y being set st x in t & y in t &( not x=y)& e={x,y} by A2,Th10;
-  hence thesis by A1,A3,Th10;
+  ex x,y being set st x in t & y in t &( not x=y)& e={x,y} by A2,Th8;
+  hence thesis by A1,A3,Th8;
 end;
 
-theorem Th15:
-  for A being finite set holds TWOELEMENTSETS(A) is finite by Th11,FINSET_1:1;
+theorem Th13:
+  for A being finite set holds TWOELEMENTSETS(A) is finite by Th9,FINSET_1:1;
 
 theorem
   for A being non trivial set holds TWOELEMENTSETS(A) is non empty
@@ -401,7 +400,7 @@ A2: b in (A9\{a}) by XBOOLE_0:def 1;
   then
 A3: a<>b by TARSKI:def 1;
   {a,b} c= A by A1,A2,ZFMISC_1:32;
-  hence thesis by A1,A2,A3,Th10;
+  hence thesis by A1,A2,A3,Th8;
 end;
 
 theorem
@@ -415,7 +414,7 @@ proof
 A1: u in {a} and
 A2: v in {a} and
 A3: u<>v and
-    x = {u,v} by Th10;
+    x = {u,v} by Th8;
     u = a by A1,TARSKI:def 1
       .= v by A2,TARSKI:def 1;
     hence contradiction by A3;
@@ -462,7 +461,7 @@ finite Subset of X, e is finite Subset of TWOELEMENTSETS(v) : not contradiction
   coherence;
 end;
 
-theorem Th19:
+theorem Th16:
   SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#) in SIMPLEGRAPHS(X)
 proof
   reconsider phiv = {} as finite Subset of X by XBOOLE_1:2;
@@ -477,37 +476,37 @@ end;
 registration
   let X be set;
   cluster SIMPLEGRAPHS(X) -> non empty;
-  coherence by Th19;
+  coherence by Th16;
 end;
 
 definition
   let X be set;
   mode SimpleGraph of X -> strict SimpleGraphStruct means
-    :Def7:
+    :Def4:
     it is Element of SIMPLEGRAPHS(X);
   existence
   proof
     take SimpleGraphStruct (# {},{}TWOELEMENTSETS{} #);
-    thus thesis by Th19;
+    thus thesis by Th16;
   end;
 end;
 
-theorem Th21:
+theorem Th17:
   for g being set holds (g in SIMPLEGRAPHS(X) iff ex v being
   finite Subset of X, e being finite Subset of TWOELEMENTSETS(v) st g =
   SimpleGraphStruct (#v,e#));
 
 begin :: SECTION 2: destructors for SimpleGraphStruct.
 
-theorem Th23:
+theorem Th18:
   for g being SimpleGraph of X holds (the carrier of g) c= X & (
   the SEdges of g) c= TWOELEMENTSETS (the carrier of g)
 proof
   let g be SimpleGraph of X;
-  g is Element of SIMPLEGRAPHS(X) by Def7;
+  g is Element of SIMPLEGRAPHS(X) by Def4;
   then
   ex v being finite Subset of X, e being finite Subset of TWOELEMENTSETS(v)
-  st g = SimpleGraphStruct (#v,e#) by Th21;
+  st g = SimpleGraphStruct (#v,e#) by Th17;
   hence (the carrier of g) c= X;
   thus thesis;
 end;
@@ -515,23 +514,23 @@ end;
 theorem
   for g being SimpleGraph of X, e being set st e in the SEdges of g
   holds ex v1,v2 being set st v1 in the carrier of g & v2 in the carrier of g &
-  v1 <> v2 & e={v1,v2} by Th10;
+  v1 <> v2 & e={v1,v2} by Th8;
 
 theorem
   for g being SimpleGraph of X, v1,v2 being set st {v1,v2} in the SEdges
-of g holds v1 in (the carrier of g) & v2 in the carrier of g & v1 <> v2 by Th12
+of g holds v1 in (the carrier of g) & v2 in the carrier of g & v1 <> v2 by Th10
 ;
 
-theorem Th27:
+theorem Th21:
   for g being SimpleGraph of X holds (the carrier of g) is finite
 Subset of X & (the SEdges of g) is finite Subset of TWOELEMENTSETS(the carrier
   of g)
 proof
   let g be SimpleGraph of X;
-  g is Element of SIMPLEGRAPHS(X) by Def7;
+  g is Element of SIMPLEGRAPHS(X) by Def4;
   then
   ex v being finite Subset of X, e being finite Subset of TWOELEMENTSETS(v)
-  st g = SimpleGraphStruct (#v,e#) by Th21;
+  st g = SimpleGraphStruct (#v,e#) by Th17;
   hence thesis;
 end;
 
@@ -572,12 +571,12 @@ A4: g in SIMPLEGRAPHS(X());
   then
 A5: ex v being finite Subset of X(), e being finite Subset of TWOELEMENTSETS(
   v) st g = SimpleGraphStruct (#v,e#);
-  then reconsider G = g as SimpleGraph of X() by A4,Def7;
-A6: (the carrier of G) c= X() by Th23;
+  then reconsider G = g as SimpleGraph of X() by A4,Def4;
+A6: (the carrier of G) c= X() by Th18;
   per cases;
   suppose
 A7: X() is empty;
-    then (the SEdges of G) is Subset of {} by A6,Th13;
+    then (the SEdges of G) is Subset of {} by A6,Th11;
     hence thesis by A1,A6,A7;
   end;
   suppose
@@ -590,7 +589,7 @@ A8: now
       B9 is finite Subset of X by FINSUB_1:17;
       then
 A9:   g in SIMPLEGRAPHS(X());
-      then reconsider g as SimpleGraph of X() by Def7;
+      then reconsider g as SimpleGraph of X() by Def4;
       assume ( X[B9])& not b in B9;
       then P[SimpleGraphStruct (#(the carrier of g)\/{b}, {}TWOELEMENTSETS((
         the carrier of g)\/{b})#)] by A2,A9;
@@ -622,8 +621,8 @@ A16:      not vv in ee;
           reconsider ee9 = ee as Subset of TWOELEMENTSETS(VV) by FINSUB_1:17;
           set g = SimpleGraphStruct (#VV,ee9#);
           VV is finite Subset of X() by FINSUB_1:17;
-          then g is Element of SIMPLEGRAPHS(X()) by Th21;
-          then reconsider g as SimpleGraph of X() by Def7;
+          then g is Element of SIMPLEGRAPHS(X()) by Th17;
+          then reconsider g as SimpleGraph of X() by Def4;
           P[g] by A15;
           then
           ex sege being Subset of TWOELEMENTSETS(the carrier of g) st sege
@@ -662,11 +661,11 @@ proof
   assume
 A1: not g=SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#);
   take (the carrier of g), (the SEdges of g);
-  thus (the carrier of g) is non empty by A1,Th13;
+  thus (the carrier of g) is non empty by A1,Th11;
   thus thesis;
 end;
 
-theorem Th30:
+theorem Th23:
   for V being Subset of X, E being Subset of TWOELEMENTSETS(V), n
   being set, Evn being finite Subset of TWOELEMENTSETS(V \/ {n}) st
   SimpleGraphStruct (#V,E#) in SIMPLEGRAPHS(X) & n in X holds SimpleGraphStruct
@@ -678,14 +677,14 @@ proof
   assume that
 A1: g in SIMPLEGRAPHS(X) and
 A2: n in X;
-  reconsider g as SimpleGraph of X by A1,Def7;
+  reconsider g as SimpleGraph of X by A1,Def4;
   V = (the carrier of g);
-  then V is finite Subset of X by Th27;
+  then V is finite Subset of X by Th21;
   then (V \/ {n}) is finite Subset of X by A2,Lm2;
   hence thesis;
 end;
 
-theorem Th31:
+theorem Th24:
   for V being Subset of X, E being Subset of TWOELEMENTSETS(V), v1
   ,v2 being set st v1 in V & v2 in V & v1<>v2 & SimpleGraphStruct (#V,E#) in
 SIMPLEGRAPHS(X) holds ex v1v2 being finite Subset of TWOELEMENTSETS(V) st v1v2
@@ -697,9 +696,9 @@ proof
 A1: v1 in V & v2 in V and
 A2: not v1=v2 and
 A3: g in SIMPLEGRAPHS(X);
-  reconsider g as SimpleGraph of X by A3,Def7;
-A4: (the SEdges of g) is finite Subset of TWOELEMENTSETS(V) by Th27;
-  (the carrier of g) is finite Subset of X by Th27;
+  reconsider g as SimpleGraph of X by A3,Def4;
+A4: (the SEdges of g) is finite Subset of TWOELEMENTSETS(V) by Th21;
+  (the carrier of g) is finite Subset of X by Th21;
   then reconsider V as finite Subset of X;
   (E \/ {{v1,v2}}) c= TWOELEMENTSETS(V) & (E \/ {{v1,v2}}) is finite
   proof
@@ -717,7 +716,7 @@ A5:   e in E \/ {{v1,v2}};
         then
 A6:     e={v1,v2} by TARSKI:def 1;
         then e is Subset of V by A1,ZFMISC_1:32;
-        hence e in TWOELEMENTSETS(V) by A1,A2,A6,Th10;
+        hence e in TWOELEMENTSETS(V) by A1,A2,A6,Th8;
       end;
     end;
     thus thesis by A4;
@@ -735,7 +734,7 @@ end;
 definition
   let X be set, GG be set;
   pred GG is_SetOfSimpleGraphs_of X means
-  :Def9:
+  :Def6:
   SimpleGraphStruct (#{},{}
     TWOELEMENTSETS{}#) in GG & (for V being Subset of X, E being Subset of
 TWOELEMENTSETS(V), n being set, Evn being finite Subset of TWOELEMENTSETS(V \/
@@ -747,18 +746,18 @@ Subset of TWOELEMENTSETS(V) st v1v2 = (E \/ {{v1,v2}}) & SimpleGraphStruct (#V,
     v1v2#) in GG;
 end;
 
-theorem Th35:
+theorem Th25:
   SIMPLEGRAPHS(X) is_SetOfSimpleGraphs_of X
 proof
-  thus SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#) in SIMPLEGRAPHS(X) by Th19;
+  thus SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#) in SIMPLEGRAPHS(X) by Th16;
   thus for VV being Subset of X, EE being Subset of TWOELEMENTSETS(VV), nn
   being set, EEvn being finite Subset of TWOELEMENTSETS(VV \/ {nn}) st
   SimpleGraphStruct (#VV,EE#) in SIMPLEGRAPHS(X) & nn in X & not nn in VV holds
-  SimpleGraphStruct (#(VV \/ {nn}),EEvn#) in SIMPLEGRAPHS(X) by Th30;
-  thus thesis by Th31;
+  SimpleGraphStruct (#(VV \/ {nn}),EEvn#) in SIMPLEGRAPHS(X) by Th23;
+  thus thesis by Th24;
 end;
 
-theorem Th36:
+theorem Th26:
   for OTHER being set st OTHER is_SetOfSimpleGraphs_of X holds
   SIMPLEGRAPHS(X) c= OTHER
 proof
@@ -775,8 +774,8 @@ A2: for g being SimpleGraph of X, v being set st g in SIMPLEGRAPHS(X) & X[g]
     g in SIMPLEGRAPHS(X) and
 A3: g in OTHER & v in X & not v in (the carrier of g);
     set SVg=(the carrier of g);
-    SVg is Subset of X by Th27;
-    hence thesis by A1,A3,Def9;
+    SVg is Subset of X by Th21;
+    hence thesis by A1,A3,Def6;
   end;
 A4: for g being SimpleGraph of X, e being set st X[g] & e in TWOELEMENTSETS(
   the carrier of g) & not e in (the SEdges of g) holds ex sege being Subset of
@@ -791,18 +790,18 @@ A7: not e in (the SEdges of g);
     set SVg = (the carrier of g), SEg = (the SEdges of g);
     consider v1,v2 being set such that
 A8: v1 in SVg & v2 in SVg & v1<>v2 and
-A9: e={v1,v2} by A6,Th10;
-    SVg is finite Subset of X by Th27;
+A9: e={v1,v2} by A6,Th8;
+    SVg is finite Subset of X by Th21;
     then consider v1v2 being finite Subset of TWOELEMENTSETS(SVg) such that
 A10: v1v2=(SEg \/ {{v1,v2}}) & SimpleGraphStruct (#SVg,v1v2#) in OTHER
-    by A1,A5,A7,A8,A9,Def9;
+    by A1,A5,A7,A8,A9,Def6;
     take v1v2;
     thus thesis by A9,A10;
   end;
   let e be set;
   assume
 A11: e in SIMPLEGRAPHS(X);
-A12: X[SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#)] by A1,Def9;
+A12: X[SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#)] by A1,Def6;
   for e being set st e in SIMPLEGRAPHS(X) holds X[e] from
   IndSimpleGraphs0(A12,A2,A4);
   hence thesis by A11;
@@ -810,7 +809,7 @@ end;
 
 theorem
   SIMPLEGRAPHS(X) is_SetOfSimpleGraphs_of X & for OTHER being set st
-  OTHER is_SetOfSimpleGraphs_of X holds SIMPLEGRAPHS(X) c= OTHER by Th35,Th36;
+  OTHER is_SetOfSimpleGraphs_of X holds SIMPLEGRAPHS(X) c= OTHER by Th25,Th26;
 
 begin :: SECTION 5: SubGraphs.
 ::  graph G is a subgraph of graph G' if
@@ -844,7 +843,7 @@ definition
   let X be set, G be SimpleGraph of X;
   let v be set;
   func degree (G,v) -> Element of NAT means
-  :Def11:
+  :Def8:
   ex X being finite set st (
 for z being set holds (z in X iff z in (the SEdges of G) & v in z)) & it = card
   X;
@@ -860,7 +859,7 @@ A2: X c= (the SEdges of G)
       assume z in X;
       hence thesis by A1;
     end;
-    (the SEdges of G) is finite by Th27;
+    (the SEdges of G) is finite by Th21;
     then reconsider X as finite set by A2;
     take card(X), X;
     thus thesis by A1;
@@ -894,7 +893,7 @@ A7: X2 c= X1
   end;
 end;
 
-theorem Th39:
+theorem Th28:
   for X being non empty set, G being SimpleGraph of X, v being set
   holds ex ww being finite set st ww = {w where w is Element of X : w in the
   carrier of G & {v,w} in the SEdges of G} & degree(G,v) = card ww
@@ -904,7 +903,7 @@ proof
   SEdges of G)};
   consider Y being finite set such that
 A1: for z being set holds (z in Y iff z in (the SEdges of G) & v in z) and
-A2: degree(G,v) = card(Y) by Def11;
+A2: degree(G,v) = card(Y) by Def8;
 A3: for z being set holds (z in ww iff z in (the carrier of G) & {v,z} in (
   the SEdges of G) )
   proof
@@ -920,7 +919,7 @@ A3: for z being set holds (z in ww iff z in (the carrier of G) & {v,z} in (
     proof
       assume
 A4:   z in (the carrier of G) & {v,z} in (the SEdges of G);
-      (the carrier of G) is finite Subset of X by Th27;
+      (the carrier of G) is finite Subset of X by Th21;
       hence thesis by A4;
     end;
   end;
@@ -930,7 +929,7 @@ A5: ww c= (the carrier of G)
     assume z in ww;
     hence thesis by A3;
   end;
-  (the carrier of G) is finite by Th27;
+  (the carrier of G) is finite by Th21;
   then reconsider ww as finite set by A5;
   take ww;
   ww,Y are_equipotent
@@ -956,25 +955,25 @@ A11:  [z,u]=[w2,{v,w2}] and
         assume
 A12:    x=z;
         w1 = [x,y]`1 by A9,MCART_1:7
-          .= z by A12,MCART_1:7
+          .= z by A12
           .= [w2,{v,w2}]`1 by A11,MCART_1:7
-          .= w2 by MCART_1:7;
+          .= w2;
         hence y = [w2,{v,w2}]`2 by A9,MCART_1:7
           .= u by A11,MCART_1:7;
       end;
       hereby
         {v,w1} in (the SEdges of G) by A1,A10;
         then
-A13:    v<>w1 by Th12;
+A13:    v<>w1 by Th10;
         assume
 A14:    y=u;
         {v,w1} = [x,y]`2 by A9,MCART_1:7
-          .= u by A14,MCART_1:7
+          .= u by A14
           .= [w2,{v,w2}]`2 by A11,MCART_1:7
-          .= {v,w2} by MCART_1:7;
+          .= {v,w2};
         then w1=w2 by A13,ZFMISC_1:6;
         hence x = [z,u]`1 by A9,A11,MCART_1:7
-          .= z by MCART_1:7;
+          .= z;
       end;
     end;
 A15: for w being set holds ([w,{v,w}] in wwY iff w in ww & {v,w} in Y)
@@ -986,7 +985,7 @@ A15: for w being set holds ([w,{v,w}] in wwY iff w in ww & {v,w} in Y)
 A16:    [w,{v,w}]=[w9,{v,w9}] and
 A17:    w9 in ww & {v,w9} in Y;
         w = [w9,{v,w9}]`1 by A16,MCART_1:7
-          .= w9 by MCART_1:7;
+          .= w9;
         hence w in ww & {v,w} in Y by A17;
       end;
       thus w in ww & {v,w} in Y implies [w,{v,w}] in wwY
@@ -995,7 +994,7 @@ A17:    w9 in ww & {v,w9} in Y;
 A18:    w in ww and
 A19:    {v,w} in Y;
 A20:    w in (the carrier of G) by A5,A18;
-        (the carrier of G) is finite Subset of X by Th27;
+        (the carrier of G) is finite Subset of X by Th21;
         then reconsider w as Element of X by A20;
         ex z being Element of X st [w,{v,w}]=[z,{v,z}] & z in ww & {v,z}
         in Y by A18,A19;
@@ -1016,7 +1015,7 @@ A24:  v in y by A1,A22;
 A25:    v1 in (the carrier of G) and
 A26:    v2 in (the carrier of G) and
         v1<>v2 and
-A27:    y={v1,v2} by A23,Th10;
+A27:    y={v1,v2} by A23,Th8;
         per cases by A24,A27,TARSKI:def 2;
         suppose
 A28:      v=v1;
@@ -1059,10 +1058,10 @@ theorem
   degree(g,v)<(card VV)
 proof
   let X be non empty set, g be SimpleGraph of X, v be set;
-  reconsider VV=the carrier of g as finite set by Th27;
+  reconsider VV=the carrier of g as finite set by Th21;
   consider ww being finite set such that
 A1: ww={w where w is Element of X : w in VV & {v,w} in the SEdges of g} and
-A2: degree(g,v)=card ww by Th39;
+A2: degree(g,v)=card ww by Th28;
   assume
 A3: v in (the carrier of g);
 A4: now
@@ -1075,7 +1074,7 @@ A5: ex w being Element of X st v=w & w in VV & {v,w} in (the SEdges of g)
     x in VV and
     y in VV and
 A6: x<>y and
-A7: {v}={x,y} by A5,Th10;
+A7: {v}={x,y} by A5,Th8;
     v=x by A7,ZFMISC_1:4;
     hence ww<>VV by A6,A7,ZFMISC_1:4;
   end;
@@ -1102,7 +1101,7 @@ A1: e in the SEdges of g and
 A2: degree(g,v)=0;
   consider Y be finite set such that
 A3: for z being set holds (z in Y iff z in the SEdges of g & v in z) and
-A4: degree(g,v)=card(Y) by Def11;
+A4: degree(g,v)=card(Y) by Def8;
   assume v in e;
   then Y is non empty by A1,A3;
   hence contradiction by A2,A4;
@@ -1118,7 +1117,7 @@ proof
 A1: vg=(the carrier of g) and
 A2: v in vg and
 A3: 1+degree(g,v)=(card vg);
-  vg is Subset of X by A1,Th27;
+  vg is Subset of X by A1,Th21;
   then reconsider X as non empty set by A2;
   let w be Element of vg;
   assume
@@ -1129,7 +1128,7 @@ A4: v<>w;
       consider ww being finite set such that
 A5:   ww={vv where vv is Element of X : vv in vg & {v,vv} in (the
       SEdges of g) } and
-A6:   degree(g,v)=(card ww) by A1,Th39;
+A6:   degree(g,v)=(card ww) by A1,Th28;
       reconsider wwv=(ww \/ {v}) as finite set;
       assume
 A7:   not {v,w} in (the SEdges of g);
@@ -1140,7 +1139,7 @@ A8:   not v in ww & not w in ww
           then ex vv being Element of X st v=vv & vv in vg & {v,vv} in (the
           SEdges of g) by A5;
           then {v} in (the SEdges of g) by ENUMSET1:29;
-          then ex z being finite Subset of vg st {v}=z & (card z)=2 by A1,Th9;
+          then ex z being finite Subset of vg st {v}=z & (card z)=2 by A1,Th7;
           hence contradiction by CARD_1:30;
         end;
         assume w in ww;
@@ -1186,7 +1185,7 @@ definition
   let X be set, g be SimpleGraph of X, v1,v2 be Element of g, p be FinSequence
   of the carrier of g;
   pred p is_path_of v1,v2 means
-  :Def12:
+  :Def9:
   (p.1)=v1 & (p.(len p))=v2 & (for i
 being Element of NAT st (1<=i & i<(len p)) holds {p.i, p.(i+1)} in (the SEdges
   of g)) & for i,j being Element of NAT st 1<=i & i<(len p) & i<j & j<(len p)
@@ -1236,7 +1235,7 @@ theorem
 definition
   let X be set, g be SimpleGraph of X, p be set;
   pred p is_cycle_of g means
-  :Def14:
+  :Def11:
   ex v being Element of (the carrier of g) st p in PATHS(v,v);
 end;
 
@@ -1265,7 +1264,7 @@ Seg m) & j in (nat_interval(m+1,m+n))} & it = SimpleGraphStruct (# (Seg (m+n)),
     m<=(m+n) by NAT_1:11;
     then
 A1: V1 c= VV by FINSEQ_1:5;
-A2: V2 c= VV by Th5,NAT_1:11;
+A2: V2 c= VV by Th4,NAT_1:11;
     EE c= TWOELEMENTSETS(VV)
     proof
       let e be set;
@@ -1278,16 +1277,16 @@ A4:   i0 in V1 & j0 in V2;
       then
 A5:   e c= VV by TARSKI:def 3;
       m<m+1 by NAT_1:13;
-      then V1 misses V2 by Th6;
+      then V1 misses V2 by Th5;
       then (V1 /\ V2) = {} by XBOOLE_0:def 7;
       then i0<>j0 by A4,XBOOLE_0:def 4;
-      hence thesis by A1,A2,A3,A4,A5,Th10;
+      hence thesis by A1,A2,A3,A4,A5,Th8;
     end;
-    then reconsider EE as finite Subset of TWOELEMENTSETS(VV) by Th15,
+    then reconsider EE as finite Subset of TWOELEMENTSETS(VV) by Th13,
 FINSET_1:1;
     set IT = SimpleGraphStruct (# VV, EE #);
     IT in SIMPLEGRAPHS(NAT);
-    then reconsider IT as SimpleGraph of NAT by Def7;
+    then reconsider IT as SimpleGraph of NAT by Def4;
     reconsider EE as Subset of TWOELEMENTSETS(Seg (m+n));
     take IT,EE;
     thus thesis;
@@ -1298,7 +1297,7 @@ end;
 definition
   let n be Element of NAT;
   func K_(n) -> SimpleGraph of NAT means
-  :Def17:
+  :Def13:
   ex ee being finite Subset of
 TWOELEMENTSETS(Seg n) st ee = {{i,j} where i,j is Element of NAT : i in (Seg n)
   & j in (Seg n) & i<>j} & it = SimpleGraphStruct (# (Seg n), ee #);
@@ -1329,14 +1328,14 @@ A5:     e0 in e;
           hence thesis by A3;
         end;
       end;
-      hence e in TWOELEMENTSETS(Seg n) by A1,A2,A3,A4,Th10;
+      hence e in TWOELEMENTSETS(Seg n) by A1,A2,A3,A4,Th8;
     end;
     then EE c= TWOELEMENTSETS(Seg n) by TARSKI:def 3;
-    then reconsider EE as finite Subset of TWOELEMENTSETS(Seg n) by Th15,
+    then reconsider EE as finite Subset of TWOELEMENTSETS(Seg n) by Th13,
 FINSET_1:1;
     set IT = SimpleGraphStruct (# Seg n,EE #);
     IT in SIMPLEGRAPHS(NAT);
-    then reconsider IT as SimpleGraph of NAT by Def7;
+    then reconsider IT as SimpleGraph of NAT by Def4;
     take IT,EE;
     thus thesis;
   end;
@@ -1351,14 +1350,14 @@ definition
   correctness;
 end;
 
-theorem Th46:
+theorem Th34:
   ex ee being Subset of TWOELEMENTSETS(Seg 3) st ee = {.{.1,2.},{.
   2,3.},{.3,1.}.} & TriangleGraph = SimpleGraphStruct (#(Seg 3),ee#)
 proof
   consider ee being finite Subset of TWOELEMENTSETS(Seg 3) such that
 A1: ee = {{i,j} where i,j is Element of NAT : i in (Seg 3) & j in (Seg 3
   ) & i<>j} and
-A2: TriangleGraph = SimpleGraphStruct (#(Seg 3),ee#) by Def17;
+A2: TriangleGraph = SimpleGraphStruct (#(Seg 3),ee#) by Def13;
   take ee;
   now
     let a be set;
@@ -1469,22 +1468,22 @@ end;
 
 theorem
   (the carrier of TriangleGraph)=(Seg 3) & (the SEdges of TriangleGraph)
-  = {.{.1,2.},{.2,3.},{.3,1.}.} by Th46;
+  = {.{.1,2.},{.2,3.},{.3,1.}.} by Th34;
 
 theorem
   {1,2} in (the SEdges of TriangleGraph) & {2,3} in (the SEdges of
-TriangleGraph) & {3,1} in (the SEdges of TriangleGraph) by Th46,ENUMSET1:def 1;
+TriangleGraph) & {3,1} in (the SEdges of TriangleGraph) by Th34,ENUMSET1:def 1;
 
 theorem
   <*1*>^<*2*>^<*3*>^<*1*> is_cycle_of TriangleGraph
 proof
-  reconsider o=1 as Element of (the carrier of TriangleGraph) by Th46,
+  reconsider o=1 as Element of (the carrier of TriangleGraph) by Th34,
 ENUMSET1:def 1,FINSEQ_3:1;
-  reconsider VERTICES = (the carrier of TriangleGraph) as non empty set by Th46
+  reconsider VERTICES = (the carrier of TriangleGraph) as non empty set by Th34
 ;
   set p = <*1*>^<*2*>^<*3*>^<*1*>;
 A1: p.1 = 1 by FINSEQ_1:66;
-  reconsider One=1, Two=2, Three=3 as Element of VERTICES by Th46,
+  reconsider One=1, Two=2, Three=3 as Element of VERTICES by Th34,
 ENUMSET1:def 1,FINSEQ_3:1;
 A2: p.2 = 2 by FINSEQ_1:66;
   reconsider ONE=<*One*>, TWO=<*Two*>, THREE=<*Three*> as FinSequence of (the
@@ -1506,17 +1505,17 @@ A8: i in Seg 3 by A6,FINSEQ_1:1;
     per cases by A8,ENUMSET1:def 1,FINSEQ_3:1;
     suppose
       i=1;
-      hence {pp.i, pp.(i+1)} in (the SEdges of TriangleGraph) by A1,A2,Th46,
+      hence {pp.i, pp.(i+1)} in (the SEdges of TriangleGraph) by A1,A2,Th34,
 ENUMSET1:def 1;
     end;
     suppose
       i=2;
-      hence {pp.i, pp.(i+1)} in (the SEdges of TriangleGraph ) by A2,A3,Th46,
+      hence {pp.i, pp.(i+1)} in (the SEdges of TriangleGraph ) by A2,A3,Th34,
 ENUMSET1:def 1;
     end;
     suppose
       i=3;
-      hence {pp.i, pp.(i+1)} in (the SEdges of TriangleGraph ) by A3,A4,Th46,
+      hence {pp.i, pp.(i+1)} in (the SEdges of TriangleGraph ) by A3,A4,Th34,
 ENUMSET1:def 1;
     end;
   end;
@@ -1573,7 +1572,7 @@ ZFMISC_1:6;
     end;
   end;
   (len p) = 4 by FINSEQ_1:66;
-  then pp is_path_of o,o by A1,A4,A5,A9,Def12;
+  then pp is_path_of o,o by A1,A4,A5,A9,Def9;
   then pp in PATHS(o,o);
-  hence thesis by Def14;
+  hence thesis by Def11;
 end;

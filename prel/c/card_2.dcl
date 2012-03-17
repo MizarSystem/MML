@@ -10,6 +10,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -26,7 +27,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="16">
+<Func kind="K" nr="14">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -38,7 +39,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -47,42 +48,60 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="13"/>
-<Adjective nr="22">
+<Adjective nr="25">
 <LocusVar nr="1"/>
-<Func kind="K" nr="104">
+<Func kind="K" nr="112">
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="29">
-<Func kind="K" nr="30">
+<Func kind="K" nr="27">
+<Func kind="K" nr="28">
 <LocusVar nr="1"/>
-<Func kind="K" nr="104">
+<Func kind="K" nr="112">
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="89">
+<Func kind="K" nr="97">
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="28"/>
+</Cluster>
+</FCluster>
+<FCluster aid="CARD_2" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="13"/>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="98">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <CCluster aid="CARD_2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="33"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="29"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 </Registrations>

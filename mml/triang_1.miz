@@ -2,7 +2,7 @@
 ::  by Beata Madras
 ::
 :: Received October 28, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,18 +20,17 @@ environ
       ARYTM_3, FUNCOP_1, FUNCT_2, QC_LANG1, ORDINAL2, FINSEQ_2, PARTFUN1,
       TRIANG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, RELAT_2,
-      SETFAM_1, ORDERS_1, DOMAIN_1, NAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      FINSET_1, FINSEQ_1, FINSEQ_2, FINSUB_1, STRUCT_0, WELLORD1, SEQM_3,
-      PBOOLE, ORDERS_2, FINSEQOP, FUNCOP_1, XXREAL_0, PRE_POLY;
- constructors SETFAM_1, WELLORD2, DOMAIN_1, FUNCT_3, FINSUB_1, XXREAL_0, NAT_1,
-      TOLER_1, FINSEQOP, PBOOLE, ORDERS_2, SEQM_3, SEQ_1, XREAL_0, MEMBERED,
-      RELSET_1, PRE_POLY;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FINSET_1,
-      FINSUB_1, NUMBERS, XXREAL_0, NAT_1, FINSEQ_1, STRUCT_0, ORDERS_2,
-      MEMBERED, VALUED_0, CARD_1, RELSET_1, FUNCT_1, FUNCT_2, PRE_POLY;
+      SETFAM_1, ORDERS_1, DOMAIN_1, ORDINAL1, NAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FINSET_1, FINSEQ_1, FINSEQ_2, FINSUB_1, STRUCT_0, WELLORD1,
+      SEQM_3, PBOOLE, ORDERS_2, FINSEQOP, FUNCOP_1, XXREAL_0, PRE_POLY;
+ constructors SETFAM_1, DOMAIN_1, FINSEQOP, PBOOLE, ORDERS_2, SEQ_1, RELSET_1,
+      PRE_POLY;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FINSET_1, FINSUB_1, XXREAL_0,
+      NAT_1, FINSEQ_1, STRUCT_0, ORDERS_2, MEMBERED, VALUED_0, CARD_1,
+      RELSET_1, FUNCT_1, FUNCT_2, PRE_POLY;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions RELAT_2, TARSKI, SETFAM_1, FUNCT_1, SEQM_3, WELLORD1, ORDERS_2,
-      FINSEQ_2, SUBSET_1;
+ definitions RELAT_2, TARSKI, FUNCT_1, WELLORD1, ORDERS_2, FINSEQ_2, SUBSET_1,
+      XBOOLE_0, PBOOLE;
  theorems RELAT_1, ORDERS_2, RELAT_2, ZFMISC_1, TARSKI, SUBSET_1, ORDERS_1,
       FINSUB_1, NAT_1, FUNCT_2, PBOOLE, FUNCT_1, FINSEQ_1, CARD_2, FINSEQ_4,
       FINSEQ_2, FUNCOP_1, SEQM_3, SETFAM_1, XBOOLE_0, XBOOLE_1, XXREAL_0,
@@ -180,7 +179,7 @@ end;
 
 reserve C for non empty Poset;
 
-theorem Th5:
+theorem Th3:
   for x be Element of C holds {x} in symplexes(C)
 proof
   let x be Element of C;
@@ -237,7 +236,7 @@ A6: the InternalRel of C is_transitive_in a by A1,ORDERS_1:10;
   hence thesis;
 end;
 
-theorem Th7:
+theorem Th5:
   for x, s be set st x c= s & s in symplexes(C) holds x in symplexes(C)
 proof
   let x, s be set;
@@ -258,7 +257,7 @@ FINSUB_1:def 5;
   hence thesis;
 end;
 
-theorem Th10:
+theorem Th6:
   for C be non empty Poset, A being non empty Element of symplexes
   (C) st card A = n holds dom(SgmX(the InternalRel of C, A)) = Seg n
 proof
@@ -280,7 +279,7 @@ registration
   existence
   proof
     set x = the Element of C;
-    {x} in symplexes(C) by Th5;
+    {x} in symplexes(C) by Th3;
     hence thesis;
   end;
 end;
@@ -294,7 +293,7 @@ end;
 definition
   let IT be SetSequence;
   attr IT is lower_non-empty means
-  :Def3:
+  :Def2:
   for n be Nat st IT.n is non empty
   holds for m be Nat st m < n holds IT.m is non empty;
 end;
@@ -316,14 +315,14 @@ registration
       m in NAT by ORDINAL1:def 12;
       hence thesis by FUNCOP_1:7;
     end;
-    hence thesis by Def3;
+    hence thesis by Def2;
   end;
 end;
 
 definition
   let X be SetSequence;
   func FuncsSeq X -> SetSequence means
-  :Def4:
+  :Def3:
   for n be Nat holds it.n = Funcs( X.(n+1),X.n);
   existence
   proof
@@ -342,24 +341,11 @@ A1: for n being Element of NAT holds f.n = U(n) from PBOOLE:sch 5;
     assume that
 A2: for n be Nat holds a.n = Funcs(X.(n+1),X.n) and
 A3: for n be Nat holds b.n = Funcs(X.(n+1),X.n);
-    now
-      let n be set;
-      assume n in NAT;
-      then reconsider n1 = n as Element of NAT;
-      a.n1 = Funcs(X.(n1+1),X.n1) by A2;
-      hence b.n c= a.n by A3;
-    end;
-    then
-A4: b c= a by PBOOLE:def 2;
-    now
-      let n be set;
-      assume n in NAT;
-      then reconsider n1 = n as Element of NAT;
-      a.n1 = Funcs(X.(n1+1),X.n1) by A2;
+      let n be Element of NAT;
+      a.n = Funcs(X.(n+1),X.n) by A2;
       hence a.n c= b.n by A3;
-    end;
-    then a c= b by PBOOLE:def 2;
-    hence thesis by A4,PBOOLE:def 10;
+      a.n = Funcs(X.(n+1),X.n) by A2;
+      hence b.n c= a.n by A3;
   end;
 end;
 
@@ -371,8 +357,8 @@ registration
   proof
     n < n + 1 by NAT_1:13;
     then
-A1: X.(n+1) = {} or X.n <> {} by Def3;
-    (FuncsSeq X).n = Funcs(X.(n+1),X.n) by Def4;
+A1: X.(n+1) = {} or X.n <> {} by Def2;
+    (FuncsSeq X).n = Funcs(X.(n+1),X.n) by Def3;
     hence thesis by A1,FUNCT_2:8;
   end;
 end;
@@ -397,7 +383,7 @@ end;
 
 definition
   func NatEmbSeq -> SetSequence means
-  :Def6:
+  :Def5:
   for n be Nat holds it.n = {f
   where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is increasing};
   existence
@@ -420,26 +406,13 @@ A2: for n be Nat holds a.n = {f where f is Element of Funcs(Seg n,Seg(
     n+1)) : @ f is increasing} and
 A3: for n be Nat holds b.n = {f where f is Element of Funcs(Seg n,Seg(
     n+ 1)) : @ f is increasing};
-    now
-      let n be set;
-      assume n in NAT;
-      then reconsider n1 = n as Element of NAT;
-      a.n1 = {f where f is Element of Funcs(Seg n1,Seg(n1+1)) : @ f is
-      increasing} by A2;
-      hence b.n c= a.n by A3;
-    end;
-    then
-A4: b c= a by PBOOLE:def 2;
-    now
-      let n be set;
-      assume n in NAT;
-      then reconsider n1 = n as Element of NAT;
-      a.n1 = {f where f is Element of Funcs(Seg n1,Seg(n1+1)) : @ f is
+      let n be Element of NAT;
+      a.n = {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is
       increasing } by A2;
       hence a.n c= b.n by A3;
-    end;
-    then a c= b by PBOOLE:def 2;
-    hence thesis by A4,PBOOLE:def 10;
+      a.n = {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is
+      increasing} by A2;
+      hence b.n c= a.n by A3;
   end;
 end;
 
@@ -451,14 +424,14 @@ registration
     n <= n + 1 by NAT_1:11;
     then
 A1: Seg n c= Seg(n+1) by FINSEQ_1:5;
-A2: rng id Seg n = Seg n by RELAT_1:45;
-    dom id Seg n = Seg n by RELAT_1:45;
+A2: rng id Seg n = Seg n;
+    dom id Seg n = Seg n;
     then reconsider n1 = (idseq n) as Element of Funcs(Seg n,Seg(n+1)) by A1,A2
 ,FUNCT_2:def 2;
     @ n1 is increasing;
     then n1 in {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is
     increasing};
-    hence thesis by Def6;
+    hence thesis by Def5;
   end;
 end;
 
@@ -471,7 +444,7 @@ registration
     let x be Element of NatEmbSeq.n;
 A1: x in NatEmbSeq.n9;
     NatEmbSeq.n = {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is
-    increasing} by Def6;
+    increasing} by Def5;
     then ex f being Element of Funcs(Seg n,Seg(n+1)) st x = f & @ f is
     increasing by A1;
     hence thesis;
@@ -490,9 +463,8 @@ end;
 
 definition
   let T be TriangStr;
-
   attr T is lower_non-empty means
-  :Def8:
+  :Def6:
   the SkeletonSeq of T is lower_non-empty;
 end;
 
@@ -513,22 +485,22 @@ A1:   Sk.n is non empty;
       n in NAT by ORDINAL1:def 12;
       hence thesis by A1,FUNCOP_1:7;
     end;
-    then Sk is lower_non-empty by Def3;
-    hence thesis by Def8;
+    then Sk is lower_non-empty by Def2;
+    hence thesis by Def6;
   end;
 end;
 
 registration
   let T be lower_non-empty TriangStr;
   cluster the SkeletonSeq of T -> lower_non-empty;
-  coherence by Def8;
+  coherence by Def6;
 end;
 
 registration
   let S be lower_non-empty SetSequence, F be ManySortedFunction of NatEmbSeq,
   FuncsSeq S;
   cluster TriangStr (#S,F#) -> lower_non-empty;
-  coherence by Def8;
+  coherence by Def6;
 end;
 
 begin :: Relationship between Abstract Complexes and Triangulations
@@ -550,7 +522,7 @@ definition
   assume
 A1: (the SkeletonSeq of T).(n+1) <> {};
   func face (x,f) -> Symplex of T,n means
-  :Def9:
+  :Def7:
   for F,G be Function st F = (
   the FacesAssign of T).n & G = F.f holds it = G.x;
   existence
@@ -560,7 +532,7 @@ A1: (the SkeletonSeq of T).(n+1) <> {};
     FuncsSeq(the SkeletonSeq of T)).n9 by PBOOLE:def 15;
     F.f in (FuncsSeq(the SkeletonSeq of T)).n9 by FUNCT_2:5;
     then
-    F.f in Funcs((the SkeletonSeq of T).(n+1),(the SkeletonSeq of T).n) by Def4
+    F.f in Funcs((the SkeletonSeq of T).(n+1),(the SkeletonSeq of T).n) by Def3
 ;
     then consider G be Function such that
 A2: G = F.f and
@@ -588,7 +560,7 @@ A8: for F,G be Function st F = (the FacesAssign of T).n & G = F.f
     FuncsSeq(the SkeletonSeq of T)).n9 by PBOOLE:def 15;
     F.f in (FuncsSeq(the SkeletonSeq of T)).n9 by FUNCT_2:5;
     then F.f in Funcs((the SkeletonSeq of T).(n+1),(the SkeletonSeq of T).n)
-    by Def4;
+    by Def3;
     then consider G be Function such that
 A9: G = F.f and
     dom G = (the SkeletonSeq of T).(n+1) and
@@ -660,7 +632,7 @@ A10:    m + 1 = card sx + 1 by A8,A9,CARD_2:41;
         end;
         suppose
 A11:      m <> 0;
-          then reconsider sx as non empty Element of symplexes(C) by A10,Th7,
+          then reconsider sx as non empty Element of symplexes(C) by A10,Th5,
 XBOOLE_1:36;
           SgmX(the InternalRel of C, sx) in {SgmX(the InternalRel of C,
 s1) where s1 is non empty Element of symplexes(C) : card s1 = m} by A10;
@@ -693,7 +665,7 @@ A16:  x in NatEmbSeq.i;
       then reconsider y = x as Face of n;
       reconsider y1 = y as Function;
       x in {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is
-      increasing} by A16,Def6;
+      increasing} by A16,Def5;
       then
 A17:  ex f be Element of Funcs(Seg n,Seg(n+1)) st f = x & @ f is increasing;
       then consider y2 be Function such that
@@ -785,7 +757,7 @@ A40:      ex s19 be Element of Fin the carrier of C st s19 = s1 & the
           reconsider f as FinSequence of RelStr (#s1,(the InternalRel of C)|_2
             s1#);
 A41:      f is one-to-one by A38,A40,PRE_POLY:10;
-A42:      dom f = Seg(n+1) by A38,A39,Th10;
+A42:      dom f = Seg(n+1) by A38,A39,Th6;
 A43:      f is Function of dom f, s1 by FINSEQ_2:26;
           then f is Function of Seg(n+1), the carrier of C by A42,FUNCT_2:7;
           then reconsider
@@ -798,7 +770,7 @@ A44:      dom (f * y2) = Seg n by A19,A20,A42,RELAT_1:27;
           then reconsider
           r = rng(f * y2) as Element of Fin the carrier of C by FINSUB_1:def 5;
           rng(f * y2) c= s1 by RELAT_1:def 19;
-          then reconsider s9 = r as non empty Element of F by A37,A44,Th7,
+          then reconsider s9 = r as non empty Element of F by A37,A44,Th5,
 RELAT_1:42;
           for n1,m1 be Nat st n1 in dom z1 & m1 in dom z1 & n1 < m1 holds
           z1/.n1 <> z1/.m1 & [z1/.n1,z1/.m1] in the InternalRel of C
@@ -848,7 +820,7 @@ A56:      z1 = SgmX(the InternalRel of C, s9) by A33,A35,PRE_POLY:9;
         end;
       end;
       then g9 in Funcs(Sk.(n+1),Sk.n) by A25,FUNCT_2:def 2;
-      hence g9 in (FuncsSeq Sk).i by Def4;
+      hence g9 in (FuncsSeq Sk).i by Def3;
       reconsider y = x as Face of n by A16;
       take n;
       take y;
@@ -893,12 +865,12 @@ Element of Sk.(m+1) st s in Sk.(m+1) for A be non empty Element of symplexes(C)
 st SgmX(the InternalRel of C, A) = s for g1 being Function st g1 = f1.x holds
     g1.s = (SgmX(the InternalRel of C, A)) * y by A61;
     f1.x in (FuncsSeq Sk).n;
-    then f1.x in Funcs(Sk.(n+1),Sk.n) by Def4;
+    then f1.x in Funcs(Sk.(n+1),Sk.n) by Def3;
     then consider G be Function such that
 A65: f1.x = G and
     dom G = Sk.(n+1) and
     rng G c= Sk.n by FUNCT_2:def 2;
-    face (s,x) = G.s by A60,A62,A65,Def9;
+    face (s,x) = G.s by A60,A62,A65,Def7;
     hence thesis by A62,A63,A64,A65;
   end;
   uniqueness
@@ -959,14 +931,14 @@ A76:  now
         then reconsider x1 = x as Face of n;
         F1n.x1 in (FuncsSeq(the SkeletonSeq of T1)).n;
         then F1n.x1 in Funcs((the SkeletonSeq of T1).(n+1),(the SkeletonSeq
-        of T1). n) by Def4;
+        of T1). n) by Def3;
         then consider F1nx be Function such that
 A77:    F1nx = F1n.x1 and
 A78:    dom F1nx = (the SkeletonSeq of T1).(n+1) and
         rng F1nx c= (the SkeletonSeq of T1).n by FUNCT_2:def 2;
         F2n.x1 in (FuncsSeq(the SkeletonSeq of T1)).n;
         then F2n.x1 in Funcs((the SkeletonSeq of T1).(n+1),(the SkeletonSeq
-        of T1). n) by Def4;
+        of T1). n) by Def3;
         then consider F2nx be Function such that
 A79:    F2nx = F2n.x1 and
 A80:    dom F2nx = (the SkeletonSeq of T1).(n+1) and
@@ -976,9 +948,9 @@ A80:    dom F2nx = (the SkeletonSeq of T1).(n+1) and
           assume
 A81:      y in (the SkeletonSeq of T1).(n+1);
           then reconsider y1 = y as Symplex of T1,(n+1);
-A82:      F1nx.y1 = face (y1,x1) by A77,A81,Def9;
+A82:      F1nx.y1 = face (y1,x1) by A77,A81,Def7;
           reconsider y2 = y as Symplex of T2,(n+1) by A72,A81;
-A83:      F2nx.y2 = face (y2,x1) by A74,A79,A81,Def9;
+A83:      F2nx.y2 = face (y2,x1) by A74,A79,A81,Def7;
           y1 in {SgmX(the InternalRel of C, s) where s is non empty
           Element of symplexes(C) : card s = n+1} by A67,A81;
           then consider A be non empty Element of symplexes(C) such that

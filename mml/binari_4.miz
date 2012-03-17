@@ -3,7 +3,7 @@
 ::  by Hisayoshi Kunimune and Yatsuka Nakamura
 ::
 :: Received January 30, 2003
-:: Copyright (c) 2003-2011 Association of Mizar Users
+:: Copyright (c) 2003-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,11 +20,11 @@ environ
       FINSEQ_2, MARGREL1, BINARITH, ARYTM_1, SUBSET_1, PARTFUN1, XBOOLEAN,
       BINARI_2, BINARI_3, FUNCOP_1, ORDINAL4, COMPLEX1, NEWTON, BINARI_4;
  notations INT_1, SUBSET_1, XBOOLEAN, MARGREL1, FUNCOP_1, POWER, BINARITH,
-      BINARI_2, BINARI_3, SERIES_1, NUMBERS, XXREAL_0, XBOOLE_0, NAT_1, NAT_D,
-      BINOP_2, EUCLID, TARSKI, PARTFUN1, FUNCT_1, RELAT_1, ZFMISC_1, INT_2,
-      FINSEQOP, NEWTON, FINSEQ_1, FINSEQ_2;
- constructors XXREAL_0, REAL_1, NAT_D, FINSEQOP, NEWTON, SERIES_1, BINARITH,
-      BINARI_2, EUCLID, BINARI_3, RVSUM_1, RELSET_1;
+      BINARI_2, BINARI_3, SERIES_1, NUMBERS, XXREAL_0, XBOOLE_0, ORDINAL1,
+      NAT_D, BINOP_2, EUCLID, TARSKI, PARTFUN1, FUNCT_1, RELAT_1, ZFMISC_1,
+      INT_2, FINSEQOP, NEWTON, FINSEQ_1, FINSEQ_2;
+ constructors REAL_1, NAT_D, FINSEQOP, NEWTON, SERIES_1, BINARITH, BINARI_2,
+      EUCLID, BINARI_3, RVSUM_1, RELSET_1;
  registrations XBOOLE_0, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED,
       XBOOLEAN, MARGREL1, VALUED_0, FINSEQ_1, FINSEQ_2, RELAT_1, FUNCT_1,
       CARD_1;
@@ -32,8 +32,8 @@ environ
  definitions FINSEQ_2, XBOOLEAN, EUCLID;
  theorems POWER, NAT_1, PRE_FF, ABSVALUE, BINARI_3, INT_1, BINARITH, NAT_2,
       BINARI_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, RVSUM_1, FUNCT_2,
-      ZFMISC_1, INT_3, EULER_2, PEPIN, PREPOWER, XREAL_1, XXREAL_0, XBOOLEAN,
-      NAT_D, VALUED_1, XREAL_0, CARD_1;
+      ZFMISC_1, EULER_2, PEPIN, PREPOWER, XREAL_1, XXREAL_0, XBOOLEAN, NAT_D,
+      VALUED_1, XREAL_0, CARD_1;
  schemes NAT_1;
 
 begin :: Preliminaries
@@ -97,9 +97,9 @@ A3: dom(0*m + 0*m) = dom(addreal.:(0*m,0*m)) by RVSUM_1:def 4
   proof
     let k be Nat such that
 A4: k in dom(0*m);
-    (0*m).k = 0 by A1,A4,FUNCOP_1:7;
+    (0*m).k = 0;
     then (0*m+0*m).k = 0 + 0 by A3,A1,A4,VALUED_1:def 1;
-    hence thesis by A1,A4,FUNCOP_1:7;
+    hence thesis;
   end;
   hence thesis by A3,FINSEQ_1:13,FUNCOP_1:13;
 end;
@@ -141,40 +141,38 @@ A5: j <= n;
     k + 1 = j;
     then
 A6: 1 <= k & k < n by A4,A5,NAT_1:13;
-    then
-A7: k in Seg n by FINSEQ_1:1;
     len(0*n) = n by CARD_1:def 7;
     then
-A8: x/.k = (0*n).k by A1,A6,FINSEQ_4:15
-      .= FALSE by A7,FUNCOP_1:7;
-A9: j = k + 1;
+A7: x/.k = (0*n).k by A1,A6,FINSEQ_4:15
+      .= FALSE;
+A8: j = k + 1;
     len carry(x,y) = n by CARD_1:def 7;
     then carry(x,y).j = carry(x,y)/.j by A4,A5,FINSEQ_4:15
       .= FALSE '&' FALSE 'or' FALSE '&' (carry(x,y)/.k) 'or' FALSE '&' (
-    carry(x,y)/.k) by A1,A2,A6,A9,A8,BINARITH:def 2
+    carry(x,y)/.k) by A1,A2,A6,A8,A7,BINARITH:def 2
       .= FALSE;
     hence thesis;
   end;
   len carry(x,y) = n by CARD_1:def 7;
   then 1 <= len carry(x,y) by NAT_1:14;
   then
-A10: carry(x,y).1 = carry(x,y)/.1 by FINSEQ_4:15
+A9: carry(x,y).1 = carry(x,y)/.1 by FINSEQ_4:15
     .= 0 by BINARITH:def 2;
   for l be Nat st l in Seg n holds carry(x,y).l = (0*n).l
   proof
     let l be Nat such that
-A11: l in Seg n;
-A12: 1 <= l by A11,FINSEQ_1:1;
-A13: (0*n).l = 0 by A11,FUNCOP_1:7;
-    per cases by A11,A12,Th4,FINSEQ_1:1;
+A10: l in Seg n;
+A11: 1 <= l by A10,FINSEQ_1:1;
+A12: (0*n).l = 0;
+    per cases by A10,A11,Th4,FINSEQ_1:1;
     suppose
       l = 1;
-      hence thesis by A10,A11,FUNCOP_1:7;
+      hence thesis by A9;
     end;
     suppose
-A14:  1 + 1 <= l & l <= n;
+A13:  1 + 1 <= l & l <= n;
       then 1 < l by NAT_1:13;
-      hence thesis by A3,A13,A14;
+      hence thesis by A3,A12,A13;
     end;
   end;
   hence thesis by A1,FINSEQ_2:119;
@@ -193,7 +191,7 @@ A2: y = 0*n;
     let k be Nat such that
 A3: k in Seg n;
     reconsider k as Nat;
-A4: (0*n).k = FALSE by A3,FUNCOP_1:7;
+A4: (0*n).k = FALSE;
 A5: 1 <= k by A3,FINSEQ_1:1;
     len x = n by CARD_1:def 7;
     then k <= len x by A3,FINSEQ_1:1;
@@ -209,7 +207,7 @@ A7: carry(x,y)/.k = carry(x,y).k by A5,FINSEQ_4:15
     then (x+y).k = (x+y)/.k by A5,FINSEQ_4:15
       .= FALSE 'xor' FALSE by A1,A2,A3,A6,A7,BINARITH:def 5
       .= FALSE;
-    hence thesis by A3,FUNCOP_1:7;
+    hence thesis;
   end;
   hence thesis by A1,FINSEQ_2:119;
 end;
@@ -222,11 +220,9 @@ proof
   let F be Tuple of n,BOOLEAN such that
 A1: F = 0*n;
 A2: 1 <= n by NAT_1:14;
-  then
-A3: n in Seg n by FINSEQ_1:1;
   n <= len F by CARD_1:def 7;
   then F/.n = F.n by A2,FINSEQ_4:15
-    .= FALSE by A1,A3,FUNCOP_1:7;
+    .= FALSE by A1;
   then Intval F = Absval F by BINARI_2:def 3;
   hence thesis by A1,BINARI_3:6;
 end;
@@ -480,11 +476,9 @@ proof
 A1: x = 0*n and
 A2: y = 0*n;
 A3: 1 <= n by NAT_1:14;
-  then
-A4: n in Seg n by FINSEQ_1:1;
   len x = n by CARD_1:def 7;
   then x/.n = (0*n).n by A1,A3,FINSEQ_4:15
-    .= FALSE by A4,FUNCOP_1:7;
+    .= FALSE;
   then add_ovfl(x,y) = FALSE '&' FALSE 'or' FALSE '&' (carry(x,y)/.n) 'or'
   FALSE '&' (carry(x,y)/.n) by A1,A2,BINARITH:def 6
     .= FALSE;

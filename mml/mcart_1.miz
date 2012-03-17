@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received March 30, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,410 +14,24 @@
 
 environ
 
- vocabularies XBOOLE_0, SUBSET_1, TARSKI, ZFMISC_1, RELAT_1, FUNCT_1, MCART_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1;
- constructors TARSKI, ENUMSET1, SUBSET_1, FUNCT_1;
- registrations XBOOLE_0, RELAT_1;
+ vocabularies XBOOLE_0, SUBSET_1, TARSKI, ZFMISC_1, RELAT_1, FUNCT_1, MCART_1,
+   XTUPLE_0, RECDEF_2, FACIRC_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1,
+   XTUPLE_0, SUBSET_1, RELAT_1, FUNCT_1;
+ constructors TARSKI, ENUMSET1, XTUPLE_0, SUBSET_1, FUNCT_1;
+ registrations XBOOLE_0, RELAT_1, XTUPLE_0, SUBSET_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0, RELAT_1;
- theorems TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, ORDINAL1, XBOOLE_1, FUNCT_1,
-      RELAT_1;
- schemes XBOOLE_0, FUNCT_1;
+ definitions TARSKI, XBOOLE_0, RELAT_1, XTUPLE_0;
+ theorems TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, FUNCT_1,
+      RELAT_1, XTUPLE_0, XREGULAR;
+ schemes FUNCT_1;
 
 begin
 
 reserve v,x,x1,x2,x3,x4,y,y1,y2,y3,y4,z,z1,z2, X,X1,X2,X3,X4,Y,Y1,Y2,Y3,Y4,Y5,
   Z,Z1,Z2,Z3,Z4,Z5 for set;
 
-::
-::   Regularity
-::
-:: We start with some auxiliary theorems related to the regularity axiom.
-:: We need them to prove theorems below. Nevertheless they are
-:: marked as theorems because they seem to be of general interest.
-
-theorem Th1:
-  X <> {} implies ex Y st Y in X & Y misses X
-proof
-  set x = the Element of X;
-  assume X <> {};
-  then x in X;
-  then consider Y such that
-A1: Y in X & not ex x st x in X & x in Y by TARSKI:2;
-  take Y;
-  thus thesis by A1,XBOOLE_0:3;
-end;
-
-theorem Th2:
-  X <> {} implies ex Y st Y in X & for Y1 st Y1 in Y holds Y1
-  misses X
-proof
-  defpred P[set] means $1 meets X;
-  consider Z such that
-A1: for Y holds Y in Z iff Y in union X & P[Y] from XBOOLE_0:sch 1;
-  assume X <> {};
-  then consider Y such that
-A2: Y in X \/ Z and
-A3: Y misses X \/ Z by Th1;
-  assume
-A4: not thesis;
-  now
-    assume
-A5: Y in X;
-    then consider Y1 such that
-A6: Y1 in Y and
-A7: not Y1 misses X by A4;
-    Y1 in union X by A5,A6,TARSKI:def 4;
-    then Y1 in Z by A1,A7;
-    then Y1 in X \/ Z by XBOOLE_0:def 3;
-    hence contradiction by A3,A6,XBOOLE_0:3;
-  end;
-  then Y in Z by A2,XBOOLE_0:def 3;
-  then Y meets X by A1;
-  hence contradiction by A3,XBOOLE_1:70;
-end;
-
-theorem
-  X <> {} implies ex Y st Y in X & for Y1,Y2 st Y1 in Y2 & Y2 in Y holds
-  Y1 misses X
-proof
-  defpred P[set] means ex Y1 st Y1 in $1 & Y1 meets X;
-  consider Z1 such that
-A1: for Y holds Y in Z1 iff Y in union X & P[Y] from XBOOLE_0:sch 1;
-  defpred Q[set] means $1 meets X;
-  consider Z2 such that
-A2: for Y holds Y in Z2 iff Y in union union X & Q[Y] from XBOOLE_0:sch
-  1;
-  assume X <> {};
-  then consider Y such that
-A3: Y in X \/ Z1 \/ Z2 and
-A4: Y misses X \/ Z1 \/ Z2 by Th1;
-A5: now
-    assume
-A6: Y in Z1;
-    then consider Y1 such that
-A7: Y1 in Y and
-A8: Y1 meets X by A1;
-    Y in union X by A1,A6;
-    then Y1 in union union X by A7,TARSKI:def 4;
-    then Y1 in Z2 by A2,A8;
-    then Y1 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    hence contradiction by A4,A7,XBOOLE_0:3;
-  end;
-  assume
-A9: not thesis;
-A10: now
-    assume
-A11: Y in X;
-    then consider Y1,Y2 such that
-A12: Y1 in Y2 and
-A13: Y2 in Y and
-A14: not Y1 misses X by A9;
-    Y2 in union X by A11,A13,TARSKI:def 4;
-    then Y2 in Z1 by A1,A12,A14;
-    then Y2 in X \/ Z1 by XBOOLE_0:def 3;
-    then Y2 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    hence contradiction by A4,A13,XBOOLE_0:3;
-  end;
-  Y in X \/ (Z1 \/ Z2) by A3,XBOOLE_1:4;
-  then Y in Z1 \/ Z2 by A10,XBOOLE_0:def 3;
-  then Y in Z2 by A5,XBOOLE_0:def 3;
-  then Y meets X by A2;
-  then Y meets X \/ Z1 by XBOOLE_1:70;
-  hence contradiction by A4,XBOOLE_1:70;
-end;
-
-theorem Th4:
-  X <> {} implies ex Y st Y in X & for Y1,Y2,Y3 st Y1 in Y2 & Y2 in
-  Y3 & Y3 in Y holds Y1 misses X
-proof
-  defpred P[set] means ex Y1,Y2 st Y1 in Y2 & Y2 in $1 & Y1 meets X;
-  consider Z1 such that
-A1: for Y holds Y in Z1 iff Y in union X & P[Y] from XBOOLE_0:sch 1;
-  defpred R[set] means $1 meets X;
-  defpred Q[set] means ex Y1 st Y1 in $1 & Y1 meets X;
-  consider Z2 such that
-A2: for Y holds Y in Z2 iff Y in union union X & Q[Y] from XBOOLE_0:sch
-  1;
-  consider Z3 such that
-A3: for Y holds Y in Z3 iff Y in union union union X & R[Y] from
-  XBOOLE_0:sch 1;
-  assume X <> {};
-  then consider Y such that
-A4: Y in X \/ Z1 \/ Z2 \/ Z3 and
-A5: Y misses X \/ Z1 \/ Z2 \/ Z3 by Th1;
-A6: now
-    assume
-A7: Y in Z2;
-    then consider Y1 such that
-A8: Y1 in Y and
-A9: Y1 meets X by A2;
-    Y in union union X by A2,A7;
-    then Y1 in union union union X by A8,TARSKI:def 4;
-    then Y1 in Z3 by A3,A9;
-    then Y1 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 3;
-    hence contradiction by A5,A8,XBOOLE_0:3;
-  end;
-A10: now
-    assume
-A11: Y in Z1;
-    then consider Y1,Y2 such that
-A12: Y1 in Y2 and
-A13: Y2 in Y and
-A14: Y1 meets X by A1;
-    Y in union X by A1,A11;
-    then Y2 in union union X by A13,TARSKI:def 4;
-    then Y2 in Z2 by A2,A12,A14;
-    then Y2 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    then Y meets X \/ Z1 \/ Z2 by A13,XBOOLE_0:3;
-    hence contradiction by A5,XBOOLE_1:70;
-  end;
-  set V = X \/ Z1 \/ Z2 \/ Z3;
-A15: V = X \/ (Z1 \/ Z2) \/ Z3 by XBOOLE_1:4
-    .= X \/ (Z1 \/ Z2 \/ Z3) by XBOOLE_1:4;
-  assume
-A16: not thesis;
-  now
-    assume
-A17: Y in X;
-    then consider Y1,Y2,Y3 such that
-A18: Y1 in Y2 & Y2 in Y3 and
-A19: Y3 in Y and
-A20: not Y1 misses X by A16;
-    Y3 in union X by A17,A19,TARSKI:def 4;
-    then Y3 in Z1 by A1,A18,A20;
-    then Y3 in X \/ Z1 by XBOOLE_0:def 3;
-    then Y3 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    then Y3 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 3;
-    hence contradiction by A5,A19,XBOOLE_0:3;
-  end;
-  then Y in Z1 \/ Z2 \/ Z3 by A15,A4,XBOOLE_0:def 3;
-  then Y in Z1 \/ (Z2 \/ Z3) by XBOOLE_1:4;
-  then Y in Z2 \/ Z3 by A10,XBOOLE_0:def 3;
-  then Y in Z3 by A6,XBOOLE_0:def 3;
-  then Y meets X by A3;
-  hence contradiction by A15,A5,XBOOLE_1:70;
-end;
-
-theorem
-  X <> {} implies ex Y st Y in X & for Y1,Y2,Y3,Y4 st Y1 in Y2 & Y2 in
-  Y3 & Y3 in Y4 & Y4 in Y holds Y1 misses X
-proof
-  defpred P[set] means ex Y1,Y2,Y3 st Y1 in Y2 & Y2 in Y3 & Y3 in $1 & Y1
-  meets X;
-  consider Z1 such that
-A1: for Y holds Y in Z1 iff Y in union X & P[Y] from XBOOLE_0:sch 1;
-  defpred S[set] means $1 meets X;
-  defpred R[set] means ex Y1 st Y1 in $1 & Y1 meets X;
-  defpred Q[set] means ex Y1,Y2 st Y1 in Y2 & Y2 in $1 & Y1 meets X;
-  consider Z2 such that
-A2: for Y holds Y in Z2 iff Y in union union X & Q[Y] from XBOOLE_0:sch
-  1;
-  consider Z4 such that
-A3: for Y holds Y in Z4 iff Y in union union union union X & S[Y] from
-  XBOOLE_0:sch 1;
-  consider Z3 such that
-A4: for Y holds Y in Z3 iff Y in union union union X & R[Y] from
-  XBOOLE_0:sch 1;
-  assume X <> {};
-  then consider Y such that
-A5: Y in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 and
-A6: Y misses X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by Th1;
-A7: now
-    assume
-A8: Y in Z3;
-    then consider Y1 such that
-A9: Y1 in Y and
-A10: Y1 meets X by A4;
-    Y in union union union X by A4,A8;
-    then Y1 in union union union union X by A9,TARSKI:def 4;
-    then Y1 in Z4 by A3,A10;
-    then Y1 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 3;
-    hence contradiction by A6,A9,XBOOLE_0:3;
-  end;
-A11: now
-    assume
-A12: Y in Z1;
-    then consider Y1,Y2,Y3 such that
-A13: Y1 in Y2 & Y2 in Y3 and
-A14: Y3 in Y and
-A15: Y1 meets X by A1;
-    Y in union X by A1,A12;
-    then Y3 in union union X by A14,TARSKI:def 4;
-    then Y3 in Z2 by A2,A13,A15;
-    then Y3 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    then Y meets X \/ Z1 \/ Z2 by A14,XBOOLE_0:3;
-    then Y meets X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_1:70;
-    hence contradiction by A6,XBOOLE_1:70;
-  end;
-A16: X \/ Z1 \/ Z2 \/ Z3 \/ Z4 = X \/ (Z1 \/ Z2) \/ Z3 \/ Z4 by XBOOLE_1:4
-    .= X \/ (Z1 \/ Z2 \/ Z3) \/ Z4 by XBOOLE_1:4
-    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4) by XBOOLE_1:4;
-A17: now
-    assume
-A18: Y in Z2;
-    then consider Y1,Y2 such that
-A19: Y1 in Y2 and
-A20: Y2 in Y and
-A21: Y1 meets X by A2;
-    Y in union union X by A2,A18;
-    then Y2 in union union union X by A20,TARSKI:def 4;
-    then Y2 in Z3 by A4,A19,A21;
-    then Y2 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 3;
-    then Y meets X \/ Z1 \/ Z2 \/ Z3 by A20,XBOOLE_0:3;
-    hence contradiction by A6,XBOOLE_1:70;
-  end;
-  assume
-A22: not thesis;
-  now
-    assume
-A23: Y in X;
-    then consider Y1,Y2,Y3,Y4 such that
-A24: Y1 in Y2 & Y2 in Y3 & Y3 in Y4 and
-A25: Y4 in Y and
-A26: not Y1 misses X by A22;
-    Y4 in union X by A23,A25,TARSKI:def 4;
-    then Y4 in Z1 by A1,A24,A26;
-    then Y4 in X \/ Z1 by XBOOLE_0:def 3;
-    then Y4 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    then Y4 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 3;
-    then Y4 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 3;
-    hence contradiction by A6,A25,XBOOLE_0:3;
-  end;
-  then Y in Z1 \/ Z2 \/ Z3 \/ Z4 by A16,A5,XBOOLE_0:def 3;
-  then Y in Z1 \/ (Z2 \/ Z3) \/ Z4 by XBOOLE_1:4;
-  then Y in Z1 \/ (Z2 \/ Z3 \/ Z4) by XBOOLE_1:4;
-  then Y in Z2 \/ Z3 \/ Z4 by A11,XBOOLE_0:def 3;
-  then Y in Z2 \/ (Z3 \/ Z4) by XBOOLE_1:4;
-  then Y in Z3 \/ Z4 by A17,XBOOLE_0:def 3;
-  then Y in Z4 by A7,XBOOLE_0:def 3;
-  then Y meets X by A3;
-  hence contradiction by A16,A6,XBOOLE_1:70;
-end;
-
-theorem Th6:
-  X <> {} implies ex Y st Y in X & for Y1,Y2,Y3,Y4,Y5 st Y1 in Y2 &
-  Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y holds Y1 misses X
-proof
-  defpred P[set] means ex Y1,Y2,Y3,Y4 st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4
-  in $1 & Y1 meets X;
-  consider Z1 such that
-A1: for Y holds Y in Z1 iff Y in union X & P[Y] from XBOOLE_0:sch 1;
-  defpred T[set] means $1 meets X;
-  defpred S[set] means ex Y1 st Y1 in $1 & Y1 meets X;
-  defpred R[set] means ex Y1,Y2 st Y1 in Y2 & Y2 in $1 & Y1 meets X;
-  defpred Q[set] means ex Y1,Y2,Y3 st Y1 in Y2 & Y2 in Y3 & Y3 in $1 & Y1
-  meets X;
-  consider Z2 such that
-A2: for Y holds Y in Z2 iff Y in union union X & Q[Y] from XBOOLE_0:sch
-  1;
-  consider Z5 such that
-A3: for Y holds Y in Z5 iff Y in union union union union union X & T[Y]
-  from XBOOLE_0:sch 1;
-  consider Z3 such that
-A4: for Y holds Y in Z3 iff Y in union union union X & R[Y] from
-  XBOOLE_0:sch 1;
-  consider Z4 such that
-A5: for Y holds Y in Z4 iff Y in union union union union X & S[Y] from
-  XBOOLE_0:sch 1;
-  set V = X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5;
-  assume X <> {};
-  then consider Y such that
-A6: Y in V and
-A7: Y misses V by Th1;
-A8: V = X \/ (Z1 \/ Z2) \/ Z3 \/ Z4 \/ Z5 by XBOOLE_1:4
-    .= X \/ (Z1 \/ Z2 \/ Z3) \/ Z4 \/ Z5 by XBOOLE_1:4
-    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4) \/ Z5 by XBOOLE_1:4
-    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5) by XBOOLE_1:4;
-A9: now
-    assume
-A10: Y in Z1;
-    then consider Y1,Y2,Y3,Y4 such that
-A11: Y1 in Y2 & Y2 in Y3 & Y3 in Y4 and
-A12: Y4 in Y and
-A13: Y1 meets X by A1;
-    Y in union X by A1,A10;
-    then Y4 in union union X by A12,TARSKI:def 4;
-    then Y4 in Z2 by A2,A11,A13;
-    then Y4 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    then Y meets X \/ Z1 \/ Z2 by A12,XBOOLE_0:3;
-    then Y meets X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_1:70;
-    then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_1:70;
-    hence contradiction by A7,XBOOLE_1:70;
-  end;
-A14: now
-    assume
-A15: Y in Z2;
-    then consider Y1,Y2,Y3 such that
-A16: Y1 in Y2 & Y2 in Y3 and
-A17: Y3 in Y and
-A18: Y1 meets X by A2;
-    Y in union union X by A2,A15;
-    then Y3 in union union union X by A17,TARSKI:def 4;
-    then Y3 in Z3 by A4,A16,A18;
-    then Y3 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 3;
-    then Y3 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 3;
-    then Y3 in V by XBOOLE_0:def 3;
-    hence contradiction by A7,A17,XBOOLE_0:3;
-  end;
-A19: now
-    assume
-A20: Y in Z3;
-    then consider Y1,Y2 such that
-A21: Y1 in Y2 and
-A22: Y2 in Y and
-A23: Y1 meets X by A4;
-    Y in union union union X by A4,A20;
-    then Y2 in union union union union X by A22,TARSKI:def 4;
-    then Y2 in Z4 by A5,A21,A23;
-    then Y2 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 3;
-    then Y2 in V by XBOOLE_0:def 3;
-    hence contradiction by A7,A22,XBOOLE_0:3;
-  end;
-A24: now
-    assume
-A25: Y in Z4;
-    then consider Y1 such that
-A26: Y1 in Y and
-A27: Y1 meets X by A5;
-    Y in union union union union X by A5,A25;
-    then Y1 in union union union union union X by A26,TARSKI:def 4;
-    then Y1 in Z5 by A3,A27;
-    then Y1 in V by XBOOLE_0:def 3;
-    hence contradiction by A7,A26,XBOOLE_0:3;
-  end;
-  assume
-A28: not thesis;
-  now
-    assume
-A29: Y in X;
-    then consider Y1,Y2,Y3,Y4,Y5 such that
-A30: Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 and
-A31: Y5 in Y and
-A32: not Y1 misses X by A28;
-    Y5 in union X by A29,A31,TARSKI:def 4;
-    then Y5 in Z1 by A1,A30,A32;
-    then Y5 in X \/ Z1 by XBOOLE_0:def 3;
-    then Y5 in X \/ Z1 \/ Z2 by XBOOLE_0:def 3;
-    then Y5 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 3;
-    then Y meets X \/ Z1 \/ Z2 \/ Z3 by A31,XBOOLE_0:3;
-    then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_1:70;
-    hence contradiction by A7,XBOOLE_1:70;
-  end;
-  then Y in Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by A8,A6,XBOOLE_0:def 3;
-  then Y in Z1 \/ (Z2 \/ Z3) \/ Z4 \/ Z5 by XBOOLE_1:4;
-  then Y in Z1 \/ (Z2 \/ Z3 \/ Z4) \/ Z5 by XBOOLE_1:4;
-  then Y in Z1 \/ (Z2 \/ Z3 \/ Z4 \/ Z5) by XBOOLE_1:4;
-  then Y in Z2 \/ Z3 \/ Z4 \/ Z5 by A9,XBOOLE_0:def 3;
-  then Y in Z2 \/ (Z3 \/ Z4) \/ Z5 by XBOOLE_1:4;
-  then Y in Z2 \/ (Z3 \/ Z4 \/ Z5) by XBOOLE_1:4;
-  then Y in Z3 \/ Z4 \/ Z5 by A14,XBOOLE_0:def 3;
-  then Y in Z3 \/ (Z4 \/ Z5) by XBOOLE_1:4;
-  then Y in Z4 \/ Z5 by A19,XBOOLE_0:def 3;
-  then Y in Z5 by A24,XBOOLE_0:def 3;
-  then Y meets X by A3;
-  hence contradiction by A8,A7,XBOOLE_1:70;
-end;
+reserve p for pair set;
 
 ::
 ::   Ordered pairs
@@ -427,57 +41,13 @@ end;
 ::  are permissive, function are defined for an arbitrary object. If it is not
 ::  an ordered pair, they are of course meaningless.
 
-definition
-  let x;
-  given x1,x2 being set such that
-A1: x = [x1,x2];
-  func x`1 means
-  :Def1:
-  x = [y1,y2] implies it = y1;
-  existence
-  proof
-    take x1;
-    thus thesis by A1,ZFMISC_1:27;
-  end;
-  uniqueness
-  proof
-    let z1,z2;
-    assume that
-A2: for y1,y2 st x = [y1,y2] holds z1 = y1 and
-A3: for y1,y2 st x = [y1,y2] holds z2 = y1;
-    z1 = x1 by A1,A2;
-    hence thesis by A1,A3;
-  end;
-  func x`2 means
-  :Def2:
-  x = [y1,y2] implies it = y2;
-  existence
-  proof
-    take x2;
-    thus thesis by A1,ZFMISC_1:27;
-  end;
-  uniqueness
-  proof
-    let z1,z2;
-    assume that
-A4: for y1,y2 st x = [y1,y2] holds z1 = y2 and
-A5: for y1,y2 st x = [y1,y2] holds z2 = y2;
-    z1 = x2 by A1,A4;
-    hence thesis by A1,A5;
-  end;
-end;
+canceled 6;
 
 theorem Th7:
-  [x,y]`1=x & [x,y]`2=y by Def1,Def2;
+  [x,y]`1=x & [x,y]`2=y;
 
 theorem Th8:
-  (ex x,y st z=[x,y]) implies [z`1,z`2] =z
-proof
-  given x,y such that
-A1: z=[x,y];
-  z`1=x by A1,Def1;
-  hence thesis by A1,Def2;
-end;
+  [p`1,p`2] = p;
 
 theorem
   X <> {} implies ex v st v in X & not ex x,y st (x in X or y in X) & v
@@ -486,7 +56,7 @@ proof
   assume X <> {};
   then consider Y such that
 A1: Y in X and
-A2: not ex Y1 st Y1 in Y & not Y1 misses X by Th2;
+A2: not ex Y1 st Y1 in Y & not Y1 misses X by XREGULAR:2;
   take v = Y;
   thus v in X by A1;
   given x,y such that
@@ -494,8 +64,7 @@ A3: x in X or y in X and
 A4: v = [x,y];
 A5: { x,y } in Y by A4,TARSKI:def 2;
   x in { x,y } & y in { x,y } by TARSKI:def 2;
-  then not { x,y } misses X by A3,XBOOLE_0:3;
-  hence contradiction by A2,A5;
+  hence contradiction by A2,A5,A3,XBOOLE_0:3;
 end;
 
 :: Now we prove theorems describing relationships between projections
@@ -505,8 +74,10 @@ theorem Th10:
   z in [:X,Y:] implies z`1 in X & z`2 in Y
 proof
   assume z in [:X,Y:];
-  then ex x,y st x in X & y in Y & z=[x,y] by ZFMISC_1:def 2;
-  hence thesis by Def1,Def2;
+  then consider x,y such that
+W: x in X & y in Y & z=[x,y] by ZFMISC_1:def 2;
+   [x,y]`1 = x & [x,y]`2 = y;
+  hence thesis by W;
 end;
 
 theorem
@@ -591,18 +162,19 @@ theorem Th20:
 proof
   given y,z such that
 A1: x = [y,z];
+X: [y,z]`1 = y & [y,z]`2 = z;
   now
     assume y = x;
     then {{y,z},{y}} in {y} by A1,TARSKI:def 1;
     hence contradiction by TARSKI:def 2;
   end;
-  hence x <> x`1 by A1,Def1;
+  hence x <> x`1 by A1,X;
   now
     assume z = x;
     then {{y,z},{y}} in {y,z} by A1,TARSKI:def 2;
     hence contradiction by TARSKI:def 2;
   end;
-  hence thesis by A1,Def2;
+  hence thesis by A1,X;
 end;
 
 :: Some of theorems proved above may be simplified , if we state them
@@ -610,7 +182,7 @@ end;
 
 reserve R for Relation;
 
-theorem Th23:
+theorem Th21:
   x in R implies x = [x`1,x`2]
 proof
   assume x in R;
@@ -618,16 +190,9 @@ proof
   hence thesis by Th8;
 end;
 
-theorem Th24:
+theorem
   X <> {} & Y <> {} implies for x being Element of [:X,Y:] holds x
-  = [x`1,x`2]
-proof
-  assume
-A1: X <> {} & Y <> {};
-  let x be Element of [:X,Y:];
-  [:X,Y:] <> {} by A1,ZFMISC_1:90;
-  hence thesis by Th23;
-end;
+  = [x`1,x`2] by Th21;
 
 Lm1: X1 <> {} & X2 <> {} implies for x being Element of [:X1,X2:] ex xx1 being
 (Element of X1), xx2 being Element of X2 st x = [xx1,xx2]
@@ -635,16 +200,14 @@ Lm1: X1 <> {} & X2 <> {} implies for x being Element of [:X1,X2:] ex xx1 being
 proof
   assume
 A1: X1 <> {} & X2 <> {};
-  then
-A2: [:X1,X2:] <> {} by ZFMISC_1:90;
   let x be Element of [:X1,X2:];
-  reconsider xx2 = x`2 as Element of X2 by A2,Th10;
-  reconsider xx1 = x`1 as Element of X1 by A2,Th10;
+  reconsider xx2 = x`2 as Element of X2 by A1,Th10;
+  reconsider xx1 = x`1 as Element of X1 by A1,Th10;
   take xx1,xx2;
-  thus thesis by A1,Th24;
+  thus thesis by A1,Th21;
 end;
 
-theorem Th25:
+theorem Th23:
   [:{x1,x2},{y1,y2}:] = {[x1,y1],[x1,y2],[x2,y1],[x2,y2]}
 proof
   thus [:{x1,x2},{y1,y2}:] = [:{x1},{y1,y2}:] \/ [:{x2},{y1,y2}:] by
@@ -654,14 +217,14 @@ ZFMISC_1:109
     .= {[x1,y1],[x1,y2],[x2,y1],[x2,y2]} by ENUMSET1:5;
 end;
 
-theorem Th26:
+theorem Th24:
   X <> {} & Y <> {} implies for x being Element of [:X,Y:] holds x
   <> x`1 & x <> x`2
 proof
   assume
 A1: X <> {} & Y <> {};
   let x be Element of [:X,Y:];
-  x = [x`1,x`2] by A1,Th24;
+  x = [x`1,x`2] by A1,Th21;
   hence thesis by Th20;
 end;
 
@@ -669,23 +232,9 @@ end;
 ::   Triples
 ::
 
-definition
-  let x1,x2,x3;
-  func [x1,x2,x3] equals
-  [[x1,x2],x3];
-  coherence;
-end;
+canceled;
 
-theorem Th28:
-  [x1,x2,x3] = [y1,y2,y3] implies x1 = y1 & x2 = y2 & x3 = y3
-proof
-  assume
-A1: [x1,x2,x3] = [y1,y2,y3];
-  then [x1,x2] = [y1,y2] by ZFMISC_1:27;
-  hence thesis by A1,ZFMISC_1:27;
-end;
-
-theorem Th29:
+theorem Th26:
   X <> {} implies ex v st v in X & not ex x,y,z st (x in X or y in
   X) & v = [x,y,z]
 proof
@@ -693,49 +242,26 @@ proof
   then consider Y such that
 A1: Y in X and
 A2: not ex Y1,Y2,Y3 st Y1 in Y2 & Y2 in Y3 & Y3 in Y & not Y1 misses X
-  by Th4;
+  by XREGULAR:4;
   take v = Y;
   thus v in X by A1;
   given x,y,z such that
 A3: x in X or y in X and
 A4: v = [x,y,z];
   set Y1 = { x,y }, Y2 = { Y1,{x} }, Y3 = { Y2,z };
-  x in Y1 & y in Y1 by TARSKI:def 2;
-  then
-A5: not Y1 misses X by A3,XBOOLE_0:3;
+B5: x in Y1 & y in Y1 by TARSKI:def 2;
 A6: Y3 in Y by A4,TARSKI:def 2;
   Y1 in Y2 & Y2 in Y3 by TARSKI:def 2;
-  hence contradiction by A2,A5,A6;
+  hence contradiction by A2,B5,A6,A3,XBOOLE_0:3;
 end;
 
 ::
 ::   Quadruples
 ::
 
-definition
-  let x1,x2,x3,x4;
-  func [x1,x2,x3,x4] equals
-  [[x1,x2,x3],x4];
-  coherence;
-end;
+canceled 3;
 
-theorem
-  [x1,x2,x3,x4] = [[[x1,x2],x3],x4];
-
-theorem
-  [x1,x2,x3,x4] = [[x1,x2],x3,x4];
-
-theorem Th33:
-  [x1,x2,x3,x4] = [y1,y2,y3,y4] implies x1 = y1 & x2 = y2 & x3 =
-  y3 & x4 = y4
-proof
-  assume
-A1: [x1,x2,x3,x4] = [y1,y2,y3,y4];
-  then [x1,x2,x3] = [y1,y2,y3] by ZFMISC_1:27;
-  hence thesis by A1,Th28,ZFMISC_1:27;
-end;
-
-theorem Th34:
+theorem Th30:
   X <> {} implies ex v st v in X & not ex x1,x2,x3,x4 st (x1 in X
   or x2 in X) & v = [x1,x2,x3,x4]
 proof
@@ -743,7 +269,7 @@ proof
   then consider Y such that
 A1: Y in X and
 A2: for Y1,Y2,Y3,Y4,Y5 st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5
-  in Y holds Y1 misses X by Th6;
+  in Y holds Y1 misses X by XREGULAR:6;
   take v = Y;
   thus v in X by A1;
   given x1,x2,x3,x4 such that
@@ -753,18 +279,16 @@ A4: v = [x1,x2,x3,x4];
   { Y4,x4 };
 A5: Y3 in Y4 & Y4 in Y5 by TARSKI:def 2;
 A6: Y5 in Y by A4,TARSKI:def 2;
-  x1 in Y1 & x2 in Y1 by TARSKI:def 2;
-  then
-A7: not Y1 misses X by A3,XBOOLE_0:3;
+B7: x1 in Y1 & x2 in Y1 by TARSKI:def 2;
   Y1 in Y2 & Y2 in Y3 by TARSKI:def 2;
-  hence contradiction by A2,A7,A5,A6;
+  hence contradiction by A2,B7,A5,A6,A3,XBOOLE_0:3;
 end;
 
 ::
 ::   Cartesian products of three sets
 ::
 
-theorem Th35:
+theorem Th31:
   X1 <> {} & X2 <> {} & X3 <> {} iff [:X1,X2,X3:] <> {}
 proof
 A1: X1 <> {} & X2 <> {} iff [:X1,X2:] <> {} by ZFMISC_1:90;
@@ -776,22 +300,20 @@ reserve xx1 for Element of X1,
   xx2 for Element of X2,
   xx3 for Element of X3;
 
-theorem Th36:
+theorem Th32:
   X1<>{} & X2<>{} & X3<>{} implies ( [:X1,X2,X3:] = [:Y1,Y2,Y3:]
   implies X1=Y1 & X2=Y2 & X3=Y3)
 proof
 A1: [:X1,X2,X3:] = [:[:X1,X2:],X3:] by ZFMISC_1:def 3;
   assume
 A2: X1<>{} & X2<>{};
-  then
-A3: [:X1,X2:] <> {} by ZFMISC_1:90;
   assume
 A4: X3<>{};
   assume [:X1,X2,X3:] = [:Y1,Y2,Y3:];
   then
 A5: [:[:X1,X2:],X3:] = [:[:Y1,Y2:],Y3:] by A1,ZFMISC_1:def 3;
-  then [:X1,X2:] = [:Y1,Y2:] by A3,A4,ZFMISC_1:110;
-  hence thesis by A2,A3,A4,A5,ZFMISC_1:110;
+  then [:X1,X2:] = [:Y1,Y2:] by A2,A4,ZFMISC_1:110;
+  hence thesis by A2,A4,A5,ZFMISC_1:110;
 end;
 
 theorem
@@ -801,21 +323,22 @@ proof
   assume
 A1: [:X1,X2,X3:]<>{};
   then
-A2: X3<>{} by Th35;
-  X1<>{} & X2<>{} by A1,Th35;
-  hence thesis by A2,Th36;
+A2: X3<>{} by Th31;
+  X1<>{} & X2<>{} by A1,Th31;
+  hence thesis by A2,Th32;
 end;
 
 theorem
   [:X,X,X:] = [:Y,Y,Y:] implies X = Y
 proof
   assume [:X,X,X:] = [:Y,Y,Y:];
-  then X<>{} or Y<>{} implies thesis by Th36;
+  then X<>{} or Y<>{} implies thesis by Th32;
   hence thesis;
 end;
 
-Lm2: X1 <> {} & X2 <> {} & X3 <> {} implies for x being Element of [:X1,X2,X3
-:] ex xx1,xx2,xx3 st x = [xx1,xx2,xx3]
+Lm2: X1 <> {} & X2 <> {} & X3 <> {} implies
+ for x being Element of [:X1,X2,X3:]
+  ex xx1,xx2,xx3 st x = [xx1,xx2,xx3]
 
 proof
   assume that
@@ -823,16 +346,15 @@ A1: X1 <> {} & X2 <> {} and
 A2: X3 <> {};
   let x be Element of [:X1,X2,X3:];
   reconsider x9=x as Element of [:[:X1,X2:],X3:] by ZFMISC_1:def 3;
-  [:X1,X2:] <> {} by A1,ZFMISC_1:90;
-  then consider x12 being (Element of [:X1,X2:]), xx3 such that
-A3: x9 = [x12,xx3] by A2,Lm1;
+  consider x12 being (Element of [:X1,X2:]), xx3 such that
+A3: x9 = [x12,xx3] by A1,A2,Lm1;
   consider xx1,xx2 such that
 A4: x12 = [xx1,xx2] by A1,Lm1;
   take xx1,xx2,xx3;
   thus thesis by A3,A4;
 end;
 
-theorem Th39:
+theorem Th35:
   [:{x1},{x2},{x3}:] = { [x1,x2,x3] }
 proof
   thus [:{x1},{x2},{x3}:] = [:[:{x1},{x2}:],{x3}:] by ZFMISC_1:def 3
@@ -870,7 +392,7 @@ theorem
 proof
   thus [:{x1,y1},{x2,y2},{x3}:] = [:[:{x1,y1},{x2,y2}:],{x3}:] by
 ZFMISC_1:def 3
-    .= [:{[x1,x2],[x1,y2],[y1,x2],[y1,y2]},{x3}:] by Th25
+    .= [:{[x1,x2],[x1,y2],[y1,x2],[y1,y2]},{x3}:] by Th23
     .= [:{[x1,x2],[x1,y2]} \/ {[y1,x2],[y1,y2]},{x3}:] by ENUMSET1:5
     .= [:{[x1,x2],[x1,y2]},{x3}:] \/ [:{[y1,x2],[y1,y2]},{x3}:] by ZFMISC_1:97
     .= { [[x1,x2],x3],[[x1,y2],x3]} \/ [:{[y1,x2],[y1,y2]},{x3}:] by
@@ -888,7 +410,7 @@ proof
   thus [:{x1,y1},{x2},{x3,y3}:] = [:[:{x1,y1},{x2}:],{x3,y3}:] by
 ZFMISC_1:def 3
     .= [:{[x1,x2],[y1,x2]},{x3,y3}:] by ZFMISC_1:30
-    .= { [[x1,x2],x3],[[x1,x2],y3],[[y1,x2],x3],[[y1,x2],y3] } by Th25
+    .= { [[x1,x2],x3],[[x1,x2],y3],[[y1,x2],x3],[[y1,x2],y3] } by Th23
     .= { [x1,x2,x3],[y1,x2,x3],[x1,x2,y3],[y1,x2,y3] } by ENUMSET1:62;
 end;
 
@@ -899,7 +421,7 @@ proof
   thus [:{x1},{x2,y2},{x3,y3}:] = [:[:{x1},{x2,y2}:],{x3,y3}:] by
 ZFMISC_1:def 3
     .= [:{[x1,x2],[x1,y2]},{x3,y3}:] by ZFMISC_1:30
-    .= { [[x1,x2],x3],[[x1,x2],y3],[[x1,y2],x3],[[x1,y2],y3] } by Th25
+    .= { [[x1,x2],x3],[[x1,x2],y3],[[x1,y2],x3],[[x1,y2],y3] } by Th23
     .= { [x1,x2,x3],[x1,y2,x3],[x1,x2,y3],[x1,y2,y3] } by ENUMSET1:62;
 end;
 
@@ -908,14 +430,14 @@ theorem
   y2,y3], [y1,x2,x3],[y1,y2,x3],[y1,x2,y3],[y1,y2,y3] }
 proof
 A1: [:{[x1,x2],[x1,y2]},{x3,y3}:] = { [[x1,x2],x3],[[x1,x2],y3],[[x1,y2],x3]
-  ,[[x1,y2],y3]} by Th25
+  ,[[x1,y2],y3]} by Th23
     .= { [x1,x2,x3],[x1,y2,x3],[x1,x2,y3],[x1,y2,y3]} by ENUMSET1:62;
 A2: [:{[y1,x2],[y1,y2]},{x3,y3}:] = { [[y1,x2],x3],[[y1,x2],y3],[[y1,y2],x3]
-  ,[[y1,y2],y3]} by Th25
+  ,[[y1,y2],y3]} by Th23
     .= { [y1,x2,x3],[y1,y2,x3],[y1,x2,y3],[y1,y2,y3]} by ENUMSET1:62;
   thus [:{x1,y1},{x2,y2},{x3,y3}:] = [:[:{x1,y1},{x2,y2}:],{x3,y3}:] by
 ZFMISC_1:def 3
-    .= [:{[x1,x2],[x1,y2],[y1,x2],[y1,y2]},{x3,y3}:] by Th25
+    .= [:{[x1,x2],[x1,y2],[y1,x2],[y1,y2]},{x3,y3}:] by Th23
     .= [:{[x1,x2],[x1,y2]} \/ {[y1,x2],[y1,y2]},{x3,y3}:] by ENUMSET1:5
     .= { [x1,x2,x3],[x1,y2,x3],[x1,x2,y3],[x1,y2,y3]} \/ {[y1,x2,x3],[y1,y2,
   x3],[y1,x2,y3],[y1,y2,y3] } by A1,A2,ZFMISC_1:97
@@ -923,166 +445,168 @@ ZFMISC_1:def 3
   [y1,x2,y3],[y1,y2,y3] } by ENUMSET1:25;
 end;
 
+registration
+ let X1,X2,X3 be non empty set;
+ cluster -> triple for Element of [:X1,X2,X3:];
+ coherence
+  proof let x be Element of [:X1,X2,X3:];
+   ex xx1 being Element of X1, xx2 being Element of X2,
+           xx3 being Element of X3 st x = [xx1,xx2,xx3] by Lm2;
+   hence thesis;
+  end;
+end;
+
 definition
-  let X1,X2,X3;
-  assume
-A1: X1<>{} & X2<>{} & X3<>{};
+ canceled 4;
+  let X1,X2,X3 be non empty set;
   let x be Element of [:X1,X2,X3:];
-  func x`1 -> Element of X1 means
+  redefine func x`1_3 -> Element of X1 means
   :Def5:
   x = [x1,x2,x3] implies it = x1;
-  existence
+  coherence
   proof
-    consider xx1,xx2,xx3 such that
-A2: x = [xx1,xx2,xx3] by A1,Lm2;
-    take xx1;
-    thus thesis by A2,Th28;
+    consider xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 such that
+A6: x = [xx1,xx2,xx3] by Lm2;
+    [xx1,xx2,xx3]`1_3 = xx1;
+   hence x`1_3 is Element of X1 by A6;
   end;
-  uniqueness
-  proof
-    let y,z be Element of X1;
+  compatibility
+   proof let y be Element of X1;
+    thus y = x`1_3 implies for x1,x2,x3 holds x = [x1,x2,x3] implies y = x1
+     proof assume
+Z:     y = x`1_3;
+      let x1,x2,x3 such that
+W:     x = [x1,x2,x3];
+       [x1,x2,x3]`1_3 = x1;
+      hence y = x1 by W,Z;
+     end;
     assume
-A3: x = [x1,x2,x3] implies y = x1;
-    assume
-A4: x = [x1,x2,x3] implies z = x1;
-    consider xx1,xx2,xx3 such that
-A5: x = [xx1,xx2,xx3] by A1,Lm2;
-    y = xx1 by A5,A3;
-    hence thesis by A5,A4;
-  end;
-  func x`2 -> Element of X2 means
+Z:   for x1,x2,x3 holds x = [x1,x2,x3] implies y = x1;
+    consider xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 such that
+A6: x = [xx1,xx2,xx3] by Lm2;
+     [xx1,xx2,xx3]`1_3 = xx1;
+    hence y = x`1_3 by Z,A6;
+   end;
+  redefine func x`2_3 -> Element of X2 means
   :Def6:
   x = [x1,x2,x3] implies it = x2;
-  existence
+  coherence
   proof
-    consider xx1,xx2,xx3 such that
-A6: x = [xx1,xx2,xx3] by A1,Lm2;
-    take xx2;
-    thus thesis by A6,Th28;
+    consider xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 such that
+A6: x = [xx1,xx2,xx3] by Lm2;
+    [xx1,xx2,xx3]`2_3 = xx2;
+   hence x`2_3 is Element of X2 by A6;
   end;
-  uniqueness
-  proof
-    let y,z be Element of X2;
+  compatibility
+   proof let y be Element of X2;
+    thus y = x`2_3 implies for x1,x2,x3 holds x = [x1,x2,x3] implies y = x2
+     proof assume
+Z:     y = x`2_3;
+      let x1,x2,x3 such that
+W:     x = [x1,x2,x3];
+       [x1,x2,x3]`2_3 = x2;
+      hence y = x2 by W,Z;
+     end;
     assume
-A7: x = [x1,x2,x3] implies y = x2;
-    assume
-A8: x = [x1,x2,x3] implies z = x2;
-    consider xx1,xx2,xx3 such that
-A9: x = [xx1,xx2,xx3] by A1,Lm2;
-    y = xx2 by A9,A7;
-    hence thesis by A9,A8;
-  end;
-  func x`3 -> Element of X3 means
+Z:   for x1,x2,x3 holds x = [x1,x2,x3] implies y = x2;
+    consider xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 such that
+A6: x = [xx1,xx2,xx3] by Lm2;
+     [xx1,xx2,xx3]`2_3 = xx2;
+    hence y = x`2_3 by Z,A6;
+   end;
+  redefine func x`3_3 -> Element of X3 means
   :Def7:
   x = [x1,x2,x3] implies it = x3;
-  existence
+  coherence
   proof
-    consider xx1,xx2,xx3 such that
-A10: x = [xx1,xx2,xx3] by A1,Lm2;
-    take xx3;
-    thus thesis by A10,Th28;
+    consider xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 such that
+A6: x = [xx1,xx2,xx3] by Lm2;
+    [xx1,xx2,xx3]`3_3 = xx3;
+   hence x`3_3 is Element of X3 by A6;
   end;
-  uniqueness
-  proof
-    let y,z be Element of X3;
+  compatibility
+   proof let y be Element of X3;
+    thus y = x`3_3 implies for x1,x2,x3 holds x = [x1,x2,x3] implies y = x3
+     proof assume
+Z:     y = x`3_3;
+      let x1,x2,x3 such that
+W:     x = [x1,x2,x3];
+       [x1,x2,x3]`3_3 = x3;
+      hence y = x3 by W,Z;
+     end;
     assume
-A11: x = [x1,x2,x3] implies y = x3;
-    assume
-A12: x = [x1,x2,x3] implies z = x3;
-    consider xx1,xx2,xx3 such that
-A13: x = [xx1,xx2,xx3] by A1,Lm2;
-    y = xx3 by A13,A11;
-    hence thesis by A13,A12;
-  end;
+Z:   for x1,x2,x3 holds x = [x1,x2,x3] implies y = x3;
+    consider xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 such that
+A6: x = [xx1,xx2,xx3] by Lm2;
+     [xx1,xx2,xx3]`3_3 = xx3;
+    hence y = x`3_3 by Z,A6;
+   end;
 end;
+
+canceled;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} implies for x being Element of [:X1,X2,X3:]
-  for x1,x2,x3 st x = [x1,x2,x3] holds x`1 = x1 & x`2 = x2 & x`3 = x3 by Def5
-,Def6,Def7;
+ for X1,X2,X3 being non empty set
+  for x being Element of [:X1,X2,
+  X3:] holds x = [x`1_3,x`2_3,x`3_3];
 
-theorem Th48:
-  X1<>{} & X2<>{} & X3<>{} implies for x being Element of [:X1,X2,
-  X3:] holds x = [x`1,x`2,x`3]
-proof
-  assume
-A1: X1<>{} & X2<>{} & X3<>{};
-  let x be Element of [:X1,X2,X3:];
-  consider xx1,xx2,xx3 such that
-A2: x = [xx1,xx2,xx3] by A1,Lm2;
-  thus x = [x`1,xx2,xx3] by A1,A2,Def5
-    .= [x`1,x`2,xx3] by A1,A2,Def6
-    .= [x`1,x`2,x`3] by A1,A2,Def7;
-end;
-
-theorem Th49:
+theorem Th45:
   X c= [:X,Y,Z:] or X c= [:Y,Z,X:] or X c= [:Z,X,Y:] implies X =
   {}
 proof
   assume that
 A1: X c= [:X,Y,Z:] or X c= [:Y,Z,X:] or X c= [:Z,X,Y:] and
 A2: X <> {};
-  [:X,Y,Z:]<>{} or [:Y,Z,X:]<>{} or [:Z,X,Y:]<>{} by A1,A2,XBOOLE_1:3;
-  then
-A3: Y<>{} & Z<>{} by Th35;
+  [:X,Y,Z:]<>{} or [:Y,Z,X:]<>{} or [:Z,X,Y:]<>{} by A1,A2;
+  then reconsider X,Y,Z as non empty set by Th31;
   per cases by A1;
   suppose
 A4: X c= [:X,Y,Z:];
     consider v such that
 A5: v in X and
-A6: for x,y,z st x in X or y in X holds v <> [x,y,z] by A2,Th29;
+A6: for x,y,z st x in X or y in X holds v <> [x,y,z] by Th26;
     reconsider v as Element of [:X,Y,Z:] by A4,A5;
-    v = [v`1,v`2,v`3] by A2,A3,Th48;
-    hence contradiction by A2,A6;
+    v = [v`1_3,v`2_3,v`3_3];
+    hence contradiction by A6;
   end;
   suppose
     X c= [:Y,Z,X:];
     then X c= [:[:Y,Z:],X:] by ZFMISC_1:def 3;
-    hence thesis by A2,ZFMISC_1:111;
+    hence thesis by ZFMISC_1:111;
   end;
   suppose
 A7: X c= [:Z,X,Y:];
     consider v such that
 A8: v in X and
-A9: for z,x,y st z in X or x in X holds v <> [z,x,y] by A2,Th29;
+A9: for z,x,y st z in X or x in X holds v <> [z,x,y] by Th26;
     reconsider v as Element of [:Z,X,Y:] by A7,A8;
-    v = [v`1,v`2,v`3] by A2,A3,Th48;
-    hence thesis by A2,A9;
+    v = [v`1_3,v`2_3,v`3_3];
+    hence thesis by A9;
   end;
 end;
 
-theorem Th50:
-  X1<>{} & X2<>{} & X3<>{} implies for x being Element of [:X1,X2,
-X3:] holds x`1 = (x qua set)`1`1 & x`2 = (x qua set)`1`2 & x`3 = (x qua set)`2
-proof
-  assume
-A1: X1<>{} & X2<>{} & X3<>{};
-  let x be Element of [:X1,X2,X3:];
-  thus x`1 = [x`1,x`2]`1 by Def1
-    .= [x`1,x`2,x`3]`1`1 by Def1
-    .= (x qua set)`1`1 by A1,Th48;
-  thus x`2 = [x`1,x`2]`2 by Def2
-    .= [x`1,x`2,x`3]`1`2 by Def1
-    .= (x qua set)`1`2 by A1,Th48;
-  thus x`3 = [x`1,x`2,x`3]`2 by Def2
-    .= (x qua set)`2 by A1,Th48;
-end;
+canceled;
 
-theorem Th51:
-  X1<>{} & X2<>{} & X3<>{} implies for x being Element of [:X1,X2,
-  X3:] holds x <> x`1 & x <> x`2 & x <> x`3
-proof
-  assume
-A1: X1<>{} & X2<>{} & X3<>{};
+theorem Th47:
+ for X1,X2,X3 being non empty set
+ for x being Element of [:X1,X2,X3:]
+   holds x <> x`1_3 & x <> x`2_3 & x <> x`3_3
+proof let X1,X2,X3 be non empty set;
   let x be Element of [:X1,X2,X3:];
-  set Y9 = { x`1,x`2 }, Y = { Y9,{x`1}}, X9 = { Y,x`3 }, X = { X9,{Y} };
-A2: x = [x`1,x`2,x`3] by A1,Th48
-    .= [[x`1,x`2],x`3];
-  then x = x`1 or x = x`2 implies X in Y9 & Y9 in Y & Y in X9 & X9 in X by
-TARSKI:def 2;
-  hence x <> x`1 & x <> x`2 by ORDINAL1:2;
-  x`3 = (x qua set)`2 by A1,Th50;
-  hence thesis by A2,Th20;
+  set Y9 = { x`1_3,x`2_3 }, Y = { Y9,{x`1_3}},
+      X9 = { Y,x`3_3 }, X = { X9,{Y} };
+A2: x = [x`1_3,x`2_3,x`3_3]
+    .= [[x`1_3,x`2_3],x`3_3];
+  then x = x`1_3 or x = x`2_3 implies X in Y9 & Y9 in Y & Y in X9 & X9 in X
+    by TARSKI:def 2;
+  hence x <> x`1_3 & x <> x`2_3 by XREGULAR:8;
+  thus thesis by A2,Th20;
 end;
 
 theorem
@@ -1101,30 +625,30 @@ end;
 ::   Cartesian products of four sets
 ::
 
-theorem Th53:
+theorem Th49:
   [:X1,X2,X3,X4:] = [:[:[:X1,X2:],X3:],X4:]
 proof
   thus [:X1,X2,X3,X4:] = [:[:X1,X2,X3:],X4:] by ZFMISC_1:def 4
     .= [:[:[:X1,X2:],X3:],X4:] by ZFMISC_1:def 3;
 end;
 
-theorem Th54:
+theorem Th50:
   [:[:X1,X2:],X3,X4:] = [:X1,X2,X3,X4:]
 proof
   thus [:[:X1,X2:],X3,X4:] = [:[:[:X1,X2:],X3:],X4:] by ZFMISC_1:def 3
-    .= [:X1,X2,X3,X4:] by Th53;
+    .= [:X1,X2,X3,X4:] by Th49;
 end;
 
-theorem Th55:
+theorem Th51:
   X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} iff [:X1,X2,X3,X4:] <>
   {}
 proof
 A1: [:[:X1,X2,X3:],X4:] = [:X1,X2,X3,X4:] by ZFMISC_1:def 4;
-  X1 <> {} & X2 <> {} & X3 <> {} iff [:X1,X2,X3:] <> {} by Th35;
+  X1 <> {} & X2 <> {} & X3 <> {} iff [:X1,X2,X3:] <> {} by Th31;
   hence thesis by A1,ZFMISC_1:90;
 end;
 
-theorem Th56:
+theorem Th52:
   X1<>{} & X2<>{} & X3<>{} & X4<>{} & [:X1,X2,X3,X4:] = [:Y1,Y2,Y3
   ,Y4:] implies X1=Y1 & X2=Y2 & X3=Y3 & X4=Y4
 proof
@@ -1136,9 +660,8 @@ A3: X4<>{};
   assume [:X1,X2,X3,X4:] = [:Y1,Y2,Y3,Y4:];
   then
 A4: [:[:X1,X2,X3:],X4:] = [:[:Y1,Y2,Y3:],Y4:] by A1,ZFMISC_1:def 4;
-A5: [:X1,X2,X3:] <> {} by A2,Th35;
-  then [:X1,X2,X3:] = [:Y1,Y2,Y3:] by A3,A4,ZFMISC_1:110;
-  hence thesis by A2,A5,A3,A4,Th36,ZFMISC_1:110;
+   [:X1,X2,X3:] = [:Y1,Y2,Y3:] by A3,A4,A2,ZFMISC_1:110;
+  hence thesis by A2,A3,A4,Th32,ZFMISC_1:110;
 end;
 
 theorem
@@ -1148,16 +671,16 @@ proof
   assume
 A1: [:X1,X2,X3,X4:]<>{};
   then
-A2: X3<>{} & X4<>{} by Th55;
-  X1<>{} & X2<>{} by A1,Th55;
-  hence thesis by A2,Th56;
+A2: X3<>{} & X4<>{} by Th51;
+  X1<>{} & X2<>{} by A1,Th51;
+  hence thesis by A2,Th52;
 end;
 
 theorem
   [:X,X,X,X:] = [:Y,Y,Y,Y:] implies X = Y
 proof
   assume [:X,X,X,X:] = [:Y,Y,Y,Y:];
-  then X<>{} or Y<>{} implies thesis by Th56;
+  then X<>{} or Y<>{} implies thesis by Th52;
   hence thesis;
 end;
 
@@ -1172,176 +695,181 @@ A1: X1 <> {} & X2 <> {} & X3 <> {} and
 A2: X4 <> {};
   let x be Element of [:X1,X2,X3,X4:];
   reconsider x9=x as Element of [:[:X1,X2,X3:],X4:] by ZFMISC_1:def 4;
-  [:X1,X2,X3:] <> {} by A1,Th35;
-  then consider x123 being (Element of [:X1,X2,X3:]), xx4 such that
-A3: x9 = [x123,xx4] by A2,Lm1;
+  consider x123 being (Element of [:X1,X2,X3:]), xx4 such that
+A3: x9 = [x123,xx4] by A2,Lm1,A1;
   consider xx1,xx2,xx3 such that
 A4: x123 = [xx1,xx2,xx3] by A1,Lm2;
   take xx1,xx2,xx3,xx4;
   thus thesis by A3,A4;
 end;
 
+registration
+ let X1,X2,X3,X4 be non empty set;
+ cluster -> quadruple for Element of [:X1,X2,X3,X4:];
+ coherence
+  proof let x be Element of [:X1,X2,X3,X4:];
+   ex xx1 being Element of X1, xx2 being Element of X2,
+      xx3 being Element of X3, xx4 being Element of X4
+     st x = [xx1,xx2,xx3,xx4] by Lm3;
+   hence thesis;
+  end;
+end;
+
 definition
-  let X1,X2,X3,X4;
-  assume
-A1: X1<>{} & X2<>{} & X3<>{} & X4 <> {};
+  let X1,X2,X3,X4 be non empty set;
   let x be Element of [:X1,X2,X3,X4:];
-  func x`1 -> Element of X1 means
+  redefine func x`1_4 -> Element of X1 means
   :Def8:
   x = [x1,x2,x3,x4] implies it = x1;
-  existence
+  coherence
   proof
-    consider xx1,xx2,xx3,xx4 such that
-A2: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    take xx1;
-    thus thesis by A2,Th33;
+    consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+    [xx1,xx2,xx3,xx4]`1_4 = xx1;
+   hence x`1_4 is Element of X1 by A6;
   end;
-  uniqueness
-  proof
-    let y,z be Element of X1;
+  compatibility
+   proof let y be Element of X1;
+    thus y = x`1_4 implies for x1,x2,x3,x4 holds x = [x1,x2,x3,x4]
+      implies y = x1
+     proof assume
+Z:     y = x`1_4;
+      let x1,x2,x3,x4 such that
+W:     x = [x1,x2,x3,x4];
+       [x1,x2,x3,x4]`1_4 = x1;
+      hence y = x1 by W,Z;
+     end;
     assume
-A3: x = [x1,x2,x3,x4] implies y = x1;
-    assume
-A4: x = [x1,x2,x3,x4] implies z = x1;
-    consider xx1,xx2,xx3,xx4 such that
-A5: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    y = xx1 by A5,A3;
-    hence thesis by A5,A4;
-  end;
-  func x`2 -> Element of X2 means
+Z:   for x1,x2,x3,x4 holds x = [x1,x2,x3,x4] implies y = x1;
+    consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+     [xx1,xx2,xx3,xx4]`1_4 = xx1;
+    hence y = x`1_4 by Z,A6;
+   end;
+  redefine func x`2_4 -> Element of X2 means
   :Def9:
   x = [x1,x2,x3,x4] implies it = x2;
-  existence
+  coherence
   proof
-    consider xx1,xx2,xx3,xx4 such that
-A6: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    take xx2;
-    thus thesis by A6,Th33;
+   consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+    [xx1,xx2,xx3,xx4]`2_4 = xx2;
+   hence x`2_4 is Element of X2 by A6;
   end;
-  uniqueness
-  proof
-    let y,z be Element of X2;
+  compatibility
+   proof let y be Element of X2;
+    thus y = x`2_4 implies for x1,x2,x3,x4 holds x = [x1,x2,x3,x4]
+     implies y = x2
+     proof assume
+Z:     y = x`2_4;
+      let x1,x2,x3,x4 such that
+W:     x = [x1,x2,x3,x4];
+       [x1,x2,x3,x4]`2_4 = x2;
+      hence y = x2 by W,Z;
+     end;
     assume
-A7: x = [x1,x2,x3,x4] implies y = x2;
-    assume
-A8: x = [x1,x2,x3,x4] implies z = x2;
-    consider xx1,xx2,xx3,xx4 such that
-A9: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    y = xx2 by A9,A7;
-    hence thesis by A9,A8;
-  end;
-  func x`3 -> Element of X3 means
+Z:   for x1,x2,x3,x4 holds x = [x1,x2,x3,x4] implies y = x2;
+   consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+     [xx1,xx2,xx3,xx4]`2_4 = xx2;
+    hence y = x`2_4 by Z,A6;
+   end;
+  redefine func x`3_4 -> Element of X3 means
   :Def10:
   x = [x1,x2,x3,x4] implies it = x3;
-  existence
+  coherence
   proof
-    consider xx1,xx2,xx3,xx4 such that
-A10: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    take xx3;
-    thus thesis by A10,Th33;
+   consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+    [xx1,xx2,xx3,xx4]`3_4 = xx3;
+   hence x`3_4 is Element of X3 by A6;
   end;
-  uniqueness
-  proof
-    let y,z be Element of X3;
+  compatibility
+   proof let y be Element of X3;
+    thus y = x`3_4 implies for x1,x2,x3,x4 holds x = [x1,x2,x3,x4]
+       implies y = x3
+     proof assume
+Z:     y = x`3_4;
+      let x1,x2,x3,x4 such that
+W:     x = [x1,x2,x3,x4];
+       [x1,x2,x3,x4]`3_4 = x3;
+      hence y = x3 by W,Z;
+     end;
     assume
-A11: x = [x1,x2,x3,x4] implies y = x3;
-    assume
-A12: x = [x1,x2,x3,x4] implies z = x3;
-    consider xx1,xx2,xx3,xx4 such that
-A13: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    y = xx3 by A13,A11;
-    hence thesis by A13,A12;
-  end;
-  func x`4 -> Element of X4 means
+Z:   for x1,x2,x3,x4 holds x = [x1,x2,x3,x4] implies y = x3;
+   consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+     [xx1,xx2,xx3,xx4]`3_4 = xx3;
+    hence y = x`3_4 by Z,A6;
+   end;
+  redefine func x`4_4 -> Element of X4 means
   :Def11:
   x = [x1,x2,x3,x4] implies it = x4;
-  existence
+  coherence
   proof
-    consider xx1,xx2,xx3,xx4 such that
-A14: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    take xx4;
-    thus thesis by A14,Th33;
+   consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+    [xx1,xx2,xx3,xx4]`4_4 = xx4;
+   hence x`4_4 is Element of X4 by A6;
   end;
-  uniqueness
-  proof
-    let y,z be Element of X4;
+  compatibility
+   proof let y be Element of X4;
+    thus y = x`4_4 implies for x1,x2,x3,x4 holds x = [x1,x2,x3,x4]
+       implies y = x4
+     proof assume
+Z:     y = x`4_4;
+      let x1,x2,x3,x4 such that
+W:     x = [x1,x2,x3,x4];
+       [x1,x2,x3,x4]`4_4 = x4;
+      hence y = x4 by W,Z;
+     end;
     assume
-A15: x = [x1,x2,x3,x4] implies y = x4;
-    assume
-A16: x = [x1,x2,x3,x4] implies z = x4;
-    consider xx1,xx2,xx3,xx4 such that
-A17: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-    y = xx4 by A17,A15;
-    hence thesis by A17,A16;
-  end;
+Z:   for x1,x2,x3,x4 holds x = [x1,x2,x3,x4] implies y = x4;
+   consider xx1 being Element of X1, xx2 being Element of X2,
+             xx3 being Element of X3, xx4 being Element of X4 such that
+A6: x = [xx1,xx2,xx3,xx4] by Lm3;
+     [xx1,xx2,xx3,xx4]`4_4 = xx4;
+    hence y = x`4_4 by Z,A6;
+   end;
 end;
+
+canceled;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} implies for x being Element of [:X1,
-X2,X3,X4:] for x1,x2,x3,x4 st x = [x1,x2,x3,x4] holds x`1 = x1 & x`2 = x2 & x`3
-  = x3 & x`4 = x4 by Def8,Def9,Def10,Def11;
+ for X1,X2,X3,X4 being non empty set
+ for x being Element of
+  [:X1,X2,X3,X4:] holds x = [x`1_4,x`2_4,x`3_4,x`4_4];
 
-theorem Th60:
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} implies for x being Element of
-  [:X1,X2,X3,X4:] holds x = [x`1,x`2,x`3,x`4]
-proof
-  assume
-A1: X1<>{} & X2<>{} & X3<>{} & X4<>{};
-  let x be Element of [:X1,X2,X3,X4:];
-  consider xx1,xx2,xx3,xx4 such that
-A2: x = [xx1,xx2,xx3,xx4] by A1,Lm3;
-  thus x = [x`1,xx2,xx3,xx4] by A1,A2,Def8
-    .= [x`1,x`2,xx3,xx4] by A1,A2,Def9
-    .= [x`1,x`2,x`3,xx4] by A1,A2,Def10
-    .= [x`1,x`2,x`3,x`4] by A1,A2,Def11;
-end;
-
-theorem Th61:
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} implies for x being Element of
-[:X1,X2,X3,X4:] holds x`1 = (x qua set)`1`1`1 & x`2 = (x qua set)`1`1`2 & x`3 =
-  (x qua set)`1`2 & x`4 = (x qua set)`2
-proof
-  assume
-A1: X1<>{} & X2<>{} & X3<>{} & X4<>{};
-  let x be Element of [:X1,X2,X3,X4:];
-  thus x`1 = [x`1,x`2]`1 by Def1
-    .= [x`1,x`2,x`3]`1`1 by Def1
-    .= [x`1,x`2,x`3,x`4]`1`1`1 by Def1
-    .= (x qua set)`1`1`1 by A1,Th60;
-  thus x`2 = [x`1,x`2]`2 by Def2
-    .= [x`1,x`2,x`3]`1`2 by Def1
-    .= [x`1,x`2,x`3,x`4]`1`1`2 by Def1
-    .= (x qua set)`1`1`2 by A1,Th60;
-  thus x`3 = [x`1,x`2,x`3]`2 by Def2
-    .= [x`1,x`2,x`3,x`4]`1`2 by Def1
-    .= (x qua set)`1`2 by A1,Th60;
-  thus x`4 = [x`1,x`2,x`3,x`4]`2 by Def2
-    .= (x qua set)`2 by A1,Th60;
-end;
+canceled;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} implies for x being Element of [:X1,
-  X2,X3,X4:] holds x <> x`1 & x <> x`2 & x <> x`3 & x <> x`4
-proof
-  assume that
-A1: X1<>{} & X2<>{} and
-A2: X3<>{} & X4<>{};
+ for X1,X2,X3,X4 being non empty set
+ for x being Element of [:X1,X2,X3,X4:]
+  holds x <> x`1_4 & x <> x`2_4 & x <> x`3_4 & x <> x`4_4
+proof let X1,X2,X3,X4 be non empty set;
   let x be Element of [:X1,X2,X3,X4:];
-  reconsider x9=x as Element of [:[:X1,X2:],X3,X4:] by Th54;
-A3: [:X1,X2:] <> {} by A1,ZFMISC_1:90;
-A4: x`4 = (x qua set)`2 by A1,A2,Th61
-    .= x9`3 by A2,A3,Th50;
-  set Z9 = { x`1,x`2 }, Z = { Z9,{x`1}}, Y9 = { Z,x`3 }, Y = { Y9,{Z} }, X9 =
-  { Y,x`4 }, X = { X9,{Y} };
-  x = [x`1,x`2,x`3,x`4] by A1,A2,Th60
+   reconsider Y = [:X1,X2:], X3, X4 as non empty set;
+  reconsider x9=x as Element of [:Y,X3,X4:] by Th50;
+  set Z9 = { x`1_4,x`2_4 }, Z = { Z9,{x`1_4}},
+      Y9 = { Z,x`3_4 }, Y = { Y9,{Z} }, X9 =
+  { Y,x`4_4 }, X = { X9,{Y} };
+  x = [x`1_4,x`2_4,x`3_4,x`4_4]
     .= X;
   then
-  x = x`1 or x = x`2 implies X in Z9 & Z9 in Z & Z in Y9 & Y9 in Y & Y in
-  X9 & X9 in X by TARSKI:def 2;
-  hence x <> x`1 & x <> x`2 by ORDINAL1:4;
-  x`3 = (x qua set)`1`2 by A1,A2,Th61
-    .= x9`2 by A2,A3,Th50;
-  hence thesis by A2,A3,A4,Th51;
+  x = x`1_4 or x = x`2_4
+   implies X in Z9 & Z9 in Z & Z in Y9 & Y9 in Y & Y in X9 & X9 in X
+     by TARSKI:def 2;
+  hence x <> x`1_4 & x <> x`2_4 by XREGULAR:10;
+  x`3_4 = (x qua set)`1`2
+    .= x9`2_3;
+  hence thesis by Th47;
 end;
 
 theorem
@@ -1353,40 +881,38 @@ A1: X1 c= [:X1,X2,X3,X4:] or X1 c= [:X2,X3,X4,X1:] or X1 c= [:X3,X4,X1,
   X2:] or X1 c= [:X4,X1,X2,X3:] and
 A2: X1 <> {};
 A3: [:X1,X2,X3,X4:]<>{} or [:X2,X3,X4,X1:]<>{} or [:X3,X4,X1,X2:]<>{} or [:
-  X4,X1,X2,X3:]<>{} by A1,A2,XBOOLE_1:3;
-  then
-A4: X2<>{} & X3<>{} by Th55;
-A5: X4<>{} by A3,Th55;
+  X4,X1,X2,X3:]<>{} by A1,A2;
+   reconsider X1,X2,X3,X4 as non empty set by A3,Th51;
   per cases by A1;
   suppose
 A6: X1 c= [:X1,X2,X3,X4:];
     consider v such that
 A7: v in X1 and
 A8: for x1,x2,x3,x4 st x1 in X1 or x2 in X1 holds v <> [x1,x2,x3,x4]
-    by A2,Th34;
+    by Th30;
     reconsider v as Element of [:X1,X2,X3,X4:] by A6,A7;
-    v = [v`1,v`2,v`3,v`4] by A2,A4,A5,Th60;
-    hence contradiction by A2,A8;
+    v = [v`1_4,v`2_4,v`3_4,v`4_4];
+    hence contradiction by A8;
   end;
   suppose
     X1 c= [:X2,X3,X4,X1:];
-    then X1 c= [:[:X2,X3:],X4,X1:] by Th54;
-    hence thesis by A2,Th49;
+    then X1 c= [:[:X2,X3:],X4,X1:] by Th50;
+    hence thesis by Th45;
   end;
   suppose
     X1 c= [:X3,X4,X1,X2:];
-    then X1 c= [:[:X3,X4:],X1,X2:] by Th54;
-    hence thesis by A2,Th49;
+    then X1 c= [:[:X3,X4:],X1,X2:] by Th50;
+    hence thesis by Th45;
   end;
   suppose
 A9: X1 c= [:X4,X1,X2,X3:];
     consider v such that
 A10: v in X1 and
 A11: for x1,x2,x3,x4 st x1 in X1 or x2 in X1 holds v <> [x1,x2,x3,x4]
-    by A2,Th34;
+    by Th30;
     reconsider v as Element of [:X4,X1,X2,X3:] by A9,A10;
-    v = [v`1,v`2,v`3,v`4] by A2,A4,A5,Th60;
-    hence thesis by A2,A11;
+    v = [v`1_4,v`2_4,v`3_4,v`4_4];
+    hence thesis by A11;
   end;
 end;
 
@@ -1397,7 +923,7 @@ proof
   assume
 A1: [:X1,X2,X3,X4:] meets [:Y1,Y2,Y3,Y4:];
 A2: [:[:[:X1,X2:],X3:],X4:] = [:X1,X2,X3,X4:] & [:[:[:Y1,Y2:],Y3:],Y4:] = [:
-  Y1, Y2,Y3,Y4:] by Th53;
+  Y1, Y2,Y3,Y4:] by Th49;
   then
 A3: [:[:X1,X2:],X3:] meets [:[:Y1,Y2:],Y3:] by A1,ZFMISC_1:104;
   then [:X1,X2:] meets [:Y1,Y2:] by ZFMISC_1:104;
@@ -1407,74 +933,88 @@ end;
 theorem
   [:{x1},{x2},{x3},{x4}:] = { [x1,x2,x3,x4] }
 proof
-  thus [:{x1},{x2},{x3},{x4}:] = [:[:{x1},{x2}:],{x3},{x4}:] by Th54
+  thus [:{x1},{x2},{x3},{x4}:] = [:[:{x1},{x2}:],{x3},{x4}:] by Th50
     .= [:{[x1,x2]},{x3},{x4}:] by ZFMISC_1:29
-    .= {[[x1,x2],x3,x4]} by Th39
+    .= {[[x1,x2],x3,x4]} by Th35
     .= { [x1,x2,x3,x4] };
 end;
 
 :: Ordered pairs
 
-theorem Th66:
+theorem Th62:
   [:X,Y:] <> {} implies for x being Element of [:X,Y:] holds x <>
   x`1 & x <> x`2
 proof
   assume [:X,Y:] <> {};
   then X <> {} & Y <> {} by ZFMISC_1:90;
-  hence thesis by Th26;
+  hence thesis by Th24;
 end;
 
 theorem
-  x in [:X,Y:] implies x <> x`1 & x <> x`2 by Th66;
+  x in [:X,Y:] implies x <> x`1 & x <> x`2 by Th62;
 
 :: Triples
 
 reserve A1 for Subset of X1,
   A2 for Subset of X2,
   A3 for Subset of X3,
-  A4 for
-  Subset of X4;
+  A4 for Subset of X4;
 
 reserve x for Element of [:X1,X2,X3:];
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} implies for x1,x2,x3 st x = [x1,x2,x3] holds
-  x`1 = x1 & x`2 = x2 & x`3 = x3 by Def5,Def6,Def7;
+ for X1,X2,X3 being non empty set
+ for x being Element of [:X1,X2,X3:]
+ for x1,x2,x3 st x = [x1,x2,x3] holds
+  x`1_3 = x1 & x`2_3 = x2 & x`3_3 = x3 by Def5,Def6,Def7;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & (for xx1,xx2,xx3 st x = [xx1,xx2,xx3] holds
-  y1 = xx1) implies y1 =x`1
-proof
+ for X1,X2,X3 being non empty set
+ for x being Element of [:X1,X2,X3:]
+  st for xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 st x = [xx1,xx2,xx3] holds y1 = xx1
+ holds y1 =x`1_3
+proof let X1,X2,X3 be non empty set;
+  let x be Element of [:X1,X2,X3:];
   assume that
-A1: X1<>{} & X2<>{} & X3<>{} and
-A2: for xx1,xx2,xx3 st x = [xx1,xx2,xx3] holds y1 = xx1;
-  x = [x`1,x`2,x`3] by A1,Th48;
+A2: for xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 st x = [xx1,xx2,xx3] holds y1 = xx1;
+  x = [x`1_3,x`2_3,x`3_3];
   hence thesis by A2;
 end;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & (for xx1,xx2,xx3 st x = [xx1,xx2,xx3] holds
-  y2 = xx2) implies y2 =x`2
-proof
+ for X1,X2,X3 being non empty set
+ for x being Element of [:X1,X2,X3:]
+  st for xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 st x = [xx1,xx2,xx3] holds  y2 = xx2
+ holds y2 =x`2_3
+proof let X1,X2,X3 be non empty set;
+  let x be Element of [:X1,X2,X3:];
   assume that
-A1: X1<>{} & X2<>{} & X3<>{} and
-A2: for xx1,xx2,xx3 st x = [xx1,xx2,xx3] holds y2 = xx2;
-  x = [x`1,x`2,x`3] by A1,Th48;
+A2: for xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 st x = [xx1,xx2,xx3] holds y2 = xx2;
+  x = [x`1_3,x`2_3,x`3_3];
   hence thesis by A2;
 end;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & (for xx1,xx2,xx3 st x = [xx1,xx2,xx3] holds
-  y3 = xx3) implies y3 =x`3
+ for X1,X2,X3 being non empty set
+ for x being Element of [:X1,X2,X3:]
+  st for xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 st x = [xx1,xx2,xx3] holds y3 = xx3
+ holds y3 =x`3_3
 proof
+ let X1,X2,X3 be non empty set;
+  let x be Element of [:X1,X2,X3:];
   assume that
-A1: X1<>{} & X2<>{} & X3<>{} and
-A2: for xx1,xx2,xx3 st x = [xx1,xx2,xx3] holds y3 = xx3;
-  x = [x`1,x`2,x`3] by A1,Th48;
+A2: for xx1 being Element of X1,xx2 being Element of X2,
+             xx3 being Element of X3 st x = [xx1,xx2,xx3] holds y3 = xx3;
+  x = [x`1_3,x`2_3,x`3_3];
   hence thesis by A2;
 end;
 
-theorem Th72:
+theorem Th68:
   z in [: X1,X2,X3 :] implies ex x1,x2,x3 st x1 in X1 & x2 in X2 &
   x3 in X3 & z = [x1,x2,x3]
 proof
@@ -1491,7 +1031,7 @@ A5: x12 = [x1,x2] by A1,ZFMISC_1:def 2;
   hence thesis by A2,A4;
 end;
 
-theorem Th73:
+theorem Th69:
   [x1,x2,x3] in [: X1,X2,X3 :] iff x1 in X1 & x2 in X2 & x3 in X3
 proof
 A1: [x1,x2] in [:X1,X2:] iff x1 in X1 & x2 in X2 by ZFMISC_1:87;
@@ -1532,46 +1072,29 @@ A8: x12 = [x1,x2] by A4,ZFMISC_1:def 2;
   hence thesis by ZFMISC_1:def 3;
 end;
 
-theorem Th75:
-  X1 <> {} & X2 <> {} & X3 <> {} & Y1 <> {} & Y2 <> {} & Y3 <> {}
-implies for x being (Element of [:X1,X2,X3:]), y being Element of [:Y1,Y2,Y3:]
-  holds x = y implies x`1 = y`1 & x`2 = y`2 & x`3 = y`3
-proof
-  assume that
-A1: X1 <> {} & X2 <> {} & X3 <> {} and
-A2: Y1 <> {} & Y2 <> {} & Y3 <> {};
-  let x be Element of [:X1,X2,X3:];
-  let y be Element of [:Y1,Y2,Y3:];
-  assume
-A3: x = y;
-  thus x`1 = (x qua set)`1`1 by A1,Th50
-    .= y`1 by A2,A3,Th50;
-  thus x`2 = (x qua set)`1`2 by A1,Th50
-    .= y`2 by A2,A3,Th50;
-  thus x`3 = (x qua set)`2 by A1,Th50
-    .= y`3 by A2,A3,Th50;
-end;
+canceled;
 
 theorem
-  for x being Element of [:X1,X2,X3:] st x in [:A1,A2,A3:] holds x`1 in
-  A1 & x`2 in A2 & x`3 in A3
+ for X1,X2,X3 being non empty set
+ for A1 being non empty Subset of X1, A2 being non empty Subset of X2,
+     A3 being non empty Subset of X3
+  for x being Element of [:X1,X2,X3:] st x in [:A1,A2,A3:]
+   holds x`1_3 in A1 & x`2_3 in A2 & x`3_3 in A3
 proof
+ let X1,X2,X3 be non empty set;
+ let A1 be non empty Subset of X1, A2 be non empty Subset of X2,
+     A3 be non empty Subset of X3;
   let x be Element of [:X1,X2,X3:];
   assume
-A1: x in [:A1,A2,A3:];
+ x in [:A1,A2,A3:];
   then reconsider y = x as Element of [:A1,A2,A3:];
-  A2 <> {} by A1,Th35;
-  then
-A2: y`2 in A2;
-  A3 <> {} by A1,Th35;
-  then
-A3: y`3 in A3;
-  A1 <> {} by A1,Th35;
-  then y`1 in A1;
-  hence thesis by A2,A3,Th75;
+A2: y`2_3 in A2;
+A3: y`3_3 in A3;
+  y`1_3 in A1;
+  hence thesis by A2,A3;
 end;
 
-theorem Th77:
+theorem Th73:
   X1 c= Y1 & X2 c= Y2 & X3 c= Y3 implies [:X1,X2,X3:] c= [:Y1,Y2,
   Y3:]
 proof
@@ -1589,51 +1112,92 @@ end;
 reserve x for Element of [:X1,X2,X3,X4:];
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} implies for x1,x2,x3,x4 st x = [x1,
-  x2,x3,x4] holds x`1 = x1 & x`2 = x2 & x`3 = x3 & x`4 = x4 by Def8,Def9,Def10
-,Def11;
+ for X1,X2,X3,X4 being non empty set
+ for x being Element of [:X1,X2,X3,X4:]
+ for x1,x2,x3,x4 being set st x = [x1,
+  x2,x3,x4] holds x`1_4 = x1 & x`2_4 = x2 & x`3_4 = x3 & x`4_4 = x4
+   by Def8,Def9,Def10,Def11;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} & (for xx1,xx2,xx3,xx4 st x = [xx1,
-  xx2,xx3,xx4] holds y1 = xx1) implies y1 =x`1
+ for X1,X2,X3,X4 being non empty set
+ for x being Element of [:X1,X2,X3,X4:]
+ st for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,xx2,xx3,xx4] holds y1 = xx1
+ holds y1 =x`1_4
 proof
+ let X1,X2,X3,X4 be non empty set;
+ let x be Element of [:X1,X2,X3,X4:];
   assume that
-A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} and
-A2: for xx1,xx2,xx3,xx4 st x = [xx1,xx2,xx3,xx4] holds y1 = xx1;
-  x = [x`1,x`2,x`3,x`4] by A1,Th60;
+A2: for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,xx2,xx3,xx4] holds y1 = xx1;
+  x = [x`1_4,x`2_4,x`3_4,x`4_4];
   hence thesis by A2;
 end;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} & (for xx1,xx2,xx3,xx4 st x = [xx1,
-  xx2,xx3,xx4] holds y2 = xx2) implies y2 =x`2
+ for X1,X2,X3,X4 being non empty set
+ for x being Element of [:X1,X2,X3,X4:]
+ st for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,
+  xx2,xx3,xx4] holds y2 = xx2
+ holds y2 =x`2_4
 proof
+ let X1,X2,X3,X4 be non empty set;
+ let x be Element of [:X1,X2,X3,X4:];
   assume that
-A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} and
-A2: for xx1,xx2,xx3,xx4 st x = [xx1,xx2,xx3,xx4] holds y2 = xx2;
-  x = [x`1,x`2,x`3,x`4] by A1,Th60;
+A2: for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,xx2,xx3,xx4] holds y2 = xx2;
+  x = [x`1_4,x`2_4,x`3_4,x`4_4];
   hence thesis by A2;
 end;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} & (for xx1,xx2,xx3,xx4 st x = [xx1,
-  xx2,xx3,xx4] holds y3 = xx3) implies y3 =x`3
+ for X1,X2,X3,X4 being non empty set
+ for x being Element of [:X1,X2,X3,X4:]
+ st for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,
+  xx2,xx3,xx4] holds y3 = xx3
+ holds y3 =x`3_4
 proof
+ let X1,X2,X3,X4 be non empty set;
+ let x be Element of [:X1,X2,X3,X4:];
   assume that
-A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} and
-A2: for xx1,xx2,xx3,xx4 st x = [xx1,xx2,xx3,xx4] holds y3 = xx3;
-  x = [x`1,x`2,x`3,x`4] by A1,Th60;
+A2: for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,xx2,xx3,xx4] holds y3 = xx3;
+  x = [x`1_4,x`2_4,x`3_4,x`4_4];
   hence thesis by A2;
 end;
 
 theorem
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} & (for xx1,xx2,xx3,xx4 st x = [xx1,
-  xx2,xx3,xx4] holds y4 = xx4) implies y4 =x`4
+ for X1,X2,X3,X4 being non empty set
+ for x being Element of [:X1,X2,X3,X4:]
+  st for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,
+  xx2,xx3,xx4] holds y4 = xx4
+ holds y4 =x`4_4
 proof
+ let X1,X2,X3,X4 be non empty set;
+ let x be Element of [:X1,X2,X3,X4:];
   assume that
-A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} and
-A2: for xx1,xx2,xx3,xx4 st x = [xx1,xx2,xx3,xx4] holds y4 = xx4;
-  x = [x`1,x`2,x`3,x`4] by A1,Th60;
+A2: for xx1 being Element of X1,
+             xx2 being Element of X2,
+             xx3 being Element of X3,
+             xx4 being Element of X4 st x = [xx1,xx2,xx3,xx4] holds y4 = xx4;
+  x = [x`1_4,x`2_4,x`3_4,x`4_4];
   hence thesis by A2;
 end;
 
@@ -1649,7 +1213,7 @@ A2: x4 in X4 and
 A3: z = [x123,x4] by ZFMISC_1:def 2;
   consider x1, x2, x3 such that
 A4: x1 in X1 & x2 in X2 & x3 in X3 and
-A5: x123 = [x1,x2,x3] by A1,Th72;
+A5: x123 = [x1,x2,x3] by A1,Th68;
   z = [x1,x2,x3,x4] by A3,A5;
   hence thesis by A2,A4;
 end;
@@ -1660,8 +1224,8 @@ theorem
 proof
 A1: [x1,x2] in [:X1,X2:] iff x1 in X1 & x2 in X2 by ZFMISC_1:87;
   [:X1,X2,X3,X4:] = [:[:X1,X2:],X3,X4:] & [x1,x2,x3,x4] = [[x1,x2],x3,x4]
-  by Th54;
-  hence thesis by A1,Th73;
+  by Th50;
+  hence thesis by A1,Th69;
 end;
 
 theorem
@@ -1679,7 +1243,7 @@ A1: for z holds z in Z iff ex x1,x2,x3,x4 st x1 in X1 & x2 in X2 & x3 in
       then consider x1,x2,x3,x4 such that
 A2:   x1 in X1 & x2 in X2 & x3 in X3 and
 A3:   x4 in X4 & z = [x1,x2,x3,x4] by A1;
-      [x1,x2,x3] in [:X1,X2,X3:] by A2,Th73;
+      [x1,x2,x3] in [:X1,X2,X3:] by A2,Th69;
       hence thesis by A3,ZFMISC_1:def 2;
     end;
     assume z in [:[:X1,X2,X3:],X4:];
@@ -1689,7 +1253,7 @@ A5: x4 in X4 and
 A6: z = [x123,x4] by ZFMISC_1:def 2;
     consider x1,x2,x3 such that
 A7: x1 in X1 & x2 in X2 & x3 in X3 and
-A8: x123 = [x1,x2,x3] by A4,Th72;
+A8: x123 = [x1,x2,x3] by A4,Th68;
     z = [x1,x2,x3,x4] by A6,A8;
     hence z in Z by A1,A5,A7;
   end;
@@ -1697,59 +1261,38 @@ A8: x123 = [x1,x2,x3] by A4,Th72;
   hence thesis by ZFMISC_1:def 4;
 end;
 
-theorem Th86:
-  X1<>{} & X2<>{} & X3<>{} & X4<>{} & Y1<>{} & Y2<>{} & Y3<>{} &
-Y4<>{} implies for x being (Element of [:X1,X2,X3,X4:]), y being Element of [:
-Y1,Y2,Y3,Y4:] holds x = y implies x`1 = y`1 & x`2 = y`2 & x`3 = y`3 & x`4 = y`4
-proof
-  assume that
-A1: X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} and
-A2: Y1 <> {} & Y2 <> {} & Y3 <> {} & Y4 <> {};
-  let x be Element of [:X1,X2,X3,X4:];
-  let y be Element of [:Y1,Y2,Y3,Y4:];
-  assume
-A3: x = y;
-  thus x`1 = (x qua set)`1`1`1 by A1,Th61
-    .= y`1 by A2,A3,Th61;
-  thus x`2 = (x qua set)`1`1`2 by A1,Th61
-    .= y`2 by A2,A3,Th61;
-  thus x`3 = (x qua set)`1`2 by A1,Th61
-    .= y`3 by A2,A3,Th61;
-  thus x`4 = (x qua set)`2 by A1,Th61
-    .= y`4 by A2,A3,Th61;
-end;
+canceled;
 
 theorem
-  for x being Element of [:X1,X2,X3,X4:] st x in [:A1,A2,A3,A4:] holds x
-  `1 in A1 & x`2 in A2 & x`3 in A3 & x`4 in A4
+ for X1,X2,X3,X4 being non empty set,
+     A1 being non empty Subset of X1, A2 being non empty Subset of X2,
+     A3 being non empty Subset of X3, A4 being non empty Subset of X4
+  for x being Element of [:X1,X2,X3,X4:] st x in [:A1,A2,A3,A4:]
+  holds x`1_4 in A1 & x`2_4 in A2 & x`3_4 in A3 & x`4_4 in A4
 proof
+ let X1,X2,X3,X4 be non empty set,
+     A1 be non empty Subset of X1, A2 be non empty Subset of X2,
+     A3 be non empty Subset of X3, A4 be non empty Subset of X4;
   let x be Element of [:X1,X2,X3,X4:];
   assume
-A1: x in [:A1,A2,A3,A4:];
+ x in [:A1,A2,A3,A4:];
   then reconsider y = x as Element of [:A1,A2,A3,A4:];
-  A2 <> {} by A1,Th55;
-  then
-A2: y`2 in A2;
-  A4 <> {} by A1,Th55;
-  then
-A3: y`4 in A4;
-  A3 <> {} by A1,Th55;
-  then
-A4: y`3 in A3;
-  A1 <> {} by A1,Th55;
-  then y`1 in A1;
-  hence thesis by A2,A4,A3,Th86;
+A2: y`2_4 in A2;
+A3: y`4_4 in A4;
+A4: y`3_4 in A3;
+  y`1_4 in A1;
+  hence thesis by A2,A4,A3;
 end;
 
-theorem Th88:
-  X1 c= Y1 & X2 c= Y2 & X3 c= Y3 & X4 c= Y4 implies [:X1,X2,X3,X4
-  :] c= [:Y1,Y2,Y3,Y4:]
+theorem Th84:
+  X1 c= Y1 & X2 c= Y2 & X3 c= Y3 & X4 c= Y4
+   implies [:X1,X2,X3,X4:] c= [:Y1,Y2,Y3,Y4:]
 proof
 A1: [:X1,X2,X3,X4:] = [:[:X1,X2,X3:],X4:] & [:Y1,Y2,Y3,Y4:] = [:[:Y1,Y2,Y3:]
   ,Y4 :] by ZFMISC_1:def 4;
   assume X1 c= Y1 & X2 c= Y2 & X3 c= Y3;
   then
-A2: [:X1,X2,X3:] c= [:Y1,Y2,Y3:] by Th77;
+A2: [:X1,X2,X3:] c= [:Y1,Y2,Y3:] by Th73;
   assume X4 c= Y4;
   hence thesis by A2,A1,ZFMISC_1:96;
 end;
@@ -1763,13 +1306,13 @@ end;
 definition
   let X1,X2,X3,A1,A2,A3;
   redefine func [:A1,A2,A3:] -> Subset of [:X1,X2,X3:];
-  coherence by Th77;
+  coherence by Th73;
 end;
 
 definition
   let X1,X2,X3,X4,A1,A2,A3,A4;
   redefine func [:A1,A2,A3,A4:] -> Subset of [:X1,X2,X3,X4:];
-  coherence by Th88;
+  coherence by Th84;
 end;
 
 begin :: Addenda
@@ -1852,11 +1395,7 @@ reserve x for set;
 
 theorem
   [[x1,x2],y]`11 = x1 & [[x1,x2],y]`12 = x2 & [x,[y1,y2]]`21 = y1 & [x,[
-  y1,y2]]`22 = y2
-proof
-  [[x1,x2],y]`1 = [x1,x2] & [x,[y1,y2]]`2 = [y1,y2] by Def1,Def2;
-  hence thesis by Def1,Def2;
-end;
+  y1,y2]]`22 = y2;
 
 :: missing, 2007.04.13, A.T.
 
@@ -1865,13 +1404,13 @@ theorem
 proof
   assume
 A1: x in R;
-  then x = [x`1,x`2] by Th23;
-  hence thesis by A1,RELAT_1:def 4,def 5;
+  then x = [x`1,x`2] by Th21;
+  hence thesis by A1,XTUPLE_0:def 12,def 13;
 end;
 
 :: 2009.08.29, A.T.
 
-theorem Th92:
+theorem Th87:
  for R being non empty Relation, x being set
   holds Im(R,x) = { I`2 where I is Element of R: I`1 = x }
  proof let R be non empty Relation, x being set;
@@ -1883,7 +1422,7 @@ theorem Th92:
 A1:   [y,z] in R and
 A2:   y in {x} by RELAT_1:def 13;
 A3:   y = x by A2,TARSKI:def 1;
-     y = [y,z]`1 & z = [y,z]`2 by Def1,Def2;
+     y = [y,z]`1 & z = [y,z]`2;
     hence z in X by A1,A3;
    end;
   let z;
@@ -1891,7 +1430,7 @@ A3:   y = x by A2,TARSKI:def 1;
    then consider I being Element of R such that
 A4: z= I`2 and
 A5: I`1 = x;
-A6: I = [I`1,I`2] by Th23;
+A6: I = [I`1,I`2] by Th21;
    x in {x} by TARSKI:def 1;
   hence z in Im(R,x) by A4,A5,A6,RELAT_1:def 13;
  end;
@@ -1902,20 +1441,20 @@ proof
  assume
 A1: x in R;
   then x`2 in { I`2 where I is Element of R: I`1 = x`1 };
- hence thesis by A1,Th92;
+ hence thesis by A1,Th87;
 end;
 
-theorem Th94:
+theorem Th89:
  x in R & y in R & x`1 = y`1 & x`2 = y`2 implies x = y
  proof assume x in R & y in R;
-   then x = [x`1,x`2] & y = [y`1,y`2] by Th23;
+   then x = [x`1,x`2] & y = [y`1,y`2] by Th21;
   hence thesis;
  end;
 
 theorem
  for R being non empty Relation, x,y being Element of R
    st x`1 = y`1 & x`2 = y`2
- holds x = y by Th94;
+ holds x = y by Th89;
 
 :: 2010.05.120, A.T.
 

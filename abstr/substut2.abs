@@ -3,7 +3,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,39 +20,40 @@ environ
       RELAT_1, BVFUNC_2, XBOOLE_0, FUNCT_1, TARSKI, ZF_LANG, FUNCT_4, FUNCOP_1,
       CLASSES2, SUBLEMMA, PARTFUN1, CQC_SIM1, ARYTM_3, XXREAL_0, ARYTM_1,
       SUBSTUT2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
-      QC_LANG2, QC_LANG3, PARTFUN1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
-      CQC_LANG, FUNCOP_1, RELAT_1, FUNCT_4, FUNCT_2, CQC_SIM1, DOMAIN_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, FINSEQ_1, FUNCT_1,
+      QC_LANG1, QC_LANG2, QC_LANG3, PARTFUN1, NUMBERS, XCMPLX_0, XXREAL_0,
+      NAT_1, CQC_LANG, FUNCOP_1, RELAT_1, FUNCT_4, FUNCT_2, CQC_SIM1, DOMAIN_1,
       MCART_1, SUBSTUT1, SUBLEMMA;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, INT_1, QC_LANG3, CQC_SIM1,
-      SUBLEMMA, RELSET_1;
+      SUBLEMMA, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       XXREAL_0, XREAL_0, NAT_1, INT_1, QC_LANG1, CQC_LANG, SUBSTUT1, SUBLEMMA,
-      CARD_1;
+      CARD_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Further Properties of Substitution
 
+reserve Al for QC-alphabet;
 reserve a,b,b1 for set,
   i,j,k,n for Element of NAT,
-  p,q,r,s for Element of CQC-WFF,
-  x,y,y1 for bound_QC-variable,
-  P for QC-pred_symbol of k,
-  l,ll for CQC-variable_list of k,
-  Sub,Sub1 for CQC_Substitution,
-  S,S1,S2 for Element of CQC-Sub-WFF,
-  P1,P2 for Element of QC-pred_symbols;
+  p,q,r,s for Element of CQC-WFF(Al),
+  x,y,y1 for bound_QC-variable of Al,
+  P for QC-pred_symbol of k,Al,
+  l,ll for CQC-variable_list of k,Al,
+  Sub,Sub1 for CQC_Substitution of Al,
+  S,S1,S2 for Element of CQC-Sub-WFF(Al),
+  P1,P2 for Element of QC-pred_symbols(Al);
 
 theorem :: SUBSTUT2:1
-  for Sub holds ex S st S`1 = VERUM & S`2 = Sub;
+  for Sub holds ex S st S`1 = VERUM(Al) & S`2 = Sub;
 
 theorem :: SUBSTUT2:2
   for Sub holds ex S st S`1 = P!ll & S`2 = Sub;
 
 theorem :: SUBSTUT2:3
-  for k,l being Element of NAT st P is (QC-pred_symbol of k) & P is (
-  QC-pred_symbol of l) holds k = l;
+  for k,l being Element of NAT st P is (QC-pred_symbol of k,Al) & P is (
+  QC-pred_symbol of l,Al) holds k = l;
 
 theorem :: SUBSTUT2:4
   (for Sub holds ex S st S`1 = p & S`2 = Sub) implies for Sub holds
@@ -64,8 +65,8 @@ st S`1 = q & S`2 = Sub) implies for Sub holds ex S st S`1 = p '&' q & S`2 = Sub
 ;
 
 definition
-  let p, Sub;
-  redefine func [p,Sub] -> Element of [:QC-WFF,vSUB:];
+  let Al, p, Sub;
+  redefine func [p,Sub] -> Element of [:QC-WFF(Al),vSUB(Al):];
 end;
 
 theorem :: SUBSTUT2:6
@@ -95,48 +96,51 @@ theorem :: SUBSTUT2:12
   for p, Sub holds ex S st S`1 = p & S`2 = Sub;
 
 definition
-  let p,Sub;
-  redefine func [p,Sub] -> Element of CQC-Sub-WFF;
+  let Al,p,Sub;
+  redefine func [p,Sub] -> Element of CQC-Sub-WFF(Al);
 end;
 
 notation
-  let x,y;
+  let Al,x,y;
   synonym Sbst(x,y) for x .--> y;
 end;
 
 definition
-  let x,y;
-  redefine func Sbst(x,y) -> CQC_Substitution;
+  let Al,x,y;
+  redefine func Sbst(x,y) -> CQC_Substitution of Al;
 end;
 
 begin :: Facts about Substitution and Quantifiers of a Formula
 
 definition
-
-  let p,x,y;
-  func p.(x,y) -> Element of CQC-WFF equals
+  let Al,p,x,y;
+  func p.(x,y) -> Element of CQC-WFF(Al) equals
 :: SUBSTUT2:def 1
   CQC_Sub([p,Sbst(x,y)]);
 end;
 
 scheme :: SUBSTUT2:sch 1
 
-  CQCInd1 {P[set]} : for p holds P[p]
+  CQCInd1 { Al() -> QC-alphabet, P[set]} :
+for p being Element of CQC-WFF(Al()) holds P[p]
 provided
- for p st QuantNbr(p) = 0 holds P[p] and
- for k st for p st QuantNbr(p) = k holds P[p] holds for p st QuantNbr
-(p) = k+1 holds P[p];
+ for p being Element of CQC-WFF(Al()) st QuantNbr(p) = 0 holds P[p] and
+ for k st for p being Element of CQC-WFF(Al()) st QuantNbr(p) = k
+holds P[p] holds for p being Element of CQC-WFF(Al()) st QuantNbr(p) = k+1
+holds P[p];
 
 scheme :: SUBSTUT2:sch 2
 
-  CQCInd2 {P[set]}: for p holds P[p]
+  CQCInd2 {Al() -> QC-alphabet, P[set]}:
+   for p being Element of CQC-WFF(Al()) holds P[p]
 provided
- for p st QuantNbr(p) <= 0 holds P[p] and
- for k st for p st QuantNbr(p) <= k holds P[p] holds for p st
-QuantNbr(p) <= k+1 holds P[p];
+ for p being Element of CQC-WFF(Al()) st QuantNbr(p) <= 0 holds P[p] and
+ for k st for p being Element of CQC-WFF(Al()) st QuantNbr(p) <= k
+holds P[p] holds for p being Element of CQC-WFF(Al())
+st QuantNbr(p) <= k+1 holds P[p];
 
 theorem :: SUBSTUT2:13
-  VERUM.(x,y) = VERUM;
+  VERUM(Al).(x,y) = VERUM(Al);
 
 theorem :: SUBSTUT2:14
   (P!l).(x,y) = P!CQC_Subst(l,Sbst(x,y)) & QuantNbr(P!l) = QuantNbr((P!l
@@ -146,8 +150,9 @@ theorem :: SUBSTUT2:15
   QuantNbr(P!l) = QuantNbr(CQC_Sub([P!l,Sub]));
 
 definition
-  let S be Element of QC-Sub-WFF;
-  redefine func S`2 -> CQC_Substitution;
+  let Al;
+  let S be Element of QC-Sub-WFF(Al);
+  redefine func S`2 -> CQC_Substitution of Al;
 end;
 
 theorem :: SUBSTUT2:16
@@ -175,21 +180,22 @@ theorem :: SUBSTUT2:21
   QuantNbr(p '&' q) = QuantNbr(CQC_Sub[p '&' q,Sub]);
 
 definition
-  func CFQ -> Function of CQC-Sub-WFF,vSUB equals
+  let Al;
+  func CFQ(Al) -> Function of CQC-Sub-WFF(Al),vSUB(Al) equals
 :: SUBSTUT2:def 2
-  QSub|CQC-Sub-WFF;
+  (QSub(Al))|CQC-Sub-WFF(Al);
 end;
 
 definition
-  let p,x,Sub;
-  func QScope(p,x,Sub) -> CQC-WFF-like Element of [:QC-Sub-WFF,
-  bound_QC-variables:] equals
+  let Al,p,x,Sub;
+  func QScope(p,x,Sub) -> CQC-WFF-like Element of [:QC-Sub-WFF(Al),
+  bound_QC-variables(Al):] equals
 :: SUBSTUT2:def 3
-  [[p,CFQ.[All(x,p),Sub]],x];
+  [[p,(CFQ(Al)).[All(x,p),Sub]],x];
 end;
 
 definition
-  let p,x,Sub;
+  let Al,p,x,Sub;
   func Qsc(p,x,Sub) -> second_Q_comp of QScope(p,x,Sub) equals
 :: SUBSTUT2:def 4
   Sub;
@@ -204,7 +210,7 @@ theorem :: SUBSTUT2:23
   for Sub holds QuantNbr(All(x,p)) = QuantNbr(CQC_Sub([All(x,p),Sub]));
 
 theorem :: SUBSTUT2:24
-  QuantNbr(VERUM) = QuantNbr(CQC_Sub([VERUM,Sub]));
+  QuantNbr(VERUM(Al)) = QuantNbr(CQC_Sub([VERUM(Al),Sub]));
 
 theorem :: SUBSTUT2:25
   for p, Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]));
@@ -214,27 +220,34 @@ theorem :: SUBSTUT2:26
 
 scheme :: SUBSTUT2:sch 3
 
-  CQCInd3 {P[set]} : for p st QuantNbr(p) = 0 holds P[p]
+  CQCInd3 {Al() -> QC-alphabet, P[set]} :
+for p being Element of CQC-WFF(Al()) st QuantNbr(p) = 0 holds P[p]
 provided
- for r,s,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[r] implies P['not' r]) & (P[r]
-& P[s] implies P[r '&' s]);
+ for r,s being Element of CQC-WFF(Al())
+for x being bound_QC-variable of Al()
+for k
+for l being CQC-variable_list of k,Al()
+for P being QC-pred_symbol of k,Al()
+holds P[VERUM(Al())] & P[P!l] &
+(P[r] implies P['not' r]) & (P[r] & P[s] implies P[r '&' s]);
 
 begin :: Results about the Construction of Formulas
 
-reserve F1,F2,F3 for QC-formula,
+reserve F1,F2,F3 for QC-formula of Al,
   L for FinSequence;
 
 definition
-  let G,H be QC-formula;
+  let Al;
+  let G,H be QC-formula of Al;
   assume
  G is_subformula_of H;
   mode PATH of G,H -> FinSequence means
 :: SUBSTUT2:def 5
 
     1 <= len it & it.1 = G & it.(
-len it) = H & for k st 1 <= k & k < len it ex G1,H1 being Element of QC-WFF st
-    it.k = G1 & it.(k+1) = H1 & G1 is_immediate_constituent_of H1;
+len it) = H & for k st 1 <= k & k < len it ex G1,H1
+being Element of QC-WFF(Al) st it.k = G1 & it.(k+1) = H1 &
+G1 is_immediate_constituent_of H1;
 end;
 
 theorem :: SUBSTUT2:27
@@ -243,7 +256,7 @@ theorem :: SUBSTUT2:27
 
 theorem :: SUBSTUT2:28
   for L being PATH of F1,p st F1 is_subformula_of p & 1 <= i & i
-  <= len L holds L.i is Element of CQC-WFF;
+  <= len L holds L.i is Element of CQC-WFF(Al);
 
 theorem :: SUBSTUT2:29
   for L being PATH of q,p st QuantNbr(p) <= n & q is_subformula_of

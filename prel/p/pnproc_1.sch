@@ -5,6 +5,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -21,23 +22,23 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="75"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="16"/>
-<Adjective nr="22">
+<Adjective nr="19"/>
+<Adjective nr="25">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="75"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="26">
-<Func kind="K" nr="27">
+<Func kind="K" nr="38">
+<Func kind="K" nr="39">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="75"/>
 </Func>
 </Func>
 </Typ>
@@ -54,7 +55,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="40">
+<Func kind="K" nr="52">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

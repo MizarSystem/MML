@@ -2,7 +2,7 @@
 ::  by J\'ozef Bia{\l}as
 ::
 :: Received October 27, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -48,7 +48,7 @@ definition
   let X be set;
   let F be BinOp of X;
   mode Preserv of F -> Subset of X means
-    :Def2:
+    :Def1:
     for x being set holds x in [: it,it:] implies F.x in it;
   existence
   proof
@@ -81,7 +81,7 @@ registration
   coherence;
 end;
 
-theorem Th3:
+theorem Th2:
   for X being set, F being BinOp of X, A being Preserv of F holds F
   ||A is BinOp of A
 proof
@@ -96,7 +96,7 @@ A1: dom (F||A) = [:A,A:] by RELAT_1:62,ZFMISC_1:96;
     assume
 A2: x in [:A,A:];
     then F||A.x=F.x by A1,FUNCT_1:47;
-    hence thesis by A2,Def2;
+    hence thesis by A2,Def1;
   end;
   hence thesis by A1,FUNCT_2:3;
 end;
@@ -106,10 +106,10 @@ definition
   let F be BinOp of X;
   let A be Preserv of F;
   redefine func F||A -> BinOp of A;
-  coherence by Th3;
+  coherence by Th2;
 end;
 
-theorem Th4:
+theorem Th3:
   for X being set holds X is non trivial iff for x being
   set holds X\{x} is non empty set
 proof
@@ -130,16 +130,16 @@ A4: for x being set holds X\{x} is non empty set;
    X\{{}} c= X;
    then X is non empty by A4;
    then consider x being set such that
-W1:  x in X by XBOOLE_0:def 1;
+A5:  x in X by XBOOLE_0:def 1;
    X\{x} is non empty by A4;
    then consider y being set such that
-W2:  y in X\{x} by XBOOLE_0:def 1;
+A6:  y in X\{x} by XBOOLE_0:def 1;
   take x,y;
-  thus x in X by W1;
-  thus y in X by W2;
+  thus x in X by A5;
+  thus y in X by A6;
    x in {x} by TARSKI:def 1;
    then not x in X\{x} by XBOOLE_0:def 5;
-  hence x <> y by W2;
+  hence x <> y by A6;
 end;
 
 theorem
@@ -171,7 +171,7 @@ definition
   correctness;
 end;
 
-theorem Th8:
+theorem Th5:
   for X being set holds for A being Subset of X holds ex F being
   BinOp of X st for x being set holds x in [:A,A:] implies F.x in A
 proof
@@ -196,12 +196,12 @@ definition
   let X be set;
   let A be Subset of X;
   mode Presv of X,A -> BinOp of X means
-    :Def6:
+    :Def4:
     for x being set holds x in [:A, A:] implies it.x in A;
-  existence by Th8;
+  existence by Th5;
 end;
 
-theorem Th9:
+theorem Th6:
   for X being set, A being Subset of X, F being Presv of X,A holds
   F||A is BinOp of A
 proof
@@ -218,7 +218,7 @@ A1: dom (F||A) = [:A,A:] by RELAT_1:62,ZFMISC_1:96;
     assume
 A2: x in [:A,A:];
     then F||A.x=F.x by A1,FUNCT_1:47;
-    hence thesis by A2,Def6;
+    hence thesis by A2,Def4;
   end;
   hence thesis by A1,FUNCT_2:3;
 end;
@@ -229,19 +229,19 @@ definition
   let F be Presv of X,A;
   func F|||A -> BinOp of A equals
   F||A;
-  coherence by Th9;
+  coherence by Th6;
 end;
 
 definition
   let A be set;
   let x be Element of A;
   mode DnT of x,A -> BinOp of A means
-    :Def8:
+    :Def6:
     for y being set holds y in [:A\{x },A\{x}:] implies it.y in A\{x};
-  existence by Th8;
+  existence by Th5;
 end;
 
-theorem Th11:
+theorem Th7:
   for A being non trivial set holds for x being Element of A holds
   for F being DnT of x,A holds F||(A\{x}) is BinOp of A\{x}
 proof
@@ -257,7 +257,7 @@ A1: dom(F||(A\{x})) = [:A\{x},A\{x}:] by RELAT_1:62,ZFMISC_1:96;
     assume
 A2: y in [:A\{x},A\{x}:];
     then F||(A\{x}).y=F.y by A1,FUNCT_1:47;
-    hence thesis by A2,Def8;
+    hence thesis by A2,Def6;
   end;
   hence thesis by A1,FUNCT_2:3;
 end;
@@ -268,23 +268,23 @@ definition
   let F be DnT of x,A;
   func F!(A,x) -> BinOp of A\{x} equals
   F||(A\{x});
-  coherence by Th11;
+  coherence by Th7;
 end;
 
-theorem Th12:
+theorem Th8:
   for F being non trivial set holds for A being Singleton of F
   holds F\A is non empty set
 proof
   let F be non trivial set;
   let A be Singleton of F;
   ex x being Element of F st A = {x} by CARD_1:65;
-  hence thesis by Th4;
+  hence thesis by Th3;
 end;
 
 registration
   let F be non trivial set;
   let A be Singleton of F;
   cluster F\A -> non empty;
-  coherence by Th12;
+  coherence by Th8;
 end;
 

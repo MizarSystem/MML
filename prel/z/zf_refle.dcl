@@ -10,6 +10,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -25,7 +26,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -42,7 +43,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -57,7 +58,7 @@
 </Adjective>
 <Adjective nr="10"/>
 <Adjective nr="16"/>
-<Adjective nr="44">
+<Adjective nr="48">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

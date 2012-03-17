@@ -2,7 +2,7 @@
 ::  by Andrzej Kondracki
 ::
 :: Received December 17, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,20 +18,21 @@ environ
       XBOOLE_0, ZF_LANG, NUMBERS, VALUED_1, RELAT_1, TARSKI, ZFMISC_1, MCART_1,
       CARD_1, XXREAL_0, NAT_1, ARYTM_3, ZF_MODEL, FUNCT_2, ORDINAL4, FUNCOP_1,
       XBOOLEAN, BVFUNC_2, ZF_FUND1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, NUMBERS, NAT_1,
-      ORDINAL1, ORDINAL4, CARD_1, FINSET_1, RELAT_1, CLASSES2, ZF_REFLE,
-      ZF_LANG, ZF_MODEL, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, MCART_1,
-      FUNCOP_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, DOMAIN_1, NUMBERS, ORDINAL1,
+      NAT_1, ORDINAL4, CARD_1, FINSET_1, RELAT_1, CLASSES2, ZF_REFLE, ZF_LANG,
+      ZF_MODEL, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, MCART_1, FUNCOP_1,
+      XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1,
       CLASSES1, ORDINAL4, ZF_MODEL, RELSET_1;
  registrations FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1, XREAL_0, CARD_1,
-      CLASSES2, ZF_LANG, ZF_LANG1;
+      CLASSES2, ZF_LANG, ZF_LANG1, RELAT_1, XTUPLE_0;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0, ORDINAL4;
+ definitions TARSKI, XBOOLE_0, ORDINAL4, RELAT_1, XTUPLE_0;
  theorems TARSKI, ORDINAL1, ORDINAL3, CARD_1, CLASSES2, ZFMISC_1, ZF_LANG,
       ZF_LANG1, ZF_MODEL, ENUMSET1, FUNCT_1, FUNCT_2, FUNCT_5, RELAT_1,
       MCART_1, FINSET_1, GRFUNC_1, NAT_1, FUNCOP_1, WELLORD2, CLASSES1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XTUPLE_0;
  schemes FUNCT_1, FUNCT_2, ORDINAL1, FINSET_1, ZF_LANG1, BINOP_2, XBOOLE_0;
 
 begin
@@ -50,63 +51,19 @@ reserve V for Universe,
   v1,v2,v3 for Element of VAR,
   H,H9 for ZF-formula;
 
-definition
-  let A,B;
-  func A(#)B -> set means
-  :Def1:
-  p in it iff ex q,r,s st p=[q,s] & [q,r] in A & [r,s] in B;
-  existence
-  proof
-    defpred PAIR[set] means ex p,r st $1=[p,r];
-    consider C such that
-A1: for o holds o in C iff o in A & PAIR[o] from XBOOLE_0:sch 1;
-    for o st o in C holds ex p,r st o=[p,r] by A1;
-    then reconsider C9=C as Relation by RELAT_1:def 1;
-    consider D such that
-A2: for o holds o in D iff o in B & PAIR[o] from XBOOLE_0:sch 1;
-    for o st o in D holds ex p,r st o=[p,r] by A2;
-    then reconsider D9=D as Relation by RELAT_1:def 1;
-    reconsider F=C9*D9 as set;
-A3: now
-      let p;
-      assume
-A4:   p in F;
-      then consider q,s such that
-A5:   p=[q,s] by RELAT_1:def 1;
-      take q;
-      consider r such that
-A6:   [q,r] in C9 and
-A7:   [r,s] in D9 by A4,A5,RELAT_1:def 8;
-      take r;
-      take s;
-      thus p=[q,s] by A5;
-      thus [q,r] in A by A1,A6;
-      thus [r,s] in B by A2,A7;
-    end;
-    take F;
-    now
-      let p;
-      given q,r,s such that
-A8:   p=[q,s] and
-A9:   [q,r] in A & [r,s] in B;
-      [q,r] in C9 & [r,s] in D9 by A1,A2,A9;
-      hence p in F by A8,RELAT_1:def 8;
-    end;
-    hence thesis by A3;
-  end;
-  uniqueness
-  proof
-    defpred P[set] means ex q,r,s st $1=[q,s] & [q,r] in A & [r,s] in B;
-    let C,D such that
-A10: for p holds p in C iff P[p] and
-A11: for p holds p in D iff P[p];
-    thus thesis from XBOOLE_0:sch 2(A10,A11);
+registration let V;
+ cluster Relation-like for Element of V;
+ existence
+  proof set u = the Element of V;
+   take [:u,u:];
+   thus thesis;
   end;
 end;
 
 definition
+ canceled;
   let V,x,y;
-  redefine func x(#)y -> Element of V;
+  redefine func x(#)y -> Relation-like Element of V;
   coherence
   proof
     set Z=x(#)y;
@@ -130,52 +87,50 @@ A5:     dom g=[:A,B:] & for o st o in [:A,B:] holds g.o=G(o) from
         thus dom g=[:A,B:] by A5;
         thus Z c= rng g
         proof
-          let o;
-          assume o in Z;
-          then consider p,q,r such that
-A6:       o=[p,r] and
-A7:       [p,q] in x & [q,r] in y by Def1;
+          let p,r;
+          assume [p,r] in Z;
+          then consider q such that
+A6:       [p,q] in x & [q,r] in y by RELAT_1:def 8;
           set s=[[p,q],[q,r]];
-          ([p,q]) in A & ([q,r]) in B by A4,A2,A7;
+          ([p,q]) in A & ([q,r]) in B by A4,A2,A6;
           then
-A8:       s in [:A,B:] by ZFMISC_1:def 2;
+A7:       s in [:A,B:] by ZFMISC_1:def 2;
           then g.s=[s`1`1,s`2`2] by A5
-            .=[[p,q]`1,s`2`2] by MCART_1:7
-            .=[[p,q]`1,[q,r]`2] by MCART_1:7
-            .=[p,[q,r]`2] by MCART_1:7
-            .=o by A6,MCART_1:7;
-          hence thesis by A5,A8,FUNCT_1:def 3;
+            .=[[p,q]`1,s`2`2]
+            .=[[p,q]`1,[q,r]`2]
+            .=[p,[q,r]`2]
+            .=[p,r];
+          hence thesis by A5,A7,FUNCT_1:def 3;
         end;
       end;
       then
-A9:   card Z c= card [:A,B:] by CARD_1:12;
+A8:   card Z c= card [:A,B:] by CARD_1:12;
       o in A implies o in x by A4;
       then A c= x by TARSKI:def 3;
       then A in V by CLASSES1:def 1;
       then [:A,B:] in V by A3,CLASSES2:61;
       then card [:A,B:] in card V by CLASSES2:1;
-      hence card Z in card V by A9,ORDINAL1:12;
+      hence card Z in card V by A8,ORDINAL1:12;
     end;
     Z c= V
     proof
-      let o;
-      assume o in Z;
-      then consider q,r,s such that
-A10:  o=[q,s] and
-A11:  [q,r] in x and
-A12:  [r,s] in y by Def1;
+      let q,s;
+      assume [q,s] in Z;
+      then consider r such that
+A9:  [q,r] in x and
+A10:  [r,s] in y by RELAT_1:def 8;
       y c= V by ORDINAL1:def 2;
-      then {{r,s},{r}} c= V by A12,ORDINAL1:def 2;
+      then {{r,s},{r}} c= V by A10,ORDINAL1:def 2;
       then {r,s} in V by ZFMISC_1:32;
       then {r,s} c= V by ORDINAL1:def 2;
       then
-A13:  s in V by ZFMISC_1:32;
+A11:  s in V by ZFMISC_1:32;
       x c= V by ORDINAL1:def 2;
-      then {{q,r},{q}} c= V by A11,ORDINAL1:def 2;
+      then {{q,r},{q}} c= V by A9,ORDINAL1:def 2;
       then {q} in V by ZFMISC_1:32;
       then {q} c= V by ORDINAL1:def 2;
       then q in V by ZFMISC_1:31;
-      hence thesis by A10,A13,CLASSES2:58;
+      hence thesis by A11,CLASSES2:58;
     end;
     hence thesis by A1,CLASSES1:1;
   end;
@@ -858,7 +813,7 @@ A14:      g.o in rng g by FUNCT_1:def 3;
 A15:    q={[x,y]} and
 A16:    x in r and
 A17:    y in a;
-        reconsider g=q as Function by A15,GRFUNC_1:5;
+        reconsider g=q as Function by A15;
         rng g={y} by A15,RELAT_1:9;
         then
 A18:    rng g c= a by A17,ZFMISC_1:31;
@@ -1014,7 +969,7 @@ A7: T=union F
       then consider x such that
 A8:   q=[n,x] and
 A9:   x in a;
-      reconsider g={[n,x]} as Function by GRFUNC_1:5;
+      reconsider g={[n,x]} as Function;
       rng g={x} by RELAT_1:9;
       then dom g={n} & rng g c= a by A9,RELAT_1:9,ZFMISC_1:31;
       then
@@ -1066,168 +1021,164 @@ A26:  dom h=fs /\ (fs\{n}) by A24,RELAT_1:61
         .=fs\{n} by XBOOLE_1:47;
 A27:  h=g\T
       proof
-        thus h c= g\T
+       let r,s;
+        thus [r,s] in h implies [r,s] in g\T
         proof
-          let p;
           assume
-A28:      p in h;
-          then consider r,s such that
-A29:      p=[r,s] by RELAT_1:def 1;
-          r in fs\{n} by A26,A28,A29,FUNCT_1:1;
+A28:      [r,s] in h;
+          r in fs\{n} by A26,A28,FUNCT_1:1;
           then not r in {n} by XBOOLE_0:def 5;
           then
-A30:      r<>n by TARSKI:def 1;
-A31:      not [r,s] in T
+A29:      r<>n by TARSKI:def 1;
+A30:      not [r,s] in T
           proof
             assume [r,s] in T;
             then ex x st [r,s]=[n,x] & x in a;
-            hence contradiction by A30,ZFMISC_1:27;
+            hence contradiction by A29,XTUPLE_0:1;
           end;
-          [r,s] in g by A28,A29,RELAT_1:def 11;
-          hence thesis by A29,A31,XBOOLE_0:def 5;
+          [r,s] in g by A28,RELAT_1:def 11;
+          hence thesis by A30,XBOOLE_0:def 5;
         end;
-        let p;
         assume
-A32:    p in g\T;
-        then consider r,s such that
-A33:    p=[r,s] by RELAT_1:def 1;
-A34:    s=g.r by A32,A33,FUNCT_1:1;
-A35:    r in dom g by A32,A33,FUNCT_1:1;
+A31:    [r,s] in g\T;
+A32:    s=g.r by A31,FUNCT_1:1;
+A33:    r in dom g by A31,FUNCT_1:1;
         then
-A36:    s in rng g by A34,FUNCT_1:def 3;
+A34:    s in rng g by A32,FUNCT_1:def 3;
         n<>r
         proof
-          reconsider a1=s as Element of V by A3,A25,A36,Th1;
+          reconsider a1=s as Element of V by A3,A25,A34,Th1;
           assume n=r;
-          then [r,a1] in T by A25,A36;
-          hence contradiction by A32,A33,XBOOLE_0:def 5;
+          then [r,a1] in T by A25,A34;
+          hence contradiction by A31,XBOOLE_0:def 5;
         end;
         then not r in {n} by TARSKI:def 1;
         then
-A37:    r in fs\{n} by A24,A35,XBOOLE_0:def 5;
-        then s=h.r by A34,FUNCT_1:49;
-        hence thesis by A26,A33,A37,FUNCT_1:1;
+A35:    r in fs\{n} by A24,A33,XBOOLE_0:def 5;
+        then s=h.r by A32,FUNCT_1:49;
+        hence thesis by A26,A35,FUNCT_1:1;
       end;
       rng h c= rng g by RELAT_1:70;
       then rng h c= a by A25,XBOOLE_1:1;
       then
-A38:  q in Funcs(fs\{n},a) by A22,A23,A26,A27,FUNCT_2:def 2;
+A36:  q in Funcs(fs\{n},a) by A22,A23,A26,A27,FUNCT_2:def 2;
       Funcs(fs\{n},a) in X by A1,A3,Th9;
-      then reconsider a2=q as Element of V by A38,Th1;
+      then reconsider a2=q as Element of V by A36,Th1;
       {[n,g.n]}=y/\T
       proof
         thus {[n,g.n]} c= y/\T
         proof
-          let p;
-A39:      g.n in rng g by A2,A24,FUNCT_1:def 3;
+          let r,s;
+A37:      g.n in rng g by A2,A24,FUNCT_1:def 3;
           then reconsider a1=g.n as Element of V by A3,A25,Th1;
-A40:      [n,a1] in T by A25,A39;
+A38:      [n,a1] in T by A25,A37;
+          set p = [r,s];
           assume p in {[n,g.n]};
           then
-A41:      p=[n,g.n] by TARSKI:def 1;
+A39:      p=[n,g.n] by TARSKI:def 1;
           then p in y by A2,A23,A24,FUNCT_1:1;
-          hence thesis by A41,A40,XBOOLE_0:def 4;
+          hence thesis by A39,A38,XBOOLE_0:def 4;
         end;
         let p;
         assume
-A42:    p in y/\T;
+A40:    p in y/\T;
         then p in T by XBOOLE_0:def 4;
         then
-A43:    ex x st p=[n,x] & x in a;
-        p in y by A42,XBOOLE_0:def 4;
-        then p=[n,g.n] by A23,A43,FUNCT_1:1;
+A41:    ex x st p=[n,x] & x in a;
+        p in y by A40,XBOOLE_0:def 4;
+        then p=[n,g.n] by A23,A41,FUNCT_1:1;
         hence thesis by TARSKI:def 1;
       end;
       then {[n,g.n]} \/ (y\T) in b by A20,XBOOLE_1:51;
-      then a2 in Y by A22,A38;
+      then a2 in Y by A22,A36;
       hence thesis;
     end;
     reconsider z=T as Element of V by A7;
     let q;
     assume q in Y;
     then consider x such that
-A44: q=x and
-A45: x in Funcs(fs\{n},a) and
-A46: ex u st {[n,u]} \/ x in b;
+A42: q=x and
+A43: x in Funcs(fs\{n},a) and
+A44: ex u st {[n,u]} \/ x in b;
     consider u such that
-A47: {[n,u]} \/ x in b by A46;
-    reconsider y={[n,u]} \/ x as Element of V by A4,A47,Th1;
-A48: x=y\z
+A45: {[n,u]} \/ x in b by A44;
+    reconsider y={[n,u]} \/ x as Element of V by A4,A45,Th1;
+A46: x=y\z
     proof
       consider g such that
-A49:  x=g and
-A50:  dom g=fs\{n} and
-      rng g c= a by A45,FUNCT_2:def 2;
+A47:  x=g and
+A48:  dom g=fs\{n} and
+      rng g c= a by A43,FUNCT_2:def 2;
       thus x c= y\z
       proof
         let p;
         assume
-A51:    p in x;
+A49:    p in x;
         then consider a1,a2 such that
-A52:    p=[a1,a2] by A49,RELAT_1:def 1;
-        a1 in dom g by A49,A51,A52,FUNCT_1:1;
+A50:    p=[a1,a2] by A47,RELAT_1:def 1;
+        a1 in dom g by A47,A49,A50,FUNCT_1:1;
         then
-A53:    not a1 in {n} by A50,XBOOLE_0:def 5;
-A54:    not p in z
+A51:    not a1 in {n} by A48,XBOOLE_0:def 5;
+A52:    not p in z
         proof
           assume p in z;
           then ex x9 st p=[n,x9] & x9 in a;
-          then a1=n by A52,ZFMISC_1:27;
-          hence contradiction by A53,TARSKI:def 1;
+          then a1=n by A50,XTUPLE_0:1;
+          hence contradiction by A51,TARSKI:def 1;
         end;
-        p in y by A51,XBOOLE_0:def 3;
-        hence thesis by A54,XBOOLE_0:def 5;
+        p in y by A49,XBOOLE_0:def 3;
+        hence thesis by A52,XBOOLE_0:def 5;
       end;
       thus y\z c= x
       proof
-A55:    x misses z
+A53:    x misses z
         proof
           assume not thesis;
           then consider r being set such that
-A56:      r in g and
-A57:      r in z by A49,XBOOLE_0:3;
+A54:      r in g and
+A55:      r in z by A47,XBOOLE_0:3;
           consider a1,a2 such that
-A58:      r=[a1,a2] by A56,RELAT_1:def 1;
-          a1 in dom g by A56,A58,FUNCT_1:1;
+A56:      r=[a1,a2] by A54,RELAT_1:def 1;
+          a1 in dom g by A54,A56,FUNCT_1:1;
           then
-A59:      not a1 in {n} by A50,XBOOLE_0:def 5;
+A57:      not a1 in {n} by A48,XBOOLE_0:def 5;
           not r in z
           proof
             assume r in z;
             then ex x9 st r=[n,x9] & x9 in a;
-            then a1=n by A58,ZFMISC_1:27;
-            hence contradiction by A59,TARSKI:def 1;
+            then a1=n by A56,XTUPLE_0:1;
+            hence contradiction by A57,TARSKI:def 1;
           end;
-          hence contradiction by A57;
+          hence contradiction by A55;
         end;
         {[n,u]} c= z
         proof
           consider g such that
-A60:      {[n,u]} \/ x = g and
+A58:      {[n,u]} \/ x = g and
           dom g=fs and
-A61:      rng g c= a by A5,A47,FUNCT_2:def 2;
-          {[n,u]} c= g by A60,XBOOLE_1:7;
+A59:      rng g c= a by A5,A45,FUNCT_2:def 2;
+          {[n,u]} c= g by A58,XBOOLE_1:7;
           then [n,u] in g by ZFMISC_1:31;
           then n in dom g & u=g.n by FUNCT_1:1;
           then
-A62:      u in rng g by FUNCT_1:def 3;
-          then reconsider a1=u as Element of V by A3,A61,Th1;
+A60:      u in rng g by FUNCT_1:def 3;
+          then reconsider a1=u as Element of V by A3,A59,Th1;
           assume not thesis;
           then
-A63:      ex r st r in {[n,u]} & not r in z by TARSKI:def 3;
-          [n,a1] in z by A61,A62;
-          hence contradiction by A63,TARSKI:def 1;
+A61:      ex r st r in {[n,u]} & not r in z by TARSKI:def 3;
+          [n,a1] in z by A59,A60;
+          hence contradiction by A61,TARSKI:def 1;
         end;
         then {[n,u]}\z={} by XBOOLE_1:37;
         then
-A64:    (x\z)\/({[n,u]}\z)=x by A55,XBOOLE_1:83;
+A62:    (x\z)\/({[n,u]}\z)=x by A53,XBOOLE_1:83;
         let p;
         assume p in y\z;
-        hence thesis by A64,XBOOLE_1:42;
+        hence thesis by A62,XBOOLE_1:42;
       end;
     end;
     z in t by TARSKI:def 1;
-    hence thesis by A44,A47,A48;
+    hence thesis by A42,A45,A46;
   end;
   X is closed_wrt_A6 by A1,Def13;
   hence thesis by A4,A17,A18,Def11;
@@ -1273,7 +1224,7 @@ A12:  g.n in rng g by FUNCT_1:def 3;
 A13: p={[n,x]} \/ y and
 A14: x in a and
 A15: y in b;
-    reconsider g={[n,x]} as Function by GRFUNC_1:5;
+    reconsider g={[n,x]} as Function;
     rng g={x} by RELAT_1:9;
     then dom g={n} & rng g c= a by A14,RELAT_1:9,ZFMISC_1:31;
     then
@@ -1551,33 +1502,32 @@ end;
 
 Lm14: {[o,p],[p,p]}(#){[p,q]}={[o,q],[p,q]}
 proof
-  thus {[o,p],[p,p]}(#){[p,q]} c= {[o,q],[p,q]}
+  let s,u;
+  thus [s,u] in {[o,p],[p,p]}(#){[p,q]} implies [s,u] in {[o,q],[p,q]}
   proof
-    let r;
-    assume r in {[o,p],[p,p]}(#){[p,q]};
-    then consider s,t,u such that
-A1: r=[s,u] and
-A2: [s,t] in {[o,p],[p,p]} and
-A3: [t,u] in {[p,q]} by Def1;
-    [t,u]=[p,q] by A3,TARSKI:def 1;
+    assume [s,u] in {[o,p],[p,p]}(#){[p,q]};
+    then consider t such that
+A1: [s,t] in {[o,p],[p,p]} and
+A2: [t,u] in {[p,q]} by RELAT_1:def 8;
+    [t,u]=[p,q] by A2,TARSKI:def 1;
     then
-A4: u=q by ZFMISC_1:27;
-    [s,t]=[o,p] or [s,t]=[p,p] by A2,TARSKI:def 2;
-    then r=[o,q] or r=[p,q] by A1,A4,ZFMISC_1:27;
+A3: u=q by XTUPLE_0:1;
+    [s,t]=[o,p] or [s,t]=[p,p] by A1,TARSKI:def 2;
+    then [s,u]=[o,q] or [s,u]=[p,q] by A3,XTUPLE_0:1;
     hence thesis by TARSKI:def 2;
   end;
-  let r such that
-A5: r in {[o,q],[p,q]};
-  per cases by A5,TARSKI:def 2;
+  assume
+A4: [s,u] in {[o,q],[p,q]};
+  per cases by A4,TARSKI:def 2;
   suppose
-A6: r=[o,q];
+A5: [s,u]=[o,q];
     [o,p] in {[o,p],[p,p]} & [p,q] in {[p,q]} by TARSKI:def 1,def 2;
-    hence thesis by A6,Def1;
+    hence thesis by A5,RELAT_1:def 8;
   end;
   suppose
-A7: r=[p,q];
+A6: [s,u]=[p,q];
     [p,p] in {[o,p],[p,p]} & [p,q] in {[p,q]} by TARSKI:def 1,def 2;
-    hence thesis by A7,Def1;
+    hence thesis by A6,RELAT_1:def 8;
   end;
 end;
 
@@ -1665,33 +1615,33 @@ Lm15: p<>r implies {[o,p],[q,r]}(#){[p,s],[r,t]}={[o,s],[q,t]}
 proof
   assume
 A1: p<>r;
-  thus {[o,p],[q,r]}(#){[p,s],[r,t]} c= {[o,s],[q,t]}
+  let a1,a3;
+  thus [a1,a3] in {[o,p],[q,r]}(#){[p,s],[r,t]}
+     implies [a1,a3] in {[o,s],[q,t]}
   proof
-    let u;
-    assume u in {[o,p],[q,r]}(#){[p,s],[r,t]};
-    then consider a1,a2,a3 such that
-A2: u=[a1,a3] and
-A3: [a1,a2] in {[o,p],[q,r]} and
-A4: [a2,a3] in {[p,s],[r,t]} by Def1;
-    [a1,a2]=[o,p] or [a1,a2]=[q,r] by A3,TARSKI:def 2;
+    assume [a1,a3] in {[o,p],[q,r]}(#){[p,s],[r,t]};
+    then consider a2 such that
+A2: [a1,a2] in {[o,p],[q,r]} and
+A3: [a2,a3] in {[p,s],[r,t]} by RELAT_1:def 8;
+    [a1,a2]=[o,p] or [a1,a2]=[q,r] by A2,TARSKI:def 2;
     then
-A5: a1=o & a2=p or a1=q & a2=r by ZFMISC_1:27;
-    [a2,a3]=[p,s] or [a2,a3]=[r,t] by A4,TARSKI:def 2;
-    then a1=o & a2=p & a3=s or a1=q & a2=r & a3=t by A1,A5,ZFMISC_1:27;
-    hence thesis by A2,TARSKI:def 2;
+A4: a1=o & a2=p or a1=q & a2=r by XTUPLE_0:1;
+    [a2,a3]=[p,s] or [a2,a3]=[r,t] by A3,TARSKI:def 2;
+    then a1=o & a2=p & a3=s or a1=q & a2=r & a3=t by A1,A4,XTUPLE_0:1;
+    hence thesis by TARSKI:def 2;
   end;
-  let u such that
-A6: u in {[o,s],[q,t]};
-  per cases by A6,TARSKI:def 2;
+  assume
+A5: [a1,a3] in {[o,s],[q,t]};
+  per cases by A5,TARSKI:def 2;
   suppose
-A7: u=[o,s];
+A6: [a1,a3]=[o,s];
     [o,p] in {[o,p],[q,r]} & [p,s] in {[p,s],[r,t]} by TARSKI:def 2;
-    hence thesis by A7,Def1;
+    hence thesis by A6,RELAT_1:def 8;
   end;
   suppose
-A8: u=[q,t];
+A7: [a1,a3]=[q,t];
     [q,r] in {[o,p],[q,r]} & [r,t] in {[p,s],[r,t]} by TARSKI:def 2;
-    hence thesis by A8,Def1;
+    hence thesis by A7,RELAT_1:def 8;
   end;
 end;
 
@@ -1760,7 +1710,7 @@ A10:  p=o or p=q;
       assume p in dom g;
       then [p,g.p] in g by FUNCT_1:1;
       then [p,g.p]=[o,g.o] or [p,g.p]=[q,g.q] by A8,TARSKI:def 2;
-      hence p=o or p=q by ZFMISC_1:27;
+      hence p=o or p=q by XTUPLE_0:1;
     end;
     hence p in dom g iff p=o or p=q by A9;
   end;
@@ -1880,7 +1830,7 @@ A28: now
 A29: d in Funcs(fs,omega)
     proof
       reconsider g={[x".v1,0-element_of(V)]}, h={[x".v2,1-element_of(V)]} as
-      Function by GRFUNC_1:5;
+      Function;
       reconsider e=d as Function by A28,GRFUNC_1:8;
 A30:  0-element_of(V) in omega by ORDINAL1:def 11;
 A31:  e=g \/ h by ENUMSET1:1;
@@ -2350,24 +2300,23 @@ A39:    {[n,u]} \/ x in Dn;
         consider h being Function of VAR,E such that
 A40:    {[n,u]} \/ x=(h*decode)|fs by A12,A39,Lm11;
         now
-          reconsider g={[n,u]} as Function by GRFUNC_1:5;
-A41:      g={[n,u]};
+          reconsider g={[n,u]} as Function;
           thus
-A42:      dom((h*decode)|(fs\{n}))=(fs\{n}) & dom((f*decode)|(fs\{n}
+A41:      dom((h*decode)|(fs\{n}))=(fs\{n}) & dom((f*decode)|(fs\{n}
           ))=(fs\{n}) by Lm3;
           let q such that
-A43:      q in (fs\{n});
+A42:      q in (fs\{n});
           ((h*decode)|(fs\{n})) c= ((h*decode)|fs) by RELAT_1:75,XBOOLE_1:36;
-          hence ((h*decode)|(fs\{n})).q=((h*decode)|fs).q by A42,A43,GRFUNC_1:2
-            .=((f*decode)|(fs\{n})).q by A15,A34,A40,A42,A43,A41,GRFUNC_1:15;
+          hence ((h*decode)|(fs\{n})).q=((h*decode)|fs).q by A41,A42,GRFUNC_1:2
+            .=((f*decode)|(fs\{n})).q by A15,A34,A40,A41,A42,GRFUNC_1:15;
         end;
         then
-A44:    h in St(All(v1,H),E) by A15,A35,Lm10,FUNCT_1:2;
+A43:    h in St(All(v1,H),E) by A15,A35,Lm10,FUNCT_1:2;
         ex hh being Function of VAR,E st {[n,u]} \/ x=(hh*decode)|code
         Free('not' H) & hh in St('not' H,E) by A39,Def5;
         then h in St('not' H,E) by A40,A38,Lm10;
         then not h in St(H,E) by ZF_MODEL:4;
-        hence contradiction by A44,ZF_MODEL:6;
+        hence contradiction by A43,ZF_MODEL:6;
       end;
       now
         assume x in C;
@@ -2449,3 +2398,4 @@ theorem
 
 theorem
   p in Funcs(fs,E) implies ex f st p=(f*decode)|fs by Lm11;
+

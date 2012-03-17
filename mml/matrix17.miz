@@ -1,0 +1,1454 @@
+:: Some Basic Properties of Some Special Matrices, Part {III}
+::  by Xiquan Liang and Tao Wang
+:: 
+:: Received October 23, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, VECTSP_1, FINSEQ_1, MATRIX_1, NAT_1, XXREAL_0,
+      ARYTM_1, INT_1, ARYTM_3, CARD_1, ZFMISC_1, FUNCT_1, RELAT_1, STRUCT_0,
+      ALGSTR_0, FUNCOP_1, FVSUM_1, SUPINF_2, FINSEQ_2, TREES_1, XBOOLE_0,
+      QC_LANG1, PARTFUN1, MATRIX16, RELAT_2, GROUP_1, MATRIX17;
+ notations MATRIX_1, VECTSP_1, GROUP_1, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1,
+      NAT_1, TARSKI, FINSEQ_1, FINSEQ_2, MATRIX_3, FVSUM_1, FUNCT_1, STRUCT_0,
+      BINOP_1, XXREAL_0, MATRIX_2, FUNCOP_1, INT_1, NUMBERS, XCMPLX_0,
+      MATRIX_6, RELAT_1, ALGSTR_0, PARTFUN1, MATRIX13, MATRIX16, RLVECT_1;
+ constructors REAL_1, MATRIX_6, XXREAL_0, MATRIX13, POLYNOM1, BINOP_2, FVSUM_1,
+      MATRIX16;
+ registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, FINSEQ_2, XXREAL_0,
+      FUNCOP_1, XREAL_0, XBOOLE_0, FUNCT_1, CARD_1, ORDINAL1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions MATRIX_1, MATRIX_3, FVSUM_1, MATRIX_4, FINSEQ_1, FINSEQ_2, CARD_1,
+      ALGSTR_0, MATRIX_6;
+ theorems MATRIX_5, MATRIX_3, FINSEQ_1, FUNCT_1, ZFMISC_1, POLYNOM1, CARD_1,
+      MATRIX_2, INT_1, VECTSP_1, FVSUM_1, MATRIX_1, FINSEQ_2, FUNCOP_1,
+      MATRIXR1, XREAL_1, XXREAL_0, PARTFUN1, MATRIX16, MATRIX_6, RLVECT_1,
+      NAT_D, ORDINAL1;
+
+begin :: Basic Properties of Subordinate Symmetric Matrices
+
+reserve i,j,k,n,l for Nat,
+  K for Field,
+  a,b,c for Element of K,
+  p,q for FinSequence of K,
+  M1,M2,M3 for Matrix of n,K;
+
+Lm1:for n,i be Nat st i in Seg n holds n+1-i in Seg n
+proof
+  let n,i be Nat;
+  assume
+A1: i in Seg n;
+    i<=n by A1,FINSEQ_1:1;
+  then i+1<=n+1 by XREAL_1:6;
+  then
+A3:i+1-i<=n+1-i by XREAL_1:9;
+   1<=i by A1,FINSEQ_1:1;
+   then n+1<=i+n by XREAL_1:6;
+   then
+A4:n+1-i<=i+n-i by XREAL_1:9;
+   n+1-i in NAT by A3,INT_1:3;
+   hence thesis by A3,A4;
+end;
+
+Lm2: for n,i,j be Nat st [i,j] in [:Seg n, Seg n:] holds
+  (n+1-j) in Seg n & (n+1-i) in Seg n
+proof
+  let n,i,j be Nat;
+  assume [i,j] in [:Seg n, Seg n:];
+  then i in Seg n & j in Seg n by ZFMISC_1:87;
+  hence thesis by Lm1;
+end;
+
+definition
+  let K be Field, n be Nat, M be Matrix of n,K;
+  attr M is subsymmetric means  :Def1:
+  for i,j,k,l being Nat st [i,j] in Indices M & k=n+1-j & l=n+1-i holds
+  M*(i,j) = M*(k,l);
+end;
+
+registration
+  let n,K,a;
+  cluster (n,n)-->a -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K such that
+A1: M = (n,n)-->a;
+    let i,j,k,l be Nat;
+    assume that
+A2: [i,j] in Indices M and
+A3: k=n+1-j & l=n+1-i;
+A4: Indices M=[:Seg n,Seg n:] by MATRIX_1:24;
+    k in Seg n & l in Seg n by A3,A2,A4,Lm2;
+    then [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    then M*(k,l)=a by A1,A4,MATRIX_2:1;
+    hence thesis by A1,A2,MATRIX_2:1;
+  end;
+end;
+
+registration
+  let n,K;
+  cluster subsymmetric for Matrix of n,K;
+  existence
+  proof
+    take (n,n)-->0.K;
+    thus thesis;
+  end;
+end;
+
+registration
+  let n,K;
+  let M be subsymmetric Matrix of n,K;
+  cluster -M -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let N be Matrix of n,K such that
+A1: N = -M;
+A2: Indices (M)=[:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices N and
+A4: k=n+1-j & l=n+1-i;
+A5: Indices (-M) = [:Seg n,Seg n:] by MATRIX_1:24;
+    then i in Seg n & j in Seg n by A1,A3,ZFMISC_1:87;
+    then
+       k in Seg n & l in Seg n by A4,Lm1;
+       then
+A6:    [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+      (-M)*(i,j)=-(M*(i,j)) by A1,A2,A3,A5,MATRIX_3:def 2
+      .= -(M*(k,l)) by A1,A2,A3,A5,A4,Def1
+      .= (-M)*(k,l) by A2,A6,MATRIX_3:def 2;
+      hence thesis by A1;
+    end;
+  end;
+
+registration
+  let n,K;
+  let M1,M2 be subsymmetric Matrix of n,K;
+  cluster M1+M2 -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K such that
+A1: M=M1+M2;
+    let i,j,k,l be Nat;
+    assume that
+A2: [i,j] in Indices (M) and
+A3: k=n+1-j & l=n+1-i;
+A4: Indices(M) = [:Seg n,Seg n:] by MATRIX_1:24;
+    n+1-j in Seg n & n+1-i in Seg n by A2,A4,Lm2;
+    then
+A5: [k,l] in [:Seg n,Seg n:] by A3,ZFMISC_1:87;
+A6: Indices M1=[:Seg n,Seg n:] & Indices M2 = [:Seg n,Seg n:] by MATRIX_1:24;
+    (M1+M2)*(i,j)=M1*(i,j)+M2*(i,j) by A2,A4,A6,MATRIX_3:def 3
+    .= M1*(k,l)+M2*(i,j) by A2,A4,A6,A3,Def1
+    .=M1*(k,l)+M2*(k,l) by A2,A4,A6,A3,Def1
+    .= (M1+M2)*(k,l) by A6,A5,MATRIX_3:def 3;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let n,K,a;
+  let M be subsymmetric Matrix of n,K;
+  cluster a*M -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M1 be Matrix of n,K such that
+A1: M1=a*M;
+A2: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices M1 and
+A4: k=n+1-j & l=n+1-i;
+    Indices M1 = [:Seg n,Seg n:] by MATRIX_1:24;
+    then k in Seg n & l in Seg n by A3,A4,Lm2;
+    then
+A5: [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+A6: [i,j] in Indices M by A2,A3,MATRIX_1:24;
+    then (a*M)*(i,j)=a*(M*(i,j)) by MATRIX_3:def 5
+    .=a*(M*(k,l)) by A4,A6,Def1
+    .=(a*M)*(k,l) by A2,A5,MATRIX_3:def 5;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be subsymmetric Matrix of n,K;
+  cluster M1-M2 -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    M1-M2=M1+-M2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n,K;
+  let M be subsymmetric Matrix of n,K;
+  cluster M@ -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M1 be Matrix of n,K such that
+A1: M1 = M@;
+A2: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices (M1) and
+A4: k=n+1-j & l=n+1-i;
+    [i,j] in [:Seg n,Seg n:] by A3,MATRIX_1:24;
+    then
+A5: i in Seg n & j in Seg n by ZFMISC_1:87;
+    then
+A6: [j,i] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    ((n+1-j)) in Seg n & ((n+1-i)) in Seg n by A5,Lm1;
+    then
+A7: [(n+1-i),(n+1-j)] in [:Seg n,Seg n:] &
+    [(n+1-j),(n+1-i)] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    thus M1*(i,j) = M*(j,i) by A1,A2,A6,MATRIX_1:def 6
+    .=M*(l,k) by A4,A6,A2,Def1
+    .=M1*(k,l) by A1,A7,A2,A4,MATRIX_1:def 6;
+  end;
+end;
+
+registration
+  let n,K;
+  cluster line_circulant -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K;
+    assume M is line_circulant;
+    then consider p being FinSequence of K such that
+    len p=width M and
+A1: M is_line_circulant_about p by MATRIX16:def 2;
+A2: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices M and
+A4: k=n+1-j & l=n+1-i;
+    k in Seg n & l in Seg n by A3,A2,A4,Lm2;
+    then
+A5: [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    M*(k,l) = p.(((n+1-i)-(n+1-j) mod len p)+1) by A1,A2,A4,A5,MATRIX16:def 1
+    .=p.((j-i mod len p)+1);
+    hence thesis by A3,A1,MATRIX16:def 1;
+  end;
+  cluster col_circulant -> subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K;
+    assume M is col_circulant;
+    then consider p being FinSequence of K such that
+A1: len p=len M and
+A2: M is_col_circulant_about p by MATRIX16:def 5;
+A3: len M = n by MATRIX_1:24;
+A4: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A5: [i,j] in Indices M and
+A6: k=n+1-j & l=n+1-i;
+    k in Seg n & l in Seg n by A5,A4,A6,Lm2;
+    then
+A7: [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    M*(k,l) = p.(((n+1-j)-(n+1-i) mod n)+1)
+    by A1,A2,A3,A4,A6,A7,MATRIX16:def 4
+    .=p.((i-j mod n)+1);
+    hence thesis by A1,A2,A3,A5,MATRIX16:def 4;
+  end;
+end;
+
+definition
+  let K be Field, n be Nat, M be Matrix of n,K;
+  attr M is Anti-subsymmetric means :Def2:
+  for i,j,k,l being Nat st [i,j] in Indices M & k=n+1-j & l=n+1-i holds
+  M*(i,j) = -(M*(k,l));
+end;
+
+registration
+  let n,K;
+  cluster Anti-subsymmetric for Matrix of n,K;
+  existence
+  proof
+     take M=(n,n)-->0.K;
+     let i,j,k,l be Nat;
+     assume that
+A1:[i,j] in Indices M and
+A2:k=n+1-j & l=n+1-i;
+A3:Indices M=[:Seg n,Seg n:] by MATRIX_1:24;
+      k in Seg n & l in Seg n by A2,A1,A3,Lm2;
+      then [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+      then
+A4:M*(k,l)=0.K by A3,MATRIX_2:1;
+      0.K=-0.K by RLVECT_1:12;
+      hence thesis by A4,A1,MATRIX_2:1;
+   end;
+end;
+
+theorem
+  for K being Fanoian Field,n,i,j,k,l being Nat,M1 being Matrix of n,K st
+  [i,j] in Indices M1 & i+j=n+1 & k=n+1-j & l=n+1-i &
+  M1 is Anti-subsymmetric holds M1*(i,j)=0.K
+  proof
+     let K be Fanoian Field;
+     let n,i,j,k,l be Nat;
+     let M1 be Matrix of n,K;
+     assume that
+A1:[i,j] in Indices M1 and
+A2:i+j=n+1 & k=n+1-j & l=n+1-i and
+A3:M1 is Anti-subsymmetric;
+      M1*(i,j) = -(M1*(i,j)) by A1,A3,A2,Def2;
+     then M1*(i,j)+M1*(i,j)=0.K by RLVECT_1:5;
+     then (1_K)*(M1*(i,j))+M1*(i,j)=0.K by VECTSP_1:def 8;
+     then (1_K)*(M1*(i,j))+(1_K)*(M1*(i,j))=0.K by VECTSP_1:def 8;
+     then 1_K+1_K<>0.K & (1_K+1_K)*(M1*(i,j))=0.K by VECTSP_1:def 7,def 19;
+  hence thesis by VECTSP_1:12;
+end;
+
+registration
+  let n,K;
+  let M be Anti-subsymmetric Matrix of n,K;
+  cluster -M -> Anti-subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let N be Matrix of n,K such that
+A1: N = -M;
+A2: Indices (M)=[:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices N and
+A4: k=n+1-j & l=n+1-i;
+A5: Indices (-M) = [:Seg n,Seg n:] by MATRIX_1:24;
+    then i in Seg n & j in Seg n by A1,A3,ZFMISC_1:87;
+    then
+       k in Seg n & l in Seg n by A4,Lm1;
+       then
+A6:    [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+      (-M)*(i,j)=-(M*(i,j)) by A1,A2,A3,A5,MATRIX_3:def 2
+      .= -(-M*(k,l)) by A1,A2,A3,A5,A4,Def2
+      .= -(-M)*(k,l) by A2,A6,MATRIX_3:def 2;
+      hence thesis by A1;
+    end;
+  end;
+
+registration
+  let n,K;
+  let M1,M2 be Anti-subsymmetric Matrix of n,K;
+  cluster M1+M2 -> Anti-subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K such that
+A1: M=M1+M2;
+    let i,j,k,l be Nat;
+    assume that
+A2: [i,j] in Indices (M) and
+A3: k=n+1-j & l=n+1-i;
+A4: Indices(M) = [:Seg n,Seg n:] by MATRIX_1:24;
+    n+1-j in Seg n & n+1-i in Seg n by A2,A4,Lm2;
+    then
+A5: [k,l] in [:Seg n,Seg n:] by A3,ZFMISC_1:87;
+A6: Indices M1=[:Seg n,Seg n:] & Indices M2 = [:Seg n,Seg n:] by MATRIX_1:24;
+    (M1+M2)*(i,j)=M1*(i,j)+M2*(i,j) by A2,A4,A6,MATRIX_3:def 3
+    .= (-M1*(k,l))+M2*(i,j) by A2,A4,A6,A3,Def2
+    .=(-M1*(k,l))+(-M2*(k,l)) by A2,A4,A6,A3,Def2
+    .=-(M1*(k,l)+M2*(k,l)) by RLVECT_1:31
+    .= -(M1+M2)*(k,l) by A6,A5,MATRIX_3:def 3;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let n,K,a;
+  let M be Anti-subsymmetric Matrix of n,K;
+  cluster a*M -> Anti-subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M1 be Matrix of n,K such that
+A1: M1=a*M;
+A2: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices M1 and
+A4: k=n+1-j & l=n+1-i;
+    Indices M1 = [:Seg n,Seg n:] by MATRIX_1:24;
+    then k in Seg n & l in Seg n by A3,A4,Lm2;
+    then
+A5: [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+A6: [i,j] in Indices M by A2,A3,MATRIX_1:24;
+    then (a*M)*(i,j)=a*(M*(i,j)) by MATRIX_3:def 5
+    .=a*(-(M*(k,l))) by A4,A6,Def2
+    .=-a*(M*(k,l)) by VECTSP_1:8
+    .=-(a*M)*(k,l) by A2,A5,MATRIX_3:def 5;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be Anti-subsymmetric Matrix of n,K;
+  cluster M1-M2 -> Anti-subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    M1-M2=M1+-M2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n,K;
+  let M be Anti-subsymmetric Matrix of n,K;
+  cluster M@ -> Anti-subsymmetric for Matrix of n,K;
+  coherence
+  proof
+    let M1 be Matrix of n,K such that
+A1: M1 = M@;
+A2: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices (M1) and
+A4: k=n+1-j & l=n+1-i;
+    [i,j] in [:Seg n,Seg n:] by A3,MATRIX_1:24;
+    then
+A5: i in Seg n & j in Seg n by ZFMISC_1:87;
+    then
+A6: [j,i] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    ((n+1-j)) in Seg n & ((n+1-i)) in Seg n by A5,Lm1;
+    then
+A7: [(n+1-i),(n+1-j)] in [:Seg n,Seg n:] &
+    [(n+1-j),(n+1-i)] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    thus M1*(i,j) = M*(j,i) by A1,A2,A6,MATRIX_1:def 6
+    .=-(M*(l,k)) by A4,A6,A2,Def2
+    .=-M1*(k,l) by A1,A7,A2,A4,MATRIX_1:def 6;
+  end;
+end;
+
+begin :: Basic Properties of central_symmetric Matrices
+
+definition
+  let K be Field;
+  let n be Nat;
+  let M be Matrix of n,K;
+  attr M is central_symmetric means :Def3:
+  for i,j,k,l being Nat st [i,j] in Indices M & k=n+1-i & l=n+1-j holds
+  M*(i,j) = M*(k,l);
+end;
+
+registration
+  let n,K,a;
+  cluster (n,n)-->a -> central_symmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K such that
+A1: M = (n,n)-->a;
+    let i,j,k,l be Nat;
+    assume that
+A2: [i,j] in Indices M and
+A3: k=n+1-i & l=n+1-j;
+A4: Indices M=[:Seg n,Seg n:] by MATRIX_1:24;
+    k in Seg n & l in Seg n by A3,A2,A4,Lm2;
+    then [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    then M*(k,l)=a by A1,A4,MATRIX_2:1;
+    hence thesis by A1,A2,MATRIX_2:1;
+  end;
+end;
+
+registration
+  let n,K;
+  cluster central_symmetric for Matrix of n,K;
+  existence
+  proof
+    take (n,n)-->0.K;
+    thus thesis;
+  end;
+end;
+
+registration
+  let n,K;
+  let M be central_symmetric Matrix of n,K;
+  cluster -M -> central_symmetric for Matrix of n,K;
+  coherence
+  proof
+    let N be Matrix of n,K such that
+A1: N = -M;
+A2: Indices (M)=[:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices N and
+A4: k=n+1-i & l=n+1-j;
+A5: Indices (-M) = [:Seg n,Seg n:] by MATRIX_1:24;
+    then i in Seg n & j in Seg n by A1,A3,ZFMISC_1:87;
+    then
+       k in Seg n & l in Seg n by A4,Lm1;
+       then
+A6:    [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+      (-M)*(i,j)=-(M*(i,j)) by A1,A2,A3,A5,MATRIX_3:def 2
+      .= -(M*(k,l)) by A1,A2,A3,A5,A4,Def3
+      .= (-M)*(k,l) by A2,A6,MATRIX_3:def 2;
+      hence thesis by A1;
+    end;
+  end;
+
+registration
+  let n,K;
+  let M1,M2 be central_symmetric Matrix of n,K;
+  cluster M1+M2 -> central_symmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K such that
+A1: M=M1+M2;
+    let i,j,k,l be Nat;
+    assume that
+A2: [i,j] in Indices (M) and
+A3: k=n+1-i & l=n+1-j;
+A4: Indices(M) = [:Seg n,Seg n:] by MATRIX_1:24;
+    n+1-j in Seg n & n+1-i in Seg n by A2,A4,Lm2;
+    then
+A5: [k,l] in [:Seg n,Seg n:] by A3,ZFMISC_1:87;
+A6: Indices M1=[:Seg n,Seg n:] & Indices M2 = [:Seg n,Seg n:] by MATRIX_1:24;
+    (M1+M2)*(i,j)=M1*(i,j)+M2*(i,j) by A2,A4,A6,MATRIX_3:def 3
+    .= M1*(k,l)+M2*(i,j) by A2,A4,A6,A3,Def3
+    .=M1*(k,l)+M2*(k,l) by A2,A4,A6,A3,Def3
+    .= (M1+M2)*(k,l) by A6,A5,MATRIX_3:def 3;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let n,K,a;
+  let M be central_symmetric Matrix of n,K;
+  cluster a*M -> central_symmetric for Matrix of n,K;
+  coherence
+  proof
+    let M1 be Matrix of n,K such that
+A1: M1=a*M;
+A2: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices M1 and
+A4: k=n+1-i & l=n+1-j;
+    Indices M1 = [:Seg n,Seg n:] by MATRIX_1:24;
+    then k in Seg n & l in Seg n by A3,A4,Lm2;
+    then
+A5: [k,l] in [:Seg n,Seg n:] by ZFMISC_1:87;
+A6: [i,j] in Indices M by A2,A3,MATRIX_1:24;
+    then (a*M)*(i,j)=a*(M*(i,j)) by MATRIX_3:def 5
+    .=a*(M*(k,l)) by A4,A6,Def3
+    .=(a*M)*(k,l) by A2,A5,MATRIX_3:def 5;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be central_symmetric Matrix of n,K;
+  cluster M1-M2 -> central_symmetric for Matrix of n,K;
+  coherence
+  proof
+    M1-M2=M1+-M2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let n,K;
+  let M be central_symmetric Matrix of n,K;
+  cluster M@ -> central_symmetric for Matrix of n,K;
+  coherence
+  proof
+    let M1 be Matrix of n,K such that
+A1: M1 = M@;
+A2: Indices M = [:Seg n,Seg n:] by MATRIX_1:24;
+    let i,j,k,l be Nat;
+    assume that
+A3: [i,j] in Indices (M1) and
+A4: k=n+1-i & l=n+1-j;
+    [i,j] in [:Seg n,Seg n:] by A3,MATRIX_1:24;
+    then
+A5: i in Seg n & j in Seg n by ZFMISC_1:87;
+    then
+A6: [j,i] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    ((n+1-j)) in Seg n & ((n+1-i)) in Seg n by A5,Lm1;
+    then
+A7: [(n+1-i),(n+1-j)] in [:Seg n,Seg n:] &
+    [(n+1-j),(n+1-i)] in [:Seg n,Seg n:] by ZFMISC_1:87;
+    thus M1*(i,j) = M*(j,i) by A1,A2,A6,MATRIX_1:def 6
+    .=M*(l,k) by A4,A6,A2,Def3
+    .=M1*(k,l) by A1,A7,A2,A4,MATRIX_1:def 6;
+  end;
+end;
+
+registration
+  let n,K;
+  cluster symmetric subsymmetric -> central_symmetric for Matrix of n,K;
+  coherence
+proof
+   let M1 be Matrix of n,K;
+   assume that
+A1:M1 is symmetric and
+A2:M1 is subsymmetric;
+A3:Indices M1 = [:Seg n,Seg n:] by MATRIX_1:24;
+   let i,j,k,l be Nat;
+     assume that
+A4:[i,j] in Indices M1 and
+A5:k=n+1-i & l=n+1-j;
+      k in Seg n & l in Seg n by A3,A4,A5,Lm2;
+      then
+A6:[k,l] in [:Seg n,Seg n:] & [l,k] in [:Seg n,Seg n:] by ZFMISC_1:87;
+      thus M1*(i,j)=M1*(l,k) by A2,A4,A5,Def1
+       .=M1@*(k,l) by A6,A3,MATRIX_1:def 6
+       .=M1*(k,l) by A1,MATRIX_6:def 5;
+end;
+end;
+
+begin :: Basic Properties of Symmetric Circulant Matrices
+
+Lm3: for n,i,j be Nat st i in Seg n & j in Seg n & i+j<>n+1
+ holds i+j-1 mod n in Seg n
+proof
+  let n,i,j be Nat such that
+B0: i in Seg n & j in Seg n;
+  assume i+j<>n+1;
+  then per cases by XXREAL_0:1;
+  suppose
+A4: i+j<n+1;
+       1 <= i & 1 <= j by B0,FINSEQ_1:1;
+    then 1+1 <=i+j by XREAL_1:7;
+    then
+A5:  1+1-1<=i+j-1 by XREAL_1:9;
+A6:  i+j-1<n+1-1 by A4,XREAL_1:9;
+A7:  i+j-1 mod n =i+j-1 by A5,A6,NAT_D:63;
+     i+j-1 mod n in NAT by A5,A7,INT_1:3;
+     hence thesis by A5,A7,A6;
+   end;
+ suppose
+A10:i+j>n+1;
+        i+j-n>n+1-n by A10,XREAL_1:9;
+      then
+A11:  i+j-n-1>1-1 by XREAL_1:9;
+A12:  i+j-n-1>=0+1 by A11,INT_1:7;
+      i<=n & j<=n by B0,FINSEQ_1:1;
+      then i+j <=n+n by XREAL_1:7;
+      then i+j-n<=n+n-n by XREAL_1:9;
+      then
+A13:  i+j-n-1<=n-1 by XREAL_1:9;
+      n-1<n by XREAL_1:44;
+      then
+A14:  i+j-n-1<n by A13,XXREAL_0:2;
+A15:  i+j-n-1 mod n = i+j-n-1 by A11,A14,NAT_D:63;
+A16:  i+j-n-1 mod n in NAT by A11,A15,INT_1:3;
+      ((i+j-1) mod n)=((i+j-1-n)+n) mod n
+      .=((i+j-1-n) mod n + (n mod n)) mod n by NAT_D:66
+      .=((i+j-1-n)+0) mod n by A15,INT_1:50;
+        hence thesis by A14,A15,A12,A16;
+     end;
+ end;
+
+Lm4: for n,i,j be Nat st [i,j] in [:Seg n, Seg n:] & i+j<>n+1
+holds (i+j-1 mod n) in Seg n
+proof
+  let n,i,j be Nat;
+  assume that
+A1:[i,j] in [:Seg n, Seg n:] and
+A2:i+j<>n+1;
+  i in Seg n & j in Seg n by A1,ZFMISC_1:87;
+  hence thesis by A2,Lm3;
+end;
+
+definition
+  let K be set, M be (Matrix of K), p be FinSequence;
+  pred M is_symmetry_circulant_about p means  :Def4:
+  len p = width M &
+  (for i,j be Nat st [i,j] in Indices M & i+j<>len p+1 holds M*(i,j) =
+  p.(i+j-1 mod len p)) &
+  for i,j be Nat st [i,j] in Indices M & i+j=len p+1 holds M*(i,j) = p.(len p);
+end;
+
+theorem T1:
+  (n,n)-->a is_symmetry_circulant_about n|->a
+  proof
+    set p=n|->a;
+    set M=(n,n)-->a;
+A1: width M=n & len p =n by CARD_1:def 7,MATRIX_1:24;
+    hence len p = width M;
+A2: Indices ((n,n)-->a)=[:Seg n, Seg n:] by MATRIX_1:24;
+    thus for i,j be Nat st [i,j] in Indices M & i+j<>len p+1 holds
+    M*(i,j)=p.((i+j-1) mod len p)
+    proof
+      let i,j be Nat;
+      assume that
+A4:   [i,j] in Indices M and
+A5:   i+j<>len p+1;
+      (Seg n --> a).(i+j-1 mod len p)=a by FUNCOP_1:7,A1,A2,A4,A5,Lm4;
+      hence thesis by A4,MATRIX_2:1;
+    end;
+    let i,j be Nat;
+     assume that
+A6:[i,j] in Indices ((n,n)-->a) and
+A7:i+j=len p+1;
+       i in Seg n & j in Seg n by A2,A6,ZFMISC_1:87;
+       then
+        1<=i & 1<=j by FINSEQ_1:1;
+       then
+        1+1<=i+j by XREAL_1:7;
+       then len p +1-1 >=1+1-1 by A7,XREAL_1:9;
+       then
+A8:    len p in Seg len p;
+      (Seg n --> a).(len p)=a by A1,A8,FUNCOP_1:7;
+      hence thesis by A6,MATRIX_2:1;
+   end;
+
+theorem T2:
+  M1 is_symmetry_circulant_about p implies a*M1 is_symmetry_circulant_about a*p
+  proof
+    assume
+A3: M1 is_symmetry_circulant_about p;
+    then
+A2: len p=width M1 by Def4;
+A1: Indices (a*M1)=[:Seg n, Seg n:] by MATRIX_1:24;
+A4: width M1=n by MATRIX_1:24; then
+A5: dom p=Seg n by A2,FINSEQ_1:def 3;
+A6: dom (a*p)=Seg len (a*p) by FINSEQ_1:def 3;
+A7:len (a*p)=len p by MATRIXR1:16;
+A8: for i,j be Nat st [i,j] in Indices (a*M1)  & i+j<>len (a*p)+1 holds
+   (a*M1)*(i,j)=(a*p).(i+j-1 mod len (a*p))
+  proof
+    let i,j be Nat;
+    assume that
+A9: [i,j] in Indices (a*M1) and
+A10:i+j<>len (a*p)+1;
+A11: i+j-1 mod n in Seg n by A1,A2,A4,A9,A10,A7,Lm4;
+A12: [i,j] in Indices M1 by A1,A9,MATRIX_1:24;
+    then (a*M1)*(i,j) =a*(M1*(i,j)) by MATRIX_3:def 5
+      .=(a multfield).(M1*(i,j)) by FVSUM_1:49
+      .=(a multfield).(p.(i+j-1 mod len p)) by A3,A12,A10,A7,Def4
+      .=(a multfield).(p/.(i+j-1 mod len p)) by A2,A4,A5,A11,PARTFUN1:def 6
+      .=a*(p/.(i+j-1 mod len p)) by FVSUM_1:49
+      .=(a*p)/.(i+j-1 mod len p) by A2,A4,A5,A11,POLYNOM1:def 1
+      .=(a*p).(i+j-1 mod len p) by A2,A4,A6,A7,A11,PARTFUN1:def 6;
+    hence thesis by MATRIXR1:16;
+  end;
+A13:for i,j be Nat st [i,j] in Indices (a*M1)  & i+j=len (a*p)+1 holds
+(a*M1)*(i,j)=(a*p).(len (a*p))
+  proof
+  let i,j be Nat;
+    assume that
+A14: [i,j] in Indices (a*M1) and
+A15:i+j=len (a*p)+1;
+       i in Seg n & j in Seg n by A1,A14,ZFMISC_1:87; then
+       1<=i & 1<=j by FINSEQ_1:1;
+       then 1+1<=i+j by XREAL_1:7; then
+A16: len (a*p) +1-1 >=1+1-1 by A15,XREAL_1:9;
+A17: len (a*p) in Seg len (a*p) by A16; then
+A18:len p in dom (a*p) by A7,FINSEQ_1:def 3;
+A19:len p in dom p by A7,A17,FINSEQ_1:def 3;
+A20:[i,j] in Indices M1 by A1,A14,MATRIX_1:24;
+      then (a*M1)*(i,j) =a*(M1*(i,j)) by MATRIX_3:def 5
+      .=(a multfield).(M1*(i,j)) by FVSUM_1:49
+      .=(a multfield).(p.(len p)) by A3,A20,A15,A7,Def4
+      .=(a multfield).(p/.(len p)) by A19,PARTFUN1:def 6
+      .=a*(p/.(len p)) by FVSUM_1:49
+      .=(a*p)/.(len p) by A19,POLYNOM1:def 1
+      .=(a*p).(len p) by A18,PARTFUN1:def 6;
+     hence thesis by MATRIXR1:16;
+   end;
+A21: width (a*M1)=n & len (a*p)=len p by MATRIXR1:16,MATRIX_1:24;
+    len p =n by A2,MATRIX_1:24;
+    hence thesis by A21,A8,A13,Def4;
+  end;
+
+theorem T4:
+  M1 is_symmetry_circulant_about p implies -M1 is_symmetry_circulant_about -p
+  proof
+    assume
+A5: M1 is_symmetry_circulant_about p; then
+A4: len p=width M1 by Def4;
+A2: width M1=n by MATRIX_1:24;
+A3: Indices (-M1) = [:Seg n, Seg n:] by MATRIX_1:24;
+  p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:92;
+  then
+A6: -p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:113;
+  then
+A7: width (-M1)=n & len (-p)=len p by CARD_1:def 7,MATRIX_1:24;
+A8: Indices M1=[:Seg n, Seg n:] by MATRIX_1:24;
+A9:for i,j be Nat st [i,j] in Indices (-M1) & i+j<>len p+1 holds (-M1)*(i,j)=
+(-p).(i+j-1 mod len (-p))
+  proof
+    let i,j be Nat;
+    assume that
+A10: [i,j] in Indices (-M1) and
+A11:i+j<>len p+1;
+    i+j-1 mod n in Seg n by A2,A4,A3,A10,A11,Lm4;
+    then
+A12: i+j-1 mod len p in dom p by A4,A2,FINSEQ_1:def 3;
+    (-M1)*(i,j) =-(M1*(i,j)) by A8,A3,A10,MATRIX_3:def 2
+      .=(comp K).(M1*(i,j)) by VECTSP_1:def 13
+      .=(comp K).( p.(i+j-1 mod len p) ) by A5,A8,A3,A10,A11,Def4
+      .=(-p).(i+j-1 mod len p) by A12,FUNCT_1:13;
+    hence thesis by A6,CARD_1:def 7;
+  end;
+ for i,j be Nat st [i,j] in Indices (-M1) & i+j=len p+1 holds (-M1)*(i,j)=
+(-p).(len (-p))
+  proof
+    let i,j be Nat;
+    assume that
+A13:[i,j] in Indices (-M1) and
+A14:i+j=len p+1;
+        i in Seg n & j in Seg n by A3,A13,ZFMISC_1:87;
+       then
+       1<=i & 1<=j by FINSEQ_1:1;
+       then 1+1<=i+j by XREAL_1:7;
+       then len p +1-1 >=1+1-1 by A14,XREAL_1:9;
+       then len p in Seg len p;
+       then
+A15:  len p in dom p by FINSEQ_1:def 3;
+     (-M1)*(i,j) =-(M1*(i,j)) by A8,A3,A13,MATRIX_3:def 2
+      .=(comp K).(M1*(i,j)) by VECTSP_1:def 13
+      .=(comp K).( p.(len p) ) by A5,A8,A3,A13,A14,Def4
+      .=(-p).(len p) by A15,FUNCT_1:13;
+    hence thesis by A6,CARD_1:def 7;
+  end;
+  hence thesis by A4,A2,A7,A9,Def4;
+end;
+
+theorem T3:
+  M1 is_symmetry_circulant_about p & M2 is_symmetry_circulant_about q
+  implies M1+M2 is_symmetry_circulant_about p+q
+  proof
+    assume that
+A3: M1 is_symmetry_circulant_about p;
+A2: len p=width M1 by A3,Def4;
+A4: Indices M2=[:Seg n, Seg n:] by MATRIX_1:24;
+A5: Indices (M1+M2) = [:Seg n, Seg n:] by MATRIX_1:24;
+A6: width M1=n by MATRIX_1:24; then
+A7: dom p=Seg n by A2,FINSEQ_1:def 3;
+    assume
+A9: M2 is_symmetry_circulant_about q;
+    then
+A8: len q=width M2 by Def4;
+A10: Indices M1=[:Seg n, Seg n:] by MATRIX_1:24;
+A11:  n in NAT by ORDINAL1:def 12;
+A12: width M2=n by MATRIX_1:24;
+  then dom q=Seg n by A8,FINSEQ_1:def 3;
+  then
+A13:dom (p+q)=dom p by A7,POLYNOM1:1;
+  then
+A14: len (p+q)=n by A7,A11,FINSEQ_1:def 3;
+A15: width (M1+M2)=n by MATRIX_1:24;
+A16: dom (p+q)=Seg len (p+q) by FINSEQ_1:def 3;
+A17:for i,j be Nat st [i,j] in Indices (M1+M2) & i+j<>len (p+q) +1 holds
+(M1+M2)*(i,j)=(p+q).(i+j-1 mod len (p+q))
+  proof
+    let i,j be Nat;
+    assume that
+A18: [i,j] in Indices (M1+M2) and
+A19:i+j<>len (p+q) +1;
+A20: ((i+j-1) mod len (p+q)) in dom (p+q)
+        by A5,A16,A19,A18,A13,A7,Lm4;
+    (M1+M2)*(i,j) =M1*(i,j) + M2*(i,j) by A10,A5,A18,MATRIX_3:def 3
+      .=(the addF of K).(M1*(i,j),q.(i+j-1 mod len (p+q)))
+      by A9,A4,A5,A8,A12,A18,A19,A14,Def4
+      .=(the addF of K).(p.(i+j-1 mod len (p+q)),q.((i+j-1 mod len (p+q))))
+      by A3,A2,A6,A10,A5,A14,A18,A19,Def4
+      .=(p+q).(i+j-1 mod len (p+q)) by A20,FUNCOP_1:22;
+    hence thesis;
+  end;
+  for i,j be Nat st [i,j] in Indices (M1+M2) & i+j=len (p+q) +1 holds
+(M1+M2)*(i,j)=(p+q).(len (p+q))
+  proof
+   let i,j be Nat;
+    assume that
+A21: [i,j] in Indices (M1+M2) and
+A22:i+j=len (p+q) +1;
+       i in Seg n & j in Seg n by A5,A21,ZFMISC_1:87;
+       then
+       1<=i & 1<=j by FINSEQ_1:1;
+       then 1+1<=i+j by XREAL_1:7;
+       then len (p+q) +1-1 >=1+1-1 by A22,XREAL_1:9;
+      then len (p+q) in Seg len (p+q);
+       then
+A23: len (p+q) in dom (p+q) by FINSEQ_1:def 3;
+   (M1+M2)*(i,j) =M1*(i,j) + M2*(i,j) by A10,A5,A21,MATRIX_3:def 3
+      .=(the addF of K).(M1*(i,j),q.(len (p+q))) by A9,A8,A12,A14,A4,A5,A21
+,A22,Def4
+      .=(the addF of K).(p.(len (p+q)),q.(len (p+q)))
+      by A2,A3,A10,A6,A5,A14,A21,A22,Def4
+      .=(p+q).(len (p+q)) by A23,FUNCOP_1:22;
+    hence thesis;
+  end;
+  hence thesis by A15,A14,A17,Def4;
+ end;
+
+definition
+  let K be set, M be Matrix of K;
+  attr M is symmetry_circulant means :Def5:
+  ex p being FinSequence of K st len p = width M &
+  M is_symmetry_circulant_about p;
+end;
+
+definition
+  let K be non empty set;
+  let p be FinSequence of K;
+  attr p is first-symmetry-of-circulant means  :Def6:
+  ex M being Matrix of len p,K st M is_symmetry_circulant_about p;
+end;
+
+definition
+  let K be non empty set, p be FinSequence of K;
+  assume
+A1: p is first-symmetry-of-circulant;
+  func SCirc(p) -> Matrix of len p,K means   :Def7:
+  it is_symmetry_circulant_about p;
+  existence by A1,Def6;
+  uniqueness
+  proof
+    let M1,M2 be Matrix of len p,K;
+    assume that
+A2: M1 is_symmetry_circulant_about p and
+A3: M2 is_symmetry_circulant_about p;
+A4: Indices M1=Indices M2 by MATRIX_1:26;
+    for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+    proof
+      let i,j be Nat;
+      assume
+A5:   [i,j] in Indices M1;
+      per cases;
+      suppose
+A6:  i+j<>len p+1;
+        then M1*(i,j)=p.(i+j-1 mod len p) by A5,A2,Def4;
+        hence thesis by A3,A4,A5,A6,Def4;
+      end;
+      suppose
+A7:  i+j=len p+1;
+        then M1*(i,j)=p.(len p) by A2,A5,Def4;
+        hence thesis by A3,A4,A5,A7,Def4;
+      end;
+    end;
+     hence thesis by MATRIX_1:27;
+    end;
+  end;
+
+registration
+  let n,K,a;
+  cluster (n,n)-->a -> symmetry_circulant for Matrix of n,K;
+  coherence
+  proof
+    set p=n|->a;
+A1: width ((n,n)-->a)=n & len p =n by CARD_1:def 7,MATRIX_1:24;
+   (n,n)-->a is_symmetry_circulant_about p by T1;
+   hence thesis by A1,Def5;
+  end;
+end;
+
+registration
+  let n,K;
+  cluster symmetry_circulant for Matrix of n,K;
+  existence
+  proof
+    take (n,n)-->0.K;
+    thus thesis;
+  end;
+end;
+
+reserve D for non empty set,
+  t for FinSequence of D,
+  A for Matrix of n,D;
+
+theorem T5:
+  for p being FinSequence of D holds
+  0 < n & A is_symmetry_circulant_about p implies
+  A@ is_symmetry_circulant_about p
+  proof
+    let p be FinSequence of D;
+    assume that
+A2: 0 < n and
+A4: A is_symmetry_circulant_about p;
+A3: len p=width A by A4,Def4;
+  width A=n & len A=n by MATRIX_1:24;
+  then
+A5:  width (A@)=len p by A2,A3,MATRIX_2:10;
+A6:for i,j be Nat st [i,j] in Indices A@ & i+j<>len p+1 holds A@*(i,j)=
+     p.(i+j-1 mod len p)
+  proof
+    let i,j be Nat;
+A7: Indices A = [:Seg n, Seg n:] by MATRIX_1:24;
+    assume that
+A8:[i,j] in Indices A@ and
+A9:i+j<>len p+1;
+    [i,j] in Indices A by A8,MATRIX_1:26;
+    then i in Seg n & j in Seg n by A7,ZFMISC_1:87;
+    then
+A10: [j,i] in Indices A by A7,ZFMISC_1:87;
+    then A@*(i,j) = A*(j,i) by MATRIX_1:def 6;
+    hence thesis by A4,A10,A9,Def4;
+  end;
+   for i,j be Nat st [i,j] in Indices A@ & i+j=len p+1 holds A@*(i,j)=
+     p.(len p)
+    proof
+      let i,j be Nat;
+A11: Indices A = [:Seg n, Seg n:] by MATRIX_1:24;
+      assume that
+A12:[i,j] in Indices A@ and
+A13:i+j=len p+1;
+      [i,j] in Indices A by A12,MATRIX_1:26;
+      then i in Seg n & j in Seg n by A11,ZFMISC_1:87;
+      then
+A14: [j,i] in Indices A by A11,ZFMISC_1:87;
+      then A@*(i,j) = A*(j,i) by MATRIX_1:def 6;
+      hence thesis by A4,A13,A14,Def4;
+  end;
+  hence thesis by A5,A6,Def4;
+end;
+
+registration
+  let n,K,a;
+  let M1 be symmetry_circulant Matrix of n,K;
+  cluster a*M1 -> symmetry_circulant for Matrix of n,K;
+  coherence
+  proof
+    consider p be FinSequence of K such that
+A2: len p=width M1 and
+A3: M1 is_symmetry_circulant_about p by Def5;
+A4: width (a*M1)=n & len (a*p)=len p by MATRIXR1:16,MATRIX_1:24;
+    a*M1 is_symmetry_circulant_about a*p by A3,T2;
+    then ex q being FinSequence of K st
+    len q =width (a*M1) & (a*M1) is_symmetry_circulant_about q
+    by A2,A4,MATRIX_1:24;
+    hence thesis by Def5;
+  end;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be symmetry_circulant Matrix of n,K;
+  cluster M1+M2 -> symmetry_circulant for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K such that
+A1: M=M1+M2;
+    consider p being FinSequence of K such that
+A2: len p=width M1 and
+A3: M1 is_symmetry_circulant_about p by Def5;
+ width M1=n by MATRIX_1:24; then
+A7: dom p=Seg n by A2,FINSEQ_1:def 3;
+  consider q being FinSequence of K such that
+A8: len q=width M2 and
+A9: M2 is_symmetry_circulant_about q by Def5;
+A11:  n in NAT by ORDINAL1:def 12;
+ width M2=n by MATRIX_1:24;
+  then dom q=Seg n by A8,FINSEQ_1:def 3;
+  then dom (p+q)=dom p by A7,POLYNOM1:1;
+  then
+A14: len (p+q)=n by A7,A11,FINSEQ_1:def 3;
+     width (M1+M2)=n by MATRIX_1:24;
+  then ex r being FinSequence of K st
+  len r =width (M1+M2) & M1+M2 is_symmetry_circulant_about r
+  by A14,A3,A9,T3;
+  hence thesis by A1,Def5;
+  end;
+end;
+
+registration
+  let n,K;
+  let M1 be symmetry_circulant Matrix of n,K;
+  cluster -M1 -> symmetry_circulant for Matrix of n,K;
+  coherence
+  proof
+    let N be Matrix of n,K such that
+A1: N = -M1;
+    consider p being FinSequence of K such that
+A4: len p=width M1 and
+A5: M1 is_symmetry_circulant_about p by Def5;
+  p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:92;
+  then
+ -p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:113;
+  then
+A7: width (-M1)=n & len (-p)=len p by CARD_1:def 7,MATRIX_1:24;
+  -M1 is_symmetry_circulant_about -p by A5,T4;
+  then ex r being FinSequence of K st
+  len r =width (-M1) & (-M1) is_symmetry_circulant_about r
+  by A4,A7,MATRIX_1:24;
+  hence thesis by A1,Def5;
+end;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be symmetry_circulant Matrix of n,K;
+  cluster M1-M2 -> symmetry_circulant for Matrix of n,K;
+  coherence
+  proof
+    M1-M2=M1+-M2;
+    hence thesis;
+  end;
+end;
+
+theorem
+  A is symmetry_circulant & n>0 implies A@ is symmetry_circulant
+proof
+  assume that
+A1: A is symmetry_circulant and
+A2: n>0;
+  consider p being FinSequence of D such that
+A3: len p=width A and
+A4: A is_symmetry_circulant_about p by A1,Def5;
+  width A=n & len A=n by MATRIX_1:24;
+  then width (A@)=len p by A2,A3,MATRIX_2:10;
+  then consider p being FinSequence of D such that
+A15: len p = width (A@) & A@ is_symmetry_circulant_about p by A2,A4,T5;
+  take p;
+  thus thesis by A15;
+end;
+
+theorem Th4:
+  p is first-symmetry-of-circulant implies -p is first-symmetry-of-circulant
+proof
+  set n=len p;
+  assume p is first-symmetry-of-circulant;
+  then consider M1 being Matrix of len p,K such that
+A1: M1 is_symmetry_circulant_about p by Def6;
+  p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:92;
+  then -p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:113;
+  then
+A5: len (-p)=len p by CARD_1:def 7;
+  -M1 is_symmetry_circulant_about -p by A1,T4;
+  then consider M2 being Matrix of len -p,K such that
+A15: M2 is_symmetry_circulant_about -p by A5;
+  take M2;
+  thus thesis by A15;
+end;
+
+theorem
+  p is first-symmetry-of-circulant implies SCirc(-p) = -(SCirc p)
+proof
+  set n=len p;
+A1: len SCirc(p)= len p & width SCirc(p)=len p by MATRIX_1:24;
+A2: Indices SCirc(p) =[:Seg n, Seg n:] by MATRIX_1:24;
+  p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:92;
+  then -p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:113;
+  then
+A3: len (-p)=len p by CARD_1:def 7;
+  assume
+A4: p is first-symmetry-of-circulant;
+  then -p is first-symmetry-of-circulant by Th4;
+  then
+A5: SCirc(-p) is_symmetry_circulant_about -p by Def7;
+A6: SCirc(p) is_symmetry_circulant_about p by A4,Def7;
+A7: for i,j be Nat st [i,j] in Indices SCirc(p) holds SCirc(-p)*(i,j)=-(
+  SCirc(p)*(i,j))
+  proof
+    let i,j be Nat;
+    assume
+A8: [i,j] in Indices SCirc(p);
+    now
+      per cases;
+      suppose
+A9:  i+j<>len p +1;
+       i+j-1 mod n in Seg n by A2,A8,A9,Lm4;
+       then
+A10: i+j-1 mod len p in dom p by FINSEQ_1:def 3;
+       [i,j] in Indices SCirc(-p) by A3,A8,MATRIX_1:26;
+       then SCirc(-p)*(i,j) =(-p).(i+j-1 mod len -p) by A5,A9,A3,Def4
+       .=(comp K).( p.(i+j-1 mod len p)) by A3,A10,FUNCT_1:13
+       .=(comp K).(SCirc(p)*(i,j)) by A6,A8,A9,Def4
+       .=-(SCirc(p)*(i,j)) by VECTSP_1:def 13;
+       hence thesis;
+     end;
+     suppose
+A11: i+j=len p+1;
+       i in Seg n & j in Seg n by A2,A8,ZFMISC_1:87;
+       then
+       1<=i & 1<=j by FINSEQ_1:1;
+       then 1+1<=i+j by XREAL_1:7;
+       then len p +1-1 >=1+1-1 by A11,XREAL_1:9;
+       then len p in Seg len p;
+       then
+A13:len p in dom p by FINSEQ_1:def 3;
+       [i,j] in Indices SCirc(-p) by A3,A8,MATRIX_1:26;
+       then SCirc(-p)*(i,j) =(-p).(len -p) by A5,A11,A3,Def4
+       .=(comp K).( p.(len p)) by A3,A13,FUNCT_1:13
+       .=(comp K).(SCirc(p)*(i,j)) by A6,A8,A11,Def4
+       .=-(SCirc(p)*(i,j)) by VECTSP_1:def 13;
+       hence thesis;
+      end;
+    end;
+    hence thesis;
+   end;
+  len SCirc(-p)= len p & width SCirc(-p)=len p by A3,MATRIX_1:24;
+  hence thesis by A1,A7,MATRIX_3:def 2;
+end;
+
+theorem Th6:
+  p is first-symmetry-of-circulant & q is first-symmetry-of-circulant &
+  len p=len q implies p+q is first-symmetry-of-circulant
+proof
+  set n = len p;
+  assume that
+A1: p is first-symmetry-of-circulant and
+A2: q is first-symmetry-of-circulant and
+A3: len p=len q;
+  consider M2 being Matrix of n,K such that
+A4: M2 is_symmetry_circulant_about q by A2,A3,Def6;
+A5: dom p=Seg n by FINSEQ_1:def 3;
+  dom q=Seg n by A3,FINSEQ_1:def 3;
+  then dom (p+q)=dom p by A5,POLYNOM1:1; then
+A7: len (p+q)=n by A5,FINSEQ_1:def 3;
+  consider M1 being Matrix of n,K such that
+A8: M1 is_symmetry_circulant_about p by A1,Def6;
+  width (M1+M2)=n by MATRIX_1:24;
+  then consider M3 being Matrix of len (p+q),K such that
+  len (p+q)=width M3 and
+A23: M3 is_symmetry_circulant_about p+q by A7,A4,A8,T3;
+  take M3;
+  thus thesis by A23;
+end;
+
+theorem Th7:
+  len p=len q & p is first-symmetry-of-circulant &
+  q is first-symmetry-of-circulant implies SCirc(p+q) = SCirc(p)+SCirc(q)
+proof
+  set n = len p;
+  assume that
+A1: len p=len q and
+A2: p is first-symmetry-of-circulant and
+A3: q is first-symmetry-of-circulant;
+A4: SCirc(q) is_symmetry_circulant_about q & Indices SCirc(p) =Indices SCirc(q)
+  by A1,A3,Def7,MATRIX_1:26;
+  p+q is first-symmetry-of-circulant by A1,A2,A3,Th6; then
+A5: SCirc(p+q) is_symmetry_circulant_about (p+q) by Def7;
+A6: dom p=Seg n by FINSEQ_1:def 3;
+A7: SCirc(p) is_symmetry_circulant_about p by A2,Def7;
+A8: dom (p+q)=Seg len (p+q) by FINSEQ_1:def 3;
+A9: Indices SCirc(p) =[:Seg n, Seg n:] by MATRIX_1:24;
+  dom q=Seg n by A1,FINSEQ_1:def 3;
+  then dom (p+q)=dom p by A6,POLYNOM1:1; then
+A10: len (p+q)=n by A6,FINSEQ_1:def 3; then
+A11: Indices SCirc(p) =Indices SCirc(p+q) by MATRIX_1:26;
+A12: for i,j be Nat holds [i,j] in Indices SCirc(p) implies SCirc(p+q)*(i,j)
+  =SCirc(p)*(i,j)+SCirc(q)*(i,j)
+  proof
+    let i,j be Nat;
+    assume
+A13: [i,j] in Indices SCirc(p);
+    now
+      per cases;
+      suppose
+A14:   i+j<>len (p+q) +1;
+A15: i+j-1 mod n in Seg n by A9,A13,A14,A10,Lm4;
+         SCirc(p+q)*(i,j) =(p+q).(i+j-1 mod len (p+q))
+         by A5,A11,A13,A14,Def4
+         .=(the addF of K).(p.(i+j-1 mod len (p+q)),q.(i+j-1 mod len (p+q))
+         ) by A8,A10,A15,FUNCOP_1:22
+         .=(the addF of K).(SCirc(p)*(i,j),q.(i+j-1 mod len q))
+         by A1,A10,A7,A13,A14,Def4
+         .=SCirc(p)*(i,j) + SCirc(q)*(i,j) by A1,A4,A13,A14,A10,Def4;
+         hence thesis;
+      end;
+      suppose
+A16:  i+j=len (p+q) +1;
+          i in Seg n & j in Seg n by A9,A13,ZFMISC_1:87;
+       then
+          1<=i & 1<=j by FINSEQ_1:1;
+       then 1+1<=i+j by XREAL_1:7;
+       then len (p+q) +1-1 >=1+1-1  by A16,XREAL_1:9;
+       then len (p+q) in Seg len (p+q);
+       then
+A17:  len (p+q) in dom (p+q) by FINSEQ_1:def 3;
+         SCirc(p+q)*(i,j) =(p+q).(len (p+q)) by A5,A11,A13,A16,Def4
+         .=(the addF of K).(p.(len (p+q)),q.(len (p+q))
+         ) by A17,FUNCOP_1:22
+         .=(the addF of K).(SCirc(p)*(i,j),q.(len q))
+         by A1,A10,A7,A13,A16,Def4
+         .=SCirc(p)*(i,j) + SCirc(q)*(i,j) by A4,A13,A16,A1,A10,Def4;
+         hence thesis;
+      end;
+    end;
+    hence thesis;
+  end;
+A18: len SCirc(p)= len p & width SCirc(p) = len p by MATRIX_1:24;
+  len SCirc(p+q)= len p & width SCirc(p+q)=len p by A10,MATRIX_1:24;
+  hence thesis by A18,A12,MATRIX_3:def 3;
+end;
+
+theorem Th8:
+  p is first-symmetry-of-circulant implies a*p is first-symmetry-of-circulant
+proof
+  set n=len p;
+A1: len (a*p)=len p by MATRIXR1:16;
+  assume p is first-symmetry-of-circulant;
+  then consider M1 being Matrix of n,K such that
+A2: M1 is_symmetry_circulant_about p by Def6;
+  a*M1 is_symmetry_circulant_about a*p by A2,T2;
+  then consider M2 being Matrix of len (a*p),K such that
+A19: M2 is_symmetry_circulant_about a*p by A1;
+  take M2;
+  thus thesis by A19;
+end;
+
+theorem Th9:
+  p is first-symmetry-of-circulant implies SCirc(a*p) =a*(SCirc p)
+proof
+  set n=len p;
+A1: len (a*p)=len p by MATRIXR1:16;
+  assume
+A2: p is first-symmetry-of-circulant;
+  then a*p is first-symmetry-of-circulant by Th8;
+  then
+A3: SCirc(a*p) is_symmetry_circulant_about a*p by Def7;
+A4: Indices SCirc(p) =[:Seg n, Seg n:] by MATRIX_1:24;
+A5: SCirc(p) is_symmetry_circulant_about p by A2,Def7;
+A6: for i,j be Nat st [i,j] in Indices SCirc(p) holds SCirc(a*p)*(i,j)=a*(
+  SCirc(p)*(i,j))
+  proof
+    let i,j be Nat;
+A7: dom (a*p)=Seg len (a*p) by FINSEQ_1:def 3;
+    assume
+A8: [i,j] in Indices SCirc(p);
+    now
+      per cases;
+      suppose
+A9:   i+j<>len p +1;
+A10:   i+j-1 mod n in Seg n by A4,A8,A9,Lm4;
+A11: dom p=Seg len p by FINSEQ_1:def 3;
+         [i,j] in Indices SCirc(a*p) by A1,A8,MATRIX_1:26;
+         then SCirc(a*p)*(i,j) =(a*p).(i+j-1 mod len (a*p)) by A1,A3,A9,Def4
+         .=(a*p)/.(i+j-1 mod len p) by A1,A10,A7,PARTFUN1:def 6
+         .=a*(p/.(i+j-1 mod len p)) by A10,A11,POLYNOM1:def 1
+         .=(a multfield).(p/.(i+j-1 mod len p)) by FVSUM_1:49
+         .=(a multfield).(p.(i+j-1 mod len p)) by A10,A11,PARTFUN1:def 6
+         .=(a multfield).(SCirc(p)*(i,j)) by A5,A8,A9,Def4
+         .=a*(SCirc(p)*(i,j)) by FVSUM_1:49;
+         hence thesis;
+       end;
+       suppose
+A12:   i+j=len p +1;
+A13:[i,j] in Indices SCirc(a*p) by A1,A8,MATRIX_1:26;
+         i in Seg n & j in Seg n by A4,A8,ZFMISC_1:87; then
+        1<=i & 1<=j by FINSEQ_1:1;
+        then 1+1<=i+j by XREAL_1:7;
+        then len p +1-1 >=1+1-1 by A12,XREAL_1:9;
+        then
+A14:    len p in Seg len p; then
+A15: len p in dom (a*p) by A1,FINSEQ_1:def 3;
+A16:  len p in dom p by A14,FINSEQ_1:def 3;
+         SCirc(a*p)*(i,j) =(a*p).(len (a*p)) by A1,A3,A12,A13,Def4
+         .=(a*p)/.(len p) by A1,A15,PARTFUN1:def 6
+         .=a*(p/.(len p)) by A16,POLYNOM1:def 1
+         .=(a multfield).(p/.(len p)) by FVSUM_1:49
+         .=(a multfield).(p.(len p)) by A16,PARTFUN1:def 6
+         .=(a multfield).(SCirc(p)*(i,j)) by A5,A8,A12,Def4
+         .=a*(SCirc(p)*(i,j)) by FVSUM_1:49;
+         hence thesis;
+       end;
+      end;
+      hence thesis;
+    end;
+A17: len SCirc(p)= len p & width SCirc(p) = len p by MATRIX_1:24;
+  len SCirc(a*p)= len p & width SCirc(a*p) = len p by A1,MATRIX_1:24;
+  hence thesis by A17,A6,MATRIX_3:def 5;
+end;
+
+theorem
+  p is first-symmetry-of-circulant implies
+  a*(SCirc p)+b*(SCirc p) = SCirc((a+ b)*p)
+proof
+A1: len (b*p)=len p by MATRIXR1:16;
+A2: p is Element of (len p)-tuples_on the carrier of K by FINSEQ_2:92;
+  assume
+A3: p is first-symmetry-of-circulant;
+  then
+A4: a*p is first-symmetry-of-circulant & b*p is first-symmetry-of-circulant
+  by Th8;
+  a*(SCirc p)=SCirc(a*p) & b*(SCirc p)=SCirc(b*p) by A3,Th9;
+  then a*(SCirc p)+b*(SCirc p)=SCirc(a*p+b*p) by A4,A1,Th7,MATRIXR1:16;
+  hence thesis by A2,FVSUM_1:55;
+end;
+
+theorem
+  p is first-symmetry-of-circulant & q is first-symmetry-of-circulant & len p =
+  len q implies a*(SCirc p)+a*(SCirc q)=SCirc(a*(p+q))
+proof
+  assume that
+A1: p is first-symmetry-of-circulant & q is first-symmetry-of-circulant and
+A2: len p=len q;
+A3: len SCirc(p)= len p & width SCirc(p) = len p by MATRIX_1:24;
+  len SCirc(q)= len p & width SCirc(q)=len p by A2,MATRIX_1:24;
+  then a*(SCirc p)+a*(SCirc q)=a*(SCirc p+SCirc q) by A3,MATRIX_5:20
+    .=a*(SCirc (p+q)) by A1,A2,Th7
+    .=SCirc(a*(p+q)) by A1,A2,Th6,Th9;
+  hence thesis;
+end;
+
+theorem
+  p is first-symmetry-of-circulant & q is first-symmetry-of-circulant & len p =
+  len q implies a*(SCirc p)+b*(SCirc q)=SCirc(a*p+b*q)
+proof
+  set n = len p;
+  assume that
+A1: p is first-symmetry-of-circulant and
+A2: q is first-symmetry-of-circulant and
+A3: len p = len q;
+A4: a*p is first-symmetry-of-circulant & b*q is first-symmetry-of-circulant
+       by A1,A2,Th8;
+A5: len (b*q)=n by A3,MATRIXR1:16;
+  a*(SCirc p)+b*(SCirc q) = SCirc (a*p)+b*(SCirc q) by A1,Th9
+    .=SCirc (a*p)+SCirc (b*q) by A2,Th9
+    .=SCirc(a*p+b*q) by A4,A5,Th7,MATRIXR1:16;
+  hence thesis;
+end;
+
+theorem Th13:
+  M1 is symmetry_circulant implies M1@ = M1
+  proof
+    assume M1 is symmetry_circulant;
+    then consider p being FinSequence of K such that len p=width M1 and
+A1: M1 is_symmetry_circulant_about p by Def5;
+A2:Indices M1 = [:Seg n,Seg n:] by MATRIX_1:24;
+A3:len M1=n & width M1=n by MATRIX_1:24;
+A4:len (M1@) = n & width (M1@) = n by MATRIX_1:24;
+   for i,j be Nat st [i,j] in Indices M1 holds
+   M1@*(i,j)=M1*(i,j)
+   proof
+    let i,j be Nat;
+    assume
+A5:[i,j] in Indices M1;
+     per cases;
+     suppose
+A6:i+j<>len p +1;
+     i in Seg n & j in Seg n by A2,A5,ZFMISC_1:87;
+     then
+A7:[j,i] in [:Seg n,Seg n:] by ZFMISC_1:87;
+     then
+     M1@*(i,j)=M1*(j,i) by A2,MATRIX_1:def 6
+     .=p.(i+j-1 mod len p) by A1,A7,A6,A2,Def4;
+     hence thesis by A1,A5,A6,Def4;
+   end;
+     suppose
+A8:i+j=len p+1;
+     i in Seg n & j in Seg n by A5,A2,ZFMISC_1:87;
+     then
+A9:  [j,i] in [:Seg n,Seg n:] by ZFMISC_1:87;
+     M1@*(i,j)=M1*(j,i) by A2,A9,MATRIX_1:def 6
+       .=p.(len p) by A1,A9,A8,A2,Def4;
+     hence thesis by A1,A8,A5,Def4;
+    end;
+   end;
+   hence thesis by A3,A4,MATRIX_1:21;
+  end;
+
+registration
+  let n,K;
+  cluster symmetry_circulant -> symmetric for Matrix of n,K;
+  coherence
+  proof
+    let M be Matrix of n,K;
+    assume M is symmetry_circulant;
+    hence M@=M by Th13;
+  end;
+end;

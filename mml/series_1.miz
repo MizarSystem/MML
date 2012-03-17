@@ -2,7 +2,7 @@
 ::  by Konrad Raczkowski and Andrzej N\c{e}dzusiak
 ::
 :: Received October 15, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,22 +17,24 @@ environ
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, ARYTM_3, CARD_1,
       FUNCT_1, POWER, SEQ_2, ORDINAL2, ARYTM_1, XXREAL_0, COMPLEX1, RELAT_1,
       INT_1, NAT_1, REAL_1, CARD_3, VALUED_1, FUNCOP_1, VALUED_0, XXREAL_2,
-      PREPOWER, NEWTON, SERIES_1, ABIAN, MEMBERED, XBOOLE_0, IDEAL_1, XCMPLX_0;
+      PREPOWER, NEWTON, SERIES_1, ABIAN, MEMBERED, XBOOLE_0, IDEAL_1, PBOOLE,
+      TARSKI;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1,
-      REAL_1, NAT_1, MEMBERED, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, SEQ_1,
-      SEQ_2, FUNCT_2, INT_1, NEWTON, ABIAN, PREPOWER, POWER, FUNCOP_1,
-      XXREAL_0;
+      REAL_1, NAT_1, MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, VALUED_0,
+      VALUED_1, SEQ_1, COMSEQ_2, SEQ_2, PBOOLE, FUNCT_2, INT_1, NEWTON, ABIAN,
+      PREPOWER, POWER, FUNCOP_1, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, SEQ_2, SEQM_3, NEWTON,
       PREPOWER, POWER, PARTFUN1, SEQ_1, VALUED_1, SEQ_4, RELSET_1, ABIAN,
-      BINOP_2;
+      BINOP_2, COMSEQ_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       MEMBERED, NEWTON, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, POWER, FUNCOP_1,
-      SEQ_2, SEQ_4, XCMPLX_0;
+      SEQ_2, SEQ_4, XCMPLX_0, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
- definitions VALUED_1, XCMPLX_0;
+ definitions VALUED_1, XCMPLX_0, PBOOLE, VALUED_0;
  theorems SEQ_1, SEQ_2, SEQM_3, SEQ_4, NAT_1, RFUNCT_2, ABSVALUE, INT_1,
       PREPOWER, POWER, FUNCT_2, NEWTON, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1,
-      XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, MEMBERED;
+      XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, MEMBERED, XCMPLX_0, RELSET_1,
+      PARTFUN1;
  schemes NAT_1, SEQ_1, FUNCT_2, RECDEF_1;
 
 begin
@@ -40,8 +42,6 @@ begin
 reserve n,m,k for Element of NAT;
 reserve a,p,r for real number;
 reserve s,s1,s2,s3 for Real_Sequence;
-
-Lm1: 1/1=1;
 
 theorem Th1:
   0<a & a<1 & (for n holds s.n=a to_power (n+1)) implies
@@ -52,7 +52,7 @@ A1: 0<a and
 A2: a<1 and
 A3: for n holds s.n=a to_power (n+1);
   set r = 1/a - 1;
-  1/a > 1 by A1,A2,Lm1,XREAL_1:88;
+  1/a > 1/1 by A1,A2,XREAL_1:88;
   then
 A4: r > 0 by XREAL_1:50;
 A5: for p be real number st 0 < p ex m st for n st m<=n holds abs(s.n - 0) < p
@@ -96,9 +96,9 @@ A14:  abs(a to_power (n+1)) = a to_power (n+1) by ABSVALUE:def 1;
 end;
 
 theorem Th2:
-  for n being natural number holds abs(a) to_power n = abs(a to_power n)
+  for n being Nat holds abs(a) to_power n = abs(a to_power n)
 proof
-  let n be natural number;
+  let n be Nat;
   per cases;
   suppose
 A1: a <> 0;
@@ -107,8 +107,8 @@ A2: abs(a) > 0 by COMPLEX1:47;
     now
       per cases by A1;
       suppose a>0;
-        then a to_power n = abs(a) to_power n & a to_power n > 0 by
-ABSVALUE:def 1,POWER:34;
+        then a to_power n = abs(a) to_power n & a to_power n > 0
+         by ABSVALUE:def 1,POWER:34;
         hence thesis by ABSVALUE:def 1;
       end;
       suppose
@@ -128,8 +128,8 @@ A6:         m is odd;
 A7:         abs(a) to_power n > 0 by A2,POWER:34;
             abs(a) to_power n = (-a) to_power m by A3,ABSVALUE:def 1
               .= - a to_power m by A6,POWER:48;
-            hence abs(a) to_power n = abs( - a to_power n ) by A7,
-ABSVALUE:def 1
+            hence abs(a) to_power n = abs( - a to_power n )
+             by A7,ABSVALUE:def 1
               .= abs( a to_power n ) by COMPLEX1:52;
           end;
         end;
@@ -217,33 +217,26 @@ A3:   s1.x in X & s2.x in X by A2,FUNCT_2:5;
 end;
 
 definition
-  let X be complex-membered set;
-  let s be sequence of X such that
-A1: X is non empty add-closed;
-  func Partial_Sums(s) -> sequence of X means
+  let s be complex-valued ManySortedSet of NAT;
+  func Partial_Sums(s) -> complex-valued ManySortedSet of NAT means
   :Def1:
   it.0 = s.0 & for n holds it.(n+1) = it.n + s.(n+1);
   existence
   proof
-    reconsider X as non empty complex-membered set by A1;
-    reconsider s as sequence of X;
-    defpred P[Nat,Element of X,set] means $3 = $2 + s.($1+1);
+    set X = COMPLEX;
+A1:  dom s = NAT by PARTFUN1:def 2;
+    rng s c= X by VALUED_0:def 1;
+    then reconsider ss = s as Function of NAT,X by A1,RELSET_1:4;
+    defpred P[Nat,Element of X,set] means $3 = $2 + ss.($1+1);
 A2: for n being Element of NAT for x being Element of X
-    ex y being Element of X st P[n,x,y]
-    proof
-      let n be Element of NAT;
-      let x be Element of X;
-      reconsider y = x + s.(n+1) as Element of X by A1,MEMBERED:def 25;
-      take y;
-      thus P[n,x,y];
-    end;
-    ex f being Function of NAT,X st f.0 = s.0 &
+    ex y being Element of X st P[n,x,y];
+    ex f being Function of NAT,X st f.0 = ss.0 &
     for n being Element of NAT holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 2(A2);
     hence thesis;
   end;
   uniqueness
   proof
-    let s1,s2 be sequence of X;
+    let s1,s2 be complex-valued ManySortedSet of NAT;
     assume that
 A3: s1.0=s.0 and
 A4: for n holds s1.(n+1)=s1.n + s.(n+1) and
@@ -258,9 +251,47 @@ A7: for k st X[k] holds X[k+1]
         .= s2.(k+1) by A6;
     end;
 A8: X[0] by A3,A5;
-    for n holds X[n] from NAT_1:sch 1(A8,A7);
-    hence s1 = s2 by FUNCT_2:63;
+    thus for n holds X[n] from NAT_1:sch 1(A8,A7);
   end;
+end;
+
+registration
+  let s be real-valued ManySortedSet of NAT;
+ cluster Partial_Sums s -> real-valued;
+ coherence
+  proof set f = Partial_Sums s;
+   let x be set;
+   assume
+  x in dom f;
+   then reconsider n = x as Element of NAT;
+   defpred P[Nat] means f.$1 is real;
+   f.0 = s.0 by Def1;
+   then
+A1: P[0];
+A2: for k be Nat st P[k] holds P[k + 1]
+    proof let k be Nat;
+     assume
+A3:      P[k];
+      reconsider k as Element of NAT by ORDINAL1:def 12;
+      f.(k+1) = f.k + s.(k+1) by Def1;
+     hence thesis by A3;
+    end;
+   for k being Nat holds P[k] from NAT_1:sch 2(A1,A2);
+    then f.n is real;
+   hence thesis;
+  end;
+end;
+
+definition
+  let s be Real_Sequence;
+  redefine func Partial_Sums s -> Real_Sequence;
+  coherence
+   proof
+A1:   dom Partial_Sums s = NAT by PARTFUN1:def 2;
+     rng Partial_Sums s c= REAL by VALUED_0:def 3;
+     then Partial_Sums s is Relation of NAT, REAL by A1,RELSET_1:4;
+    hence Partial_Sums s is Real_Sequence;
+   end;
 end;
 
 definition
@@ -273,7 +304,7 @@ definition
   correctness;
 end;
 
-theorem Th7:
+theorem Th4:
   s is summable implies s is convergent & lim s = 0
 proof
   assume s is summable;
@@ -311,32 +342,30 @@ A4: s ^\1 is convergent by A1;
   hence thesis by A3,A4,SEQ_4:22;
 end;
 
-Lm2:
-  for X being non empty add-closed complex-membered set
-  for seq,seq1,seq2 being sequence of X holds
+Lm1:
+  for seq,seq1,seq2 being complex-valued ManySortedSet of NAT holds
   seq = seq1 + seq2 iff for n holds seq.n =seq1.n + seq2.n
 proof
-  let X be non empty add-closed complex-membered set;
-  let seq,seq1,seq2 be sequence of X;
+:::  let X be complex-valued ManySortedSet of NAT;
+  let seq,seq1,seq2 be complex-valued ManySortedSet of NAT;
   thus seq = seq1 + seq2 implies for n holds seq.n =seq1.n + seq2.n
   proof
     assume
 A1: seq = seq1 + seq2;
     let n;
-    dom seq = NAT by FUNCT_2:def 1;
+    dom seq = NAT by PARTFUN1:def 2;
     hence thesis by A1,VALUED_1:def 1;
   end;
-A2: dom seq = NAT by FUNCT_2:def 1;
   assume for n holds seq.n =seq1.n + seq2.n;
   then
-A3: for n being set st n in dom seq holds seq.n = seq1.n + seq2.n by A2;
-  dom seq = NAT /\ NAT by FUNCT_2:def 1
-    .= NAT /\ dom seq2 by FUNCT_2:def 1
-    .= dom seq1 /\ dom seq2 by FUNCT_2:def 1;
-  hence thesis by A3,VALUED_1:def 1;
+A2: for n being set st n in dom seq holds seq.n = seq1.n + seq2.n;
+  dom seq = NAT /\ NAT by PARTFUN1:def 2
+    .= NAT /\ dom seq2 by PARTFUN1:def 2
+    .= dom seq1 /\ dom seq2 by PARTFUN1:def 2;
+  hence thesis by A2,VALUED_1:def 1;
 end;
 
-theorem Th8:
+theorem Th5:
   for X being non empty add-closed complex-membered set
   for s1,s2 being sequence of X holds
   Partial_Sums(s1) + Partial_Sums(s2) = Partial_Sums(s1+s2)
@@ -346,23 +375,23 @@ proof
 A1: now
     let n;
     thus (Partial_Sums(s1) + Partial_Sums(s2)).(n+1) = Partial_Sums(s1).(n+1)
-    + Partial_Sums(s2).(n+1) by Lm2
+    + Partial_Sums(s2).(n+1) by Lm1
       .= Partial_Sums(s1).n + s1.(n+1) + Partial_Sums(s2).(n+1) by Def1
       .= Partial_Sums(s1).n+s1.(n+1)+(s2.(n+1)+Partial_Sums(s2).n) by Def1
       .= Partial_Sums(s1).n+(s1.(n+1)+s2.(n+1))+Partial_Sums(s2).n
-      .= Partial_Sums(s1).n+(s1+s2).(n+1)+Partial_Sums(s2).n by Lm2
+      .= Partial_Sums(s1).n+(s1+s2).(n+1)+Partial_Sums(s2).n by Lm1
       .= Partial_Sums(s1).n+Partial_Sums(s2).n+(s1+s2).(n+1)
-      .= (Partial_Sums(s1)+Partial_Sums(s2)).n+(s1+s2).(n+1) by Lm2;
+      .= (Partial_Sums(s1)+Partial_Sums(s2)).n+(s1+s2).(n+1) by Lm1;
   end;
   (Partial_Sums(s1) + Partial_Sums(s2)).0 = Partial_Sums(s1).0 +
-  Partial_Sums(s2).0 by Lm2
+  Partial_Sums(s2).0 by Lm1
     .= s1.0 + Partial_Sums(s2).0 by Def1
     .= s1.0 + s2.0 by Def1
-    .= (s1+s2).0 by Lm2;
+    .= (s1+s2).0 by Lm1;
   hence thesis by A1,Def1;
 end;
 
-theorem Th9:
+theorem Th6:
   Partial_Sums(s1) - Partial_Sums(s2) = Partial_Sums(s1-s2)
 proof
 A1: now
@@ -392,9 +421,9 @@ proof
   then
 A1: Partial_Sums(s1) is convergent & Partial_Sums(s2) is convergent by Def2;
   then Partial_Sums(s1) + Partial_Sums(s2) is convergent;
-  then Partial_Sums(s1+s2) is convergent by Th8;
+  then Partial_Sums(s1+s2) is convergent by Th5;
   hence s1+s2 is summable by Def2;
-  thus Sum(s1+s2) =lim (Partial_Sums(s1) + Partial_Sums(s2)) by Th8
+  thus Sum(s1+s2) =lim (Partial_Sums(s1) + Partial_Sums(s2)) by Th5
     .=Sum(s1) + Sum(s2) by A1,SEQ_2:6;
 end;
 
@@ -406,13 +435,13 @@ proof
   then
 A1: Partial_Sums(s1) is convergent & Partial_Sums(s2) is convergent by Def2;
   then Partial_Sums(s1) - Partial_Sums(s2) is convergent;
-  then Partial_Sums(s1-s2) is convergent by Th9;
+  then Partial_Sums(s1-s2) is convergent by Th6;
   hence s1-s2 is summable by Def2;
-  thus Sum(s1-s2) =lim (Partial_Sums(s1) - Partial_Sums(s2)) by Th9
+  thus Sum(s1-s2) =lim (Partial_Sums(s1) - Partial_Sums(s2)) by Th6
     .=Sum(s1) - Sum(s2) by A1,SEQ_2:12;
 end;
 
-theorem Th12:
+theorem Th9:
   Partial_Sums(r(#)s) = r(#)Partial_Sums(s)
 proof
 A1: now
@@ -429,20 +458,20 @@ A1: now
   hence thesis by A1,Def1;
 end;
 
-theorem Th13:
+theorem Th10:
   s is summable implies r(#)s is summable & Sum(r(#)s) =r*Sum(s)
 proof
   assume s is summable;
   then
 A1: Partial_Sums(s) is convergent by Def2;
   then r(#)Partial_Sums(s) is convergent;
-  then Partial_Sums(r(#)s) is convergent by Th12;
+  then Partial_Sums(r(#)s) is convergent by Th9;
   hence r(#)s is summable by Def2;
-  thus Sum(r(#)s) =lim (r(#)Partial_Sums(s)) by Th12
+  thus Sum(r(#)s) =lim (r(#)Partial_Sums(s)) by Th9
     .=r*Sum(s) by A1,SEQ_2:8;
 end;
 
-theorem Th14:
+theorem Th11:
   for s,s1 st for n holds s1.n=s.0 holds Partial_Sums(s^\1) = (
   Partial_Sums(s)^\1) - s1
 proof
@@ -471,7 +500,7 @@ A2: now
   hence thesis by A2,Def1;
 end;
 
-theorem Th15:
+theorem Th12:
   s is summable implies for n holds s^\n is summable
 proof
   defpred X[Element of NAT] means s^\$1 is summable;
@@ -481,7 +510,7 @@ A1: for n st X[n] holds X[n+1]
     reconsider s1 = NAT --> (s^\n).0 as Real_Sequence;
     for k holds s1.k = (s^\n).0 by FUNCOP_1:7;
     then
-A2: Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by Th14;
+A2: Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by Th11;
     assume s^\n is summable;
     then Partial_Sums(s^\n) is convergent by Def2;
     then s^\(n+1)=(s^\n)^\1 & Partial_Sums(s^\n^\1) is convergent by A2,
@@ -494,7 +523,7 @@ A3: X[0] by NAT_1:47;
   thus for n holds X[n] from NAT_1:sch 1(A3,A1);
 end;
 
-theorem Th16:
+theorem Th13:
   (ex n st s^\n is summable) implies s is summable
 proof
   given n such that
@@ -535,14 +564,14 @@ A5: X[0];
   then
 A6: Partial_Sums(s)^\(n+1) = Partial_Sums(s^\(n+1)) + s1 by SEQ_1:7
     .= Partial_Sums((s^\n)^\1) + s1 by NAT_1:48;
-  s^\n^\1 is summable by A1,Th15;
+  s^\n^\1 is summable by A1,Th12;
   then Partial_Sums(s^\n^\1) is convergent by Def2;
   then Partial_Sums(s)^\(n+1) is convergent by A6;
   then Partial_Sums(s) is convergent by SEQ_4:21;
   hence thesis by Def2;
 end;
 
-theorem Th17:
+theorem Th14:
   (for n holds s1.n<=s2.n) implies for n holds Partial_Sums(s1).n
   <=Partial_Sums(s2).n
 proof
@@ -565,8 +594,8 @@ A5: X[0] by A1;
 end;
 
 theorem
-  s is summable implies for n holds Sum(s) = Partial_Sums(s).n + Sum(s^\
-  (n+1 ) )
+  s is summable implies
+   for n holds Sum(s) = Partial_Sums(s).n + Sum(s^\(n+1))
 proof
   defpred X[Element of NAT] means Sum(s) = Partial_Sums(s).$1 + Sum(s^\($1+1));
   assume
@@ -579,8 +608,8 @@ A3: Sum(s) = Partial_Sums(s).n + Sum(s^\(n+1));
     reconsider s1 = NAT --> (s^\(n+1)).0 as Real_Sequence;
     for k holds s1.k= (s^\(n+1)).0 by FUNCOP_1:7;
     then
-A4: Partial_Sums(s^\(n+1)^\1) = (Partial_Sums(s^\(n+1))^\1) - s1 by Th14;
-    s^\(n+1) is summable by A1,Th15;
+A4: Partial_Sums(s^\(n+1)^\1) = (Partial_Sums(s^\(n+1))^\1) - s1 by Th11;
+    s^\(n+1) is summable by A1,Th12;
     then
 A5: Partial_Sums(s^\(n+1)) is convergent by Def2;
     lim Partial_Sums(s^\(n+1+1)) = lim Partial_Sums(s^\(n+1)^\1) by NAT_1:48
@@ -598,7 +627,7 @@ A6: X[0]
     reconsider s1 = NAT --> s.0 as Real_Sequence;
 A7: Partial_Sums(s) is convergent by A1,Def2;
     for k holds s1.k= s.0 by FUNCOP_1:7;
-    then Partial_Sums(s^\1) = (Partial_Sums(s)^\1) - s1 by Th14;
+    then Partial_Sums(s^\1) = (Partial_Sums(s)^\1) - s1 by Th11;
     then lim Partial_Sums(s^\1) = lim (Partial_Sums(s)^\1) - lim s1 by A7,
 SEQ_2:12
       .= lim Partial_Sums(s) - lim s1 by A7,SEQ_4:20
@@ -610,7 +639,7 @@ SEQ_2:12
   thus for n holds X[n] from NAT_1:sch 1(A6,A2);
 end;
 
-theorem Th19:
+theorem Th16:
   (for n holds 0<=s.n) implies Partial_Sums(s) is non-decreasing
 proof
   assume
@@ -624,12 +653,12 @@ A1: for n holds 0<=s.n;
   hence thesis by SEQM_3:def 8;
 end;
 
-theorem Th20:
+theorem Th17:
   (for n holds 0<=s.n) implies (Partial_Sums(s) is bounded_above
   iff s is summable)
 proof
   assume for n holds 0<=s.n;
-  then Partial_Sums(s) is non-decreasing by Th19;
+  then Partial_Sums(s) is non-decreasing by Th16;
   hence Partial_Sums(s) is bounded_above implies s is summable by Def2;
   assume s is summable;
   then Partial_Sums(s) is convergent by Def2;
@@ -645,14 +674,14 @@ A1: s is summable and
 A2: for n holds 0<=s.n;
 A3: now
     let n;
-    Partial_Sums(s).0<=Partial_Sums(s).n & 0<=s.0 by A2,Th19,SEQM_3:11;
+    Partial_Sums(s).0<=Partial_Sums(s).n & 0<=s.0 by A2,Th16,SEQM_3:11;
     hence 0<=Partial_Sums(s).n by Def1;
   end;
   Partial_Sums(s) is convergent by A1,Def2;
   hence thesis by A3,SEQ_2:17;
 end;
 
-theorem Th22:
+theorem Th19:
   (for n holds 0<=s2.n) & s1 is summable & (ex m st for n st m<=n
   holds s2.n<=s1.n) implies s2 is summable
 proof
@@ -666,8 +695,8 @@ A4: now
     (s1^\m).n = s1.(n+m) & 0<= s2.(n+m) by A1,NAT_1:def 3;
     hence 0<=(s1^\m).n by A3,NAT_1:11;
   end;
-  s1^\m is summable by A2,Th15;
-  then Partial_Sums(s1^\m) is bounded_above by A4,Th20;
+  s1^\m is summable by A2,Th12;
+  then Partial_Sums(s1^\m) is bounded_above by A4,Th17;
   then consider r being real number such that
 A5: for n holds Partial_Sums(s1^\m).n<r by SEQ_2:def 3;
 A6: now
@@ -678,7 +707,7 @@ A6: now
   end;
   now
     let n;
-    Partial_Sums(s2^\m).n <= Partial_Sums(s1^\m).n by A6,Th17;
+    Partial_Sums(s2^\m).n <= Partial_Sums(s1^\m).n by A6,Th14;
     hence Partial_Sums(s2^\m).n<r by A5,XXREAL_0:2;
   end;
   then
@@ -688,8 +717,8 @@ A7: Partial_Sums(s2^\m) is bounded_above by SEQ_2:def 3;
     (s2^\m).n = s2.(n+m) by NAT_1:def 3;
     hence 0<=(s2^\m).n by A1;
   end;
-  then s2^\m is summable by A7,Th20;
-  hence thesis by Th16;
+  then s2^\m is summable by A7,Th17;
+  hence thesis by Th13;
 end;
 
 theorem
@@ -700,15 +729,15 @@ proof
 A1: for n holds 0<=s1.n & s1.n<=s2.n and
 A2: s2 is summable;
   for n holds 0<=n implies s1.n<=s2.n by A1;
-  hence s1 is summable by A1,A2,Th22;
+  hence s1 is summable by A1,A2,Th19;
   then
 A3: Partial_Sums(s1) is convergent by Def2;
   Partial_Sums(s2) is convergent & for n holds Partial_Sums(s1).n<=
-  Partial_Sums(s2).n by A1,A2,Def2,Th17;
+  Partial_Sums(s2).n by A1,A2,Def2,Th14;
   hence thesis by A3,SEQ_2:18;
 end;
 
-theorem Th25:
+theorem Th21:
   s is summable iff for r st 0<r ex n st for m st n<=m holds abs(
   Partial_Sums(s).m - Partial_Sums(s).n)<r
 proof
@@ -726,7 +755,7 @@ proof
 end;
 
 ::$N Sum of a Geometric Series
-theorem Th26:
+theorem Th22:
   a <> 1 implies Partial_Sums(a GeoSeq).n = (1 - a to_power (n+1)) /(1-a)
 proof
   defpred X[Element of NAT] means Partial_Sums(a GeoSeq).$1 = (1-a to_power (
@@ -782,17 +811,17 @@ A4: X[0];
   for n holds X[n] from NAT_1:sch 1(A4,A3);
   then s = s.0 (#) a GeoSeq by SEQ_1:9;
   then
-A5: Partial_Sums(s) = s.0 (#) Partial_Sums(a GeoSeq) by Th12;
+A5: Partial_Sums(s) = s.0 (#) Partial_Sums(a GeoSeq) by Th9;
   now
     let n;
     thus Partial_Sums(s).n = s.0 * Partial_Sums(a GeoSeq).n by A5,SEQ_1:9
-      .= s.0 * ((1 - a to_power (n+1))/(1-a)) by A1,Th26
+      .= s.0 * ((1 - a to_power (n+1))/(1-a)) by A1,Th22
       .= s.0 * (1 - a to_power (n+1))/(1-a);
   end;
   hence thesis;
 end;
 
-theorem Th28:
+theorem Th24:
   abs(a)<1 implies a GeoSeq is summable & Sum(a GeoSeq) = 1/(1-a)
 proof
   deffunc U(Element of NAT) = a to_power ($1+1);
@@ -821,7 +850,7 @@ A7: abs(a to_power (n+1))/(1-a)<r*(1-a)/(1-a) by A5,XREAL_1:74;
     a<>1 by A2,SEQ_2:1;
     then
 A8: abs(Partial_Sums(a GeoSeq).n - 1/(1-a)) = abs((1 - a to_power (n+1))/
-    (1-a) - 1/(1-a)) by Th26
+    (1-a) - 1/(1-a)) by Th22
       .= abs((1 +- a to_power (n+1) - 1)/(1-a))
       .= abs(- a to_power (n+1)/(1-a))
       .= abs(a to_power (n+1)/(1-a)) by COMPLEX1:52
@@ -859,20 +888,20 @@ A4: X[0];
   for n holds X[n] from NAT_1:sch 1(A4,A3);
   then s = s.0 (#) a GeoSeq by SEQ_1:9;
   then
-A5: Partial_Sums(s) = s.0 (#) Partial_Sums(a GeoSeq) by Th12;
-  a GeoSeq is summable by A1,Th28;
+A5: Partial_Sums(s) = s.0 (#) Partial_Sums(a GeoSeq) by Th9;
+  a GeoSeq is summable by A1,Th24;
   then
 A6: Partial_Sums(a GeoSeq) is convergent by Def2;
   then Partial_Sums(s) is convergent by A5;
   hence s is summable by Def2;
-  Sum(a GeoSeq) = 1/(1-a) by A1,Th28;
+  Sum(a GeoSeq) = 1/(1-a) by A1,Th24;
   then lim Partial_Sums(s) = s.0 * (1/(1-a)) by A5,A6,SEQ_2:8
     .= s.0*1/(1-a)
     .= s.0/(1-a);
   hence thesis;
 end;
 
-theorem Th30:
+theorem Th26:
   (for n holds s.n>0 & s1.n=s.(n+1)/s.n) & s1 is convergent & lim
   s1 < 1 implies s is summable
 proof
@@ -954,11 +983,11 @@ A19: - (r - 1) > - 1 by XREAL_1:24;
   then r > 0;
   then 1 - r < 1 - 0 by XREAL_1:10;
   then abs(1-r) < 1 by A19,SEQ_2:1;
-  then (1-r) GeoSeq is summable by Th28;
+  then (1-r) GeoSeq is summable by Th24;
   then
-A20: s2 is summable by Th13;
+A20: s2 is summable by Th10;
   for n holds 0 <= s.n by A1;
-  hence thesis by A20,A17,Th22;
+  hence thesis by A20,A17,Th19;
 end;
 
 theorem
@@ -990,10 +1019,10 @@ A8: for k ex n st n>=k & not abs(s.n - 0)<s.m
   end;
   s.m>0 by A1;
   then not lim s = 0 or s is not convergent by A8,SEQ_2:def 7;
-  hence thesis by Th7;
+  hence thesis by Th4;
 end;
 
-theorem Th32:
+theorem Th28:
   (for n holds s.n>=0 & s1.n = n-root (s.n)) & s1 is convergent &
   lim s1 < 1 implies s is summable
 proof
@@ -1071,11 +1100,11 @@ A16: - (r - 1) > - 1 by XREAL_1:24;
   then r > 0;
   then 1 - r < 1 - 0 by XREAL_1:10;
   then abs(1-r) < 1 by A16,SEQ_2:1;
-  then s2 is summable by Th28;
-  hence thesis by A1,A15,Th22;
+  then s2 is summable by Th24;
+  hence thesis by A1,A15,Th19;
 end;
 
-theorem Th33:
+theorem Th29:
   (for n holds s.n>=0 & s1.n = n-root (s.n)) & (ex m st for n st m
   <=n holds s1.n>=1) implies s is not summable
 proof
@@ -1120,7 +1149,7 @@ A8: n-root (s.n) >= 1 by A1;
     hence thesis by NAT_1:11,SEQ_2:1;
   end;
   then s is not convergent or not lim s = 0 by SEQ_2:def 7;
-  hence thesis by Th7;
+  hence thesis by Th4;
 end;
 
 theorem
@@ -1144,7 +1173,7 @@ A4: for n st m<=n holds abs(s1.n - lim s1) < r by A2,SEQ_2:def 7;
     then s1.n - lim s1 + lim s1 > - r + lim s1 by XREAL_1:6;
     hence thesis;
   end;
-  hence thesis by A1,Th33;
+  hence thesis by A1,Th29;
 end;
 
 registration
@@ -1159,7 +1188,7 @@ definition
   coherence by ORDINAL1:def 12;
 end;
 
-theorem Th35:
+theorem Th31:
   s is non-increasing & (for n holds s.n>=0 & s1.n = 2 to_power n
   * s.(2 to_power n)) implies (s is summable iff s1 is summable)
 proof
@@ -1276,7 +1305,7 @@ A15: 2 * Partial_Sums(s).(2 to_power 0) = 2 * (Partial_Sums(s).0 + s.1) by Def1
       .= 2*(s.0 + s.1) by Def1
       .= 2*s.0 + 2*s.1;
     assume s is summable;
-    then Partial_Sums(s) is bounded_above by A2,Th20;
+    then Partial_Sums(s) is bounded_above by A2,Th17;
     then consider r be real number such that
 A16: for n holds Partial_Sums(s).n<r by SEQ_2:def 3;
     s.1>=0 by A2;
@@ -1295,10 +1324,10 @@ A19: for n holds Y[n] from NAT_1:sch 1(A18,A6);
       hence Partial_Sums(s1).n < 2*r by XXREAL_0:2;
     end;
     then Partial_Sums(s1) is bounded_above by SEQ_2:def 3;
-    hence thesis by A4,Th20;
+    hence thesis by A4,Th17;
   end;
   assume s1 is summable;
-  then Partial_Sums(s1) is bounded_above by A4,Th20;
+  then Partial_Sums(s1) is bounded_above by A4,Th17;
   then consider r be real number such that
 A20: for n holds Partial_Sums(s1).n<r by SEQ_2:def 3;
 A21: 2 to_power 0 = 1 by POWER:24;
@@ -1358,7 +1387,7 @@ A27: Partial_Sums(s).(2 to_power (n+1)) + s1.(n+1) <= Partial_Sums(s1).(n+
   then
 A28: Y[0] by A3;
 A29: for n holds Y[n] from NAT_1:sch 1(A28,A22);
-A30: Partial_Sums(s) is non-decreasing by A2,Th19;
+A30: Partial_Sums(s) is non-decreasing by A2,Th16;
   now
     let n;
     Partial_Sums(s1).n < r by A20;
@@ -1380,7 +1409,7 @@ A33: Partial_Sums(s).(2 to_power (n+1)) >= Partial_Sums(s).n by A30,SEQM_3:6;
     hence Partial_Sums(s).n < r + (s.0+s.2) by A31,XXREAL_0:2;
   end;
   then Partial_Sums(s) is bounded_above by SEQ_2:def 3;
-  hence thesis by A2,Th20;
+  hence thesis by A2,Th17;
 end;
 
 theorem
@@ -1515,11 +1544,11 @@ A29: s1.(n+1)>=0 by A26;
 A30: s3 is convergent by A24,SEQ_4:21;
   1-p<0 by A1,XREAL_1:49;
   then lim s3 < 1 by A25,POWER:36;
-  then s2 is summable by A18,A19,A30,Th32;
-  then s1 is summable by A15,A26,Th35;
-  then s1^\1 is summable by Th15;
-  then s^\1 is summable by A27,A16,Th22;
-  hence thesis by Th16;
+  then s2 is summable by A18,A19,A30,Th28;
+  then s1 is summable by A15,A26,Th31;
+  then s1^\1 is summable by Th12;
+  then s^\1 is summable by A27,A16,Th19;
+  hence thesis by Th13;
 end;
 
 ::$N Divergence of the Harmonic Series
@@ -1556,7 +1585,7 @@ A9:       n to_power (-p)<1 by ABSVALUE:def 1;
         end;
         hence contradiction;
       end;
-      hence thesis by Th7;
+      hence thesis by Th4;
     end;
     suppose
 A10:  p>=0;
@@ -1669,9 +1698,9 @@ A29:      2 to_power (n-n*p+1)<1 by POWER:27;
         end;
         hence contradiction;
       end;
-      then not s2 is summable by Th7;
-      then not s1 is summable by A22,A26,Th35;
-      hence thesis by A26,A23,Th22;
+      then not s2 is summable by Th4;
+      then not s1 is summable by A22,A26,Th31;
+      hence thesis by A26,A23,Th19;
     end;
   end;
   hence thesis;
@@ -1679,13 +1708,11 @@ end;
 
 definition
   let s;
-
   attr s is absolutely_summable means
-  :Def5:
-  abs(s) is summable;
+:Def4: abs s is summable;
 end;
 
-theorem Th39:
+theorem Th34:
   for n,m st n<=m holds abs(Partial_Sums(s).m - Partial_Sums(s).n)
   <= abs(Partial_Sums(abs(s)).m - Partial_Sums(abs(s)).n)
 proof
@@ -1702,7 +1729,7 @@ A1: n<=m;
     hence abs(s).k >= 0 by SEQ_1:12;
   end;
   then
-A2: s2 is non-decreasing by Th19;
+A2: s2 is non-decreasing by Th16;
 A3: for k st X[k] holds X[k+1]
   proof
     let k;
@@ -1734,30 +1761,35 @@ A9: X[0];
   hence thesis by A8;
 end;
 
-theorem
-  s is absolutely_summable implies s is summable
-proof
+registration
+ cluster absolutely_summable -> summable for Real_Sequence;
+ coherence
+proof let s be Real_Sequence;
   assume s is absolutely_summable;
   then
-A1: abs(s) is summable by Def5;
+A1: abs s is summable by Def4;
   now
     let r;
     assume 0<r;
     then consider n such that
 A2: for m st n<=m holds abs(Partial_Sums(abs(s)).m - Partial_Sums(abs(
-    s)).n)<r by A1,Th25;
+    s)).n)<r by A1,Th21;
     take n;
     let m;
     assume
 A3: n<=m;
     then
 A4: abs(Partial_Sums(s).m - Partial_Sums(s).n) <= abs(Partial_Sums(abs(s))
-    .m - Partial_Sums(abs(s)).n) by Th39;
+    .m - Partial_Sums(abs(s)).n) by Th34;
     abs(Partial_Sums(abs(s)).m - Partial_Sums(abs(s)).n)<r by A2,A3;
     hence abs( Partial_Sums(s).m - Partial_Sums(s).n)<r by A4,XXREAL_0:2;
   end;
-  hence thesis by Th25;
+  hence thesis by Th21;
 end;
+end;
+
+theorem
+  s is absolutely_summable implies s is summable;
 
 theorem
   (for n holds 0<=s.n) & s is summable implies s is absolutely_summable
@@ -1773,7 +1805,7 @@ A3: now
   Partial_Sums(s) is convergent by A2,Def2;
   then Partial_Sums(abs(s)) is convergent by A3,SEQ_1:12;
   then abs(s) is summable by Def2;
-  hence thesis by Def5;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -1789,11 +1821,11 @@ A2: s1 is convergent & lim s1 < 1;
     hence abs(s).n > 0 by COMPLEX1:47;
     thus s1.n=abs(s).(n+1)/abs(s).n by A1;
   end;
-  then abs(s) is summable by A2,Th30;
-  hence thesis by Def5;
+  then abs(s) is summable by A2,Th26;
+  hence thesis by Def4;
 end;
 
-theorem Th43:
+theorem Th38:
   r>0 & (ex m st for n st n>=m holds abs(s.n)>=r) implies s is not
   convergent or lim s <> 0
 proof
@@ -1867,8 +1899,8 @@ A9: X[0];
   end;
   s.m <> 0 by A1;
   then abs(s.m) > 0 by COMPLEX1:47;
-  then s is not convergent or lim s <> 0 by A3,Th43;
-  hence thesis by Th7;
+  then s is not convergent or lim s <> 0 by A3,Th38;
+  hence thesis by Th4;
 end;
 
 theorem
@@ -1884,8 +1916,8 @@ A2: s1 is convergent & lim s1 < 1;
     hence abs(s).n >= 0 by COMPLEX1:46;
     thus s1.n = n-root (abs(s).n) by A1;
   end;
-  then abs(s) is summable by A2,Th32;
-  hence thesis by Def5;
+  then abs(s) is summable by A2,Th28;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -1911,8 +1943,8 @@ A5: n>=m by A3,XXREAL_0:2;
 ,PREPOWER:11;
     hence abs(s.n) >= 1 by A4,POWER:4;
   end;
-  then s is not convergent or lim s<>0 by Th43;
-  hence thesis by Th7;
+  then s is not convergent or lim s<>0 by Th38;
+  hence thesis by Th4;
 end;
 
 theorem
@@ -1942,8 +1974,8 @@ A7: abs(s.n) >= 0 & n-root abs(s.n) |^ n >= 1 by COMPLEX1:46,PREPOWER:11;
     then n>=1 by A5,XXREAL_0:2;
     hence abs(s.n) >= 1 by A7,POWER:4;
   end;
-  then s is not convergent or lim s<>0 by Th43;
-  hence thesis by Th7;
+  then s is not convergent or lim s<>0 by Th38;
+  hence thesis by Th4;
 end;
 
 begin :: Addenda

@@ -1,8 +1,8 @@
-:: Properties of Caratheodor's Measure
+:: Properties of Caratheodory's Measure
 ::  by J\'ozef Bia{\l}as
 ::
 :: Received June 25, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,7 +20,8 @@ environ
       MEASURE4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, VALUED_0, FUNCOP_1,
-      REAL_1, NAT_1, SETFAM_1, PROB_1, SUPINF_1, SUPINF_2, MEASURE1, MEASURE3;
+      REAL_1, ORDINAL1, NAT_1, SETFAM_1, PROB_1, SUPINF_1, SUPINF_2, MEASURE1,
+      MEASURE3;
  constructors ENUMSET1, PARTFUN1, REAL_1, NAT_1, PROB_2, MEASURE3, SUPINF_1,
       FUNCOP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
@@ -38,7 +39,7 @@ reserve
   A,B,X for set,
   S for SigmaField of X;
 
-theorem Th4:
+theorem Th1:
   for S being non empty Subset-Family of X, F, G being Function of
 NAT,S, A being Element of S st for n being Element of NAT holds G.n = A /\ F.n
   holds union rng G = A /\ union rng F
@@ -85,7 +86,7 @@ A15: G.s in rng G by FUNCT_2:4;
   hence thesis by A15,TARSKI:def 4;
 end;
 
-theorem Th5:
+theorem Th2:
   for S being non empty Subset-Family of X for F, G being Function
 of NAT,S st (G.0 = F.0 & for n being Element of NAT holds G.(n+1) = F.(n+1) \/
 G.n) holds for H being Function of NAT,S st (H.0 = F.0 & for n being Element of
@@ -176,7 +177,7 @@ A24: F.s in rng F by FUNCT_2:4;
   hence thesis;
 end;
 
-theorem Th6:
+theorem Th3:
   bool X is SigmaField of X
 proof
 A1: for M being N_Sub_set_fam of X st M c= bool X holds union M in bool X;
@@ -193,7 +194,7 @@ definition
   let X be set;
 
   mode C_Measure of X -> Function of bool X,ExtREAL means
-    :Def2:
+    :Def1:
     it is
 nonnegative zeroed & for A,B being Subset of X st A c= B holds it.A <= it.B &
     for F being Function of NAT,bool X holds it.(union rng F) <= SUM(it*F);
@@ -231,7 +232,7 @@ definition
   let X be set;
   let C be C_Measure of X;
   func sigma_Field(C) -> non empty Subset-Family of X means
-  :Def3:
+  :Def2:
   for A being
 Subset of X holds (A in it iff for W,Z being Subset of X holds (W c= A & Z c= X
   \ A implies C.W + C.Z <= C.(W \/ Z)));
@@ -259,7 +260,7 @@ A3: for A being set holds A in D implies A in bool X;
 A4:   W c= A and
       Z c= X \ A;
 A5:   W = {} by A4;
-      C is zeroed by Def2;
+      C is zeroed by Def1;
       then C.W = 0 by A5,VALUED_0:def 19;
       hence C.W + C.Z <= C.(W \/ Z) by A5,XXREAL_3:4;
     end;
@@ -296,7 +297,7 @@ A9:   A in D2;
   end;
 end;
 
-theorem Th12:
+theorem Th4:
   for W,Z being Subset of X holds C.(W \/ Z) <= C.W + C.Z
 proof
   let W,Z be Subset of X;
@@ -336,7 +337,7 @@ A9:     x in Z;
     end;
     hence thesis by TARSKI:def 4;
   end;
-A10: C is zeroed by Def2;
+A10: C is zeroed by Def1;
 A11: for r being Element of NAT st 2 <= r holds (C*F).r = 0.
   proof
     let r be Element of NAT;
@@ -345,11 +346,11 @@ A11: for r being Element of NAT st 2 <= r holds (C*F).r = 0.
     then 1 < r by NAT_1:13;
     then
 A12: F.r = {} by A4;
-    C is zeroed by Def2;
+    C is zeroed by Def1;
     then C.(F.r) = 0. by A12,VALUED_0:def 19;
     hence thesis by FUNCT_2:15;
   end;
-  C is nonnegative by Def2;
+  C is nonnegative by Def1;
   then
 A13: C*F is nonnegative by MEASURE1:25;
   F.2 = P by A4;
@@ -365,10 +366,10 @@ A17: y2 = Ser(G).0;
     .= y2 + G.(0 + 1) by A17,SUPINF_2:44
     .= C.W + C.Z by A5,A15,A17,SUPINF_2:44;
   then SUM(C*F) = C.W + C.Z by A13,A11,SUPINF_2:48;
-  hence thesis by A1,A6,Def2;
+  hence thesis by A1,A6,Def1;
 end;
 
-theorem Th14:
+theorem Th5:
   for A being Subset of X holds (A in sigma_Field(C) iff for W,Z
   being Subset of X holds (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z)))
 proof
@@ -380,18 +381,18 @@ A1: A in sigma_Field(C);
     assume that
 A2: W c= A and
 A3: Z c= X \ A;
-A4: C.(W \/ Z) <= C.W + C.Z by Th12;
-    C.W + C.Z <= C.(W \/ Z) by A1,A2,A3,Def3;
+A4: C.(W \/ Z) <= C.W + C.Z by Th4;
+    C.W + C.Z <= C.(W \/ Z) by A1,A2,A3,Def2;
     hence C.W + C.Z = C.(W \/ Z) by A4,XXREAL_0:1;
   end;
   assume for W,Z being Subset of X holds (W c= A & Z c= X \ A implies C.W + C
   .Z = C.(W \/ Z));
   then for W,Z being Subset of X holds (W c= A & Z c= X \ A implies C.W + C.Z
   <= C.(W \/ Z));
-  hence thesis by Def3;
+  hence thesis by Def2;
 end;
 
-theorem Th15:
+theorem Th6:
   for W,Z being Subset of X holds W in sigma_Field(C) & Z misses W
   implies C.(W \/ Z) = C.W + C.Z
 proof
@@ -401,10 +402,10 @@ A1: W in sigma_Field(C) and
 A2: Z misses W;
   Z \ W c= X \ W by XBOOLE_1:33;
   then Z c= X \ W by A2,XBOOLE_1:83;
-  hence thesis by A1,Th14;
+  hence thesis by A1,Th5;
 end;
 
-theorem Th16:
+theorem Th7:
   A in sigma_Field(C) implies X \ A in sigma_Field(C)
 proof
   assume
@@ -418,12 +419,12 @@ A2: W c= X \ A and
 A3: Z c= X \ (X \ A);
     X \ (X \ A) = X /\ A by XBOOLE_1:48;
     then Z c= A by A1,A3,XBOOLE_1:28;
-    hence thesis by A1,A2,Def3;
+    hence thesis by A1,A2,Def2;
   end;
-  hence thesis by Def3;
+  hence thesis by Def2;
 end;
 
-theorem Th17:
+theorem Th8:
   A in sigma_Field(C) & B in sigma_Field(C) implies A \/ B in sigma_Field(C)
 proof
   assume that
@@ -450,7 +451,7 @@ A7: X \ (A \/ B) c= X \ A by XBOOLE_1:53;
     then
 A8: Z c= X \ B by A5,XBOOLE_1:1;
     W = W1 \/ W2 by XBOOLE_1:51;
-    then C.W <= C.W1 + C.W2 by Th12;
+    then C.W <= C.W1 + C.W2 by Th4;
     then
 A9: C.W + C.Z <= (C.W1 + C.W2) + C.Z by XXREAL_3:36;
     W \ A c= B \/ A \ A by A3,XBOOLE_1:33;
@@ -459,8 +460,8 @@ A10: W \ A c= B \ A by XBOOLE_1:40;
     B \ A c= B by XBOOLE_1:36;
     then W2 c= B by A10,XBOOLE_1:1;
     then
-A11: C.W2 + C.Z <= C.Z1 by A2,A8,Def3;
-    C is nonnegative by Def2;
+A11: C.W2 + C.Z <= C.Z1 by A2,A8,Def2;
+    C is nonnegative by Def1;
     then
 A12: 0. <= C.W1 by MEASURE1:def 2;
     W \ A c= X \ A by XBOOLE_1:33;
@@ -469,40 +470,40 @@ A12: 0. <= C.W1 by MEASURE1:def 2;
 A13: Z1 c= X \ A by A4,A7,XBOOLE_1:1,12;
     C.(W \/ Z) = C.((W1 \/ W2) \/ Z) by XBOOLE_1:51
       .= C.(W1 \/ Z1) by XBOOLE_1:4
-      .= C.W1 + C.Z1 by A1,A6,A13,Th14;
+      .= C.W1 + C.Z1 by A1,A6,A13,Th5;
     then
 A14: C.W1 + (C.W2 + C.Z) <= C.(W \/ Z) by A11,XXREAL_3:36;
-A15: C is nonnegative by Def2;
+A15: C is nonnegative by Def1;
     then
 A16: 0.<= C.Z by MEASURE1:def 2;
     0.<= C.W2 by A15,MEASURE1:def 2;
     then (C.W1 + C.W2) + C.Z <= C.(W \/ Z) by A16,A12,A14,XXREAL_3:44;
     then
 A17: C.W + C.Z <= C.(W \/ Z) by A9,XXREAL_0:2;
-    C.(W \/ Z) <= C.W + C.Z by Th12;
+    C.(W \/ Z) <= C.W + C.Z by Th4;
     hence thesis by A17,XXREAL_0:1;
   end;
-  hence thesis by Th14;
+  hence thesis by Th5;
 end;
 
-theorem Th18:
+theorem Th9:
   A in sigma_Field(C) & B in sigma_Field(C) implies A /\ B in sigma_Field(C)
 proof
   assume that
 A1: A in sigma_Field(C) and
 A2: B in sigma_Field(C);
-A3: X \ B in sigma_Field(C) by A2,Th16;
+A3: X \ B in sigma_Field(C) by A2,Th7;
   A /\ B c= X /\ X by A1,A2,XBOOLE_1:27;
   then
 A4: A /\ B = X /\ (A /\ B) by XBOOLE_1:28
     .= X \ (X \(A /\ B)) by XBOOLE_1:48
     .= X \ ((X \ A) \/ (X \ B)) by XBOOLE_1:54;
-  X \ A in sigma_Field(C) by A1,Th16;
-  then (X \ A) \/ (X \ B) in sigma_Field(C) by A3,Th17;
-  hence thesis by A4,Th16;
+  X \ A in sigma_Field(C) by A1,Th7;
+  then (X \ A) \/ (X \ B) in sigma_Field(C) by A3,Th8;
+  hence thesis by A4,Th7;
 end;
 
-theorem Th19:
+theorem Th10:
   A in sigma_Field(C) & B in sigma_Field(C) implies A \ B in sigma_Field(C)
 proof
   assume that
@@ -530,11 +531,11 @@ A6: not x in B by XBOOLE_0:def 5;
   end;
   then
 A7: A \ B = A /\ (X \ B) by TARSKI:1;
-  X \ B in sigma_Field(C) by A2,Th16;
-  hence thesis by A1,A7,Th18;
+  X \ B in sigma_Field(C) by A2,Th7;
+  hence thesis by A1,A7,Th9;
 end;
 
-theorem Th20:
+theorem Th11:
   for N being Function of NAT,S holds for A being Element of S
 holds ex F being Function of NAT,S st for n being Element of NAT holds F.n = A
   /\ N.n
@@ -560,10 +561,10 @@ A3: for x being set st x in NAT holds P[x,F.x];
   thus thesis by A3;
 end;
 
-theorem Th21:
+theorem Th12:
   sigma_Field(C) is SigmaField of X
 proof
-A1: C is nonnegative by Def2;
+A1: C is nonnegative by Def1;
 A2: for M being N_Sub_set_fam of X holds M c= sigma_Field(C) implies union M
   in sigma_Field(C)
   proof
@@ -573,7 +574,7 @@ A3: M c= sigma_Field(C);
     for W,Z being Subset of X holds (W c= union M & Z c= X \ union M
     implies C.W + C.Z <= C.(W \/ Z))
     proof
-      reconsider S = bool X as SigmaField of X by Th6;
+      reconsider S = bool X as SigmaField of X by Th3;
       let W,Z be Subset of X;
       assume that
 A4:   W c= union M and
@@ -586,7 +587,7 @@ A8:   for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n by MEASURE2:4;
       consider B being Function of NAT,S such that
 A9:   B.0 = F.0 and
 A10:  for n being Element of NAT holds B.(n+1) = F.(n+1) \ G.n by MEASURE2:8;
-A11:  union rng F = union rng B by A7,A8,A9,A10,Th5;
+A11:  union rng F = union rng B by A7,A8,A9,A10,Th2;
       defpred P[Element of NAT] means G.$1 in sigma_Field(C);
 A12:  for n being Element of NAT holds F.n in sigma_Field(C)
       proof
@@ -601,13 +602,13 @@ A13:  for k being Element of NAT st P[k] holds P[k+1]
 A14:    G.k in sigma_Field(C);
 A15:    F.(k+1) in sigma_Field(C) by A12;
         G.(k+1) = F.(k+1) \/ G.k by A8;
-        hence thesis by A14,A15,Th17;
+        hence thesis by A14,A15,Th8;
       end;
 A16:  P[0] by A12,A7;
 A17:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A16,A13);
       consider Q being Function of NAT,S such that
-A18:  for n being Element of NAT holds Q.n = W /\ B.n by Th20;
-A19:  union rng Q = W /\ union rng B by A18,Th4;
+A18:  for n being Element of NAT holds Q.n = W /\ B.n by Th11;
+A19:  union rng Q = W /\ union rng B by A18,Th1;
       consider QQ being Function of NAT,S such that
 A20:  QQ.0 = Q.0 and
 A21:  for n being Element of NAT holds QQ.(n+1) = Q.(n+1) \/ QQ.n by MEASURE2:4
@@ -625,7 +626,7 @@ A26:    QQ.(k+1) = QQ.k \/ Q.(k+1) by A21;
 A27:    G.k in sigma_Field(C) by A17;
         F.(k+1) in sigma_Field(C) by A12;
         then
-A28:    F.(k+1) \ G.k in sigma_Field(C) by A27,Th19;
+A28:    F.(k+1) \ G.k in sigma_Field(C) by A27,Th10;
 A29:    0. <= (C*Q).(k+1) by A23,SUPINF_2:39;
 A30:    0. <= Ser(C*Q).k by A23,SUPINF_2:40;
         QQ.0 = W /\ F.0 by A9,A18,A20;
@@ -675,7 +676,7 @@ A40:    Q.(k+1) c= F.(k+1) \ G.k by XBOOLE_1:17;
         then Z \/ QQ.k c= X \ (F.(k+1) \ G.k) by A38,XBOOLE_1:8;
         then
 A41:    C.(Q.(k+1)) + C.(Z \/ QQ.k) = C.((Z \/ QQ.k) \/ Q.(k+1)) by A40,A28
-,Th14
+,Th5
           .= C.(Z \/ QQ.(k+1)) by A26,XBOOLE_1:4;
 A42:    0. <= C.Z by A1,SUPINF_2:39;
         assume C.(Z \/ QQ.k) = C.Z + Ser(C*Q).k;
@@ -694,7 +695,7 @@ A44:  Ser(C*Q).0 = (C*Q).0 by SUPINF_2:44
       then X \ union rng F c= X \ F.0 by XBOOLE_1:34,ZFMISC_1:74;
       then Z c= X \ F.0 by A5,A6,XBOOLE_1:1;
       then
-A45:  P[0] by A22,A43,A44,Th14;
+A45:  P[0] by A22,A43,A44,Th5;
 A46:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A45,A24);
       defpred Q[Element of NAT] means QQ.$1 c= W;
 A47:  for n being Element of NAT st Q[n] holds Q[n+1]
@@ -738,7 +739,7 @@ A56:    C.Z is real;
             then consider y being Real such that
 A57:        y = C.Z by A56,TARSKI:def 2;
             Z c= Z \/ W by XBOOLE_1:7;
-            then C.Z <= C.(Z \/ W) by Def2;
+            then C.Z <= C.(Z \/ W) by Def1;
             then
 A58:        C.Z - C.Z <= C.(Z \/ W) - C.Z by XXREAL_3:37;
             C.Z - C.Z = y - y by A57,SUPINF_2:3;
@@ -751,7 +752,7 @@ A60:    for n being Element of NAT holds Ser(C*Q).n <= C.(Z \/ W) - C.Z
           let n be Element of NAT;
 A61:      Z \/ QQ.n c= Z \/ W by A51,XBOOLE_1:9;
           Ser(C*Q).n + C.Z = C.(Z \/ QQ.n) by A46;
-          then Ser(C*Q).n + C.Z <= C.(Z \/ W) by A61,Def2;
+          then Ser(C*Q).n + C.Z <= C.(Z \/ W) by A61,Def1;
           hence thesis by A56,XXREAL_3:45;
         end;
 A62:    for n being Element of NAT holds Ser(C*Q).n <= Ser(R).n
@@ -780,7 +781,7 @@ A65:      P[0] by A55;
         y = R.0 by SUPINF_2:44;
         then
 A66:    y = C.(Z \/ W) - C.Z by A55;
-A67:    C.W <= SUM(C*Q) by A52,Def2;
+A67:    C.W <= SUM(C*Q) by A52,Def1;
         for k being Element of NAT st 1 <= k holds R.k = 0. by A55;
         then
 A68:    SUM(R) = Ser(R).1 by A59,SUPINF_2:48;
@@ -798,16 +799,16 @@ A70:    Z c= W \/ Z by XBOOLE_1:7;
 A71:    C.Z = +infty;
         0. <= C.W by A1,MEASURE1:def 2;
         then C.W + C.Z = +infty by A71,XXREAL_3:def 2;
-        hence thesis by A71,A70,Def2;
+        hence thesis by A71,A70,Def1;
       end;
       0 <= C.Z by A1,MEASURE1:def 2;
       then C.Z is Element of REAL or C.Z = +infty by XXREAL_0:14;
       hence thesis by A69,A53;
     end;
-    hence thesis by Def3;
+    hence thesis by Def2;
   end;
   for A being set holds A in sigma_Field(C) implies X\A in sigma_Field(C)
-  by Th16;
+  by Th7;
   then reconsider Y = sigma_Field C as non empty compl-closed sigma-additive
   Subset-Family of X by A2,MEASURE1:def 1,def 5;
   Y is SigmaField of X;
@@ -818,7 +819,7 @@ registration
   let X be set;
   let C be C_Measure of X;
   cluster sigma_Field(C) -> sigma-additive compl-closed non empty;
-  coherence by Th21;
+  coherence by Th12;
 end;
 
 definition
@@ -837,7 +838,7 @@ definition
   let X be set;
   let C be C_Measure of X;
   func sigma_Meas(C) -> Function of sigma_Field(C),ExtREAL means
-  :Def4:
+  :Def3:
   for A being Subset of X st A in sigma_Field(C) holds it.A = C.A;
   existence
   proof
@@ -878,40 +879,40 @@ A8: sigma_Field(C) = dom D2 by FUNCT_2:def 1;
   end;
 end;
 
-theorem Th22:
+theorem Th13:
   sigma_Meas(C) is Measure of sigma_Field(C)
 proof
 A1: now
     let A be Element of sigma_Field(C);
     reconsider A9 = A as Subset of X;
-A2: C is nonnegative by Def2;
-    (sigma_Meas(C)).A9 = C.A9 by Def4;
+A2: C is nonnegative by Def1;
+    (sigma_Meas(C)).A9 = C.A9 by Def3;
     hence 0.<= (sigma_Meas(C)).A by A2,MEASURE1:def 2;
   end;
   {} in sigma_Field(C) by PROB_1:4;
   then
-A3: (sigma_Meas(C)).{} = C.{} by Def4;
+A3: (sigma_Meas(C)).{} = C.{} by Def3;
 A4: now
     let A,B be Element of sigma_Field(C);
     reconsider A9 = A,B9 = B as Subset of X;
-A5: (sigma_Meas(C)).B9 = C.B9 by Def4;
+A5: (sigma_Meas(C)).B9 = C.B9 by Def3;
     assume A misses B;
     then
-A6: C.(A9 \/ B9) = C.A9 + C.B9 by Th15;
-    (sigma_Meas(C)).A9 = C.A9 by Def4;
+A6: C.(A9 \/ B9) = C.A9 + C.B9 by Th6;
+    (sigma_Meas(C)).A9 = C.A9 by Def3;
     hence (sigma_Meas(C)).(A \/ B) = (sigma_Meas(C)).A + (sigma_Meas(C)).B by
-A5,A6,Def4;
+A5,A6,Def3;
   end;
-  C is zeroed by Def2;
+  C is zeroed by Def1;
   then (sigma_Meas(C)).{} = 0. by A3,VALUED_0:def 19;
   hence thesis by A1,A4,MEASURE1:def 2,def 3,VALUED_0:def 19;
 end;
 
 ::$N Caratheodory's Theorem
-theorem Th23:
+theorem Th14:
   sigma_Meas(C) is sigma_Measure of sigma_Field(C)
 proof
-  reconsider M = sigma_Meas(C) as Measure of sigma_Field(C) by Th22;
+  reconsider M = sigma_Meas(C) as Measure of sigma_Field(C) by Th13;
   for F being Sep_Sequence of sigma_Field(C) holds M.(union rng F) <= SUM( M*F)
   proof
     let F be Sep_Sequence of sigma_Field(C);
@@ -927,7 +928,7 @@ A4:   (M*F).k = M.(F.k) by FUNCT_2:15;
 A5:   F.k in sigma_Field(C) by A3,FUNCT_2:5;
       reconsider F as Function of NAT,bool X by FUNCT_2:7;
       (C*F).k = C.(F.k) by A3,FUNCT_2:15;
-      hence thesis by A4,A5,Def4;
+      hence thesis by A4,A5,Def3;
     end;
     reconsider F9 = F as Function of NAT,bool X by FUNCT_2:7;
     consider a,b being R_eal such that
@@ -937,8 +938,8 @@ A6: b = C.A;
     then
 A7: M*F = C*F by A2,FUNCT_2:12;
     reconsider F as Function of NAT,bool X by FUNCT_2:7;
-    b <= SUM(C*F) by A1,A6,Def2;
-    hence thesis by A1,A6,A7,Def4;
+    b <= SUM(C*F) by A1,A6,Def1;
+    hence thesis by A1,A6,A7,Def3;
   end;
   hence thesis by MEASURE3:14;
 end;
@@ -947,10 +948,10 @@ registration
   let X be set;
   let C be C_Measure of X;
   cluster sigma_Meas(C) -> nonnegative sigma-additive zeroed;
-  coherence by Th23;
+  coherence by Th14;
 end;
 
-theorem Th24:
+theorem Th15:
   for A being Subset of X holds C.A = 0. implies A in sigma_Field(C)
 proof
   let A be Subset of X;
@@ -963,13 +964,13 @@ A2: W c= A and
     Z c= X \ A;
     Z c= W \/ Z by XBOOLE_1:7;
     then
-A3: C.Z <= C.(W \/ Z) by Def2;
-    C is nonnegative by Def2;
+A3: C.Z <= C.(W \/ Z) by Def1;
+    C is nonnegative by Def1;
     then 0.<= C.W by MEASURE1:def 2;
-    then C.W = 0. by A1,A2,Def2;
+    then C.W = 0. by A1,A2,Def1;
     hence C.W + C.Z <= C.(W \/ Z) by A3,XXREAL_3:4;
   end;
-  hence thesis by Def3;
+  hence thesis by Def2;
 end;
 
 theorem
@@ -982,10 +983,10 @@ A1: B in sigma_Field(C) and
 A2: A c= B and
 A3: (sigma_Meas(C)).B = 0.;
   reconsider B as Subset of X by A1;
-  C is nonnegative by Def2;
+  C is nonnegative by Def1;
   then
 A4: 0.<= C.A by MEASURE1:def 2;
-  C.B = 0. by A1,A3,Def4;
-  then C.A = 0. by A2,A4,Def2;
-  hence thesis by Th24;
+  C.B = 0. by A1,A3,Def3;
+  then C.A = 0. by A2,A4,Def1;
+  hence thesis by Th15;
 end;

@@ -10,6 +10,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="RELAT_2"/>
@@ -38,7 +39,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="224">
+<Func kind="K" nr="236">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -48,11 +49,11 @@
 </FCluster>
 <FCluster aid="PARTIT_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="220"/>
+<Func kind="K" nr="228"/>
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="12"/>
-<Adjective nr="62"/>
+<Adjective nr="66"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -64,17 +65,15 @@
 <FCluster aid="PARTIT_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
+<Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="38">
+<Func kind="K" nr="36">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="62"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <CCluster aid="PARTIT_2" nr="1">
@@ -88,9 +87,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="22"/>
 <Adjective nr="25"/>
 <Adjective nr="28"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 </Registrations>

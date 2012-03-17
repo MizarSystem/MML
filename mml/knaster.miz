@@ -2,7 +2,7 @@
 ::  by Piotr Rudnicki and Andrzej Trybulec
 ::
 :: Received September 16, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,12 +19,12 @@ environ
       LATTICES, STRUCT_0, ORDINAL1, ORDINAL2, EQREL_1, CARD_1, BINOP_1,
       LATTICE3, PBOOLE, FILTER_0, FILTER_1, WELLORD1, RELAT_2, ORDERS_1,
       ORDERS_2, XXREAL_0, REWRITE1, XXREAL_2, SEQM_3, KNASTER;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
-      RELAT_1, RELAT_2, ORDERS_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, BINOP_1, FUNCOP_1, SETFAM_1, FUNCT_4, WELLORD1, ORDINAL1,
-      ORDINAL2, COHSP_1, LATTICES, LATTICE3, QUANTAL1, ORDERS_2, ABIAN;
- constructors SETFAM_1, WELLORD1, WELLORD2, BINOP_1, DOMAIN_1, ORDINAL2, NAT_1,
-      ABIAN, BOOLEALG, QUANTAL1, COHSP_1, RELSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, ORDINAL1,
+      NAT_1, RELAT_1, RELAT_2, ORDERS_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, BINOP_1, FUNCOP_1, SETFAM_1, FUNCT_4, WELLORD1, ORDINAL2,
+      COHSP_1, LATTICES, LATTICE3, QUANTAL1, ORDERS_2, ABIAN;
+ constructors WELLORD1, WELLORD2, BINOP_1, DOMAIN_1, ORDINAL2, NAT_1, ABIAN,
+      BOOLEALG, QUANTAL1, COHSP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, CARD_1,
       STRUCT_0, LATTICES, LATTICE3, QUANTAL1;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -125,7 +125,7 @@ reserve x, y, z, u, X for set,
   n for Element of NAT,
   f for Function of X, X;
 
-theorem Th4:
+theorem Th2:
   x is_a_fixpoint_of iter(f,n) implies f.x is_a_fixpoint_of iter(f, n)
 proof
   assume
@@ -151,14 +151,14 @@ A1: x is_a_fixpoint_of iter(f, n) and
 A2: for y st y is_a_fixpoint_of iter(f,n) holds x = y;
   dom f = X & dom iter(f, n) = X by FUNCT_2:52;
   hence x in dom f by A1,ABIAN:def 3;
-  thus thesis by A1,A2,Th4;
+  thus thesis by A1,A2,Th2;
 end;
 
 definition
   let A, B be non empty set, f be Function of A, B;
 
   redefine attr f is c=-monotone means
-  :Def3:
+  :Def1:
   for x, y being Element of A st x c= y holds f.x c= f.y;
   compatibility
   proof
@@ -221,7 +221,7 @@ end;
 reserve f for c=-monotone Function of bool X, bool X,
   S for Subset of X;
 
-theorem Th6:
+theorem Th4:
   lfp(X, f) is_a_fixpoint_of f
 proof
   defpred P[set] means f.$1 c= $1;
@@ -242,18 +242,18 @@ A1: h in H;
 A2: x = h and
 A3: f.x c= x;
     A c= h by A1,SETFAM_1:3;
-    then f.A c= f.x by A2,Def3;
+    then f.A c= f.x by A2,Def1;
     hence f.A c= h by A2,A3,XBOOLE_1:1;
   end;
   then
 A4: f.A c= A by SETFAM_1:5;
-  then f.(f.A) c= f.A by Def3;
+  then f.(f.A) c= f.A by Def1;
   then f.A in H;
   then A c= f.A by SETFAM_1:3;
   hence f.(lfp(X,f)) = lfp(X,f) by A4,XBOOLE_0:def 10;
 end;
 
-theorem Th7:
+theorem Th5:
   gfp(X, f) is_a_fixpoint_of f
 proof
   defpred P[set] means $1 c= f.$1;
@@ -268,18 +268,18 @@ A1: x in H;
 A2: x = h and
 A3: h c= f.h;
     h c= A by A1,A2,ZFMISC_1:74;
-    then f.h c= f.A by Def3;
+    then f.h c= f.A by Def1;
     hence x c= f.A by A2,A3,XBOOLE_1:1;
   end;
   then
 A4: A c= f.A by ZFMISC_1:76;
-  then f.A c= f.(f.A) by Def3;
+  then f.A c= f.(f.A) by Def1;
   then f.A in H;
   then f.A c= A by ZFMISC_1:74;
   hence f.(gfp (X,f)) = gfp(X,f) by A4,XBOOLE_0:def 10;
 end;
 
-theorem Th8:
+theorem Th6:
   f.S c= S implies lfp(X,f) c= S
 proof
   set H = {h where h is Subset of X : f.h c= h };
@@ -288,7 +288,7 @@ proof
   hence thesis by SETFAM_1:3;
 end;
 
-theorem Th9:
+theorem Th7:
   S c= f.S implies S c= gfp(X,f)
 proof
   set H = {h where h is Subset of X : h c= f.h };
@@ -297,11 +297,11 @@ proof
   hence thesis by ZFMISC_1:74;
 end;
 
-theorem Th10:
+theorem Th8:
   S is_a_fixpoint_of f implies lfp(X,f) c= S & S c= gfp(X,f)
 proof
   assume S = f.S;
-  hence thesis by Th8,Th9;
+  hence thesis by Th6,Th7;
 end;
 
 ::$N Knaster Theorem
@@ -339,7 +339,7 @@ A7: a c= b;
   then reconsider f as c=-monotone Function of bool A(), bool A() by
 COHSP_1:def 11;
   take d = lfp(A(), f);
-  d is_a_fixpoint_of f by Th6;
+  d is_a_fixpoint_of f by Th4;
   then d = f.d by ABIAN:def 3;
   hence F(d) = d by A3;
   thus thesis;
@@ -351,7 +351,7 @@ reserve X, Y for non empty set,
 
 :: Banach decomposition
 
-theorem Th11:
+theorem Th9:
   ex Xa, Xb, Ya, Yb being set st Xa misses Xb & Ya misses Yb & Xa
   \/ Xb = X & Ya \/ Yb = Y & f.:Xa = Ya & g.:Yb = Xb
 proof
@@ -383,7 +383,7 @@ A5: x c= y;
   thus Xa \/ Xb = X by XBOOLE_1:45;
   thus Ya \/ Yb = Y by XBOOLE_1:45;
   thus f.:Xa = Ya;
-A6: Xa is_a_fixpoint_of h by Th6;
+A6: Xa is_a_fixpoint_of h by Th4;
   thus g.:Yb = X/\g.:(Y\f.:Xa) by XBOOLE_1:28
     .= X\(X\g.:(Y\f.:Xa)) by XBOOLE_1:48
     .= X\h.Xa by A2
@@ -391,7 +391,7 @@ A6: Xa is_a_fixpoint_of h by Th6;
 end;
 
 ::$N Schroeder Bernstein theorem
-theorem Th12:
+theorem Th10:
   for X, Y being non empty set,
       f being Function of X, Y,
       g being Function of Y, X st
@@ -410,7 +410,7 @@ A4: Ya misses Yb and
 A5: Xa \/ Xb = X and
 A6: Ya \/ Yb = Y and
 A7: f.:Xa = Ya and
-A8: g.:Yb = Xb by Th11;
+A8: g.:Yb = Xb by Th9;
   set gYb = g|Yb;
 A9: gYb is one-to-one by A2,FUNCT_1:52;
   set fXa = f|Xa;
@@ -439,7 +439,7 @@ A16: h is onto by A15,FUNCT_2:def 3;
   hence thesis by A16,FUNCT_2:def 4;
 end;
 
-theorem Th13: ::: EULER_1:12
+theorem Th11: ::: EULER_1:12
   f is bijective implies X,Y are_equipotent
 proof
   assume
@@ -478,8 +478,8 @@ theorem
   f is one-to-one & g is one-to-one implies X,Y are_equipotent
 proof
   assume f is one-to-one & g is one-to-one;
-  then ex h being Function of X,Y st h is bijective by Th12;
-  hence thesis by Th13;
+  then ex h being Function of X,Y st h is bijective by Th10;
+  hence thesis by Th11;
 end;
 
 begin :: The lattice of a lattice subset
@@ -488,7 +488,7 @@ definition
   let L be Lattice, f be Function of the carrier of L, the carrier of L, x be
   Element of L, O be Ordinal;
   func (f, O)+.x means
-  :Def6:
+  :Def4:
   ex L0 being T-Sequence st it = last L0 & dom L0
 = succ O & L0.{} = x & (for C being Ordinal st succ C in succ O holds L0.succ C
 = f.(L0.C)) & for C being Ordinal st C in succ O & C <> {} & C is limit_ordinal
@@ -510,7 +510,7 @@ is limit_ordinal holds L0.C = D(C,L0|C) ) holds x1 = x2 from ORDINAL2:sch 7;
     hence thesis;
   end;
   func (f, O)-.x means
-  :Def7:
+  :Def5:
   ex L0 being T-Sequence st it = last L0 & dom L0
 = succ O & L0.{} = x & (for C being Ordinal st succ C in succ O holds L0.succ C
 = f.(L0.C)) & for C being Ordinal st C in succ O & C <> {} & C is limit_ordinal
@@ -539,7 +539,7 @@ reserve L for Lattice,
   O, O1, O2, O3, O4 for Ordinal,
   T for T-Sequence;
 
-theorem Th16:
+theorem Th13:
   (f, {})+.x = x
 proof
   deffunc C(Ordinal,set)=f.$2;
@@ -548,11 +548,11 @@ proof
 A1: for O being Ordinal, y being set holds y = F(O) iff ex L0 being
 T-Sequence st y = last L0 & dom L0 = succ O & L0.{} = x & (for C being Ordinal
 st succ C in succ O holds L0.succ C = C(C,L0.C)) & for C being Ordinal st C in
-  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def6;
+  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def4;
   thus F({}) = x from ORDINAL2:sch 8(A1);
 end;
 
-theorem Th17:
+theorem Th14:
   (f, {})-.x = x
 proof
   deffunc C(Ordinal,set)=f.$2;
@@ -561,11 +561,11 @@ proof
 A1: for O being Ordinal, y being set holds y = F(O) iff ex L0 being
 T-Sequence st y = last L0 & dom L0 = succ O & L0.{} = x & (for C being Ordinal
 st succ C in succ O holds L0.succ C = C(C,L0.C)) & for C being Ordinal st C in
-  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def7;
+  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def5;
   thus F({}) = x from ORDINAL2:sch 8(A1);
 end;
 
-theorem Th18:
+theorem Th15:
   (f, succ O)+.x = f.(f, O)+.x
 proof
   deffunc C(Ordinal,set)=f.$2;
@@ -574,12 +574,12 @@ proof
 A1: for O being Ordinal, y being set holds y = F(O) iff ex L0 being
 T-Sequence st y = last L0 & dom L0 = succ O & L0.{} = x & (for C being Ordinal
 st succ C in succ O holds L0.succ C = C(C,L0.C)) & for C being Ordinal st C in
-  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def6;
+  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def4;
   for O being Ordinal holds F(succ O) = C(O,F(O)) from ORDINAL2:sch 9( A1);
   hence thesis;
 end;
 
-theorem Th19:
+theorem Th16:
   (f, succ O)-.x = f.(f, O)-.x
 proof
   deffunc C(Ordinal,set)=f.$2;
@@ -588,12 +588,12 @@ proof
 A1: for O being Ordinal, y being set holds y = F(O) iff ex L0 being
 T-Sequence st y = last L0 & dom L0 = succ O & L0.{} = x & (for C being Ordinal
 st succ C in succ O holds L0.succ C = C(C,L0.C)) & for C being Ordinal st C in
-  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def7;
+  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def5;
   for O being Ordinal holds F(succ O) = C(O,F(O)) from ORDINAL2:sch 9( A1);
   hence thesis;
 end;
 
-theorem Th20:
+theorem Th17:
   O <> {} & O is limit_ordinal & dom T = O & (for A being Ordinal
   st A in O holds T.A = (f, A)+.x) implies (f, O)+.x = "\/"(rng T, L)
 proof
@@ -607,11 +607,11 @@ A3: for A being Ordinal st A in O holds T.A = F(A);
 A4: for O being Ordinal, y being set holds y = F(O) iff ex L0 being
 T-Sequence st y = last L0 & dom L0 = succ O & L0.{} = x & (for C being Ordinal
 st succ C in succ O holds L0.succ C = C(C,L0.C)) & for C being Ordinal st C in
-  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def6;
+  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def4;
   thus F(O) = D(O,T) from ORDINAL2:sch 10(A4, A1, A2, A3);
 end;
 
-theorem Th21:
+theorem Th18:
   O <> {} & O is limit_ordinal & dom T = O & (for A being Ordinal
   st A in O holds T.A = (f, A)-.x) implies (f, O)-.x = "/\"(rng T, L)
 proof
@@ -625,7 +625,7 @@ A3: for A being Ordinal st A in O holds T.A = F(A);
 A4: for O being Ordinal, y being set holds y = F(O) iff ex L0 being
 T-Sequence st y = last L0 & dom L0 = succ O & L0.{} = x & (for C being Ordinal
 st succ C in succ O holds L0.succ C = C(C,L0.C)) & for C being Ordinal st C in
-  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def7;
+  succ O & C <> {} & C is limit_ordinal holds L0.C = D(C,L0|C) by Def5;
   thus F(O) = D(O,T) from ORDINAL2:sch 10(A4, A1, A2, A3);
 end;
 
@@ -645,13 +645,13 @@ A4: P[n];
 A5: dom iter(f, n) = dom f by A1,FUNCT_7:74;
     iter(f, n+1).x = (f*iter(f, n)).x by FUNCT_7:71
       .= f.(f, n)+.x by A1,A4,A5,FUNCT_1:13
-      .= (f, succ n)+.x by Th18
+      .= (f, succ n)+.x by Th15
       .= (f, n+1)+.x by NAT_1:38;
     hence P[n+1];
   end;
   iter(f, 0).x = id(field f).x by FUNCT_7:68
     .= x by A2,FUNCT_1:18
-    .= (f, 0)+.x by Th16;
+    .= (f, 0)+.x by Th13;
   then
 A6: P[ 0 ];
   for n being Element of NAT holds P[n] from NAT_1:sch 1(A6, A3);
@@ -674,13 +674,13 @@ A4: P[n];
 A5: dom iter(f, n) = dom f by A1,FUNCT_7:74;
     iter(f, n+1).x = (f*iter(f, n)).x by FUNCT_7:71
       .= f.(f, n)-.x by A1,A4,A5,FUNCT_1:13
-      .= (f, succ n)-.x by Th19
+      .= (f, succ n)-.x by Th16
       .= (f, n+1)-.x by NAT_1:38;
     hence P[n+1];
   end;
   iter(f, 0).x = id(field f).x by FUNCT_7:68
     .= x by A2,FUNCT_1:18
-    .= (f, 0)-.x by Th17;
+    .= (f, 0)-.x by Th14;
   then
 A6: P[ 0 ];
   for n being Element of NAT holds P[n] from NAT_1:sch 1(A6, A3);
@@ -699,7 +699,7 @@ A1: now
       let O1;
       assume P[O1];
       then reconsider fa = (f, O1)+.a as Element of L;
-      f.fa = (f, succ O1)+.a by Th18;
+      f.fa = (f, succ O1)+.a by Th15;
       hence P[succ O1];
     end;
 A2: now
@@ -710,10 +710,10 @@ A3:   O1 <> {} & O1 is limit_ordinal and
       consider Ls being T-Sequence such that
 A4:   dom Ls = O1 & for O2 being Ordinal st O2 in O1 holds Ls.O2 = F(
       O2) from ORDINAL2:sch 2;
-      (f, O1)+.a = "\/"(rng Ls, L) by A3,A4,Th20;
+      (f, O1)+.a = "\/"(rng Ls, L) by A3,A4,Th17;
       hence P[O1];
     end;
-A5: P[{}] by Th16;
+A5: P[{}] by Th13;
     for O holds P[O] from ORDINAL2:sch 1(A5, A1, A2);
     hence thesis;
   end;
@@ -731,7 +731,7 @@ A1: now
       let O1;
       assume P[O1];
       then reconsider fa = (f, O1)-.a as Element of L;
-      f.fa = (f, succ O1)-.a by Th19;
+      f.fa = (f, succ O1)-.a by Th16;
       hence P[succ O1];
     end;
 A2: now
@@ -742,10 +742,10 @@ A3:   O1 <> {} & O1 is limit_ordinal and
       consider Ls being T-Sequence such that
 A4:   dom Ls = O1 & for O2 being Ordinal st O2 in O1 holds Ls.O2 =F(O2
       ) from ORDINAL2:sch 2;
-      (f, O1)-.a = "/\"(rng Ls, L) by A3,A4,Th21;
+      (f, O1)-.a = "/\"(rng Ls, L) by A3,A4,Th18;
       hence P[O1];
     end;
-A5: P[{}] by Th17;
+A5: P[{}] by Th14;
     for O holds P[O] from ORDINAL2:sch 1(A5, A1, A2);
     hence thesis;
   end;
@@ -754,12 +754,12 @@ end;
 definition
   let L be non empty LattStr, P be Subset of L;
   attr P is with_suprema means
-  :Def8:
+  :Def6:
   for x,y being Element of L st x in P & y
 in P ex z being Element of L st z in P & x [= z & y [= z & for z9 being Element
   of L st z9 in P & x [= z9 & y [= z9 holds z [= z9;
   attr P is with_infima means
-  :Def9:
+  :Def7:
   for x,y being Element of L st x in P & y
 in P ex z being Element of L st z in P & z [= x & z [= y & for z9 being Element
   of L st z9 in P & z9 [= x & z9 [= y holds z9 [= z;
@@ -805,7 +805,7 @@ end;
 definition
   let L be Lattice, P be non empty with_suprema with_infima Subset of L;
   func latt P -> strict Lattice means
-  :Def10:
+  :Def8:
   the carrier of it = P & for x, y
   being Element of it ex x9, y9 being Element of L st x = x9 & y = y9 & (x [= y
   iff x9 [= y9);
@@ -851,7 +851,7 @@ A8:   zL in P and
 A9:   xL [= zL and
 A10:  yL [= zL and
 A11:  for z9 being Element of L st z9 in P & xL [= z9 & yL [= z9
-      holds zL [= z9 by Def8;
+      holds zL [= z9 by Def6;
       [yL,zL] in [:P,P:] & [yL,zL] in LL by A8,A10,FILTER_1:31,ZFMISC_1:87;
       then
 A12:  [yL,zL] in LR by XBOOLE_0:def 4;
@@ -890,7 +890,7 @@ A18:  zL in P and
 A19:  zL [= xL and
 A20:  zL [= yL and
 A21:  for z9 being Element of L st z9 in P & z9 [= xL & z9 [= yL
-      holds z9 [= zL by Def9;
+      holds z9 [= zL by Def7;
       [zL,yL] in [:P,P:] & [zL,yL] in LL by A18,A20,FILTER_1:31,ZFMISC_1:87;
       then
 A22:  [zL,yL] in LR by XBOOLE_0:def 4;
@@ -1003,7 +1003,7 @@ reserve L for complete Lattice,
   f for monotone UnOp of L,
   a, b for Element of L;
 
-theorem Th24:
+theorem Th21:
   ex a st a is_a_fixpoint_of f
 proof
   set H = {h where h is Element of L: h [= f.h};
@@ -1042,7 +1042,7 @@ A5: uH [= f.uH by A3,LATTICES:7;
   hence uH = f.uH by A5,LATTICES:8;
 end;
 
-theorem Th25:
+theorem Th22:
   for a st a [= f.a for O holds a [= (f, O)+.a
 proof
   let a;
@@ -1064,7 +1064,7 @@ A7: dom Ls = O1 & for O2 being Ordinal st O2 in O1 holds Ls.O2 = F(O2
     Ls.O2 = (f, O2)+.a & Ls.O2 in rng Ls by A7,A5,FUNCT_1:def 3;
     then (f, O2)+.a [= "\/"(rng Ls, L) by LATTICE3:38;
     then a [= "\/"(rng Ls, L) by A6,LATTICES:7;
-    hence S[O1] by A2,A3,A7,Th20;
+    hence S[O1] by A2,A3,A7,Th17;
   end;
   assume
 A8: a [= f.a;
@@ -1073,13 +1073,13 @@ A9: now
     assume S[O1];
     then f.a [= f.((f, O1)+.a) by QUANTAL1:def 12;
     then a [= f.((f, O1)+.a) by A8,LATTICES:7;
-    hence S[succ O1] by Th18;
+    hence S[succ O1] by Th15;
   end;
-A10: S[{}] by Th16;
+A10: S[{}] by Th13;
   thus for O holds S[O] from ORDINAL2:sch 1(A10, A9, A1);
 end;
 
-theorem Th26:
+theorem Th23:
   for a st f.a [= a for O holds (f, O)-.a [= a
 proof
   let a;
@@ -1101,7 +1101,7 @@ A7: dom Ls = O1 & for O2 being Ordinal st O2 in O1 holds Ls.O2 = F(O2
     Ls.O2 = (f, O2)-.a & Ls.O2 in rng Ls by A7,A5,FUNCT_1:def 3;
     then "/\"(rng Ls, L) [= (f, O2)-.a by LATTICE3:38;
     then "/\"(rng Ls, L) [= a by A6,LATTICES:7;
-    hence S[O1] by A2,A3,A7,Th21;
+    hence S[O1] by A2,A3,A7,Th18;
   end;
   assume
 A8: f.a [= a;
@@ -1110,13 +1110,13 @@ A9: now
     assume S[O1];
     then f.((f, O1)-.a) [= f.a by QUANTAL1:def 12;
     then f.((f, O1)-.a) [= a by A8,LATTICES:7;
-    hence S[succ O1] by Th19;
+    hence S[succ O1] by Th16;
   end;
-A10: S[{}] by Th17;
+A10: S[{}] by Th14;
   thus for O holds S[O] from ORDINAL2:sch 1(A10, A9, A1);
 end;
 
-theorem Th27:
+theorem Th24:
   for a st a [= f.a for O1, O2 st O1 c= O2 holds (f, O1)+.a [= (f, O2)+.a
 proof
   let a;
@@ -1152,7 +1152,7 @@ A9:         O1 in O2;
 A10:        dom L1 = O2 & for O3 st O3 in O2 holds L1.O3 = F(O3) from
             ORDINAL2:sch 2;
 A11:        L1.O1 = (f, O1)+.a & L1.O1 in rng L1 by A9,A10,FUNCT_1:def 3;
-            (f, O2)+.a = "\/"(rng L1, L) by A2,A8,A10,Th20;
+            (f, O2)+.a = "\/"(rng L1, L) by A2,A8,A10,Th17;
             hence thesis by A11,LATTICE3:38;
           end;
         end;
@@ -1203,8 +1203,8 @@ A19:        O4 is limit_ordinal;
               per cases;
               suppose
                 O4 = {};
-                then (f, O4)+.a = a by Th16;
-                hence thesis by A12,Th18;
+                then (f, O4)+.a = a by Th13;
+                hence thesis by A12,Th15;
               end;
               suppose
 A20:            O4 <> {};
@@ -1226,16 +1226,16 @@ A25:              O3 c= succ O3 by ORDINAL1:def 2;
                   O3 c= O4 by A21,A23,ORDINAL1:def 2;
                   then (f, O3)+.a [= (f, O4)+.a by A14;
                   then f.(f, O3)+.a [= f.(f, O4)+.a by QUANTAL1:def 12;
-                  then (f, succ O3)+.a [= f.(f, O4)+.a by Th18;
+                  then (f, succ O3)+.a [= f.(f, O4)+.a by Th15;
                   then
-A26:              (f, succ O3)+.a [= (f, succ O4)+.a by Th18;
+A26:              (f, succ O3)+.a [= (f, succ O4)+.a by Th15;
                   succ O3 c= O4 by A21,A23,ORDINAL1:21;
                   then
 A27:              (f, O3)+.a [= (f, succ O3)+.a by A14,A25;
                   q = (f, O3)+.a by A21,A23,A24;
                   hence q [= (f, succ O4)+.a by A26,A27,LATTICES:7;
                 end;
-                (f, O4)+.a = "\/"(rng L1, L) by A19,A20,A21,Th20;
+                (f, O4)+.a = "\/"(rng L1, L) by A19,A20,A21,Th17;
                 hence thesis by A22,LATTICE3:def 21;
               end;
             end;
@@ -1248,8 +1248,8 @@ A28:        O4 = succ O3;
             then O3 c= O4 by A28,XBOOLE_1:7;
             then (f, O3)+.a [= (f, O4)+.a by A14;
             then f.((f, O3)+.a) [= f.((f, O4)+.a) by QUANTAL1:def 12;
-            then (f, O4)+.a [= f.((f, O4)+.a) by A28,Th18;
-            hence thesis by Th18;
+            then (f, O4)+.a [= f.((f, O4)+.a) by A28,Th15;
+            hence thesis by Th15;
           end;
         end;
         O1 c< O2 by A15,A17,XBOOLE_0:def 8;
@@ -1268,7 +1268,7 @@ A30: S[{}];
   hence thesis by A29;
 end;
 
-theorem Th28:
+theorem Th25:
   for a st f.a [= a for O1, O2 st O1 c= O2 holds (f, O2)-.a [= (f, O1)-.a
 proof
   let a;
@@ -1304,7 +1304,7 @@ A9:         O1 in O2;
 A10:        dom L1 = O2 & for O3 st O3 in O2 holds L1.O3 = F(O3) from
             ORDINAL2:sch 2;
 A11:        L1.O1 = (f, O1)-.a & L1.O1 in rng L1 by A9,A10,FUNCT_1:def 3;
-            (f, O2)-.a = "/\"(rng L1, L) by A2,A8,A10,Th21;
+            (f, O2)-.a = "/\"(rng L1, L) by A2,A8,A10,Th18;
             hence thesis by A11,LATTICE3:38;
           end;
         end;
@@ -1355,8 +1355,8 @@ A19:        O4 is limit_ordinal;
               per cases;
               suppose
                 O4 = {};
-                then (f, O4)-.a = a by Th17;
-                hence thesis by A12,Th19;
+                then (f, O4)-.a = a by Th14;
+                hence thesis by A12,Th16;
               end;
               suppose
 A20:            O4 <> {};
@@ -1378,16 +1378,16 @@ A25:              O3 c= succ O3 by ORDINAL1:def 2;
                   O3 c= O4 by A21,A23,ORDINAL1:def 2;
                   then (f, O4)-.a [= (f, O3)-.a by A14;
                   then f.(f, O4)-.a [= f.(f, O3)-.a by QUANTAL1:def 12;
-                  then (f, succ O4)-.a [= f.(f, O3)-.a by Th19;
+                  then (f, succ O4)-.a [= f.(f, O3)-.a by Th16;
                   then
-A26:              (f, succ O4)-.a [= (f, succ O3)-.a by Th19;
+A26:              (f, succ O4)-.a [= (f, succ O3)-.a by Th16;
                   succ O3 c= O4 by A21,A23,ORDINAL1:21;
                   then
 A27:              (f, succ O3)-.a [= (f, O3)-.a by A14,A25;
                   q = (f, O3)-.a by A21,A23,A24;
                   hence (f, succ O4)-.a [= q by A26,A27,LATTICES:7;
                 end;
-                (f, O4)-.a = "/\"(rng L1, L) by A19,A20,A21,Th21;
+                (f, O4)-.a = "/\"(rng L1, L) by A19,A20,A21,Th18;
                 hence thesis by A22,LATTICE3:34;
               end;
             end;
@@ -1400,8 +1400,8 @@ A28:        O4 = succ O3;
             then O3 c= O4 by A28,XBOOLE_1:7;
             then (f, O4)-.a [= (f, O3)-.a by A14;
             then f.((f, O4)-.a) [= f.((f, O3)-.a) by QUANTAL1:def 12;
-            then f.((f, O4)-.a) [= (f, O4)-.a by A28,Th19;
-            hence thesis by Th19;
+            then f.((f, O4)-.a) [= (f, O4)-.a by A28,Th16;
+            hence thesis by Th16;
           end;
         end;
         O1 c< O2 by A15,A17,XBOOLE_0:def 8;
@@ -1420,7 +1420,7 @@ A30: S[{}];
   hence thesis by A29;
 end;
 
-theorem Th29:
+theorem Th26:
   for a st a [= f.a for O1, O2 st O1 c< O2 & not (f, O2)+.a
   is_a_fixpoint_of f holds (f, O1)+.a <> (f, O2)+.a
 proof
@@ -1430,20 +1430,20 @@ A1: a [= f.a;
   let O1, O2;
   succ O1 = O1 \/ {O1} by ORDINAL1:def 1;
   then
-A2: (f, O1)+.a [= (f, succ O1)+.a by A1,Th27,XBOOLE_1:7;
+A2: (f, O1)+.a [= (f, succ O1)+.a by A1,Th24,XBOOLE_1:7;
   assume that
 A3: O1 c< O2 and
 A4: not (f, O2)+.a is_a_fixpoint_of f and
 A5: (f, O1)+.a = (f, O2)+.a;
   O1 in O2 by A3,ORDINAL1:11;
   then succ O1 c= O2 by ORDINAL1:21;
-  then (f, succ O1)+.a [= (f, O2)+.a by A1,Th27;
+  then (f, succ O1)+.a [= (f, O2)+.a by A1,Th24;
   then (f, O1)+.a = (f, succ O1)+.a by A5,A2,LATTICES:8;
-  then (f, O1)+.a = f.(f, O1)+.a by Th18;
+  then (f, O1)+.a = f.(f, O1)+.a by Th15;
   hence contradiction by A4,A5,ABIAN:def 4;
 end;
 
-theorem Th30:
+theorem Th27:
   for a st f.a [= a for O1, O2 st O1 c< O2 & not (f, O2)-.a
   is_a_fixpoint_of f holds (f, O1)-.a <> (f, O2)-.a
 proof
@@ -1453,20 +1453,20 @@ A1: f.a [= a;
   let O1, O2;
   succ O1 = O1 \/ {O1} by ORDINAL1:def 1;
   then
-A2: (f, succ O1)-.a [= (f, O1)-.a by A1,Th28,XBOOLE_1:7;
+A2: (f, succ O1)-.a [= (f, O1)-.a by A1,Th25,XBOOLE_1:7;
   assume that
 A3: O1 c< O2 and
 A4: not (f, O2)-.a is_a_fixpoint_of f and
 A5: (f, O1)-.a = (f, O2)-.a;
   O1 in O2 by A3,ORDINAL1:11;
   then succ O1 c= O2 by ORDINAL1:21;
-  then (f, O2)-.a [= (f, succ O1)-.a by A1,Th28;
+  then (f, O2)-.a [= (f, succ O1)-.a by A1,Th25;
   then (f, O1)-.a = (f, succ O1)-.a by A5,A2,LATTICES:8;
-  then (f, O1)-.a = f.(f, O1)-.a by Th19;
+  then (f, O1)-.a = f.(f, O1)-.a by Th16;
   hence contradiction by A4,A5,ABIAN:def 4;
 end;
 
-theorem Th31:
+theorem Th28:
   a [= f.a & (f, O1)+.a is_a_fixpoint_of f implies for O2 st O1 c=
   O2 holds (f, O1)+.a = (f, O2)+.a
 proof
@@ -1484,7 +1484,7 @@ A5: for O3 st O3 in O2 holds S[O3];
     proof
       assume O1 c= O2;
       then
-A6:   fa [= (f, O2)+.a by A1,Th27;
+A6:   fa [= (f, O2)+.a by A1,Th24;
       deffunc F(Ordinal)=(f, $1)+.a;
       consider L1 being T-Sequence such that
 A7:   dom L1 = O2 & for O3 st O3 in O2 holds L1.O3 = F(O3) from
@@ -1505,11 +1505,11 @@ A10:    q = L1.O3 by FUNCT_1:def 3;
         end;
         suppose
           O3 c= O1;
-          then (f, O3)+.a [= fa by A1,Th27;
+          then (f, O3)+.a [= fa by A1,Th24;
           hence q [= fa by A7,A9,A10;
         end;
       end;
-      (f, O2)+.a = "\/"(rng L1, L) by A4,A7,Th20;
+      (f, O2)+.a = "\/"(rng L1, L) by A4,A7,Th17;
       then (f, O2)+.a [= fa by A8,LATTICE3:def 21;
       hence thesis by A6,LATTICES:8;
     end;
@@ -1532,7 +1532,7 @@ A13:  O1 c= succ O2;
         then O1 c< succ O2 by A13,XBOOLE_0:def 8;
         then O1 in succ O2 by ORDINAL1:11;
         hence fa = f.(f, O2)+.a by A2,A12,ABIAN:def 3,ORDINAL1:22
-          .= (f, succ O2)+.a by Th18;
+          .= (f, succ O2)+.a by Th15;
       end;
     end;
   end;
@@ -1540,7 +1540,7 @@ A14: S[{}];
   thus for O2 holds S[O2] from ORDINAL2:sch 1(A14, A11, A3);
 end;
 
-theorem Th32:
+theorem Th29:
   f.a [= a & (f, O1)-.a is_a_fixpoint_of f implies for O2 st O1 c=
   O2 holds (f, O1)-.a = (f, O2)-.a
 proof
@@ -1558,7 +1558,7 @@ A5: for O3 st O3 in O2 holds S[O3];
     proof
       assume O1 c= O2;
       then
-A6:   (f, O2)-.a [= fa by A1,Th28;
+A6:   (f, O2)-.a [= fa by A1,Th25;
       deffunc F(Ordinal)=(f, $1)-.a;
       consider L1 being T-Sequence such that
 A7:   dom L1 = O2 & for O3 st O3 in O2 holds L1.O3 = F(O3) from
@@ -1579,11 +1579,11 @@ A10:    q = L1.O3 by FUNCT_1:def 3;
         end;
         suppose
           O3 c= O1;
-          then fa [= (f, O3)-.a by A1,Th28;
+          then fa [= (f, O3)-.a by A1,Th25;
           hence fa [= q by A7,A9,A10;
         end;
       end;
-      (f, O2)-.a = "/\"(rng L1, L) by A4,A7,Th21;
+      (f, O2)-.a = "/\"(rng L1, L) by A4,A7,Th18;
       then fa [= (f, O2)-.a by A8,LATTICE3:39;
       hence thesis by A6,LATTICES:8;
     end;
@@ -1606,7 +1606,7 @@ A13:  O1 c= succ O2;
         then O1 c< succ O2 by A13,XBOOLE_0:def 8;
         then O1 in succ O2 by ORDINAL1:11;
         hence fa = f.(f, O2)-.a by A2,A12,ABIAN:def 3,ORDINAL1:22
-          .= (f, succ O2)-.a by Th19;
+          .= (f, succ O2)-.a by Th16;
       end;
     end;
   end;
@@ -1623,7 +1623,7 @@ A2: not O2 c< O1;
   hence contradiction by A2,XBOOLE_0:def 8;
 end;
 
-theorem Th33:
+theorem Th30:
   for a st a [= f.a ex O st card O c= card the carrier of L & (f,
   O)+.a is_a_fixpoint_of f
 proof
@@ -1654,12 +1654,12 @@ A9:   Ls.x2 = (f, x2)+.a by A1,A6;
       suppose
 A10:    x1 c< x2;
         not (f, x2)+.a is_a_fixpoint_of f by A1,A3,A6;
-        hence thesis by A2,A1,A6,A7,A8,A10,Th29;
+        hence thesis by A2,A1,A6,A7,A8,A10,Th26;
       end;
       suppose
 A11:    x2 c< x1;
         not (f, x1)+.a is_a_fixpoint_of f by A1,A3,A5;
-        hence thesis by A2,A1,A5,A7,A9,A11,Th29;
+        hence thesis by A2,A1,A5,A7,A9,A11,Th26;
       end;
       suppose
         x2 = x1;
@@ -1692,7 +1692,7 @@ A16: (f, O)+.a is_a_fixpoint_of f;
   thus thesis by A16;
 end;
 
-theorem Th34:
+theorem Th31:
   for a st f.a [= a ex O st card O c= card the carrier of L & (f,
   O)-.a is_a_fixpoint_of f
 proof
@@ -1723,12 +1723,12 @@ A9:   Ls.x2 = (f, x2)-.a by A1,A6;
       suppose
 A10:    x1 c< x2;
         not (f, x2)-.a is_a_fixpoint_of f by A1,A3,A6;
-        hence thesis by A2,A1,A6,A7,A8,A10,Th30;
+        hence thesis by A2,A1,A6,A7,A8,A10,Th27;
       end;
       suppose
 A11:    x2 c< x1;
         not (f, x1)-.a is_a_fixpoint_of f by A1,A3,A5;
-        hence thesis by A2,A1,A5,A7,A9,A11,Th30;
+        hence thesis by A2,A1,A5,A7,A9,A11,Th27;
       end;
       suppose
         x2 = x1;
@@ -1761,7 +1761,7 @@ A16: (f, O)-.a is_a_fixpoint_of f;
   thus thesis by A16;
 end;
 
-theorem Th35:
+theorem Th32:
   for a, b st a is_a_fixpoint_of f & b is_a_fixpoint_of f ex O st
 card O c= card the carrier of L & (f, O)+.(a"\/"b) is_a_fixpoint_of f & a [= (f
   , O)+.(a"\/"b) & b [= (f, O)+.(a"\/"b)
@@ -1779,18 +1779,18 @@ A4: f.b [= f.ab by QUANTAL1:def 12;
 A5: a = f.a & b = f.b by ABIAN:def 3;
   then consider O such that
 A6: card O c= card the carrier of L & (f, O)+.ab is_a_fixpoint_of f by A2,A4
-,Th33,FILTER_0:6;
+,Th30,FILTER_0:6;
   take O;
   thus card O c= card the carrier of L & (f, O)+.(a"\/"b) is_a_fixpoint_of f
   by A6;
   ab [= f.ab by A5,A2,A4,FILTER_0:6;
   then
-A7: ab [= (f, O)+.(a"\/"b) by Th25;
+A7: ab [= (f, O)+.(a"\/"b) by Th22;
   hence a [= (f, O)+.(a"\/"b) by A1,LATTICES:7;
   thus thesis by A3,A7,LATTICES:7;
 end;
 
-theorem Th36:
+theorem Th33:
   for a, b st a is_a_fixpoint_of f & b is_a_fixpoint_of f ex O st
 card O c= card the carrier of L & (f, O)-.(a"/\"b) is_a_fixpoint_of f & (f, O)
   -.(a"/\"b) [= a & (f, O)-.(a"/\"b) [= b
@@ -1808,18 +1808,18 @@ A4: f.ab [= f.b by QUANTAL1:def 12;
 A5: a = f.a & b = f.b by ABIAN:def 3;
   then consider O such that
 A6: card O c= card the carrier of L & (f, O)-.ab is_a_fixpoint_of f by A2,A4
-,Th34,FILTER_0:7;
+,Th31,FILTER_0:7;
   take O;
   thus card O c= card the carrier of L & (f, O)-.(a"/\"b) is_a_fixpoint_of f
   by A6;
   f.ab [= ab by A5,A2,A4,FILTER_0:7;
   then
-A7: (f, O)-.(a"/\"b) [= ab by Th26;
+A7: (f, O)-.(a"/\"b) [= ab by Th23;
   hence (f, O)-.(a"/\"b) [= a by A1,LATTICES:7;
   thus thesis by A3,A7,LATTICES:7;
 end;
 
-theorem Th37:
+theorem Th34:
   a [= b & b is_a_fixpoint_of f implies for O2 holds (f, O2)+.a [= b
 proof
   assume that
@@ -1831,7 +1831,7 @@ A4: now
     let O1;
     assume S[O1];
     then f.(f, O1)+.a [= f.b by QUANTAL1:def 12;
-    hence S[succ O1] by A3,Th18;
+    hence S[succ O1] by A3,Th15;
   end;
 A5: now
     deffunc F(Ordinal)=(f, $1)+.a;
@@ -1853,14 +1853,14 @@ A11:  q = L1.O3 by FUNCT_1:def 3;
       (f, O3)+.a [= b by A7,A8,A10;
       hence q [= b by A8,A10,A11;
     end;
-    (f, O1)+.a = "\/"(rng L1, L) by A6,A8,Th20;
+    (f, O1)+.a = "\/"(rng L1, L) by A6,A8,Th17;
     hence S[O1] by A9,LATTICE3:def 21;
   end;
-A12: S[{}] by A1,Th16;
+A12: S[{}] by A1,Th13;
   thus for O2 holds S[O2] from ORDINAL2:sch 1(A12, A4, A5);
 end;
 
-theorem Th38:
+theorem Th35:
   b [= a & b is_a_fixpoint_of f implies for O2 holds b [= (f, O2) -.a
 proof
   assume that
@@ -1872,7 +1872,7 @@ A4: now
     let O1;
     assume S[O1];
     then f.b [= f.(f, O1)-.a by QUANTAL1:def 12;
-    hence S[succ O1] by A3,Th19;
+    hence S[succ O1] by A3,Th16;
   end;
 A5: now
     deffunc F(Ordinal)=(f, $1)-.a;
@@ -1894,18 +1894,18 @@ A11:  q = L1.O3 by FUNCT_1:def 3;
       b [= (f, O3)-.a by A7,A8,A10;
       hence b [= q by A8,A10,A11;
     end;
-    (f, O1)-.a = "/\"(rng L1, L) by A6,A8,Th21;
+    (f, O1)-.a = "/\"(rng L1, L) by A6,A8,Th18;
     hence S[O1] by A9,LATTICE3:39;
   end;
-A12: S[{}] by A1,Th17;
+A12: S[{}] by A1,Th14;
   thus for O2 holds S[O2] from ORDINAL2:sch 1(A12, A4, A5);
 end;
 
 definition
   let L be complete Lattice, f be UnOp of L such that
-A1: f is monotone;
+B1: f is monotone;
   func FixPoints f -> strict Lattice means
-  :Def11:
+  :Def9:
   ex P being non empty
   with_suprema with_infima Subset of L st P = {x where x is Element of L: x
   is_a_fixpoint_of f} & it = latt P;
@@ -1913,73 +1913,73 @@ A1: f is monotone;
   proof
     defpred P[set] means $1 is_a_fixpoint_of f;
     set P = {x where x is Element of L: P[x]};
-A2: P is Subset of L from DOMAIN_1:sch 7;
+A1: P is Subset of L from DOMAIN_1:sch 7;
     consider a being Element of L such that
-A3: a is_a_fixpoint_of f by A1,Th24;
-A4: a in P by A3;
-    reconsider P as Subset of L by A2;
-A5: P is with_suprema
+A2: a is_a_fixpoint_of f by B1,Th21;
+A3: a in P by A2;
+    reconsider P as Subset of L by A1;
+A4: P is with_suprema
     proof
       let x,y be Element of L;
       assume that
-A6:   x in P and
-A7:   y in P;
+A5:   x in P and
+A6:   y in P;
       consider a being Element of L such that
-A8:   x = a and
-A9:   a is_a_fixpoint_of f by A6;
+A7:   x = a and
+A8:   a is_a_fixpoint_of f by A5;
       consider b being Element of L such that
-A10:  y = b and
-A11:  b is_a_fixpoint_of f by A7;
+A9:  y = b and
+A10:  b is_a_fixpoint_of f by A6;
       reconsider a, b as Element of L;
       reconsider ab = a"\/"b as Element of L;
       consider O such that
       card O c= card the carrier of L and
-A12:  (f, O)+.ab is_a_fixpoint_of f and
-A13:  a [= (f, O)+.ab & b [= (f, O)+.ab by A1,A9,A11,Th35;
+A11:  (f, O)+.ab is_a_fixpoint_of f and
+A12:  a [= (f, O)+.ab & b [= (f, O)+.ab by B1,A8,A10,Th32;
       set z = (f, O)+.ab;
       take z;
-      thus z in P by A12;
-      thus x [= z & y [= z by A8,A10,A13;
+      thus z in P by A11;
+      thus x [= z & y [= z by A7,A9,A12;
       let z9 be Element of L;
       assume that
-A14:  z9 in P and
-A15:  x [= z9 & y [= z9;
-A16:  ex zz being Element of L st zz = z9 & zz is_a_fixpoint_of f by A14;
-      ab [= z9 by A8,A10,A15,FILTER_0:6;
-      hence z [= z9 by A1,A16,Th37;
+A13:  z9 in P and
+A14:  x [= z9 & y [= z9;
+A15:  ex zz being Element of L st zz = z9 & zz is_a_fixpoint_of f by A13;
+      ab [= z9 by A7,A9,A14,FILTER_0:6;
+      hence z [= z9 by B1,A15,Th34;
     end;
     P is with_infima
     proof
       let x,y be Element of L;
       assume that
-A17:  x in P and
-A18:  y in P;
+A16:  x in P and
+A17:  y in P;
       consider a being Element of L such that
-A19:  x = a and
-A20:  a is_a_fixpoint_of f by A17;
+A18:  x = a and
+A19:  a is_a_fixpoint_of f by A16;
       consider b being Element of L such that
-A21:  y = b and
-A22:  b is_a_fixpoint_of f by A18;
+A20:  y = b and
+A21:  b is_a_fixpoint_of f by A17;
       reconsider a, b as Element of L;
       reconsider ab = a"/\"b as Element of L;
       consider O such that
       card O c= card the carrier of L and
-A23:  (f, O)-.ab is_a_fixpoint_of f and
-A24:  (f, O)-.ab [= a & (f, O)-.ab [= b by A1,A20,A22,Th36;
+A22:  (f, O)-.ab is_a_fixpoint_of f and
+A23:  (f, O)-.ab [= a & (f, O)-.ab [= b by B1,A19,A21,Th33;
       set z = (f, O)-.ab;
       take z;
-      thus z in P by A23;
-      thus z [= x & z [= y by A19,A21,A24;
+      thus z in P by A22;
+      thus z [= x & z [= y by A18,A20,A23;
       let z9 be Element of L;
       assume that
-A25:  z9 in P and
-A26:  z9 [= x & z9 [= y;
-A27:  ex zz being Element of L st zz = z9 & zz is_a_fixpoint_of f by A25;
-      z9 [= ab by A19,A21,A26,FILTER_0:7;
-      hence z9 [= z by A1,A27,Th38;
+A24:  z9 in P and
+A25:  z9 [= x & z9 [= y;
+A26:  ex zz being Element of L st zz = z9 & zz is_a_fixpoint_of f by A24;
+      z9 [= ab by A18,A20,A25,FILTER_0:7;
+      hence z9 [= z by B1,A26,Th35;
     end;
     then reconsider
-    P as non empty with_suprema with_infima Subset of L by A4,A5;
+    P as non empty with_suprema with_infima Subset of L by A3,A4;
     take latt P, P;
     thus P = {x where x is Element of L: x is_a_fixpoint_of f};
     thus thesis;
@@ -1987,31 +1987,31 @@ A27:  ex zz being Element of L st zz = z9 & zz is_a_fixpoint_of f by A25;
   uniqueness;
 end;
 
-theorem Th39:
+theorem Th36:
   the carrier of FixPoints f = {x where x is Element of L: x
   is_a_fixpoint_of f}
 proof
   ex P being non empty with_suprema with_infima Subset of L st P = {x
-where x is Element of L: x is_a_fixpoint_of f} & FixPoints f = latt P by Def11;
-  hence thesis by Def10;
+where x is Element of L: x is_a_fixpoint_of f} & FixPoints f = latt P by Def9;
+  hence thesis by Def8;
 end;
 
-theorem Th40:
+theorem Th37:
   the carrier of FixPoints f c= the carrier of L
 proof
 A1: the carrier of FixPoints f = {x where x is Element of L: x
-  is_a_fixpoint_of f} by Th39;
+  is_a_fixpoint_of f} by Th36;
   let x be set;
   assume x in the carrier of FixPoints f;
   then ex a st x = a & a is_a_fixpoint_of f by A1;
   hence thesis;
 end;
 
-theorem Th41:
+theorem Th38:
   a in the carrier of FixPoints f iff a is_a_fixpoint_of f
 proof
 A1: the carrier of FixPoints f = {x where x is Element of L: x
-  is_a_fixpoint_of f} by Th39;
+  is_a_fixpoint_of f} by Th36;
   hereby
     assume a in the carrier of FixPoints f;
     then ex b st a = b & b is_a_fixpoint_of f by A1;
@@ -2021,17 +2021,17 @@ A1: the carrier of FixPoints f = {x where x is Element of L: x
   hence thesis by A1;
 end;
 
-theorem Th42:
+theorem Th39:
   for x, y being Element of FixPoints f, a, b st x = a & y = b
   holds (x [= y iff a [= b)
 proof
 A1: ex P being non empty with_suprema with_infima Subset of L st P = {x where
-  x is Element of L: x is_a_fixpoint_of f} & FixPoints f = latt P by Def11;
+  x is Element of L: x is_a_fixpoint_of f} & FixPoints f = latt P by Def9;
   let x, y be Element of FixPoints f, a, b;
   assume
 A2: x = a & y = b;
   ex a9, b9 being Element of L st x = a9 & y = b9 &( x [= y iff a9 [= b9)
-  by A1,Def10;
+  by A1,Def8;
   hence thesis by A2;
 end;
 
@@ -2054,35 +2054,35 @@ A2: q in Y;
     then q [= s by LATTICE3:38;
     then
 A3: f.q [= f.s by QUANTAL1:def 12;
-    q9 is_a_fixpoint_of f by A1,A2,Th41;
+    q9 is_a_fixpoint_of f by A1,A2,Th38;
     hence q [= f.s by A3,ABIAN:def 3;
   end;
   then
 A4: s [= f.s by LATTICE3:def 21;
   then consider O such that
   card O c= card cL and
-A5: (f, O)+.s is_a_fixpoint_of f by Th33;
+A5: (f, O)+.s is_a_fixpoint_of f by Th30;
   reconsider p9 = (f, O)+.s as Element of L;
-  reconsider p = p9 as Element of cF by A5,Th41;
+  reconsider p = p9 as Element of cF by A5,Th38;
   take p;
   thus X is_less_than p
   proof
     let q be Element of cF;
-    q in cF & cF c= cL by Th40;
+    q in cF & cF c= cL by Th37;
     then reconsider qL9 = q as Element of L;
     assume q in X;
     then q in Y by XBOOLE_0:def 4;
     then
 A6: qL9 [= s by LATTICE3:38;
-    s [= p9 by A4,Th25;
+    s [= p9 by A4,Th22;
     then qL9 [= p9 by A6,LATTICES:7;
-    hence q [= p by Th42;
+    hence q [= p by Th39;
   end;
   let r be Element of cF such that
 A7: X is_less_than r;
   reconsider r99 = r as Element of F;
   cF = {x where x is Element of L: x is_a_fixpoint_of f} & r in the
-  carrier of F by Th39;
+  carrier of F by Th36;
   then consider r9 being Element of L such that
 A8: r9 = r and
 A9: r9 is_a_fixpoint_of f;
@@ -2094,11 +2094,11 @@ A10: Y c= X by XBOOLE_1:17;
 A11: q in Y;
     then reconsider q99 = q as Element of F by A1;
     q99 [= r99 by A10,A7,A11,LATTICE3:def 17;
-    hence q [= r9 by A8,Th42;
+    hence q [= r9 by A8,Th39;
   end;
   then s [= r9 by LATTICE3:def 21;
-  then p9 [= r9 by A9,Th37;
-  hence p [= r by A8,Th42;
+  then p9 [= r9 by A9,Th34;
+  hence p [= r by A8,Th39;
 end;
 
 definition
@@ -2111,7 +2111,7 @@ definition
   coherence;
 end;
 
-theorem Th44:
+theorem Th41:
   lfp f is_a_fixpoint_of f & ex O st card O c= card the carrier of
   L & (f, O)+.Bottom L = lfp f
 proof
@@ -2119,19 +2119,19 @@ proof
 A1: Bottom L [= f.ze by LATTICES:16;
   then consider O such that
 A2: card O c= card the carrier of L and
-A3: (f, O)+.Bottom L is_a_fixpoint_of f by Th33;
+A3: (f, O)+.Bottom L is_a_fixpoint_of f by Th30;
   card the carrier of L in nextcard the carrier of L by CARD_1:def 3;
   then card O in nextcard the carrier of L by A2,ORDINAL1:12;
   then O in nextcard the carrier of L by CARD_3:44;
   then
 A4: O c= nextcard the carrier of L by ORDINAL1:def 2;
-  hence lfp f is_a_fixpoint_of f by A1,A3,Th31;
+  hence lfp f is_a_fixpoint_of f by A1,A3,Th28;
   take O;
   thus card O c= card the carrier of L by A2;
-  thus thesis by A1,A3,A4,Th31;
+  thus thesis by A1,A3,A4,Th28;
 end;
 
-theorem Th45:
+theorem Th42:
   gfp f is_a_fixpoint_of f & ex O st card O c= card the carrier of
   L & (f, O)-.Top L = gfp f
 proof
@@ -2139,19 +2139,19 @@ proof
 A1: f.je [= Top L by LATTICES:19;
   then consider O such that
 A2: card O c= card the carrier of L and
-A3: (f, O)-.Top L is_a_fixpoint_of f by Th34;
+A3: (f, O)-.Top L is_a_fixpoint_of f by Th31;
   card the carrier of L in nextcard the carrier of L by CARD_1:def 3;
   then card O in nextcard the carrier of L by A2,ORDINAL1:12;
   then O in nextcard the carrier of L by CARD_3:44;
   then
 A4: O c= nextcard the carrier of L by ORDINAL1:def 2;
-  hence gfp f is_a_fixpoint_of f by A1,A3,Th32;
+  hence gfp f is_a_fixpoint_of f by A1,A3,Th29;
   take O;
   thus card O c= card the carrier of L by A2;
-  thus thesis by A1,A3,A4,Th32;
+  thus thesis by A1,A3,A4,Th29;
 end;
 
-theorem Th46:
+theorem Th43:
   a is_a_fixpoint_of f implies lfp f [= a & a [= gfp f
 proof
   defpred S[Ordinal] means (f, $1)+.Bottom L [= a;
@@ -2175,7 +2175,7 @@ A7:   q = L1.C by FUNCT_1:def 3;
       (f, C)+.Bottom L [= a by A3,A4,A6;
       hence q [= a by A4,A6,A7;
     end;
-    (f, O1)+.Bottom L = "\/"(rng L1, L) by A2,A4,Th20;
+    (f, O1)+.Bottom L = "\/"(rng L1, L) by A2,A4,Th17;
     hence S[O1] by A5,LATTICE3:def 21;
   end;
   assume a is_a_fixpoint_of f;
@@ -2185,9 +2185,9 @@ A9: now
     let O1;
     assume S[O1];
     then f.(f, O1)+.Bottom L [= f.a by QUANTAL1:def 12;
-    hence S[succ O1] by A8,Th18;
+    hence S[succ O1] by A8,Th15;
   end;
-  (f, {})+.Bottom L = Bottom L by Th16;
+  (f, {})+.Bottom L = Bottom L by Th13;
   then
 A10: S[{}] by LATTICES:16;
   for O2 holds S[O2] from ORDINAL2:sch 1(A10, A9, A1);
@@ -2197,7 +2197,7 @@ A11: now
     let O1;
     assume S[O1];
     then f.a [= f.(f, O1)-.Top L by QUANTAL1:def 12;
-    hence S[succ O1] by A8,Th19;
+    hence S[succ O1] by A8,Th16;
   end;
 A12: now
     deffunc F(Ordinal)=(f, $1)-.Top L;
@@ -2219,10 +2219,10 @@ A18:  q = L1.C by FUNCT_1:def 3;
       a [= (f, C)-.Top L by A14,A15,A17;
       hence a [= q by A15,A17,A18;
     end;
-    (f, O1)-.Top L = "/\"(rng L1, L) by A13,A15,Th21;
+    (f, O1)-.Top L = "/\"(rng L1, L) by A13,A15,Th18;
     hence S[O1] by A16,LATTICE3:39;
   end;
-  (f, {})-.Top L = Top L by Th17;
+  (f, {})-.Top L = Top L by Th14;
   then
 A19: S[{}] by LATTICES:19;
   for O2 holds S[O2] from ORDINAL2:sch 1(A19, A11, A12);
@@ -2236,9 +2236,9 @@ proof
 A1: f.a [= a;
   then consider O such that
   card O c= card the carrier of L and
-A2: (f, O)-.a is_a_fixpoint_of f by Th34;
-A3: lfp f [= (f, O)-.a by A2,Th46;
-  (f, O)-.a [= a by A1,Th26;
+A2: (f, O)-.a is_a_fixpoint_of f by Th31;
+A3: lfp f [= (f, O)-.a by A2,Th43;
+  (f, O)-.a [= a by A1,Th23;
   hence thesis by A3,LATTICES:7;
 end;
 
@@ -2249,9 +2249,9 @@ proof
 A1: a [= f.a;
   then consider O such that
   card O c= card the carrier of L and
-A2: (f, O)+.a is_a_fixpoint_of f by Th33;
-A3: (f, O)+.a [= gfp f by A2,Th46;
-  a [= (f, O)+.a by A1,Th25;
+A2: (f, O)+.a is_a_fixpoint_of f by Th30;
+A3: (f, O)+.a [= gfp f by A2,Th43;
+  a [= (f, O)+.a by A1,Th22;
   hence thesis by A3,LATTICES:7;
 end;
 
@@ -2259,7 +2259,7 @@ begin :: Boolean Lattices
 
 reserve f for monotone UnOp of BooleLatt A;
 
-theorem Th49:
+theorem Th46:
   for f being UnOp of BooleLatt A holds f is monotone iff f is c=-monotone
 proof
   let f be UnOp of BooleLatt A;
@@ -2278,7 +2278,7 @@ A2: f is c=-monotone;
   let p, q be Element of BooleLatt A;
   assume p [= q;
   then p c= q by LATTICE3:2;
-  then f.p c= f.q by A2,Def3;
+  then f.p c= f.q by A2,Def1;
   hence f.p [= f.q by LATTICE3:2;
 end;
 
@@ -2287,15 +2287,15 @@ theorem
 proof
   reconsider lf = lfp f as Subset of A by LATTICE3:def 1;
   the carrier of BooleLatt A = bool A by LATTICE3:def 1;
-  then reconsider g = f as c=-monotone Function of bool A, bool A by Th49;
+  then reconsider g = f as c=-monotone Function of bool A, bool A by Th46;
   reconsider lg = lfp(A, g) as Element of BooleLatt A by LATTICE3:def 1;
   take g;
-  lg is_a_fixpoint_of f by Th6;
-  then lfp f [= lg by Th46;
+  lg is_a_fixpoint_of f by Th4;
+  then lfp f [= lg by Th43;
   then
 A1: lf c= lg by LATTICE3:2;
-  lfp f is_a_fixpoint_of f by Th44;
-  then lfp (A, g) c= lf by Th10;
+  lfp f is_a_fixpoint_of f by Th41;
+  then lfp (A, g) c= lf by Th8;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
@@ -2304,14 +2304,14 @@ theorem
 proof
   reconsider gf = gfp f as Subset of A by LATTICE3:def 1;
   the carrier of BooleLatt A = bool A by LATTICE3:def 1;
-  then reconsider g = f as c=-monotone Function of bool A, bool A by Th49;
+  then reconsider g = f as c=-monotone Function of bool A, bool A by Th46;
   reconsider gg = gfp(A, g) as Element of BooleLatt A by LATTICE3:def 1;
   take g;
-  gg is_a_fixpoint_of f by Th7;
-  then gg [= gfp f by Th46;
+  gg is_a_fixpoint_of f by Th5;
+  then gg [= gfp f by Th43;
   then
 A1: gg c= gf by LATTICE3:2;
-  gfp f is_a_fixpoint_of f by Th45;
-  then gf c= gfp (A, g) by Th10;
+  gfp f is_a_fixpoint_of f by Th42;
+  then gf c= gfp (A, g) by Th8;
   hence thesis by A1,XBOOLE_0:def 10;
 end;

@@ -3,7 +3,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received June 26, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,15 +16,15 @@
 environ
 
  vocabularies RELAT_1, ORDINAL1, TARSKI, RELAT_2, WELLORD1, XBOOLE_0, SUBSET_1,
-      ZFMISC_1, FUNCT_1, MCART_1, WELLORD2;
+      ZFMISC_1, FUNCT_1, WELLORD2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, RELAT_1, RELAT_2,
       FUNCT_1, WELLORD1, ORDINAL1;
- constructors RELAT_2, ORDINAL1, WELLORD1, MCART_1;
- registrations RELAT_1, FUNCT_1, ORDINAL1;
+ constructors RELAT_2, ORDINAL1, WELLORD1, MCART_1, XTUPLE_0;
+ registrations RELAT_1, FUNCT_1, ORDINAL1, WELLORD1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, FUNCT_1, RELAT_1, RELAT_2, WELLORD1;
  theorems TARSKI, FUNCT_1, RELAT_1, RELAT_2, ZFMISC_1, WELLORD1, ORDINAL1,
-      XBOOLE_0, XBOOLE_1;
+      XBOOLE_0, XBOOLE_1, XTUPLE_0;
  schemes FUNCT_1, RELAT_1, ORDINAL1, XBOOLE_0;
 
 begin
@@ -51,12 +51,12 @@ A1: [x,y] in R iff x in X & y in X & P[x,y] from RELAT_1:sch 1;
       proof
 A2:     now
           assume x in dom R;
-          then ex y st [x,y] in R by RELAT_1:def 4;
+          then ex y st [x,y] in R by XTUPLE_0:def 12;
           hence thesis by A1;
         end;
 A3:     now
           assume x in rng R;
-          then ex y st [y,x] in R by RELAT_1:def 5;
+          then ex y st [y,x] in R by XTUPLE_0:def 13;
           hence thesis by A1;
         end;
         assume x in field R;
@@ -98,33 +98,49 @@ A12: x in field R2 & y in field R2 by RELAT_1:15;
   end;
 end;
 
-theorem Th2:
-  RelIncl X is reflexive
+canceled 6;
+
+registration
+  let X;
+  cluster RelIncl X -> reflexive;
+  coherence
 proof
 A1: field RelIncl X = X by Def1;
   let a;
   assume a in field RelIncl X;
   hence thesis by A1,Def1;
 end;
-
-theorem Th3:
-  RelIncl X is transitive
+  cluster RelIncl X -> transitive;
+  coherence
 proof
   let a,b,c such that
-A1: a in field RelIncl X and
-A2: b in field RelIncl X and
-A3: c in field RelIncl X and
-A4: [a,b] in RelIncl X & [b,c] in RelIncl X;
+A2: a in field RelIncl X and
+A3: b in field RelIncl X and
+A4: c in field RelIncl X and
+A5: [a,b] in RelIncl X & [b,c] in RelIncl X;
   field RelIncl X = X by Def1;
-  then a c= b & b c= c by A1,A2,A3,A4,Def1;
+  then a c= b & b c= c by A2,A3,A4,A5,Def1;
   then
-A5: a c= c by XBOOLE_1:1;
-  a in X & c in X by A1,A3,Def1;
-  hence thesis by A5,Def1;
+A6: a c= c by XBOOLE_1:1;
+  a in X & c in X by A2,A4,Def1;
+  hence thesis by A6,Def1;
+end;
+  cluster RelIncl X -> antisymmetric;
+  coherence
+proof
+A7: field RelIncl X = X by Def1;
+  let a,b;
+  assume a in field RelIncl X & b in field RelIncl X & [a,b] in RelIncl X & [
+  b,a ] in RelIncl X;
+  then a c= b & b c= a by A7,Def1;
+  hence thesis by XBOOLE_0:def 10;
+end;
 end;
 
-theorem Th4:
-  RelIncl A is connected
+registration
+  let A;
+  cluster RelIncl A -> connected;
+coherence
 proof
   let a,b such that
 A1: a in field RelIncl A & b in field RelIncl A and
@@ -134,62 +150,43 @@ A2: field RelIncl A = A by Def1;
   Y c= Z or Z c= Y;
   hence thesis by A1,A2,Def1;
 end;
-
-theorem Th5:
-  RelIncl X is antisymmetric
-proof
-A1: field RelIncl X = X by Def1;
-  let a,b;
-  assume a in field RelIncl X & b in field RelIncl X & [a,b] in RelIncl X & [
-  b,a ] in RelIncl X;
-  then a c= b & b c= a by A1,Def1;
-  hence thesis by XBOOLE_0:def 10;
-end;
-
-theorem Th6:
-  RelIncl A is well_founded
+  cluster RelIncl A -> well_founded;
+coherence
 proof
   let Y;
   assume that
-A1: Y c= field RelIncl A and
-A2: Y <> {};
+A3: Y c= field RelIncl A and
+A4: Y <> {};
   defpred P[set] means $1 in Y;
   set x = the Element of Y;
-A3: field RelIncl A = A by Def1;
-  then x in A by A1,A2,TARSKI:def 3;
+A5: field RelIncl A = A by Def1;
+  then x in A by A3,A4,TARSKI:def 3;
   then reconsider x as Ordinal;
-  x in Y by A2;
+  x in Y by A4;
   then
-A4: ex B st P[B];
+A6: ex B st P[B];
   consider B such that
-A5: P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A4);
+A7: P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A6);
   reconsider x = B as set;
   take x;
-  thus x in Y by A5;
+  thus x in Y by A7;
   set y = the Element of (RelIncl A)-Seg(x) /\ Y;
   assume
-A6: (RelIncl A)-Seg(x) /\ Y <> {};
+A8: (RelIncl A)-Seg(x) /\ Y <> {};
   then
-A7: y in Y by XBOOLE_0:def 4;
-  then reconsider C = y as Ordinal by A1,A3;
-A8: y in (RelIncl A)-Seg(x) by A6,XBOOLE_0:def 4;
+A9: y in Y by XBOOLE_0:def 4;
+  then reconsider C = y as Ordinal by A3,A5;
+A10: y in (RelIncl A)-Seg(x) by A8,XBOOLE_0:def 4;
   then [y,x] in RelIncl A by WELLORD1:1;
   then
-A9: C c= B by A1,A3,A5,A7,Def1;
-A10: y <> x by A8,WELLORD1:1;
-  B c= C by A5,A7;
-  hence contradiction by A10,A9,XBOOLE_0:def 10;
+A11: C c= B by A3,A5,A7,A9,Def1;
+A12: y <> x by A10,WELLORD1:1;
+  B c= C by A7,A9;
+  hence contradiction by A12,A11,XBOOLE_0:def 10;
+end;
 end;
 
 theorem Th7:
-  RelIncl A is well-ordering
-proof
-  thus RelIncl A is reflexive & RelIncl A is transitive & RelIncl A is
-antisymmetric & RelIncl A is connected & RelIncl A is well_founded by Th2,Th3
-,Th4,Th5,Th6;
-end;
-
-theorem Th8:
   Y c= X implies (RelIncl X) |_2 Y = RelIncl Y
 proof
   assume
@@ -218,18 +215,17 @@ A7: [a,b] in RelIncl X by A1,A5,A6,Def1;
   hence thesis by A7,XBOOLE_0:def 4;
 end;
 
-theorem Th9:
+theorem Th8:
   for A,X st X c= A holds RelIncl X is well-ordering
 proof
-  let A,X such that
-A1: X c= A;
-  (RelIncl A) |_2 X is well-ordering by Th7,WELLORD1:25;
-  hence thesis by A1,Th8;
+  let A,X;
+  (RelIncl A) |_2 X is well-ordering by WELLORD1:25;
+  hence thesis by Th7;
 end;
 
 reserve H for Function;
 
-theorem Th10:
+theorem Th9:
   A in B implies A = (RelIncl B)-Seg(A)
 proof
   assume
@@ -260,41 +256,39 @@ A9: field RelIncl B = B by Def1;
   hence thesis by ORDINAL1:11;
 end;
 
-theorem Th11:
+theorem Th10:
   RelIncl A,RelIncl B are_isomorphic implies A = B
 proof
 A1: field RelIncl A = A by Def1;
   assume
 A2: RelIncl A,RelIncl B are_isomorphic;
 A3: now
-A4: RelIncl B is well-ordering by Th7;
-A5: field RelIncl B = B by Def1;
+A4: field RelIncl B = B by Def1;
     assume
-A6: A in B;
-    then A = (RelIncl B)-Seg(A) by Th10;
-    then RelIncl A = (RelIncl B) |_2 ((RelIncl B)-Seg(A)) by A5,Th8,WELLORD1:9
-;
-    hence contradiction by A2,A6,A5,A4,WELLORD1:40,46;
+A5: A in B;
+    then A = (RelIncl B)-Seg(A) by Th9;
+    then RelIncl A = (RelIncl B) |_2 ((RelIncl B)-Seg(A)) by A4,Th7,WELLORD1:9;
+    hence contradiction by A2,A5,A4,WELLORD1:40,46;
   end;
   assume A <> B;
   then
-A7: A in B or B in A by ORDINAL1:14;
-  then B = (RelIncl A)-Seg(B) by A3,Th10;
-  then RelIncl B = (RelIncl A) |_2 ((RelIncl A)-Seg(B)) by A1,Th8,WELLORD1:9;
-  hence contradiction by A2,A7,A3,A1,Th7,WELLORD1:46;
+A6: A in B or B in A by ORDINAL1:14;
+  then B = (RelIncl A)-Seg(B) by A3,Th9;
+  then RelIncl B = (RelIncl A) |_2 ((RelIncl A)-Seg(B)) by A1,Th7,WELLORD1:9;
+  hence contradiction by A2,A6,A3,A1,WELLORD1:46;
 end;
 
-theorem Th12:
+theorem Th11:
   R,RelIncl A are_isomorphic & R,RelIncl B are_isomorphic implies A = B
 proof
   assume that
 A1: R,RelIncl A are_isomorphic and
 A2: R,RelIncl B are_isomorphic;
   RelIncl A,R are_isomorphic by A1,WELLORD1:40;
-  hence thesis by A2,Th11,WELLORD1:42;
+  hence thesis by A2,Th10,WELLORD1:42;
 end;
 
-theorem Th13:
+theorem Th12:
   for R st R is well-ordering & for a st a in field R ex A st R
   |_2 (R-Seg(a)),RelIncl A are_isomorphic ex A st R,RelIncl A are_isomorphic
 proof
@@ -315,7 +309,7 @@ A4: R |_2 (R-Seg(a)),RelIncl A are_isomorphic by A2;
     let B;
     thus B = b implies R |_2 (R-Seg(a)),RelIncl B are_isomorphic by A4;
     assume R |_2 (R-Seg(a)),RelIncl B are_isomorphic;
-    hence thesis by A4,Th12;
+    hence thesis by A4,Th11;
   end;
 A5: for b,c,d st b in field R & P[b,c] & P[b,d] holds c = d
   proof
@@ -366,156 +360,148 @@ A22:  c in C by A19,RELAT_1:15;
       then
 A23:  B c= A by A20,A19,A22,Def1;
       then
-A24:  (RelIncl A) |_2 B = RelIncl B by Th8;
+A24:  (RelIncl A) |_2 B = RelIncl B by Th7;
       assume c <> b;
       then
 A25:  B c< A by A20,A23,XBOOLE_0:def 8;
       then
-A26:  B = (RelIncl A)-Seg(B) by Th10,ORDINAL1:11;
+A26:  B = (RelIncl A)-Seg(B) by Th9,ORDINAL1:11;
 A27:  A = field RelIncl A by Def1;
-A28:  RelIncl A is well-ordering by Th7;
       RelIncl A,P are_isomorphic by A18,WELLORD1:40;
       then
       canonical_isomorphism_of(RelIncl A,P) is_isomorphism_of RelIncl A,P
-      by A28,WELLORD1:def 9;
+      by WELLORD1:def 9;
       then consider d such that
-A29:  d in field P and
-A30:  (RelIncl A) |_2 ((RelIncl A)-Seg(B)),P |_2 (P-Seg(d))
-      are_isomorphic by A25,A27,A28,ORDINAL1:11,WELLORD1:50;
-A31:  d in field R by A29,WELLORD1:12;
-A32:  P-Seg(d) = R-Seg(d) by A1,A29,WELLORD1:12,27;
-      d in V by A29,WELLORD1:12;
+A28:  d in field P and
+A29:  (RelIncl A) |_2 ((RelIncl A)-Seg(B)),P |_2 (P-Seg(d))
+      are_isomorphic by A25,A27,ORDINAL1:11,WELLORD1:50;
+A30:  d in field R by A28,WELLORD1:12;
+A31:  P-Seg(d) = R-Seg(d) by A1,A28,WELLORD1:12,27;
+      d in V by A28,WELLORD1:12;
       then [d,b9] in R by WELLORD1:1;
-      then R-Seg(d) c= R-Seg(b9) by A1,A10,A16,A31,WELLORD1:29;
-      then RelIncl B,R |_2 (R-Seg(d)) are_isomorphic by A30,A26,A24,A32,
+      then R-Seg(d) c= R-Seg(b9) by A1,A10,A16,A30,WELLORD1:29;
+      then RelIncl B,R |_2 (R-Seg(d)) are_isomorphic by A29,A26,A24,A31,
 WELLORD1:22;
       then R |_2 (R-Seg(d)),RelIncl B are_isomorphic by WELLORD1:40;
-      then B = H.d by A10,A31;
-      hence c in rng H by A10,A31,FUNCT_1:def 3;
+      then B = H.d by A10,A30;
+      hence c in rng H by A10,A30,FUNCT_1:def 3;
     end;
     hence c in rng H by A15;
   end;
-A33: (ex a st a in C & rng H = (RelIncl C)-Seg(a)) implies rng H is Ordinal
-  by Th10;
-  C = field RelIncl C & RelIncl C is well-ordering by Def1,Th7;
-  then reconsider A = rng H as Ordinal by A13,A14,A33,WELLORD1:28;
+A32: (ex a st a in C & rng H = (RelIncl C)-Seg(a)) implies rng H is Ordinal
+  by Th9;
+  C = field RelIncl C & RelIncl C is well-ordering by Def1;
+  then reconsider A = rng H as Ordinal by A13,A14,A32,WELLORD1:28;
   take A;
   take H;
   thus dom H = field R by A10;
   thus rng H = field RelIncl A by Def1;
-A34: a in dom H implies H.a is Ordinal
+A33: a in dom H implies H.a is Ordinal
   proof
     assume a in dom H;
     then H.a in A by FUNCT_1:def 3;
     hence thesis;
   end;
   thus
-A35: H is one-to-one
+A34: H is one-to-one
   proof
     let a,b;
     assume that
-A36: a in dom H and
-A37: b in dom H and
-A38: H.a = H.b;
-    reconsider B = H.a as Ordinal by A34,A36;
-    R |_2 (R-Seg(b)),RelIncl B are_isomorphic by A10,A37,A38;
+A35: a in dom H and
+A36: b in dom H and
+A37: H.a = H.b;
+    reconsider B = H.a as Ordinal by A33,A35;
+    R |_2 (R-Seg(b)),RelIncl B are_isomorphic by A10,A36,A37;
     then
-A39: RelIncl B,R |_2 (R-Seg(b)) are_isomorphic by WELLORD1:40;
-    R |_2 (R-Seg(a)),RelIncl B are_isomorphic by A10,A36;
-    then R |_2 (R-Seg(a)),R |_2 (R-Seg(b)) are_isomorphic by A39,WELLORD1:42;
-    hence thesis by A1,A10,A36,A37,WELLORD1:47;
+A38: RelIncl B,R |_2 (R-Seg(b)) are_isomorphic by WELLORD1:40;
+    R |_2 (R-Seg(a)),RelIncl B are_isomorphic by A10,A35;
+    then R |_2 (R-Seg(a)),R |_2 (R-Seg(b)) are_isomorphic by A38,WELLORD1:42;
+    hence thesis by A1,A10,A35,A36,WELLORD1:47;
   end;
   let a,b;
   thus [a,b] in R implies a in field R & b in field R & [H.a,H.b] in RelIncl A
   proof
     set Z = R-Seg(b);
     set P = R |_2 Z;
-A40: A = field RelIncl A & P is well-ordering by A1,Def1,WELLORD1:25;
+A39: A = field RelIncl A & P is well-ordering by A1,Def1,WELLORD1:25;
     assume
-A41: [a,b] in R;
+A40: [a,b] in R;
     hence
-A42: a in field R & b in field R by RELAT_1:15;
-    then reconsider A9 = H.a, B9 = H.b as Ordinal by A10,A34;
-A43: R |_2 (R-Seg(b)),RelIncl B9 are_isomorphic by A10,A42;
-A44: A9 in A by A10,A42,FUNCT_1:def 3;
-A45: B9 in A by A10,A42,FUNCT_1:def 3;
-A46: R |_2 (R-Seg(a)),RelIncl A9 are_isomorphic by A10,A42;
+A41: a in field R & b in field R by RELAT_1:15;
+    then reconsider A9 = H.a, B9 = H.b as Ordinal by A10,A33;
+A42: R |_2 (R-Seg(b)),RelIncl B9 are_isomorphic by A10,A41;
+A43: A9 in A by A10,A41,FUNCT_1:def 3;
+A44: B9 in A by A10,A41,FUNCT_1:def 3;
+A45: R |_2 (R-Seg(a)),RelIncl A9 are_isomorphic by A10,A41;
     now
       assume a <> b;
       then
-A47:  a in Z by A41,WELLORD1:1;
+A46:  a in Z by A40,WELLORD1:1;
       then
-A48:  P-Seg(a) = R-Seg(a) by A1,WELLORD1:27;
+A47:  P-Seg(a) = R-Seg(a) by A1,WELLORD1:27;
       Z c= field R by WELLORD1:9;
       then
-A49:  a in field P by A1,A47,WELLORD1:31;
-      A9 c= A by A44,ORDINAL1:def 2;
+A48:  a in field P by A1,A46,WELLORD1:31;
+      A9 c= A by A43,ORDINAL1:def 2;
       then
-A50:  (RelIncl A) |_2 A9 = RelIncl A9 by Th8;
-      A9 = (RelIncl A)-Seg(A9) & R-Seg(a) c= R-Seg(b) by A1,A41,A42,A44,Th10,
+A49:  (RelIncl A) |_2 A9 = RelIncl A9 by Th7;
+      A9 = (RelIncl A)-Seg(A9) & R-Seg(a) c= R-Seg(b) by A1,A40,A41,A43,Th9,
 WELLORD1:29;
       then
-A51:  P |_2 (P-Seg(a)),(RelIncl A) |_2 ((RelIncl A)-Seg(A9))
-      are_isomorphic by A46,A50,A48,WELLORD1:22;
-      B9 = (RelIncl A)-Seg(B9) & B9 c= A by A45,Th10,ORDINAL1:def 2;
-      then
-A52:  P,(RelIncl A) |_2 ((RelIncl A)-Seg(B9)) are_isomorphic by A43,Th8;
-      RelIncl A is well-ordering by Th7;
-      hence [A9,B9] in RelIncl A by A44,A45,A40,A49,A52,A51,WELLORD1:51;
+A50:  P |_2 (P-Seg(a)),(RelIncl A) |_2 ((RelIncl A)-Seg(A9))
+      are_isomorphic by A45,A49,A47,WELLORD1:22;
+      B9 = (RelIncl A)-Seg(B9) & B9 c= A by A44,Th9,ORDINAL1:def 2;
+      then P,(RelIncl A) |_2 ((RelIncl A)-Seg(B9)) are_isomorphic by A42,Th7;
+      hence [A9,B9] in RelIncl A by A43,A44,A39,A48,A50,WELLORD1:51;
     end;
-    hence thesis by A44,Def1;
+    hence thesis by A43,Def1;
   end;
   assume that
-A53: a in field R and
-A54: b in field R and
-A55: [H.a,H.b] in RelIncl A;
+A51: a in field R and
+A52: b in field R and
+A53: [H.a,H.b] in RelIncl A;
   assume
-A56: not [a,b] in R;
-  R is reflexive by A1,WELLORD1:def 4;
-  then R is_reflexive_in field R by RELAT_2:def 9;
+A54: not [a,b] in R;
+  R is_reflexive_in field R by A1,RELAT_2:def 9;
   then
-A57: a <> b by A53,A56,RELAT_2:def 1;
-  R is connected by A1,WELLORD1:def 4;
-  then R is_connected_in field R by RELAT_2:def 14;
+A55: a <> b by A51,A54,RELAT_2:def 1;
+  R is_connected_in field R by A1,RELAT_2:def 14;
   then
-A58: [b,a] in R by A53,A54,A56,A57,RELAT_2:def 6;
+A56: [b,a] in R by A51,A52,A54,A55,RELAT_2:def 6;
   then
-A59: R-Seg(b) c= R-Seg(a) by A1,A53,A54,WELLORD1:29;
-  RelIncl A is antisymmetric by Th5;
-  then
-A60: RelIncl A is_antisymmetric_in field RelIncl A by RELAT_2:def 12;
-A61: A = field RelIncl A by Def1;
-  reconsider A9 = H.a, B9 = H.b as Ordinal by A10,A34,A53,A54;
-A62: R |_2 (R-Seg(a)),RelIncl A9 are_isomorphic by A10,A53;
-A63: R |_2 (R-Seg(b)),RelIncl B9 are_isomorphic by A10,A54;
-A64: B9 in A by A10,A54,FUNCT_1:def 3;
+A57: R-Seg(b) c= R-Seg(a) by A1,A51,A52,WELLORD1:29;
+A58: RelIncl A is_antisymmetric_in field RelIncl A by RELAT_2:def 12;
+A59: A = field RelIncl A by Def1;
+  reconsider A9 = H.a, B9 = H.b as Ordinal by A10,A33,A51,A52;
+A60: R |_2 (R-Seg(a)),RelIncl A9 are_isomorphic by A10,A51;
+A61: R |_2 (R-Seg(b)),RelIncl B9 are_isomorphic by A10,A52;
+A62: B9 in A by A10,A52,FUNCT_1:def 3;
   then B9 c= A by ORDINAL1:def 2;
   then
-A65: (RelIncl A) |_2 B9 = RelIncl B9 by Th8;
+A63: (RelIncl A) |_2 B9 = RelIncl B9 by Th7;
   set Z = R-Seg(a);
   set P = R |_2 Z;
-A66: RelIncl A is well-ordering by Th7;
-A67: A9 in A by A10,A53,FUNCT_1:def 3;
-  then A9 = (RelIncl A)-Seg(A9) & A9 c= A by Th10,ORDINAL1:def 2;
+A64: A9 in A by A10,A51,FUNCT_1:def 3;
+  then A9 = (RelIncl A)-Seg(A9) & A9 c= A by Th9,ORDINAL1:def 2;
   then
-A68: P,(RelIncl A) |_2 ((RelIncl A)-Seg(A9)) are_isomorphic by A62,Th8;
-A69: b in Z by A56,A58,WELLORD1:1;
+A65: P,(RelIncl A) |_2 ((RelIncl A)-Seg(A9)) are_isomorphic by A60,Th7;
+A66: b in Z by A54,A56,WELLORD1:1;
   then
-A70: P-Seg(b) = R-Seg(b) by A1,WELLORD1:27;
-  B9 = (RelIncl A)-Seg(B9) by A64,Th10;
+A67: P-Seg(b) = R-Seg(b) by A1,WELLORD1:27;
+  B9 = (RelIncl A)-Seg(B9) by A62,Th9;
   then
-A71: P |_2 (P-Seg(b)),(RelIncl A) |_2 ((RelIncl A)-Seg(B9)) are_isomorphic
-  by A63,A65,A70,A59,WELLORD1:22;
+A68: P |_2 (P-Seg(b)),(RelIncl A) |_2 ((RelIncl A)-Seg(B9)) are_isomorphic
+  by A61,A63,A67,A57,WELLORD1:22;
   Z c= field R by WELLORD1:9;
   then
-A72: b in field P by A1,A69,WELLORD1:31;
+A69: b in field P by A1,A66,WELLORD1:31;
   P is well-ordering by A1,WELLORD1:25;
-  then [B9,A9] in RelIncl A by A72,A66,A67,A64,A61,A68,A71,WELLORD1:51;
-  then H.a = H.b by A55,A60,A67,A64,A61,RELAT_2:def 4;
-  hence contradiction by A10,A35,A53,A54,A57,FUNCT_1:def 4;
+  then [B9,A9] in RelIncl A by A69,A64,A62,A59,A65,A68,WELLORD1:51;
+  then H.a = H.b by A53,A58,A64,A62,A59,RELAT_2:def 4;
+  hence contradiction by A10,A34,A51,A52,A55,FUNCT_1:def 4;
 end;
 
-theorem Th14:
+theorem Th13:
   for R st R is well-ordering ex A st R,RelIncl A are_isomorphic
 proof
   let R such that
@@ -545,14 +531,14 @@ A9:   R |_2 (R-Seg(b)),RelIncl A are_isomorphic by A2,A4,A6;
       P-Seg(b) = R-Seg(b) by A1,A5,WELLORD1:12,27;
       hence P |_2 (P-Seg(b)),RelIncl A are_isomorphic by A9,A8,WELLORD1:22;
     end;
-    then ex A st P,RelIncl A are_isomorphic by A1,Th13,WELLORD1:25;
+    then ex A st P,RelIncl A are_isomorphic by A1,Th12,WELLORD1:25;
     hence a in Z by A2,A3;
   end;
   then field R c= Z by A1,WELLORD1:33;
   then
   for a st a in field R ex A st R |_2 (R-Seg(a)),RelIncl A are_isomorphic
   by A2;
-  hence thesis by A1,Th13;
+  hence thesis by A1,Th12;
 end;
 
 definition
@@ -562,8 +548,8 @@ A1: R is well-ordering;
   func order_type_of R -> Ordinal means
   :Def2:
   R,RelIncl it are_isomorphic;
-  existence by A1,Th14;
-  uniqueness by Th12;
+  existence by A1,Th13;
+  uniqueness by Th11;
 end;
 
 definition
@@ -578,8 +564,8 @@ proof
   assume
 A1: X c= A;
   then
-A2: (RelIncl A) |_2 X = RelIncl X by Th8;
-A3: RelIncl X is well-ordering by A1,Th9;
+A2: (RelIncl A) |_2 X = RelIncl X by Th7;
+A3: RelIncl X is well-ordering by A1,Th8;
 A4: now
     assume RelIncl A,(RelIncl A) |_2 X are_isomorphic;
     then RelIncl X,RelIncl A are_isomorphic by A2,WELLORD1:40;
@@ -590,14 +576,14 @@ A5: now
 A6: a in A and
 A7: (RelIncl A) |_2 ((RelIncl A)-Seg(a)),(RelIncl A) |_2 X are_isomorphic;
     reconsider a as Ordinal by A6;
-A8: (RelIncl A)-Seg(a) = a by A6,Th10;
+A8: (RelIncl A)-Seg(a) = a by A6,Th9;
 A9: a c= A by A6,ORDINAL1:def 2;
-    then (RelIncl A) |_2 a = RelIncl a by Th8;
+    then (RelIncl A) |_2 a = RelIncl a by Th7;
     then RelIncl X,RelIncl a are_isomorphic by A2,A7,A8,WELLORD1:40;
     hence thesis by A3,A9,Def2;
   end;
   field RelIncl A = A by Def1;
-  hence thesis by A1,A4,A5,Th7,WELLORD1:53;
+  hence thesis by A1,A4,A5,WELLORD1:53;
 end;
 
 reserve f,g for Function;
@@ -729,7 +715,7 @@ A24:  x in dom f & z in dom f by FUNCT_1:1;
   proof
     let X;
     take id X;
-    thus thesis by RELAT_1:45;
+    thus thesis;
   end;
   symmetry
   proof
@@ -752,7 +738,7 @@ A2: g is one-to-one & dom g = Y & rng g = Z;
   thus thesis by A1,A2,RELAT_1:27,28;
 end;
 
-theorem Th25:
+theorem Th16:
   R well_orders X implies field(R|_2 X) = X & R|_2 X is well-ordering
 proof
   assume that
@@ -852,9 +838,7 @@ A4: rng f = field R;
   consider Q being Relation such that
 A5: [x,y] in Q iff x in X & y in X & P[x,y] from RELAT_1:sch 1;
   take Q;
-  R is reflexive by A1,WELLORD1:def 4;
-  then
-A6: R is_reflexive_in field R by RELAT_2:def 9;
+A6: R is_reflexive_in field R by A1,RELAT_2:def 9;
 A7: field Q = X
   proof
     thus field Q c= X
@@ -865,9 +849,9 @@ A8:   x in field Q and
 A9:   not x in X;
       for y holds not [y,x] in Q by A5,A9;
       then
-A10:  not x in rng Q by RELAT_1:def 5;
+A10:  not x in rng Q by XTUPLE_0:def 13;
       for y holds not [x,y] in Q by A5,A9;
-      then not x in dom Q by RELAT_1:def 4;
+      then not x in dom Q by XTUPLE_0:def 12;
       hence contradiction by A8,A10,XBOOLE_0:def 3;
     end;
     let x;
@@ -893,7 +877,7 @@ A11: x in X;
 end;
 
 ::$N Zermelo Theorem
-theorem Th26:
+theorem Th17:
   for X ex R st R well_orders X
 proof
   deffunc F(set) = {$1};
@@ -938,7 +922,7 @@ A9: ON,Class are_equipotent
   end;
   field RelIncl ON = ON by Def1;
   then consider R such that
-A10: R well_orders Class by A9,Lm1,Th7;
+A10: R well_orders Class by A9,Lm1;
   consider f such that
 A11: dom f = X & for x st x in X holds f.x = F(x) from FUNCT_1:sch 3;
 A12: rng f c= Class
@@ -972,10 +956,10 @@ A18:  f.x = f.y;
     thus thesis by A11;
   end;
   set Q = R|_2 Class;
-  field Q = Class by A10,Th25;
+  field Q = Class by A10,Th16;
   then
-A19: field(Q|_2 rng f) = rng f by A10,A12,Th25,WELLORD1:31;
-  Q is well-ordering by A10,Th25;
+A19: field(Q|_2 rng f) = rng f by A10,A12,Th16,WELLORD1:31;
+  Q is well-ordering by A10,Th16;
   hence thesis by A16,A19,Lm1,WELLORD1:25;
 end;
 
@@ -991,7 +975,7 @@ proof
 A1: for X st X in M holds X <> {} and
 A2: for X,Y st X in M & Y in M & X <> Y holds X misses Y;
   consider R such that
-A3: R well_orders union M by Th26;
+A3: R well_orders union M by Th17;
 A4: R is_reflexive_in union M by A3,WELLORD1:def 5;
 A5: R is_connected_in union M by A3,WELLORD1:def 5;
   defpred Ch[set,set] means $2 in $1 & for z st z in $1 holds [$2,z] in R;
@@ -1075,7 +1059,7 @@ theorem :: WAYBEL35:1, AK, 21.02.2006
   for X being set holds RelIncl X is_reflexive_in X
 proof
   let X be set;
-  RelIncl X is reflexive & field RelIncl X = X by Def1,Th2;
+  RelIncl X is reflexive & field RelIncl X = X by Def1;
   hence thesis by RELAT_2:def 9;
 end;
 
@@ -1083,7 +1067,7 @@ theorem :: WAYBEL35:1, AK, 21.02.2006
   for X being set holds RelIncl X is_transitive_in X
 proof
   let X be set;
-  RelIncl X is transitive & field RelIncl X = X by Def1,Th3;
+  RelIncl X is transitive & field RelIncl X = X by Def1;
   hence thesis by RELAT_2:def 16;
 end;
 
@@ -1091,7 +1075,7 @@ theorem :: WAYBEL35:1, AK, 21.02.2006
   for X being set holds RelIncl X is_antisymmetric_in X
 proof
   let X be set;
-  RelIncl X is antisymmetric & field RelIncl X = X by Def1,Th5;
+  RelIncl X is antisymmetric & field RelIncl X = X by Def1;
   hence thesis by RELAT_2:def 12;
 end;
 

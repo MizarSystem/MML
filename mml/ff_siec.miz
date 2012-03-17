@@ -2,7 +2,7 @@
 ::  by Waldemar Korczy\'nski
 ::
 :: Received January 31, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,12 +18,12 @@ environ
       PETRI;
  notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, PARTIT_2, STRUCT_0, PETRI,
       NET_1;
- constructors TARSKI, NET_1, STRUCT_0, PETRI, PARTIT_2;
- registrations XBOOLE_0, RELAT_1, NET_1, STRUCT_0, PARTIT_2;
+ constructors NET_1, PARTIT_2;
+ registrations RELAT_1, NET_1, PARTIT_2;
  requirements SUBSET, BOOLE;
- definitions NET_1, STRUCT_0;
+ definitions NET_1;
  theorems ZFMISC_1, RELAT_1, SYSREL, TARSKI, RELSET_1, NET_1, XBOOLE_0,
-      XBOOLE_1;
+      XBOOLE_1, XTUPLE_0;
 
 begin :: F - Nets
 
@@ -36,7 +36,7 @@ definition
 A1: X misses Y;
 
   func PTempty_f_net(X,Y) -> strict Pnet equals
-  :Def4:
+  :Def1:
   PT_net_Str (# X, Y, {}(X,Y), {}(Y,X) #);
   correctness
   proof
@@ -79,7 +79,7 @@ theorem
     Flow PTempty_f_net(X,Y) = {}
 proof
   assume X misses Y;
-  then PTempty_f_net(X,Y) = PT_net_Str (# X, Y, {}(X,Y), {}(Y,X) #) by Def4;
+  then PTempty_f_net(X,Y) = PT_net_Str (# X, Y, {}(X,Y), {}(Y,X) #) by Def1;
   hence thesis;
 end;
 
@@ -88,7 +88,7 @@ theorem
   the carrier' of Tempty_f_net(X) = {} & Flow Tempty_f_net(X) = {}
 proof
   Tempty_f_net(X) = PT_net_Str (# X, {}, {}(X,{}), {}({},X) #)
-   by Def4,XBOOLE_1:65;
+   by Def1,XBOOLE_1:65;
   hence thesis;
 end;
 
@@ -98,7 +98,7 @@ theorem
 proof
   let X;
   {} misses X by XBOOLE_1:65;
-  then Pempty_f_net(X) = PT_net_Str (# {}, X, {}({},X), {}(X,{}) #) by Def4;
+  then Pempty_f_net(X) = PT_net_Str (# {}, X, {}({},X), {}(X,{}) #) by Def1;
   hence thesis;
 end;
 
@@ -110,7 +110,7 @@ proof
   let x;
   {} misses {x} by XBOOLE_1:65;
   then Tsingle_f_net(x) = PT_net_Str (# {}, {x}, {}({},{x}), {}({x},{}) #)
-     by Def4;
+     by Def1;
   hence thesis;
 end;
 
@@ -121,7 +121,7 @@ theorem
 proof
   let x;
   Psingle_f_net(x) = PT_net_Str (# {x}, {}, {}({x},{}), {}({},{x}) #)
-   by Def4,XBOOLE_1:65;
+   by Def1,XBOOLE_1:65;
   hence thesis;
 end;
 
@@ -130,11 +130,11 @@ theorem
   Flow empty_f_net = {}
 proof
   empty_f_net = PT_net_Str (# {}, {}, {}({},{}), {}({},{}) #)
-     by Def4,XBOOLE_1:65;
+     by Def1,XBOOLE_1:65;
   hence thesis;
 end;
 
-theorem Th11:
+theorem Th7:
   ( [x,y] in Flow M & x in the carrier' of M implies
   not x in the carrier of M & not y in the carrier' of M &
   y in the carrier of M) &
@@ -154,7 +154,7 @@ A1: (the carrier of M) misses (the carrier' of M) by NET_1:def 2;
   hence thesis by A1,SYSREL:7;
 end;
 
-theorem Th13:
+theorem Th8:
   (Flow M) c= [:Elements(M), Elements(M):] &
   (Flow M)~ c= [:Elements(M), Elements(M):]
 proof
@@ -175,7 +175,7 @@ A4: [:the carrier of M, the carrier' of M:] \/
   hence thesis by SYSREL:4;
 end;
 
-theorem Th14:
+theorem Th9:
   rng ((Flow M)|(the carrier' of M)) c= (the carrier of M) &
   rng ((Flow M)~|(the carrier' of M)) c= (the carrier of M) &
   rng ((Flow M)|(the carrier of M)) c= (the carrier' of M) &
@@ -191,10 +191,10 @@ A1: for x holds x in rng ((Flow M)|(the carrier' of M)) implies
     let x;
     assume x in rng ((Flow M)|(the carrier' of M));
     then consider y such that
-A2: [y,x] in (Flow M)|(the carrier' of M) by RELAT_1:def 5;
+A2: [y,x] in (Flow M)|(the carrier' of M) by XTUPLE_0:def 13;
 A3: y in (the carrier' of M) by A2,RELAT_1:def 11;
     [y,x] in (Flow M) by A2,RELAT_1:def 11;
-    hence thesis by A3,Th11;
+    hence thesis by A3,Th7;
   end;
 A4: for x holds x in rng ((Flow M)~|(the carrier' of M)) implies
   x in (the carrier of M)
@@ -202,11 +202,11 @@ A4: for x holds x in rng ((Flow M)~|(the carrier' of M)) implies
     let x;
     assume x in rng ((Flow M)~|(the carrier' of M));
     then consider y such that
-A5: [y,x] in (Flow M)~|(the carrier' of M) by RELAT_1:def 5;
+A5: [y,x] in (Flow M)~|(the carrier' of M) by XTUPLE_0:def 13;
 A6: [y,x] in (Flow M)~ by A5,RELAT_1:def 11;
 A7: y in (the carrier' of M) by A5,RELAT_1:def 11;
     [x,y] in (Flow M) by A6,RELAT_1:def 7;
-    hence thesis by A7,Th11;
+    hence thesis by A7,Th7;
   end;
 A8: for x holds x in rng ((Flow M)|(the carrier of M)) implies
   x in (the carrier' of M)
@@ -214,10 +214,10 @@ A8: for x holds x in rng ((Flow M)|(the carrier of M)) implies
     let x;
     assume x in rng ((Flow M)|(the carrier of M));
     then consider y such that
-A9: [y,x] in (Flow M)|(the carrier of M) by RELAT_1:def 5;
+A9: [y,x] in (Flow M)|(the carrier of M) by XTUPLE_0:def 13;
 A10: y in (the carrier of M) by A9,RELAT_1:def 11;
     [y,x] in (Flow M) by A9,RELAT_1:def 11;
-    hence thesis by A10,Th11;
+    hence thesis by A10,Th7;
   end;
   for x holds x in rng ((Flow M)~|(the carrier of M)) implies
   x in (the carrier' of M)
@@ -225,13 +225,13 @@ A10: y in (the carrier of M) by A9,RELAT_1:def 11;
     let x;
     assume x in rng ((Flow M)~|(the carrier of M));
     then consider y such that
-A11: [y,x] in (Flow M)~|(the carrier of M) by RELAT_1:def 5;
+A11: [y,x] in (Flow M)~|(the carrier of M) by XTUPLE_0:def 13;
 A12: [y,x] in (Flow M)~ by A11,RELAT_1:def 11;
 A13: y in (the carrier of M) by A11,RELAT_1:def 11;
     [x,y] in (Flow M) by A12,RELAT_1:def 7;
-    hence thesis by A13,Th11;
+    hence thesis by A13,Th7;
   end;
-  hence thesis by A1,A4,A8,RELAT_1:45,TARSKI:def 3;
+  hence thesis by A1,A4,A8,TARSKI:def 3;
 end;
 
 Lm1: for A,B,C,D being set st B misses D & A c= B & C c= D holds A misses C
@@ -248,7 +248,7 @@ A4: ex x be set st ( x in A /\ C) by XBOOLE_0:4;
   hence thesis by A1,A4,XBOOLE_0:4;
 end;
 
-theorem Th15:
+theorem Th10:
   rng ((Flow M)|(the carrier' of M)) misses dom((Flow M)|(the carrier' of M)) &
   rng ((Flow M)|(the carrier' of M)) misses
   dom((Flow M)~|(the carrier' of M)) &
@@ -301,22 +301,18 @@ proof
   set S1 = (Flow M)~|(the carrier of M);
   set T1 = id(the carrier of M);
 A1: dom R c= the carrier' of M by RELAT_1:58;
-A2: rng R c= the carrier of M by Th14;
+A2: rng R c= the carrier of M by Th9;
 A3: dom S c= the carrier' of M by RELAT_1:58;
-A4: rng S c= the carrier of M by Th14;
-A5: dom T c= the carrier' of M by Th14;
-A6: rng T c= the carrier' of M by Th14;
-A7: dom R1 c= the carrier of M by RELAT_1:58;
-A8: rng R1 c= the carrier' of M by Th14;
-A9: dom S1 c= the carrier of M by RELAT_1:58;
-A10: rng S1 c= the carrier' of M by Th14;
-A11: dom T1 c= the carrier of M by Th14;
-A12: rng T1 c= the carrier of M by Th14;
+A4: rng S c= the carrier of M by Th9;
+A5: dom R1 c= the carrier of M by RELAT_1:58;
+A6: rng R1 c= the carrier' of M by Th9;
+A7: dom S1 c= the carrier of M by RELAT_1:58;
+A8: rng S1 c= the carrier' of M by Th9;
   (the carrier of M) misses (the carrier' of M) by NET_1:def 2;
-  hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,Lm1;
+  hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,Lm1;
 end;
 
-theorem Th16:
+theorem Th11:
   ((Flow M)|(the carrier' of M)) * ((Flow M)|(the carrier' of M)) = {} &
   ((Flow M)~|(the carrier' of M)) *
   ((Flow M)~|(the carrier' of M)) = {} &
@@ -334,25 +330,25 @@ theorem Th16:
   ((Flow M)|(the carrier of M)) = {}
 proof
 A1: rng ((Flow M)|(the carrier' of M)) misses
-  dom ((Flow M)|(the carrier' of M)) by Th15;
+  dom ((Flow M)|(the carrier' of M)) by Th10;
 A2: rng ((Flow M)~|(the carrier' of M)) misses
-  dom ((Flow M)~|(the carrier' of M)) by Th15;
+  dom ((Flow M)~|(the carrier' of M)) by Th10;
 A3: rng ((Flow M)|(the carrier' of M)) misses
-  dom ((Flow M)~|(the carrier' of M)) by Th15;
+  dom ((Flow M)~|(the carrier' of M)) by Th10;
 A4: rng ((Flow M)~|(the carrier' of M)) misses
-  dom ((Flow M)|(the carrier' of M)) by Th15;
+  dom ((Flow M)|(the carrier' of M)) by Th10;
 A5: rng ((Flow M)|(the carrier of M)) misses
-  dom ((Flow M)|(the carrier of M)) by Th15;
+  dom ((Flow M)|(the carrier of M)) by Th10;
 A6: rng ((Flow M)~|(the carrier of M)) misses
-  dom ((Flow M)~|(the carrier of M)) by Th15;
+  dom ((Flow M)~|(the carrier of M)) by Th10;
 A7: rng ((Flow M)|(the carrier of M)) misses
-  dom ((Flow M)~|(the carrier of M)) by Th15;
+  dom ((Flow M)~|(the carrier of M)) by Th10;
   rng ((Flow M)~|(the carrier of M)) misses
-  dom ((Flow M)|(the carrier of M)) by Th15;
+  dom ((Flow M)|(the carrier of M)) by Th10;
   hence thesis by A1,A2,A3,A4,A5,A6,A7,RELAT_1:44;
 end;
 
-theorem Th17:
+theorem Th12:
   ((Flow M)|(the carrier' of M)) *
   id(the carrier of M) = (Flow M)|(the carrier' of M) &
   ((Flow M)~|(the carrier' of M)) *
@@ -382,28 +378,28 @@ theorem Th17:
   ((Flow M)|(the carrier' of M)) * (id(the carrier' of M)) = {} &
   ((Flow M)~|(the carrier' of M)) * (id(the carrier' of M)) = {}
 proof
-A1: rng ((Flow M)|(the carrier' of M)) c= the carrier of M by Th14;
-A2: rng ((Flow M)~|(the carrier' of M)) c= the carrier of M by Th14;
-A3: rng ((Flow M)|(the carrier of M)) c= the carrier' of M by Th14;
-A4: rng ((Flow M)~|(the carrier of M)) c= the carrier' of M by Th14;
+A1: rng ((Flow M)|(the carrier' of M)) c= the carrier of M by Th9;
+A2: rng ((Flow M)~|(the carrier' of M)) c= the carrier of M by Th9;
+A3: rng ((Flow M)|(the carrier of M)) c= the carrier' of M by Th9;
+A4: rng ((Flow M)~|(the carrier of M)) c= the carrier' of M by Th9;
 A5: dom ((Flow M)|(the carrier of M)) misses
-  rng (id(the carrier' of M)) by Th15;
+  rng (id(the carrier' of M)) by Th10;
 A6: dom ((Flow M)~|(the carrier of M)) misses
-  rng (id(the carrier' of M)) by Th15;
+  rng (id(the carrier' of M)) by Th10;
 A7: rng ((Flow M)|(the carrier of M)) misses
-  dom (id(the carrier of M)) by Th15;
+  dom (id(the carrier of M)) by Th10;
 A8: rng ((Flow M)~|(the carrier of M)) misses
-  dom (id(the carrier of M)) by Th15;
-A9: rng id(the carrier of M) misses dom ((Flow M)|(the carrier' of M)) by Th15;
+  dom (id(the carrier of M)) by Th10;
+A9: rng id(the carrier of M) misses dom ((Flow M)|(the carrier' of M)) by Th10;
 A10: rng id(the carrier of M) misses
-  dom ((Flow M)~|(the carrier' of M)) by Th15;
+  dom ((Flow M)~|(the carrier' of M)) by Th10;
 A11: rng ((Flow M)|(the carrier' of M)) misses
-  dom id(the carrier' of M) by Th15;
-  rng ((Flow M)~|(the carrier' of M)) misses dom id(the carrier' of M) by Th15;
+  dom id(the carrier' of M) by Th10;
+  rng ((Flow M)~|(the carrier' of M)) misses dom id(the carrier' of M) by Th10;
   hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,RELAT_1:44,51,53,58;
 end;
 
-theorem Th18:
+theorem Th13:
   ((Flow M)~|(the carrier' of M)) misses (id(Elements(M))) &
   ((Flow M)|(the carrier' of M)) misses (id(Elements(M))) &
   ((Flow M)~|(the carrier of M)) misses (id(Elements(M))) &
@@ -424,7 +420,7 @@ A3:   [x,y] in T by A1,XBOOLE_0:def 4;
 A4:   [x,y] in (Flow M)~ by A2,RELAT_1:def 11;
 A5:   x in (the carrier' of M) by A2,RELAT_1:def 11;
       [y,x] in (Flow M) by A4,RELAT_1:def 7;
-      then x <> y by A5,Th11;
+      then x <> y by A5,Th7;
       hence thesis by A3,RELAT_1:def 10;
     end;
     then R /\ T = {} by RELAT_1:37;
@@ -443,7 +439,7 @@ A7:   [x,y] in R by XBOOLE_0:def 4;
 A8:   [x,y] in T by A6,XBOOLE_0:def 4;
 A9:   x in (the carrier' of M) by A7,RELAT_1:def 11;
       [x,y] in (Flow M) by A7,RELAT_1:def 11;
-      then x <> y by A9,Th11;
+      then x <> y by A9,Th7;
       hence thesis by A8,RELAT_1:def 10;
     end;
     then R /\ T = {} by RELAT_1:37;
@@ -463,7 +459,7 @@ A12:  [x,y] in T by A10,XBOOLE_0:def 4;
 A13:  [x,y] in (Flow M)~ by A11,RELAT_1:def 11;
 A14:  x in the carrier of M by A11,RELAT_1:def 11;
       [y,x] in Flow M by A13,RELAT_1:def 7;
-      then x <> y by A14,Th11;
+      then x <> y by A14,Th7;
       hence thesis by A12,RELAT_1:def 10;
     end;
     then R /\ T = {} by RELAT_1:37;
@@ -480,14 +476,14 @@ A16: [x,y] in R by XBOOLE_0:def 4;
 A17: [x,y] in T by A15,XBOOLE_0:def 4;
 A18: x in the carrier of M by A16,RELAT_1:def 11;
     [x,y] in Flow M by A16,RELAT_1:def 11;
-    then x <> y by A18,Th11;
+    then x <> y by A18,Th7;
     hence thesis by A17,RELAT_1:def 10;
   end;
   then R /\ T = {} by RELAT_1:37;
   hence thesis by XBOOLE_0:def 7;
 end;
 
-theorem Th19:
+theorem Th14:
   ((Flow M)~|(the carrier' of M)) \/ (id(the carrier of M)) \ id(Elements(M)) =
   (Flow M)~|(the carrier' of M) &
   ((Flow M)|(the carrier' of M)) \/
@@ -518,7 +514,7 @@ A1: ((Flow M)~|(the carrier' of M)) \/
     set S = id(the carrier of M);
     set T = id(Elements(M));
 A2: S c= T by SYSREL:15,XBOOLE_1:7;
-A3: R misses T by Th18;
+A3: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A2,XBOOLE_1:37
       .= R by A3,XBOOLE_1:83;
@@ -532,7 +528,7 @@ A4: ((Flow M)|(the carrier' of M)) \/
     set S = id(the carrier of M);
     set T = id(Elements(M));
 A5: S c= T by SYSREL:15,XBOOLE_1:7;
-A6: R misses T by Th18;
+A6: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A5,XBOOLE_1:37
       .= R by A6,XBOOLE_1:83;
@@ -545,7 +541,7 @@ A7: ((Flow M)~|(the carrier of M)) \/ (id(the carrier of M)) \ id(Elements(M))
     set S = id(the carrier of M);
     set T = id(Elements(M));
 A8: S c= T by SYSREL:15,XBOOLE_1:7;
-A9: R misses T by Th18;
+A9: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A8,XBOOLE_1:37
       .= R by A9,XBOOLE_1:83;
@@ -558,7 +554,7 @@ A10: ((Flow M)|(the carrier of M)) \/
     set S = id(the carrier of M);
     set T = id(Elements(M));
 A11: S c= T by SYSREL:15,XBOOLE_1:7;
-A12: R misses T by Th18;
+A12: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A11,XBOOLE_1:37
       .= R by A12,XBOOLE_1:83;
@@ -572,7 +568,7 @@ A13: ((Flow M)~|(the carrier of M)) \/
     set S = id(the carrier' of M);
     set T = id(Elements(M));
 A14: S c= T by SYSREL:15,XBOOLE_1:7;
-A15: R misses T by Th18;
+A15: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A14,XBOOLE_1:37
       .= R by A15,XBOOLE_1:83;
@@ -586,7 +582,7 @@ A16: ((Flow M)|(the carrier of M)) \/
     set S = id(the carrier' of M);
     set T = id(Elements(M));
 A17: S c= T by SYSREL:15,XBOOLE_1:7;
-A18: R misses T by Th18;
+A18: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A17,XBOOLE_1:37
       .= R by A18,XBOOLE_1:83;
@@ -600,7 +596,7 @@ A19: ((Flow M)~|(the carrier' of M)) \/
     set S = id(the carrier' of M);
     set T = id(Elements(M));
 A20: S c= T by SYSREL:15,XBOOLE_1:7;
-A21: R misses T by Th18;
+A21: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A20,XBOOLE_1:37
       .= R by A21,XBOOLE_1:83;
@@ -613,7 +609,7 @@ A21: R misses T by Th18;
     set S = id(the carrier' of M);
     set T = id(Elements(M));
 A22: S c= T by SYSREL:15,XBOOLE_1:7;
-A23: R misses T by Th18;
+A23: R misses T by Th13;
     (R \/ S) \ T = (R \ T) \/ (S \ T) by XBOOLE_1:42
       .= (R \ T) \/ {} by A22,XBOOLE_1:37
       .= R by A23,XBOOLE_1:83;
@@ -622,7 +618,7 @@ A23: R misses T by Th18;
   hence thesis by A1,A4,A7,A10,A13,A16,A19;
 end;
 
-theorem Th20:
+theorem Th15:
   ((Flow M)|(the carrier of M))~ = ((Flow M)~)|(the carrier' of M) &
   ((Flow M)|(the carrier' of M))~ =
   ((Flow M)~)|(the carrier of M)
@@ -640,7 +636,7 @@ A1: [y,x] in R|X by RELAT_1:def 7;
 A2: [y,x] in R by RELAT_1:def 11;
 A3: y in X by A1,RELAT_1:def 11;
 A4: [x,y] in R~ by A2,RELAT_1:def 7;
-    x in Y by A2,A3,Th11;
+    x in Y by A2,A3,Th7;
     hence thesis by A4,RELAT_1:def 11;
   end;
   then
@@ -654,7 +650,7 @@ A6: [x,y] in (R~)|Y;
     then
 A7: [y,x] in R by RELAT_1:def 7;
     x in Y by A6,RELAT_1:def 11;
-    then y in X by A7,Th11;
+    then y in X by A7,Th7;
     then [y,x] in R|X by A7,RELAT_1:def 11;
     hence thesis by RELAT_1:def 7;
   end;
@@ -670,7 +666,7 @@ A9: [y,x] in R|Y by RELAT_1:def 7;
 A10: [y,x] in R by RELAT_1:def 11;
 A11: y in Y by A9,RELAT_1:def 11;
 A12: [x,y] in R~ by A10,RELAT_1:def 7;
-    x in X by A10,A11,Th11;
+    x in X by A10,A11,Th7;
     hence thesis by A12,RELAT_1:def 11;
   end;
   then
@@ -684,7 +680,7 @@ A14: [x,y] in (R~)|X;
     then
 A15: [y,x] in R by RELAT_1:def 7;
     x in X by A14,RELAT_1:def 11;
-    then y in Y by A15,Th11;
+    then y in Y by A15,Th7;
     then [y,x] in R|Y by A15,RELAT_1:def 11;
     hence thesis by RELAT_1:def 7;
   end;
@@ -692,7 +688,7 @@ A15: [y,x] in R by RELAT_1:def 7;
   hence thesis by A5,A8,A13,XBOOLE_0:def 10;
 end;
 
-theorem Th21:
+theorem Th16:
   ((Flow M)|(the carrier of M)) \/ ((Flow M)|(the carrier' of M)) = (Flow M) &
   ((Flow M)|(the carrier' of M)) \/
   ((Flow M)|(the carrier of M)) = (Flow M) &
@@ -702,7 +698,7 @@ theorem Th21:
   (((Flow M)|(the carrier of M))~) = (Flow M)~
 proof
   set R = Flow M;
-  Flow M c= [:Elements(M),Elements(M):] by Th13;
+  Flow M c= [:Elements(M),Elements(M):] by Th8;
   then (R|the carrier of M) \/ (R|the carrier' of M) = R by SYSREL:9;
   hence thesis by RELAT_1:23;
 end;
@@ -729,7 +725,7 @@ A1: id(the carrier of M) c= id(Elements(M)) by SYSREL:15,XBOOLE_1:7;
   then
 A2: id(the carrier of M) c= [:Elements(M),Elements(M):] by A1,XBOOLE_1:1;
 A3: (Flow M)|(the carrier' of M) c= (Flow M) by RELAT_1:59;
-  (Flow M) c= [:Elements(M),Elements(M):] by Th13;
+  (Flow M) c= [:Elements(M),Elements(M):] by Th8;
   then (Flow M)|(the carrier' of M) c= [:Elements(M),Elements(M):]
   by A3,XBOOLE_1:1;
   hence f_exit(M) c= [:Elements(M),Elements(M):] by A2,XBOOLE_1:8;
@@ -738,7 +734,7 @@ A4: id(the carrier of M) c= id(Elements(M)) by SYSREL:15,XBOOLE_1:7;
   then
 A5: id(the carrier of M) c= [:Elements(M),Elements(M):] by A4,XBOOLE_1:1;
   A6: ( Flow M)~|(the carrier' of M) c= (Flow M)~ by RELAT_1:59;
-  (Flow M)~ c= [:Elements(M),Elements(M):] by Th13;
+  (Flow M)~ c= [:Elements(M),Elements(M):] by Th8;
   then (Flow M)~|(the carrier' of M) c= [:Elements(M),Elements(M):]
   by A6,XBOOLE_1:1;
   hence thesis by A5,XBOOLE_1:8;
@@ -756,7 +752,7 @@ A1: for x holds x in dom(f_exit(M)) implies x in Elements(M)
     dom(id(the carrier of M)) by RELAT_1:1;
     then x in dom((Flow M)|(the carrier' of M)) or
     x in dom(id(the carrier of M)) by XBOOLE_0:def 3;
-    then x in (the carrier' of M) or x in the carrier of M by RELAT_1:45,57;
+    then x in (the carrier' of M) or x in the carrier of M by RELAT_1:57;
     hence thesis by XBOOLE_0:def 3;
   end;
 A2: for x holds x in rng(f_exit(M)) implies x in Elements(M)
@@ -770,16 +766,16 @@ A4: x in rng((Flow M)|(the carrier' of M)) implies thesis
     proof
       assume x in rng((Flow M)|(the carrier' of M));
       then consider y such that
-A5:   [y,x] in (Flow M)|(the carrier' of M) by RELAT_1:def 5;
+A5:   [y,x] in (Flow M)|(the carrier' of M) by XTUPLE_0:def 13;
 A6:   y in (the carrier' of M) by A5,RELAT_1:def 11;
       [y,x] in (Flow M) by A5,RELAT_1:def 11;
-      then x in (the carrier' of M) or x in the carrier of M by A6,Th11;
+      then x in (the carrier' of M) or x in the carrier of M by A6,Th7;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the carrier of M)) implies thesis
     proof
       assume x in rng(id(the carrier of M));
-      then x in (the carrier' of M) or x in the carrier of M by RELAT_1:45;
+      then x in (the carrier' of M) or x in the carrier of M;
       hence thesis by XBOOLE_0:def 3;
     end;
     hence thesis by A3,A4,XBOOLE_0:def 3;
@@ -792,7 +788,7 @@ A7: for x holds x in dom(f_enter(M)) implies x in Elements(M)
     dom(id(the carrier of M)) by RELAT_1:1;
     then x in dom((Flow M)~|(the carrier' of M)) or
     x in dom(id(the carrier of M)) by XBOOLE_0:def 3;
-    then x in (the carrier' of M) or x in the carrier of M by RELAT_1:45,57;
+    then x in (the carrier' of M) or x in the carrier of M by RELAT_1:57;
     hence thesis by XBOOLE_0:def 3;
   end;
   for x holds x in rng(f_enter(M)) implies x in Elements(M)
@@ -806,17 +802,17 @@ A9: x in rng((Flow M)~|(the carrier' of M)) implies thesis
     proof
       assume x in rng((Flow M)~|(the carrier' of M));
       then consider y such that
-A10:  [y,x] in (Flow M)~|(the carrier' of M) by RELAT_1:def 5;
+A10:  [y,x] in (Flow M)~|(the carrier' of M) by XTUPLE_0:def 13;
 A11:  [y,x] in (Flow M)~ by A10,RELAT_1:def 11;
 A12:  y in (the carrier' of M) by A10,RELAT_1:def 11;
       [x,y] in (Flow M) by A11,RELAT_1:def 7;
-      then x in (the carrier' of M) or x in the carrier of M by A12,Th11;
+      then x in (the carrier' of M) or x in the carrier of M by A12,Th7;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the carrier of M)) implies thesis
     proof
       assume x in rng(id(the carrier of M));
-      then x in (the carrier' of M) or x in the carrier of M by RELAT_1:45;
+      then x in (the carrier' of M) or x in the carrier of M;
       hence thesis by XBOOLE_0:def 3;
     end;
     hence thesis by A8,A9,XBOOLE_0:def 3;
@@ -834,13 +830,13 @@ A1: (f_exit(M)) * (f_exit(M)) = f_exit(M)
   proof
     set R = ((Flow M)|(the carrier' of M));
     set S = id(the carrier of M);
-A2: S * R = {} by Th17;
-A3: R * S = R by Th17;
+A2: S * R = {} by Th12;
+A3: R * S = R by Th12;
 A4: S * S = S by SYSREL:12;
     (f_exit(M)) * (f_exit(M)) = (R * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:6
       .= ((R * R) \/ (R * S)) \/ (S * (R \/ S)) by RELAT_1:32
       .= ((R * R) \/ (R * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:32
-      .= ({} \/ R) \/ ({} \/ S) by A2,A3,A4,Th16
+      .= ({} \/ R) \/ ({} \/ S) by A2,A3,A4,Th11
       .= f_exit(M);
     hence thesis;
   end;
@@ -849,13 +845,13 @@ A5: (f_exit(M)) * (f_enter(M)) = f_exit(M)
     set R = ((Flow M)|(the carrier' of M));
     set S = id(the carrier of M);
     set T = ((Flow M)~|(the carrier' of M));
-A6: S * T = {} by Th17;
-A7: R * S = R by Th17;
+A6: S * T = {} by Th12;
+A7: R * S = R by Th12;
 A8: S * S = S by SYSREL:12;
     (f_exit(M)) * (f_enter(M)) = (R * (T \/ S)) \/ (S * (T \/ S)) by SYSREL:6
       .= ((R * T) \/ (R * S)) \/ (S * (T \/ S)) by RELAT_1:32
       .= ((R * T) \/ (R * S)) \/ ((S * T) \/ (S * S)) by RELAT_1:32
-      .= ({} \/ R) \/ ({} \/ S) by A6,A7,A8,Th16
+      .= ({} \/ R) \/ ({} \/ S) by A6,A7,A8,Th11
       .=f_exit(M);
     hence thesis;
   end;
@@ -863,13 +859,13 @@ A9: (f_enter(M)) * (f_enter(M)) = f_enter(M)
   proof
     set R = ((Flow M)~|(the carrier' of M));
     set S = id(the carrier of M);
-A10: S * R = {} by Th17;
-A11: R * S = R by Th17;
+A10: S * R = {} by Th12;
+A11: R * S = R by Th12;
 A12: S * S = S by SYSREL:12;
     (f_enter(M)) * (f_enter(M)) = (R * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:6
       .= ((R * R) \/ (R * S)) \/ (S * (R \/ S)) by RELAT_1:32
       .= ((R * R) \/ (R * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:32
-      .= ({} \/ R) \/ ({} \/ S) by A10,A11,A12,Th16
+      .= ({} \/ R) \/ ({} \/ S) by A10,A11,A12,Th11
       .=f_enter(M);
     hence thesis;
   end;
@@ -878,13 +874,13 @@ A12: S * S = S by SYSREL:12;
     set R = ((Flow M)|(the carrier' of M));
     set S = id(the carrier of M);
     set T = ((Flow M)~|(the carrier' of M));
-A13: T * S = T by Th17;
-A14: S * R = {} by Th17;
+A13: T * S = T by Th12;
+A14: S * R = {} by Th12;
 A15: S * S = S by SYSREL:12;
     (f_enter(M)) * (f_exit(M)) = (T * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:6
       .= ((T * R) \/ (T * S)) \/ (S * (R \/ S)) by RELAT_1:32
       .= ((T * R) \/ (T * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:32
-      .= ({} \/ T) \/ ({} \/ S) by A13,A14,A15,Th16
+      .= ({} \/ T) \/ ({} \/ S) by A13,A14,A15,Th11
       .=f_enter(M);
     hence thesis;
   end;
@@ -899,17 +895,17 @@ proof
   thus (f_exit(M)) * (f_exit(M) \ id(Elements(M))) = {}
   proof
     set R = (Flow M)|(the carrier' of M);
-A1: S * R = {} by Th17;
-    (f_exit(M)) * (f_exit(M) \ id(Elements(M))) = (R \/ S) * R by Th19
+A1: S * R = {} by Th12;
+    (f_exit(M)) * (f_exit(M) \ id(Elements(M))) = (R \/ S) * R by Th14
       .= (R * R) \/ (S * R) by SYSREL:6
-      .= {} by A1,Th16;
+      .= {} by A1,Th11;
     hence thesis;
   end;
   set R = ((Flow M)~|(the carrier' of M));
-A2: S * R = {} by Th17;
-  (f_enter(M)) * (f_enter(M) \ id(Elements(M))) = (R \/ S) * R by Th19
+A2: S * R = {} by Th12;
+  (f_enter(M)) * (f_enter(M) \ id(Elements(M))) = (R \/ S) * R by Th14
     .= (R * R) \/ (S * R) by SYSREL:6
-    .= {} by A2,Th16;
+    .= {} by A2,Th11;
   hence thesis;
 end;
 
@@ -939,19 +935,19 @@ A1: ((R \/ S) \/ T) \ Q = ((R \/ T) \/ (S \/ T)) \ Q by XBOOLE_1:5
     .= ((R \/ T) \ (id(Elements(M))) \/
   ((S \/ T) \ (id(Elements(M))))) by XBOOLE_1:42
     .= R \/
-  ((S \/ T) \ (id(Elements(M)))) by Th19
-    .= R \/ S by Th19;
+  ((S \/ T) \ (id(Elements(M)))) by Th14
+    .= R \/ S by Th14;
 A2: (R \/ S) * (R \/ S) = ((R \/ S) * R) \/ ((R \/ S) *S) by RELAT_1:32
     .= ((R * R) \/ (S * R)) \/ ((R \/ S) *S) by SYSREL:6
     .= ((R * R) \/ (S * R)) \/ ((R * S) \/ (S *S)) by SYSREL:6
-    .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th16
-    .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th16
-    .= ({} \/ {}) \/ ({} \/ (S *S)) by Th16
-    .= {} by Th16;
-A3: R \/ S~ = R \/ (((Flow M)|(the carrier' of M))~)~ by Th20
-    .= Flow M by Th21;
-A4: R~ \/ S = R~ \/ ((Flow M)|(the carrier' of M))~ by Th20
-    .= (Flow M)~ by Th21;
+    .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th11
+    .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th11
+    .= ({} \/ {}) \/ ({} \/ (S *S)) by Th11
+    .= {} by Th11;
+A3: R \/ S~ = R \/ (((Flow M)|(the carrier' of M))~)~ by Th15
+    .= Flow M by Th16;
+A4: R~ \/ S = R~ \/ ((Flow M)|(the carrier' of M))~ by Th15
+    .= (Flow M)~ by Th16;
 A5: (R \/ S)~ \/ (R \/ S) = (R~ \/ S~) \/ (R \/ S) by RELAT_1:23
     .= (R~ \/ (S \/ R)) \/ S~ by XBOOLE_1:4
     .= ((R~ \/ S) \/ R) \/ S~ by XBOOLE_1:4
@@ -961,7 +957,7 @@ A6: f_prox(M) \/ (f_prox(M))~ =
     .= (((R \/ S) \/ T) \/ (R \/ S)~) \/ T~ by XBOOLE_1:4
     .= (((R \/ S) \/ (R \/ S)~) \/ T) \/ T~ by XBOOLE_1:4
     .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T~) by XBOOLE_1:4
-    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T) by RELAT_1:46
+    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T)
     .= ((Flow M) \/ (Flow M)~) \/ id(the carrier of M) by A5;
 A7: id(the carrier of M) c= id(Elements(M)) by SYSREL:15,XBOOLE_1:7;
 A8: f_prox(M) * f_prox(M) = (((R \/ S) \/ T) * (R \/ S)) \/
@@ -983,26 +979,26 @@ A8: f_prox(M) * f_prox(M) = (((R \/ S) \/ T) * (R \/ S)) \/
   (((R * S) \/ (S * S)) \/ (T * S)) \/
   (((R * T) \/ (S * T)) \/ (T * T)) by SYSREL:6
     .= (({} \/ (S * R)) \/ (T * R )) \/ (((R * S) \/ (S * S)) \/ (T * S)) \/
-  (((R * T) \/ (S * T)) \/ (T * T)) by Th16
+  (((R * T) \/ (S * T)) \/ (T * T)) by Th11
     .= (({} \/ {}) \/ (T * R )) \/
   (((R * S) \/ (S * S)) \/ (T * S)) \/
-  (((R * T) \/ (S * T)) \/ (T * T)) by Th16
+  (((R * T) \/ (S * T)) \/ (T * T)) by Th11
     .= (({} \/ {}) \/ (T * R )) \/
-  (({} \/ (S * S)) \/ (T * S)) \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th16
+  (({} \/ (S * S)) \/ (T * S)) \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th11
     .= (T * R ) \/ ({} \/ (T * S)) \/
-  (((R * T) \/ (S * T)) \/ (T * T)) by Th16
+  (((R * T) \/ (S * T)) \/ (T * T)) by Th11
     .= R \/ (T * S) \/
-  (((R * T) \/ (S * T)) \/ (T * T)) by Th17
-    .= R \/ S \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th17
+  (((R * T) \/ (S * T)) \/ (T * T)) by Th12
+    .= R \/ S \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th12
     .= R \/ S \/ (((R * T) \/ (S * T)) \/ T) by SYSREL:12
-    .= R \/ S \/ (({} \/ (S * T)) \/ T) by Th17
-    .= R \/ S \/ ({} \/ T) by Th17
+    .= R \/ S \/ (({} \/ (S * T)) \/ T) by Th12
+    .= R \/ S \/ ({} \/ T) by Th12
     .= f_prox(M);
 A9: (f_prox(M) \ id(Elements(M))) * f_prox(M) = {} \/ ((R \/ S) * T) by A1,A2,
 RELAT_1:32
     .= (R * T) \/ (S * T) by SYSREL:6
-    .= {} \/ (S * T) by Th17
-    .= {} by Th17;
+    .= {} \/ (S * T) by Th12
+    .= {} by Th12;
   (f_prox(M) \/ (f_prox(M))~) \/ id(Elements(M)) =
   (((Flow M) \/ (Flow M)~) \/ (id(the carrier of M) \/
   id(Elements(M)))) by A6,XBOOLE_1:4
@@ -1011,7 +1007,7 @@ RELAT_1:32
     .= ((Flow M) \/ id(Elements(M))) \/
   ((Flow M)~ \/ id(Elements(M))) by XBOOLE_1:5
     .= ((Flow M) \/ id(Elements(M))) \/
-  ((Flow M)~ \/ (id(Elements(M)))~) by RELAT_1:46
+  ((Flow M)~ \/ (id(Elements(M)))~)
     .= f_flow(M) \/ (f_flow(M))~ by RELAT_1:23;
   hence thesis by A8,A9;
 end;
@@ -1047,7 +1043,7 @@ A2: [x,y] in f_pre(M);
     then
 A3: x in (the carrier' of M) by RELAT_1:def 11;
     [x,y] in (Flow M) by A2,RELAT_1:def 11;
-    then y in (the carrier of M) by A3,Th11;
+    then y in (the carrier of M) by A3,Th7;
     hence thesis by A3,ZFMISC_1:87;
   end;
   for x,y holds [x,y] in f_post(M) implies
@@ -1060,7 +1056,7 @@ A4: [x,y] in f_post(M);
 A5: [x,y] in (Flow M)~ by RELAT_1:def 11;
 A6: x in (the carrier' of M) by A4,RELAT_1:def 11;
     [y,x] in (Flow M) by A5,RELAT_1:def 7;
-    then y in (the carrier of M) by A6,Th11;
+    then y in (the carrier of M) by A6,Th7;
     hence thesis by A6,ZFMISC_1:87;
   end;
   hence thesis by A1,RELAT_1:def 3;
@@ -1071,12 +1067,12 @@ theorem
   f_flow(M) c= [:Elements(M), Elements(M):]
 proof
 A1: (Flow M)|(the carrier of M) c= Flow M by RELAT_1:59;
-  Flow M c= [:Elements(M), Elements(M):] by Th13;
+  Flow M c= [:Elements(M), Elements(M):] by Th8;
   then
 A2: (Flow M)|(the carrier of M) c= [:Elements(M), Elements(M):]
   by A1,XBOOLE_1:1;
 A3: (Flow M)~|(the carrier of M) c= (Flow M)~ by RELAT_1:59;
-  (Flow M)~ c= [:Elements(M), Elements(M):] by Th13;
+  (Flow M)~ c= [:Elements(M), Elements(M):] by Th8;
   then
 A4: (Flow M)~|(the carrier of M) c= [:Elements(M), Elements(M):]
   by A3,XBOOLE_1:1;
@@ -1092,7 +1088,7 @@ A6: id(the carrier of M) c= [:Elements(M), Elements(M):] by A5,XBOOLE_1:1;
   (Flow M)~|(the carrier of M) c= [:Elements(M), Elements(M):]
   by A2,A4,XBOOLE_1:8;
   hence f_prox(M) c= [:Elements(M), Elements(M):] by A6,XBOOLE_1:8;
-A7: Flow M c= [:Elements(M), Elements(M):] by Th13;
+A7: Flow M c= [:Elements(M), Elements(M):] by Th8;
   id(Elements(M)) c= [:Elements(M), Elements(M):] by RELSET_1:13;
   hence thesis by A7,XBOOLE_1:8;
 end;
@@ -1118,7 +1114,7 @@ A1: id(the carrier' of M) c= id(Elements(M)) by SYSREL:15,XBOOLE_1:7;
   then
 A2: id(the carrier' of M) c= [:Elements(M),Elements(M):] by A1,XBOOLE_1:1;
 A3: (Flow M)|(the carrier of M) c= (Flow M) by RELAT_1:59;
-  (Flow M) c= [:Elements(M),Elements(M):] by Th13;
+  (Flow M) c= [:Elements(M),Elements(M):] by Th8;
   then (Flow M)|(the carrier of M) c= [:Elements(M),Elements(M):]
   by A3,XBOOLE_1:1;
   hence f_escape(M) c= [:Elements(M),Elements(M):] by A2,XBOOLE_1:8;
@@ -1127,7 +1123,7 @@ A4: id(the carrier' of M) c= id(Elements(M)) by SYSREL:15,XBOOLE_1:7;
   then
 A5: id(the carrier' of M) c= [:Elements(M),Elements(M):] by A4,XBOOLE_1:1;
 A6: (Flow M)~|(the carrier of M) c= (Flow M)~ by RELAT_1:59;
-  (Flow M)~ c= [:Elements(M),Elements(M):] by Th13;
+  (Flow M)~ c= [:Elements(M),Elements(M):] by Th8;
   then (Flow M)~|(the carrier of M) c= [:Elements(M),Elements(M):]
   by A6,XBOOLE_1:1;
   hence thesis by A5,XBOOLE_1:8;
@@ -1145,7 +1141,7 @@ A1: for x holds x in dom(f_escape(M)) implies x in Elements(M)
     dom(id(the carrier' of M)) by RELAT_1:1;
     then x in dom((Flow M)|(the carrier of M)) or
     x in dom(id(the carrier' of M)) by XBOOLE_0:def 3;
-    then x in (the carrier of M) or x in the carrier' of M by RELAT_1:45,57;
+    then x in (the carrier of M) or x in the carrier' of M by RELAT_1:57;
     hence thesis by XBOOLE_0:def 3;
   end;
 A2: for x holds x in rng(f_escape(M)) implies x in Elements(M)
@@ -1159,16 +1155,16 @@ A4: x in rng((Flow M)|(the carrier of M)) implies thesis
     proof
       assume x in rng((Flow M)|(the carrier of M));
       then consider y such that
-A5:   [y,x] in (Flow M)|(the carrier of M) by RELAT_1:def 5;
+A5:   [y,x] in (Flow M)|(the carrier of M) by XTUPLE_0:def 13;
 A6:   y in (the carrier of M) by A5,RELAT_1:def 11;
       [y,x] in (Flow M) by A5,RELAT_1:def 11;
-      then x in (the carrier of M) or x in the carrier' of M by A6,Th11;
+      then x in (the carrier of M) or x in the carrier' of M by A6,Th7;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the carrier' of M)) implies thesis
     proof
       assume x in rng(id(the carrier' of M));
-      then x in (the carrier of M) or x in the carrier' of M by RELAT_1:45;
+      then x in (the carrier of M) or x in the carrier' of M;
       hence thesis by XBOOLE_0:def 3;
     end;
     hence thesis by A3,A4,XBOOLE_0:def 3;
@@ -1181,7 +1177,7 @@ A7: for x holds x in dom(f_entrance(M)) implies x in Elements(M)
     dom(id(the carrier' of M)) by RELAT_1:1;
     then x in dom((Flow M)~|(the carrier of M)) or
     x in dom(id(the carrier' of M)) by XBOOLE_0:def 3;
-    then x in (the carrier of M) or x in the carrier' of M by RELAT_1:45,57;
+    then x in (the carrier of M) or x in the carrier' of M by RELAT_1:57;
     hence thesis by XBOOLE_0:def 3;
   end;
   for x holds x in rng(f_entrance(M)) implies x in Elements(M)
@@ -1195,17 +1191,17 @@ A9: x in rng((Flow M)~|(the carrier of M)) implies thesis
     proof
       assume x in rng((Flow M)~|(the carrier of M));
       then consider y such that
-A10:  [y,x] in (Flow M)~|(the carrier of M) by RELAT_1:def 5;
+A10:  [y,x] in (Flow M)~|(the carrier of M) by XTUPLE_0:def 13;
 A11:  [y,x] in (Flow M)~ by A10,RELAT_1:def 11;
 A12:  y in (the carrier of M) by A10,RELAT_1:def 11;
       [x,y] in (Flow M) by A11,RELAT_1:def 7;
-      then x in (the carrier of M) or x in the carrier' of M by A12,Th11;
+      then x in (the carrier of M) or x in the carrier' of M by A12,Th7;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the carrier' of M)) implies thesis
     proof
       assume x in rng(id(the carrier' of M));
-      then x in (the carrier of M) or x in the carrier' of M by RELAT_1:45;
+      then x in (the carrier of M) or x in the carrier' of M;
       hence thesis by XBOOLE_0:def 3;
     end;
     hence thesis by A8,A9,XBOOLE_0:def 3;
@@ -1221,54 +1217,54 @@ theorem
 proof
   set R = ((Flow M)|(the carrier of M));
   set S = id(the carrier' of M);
-A1: S * R = {} by Th17;
-A2: R * S = R by Th17;
+A1: S * R = {} by Th12;
+A2: R * S = R by Th12;
 A3: S * S = S by SYSREL:12;
 A4: (f_escape(M)) * (f_escape(M)) =
   (R * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:6
     .= ((R * R) \/ (R * S)) \/ (S * (R \/ S)) by RELAT_1:32
     .= ((R * R) \/ (R * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:32
-    .= ({} \/ R) \/ ({} \/ S) by A1,A2,A3,Th16
+    .= ({} \/ R) \/ ({} \/ S) by A1,A2,A3,Th11
     .=f_escape(M);
 A5: (f_escape(M)) * (f_entrance(M)) = f_escape(M)
   proof
     set T = ((Flow M)~|(the carrier of M));
-A6: S * T = {} by Th17;
-A7: R * S = R by Th17;
+A6: S * T = {} by Th12;
+A7: R * S = R by Th12;
 A8: S * S = S by SYSREL:12;
     (f_escape(M)) * (f_entrance(M)) =
     (R * (T \/ S)) \/ (S * (T \/ S)) by SYSREL:6
       .= ((R * T) \/ (R * S)) \/ (S * (T \/ S)) by RELAT_1:32
       .= ((R * T) \/ (R * S)) \/ ((S * T) \/ (S * S)) by RELAT_1:32
-      .= ({} \/ R) \/ ({} \/ S) by A6,A7,A8,Th16
+      .= ({} \/ R) \/ ({} \/ S) by A6,A7,A8,Th11
       .=f_escape(M);
     hence thesis;
   end;
 A9: (f_entrance(M)) * (f_entrance(M)) = f_entrance(M)
   proof
     set R = ((Flow M)~|(the carrier of M));
-A10: S * R = {} by Th17;
-A11: R * S = R by Th17;
+A10: S * R = {} by Th12;
+A11: R * S = R by Th12;
 A12: S * S = S by SYSREL:12;
     (f_entrance(M)) * (f_entrance(M)) =
     (R * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:6
       .= ((R * R) \/ (R * S)) \/ (S * (R \/ S)) by RELAT_1:32
       .= ((R * R) \/ (R * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:32
-      .= ({} \/ R) \/ ({} \/ S) by A10,A11,A12,Th16
+      .= ({} \/ R) \/ ({} \/ S) by A10,A11,A12,Th11
       .=f_entrance(M);
     hence thesis;
   end;
   (f_entrance(M)) * (f_escape(M)) = f_entrance(M)
   proof
     set T = ((Flow M)~|(the carrier of M));
-A13: T * S = T by Th17;
-A14: S * R = {} by Th17;
+A13: T * S = T by Th12;
+A14: S * R = {} by Th12;
 A15: S * S = S by SYSREL:12;
     (f_entrance(M)) * (f_escape(M)) =
     (T * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:6
       .= ((T * R) \/ (T * S)) \/ (S * (R \/ S)) by RELAT_1:32
       .= ((T * R) \/ (T * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:32
-      .= ({} \/ T) \/ ({} \/ S) by A13,A14,A15,Th16
+      .= ({} \/ T) \/ ({} \/ S) by A13,A14,A15,Th11
       .=f_entrance(M);
     hence thesis;
   end;
@@ -1281,16 +1277,16 @@ theorem
 proof
   set R = (Flow M)|(the carrier of M);
   set S = id(the carrier' of M);
-A1: S * R = {} by Th17;
-  (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = (R \/ S) * R by Th19
+A1: S * R = {} by Th12;
+  (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = (R \/ S) * R by Th14
     .= (R * R) \/ (S * R) by SYSREL:6
-    .= {} by A1,Th16;
+    .= {} by A1,Th11;
   hence (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = {};
   set R = ((Flow M)~|(the carrier of M));
-A2: S * R = {} by Th17;
-  (f_entrance(M)) * (f_entrance(M) \ id(Elements(M))) = (R \/ S) * R by Th19
+A2: S * R = {} by Th12;
+  (f_entrance(M)) * (f_entrance(M) \ id(Elements(M))) = (R \/ S) * R by Th14
     .= (R * R) \/ (S * R) by SYSREL:6
-    .= {} by A2,Th16;
+    .= {} by A2,Th11;
   hence thesis;
 end;
 
@@ -1323,19 +1319,19 @@ A1: ((R \/ S) \/ T) \ Q = ((R \/ T) \/ (S \/ T)) \ Q by XBOOLE_1:5
     .= ((R \/ T) \ (id(Elements(M))) \/
   ((S \/ T) \ (id(Elements(M))))) by XBOOLE_1:42
     .= R \/
-  ((S \/ T) \ (id(Elements(M)))) by Th19
-    .= R \/ S by Th19;
+  ((S \/ T) \ (id(Elements(M)))) by Th14
+    .= R \/ S by Th14;
 A2: (R \/ S) * (R \/ S) = ((R \/ S) * R) \/ ((R \/ S) *S) by RELAT_1:32
     .= ((R * R) \/ (S * R)) \/ ((R \/ S) *S) by SYSREL:6
     .= ((R * R) \/ (S * R)) \/ ((R * S) \/ (S *S)) by SYSREL:6
-    .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th16
-    .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th16
-    .= ({} \/ {}) \/ ({} \/ (S *S)) by Th16
-    .= {} by Th16;
-A3: R \/ S~ = R \/ (((Flow M)|(the carrier of M))~)~ by Th20
-    .= Flow M by Th21;
-A4: R~ \/ S = R~ \/ ((Flow M)|(the carrier of M))~ by Th20
-    .= (Flow M)~ by Th21;
+    .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th11
+    .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th11
+    .= ({} \/ {}) \/ ({} \/ (S *S)) by Th11
+    .= {} by Th11;
+A3: R \/ S~ = R \/ (((Flow M)|(the carrier of M))~)~ by Th15
+    .= Flow M by Th16;
+A4: R~ \/ S = R~ \/ ((Flow M)|(the carrier of M))~ by Th15
+    .= (Flow M)~ by Th16;
 A5: (R \/ S)~ \/ (R \/ S) = (R~ \/ S~) \/ (R \/ S) by RELAT_1:23
     .= (R~ \/ (S \/ R)) \/ S~ by XBOOLE_1:4
     .= ((R~ \/ S) \/ R) \/ S~ by XBOOLE_1:4
@@ -1345,7 +1341,7 @@ A6: f_adjac(M) \/ (f_adjac(M))~ =
     .= (((R \/ S) \/ T) \/ (R \/ S)~) \/ T~ by XBOOLE_1:4
     .= (((R \/ S) \/ (R \/ S)~) \/ T) \/ T~ by XBOOLE_1:4
     .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T~) by XBOOLE_1:4
-    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T) by RELAT_1:46
+    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T)
     .= ((Flow M) \/ (Flow M)~) \/
   id(the carrier' of M) by A5;
 A7: id(the carrier' of M) c= id(Elements(M)) by SYSREL:15,XBOOLE_1:7;
@@ -1366,23 +1362,23 @@ A8: f_adjac(M) * f_adjac(M) =
     .= (((R * R) \/ (S * R)) \/ (T * R )) \/ (((R * S) \/ (S * S)) \/ (T * S))
   \/ (((R * T) \/ (S * T)) \/ (T * T)) by SYSREL:6
     .= (({} \/ (S * R)) \/ (T * R )) \/ (((R * S) \/ (S * S)) \/ (T * S)) \/
-  (((R * T) \/ (S * T)) \/ (T * T)) by Th16
+  (((R * T) \/ (S * T)) \/ (T * T)) by Th11
     .= (({} \/ {}) \/ (T * R )) \/ (((R * S) \/ (S * S)) \/ (T * S)) \/
-  (((R * T) \/ (S * T)) \/ (T * T)) by Th16
+  (((R * T) \/ (S * T)) \/ (T * T)) by Th11
     .= (({} \/ {}) \/ (T * R )) \/ (({} \/ (S * S)) \/ (T * S)) \/
-  (((R * T) \/ (S * T)) \/ (T * T)) by Th16
-    .= (T * R ) \/ ({} \/ (T * S)) \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th16
-    .= R \/ (T * S) \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th17
-    .= R \/ S \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th17
+  (((R * T) \/ (S * T)) \/ (T * T)) by Th11
+    .= (T * R ) \/ ({} \/ (T * S)) \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th11
+    .= R \/ (T * S) \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th12
+    .= R \/ S \/ (((R * T) \/ (S * T)) \/ (T * T)) by Th12
     .= R \/ S \/ (((R * T) \/ (S * T)) \/ T) by SYSREL:12
-    .= R \/ S \/ (({} \/ (S * T)) \/ T) by Th17
-    .= R \/ S \/ ({} \/ T) by Th17
+    .= R \/ S \/ (({} \/ (S * T)) \/ T) by Th12
+    .= R \/ S \/ ({} \/ T) by Th12
     .= f_adjac(M);
 A9: (f_adjac(M) \ id(Elements(M))) * f_adjac(M) = {} \/ ((R \/ S) * T) by A1,A2
 ,RELAT_1:32
     .= (R * T) \/ (S * T) by SYSREL:6
-    .= {} \/ (S * T) by Th17
-    .= {} by Th17;
+    .= {} \/ (S * T) by Th12
+    .= {} by Th12;
   (f_adjac(M) \/ (f_adjac(M))~) \/ id(Elements(M)) =
   (((Flow M) \/ (Flow M)~) \/
   (id(the carrier' of M) \/ id(Elements(M)))) by A6,XBOOLE_1:4
@@ -1391,7 +1387,7 @@ A9: (f_adjac(M) \ id(Elements(M))) * f_adjac(M) = {} \/ ((R \/ S) * T) by A1,A2
     .= ((Flow M) \/ id(Elements(M))) \/
   ((Flow M)~ \/ id(Elements(M))) by XBOOLE_1:5
     .= ((Flow M) \/ id(Elements(M))) \/
-  ((Flow M)~ \/ (id(Elements(M)))~) by RELAT_1:46
+  ((Flow M)~ \/ (id(Elements(M)))~)
     .= f_circulation(M) \/ (f_circulation(M))~ by RELAT_1:23;
   hence thesis by A8,A9;
 end;

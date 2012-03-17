@@ -3,7 +3,7 @@
 ::  by Agata Darmochwa{\l}
 ::
 :: Received May 25, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,15 +15,15 @@
 
 environ
 
- vocabularies NUMBERS, ORDINAL1, SUBSET_1, XXREAL_0, ARYTM_3, XBOOLE_0, TARSKI,
-      FINSET_1, CARD_1, MCART_1, ZFMISC_1, CQC_LANG, QC_LANG1, XBOOLEAN,
-      BVFUNC_2, FUNCT_1, FINSEQ_1, NAT_1, RELAT_1, ORDINAL4, ARYTM_1, CQC_THE1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
-      NUMBERS, NAT_1, FINSET_1, FINSEQ_1, MCART_1, QC_LANG1, CQC_LANG,
+ vocabularies NUMBERS, SUBSET_1, XXREAL_0, ARYTM_3, XBOOLE_0, TARSKI, FINSET_1,
+      CARD_1, MCART_1, ZFMISC_1, CQC_LANG, XBOOLEAN, BVFUNC_2, QC_LANG1,
+      FUNCT_1, FINSEQ_1, NAT_1, RELAT_1, ORDINAL4, ARYTM_1, CQC_THE1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, ORDINAL1, XCMPLX_0,
+      FUNCT_1, NUMBERS, NAT_1, FINSET_1, FINSEQ_1, MCART_1, QC_LANG1, CQC_LANG,
       XXREAL_0;
- constructors XXREAL_0, XREAL_0, NAT_1, CQC_LANG;
+ constructors XXREAL_0, XREAL_0, NAT_1, CQC_LANG, XTUPLE_0;
  registrations SUBSET_1, RELSET_1, FINSET_1, XXREAL_0, XREAL_0, FINSEQ_1,
-      CQC_LANG, ORDINAL1, CARD_1;
+      CQC_LANG, ORDINAL1, CARD_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -31,6 +31,7 @@ begin
 
 :: --------- Auxiliary theorems
 
+reserve Al for QC-alphabet;
 reserve i,j,n,k,l for Element of NAT;
 reserve a for set;
 
@@ -53,24 +54,25 @@ theorem :: CQC_THE1:4
 
 :: --------- The axiomatic of a first-order calculus
 
-reserve T,S,X,Y for Subset of CQC-WFF;
-reserve p,q,r,t,F,H,G for Element of CQC-WFF;
-reserve s for QC-formula;
-reserve x,y for bound_QC-variable;
+reserve T,S,X,Y for Subset of CQC-WFF(Al);
+reserve p,q,r,t,F,H,G for Element of CQC-WFF(Al);
+reserve s for QC-formula of Al;
+reserve x,y for bound_QC-variable of Al;
 
 definition
-  let T;
+  let Al,T;
   attr T is being_a_theory means
 :: CQC_THE1:def 1
 
-  VERUM in T & for p,q,r,s,x,y holds
+  VERUM(Al) in T & for p,q,r,s,x,y holds
   ('not' p => p) => p in T & p => ('not' p => q) in T &
   (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in T &
   p '&' q => q '&' p in T & (p in T & p => q in T implies q in T) &
   All(x,p) => p in T &
   (p => q in T & not x in still_not-bound_in p implies p => All(x,q) in T) &
-  (s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s & s.x in T
-  implies s.y in T);
+  (s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s
+&
+s.x in T implies s.y in T);
 end;
 
 theorem :: CQC_THE1:5
@@ -79,15 +81,15 @@ theorem :: CQC_THE1:5
 :: --------- The consequence operation
 
 definition
-  let X;
-  func Cn(X) -> Subset of CQC-WFF means
+  let Al,X;
+  func Cn(X) -> Subset of CQC-WFF(Al) means
 :: CQC_THE1:def 2
 
   t in it iff for T st T is being_a_theory & X c= T holds t in T;
 end;
 
 theorem :: CQC_THE1:6
-  VERUM in Cn(X);
+  VERUM(Al) in Cn(X);
 
 theorem :: CQC_THE1:7
   ('not' p => p) => p in Cn(X);
@@ -112,7 +114,7 @@ theorem :: CQC_THE1:13
   p => All(x,q) in Cn(X);
 
 theorem :: CQC_THE1:14
-  s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
+  s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
   s.x in Cn(X) implies s.y in Cn(X);
 
 theorem :: CQC_THE1:15
@@ -154,7 +156,7 @@ theorem :: CQC_THE1:21
 theorem :: CQC_THE1:22
   Proof_Step_Kinds is finite;
 
-reserve f,g for FinSequence of [:CQC-WFF,Proof_Step_Kinds:];
+reserve f,g for FinSequence of [:CQC-WFF(Al),Proof_Step_Kinds:];
 
 theorem :: CQC_THE1:23
   for n being Nat holds 1 <= n & n <= len f implies
@@ -162,11 +164,12 @@ theorem :: CQC_THE1:23
   or (f.n)`2 = 5 or (f.n)`2 = 6 or (f.n)`2 = 7 or (f.n)`2 = 8 or (f.n)`2 = 9;
 
 definition
-  let PR be (FinSequence of [:CQC-WFF,Proof_Step_Kinds:]),n be Nat,X;
+  let Al;
+  let PR be (FinSequence of [:CQC-WFF(Al),Proof_Step_Kinds:]),n be Nat,X;
   pred PR,n is_a_correct_step_wrt X means
 :: CQC_THE1:def 4
 
-  (PR.n)`1 in X if (PR.n)`2 = 0, (PR.n)`1 = VERUM if (PR.n)`2 = 1,
+  (PR.n)`1 in X if (PR.n)`2 = 0, (PR.n)`1 = VERUM(Al) if (PR.n)`2 = 1,
   ex p st (PR.n)`1 = ('not' p => p) => p if (PR.n)`2 = 2,
   ex p,q st (PR.n)`1 = p => ('not' p => q) if (PR.n)`2 = 3,
   ex p,q,r st (PR.n)`1 = (p => q) => ('not'(q '&' r) => 'not'(p '&' r))
@@ -176,13 +179,13 @@ definition
   (PR.i)`1 = p => q if (PR.n)`2 = 7,
   ex i,p,q,x st 1 <= i & i < n & (PR.i)`1 = p => q &
   not x in still_not-bound_in p & (PR.n)`1 = p => All(x,q) if (PR.n)`2 = 8,
-  ex i,x,y,s st 1 <= i & i < n & s.x in CQC-WFF & s.y in CQC-WFF &
+  ex i,x,y,s st 1 <= i & i < n & s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) &
   not x in still_not-bound_in s & s.x = (PR.i)`1 & s.y = (PR.n)`1
   if (PR.n)`2 = 9;
 end;
 
 definition
-  let X,f;
+  let Al,X,f;
   pred f is_a_proof_wrt X means
 :: CQC_THE1:def 5
 
@@ -217,10 +220,10 @@ theorem :: CQC_THE1:31
   f is_a_proof_wrt X & 1 <= l & l <= len f implies (f.l)`1 in Cn(X);
 
 definition
-  let f;
+  let Al,f;
   assume
  f <> {};
-  func Effect(f) -> Element of CQC-WFF equals
+  func Effect(f) -> Element of CQC-WFF(Al) equals
 :: CQC_THE1:def 6
 
   (f.(len f))`1;
@@ -245,57 +248,58 @@ theorem :: CQC_THE1:36
 theorem :: CQC_THE1:37
   p in Cn(X) implies ex Y st Y c= X & Y is finite & p in Cn(Y);
 
-:: --------- TAUT - the set of all tautologies
+:: --------- TAUT(Al) - the set of all tautologies
 
 definition
-
-  func TAUT -> Subset of CQC-WFF equals
+  let Al;
+  func TAUT(Al) -> Subset of CQC-WFF(Al) equals
 :: CQC_THE1:def 7
-  Cn({}(CQC-WFF));
+  Cn({}(CQC-WFF(Al)));
 end;
 
 theorem :: CQC_THE1:38
-  T is being_a_theory implies TAUT c= T;
+  T is being_a_theory implies TAUT(Al) c= T;
 
 theorem :: CQC_THE1:39
-  TAUT c= Cn(X);
+  TAUT(Al) c= Cn(X);
 
 theorem :: CQC_THE1:40
-  TAUT is being_a_theory;
+  TAUT(Al) is being_a_theory;
 
 theorem :: CQC_THE1:41
-  VERUM in TAUT;
+  VERUM(Al) in TAUT(Al);
 
 theorem :: CQC_THE1:42
-  ('not' p => p) =>p in TAUT;
+  ('not' p => p) =>p in TAUT(Al);
 
 theorem :: CQC_THE1:43
-  p => ('not' p => q) in TAUT;
+  p => ('not' p => q) in TAUT(Al);
 
 theorem :: CQC_THE1:44
-  (p => q) => ('not'(q '&' r) => 'not' (p '&' r)) in TAUT;
+  (p => q) => ('not'(q '&' r) => 'not' (p '&' r)) in TAUT(Al);
 
 theorem :: CQC_THE1:45
-  p '&' q => q '&' p in TAUT;
+  p '&' q => q '&' p in TAUT(Al);
 
 theorem :: CQC_THE1:46
-  p in TAUT & p => q in TAUT implies q in TAUT;
+  p in TAUT(Al) & p => q in TAUT(Al) implies q in TAUT(Al);
 
 theorem :: CQC_THE1:47
-  All(x,p) => p in TAUT;
+  All(x,p) => p in TAUT(Al);
 
 theorem :: CQC_THE1:48
-  p => q in TAUT & not x in still_not-bound_in p implies
-  p => All(x,q) in TAUT;
+  p => q in TAUT(Al) & not x in still_not-bound_in p implies
+  p => All(x,q) in TAUT(Al);
 
 theorem :: CQC_THE1:49
-  s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
-  s.x in TAUT implies s.y in TAUT;
+  s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s
+&
+  s.x in TAUT(Al) implies s.y in TAUT(Al);
 
 :: --------- Relation of consequence of a set of formulas
 
 definition
-  let X,s;
+  let Al,X,s;
   pred X|-s means
 :: CQC_THE1:def 8
 
@@ -303,7 +307,7 @@ definition
 end;
 
 theorem :: CQC_THE1:50
-  X |- VERUM;
+  X |- VERUM(Al);
 
 theorem :: CQC_THE1:51
   X |- ('not' p => p) => p;
@@ -327,28 +331,29 @@ theorem :: CQC_THE1:57
   X |- p => q & not x in still_not-bound_in p implies X |- p => All(x,q);
 
 theorem :: CQC_THE1:58
-  s.y in CQC-WFF & not x in still_not-bound_in s & X |- s.x implies X |- s.y;
+  s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
+X |- s.x implies X |- s.y;
 
 definition
-  let s;
+  let Al,s;
   attr s is valid means
 :: CQC_THE1:def 9
 
-  {}(CQC-WFF)|-s;
+  {}(CQC-WFF(Al))|-s;
 end;
 
 definition
-  let s;
+  let Al,s;
   redefine attr s is valid means
 :: CQC_THE1:def 10
-  s in TAUT;
+  s in TAUT(Al);
 end;
 
 theorem :: CQC_THE1:59
   p is valid implies X |- p;
 
 theorem :: CQC_THE1:60
-  VERUM is valid;
+  VERUM(Al) is valid;
 
 theorem :: CQC_THE1:61
   ('not' p => p) =>p is valid;
@@ -373,5 +378,5 @@ theorem :: CQC_THE1:67
   implies p => All(x,q) is valid;
 
 theorem :: CQC_THE1:68
-  s.y in CQC-WFF & not x in still_not-bound_in s &
+  s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
   s.x is valid implies s.y is valid;

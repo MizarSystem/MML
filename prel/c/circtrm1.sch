@@ -9,6 +9,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
@@ -65,7 +66,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="36">
+<Func kind="K" nr="34">
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
 </Func>
@@ -73,8 +74,8 @@
 <Pred kind="P" nr="1">
 <Var nr="2"/>
 <Var nr="3"/>
-<Func kind="K" nr="36">
-<Func kind="K" nr="36">
+<Func kind="K" nr="34">
+<Func kind="K" nr="34">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -94,7 +95,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="36">
+<Func kind="K" nr="34">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
@@ -103,7 +104,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="36">
+<Func kind="K" nr="34">
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
 </Func>

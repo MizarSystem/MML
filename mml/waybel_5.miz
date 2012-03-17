@@ -2,7 +2,7 @@
 ::  by Mariusz \.Zynel
 ::
 :: Received October 25, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,24 +21,26 @@ environ
       ZFMISC_1, FUNCT_5, EQREL_1, FUNCT_2, FINSUB_1, FINSET_1, ORDERS_1,
       RELAT_2, LATTICE2, CAT_1, XBOOLEAN, PARTFUN1, MEMBER_1, SEQM_3, WAYBEL_5,
       CARD_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FINSET_1, FINSUB_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, RELAT_1, FINSET_1, FINSUB_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_5, FUNCT_6,
       FUNCOP_1, ORDERS_1, DOMAIN_1, STRUCT_0, ORDERS_2, LATTICE3, CARD_3,
       PBOOLE, PRALG_1, PRALG_2, MSUALG_3, CLASSES1, CLASSES2, YELLOW_0,
       YELLOW_1, YELLOW_2, WAYBEL_1, WAYBEL_0, WAYBEL_3, YELLOW_6;
  constructors FINSUB_1, CLASSES1, CLASSES2, BORSUK_1, LATTICE3, PRALG_1,
-      PRALG_2, MSUALG_3, ORDERS_3, WAYBEL_1, WAYBEL_3, YELLOW_6;
+      PRALG_2, MSUALG_3, ORDERS_3, WAYBEL_1, WAYBEL_3, YELLOW_6, FUNCT_5,
+      XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCOP_1,
       FUNCT_4, FINSET_1, CARD_3, CLASSES2, PBOOLE, STRUCT_0, ORDERS_2,
       LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_3, YELLOW_6,
-      PRALG_1, CARD_1, ORDINAL1;
+      PRALG_1, CARD_1, ORDINAL1, RELAT_1, XTUPLE_0;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions TARSKI, LATTICE3, BINOP_1, STRUCT_0;
+ definitions TARSKI, LATTICE3, BINOP_1, STRUCT_0, XTUPLE_0;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_5, CARD_3, ORDERS_2,
       LATTICE3, FUNCT_6, FUNCOP_1, PBOOLE, PRALG_1, PRALG_2, MSUALG_3, RELAT_1,
       FINSUB_1, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_1, WAYBEL_0, WAYBEL_3,
       CLASSES2, YELLOW_6, CLASSES1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCT_4,
-      ORDERS_1, STRUCT_0, PARTFUN1;
+      ORDERS_1, PARTFUN1;
  schemes FUNCT_1, FUNCT_2, MSSUBFAM, DOMAIN_1, BINOP_1;
 
 begin  :: The Continuity of Lattices
@@ -311,11 +313,7 @@ registration
   let F be DoubleIndexedSet of K, D;
   let j be Element of J;
   cluster rng(F.j) -> non empty;
-  correctness
-  proof
-    dom(F.j) = K.j by FUNCT_2:def 1;
-    hence thesis by RELAT_1:42;
-  end;
+  correctness;
 end;
 
 registration
@@ -331,7 +329,7 @@ registration
       set k = the Element of K.j;
       assume j in dom F;
       then
-A1:   j in J by PARTFUN1:def 2;
+A1:   j in J;
       then F.j is Function of K.j, D by Th6;
       then dom(F.j) = K.j by FUNCT_2:def 1;
       then [k, (F.j).k] in F.j by A1,FUNCT_1:def 2;
@@ -341,16 +339,9 @@ A1:   j in J by PARTFUN1:def 2;
   end;
 end;
 
-theorem Th7:
+theorem
   for F being Function-yielding Function for f being set holds f in
-  dom(Frege F) implies f is Function
-proof
-  let F be Function-yielding Function;
-  let f be set;
-  assume f in dom(Frege F);
-  then f in product doms F by PARTFUN1:def 2;
-  hence thesis;
-end;
+  dom(Frege F) implies f is Function;
 
 theorem Th8:
   for F being Function-yielding Function for f being Function st f
@@ -360,7 +351,7 @@ proof
   let f be Function;
   assume f in dom(Frege F);
   then
-A1: f in product doms F by PARTFUN1:def 2;
+A1: f in product doms F;
   then ex g being Function st g = f & dom g = dom(doms F) & for x st x in dom(
   doms F) holds g.x in (doms F).x by CARD_3:def 5;
   hence dom f = dom F by FUNCT_6:59;
@@ -376,7 +367,7 @@ proof
   let F be Function-yielding Function;
   let f be Function such that
 A1: f in dom Frege F;
-A2: f in product doms F by A1,PARTFUN1:def 2;
+A2: f in product doms F by A1;
   set G = (Frege F).f;
   let i be set such that
 A3: i in dom F;
@@ -409,7 +400,7 @@ A3: dom F = J by PARTFUN1:def 2;
     then consider x such that
 A4: x in dom G and
 A5: y = G.x by FUNCT_1:def 3;
-    F.x is Function of K.x, D by A3,A2,A4,Th6;
+    F.x is Function of K.x, D by A2,A4,Th6;
     then
 A6: rng(F.x) c= D by RELAT_1:def 19;
     G.x = (F.x).(f.x) & f.x in dom(F.x) by A1,A2,A4,Th9;
@@ -467,7 +458,7 @@ A3:   j in f"SubFuncs rng f by A1,FUNCT_6:def 2;
       then reconsider fj = f.j as Function by FUNCT_6:19;
 A4:   j in dom f by A3,FUNCT_6:19;
       then {} = dom fj by A2,FUNCT_6:22;
-      then f.j = {} by RELAT_1:41;
+      then f.j = {};
       hence contradiction by A4,FUNCT_1:def 9;
     end;
     hence thesis by FUNCT_1:def 9;
@@ -706,7 +697,7 @@ A1: dom F = J by PARTFUN1:def 2;
       then consider j being set such that
 A2:   j in dom F and
 A3:   x = \\/(F.j, L) by Th13;
-      reconsider j as Element of J by A2,PARTFUN1:def 2;
+      reconsider j as Element of J by A2;
       take j;
       thus x = Sup(F.j) by A3;
     end;
@@ -717,7 +708,7 @@ A3:   x = \\/(F.j, L) by Th13;
     then consider j being set such that
 A4: j in dom F and
 A5: x = //\(F.j, L) by Th13;
-    reconsider j as Element of J by A4,PARTFUN1:def 2;
+    reconsider j as Element of J by A4;
     take j;
     thus x = Inf(F.j) by A5;
   end;
@@ -728,19 +719,9 @@ registration
   let J be non empty set, K be ManySortedSet of J, L be non empty RelStr;
   let F be DoubleIndexedSet of K, L;
   cluster rng Sups F -> non empty;
-  correctness
-  proof
-    set j = the Element of J;
-    Sup(F.j) in rng Sups F by Th14;
-    hence thesis;
-  end;
+  correctness;
   cluster rng Infs F -> non empty;
-  correctness
-  proof
-    set j = the Element of J;
-    Inf(F.j) in rng Infs F by Th14;
-    hence thesis;
-  end;
+  correctness;
 end;
 
 reserve L for complete LATTICE,
@@ -758,7 +739,7 @@ proof
     then f in product doms F;
     hence f in dom(Frege F) by PARTFUN1:def 2;
   end;
-  thus thesis by PARTFUN1:def 2;
+  thus thesis;
 end;
 
 theorem Th15:
@@ -776,7 +757,7 @@ A1: for f being Function st f in dom(Frege F) holds //\((Frege F).f, L) <= a;
     then consider f being set such that
 A2: f in dom(Frege F) and
 A3: c = //\((Frege F).f, L) by Th13;
-    reconsider f as Function by A2,Th7;
+    reconsider f as Function by A2;
     f in dom(Frege F) by A2;
     hence c <= a by A1,A3;
   end;
@@ -809,13 +790,7 @@ A3: Inf((Frege F).f) <= (F.j).k by YELLOW_2:53;
     then consider j being Element of J such that
 A4: c = Sup(F.j) by Th14;
     for f being Function st f in dom(Frege F) holds //\((Frege F).f, L) <= c
-    proof
-      let f be Function;
-      assume f in dom(Frege F);
-      then reconsider f9= f as Element of product doms F by Lm7;
-      Sup(F.j) >= Inf((Frege F).f9) by A1;
-      hence thesis by A4;
-    end;
+    by A1,A4;
     hence a <= c by Th15;
   end;
   then a <= inf rng Sups F by YELLOW_0:33;
@@ -904,7 +879,7 @@ A15:  now
         assume x in dom doms F;
         then
 A16:    x in dom F by FUNCT_6:59;
-        then reconsider j = x as Element of J by PARTFUN1:def 2;
+        then reconsider j = x as Element of J;
         (doms F).x = dom(F.j) by A16,FUNCT_6:22
           .= K.j by FUNCT_2:def 1;
         hence f.x in (doms F).x by A14;
@@ -921,7 +896,7 @@ A17:  f in dom(Frege F) by PARTFUN1:def 2;
     then consider f being Function such that
 A18: f in dom(Frege F) and
 A19: for j being Element of J ex b st b = (F.j).(f.j) & c <= b;
-    reconsider f as Element of product doms F by A18,Lm7;
+    reconsider f as Element of product doms F by A18;
     reconsider G = (Frege F).f as Function of J, the carrier of L;
     now
       let j be Element of J;
@@ -1025,7 +1000,7 @@ A11: for j being set st j in J holds F.j = id(K.j);
     proof
       let j be set;
       assume j in dom F;
-      then F.j = id(K.j) by A10,A11;
+      then F.j = id(K.j) by A11;
       hence thesis;
     end;
     then reconsider F as ManySortedFunction of J by FUNCOP_1:def 6;
@@ -1219,7 +1194,7 @@ A4:   dom g = K and
 A5:   rng g c= rng F9 and
       for k being set st k in K holds g.k = F9.(j, k) by A1,FUNCT_5:29;
       J = dom curry F by A1,FUNCT_5:24;
-      then reconsider G = (curry F9).j as Function by A2,FUNCT_5:30;
+      then reconsider G = (curry F9).j as Function;
       rng F c= D;
       then rng g c= D by A5,XBOOLE_1:1;
       then reconsider g as Function of K, D by A4,FUNCT_2:def 1,RELSET_1:4;
@@ -1340,7 +1315,7 @@ A15: for j being set st j in dom F holds \\/(F.j, L) = \\/((curry G).j, L)
     proof
       let j9 be set;
       assume j9 in dom F;
-      then reconsider j = j9 as Element of J by PARTFUN1:def 2;
+      then reconsider j = j9 as Element of J;
       reconsider H = (curry G).j as Function of (J --> K9).j, the carrier of L;
       (J --> K9).j = K9 by FUNCOP_1:7;
       then reconsider H as Function of K9, the carrier of L;
@@ -1389,8 +1364,8 @@ A24:  for j being set st j in dom doms curry G holds g.j in (doms curry G ) . j
         let j be set;
         assume
 A25:    j in dom doms curry G;
-        then reconsider j9 = j as Element of J by A19,Th20;
-        j in J by A19,A25,Th20;
+        then reconsider j9 = j as Element of J by A19;
+        j in J by A19,A25;
         then
 A26:    g.j in (doms F).j by A2,A3,A23;
 A27:    (doms F).j = dom(F.j9) by A3,FUNCT_6:22
@@ -1412,7 +1387,7 @@ A30: for f being set st f in dom(Frege F) holds //\((Frege F).f, L) = //\(
       let f9 be set;
       assume
 A31:  f9 in dom(Frege F);
-      then reconsider f= f9 as Element of product doms F by PARTFUN1:def 2;
+      then reconsider f= f9 as Element of product doms F;
 A32:  dom((Frege F).f) = dom F by A31,Th8
         .= J by PARTFUN1:def 2;
 A33:  for j being set st j in J holds ((Frege F).f).j = ((Frege curry G).
@@ -1489,7 +1464,7 @@ A46:        for x st x in dom doms curry G holds f.x in (doms curry G).x
             proof
               let x;
               assume x in dom doms curry G;
-              then reconsider j = x as Element of J by A19,Th20;
+              then reconsider j = x as Element of J by A19;
 A47:          f.j = k by FUNCOP_1:7;
               (doms curry G).j = dom((curry G).j) by A20,FUNCT_6:22
                 .= K9 by Th20;
@@ -1522,7 +1497,7 @@ A52:    rng Infs(Frege curry G) c= rng Infs(Frege F) \/ {Bottom L}
           then consider f being set such that
 A53:      f in dom Frege curry G and
 A54:      x = //\((Frege curry G).f, L) by Th13;
-          reconsider f as Function by A53,Th7;
+          reconsider f as Function by A53;
           per cases;
           suppose
 A55:        for j being Element of J holds f.j in K.j;
@@ -1817,7 +1792,7 @@ A7:     Z is finite and
 A8:     Fj.:Z = Y by ORDERS_1:85;
 A9:     Z c= K by A6,Th20;
         assume Y <> {};
-        then Z <> {} by A8,RELAT_1:116;
+        then Z <> {} by A8;
         then Z in FIK by A7,A9;
         then
 A10:    {Z} c= FIK by ZFMISC_1:31;
@@ -1849,7 +1824,7 @@ A15: for j being set st j in dom curry F holds \\/((curry F).j, L) = \\/((
     proof
       let j9 be set;
       assume j9 in dom curry F;
-      then reconsider j = j9 as Element of J by Th20;
+      then reconsider j = j9 as Element of J;
 A16:  ( for x being Element of L st x in rng(cH.j) ex Y being finite
 Subset of rng(cF .j) st ex_sup_of Y,L & x = "\/"(Y,L))& for Y being finite
       Subset of rng(cF.j) st Y <> {} holds "\/"(Y,L) in rng(cH.j) by A3;
@@ -1898,7 +1873,7 @@ FUNCT_2:def 2;
         then (id J).j = j & (doms h).j = J by A22,FUNCT_1:18,FUNCT_6:22;
         hence thesis;
       end;
-      dom id J = J & dom doms h = dom h by FUNCT_1:17,FUNCT_6:59;
+      dom id J = J & dom doms h = dom h by FUNCT_6:59;
       then id J in product doms h by A22,A23,CARD_3:9;
       then
 A24:  id J in dom Frege h by PARTFUN1:def 2;
@@ -2046,7 +2021,7 @@ A50:  Inf((Frege curry H).h) <= Inf Sups G by YELLOW_2:def 6;
       then consider h being set such that
 A51:  h in dom Frege curry H and
 A52:  x = //\((Frege curry H).h, L) by Th13;
-      reconsider h as Element of product doms curry H by A51,PARTFUN1:def 2;
+      reconsider h as Element of product doms curry H by A51;
       Inf((Frege curry H).h) <= sup X by A33;
       hence thesis by A52;
     end;
@@ -2136,7 +2111,7 @@ A18:  dom g = dom doms curry F by A15,Th20;
       proof
         let x;
         assume x in dom doms curry F;
-        then reconsider j = x as Element of J by A17,Th20;
+        then reconsider j = x as Element of J by A17;
         dom curry F = J by Th20;
         then (doms curry F).j = dom((curry F).j) by FUNCT_6:22
           .= K by Th20;
@@ -2201,11 +2176,7 @@ registration
     proof
       let J be non empty set, K be non-empty ManySortedSet of J;
       let F be DoubleIndexedSet of K, L9;
-      for j being Element of J holds rng(F.j) is directed
-      proof
-        let j be Element of J;
-        thus thesis;
-      end;
+      for j being Element of J holds rng(F.j) is directed;
       hence thesis by Lm8;
     end;
     hence thesis;
@@ -2316,7 +2287,7 @@ A8: (J --> the carrier of L).j = the carrier of L by FUNCOP_1:7;
     then consider f being set such that
 A9: f in dom Frege F and
 A10: y = //\(((Frege F).f), L) by Th13;
-    reconsider f as Function by A9,Th7;
+    reconsider f as Function by A9;
 A11: f.j2 in K.j2 by A9,Lm6;
     then reconsider f2 = f.2 as Element of X by FUNCT_4:63;
 A12: f.j1 in K.j1 by A9,Lm6;
@@ -2449,12 +2420,12 @@ A3: y in X;
     consider h being set such that
 A4: h in dom(Frege F) and
 A5: y = //\((Frege F).h, L) by A3,Th13;
-    reconsider h as Function by A4,Th7;
+    reconsider h as Function by A4;
     reconsider H = (Frege F).h as Function of J, the carrier of L by A4,Th10;
     consider g being set such that
 A6: g in dom(Frege F) and
 A7: x = //\((Frege F).g, L) by A2,Th13;
-    reconsider g as Function by A6,Th7;
+    reconsider g as Function by A6;
     reconsider G = (Frege F).g as Function of J, the carrier of L by A6,Th10;
 A8: ex_inf_of rng((Frege F).g),L by YELLOW_0:17;
     defpred P[set, set] means $1 in J & $2 in K.$1 & for c being Element of L
@@ -2514,7 +2485,7 @@ A24: now
       assume x in dom doms F;
       then
 A25:  x in dom F by FUNCT_6:59;
-      then reconsider j = x as Element of J by PARTFUN1:def 2;
+      then reconsider j = x as Element of J;
       (doms F).x = dom(F.j) by A25,FUNCT_6:22
         .= K.j by FUNCT_2:def 1;
       hence f.x in (doms F).x by A23;
@@ -2632,7 +2603,7 @@ A12: Inf Sups F9 = inf rng Sups F by YELLOW_2:def 6;
       then consider f being set such that
 A13:  f in dom(Frege F) and
 A14:  x = //\((Frege F).f, S) by Th13;
-      reconsider f as Function by A13,Th7;
+      reconsider f as Function by A13;
       (Frege F).f is Function of J, the carrier of S by A13,Th10;
       then
 A15:  rng((Frege F).f) c= the carrier of S by RELAT_1:def 19;
@@ -2652,7 +2623,7 @@ A18: rng Infs Frege F c= rng Infs Frege F9 by TARSKI:def 3;
       then consider f being set such that
 A19:  f in dom(Frege F9) and
 A20:  x = //\((Frege F9).f, L) by Th13;
-      reconsider f as Element of product doms F9 by A19,Lm7;
+      reconsider f as Element of product doms F9 by A19;
       (Frege F).f is Function of J, the carrier of S by A19,Th10;
       then
 A21:  rng((Frege F).f) c= the carrier of S by RELAT_1:def 19;
@@ -2864,7 +2835,7 @@ A8: for f being set st f in dom(Frege dF) holds rng((Frege F).f) = g.:(
       let f be set;
       assume
 A9:   f in dom(Frege dF);
-      then reconsider f as Element of product doms dF by PARTFUN1:def 2;
+      then reconsider f as Element of product doms dF;
 A10:  dom(Frege dF) = product(doms dF) by PARTFUN1:def 2
         .= product(doms F) by Th32
         .= dom(Frege F) by PARTFUN1:def 2;
@@ -2908,7 +2879,7 @@ A18: rng Infs Frege F c= g.:(rng Infs Frege dF)
       then consider f being set such that
 A19:  f in dom(Frege F) and
 A20:  y = //\((Frege F).f, S) by Th13;
-      reconsider f as Element of product doms F by A19,PARTFUN1:def 2;
+      reconsider f as Element of product doms F by A19;
       reconsider f9= f as Element of product doms dF by Th32;
       set X = rng((Frege dF).f9);
 A21:  g preserves_inf_of X & ex_inf_of X,L by A2,WAYBEL_0:def 32,YELLOW_0:17;
@@ -2934,7 +2905,7 @@ A26:  y = g.x by FUNCT_2:64;
       consider f being set such that
 A27:  f in dom(Frege dF) and
 A28:  x = //\((Frege dF).f, L) by A25,Th13;
-      reconsider f as Element of product doms dF by A27,PARTFUN1:def 2;
+      reconsider f as Element of product doms dF by A27;
       set X = rng((Frege dF).f);
       g preserves_inf_of X & ex_inf_of X,L by A2,WAYBEL_0:def 32,YELLOW_0:17;
       then inf(g.:X) = g.inf X by WAYBEL_0:def 30;

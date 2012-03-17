@@ -1,0 +1,1310 @@
+:: Morphology for Image Processing, Part {I}
+::  by Hiroshi Yamazaki , Czes\l aw Byli\'nski and Katsumi Wasaki
+:: 
+:: Received September 21, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, RLVECT_1, FUNCT_1, ARYTM_1, RELAT_1, MATHMORP, SETFAM_1,
+      ARYTM_3, ALGSTR_0, MORPH_01, ZFMISC_1, SUBSET_1, STRUCT_0, XBOOLE_0,
+      REAL_1, SUPINF_2, VALUED_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, FUNCT_2, REAL_1,
+      STRUCT_0, ALGSTR_0, RLVECT_1, RUSUB_4, MATHMORP;
+ constructors SETFAM_1, REAL_1, RUSUB_4, RVSUM_1, RELSET_1, MATHMORP;
+ registrations SUBSET_1, RELSET_1, MEMBERED, STRUCT_0, RLVECT_1;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0, RLVECT_1, RUSUB_4, MATHMORP;
+ theorems SUBSET_1, RLVECT_1, TARSKI, ZFMISC_1, XBOOLE_0, SETFAM_1, RUSUB_5,
+      XBOOLE_1, FUNCT_2, RLVECT_4;
+ schemes FUNCT_2;
+
+begin :: Minkowski set operations
+
+definition let E be non empty RLSStruct;
+  mode binary-image of E is Subset of E;
+end;
+
+reserve E for RealLinearSpace;
+reserve A, B, C for binary-image of E;
+reserve a, b, v for Element of E;
+
+definition
+  let E be RealLinearSpace;
+  let A, B be binary-image of E;
+  func A(-)B -> binary-image of E equals
+  { z where z is Element of E :
+     for b be Element of E st b in B holds z - b in A };
+  correctness
+  proof
+    now let x be set;
+      assume x in {z where z is Element of E : for b be Element of E
+      st b in B holds z - b in A}; then
+      ex z be Element of E st x=z &
+      for b be Element of E st b in B holds z - b in A;
+      hence x in the carrier of E;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+end;
+
+notation
+  let a be Real, E be RealLinearSpace,
+      A be Subset of E;
+  synonym a * A for a (.) A;
+end;
+
+theorem LM0010:
+  for E be RealLinearSpace, A, B be Subset of E st B = {}
+  holds A(+)B = B & B(+)A = B & A(-)B = the carrier of E
+  proof
+    let E be RealLinearSpace,
+    A, B be Subset of E;
+    assume AS: B = {};
+    hence A(+)B = B & B(+)A = B by RUSUB_5:5;
+    now let x be set;
+      assume x in the carrier of E;
+      then reconsider z = x as Element of E;
+      for b be Element of E st b in B
+      holds z - b in A by AS;
+      hence x in A(-)B;
+    end;
+    then the carrier of E c= A(-)B by TARSKI:def 3;
+    hence the carrier of E = A(-)B by XBOOLE_0:def 10;
+  end;
+
+theorem LM0010A:
+  for E be RealLinearSpace, A, B be Subset of E st A <> {} & B = {}
+  holds B(-)A = B
+  proof
+    let E be RealLinearSpace,
+    A, B be Subset of E;
+    assume
+    AS: A <> {} & B = {};
+    then consider a be set such that
+    P1: a in A by XBOOLE_0:def 1;
+    reconsider a as Element of E by P1;
+    assume B(-)A <> B;
+    then consider ba be set such that
+    P2: ba in B(-)A by AS, XBOOLE_0:def 1;
+    consider z be Element of E such that
+    P3: ba = z & for a be Element of E st a in A holds z - a in B by P2;
+    thus contradiction by AS, P1, P3;
+  end;
+
+theorem LM0020:
+  for E be RealLinearSpace,
+  A, B be Subset of E st B = the carrier of E & A <> {}
+  holds A(+)B = B & B(+)A = B
+  proof
+    let E be RealLinearSpace, A, B be Subset of E;
+    assume
+    AS: B = the carrier of E & A <> {};
+    then consider a be set such that
+    P1: a in A by XBOOLE_0:def 1;
+    reconsider a as Element of E by P1;
+    now let x be set;
+      assume x in the carrier of E;
+      then reconsider z = x as Element of E;
+      a+(z-a) =z by RLVECT_4:1;
+      hence x in A(+)B by AS, P1;
+    end;
+    then
+    P1: the carrier of E c= A(+)B by TARSKI:def 3;
+    hence B = A(+)B by AS, XBOOLE_0:def 10;
+    thus B(+)A = A + B
+    .= B by P1, AS, XBOOLE_0:def 10;
+  end;
+
+theorem LM0020A:
+  for E be RealLinearSpace,
+  A, B be Subset of E st B = the carrier of E
+  holds B(-)A = B
+  proof
+    let E be RealLinearSpace, A,B be Subset of E;
+    assume
+    AS: B = the carrier of E;
+    now let x be set;
+      assume x in the carrier of E;
+      then reconsider z = x as Element of E;
+      for a be Element of E st a in A holds z-a in B by AS;
+      hence x in B(-)A;
+    end;
+    then the carrier of E c= B(-)A by TARSKI:def 3;
+    hence B = B(-)A by XBOOLE_0:def 10, AS;
+  end;
+
+theorem
+  A(+)B = union {b + A where b is Element of E: b in B}
+  proof
+    now let x be set;
+      assume
+      P1: x in A(+)B;
+      consider a0, b0 be Element of E such that
+      P2: x = a0 + b0 & a0 in A & b0 in B by P1;
+      P3: x in b0 + A by P2;
+      b0 + A in {b + A where b is Element of E: b in B} by P2;
+      hence x in union {b + A where b is Element of E: b in B}
+      by P3, TARSKI:def 4;
+    end;
+    hence
+    A(+)B c= union {b + A where b is Element of E: b in B} by TARSKI:def 3;
+
+    now let x be set;
+      assume x in union {b + A where b is Element of E: b in B};
+      then consider y be set such that
+      P0: x in y & y in {b + A where b is Element of E: b in B}
+      by TARSKI:def 4;
+      consider b be Element of E such that
+      P1: y = b + A & b in B by P0;
+      consider a be Element of E such that
+      P2: x = b + a & a in A by P1, P0;
+      thus x in A(+)B by P1, P2;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+
+definition
+  let E be non empty RLSStruct;
+  mode binary-image-family of E is Subset-Family of the carrier of E;
+end;
+
+reserve F, G for binary-image-family of E;
+reserve A, B, C for non empty binary-image of E;
+
+theorem
+  A(-)B = meet {b + A where b is Element of E: b in B}
+  proof
+    consider g be set such that
+    P01: g in B by XBOOLE_0:def 1;
+    reconsider g as Element of E by P01;
+    P02: g+A in {b + A where b is Element of E: b in B} by P01;
+
+    now let x be set;
+      assume x in A(-)B; then
+      consider z be Element of E such that
+      P1: x = z & for b be Element of E st b in B
+      holds z - b in A;
+
+      for Y be set st Y in {b + A where b is Element of E: b in B}
+      holds z in Y
+      proof
+        let Y be set;
+        assume Y in {b + A where b is Element of E: b in B};
+        then
+        consider b be Element of E such that
+        A2: Y = b + A & b in B;
+        A3: z - b in A by P1, A2;
+        z = b + (z- b) by RLVECT_4:1;
+        hence z in Y by A3, A2;
+      end;
+      hence x in meet {b + A where b is Element of E: b in B}
+      by P1, P02, SETFAM_1:def 1;
+    end;
+    hence A(-)B c= meet {b + A where b is Element of E: b in B}
+    by TARSKI:def 3;
+
+    now let x be set;
+      assume
+      P0: x in meet {b + A where b is Element of E: b in B};
+      consider S be set such that
+      P11: S in {b + A where b is Element of E: b in B} by P02;
+      consider d be Element of E such that
+      P12: S = d + A & d in B by P11;
+
+      x in S by P0, P11, SETFAM_1:def 1;
+      then
+      reconsider x0 = x as Element of E by P12;
+
+      for b be Element of E st b in B holds x0 - b in A
+      proof
+        let b be Element of E;
+        assume b in B;
+        then b + A in {f + A where f is Element of E :f in B};
+        then x in b + A by P0, SETFAM_1:def 1;
+        then consider a be Element of E such that
+        X1: x0 = b + a & a in A;
+
+        thus thesis by X1, RLVECT_4:1;
+      end;
+      hence x in A(-)B;
+    end;
+    hence meet {b + A where b is Element of E: b in B} c= A(-)B
+    by TARSKI:def 3;
+  end;
+
+theorem Th104:
+  A(+)B = {v where v is Element of E: (v + (-1)*B) /\ A <> {}}
+  proof
+    thus A(+)B c= {v where v is Element of E: (v + (-1)*B ) /\ A <> {}}
+    proof let x be set;
+      assume
+      P1: x in A(+)B;
+      consider a0,b0 be Element of E such that
+      P2: x = a0 + b0 & a0 in A & b0 in B by P1;
+      reconsider v = x as Element of E by P1;
+      P3: v - b0 = a0 by P2,RLVECT_4:1;
+      (-1)*b0 in (-1)*B by P2;
+      then v + (-1)*b0 in v + (-1)*B;
+      then v - b0 in v + (-1)*B by RLVECT_1:16;
+      then (v + (-1)*B) /\ A <> {} by P2, P3, XBOOLE_0:def 4;
+      hence x in {w where w is Element of E: (w + (-1)*B) /\ A <> {}};
+    end;
+
+    let x be set;
+      assume x in {v where v is Element of E: (v + (-1)*B) /\ A <> {}};
+      then
+      consider v be Element of E such that
+      P1: x = v & (v + (-1)*B ) /\ A <> {};
+      consider y be set such that
+      X1: y in ((v + (-1)*B) /\ A) by P1, XBOOLE_0:def 1;
+      X2: y in (v + (-1)*B ) & y in A by X1, XBOOLE_0:def 4;
+      then
+      consider nb be Element of E such that
+      X3: y = v + nb & nb in (-1)*B;
+      consider b be Element of E such that
+      X4: nb = (-1)*b & b in B by X3;
+      reconsider a = y as Element of E by X3;
+      a + b = v - b + b by X3, X4, RLVECT_1:16
+      .= v by RLVECT_4:1;
+      hence x in A(+)B by P1, X4, X2;
+  end;
+
+theorem Th105:
+  A(-)B = {v where v is Element of E: v + (-1)*B c= A}
+  proof
+    thus A(-)B c= {v where v is Element of E: v + (-1)*B c= A}
+    proof let x be set;
+      assume x in A(-)B; then
+      consider z be Element of E such that
+      P1: x = z & for b be Element of E st b in B holds z - b in A;
+      z + (-1)*B c= A
+      proof
+        let y be set;
+        assume y in z + (-1)*B;
+        then consider nb be Element of E such that
+        X1: y = z + nb & nb in (-1)*B;
+        consider b be Element of E such that
+        X2: nb = (-1)*b & b in B by X1;
+        z - b in A by X2, P1;
+        hence y in A by X1, X2, RLVECT_1:16;
+      end;
+      hence x in {v where v is Element of E: v + (-1)*B c= A} by P1;
+    end;
+    let x be set;
+      assume x in {v where v is Element of E: v + (-1)*B c= A};
+      then consider v be Element of E such that
+      P1: x = v & v + (-1)*B c= A;
+      for b be Element of E st b in B holds v - b in A
+      proof
+        let b be Element of E;
+        assume b in B;
+        then (-1)*b in (-1)*B;
+        then v + (-1)*b in v + (-1)*B;
+        then v-b in v + (-1)*B by RLVECT_1:16;
+        hence thesis by P1;
+      end;
+      hence x in A(-)B by P1;
+  end;
+
+theorem Th106:
+  ((the carrier of E) \ A)(+)B = (the carrier of E) \ (A(-)B)
+  & ((the carrier of E) \ A)(-)B = (the carrier of E) \ (A(+)B)
+  proof
+    per cases;
+    suppose
+      X0: A = the carrier of E;
+      reconsider X = {} as Subset of E by XBOOLE_1:2;
+      thus ((the carrier of E) \ A)(+)B = X(+)B by X0, XBOOLE_1:37
+      .= {} by LM0010
+      .= (the carrier of E) \ (the carrier of E) by XBOOLE_1:37
+      .= (the carrier of E) \ (A(-)B) by X0,LM0020A;
+      thus ((the carrier of E) \ A) (-)B = X(-)B by X0, XBOOLE_1:37
+      .= {} by LM0010A
+      .= (the carrier of E) \ (the carrier of E) by XBOOLE_1:37
+      .= (the carrier of E) \ (A(+)B) by X0,LM0020;
+    end;
+    suppose
+      X0: A <> the carrier of E;
+      P1: (the carrier of E) \ A is non empty
+      proof
+        assume (the carrier of E) \ A is empty;
+        then (the carrier of E) c= A by XBOOLE_1:37;
+        hence contradiction by X0, XBOOLE_0:def 10;
+      end;
+      X1: for x be set holds x in {v where v is Element of E:
+      (v + (-1)*B) /\ ((the carrier of E) \ A) <> {}}
+      iff x in (the carrier of E)
+      & not x in ({v where v is Element of E: v + (-1)*B c= A })
+      proof
+        let x be set;
+        hereby
+          assume x in {v where v is Element of E:
+          (v + (-1)*B) /\ ( (the carrier of E) \ A) <> {}};
+          then
+          consider v be Element of E such that
+          R2: x=v & (v + (-1)*B) /\ ((the carrier of E) \ A) <> {};
+          thus x in (the carrier of E) by R2;
+          thus not x in ({ w where w is Element of E: w + (-1)*B c= A })
+          proof
+            assume x in ({w where w is Element of E: w + (-1)*B c= A});
+            then
+            consider w be Element of E such that
+            R4: w = x & w + (-1)*B c= A;
+            (v + (-1)*B) misses ((the carrier of E) \ A)
+            by R2, R4, XBOOLE_1:85;
+            hence contradiction by R2, XBOOLE_0:def 7;
+          end;
+        end;
+        assume
+        X5: x in (the carrier of E)
+        & not x in ({v where v is Element of E: v + (-1)*B c= A });
+        then
+        reconsider w=x as Element of E;
+        now assume (w + (-1)*B) /\ ((the carrier of E) \ A) = {};
+          then {} = ((w + (-1)*B) /\ (the carrier of E)) \ A by XBOOLE_1:49
+          .= (w + (-1)*B) \ A by XBOOLE_1:28;
+          then (w + (-1)*B) c= A by XBOOLE_1:37;
+          hence contradiction by X5;
+        end;
+        hence x in {v where v is Element of E:
+        (v + (-1)*B) /\ ((the carrier of E) \ A) <> {}};
+      end;
+
+      X2: for x be set holds
+      x in {v where v is Element of E: v + (-1)*B c= ((the carrier of E) \ A)}
+      iff
+      x in the carrier of E
+      & not x in {v where v is Element of E: (v + (-1)*B) /\ A <> {}}
+      proof
+        let x be set;
+        hereby
+          assume x in {v where v is Element of E:
+          (v + (-1)*B) c= ((the carrier of E) \ A)};
+          then consider v be Element of E such that
+          R2: x = v & (v + (-1)*B) c= ((the carrier of E) \ A);
+          thus x in (the carrier of E) by R2;
+          thus not x in
+          {w where w is Element of E: (w + (-1)*B) /\ A <> {}}
+          proof
+            assume x in {w where w is Element of E: (w + (-1)*B) /\ A <> {}};
+            then
+            consider w be Element of E such that
+            R4: w=x & (w + (-1)*B) /\  A  <> {};
+            (w + (-1)*B) misses (the carrier of E) \ ((the carrier of E) \ A)
+            by R2, R4, XBOOLE_1:85;
+            then (w + (-1)*B) misses (the carrier of E) /\ A by XBOOLE_1:48;
+            then (w + (-1)*B) misses A by XBOOLE_1:28;
+            hence contradiction by R4, XBOOLE_0:def 7;
+          end;
+        end;
+
+        assume
+        X5: x in (the carrier of E)
+        & not x in ({v where v is Element of E: (v + (-1)*B) /\ A <> {}});
+        then reconsider w = x as Element of E;
+        reconsider w = x as Element of E by X5;
+        (w + (-1)*B) \ ((the carrier of E) \ A)
+        = ((w + (-1)*B) \ (the carrier of E)) \/ ((w + (-1)*B) /\ A)
+        by XBOOLE_1:52
+        .= {} \/ ((w + (-1)*B) /\ A) by XBOOLE_1:37
+        .= {} by X5;
+        then w + (-1)*B c= ((the carrier of E) \ A) by XBOOLE_1:37;
+        hence
+        x in ({v where v is Element of E: v + (-1)*B
+        c= ((the carrier of E) \ A)});
+      end;
+      thus ((the carrier of E) \ A)(+)B = {v where v is Element of E:
+
+      (v + (-1)*B) /\ ((the carrier of E) \ A) <> {}} by Th104, P1
+      .= (the carrier of E) \ ({v where v is Element of E: v + (-1)*B c= A})
+      by X1, XBOOLE_0:def 5
+      .= (the carrier of E) \ (A(-)B ) by Th105;
+      thus ((the carrier of E) \ A)(-)B
+      = {v where v is Element of E: v + (-1)*B c= ((the carrier of E) \ A)}
+      by Th105, P1
+      .= (the carrier of E)
+      \ {v where v is Element of E: (v + (-1)*B) /\ A <> {}}
+      by X2, XBOOLE_0:def 5
+      .= (the carrier of E) \ (A(+)B) by Th104;
+    end;
+  end;
+
+Th107:
+  for E be non empty Abelian addLoopStr, A, B be Subset of E
+  holds A(+)B = B(+)A
+  proof
+    let E be non empty Abelian addLoopStr, A, B be Subset of E;
+    thus A(+)B = B + A
+    .= B(+)A;
+  end;
+
+definition let E be non empty Abelian addLoopStr, A, B be Subset of E;
+  redefine func A(+)B;
+  commutativity by Th107;
+end;
+
+theorem Th108A1:
+  for E be non empty add-associative addLoopStr, A, B, C be Subset of E
+  holds A + B + C = A + (B + C)
+  proof
+    let E be non empty add-associative addLoopStr, A, B, C be Subset of E;
+    for x be Element of E
+    holds x in (A + B + C) iff x in A + (B + C)
+    proof
+      let x be Element of E;
+      hereby assume x in (A + B + C);
+        then
+        consider ab, c be Element of E such that
+        P1: x = ab + c & ab in (A+B) & c in C;
+        consider a, b be Element of E such that
+        P2: ab = a + b & a in A & b in B by P1;
+        P3: x = a + (b + c) by P1, P2, RLVECT_1:def 3;
+        b + c in B + C by P1, P2;
+        hence x in A + (B + C) by P2, P3;
+      end;
+
+      assume x in A + (B + C);
+      then
+      consider a, bc be Element of E such that
+      P1: x = a + bc & a in A & bc in B + C;
+      consider b, c be Element of E such that
+      P2: bc = b + c & b in B & c in C by P1;
+      P3: x = (a + b) + c by P1, P2, RLVECT_1:def 3;
+      a + b in A + B by P1, P2;
+      hence x in (A +B) + C by P2, P3;
+    end;
+    hence thesis by SUBSET_1:3;
+  end;
+
+theorem
+  A(+)B(+)C = A(+)(B(+)C) by Th108A1;
+
+theorem Th108B:
+  (union F)(+)B = union {X(+)B where X is binary-image of E: X in F}
+  proof
+    for x be set
+    holds x in (union F)(+)B
+    iff x in union {X(+)B where X is binary-image of E: X in F}
+    proof
+      let x be set;
+      hereby assume x in (union F)(+)B;
+        then consider f, b be Element of E such that
+        P1: x = f + b & f in (union F) & b in B;
+        consider Y be set such that
+        P2: f in Y & Y in F by P1, TARSKI:def 4;
+        reconsider X = Y as binary-image of E by P2;
+        P3: x in X(+)B by P1, P2;
+        X(+)B in {W(+)B where W is binary-image of E: W in F } by P2;
+        hence x in union {W(+)B where W is binary-image of E: W in F}
+        by P3, TARSKI:def 4;
+      end;
+
+      assume x in union {X(+)B where X is binary-image of E: X in F};
+      then consider Y be set such that
+      P1: x in Y & Y in {X(+)B where X is binary-image of E: X in F}
+      by TARSKI:def 4;
+      consider W be binary-image of E such that
+      P2: Y = W(+)B & W in F by P1;
+      consider f, b be Element of E such that
+      P3: x = f + b & f in W & b in B by P1, P2;
+      W c= (union F) by P2, ZFMISC_1:74;
+      hence x in (union F) (+)B by P3;
+    end;
+    hence thesis by TARSKI:1;
+  end;
+
+theorem
+  A(+)(union F) = union {A(+)X where X is binary-image of E: X in F}
+  proof
+    P1: for x be set holds x in {X(+)A where X is binary-image of E: X in F}
+    iff x in {A(+)X where X is binary-image of E: X in F}
+    proof
+      let x be set;
+      hereby assume x in {X(+)A where X is binary-image of E: X in F};
+        then consider W be binary-image of E such that
+        X1: x = W(+)A & W in F;
+        x = A(+)W & W in F by X1;
+        hence x in {A(+)X where X is binary-image of E: X in F};
+      end;
+
+      assume x in {A(+)X where X is binary-image of E: X in F};
+      then consider W be binary-image of E such that
+      X1: x= A(+)W & W in F;
+      x= W(+)A & W in F by X1;
+      hence x in {X(+)A where X is binary-image of E: X in F};
+    end;
+    thus A(+)(union F) = (union F)(+)A
+    .= union {X(+)A where X is binary-image of E: X in F} by Th108B
+    .= union {A(+)X where X is binary-image of E: X in F}
+    by P1, TARSKI:1;
+  end;
+
+theorem Th110:
+  (meet F)(+)B c= meet {X(+)B where X is binary-image of E: X in F }
+  proof
+    per cases;
+    suppose
+      G1: F = {};
+      reconsider Z=(meet F) as Subset of E;
+      (meet F) = {} by G1, SETFAM_1:def 1;
+      then Z(+)B ={} by LM0010;
+      hence (meet F)(+)B
+      c= meet {X(+)B where X is binary-image of E: X in F} by XBOOLE_1:2;
+    end;
+
+    suppose
+      F <> {}; then
+      consider W0 be set such that
+      P0: W0 in F by XBOOLE_0:def 1;
+      reconsider W0 as binary-image of E by P0;
+      P2: W0(+)B in {W(+)B where W is binary-image of E: W in F} by P0;
+
+      now let x be set;
+        assume x in (meet F)(+)B;
+        then consider f, b be Element of E such that
+        P1: x = f + b & f in (meet F) & b in B;
+        now let Y be set;
+          assume Y in {X(+)B where X is binary-image of E: X in F};
+          then consider X be binary-image of E such that
+          P3: Y = X(+)B & X in F;
+          meet F c= X by P3, SETFAM_1:3;
+          hence x in Y by P1, P3;
+        end;
+        hence x in meet {W(+)B where W is binary-image of E: W in F}
+        by P2, SETFAM_1:def 1;
+      end;
+      hence (meet F)(+)B c= meet {X(+)B where X is binary-image of E: X in F}
+      by TARSKI:def 3;
+    end;
+  end;
+
+theorem
+  A(+)(meet F) c= meet { A(+)X where X is binary-image of E: X in F}
+  proof
+    P1: for x be set holds x in {X(+)A where X is binary-image of E: X in F}
+    iff x in { A(+)X where X is binary-image of E: X in F}
+    proof
+      let x be set;
+      hereby assume x in {X(+)A where X is binary-image of E: X in F };
+        then
+        consider W be binary-image of E such that
+        X1: x = W(+)A & W in F;
+        x = A(+)W & W in F by X1;
+        hence x in {A(+)X where X is binary-image of E: X in F};
+      end;
+
+      assume x in {A(+)X where X is binary-image of E: X in F};
+      then consider W be binary-image of E such that
+      X1: x = A(+)W & W in F;
+      x = W(+)A & W in F by X1;
+      hence x in {X(+)A where X is binary-image of E: X in F};
+    end;
+    A(+)(meet F) c= meet {X(+)A where X is binary-image of E: X in F}
+    by Th110;
+    hence A(+)(meet F) c= meet {A(+)X where X is binary-image of E: X in F}
+    by P1, TARSKI:1;
+  end;
+
+theorem Th112:
+  for E be non empty addLoopStr, A, B, C be Subset of E
+  holds B c= C implies A + B c= A + C
+  proof
+    let E be non empty addLoopStr,
+    A, B, C be Subset of E;
+    assume
+    AS1: B c= C;
+    let x be set;
+    assume x in A + B;
+    then consider a, b be Element of E such that
+    P1: x = a + b & a in A & b in B;
+    thus x in A + C by AS1, P1;
+  end;
+
+theorem Th113:
+  (v + A)(+)B = A(+)(v+B) & (v+A)(+)B = v+ (A(+)B)
+  proof
+    for x be set holds x in (v+A)(+)B iff x in A(+)(v + B)
+    proof
+      let x be set;
+      hereby assume x in (v+A)(+)B;
+        then consider f, b be Element of E such that
+        P1: x = f + b & f in (v+A) & b in B;
+        consider a be Element of E such that
+        P2: f = v + a & a in A by P1;
+        P3: x = a+ (v + b) by P1, P2, RLVECT_1:def 3;
+        v+b in (v+B) by P1;
+        hence x in A(+)(v + B) by P3, P2;
+      end;
+
+      assume x in A(+)(v + B);
+      then consider a, f be Element of E such that
+      P1: x = a + f & a in A & f in (v + B);
+      consider b be Element of E such that
+      P2: f=v+b & b in B by P1;
+      P3: x = (v+a) + b by P1, P2, RLVECT_1:def 3;
+      v+a in (v+A) by P1;
+      hence x in (v+A)(+)B by P3, P2;
+    end;
+    hence (v+A)(+)B = A(+)(v+B) by TARSKI:1;
+
+    for x be set holds x in (v+A)(+) B iff x in v+(A(+)B)
+    proof
+      let x be set;
+      hereby assume x in (v+A)(+)B;
+        then consider f, b be Element of E such that
+        P1: x = f+b & f in (v+A) & b in B;
+        consider a be Element of E such that
+        P2: f = v+a & a in A by P1;
+        P3: x = v + (a+b) by P1, P2, RLVECT_1:def 3;
+        a+b in (A+B) by P1, P2;
+        hence x in v+ (A(+)B) by P3;
+      end;
+
+      assume x in v + (A(+)B);
+      then consider ab be Element of E such that
+      P1: x = v+ab & ab in (A(+)B);
+      consider a, b be Element of E such that
+      P2: ab = a + b & a in A & b in B by P1;
+      P3: x = (v+a) + b by P1, P2,RLVECT_1:def 3;
+      v+a in (v+A) by P2;
+      hence x in (v + A)(+)B by P3, P2;
+    end;
+    hence (v+A)(+)B = v + (A(+)B) by TARSKI:1;
+  end;
+
+theorem Th114:
+  (meet F)(-)B = meet { X(-)B where X is binary-image of E: X in F}
+  proof
+    per cases;
+    suppose
+      G1: F = {};
+      reconsider Z=(meet F) as Subset of E;
+      G2: (meet F) = {} by G1, SETFAM_1:def 1;
+      {X(-)B where X is binary-image of E: X in F} = {}
+      proof
+        assume {X(-)B where X is binary-image of E: X in F} <> {};
+        then consider x be set such that
+        S1: x in {X(-)B where X is binary-image of E: X in F}
+        by XBOOLE_0:def 1;
+        ex X be binary-image of E st x = X(-)B & X in F by S1;
+        hence contradiction by G1;
+      end;
+      then {} = meet {X(-)B where X is binary-image of E: X in F}
+      by SETFAM_1:def 1;
+      hence (meet F)(-)B = meet {X(-)B where X is binary-image of E: X in F}
+      by G2, LM0010A;
+    end;
+
+    suppose
+      G2: F <> {};
+      then consider W0 be set such that
+      P0: W0 in F by XBOOLE_0:def 1;
+      reconsider W0 as binary-image of E by P0;
+      P2: W0(-)B in { W(-)B where W is binary-image of E: W in F} by P0;
+      for x be set holds x in (meet F)(-)B
+      iff x in meet {W(-)B where W is binary-image of E: W in F}
+      proof
+        let x be set;
+        hereby
+          assume x in (meet F)(-)B;
+          then consider z be Element of E such that
+          Q1: x = z & for b be Element of E st b in B holds z - b in (meet F);
+          now let Y be set;
+            assume Y in { X(-)B where X is binary-image of E: X in F};
+            then consider X be binary-image of E such that
+            P3: Y = X(-)B & X in F;
+            now let b be Element of E;
+              assume b in B;
+              then
+              X1: z - b in (meet F) by Q1;
+              meet F c= X by P3, SETFAM_1:3;
+              hence z - b in X  by X1;
+            end;
+            hence x in Y by P3, Q1;
+          end;
+          hence x in meet {W(-)B where W is binary-image of E: W in F}
+          by P2, SETFAM_1:def 1;
+        end;
+        assume
+        X1: x in meet {W(-)B where W is binary-image of E: W in F};
+        Q1: for W be binary-image of E st W in F holds x in W(-)B
+        proof
+          let W be binary-image of E;
+          assume W in F;
+          then W(-)B in {D(-)B where D is binary-image of E: D in F};
+          hence x in W(-)B by X1, SETFAM_1:def 1;
+        end;
+
+        x in W0(-)B by P0, Q1;
+        then
+        reconsider z=x as Element of E;
+
+        for b be Element of E st b in B holds z - b in meet F
+        proof
+          assume not for b be Element of E st b in B holds z - b in meet F;
+          then consider b be Element of E such that
+          D2: b in B & not z - b in meet F;
+          consider X be set such that
+          Q5:  X in F & not (z-b) in X by G2,D2,SETFAM_1:def 1;
+          reconsider X as binary-image of E by Q5;
+          z in X(-)B by Q5,Q1;
+          then consider zz be Element of E such that
+          Q70: z = zz & for b be Element of E st b in B holds zz - b in X;
+          thus contradiction by Q70, D2, Q5;
+        end;
+        hence x in (meet F)(-)B;
+      end;
+      hence (meet F)(-)B = meet {X(-)B where X is binary-image of E: X in F}
+      by TARSKI:1;
+    end;
+  end;
+
+theorem
+  meet {B (-)X where X is binary-image of E: X in F} c= B(-)(meet F)
+  proof
+    per cases;
+    suppose
+      G1: F = {};
+      reconsider Z = meet F as Subset of E;
+      {B(-)X where X is binary-image of E: X in F} = {}
+      proof
+        assume { B(-)X where X is binary-image of E: X in F} <> {};
+        then consider x be set such that
+        S1: x in {B(-)X where X is binary-image of E: X in F}
+        by XBOOLE_0:def 1;
+        ex X be binary-image of E st x = B(-)X & X in F by S1;
+        hence contradiction by G1;
+      end;
+      then {} = meet {B(-)X where X is binary-image of E: X in F}
+      by SETFAM_1:def 1;
+      hence meet {B(-)X where X is binary-image of E: X in F}
+      c= B (-)(meet F) by XBOOLE_1:2;
+    end;
+
+    suppose F <> {}; then
+      consider W0 be set such that
+      P0: W0 in F by XBOOLE_0:def 1;
+      reconsider W0 as binary-image of E by P0;
+      for x be set
+      holds x in meet { B(-)W where W is binary-image of E: W in F}
+      implies x in B(-)(meet F)
+      proof
+        let x be set;
+        assume
+        X1: x in meet { B(-)W where W is binary-image of E: W in F};
+
+        Q1: for W be binary-image of E st W in F holds x in B(-)W
+        proof
+          let W be binary-image of E;
+          assume W in F;
+          then B(-)W in { B(-)D where D is binary-image of E: D in F};
+          hence x in B(-)W by X1, SETFAM_1:def 1;
+        end;
+        T1: x in B(-)W0 by P0,Q1;
+        then reconsider z=x as Element of E;
+        for f be Element of E st f in meet F holds z - f in B
+        proof
+          let f be Element of E;
+          assume
+          D1: f in meet F;
+          D2: meet F c= W0 by P0,SETFAM_1:3;
+          consider zz be Element of E such that
+          Q7: z = zz & for w be Element of E st w in W0
+          holds zz - w in B by T1;
+          thus z - f in B by Q7, D1, D2;
+        end;
+        hence x in B(-)(meet F);
+      end;
+      hence
+      meet {B(-)X where X is binary-image of E: X in F} c= B(-)(meet F)
+      by TARSKI:def 3;
+    end;
+  end;
+
+theorem
+  union {X(-)B where X is binary-image of E: X in F} c= (union F)(-)B
+  proof
+    let x be set;
+    assume x in union { X(-)B where X is binary-image of E: X in F};
+    then consider Y be set such that
+    P1: x in Y & Y in {X(-)B where X is binary-image of E: X in F}
+    by TARSKI:def 4;
+    consider W be binary-image of E such that
+    P2: Y = W(-)B & W in F by P1;
+    consider z be Element of E such that
+    Q7: x = z & for b be Element of E st b in B holds z - b in W by P1, P2;
+    now let b be Element of E;
+      assume b in B;
+      then
+      X2: z - b in W by Q7;
+      W c= union F by P2,ZFMISC_1:74;
+      hence z - b in union F by X2;
+    end;
+    hence x in (union F) (-)B by Q7;
+  end;
+
+theorem
+  F <> {}
+  implies B(-) (union F) = meet {B(-)X where X is binary-image of E: X in F}
+  proof
+    assume F <> {};
+    then consider W0 be set such that
+    P0: W0 in F by XBOOLE_0:def 1;
+    reconsider W0 as binary-image of E by P0;
+    P2: B(-)W0 in {B(-)X where X is binary-image of E: X in F} by P0;
+
+    for x be set holds x in B(-) (union F)
+    iff x in meet {B(-)X where X is binary-image of E: X in F}
+    proof
+      let x be set;
+      hereby
+        assume x in B(-) (union F);
+        then consider z be Element of E such that
+        Q1: x = z & for f be Element of E st f in (union F) holds z - f in B;
+        now
+          let Y be set;
+          assume Y in {B(-)X where X is binary-image of E: X in F};
+          then consider X be binary-image of E such that
+          Q2: Y = B(-)X & X in F;
+          now
+            let f be Element of E;
+            assume f in X;
+            then f in (union F) by Q2, TARSKI:def 4;
+            hence z - f in B by Q1;
+          end;
+          hence x in Y by Q1, Q2;
+        end;
+        hence x in meet {B(-)W where W is binary-image of E: W in F}
+        by P2, SETFAM_1:def 1;
+      end;
+
+      assume
+      X1: x in meet {B(-)W where W is binary-image of E: W in F};
+      Q1: for W be binary-image of E st W in F holds x in B(-)W
+      proof
+        let W be binary-image of E;
+        assume W in F;
+        then B(-)W in {B(-)D where D is binary-image of E: D in F};
+        hence x in B(-)W by X1, SETFAM_1:def 1;
+      end;
+      x in B(-)W0 by P0, Q1;
+      then reconsider z=x as Element of E;
+      for f be Element of E st f in (union F) holds z - f in B
+      proof
+        let f be Element of E;
+        assume f in (union F);
+        then consider W be set such that
+        Q4: f in W & W in F by TARSKI:def 4;
+        reconsider W as binary-image of E by Q4;
+        z in B(-)W by Q1,Q4; then
+        consider w be Element of E such that
+        Q7: z = w & for f be Element of E st f in W holds w - f in B;
+        thus z - f in B by Q4, Q7;
+      end;
+      hence x in B(-)(union F);
+    end;
+    hence B(-)(union F) = meet {B(-)X where X is binary-image of E: X in F}
+    by TARSKI:1;
+  end;
+
+theorem Th118:
+  A c= B implies A(-)C c= B(-)C
+  proof
+    assume
+    AS: A c= B;
+    let x be set;
+    assume x in A(-)C;
+    then consider w be Element of E such that
+    P2: x = w & for c be Element of E st c in C holds w - c in A;
+    now let c be Element of E;
+      assume c in C;
+      then w - c in A by P2;
+      hence w - c in B by AS;
+    end;
+    hence x in B(-)C by P2;
+  end;
+
+theorem
+  A c= B implies C(-)B c= C(-)A
+  proof
+    assume
+    AS: A c= B;
+    let x be set;
+    assume x in C(-)B;
+    then consider w be Element of E such that
+    P2: x = w & for b be Element of E st b in B holds w - b in C;
+    for a be Element of E st a in A holds w - a in C by AS, P2;
+    hence x in C(-)A by P2;
+  end;
+
+theorem Th120:
+  (v+A)(-)B = A(-)(v+B) & (v+A)(-)B = v+(A(-)B)
+  proof
+    for x be set holds x in (v+A)(-)B iff x in A(-)(v+B)
+    proof
+      let x be set;
+      hereby
+        assume x in (v+A)(-) B;
+        then consider w be Element of E such that
+        P1: x = w & for b be Element of E st b in B holds w - b in (v+A);
+        now let vb be Element of E;
+          assume vb in (v+B); then
+          consider b be Element of E such that
+          P3: vb = v+b & b in B;
+          w - b in (v+A) by P3,P1;
+          then consider a be Element of E such that
+          P5: w - b = v+a & a in A;
+          w - vb = w-b -v by P3, RLVECT_1:27
+          .= a by P5, RLVECT_4:1;
+          hence w - vb in A by P5;
+        end;
+        hence x in A(-)(v+B) by P1;
+      end;
+
+      assume x in A(-)(v+B);
+      then consider w be Element of E such that
+      P1: x = w & for vb be Element of E st vb in (v+B) holds w - vb in A;
+
+      now let b be Element of E;
+        assume b in B;
+        then (v+b) in (v+B);
+        then w -(v+b) in A by P1;
+        then
+        P4: v + (w -(v+b)) in v+A;
+
+        v + (w -(v+b)) = v+w -(v+b) by RLVECT_1:28
+        .=w+(v-(v+b)) by RLVECT_1:28
+        .=w+ (v -v - b) by RLVECT_1:27
+        .=w + (0.E - b) by RLVECT_1:15;
+        hence w - b in v+A by RLVECT_1:14, P4;
+      end;
+      hence x in (v+A)(-) B by P1;
+    end;
+    hence (v+A)(-) B = A(-) (v+B) by TARSKI:1;
+
+    for x be set holds x in (v+A)(-) B iff x in v+ (A(-)B)
+    proof
+      let x be set;
+      hereby
+        assume x in (v+A)(-) B;
+        then consider w be Element of E such that
+        P1: x = w & for b be Element of E st b in B holds w - b in (v+A);
+        now let b be Element of E;
+          assume b in B;
+          then
+          X2: w - b in (v+A) by P1;
+          consider a be Element of E such that
+          X3: w - b  = v+a & a in A by X2;
+          (w - v) - b = w - (v+b) by RLVECT_1:27
+          .= v+a -v by RLVECT_1:27, X3
+          .= a by RLVECT_4:1;
+          hence (w - v) - b in A by X3;
+        end;
+        then
+        X4: w-v in A(-)B;
+
+        v+(w-v) = w by RLVECT_4:1;
+        hence x in v + (A(-)B) by P1, X4;
+      end;
+
+      assume x in v + (A(-)B);
+      then consider ab be Element of E such that
+      X1: x = v+ab & ab in (A(-)B);
+
+      reconsider w=x as Element of E by X1;
+      consider d be Element of E such that
+      Y1: ab = d & for b be Element of E st b in B holds d - b in A by X1;
+
+      now let b be Element of E;
+        assume b in B;
+        then
+        X2: ab - b in A by Y1;
+        (v+ab) - b = v +(ab-b) by RLVECT_1:28;
+        hence (v+ab) - b in v + A by X2;
+      end;
+      hence x in (v+A)(-)B by X1;
+    end;
+    hence (v+A)(-)B = v+(A(-)B) by TARSKI:1;
+  end;
+
+theorem Th121:
+  (A(-)B)(-)C = A(-)(B(+)C)
+  proof
+    for x be set holds x in (A(-)B)(-)C iff x in A(-)(B(+)C)
+    proof
+      let x be set;
+      hereby
+        assume x in (A(-)B)(-)C;
+        then consider w be Element of E such that
+        P1: x = w & for c be Element of E st c in C
+        holds w - c in (A(-)B);
+        now
+          let bc be Element of E;
+          assume bc in (B(+)C);
+          then consider b, c be Element of E such that
+          P3: bc = b+c & b in B & c in C;
+          w - c in (A(-)B) by P1, P3;
+          then consider g be Element of E such that
+          P5: w - c = g & for b be Element of E st b in B holds g - b in A;
+          w - bc = g - b by P3, RLVECT_1:27, P5;
+          hence w - bc in A by P5,P3;
+        end;
+        hence x in A(-)(B(+)C) by P1;
+      end;
+      assume x in A(-)(B(+)C);
+      then consider w be Element of E such that
+      P1: x = w & for bc be Element of E st bc in B(+)C holds w - bc in A;
+      now let c be Element of E;
+        assume
+        P2: c in C;
+        now let b be Element of E;
+          assume
+          P3: b in B;
+          b+c in B(+)C by P2, P3;
+          then w -(b+c) in A by P1;
+          hence (w -c) -b in A by RLVECT_1:27;
+        end;
+        hence w-c in A(-)B;
+      end;
+      hence x in (A(-)B)(-)C by P1;
+    end;
+    hence (A(-)B)(-)C = A(-)(B(+)C) by TARSKI:1;
+  end;
+
+begin :: Dilation and erosion
+
+definition
+  let E be RealLinearSpace;
+  let B be binary-image of E;
+  func dilation(B)
+  -> Function of bool the carrier of E, bool the carrier of E means
+  :def020:
+  for A be binary-image of E holds it.A = A(+)B;
+  existence
+  proof
+    defpred P[set,set] means ex A be binary-image of E st $1 = A & $2 = A(+)B;
+    X1:
+    now
+      let x be set;
+      assume x in bool (the carrier of E);
+      then reconsider A = x as binary-image of E;
+      set y = A(+)B;
+      A(+)B c= the carrier of E;
+      hence ex y be set st y in bool (the carrier of E) & P[x,y];
+    end;
+    consider f be Function of bool the carrier of E, bool the carrier of E
+    such that
+    X2: for x be set st x in bool the carrier of E holds P[x,f.x]
+    from FUNCT_2:sch 1(X1);
+    take f;
+
+    now
+      let A be binary-image of E;
+      ex X be binary-image of E st A = X & f.A = X(+)B by X2;
+      hence f.A = A(+)B;
+    end;
+    hence thesis;
+  end;
+
+  uniqueness
+  proof
+    let f, g be Function of bool (the carrier of E), bool (the carrier of E);
+    assume
+    A1: for A be binary-image of E holds f.A = A(+)B;
+    assume
+    A2: for A be binary-image of E holds g.A = A(+)B;
+    now
+      let x be set;
+      assume x in bool the carrier of E;
+      then reconsider A = x as binary-image of E;
+      thus f.x = A(+)B by A1
+      .= g.x by A2;
+    end;
+    hence f=g by FUNCT_2:12;
+  end;
+end;
+
+definition
+  let E be RealLinearSpace;
+  let B be binary-image of E;
+  func erosion (B)
+  -> Function of bool the carrier of E, bool the carrier of E means
+  :def030:
+  for A be binary-image of E holds it.A = A(-)B;
+  existence
+  proof
+    defpred P[set,set] means ex A be binary-image of E st $1=A & $2 = A(-)B;
+    X1:
+    now
+      let x be set;
+      assume x in bool the carrier of E;
+      then reconsider A = x as binary-image of E;
+      set y = A(-)B;
+      A(-)B c= the carrier of E;
+      hence ex y be set st y in bool the carrier of E & P[x,y];
+    end;
+
+    consider f be Function of bool the carrier of E, bool the carrier of E
+    such that
+    X2: for x be set st x in bool the carrier of E holds P[x,f.x]
+    from FUNCT_2:sch 1(X1);
+    take f;
+
+    now let A be binary-image of E;
+      ex X be binary-image of E st A=X & f.A = X(-)B by X2;
+      hence f.A = A(-)B;
+    end;
+    hence thesis;
+  end;
+
+  uniqueness
+  proof
+    let f, g be Function of bool (the carrier of E), bool (the carrier of E);
+    assume that
+    A1: for A be binary-image of E holds f.A = A(-)B and
+    A2: for A be binary-image of E holds g.A = A(-)B;
+    now
+      let x be set;
+      assume x in bool (the carrier of E); then
+      reconsider A = x as binary-image of E;
+      thus f.x = A(-)B by A1
+      .= g.x by A2;
+    end;
+    hence f = g by FUNCT_2:12;
+  end;
+end;
+
+theorem
+  (dilation(B)).(union F)
+  = union {(dilation(B)).X where X is binary-image of E: X in F}
+  proof
+    P2: for x be set holds x in {X(+)B where X is binary-image of E: X in F}
+    iff x in {(dilation(B)).X where X is binary-image of E: X in F}
+    proof
+      let x be set;
+
+      hereby assume x in {X(+)B where X is binary-image of E: X in F};
+        then consider X be binary-image of E such that
+        P3: x = X(+)B & X in F;
+        x = (dilation(B)).X & X in F by P3, def020;
+        hence x in {(dilation(B)).W where W is binary-image of E: W in F};
+      end;
+
+      assume x in {(dilation(B)).X where X is binary-image of E: X in F};
+      then consider X be binary-image of E such that
+      P3: x=(dilation(B)).X & X in F;
+      x = X(+)B & X in F by P3,def020;
+      hence x in { W(+)B where W is binary-image of E: W in F};
+    end;
+    thus (dilation(B)).(union F) = (union F)(+)B by def020
+    .= union { X(+)B where X is binary-image of E: X in F} by Th108B
+    .= union {(dilation(B)).X where X is binary-image of E: X in F}
+    by P2, TARSKI:1;
+  end;
+
+theorem
+  A c= B implies (dilation(C)).A c= (dilation(C)).B
+  proof
+    assume
+    AS: A c= B;
+    P1: (dilation(C)).A = C+A by def020;
+    (dilation(C)).B = C+B by def020;
+    hence thesis by P1, AS, Th112;
+  end;
+
+theorem
+  (dilation(C)).(v+A) = v+((dilation(C)).A)
+  proof
+    P1: (dilation(C)).(v+A) = (v+A)(+)C by def020;
+    v + ((dilation(C)).A) = v+(A(+)C) by def020;
+    hence thesis by Th113, P1;
+  end;
+
+theorem
+  (erosion(B)).(meet F)
+  = meet {(erosion(B)).X where X is binary-image of E: X in F}
+  proof
+    P2: for x be set holds x in {X(-)B where X is binary-image of E: X in F}
+    iff x in {(erosion(B)).X where X is binary-image of E: X in F}
+    proof
+      let x be set;
+
+      hereby
+        assume x in {X(-)B where X is binary-image of E: X in F};
+        then consider X be binary-image of E such that
+        P3: x = X(-)B & X in F;
+        x = (erosion(B)).X & X in F by P3,def030;
+        hence x in {(erosion(B)).W where W is binary-image of E: W in F};
+      end;
+
+      assume x in {(erosion(B)).X where X is binary-image of E: X in F};
+      then consider X be binary-image of E such that
+      P3: x = (erosion(B)).X & X in F;
+
+      x = X(-)B & X in F by P3, def030;
+      hence x in { W(-)B where W is binary-image of E: W in F};
+    end;
+    thus (erosion(B)).(meet F) = (meet F)(-)B by def030
+    .= meet {X(-)B where X is binary-image of E: X in F } by Th114
+    .= meet {(erosion(B)).X where X is binary-image of E: X in F}
+    by P2, TARSKI:1;
+  end;
+
+theorem
+  A c= B implies (erosion(C)).A c= (erosion(C)).B
+  proof
+    assume
+    AS: A c= B;
+    P1: (erosion(C)).A = A(-)C by def030;
+    (erosion(C)).B = B(-)C by def030;
+    hence thesis by P1, AS, Th118;
+  end;
+
+theorem
+  (erosion(C)).(v+A) = v+((erosion(C)).A)
+  proof
+    P1: (erosion(C)).(v+A) = (v+A)(-)C by def030;
+    v+((erosion(C)).A) = v+(A(-)C) by def030;
+    hence thesis by Th120, P1;
+  end;
+
+theorem
+  (dilation(C)).((the carrier of E) \ A)
+  = (the carrier of E) \ ((erosion(C)).A)
+  & (erosion(C)).( (the carrier of E) \ A)
+  = (the carrier of E) \ ((dilation(C)).A )
+  proof
+    thus (dilation(C)).((the carrier of E) \ A)
+    = ((the carrier of E) \ A)(+)C by def020
+    .= (the carrier of E) \ (A(-)C) by Th106
+    .= (the carrier of E) \ ((erosion(C)).A) by def030;
+    thus (erosion(C)).( (the carrier of E) \ A)
+    = ((the carrier of E) \ A)(-)C by def030
+    .= (the carrier of E) \ (A(+)C) by Th106
+    .= (the carrier of E) \ ((dilation(C)).A) by def020;
+  end;
+
+theorem
+  (dilation(C)).((dilation(B)).A) = (dilation((dilation(C)).B)).A
+  & (erosion(C)).((erosion(B)).A) = (erosion((dilation(C)).B)).A
+  proof
+    thus (dilation(C)).((dilation(B)).A) = (dilation(C)).(A(+)B) by def020
+    .= (A(+)B)(+)C by def020
+    .= A(+)(B(+)C) by Th108A1
+    .= A(+)((dilation(C)).B) by def020
+    .= (dilation((dilation(C)).B)).A by def020;
+    thus (erosion(C)).((erosion(B)).A) = (erosion(C)).(A(-)B) by def030
+    .= (A(-)B)(-)C by def030
+    .= A(-)(B(+)C) by Th121
+    .= A(-)((dilation(C)).B) by def020
+    .= (erosion((dilation(C)).B)).A by def030;
+  end;

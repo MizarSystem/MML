@@ -11,6 +11,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
@@ -23,6 +24,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="VALUED_0"/>
@@ -52,7 +54,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="33">
+<Func kind="K" nr="31">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -75,7 +77,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="33">
+<Func kind="K" nr="31">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -93,27 +95,27 @@
 </Typ>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="79" value="false"/>
 <Adjective nr="84" value="false"/>
-<Adjective nr="103"/>
-<Adjective nr="128"/>
-<Adjective nr="129"/>
-<Adjective nr="130"/>
-<Adjective nr="138"/>
-<Adjective nr="149"/>
-<Adjective nr="150"/>
+<Adjective nr="89" value="false"/>
+<Adjective nr="110"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
+<Adjective nr="145"/>
+<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="310">
+<Func kind="K" nr="325">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="79" value="false"/>
 <Adjective nr="84" value="false"/>
-<Adjective nr="126"/>
-<Adjective nr="150"/>
+<Adjective nr="89" value="false"/>
+<Adjective nr="133"/>
+<Adjective nr="157"/>
 </Cluster>
 </FCluster>
 </Registrations>

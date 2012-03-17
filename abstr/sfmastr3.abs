@@ -2,7 +2,7 @@
 ::  by Piotr Rudnicki
 ::
 :: Received June 4, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,20 +19,24 @@ environ
       AMISTD_2, RELAT_1, GRAPHSP, AMI_3, PARTFUN1, COMPLEX1, SCMFSA8B,
       TURING_1, SCMFSA_9, ARYTM_3, FUNCOP_1, SCMFSA8A, CARD_3, SFMASTR1,
       ARYTM_1, XXREAL_0, SCMFSA6A, TARSKI, SCMFSA9A, FINSEQ_1, GRAPH_2,
-      AOFA_I00, FUNCT_2, FINSEQ_2, SFMASTR3, NAT_1, SCMNORM, PBOOLE, COMPOS_1;
+      AOFA_I00, FUNCT_2, FINSEQ_2, SFMASTR3, NAT_1, PBOOLE, COMPOS_1, MEMSTR_0,
+      EXTPRO_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, CARD_3,
       INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7, PBOOLE,
-      FUNCOP_1, GRAPH_2, FINSEQ_1, FINSEQ_2, MEMSTR_0, COMPOS_1, EXTPRO_1,
-      AMISTD_1, SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMFSA9A, XXREAL_0, NAT_1;
+      FUNCOP_1, GRAPH_2, FINSEQ_1, FINSEQ_2, MEMSTR_0, COMPOS_0, COMPOS_1,
+      EXTPRO_1, AMISTD_1, SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C,
+      SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMFSA9A, XXREAL_0,
+      ORDINAL1, NAT_1, SCMFSA_M;
  constructors SETWISEO, REAL_1, INT_2, MESFUNC1, SCMFSA6A, SCMFSA6B, SCMFSA6C,
       SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMFSA9A, RELSET_1, FUNCT_4,
-      PBOOLE, GRAPH_2, SCMFSA7B, MEMSTR_0, AMISTD_1;
+      PBOOLE, GRAPH_2, SCMFSA7B, MEMSTR_0, AMISTD_1, FINSEQ_2, SCMFSA_M,
+      SF_MASTR, FUNCT_7;
  registrations SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
       SFMASTR1, XBOOLE_0, VALUED_0, AFINSQ_1, FUNCOP_1, COMPOS_1, EXTPRO_1,
-      PBOOLE, FUNCT_4, MEMSTR_0, SCMFSA6A;
+      PBOOLE, FUNCT_4, MEMSTR_0, SCMFSA6A, FINSEQ_1, AMI_3, COMPOS_0, SCMFSA_M,
+      PRE_POLY;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -92,11 +96,11 @@ definition  let p;
   let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
 
   func StepForUp(a, b, c, I, p,s) ->
-   Function of NAT, product the Object-Kind of
+   Function of NAT, product the_Values_of
   SCM+FSA equals
 :: SFMASTR3:def 1
   StepWhile>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
-     I ';' AddTo(a, intloc 0) ';'
+     I ";" AddTo(a, intloc 0) ";"
       SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0), p,
     s+*(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), s.c-s.b+1)+*(a, s.b));
 end;
@@ -124,7 +128,7 @@ theorem :: SFMASTR3:16
   s.intloc 0 = 1 implies for aux being read-write Int-Location st
 aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I)
  holds DataPart IExec( aux := cc
-';' SubFrom(aux, bb) ';' AddTo(aux, intloc 0) ';' (a := bb),p,s)
+";" SubFrom(aux, bb) ";" AddTo(aux, intloc 0) ";" (a := bb),p,s)
  = DataPart(s+*(aux, s.cc-s.bb+1)+*(a, s.bb));
 
 definition let p;
@@ -136,11 +140,11 @@ definition let p;
   st i < s.c-s.b+1 holds
   I is_closed_on StepForUp(a, b, c, I,p,s).i,
    p +* while>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
-     I ';' AddTo(a, intloc 0) ';'
+     I ";" AddTo(a, intloc 0) ";"
       SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0)) &
   I is_halting_on StepForUp(a, b, c, I,p,s).i,
    p +* while>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
-     I ';' AddTo(a, intloc 0) ';'
+     I ";" AddTo(a, intloc 0) ";"
       SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0));
 end;
 
@@ -152,11 +156,11 @@ theorem :: SFMASTR3:18
   StepForUp(a,bb,cc,Ig,p,s).k.intloc 0 = 1 &
   Ig is_closed_on StepForUp(a,bb,cc,Ig,p,s).k,
    p +* while>0(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig),
-     Ig ';' AddTo(a, intloc 0) ';'
+     Ig ";" AddTo(a, intloc 0) ";"
       SubFrom(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig), intloc 0)) &
   Ig is_halting_on StepForUp(a,bb,cc,Ig,p,s).k,
    p +* while>0(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig),
-     Ig ';' AddTo(a, intloc 0) ';'
+     Ig ";" AddTo(a, intloc 0) ";"
       SubFrom(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig), intloc 0))
   implies StepForUp(a,bb,cc,Ig,p,s).(k+1).intloc 0 = 1;
 
@@ -178,9 +182,9 @@ theorem :: SFMASTR3:21
 bb+1 implies
   StepForUp(a,bb,cc,Ig,p,s).(k+1) |
     ({a, bb, cc} \/ UsedIntLoc Ig \/ FinSeq-Locations)
- = IExec(Ig ';' AddTo(a, intloc 0),
+ = IExec(Ig ";" AddTo(a, intloc 0),
    p +* while>0(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig),
-     Ig ';' AddTo(a, intloc 0) ';'
+     Ig ";" AddTo(a, intloc 0) ";"
       SubFrom(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig), intloc 0)),
    StepForUp(a, bb, cc, Ig, p, s).k) |
      ({a, bb, cc} \/ UsedIntLoc Ig \/ FinSeq-Locations);
@@ -190,9 +194,9 @@ definition
   func for-up(a, b, c, I) -> Program of SCM+FSA equals
 :: SFMASTR3:def 3
   (1-stRWNotIn ({a, b, c}
-\/ UsedIntLoc I)) := c ';' SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), b)
-  ';' AddTo(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0) ';' (a := b) ';'
-while>0( 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), I ';' AddTo(a, intloc 0) ';'
+\/ UsedIntLoc I)) := c ";" SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), b)
+  ";" AddTo(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0) ";" (a := b) ";"
+while>0( 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), I ";" AddTo(a, intloc 0) ";"
   SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0) );
 end;
 
@@ -234,9 +238,9 @@ definition
   func FinSeqMin(f, start, finish, minpos) -> Program of SCM+FSA equals
 :: SFMASTR3:def 4
   minpos
-  := start ';' for-up ( 3-rdRWNotIn {start, finish, minpos}, start, finish, (1
+  := start ";" for-up ( 3-rdRWNotIn {start, finish, minpos}, start, finish, (1
 -stRWNotIn {start, finish, minpos}) := (f, 3-rdRWNotIn {start, finish, minpos})
-  ';' ((2-ndRWNotIn {start, finish, minpos}) := (f, minpos)) ';' if>0((2
+  ";" ((2-ndRWNotIn {start, finish, minpos}) := (f, minpos)) ";" if>0((2
   -ndRWNotIn {start, finish, minpos}), (1-stRWNotIn {start, finish, minpos}),
   Macro (minpos := (3-rdRWNotIn {start, finish, minpos})), Stop SCM+FSA) );
 end;
@@ -278,7 +282,7 @@ definition
   func swap(f, a, b) -> Program of SCM+FSA equals
 :: SFMASTR3:def 5
   1-stRWNotIn {a, b} := (f,a)
-';' (2-ndRWNotIn {a, b} := (f,b)) ';' ((f,a) := (2-ndRWNotIn {a, b})) ';' ((f,b
+";" (2-ndRWNotIn {a, b} := (f,b)) ";" ((f,a) := (2-ndRWNotIn {a, b})) ";" ((f,b
   ) := (1-stRWNotIn {a, b}));
 end;
 
@@ -315,11 +319,11 @@ definition
   func Selection-sort f -> Program of SCM+FSA equals
 :: SFMASTR3:def 6
   (1-stNotUsed swap(f, 1
--stRWNotIn {} Int-Locations, 2-ndRWNotIn {} Int-Locations)) :=len f ';' for-up
+-stRWNotIn {} Int-Locations, 2-ndRWNotIn {} Int-Locations)) :=len f ";" for-up
   ( 1-stRWNotIn {} Int-Locations, intloc 0, (1-stNotUsed swap(f, 1-stRWNotIn {}
   Int-Locations, 2-ndRWNotIn {} Int-Locations)), FinSeqMin(f, 1-stRWNotIn {}
   Int-Locations, (1-stNotUsed swap(f, 1-stRWNotIn {} Int-Locations, 2-ndRWNotIn
-  {} Int-Locations)), 2-ndRWNotIn {} Int-Locations) ';' swap(f, 1-stRWNotIn {}
+  {} Int-Locations)), 2-ndRWNotIn {} Int-Locations) ";" swap(f, 1-stRWNotIn {}
   Int-Locations, 2-ndRWNotIn {} Int-Locations) );
 end;
 

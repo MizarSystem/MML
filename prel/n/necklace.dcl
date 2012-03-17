@@ -10,6 +10,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -27,8 +28,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="68"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NECKLACE" nr="1">
@@ -37,7 +38,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -52,19 +53,19 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="117">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
-<Adjective nr="62"/>
+<Adjective nr="54"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="62"/>
+<Adjective nr="68"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -72,23 +73,23 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="56"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="126">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="5">
@@ -99,12 +100,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
-<Adjective nr="62"/>
+<Adjective nr="54"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="6">
@@ -115,12 +116,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
-<Adjective nr="64"/>
+<Adjective nr="54"/>
+<Adjective nr="70"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="7">
@@ -132,12 +133,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="8">
@@ -149,12 +150,12 @@
 </Typ>
 </ArgTypes>
 <Func kind="U" nr="1">
-<Func kind="K" nr="119">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <CCluster aid="NECKLACE" nr="1">

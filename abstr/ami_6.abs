@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received May 8, 2001
-:: Copyright (c) 2001-2011 Association of Mizar Users
+:: Copyright (c) 2001-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,21 +16,18 @@ environ
 
  vocabularies NUMBERS, AMI_3, AMI_1, FSM_1, ORDINAL1, CAT_1, XBOOLE_0, FUNCT_1,
       RELAT_1, FINSEQ_1, CARD_1, AMISTD_2, GRAPHSP, CARD_3, AMISTD_1, SUBSET_1,
-      CIRCUIT2, FUNCT_4, FUNCOP_1, SETFAM_1, ZFMISC_1, XXREAL_0, TARSKI,
-      ARYTM_3, GOBOARD5, FRECHET, ARYTM_1, INT_1, UNIALG_1, CARD_5, PARTFUN1,
-      NAT_1, COMPOS_1, PBOOLE;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2,
-      ZFMISC_1, CARD_1, ORDINAL1, NAT_1, NUMBERS, XCMPLX_0, INT_1, FUNCOP_1,
-      PARTFUN1, PBOOLE, FINSEQ_1, FUNCT_4, XXREAL_0, MCART_1, VALUED_1,
-      STRUCT_0, CARD_3, FUNCT_7, MEMSTR_0, COMPOS_1, EXTPRO_1, AMI_2, AMI_3,
-      AMISTD_1, AMISTD_2;
- constructors XXREAL_0, NAT_1, NAT_D, ZFMISC_1, AMI_3, AMISTD_2, RELSET_1,
-      RECDEF_2, MCART_1, VALUED_1, AMI_2, EXTPRO_1, AMISTD_1, PRE_POLY,
-      DOMAIN_1, FUNCT_7, MEMSTR_0;
- registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, AMI_3, AMISTD_2,
-      RELSET_1, ZFMISC_1, FUNCT_2, FUNCT_4, VALUED_0, COMPOS_1, EXTPRO_1,
-      PBOOLE, FUNCT_7, PRE_POLY, MEMSTR_0, CARD_1;
+      CIRCUIT2, FUNCT_4, FUNCOP_1, SETFAM_1, XXREAL_0, TARSKI, ARYTM_3,
+      GOBOARD5, FRECHET, ARYTM_1, INT_1, PARTFUN1, NAT_1, COMPOS_1, GOBRD13,
+      MEMSTR_0;
+ notations TARSKI, XBOOLE_0, XTUPLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      CARD_1, ORDINAL1, NUMBERS, XCMPLX_0, INT_1, FUNCOP_1, PARTFUN1, FINSEQ_1,
+      FUNCT_4, XXREAL_0, VALUED_1, CARD_3, FUNCT_7, MEMSTR_0, COMPOS_0,
+      COMPOS_1, EXTPRO_1, AMI_3, AMISTD_1, AMISTD_2;
+ constructors NAT_D, AMI_3, AMISTD_2, RELSET_1, AMISTD_1, PRE_POLY, FUNCT_7,
+      DOMAIN_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, XREAL_0, NAT_1,
+      INT_1, FINSEQ_1, CARD_3, AMI_3, AMISTD_2, FUNCT_4, VALUED_0, EXTPRO_1,
+      FUNCT_7, PRE_POLY, MEMSTR_0, CARD_1, COMPOS_0, XTUPLE_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -40,12 +37,8 @@ reserve a, b, d1, d2 for Data-Location,
   il, i1, i2 for Element of NAT,
   I for Instruction of SCM,
   s, s1, s2 for State of SCM,
-  T for InsType of SCM,
-  k,k1 for natural number;
-
-registration
- cluster InsCodes SCM -> non empty;
-end;
+  T for InsType of the InstructionsF of SCM,
+  k,k1 for Nat;
 
 theorem :: AMI_6:1
  T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or T
@@ -173,7 +166,8 @@ registration
 end;
 
 registration
-  cluster InsCode halt SCM -> jump-only for InsType of SCM;
+  cluster InsCode halt SCM -> jump-only
+   for InsType of the InstructionsF of SCM;
 end;
 
 registration
@@ -182,7 +176,8 @@ end;
 
 registration
   let i1;
-  cluster InsCode SCM-goto i1 -> jump-only for InsType of SCM;
+  cluster InsCode SCM-goto i1 -> jump-only
+  for InsType of the InstructionsF of SCM;
 end;
 
 registration
@@ -192,8 +187,10 @@ end;
 
 registration
   let a, i1;
-  cluster InsCode (a =0_goto i1) -> jump-only for InsType of SCM;
-  cluster InsCode (a >0_goto i1) -> jump-only for InsType of SCM;
+  cluster InsCode (a =0_goto i1) -> jump-only
+  for InsType of the InstructionsF of SCM;
+  cluster InsCode (a >0_goto i1) -> jump-only
+  for InsType of the InstructionsF of SCM;
 end;
 
 registration
@@ -204,11 +201,16 @@ end;
 
 registration
   let a, b;
-  cluster InsCode (a:=b) -> non jump-only for InsType of SCM;
-  cluster InsCode AddTo(a,b) -> non jump-only for InsType of SCM;
-  cluster InsCode SubFrom(a,b) -> non jump-only for InsType of SCM;
-  cluster InsCode MultBy(a,b) -> non jump-only for InsType of SCM;
-  cluster InsCode Divide(a,b) -> non jump-only for InsType of SCM;
+  cluster InsCode (a:=b) -> non jump-only
+  for InsType of the InstructionsF of SCM;
+  cluster InsCode AddTo(a,b) -> non jump-only
+  for InsType of the InstructionsF of SCM;
+  cluster InsCode SubFrom(a,b) -> non jump-only
+  for InsType of the InstructionsF of SCM;
+  cluster InsCode MultBy(a,b) -> non jump-only
+  for InsType of the InstructionsF of SCM;
+  cluster InsCode Divide(a,b) -> non jump-only
+  for InsType of the InstructionsF of SCM;
 end;
 
 registration
@@ -221,11 +223,7 @@ registration
 end;
 
 registration
-  cluster SCM -> homogeneous with_explicit_jumps;
-end;
-
-registration
-  cluster SCM -> regular J/A-independent;
+  cluster SCM -> with_explicit_jumps;
 end;
 
 theorem :: AMI_6:23

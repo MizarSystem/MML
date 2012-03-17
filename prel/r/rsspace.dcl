@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -29,84 +30,84 @@
 <FCluster aid="RSSPACE" nr="1">
 <ArgTypes/>
 <Func kind="G" nr="12">
-<Func kind="K" nr="156"/>
-<Func kind="K" nr="161"/>
-<Func kind="K" nr="159"/>
-<Func kind="K" nr="160"/>
+<Func kind="K" nr="164"/>
+<Func kind="K" nr="169"/>
+<Func kind="K" nr="167"/>
+<Func kind="K" nr="168"/>
 </Func>
 <Cluster>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-</Cluster>
-</FCluster>
-<FCluster aid="RSSPACE" nr="2">
-<ArgTypes/>
-<Func kind="K" nr="162"/>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="85"/>
-</Cluster>
-</FCluster>
-<FCluster aid="RSSPACE" nr="3">
-<ArgTypes/>
-<Func kind="K" nr="162"/>
-<Cluster>
-<Adjective nr="61"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
 <Adjective nr="91"/>
 <Adjective nr="92"/>
 </Cluster>
 </FCluster>
+<FCluster aid="RSSPACE" nr="2">
+<ArgTypes/>
+<Func kind="K" nr="170"/>
+<Cluster>
+<Adjective nr="41" value="false"/>
+<Adjective nr="91"/>
+</Cluster>
+</FCluster>
+<FCluster aid="RSSPACE" nr="3">
+<ArgTypes/>
+<Func kind="K" nr="170"/>
+<Cluster>
+<Adjective nr="67"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+</Cluster>
+</FCluster>
 <FCluster aid="RSSPACE" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="166"/>
+<Func kind="K" nr="174"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="94">
-<Func kind="K" nr="162"/>
+<Adjective nr="100">
+<Func kind="K" nr="170"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE" nr="5">
 <ArgTypes/>
 <Func kind="G" nr="16">
-<Func kind="K" nr="166"/>
-<Func kind="K" nr="165">
-<Func kind="K" nr="162"/>
-<Func kind="K" nr="166"/>
+<Func kind="K" nr="174"/>
+<Func kind="K" nr="173">
+<Func kind="K" nr="170"/>
+<Func kind="K" nr="174"/>
 </Func>
-<Func kind="K" nr="163">
-<Func kind="K" nr="162"/>
-<Func kind="K" nr="166"/>
+<Func kind="K" nr="171">
+<Func kind="K" nr="170"/>
+<Func kind="K" nr="174"/>
 </Func>
-<Func kind="K" nr="164">
-<Func kind="K" nr="162"/>
-<Func kind="K" nr="166"/>
+<Func kind="K" nr="172">
+<Func kind="K" nr="170"/>
+<Func kind="K" nr="174"/>
 </Func>
-<Func kind="K" nr="167"/>
+<Func kind="K" nr="175"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="102"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="108"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="168"/>
+<Func kind="K" nr="176"/>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="67"/>
 <Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
 </Cluster>
 </FCluster>
 </Registrations>

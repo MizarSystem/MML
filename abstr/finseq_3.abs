@@ -2,7 +2,7 @@
 ::  by Wojciech A. Trybulec
 ::
 :: Received April 8, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,17 +14,17 @@
 
 environ
 
- vocabularies NUMBERS, FINSEQ_1, ORDINAL1, XBOOLE_0, ARYTM_3, CARD_1, XXREAL_0,
-      ARYTM_1, NAT_1, SUBSET_1, TARSKI, RELAT_1, ORDINAL4, FUNCT_1, FINSET_1,
-      FINSEQ_2, FUNCT_2, CARD_3, FUNCOP_1, FINSEQ_3, EQREL_1, ALG_1, FUNCT_6,
-      SETFAM_1, FINSEQ_4, ZFMISC_1, FUNCT_5, PARTFUN1;
+ vocabularies NUMBERS, FINSEQ_1, XBOOLE_0, ARYTM_3, CARD_1, XXREAL_0, ARYTM_1,
+      NAT_1, SUBSET_1, TARSKI, RELAT_1, ORDINAL4, FUNCT_1, FINSET_1, FINSEQ_2,
+      FUNCT_2, CARD_3, FUNCOP_1, FINSEQ_3, EQREL_1, ALG_1, FUNCT_6, SETFAM_1,
+      FINSEQ_4, ZFMISC_1, FUNCT_5, PARTFUN1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, CARD_1, NUMBERS,
       ORDINAL1, XCMPLX_0, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, PARTFUN1,
       FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_2, FINSET_1, NAT_1, FINSEQOP,
       XXREAL_0, CARD_3, FUNCT_3, FUNCT_5, FUNCT_6, EQREL_1;
  constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1,
       FINSEQOP, RELSET_1, CARD_3, DOMAIN_1, CARD_2, EQREL_1, FUNCT_6, BINOP_1,
-      FUNCT_3, FUNCT_5;
+      FUNCT_3, FUNCT_5, FINSEQ_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_1, FINSEQ_2, FUNCOP_1, CARD_3,
       SUBSET_1, FUNCT_2, CARD_2, EQREL_1, RELSET_1, FUNCT_4;
@@ -35,7 +35,7 @@ begin
 
 reserve p,q,r for FinSequence;
 reserve u,v,x,y,y1,y2,z,A,D,X,Y for set;
-reserve i,j,k,l,m,n for natural number;
+reserve i,j,k,l,m,n for Nat;
 
 theorem :: FINSEQ_3:1
   Seg 3 = {1,2,3};
@@ -509,7 +509,7 @@ theorem :: FINSEQ_3:122
 
 reserve x,y,y1,y2,z,a,b,X,Y,Z,V1,V2 for set,
   f,g,h,h9,f1,f2 for Function,
-  i for natural number,
+  i for Nat,
   P for Permutation of X,
   D,D1,D2,D3 for non empty set,
   d1 for Element of D1,
@@ -542,7 +542,7 @@ theorem :: FINSEQ_3:130
   product <*D,D,D*> = 3-tuples_on D;
 
 theorem :: FINSEQ_3:131
-  product (i |-> D) = i-tuples_on D;
+ for D being set holds product (i |-> D) = i-tuples_on D;
 
 theorem :: FINSEQ_3:132
   doms <*f*> = <*dom f*> & rngs <*f*> = <*rng f*>;
@@ -609,3 +609,19 @@ theorem :: FINSEQ_3:149
 theorem :: FINSEQ_3:150
   Funcs(X,<*Y,Z*>) = <*Funcs(X,Y), Funcs(X,Z)*>;
 
+::from JORDAN2C, 2011.07.03, A.T.
+
+theorem :: FINSEQ_3:151
+  for f being FinSequence st rng f={x,y} & len f=2 holds f.1=x & f.
+  2=y or f.1=y & f.2=x;
+
+:: from GLIB_001, 2011.07.30, A.T.
+
+theorem :: FINSEQ_3:152
+  for X being set, k being Element of NAT st X c= Seg k holds for m
+  ,n being Element of NAT st m in dom (Sgm X) & n = (Sgm X).m holds m <= n;
+
+registration
+  let i be Nat; let D be finite set;
+  cluster i-tuples_on D -> finite;
+end;

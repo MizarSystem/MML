@@ -2,7 +2,7 @@
 ::  by Takaya Nishiyama , Artur Korni{\l}owicz and Yasunari Shidama
 ::
 :: Received April 6, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,14 +21,13 @@ environ
       FUNCOP_1, XREAL_0, ORDINAL1, POWER, SEQ_1, RSSPACE3, FUNCT_7, NFCONT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, FUNCOP_1, XCMPLX_0, XXREAL_0, XREAL_0, NUMBERS, COMPLEX1,
-      REAL_1, NAT_1, RLVECT_1, SQUARE_1, STRUCT_0, PRE_TOPC, ORDINAL1,
+      REAL_1, ORDINAL1, NAT_1, RLVECT_1, SQUARE_1, STRUCT_0, PRE_TOPC,
       VALUED_1, SEQ_1, SEQ_2, VALUED_0, SEQ_4, ABIAN, POWER, VFUNCT_1,
       NORMSP_0, NORMSP_1, LOPBAN_1, RSSPACE3, NFCONT_1, RECDEF_1;
- constructors REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, SEQ_4, PARTFUN2, POWER,
-      ABIAN, BHSP_3, VFUNCT_1, RSSPACE3, LOPBAN_3, NFCONT_1, SEQ_1, VALUED_1,
-      RECDEF_1, NORMSP_1, RELSET_1;
+ constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_2, SEQ_4, POWER, ABIAN, VFUNCT_1,
+      RSSPACE3, LOPBAN_3, NFCONT_1, SEQ_1, RECDEF_1, RELSET_1, COMSEQ_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0,
-      MEMBERED, STRUCT_0, VALUED_1, FUNCT_2, NUMBERS, VALUED_0;
+      MEMBERED, STRUCT_0, VALUED_1, FUNCT_2, NUMBERS, VALUED_0, NORMSP_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions RLVECT_1;
  theorems TARSKI, ABSVALUE, XBOOLE_1, RLVECT_1, XCMPLX_1, FUNCOP_1, SEQ_1,
@@ -552,12 +551,17 @@ NFCONT_1:43;
 begin :: Contraction Mapping Principle on Normed Linear Spaces
 
 definition
-  let M be RealBanachSpace;
-  mode contraction of M -> Function of the carrier of M, the carrier of M
-    means
-    :Def3:
+  let M be non empty NORMSTR;
+  let f be Function of M,M;
+  attr f is contraction  means
+:Def3:
     ex L being Real st 0 < L & L < 1 & for x,y being Point of M holds
-    ||.it.x - it.y.|| <=L*||.x - y.||;
+    ||.f.x - f.y.|| <=L*||.x - y.||;
+end;
+
+registration
+ let M be RealNormSpace;
+ cluster contraction for Function of M,M;
   existence
   proof
     set x = the Point of M;
@@ -567,11 +571,14 @@ definition
     thus 0<1/2 & 1/2<1;
     let z,y be Point of M;
     f.z=x & f.y=x by FUNCOP_1:7;
-    then
-A1: ||.f.z-f.y.|| = 0 by NORMSP_1:6;
-    ||.z-y.||>=0 by NORMSP_1:4;
-    hence thesis by A1;
+    then ||.f.z-f.y.|| = 0 by NORMSP_1:6;
+    hence thesis;
   end;
+end;
+
+definition
+ let M be RealNormSpace;
+  mode Contraction of M is contraction Function of M,M;
 end;
 
 Lm1: (for X be RealNormSpace for x, y be Point of X holds ||.x-y.|| = 0 iff x
@@ -625,7 +632,7 @@ A6: for X be RealNormSpace for x, y be Point of X holds ||.x-y.|| > 0 iff x
     now
       assume x <> y;
       then 0 <> ||.x-y.|| by NORMSP_1:11;
-      hence 0 < ||.x-y.|| by NORMSP_1:4;
+      hence 0 < ||.x-y.||;
     end;
     hence thesis;
   end;
@@ -645,21 +652,12 @@ A9: for e be Real st e > 0 holds ||.x.|| <e;
     now
       assume x<>0.X;
       then 0<> ||.x.|| by NORMSP_0:def 5;
-      then 0< ||.x.|| by NORMSP_1:4;
+      then 0< ||.x.||;
       hence contradiction by A9;
     end;
     hence thesis;
   end;
-  for X be RealNormSpace for x,y be Point of X st (for e be Real st e>0
-  holds ||.x-y.|| <e) holds x=y
-  proof
-    let X be RealNormSpace;
-    let x,y be Point of X;
-    assume for e be Real st e > 0 holds ||.x-y.|| <e;
-    then x-y = 0.X by A8;
-    hence thesis by RLVECT_1:21;
-  end;
-  hence thesis by A6,A7,A1,A2,A8,NORMSP_1:6;
+  thus thesis by A6,A7,A1,A2,A8;
 end;
 
 Lm2: for K, L, e be real number st 0 < K & K < 1 & 0 < e ex n be Element of
@@ -685,14 +683,15 @@ SEQ_2:def 7;
 end;
 
 theorem Th14:
-  for X be RealBanachSpace for f be Function of X, X st f is
-contraction of X ex xp be Point of X st f.xp=xp & for x be Point of X st f.x=x
+  for X be RealBanachSpace
+  for f be Function of X, X st f is Contraction of X
+   ex xp be Point of X st f.xp=xp & for x be Point of X st f.x=x
   holds xp=x
 proof
   let X be RealBanachSpace;
   set x0 = the Element of X;
   let f be Function of X,X;
-  assume f is contraction of X;
+  assume f is Contraction of X;
   then consider K be Real such that
 A1: 0 < K and
 A2: K < 1 and
@@ -809,7 +808,6 @@ A19: for k,n be Element of NAT holds ||.g.(n+k) - g.n .|| <= ||. g.1-g.0 .||
     let k be Element of NAT;
     now
       let n be Element of NAT;
-A20:  0 <= ||. g.1-g.0 .|| by NORMSP_1:4;
       K to_power (n+k) > 0 by A1,POWER:34;
       then
 A21:  K to_power n - K to_power (n+k) <= K to_power n - 0 by XREAL_1:13;
@@ -819,7 +817,7 @@ A21:  K to_power n - K to_power (n+k) <= K to_power n - 0 by XREAL_1:13;
       )) by A21,XREAL_1:72;
       then
 A22:  ||. g.1-g.0 .||*( (K to_power n - K to_power (n+k)) /(1-K) ) <= ||.
-      g.1-g.0 .||*( ( K to_power n ) /(1-K) ) by A20,XREAL_1:64;
+      g.1-g.0 .||*( ( K to_power n ) /(1-K) ) by XREAL_1:64;
       ||.g.(n+k) - g.n .|| <= ||. g.1-g.0 .||*( (K to_power n - K
       to_power (n+k)) /(1-K)) by A14;
       hence
@@ -948,13 +946,14 @@ end;
 
 theorem
   for X be RealBanachSpace for f be Function of X,X st ex n0 be Element
-of NAT st iter(f,n0) is contraction of X holds ex xp be Point of X st f.xp=xp &
+   of NAT st iter(f,n0) is Contraction of X
+   ex xp be Point of X st f.xp=xp &
   for x be Point of X st f.x=x holds xp=x
 proof
   let X be RealBanachSpace;
   let f be Function of X, X;
   given n0 be Element of NAT such that
-A1: iter(f,n0) is contraction of X;
+A1: iter(f,n0) is Contraction of X;
   consider xp be Point of X such that
 A2: (iter(f,n0)).xp=xp and
 A3: for x be Point of X st iter(f,n0).x=x holds xp=x by A1,Th14;

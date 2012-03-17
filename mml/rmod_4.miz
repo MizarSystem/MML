@@ -2,7 +2,7 @@
 ::  by Michal Muzalewski and Wojciech Skaba
 ::
 :: Received October 22, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,9 +20,9 @@ environ
       FUNCT_2, FUNCOP_1, VALUED_1, GROUP_1, RLSUB_1, FINSEQ_4, RLVECT_3,
       RMOD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, FINSET_1, FINSEQ_1, NUMBERS,
-      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, NAT_1, CARD_1, DOMAIN_1, STRUCT_0,
-      ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_4, FUNCSDOM, VECTSP_2,
-      RMOD_2, RMOD_3, FUNCOP_1, XXREAL_0;
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, ORDINAL1, NAT_1, CARD_1, DOMAIN_1,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_4, FUNCSDOM,
+      VECTSP_2, RMOD_2, RMOD_3, FUNCOP_1, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, XXREAL_0, NAT_1, FINSEQ_4,
       RLVECT_2, RMOD_2, RMOD_3, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, XREAL_0,
@@ -170,7 +170,7 @@ definition
   let R, V, T;
 
   func Sum(T) -> Vector of V means
-  :Def3:
+  :Def1:
   ex F st rng F = T & F is one-to-one & it = Sum(F);
   existence
   proof
@@ -189,7 +189,7 @@ theorem Th5:
   Sum({}V) = 0.V
 proof
   Sum(<*>(the carrier of V)) = 0.V by RLVECT_1:43;
-  hence thesis by Def3,RELAT_1:38;
+  hence thesis by Def1,RELAT_1:38;
 end;
 
 theorem
@@ -197,7 +197,7 @@ theorem
 proof
 A1: Sum<* v *> = v by RLVECT_1:44;
   rng<* v *> = {v} & <* v *> is one-to-one by FINSEQ_1:39,FINSEQ_3:93;
-  hence thesis by A1,Def3;
+  hence thesis by A1,Def1;
 end;
 
 theorem
@@ -208,7 +208,7 @@ proof
 A1: <* v1,v2 *> is one-to-one by FINSEQ_3:94;
   rng<* v1,v2 *> = {v1,v2} & Sum<* v1,v2 *> = v1 + v2 by FINSEQ_2:127
 ,RLVECT_1:45;
-  hence thesis by A1,Def3;
+  hence thesis by A1,Def1;
 end;
 
 theorem
@@ -219,7 +219,7 @@ proof
 A1: <* v1,v2,v3 *> is one-to-one by FINSEQ_3:95;
   rng<* v1,v2,v3 *> = {v1,v2,v3} & Sum<* v1,v2,v3 *> = v1 + v2 + v3 by
 FINSEQ_2:128,RLVECT_1:46;
-  hence thesis by A1,Def3;
+  hence thesis by A1,Def1;
 end;
 
 theorem Th9:
@@ -227,15 +227,15 @@ theorem Th9:
 proof
   consider F such that
 A1: rng F = T \/ S and
-A2: F is one-to-one & Sum(T \/ S) = Sum(F) by Def3;
+A2: F is one-to-one & Sum(T \/ S) = Sum(F) by Def1;
   consider G such that
 A3: rng G = T and
 A4: G is one-to-one and
-A5: Sum(T) = Sum(G) by Def3;
+A5: Sum(T) = Sum(G) by Def1;
   consider H such that
 A6: rng H = S and
 A7: H is one-to-one and
-A8: Sum(S) = Sum(H) by Def3;
+A8: Sum(S) = Sum(H) by Def1;
   set I = G ^ H;
   assume T misses S;
   then
@@ -310,7 +310,7 @@ definition
   let R, V;
   mode Linear_Combination of V -> Element of Funcs(the carrier of V, the
     carrier of R) means
-    :Def4:
+    :Def2:
     ex T st for v st not v in T holds it.v = 0.R;
   existence
   proof
@@ -335,7 +335,7 @@ definition
   proof
     set A = {v : L.v <> 0.R};
     consider T such that
-A1: for v st not v in T holds L.v = 0.R by Def4;
+A1: for v st not v in T holds L.v = 0.R by Def2;
     A c= T
     proof
       let x;
@@ -368,7 +368,7 @@ end;
 definition
   let R, V;
   func ZeroLC(V) -> Linear_Combination of V means
-  :Def6:
+  :Def4:
   Carrier(it) = {};
   existence
   proof
@@ -419,61 +419,61 @@ A3:   now
   end;
 end;
 
-theorem Th22:
+theorem Th18:
   ZeroLC(V).v = 0.R
 proof
-  Carrier(ZeroLC(V)) = {} & not v in {} by Def6;
+  Carrier(ZeroLC(V)) = {} & not v in {} by Def4;
   hence thesis;
 end;
 
 definition
   let R, V, A;
   mode Linear_Combination of A -> Linear_Combination of V means
-    :Def7:
+    :Def5:
     Carrier (it) c= A;
   existence
   proof
     take L = ZeroLC(V);
-    Carrier(L) = {} by Def6;
+    Carrier(L) = {} by Def4;
     hence thesis by XBOOLE_1:2;
   end;
 end;
 
 reserve l for Linear_Combination of A;
 
-theorem Th25:
+theorem Th19:
   A c= B implies l is Linear_Combination of B
 proof
   assume
 A1: A c= B;
-  Carrier(l) c= A by Def7;
+  Carrier(l) c= A by Def5;
   then Carrier(l) c= B by A1,XBOOLE_1:1;
-  hence thesis by Def7;
+  hence thesis by Def5;
 end;
 
-theorem Th26:
+theorem Th20:
   ZeroLC(V) is Linear_Combination of A
 proof
-  Carrier(ZeroLC(V)) = {} & {} c= A by Def6,XBOOLE_1:2;
-  hence thesis by Def7;
+  Carrier(ZeroLC(V)) = {} & {} c= A by Def4,XBOOLE_1:2;
+  hence thesis by Def5;
 end;
 
-theorem Th27:
+theorem Th21:
   for l being Linear_Combination of {}(the carrier of V) holds l = ZeroLC(V)
 proof
   let l be Linear_Combination of {}(the carrier of V);
-  Carrier(l) c= {} by Def7;
+  Carrier(l) c= {} by Def5;
   then Carrier(l) = {};
-  hence thesis by Def6;
+  hence thesis by Def4;
 end;
 
 theorem
-  L is Linear_Combination of Carrier(L) by Def7;
+  L is Linear_Combination of Carrier(L) by Def5;
 
 definition
   let R, V, F, f;
   func f (#) F -> FinSequence of V means
-  :Def8:
+  :Def6:
   len it = len F & for i being
   Nat st i in dom it holds it.i = (F/.i) * f.(F/.i);
   existence
@@ -521,53 +521,53 @@ A10:  H1.k = (F/.k) * f.(F/.k) by A6;
   end;
 end;
 
-theorem Th32:
+theorem Th23:
   i in dom F & v = F.i implies (f (#) F).i = v * f.v
 proof
   assume that
 A1: i in dom F and
 A2: v = F.i;
 A3: F/.i = F.i by A1,PARTFUN1:def 6;
-  len(f (#) F) = len F by Def8;
+  len(f (#) F) = len F by Def6;
   then i in dom(f (#) F) by A1,FINSEQ_3:29;
-  hence thesis by A2,A3,Def8;
+  hence thesis by A2,A3,Def6;
 end;
 
 theorem
   f (#) <*>(the carrier of V) = <*>(the carrier of V)
 proof
-  len(f (#) <*>(the carrier of V)) = len(<*>(the carrier of V)) by Def8
+  len(f (#) <*>(the carrier of V)) = len(<*>(the carrier of V)) by Def6
     .= 0;
   hence thesis;
 end;
 
-theorem Th34:
+theorem Th25:
   f (#) <* v *> = <* v * f.v *>
 proof
 A1: 1 in {1} by TARSKI:def 1;
-A2: len(f (#) <* v *>) = len<* v *> by Def8
+A2: len(f (#) <* v *>) = len<* v *> by Def6
     .= 1 by FINSEQ_1:40;
   then dom(f (#) <* v *>) = {1} by FINSEQ_1:2,def 3;
-  then (f (#) <* v *>).1 = (<* v *>/.1) * f.(<* v *>/.1) by A1,Def8
+  then (f (#) <* v *>).1 = (<* v *>/.1) * f.(<* v *>/.1) by A1,Def6
     .= v * f.(<* v *>/.1) by FINSEQ_4:16
     .= v * f.v by FINSEQ_4:16;
   hence thesis by A2,FINSEQ_1:40;
 end;
 
-theorem Th35:
+theorem Th26:
   f (#) <* v1,v2 *> = <* v1 * f.v1, v2 * f.v2 *>
 proof
-A1: len(f (#) <* v1,v2 *>) = len<* v1,v2 *> by Def8
+A1: len(f (#) <* v1,v2 *>) = len<* v1,v2 *> by Def6
     .= 2 by FINSEQ_1:44;
   then
 A2: dom(f (#) <* v1,v2 *>) = {1,2} by FINSEQ_1:2,def 3;
   2 in {1,2} by TARSKI:def 2;
   then
-A3: (f (#) <* v1,v2 *>).2 = (<* v1,v2 *>/.2) * f.(<* v1,v2 *>/.2) by A2,Def8
+A3: (f (#) <* v1,v2 *>).2 = (<* v1,v2 *>/.2) * f.(<* v1,v2 *>/.2) by A2,Def6
     .= v2 * f.(<* v1,v2 *>/.2) by FINSEQ_4:17
     .= v2 * f.v2 by FINSEQ_4:17;
   1 in {1,2} by TARSKI:def 2;
-  then (f (#) <* v1,v2 *>).1 = (<* v1,v2 *>/.1) * f.(<* v1,v2 *>/.1) by A2,Def8
+  then (f (#) <* v1,v2 *>).1 = (<* v1,v2 *>/.1) * f.(<* v1,v2 *>/.1) by A2,Def6
     .= v1 * f.(<* v1,v2 *>/.1) by FINSEQ_4:17
     .= v1 * f.v1 by FINSEQ_4:17;
   hence thesis by A1,A3,FINSEQ_1:44;
@@ -576,41 +576,41 @@ end;
 theorem
   f (#) <* v1,v2,v3 *> = <* v1 * f.v1, v2 * f.v2, v3 * f.v3 *>
 proof
-A1: len(f (#) <* v1,v2,v3 *>) = len<* v1,v2,v3 *> by Def8
+A1: len(f (#) <* v1,v2,v3 *>) = len<* v1,v2,v3 *> by Def6
     .= 3 by FINSEQ_1:45;
   then
 A2: dom(f (#) <* v1,v2,v3 *>) = {1,2,3} by FINSEQ_1:def 3,FINSEQ_3:1;
   3 in {1,2,3} by ENUMSET1:def 1;
   then
 A3: (f (#) <* v1,v2,v3 *>).3 = (<* v1,v2,v3 *>/.3) * f.(<* v1,v2,v3 *>/.3)
-  by A2,Def8
+  by A2,Def6
     .= v3 * f.(<* v1,v2,v3 *>/.3) by FINSEQ_4:18
     .= v3 * f.v3 by FINSEQ_4:18;
   2 in {1,2,3} by ENUMSET1:def 1;
   then
 A4: (f (#) <* v1,v2,v3 *>).2 = (<* v1,v2,v3 *>/.2) * f.(<* v1,v2,v3 *>/.2)
-  by A2,Def8
+  by A2,Def6
     .= v2 * f.(<* v1,v2,v3 *>/.2) by FINSEQ_4:18
     .= v2 * f.v2 by FINSEQ_4:18;
   1 in {1,2,3} by ENUMSET1:def 1;
   then (f (#) <* v1,v2,v3 *>).1 = (<* v1,v2,v3 *>/.1) * f.(<* v1,v2,v3 *>/.1)
-  by A2,Def8
+  by A2,Def6
     .= v1 * f.(<* v1,v2,v3 *>/.1) by FINSEQ_4:18
     .= v1 * f.v1 by FINSEQ_4:18;
   hence thesis by A1,A4,A3,FINSEQ_1:45;
 end;
 
-theorem Th37:
+theorem Th28:
   f (#) (F ^ G) = (f (#) F) ^ (f (#) G)
 proof
   set H = (f (#) F) ^ (f (#) G);
   set I = F ^ G;
-A1: len F = len(f (#) F) by Def8;
+A1: len F = len(f (#) F) by Def6;
 A2: len H = len(f (#) F) + len(f (#) G) by FINSEQ_1:22
-    .= len F + len(f (#) G) by Def8
-    .= len F + len G by Def8
+    .= len F + len(f (#) G) by Def6
+    .= len F + len G by Def6
     .= len I by FINSEQ_1:22;
-A3: len G = len(f (#) G) by Def8;
+A3: len G = len(f (#) G) by Def6;
   now
     let k be Nat;
     assume
@@ -627,7 +627,7 @@ A8:     F/.k = F.k by A6,PARTFUN1:def 6
           .= (F ^ G).k by A6,FINSEQ_1:def 7
           .= (F ^ G)/.k by A7,PARTFUN1:def 6;
         thus H.k = (f (#) F).k by A5,FINSEQ_1:def 7
-          .= (I/.k) * f.(I/.k) by A5,A8,Def8;
+          .= (I/.k) * f.(I/.k) by A5,A8,Def6;
       end;
       suppose
 A9:     ex n be Nat st n in dom(f (#) G) & k = len(f (#) F) + n;
@@ -641,18 +641,18 @@ A14:    G/.n = G.n by PARTFUN1:def 6
           .= (F ^ G).k by A1,A12,A13,FINSEQ_1:def 7
           .= (F ^ G)/.k by A10,PARTFUN1:def 6;
         thus H.k = (f (#) G).n by A11,A12,FINSEQ_1:def 7
-          .= (I/.k) * f.(I/.k) by A11,A14,Def8;
+          .= (I/.k) * f.(I/.k) by A11,A14,Def6;
       end;
     end;
     hence H.k = (I/.k) * f.(I/.k);
   end;
-  hence thesis by A2,Def8;
+  hence thesis by A2,Def6;
 end;
 
 definition
   let R, V, L;
   func Sum(L) -> Vector of V means
-  :Def9:
+  :Def7:
   ex F st F is one-to-one & rng F = Carrier(L) & it = Sum(L (#) F);
   existence
   proof
@@ -713,7 +713,7 @@ A19:  f.x = y by ZFMISC_1:18;
       hence thesis by A19,FUNCT_1:def 3;
     end;
     set G1 = L (#) F1;
-A20: len G1 = len F1 by Def8;
+A20: len G1 = len F1 by Def6;
 A21: dom F1 = {} implies dom F1 = {};
 A22: f is one-to-one
     proof
@@ -744,14 +744,14 @@ A32: dom G2 = Seg(len G2) by FINSEQ_1:def 3;
     reconsider f as Permutation of dom F1 by A15,A22,FUNCT_2:57;
     dom F1 = Seg len F1 & dom G1 = Seg len G1 by FINSEQ_1:def 3;
     then reconsider f as Permutation of dom G1 by A20;
-A33: len G2 = len F2 by Def8;
+A33: len G2 = len F2 by Def6;
 A34: dom(G1) = Seg(len G1) by FINSEQ_1:def 3;
     now
       let i be Element of NAT;
       assume
 A35:  i in dom G2;
       then
-A36:  G2.i = (F2/.i) * L.(F2/.i) & F2.i = F2/.i by A33,A11,A32,Def8,
+A36:  G2.i = (F2/.i) * L.(F2/.i) & F2.i = F2/.i by A33,A11,A32,Def6,
 PARTFUN1:def 6;
       i in dom F2 by A33,A35,FINSEQ_3:29;
       then reconsider u = F2.i as Vector of V by FINSEQ_2:11;
@@ -765,7 +765,7 @@ A37:  f.i in dom F1 by A15,FUNCT_1:def 3;
       then
 A38:  u = v by FUNCT_1:75,ZFMISC_1:18;
       F1.m = F1/.m by A37,PARTFUN1:def 6;
-      hence G2.i = G1.(f.i) by A20,A10,A34,A37,A38,A36,Def8;
+      hence G2.i = G1.(f.i) by A20,A10,A34,A37,A38,A36,Def6;
     end;
     hence thesis by A3,A4,A5,A6,A7,A8,A20,A33,FINSEQ_1:48,RLVECT_2:6;
   end;
@@ -776,15 +776,15 @@ proof
   consider F such that
   F is one-to-one and
 A1: rng F = Carrier(ZeroLC(V)) and
-A2: Sum(ZeroLC(V)) = Sum(ZeroLC(V) (#) F) by Def9;
-  Carrier(ZeroLC(V)) = {} by Def6;
+A2: Sum(ZeroLC(V)) = Sum(ZeroLC(V) (#) F) by Def7;
+  Carrier(ZeroLC(V)) = {} by Def4;
   then F = {} by A1,RELAT_1:41;
   then len F = 0;
-  then len(ZeroLC(V) (#) F) = 0 by Def8;
+  then len(ZeroLC(V) (#) F) = 0 by Def6;
   hence thesis by A2,RLVECT_1:75;
 end;
 
-theorem Th40:
+theorem Th29:
   0.R <> 1_R implies (A <> {} & A is linearly-closed iff for l
   holds Sum l in A)
 proof
@@ -800,7 +800,7 @@ A3: A is linearly-closed;
       let l;
       assume card(Carrier(l)) = 0;
       then Carrier(l) = {};
-      then l = ZeroLC(V) by Def6;
+      then l = ZeroLC(V) by Def4;
       then Sum(l) = 0.V by Lm3;
       hence Sum(l) in A by A2,A3,RMOD_2:1;
     end;
@@ -815,14 +815,14 @@ A5:   for l st card Carrier l = k holds Sum(l) in A;
       consider F such that
 A6:   F is one-to-one and
 A7:   rng F = Carrier(l) and
-A8:   Sum(l) = Sum(l (#) F) by Def9;
+A8:   Sum(l) = Sum(l (#) F) by Def7;
       reconsider G = F | Seg k as FinSequence of V by FINSEQ_1:18;
       assume
 A9:   card Carrier l = k + 1;
       then
 A10:  len F = k + 1 by A6,A7,FINSEQ_4:62;
       then
-A11:  len(l (#) F) = k + 1 by Def8;
+A11:  len(l (#) F) = k + 1 by Def6;
 A12:  k + 1 in Seg(k + 1) by FINSEQ_1:4;
       then
 A13:  k + 1 in dom F by A10,FINSEQ_1:def 3;
@@ -842,9 +842,9 @@ A17:    not u in Carrier(l);
         hence f.u = l.u by A16,A15
           .= 0.R by A17;
       end;
-      then reconsider f as Linear_Combination of V by Def4;
+      then reconsider f as Linear_Combination of V by Def2;
 A18:  A \ {v} c= A by XBOOLE_1:36;
-A19:  Carrier(l) c= A by Def7;
+A19:  Carrier(l) c= A by Def5;
       then
 A20:  v * l.v in A by A3,A16,RMOD_2:def 1;
 A21:  Carrier(f) = Carrier(l) \ {v}
@@ -876,10 +876,10 @@ A27:    l.u <> 0.R;
       end;
       then Carrier(f) c= A \ {v} by A19,XBOOLE_1:33;
       then Carrier(f) c= A by A18,XBOOLE_1:1;
-      then reconsider f as Linear_Combination of A by Def7;
+      then reconsider f as Linear_Combination of A by Def5;
 A28:  len G = k by A10,FINSEQ_3:53;
       then
-A29:  len (f (#) G) = k by Def8;
+A29:  len (f (#) G) = k by Def6;
 A30:  rng G = Carrier(f)
       proof
         thus rng G c= Carrier f
@@ -949,10 +949,10 @@ A45:    G.n in rng G by FUNCT_1:def 3;
         not u in {v} by A21,A30,A45,XBOOLE_0:def 5;
         then
 A46:    u <> v by TARSKI:def 1;
-A47:    (f (#) G).n = u * f.u by A44,Th32
+A47:    (f (#) G).n = u * f.u by A44,Th23
           .= u * l.u by A15,A46;
         w = u by A44,FUNCT_1:47;
-        hence (f (#) G).x = (l (#) F).x by A47,A43,Th32;
+        hence (f (#) G).x = (l (#) F).x by A47,A43,Th23;
       end;
       then f (#) G = (l (#) F) | Seg k by A40,FUNCT_1:46;
       then
@@ -966,8 +966,8 @@ A48:  f (#) G = (l (#) F) | dom (f (#) G) by A29,FINSEQ_1:def 3;
 A49:  Sum(f) in A by A5;
       G is one-to-one by A6,FUNCT_1:52;
       then
-A50:  Sum(f (#) G) = Sum(f) by A30,Def9;
-      (l (#) F).(len F) = v * l.v by A10,A13,Th32;
+A50:  Sum(f (#) G) = Sum(f) by A30,Def7;
+      (l (#) F).(len F) = v * l.v by A10,A13,Th23;
       then Sum(l (#) F) = Sum (f (#) G) + v * l.v by A10,A11,A29,A48,
 RLVECT_1:38;
       hence Sum(l) in A by A3,A8,A20,A50,A49,RMOD_2:def 1;
@@ -982,7 +982,7 @@ A52: card Carrier l = card Carrier l;
   assume
 A53: for l holds Sum(l) in A;
   hence A <> {};
-  ZeroLC(V) is Linear_Combination of A & Sum(ZeroLC(V)) = 0.V by Lm3,Th26;
+  ZeroLC(V) is Linear_Combination of A & Sum(ZeroLC(V)) = 0.V by Lm3,Th20;
   then
 A54: 0.V in A by A53;
 A55: for a,v st v in A holds v * a in A
@@ -1011,7 +1011,7 @@ A59:    for u being Element of V st u <> v holds f.u = F(u) from
           then u <> v by TARSKI:def 1;
           hence f.u = 0.R by A59;
         end;
-        then reconsider f as Linear_Combination of V by Def4;
+        then reconsider f as Linear_Combination of V by Def2;
 A60:    Carrier(f) = {v}
         proof
           thus Carrier(f) c= {v}
@@ -1030,12 +1030,12 @@ A62:        f.u <> 0.R;
           hence thesis by A57,A58;
         end;
         {v} c= A by A56,ZFMISC_1:31;
-        then reconsider f as Linear_Combination of A by A60,Def7;
+        then reconsider f as Linear_Combination of A by A60,Def5;
         consider F such that
 A63:    F is one-to-one & rng F = Carrier(f) and
-A64:    Sum(f (#) F) = Sum(f) by Def9;
+A64:    Sum(f (#) F) = Sum(f) by Def7;
         F = <* v *> by A60,A63,FINSEQ_3:97;
-        then f (#) F = <* v * f.v *> by Th34;
+        then f (#) F = <* v * f.v *> by Th25;
         then Sum(f) = v * a by A58,A64,RLVECT_1:44;
         hence thesis by A53;
       end;
@@ -1072,7 +1072,7 @@ A69:    for w being Element of V st w <> v & w <> u holds f.w = F(w)
           then w <> v & w <> u by TARSKI:def 2;
           hence f.w = 0.R by A69;
         end;
-        then reconsider f as Linear_Combination of V by Def4;
+        then reconsider f as Linear_Combination of V by Def2;
 A70:    Carrier(f) = {v,u}
         proof
           thus Carrier(f) c= {v,u}
@@ -1091,13 +1091,13 @@ A70:    Carrier(f) = {v,u}
         then
 A71:    Carrier(f) c= A by A65,A66,ZFMISC_1:32;
 A72:    u * 1_R = u & v * 1_R = v by VECTSP_2:def 9;
-        reconsider f as Linear_Combination of A by A71,Def7;
+        reconsider f as Linear_Combination of A by A71,Def5;
         consider F such that
 A73:    F is one-to-one & rng F = Carrier(f) and
-A74:    Sum(f (#) F) = Sum(f) by Def9;
+A74:    Sum(f (#) F) = Sum(f) by Def7;
         F = <* v,u *> or F = <* u,v *> by A67,A70,A73,FINSEQ_3:99;
         then f (#) F = <* v * 1_R, u * 1_R *> or f (#) F = <* u * 1_R, v *
-        1_R *> by A68,Th35;
+        1_R *> by A68,Th26;
         then Sum(f) = v + u by A74,A72,RLVECT_1:45;
         hence thesis by A53;
       end;
@@ -1110,77 +1110,77 @@ end;
 theorem
   Sum(ZeroLC(V)) = 0.V by Lm3;
 
-theorem Th42:
+theorem Th31:
   for l being Linear_Combination of {}(the carrier of V) holds Sum (l) = 0.V
 proof
   let l be Linear_Combination of {}(the carrier of V);
-  l = ZeroLC(V) by Th27;
+  l = ZeroLC(V) by Th21;
   hence thesis by Lm3;
 end;
 
-theorem Th43:
+theorem Th32:
   for l being Linear_Combination of {v} holds Sum(l) = v * l.v
 proof
   let l be Linear_Combination of {v};
-A1: Carrier(l) c= {v} by Def7;
+A1: Carrier(l) c= {v} by Def5;
   now
     per cases by A1,ZFMISC_1:33;
     suppose
       Carrier(l) = {};
       then
-A2:   l = ZeroLC(V) by Def6;
+A2:   l = ZeroLC(V) by Def4;
       hence Sum(l) = 0.V by Lm3
         .= v * 0.R by VECTSP_2:32
-        .= v * l.v by A2,Th22;
+        .= v * l.v by A2,Th18;
     end;
     suppose
       Carrier(l) = {v};
       then consider F such that
 A3:   F is one-to-one & rng F = {v} and
-A4:   Sum(l) = Sum(l (#) F) by Def9;
+A4:   Sum(l) = Sum(l (#) F) by Def7;
       F = <* v *> by A3,FINSEQ_3:97;
-      then l (#) F = <* v * l.v *> by Th34;
+      then l (#) F = <* v * l.v *> by Th25;
       hence thesis by A4,RLVECT_1:44;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th44:
+theorem Th33:
   v1 <> v2 implies for l being Linear_Combination of {v1,v2} holds
   Sum (l) = v1 * l.v1 + v2 * l.v2
 proof
   assume
 A1: v1 <> v2;
   let l be Linear_Combination of {v1,v2};
-A2: Carrier(l) c= {v1,v2} by Def7;
+A2: Carrier(l) c= {v1,v2} by Def5;
   now
     per cases by A2,ZFMISC_1:36;
     suppose
       Carrier(l) = {};
       then
-A3:   l = ZeroLC(V) by Def6;
+A3:   l = ZeroLC(V) by Def4;
       hence Sum(l) = 0.V by Lm3
         .= 0.V + 0.V by RLVECT_1:def 4
         .= v1 * 0.R + 0.V by VECTSP_2:32
         .= v1 * 0.R + v2 * 0.R by VECTSP_2:32
-        .= v1 * l.v1 + v2 * 0.R by A3,Th22
-        .= v1 * l.v1 + v2 * l.v2 by A3,Th22;
+        .= v1 * l.v1 + v2 * 0.R by A3,Th18
+        .= v1 * l.v1 + v2 * l.v2 by A3,Th18;
     end;
     suppose
 A4:   Carrier(l) = {v1};
-      then reconsider L = l as Linear_Combination of {v1} by Def7;
+      then reconsider L = l as Linear_Combination of {v1} by Def5;
 A5:   not v2 in Carrier(l) by A1,A4,TARSKI:def 1;
-      thus Sum(l) = Sum(L) .= v1 * l.v1 by Th43
+      thus Sum(l) = Sum(L) .= v1 * l.v1 by Th32
         .= v1 * l.v1 + 0.V by RLVECT_1:def 4
         .= v1 * l.v1 + v2 * 0.R by VECTSP_2:32
         .= v1 * l.v1 + v2 * l.v2 by A5;
     end;
     suppose
 A6:   Carrier(l) = {v2};
-      then reconsider L = l as Linear_Combination of {v2} by Def7;
+      then reconsider L = l as Linear_Combination of {v2} by Def5;
 A7:   not v1 in Carrier(l) by A1,A6,TARSKI:def 1;
-      thus Sum(l) = Sum(L) .= v2 * l.v2 by Th43
+      thus Sum(l) = Sum(L) .= v2 * l.v2 by Th32
         .= 0.V + v2 * l.v2 by RLVECT_1:def 4
         .= v1 * 0.R + v2 * l.v2 by VECTSP_2:32
         .= v1 * l.v1 + v2 * l.v2 by A7;
@@ -1189,10 +1189,10 @@ A7:   not v1 in Carrier(l) by A1,A6,TARSKI:def 1;
       Carrier(l) = {v1,v2};
       then consider F such that
 A8:   F is one-to-one & rng F = {v1,v2} and
-A9:   Sum(l) = Sum(l (#) F) by Def9;
+A9:   Sum(l) = Sum(l (#) F) by Def7;
       F = <* v1,v2 *> or F = <* v2,v1 *> by A1,A8,FINSEQ_3:99;
       then l (#) F = <* v1 * l.v1, v2 * l.v2 *> or l (#) F = <* v2 * l.v2, v1
-      * l.v1 *> by Th35;
+      * l.v1 *> by Th26;
       hence thesis by A9,RLVECT_1:45;
     end;
   end;
@@ -1203,16 +1203,16 @@ theorem
   Carrier(L) = {} implies Sum(L) = 0.V
 proof
   assume Carrier(L) = {};
-  then L = ZeroLC(V) by Def6;
+  then L = ZeroLC(V) by Def4;
   hence thesis by Lm3;
 end;
 
-theorem Th46:
+theorem Th35:
   Carrier(L) = {v} implies Sum(L) = v * L.v
 proof
   assume Carrier(L) = {v};
-  then L is Linear_Combination of {v} by Def7;
-  hence thesis by Th43;
+  then L is Linear_Combination of {v} by Def5;
+  hence thesis by Th32;
 end;
 
 theorem
@@ -1221,8 +1221,8 @@ proof
   assume that
 A1: Carrier(L) = {v1,v2} and
 A2: v1 <> v2;
-  L is Linear_Combination of {v1,v2} by A1,Def7;
-  hence thesis by A2,Th44;
+  L is Linear_Combination of {v1,v2} by A1,Def5;
+  hence thesis by A2,Th33;
 end;
 
 definition
@@ -1235,7 +1235,7 @@ end;
 definition
   let R, V, L1, L2;
   func L1 + L2 -> Linear_Combination of V means
-  :Def11:
+  :Def9:
   for v holds it.v = L1. v + L2.v;
   existence
   proof
@@ -1256,7 +1256,7 @@ A3:   L2.v = 0.R;
       hence f.v = 0.R + 0.R by A1,A3
         .= 0.R by RLVECT_1:4;
     end;
-    then reconsider f as Linear_Combination of V by Def4;
+    then reconsider f as Linear_Combination of V by Def2;
     take f;
     let v;
     thus thesis by A1;
@@ -1274,7 +1274,7 @@ A5: for v holds N.v = L1.v + L2.v;
   end;
 end;
 
-theorem Th51:
+theorem Th37:
   Carrier(L1 + L2) c= Carrier(L1) \/ Carrier(L2)
 proof
   let x;
@@ -1282,25 +1282,25 @@ proof
   then consider u such that
 A1: x = u and
 A2: (L1 + L2).u <> 0.R;
-  (L1 + L2).u = L1.u + L2.u by Def11;
+  (L1 + L2).u = L1.u + L2.u by Def9;
   then L1.u <> 0.R or L2.u <> 0.R by A2,RLVECT_1:4;
   then x in {v1 : L1.v1 <> 0.R} or x in {v2 : L2.v2 <> 0.R} by A1;
   hence thesis by XBOOLE_0:def 3;
 end;
 
-theorem Th52:
+theorem Th38:
   L1 is Linear_Combination of A & L2 is Linear_Combination of A
   implies L1 + L2 is Linear_Combination of A
 proof
   assume L1 is Linear_Combination of A & L2 is Linear_Combination of A;
-  then Carrier(L1) c= A & Carrier(L2) c= A by Def7;
+  then Carrier(L1) c= A & Carrier(L2) c= A by Def5;
   then
 A1: Carrier(L1) \/ Carrier(L2) c= A by XBOOLE_1:8;
-  Carrier(L1 + L2) c= Carrier(L1) \/ Carrier(L2) by Th51;
+  Carrier(L1 + L2) c= Carrier(L1) \/ Carrier(L2) by Th37;
   hence Carrier(L1 + L2) c= A by A1,XBOOLE_1:1;
 end;
 
-theorem Th53:
+theorem Th39:
   for R being comRing for V being RightMod of R for L1, L2 being
   Linear_Combination of V holds L1 + L2 = L2 + L1
 proof
@@ -1308,19 +1308,19 @@ proof
   let V be RightMod of R;
   let L1, L2 be Linear_Combination of V;
   let v be Vector of V;
-  thus (L1 + L2).v = L2.v + L1.v by Def11
-    .= (L2 + L1).v by Def11;
+  thus (L1 + L2).v = L2.v + L1.v by Def9
+    .= (L2 + L1).v by Def9;
 end;
 
 theorem
   L1 + (L2 + L3) = L1 + L2 + L3
 proof
   let v;
-  thus (L1 + (L2 + L3)).v = L1.v + (L2 + L3).v by Def11
-    .= L1.v + (L2.v + L3.v) by Def11
+  thus (L1 + (L2 + L3)).v = L1.v + (L2 + L3).v by Def9
+    .= L1.v + (L2.v + L3.v) by Def9
     .= L1.v + L2.v + L3.v by RLVECT_1:def 3
-    .= (L1 + L2).v + L3.v by Def11
-    .= (L1 + L2 + L3).v by Def11;
+    .= (L1 + L2).v + L3.v by Def9
+    .= (L1 + L2 + L3).v by Def9;
 end;
 
 theorem
@@ -1333,17 +1333,17 @@ proof
   thus L + ZeroLC(V) = L
   proof
     let v be Vector of V;
-    thus (L + ZeroLC(V)).v = L.v + ZeroLC(V).v by Def11
-      .= L.v + 0.R by Th22
+    thus (L + ZeroLC(V)).v = L.v + ZeroLC(V).v by Def9
+      .= L.v + 0.R by Th18
       .= L.v by RLVECT_1:4;
   end;
-  hence thesis by Th53;
+  hence thesis by Th39;
 end;
 
 definition
   let R, V, a, L;
   func L * a -> Linear_Combination of V means
-  :Def12:
+  :Def10:
   for v holds it.v = L.v * a;
   existence
   proof
@@ -1359,7 +1359,7 @@ FUNCT_2:8;
       hence f.v = 0.R * a by A1
         .= 0.R by VECTSP_1:7;
     end;
-    then reconsider f as Linear_Combination of V by Def4;
+    then reconsider f as Linear_Combination of V by Def2;
     take f;
     let v;
     thus thesis by A1;
@@ -1377,7 +1377,7 @@ A3: for v holds L2.v = L.v * a;
   end;
 end;
 
-theorem Th58:
+theorem Th42:
   Carrier(L * a) c= Carrier(L)
 proof
   set T = {u : (L * a).u <> 0.R};
@@ -1389,7 +1389,7 @@ proof
     then consider u such that
 A1: x = u and
 A2: (L * a).u <> 0.R;
-    (L * a).u = L.u * a by Def12;
+    (L * a).u = L.u * a by Def10;
     then L.u <> 0.R by A2,VECTSP_1:7;
     hence thesis by A1;
   end;
@@ -1402,7 +1402,7 @@ reserve LL for Linear_Combination of VV;
 reserve aa for Scalar of RR;
 reserve uu, vv for Vector of VV;
 
-theorem Th59:
+theorem Th43:
   aa <> 0.RR implies Carrier(LL * aa) = Carrier(LL)
 proof
   set T = {uu : (LL * aa).uu <> 0.RR};
@@ -1418,7 +1418,7 @@ A1: aa <> 0.RR;
       then consider uu such that
 A2:   x = uu and
 A3:   (LL * aa).uu <> 0.RR;
-      (LL * aa).uu = LL.uu * aa by Def12;
+      (LL * aa).uu = LL.uu * aa by Def10;
       then LL.uu <> 0.RR by A3,VECTSP_1:6;
       hence thesis by A2;
     end;
@@ -1427,71 +1427,71 @@ A3:   (LL * aa).uu <> 0.RR;
     then consider vv such that
 A4: x = vv and
 A5: LL.vv <> 0.RR;
-    (LL * aa).vv = LL.vv * aa by Def12;
+    (LL * aa).vv = LL.vv * aa by Def10;
     then (LL * aa).vv <> 0.RR by A1,A5,VECTSP_2:def 1;
     hence thesis by A4;
   end;
   hence thesis;
 end;
 
-theorem Th60:
+theorem Th44:
   L * 0.R = ZeroLC(V)
 proof
   let v;
-  thus (L * 0.R).v = L.v * 0.R by Def12
+  thus (L * 0.R).v = L.v * 0.R by Def10
     .= 0.R by VECTSP_1:6
-    .= ZeroLC(V).v by Th22;
+    .= ZeroLC(V).v by Th18;
 end;
 
-theorem Th61:
+theorem Th45:
   L is Linear_Combination of A implies L * a is Linear_Combination of A
 proof
   assume L is Linear_Combination of A;
   then
-A1: Carrier(L) c= A by Def7;
-  Carrier(L * a) c= Carrier(L) by Th58;
+A1: Carrier(L) c= A by Def5;
+  Carrier(L * a) c= Carrier(L) by Th42;
   then Carrier(L * a) c= A by A1,XBOOLE_1:1;
-  hence thesis by Def7;
+  hence thesis by Def5;
 end;
 
 theorem
   L * (a + b) = L * a + L * b
 proof
   let v;
-  thus (L * (a + b)).v = L.v * (a + b) by Def12
+  thus (L * (a + b)).v = L.v * (a + b) by Def10
     .= L.v * a + L.v * b by VECTSP_1:def 7
-    .= (L * a).v + L.v * b by Def12
-    .= (L * a).v + (L * b).v by Def12
-    .= ((L * a) + (L * b)).v by Def11;
+    .= (L * a).v + L.v * b by Def10
+    .= (L * a).v + (L * b).v by Def10
+    .= ((L * a) + (L * b)).v by Def9;
 end;
 
 theorem
   (L1 + L2) * a = L1 * a + L2 * a
 proof
   let v;
-  thus ((L1 + L2) * a).v = (L1 + L2).v * a by Def12
-    .= (L1.v + L2.v) * a by Def11
+  thus ((L1 + L2) * a).v = (L1 + L2).v * a by Def10
+    .= (L1.v + L2.v) * a by Def9
     .= L1.v * a + L2.v * a by VECTSP_1:def 7
-    .= (L1 * a).v + L2.v * a by Def12
-    .= (L1 * a).v + (L2 * a). v by Def12
-    .= ((L1 * a) + (L2 * a)).v by Def11;
+    .= (L1 * a).v + L2.v * a by Def10
+    .= (L1 * a).v + (L2 * a). v by Def10
+    .= ((L1 * a) + (L2 * a)).v by Def9;
 end;
 
-theorem Th64:
+theorem Th48:
   (L * b) * a = L * (b * a)
 proof
   let v;
-  thus ((L * b) * a).v = (L * b).v * a by Def12
-    .= L.v * b * a by Def12
+  thus ((L * b) * a).v = (L * b).v * a by Def10
+    .= L.v * b * a by Def10
     .= L.v * (b * a) by GROUP_1:def 3
-    .= (L * (b * a)).v by Def12;
+    .= (L * (b * a)).v by Def10;
 end;
 
 theorem
   L * 1_R = L
 proof
   let v;
-  thus (L * 1_R).v = L.v * 1_R by Def12
+  thus (L * 1_R).v = L.v * 1_R by Def10
     .= L.v by VECTSP_1:def 4;
 end;
 
@@ -1509,15 +1509,15 @@ A1: L = L9 * (- 1_R);
     thus L9.v = L9.v * (1_R) by VECTSP_1:def 4
       .= L9.v * ((1_R) * (1_R)) by VECTSP_1:def 4
       .= L9.v * ((- 1_R) * (- 1_R)) by VECTSP_1:10
-      .= (L9 * ((- 1_R) * (- 1_R))).v by Def12
-      .= (L * (- 1_R)).v by A1,Th64;
+      .= (L9 * ((- 1_R) * (- 1_R))).v by Def10
+      .= (L * (- 1_R)).v by A1,Th48;
   end;
 end;
 
-theorem Th67:
+theorem Th50:
   (- L).v = - L.v
 proof
-  thus (- L).v = L.v * (- 1_R) by Def12
+  thus (- L).v = L.v * (- 1_R) by Def10
     .= - L.v by VECTSP_2:28;
 end;
 
@@ -1527,13 +1527,13 @@ proof
   assume
 A1: L1 + L2 = ZeroLC(V);
   let v;
-  L1.v + L2.v = ZeroLC(V).v by A1,Def11
-    .= 0.R by Th22;
+  L1.v + L2.v = ZeroLC(V).v by A1,Def9
+    .= 0.R by Th18;
   hence L2.v = - L1.v by RLVECT_1:6
-    .= (- L1).v by Th67;
+    .= (- L1).v by Th50;
 end;
 
-theorem Th69:
+theorem Th52:
   Carrier(- L) = Carrier(L)
 proof
   set a = -1_R;
@@ -1550,7 +1550,7 @@ proof
         then consider u such that
 A1:     x = u and
 A2:     (L * a).u <> 0.R;
-        (L * a).u = L.u * a by Def12;
+        (L * a).u = L.u * a by Def10;
         then L.u <> 0.R by A2,VECTSP_1:7;
         hence thesis by A1;
       end;
@@ -1559,7 +1559,7 @@ A2:     (L * a).u <> 0.R;
       then consider v such that
 A3:   x = v and
 A4:   L.v <> 0.R;
-      (L * a).v = L.v * a by Def12
+      (L * a).v = L.v * a by Def10
         .= -(L.v) by VECTSP_2:28;
       then (L * a).v <> 0.R by A4,VECTSP_2:3;
       hence thesis by A3;
@@ -1570,7 +1570,7 @@ A4:   L.v <> 0.R;
 end;
 
 theorem
-  L is Linear_Combination of A implies - L is Linear_Combination of A by Th61;
+  L is Linear_Combination of A implies - L is Linear_Combination of A by Th45;
 
 definition
   let R, V, L1, L2;
@@ -1579,19 +1579,19 @@ definition
   correctness;
 end;
 
-theorem Th73:
+theorem Th54:
   (L1 - L2).v = L1.v - L2.v
 proof
-  thus (L1 - L2).v = L1.v + (- L2).v by Def11
-    .= L1.v + (- L2.v) by Th67
+  thus (L1 - L2).v = L1.v + (- L2).v by Def9
+    .= L1.v + (- L2.v) by Th50
     .= L1.v - L2.v by RLVECT_1:def 11;
 end;
 
 theorem
   Carrier(L1 - L2) c= Carrier(L1) \/ Carrier(L2)
 proof
-  Carrier(L1 - L2) c= Carrier(L1) \/ Carrier(- L2) by Th51;
-  hence thesis by Th69;
+  Carrier(L1 - L2) c= Carrier(L1) \/ Carrier(- L2) by Th37;
+  hence thesis by Th52;
 end;
 
 theorem
@@ -1601,20 +1601,20 @@ proof
   assume that
 A1: L1 is Linear_Combination of A and
 A2: L2 is Linear_Combination of A;
-  - L2 is Linear_Combination of A by A2,Th61;
-  hence thesis by A1,Th52;
+  - L2 is Linear_Combination of A by A2,Th45;
+  hence thesis by A1,Th38;
 end;
 
 theorem
   L - L = ZeroLC(V)
 proof
   let v;
-  thus (L - L).v = L.v - L.v by Th73
+  thus (L - L).v = L.v - L.v by Th54
     .= 0.R by RLVECT_1:15
-    .= ZeroLC(V).v by Th22;
+    .= ZeroLC(V).v by Th18;
 end;
 
-theorem Th77:
+theorem Th58:
   Sum(L1 + L2) = Sum(L1) + Sum(L2)
 proof
   set A = Carrier(L1 + L2) \/ Carrier(L1) \/ Carrier(L2);
@@ -1638,12 +1638,12 @@ A8: q is one-to-one by FINSEQ_4:58;
   consider F such that
 A9: F is one-to-one and
 A10: rng F = Carrier(L1 + L2) and
-A11: Sum((L1 + L2) (#) F) = Sum(L1 + L2) by Def9;
+A11: Sum((L1 + L2) (#) F) = Sum(L1 + L2) by Def7;
   set FF = F ^ r;
   consider G such that
 A12: G is one-to-one and
 A13: rng G = Carrier(L1) and
-A14: Sum(L1 (#) G) = Sum(L1) by Def9;
+A14: Sum(L1 (#) G) = Sum(L1) by Def7;
   rng FF = rng F \/ rng r by FINSEQ_1:31;
   then rng FF = Carrier(L1 + L2) \/ A by A10,A4,XBOOLE_1:39;
   then
@@ -1743,7 +1743,7 @@ A34: rng f = rng(FF") by RELAT_1:28
   end;
   then
 A35: dom FF = rng P by A27,XBOOLE_0:def 10;
-A36: len r = len((L1 + L2) (#) r) by Def8;
+A36: len r = len((L1 + L2) (#) r) by Def6;
   now
     let k;
     assume
@@ -1753,13 +1753,13 @@ A37: k in dom r;
     then
 A38: not r/.k in Carrier((L1 + L2)) by XBOOLE_0:def 5;
     k in dom((L1 + L2) (#) r) by A36,A37,FINSEQ_3:29;
-    then ((L1 + L2) (#) r).k = (r/.k) * (L1 + L2).(r/.k) by Def8;
+    then ((L1 + L2) (#) r).k = (r/.k) * (L1 + L2).(r/.k) by Def6;
     hence ((L1 + L2) (#) r).k = (r/.k) * 0.R by A38;
   end;
   then
 A39: Sum((L1 + L2) (#) r) = Sum(r) * 0.R by A36,Lm2
     .= 0.V by VECTSP_2:32;
-A40: len p = len(L1 (#) p) by Def8;
+A40: len p = len(L1 (#) p) by Def6;
   now
     let k;
     assume
@@ -1769,7 +1769,7 @@ A41: k in dom p;
     then
 A42: not p/.k in Carrier(L1) by XBOOLE_0:def 5;
     k in dom(L1 (#) p) by A40,A41,FINSEQ_3:29;
-    then (L1 (#) p).k = (p/.k) * L1.(p/.k) by Def8;
+    then (L1 (#) p).k = (p/.k) * L1.(p/.k) by Def6;
     hence (L1 (#) p).k = (p/.k) * 0.R by A42;
   end;
   then
@@ -1779,7 +1779,7 @@ A43: Sum(L1 (#) p) = Sum(p) * 0.R by A40,Lm2
   consider H such that
 A44: H is one-to-one and
 A45: rng H = Carrier(L2) and
-A46: Sum(L2 (#) H) = Sum(L2) by Def9;
+A46: Sum(L2 (#) H) = Sum(L2) by Def7;
   set HH = H ^ q;
   rng H misses rng q
   proof
@@ -1791,7 +1791,7 @@ A46: Sum(L2 (#) H) = Sum(L2) by Def9;
   end;
   then
 A47: HH is one-to-one by A44,A8,FINSEQ_3:91;
-A48: len q = len(L2 (#) q) by Def8;
+A48: len q = len(L2 (#) q) by Def6;
   now
     let k;
     assume
@@ -1801,14 +1801,14 @@ A49: k in dom q;
     then
 A50: not q/.k in Carrier(L2) by XBOOLE_0:def 5;
     k in dom(L2 (#) q) by A48,A49,FINSEQ_3:29;
-    then (L2 (#) q).k = (q/.k) * L2.(q/.k) by Def8;
+    then (L2 (#) q).k = (q/.k) * L2.(q/.k) by Def6;
     hence (L2 (#) q).k = (q/.k) * 0.R by A50;
   end;
   then
 A51: Sum(L2 (#) q) = Sum(q) * 0.R by A48,Lm2
     .= 0.V by VECTSP_2:32;
   set g = L1 (#) GG;
-A52: len g = len GG by Def8;
+A52: len g = len GG by Def6;
   then
 A53: Seg len GG = dom g by FINSEQ_1:def 3;
   rng HH = rng H \/ rng q by FINSEQ_1:31;
@@ -1886,14 +1886,14 @@ A70: rng f = rng(HH") by RELAT_1:28
   end;
   then
 A71: dom HH = rng R by A63,XBOOLE_0:def 10;
-A72: Sum(g) = Sum((L1 (#) G) ^ (L1 (#) p)) by Th37
+A72: Sum(g) = Sum((L1 (#) G) ^ (L1 (#) p)) by Th28
     .= Sum(L1 (#) G) + 0.V by A43,RLVECT_1:41
     .= Sum(L1 (#) G) by RLVECT_1:def 4;
   set h = L2 (#) HH;
-A73: Sum(h) = Sum((L2 (#) H) ^ (L2 (#) q)) by Th37
+A73: Sum(h) = Sum((L2 (#) H) ^ (L2 (#) q)) by Th28
     .= Sum(L2 (#) H) + 0.V by A51,RLVECT_1:41
     .= Sum(L2 (#) H) by RLVECT_1:def 4;
-A74: Sum(f) = Sum(((L1 + L2) (#) F) ^ ((L1 + L2) (#) r)) by Th37
+A74: Sum(f) = Sum(((L1 + L2) (#) F) ^ ((L1 + L2) (#) r)) by Th28
     .= Sum((L1 + L2) (#) F) + 0.V by A39,RLVECT_1:41
     .= Sum((L1 + L2) (#) F) by RLVECT_1:def 4;
 A75: dom P = dom FF by A20,FINSEQ_3:29;
@@ -1902,10 +1902,9 @@ A76: P is one-to-one by A35,FINSEQ_4:60;
 A77: dom R = dom HH by A56,FINSEQ_3:29;
   then
 A78: R is one-to-one by A71,FINSEQ_4:60;
-  dom HH = {} implies dom HH = {};
-  then reconsider R as Function of dom HH, dom HH by A63,A77,FUNCT_2:def 1
-,RELSET_1:4;
-A79: len h = len HH by Def8;
+  reconsider R as Function of dom HH, dom HH by A63,A77,FUNCT_2:2
+;
+A79: len h = len HH by Def6;
   then
 A80: dom h = dom HH by FINSEQ_3:29;
   then reconsider R as Function of dom h, dom h;
@@ -1914,10 +1913,9 @@ A80: dom h = dom HH by FINSEQ_3:29;
 A81: Hp = h * R;
   then
 A82: len Hp = len GG by A55,A79,FINSEQ_2:44;
-  dom FF = {} implies dom FF = {};
-  then reconsider P as Function of dom FF, dom FF by A27,A75,FUNCT_2:def 1
-,RELSET_1:4;
-A83: len f = len FF by Def8;
+  reconsider P as Function of dom FF, dom FF by A27,A75,FUNCT_2:2
+;
+A83: len f = len FF by Def6;
   then
 A84: dom f = dom FF by FINSEQ_3:29;
   then reconsider P as Function of dom f, dom f;
@@ -1966,8 +1964,8 @@ A100: FF.l = GG.k by A23,A97
       .= GG/.k by A97,PARTFUN1:def 6;
     P.k in dom FF by A26,A62,A35,A75,A96,FUNCT_1:def 3;
     then
-A101: f.l = v * (L1 + L2).v by A100,Th32
-      .= v * (L1.v + L2.v) by Def11
+A101: f.l = v * (L1 + L2).v by A100,Th23
+      .= v * (L1.v + L2.v) by Def9
       .= v * L1.v + v * L2.v by VECTSP_2:def 9;
 A102: x in dom Hp by A87,A82,A95,FINSEQ_1:def 3;
     then
@@ -1975,10 +1973,10 @@ A103: Hp/.k = (h * R).k by PARTFUN1:def 6
       .= h.(R.k) by A102,FUNCT_1:12;
     R.k in dom HH by A71,A77,A96,FUNCT_1:def 3;
     then
-A104: h.j = v * L2.v by A98,Th32;
+A104: h.j = v * L2.v by A98,Th23;
 A105: x in dom g by A87,A52,A95,FINSEQ_1:def 3;
     then g/.k = g.k by PARTFUN1:def 6
-      .= v * L1.v by A105,Def8;
+      .= v * L1.v by A105,Def6;
     hence I.x = v * L1.v + v * L2.v by A87,A88,A89,A95,A103,A104
       .= Fp.x by A99,A101,FUNCT_1:12;
   end;
@@ -1995,24 +1993,24 @@ reserve V for RightMod of R;
 reserve L,L1,L2 for Linear_Combination of V;
 reserve a for Scalar of R;
 
-theorem Th78:
+theorem Th59:
   Sum(L * a) = Sum(L) * a
 proof
   per cases;
   suppose
 A1: a <> 0.R;
     set l = L * a;
-A2: Carrier(l) = Carrier(L) by A1,Th59;
+A2: Carrier(l) = Carrier(L) by A1,Th43;
     consider G being FinSequence of V such that
 A3: G is one-to-one and
 A4: rng G = Carrier(L) and
-A5: Sum(L) = Sum(L (#) G) by Def9;
+A5: Sum(L) = Sum(L (#) G) by Def7;
     set g = L (#) G;
     consider F being FinSequence of V such that
 A6: F is one-to-one and
 A7: rng F = Carrier(L * a) and
-A8: Sum(L * a) = Sum((L * a) (#) F) by Def9;
-A9: len G = len F by A1,A6,A7,A3,A4,Th59,FINSEQ_1:48;
+A8: Sum(L * a) = Sum((L * a) (#) F) by Def7;
+A9: len G = len F by A1,A6,A7,A3,A4,Th43,FINSEQ_1:48;
     set f = (L * a) (#) F;
     deffunc Q(Nat)= F <- (G.$1);
     consider P being FinSequence such that
@@ -2085,10 +2083,9 @@ A24: dom F = rng P by A16,XBOOLE_0:def 10;
 A25: dom P = dom F by A10,FINSEQ_3:29;
     then
 A26: P is one-to-one by A24,FINSEQ_4:60;
-    dom F = {} implies dom F = {};
-    then reconsider P as Function of dom F, dom F by A16,A25,FUNCT_2:def 1
-,RELSET_1:4;
-A27: len f = len F by Def8;
+    reconsider P as Function of dom F, dom F by A16,A25,FUNCT_2:2
+;
+A27: len f = len F by Def6;
     then
 A28: dom f = dom F by FINSEQ_3:29;
     then reconsider P as Function of dom f, dom f;
@@ -2098,7 +2095,7 @@ A29: Fp = f * P;
     then
 A30: len Fp = len f by FINSEQ_2:44;
     then
-A31: len Fp = len g by A9,A27,Def8;
+A31: len Fp = len g by A9,A27,Def6;
 A32: now
       let k;
       let v be Vector of V;
@@ -2124,34 +2121,34 @@ A40:  k in dom g by A35,FINSEQ_1:def 3;
 A41:  i in dom f by FINSEQ_1:def 3;
       thus Fp.k = f.(P.k) by A36,FUNCT_1:13
         .= f.(F <- (G.k)) by A11,A12,A27,A30,A31,A35
-        .= (F/.i) * l.(F/.i) by A41,Def8
-        .= (F/.i) * (L.(F/.i) * a) by Def12
+        .= (F/.i) * l.(F/.i) by A41,Def6
+        .= (F/.i) * (L.(F/.i) * a) by Def10
         .= (F/.i) * L.(F/.i) * a by VECTSP_2:def 9
-        .= v * a by A34,A40,A39,Def8;
+        .= v * a by A34,A40,A39,Def6;
     end;
     Sum(Fp) = Sum(f) by A29,RLVECT_2:7;
     hence thesis by A8,A5,A31,A32,Th1;
   end;
   suppose
 A42: a = 0.R;
-    hence Sum(L * a) = Sum(ZeroLC(V)) by Th60
+    hence Sum(L * a) = Sum(ZeroLC(V)) by Th44
       .= 0.V by Lm3
       .= Sum(L) * a by A42,VECTSP_2:32;
   end;
 end;
 
-theorem Th79:
+theorem Th60:
   Sum(- L) = - Sum(L)
 proof
-  thus Sum(- L) = Sum(L) * (- 1_R) by Th78
+  thus Sum(- L) = Sum(L) * (- 1_R) by Th59
     .= - Sum(L) by VECTSP_2:32;
 end;
 
 theorem
   Sum(L1 - L2) = Sum(L1) - Sum(L2)
 proof
-  thus Sum(L1 - L2) = Sum(L1) + Sum(- L2) by Th77
-    .= Sum(L1) + (- Sum(L2)) by Th79
+  thus Sum(L1 - L2) = Sum(L1) + Sum(- L2) by Th58
+    .= Sum(L1) + (- Sum(L2)) by Th60
     .= Sum(L1) - Sum(L2) by RLVECT_1:def 11;
 end;
 
@@ -2167,7 +2164,7 @@ definition
   let R, V;
   let IT be Subset of V;
   attr IT is linearly-independent means
-  :Def15:
+  :Def13:
   for l being Linear_Combination of IT st Sum(l) = 0.V holds Carrier(l) = {};
 end;
 
@@ -2184,13 +2181,13 @@ proof
 A1: A c= B and
 A2: B is linearly-independent;
   let l be Linear_Combination of A;
-  reconsider L = l as Linear_Combination of B by A1,Th25;
+  reconsider L = l as Linear_Combination of B by A1,Th19;
   assume Sum(l) = 0.V;
-  then Carrier(L) = {} by A2,Def15;
+  then Carrier(L) = {} by A2,Def13;
   hence thesis;
 end;
 
-theorem Th82:
+theorem Th63:
   0.R <> 1_R & A is linearly-independent implies not 0.V in A
 proof
   assume that
@@ -2212,7 +2209,7 @@ FUNCT_2:8;
     then v <> 0.V by TARSKI:def 1;
     hence thesis by A5;
   end;
-  then reconsider f as Linear_Combination of V by Def4;
+  then reconsider f as Linear_Combination of V by Def2;
 A6: Carrier(f) = {0.V}
   proof
     thus Carrier(f) c= {0.V}
@@ -2231,31 +2228,31 @@ A8:   f.v <> 0.R;
     hence thesis by A1,A4;
   end;
   then Carrier(f) c= A by A3,ZFMISC_1:31;
-  then reconsider f as Linear_Combination of A by Def7;
-  Sum(f) = 0.V * f.(0.V) by A6,Th46
+  then reconsider f as Linear_Combination of A by Def5;
+  Sum(f) = 0.V * f.(0.V) by A6,Th35
     .= 0.V by VECTSP_2:32;
-  hence contradiction by A2,A6,Def15;
+  hence contradiction by A2,A6,Def13;
 end;
 
 theorem
   {}(the carrier of V) is linearly-independent
 proof
   let l be Linear_Combination of {}(the carrier of V);
-  Carrier(l) c= {} by Def7;
+  Carrier(l) c= {} by Def5;
   hence thesis;
 end;
 
-theorem Th84:
+theorem Th65:
   0.R <> 1_R & {v1,v2} is linearly-independent implies v1 <> 0.V & v2 <> 0.V
 proof
 A1: v1 in {v1,v2} & v2 in {v1,v2} by TARSKI:def 2;
   assume 0.R <> 1_R & {v1,v2} is linearly-independent;
-  hence thesis by A1,Th82;
+  hence thesis by A1,Th63;
 end;
 
 theorem
   0.R <> 1_R implies {v,0.V} is linearly-dependent & {0.V,v} is
-  linearly-dependent by Th84;
+  linearly-dependent by Th65;
 
 reserve R for domRing;
 reserve V for RightMod of R;
@@ -2267,12 +2264,12 @@ reserve f,g for Function of the carrier of V, the carrier of R;
 definition
   let R, V, A;
   func Lin(A) -> strict Submodule of V means
-  :Def16:
+  :Def14:
   the carrier of it = {Sum( l) : not contradiction};
   existence
   proof
     set A1 = {Sum(l) : not contradiction};
-    reconsider l = ZeroLC(V) as Linear_Combination of A by Th26;
+    reconsider l = ZeroLC(V) as Linear_Combination of A by Th20;
     A1 c= the carrier of V
     proof
       let x;
@@ -2293,16 +2290,16 @@ A3:     u in A1;
 A4:     v = Sum(l1) by A2;
         consider l2 being Linear_Combination of A such that
 A5:     u = Sum(l2) by A3;
-        reconsider f = l1 + l2 as Linear_Combination of A by Th52;
-        v + u = Sum(f) by A4,A5,Th77;
+        reconsider f = l1 + l2 as Linear_Combination of A by Th38;
+        v + u = Sum(f) by A4,A5,Th58;
         hence thesis;
       end;
       let a be Scalar of R,v;
       assume v in A1;
       then consider l such that
 A6:   v = Sum(l);
-      reconsider f = l * a as Linear_Combination of A by Th61;
-      v * a = Sum(f) by A6,Th78;
+      reconsider f = l * a as Linear_Combination of A by Th45;
+      v * a = Sum(f) by A6,Th59;
       hence thesis;
     end;
     Sum(l) = 0.V by Lm3;
@@ -2312,24 +2309,24 @@ A6:   v = Sum(l);
   uniqueness by RMOD_2:29;
 end;
 
-theorem Th86:
+theorem Th67:
   x in Lin(A) iff ex l st x = Sum(l)
 proof
   thus x in Lin(A) implies ex l st x = Sum(l)
   proof
     assume x in Lin(A);
     then x in the carrier of Lin(A) by STRUCT_0:def 5;
-    then x in {Sum(l) : not contradiction} by Def16;
+    then x in {Sum(l) : not contradiction} by Def14;
     hence thesis;
   end;
   given k being Linear_Combination of A such that
 A1: x = Sum(k);
   x in {Sum(l): not contradiction} by A1;
-  then x in the carrier of Lin(A) by Def16;
+  then x in the carrier of Lin(A) by Def14;
   hence thesis by STRUCT_0:def 5;
 end;
 
-theorem Th87:
+theorem Th68:
   x in A implies x in Lin(A)
 proof
   deffunc F(Element of V)=0.R;
@@ -2349,7 +2346,7 @@ FUNCT_2:8;
     then u <> v by TARSKI:def 1;
     hence thesis by A3;
   end;
-  then reconsider f as Linear_Combination of V by Def4;
+  then reconsider f as Linear_Combination of V by Def2;
 A4: Carrier(f) c= {v}
   proof
     let x;
@@ -2360,14 +2357,14 @@ A6: f.u <> 0.R;
     u = v by A3,A6;
     hence thesis by A5,TARSKI:def 1;
   end;
-  then reconsider f as Linear_Combination of {v} by Def7;
-A7: Sum(f) = v * 1_R by A2,Th43
+  then reconsider f as Linear_Combination of {v} by Def5;
+A7: Sum(f) = v * 1_R by A2,Th32
     .= v by VECTSP_2:def 9;
   {v} c= A by A1,ZFMISC_1:31;
   then Carrier(f) c= A by A4,XBOOLE_1:1;
-  then reconsider f as Linear_Combination of A by Def7;
+  then reconsider f as Linear_Combination of A by Def5;
   Sum(f) = v by A7;
-  hence thesis by Th86;
+  hence thesis by Th67;
 end;
 
 theorem
@@ -2382,11 +2379,11 @@ proof
       then
 A1:   v in the carrier of A by STRUCT_0:def 5;
       the carrier of A = {Sum(l0) where l0 is Linear_Combination of {}(the
-      carrier of V): not contradiction} by Def16;
+      carrier of V): not contradiction} by Def14;
       then
       ex l0 being Linear_Combination of {}(the carrier of V) st v = Sum(l0
       ) by A1;
-      then v = 0.V by Th42;
+      then v = 0.V by Th31;
       hence thesis by RMOD_2:35;
     end;
     assume v in (0).V;
@@ -2406,7 +2403,7 @@ A2: A <> {};
   proof
     let x;
     assume x in A;
-    then x in Lin(A) by Th87;
+    then x in Lin(A) by Th68;
     then x = 0.V by A1,RMOD_2:35;
     hence thesis by TARSKI:def 1;
   end;
@@ -2415,11 +2412,11 @@ A2: A <> {};
   assume x in {0.V};
   then
 A3: x = 0.V by TARSKI:def 1;
-  y in A & y in Lin(A) by A2,Th87;
+  y in A & y in Lin(A) by A2,Th68;
   hence thesis by A1,A3,RMOD_2:35;
 end;
 
-theorem Th90:
+theorem Th71:
   for W being strict Submodule of V st 0.R <> 1_R & A = the
   carrier of W holds Lin(A) = W
 proof
@@ -2433,13 +2430,13 @@ A2: A = the carrier of W;
     proof
       assume v in Lin(A);
       then
-A3:   ex l st v = Sum(l) by Th86;
+A3:   ex l st v = Sum(l) by Th67;
       A is linearly-closed by A2,RMOD_2:33;
-      then v in the carrier of W by A1,A2,A3,Th40;
+      then v in the carrier of W by A1,A2,A3,Th29;
       hence thesis by STRUCT_0:def 5;
     end;
     v in W iff v in the carrier of W by STRUCT_0:def 5;
-    hence v in W implies v in Lin(A) by A2,Th87;
+    hence v in W implies v in Lin(A) by A2,Th68;
   end;
   hence thesis by RMOD_2:30;
 end;
@@ -2453,10 +2450,10 @@ A1: 0.R <> 1_R;
   assume
 A2: A = the carrier of V;
   (Omega).V = V;
-  hence thesis by A1,A2,Th90;
+  hence thesis by A1,A2,Th71;
 end;
 
-theorem Th92:
+theorem Th73:
   A c= B implies Lin(A) is Submodule of Lin(B)
 proof
   assume
@@ -2465,10 +2462,10 @@ A1: A c= B;
     let v;
     assume v in Lin(A);
     then consider l such that
-A2: v = Sum(l) by Th86;
-    reconsider l as Linear_Combination of B by A1,Th25;
+A2: v = Sum(l) by Th67;
+    reconsider l as Linear_Combination of B by A1,Th19;
     Sum(l) = v by A2;
-    hence v in Lin(B) by Th86;
+    hence v in Lin(B) by Th67;
   end;
   hence thesis by RMOD_2:28;
 end;
@@ -2479,7 +2476,7 @@ theorem
 proof
   let V be strict RightMod of R, A,B be Subset of V;
   assume Lin(A) = V & A c= B;
-  then V is Submodule of Lin(B) by Th92;
+  then V is Submodule of Lin(B) by Th73;
   hence thesis by RMOD_2:25;
 end;
 
@@ -2491,7 +2488,7 @@ proof
     let v;
     assume v in Lin(A \/ B);
     then consider l being Linear_Combination of A \/ B such that
-A1: v = Sum(l) by Th86;
+A1: v = Sum(l) by Th67;
     deffunc F(set)=l.$1;
     set D = Carrier(l) \ A;
     set C = Carrier(l) /\ A;
@@ -2516,7 +2513,7 @@ A3: for x st x in the carrier of V holds (P[x] implies f.x = F(x)) &
     reconsider f as Element of Funcs(the carrier of V, the carrier of R) by
 FUNCT_2:8;
     for u holds not u in C implies f.u = 0.R by A3;
-    then reconsider f as Linear_Combination of V by Def4;
+    then reconsider f as Linear_Combination of V by Def2;
 A4: Carrier(f) c= C
     proof
       let x;
@@ -2528,7 +2525,7 @@ A5:   ex u st x = u & f.u <> 0.R;
     end;
     C c= A by XBOOLE_1:17;
     then Carrier(f) c= A by A4,XBOOLE_1:1;
-    then reconsider f as Linear_Combination of A by Def7;
+    then reconsider f as Linear_Combination of A by Def5;
     now
       let x;
       assume x in the carrier of V;
@@ -2548,14 +2545,14 @@ A7: for x st x in the carrier of V holds (C[x] implies g.x = F(x)) &
     reconsider g as Element of Funcs(the carrier of V, the carrier of R) by
 FUNCT_2:8;
     for u holds not u in D implies g.u = 0.R by A7;
-    then reconsider g as Linear_Combination of V by Def4;
+    then reconsider g as Linear_Combination of V by Def2;
 A8: D c= B
     proof
       let x;
       assume x in D;
       then
 A9:   x in Carrier(l) & not x in A by XBOOLE_0:def 5;
-      Carrier(l) c= A \/ B by Def7;
+      Carrier(l) c= A \/ B by Def5;
       hence thesis by A9,XBOOLE_0:def 3;
     end;
     Carrier(g) c= D
@@ -2568,7 +2565,7 @@ A10:  ex u st x = u & g.u <> 0.R;
       hence thesis by A7,A10;
     end;
     then Carrier(g) c= B by A8,XBOOLE_1:1;
-    then reconsider g as Linear_Combination of B by Def7;
+    then reconsider g as Linear_Combination of B by Def5;
     l = f + g
     proof
       let v;
@@ -2581,7 +2578,7 @@ A12:      now
             then not v in A by XBOOLE_0:def 5;
             hence contradiction by A11,XBOOLE_0:def 4;
           end;
-          thus (f + g).v = f.v + g.v by Def11
+          thus (f + g).v = f.v + g.v by Def9
             .= l.v + g.v by A3,A11
             .= l.v + 0.R by A7,A12
             .= l.v by RLVECT_1:4;
@@ -2597,7 +2594,7 @@ A15:          now
                 then not v in Carrier(l) or v in A by XBOOLE_0:def 5;
                 hence contradiction by A13,A14,XBOOLE_0:def 4;
               end;
-              thus (f + g). v = f.v + g.v by Def11
+              thus (f + g). v = f.v + g.v by Def9
                 .= 0.R + g.v by A3,A13
                 .= g.v by RLVECT_1:4
                 .= l.v by A7,A15;
@@ -2607,7 +2604,7 @@ A16:          not v in Carrier(l);
               then
 A17:          not v in D by XBOOLE_0:def 5;
 A18:          not v in C by A16,XBOOLE_0:def 4;
-              thus (f + g).v = f.v + g.v by Def11
+              thus (f + g).v = f.v + g.v by Def9
                 .= 0.R + g.v by A3,A18
                 .= 0.R + 0.R by A7,A17
                 .= 0.R by RLVECT_1:4
@@ -2620,14 +2617,14 @@ A18:          not v in C by A16,XBOOLE_0:def 4;
       hence thesis;
     end;
     then
-A19: v = Sum(f) + Sum(g) by A1,Th77;
-    Sum(f) in Lin(A) & Sum(g) in Lin(B) by Th86;
+A19: v = Sum(f) + Sum(g) by A1,Th58;
+    Sum(f) in Lin(A) & Sum(g) in Lin(B) by Th67;
     hence v in Lin(A) + Lin(B) by A19,RMOD_3:1;
   end;
   then
 A20: Lin(A \/ B) is Submodule of Lin(A) + Lin(B) by RMOD_2:28;
   Lin(A) is Submodule of Lin(A \/ B) & Lin(B) is Submodule of Lin(A \/ B)
-  by Th92,XBOOLE_1:7;
+  by Th73,XBOOLE_1:7;
   then Lin(A) + Lin(B) is Submodule of Lin(A \/ B) by RMOD_3:35;
   hence thesis by A20,RMOD_2:25;
 end;
@@ -2636,6 +2633,6 @@ theorem
   Lin(A /\ B) is Submodule of Lin(A) /\ Lin(B)
 proof
   Lin(A /\ B) is Submodule of Lin(A) & Lin(A /\ B) is Submodule of Lin(B)
-  by Th92,XBOOLE_1:17;
+  by Th73,XBOOLE_1:17;
   hence thesis by RMOD_3:20;
 end;

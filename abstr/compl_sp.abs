@@ -2,7 +2,7 @@
 ::  by Karol P\c{a}k
 ::
 :: Received October 12, 2007
-:: Copyright (c) 2007-2011 Association of Mizar Users
+:: Copyright (c) 2007-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -22,33 +22,32 @@ environ
       TOPGEN_1, WELLORD1, ORDERS_2, PARTFUN1, WELLFND1, TBSP_1, WAYBEL23,
       RLVECT_3, COMPL_SP;
  notations METRIC_6, RELAT_2, BINOP_1, TOPMETR, CARD_1, FUNCOP_1, CANTOR_1,
-      WELLORD1, COMPLEX1, FINSET_1, SEQ_2, TARSKI, XBOOLE_0, SUBSET_1,
+      WELLORD1, COMPLEX1, FINSET_1, SEQ_2, TARSKI, XBOOLE_0, SUBSET_1, RELAT_1,
       ORDINAL1, NUMBERS, ZFMISC_1, XXREAL_0, XREAL_0, REAL_1, SETFAM_1,
       DOMAIN_1, TOPS_2, FUNCT_1, VALUED_1, NAT_1, VALUED_0, STRUCT_0, PRE_TOPC,
-      COMPTS_1, RELAT_1, SEQ_1, TBSP_1, RELSET_1, PARTFUN1, FUNCT_2, METRIC_1,
-      PCOMPS_1, CARD_3, PROB_1, FRECHET, KURATO_0, KURATO_2, WELLFND1,
-      WAYBEL23, ORDERS_2, TOPGEN_1;
- constructors REAL_1, NAT_1, TBSP_1, YELLOW_6, FRECHET, FRECHET2, KURATO_2,
-      COMPLEX1, SEQ_2, TOPS_2, WELLORD1, CARD_3, CANTOR_1, URYSOHN3, METRIC_6,
-      REALSET1, WELLFND1, TOPGEN_4, WAYBEL23, TOPGEN_1, SEQ_1, COMPTS_1,
-      FINSUB_1, TOPS_1, BINOP_2, RVSUM_1, KURATO_0;
- registrations REALSET1, TOPMETR, PRE_TOPC, PCOMPS_1, NAT_1, TBSP_1, XREAL_0,
-      RELSET_1, SUBSET_1, STRUCT_0, TOPS_1, METRIC_1, HAUSDORF, MEMBERED,
-      XXREAL_0, YELLOW13, CARD_1, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS,
-      FINSET_1, SEQ_4, WELLFND1, ZFMISC_1, KURATO_0;
+      COMPTS_1, SEQ_1, TBSP_1, RELSET_1, PARTFUN1, FUNCT_2, METRIC_1, PCOMPS_1,
+      CARD_3, PROB_1, FRECHET, KURATO_0, KURATO_2, WELLFND1, WAYBEL23,
+      ORDERS_2, TOPGEN_1;
+ constructors REAL_1, TBSP_1, FRECHET, COMPLEX1, SEQ_2, TOPS_2, WELLORD1,
+      CANTOR_1, URYSOHN3, METRIC_6, WELLFND1, TOPGEN_4, WAYBEL23, TOPGEN_1,
+      SEQ_1, COMPTS_1, BINOP_2, KURATO_0, COMSEQ_2;
+ registrations TOPMETR, PRE_TOPC, PCOMPS_1, NAT_1, TBSP_1, XREAL_0, RELSET_1,
+      SUBSET_1, STRUCT_0, TOPS_1, METRIC_1, HAUSDORF, MEMBERED, XXREAL_0,
+      YELLOW13, CARD_1, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS, FINSET_1, SEQ_4,
+      WELLFND1, ZFMISC_1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
 
 
 begin :: Preliminaries
 
-reserve i,n,m for natural number,
+reserve i,n,m for Nat,
   x,y,X,Y for set,
   r,s for Real;
 
 definition
   let M be non empty MetrStruct;
   let S be SetSequence of M;
-  attr S is bounded means
+  attr S is pointwise_bounded means
 :: COMPL_SP:def 1
 
   for i holds S.i is bounded;
@@ -56,7 +55,7 @@ end;
 
 registration
   let M be non empty Reflexive MetrStruct;
-  cluster bounded non-empty for SetSequence of M;
+  cluster pointwise_bounded non-empty for SetSequence of M;
 end;
 
 definition
@@ -69,20 +68,21 @@ definition
 end;
 
 theorem :: COMPL_SP:1
-  for M be Reflexive non empty MetrStruct for S be bounded
+  for M be Reflexive non empty MetrStruct for S be pointwise_bounded
   SetSequence of M holds diameter S is bounded_below;
 
 theorem :: COMPL_SP:2
-  for M be Reflexive non empty MetrStruct for S be bounded
+  for M be Reflexive non empty MetrStruct for S be pointwise_bounded
   SetSequence of M st S is non-ascending holds diameter S is bounded_above &
   diameter S is non-increasing;
 
 theorem :: COMPL_SP:3
-  for M be Reflexive non empty MetrStruct for S be bounded SetSequence
-  of M st S is non-descending holds diameter S is non-decreasing;
+  for M be Reflexive non empty MetrStruct
+  for S be pointwise_bounded SetSequence of M st
+  S is non-descending holds diameter S is non-decreasing;
 
 theorem :: COMPL_SP:4
-  for M be non empty Reflexive MetrStruct for S be bounded
+  for M be non empty Reflexive MetrStruct for S be pointwise_bounded
   SetSequence of M st S is non-ascending & lim diameter S = 0 for F be sequence
   of M st for i holds F.i in S.i holds F is Cauchy;
 
@@ -165,8 +165,8 @@ end;
 
 registration
   let M be non empty MetrSpace;
-  cluster non-empty bounded open for SetSequence of M;
-  cluster non-empty bounded closed for SetSequence of M;
+  cluster non-empty pointwise_bounded open for SetSequence of M;
+  cluster non-empty pointwise_bounded closed for SetSequence of M;
 end;
 
 theorem :: COMPL_SP:7
@@ -184,13 +184,14 @@ begin :: Cantor's theorem on complete spaces
 theorem :: COMPL_SP:9
   for M be non empty MetrSpace for C be sequence of M ex S be
 non-empty closed SetSequence of M st S is non-ascending & ( C is Cauchy implies
-S is bounded & lim diameter S = 0 ) & for i ex U be Subset of TopSpaceMetr M st
+S is pointwise_bounded & lim diameter S = 0 ) &
+for i ex U be Subset of TopSpaceMetr M st
   U = { C.j where j is Element of NAT: j >= i } & S.i = Cl U;
 
 theorem :: COMPL_SP:10
   for M be non empty MetrSpace holds M is complete iff for S be
-non-empty bounded closed SetSequence of M st S is non-ascending & lim diameter
-  S = 0 holds meet S is non empty;
+non-empty pointwise_bounded closed SetSequence of M st S is non-ascending &
+lim diameter S = 0 holds meet S is non empty;
 
 theorem :: COMPL_SP:11
   for T be non empty TopSpace for S be non-empty SetSequence of T
@@ -271,9 +272,7 @@ theorem :: COMPL_SP:23
   one-to-one implies meet R = {} ) & for i ex Si be Subset-Family of T st R.i =
   Cl union Si & Si = {S.j where j is Element of NAT: j >= i};
 
-theorem :: COMPL_SP:24
-  for F be Function st dom F is infinite & rng F is finite ex x st
-  x in rng F & F"{x} is infinite;
+canceled;
 
 theorem :: COMPL_SP:25
   for X be non empty set, F be SetSequence of X st F is
@@ -348,13 +347,6 @@ theorem :: COMPL_SP:37
   totally_bounded & M is complete;
 
 begin :: Well spaces
-
-definition
-  let T be set;
-  let S be Function of NAT,T;
-  let i be natural number;
-  redefine func S.i -> Element of T;
-end;
 
 theorem :: COMPL_SP:38
   for M be MetrStruct, a be Point of M,x holds x in [:X,(the
@@ -446,10 +438,12 @@ theorem :: COMPL_SP:42
 theorem :: COMPL_SP:43
   for M be symmetric triangle Reflexive non empty MetrStruct st M
 is complete for a be Point of M st ex b be Point of M st dist(a,b)<>0 for X be
-  infinite set holds WellSpace(a,X) is complete & ex S be non-empty bounded
+  infinite set holds WellSpace(a,X) is complete &
+  ex S be non-empty pointwise_bounded
   SetSequence of WellSpace(a,X) st S is closed & S is non-ascending & meet S is
   empty;
 
 theorem :: COMPL_SP:44
   ex M be non empty MetrSpace st M is complete & ex S be non-empty
-bounded SetSequence of M st S is closed & S is non-ascending & meet S is empty;
+pointwise_bounded SetSequence of M st S is closed & S is non-ascending &
+meet S is empty;

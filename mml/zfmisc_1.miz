@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received February 1, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,7 +20,7 @@ environ
  registrations XBOOLE_0;
  requirements BOOLE;
  definitions TARSKI, XBOOLE_0;
- theorems TARSKI, XBOOLE_0, ENUMSET1, XBOOLE_1;
+ theorems TARSKI, XBOOLE_0, ENUMSET1, XBOOLE_1, XTUPLE_0, XREGULAR;
  schemes XBOOLE_0;
 
 begin
@@ -82,12 +82,7 @@ A1: X in M & for X,Y holds X in M & Y c= X implies Y in M and
     consider IT being set such that
 A2: Y in IT iff Y in M & IT[Y] from XBOOLE_0:sch 1;
     take IT;
-    let Y;
-    thus Y in IT implies Y c= X by A2;
-    assume
-A3: Y c= X;
-    then Y in M by A1;
-    hence thesis by A2,A3;
+    thus thesis by A2,A1;
   end;
   uniqueness
   proof
@@ -191,7 +186,7 @@ end;
 ::  Singleton and unordered pairs.
 ::
 
-theorem Th6:
+theorem Th3:
   {x} c= {y} implies x = y
 proof
   x in { x } by TARSKI:def 1;
@@ -199,7 +194,7 @@ proof
   hence thesis by Lm3;
 end;
 
-theorem Th8:
+theorem Th4:
   {x} = {y1,y2} implies x = y1
 proof
   assume { x } = { y1,y2 };
@@ -207,23 +202,23 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th9:
+theorem
   {x} = {y1,y2} implies y1 = y2
 proof
   assume
 A1: { x } = { y1,y2 };
-  then x = y1 by Th8;
-  hence thesis by A1,Th8;
+  then x = y1 by Th4;
+  hence thesis by A1,Th4;
 end;
 
-theorem Th10:
+theorem Th6:
   { x1,x2 } = { y1,y2 } implies x1 = y1 or x1 = y2
 proof
   x1 in { x1,x2 } by TARSKI:def 2;
   hence thesis by TARSKI:def 2;
 end;
 
-theorem Th12:
+theorem Th7:
   {x} c= {x,y}
 proof
   let z;
@@ -250,18 +245,11 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-Lm5: x in X implies {x} \/ X = X
-proof
-  assume x in X;
-  then {x} c= X by Lm1;
-  hence thesis by XBOOLE_1:12;
-end;
-
 theorem
   {x} \/ {x,y} = {x,y}
 proof
   x in {x,y} by TARSKI:def 2;
-  hence thesis by Lm5;
+  hence thesis by XBOOLE_1:12,Lm1;
 end;
 
 Lm6: {x} misses X implies not x in X
@@ -293,7 +281,7 @@ A1: not x in X;
   thus thesis by XBOOLE_1:2;
 end;
 
-theorem Th17:
+theorem Th11:
   x <> y implies {x} misses {y}
 proof
   assume x <> y;
@@ -316,44 +304,31 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-Lm9: x in X implies X /\ {x} = {x}
-proof
-  assume x in X;
-  then {x} c= X by Lm1;
-  hence thesis by XBOOLE_1:28;
-end;
+Lm9: x in X implies X /\ {x} = {x} by XBOOLE_1:28,Lm1;
 
 theorem
   {x} /\ {x,y} = {x}
 proof
   x in {x,y} by TARSKI:def 2;
-  hence thesis by Lm9;
+  hence thesis by XBOOLE_1:28,Lm1;
 end;
 
-Lm10: {x} \ X = {x} iff not x in X
-proof
-  {x} \ X = {x} iff {x} misses X by XBOOLE_1:83;
-  hence thesis by Lm6,Lm7;
-end;
+Lm10: {x} \ X = {x} iff not x in X by Lm6,Lm7,XBOOLE_1:83;
 
 theorem
   {x} \ {y} = {x} iff x <> y
 proof
-  {x} \ {y} = {x} iff not x in {y} by Lm10;
+  {x} \ {y} = {x} iff not x in {y} by Lm6,Lm7,XBOOLE_1:83;
   hence thesis by TARSKI:def 1;
 end;
 
-Lm11: {x} \ X = {} iff x in X
-proof
-  {x} \ X = {} iff {x} c= X by XBOOLE_1:37;
-  hence thesis by Lm1;
-end;
+Lm11: {x} \ X = {} iff x in X by Lm1,XBOOLE_1:37;
 
 theorem
   {x} \ {y} = {} implies x = y
 proof
   assume {x} \ {y} = {};
-  then x in {y} by Lm11;
+  then x in {y} by Lm1,XBOOLE_1:37;
   hence thesis by TARSKI:def 1;
 end;
 
@@ -361,7 +336,7 @@ theorem
   {x} \ {x,y} = {}
 proof
   x in {x,y} by TARSKI:def 2;
-  hence thesis by Lm11;
+  hence thesis by Lm1,XBOOLE_1:37;
 end;
 
 Lm12: {x,y} \ X = {x} iff not x in X & (y in X or x = y)
@@ -398,7 +373,7 @@ A1: not x in {y} by TARSKI:def 1;
 end;
 
 theorem
-  {x} c= {y} implies x = y by Th6;
+  {x} c= {y} implies x = y by Th3;
 
 theorem
   {z} c= {x,y} implies z = x or z = y
@@ -409,7 +384,7 @@ A1: z in {z} by TARSKI:def 1;
   hence thesis by TARSKI:def 2;
 end;
 
-theorem Th26:
+theorem Th20:
   {x,y} c= {z} implies x = z
 proof
 A1: x in {x,y} by TARSKI:def 2;
@@ -422,7 +397,7 @@ theorem
   {x,y} c= {z} implies {x,y} = {z}
 proof
   assume {x,y} c= {z};
-  then x=z & y=z by Th26;
+  then x=z & y=z by Th20;
   hence thesis by ENUMSET1:29;
 end;
 
@@ -483,7 +458,7 @@ A12:    y<>x1 by A2,A3,Lm13;
     end;
     hence thesis by TARSKI:1;
   end;
-  thus thesis by Th12,XBOOLE_1:2;
+  thus thesis by Th7,XBOOLE_1:2;
 end;
 
 theorem
@@ -491,7 +466,7 @@ theorem
 proof
   assume {x1,x2} c= {y1,y2};
   then {x1,x2}={} or {x1,x2}={y1} or {x1,x2}={y2} or {x1,x2}={y1,y2} by Lm14;
-  hence thesis by Th8,Th10;
+  hence thesis by Th4,Th6;
 end;
 
 theorem
@@ -569,44 +544,18 @@ end;
 ::  Ordered pairs.
 ::
 
-theorem Th33:
-  [x1,x2] = [y1,y2] implies x1 = y1 & x2 = y2
-proof
-  assume
-A1: [x1,x2] = [y1,y2];
-A2: now
-    assume
-A3: y1 <> y2;
-    then
-A4: {x1} <> {y1,y2} by Th9;
-    then {x1} = {y1} by A1,Th10;
-    hence
-A5: x1 = y1 by Th6;
-    {y1,y2} = {x1,x2} by A1,A4,Th10;
-    hence x2 = y2 by A3,A5,Th10;
-  end;
-  now
-    assume
-A6: y1 = y2;
-    then
-    { { y1 } } = { {y1}, {y1} } & { {y1}, {y1} } = { {x1,x2},{x1} } by A1,
-ENUMSET1:29;
-    then { y1 } = { x1,x2 } by Th8;
-    hence thesis by A6,Th8;
-  end;
-  hence thesis by A2;
-end;
-
 Lm17: [x,y] in [:X,Y:] iff x in X & y in Y
 proof
   thus [x,y] in [:X,Y:] implies x in X & y in Y
   proof
     assume [x,y] in [:X,Y:];
     then ex x1,y1 st x1 in X & y1 in Y & [x,y]=[x1,y1] by Def2;
-    hence thesis by Th33;
+    hence thesis by XTUPLE_0:1;
   end;
   thus thesis by Def2;
 end;
+
+canceled;
 
 theorem
   [x,y] in [:{x1},{y1}:] iff x = x1 & y = y1
@@ -638,7 +587,7 @@ A3: z=[x,y] by TARSKI:def 1;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th36:
+theorem Th30:
   [:{x},{y,z}:] = {[x,y],[x,z]} & [:{x,y},{z}:] = {[x,z],[y,z]}
 proof
   now
@@ -689,10 +638,10 @@ end;
 ::  Singleton and unordered pairs included in a set.
 ::
 
-theorem Th37:
+theorem
   {x} c= X iff x in X by Lm1;
 
-theorem Th38:
+theorem Th32:
   {x1,x2} c= Z iff x1 in Z & x2 in Z
 proof
   x1 in {x1,x2} & x2 in {x1,x2} by TARSKI:def 2;
@@ -724,23 +673,21 @@ theorem
 ::   Sum of an unordered pair (or a singleton) and a set.
 ::
 
-theorem Th43:
+theorem Th37:
   {z} = X \/ Y implies X = {z} & Y = {z} or X = {} & Y = {z} or X
   = {z} & Y = {}
 proof
   assume
 A1: {z} = X \/ Y;
-  then
-A2: X c= {z} & Y c= {z} by XBOOLE_1:7;
   X <> {} or Y <> {} by A1;
-  hence thesis by A2,Lm3;
+  hence thesis by A1,Lm3,XBOOLE_1:7;
 end;
 
 theorem
   {z} = X \/ Y & X <> Y implies X = {} or Y = {}
 proof
   assume {z} = X \/ Y;
-  then X={z} & Y={z} or X={} & Y={z} or X={z} & Y={} by Th43;
+  then X={z} & Y={z} or X={} & Y={z} or X={z} & Y={} by Th37;
   hence thesis;
 end;
 
@@ -748,7 +695,7 @@ theorem
   {x} \/ X c= X implies x in X by Lm4;
 
 theorem
-  x in X implies {x} \/ X = X by Lm5;
+  x in X implies {x} \/ X = X by XBOOLE_1:12,Lm1;
 
 theorem
   {x,y} \/ Z c= Z implies x in Z
@@ -762,12 +709,7 @@ A1: {x,y} \/ Z c= Z;
 end;
 
 theorem
-  x in Z & y in Z implies {x,y} \/ Z = Z
-proof
-  assume x in Z & y in Z;
-  then {x,y} c= Z by Th38;
-  hence thesis by XBOOLE_1:12;
-end;
+  x in Z & y in Z implies {x,y} \/ Z = Z by XBOOLE_1:12,Th32;
 
 theorem
   {x} \/ X <> {};
@@ -783,20 +725,15 @@ theorem
   X /\ {x} = {x} implies x in X by Lm8;
 
 theorem
-  x in X implies X /\ {x} = {x} by Lm9;
+  x in X implies X /\ {x} = {x} by XBOOLE_1:28,Lm1;
 
 theorem
-  x in Z & y in Z implies {x,y} /\ Z = {x,y}
-proof
-  assume x in Z & y in Z;
-  then {x,y} c= Z by Th38;
-  hence thesis by XBOOLE_1:28;
-end;
+  x in Z & y in Z implies {x,y} /\ Z = {x,y} by XBOOLE_1:28,Th32;
 
 theorem
   {x} misses X implies not x in X by Lm6;
 
-theorem Th55:
+theorem Th49:
   {x,y} misses Z implies not x in Z
 proof
 A1: x in {x,y} by TARSKI:def 2;
@@ -807,7 +744,7 @@ end;
 theorem
   not x in X implies {x} misses X by Lm7;
 
-theorem Th57:
+theorem Th51:
   not x in Z & not y in Z implies {x,y} misses Z
 proof
   assume
@@ -857,14 +794,14 @@ end;
 ::   Difference of an unordered pair (or a singleton) and a set.
 ::
 
-theorem Th64:
+theorem Th56:
   z in X \ {x} iff z in X & z <> x
 proof
   z in X \ {x} iff z in X & not z in {x} by XBOOLE_0:def 5;
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th65:
+theorem Th57:
   X \ {x} = X iff not x in X
 proof
   X \ {x} = X iff X misses {x} by XBOOLE_1:83;
@@ -880,34 +817,25 @@ proof
 end;
 
 theorem
-  {x} \ X = {x} iff not x in X by Lm10;
+  {x} \ X = {x} iff not x in X by Lm6,Lm7,XBOOLE_1:83;
 
 theorem
-  {x} \ X = {} iff x in X by Lm11;
+  {x} \ X = {} iff x in X by Lm1,XBOOLE_1:37;
 
 theorem
-  {x} \ X = {} or {x} \ X = {x}
-proof
-  assume {x} \ X <> {};
-  then not x in X by Lm11;
-  hence thesis by Lm10;
-end;
+  {x} \ X = {} or {x} \ X = {x} by Lm10,Lm11;
 
 theorem
   {x,y} \ X = {x} iff not x in X & (y in X or x = y) by Lm12;
 
-theorem Th72:
-  {x,y} \ X = {x,y} iff not x in X & not y in X
-proof
-  {x,y} \ X = {x,y} iff {x,y} misses X by XBOOLE_1:83;
-  hence thesis by Th55,Th57;
-end;
+theorem
+  {x,y} \ X = {x,y} iff not x in X & not y in X by Th49,Th51,XBOOLE_1:83;
 
-theorem Th73:
+theorem Th64:
   {x,y} \ X = {} iff x in X & y in X
 proof
   {x,y} \ X = {} iff {x,y} c= X by XBOOLE_1:37;
-  hence thesis by Th38;
+  hence thesis by Th32;
 end;
 
 theorem
@@ -919,7 +847,7 @@ A2: {x,y} \ X <> {x} and
 A3: {x,y} \ X <> {y};
 A4: not x in X & x<>y or y in X by A3,Lm12;
   x in X or not y in X & x<>y by A2,Lm12;
-  hence thesis by A1,A4,Th72,Th73;
+  hence thesis by A1,A4,Th51,XBOOLE_1:83,Th64;
 end;
 
 theorem
@@ -1048,7 +976,7 @@ A3: Y in A by TARSKI:def 4;
   hence thesis by A2,TARSKI:def 3;
 end;
 
-theorem Th95:
+theorem Th77:
   A c= B implies union A c= union B
 proof
   assume
@@ -1076,12 +1004,12 @@ A3: Y in A \/ B by TARSKI:def 4;
     then x in union A or x in union B by A2,TARSKI:def 4;
     hence thesis by XBOOLE_0:def 3;
   end;
-  union A c= union (A \/ B) & union B c= union (A \/ B) by Th95,XBOOLE_1:7;
+  union A c= union (A \/ B) & union B c= union (A \/ B) by Th77,XBOOLE_1:7;
   then union A \/ union B c= union (A \/ B) by XBOOLE_1:8;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem Th97:
+theorem Th79:
   union (A /\ B) c= union A /\ union B
 proof
   let x;
@@ -1097,7 +1025,7 @@ A3: x in union B by A1,TARSKI:def 4;
   hence thesis by A3,XBOOLE_0:def 4;
 end;
 
-theorem Th98:
+theorem Th80:
   (for X st X in A holds X misses B) implies union A misses B
 proof
   assume
@@ -1109,10 +1037,9 @@ A2: z in union(A) /\ B by XBOOLE_0:4;
   then consider X such that
 A3: z in X and
 A4: X in A by TARSKI:def 4;
-A5: X misses B by A1,A4;
   z in B by A2,XBOOLE_0:def 4;
   then z in X /\ B by A3,XBOOLE_0:def 4;
-  hence contradiction by A5,XBOOLE_0:4;
+  hence contradiction by A1,A4,XBOOLE_0:4;
 end;
 
 theorem
@@ -1168,18 +1095,16 @@ A5: X in A by TARSKI:def 4;
 A6: x in Y and
 A7: Y in B by TARSKI:def 4;
     now
-      x in X /\ Y by A4,A6,XBOOLE_0:def 4;
-      then
-A8:   X meets Y by XBOOLE_0:4;
+B8:   x in X /\ Y by A4,A6,XBOOLE_0:def 4;
       assume
 A9:   X<>Y;
       X in A \/ B & Y in A \/ B by A5,A7,XBOOLE_0:def 3;
-      hence contradiction by A1,A9,A8;
+      hence contradiction by A1,A9,B8,XBOOLE_0:4;
     end;
     then Y in A /\ B by A5,A7,XBOOLE_0:def 4;
     hence thesis by A6,TARSKI:def 4;
   end;
-  union (A /\ B) c= union A /\ union B by Th97;
+  union (A /\ B) c= union A /\ union B by Th79;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
@@ -1187,7 +1112,7 @@ end;
 ::  Cartesian product.
 ::
 
-theorem Th103:
+theorem Th84:
   A c= [:X,Y:] & z in A implies ex x,y st x in X & y in Y & z = [ x,y]
 proof
   assume A c= [:X,Y:] & z in A;
@@ -1195,7 +1120,7 @@ proof
   hence thesis by Def2;
 end;
 
-theorem Th104:
+theorem Th85:
   z in [:X1, Y1:] /\ [:X2, Y2:] implies ex x,y st z = [x,y] & x
   in X1 /\ X2 & y in Y1 /\ Y2
 proof
@@ -1211,10 +1136,10 @@ A4: z=[x1,y1] by Def2;
 A5: x2 in X2 and
 A6: y2 in Y2 and
 A7: z=[x2,y2] by Def2;
-  y1=y2 by A4,A7,Th33;
+  y1=y2 by A4,A7,XTUPLE_0:1;
   then
 A8: y1 in Y1 /\ Y2 by A3,A6,XBOOLE_0:def 4;
-  x1=x2 by A4,A7,Th33;
+  x1=x2 by A4,A7,XTUPLE_0:1;
   then x1 in X1 /\ X2 by A2,A5,XBOOLE_0:def 4;
   hence thesis by A4,A8;
 end;
@@ -1238,7 +1163,7 @@ A4: u = {x,y} or u = {x} by A3,TARSKI:def 2;
     then
 A5: {x} c= X \/ Y by XBOOLE_1:1;
     x in X \/ Y & y in X \/ Y by A1,A2,XBOOLE_0:def 3;
-    then {x,y} c= X \/ Y by Th38;
+    then {x,y} c= X \/ Y by Th32;
     hence thesis by A5,A4,Def1;
   end;
   hence thesis by Def1;
@@ -1247,7 +1172,7 @@ end;
 theorem
   [x,y] in [:X,Y:] iff x in X & y in Y by Lm17;
 
-theorem Th107:
+theorem Th88:
   [x,y] in [:X,Y:] implies [y,x] in [:Y,X:]
 proof
   [x,y] in [:X,Y:] implies x in X & y in Y by Lm17;
@@ -1286,8 +1211,8 @@ A2: B c= [:X2,Y2:] and
 A3: for x,y holds [x,y] in A iff [x,y] in B;
   now
     let z;
-A4: z in B implies ex x,y st x in X2 & y in Y2 & z=[x,y] by A2,Th103;
-    z in A implies ex x,y st x in X1 & y in Y1 & z=[x,y] by A1,Th103;
+A4: z in B implies ex x,y st x in X2 & y in Y2 & z=[x,y] by A2,Th84;
+    z in A implies ex x,y st x in X1 & y in Y1 & z=[x,y] by A1,Th84;
     hence z in A iff z in B by A3,A4;
   end;
   hence thesis by TARSKI:1;
@@ -1309,7 +1234,7 @@ A4: z in B implies ex x,y st z=[x, y ] by A2;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th113:
+theorem Th90:
   [:X,Y:] = {} iff X = {} or Y = {}
 proof
   thus [:X,Y:] = {} implies X={} or Y={}
@@ -1398,21 +1323,19 @@ A1: X c= [:X,X:];
   assume X <> {};
   then consider z being set such that
 A2: z in X by XBOOLE_0:7;
-  z in X \/ union X by A2,XBOOLE_0:def 3;
-  then consider Y such that
+  consider Y such that
 A3: Y in X \/ union X and
-A4: not ex x st x in X \/ union X & x in Y by TARSKI:2;
+A4: X \/ union X misses Y by XREGULAR:1,A2;
   now
     assume
 A5: Y in X;
-    then Y in [:X,X:] by A1,TARSKI:def 3;
     then consider x,y such that
-A6: Y=[x,y] by Lm20;
+A6: Y=[x,y] by Lm20,A1,TARSKI:def 3;
 A7: {x} in Y by A6,TARSKI:def 2;
     Y c= union X by A5,Lm15;
     then {x} in union X by A7,TARSKI:def 3;
     then {x} in X \/ union X by XBOOLE_0:def 3;
-    hence contradiction by A4,A7;
+    hence contradiction by A4,A7,XBOOLE_0:3;
   end;
   then Y in union X by A3,XBOOLE_0:def 3;
   then consider Z such that
@@ -1427,7 +1350,7 @@ A11: Z=[x,y] by Def2;
   then
 A12: x in Y by TARSKI:def 1,def 2;
   x in X \/ union X by A10,XBOOLE_0:def 3;
-  hence contradiction by A4,A12;
+  hence contradiction by A4,A12,XBOOLE_0:3;
 end;
 
 theorem
@@ -1445,7 +1368,7 @@ A2: [:X,Z:] c= [:Y,Z:] or [:Z,X:] c= [:Z,Y:];
   hence thesis by Lm17;
 end;
 
-theorem Th118:
+theorem Th95:
   X c= Y implies [:X,Z:] c= [:Y,Z:] & [:Z,X:] c= [:Z,Y:]
 proof
   assume
@@ -1470,15 +1393,15 @@ A6: z=[y,x] by Def2;
   hence thesis by A4,A6,Def2;
 end;
 
-theorem Th119:
+theorem Th96:
   X1 c= Y1 & X2 c= Y2 implies [:X1,X2:] c= [:Y1,Y2:]
 proof
   assume X1 c= Y1 & X2 c= Y2;
-  then [:X1,X2:] c= [:Y1,X2:] & [:Y1,X2:] c= [:Y1,Y2:] by Th118;
+  then [:X1,X2:] c= [:Y1,X2:] & [:Y1,X2:] c= [:Y1,Y2:] by Th95;
   hence thesis by XBOOLE_1:1;
 end;
 
-theorem Th120:
+theorem Th97:
   [:X \/ Y, Z:] = [:X, Z:] \/ [:Y, Z:] & [:Z, X \/ Y:] = [:Z, X:] \/ [:Z, Y:]
 proof
 A1: for z st z in [:X \/ Y, Z:] ex x,y st z=[x,y] by Lm20;
@@ -1516,8 +1439,8 @@ A8: for y,x holds [y,x] in [:Z, X \/ Y:] iff [y,x] in [:Z, X:] \/ [:Z, Y:]
   proof
     let y,x;
 A9: [x,y]in[:X, Z:] or [x,y]in[:Y,Z:] iff [y,x]in[:Z,X:] or [y,x]in[:Z,Y
-    :] by Th107;
-    [y,x] in [:Z, X \/ Y:] iff [x,y] in [:X \/ Y, Z:] by Th107;
+    :] by Th88;
+    [y,x] in [:Z, X \/ Y:] iff [x,y] in [:X \/ Y, Z:] by Th88;
     hence thesis by A7,A9,XBOOLE_0:def 3;
   end;
 A10: for z st z in [:Z,X \/ Y:] ex x,y st z=[x,y] by Lm20;
@@ -1528,9 +1451,9 @@ end;
 theorem
   [:X1 \/ X2, Y1 \/ Y2:] = [:X1,Y1:] \/ [:X1,Y2:] \/ [:X2,Y1:] \/ [:X2, Y2:]
 proof
-  thus [:X1 \/ X2, Y1 \/ Y2:] = [:X1, Y1 \/ Y2:] \/ [:X2, Y1 \/ Y2:] by Th120
-    .= [:X1,Y1:] \/ [:X1,Y2:] \/ [:X2,Y1 \/ Y2:] by Th120
-    .= [:X1,Y1:] \/ [:X1,Y2:] \/ ([:X2,Y1:] \/ [:X2,Y2:]) by Th120
+  thus [:X1 \/ X2, Y1 \/ Y2:] = [:X1, Y1 \/ Y2:] \/ [:X2, Y1 \/ Y2:] by Th97
+    .= [:X1,Y1:] \/ [:X1,Y2:] \/ [:X2,Y1 \/ Y2:] by Th97
+    .= [:X1,Y1:] \/ [:X1,Y2:] \/ ([:X2,Y1:] \/ [:X2,Y2:]) by Th97
     .= [:X1,Y1:] \/ [:X1,Y2:] \/ [:X2,Y1:] \/ [:X2,Y2:] by XBOOLE_1:4;
 end;
 
@@ -1573,29 +1496,29 @@ A11: for y,x holds [y,x] in [:Z, X /\ Y:] iff [y,x] in [:Z, X:] /\ [:Z, Y:]
   proof
     let y,x;
 A12: [x,y]in[:X, Z:] & [x,y]in[:Y,Z:] iff [y,x]in[:Z,X:] & [y,x]in[:Z,Y:]
-    by Th107;
-    [y,x] in [:Z, X /\ Y:] iff [x,y] in [:X /\ Y, Z:] by Th107;
+    by Th88;
+    [y,x] in [:Z, X /\ Y:] iff [x,y] in [:X /\ Y, Z:] by Th88;
     hence thesis by A10,A12,XBOOLE_0:def 4;
   end;
   [:Z, X:] /\ [:Z, Y:] c= [:Z, X:] by XBOOLE_1:17;
   hence thesis by A11,Lm18;
 end;
 
-theorem Th123:
+theorem Th100:
   [:X1 /\ X2, Y1 /\ Y2:] = [:X1,Y1:] /\ [:X2, Y2:]
 proof
   Y1 /\ Y2 c= Y2 & X1 /\ X2 c= X2 by XBOOLE_1:17;
   then
-A1: [:X1 /\ X2, Y1 /\ Y2:] c= [:X2, Y2:] by Th119;
+A1: [:X1 /\ X2, Y1 /\ Y2:] c= [:X2, Y2:] by Th96;
 A2: [:X1, Y1:] /\ [:X2, Y2:] c= [:X1 /\ X2, Y1 /\ Y2:]
   proof
     let z;
     assume z in [:X1, Y1:] /\ [:X2, Y2:];
-    then ex x,y st z=[x,y] & x in X1 /\ X2 & y in Y1 /\ Y2 by Th104;
+    then ex x,y st z=[x,y] & x in X1 /\ X2 & y in Y1 /\ Y2 by Th85;
     hence thesis by Def2;
   end;
   Y1 /\ Y2 c= Y1 & X1 /\ X2 c= X1 by XBOOLE_1:17;
-  then [:X1 /\ X2, Y1 /\ Y2:] c= [:X1, Y1:] by Th119;
+  then [:X1 /\ X2, Y1 /\ Y2:] c= [:X1, Y1:] by Th96;
   then [:X1 /\ X2, Y1 /\ Y2:] c= [:X1, Y1:] /\ [:X2, Y2:] by A1,XBOOLE_1:19;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
@@ -1606,12 +1529,12 @@ proof
   assume that
 A1: A c= X and
 A2: B c= Y;
-A3: [:A,Y:] /\ [:X,B:] = [:A /\ X, Y /\ B:] by Th123;
+A3: [:A,Y:] /\ [:X,B:] = [:A /\ X, Y /\ B:] by Th100;
   A /\ X = A by A1,XBOOLE_1:28;
   hence thesis by A2,A3,XBOOLE_1:28;
 end;
 
-theorem Th125:
+theorem Th102:
   [:X \ Y, Z:] = [:X, Z:] \ [:Y, Z:] & [:Z, X \ Y:] = [:Z, X:] \ [:Z, Y:]
 proof
 A1: for x,y holds [x,y] in [:X \ Y, Z:] iff [x,y] in [:X, Z:] \ [:Y, Z:]
@@ -1652,8 +1575,8 @@ A11: for y,x holds [y,x] in [:Z, X \ Y:] iff [y,x] in [:Z, X:] \ [:Z, Y:]
   proof
     let y,x;
 A12: [x,y]in[:X, Z:]& not[x,y]in[:Y,Z:] iff [y,x]in[:Z,X:]& not[y,x]in[:Z,
-    Y :] by Th107;
-    [y,x] in [:Z, X \ Y:] iff [x,y] in [:X \ Y, Z:] by Th107;
+    Y :] by Th88;
+    [y,x] in [:Z, X \ Y:] iff [x,y] in [:X \ Y, Z:] by Th88;
     hence thesis by A10,A12,XBOOLE_0:def 5;
   end;
   [:Z, X:] \ [:Z, Y:] c= [:Z, X:] by XBOOLE_1:36;
@@ -1663,10 +1586,10 @@ end;
 theorem
   [:X1,X2:] \ [:Y1,Y2:] = [:X1\Y1,X2:] \/ [:X1,X2\Y2:]
 proof
-A1: [:Y1,X2:] /\ [:X1,Y2:] = [:Y1 /\ X1, X2 /\ Y2:] by Th123;
+A1: [:Y1,X2:] /\ [:X1,Y2:] = [:Y1 /\ X1, X2 /\ Y2:] by Th100;
   Y1 /\ X1 c= Y1 & X2 /\ Y2 c= Y2 by XBOOLE_1:17;
   then
-A2: [:Y1 /\ X1, X2 /\ Y2:] c= [:Y1,Y2:] by Th119;
+A2: [:Y1 /\ X1, X2 /\ Y2:] c= [:Y1,Y2:] by Th96;
 A3: [:X1\Y1,X2:] \/ [:X1,X2\Y2:] c= [:X1,X2:] \ [:Y1, Y2:]
   proof
     let z;
@@ -1700,14 +1623,14 @@ A13:  not z in [:Y1,Y2:] by A12,Lm17;
     hence thesis by A4,A9,XBOOLE_0:def 3;
   end;
   [:X1\Y1,X2:] = [:X1,X2:] \ [:Y1,X2:] & [:X1,X2\Y2:] = [:X1,X2:] \ [:X1,
-  Y2 :] by Th125;
+  Y2 :] by Th102;
   then [:X1\Y1,X2:] \/ [:X1,X2\Y2:] = [:X1,X2:] \ [:Y1 /\ X1, X2 /\ Y2:] by A1,
 XBOOLE_1:54;
   then [:X1,X2:] \ [:Y1,Y2:] c= [:X1\Y1,X2:] \/ [:X1,X2\Y2:] by A2,XBOOLE_1:34;
   hence thesis by A3,XBOOLE_0:def 10;
 end;
 
-theorem Th127:
+theorem Th104:
   X1 misses X2 or Y1 misses Y2 implies [:X1,Y1:] misses [:X2,Y2:]
 proof
   assume
@@ -1715,7 +1638,7 @@ A1: X1 misses X2 or Y1 misses Y2;
   assume not thesis;
   then consider z being set such that
 A2: z in [:X1,Y1:] /\ [:X2,Y2:] by XBOOLE_0:4;
-  ex x,y st z=[x,y] & x in X1 /\ X2 & y in Y1 /\ Y2 by A2,Th104;
+  ex x,y st z=[x,y] & x in X1 /\ X2 & y in Y1 /\ Y2 by A2,Th85;
   hence contradiction by A1,XBOOLE_0:4;
 end;
 
@@ -1736,24 +1659,24 @@ A1: y in {z} iff y=z by TARSKI:def 1;
 end;
 
 theorem
-  X <> {} implies [:{x},X:] <> {} & [:X,{x}:] <> {} by Th113;
+  X <> {} implies [:{x},X:] <> {} & [:X,{x}:] <> {} by Th90;
 
 theorem
   x <> y implies [:{x},X:] misses [:{y},Y:] & [:X,{x}:] misses [:Y,{y}:]
 proof
   assume x<>y;
-  then {x} misses {y} by Th17;
-  hence thesis by Th127;
+  then {x} misses {y} by Th11;
+  hence thesis by Th104;
 end;
 
 theorem
   [:{x,y},X:] = [:{x},X:] \/ [:{y},X:] & [:X,{x,y}:] = [:X,{x}:] \/ [:X, {y} :]
 proof
   {x,y}={x} \/ {y} by ENUMSET1:1;
-  hence thesis by Th120;
+  hence thesis by Th97;
 end;
 
-theorem Th134:
+theorem Th110:
   X1 <> {} & Y1 <> {} & [:X1,Y1:] = [:X2,Y2:] implies X1 = X2 & Y1 = Y2
 proof
   assume
@@ -1767,9 +1690,9 @@ A4: y in Y1 by XBOOLE_0:7;
   assume
 A5: [:X1,Y1:] = [:X2,Y2:];
   then
-A6: [:X2,Y2:] <> {} by A1,A3,Th113;
+A6: [:X2,Y2:] <> {} by A1,A3,Th90;
   then
-A7: Y2 <> {} by Th113;
+A7: Y2 <> {} by Th90;
   z in X1 iff z in X2
   proof
     consider y2 being set such that
@@ -1785,7 +1708,7 @@ A8: y2 in Y2 by A7,XBOOLE_0:7;
     hence thesis by A5,Lm17;
   end;
   hence X1 = X2 by TARSKI:1;
-A9: X2 <> {} by A6,Th113;
+A9: X2 <> {} by A6,Th90;
   z in Y1 iff z in Y2
   proof
     consider x2 being set such that
@@ -1814,10 +1737,9 @@ A3: now
     defpred P[set] means ex Y st $1=Y & ex z st z in Y & z in X;
     consider Z such that
 A4: for y holds y in Z iff y in union X & P[y] from XBOOLE_0:sch 1;
-    ex x being set st x in X \/ Z by A2,XBOOLE_0:7;
-    then consider Y2 such that
+    consider Y2 such that
 A5: Y2 in X \/ Z and
-A6: not ex x st x in X \/ Z & x in Y2 by TARSKI:2;
+A6: X \/ Z misses Y2 by XREGULAR:1,A2;
     now
       assume
 A7:   not ex Y2 st Y2 in X & for Y1 st Y1 in Y2 holds for z holds not
@@ -1831,7 +1753,7 @@ A10:    ex z st z in Y1 & z in X by A7;
         Y1 in union X by A8,A9,TARSKI:def 4;
         then Y1 in Z by A4,A10;
         then Y1 in X \/ Z by XBOOLE_0:def 3;
-        hence contradiction by A6,A9;
+        hence contradiction by A6,A9,XBOOLE_0:3;
       end;
       then Y2 in Z by A5,XBOOLE_0:def 3;
       then ex X2 st Y2=X2 & ex z st z in X2 & z in X by A4;
@@ -1839,7 +1761,7 @@ A10:    ex z st z in Y1 & z in X by A7;
 A11:  z in Y2 and
 A12:  z in X;
       z in X \/ Z by A12,XBOOLE_0:def 3;
-      hence contradiction by A6,A11;
+      hence contradiction by A6,A11,XBOOLE_0:3;
     end;
     then consider Y1 such that
 A13: Y1 in X and
@@ -1860,23 +1782,21 @@ A18:  x in {y,x} by TARSKI:def 2;
   now
     consider z being set such that
 A19: z in X by A2,XBOOLE_0:7;
-    z in X \/ union X by A19,XBOOLE_0:def 3;
-    then consider Y1 such that
+    consider Y1 such that
 A20: Y1 in X \/ union X and
-A21: not ex x st x in X \/ union X & x in Y1 by TARSKI:2;
+A21: X \/ union X misses Y1 by XREGULAR:1,A19;
     assume
 A22: X c= [:X,Y:];
     now
       assume
 A23:  Y1 in X;
-      then Y1 in [:X,Y:] by A22,TARSKI:def 3;
       then consider x,y such that
-A24:  Y1 = [x,y] by Lm20;
+A24:  Y1 = [x,y] by Lm20,A22,TARSKI:def 3;
 A25:  {x} in Y1 by A24,TARSKI:def 2;
       Y1 c= union X by A23,Lm15;
       then {x} in union X by A25,TARSKI:def 3;
       then {x} in X \/ union X by XBOOLE_0:def 3;
-      hence contradiction by A21,A25;
+      hence contradiction by A21,A25,XBOOLE_0:3;
     end;
     then Y1 in union X by A20,XBOOLE_0:def 3;
     then consider Y2 such that
@@ -1891,7 +1811,7 @@ A29: Y2=[x,y] by Def2;
     then
 A30: x in Y1 by TARSKI:def 1,def 2;
     x in X \/ union X by A28,XBOOLE_0:def 3;
-    hence contradiction by A21,A30;
+    hence contradiction by A21,A30,XBOOLE_0:3;
   end;
   hence thesis by A1,A3;
 end;
@@ -1922,8 +1842,7 @@ A6: for Y st Y c= X holds Y in Z by A3;
       then Y c= X by Def1;
       hence Y in Z by A6;
     end;
-    then bool X c= Z by TARSKI:def 3;
-    hence thesis by A2,A5;
+    hence thesis by A2,A5,TARSKI:def 3;
   end;
   thus thesis by A4;
 end;
@@ -1935,22 +1854,22 @@ theorem
 proof
   assume e in [:X1,Y1:] & e in [:X2,Y2:];
   then e in [:X1,Y1:] /\ [:X2,Y2:] by XBOOLE_0:def 4;
-  hence thesis by Th123;
+  hence thesis by Th100;
 end;
 
 begin :: Addenda
 :: from BORSUK_1
 
-theorem Th138:
+theorem Th114:
   [:X1,X2:] c= [:Y1,Y2:] & [:X1,X2:] <> {} implies X1 c= Y1 & X2 c= Y2
 proof
   assume that
 A1: [:X1,X2:] c= [:Y1,Y2:] and
 A2: [:X1,X2:] <> {};
 A3: [:X1,X2:] = [:X1,X2:] /\ [:Y1,Y2:] by A1,XBOOLE_1:28
-    .= [:X1/\Y1,X2/\Y2:] by Th123;
-  X1 <> {} & X2 <> {} by A2,Th113;
-  then X1 = X1/\Y1 & X2 = X2/\Y2 by A3,Th134;
+    .= [:X1/\Y1,X2/\Y2:] by Th100;
+  X1 <> {} & X2 <> {} by A2,Th90;
+  then X1 = X1/\Y1 & X2 = X2/\Y2 by A3,Th110;
   hence thesis by XBOOLE_1:17;
 end;
 
@@ -1969,8 +1888,8 @@ A1: [:A,B:] c= [:C,D:] or [:B,A:] c= [:D,C:];
   end;
   suppose
     B <> {};
-    then [:A,B:] <> {} & [:B,A:] <> {} by Th113;
-    hence thesis by A1,Th138;
+    then [:A,B:] <> {} & [:B,A:] <> {} by Th90;
+    hence thesis by A1,Th114;
   end;
 end;
 
@@ -1984,7 +1903,7 @@ A1: x in X;
     let y;
     assume y in (X\{x})\/{x};
     then y in X\{x} or y in {x} by XBOOLE_0:def 3;
-    hence thesis by A1,Th64,TARSKI:def 1;
+    hence thesis by A1,Th56,TARSKI:def 1;
   end;
   thus X c= (X\{x})\/{x}
   proof
@@ -2000,7 +1919,7 @@ theorem
 proof
 A1: (X \/ {x}) \ {x} = X \ {x} by XBOOLE_1:40;
   assume not x in X;
-  hence thesis by A1,Th65;
+  hence thesis by A1,Th57;
 end;
 
 :: from WAYBEL18, 2006.01.06, A.T.
@@ -2030,8 +1949,7 @@ A9:   now
 A10:    {x,y,z} \ {x} c= {y,z} by XBOOLE_1:36;
         assume not x in Z;
         then Z c= {x,y,z} \ {x} by A1,Lm2;
-        then Z c= {y,z} by A10,XBOOLE_1:1;
-        hence contradiction by A2,A4,A5,A7,Lm14;
+        hence contradiction by A2,A4,A5,A7,Lm14,A10,XBOOLE_1:1;
       end;
 A11:  now
         {x,y,z} \ {y} = ({x,y} \/ {z}) \ {y} by ENUMSET1:3
@@ -2043,8 +1961,7 @@ A11:  now
 A12:    {x,y,z} \ {y} c= {x,z} by XBOOLE_1:36;
         assume not y in Z;
         then Z c= {x,y,z} \ {y} by A1,Lm2;
-        then Z c= {x,z} by A12,XBOOLE_1:1;
-        hence contradiction by A2,A3,A5,A8,Lm14;
+        hence contradiction by A2,A3,A5,A8,Lm14,A12,XBOOLE_1:1;
       end;
 A13:  now
         {x,y,z} \ {z} = ({x,y} \/ {z}) \ {z} by ENUMSET1:3
@@ -2053,8 +1970,7 @@ A13:  now
 A14:    {x,y,z} \ {z} c= {x,y} by XBOOLE_1:36;
         assume not z in Z;
         then Z c= {x,y,z} \ {z} by A1,Lm2;
-        then Z c= {x,y} by A14,XBOOLE_1:1;
-        hence contradiction by A2,A3,A4,A6,Lm14;
+        hence contradiction by A2,A3,A4,A6,Lm14,A14,XBOOLE_1:1;
       end;
       assume a in {x,y,z};
       hence thesis by A9,A11,A13,ENUMSET1:def 1;
@@ -2079,7 +1995,7 @@ A16: Z = {y};
     {x,y} c= {x,y} \/ {z} by XBOOLE_1:7;
     then
 A17: {x,y} c= {x,y,z} by ENUMSET1:3;
-    Z c= {x,y} by A16,Th12;
+    Z c= {x,y} by A16,Th7;
     hence thesis by A17,XBOOLE_1:1;
   end;
   suppose
@@ -2121,9 +2037,9 @@ proof
 A1: N \/ M c= [:X1,Y1:] \/ [:X2,Y2:] by XBOOLE_1:13;
   X1 c= X1 \/ X2 & Y1 c= Y1 \/ Y2 by XBOOLE_1:7;
   then
-A2: [:X1,Y1:] c= [:X1 \/ X2,Y1 \/ Y2:] by Th119;
+A2: [:X1,Y1:] c= [:X1 \/ X2,Y1 \/ Y2:] by Th96;
   Y2 c= Y1 \/ Y2 & X2 c= X1 \/ X2 by XBOOLE_1:7;
-  then [:X2,Y2:] c= [:X1 \/ X2,Y1 \/ Y2:] by Th119;
+  then [:X2,Y2:] c= [:X1 \/ X2,Y1 \/ Y2:] by Th96;
   then [:X1,Y1:] \/ [:X2,Y2:] c= [:X1 \/ X2,Y1 \/ Y2:] by A2,XBOOLE_1:8;
   hence thesis by A1,XBOOLE_1:1;
 end;
@@ -2142,7 +2058,7 @@ A1: ( not x in X)& not y in X;
   thus thesis by XBOOLE_1:2;
 end;
 
-theorem Th144:
+theorem Th120:
   not x in X & not y in X implies X = X \ {x,y}
 proof
   X \ {x,y} = X iff X misses {x,y} by XBOOLE_1:83;
@@ -2154,7 +2070,7 @@ theorem
 proof
 A1: (X \/ {x,y}) \ {x,y} = X \ {x,y} by XBOOLE_1:40;
   assume ( not x in X)& not y in X;
-  hence thesis by A1,Th144;
+  hence thesis by A1,Th120;
 end;
 
 :: from INCPROJ, 2007.01.18. AK
@@ -2206,16 +2122,16 @@ theorem
   [:{x1,x2},{y1,y2}:] = {[x1,y1],[x1,y2],[x2,y1],[x2,y2]}
 proof
   thus [:{x1,x2},{y1,y2}:] = [:{x1}\/{x2},{y1,y2}:] by ENUMSET1:1
-    .= [:{x1},{y1,y2}:] \/ [:{x2},{y1,y2}:] by Th120
-    .= {[x1,y1],[x1,y2]} \/ [:{x2},{y1,y2}:] by Th36
-    .= {[x1,y1],[x1,y2]} \/ {[x2,y1],[x2,y2]} by Th36
+    .= [:{x1},{y1,y2}:] \/ [:{x2},{y1,y2}:] by Th97
+    .= {[x1,y1],[x1,y2]} \/ [:{x2},{y1,y2}:] by Th30
+    .= {[x1,y1],[x1,y2]} \/ {[x2,y1],[x2,y2]} by Th30
     .= {[x1,y1],[x1,y2],[x2,y1],[x2,y2]} by ENUMSET1:5;
 end;
 
 :: missing, 2008.03.22, A.T.
 
 theorem
-  x <> y implies A \/ {x} \ {y} = A \ {y} \/ {x} by Th17,XBOOLE_1:87;
+  x <> y implies A \/ {x} \ {y} = A \ {y} \/ {x} by Th11,XBOOLE_1:87;
 
 :: comp. REALSET1, 2008.07.05, A.T.
 
@@ -2239,12 +2155,7 @@ end;
 
 registration
   cluster non trivial -> non empty for set;
-  coherence
-  proof
-    let X;
-    assume X is non trivial;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
@@ -2279,14 +2190,12 @@ proof
 A1: A c= B;
   assume
 A2: B /\ C = {p};
-  then
-A3: A /\ C c= { p } by A1,XBOOLE_1:26;
   p in B /\ C by A2,TARSKI:def 1;
   then
 A4: p in C by XBOOLE_0:def 4;
   assume p in A;
   then p in A /\ C by A4,XBOOLE_0:def 4;
-  hence thesis by A3,Lm3;
+  hence thesis by A2,Lm3,A1,XBOOLE_1:26;
 end;
 
 :: from SPRECT_2, 2008.09.30, A.T.
@@ -2321,9 +2230,9 @@ A1: for x,y being set st x in A & y in B holds x misses y;
     let y be set;
     assume y in B;
     then for x being set st x in A holds x misses y by A1;
-    hence thesis by Th98;
+    hence thesis by Th80;
   end;
-  hence thesis by Th98;
+  hence thesis by Th80;
 end;
 
 :: from BORSUK_3, 2009.01.24, A.T.
@@ -2331,13 +2240,13 @@ end;
 registration
   let X be set, Y be empty set;
   cluster [:X, Y:] -> empty;
-  coherence by Th113;
+  coherence by Th90;
 end;
 
 registration
   let X be empty set, Y be set;
   cluster [:X, Y:] -> empty;
-  coherence by Th113;
+  coherence by Th90;
 end;
 
 :: new, 2009.08.26, A.T
@@ -2347,7 +2256,7 @@ theorem
   proof
    assume A in [:A,B:];
     then consider x,y such that
-A1:   x in A & y in B & A = [x,y] by Th103;
+A1:   x in A & y in B & A = [x,y] by Th84;
     x = {x} or x = {x,y} by A1,TARSKI:def 2;
     then x in x by TARSKI:def 1,def 2;
    hence contradiction;
@@ -2356,7 +2265,7 @@ A1:   x in A & y in B & A = [x,y] by Th103;
 theorem
  [x,{x}] in [:{x},[x,{x}]:]
   proof
-    [:{x},[x,{x}]:] = { [x,{x}], [x,{x,{x}}] } by Th36;
+    [:{x},[x,{x}]:] = { [x,{x}], [x,{x,{x}}] } by Th30;
    hence thesis by TARSKI:def 2;
   end;
 
@@ -2365,11 +2274,10 @@ theorem
   proof
    assume B in [:A,B:];
     then consider x,y such that
-A1:   x in A & y in B & B = [x,y] by Th103;
+A1:   x in A & y in B & B = [x,y] by Th84;
    take x;
    thus x in A by A1;
-A2:  y in [x,y] by A1;
-   per cases by A2,TARSKI:def 2;
+   per cases by A1,TARSKI:def 2;
    suppose y = {x};
     hence thesis by A1;
    end;
@@ -2382,12 +2290,12 @@ A2:  y in [x,y] by A1;
 theorem
  B c= A & A is trivial implies B is trivial
 proof assume that
-Z1: B c= A and
-Z2: A is trivial;
+A1: B c= A and
+A2: A is trivial;
   let x,y;
  assume x in B & y in B;
-  then x in A & y in A by Z1,TARSKI:def 3;
- hence thesis by Z2,Def10;
+  then x in A & y in A by A1,TARSKI:def 3;
+ hence thesis by A2,Def10;
 end;
 
 registration
@@ -2396,23 +2304,20 @@ registration
   proof
    take {{},{{}}}, {},{{}};
    thus {} in {{},{{}}} & {{}} in  {{},{{}}} by TARSKI:def 2;
-    {} in {{}} by TARSKI:def 1;
-   hence {} <> {{}};
+   thus {} <> {{}};
   end;
 end;
 
-theorem Th156:
+theorem Th131:
  X is non empty trivial implies ex x st X = {x}
  proof
   assume X is non empty;
    then consider x such that
-A:  x in X by XBOOLE_0:def 1;
+A1:  x in X by XBOOLE_0:def 1;
   assume
-Z:  X is trivial;
+A2:  X is trivial;
   take x;
-   now let y;
-    thus y in X iff x = y by Z,A,Def10;
-   end;
+  for y holds y in X iff x = y by A2,A1,Def10;
   hence thesis by TARSKI:def 1;
  end;
 
@@ -2422,7 +2327,7 @@ proof
   let x be set, X be trivial set;
   assume
 A1: x in X;
-  then ex x being set st X = {x} by Th156;
+  then ex x being set st X = {x} by Th131;
   hence thesis by A1,TARSKI:def 1;
 end;
 
@@ -2433,7 +2338,7 @@ theorem
 proof
   let a,b,c,X be set;
   assume a in X & b in X & c in X;
-  then {a,b} c= X & {c} c= X by Th37,Th38;
+  then {a,b} c= X & {c} c= X by Lm1,Th32;
   then {a,b} \/ {c} c= X by XBOOLE_1:8;
   hence thesis by ENUMSET1:3;
 end;
@@ -2454,3 +2359,52 @@ A3: {x,y} in union X by A1,TARSKI:def 4;
   y in {x,y} & x in {x} by TARSKI:def 1,def 2;
   hence thesis by A3,A2,TARSKI:def 4;
 end;
+
+theorem Th135:
+  X c= Y \/ {x} implies x in X or X c= Y
+proof
+  assume that
+A1: X c= Y \/ {x} and
+A2: not x in X;
+  X = X /\ (Y \/ {x}) by A1,XBOOLE_1:28
+    .= X /\ Y \/ X /\ {x} by XBOOLE_1:23
+    .= X /\ Y \/ {} by A2,Lm7,XBOOLE_0:def 7
+    .= X /\ Y;
+  hence thesis by XBOOLE_1:17;
+end;
+
+theorem
+  x in X \/ {y} iff x in X or x = y
+proof
+  x in X \/ {y} iff x in X or x in {y} by XBOOLE_0:def 3;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem
+  X \/ {x} c= Y iff x in Y & X c= Y
+proof
+ X c= Y & {x} c= Y implies X \/ {x} c= Y by XBOOLE_1:8;
+  hence thesis by Lm1,XBOOLE_1:11;
+end;
+
+theorem
+  for A, B, a being set st A c= B & B c= A \/ {a} holds A \/ {a} = B or A = B
+proof
+  let A, B, a be set;
+  assume that
+A1: A c= B and
+A2: B c= A \/ {a};
+  assume that
+A3: A \/ {a} <> B and
+A4: A <> B;
+A5: not A \/ {a} c= B by A2,A3,XBOOLE_0:def 10;
+A6: not a in B
+  proof
+    assume a in B;
+    then {a} c= B by Lm1;
+    hence thesis by A1,A5,XBOOLE_1:8;
+  end;
+  not B c= A by A1,A4,XBOOLE_0:def 10;
+  hence thesis by A2,A6,Th135;
+end;
+

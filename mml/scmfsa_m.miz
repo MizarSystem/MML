@@ -1,0 +1,1518 @@
+:: On the memory of SCM+FSA
+::  by Library Committee
+::
+:: Received October 1, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, AMI_1, SCMFSA_2, FUNCT_4,
+      FUNCOP_1, RELAT_1, FUNCT_1, TARSKI, XBOOLE_0, CARD_1, NAT_1,
+      ARYTM_3, FINSET_1, STRUCT_0, FSM_1, AMI_3, AMI_2, CARD_3,
+      INT_1, PARTFUN1, FINSEQ_1, XXREAL_0, ZFMISC_1, SCMFSA9A,
+      SCMFSA6A, SCMFSA6C, GOBRD13, MEMSTR_0, SF_MASTR, SFMASTR1, SCMBSORT,
+      CLASSES1, VALUED_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
+      COMPLEX1, XXREAL_2, ENUMSET1, CARD_3, CLASSES1,
+      ORDINAL1, NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      INT_2, NAT_D, SEQ_4, VALUED_0, RFINSEQ,
+      FINSEQ_2, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1,
+      STRUCT_0, MEMSTR_0, AMI_2, AMI_3,
+      EXTPRO_1, FUNCT_7, SCMFSA_2, FUNCOP_1, XXREAL_0;
+ constructors WELLORD2, DOMAIN_1, XXREAL_0, INT_2, SCMFSA_2, RELSET_1,
+      VALUED_1, AMI_3, PRE_POLY, AMISTD_1, FUNCT_7, MEMSTR_0, SCMFSA_1,
+      XXREAL_2, SEQ_4, XXREAL_1, ENUMSET1, CLASSES1, VALUED_0, RFINSEQ;
+ registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
+      FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, SCMFSA_2, FUNCT_4, RELAT_1,
+      VALUED_1, SCMFSA10, COMPOS_1, EXTPRO_1, SCMFSA_4, MEMSTR_0,
+      FINSEQ_1, AMI_3, COMPOS_0, SCM_INST, CARD_1, XXREAL_2, FINSUB_1,
+      NAT_1, MEMBERED, AMI_5;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions FUNCT_1, FUNCOP_1, SCMFSA_2, FUNCT_7, XBOOLE_0, TARSKI,
+      SUBSET_1, FUNCT_4, AFINSQ_1, MEMSTR_0, PARTFUN1;
+ theorems FUNCT_2, RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, ZFMISC_1, FUNCOP_1,
+      TARSKI, SCMFSA_2, MEMSTR_0, ENUMSET1, INT_1, FINSEQ_1, XBOOLE_0,
+      XBOOLE_1, PARTFUN1, STRUCT_0, AMI_2, AMI_3, XXREAL_2, SCM_INST,
+      GRFUNC_1, SUBSET_1, XXREAL_0, NAT_1, RFINSEQ, RELSET_1, CLASSES1,
+      XTUPLE_0;
+ schemes CLASSES1, DOMAIN_1, RECDEF_1, FRAENKEL, NAT_1, FUNCT_1, RELSET_1;
+
+begin
+
+reserve l, m, n for Element of NAT;
+
+set SA0 = Start-At(0,SCM+FSA);
+
+reserve a,b for Int-Location,
+  f for FinSeq-Location,
+  s,s1,s2 for State of SCM+FSA;
+
+  set q = (intloc 0) .--> 1;
+  set f = the_Values_of SCM+FSA;
+
+registration
+  let n be Nat;
+  let i be Integer;
+  cluster (intloc n) .--> i -> (the_Values_of SCM+FSA)-compatible;
+  coherence
+  proof
+    set q = (intloc n) .--> i;
+A1: dom q = {intloc n} by FUNCOP_1:13;
+    i in INT by INT_1:def 2;
+    then
+A2: rng q = {i} & {i} c= INT by FUNCOP_1:8,ZFMISC_1:31;
+    let x be set;
+    assume
+A3: x in dom q;
+    reconsider l = x as Int-Location by A1,A3,TARSKI:def 1;
+A4: f.l = Values l
+    .= INT by SCMFSA_2:11;
+    q.x in rng q by A3,FUNCT_1:def 3;
+    hence q.x in f.x by A4,A2;
+  end;
+end;
+
+definition
+  let I be PartState of SCM+FSA;
+  func Initialized I -> PartState of SCM+FSA equals
+  I +* Initialize ((intloc 0) .--> 1);
+  coherence;
+ projectivity
+ proof
+  let IT,s be PartState of SCM+FSA;
+  assume
+Z: IT = s +* Initialize ((intloc 0) .--> 1);
+  dom SA0 = {IC SCM+FSA} by FUNCOP_1:13;
+  then
+A2: IC SCM+FSA in dom SA0 by TARSKI:def 1;
+A3: s +* Initialize ((intloc 0) .--> 1)
+   = Initialize(s +* ((intloc 0) .--> 1)) by FUNCT_4:14;
+ dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:13;
+  then
+A5: intloc 0 in dom ((intloc 0) .--> 1) by TARSKI:def 1;
+A6:  not intloc 0 in dom SA0 by SCMFSA_2:102;
+B1: (s +* Initialize ((intloc 0) .--> 1)).intloc 0
+   = (Initialize(s +* ((intloc 0) .--> 1))).intloc 0 by FUNCT_4:14
+  .= (s +* ((intloc 0) .--> 1)).intloc 0 by A6,FUNCT_4:11
+  .= (((intloc 0) .--> 1)).intloc 0 by A5,FUNCT_4:13
+    .= 1 by FUNCOP_1:72;
+  SA0.IC SCM+FSA =  0 by FUNCOP_1:72;
+ then
+B2: IC IT =  0 by Z,A2,A3,FUNCT_4:13;
+A3: IC SCM+FSA in dom IT by Z,MEMSTR_0:49;
+X1:  dom IT = dom s \/ dom Initialize ((intloc 0) .--> 1) by Z,FUNCT_4:def 1;
+X2:   dom Initialize ((intloc 0) .--> 1)
+        = dom ((intloc 0) .--> 1) \/ dom Start-At(0,SCM+FSA) by FUNCT_4:def 1;
+    dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:13;
+    then intloc 0 in dom ((intloc 0) .--> 1) by TARSKI:def 1;
+    then intloc 0 in dom Initialize ((intloc 0) .--> 1) by X2,XBOOLE_0:def 3;
+    then
+A4: intloc 0 in dom IT by X1,XBOOLE_0:def 3;
+  thus IT +* Initialize ((intloc 0) .--> 1)
+     = Initialize(IT +* ((intloc 0) .--> 1)) by FUNCT_4:14
+    .= IT +* (IC SCM+FSA .-->  0) by B1,A4,Z,FUNCT_7:109
+    .= IT by B2,A3,FUNCT_7:109;
+ end;
+end;
+
+registration
+  let I be PartState of SCM+FSA;
+ cluster Initialized I -> 0-started;
+ coherence;
+end;
+
+registration
+  let I be FinPartState of SCM+FSA;
+ cluster Initialized I -> finite;
+ coherence;
+end;
+
+scheme
+  SCMFSAEx{ G(set) -> Integer, H(set) -> FinSequence of INT,
+        I() -> Element of NAT }:
+ ex S being State of SCM+FSA st IC S = I() &
+   for i being Element of NAT holds S.intloc i = G(i) & S.fsloc i = H(i)
+ proof
+  defpred P[set,set] means ex m st $1 = IC SCM+FSA & $2 = I() or
+   $1 = intloc m & $2 = G(m) or $1 = fsloc m & $2 = H(m);
+A1: for e being set st e in the carrier of SCM+FSA ex u being set st P[e,u]
+  proof
+    let e be set;
+    assume e in the carrier of SCM+FSA;
+    then
+    e in Data-Locations SCM+FSA \/ {IC SCM+FSA} by STRUCT_0:4;
+    then
+A2: e in Data-Locations SCM+FSA or e in {IC SCM+FSA} by XBOOLE_0:def 3;
+    now
+      per cases by A2,SCMFSA_2:100,XBOOLE_0:def 3;
+      case
+        e in {IC SCM+FSA};
+        hence e = IC SCM+FSA by TARSKI:def 1;
+      end;
+      case
+        e in Int-Locations;
+        then e is Int-Location by AMI_2:def 16;
+        hence ex m being Element of NAT st e = intloc m by SCMFSA_2:8;
+      end;
+      case
+        e in FinSeq-Locations;
+        then e is FinSeq-Location by SCMFSA_2:def 5;
+        hence ex m being Element of NAT st e = fsloc m by SCMFSA_2:9;
+      end;
+    end;
+    then consider m such that
+A3: e = IC SCM+FSA or e = intloc m or e = fsloc m;
+    per cases by A3;
+    suppose
+A4:   e = IC SCM+FSA;
+      take u = I();
+      thus thesis by A4;
+    end;
+    suppose
+A6:   e = intloc m;
+      take u = G(m);
+      thus thesis by A6;
+    end;
+    suppose
+A7:   e = fsloc m;
+      take u = H(m);
+      thus thesis by A7;
+    end;
+  end;
+  consider f being Function such that
+A8: dom f = the carrier of SCM+FSA and
+A9: for e being set st e in the carrier of SCM+FSA holds P[e,f.e] from
+  CLASSES1:sch 1(A1);
+A10: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
+  now
+    let x be set;
+    assume
+A11: x in dom the Object-Kind of SCM+FSA;
+    then consider m such that
+A12: x = IC SCM+FSA & f.x = I() or x =
+    intloc m & f.x = G(m) or x = fsloc m & f.x = H(m) by A9,A10;
+    x in Data-Locations SCM+FSA \/ {IC SCM+FSA} by A11,A10,STRUCT_0:4;
+    then
+A13: x in Data-Locations SCM+FSA or x in {IC SCM+FSA} by XBOOLE_0:def 3;
+    per cases by A13,SCMFSA_2:100,XBOOLE_0:def 3;
+    suppose
+      x in Int-Locations;
+      then
+A14:  x is Int-Location by AMI_2:def 16;
+      then (the_Values_of SCM+FSA).x = Values intloc m by A12,SCMFSA_2:56,58
+        .= INT by SCMFSA_2:11;
+      hence f.x in (the_Values_of SCM+FSA).x by A12,A14,INT_1:def 2,SCMFSA_2:58
+;
+    end;
+    suppose
+      x in FinSeq-Locations;
+      then
+A15:  x is FinSeq-Location by SCMFSA_2:def 5;
+      then (the_Values_of SCM+FSA).x = Values fsloc m by A12,SCMFSA_2:57,58
+        .= INT* by SCMFSA_2:12;
+      hence f.x in (the_Values_of SCM+FSA).x by A12,A15,FINSEQ_1:def 11
+,SCMFSA_2:57,58;
+    end;
+    suppose
+A16:  x in {IC SCM+FSA};
+      then
+A17:  (the_Values_of SCM+FSA).x = Values IC SCM+FSA by TARSKI:def 1
+        .= NAT by MEMSTR_0:def 6;
+      x = IC SCM+FSA by A16,TARSKI:def 1;
+      hence f.x in (the_Values_of SCM+FSA).x by A12,A17,SCMFSA_2:56,57;
+    end;
+  end;
+  then reconsider f as State of SCM+FSA by A8,A10,FUNCT_1:def 14,PARTFUN1:def 2
+,RELAT_1:def 18;
+  take f;
+  ex m st ( IC SCM+FSA = IC SCM+FSA & f.IC SCM+FSA = I()
+   or IC SCM+FSA = intloc m & f.IC SCM+FSA = G(m)
+  or IC SCM+FSA = fsloc m & f.IC SCM+FSA = H(m)) by A9;
+  hence IC f = I() by SCMFSA_2:56,57;
+  let i be Element of NAT;
+
+  ex m st ( intloc i = IC SCM+FSA & f.intloc i = I() or
+   intloc i = intloc m & f.intloc i = G (m) or intloc i =
+  fsloc m & f.intloc i = H(m)) by A9;
+  hence f.intloc i = G(i) by AMI_3:10,SCMFSA_2:56,58;
+  ex m st ( fsloc i = IC SCM+FSA & f.fsloc i = I() or
+   fsloc i = intloc m & f.fsloc i = G(m) or fsloc i = fsloc m
+  & f.fsloc i = H(m)) by A9;
+  hence thesis by SCMFSA_2:57,58;
+end;
+
+theorem Th1:
+  for s being State of SCM+FSA, x being set st x in dom s holds x is
+  Int-Location or x is FinSeq-Location or x = IC SCM+FSA
+proof
+  let s be State of SCM+FSA;
+  let x be set;
+  assume
+A1: x in dom s;
+  x in Data-Locations SCM+FSA \/ {IC SCM+FSA} by A1,MEMSTR_0:13;
+  then
+  x in Data-Locations SCM+FSA or x in {IC SCM+FSA}
+  by XBOOLE_0:def 3;
+  then x in Int-Locations or x in FinSeq-Locations or x = IC SCM+FSA
+   by SCMFSA_2:100,TARSKI:def 1,XBOOLE_0:def 3;
+  hence thesis by AMI_2:def 16,SCMFSA_2:def 5;
+end;
+
+theorem
+  for s1,s2 being State of SCM+FSA holds ((for a being
+Int-Location holds s1.a = s2.a) & for f being FinSeq-Location
+ holds s1.f = s2.f) iff DataPart s1 = DataPart s2
+proof
+  let s1,s2 be State of SCM+FSA;
+A2: now
+    assume that
+A3: for a being Int-Location holds s1.a = s2.a and
+A4: for f being FinSeq-Location holds s1.f = s2.f;
+    hereby
+      let x be set;
+      assume
+A5:   x in Data-Locations SCM+FSA;
+      per cases;
+      suppose
+        x in Int-Locations;
+        then x is Int-Location by AMI_2:def 16;
+        hence s1.x = s2.x by A3;
+      end;
+      suppose
+        not x in Int-Locations;
+        then x in FinSeq-Locations by A5,SCMFSA_2:100,XBOOLE_0:def 3;
+        then x is FinSeq-Location by SCMFSA_2:def 5;
+        hence s1.x = s2.x by A4;
+      end;
+    end;
+  end;
+A6: now
+    assume
+A7: for x being set st x in Data-Locations SCM+FSA holds
+    s1.x = s2.x;
+    hereby
+      let a be Int-Location;
+      a in Int-Locations by AMI_2:def 16;
+      then a in Data-Locations SCM+FSA by SCMFSA_2:100,XBOOLE_0:def 3;
+      hence s1.a = s2.a by A7;
+    end;
+    hereby
+      let f be FinSeq-Location;
+      f in FinSeq-Locations by SCMFSA_2:def 5;
+      then f in Data-Locations SCM+FSA by SCMFSA_2:100,XBOOLE_0:def 3;
+      hence s1.f = s2.f by A7;
+    end;
+  end;
+  dom s2 = Data-Locations SCM+FSA \/ {IC SCM+FSA} by MEMSTR_0:13;
+  then
+A8: Data-Locations SCM+FSA c= dom s2 by XBOOLE_1:7;
+  dom s1 = Data-Locations SCM+FSA \/ {IC SCM+FSA} by MEMSTR_0:13;
+  then Data-Locations SCM+FSA c= dom s1 by XBOOLE_1:7;
+  hence thesis by A8,A2,A6,FUNCT_1:95;
+end;
+
+theorem Th43:
+  for p being PartState of SCM+FSA holds dom Initialized p = dom p
+  \/ {intloc 0} \/ {IC SCM+FSA}
+proof let p be PartState of SCM+FSA;
+A1: dom q = {intloc 0} & dom SA0 = {IC SCM+FSA} by FUNCOP_1:13;
+    Initialized p = Initialize(p +* q) by FUNCT_4:14;
+  hence dom Initialized p = dom (p +* q) \/ dom SA0 by FUNCT_4:def 1
+    .= dom p \/ {intloc 0} \/ {IC SCM+FSA} by A1,FUNCT_4:def 1;
+end;
+
+registration
+  let s be State of SCM+FSA;
+  cluster Initialized s -> total;
+  coherence;
+end;
+
+theorem Th4:
+  for p being PartState of SCM+FSA holds intloc 0 in dom Initialized p
+proof
+  let p be PartState of SCM+FSA;
+A1: dom q = {intloc 0} & dom SA0 = {IC SCM+FSA} by FUNCOP_1:13;
+  intloc 0 in {intloc 0} by TARSKI:def 1;
+  then
+A2: intloc 0 in dom p \/ {intloc 0} by XBOOLE_0:def 3;
+    Initialized p = Initialize(p +* q) by FUNCT_4:14;
+  then dom Initialized p = dom (p +* q) \/ dom SA0 by FUNCT_4:def 1
+    .= dom p \/ {intloc 0} \/ {IC SCM+FSA} by A1,FUNCT_4:def 1;
+  hence thesis by A2,XBOOLE_0:def 3;
+end;
+
+theorem
+  for p being PartState of SCM+FSA holds (Initialized p).intloc 0 =
+  1 & (Initialized p).IC SCM+FSA =  0
+proof
+  let p be PartState of SCM+FSA;
+  intloc 0 in {intloc 0} by TARSKI:def 1;
+  then
+A1: intloc 0 in dom q by FUNCOP_1:13;
+A2: Initialized p = Initialize(p +* q) by FUNCT_4:14;
+  intloc 0 <> IC SCM+FSA by SCMFSA_2:56;
+  then not intloc 0 in {IC SCM+FSA} by TARSKI:def 1;
+  then not intloc 0 in dom SA0 by FUNCOP_1:13;
+  hence (Initialized p).intloc 0 = (p +* q).intloc 0 by A2,FUNCT_4:11
+    .= q.intloc 0 by A1,FUNCT_4:13
+    .= 1 by FUNCOP_1:72;
+  IC SCM+FSA in {IC SCM+FSA} by TARSKI:def 1;
+  then IC SCM+FSA in dom SA0 by FUNCOP_1:13;
+  hence (Initialized p).IC SCM+FSA = SA0.IC SCM+FSA by A2,FUNCT_4:13
+    .=  0 by FUNCOP_1:72;
+end;
+
+theorem
+  for p being PartState of SCM+FSA, a being Int-Location
+   st  a <> intloc 0 & not a in dom p
+  holds not a in dom Initialized p
+proof
+  let p be PartState of SCM+FSA;
+  let a be Int-Location;
+  assume that
+A1: a <> intloc 0 and
+Z: not a in dom p;
+  assume a in dom Initialized p;
+  then a in dom p \/ {intloc 0} \/ {IC SCM+FSA} by Th43;
+  then
+A2: a in (dom p \/ {intloc 0}) or a in {IC SCM+FSA} by XBOOLE_0:def 3;
+  per cases by A2,Z,XBOOLE_0:def 3;
+  suppose
+    a in {intloc 0};
+    hence contradiction by A1,TARSKI:def 1;
+  end;
+  suppose
+    a in {IC SCM+FSA};
+    then a = IC SCM+FSA by TARSKI:def 1;
+    hence contradiction by SCMFSA_2:56;
+  end;
+end;
+
+theorem
+  for p being PartState of SCM+FSA, f being FinSeq-Location
+     st not f in dom p
+    holds not f in dom Initialized p
+proof
+  let p be PartState of SCM+FSA;
+  let f be FinSeq-Location;
+  assume
+Z:  not f in dom p;
+  assume f in dom Initialized p;
+  then f in dom p \/ {intloc 0} \/ {IC SCM+FSA} by Th43;
+  then
+A1: f in (dom p \/ {intloc 0}) or f in {IC SCM+FSA} by XBOOLE_0:def 3;
+  per cases by A1,Z,XBOOLE_0:def 3;
+  suppose
+    f in {intloc 0};
+    then f = intloc 0 by TARSKI:def 1;
+    hence contradiction by SCMFSA_2:58;
+  end;
+  suppose
+    f in {IC SCM+FSA};
+    then f = IC SCM+FSA by TARSKI:def 1;
+    hence contradiction by SCMFSA_2:57;
+  end;
+end;
+
+theorem  :: from SCMFSA8C
+  for s being State of SCM+FSA st s.intloc 0 = 1 & IC s =  0
+  holds Initialized s = s
+proof
+  let s be State of SCM+FSA;
+  assume
+A1: s.intloc 0 = 1;
+  assume
+A2: IC s =  0;
+A3: IC SCM+FSA in dom s by MEMSTR_0:2;
+A4: intloc 0 in dom s by SCMFSA_2:42;
+  thus Initialized s = Initialize(s +* ((intloc 0) .--> 1)) by FUNCT_4:14
+  .= s +* (IC SCM+FSA .-->  0) by A1,A4,FUNCT_7:109
+    .= s by A2,A3,FUNCT_7:109;
+end;
+
+theorem
+ for p being PartState of SCM+FSA holds
+   (Initialized p).intloc 0 = 1
+proof
+ let p be PartState of SCM+FSA;
+A1: ((intloc 0) .--> 1).intloc 0 = 1 by FUNCOP_1:72;
+A3: Initialized p = Initialize(p +* ((intloc 0) .--> 1)) by FUNCT_4:14;
+ dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:13;
+  then
+A5: intloc 0 in dom ((intloc 0) .--> 1) by TARSKI:def 1;
+  not intloc 0 in dom SA0 by SCMFSA_2:102;
+  hence (Initialized p).intloc 0 = (p+*((intloc 0) .--> 1)).intloc 0
+         by A3,FUNCT_4:11
+    .= 1 by A5,A1,FUNCT_4:13;
+ end;
+
+theorem Th10:
+ intloc 0 in dom Initialize ((intloc 0).-->1)
+proof
+A: dom Initialize ((intloc 0).-->1)
+   = dom Start-At(0,SCM+FSA) \/ dom((intloc 0).-->1) by FUNCT_4:def 1;
+  dom((intloc 0).-->1) = {intloc 0} by FUNCOP_1:13;
+  then intloc 0 in dom((intloc 0).-->1) by TARSKI:def 1;
+ hence intloc 0 in dom Initialize ((intloc 0).-->1) by A,XBOOLE_0:def 3;
+end;
+
+theorem Th11:
+  dom Initialize ((intloc 0) .--> 1) = {intloc 0,IC SCM+FSA}
+proof
+  thus dom( Initialize((intloc 0) .--> 1) )
+  =dom ((intloc 0) .--> 1) \/ dom SA0 by FUNCT_4:def 1
+    .=dom ((intloc 0) .--> 1) \/ {IC SCM+FSA} by FUNCOP_1:13
+    .={intloc 0} \/ {IC SCM+FSA} by FUNCOP_1:13
+    .={intloc 0,IC SCM+FSA} by ENUMSET1:1;
+end;
+
+theorem Th12:
+ (Initialize((intloc 0).-->1)).intloc 0 = 1
+proof
+  not intloc 0 in dom Start-At(0,SCM+FSA) by SCMFSA_2:102;
+ hence (Initialize((intloc 0).-->1)).intloc 0
+         = ((intloc 0).-->1).intloc 0 by FUNCT_4:11
+        .= 1 by FUNCOP_1:72;
+end;
+
+theorem
+ for p being PartState of SCM+FSA holds
+ Initialize((intloc 0).-->1) c= Initialized p by FUNCT_4:25;
+
+begin :: from SF_MASTR
+
+registration
+  cluster Int-Locations -> non empty;
+  coherence;
+end;
+
+definition
+  let IT be Int-Location;
+  attr IT is read-only means
+:Def2: IT = intloc 0;
+end;
+
+notation
+  let IT be Int-Location;
+  antonym IT is read-write for IT is read-only;
+end;
+
+registration
+  cluster intloc 0 -> read-only;
+  coherence by Def2;
+end;
+
+registration
+  cluster read-write for Int-Location;
+  existence
+  proof
+    take intloc 1;
+    intloc 1 <> intloc 0 by AMI_3:10;
+    hence thesis by Def2;
+  end;
+end;
+
+reserve L for finite Subset of Int-Locations;
+
+definition
+  let L be finite Subset of Int-Locations;
+  func FirstNotIn L -> Int-Location means
+  :Def6:
+  ex sn being non empty Subset
+of NAT st it = intloc min sn & sn = {k where k is Element of NAT : not intloc k
+  in L};
+  existence
+  proof
+    defpred X[Element of NAT] means not intloc $1 in L;
+    set sn = {k where k is Element of NAT : X[k]};
+A1: sn is Subset of NAT from DOMAIN_1:sch 7;
+    Int-Locations = [:{1},NAT:] by SCM_INST:def 1;
+    then not Int-Locations c= L;
+    then consider x being set such that
+A2: x in Int-Locations and
+A3: not x in L by TARSKI:def 3;
+    reconsider x as Int-Location by A2,AMI_2:def 16;
+    consider k being Element of NAT such that
+A4: x = intloc k by SCMFSA_2:8;
+    k in sn by A3,A4;
+    then reconsider sn as non empty Subset of NAT by A1;
+    take intloc min sn, sn;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+theorem
+  not FirstNotIn L in L
+proof
+  set FNI = FirstNotIn L;
+  consider sn being non empty Subset of NAT such that
+A1: FNI = intloc min sn and
+A2: sn = {k where k is Element of NAT : not intloc k in L} by Def6;
+  min sn in sn by XXREAL_2:def 7;
+  then ex k being Element of NAT st k = min sn & not intloc k in L by A2;
+  hence thesis by A1;
+end;
+
+theorem
+  FirstNotIn L = intloc m & not intloc n in L implies m <= n
+proof
+  consider sn being non empty Subset of NAT such that
+A1: FirstNotIn L = intloc min sn & sn = {k where k is Element of NAT :
+  not intloc k in L} by Def6;
+  assume FirstNotIn L = intloc m & not intloc n in L;
+  then m = min sn & n in sn by A1,AMI_3:10;
+  hence thesis by XXREAL_2:def 7;
+end;
+
+reserve L for finite Subset of FinSeq-Locations;
+
+definition
+  let L be finite Subset of FinSeq-Locations;
+  func First*NotIn L -> FinSeq-Location means
+  :Def8:
+  ex sn being non empty
+  Subset of NAT st it = fsloc min sn & sn = {k where k is Element of NAT : not
+  fsloc k in L};
+  existence
+  proof
+    defpred X[Element of NAT] means not fsloc $1 in L;
+    set sn = {k where k is Element of NAT : X[k]};
+A1: sn is Subset of NAT from DOMAIN_1:sch 7;
+    not FinSeq-Locations c= L;
+    then consider x being set such that
+A2: x in FinSeq-Locations and
+A3: not x in L by TARSKI:def 3;
+    reconsider x as FinSeq-Location by A2,SCMFSA_2:def 5;
+    consider k being Element of NAT such that
+A4: x = fsloc k by SCMFSA_2:9;
+    k in sn by A3,A4;
+    then reconsider sn as non empty Subset of NAT by A1;
+    take fsloc min sn, sn;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+theorem
+  not First*NotIn L in L
+proof
+  set FNI = First*NotIn L;
+  consider sn being non empty Subset of NAT such that
+A1: FNI = fsloc min sn and
+A2: sn = {k where k is Element of NAT : not fsloc k in L} by Def8;
+  min sn in sn by XXREAL_2:def 7;
+  then ex k being Element of NAT st k = min sn & not fsloc k in L by A2;
+  hence thesis by A1;
+end;
+
+theorem
+  First*NotIn L = fsloc m & not fsloc n in L implies m <= n
+proof
+  assume that
+A1: First*NotIn L = fsloc m and
+A2: not fsloc n in L;
+  consider sn being non empty Subset of NAT such that
+A3: First*NotIn L = fsloc min sn and
+A4: sn = {k where k is Element of NAT : not fsloc k in L} by Def8;
+  n in sn by A2,A4;
+  hence thesis by A1,A3,XXREAL_2:def 7;
+end;
+
+registration
+  let s be State of SCM+FSA, li be Int-Location, k be Integer;
+  cluster s+*(li,k) -> (the_Values_of SCM+FSA)-compatible;
+ coherence
+ proof
+   let x be set;
+   assume x in dom (s+*(li,k));
+   then
+A2:    x in dom s by FUNCT_7:30;
+   per cases;
+   suppose
+A3:     x = li;
+     then
+A4:     (the_Values_of SCM+FSA).x = Values li
+       .= INT by SCMFSA_2:11;
+     (s+*(li,k)).x = k by A3,A2,FUNCT_7:31;
+     hence (s+*(li,k)).x in (the_Values_of SCM+FSA).x
+      by A4,INT_1:def 2;
+   end;
+   suppose
+     x <> li;
+     then (s+*(li,k)).x = s.x by FUNCT_7:32;
+     hence (s+*(li,k)).x in (the_Values_of SCM+FSA).x
+      by A2,FUNCT_1:def 14;
+   end;
+ end;
+end;
+
+begin ::from SCMFSA8C
+
+registration let a be Int-Location, n be Nat;
+ cluster a .--> n -> data-only for PartState of SCM+FSA;
+ coherence;
+end;
+
+theorem
+  for s being State of SCM+FSA st s.intloc 0 = 1
+  holds Initialize s = Initialized s
+proof
+  let s be State of SCM+FSA;
+A1: intloc 0 in dom s by SCMFSA_2:42;
+  assume s.intloc 0 = 1;
+  then
+A2: s = s +* ((intloc 0) .--> 1) by A1,FUNCT_7:109;
+  thus Initialized s = Initialize s by A2,FUNCT_4:14;
+end;
+
+theorem
+  for s being State of SCM+FSA st s.intloc 0 = 1
+   holds DataPart Initialized s = DataPart s
+proof
+  let s be State of SCM+FSA;
+  assume
+A1: s.intloc 0 = 1;
+A2: intloc 0 in dom s by SCMFSA_2:42;
+    Initialized s = Initialize(s +* ((intloc 0) .--> 1)) by FUNCT_4:14;
+  then Initialized s = Initialize s by A1,A2,FUNCT_7:109;
+  hence thesis by MEMSTR_0:79;
+end;
+
+theorem
+  for s1,s2 being State of SCM+FSA st s1.intloc 0 = s2.intloc 0 &
+  ((for a being read-write Int-Location holds s1.a = s2.a) & for f being
+  FinSeq-Location holds s1.f = s2.f) holds DataPart s1 = DataPart s2
+proof
+  let s1,s2 be State of SCM+FSA;
+  set D = Data-Locations SCM+FSA;
+  assume
+A1: s1.intloc 0 = s2.intloc 0;
+  assume
+A2: for a being read-write Int-Location holds s1.a = s2.a;
+A3: dom DataPart s1 = dom s1 /\ D by RELAT_1:61
+    .= (Data-Locations SCM+FSA \/ {IC SCM+FSA}) /\ D by MEMSTR_0:13
+    .= dom s2 /\ D by MEMSTR_0:13
+    .= dom DataPart s2 by RELAT_1:61;
+  assume
+A4: for f being FinSeq-Location holds s1.f = s2.f;
+  now
+    let x be set;
+    assume
+A5: x in dom DataPart s1;
+    then
+A6: x in dom s1 /\ D by RELAT_1:61;
+    then
+A7: x in dom s1 by XBOOLE_0:def 4;
+    per cases by A7,Th1;
+    suppose
+A9:   x is Int-Location;
+      hereby
+        per cases;
+        suppose
+A10:      x is read-write Int-Location;
+          thus (DataPart s1).x = s1.x by A5,FUNCT_1:47
+            .= s2.x by A2,A10
+            .= (DataPart s2).x by A3,A5,FUNCT_1:47;
+        end;
+        suppose
+A11:      not x is read-write Int-Location;
+          reconsider a = x as Int-Location by A9;
+          a = intloc 0 by A11,Def2;
+          hence (DataPart s1).x = s2.a by A1,A5,FUNCT_1:47
+            .= (DataPart s2).x by A3,A5,FUNCT_1:47;
+        end;
+      end;
+    end;
+    suppose
+A12:  x is FinSeq-Location;
+      thus (DataPart s1).x = s1.x by A5,FUNCT_1:47
+        .= s2.x by A4,A12
+        .= (DataPart s2).x by A3,A5,FUNCT_1:47;
+    end;
+    suppose x = IC SCM+FSA;
+     then not x in Data-Locations SCM+FSA by STRUCT_0:3;
+     hence (DataPart s1).x = (DataPart s2).x by A6,XBOOLE_0:def 4;
+    end;
+  end;
+  then DataPart s1 c= DataPart s2 by A3,GRFUNC_1:2;
+  hence thesis by A3,GRFUNC_1:3;
+end;
+
+theorem
+  for s being State of SCM+FSA, a being Int-Location,
+      l being Element of NAT holds
+  (s +* Start-At(l,SCM+FSA)).a = s.a
+proof
+  let s be State of SCM+FSA;
+  let a be Int-Location;
+  let l be Element of NAT;
+  not a in dom Start-At(l,SCM+FSA) by SCMFSA_2:102;
+  hence thesis by FUNCT_4:11;
+end;
+
+begin :: from SFMASTR1
+
+definition
+  let d be Int-Location;
+  redefine func { d } -> Subset of Int-Locations;
+  coherence
+  proof
+    d in SCM-Data-Loc by AMI_2:def 16;
+    hence thesis by SUBSET_1:33;
+  end;
+  let e be Int-Location;
+  redefine func { d, e } -> Subset of Int-Locations;
+  coherence
+  proof
+A1: e in SCM-Data-Loc by AMI_2:def 16;
+    d in SCM-Data-Loc by AMI_2:def 16;
+    hence thesis by A1,SUBSET_1:34;
+  end;
+  let f be Int-Location;
+  redefine func { d, e, f } -> Subset of Int-Locations;
+  coherence
+  proof
+A2: f in SCM-Data-Loc by AMI_2:def 16;
+A3: e in SCM-Data-Loc by AMI_2:def 16;
+    d in SCM-Data-Loc by AMI_2:def 16;
+    hence thesis by A3,A2,SUBSET_1:35;
+  end;
+  let g be Int-Location;
+  redefine func { d, e, f, g } -> Subset of Int-Locations;
+  coherence
+  proof
+A4: g in SCM-Data-Loc by AMI_2:def 16;
+A5: f in SCM-Data-Loc by AMI_2:def 16;
+A6: e in SCM-Data-Loc by AMI_2:def 16;
+    d in SCM-Data-Loc by AMI_2:def 16;
+    hence thesis by A6,A5,A4,SUBSET_1:36;
+  end;
+end;
+
+definition
+  let L be finite Subset of Int-Locations;
+  func RWNotIn-seq L -> Function of NAT, bool NAT means
+  :Def2:
+  it.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} &
+  (for i being Element of NAT,
+     sn being non empty Subset of NAT st it.i = sn
+    holds it.(i+1) = sn \ {min sn})
+  & for i being Element of NAT holds it.i is infinite;
+  existence
+  proof
+    set M = L \/ {intloc 0};
+    defpred X[Element of NAT] means not intloc $1 in L & $1 <> 0;
+    set sn = {k where k is Element of NAT : X[k] };
+A1: sn is Subset of NAT from DOMAIN_1:sch 7;
+    not Int-Locations c= M by AMI_3:27;
+    then consider x being set such that
+A2: x in Int-Locations and
+A3: not x in M by TARSKI:def 3;
+    reconsider x as Int-Location by A2,AMI_2:def 16;
+    consider k being Element of NAT such that
+A4: x = intloc k by SCMFSA_2:8;
+    not intloc k in {intloc 0} by A3,A4,XBOOLE_0:def 3;
+    then
+A5: k <> 0 by TARSKI:def 1;
+    not intloc k in L by A3,A4,XBOOLE_0:def 3;
+    then k in sn by A5;
+    then reconsider sn as non empty Subset of NAT by A1;
+    defpred P[Element of NAT, Subset of NAT, Subset of NAT] means for N being
+    non empty Subset of NAT st N = $2 holds $3 = $2 \ {min N};
+A6: now
+      let n be Element of NAT;
+      let x be Subset of NAT;
+      per cases;
+      suppose
+        x is empty;
+        then P[n, x, {} NAT];
+        hence ex y being Subset of NAT st P[n,x,y];
+      end;
+      suppose
+        x is non empty;
+        then reconsider x9 = x as non empty Subset of NAT;
+        now
+          reconsider mx9 = {min x9} as Subset of NAT;
+          reconsider t = x9 \ mx9 as Subset of NAT;
+          take t;
+          let N be non empty Subset of NAT;
+          assume N = x;
+          hence t = x \ {min N};
+        end;
+        hence ex y being Subset of NAT st P[n,x,y];
+      end;
+    end;
+    consider f being Function of NAT, bool NAT such that
+A7: f.0 = sn and
+A8: for n being (Element of NAT) holds P[n, f.n, f.(n+1)] from
+    RECDEF_1:sch 2(A6);
+    take f;
+    thus f.0 = {v where v is Element of NAT : not intloc v in L & v <> 0}
+             by A7;
+    thus for i be Element of NAT, sn be non empty Subset of NAT st f.i = sn
+    holds f.(i+1) = sn \ {min sn} by A8;
+    defpred X[Element of NAT] means f.$1 is infinite;
+A9: X[0]
+    proof
+      deffunc U(Element of NAT) = intloc $1;
+      set Isn = { U(v) where v is Element of NAT : v in sn };
+      assume f.0 is finite;
+      then
+A10:  sn is finite by A7;
+      Isn is finite from FRAENKEL:sch 21(A10);
+      then reconsider Isn as finite set;
+      now
+        let x be set;
+        hereby
+          assume
+A11:      x in M \/ Isn;
+          per cases by A11,XBOOLE_0:def 3;
+          suppose
+            x in M;
+            hence x in Int-Locations;
+          end;
+          suppose
+            x in Isn;
+            then ex k being Element of NAT st intloc k = x & k in sn;
+            hence x in Int-Locations by AMI_2:def 16;
+          end;
+        end;
+        assume x in Int-Locations;
+        then reconsider x9 = x as Int-Location by AMI_2:def 16;
+        consider i being Element of NAT such that
+A12:    x9 = intloc i by SCMFSA_2:8;
+        now
+          assume
+A13:      not x in M;
+          then not x9 in {intloc 0} by XBOOLE_0:def 3;
+          then
+A14:      i <> 0 by A12,TARSKI:def 1;
+          not intloc i in L by A12,A13,XBOOLE_0:def 3;
+          then i in sn by A14;
+          hence x in Isn by A12;
+        end;
+        hence x in M \/ Isn by XBOOLE_0:def 3;
+      end;
+      hence contradiction by AMI_3:27,TARSKI:1;
+    end;
+A15: for n st X[n] holds X[n+1]
+    proof
+      let n;
+      assume
+A16:  f.n is infinite;
+      then reconsider sn = f.n as non empty Subset of NAT;
+      min sn in sn by XXREAL_2:def 7;
+      then
+A17:  {min sn} c= sn by ZFMISC_1:31;
+      assume f.(n+1) is finite;
+      then reconsider sn1 = f.(n+1) as finite set;
+A18:  sn1 \/ {min sn} is finite;
+      f.(n+1) = sn \ {min sn} by A8;
+      hence contradiction by A16,A17,A18,XBOOLE_1:45;
+    end;
+    thus for n being Element of NAT holds X[n] from NAT_1:sch 1(A9, A15);
+  end;
+  uniqueness
+  proof
+    let IT1, IT2 be Function of NAT, bool NAT such that
+A19: IT1.0 = {k where k is Element of NAT : not intloc k in L & k <> 0
+    } and
+A20: for i being Element of NAT, sn being non empty Subset of NAT st
+    IT1.i = sn holds IT1.(i+1) = sn \ {min sn} and
+    for i being Element of NAT holds IT1.i is infinite and
+A21: IT2.0 = {k where k is Element of NAT : not intloc k in L & k <> 0
+    } and
+A22: for i being Element of NAT, sn being non empty Subset of NAT st
+    IT2.i = sn holds IT2.(i+1) = sn \ {min sn} and
+A23: for i being Element of NAT holds IT2.i is infinite;
+    now
+      defpred X[Element of NAT] means IT1.$1 = IT2.$1;
+      thus NAT = dom IT1 by FUNCT_2:def 1;
+      thus NAT = dom IT2 by FUNCT_2:def 1;
+A24:  for n st X[n] holds X[n+1]
+      proof
+        let n be Element of NAT;
+        assume
+A25:    IT1.n = IT2.n;
+        then reconsider IT1n = IT1.n as non empty Subset of NAT by A23;
+        thus IT1.(n+1) = IT1n \ {min IT1n} by A20
+          .= IT2.(n+1) by A22,A25;
+      end;
+A26:  X[0] by A19,A21;
+      for n being Element of NAT holds X[n] from NAT_1:sch 1(A26, A24);
+      hence for x being set st x in NAT holds IT1.x = IT2.x;
+    end;
+    hence IT1 = IT2 by FUNCT_1:2;
+  end;
+end;
+
+registration
+  let L be finite Subset of Int-Locations, n be Element of NAT;
+  cluster (RWNotIn-seq L).n -> non empty;
+  coherence by Def2;
+end;
+
+reserve L for finite Subset of Int-Locations;
+
+theorem Th18:
+  not 0 in (RWNotIn-seq L).n & for m st m in (RWNotIn-seq L).n
+  holds not intloc m in L
+proof
+  set RL = RWNotIn-seq L;
+  defpred X[Element of NAT] means not 0 in RL.$1 & for m st m in RL.$1 holds
+  not intloc m in L;
+A1: X[0]
+  proof
+A2: RL.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} by Def2;
+    hereby
+      assume 0 in RL.0;
+      then
+      ex k being Element of NAT st k = 0 & (not intloc k in L)& k <> 0
+      by A2;
+      hence contradiction;
+    end;
+    let m;
+    assume m in RL.0;
+    then ex k being Element of NAT st k = m &(not intloc k in L)& k <> 0
+    by A2;
+    hence thesis;
+  end;
+A3: for n st X[n] holds X[n+1]
+  proof
+    let n such that
+A4: not 0 in RL.n and
+A5: for m st m in RL.n holds not intloc m in L;
+    reconsider sn = RL.n as non empty Subset of NAT;
+A6: RL.(n+1) = sn \ {min sn} by Def2;
+    hence not 0 in RL.(n+1) by A4,XBOOLE_0:def 5;
+    let m;
+    assume m in RL.(n+1);
+    then m in RL.n by A6,XBOOLE_0:def 5;
+    hence thesis by A5;
+  end;
+  for n being Element of NAT holds X[n] from NAT_1:sch 1(A1, A3);
+  hence thesis;
+end;
+
+theorem Th19:
+  min ((RWNotIn-seq L).n) < min ((RWNotIn-seq L).(n+1))
+proof
+  set RL = RWNotIn-seq L;
+  set sn = RL.n;
+  set sn1 = RL.(n+1);
+  assume
+A1: min ((RWNotIn-seq L).n) >= min ((RWNotIn-seq L).(n+1));
+A2: sn1 = sn \ {min sn} by Def2;
+  then min sn <= min sn1 by XBOOLE_1:36,XXREAL_2:60;
+  then min sn = min sn1 by A1,XXREAL_0:1;
+  then
+A3: min sn1 in {min sn} by TARSKI:def 1;
+  min sn1 in sn1 by XXREAL_2:def 7;
+  hence contradiction by A2,A3,XBOOLE_0:def 5;
+end;
+
+theorem Th20:
+  n < m implies min ((RWNotIn-seq L).n) < min ((RWNotIn-seq L).m)
+proof
+  set RL = RWNotIn-seq L;
+  now
+    let n;
+    defpred X[Element of NAT] means n < $1 implies min (RL.n) < min (RL.$1);
+A1: for m st X[m] holds X[m+1]
+    proof
+      let m such that
+A2:   n < m implies min (RL.n) < min (RL.m);
+      assume n < m+1;
+      then
+A3:   n <= m by NAT_1:13;
+      per cases by A3,XXREAL_0:1;
+      suppose
+        n = m;
+        hence min (RL.n) < min (RL.(m+1)) by Th19;
+      end;
+      suppose
+        n < m;
+        hence min (RL.n) < min (RL.(m+1)) by A2,Th19,XXREAL_0:2;
+      end;
+    end;
+A4: X[0] by NAT_1:2;
+    thus for n being Element of NAT holds X[n] from NAT_1:sch 1(A4, A1);
+  end;
+  hence thesis;
+end;
+
+definition
+  let n be Element of NAT, L be finite Subset of Int-Locations;
+  func n-thRWNotIn L -> Int-Location equals
+  intloc min ((RWNotIn-seq L).n);
+  correctness;
+end;
+
+notation
+  let n be Element of NAT, L be finite Subset of Int-Locations;
+  synonym n-stRWNotIn L for n-thRWNotIn L;
+  synonym n-ndRWNotIn L for n-thRWNotIn L;
+  synonym n-rdRWNotIn L for n-thRWNotIn L;
+end;
+
+registration
+  let n be Element of NAT, L be finite Subset of Int-Locations;
+  cluster n-thRWNotIn L -> read-write;
+  coherence
+  proof
+    set sn = (RWNotIn-seq L).n;
+A1: min sn in sn by XXREAL_2:def 7;
+    assume n-thRWNotIn L = intloc 0;
+     then min ((RWNotIn-seq L).n) = 0 by AMI_3:10;
+    hence contradiction by A1,Th18;
+  end;
+end;
+
+theorem
+  not n-thRWNotIn L in L
+proof
+  set FNI = n-thRWNotIn L;
+  set sn = (RWNotIn-seq L).n;
+  min sn in sn by XXREAL_2:def 7;
+  hence thesis by Th18;
+end;
+
+theorem
+  n <> m implies n-thRWNotIn L <> m-thRWNotIn L
+proof
+  assume n <> m;
+  then n < m or m < n by XXREAL_0:1;
+  then
+A1: min ((RWNotIn-seq L).n) <> min ((RWNotIn-seq L).m) by Th20;
+  assume n-thRWNotIn L = m-thRWNotIn L;
+  hence contradiction by A1,AMI_3:10;
+end;
+
+begin :: from SFMASTR2
+
+theorem Th6:
+  for Iloc being Subset of Int-Locations, Floc being Subset of
+  FinSeq-Locations holds s1 | (Iloc \/ Floc) = s2 | (Iloc \/ Floc) iff (for x
+  being Int-Location st x in Iloc holds s1.x = s2.x) & for x being
+  FinSeq-Location st x in Floc holds s1.x = s2.x
+proof
+  let Iloc be Subset of Int-Locations, Floc be Subset of FinSeq-Locations;
+  FinSeq-Locations c= dom s1 by SCMFSA_2:46;
+  then
+A1: Floc c= dom s1 by XBOOLE_1:1;
+  FinSeq-Locations c= dom s2 by SCMFSA_2:46;
+  then
+A2: Floc c= dom s2 by XBOOLE_1:1;
+  Int-Locations c= dom s2 by SCMFSA_2:45;
+  then
+A3: Iloc c= dom s2 by XBOOLE_1:1;
+  then
+A4: Iloc \/ Floc c= dom s2 by A2,XBOOLE_1:8;
+  Int-Locations c= dom s1 by SCMFSA_2:45;
+  then
+A5: Iloc c= dom s1 by XBOOLE_1:1;
+  then
+A6: Iloc \/ Floc c= dom s1 by A1,XBOOLE_1:8;
+  hereby
+    assume
+A7: s1 | (Iloc \/ Floc) = s2 | (Iloc \/ Floc);
+    hereby
+      let x be Int-Location;
+      assume x in Iloc;
+      then x in Iloc \/ Floc by XBOOLE_0:def 3;
+      hence s1.x = s2.x by A6,A4,A7,FUNCT_1:95;
+    end;
+    let x be FinSeq-Location;
+    assume x in Floc;
+    then x in Iloc \/ Floc by XBOOLE_0:def 3;
+    hence s1.x = s2.x by A6,A4,A7,FUNCT_1:95;
+  end;
+  assume that
+A8: for x being Int-Location st x in Iloc holds s1.x = s2.x and
+A9: for x being FinSeq-Location st x in Floc holds s1.x = s2.x;
+A10: now
+    hereby
+      let x be set;
+      assume
+A11:  x in Iloc;
+      then x in Int-Locations;
+      then reconsider x9 = x as Int-Location by AMI_2:def 16;
+      thus s1.x = s2.x9 by A8,A11
+        .= s2.x;
+    end;
+    let x be set;
+    assume
+A12: x in Floc;
+    then x in FinSeq-Locations;
+    then reconsider x9 = x as FinSeq-Location by SCMFSA_2:def 5;
+    thus s1.x = s2.x9 by A9,A12
+      .= s2.x;
+  end;
+  then
+A13: s1 | Floc = s2 | Floc by A1,A2,FUNCT_1:95;
+  s1 | Iloc = s2 | Iloc by A5,A3,A10,FUNCT_1:95;
+  hence thesis by A13,RELAT_1:150;
+end;
+
+theorem
+  for Iloc being Subset of Int-Locations holds s1 | (Iloc \/
+  FinSeq-Locations) = s2 | (Iloc \/ FinSeq-Locations) iff (for x being
+  Int-Location st x in Iloc holds s1.x = s2.x) & for x being FinSeq-Location
+  holds s1.x = s2.x
+proof
+  set FSL = FinSeq-Locations;
+  let Iloc be Subset of Int-Locations;
+A1: (for x being FinSeq-Location holds s1.x = s2.x) implies for x being
+  FinSeq-Location st x in FSL holds s1.x = s2.x;
+A2: (for x being FinSeq-Location st x in FSL holds s1.x = s2.x) implies for
+  x be FinSeq-Location holds s1.x = s2.x
+  proof assume
+A3:  for x being FinSeq-Location st x in FSL holds s1.x = s2.x;
+   let x be FinSeq-Location;
+    x in  FinSeq-Locations by SCMFSA_2:def 5;
+   hence thesis by A3;
+  end;
+  [#] FSL = FSL;
+  hence thesis by A1,A2,Th6;
+end;
+
+begin :: from SCM_HALT
+
+theorem
+  for x being set,i,m,n being Element of NAT
+   st x in dom (((intloc i) .--> m) +* Start-At(n,SCM+FSA))
+    holds x=intloc i or x=IC SCM+FSA
+proof
+  let x be set,i,m,n be Element of NAT;
+  set iS = ((intloc i) .--> m) +* Start-At(n,SCM+FSA);
+  dom ((intloc i) .--> m) ={intloc i } & dom(Start-At(n,SCM+FSA)) = {IC
+  SCM+FSA} by FUNCOP_1:13;
+  then
+A1: dom iS ={intloc i} \/ {IC SCM+FSA} by FUNCT_4:def 1;
+  assume x in dom iS;
+  then x in{intloc i} or x in {IC SCM+FSA} by A1,XBOOLE_0:def 3;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem
+  for s being State of SCM+FSA st
+  Initialize ((intloc 0) .--> 1) c= s holds s.intloc 0 =1
+proof
+  let s be State of SCM+FSA;
+set iS = Initialize ((intloc 0) .--> 1);
+Y:  dom iS = dom((intloc 0) .--> 1) \/ dom SA0 by FUNCT_4:def 1;
+    intloc 0 in dom((intloc 0) .--> 1) by FUNCOP_1:74;
+    then
+A1: intloc 0 in dom iS by Y,XBOOLE_0:def 3;
+C:  dom SA0 = {IC SCM+FSA} by FUNCOP_1:13;
+    IC SCM+FSA <> intloc 0 by SCMFSA_2:56;
+    then not intloc 0 in dom SA0 by C,TARSKI:def 1;
+    then
+ iS.intloc 0 = ((intloc 0) .--> 1).intloc 0 by FUNCT_4:11
+      .= 1 by FUNCOP_1:72;
+  hence thesis by A1,GRFUNC_1:2;
+end;
+
+registration
+  let n be Element of NAT;
+  cluster intloc (n+1) -> read-write;
+  coherence
+  proof
+   thus intloc (n+1) <> intloc 0 by AMI_3:10;
+  end;
+end;
+
+begin :: from SCMBSORT
+
+registration
+  let f be FinSeq-Location,t be FinSequence of INT;
+  cluster f .--> t ->  (the_Values_of SCM+FSA)-compatible;
+  coherence
+  proof
+A1: t is Element of INT* by FINSEQ_1:def 11;
+    Values f = INT* by SCMFSA_2:12;
+    hence thesis by A1;
+  end;
+end;
+
+theorem
+  for w being FinSequence of INT,f be FinSeq-Location
+  holds dom (Initialized (f.--> w)) = {intloc 0,IC SCM+FSA,f}
+proof
+  let w be FinSequence of INT,f be FinSeq-Location;
+  dom (Initialized(f .--> w)) =
+  dom(Initialize ((intloc 0) .--> 1)) \/ dom (f.--> w) by FUNCT_4:def 1
+    .= ({ intloc 0,IC SCM+FSA } \/ {f}) by Th11,FUNCOP_1:13;
+  hence thesis by ENUMSET1:3;
+end;
+
+theorem
+  for t be FinSequence of INT,f be FinSeq-Location
+  holds dom Initialize((intloc 0) .--> 1) misses dom (f .--> t)
+proof
+  let t be FinSequence of INT,f be FinSeq-Location;
+  set x = f .--> t;
+A1: dom x ={f} by FUNCOP_1:13;
+  set DI=dom Initialize((intloc 0) .--> 1);
+  assume DI /\ dom x <> {};
+  then consider y being set such that
+A2: y in DI /\ dom x by XBOOLE_0:def 1;
+A3: y in DI by A2,XBOOLE_0:def 4;
+  y in dom x by A2,XBOOLE_0:def 4;
+  then
+A4: y=f by A1,TARSKI:def 1;
+  y=intloc 0 or y=IC SCM+FSA by A3,Th11,TARSKI:def 2;
+  hence contradiction by A4,SCMFSA_2:57,58;
+end;
+
+theorem
+  for w being FinSequence of INT,f be FinSeq-Location,s be State of SCM+FSA
+   st  Initialized(f .--> w) c= s
+  holds s.f = w & s.(intloc 0) = 1
+proof
+  let w be FinSequence of INT,f be FinSeq-Location,
+  s be State of SCM+FSA;
+  set t= f.--> w, p=Initialized t;
+  assume
+A2:  p c= s;
+   reconsider pt = p  as PartState of SCM+FSA;
+  dom t = { f} by FUNCOP_1:13;
+  then
+B3: f in dom t by TARSKI:def 1;
+A4: f in dom  pt by B3,FUNCT_4:12;
+A5: intloc 0 in dom  pt by Th4;
+  ex i being Element of NAT st f = fsloc i by SCMFSA_2:9;
+    then f <> intloc 0 by SCMFSA_2:99;
+    then not f in {intloc 0} by TARSKI:def 1;
+    then
+A6: not f in dom((intloc 0) .--> 1) by FUNCOP_1:13;
+A7: dom Initialize((intloc 0) .--> 1)
+     = dom ((intloc 0) .--> 1) \/ dom Start-At(0,SCM+FSA) by FUNCT_4:def 1;
+    not f in dom Start-At(0,SCM+FSA) by SCMFSA_2:103;
+    then
+A8: not f in dom Initialize ((intloc 0) .--> 1) by A6,A7,XBOOLE_0:def 3;
+  thus s.f = pt.f by A2,A4,GRFUNC_1:2
+    .= t.f by A8,FUNCT_4:11
+    .= w by FUNCOP_1:72;
+  thus s.intloc 0 =p.intloc 0 by A2,A5,GRFUNC_1:2
+    .= 1 by Th12,Th10,FUNCT_4:13;
+end;
+
+theorem
+  for f being FinSeq-Location,a being Int-Location,s being State of SCM+FSA
+  holds {a,IC SCM+FSA,f} c= dom s
+proof
+  let f be FinSeq-Location,a be Int-Location,s be State of SCM+FSA;
+A1: a in dom s by SCMFSA_2:42;
+  IC SCM+FSA in dom s by MEMSTR_0:2;
+  then
+A2: {a,IC SCM+FSA} c= dom s by A1,ZFMISC_1:32;
+  f in dom s by SCMFSA_2:43;
+  then { f } c= dom s by ZFMISC_1:31;
+  then {a,IC SCM+FSA} \/ {f} c= dom s by A2,XBOOLE_1:8;
+  hence thesis by ENUMSET1:3;
+end;
+
+definition
+  func Sorting-Function -> PartFunc of FinPartSt SCM+FSA,FinPartSt SCM+FSA
+  means
+  :Def3:
+  for p,q being FinPartState of SCM+FSA holds [p,q] in it
+  iff ex t being FinSequence of INT,u being FinSequence of REAL
+  st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+  u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u;
+  existence
+  proof
+    defpred X[set,set] means
+    ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+    u is non-increasing & $1 = fsloc 0 .--> t & $2 = fsloc 0 .--> u;
+A1: for x,y1,y2 being set st X[x,y1] & X[x,y2] holds y1 = y2
+    proof
+      let p,q1,q2 be set;
+      given t1 being FinSequence of INT,u1 being FinSequence of REAL such that
+A2:   t1,u1 are_fiberwise_equipotent
+      and u1 is FinSequence of INT and
+A3:   u1 is non-increasing and
+A4:   p = fsloc 0 .--> t1 and
+A5:   q1 = fsloc 0 .--> u1;
+      given t2 being FinSequence of INT,u2 being FinSequence of REAL such that
+A6:   t2,u2 are_fiberwise_equipotent
+      and u2 is FinSequence of INT and
+A7:   u2 is non-increasing and
+A8:   p = fsloc 0 .--> t2 and
+A9:   q2 = fsloc 0 .--> u2;
+      t1=(fsloc 0 .--> t1).(fsloc 0) by FUNCOP_1:72
+        .=t2 by A4,A8,FUNCOP_1:72;
+      hence thesis by A2,A3,A5,A6,A7,A9,CLASSES1:76,RFINSEQ:23;
+    end;
+    consider f being Function such that
+A10: for p,q being set holds [p,q] in f iff p in FinPartSt SCM+FSA &
+    X[p,q] from FUNCT_1:sch 1(A1);
+A11: dom f c= FinPartSt SCM+FSA
+    proof
+      let e be set;
+      assume e in dom f;
+      then [e,f.e] in f by FUNCT_1:1;
+      hence thesis by A10;
+    end;
+    rng f c= FinPartSt SCM+FSA
+    proof
+      let q be set;
+      assume q in rng f;
+      then consider p being set such that
+A12:  [p,q] in f by XTUPLE_0:def 13;
+      consider t being FinSequence of INT,u being FinSequence of REAL
+      such that
+      t,u are_fiberwise_equipotent and
+A13:  u is FinSequence of INT
+      and u is non-increasing
+      and p = fsloc 0 .--> t and
+A14:  q = fsloc 0 .--> u by A10,A12;
+      reconsider u as FinSequence of INT by A13;
+      fsloc 0 .--> u is FinPartState of SCM+FSA;
+      hence thesis by A14,MEMSTR_0:75;
+    end;
+    then reconsider f as PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA
+    by A11,RELSET_1:4;
+    take f;
+    let p,q be FinPartState of SCM+FSA;
+    thus [p,q] in f implies
+    ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+    u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u by A10;
+    given t being FinSequence of INT,u being FinSequence of REAL such that
+A15: t,u are_fiberwise_equipotent and
+A16: u is FinSequence of INT and
+A17: u is non-increasing and
+A18: p = fsloc 0 .--> t and
+A19: q = fsloc 0 .--> u;
+    p in FinPartSt SCM+FSA by MEMSTR_0:75;
+    hence thesis by A10,A15,A16,A17,A18,A19;
+  end;
+  uniqueness
+  proof
+    let IT1,IT2 be PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA such that
+A20: for p,q being FinPartState of SCM+FSA holds [p,q] in IT1
+    iff ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+    u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u and
+A21: for p,q being FinPartState of SCM+FSA holds [p,q] in IT2
+    iff ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+    u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u;
+    defpred X[set,set] means
+    ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+    u is non-increasing & $1 = fsloc 0 .--> t & $2 = fsloc 0 .--> u;
+A22: for p,q being Element of FinPartSt SCM+FSA holds [p,q] in IT1 iff X[p,q]
+    proof
+      let p,q be Element of FinPartSt SCM+FSA;
+      reconsider p,q as FinPartState of SCM+FSA by MEMSTR_0:76;
+      [p,q] in IT1 iff X[p,q] by A20;
+      hence thesis;
+    end;
+A23: for p,q being Element of FinPartSt SCM+FSA holds [p,q] in IT2 iff X[p,q]
+    proof
+      let p,q be Element of FinPartSt SCM+FSA;
+      reconsider p,q as FinPartState of SCM+FSA by MEMSTR_0:76;
+      [p,q] in IT2 iff X[p,q] by A21;
+      hence thesis;
+    end;
+    thus IT1 = IT2 from RELSET_1:sch 4(A22,A23);
+  end;
+end;
+
+theorem
+  for p being set holds p in dom Sorting-Function iff
+  ex t being FinSequence of INT st p = fsloc 0 .--> t
+proof
+  set f=Sorting-Function;
+  let p be set;
+  hereby
+    set q=f.p;
+    assume
+A1: p in dom f;
+    then
+A2: [p,f.p] in f by FUNCT_1:1;
+    dom f c=FinPartSt SCM+FSA by RELAT_1:def 18;
+    then
+A3: p is FinPartState of SCM+FSA by A1,MEMSTR_0:76;
+    q in FinPartSt SCM+FSA by A1,PARTFUN1:4;
+    then q is FinPartState of SCM+FSA by MEMSTR_0:76;
+    then consider t be FinSequence of INT,u being FinSequence of REAL such that
+    t,u are_fiberwise_equipotent
+    and u is FinSequence of INT
+    and u is non-increasing and
+A4: p = fsloc 0 .--> t
+    and q = fsloc 0 .--> u
+    by A2,A3,Def3;
+    take t;
+    thus p = fsloc 0 .--> t by A4;
+  end;
+  given t be FinSequence of INT such that
+A5: p = fsloc 0 .--> t;
+  consider u be FinSequence of REAL such that
+A6: t,u are_fiberwise_equipotent and
+A7: u is FinSequence of INT and
+A8: u is non-increasing by RFINSEQ:33;
+  reconsider u1=u as FinSequence of INT by A7;
+  set q=fsloc 0 .--> u1;
+  [p,q] in f by A5,A6,A8,Def3;
+  hence thesis by FUNCT_1:1;
+end;
+
+theorem
+  for t being FinSequence of INT holds
+  ex u being FinSequence of REAL st t,u are_fiberwise_equipotent &
+  u is non-increasing & u is FinSequence of INT &
+  Sorting-Function.(fsloc 0 .--> t ) = fsloc 0 .--> u
+proof
+  let t be FinSequence of INT;
+  consider u being FinSequence of REAL such that
+A1: t,u are_fiberwise_equipotent and
+A2: u is FinSequence of INT and
+A3: u is non-increasing by RFINSEQ:33;
+  reconsider u as FinSequence of INT by A2;
+  set p = fsloc 0 .--> t;
+  set q = fsloc 0 .--> u;
+  [p, q] in Sorting-Function by A1,A3,Def3;
+  then Sorting-Function.p = q by FUNCT_1:1;
+  hence thesis by A1,A3;
+end;
+
+:: SCMFSA6C:3
+
+theorem
+  (for a being read-write Int-Location holds (Initialized s).a = s.a) &
+  (for f holds (Initialized s).f = s.f)
+proof
+A1: Initialized s = Initialize(s +* ((intloc 0) .--> 1)) by FUNCT_4:14;
+A2: dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:13;
+  hereby
+    let a be read-write Int-Location;
+A3: not a in dom ((intloc 0) .--> 1) by A2,TARSKI:def 1;
+    not a in dom SA0 by SCMFSA_2:102;
+    hence (Initialized s).a = (s+*((intloc 0) .--> 1)).a by A1,FUNCT_4:11
+      .= s.a by A3,FUNCT_4:11;
+  end;
+  hereby
+    let f be FinSeq-Location;
+    intloc 0 <> f by SCMFSA_2:58;
+    then
+A4: not f in dom ((intloc 0) .--> 1) by A2,TARSKI:def 1;
+    not f in dom SA0 by SCMFSA_2:103;
+    hence (Initialized s).f = (s+*((intloc 0) .--> 1)).f by A1,FUNCT_4:11
+      .= s.f by A4,FUNCT_4:11;
+  end;
+end;
+

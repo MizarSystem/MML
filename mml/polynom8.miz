@@ -2,7 +2,7 @@
 ::  by Krzysztof Treyderowski and Christoph Schwarzweller
 ::
 :: Received October 12, 2006
-:: Copyright (c) 2006-2011 Association of Mizar Users
+:: Copyright (c) 2006-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -22,20 +22,20 @@ environ
       POLYNOM1, COMPLEX1, MCART_1, POLYNOM2, POLYNOM3, POLYNOM8;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, NUMBERS,
       XCMPLX_0, XXREAL_0, VECTSP_2, BINOP_1, BINOM, ALGSTR_1, PARTFUN1,
-      FINSEQ_1, FINSEQ_2, INT_1, NAT_1, NAT_D, STRUCT_0, ALGSTR_0, RLVECT_1,
-      GROUP_1, VECTSP_1, FVSUM_1, ALGSEQ_1, POLYNOM5, POLYNOM3, MATRIX_1,
-      MATRIX_3, POLYNOM4, MCART_1, INT_2;
- constructors REAL_1, SQUARE_1, NAT_D, VECTSP_2, ALGSTR_2, TOPREAL1, MATRIX_3,
-      POLYNOM1, POLYNOM4, POLYNOM5, BINOM, RELSET_1, FVSUM_1;
+      FINSEQ_1, FINSEQ_2, INT_1, ORDINAL1, NAT_1, NAT_D, STRUCT_0, ALGSTR_0,
+      RLVECT_1, GROUP_1, VECTSP_1, FVSUM_1, ALGSEQ_1, POLYNOM5, POLYNOM3,
+      MATRIX_1, MATRIX_3, POLYNOM4, XTUPLE_0, MCART_1, INT_2;
+ constructors REAL_1, NAT_D, VECTSP_2, ALGSTR_2, TOPREAL1, MATRIX_3, POLYNOM4,
+      POLYNOM5, BINOM, RELSET_1, FVSUM_1, XTUPLE_0;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      STRUCT_0, VECTSP_1, ALGSTR_1, GCD_1, POLYNOM3, CARD_1, FINSEQ_1;
+      STRUCT_0, VECTSP_1, ALGSTR_1, GCD_1, POLYNOM3, CARD_1, XTUPLE_0;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions VECTSP_1, RLVECT_1, BINOM, FINSEQ_1, MATRIX_1, POLYNOM3;
+ definitions VECTSP_1, RLVECT_1, BINOM, FINSEQ_1, MATRIX_1, POLYNOM3, XTUPLE_0;
  theorems FVSUM_1, GROUP_1, BINOM, VECTSP_1, ALGSEQ_1, NAT_1, FINSEQ_4, INT_1,
       FUNCT_2, XREAL_1, VECTSP_2, ALGSTR_1, MATRIX_1, FUNCT_1, MATRIX_3,
       FINSEQ_1, ZFMISC_1, COMPLEX1, RLVECT_1, POLYNOM4, TARSKI, MCART_1,
       FINSEQ_2, POLYNOM1, ABSVALUE, POLYNOM3, POLYNOM5, FINSEQ_3, ORDINAL1,
-      XXREAL_0, FUNCOP_1, PARTFUN1, XREAL_0;
+      XXREAL_0, FUNCOP_1, PARTFUN1, XREAL_0, XTUPLE_0;
  schemes NAT_1, FUNCT_2, MATRIX_1, FINSEQ_1, INT_1;
 
 begin :: Preliminaries
@@ -749,7 +749,7 @@ proof
   let L be add-associative right_zeroed right_complementable distributive non
   empty doubleLoopStr, m1,m2 be AlgSequence of L;
   set p = m1 * m2, k = min(len m1, len m2);
-  reconsider k as Element of NAT by XXREAL_0:15;
+  reconsider k as Element of NAT;
   now
     let i be Nat;
     assume
@@ -1613,13 +1613,13 @@ A1: for i,j being Nat st [i,j] in [:Seg m9, Seg 1:] ex x being Element of
 A2:   [i,j] in [:Seg m9, Seg 1:];
       take p/.(i-1);
       [i,j]`1 in Seg m by A2,MCART_1:10;
-      then i in Seg m by MCART_1:def 1;
+      then i in Seg m;
       then 1 <= i by FINSEQ_1:1;
       then dom p = NAT & 1-1 <= i-1 by FUNCT_2:def 1,XREAL_1:9;
       hence thesis by INT_1:3,PARTFUN1:def 6;
     end;
     consider M being Matrix of m9,1,L such that
-A4: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)] from
+A3: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)] from
     MATRIX_1:sch 2(A1);
     reconsider M as Matrix of m,1,L;
     take M;
@@ -1627,10 +1627,10 @@ A4: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)] from
       let i be Nat;
       assume 1 <= i & i <= m;
       then
-A5:   i in Seg m & Indices M = [:Seg m, Seg 1:] by FINSEQ_1:1,MATRIX_1:23;
+A4:   i in Seg m & Indices M = [:Seg m, Seg 1:] by FINSEQ_1:1,MATRIX_1:23;
       1 in Seg 1;
-      then [i,1] in Indices M by A5,ZFMISC_1:def 2;
-      hence M*(i,1) = p.(i-1) by A4;
+      then [i,1] in Indices M by A4,ZFMISC_1:def 2;
+      hence M*(i,1) = p.(i-1) by A3;
     end;
     hence thesis;
   end;
@@ -1638,44 +1638,44 @@ A5:   i in Seg m & Indices M = [:Seg m, Seg 1:] by FINSEQ_1:1,MATRIX_1:23;
   proof
     let M1,M2 be Matrix of m,1,L;
     assume that
-A6: for i being Nat st 1 <= i & i <= m holds M1*(i,1) = p.(i-1) and
-A7: for i being Nat st 1 <= i & i <= m holds M2*(i,1) = p.(i-1);
+A5: for i being Nat st 1 <= i & i <= m holds M1*(i,1) = p.(i-1) and
+A6: for i being Nat st 1 <= i & i <= m holds M2*(i,1) = p.(i-1);
     per cases;
     suppose
-A8:   m = 0;
+A7:   m = 0;
       then
-A9:   for i,j being Nat st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j)
+A8:   for i,j being Nat st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j)
       by MATRIX_1:22;
-A10:  width M1 = 0 by A8,MATRIX_1:22
-        .= width M2 by A8,MATRIX_1:22;
-      len M1 = 0 by A8,MATRIX_1:22
-        .= len M2 by A8,MATRIX_1:22;
-      hence thesis by A10,A9,MATRIX_1:21;
+A9:  width M1 = 0 by A7,MATRIX_1:22
+        .= width M2 by A7,MATRIX_1:22;
+      len M1 = 0 by A7,MATRIX_1:22
+        .= len M2 by A7,MATRIX_1:22;
+      hence thesis by A9,A8,MATRIX_1:21;
     end;
     suppose
-A11:  m > 0;
-A12:  now
+A10:  m > 0;
+A11:  now
         let i,j be Nat;
         assume [i,j] in Indices M1;
         then
-A13:    [i,j] in [:Seg m, Seg 1:] by A11,MATRIX_1:23;
+A12:    [i,j] in [:Seg m, Seg 1:] by A10,MATRIX_1:23;
         then [i,j]`2 in Seg 1 by MCART_1:10;
-        then j in Seg 1 by MCART_1:def 2;
+        then j in Seg 1;
         then 1 <= j & j <= 1 by FINSEQ_1:1;
         then
-A14:    j = 1 by XXREAL_0:1;
-        [i,j]`1 in Seg m by A13,MCART_1:10;
-        then i in Seg m by MCART_1:def 1;
+A13:    j = 1 by XXREAL_0:1;
+        [i,j]`1 in Seg m by A12,MCART_1:10;
+        then i in Seg m;
         then
-A15:    1 <= i & i <= m by FINSEQ_1:1;
-        hence M1*(i,j) = p.(i-1) by A6,A14
-          .= M2*(i,j) by A7,A15,A14;
+A14:    1 <= i & i <= m by FINSEQ_1:1;
+        hence M1*(i,j) = p.(i-1) by A5,A13
+          .= M2*(i,j) by A6,A14,A13;
       end;
-A16:  width M1 = 1 by A11,MATRIX_1:23
-        .= width M2 by A11,MATRIX_1:23;
-      len M1 = m by A11,MATRIX_1:23
-        .= len M2 by A11,MATRIX_1:23;
-      hence thesis by A16,A12,MATRIX_1:21;
+A15:  width M1 = 1 by A10,MATRIX_1:23
+        .= width M2 by A10,MATRIX_1:23;
+      len M1 = m by A10,MATRIX_1:23
+        .= len M2 by A10,MATRIX_1:23;
+      hence thesis by A15,A11,MATRIX_1:21;
     end;
   end;
 end;
@@ -2165,7 +2165,7 @@ almost_left_invertible non empty doubleLoopStr, m be Nat, x be Element of L;
 A1: for i,j being Nat st [i,j] in [:Seg m9, Seg m9:] ex x being Element of
     L st P[i,j,x];
     consider M being Matrix of m9,m9,L such that
-A3: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)] from
+A2: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)] from
     MATRIX_1:sch 2(A1);
     reconsider M as Matrix of m,m,L;
     take M;
@@ -2173,12 +2173,12 @@ A3: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)] from
       let i be Nat;
       assume 1 <= i & i <= m;
       then
-A4:   Indices M = [:Seg m, Seg m:] & i in Seg m by FINSEQ_1:1,MATRIX_1:24;
+A3:   Indices M = [:Seg m, Seg m:] & i in Seg m by FINSEQ_1:1,MATRIX_1:24;
       let j be Nat;
       assume 1 <= j & j <= m;
       then j in Seg m by FINSEQ_1:1;
-      then [i,j] in Indices M by A4,ZFMISC_1:def 2;
-      hence M*(i,j) = pow(x,(i-1)*(j-1)) by A3;
+      then [i,j] in Indices M by A3,ZFMISC_1:def 2;
+      hence M*(i,j) = pow(x,(i-1)*(j-1)) by A2;
     end;
     hence thesis;
   end;
@@ -2186,31 +2186,29 @@ A4:   Indices M = [:Seg m, Seg m:] & i in Seg m by FINSEQ_1:1,MATRIX_1:24;
   proof
     let M1,M2 be Matrix of m,L;
     assume
-A5: for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m holds M1*(
+A4: for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m holds M1*(
     i,j) = pow(x,(i-1)*(j-1));
     assume
-A6: for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m holds M2*(
+A5: for i,j being Nat st 1 <= i & i <= m & 1 <= j & j <= m holds M2*(
     i,j) = pow(x,(i-1)*(j-1));
     now
       let i,j be Nat;
-A7:   Indices M1 = [:Seg m, Seg m:] by MATRIX_1:24;
+A6:   Indices M1 = [:Seg m, Seg m:] by MATRIX_1:24;
       assume [i,j] in Indices M1;
-      then ex x,y being set st x in Seg m & y in Seg m & [x,y] = [i,j] by A7,
+      then ex x,y being set st x in Seg m & y in Seg m & [x,y] = [i,j] by A6,
 ZFMISC_1:def 2;
       then consider z,y being set such that
-A8:   [i,j] = [z,y] and
-A9:   z in Seg m and
-A10:  y in Seg m;
-      j = [z,y]`2 by A8,MCART_1:def 2
-        .= y by MCART_1:def 2;
+A7:   [i,j] = [z,y] and
+A8:   z in Seg m and
+A9:  y in Seg m;
+      j = y by A7,XTUPLE_0:1;
       then
-A11:  1 <= j & j <= m by A10,FINSEQ_1:1;
-      i = [z,y]`1 by A8,MCART_1:def 1
-        .= z by MCART_1:def 1;
+A10:  1 <= j & j <= m by A9,FINSEQ_1:1;
+      i = z by A7,XTUPLE_0:1;
       then
-A12:  1 <= i & i <= m by A9,FINSEQ_1:1;
-      hence M1*(i,j) = pow(x,(i-1)*(j-1)) by A5,A11
-        .= M2*(i,j) by A6,A12,A11;
+A11:  1 <= i & i <= m by A8,FINSEQ_1:1;
+      hence M1*(i,j) = pow(x,(i-1)*(j-1)) by A4,A10
+        .= M2*(i,j) by A5,A11,A10;
     end;
     hence thesis by MATRIX_1:27;
   end;

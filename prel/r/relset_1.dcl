@@ -6,6 +6,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="XTUPLE_0"/>
 </Signature>
 <RCluster aid="RELSET_1" nr="1">
 <ArgTypes>
@@ -224,7 +225,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="25">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -256,7 +257,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="20">
+<Func kind="K" nr="38">
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
@@ -287,7 +288,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="21">
+<Func kind="K" nr="39">
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
@@ -307,13 +308,13 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="K" nr="6">
-<Func kind="K" nr="20">
+<Func kind="K" nr="38">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="26">
+<Func kind="K" nr="24">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -335,13 +336,13 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="K" nr="6">
-<Func kind="K" nr="20">
+<Func kind="K" nr="38">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="28">
+<Func kind="K" nr="26">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

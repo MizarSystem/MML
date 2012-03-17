@@ -2,7 +2,7 @@
 ::  by Stanis{\l}awa Kanas, Adam Lecko and Mariusz Startek
 ::
 :: Received May 3, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -137,32 +137,32 @@ definition
   let A be set;
   let f be PartFunc of [:A,A:], REAL;
   attr f is Reflexive means
-  :Def3:
+  :Def2:
   for a being Element of A holds f.(a,a) = 0;
   attr f is discerning means
-  :Def4:
+  :Def3:
   for a, b being Element of A st f.(a,b) = 0 holds a = b;
   attr f is symmetric means
-  :Def5:
+  :Def4:
   for a, b being Element of A holds f.(a,b) = f.(b,a);
   attr f is triangle means
-  :Def6:
+  :Def5:
   for a, b, c being Element of A holds f.(a,c) <= f.(a,b) + f.(b,c);
 end;
 
 definition
   let M be MetrStruct;
   attr M is Reflexive means
-  :Def7:
+  :Def6:
   the distance of M is Reflexive;
   attr M is discerning means
-  :Def8:
+  :Def7:
   the distance of M is discerning;
   attr M is symmetric means
-  :Def9:
+  :Def8:
   the distance of M is symmetric;
   attr M is triangle means
-  :Def10:
+  :Def9:
   the distance of M is triangle;
 end;
 
@@ -195,7 +195,7 @@ A3: the distance of M is triangle
       let a be Element of M;
       thus thesis by Lm2;
     end;
-    hence thesis by A1,A2,A3,Def7,Def8,Def9,Def10;
+    hence thesis by A1,A2,A3,Def6,Def7,Def8,Def9;
   end;
 end;
 
@@ -217,11 +217,11 @@ A1: for a being Element of M holds dist(a,a) = 0;
       (the distance of M).(a,a) = dist(a,a) .= 0 by A1;
       hence thesis;
     end;
-    hence M is Reflexive by Def7;
+    hence M is Reflexive by Def6;
   end;
   assume M is Reflexive;
-  then the distance of M is Reflexive by Def7;
-  hence thesis by Def3;
+  then the distance of M is Reflexive by Def6;
+  hence thesis by Def2;
 end;
 
 theorem Th2:
@@ -240,11 +240,11 @@ A1: for a, b being Element of M st dist(a,b) = 0 holds a = b;
       then dist(a,b) = 0;
       hence thesis by A1;
     end;
-    hence M is discerning by Def8;
+    hence M is discerning by Def7;
   end;
   assume M is discerning;
-  then the distance of M is discerning by Def8;
-  hence thesis by Def4;
+  then the distance of M is discerning by Def7;
+  hence thesis by Def3;
 end;
 
 theorem Th3:
@@ -261,7 +261,7 @@ A1: for a, b being Element of M holds dist(a,b) = dist(b,a);
       thus (the distance of M).(a,b) = dist(a,b) .= dist(b,a) by A1
         .= (the distance of M).(b,a);
     end;
-    hence M is symmetric by Def9;
+    hence M is symmetric by Def8;
 end;
 
 theorem Th4:
@@ -280,13 +280,13 @@ A2:   (the distance of M).(b,c) = dist(b,c);
       (the distance of M).(a,c) = dist(a,c);
       hence thesis by A1,A2;
     end;
-    hence M is triangle by Def10;
+    hence M is triangle by Def9;
   end;
   assume
 A3: M is triangle;
   let a, b, c be Element of M;
-  the distance of M is triangle by A3,Def10;
-  hence thesis by Def6;
+  the distance of M is triangle by A3,Def9;
+  hence thesis by Def5;
 end;
 
 definition
@@ -295,8 +295,8 @@ definition
   redefine func dist(a,b);
   commutativity
   proof
-    the distance of M is symmetric by Def9;
-    hence thesis by Def5;
+    the distance of M is symmetric by Def8;
+    hence thesis by Def4;
   end;
 end;
 
@@ -349,7 +349,7 @@ A5: the distance of M is discerning
     (the distance of M).(a,a) = dist(a,a) .= 0 by A1;
     hence thesis;
   end;
-  hence thesis by A5,A2,A3,Def7,Def8,Def9,Def10;
+  hence thesis by A5,A2,A3,Def6,Def7,Def8,Def9;
 end;
 
 theorem Th7:
@@ -366,7 +366,7 @@ end;
 definition
   let A be set;
   func discrete_dist A -> Function of [:A,A:], REAL means
-  :Def11:
+  :Def10:
   for x,y being Element of A holds it.(x,x) = 0 &
   (x <> y implies it.(x,y) = 1);
   existence
@@ -378,8 +378,7 @@ A1:   A is empty;
       then reconsider f = {} as Function of [:A,A:], REAL by RELSET_1:12;
       take f;
       let x, y be Element of A;
-      dom {} = {};
-      hence f.(x,x) = 0 by FUNCT_1:def 2;
+      thus f.(x,x) = 0;
       x = {} by A1,SUBSET_1:def 1
         .= y by A1,SUBSET_1:def 1;
       hence thesis;
@@ -457,7 +456,7 @@ A1: the distance of M is discerning
     proof
       let a, b be Element of M;
       assume (the distance of M).(a,b) = 0;
-      hence thesis by Def11;
+      hence thesis by Def10;
     end;
 A2: the distance of M is symmetric
     proof
@@ -466,8 +465,8 @@ A2: the distance of M is symmetric
         per cases;
         suppose
 A3:       a <> b;
-          hence (the distance of M).(a,b) = 1 by Def11
-            .= (the distance of M).(b,a) by A3,Def11;
+          hence (the distance of M).(a,b) = 1 by Def10
+            .= (the distance of M).(b,a) by A3,Def10;
         end;
         suppose a = b;
           hence thesis;
@@ -478,7 +477,7 @@ A3:       a <> b;
 A4: the distance of M is triangle
     proof
       let a, b, c be Element of M;
-A5:   (the distance of M).(a,b) = 0 iff a=b by Def11;
+A5:   (the distance of M).(a,b) = 0 iff a=b by Def10;
       per cases;
       suppose
         a=b & a=c;
@@ -491,34 +490,34 @@ A5:   (the distance of M).(a,b) = 0 iff a=b by Def11;
       suppose
 A6:     a=c & a<>b;
         then
-A7:     (the distance of M).(b,c)=1 by Def11;
-        (the distance of M).(a,c)=0 & (the distance of M).(a,b)=1 by A6,Def11;
+A7:     (the distance of M).(b,c)=1 by Def10;
+        (the distance of M).(a,c)=0 & (the distance of M).(a,b)=1 by A6,Def10;
         hence thesis by A7;
       end;
       suppose
 A8:     b=c & a<>c;
-        then (the distance of M).(b,c)=0 by Def11;
+        then (the distance of M).(b,c)=0 by Def10;
         hence thesis by A8;
       end;
       suppose
 A9:     a<>b & a<>c & b<>c; then
-A10:    (the distance of M).(b,c)=1 by Def11;
-        (the distance of M).(a,c)=1 & (the distance of M).(a,b)=1 by A9,Def11;
+A10:    (the distance of M).(b,c)=1 by Def10;
+        (the distance of M).(a,c)=1 & (the distance of M).(a,b)=1 by A9,Def10;
         hence thesis by A10;
       end;
     end;
     the distance of M is Reflexive
     proof
       let a be Element of M;
-      thus thesis by Def11;
+      thus thesis by Def10;
     end;
-    hence thesis by A1,A2,A4,Def7,Def8,Def9,Def10;
+    hence thesis by A1,A2,A4,Def6,Def7,Def8,Def9;
   end;
 end;
 
 definition
   func real_dist -> Function of [:REAL,REAL:], REAL means
-  :Def13:
+  :Def12:
   for x,y being Element of REAL holds it.(x,y) = abs(x-y);
   existence
   proof
@@ -546,33 +545,33 @@ A3: for x,y being Element of REAL holds F2.(x,y) = abs(x-y);
   end;
 end;
 
-theorem Th9:
+theorem Th8:
   for x,y being Element of REAL holds real_dist.(x,y) = 0 iff x = y
 proof
   let x,y be Element of REAL;
   thus real_dist.(x,y)=0 implies x=y
   proof
     assume real_dist.(x,y)=0;
-    then 0=abs(x-y) by Def13;
+    then 0=abs(x-y) by Def12;
     then x-y = 0 by ABSVALUE:2;
     hence thesis;
   end;
   assume x=y;
   then abs(x-y)=0 by ABSVALUE:2;
-  hence thesis by Def13;
+  hence thesis by Def12;
 end;
 
-theorem Th10:
+theorem Th9:
   for x,y being Element of REAL holds real_dist.(x,y) = real_dist.(y,x)
 proof
   let x,y be Element of REAL;
-  thus real_dist.(x,y)=abs(x-y) by Def13
+  thus real_dist.(x,y)=abs(x-y) by Def12
     .=abs(-(x-y)) by COMPLEX1:52
     .=abs(y-x)
-    .=real_dist.(y,x) by Def13;
+    .=real_dist.(y,x) by Def12;
 end;
 
-theorem Th11:
+theorem Th10:
   for x,y,z being Element of REAL holds real_dist.(x,y) <=
   real_dist.(x,z) + real_dist.(z,y)
 proof
@@ -580,8 +579,8 @@ proof
   abs(x-y)=abs((x-z)+(z-y));
   then
 A1: abs(x-y)<=abs(x-z)+abs(z-y) by COMPLEX1:56;
-  real_dist.(x,y)=abs(x-y) & real_dist.(x,z)=abs(x-z) by Def13;
-  hence thesis by A1,Def13;
+  real_dist.(x,y)=abs(x-y) & real_dist.(x,z)=abs(x-z) by Def12;
+  hence thesis by A1,Def12;
 end;
 
 definition
@@ -601,7 +600,7 @@ registration
   proof
     reconsider M = MetrStruct(#REAL,real_dist#) as non empty MetrStruct;
     for a,b,c be Element of M holds (dist(a,b)=0 iff a=b) & dist(a,b)=dist
-    (b,a) & dist(a,c)<=dist(a,b)+dist(b,c) by Th9,Th10,Th11;
+    (b,a) & dist(a,c)<=dist(a,b)+dist(b,c) by Th8,Th9,Th10;
     hence thesis by Th6;
   end;
 end;
@@ -609,16 +608,14 @@ end;
 definition
   let M be MetrStruct, p be Element of M, r be real number;
   func Ball(p,r) -> Subset of M means
-  :Def15:
-  ex M9 being non empty MetrStruct
-, p9 being Element of M9 st M9 = M & p9 = p & it = {q where q is Element of M9
-  : dist(p9,q) < r} if M is non empty otherwise it is empty;
+:Def14:
+   it = {q where q is Element of M : dist(p,q) < r} if M is non empty
+    otherwise it is empty;
   existence
   proof
     reconsider X = {} as Subset of M by XBOOLE_1:2;
-    thus M is non empty implies ex X being Subset of M st ex M9 being non
-empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p & X = {q where q is
-    Element of M9 : dist(p9,q) < r}
+    thus M is non empty implies ex X being Subset of M st
+     X = {q where q is Element of M : dist(p,q) < r}
     proof
       assume M is non empty;
       then reconsider M9 = M as non empty MetrStruct;
@@ -627,7 +624,7 @@ empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p & X = {q where q is
       set X = {q where q is Element of M9: P[q]};
       X c= the carrier of M9 from FRAENKEL:sch 10;
       then reconsider X as Subset of M;
-      take X, M9, p9;
+      take X;
       thus thesis;
     end;
     assume M is empty;
@@ -640,17 +637,14 @@ end;
 definition
   let M be MetrStruct, p be Element of M, r be real number;
   func cl_Ball(p,r) -> Subset of M means
-  :Def16:
-  ex M9 being non empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p &
-     it = {q where q is Element of M9 : dist(p9,q) <= r} if
-       M is non empty otherwise it is empty;
+:Def15:
+     it = {q where q is Element of M : dist(p,q) <= r} if M is non empty
+      otherwise it is empty;
   existence
   proof
     reconsider X = {} as Subset of M by XBOOLE_1:2;
     thus M is non empty implies ex X being Subset of M st
-    ex M9 being non empty MetrStruct,
-       p9 being Element of M9 st M9 = M & p9 = p &
-       X = {q where q is Element of M9 : dist(p9,q) <= r}
+      X = {q where q is Element of M : dist(p,q) <= r}
     proof
       assume M is non empty;
       then reconsider M9 = M as non empty MetrStruct;
@@ -659,7 +653,7 @@ definition
       set X = {q where q is Element of M9: P[q]};
       X c= the carrier of M9 from FRAENKEL:sch 10;
       then reconsider X as Subset of M;
-      take X, M9, p9;
+      take X;
       thus thesis;
     end;
     assume M is empty;
@@ -672,16 +666,14 @@ end;
 definition
   let M be MetrStruct, p be Element of M, r be real number;
   func Sphere(p,r) -> Subset of M means
-  :Def17:
-  ex M9 being non empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p &
-   it = {q where q is Element of M9 : dist(p9,q) = r} if M is non empty
+  :Def16:
+   it = {q where q is Element of M : dist(p,q) = r} if M is non empty
    otherwise it is empty;
   existence
   proof
     reconsider X = {} as Subset of M by XBOOLE_1:2;
-    thus M is non empty implies ex X being Subset of M st ex M9 being non
-empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p & X = {q where q is
-    Element of M9 : dist(p9,q) = r}
+    thus M is non empty implies ex X being Subset of M st
+     X = {q where q is Element of M : dist(p,q) = r}
     proof
       assume M is non empty;
       then reconsider M9 = M as non empty MetrStruct;
@@ -690,7 +682,7 @@ empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p & X = {q where q is
       set X = {q where q is Element of M9: P[q]};
       X c= the carrier of M9 from FRAENKEL:sch 10;
       then reconsider X as Subset of M;
-      take X, M9, p9;
+      take X;
       thus thesis;
     end;
     assume M is empty;
@@ -702,34 +694,7 @@ end;
 
 reserve r for real number;
 
-Lm5: for M being non empty MetrStruct, p being Element of M holds Ball(p,r) =
-{q where q is Element of M: dist(p,q) < r}
-proof
-  let M be non empty MetrStruct, p be Element of M;
-  ex M9 being non empty MetrStruct, p9 being Element of M9 st M9 = M & p9
-  = p & Ball(p,r) = {q where q is Element of M9 : dist(p9,q) < r} by Def15;
-  hence thesis;
-end;
-
-Lm6: for M being non empty MetrStruct, p being Element of M holds cl_Ball(p,r)
-= {q where q is Element of M: dist(p,q) <= r}
-proof
-  let M be non empty MetrStruct, p be Element of M;
-  ex M9 being non empty MetrStruct, p9 being Element of M9 st M9 = M & p9
-  = p & cl_Ball(p,r) = {q where q is Element of M9 : dist(p9,q) <= r} by Def16;
-  hence thesis;
-end;
-
-Lm7: for M being non empty MetrStruct, p being Element of M holds Sphere(p,r)
-= {q where q is Element of M: dist(p,q) = r}
-proof
-  let M be non empty MetrStruct, p be Element of M;
-  ex M9 being non empty MetrStruct, p9 being Element of M9 st M9 = M & p9
-  = p & Sphere(p,r) = {q where q is Element of M9 : dist(p9,q) = r} by Def17;
-  hence thesis;
-end;
-
-theorem Th12:
+theorem Th11:
   for M being MetrStruct, p, x being Element of M holds x in Ball(p,r)
     iff M is non empty & dist(p,x) < r
 proof
@@ -739,7 +704,7 @@ proof
 A1: x in Ball(p,r);
     then reconsider M9 = M as non empty MetrStruct;
     reconsider p9 = p as Element of M9;
-    x in {q where q is Element of M9:dist(p9,q)<r} by A1,Lm5;
+    x in {q where q is Element of M9:dist(p9,q)<r} by A1,Def14;
     then ex q be Element of M st x=q & dist(p,q)<r;
     hence M is non empty & dist(p,x)<r by A1;
   end;
@@ -748,10 +713,10 @@ A1: x in Ball(p,r);
   reconsider p9 = p as Element of M9;
   assume dist(p,x)<r;
   then x in {q where q is Element of M9:dist(p9,q)<r};
-  hence thesis by Lm5;
+  hence thesis by Def14;
 end;
 
-theorem Th13:
+theorem Th12:
   for M being MetrStruct, p, x being Element of M holds x in
   cl_Ball(p,r) iff M is non empty & dist(p,x) <= r
 proof
@@ -761,7 +726,7 @@ proof
 A1: x in cl_Ball(p,r);
     then reconsider M9 = M as non empty MetrStruct;
     reconsider p9 = p as Element of M9;
-    x in {q where q is Element of M9:dist(p9,q)<=r} by A1,Lm6;
+    x in {q where q is Element of M9:dist(p9,q)<=r} by A1,Def15;
     then ex q be Element of M st x=q & dist(p,q)<=r;
     hence M is non empty & dist(p,x)<=r by A1;
   end;
@@ -770,10 +735,10 @@ A1: x in cl_Ball(p,r);
   reconsider p9 = p as Element of M9;
   assume dist(p,x)<=r;
   then x in {q where q is Element of M9:dist(p9,q)<=r};
-  hence thesis by Lm6;
+  hence thesis by Def15;
 end;
 
-theorem Th14:
+theorem Th13:
   for M being MetrStruct, p, x being Element of M holds x in
   Sphere(p,r) iff M is non empty & dist(p,x) = r
 proof
@@ -783,7 +748,7 @@ proof
 A1: x in Sphere(p,r);
     then reconsider M9 = M as non empty MetrStruct;
     reconsider p9 = p as Element of M9;
-    x in {q where q is Element of M9:dist(p9,q)=r} by A1,Lm7;
+    x in {q where q is Element of M9:dist(p9,q)=r} by A1,Def16;
     then ex q be Element of M st x=q & dist(p,q)=r;
     hence M is non empty & dist(p,x)=r by A1;
   end;
@@ -792,61 +757,53 @@ A1: x in Sphere(p,r);
   reconsider p9 = p as Element of M9;
   assume dist(p,x)=r;
   then x in {q where q is Element of M9:dist(p9,q)=r};
-  hence thesis by Lm7;
+  hence thesis by Def16;
 end;
 
-theorem Th15:
+theorem Th14:
   for M being MetrStruct, p being Element of M holds Ball(p,r) c= cl_Ball(p,r)
 proof
   let M be MetrStruct,p be Element of M;
   per cases;
   suppose
-    M is non empty;
-    then consider
-    M9 being non empty MetrStruct, p9 being Element of M9 such that
-A1: M9 = M & p9 = p and
-    Ball(p,r) = {q where q is Element of M9 : dist(p9,q) < r} by Def15;
+A1:  M is non empty;
     now
-      let x be Element of M9;
-      assume x in Ball(p9,r);
-      then dist(p9,x)<=r by Th12;
-      then x in {q where q is Element of M9:dist(p9,q)<=r};
-      hence x in cl_Ball(p9,r) by Lm6;
+      let x be Element of M;
+      assume x in Ball(p,r);
+      then dist(p,x)<=r by Th11;
+      then x in {q where q is Element of M:dist(p,q)<=r};
+      hence x in cl_Ball(p,r) by A1,Def15;
     end;
-    hence thesis by A1,SUBSET_1:2;
+    hence thesis by SUBSET_1:2;
   end;
   suppose
 A2: M is empty;
-    then Ball(p,r) is empty by Def15;
-    hence thesis by A2,Def16;
+    then Ball(p,r) is empty by Def14;
+    hence thesis by A2,Def15;
   end;
 end;
 
-theorem Th16:
+theorem Th15:
   for M being MetrStruct, p being Element of M holds Sphere(p,r)
   c= cl_Ball(p,r)
 proof
   let M be MetrStruct,p be Element of M;
   per cases;
   suppose
-    M is non empty;
-    then consider
-    M9 being non empty MetrStruct, p9 being Element of M9 such that
-A1: M9 = M & p9 = p and
-    Sphere(p,r) = {q where q is Element of M9 : dist(p9,q) = r} by Def17;
+A1:  M is non empty;
     now
-      let x be Element of M9;
-      assume x in Sphere(p9,r);
-      then dist(p9,x)=r by Th14;
-      then x in {q where q is Element of M9:dist(p9,q)<=r};
-      hence x in cl_Ball(p9,r) by Lm6;
+      let x be Element of M;
+      assume x in Sphere(p,r);
+      then dist(p,x)=r by Th13;
+      then x in {q where q is Element of M:dist(p,q)<=r};
+      hence x in cl_Ball(p,r) by Def15,A1;
     end;
-    hence thesis by A1,SUBSET_1:2;
+    hence thesis by SUBSET_1:2;
   end;
   suppose
 A2: M is empty;
-    then Sphere(p,r) is empty by Def17;
-    hence thesis by A2,Def16;
+    then Sphere(p,r) is empty by Def16;
+    hence thesis by A2,Def15;
   end;
 end;
 
@@ -855,59 +812,51 @@ theorem
   Sphere(p,r) \/ Ball(p,r) = cl_Ball(p,r)
 proof
   let M be MetrStruct,p be Element of M;
-  Sphere(p,r) c= cl_Ball(p,r) & Ball(p,r) c= cl_Ball(p,r) by Th15,Th16;
+  Sphere(p,r) c= cl_Ball(p,r) & Ball(p,r) c= cl_Ball(p,r) by Th14,Th15;
   hence Sphere(p,r) \/ Ball(p,r) c= cl_Ball(p,r) by XBOOLE_1:8;
   per cases;
   suppose
-    M is non empty;
-    then consider
-    M9 being non empty MetrStruct, p9 being Element of M9 such that
-A1: M9 = M & p9 = p and
-    Sphere(p,r) = {q where q is Element of M9 : dist(p9,q) = r} by Def17;
+A1:  M is non empty;
     now
-      let x be Element of M9;
-      assume x in cl_Ball(p9,r);
+      let x be Element of M;
+      assume x in cl_Ball(p,r);
       then
-A2:   dist(p9,x)<=r by Th13;
+A2:   dist(p,x)<=r by Th12;
       now
         per cases by A2,XXREAL_0:1;
         case
-          dist(p9,x)<r;
-          hence x in Ball(p9,r) by Th12;
+          dist(p,x)<r;
+          hence x in Ball(p,r) by A1,Th11;
         end;
         case
-          dist(p9,x)=r;
-          hence x in Sphere(p9,r) by Th14;
+          dist(p,x)=r;
+          hence x in Sphere(p,r) by A1,Th13;
         end;
       end;
-      hence x in Sphere(p9,r) \/ Ball(p9,r) by XBOOLE_0:def 3;
+      hence x in Sphere(p,r) \/ Ball(p,r) by XBOOLE_0:def 3;
     end;
-    hence thesis by A1,SUBSET_1:2;
+    hence thesis by SUBSET_1:2;
   end;
   suppose
 A3: M is empty;
-    then Ball(p,r) is empty & cl_Ball(p,r) is empty by Def15,Def16;
-    hence thesis by A3,Def17;
+    then Ball(p,r) is empty & cl_Ball(p,r) is empty by Def14,Def15;
+    hence thesis by A3,Def16;
   end;
 end;
 
 theorem
   for M being non empty MetrStruct, p being Element of M holds Ball(p,r)
-  = {q where q is Element of M: dist(p,q) < r} by Lm5;
+  = {q where q is Element of M: dist(p,q) < r} by Def14;
 
 theorem
   for M being non empty MetrStruct, p being Element of M holds cl_Ball(p
-  ,r) = {q where q is Element of M: dist(p,q) <= r} by Lm6;
+  ,r) = {q where q is Element of M: dist(p,q) <= r} by Def15;
 
 theorem
   for M being non empty MetrStruct, p being Element of M holds Sphere(p,
-  r) = {q where q is Element of M: dist(p,q) = r} by Lm7;
+  r) = {q where q is Element of M: dist(p,q) = r} by Def16;
 
 begin :: SUB_METR
-
-Lm8:
-  for M being MetrSpace, x,y being Element of M st x <> y holds 0 < dist(x,y)
-  by Th7;
 
 theorem
   for x being set holds Empty^2-to-zero.(x,x) = 0
@@ -923,7 +872,7 @@ proof
   end;
 end;
 
-theorem Th22:
+theorem Th21:
   for x,y being Element of 1 st x <> y holds 0 < Empty^2-to-zero.(x,y)
 proof
   let x,y be Element of 1;
@@ -931,15 +880,15 @@ proof
   hence thesis by CARD_1:49,TARSKI:def 1;
 end;
 
-theorem Th23:
+theorem Th22:
   for x,y being Element of 1 holds
     Empty^2-to-zero.(x,y) = Empty^2-to-zero.(y,x) by Lm3;
 
-theorem Th24:
+theorem Th23:
   for x,y,z being Element of 1 holds Empty^2-to-zero.(x,z) <=
   Empty^2-to-zero.(x,y) + Empty^2-to-zero.(y,z) by Lm4;
 
-theorem Th25:
+theorem Th24:
   for x,y,z being Element of 1 holds
   Empty^2-to-zero.(x,z) <= max(Empty^2-to-zero.(x,y),Empty^2-to-zero.(y,z))
 proof
@@ -955,18 +904,18 @@ definition
   let A be non empty set;
   let f be Function of [:A,A:], REAL;
   attr f is Discerning means
-  :Def18:
+  :Def17:
   for a, b being Element of A holds a <> b implies 0 < f.(a,b);
 end;
 
 definition
   let M be non empty MetrStruct;
   attr M is Discerning means
-  :Def19:
+  :Def18:
   the distance of M is Discerning;
 end;
 
-theorem Th26:
+theorem Th25:
   for M being non empty MetrStruct holds
   ( for a, b being Element of M holds a <> b implies 0 < dist(a,b)) iff
   M is Discerning
@@ -982,12 +931,11 @@ A1: for a, b being Element of M st a <> b holds 0 < dist(a,b);
       then 0 < dist(a,b) by A1;
       hence thesis;
     end;
-    hence M is Discerning by Def19;
+    hence M is Discerning by Def18;
   end;
-  assume M is Discerning; then
- the distance of M is Discerning by Def19;
-   then for a,b being Element of M st a <> b holds 0 < dist(a,b) by Def18;
-  hence thesis;
+  assume M is Discerning;
+   then the distance of M is Discerning by Def18;
+  hence thesis by Def17;
 end;
 
 registration
@@ -1000,18 +948,18 @@ registration
     triangle;
   coherence
   proof
-A1:  for x,y,z being Element of M0 holds dist(x,z) <= dist(x,y) + dist(y,z)
-          by Th24;
-A2: for x,y being Element of M0 st x <> y holds 0 < dist(x,y) by Th22;
-A3: for x being Element of M0 holds dist(x,x) = 0 by Lm2;
-    for x,y being Element of M0 holds dist(x,y) = dist(y,x) by Th23;
-    hence thesis by A2,A1,A3,Th26,Th1,Th3,Th4;
+A1: for x being Element of M0 holds dist(x,x) = 0 by Lm2;
+A2: for x,y being Element of M0 holds dist(x,y) = dist(y,x) by Th22;
+A3: for x,y being Element of M0 st x <> y holds 0 < dist(x,y) by Th21;
+      for x,y,z being Element of M0 holds dist(x,z) <= dist(x,y) + dist(y,z)
+          by Th23;
+   hence thesis by A2,A1,A3,Th25,Th1,Th3,Th4;
   end;
 end;
 
 definition
   let M be non empty MetrStruct;
-  attr M is ultra means :Def20:
+  attr M is ultra means :Def19:
   for a, b, c being Element of M holds dist(a,c) <= max (dist(a,b),dist(b,c));
 end;
 
@@ -1024,13 +972,13 @@ registration
     M0 is ultra
     proof
       let x, y, z be Element of M0;
-      thus thesis by Th25;
+      thus thesis by Th24;
     end;
     hence thesis;
   end;
 end;
 
-theorem Th27:
+theorem Th26:
   for M being Reflexive Discerning non empty MetrStruct,
       a,b being Element of M holds 0 <= dist(a,b)
 proof
@@ -1042,7 +990,7 @@ proof
       hence thesis by Th1;
     end;
     suppose a <> b;
-      hence thesis by Th26;
+      hence thesis by Th25;
     end;
   end;
   hence thesis;
@@ -1064,8 +1012,8 @@ registration
   coherence
   proof
     let M be non empty MetrSpace;
-    for a, b being Element of M holds a <> b implies 0 < dist(a,b) by Lm8;
-    hence thesis by Th26;
+    for a, b being Element of M holds a <> b implies 0 < dist(a,b) by Th7;
+    hence thesis by Th25;
   end;
 end;
 
@@ -1076,11 +1024,11 @@ registration
     let M be UltraMetricSpace;
     now
       let x,y,z be Element of M;
-      thus dist(x,y) = 0 iff x = y by Th26,Th1;
+      thus dist(x,y) = 0 iff x = y by Th25,Th1;
       thus dist(x,y) = dist(y,x);
-      0 <= dist(x,y) & 0 <= dist(y,z) by Th27; then
+      0 <= dist(x,y) & 0 <= dist(y,z) by Th26; then
 A1:   max(dist(x,y),dist(y,z)) <= dist(x,y) + dist(y,z) by SQUARE_1:2;
-      dist(x,z) <= max(dist(x,y),dist(y,z)) by Def20;
+      dist(x,z) <= max(dist(x,y),dist(y,z)) by Def19;
       hence dist(x,z) <= dist(x,y) + dist(y,z) by A1,XXREAL_0:2;
     end;
     hence thesis by Th6;
@@ -1093,7 +1041,7 @@ definition
   coherence;
 end;
 
-theorem Th28:
+theorem Th27:
   for x,y being Element of 2 holds Set_to_zero.(x,y) = 0
 proof
   let x,y be Element of 2;
@@ -1101,22 +1049,22 @@ A1:[x,y] in [:2,2:] by ZFMISC_1:87;
   thus Set_to_zero.(x,y) = Set_to_zero.[x,y] .= 0 by A1,FUNCOP_1:7;
 end;
 
-theorem Th29:
+theorem Th28:
   for x,y being Element of 2 holds Set_to_zero.(x,y) = Set_to_zero.(y,x)
 proof
   let x,y be Element of 2;
-  Set_to_zero.(x,y)=0 by Th28
-    .=Set_to_zero.(y,x) by Th28;
+  Set_to_zero.(x,y)=0 by Th27
+    .=Set_to_zero.(y,x) by Th27;
   hence thesis;
 end;
 
-theorem Th30:
+theorem Th29:
   for x,y,z being Element of 2 holds
   Set_to_zero.(x,z) <= Set_to_zero.(x,y) + Set_to_zero.(y,z)
 proof
   let x,y,z be Element of 2;
-  Set_to_zero.(x,y) = 0 & Set_to_zero.(y,z) = 0 by Th28;
-  hence thesis by Th28;
+  Set_to_zero.(x,y) = 0 & Set_to_zero.(y,z) = 0 by Th27;
+  hence thesis by Th27;
 end;
 
 definition
@@ -1137,15 +1085,15 @@ registration
     set M = MetrStruct(#2,Set_to_zero#);
 A1: for x,y,z being Element of M
      holds dist(x,y) = dist(y,x) & dist(x,z) <= dist(x,y) + dist(y,z)
-       by Th29,Th30;
-     for x being Element of M holds dist(x,x) = 0 by Th28;
+       by Th28,Th29;
+     for x being Element of M holds dist(x,x) = 0 by Th27;
     hence thesis by A1,Th1,Th3,Th4;
   end;
 end;
 
 definition
   let S be MetrStruct, p,q,r be Element of S;
-  pred q is_between p,r means  :Def23:
+  pred q is_between p,r means  :Def22:
   p <> q & p <> r & q <> r & dist(p,r) = dist(p,q) + dist(q,r);
 end;
 
@@ -1158,8 +1106,8 @@ proof
       p,q,r be Element of S;
   assume
 A1: q is_between p,r;
-  hence r <> q & r <> p & q <> p by Def23;
-  dist(p,r) = dist(p,q) + dist(q,r) by A1,Def23;
+  hence r <> q & r <> p & q <> p by Def22;
+  dist(p,r) = dist(p,q) + dist(q,r) by A1,Def22;
   hence thesis;
 end;
 
@@ -1170,18 +1118,18 @@ proof
   let S be MetrSpace, p,q,r be Element of S;
   assume
 A1: q is_between p,r; then
-A2: dist(p,r) = dist(p,q) + dist(q,r) by Def23;
-A3: p <> q by A1,Def23;
+A2: dist(p,r) = dist(p,q) + dist(q,r) by Def22;
+A3: p <> q by A1,Def22;
   thus not p is_between q,r
   proof
     assume p is_between q,r;
-    then dist(p,r) = dist(p,q) + (dist(q,p) + dist(p,r)) by A2,Def23;
-    hence contradiction by A3,Lm8;
+    then dist(p,r) = dist(p,q) + (dist(q,p) + dist(p,r)) by A2,Def22;
+    hence contradiction by A3,Th7;
   end;
   assume r is_between p,q; then
-A4: dist(p,q) = dist(p,q) + dist(q,r) + dist(r,q) by A2,Def23;
-  q <> r by A1,Def23;
-  hence contradiction by A4,Lm8;
+A4: dist(p,q) = dist(p,q) + dist(q,r) + dist(r,q) by A2,Def22;
+  q <> r by A1,Def22;
+  hence contradiction by A4,Th7;
 end;
 
 theorem
@@ -1191,20 +1139,19 @@ proof
   let S be MetrSpace, p,q,r,s be Element of S;
   assume
 A1: q is_between p,r; then
-A2: p<>q by Def23;
+A2: p<>q by Def22;
   assume
 A3: r is_between p,s; then
-A4: p <> s & r <> s by Def23;
-  dist(p,r) = dist(p,q) + dist(q,r) by A1,Def23; then
-A5: dist(p,s) = dist(p,q) + dist(q,r) + dist(r,s) by A3,Def23;
-  dist(q,s) <= dist(q,r) + dist(r,s) by Th4; then
+A4: p <> s & r <> s by Def22;
+  dist(p,r) = dist(p,q) + dist(q,r) by A1,Def22; then
+A5: dist(p,s) = dist(p,q) + dist(q,r) + dist(r,s) by A3,Def22;
   dist(p,s) <= dist(p,q) + dist(q,s) & dist(p,q) + dist(q,s) <=
   (dist(q,r) + dist(r,s)) + dist(p,q) by Th4,XREAL_1:6; then
 A6: dist(p,q) + dist(q,s) = dist(p,q) + (dist(q,r) + dist(r,s)) by A5,
 XXREAL_0:1;
-A7: q<>r by A1,Def23;
-  then q <> s by A5,Lm8;
-  hence thesis by A2,A7,A4,A5,A6,Def23;
+A7: q<>r by A1,Def22;
+  then q <> s by A5,Th7;
+  hence thesis by A2,A7,A4,A5,A6,Def22;
 end;
 
 definition

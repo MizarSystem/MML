@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz
 ::
 :: Received July 4, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,13 +16,15 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, VALUED_0, FUNCT_1,
       ARYTM_1, ARYTM_3, COMPLEX1, XXREAL_0, CARD_1, RELAT_1, XXREAL_2, NAT_1,
-      ORDINAL2, REAL_1, VALUED_1, SEQ_2, FUNCOP_1;
+      ORDINAL2, REAL_1, VALUED_1, SEQ_2, FUNCOP_1, COMSEQ_1, XCMPLX_0,
+      SQUARE_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1,
-      NAT_1, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, FUNCOP_1, SEQ_1, XXREAL_0;
+      NAT_1, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, FUNCOP_1, SEQ_1, XXREAL_0,
+      SQUARE_1, COMSEQ_1, COMSEQ_2;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, PARTFUN1, VALUED_1, SEQ_1,
-      RELSET_1, FUNCOP_1;
+      RELSET_1, FUNCOP_1, COMSEQ_2, SQUARE_1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, XBOOLE_0,
-      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, FUNCOP_1;
+      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, FUNCOP_1, COMSEQ_2, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -63,13 +65,6 @@ definition
   ex r st for n holds r<seq.n;
 end;
 
-definition
-  let f be complex-valued Function;
-  attr f is bounded means
-:: SEQ_2:def 5
-  ex r st for y st y in dom f holds abs(f.y) <r;
-end;
-
 registration
   cluster bounded -> bounded_above bounded_below for real-valued Function;
   cluster bounded_above bounded_below -> bounded for real-valued Function;
@@ -87,8 +82,9 @@ theorem :: SEQ_2:4
 ::
 
 definition
+ canceled;
   let seq;
-  attr seq is convergent means
+  redefine attr seq is convergent means
 :: SEQ_2:def 6
 
   ex g st for p st 0<p ex n st for m st n<=m holds abs (seq.m-g) < p;
@@ -233,3 +229,49 @@ theorem :: SEQ_2:25
 
 theorem :: SEQ_2:26
   seq is convergent & seq1 is bounded & lim seq=0 implies lim(seq(#)seq1)=0;
+
+:: from COMSEQ_2, 2011.07.10, A.T.
+
+reserve g for Element of COMPLEX;
+
+registration
+  let s be convergent Complex_Sequence;
+  cluster |.s.| -> convergent for Real_Sequence;
+end;
+
+reserve s,s1,s9 for Complex_Sequence;
+
+theorem :: SEQ_2:27
+  s is convergent implies lim |.s.| = |.lim s.|;
+
+theorem :: SEQ_2:28
+ for s,s9 being convergent Complex_Sequence
+  holds lim |.(s + s9).| = |.(lim s)+(lim s9).|;
+
+theorem :: SEQ_2:29
+  for s being convergent Complex_Sequence
+   holds lim |.(r(#)s).| = |.r.|*|.(lim s).|;
+
+theorem :: SEQ_2:30
+  for s being convergent Complex_Sequence
+  holds lim |.-s.| = |.lim s.|;
+
+theorem :: SEQ_2:31
+    for s,s9 being convergent Complex_Sequence
+  holds lim |.s - s9.| = |.(lim s) - (lim s9).|;
+
+theorem :: SEQ_2:32
+  for s,s9 being convergent Complex_Sequence
+  holds lim |.s(#)s9.| = |.lim s.|*|.lim s9.|;
+
+theorem :: SEQ_2:33
+  s is convergent & (lim s)<>0c & s is non-zero implies lim |.s".| = (|.
+  lim s.|)";
+
+theorem :: SEQ_2:34
+  s9 is convergent & s is convergent & (lim s)<>0c & s is non-zero
+  implies lim |.(s9/"s).|=|.(lim s9).|/|.(lim s).|;
+
+theorem :: SEQ_2:35
+  s is convergent & s1 is bounded & (lim s)=0c implies lim |.s(#)s1.| = 0;
+

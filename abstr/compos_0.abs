@@ -1,0 +1,339 @@
+:: Commands Structure
+::  by Andrzej Trybulec
+::
+:: Received May 20, 2010
+:: Copyright (c) 2010-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, ORDINAL1, CARD_1,
+      FUNCOP_1, RELAT_1, TARSKI, NAT_1, AFINSQ_1, AMISTD_1, AMISTD_2, ARYTM_1,
+      ZFMISC_1, AMI_1, ARYTM_3, RECDEF_2, COMPOS_1, FINSEQ_1, UNIALG_1, CARD_5,
+      XXREAL_0, VALUED_0, INT_1, SCMPDS_5, FUNCT_4, COMPOS_0, XTUPLE_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, MCART_1, SUBSET_1, SETFAM_1,
+      ORDINAL1, PBOOLE, CARD_1, CARD_3, XXREAL_0, XCMPLX_0, RELAT_1, FUNCT_1,
+      PARTFUN1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, FUNCT_7,
+      FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, RECDEF_2, AFINSQ_1,
+      STRUCT_0;
+ constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, RELSET_1, FUNCT_7,
+      PRE_POLY, PBOOLE, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0, XTUPLE_0;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
+      FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
+      RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, AFINSQ_1, VALUED_1, XCMPLX_0,
+      PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2, ZFMISC_1,
+      SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin
+
+reserve x,A for set,
+  i,j,k,m,n, l, l1, l2 for Nat;
+reserve D for non empty set,
+  z for Nat;
+
+definition
+  let S be set;
+  attr S is standard-ins means
+:: COMPOS_0:def 1
+
+   ex X being non empty set
+    st S c= [: NAT,NAT*,X*:];
+end;
+
+registration
+ cluster {[0,{},{}]} -> standard-ins;
+ cluster {[1,{},{}]} -> standard-ins;
+end;
+
+notation
+  let x;
+  synonym InsCode x for x`1_3;
+  synonym JumpPart x for x`2_3;
+  synonym AddressPart x for x`3_3;
+end;
+
+registration
+ cluster non empty standard-ins for set;
+end;
+
+registration
+  let S be non empty standard-ins set;
+  let I be Element of S;
+  cluster AddressPart I -> Function-like Relation-like;
+  cluster JumpPart I -> Function-like Relation-like;
+end;
+
+registration
+  let S be non empty standard-ins set;
+  let I be Element of S;
+  cluster AddressPart I -> FinSequence-like;
+  cluster JumpPart I -> FinSequence-like;
+end;
+
+registration
+  let S be non empty standard-ins set;
+ let x be Element of S;
+ cluster InsCode x -> natural;
+end;
+
+registration
+  cluster standard-ins -> Relation-like for set;
+end;
+
+definition
+  let S be standard-ins set;
+  func InsCodes S equals
+:: COMPOS_0:def 2
+   proj1_3 S;
+end;
+
+registration
+  let S be non empty standard-ins set;
+  cluster InsCodes S ->non empty;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  mode InsType of S is Element of InsCodes S;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  let I be Element of S;
+  redefine func InsCode I -> InsType of S;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  let T be InsType of S;
+  func JumpParts T equals
+:: COMPOS_0:def 3
+  { JumpPart I where I is Element of S: InsCode I = T };
+  func AddressParts T equals
+:: COMPOS_0:def 4
+  { AddressPart I where I is Element of S: InsCode I = T };
+end;
+
+registration
+  let S be non empty standard-ins set;
+  let T be InsType of S;
+  cluster AddressParts T -> functional;
+  cluster JumpParts T -> non empty functional;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  attr S is homogeneous means
+:: COMPOS_0:def 5
+
+  for I, J being Element of S st InsCode I = InsCode J holds
+  dom JumpPart I = dom JumpPart J;
+  canceled;
+  attr S is J/A-independent means
+:: COMPOS_0:def 7
+
+ for T being InsType of S,
+     f1,f2 being natural-valued Function st
+      f1 in JumpParts T & dom f1 = dom f2
+    for p being set st [T,f1,p] in S holds [T,f2,p] in S;
+end;
+
+registration
+ cluster {[0,{},{}]} -> J/A-independent homogeneous;
+end;
+
+registration
+ cluster J/A-independent homogeneous for non empty standard-ins set;
+end;
+
+registration
+  let S be homogeneous non empty standard-ins set;
+  let T be InsType of S;
+  cluster JumpParts T -> with_common_domain;
+end;
+
+registration
+ let S be non empty standard-ins set;
+ let I be Element of S;
+ cluster JumpPart I -> NAT-valued for Function;
+end;
+
+theorem :: COMPOS_0:1
+ for S be standard-ins non empty set
+ for I,J being Element of S
+  st InsCode I = InsCode J & JumpPart I = JumpPart J &
+   AddressPart I = AddressPart J
+ holds I = J;
+
+reserve y for set;
+
+registration
+  let S be homogeneous J/A-independent standard-ins non empty set;
+  let T be InsType of S;
+  cluster JumpParts T -> product-like;
+end;
+
+definition
+  let S be standard-ins set;
+  let I be Element of S;
+  attr I is ins-loc-free means
+:: COMPOS_0:def 8
+ JumpPart I is empty;
+end;
+
+registration
+  let S be standard-ins non empty set;
+  let I be Element of S;
+ cluster JumpPart I -> natural-valued for Function;
+end;
+
+definition
+  let S be homogeneous J/A-independent standard-ins non empty set;
+  let I be Element of S;
+  let k be Nat;
+  func IncAddr(I,k) -> Element of S means
+:: COMPOS_0:def 9
+
+  InsCode it = InsCode I &
+  AddressPart it = AddressPart I &
+  JumpPart it = k + JumpPart I;
+end;
+
+canceled;
+
+theorem :: COMPOS_0:3
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I being Element of S holds IncAddr(I, 0) = I;
+
+theorem :: COMPOS_0:4
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I being Element of S st I is ins-loc-free holds IncAddr(I, k) = I;
+
+theorem :: COMPOS_0:5
+  for S being homogeneous J/A-independent standard-ins non empty set,
+      I being Element of S
+  holds JumpParts InsCode I = JumpParts InsCode IncAddr(I,k);
+
+theorem :: COMPOS_0:6
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I, J being Element of S st
+  ex k being Nat st IncAddr(I,k) = IncAddr(J,k) holds I = J;
+
+theorem :: COMPOS_0:7
+  for S being homogeneous J/A-independent standard-ins non empty set,
+      I being Element of S
+  holds IncAddr(IncAddr(I,k),m) = IncAddr(I,k+m);
+
+theorem :: COMPOS_0:8
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I being Element of S, x being set st x in dom JumpPart I holds
+  (JumpPart I).x in (product" JumpParts InsCode I).x;
+
+registration
+ cluster {[0,{},{}],[1,{},{}]} -> standard-ins;
+end;
+
+theorem :: COMPOS_0:9
+  for x being Element of {[0,{},{}],[1,{},{}]}
+    holds JumpPart x = {};
+
+registration
+ cluster {[0,{},{}],[1,{},{}]} -> J/A-independent homogeneous;
+end;
+
+theorem :: COMPOS_0:10
+ for S being standard-ins non empty set
+ for T being InsType of S
+  ex I being Element of S st InsCode I = T;
+
+theorem :: COMPOS_0:11
+ for S being homogeneous standard-ins non empty set
+ for I being Element of S st JumpPart I = {}
+  holds JumpParts InsCode I = {0};
+
+begin :: The halt instruction
+
+:: Wymagamy, zeby zbior instrukcji mial instrukcje z InsCode rowym
+:: zero i zeby ta instrukcja to byla [0,{},{}], a wiec ma byc jedyna
+:: instrukcja o kodzie 0. Wymaga to modyfikacji
+:: maszyny SCMPDS, gdzie z instrukcje halt robi goto 0 (tzn. przeskok
+:: o 0);
+
+definition let X be set;
+ attr X is with_halt means
+:: COMPOS_0:def 10
+ [0,{},{}] in X;
+end;
+
+registration
+ cluster with_halt -> non empty for set;
+end;
+
+registration
+ cluster {[0,{},{}]} -> with_halt;
+ cluster {[0,{},{}],[1,{},{}]} -> with_halt;
+end;
+
+registration
+ cluster with_halt standard-ins for set;
+end;
+
+registration
+ cluster J/A-independent homogeneous for with_halt standard-ins set;
+end;
+
+definition
+  let S be with_halt set;
+  func halt S -> Element of S equals
+:: COMPOS_0:def 11
+   [0,{},{}];
+end;
+
+registration
+  let S be with_halt standard-ins set;
+  cluster halt S -> ins-loc-free;
+end;
+
+registration
+  let S be with_halt standard-ins set;
+ cluster ins-loc-free for Element of S;
+end;
+
+registration let S be with_halt standard-ins set;
+ let I be ins-loc-free Element of S;
+ cluster JumpPart I -> empty;
+end;
+
+theorem :: COMPOS_0:12
+  for S being homogeneous J/A-independent standard-ins non empty
+     with_halt set,
+  I being Element of S st IncAddr(I,k) = halt S holds I = halt S;
+
+definition
+  let S be homogeneous J/A-independent standard-ins non empty
+     with_halt set;
+  let i be Element of S;
+  attr i is No-StopCode means
+:: COMPOS_0:def 12
+  i <> halt S;
+end;
+
+begin :: Typ "instrukcje"
+
+definition
+ mode Instructions is J/A-independent homogeneous
+        with_halt standard-ins set;
+end;
+
+registration
+ cluster non trivial for Instructions;
+end;

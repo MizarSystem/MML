@@ -289,6 +289,10 @@
   <xsl:param name="mk_header">
     <xsl:text>0</xsl:text>
   </xsl:param>
+  <!-- include comment info from .cmt file -->
+  <xsl:param name="mk_comments">
+    <xsl:text>0</xsl:text>
+  </xsl:param>
   <!-- Suppress the header and trailer of the final document. -->
   <!-- Thus, you can insert the resulting document into a larger one. -->
   <xsl:param name="body_only">
@@ -371,6 +375,10 @@
   <!-- .hdr file with header info (done by mkxmlhdr.pl) -->
   <xsl:param name="hdr">
     <xsl:value-of select="concat($anamelc, &apos;.hdr&apos;)"/>
+  </xsl:param>
+  <!-- .cmt file with comments info (done by MizComments.pl) -->
+  <xsl:param name="cmt">
+    <xsl:value-of select="concat($anamelc, &apos;.cmt&apos;)"/>
   </xsl:param>
   <xsl:param name="varcolor">
     <xsl:text>Olive</xsl:text>
@@ -456,6 +464,9 @@
   <xsl:param name="is_s">
     <xsl:text> is </xsl:text>
   </xsl:param>
+  <xsl:param name="dots_s">
+    <xsl:text> ... </xsl:text>
+  </xsl:param>
   <xsl:param name="fraenkel_start">
     <xsl:text> { </xsl:text>
   </xsl:param>
@@ -538,6 +549,8 @@
   <!-- lookup for private functors and predicates -->
   <xsl:key name="pf" match="DefFunc" use="concat(@nr,&quot;:&quot;,@plevel)"/>
   <xsl:key name="pp" match="DefPred" use="concat(@nr,&quot;:&quot;,@plevel)"/>
+  <!-- lookup for comments -->
+  <xsl:key name="CMT" match="Comment" use="@endline"/>
 
   <!--  -->
   <!-- File: print_simple.xsltxt - html-ization of Mizar XML, simple printing funcs -->
@@ -999,6 +1012,33 @@
     <xsl:element name="br"/>
   </xsl:template>
 
+  <!-- this assumes comments with :: already -->
+  <xsl:template name="pcommentedblock">
+    <xsl:param name="str"/>
+    <xsl:element name="div">
+      <xsl:attribute name="class">
+        <xsl:text>comment</xsl:text>
+      </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="$colored=&quot;1&quot;">
+          <xsl:element name="font">
+            <xsl:attribute name="color">
+              <xsl:value-of select="$commentcolor"/>
+            </xsl:attribute>
+            <xsl:call-template name="br">
+              <xsl:with-param name="text" select="$str"/>
+            </xsl:call-template>
+          </xsl:element>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="br">
+            <xsl:with-param name="text" select="$str"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:element>
+  </xsl:template>
+
   <!-- argument list -->
   <xsl:template name="arglist">
     <xsl:param name="separ"/>
@@ -1011,6 +1051,23 @@
         <xsl:value-of select="$separ"/>
       </xsl:if>
     </xsl:for-each>
+  </xsl:template>
+
+  <!-- translate newlines to <br; -->
+  <xsl:template name="br">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="contains($text,&apos;&#xa;&apos;)">
+        <xsl:value-of select="substring-before($text,&apos;&#xa;&apos;)"/>
+        <xsl:element name="br"/>
+        <xsl:call-template name="br">
+          <xsl:with-param name="text" select="substring-after($text,&apos;&#xa;&apos;)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- like jlist, but with loci -->
@@ -3322,6 +3379,35 @@
     <xsl:text>errorfrm</xsl:text>
   </xsl:template>
 
+  <xsl:template match="FlexFrm">
+    <xsl:param name="i"/>
+    <xsl:param name="pr"/>
+    <xsl:param name="not"/>
+    <xsl:variable name="conn">
+      <xsl:choose>
+        <xsl:when test="$not=&quot;1&quot;">
+          <xsl:value-of select="$or_s"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$and_s"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:apply-templates select="*[1]">
+      <xsl:with-param name="i" select="$i"/>
+      <xsl:with-param name="pr" select="$pr"/>
+      <xsl:with-param name="not" select="$not"/>
+    </xsl:apply-templates>
+    <xsl:value-of select="$conn"/>
+    <xsl:copy-of select="$dots_s"/>
+    <xsl:value-of select="$conn"/>
+    <xsl:apply-templates select="*[2]">
+      <xsl:with-param name="i" select="$i"/>
+      <xsl:with-param name="pr" select="$pr"/>
+      <xsl:with-param name="not" select="$not"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
   <!-- Terms -->
   <!-- #p is the parenthesis count -->
   <!-- #i is the size of the var stack -->
@@ -4818,8 +4904,17 @@
     </xsl:if>
     <!-- print right args preceded by "of" for types -->
     <xsl:for-each select="$vis">
-      <xsl:if test="(position() = 1) and (($k=&apos;M&apos;) or ($k=&apos;L&apos;))">
-        <xsl:text>of </xsl:text>
+      <xsl:if test="(position() = 1)">
+        <xsl:choose>
+          <xsl:when test="($k=&apos;M&apos;)">
+            <xsl:text>of </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:if test="($k=&apos;L&apos;)">
+              <xsl:text>over </xsl:text>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:if>
       <xsl:if test="position() &gt; $la">
         <xsl:variable name="x" select="@x"/>
@@ -5039,9 +5134,27 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
+      <!-- we can only say that this is a lemma if it is a toplevel proposition -->
+      <!-- nontoplevel could be assumptions, etc. - this is a ##TODO -->
       <xsl:otherwise>
-        <xsl:apply-templates/>
-        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="not(string-length(@plevel)&gt;0)">
+            <xsl:element name="span">
+              <xsl:attribute name="about">
+                <xsl:value-of select="concat(&quot;#E&quot;,@propnr)"/>
+              </xsl:attribute>
+              <xsl:attribute name="typeof">
+                <xsl:text>oo:Lemma</xsl:text>
+              </xsl:attribute>
+              <xsl:apply-templates/>
+              <xsl:text> </xsl:text>
+            </xsl:element>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+            <xsl:text> </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -6244,7 +6357,15 @@
             <xsl:variable name="bogus" select="1"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="rc"/>
+            <xsl:element name="div">
+              <xsl:attribute name="about">
+                <xsl:value-of select="concat(&quot;#RC&quot;,$nr1)"/>
+              </xsl:attribute>
+              <xsl:attribute name="typeof">
+                <xsl:text>oo:Theorem</xsl:text>
+              </xsl:attribute>
+              <xsl:call-template name="rc"/>
+            </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -6305,7 +6426,15 @@
             <xsl:variable name="bogus" select="1"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="cc"/>
+            <xsl:element name="div">
+              <xsl:attribute name="about">
+                <xsl:value-of select="concat(&quot;#CC&quot;,$nr1)"/>
+              </xsl:attribute>
+              <xsl:attribute name="typeof">
+                <xsl:text>oo:Theorem</xsl:text>
+              </xsl:attribute>
+              <xsl:call-template name="cc"/>
+            </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -6372,7 +6501,15 @@
             <xsl:variable name="bogus" select="1"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="fc"/>
+            <xsl:element name="div">
+              <xsl:attribute name="about">
+                <xsl:value-of select="concat(&quot;#FC&quot;,$nr1)"/>
+              </xsl:attribute>
+              <xsl:attribute name="typeof">
+                <xsl:text>oo:Theorem</xsl:text>
+              </xsl:attribute>
+              <xsl:call-template name="fc"/>
+            </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -6433,7 +6570,15 @@
         <xsl:variable name="bogus" select="1"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="iy"/>
+        <xsl:element name="div">
+          <xsl:attribute name="about">
+            <xsl:value-of select="concat(&quot;#IE&quot;,$nr1)"/>
+          </xsl:attribute>
+          <xsl:attribute name="typeof">
+            <xsl:text>oo:Theorem</xsl:text>
+          </xsl:attribute>
+          <xsl:call-template name="iy"/>
+        </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -6598,6 +6743,91 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="Reduction">
+    <xsl:variable name="nr1" select="@nr"/>
+    <xsl:choose>
+      <xsl:when test="$generate_items&gt;0">
+        <xsl:document href="proofhtml/redreg/{$anamelc}.{$nr1}" format="html"> 
+        <xsl:call-template name="reduce"/>
+        </xsl:document> 
+        <xsl:variable name="bogus" select="1"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="div">
+          <xsl:attribute name="about">
+            <xsl:value-of select="concat(&quot;#RD&quot;,$nr1)"/>
+          </xsl:attribute>
+          <xsl:attribute name="typeof">
+            <xsl:text>oo:Theorem</xsl:text>
+          </xsl:attribute>
+          <xsl:call-template name="reduce"/>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="reduce">
+    <xsl:if test="($mml=&quot;1&quot;) or ($generate_items&gt;0)">
+      <xsl:call-template name="argtypes">
+        <xsl:with-param name="el" select="Typ"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:variable name="nr1" select="@nr"/>
+    <xsl:element name="a">
+      <xsl:attribute name="NAME">
+        <xsl:value-of select="concat(&quot;RD&quot;,$nr1)"/>
+      </xsl:attribute>
+      <xsl:call-template name="pkeyword">
+        <xsl:with-param name="str">
+          <xsl:text>reduce </xsl:text>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:element>
+    <xsl:choose>
+      <xsl:when test="ErrorReduction">
+        <xsl:text>errorreduction</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="($mml=&quot;1&quot;) or ($generate_items&gt;0)">
+            <xsl:apply-templates select="*[position() = last() - 1]"/>
+            <xsl:call-template name="pkeyword">
+              <xsl:with-param name="str">
+                <xsl:text> to </xsl:text>
+              </xsl:with-param>
+            </xsl:call-template>
+            <xsl:apply-templates select="*[position() = last()]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="following-sibling::*[1]/Proposition/*[1]">
+              <xsl:choose>
+                <xsl:when test="name() = &quot;Pred&quot;">
+                  <xsl:apply-templates select="*[1]"/>
+                  <xsl:call-template name="pkeyword">
+                    <xsl:with-param name="str">
+                      <xsl:text> with </xsl:text>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                  <xsl:apply-templates select="*[2]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:text>REDUCE DISPLAY FAILED -  PLEASE COMPLAIN!</xsl:text>
+                  <xsl:element name="br"/>
+                  <xsl:apply-templates select="."/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>;</xsl:text>
+    <xsl:element name="br"/>
+    <xsl:if test="$mml=&quot;1&quot;">
+      <xsl:element name="br"/>
+    </xsl:if>
+  </xsl:template>
+
   <!-- ignore them -->
   <xsl:template match="Reservation/Typ">
     <xsl:text/>
@@ -6607,11 +6837,59 @@
     <xsl:text/>
   </xsl:template>
 
+  <xsl:template name="add_comments">
+    <xsl:param name="line"/>
+    <xsl:if test="$mk_comments &gt; 0">
+      <xsl:variable name="prevline" select="$line - 1"/>
+      <xsl:for-each select="document($cmt,/)">
+        <xsl:for-each select="key(&apos;CMT&apos;,$prevline)">
+          <xsl:apply-templates select="."/>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- http://en.wikipedia.org/wiki/Cantor_Theorem to -->
+  <!-- http://dbpedia.org/resource/Cantor_theorem -->
+  <xsl:template name="wp2dp">
+    <xsl:param name="txt"/>
+    <xsl:value-of select="concat(&quot;http://dbpedia.org/resource/&quot;,substring-after($txt,&apos;/wiki/&apos;))"/>
+  </xsl:template>
+
+  <xsl:template name="add_dbpedia">
+    <xsl:param name="line"/>
+    <xsl:if test="$mk_comments &gt; 0">
+      <xsl:variable name="prevline" select="$line - 1"/>
+      <xsl:for-each select="document($cmt,/)">
+        <xsl:for-each select="key(&apos;CMT&apos;,$prevline)">
+          <xsl:for-each select="CmtLink/a">
+            <xsl:variable name="dbplink">
+              <xsl:call-template name="wp2dp">
+                <xsl:with-param name="txt" select="@href"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:element name="span">
+              <xsl:attribute name="rel">
+                <xsl:text>owl:sameAs</xsl:text>
+              </xsl:attribute>
+              <xsl:attribute name="resource">
+                <xsl:value-of select="$dbplink"/>
+              </xsl:attribute>
+            </xsl:element>
+          </xsl:for-each>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
   <!-- xsltxt cannot use xsl:document yet, so manually insert it -->
   <!-- (now done by the perl postproc) -->
   <!-- the bogus is there to ensure that the ending xsl:doc element -->
   <!-- is printed by xslxtxt.jar too -->
   <xsl:template match="JustifiedTheorem">
+    <xsl:call-template name="add_comments">
+      <xsl:with-param name="line" select="@line"/>
+    </xsl:call-template>
     <xsl:variable name="nr1" select="1+count(preceding-sibling::JustifiedTheorem)"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
@@ -6627,6 +6905,15 @@
             <!-- scale red and blue from 0% (green) to 100% (white) -->
             <xsl:variable name="intensity" select="(1 - @interesting) * 100"/>
             <xsl:element name="div">
+              <xsl:attribute name="about">
+                <xsl:value-of select="concat(&quot;#T&quot;,$nr1)"/>
+              </xsl:attribute>
+              <xsl:attribute name="typeof">
+                <xsl:text>oo:Theorem</xsl:text>
+              </xsl:attribute>
+              <xsl:call-template name="add_dbpedia">
+                <xsl:with-param name="line" select="@line"/>
+              </xsl:call-template>
               <xsl:attribute name="style">
                 <xsl:value-of select="concat(&quot;background-color:rgb(&quot;,$intensity,&quot;%,100%,&quot;, $intensity, &quot;%);&quot;)"/>
               </xsl:attribute>
@@ -6634,7 +6921,18 @@
             </xsl:element>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="jt"/>
+            <xsl:element name="div">
+              <xsl:attribute name="about">
+                <xsl:value-of select="concat(&quot;#T&quot;,$nr1)"/>
+              </xsl:attribute>
+              <xsl:attribute name="typeof">
+                <xsl:text>oo:Theorem</xsl:text>
+              </xsl:attribute>
+              <xsl:call-template name="add_dbpedia">
+                <xsl:with-param name="line" select="@line"/>
+              </xsl:call-template>
+              <xsl:call-template name="jt"/>
+            </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -6994,7 +7292,15 @@
         <xsl:variable name="bogus" select="1"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="dt"/>
+        <xsl:element name="div">
+          <xsl:attribute name="about">
+            <xsl:value-of select="concat(&quot;#DT&quot;,$nr1)"/>
+          </xsl:attribute>
+          <xsl:attribute name="typeof">
+            <xsl:text>oo:Definition</xsl:text>
+          </xsl:attribute>
+          <xsl:call-template name="dt"/>
+        </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -7115,7 +7421,7 @@
   </xsl:template>
 
   <!-- Formula | ( elProposition, Justification ) -->
-  <xsl:template match="UnknownCorrCond|Coherence|Compatibility|Consistency|Existence|Uniqueness">
+  <xsl:template match="UnknownCorrCond|Coherence|Compatibility|Consistency|Existence|Reducibility|Uniqueness">
     <xsl:element name="a">
       <xsl:call-template name="add_hs_attrs"/>
       <xsl:variable name="nm">
@@ -7214,6 +7520,9 @@
   <!-- element elSchemePremises { elProposition* }, -->
   <!-- elProposition, Justification, elEndPosition -->
   <xsl:template match="SchemeBlock">
+    <xsl:call-template name="add_comments">
+      <xsl:with-param name="line" select="@line"/>
+    </xsl:call-template>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
         <xsl:document href="proofhtml/sch/{$anamelc}.{@schemenr}" format="html"> 
@@ -7222,7 +7531,18 @@
         <xsl:variable name="bogus" select="1"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="sd"/>
+        <xsl:element name="div">
+          <xsl:attribute name="about">
+            <xsl:value-of select="concat(&quot;#S&quot;,@schemenr)"/>
+          </xsl:attribute>
+          <xsl:attribute name="typeof">
+            <xsl:text>oo:Theorem</xsl:text>
+          </xsl:attribute>
+          <xsl:call-template name="add_dbpedia">
+            <xsl:with-param name="line" select="@line"/>
+          </xsl:call-template>
+          <xsl:call-template name="sd"/>
+        </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -7305,6 +7625,9 @@
   <!-- elCorrectness?, elPattern+ )) -->
   <!-- ##TODO: commented registration and strict attr for defstruct -->
   <xsl:template match="Definition">
+    <xsl:call-template name="add_comments">
+      <xsl:with-param name="line" select="@line"/>
+    </xsl:call-template>
     <xsl:choose>
       <xsl:when test="@expandable = &quot;true&quot;">
         <xsl:variable name="argtypes" select="../Let/Typ"/>
@@ -7381,7 +7704,25 @@
             <xsl:variable name="bogus" select="1"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="dfs"/>
+            <xsl:choose>
+              <xsl:when test="@nr">
+                <xsl:element name="div">
+                  <xsl:attribute name="about">
+                    <xsl:value-of select="concat(&quot;#D&quot;,@nr)"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="typeof">
+                    <xsl:text>oo:Definition</xsl:text>
+                  </xsl:attribute>
+                  <xsl:call-template name="add_dbpedia">
+                    <xsl:with-param name="line" select="@line"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="dfs"/>
+                </xsl:element>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="dfs"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -7558,6 +7899,9 @@
   <!-- ( elLet | elAssume | elGiven | AuxiliaryItem | -->
   <!-- elCanceled | elDefinition )*, elEndPosition -->
   <xsl:template match="DefinitionBlock">
+    <xsl:call-template name="add_comments">
+      <xsl:with-param name="line" select="@line"/>
+    </xsl:call-template>
     <xsl:element name="div">
       <xsl:call-template name="pkeyword">
         <xsl:with-param name="str">
@@ -7589,8 +7933,15 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="ReductionRegistration">
+    <xsl:apply-templates/>
+  </xsl:template>
+
   <!-- ( elLet | AuxiliaryItem | elRegistration | elCanceled )+, elEndPosition -->
   <xsl:template match="RegistrationBlock">
+    <xsl:call-template name="add_comments">
+      <xsl:with-param name="line" select="@line"/>
+    </xsl:call-template>
     <xsl:element name="div">
       <xsl:call-template name="pkeyword">
         <xsl:with-param name="str">
@@ -7785,6 +8136,45 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:element name="div">
+      <xsl:attribute name="about">
+        <xsl:value-of select="concat(&quot;#PF&quot;,@newlevel)"/>
+      </xsl:attribute>
+      <xsl:attribute name="typeof">
+        <xsl:text>oo:Proof</xsl:text>
+      </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="(name(..) = &quot;JustifiedTheorem&quot;)">
+          <xsl:element name="span">
+            <xsl:attribute name="rel">
+              <xsl:text>oo:proves</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="resource">
+              <xsl:value-of select="concat(&quot;#T&quot;,../@nr)"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:when>
+        <xsl:when test="(name(..) = &quot;SchemeBlock&quot;)">
+          <xsl:element name="span">
+            <xsl:attribute name="rel">
+              <xsl:text>oo:proves</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="resource">
+              <xsl:value-of select="concat(&quot;#S&quot;,../@schemenr)"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:when>
+        <!-- toplevel lemma, hopefully -->
+        <xsl:when test="not(string-length(@plevel)&gt;0)">
+          <xsl:element name="span">
+            <xsl:attribute name="rel">
+              <xsl:text>oo:proves</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="resource">
+              <xsl:value-of select="concat(&quot;#E&quot;,preceding-sibling::Proposition[1]/@propnr)"/>
+            </xsl:attribute>
+          </xsl:element>
+        </xsl:when>
+      </xsl:choose>
       <xsl:element name="a">
         <xsl:choose>
           <xsl:when test="($ajax_proofs=1) or ($ajax_proofs=3)">
@@ -7871,6 +8261,26 @@
                 <xsl:text>now </xsl:text>
               </xsl:with-param>
             </xsl:call-template>
+            <xsl:if test="($display_thesis = 1)">
+              <xsl:for-each select=" BlockThesis">
+                <xsl:text> </xsl:text>
+                <xsl:element name="a">
+                  <xsl:call-template name="add_hs_attrs"/>
+                  <xsl:call-template name="pcomment0">
+                    <xsl:with-param name="str">
+                      <xsl:text> thesis: </xsl:text>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </xsl:element>
+                <xsl:element name="span">
+                  <xsl:attribute name="class">
+                    <xsl:text>hide</xsl:text>
+                  </xsl:attribute>
+                  <xsl:text> </xsl:text>
+                  <xsl:apply-templates select="*[position()=last()]"/>
+                </xsl:element>
+              </xsl:for-each>
+            </xsl:if>
           </xsl:element>
           <xsl:call-template name="now_body"/>
           <xsl:call-template name="pkeyword">
@@ -8403,6 +8813,9 @@
         <xsl:choose>
           <xsl:when test="$body_only = &quot;0&quot;">
             <xsl:element name="html">
+              <xsl:attribute name="prefix">
+                <xsl:text>oo: http://omdoc.org/ontology#</xsl:text>
+              </xsl:attribute>
               <!-- output the css defaults for div and p (for indenting) -->
               <xsl:element name="style">
                 <xsl:attribute name="type">
@@ -8666,5 +9079,56 @@ return tstp_dump;
     <xsl:call-template name="pcomment">
       <xsl:with-param name="str" select="concat(&quot;Copyright &quot;, text())"/>
     </xsl:call-template>
+  </xsl:template>
+
+  <!-- comment rules -->
+  <xsl:template match="Comment">
+    <xsl:element name="div">
+      <xsl:attribute name="class">
+        <xsl:text>comment</xsl:text>
+      </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="$colored=&quot;1&quot;">
+          <xsl:element name="font">
+            <xsl:attribute name="color">
+              <xsl:value-of select="$commentcolor"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+          </xsl:element>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="CmtLine">
+    <xsl:value-of select="text()"/>
+    <xsl:element name="br"/>
+  </xsl:template>
+
+  <xsl:template match="CmtLink">
+    <xsl:text>:: </xsl:text>
+    <xsl:call-template name="add_wp_icon"/>
+    <xsl:text> </xsl:text>
+    <xsl:for-each select="*">
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:copy-of select="text()"/>
+      </xsl:copy>
+    </xsl:for-each>
+    <xsl:element name="br"/>
+  </xsl:template>
+
+  <xsl:template name="add_wp_icon">
+    <xsl:element name="img">
+      <xsl:attribute name="src">
+        <xsl:value-of select="concat($ltptproot,&quot;WP.ico&quot;)"/>
+      </xsl:attribute>
+      <xsl:attribute name="alt">
+        <xsl:text>WP: </xsl:text>
+      </xsl:attribute>
+    </xsl:element>
   </xsl:template>
 </xsl:stylesheet>

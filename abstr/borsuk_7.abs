@@ -1,0 +1,561 @@
+:: The {B}orsuk-Ulam Theorem
+::  by Artur Korni{\l}owicz and Marco Riccardi
+:: 
+:: Received November 3, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies PRE_TOPC, ORDINAL2, FUNCT_1, EUCLID, RELAT_1, ARYTM_1, BORSUK_2,
+      GRAPH_1, BORSUK_1, ALGSTR_1, SUBSET_1, RCOMP_1, ZFMISC_1, ARYTM_3,
+      METRIC_1, COMPLEX1, WAYBEL20, EQREL_1, CARD_3, VALUED_0, TOPREALB,
+      FINSEQ_1, XCMPLX_0, SIN_COS, INT_1, TOPMETR, SQUARE_1, MCART_1, RVSUM_1,
+      XREAL_0, TOPALG_5, FUNCOP_1, GR_CY_1, TOPS_1, JGRAPH_4, RELAT_2,
+      JGRAPH_2, FUNCT_4, JORDAN, GROUP_6, TOPS_2, PARTFUN1, WAYBEL_1, FINSEQ_6,
+      VECTMETR, PCOMPS_1, IRRAT_1, COMPTRIG, EUCLID_3, VALUED_2, BORSUK_5,
+      LIMFUNC1, NAT_1, STRUCT_0, XXREAL_1, XXREAL_0, CARD_1, ABIAN, ORDINAL1,
+      TARSKI, XBOOLE_0, VALUED_1, SUPINF_2, ORDINAL4, REAL_1, NUMBERS,
+      RLTOPSP1, BINOP_2, FUNCT_2, TOPALG_6, BORSUK_7;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ENUMSET1, EQREL_1, RELAT_1,
+      RVSUM_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, NUMBERS,
+      ORDINAL1, FCONT_1, LIMFUNC1, FUNCOP_1, XCMPLX_0, XXREAL_0, XREAL_0,
+      REAL_1, SQUARE_1, NAT_1, INT_1, CARD_3, FINSEQ_1, FUNCT_4, COMPTRIG,
+      COMPLEX2, VALUED_0, VALUED_1, FINSEQ_2, IRRAT_1, COMPLEX1, ABIAN,
+      SIN_COS, VALUED_2, STRUCT_0, RLVECT_1, METRIC_1, PRE_TOPC, TOPS_1,
+      TMAP_1, TOPS_2, GR_CY_1, CONNSP_1, TOPMETR, RCOMP_1, BORSUK_1, RLTOPSP1,
+      EUCLID, BORSUK_2, PCOMPS_1, EUCLID_3, BORSUK_5, WAYBEL18, JGRAPH_4,
+      JORDAN24, TOPREAL9, TOPREALB, TOPALG_1, TOPALG_3, TOPALG_5, EUCLID_5,
+      TOPREALC, TOPALG_6;
+ constructors BINOP_2, TOPS_1, GRCAT_1, SIN_COS, SEQ_1, ABIAN, TOPREAL9,
+      SQUARE_1, EUCLID_5, FINSEQ_4, TOPALG_5, FINSEQOP, TOPALG_3, BORSUK_6,
+      FCONT_1, TMAP_1, JORDAN24, COMPLEX2, COMPTRIG, EUCLID_3, JGRAPH_4,
+      TOPREALC, WAYBEL18, CONNSP_1, BORSUK_5, FUNCSDOM, LIMFUNC1, COMPLEX1,
+      TOPALG_6;
+ registrations NUMBERS, XBOOLE_0, RELSET_1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1,
+      MEMBERED, STRUCT_0, BORSUK_1, EUCLID, BORSUK_2, VALUED_0, FUNCT_1,
+      RELAT_1, VALUED_1, TOPREALB, PRE_TOPC, RVSUM_1, XCMPLX_0, INT_1, TOPMETR,
+      ABIAN, SQUARE_1, FINSEQ_1, TOPALG_5, SIN_COS6, FUNCOP_1, FUNCT_4,
+      TOPREAL9, SIN_COS, TOPS_1, JORDAN24, TOPGRP_1, VALUED_2, TOPREALC,
+      BORSUK_5, WAYBEL18, FCONT_1, PCOMPS_1, RCOMP_1, FCONT_3, JGRAPH_4,
+      PARTFUN3, FINSEQ_2, TOPALG_6;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve a,b,c,x,y,z,X,Y,Z for set,
+  n for Nat,
+  i,j for Integer,
+  r,r1,r2,r3,s for real number,
+  c,c1,c2 for complex number,
+  p for Point of TOP-REAL n;
+
+registration
+  cluster -> irrational for Element of IRRAT;
+end;
+
+theorem :: BORSUK_7:1
+  0 <= r & 0 <= s & r^2 = s^2 implies r = s;
+
+theorem :: BORSUK_7:2
+  frac(r) >= frac(s) implies frac(r-s) = frac(r) - frac(s);
+
+theorem :: BORSUK_7:3
+  frac(r) < frac(s) implies frac(r-s) = frac(r) - frac(s) + 1;
+
+theorem :: BORSUK_7:4
+  ex i st frac(r-s) = frac(r) - frac(s) + i & (i = 0 or i = 1);
+
+theorem :: BORSUK_7:5
+  sin(r) = 0 implies r = 2*PI*[\r/(2*PI)/] or r = PI+2*PI*[\r/(2*PI)/];
+
+theorem :: BORSUK_7:6
+  cos(r) = 0 implies r = PI/2+2*PI*[\r/(2*PI)/] or r = 3*PI/2+2*PI*[\r/(2*PI)/]
+;
+
+theorem :: BORSUK_7:7
+  sin(r) = 0 implies ex i st r = PI*i;
+
+theorem :: BORSUK_7:8
+  cos(r) = 0 implies ex i st r = PI/2+PI*i;
+
+theorem :: BORSUK_7:9
+  sin(r) = sin(s) implies ex i st r = s + 2*PI*i or r = PI-s + 2*PI*i;
+
+theorem :: BORSUK_7:10
+  cos(r) = cos(s) implies ex i st r = s + 2*PI*i or r = -s + 2*PI*i;
+
+theorem :: BORSUK_7:11
+  sin(r) = sin(s) & cos(r) = cos(s) implies ex i st r = s + 2*PI*i;
+
+theorem :: BORSUK_7:12
+  |.c1.| = |.c2.| & Arg c1 = Arg c2 + 2*PI*i implies c1 = c2;
+
+registration
+  let f be one-to-one complex-valued Function;
+  let c;
+  cluster f+c -> one-to-one;
+end;
+
+registration
+  let f be one-to-one complex-valued Function;
+  let c;
+  cluster f-c -> one-to-one;
+end;
+
+theorem :: BORSUK_7:13
+  for f being complex-valued FinSequence holds len -f = len f;
+
+theorem :: BORSUK_7:14
+  -(0*n) = 0*n;
+
+theorem :: BORSUK_7:15
+  for f being complex-valued Function holds
+  f <> 0*n implies -f <> 0*n;
+
+theorem :: BORSUK_7:16
+  sqr <*r1,r2,r3*> = <* r1^2, r2^2, r3^2 *>;
+
+theorem :: BORSUK_7:17
+  Sum sqr <*r1,r2,r3*> = r1^2+r2^2+r3^2;
+
+theorem :: BORSUK_7:18
+  for f being complex-valued FinSequence holds (c(#)f)^2 = (c^2) (#) (f^2);
+
+theorem :: BORSUK_7:19
+  for f being complex-valued FinSequence holds (f(/)c)^2 = (f^2) (/) (c^2);
+
+theorem :: BORSUK_7:20
+  for f being real-valued FinSequence st Sum f <> 0 holds Sum (f (/) Sum f) = 1
+;
+
+definition
+  let a,b,c,x,y,z be set;
+  func (a,b,c) --> (x,y,z) equals
+:: BORSUK_7:def 1
+  ((a,b) --> (x,y)) +* (c .--> z);
+end;
+
+registration
+  let a,b,c,x,y,z be set;
+  cluster (a,b,c) --> (x,y,z) -> Function-like Relation-like;
+end;
+
+theorem :: BORSUK_7:21
+  dom((a,b,c) --> (x,y,z)) = {a,b,c};
+
+theorem :: BORSUK_7:22
+  rng((a,b,c) --> (x,y,z)) c= {x,y,z};
+
+theorem :: BORSUK_7:23
+  (a,a,a) --> (x,y,z) = a .--> z;
+
+theorem :: BORSUK_7:24
+  (a,a,b) --> (x,y,z) = (a,b) --> (y,z);
+
+theorem :: BORSUK_7:25
+  a <> b implies (a,b,a) --> (x,y,z) = (a,b) --> (z,y);
+
+theorem :: BORSUK_7:26
+  (a,b,b) --> (x,y,z) = (a,b) --> (x,z);
+
+theorem :: BORSUK_7:27
+  a <> b & a <> c implies ((a,b,c) --> (x,y,z)).a = x;
+
+theorem :: BORSUK_7:28
+  a,b,c are_mutually_different implies
+  ((a,b,c) --> (x,y,z)).a = x & ((a,b,c) --> (x,y,z)).b = y &
+  ((a,b,c) --> (x,y,z)).c = z;
+
+theorem :: BORSUK_7:29
+  for f being Function st dom f = {a,b,c} & f.a = x & f.b = y & f.c = z holds
+  f = (a,b,c) --> (x,y,z);
+
+theorem :: BORSUK_7:30
+  <*a,b,c*> = (1,2,3) --> (a,b,c);
+
+theorem :: BORSUK_7:31
+  a,b,c are_mutually_different implies
+  product (a,b,c) --> ({x},{y},{z}) = { (a,b,c) --> (x,y,z) };
+
+theorem :: BORSUK_7:32
+  for A, B, C, D, E, F being set st A c= B & C c= D & E c= F holds
+  product ((a,b,c) --> (A,C,E)) c= product ((a,b,c) --> (B,D,F));
+
+theorem :: BORSUK_7:33
+  a,b,c are_mutually_different & x in X & y in Y & z in Z implies
+  (a,b,c) --> (x,y,z) in product((a,b,c) --> (X,Y,Z));
+
+definition
+  let f be Function;
+  attr f is odd means
+:: BORSUK_7:def 2
+
+  for x, y being complex-valued Function st x in dom f & -x in dom f & y = f.x
+  holds f.-x = -y;
+end;
+
+registration
+  cluster {} -> odd;
+end;
+
+registration
+  cluster odd for complex-functions-valued Function;
+end;
+
+theorem :: BORSUK_7:34
+  for p being Point of TOP-REAL 3 holds
+  sqr p = <* p`1^2, p`2^2, p`3^2 *>;
+
+theorem :: BORSUK_7:35
+  for p being Point of TOP-REAL 3 holds
+  Sum sqr p = p`1^2+p`2^2+p`3^2;
+
+theorem :: BORSUK_7:36
+  for S being Subset of R^1 st S = RAT holds
+  RAT /\ ]. -infty,r .[ is open Subset of R^1 | S;
+
+theorem :: BORSUK_7:37
+  for S being Subset of R^1 st S = RAT holds
+  RAT /\ ]. r,+infty .[ is open Subset of R^1 | S;
+
+registration
+  let X be connected non empty TopSpace, Y be non empty TopSpace;
+  let f be continuous Function of X,Y;
+  cluster Image f -> connected;
+end;
+
+theorem :: BORSUK_7:38
+  for S being Subset of R^1 st S = RAT
+  for T being connected TopSpace, f being Function of T, R^1 | S
+  st f is continuous holds f is constant;
+
+theorem :: BORSUK_7:39
+  for a, b being real number,
+  f being continuous Function of Closed-Interval-TSpace(a,b), R^1,
+  g being PartFunc of REAL, REAL st a <= b & f = g holds
+  g is continuous;
+
+definition
+  let s be Point of R^1;
+  let r be real number;
+  redefine func s+r -> Point of R^1;
+end;
+
+definition
+  let s be Point of R^1;
+  let r be real number;
+  redefine func s-r -> Point of R^1;
+end;
+
+definition
+  let X be set;
+  let f be Function of X,R^1;
+  let r;
+  redefine func f+r -> Function of X,R^1;
+end;
+
+definition
+  let X be set;
+  let f be Function of X,R^1;
+  let r;
+  redefine func f-r -> Function of X,R^1;
+end;
+
+definition
+  let s, t be Point of R^1;
+  let f be Path of s,t;
+  let r be real number;
+  redefine func f+r -> Path of s+r,t+r;
+  redefine func f-r -> Path of s-r,t-r;
+end;
+
+definition
+  func c[100] -> Point of Tunit_circle(3) equals
+:: BORSUK_7:def 3
+  |[1,0,0]|;
+end;
+
+definition
+  func c[-100] -> Point of Tunit_circle(3) equals
+:: BORSUK_7:def 4
+  |[-1,0,0]|;
+end;
+
+theorem :: BORSUK_7:40
+  -c[100] = c[-100];
+
+theorem :: BORSUK_7:41
+  -c[-100] = c[100];
+
+theorem :: BORSUK_7:42
+  c[100] - c[-100] = |[2,0,0]|;
+
+theorem :: BORSUK_7:43
+  for p being Point of TOP-REAL 2 holds
+  p`1 = |.p.|*cos(Arg p) & p`2 = |.p.|*sin(Arg p);
+
+theorem :: BORSUK_7:44
+  for p being Point of TOP-REAL 2 holds
+  p = cpx2euc(|.p.|*cos(Arg p) + |.p.|*sin(Arg p)*<i>);
+
+theorem :: BORSUK_7:45
+  for p1, p2 being Point of TOP-REAL 2 holds
+  |.p1.| = |.p2.| & Arg p1 = Arg p2 + 2*PI*i implies p1 = p2;
+
+theorem :: BORSUK_7:46
+  for p being Point of TOP-REAL 2 st p = CircleMap.r holds
+  Arg(p) = 2*PI*frac(r);
+
+theorem :: BORSUK_7:47
+  for p1, p2 being Point of TOP-REAL 3, u1, u2 being Point of Euclid 3 holds
+  u1 = p1 & u2 = p2 implies
+  (Pitag_dist 3).(u1,u2) =
+  sqrt ((p1`1 - p2`1)^2 + (p1`2 - p2`2)^2 + (p1`3 - p2`3)^2);
+
+theorem :: BORSUK_7:48
+  for p being Point of TOP-REAL 3, e being Point of Euclid 3 holds
+  p = e & p`3 = 0 implies product ((1,2,3) --> (].p`1-r/sqrt 2,p`1+r/sqrt 2.[,
+  ].p`2-r/sqrt 2,p`2+r/sqrt 2.[,{0})) c= Ball(e,r);
+
+theorem :: BORSUK_7:49
+  for s being Real holds Rotate(c,s) = Rotate(c,s+2*PI*i);
+
+theorem :: BORSUK_7:50
+  for s being Real holds Rotate(s) = Rotate(s+2*PI*i);
+
+theorem :: BORSUK_7:51
+  for s being Real, p being Point of TOP-REAL 2 holds
+  |.(Rotate(s)).p.| = |.p.|;
+
+theorem :: BORSUK_7:52
+  for s being Real, p being Point of TOP-REAL 2 holds
+  Arg((Rotate(s)).p) = Arg Rotate(euc2cpx(p),s);
+
+theorem :: BORSUK_7:53
+  for s being Real, p being Point of TOP-REAL 2 st p <> 0.TOP-REAL 2
+  ex i st Arg((Rotate(s)).p) = s+(Arg p)+2*PI*i;
+
+theorem :: BORSUK_7:54
+  for s being Real holds (Rotate(s)).(0.TOP-REAL 2) = 0.TOP-REAL 2;
+
+theorem :: BORSUK_7:55
+  for s being Real, p being Point of TOP-REAL 2 holds
+  (Rotate(s)).p = 0.TOP-REAL 2 implies p = 0.TOP-REAL 2;
+
+theorem :: BORSUK_7:56
+  for s being Real, p being Point of TOP-REAL 2 holds
+  (Rotate(s)).((Rotate(-s)).p) = p;
+
+theorem :: BORSUK_7:57
+  for s being Real holds (Rotate(s)) * (Rotate(-s)) = id TOP-REAL 2;
+
+theorem :: BORSUK_7:58
+  for s being Real, p being Point of TOP-REAL 2 holds
+  p in Sphere(0.TOP-REAL 2,r) iff (Rotate(s)).p in Sphere(0.TOP-REAL 2,r);
+
+theorem :: BORSUK_7:59
+  for r being non negative real number, s being Real holds
+  (Rotate(s)).:Sphere(0.TOP-REAL 2,r) = Sphere(0.TOP-REAL 2,r);
+
+definition
+  let r be non negative real number;
+  let s be Real;
+  func RotateCircle(r,s) ->
+       Function of Tcircle(0.TOP-REAL 2,r),Tcircle(0.TOP-REAL 2,r) equals
+:: BORSUK_7:def 5
+  (Rotate(s)) | Tcircle(0.TOP-REAL 2,r);
+end;
+
+registration
+  let r be non negative real number, s be Real;
+  cluster RotateCircle(r,s) -> being_homeomorphism;
+end;
+
+theorem :: BORSUK_7:60
+  for p being Point of TOP-REAL 2 st p = CircleMap.r2 holds
+  RotateCircle(1,-Arg(p)).(CircleMap.r1) = CircleMap.(r1-r2);
+
+begin :: Main
+
+definition
+  let n be non empty Nat;
+  let p be Point of TOP-REAL n;
+  let r be non negative real number;
+  func CircleIso(p,r) -> Function of Tunit_circle(n), Tcircle(p,r) means
+:: BORSUK_7:def 6
+
+  for a being Point of Tunit_circle(n),
+      b being Point of TOP-REAL n st a = b holds it.a = r*b+p;
+end;
+
+registration
+  let n be non empty Nat, p be Point of TOP-REAL n,
+      r be positive real number;
+  cluster CircleIso(p,r) -> being_homeomorphism;
+end;
+
+definition
+  func SphereMap -> Function of R^1, Tunit_circle(3) means
+:: BORSUK_7:def 7
+
+  for x being real number holds it.x = |[ cos(2*PI*x), sin(2*PI*x), 0 ]|;
+end;
+
+theorem :: BORSUK_7:61
+  SphereMap.i = c[100];
+
+registration
+  cluster SphereMap -> continuous;
+end;
+
+definition
+  let r be real number;
+  func eLoop(r) -> Function of I[01], Tunit_circle(3) means
+:: BORSUK_7:def 8
+
+  for x being Point of I[01] holds it.x = |[cos(2*PI*r*x), sin(2*PI*r*x), 0]|;
+end;
+
+theorem :: BORSUK_7:62
+  eLoop(r) = SphereMap * ExtendInt(r);
+
+definition
+  let i;
+  redefine func eLoop(i) -> Loop of c[100];
+end;
+
+registration
+  let i;
+  cluster eLoop(i) -> nullhomotopic for Loop of c[100];
+end;
+
+theorem :: BORSUK_7:63
+  p <> 0.TOP-REAL n implies |. p (/) |. p .| .| = 1;
+
+definition
+  let n be Nat;
+  let p be Point of TOP-REAL n;
+  assume
+ p <> 0.TOP-REAL n;
+  func Rn->S1(p) -> Point of Tcircle(0.TOP-REAL n,1) equals
+:: BORSUK_7:def 9
+
+  p (/) |. p .|;
+end;
+
+reserve n for non zero Nat;
+
+definition
+  let n be non zero Nat;
+  let f be Function of Tcircle(0.TOP-REAL(n+1),1),TOP-REAL n;
+  func Sn1->Sn(f) ->
+       Function of Tunit_circle(n+1),Tunit_circle(n)
+  means
+:: BORSUK_7:def 10
+
+  for x, y being Point of Tcircle(0.TOP-REAL(n+1),1) st y = -x holds
+  it.x = Rn->S1(f.x-f.y);
+end;
+
+definition
+  let x0, y0 be Point of Tunit_circle(2),
+      xt be set,
+      f be Path of x0,y0 such that
+   xt in (CircleMap)"{x0};
+  func liftPath(f,xt) -> Function of I[01], R^1 means
+:: BORSUK_7:def 11
+
+  it.0 = xt & f = CircleMap*it & it is continuous &
+  for f1 being Function of I[01], R^1 st f1 is continuous & f = CircleMap*f1 &
+  f1.0 = xt holds it = f1;
+end;
+
+definition
+  let n be Nat,
+      p, x, y be Point of TOP-REAL n,
+      r be real number;
+  pred x,y are_antipodals_of p,r means
+:: BORSUK_7:def 12
+
+  x is Point of Tcircle(p,r) & y is Point of Tcircle(p,r) & p in LSeg(x,y);
+end;
+
+definition
+  let n be Nat,
+      p, x, y be Point of TOP-REAL n,
+      r be real number,
+      f be Function;
+  pred x,y are_antipodals_of p,r,f means
+:: BORSUK_7:def 13
+
+  x,y are_antipodals_of p,r & x in dom f & y in dom f & f.x = f.y;
+end;
+
+definition
+  let m,n be Nat,
+      p be Point of TOP-REAL m,
+      r be real number,
+      f be Function of Tcircle(p,r), TOP-REAL n;
+  attr f is with_antipodals means
+:: BORSUK_7:def 14
+  ex x, y being Point of TOP-REAL m st x,y are_antipodals_of p,r,f;
+end;
+
+notation
+  let m,n be Nat,
+      p be Point of TOP-REAL m,
+      r be real number,
+      f be Function of Tcircle(p,r), TOP-REAL n;
+  antonym f is without_antipodals for f is with_antipodals;
+end;
+
+theorem :: BORSUK_7:64
+  for n being non empty Nat,
+      r being non negative real number,
+      x being Point of TOP-REAL n st x is Point of Tcircle(0.TOP-REAL n,r)
+  holds x,-x are_antipodals_of 0.TOP-REAL n,r;
+
+theorem :: BORSUK_7:65
+  for n being non empty Nat,
+      p, x, y, x1, y1 being Point of TOP-REAL n,
+      r being positive real number
+  st x,y are_antipodals_of 0.TOP-REAL n,1 &
+     x1 = CircleIso(p,r).x & y1 = CircleIso(p,r).y
+  holds x1,y1 are_antipodals_of p,r;
+
+theorem :: BORSUK_7:66
+  for f being Function of Tcircle(0.TOP-REAL(n+1),1),TOP-REAL n
+  for x being Point of Tcircle(0.TOP-REAL(n+1),1) st
+  f is without_antipodals holds f.x - f.-x <> 0.TOP-REAL n;
+
+theorem :: BORSUK_7:67
+  for f being Function of Tcircle(0.TOP-REAL(n+1),1),TOP-REAL n holds
+  f is without_antipodals implies Sn1->Sn(f) is odd;
+
+theorem :: BORSUK_7:68
+  for f being Function of Tcircle(0.TOP-REAL(n+1),1),TOP-REAL n
+  for g, B1 being Function of Tcircle(0.TOP-REAL(n+1),1),TOP-REAL n
+  st g = f(-) & B1 = f<-->g & f is without_antipodals holds
+  Sn1->Sn(f) = B1 </> (n NormF * B1);
+
+registration
+  let n;
+  let r be negative real number, p be Point of TOP-REAL(n+1);
+  cluster -> without_antipodals for Function of Tcircle(p,r),TOP-REAL n;
+end;
+
+::$N Borsuk-Ulam Theorem
+registration
+  let r be non negative real number, p be Point of TOP-REAL 3;
+  cluster continuous -> with_antipodals for
+          Function of Tcircle(p,r),TOP-REAL 2;
+end;

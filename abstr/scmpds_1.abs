@@ -2,7 +2,7 @@
 ::  by JingChao Chen
 ::
 :: Received June 15, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,35 +15,28 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, CARD_1, AMI_2, INT_1, XBOOLE_0, FINSEQ_1,
-      TARSKI, RELAT_1, ARYTM_3, FUNCT_1, CARD_3, AMI_1, NAT_1, FUNCT_4,
-      FUNCOP_1, COMPLEX1, MCART_1, PARTFUN1, ORDINAL1, XXREAL_0, ARYTM_1,
-      FUNCT_2, ZFMISC_1, FUNCT_5, SCMPDS_1, GROUP_9, RECDEF_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      CARD_1, PARTFUN1, FUNCT_2, BINOP_1, MCART_1, NUMBERS, XCMPLX_0, CARD_3,
-      INT_1, NAT_1, FINSEQ_1, FINSEQ_4, FUNCOP_1, FUNCT_4, XXREAL_0, CAT_2,
-      AMI_2, INT_2, RECDEF_2;
- constructors XXREAL_0, NAT_1, NAT_D, FINSEQ_4, CAT_2, AMI_2, SETFAM_1,
-      DOMAIN_1, RELSET_1, FUNCOP_1, RECDEF_2;
- registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
-      XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, AMI_2, ORDINAL2, XXREAL_0,
-      FUNCT_1, CARD_2, FUNCT_2;
- requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+      TARSKI, RELAT_1, ARYTM_3, FUNCT_1, CARD_3, AMI_1, FUNCOP_1, COMPLEX1,
+      ORDINAL1, XXREAL_0, ARYTM_1, ZFMISC_1, FUNCT_5, SCMPDS_1, GROUP_9;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, CARD_1, FUNCT_2,
+      BINOP_1, NUMBERS, XCMPLX_0, CARD_3, INT_1, NAT_1, FINSEQ_1, FUNCOP_1,
+      XXREAL_0, FUNCT_5, AMI_2, INT_2, COMPOS_0, SCMPDS_I;
+ constructors NAT_1, NAT_D, FUNCT_5, AMI_2, RELSET_1, FUNCOP_1, COMPOS_0,
+      SCMPDS_I, BINOP_1;
+ registrations ORDINAL1, RELSET_1, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_2,
+      ORDINAL2, XXREAL_0, FUNCT_1, FUNCT_2, SCM_INST, SCMPDS_I;
+ requirements NUMERALS, SUBSET, BOOLE;
 
 
 begin :: Preliminaries
 
 reserve
   i, j, k for Element of NAT,
-  I,I2,I3,I4 for Element of Segm 14,
+  I,I2,I3,I4 for Element of Segm 15,
   i1 for Element of NAT,
   d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
   k1,k2 for Integer;
 
-theorem :: SCMPDS_1:1
-  for k be Integer holds k in union {INT} \/ SCM-Memory;
-
-theorem :: SCMPDS_1:2
-  for k be Integer holds k in SCM-Data-Loc \/ INT;
+canceled 2;
 
 theorem :: SCMPDS_1:3
   for d be Element of SCM-Data-Loc holds d in SCM-Data-Loc \/ INT;
@@ -65,132 +58,18 @@ begin  :: The construction of SCM with Push-Down Stack
 :: [13,(a1,k1):=(a2,k2)]
 
 definition
-
-  func SCMPDS-Instr
-  equals
-:: SCMPDS_1:def 1
-  { [0,{},<*l*>] where l is Element of INT: not contradiction}
-   \/ { [1,{},<*sp*> ] where sp is Element of SCM-Data-Loc:not contradiction}
-   \/ { [I,{},<*v,c*>]
-    where I is Element of Segm 14,v is Element of SCM-Data-Loc,
-      c is Element of INT: I in {2,3} }
-   \/ { [I,{},<*v,c1,c2*>] where I is Element of Segm 14,
-      v is Element of SCM-Data-Loc, c1,c2 is Element of INT: I in {4,5,6,7,8} }
-   \/ { [I,{},<*v1,v2,c1,c2*>]
-    where I is Element of Segm 14, v1,v2 is Element of SCM-Data-Loc, c1,c2 is
-  Element of INT: I in {9,10,11,12,13} };
-end;
-
-theorem :: SCMPDS_1:4
-  [0,{},<*0*>] in SCMPDS-Instr;
-
-registration
-  cluster SCMPDS-Instr -> non empty;
-end;
-
-theorem :: SCMPDS_1:5
-  for k being Element of SCM-Memory holds k = NAT or k in
-  SCM-Data-Loc;
-
-theorem :: SCMPDS_1:6
-  ((ex j st k = 2*j+1) implies k<>0 & not (ex j st k = 2*j+2)) & ((ex j
-  st k = 2*j+2) implies k<>0 & not (ex j st k = 2*j+1));
-
-definition
-  func SCMPDS-OK -> Function of SCM-Memory, { INT } \/ { NAT }
-  means
-:: SCMPDS_1:def 2
-
-  for k being Element of SCM-Memory holds (k = NAT implies it.k =
-  NAT) & (k in SCM-Data-Loc implies it.k = INT);
-end;
-
-definition
-  mode SCMPDS-State is Element of product SCMPDS-OK;
-end;
-
-theorem :: SCMPDS_1:7
-  NAT <> SCMPDS-Instr & SCMPDS-Instr <> INT;
-
-theorem :: SCMPDS_1:8
-  for i being Element of SCM-Memory holds SCMPDS-OK.i = NAT iff i = NAT;
-
-theorem :: SCMPDS_1:9
-  for i being Element of SCM-Memory holds SCMPDS-OK.i = INT iff i
-  in SCM-Data-Loc;
-
-theorem :: SCMPDS_1:10
-  SCMPDS-OK.d1 = INT;
-
-registration
- cluster SCMPDS-OK -> non-empty;
-end;
-
-theorem :: SCMPDS_1:11
-  pi(product SCMPDS-OK,NAT) = NAT;
-
-theorem :: SCMPDS_1:12
-  pi(product SCMPDS-OK,d1) = INT;
-
-definition
-  let s be SCMPDS-State;
-  func IC s -> Element of NAT equals
-:: SCMPDS_1:def 3
-  s.NAT;
-end;
-
-definition
-  let s be SCMPDS-State, u be Nat;
-  func SCM-Chg(s,u) -> SCMPDS-State equals
-:: SCMPDS_1:def 4
-  s +* (NAT .--> u);
-end;
-
-theorem :: SCMPDS_1:13
-  for s being SCMPDS-State, u being Nat holds SCM-Chg(s,u).NAT = u;
-
-theorem :: SCMPDS_1:14
-  for s being SCMPDS-State, u being Nat, mk being Element of
-  SCM-Data-Loc holds SCM-Chg(s,u).mk = s.mk;
-
-definition
-  let s be SCMPDS-State, t be Element of SCM-Data-Loc, u be Integer;
-  func SCM-Chg(s,t,u) -> SCMPDS-State equals
-:: SCMPDS_1:def 5
-  s +* (t .--> u);
-end;
-
-theorem :: SCMPDS_1:15
-  for s being SCMPDS-State, t being Element of SCM-Data-Loc, u being
-  Integer holds SCM-Chg(s,t,u).NAT = s.NAT;
-
-theorem :: SCMPDS_1:16
-  for s being SCMPDS-State, t being Element of SCM-Data-Loc, u being
-  Integer holds SCM-Chg(s,t,u).t = u;
-
-theorem :: SCMPDS_1:17
-  for s being SCMPDS-State, t being Element of SCM-Data-Loc, u being
-Integer, mk being Element of SCM-Data-Loc st mk <> t holds SCM-Chg(s,t,u).mk =
-  s.mk;
-
-definition
-  let s be SCMPDS-State, a be Element of SCM-Data-Loc;
-  redefine func s.a -> Integer;
-end;
-
-definition
-  let s be SCMPDS-State, a be Element of SCM-Data-Loc, n be Integer;
+ canceled 5;
+  let s be SCM-State, a be Element of SCM-Data-Loc, n be Integer;
   func Address_Add(s,a,n) -> Element of SCM-Data-Loc equals
 :: SCMPDS_1:def 6
   [1,abs(s.a+n)];
 end;
 
 definition
-  let s be SCMPDS-State, n be Integer;
+  let s be SCM-State, n be Integer;
   func jump_address(s,n) -> Element of NAT equals
 :: SCMPDS_1:def 7
-  abs((IC s qua Element of NAT
-  )+n);
+  abs((IC s qua Element of NAT)+n);
 end;
 
 definition
@@ -199,104 +78,8 @@ definition
 end;
 
 definition
-  let x be Element of SCMPDS-Instr;
-  given mk be Element of SCM-Data-Loc, I such that
- x = [I,{},<*mk*>];
-  func x address_1 -> Element of SCM-Data-Loc means
-:: SCMPDS_1:def 8
-
-  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.1;
-end;
-
-theorem :: SCMPDS_1:18
-  for x being Element of SCMPDS-Instr, mk being Element of SCM-Data-Loc
-  st x = [I,{},<*mk*>] holds x address_1 = mk;
-
-definition
-  let x be Element of SCMPDS-Instr;
-  given r being Integer, I such that
- x = [I,{},<*r*>];
-  func x const_INT -> Integer means
-:: SCMPDS_1:def 9
-
-  ex f being FinSequence of INT st f = x`3_3 & it = f/.1;
-end;
-
-theorem :: SCMPDS_1:19
-  for x being Element of SCMPDS-Instr, k being Integer st x = [ I,{}, <*k*>
-  ] holds x const_INT = k;
-
-definition
-  let x be Element of SCMPDS-Instr;
-  given mk being Element of SCM-Data-Loc, r being Integer, I such that
- x = [I,{},<*mk,r*>];
-  func x P21address -> Element of SCM-Data-Loc means
-:: SCMPDS_1:def 10
-
-  ex f being FinSequence of SCM-Data-Loc \/ INT st f = x`3_3 & it = f/.1;
-  func x P22const -> Integer means
-:: SCMPDS_1:def 11
-
-  ex f being FinSequence of SCM-Data-Loc \/ INT st f = x`3_3 & it = f/.2;
-end;
-
-theorem :: SCMPDS_1:20
-  for x being Element of SCMPDS-Instr, mk being Element of SCM-Data-Loc,
-r being Integer st x = [I,{},<*mk,r*>] holds x P21address = mk & x P22const = r
-;
-
-definition
-  let x be Element of SCMPDS-Instr;
-  given m1 being Element of SCM-Data-Loc,k1,k2 be Integer,I such that
- x = [I,{},<*m1,k1,k2*>];
-  func x P31address -> Element of SCM-Data-Loc means
-:: SCMPDS_1:def 12
-
-  ex f being FinSequence of (SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.1;
-  func x P32const -> Integer means
-:: SCMPDS_1:def 13
-
-  ex f being FinSequence of SCM-Data-Loc \/ INT st f = x`3_3 & it = f/.2;
-  func x P33const -> Integer means
-:: SCMPDS_1:def 14
-
-  ex f being FinSequence of ( SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.3;
-end;
-
-theorem :: SCMPDS_1:21
-  for x being Element of SCMPDS-Instr, d1 being Element of SCM-Data-Loc,
-  k1,k2 being Integer st x = [I,{}, <*d1,k1,k2*>] holds x P31address = d1 & x
-  P32const = k1 & x P33const = k2;
-
-definition
-  let x be Element of SCMPDS-Instr;
-  given m1,m2 being Element of SCM-Data-Loc,k1,k2 be Integer,I such that
- x = [I,{},<*m1,m2,k1,k2*>];
-  func x P41address -> Element of SCM-Data-Loc means
-:: SCMPDS_1:def 15
-
-  ex f being FinSequence of (SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.1;
-  func x P42address -> Element of SCM-Data-Loc means
-:: SCMPDS_1:def 16
-
-  ex f being FinSequence of (SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.2;
-  func x P43const -> Integer means
-:: SCMPDS_1:def 17
-
-  ex f being FinSequence of ( SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.3;
-  func x P44const -> Integer means
-:: SCMPDS_1:def 18
-
-  ex f being FinSequence of ( SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.4;
-end;
-
-theorem :: SCMPDS_1:22
-  for x being Element of SCMPDS-Instr, d1,d2 being Element of
-  SCM-Data-Loc, k1,k2 being Integer st x = [I,{}, <*d1,d2,k1,k2*>] holds x
-  P41address = d1 & x P42address = d2 & x P43const = k1 & x P44const = k2;
-
-definition
-  let s be SCMPDS-State, a be Element of SCM-Data-Loc;
+ canceled 11;
+  let s be SCM-State, a be Element of SCM-Data-Loc;
   func PopInstrLoc(s,a) -> Element of NAT equals
 :: SCMPDS_1:def 19
   abs(s.a)+2;
@@ -306,77 +89,68 @@ end;
 :: RetIC: Return Instruction-Counter
 
 definition
-  func RetSP -> Element of NAT equals
-:: SCMPDS_1:def 20
-  0;
-  func RetIC -> Element of NAT equals
-:: SCMPDS_1:def 21
-  1;
+ canceled 2;
 end;
 
 definition
-  let x be Element of SCMPDS-Instr, s be SCMPDS-State;
-  func SCM-Exec-Res (x,s) -> SCMPDS-State equals
+  let x be Element of SCMPDS-Instr, s be SCM-State;
+  func SCM-Exec-Res (x,s) -> SCM-State equals
 :: SCMPDS_1:def 22
   SCM-Chg(s, jump_address(s,x const_INT ))
-   if ex k1 st x = [ 0,{}, <*k1*>],
+   if InsCode x = 14,
   SCM-Chg(SCM-Chg(s, x P21address, x P22const), succ IC s)
-   if ex d1,k1 st x = [ 2,{}, <*d1, k1*>],
+   if InsCode x = 2,
   SCM-Chg(SCM-Chg(s,Address_Add(s,x P21address,x P22const),
    IC s qua Element of NAT),succ IC s)
-   if ex d1,k1 st x = [ 3,{}, <*d1, k1*>],
+   if InsCode x = 3,
   SCM-Chg(SCM-Chg(s, x address_1,s.Address_Add(s,x address_1,RetSP)),
     PopInstrLoc(s,Address_Add(s,x address_1,RetIC)) )
-   if ex d1 st x = [ 1,{}, <*d1*>],
+   if InsCode x = 1,
   SCM-Chg(s,IFEQ(s.Address_Add(s,x P31address,x P32const), 0, succ IC s,
         jump_address(s,x P33const )))
-   if ex d1,k1,k2 st x = [ 4,{}, <*d1,k1,k2*>],
+   if InsCode x = 4,
   SCM-Chg(s,IFGT(s.Address_Add(s,x P31address,x P32const), 0, succ IC
       s,jump_address(s,x P33const )))
-   if ex d1,k1,k2 st x = [ 5,{}, <*d1,k1,k2*>],
+   if InsCode x = 5,
   SCM-Chg(s, IFGT(0, s.Address_Add(s,x P31address,x P32const), succ IC s,
          jump_address(s,x P33const )))
-   if ex d1,k1,k2 st x = [ 6,{}, <*d1,k1,k2*>],
+   if InsCode x = 6,
   SCM-Chg(SCM-Chg(s,
     Address_Add(s,x P31address,x P32const), x P33const), succ IC s)
-   if ex d1,k1,k2 st x = [ 7,{}, <*d1,k1,k2*>],
+   if InsCode x = 7,
   SCM-Chg(SCM-Chg(s,Address_Add(s,x P31address,x P32const),
       s.Address_Add(s,x P31address,x P32const)+ (x P33const)), succ IC s)
-   if ex d1,k1,k2 st x = [ 8,{}, <*d1,k1,k2*>],
+   if InsCode x = 8,
   SCM-Chg(SCM-Chg(s,Address_Add(s,x P41address,x P43const),
       s.Address_Add(s,x P41address,x P43const)+
       s.Address_Add(s,x P42address,x P44const)),succ IC s)
-   if ex d1,d2,k1,k2 st x = [ 9,{}, <*d1,d2,k1,k2*>],
+   if InsCode x = 9,
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
     s.Address_Add(s,x P41address,x P43const) - s.Address_Add(s,x
     P42address,x P44const)),succ IC s)
-   if ex d1,d2,k1,k2 st x = [ 10,{}, <*d1,d2,k1,k2*>],
+   if InsCode x = 10,
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
       s.Address_Add(s,x P41address,x P43const) *
       s.Address_Add(s,x P42address,x P44const)),succ IC s)
-   if ex d1,d2,k1,k2 st x = [ 11,{}, <*d1,d2,k1,k2*>],
+   if InsCode x = 11,
   SCM-Chg(SCM-Chg(s,Address_Add(s,x P41address,x P43const),
       s.Address_Add(s,x P42address,x P44const)), succ IC s)
-   if ex d1,d2,k1,k2 st x = [13,{}, <*d1,d2,k1,k2*>],
+   if InsCode x = 13,
   SCM-Chg(SCM-Chg(SCM-Chg(s,Address_Add(s,x P41address,x P43const),
     s.Address_Add(s,x P41address,x P43const) div
     s.Address_Add(s,x P42address,x P44const)),
       Address_Add(s,x P42address,x P44const),
     s.Address_Add(s,x P41address,x P43const) mod
     s.Address_Add(s,x P42address,x P44const)), succ IC s)
-   if ex d1,d2,k1,k2 st x = [12,{}, <*d1,d2,k1,k2*>]
+   if InsCode x = 12
   otherwise s;
 end;
 
-registration
-  let f be Action of SCMPDS-Instr, product SCMPDS-OK,
-      x be Element of SCMPDS-Instr;
-  cluster f.x -> Function-like Relation-like;
-end;
-
 definition
-  func SCMPDS-Exec -> Action of SCMPDS-Instr, product SCMPDS-OK means
+  func SCMPDS-Exec -> Action of SCMPDS-Instr,
+     product(SCM-VAL*SCM-OK) means
 :: SCMPDS_1:def 23
   for x being Element of SCMPDS-Instr, y being
-  SCMPDS-State holds (it.x).y = SCM-Exec-Res (x,y);
+  SCM-State holds (it.x).y = SCM-Exec-Res (x,y);
 end;
+

@@ -2,7 +2,7 @@
 ::  by Noboru Endou
 ::
 :: Received March 18, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,19 +16,18 @@ environ
 
  vocabularies NUMBERS, CLVECT_1, LOPBAN_1, RELAT_1, RLVECT_1, CFUNCT_1,
       FUNCT_1, ARYTM_3, XXREAL_2, NORMSP_1, XXREAL_0, PRE_TOPC, CLOPBAN1,
-      CARD_1, REAL_1, XREAL_0, ORDINAL1, ORDINAL2, SUBSET_1, RSSPACE, LOPBAN_2,
-      BINOP_1, STRUCT_0, COMPLEX1, ALGSTR_0, XBOOLE_0, GROUP_1, SUPINF_2,
-      MESFUNC1, FUNCSDOM, VECTSP_1, LATTICES, CFUNCDOM, CSSPACE3, REWRITE1,
-      NAT_1, RSSPACE3, SEQ_2, ZFMISC_1, XCMPLX_0, PREPOWER, COMSEQ_1, SERIES_1,
-      CSSPACE, ARYTM_1, CLOPBAN2, NORMSP_0, METRIC_1, RELAT_2, SEQ_4;
+      CARD_1, REAL_1, XREAL_0, ORDINAL1, SUBSET_1, RSSPACE, LOPBAN_2, BINOP_1,
+      STRUCT_0, COMPLEX1, ALGSTR_0, XBOOLE_0, GROUP_1, SUPINF_2, MESFUNC1,
+      FUNCSDOM, VECTSP_1, LATTICES, CFUNCDOM, CSSPACE3, REWRITE1, NAT_1,
+      RSSPACE3, SEQ_2, ZFMISC_1, XCMPLX_0, PREPOWER, COMSEQ_1, SERIES_1,
+      CSSPACE, ARYTM_1, CLOPBAN2, NORMSP_0, METRIC_1, RELAT_2, SEQ_4, FCONT_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
       BINOP_1, STRUCT_0, ALGSTR_0, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1,
-      NUMBERS, XXREAL_2, REAL_1, PSCOMP_1, RLVECT_1, VALUED_1, SEQ_4, FUNCSDOM,
-      COMPLEX1, GROUP_1, VECTSP_1, SERIES_1, CFUNCT_1, COMSEQ_1, COMSEQ_3,
-      NORMSP_0, CLVECT_1, CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM, PREPOWER;
- constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, PREPOWER, COMSEQ_3,
-      PSCOMP_1, CSSPACE3, CLOPBAN1, CFUNCDOM, VECTSP_1, SEQ_1, XXREAL_2,
-      SERIES_1, SEQ_4, RELSET_1, BINOP_2, RVSUM_1;
+      NUMBERS, XXREAL_2, REAL_1, RLVECT_1, VALUED_1, SEQ_4, FUNCSDOM, COMPLEX1,
+      GROUP_1, VECTSP_1, SERIES_1, CFUNCT_1, COMSEQ_1, COMSEQ_3, NORMSP_0,
+      CLVECT_1, CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM, PREPOWER;
+ constructors REAL_1, PREPOWER, COMSEQ_3, CSSPACE3, CLOPBAN1, CFUNCDOM,
+      VECTSP_1, SEQ_1, SEQ_4, RELSET_1, BINOP_2, BINOP_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, CLVECT_1, CSSPACE3,
       CLOPBAN1, CFUNCDOM, ALGSTR_0, VALUED_1, VALUED_0, NORMSP_0;
@@ -38,7 +37,7 @@ environ
  theorems ABSVALUE, RLVECT_1, VECTSP_1, BINOP_1, XCMPLX_0, SERIES_1, FUNCT_1,
       FUNCT_2, SEQ_4, PREPOWER, STRUCT_0, CLOPBAN1, CLVECT_1, COMPLEX1,
       CFUNCDOM, CSSPACE3, COMSEQ_3, CSSPACE, GROUP_1, XREAL_1, XXREAL_0,
-      ALGSTR_0, VALUED_1, GRCAT_1, NORMSP_0;
+      ALGSTR_0, VALUED_1, NORMSP_0;
  schemes BINOP_1;
 
 begin :: Banach Algebra of Bounded Complex Linear Operators
@@ -60,25 +59,26 @@ A1: now
   now
     let v,w be VECTOR of X;
     thus (g*f).(v+w) =g.(f.(v+w)) by FUNCT_2:15
-      .=g.(f.v+f.w) by GRCAT_1:def 8
-      .=g.(f.v)+g.(f.w) by GRCAT_1:def 8
+      .=g.(f.v+f.w) by VECTSP_1:def 20
+      .=g.(f.v)+g.(f.w) by VECTSP_1:def 20
       .=(g*f).(v)+g.(f.w) by FUNCT_2:15
       .=(g*f).(v)+(g*f).(w) by FUNCT_2:15;
   end;
-  hence thesis by A1,CLOPBAN1:def 3,GRCAT_1:def 8;
+  hence thesis by A1,CLOPBAN1:def 3,VECTSP_1:def 20;
 end;
 
 theorem Th2:
-  for X,Y,Z be ComplexNormSpace for f be bounded LinearOperator of
-X,Y for g be bounded LinearOperator of Y,Z holds g*f is bounded LinearOperator
+  for X,Y,Z be ComplexNormSpace for f be Lipschitzian LinearOperator of
+X,Y for g be Lipschitzian LinearOperator of Y,Z holds
+g*f is Lipschitzian LinearOperator
   of X,Z & for x be VECTOR of X holds ||.((g*f).x).|| <=(
   BoundedLinearOperatorsNorm(Y,Z).g) *(BoundedLinearOperatorsNorm(X,Y).f )*||.x
 .|| & (BoundedLinearOperatorsNorm(X,Z).(g*f)) <=(BoundedLinearOperatorsNorm(Y,Z
   ).g) *(BoundedLinearOperatorsNorm(X,Y).f)
 proof
   let X,Y,Z be ComplexNormSpace;
-  let f be bounded LinearOperator of X,Y;
-  let g be bounded LinearOperator of Y,Z;
+  let f be Lipschitzian LinearOperator of X,Y;
+  let g be Lipschitzian LinearOperator of Y,Z;
   reconsider ff=f as Point of C_NormSpace_of_BoundedLinearOperators(X,Y) by
 CLOPBAN1:def 7;
   reconsider gg=g as Point of C_NormSpace_of_BoundedLinearOperators(Y,Z) by
@@ -95,7 +95,7 @@ A2: ||.gg.||*||.f.(v).|| <=||.gg.||*(||.ff.||*||.v.||) by CLOPBAN1:31
   end;
   set K = ||.gg.|| * ||.ff.||;
 A3: 0 <= ||.gg.|| & 0 <= ||.ff.|| by CLVECT_1:105;
-  then reconsider gf=g*f as bounded LinearOperator of X,Z by A1,Th1,
+  then reconsider gf=g*f as Lipschitzian LinearOperator of X,Z by A1,Th1,
 CLOPBAN1:def 6;
 A4: now
     let t be VECTOR of X;
@@ -118,8 +118,8 @@ end;
 
 definition
   let X be ComplexNormSpace;
-  let f,g be bounded LinearOperator of X,X;
-  redefine func g*f -> bounded LinearOperator of X,X;
+  let f,g be Lipschitzian LinearOperator of X,X;
+  redefine func g*f -> Lipschitzian LinearOperator of X,X;
   correctness by Th2;
 end;
 
@@ -148,7 +148,14 @@ definition
   func z*f -> Element of BoundedLinearOperators(X,X) equals
   Mult_(
   BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)).(z,f);
-  correctness;
+  correctness
+  proof
+    reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
+    Mult_(
+    BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)).(z,f)
+    is Element of BoundedLinearOperators(X,X);
+    hence thesis;
+  end;
 end;
 
 definition
@@ -184,7 +191,7 @@ A3: for f,g being Element of BoundedLinearOperators(X,X) holds it2.(f,
 end;
 
 theorem Th3:
-  for X be ComplexNormSpace holds id (the carrier of X) is bounded
+  for X be ComplexNormSpace holds id (the carrier of X) is Lipschitzian
   LinearOperator of X,X
 proof
   let X be ComplexNormSpace;
@@ -201,27 +208,26 @@ A2: now
   end;
   for v be VECTOR of X holds ||.id (the carrier of X).v.|| <=1* ||.v.|| by
 FUNCT_1:18;
-  hence thesis by A1,A2,CLOPBAN1:def 3,def 6,GRCAT_1:def 8;
+  hence thesis by A1,A2,CLOPBAN1:def 3,def 6,VECTSP_1:def 20;
 end;
 
 definition
   let X be ComplexNormSpace;
   func FuncUnit(X) -> Element of BoundedLinearOperators(X,X) equals
-  id (the
-  carrier of X);
+  id (the carrier of X);
   coherence
   proof
-    id (the carrier of X) is bounded LinearOperator of X,X by Th3;
+    id (the carrier of X) is Lipschitzian LinearOperator of X,X by Th3;
     hence thesis by CLOPBAN1:def 7;
   end;
 end;
 
 theorem Th4:
-  for X be ComplexNormSpace for f,g,h be bounded LinearOperator of
+  for X be ComplexNormSpace for f,g,h be Lipschitzian LinearOperator of
   X,X holds h = f*g iff for x be VECTOR of X holds h.x = f.(g.x)
 proof
   let X be ComplexNormSpace;
-  let f,g,h be bounded LinearOperator of X,X;
+  let f,g,h be Lipschitzian LinearOperator of X,X;
   now
     assume
 A1: for x being VECTOR of X holds h.x=f.(g.x);
@@ -236,11 +242,11 @@ A1: for x being VECTOR of X holds h.x=f.(g.x);
 end;
 
 theorem Th5:
-  for X be ComplexNormSpace for f,g,h be bounded LinearOperator of
+  for X be ComplexNormSpace for f,g,h be Lipschitzian LinearOperator of
   X,X holds f*(g*h) =(f*g)*h
 proof
   let X be ComplexNormSpace;
-  let f,g,h be bounded LinearOperator of X,X;
+  let f,g,h be Lipschitzian LinearOperator of X,X;
   now
     let x be VECTOR of X;
     thus (f*(g*h)).x = f.((g*h).x) by Th4
@@ -252,12 +258,13 @@ proof
 end;
 
 theorem Th6:
-  for X be ComplexNormSpace for f be bounded LinearOperator of X,X
+  for X be ComplexNormSpace for f be Lipschitzian LinearOperator of X,X
   holds f*(id the carrier of X) = f & (id the carrier of X )*f=f
 proof
   let X be ComplexNormSpace;
-  reconsider ii=(id the carrier of X) as bounded LinearOperator of X,X by Th3;
-  let f be bounded LinearOperator of X,X;
+  reconsider ii=(id the carrier of X) as Lipschitzian LinearOperator of X,X
+  by Th3;
+  let f be Lipschitzian LinearOperator of X,X;
 A1: now
     let x be VECTOR of X;
     thus ( (id the carrier of X)*f).x =( ii*f).x .=ii.(f.x) by Th4
@@ -290,7 +297,7 @@ theorem Th8:
 proof
   let X be ComplexNormSpace;
   let f be Element of BoundedLinearOperators(X,X);
-  (id the carrier of X) is bounded LinearOperator of X,X by Th3;
+  (id the carrier of X) is Lipschitzian LinearOperator of X,X by Th3;
   then (id the carrier of X) is Element of BoundedLinearOperators(X,X) by
 CLOPBAN1:def 7;
   then
@@ -330,7 +337,7 @@ A1: gg=mg & hh=mh by CLOPBAN1:def 9;
       then
 A2:   mgh.x=mg.x+mh.x by A1,CLOPBAN1:34;
       thus (mf*mgh).x=mf.(mgh.x) by Th4
-        .=mf.(mg.x) +mf.(mh.x) by A2,GRCAT_1:def 8
+        .=mf.(mg.x) +mf.(mh.x) by A2,VECTSP_1:def 20
         .=(mf*mg).x+mf.(mh.x) by Th4
         .=(mf*mg).x+ (mf*mh).x by Th4;
     end;
@@ -743,8 +750,8 @@ registration let X be ComplexNormSpace;
      thus (a*b)*x =(a*b)*f .=a*(b*f) by CLVECT_1:def 4
        .=a*(b*x);
     end;
-   let x,y be Element of A; let a be Complex;
-    reconsider xx=x,yy=y as Element of BLOP;
+   let x,y be Element of A; let a be Element of COMPLEX;
+   reconsider xx=x,yy=y as Element of BLOP;
    thus a*(x*y) = a*(xx*yy) by Def4
      .= (a*xx)*yy by Th12
      .=(a*x)*y by Def4;
@@ -828,7 +835,8 @@ proof
   let X be non trivial ComplexNormSpace;
   consider v be VECTOR of X such that
 A1: ||.v.|| = 1 by Th17;
-  reconsider ii=(id the carrier of X) as bounded LinearOperator of X,X by Th3;
+  reconsider ii=(id the carrier of X) as Lipschitzian LinearOperator of X,X
+  by Th3;
 A2: now
     let r be Real;
     assume r in PreNorms(ii);
@@ -983,7 +991,7 @@ end;
 
 theorem Th20:
   for X be ComplexNormSpace holds
-C_Normed_Algebra_of_BoundedLinearOperators(X) is
+  C_Normed_Algebra_of_BoundedLinearOperators(X) is
   reflexive discerning ComplexNormSpace-like Abelian
   add-associative right_zeroed right_complementable associative right_unital
   right-distributive vector-distributive scalar-distributive
@@ -1023,17 +1031,21 @@ A2: C is right_complementable
     let x be Element of C;
     thus thesis by Th19;
   end;
-A3: ( for a,b be Complex, v being VECTOR of RBLOP holds (a + b) * v = a * v
-+ b * v )& for a,b be Complex, v being VECTOR of RBLOP holds (a * b) * v = a *
-  (b * v) by Th19;
-  ( for x,y,z being Element of C for a,b be Complex holds x+y = y+x & (x+y
-)+z = x +(y+z) & x+(0.C) = x & x is right_complementable & (x*y)*z = x*(y*z) &
-x*(1.C) = x & (1.C)*x = x & x*(y+z) = x*y + x*z & (y+z)*x = y*x + z*x & a*(x*y)
-= (a*x) *y & (a*b)*(x*y)=(a*x)*(b*y) & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*
-  x & (a*b )*x = a*(b*x) & 1r*x=x)& for a be Complex, v,w being VECTOR of RBLOP
-  holds a * (v + w) = a * v + a * w by Th19;
-  hence thesis by A2,A3,CFUNCDOM:def 9,CLVECT_1:def 2,def 3,def 4,def 5
-,GROUP_1:def 3,RLVECT_1:def 2,def 3,def 4,VECTSP_1:def 2,def 4;
+A3: (for a,b be Complex, v being VECTOR of RBLOP holds
+    (a + b) * v = a * v + b * v) &
+    for a,b be Complex, v being VECTOR of RBLOP holds (a * b) * v = a * (b * v)
+    by Th19;
+  (for x,y,z being Element of C for a,b be Element of COMPLEX holds
+  x+y = y+x & (x+y)+z = x +(y+z) & x+(0.C) = x &
+  x is right_complementable & (x*y)*z = x*(y*z) &
+  x*(1.C) = x & (1.C)*x = x & x*(y+z) = x*y + x*z &
+  (y+z)*x = y*x + z*x & a*(x*y) = (a*x) *y & (a*b)*(x*y)=(a*x)*(b*y) &
+  a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x &
+  (a*b)*x = a*(b*x) & 1r*x=x) &
+  for a be Complex, v,w being VECTOR of RBLOP holds a * (v + w) = a * v + a * w
+  by Th19;
+  hence thesis by A2,A3,CFUNCDOM:def 9,CLVECT_1:def 2,def 3,def 4,def 5,
+  GROUP_1:def 3,RLVECT_1:def 2,def 3,def 4,VECTSP_1:def 2,def 4;
 end;
 
 registration
@@ -1205,8 +1217,8 @@ registration
   cluster Banach_Algebra-like for Normed_Complex_Algebra;
   existence
   proof
-    set X = the non trivial ComplexBanachSpace;
-    take C_Normed_Algebra_of_BoundedLinearOperators(X);
+    take C_Normed_Algebra_of_BoundedLinearOperators(
+    the non trivial ComplexBanachSpace);
     thus thesis;
   end;
 end;

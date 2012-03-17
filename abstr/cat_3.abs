@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received May 11, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,11 +16,11 @@ environ
 
  vocabularies XBOOLE_0, CAT_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCOP_1, STRUCT_0,
       FUNCT_6, RELAT_1, GRAPH_1, FUNCT_4, ARYTM_0, FVSUM_1, ALGSTR_0, WELLORD1,
-      TARSKI, CARD_1, CAT_3;
+      TARSKI, CARD_1, CAT_3, MONOID_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCOP_1,
       FUNCT_4, NUMBERS, FUNCT_2, STRUCT_0, GRAPH_1, CAT_1, OPPCAT_1;
  constructors PARTFUN1, OPPCAT_1, FUNCOP_1, RELSET_1;
- registrations XBOOLE_0, RELSET_1, STRUCT_0;
+ registrations XBOOLE_0, RELSET_1, STRUCT_0, CAT_1, OPPCAT_1;
  requirements SUBSET, BOOLE;
 
 
@@ -133,18 +133,18 @@ definition
   func F*f -> Function of I,the carrier' of C means
 :: CAT_3:def 5
 
-  for x st x in I holds it/.x = (F/.x)*f;
+  for x st x in I holds it/.x = (F/.x)(*)f;
   func f*F -> Function of I,the carrier' of C means
 :: CAT_3:def 6
 
-  for x st x in I holds it/.x = f*(F/.x);
+  for x st x in I holds it/.x = f(*)(F/.x);
 end;
 
 theorem :: CAT_3:14
-  x1 <> x2 implies ((x1,x2)-->(p1,p2))*f = (x1,x2)-->(p1*f,p2*f);
+  x1 <> x2 implies ((x1,x2)-->(p1,p2))*f = (x1,x2)-->(p1(*)f,p2(*)f);
 
 theorem :: CAT_3:15
-  x1 <> x2 implies f*((x1,x2)-->(p1,p2)) = (x1,x2)-->(f*p1,f*p2);
+  x1 <> x2 implies f*((x1,x2)-->(p1,p2)) = (x1,x2)-->(f(*)p1,f(*)p2);
 
 theorem :: CAT_3:16
   for F being Function of I,the carrier' of C st doms F = I-->cod
@@ -160,7 +160,7 @@ definition
   func F"*"G -> Function of I,the carrier' of C means
 :: CAT_3:def 7
 
-  for x st x in I holds it/.x = (F/.x)*(G/.x);
+  for x st x in I holds it/.x = (F/.x)(*)(G/.x);
 end;
 
 theorem :: CAT_3:18
@@ -169,7 +169,7 @@ theorem :: CAT_3:18
 
 theorem :: CAT_3:19
   x1 <> x2 implies ((x1,x2)-->(p1,p2))"*"((x1,x2)-->(q1,q2)) = (x1,x2)
-  -->(p1*q1,p2*q2);
+  -->(p1(*)q1,p2(*)q2);
 
 theorem :: CAT_3:20
   for F being Function of I,the carrier' of C holds F*f = F"*"(I-->f);
@@ -179,17 +179,22 @@ theorem :: CAT_3:21
 
 begin :: Retractions and Coretractions
 
+reserve f for Morphism of a,b,
+        g for Morphism of b,a;
+
 definition
-  let C;
-  let IT be Morphism of C;
+  let C,a,b;
+  let IT be Morphism of a,b;
   attr IT is retraction means
 :: CAT_3:def 8
 
-  ex g st cod g = dom IT & IT*g = id(cod IT);
+  Hom(a,b) <> {} & Hom(b,a) <> {} &
+  ex g st IT*g = id b;
   attr IT is coretraction means
 :: CAT_3:def 9
 
-  ex g st dom g = cod IT & g*IT = id(dom IT);
+  Hom(a,b) <> {} & Hom(b,a) <> {} &
+  ex g st g*IT = id a;
 end;
 
 theorem :: CAT_3:22
@@ -198,18 +203,21 @@ theorem :: CAT_3:22
 theorem :: CAT_3:23
   f is coretraction implies f is monic;
 
+reserve g for Morphism of b,c;
+
 theorem :: CAT_3:24
-  f is retraction & g is retraction & dom g = cod f implies g*f is retraction;
+  f is retraction & g is retraction implies g*f is retraction;
 
 theorem :: CAT_3:25
-  f is coretraction & g is coretraction & dom g = cod f implies g*f is
-  coretraction;
+  f is coretraction & g is coretraction implies g*f is coretraction;
 
 theorem :: CAT_3:26
-  dom g = cod f & g*f is retraction implies g is retraction;
+ Hom(a,b) <> {} & Hom(b,a) <> {} &
+  g*f is retraction implies g is retraction;
 
 theorem :: CAT_3:27
-  dom g = cod f & g*f is coretraction implies f is coretraction;
+ Hom(b,c) <> {} & Hom(c,b) <> {} &
+  g*f is coretraction implies f is coretraction;
 
 theorem :: CAT_3:28
   f is retraction & f is monic implies f is invertible;
@@ -220,11 +228,19 @@ theorem :: CAT_3:29
 theorem :: CAT_3:30
   f is invertible iff f is retraction & f is coretraction;
 
+definition let C,a,b such that
+ Hom(a,b) <> {};
+ let D; let T be Functor of C,D, f be Morphism of a,b;
+ func T/.f -> Morphism of T.a, T.b equals
+:: CAT_3:def 10
+  T.f;
+end;
+
 theorem :: CAT_3:31
-  for T being Functor of C,D st f is retraction holds T.f is retraction;
+  for T being Functor of C,D st f is retraction holds T/.f is retraction;
 
 theorem :: CAT_3:32
-  for T being Functor of C,D st f is coretraction holds T.f is coretraction;
+  for T being Functor of C,D st f is coretraction holds T/.f is coretraction;
 
 theorem :: CAT_3:33
   f is retraction iff f opp is coretraction;
@@ -234,12 +250,14 @@ theorem :: CAT_3:34
 
 begin :: carrier' determined by a terminal Object
 
+reserve f,g for Morphism of C;
+
 definition
   let C,a,b;
   assume
  b is terminal;
   func term(a,b) -> Morphism of a,b means
-:: CAT_3:def 10
+:: CAT_3:def 11
   not contradiction;
 end;
 
@@ -259,7 +277,7 @@ definition
   assume
  a is initial;
   func init(a,b) -> Morphism of a,b means
-:: CAT_3:def 11
+:: CAT_3:def 12
   not contradiction;
 end;
 
@@ -277,9 +295,8 @@ begin :: Products
 definition
   let C,a,I;
   mode Projections_family of a,I -> Function of I,the carrier' of C means
-:: CAT_3:def 12
-
-     doms it = I --> a;
+:: CAT_3:def 13
+ doms it = I --> a;
 end;
 
 theorem :: CAT_3:41
@@ -312,12 +329,14 @@ definition
   let C,a,I;
   let F be Function of I,the carrier' of C;
   pred a is_a_product_wrt F means
-:: CAT_3:def 13
+:: CAT_3:def 14
 
-  F is Projections_family of a,I & for
-b for F9 being Projections_family of b,I st cods F = cods F9 ex h st h in Hom(b
-,a) & for k st k in Hom(b,a) holds (for x st x in I holds (F/.x)*k = F9/.x) iff
-  h = k;
+  F is Projections_family of a,I &
+  for b for F9 being Projections_family of b,I
+    st cods F = cods F9
+   ex h st h in Hom(b,a) &
+    for k st k in Hom(b,a) holds
+     (for x st x in I holds (F/.x)(*)k = F9/.x) iff h = k;
 end;
 
 theorem :: CAT_3:48
@@ -326,17 +345,23 @@ theorem :: CAT_3:48
   cods F = cods F9 holds c,d are_isomorphic;
 
 theorem :: CAT_3:49
-  for F being Projections_family of c,I st c is_a_product_wrt F &
-for x1,x2 st x1 in I & x2 in I holds Hom(cod(F/.x1),cod(F/.x2)) <> {} for x st
-  x in I holds F/.x is retraction;
+  for F being Projections_family of c,I
+   st c is_a_product_wrt F &
+    for x1,x2 st x1 in I & x2 in I holds Hom(cod(F/.x1),cod(F/.x2)) <> {}
+  for x st x in I
+  for d being Object of C st d = cod(F/.x) & Hom(c,d) <> {}
+  for f being Morphism of c,d st f = F/.x
+    holds f is retraction;
 
 theorem :: CAT_3:50
   for F being Function of {},the carrier' of C holds a
   is_a_product_wrt F iff a is terminal;
 
 theorem :: CAT_3:51
-  for F being Projections_family of a,I st a is_a_product_wrt F &
-  dom f = b & cod f = a & f is invertible holds b is_a_product_wrt F*f;
+  for F being Projections_family of a,I st a is_a_product_wrt F
+  for f being Morphism of b,a st
+  dom f = b & cod f = a &
+  f is invertible holds b is_a_product_wrt F*f;
 
 theorem :: CAT_3:52
   a is_a_product_wrt y .--> id a;
@@ -348,11 +373,11 @@ theorem :: CAT_3:53
 definition
   let C,c,p1,p2;
   pred c is_a_product_wrt p1,p2 means
-:: CAT_3:def 14
+:: CAT_3:def 15
 
   dom p1 = c & dom p2 = c & for d,
 f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2) ex h st h in Hom(d,c) & for k st
-  k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k;
+  k in Hom(d,c) holds p1(*)k = f & p2(*)k = g iff h = k;
 end;
 
 theorem :: CAT_3:54
@@ -371,16 +396,20 @@ theorem :: CAT_3:56
   & cod p2 = cod q2 implies c,d are_isomorphic;
 
 theorem :: CAT_3:57
-  c is_a_product_wrt p1,p2 & Hom(cod p1,cod p2) <> {} & Hom(cod p2,cod
-  p1 ) <> {} implies p1 is retraction & p2 is retraction;
+  for p1 being Morphism of c,a, p2 being Morphism of c,b st
+    Hom(c,a) <> {} & Hom(c,b) <> {} &
+    c is_a_product_wrt p1,p2 &
+    Hom(a,b) <> {} & Hom(b,a) <> {}
+ holds p1 is retraction & p2 is retraction;
 
 theorem :: CAT_3:58
-  c is_a_product_wrt p1,p2 & h in Hom(c,c) & p1*h = p1 & p2*h = p2
+  c is_a_product_wrt p1,p2 & h in Hom(c,c) & p1(*)h = p1 & p2(*)h = p2
   implies h = id c;
 
 theorem :: CAT_3:59
-  c is_a_product_wrt p1,p2 & dom f = d & cod f = c & f is invertible
-  implies d is_a_product_wrt p1*f,p2*f;
+ for f being Morphism of d,c
+  st c is_a_product_wrt p1,p2 & dom f = d & cod f = c & f is invertible
+ holds d is_a_product_wrt p1(*)f,p2(*)f;
 
 theorem :: CAT_3:60
   c is_a_product_wrt p1,p2 & cod p2 is terminal implies c,cod p1 are_isomorphic
@@ -395,7 +424,7 @@ begin :: Coproducts
 definition
   let C,c,I;
   mode Injections_family of c,I -> Function of I,the carrier' of C means
-:: CAT_3:def 15
+:: CAT_3:def 16
 
      cods it = I --> c;
 end;
@@ -438,11 +467,12 @@ definition
   let C,c,I;
   let F be Function of I,the carrier' of C;
   pred c is_a_coproduct_wrt F means
-:: CAT_3:def 16
+:: CAT_3:def 17
 
   F is Injections_family of c,I &
   for d for F9 being Injections_family of d,I st doms F = doms F9 ex h st h in
-Hom(c,d) & for k st k in Hom(c,d) holds (for x st x in I holds k*(F/.x) = F9/.x
+Hom(c,d) & for k st k in Hom(c,d) holds (for x st x in I
+     holds k(*)(F/.x) = F9/.x
   ) iff h = k;
 end;
 
@@ -457,10 +487,14 @@ theorem :: CAT_3:72
 
 theorem :: CAT_3:73
   for F being Injections_family of c,I st c is_a_coproduct_wrt F &
-for x1,x2 st x1 in I & x2 in I holds Hom(dom(F/.x1),dom(F/.x2)) <> {} for x st
-  x in I holds F/.x is coretraction;
+for x1,x2 st x1 in I & x2 in I holds Hom(dom(F/.x1),dom(F/.x2)) <> {}
+  for x st x in I
+  for d being Object of C st d = dom(F/.x) & Hom(d,c) <> {}
+  for f being Morphism of d,c st f = F/.x
+    holds f is coretraction;
 
 theorem :: CAT_3:74
+  for f being Morphism of a,b
   for F being Injections_family of a,I st a is_a_coproduct_wrt F &
   dom f = a & cod f = b & f is invertible holds b is_a_coproduct_wrt f*F;
 
@@ -478,11 +512,11 @@ theorem :: CAT_3:77
 definition
   let C,c,i1,i2;
   pred c is_a_coproduct_wrt i1,i2 means
-:: CAT_3:def 17
+:: CAT_3:def 18
 
   cod i1 = c & cod i2 = c & for
 d,f,g st f in Hom(dom i1,d) & g in Hom(dom i2,d) ex h st h in Hom(c,d) & for k
-  st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k;
+  st k in Hom(c,d) holds k(*)i1 = f & k(*)i2 = g iff h = k;
 end;
 
 theorem :: CAT_3:78
@@ -504,16 +538,20 @@ Morphism of b,d ex h being Morphism of c,d st for k being Morphism of c,d holds
   k*i1 = f & k*i2 = g iff h = k;
 
 theorem :: CAT_3:82
-  c is_a_coproduct_wrt i1,i2 & Hom(dom i1,dom i2) <> {} & Hom(dom i2,dom
-  i1) <> {} implies i1 is coretraction & i2 is coretraction;
+  for i1 being Morphism of a,c, i2 being Morphism of b,c
+   st Hom(a,c) <> {} & Hom(b,c) <> {}
+  holds
+  c is_a_coproduct_wrt i1,i2 & Hom(a,b) <> {} & Hom(b,a) <> {}
+  implies i1 is coretraction & i2 is coretraction;
 
 theorem :: CAT_3:83
-  c is_a_coproduct_wrt i1,i2 & h in Hom(c,c) & h*i1 = i1 & h*i2 =
+  c is_a_coproduct_wrt i1,i2 & h in Hom(c,c) & h(*)i1 = i1 & h(*)i2 =
   i2 implies h = id c;
 
 theorem :: CAT_3:84
+ for f being Morphism of c,d holds
   c is_a_coproduct_wrt i1,i2 & dom f = c & cod f = d & f is invertible
-  implies d is_a_coproduct_wrt f*i1,f*i2;
+  implies d is_a_coproduct_wrt f(*)i1,f(*)i2;
 
 theorem :: CAT_3:85
   c is_a_coproduct_wrt i1,i2 & dom i2 is initial implies dom i1,c

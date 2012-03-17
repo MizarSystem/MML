@@ -7,6 +7,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -36,7 +37,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="20">
+<Func kind="K" nr="41">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -54,7 +55,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="32">
+<Func kind="K" nr="30">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -72,7 +73,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="32">
+<Func kind="K" nr="30">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -90,7 +91,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="32">
+<Func kind="K" nr="30">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

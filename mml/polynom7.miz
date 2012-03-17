@@ -2,7 +2,7 @@
 ::  by Christoph Schwarzweller
 ::
 :: Received November 28, 2001
-:: Copyright (c) 2001-2011 Association of Mizar Users
+:: Copyright (c) 2001-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,18 +25,18 @@ environ
       XXREAL_0, DOMAIN_1, STRUCT_0, ALGSTR_0, FUNCT_4, NAT_1, ALGSTR_1,
       RLVECT_1, ORDERS_1, FINSEQ_1, FUNCOP_1, GROUP_1, QUOFIELD, GRCAT_1,
       VECTSP_2, POLYNOM2, VECTSP_1, GROUP_6, PRE_POLY;
- constructors RFUNCT_3, REALSET2, GRCAT_1, GROUP_6, TRIANG_1, QUOFIELD,
-      POLYNOM2, ALGSTR_1, RELSET_1, FUNCT_7, FVSUM_1, VFUNCT_1;
+ constructors REALSET2, GRCAT_1, GROUP_6, TRIANG_1, QUOFIELD, POLYNOM2,
+      ALGSTR_1, RELSET_1, FUNCT_7, FVSUM_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, FINSET_1, XREAL_0,
       STRUCT_0, VECTSP_1, ALGSTR_1, POLYNOM1, POLYNOM2, ALGSTR_0, CARD_1,
-      SUBSET_1, PRE_POLY, ZFMISC_1, FUNCT_1;
+      SUBSET_1, PRE_POLY, FUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCOP_1, STRUCT_0;
  theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, RELAT_1, ZFMISC_1, VECTSP_1,
-      POLYNOM1, STRUCT_0, QUOFIELD, FUNCT_7, FUNCT_4, FUNCOP_1, GRCAT_1, BINOM,
+      POLYNOM1, STRUCT_0, QUOFIELD, FUNCT_7, FUNCT_4, FUNCOP_1, BINOM,
       FINSEQ_3, RLVECT_1, VECTSP_2, GROUP_1, NAT_1, FINSEQ_2, FINSEQ_5,
-      MATRLIN, POLYNOM2, XBOOLE_0, REALSET1, XREAL_1, GROUP_6, XXREAL_0,
-      ORDINAL1, PARTFUN1, PRE_POLY;
+      MATRLIN, POLYNOM2, XBOOLE_0, XREAL_1, GROUP_6, XXREAL_0, ORDINAL1,
+      PARTFUN1, PRE_POLY, XTUPLE_0;
  schemes FUNCT_2;
 
 begin
@@ -57,7 +57,7 @@ definition
   let X be set, R be non empty ZeroStr, p be Series of X,R;
 
   attr p is non-zero means
-  :Def2:
+  :Def1:
   p <> 0_(X,R);
 end;
 
@@ -80,7 +80,7 @@ A1: not a in {0.R} by XBOOLE_0:def 5;
 A2: p.(EmptyBag X) = a by FUNCT_7:31;
     a <> 0.R by A1,TARSKI:def 1;
     then p <> 0_(X,R) by A2,POLYNOM1:22;
-    hence thesis by Def2;
+    hence thesis by Def1;
   end;
 end;
 
@@ -102,11 +102,11 @@ A2: now
 A3:   u in Support p;
       then
    u is Element of Bags n;
-      then aa: u is bag of n;
+      then A4: u is bag of n;
       now
         assume u <> EmptyBag n;
         then p.u = (0_(n,R)).u by FUNCT_7:32
-          .= 0.R by aa,POLYNOM1:22;
+          .= 0.R by A4,POLYNOM1:22;
         hence contradiction by A3,POLYNOM1:def 3;
       end;
       hence u in {EmptyBag n} by TARSKI:def 1;
@@ -128,7 +128,7 @@ A6:   u = EmptyBag n by TARSKI:def 1;
     take p;
     a <> 0.R by A1,TARSKI:def 1;
     then p <> 0_(n,R) by A5,POLYNOM1:22;
-    hence thesis by Def2;
+    hence thesis by Def1;
   end;
 end;
 
@@ -227,7 +227,7 @@ end;
 definition
   let X be set, b be bag of X;
   attr b is univariate means
-  :Def3:
+  :Def2:
   ex u being Element of X st support b = {u};
 end;
 
@@ -271,7 +271,7 @@ A7: b.x = (x.-->1).x by A2,FUNCT_4:13
       hence thesis by A7,PRE_POLY:def 7;
     end;
     then support b = {x} by A4,TARSKI:1;
-    hence thesis by Def3;
+    hence thesis by Def2;
   end;
 end;
 
@@ -283,7 +283,7 @@ registration
     let b be bag of X;
     assume b is univariate;
     then consider x being Element of X such that
-A1: support b = {x} by Def3;
+A1: support b = {x} by Def2;
     x in support b by A1,TARSKI:def 1;
     then b.x <> 0 by PRE_POLY:def 7;
     then b.x <> (EmptyBag X).x by PRE_POLY:52;
@@ -331,7 +331,7 @@ A3: for u being set holds u in p implies u in [:{EmptyBag n},{a}:]
 A4: u in p;
     then consider p1,p2 being set such that
 A5: u = [p1,p2] by RELAT_1:def 1;
-A6: p1 in dom p by A4,A5,RELAT_1:def 4;
+A6: p1 in dom p by A4,A5,XTUPLE_0:def 12;
     then reconsider p1 as bag of n by A2;
 A7: p1 = {} by A1;
     then p2 = p.{} by A4,A5,A6,FUNCT_1:def 2
@@ -593,7 +593,7 @@ A32: (p+q).{} = p.i + q.i by POLYNOM1:15
     hence thesis by A23,A25,A28,A32,POLYNOM1:def 10;
   end;
   then
-A33: f is additive by GRCAT_1:def 8;
+A33: f is additive by VECTSP_1:def 20;
   p.i = p.(EmptyBag n) by A3
     .= (0_(n,L)+*(EmptyBag n .--> 1_L)).(EmptyBag n) by A11,A1,FUNCT_7:def 3
     .= (EmptyBag n .--> 1_L).(EmptyBag n) by A2,FUNCT_4:13
@@ -700,7 +700,7 @@ begin :: Monomials
 definition
   let X be set, L be non empty ZeroStr, p be Series of X,L;
   attr p is monomial-like means
-  :Def4:
+  :Def3:
   ex b being bag of X st for b9 being bag of X st b9 <> b holds p.b9 = 0.L;
 end;
 
@@ -712,7 +712,7 @@ registration
     set p = 0_(X,L);
     take p;
     for b9 being bag of X st b9 <> EmptyBag X holds p.b9 = 0.L by POLYNOM1:22;
-    hence thesis by Def4;
+    hence thesis by Def3;
   end;
 end;
 
@@ -729,7 +729,7 @@ registration
     let s be Series of X,L;
     assume s is monomial-like;
     then consider b being bag of X such that
-A1: for b9 being bag of X st b9 <> b holds s.b9 = 0.L by Def4;
+A1: for b9 being bag of X st b9 <> b holds s.b9 = 0.L by Def3;
     per cases;
     suppose
 A2:   s.b = 0.L;
@@ -789,12 +789,12 @@ A4:   p.b9 <> 0.L;
       b9 in Support p by A4,POLYNOM1:def 3;
       hence thesis by A2,A3,TARSKI:def 1;
     end;
-    hence p is Monomial of n,L by Def4;
+    hence p is Monomial of n,L by Def3;
   end;
 A5: now
     assume p is Monomial of n,L;
     then consider b being bag of n such that
-A6: for b9 being bag of n st b9 <> b holds p.b9 = 0.L by Def4;
+A6: for b9 being bag of n st b9 <> b holds p.b9 = 0.L by Def3;
     now
       per cases;
       case
@@ -849,7 +849,7 @@ A12: Support p = {};
       then c in Support p by POLYNOM1:def 3;
       hence thesis by A12;
     end;
-    hence p is Monomial of n,L by Def4;
+    hence p is Monomial of n,L by Def3;
   end;
   hence thesis by A1,A5;
 end;
@@ -886,7 +886,7 @@ A7:     for u being set holds u in Support m implies u in {b}
 A8:       u in Support m;
           assume not u in {b};
           then
-A9:       not u in dom(b .--> a) by FUNCOP_1:13;
+A9:       not u in dom(b .--> a);
           reconsider u as bag of X by A8;
           m.u = (0_(X,L)).u by A4,A9,FUNCT_4:11
             .= 0.L by POLYNOM1:22;
@@ -907,7 +907,7 @@ A10:    a = 0.L;
           m.c <> 0.L by POLYNOM1:def 3;
           then not c in {b} by A5,A10,TARSKI:def 1;
           then
-A11:      not c in dom(b .--> a) by FUNCOP_1:13;
+A11:      not c in dom(b .--> a);
           reconsider c as bag of X;
           m.c = (0_(X,L)).c by A4,A11,FUNCT_4:11
             .= 0.L by POLYNOM1:22;
@@ -923,12 +923,12 @@ end;
 definition
   let X be set, L be non empty ZeroStr, m be Monomial of X,L;
   func term(m) -> bag of X means
-  :Def6:
+  :Def5:
   m.it <> 0.L or Support m = {} & it = EmptyBag X;
   existence
   proof
     consider b being bag of X such that
-A1: for b9 being bag of X st b9 <> b holds m.b9 = 0.L by Def4;
+A1: for b9 being bag of X st b9 <> b holds m.b9 = 0.L by Def3;
     now
       per cases;
       case
@@ -956,7 +956,7 @@ A2:     m.b = 0.L;
     assume
 A3: m.b1 <> 0.L or Support m = {} & b1 = EmptyBag X;
     consider b being bag of X such that
-A4: for b9 being bag of X st b9 <> b holds m.b9 = 0.L by Def4;
+A4: for b9 being bag of X st b9 <> b holds m.b9 = 0.L by Def3;
     assume
 A5: m.b2 <> 0.L or Support m = {} & b2 = EmptyBag X;
     now
@@ -1005,7 +1005,7 @@ proof
 A1: term(m) is Element of Bags X by PRE_POLY:def 12;
   assume
 A2: Support(m) <> {};
-  then m.term(m) <> 0.L by Def6;
+  then m.term(m) <> 0.L by Def5;
   then
 A3: term(m) in Support(m) by A1,POLYNOM1:def 3;
   ex b being bag of X st Support(m) = {b} by A2,Th6;
@@ -1026,23 +1026,23 @@ A2: dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 7
     .= Bags n by FUNCOP_1:13;
   then
 A3: m = 0_(n,L)+*(b .--> 0.L) by A1,FUNCT_7:def 3;
-A4: dom(b .--> 0.L) = {b} by FUNCOP_1:13;
+ dom(b .--> 0.L) = {b} by FUNCOP_1:13;
   then
-A5: b in dom(b .--> 0.L) by TARSKI:def 1;
-A6: m.b = (0_(n,L)+*(b .--> 0.L)).b by A2,A1,FUNCT_7:def 3
-    .= (b .--> 0.L).b by A5,FUNCT_4:13
+A4: b in dom(b .--> 0.L) by TARSKI:def 1;
+A5: m.b = (0_(n,L)+*(b .--> 0.L)).b by A2,A1,FUNCT_7:def 3
+    .= (b .--> 0.L).b by A4,FUNCT_4:13
     .= 0.L by FUNCOP_1:72;
-A7: now
+A6: now
     let b9 be bag of n;
     now
       per cases;
       case
         b9 = b;
-        hence m.b9 = 0.L by A6;
+        hence m.b9 = 0.L by A5;
       end;
       case
         b9 <> b;
-        then not b9 in dom(b .--> 0.L) by A4,TARSKI:def 1;
+        then not b9 in dom(b .--> 0.L) by TARSKI:def 1;
         hence m.b9 = (0_(n,L)).b9 by A3,FUNCT_4:11
           .= 0.L by POLYNOM1:22;
       end;
@@ -1050,8 +1050,8 @@ A7: now
     hence m.b9 = 0.L;
   end;
   hence coefficient(Monom(0.L,b)) = 0.L;
-  (Monom(0.L,b)).(term(Monom(0.L,b))) = 0.L by A7;
-  hence thesis by Def6;
+  (Monom(0.L,b)).(term(Monom(0.L,b))) = 0.L by A6;
+  hence thesis by Def5;
 end;
 
 theorem Th9:
@@ -1076,7 +1076,7 @@ A3: m.b = (0_(n,L)+*(b .--> a)).b by A1,FUNCT_7:def 3
   per cases;
   suppose
     m.b <> 0.L;
-    hence thesis by A3,Def6;
+    hence thesis by A3,Def5;
   end;
   suppose
     m.b = 0.L;
@@ -1104,7 +1104,7 @@ A2: b in dom(b .--> a) by TARSKI:def 1;
     .= (b .--> a).b by A2,FUNCT_4:13
     .= a by FUNCOP_1:72;
   then m.b <> 0.L;
-  hence thesis by Def6;
+  hence thesis by Def5;
 end;
 
 theorem
@@ -1126,14 +1126,14 @@ A5: m = 0_(X,L) by A2,Th1;
     set m9 = Monom(coefficient(m),term(m));
 A6: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
       .= Bags X by FUNCOP_1:13;
-A7: dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:13;
+ dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:13;
     then
-A8: EmptyBag X in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
-A9: term(m) = EmptyBag X by A2,Def6;
+A7: EmptyBag X in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
+A8: term(m) = EmptyBag X by A2,Def5;
     then
-A10: m9.EmptyBag X = (0_(X,L)+*(EmptyBag X .--> 0.L)).EmptyBag X by A3,A6,
+A9: m9.EmptyBag X = (0_(X,L)+*(EmptyBag X .--> 0.L)).EmptyBag X by A3,A6,
 FUNCT_7:def 3
-      .= (EmptyBag X .--> 0.L).EmptyBag X by A8,FUNCT_4:13
+      .= (EmptyBag X .--> 0.L).EmptyBag X by A7,FUNCT_4:13
       .= 0.L by FUNCOP_1:72;
     now
       let x be set;
@@ -1143,14 +1143,14 @@ FUNCT_7:def 3
         per cases;
         case
           x9 = EmptyBag X;
-          hence m9.x9 = 0.L by A10;
+          hence m9.x9 = 0.L by A9;
         end;
         case
           x <> EmptyBag X;
           then
-A11:      not x9 in dom(EmptyBag X .--> 0.L) by A7,TARSKI:def 1;
-          m9.x9 = (0_(X,L)+*(EmptyBag X .--> 0.L)).x9 by A9,A3,A6,FUNCT_7:def 3
-            .= 0_(X,L).x9 by A11,FUNCT_4:11;
+A10:      not x9 in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
+          m9.x9 = (0_(X,L)+*(EmptyBag X .--> 0.L)).x9 by A8,A3,A6,FUNCT_7:def 3
+            .= 0_(X,L).x9 by A10,FUNCT_4:11;
           hence m9.x9 = 0.L by POLYNOM1:22;
         end;
       end;
@@ -1161,51 +1161,50 @@ A11:      not x9 in dom(EmptyBag X .--> 0.L) by A7,TARSKI:def 1;
   suppose
     ex b being bag of X st Support m = {b};
     then consider b being bag of X such that
-A12: Support m = {b};
+A11: Support m = {b};
     set a = m.b;
     dom(b .--> a) = {b} by FUNCOP_1:13;
     then
-A13: b in dom(b .--> a) by TARSKI:def 1;
+A12: b in dom(b .--> a) by TARSKI:def 1;
     set m9 = Monom(coefficient(m),term(m));
-A14: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+A13: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
       .= Bags X by FUNCOP_1:13;
-A15: b in Support m by A12,TARSKI:def 1;
+A14: b in Support m by A11,TARSKI:def 1;
     then a <> 0.L by POLYNOM1:def 3;
     then
-A16: term(m) = b by Def6;
-A17: now
+A15: term(m) = b by Def5;
+A16: now
       let u be set;
       assume
-A18:  u in Support(Monom(coefficient(m),term(m)));
+A17:  u in Support(Monom(coefficient(m),term(m)));
       then reconsider u9 = u as Element of Bags X;
       now
-A19:    dom(b .--> a) = {b} by FUNCOP_1:13;
         assume u <> b;
         then
-A20:    not u9 in dom(b .--> a) by A19,TARSKI:def 1;
-        b in dom 0_(X,L) by A14,PRE_POLY:def 12;
-        then m9.u9 = (0_(X,L)+*(b .--> a)).u9 by A16,FUNCT_7:def 3
-          .= 0_(X,L).u9 by A20,FUNCT_4:11;
+A18:    not u9 in dom(b .--> a) by TARSKI:def 1;
+        b in dom 0_(X,L) by A13,PRE_POLY:def 12;
+        then m9.u9 = (0_(X,L)+*(b .--> a)).u9 by A15,FUNCT_7:def 3
+          .= 0_(X,L).u9 by A18,FUNCT_4:11;
         hence m9.u9 = 0.L by POLYNOM1:22;
       end;
-      hence u in {b} by A18,POLYNOM1:def 3,TARSKI:def 1;
+      hence u in {b} by A17,POLYNOM1:def 3,TARSKI:def 1;
     end;
     b in Bags X by PRE_POLY:def 12;
     then
-A21: m9.b = (0_(X,L)+*(b .--> a)).b by A16,A14,FUNCT_7:def 3
-      .= (b .--> a).b by A13,FUNCT_4:13
+A19: m9.b = (0_(X,L)+*(b .--> a)).b by A15,A13,FUNCT_7:def 3
+      .= (b .--> a).b by A12,FUNCT_4:13
       .= a by FUNCOP_1:72;
     now
       let u be set;
       assume u in {b};
       then
-A22:  u = b by TARSKI:def 1;
-      m9.b <> 0.L by A15,A21,POLYNOM1:def 3;
-      hence u in Support(Monom(coefficient(m),term(m))) by A15,A22,
+A20:  u = b by TARSKI:def 1;
+      m9.b <> 0.L by A14,A19,POLYNOM1:def 3;
+      hence u in Support(Monom(coefficient(m),term(m))) by A14,A20,
 POLYNOM1:def 3;
     end;
     then
-A23: Support(Monom(coefficient(m),term(m))) = {b} by A17,TARSKI:1;
+A21: Support(Monom(coefficient(m),term(m))) = {b} by A16,TARSKI:1;
     now
       let x be set;
       assume x in Bags X;
@@ -1214,15 +1213,15 @@ A23: Support(Monom(coefficient(m),term(m))) = {b} by A17,TARSKI:1;
         per cases;
         case
           x = b;
-          hence Monom(coefficient(m),term(m)).x9 = m.x9 by A21;
+          hence Monom(coefficient(m),term(m)).x9 = m.x9 by A19;
         end;
         case
-A24:      x <> b;
+A22:      x <> b;
           then
-A25:      not x in Support(Monom(coefficient(m),term(m))) by A23,TARSKI:def 1;
-          not x in Support m by A12,A24,TARSKI:def 1;
+A23:      not x in Support(Monom(coefficient(m),term(m))) by A21,TARSKI:def 1;
+          not x in Support m by A11,A22,TARSKI:def 1;
           hence m.x9 = 0.L by POLYNOM1:def 3
-            .= Monom(coefficient(m),term(m)).x9 by A25,POLYNOM1:def 3;
+            .= Monom(coefficient(m),term(m)).x9 by A23,POLYNOM1:def 3;
         end;
       end;
       hence m.x = Monom(coefficient(m),term(m)).x;
@@ -1247,7 +1246,7 @@ A3: for i being Element of NAT st 1 <= i & i <= len y holds y/.i = (m *
   SgmX(BagOrder n, Support m))/.i * eval(((SgmX(BagOrder n, Support m))/.i)@,x)
   by POLYNOM2:def 4;
   consider b being bag of n such that
-A4: for b9 being bag of n st b9 <> b holds m.b9 = 0.L by Def4;
+A4: for b9 being bag of n st b9 <> b holds m.b9 = 0.L by Def3;
   now
     per cases;
     case
@@ -1293,7 +1292,7 @@ A15:  sg.1 in rng sg by FUNCT_1:3;
 A16:  (m * sg)/.1 = (m * sg).1 by PARTFUN1:def 6
         .= m.(sg.1) by A14,FUNCT_1:13
         .= m.b by A12,A15,TARSKI:def 1
-        .= coefficient(m) by A5,Def6;
+        .= coefficient(m) by A5,Def5;
 A17:  for u being set holds u in dom sg implies u in {1}
       proof
         let u be set;
@@ -1339,7 +1338,7 @@ A27:  len sg = 1 by A24,FINSEQ_1:def 3;
         .= (m * sg)/.1 * eval(b,x) by A26,POLYNOM2:def 3;
       then y = <* coefficient(m) * eval(b,x) *> by A1,A27,A16,FINSEQ_1:40;
       hence eval(m,x) = coefficient(m) * eval(b,x) by A2,RLVECT_1:44
-        .= coefficient(m) * eval(term(m),x) by A5,Def6;
+        .= coefficient(m) * eval(term(m),x) by A5,Def5;
     end;
     case
 A28:  m.b = 0.L;
@@ -1351,7 +1350,7 @@ A29:  Support m = {}
         m.c <> 0.L by POLYNOM1:def 3;
         hence thesis by A4,A28;
       end;
-      then term(m) = EmptyBag n & m.(EmptyBag n) = 0.L by Def6,POLYNOM1:def 3;
+      then term(m) = EmptyBag n & m.(EmptyBag n) = 0.L by Def5,POLYNOM1:def 3;
       then
 A30:  coefficient(m) * eval(term(m),x) = 0.L by VECTSP_1:7;
       consider y being FinSequence of the carrier of L such that
@@ -1432,7 +1431,7 @@ begin :: Constant Polynomials
 definition
   let X be set, L be non empty ZeroStr, p be Series of X,L;
   attr p is Constant means
-  :Def8:
+  :Def7:
   for b being bag of X st b <> EmptyBag X holds p.b = 0.L;
 end;
 
@@ -1444,7 +1443,7 @@ registration
     set c = 0_(X,L);
     take c;
     for b being bag of X st b <> EmptyBag X holds c.b = 0.L by POLYNOM1:22;
-    hence thesis by Def8;
+    hence thesis by Def7;
   end;
 end;
 
@@ -1460,8 +1459,8 @@ registration
   proof
     let p be Series of X,L;
     assume p is Constant;
-    then for b being bag of X st b <> EmptyBag X holds p.b = 0.L by Def8;
-    hence thesis by Def4;
+    then for b being bag of X st b <> EmptyBag X holds p.b = 0.L by Def7;
+    hence thesis by Def3;
   end;
 end;
 
@@ -1481,7 +1480,7 @@ A4:   u in Support p;
       then reconsider u as Element of Bags n;
       reconsider u9 = u as bag of n;
       p.u9 <> 0.L by A4,POLYNOM1:def 3;
-      then u9 = EmptyBag n by A2,Def8;
+      then u9 = EmptyBag n by A2,Def7;
       hence thesis by TARSKI:def 1;
     end;
     thus Support p = {EmptyBag n} or p = 0_(n,L)
@@ -1546,7 +1545,7 @@ A15: p = 0_(n,L) or Support p = {EmptyBag n};
       p = 0_(n,L);
       then for b being bag of n st b <> EmptyBag n holds p.b = 0.L by
 POLYNOM1:22;
-      hence p is ConstPoly of n,L by Def8;
+      hence p is ConstPoly of n,L by Def7;
     end;
     suppose
 A16:  Support p = {EmptyBag n};
@@ -1559,7 +1558,7 @@ A17:    b <> EmptyBag n;
         not b in Support p by A16,A17,TARSKI:def 1;
         hence thesis by POLYNOM1:def 3;
       end;
-      hence p is ConstPoly of n,L by Def8;
+      hence p is ConstPoly of n,L by Def7;
     end;
   end;
   hence thesis by A1;
@@ -1572,7 +1571,7 @@ registration
   proof
     for b being bag of X st b <> EmptyBag X holds (0_(X,L)).b = 0.L by
 POLYNOM1:22;
-    hence thesis by Def8;
+    hence thesis by Def7;
   end;
 end;
 
@@ -1583,7 +1582,7 @@ registration
   proof
     for b being bag of X st b <> EmptyBag X holds (1_(X,L)).b = 0.L by
 POLYNOM1:25;
-    hence thesis by Def8;
+    hence thesis by Def7;
   end;
 end;
 
@@ -1596,7 +1595,7 @@ A1: now
     per cases;
     case
       c.eb <> 0.L;
-      hence term(c) = EmptyBag n by Def6;
+      hence term(c) = EmptyBag n by Def5;
     end;
     case
 A2:   c.eb = 0.L;
@@ -1608,9 +1607,9 @@ A3:     Support c <> {};
         then u in Support c;
         then reconsider u as Element of Bags n;
         c.u <> 0.L by A3,POLYNOM1:def 3;
-        hence thesis by A2,Def8;
+        hence thesis by A2,Def7;
       end;
-      hence term(c) = EmptyBag n by Def6;
+      hence term(c) = EmptyBag n by Def5;
     end;
   end;
   hence term(c) = EmptyBag n;
@@ -1650,17 +1649,16 @@ registration
     reconsider O9 as Series of X,L;
     now
       let b be bag of X;
-A1:   dom(EmptyBag X .--> a) = {EmptyBag X} by FUNCOP_1:13;
       dom(Z) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
         .= Bags X by FUNCOP_1:13;
       then
-A2:   O9 = 0_(X,L)+*(EmptyBag X .--> a) by FUNCT_7:def 3;
+A1:   O9 = 0_(X,L)+*(EmptyBag X .--> a) by FUNCT_7:def 3;
       assume b <> EmptyBag X;
-      then not b in dom(EmptyBag X .--> a) by A1,TARSKI:def 1;
-      hence (O9).b = (0_(X,L)).b by A2,FUNCT_4:11
+      then not b in dom(EmptyBag X .--> a) by TARSKI:def 1;
+      hence (O9).b = (0_(X,L)).b by A1,FUNCT_4:11
         .= 0.L by POLYNOM1:22;
     end;
-    hence thesis by Def8;
+    hence thesis by Def7;
   end;
 end;
 
@@ -1680,21 +1678,21 @@ A2: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
       .= Bags X by FUNCOP_1:13;
     then
 A3: m = 0_(X,L)+*(EmptyBag X .--> 0.L) by FUNCT_7:def 3;
-A4: dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:13;
+ dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:13;
     then
-A5: EmptyBag X in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
-A6: m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> 0.L)).(EmptyBag X) by A2,
+A4: EmptyBag X in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
+A5: m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> 0.L)).(EmptyBag X) by A2,
 FUNCT_7:def 3
-      .= (EmptyBag X .--> 0.L).(EmptyBag X) by A5,FUNCT_4:13
+      .= (EmptyBag X .--> 0.L).(EmptyBag X) by A4,FUNCT_4:13
       .= 0.L by FUNCOP_1:72;
     per cases;
     suppose
       x9 = EmptyBag X;
-      hence o1.x = o2.x by A6,POLYNOM1:22;
+      hence o1.x = o2.x by A5,POLYNOM1:22;
     end;
     suppose
       x9 <> EmptyBag X;
-      then not x9 in dom(EmptyBag X .--> 0.L) by A4,TARSKI:def 1;
+      then not x9 in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
       hence o1.x = o2.x by A3,FUNCT_4:11;
     end;
   end;
@@ -1728,36 +1726,35 @@ A4:       dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
             .= Bags X by FUNCOP_1:13;
           then
 A5:       q = 0_(X,L)+*(EmptyBag X .--> p.(EmptyBag X)) by FUNCT_7:def 3;
-A6:       dom(EmptyBag X .--> p.(EmptyBag X)) = {EmptyBag X} by FUNCOP_1:13;
+       dom(EmptyBag X .--> p.(EmptyBag X)) = {EmptyBag X} by FUNCOP_1:13;
           then
-A7:       EmptyBag X in dom(EmptyBag X .--> p.(EmptyBag X)) by TARSKI:def 1;
-A8:       q.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> p.(EmptyBag X))).(
+A6:       EmptyBag X in dom(EmptyBag X .--> p.(EmptyBag X)) by TARSKI:def 1;
+A7:       q.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> p.(EmptyBag X))).(
           EmptyBag X) by A4,FUNCT_7:def 3
-            .= (EmptyBag X .--> p.(EmptyBag X)).(EmptyBag X) by A7,FUNCT_4:13
+            .= (EmptyBag X .--> p.(EmptyBag X)).(EmptyBag X) by A6,FUNCT_4:13
             .= p.(EmptyBag X) by FUNCOP_1:72;
           now
             per cases;
             case
               x9 = EmptyBag X;
-              hence p.x = q.x by A8;
+              hence p.x = q.x by A7;
             end;
             case
-A9:           x9 <> EmptyBag X;
-A10:          x9 is Element of Bags X by PRE_POLY:def 12;
-              not x9 in Support p by A2,A9,TARSKI:def 1;
+A8:           x9 <> EmptyBag X;
+A9:          x9 is Element of Bags X by PRE_POLY:def 12;
+              not x9 in Support p by A2,A8,TARSKI:def 1;
               then
-A11:          p.x9 = 0.L by A10,POLYNOM1:def 3;
-              not x9 in dom(EmptyBag X .--> p.(EmptyBag X)) by A6,A9,
-TARSKI:def 1;
+A10:          p.x9 = 0.L by A9,POLYNOM1:def 3;
+              not x9 in dom(EmptyBag X .--> p.(EmptyBag X)) by A8,TARSKI:def 1;
               then q.x9 = (0_(X,L)).x9 by A5,FUNCT_4:11;
-              hence p.x = q.x by A11,POLYNOM1:22;
+              hence p.x = q.x by A10,POLYNOM1:22;
             end;
           end;
           hence p.x = q.x;
         end;
-A12:    Bags X = dom q by FUNCT_2:def 1;
+A11:    Bags X = dom q by FUNCT_2:def 1;
         q = p.(EmptyBag X) |(X,L) & Bags X = dom p by FUNCT_2:def 1;
-        hence ex a being Element of L st p = a |(X,L) by A12,A3,FUNCT_1:2;
+        hence ex a being Element of L st p = a |(X,L) by A11,A3,FUNCT_1:2;
       end;
     end;
     hence ex a being Element of L st p = a |(X,L);
@@ -1803,24 +1800,24 @@ A2: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
       .= Bags X by FUNCOP_1:13;
     then
 A3: m = 0_(X,L)+*(EmptyBag X .--> 1.L) by FUNCT_7:def 3;
-A4: dom(EmptyBag X .--> 1.L) = {EmptyBag X} by FUNCOP_1:13;
+ dom(EmptyBag X .--> 1.L) = {EmptyBag X} by FUNCOP_1:13;
     then
-A5: EmptyBag X in dom(EmptyBag X .--> 1.L) by TARSKI:def 1;
-A6: m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> 1.L)).(EmptyBag X) by A2,
+A4: EmptyBag X in dom(EmptyBag X .--> 1.L) by TARSKI:def 1;
+A5: m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> 1.L)).(EmptyBag X) by A2,
 FUNCT_7:def 3
-      .= (EmptyBag X .--> 1.L).(EmptyBag X) by A5,FUNCT_4:13
+      .= (EmptyBag X .--> 1.L).(EmptyBag X) by A4,FUNCT_4:13
       .= 1.L by FUNCOP_1:72;
     per cases;
     suppose
       x9 = EmptyBag X;
-      hence o1.x = o2.x by A6,POLYNOM1:25;
+      hence o1.x = o2.x by A5,POLYNOM1:25;
     end;
     suppose
-A7:   x9 <> EmptyBag X;
-      then not x9 in dom(EmptyBag X .--> 1.L) by A4,TARSKI:def 1;
+A6:   x9 <> EmptyBag X;
+      then not x9 in dom(EmptyBag X .--> 1.L) by TARSKI:def 1;
       then m.x9 = (0_(X,L)).x9 by A3,FUNCT_4:11
         .= 0.L by POLYNOM1:22
-        .= o2.x9 by A7,POLYNOM1:25;
+        .= o2.x9 by A6,POLYNOM1:25;
       hence o1.x = o2.x;
     end;
   end;
@@ -1916,7 +1913,7 @@ A5:     Support c <> {};
         then reconsider u as Element of Bags n;
         c.u <> 0.L by A5,POLYNOM1:def 3;
         then u <> EmptyBag n by A4,Lm2;
-        then c.u = 0.L by Def8;
+        then c.u = 0.L by Def7;
         hence thesis by A5,POLYNOM1:def 3;
       end;
       then reconsider Sc = Support c as empty Subset of Bags n;
@@ -1938,7 +1935,7 @@ A9:     u in Support c;
 A10:    not u in {EmptyBag n};
         reconsider u as Element of Bags n by A9;
         u <> EmptyBag n by A10,TARSKI:def 1;
-        then c.u = 0.L by Def8;
+        then c.u = 0.L by Def7;
         hence thesis by A9,POLYNOM1:def 3;
       end;
       for u being set holds u in {EmptyBag n} implies u in Support c
@@ -2038,7 +2035,7 @@ definition
   let X be set, L be non empty multLoopStr_0, p be Series of X,L, a be Element
   of L;
   func a * p -> Series of X,L means
-  :Def10:
+  :Def9:
   for b being bag of X holds it.b = a * p.b;
   existence
   proof
@@ -2067,7 +2064,7 @@ A3: for b being bag of X holds p2.b = a * p.b;
     hence p1 = p2 by FUNCT_2:63;
   end;
   func p * a -> Series of X,L means
-  :Def11:
+  :Def10:
   for b being bag of X holds it.b = p.b * a;
   existence
   proof
@@ -2110,7 +2107,7 @@ registration
 A1:   u in Support ap;
       then reconsider u9 = u as Element of Bags X;
       ap.u <> 0.L by A1,POLYNOM1:def 3;
-      then a * p.u9 <> 0.L by Def10;
+      then a * p.u9 <> 0.L by Def9;
       then p.u9 <> 0.L by BINOM:2;
       hence u in Support p by POLYNOM1:def 3;
     end;
@@ -2128,7 +2125,7 @@ A1:   u in Support ap;
 A2:   u in Support ap;
       then reconsider u9 = u as Element of Bags X;
       ap.u <> 0.L by A2,POLYNOM1:def 3;
-      then p.u9 * a <> 0.L by Def11;
+      then p.u9 * a <> 0.L by Def10;
       then p.u9 <> 0.L by BINOM:1;
       hence u in Support p by POLYNOM1:def 3;
     end;
@@ -2147,8 +2144,8 @@ proof
   now
     let b be Element of Bags n;
     reconsider b9 = b as bag of n;
-    thus (a * p).b = a * p.b9 by Def10
-      .= (p * a).b by Def11;
+    thus (a * p).b = a * p.b9 by Def9
+      .= (p * a).b by Def10;
   end;
   hence thesis by FUNCT_2:63;
 end;
@@ -2258,7 +2255,7 @@ A30:  b2 = b & b1 = EmptyBag n by A27,FINSEQ_1:77;
     end;
     b is Element of Bags n by PRE_POLY:def 12;
     then (O*'p).b = a * p.b by A2
-      .= (a * p).b by Def10;
+      .= (a * p).b by Def9;
     hence thesis;
   end;
   Bags n = dom(a * p) & Bags n = dom(a |(n,L) *' p) by FUNCT_2:def 1;
@@ -2367,7 +2364,7 @@ A30:  b1 = b & b2 = EmptyBag n by A27,FINSEQ_1:77;
     end;
     b is Element of Bags n by PRE_POLY:def 12;
     then (p*'O).b = p.b * a by A2
-      .= (p * a).b by Def11;
+      .= (p * a).b by Def10;
     hence thesis;
   end;
   Bags n = dom(p * a) & Bags n = dom(p *' (a |(n,L))) by FUNCT_2:def 1;
@@ -2445,7 +2442,7 @@ A7: for i being Element of NAT st 1 <= i & i <= len z holds z/.i = (p *
 A8: a = 0.L;
 A9: now
       let b be bag of n;
-      thus (a*p).b = a * p.b by Def10
+      thus (a*p).b = a * p.b by Def9
         .= 0.L by A8,BINOM:1;
     end;
     now
@@ -2471,7 +2468,7 @@ A11: for u being set holds u in Support(a*p) implies u in Support p
 A12:  u in Support(a*p);
       then reconsider u9 = u as Element of Bags n;
       (a*p).u <> 0.L by A12,POLYNOM1:def 3;
-      then a * p.u9 <> 0.L by Def10;
+      then a * p.u9 <> 0.L by Def9;
       then p.u9 <> 0.L by BINOM:2;
       hence thesis by POLYNOM1:def 3;
     end;
@@ -2483,7 +2480,7 @@ A14:  u in Support p;
       then reconsider u9 = u as Element of Bags n;
       p.u <> 0.L by A14,POLYNOM1:def 3;
       then a * p.u9 <> 0.L by A10,VECTSP_2:def 1;
-      then (a * p).u9 <> 0.L by Def10;
+      then (a * p).u9 <> 0.L by Def9;
       hence thesis by POLYNOM1:def 3;
     end;
     then
@@ -2563,7 +2560,7 @@ A29:  a * z/.k = a * ((p * SgmX(BagOrder n, Support p))/.k * eval(((SgmX(
         .= (a * (p * SgmX(BagOrder n, Support(a*p)))/.k) * eval(((SgmX(
       BagOrder n, Support(a*p)))/.k)@,x) by A17,GROUP_1:def 3;
 A30:  (a*p).(SgmX(BagOrder n, Support(a*p))/.k) = (a*p).c
-        .= a * (p * SgmX(BagOrder n, Support(a*p)))/.k by A28,Def10;
+        .= a * (p * SgmX(BagOrder n, Support(a*p)))/.k by A28,Def9;
       (SgmX(BagOrder n, Support(a*p))).k = (SgmX(BagOrder n, Support(a*p)
       ))/.k by A24,A25,A27,PARTFUN1:def 6;
       then k in dom r by A24,A25,A27,A18,FUNCT_1:11;
@@ -2621,7 +2618,7 @@ A6: for i being Element of NAT st 1 <= i & i <= len z holds z/.i = (p *
 A7:   a = 0.L;
 A8:   now
         let b be bag of n;
-        thus (p*a).b = p.b * a by Def11
+        thus (p*a).b = p.b * a by Def10
           .= 0.L by A7,BINOM:2;
       end;
 A9:   now
@@ -2648,7 +2645,7 @@ A11:  for u being set holds u in Support(p*a) implies u in Support p
 A12:    u in Support(p*a);
         then reconsider u9 = u as Element of Bags n;
         (p*a).u <> 0.L by A12,POLYNOM1:def 3;
-        then p.u9 * a <> 0.L by Def11;
+        then p.u9 * a <> 0.L by Def10;
         then p.u9 <> 0.L by BINOM:1;
         hence thesis by POLYNOM1:def 3;
       end;
@@ -2660,7 +2657,7 @@ A14:    u in Support p;
         then reconsider u9 = u as Element of Bags n;
         p.u <> 0.L by A14,POLYNOM1:def 3;
         then p.u9 * a <> 0.L by A10,VECTSP_2:def 1;
-        then (p *a).u9 <> 0.L by Def11;
+        then (p *a).u9 <> 0.L by Def10;
         hence thesis by POLYNOM1:def 3;
       end;
       then
@@ -2744,7 +2741,7 @@ A30:    z/.k * a = (p * SgmX(BagOrder n, Support(p*a)))/.k * (eval(((SgmX
           .= ((p * SgmX(BagOrder n, Support(p*a)))/.k * a) * eval(((SgmX(
         BagOrder n, Support(p*a)))/.k)@,x) by GROUP_1:def 3;
 A31:    (p*a).(SgmX(BagOrder n, Support(p*a))/.k) = (p*a).c
-          .= (p * SgmX(BagOrder n, Support(p*a)))/.k * a by A29,Def11;
+          .= (p * SgmX(BagOrder n, Support(p*a)))/.k * a by A29,Def10;
         (SgmX(BagOrder n, Support(p*a))).k = (SgmX(BagOrder n, Support(p*
         a)))/.k by A25,A26,A28,PARTFUN1:def 6;
         then k in dom r by A25,A26,A28,A19,FUNCT_1:11;

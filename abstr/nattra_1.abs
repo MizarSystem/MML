@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received May 15, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,13 +16,14 @@ environ
 
  vocabularies XBOOLE_0, FUNCT_1, SUBSET_1, RELAT_1, ZFMISC_1, PARTFUN1,
       FUNCT_4, REALSET1, TARSKI, CAT_1, GRAPH_1, STRUCT_0, CAT_2, MCART_1,
-      PZFMISC1, ALGSTR_0, FUNCT_2, FINSET_1, CARD_1, NATTRA_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, REALSET1, FINSET_1,
-      PARTFUN1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCT_4, STRUCT_0, CARD_1,
-      GRAPH_1, CAT_1, CAT_2;
- constructors PARTFUN1, REALSET1, CAT_2, FUNCOP_1, RELSET_1;
+      PZFMISC1, ALGSTR_0, FUNCT_2, FINSET_1, CARD_1, NATTRA_1, MONOID_0,
+      RELAT_2, BINOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, MCART_1, REALSET1,
+      FINSET_1, PARTFUN1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCT_4,
+      STRUCT_0, CARD_1, GRAPH_1, CAT_1, CAT_2, CAT_3;
+ constructors PARTFUN1, REALSET1, CAT_2, FUNCOP_1, RELSET_1, CAT_3, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, CAT_1, CAT_2, STRUCT_0,
-      ZFMISC_1, RELAT_1, FINSET_1;
+      ZFMISC_1, RELAT_1, FINSET_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
 
 
@@ -62,10 +63,9 @@ reserve A,B,C for Category,
   F,F1,F2,F3 for Functor of A,B,
   G for Functor of B, C;
 
-theorem :: NATTRA_1:3
-  for a being Object of A, m being Morphism of a,a holds m in Hom(a ,a);
-
 reserve m,o for set;
+
+canceled;
 
 theorem :: NATTRA_1:4
   for f,g being Morphism of 1Cat(o,m) holds f = g;
@@ -82,16 +82,17 @@ theorem :: NATTRA_1:7
 theorem :: NATTRA_1:8
   for C being Subcategory of A holds the Source of C = (the Source
 of A)|the carrier' of C & the Target of C = (the Target of A)|the carrier' of C
-& the Comp of C = (the Comp of A)||the carrier' of C & the Id of C = (the Id of
-  A)|the carrier of C;
+& the Comp of C = (the Comp of A)||the carrier' of C;
 
 theorem :: NATTRA_1:9
-  for O being non empty Subset of the carrier of A, M being non
-empty Subset of the carrier' of A for DOM,COD being Function of M,O st DOM = (
-the Source of A) |M & COD = (the Target of A)|M for COMP being PartFunc of [:M,
-M qua non empty set:], M st COMP = (the Comp of A)||M for ID being Function of
-O,M st ID = (the Id of A)|O holds CatStr(#O,M,DOM,COD,COMP,ID#) is Subcategory
-  of A;
+  for O being non empty Subset of the carrier of A,
+      M being non empty Subset of the carrier' of A st
+  for o being Element of A st o in O holds id o in M
+  for DOM,COD being Function of M,O st DOM = (the Source of A) |M &
+     COD = (the Target of A)|M
+  for COMP being PartFunc of [:M,M qua non empty set:], M
+   st COMP = (the Comp of A)||M
+   holds CatStr(#O,M,DOM,COD,COMP#) is Subcategory of A;
 
 theorem :: NATTRA_1:10
   for C being strict Category, A being strict Subcategory of C st
@@ -101,41 +102,37 @@ theorem :: NATTRA_1:10
 begin :: Application of a functor to a morphism
 
 definition
-  let A,B,F;
-  let a,b be Object of A such that
- Hom(a,b) <> {};
-  let f be Morphism of a,b;
-  func F.f -> Morphism of F.a, F.b equals
-:: NATTRA_1:def 1
-
-  F.f;
+  canceled;
 end;
 
 theorem :: NATTRA_1:11
   for a,b being Object of A st Hom(a,b) <> {} for f being Morphism of a,
-  b holds (G*F).f = G.(F.f);
+  b holds (G*F)/.f = G/.(F/.f);
 
-:: The following theorems are analogues of theorems from CAT_1.MIZ, with
+:: The following theorems are analogues of theorems from CAT_1, with
 :: the new concept of the application of a functor to a morphism
 
 theorem :: NATTRA_1:12
-  for F1,F2 being Functor of A,B st for a,b being Object of A st Hom(a,b
-  ) <> {} for f being Morphism of a,b holds F1.f = F2.f holds F1 = F2;
+  for F1,F2 being Functor of A,B
+   st for a,b being Object of A st Hom(a,b) <> {}
+       for f being Morphism of a,b holds F1.f = F2.f
+  holds F1 = F2;
 
 theorem :: NATTRA_1:13
   for a,b,c being Object of A st Hom(a,b) <> {} & Hom(b,c) <> {}
-  for f being Morphism of a,b, g being Morphism of b,c holds F.(g*f) = F.g*F.f;
+  for f being Morphism of a,b, g being Morphism of b,c
+   holds F/.(g*f) = (F/.g)*(F/.f);
 
 theorem :: NATTRA_1:14
-  for c being Object of A, d being Object of B st F.(id c) = id d holds F.c = d
-;
+  for c being Object of A, d being Object of B st F/.(id c) = id d
+   holds F.c = d;
 
 theorem :: NATTRA_1:15
-  for a being Object of A holds F.id a = id (F.a);
+  for a being Object of A holds F/.id a = id (F.a);
 
 theorem :: NATTRA_1:16
   for a,b being Object of A st Hom(a,b) <> {} for f being Morphism of a,
-  b holds (id A).f = f;
+  b holds (id A)/.f = f;
 
 theorem :: NATTRA_1:17
   for a,b,c,d being Object of A st Hom(a,b) meets Hom(c,d) holds a = c & b = d;
@@ -226,7 +223,7 @@ definition
 
   F1 is_transformable_to
 F2 & ex t being transformation of F1,F2 st for a,b being Object of A st Hom(a,b
-  ) <> {} for f being Morphism of a,b holds t.b*F1.f = F2.f*t.a;
+  ) <> {} for f being Morphism of a,b holds t.b*F1/.f = F2/.f*t.a;
   reflexivity;
 end;
 
@@ -242,7 +239,7 @@ definition
 :: NATTRA_1:def 8
 
 for a,b being Object of A st Hom(a,b) <> {} for f being Morphism of a,b holds
-    it.b*F1.f = F2.f*it.a;
+    it.b*F1/.f = F2/.f*it.a;
 end;
 
 definition
@@ -384,7 +381,6 @@ theorem :: NATTRA_1:32
   F1 is_naturally_transformable_to F2 iff [[F1,F2],t1] in NatTrans (A,B);
 
 definition
-
   let A,B;
   func Functors(A,B) -> strict Category means
 :: NATTRA_1:def 17
@@ -394,7 +390,8 @@ definition
 holds dom f = f`1`1 & cod f = f`1`2) & (for f,g being Morphism of it st dom g =
 cod f holds [g,f] in dom the Comp of it) & (for f,g being Morphism of it st [g,
 f] in dom (the Comp of it) ex F,F1,F2,t,t1 st f = [[F,F1],t] & g = [[F1,F2],t1]
-& (the Comp of it).[g,f] = [[F,F2],t1`*`t]) & for a being Object of it, F st F
+& (the Comp of it).[g,f] = [[F,F2],t1`*`t])
+& for a being Object of it, F st F
   = a holds id a = [[F,F],id F];
 end;
 
@@ -415,7 +412,7 @@ theorem :: NATTRA_1:35
 
 theorem :: NATTRA_1:36
   for f,g being Morphism of Functors(A,B) st f = [[F,F1],t] & g = [[F1,
-  F2],t1] holds g*f = [[F,F2],t1`*`t];
+  F2],t1] holds g(*)f = [[F,F2],t1`*`t];
 
 begin ::  Discrete categories
 

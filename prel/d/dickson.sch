@@ -9,19 +9,19 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="45"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="45"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -31,7 +31,7 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="45"/>
 </Typ>
 <Func kind="F" nr="3">
 <Var nr="1"/>

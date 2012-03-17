@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -23,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="45"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COLLSP" nr="2">
@@ -32,8 +33,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COLLSP" nr="3">
@@ -42,10 +43,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COLLSP" nr="4">
@@ -54,11 +55,11 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 </Registrations>

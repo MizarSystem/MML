@@ -10,6 +10,7 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -32,6 +33,7 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="DICKSON"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -47,20 +49,20 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="45"/>
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="14">
-<Func kind="K" nr="319">
+<Func kind="K" nr="334">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="340">
+<Func kind="K" nr="355">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="129"/>
-<Adjective nr="142"/>
+<Adjective nr="136"/>
+<Adjective nr="149"/>
 </Cluster>
 </FCluster>
 </Registrations>

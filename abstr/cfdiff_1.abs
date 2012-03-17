@@ -2,7 +2,7 @@
 ::  by Chanapat Pacharapokin , Hiroshi Yamazaki , Yasunari Shidama and Yatsuka Nakamura
 ::
 :: Received November 4, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -27,7 +27,8 @@ environ
       FINSEQ_4, SEQM_3, PARTFUN2, SQUARE_1, COMSEQ_2, COMSEQ_3, CFCONT_1,
       XXREAL_0, CFUNCT_1, RELSET_1;
  registrations FUNCT_1, RELSET_1, FUNCT_2, MEMBERED, NUMBERS, ORDINAL1,
-      XREAL_0, XXREAL_0, COMSEQ_2, NAT_1, VALUED_0, SEQ_4, VALUED_1, FUNCOP_1;
+      XREAL_0, XXREAL_0, COMSEQ_2, NAT_1, VALUED_0, SEQ_4, VALUED_1, FUNCOP_1,
+      XCMPLX_0, SEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -37,18 +38,18 @@ reserve k, k1, n, n1, m for Element of NAT;
 reserve X, y for set;
 reserve p for Real;
 reserve r for real number;
-reserve a, a1, a2, b, b1, b2, x, x0, z, z0 for Complex;
+reserve a, a1, a2, b, b1, b2, x, x0, z, z0 for Element of COMPLEX;
 reserve s1, s3, seq, seq1 for Complex_Sequence;
 reserve Y for Subset of COMPLEX;
 reserve f, f1, f2 for PartFunc of COMPLEX,COMPLEX;
 reserve Nseq for increasing sequence of NAT;
 
 definition
+  let x be real number;
   let IT be Complex_Sequence;
-  attr IT is convergent_to_0 means
+  attr IT is x-convergent means
 :: CFDIFF_1:def 1
-
-  IT is non-zero convergent & lim IT = 0;
+  IT is convergent & lim IT = x;
 end;
 
 theorem :: CFDIFF_1:1
@@ -76,15 +77,15 @@ theorem :: CFDIFF_1:3
 
 registration
   let r be positive real number;
-  cluster InvShift(r) -> convergent_to_0;
+  cluster InvShift(r) -> non-zero 0-convergent;
 end;
 
 registration
-  cluster convergent_to_0 for Complex_Sequence;
+  cluster 0-convergent non-zero for Complex_Sequence;
 end;
 
 registration
-  cluster convergent_to_0 -> non-zero convergent for Complex_Sequence;
+  cluster 0-convergent non-zero -> convergent for Complex_Sequence;
 end;
 
 registration
@@ -97,23 +98,23 @@ theorem :: CFDIFF_1:4
 theorem :: CFDIFF_1:5
   for n holds (seq*Nseq).n = seq.(Nseq.n);
 
-reserve h for convergent_to_0 Complex_Sequence;
+reserve h for 0-convergent non-zero Complex_Sequence;
 reserve c for constant Complex_Sequence;
 
 definition
   let IT be PartFunc of COMPLEX,COMPLEX;
-  attr IT is REST-like means
+  attr IT is RestFunc-like means
 :: CFDIFF_1:def 3
 
   for h holds (h")(#)(IT/*h) is convergent & lim ((h")(#)(IT/*h)) = 0;
 end;
 
 registration
-  cluster total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
 end;
 
 definition
-  mode C_REST is total REST-like PartFunc of COMPLEX,COMPLEX;
+  mode C_RestFunc is total RestFunc-like PartFunc of COMPLEX,COMPLEX;
 end;
 
 definition
@@ -129,11 +130,11 @@ registration
 end;
 
 definition
-  mode C_LINEAR is total linear PartFunc of COMPLEX,COMPLEX;
+  mode C_LinearFunc is total linear PartFunc of COMPLEX,COMPLEX;
 end;
 
-reserve R, R1, R2 for C_REST;
-reserve L, L1, L2 for C_LINEAR;
+reserve R, R1, R2 for C_RestFunc;
+reserve L, L1, L2 for C_LinearFunc;
 
 registration
   let L1,L2;
@@ -148,25 +149,25 @@ end;
 
 registration
   let R1,R2;
-  cluster R1+R2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
-  cluster R1-R2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
-  cluster R1(#)R2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R1+R2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R1-R2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R1(#)R2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
 end;
 
 registration
   let a,R;
-  cluster a(#)R -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster a(#)R -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
 end;
 
 registration
   let L1,L2;
-  cluster L1(#)L2 -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster L1(#)L2 -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
 end;
 
 registration
   let R,L;
-  cluster R(#)L -> total REST-like for PartFunc of COMPLEX,COMPLEX;
-  cluster L(#)R -> total REST-like for PartFunc of COMPLEX,COMPLEX;
+  cluster R(#)L -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
+  cluster L(#)R -> total RestFunc-like for PartFunc of COMPLEX,COMPLEX;
 end;
 
 definition
@@ -174,12 +175,12 @@ definition
   mode Neighbourhood of z0 -> Subset of COMPLEX means
 :: CFDIFF_1:def 5
 
-    ex g be Real st 0 < g & {y where y is Complex : |.y-z0.| < g} c= it;
+  ex g be Real st 0 < g & {y where y is Complex : |.y-z0.| < g} c= it;
 end;
 
 theorem :: CFDIFF_1:6
-  for g be real number st 0 < g holds {y where y is Complex : |.y-
-  z0.| < g} is Neighbourhood of z0;
+  for g be real number st 0 < g holds
+  {y where y is Complex : |.y-z0.| < g} is Neighbourhood of z0;
 
 theorem :: CFDIFF_1:7
   for N being Neighbourhood of z0 holds z0 in N;
@@ -190,9 +191,8 @@ definition
   pred f is_differentiable_in z0 means
 :: CFDIFF_1:def 6
 
-  ex N being Neighbourhood of z0
-st N c= dom f & ex L,R st for z be Complex st z in N holds f/.z-f/.z0 = L/.(z-
-  z0)+R/.(z-z0);
+  ex N being Neighbourhood of z0 st N c= dom f &
+  ex L,R st for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
 end;
 
 definition
@@ -200,11 +200,11 @@ definition
   let z0 be Complex;
   assume
  f is_differentiable_in z0;
-  func diff(f,z0) -> Complex means
+  func diff(f,z0) -> Element of COMPLEX means
 :: CFDIFF_1:def 7
 
-  ex N being Neighbourhood of z0 st N
-c= dom f & ex L,R st it = L/.1r & for z be Complex st z in N holds f/.z-f/.z0 =
+  ex N being Neighbourhood of z0 st N c= dom f &
+  ex L,R st it = L/.1r & for z st z in N holds f/.z-f/.z0 =
   L/.(z-z0)+R/.(z-z0);
 end;
 
@@ -302,7 +302,7 @@ end;
 
 registration
   let h,n;
-  cluster h^\n -> convergent_to_0 for Complex_Sequence;
+  cluster h^\n -> 0-convergent for Complex_Sequence;
 end;
 
 theorem :: CFDIFF_1:18
@@ -374,7 +374,7 @@ theorem :: CFDIFF_1:33
   is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = a;
 
 theorem :: CFDIFF_1:34
-  for x0 be Complex holds f is_differentiable_in x0 implies f
+  for x0 be Element of COMPLEX holds f is_differentiable_in x0 implies f
   is_continuous_in x0;
 
 theorem :: CFDIFF_1:35
@@ -383,8 +383,7 @@ theorem :: CFDIFF_1:35
 theorem :: CFDIFF_1:36
   f is_differentiable_on X & Z c= X implies f is_differentiable_on Z;
 
-theorem :: CFDIFF_1:37
-  seq is convergent implies |.seq.| is convergent;
+canceled;
 
 theorem :: CFDIFF_1:38
   f is_differentiable_in x0 implies ex R st R/.0c = 0c & R is_continuous_in 0c;

@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received December 29, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,8 +23,8 @@ environ
       REAL_1, NAT_1, RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, MONOID_0, RELSET_1,
       PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, SETWISEO, FINSET_1, FUNCT_3,
       FINSEQ_2, LATTICE2, FUNCT_6, DOMAIN_1, ALGSTR_0;
- constructors BINOP_1, DOMAIN_1, FUNCT_3, SETWISEO, XXREAL_0, REAL_1, NAT_1,
-      BINOP_2, FUNCT_5, FUNCT_6, LATTICE2, MONOID_0, RELSET_1;
+ constructors BINOP_1, DOMAIN_1, FUNCT_3, SETWISEO, REAL_1, BINOP_2, FUNCT_5,
+      FUNCT_6, LATTICE2, MONOID_0, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FINSET_1, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, MONOID_0, CARD_1,
       RELSET_1;
@@ -140,13 +140,13 @@ definition
 end;
 
 theorem
-  for f,g being Function, X being set holds (f|X)*g = f*(X|g)
+  for f,g being Function, X being set holds (f|X)*g = f*(X|`g)
 proof
   let f,g be Function, X be set;
 A1: dom (f|X) = dom f /\ X by RELAT_1:61;
-A2: dom ((f|X)*g) = dom (f*(X|g))
+A2: dom ((f|X)*g) = dom (f*(X|`g))
   proof
-    thus dom ((f|X)*g) c= dom (f*(X|g))
+    thus dom ((f|X)*g) c= dom (f*(X|`g))
     proof
       let x;
       assume
@@ -158,18 +158,18 @@ A5:   g.x in dom (f|X) by A3,FUNCT_1:11;
 A6:   g.x in dom f by A1,XBOOLE_0:def 4;
       g.x in X by A1,A5,XBOOLE_0:def 4;
       then
-A7:   x in dom (X|g) by A4,FUNCT_1:53;
-      then g.x = (X|g).x by FUNCT_1:53;
+A7:   x in dom (X|`g) by A4,FUNCT_1:53;
+      then g.x = (X|`g).x by FUNCT_1:53;
       hence thesis by A6,A7,FUNCT_1:11;
     end;
     let x;
     assume
-A8: x in dom (f*(X|g));
+A8: x in dom (f*(X|`g));
     then
-A9: x in dom (X|g) by FUNCT_1:11;
+A9: x in dom (X|`g) by FUNCT_1:11;
     then
 A10: x in dom g by FUNCT_1:53;
-    (X|g).x in dom f by A8,FUNCT_1:11;
+    (X|`g).x in dom f by A8,FUNCT_1:11;
     then
 A11: g.x in dom f by A9,FUNCT_1:53;
     g.x in X by A9,FUNCT_1:53;
@@ -183,8 +183,8 @@ A12: x in dom ((f|X)*g);
     then ((f|X)*g).x = (f|X).(g.x) & g.x in dom (f|X) by FUNCT_1:11,12;
     then
 A13: ((f|X)*g).x = f.(g.x) by FUNCT_1:47;
-    (f*(X|g)).x = f.((X|g).x) & x in dom (X|g) by A2,A12,FUNCT_1:11,12;
-    hence ((f|X)*g).x = (f*(X|g)).x by A13,FUNCT_1:53;
+    (f*(X|`g)).x = f.((X|`g).x) & x in dom (X|`g) by A2,A12,FUNCT_1:11,12;
+    hence ((f|X)*g).x = (f*(X|`g)).x by A13,FUNCT_1:53;
   end;
   hence thesis by A2,FUNCT_1:2;
 end;
@@ -278,7 +278,7 @@ reserve A for set,
   o,o9 for BinOp of D,
   f,g,h for Function of A,D;
 
-theorem Th4:
+theorem Th3:
   o is commutative implies o.:(f,g) = o.:(g,f)
 proof
 A1: dom (o.:(f,g)) = A by FUNCT_2:def 1;
@@ -299,7 +299,7 @@ A5: x in A;
   hence thesis by A1,A3,FUNCT_1:2;
 end;
 
-theorem Th5:
+theorem Th4:
   o is associative implies o.:(o.:(f,g),h) = o.:(f,o.:(g,h))
 proof
 A1: dom (o.:(f,g)) = A by FUNCT_2:def 1;
@@ -327,7 +327,7 @@ A9: h.x in rng h by A5,FUNCT_1:def 3;
   hence thesis by A4,A6,FUNCT_1:2;
 end;
 
-theorem Th6:
+theorem Th5:
   a is_a_unity_wrt o implies o[;](a,f) = f & o[:](f,a) = f
 proof
   assume
@@ -357,7 +357,7 @@ A6: x in A;
   hence thesis by A5,A2,FUNCT_1:2;
 end;
 
-theorem Th7:
+theorem Th6:
   o is idempotent implies o.:(f,f) = f
 proof
 A1: dom (o.:(f,f)) = A by FUNCT_2:def 1;
@@ -375,7 +375,7 @@ A4: x in A;
   hence thesis by A1,A3,FUNCT_1:2;
 end;
 
-theorem Th8:
+theorem Th7:
   o is commutative implies (o,D).:A is commutative
 proof
   assume
@@ -383,11 +383,11 @@ A1: o is commutative;
   set h = (o,D).:A;
   let f,g be Element of Funcs(A,D);
   thus h.(f,g) = o.:(f, g) by Def2
-    .= o.:(g, f) by A1,Th4
+    .= o.:(g, f) by A1,Th3
     .= h.(g,f) by Def2;
 end;
 
-theorem Th9:
+theorem Th8:
   o is associative implies (o,D).:A is associative
 proof
   assume
@@ -396,12 +396,12 @@ A1: o is associative;
   let f,g,h be Element of Funcs(A,D);
   thus F.(F.(f,g),h) = F.(o.:(f,g),h) by Def2
     .= o.:(o.:(f,g),h) by Def2
-    .= o.:(f,o.:(g,h)) by A1,Th5
+    .= o.:(f,o.:(g,h)) by A1,Th4
     .= F.(f,o.:(g,h)) by Def2
     .= F.(f,F.(g,h)) by Def2;
 end;
 
-theorem Th10:
+theorem Th9:
   a is_a_unity_wrt o implies A --> a is_a_unity_wrt (o,D).:A
 proof
   set e = A --> a;
@@ -413,38 +413,38 @@ A1: a is_a_unity_wrt o;
 A2: dom f = A by FUNCT_2:def 1;
     thus F.(e,f) = o.:(e,f) by Def2
       .= o[;](a,f) by A2,FUNCOP_1:31
-      .= f by A1,Th6;
+      .= f by A1,Th5;
     thus F.(f,e) = o.:(f,e) by Def2
       .= o[:](f,a) by A2,FUNCOP_1:26
-      .= f by A1,Th6;
+      .= f by A1,Th5;
   end;
   hence thesis by BINOP_1:3;
 end;
 
-theorem Th11:
+theorem Th10:
   o is having_a_unity implies the_unity_wrt (o,D).:A = A -->
   the_unity_wrt o & (o,D).:A is having_a_unity
 proof
   given a such that
 A1: a is_a_unity_wrt o;
-  a = the_unity_wrt o & A --> a is_a_unity_wrt (o,D).:A by A1,Th10,
+  a = the_unity_wrt o & A --> a is_a_unity_wrt (o,D).:A by A1,Th9,
 BINOP_1:def 8;
   hence the_unity_wrt (o,D).:A = A --> the_unity_wrt o by BINOP_1:def 8;
   take A --> a;
-  thus thesis by A1,Th10;
+  thus thesis by A1,Th9;
 end;
 
-theorem Th12:
+theorem Th11:
   o is idempotent implies (o,D).:A is idempotent
 proof
   assume
 A1: o is idempotent;
   let f be Element of Funcs(A,D);
   thus ((o,D).:A).(f,f) = o.:(f,f) by Def2
-    .= f by A1,Th7;
+    .= f by A1,Th6;
 end;
 
-theorem Th13:
+theorem Th12:
   o is invertible implies (o,D).:A is invertible
 proof
   assume
@@ -505,7 +505,7 @@ A15: x in A;
   hence thesis by A13,A9,A14,FUNCT_1:2;
 end;
 
-theorem Th14:
+theorem Th13:
   o is cancelable implies (o,D).:A is cancelable
 proof
   assume
@@ -529,14 +529,14 @@ A9: o.:(g,f).x = o.(b,a) & o.:(h,f).x = o.(c,a) by A3,A8,FUNCOP_1:22;
   hence thesis by A7,FUNCT_1:2;
 end;
 
-theorem Th15:
+theorem Th14:
   o is uniquely-decomposable implies (o,D).:A is uniquely-decomposable
 proof
   assume that
 A1: o is having_a_unity and
 A2: for a,b st o.(a,b) = the_unity_wrt o holds a = b & b = the_unity_wrt o;
-A3: the_unity_wrt (o,D).:A = A --> the_unity_wrt o by A1,Th11;
-  thus (o,D).:A is having_a_unity by A1,Th11;
+A3: the_unity_wrt (o,D).:A = A --> the_unity_wrt o by A1,Th10;
+  thus (o,D).:A is having_a_unity by A1,Th10;
   let f,g be Element of Funcs(A,D) such that
 A4: (o,D).:A.(f,g) = the_unity_wrt (o,D).:A;
 A5: dom (o.:(f,g)) = A by FUNCT_2:def 1;
@@ -589,7 +589,7 @@ A6: dom f = A by FUNCT_2:def 1;
   hence thesis by A6,A2,A4,FUNCT_1:2;
 end;
 
-theorem Th17:
+theorem Th16:
   for D1, D2, D, E1, E2, E being non empty set, o1 being Function
 of [:D1, D2:], D, o2 being Function of [:E1, E2:], E st o1 c= o2
   holds (o1,D).:A c= (o2,E).:A
@@ -680,7 +680,7 @@ reserve G for non empty multMagma;
 
 deffunc carr(non empty multMagma) = the carrier of $1;
 
-theorem Th18:
+theorem Th17:
   the carrier of .:(G,X) = Funcs(X, the carrier of G) & the multF
   of .:(G,X) = (the multF of G, the carrier of G).:X
 proof
@@ -694,19 +694,19 @@ end;
 theorem
   x is Element of .: (G,X) iff x is Function of X, the carrier of G
 proof
-  x is Element of .:(G,X) implies x is Element of Funcs(X, carr(G)) by Th18;
+  x is Element of .:(G,X) implies x is Element of Funcs(X, carr(G)) by Th17;
   hence x is Element of .:(G,X) implies x is Function of X, carr(G);
   assume x is Function of X, carr(G);
   then reconsider f = x as Function of X, carr(G);
 A1: rng f c= carr(G);
-  carr(.:(G,X)) = Funcs(X, carr(G)) & dom f = X by Th18,FUNCT_2:def 1;
+  carr(.:(G,X)) = Funcs(X, carr(G)) & dom f = X by Th17,FUNCT_2:def 1;
   hence thesis by A1,FUNCT_2:def 2;
 end;
 
 Lm1: .:(G,X) is constituted-Functions
 proof
   let a be Element of .:(G,X);
-  a is Element of Funcs(X,carr(G)) by Th18;
+  a is Element of Funcs(X,carr(G)) by Th17;
   hence thesis;
 end;
 
@@ -716,21 +716,21 @@ registration
   coherence by Lm1;
 end;
 
-theorem Th20:
+theorem Th19:
   for f being Element of .:(G,X) holds dom f = X & rng f c= the carrier of G
 proof
   let f be Element of .:(G,X);
-  reconsider f as Element of Funcs(X, carr(G)) by Th18;
+  reconsider f as Element of Funcs(X, carr(G)) by Th17;
   f = f;
   hence thesis by FUNCT_2:def 1,RELAT_1:def 19;
 end;
 
-theorem Th21:
+theorem Th20:
   for f,g being Element of .:(G,X) st for x st x in X holds f.x =
   g.x holds f = g
 proof
   let f,g be Element of .:(G,X);
-  dom f = X & dom g = X by Th20;
+  dom f = X & dom g = X by Th19;
   hence thesis by FUNCT_1:2;
 end;
 
@@ -741,10 +741,10 @@ definition
   redefine func f.a -> Element of G;
   coherence
   proof
-    dom f = A by Th20;
+    dom f = A by Th19;
     then
 A1: f.a in rng f by FUNCT_1:def 3;
-    rng f c= carr(G) by Th20;
+    rng f c= carr(G) by Th19;
     hence thesis by A1;
   end;
 end;
@@ -756,19 +756,19 @@ registration
   coherence
   proof
     set a = the Element of A;
-    dom f = A by Th20;
+    dom f = A by Th19;
     then f.a in rng f by FUNCT_1:def 3;
     hence thesis;
   end;
 end;
 
-theorem Th22:
+theorem Th21:
   for f1,f2 being Element of .:(G,D), a being Element of D holds (
   f1*f2).a = (f1.a)*(f2.a)
 proof
   let f1,f2 be Element of .:(G,D), a be Element of D;
-  reconsider g1 = f1, g2 = f2 as Element of Funcs(D, carr(G)) by Th18;
-  op(.:(G,D)) = (op(G),carr(G)).:D by Th18;
+  reconsider g1 = f1, g2 = f2 as Element of Funcs(D, carr(G)) by Th17;
+  op(.:(G,D)) = (op(G),carr(G)).:D by Th17;
   then dom (op(G).:(g1,g2)) = D & f1*f2 = op(G).:(g1,g2) by Def2,FUNCT_2:def 1;
   hence thesis by FUNCOP_1:22;
 end;
@@ -787,12 +787,12 @@ definition
 A1: a is_a_unity_wrt op(G) by SETWISEO:def 2;
 A2: 1.M = A --> the_unity_wrt the multF of G & .:(G,A) = M by Def3;
     a = the_unity_wrt op(G) & A --> a is_a_unity_wrt (op(G),carr(G)).:A by A1
-,Th10,BINOP_1:def 8;
+,Th9,BINOP_1:def 8;
     hence thesis by A2,MONOID_0:def 21;
   end;
 end;
 
-theorem Th23:
+theorem Th22:
   for G being unital non empty multMagma holds 1..:(G,X) = X -->
   the_unity_wrt the multF of G
 proof
@@ -802,7 +802,7 @@ proof
   hence thesis;
 end;
 
-theorem Th24:
+theorem Th23:
   for G being non empty multMagma, A being set holds (G is
 commutative implies .:(G,A) is commutative) & (G is associative implies .:(G,A)
   is associative) & (G is idempotent implies .:(G,A) is idempotent) & (G is
@@ -813,43 +813,43 @@ proof
   let G;
   let A be set;
 A1: op(.:(G,A)) = (op(G), carr(G)).:A & carr(.:(G,A)) = Funcs(A, carr(G)) by
-Th18;
+Th17;
   thus G is commutative implies .:(G,A) is commutative
   proof
     assume op(G) is commutative;
-    hence op(.:(G,A)) is commutative by A1,Th8;
+    hence op(.:(G,A)) is commutative by A1,Th7;
   end;
   thus G is associative implies .:(G,A) is associative
   proof
     assume op(G) is associative;
-    hence op(.:(G,A)) is associative by A1,Th9;
+    hence op(.:(G,A)) is associative by A1,Th8;
   end;
   thus G is idempotent implies .:(G,A) is idempotent
   proof
     assume op(G) is idempotent;
-    hence op(.:(G,A)) is idempotent by A1,Th12;
+    hence op(.:(G,A)) is idempotent by A1,Th11;
   end;
   thus G is invertible implies .:(G,A) is invertible
   proof
     assume op(G) is invertible;
-    hence op(.:(G,A)) is invertible by A1,Th13;
+    hence op(.:(G,A)) is invertible by A1,Th12;
   end;
   thus G is cancelable implies .:(G,A) is cancelable
   proof
     assume op(G) is cancelable;
-    hence op(.:(G,A)) is cancelable by A1,Th14;
+    hence op(.:(G,A)) is cancelable by A1,Th13;
   end;
   assume op(G) is uniquely-decomposable;
-  hence op(.:(G,A)) is uniquely-decomposable by A1,Th15;
+  hence op(.:(G,A)) is uniquely-decomposable by A1,Th14;
 end;
 
 theorem
   for H being non empty SubStr of G holds .:(H,X) is SubStr of .:(G,X)
 proof
   let H be non empty SubStr of G;
-A1: op(.:(H,X)) = (op(H), carr(H)).:X by Th18;
-  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th18,MONOID_0:def 23;
-  hence op(.:(H,X)) c= op(.:(G,X)) by A1,Th17;
+A1: op(.:(H,X)) = (op(H), carr(H)).:X by Th17;
+  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th17,MONOID_0:def 23;
+  hence op(.:(H,X)) c= op(.:(G,X)) by A1,Th16;
 end;
 
 theorem
@@ -863,12 +863,12 @@ A1: the_unity_wrt the multF of G in carr(H);
   then reconsider G9 = G, H9 = H as unital non empty multMagma by MONOID_0:30
 ;
 A2: the_unity_wrt op(H9) = the_unity_wrt op(G9) by A1,MONOID_0:30;
-A3: op(.:(H,X)) = (op(H), carr(H)).:X by Th18;
-  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th18,MONOID_0:def 23;
+A3: op(.:(H,X)) = (op(H), carr(H)).:X by Th17;
+  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th17,MONOID_0:def 23;
   then
-A4: op(.:(H,X)) c= op(.:(G,X)) by A3,Th17;
+A4: op(.:(H,X)) c= op(.:(G,X)) by A3,Th16;
   1..:(G9,X) = X --> the_unity_wrt op(G) & 1..:(H9,X) = X -->
-  the_unity_wrt op (H) by Th23;
+  the_unity_wrt op (H) by Th22;
   hence thesis by A2,A4,MONOID_0:def 25;
 end;
 
@@ -880,8 +880,8 @@ definition
   constituted-Functions strict Monoid;
   coherence
   proof
-    .:(G,A) is commutative cancelable by Th24;
-    hence thesis by Th24;
+    .:(G,A) is commutative cancelable by Th23;
+    hence thesis by Th23;
   end;
 end;
 
@@ -895,13 +895,13 @@ definition
   correctness;
 end;
 
-theorem Th27:
+theorem Th26:
   the carrier of MultiSet_over X = Funcs(X,NAT) & the multF of
   MultiSet_over X = (addnat,NAT).:X & 1.MultiSet_over X = X --> 0
 proof
   the multMagma of <NAT,+,0> = <NAT,+> & the_unity_wrt op(<NAT,+>) = 0 by
 MONOID_0:40,def 22;
-  hence thesis by Th18,Th23,MONOID_0:46;
+  hence thesis by Th17,Th22,MONOID_0:46;
 end;
 
 definition
@@ -909,7 +909,7 @@ definition
   mode Multiset of A is Element of MultiSet_over A;
 end;
 
-theorem Th28:
+theorem Th27:
   x is Multiset of X iff x is Function of X,NAT
 proof
 A1: now
@@ -917,15 +917,15 @@ A1: now
     dom x = X & rng x c= NAT by FUNCT_2:def 1;
     hence x is Element of Funcs(X,NAT) by FUNCT_2:def 2;
   end;
-  x is Multiset of X iff x is Element of Funcs(X,NAT) by Th27;
+  x is Multiset of X iff x is Element of Funcs(X,NAT) by Th26;
   hence thesis by A1;
 end;
 
-theorem Th29:
+theorem Th28:
   for m being Multiset of X holds dom m = X & rng m c= NAT
 proof
   let m be Multiset of X;
-  m is Function of X,NAT by Th28;
+  m is Function of X,NAT by Th27;
   hence thesis by FUNCT_2:def 1,RELAT_1:def 19;
 end;
 
@@ -933,37 +933,37 @@ definition
   let A be non empty set;
   let m be Multiset of A;
   redefine func rng m -> Subset of NAT;
-  coherence by Th20,MONOID_0:46;
+  coherence by Th19,MONOID_0:46;
   let a be Element of A;
   redefine func m.a -> Element of NAT;
   coherence
   proof
-    dom m = A by Th20;
+    dom m = A by Th19;
     then
 A1: m.a in rng m by FUNCT_1:def 3;
-    rng m c= NAT by Th20,MONOID_0:46;
+    rng m c= NAT by Th19,MONOID_0:46;
     hence thesis by A1;
   end;
 end;
 
-theorem Th30:
+theorem Th29:
   for m1,m2 being Multiset of D, a being Element of D holds (m1
   [*] m2).a = (m1.a)+(m2.a)
 proof
   reconsider N = <NAT,+,0> as non empty multMagma;
   let m1,m2 be Multiset of D, a be Element of D;
   reconsider f1 = m1, f2 = m2 as Element of .:(N,D);
-  thus (m1 [*] m2).a = (f1.a)*(f2.a) by Th22
+  thus (m1 [*] m2).a = (f1.a)*(f2.a) by Th21
     .= (m1.a)+(m2.a) by MONOID_0:45;
 end;
 
-theorem Th31:
+theorem Th30:
   chi(Y,X) is Multiset of X
 proof
   rng chi(Y,X) c= {0,1};
   then
 A1: rng chi(Y,X) c= NAT by XBOOLE_1:1;
-  dom chi(Y,X) = X & carr(MultiSet_over X) = Funcs(X,NAT) by Th27,FUNCT_3:def 3
+  dom chi(Y,X) = X & carr(MultiSet_over X) = Funcs(X,NAT) by Th26,FUNCT_3:def 3
 ;
   hence thesis by A1,FUNCT_2:def 2;
 end;
@@ -971,7 +971,7 @@ end;
 definition
   let Y,X;
   redefine func chi(Y,X) -> Multiset of X;
-  coherence by Th31;
+  coherence by Th30;
 end;
 
 definition
@@ -980,7 +980,7 @@ definition
   redefine func X --> n -> Multiset of X;
   coherence
   proof
-    thus X --> n is Multiset of X by Th28;
+    thus X --> n is Multiset of X by Th27;
   end;
 end;
 
@@ -991,7 +991,7 @@ definition
   coherence;
 end;
 
-theorem Th32:
+theorem Th31:
   for A being non empty set, a,b being Element of A holds (chi a).
   a = 1 & (b <> a implies (chi a).b = 0)
 proof
@@ -1006,12 +1006,12 @@ reserve A for non empty set,
   p for FinSequence of A,
   m1,m2 for Multiset of A;
 
-theorem Th33:
+theorem Th32:
   (for a holds m1.a = m2.a) implies m1 = m2
 proof
   assume for a holds m1.a = m2.a;
   then for x st x in A holds m1.x = m2.x;
-  hence thesis by Th21;
+  hence thesis by Th20;
 end;
 
 definition
@@ -1023,13 +1023,13 @@ definition
   of it iff f"(NAT\{0}) is finite;
   existence
   proof
-    reconsider e = A --> 0 as Function of A,NAT by Th28;
+    reconsider e = A --> 0 as Function of A,NAT by Th27;
     defpred P[set] means ex f being Function of A,NAT st $1 = f & f"(NAT\{0})
     is finite;
 A1: for a,b being Multiset of A holds P[a] & P[b] implies P[a [*] b]
     proof
       let a,b be Multiset of A;
-      reconsider h = a [*] b as Function of A,NAT by Th28;
+      reconsider h = a [*] b as Function of A,NAT by Th27;
       given f being Function of A,NAT such that
 A2:   a = f and
 A3:   f"(NAT\{0}) is finite;
@@ -1048,7 +1048,7 @@ A7:     x in h"(NAT\{0});
 A8:     not h.x in {0} by XBOOLE_0:def 5;
         f.x in rng f & g.x in rng g by A6,A7,FUNCT_1:def 3;
         then reconsider n = f.x, m = g.x as Element of NAT;
-        h.x = n+m by A2,A4,A7,Th30;
+        h.x = n+m by A2,A4,A7,Th29;
         then n <> 0 or m <> 0 by A8,TARSKI:def 1;
         then not n in {0} or not m in {0} by TARSKI:def 1;
         then n in NAT\{0} or m in NAT\{0} by XBOOLE_0:def 5;
@@ -1070,7 +1070,7 @@ A11:  not e.x in {0} by XBOOLE_0:def 5;
       hence contradiction by A11,TARSKI:def 1;
     end;
     then
-A12: P[1.MultiSet_over A] by Th27;
+A12: P[1.MultiSet_over A] by Th26;
     consider M being strict non empty MonoidalSubStr of MultiSet_over A such
     that
 A13: for a being Multiset of A holds a in the carrier of M iff P[a]
@@ -1085,7 +1085,7 @@ A13: for a being Multiset of A holds a in the carrier of M iff P[a]
 ;
       hence thesis;
     end;
-    reconsider g = f as Function of A,NAT by Th28;
+    reconsider g = f as Function of A,NAT by Th27;
     assume f"(NAT\{0}) is finite;
     then g"(NAT\{0}) is finite;
     hence thesis by A13;
@@ -1121,7 +1121,7 @@ A19:  x in carr(M2);
   end;
 end;
 
-theorem Th34:
+theorem Th33:
   chi a is Element of finite-MultiSet_over A
 proof
   (chi a)"(NAT\{0}) c= {a}
@@ -1130,26 +1130,26 @@ proof
     assume
 A1: x in (chi a)"(NAT\{0});
     then x in dom chi a by FUNCT_1:def 7;
-    then reconsider y = x as Element of A by Th29;
+    then reconsider y = x as Element of A by Th28;
     (chi a).x in NAT\{0} by A1,FUNCT_1:def 7;
     then not (chi a).y in {0} by XBOOLE_0:def 5;
     then (chi a).y <> 0 by TARSKI:def 1;
-    then y = a by Th32;
+    then y = a by Th31;
     hence thesis by TARSKI:def 1;
   end;
   hence thesis by Def6;
 end;
 
-theorem Th35:
-  dom ({x}|(p^<*x*>)) = dom ({x}|p) \/ {len p+1}
+theorem Th34:
+  dom ({x}|`(p^<*x*>)) = dom ({x}|`p) \/ {len p+1}
 proof
-  thus dom ({x}|(p^<*x*>)) c= dom ({x}|p) \/ {len p+1}
+  thus dom ({x}|`(p^<*x*>)) c= dom ({x}|`p) \/ {len p+1}
   proof
     let a be set;
 A1: len <*x*> = 1 by FINSEQ_1:40;
 A2: Seg len p = dom p by FINSEQ_1:def 3;
     assume
-A3: a in dom ({x}|(p^<*x*>));
+A3: a in dom ({x}|`(p^<*x*>));
     then
 A4: a in dom (p^<*x*>) by FUNCT_1:54;
     then a in Seg (len p+len <*x*>) by FINSEQ_1:def 7;
@@ -1159,7 +1159,7 @@ A5: a in dom p or a in {len p+1} by A2,XBOOLE_0:def 3;
 A6: (p^<*x*>).a in {x} by A3,FUNCT_1:54;
     reconsider a as Element of NAT by A4;
     a in dom p implies (p^<*x*>).a = p.a by FINSEQ_1:def 7;
-    then a in dom p implies a in dom ({x}|p) by A6,FUNCT_1:54;
+    then a in dom p implies a in dom ({x}|`p) by A6,FUNCT_1:54;
     hence thesis by A5,XBOOLE_0:def 3;
   end;
   let a be set;
@@ -1167,8 +1167,8 @@ A6: (p^<*x*>).a in {x} by A3,FUNCT_1:54;
   then
 A7: dom (p^<*x*>) = Seg (len p+1) by FINSEQ_1:def 7;
   assume
-A8: a in dom ({x}|p) \/ {len p+1};
-  then a in dom ({x}|p) or a in {len p+1} by XBOOLE_0:def 3;
+A8: a in dom ({x}|`p) \/ {len p+1};
+  then a in dom ({x}|`p) or a in {len p+1} by XBOOLE_0:def 3;
   then
 A9: a in dom p & p.a in {x} or a in {len p+1} & a = len p+1 & x in {x} by
 FUNCT_1:54,TARSKI:def 1;
@@ -1182,18 +1182,18 @@ A10: (p^<*x*>).(len p+1) = x & a in dom (p^<*x*>) by A9,A7,FINSEQ_1:42
   hence thesis by A9,A10,FUNCT_1:54;
 end;
 
-theorem Th36:
-  x <> y implies dom ({x}|(p^<*y*>)) = dom ({x}|p)
+theorem Th35:
+  x <> y implies dom ({x}|`(p^<*y*>)) = dom ({x}|`p)
 proof
   assume
 A1: x <> y;
-  thus dom ({x}|(p^<*y*>)) c= dom ({x}|p)
+  thus dom ({x}|`(p^<*y*>)) c= dom ({x}|`p)
   proof
     let a be set;
 A2: len <*y*> = 1 by FINSEQ_1:40;
 A3: Seg len p = dom p by FINSEQ_1:def 3;
     assume
-A4: a in dom ({x}|(p^<*y*>));
+A4: a in dom ({x}|`(p^<*y*>));
     then
 A5: a in dom (p^<*y*>) by FUNCT_1:54;
     then a in Seg (len p+len <*y*>) by FINSEQ_1:def 7;
@@ -1208,7 +1208,7 @@ A8: (p^<*y*>).(len p+1) = y & not y in {x} by A1,FINSEQ_1:42,TARSKI:def 1;
   end;
   let a be set;
   assume
-A9: a in dom ({x}|p);
+A9: a in dom ({x}|`p);
   then
 A10: a in dom p by FUNCT_1:54;
   len <*y*> = 1 by FINSEQ_1:40;
@@ -1228,48 +1228,48 @@ definition
   let A be non empty set, p be FinSequence of A;
   func |.p.| -> Multiset of A means
   : Def7:
-  for a being Element of A holds it. a = card dom ({a}|p);
+  for a being Element of A holds it. a = card dom ({a}|`p);
   existence
   proof
-    deffunc F(Element of A)=card dom ({$1}|p);
+    deffunc F(Element of A)=card dom ({$1}|`p);
     consider m being Function of A,NAT such that
 A1: for a being Element of A holds m.a = F(a) from FUNCT_2:sch 4;
-    m is Multiset of A by Th28;
+    m is Multiset of A by Th27;
     hence thesis by A1;
   end;
   uniqueness
   proof
     let m1, m2 be Multiset of A such that
-A2: for a being Element of A holds m1.a = card dom ({a}|p) and
-A3: for a being Element of A holds m2.a = card dom ({a}|p);
+A2: for a being Element of A holds m1.a = card dom ({a}|`p) and
+A3: for a being Element of A holds m2.a = card dom ({a}|`p);
     now
       let a be Element of A;
-      thus m1.a = card dom ({a}|p) by A2
+      thus m1.a = card dom ({a}|`p) by A2
         .= m2.a by A3;
     end;
-    hence thesis by Th33;
+    hence thesis by Th32;
   end;
 end;
 
 theorem
   |.<*> A.|.a = 0
 proof
-  dom ({a}|{}) c= dom {} by FUNCT_1:56;
-  then dom ({a}|<*> A) = {};
+  dom ({a}|`{}) c= dom {} by FUNCT_1:56;
+  then dom ({a}|`<*> A) = {};
   hence thesis by Def7,CARD_1:27;
 end;
 
-theorem Th38:
+theorem Th37:
   |.<*> A.| = A --> 0
 proof
 A1: now
     let x;
     assume x in A;
     then reconsider a = x as Element of A;
-    thus |.<*>A.|.x = card dom ({a}|{}) by Def7
+    thus |.<*>A.|.x = card dom ({a}|`{}) by Def7
       .= 0 by CARD_1:27,RELAT_1:38,107;
   end;
-  dom |.<*>A.| = A by Th29;
+  dom |.<*>A.| = A by Th28;
   hence thesis by A1,FUNCOP_1:11;
 end;
 
@@ -1284,38 +1284,38 @@ A2: dom <*a*> = Seg 1 & card Seg 1 = 1 by FINSEQ_1:38,57;
     a <> x implies {x} misses {a} by ZFMISC_1:11;
     then
 A3: a <> x implies {x}/\{a} = {} by XBOOLE_0:def 7;
-A4: (chi a).a = 1 & {a}|<*a*> = <*a*> by A1,Th32,RELAT_1:94;
-    <*a*> = (rng<*a*>)|<*a*> by RELAT_1:94;
-    then {x}|<*a*> = ({x}/\rng<*a*>)|<*a*> by RELAT_1:96;
-    then x <> a implies {x}|<*a*> = {} & (chi a).b = 0 by A1,A3,Th32;
+A4: (chi a).a = 1 & {a}|`<*a*> = <*a*> by A1,Th31,RELAT_1:94;
+    <*a*> = (rng<*a*>)|`<*a*>;
+    then {x}|`<*a*> = ({x}/\rng<*a*>)|`<*a*> by RELAT_1:96;
+    then x <> a implies {x}|`<*a*> = {} & (chi a).b = 0 by A1,A3,Th31;
     hence |.<*a*>.|.x = (chi a).x by A2,A4,Def7,CARD_1:27,RELAT_1:38;
   end;
-  hence thesis by Th33;
+  hence thesis by Th32;
 end;
 
 reserve p,q for FinSequence of A;
 
-theorem Th40:
+theorem Th39:
   |.p^<*a*>.| = |.p.| [*] chi a
 proof
   now
     reconsider pa = p^<*a*> as FinSequence of A;
     let b be Element of A;
-    len p < len p+1 & dom ({b}|p) c= dom p by FUNCT_1:56,NAT_1:13;
+    len p < len p+1 & dom ({b}|`p) c= dom p by FUNCT_1:56,NAT_1:13;
     then
-A1: not len p+1 in dom ({b}|p) by FINSEQ_3:25;
-A2: |.p^<*a*>.|.b = card dom ({b}|pa) & |.p.|.b = card dom ({b}|p) by Def7;
-A3: a <> b implies dom ({b}|(p^<*a*>)) = dom ({b}|p) & (chi a).b = 0 by Th32
-,Th36;
-A4: (|.p.| [*] chi a).b = (|.p.|.b) + ((chi a).b) by Th30;
-    dom ({a}|(p^<*a*>)) = dom ({a}|p) \/ {len p+1} & (chi a).a = 1 by Th32,Th35
-;
+A1: not len p+1 in dom ({b}|`p) by FINSEQ_3:25;
+A2: |.p^<*a*>.|.b = card dom ({b}|`pa) & |.p.|.b = card dom ({b}|`p) by Def7;
+A3: a <> b implies dom ({b}|`(p^<*a*>)) = dom ({b}|`p) & (chi a).b = 0 by Th31
+,Th35;
+A4: (|.p.| [*] chi a).b = (|.p.|.b) + ((chi a).b) by Th29;
+    dom ({a}|`(p^<*a*>)) = dom ({a}|`p) \/ {len p+1} & (chi a).a = 1
+      by Th31,Th34;
     hence |.p^<*a*>.|.b = (|.p.| [*] chi a).b by A1,A2,A3,A4,CARD_2:41;
   end;
-  hence thesis by Th33;
+  hence thesis by Th32;
 end;
 
-theorem Th41:
+theorem Th40:
   |.p^q.| = |.p.|[*]|.q.|
 proof
   defpred P[Element of NAT] means for q st len q = $1 holds |.p^q.| = |.p.|[*]
@@ -1341,15 +1341,15 @@ A6: {x} c= A by XBOOLE_1:1;
 A7: n+1 = len r+1 by A4,A5,FINSEQ_1:22;
     reconsider x as Element of A by A6,ZFMISC_1:31;
     thus |.p^q.| = |.p^r^<*x*>.| by A5,FINSEQ_1:32
-      .= |.p^r.|[*] chi x by Th40
+      .= |.p^r.|[*] chi x by Th39
       .= |.p.|[*]|.r.|[*] chi x by A3,A7
       .= |.p.|[*](|.r.|[*] chi x) by GROUP_1:def 3
-      .= |.p.|[*]|.q.| by A5,Th40;
+      .= |.p.|[*]|.q.| by A5,Th39;
   end;
 A8: P[0]
   proof
     let q;
-A9: |.<*>A.| = A-->0 & A-->0 = un(MultiSet_over A) by Th27,Th38;
+A9: |.<*>A.| = A-->0 & A-->0 = un(MultiSet_over A) by Th26,Th37;
     assume len q = 0;
     then
 A10: q = {};
@@ -1360,7 +1360,7 @@ A10: q = {};
   hence thesis by A1;
 end;
 
-theorem Th42:
+theorem Th41:
   |.n .--> a.|.a = n & for b being Element of A st b <> a holds |.
   n .--> a.|.b = 0
 proof
@@ -1371,13 +1371,13 @@ A2: for n st P[n] holds P[n+1]
     let n such that
 A3: |.n .--> a.|.a = n;
     thus |.(n+1) .--> a.|.a = |.(n .--> a)^<*a*>.|.a by FINSEQ_2:60
-      .= (|.n .--> a.|[*]chi a).a by Th40
-      .= n+(chi a).a by A3,Th30
-      .= n+1 by Th32;
+      .= (|.n .--> a.|[*]chi a).a by Th39
+      .= n+(chi a).a by A3,Th29
+      .= n+1 by Th31;
   end;
   (A-->0).a = 0 by FUNCOP_1:7;
   then
-A4: P[0] by A1,Th38;
+A4: P[0] by A1,Th37;
   for n holds P[n] from NAT_1:sch 1(A4,A2);
   hence |.n .--> a.|.a = n;
   let b be Element of A such that
@@ -1388,13 +1388,13 @@ A6: for n st P[n] holds P[(n+1)]
     let n such that
 A7: |.n .--> a.|.b = 0;
     thus |.(n+1) .--> a.|.b = |.(n .--> a)^<*a*>.|.b by FINSEQ_2:60
-      .= (|.n .--> a.|[*]chi a).b by Th40
-      .= 0+(chi a).b by A7,Th30
-      .= 0 by A5,Th32;
+      .= (|.n .--> a.|[*]chi a).b by Th39
+      .= 0+(chi a).b by A7,Th29
+      .= 0 by A5,Th31;
   end;
   (A-->0).b = 0 by FUNCOP_1:7;
   then
-A8: P[0] by A1,Th38;
+A8: P[0] by A1,Th37;
   for n holds P[n] from NAT_1:sch 1(A8,A6);
   hence thesis;
 end;
@@ -1427,10 +1427,10 @@ A6: {x} c= A by XBOOLE_1:1;
 A7: len <*x*> = 1 by FINSEQ_1:40;
     reconsider x as Element of A by A6,ZFMISC_1:31;
     n+1 = len r+1 by A4,A5,A7,FINSEQ_1:22;
-    then reconsider r9 = |.r.|, a = chi x as Element of M by A3,Th34;
+    then reconsider r9 = |.r.|, a = chi x as Element of M by A3,Th33;
     M is SubStr of MultiSet_over A by MONOID_0:21;
     then r9[*]a = |.r.|[*]chi x by MONOID_0:25
-      .= |.p.| by A5,Th40;
+      .= |.p.| by A5,Th39;
     hence thesis;
   end;
 A8: Q[0]
@@ -1438,8 +1438,8 @@ A8: Q[0]
     let p;
     assume len p = 0;
     then p = <*> A;
-    then |.p.| = A --> 0 by Th38
-      .= un(MultiSet_over A) by Th27
+    then |.p.| = A --> 0 by Th37
+      .= un(MultiSet_over A) by Th26
       .= un(finite-MultiSet_over A) by MONOID_0:def 24;
     hence thesis;
   end;
@@ -1472,7 +1472,7 @@ A4: for V being finite set st V = fm"(NAT\{0}) holds card V = n+1;
     then reconsider m = fm as Multiset of A by TARSKI:def 3;
     reconsider V = m"(NAT\{0}) as finite set by Def6;
 A5: card V = n+1 by A4;
-A6: dom m = A by Th29;
+A6: dom m = A by Th28;
     then reconsider x as Element of A by A5,CARD_1:27,FUNCT_1:def 7;
     defpred C[set] means x = $1;
     consider f being Function such that
@@ -1490,7 +1490,7 @@ A9:   y = f.z by FUNCT_1:def 3;
       hence thesis;
     end;
     then reconsider f as Function of A,NAT by A7,FUNCT_2:def 1,RELSET_1:4;
-    reconsider f as Multiset of A by Th28;
+    reconsider f as Multiset of A by Th27;
 A10: f"(NAT\{0}) = (fm"(NAT\{0}))\{x}
     proof
       thus f"(NAT\{0}) c= (fm"(NAT\{0}))\{x}
@@ -1535,12 +1535,12 @@ A19: f = |.p.| by A3;
     now
       let a;
 A20:  0 + m.a = m.a;
-A21:  a <> x implies f.a = m.a & g.a = 0 by A7,Th42;
-      f.x = 0 & g.x = m.x by A7,Th42;
-      hence (f[*]g).a = m.a by A20,A21,Th30;
+A21:  a <> x implies f.a = m.a & g.a = 0 by A7,Th41;
+      f.x = 0 & g.x = m.x by A7,Th41;
+      hence (f[*]g).a = m.a by A20,A21,Th29;
     end;
-    hence fm = f[*]g by Th33
-      .= |.q.| by A19,Th41;
+    hence fm = f[*]g by Th32
+      .= |.q.| by A19,Th40;
   end;
 A22: Z[0]
   proof
@@ -1561,14 +1561,14 @@ A24: {} = rng fm /\ (NAT\{0}) by XBOOLE_0:def 7
     then rng fm /\ NAT = rng fm by XBOOLE_1:28;
     then
 A25: rng fm c= {0} by A24,XBOOLE_1:37;
-A26: dom m = A by Th29;
+A26: dom m = A by Th28;
     then
 A27: fm.a in rng fm by FUNCT_1:def 3;
     then fm.a = 0 by A25,TARSKI:def 1;
     then {0} c= rng fm by A27,ZFMISC_1:31;
     then rng fm = {0} by A25,XBOOLE_0:def 10;
     hence fm = A --> 0 by A26,FUNCOP_1:9
-      .= |.p.| by Th38;
+      .= |.p.| by Th37;
   end;
   for n holds Z[n] from NAT_1:sch 1(A22,A2);
   hence thesis by A1;
@@ -1606,7 +1606,7 @@ A2: for x being Element of [:bool D1, bool D2:] holds F2.x = f.:[:x`1, x`2:];
   end;
 end;
 
-theorem Th45:
+theorem Th44:
   for D1,D2,D being non empty set, f being Function of [:D1,D2:],D for
 X1 being Subset of D1, X2 being Subset of D2 holds (f.:^2).(X1,X2) = f.:[:X1,X2
   :]
@@ -1617,7 +1617,7 @@ proof
   hence thesis by Def8;
 end;
 
-theorem Th46:
+theorem Th45:
   for D1,D2,D being non empty set, f being Function of [:D1,D2:],D for
 X1 being Subset of D1, X2 being Subset of D2, x1,x2 being set st x1 in X1 & x2
   in X2 holds f.(x1,x2) in (f.:^2).(X1,X2)
@@ -1629,7 +1629,7 @@ A1: x1 in X1 and
 A2: x2 in X2;
   reconsider b = x2 as Element of D2 by A2;
   reconsider a = x1 as Element of D1 by A1;
-A3: (f.:^2).(X1,X2) = f.:[:X1,X2:] & dom f = [:D1,D2:] by Th45,FUNCT_2:def 1;
+A3: (f.:^2).(X1,X2) = f.:[:X1,X2:] & dom f = [:D1,D2:] by Th44,FUNCT_2:def 1;
   [a,b] in [:X1,X2:] by A1,A2,ZFMISC_1:87;
   hence thesis by A3,FUNCT_1:def 6;
 end;
@@ -1643,7 +1643,7 @@ proof
   let X1 be Subset of D1, X2 be Subset of D2;
   set A = {f.(a,b) where a is Element of D1, b is Element of D2: a in X1 & b
   in X2};
-A1: (f.:^2).(X1,X2) = f.:[:X1,X2:] by Th45;
+A1: (f.:^2).(X1,X2) = f.:[:X1,X2:] by Th44;
   thus (f.:^2).(X1,X2) c= A
   proof
     let x;
@@ -1665,10 +1665,10 @@ A6: y = [y1,y2] by A2,ZFMISC_1:84;
   assume x in A;
   then ex a being Element of D1, b being Element of D2 st x = f.(a,b) & a in
   X1 & b in X2;
-  hence thesis by Th46;
+  hence thesis by Th45;
 end;
 
-theorem Th48:
+theorem Th47:
   o is commutative implies o.:[:X,Y:] = o.:[:Y,X:]
 proof
   assume
@@ -1696,7 +1696,7 @@ A6:   dom o = [:D,D:] & o.(y`1,y`2) = o.(y`2,y`1 ) by A1,FUNCT_2:def 1;
   hence o.:[:X,Y:] c= o.:[:Y,X:] & o.:[:Y,X:] c= o.:[:X,Y:];
 end;
 
-theorem Th49:
+theorem Th48:
   o is associative implies o.:[:o.:[:X,Y:],Z:] = o.:[:X,o.:[:Y,Z:] :]
 proof
 A1: dom o = [:D,D:] by FUNCT_2:def 1;
@@ -1763,31 +1763,31 @@ A26: [o.(y`1,z`1),z`2] in [:o.:[:X,Y:],Z:] by A25,ZFMISC_1:87;
   hence thesis by A1,A26,FUNCT_1:def 6;
 end;
 
-theorem Th50:
+theorem Th49:
   o is commutative implies o.:^2 is commutative
 proof
   assume
 A1: o is commutative;
   let x,y be Subset of D;
-  thus (o.:^2).(x,y) = o.:[:x,y:] by Th45
-    .= o.:[:y,x:] by A1,Th48
-    .= (o.:^2).(y,x) by Th45;
+  thus (o.:^2).(x,y) = o.:[:x,y:] by Th44
+    .= o.:[:y,x:] by A1,Th47
+    .= (o.:^2).(y,x) by Th44;
 end;
 
-theorem Th51:
+theorem Th50:
   o is associative implies o.:^2 is associative
 proof
   assume
 A1: o is associative;
   let x,y,z be Subset of D;
-  thus (o.:^2).((o.:^2).(x,y),z) = (o.:^2).(o.:[:x,y:],z) by Th45
-    .= o.:[:o.:[:x,y:],z:] by Th45
-    .= o.:[:x,o.:[:y,z:]:] by A1,Th49
-    .= (o.:^2).(x,o.:[:y,z:]) by Th45
-    .= (o.:^2).(x,(o.:^2).(y,z)) by Th45;
+  thus (o.:^2).((o.:^2).(x,y),z) = (o.:^2).(o.:[:x,y:],z) by Th44
+    .= o.:[:o.:[:x,y:],z:] by Th44
+    .= o.:[:x,o.:[:y,z:]:] by A1,Th48
+    .= (o.:^2).(x,o.:[:y,z:]) by Th44
+    .= (o.:^2).(x,(o.:^2).(y,z)) by Th44;
 end;
 
-theorem Th52:
+theorem Th51:
   a is_a_unity_wrt o implies o.:[:{a},X:] = D /\ X & o.:[:X,{a}:] = D /\ X
 proof
   assume
@@ -1857,7 +1857,7 @@ A22: x = o.(d,a) by A1,BINOP_1:3
   end;
 end;
 
-theorem Th53:
+theorem Th52:
   a is_a_unity_wrt o implies {a} is_a_unity_wrt o.:^2 & o.:^2 is
   having_a_unity & the_unity_wrt o.:^2 = {a}
 proof
@@ -1865,11 +1865,11 @@ proof
 A1: a is_a_unity_wrt o;
   now
     let x be Subset of D;
-    thus (o.:^2).({a},x) = o.:[:{a},x:] by Th45
-      .= D /\ x by A1,Th52
+    thus (o.:^2).({a},x) = o.:[:{a},x:] by Th44
+      .= D /\ x by A1,Th51
       .= x by XBOOLE_1:28;
-    thus (o.:^2).(x,{a}) = o.:[:x,{a}:] by Th45
-      .= D /\ x by A1,Th52
+    thus (o.:^2).(x,{a}) = o.:[:x,{a}:] by Th44
+      .= D /\ x by A1,Th51
       .= x by XBOOLE_1:28;
   end;
   hence
@@ -1878,29 +1878,29 @@ A2: {a} is_a_unity_wrt o.:^2 by BINOP_1:3;
   thus thesis by A2,BINOP_1:def 8;
 end;
 
-theorem Th54:
+theorem Th53:
   o is having_a_unity implies o.:^2 is having_a_unity & {
 the_unity_wrt o} is_a_unity_wrt o.:^2 & the_unity_wrt o.:^2 = {the_unity_wrt o}
 proof
   given a such that
 A1: a is_a_unity_wrt o;
   a = the_unity_wrt o by A1,BINOP_1:def 8;
-  hence thesis by A1,Th53;
+  hence thesis by A1,Th52;
 end;
 
-theorem Th55:
+theorem Th54:
   o is uniquely-decomposable implies o.:^2 is uniquely-decomposable
 proof
   assume that
 A1: o is having_a_unity and
 A2: o.(a,b) = the_unity_wrt o implies a = b & b = the_unity_wrt o;
-  thus o.:^2 is having_a_unity by A1,Th54;
+  thus o.:^2 is having_a_unity by A1,Th53;
   let A,B be Subset of D such that
 A3: (o.:^2).(A,B) = the_unity_wrt o.:^2;
   set a = the_unity_wrt o;
-A4: the_unity_wrt o.:^2 = {a} by A1,Th54;
+A4: the_unity_wrt o.:^2 = {a} by A1,Th53;
   set a1 = the Element of A,a2 = the Element of B;
-  o.:[:A,B:] = (o.:^2).(A,B) by Th45;
+  o.:[:A,B:] = (o.:^2).(A,B) by Th44;
   then dom o meets [:A,B:] by A3,A4,RELAT_1:118;
   then dom o /\ [:A,B:] <> {} by XBOOLE_0:def 7;
   then
@@ -1910,7 +1910,7 @@ A6: A <> {} by ZFMISC_1:90;
 A7: B <> {} by A5,ZFMISC_1:90;
   then reconsider a1,a2 as Element of D by A6,TARSKI:def 3;
 A8: {a1} c= A by A6,ZFMISC_1:31;
-  o.(a1,a2) in {a} by A3,A4,A6,A7,Th46;
+  o.(a1,a2) in {a} by A3,A4,A6,A7,Th45;
   then
 A9: o.(a1,a2) = a by TARSKI:def 1;
   then
@@ -1921,7 +1921,7 @@ A11: A c= {a}
     assume
 A12: x in A;
     then reconsider c = x as Element of D;
-    o.(c,a2) in {a} by A3,A4,A7,A12,Th46;
+    o.(c,a2) in {a} by A3,A4,A7,A12,Th45;
     then o.(c,a2) = a by TARSKI:def 1;
     then c = a2 by A2;
     hence thesis by A10,TARSKI:def 1;
@@ -1932,7 +1932,7 @@ A13: B c= {a}
     assume
 A14: x in B;
     then reconsider c = x as Element of D;
-    o.(a1,c) in {a} by A3,A4,A6,A14,Th46;
+    o.(a1,c) in {a} by A3,A4,A6,A14,Th45;
     then o.(a1,c) = a by TARSKI:def 1;
     then c = a by A2;
     hence thesis by TARSKI:def 1;
@@ -1940,7 +1940,7 @@ A14: x in B;
 A15: a1 = a2 by A2,A9;
   {a2} c= B by A7,ZFMISC_1:31;
   then B = {a} by A10,A13,XBOOLE_0:def 10;
-  hence thesis by A1,A15,A10,A8,A11,Th54,XBOOLE_0:def 10;
+  hence thesis by A1,A15,A10,A8,A11,Th53,XBOOLE_0:def 10;
 end;
 
 definition
@@ -1984,13 +1984,13 @@ definition
     set M = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#);
     op(G) is having_a_unity by MONOID_0:def 10;
     then
-A1: {the_unity_wrt op(G)} is_a_unity_wrt op(G).:^2 by Th54;
+A1: {the_unity_wrt op(G)} is_a_unity_wrt op(G).:^2 by Th53;
     1.M = {the_unity_wrt op(G)} & bool G = M by Def9;
     hence thesis by A1,MONOID_0:def 21;
   end;
 end;
 
-theorem Th56:
+theorem Th55:
   the carrier of bool G = bool the carrier of G & the multF of
   bool G = (the multF of G).:^2
 proof
@@ -2015,17 +2015,17 @@ theorem
   uniquely-decomposable implies bool G is uniquely-decomposable)
 proof
   let G be non empty multMagma;
-A1: op(bool G) = op(G).:^2 & carr(bool G) = bool carr(G) by Th56;
+A1: op(bool G) = op(G).:^2 & carr(bool G) = bool carr(G) by Th55;
   thus G is commutative implies bool G is commutative
   proof
     assume op(G) is commutative;
-    hence op(bool G) is commutative by A1,Th50;
+    hence op(bool G) is commutative by A1,Th49;
   end;
   thus G is associative implies bool G is associative
   proof
     assume op(G) is associative;
-    hence op(bool G) is associative by A1,Th51;
+    hence op(bool G) is associative by A1,Th50;
   end;
   assume op(G) is uniquely-decomposable;
-  hence op(bool G) is uniquely-decomposable by A1,Th55;
+  hence op(bool G) is uniquely-decomposable by A1,Th54;
 end;

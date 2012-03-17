@@ -2,7 +2,7 @@
 ::  by Wojciech A. Trybulec
 ::
 :: Received August 10, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,9 +18,9 @@ environ
       ALGSTR_0, FUNCT_1, STRUCT_0, TARSKI, ZFMISC_1, XBOOLE_0, FINSET_1,
       CARD_1, NEWTON, ARYTM_3, XXREAL_0, COMPLEX1, RLSUB_1, CQC_SIM1, SETFAM_1,
       PRE_TOPC, GROUP_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, BINOP_1, RELAT_1,
-      FUNCT_1, FUNCT_2, FINSET_1, CARD_1, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2,
-      DOMAIN_1, XXREAL_0, INT_1, INT_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NAT_1, BINOP_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, CARD_1, STRUCT_0, ALGSTR_0, GROUP_1,
+      GROUP_2, DOMAIN_1, XXREAL_0, INT_1, INT_2;
  constructors SETFAM_1, WELLORD2, BINOP_1, XXREAL_0, NAT_1, INT_2, REALSET1,
       REAL_1, GROUP_2, RELSET_1, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, XREAL_0, INT_1,
@@ -30,7 +30,7 @@ environ
       STRUCT_0;
  theorems ABSVALUE, BINOP_1, CARD_1, CARD_2, ENUMSET1, FINSET_1, FUNCT_1,
       FUNCT_2, GROUP_1, GROUP_2, TARSKI, WELLORD2, ZFMISC_1, RELAT_1, XBOOLE_0,
-      XBOOLE_1, STRUCT_0;
+      XBOOLE_1, STRUCT_0, XTUPLE_0;
  schemes FUNCT_1, FUNCT_2, NAT_1, SUBSET_1, XBOOLE_0, CLASSES1;
 
 begin
@@ -127,7 +127,7 @@ theorem
 theorem
   H * a = H * {a};
 
-theorem Th10:
+theorem Th9:
   A * a * H = A * (a * H)
 proof
   thus A * a * H = A * ({a} * H) by GROUP_2:96
@@ -154,7 +154,7 @@ proof
 end;
 
 theorem
-  H1 * a * H2 = H1 * (a * H2) by Th10;
+  H1 * a * H2 = H1 * (a * H2) by Th9;
 
 definition
   let G;
@@ -192,7 +192,7 @@ A6:   [x,y] in f;
       thus thesis by A3,A6;
     end;
     then
-A7: B = dom f by RELAT_1:def 4;
+A7: B = dom f by XTUPLE_0:def 12;
     for y holds y in rng f iff y is strict Subgroup of G
     proof
       let y;
@@ -249,7 +249,7 @@ proof
   hence thesis by Def1;
 end;
 
-theorem Th19:
+theorem Th15:
   G is finite implies Subgroups G is finite
 proof
   defpred P[set,set] means ex H being strict Subgroup of G st $1 = H & $2 =
@@ -303,7 +303,7 @@ definition
   correctness;
 end;
 
-theorem Th21:
+theorem Th16:
   a |^ g = b |^ g implies a = b
 proof
   assume a |^ g = b |^ g;
@@ -311,14 +311,14 @@ proof
   hence thesis by GROUP_1:6;
 end;
 
-theorem Th22:
+theorem Th17:
   (1_G) |^ a = 1_G
 proof
   thus (1_G) |^ a = a" * a by GROUP_1:def 4
     .= 1_G by GROUP_1:def 5;
 end;
 
-theorem Th23:
+theorem Th18:
   a |^ b = 1_G implies a = 1_G
 proof
   assume a |^ b = 1_G;
@@ -326,7 +326,7 @@ proof
   hence thesis by GROUP_1:7;
 end;
 
-theorem Th24:
+theorem Th19:
   a |^ 1_G = a
 proof
   thus a |^ 1_G = (1_G)" * a by GROUP_1:def 4
@@ -334,7 +334,7 @@ proof
     .= a by GROUP_1:def 4;
 end;
 
-theorem Th25:
+theorem Th20:
   a |^ a = a
 proof
   thus a |^ a = 1_G * a by GROUP_1:def 5
@@ -344,7 +344,7 @@ end;
 theorem
   a |^ a" = a & a" |^ a = a" by Th1;
 
-theorem Th27:
+theorem Th22:
   a |^ b = a iff a * b = b * a
 proof
   thus a |^ b = a implies a * b = b * a
@@ -358,7 +358,7 @@ proof
   hence thesis by GROUP_1:def 3;
 end;
 
-theorem Th28:
+theorem Th23:
   (a * b) |^ g = a |^ g * (b |^ g)
 proof
   thus (a * b) |^ g = g" * (a * 1_G * b) * g by GROUP_1:def 4
@@ -370,7 +370,7 @@ proof
     .= a |^ g * (b |^ g) by GROUP_1:def 3;
 end;
 
-theorem Th29:
+theorem Th24:
   a |^ g |^ h = a |^ (g * h)
 proof
   thus a |^ g |^ h = h" * (g" * a) * g * h by GROUP_1:def 3
@@ -379,18 +379,18 @@ proof
     .= a |^ (g * h) by GROUP_1:def 3;
 end;
 
-theorem Th30:
+theorem Th25:
   a |^ b |^ b" = a & a |^ b" |^ b = a
 proof
-  thus a |^ b |^ b" = a |^ (b * b") by Th29
+  thus a |^ b |^ b" = a |^ (b * b") by Th24
     .= a |^ 1_G by GROUP_1:def 5
-    .= a by Th24;
-  thus a |^ b" |^ b = a |^ (b" * b) by Th29
+    .= a by Th19;
+  thus a |^ b" |^ b = a |^ (b" * b) by Th24
     .= a |^ 1_G by GROUP_1:def 5
-    .= a by Th24;
+    .= a by Th19;
 end;
 
-theorem Th32:
+theorem Th26:
   a" |^ b = (a |^ b)"
 proof
   thus a" |^ b = (a * b)" * b by GROUP_1:17
@@ -402,7 +402,7 @@ end;
 Lm2: now
   let G,a,b;
   thus a |^ 0 |^ b = (1_G) |^ b by GROUP_1:25
-    .= 1_G by Th22
+    .= 1_G by Th17
     .= (a |^ b) |^ 0 by GROUP_1:25;
 end;
 
@@ -412,7 +412,7 @@ Lm3: now
 A1: for G,a,b holds a |^ n |^ b = (a |^ b) |^ n;
   let G,a,b;
   thus a |^ (n + 1) |^ b = (a |^ n * a) |^ b by GROUP_1:34
-    .= (a |^ n |^ b) * (a |^ b) by Th28
+    .= (a |^ n |^ b) * (a |^ b) by Th23
     .= ((a |^ b) |^ n) * (a |^ b) by A1
     .= (a |^ b) |^ (n + 1) by GROUP_1:34;
 end;
@@ -441,13 +441,13 @@ proof
   suppose
 A1: i < 0;
     hence a |^ i |^ b = (a |^ abs i)" |^ b by GROUP_1:30
-      .= (a |^ abs (i) |^ b)" by Th32
+      .= (a |^ abs (i) |^ b)" by Th26
       .= ((a |^ b) |^ abs i)" by Lm4
       .= (a |^ b) |^ i by A1,GROUP_1:30;
   end;
 end;
 
-theorem Th35:
+theorem Th29:
   G is commutative Group implies a |^ b = a
 proof
   assume G is commutative Group;
@@ -455,14 +455,14 @@ proof
     .= a by Th1;
 end;
 
-theorem Th36:
+theorem Th30:
   (for a,b holds a |^ b = a) implies G is commutative
 proof
   assume
 A1: for a,b holds a |^ b = a;
   let a,b;
   a |^ b = a by A1;
-  hence thesis by Th27;
+  hence thesis by Th22;
 end;
 
 definition
@@ -483,10 +483,10 @@ definition
   end;
 end;
 
-theorem Th38:
+theorem Th31:
   x in A |^ B iff ex g,h st x = g |^ h & g in A & h in B;
 
-theorem Th39:
+theorem Th32:
   A |^ B <> {} iff A <> {} & B <> {}
 proof
   set x = the Element of A;
@@ -495,7 +495,7 @@ proof
   proof
     set x = the Element of A |^ B;
     assume A |^ B <> {};
-    then ex a,b st x = a |^ b & a in A & b in B by Th38;
+    then ex a,b st x = a |^ b & a in A & b in B by Th31;
     hence thesis;
   end;
   assume
@@ -507,7 +507,7 @@ A2: B <> {};
   hence thesis;
 end;
 
-theorem Th40:
+theorem Th33:
   A |^ B c= B" * A * B
 proof
   let x;
@@ -521,7 +521,7 @@ A3: b in B;
   hence thesis by A1,A3;
 end;
 
-theorem Th41:
+theorem Th34:
   (A * B) |^ C c= A |^ C * (B |^ C)
 proof
   let x;
@@ -534,11 +534,11 @@ A3: b in C;
 A4: a = g * h & g in A and
 A5: h in B by A2;
 A6: h |^ b in B |^ C by A3,A5;
-  x = (g |^ b) * (h |^ b) & g |^ b in A |^ C by A1,A3,A4,Th28;
+  x = (g |^ b) * (h |^ b) & g |^ b in A |^ C by A1,A3,A4,Th23;
   hence thesis by A6;
 end;
 
-theorem Th42:
+theorem Th35:
   A |^ B |^ C = A |^ (B * C)
 proof
   thus A |^ B |^ C c= A |^ (B * C)
@@ -553,7 +553,7 @@ A3: c in C;
 A4: a = g |^ h and
 A5: g in A and
 A6: h in B by A2;
-    x = g |^ (h * c) & h * c in B * C by A1,A3,A4,A6,Th29;
+    x = g |^ (h * c) & h * c in B * C by A1,A3,A4,A6,Th24;
     hence thesis by A5;
   end;
   let x;
@@ -564,7 +564,7 @@ A8: b in B * C;
   consider g,h such that
 A9: b = g * h & g in B and
 A10: h in C by A8;
-  a |^ g in A |^ B & x = a |^ g |^ h by A7,A9,Th29;
+  a |^ g in A |^ B & x = a |^ g |^ h by A7,A9,Th24;
   hence thesis by A10;
 end;
 
@@ -581,7 +581,7 @@ A2: a in A" and
 A3: b in B;
     consider c such that
 A4: a = c" & c in A by A2;
-    x = (c |^ b)" & c |^ b in A |^ B by A1,A3,A4,Th32;
+    x = (c |^ b)" & c |^ b in A |^ B by A1,A3,A4,Th26;
     hence thesis;
   end;
   let x;
@@ -594,17 +594,17 @@ A7: a = b |^ c and
 A8: b in A and
 A9: c in B by A6;
 A10: b" in A" by A8;
-  x = b" |^ c by A5,A7,Th32;
+  x = b" |^ c by A5,A7,Th26;
   hence thesis by A9,A10;
 end;
 
-theorem Th44:
+theorem Th37:
   {a} |^ {b} = {a |^ b}
 proof
 A1: {b}" * {a} * {b} = {b"} * {a} * {b} by GROUP_2:3
     .= {b" * a} * {b} by GROUP_2:18
     .= {a |^ b} by GROUP_2:18;
-  {a} |^ {b} c= {b}" * {a} * {b} & {a} |^ {b} <> {} by Th39,Th40;
+  {a} |^ {b} c= {b}" * {a} * {b} & {a} |^ {b} <> {} by Th32,Th33;
   hence thesis by A1,ZFMISC_1:33;
 end;
 
@@ -690,7 +690,7 @@ definition
   correctness;
 end;
 
-theorem Th50:
+theorem Th41:
   x in A |^ g iff ex h st x = h |^ g & h in A
 proof
   thus x in A |^ g implies ex h st x = h |^ g & h in A
@@ -708,7 +708,7 @@ A3: x = h |^ g & h in A;
   hence thesis by A3;
 end;
 
-theorem Th51:
+theorem Th42:
   x in g |^ A iff ex h st x = g |^ h & h in A
 proof
   thus x in g |^ A implies ex h st x = g |^ h & h in A
@@ -734,42 +734,42 @@ proof
   assume x in g |^ A;
   then consider a such that
 A1: x = g |^ a and
-A2: a in A by Th51;
+A2: a in A by Th42;
   a" in A" by A2;
   then a" * g in A" * g by GROUP_2:28;
   hence thesis by A1,A2;
 end;
 
 theorem
-  A |^ B |^ g = A |^ (B * g) by Th42;
+  A |^ B |^ g = A |^ (B * g) by Th35;
 
 theorem
-  A |^ g |^ B = A |^ (g * B) by Th42;
+  A |^ g |^ B = A |^ (g * B) by Th35;
 
 theorem
-  g |^ A |^ B = g |^ (A * B) by Th42;
+  g |^ A |^ B = g |^ (A * B) by Th35;
 
-theorem Th56:
+theorem Th47:
   A |^ a |^ b = A |^ (a * b)
 proof
-  thus A |^ a |^ b = A |^ (a * {b}) by Th42
+  thus A |^ a |^ b = A |^ (a * {b}) by Th35
     .= A |^ (a * b) by GROUP_2:18;
 end;
 
 theorem
-  a |^ A |^ b = a |^ (A * b) by Th42;
+  a |^ A |^ b = a |^ (A * b) by Th35;
 
 theorem
   a |^ b |^ A = a |^ (b * A)
 proof
-  thus a |^ b |^ A = {a} |^ {b} |^ A by Th44
-    .= a |^ (b * A) by Th42;
+  thus a |^ b |^ A = {a} |^ {b} |^ A by Th37
+    .= a |^ (b * A) by Th35;
 end;
 
-theorem Th59:
+theorem Th50:
   A |^ g = g" * A * g
 proof
-  A |^ g c= {g}" * A * {g} by Th40;
+  A |^ g c= {g}" * A * {g} by Th33;
   hence A |^ g c= g" * A * g by GROUP_2:3;
   let x;
   assume x in g" * A * g;
@@ -780,16 +780,16 @@ A2: a in g" * A by GROUP_2:28;
 A3: a = g" * b and
 A4: b in A by A2,GROUP_2:27;
   x = b |^ g by A1,A3;
-  hence thesis by A4,Th50;
+  hence thesis by A4,Th41;
 end;
 
 theorem
-  (A * B) |^ a c= (A |^ a) * (B |^ a) by Th41;
+  (A * B) |^ a c= (A |^ a) * (B |^ a) by Th34;
 
-theorem Th61:
+theorem Th52:
   A |^ 1_G = A
 proof
-  thus A |^ 1_G = (1_G)" * A * 1_G by Th59
+  thus A |^ 1_G = (1_G)" * A * 1_G by Th50
     .= (1_G)" * A by GROUP_2:37
     .= 1_G * A by GROUP_1:8
     .= A by GROUP_2:37;
@@ -806,29 +806,29 @@ A1: A <> {};
   proof
     let x;
     assume x in (1_G) |^ A;
-    then ex a st x = (1_G) |^ a & a in A by Th51;
-    then x = 1_G by Th22;
+    then ex a st x = (1_G) |^ a & a in A by Th42;
+    then x = 1_G by Th17;
     hence thesis by TARSKI:def 1;
   end;
   let x;
   assume x in {1_G};
   then x = 1_G by TARSKI:def 1;
-  then (1_G) |^ y = x by Th22;
-  hence thesis by A1,Th51;
+  then (1_G) |^ y = x by Th17;
+  hence thesis by A1,Th42;
 end;
 
-theorem Th63:
+theorem Th54:
   A |^ a |^ a" = A & A |^ a" |^ a = A
 proof
-  thus A |^ a |^ a" = A |^ (a * a") by Th56
+  thus A |^ a |^ a" = A |^ (a * a") by Th47
     .= A |^ 1_G by GROUP_1:def 5
-    .= A by Th61;
-  thus A |^ a" |^ a = A |^ (a" * a) by Th56
+    .= A by Th52;
+  thus A |^ a" |^ a = A |^ (a" * a) by Th47
     .= A |^ 1_G by GROUP_1:def 5
-    .= A by Th61;
+    .= A by Th52;
 end;
 
-theorem Th65:
+theorem Th55:
   G is commutative Group iff for A,B st B <> {} holds A |^ B = A
 proof
   thus G is commutative Group implies for A,B st B <> {} holds A |^ B = A
@@ -845,13 +845,13 @@ A2: B <> {};
       let x;
       assume x in A |^ B;
       then ex a,b st x = a |^ b & a in A & b in B;
-      hence thesis by A1,Th35;
+      hence thesis by A1,Th29;
     end;
     let x;
     assume
 A3: x in A;
     then reconsider a = x as Element of G;
-    a |^ y = x by A1,Th35;
+    a |^ y = x by A1,Th29;
     hence thesis by A2,A3;
   end;
   assume
@@ -859,41 +859,41 @@ A4: for A,B st B <> {} holds A |^ B = A;
   now
     let a,b;
     {a} = {a} |^ {b} by A4
-      .= {a |^ b} by Th44;
+      .= {a |^ b} by Th37;
     hence a = a |^ b by ZFMISC_1:3;
   end;
-  hence thesis by Th36;
+  hence thesis by Th30;
 end;
 
 theorem
   G is commutative Group iff for A,g holds A |^ g = A
 proof
-  thus G is commutative Group implies for A,g holds A |^ g = A by Th65;
+  thus G is commutative Group implies for A,g holds A |^ g = A by Th55;
   assume
 A1: for A,g holds A |^ g = A;
   now
     let a,b;
     {a} = {a} |^ b by A1
-      .= {a |^ b} by Th44;
+      .= {a |^ b} by Th37;
     hence a = a |^ b by ZFMISC_1:3;
   end;
-  hence thesis by Th36;
+  hence thesis by Th30;
 end;
 
 theorem
   G is commutative Group iff for A,g st A <> {} holds g |^ A = {g}
 proof
   thus G is commutative Group implies for A,g st A <> {} holds g |^ A = {g} by
-Th65;
+Th55;
   assume
 A1: for A,g st A <> {} holds g |^ A = {g};
   now
     let a,b;
     {a} = a |^ {b} by A1
-      .= {a |^ b} by Th44;
+      .= {a |^ b} by Th37;
     hence a = a |^ b by ZFMISC_1:3;
   end;
-  hence thesis by Th36;
+  hence thesis by Th30;
 end;
 
 definition
@@ -906,13 +906,13 @@ definition
     consider H1 being strict Subgroup of G such that
 A1: the carrier of H1 = a" * H * a"" by GROUP_2:127;
     the carrier of H1 = a" * carr H * a by A1
-      .= carr(H) |^ a by Th59;
+      .= carr(H) |^ a by Th50;
     hence thesis;
   end;
   correctness by GROUP_2:59;
 end;
 
-theorem Th70:
+theorem Th58:
   x in H |^ a iff ex g st x = g |^ a & g in H
 proof
   thus x in H |^ a implies ex g st x = g |^ a & g in H
@@ -921,7 +921,7 @@ proof
     then x in the carrier of H |^ a by STRUCT_0:def 5;
     then x in carr H |^ a by Def6;
     then consider b such that
-A1: x = b |^ a & b in carr H by Th50;
+A1: x = b |^ a & b in carr H by Th41;
     take b;
     thus thesis by A1,STRUCT_0:def 5;
   end;
@@ -929,50 +929,50 @@ A1: x = b |^ a & b in carr H by Th50;
 A2: x = g |^ a and
 A3: g in H;
   g in carr H by A3,STRUCT_0:def 5;
-  then x in carr H |^ a by A2,Th50;
+  then x in carr H |^ a by A2,Th41;
   then x in the carrier of H |^ a by Def6;
   hence thesis by STRUCT_0:def 5;
 end;
 
-theorem Th71:
+theorem Th59:
   the carrier of H |^ a = a" * H * a
 proof
   thus the carrier of H |^ a = carr(H) |^ a by Def6
-    .= a" * H * a by Th59;
+    .= a" * H * a by Th50;
 end;
 
-theorem Th72:
+theorem Th60:
   H |^ a |^ b = H |^ (a * b)
 proof
   the carrier of H |^ a |^ b = carr(H |^ a) |^ b by Def6
     .= (carr H |^ a) |^ b by Def6
-    .= carr H |^ (a * b) by Th56
+    .= carr H |^ (a * b) by Th47
     .= the carrier of H |^ (a * b) by Def6;
   hence thesis by GROUP_2:59;
 end;
 
-theorem Th73:
+theorem Th61:
   for H being strict Subgroup of G holds H |^ 1_G = H
 proof
   let H be strict Subgroup of G;
   the carrier of H |^ 1_G = carr H |^ 1_G by Def6
-    .= the carrier of H by Th61;
+    .= the carrier of H by Th52;
   hence thesis by GROUP_2:59;
 end;
 
-theorem Th74:
+theorem Th62:
   for H being strict Subgroup of G holds H |^ a |^ a" = H & H |^ a " |^ a = H
 proof
   let H be strict Subgroup of G;
-  thus H |^ a |^ a" = H |^ (a * a") by Th72
+  thus H |^ a |^ a" = H |^ (a * a") by Th60
     .= H |^ 1_G by GROUP_1:def 5
-    .= H by Th73;
-  thus H |^ a" |^ a = H |^ (a" * a) by Th72
+    .= H by Th61;
+  thus H |^ a" |^ a = H |^ (a" * a) by Th60
     .= H |^ 1_G by GROUP_1:def 5
-    .= H by Th73;
+    .= H by Th61;
 end;
 
-theorem Th76:
+theorem Th63:
   (H1 /\ H2) |^ a = (H1 |^ a) /\ (H2 |^ a)
 proof
   let g;
@@ -981,12 +981,12 @@ proof
     assume g in (H1 /\ H2) |^ a;
     then consider h such that
 A1: g = h |^ a and
-A2: h in H1 /\ H2 by Th70;
+A2: h in H1 /\ H2 by Th58;
     h in H2 by A2,GROUP_2:82;
     then
-A3: g in H2 |^ a by A1,Th70;
+A3: g in H2 |^ a by A1,Th58;
     h in H1 by A2,GROUP_2:82;
-    then g in H1 |^ a by A1,Th70;
+    then g in H1 |^ a by A1,Th58;
     hence thesis by A3,GROUP_2:82;
   end;
   assume
@@ -994,17 +994,17 @@ A4: g in (H1 |^ a) /\ (H2 |^ a);
   then g in H1 |^ a by GROUP_2:82;
   then consider b such that
 A5: g = b |^ a and
-A6: b in H1 by Th70;
+A6: b in H1 by Th58;
   g in H2 |^ a by A4,GROUP_2:82;
   then consider c such that
 A7: g = c |^ a and
-A8: c in H2 by Th70;
-  b = c by A5,A7,Th21;
+A8: c in H2 by Th58;
+  b = c by A5,A7,Th16;
   then b in (H1 /\ H2) by A6,A8,GROUP_2:82;
-  hence thesis by A5,Th70;
+  hence thesis by A5,Th58;
 end;
 
-theorem Th77:
+theorem Th64:
   card H = card(H |^ a)
 proof
   deffunc F(Element of G) = $1 |^ a;
@@ -1028,7 +1028,7 @@ A6:   g.y = x by FUNCT_1:def 3;
       reconsider y as Element of G by GROUP_2:42;
 A7:   f.y = g.y by A5,FUNCT_1:47;
       f.y = y |^ a by A1;
-      then x in carr H |^ a by A6,A7,Th50;
+      then x in carr H |^ a by A6,A7,Th41;
       hence thesis by Def6;
     end;
     let x;
@@ -1036,7 +1036,7 @@ A7:   f.y = g.y by A5,FUNCT_1:47;
     then x in carr H |^ a by Def6;
     then consider b such that
 A8: x = b |^ a and
-A9: b in carr H by Th50;
+A9: b in carr H by Th41;
 A10: f.b = b |^ a by A1;
     g.b = f.b by A3,A9,FUNCT_1:47;
     hence thesis by A3,A8,A9,A10,FUNCT_1:def 3;
@@ -1052,17 +1052,17 @@ A13: g.x = g.y;
     reconsider b,c as Element of G by GROUP_2:42;
 A14: f.x = b |^ a & f.y = c |^ a by A1;
     f.x = g.x by A11,FUNCT_1:47;
-    hence thesis by A12,A13,A14,Th21,FUNCT_1:47;
+    hence thesis by A12,A13,A14,Th16,FUNCT_1:47;
   end;
   then the carrier of H,the carrier of H |^ a are_equipotent by A3,A4,
 WELLORD2:def 4;
   hence thesis by CARD_1:5;
 end;
 
-theorem Th78:
+theorem Th65:
   H is finite iff H |^ a is finite
 proof
-  card H = card(H |^ a) by Th77;
+  card H = card(H |^ a) by Th64;
   then the carrier of H,the carrier of H |^ a are_equipotent by CARD_1:5;
   hence thesis by CARD_1:38;
 end;
@@ -1071,19 +1071,19 @@ registration
   let G,a;
   let H be finite Subgroup of G;
   cluster H |^ a -> finite;
-  coherence by Th78;
+  coherence by Th65;
 end;
 
 theorem
-  for H being finite Subgroup of G holds card H = card(H |^ a) by Th77;
+  for H being finite Subgroup of G holds card H = card(H |^ a) by Th64;
 
-theorem Th80:
+theorem Th67:
   (1).G |^ a = (1).G
 proof
 A1: the carrier of (1).G = {1_G} by GROUP_2:def 7;
   the carrier of (1).G |^ a = (carr (1).G) |^ a by Def6
-    .= {(1_G) |^ a} by A1,Th44
-    .= {1_G} by Th22;
+    .= {(1_G) |^ a} by A1,Th37
+    .= {1_G} by Th17;
   hence thesis by GROUP_2:def 7;
 end;
 
@@ -1093,22 +1093,21 @@ proof
   let H be strict Subgroup of G;
   assume
 A1: H |^ a = (1).G;
-  then reconsider H as finite Subgroup of G by Th78;
+  then reconsider H as finite Subgroup of G by Th65;
   card (1).G = 1 by GROUP_2:69;
-  then card H = 1 by A1,Th77;
+  then card H = 1 by A1,Th64;
   hence thesis by GROUP_2:70;
 end;
 
-theorem Th82:
+theorem Th69:
   for G being Group, a being Element of G holds (Omega).G |^ a = (Omega).G
 proof
   let G be Group, a be Element of G;
   let h be Element of G;
-A1: h |^ a" in the multMagma of G by STRUCT_0:def 5;
-  (h |^ a") |^ a = h |^ (a" * a) by Th29
+  (h |^ a") |^ a = h |^ (a" * a) by Th24
     .= h |^ 1_G by GROUP_1:def 5
-    .= h by Th24;
-  hence thesis by A1,Th70,STRUCT_0:def 5;
+    .= h by Th19;
+  hence thesis by Th58,STRUCT_0:def 5;
 end;
 
 theorem
@@ -1123,15 +1122,15 @@ A1: H |^ a = G;
 A2: not g in H;
     now
       assume g |^ a in H |^ a;
-      then ex h st g |^ a = h |^ a & h in H by Th70;
-      hence contradiction by A2,Th21;
+      then ex h st g |^ a = h |^ a & h in H by Th58;
+      hence contradiction by A2,Th16;
     end;
     hence contradiction by A1,STRUCT_0:def 5;
   end;
   hence thesis by A1,GROUP_2:62;
 end;
 
-theorem Th84:
+theorem Th71:
   Index H = Index(H |^ a)
 proof
   defpred P[set,set] means ex b st $1 = b * H & $2 = (b |^ a) * (H |^ a);
@@ -1160,7 +1159,7 @@ A7: y1 = (b |^ a) * (H |^ a);
     given c such that
 A8: x = c * H and
 A9: y2 = (c |^ a) * (H |^ a);
-    thus y1 = (a" * b * a) * (a" * H * a) by A7,Th71
+    thus y1 = (a" * b * a) * (a" * H * a) by A7,Th59
       .= (a" * b * a) * (a" * A) * a by GROUP_2:33
       .= (a" * b) * (a * (a" * A)) * a by GROUP_2:32
       .= a" * b * (a * a" * A) * a by GROUP_2:32
@@ -1173,7 +1172,7 @@ A9: y2 = (c |^ a) * (H |^ a);
       .= (a" * c) * (a * (a" * A)) * a by GROUP_2:32
       .= (a" * c * a) * (a" * A) * a by GROUP_2:32
       .= (a" * c * a) * (a" * H * a) by GROUP_2:33
-      .= y2 by A9,Th71;
+      .= y2 by A9,Th59;
   end;
 A10: rng f = Left_Cosets(H |^ a)
   proof
@@ -1191,7 +1190,7 @@ A11:  y in dom f & f.y = x by FUNCT_1:def 3;
     then consider b such that
 A12: x = b * (H |^ a) by GROUP_2:def 15;
     set c = b |^ a";
-A13: x = (c |^ a) * (H |^ a) by A12,Th30;
+A13: x = (c |^ a) * (H |^ a) by A12,Th25;
 A14: c * H in Left_Cosets H by GROUP_2:def 15;
     then consider d such that
 A15: c * H = d * H and
@@ -1212,13 +1211,13 @@ A21: f.y = (c |^ a) * (H |^ a) by A3,A4,A18;
     consider b such that
 A22: x = b * H and
 A23: f.x = (b |^ a) * (H |^ a) by A3,A4,A17;
-A24: (c |^ a)" * (b |^ a) = (c" |^ a) * (b |^ a) by Th32
-      .= (c" * b) |^ a by Th28;
+A24: (c |^ a)" * (b |^ a) = (c" |^ a) * (b |^ a) by Th26
+      .= (c" * b) |^ a by Th23;
     (c |^ a)" * (b |^ a) in H |^ a by A19,A23,A21,GROUP_2:114;
     then consider d such that
 A25: (c" * b) |^ a = d |^ a and
-A26: d in H by A24,Th70;
-    c" * b = d by A25,Th21;
+A26: d in H by A24,Th58;
+    c" * b = d by A25,Th16;
     hence thesis by A22,A20,A26,GROUP_2:114;
   end;
   then Left_Cosets H,Left_Cosets(H |^ a) are_equipotent by A3,A10,
@@ -1234,13 +1233,13 @@ A1: Left_Cosets H is finite;
   then
 A2: ex B being finite set st B = Left_Cosets H & index H = card B by
 GROUP_2:def 18;
-A3: Index H = Index(H |^ a) by Th84;
+A3: Index H = Index(H |^ a) by Th71;
   then Left_Cosets H,Left_Cosets(H |^ a) are_equipotent by CARD_1:5;
   then Left_Cosets(H |^ a) is finite by A1,CARD_1:38;
   hence thesis by A2,A3,GROUP_2:def 18;
 end;
 
-theorem Th86:
+theorem Th73:
   G is commutative Group implies for H being strict Subgroup of G
   for a holds H |^ a = H
 proof
@@ -1248,7 +1247,7 @@ proof
 A1: G is commutative Group;
   let H be strict Subgroup of G;
   let a;
-  the carrier of H |^ a = a" * H * a by Th71
+  the carrier of H |^ a = a" * H * a by Th59
     .= H * a" * a by A1,GROUP_2:112
     .= H * (a" * a) by GROUP_2:107
     .= H * 1_G by GROUP_1:def 5
@@ -1268,57 +1267,57 @@ notation
   antonym a,b are_not_conjugated for a,b are_conjugated;
 end;
 
-theorem Th88:
+theorem Th74:
   a,b are_conjugated iff ex g st b = a |^ g
 proof
   thus a,b are_conjugated implies ex g st b = a |^ g
   proof
     given g such that
 A1: a = b |^ g;
-    a |^ g" = b by A1,Th30;
+    a |^ g" = b by A1,Th25;
     hence thesis;
   end;
   given g such that
 A2: b = a |^ g;
-  a = b |^ g" by A2,Th30;
+  a = b |^ g" by A2,Th25;
   hence thesis by Def7;
 end;
 
-theorem Th89:
+theorem Th75:
   a,a are_conjugated
 proof
   take 1_G;
-  thus thesis by Th24;
+  thus thesis by Th19;
 end;
 
-theorem Th90:
+theorem Th76:
   a,b are_conjugated implies b,a are_conjugated
 proof
   given g such that
 A1: a = b |^ g;
-  b = a |^ g" by A1,Th30;
+  b = a |^ g" by A1,Th25;
   hence thesis by Def7;
 end;
 
 definition
   let G,a,b;
   redefine pred a,b are_conjugated;
-  reflexivity by Th89;
-  symmetry by Th90;
+  reflexivity by Th75;
+  symmetry by Th76;
 end;
 
-theorem Th91:
+theorem Th77:
   a,b are_conjugated & b,c are_conjugated implies a,c are_conjugated
 proof
   given g such that
 A1: a = b |^ g;
   given h such that
 A2: b = c |^ h;
-  a = c |^ (h * g) by A1,A2,Th29;
+  a = c |^ (h * g) by A1,A2,Th24;
   hence thesis by Def7;
 end;
 
-theorem Th92:
+theorem Th78:
   a,1_G are_conjugated or 1_G,a are_conjugated implies a = 1_G
 proof
   assume
@@ -1327,19 +1326,19 @@ A1: a,1_G are_conjugated or 1_G,a are_conjugated;
     per cases by A1;
     suppose
       a,1_G are_conjugated;
-      then ex g st 1_G = a |^ g by Th88;
-      hence thesis by Th23;
+      then ex g st 1_G = a |^ g by Th74;
+      hence thesis by Th18;
     end;
     suppose
       1_G,a are_conjugated;
       then ex g st 1_G = a |^ g by Def7;
-      hence thesis by Th23;
+      hence thesis by Th18;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th93:
+theorem Th79:
   a |^ carr (Omega).G = {b : a,b are_conjugated}
 proof
   set A = a |^ carr (Omega).G;
@@ -1350,7 +1349,7 @@ proof
     assume
 A1: x in A;
     then reconsider b = x as Element of G;
-    ex g st x = a |^ g & g in carr(Omega).G by A1,Th51;
+    ex g st x = a |^ g & g in carr(Omega).G by A1,Th42;
     then b,a are_conjugated by Def7;
     hence thesis;
   end;
@@ -1360,7 +1359,7 @@ A1: x in A;
 A2: x = b and
 A3: a,b are_conjugated;
   ex g st b = a |^ g by A3,Def7;
-  hence thesis by A2,Th51;
+  hence thesis by A2,Th42;
 end;
 
 definition
@@ -1370,50 +1369,50 @@ definition
   correctness;
 end;
 
-theorem Th95:
+theorem Th80:
   x in con_class a iff ex b st b = x & a,b are_conjugated
 proof
   thus x in con_class a implies ex b st b = x & a,b are_conjugated
   proof
     assume x in con_class a;
-    then x in {b : a,b are_conjugated} by Th93;
+    then x in {b : a,b are_conjugated} by Th79;
     hence thesis;
   end;
   given b such that
 A1: b = x & a,b are_conjugated;
   x in {c : a,c are_conjugated} by A1;
-  hence thesis by Th93;
+  hence thesis by Th79;
 end;
 
-theorem Th96:
+theorem Th81:
   a in con_class b iff a,b are_conjugated
 proof
   thus a in con_class b implies a,b are_conjugated
   proof
     assume a in con_class b;
-    then ex c st a = c & b,c are_conjugated by Th95;
+    then ex c st a = c & b,c are_conjugated by Th80;
     hence thesis;
   end;
   assume a,b are_conjugated;
-  hence thesis by Th95;
+  hence thesis by Th80;
 end;
 
-theorem Th97:
+theorem Th82:
   a |^ g in con_class a
 proof
-  a,a |^ g are_conjugated by Th88;
-  hence thesis by Th95;
+  a,a |^ g are_conjugated by Th74;
+  hence thesis by Th80;
 end;
 
 theorem
-  a in con_class a by Th96;
+  a in con_class a by Th81;
 
 theorem
   a in con_class b implies b in con_class a
 proof
   assume a in con_class b;
-  then a,b are_conjugated by Th96;
-  hence thesis by Th96;
+  then a,b are_conjugated by Th81;
+  hence thesis by Th81;
 end;
 
 theorem
@@ -1423,7 +1422,7 @@ proof
   proof
     assume
 A1: con_class a = con_class b;
-    a in con_class a by Th96;
+    a in con_class a by Th81;
     hence thesis by A1,XBOOLE_0:3;
   end;
   assume con_class a meets con_class b;
@@ -1431,29 +1430,29 @@ A1: con_class a = con_class b;
 A2: x in con_class a and
 A3: x in con_class b by XBOOLE_0:3;
   reconsider x as Element of G by A2;
-A4: a,x are_conjugated by A2,Th96;
+A4: a,x are_conjugated by A2,Th81;
   thus con_class a c= con_class b
   proof
     let y;
     assume y in con_class a;
     then consider g such that
 A5: g = y and
-A6: a,g are_conjugated by Th95;
-A7: b,x are_conjugated by A3,Th96;
-    x,a are_conjugated by A2,Th96;
-    then x,g are_conjugated by A6,Th91;
-    then b,g are_conjugated by A7,Th91;
-    hence thesis by A5,Th95;
+A6: a,g are_conjugated by Th80;
+A7: b,x are_conjugated by A3,Th81;
+    x,a are_conjugated by A2,Th81;
+    then x,g are_conjugated by A6,Th77;
+    then b,g are_conjugated by A7,Th77;
+    hence thesis by A5,Th80;
   end;
   let y;
   assume y in con_class b;
   then consider g such that
 A8: g = y and
-A9: b,g are_conjugated by Th95;
-  x,b are_conjugated by A3,Th96;
-  then x,g are_conjugated by A9,Th91;
-  then a,g are_conjugated by A4,Th91;
-  hence thesis by A8,Th95;
+A9: b,g are_conjugated by Th80;
+  x,b are_conjugated by A3,Th81;
+  then x,g are_conjugated by A9,Th77;
+  then a,g are_conjugated by A4,Th77;
+  hence thesis by A8,Th80;
 end;
 
 theorem
@@ -1463,7 +1462,7 @@ proof
   proof
     assume
 A1: con_class a = {1_G};
-    a in con_class a by Th96;
+    a in con_class a by Th81;
     hence thesis by A1,TARSKI:def 1;
   end;
   assume
@@ -1474,11 +1473,11 @@ A2: a = 1_G;
     assume x in con_class a;
     then consider b such that
 A3: b = x and
-A4: a,b are_conjugated by Th95;
-    b = 1_G by A2,A4,Th92;
+A4: a,b are_conjugated by Th80;
+    b = 1_G by A2,A4,Th78;
     hence thesis by A3,TARSKI:def 1;
   end;
-  1_G in con_class a by A2,Th96;
+  1_G in con_class a by A2,Th81;
   hence thesis by ZFMISC_1:31;
 end;
 
@@ -1494,18 +1493,18 @@ A1: x = b * c and
 A2: b in con_class a and
 A3: c in A;
     reconsider h = x as Element of G by A1;
-    b,a are_conjugated by A2,Th96;
+    b,a are_conjugated by A2,Th81;
     then consider g such that
 A4: b = a |^ g by Def7;
     h |^ c" = c * ((a |^ g) * c) * c" by A1,A4
       .= c * (((a |^ g) * c) * c") by GROUP_1:def 3
       .= c * (a |^ g) by Th1;
     then
-A5: x = (c * (a |^ g)) |^ c by Th30
-      .= (c |^ c) * (a |^ g |^ c) by Th28
-      .= c * (a |^ g |^ c) by Th25
-      .= c * (a |^ (g * c)) by Th29;
-    a |^ (g * c) in con_class a by Th97;
+A5: x = (c * (a |^ g)) |^ c by Th25
+      .= (c |^ c) * (a |^ g |^ c) by Th23
+      .= c * (a |^ g |^ c) by Th20
+      .= c * (a |^ (g * c)) by Th24;
+    a |^ (g * c) in con_class a by Th82;
     hence thesis by A3,A5;
   end;
   let x;
@@ -1515,16 +1514,16 @@ A6: x = b * c and
 A7: b in A and
 A8: c in con_class a;
   reconsider h = x as Element of G by A6;
-  c,a are_conjugated by A8,Th96;
+  c,a are_conjugated by A8,Th81;
   then consider g such that
 A9: c = a |^ g by Def7;
   h |^ b = (a |^ g) * b by A6,A9,Th1;
   then
-A10: x = ((a |^ g) * b) |^ b" by Th30
-    .= (a |^ g) |^ b" * (b |^ b") by Th28
-    .= a |^ (g * b") * (b |^ b") by Th29
+A10: x = ((a |^ g) * b) |^ b" by Th25
+    .= (a |^ g) |^ b" * (b |^ b") by Th23
+    .= a |^ (g * b") * (b |^ b") by Th24
     .= a |^ (g * b") * b by Th1;
-  a |^ (g * b") in con_class a by Th97;
+  a |^ (g * b") in con_class a by Th82;
   hence thesis by A7,A10;
 end;
 
@@ -1540,76 +1539,76 @@ notation
   antonym A,B are_not_conjugated for A,B are_conjugated;
 end;
 
-theorem Th104:
+theorem Th88:
   A,B are_conjugated iff ex g st B = A |^ g
 proof
   thus A,B are_conjugated implies ex g st B = A |^ g
   proof
     given g such that
 A1: A = B |^ g;
-    A |^ g" = B by A1,Th63;
+    A |^ g" = B by A1,Th54;
     hence thesis;
   end;
   given g such that
 A2: B = A |^ g;
-  A = B |^ g" by A2,Th63;
+  A = B |^ g" by A2,Th54;
   hence thesis by Def9;
 end;
 
-theorem Th105:
+theorem Th89:
   A,A are_conjugated
 proof
   take 1_G;
-  thus thesis by Th61;
+  thus thesis by Th52;
 end;
 
-theorem Th106:
+theorem Th90:
   A,B are_conjugated implies B,A are_conjugated
 proof
   given g such that
 A1: A = B |^ g;
-  B = A |^ g" by A1,Th63;
+  B = A |^ g" by A1,Th54;
   hence thesis by Def9;
 end;
 
 definition
   let G,A,B;
   redefine pred A,B are_conjugated;
-  reflexivity by Th105;
-  symmetry by Th106;
+  reflexivity by Th89;
+  symmetry by Th90;
 end;
 
-theorem Th107:
+theorem Th91:
   A,B are_conjugated & B,C are_conjugated implies A,C are_conjugated
 proof
   given g such that
 A1: A = B |^ g;
   given h such that
 A2: B = C |^ h;
-  A = C |^ (h * g) by A1,A2,Th56;
+  A = C |^ (h * g) by A1,A2,Th47;
   hence thesis by Def9;
 end;
 
-theorem Th108:
+theorem Th92:
   {a},{b} are_conjugated iff a,b are_conjugated
 proof
   thus {a},{b} are_conjugated implies a,b are_conjugated
   proof
     assume {a},{b} are_conjugated;
     then consider g such that
-A1: {a} |^ g = {b} by Th104;
-    {b} = {a |^ g} by A1,Th44;
+A1: {a} |^ g = {b} by Th88;
+    {b} = {a |^ g} by A1,Th37;
     then b = a |^ g by ZFMISC_1:3;
-    hence thesis by Th88;
+    hence thesis by Th74;
   end;
   assume a,b are_conjugated;
   then consider g such that
-A2: a |^ g = b by Th88;
-  {b} = {a} |^ g by A2,Th44;
-  hence thesis by Th104;
+A2: a |^ g = b by Th74;
+  {b} = {a} |^ g by A2,Th37;
+  hence thesis by Th88;
 end;
 
-theorem Th109:
+theorem Th93:
   A,carr H1 are_conjugated implies ex H2 being strict Subgroup of
   G st the carrier of H2 = A
 proof
@@ -1641,7 +1640,7 @@ end;
 theorem
   x in con_class A iff ex B st x = B & A,B are_conjugated;
 
-theorem Th113:
+theorem Th95:
   A in con_class B iff A,B are_conjugated
 proof
   thus A in con_class B implies A,B are_conjugated
@@ -1657,7 +1656,7 @@ end;
 theorem
   A |^ g in con_class A
 proof
-  A,A |^ g are_conjugated by Th104;
+  A,A |^ g are_conjugated by Th88;
   hence thesis;
 end;
 
@@ -1668,7 +1667,7 @@ theorem
   A in con_class B implies B in con_class A
 proof
   assume A in con_class B;
-  then A,B are_conjugated by Th113;
+  then A,B are_conjugated by Th95;
   hence thesis;
 end;
 
@@ -1686,7 +1685,7 @@ A1: A in con_class A;
 A2: x in con_class A and
 A3: x in con_class B by XBOOLE_0:3;
   reconsider x as Subset of G by A2;
-A4: A,x are_conjugated by A2,Th113;
+A4: A,x are_conjugated by A2,Th95;
   thus con_class A c= con_class B
   proof
     let y;
@@ -1694,10 +1693,10 @@ A4: A,x are_conjugated by A2,Th113;
     then consider C such that
 A5: C = y and
 A6: A,C are_conjugated;
-A7: B,x are_conjugated by A3,Th113;
-    x,A are_conjugated by A2,Th113;
-    then x,C are_conjugated by A6,Th107;
-    then B,C are_conjugated by A7,Th107;
+A7: B,x are_conjugated by A3,Th95;
+    x,A are_conjugated by A2,Th95;
+    then x,C are_conjugated by A6,Th91;
+    then B,C are_conjugated by A7,Th91;
     hence thesis by A5;
   end;
   let y;
@@ -1705,13 +1704,13 @@ A7: B,x are_conjugated by A3,Th113;
   then consider C such that
 A8: C = y and
 A9: B,C are_conjugated;
-  x,B are_conjugated by A3,Th113;
-  then x,C are_conjugated by A9,Th107;
-  then A,C are_conjugated by A4,Th107;
+  x,B are_conjugated by A3,Th95;
+  then x,C are_conjugated by A9,Th91;
+  then A,C are_conjugated by A4,Th91;
   hence thesis by A8;
 end;
 
-theorem Th118:
+theorem Th100:
   con_class{a} = {{b} : b in con_class a}
 proof
   set A = {{b} : b in con_class a};
@@ -1723,11 +1722,11 @@ proof
 A1: x = B and
 A2: {a},B are_conjugated;
     consider b such that
-A3: {a} |^ b = B by A2,Th104;
-    a,a |^ b are_conjugated by Th88;
+A3: {a} |^ b = B by A2,Th88;
+    a,a |^ b are_conjugated by Th74;
     then
-A4: a |^ b in con_class a by Th96;
-    B = {a |^ b} by A3,Th44;
+A4: a |^ b in con_class a by Th81;
+    B = {a |^ b} by A3,Th37;
     hence thesis by A1,A4;
   end;
   let x;
@@ -1735,8 +1734,8 @@ A4: a |^ b in con_class a by Th96;
   then consider b such that
 A5: x = {b} and
 A6: b in con_class a;
-  b,a are_conjugated by A6,Th96;
-  then {b},{a} are_conjugated by Th108;
+  b,a are_conjugated by A6,Th81;
+  then {b},{a} are_conjugated by Th92;
   hence thesis by A5;
 end;
 
@@ -1755,7 +1754,7 @@ notation
   antonym H1,H2 are_not_conjugated for H1,H2 are_conjugated;
 end;
 
-theorem Th121:
+theorem Th102:
   for H1,H2 being strict Subgroup of G holds H1,H2 are_conjugated
   iff ex g st H2 = H1 |^ g
 proof
@@ -1764,31 +1763,31 @@ proof
   proof
     given g such that
 A1: the multMagma of H1 = H2 |^ g;
-    H1 |^ g" = H2 by A1,Th74;
+    H1 |^ g" = H2 by A1,Th62;
     hence thesis;
   end;
   given g such that
 A2: H2 = H1 |^ g;
-  H1 = H2 |^ g" by A2,Th74;
+  H1 = H2 |^ g" by A2,Th62;
   hence thesis by Def11;
 end;
 
-theorem Th122:
+theorem Th103:
   for H1 being strict Subgroup of G holds H1,H1 are_conjugated
 proof
   let H1 be strict Subgroup of G;
   take 1_G;
-  thus thesis by Th73;
+  thus thesis by Th61;
 end;
 
-theorem Th123:
+theorem Th104:
   for H1,H2 being strict Subgroup of G holds H1,H2 are_conjugated
   implies H2,H1 are_conjugated
 proof
   let H1,H2 be strict Subgroup of G;
   given g such that
 A1: the multMagma of H1 = H2 |^ g;
-  H2 = H1 |^ g" by A1,Th74;
+  H2 = H1 |^ g" by A1,Th62;
   hence thesis by Def11;
 end;
 
@@ -1796,11 +1795,11 @@ definition
   let G;
   let H1,H2 be strict Subgroup of G;
   redefine pred H1,H2 are_conjugated;
-  reflexivity by Th122;
-  symmetry by Th123;
+  reflexivity by Th103;
+  symmetry by Th104;
 end;
 
-theorem Th124:
+theorem Th105:
   for H1,H2 being strict Subgroup of G holds H1,H2 are_conjugated
   & H2,H3 are_conjugated implies H1,H3 are_conjugated
 proof
@@ -1809,7 +1808,7 @@ proof
 A1: the multMagma of H1 = H2 |^ g;
   given h such that
 A2: the multMagma of H2 = H3 |^ h;
-  H1 = H3 |^ (h * g) by A1,A2,Th72;
+  H1 = H3 |^ (h * g) by A1,A2,Th60;
   hence thesis by Def11;
 end;
 
@@ -1849,7 +1848,7 @@ A5: x in A2 iff P[x];
   end;
 end;
 
-theorem Th127:
+theorem Th106:
   x in con_class H implies x is strict Subgroup of G
 proof
   assume x in con_class H;
@@ -1858,7 +1857,7 @@ Def12;
   hence thesis;
 end;
 
-theorem Th128:
+theorem Th107:
   for H1,H2 being strict Subgroup of G holds H1 in con_class H2
   iff H1,H2 are_conjugated
 proof
@@ -1875,15 +1874,15 @@ proof
   hence thesis by Def12;
 end;
 
-theorem Th129:
+theorem Th108:
   for H being strict Subgroup of G holds H |^ g in con_class H
 proof
   let H be strict Subgroup of G;
-  H,H |^ g are_conjugated by Th121;
+  H,H |^ g are_conjugated by Th102;
   hence thesis by Def12;
 end;
 
-theorem Th130:
+theorem Th109:
   for H being strict Subgroup of G holds H in con_class H
 proof
   let H be strict Subgroup of G;
@@ -1897,8 +1896,8 @@ theorem
 proof
   let H1,H2 be strict Subgroup of G;
   assume H1 in con_class H2;
-  then H1,H2 are_conjugated by Th128;
-  hence thesis by Th128;
+  then H1,H2 are_conjugated by Th107;
+  hence thesis by Th107;
 end;
 
 theorem
@@ -1910,15 +1909,15 @@ proof
   proof
     assume
 A1: con_class H1 = con_class H2;
-    H1 in con_class H1 by Th130;
+    H1 in con_class H1 by Th109;
     hence thesis by A1,XBOOLE_0:3;
   end;
   assume con_class H1 meets con_class H2;
   then consider x such that
 A2: x in con_class H1 and
 A3: x in con_class H2 by XBOOLE_0:3;
-  reconsider x as strict Subgroup of G by A2,Th127;
-A4: H1,x are_conjugated by A2,Th128;
+  reconsider x as strict Subgroup of G by A2,Th106;
+A4: H1,x are_conjugated by A2,Th107;
   thus con_class H1 c= con_class H2
   proof
     let y;
@@ -1926,10 +1925,10 @@ A4: H1,x are_conjugated by A2,Th128;
     then consider H3 being strict Subgroup of G such that
 A5: H3 = y and
 A6: H1,H3 are_conjugated by Def12;
-A7: H2,x are_conjugated by A3,Th128;
-    x,H1 are_conjugated by A2,Th128;
-    then x,H3 are_conjugated by A6,Th124;
-    then H2,H3 are_conjugated by A7,Th124;
+A7: H2,x are_conjugated by A3,Th107;
+    x,H1 are_conjugated by A2,Th107;
+    then x,H3 are_conjugated by A6,Th105;
+    then H2,H3 are_conjugated by A7,Th105;
     hence thesis by A5,Def12;
   end;
   let y;
@@ -1937,16 +1936,16 @@ A7: H2,x are_conjugated by A3,Th128;
   then consider H3 being strict Subgroup of G such that
 A8: H3 = y and
 A9: H2,H3 are_conjugated by Def12;
-  x,H2 are_conjugated by A3,Th128;
-  then x,H3 are_conjugated by A9,Th124;
-  then H1,H3 are_conjugated by A4,Th124;
+  x,H2 are_conjugated by A3,Th107;
+  then x,H3 are_conjugated by A9,Th105;
+  then H1,H3 are_conjugated by A4,Th105;
   hence thesis by A8,Def12;
 end;
 
 theorem
-  G is finite implies con_class H is finite by Th19,FINSET_1:1;
+  G is finite implies con_class H is finite by Th15,FINSET_1:1;
 
-theorem Th134:
+theorem Th113:
   for H1 being strict Subgroup of G holds H1,H2 are_conjugated
   iff carr H1,carr H2 are_conjugated
 proof
@@ -1977,7 +1976,7 @@ registration
   cluster strict normal for Subgroup of G;
   existence
   proof
-    for a holds (1).G |^ a = (1).G by Th80;
+    for a holds (1).G |^ a = (1).G by Th67;
     then (1).G is normal by Def13;
     hence thesis;
   end;
@@ -1985,13 +1984,13 @@ end;
 
 reserve N2 for normal Subgroup of G;
 
-theorem Th137:
+theorem Th114:
   (1).G is normal & (Omega).G is normal
 proof
   thus for a being Element of G holds (1).G |^ a = the multMagma of (1).G by
-Th80;
+Th67;
   thus for a being Element of G holds (Omega).G |^ a = the multMagma of
-  (Omega).G by Th82;
+  (Omega).G by Th69;
 end;
 
 theorem
@@ -1999,7 +1998,7 @@ theorem
 proof
   let N1,N2 be strict normal Subgroup of G;
   let a;
-  thus (N1 /\ N2) |^ a = (N1 |^ a) /\ (N2 |^ a) by Th76
+  thus (N1 /\ N2) |^ a = (N1 |^ a) /\ (N2 |^ a) by Th63
     .= N1 /\ (N2 |^ a) by Def13
     .= the multMagma of (N1 /\ N2) by Def13;
 end;
@@ -2010,10 +2009,10 @@ theorem
 proof
   let H be strict Subgroup of G;
   assume G is commutative Group;
-  hence H |^ a = the multMagma of H by Th86;
+  hence H |^ a = the multMagma of H by Th73;
 end;
 
-theorem Th140:
+theorem Th117:
   H is normal Subgroup of G iff for a holds a * H = H * a
 proof
   thus H is normal Subgroup of G implies for a holds a * H = H * a
@@ -2021,7 +2020,7 @@ proof
     assume
 A1: H is normal Subgroup of G;
     let a;
-A2: carr(H |^ a) = a" * H * a by Th71;
+A2: carr(H |^ a) = a" * H * a by Th59;
     carr(H |^ a) = the carrier of the multMagma of H by A1,Def13
       .= carr H;
     hence a * H = a * (a" * H) * a by A2,GROUP_2:33
@@ -2034,7 +2033,7 @@ A3: for a holds a * H = H * a;
   H is normal
   proof
     let a;
-    the carrier of H |^ a = a" * H * a by Th71
+    the carrier of H |^ a = a" * H * a by Th59
       .= H * a" * a by A3
       .= H * (a" * a) by GROUP_2:107
       .= H * 1_G by GROUP_1:def 5
@@ -2044,12 +2043,12 @@ A3: for a holds a * H = H * a;
   hence thesis;
 end;
 
-theorem Th141:
+theorem Th118:
   for H being Subgroup of G holds H is normal Subgroup of G iff
   for a holds a * H c= H * a
 proof
   let H be Subgroup of G;
-  thus H is normal Subgroup of G implies for a holds a * H c= H * a by Th140;
+  thus H is normal Subgroup of G implies for a holds a * H c= H * a by Th117;
   assume
 A1: for a holds a * H c= H * a;
 A2: now
@@ -2070,15 +2069,15 @@ A2: now
     a * H c= H * a & H * a c= a * H by A1,A2;
     hence a * H = H * a by XBOOLE_0:def 10;
   end;
-  hence thesis by Th140;
+  hence thesis by Th117;
 end;
 
-theorem Th142:
+theorem Th119:
   for H being Subgroup of G holds H is normal Subgroup of G iff
   for a holds H * a c= a * H
 proof
   let H be Subgroup of G;
-  thus H is normal Subgroup of G implies for a holds H * a c= a * H by Th140;
+  thus H is normal Subgroup of G implies for a holds H * a c= a * H by Th117;
   assume
 A1: for a holds H * a c= a * H;
 A2: now
@@ -2099,7 +2098,7 @@ A2: now
     a * H c= H * a & H * a c= a * H by A1,A2;
     hence a * H = H * a by XBOOLE_0:def 10;
   end;
-  hence thesis by Th140;
+  hence thesis by Th117;
 end;
 
 theorem
@@ -2121,7 +2120,7 @@ A2:   x = a * h and
 A3:   a in A and
 A4:   h in H by GROUP_2:94;
       x in a * H by A2,A4,GROUP_2:103;
-      then x in H * a by A1,Th140;
+      then x in H * a by A1,Th117;
       then ex g st x = g * a & g in H by GROUP_2:104;
       hence thesis by A3,GROUP_2:95;
     end;
@@ -2131,7 +2130,7 @@ A4:   h in H by GROUP_2:94;
 A5: x = h * a & h in H and
 A6: a in A by GROUP_2:95;
     x in H * a by A5,GROUP_2:104;
-    then x in a * H by A1,Th140;
+    then x in a * H by A1,Th117;
     then ex g st x = a * g & g in H by GROUP_2:103;
     hence thesis by A6,GROUP_2:94;
   end;
@@ -2142,7 +2141,7 @@ A7: for A holds A * H = H * A;
     thus a * H = {a} * H .= H * {a} by A7
       .= H * a;
   end;
-  hence thesis by Th140;
+  hence thesis by Th117;
 end;
 
 theorem
@@ -2162,7 +2161,7 @@ A1: H is normal Subgroup of G;
 A2: for a holds H is Subgroup of H |^ a;
   now
     let a;
-A3: H |^ a" * a = a"" * H * a" * a by Th71
+A3: H |^ a" * a = a"" * H * a" * a by Th59
       .= a"" * H * (a" * a) by GROUP_2:34
       .= a"" * H * 1_G by GROUP_1:def 5
       .= a"" * H by GROUP_2:37
@@ -2170,7 +2169,7 @@ A3: H |^ a" * a = a"" * H * a" * a by Th71
     H is Subgroup of H |^ a" by A2;
     hence H * a c= a * H by A3,Th6;
   end;
-  hence thesis by Th142;
+  hence thesis by Th119;
 end;
 
 theorem
@@ -2190,7 +2189,7 @@ A1: H is normal Subgroup of G;
 A2: for a holds H |^ a is Subgroup of H;
   now
     let a;
-A3: H |^ a" * a = a"" * H * a" * a by Th71
+A3: H |^ a" * a = a"" * H * a" * a by Th59
       .= a"" * H * (a" * a) by GROUP_2:34
       .= a"" * H * 1_G by GROUP_1:def 5
       .= a"" * H by GROUP_2:37
@@ -2198,7 +2197,7 @@ A3: H |^ a" * a = a"" * H * a" * a by Th71
     H |^ a" is Subgroup of H by A2;
     hence a * H c= H * a by A3,Th6;
   end;
-  hence thesis by Th141;
+  hence thesis by Th118;
 end;
 
 theorem
@@ -2217,11 +2216,11 @@ A1: H is normal Subgroup of G;
       then consider H1 being strict Subgroup of G such that
 A2:   x = H1 and
 A3:   H,H1 are_conjugated by Def12;
-      ex g st H1 = H |^ g by A3,Th121;
+      ex g st H1 = H |^ g by A3,Th102;
       then x = H by A1,A2,Def13;
       hence thesis by TARSKI:def 1;
     end;
-    H in con_class H by Th130;
+    H in con_class H by Th109;
     hence thesis by ZFMISC_1:31;
   end;
   assume
@@ -2229,7 +2228,7 @@ A4: con_class H = {H};
   H is normal
   proof
     let a;
-    H |^ a in con_class H by Th129;
+    H |^ a in con_class H by Th108;
     hence thesis by A4,TARSKI:def 1;
   end;
   hence thesis;
@@ -2252,10 +2251,10 @@ A2: a in H;
     assume x in con_class a;
     then consider b such that
 A3: x = b and
-A4: a,b are_conjugated by Th95;
+A4: a,b are_conjugated by Th80;
     consider c such that
-A5: b = a |^ c by A4,Th88;
-    x in H |^ c by A2,A3,A5,Th70;
+A5: b = a |^ c by A4,Th74;
+    x in H |^ c by A2,A3,A5,Th58;
     then x in H by A1,Def13;
     hence thesis by STRUCT_0:def 5;
   end;
@@ -2271,17 +2270,17 @@ A6: for a st a in H holds con_class a c= carr H;
       proof
         assume b in H |^ a;
         then consider c such that
-A7:     b = c |^ a & c in H by Th70;
-        b in con_class c & con_class c c= carr H by A6,A7,Th97;
+A7:     b = c |^ a & c in H by Th58;
+        b in con_class c & con_class c c= carr H by A6,A7,Th82;
         hence thesis by STRUCT_0:def 5;
       end;
       assume b in H;
       then
 A8:   con_class b c= carr H by A6;
-      b |^ a" in con_class b by Th97;
+      b |^ a" in con_class b by Th82;
       then b |^ a" in H by A8,STRUCT_0:def 5;
-      then b |^ a" |^ a in H |^ a by Th70;
-      hence thesis by Th30;
+      then b |^ a" |^ a in H |^ a by Th58;
+      hence thesis by Th25;
     end;
     hence thesis;
   end;
@@ -2299,7 +2298,7 @@ A1: x = a * b and
 A2: a in carr N1 and
 A3: b in carr N2;
   a in N1 by A2,STRUCT_0:def 5;
-  then a |^ b in N1 |^ b by Th70;
+  then a |^ b in N1 |^ b by Th58;
   then a |^ b in the multMagma of N1 by Def13;
   then
 A4: a |^ b in carr N1 by STRUCT_0:def 5;
@@ -2308,7 +2307,7 @@ A4: a |^ b in carr N1 by STRUCT_0:def 5;
   hence thesis by A1,A3,A4;
 end;
 
-theorem Th148:
+theorem Th125:
   for N1,N2 being strict normal Subgroup of G holds carr N1 *
   carr N2 = carr N2 * carr N1
 proof
@@ -2326,18 +2325,18 @@ proof
   set A = carr N1 * carr N2;
   set B = carr N1;
   set C = carr N2;
-  carr N1 * carr N2 = carr N2 * carr N1 by Th148;
+  carr N1 * carr N2 = carr N2 * carr N1 by Th125;
   then consider H being strict Subgroup of G such that
 A1: the carrier of H = A by GROUP_2:78;
   now
     let a;
     thus a * H = a * N1 * C by A1,GROUP_2:29
-      .= N1 * a * C by Th140
+      .= N1 * a * C by Th117
       .= B * (a * N2) by GROUP_2:30
-      .= B * (N2 * a) by Th140
+      .= B * (N2 * a) by Th117
       .= H * a by A1,GROUP_2:31;
   end;
-  then H is normal Subgroup of G by Th140;
+  then H is normal Subgroup of G by Th117;
   hence thesis by A1;
 end;
 
@@ -2351,14 +2350,14 @@ proof
     assume x in Left_Cosets N;
     then consider a such that
 A1: x = a * N by GROUP_2:def 15;
-    x = N * a by A1,Th140;
+    x = N * a by A1,Th117;
     hence thesis by GROUP_2:def 16;
   end;
   let x;
   assume x in Right_Cosets N;
   then consider a such that
 A2: x = N * a by GROUP_2:def 16;
-  x = a * N by A2,Th140;
+  x = a * N by A2,Th117;
   hence thesis by GROUP_2:def 15;
 end;
 
@@ -2444,13 +2443,13 @@ A22:    c * H = z3 by A4,A5,A20,TARSKI:def 2;
     end;
     hence c * H = H * c;
   end;
-  hence thesis by Th140;
+  hence thesis by Th117;
 end;
 
 definition
   let G;
   let A;
-  func Normalizator A -> strict Subgroup of G means
+  func Normalizer A -> strict Subgroup of G means
   :Def14:
   the carrier of it = {h : A |^ h = A};
   existence
@@ -2468,44 +2467,44 @@ A1: now
       let a,b;
       assume a in X & b in X;
       then ( ex g st a = g & A |^ g = A)& ex h st b = h & A |^ h = A;
-      then A |^ (a * b) = A by Th56;
+      then A |^ (a * b) = A by Th47;
       hence a * b in X;
     end;
 A2: now
       let a;
       assume a in X;
       then ex b st a = b & A |^ b = A;
-      then A = A |^ a" by Th63;
+      then A = A |^ a" by Th54;
       hence a" in X;
     end;
-    A |^ 1_G = A by Th61;
+    A |^ 1_G = A by Th52;
     then 1_G in X;
     hence thesis by A1,A2,GROUP_2:52;
   end;
   uniqueness by GROUP_2:59;
 end;
 
-theorem Th154:
-  x in Normalizator A iff ex h st x = h & A |^ h = A
+theorem Th129:
+  x in Normalizer A iff ex h st x = h & A |^ h = A
 proof
-  thus x in Normalizator A implies ex h st x = h & A |^ h = A
+  thus x in Normalizer A implies ex h st x = h & A |^ h = A
   proof
-    assume x in Normalizator A;
-    then x in the carrier of Normalizator A by STRUCT_0:def 5;
+    assume x in Normalizer A;
+    then x in the carrier of Normalizer A by STRUCT_0:def 5;
     then x in {h : A |^ h = A} by Def14;
     hence thesis;
   end;
   given h such that
 A1: x = h & A |^ h = A;
   x in {b : A |^ b = A} by A1;
-  then x in the carrier of Normalizator A by Def14;
+  then x in the carrier of Normalizer A by Def14;
   hence thesis by STRUCT_0:def 5;
 end;
 
-theorem Th155:
-  card con_class A = Index Normalizator A
+theorem Th130:
+  card con_class A = Index Normalizer A
 proof
-  defpred P[set,set] means ex a st $1 = A |^ a & $2 = Normalizator A * a;
+  defpred P[set,set] means ex a st $1 = A |^ a & $2 = Normalizer A * a;
 A1: for x st x in con_class A ex y st P[x,y]
   proof
     let x;
@@ -2514,8 +2513,8 @@ A1: for x st x in con_class A ex y st P[x,y]
 A2: x = B and
 A3: A,B are_conjugated;
     consider g such that
-A4: B = A |^ g by A3,Th104;
-    reconsider y = Normalizator A * g as set;
+A4: B = A |^ g by A3,Th88;
+    reconsider y = Normalizer A * g as set;
     take y;
     take g;
     thus thesis by A2,A4;
@@ -2529,35 +2528,35 @@ A7: for x,y1,y2 st x in con_class A & P[x,y1] & P[x,y2] holds y1 = y2
     assume x in con_class A;
     given a such that
 A8: x = A |^ a and
-A9: y1 = Normalizator A * a;
+A9: y1 = Normalizer A * a;
     given b such that
 A10: x = A |^ b and
-A11: y2 = Normalizator A * b;
-    A = A |^ b |^ a" by A8,A10,Th63
-      .= A |^ (b * a") by Th56;
-    then b * a" in Normalizator A by Th154;
+A11: y2 = Normalizer A * b;
+    A = A |^ b |^ a" by A8,A10,Th54
+      .= A |^ (b * a") by Th47;
+    then b * a" in Normalizer A by Th129;
     hence thesis by A9,A11,GROUP_2:120;
   end;
-A12: rng f = Right_Cosets Normalizator A
+A12: rng f = Right_Cosets Normalizer A
   proof
-    thus rng f c= Right_Cosets Normalizator A
+    thus rng f c= Right_Cosets Normalizer A
     proof
       let x;
       assume x in rng f;
       then consider y such that
 A13:  y in dom f & f.y = x by FUNCT_1:def 3;
-      ex a st y = A |^ a & x = Normalizator A * a by A5,A6,A13;
+      ex a st y = A |^ a & x = Normalizer A * a by A5,A6,A13;
       hence thesis by GROUP_2:def 16;
     end;
     let x;
-    assume x in Right_Cosets Normalizator A;
+    assume x in Right_Cosets Normalizer A;
     then consider a such that
-A14: x = Normalizator A * a by GROUP_2:def 16;
+A14: x = Normalizer A * a by GROUP_2:def 16;
     set y = A |^ a;
-    A,A |^ a are_conjugated by Th104;
+    A,A |^ a are_conjugated by Th88;
     then
 A15: y in con_class A;
-    then ex b st y = A |^ b & f.y = Normalizator A * b by A6;
+    then ex b st y = A |^ b & f.y = Normalizer A * b by A6;
     then x = f.y by A7,A14,A15;
     hence thesis by A5,A15,FUNCT_1:def 3;
   end;
@@ -2570,40 +2569,40 @@ A17: y in dom f and
 A18: f.x = f.y;
     consider b such that
 A19: y = A |^ b and
-A20: f.y = Normalizator A * b by A5,A6,A17;
+A20: f.y = Normalizer A * b by A5,A6,A17;
     consider a such that
 A21: x = A |^ a and
-A22: f.x = Normalizator A * a by A5,A6,A16;
-    b * a" in Normalizator A by A18,A22,A20,GROUP_2:120;
-    then ex h st b * a" = h & A |^ h = A by Th154;
-    then A = A |^ b |^ a" by Th56;
-    hence thesis by A21,A19,Th63;
+A22: f.x = Normalizer A * a by A5,A6,A16;
+    b * a" in Normalizer A by A18,A22,A20,GROUP_2:120;
+    then ex h st b * a" = h & A |^ h = A by Th129;
+    then A = A |^ b |^ a" by Th47;
+    hence thesis by A21,A19,Th54;
   end;
-  then con_class A,Right_Cosets Normalizator A are_equipotent by A5,A12,
+  then con_class A,Right_Cosets Normalizer A are_equipotent by A5,A12,
 WELLORD2:def 4;
-  hence card con_class A = card Right_Cosets Normalizator A by CARD_1:5
-    .= Index Normalizator A by GROUP_2:145;
+  hence card con_class A = card Right_Cosets Normalizer A by CARD_1:5
+    .= Index Normalizer A by GROUP_2:145;
 end;
 
 theorem
-  con_class A is finite or Left_Cosets Normalizator A is finite implies
-  ex C being finite set st C = con_class A & card C = index Normalizator A
+  con_class A is finite or Left_Cosets Normalizer A is finite implies
+  ex C being finite set st C = con_class A & card C = index Normalizer A
 proof
-A1: card con_class A = Index Normalizator A by Th155
-    .= card Left_Cosets Normalizator A;
+A1: card con_class A = Index Normalizer A by Th130
+    .= card Left_Cosets Normalizer A;
   then
-A2: con_class A,Left_Cosets Normalizator A are_equipotent by CARD_1:5;
+A2: con_class A,Left_Cosets Normalizer A are_equipotent by CARD_1:5;
   assume
-A3: con_class A is finite or Left_Cosets Normalizator A is finite;
+A3: con_class A is finite or Left_Cosets Normalizer A is finite;
   then reconsider C = con_class A as finite set by A2,CARD_1:38;
   take C;
   thus C = con_class A;
-  Left_Cosets Normalizator A is finite by A3,A2,CARD_1:38;
+  Left_Cosets Normalizer A is finite by A3,A2,CARD_1:38;
   hence thesis by A1,GROUP_2:def 18;
 end;
 
-theorem Th157:
-  card con_class a = Index Normalizator{a}
+theorem Th132:
+  card con_class a = Index Normalizer{a}
 proof
   deffunc F(set) = {$1};
   consider f being Function such that
@@ -2621,11 +2620,11 @@ A5:   f.y = x by FUNCT_1:def 3;
       reconsider y as Element of G by A1,A4;
       f.y = {y} by A1,A2,A4;
       then x in {{d} : d in con_class a} by A1,A4,A5;
-      hence thesis by Th118;
+      hence thesis by Th100;
     end;
     let x;
     assume x in con_class{a};
-    then x in {{b} : b in con_class a} by Th118;
+    then x in {{b} : b in con_class a} by Th100;
     then consider b such that
 A6: x = {b} and
 A7: b in con_class a;
@@ -2643,45 +2642,45 @@ A9: f.x = f.y;
   end;
   then con_class a,con_class{a} are_equipotent by A1,A3,WELLORD2:def 4;
   hence card con_class a = card con_class{a} by CARD_1:5
-    .= Index Normalizator{a} by Th155;
+    .= Index Normalizer{a} by Th130;
 end;
 
 theorem
-  con_class a is finite or Left_Cosets Normalizator{a} is finite implies
-  ex C being finite set st C = con_class a & card C = index Normalizator{a}
+  con_class a is finite or Left_Cosets Normalizer{a} is finite implies
+  ex C being finite set st C = con_class a & card C = index Normalizer{a}
 proof
-A1: card con_class a = Index Normalizator {a} by Th157
-    .= card Left_Cosets Normalizator {a};
+A1: card con_class a = Index Normalizer {a} by Th132
+    .= card Left_Cosets Normalizer {a};
   then
-A2: con_class a,Left_Cosets Normalizator {a} are_equipotent by CARD_1:5;
+A2: con_class a,Left_Cosets Normalizer {a} are_equipotent by CARD_1:5;
   assume
-A3: con_class a is finite or Left_Cosets Normalizator {a} is finite;
+A3: con_class a is finite or Left_Cosets Normalizer {a} is finite;
   then reconsider C = con_class a as finite set by A2,CARD_1:38;
   take C;
   thus C = con_class a;
-  Left_Cosets Normalizator {a} is finite by A3,A2,CARD_1:38;
+  Left_Cosets Normalizer {a} is finite by A3,A2,CARD_1:38;
   hence thesis by A1,GROUP_2:def 18;
 end;
 
 definition
   let G;
   let H;
-  func Normalizator H -> strict Subgroup of G equals
-  Normalizator carr H;
+  func Normalizer H -> strict Subgroup of G equals
+  Normalizer carr H;
   correctness;
 end;
 
-theorem Th160:
-  for H being strict Subgroup of G holds x in Normalizator H iff
+theorem Th134:
+  for H being strict Subgroup of G holds x in Normalizer H iff
   ex h st x = h & H |^ h = H
 proof
   let H be strict Subgroup of G;
-  thus x in Normalizator H implies ex h st x = h & H |^ h = H
+  thus x in Normalizer H implies ex h st x = h & H |^ h = H
   proof
-    assume x in Normalizator H;
+    assume x in Normalizer H;
     then consider a such that
 A1: x = a and
-A2: carr H |^ a = carr H by Th154;
+A2: carr H |^ a = carr H by Th129;
     H |^ a = H by A2,Def6;
     hence thesis by A1;
   end;
@@ -2689,12 +2688,12 @@ A2: carr H |^ a = carr H by Th154;
 A3: x = h and
 A4: H |^ h = H;
   carr H |^ h = carr H by A4,Def6;
-  hence thesis by A3,Th154;
+  hence thesis by A3,Th129;
 end;
 
-theorem Th161:
+theorem Th135:
   for H being strict Subgroup of G holds card con_class H = Index
-  Normalizator H
+  Normalizer H
 proof
   let H be strict Subgroup of G;
   defpred P[set,set] means ex H1 being strict Subgroup of G st $1 = H1 & $2 =
@@ -2724,8 +2723,8 @@ A6:   f.y = x by FUNCT_1:def 3;
       consider H1 being strict Subgroup of G such that
 A7:   y = H1 and
 A8:   x = carr H1 by A2,A3,A5,A6;
-      H1,H are_conjugated by A2,A5,A7,Th128;
-      then carr H1,carr H are_conjugated by Th134;
+      H1,H are_conjugated by A2,A5,A7,Th107;
+      then carr H1,carr H are_conjugated by Th113;
       hence thesis by A8;
     end;
     let x;
@@ -2734,11 +2733,11 @@ A8:   x = carr H1 by A2,A3,A5,A6;
 A9: B = x and
 A10: carr H,B are_conjugated;
     consider H1 being strict Subgroup of G such that
-A11: the carrier of H1 = B by A10,Th109;
+A11: the carrier of H1 = B by A10,Th93;
     B = carr H1 by A11;
-    then H1,H are_conjugated by A10,Th134;
+    then H1,H are_conjugated by A10,Th113;
     then
-A12: H1 in con_class H by Th128;
+A12: H1 in con_class H by Th107;
     then ex H2 being strict Subgroup of G st H1 = H2 & f.H1 = carr H2 by A3;
     hence thesis by A2,A9,A11,A12,FUNCT_1:def 3;
   end;
@@ -2754,68 +2753,68 @@ A14: f.x = f.y;
   end;
   then con_class H,con_class carr H are_equipotent by A2,A4,WELLORD2:def 4;
   hence card con_class H = card con_class carr H by CARD_1:5
-    .= Index Normalizator H by Th155;
+    .= Index Normalizer H by Th130;
 end;
 
 theorem
   for H being strict Subgroup of G holds con_class H is finite or
-  Left_Cosets Normalizator H is finite implies ex C being finite set st C =
-  con_class H & card C = index Normalizator H
+  Left_Cosets Normalizer H is finite implies ex C being finite set st C =
+  con_class H & card C = index Normalizer H
 proof
   let H be strict Subgroup of G;
-A1: card con_class H = Index Normalizator H by Th161
-    .= card Left_Cosets Normalizator H;
+A1: card con_class H = Index Normalizer H by Th135
+    .= card Left_Cosets Normalizer H;
   then
-A2: con_class H,Left_Cosets Normalizator H are_equipotent by CARD_1:5;
+A2: con_class H,Left_Cosets Normalizer H are_equipotent by CARD_1:5;
   assume
-A3: con_class H is finite or Left_Cosets Normalizator H is finite;
+A3: con_class H is finite or Left_Cosets Normalizer H is finite;
   then reconsider C = con_class H as finite set by A2,CARD_1:38;
   take C;
   thus C = con_class H;
-  Left_Cosets Normalizator H is finite by A3,A2,CARD_1:38;
+  Left_Cosets Normalizer H is finite by A3,A2,CARD_1:38;
   hence thesis by A1,GROUP_2:def 18;
 end;
 
-theorem Th163:
+theorem Th137:
   for G being strict Group, H being strict Subgroup of G holds H
-  is normal Subgroup of G iff Normalizator H = G
+  is normal Subgroup of G iff Normalizer H = G
 proof
   let G be strict Group, H be strict Subgroup of G;
-  thus H is normal Subgroup of G implies Normalizator H = G
+  thus H is normal Subgroup of G implies Normalizer H = G
   proof
     assume
 A1: H is normal Subgroup of G;
     now
       let a be Element of G;
       H |^ a = H by A1,Def13;
-      hence a in Normalizator H by Th160;
+      hence a in Normalizer H by Th134;
     end;
     hence thesis by GROUP_2:62;
   end;
   assume
-A2: Normalizator H = G;
+A2: Normalizer H = G;
   H is normal
   proof
     let a be Element of G;
-    a in Normalizator H by A2,STRUCT_0:def 5;
-    then ex b being Element of G st b = a & H |^ b = H by Th160;
+    a in Normalizer H by A2,STRUCT_0:def 5;
+    then ex b being Element of G st b = a & H |^ b = H by Th134;
     hence thesis;
   end;
   hence thesis;
 end;
 
 theorem
-  for G being strict Group holds Normalizator (1).G = G
+  for G being strict Group holds Normalizer (1).G = G
 proof
   let G be strict Group;
-  (1).G is normal Subgroup of G by Th137;
-  hence thesis by Th163;
+  (1).G is normal Subgroup of G by Th114;
+  hence thesis by Th137;
 end;
 
 theorem
-  for G being strict Group holds Normalizator (Omega).G = G
+  for G being strict Group holds Normalizer (Omega).G = G
 proof
   let G be strict Group;
-  (Omega).G is normal Subgroup of G by Th137;
-  hence thesis by Th163;
+  (Omega).G is normal Subgroup of G by Th114;
+  hence thesis by Th137;
 end;

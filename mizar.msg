@@ -407,6 +407,10 @@ Directives are not allowed in the text proper
 It is not allowed for expandable modes
 # 256
 "of" expected
+#257
+Right term must be a subterm of the left term
+#258
+Choice and Fraenkel terms are not allowed in reductions
 # 271
 Redefined mode cannot be expandable
 # 272

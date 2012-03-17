@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -15,6 +16,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="FINSET_1"/>
@@ -24,13 +26,13 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="ALGSTR_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
@@ -41,9 +43,9 @@
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
-<Func kind="K" nr="21">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -55,7 +57,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -68,8 +70,8 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="113">
-<Func kind="K" nr="281">
+<Func kind="K" nr="126">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -78,8 +80,8 @@
 </And>
 </Fraenkel>
 <Func kind="U" nr="1">
-<Func kind="K" nr="118">
-<Func kind="K" nr="281">
+<Func kind="K" nr="131">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -88,8 +90,8 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="117">
-<Func kind="K" nr="281">
+<Func kind="K" nr="130">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 </Func>

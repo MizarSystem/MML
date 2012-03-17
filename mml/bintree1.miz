@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek and Piotr Rudnicki
 ::
 :: Received December 30, 1993
-:: Copyright (c) 1993-2011 Association of Mizar Users
+:: Copyright (c) 1993-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,19 +18,19 @@ environ
       FINSEQ_1, TREES_1, ORDINAL1, ORDINAL4, CARD_1, XXREAL_0, ARYTM_3,
       FINSET_1, RELAT_1, TARSKI, TREES_A, LANG1, TDGROUP, DTCONSTR, STRUCT_0,
       ZFMISC_1, FUNCT_2, BINTREE1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
       STRUCT_0, MCART_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, FINSET_1, LANG1,
       TREES_1, TREES_2, TREES_3, TREES_4, DTCONSTR, PRE_POLY, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FINSEQOP, DTCONSTR,
-      RELSET_1, PRE_POLY;
+ constructors DOMAIN_1, FINSEQOP, DTCONSTR, RELSET_1, PRE_POLY, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, MEMBERED, FINSEQ_1,
-      TREES_2, TREES_3, STRUCT_0, DTCONSTR, FINSET_1, PRE_POLY, TREES_4,
-      TREES_1, RELSET_1;
+      TREES_2, TREES_3, STRUCT_0, DTCONSTR, FINSET_1, TREES_4, TREES_1,
+      RELSET_1, XTUPLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions DTCONSTR;
+ definitions DTCONSTR, XTUPLE_0;
  theorems TARSKI, NAT_1, MCART_1, ZFMISC_1, ENUMSET1, MODAL_1, RELSET_1,
-      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, LANG1, TREES_1, TREES_2,
-      TREES_3, TREES_4, DTCONSTR, FINSET_1, RELAT_1;
+      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, LANG1, TREES_1, TREES_2, TREES_3,
+      TREES_4, DTCONSTR, FINSET_1, XTUPLE_0;
  schemes FUNCT_2, DTCONSTR, MULTOP_1;
 
 begin
@@ -231,8 +231,7 @@ registration
   proof
     set t = the binary finite Tree;
     set T = the Function of t, D;
-    rng T c= D;
-    then reconsider T as DecoratedTree of D by RELAT_1:def 19;
+    reconsider T as DecoratedTree of D;
     take T;
     thus dom T is binary & T is finite by FUNCT_2:def 1;
   end;
@@ -290,7 +289,7 @@ A9:     t^<*2*> in succ t by TREES_2:def 5;
   end;
 end;
 
-theorem Th8:
+theorem Th6:
   for T0,T1 being Tree, t being Element of tree(T0,T1) holds (for p
   being Element of T0 st t = <*0*>^p holds t in Leaves tree(T0,T1) iff p in
 Leaves T0) & for p being Element of T1 st t = <*1*>^p holds t in Leaves tree(T0
@@ -344,7 +343,7 @@ A10: t^<*n*> in RT by TREES_1:55;
   hence contradiction by A9,TREES_1:55;
 end;
 
-theorem Th9:
+theorem Th7:
   for T0,T1 being Tree, t being Element of tree(T0,T1) holds (t =
   {} implies succ t = { t^<*0*>, t^<*1*> }) & (for p being Element of T0 st t =
   <*0*>^p for sp being FinSequence holds sp in succ p iff <*0*>^sp in succ t) &
@@ -455,7 +454,7 @@ A19: p^<*n*> in succ p by TREES_2:def 5;
   hence thesis by A19,FINSEQ_1:33;
 end;
 
-theorem Th10:
+theorem Th8:
   for T1,T2 being Tree holds T1 is binary & T2 is binary iff tree(
   T1,T2) is binary
 proof
@@ -472,7 +471,7 @@ A3:   not t in Leaves RT;
       per cases by TREES_3:68;
       suppose
         t = {};
-        hence succ t = { t^<*0*>, t^<*1*> } by Th9;
+        hence succ t = { t^<*0*>, t^<*1*> } by Th7;
       end;
       suppose
         ex p being FinSequence st p in T1 & t = <*0*>^p or p in T2 & t
@@ -487,7 +486,7 @@ A7:       t = <*1*>^p;
           per cases;
           suppose
             p in Leaves T2;
-            hence succ t = { t^<*0*>, t^<*1*> } by A3,A7,Th8;
+            hence succ t = { t^<*0*>, t^<*1*> } by A3,A7,Th6;
           end;
           suppose
             not p in Leaves T2;
@@ -506,7 +505,7 @@ A11:            t^<*n*> in RT;
 A12:            x = <*1*>^(p^<*n*>) by A7,A10,FINSEQ_1:32;
                 then reconsider pn = p^<*n*> as Element of T2 by A10,A11,
 TREES_3:70;
-                pn in succ p by A7,A9,A12,Th9;
+                pn in succ p by A7,A9,A12,Th7;
                 then pn = p^<*0*> or pn = p^<*1*> by A8,TARSKI:def 2;
                 then x = t^<*0*> or x = t^<*1*> by A10,FINSEQ_1:33;
                 hence x in { t^<*0*>, t^<*1*> } by TARSKI:def 2;
@@ -516,7 +515,7 @@ TREES_3:70;
               then
 A13:          x = <*1*>^(p^<*0*>) or x = <*1*>^(p^<*1*>) by FINSEQ_1:32;
               p^<*0*> in succ p & p^<*1*> in succ p by A8,TARSKI:def 2;
-              hence x in succ t by A7,A13,Th9;
+              hence x in succ t by A7,A13,Th7;
             end;
             hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:1;
           end;
@@ -529,7 +528,7 @@ A15:      t = <*0*>^p;
           per cases;
           suppose
             p in Leaves T1;
-            hence succ t = { t^<*0*>, t^<*1*> } by A3,A15,Th8;
+            hence succ t = { t^<*0*>, t^<*1*> } by A3,A15,Th6;
           end;
           suppose
             not p in Leaves T1;
@@ -548,7 +547,7 @@ A19:            t^<*n*> in RT;
 A20:            x = <*0*>^(p^<*n*>) by A15,A18,FINSEQ_1:32;
                 then reconsider pn = p^<*n*> as Element of T1 by A18,A19,
 TREES_3:69;
-                pn in succ p by A15,A17,A20,Th9;
+                pn in succ p by A15,A17,A20,Th7;
                 then pn = p^<*0*> or pn = p^<*1*> by A16,TARSKI:def 2;
                 then x = t^<*0*> or x = t^<*1*> by A18,FINSEQ_1:33;
                 hence x in { t^<*0*>, t^<*1*> } by TARSKI:def 2;
@@ -558,7 +557,7 @@ TREES_3:69;
               then
 A21:          x = <*0*>^(p^<*0*>) or x = <*0*>^(p^<*1*>) by FINSEQ_1:32;
               p^<*0*> in succ p & p^<*1*> in succ p by A16,TARSKI:def 2;
-              hence x in succ t by A15,A21,Th9;
+              hence x in succ t by A15,A21,Th7;
             end;
             hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:1;
           end;
@@ -574,7 +573,7 @@ A22: RT is binary;
     let t be Element of T1;
     reconsider zt = <*0*>^t as Element of RT by TREES_3:69;
     assume not t in Leaves T1;
-    then not zt in Leaves RT by Th8;
+    then not zt in Leaves RT by Th6;
     then
 A23: succ zt = { <*0*>^t^<*0*>, <*0*>^t^<*1*> } by A22,Def2;
 A24: succ zt = {zt^<*n*> where n is Element of NAT:zt^<*n*> in RT} by
@@ -604,7 +603,7 @@ A27:  x = t^<*0*> or x = t^<*1*> by TARSKI:def 2;
 A28:  <*0*>^(t^<*1*>) in succ zt by FINSEQ_1:32;
       <*0*>^t^<*0*> in succ zt by A23,TARSKI:def 2;
       then <*0*>^(t^<*0*>) in succ zt by FINSEQ_1:32;
-      hence x in succ t by A27,A28,Th9;
+      hence x in succ t by A27,A28,Th7;
     end;
     hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:1;
   end;
@@ -613,7 +612,7 @@ A28:  <*0*>^(t^<*1*>) in succ zt by FINSEQ_1:32;
     let t be Element of T2;
     reconsider zt = <*1*>^t as Element of RT by TREES_3:70;
     assume not t in Leaves T2;
-    then not zt in Leaves RT by Th8;
+    then not zt in Leaves RT by Th6;
     then
 A29: succ zt = { <*1*>^t^<*0*>, <*1*>^t^<*1*> } by A22,Def2;
 A30: succ zt = {zt^<*n*> where n is Element of NAT:zt^<*n*> in RT} by
@@ -643,14 +642,14 @@ A33:  x = t^<*0*> or x = t^<*1*> by TARSKI:def 2;
 A34:  <*1*>^(t^<*1*>) in succ zt by FINSEQ_1:32;
       <*1*>^t^<*0*> in succ zt by A29,TARSKI:def 2;
       then <*1*>^(t^<*0*>) in succ zt by FINSEQ_1:32;
-      hence x in succ t by A33,A34,Th9;
+      hence x in succ t by A33,A34,Th7;
     end;
     hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:1;
   end;
   hence thesis by Def2;
 end;
 
-theorem Th11:
+theorem Th9:
   for T1,T2 being DecoratedTree, x being set holds T1 is binary &
   T2 is binary iff x-tree (T1,T2) is binary
 proof
@@ -659,7 +658,7 @@ proof
     assume T1 is binary & T2 is binary;
     then dom T1 is binary & dom T2 is binary by Def3;
     then
-A1: tree(dom T1, dom T2) is binary by Th10;
+A1: tree(dom T1, dom T2) is binary by Th8;
     dom (x-tree (T1, T2)) = tree(dom T1, dom T2) by TREES_4:14;
     hence x-tree (T1,T2) is binary by A1,Def3;
   end;
@@ -667,7 +666,7 @@ A1: tree(dom T1, dom T2) is binary by Th10;
   then
 A2: dom (x-tree (T1,T2)) is binary by Def3;
   dom (x-tree (T1, T2)) = tree(dom T1, dom T2) by TREES_4:14;
-  then dom T1 is binary & dom T2 is binary by A2,Th10;
+  then dom T1 is binary & dom T2 is binary by A2,Th8;
   hence thesis by Def3;
 end;
 
@@ -695,7 +694,7 @@ TARSKI:def 2;
     then reconsider T1T2 = t1t2 as FinSequence of FinTrees D by FINSEQ_1:def 4;
     x-tree (T1, T2) = x-tree T1T2 by TREES_4:def 6;
     then dom (x-tree (T1, T2)) is finite;
-    hence thesis by Th11,FINSET_1:10;
+    hence thesis by Th9,FINSET_1:10;
   end;
 end;
 
@@ -725,7 +724,7 @@ A1:   s ==> p;
       take x1 = a91, x2 = a91;
       [s,p] in P by A1,LANG1:def 1;
       then [s,p] = [0,a9119] by TARSKI:def 1;
-      then p = a9119 by ZFMISC_1:27
+      then p = a9119 by XTUPLE_0:1
         .= <*1,1*> by FINSEQ_1:def 9;
       hence p = <*x1,x2*>;
     end;
@@ -734,7 +733,7 @@ A1:   s ==> p;
       assume a91 ==> s;
       then [1,s] in P by LANG1:def 1;
       then [1,s] = [0,a9119] by TARSKI:def 1;
-      hence contradiction by ZFMISC_1:27;
+      hence contradiction by XTUPLE_0:1;
     end;
     then
 A2: a91 in {t where t is Symbol of cherry: not ex s being FinSequence st t
@@ -768,7 +767,7 @@ A6:   nt ==> p;
       then
 A7:   [nt, p] = [0, a9119] by TARSKI:def 1;
       a9119 = <*1, 1*> & (root-tree 1).{} = 1 by FINSEQ_1:def 9,TREES_4:3;
-      hence nt ==> roots q9 by A6,A7,A5,ZFMISC_1:27;
+      hence nt ==> roots q9 by A6,A7,A5,XTUPLE_0:1;
     end;
     thus thesis;
   end;
@@ -813,7 +812,7 @@ A4: G is binary by Def4;
   hence thesis by A1,A4;
 end;
 
-theorem Th12:
+theorem Th10:
   for G being binary with_terminals with_nonterminals non empty
   DTConstrStr, ts being FinSequence of TS G, nt being Symbol of G st nt ==>
   roots ts holds nt is NonTerminal of G & dom ts = {1, 2} & 1 in dom ts & 2 in
@@ -871,13 +870,13 @@ roots ts & for t being DecoratedTree of the carrier of G() st t in rng ts holds
     let nt be Symbol of G(), ts be FinSequence of TS(G()) such that
 A4: nt ==> roots ts and
 A5: for t being DecoratedTree of the carrier of G() st t in rng ts holds P[t];
-A6: nt is NonTerminal of G() by A4,Th12;
+A6: nt is NonTerminal of G() by A4,Th10;
     consider tl, tr being Element of TS G() such that
 A7: roots ts = <*root-label tl, root-label tr*> and
     tl = ts.1 and
     tr = ts.2 and
 A8: nt-tree ts = nt-tree (tl, tr) and
-A9: tl in rng ts & tr in rng ts by A4,Th12;
+A9: tl in rng ts & tr in rng ts by A4,Th10;
     ( P[tl])& P[tr] by A5,A9;
     hence thesis by A2,A4,A6,A7,A8;
   end;
@@ -1024,14 +1023,14 @@ A6: tl = ts.1 and
 A7: tr = ts.2 and
 A8: nt-tree ts = nt-tree (tl, tr) and
     tl in rng ts and
-    tr in rng ts by Th12;
-A9: nt is NonTerminal of G() by A4,Th12;
+    tr in rng ts by Th10;
+A9: nt is NonTerminal of G() by A4,Th10;
     reconsider xr = f2().tr as Element of D();
-    2 in dom ts by A4,Th12;
+    2 in dom ts by A4,Th10;
     then
 A10: x.2 = xr by A7,FUNCT_1:13;
     reconsider xl = f2().tl as Element of D();
-    1 in dom ts by A4,Th12;
+    1 in dom ts by A4,Th10;
     then
 A11: x.1 = xl by A6,FUNCT_1:13;
     root-label tl = rts.1 & root-label tr = rts.2 by A5,FINSEQ_1:44;
@@ -1051,14 +1050,14 @@ A15: tl = ts.1 and
 A16: tr = ts.2 and
 A17: nt-tree ts = nt-tree (tl, tr) and
     tl in rng ts and
-    tr in rng ts by Th12;
-A18: nt is NonTerminal of G() by A13,Th12;
+    tr in rng ts by Th10;
+A18: nt is NonTerminal of G() by A13,Th10;
     reconsider xr = f1().tr as Element of D();
-    2 in dom ts by A13,Th12;
+    2 in dom ts by A13,Th10;
     then
 A19: x.2 = xr by A16,FUNCT_1:13;
     reconsider xl = f1().tl as Element of D();
-    1 in dom ts by A13,Th12;
+    1 in dom ts by A13,Th10;
     then
 A20: x.1 = xl by A15,FUNCT_1:13;
     root-label tl = rts.1 & root-label tr = rts.2 by A14,FINSEQ_1:44;
@@ -1334,7 +1333,7 @@ A1: now
     end;
 A2: for nt being NonTerminal of G, tl, tr being Element of TS(G) st nt ==>
 <*root-label tl, root-label tr*> & P[tl] & P[tr] holds P[nt-tree(tl, tr)] by
-Th11;
+Th9;
     thus for x being Element of TS(G) holds P[x] from BinDTConstrInd ( A1, A2);
   end;
 end;

@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -31,14 +32,14 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="22">
+<Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14">
-<Func kind="K" nr="22">
+<Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -66,7 +67,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="72">
+<Func kind="K" nr="80">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -107,14 +108,14 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="22">
+<Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14">
-<Func kind="K" nr="22">
+<Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -133,7 +134,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="72">
+<Func kind="K" nr="80">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -170,7 +171,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="23">
+<Func kind="K" nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -178,7 +179,7 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14">
-<Func kind="K" nr="23">
+<Func kind="K" nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -215,7 +216,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="76">
+<Func kind="K" nr="85">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -264,7 +265,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="23">
+<Func kind="K" nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -272,7 +273,7 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14">
-<Func kind="K" nr="23">
+<Func kind="K" nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -297,7 +298,7 @@
 <Func kind="F" nr="3"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="76">
+<Func kind="K" nr="85">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

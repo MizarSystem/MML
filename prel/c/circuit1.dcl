@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -38,17 +39,17 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="90"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="89">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -61,10 +62,10 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="13">
+<Func kind="K" nr="11">
 <Func kind="U" nr="8">
 <LocusVar nr="1"/>
-<Func kind="K" nr="301">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -72,25 +73,25 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <CCluster aid="CIRCUIT1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="89">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -106,10 +107,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="13">
+<Func kind="K" nr="11">
 <Func kind="U" nr="8">
 <LocusVar nr="1"/>
-<Func kind="K" nr="301">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -121,25 +122,25 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CIRCUIT1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="89">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -155,10 +156,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="13">
+<Func kind="K" nr="11">
 <Func kind="U" nr="8">
 <LocusVar nr="1"/>
-<Func kind="K" nr="301">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -167,7 +168,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="76"/>
 </Cluster>
 </CCluster>
 </Registrations>

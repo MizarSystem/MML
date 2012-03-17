@@ -2,7 +2,7 @@
 ::  by Library Committee
 ::
 :: Received January 6, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,7 +16,8 @@ environ
 
  vocabularies XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, RELAT_1,
       NAT_1, PARTFUN1, SUPINF_2, MESFUNC1, ZFMISC_1, CARD_1, FINSET_1,
-      XCMPLX_0, FUNCT_7, FUNCOP_1, VALUED_0, BINOP_1, STRUCT_0, ORDINAL1;
+      XCMPLX_0, FUNCT_7, FUNCOP_1, VALUED_0, BINOP_1, STRUCT_0, ORDINAL1,
+      MSUALG_6;
  notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, SETFAM_1, FINSET_1, ORDINAL1,
       CARD_1, RELAT_1, XCMPLX_0, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, NAT_1,
       FINSEQ_1, FUNCOP_1, ZFMISC_1, PBOOLE, FUNCT_7;
@@ -274,24 +275,24 @@ A1:   I is non empty;
       thus S is trivial implies for x,y being Element of I holds x = y
       proof
        assume
-Z:      I is trivial;
+A2:      I is trivial;
        let x,y be Element of I;
-       thus thesis by Z,A1,ZFMISC_1:def 10;
+       thus thesis by A2,A1,ZFMISC_1:def 10;
       end;
       assume
-A4:   for x,y being Element of I holds x = y;
+A3:   for x,y being Element of I holds x = y;
       let x,y be set;
-      thus thesis by A4;
+      thus thesis by A3;
     end;
     suppose
-A5:   I is empty;
+A4:   I is empty;
       for x,y being Element of I holds x = y
       proof
         let x, y be Element of I;
-        thus x = {} by A5,SUBSET_1:def 1
-          .= y by A5,SUBSET_1:def 1;
+        thus x = {} by A4,SUBSET_1:def 1
+          .= y by A4,SUBSET_1:def 1;
       end;
-      hence thesis by A5;
+      hence thesis by A4;
     end;
   end;
 end;
@@ -616,7 +617,7 @@ end;
 definition
   let V be non empty ZeroStr;
   redefine attr V is trivial means
-  :Def19:
+  :Def18:
   for u being Element of V holds u = 0.V;
   compatibility
   proof
@@ -634,7 +635,7 @@ registration
   cluster NonZero V -> non empty;
   coherence
   proof
-    ex u being Element of V st u <> 0.V by Def19;
+    ex u being Element of V st u <> 0.V by Def18;
     hence thesis by ZFMISC_1:56;
   end;
 end;
@@ -655,10 +656,10 @@ registration
    proof
     assume NonZero S is not empty;
      then consider x being Element of S such that
-W1:   x in NonZero S by SUBSET_1:4;
-     not x in {0.S} by W1,XBOOLE_0:def 5;
+A1:   x in NonZero S by SUBSET_1:4;
+     not x in {0.S} by A1,XBOOLE_0:def 5;
      then x <> 0.S by TARSKI:def 1;
-    hence contradiction by Def19;
+    hence contradiction by Def18;
    end;
 end;
 
@@ -690,7 +691,7 @@ end;
 
 registration
  let S be finite non empty 1-sorted;
- cluster card S -> non zero for natural number;
+ cluster card S -> non zero for Nat;
  coherence;
 end;
 
@@ -727,7 +728,7 @@ theorem :: COMPOS_1:160
 
 definition let C be set, X be 1-sorted;
  attr X is C-element means
-:Def20: the carrier of X is C-element;
+:Def19: the carrier of X is C-element;
 end;
 
 registration let C be Cardinal;
@@ -741,7 +742,7 @@ end;
 
 registration let C be Cardinal, X be C-element 1-sorted;
  cluster the carrier of X -> C-element;
- coherence by Def20;
+ coherence by Def19;
 end;
 
 registration
@@ -761,18 +762,97 @@ registration
  coherence
  proof let S be 1-sorted;
    assume
-A: the carrier of S is non empty;
+A1: the carrier of S is non empty;
    assume S is trivial;
-   hence the carrier of S is 1-element by A;
+   hence the carrier of S is 1-element by A1;
  end;
  cluster 1-element -> non empty trivial for 1-sorted;
  coherence
   proof let S be 1-sorted;
    assume
-Z:  S is 1-element;
+A2:  S is 1-element;
    hence the carrier of S is non empty;
-    the carrier of S is trivial by Z;
+    the carrier of S is trivial by A2;
    hence thesis;
   end;
 end;
 
+:: Feasibility, 2011.11.15, A.T.
+
+definition let S be 2-sorted;
+ attr S is feasible means
+:Def20:  the carrier of S is empty implies the carrier' of S is empty;
+end;
+
+registration
+ cluster non empty -> feasible for 2-sorted;
+ coherence
+  proof let S be 2-sorted;
+   assume the carrier of S is not empty;
+   hence thesis by Def20;
+  end;
+ cluster void -> feasible for 2-sorted;
+ coherence
+  proof let S be 2-sorted;
+   assume the carrier' of S is empty;
+   hence thesis by Def20;
+  end;
+ cluster empty feasible -> void for 2-sorted;
+ coherence
+  proof let S be 2-sorted;
+   assume the carrier of S is empty & S is feasible;
+   hence the carrier' of S is empty by Def20;
+  end;
+ cluster non void feasible -> non empty for 2-sorted;
+ coherence;
+end;
+
+definition let S be 2-sorted;
+ attr S is trivial' means
+:Def21: the carrier' of S is trivial;
+end;
+
+registration
+  cluster strict non empty non void trivial trivial' for 2-sorted;
+  existence
+  proof
+   take S = 2-sorted(#1,1#);
+    thus S is strict;
+    thus S is not empty;
+    thus S is not void;
+    thus S is trivial by CARD_1:49;
+    thus the carrier' of S is trivial by CARD_1:49;
+  end;
+end;
+
+registration let S be trivial' 2-sorted;
+ cluster the carrier' of S ->trivial;
+ coherence by Def21;
+end;
+
+registration
+ cluster non trivial' for 2-sorted;
+ existence
+  proof
+   take S = 2-sorted(#1,{0,1}#);
+    0 in {0,1} & 1 in {0,1} by TARSKI:def 2;    
+   hence thesis by ZFMISC_1:def 10;
+  end;
+end;
+
+registration let S be non trivial' 2-sorted;
+ cluster the carrier' of S -> non trivial;
+ coherence by Def21;
+end;
+
+registration
+ cluster void -> trivial' for 2-sorted;
+  coherence
+  proof
+    let S be 2-sorted;
+    assume the carrier' of S is empty;
+    hence the carrier' of S is trivial;
+  end;
+  cluster non trivial -> non empty for 1-sorted;
+  coherence;
+end;

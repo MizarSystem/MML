@@ -2,7 +2,7 @@
 ::  by Edmund Woronowicz
 ::
 :: Received March 15, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,10 +14,10 @@
 
 environ
 
- vocabularies XBOOLE_0, TARSKI, ZFMISC_1, SUBSET_1, RELAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1;
- constructors TARSKI, SUBSET_1, ZFMISC_1;
- registrations XBOOLE_0, ZFMISC_1;
+ vocabularies XBOOLE_0, TARSKI, ZFMISC_1, SUBSET_1, RELAT_1, VALUED_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1;
+ constructors TARSKI, SUBSET_1, ZFMISC_1, XTUPLE_0, XBOOLE_0;
+ registrations XBOOLE_0, ZFMISC_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
 
 
@@ -96,14 +96,6 @@ end;
 
 ::             DOMAIN OF RELATION
 
-definition
-  let R be set;
-  func proj1 R -> set means
-:: RELAT_1:def 4
-
-  x in it iff ex y st [x,y] in R;
-end;
-
 notation
   let R be Relation;
   synonym dom R for proj1 R;
@@ -120,27 +112,12 @@ theorem :: RELAT_1:3
 
 ::            CODOMAIN OF RELATION
 
-definition
-  let R be set;
-  func proj2 R -> set means
-:: RELAT_1:def 5
-
-  y in it iff ex x st [x,y] in R;
-end;
-
 notation
   let R be Relation;
   synonym rng R for proj2 R;
 end;
 
-theorem :: RELAT_1:4
-  x in dom R implies ex y st y in rng R;
-
-theorem :: RELAT_1:5
-  y in rng R implies ex x st x in dom R;
-
-theorem :: RELAT_1:6
-  [x,y] in R implies x in dom R & y in rng R;
+canceled 3;
 
 theorem :: RELAT_1:7
   R c= [:dom R, rng R:];
@@ -169,6 +146,7 @@ theorem :: RELAT_1:14
 ::                  FIELD OF RELATION
 
 definition
+ canceled 2;
   let R;
   func field R -> set equals
 :: RELAT_1:def 6
@@ -219,11 +197,16 @@ theorem :: RELAT_1:24
 ::               COMPOSITION OF RELATIONS
 
 definition
-  let P,R;
-  func P*R -> Relation means
+  let P,R be set;
+  func P(#)R -> Relation means
 :: RELAT_1:def 8
 
   [x,y] in it iff ex z st [x,z] in P & [z,y] in R;
+end;
+
+notation
+  let P,R;
+  synonym P*R for P(#)R;
 end;
 
 theorem :: RELAT_1:25
@@ -339,8 +322,17 @@ definition
   [x,y] in it iff x in X & x = y;
 end;
 
+registration let X;
+ reduce dom id X to X;
+ reduce rng id X to X;
+end;
+
 theorem :: RELAT_1:45
   dom id X = X & rng id X = X;
+
+registration let X;
+ reduce (id X)~ to id X;
+end;
 
 theorem :: RELAT_1:46
   (id X)~ = id X;
@@ -424,6 +416,10 @@ theorem :: RELAT_1:67
 theorem :: RELAT_1:68
   dom R c= X implies R|X = R;
 
+registration let R;
+ reduce R|dom R to R;
+end;
+
 theorem :: RELAT_1:69
   R|dom R = R;
 
@@ -432,6 +428,10 @@ theorem :: RELAT_1:70
 
 theorem :: RELAT_1:71
   (R|X)|Y = R|(X /\ Y);
+
+registration let R,X;
+ reduce R|X|X to R|X;
+end;
 
 theorem :: RELAT_1:72
   (R|X)|X = R|X;
@@ -476,7 +476,7 @@ theorem :: RELAT_1:83
 
 definition
   let Y,R;
-  func Y|R -> Relation means
+  func Y|`R -> Relation means
 :: RELAT_1:def 12
 
   [x,y] in it iff y in Y & [x,y] in R;
@@ -484,86 +484,94 @@ end;
 
 registration
   let R be Relation, X be empty set;
-  cluster X|R -> empty;
+  cluster X|`R -> empty;
 end;
 
 theorem :: RELAT_1:84
-  y in rng(Y|R) iff y in Y & y in rng R;
+  y in rng(Y|`R) iff y in Y & y in rng R;
 
 theorem :: RELAT_1:85
-  rng(Y|R) c= Y;
+  rng(Y|`R) c= Y;
 
 theorem :: RELAT_1:86
-  Y|R c= R;
+  Y|`R c= R;
 
 theorem :: RELAT_1:87
-  rng(Y|R) c= rng R;
+  rng(Y|`R) c= rng R;
 
 theorem :: RELAT_1:88
-  rng(Y|R) = rng R /\ Y;
+  rng(Y|`R) = rng R /\ Y;
 
 theorem :: RELAT_1:89
-  Y c= rng R implies rng(Y|R) = Y;
+  Y c= rng R implies rng(Y|`R) = Y;
 
 theorem :: RELAT_1:90
-  (Y|R)*P c= R*P;
+  (Y|`R)*P c= R*P;
 
 theorem :: RELAT_1:91
-  P*(Y|R) c= P*R;
+  P*(Y|`R) c= P*R;
 
 theorem :: RELAT_1:92
-  Y|R = R*(id Y);
+  Y|`R = R*(id Y);
 
 theorem :: RELAT_1:93
-  Y|R = R /\ [:dom R,Y:];
+  Y|`R = R /\ [:dom R,Y:];
 
 theorem :: RELAT_1:94
-  rng R c= Y implies Y|R = R;
+  rng R c= Y implies Y|`R = R;
+
+registration let R;
+ reduce rng R|`R to R;
+end;
 
 theorem :: RELAT_1:95
-  rng R|R=R;
+  rng R|`R=R;
 
 theorem :: RELAT_1:96
-  Y|(X|R) = (Y /\ X)|R;
+  Y|`(X|`R) = (Y /\ X)|`R;
+
+registration let Y,R;
+ reduce Y|`(Y|`R) to Y|`R;
+end;
 
 theorem :: RELAT_1:97
-  Y|(Y|R) = Y|R;
+  Y|`(Y|`R) = Y|`R;
 
 theorem :: RELAT_1:98
-  X c= Y implies Y|(X|R) = X|R;
+  X c= Y implies Y|`(X|`R) = X|`R;
 
 theorem :: RELAT_1:99
-  Y c= X implies Y|(X|R) = Y|R;
+  Y c= X implies Y|`(X|`R) = Y|`R;
 
 theorem :: RELAT_1:100
-  X c= Y implies X|R c= Y|R;
+  X c= Y implies X|`R c= Y|`R;
 
 theorem :: RELAT_1:101
-  P1 c= P2 implies Y|P1 c= Y|P2;
+  P1 c= P2 implies Y|`P1 c= Y|`P2;
 
 theorem :: RELAT_1:102
-  P1 c= P2 & Y1 c= Y2 implies Y1|P1 c= Y2|P2;
+  P1 c= P2 & Y1 c= Y2 implies Y1|`P1 c= Y2|`P2;
 
 theorem :: RELAT_1:103
-  (X \/ Y)|R = (X|R) \/ (Y|R);
+  (X \/ Y)|`R = (X|`R) \/ (Y|`R);
 
 theorem :: RELAT_1:104
-  (X /\ Y)|R = X|R /\ Y|R;
+  (X /\ Y)|`R = X|`R /\ Y|`R;
 
 theorem :: RELAT_1:105
-  (X \ Y)|R = X|R \ Y|R;
+  (X \ Y)|`R = X|`R \ Y|`R;
 
 theorem :: RELAT_1:106
-  {}|R = {};
+  {}|`R = {};
 
 theorem :: RELAT_1:107
-  Y|{} = {};
+  Y|`{} = {};
 
 theorem :: RELAT_1:108
-  Y|(P*R) = P*(Y|R);
+  Y|`(P*R) = P*(Y|`R);
 
 theorem :: RELAT_1:109
-  (Y|R)|X = Y|(R|X);
+  (Y|`R)|X = Y|`(R|X);
 
 ::           IMAGE OF SET IN RELATION
 
@@ -593,11 +601,15 @@ theorem :: RELAT_1:114
 theorem :: RELAT_1:115
   rng(R|X) = R.:X;
 
-theorem :: RELAT_1:116
-  R.:{} = {};
+registration let R; let X be empty set;
+ cluster R.:X -> empty;
+end;
 
-theorem :: RELAT_1:117
-  {}.:X = {};
+registration let R be empty Relation; let X;
+ cluster R.:X -> empty;
+end;
+
+canceled 2;
 
 theorem :: RELAT_1:118
   R.:X = {} iff dom R misses X;
@@ -663,11 +675,15 @@ theorem :: RELAT_1:134
 theorem :: RELAT_1:135
   R"Y c= R"rng R;
 
-theorem :: RELAT_1:136
-  R"{} = {};
+registration let R; let Y be empty set;
+ cluster R"Y -> empty;
+end;
 
-theorem :: RELAT_1:137
-  {}"Y = {};
+registration let R be empty Relation; let Y;
+ cluster R"Y -> empty;
+end;
+
+canceled 2;
 
 theorem :: RELAT_1:138
   R"Y = {} iff rng R misses Y;
@@ -932,6 +948,14 @@ theorem :: RELAT_1:172
 theorem :: RELAT_1:173
   field {[x,x]} = {x};
 
+registration let X; let R be X-defined Relation;
+ reduce R|X to R;
+end;
+
+registration let Y; let R be Y-valued Relation;
+ reduce Y|`R to R;
+end;
+
 theorem :: RELAT_1:174
   for R being X-defined Relation holds R = R|X;
 
@@ -972,26 +996,21 @@ theorem :: RELAT_1:184
 theorem :: RELAT_1:185
   for R being X-defined Y-valued Relation holds R c= [:X,Y:];
 
-registration
-  let X,Y;
-  sethood of X-defined Y-valued Relation;
-end;
-
 :: new, 20011.06.11, A.T.
 
 theorem :: RELAT_1:186
-  dom(X|R) c= dom R;
+  dom(X|`R) c= dom R;
 
 registration
   let A,X;
   let R be A-defined Relation;
-  cluster X|R -> A-defined;
+  cluster X|`R -> A-defined;
 end;
 
 registration
   let X,A;
   let R be A-valued Relation;
-  cluster X|R -> A-valued X-valued;
+  cluster X|`R -> A-valued X-valued;
 end;
 
 registration

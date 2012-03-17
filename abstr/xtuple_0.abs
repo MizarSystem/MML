@@ -1,0 +1,377 @@
+:: Kuratowski Pairs. {T}uples and Projections
+::  by Grzegorz Bancerek, Artur Korni\l owicz and Andrzej Trybulec
+::
+:: Received December 9, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies MCART_1, RECDEF_2, XTUPLE_0, FACIRC_1, RELAT_1, TARSKI, XBOOLE_0;
+ notations TARSKI, XBOOLE_0;
+ constructors TARSKI, XBOOLE_0;
+ registrations XBOOLE_0;
+ requirements BOOLE;
+
+
+begin :: Pairs
+
+reserve x,x1,x2,x3,x4,y,y1,y2,y3,y4,z,z1,z2,z2,z4 for set;
+
+definition let x;
+ attr x is pair means
+:: XTUPLE_0:def 1
+ ex x1,x2 st x = [x1,x2];
+end;
+
+registration let x1,x2;
+ cluster [x1,x2] -> pair;
+end;
+
+reserve X,Y for set;
+
+theorem :: XTUPLE_0:1
+  [x1,x2] = [y1,y2] implies x1 = y1 & x2 = y2;
+
+definition
+  let x;
+  assume x is pair;
+  func x`1 means
+:: XTUPLE_0:def 2
+ x = [y1,y2] implies it = y1;
+  func x`2 means
+:: XTUPLE_0:def 3
+ x = [y1,y2] implies it = y2;
+end;
+
+registration let x1,x2;
+ reduce [x1,x2]`1 to x1;
+ reduce [x1,x2]`2 to x2;
+end;
+
+registration
+ cluster pair for set;
+end;
+
+registration let x be pair set;
+ reduce [x`1,x`2] to x;
+end;
+
+theorem :: XTUPLE_0:2
+ for a,b being pair set st a`1 = b`1 & a`2 = b`2
+  holds a = b;
+
+begin :: Triples
+
+definition
+  let x1,x2,x3;
+  func [x1,x2,x3] equals
+:: XTUPLE_0:def 4
+  [[x1,x2],x3];
+end;
+
+definition let x;
+ attr x is triple means
+:: XTUPLE_0:def 5
+ ex x1,x2,x3 st x = [x1,x2,x3];
+end;
+
+registration let x1,x2,x3;
+ cluster [x1,x2,x3] -> triple;
+end;
+
+theorem :: XTUPLE_0:3
+  [x1,x2,x3] = [y1,y2,y3] implies x1 = y1 & x2 = y2 & x3 = y3;
+
+registration
+ cluster triple for set;
+ cluster triple -> pair for set;
+end;
+
+definition
+  let x be set;
+  func x`1_3 equals
+:: XTUPLE_0:def 6
+x`1`1;
+  func x`2_3 equals
+:: XTUPLE_0:def 7
+x`1`2;
+end;
+
+notation
+ let x be set;
+ synonym x`3_3 for x`2;
+end;
+
+registration let x1,x2,x3;
+ reduce [x1,x2,x3]`1_3 to x1;
+ reduce [x1,x2,x3]`2_3 to x2;
+ reduce [x1,x2,x3]`3_3 to x3;
+end;
+
+registration let x be triple set;
+ reduce [x`1_3,x`2_3,x`3_3] to x;
+end;
+
+theorem :: XTUPLE_0:4
+ for a,b being triple set st a`1_3 = b`1_3 & a`2_3 = b`2_3 & a`3_3 = b`3_3
+  holds a = b;
+
+begin :: Quadruples
+
+definition
+  let x1,x2,x3,x4;
+  func [x1,x2,x3,x4] equals
+:: XTUPLE_0:def 8
+  [[x1,x2,x3],x4];
+end;
+
+definition let x;
+ attr x is quadruple means
+:: XTUPLE_0:def 9
+ ex x1,x2,x3,x4 st x = [x1,x2,x3,x4];
+end;
+
+registration let x1,x2,x3,x4;
+ cluster [x1,x2,x3,x4] -> quadruple;
+end;
+
+theorem :: XTUPLE_0:5
+ [x1,x2,x3,x4] = [y1,y2,y3,y4]
+   implies x1 = y1 & x2 = y2 & x3 = y3 & x4 = y4;
+
+registration
+ cluster quadruple for set;
+ cluster quadruple -> triple for set;
+end;
+
+definition
+ let x be set;
+  func x`1_4 equals
+:: XTUPLE_0:def 10
+x`1`1`1;
+  func x`2_4 equals
+:: XTUPLE_0:def 11
+x`1`1`2;
+end;
+
+notation let x be set;
+ synonym x`3_4 for x`2_3;
+ synonym x`4_4 for x`2;
+end;
+
+registration let x1,x2,x3,x4;
+ reduce [x1,x2,x3,x4]`1_4 to x1;
+ reduce [x1,x2,x3,x4]`2_4 to x2;
+ reduce [x1,x2,x3,x4]`3_4 to x3;
+ reduce [x1,x2,x3,x4]`4_4 to x4;
+end;
+
+registration let x be quadruple set;
+ reduce [x`1_4,x`2_4,x`3_4,x`4_4] to x;
+end;
+
+reserve X,X1,X2,X3,X4,Y for set;
+
+:: Preliminaries
+
+theorem :: XTUPLE_0:6
+ [x,y] in X implies x in union union X;
+
+theorem :: XTUPLE_0:7
+ [x,y] in X implies y in union union X;
+
+:: Projections
+
+definition
+  let X be set;
+  func proj1 X -> set means
+:: XTUPLE_0:def 12
+
+  x in it iff ex y st [x,y] in X;
+  func proj2 X -> set means
+:: XTUPLE_0:def 13
+
+  x in it iff ex y st [y,x] in X;
+end;
+
+theorem :: XTUPLE_0:8
+ X c= Y implies proj1 X c= proj1 Y;
+
+theorem :: XTUPLE_0:9
+ X c= Y implies proj2 X c= proj2 Y;
+
+definition
+  let X be set;
+  func proj1_3 X -> set equals
+:: XTUPLE_0:def 14
+   proj1 proj1 X;
+  func proj2_3 X -> set equals
+:: XTUPLE_0:def 15
+   proj2 proj1 X;
+end;
+
+notation let X be set;
+ synonym proj3_3 X for proj2 X;
+end;
+
+theorem :: XTUPLE_0:10
+ X c= Y implies proj1_3 X c= proj1_3 Y;
+
+theorem :: XTUPLE_0:11
+ X c= Y implies proj2_3 X c= proj2_3 Y;
+
+theorem :: XTUPLE_0:12
+ x in proj1_3 X implies ex y,z st [x,y,z] in X;
+
+theorem :: XTUPLE_0:13
+ [x,y,z] in X implies x in proj1_3 X;
+
+theorem :: XTUPLE_0:14
+ x in proj2_3 X implies ex y,z st [y,x,z] in X;
+
+theorem :: XTUPLE_0:15
+ [x,y,z] in X implies y in proj2_3 X;
+
+definition
+  let X be set;
+func proj1_4 X -> set equals
+:: XTUPLE_0:def 16
+   proj1 proj1_3 X;
+  func proj2_4 X -> set equals
+:: XTUPLE_0:def 17
+   proj2 proj1_3 X;
+end;
+
+notation let X be set;
+  synonym proj3_4 X for proj2_3 X;
+  synonym proj4_4 X for proj2 X;
+end;
+
+theorem :: XTUPLE_0:16
+ X c= Y implies proj1_4 X c= proj1_4 Y;
+
+theorem :: XTUPLE_0:17
+ X c= Y implies proj2_4 X c= proj2_4 Y;
+
+theorem :: XTUPLE_0:18
+ x in proj1_4 X implies ex x1,x2,x3 st [x,x1,x2,x3] in X;
+
+theorem :: XTUPLE_0:19
+ [x,x1,x2,x3] in X implies x in proj1_4 X;
+
+theorem :: XTUPLE_0:20
+ x in proj2_4 X implies ex x1,x2,x3 st [x1,x,x2,x3] in X;
+
+theorem :: XTUPLE_0:21
+ [x1,x,x2,x3] in X implies x in proj2_4 X;
+
+theorem :: XTUPLE_0:22
+ for a,b being quadruple set
+  st a`1_4 = b`1_4 & a`2_4 = b`2_4 & a`3_4 = b`3_4 & a`4_4 = b`4_4
+  holds a = b;
+
+begin :: Boolean properties
+
+registration let X be empty set;
+ cluster proj1 X -> empty;
+end;
+
+registration let X be empty set;
+ cluster proj2 X -> empty;
+end;
+
+registration let X be empty set;
+ cluster proj1_3 X -> empty;
+end;
+
+registration let X be empty set;
+ cluster proj2_3 X -> empty;
+end;
+
+registration let X be empty set;
+ cluster proj1_4 X -> empty;
+end;
+
+registration let X be empty set;
+ cluster proj2_4 X -> empty;
+end;
+
+theorem :: XTUPLE_0:23
+ proj1(X \/ Y) = proj1 X \/ proj1 Y;
+
+theorem :: XTUPLE_0:24
+  proj1(X /\ Y) c= proj1 X /\ proj1 Y;
+
+theorem :: XTUPLE_0:25
+  proj1 X \ proj1 Y c= proj1(X \ Y);
+
+theorem :: XTUPLE_0:26
+  proj1 X \+\ proj1 Y c= proj1(X \+\ Y);
+
+theorem :: XTUPLE_0:27
+ proj2(X \/ Y) = proj2 X \/ proj2 Y;
+
+theorem :: XTUPLE_0:28
+  proj2(X /\ Y) c= proj2 X /\ proj2 Y;
+
+theorem :: XTUPLE_0:29
+  proj2 X \ proj2 Y c= proj2(X \ Y);
+
+theorem :: XTUPLE_0:30
+   proj2 X \+\ proj2 Y c= proj2(X \+\ Y);
+
+theorem :: XTUPLE_0:31
+ proj1_3(X \/ Y) = proj1_3 X \/ proj1_3 Y;
+
+theorem :: XTUPLE_0:32
+  proj1_3(X /\ Y) c= proj1_3 X /\ proj1_3 Y;
+
+theorem :: XTUPLE_0:33
+  proj1_3 X \ proj1_3 Y c= proj1_3(X \ Y);
+
+theorem :: XTUPLE_0:34
+  proj1_3 X \+\ proj1_3 Y c= proj1_3(X \+\ Y);
+
+theorem :: XTUPLE_0:35
+ proj2_3(X \/ Y) = proj2_3 X \/ proj2_3 Y;
+
+theorem :: XTUPLE_0:36
+  proj2_3(X /\ Y) c= proj2_3 X /\ proj2_3 Y;
+
+theorem :: XTUPLE_0:37
+  proj2_3 X \ proj2_3 Y c= proj2_3(X \ Y);
+
+theorem :: XTUPLE_0:38
+  proj2_3 X \+\ proj2_3 Y c= proj2_3(X \+\ Y);
+
+theorem :: XTUPLE_0:39
+ proj1_4(X \/ Y) = proj1_4 X \/ proj1_4 Y;
+
+theorem :: XTUPLE_0:40
+  proj1_4(X /\ Y) c= proj1_4 X /\ proj1_4 Y;
+
+theorem :: XTUPLE_0:41
+  proj1_4 X \ proj1_4 Y c= proj1_4(X \ Y);
+
+theorem :: XTUPLE_0:42
+  proj1_4 X \+\ proj1_4 Y c= proj1_4(X \+\ Y);
+
+theorem :: XTUPLE_0:43
+ proj2_4(X \/ Y) = proj2_4 X \/ proj2_4 Y;
+
+theorem :: XTUPLE_0:44
+  proj2_4(X /\ Y) c= proj2_4 X /\ proj2_4 Y;
+
+theorem :: XTUPLE_0:45
+  proj2_4 X \ proj2_4 Y c= proj2_4(X \ Y);
+
+theorem :: XTUPLE_0:46
+  proj2_4 X \+\ proj2_4 Y c= proj2_4(X \+\ Y);

@@ -2,7 +2,7 @@
 ::  by Agata Darmochwa{\l}
 ::
 :: Received November 21, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,7 +19,7 @@ environ
       ARYTM_3, RVSUM_1, SQUARE_1, CARD_3, XXREAL_0, XCMPLX_0, ZFMISC_1,
       VALUED_1, PCOMPS_1, STRUCT_0, METRIC_1, XBOOLE_0, RLTOPSP1, PRE_TOPC,
       RLVECT_1, FUNCSDOM, SETFAM_1, ALGSTR_0, FUNCT_2, MONOID_0, BINOP_2,
-      FUNCOP_1, SUPINF_2, MCART_1, EUCLID, VALUED_2;
+      FUNCOP_1, SUPINF_2, MCART_1, EUCLID, VALUED_2, JORDAN2C;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, SETFAM_1, XREAL_0, COMPLEX1, NAT_1, RELAT_1, FUNCT_1, VALUED_0,
       STRUCT_0, METRIC_1, FUNCT_2, BINOP_1, BINOP_2, FUNCOP_1, REAL_1,
@@ -48,8 +48,14 @@ reserve k,j,n for Nat,
 
 definition
   let n be Nat;
-  func REAL n -> FinSequence-DOMAIN of REAL equals
+  func REAL n -> FinSequenceSet of REAL equals
   n-tuples_on REAL;
+  coherence;
+end;
+
+registration
+  let n be Nat;
+  cluster REAL n -> non empty;
   coherence;
 end;
 
@@ -195,7 +201,7 @@ definition
   coherence;
 end;
 
-Lm2: f is Element of REAL len f
+Lm1: f is Element of REAL len f
 proof
   rng f c= REAL;
   then f is FinSequence of REAL by FINSEQ_1:def 4;
@@ -215,7 +221,7 @@ proof
     .= n |-> 0 by ABSVALUE:2;
 end;
 
-theorem Th8:
+theorem Th5:
   for f being complex-valued Function holds abs -f = abs f
   proof
     let f be complex-valued Function;
@@ -233,10 +239,10 @@ A3: dom -f = dom f by VALUED_1:8;
     hence thesis by A1,A2,A3,FUNCT_1:2;
   end;
 
-theorem Th9:
+theorem Th6:
   abs(r*f) = abs(r)*(abs f) by RFUNCT_1:25;
 
-theorem Th10:
+theorem Th7:
   |.0*n.| = 0
 proof
   thus |.0*n .| = sqrt Sum (n |-> 0^2) by RVSUM_1:56
@@ -244,10 +250,10 @@ proof
     .= 0 by SQUARE_1:17;
 end;
 
-Lm3: sqr abs f = sqr f
+Lm2: sqr abs f = sqr f
 proof
   set n = len f;
-  reconsider x=f as Element of REAL n by Lm2;
+  reconsider x=f as Element of REAL n by Lm1;
   now
     let k;
     assume k in Seg n;
@@ -259,7 +265,7 @@ proof
   hence thesis by FINSEQ_2:119;
 end;
 
-theorem Th11:
+theorem Th8:
   |. x .| = 0 implies x = 0*n
 proof
   assume
@@ -267,20 +273,20 @@ A1: |. x .| = 0;
   now
     let j;
     assume
-A2: j in Seg n;
+ j in Seg n;
     reconsider r = x .j as Element of REAL;
     Sum sqr x = 0 by A1,RVSUM_1:86,SQUARE_1:24;
-    then Sum sqr abs x = 0 by Lm3;
+    then Sum sqr abs x = 0 by Lm2;
     then (abs x).j = (n|->0).j by RVSUM_1:91;
     then abs r = (n|-> 0).j by VALUED_1:18;
-    then abs r = 0 by A2,FUNCOP_1:7;
+    then abs r = 0;
     then r = 0 by ABSVALUE:2;
-    hence x .j = (n|->(0 qua Real)).j by A2,FUNCOP_1:7;
+    hence x .j = (n|->(0 qua Real)).j;
   end;
   hence thesis by FINSEQ_2:119;
 end;
 
-theorem Th12:
+theorem Th9:
   |.f.| >= 0
 proof
   0 <= Sum sqr f by RVSUM_1:86;
@@ -290,33 +296,33 @@ end;
 registration
   let f;
   cluster |.f.| -> non negative;
-  coherence by Th12;
+  coherence by Th9;
 end;
 
-theorem Th13:
+theorem Th10:
   |.-f.| = |.f.|
 proof
-  thus |.-f.| = sqrt Sum sqr abs -f by Lm3
-    .= sqrt Sum sqr abs f by Th8
-    .= |.f.| by Lm3;
+  thus |.-f.| = sqrt Sum sqr abs -f by Lm2
+    .= sqrt Sum sqr abs f by Th5
+    .= |.f.| by Lm2;
 end;
 
 theorem
   |.r*f.| = abs(r)*|.f.|
 proof
   set n = len f;
-  reconsider x=f as Element of REAL n by Lm2;
+  reconsider x=f as Element of REAL n by Lm1;
 A1: 0 <= (abs(r))^2 & 0 <= Sum sqr abs x by RVSUM_1:86,XREAL_1:63;
-  thus |.r*f.| = sqrt Sum sqr abs(r*x) by Lm3
-    .= sqrt Sum sqr (abs(r)*abs x) by Th9
+  thus |.r*f.| = sqrt Sum sqr abs(r*x) by Lm2
+    .= sqrt Sum sqr (abs(r)*abs x) by Th6
     .= sqrt Sum ((abs(r))^2 * sqr abs x) by RVSUM_1:58
     .= sqrt ((abs(r))^2 * Sum sqr abs x) by RVSUM_1:87
     .= sqrt (abs(r))^2 * sqrt Sum sqr abs x by A1,SQUARE_1:29
     .= abs(r) * sqrt Sum sqr abs x by COMPLEX1:46,SQUARE_1:22
-    .= abs(r)*|.f.| by Lm3;
+    .= abs(r)*|.f.| by Lm2;
 end;
 
-theorem Th15:
+theorem Th12:
   |.x1 + x2.| <= |.x1.| + |.x2.|
 proof
 A1: 0 <= Sum sqr (x1 + x2) by RVSUM_1:86;
@@ -393,7 +399,7 @@ RVSUM_1:89
   then Sum sqr abs (x1 + x2) <= Sum sqr abs x1 + (2*Sum mlt(abs x1,abs x2))+
   Sum sqr abs x2 by A4,RVSUM_1:82;
   then Sum sqr (x1 + x2) <= Sum sqr abs x1 + (2*Sum mlt(abs x1,abs x2))+Sum
-  sqr abs x2 by Lm3;
+  sqr abs x2 by Lm2;
   then Sum sqr (x1 + x2) <= Sum sqr abs x1+2*sqrt((Sum sqr abs x1)*(Sum sqr
   abs x2)) + Sum sqr abs x2 by A12,XXREAL_0:2;
   then
@@ -407,15 +413,15 @@ A16: (sqrt Sum sqr abs x2)^2 = Sum sqr abs x2 by A13,SQUARE_1:def 2;
   sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr abs x1) + (sqrt Sum sqr abs x2)
   by A3,A14,SQUARE_1:22;
   then sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr abs x1) + (sqrt Sum sqr x2) by
-Lm3;
-  hence thesis by Lm3;
+Lm2;
+  hence thesis by Lm2;
 end;
 
-theorem Th16:
+theorem Th13:
   |.x1 - x2.| <= |.x1.| + |.x2.|
 proof
-  |.x1 - x2.| <= |.x1.| + |.-x2.| by Th15;
-  hence thesis by Th13;
+  |.x1 - x2.| <= |.x1.| + |.-x2.| by Th12;
+  hence thesis by Th10;
 end;
 
 theorem
@@ -423,7 +429,7 @@ theorem
 proof
   reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL;
   x1 = R1 + R2 - R2 by RVSUM_1:42;
-  then |.x1.| <= |.x1 + x2.| + |.x2.| by Th16;
+  then |.x1.| <= |.x1 + x2.| + |.x2.| by Th13;
   hence thesis by XREAL_1:20;
 end;
 
@@ -432,55 +438,55 @@ theorem
 proof
   reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL;
   x1 = R1 - R2 + R2 by RVSUM_1:43;
-  then |.x1.| <= |.x1 - x2.| + |.x2.| by Th15;
+  then |.x1.| <= |.x1 - x2.| + |.x2.| by Th12;
   hence thesis by XREAL_1:20;
 end;
 
-theorem Th19:
+theorem Th16:
   |.x1 - x2.| = 0 iff x1 = x2
 proof
   reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL;
   thus |.x1 - x2.| = 0 implies x1 = x2
   proof
     assume |.x1 - x2.| = 0;
-    then R1 - R2 = 0*n by Th11
+    then R1 - R2 = 0*n by Th8
       .= n |-> 0;
     hence thesis by RVSUM_1:38;
   end;
   assume x1 = x2;
   then R1 - R2 = 0*n by RVSUM_1:37;
-  hence thesis by Th10;
+  hence thesis by Th7;
 end;
 
 registration
   let n,x1;
   cluster |. x1 - x1 .| -> zero;
-  coherence by Th19;
+  coherence by Th16;
 end;
 
 theorem
   x1 <> x2 implies |.x1 - x2.| > 0
 proof
   assume x1 <> x2;
-  then 0 <> |.x1 - x2.| by Th19;
+  then 0 <> |.x1 - x2.| by Th16;
   hence thesis;
 end;
 
-theorem Th21:
+theorem Th18:
   |.x1 - x2.| = |.x2 - x1.|
 proof
   reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL;
   thus |.x1 - x2.| = |.-(R2 - R1).| by RVSUM_1:35
-    .= |.x2 - x1.| by Th13;
+    .= |.x2 - x1.| by Th10;
 end;
 
-theorem Th22:
+theorem Th19:
   |.x1 - x2.| <= |.x1 - x .| + |.x - x2.|
 proof
   reconsider R1=x1,R2=x2,R=x as Element of n-tuples_on REAL;
   |.x1 - x2.| = |.R1 - R + R - R2.| by RVSUM_1:43
     .= |.(x1 - x) + (x - x2).| by RVSUM_1:40;
-  hence thesis by Th15;
+  hence thesis by Th12;
 end;
 
 definition
@@ -525,20 +531,20 @@ proof
     .= sqr(y-x) by RVSUM_1:69;
 end;
 
-theorem Th24:
+theorem Th21:
   for n being Nat holds Pitag_dist n is_metric_of REAL n
 proof
   let n be Nat;
   let x,y,z be Element of REAL n;
 A1: (Pitag_dist n).(y,z) = |.y-z.| by Def6;
   (Pitag_dist n).(x,y) = |.x-y.| by Def6;
-  hence (Pitag_dist n).(x,y) = 0 iff x=y by Th19;
+  hence (Pitag_dist n).(x,y) = 0 iff x=y by Th16;
   thus (Pitag_dist n).(x,y) = |.x-y.| by Def6
-    .= |.y-x .| by Th21
+    .= |.y-x .| by Th18
     .= (Pitag_dist n).(y,x) by Def6;
   (Pitag_dist n).(x,y) = |.x-y.| & (Pitag_dist n).(x,z) = |.x-z.| by Def6;
   hence (Pitag_dist n).(x,z) <= (Pitag_dist n).(x,y) + (Pitag_dist n).(y,z) by
-A1,Th22;
+A1,Th19;
 end;
 
 definition
@@ -547,7 +553,7 @@ definition
   MetrStruct(#REAL n,Pitag_dist n#);
   coherence
   proof
-    SpaceMetr(REAL n, Pitag_dist n) = MetrStruct(#REAL n,Pitag_dist n#) by Th24
+    SpaceMetr(REAL n, Pitag_dist n) = MetrStruct(#REAL n,Pitag_dist n#) by Th21
 ,PCOMPS_1:def 7;
     hence thesis;
   end;
@@ -605,14 +611,14 @@ end;
 reserve p,p1,p2,p3 for Point of TOP-REAL n,
   x,x1,x2,y,y1,y2 for real number;
 
-theorem Th25:
+theorem Th22:
   the carrier of TOP-REAL n = REAL n
 proof
   the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by Def8;
   hence thesis;
 end;
 
-theorem Th26:
+theorem Th23:
   p is Function of Seg n, REAL
 proof
   the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by Def8;
@@ -620,10 +626,10 @@ proof
   hence thesis;
 end;
 
-theorem Th27:
+theorem Th24:
   p is FinSequence of REAL
 proof
-  p is Function of Seg n, REAL by Th26;
+  p is Function of Seg n, REAL by Th23;
   hence thesis by FINSEQ_2:25;
 end;
 
@@ -633,7 +639,7 @@ registration
   coherence
   proof
     let a be Element of TOP-REAL n;
-    thus thesis by Th27;
+    thus thesis by Th24;
   end;
 end;
 
@@ -646,28 +652,28 @@ end;
 registration
   let n;
   cluster -> real-valued for Point of TOP-REAL n;
-  coherence by Th27;
+  coherence by Th24;
 end;
 
-Lm4: for r1,r2 being real-valued Function st p1 = r1 & p2 =r2 holds p1+p2 = r1
+Lm3: for r1,r2 being real-valued Function st p1 = r1 & p2 =r2 holds p1+p2 = r1
 +r2
 proof
 A1: REAL n = Funcs(Seg n,REAL) by FINSEQ_2:93;
   let r1,r2 be real-valued Function such that
 A2: p1 = r1 & p2 =r2;
-  reconsider s1 = r1, s2 = r2 as Element of REAL n by A2,Th25;
+  reconsider s1 = r1, s2 = r2 as Element of REAL n by A2,Th22;
   the RLSStruct of TOP-REAL n = RealVectSpace Seg n by Def8;
   hence p1+p2 = (RealFuncAdd Seg n).(r1,r2) by A2,ALGSTR_0:def 1
     .= s1+s2 by A1,FUNCSDOM:def 1
     .= r1+r2;
 end;
 
-Lm5: for r being real-valued Function st p = r holds x*p = x(#)r
+Lm4: for r being real-valued Function st p = r holds x*p = x(#)r
 proof
   reconsider x1 = x as Real by XREAL_0:def 1;
   let r be real-valued Function such that
 A1: p = r;
-  reconsider s=r as Element of REAL n by A1,Th25;
+  reconsider s=r as Element of REAL n by A1,Th22;
   REAL n = Funcs(Seg n,REAL) by FINSEQ_2:93;
   then reconsider f = s as Function of Seg n,REAL by FUNCT_2:66;
   the RLSStruct of TOP-REAL n = RealVectSpace Seg n by Def8;
@@ -683,7 +689,7 @@ registration
   let p be Element of TOP-REAL n;
   let f be real-valued FinSequence;
   identify r*p with s*f when r=s, p=f;
-  compatibility by Lm5;
+  compatibility by Lm4;
 end;
 
 registration
@@ -691,7 +697,7 @@ registration
   let p,q be Element of TOP-REAL n;
   let f,g be real-valued FinSequence;
   identify p+q with f+g when p=f, q=g;
-  compatibility by Lm4;
+  compatibility by Lm3;
 end;
 
 registration
@@ -722,7 +728,7 @@ registration
   coherence
   proof
     let p be Point of TOP-REAL n;
-A1: p is Function of Seg n, REAL by Th26;
+A1: p is Function of Seg n, REAL by Th23;
     Seg len p = dom p by FINSEQ_1:def 3
       .= Seg n by A1,FUNCT_2:def 1;
     hence len p = n by FINSEQ_1:6;
@@ -745,7 +751,7 @@ definition
 end;
 
 theorem
-  for x being Element of REAL n holds sqr abs x = sqr x by Lm3;
+  for x being Element of REAL n holds sqr abs x = sqr x by Lm2;
 
 theorem
   p1 + p2 + p3 = p1 + (p2 + p3) by RLVECT_1:def 3;
@@ -757,7 +763,7 @@ theorem
   x*0.TOP-REAL n = 0.TOP-REAL n by RLVECT_1:10;
 
 theorem
-  1*p = p & 0 * p = 0.TOP-REAL n by RLVECT_1:10,def 8;
+  1 * p = p & 0 * p = 0.TOP-REAL n by RLVECT_1:10,def 8;
 
 theorem
   (x*y)*p = x*(y*p) by RLVECT_1:def 7;
@@ -774,8 +780,7 @@ theorem
 theorem
   x*p1 = x*p2 implies x = 0 or p1 = p2 by RLVECT_1:36;
 
-theorem
-  --p = p;
+canceled;
 
 theorem
   p + -p = 0.TOP-REAL n by RLVECT_1:5;
@@ -863,7 +868,7 @@ end;
 theorem
   |[x,y]|`1 = x & |[x,y]|`2 = y by FINSEQ_1:44;
 
-theorem Th57:
+theorem Th53:
   p = |[p`1, p`2]|
 proof
   the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by Def8;
@@ -882,7 +887,7 @@ proof
   hence thesis;
 end;
 
-theorem Th59:
+theorem Th55:
   p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2]|
 proof
   the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by Def8;
@@ -895,7 +900,7 @@ A1: dom(p19+p29) = Seg 2 by FINSEQ_1:def 3;
 A2: (p1+p2)`2 = p1`2 + p2`2 by A1,FINSEQ_1:2,VALUED_1:def 1;
   1 in {1,2} by TARSKI:def 2;
   then (p1+p2)`1 = p1`1 + p2`1 by A1,FINSEQ_1:2,VALUED_1:def 1;
-  hence thesis by A2,Th57;
+  hence thesis by A2,Th53;
 end;
 
 theorem
@@ -903,27 +908,27 @@ theorem
 proof
 A1: |[x2, y2]|`1 = x2 & |[x2, y2]|`2 = y2 by FINSEQ_1:44;
   |[x1, y1]|`1 = x1 & |[x1, y1]|`2 = y1 by FINSEQ_1:44;
-  hence thesis by A1,Th59;
+  hence thesis by A1,Th55;
 end;
 
-theorem Th61:
+theorem Th57:
   x*p = |[ x*p`1 ,x*p`2 ]|
 proof
   (x*p)`1 = x*(p`1) & (x*p)`2 = x*(p`2) by RVSUM_1:44;
-  hence thesis by Th57;
+  hence thesis by Th53;
 end;
 
 theorem
   x*|[x1,y1]| = |[ x*x1,x*y1 ]|
 proof
   |[x1,y1]|`1 = x1 & |[x1,y1]|`2 = y1 by FINSEQ_1:44;
-  hence thesis by Th61;
+  hence thesis by Th57;
 end;
 
-theorem Th63:
+theorem Th59:
   -p = |[ -p`1, -p`2]|
 proof
-  thus -p = (-1)*p .= |[ (-1)*p`1, (-1)*p`2]| by Th61
+  thus -p = (-1)*p .= |[ (-1)*p`1, (-1)*p`2]| by Th57
     .= |[ -p`1, -p`2]|;
 end;
 
@@ -931,15 +936,15 @@ theorem
   -|[x1,y1]| = |[ -x1, -y1]|
 proof
   |[x1,y1]|`1 = x1 & |[x1,y1]|`2 = y1 by FINSEQ_1:44;
-  hence thesis by Th63;
+  hence thesis by Th59;
 end;
 
-theorem Th65:
+theorem Th61:
   p1 - p2 = |[ p1`1 - p2`1, p1`2 - p2`2]|
 proof
-  -p2 = |[ -p2`1, -p2`2]| by Th63;
+  -p2 = |[ -p2`1, -p2`2]| by Th59;
   then (-p2)`1 = -p2`1 & (-p2)`2 = -p2`2 by FINSEQ_1:44;
-  hence p1 - p2 = |[ p1`1 + -p2`1, p1`2 + -p2`2]| by Th59
+  hence p1 - p2 = |[ p1`1 + -p2`1, p1`2 + -p2`2]| by Th55
     .= |[ p1`1 - p2`1, p1`2 - p2`2]|;
 end;
 
@@ -948,7 +953,7 @@ theorem
 proof
 A1: |[x2, y2]|`1 = x2 & |[x2, y2]|`2 = y2 by FINSEQ_1:44;
   |[x1, y1]|`1 = x1 & |[x1, y1]|`2 = y1 by FINSEQ_1:44;
-  hence thesis by A1,Th65;
+  hence thesis by A1,Th61;
 end;
 
 theorem
@@ -976,14 +981,14 @@ theorem
   for p being Point of TOP-REAL n for r being real-valued Function st
   p = r holds x*p = x(#)r;
 
-theorem Th70:
+theorem Th66:
   0.REAL n = 0.TOP-REAL n
 proof
   the RLSStruct of TOP-REAL n = RealVectSpace Seg n by Def8;
   hence thesis;
 end;
 
-theorem
+theorem Th67:
   the carrier of Euclid n = the carrier of TOP-REAL n
 proof
   thus the carrier of Euclid n = the carrier of TopSpaceMetr Euclid n
@@ -1000,21 +1005,15 @@ theorem
   Function st p1 = r1 & p2 =r2 holds p1-p2 = r1-r2;
 
 theorem
-  0.TOP-REAL n = 0*n by Th70;
+  0.TOP-REAL n = 0*n by Th66;
 
 theorem
-  for p being Point of TOP-REAL n holds |.-p.| = |.p.| by Th13;
+  for p being Point of TOP-REAL n holds |.-p.| = |.p.| by Th10;
 
 registration
   let n; let D be set;
   cluster n-tuples_on D -> FinSequence-membered;
-  coherence
-  proof
-    let x be set;
-    assume x in n-tuples_on D;
-    then ex s being Element of D* st x = s & len s = n;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
@@ -1034,5 +1033,75 @@ registration
     x is real-valued;
     hence thesis;
   end;
+end;
+
+:: from JORDAN2C, 2011.07.28, A.T.
+
+definition
+  let n be Nat;
+  func 1*n -> FinSequence of REAL equals
+  n |-> (1 qua Real);
+  coherence;
+end;
+
+definition
+  let n be Nat;
+  redefine func 1*n -> Element of REAL n;
+  coherence;
+end;
+
+definition
+  let n be Nat;
+  func 1.REAL n -> Point of TOP-REAL n equals
+  1*n;
+  coherence by Th22;
+end;
+
+theorem
+  abs 1*n = n |-> (1 qua Real)
+proof
+  thus abs 1*n = n |-> absreal.(1 qua Real) by FINSEQOP:16
+    .= n |-> abs(1 qua Real) by Def2
+    .= n |-> 1 by ABSVALUE:def 1;
+end;
+
+theorem Th73:
+  |.1*n.| = sqrt n
+proof
+  reconsider f= n |-> 1^2 as FinSequence of REAL;
+  thus |.1*n .| = sqrt Sum f by RVSUM_1:56
+    .= sqrt (n*1) by RVSUM_1:80
+    .= sqrt n;
+end;
+
+theorem
+  |. (1.REAL n) .| = sqrt n by Th73;
+
+theorem
+  1<=n implies 1<=|. (1.REAL n) .|
+proof
+  assume
+A1: 1<=n;
+  |.1.REAL n.|=sqrt n by Th73;
+  hence thesis by A1,SQUARE_1:18,26;
+end;
+
+theorem
+  for f being FinSequence of REAL holds
+   f is Element of REAL len f & f is Point of TOP-REAL len f
+proof
+  let f be FinSequence of REAL;
+  f is Element of REAL* by FINSEQ_1:def 11;
+  then
+  the carrier of TOP-REAL len f = the carrier of Euclid len f & f in ((len
+  f) -tuples_on REAL) by Th67;
+  hence thesis;
+end;
+
+theorem
+  REAL 0 = {0.TOP-REAL 0}
+proof
+  thus REAL 0 = { <*>REAL } by FINSEQ_2:94
+    .= {0.TOP-REAL 0};
 end;
 

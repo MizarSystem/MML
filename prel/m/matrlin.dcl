@@ -8,12 +8,14 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
@@ -45,17 +47,17 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="43" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="83"/>
-<Adjective nr="89"/>
-<Adjective nr="91"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="50" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="92"/>
+<Adjective nr="98"/>
+<Adjective nr="100"/>
+<Adjective nr="105"/>
 <Adjective nr="106"/>
-<Adjective nr="107"/>
-<Adjective nr="108"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -64,27 +66,27 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="99">
+<Adjective nr="46" value="false"/>
+<Adjective nr="72"/>
+<Adjective nr="108">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="100">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="101">
+<Adjective nr="110">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="102">
+<Adjective nr="111">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="103">
+<Adjective nr="112">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
-<Adjective nr="108"/>
-<Adjective nr="165">
+<Adjective nr="116"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
+<Adjective nr="173">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -98,17 +100,17 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="130"/>
+<Adjective nr="140"/>
 </Cluster>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="173">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="130"/>
-<Adjective nr="163"/>
+<Adjective nr="140"/>
+<Adjective nr="171"/>
 </Cluster>
 </CCluster>
 </Registrations>

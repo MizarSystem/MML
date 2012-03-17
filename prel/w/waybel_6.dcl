@@ -12,6 +12,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
@@ -45,39 +46,39 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="51" value="false"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
+<Adjective nr="55" value="false"/>
 <Adjective nr="89"/>
-<Adjective nr="124"/>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
-<Adjective nr="163"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="95"/>
+<Adjective nr="130"/>
+<Adjective nr="161"/>
+<Adjective nr="162"/>
+<Adjective nr="169"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL_6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
-<Adjective nr="157"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="161"/>
+<Adjective nr="162"/>
+<Adjective nr="163"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
-<Adjective nr="157"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="161"/>
+<Adjective nr="162"/>
+<Adjective nr="163"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -107,7 +108,7 @@
 </Func>
 </Adjective>
 <Adjective nr="19"/>
-<Adjective nr="25">
+<Adjective nr="28">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -115,7 +116,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="114">
+<Adjective nr="120">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -125,13 +126,13 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="89"/>
-<Adjective nr="120"/>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="95"/>
+<Adjective nr="126"/>
+<Adjective nr="161"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -145,13 +146,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="98">
+<Adjective nr="104">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="109">
+<Adjective nr="115">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="167">
+<Adjective nr="173">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -160,10 +161,10 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="51" value="false"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
-<Adjective nr="156"/>
+<Adjective nr="55" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="96"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -174,7 +175,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="168">
+<Adjective nr="174">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -183,9 +184,9 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="51" value="false"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="55" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -196,7 +197,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="171">
+<Adjective nr="177">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -205,15 +206,15 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="51" value="false"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
+<Adjective nr="55" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="88">
+<Adjective nr="94">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -226,13 +227,13 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="88">
+<Adjective nr="94">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="97">
+<Adjective nr="103">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="98">
+<Adjective nr="104">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -1,0 +1,835 @@
+:: The Elementary Macroinstructions
+::  by Andrzej Trybulec
+::
+:: Received October 1, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+vocabularies TURING_1, COMPOS_1, SCMFSA6A, AMI_1, AMISTD_1, SCMPDS_5,
+    FUNCT_1, CARD_1, ARYTM_1, NAT_1, RELAT_1, ZFMISC_1, ARYTM_3, XXREAL_0,
+    AMISTD_2, TARSKI, XBOOLE_0, NUMBERS, FINSET_1, EXTPRO_1, FUNCOP_1,
+    FUNCT_4, RELOC, VALUED_1, SUBSET_1, PARTFUN1, RCOMP_1, XCMPLX_0,
+    ORDINAL1, VALUED_0, AMISTD_4;
+notations TARSKI, XBOOLE_0, RELAT_1, ZFMISC_1, FUNCT_1, FUNCOP_1, ORDINAL1,
+    SUBSET_1, FINSET_1, PARTFUN1, FUNCT_4, CARD_1, NUMBERS,
+    XXREAL_0, XCMPLX_0, XREAL_0, NAT_D, VALUED_0, VALUED_1,
+    COMPOS_0, COMPOS_1, AMISTD_4;
+constructors COMPOS_1, AMISTD_4, VALUED_1, NAT_D, XXREAL_0, XREAL_0,
+    XCMPLX_0, AMISTD_1, AMISTD_2, NAT_1, PRE_POLY, DOMAIN_1, RELSET_1, FUNCT_4;
+definitions TARSKI, COMPOS_1, VALUED_1, FUNCOP_1, AMISTD_4;
+registrations COMPOS_0, COMPOS_1, AMISTD_4, CARD_1, NAT_1, XCMPLX_0,
+    XREAL_0, ORDINAL1, VALUED_1, FUNCOP_1, AFINSQ_1, RELAT_1, XBOOLE_0,
+    FUNCT_4, FINSEQ_1, VALUED_0;
+theorems COMPOS_1, COMPOS_0, AFINSQ_1, XREAL_1, ZFMISC_1, AMISTD_4, XBOOLE_1,
+    FUNCT_7, VALUED_1, RELAT_1, TARSKI, XBOOLE_0, FUNCT_1, GRFUNC_1, FUNCT_4,
+    FUNCOP_1, XCMPLX_1, NAT_1, XXREAL_0, ORDINAL1, PARTFUN1, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+begin
+
+registration
+ cluster with_non_trivial_Instructions for COM-Struct;
+ existence
+  proof
+   take C = COM-Struct(#the non trivial Instructions#);
+   thus the InstructionsF of C is non trivial;
+  end;
+end;
+
+reserve S for with_non_trivial_Instructions COM-Struct;
+
+registration let S;
+ cluster No-StopCode for Instruction of S;
+ existence
+  proof
+    the InstructionsF of S is non trivial by AMISTD_4:def 1;
+    then consider x,y being set such that
+W1:  x in the InstructionsF of S & y in the InstructionsF of S and
+W2:  x <> y by ZFMISC_1:def 10;
+    x <> halt S or y <> halt S by W2;
+    then consider i being Instruction of S such that
+W3:  i <> halt S by W1;
+   take i;
+   thus i is No-StopCode by W3,COMPOS_0:def 12;
+  end;
+end;
+
+registration let S;
+ let i be No-StopCode Instruction of S;
+ cluster Macro i -> halt-ending unique-halt;
+ coherence
+  proof
+B:  LastLoc Macro i = card Macro i -' 1 by AFINSQ_1:70
+         .= 2 -' 1 by COMPOS_1:56
+         .= 2 - 1 by XREAL_1:233
+         .= 1;
+   hence (Macro i).(LastLoc Macro i) = halt S by COMPOS_1:59;
+   thus Macro i is unique-halt
+    proof let f being Nat such that
+Z1:   (Macro i).f = halt S;
+     assume
+Z2:  f in dom Macro i;
+      now assume f = 0;
+        then (Macro i).f = i by COMPOS_1:58;
+       hence contradiction by Z1,COMPOS_0:def 12;
+      end;
+     hence f = LastLoc Macro i by Z2,B,COMPOS_1:60;
+    end;
+  end;
+end;
+
+definition let S;
+  let i be No-StopCode Instruction of S, J be MacroInstruction of S;
+  func i ';' J -> MacroInstruction of S equals
+  Macro i ';' J;
+  correctness;
+end;
+
+definition let S;
+  let I be MacroInstruction of S, j be No-StopCode Instruction of S;
+  func I ';' j -> MacroInstruction of S equals
+  I ';' Macro j;
+  correctness;
+end;
+
+definition let S;
+  let i,j be No-StopCode Instruction of S;
+  func i ';' j -> MacroInstruction of S equals
+  Macro i ';' Macro j;
+  correctness;
+end;
+
+reserve i,j,k for No-StopCode Instruction of S,
+        I,J,K for MacroInstruction of S;
+
+theorem
+  I ';' J ';' k = I ';' (J ';' k) by COMPOS_1:29;
+
+theorem
+  I ';' j ';' K = I ';' (j ';' K) by COMPOS_1:29;
+
+theorem
+  I ';' j ';' k = I ';' (j ';' k) by COMPOS_1:29;
+
+theorem
+  i ';' J ';' K = i ';' (J ';' K) by COMPOS_1:29;
+
+theorem
+  i ';' J ';' k = i ';' (J ';' k) by COMPOS_1:29;
+
+theorem
+  i ';' j ';' K = i ';' (j ';' K) by COMPOS_1:29;
+
+theorem
+  i ';' j ';' k = i ';' (j ';' k) by COMPOS_1:29;
+
+theorem
+  i ';' j = Macro i ';' j;
+
+theorem
+  i ';' j = i ';' Macro j;
+
+theorem
+ card(i ';' J) = card J + 1
+  proof
+   thus card(i ';' J) = card Macro i + card J - 1 by COMPOS_1:20
+      .= 2 + card J - 1 by COMPOS_1:56
+      .= card J + 1;
+  end;
+
+theorem Th11:
+ card(I ';' j) = card I + 1
+  proof
+   thus card(I ';' j) = card I + card Macro j - 1 by COMPOS_1:20
+      .= 2 + card I - 1 by COMPOS_1:56
+      .= card I + 1;
+  end;
+
+theorem Th12:
+ card(i ';' j) = 3
+  proof
+   thus card(i ';' j) = card Macro i + card Macro j - 1 by COMPOS_1:20
+      .= 2 + card Macro i - 1 by COMPOS_1:56
+      .= 2 + 2 - 1 by COMPOS_1:56
+      .= 3;
+  end;
+
+theorem Th13:
+ card(i ';' j ';' k) = 4
+proof
+ thus card(i ';' j ';' k) = card(i ';' j) + 1 by Th11
+   .= 3 + 1 by Th12
+   .= 4;
+end;
+
+reserve i1,i2,i3,i4,i5,i6 for No-StopCode Instruction of S;
+
+theorem Th14:
+ card(i1 ';' i2 ';' i3 ';' i4) = 5
+proof
+ thus card(i1 ';' i2 ';' i3 ';' i4)
+    = card(i1 ';' i2 ';' i3) + 1 by Th11
+   .= 4 + 1 by Th13
+   .= 5;
+end;
+
+theorem Th15:
+ card(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 6
+proof
+ thus card(i1 ';' i2 ';' i3 ';' i4 ';' i5)
+    = card(i1 ';' i2 ';' i3 ';' i4) + 1 by Th11
+   .= 5 + 1 by Th14
+   .= 6;
+end;
+
+theorem Th16:
+ card(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6) = 7
+proof
+ thus card(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6)
+    = card(i1 ';' i2 ';' i3 ';' i4 ';' i5) + 1 by Th11
+   .= 6 + 1 by Th15
+   .= 7;
+end;
+
+reserve I,J for non empty NAT-defined finite Function;
+
+definition
+ let I; let J be set;
+ pred I <= J means
+  CutLastLoc I c= J;
+end;
+
+definition
+ let I,J;
+ redefine pred I <= J;
+ reflexivity
+  proof
+   let I;
+   thus CutLastLoc I c= I;
+  end;
+end;
+
+theorem Th17:
+ for F being non empty NAT-defined finite Function
+  holds not LastLoc F in dom CutLastLoc F
+ proof let F be non empty NAT-defined finite Function;
+   LastLoc F in dom F by VALUED_1:30;
+   then F|{LastLoc F} = LastLoc F .--> F.LastLoc F by FUNCT_7:6;
+   then
+A:  dom CutLastLoc F = dom F \ {LastLoc F} by RELAT_1:177;
+   LastLoc F in {LastLoc F} by TARSKI:def 1;
+  hence thesis by A,XBOOLE_0:def 5;
+ end;
+
+registration let S;
+ let I be unique-halt non empty preProgram of S;
+ cluster CutLastLoc I -> halt-free;
+ coherence
+  proof
+   now assume
+   halt S in rng CutLastLoc I;
+     then consider x being set such that
+W1:   x in dom CutLastLoc I and
+W2:   (CutLastLoc I).x = halt S by FUNCT_1:def 3;
+     dom CutLastLoc I c= dom I by RELAT_1:11;
+     then
+B:   x in dom I by W1;
+D:   dom I c= NAT by RELAT_1:def 18;
+     I.x = halt S by W2,W1,GRFUNC_1:2;
+     then x = LastLoc I by B,D,COMPOS_1:def 15;
+    hence contradiction by W1,Th17;
+   end;
+   hence CutLastLoc I is halt-free by COMPOS_1:def 11;
+     :: dlaczego nie dziala rozwiniecie definicyjne ???
+  end;
+end;
+
+Lm1:
+ for f,g being Function st f c= g
+ for x,y being set st not x in rng f
+  holds f c= g \ (y .--> x)
+ proof
+  let f,g be Function such that
+Z1: f c= g;
+  let x,y be set;
+  assume not x in rng f;
+   then
+A:  not [y,x] in f by XTUPLE_0:def 13;
+ y .--> x = {[y,x]} by ZFMISC_1:29;
+  hence f c= g \ (y .--> x) by A,Z1,ZFMISC_1:34;
+end;
+
+theorem Th18:
+ for I being unique-halt Program of S,
+     J being halt-ending Program of S
+  st CutLastLoc I c= J
+ holds CutLastLoc I c= CutLastLoc J
+proof
+ let I be unique-halt Program of S,
+     J be halt-ending Program of S such that
+Z: CutLastLoc I c= J;
+A: not halt S in rng CutLastLoc I by COMPOS_1:def 11;
+  J.LastLoc J = halt S by COMPOS_1:def 14;
+ hence CutLastLoc I c= CutLastLoc J by A,Z,Lm1;
+end;
+
+reserve I,J for MacroInstruction of S;
+
+theorem
+ for K be set st I <= J & J <= K
+  holds I <= K
+ proof let K be set such that
+Z1: CutLastLoc I c= J and
+Z2: CutLastLoc J c= K;
+   CutLastLoc I c= CutLastLoc J by Z1,Th18;
+  hence CutLastLoc I c= K by Z2,XBOOLE_1:1;
+ end;
+
+theorem Thx:
+ I = CutLastLoc I +* (LastLoc I .--> halt S)
+ proof
+E: LastLoc I in dom I by VALUED_1:30;
+D: {LastLoc I} misses dom CutLastLoc I by Th17,ZFMISC_1:50;
+A: dom (LastLoc I .--> I.LastLoc I) = {LastLoc I} by FUNCOP_1:13;
+ I = CutLastLoc I \/ (LastLoc I .--> I.LastLoc I)
+                              by E,FUNCOP_1:84,XBOOLE_1:45
+    .= CutLastLoc I +* (LastLoc I .--> I.LastLoc I) by A,D,FUNCT_4:31;
+ hence thesis by COMPOS_1:def 14;
+ end;
+
+theorem Th21:
+ CutLastLoc I = CutLastLoc J implies I = J
+proof assume
+Z: CutLastLoc I = CutLastLoc J;
+ card I - 1 = card CutLastLoc J by Z,VALUED_1:38
+   .= card J -1 by VALUED_1:38;
+  then LastLoc I = card J -' 1 by AFINSQ_1:70
+      .= LastLoc J by AFINSQ_1:70;
+ hence I = CutLastLoc I +* (LastLoc J .--> halt S) by Thx
+   .= J by Z,Thx;
+end;
+
+theorem
+  I <= J & J <= I implies I = J
+ proof assume CutLastLoc I c= J;
+  then
+Z1: CutLastLoc I c= CutLastLoc J by Th18;
+  assume CutLastLoc J c= I;
+   then CutLastLoc J c= CutLastLoc I by Th18;
+   then  CutLastLoc I = CutLastLoc J by Z1,XBOOLE_0:def 10;
+  hence I = J by Th21;
+ end;
+
+theorem Th23:
+  I <= I ';' J
+ proof
+   dom CutLastLoc I misses dom Reloc(J,card I -' 1) by COMPOS_1:18;
+  hence CutLastLoc I c= I ';' J by FUNCT_4:32;
+ end;
+
+:: Potrzebne chyba beda trywialne twierdzenia, jak
+
+theorem
+ for X being set st I c= X
+  holds I <= X
+ proof let X be set such that
+Z: I c= X;
+  thus CutLastLoc I c= X by Z,XBOOLE_1:1;
+ end;
+
+theorem
+ I <= J implies
+ for X being set st J c= X
+ holds I <= X
+ proof assume
+Z1: CutLastLoc I c= J;
+  let X be set;
+  assume J c= X;
+  hence CutLastLoc I c= X by Z1,XBOOLE_1:1;
+ end;
+
+theorem Th26:
+ for k being Nat holds
+   k < LastLoc I iff k in dom CutLastLoc I
+proof let k be Nat;
+   card I > 0 by NAT_1:3;
+   then
+A:  card I >= 0+1 by NAT_1:13;
+  card CutLastLoc I = card I - 1 by VALUED_1:38
+     .= card I -' 1 by A,XREAL_1:233
+     .= LastLoc I by AFINSQ_1:70;
+ hence thesis by NAT_1:44;
+end;
+
+theorem Th27:
+ for k being Nat st k < LastLoc I
+  holds (CutLastLoc I).k = I.k
+proof
+ let k be Nat;
+ assume k < LastLoc I;
+  then
+A: k in dom CutLastLoc I by Th26;
+ thus thesis by A,GRFUNC_1:2;
+end;
+
+theorem Th28:
+ for k being Nat st k < LastLoc I & I <= J
+  holds I.k = J.k
+ proof let k be Nat such that
+Z1: k < LastLoc I;
+ assume
+Z2: CutLastLoc I c= J;
+B: k in dom CutLastLoc I by Z1,Th26;
+  thus I.k = (CutLastLoc I).k by Z1,Th27
+       .= J.k by Z2,B,GRFUNC_1:2;
+ end;
+
+theorem Th29:
+ LastLoc I = card I - 1
+proof
+   card I > 0 by NAT_1:3;
+   then
+A:  card I >= 0+1 by NAT_1:13;
+ thus LastLoc I = card I -' 1 by AFINSQ_1:70
+   .= card I - 1 by A,XREAL_1:233;
+end;
+
+theorem Th30:
+ LastLoc Macro i = 1
+proof
+ thus LastLoc Macro i = card Macro i - 1 by Th29
+     .= 2 - 1 by COMPOS_1:56
+     .= 1;
+end;
+
+theorem Th31:
+ LastLoc(i ';' j) = 2
+proof
+ thus LastLoc(i ';' j) = card(i ';' j) - 1 by Th29
+     .= 3 - 1 by Th12
+     .= 2;
+end;
+
+theorem Th32:
+ LastLoc(i ';' j ';' k) = 3
+proof
+ thus LastLoc(i ';' j ';' k) = card(i ';' j ';' k) - 1 by Th29
+     .= 4 - 1 by Th13
+     .= 3;
+end;
+
+theorem Th33:
+ LastLoc(i1 ';' i2 ';' i3 ';' i4) = 4
+proof
+ thus LastLoc(i1 ';' i2 ';' i3 ';' i4)
+      = card(i1 ';' i2 ';' i3 ';' i4) - 1 by Th29
+     .= 5 - 1 by Th14
+     .= 4;
+end;
+
+theorem Th34:
+ LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5
+proof
+ thus LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5)
+      = card(i1 ';' i2 ';' i3 ';' i4 ';' i5) - 1 by Th29
+     .= 6 - 1 by Th15
+     .= 5;
+end;
+
+theorem Th35:
+ LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6) = 6
+proof
+ thus LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6)
+      = card(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6) - 1 by Th29
+     .= 7 - 1 by Th16
+     .= 6;
+end;
+
+:: dla zerowej pozycji nie mamy inkrementpwania adresow.
+
+theorem Th36:
+  (i ';' J).0 = i
+proof
+  LastLoc Macro i = 1 by Th30;
+ hence (i ';' J).0 = (Macro i).0 by Th23,Th28
+     .= i by COMPOS_1:58;
+end;
+
+theorem Th37:
+  (i ';' j ';' K).0 = i
+ proof
+  LastLoc(i ';' j) = 2 by Th31;
+  hence (i ';' j ';' K).0 = (i ';' j).0 by Th23,Th28
+        .= (i ';' Macro j).0
+        .= i by Th36;
+ end;
+
+theorem Th38:
+  (i ';' j ';' k ';' K).0 = i
+ proof
+  LastLoc(i ';' j ';' k) = 3 by Th32;
+  hence (i ';' j ';' k ';' K).0 = (i ';' j ';' k).0 by Th23,Th28
+        .= (i ';' j ';'  Macro k).0
+        .= i by Th37;
+ end;
+
+theorem Th39:
+  (i1 ';' i2 ';' i3 ';' i4 ';' K).0 = i1
+ proof
+  LastLoc(i1 ';' i2 ';' i3 ';' i4) = 4 by Th33;
+  hence (i1 ';' i2 ';' i3 ';' i4 ';' K).0
+         = (i1 ';' i2 ';' i3 ';' i4).0 by Th23,Th28
+        .= (i1 ';' i2 ';' i3 ';' Macro i4).0
+        .= i1 by Th38;
+ end;
+
+theorem Th40:
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' K).0 = i1
+ proof
+  LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5 by Th34;
+  hence (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' K).0
+         = (i1 ';' i2 ';' i3 ';' i4 ';' i5).0 by Th23,Th28
+        .= (i1 ';' i2 ';' i3 ';' i4 ';' Macro i5).0
+        .= i1 by Th39;
+ end;
+
+theorem
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6 ';' K).0 = i1
+ proof
+  LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6) = 6 by Th35;
+  hence (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6 ';' K).0
+         = (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).0 by Th23,Th28
+        .= (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' Macro i6).0
+        .= i1 by Th40;
+ end;
+
+
+::theorem :: COMPOS_1:23
+::  for S being COM-Struct,
+::  F, G being initial non empty finite preProgram of S
+::  holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).0;
+
+::theorem :: COMPOS_1:24
+::  for S being COM-Struct,
+::  F, G being initial non empty finite preProgram of S,
+::  f being Nat st f < card F - 1
+::  holds IncAddr(F,card F -' 1).f = IncAddr(F ';' G, card F -' 1).f;
+
+theorem
+ for k being Nat st k < LastLoc I
+  holds (I ';' J).k = I.k
+proof let k be Nat;
+ assume k < LastLoc I;
+  then
+A: k in dom CutLastLoc I by Th26;
+  dom CutLastLoc I misses dom Reloc(J,card I -' 1) by COMPOS_1:18;
+  then not k in dom Reloc(J,card I -' 1) by A,XBOOLE_0:3;
+ hence (I ';' J).k = (CutLastLoc I).k by FUNCT_4:11
+      .= I.k by A,GRFUNC_1:2;
+end;
+
+theorem
+ LastLoc(I ';' J) = LastLoc I + LastLoc J
+proof
+ thus LastLoc(I ';' J) = card(I ';' J) - 1 by Th29
+      .= card I + card J - 1 - 1 by COMPOS_1:20
+      .= card I - 1 + (card J - 1)
+      .= LastLoc I + (card J - 1) by Th29
+      .= LastLoc I + LastLoc J by Th29;
+end;
+
+theorem Th44:
+ for j being Nat st j <= LastLoc J
+  holds (I ';' J).(LastLoc I + j) = IncAddr(J/.j,LastLoc I)
+proof let j be Nat such that
+Z0: j <= LastLoc J;
+   set k = LastLoc I + j;
+F: LastLoc I = card I -' 1 by AFINSQ_1:70;
+X: j <= card J - 1 by Z0,Th29;
+   card J - 1 < card J by XREAL_1:44;
+   then j < card J by X,XXREAL_0:2;
+   then
+D: j in dom J by NAT_1:44;
+   then
+C: j in dom IncAddr(J,LastLoc I) by COMPOS_1:def 21;
+E: LastLoc I + j in dom Reloc(J,LastLoc I) by D,COMPOS_1:46;
+   reconsider j as Element of NAT by ORDINAL1:def 12;
+  (I ';' J).(LastLoc I + j)
+     = Reloc(J,LastLoc I).(LastLoc I + j) by E,F,FUNCT_4:13
+    .= IncAddr(J,LastLoc I).j by C,VALUED_1:def 12
+    .= IncAddr(J/.j,LastLoc I) by D,COMPOS_1:def 21;
+ hence thesis;
+end;
+
+theorem Th45:
+ (i ';' j).1 = IncAddr(j,1)
+proof
+  0 in dom Macro j by COMPOS_1:57;
+  then
+C: (Macro j)/.0 = (Macro j).0 by PARTFUN1:def 6
+   .= j by COMPOS_1:58;
+A: LastLoc Macro j = 1 by Th30;
+ thus (i ';' j).1 = (i ';' Macro j).(LastLoc Macro i + 0) by Th30
+     .= IncAddr((Macro j)/.0,LastLoc Macro i) by A,Th44
+     .= IncAddr(j,1) by C,Th30;
+end;
+
+theorem Th46:
+  (i ';' j ';' k).1 = IncAddr(j,1)
+ proof
+  LastLoc(i ';' j) = 2 by Th31;
+  hence (i ';' j ';' k).1 = (i ';' j).1 by Th23,Th28
+        .= IncAddr(j,1) by Th45;
+ end;
+
+theorem Th47:
+  (i1 ';' i2 ';' i3 ';' i4).1 = IncAddr(i2,1)
+ proof
+  LastLoc(i1 ';' i2 ';' i3) = 3 by Th32;
+  hence (i1 ';' i2 ';' i3 ';' i4).1 = (i1 ';' i2 ';' i3).1 by Th23,Th28
+        .= IncAddr(i2,1) by Th46;
+ end;
+
+theorem Th48:
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).1 = IncAddr(i2,1)
+ proof
+  LastLoc(i1 ';' i2 ';' i3 ';' i4) = 4 by Th33;
+  hence (i1 ';' i2 ';' i3 ';' i4 ';' i5).1
+         = (i1 ';' i2 ';' i3 ';' i4).1 by Th23,Th28
+        .= IncAddr(i2,1) by Th47;
+ end;
+
+theorem
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).1 = IncAddr(i2,1)
+ proof
+  LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5 by Th34;
+  hence (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).1
+         = (i1 ';' i2 ';' i3 ';' i4 ';' i5).1 by Th23,Th28
+        .= IncAddr(i2,1) by Th48;
+ end;
+
+theorem Th50:
+ (I ';' j).(LastLoc I) = IncAddr(j,LastLoc I)
+proof
+A: 0 <= LastLoc Macro j by NAT_1:2;
+   0 in dom Macro j by COMPOS_1:57;
+   then
+C: (Macro j)/.0 = (Macro j).0 by PARTFUN1:def 6
+       .= j by COMPOS_1:58;
+ thus (I ';' j).(LastLoc I) = (I ';' Macro j).(LastLoc I + 0)
+      .= IncAddr((Macro j)/.0,LastLoc I) by A,Th44
+      .= IncAddr(j,LastLoc I) by C;
+end;
+
+theorem Th51:
+  (i1 ';' i2 ';' i3).2 = IncAddr(i3,2)
+ proof
+   LastLoc(i1 ';' i2) = 2 by Th31;
+  hence thesis by Th50;
+ end;
+
+theorem Th52:
+  (i1 ';' i2 ';' i3 ';' i4).2 = IncAddr(i3,2)
+ proof
+  LastLoc(i1 ';' i2 ';' i3) = 3 by Th32;
+  hence (i1 ';' i2 ';' i3 ';' i4).2 = (i1 ';' i2 ';' i3).2 by Th23,Th28
+        .= IncAddr(i3,2) by Th51;
+ end;
+
+theorem Th53:
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).2 = IncAddr(i3,2)
+ proof
+  LastLoc(i1 ';' i2 ';' i3 ';' i4) = 4 by Th33;
+  hence (i1 ';' i2 ';' i3 ';' i4 ';' i5).2
+         = (i1 ';' i2 ';' i3 ';' i4).2 by Th23,Th28
+        .= IncAddr(i3,2) by Th52;
+ end;
+
+theorem
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).2 = IncAddr(i3,2)
+ proof
+  LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5 by Th34;
+  hence (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).2
+         = (i1 ';' i2 ';' i3 ';' i4 ';' i5).2 by Th23,Th28
+        .= IncAddr(i3,2) by Th53;
+ end;
+
+theorem Th55:
+  (i1 ';' i2 ';' i3 ';' i4).3 = IncAddr(i4,3)
+ proof
+   LastLoc(i1 ';' i2 ';' i3) = 3 by Th32;
+  hence thesis by Th50;
+ end;
+
+theorem Th56:
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).3 = IncAddr(i4,3)
+ proof
+B:  LastLoc(i1 ';' i2 ';' i3 ';' i4) = 4 by Th33;
+  thus (i1 ';' i2 ';' i3 ';' i4 ';' i5).3
+         = (i1 ';' i2 ';' i3 ';' i4).3 by Th23,B,Th28
+        .= IncAddr(i4,3) by Th55;
+ end;
+
+theorem
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).3 = IncAddr(i4,3)
+ proof
+B:  LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5 by Th34;
+  thus (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).3
+         = (i1 ';' i2 ';' i3 ';' i4 ';' i5).3 by Th23,B,Th28
+        .= IncAddr(i4,3) by Th56;
+ end;
+
+theorem Th57:
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).4 = IncAddr(i5,4)
+ proof
+   LastLoc(i1 ';' i2 ';' i3 ';' i4) = 4 by Th33;
+  hence thesis by Th50;
+ end;
+
+theorem
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).4 = IncAddr(i5,4)
+ proof
+B:  LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5 by Th34;
+  thus (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).4
+         = (i1 ';' i2 ';' i3 ';' i4 ';' i5).4 by Th23,B,Th28
+        .= IncAddr(i5,4) by Th57;
+ end;
+
+theorem
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).5 = IncAddr(i6,5)
+ proof
+   LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5 by Th34;
+  hence thesis by Th50;
+ end;
+
+:: Zeby moc mowic o tym, ze Reloc(I,k) jest closed
+:: trzebaby ten atrybut zdefiniowac ogolniej
+:: ale wtedy trzeba wykorzystac fakt, ze sekwencyjnie
+:: przejscie nie moze sie cofac. Czyli maszyna
+:: musi byc standard.
+:: Potrzeba nam wiec raczej to, ze tak psedomakroinstrukcja
+:: jest "contigious" a niekoniecznie "initial"
+:: Definicje moze bez trudu zrobic ogolniejsza.
+
+definition let S;
+ let I be preProgram of S;
+ attr I is closed means
+:Def5: for i being Instruction of S st i in rng I
+  holds rng JumpPart i c= dom I;
+end;
+
+registration let S;
+ cluster Stop S -> closed;
+ coherence
+  proof
+  let i be Instruction of S;
+   assume
+Z:  i in rng Stop S;
+    rng Stop S = {halt S} by AFINSQ_1:33;
+    then i = halt S by Z,TARSKI:def 1;
+    then rng JumpPart i = {};
+   hence rng JumpPart i c= dom Stop S by XBOOLE_1:2;
+  end;
+end;
+
+registration let S;
+ cluster closed for MacroInstruction of S;
+ existence
+  proof
+   take Stop S;
+   thus thesis;
+  end;
+end;
+
+:: Nie mozemy bez dodatkowych zalozen zarejestrowac
+:: ins-loc-free No-StopCode dowodzimy twierdzenie
+:: rejestracje mozna zrobic dla konkretnych komputerow.
+
+theorem
+ for i being No-StopCode Instruction of S st i is ins-loc-free
+  holds Macro i is closed
+proof let i be No-StopCode Instruction of S such that
+Z: i is ins-loc-free;
+ let i1 be Instruction of S;
+ assume i1 in rng Macro i;
+  then i1 in {i,halt S} by COMPOS_1:67;
+  then i1 = i or i1 = halt S by TARSKI:def 2;
+  then rng JumpPart i1 = {} by Z;
+ hence rng JumpPart i1 c= dom Macro i by XBOOLE_1:2;
+end;
+
+registration let S;
+ let I be closed MacroInstruction of S, k be Nat;
+ cluster Reloc(I,k) -> closed;
+ coherence
+  proof
+   let i be Instruction of S;
+   assume i in rng Reloc(I,k);
+    then consider n being set such that
+W1:  n in dom Reloc(I,k) and
+W2:  Reloc(I,k).n = i by FUNCT_1:def 3;
+    dom Reloc(I,k) c= NAT by RELAT_1:def 18;
+    then reconsider n as Nat by W1;
+B:  dom Reloc(I,k) = dom Shift(I,k) by COMPOS_1:32;
+    then consider j being Nat such that
+W3:  j in dom I and
+W4:  n = j + k by W1,VALUED_1:39;
+   I.j = I/.j by W3,PARTFUN1:def 6;
+   then reconsider i1 = I.j as Instruction of S;
+A: IncAddr(i1, k) = i by W2,W3,W4,COMPOS_1:35;
+   let x be set;
+   assume
+C:  x in rng JumpPart i;
+    then consider y being set such that
+W5:  y in dom JumpPart i and
+W6:  (JumpPart i).y = x by FUNCT_1:def 3;
+    dom JumpPart i c= NAT by RELAT_1:def 18;
+    then reconsider y as Nat by W5;
+H:  JumpPart i = JumpPart i1 + k by A,COMPOS_0:def 9;
+    then
+E:  dom JumpPart i = dom JumpPart i1 by VALUED_1:def 2;
+    rng JumpPart i c= NAT by RELAT_1:def 19;
+    then reconsider m = x as Nat by C;
+    reconsider n = (JumpPart i1).y as Nat;
+D:  m = n + k by W6,H,W5,VALUED_1:def 2;
+G:  n in rng JumpPart i1 by W5,E,FUNCT_1:3;
+    i1 in rng I by W3,FUNCT_1:3;
+    then rng JumpPart i1 c= dom I by Def5;
+   hence x in dom Reloc(I,k) by B,D,G,VALUED_1:24;
+  end;
+end;
+
+registration let S;
+ let I,J be closed MacroInstruction of S;
+ cluster I ';' J -> closed;
+ coherence
+  proof let i be Instruction of S such that
+Z: i in rng(I ';' J);
+    rng(I ';' J) c= rng CutLastLoc I \/ rng Reloc(J,card I -' 1)
+            by FUNCT_4:17;
+   then per cases by Z,XBOOLE_0:def 3;
+   suppose
+S:   i in rng CutLastLoc I;
+    rng CutLastLoc I c= rng I by RELAT_1:11;
+    then
+A:  rng JumpPart i c= dom I by S,Def5;
+    dom I c= dom(I ';' J) by COMPOS_1:21;
+   hence rng JumpPart i c= dom(I ';' J) by A,XBOOLE_1:1;
+   end;
+   suppose i in rng Reloc(J,card I -' 1);
+    then
+A:  rng JumpPart i c= dom Reloc(J,card I -' 1) by Def5;
+    dom Reloc(J,card I -' 1) c= dom(I ';' J) by FUNCT_4:10;
+   hence rng JumpPart i c= dom(I ';' J) by A,XBOOLE_1:1;
+   end;
+  end;
+end;

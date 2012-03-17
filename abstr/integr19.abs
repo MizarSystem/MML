@@ -1,0 +1,405 @@
+:: Riemann Integral of Functions from $\mathbbbR$ into $n$-dimensional Real
+:: Normed Space
+::  by Keiichi Miyajima , Artur Korni{\l}owicz and Yasunari Shidama
+::
+:: Received October 27, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, INTEGRA1, SUBSET_1, FUNCT_1, FINSEQ_1, NAT_1, RELAT_1,
+      MEASURE7, XBOOLE_0, XXREAL_2, XXREAL_0, CARD_1, REAL_1, ARYTM_3, XREAL_0,
+      ORDINAL1, ARYTM_1, CARD_3, FINSEQ_2, INTEGRA2, SEQ_1, SEQ_2, ORDINAL2,
+      COMPLEX1, XXREAL_1, FUNCT_3, NORMSP_1, REAL_NS1, STRUCT_0, PARTFUN1,
+      FDIFF_1, RSSPACE, VALUED_1, RCOMP_1, FUNCT_2, SUPINF_2, FUNCOP_1,
+      VALUED_0, TARSKI, PRE_TOPC, INTEGRA5, INTEGR15, FCONT_1, ORDINAL4,
+      EUCLID, MEASURE5;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, NAT_1,
+      VALUED_0, COMPLEX1, BINOP_2, FINSEQ_1, VALUED_1, FINSEQ_2, SEQ_1, SEQ_2,
+      FINSEQOP, RVSUM_1, RCOMP_1, FDIFF_1, INTEGRA1, INTEGRA2, RFINSEQ2,
+      INTEGRA3, INTEGRA5, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_0, NORMSP_1,
+      MEASURE5, VFUNCT_1, RSSPACE, EUCLID, NDIFF_1, REAL_NS1, PDIFF_1,
+      EUCLID_7, INTEGR15, INTEGR18, NDIFF_3, NFCONT_3, NFCONT_4;
+ constructors REAL_1, FINSEQOP, MONOID_0, SEQ_4, NAT_D, VFUNCT_1, PDIFF_1,
+      BINOP_2, SEQ_1, INTEGRA5, RELSET_1, SEQ_2, INTEGRA3, INTEGR15, INTEGR18,
+      NFCONT_4, NDIFF_3, NFCONT_3, RSSPACE3, RFINSEQ2, FDIFF_1, NDIFF_1,
+      VALUED_2, EUCLID_7, REALSET1, COMSEQ_2;
+ registrations NUMBERS, XREAL_0, FINSEQ_2, INTEGRA1, FUNCT_1, FUNCT_2, NAT_1,
+      MEMBERED, XXREAL_0, VALUED_0, VALUED_1, REAL_NS1, RELSET_1, XBOOLE_0,
+      RELAT_1, FINSEQ_1, RCOMP_1, FDIFF_1, FINSET_1, XXREAL_2, CARD_1,
+      STRUCT_0, EUCLID, VALUED_2, SETFAM_1, ABIAN, RFUNCT_1, MEASURE5,
+      ORDINAL1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: On the functions from REAL into REAL n
+
+reserve X for set;
+reserve n,i for Element of NAT;
+reserve a,b,c,d,e,r,x0 for real number;
+reserve A for non empty closed_interval Subset of REAL;
+reserve f,g,h for PartFunc of REAL,REAL n;
+reserve E for Element of REAL n;
+
+theorem :: INTEGR19:1
+  a <= c & c <= b
+  implies c in ['a,b'] & ['a,c'] c= ['a,b'] & ['c,b'] c= ['a,b'];
+
+theorem :: INTEGR19:2
+  a <= c & c <= d & d <= b & ['a,b'] c= X implies ['c,d'] c= X;
+
+theorem :: INTEGR19:3
+  a <= b & c in ['a,b'] & d in ['a,b'] & ['a,b'] c= X
+  implies ['min(c,d),max(c,d)'] c= X;
+
+theorem :: INTEGR19:4
+  a <= c & c <= d & d <= b & ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies ['c,d'] c= dom (f+g);
+
+theorem :: INTEGR19:5
+  a <= c & c <= d & d <= b & ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies ['c,d'] c= dom (f-g);
+
+theorem :: INTEGR19:6
+  for f be PartFunc of REAL,REAL holds
+  a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+  f | [' a,b '] is bounded & ['a,b'] c= dom f
+  implies r(#)f is_integrable_on ['c,d'] & (r(#)f) | ['c,d'] is bounded;
+
+theorem :: INTEGR19:7
+  for f,g be PartFunc of REAL,REAL
+  st a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+  g is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  g| ['a,b'] is bounded & ['a,b'] c= dom f & ['a,b'] c= dom g
+  holds f-g is_integrable_on ['c,d'] & (f-g) | ['c,d'] is bounded;
+
+theorem :: INTEGR19:8
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b']
+  implies f is_integrable_on ['a,c'] & f is_integrable_on ['c,b'] &
+  integral(f,a,b) = integral(f,a,c) + integral(f,c,b);
+
+theorem :: INTEGR19:9
+  a <= c & c <= d & d <= b & f is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & ['a,b'] c= dom f
+  implies f is_integrable_on ['c,d'] & f| ['c,d'] is bounded;
+
+theorem :: INTEGR19:10
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded &
+  ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies
+  f + g is_integrable_on ['c,d'] & (f + g) | ['c,d'] is bounded;
+
+theorem :: INTEGR19:11
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & f| ['a,b'] is bounded & ['a,b'] c= dom f
+  implies
+  r(#)f is_integrable_on ['c,d'] & (r(#)f) | ['c,d'] is bounded;
+
+theorem :: INTEGR19:12
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & f| ['a,b'] is bounded & ['a,b'] c= dom f
+  implies
+  -f is_integrable_on ['c,d'] & (-f) | ['c,d'] is bounded;
+
+theorem :: INTEGR19:13
+  a <= c & c <= d & d <= b &
+  f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded &
+  ['a,b'] c= dom f & ['a,b'] c= dom g
+  implies
+  f - g is_integrable_on ['c,d'] & (f - g) | ['c,d'] is bounded;
+
+theorem :: INTEGR19:14
+  for n be non empty Element of NAT,
+      f be Function of A,REAL n holds
+  f is bounded iff |.f.| is bounded;
+
+theorem :: INTEGR19:15
+  f is bounded & A c= dom f implies f|A is bounded;
+
+theorem :: INTEGR19:16
+  for f be PartFunc of REAL,REAL n, g be Function of A,REAL n
+  st f is bounded & f = g holds g is bounded;
+
+theorem :: INTEGR19:17
+  for f be PartFunc of REAL,REAL n, g be Function of A,REAL n
+  st f = g holds |. f .| = |. g .|;
+
+theorem :: INTEGR19:18
+  A c= dom h implies |. h|A .| = (|.h.|) |A;
+
+theorem :: INTEGR19:19
+  for n be non empty Element of NAT, h be PartFunc of REAL,REAL n
+   st A c= dom h & h|A is bounded
+   holds (|.h.|) |A is bounded;
+
+theorem :: INTEGR19:20
+  for n be non empty Element of NAT, h be PartFunc of REAL,REAL n
+  st A c= dom h & h|A is bounded &
+  h is_integrable_on A & |. h .| is_integrable_on A
+  holds |.integral(h,A) .| <= integral(|. h .|,A);
+
+theorem :: INTEGR19:21
+  for n be non empty Element of NAT, h be PartFunc of REAL,REAL n
+  st a<=b & ['a,b'] c= dom h & h is_integrable_on ['a,b']
+  & |.h.| is_integrable_on ['a,b'] & h| ['a ,b'] is bounded
+  holds |. integral(h,a,b).| <= integral(|.h.|,a,b);
+
+theorem :: INTEGR19:22
+  for n be non empty Element of NAT, f be PartFunc of REAL,REAL n
+  st a <= b & f is_integrable_on ['a,b'] & |. f .| is_integrable_on ['a,b']
+    & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds |. f .| is_integrable_on ['min(c,d),max(c,d)'] &
+    (|. f .|) | ['min(c,d),max(c,d)'] is bounded &
+    |. integral(f,c,d) .| <= integral((|. f .|),min(c,d),max(c,d));
+
+theorem :: INTEGR19:23
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+  st a <= b & c <= d & f is_integrable_on ['a,b'] &
+  |.f.| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds |.f.| is_integrable_on ['c,d'] &
+  |.f.| | ['c,d'] is bounded & |.integral(f,c,d).| <= integral(|.f.|,c,d) &
+  |.integral(f,d,c).| <= integral(|.f.|,c,d);
+
+theorem :: INTEGR19:24
+  for n be non empty Element of NAT
+  for f be PartFunc of REAL,REAL n
+  st (a<=b & c <= d & f is_integrable_on ['a,b']
+  & |. f .| is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b'] &
+  for x be real number st x in ['c,d'] holds |. f/.x .| <= e)
+  holds |. integral(f,c,d) .| <= e * (d-c) &
+  |. integral(f,d,c).| <= e * (d-c);
+
+theorem :: INTEGR19:25
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(r(#)f,c,d) = r*integral(f,c,d);
+
+theorem :: INTEGR19:26
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(-f,c,d) = -integral(f,c,d);
+
+theorem :: INTEGR19:27
+  a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  implies integral(f+g,c,d) = integral(f,c,d) + integral(g,c,d);
+
+theorem :: INTEGR19:28
+  a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  implies integral(f-g,c,d) = integral(f,c,d) - integral(g,c,d);
+
+theorem :: INTEGR19:29
+  (a <= b & ['a,b'] c= dom f &
+  for x be real number st x in ['a,b'] holds f.x = E)
+  implies f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  integral(f,a,b) = (b-a)*E;
+
+theorem :: INTEGR19:30
+  a <= b & (for x be real number st x in ['a,b'] holds f.x = E) &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(f,c,d) = (d-c)*E;
+
+theorem :: INTEGR19:31
+  a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  implies integral(f,a,d) = integral(f,a,c) + integral(f,c,d);
+
+theorem :: INTEGR19:32
+  (a<=b & f is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+  d in ['a,b'] & for x be real number st x in ['min(c,d),max(c,d)']
+  holds |. f/.x .| <= e)
+  implies |. integral(f,c,d) .| <= n*e * abs(d-c);
+
+theorem :: INTEGR19:33
+  integral(f,b,a) = - integral(f,a,b);
+
+begin
+
+definition
+  let R be RealNormSpace, X be non empty set, g be PartFunc of X,R;
+  attr g is bounded means
+:: INTEGR19:def 1
+
+  ex r be real number
+  st for y be set st y in dom g holds ||. g/.y .|| < r;
+end;
+
+theorem :: INTEGR19:34
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n st f=g
+  holds f is bounded iff g is bounded;
+
+theorem :: INTEGR19:35
+  for X,Y be set, f1,f2 be PartFunc of REAL,REAL-NS n
+  st f1|X is bounded & f2|Y is bounded
+  holds (f1+f2) | (X /\ Y) is bounded & (f1-f2) | (X /\ Y) is bounded;
+
+theorem :: INTEGR19:36
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n,
+      D be Division of A, p be FinSequence of REAL n,
+      q be FinSequence of REAL-NS n st f=g & p=q
+  holds p is middle_volume of f,D iff q is middle_volume of g,D;
+
+theorem :: INTEGR19:37
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n,
+  D be Division of A,
+  p be middle_volume of f,D,
+  q be middle_volume of g,D
+  st f=g & p=q
+  holds middle_sum(f,p) = middle_sum(g,q);
+
+theorem :: INTEGR19:38
+  for f be Function of A,REAL n,
+  g be Function of A,REAL-NS n,
+  T be DivSequence of A,
+  p be Function of NAT,(REAL n)*,
+  q be Function of NAT,(the carrier of REAL-NS n)*
+  st f=g & p=q
+  holds p is middle_volume_Sequence of f,T
+  iff  q is middle_volume_Sequence of g,T;
+
+theorem :: INTEGR19:39
+  for f be Function of A,REAL n,
+  g be Function of A,REAL-NS n,
+  T be DivSequence of A,
+  S be middle_volume_Sequence of f,T,
+  U be middle_volume_Sequence of g,T
+  st f=g & S=U
+  holds middle_sum(f,S) = middle_sum(g,U);
+
+theorem :: INTEGR19:40
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n,
+  I be Element of REAL n, J be Point of REAL-NS n
+  st f=g & I = J holds
+  (for T be DivSequence of A, S be middle_volume_Sequence of f,T
+  st delta(T) is convergent & lim delta(T)=0
+  holds middle_sum(f,S) is convergent
+  & lim (middle_sum(f,S))=I)
+  iff
+  (for T be DivSequence of A, S be middle_volume_Sequence of g,T
+  st delta(T) is convergent & lim delta(T)=0
+  holds middle_sum(g,S) is convergent & lim (middle_sum(g,S))=J);
+
+theorem :: INTEGR19:41
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n
+  st f=g & f is bounded
+  holds f is integrable iff g is integrable;
+
+theorem :: INTEGR19:42
+  for f be Function of A,REAL n, g be Function of A,REAL-NS n
+  st f=g & f is bounded & f is integrable
+  holds g is integrable & integral(f) = integral(g);
+
+theorem :: INTEGR19:43
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n
+  st f=g & f |A is bounded & A c= dom f
+  holds f is_integrable_on A iff g is_integrable_on A;
+
+theorem :: INTEGR19:44
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n
+  st f=g & f|A is bounded & A c= dom f & f is_integrable_on A
+  holds g is_integrable_on A & integral(f,A) = integral(g,A);
+
+theorem :: INTEGR19:45
+  for f be PartFunc of REAL,REAL n, g be PartFunc of REAL,REAL-NS n
+  st f=g & a <= b & f| ['a,b'] is bounded & ['a,b'] c= dom f
+  & f is_integrable_on ['a,b']
+  holds integral(f,a,b) = integral(g,a,b);
+
+theorem :: INTEGR19:46
+  for f,g be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b']
+  & ['a,b'] c= dom f & ['a,b'] c= dom g
+  holds integral(f+g,a,b) = integral(f,a,b) + integral(g,a,b) &
+  integral(f-g,a,b) = integral(f,a,b) - integral(g,a,b);
+
+theorem :: INTEGR19:47
+  for f be PartFunc of REAL,REAL-NS n st a <= b & ['a,b'] c= dom f
+  holds integral(f,b,a) = - integral(f,a,b);
+
+theorem :: INTEGR19:48
+  for f be PartFunc of REAL,REAL-NS n, g be PartFunc of REAL,REAL n
+  st f=g & a <= b & ['a,b'] c= dom f & f | ['a,b'] is bounded
+  & f is_integrable_on ['a,b'] & c in ['a,b'] & d in ['a,b']
+  holds integral(f,c,d) = integral(g,c,d);
+
+theorem :: INTEGR19:49
+  for f,g be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  holds integral(f+g,c,d) = integral(f,c,d) + integral(g,c,d);
+
+theorem :: INTEGR19:50
+  for f,g be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & g is_integrable_on ['a,b'] &
+  f| ['a,b'] is bounded & g| ['a,b'] is bounded & ['a,b'] c= dom f &
+  ['a,b'] c= dom g & c in ['a,b'] & d in ['a,b']
+  holds integral(f-g,c,d) = integral(f,c,d) - integral(g,c,d);
+
+theorem :: INTEGR19:51
+  for E be Point of REAL-NS n, f be PartFunc of REAL,REAL-NS n
+  st (a <= b & ['a,b'] c= dom f &
+  for x be real number st x in ['a,b'] holds f.x = E)
+  holds f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  integral(f,a,b) = (b-a)*E;
+
+theorem :: INTEGR19:52
+  for E be Point of REAL-NS n, f be PartFunc of REAL,REAL-NS n
+  st a <= b & ['a,b'] c= dom f &
+  (for x be real number st x in ['a,b'] holds f.x = E)
+  & c in ['a,b'] & d in ['a,b']
+  holds integral(f,c,d) = (d-c)*E;
+
+theorem :: INTEGR19:53
+  for f be PartFunc of REAL,REAL-NS n
+  st a<=b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & c in ['a,b'] & d in ['a,b']
+  holds integral(f,a,d) = integral(f,a,c) + integral(f,c,d);
+
+theorem :: INTEGR19:54
+  for f be PartFunc of REAL,REAL-NS n
+  st (a<=b & f is_integrable_on ['a,b']
+  & f| ['a,b'] is bounded & ['a,b'] c= dom f & c in ['a,b'] &
+  d in ['a,b'] & for x be real number st x in ['min(c,d),max(c,d)']
+  holds ||. f/.x .|| <= e)
+  holds ||. integral(f,c,d) .||<= (n*e)* abs(d-c);
+
+begin
+
+theorem :: INTEGR19:55
+  for n be non empty Element of NAT, F,f be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b']
+  & f| ['a,b'] is bounded & ['a,b'] c= dom f & ].a,b.[ c= dom F &
+  (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x)) &
+  x0 in ].a,b.[ & f is_continuous_in x0 holds F is_differentiable_in x0 &
+  diff(F,x0)=f/.x0;
+
+theorem :: INTEGR19:56
+  for n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL-NS n
+  st a <= b & f is_integrable_on ['a,b'] & f| ['a,b'] is bounded &
+  ['a,b'] c= dom f & x0 in ].a,b.[ & f is_continuous_in x0
+  ex F be PartFunc of REAL,REAL-NS n st ].a,b.[ c= dom F &
+  (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x))
+  & F is_differentiable_in x0 & diff(F,x0)=f/.x0;
+

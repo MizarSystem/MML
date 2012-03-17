@@ -2,7 +2,7 @@
 ::  by Micha{\l} Muzalewski
 ::
 :: Received December 12, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,16 +17,19 @@ environ
  vocabularies XBOOLE_0, CLASSES2, FUNCSDOM, VECTSP_2, SUBSET_1, STRUCT_0,
       MOD_2, MIDSP_1, CAT_1, GRCAT_1, FUNCT_2, ENS_1, RELAT_1, GRAPH_1,
       FUNCT_1, ALGSTR_0, VECTSP_1, ZFMISC_1, FUNCT_5, MCART_1, TARSKI, ARYTM_3,
-      PARTFUN1, MODCAT_1, MSSUBFAM, UNIALG_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_2, PARTFUN1,
-      BINOP_1, FUNCT_5, STRUCT_0, ALGSTR_0, VECTSP_1, FUNCSDOM, VECTSP_2,
-      GRAPH_1, CAT_1, CLASSES2, GRCAT_1, MOD_2, FUNCT_3;
- constructors GRCAT_1, MOD_2, RELSET_1;
- registrations XBOOLE_0, RELSET_1, STRUCT_0, CAT_1, VECTSP_2, GRCAT_1, MOD_2;
+      PARTFUN1, MODCAT_1, MSSUBFAM, UNIALG_1, MONOID_0, RELAT_2, BINOP_1,
+      SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1,
+      SETFAM_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3,
+       BINOP_1, FUNCT_5, STRUCT_0, ALGSTR_0, VECTSP_1, FUNCSDOM, VECTSP_2,
+       GRAPH_1, CAT_1, CLASSES2, GRCAT_1, MOD_2;
+ constructors GRCAT_1, MOD_2, RELSET_1, FUNCT_5;
+ registrations XBOOLE_0, RELSET_1, STRUCT_0, CAT_1, VECTSP_2, GRCAT_1, MOD_2,
+      FUNCT_2, SETFAM_1;
  requirements SUBSET, BOOLE;
- definitions ALGSTR_0, GRAPH_1;
+ definitions ALGSTR_0, GRAPH_1, CAT_1, STRUCT_0;
  theorems CAT_1, GRCAT_1, FUNCT_2, MOD_2, TARSKI, ZFMISC_1, XBOOLE_0, BINOP_1,
-      RELAT_1, SUBSET_1;
+      RELAT_1, SUBSET_1, XTUPLE_0;
  schemes FUNCT_2, BINOP_1, TARSKI;
 
 begin
@@ -106,7 +109,7 @@ registration
   end;
 end;
 
-theorem Th3:
+theorem Th1:
   for f being strict LModMorphism of R holds {f} is LModMorphism_DOMAIN of R
 proof
   let f be strict LModMorphism of R;
@@ -121,13 +124,13 @@ definition
     for x being Element of it holds x is strict Morphism of G,H;
   existence
   proof
-    reconsider D = {ZERO(G,H)} as LModMorphism_DOMAIN of R by Th3;
+    reconsider D = {ZERO(G,H)} as LModMorphism_DOMAIN of R by Th1;
     take D;
     thus thesis by TARSKI:def 1;
   end;
 end;
 
-theorem Th4:
+theorem Th2:
   D is LModMorphism_DOMAIN of G,H iff for x being Element of D
   holds x is strict Morphism of G,H
 proof
@@ -150,7 +153,7 @@ theorem
 proof
   let f be strict Morphism of G,H;
   for x being Element of {f} holds x is strict Morphism of G,H by TARSKI:def 1;
-  hence thesis by Th4;
+  hence thesis by Th2;
 end;
 
 definition
@@ -193,7 +196,7 @@ A4: x in D implies x is strict Morphism of G,H
       hence thesis by MOD_2:6;
     end;
     then for x being Element of D holds x is strict Morphism of G,H;
-    then reconsider D as LModMorphism_DOMAIN of G,H by Th4;
+    then reconsider D as LModMorphism_DOMAIN of G,H by Th2;
     take D;
     thus thesis by A4,A1;
   end;
@@ -236,7 +239,7 @@ definition
 strict LeftMod of R st y = G & x1 = the addLoopStr of G & x2 = the lmult of G;
 end;
 
-theorem Th6:
+theorem Th4:
   for x,y1,y2 being set st GO x,y1,R & GO x,y2,R holds y1 = y2
 proof
   let x,y1,y2 be set such that
@@ -258,11 +261,11 @@ A9: ex G being strict LeftMod of R st y2 = G & b1 = the addLoopStr of G
 A10: y2 = G2 and
 A11: b1 = the addLoopStr of G2 and
 A12: b2 = the lmult of G2 by A9;
-  the addLoopStr of G1 = the addLoopStr of G2 by A3,A8,A6,A11,ZFMISC_1:27;
-  hence thesis by A3,A8,A5,A7,A10,A12,ZFMISC_1:27;
+  the addLoopStr of G1 = the addLoopStr of G2 by A3,A8,A6,A11,XTUPLE_0:1;
+  hence thesis by A3,A8,A5,A7,A10,A12,XTUPLE_0:1;
 end;
 
-theorem Th7:
+theorem Th5:
   for UN ex x st x in {[G,f] where G is Element of GroupObjects(UN)
 , f is Element of Funcs([:the carrier of R,1:],1) : not contradiction} & GO x,
   TrivialLMod(R),R
@@ -293,7 +296,7 @@ definition
     defpred P[set,set] means GO $1,$2,R;
     set N = {[G,f] where G is Element of GroupObjects(UN), f is Element of
     Funcs([:the carrier of R,1:],1) : not contradiction};
-A1: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by Th6;
+A1: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by Th4;
     consider Y being set such that
 A2: for y holds y in Y iff ex x st x in N & P[x,y] from TARSKI:sch 1(
     A1);
@@ -316,22 +319,22 @@ A4: for y holds y in Y2 iff ex x st x in N & GO x,y,R;
   end;
 end;
 
-theorem Th8:
+theorem Th6:
   TrivialLMod(R) in LModObjects(UN,R)
 proof
   ex x st x in {[G,f] where G is Element of GroupObjects(UN), f is Element
 of Funcs([:the carrier of R,1:],1) : not contradiction} & GO x,TrivialLMod(R),R
-  by Th7;
+  by Th5;
   hence thesis by Def6;
 end;
 
 registration
   let UN,R;
   cluster LModObjects(UN,R) -> non empty;
-  coherence by Th8;
+  coherence by Th6;
 end;
 
-theorem Th9:
+theorem Th7:
   for x being Element of LModObjects(UN,R) holds x is strict LeftMod of R
 proof
   let x be Element of LModObjects(UN,R);
@@ -351,7 +354,7 @@ definition
   coherence
   proof
     for x being Element of LModObjects(UN,R) holds x is strict LeftMod of
-    R by Th9;
+    R by Th7;
     hence thesis by Def1;
   end;
 end;
@@ -518,36 +521,14 @@ A6: for f being Element of Morphs(V) holds F2.f = cod' f;
     end;
     hence thesis by FUNCT_2:63;
   end;
-  func ID(V) -> Function of V,Morphs(V) means
-  :Def13:
-  for G being Element of V holds it.G = ID(G);
-  existence
-  proof
-    deffunc Gf(Element of V) = ID($1);
-    consider F being Function of V,Morphs(V) such that
-A7: for G being Element of V holds F.G = Gf(G) from FUNCT_2:sch 4;
-    take F;
-    thus thesis by A7;
-  end;
-  uniqueness
-  proof
-    let F1,F2 be Function of V,Morphs(V) such that
-A8: for G being Element of V holds F1.G = ID(G) and
-A9: for G being Element of V holds F2.G = ID(G);
-    now
-      let G be Element of V;
-      F1.G = ID(G) by A8;
-      hence F1.G = F2.G by A9;
-    end;
-    hence thesis by FUNCT_2:63;
-  end;
+ canceled;
 end;
 
 ::
 ::  4d. Category of left modules - superposition
 ::
 
-theorem Th10:
+theorem Th8:
   for g,f being Element of Morphs(V) st dom'(g) = cod'(f) ex G1,G2
 ,G3 being strict Element of V st g is Morphism of G2,G3 & f is Morphism of G1,
   G2
@@ -565,7 +546,7 @@ A4: G29 = cod'(f) by A3,MOD_2:def 8;
   hence thesis by A1,A2,A3,A4;
 end;
 
-theorem Th11:
+theorem Th9:
   for g,f being Element of Morphs(V) st dom'(g) = cod'(f) holds g*
   f in Morphs(V)
 proof
@@ -575,20 +556,20 @@ proof
   assume P[g,f];
   then consider G1,G2,G3 being strict Element of V such that
 A1: g is Morphism of G2,G3 and
-A2: f is Morphism of G1,G2 by Th10;
+A2: f is Morphism of G1,G2 by Th8;
   reconsider f9 = f as Morphism of G1,G2 by A2;
   reconsider g9 = g as Morphism of G2,G3 by A1;
   g9*f9 = g9*'f9 by MOD_2:def 11;
   hence thesis by Def7;
 end;
 
-theorem Th12:
+theorem Th10:
   for g,f being Element of Morphs(V) st dom(g) = cod(f) holds g*f in Morphs(V)
 proof
   let g,f be Element of Morphs(V);
   assume dom(g) = cod(f);
   then dom'(g) = cod'(f);
-  hence thesis by Th11;
+  hence thesis by Th9;
 end;
 
 definition
@@ -602,7 +583,7 @@ definition
     set X = Morphs(V);
     defpred P[Element of X,Element of X] means dom'($1) = cod'($2);
     deffunc F(Element of X,Element of X) = $1*$2;
-A1: for g,f being Element of X st P[g,f] holds F(g,f) in X by Th11;
+A1: for g,f being Element of X st P[g,f] holds F(g,f) in X by Th9;
     consider c being PartFunc of [:X,X:],X such that
 A2: ( for g,f being Element of X holds [g,f] in dom c iff P[g,f])& for
 g,f being Element of X st [g,f] in dom c holds c.(g,f) = F(g,f) from BINOP_1:
@@ -620,13 +601,12 @@ A4: for g,f being Element of X st [g,f] in dom c1 holds c1.(g,f) = g*f and
 A5: for g,f being Element of X holds [g,f] in dom c2 iff P[g,f] and
 A6: for g,f being Element of X st [g,f] in dom c2 holds c2.(g,f) = g*f;
     set V0 = dom c1;
-A7: dom c1 c= [:X,X:] by RELAT_1:def 18;
     now
       let x;
       assume
 A8:   x in dom c1;
       then consider g,f being Element of X such that
-A9:   x = [g,f] by A7,SUBSET_1:43;
+A9:   x = [g,f] by SUBSET_1:43;
       P[g,f] by A3,A8,A9;
       hence x in dom c2 by A5,A9;
     end;
@@ -637,17 +617,16 @@ A11: for x,y st [x,y] in V0 holds c1.(x,y)=c2.(x,y)
       let x,y;
       assume
 A12:  [x,y] in V0;
-      then reconsider x,y as Element of X by A7,ZFMISC_1:87;
+      then reconsider x,y as Element of X by ZFMISC_1:87;
       c1.(x,y) = x*y by A4,A12;
       hence thesis by A6,A10,A12;
     end;
-A13: dom c2 c= [:X,X:] by RELAT_1:def 18;
     now
       let x;
       assume
 A14:  x in dom c2;
       then consider g,f being Element of X such that
-A15:  x = [g,f] by A13,SUBSET_1:43;
+A15:  x = [g,f] by SUBSET_1:43;
       P[g,f] by A5,A14,A15;
       hence x in dom c1 by A3,A15;
     end;
@@ -657,7 +636,7 @@ A15:  x = [g,f] by A13,SUBSET_1:43;
   end;
 end;
 
-theorem Th13:
+theorem Th11:
   for g,f being Element of Morphs(V) holds [g,f] in dom comp(V)
   iff dom(g) = cod(f)
 proof
@@ -675,7 +654,9 @@ definition
   func LModCat(UN,R) -> strict CatStr equals
   CatStr(#LModObjects(UN,R),Morphs(
     LModObjects(UN,R)), dom(LModObjects(UN,R)),cod(LModObjects(UN,R)), comp(
-    LModObjects(UN,R)),ID(LModObjects(UN,R))#);
+    LModObjects(UN,R))
+:::,ID(LModObjects(UN,R))
+   #);
   coherence;
 end;
 
@@ -685,7 +666,7 @@ registration
   coherence;
 end;
 
-theorem Th14:
+theorem Th12:
   for f,g being Morphism of LModCat(UN,R) holds [g,f] in dom(the
   Comp of LModCat(UN,R)) iff dom g = cod f
 proof
@@ -711,42 +692,20 @@ A3: now
   hence thesis by A3;
 end;
 
-theorem Th15:
-  for f being (Morphism of LModCat(UN,R)), f9 being Element of
-Morphs(LModObjects(UN,R)), b being Object of LModCat(UN,R), b9 being Element of
-  LModObjects(UN,R) holds f is strict Element of Morphs(LModObjects(UN,R)) & f9
-is Morphism of LModCat(UN,R) & b is strict Element of LModObjects(UN,R) & b9 is
-  Object of LModCat(UN,R)
-proof
-  set C = LModCat(UN,R), V = LModObjects(UN,R);
-  set X = Morphs(V);
-  let f be (Morphism of C), f9 be Element of X, b be Object of C, b9 be
-  Element of V;
-  consider x such that
-  x in {[G,ff] where G is Element of GroupObjects(UN), ff is Element of
-  Funcs([:the carrier of R,1:],1) : not contradiction} and
-A1: GO x,b,R by Def6;
+registration let UN,R;
+ cluster -> strict for Element of Morphs LModObjects(UN,R);
+ coherence
+ proof
+  set V = LModObjects(UN,R);
+  let f be Element of Morphs V;
   ex G,H being strict Element of V st f is strict Morphism of G,H by Def7;
-  hence f is strict Element of X;
-  thus f9 is Morphism of C;
-  ex x1,x2 being set st x = [x1,x2] & ex G being strict LeftMod of R st b
-  = G & x1 = the addLoopStr of G & x2 = the lmult of G by A1,Def5;
-  hence b is strict Element of V;
-  thus thesis;
+  hence f is strict;
+ end;
 end;
 
-theorem Th16:
-  for b being Object of LModCat(UN,R), b9 being Element of
-  LModObjects(UN,R) st b = b9 holds id b = ID(b9)
-proof
-  set C = LModCat(UN,R), V = LModObjects(UN,R);
-  let b be Object of C, b9 be Element of V;
-  assume b = b9;
-  hence id b = (ID(V)).b9 by CAT_1:def 2
-    .= ID(b9) by Def13;
-end;
+canceled 2;
 
-theorem Th17:
+theorem Th15:
   for f being Morphism of LModCat(UN,R) for f9 being Element of
   Morphs(LModObjects(UN,R)) st f = f9 holds dom f = dom f9 & cod f = cod f9
 proof
@@ -761,11 +720,12 @@ A1: f = f9;
     .= cod f9;
 end;
 
-theorem Th18:
+theorem Th16:
   for f,g being (Morphism of LModCat(UN,R)), f9,g9 being Element
 of Morphs(LModObjects(UN,R)) st f = f9 & g = g9 holds (dom g = cod f iff dom g9
 = cod f9) & (dom g = cod f iff [g9,f9] in dom comp(LModObjects(UN,R))) & (dom g
-  = cod f implies g*f = g9*f9) & (dom f = dom g iff dom f9 = dom g9) & (cod f =
+  = cod f implies g(*)f = g9*f9) & (dom f = dom g iff dom f9 = dom g9) &
+(cod f =
   cod g iff cod f9 = cod g9)
 proof
   set C = LModCat(UN,R), V = LModObjects(UN,R);
@@ -775,111 +735,101 @@ proof
   assume that
 A1: f = f9 and
 A2: g = g9;
-A3: cod f = cod f9 by A1,Th17;
-  hence dom g = cod f iff dom g9 = cod f9 by A2,Th17;
-  dom g = dom g9 by A2,Th17;
+A3: cod f = cod f9 by A1,Th15;
+  hence dom g = cod f iff dom g9 = cod f9 by A2,Th15;
+  dom g = dom g9 by A2,Th15;
   hence
-A4: dom g = cod f iff [g9,f9] in dom comp(V) by A3,Th13;
-  thus dom g = cod f implies g*f = g9*f9
+A4: dom g = cod f iff [g9,f9] in dom comp(V) by A3,Th11;
+  thus dom g = cod f implies g(*)f = g9*f9
   proof
     assume
 A5: dom g = cod f;
-    then [g,f] in dom (the Comp of C) by Th14;
-    hence g*f = (comp(V)).(g9,f9) by A1,A2,CAT_1:def 1
+    then [g,f] in dom (the Comp of C) by Th12;
+    hence g(*)f = (comp(V)).(g9,f9) by A1,A2,CAT_1:def 1
       .= g9*f9 by A4,A5,Def14;
   end;
-  dom f = dom f9 by A1,Th17;
-  hence dom f = dom g iff dom f9 = dom g9 by A2,Th17;
-  cod g = cod g9 by A2,Th17;
-  hence thesis by A1,Th17;
+  dom f = dom f9 by A1,Th15;
+  hence dom f = dom g iff dom f9 = dom g9 by A2,Th15;
+  cod g = cod g9 by A2,Th15;
+  hence thesis by A1,Th15;
 end;
 
-Lm1: for f,g being Morphism of LModCat(UN,R) st dom g = cod f holds dom(g*f) =
-dom f & cod (g*f) = cod g
+Lm1: for f,g being Morphism of LModCat(UN,R) st dom g = cod f
+ holds dom(g(*)f) = dom f & cod (g(*)f) = cod g
 proof
   set X = Morphs((LModObjects(UN,R)));
   let f,g be Morphism of (LModCat(UN,R)) such that
 A1: dom g = cod f;
-  reconsider g9 = g as strict Element of X by Th15;
-  reconsider f9 = f as strict Element of X by Th15;
-A2: dom g9 = cod f9 by A1,Th18;
+  reconsider g9 = g as strict Element of X;
+  reconsider f9 = f as strict Element of X;
+A2: dom g9 = cod f9 by A1,Th16;
   then
 A3: dom(g9*f9) = dom f9 & cod (g9*f9) = cod g9 by MOD_2:15;
-  reconsider gf = g9*f9 as Element of X by A2,Th12;
-  gf = g*f by A1,Th18;
-  hence thesis by A3,Th18;
+  reconsider gf = g9*f9 as Element of X by A2,Th10;
+  gf = g(*)f by A1,Th16;
+  hence thesis by A3,Th16;
 end;
 
 Lm2: for f,g,h being Morphism of LModCat(UN,R) st dom h = cod g & dom g = cod
-f holds h*(g*f) = (h*g)*f
+f holds h(*)(g(*)f) = (h(*)g)(*)f
 proof
   set X = Morphs((LModObjects(UN,R)));
   let f,g,h be Morphism of (LModCat(UN,R)) such that
 A1: dom h = cod g & dom g = cod f;
-  reconsider f9=f, g9=g, h9=h as strict Element of X by Th15;
-A2: h9*g9 = h*g & dom(h*g) = cod(f) by A1,Lm1,Th18;
-A3: dom h9 = cod g9 & dom g9 = cod f9 by A1,Th18;
-  then reconsider gf = g9*f9, hg = h9*g9 as strict Element of X by Th12;
-  g9*f9 = g*f & dom(h) = cod(g*f) by A1,Lm1,Th18;
-  then h*(g*f) = h9*gf by Th18
+  reconsider f9=f, g9=g, h9=h as strict Element of X;
+A2: h9*g9 = h(*)g & dom(h(*)g) = cod(f) by A1,Lm1,Th16;
+A3: dom h9 = cod g9 & dom g9 = cod f9 by A1,Th16;
+  then reconsider gf = g9*f9, hg = h9*g9 as strict Element of X by Th10;
+  g9*f9 = g(*)f & dom(h) = cod(g(*)f) by A1,Lm1,Th16;
+  then h(*)(g(*)f) = h9*gf by Th16
     .= hg*f9 by A3,MOD_2:17
-    .= (h*g)*f by A2,Th18;
+    .= (h(*)g)(*)f by A2,Th16;
   hence thesis;
-end;
-
-Lm3: for b being Object of LModCat(UN,R) holds dom id b = b & cod id b = b & (
-for f being Morphism of LModCat(UN,R) st cod f = b holds (id b)*f = f) & for g
-being Morphism of LModCat(UN,R) st dom g = b holds g*(id b) = g
-proof
-  set C = LModCat(UN,R), V = LModObjects(UN,R);
-  set X = Morphs(V);
-  let b be Object of C;
-  reconsider b9 = b as Element of V;
-  reconsider b99 = b9 as LeftMod of R;
-A1: id b = ID(b9) by Th16;
-  hence
-A2: dom id b = dom ID(b99) by Th17
-    .= b by MOD_2:18;
-  thus
-A3: cod id b = cod ID(b99) by A1,Th17
-    .= b by MOD_2:18;
-  thus for f being Morphism of C st cod f = b holds (id b)*f = f
-  proof
-    let f be Morphism of C such that
-A4: cod f = b;
-    reconsider f1 = f as Element of X;
-    ex G,H being strict Element of V st f1 is strict Morphism of G,H by Def7;
-    then reconsider f9 = f1 as strict LModMorphism of R;
-A5: cod f9 = b99 by A4,Th17;
-    thus (id b)*f = ID(b99)*f9 by A1,A2,A4,Th18
-      .= f by A5,MOD_2:18;
-  end;
-  thus for g being Morphism of C st dom g = b holds g*(id b) = g
-  proof
-    let f be Morphism of C such that
-A6: dom f = b;
-    reconsider f1 = f as Element of X;
-    ex G,H being strict Element of V st f1 is strict Morphism of G,H by Def7;
-    then reconsider f9 = f1 as strict LModMorphism of R;
-A7: dom f9 = b99 by A6,Th17;
-    thus f*(id b) = f9*ID(b99) by A1,A3,A6,Th18
-      .= f by A7,MOD_2:18;
-  end;
 end;
 
 registration
   let UN,R;
-  cluster LModCat(UN,R) -> Category-like;
+  cluster LModCat(UN,R) -> Category-like
+    transitive associative reflexive;
   coherence
-  proof
-A1: ( for f,g,h being Morphism of LModCat(UN,R) st dom h = cod g & dom g =
-cod f holds h*(g*f) = (h*g)*f)& for b being Object of LModCat(UN,R) holds dom
-id b = b & cod id b = b & (for f being Morphism of LModCat(UN,R) st cod f = b
-holds ( id b)*f = f) & for g being Morphism of LModCat(UN,R) st dom g = b holds
-    g*(id b ) = g by Lm2,Lm3;
-    ( for f,g being Morphism of LModCat(UN,R) holds [g,f] in dom(the Comp
-of LModCat(UN,R)) iff dom g = cod f)& for f,g being Morphism of LModCat(UN,R)
-    st dom g = cod f holds dom(g*f ) = dom f & cod (g*f) = cod g by Lm1,Th14;
-    hence thesis by A1,CAT_1:10;
+  proof set C = LModCat(UN,R);
+   thus C is Category-like
+    proof let f be Morphism of C;
+     thus thesis by Th16;
+    end;
+   thus C is transitive
+   proof let f be Morphism of C;
+    thus thesis by Lm1;
+   end;
+   thus C is associative
+   proof let f be Morphism of C;
+    thus thesis by Lm2;
+   end;
+   thus C is reflexive
+   proof let a be Element of C;
+     reconsider G = a as Element of LModObjects(UN,R);
+     consider x such that
+      x in {[H,f]
+          where H is Element of GroupObjects(UN),
+                f is Element of Funcs([:the carrier of R,1:],1)
+   : not contradiction} and
+W2:  GO x,G,R by Def6;
+     set ii = ID G;
+     consider  x1,x2 being set such that
+    x = [x1,x2] and
+W4:    ex H being strict LeftMod of R
+       st G = H & x1 = the addLoopStr of H & x2 = the lmult of H
+                  by W2,Def5;
+     reconsider G as strict Element of LModObjects(UN,R) by W4;
+     reconsider ii as Morphism of C;
+     reconsider ia = ii as LModMorphismStr over R;
+A:   dom ii = dom ia by Th15
+       .= a by MOD_2:18;
+     cod ii = cod ia by Th15
+       .= a by MOD_2:18;
+     then ii in Hom(a,a) by A;
+    hence Hom(a,a)<>{};
+   end;
   end;
 end;
+

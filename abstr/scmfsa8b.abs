@@ -2,7 +2,7 @@
 ::  by Noriko Asamoto
 ::
 :: Received August 27, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,20 +18,21 @@ environ
       SCMFSA6A, FUNCT_4, FSM_1, RELAT_1, UNIALG_2, CIRCUIT2, FUNCT_1, SF_MASTR,
       SUBSET_1, ARYTM_3, SCMFSA7B, SCMFSA6B, SCMFSA6C, AMI_3, SCMFSA8A, NAT_1,
       GRAPHSP, XXREAL_0, MSUALG_1, STRUCT_0, ARYTM_1, INT_1, COMPLEX1,
-      PARTFUN1, FINSEQ_1, FINSEQ_2, SCMFSA8B, ORDINAL1, SCMNORM, RELOC, PBOOLE,
-      FUNCOP_1, XBOOLE_0, COMPOS_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
-      RELAT_1, FUNCT_1, PARTFUN1, FUNCOP_1, FUNCT_4, PBOOLE, FUNCT_7, FINSEQ_1,
-      FINSEQ_2, STRUCT_0, MEMSTR_0, COMPOS_1, EXTPRO_1, AMISTD_1, AMISTD_2,
-      SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      INT_2, XXREAL_0;
+      PARTFUN1, FINSEQ_1, FINSEQ_2, SCMFSA8B, ORDINAL1, EXTPRO_1, RELOC,
+      PBOOLE, FUNCOP_1, XBOOLE_0, COMPOS_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, ORDINAL1,
+      NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCOP_1, FUNCT_4, PBOOLE,
+      FUNCT_7, FINSEQ_1, FINSEQ_2, STRUCT_0, MEMSTR_0, COMPOS_0, COMPOS_1,
+      EXTPRO_1, AMISTD_1, AMISTD_2, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
+      SCMFSA6C, SCMFSA7B, SCMFSA8A, INT_2, XXREAL_0, SCMFSA_M;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
       SCMFSA6C, SCMFSA8A, AMISTD_2, RELSET_1, SCMFSA7B, PRE_POLY, AMISTD_1,
-      PBOOLE, FUNCOP_1, FUNCT_4, MEMSTR_0;
+      PBOOLE, FUNCOP_1, FUNCT_4, MEMSTR_0, SCMFSA_M, FUNCT_7;
  registrations SETFAM_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       SCMFSA_2, SF_MASTR, SCMFSA6A, SCMFSA6B, SCMFSA6C, ORDINAL1, MEMSTR_0,
       XBOOLE_0, FINSET_1, RELSET_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1,
-      PBOOLE, FUNCT_4, FUNCOP_1, AMISTD_1, RELAT_1, STRUCT_0;
+      PBOOLE, FUNCT_4, FUNCOP_1, AMISTD_1, RELAT_1, STRUCT_0, FINSEQ_1, AMI_3,
+      COMPOS_0, SCMFSA_M;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -45,11 +46,7 @@ theorem :: SCMFSA8B:1
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
   is_closed_on s,P holds 0 in dom I;
 
-
-
-theorem :: SCMFSA8B:2
-  for s being State of SCM+FSA, I being Program of SCM+FSA holds
-  DataPart Initialized s = DataPart(s +* Initialize((intloc 0).-->1));
+canceled;
 
 theorem :: SCMFSA8B:3
   for s1,s2 being State of SCM+FSA, I being Program of SCM+FSA st
@@ -95,12 +92,12 @@ theorem :: SCMFSA8B:9
   for s being State of SCM+FSA, i being keeping_0 parahalting
   Instruction of SCM+FSA, J being parahalting Program of SCM+FSA, a being
   Int-Location
-   holds IExec(i ';' J,P,s).a = IExec(J,P,Exec(i,Initialized s)).a;
+   holds IExec(i ";" J,P,s).a = IExec(J,P,Exec(i,Initialized s)).a;
 
 theorem :: SCMFSA8B:10
   for s being State of SCM+FSA, i being keeping_0 parahalting
   Instruction of SCM+FSA, J being parahalting Program of SCM+FSA, f being
-  FinSeq-Location holds IExec(i ';' J,P,s).f
+  FinSeq-Location holds IExec(i ";" J,P,s).f
    = IExec(J,P,Exec(i,Initialized s)).f;
 
 definition
@@ -109,11 +106,11 @@ definition
   func if=0(a,I,J) -> Program of SCM+FSA equals
 :: SCMFSA8B:def 1
   a =0_goto  (card J + 3)
-  ';' J ';' Goto  (card I + 1) ';' I ';' Stop SCM+FSA;
+  ";" J ";" Goto  (card I + 1) ";" I ";" Stop SCM+FSA;
   func if>0(a,I,J) -> Program of SCM+FSA equals
 :: SCMFSA8B:def 2
   a >0_goto  (card J + 3)
-  ';' J ';' Goto  (card I + 1) ';' I ';' Stop SCM+FSA;
+  ";" J ";" Goto  (card I + 1) ";" I ";" Stop SCM+FSA;
 end;
 
 definition
@@ -282,10 +279,10 @@ definition
   let I,J be Program of SCM+FSA;
   func if=0(a,b,I,J) -> Program of SCM+FSA equals
 :: SCMFSA8B:def 4
-  SubFrom(a,b) ';' if=0(a,I,J);
+  SubFrom(a,b) ";" if=0(a,I,J);
   func if>0(a,b,I,J) -> Program of SCM+FSA equals
 :: SCMFSA8B:def 5
-  SubFrom(a,b) ';' if>0(a,I,J);
+  SubFrom(a,b) ";" if>0(a,I,J);
 end;
 
 registration

@@ -2,7 +2,7 @@
 ::  by Agata Darmochwa\l
 ::
 :: Received April 6, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,18 +16,20 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, ORDINAL1, XBOOLE_0, FUNCOP_1, ORDINAL3,
       ORDINAL2, TARSKI, SUBSET_1, SETFAM_1, ZFMISC_1, MCART_1, FUNCT_4,
-      FINSET_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCOP_1,
+      FINSET_1, MATROID0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1,
+      XTUPLE_0, RELAT_1, FUNCT_1, FUNCOP_1,
       MCART_1, SETFAM_1, ORDINAL1, ORDINAL2, ORDINAL3, SUBSET_1, DOMAIN_1,
       RELSET_1, FUNCT_2, FUNCT_3, FUNCT_4;
  constructors DOMAIN_1, FUNCT_3, FUNCOP_1, ORDINAL3, FUNCT_4, SETFAM_1,
-      RELSET_1;
+      RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ORDINAL2,
-      RELSET_1;
+      RELSET_1, FUNCOP_1, XTUPLE_0;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions TARSKI, XBOOLE_0, FUNCOP_1, RELAT_1, FUNCT_4;
+ definitions TARSKI, XBOOLE_0, FUNCOP_1, RELAT_1, FUNCT_4, XTUPLE_0;
  theorems FUNCT_1, ENUMSET1, MCART_1, ZFMISC_1, TARSKI, RELAT_1, ORDINAL3,
-      ORDINAL1, XBOOLE_0, XBOOLE_1, FUNCT_3, FUNCOP_1, FUNCT_4;
+      ORDINAL1, XBOOLE_0, XBOOLE_1, FUNCT_3, FUNCOP_1, FUNCT_4, SUBSET_1,
+      XTUPLE_0;
  schemes FUNCT_1, PARTFUN1, ORDINAL2, XBOOLE_0;
 
 begin
@@ -371,7 +373,7 @@ theorem
 
 reserve O for Ordinal;
 
-theorem Th18:
+theorem Th6:
   A is finite implies for X being Subset-Family of A st X <> {}
   ex x being set st x in X &
     for B being set st B in X holds x c= B implies B = x
@@ -605,7 +607,7 @@ A4: for x holds x in G iff x in bool A() & R[x] from XBOOLE_0:sch 1;
     then GA <> {} by A2,A4;
     then consider B such that
 A5: B in GA and
-A6: for X being set st X in GA holds B c= X implies B=X by A1,Th18;
+A6: for X being set st X in GA holds B c= X implies B=X by A1,Th6;
 A7: ex A st A = B & P[A] by A4,A5;
     now set x = the Element of A() \ B;
       assume B <> A();
@@ -888,7 +890,7 @@ A30:    {x} c= A by A6,ZFMISC_1:31;
   end;
 end;
 
-theorem
+theorem Th7:
   A is finite & (for X st X in A holds X is finite) iff union A is finite
 proof
   thus A is finite & (for X st X in A holds X is finite) implies
@@ -907,7 +909,7 @@ A1: union A is finite;
   end;
 end;
 
-theorem Th26:
+theorem Th8:
   dom f is finite implies rng f is finite
 proof
   assume dom f is finite;
@@ -942,7 +944,7 @@ end;
 begin :: Addenda
 :: from AMI_1
 
-theorem Th29:
+theorem Th10:
   for f being Function holds dom f is finite iff f is finite
 proof
   let f be Function;
@@ -951,7 +953,7 @@ proof
     assume
 A1: dom f is finite;
     then
-A2: rng f is finite by Th26;
+A2: rng f is finite by Th8;
     f c= [:dom f, rng f:] by RELAT_1:7;
     hence thesis by A1,A2;
   end;
@@ -1106,7 +1108,7 @@ A4: for a st a in X holds f.a = F(a) from FUNCT_1:sch 3;
 A5: dom g = X and
 A6: for a st a in X holds g.a = G(a) from FUNCT_1:sch 3;
   take A = rng f, B = rng g;
-  thus A is finite by A1,A3,Th26;
+  thus A is finite by A1,A3,Th8;
   thus A c= Y
   proof
     let a;
@@ -1121,7 +1123,7 @@ A10: x = [y,z] by A2,A3,A7,ZFMISC_1:def 2;
       .= y by A10,MCART_1:7;
     hence thesis by A8,A9;
   end;
-  thus B is finite by A1,A5,Th26;
+  thus B is finite by A1,A5,Th8;
   thus B c= Z
   proof
     let a;
@@ -1167,7 +1169,7 @@ A2: X c= [:Y,Z:];
 A3: dom f = X and
 A4: for a st a in X holds f.a = F(a) from FUNCT_1:sch 3;
   take A = rng f;
-  thus A is finite by A1,A3,Th26;
+  thus A is finite by A1,A3,Th8;
   thus A c= Y
   proof
     let a;
@@ -1233,11 +1235,11 @@ A5:     ex x,y st a = [x,y] by A1,A3,RELAT_1:def 1;
       given y such that
 A6:   [x,y] in R;
       f.[x,y] = [x,y]`1 by A2,A6
-        .= x by MCART_1:7;
+        .= x;
       hence x in rng f by A1,A6,FUNCT_1:3;
     end;
-    then rng f = dom R by RELAT_1:def 4;
-    hence thesis by A1,Th26;
+    then rng f = dom R by XTUPLE_0:def 12;
+    hence thesis by A1,Th8;
   end;
 end;
 
@@ -1248,7 +1250,7 @@ registration
   cluster f*g -> finite;
   coherence
   proof dom(f*g) c= dom g by RELAT_1:25;
-    hence thesis by Th29;
+    hence thesis by Th10;
   end;
 end;
 
@@ -1261,7 +1263,7 @@ registration
   proof
     let f be Function of A, B;
     dom f is finite;
-    hence thesis by Th29;
+    hence thesis by Th10;
   end;
 end;
 
@@ -1299,11 +1301,11 @@ A5:     ex x,y st a = [x,y] by A1,A3,RELAT_1:def 1;
       given x such that
 A6:   [x,y] in R;
       f.[x,y] = [x,y]`2 by A2,A6
-        .= y by MCART_1:7;
+        .= y;
       hence y in rng f by A1,A6,FUNCT_1:3;
     end;
-    then rng f = rng R by RELAT_1:def 5;
-    hence thesis by A1,Th26;
+    then rng f = rng R by XTUPLE_0:def 13;
+    hence thesis by A1,Th8;
   end;
 end;
 
@@ -1325,7 +1327,7 @@ registration
   coherence
   proof
     dom (f+*g) = dom f \/ dom g by FUNCT_4:def 1;
-    hence thesis by Th29;
+    hence thesis by Th10;
   end;
 end;
 
@@ -1338,6 +1340,34 @@ definition
   for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
 end;
 
+definition
+ let f be Function;
+  redefine attr f is finite-yielding means
+:Def4: for i being set st i in dom f holds f.i is finite;
+  compatibility
+  proof
+    hereby
+      assume
+A1:   f is finite-yielding;
+      let i be set such that i in dom f;
+      per cases;
+      suppose i in dom f;
+        then f.i in rng f by FUNCT_1:3;
+        hence f.i is finite by A1,Def2;
+      end;
+      suppose not i in dom f;
+        hence f.i is finite by FUNCT_1:def 2;
+      end;
+    end;
+    assume
+A2: for i being set st i in dom f holds f.i is finite;
+    let i be set;
+    assume i in rng f;
+    then ex x st x in dom f & i = f.x by FUNCT_1:def 3;
+    hence thesis by A2;
+  end;
+end;
+
 :: from PRE_CIRC, 2009.03.04, A.T.
 
 definition
@@ -1347,26 +1377,23 @@ definition
   for i being set st i in I holds IT.i is finite;
   compatibility
   proof
-A1: dom IT c= I by RELAT_1:def 18;
     hereby
       assume
-A2:   IT is finite-yielding;
+A1:   IT is finite-yielding;
       let i be set such that i in I;
       per cases;
       suppose i in dom IT;
-        then IT.i in rng IT by FUNCT_1:3;
-        hence IT.i is finite by A2,Def2;
+        hence IT.i is finite by A1,Def4;
       end;
       suppose not i in dom IT;
         hence IT.i is finite by FUNCT_1:def 2;
       end;
     end;
     assume
-A3: for i being set st i in I holds IT.i is finite;
+A2: for i being set st i in I holds IT.i is finite;
     let i be set;
-    assume i in rng IT;
-    then ex x st x in dom IT & i = IT.x by FUNCT_1:def 3;
-    hence thesis by A1,A3;
+     dom IT c= I;
+    hence thesis by A2;
   end;
 end;
 
@@ -1404,11 +1431,23 @@ registration
 end;
 
 registration
+ let X,Y be non empty set;
+ cluster X-defined Y-valued non empty finite for Function;
+ existence
+  proof set x = the Element of X, y = the Element of Y;
+   take F = x .--> y;
+   thus F is X-defined;
+   thus F is Y-valued;
+   thus thesis;
+  end;
+end;
+
+registration
   let A be set, F be finite Relation;
-  cluster A|F -> finite;
+  cluster A|`F -> finite;
   coherence
   proof
-    A|F c= F by RELAT_1:86;
+    A|`F c= F by RELAT_1:86;
     hence thesis;
   end;
 end;
@@ -1429,7 +1468,7 @@ registration
   coherence
   proof
     dom(F|A) c= A by RELAT_1:58;
-    hence thesis by Th29;
+    hence thesis by Th10;
   end;
 end;
 
@@ -1467,12 +1506,12 @@ registration
   existence
   proof
    consider a1,a2 being set such that
-W:  a1 in X & a2 in X & a1 <> a2 by ZFMISC_1:def 10;
-    reconsider A = {a1,a2} as Subset of X by W,ZFMISC_1:32;
+A1:  a1 in X & a2 in X & a1 <> a2 by ZFMISC_1:def 10;
+    reconsider A = {a1,a2} as Subset of X by A1,ZFMISC_1:32;
    take A;
    thus A is finite;
     a1 in A & a2 in A by TARSKI:def 2;
-   hence thesis by W,ZFMISC_1:def 10;
+   hence thesis by A1,ZFMISC_1:def 10;
   end;
 end;
 
@@ -1484,3 +1523,147 @@ registration
   coherence;
 end;
 
+:: from MATROID0, 2011.07.25, A.T.
+
+definition
+  let A be set;
+  attr A is finite-membered means
+:Def6: for B being set st B in A holds B is finite;
+end;
+
+registration
+ cluster empty -> finite-membered for set;
+ coherence
+  proof let A be set;
+   assume
+A1:  A is empty;
+   let B be set;
+   thus thesis by A1;
+  end;
+end;
+
+registration
+  let A be finite-membered set;
+  cluster -> finite for Element of A;
+ coherence
+  proof let B be Element of A;
+   per cases;
+   suppose A is empty;
+   hence thesis by SUBSET_1:def 1;
+   end;
+   suppose A is not empty;
+   hence thesis by Def6;
+   end;
+  end;
+end;
+
+registration
+  cluster non empty finite finite-membered for set;
+  existence
+  proof
+    take x = {{{}}};
+    thus x is non empty finite;
+    let y be set;
+    thus thesis by TARSKI:def 1;
+  end;
+end;
+
+:: from SIMPLEX0, 2011.07.25, A.T.
+
+registration
+  let X be finite set;
+  cluster {X} -> finite-membered;
+  coherence
+  proof
+  let x;
+  thus thesis by TARSKI:def 1;
+ end;
+  cluster bool X -> finite-membered;
+  coherence
+  proof
+  let x;
+  thus thesis;
+ end;
+  let Y be finite set;
+  cluster {X,Y} -> finite-membered;
+  coherence
+  proof
+  let x;
+  thus thesis by TARSKI:def 2;
+ end;
+end;
+
+registration
+  let X be finite-membered set;
+  cluster -> finite-membered for Subset of X;
+  coherence
+  proof
+  let S be Subset of X;
+  let x be set;
+  thus thesis;
+ end;
+  let Y be finite-membered set;
+  cluster X \/ Y -> finite-membered;
+  coherence
+  proof
+  let x be set;
+  assume x in X\/Y;
+  then x in X or x in Y by XBOOLE_0:def 3;
+  hence thesis;
+ end;
+end;
+
+registration
+  let X be finite finite-membered set;
+  cluster union X -> finite;
+  coherence
+  proof
+  for x st x in X holds x is finite;
+  hence thesis by Th7;
+ end;
+end;
+
+registration
+  cluster non empty finite-yielding for Function;
+  existence
+  proof
+    take F = {{}} .--> {{}};
+    thus F is non empty;
+    let x;
+    assume x in {{{}}};
+     then x = {{}} by TARSKI:def 1;
+    hence F.x is finite by FUNCOP_1:72;
+  end;
+  cluster empty -> finite-yielding for Relation;
+  coherence
+  proof
+    let F be Relation;
+    assume
+A1: F is empty;
+    let x;
+    thus thesis by A1;
+  end;
+end;
+
+registration
+  let F be finite-yielding Function, x be set;
+  cluster F.x -> finite;
+  coherence
+   proof
+    per cases;
+    suppose x in dom F;
+     hence thesis by Def4;
+    end;
+    suppose not x in dom F;
+     hence thesis by FUNCT_1:def 2;
+    end;
+   end;
+end;
+
+registration let F be finite-yielding Relation;
+ cluster rng F -> finite-membered;
+ coherence
+  proof let e be set;
+   thus thesis by Def2;
+  end;
+end;

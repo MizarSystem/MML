@@ -2,7 +2,7 @@
 ::  by Keiichi Miyajima , Takahiro Kato and Yasunari Shidama
 ::
 :: Received February 23, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,9 +23,8 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, REAL_1, RCOMP_1, VALUED_1,
       RELSET_1, PARTFUN1, SEQ_1, SEQ_2, FINSEQ_1, FINSEQ_2, BINOP_2, BINOP_1,
-      SETWOP_2, RVSUM_1, XXREAL_0, MEASURE5,
-      INTEGRA1, INTEGRA2, INTEGRA3, INTEGRA5,
-      INTEGR15, MESFUN6C, COMSEQ_1, COMSEQ_2, COMSEQ_3;
+      SETWOP_2, RVSUM_1, XXREAL_0, MEASURE5, INTEGRA1, INTEGRA2, INTEGRA3,
+      INTEGRA5, INTEGR15, MESFUN6C, COMSEQ_1, COMSEQ_2, COMSEQ_3;
  constructors REAL_1, MONOID_0, MEASURE6, BINOP_2, SEQ_1, INTEGRA5, RELSET_1,
       INTEGR15, FINSOP_1, SETWISEO, COMSEQ_2, COMSEQ_3, MESFUN6C, SQUARE_1,
       SEQ_2, INTEGRA3;
@@ -35,8 +34,8 @@ environ
  definitions XBOOLE_0, INTEGRA5, INTEGR15, FINSEQ_1, COMPLEX1, RVSUM_1;
  theorems XBOOLE_0, XBOOLE_1, XCMPLX_0, XREAL_0, INTEGRA1, COMSEQ_3, RFUNCT_1,
       COMPLEX1, RELSET_1, BINOP_2, FINSOP_1, NAT_1, XXREAL_0, RELAT_1,
-      ORDINAL1, XREAL_1, SEQ_2, FINSEQ_1, RVSUM_1, FUNCT_1, FUNCT_2, INTEGRA5,
-      FINSEQ_3, INTEGRA6, INTEGR15, VALUED_1, MESFUN6C;
+      ORDINAL1, XREAL_1, FINSEQ_1, RVSUM_1, FUNCT_1, FUNCT_2, INTEGRA5,
+      FINSEQ_3, INTEGRA6, INTEGR15, VALUED_1, MESFUN6C, COMSEQ_2;
  schemes FUNCT_2, FINSEQ_1, NAT_1;
 
 begin :: Preliminaries
@@ -99,7 +98,7 @@ definition
   let A be non empty closed_interval Subset of REAL;
   let f be Function of A,COMPLEX;
   let D be Division of A;
-  mode middle_volume of f,D -> FinSequence of COMPLEX means   :Def3:
+  mode middle_volume of f,D -> FinSequence of COMPLEX means   :Def1:
     len it = len D & for i be Nat st i in dom D holds
       ex c be Element of COMPLEX st c in rng (f|divset(D,i))
       & it.i = c * vol divset(D,i);
@@ -147,7 +146,7 @@ definition
       f be Function of A,COMPLEX,
       T be DivSequence of A;
   mode middle_volume_Sequence of f,T -> Function of NAT, (COMPLEX)* means
-    :Def5:
+    :Def3:
     for k be Element of NAT holds it.k is middle_volume of f,T.k;
   correctness
   proof
@@ -161,7 +160,7 @@ A1: for x being Element of NAT ex y being Element of (COMPLEX)* st P[x, y]
       hence thesis;
     end;
     ex f being Function of NAT, (COMPLEX)* st for x being Element of NAT holds
-    P[x, f.x] from FUNCT_2:sch 10(A1);
+    P[x, f.x] from FUNCT_2:sch 3(A1);
     hence thesis;
   end;
 end;
@@ -173,7 +172,7 @@ definition
       S be middle_volume_Sequence of f,T,
       k be Element of NAT;
   redefine func S.k -> middle_volume of f,T.k;
-  coherence by Def5;
+  coherence by Def3;
 end;
 
 definition
@@ -181,7 +180,7 @@ definition
       f be Function of A,COMPLEX,
       T be DivSequence of A,
       S be middle_volume_Sequence of f,T;
-  func middle_sum(f,S) -> Complex_Sequence means :Def6:
+  func middle_sum(f,S) -> Complex_Sequence means :Def4:
     for i be Element of NAT holds it.i = middle_sum(f,S.i);
   existence
   proof
@@ -299,7 +298,7 @@ let A be non empty closed_interval Subset of REAL,
     S be middle_volume of f,D;
 A1: dom S = dom (Re S) by COMSEQ_3:def 3;
 set RS = Re S;
-    len S = len D by Def3; then
+    len S = len D by Def1; then
 A2: dom S = Seg len D by FINSEQ_1:def 3; then
 A3: len (RS) = len D by A1,FINSEQ_1:def 3;
   for i be Nat st i in dom D holds
@@ -308,7 +307,7 @@ A3: len (RS) = len D by A1,FINSEQ_1:def 3;
   proof
     let i be Nat such that A4: i in dom D;
     consider c be Element of COMPLEX such that
-  A5: c in rng (f|divset(D,i)) & S.i= c * vol divset(D,i) by A4,Def3;
+  A5: c in rng (f|divset(D,i)) & S.i= c * vol divset(D,i) by A4,Def1;
   A6: i in dom (Re S) by A4,A1,A2,FINSEQ_1:def 3;
     set r =Re c;
     take r;
@@ -338,7 +337,7 @@ A12: len (IS) = len D by A2,A11,FINSEQ_1:def 3;
   proof
     let i be Nat such that A13: i in dom D;
     consider c be Element of COMPLEX such that
-  A14: c in rng (f|divset(D,i)) & S.i= c * vol divset(D,i) by A13,Def3;
+  A14: c in rng (f|divset(D,i)) & S.i= c * vol divset(D,i) by A13,Def1;
   A15: i in dom (Im S) by A13,A2,A11,FINSEQ_1:def 3;
     set r = Im c;
     take r;
@@ -579,7 +578,7 @@ for A be non empty closed_interval Subset of REAL, f be Function of A,COMPLEX,
 definition
   let A be non empty closed_interval Subset of REAL;
   let f be Function of A,COMPLEX;
-  attr f is integrable means :Def7:
+  attr f is integrable means :Def5:
   (Re f) is integrable & (Im f) is integrable;
 end;
 
@@ -592,7 +591,7 @@ thus f is bounded implies (Re f is bounded & Im f is bounded)
   proof
     assume f is bounded; then
     consider r being real number such that
-  A1: for y be set st y in dom f holds abs(f.y) < r by SEQ_2:def 5;
+  A1: for y be set st y in dom f holds abs(f.y) < r by COMSEQ_2:def 3;
     now
       let y be set;
       assume A2:y in dom (Re f); then
@@ -601,7 +600,7 @@ thus f is bounded implies (Re f is bounded & Im f is bounded)
       abs(Re (f.y)) < r by A1,A3,XXREAL_0:2;
       hence abs((Re f).y) < r by A2,COMSEQ_3:def 3;
     end;
-    hence Re f is bounded by SEQ_2:def 5;
+    hence Re f is bounded by COMSEQ_2:def 3;
     now
       let y be set;
       assume A4:y in dom (Im f); then
@@ -610,16 +609,17 @@ thus f is bounded implies (Re f is bounded & Im f is bounded)
       abs(Im (f.y)) < r by A1,A5,XXREAL_0:2;
       hence abs((Im f).y) < r by A4,COMSEQ_3:def 4;
     end;
-    hence Im f is bounded by SEQ_2:def 5;
+    hence Im f is bounded by COMSEQ_2:def 3;
   end;
 thus (Re f is bounded & Im f is bounded) implies f is bounded
   proof
     assume A6: Re f is bounded & Im f is bounded; then
     consider r1 being real number such that
-  A7: for y be set st y in dom (Re f) holds abs((Re f).y) < r1 by SEQ_2:def 5;
+  A7: for y be set st y in dom (Re f) holds abs((Re f).y) < r1 by
+COMSEQ_2:def 3;
     consider r2 being real number such that
   A8: for y be set st y in dom (Im f)
-         holds abs((Im f).y) < r2 by A6,SEQ_2:def 5;
+         holds abs((Im f).y) < r2 by A6,COMSEQ_2:def 3;
     now let y be set;
       assume A9:y in dom f; then
     A10: y in dom (Re f) by COMSEQ_3:def 3; then
@@ -632,7 +632,7 @@ thus (Re f is bounded & Im f is bounded) implies f is bounded
       abs(Re (f.y)) +  abs(Im(f.y)) < r1+r2 by A11,A13,XREAL_1:8;
       hence abs(f.y) < r1+r2 by A14,XXREAL_0:2;
     end;
-    hence f is bounded by SEQ_2:def 5;
+    hence f is bounded by COMSEQ_2:def 3;
   end;
 end;
 
@@ -640,29 +640,7 @@ theorem
 for A be non empty Subset of REAL, f be PartFunc of REAL,COMPLEX,
     g be Function of A,COMPLEX
       st f = g
-  holds Re f = Re g & Im f = Im g
-proof
-let A be non empty Subset of REAL,
-    f be PartFunc of REAL,COMPLEX,
-    g be Function of A,COMPLEX;
-assume A1: f = g;
-A2: dom (Re f) = dom f by COMSEQ_3:def 3
-              .= dom (Re g) by A1,COMSEQ_3:def 3;
-A3: dom (Im f) = dom f by COMSEQ_3:def 4
-              .= dom (Im g) by A1,COMSEQ_3:def 4;
-A4:now let x be set;
-     assume A5: x in dom (Re f);
-     hence (Re f).x = Re (f.x) by COMSEQ_3:def 3
-                  .=(Re g).x by A1,A5,COMSEQ_3:def 3;
-   end;
-A6:now let x be set;
-     assume A7: x in dom (Im f);
-     hence (Im f).x = Im (f.x) by COMSEQ_3:def 4
-                  .=(Im g).x by A1,A7,COMSEQ_3:def 4;
-   end;
-   thus Re f = Re g by A2,A4,FUNCT_1:2;
-   thus Im f = Im g by A3,A6,FUNCT_1:2;
-end;
+  holds Re f = Re g & Im f = Im g;
 
 theorem Th13:
 for A be non empty closed_interval Subset of REAL,
@@ -704,8 +682,8 @@ A1: f is bounded & f is integrable and
 A2: delta(T) is convergent & lim delta(T)=0;
 set seq=middle_sum(f,S);
 set xs=integral(f);
-A3: Re f is bounded & Re f is integrable by A1,Def7,Th13;
-A4: Im f is bounded & Im f is integrable by A1,Def7,Th13;
+A3: Re f is bounded & Re f is integrable by A1,Def5,Th13;
+A4: Im f is bounded & Im f is integrable by A1,Def5,Th13;
 reconsider xseq=seq as Function of NAT, COMPLEX;
 ex rseqi be Real_Sequence st for k be Element of NAT holds
     rseqi.k = Re (xseq.k) & rseqi is convergent & Re xs = lim rseqi
@@ -719,7 +697,7 @@ ex rseqi be Real_Sequence st for k be Element of NAT holds
         hence thesis;
       end;
     consider F being Function of NAT, (REAL)* such that
-  A6:for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A5);
+  A6:for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 3(A5);
   A7:for x being Element of NAT holds dom(Re (S.x)) = Seg len(S.x)
       proof
         let x be Element of NAT;
@@ -733,14 +711,14 @@ ex rseqi be Real_Sequence st for k be Element of NAT holds
         reconsider Fk=F.k as FinSequence of REAL by FINSEQ_1:def 11;
       A8:F.k= Re (S.k) by A6; then
       A9:dom (Fk) = Seg len(S.k) by A7
-                 .= Seg len(Tk) by Def3; then
+                 .= Seg len(Tk) by Def1; then
       A10:dom (Fk) = dom (Tk) by FINSEQ_1:def 3;
       A11:now
           let j be Nat;
           assume A12:j in dom (Tk); then
           consider r be Element of COMPLEX such that
         A13:r in rng (f|divset((T.k),j)) and
-        A14:(S.k).j=r * vol divset((T.k),j) by Def3;
+        A14:(S.k).j=r * vol divset((T.k),j) by Def1;
           reconsider v=Re r as Element of REAL;
           take v;
           consider t be set such that
@@ -770,7 +748,7 @@ ex rseqi be Real_Sequence st for k be Element of NAT holds
     A20: Re (S.k) is middle_volume of Re f,T.k by Th4;
       thus rseqi.k = middle_sum(pjinf,pjis.k) by INTEGR15:def 4
                   .= Re (middle_sum(f,S.k)) by A6,A20,Th7
-                  .= Re (xseq.k) by Def6;
+                  .= Re (xseq.k) by Def4;
     end;
   take rseqi;
   lim (middle_sum(pjinf,pjis))=integral(pjinf) by A2,A3,INTEGR15:9;
@@ -791,7 +769,7 @@ ex iseqi be Real_Sequence st for k be Element of NAT holds
         hence thesis;
       end;
     consider F being Function of NAT, (REAL)* such that
-  A23:for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A22);
+  A23:for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 3(A22);
   A24:for x being Element of NAT holds dom(Im (S.x)) = Seg len(S.x)
       proof
         let x be Element of NAT;
@@ -806,13 +784,13 @@ ex iseqi be Real_Sequence st for k be Element of NAT holds
         reconsider Fk=F.k as FinSequence of REAL by FINSEQ_1:def 11;
       A25:F.k= Im (S.k) by A23; then
       A26:dom (Fk) = Seg len(S.k) by A24
-                 .= Seg len(Tk) by Def3; then
+                 .= Seg len(Tk) by Def1; then
       A27:dom (Fk) = dom (Tk) by FINSEQ_1:def 3;
       A28:now let j be Nat;
           assume A29: j in dom (Tk); then
           consider r be Element of COMPLEX such that
         A30:r in rng (f|divset((T.k),j)) and
-        A31:(S.k).j=r * vol divset((T.k),j) by Def3;
+        A31:(S.k).j=r * vol divset((T.k),j) by Def1;
           reconsider v=Im r as Element of REAL;
           take v;
           consider t be set such that
@@ -842,7 +820,7 @@ ex iseqi be Real_Sequence st for k be Element of NAT holds
     A37:Im (S.k) is middle_volume of Im f,T.k by Th4;
       thus iseqi.k = middle_sum(pjinf,pjis.k) by INTEGR15:def 4
                   .= Im (middle_sum(f,S.k)) by A23,A37,Th8
-                  .= Im (xseq.k) by Def6;
+                  .= Im (xseq.k) by Def4;
     end;
     take iseqi;
     lim (middle_sum(pjinf,pjis))=integral(pjinf) by A2,A4,INTEGR15:9;
@@ -963,7 +941,7 @@ now
         hence P[k,x] by A14;
         end;
       consider S being Function of NAT, (COMPLEX)* such that
-    A16:for x being Element of NAT holds P[x, S.x] from FUNCT_2:sch 10(A5);
+    A16:for x being Element of NAT holds P[x, S.x] from FUNCT_2:sch 3(A5);
       for k be Element of NAT holds S.k is middle_volume of f,T.k
         proof
           let k be Element of NAT;
@@ -992,9 +970,9 @@ now
             thus z.x =rji*(vol divset((T.k),x)) by A23;
           end;
           S.k is FinSequence of COMPLEX by FINSEQ_1:def 11;
-          hence thesis by A17,A19,Def3;
+          hence thesis by A17,A19,Def1;
         end; then
-      reconsider S as middle_volume_Sequence of f,T by Def5;
+      reconsider S as middle_volume_Sequence of f,T by Def3;
       set seq=middle_sum(f,S);
       reconsider xseq=seq as Function of NAT, COMPLEX;
       assume delta(T) is convergent & lim delta(T)=0; then
@@ -1051,7 +1029,7 @@ now
         A40:for j0 be set st j0 in dom (Re (S.k))
             holds (Re (S.k)).j0 = (Si.k).j0 by A31;
           thus rseqi.k = Re (xseq.k) by COMSEQ_3:def 5
-                 .=Re (middle_sum(f,S.k)) by Def6
+                 .=Re (middle_sum(f,S.k)) by Def4
                  .=(middle_sum((Re f),Si.k)) by A30,A40,Th7,FUNCT_1:2
                  .=(middle_sum((Re f),Si)).k by INTEGR15:def 4;
         end;
@@ -1134,7 +1112,7 @@ A42:now
       hence P[k,x] by A52;
     end;
     consider S being Function of NAT, (COMPLEX) * such that
-  A54:for x being Element of NAT holds P[x, S.x] from FUNCT_2:sch 10(A43);
+  A54:for x being Element of NAT holds P[x, S.x] from FUNCT_2:sch 3(A43);
     for k be Element of NAT holds S.k is middle_volume of f,T.k
       proof
         let k be Element of NAT;
@@ -1162,9 +1140,9 @@ A42:now
           thus z.x =rji*(vol divset((T.k),x)) by A61;
         end;
         S.k is FinSequence of COMPLEX by FINSEQ_1:def 11;
-        hence thesis by A55,A57,Def3;
+        hence thesis by A55,A57,Def1;
       end; then
-    reconsider S as middle_volume_Sequence of f,T by Def5;
+    reconsider S as middle_volume_Sequence of f,T by Def3;
     set seq=middle_sum(f,S);
     reconsider xseq=seq as Function of NAT, COMPLEX;
     assume delta(T) is convergent & lim delta(T)=0; then
@@ -1221,7 +1199,7 @@ A42:now
       A78:for j0 be set st j0 in dom (Im (S.k))
           holds (Im (S.k)).j0 = (Si.k).j0 by A69;
         thus rseqi.k = Im (xseq.k) by COMSEQ_3:def 6
-          .=Im (middle_sum(f,S.k)) by Def6
+          .=Im (middle_sum(f,S.k)) by Def4
           .=(middle_sum((Im f),Si.k)) by A78,A68,Th8,FUNCT_1:2
           .=(middle_sum((Im f),Si)).k by INTEGR15:def 4;
       end;
@@ -1230,7 +1208,7 @@ A42:now
   end;
   Im f is bounded by A1,Th13; then
   (Im f) is integrable by A42,INTEGR15:10;
-  hence f is integrable by A41,Def7;
+  hence f is integrable by A41,Def5;
 end;
 hence thesis;
 end;
@@ -1238,7 +1216,7 @@ end;
 definition
   let A be non empty closed_interval Subset of REAL;
   let f be PartFunc of REAL,COMPLEX;
-  pred f is_integrable_on A means  :Def9:
+  pred f is_integrable_on A means  :Def7:
   (Re f) is_integrable_on A & (Im f) is_integrable_on A;
 end;
 
@@ -1310,7 +1288,7 @@ thus f is_integrable_on A implies g is integrable
       then A = dom (Re f) /\ A by COMSEQ_3:def 3; then
       (Re f)||A is total by INTEGRA5:6,XBOOLE_1:17; then
       reconsider F = (Re f)|A as Function of A,REAL;
-    A4:(Re f) is_integrable_on A by A2,Def9;
+    A4:(Re f) is_integrable_on A by A2,Def7;
       dom g = A by FUNCT_2:def 1; then
       reconsider g0=g as PartFunc of REAL,COMPLEX by RELSET_1:5;
       Re g = Re g0
@@ -1319,12 +1297,12 @@ thus f is_integrable_on A implies g is integrable
       A = dom (Im f) /\ A by A3,COMSEQ_3:def 4; then
       (Im f)||A is total by INTEGRA5:6,XBOOLE_1:17; then
       reconsider G = (Im f)|A as Function of A,REAL;
-    A5:(Im f) is_integrable_on A by A2,Def9;
+    A5:(Im f) is_integrable_on A by A2,Def7;
       Im g = Im g0
           .= G by A1,Lm4;
       hence (Im g) is integrable by A5,INTEGRA5:def 1;
     end;
-    hence thesis by Def7;
+    hence thesis by Def5;
   end;
 assume A6: g is integrable;
 (Re f) is_integrable_on A & (Im f) is_integrable_on A
@@ -1333,14 +1311,14 @@ assume A6: g is integrable;
     reconsider g0=g as PartFunc of REAL,COMPLEX by RELSET_1:5;
     Re g = Re g0
         .=(Re f)||A by A1,Lm4; then
-    (Re f)||A is integrable by A6,Def7;
+    (Re f)||A is integrable by A6,Def5;
     hence (Re f) is_integrable_on A by INTEGRA5:def 1;
     Im g = Im g0
         .=(Im f)||A by A1,Lm4; then
-    (Im f)||A is integrable by A6,Def7;
+    (Im f)||A is integrable by A6,Def5;
     hence (Im f) is_integrable_on A by INTEGRA5:def 1;
   end;
-hence thesis by Def9;
+hence thesis by Def7;
 end;
 
 theorem
@@ -1463,7 +1441,7 @@ A5: (Re f1) + (Re f2) is_integrable_on A & (Im f1) + (Im f2) is_integrable_on A
     Re (f1|A) is bounded & Im (f1|A) is bounded by A3,Th11; then
   A8:(Re f1)|A is bounded & (Im f1)|A is bounded by Lm4;
   A9:Re f1 is_integrable_on A & Im f1 is_integrable_on A
-    & Re f2 is_integrable_on A & Im f2 is_integrable_on A by A1,Def9;
+    & Re f2 is_integrable_on A & Im f2 is_integrable_on A by A1,Def7;
     hence (Re f1) + (Re f2) is_integrable_on A
         & (Im f1) + (Im f2) is_integrable_on A
         & integral((Re f1)+(Re f2),A)=integral((Re f1),A)+integral((Re f2),A)
@@ -1478,7 +1456,7 @@ A5: (Re f1) + (Re f2) is_integrable_on A & (Im f1) + (Im f2) is_integrable_on A
   then Re (f1+f2) is_integrable_on A & Im (f1+f2) is_integrable_on A
 & Re (f1-f2) is_integrable_on A & Im (f1-f2) is_integrable_on A
   by MESFUN6C:5,6;
-hence f1+f2 is_integrable_on A & f1-f2 is_integrable_on A by Def9;
+hence f1+f2 is_integrable_on A & f1-f2 is_integrable_on A by Def7;
   Re(integral(f1,A)) + Re(integral(f2,A))
       =integral((Re f1),A) + integral((Re f2),A)
 & Im(integral(f1,A)) + Im(integral(f2,A))
@@ -1530,7 +1508,7 @@ let f be PartFunc of REAL, COMPLEX;
 assume that A1: A c= dom f and
 A2: f is_integrable_on A and
 A3: f|A is bounded;
-A4: (Re f) is_integrable_on A & (Im f) is_integrable_on A by A2,Def9;
+A4: (Re f) is_integrable_on A & (Im f) is_integrable_on A by A2,Def7;
 A5: integral(r(#)(Re f), A)=r*integral((Re f), A)
   & integral(r(#)(Im f), A)=r*integral((Im f), A)
   proof
@@ -1554,12 +1532,12 @@ A8: Re (integral((r(#)f), A)) = r * Re (integral(f,A))
     (Re f)|A = Re (f|A) & (Im f)|A = Im (f|A) by Lm4; then
   A9:(Re f)|A is bounded & (Im f)|A is bounded by A3,Th11;
   A10:A c= dom (Re f) & A c= dom (Im f) by A1,COMSEQ_3:def 3,def 4;
-    (Re f) is_integrable_on A & (Im f) is_integrable_on A by A2,Def9; then
+    (Re f) is_integrable_on A & (Im f) is_integrable_on A by A2,Def7; then
     r(#)(Re f) is_integrable_on A & r(#)(Im f ) is_integrable_on A
     by A9,A10,INTEGRA6:9;
     hence thesis by MESFUN6C:2;
   end;
-hence r(#)f is_integrable_on A by Def9;
+hence r(#)f is_integrable_on A by Def7;
   Re (integral((r(#)f), A)) = Re (r*integral(f,A))
 & Im (integral((r(#)f), A)) = Im (r*integral(f,A)) by A8,Th1;
 hence thesis by COMPLEX1:def 3;
@@ -1592,7 +1570,7 @@ A4: Re(c*integral(f,A)) = (Re c)*integral((Re f),A)-(Im c)*integral((Im f),A)
 (Re f)|A = Re (f|A) & (Im f)|A = Im (f|A) by Lm4; then
 A7: (Re f)|A is bounded & (Im f)|A is bounded by A3,Th11;
 A8: A c= dom (Re f) & A c= dom (Im f) by A1,COMSEQ_3:def 3,def 4;
-A9: (Re f) is_integrable_on A & (Im f) is_integrable_on A by A2,Def9; then
+A9: (Re f) is_integrable_on A & (Im f) is_integrable_on A by A2,Def7; then
 A10: (Re c)(#)(Re f) is_integrable_on A & (Re c)(#)(Im f) is_integrable_on A
   & (Im c)(#)(Re f) is_integrable_on A
   & (Im c)(#)(Im f) is_integrable_on A by A7,A8,INTEGRA6:9;
@@ -1607,7 +1585,7 @@ A13: A c= dom ((Re c)(#)(Re f)) & A c= dom ((Re c)(#)(Im f))
   & A c= dom ((Im c)(#)(Im f)) by A1,VALUED_1:def 5; then
 A14: Re (c(#)f) is_integrable_on A by A10,A11,A12,INTEGRA6:11;
     Im (c(#)f) is_integrable_on A by A10,A11,A12,A13,INTEGRA6:11;
-hence c(#)f is_integrable_on A by A14,Def9;
+hence c(#)f is_integrable_on A by A14,Def7;
 A15: Re (integral((c(#)f), A)) = integral(Re (c(#)f),A) by COMPLEX1:12
  .= integral((Re c)(#)(Re f),A) - integral((Im c)(#)(Im f),A)
     by A10,A11,A12,A13,INTEGRA6:11

@@ -10,9 +10,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -27,23 +29,17 @@
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="FUNCT_3"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="CLASSES2"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="GRAPH_1"/>
-<ArticleID name="CAT_1"/>
-<ArticleID name="CAT_2"/>
-<ArticleID name="GRCAT_1"/>
-<ArticleID name="LOPBAN_1"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
+<ArticleID name="LOPBAN_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
@@ -52,20 +48,20 @@
 </Signature>
 <FCluster aid="PDIFF_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="464">
+<Func kind="K" nr="380">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="18"/>
-<Adjective nr="24">
-<Func kind="K" nr="438">
+<Adjective nr="21"/>
+<Adjective nr="30">
+<Func kind="K" nr="351">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="28"/>
 </Adjective>
-<Adjective nr="26">
-<Func kind="K" nr="438">
+<Adjective nr="32">
+<Func kind="K" nr="351">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="28"/>

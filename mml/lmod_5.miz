@@ -2,7 +2,7 @@
 ::  by Micha{\l} Muzalewski and Wojciech Skaba
 ::
 :: Received October 22, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,10 +18,10 @@ environ
       RLVECT_3, RLVECT_2, CARD_3, SUPINF_2, TARSKI, MESFUNC1, FUNCT_1,
       STRUCT_0, FUNCT_2, FINSET_1, RELAT_1, FINSEQ_1, VALUED_1, NAT_1,
       FINSEQ_4, NUMBERS, PARTFUN1, RLSUB_1, ARYTM_3;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, FINSET_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4, DOMAIN_1, STRUCT_0,
-      ALGSTR_0, RLVECT_1, VECTSP_1, FUNCSDOM, VECTSP_2, VECTSP_4, VECTSP_5,
-      VECTSP_6;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, ORDINAL1, NAT_1, FINSET_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4, DOMAIN_1,
+      STRUCT_0, ALGSTR_0, RLVECT_1, VECTSP_1, FUNCSDOM, VECTSP_2, VECTSP_4,
+      VECTSP_5, VECTSP_6;
  constructors PARTFUN1, DOMAIN_1, FINSEQ_4, VECTSP_2, VECTSP_5, VECTSP_6,
       RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, STRUCT_0,
@@ -70,7 +70,7 @@ A2: B is linearly-independent;
   hence thesis;
 end;
 
-theorem Th3:
+theorem Th2:
   0.R <> 1.R & A is linearly-independent implies not 0.V in A
 proof
   assume that
@@ -125,19 +125,19 @@ proof
   hence thesis;
 end;
 
-theorem Th5:
+theorem Th4:
   0.R <> 1.R & {v1,v2} is linearly-independent implies v1 <> 0.V & v2 <> 0.V
 proof
 A1: v1 in {v1,v2} & v2 in {v1,v2} by TARSKI:def 2;
   assume 0.R <> 1.R & {v1,v2} is linearly-independent;
-  hence thesis by A1,Th3;
+  hence thesis by A1,Th2;
 end;
 
 theorem
   0.R <> 1.R implies {v,0.V} is linearly-dependent & {0.V,v} is
-  linearly-dependent by Th5;
+  linearly-dependent by Th4;
 
-theorem Th7:
+theorem Th6:
   for R being domRing, V being LeftMod of R, L being
 Linear_Combination of V, a being Scalar of R holds a <> 0.R implies Carrier(a *
   L) = Carrier(L)
@@ -173,7 +173,7 @@ A5: L.v <> 0.R;
   hence thesis;
 end;
 
-theorem Th8:
+theorem Th7:
   for R being domRing, V being LeftMod of R, L being
   Linear_Combination of V, a being Scalar of R holds Sum(a * L) = a * Sum(L)
 proof
@@ -183,7 +183,7 @@ proof
   suppose
 A1: a <> 0.R;
     set l = a * L;
-A2: Carrier(l) = Carrier(L) by A1,Th7;
+A2: Carrier(l) = Carrier(L) by A1,Th6;
     consider G be FinSequence of the carrier of V such that
 A3: G is one-to-one and
 A4: rng G = Carrier(L) and
@@ -193,7 +193,7 @@ A5: Sum(L) = Sum(L (#) G) by VECTSP_6:def 6;
 A6: F is one-to-one and
 A7: rng F = Carrier(a * L) and
 A8: Sum(a * L) = Sum((a * L) (#) F) by VECTSP_6:def 6;
-A9: len G = len F by A1,A6,A7,A3,A4,Th7,FINSEQ_1:48;
+A9: len G = len F by A1,A6,A7,A3,A4,Th6,FINSEQ_1:48;
     set f = (a * L) (#) F;
     deffunc U(Nat) = F <- (G.$1);
     consider P be FinSequence such that
@@ -264,9 +264,7 @@ A24: dom F = rng P by A16,XBOOLE_0:def 10;
 A25: dom P = dom F by A10,FINSEQ_3:29;
     then
 A26: P is one-to-one by A24,FINSEQ_4:60;
-    dom F = {} implies dom F = {};
-    then reconsider P as Function of dom F, dom F by A16,A25,FUNCT_2:def 1
-,RELSET_1:4;
+    reconsider P as Function of dom F, dom F by A16,A25,FUNCT_2:2;
 A27: len f = len F by VECTSP_6:def 5;
     then
 A28: dom f = dom F by FINSEQ_3:29;
@@ -366,7 +364,7 @@ A5:     u = Sum(l2) by A3;
       then consider l such that
 A6:   v = Sum(l);
       reconsider f = a * l as Linear_Combination of A by VECTSP_6:31;
-      a * v = Sum(f) by A6,Th8;
+      a * v = Sum(f) by A6,Th7;
       hence thesis;
     end;
     Sum(l) = 0.V by VECTSP_6:15;
@@ -376,7 +374,7 @@ A6:   v = Sum(l);
   uniqueness by VECTSP_4:29;
 end;
 
-theorem Th9:
+theorem Th8:
   x in Lin(A) iff ex l st x = Sum(l)
 proof
   thus x in Lin(A) implies ex l st x = Sum(l)
@@ -393,7 +391,7 @@ A1: x = Sum(k);
   hence thesis by STRUCT_0:def 5;
 end;
 
-theorem Th10:
+theorem Th9:
   x in A implies x in Lin(A)
 proof
   deffunc U(set) = 0.R;
@@ -432,7 +430,7 @@ A7: Sum(f) = 1.R * v by A2,VECTSP_6:17
   then Carrier(f) c= A by A4,XBOOLE_1:1;
   then reconsider f as Linear_Combination of A by VECTSP_6:def 4;
   Sum(f) = v by A7;
-  hence thesis by Th9;
+  hence thesis by Th8;
 end;
 
 theorem
@@ -471,7 +469,7 @@ A2: A <> {};
   proof
     let x;
     assume x in A;
-    then x in Lin(A) by Th10;
+    then x in Lin(A) by Th9;
     then x = 0.V by A1,VECTSP_4:35;
     hence thesis by TARSKI:def 1;
   end;
@@ -480,11 +478,11 @@ A2: A <> {};
   assume x in {0.V};
   then
 A3: x = 0.V by TARSKI:def 1;
-  y in A & y in Lin(A) by A2,Th10;
+  y in A & y in Lin(A) by A2,Th9;
   hence thesis by A1,A3,VECTSP_4:35;
 end;
 
-theorem Th13:
+theorem Th12:
   for W being strict Subspace of V st 0.R <> 1.R & A = the carrier
   of W holds Lin(A) = W
 proof
@@ -498,13 +496,13 @@ A2: A = the carrier of W;
     proof
       assume v in Lin(A);
       then
-A3:   ex l st v = Sum(l) by Th9;
+A3:   ex l st v = Sum(l) by Th8;
       A is linearly-closed by A2,VECTSP_4:33;
       then v in the carrier of W by A1,A2,A3,VECTSP_6:14;
       hence thesis by STRUCT_0:def 5;
     end;
     v in W iff v in the carrier of W by STRUCT_0:def 5;
-    hence v in W implies v in Lin(A) by A2,Th10;
+    hence v in W implies v in Lin(A) by A2,Th9;
   end;
   hence thesis by VECTSP_4:30;
 end;
@@ -518,10 +516,10 @@ A1: 0.R <> 1.R;
   assume
 A2: A = the carrier of V;
   (Omega).V = V;
-  hence thesis by A1,A2,Th13;
+  hence thesis by A1,A2,Th12;
 end;
 
-theorem Th15:
+theorem Th14:
   A c= B implies Lin(A) is Subspace of Lin(B)
 proof
   assume
@@ -530,10 +528,10 @@ A1: A c= B;
     let v be Vector of V;
     assume v in Lin(A);
     then consider l such that
-A2: v = Sum(l) by Th9;
+A2: v = Sum(l) by Th8;
     reconsider l as Linear_Combination of B by A1,VECTSP_6:4;
     Sum(l) = v by A2;
-    hence v in Lin(B) by Th9;
+    hence v in Lin(B) by Th8;
   end;
   hence thesis by VECTSP_4:28;
 end;
@@ -544,7 +542,7 @@ theorem
 proof
   let V be strict LeftMod of R, A,B be Subset of V;
   assume Lin(A) = V & A c= B;
-  then V is Subspace of Lin(B) by Th15;
+  then V is Subspace of Lin(B) by Th14;
   hence thesis by VECTSP_4:25;
 end;
 
@@ -556,7 +554,7 @@ proof
     let v be Vector of V;
     assume v in Lin(A \/ B);
     then consider l being Linear_Combination of A \/ B such that
-A1: v = Sum(l) by Th9;
+A1: v = Sum(l) by Th8;
     deffunc U(set) = l.$1;
     set D = Carrier(l) \ A;
     set C = Carrier(l) /\ A;
@@ -678,12 +676,12 @@ A18:          not v in C by A16,XBOOLE_0:def 4;
     end;
     then
 A19: v = Sum(f) + Sum(g) by A1,VECTSP_6:44;
-    Sum(f) in Lin(A) & Sum(g) in Lin(B) by Th9;
+    Sum(f) in Lin(A) & Sum(g) in Lin(B) by Th8;
     hence v in Lin(A) + Lin(B) by A19,VECTSP_5:1;
   end;
   then
 A20: Lin(A \/ B) is Subspace of Lin(A) + Lin(B) by VECTSP_4:28;
-  Lin(A) is Subspace of Lin(A \/ B) & Lin(B) is Subspace of Lin(A \/ B) by Th15
+  Lin(A) is Subspace of Lin(A \/ B) & Lin(B) is Subspace of Lin(A \/ B) by Th14
 ,XBOOLE_1:7;
   then Lin(A) + Lin(B) is Subspace of Lin(A \/ B) by VECTSP_5:34;
   hence thesis by A20,VECTSP_4:25;
@@ -692,7 +690,7 @@ end;
 theorem
   Lin(A /\ B) is Subspace of Lin(A) /\ Lin(B)
 proof
-  Lin(A /\ B) is Subspace of Lin(A) & Lin(A /\ B) is Subspace of Lin(B) by Th15
+  Lin(A /\ B) is Subspace of Lin(A) & Lin(A /\ B) is Subspace of Lin(B) by Th14
 ,XBOOLE_1:17;
   hence thesis by VECTSP_5:19;
 end;

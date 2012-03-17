@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -26,25 +27,25 @@
 <CCluster aid="HESSENBE" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
 <Adjective nr="103"/>
+<Adjective nr="105"/>
+<Adjective nr="106"/>
+<Adjective nr="109"/>
 </Cluster>
 <Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="101"/>
 <Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="105"/>
+<Adjective nr="106"/>
+<Adjective nr="108"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -1,0 +1,590 @@
+:: Semantic of MML Query
+::  by Grzegorz Bancerek
+:: 
+:: Received December 18, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies MMLQUERY, TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      FUNCOP_1, ZFMISC_1, AOFA_000, CARD_1, FINSEQ_1, NAT_1, NUMBERS, XXREAL_0,
+      CARD_3, ORDINAL1, FINSET_1, STRUCT_0, QC_LANG1, ARYTM_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      RELSET_1, FUNCOP_1, ORDINAL1, FINSET_1, CARD_1, CARD_3, STRUCT_0,
+      XCMPLX_0, XXREAL_0, NUMBERS, NAT_1, FINSEQ_1, AOFA_000, FINSEQ_4, PROB_3;
+ constructors TARSKI, SUBSET_1, SETFAM_1, RELSET_1, FUNCT_1, FUNCOP_1,
+      FINSEQ_1, CARD_1, XXREAL_0, CARD_3, FINSET_1, STRUCT_0, WELLORD2,
+      FINSEQ_4, XCMPLX_0, NAT_1, PROB_3;
+ registrations SUBSET_1, RELSET_1, ORDINAL1, FINSET_1, XXREAL_0, FINSEQ_1,
+      CARD_1, XCMPLX_0, STRUCT_0;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM;
+
+
+begin :: Elementary queries
+
+definition
+  let X be set;
+  mode List of X is Subset of X;
+  mode Operation of X is Relation of X;
+end;
+
+definition
+  let x,y,R be set;
+  pred x,y in R means
+:: MMLQUERY:def 1
+[x,y] in R;
+end;
+
+notation
+  let x,y,R be set;
+  antonym x,y nin R for x,y in R;
+end;
+
+reserve X,Y,z,s for set, L,L1,L2,A,B for List of X, x for Element of X,
+  O,O1,O2,O3 for Operation of X, a,b,y for Element of X, n,m for Nat;
+
+theorem :: MMLQUERY:1
+  for R1,R2 be Relation holds R1 c= R2 iff for z holds Im(R1,z) c= Im(R2,z);
+
+notation
+  let X,O,x;
+  synonym x.O for Im(O,x);
+end;
+
+definition
+  let X,O,x;
+  redefine func x.O -> List of X;
+end;
+
+theorem :: MMLQUERY:2
+  x,y in O iff y in x.O;
+
+notation
+  let X,O,L;
+  synonym L | O for O.:L;
+end;
+
+definition
+  let X,O,L;
+  redefine func L | O -> List of X equals
+:: MMLQUERY:def 2
+union {x.O: x in L};
+  func L \& O -> List of X equals
+:: MMLQUERY:def 3
+meet {x.O: x in L};
+  func L WHERE O -> List of X equals
+:: MMLQUERY:def 4
+{x: ex y st x,y in O & x in L};
+  let O2 be Operation of X;
+  func L WHEREeq(O,O2) -> List of X equals
+:: MMLQUERY:def 5
+  {x: card(x.O) = card(x.O2) & x in L};
+  func L WHEREle(O,O2) -> List of X equals
+:: MMLQUERY:def 6
+  {x: card(x.O) c= card(x.O2) & x in L};
+  func L WHEREge(O,O2) -> List of X equals
+:: MMLQUERY:def 7
+  {x: card(x.O2) c= card(x.O) & x in L};
+  func L WHERElt(O,O2) -> List of X equals
+:: MMLQUERY:def 8
+  {x: card(x.O) in card(x.O2) & x in L};
+  func L WHEREgt(O,O2) -> List of X equals
+:: MMLQUERY:def 9
+  {x: card(x.O2) in card(x.O) & x in L};
+end;
+
+definition
+  let X,L,O,n;
+  func L WHEREeq(O,n) -> List of X equals
+:: MMLQUERY:def 10
+{x: card(x.O) = n & x in L};
+  func L WHEREle(O,n) -> List of X equals
+:: MMLQUERY:def 11
+{x: card(x.O) c= n & x in L};
+  func L WHEREge(O,n) -> List of X equals
+:: MMLQUERY:def 12
+{x: n c= card(x.O) & x in L};
+  func L WHERElt(O,n) -> List of X equals
+:: MMLQUERY:def 13
+{x: card(x.O) in n & x in L};
+  func L WHEREgt(O,n) -> List of X equals
+:: MMLQUERY:def 14
+{x: n in card(x.O) & x in L};
+end;
+
+theorem :: MMLQUERY:3
+  x in L WHERE O iff x in L & x.O <> {};
+
+theorem :: MMLQUERY:4
+  L WHERE O c= L;
+
+theorem :: MMLQUERY:5
+  L c= dom O implies L WHERE O = L;
+
+theorem :: MMLQUERY:6
+  n <> 0 & L1 c= L2 implies L1 WHEREge(O,n) c= L2 WHERE O;
+
+theorem :: MMLQUERY:7
+  L WHEREge(O,1) = L WHERE O;
+
+theorem :: MMLQUERY:8
+  L1 c= L2 implies L1 WHEREgt(O,n) c= L2 WHERE O;
+
+theorem :: MMLQUERY:9
+  L WHEREgt(O,0) = L WHERE O;
+
+theorem :: MMLQUERY:10
+  n <> 0 & L1 c= L2 implies L1 WHEREeq(O,n) c= L2 WHERE O;
+
+theorem :: MMLQUERY:11
+  L WHEREge(O,n+1) = L WHEREgt(O,n);
+
+theorem :: MMLQUERY:12
+  L WHEREle(O,n) = L WHERElt(O,n+1);
+
+theorem :: MMLQUERY:13
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHEREge(O1,m) c= L2 WHEREge(O2,n);
+
+theorem :: MMLQUERY:14
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHEREgt(O1,m) c= L2 WHEREgt(O2,n);
+
+theorem :: MMLQUERY:15
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHEREle(O2,n) c= L2 WHEREle(O1,m);
+
+theorem :: MMLQUERY:16
+  n <= m & L1 c= L2 & O1 c= O2 implies L1 WHERElt(O2,n) c= L2 WHERElt(O1,m);
+
+theorem :: MMLQUERY:17
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHEREge(O,O2) c= L2 WHEREge(O3,O1);
+
+theorem :: MMLQUERY:18
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHEREgt(O,O2) c= L2 WHEREgt(O3,O1);
+
+theorem :: MMLQUERY:19
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHEREle(O3,O1) c= L2 WHEREle(O,O2);
+
+theorem :: MMLQUERY:20
+  O1 c= O2 & L1 c= L2 & O c= O3 implies L1 WHERElt(O3,O1) c= L2 WHERElt(O,O2);
+
+theorem :: MMLQUERY:21
+  L WHEREgt(O,O1) c= L WHERE O;
+
+theorem :: MMLQUERY:22
+  O1 c= O2 & L1 c= L2 implies L1 WHERE O1 c= L2 WHERE O2;
+
+theorem :: MMLQUERY:23
+  a in L|O iff ex b st a in b.O & b in L;
+
+notation
+  let X,A,B;
+  synonym A AND B for A /\ B;
+  synonym A OR B for A \/ B;
+  synonym A BUTNOT B for A \ B;
+end;
+
+definition
+  let X,A,B;
+  redefine func A AND B -> List of X;
+  redefine func A OR B -> List of X;
+  redefine func A BUTNOT B -> List of X;
+end;
+
+theorem :: MMLQUERY:24
+  L1 <> {} & L2 <> {} implies (L1 OR L2)\& O = (L1 \& O)AND(L2 \& O);
+
+theorem :: MMLQUERY:25
+  L1 c= L2 & O1 c= O2 implies L1|O1 c= L2|O2;
+
+theorem :: MMLQUERY:26
+  O1 c= O2 implies L\&O1 c= L\&O2;
+
+theorem :: MMLQUERY:27
+  L\&(O1 AND O2) = (L \& O1)AND(L \& O2);
+
+theorem :: MMLQUERY:28
+  L1 <> {} & L1 c= L2 implies L2 \& O c= L1 \& O;
+
+begin :: Operations
+
+theorem :: MMLQUERY:29
+  for O1,O2 being Operation of X st for x holds x.O1 = x.O2 holds O1 = O2;
+
+theorem :: MMLQUERY:30
+  for O1,O2 being Operation of X st for L holds L|O1 = L|O2 holds O1 = O2;
+
+definition
+  let X,O;
+  func NOT O -> Operation of X means
+:: MMLQUERY:def 15
+  for L holds L|it = union {IFEQ(x.O, {}, {x}, {}): x in L};
+end;
+
+notation
+  let X;
+  let O1,O2 be Operation of X;
+  synonym O1 AND O2 for O1 /\ O2;
+  synonym O1 OR O2 for O1 \/ O2;
+  synonym O1 BUTNOT O2 for O1 \ O2;
+  synonym O1 | O2 for O1 * O2;
+end;
+
+definition
+  let X;
+  let O1,O2 be Operation of X;
+  redefine func O1 AND O2 -> Operation of X means
+:: MMLQUERY:def 16
+  for L holds L|it = union {x.O1 AND x.O2: x in L};
+  redefine func O1 OR O2 -> Operation of X means
+:: MMLQUERY:def 17
+  for L holds L|it = union {x.O1 OR x.O2: x in L};
+  redefine func O1 BUTNOT O2 -> Operation of X means
+:: MMLQUERY:def 18
+  for L holds L|it = union {x.O1 BUTNOT x.O2: x in L};
+  redefine func O1 | O2 -> Operation of X means
+:: MMLQUERY:def 19
+  for L holds L|it = L|O1|O2;
+  func O1 \& O2 -> Operation of X means
+:: MMLQUERY:def 20
+  for L holds L|it = union {x.O1\&O2: x in L};
+end;
+
+theorem :: MMLQUERY:31
+  x.(O1 AND O2) = (x.O1)AND(x.O2);
+theorem :: MMLQUERY:32
+  x.(O1 OR O2) = (x.O1)OR(x.O2);
+theorem :: MMLQUERY:33
+  x.(O1 BUTNOT O2) = (x.O1)BUTNOT(x.O2);
+theorem :: MMLQUERY:34
+  x.(O1|O2) = (x.O1)|O2;
+
+theorem :: MMLQUERY:35
+  x.(O1\&O2) = (x.O1)\&O2;
+
+theorem :: MMLQUERY:36
+  [z,s] in NOT O iff z = s & z in X & z nin dom O;
+
+theorem :: MMLQUERY:37
+  NOT O = id(X\dom O);
+
+theorem :: MMLQUERY:38
+  dom NOT NOT O = dom O;
+
+theorem :: MMLQUERY:39
+  L WHERE NOT NOT O = L WHERE O;
+
+theorem :: MMLQUERY:40
+  L WHEREeq(O,0) = L WHERE NOT O;
+
+theorem :: MMLQUERY:41
+  NOT NOT NOT O = NOT O;
+
+theorem :: MMLQUERY:42
+  (NOT O1) OR NOT O2 c= NOT (O1 AND O2);
+
+theorem :: MMLQUERY:43
+  NOT (O1 OR O2) = (NOT O1) AND NOT O2;
+
+theorem :: MMLQUERY:44
+  dom O1 = X & dom O2 = X implies (O1 OR O2)\& O = (O1 \& O) AND (O2 \& O);
+
+definition
+  let X,O;
+  attr O is filtering means
+:: MMLQUERY:def 21
+O c= id X;
+end;
+
+theorem :: MMLQUERY:45
+  O is filtering iff O = id dom O;
+
+registration
+  let X,O;
+  cluster NOT O -> filtering;
+end;
+
+registration
+  let X;
+  cluster filtering for Operation of X;
+end;
+
+reserve F,F1,F2 for filtering Operation of X;
+
+registration
+  let X,F,O;
+  cluster F AND O -> filtering for Operation of X;
+  cluster O AND F -> filtering for Operation of X;
+  cluster F BUTNOT O -> filtering for Operation of X;
+end;
+
+registration
+  let X,F1,F2;
+  cluster F1 OR F2 -> filtering for Operation of X;
+end;
+
+theorem :: MMLQUERY:46
+  z in x.F implies z = x;
+
+theorem :: MMLQUERY:47
+  L|F = L WHERE F;
+
+theorem :: MMLQUERY:48
+  NOT NOT F = F;
+
+theorem :: MMLQUERY:49
+  NOT (F1 AND F2) = (NOT F1) OR (NOT F2);
+
+theorem :: MMLQUERY:50
+  dom(O OR NOT O) = X;
+
+theorem :: MMLQUERY:51
+  F OR NOT F = id X;
+
+theorem :: MMLQUERY:52
+  O AND NOT O = {};
+
+theorem :: MMLQUERY:53
+  (O1 OR O2) AND NOT O1 c= O2;
+
+begin :: Rough queries
+
+reserve i for Element of NAT;
+
+definition
+  let A be FinSequence;
+  let a be set;
+  func #occurrences(a,A) -> Nat equals
+:: MMLQUERY:def 22
+card {i: i in dom A & a in A.i};
+end;
+
+theorem :: MMLQUERY:54
+  for A being FinSequence, a being set holds #occurrences(a,A) <= len A;
+
+theorem :: MMLQUERY:55
+  for A being FinSequence, a being set holds
+  A <> {} & #occurrences(a,A) = len A iff a in meet rng A;
+
+definition
+  let A be FinSequence;
+  func max# A -> Nat means
+:: MMLQUERY:def 23
+  (for a being set holds #occurrences(a,A) <= it) &
+  (for n st for a being set holds #occurrences(a,A) <= n holds it <= n);
+end;
+
+theorem :: MMLQUERY:56
+  for A being FinSequence holds max# A <= len A;
+
+theorem :: MMLQUERY:57
+  for A being FinSequence, a being set st #occurrences(a,A) = len A holds
+  max# A = len A;
+
+definition
+  let X;
+  let A be FinSequence of bool X;
+  let n be Nat;
+  func ROUGH(A,n) -> List of X equals
+:: MMLQUERY:def 24
+  {x: n <= #occurrences(x,A)} if X <> {};
+  let m be Nat;
+  func ROUGH(A,n,m) -> List of X equals
+:: MMLQUERY:def 25
+  {x: n <= #occurrences(x,A) & #occurrences(x,A) <= m} if X <> {};
+end;
+
+definition
+  let X;
+  let A be FinSequence of bool X;
+  func ROUGH(A) -> List of X equals
+:: MMLQUERY:def 26
+ROUGH(A, max# A);
+end;
+
+theorem :: MMLQUERY:58
+  for A being FinSequence of bool X holds
+  ROUGH(A, n, len A) = ROUGH(A, n);
+
+theorem :: MMLQUERY:59
+  for A being FinSequence of bool X holds
+  n <= m implies ROUGH(A,m) c= ROUGH(A,n);
+
+theorem :: MMLQUERY:60
+  for A being FinSequence of bool X holds
+  for n1,n2,m1,m2 being Nat st n1 <= m1 & n2 <= m2 holds
+  ROUGH(A,m1,n2) c= ROUGH(A,n1,m2);
+
+theorem :: MMLQUERY:61
+  for A being FinSequence of bool X holds
+  ROUGH(A,n,m) c= ROUGH(A,n);
+
+theorem :: MMLQUERY:62
+  for A being FinSequence of bool X st A <> {} holds
+  ROUGH(A, len A) = meet rng A;
+
+theorem :: MMLQUERY:63
+  for A being FinSequence of bool X holds
+  ROUGH(A, 1) = Union A;
+
+theorem :: MMLQUERY:64
+  for L1,L2 being List of X holds
+  ROUGH(<*L1,L2*>,2) = L1 AND L2;
+
+theorem :: MMLQUERY:65
+  for L1,L2 being List of X holds
+  ROUGH(<*L1,L2*>,1) = L1 OR L2;
+
+begin :: Constructor Database
+
+definition
+  struct(1-sorted) ConstructorDB(#
+     carrier -> set,
+     Constrs -> List of the carrier,
+     ref-operation -> Relation of the carrier, the Constrs
+  #);
+end;
+
+definition
+  let X be 1-sorted;
+  mode List of X is List of the carrier of X;
+  mode Operation of X is Operation of the carrier of X;
+end;
+
+definition
+  let X;
+  let S be Subset of X;
+  let R be Relation of X,S;
+  func @R -> Relation of X equals
+:: MMLQUERY:def 27
+R;
+end;
+
+definition
+  let X be ConstructorDB;
+  let a be Element of X;
+  func a ref -> List of X equals
+:: MMLQUERY:def 28
+a.@the ref-operation of X;
+  func a occur -> List of X equals
+:: MMLQUERY:def 29
+a.((@the ref-operation of X)~);
+end;
+
+theorem :: MMLQUERY:66
+  for X being ConstructorDB
+  for x,y being Element of X holds x in y ref iff y in x occur;
+
+definition
+  let X be ConstructorDB;
+  attr X is ref-finite means
+:: MMLQUERY:def 30
+  for x being Element of X holds x ref is finite;
+end;
+
+registration
+  cluster finite -> ref-finite for ConstructorDB;
+end;
+
+registration
+  cluster finite non empty for ConstructorDB;
+end;
+
+registration
+  let X be ref-finite ConstructorDB;
+  let x be Element of X;
+  cluster x ref -> finite;
+end;
+
+definition
+  let X be ConstructorDB;
+  let A be FinSequence of the Constrs of X;
+  func ATLEAST(A) -> List of X equals
+:: MMLQUERY:def 31
+  {x where x is Element of X: rng A c= x ref}
+  if the carrier of X <> {};
+  func ATMOST(A) -> List of X equals
+:: MMLQUERY:def 32
+  {x where x is Element of X: x ref c= rng A}
+  if the carrier of X <> {};
+  func EXACTLY(A) -> List of X equals
+:: MMLQUERY:def 33
+  {x where x is Element of X: x ref = rng A}
+  if the carrier of X <> {};
+
+  let n be Nat;
+  func ATLEAST-(A,n) -> List of X equals
+:: MMLQUERY:def 34
+  {x where x is Element of X: card((rng A) \ x ref) <= n}
+  if the carrier of X <> {};
+end;
+
+definition
+  let X be ref-finite ConstructorDB;
+  let A be FinSequence of the Constrs of X;
+  let n be Nat;
+  func ATMOST+(A,n) -> List of X equals
+:: MMLQUERY:def 35
+  {x where x is Element of X: card((x ref) \ rng A) <= n}
+  if the carrier of X <> {};
+  let m be Nat;
+  func EXACTLY+-(A,n,m) -> List of X equals
+:: MMLQUERY:def 36
+  {x where x is Element of X: card((x ref) \ rng A) <= n &
+                              card((rng A) \ x ref) <= m}
+  if the carrier of X <> {};
+end;
+
+reserve X for ConstructorDB, A for FinSequence of the Constrs of X,
+  x for Element of X;
+reserve Y for ref-finite ConstructorDB,
+  B for FinSequence of the Constrs of Y,
+  y for Element of Y;
+
+theorem :: MMLQUERY:67
+  ATLEAST-(A,0) = ATLEAST(A);
+
+theorem :: MMLQUERY:68
+  ATMOST+(B,0) = ATMOST(B);
+
+theorem :: MMLQUERY:69
+  EXACTLY+-(B,0,0) = EXACTLY(B);
+
+theorem :: MMLQUERY:70
+  n <= m implies ATLEAST-(A,n) c= ATLEAST-(A,m);
+
+theorem :: MMLQUERY:71
+  n <= m implies ATMOST+(B,n) c= ATMOST+(B,m);
+
+theorem :: MMLQUERY:72
+  for n1,n2,m1,m2 being Nat st n1 <= m1 & n2 <= m2 holds
+  EXACTLY+-(B,n1,n2) c= EXACTLY+-(B,m1,m2);
+
+theorem :: MMLQUERY:73
+  ATLEAST(A) c= ATLEAST-(A,n);
+
+theorem :: MMLQUERY:74
+  ATMOST(B) c= ATMOST+(B,n);
+
+theorem :: MMLQUERY:75
+  EXACTLY(B) c= EXACTLY+-(B,n,m);
+
+theorem :: MMLQUERY:76
+  EXACTLY A = ATLEAST A AND ATMOST A;
+
+theorem :: MMLQUERY:77
+  EXACTLY+-(B,n,m) = ATLEAST-(B,m) AND ATMOST+(B,n);
+
+theorem :: MMLQUERY:78
+  A <> {} implies ATLEAST A = meet {x occur: x in rng A};
+
+theorem :: MMLQUERY:79
+  for c1,c2 being Element of X holds
+  A = <*c1,c2*> implies ATLEAST A = (c1 occur) AND (c2 occur);
+

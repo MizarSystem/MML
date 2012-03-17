@@ -1,0 +1,2926 @@
+:: The Differentiable Functions from $\mathbbR$ into ${\mathbbR}^n$
+::  by Keiko Narita , Artur Korni\l owicz and Yasunari Shidama
+::
+:: Received September 28, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
+      NAT_1, FDIFF_1, SUBSET_1, RELAT_1, LOPBAN_1, RCOMP_1, TARSKI, SEQ_1,
+      ARYTM_3, VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2, FCONT_1,
+      COMPLEX1, STRUCT_0, CARD_1, VALUED_0, XXREAL_0, FUNCOP_1, XREAL_0,
+      ORDINAL1, XBOOLE_0, CARD_3, FINSEQ_1, FINSEQ_2, BORSUK_1, REAL_NS1,
+      RLVECT_1, SQUARE_1, RVSUM_1, SUPINF_1, XXREAL_1, PDIFF_1, EUCLID,
+      RFINSEQ2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
+      SQUARE_1, NAT_1, VALUED_0, COMPLEX1, BINOP_2, SUPINF_1, FINSEQ_1,
+      VALUED_1, FINSEQ_2, SEQ_1, SEQ_2, FINSEQOP, RVSUM_1, RCOMP_1, FDIFF_1,
+      EXTREAL1, RFINSEQ2, STRUCT_0, PRE_TOPC, RLVECT_1, VFUNCT_1, NORMSP_0,
+      NORMSP_1, EUCLID, LOPBAN_1, NFCONT_1, NDIFF_1, REAL_NS1, PDIFF_1,
+      INTEGR15, PDIFF_6, NFCONT_3, NDIFF_3, NFCONT_4, PDIFF_7;
+ constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_2, FDIFF_1, RSSPACE, VFUNCT_1,
+      NFCONT_1, NDIFF_1, SEQ_1, RELSET_1, EXTREAL1, RVSUM_1, BINOP_2, PDIFF_1,
+      INTEGR15, JORDAN2B, FINSEQOP, RFINSEQ2, PDIFF_6, PDIFF_7, NFCONT_3,
+      NDIFF_3, NFCONT_4, VALUED_2, COMSEQ_2;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_1,
+      FUNCT_2, NUMBERS, XBOOLE_0, VALUED_0, EUCLID, FINSEQ_2, NORMSP_0,
+      NORMSP_1, XXREAL_0, LOPBAN_1, LOPBAN_2, NAT_1, PDIFF_1, RCOMP_1,
+      VALUED_1, FDIFF_1, NDIFF_1, NDIFF_3, REAL_NS1, FCONT_3, VALUED_2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, RLVECT_1, LOPBAN_1, EUCLID, PDIFF_1, RFINSEQ2, SQUARE_1,
+      FINSEQ_1, RVSUM_1, XCMPLX_0, PDIFF_7, VALUED_1, SUBSET_1, NFCONT_1,
+      STRUCT_0, INTEGR15;
+ theorems TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, RLVECT_1, XCMPLX_0, XCMPLX_1,
+      SEQ_1, SEQ_2, NAT_1, RELAT_1, FUNCT_1, VFUNCT_1, FUNCT_2, ORDINAL1,
+      SEQ_4, NORMSP_1, LOPBAN_1, PARTFUN1, PARTFUN2, NFCONT_1, FDIFF_1,
+      NDIFF_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, VALUED_1, VALUED_0,
+      VECTSP_1, NORMSP_0, XREAL_0, RCOMP_1, FINSEQ_1, FINSEQ_2, RVSUM_1,
+      FRECHET, REAL_NS1, SQUARE_1, EXTREAL2, NUMBERS, PDIFF_1, JORDAN2C,
+      RLVECT_4, PDIFF_7, EUCLID, PDIFF_6, RFINSEQ2, NFCONT_3, NDIFF_3,
+      NFCONT_4, NDIFF_2, VALUED_2;
+ schemes FUNCT_2, SEQ_1, RECDEF_1;
+
+begin :: Basic Properties of the differentiable functions of PartFunc of REAL,REAL n
+
+reserve F for non trivial RealNormSpace;
+reserve G for RealNormSpace;
+reserve y,X for set;
+reserve x,x0,x1,x2,g,g1,g2,r,r1,s,p,p1,p2 for Real;
+reserve i,m,k for Element of NAT;
+reserve n,k for non empty Element of NAT;
+reserve Y for Subset of REAL;
+reserve Z for open Subset of REAL;
+reserve s1,s3 for Real_Sequence;
+reserve seq,seq1 for sequence of G;
+reserve f,f1,f2 for PartFunc of REAL,REAL n;
+reserve g,g1,g2 for PartFunc of REAL,REAL-NS n;
+reserve h for 0-convergent non-zero Real_Sequence;
+reserve c for constant Real_Sequence;
+
+reconsider cs = NAT --> 0 as Real_Sequence by FUNCOP_1:45;
+set ZR = [#]REAL;
+Lm1: the carrier of REAL-NS 1 = REAL 1 by REAL_NS1:def 4;
+
+theorem Th1: ::: move eventually to VALUED_2
+  for f1, f2 being PartFunc of REAL, REAL m holds
+  f1-f2 = f1+-f2
+  proof
+    let f1, f2 be PartFunc of REAL, REAL m;
+A1: dom(f1-f2) = dom f1 /\ dom f2 by VALUED_2:def 46;
+A2: dom(f1+-f2) = dom f1 /\ dom -f2 by VALUED_2:def 45;
+A3: dom -f2 = dom f2 by NFCONT_4:def 3;
+    now
+      let x be set;
+      assume
+A4:   x in dom(f1-f2); then
+A5:   x in dom f2 by A1,XBOOLE_0:def 4; then
+A6:   f2.x = f2/.x & (-f2).x = (-f2)/.x by A3,PARTFUN1:def 6;
+      thus (f1-f2).x = f1.x - f2.x by A4,VALUED_2:def 46
+      .= f1.x + (-f2).x by A3,A5,A6,NFCONT_4:def 3
+      .= (f1+-f2).x by A1,A2,A3,A4,VALUED_2:def 45;
+    end;
+    hence thesis by A1,A2,A3,FUNCT_1:2;
+  end;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL,REAL n;
+  let x be real number;
+  pred f is_differentiable_in x means :Def1:
+  ex g be PartFunc of REAL,REAL-NS n st f=g & g is_differentiable_in x;
+end;
+
+theorem Th2:
+  for n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL n,
+      h be PartFunc of REAL,REAL-NS n,
+      x be real number st h=f
+  holds f is_differentiable_in x iff h is_differentiable_in x
+proof
+  let n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL n,
+      h be PartFunc of REAL,REAL-NS n,
+      x be real number;
+  assume A1: h=f;
+  hereby assume
+    f is_differentiable_in x;
+    then ex g be PartFunc of REAL,REAL-NS n st
+    f=g & g is_differentiable_in x by Def1;
+    hence h is_differentiable_in x by A1;
+  end;
+  thus thesis by A1,Def1;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL,REAL n;
+  let x be real number;
+  func diff(f,x) -> Element of REAL n means :Def2:
+  ex g be PartFunc of REAL,REAL-NS n st f=g & it = diff(g,x);
+existence
+ proof
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+  diff(g,x) is Element of REAL n by REAL_NS1:def 4;
+  hence thesis;
+end;
+uniqueness;
+end;
+
+theorem Th3:
+  for n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL n,
+      h be PartFunc of REAL,REAL-NS n,
+      x be real number st h=f
+holds diff(f,x) = diff(h,x)
+proof
+  let n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL n,
+      h be PartFunc of REAL,REAL-NS n,
+      x be real number;
+  ex g be PartFunc of REAL,REAL-NS n st f=g & diff(f,x) = diff(g,x) by Def2;
+  hence thesis;
+end;
+
+definition
+  let n,f,X;
+  pred f is_differentiable_on X means
+  :Def3:
+  X c= dom f & for x st x in X holds f|X is_differentiable_in x;
+end;
+
+theorem Th4:
+  f is_differentiable_on X implies X is Subset of REAL
+proof
+  assume f is_differentiable_on X;
+  then X c=dom f by Def3;
+  hence thesis by XBOOLE_1:1;
+end;
+
+theorem Th5:
+  f is_differentiable_on Z iff Z c= dom f & for x st x in Z holds
+  f is_differentiable_in x
+proof
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+  thus f is_differentiable_on Z implies Z c= dom f & for x st x in Z holds
+  f is_differentiable_in x
+  proof
+    assume A1: f is_differentiable_on Z;
+A2: Z c= dom g by A1,Def3;
+    now
+      let x;
+      assume x in Z;
+      then f|Z is_differentiable_in x by A1,Def3;
+      hence g|Z is_differentiable_in x by Th2;
+    end;
+    then
+A3: g is_differentiable_on Z by A2,NDIFF_3:def 5;
+    now
+      let x;
+      assume x in Z;
+      then g is_differentiable_in x by A3,NDIFF_3:10;
+      hence f is_differentiable_in x by Def1;
+    end;
+    hence thesis by A1,Def3;
+  end;
+  assume
+A4: Z c= dom f & for x st x in Z holds f is_differentiable_in x;
+    now
+      let x;
+      assume x in Z;
+      then f is_differentiable_in x by A4;
+      hence g is_differentiable_in x by Th2;
+    end;
+    then
+A5: g is_differentiable_on Z by A4,NDIFF_3:10;
+    now
+      let x;
+      assume x in Z;
+      then g|Z is_differentiable_in x by A5,NDIFF_3:def 5;
+      hence f|Z is_differentiable_in x by Def1;
+    end;
+    hence f is_differentiable_on Z by A4,Def3;
+end;
+
+theorem Th6:
+  f is_differentiable_on Y implies Y is open
+proof
+  assume A1: f is_differentiable_on Y;
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+A2: Y c= dom g by A1,Def3;
+    now
+      let x;
+      assume x in Y;
+      then f|Y is_differentiable_in x by A1,Def3;
+      hence g|Y is_differentiable_in x by Th2;
+    end;
+    then g is_differentiable_on Y by A2,NDIFF_3:def 5;
+    hence Y is open by NDIFF_3:11;
+end;
+
+definition
+  let n,f,X;
+  assume
+A1: f is_differentiable_on X;
+  func f`|X -> PartFunc of REAL,REAL n means
+  :Def4:
+  dom it = X & for x st x in X holds it.x = diff(f,x);
+  existence
+  proof
+    deffunc FG(Real) = diff(f,$1);
+    defpred P[set] means $1 in X;
+    consider F0 being PartFunc of REAL,REAL n such that
+A2: (for x holds x in dom F0 iff P[x]) & for x st x in dom F0
+        holds F0.x = FG(x) from SEQ_1:sch 3;
+    take F0;
+    now
+A3:   X is Subset of REAL by A1,Th4;
+      let y;
+      assume y in X;
+      hence y in dom F0 by A2,A3;
+    end;
+    then
+A4: X c= dom F0 by TARSKI:def 3;
+    for y st y in dom F0 holds y in X by A2;
+    then dom F0 c= X by TARSKI:def 3;
+    hence dom F0 = X by A4,XBOOLE_0:def 10;
+    now
+      let x;
+      assume x in X;
+      then x in dom F0 by A2;
+      hence F0.x = diff(f,x) by A2;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F0,G0 be PartFunc of REAL,REAL n;
+    assume that
+A5: dom F0 = X and
+A6: for x st x in X holds F0.x = diff(f,x) and
+A7: dom G0 = X and
+A8: for x st x in X holds G0.x = diff(f,x);
+    now
+      let x;
+      assume
+A9:   x in dom F0;
+      then F0.x = diff(f,x) by A5,A6;
+      hence F0.x=G0.x by A5,A8,A9;
+    end;
+    hence thesis by A5,A7,PARTFUN1:5;
+  end;
+end;
+
+theorem
+  (Z c= dom f & ex r be Element of REAL n st rng f = {r})
+  implies f is_differentiable_on Z &
+  for x st x in Z holds (f`|Z)/.x = 0*n
+proof
+  assume A1: Z c= dom f;
+  given r be Element of REAL n such that
+A2: rng f = {r};
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+A3: r is Point of REAL-NS n by REAL_NS1:def 4;
+  then
+A4: g is_differentiable_on Z
+       & for x st x in Z holds (g`|Z)/.x = 0.(REAL-NS n) by A1,A2,NDIFF_3:12;
+A5: now
+    let x;
+    assume x in Z;
+    then g|Z is_differentiable_in x by A4,NDIFF_3:def 5;
+    hence f|Z is_differentiable_in x by Def1;
+  end;
+  then
+A6: f is_differentiable_on Z by A1,Def3;
+  now
+    let x;
+    assume A7: x in Z;
+    then
+A8: (g`|Z)/.x = 0.(REAL-NS n) by A3,A1,A2,NDIFF_3:12;
+    x in dom(g`|Z) by A4,A7,NDIFF_3:def 6;
+    then
+A9: (g`|Z).x = 0.(REAL-NS n) by A8,PARTFUN1:def 6;
+A10: (g`|Z).x = diff(g,x) by A7,A4,NDIFF_3:def 6;
+A11: (f`|Z).x = diff(f,x) by A7,A6,Def4;
+    diff(f,x) = diff(g,x) by Th3;
+    then
+A12: (f`|Z).x = 0*n by A9,A10,A11,REAL_NS1:def 4;
+    x in dom(f`|Z) by A6,Def4,A7;
+    hence (f`|Z)/.x = 0*n by A12,PARTFUN1:def 6;
+  end;
+  hence thesis by A5,A1,Def3;
+end;
+
+theorem
+  for x0 being real number,f be PartFunc of REAL,REAL n,
+  g be PartFunc of REAL,REAL-NS n, N being Neighbourhood of x0
+st f=g & f is_differentiable_in x0 & N c= dom f
+for h,c st rng c = {x0} & rng (h+c)c= N
+holds h"(#)((g/*(h+c)) - g/*c) is convergent
+& diff(f,x0) = lim (h"(#)((g/*(h+c)) - g/*c))
+proof
+  let x0 being real number,
+      f be PartFunc of REAL,REAL n,
+      g be PartFunc of REAL,REAL-NS n,
+      N being Neighbourhood of x0;
+  assume that
+A1: f=g and
+A2: f is_differentiable_in x0 and
+A3: N c= dom f;
+A4: g is_differentiable_in x0 by A1,A2,Th2;
+    let h,c;
+    assume rng c = {x0} & rng (h+c)c= N;
+    then h"(#)((g/*(h+c)) - g/*c) is convergent
+    & diff(g,x0) = lim (h"(#)((g/*(h+c)) - g/*c)) by A4,A1,A3,NDIFF_3:13;
+    hence thesis by A1,Th3;
+end;
+
+theorem Th9:
+  f is_differentiable_in x0 implies r(#)f is_differentiable_in x0
+  & diff((r(#)f),x0) = r*diff(f,x0)
+proof
+  assume f is_differentiable_in x0; then
+  consider g be PartFunc of REAL,REAL-NS n such that
+A1: f=g & g is_differentiable_in x0 by Def1;
+A2: r(#)g is_differentiable_in x0 & diff((r(#)g),x0) = r*diff(g,x0)
+     by A1,NDIFF_3:16;
+A3: r(#)f = r(#)g by A1,NFCONT_4:6;
+A4: diff(f,x0) = diff(g,x0) by A1,Th3;
+   diff((r(#)f),x0) = diff((r(#)g),x0) by A1,Th3,NFCONT_4:6;
+   hence thesis by A3,A2,Def1,A4,REAL_NS1:3;
+end;
+
+theorem Th10:
+  f is_differentiable_in x0 implies
+  -f is_differentiable_in x0 & diff(-f,x0) = -diff(f,x0)
+  proof
+    (-(1 qua Real))(#)f = -f by NFCONT_4:7;
+    hence thesis by Th9;
+  end;
+
+theorem Th11:
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1+f2 is_differentiable_in x0 & diff(f1+f2,x0) = diff(f1,x0)+diff(f2,x0)
+proof
+  assume
+A1: f1 is_differentiable_in x0 & f2 is_differentiable_in x0;
+  consider g1 be PartFunc of REAL,REAL-NS n such that
+A2: f1=g1 & g1 is_differentiable_in x0 by A1,Def1;
+  consider g2 be PartFunc of REAL,REAL-NS n such that
+A3: f2=g2 & g2 is_differentiable_in x0 by A1,Def1;
+A4: g1+g2 is_differentiable_in x0
+     & diff(g1+g2,x0)=diff(g1,x0)+diff(g2,x0) by A2,A3,NDIFF_3:14;
+A5: f1+f2 = g1+g2 by A2,A3,NFCONT_4:5;
+A6: diff(f1,x0) = diff(g1,x0) & diff(f2,x0) = diff(g2,x0) by A2,A3,Th3;
+  diff(f1+f2,x0) = diff(g1+g2,x0) by A2,A3,Th3,NFCONT_4:5;
+  hence thesis by A5,A4,Def1,A6,REAL_NS1:2;
+end;
+
+theorem
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1-f2 is_differentiable_in x0 & diff(f1-f2,x0) = diff(f1,x0)-diff(f2,x0)
+proof
+A1: f1-f2 = f1+-f2 by Th1;
+    assume
+A2: f1 is_differentiable_in x0;
+    assume f2 is_differentiable_in x0;
+    then -f2 is_differentiable_in x0 & diff(-f2,x0) = -diff(f2,x0) by Th10;
+    hence thesis by A1,A2,Th11;
+end;
+
+theorem Th13:
+  Z c= dom f & f is_differentiable_on Z implies
+  r(#)f is_differentiable_on Z &
+  for x st x in Z holds ((r(#)f)`|Z).x =r*diff(f,x)
+proof
+  assume that
+A1: Z c= dom f and
+A2: f is_differentiable_on Z;
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+A3: dom f = dom (r(#)f) by VALUED_2:def 39;
+A4: r(#)f = r(#)g by NFCONT_4:6;
+A5: Z c= dom (r(#)g) by A3,A1,NFCONT_4:6;
+A6: Z c= dom g by A2,Def3;
+  now
+    let x;
+    assume x in Z;
+    then f|Z is_differentiable_in x by A2,Def3;
+    hence g|Z is_differentiable_in x by Th2;
+  end;
+  then g is_differentiable_on Z by A6,NDIFF_3:def 5;
+   then
+A7: r(#)g is_differentiable_on Z &
+   for x st x in Z holds ((r(#)g)`|Z).x =r*diff(g,x) by A5,NDIFF_3:19;
+A8: now
+    let x;
+    assume x in Z;
+    then (r(#)g) |Z is_differentiable_in x by A7,NDIFF_3:def 5;
+    hence (r(#)f) |Z is_differentiable_in x by A4,Def1;
+  end;
+  then
+A9: r(#)f is_differentiable_on Z by A3,A1,Def3;
+  now
+    let x;
+    assume A10: x in Z;
+    then f is_differentiable_in x by A2,Th5;
+    then r(#)f is_differentiable_in x & diff(r(#)f,x) = r*diff(f,x) by Th9;
+    hence ((r(#)f)`|Z).x = r*diff(f,x) by A10,A9,Def4;
+  end;
+  hence thesis by A3,A8,A1,Def3;
+end;
+
+theorem Th14:
+  Z c= dom f & f is_differentiable_on Z implies
+  -f is_differentiable_on Z & for x st x in Z holds ((-f)`|Z).x = -diff(f,x)
+  proof
+    (-(1 qua Real))(#)f = -f by NFCONT_4:7;
+    hence thesis by Th13;
+  end;
+
+theorem Th15:
+  Z c= dom (f1+f2) & f1 is_differentiable_on Z & f2 is_differentiable_on Z
+  implies f1+f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1+f2)`|Z).x = diff(f1,x) + diff(f2,x)
+proof
+  assume that
+A1: Z c= dom (f1+f2) and
+A2: f1 is_differentiable_on Z & f2 is_differentiable_on Z;
+  reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+A3: f1+f2 = g1+g2 by NFCONT_4:5;
+A4: Z c= dom (g1+g2) by A1,NFCONT_4:5;
+A5: Z c= dom g1 & Z c= dom g2 by A2,Def3;
+  now
+    let x;
+    assume x in Z; then
+    f1|Z is_differentiable_in x by A2,Def3;
+    hence
+    g1|Z is_differentiable_in x by Th2;
+  end;
+  then
+A6: g1 is_differentiable_on Z by A5,NDIFF_3:def 5;
+  now
+    let x;
+    assume x in Z;
+    then f2|Z is_differentiable_in x by A2,Def3;
+    hence g2|Z is_differentiable_in x by Th2;
+  end;
+  then g2 is_differentiable_on Z by A5,NDIFF_3:def 5;
+  then
+A7: g1+g2 is_differentiable_on Z & for x st x in Z holds ((g1+g2)`|Z).x =
+  diff(g1,x) + diff(g2,x) by A4,A6,NDIFF_3:17;
+  now
+    let x;
+    assume x in Z;
+    then (g1+g2) |Z is_differentiable_in x by A7,NDIFF_3:def 5;
+    hence (f1+f2) |Z is_differentiable_in x by A3,Def1;
+  end;
+  hence
+A8: f1+f2 is_differentiable_on Z by A1,Def3;
+    let x;
+    assume A9: x in Z;
+    then f1 is_differentiable_in x & f2 is_differentiable_in x by A2,Th5;
+    then f1+f2 is_differentiable_in x &
+    diff(f1+f2,x) = diff(f1,x)+diff(f2,x) by Th11;
+    hence thesis by A9,A8,Def4;
+end;
+
+theorem
+  Z c= dom (f1-f2) & f1 is_differentiable_on Z & f2 is_differentiable_on Z
+  implies f1-f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1-f2)`|Z).x = diff(f1,x) - diff(f2,x)
+proof
+A1: f1-f2 = f1+-f2 by Th1;
+A2: dom(f1-f2) = dom f1 /\ dom f2 by VALUED_2:def 46;
+    assume that
+A3: Z c= dom (f1-f2) and
+A4: f1 is_differentiable_on Z and
+A5: f2 is_differentiable_on Z;
+    Z c= dom f2 by A3,A2,XBOOLE_1:18;
+    then
+A6: -f2 is_differentiable_on Z by A5,Th14;
+    hence f1-f2 is_differentiable_on Z by A1,A3,A4,Th15;
+    let x;
+    assume
+A7: x in Z;
+    then
+A8: f2 is_differentiable_in x by A5,Th5;
+    thus ((f1-f2)`|Z).x = diff(f1,x) + diff(-f2,x) by A1,A3,A4,A6,A7,Th15
+    .= diff(f1,x) - diff(f2,x) by A8,Th10;
+end;
+
+theorem
+  Z c= dom f & f|Z is constant implies f is_differentiable_on Z &
+  for x st x in Z holds (f`|Z).x = 0*n
+proof
+  assume that
+A1: Z c= dom f and
+A2: f|Z is constant;
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+A3: g|Z is constant by A2;
+  then
+A4: g is_differentiable_on Z
+       & for x st x in Z holds (g`|Z).x = 0.(REAL-NS n) by A1,NDIFF_3:20;
+   now
+    let x;
+    assume x in Z;
+    then
+    g|Z is_differentiable_in x by A4,NDIFF_3:def 5;
+    hence f|Z is_differentiable_in x by Def1;
+  end;
+  hence
+A5: f is_differentiable_on Z by A1,Def3;
+    let x;
+    assume A6: x in Z;
+    then
+A7: (g`|Z).x = 0.(REAL-NS n) by A3,A1,NDIFF_3:20;
+A8: (g`|Z).x = diff(g,x) by A6,A4,NDIFF_3:def 6;
+A9: (f`|Z).x = diff(f,x) by A6,A5,Def4;
+    diff(f,x) = diff(g,x) by Th3;
+    hence (f`|Z).x = 0*n by A7,A8,A9,REAL_NS1:def 4;
+  end;
+
+theorem Th18:
+  for r,p be Element of REAL n st Z c= dom f &
+  (for x st x in Z holds f/.x = x*r + p)
+  holds f is_differentiable_on Z & for x st x in Z holds (f`|Z).x = r
+proof
+  let r,p be Element of REAL n;
+  assume that
+A1: Z c= dom f and
+A2: (for x st x in Z holds f/.x = x*r + p);
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+  reconsider r1=r,p1=p as Point of REAL-NS n by REAL_NS1:def 4;
+A3: now
+    let x;
+    assume x in Z;
+    then
+A4: f/.x = x*r + p by A2;
+A5: f/.x = g/.x by REAL_NS1:def 4;
+    x*r = x*r1 by REAL_NS1:3;
+    hence g/.x = x*r1 + p1 by A4,A5,REAL_NS1:2;
+  end;
+  then
+A6: g is_differentiable_on Z
+    & for x st x in Z holds (g`|Z).x = r1 by A1,NDIFF_3:21;
+    now
+    let x;
+    assume x in Z;
+    then g|Z is_differentiable_in x by A6,NDIFF_3:def 5;
+    hence f|Z is_differentiable_in x by Def1;
+  end;
+  hence
+A7: f is_differentiable_on Z by A1,Def3;
+    let x;
+    assume A8: x in Z;
+    then
+A9: (g`|Z).x = diff(g,x) by A6,NDIFF_3:def 6;
+A10: (f`|Z).x = diff(f,x) by A8,A7,Def4;
+    diff(f,x) = diff(g,x) by Th3;
+    hence (f`|Z).x = r by A8,A3,A1,A9,A10,NDIFF_3:21;
+end;
+
+theorem
+  for x0 being Real holds f is_differentiable_in x0 implies
+  f is_continuous_in x0
+proof
+  let x0 being Real;
+  assume f is_differentiable_in x0;
+  then
+  consider g be PartFunc of REAL,REAL-NS n such that
+A1: f=g & g is_differentiable_in x0 by Def1;
+  g is_continuous_in x0 by A1,NDIFF_3:22;
+  hence f is_continuous_in x0 by A1,NFCONT_4:def 1;
+end;
+
+theorem
+  f is_differentiable_on X implies f|X is continuous
+proof
+  assume A1: f is_differentiable_on X;
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+A2: X c= dom g by A1,Def3;
+  now
+    let x;
+    assume x in X;
+    then f|X is_differentiable_in x by A1,Def3;
+    hence g|X is_differentiable_in x by Th2;
+  end;
+  then g is_differentiable_on X by A2,NDIFF_3:def 5;
+  then g|X is continuous by NDIFF_3:23;
+  hence thesis by NFCONT_4:23;
+end;
+
+theorem Th21:
+  f is_differentiable_on X & Z c= X implies f is_differentiable_on Z
+proof
+  assume A1: f is_differentiable_on X & Z c= X;
+  then
+A2: X c= dom f & for x st x in X holds f|X is_differentiable_in x by Def3;
+A3: Z c= dom f by A1,A2,XBOOLE_1:1;
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+  now
+    let x;
+    assume x in X;
+    then f|X is_differentiable_in x by A1,Def3;
+    hence g|X is_differentiable_in x by Th2;
+  end;
+  then g is_differentiable_on X by A2,NDIFF_3:def 5;
+  then
+A4: g is_differentiable_on Z by A1,NDIFF_3:24;
+  now
+    let x;
+    assume x in Z;
+    then g|Z is_differentiable_in x by A4,NDIFF_3:def 5;
+    hence f|Z is_differentiable_in x by Def1;
+  end;
+  hence thesis by A3,Def3;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL, REAL n;
+  attr f is differentiable means
+  :Def5:
+  f is_differentiable_on dom f;
+end;
+
+registration
+ let n;
+ cluster REAL --> 0*n -> differentiable for Function of REAL,REAL n;
+ coherence
+ proof
+   set f = REAL --> 0*n;
+A1: ZR = dom f by FUNCT_2:def 1;
+   now let x;
+    assume x in ZR;
+A2: f/.x = 0*n by FUNCOP_1:7
+    .=0.TOP-REAL n by EUCLID:70
+    .= x*(0.TOP-REAL n) by EUCLID:28
+    .= x*(0.TOP-REAL n) + 0.TOP-REAL n by EUCLID:27;
+A3: x*(0.TOP-REAL n) = x(#)(0*n) by EUCLID:65,70;
+    0.TOP-REAL n = 0*n by EUCLID:70;
+    hence f/.x = x*(0*n) + 0*n by A2,A3,EUCLID:64;
+  end;
+  then f is_differentiable_on ZR by A1,Th18;
+  hence thesis by A1,Def5;
+end;
+end;
+
+registration
+ let n;
+ cluster differentiable for Function of REAL, REAL n;
+ existence
+ proof
+   take REAL --> 0*n;
+   thus thesis;
+ end;
+end;
+
+theorem
+  for f being differentiable PartFunc of REAL, REAL n
+   st Z c= dom f holds
+  f is_differentiable_on Z
+proof
+  let f being differentiable PartFunc of REAL, REAL n;
+  f is_differentiable_on dom f by Def5;
+  hence thesis by Th21;
+end;
+
+reserve GR,R for RestFunc of REAL-NS n;
+reserve DFG,L for LinearFunc of REAL-NS n;
+
+theorem Th23:
+  for R be PartFunc of REAL,REAL-NS n
+    st R is total holds R is RestFunc-like iff for r be Real st r > 0
+    ex d be Real st d > 0 & for z be Real
+    st z <> 0 & |. z .| < d holds |.z.|"* ||. R/.z .|| < r
+proof
+  let R be PartFunc of REAL,REAL-NS n such that
+A1: R is total;
+A2: now
+    assume
+A3: R is RestFunc-like;
+    assume not (for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+    st z <> 0 & |. z .| < d holds ( |. z .|"* ||. R/.z .||) < r );
+    then consider r be Real such that
+A4: r > 0 and
+A5: for d be Real st d > 0 holds ex z be Real st z <> 0 & |. z .| < d
+    & not ( |. z .|"* ||. R/.z .||) < r;
+    defpred P[Element of NAT,Real] means $2 <> 0 & |. $2 .| < (1/($1+1
+    )) & not ( ( |. $2 .|"* ||. R/.$2 .||) < r );
+A6: for n be Element of NAT ex z be Real st P[n,z]
+    proof
+      let n be Element of NAT;
+      1/(n + 1) is Real by XREAL_0:def 1;
+      hence thesis by A5;
+    end;
+    consider s be Real_Sequence such that
+A7: for n being Element of NAT holds P[n,s.n] from FUNCT_2:sch 3(A6);
+A8: now
+      let p be real number;
+      assume
+A9:   0<p;
+      consider n be Element of NAT such that
+A10:  p"<n by SEQ_4:3;
+      reconsider q0=0,q1=1 as real number;
+      p" + q0 < n + q1 by A10,XREAL_1:8;
+      then
+A11:  1/(n+1) < 1/p" by A9,XREAL_1:76;
+      take n;
+      let m be Element of NAT;
+      assume n<=m;
+      then
+A12:  n + 1 <= m + 1 by XREAL_1:6;
+      1/(m+1) <= 1/(n+1) by A12,XREAL_1:118;
+      then |. s.m - 0 .| < 1/(n+1) by A7,XXREAL_0:2;
+      hence |. s.m - 0 .| <p by A11,XXREAL_0:2;
+    end;
+A13: s is convergent by A8,SEQ_2:def 6;
+    then
+A14: lim s = 0 by A8,SEQ_2:def 7;
+    s is non-zero by A7,SEQ_1:5;
+    then reconsider s as 0-convergent non-zero Real_Sequence
+      by A13,A14,FDIFF_1:def 1;
+      (s")(#)(R/*s) is convergent
+     & lim ((s")(#)(R/*s)) = 0.(REAL-NS n)
+      by A3,NDIFF_3:def 1;
+    then consider n0 be Element of NAT such that
+A15: for m be Element of NAT st n0 <=m holds ||. ((s")(#)(R/*s)).
+    m- 0.(REAL-NS n).|| < r by A4,NORMSP_1:def 7;
+A16: ||. ((s")(#)(R/*s)).n0- 0.(REAL-NS n).|| < r by A15;
+A17: ||.(s.n0)"*(R/.(s.n0)).|| = abs((s.n0)") * ||.(R/.(s.n0)).||
+    by NORMSP_1:def 1
+      .=|. s.n0 .|" * ||.(R/.(s.n0)).|| by COMPLEX1:66;
+    dom R = REAL by A1,PARTFUN1:def 2;
+    then
+A18: rng s c= dom R;
+    ||. ((s")(#)(R/*s)).n0- 0.(REAL-NS n) .||
+            = ||. ((s")(#)(R/*s)).n0 .|| by RLVECT_1:13
+      .= ||.(s".n0)*((R/*s).n0).|| by NDIFF_1:def 2
+      .= ||.(s.n0)"*((R/*s).n0).|| by VALUED_1:10
+      .= ||.(s.n0)"*(R/.(s.n0)).|| by A18,FUNCT_2:109;
+    hence
+    for r be Real st r > 0 ex d be Real st d > 0 & for z be Real st
+    z <> 0 & |. z .| < d holds ( |. z .|"* ||. R/.z .||) < r by A7,A16,A17;
+  end;
+  now
+    assume
+A19: for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+     st z <> 0 & |. z .| < d holds ( |. z .|"* ||. R/.z .||) < r;
+    now
+      let s be 0-convergent non-zero Real_Sequence;
+A20:  s is convergent & lim s = 0;
+A21:  now
+        let r be Real;
+        assume r > 0;
+        then consider d be Real such that
+A22:    d > 0 and
+A23:    for z be Real st z <> 0 & |. z .| < d holds ( |. z .|
+        "* ||. R/.z .||) < r by A19;
+        consider n0 be Element of NAT such that
+A24:    for m be Element of NAT st n0 <=m holds |. s.m-0 .| < d by A20,A22,
+SEQ_2:def 7;
+        take n0;
+        thus for m be Element of NAT st n0 <=m holds ||. ((s")(#)(R/*s)).
+        m- 0.(REAL-NS n).|| < r
+        proof
+          dom R = REAL by A1,PARTFUN1:def 2;
+          then
+A25:      rng s c= dom R;
+          let m be Element of NAT;
+          assume n0 <=m;
+          then
+A26:      |. s.m-0 .| < d by A24;
+A27:      s.m <> 0 by SEQ_1:5;
+          |. s.m .|" * ||.(R/.(s.m)).|| =abs((s.m)") * ||.(R/.(s.m)).||
+            by COMPLEX1:66
+            .= ||.(s.m)"*(R/.(s.m)).|| by NORMSP_1:def 1
+            .= ||.(s.m)"*((R/*s).m).|| by A25,FUNCT_2:109
+            .= ||.(s".m)*((R/*s).m).|| by VALUED_1:10
+            .= ||. ((s")(#)(R/*s)).m .|| by NDIFF_1:def 2
+            .= ||. ((s")(#)(R/*s)).m- 0.(REAL-NS n).|| by RLVECT_1:13;
+          hence thesis by A23,A26,A27;
+        end;
+      end;
+      hence
+     (s")(#)(R/*s) is convergent by NORMSP_1:def 6;
+      hence lim ((s")(#)(R/*s)) = 0.(REAL-NS n) by A21,NORMSP_1:def 7;
+    end;
+    hence R is RestFunc-like by A1,NDIFF_3:def 1;
+  end;
+  hence thesis by A2;
+end;
+
+theorem Th24:
+for g be PartFunc of REAL,REAL-NS n,
+    x0 be real number st
+ 1 <= i & i <= n & g is_differentiable_in x0 holds
+   (Proj(i,n)*g) is_differentiable_in x0 &
+   Proj(i,n).(diff(g,x0)) = diff((Proj(i,n)*g),x0)
+proof
+   let g be PartFunc of REAL,REAL-NS n, x0 be real number;
+   assume A1: 1 <= i & i <= n & g is_differentiable_in x0; then
+   consider N being Neighbourhood of x0 such that
+A2:N c= dom g & ex DFG,GR st diff(g,x0) = DFG.1 &
+     for x be Real st x in N holds
+      g/.x - g/.x0 = DFG.(x-x0) + GR/.(x-x0) by NDIFF_3:def 4;
+   consider GR, DFG such that
+A3:diff(g,x0) = DFG.1 &
+     for x be Element of REAL st x in N holds
+     g/.x - g/.x0 = DFG.(x-x0) + GR/.(x-x0) by A2;
+     consider LP be Point of REAL-NS n such that
+A4: for p be Real holds DFG.p = p*LP by NDIFF_3:def 2;
+   reconsider PG = Proj(i,n) as Function of REAL-NS n,REAL-NS 1;
+   reconsider L = Proj(i,n)*DFG as Function of REAL,REAL-NS 1;
+A5: for r being Real holds L.r = r*(Proj(i,n).LP)
+   proof
+    let r being Real;
+A6: dom L = REAL by FUNCT_2:def 1;
+    DFG.r = r*LP by A4; then
+    Proj(i,n).(DFG.r) = r*(Proj(i,n).LP) by PDIFF_6:27;
+    hence
+    L.r = r*(Proj(i,n).LP) by A6,FUNCT_1:12;
+   end; then
+   reconsider L as LinearFunc of REAL-NS 1 by NDIFF_3:def 2;
+A7: GR is total by NDIFF_3:def 1; then
+   reconsider FGR = GR as Function of REAL, REAL-NS n;
+A8:Proj(i,n)*FGR is Function of REAL,REAL-NS 1;
+   Proj(i,n)*GR is RestFunc of REAL-NS 1
+   proof
+A9:dom GR = REAL by A7,PARTFUN1:def 2;
+    reconsider R = Proj(i,n)*GR as PartFunc of REAL,REAL-NS 1;
+    for r be Real st r > 0 ex d be Real st d > 0 &
+      (for z be Real st z <> 0 & |.z.| < d
+         holds (|.z.|" * ||. R/.z .||) < r)
+    proof
+     let r be Real;
+     assume r > 0; then
+     consider d be Real such that
+A10:   d > 0 &
+      (for z be Real st z <> 0 & |.z.| < d holds
+         (|.z.|"* ||. GR/.z .||) < r) by A7,Th23;
+     take d;
+     thus d> 0 by A10;
+     let z be Element of REAL;
+     assume A11: z <> 0 & |.z.| < d;
+A12: GR/.z = GR.z by A9,PARTFUN1:def 6;
+A13:i in Seg n by A1;
+     reconsider GRz = GR/.z as Point of REAL-NS n;
+     reconsider GRz1 = GRz as Element of REAL n by REAL_NS1:def 4;
+     reconsider GRzi = GRz1.i as Element of REAL;
+     dom Proj(i,n) = the carrier of REAL-NS n by PARTFUN1:def 2; then
+A14:z in dom (Proj(i,n)*GR) by A9,A12,FUNCT_1:11; then
+     (Proj(i,n)*GR).z = Proj(i,n).(GR.z) by FUNCT_1:12
+                     .= <* proj(i,n).(GRz1) *> by A12,PDIFF_1:def 4; then
+A15: (Proj(i,n)*GR).z = <* GRzi *> by PDIFF_1:def 1;
+A16: abs GRzi <= ||. GR/.z .|| by A13,REAL_NS1:9;
+A17:0 <= |.z.| by COMPLEX1:46;
+     0 <= abs GRzi by COMPLEX1:46; then
+A18: |.z.|"* abs GRzi <= |.z.|"* ||. GR/.z .|| by A16,A17,XREAL_1:66;
+     |.z.|"* ||. GR/.z .|| < r by A10,A11; then
+A19: |.z.|"* abs GRzi < r by A18,XXREAL_0:2;
+     (Proj(i,n)*GR).z in rng(Proj(i,n)*GR) by A14,FUNCT_1:3; then
+     reconsider Rz = (Proj(i,n)*GR).z as VECTOR of REAL-NS 1;
+     set VGRzi = <* GRzi *>;
+     VGRzi is Element of REAL 1 by FINSEQ_2:98; then
+     ||. Rz .|| = |. VGRzi .| by A15,REAL_NS1:1; then
+     |.z.|"* ||. Rz .|| < r by A19,JORDAN2C:10;
+     hence thesis by A14,PARTFUN1:def 6;
+    end;
+    hence thesis by A8,Th23;
+   end; then
+   reconsider R = Proj(i,n)*GR as RestFunc of REAL-NS 1;
+   set pg = Proj(i,n)*g;
+A20:dom Proj(i,n) = the carrier of REAL-NS n by FUNCT_2:def 1; then
+   rng g c= dom Proj(i,n); then
+A21:dom g = dom (Proj(i,n)*g) by RELAT_1:27;
+A22:dom Proj(i,n) = REAL n by A20,REAL_NS1:def 4;
+A23:for x be Real st x in N holds
+      pg/.x - pg/.x0 = L.(x-x0) + R/.(x-x0)
+  proof
+    let x be Real;
+    now assume A24: x in N; then
+A25:  g/.x - g/.x0 = DFG.(x-x0) + GR/.(x-x0) by A3;
+A26:  x0 in N by RCOMP_1:16; then
+A27: pg/.x = pg.x & pg/.x0 = pg.x0 by A2,A21,A24,PARTFUN1:def 6;
+A28: g/.x = g.x & g/.x0 = g.x0 by A2,A24,A26,PARTFUN1:def 6;
+     reconsider PGSx = pg/.x - pg/.x0 as Element of REAL 1 by REAL_NS1:def 4;
+     pg.x in rng pg by A2,A21,A24,FUNCT_1:3; then
+     reconsider PGdx = pg.x as Element of REAL 1 by REAL_NS1:def 4;
+     pg.x0 in rng pg by A2,A21,A26,FUNCT_1:3; then
+     reconsider PGdx0 = pg.x0 as Element of REAL 1 by REAL_NS1:def 4;
+     g.x in rng g by A2,A24,FUNCT_1:3; then
+     reconsider Gx = g.x as Element of REAL n by REAL_NS1:def 4;
+     g.x0 in rng g by A2,A26,FUNCT_1:3; then
+     reconsider Gx0 = g.x0 as Element of REAL n by REAL_NS1:def 4;
+     set ProjGx = Proj(i,n).(g.x);
+     Gx in dom Proj(i,n) by A22; then
+     ProjGx in rng Proj(i,n) by FUNCT_1:3; then
+     reconsider ProjGx as Element of REAL 1 by REAL_NS1:def 4;
+     set ProjGx0 = Proj(i,n).(g.x0);
+     Gx0 in dom Proj(i,n) by A22; then
+     ProjGx0 in rng Proj(i,n) by FUNCT_1:3; then
+     reconsider ProjGx0 as Element of REAL 1 by REAL_NS1:def 4;
+     reconsider Gx1 = Gx as Element of REAL-NS n by REAL_NS1:def 4;
+     reconsider Gx01 = Gx0 as Element of REAL-NS n by REAL_NS1:def 4;
+     reconsider Gsx = g/.x as Element of REAL n by REAL_NS1:def 4;
+     reconsider Gsx0 = g/.x0 as Element of REAL n by REAL_NS1:def 4;
+     set dxx0 = x-x0;
+     reconsider Ldxx0 = L.(x-x0) as Element of REAL-NS 1;
+A29:  dom R = REAL by A8,PARTFUN1:def 2; then
+A30:  R/.(x-x0) = R.dxx0 by PARTFUN1:def 6; then
+     reconsider Rdxx0 = R.(x-x0) as Element of REAL-NS 1;
+     reconsider Lxx0Rxx0 = L.(x-x0) + R/.(x-x0) as Element of REAL 1
+        by REAL_NS1:def 4;
+     reconsider Ldiff = DFG.(x-x0) as Element of REAL n by REAL_NS1:def 4;
+     set ProjLdiff = Proj(i,n).Ldiff;
+     ProjLdiff in rng Proj(i,n) by A20,FUNCT_1:3; then
+     reconsider ProjLdiff as Element of REAL 1 by REAL_NS1:def 4;
+A31:  dom GR = REAL by A7,PARTFUN1:def 2; then
+     GR.dxx0 in rng GR by FUNCT_1:3; then
+     reconsider Rdiff = GR.dxx0 as Element of REAL n by REAL_NS1:def 4;
+A32: Rdiff = GR/.dxx0 by A31,PARTFUN1:def 6;
+     set ProjRdiff = Proj(i,n).Rdiff;
+     ProjRdiff in rng Proj(i,n) by A22,FUNCT_1:3; then
+     reconsider ProjRdiff as Element of REAL 1 by REAL_NS1:def 4;
+     dom L = REAL by FUNCT_2:def 1; then
+     L.(x-x0) = Proj(i,n).Ldiff & R.(x-x0) = Proj(i,n).Rdiff
+        by A29,FUNCT_1:12; then
+A33: Ldxx0 + Rdxx0 = ProjLdiff + ProjRdiff by REAL_NS1:2;
+     Proj(i,n).Ldiff = <* proj(i,n).Ldiff *> by PDIFF_1:def 4; then
+A34: Proj(i,n).Ldiff = <* Ldiff.i *> by PDIFF_1:def 1;
+     Rdiff in dom Proj(i,n) by A22; then
+     Proj(i,n).Rdiff = <* proj(i,n).Rdiff *> by PDIFF_1:def 4; then
+A35: Proj(i,n).Rdiff = <* Rdiff.i *> by PDIFF_1:def 1;
+     reconsider diffGR = DFG.(x-x0) + GR/.(x-x0)
+       as Element of REAL n by REAL_NS1:def 4;
+     reconsider Rsdiff = GR/.(x-x0) as Element of REAL n by REAL_NS1:def 4;
+     PGSx = PGdx - PGdx0 by A27,REAL_NS1:5
+        .= ProjGx - PGdx0 by A2,A21,A24,FUNCT_1:12
+        .= ProjGx - ProjGx0 by A2,A21,A26,FUNCT_1:12
+        .= <* proj(i,n).Gx1 *> - ProjGx0 by PDIFF_1:def 4
+        .= <* proj(i,n).Gx1 *> - <* proj(i,n).Gx01 *> by PDIFF_1:def 4
+        .= <* Gx.i *> - <* proj(i,n).Gx01 *> by PDIFF_1:def 1
+        .= <* Gx.i *> - <* Gx0.i *> by PDIFF_1:def 1
+        .= <* Gx.i - Gx0.i *> by RVSUM_1:29
+        .= <* (Gsx - Gsx0).i *> by A28,RVSUM_1:27
+        .= <* diffGR.i *> by A25,REAL_NS1:5
+        .= <* (Ldiff + Rsdiff).i *> by REAL_NS1:2
+        .= <* Ldiff.i + Rsdiff.i *> by RVSUM_1:11;
+     hence thesis by A30,A33,A34,A35,A32,RVSUM_1:13;
+    end;
+    hence thesis;
+   end;
+   hence A36:Proj(i,n)*g is_differentiable_in x0 by A2,A21,NDIFF_3:def 3;
+   L.1 =1*(Proj(i,n).LP) by A5
+       .= Proj(i,n).(LP) by RLVECT_1:def 8
+        .= Proj(i,n).(1*LP) by RLVECT_1:def 8
+       .= Proj(i,n).diff(g,x0) by A3,A4;
+   hence thesis by A36,A2,A21,A23,NDIFF_3:def 4;
+end;
+
+theorem Th25:
+for g be PartFunc of REAL,REAL-NS n,
+    x0 be real number holds
+g is_differentiable_in x0 iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*g is_differentiable_in x0)
+proof
+   let g be PartFunc of REAL,REAL-NS n;
+   let x0 be real number;
+   thus g is_differentiable_in x0 implies
+   for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*g is_differentiable_in x0 by Th24;
+    assume A1: for i be Element of NAT st 1 <= i & i <= n holds
+                 Proj(i,n)*g is_differentiable_in x0;
+    defpred Pd[Element of NAT,Element of REAL] means
+     $2 > 0 &
+     ]. x0-$2,x0+$2.[ c= dom (Proj($1,n)*g) &
+     ex Ri be RestFunc of REAL-NS 1 st
+      for x be Real st x in ]. x0-$2,x0+$2.[ holds
+        (Proj($1,n)*g)/.x - (Proj($1,n)*g)/.x0
+           = (x-x0)*(diff((Proj($1,n)*g),x0)) + Ri/.(x-x0);
+A2: for k be Element of NAT st k in Seg n ex dk be Element of REAL st Pd[k,dk]
+    proof
+     let k be Element of NAT;
+     assume k in Seg n; then
+     1 <= k & k <= n by FINSEQ_1:1; then
+     Proj(k,n)*g is_differentiable_in x0 by A1; then
+     consider Nk be Neighbourhood of x0 such that
+A3:   Nk c= dom (Proj(k,n)*g) & ex L be LinearFunc of REAL-NS 1,
+      Rk be RestFunc of REAL-NS 1 st L.1 = (diff((Proj(k,n)*g),x0)) &
+       for x be Real st
+        x in Nk holds (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0
+         = L.(x-x0) + Rk/.(x-x0) by NDIFF_3:def 4;
+     consider dk be real number such that
+A4:    0 < dk & Nk = ]. x0-dk,x0+dk.[ by RCOMP_1:def 6;
+     reconsider dk as Element of REAL by XREAL_0:def 1;
+     take dk;
+     thus 0 < dk by A4;
+     thus ]. x0-dk,x0+dk.[ c= dom(Proj(k,n)*g) by A4,A3;
+     thus ex Rk be RestFunc of REAL-NS 1 st
+       for x be Real st x in ]. x0-dk,x0+dk.[ holds
+         (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0
+          = (x-x0)*(diff((Proj(k,n)*g),x0))+Rk/.(x-x0)
+       proof
+         consider L be LinearFunc of REAL-NS 1, Rk be RestFunc of REAL-NS 1
+         such that
+A5:     L.1 = (diff((Proj(k,n)*g),x0)) &
+         for x be Real st x in Nk holds (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0
+                  = L.(x-x0) + Rk/.(x-x0) by A3;
+A6:     now let x be Real;
+         assume A7: x in Nk;
+         consider L1 be Point of REAL-NS 1 such that
+A8:     for p be Real holds L.p = p*L1 by NDIFF_3:def 2;
+A9:     (diff((Proj(k,n)*g),x0)) = 1*L1 by A8,A5
+                                 .= L1 by RLVECT_1:def 8;
+A10:     L.(x-x0) =(x-x0)*(diff((Proj(k,n)*g),x0)) by A9,A8;
+         thus  (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0
+         =(x-x0)*(diff((Proj(k,n)*g),x0))+Rk/.(x-x0) by A10,A5,A7;
+        end;
+        take Rk;
+        thus for x be Real st
+               x in ]. x0-dk,x0+dk.[ holds
+             (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0
+               = (x-x0)*(diff((Proj(k,n)*g),x0))+Rk/.(x-x0) by A4,A6;
+       end;
+     end;
+    consider d be FinSequence of REAL such that
+A11:  dom d = Seg n & for k be Element of NAT st k in Seg n holds
+       Pd[k,d/.k] from RECDEF_1:sch 17(A2);
+    set d0 = min d;
+    len d = n by A11,FINSEQ_1:def 3; then
+A12:min_p d in dom d by RFINSEQ2:def 2; then
+    d/.(min_p d) > 0 by A11; then
+A13:d0 > 0 by A12,PARTFUN1:def 6;
+    defpred LX[Real,set] means
+     ex y be Element of REAL n st $2 = y &
+      for i be Element of NAT st i in Seg n holds
+       y.i = proj(1,1).($1*(diff((Proj(i,n)*g),x0)));
+A14: for x be Real holds ex y be Point of REAL-NS n st LX[x,y]
+    proof
+     let x be Real;
+     defpred YX[Element of NAT,set] means
+       $2 = proj(1,1).(x*(diff((Proj($1,n)*g),x0)));
+A15: for i be Element of NAT st i in Seg n
+       ex r being Element of REAL st YX[i,r];
+     consider y be FinSequence of REAL such that
+A16:  dom y = Seg n & for i be Element of NAT st i in Seg n holds YX[i,y/.i]
+        from RECDEF_1:sch 17(A15);
+     len y = n by A16,FINSEQ_1:def 3; then
+     reconsider y as Element of REAL n by FINSEQ_2:92;
+A17: now let i be Element of NAT;
+      assume i in Seg n; then
+      YX[i,y/.i] & y/.i = y.i by A16,PARTFUN1:def 6;
+      hence y.i =proj(1,1).(x*(diff((Proj(i,n)*g),x0)));
+     end;
+     reconsider y0=y as Point of REAL-NS n by REAL_NS1:def 4;
+     ex y be Element of REAL n st y0=y &
+      for i be Element of NAT st i in Seg n holds
+       y.i = proj(1,1).(x*(diff((Proj(i,n)*g),x0))) by A17;
+     hence ex y0 be Point of REAL-NS n st LX[x,y0];
+    end;
+    consider L be Function of REAL,REAL-NS n such that
+A18:  for x be Real holds LX[x,L.x] from FUNCT_2:sch 3(A14);
+    for r be Real holds L.r = r*(L.1)
+    proof
+     let r be Real;
+     consider Lx be Element of REAL n such that
+A19:   L.1 = Lx & for i be Element of NAT st i in Seg n holds
+       Lx.i = proj(1,1).(1*(diff((Proj(i,n)*g),x0))) by A18;
+A20:now let i be Element of NAT;
+      assume i in Seg n;
+      then Lx.i = proj(1,1).(1*(diff((Proj(i,n)*g),x0))) by A19;
+      hence Lx.i = proj(1,1).(diff((Proj(i,n)*g),x0)) by RLVECT_1:def 8;
+    end;
+     consider Lrx be Element of REAL n such that
+A21:   L.r = Lrx & for i be Element of NAT st i in Seg n holds
+       Lrx.i = proj(1,1).(r*(diff((Proj(i,n)*g),x0))) by A18;
+A22:  dom (r*Lx) = Seg n by FINSEQ_2:124; then
+A23:  dom (r*Lx) = dom Lrx by FINSEQ_2:124;
+     for i0 be Nat st i0 in dom (r*Lx) holds (r*Lx).i0 = Lrx.i0
+     proof
+      let i0 be Nat;
+      reconsider i = i0 as Element of NAT by ORDINAL1:def 12;
+      assume i0 in dom(r*Lx); then
+A24:   Lx.i = proj(1,1).((diff((Proj(i,n)*g),x0))) &
+      Lrx.i = proj(1,1).(r*(diff((Proj(i,n)*g),x0))) by A20,A21,A22;
+A25:   (r*1) * diff((Proj(i,n)*g),x0) = r * (1*diff((Proj(i,n)*g),x0))
+       by RLVECT_1:def 8;
+      reconsider Diffrx = (r*1)*diff((Proj(i,n)*g),x0)
+        as Element of REAL 1 by REAL_NS1:def 4;
+      reconsider Diffx = 1*diff((Proj(i,n)*g),x0)
+        as Element of REAL 1 by REAL_NS1:def 4;
+      A26: Diffx = diff((Proj(i,n)*g),x0) by RLVECT_1:def 8;
+       Diffrx = r*Diffx by A25,REAL_NS1:3; then
+      Lrx.i0 = (r*Diffx).1 by A24,PDIFF_1:def 1; then
+      Lrx.i0 = r*(Diffx.1) by RVSUM_1:45;
+      then
+      Lrx.i0 = r*(Lx.i0) by A24,A26,PDIFF_1:def 1;
+      hence thesis by RVSUM_1:45;
+     end; then
+     r*Lx = Lrx by A23,FINSEQ_1:13;
+     hence thesis by A19,A21,REAL_NS1:3;
+    end; then
+    reconsider L as linear Function of REAL,REAL-NS n
+       by NDIFF_3:def 2;
+    reconsider L0 = L as LinearFunc of REAL-NS n;
+    deffunc RD(Element of REAL) = g/.($1+x0) - g/.x0 - L.$1;
+    consider R be Function of REAL,REAL-NS n such that
+A27:  for x be Element of REAL holds R.x = RD(x) from FUNCT_2:sch 4;
+A28:for x be Element of REAL, i be Element of NAT st
+     i in Seg n & x+x0 in dom g holds
+     (Proj(i,n)*R).x
+      = (Proj(i,n)*g)/.(x+x0) - (Proj(i,n)*g)/.x0 - (Proj(i,n)*L).x
+    proof
+     let x be Element of REAL, i be Element of NAT;
+     assume that
+A29:  i in Seg n and
+A30:  x+x0 in dom g;
+A31: |. x0 - x0 .| = 0 by COMPLEX1:44;
+A32:  0 < d/.i & ]. x0-d/.i,x0+d/.i.[ c= dom (Proj(i,n)*g) by A29,A11; then
+      x0 in ]. x0-d/.i,x0+d/.i.[ by A31,RCOMP_1:1; then
+A33:  x0 in dom (Proj(i,n)*g) by A32;
+A34:  dom (Proj(i,n)*g) c= dom g by RELAT_1:25;
+     reconsider gxx0 = g/.(x+x0), gx0 = g/.x0, Lx = L.x as Element of REAL n
+       by REAL_NS1:def 4;
+     reconsider gxx01 = g/.(x+x0), gx01 = g/.x0, Lx1 = L.x
+        as Point of REAL-NS n;
+A35:  -gx0 = (-1)*(g/.x0) & -Lx = (-1)*(L.x) by REAL_NS1:3; then
+     gxx0 + -gx0 = g/.(x+x0) + (-1)*(g/.x0) by REAL_NS1:2; then
+A36:  gxx0 + -gx0 + -Lx = g/.(x+x0) + (-1)*(g/.x0) + (-1)*(L.x)
+       by A35,REAL_NS1:2;
+A37: -1 is Real by XREAL_0:def 1;
+     gxx0-gx0 = g/.(x+x0)-g/.x0 by REAL_NS1:5; then
+A38:  g/.(x+x0) - g/.x0 - L.x = gxx0 - gx0 - Lx by REAL_NS1:5;
+     (Proj(i,n)*R).x = Proj(i,n).(R.x) by FUNCT_2:15; then
+     (Proj(i,n)*R).x = Proj(i,n).(g/.(x+x0) - g/.x0 - L.x) by A27; then
+     (Proj(i,n)*R).x = Proj(i,n).(g/.(x+x0) + (-1)*(g/.x0))
+                         + Proj(i,n).((-1)*(L.x)) by A38,A36,PDIFF_6:26; then
+A39:  (Proj(i,n)*R).x = Proj(i,n).(g/.(x+x0)) + Proj(i,n).((-1)*(g/.x0))
+                         + Proj(i,n).((-1)*(L.x)) by PDIFF_6:26;
+     Proj(i,n).((-1)*(g/.x0)) = (-1)*(Proj(i,n).(g/.x0)) &
+     Proj(i,n).((-1)*(Lx1)) = (-1)*(Proj(i,n).(Lx1)) by A37,PDIFF_6:27;
+     then
+     (Proj(i,n)*R).x = Proj(i,n).(g/.(x+x0)) + -Proj(i,n).(g/.x0)
+                         + (-1)*Proj(i,n).(L.x) by A39,RLVECT_1:16; then
+A40:  (Proj(i,n)*R).x = Proj(i,n).(g/.(x+x0)) - Proj(i,n).(g/.x0)
+                         - Proj(i,n).(L.x) by RLVECT_1:16;
+     g/.(x+x0) in the carrier of REAL-NS n &
+     g/.x0 in the carrier of REAL-NS n; then
+A41:  g/.(x+x0) in dom (Proj(i,n)) & g/.x0 in dom (Proj(i,n)) by FUNCT_2:def 1;
+A42:  Proj(i,n).(g/.(x+x0)) = Proj(i,n)/.(g/.(x+x0))
+      .= (Proj(i,n)*g)/.(x+x0) by A30,A41,PARTFUN2:4;
+     Proj(i,n).(g/.x0) = Proj(i,n)/.(g/.x0)
+      .= (Proj(i,n)*g)/.x0 by A33,A34,A41,PARTFUN2:4;
+     hence thesis by A40,A42,FUNCT_2:15;
+    end;
+    for r be Real st r > 0 ex d be Real st d > 0 &
+      for z be Real st
+       z <> 0 & |. z .| < d holds (|.z.|"* ||. R/.z .||) < r
+    proof
+     let r be Real;
+     assume A43: r > 0;
+     set r0 = (sqrt n)"*r;
+A44: sqrt n > 0 by SQUARE_1:25; then
+A45: r0 > 0 by A43,XREAL_1:129;
+     defpred DD[Element of NAT,Element of REAL] means $2 > 0 &
+      for z be Real st z <> 0 & |. z .| < $2 holds
+      |. z .|"* ||. (Proj($1,n)*R)/.z .|| < r0;
+A46: for k be Element of NAT st k in Seg n ex dd be Element of REAL st DD[k,dd]
+     proof
+      let k be Element of NAT;
+      assume A47: k in Seg n; then
+      1 <= k & k <= n by FINSEQ_1:1; then
+      Proj(k,n)*g is_differentiable_in x0 by A1; then
+      consider Nk be Neighbourhood of x0 such that
+A48:    Nk c= dom (Proj(k,n)*g) & ex LR be LinearFunc of REAL-NS 1,
+       PR be RestFunc of REAL-NS 1 st LR.1 = diff(Proj(k,n)*g,x0) &
+        for x be Real st x in Nk holds
+         (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0
+           = LR.(x-x0) + PR/.(x-x0) by NDIFF_3:def 4;
+    consider d0 be real number such that
+    A49:0 < d0 & Nk = ]. x0-d0,x0+d0.[ by RCOMP_1:def 6;
+      reconsider d0 as Real by XREAL_0:def 1;
+      consider LR be LinearFunc of REAL-NS 1,
+          PR be RestFunc of REAL-NS 1 such that
+A50:   LR.1 = diff(Proj(k,n)*g,x0) &
+      for x be Real st x in Nk holds
+      (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0 =LR.(x-x0)  + PR/.(x-x0) by A48;
+A51: now let x be Real;
+   assume A52: x in Nk;
+   consider L1 be Point of REAL-NS 1 such that
+A53: for p be Real holds LR.p = p*L1 by NDIFF_3:def 2;
+    (diff((Proj(k,n)*g),x0)) = 1*L1 by A53,A50
+         .=L1 by RLVECT_1:def 8;
+  then LR.(x-x0) =(x-x0)*(diff((Proj(k,n)*g),x0)) by A53;
+   hence (Proj(k,n)*g)/.x - (Proj(k,n)*g)/.x0
+         =(x-x0)*diff(Proj(k,n)*g,x0) + PR/.(x-x0) by A52,A50;
+end;
+      PR is total by NDIFF_3:def 1; then
+      consider d1 be Real such that
+A54:    d1 > 0 & for z be Real st z <> 0 & |. z .| < d1 holds
+       |. z .|"* ||. PR/.z .|| < r0 by A45,Th23;
+      set dd = min(d0,d1);
+      take dd;
+      for z be Real st z <> 0 & |. z .| < dd holds
+        (|. z .|"* ||. (Proj(k,n)*R)/.z .||) < r0
+      proof
+       let z be Real;
+       assume A55: z <> 0 & |. z .| < dd;
+       dd <= d1 by XXREAL_0:17; then
+       |. z .| < d1 by A55,XXREAL_0:2; then
+A56:    ( |. z .|"* ||. PR/.z .||) < r0 by A55,A54;
+       dd <= d0 by XXREAL_0:17; then
+A57:    |. z .| < d0 by A55,XXREAL_0:2;
+       z+x0 - x0 = z; then
+A58:    z+x0 in ]. x0-d0,x0+d0.[ by A57,RCOMP_1:1; then
+A59:    z+x0 in dom (Proj(k,n)*g) by A48,A49;
+       (Proj(k,n)*g)/.(z+x0) - (Proj(k,n)*g)/.x0
+         = (z+x0-x0)*diff(Proj(k,n)*g,x0) + PR/.(z+x0-x0) by A58,A49,A51;
+       then
+A60:   PR/.z = (Proj(k,n)*g)/.(z+x0) - (Proj(k,n)*g)/.x0
+                 - z*diff(Proj(k,n)*g,x0) by RLVECT_4:1;
+       dom(Proj(k,n)*g) c= dom g by RELAT_1:25; then
+A61:    (Proj(k,n)*R).z
+        = (Proj(k,n)*g)/.(z+x0) - (Proj(k,n)*g)/.x0 - (Proj(k,n)*L).z
+          by A59,A47,A28;
+       consider y be Element of REAL n such that
+A62:    L.z = y & for i be Element of NAT st i in Seg n holds
+         y.i = proj(1,1).(z*(diff((Proj(i,n)*g),x0))) by A18;
+A63:   y.k = proj(1,1).(z*(diff((Proj(k,n)*g),x0))) by A62,A47;
+       z*(diff((Proj(k,n)*g),x0)) is Element of REAL 1 by REAL_NS1:def 4; then
+       consider Dk be Element of REAL such that
+A64:    z*(diff((Proj(k,n)*g),x0)) = <* Dk *> by FINSEQ_2:97;
+       reconsider y1 = y as Point of REAL-NS n by REAL_NS1:def 4;
+       dom L = REAL by FUNCT_2:def 1; then
+       (Proj(k,n)*L).z = (Proj(k,n)).(L.z) by FUNCT_1:13; then
+       (Proj(k,n)*L).z = <* proj(k,n).y1 *> by A62,PDIFF_1:def 4; then
+       (Proj(k,n)*L).z = <* proj(1,1).(z*(diff((Proj(k,n)*g),x0))) *>
+            by A63,PDIFF_1:def 1;
+       hence thesis by A56,A60,A61,A64,PDIFF_1:1;
+      end;
+      hence thesis by A49,A54,XXREAL_0:21;
+     end;
+     consider dd be FinSequence of REAL such that
+A65:  dom dd = Seg n & for i be Element of NAT st i in Seg n holds DD[i,dd/.i]
+        from RECDEF_1:sch 17(A46);
+     take d = min dd;
+     len dd = n by A65,FINSEQ_1:def 3; then
+A66: min_p dd in dom dd by RFINSEQ2:def 2; then
+A67: dd/.(min_p dd) > 0 by A65;
+     for z be Real st
+      z <> 0 & |. z .| < d holds (|.z.|"* ||. R/.z .||) < r
+     proof
+      let z be Real;
+      assume A68: z <> 0 & |. z .| < d;
+      reconsider Rz = R/.z as Element of REAL n by REAL_NS1:def 4;
+      reconsider R0 = (n |-> (|. z .| * r0)^2) as Element of n-tuples_on REAL;
+      reconsider SRz = sqr Rz as Element of n-tuples_on REAL;
+A69:  |. z .| > 0 by A68,COMPLEX1:47;
+A70:  for i0 be Nat st i0 in Seg n holds SRz.i0 < R0.i0
+      proof
+       let i0 be Nat;
+       reconsider i = i0 as Element of NAT by ORDINAL1:def 12;
+       assume A71: i0 in Seg n; then
+       i in dom Rz by FINSEQ_2:124; then
+       (sqr Rz).i = sqrreal.(Rz.i) by FUNCT_1:13; then
+A72:    (sqr Rz).i = (Rz.i)^2 by RVSUM_1:def 2;
+       1 <= i & i <= n by A71,FINSEQ_1:1; then
+       1 <= i & i <= len dd by A65,FINSEQ_1:def 3; then
+       d <= dd.i by RFINSEQ2:2; then
+       d <= dd/.i by A71,A65,PARTFUN1:def 6; then
+       |. z .| < dd/.i by A68,XXREAL_0:2; then
+       (|. z .|" * ||. (Proj(i,n)*R)/.z .||) < r0 by A68,A71,A65; then
+A73:    ||. (Proj(i,n)*R)/.z .|| < r0 / (|. z .|") by A69,XREAL_1:81;
+       reconsider Rzi = <* Rz.i *> as Element of REAL 1 by FINSEQ_2:98;
+       (Proj(i,n)*R).z = Proj(i,n).(R.z) by FUNCT_2:15; then
+       (Proj(i,n)*R).z = <* proj(i,n).Rz *> by PDIFF_1:def 4; then
+       (Proj(i,n)*R).z = <* Rz.i *> by PDIFF_1:def 1; then
+       ||. (Proj(i,n)*R).z .|| = |. Rzi .| by REAL_NS1:1; then
+       |. Rz.i .| < |. z .| * r0 by A73,JORDAN2C:10; then
+       |. Rz.i .| ^2 < (|. z .| * r0)^2 by COMPLEX1:46,SQUARE_1:16; then
+       (Rz.i0)^2 < (|. z .| * r0)^2 by COMPLEX1:75;
+       hence thesis by A71,A72,FINSEQ_2:57;
+      end;
+A74:  for i be Nat st i in dom (sqr Rz) holds 0 <= (sqr Rz).i
+      proof
+       let i be Nat;
+       assume i in dom(sqr Rz); then
+       i in dom (sqrreal*Rz) & dom(sqrreal*Rz) c= dom Rz by RELAT_1:25; then
+       (sqr Rz).i = sqrreal.(Rz.i) by FUNCT_1:13; then
+       (sqr Rz).i = (Rz.i)^2 by RVSUM_1:def 2;
+       hence thesis by XREAL_1:63;
+      end;
+A75:  (|. z .| * r0)^2 >= 0 by XREAL_1:63;
+A76:  ex i be Nat st i in Seg n & SRz.i < R0.i
+      proof
+       take 1;
+       1 <= n by NAT_1:14;
+       hence 1 in Seg n;
+       hence thesis by A70;
+      end;
+A77:  sqrt n > 0 by SQUARE_1:25;
+      for i0 be Nat st i0 in Seg n holds SRz.i0 <= R0.i0 by A70; then
+      Sum SRz < Sum R0 by A76,RVSUM_1:83; then
+      Sum (sqr Rz) < n * (|. z .| * r0)^2 by RVSUM_1:80; then
+      |. Rz .| < sqrt (n * (|. z .| * r0)^2)
+         by A74,RVSUM_1:84,SQUARE_1:27; then
+      |. Rz .| < sqrt n * sqrt (|. z .| * r0)^2 by A75,SQUARE_1:29; then
+      |. Rz .| < sqrt n * |. |. z .| * r0 .| by COMPLEX1:72; then
+      |. Rz .| < sqrt n * (|. z .| * r0) by A44,A43,A69,ABSVALUE:def 1; then
+      |. Rz .| < sqrt n * r0 * |. z .|; then
+      |. Rz .| / |. z .| < sqrt n * r0 by A69,XREAL_1:83; then
+      |. z .|" * ||. R/.z .|| < sqrt n * (sqrt n)"*r by REAL_NS1:1; then
+      |. z .|" * ||. R/.z .|| < 1*r by A77,XCMPLX_0:def 7;
+      hence |. z .|" * ||. R/.z .|| < r;
+     end;
+     hence thesis by A67,A66,PARTFUN1:def 6;
+    end; then
+    reconsider R as RestFunc of REAL-NS n by Th23;
+    reconsider N = ]. x0-d0,x0+d0.[ as Neighbourhood of x0
+      by A13,RCOMP_1:def 6;
+    now let x be set;
+     assume A78: x in N; then
+     reconsider y=x as Real;
+A79:  |. y - x0 .| < d0 by A78,RCOMP_1:1;
+     1 <= n by NAT_1:14; then
+A80:  1 in Seg n & 1 in dom d by A11; then
+A81: ]. x0-d/.1,x0+d/.1.[ c= dom(Proj(1,n)*g) by A11;
+     dom(Proj(1,n)*g) c= dom g by RELAT_1:25; then
+A82:  ]. x0-d/.1,x0+d/.1.[ c= dom g by A81,XBOOLE_1:1;
+     len d = n by A11,FINSEQ_1:def 3; then
+     1 <= len d by NAT_1:14; then
+     d0 <= d.1 by RFINSEQ2:2; then
+     d0 <= d/.1 by A80,PARTFUN1:def 6; then
+     |. y - x0 .| < d/.1 by A79,XXREAL_0:2; then
+     y in ]. x0-d/.1,x0+d/.1.[ by RCOMP_1:1;
+     hence x in dom g by A82;
+    end; then
+A83: N c= dom g by TARSKI:def 3;
+    ex L, R st for x be Real st x in N holds
+       g/.x - g/.x0 = L.(x-x0) + R/.(x-x0)
+    proof
+      take L0,R;
+      let x be Real;
+      assume x in N;
+A84:  dom R = REAL by PARTFUN1:def 2;
+      R.(x-x0) = g/.(x-x0+x0) - g/.x0 - L.(x-x0) by A27; then
+      R/.(x-x0) = g/.x - g/.x0 + -(L0.(x-x0)) by A84,PARTFUN1:def 6; then
+      L0.(x-x0) + R/.(x-x0)
+       = g/.x - g/.x0 + (-(L0.(x-x0)) + L0.(x-x0)) by RLVECT_1:def 3; then
+      L0.(x-x0) + R/.(x-x0) = g/.x - g/.x0 + (0.(REAL-NS n)) by RLVECT_1:5;
+      hence thesis by RLVECT_1:4;
+    end;
+    hence thesis by A83,NDIFF_3:def 3;
+end;
+
+theorem
+for f be PartFunc of REAL,REAL n,
+    x0 be real number st
+ 1 <= i & i <= n & f is_differentiable_in x0 holds
+   (Proj(i,n)*f) is_differentiable_in x0 &
+   Proj(i,n).(diff(f,x0)) = diff((Proj(i,n)*f),x0)
+proof
+  let f be PartFunc of REAL,REAL n,
+      x0 be real number;
+  assume
+A1: 1 <= i & i <= n & f is_differentiable_in x0;
+  then
+  consider g be PartFunc of REAL,REAL-NS n such that
+A2: f=g & g is_differentiable_in x0 by Def1;
+  diff(f,x0) = diff(g,x0) by A2,Th3;
+  hence thesis by A2,A1,Th24;
+end;
+
+theorem
+for f be PartFunc of REAL,REAL n,
+    x0 be real number holds
+f is_differentiable_in x0 iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*f is_differentiable_in x0)
+proof
+  let f be PartFunc of REAL,REAL n, x0 be real number;
+  thus f is_differentiable_in x0 implies
+   (for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*f is_differentiable_in x0)
+  proof
+    assume f is_differentiable_in x0;
+    then ex g be PartFunc of REAL,REAL-NS n st
+    f=g & g is_differentiable_in x0 by Def1;
+    hence thesis by Th25;
+  end;
+  assume
+A1: for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*f is_differentiable_in x0;
+    reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+    for i be Element of NAT st 1<=i & i <=n holds
+                  Proj(i,n)*g is_differentiable_in x0 by A1;
+    then g is_differentiable_in x0 by Th25;
+    hence thesis by Def1;
+end;
+
+theorem Th28:
+for g be PartFunc of REAL,REAL-NS n st
+ 1 <= i & i <= n & g is_differentiable_on X holds
+   (Proj(i,n)*g) is_differentiable_on X &
+   Proj(i,n)*(g`|X) = (Proj(i,n)*g)`|X
+proof
+  let g be PartFunc of REAL,REAL-NS n;
+  assume
+A1: 1 <= i & i <= n & g is_differentiable_on X;
+  then
+A2: X is open Subset of REAL by NDIFF_3:9,11;
+A3: dom(Proj(i,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
+    rng g c= the carrier of REAL-NS n;
+    then
+    dom(Proj(i,n)*g) = dom g by A3,RELAT_1:27;
+    then
+A4: X c= dom(Proj(i,n)*g) by A2,A1,NDIFF_3:10;
+    now let x;
+    assume x in X;
+    then g is_differentiable_in x by A2,A1,NDIFF_3:10;
+    hence (Proj(i,n)*g) is_differentiable_in x by A1,Th24;
+  end;
+  hence
+A5: (Proj(i,n)*g) is_differentiable_on X by A2,A4,NDIFF_3:10;
+  then
+A6: dom ((Proj(i,n)*g)`|X) = X &
+    for x st x in X holds
+    ((Proj(i,n)*g)`|X).x = diff((Proj(i,n)*g),x) by NDIFF_3:def 6;
+A7: dom (g`|X) = X &
+    for x st x in X holds (g`|X).x = diff(g,x) by A1,NDIFF_3:def 6;
+  rng (g`|X) c= the carrier of REAL-NS n;
+  then
+A8: dom (Proj(i,n)*(g`|X)) = dom (g`|X) by A3,RELAT_1:27;
+  now let x;
+    assume A9: x in dom ((Proj(i,n)*g)`|X);
+    then
+A10: x in X by A5,NDIFF_3:def 6;
+    then g is_differentiable_in x by A2,A1,NDIFF_3:10;
+    then
+A11: Proj(i,n).(diff(g,x)) = diff((Proj(i,n)*g),x) by A1,Th24;
+A12: ((Proj(i,n)*g)`|X).x = diff((Proj(i,n)*g),x) by A9,A6;
+    (g`|X).x = diff(g,x) by A10,A1,NDIFF_3:def 6;
+    hence (Proj(i,n)*(g`|X)).x = ((Proj(i,n)*g)`|X).x
+           by A7,A10,A11,A12,FUNCT_1:13;
+  end;
+  hence thesis by A8,A6,A7,PARTFUN1:5;
+end;
+
+theorem Th29:
+for f be PartFunc of REAL,REAL n st
+ 1 <= i & i <= n & f is_differentiable_on X holds
+   (Proj(i,n)*f) is_differentiable_on X &
+   Proj(i,n)*(f`|X) = (Proj(i,n)*f)`|X
+proof
+  let f be PartFunc of REAL,REAL n;
+  assume
+A1: 1 <= i & i <= n & f is_differentiable_on X;
+  then
+A2: X is open Subset of REAL by Th4,Th6;
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+A3: X c= dom g by A2,A1,Th5;
+  now let x;
+    assume x in X;
+    then f is_differentiable_in x by A2,A1,Th5;
+    hence g is_differentiable_in x by Th2;
+  end;
+  then
+A4: g is_differentiable_on X  by A2,A3,NDIFF_3:10;
+  hence (Proj(i,n)*f) is_differentiable_on X by A1,Th28;
+A5: dom (g`|X) = X &
+    for x st x in X holds (g`|X).x = diff(g,x) by A4,NDIFF_3:def 6;
+A6: dom (f`|X) = dom (g`|X) by A1,Def4,A5;
+A7: now let x;
+    assume x in dom (f`|X);
+    then
+A8: x in X by A1,Def4;
+    then
+A9: (f`|X).x = diff(f,x) by A1,Def4;
+    diff(f,x) = diff(g,x) by Th3;
+    hence (f`|X).x = (g`|X).x by A9,A8,A4,NDIFF_3:def 6;
+  end;
+  g`|X is PartFunc of REAL,REAL n by REAL_NS1:def 4;
+  then Proj(i,n)*(f`|X) = Proj(i,n)*(g`|X) by A6,A7,PARTFUN1:5;
+  hence thesis by A4,A1,Th28;
+end;
+
+theorem Th30:
+for g be PartFunc of REAL,REAL-NS n holds
+g is_differentiable_on X iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*g is_differentiable_on X)
+proof
+  let g be PartFunc of REAL,REAL-NS n;
+  thus g is_differentiable_on X implies
+  (for i be Element of NAT st 1<=i & i <=n holds
+        Proj(i,n)*g is_differentiable_on X) by Th28;
+    assume A1: for i be Element of NAT st 1<=i & i <=n holds
+               Proj(i,n)*g is_differentiable_on X;
+    1 <=n by NAT_1:14;
+    then
+A2: Proj(1,n)*g is_differentiable_on X by A1;
+    then
+A3: X is open Subset of REAL by NDIFF_3:9,11;
+A4:dom(Proj(1,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
+A5: rng g c= the carrier of REAL-NS n;
+    X c= dom (Proj(1,n)*g) by A2,A3,NDIFF_3:10;
+     then
+A6: X c= dom g by A5,A4,RELAT_1:27;
+      now let x;
+        assume  A7: x in X;
+        now let i be Element of NAT;
+          assume 1<=i & i <=n;
+          then Proj(i,n)*g is_differentiable_on X by A1;
+          hence Proj(i,n)*g is_differentiable_in x by A7,A3,NDIFF_3:10;
+        end;
+        hence g is_differentiable_in x by Th25;
+      end;
+      hence thesis by A3,A6,NDIFF_3:10;
+    end;
+
+theorem
+for f be PartFunc of REAL,REAL n holds
+f is_differentiable_on X iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*f is_differentiable_on X)
+proof
+  let f be PartFunc of REAL,REAL n;
+  thus f is_differentiable_on X implies
+  (for i be Element of NAT st 1<=i & i <=n holds
+  Proj(i,n)*f is_differentiable_on X) by Th29;
+  assume A1: for i be Element of NAT st 1<=i & i <=n holds
+  Proj(i,n)*f is_differentiable_on X;
+  reconsider g=f as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+  for i be Element of NAT st 1<=i & i <=n holds
+  Proj(i,n)*g is_differentiable_on X by A1;
+  then
+A2: g is_differentiable_on X by Th30;
+    then
+A3: X is open Subset of REAL by NDIFF_3:9,11;
+    then
+A4: X c= dom f by A2,NDIFF_3:10;
+    now let x;
+      assume x in X;
+      then g is_differentiable_in x by A3,A2,NDIFF_3:10;
+      hence f is_differentiable_in x by Def1;
+    end;
+    hence thesis by A3,A4,Th5;
+end;
+
+theorem Th32:
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1 st J=proj(1,1)
+ holds J is_continuous_in x0
+proof
+  let J be Function of REAL-NS 1,REAL,
+     x0 be Point of REAL-NS 1;
+  assume A1: J=proj(1,1);
+A2: dom J =the carrier of REAL-NS 1 by FUNCT_2:def 1;
+  now let r be Real;
+    assume A3: 0 < r;
+    take s=r;
+    thus 0 < s by A3;
+    thus for x1 be Point of REAL-NS 1 st x1
+        in dom J & ||. x1- x0 .|| <s holds abs( J/.x1-J/.x0 )<r
+    proof
+      let x1 be Point of REAL-NS 1;
+      J/.x1-J/.x0 = J.(x1-x0) by A1,PDIFF_1:4;
+      hence thesis by A1,PDIFF_1:4;
+   end;
+ end;
+ hence thesis by A2,NFCONT_1:8;
+end;
+
+theorem Th33:
+for I be Function of REAL,REAL-NS 1 st I=proj(1,1) qua Function"
+ holds I is_continuous_in x0
+proof
+ let I be Function of REAL,REAL-NS 1;
+ assume A1: I=proj(1,1) qua Function";
+A2: I is Function of REAL,REAL 1 by REAL_NS1:def 4;
+A3: dom I = REAL by FUNCT_2:def 1;
+ reconsider y0=x0 as real number;
+ now let r be Real;
+  assume A4: 0 < r;
+  reconsider s1=r as real number;
+  take s=s1;
+  thus 0 < s by A4;
+  thus for y1 be real number st y1
+  in dom I & abs(y1 - y0)<s holds ||. I/.y1 - I/.y0 .||<r
+  proof
+    let y1 be real number;
+    assume A5: y1 in dom I & abs(y1- y0)<s;
+    reconsider x1=y1 as Element of REAL by XREAL_0:def 1;
+    I/.x1-I/.x0 = I.(x1-x0) by A1,A2,PDIFF_1:3;
+    hence thesis by A5,A1,A2,PDIFF_1:3;
+  end;
+ end;
+ hence thesis by A3,NFCONT_3:8;
+end;
+
+theorem Th34:
+for S,T be RealNormSpace,
+    f1 be PartFunc of S,REAL,
+    f2 be PartFunc of REAL,T,
+    x0 be Point of S
+     st x0 in dom (f2*f1) & f1 is_continuous_in x0
+      & f2 is_continuous_in f1/.x0
+ holds f2*f1 is_continuous_in x0
+proof
+let S,T be RealNormSpace,
+    f1 be PartFunc of S,REAL,
+    f2 be PartFunc of REAL,T,
+    x0 be Point of S;
+  assume
+A1: x0 in dom (f2*f1);
+  assume that
+A2: f1 is_continuous_in x0 and
+A3: f2 is_continuous_in f1/.x0;
+  thus x0 in dom (f2*f1) by A1;
+let s1 be sequence of S such that
+A4: rng s1 c= dom (f2*f1) and
+A5: s1 is convergent & lim s1 = x0;
+A6: dom (f2*f1) c= dom f1 by RELAT_1:25;
+  now
+    let x be set;
+    assume x in rng (f1/*s1);
+    then consider n be Element of NAT such that
+A7: x=(f1/*s1).n by FUNCT_2:113;
+    s1.n in rng s1 by VALUED_0:28;
+    then f1.(s1.n) in dom f2 by A4,FUNCT_1:11;
+    hence x in dom f2 by A4,A6,A7,FUNCT_2:108,XBOOLE_1:1;
+  end;
+  then
+A8: rng (f1/*s1) c= dom f2 by TARSKI:def 3;
+A9: now
+    let n be Element of NAT;
+    s1.n in rng s1 by VALUED_0:28;
+    then
+A10: s1.n in dom f1 by A4,FUNCT_1:11;
+    thus ((f2*f1)/*s1).n = (f2*f1).(s1.n) by A4,FUNCT_2:108
+      .= f2.(f1.(s1.n)) by A10,FUNCT_1:13
+      .= f2.((f1/*s1).n) by A4,A6,FUNCT_2:108,XBOOLE_1:1
+      .= (f2/*(f1/*s1)).n by A8,FUNCT_2:108;
+  end;
+  then
+A11: f2/*(f1/*s1) = (f2*f1)/*s1 by FUNCT_2:63;
+  rng s1 c= dom f1 by A4,A6,XBOOLE_1:1;
+  then
+A12: f1/*s1 is convergent & f1/.x0 = lim (f1/*s1) by A2,A5,NFCONT_1:def 6;
+   (f2*f1)/.x0 = f2/.(f1/.x0 ) by A1,PARTFUN2:3
+        .= lim (f2/*(f1/*s1)) by A12,A3,A8,NFCONT_3:def 1
+         .= lim ((f2*f1)/*s1) by A9,FUNCT_2:63;
+  hence thesis by A3,A12,A8,A11,NFCONT_3:def 1;
+end;
+
+Lm2: dom proj(1,1) = REAL 1 &
+rng proj(1,1) = REAL &
+for x be Element of REAL holds proj(1,1).<*x*> = x & proj(1,1) qua Function".x
+= <*x*>
+proof
+  set f=proj(1,1);
+  for y be set st y in REAL ex x be set st x in REAL 1 & y = f.x
+  proof
+    let y be set;
+    assume y in REAL;
+    then reconsider y1=y as Element of REAL;
+    reconsider x=<*y1*> as Element of REAL 1 by FINSEQ_2:98;
+    f.x = x.1 by PDIFF_1:def 1;
+    then f.x = y by FINSEQ_1:40;
+    hence thesis;
+  end;
+  hence thesis by FUNCT_2:10,def 1,PDIFF_1:1;
+end;
+
+theorem
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st J=proj(1,1)
+  & x0 in dom f & y0 in dom g & x0=<*y0*> & f = g*J
+ holds f is_continuous_in x0 iff g is_continuous_in y0
+proof
+  let J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n;
+  assume A1: J=proj(1,1)
+   & x0 in dom f & y0 in dom g & x0=<*y0*> & f = g*J;
+  thus f is_continuous_in x0 implies g is_continuous_in y0
+  proof
+    reconsider I= proj(1,1) qua Function" as Function of REAL,REAL-NS 1
+    by PDIFF_1:2,REAL_NS1:def 4;
+A2: J*I = id REAL by A1,Lm2,FUNCT_1:39;
+A3: f*I = g*(id REAL) by A1,A2,RELAT_1:36
+       .= g by FUNCT_2:17;
+    I/.y0 = x0 by A1,PDIFF_1:1;
+    hence thesis by A3,Th33,A1,NFCONT_3:15;
+  end;
+  J/.x0 = y0 by A1,PDIFF_1:1;
+  hence thesis by A1,Th32,Th34;
+end;
+
+theorem
+for I be Function of REAL,REAL-NS 1,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st I=proj(1,1) qua Function" &
+      x0 in dom f & y0 in dom g & x0=<*y0*> & f*I = g
+ holds f is_continuous_in x0 iff g is_continuous_in y0
+proof
+  let I be Function of REAL,REAL-NS 1,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n;
+  assume A1: I=proj(1,1) qua Function"  &
+         x0 in dom f & y0 in dom g & x0=<*y0*> & f*I = g;
+  reconsider J= proj(1,1) as Function of REAL-NS 1,REAL by Lm1;
+  thus f is_continuous_in x0 implies g is_continuous_in y0
+  proof
+    I/.y0 = x0 by A1,PDIFF_1:1;
+    hence thesis by A1,Th33,NFCONT_3:15;
+  end;
+A2: I*J = id REAL-NS 1 by A1,Lm2,Lm1,FUNCT_1:39;
+A3: g*J = f*(id REAL-NS 1) by A2,A1,RELAT_1:36
+       .= f by FUNCT_2:17;
+    J/.x0 = y0 by A1,PDIFF_1:1;
+    hence thesis by A3,Th32,A1,Th34;
+end;
+
+theorem
+for I be Function of REAL,REAL-NS 1 st I = proj(1,1) qua Function"
+ holds I is_differentiable_in x0 & diff(I,x0) = <*1*>
+proof
+  let I be Function of REAL,REAL-NS 1;
+assume A1: I=proj(1,1) qua Function";
+  I.1 = <*1*> by A1,PDIFF_1:1;
+then reconsider r = <*1*> as Point of REAL-NS 1;
+A2:for x be Real st x in ZR holds I/.x = x*r + 0.(REAL-NS 1)
+   proof
+    let x be Real;
+    assume x in ZR;
+    I.1 in REAL 1 by A1,FUNCT_1:3,PDIFF_1:2;
+    then
+A3: <*1*> is Element of REAL 1 by A1,PDIFF_1:1;
+    I/.x = <*x*1*> by A1,PDIFF_1:1
+        .= x*<*1*> by RVSUM_1:47;
+    hence I/.x = x*r by A3,REAL_NS1:3
+        .= x*r + 0.(REAL-NS 1) by RLVECT_1:4;
+   end;
+A4: ZR c= dom I by FUNCT_2:def 1;
+   then
+A5:I is_differentiable_on ZR
+       & for x st x in ZR holds (I`|ZR).x = r by A2,NDIFF_3:21;
+   r = (I`|ZR).x0 by A4,A2,NDIFF_3:21
+      .= diff(I,x0) by A5,NDIFF_3:def 6;
+   hence thesis by A5,NDIFF_3:10;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL-NS n,REAL;
+  let x be Point of REAL-NS n;
+  pred f is_differentiable_in x means
+  :Def6:
+  ex g be PartFunc of REAL n,REAL, y be Element of REAL n
+  st f=g & x=y & g is_differentiable_in y;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL-NS n,REAL;
+  let x be Point of REAL-NS n;
+  func diff(f,x) -> Function of REAL-NS n,REAL means
+:Def7:
+  ex g be PartFunc of REAL n,REAL, y be Element of REAL n
+   st f=g & x=y & it = diff(g,y);
+existence
+ proof
+   reconsider g=f as PartFunc of REAL n,REAL by REAL_NS1:def 4;
+   reconsider y=x as Element of REAL n by REAL_NS1:def 4;
+   REAL n = the carrier of REAL-NS n by REAL_NS1:def 4;
+   then diff(g,y) is Function of REAL-NS n,REAL;
+   hence thesis;
+ end;
+uniqueness;
+end;
+
+theorem Th38:
+for J be Function of REAL 1,REAL,
+      x0 be Element of REAL 1
+   st J=proj(1,1)
+ holds J is_differentiable_in x0 & diff(J,x0) = J
+proof
+  let J be Function of REAL 1,REAL,
+      x0 be Element of REAL 1;
+  assume A1: J=proj(1,1);
+A2: 1 in Seg 1;
+  set R = (REAL 1) --> (0*1);
+  set L = <>*J;
+  rng J = dom (proj(1,1) qua Function") by A1,A2,PDIFF_1:1,2;
+  then
+A3: dom L = dom J by RELAT_1:27
+    .= REAL 1 by A1,A2,PDIFF_1:1;
+    reconsider L as Function of REAL 1,REAL 1 by PDIFF_1:2;
+    set f = <>*J;
+A4: L= id (dom J) by A1,FUNCT_1:39
+    .= id (REAL 1) by A1,A2,PDIFF_1:1;
+A5: for x,y being Element of REAL 1 holds L.(x+y) = L.x+L.y
+    proof
+      let x,y being Element of REAL 1;
+      thus L.(x+y) =x+y by A4,FUNCT_1:18
+      .=L.x+y by A4,FUNCT_1:18
+      .=L.x+L.y by A4,FUNCT_1:18;
+    end;
+A6: for x being Element of REAL 1, r being Real holds L.(r*x) = r*L.x
+    proof
+      let x being Element of REAL 1,r being Real;
+      thus L.(r*x) =r*x by A4,FUNCT_1:18
+      .=r*(L.x) by A4,FUNCT_1:18;
+    end;
+    then
+A7: L is LinearOperator of 1,1 by A5,PDIFF_6:def 1,def 2;
+    reconsider r0=1 as Real;
+A8: {y where y is Element of REAL 1: |.y-x0.| < r0} c= dom f
+    proof
+      let x be set;
+      assume x in {y where y is Element of REAL 1: |.y-x0.| < r0};
+      then ex y be Element of REAL 1 st x=y & |.y-x0.| < r0;
+      hence x in dom f by A3;
+    end;
+A9:for r be Real st r > 0
+      ex d be Real st d > 0 &
+      for z be Element of REAL 1,w be Element of REAL 1 st
+      z <> 0*1 & |.z.| < d & w = R.z holds |.z.|"* |. w .| < r
+   proof
+     let r be Real;
+     assume A10: r > 0;
+     take d=r;
+     thus 0 < d by A10;
+     let z be Element of REAL 1,w be Element of REAL 1;
+     assume A11: z <> 0*1 & |.z.| < d & w = R.z;
+     w= 0*1 by A11,FUNCOP_1:7;
+     then |. w .| = 0 by EUCLID:7;
+     hence thesis by A10;
+   end;
+A12: for x be Element of REAL 1 st |.x-x0.| < r0 holds
+      f/.x - f/.x0 = L.(x-x0) + R.(x-x0)
+   proof
+     let x be Element of REAL 1;
+     assume |.x-x0.| < r0;
+A13:  f/.x0 =L.x0 by A3,PARTFUN1:def 6;
+A14:  -1 is Real by XREAL_0:def 1;
+     thus f/.x - f/.x0 = L.x -L.x0 by A13,A3,PARTFUN1:def 6
+     .=L.x +L.((-1)*x0) by A14,A6
+     .=L.(x-x0) by A5
+     .=L.(x-x0) +  0*1 by RVSUM_1:16
+     .= L.(x-x0) + R.(x-x0) by FUNCOP_1:7;
+   end;
+   then f is_differentiable_in x0 & diff(f,x0) = L by A7,A8,A9,PDIFF_6:24;
+   hence J is_differentiable_in x0 by PDIFF_7:def 1;
+A15: rng J c= REAL;
+   thus diff(J,x0) =proj(1,1)*L by A12,A7,A8,A9,PDIFF_6:24
+           .=proj(1,1)*(proj(1,1) qua Function") * J by RELAT_1:36
+           .=id (rng proj(1,1) )* J by FUNCT_1:39
+           .= id REAL * J by A2,PDIFF_1:1
+           .=J by A15,RELAT_1:53;
+end;
+
+theorem
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1
+   st J=proj(1,1)
+ holds J is_differentiable_in x0 & diff(J,x0) = J
+proof
+  let J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1;
+  assume A1: J=proj(1,1);
+  reconsider J0=J as Function of REAL 1,REAL by Lm1;
+  reconsider y0=x0 as Element of REAL 1 by REAL_NS1:def 4;
+  J0 is_differentiable_in y0 & diff(J0,y0) = J by A1,Th38;
+  hence J is_differentiable_in x0 by Def6;
+  ex g be PartFunc of REAL 1,REAL, y be Element of REAL 1 st
+  J=g & x0=y & diff(J,x0) = diff(g,y) by Def7;
+  hence thesis by A1,Th38;
+end;
+
+theorem Th40:
+  for I be Function of REAL,REAL-NS 1 st
+  I=proj(1,1) qua Function" holds
+  (for R being RestFunc of REAL-NS 1,REAL-NS n holds
+      R*I is RestFunc of REAL-NS n) &
+  for L being LinearOperator of REAL-NS 1,REAL-NS n holds
+     L*I is LinearFunc of REAL-NS n
+proof
+  let I be Function of REAL,REAL-NS 1;
+  assume A1: I=proj(1,1) qua Function";
+  thus for R being RestFunc of REAL-NS 1,
+    REAL-NS n holds R*I is RestFunc of REAL-NS n
+  proof
+    let R be RestFunc of REAL-NS 1,REAL-NS n;
+A2: R is total by NDIFF_1:def 5;
+    reconsider R0=R as Function of REAL 1,REAL n
+    by A2,Lm1,REAL_NS1:def 4;
+    reconsider R1=R*I as PartFunc of REAL,REAL-NS n;
+A3: R0*I is Function of REAL,REAL n by Lm1;
+    then
+A4: dom R1 = REAL by FUNCT_2:def 1;
+A5: for r be Real st r > 0 ex d be Real st d > 0 & for z1 be Real st
+      z1 <> 0 & |. z1 .| < d holds |. z1 .|"*||. R1/.z1 .|| < r
+    proof
+      let r be Real;
+      assume r > 0;
+      then consider d be Real such that
+A6:   d > 0 and
+A7:   for z be Point of REAL-NS 1 st z <> 0.(REAL-NS 1) & ||.z.|| < d
+      holds ||.z.||"*||. R/.z .|| < r by A2,NDIFF_1:23;
+      take d;
+      for z1 be Real st z1 <> 0 & |. z1 .| < d holds
+      |. z1 .|" * ||. R1/.z1 .|| < r
+      proof
+        let z1 be Real such that
+A8:     z1 <> 0 and
+A9:    abs z1 < d;
+        reconsider z = I.z1 as Point of REAL-NS 1;
+        z1 in REAL;
+        then reconsider z1r = z1 as R_eal by NUMBERS:31;
+        0 < |.z1r.| by A8,EXTREAL2:4;
+        then abs z1 > 0 by EXTREAL2:1;
+        then ||.z.|| <> 0 by A1,Lm1,PDIFF_1:3;
+        then
+A10:    z <> 0.(REAL-NS 1);
+A11:    dom I = REAL by FUNCT_2:def 1;
+        R is total by NDIFF_1:def 5;
+        then dom R = the carrier of REAL-NS 1 by PARTFUN1:def 2;
+        then R/.z = R.(I.z1) by PARTFUN1:def 6;
+        then R/.z = R1.z1 by A11,FUNCT_1:13;
+        then
+A12:    ||. R/.z .|| =||. R1/.z1 .|| by A4,PARTFUN1:def 6;
+A13:    ||.z.||" = abs(z1)" by A1,Lm1,PDIFF_1:3;
+        ||.z.|| < d by A1,A9,Lm1,PDIFF_1:3;
+        hence thesis by A7,A10,A13,A12;
+      end;
+      hence thesis by A6;
+    end;
+    for h be 0-convergent non-zero Real_Sequence holds h"(#)(R1/*h) is
+    convergent & lim(h"(#)(R1/*h)) = 0.(REAL-NS n)
+    proof
+      let h be 0-convergent non-zero Real_Sequence;
+A14:  now
+        let r be Real;
+A15:    lim h = 0;
+        assume r > 0;
+        then consider d be Real such that
+A16:    d > 0 and
+A17:    for z1 be Real st z1 <> 0 & |. z1 .| < d holds
+          |. z1 .|" * ||. R1/.z1 .|| < r by A5;
+        reconsider d1 =d as real number;
+        consider n0 be Element of NAT such that
+A18:    for m be Element of NAT st n0 <= m holds abs(h.m-0) < d1 by A16,A15,
+SEQ_2:def 7;
+        take n0;
+        hereby
+          let m be Element of NAT;
+A19:      h.m <> 0 by SEQ_1:5;
+          rng h c= dom R1 by A4;
+          then
+A20:      abs(h.m)" * ||. R1/.(h.m) .|| = abs(h.m)" * ||. (R1/*h).m .||
+             by FUNCT_2:109
+            .= ((abs h).m)" * ||. (R1/*h).m .|| by SEQ_1:12
+            .= (abs h)".m * ||. (R1/*h).m .|| by VALUED_1:10
+            .= abs(h").m * ||. (R1/*h).m .|| by SEQ_1:54
+            .= abs(h".m) * ||. (R1/*h).m .|| by SEQ_1:12
+            .= ||. h".m * (R1/*h).m .|| by NORMSP_1:def 1
+            .= ||. (h"(#)(R1/*h)).m .|| by NDIFF_1:def 2
+            .= ||. (h"(#)(R1/*h)).m - 0.(REAL-NS n) .|| by RLVECT_1:13;
+          assume n0 <= m;
+          then abs(h.m - 0) < d by A18;
+          hence ||. (h"(#)(R1/*h)).m - 0.(REAL-NS n) .|| < r
+                   by A17,A19,A20;
+        end;
+      end;
+      hence (h")(#)(R1/*h) is convergent by NORMSP_1:def 6;
+      hence thesis by A14,NORMSP_1:def 7;
+    end;
+    hence thesis by A3,NDIFF_3:def 1;
+  end;
+  let L be LinearOperator of REAL-NS 1,REAL-NS n;
+  reconsider L0=L as Function of REAL 1, REAL n by Lm1,REAL_NS1:def 4;
+  reconsider L1=L0*I as PartFunc of REAL,REAL-NS n by REAL_NS1:def 4;
+    reconsider r = L1.1 as Point of (REAL-NS n) by FUNCT_2:5;
+A21: dom(L0*I) = REAL by Lm1,FUNCT_2:def 1;
+     for p be Real holds L1.p = p*r
+     proof
+      reconsider 1p = I.1 as VECTOR of REAL-NS 1;
+      let p be Real;
+      dom I = REAL by FUNCT_2:def 1;
+      then L1.p = L.(I.(p*1)) by FUNCT_1:13;
+      then L1.p = L.(p*1p) by A1,Lm1,PDIFF_1:3;
+      then L1.p = p*(L.1p) by LOPBAN_1:def 5;
+      hence thesis by A21,FUNCT_1:12;
+    end;
+    hence thesis by NDIFF_3:def 2;
+end;
+
+theorem Th41:
+  for J be Function of REAL-NS 1,REAL st J = proj(1,1) holds
+  (for R being RestFunc of REAL-NS n holds
+      R*J is RestFunc of REAL-NS 1,REAL-NS n) &
+  for L being LinearFunc of REAL-NS n holds
+     L*J is Lipschitzian LinearOperator of REAL-NS 1,REAL-NS n
+proof
+  let J be Function of REAL-NS 1,REAL;
+  assume A1: J=proj(1,1);
+  thus
+  for R being RestFunc of REAL-NS n holds
+  R*J is RestFunc of REAL-NS 1,REAL-NS n
+  proof
+    let R be RestFunc of REAL-NS n;
+A2: R is total by NDIFF_3:def 1;
+    reconsider R0=R as Function of REAL,REAL n by A2,REAL_NS1:def 4;
+    reconsider R1 = R0*J as PartFunc of REAL-NS 1,REAL-NS n
+           by REAL_NS1:def 4;
+    for h be (0.(REAL-NS 1))-convergent
+    non-zero sequence of REAL-NS 1 holds ||.h.||"(#)(R1/*h
+    ) is convergent & lim(||.h.||"(#)(R1/*h)) = 0.(REAL-NS n)
+    proof
+      let h be (0.(REAL-NS 1))-convergent non-zero sequence of REAL-NS 1;
+A3:   lim h = 0.(REAL-NS 1) by NDIFF_1:def 4;
+      deffunc F(Element of NAT)=J.(h.$1);
+      consider s be Real_Sequence such that
+A4:   for n be Element of NAT holds s.n = F(n) from SEQ_1:sch 1;
+A5:   h is convergent by NDIFF_1:def 4;
+A6:   now
+        let p be real number;
+A7:     p is Real by XREAL_0:def 1;
+        assume 0 < p;
+        then consider m be Element of NAT such that
+A8:     for n be Element of NAT st m <= n holds ||. h.n - 0.(REAL-NS
+        1).|| < p by A5,A3,A7,NORMSP_1:def 7;
+        take m;
+        now
+          let n be Element of NAT;
+          assume m <= n;
+          then ||. h.n - 0.(REAL-NS 1).|| < p by A8;
+          then
+A9:      ||. h.n .|| < p by RLVECT_1:13;
+          s.n = J.(h.n) by A4;
+          hence abs(s.n-0) < p by A1,A9,PDIFF_1:4;
+        end;
+        hence for n be Element of NAT st m <= n holds abs(s.n-0)< p;
+      end;
+      then
+A10:  s is convergent by SEQ_2:def 6;
+      then
+A11:  lim s = 0 by A6,SEQ_2:def 7;
+      now
+        let x be set;
+        assume x in NAT;
+        then reconsider n=x as Element of NAT;
+A12:    0 <= abs(s.n) by COMPLEX1:46;
+        h.n <> 0.(REAL-NS 1) by NDIFF_1:6;
+        then
+A13:    ||. h.n .|| <> 0 by NORMSP_0:def 5;
+        s.n = J.(h.n) by A4;
+        then abs(s.n) <> 0 by A1,A13,PDIFF_1:4;
+        hence s.x <> 0 by A12,COMPLEX1:47;
+      end;
+      then s is non-zero by SEQ_1:4;
+      then reconsider s as 0-convergent non-zero Real_Sequence
+      by A10,A11,FDIFF_1:def 1;
+      now
+        reconsider f1=R1 as Function;
+        let n be Element of NAT;
+A14:    rng h c= the carrier of REAL-NS 1;
+        (R/*s).n =R.(s.n) by A2,FUNCT_2:115;
+        then
+A15:    (R/*s).n =R.(J.(h.n)) by A4;
+        NAT = dom h by FUNCT_2:def 1;
+        then
+A16:    R1.(h.n) =(f1*h).n by FUNCT_1:13;
+        rng h c= dom R1 by A14,FUNCT_2:def 1;
+        then
+A17:    R1.(h.n) =(R1/*h).n by A16,FUNCT_2:def 11;
+A18:    s.n = J.(h.n) by A4;
+         ||. ||.h.||"(#)(R1/*h).|| .n = ||.(||.h.||"(#)(R1/*h)).n .|| by
+NORMSP_0:def 4
+          .= ||.(||.h.||").n * (R1/*h).n .|| by NDIFF_1:def 2
+          .= abs((||.h.||").n) * ||.(R1/*h).n .|| by NORMSP_1:def 1
+          .= abs((||.h.||.n)") * ||.(R1/*h).n .|| by VALUED_1:10
+          .= abs(||.h.n.||") * ||.(R1/*h).n .|| by NORMSP_0:def 4
+          .= ||.h.n .||" *||.(R1/*h).n .|| by ABSVALUE:def 1
+          .= (abs(s.n))" *||.(R1/*h).n .|| by A1,A18,PDIFF_1:4
+          .= (abs(s.n))" *||.(R/*s).n .|| by A17,A15,FUNCT_2:15
+          .= ((abs s).n)"*||.(R/*s).n .|| by SEQ_1:12
+          .= ((abs s)".n)*||.(R/*s).n .|| by VALUED_1:10
+          .=(abs(s").n)*||.(R/*s).n .|| by SEQ_1:54
+          .=abs(s".n)*||.(R/*s).n .|| by SEQ_1:12
+          .= ||. (s".n)*(R/*s).n .|| by NORMSP_1:def 1
+          .= ||. (s"(#)(R/*s)).n .|| by NDIFF_1:def 2
+          .= ||. (s"(#)(R/*s)) .||.n by NORMSP_0:def 4;
+        hence ||. ||.h.||"(#)(R1/*h) .|| .n = ||. (s"(#)(R/*s)) .||.n;
+      end;
+      then
+A19:  ||. ||.h.||"(#)(R1/*h) .|| = ||. s"(#)(R/*s) .|| by FUNCT_2:63;
+A20:  lim(s"(#)(R/*s))=0.(REAL-NS n) by NDIFF_3:def 1;
+A21:  s"(#)(R/*s) is convergent by NDIFF_3:def 1;
+A22:  lim ||. s"(#)(R/*s) .|| = ||.0.(REAL-NS n).|| by A20,A21,LOPBAN_1:20
+                            .= 0;
+A23:  ||. s"(#)(R/*s) .|| is convergent by A21,NORMSP_1:23;
+A24:  now
+        let p be Real;
+        assume 0 < p;
+        then consider n0 be Element of NAT such that
+A25:    for m be Element of NAT st n0 <= m holds abs(||. ||.h.||"(#)(
+        R1/*h).||.m - 0) < p by A19,A23,A22,SEQ_2:def 7;
+        take n0;
+        hereby
+          let m be Element of NAT;
+          assume n0 <= m;
+          then abs(||. ||.h.||"(#)(R1/*h).|| .m - 0) < p by A25;
+          then
+A26:      abs ||.( ||.h.||"(#)(R1/*h)).m.|| < p by NORMSP_0:def 4;
+         ||.(||.h.||"(#)(R1/*h)).m.|| < p by A26,ABSVALUE:def 1;
+          hence ||.(||.h.||"(#)(R1/*h)).m -0.(REAL-NS n) .|| < p
+                    by RLVECT_1:13;
+        end;
+      end;
+      then ||.h.||"(#)(R1/*h) is convergent by NORMSP_1:def 6;
+      hence thesis by A24,NORMSP_1:def 7;
+    end;
+    hence thesis by NDIFF_1:def 5;
+  end;
+  let L be LinearFunc of REAL-NS n;
+  consider r be Point of REAL-NS n such that
+A27: for p be Real holds L.p = p*r by NDIFF_3:def 2;
+   reconsider L0 = L as Function of REAL,REAL n by REAL_NS1:def 4;
+   set K = ||.r.||;
+    reconsider L1 = L*J as Function of REAL-NS 1,REAL-NS n;
+A28: dom L1 = REAL 1 by Lm1,FUNCT_2:def 1;
+A29: now
+      let x,y be Point of REAL-NS 1;
+      L1.(x+y) =L.(J.(x+y)) by Lm1,A28,FUNCT_1:12;
+      then L1.(x+y) = L.((J.x+J.y)) by A1,PDIFF_1:4;
+      then L1.(x+y) = (J.x+J.y)*r by A27;
+      then L1.(x+y) = (J.x)*r+(J.y)*r by RLVECT_1:def 6;
+      then L1.(x+y) = L.(J.x)+(J.y)*r by A27;
+      then
+A30:  L1.(x+y) = L.(J.x)+L.(J.y) by A27;
+      L.(J.x) = L1.x by Lm1,A28,FUNCT_1:12;
+      hence L1.(x+y) =L1.x + L1.y by Lm1,A28,A30,FUNCT_1:12;
+    end;
+    now
+      let x be Point of REAL-NS 1, a be Real;
+      L1.(a*x) = L.(J.(a*x)) by Lm1,A28,FUNCT_1:12;
+      then L1.(a*x) = L.(a*(J.x)) by A1,PDIFF_1:4;
+      then L1.(a*x) = (a*(J.x))*r by A27;
+      then
+A31:  L1.(a*x) = a*((J.x)*r) by RLVECT_1:def 7;
+      L.(J.x) = L1.x by Lm1,A28,FUNCT_1:12;
+      hence L1.(a*x) =a*(L1.x) by A31,A27;
+    end;
+    then reconsider L1 as LinearOperator of REAL-NS 1,REAL-NS n by A29,
+VECTSP_1:def 20,LOPBAN_1:def 5;
+    now
+      let x be Point of REAL-NS 1;
+      ||. L1.x .|| =||. L.(J.x) .|| by Lm1,A28,FUNCT_1:12;
+      then ||. L1.x .|| =||. (J.x)*r .|| by A27;
+      then ||. L1.x .|| =||.r.||*|.J.x .| by NORMSP_1:def 1;
+      hence ||. L1.x .|| <= K* ||.x.|| by A1,PDIFF_1:4;
+    end;
+    hence thesis by LOPBAN_1:def 8;
+  end;
+
+theorem Th42:
+for I be Function of REAL,REAL-NS 1,
+    x0 be Point of REAL-NS 1,
+    y0 be Element of REAL,
+    g be PartFunc of REAL,REAL-NS n,
+    f be PartFunc of REAL-NS 1,REAL-NS n
+   st I=proj(1,1) qua Function" & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f*I = g & f is_differentiable_in x0
+   holds g is_differentiable_in y0
+     & diff(g,y0)=diff(f,x0).<*1*>
+     & for r be Element of REAL holds diff(f,x0).<*r*> = r*diff(g,y0)
+proof
+  let I be Function of REAL,REAL-NS 1,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n;
+  assume that
+A1: I=proj(1,1) qua Function" and
+A2: x0 in dom f and
+A3: y0 in dom g and
+A4: x0=<*y0*> and
+A5: f*I = g;
+  reconsider J= proj(1,1) as Function of REAL-NS 1, REAL by Lm1;
+    assume A6: f is_differentiable_in x0;
+    then
+    consider NN being Neighbourhood of x0 such that
+A7:   NN c= dom f and
+A8:   ex L be
+      Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS n),
+      R be RestFunc of REAL-NS 1,REAL-NS n
+      st for x be Point of REAL-NS 1 st x in NN
+     holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0) by NDIFF_1:def 6;
+A9: I*J = id REAL-NS 1 by Lm1,A1,Lm2,FUNCT_1:39;
+A10: g*J = f*(id REAL-NS 1) by A9,A5,RELAT_1:36
+       .= f by FUNCT_2:17;
+    consider e be Real such that
+A11:   0 < e and
+A12: {z where z is Point of REAL-NS 1 : ||.z-x0.|| < e} c= NN by NFCONT_1:def 1
+;
+    consider L be
+      Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS n),
+      R being RestFunc of REAL-NS 1,REAL-NS n such that
+A13:   for x9 be Point of REAL-NS 1 st x9 in NN holds
+        f/.x9 - f/.x0 = L.(x9-x0) + R/.(x9-x0) by A8;
+  reconsider R0=R*I as RestFunc of REAL-NS n by A1,Th40;
+  L is LinearOperator of REAL-NS 1,REAL-NS n by LOPBAN_1:def 9;
+  then
+  reconsider L0=L*I as LinearFunc of REAL-NS n by A1,Th40;
+  set N={z where z is Point of REAL-NS 1 : ||.z-x0.|| < e};
+A14: N c= the carrier of REAL-NS 1
+  proof
+    let y be set;
+    assume y in N;
+    then ex z be Point of REAL-NS 1 st y=z & ||.z-x0.|| < e;
+    hence thesis;
+  end;
+  then reconsider N as Neighbourhood of x0 by A11,NFCONT_1:def 1;
+  set N0={z where z is Element of REAL: abs(z-y0) < e};
+A15: N c= dom f by A7,A12,XBOOLE_1:1;
+  now
+    let z be set;
+    hereby
+      assume z in N0;
+      then consider y9 be Element of REAL such that
+A16:  z=y9 and
+A17:  abs(y9-y0) < e;
+      reconsider w=I.y9 as Point of REAL-NS 1;
+      x0=I.y0 by A1,A4,Lm2;
+      then w-x0=I.(y9-y0) by A1,Lm1,PDIFF_1:3;
+      then ||.w-x0.||=abs(y9-y0) by A1,Lm1,PDIFF_1:3;
+      then
+A18:   w in {z0 where z0 is Point of REAL-NS 1 : ||.z0 - x0.|| < e} by A17;
+      J.(I.y9) = y9 by A1,Lm2,FUNCT_1:35;
+      hence z in J.:N by A18,A16,FUNCT_2:35;
+    end;
+    assume z in J.:N;
+    then consider ww be set such that
+    ww in REAL 1 and
+A19: ww in N and
+A20: z=J.ww by FUNCT_2:64;
+    consider w be Point of REAL-NS 1 such that
+A21: ww=w and
+A22: ||.w-x0.|| < e by A19;
+    reconsider y9=J.w as Element of REAL;
+    J.x0=y0 by A4,Lm2;
+    then J.(w-x0) =y9-y0 by PDIFF_1:4;
+    then abs(y9-y0) < e by A22,PDIFF_1:4;
+    hence z in N0 by A20,A21;
+  end;
+  then
+A23: N0=J.:N by TARSKI:1;
+  J.:(dom f) = J.:(J"(dom g)) by A10,RELAT_1:147;
+  then
+A24: J.:(dom f) = dom(f*I) by A5,Lm2,FUNCT_1:77;
+A25: I*J =id (REAL 1) by A1,Lm2,FUNCT_1:39;
+  N c= dom f by A7,A12,XBOOLE_1:1;
+  then
+A26: N0 c= dom(f*I) by A24,A23,RELAT_1:123;
+A27: ].y0-e,y0+e.[ c= N0
+  proof
+    now let d be set such that
+A28: d in ].y0-e,y0+e.[;
+    reconsider y1=d as Element of REAL by A28;
+    abs(y1-y0) < e by A28,RCOMP_1:1;
+    hence d in N0;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  N0 c= ].y0-e,y0+e.[
+  proof
+    let d be set;
+    assume d in N0;
+    then ex r be Element of REAL st d=r & abs(r-y0) < e;
+    hence thesis by RCOMP_1:1;
+  end;
+  then
+  N0 = ].y0-e,y0+e.[ by A27,XBOOLE_0:def 10;
+  then
+A29: N0 is Neighbourhood of y0 by A11,RCOMP_1:def 6;
+  N c= REAL 1 by A14,REAL_NS1:def 4;
+  then (I*J).:N = N by A25,FRECHET:13;
+  then
+A30: I.:N0 = N by A23,RELAT_1:126;
+A31: for y1 be Real st y1 in N0 holds
+       (f*I)/.y1 - (f*I)/.y0 = L0.(y1-y0) + R0/.(y1-y0)
+  proof
+    let y1 be Real;
+    reconsider y9 = I.y1 as Point of REAL-NS 1;
+    R is total by NDIFF_1:def 5;
+    then
+A32: dom R = the carrier of REAL-NS 1 by PARTFUN1:def 2;
+    R0 is total by NDIFF_3:def 1;
+    then
+A33: dom(R*I) = REAL by PARTFUN1:def 2;
+    R/.(I.(y1-y0)) =R.(I.(y1-y0)) by A32,PARTFUN1:def 6;
+    then R/.(I.(y1-y0)) =R0.(y1-y0) by A33,FUNCT_1:12;
+    then
+A34: R/.(I.(y1-y0)) =R0/.(y1-y0) by A33,PARTFUN1:def 6;
+    L0 is total;
+    then
+A35: dom(L*I) = REAL by PARTFUN1:def 2;
+    assume
+A36: y1 in N0;
+    then
+A37: I.y1 in N by A30,FUNCT_2:35;
+    then
+A38: f/.(I.y1) =f.(I.y1) by A15,PARTFUN1:def 6;
+    f/.(I.y1) =(f*I).y1 by A38,A26,A36,FUNCT_1:12;
+    then
+A39: f/.(I.y1) =(f*I)/.y1 by A26,A36,PARTFUN1:def 6;
+A40: x0=I.y0 by A4,A1,Lm2;
+    then f/.(I.y0) =f.(I.y0) by A2,PARTFUN1:def 6;
+    then f/.(I.y0) =(f*I).y0 by A3,A5,FUNCT_1:12;
+    then
+A41: f/.(I.y0) =(f*I)/.y0 by A3,A5,PARTFUN1:def 6;
+    f/.y9 - f/.x0=L.(y9-x0) + R/.(y9-x0) by A13,A12,A37;
+    then
+A42: f/.(I.y1) - f/.(I.y0)=L.(I.(y1-y0)) + R/.(y9-x0)
+       by A1,A40,Lm1,PDIFF_1:3;
+    L.(I.(y1-y0)) =L0.(y1-y0) by A35,FUNCT_1:12;
+    hence thesis by A40,A42,A34,A39,A41,A1,Lm1,PDIFF_1:3;
+  end;
+  then
+A43:f*I is_differentiable_in y0 by A29,A26,NDIFF_3:def 3;
+  thus
+    g is_differentiable_in y0 by A5,A31,A29,A26,NDIFF_3:def 3;
+A44: diff(f*I,y0)=L0.1 by A31,A43,A29,A26,NDIFF_3:def 4;
+  thus
+A45:diff(g,y0)=(diff(f,x0)*I).1 by A5,A44,A6,A13,A7,NDIFF_1:def 7
+          .=diff(f,x0).(I.1) by A1,FUNCT_1:13,PDIFF_1:2
+          .=diff(f,x0).<*1*> by A1,Lm2;
+   let r be Element of REAL;
+A46:  <*1*> is Element of REAL 1 by FINSEQ_2:98;
+     then reconsider x = <*1*> as Point of REAL-NS 1 by REAL_NS1:def 4;
+A47:  diff(f,x0) is LinearOperator of REAL-NS 1,REAL-NS n
+          by LOPBAN_1:def 9;
+     thus diff(f,x0).<*r*> = diff(f,x0).<*r*1*>
+     .= diff(f,x0).(r*<*1*>) by RVSUM_1:47
+     .= diff(f,x0).(r*x) by A46,REAL_NS1:3
+     .= r*diff(g,y0) by A45,A47,LOPBAN_1:def 5;
+end;
+
+theorem Th43:
+for I be Function of REAL,REAL-NS 1,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st I=proj(1,1) qua Function" & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f*I = g
+ holds f is_differentiable_in x0 iff g is_differentiable_in y0
+proof
+  let I be Function of REAL,REAL-NS 1,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n;
+  assume that
+A1: I=proj(1,1) qua Function" and
+A2: x0 in dom f and
+A3: y0 in dom g and
+A4: x0=<*y0*> and
+A5: f*I = g;
+  reconsider J = proj(1,1) as Function of REAL-NS 1, REAL by Lm1;
+  thus f is_differentiable_in x0 implies g is_differentiable_in y0
+  by A2,A3,A4,A5,Th42,A1;
+  assume g is_differentiable_in y0;
+  then
+  consider N0 being Neighbourhood of y0 such that
+A6:   N0 c= dom (f*I) and
+A7:   ex L be LinearFunc of REAL-NS n,R be RestFunc of REAL-NS n st
+       for y be Real st y in N0 holds
+        (f*I)/.y - (f*I)/.y0 = L.(y-y0) + R/.(y-y0) by A5,NDIFF_3:def 3;
+A8: I*J = id REAL-NS 1 by Lm1,A1,Lm2,FUNCT_1:39;
+A9: g*J = f*(id REAL-NS 1) by A5,A8,RELAT_1:36
+       .= f by FUNCT_2:17;
+    consider e0 be real number such that
+A10: 0 < e0 and
+A11: N0 = ].y0 - e0,y0 + e0.[ by RCOMP_1:def 6;
+    reconsider e = e0 as Real by XREAL_0:def 1;
+    set N = {z where z is Point of REAL-NS 1 : ||.z-x0.|| < e};
+    consider L be LinearFunc of REAL-NS n, R be RestFunc of REAL-NS n such that
+A12: for y1 be Real st y1 in N0 holds
+       (f*I)/.y1 - (f*I)/.y0 = L.(y1-y0) + R/.(y1-y0) by A7;
+    reconsider R0=R*J as RestFunc of REAL-NS 1,REAL-NS n by Th41;
+    reconsider L0=L*J as Lipschitzian LinearOperator of REAL-NS 1,REAL-NS n
+             by Th41;
+  now
+    let z be set;
+    hereby
+      assume z in N;
+      then consider w be Point of REAL-NS 1 such that
+A13:  z=w and
+A14:  ||.w-x0.|| < e;
+      reconsider y2=J.w as Element of REAL;
+      J.x0=y0 by A4,Lm2;
+      then J.(w-x0) =y2-y0 by PDIFF_1:4;
+      then abs(y2-y0) < e by A14,PDIFF_1:4;
+      then
+A15:  y2 in N0 by A11,RCOMP_1:1;
+      w in the carrier of REAL-NS 1;
+      then w in dom J by Lm2,REAL_NS1:def 4;
+      then w=I.y2 by A1,FUNCT_1:34;
+      hence z in I.:N0 by A13,A15,FUNCT_2:35;
+    end;
+    assume z in I.:N0;
+    then consider yy be set such that
+A16: yy in REAL and
+A17: yy in N0 and
+A18: z=I.yy by FUNCT_2:64;
+    reconsider y3=yy as Element of REAL by A16;
+    set w = I.y3;
+    I.y0=x0 by A4,A1,Lm2;
+    then
+A19: w-x0 =I.(y3-y0) by A1,Lm1,PDIFF_1:3;
+    abs(y3-y0) < e by A11,A17,RCOMP_1:1;
+    then ||.w-x0.|| < e by A19,A1,Lm1,PDIFF_1:3;
+    hence z in N by A18;
+  end;
+  then
+A20: N=I.:N0 by TARSKI:1;
+  I.:(dom g) = I.:(I"(dom f)) by A5,RELAT_1:147;
+  then I.:(dom g) = dom f by A1,Lm1,FUNCT_1:77,PDIFF_1:2;
+  then
+A21: N c= dom f by A5,A6,A20,RELAT_1:123;
+  N c= the carrier of REAL-NS 1
+  proof
+    let y be set;
+    assume y in N;
+    then ex z be Point of REAL-NS 1 st y=z & ||.z-x0.|| < e;
+    hence thesis;
+  end;
+  then
+A22: N is Neighbourhood of x0 by A10,NFCONT_1:def 1;
+  J*I=id REAL by A1,Lm2,FUNCT_1:39;
+  then (J*I).:N0 = N0 by FRECHET:13;
+  then
+A23: J.:N = N0 by A20,RELAT_1:126;
+A24: for y be Point of REAL-NS 1 st y in N holds
+       f/.y - f/.x0 = L0.(y-x0) + R0/.(y-x0)
+  proof
+    x0 in the carrier of REAL-NS 1;
+    then x0 in dom J by Lm2,REAL_NS1:def 4;
+    then
+    g.(J.x0) =f.x0 by A9,FUNCT_1:13;
+    then
+A25: g.(J.x0) =f/.x0 by A2,PARTFUN1:def 6;
+A26: J.x0 = y0 by A4,Lm2;
+    let y be Point of REAL-NS 1;
+    assume
+A27: y in N;
+    set y3 = J.y;
+    reconsider p1=g/.y3,p2=g/.y0, q1=L.(y3-y0), q2=R/.(y3-y0)
+    as VECTOR of REAL-NS n;
+A28: J.x0=y0 by A4,Lm2;
+    g/.y3 - g/.y0=q1+q2 by A5,A12,A23,A27,FUNCT_2:35;
+    then g/.(J.y) - g/.(J.x0)=L.(J.(y-x0)) + R/.(y3-y0) by A28,PDIFF_1:4;
+    then
+A29: g/.(J.y) - g/.(J.x0)= L.(J.(y-x0)) + R/.(J.(y-x0)) by A28,PDIFF_1:4;
+A30: dom L0 = the carrier of REAL-NS 1 by FUNCT_2:def 1;
+    y-x0 in the carrier of REAL-NS 1;
+    then y-x0 in dom J by Lm2,REAL_NS1:def 4;
+    then
+A31: R.(J.(y-x0)) =(R*J).(y-x0) by FUNCT_1:13;
+    R0 is total by NDIFF_1:def 5;
+    then
+A32: dom(R*J) = the carrier of REAL-NS 1 by PARTFUN1:def 2;
+A33: R.(J.(y-x0)) =R0/.(y-x0) by A31,A32,PARTFUN1:def 6;
+     J.(y-x0) in dom R by A32,FUNCT_1:11;
+     then
+A34: R/.(J.(y-x0)) =R0/.(y-x0) by A33,PARTFUN1:def 6;
+    y in the carrier of REAL-NS 1;
+    then
+A35: y in dom J by Lm2,REAL_NS1:def 4;
+    g.(J.y) =f.y by A9,A35,FUNCT_1:13;
+    then
+A36: g.(J.y) =f/.y by A21,A27,PARTFUN1:def 6;
+    J.y in dom g by A21,A27,A9,FUNCT_1:11;
+    then g/.(J.y) =f/.y by A36,PARTFUN1:def 6;
+    then g/.(J.y) - g/.(J.x0) = f/.y -f/.x0 by A3,A26,A25,PARTFUN1:def 6;
+    hence thesis by A29,A34,A30,FUNCT_1:12;
+  end;
+  L0 is Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS 1,REAL-NS n)
+  by LOPBAN_1:def 9;
+  hence thesis by A22,A21,A24,NDIFF_1:def 6;
+end;
+
+theorem Th44:
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st J=proj(1,1) & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f = g*J
+ holds f is_differentiable_in x0 iff g is_differentiable_in y0
+proof
+  let J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,
+           REAL-NS n;
+  assume A1: J=proj(1,1) & x0 in dom f & y0 in dom g & x0=<*y0*> & f = g*J;
+  reconsider I= (proj(1,1) qua Function") as Function of REAL,REAL-NS 1
+  by PDIFF_1:2,REAL_NS1:def 4;
+A2: J*I = id REAL by A1,Lm2,FUNCT_1:39;
+   f*I = g*(id REAL) by A1,A2,RELAT_1:36
+   .= g by FUNCT_2:17;
+  hence thesis by A1,Th43;
+end;
+
+theorem
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st J=proj(1,1) & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f = g*J & g is_differentiable_in y0
+  holds
+   f is_differentiable_in x0
+   & diff(g,y0)=diff(f,x0).<*1*>
+   & for r be Element of REAL holds diff(f,x0).<*r*> = r*diff(g,y0)
+proof
+  let J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n;
+  assume A1: J=proj(1,1) & x0 in dom f & y0 in dom g & x0=<*y0*> & f = g*J
+   & g is_differentiable_in y0;
+  hence
+A2: f is_differentiable_in x0 by Th44;
+  reconsider I= (proj(1,1) qua Function") as Function of REAL,REAL-NS 1
+                       by PDIFF_1:2,REAL_NS1:def 4;
+A3: J*I = id REAL by A1,Lm2,FUNCT_1:39;
+   f*I = g*(id REAL) by A1,A3,RELAT_1:36
+   .= g by FUNCT_2:17;
+  hence thesis by A1,Th42,A2;
+end;
+
+theorem Th46:
+  for R be RestFunc of REAL-NS n st R/.0=0.(REAL-NS n)
+  for e be Real st e > 0 ex d be Real st
+    d > 0 & for h be Real st |.h.| < d holds ||.R/.h.|| <= e*|.h.|
+proof
+  let R be RestFunc of REAL-NS n such that
+A1: R/.0=0.(REAL-NS n);
+  let e be Real such that
+A2: e > 0;
+  R is total by NDIFF_3:def 1;
+  then consider d be Real such that
+A3: d > 0 and
+A4: for z be Real st z <> 0 & |.z.| < d holds ( |.z.|"* ||.
+  R/.z .||) < e by A2,Th23;
+  take d;
+  now
+    let h be Real such that
+A5: |.h.| < d;
+    now
+      per cases;
+      case
+A6:     h <> 0;
+        then 0 <= |.h.| & |.h.|"*||. R/.h .|| <= e by A4,A5,COMPLEX1:46;
+        then |.h.|*(|.h.|"*||. R/.h .||) <= |.h.|*e by XREAL_1:64;
+        then
+A7:     |.h.|*|.h.|"*||. R/.h .|| <= e* |.h.|;
+        |.h.| <> 0 by A6,COMPLEX1:45;
+        then 1*||. R/.h .|| <= e* |.h.| by A7,XCMPLX_0:def 7;
+        hence ||. R/.h .|| <= e* |.h.|;
+      end;
+      case
+A8:     h = 0;
+        reconsider p0=0 as Real;
+        0 <= |.h.| by COMPLEX1:46;
+        then p0* |.h.| <= e* |.h.| by A2;
+        hence ||. R/.h .|| <= e* |.h.| by A1,A8;
+      end;
+    end;
+    hence ||. R/.h .|| <= e* |.h.|;
+  end;
+  hence thesis by A3;
+end;
+
+reserve m for non empty Element of NAT;
+
+theorem Th47:
+  for R be RestFunc of REAL-NS n
+  for L be Lipschitzian LinearOperator of REAL-NS n,REAL-NS m holds
+  L*R is RestFunc of REAL-NS m
+proof
+  let R be RestFunc of REAL-NS n;
+  let L be Lipschitzian LinearOperator of REAL-NS n,REAL-NS m;
+  set S=REAL-NS n;
+  set T=REAL-NS m;
+  consider K be Real such that
+A1: 0 <= K and
+A2: for z be Point of S holds ||.L.z.|| <= K * ||.z.|| by LOPBAN_1:def 8;
+  dom L = the carrier of S by FUNCT_2:def 1;
+  then
+A3: rng R c= dom L;
+A4: R is total by NDIFF_3:def 1;
+  then
+A5: dom R = REAL by PARTFUN1:def 2;
+  reconsider p0=0, p1=1 as Real;
+A6: p0 + K < p1 + K by XREAL_1:8;
+now
+    let ee be Real such that
+A7: ee > 0;
+    set e=ee/2;
+    e > 0 by A7,XREAL_1:215;
+    then
+A8: 0/(1 + K) < e/(1 + K) by A1,XREAL_1:74;
+    set e1=e/( 1 + K );
+    consider d be Real such that
+A9: 0 < d and
+A10: for h be Real st h <> 0 & |.h.| < d holds (|.h.|"* ||.
+    R/.h.||) < e1 by A4,A8,Th23;
+A11: e < ee by A7,XREAL_1:216;
+    now
+      let h be Real such that
+A12:  h <> 0 and
+A13:  |.h.| < d;
+      |.h.|"* ||.(R/.h).|| < e1 by A10,A12,A13;
+      then ( K +1) *( |.h.|"* ||.R/.h.||) <=( K +1) *e1 by A1,XREAL_1:64;
+      then
+A14:  ( K +1) *( |.h.|"* ||.R/.h.||) <=e by A1,XCMPLX_1:87;
+      |.h.| <> 0 by A12,COMPLEX1:45;
+      then
+A15:  |.h.| > 0 by COMPLEX1:46;
+A16:  K * ||.R/.h.|| <= ( K +1) * ||.R/.h.|| by A6,XREAL_1:64;
+      ||.L.(R/.h).|| <= K * ||.R/.h.|| by A2;
+      then ||.L.(R/.h).|| <= ( K +1) * ||.R/.h.|| by A16,XXREAL_0:2;
+      then
+      |.h.|"* ||.L.(R/.h).|| <= |.h.|"*(( K +1) * ||.R/.h.|| ) by A15,
+XREAL_1:64;
+      then
+A17:  |.h.|"* ||.L.(R/.h).|| <= e by A14,XXREAL_0:2;
+      L.(R/.h) = L/.(R/.h) .=(L*R)/.h by A5,A3,PARTFUN2:5;
+      hence |.h.|"* ||.(L*R)/.h.|| < ee by A11,A17,XXREAL_0:2;
+    end;
+    hence ex d be Real st d > 0 & for h be Real st h <> 0 & |.h.| < d
+    holds |.h.|"* ||.(L*R)/.h.|| < ee by A9;
+  end;
+  hence thesis by A4,Th23;
+end;
+
+theorem Th48:
+  for R1 be RestFunc of REAL-NS n st R1/.0=0.(REAL-NS n)
+  for R2 be RestFunc of REAL-NS n,REAL-NS m st R2/.0.(REAL-NS n)=0.(REAL-NS m)
+  for L be LinearFunc of REAL-NS n holds R2*(L+R1) is RestFunc of REAL-NS m
+proof
+  set S=REAL-NS n;
+  set T=REAL-NS m;
+  let R1 be RestFunc of S;
+  assume R1/.0=0.S;
+  then consider d0 be Real such that
+A1: 0 < d0 and
+A2: for h be Real st |.h.| < d0 holds ||.R1/.h.|| <=1* |.h.| by Th46;
+  let R2 be RestFunc of REAL-NS n,REAL-NS m such that
+A3: R2/.0.S=0.T;
+  let L be LinearFunc of S;
+  consider r be Point of S such that
+A4: for h be Real holds L.h = h*r by NDIFF_3:def 2;
+  set K=||.r.||;
+  R2 is total by NDIFF_1:def 5;
+  then dom R2 = the carrier of S by PARTFUN1:def 2;
+  then
+A5: rng (L+R1) c= dom R2;
+  R1 is total by NDIFF_3:def 1;
+  then
+A6: L+R1 is total by VFUNCT_1:32;
+  then
+A7: dom(L+R1)=REAL by PARTFUN1:def 2;
+A8: now
+    let ee be Real such that
+A9: ee > 0;
+    set e=ee/2;
+A10: e < ee by A9,XREAL_1:216;
+    set e1=e/(1 + K);
+    e > 0 by A9,XREAL_1:215;
+    then 0/(1 + K) < e/(1 + K) by XREAL_1:74;
+    then consider d be Real such that
+A11: 0 < d and
+A12: for z be Point of S st ||.z.|| < d holds ||.R2/.z.|| <= e1*||.z.||
+      by A3,NDIFF_2:7;
+    set d1=d/(1 + K);
+    set dd1=min(d0,d1);
+A13: dd1 <=d1 by XXREAL_0:17;
+A14: dd1 <=d0 by XXREAL_0:17;
+A15: now
+      let h be Real such that
+A16:  h <> 0 and
+A17:  |.h.| < dd1;
+      |.h.| < d0 by A14,A17,XXREAL_0:2;
+      then
+A18:  ||.R1/.h.|| <=1* |.h.| by A2;
+A19:  L.h = h*r by A4;
+      reconsider p0=0 as Real;
+      ||. L.h .|| - K * |.h.| + K * |.h.| <= p0 + K * |.h.|
+               by A19,NORMSP_1:def 1; then
+      ||.L.h+R1/.h.|| <= ||.L.h.|| + ||.R1/.h.|| & ||.L.h.|| + ||.R1/.h
+      .|| <= K * |.h.| + 1* |.h.| by A18,NORMSP_1:def 1,XREAL_1:7;
+      then
+A20:  ||.L.h+R1/.h.|| <= ( K +1) * |.h.| by XXREAL_0:2;
+      |.h.| < d1 by A13,A17,XXREAL_0:2;
+      then (K +1) * |.h.| < (K +1) *d1 by XREAL_1:68;
+      then ||.L.h+R1/.h.|| < (K +1) * d1 by A20,XXREAL_0:2;
+      then ||.L.h+R1/.h.|| < d by XCMPLX_1:87;
+      then
+A21:  ||.R2/.(L.h+R1/.h).|| <= e1*||.L.h+R1/.h.|| by A12;
+      e1*||.L.h+R1/.h.|| <= e1* ((K +1) * |.h.|) by A9,A20,XREAL_1:64;
+      then
+A22:  ||.R2/.(L.h+R1/.h).|| <= e1* ((K +1) * |.h.|) by A21,XXREAL_0:2;
+A23:  R2/.(L.h+R1/.h) = R2/.(L/.h+R1/.h) .=R2/.((L+R1)/.h) by A7,VFUNCT_1:def 1
+        .=(R2*(L+R1))/.h by A7,A5,PARTFUN2:5;
+A24:  |.h.| <> 0 by A16,COMPLEX1:45;
+      then |.h.| > 0 by COMPLEX1:46;
+      then
+      |.h.|"* ||.(R2*(L+R1))/.h.|| <= |.h.|"* (e1* ( K +1) * |.h .|)
+        by A23,A22,XREAL_1:64;
+      then |.h.|"* ||.(R2*(L+R1))/.h.|| <= |.h.|*|.h.|"*e1* (K +1);
+      then |.h.|"* ||.(R2*(L+R1))/.h.|| <= 1*e1* (K +1) by A24,XCMPLX_0:def 7;
+      then |.h.|"* ||.(R2*(L+R1))/.h.|| <= e by XCMPLX_1:87;
+      hence |.h.|"* ||.(R2*(L+R1))/.h.|| < ee by A10,XXREAL_0:2;
+    end;
+    0/(1 + K) < d/(1 + K) by A11,XREAL_1:74;
+    then 0 < dd1 by A1,XXREAL_0:15;
+    hence ex dd1 be Real st dd1 > 0 & for h be Real st h <> 0 & |.h.|
+    < dd1 holds |.h.|"* ||.(R2*(L+R1))/.h.|| < ee by A15;
+  end;
+  dom (R2*(L+R1)) = dom(L+R1) by A5,RELAT_1:27
+    .=REAL by A6,PARTFUN1:def 2;
+  then R2*(L+R1) is total by PARTFUN1:def 2;
+  hence thesis by A8,Th23;
+end;
+
+theorem Th49:
+  for R1 be RestFunc of REAL-NS n st R1/.0=0.(REAL-NS n)
+  for R2 be RestFunc of REAL-NS n,REAL-NS m st R2/.0.(REAL-NS n)=0.(REAL-NS m)
+  for L1 be LinearFunc of REAL-NS n
+  for L2 be Lipschitzian LinearOperator of REAL-NS n,REAL-NS m holds
+    L2*R1+ R2*(L1+R1) is RestFunc of REAL-NS m
+proof
+  let R1 be RestFunc of REAL-NS n such that
+A1: R1/.0=0.(REAL-NS n);
+  let R2 be RestFunc of REAL-NS n,REAL-NS m such that
+A2: R2/.0.(REAL-NS n)=0.(REAL-NS m);
+  let L1 be LinearFunc of REAL-NS n;
+  let L2 be Lipschitzian LinearOperator of REAL-NS n,REAL-NS m;
+A3: L2*R1 is RestFunc of REAL-NS m by Th47;
+  R2*(L1+R1) is RestFunc of REAL-NS m by A1,A2,Th48;
+  hence thesis by A3,NDIFF_3:7;
+end;
+
+theorem
+  for x0 be Element of REAL
+  for g be PartFunc of REAL,REAL-NS n st
+    g is_differentiable_in x0
+  for f be PartFunc of REAL-NS n,REAL-NS m st
+    f is_differentiable_in (g/.x0) holds
+  f*g is_differentiable_in x0 & diff(f*g,x0) = diff(f,g/.x0).diff(g,x0)
+proof
+  let x0 be Element of REAL;
+  set S=REAL-NS n;
+  set T=REAL-NS m;
+  let g be PartFunc of REAL,S such that
+A1: g is_differentiable_in x0;
+  consider N1 being Neighbourhood of x0 such that
+A2: N1 c= dom g and
+A3: ex L1 be LinearFunc of S,R1 be RestFunc of S st
+      diff(g,x0) = L1.1 & for x be Real st x in N1 holds
+      g/.x-g/.x0 = L1.(x-x0) + R1/.(x-x0) by A1,NDIFF_3:def 4;
+  let f be PartFunc of S,T;
+  assume f is_differentiable_in g/.x0;
+  then consider N2 being Neighbourhood of g/.x0 such that
+A4: N2 c= dom f and
+A5: ex R2 be RestFunc of S,T st R2/.0.S=0.T & R2 is_continuous_in 0.S &
+    for y be Point of S st y in N2 holds
+      f/.y-f/.(g/.x0) = diff(f,g/.x0).(y-g/.x0) + R2/.(y-g/.x0) by NDIFF_1:47;
+  consider R2 be RestFunc of S,T such that
+A6: R2/.0.S=0.T and
+A7: for y be Point of S st y in N2 holds f/.y-f/.(g/.x0) = diff(f,
+  g/.x0).(y-g/.x0) + R2/.(y-g/.x0) by A5;
+  reconsider L2 = diff(f,g/.x0) as Lipschitzian LinearOperator of S,T
+                                      by LOPBAN_1:def 9;
+  consider L1 be LinearFunc of S,R1 be RestFunc of S such that
+A8: diff(g,x0) = L1.1 & for x be Real st x in N1 holds
+      g/.x-g/.x0 = L1.(x-x0) + R1/.(x-x0) by A3;
+  consider r be Point of S such that
+A9: for p be Real holds L1.p = p*r by NDIFF_3:def 2;
+  reconsider p0=0 as Element of REAL;
+  g/.x0-g/.x0 = L1.(x0-x0) + R1/.(x0-x0) by A8,RCOMP_1:16;
+  then 0.S = L1.0 + R1/.0 by RLVECT_1:15;
+  then 0.S = p0*r + R1/.0 by A9;
+  then 0.S = 0.S + R1/.0 by RLVECT_1:10;
+  then
+A10: R1/.0=0.S by RLVECT_1:4;
+A11: dom(L2*L1) = REAL by FUNCT_2:def 1;
+  reconsider q=L2.r as Point of T;
+  for p be Real holds (L2*L1).p = p*q
+  proof
+    let p be Real;
+    L2.(L1.p) = L2.(p*r) by A9
+    .= p*q by LOPBAN_1:def 5;
+    hence thesis by A11,FUNCT_1:12;
+  end;
+  then reconsider L0=L2*L1 as LinearFunc of T by NDIFF_3:def 2;
+  g is_continuous_in x0 by A1,NDIFF_3:22;
+  then consider N3 be Neighbourhood of x0 such that
+A12: g.:N3 c= N2 by NFCONT_3:10;
+  reconsider R0=L2*R1+R2*(L1+R1) as RestFunc of T by A10,A6,Th49;
+  consider N be Neighbourhood of x0 such that
+A13: N c= N1 and
+A14: N c= N3 by RCOMP_1:17;
+A15: N c= dom(f*g)
+  proof
+    let x be set;
+    assume
+A16: x in N;
+     then reconsider x9 = x as Real;
+A17: x in N1 by A13,A16;
+     then g.x9 in g.:N3 by A2,A14,A16,FUNCT_1:def 6;
+     then g.x9 in N2 by A12;
+     hence x in dom(f*g) by A2,A4,A17,FUNCT_1:11;
+   end;
+A18: now
+    let x be Real such that
+A19: x in N;
+A20: g/.x-g/.x0 = L1.(x-x0) + R1/.(x-x0) by A8,A13,A19;
+    x in N1 by A13,A19;
+    then g.x in g.:N3 by A2,A14,A19,FUNCT_1:def 6;
+    then
+A21: g.x in N2 by A12;
+    x in N1 by A13,A19;
+    then
+A22: g/.x in N2 by A2,A21,PARTFUN1:def 6;
+A23: x0 in N by RCOMP_1:16;
+A24: R1 is total by NDIFF_3:def 1;
+    then
+A25: dom R1 = REAL by PARTFUN1:def 2;
+    dom L2 = the carrier of S by FUNCT_2:def 1;
+    then
+A26: rng R1 c= dom L2;
+A27: dom(L2*R1) = REAL by A24,PARTFUN1:def 2;
+A28: L1+R1 is total by A24,VFUNCT_1:32;
+    then
+A29: dom(L1+R1)=REAL by PARTFUN1:def 2;
+    R2 is total by NDIFF_1:def 5;
+    then dom R2 = the carrier of S by PARTFUN1:def 2;
+    then
+A30: rng (L1+R1) c= dom R2;
+    then dom (R2*(L1+R1)) = dom(L1+R1) by RELAT_1:27
+      .=REAL by A28,PARTFUN1:def 2; then
+A31: dom (L2*R1+R2*(L1+R1)) = (REAL) /\ (REAL) by A27,VFUNCT_1:def 1
+      .= REAL;
+A32: L2.(R1/.(x-x0)) = L2/.(R1/.(x-x0))
+      .=(L2*R1)/.(x-x0) by A25,A26,PARTFUN2:5;
+A33: R2/.(L1.(x-x0)+R1/.(x-x0)) = R2/.(L1/.(x-x0)+R1/.(x-x0))
+      .=R2/.((L1+R1)/.(x-x0)) by A29,VFUNCT_1:def 1
+      .=(R2*(L1+R1))/.(x-x0) by A29,A30,PARTFUN2:5;
+A34: (L2*L1).(x-x0) = L2.(L1.(x-x0)) by A11,FUNCT_1:12;
+    thus (f*g)/.x-(f*g)/.x0 =f/.(g/.x) -(f*g)/.x0 by A15,A19,PARTFUN2:3
+      .=f/.(g/.x) -f/.(g/.x0) by A15,A23,PARTFUN2:3
+      .=diff(f,g/.x0).(g/.x-g/.x0) + R2/.(g/.x-g/.x0) by A7,A22
+      .=L2.(L1.(x-x0)) + L2.(R1/.(x-x0)) + (R2*(L1+R1))/.(x-x0) by A20,A33,
+VECTSP_1:def 20
+      .=L2.(L1.(x-x0)) + ((L2*R1)/.(x-x0) + (R2*(L1+R1))/.(x-x0)) by A32,
+RLVECT_1:def 3
+      .=L0.(x-x0) + R0/.(x-x0) by A34,A31,VFUNCT_1:def 1;
+  end;
+  hence A35: f*g is_differentiable_in x0 by A15,NDIFF_3:def 3;
+  (L2*L1).1 = diff(f,g/.x0).diff(g,x0) by A8,A11,FUNCT_1:12;
+  hence thesis by A35,A15,A18,NDIFF_3:def 4;
+end;

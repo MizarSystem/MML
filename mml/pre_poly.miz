@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received August 7, 2009
-:: Copyright (c) 2009-2011 Association of Mizar Users
+:: Copyright (c) 2009-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -416,7 +416,7 @@ A2: card A = card B;
   reconsider A as Subset of B by A1;
   set f = incl A;
   rng f = B by A2,FINSEQ_4:63;
-  hence thesis by RELAT_1:45;
+  hence thesis;
 end;
 
 definition
@@ -489,7 +489,7 @@ A10:       card Vx2 <> card A1 by A7,Th8;
 A11:     (card Vx2) + 1 <= card A1 by NAT_1:13;
 A12:    y = (card Vx2) +^ 1 by A5,A9
          .= (card Vx2) + 1 by CARD_2:36;
-        then (0 qua natural number) + 1 <= y1 by XREAL_1:6;
+        then (0 qua Nat) + 1 <= y1 by XREAL_1:6;
         hence thesis by A11,A12,FINSEQ_1:1;
       end;
       then reconsider f1 = f as Function of A1,Seg card A1 by FUNCT_2:6;
@@ -1392,10 +1392,9 @@ registration
     let f be FinSequence of D*;
     let x be set;
     assume
-A1: x in dom f;
+ x in dom f;
     then reconsider x as Element of NAT;
-    f.x in D* by A1,FINSEQ_2:11;
-    hence thesis;
+    thus thesis;
   end;
 end;
 
@@ -1463,7 +1462,8 @@ end;
 
 definition
   let A be set;
-  let X be set, D be FinSequence-DOMAIN of A, p be PartFunc of X,D, i be set;
+  let X be set, D be non empty FinSequenceSet of A,
+      p be PartFunc of X,D, i be set;
   redefine func p/.i -> Element of D;
   coherence;
 end;
@@ -2165,7 +2165,7 @@ end;
 begin :: Functions yielding natural and real numbers -------------------------
 
 registration
-  let f be natural-valued Function, x be set, n be natural number;
+  let f be natural-valued Function, x be set, n be Nat;
   cluster f+*(x,n) -> natural-valued;
   coherence
   proof
@@ -2216,77 +2216,37 @@ registration
   end;
 end;
 
-registration
-  let X be set;
-  cluster natural-valued for ManySortedSet of X;
-  existence
-  proof
-    set f = X --> 0;
-    reconsider f as ManySortedSet of X;
-    take f;
-    thus thesis;
-  end;
-end;
-
-registration
-  let X be set;
-  cluster real-valued for ManySortedSet of X;
-  existence
-  proof
-    set b = the natural-valued ManySortedSet of X;
-    b is real-valued;
-    hence thesis;
-  end;
-end;
-
-registration
-  let X be set;
-  cluster real-valued for ManySortedSet of X;
-  existence
-  proof
-    set b = the natural-valued ManySortedSet of X;
-    b is real-valued;
-    hence thesis;
-  end;
-end;
-
 definition
   let X be set, b1, b2 be complex-valued ManySortedSet of X;
   redefine func b1+b2 -> ManySortedSet of X means
   :Def5:
   for x being set holds it.x = b1.x+b2.x;
-  coherence
-  proof
-A1: X /\ X = X;
-    dom b1 = X & dom b2 = X by PARTFUN1:def 2;
-    then dom(b1+b2) = X by A1,VALUED_1:def 1;
-    hence thesis by PARTFUN1:def 2,RELAT_1:def 18;
-  end;
+  coherence;
   compatibility
   proof
     let f be ManySortedSet of X;
-A2: dom b1 = X & dom b2 = X by PARTFUN1:def 2;
+A1: dom b1 = X & dom b2 = X by PARTFUN1:def 2;
     then
-A3: dom f = dom b1 /\ dom b2 by PARTFUN1:def 2;
+A2: dom f = dom b1 /\ dom b2 by PARTFUN1:def 2;
     thus f = b1+b2 implies for x being set holds f.x = b1.x+b2.x
     proof
       assume
-A4:   f = b1+b2;
+A3:   f = b1+b2;
       let x be set;
       per cases;
       suppose
         x in X;
-        hence thesis by A2,A3,A4,VALUED_1:def 1;
+        hence thesis by A1,A2,A3,VALUED_1:def 1;
       end;
       suppose
-A5:     not x in X;
-        then b1.x = 0 & b2.x = 0 by A2,FUNCT_1:def 2;
-        hence thesis by A2,A3,A5,FUNCT_1:def 2;
+A4:     not x in X;
+        then b1.x = 0 & b2.x = 0 by A1,FUNCT_1:def 2;
+        hence thesis by A1,A2,A4,FUNCT_1:def 2;
       end;
     end;
     assume for x being set holds f.x = b1.x+b2.x;
     then for c being set st c in dom f holds f.c = b1.c+b2.c;
-    hence thesis by A3,VALUED_1:def 1;
+    hence thesis by A2,VALUED_1:def 1;
   end;
 end;
 
@@ -2861,7 +2821,7 @@ A1: for k being set st k in n holds d.k <= b.k;
   per cases;
   suppose
     k in dom d;
-    then k in n by PARTFUN1:def 2;
+    then k in n;
     hence thesis by A1;
   end;
   suppose
@@ -3009,8 +2969,7 @@ proof
     end;
     assume x is bag of {};
     then reconsider x9 = x as ManySortedSet of {};
-    dom x9 = {} by PARTFUN1:def 2;
-    then x9 = {};
+    x9 = {};
     hence x in {{}} by TARSKI:def 1;
   end;
   hence thesis by Def12;
@@ -4011,11 +3970,10 @@ A4:   (decomp b)/.m = <*bm1, bm2*> and
     hence decomp b is one-to-one by PARTFUN2:9;
     let x be set;
     assume
-A5: x in dom decomp b;
+ x in dom decomp b;
     then reconsider k = x as Element of NAT;
     reconsider p = (divisors b)/.k as bag of n;
-    (decomp b)/.k = <*p,b-'p*> by A5,Def17;
-    hence thesis by A5,PARTFUN1:def 6;
+    thus thesis;
   end;
 end;
 
@@ -4467,10 +4425,9 @@ registration
     let p be FinSequence of n-tuples_on D;
     let x be set;
     assume
-A1: x in dom p;
+ x in dom p;
     then reconsider i=x as Element of NAT;
-    p.i is Element of n-tuples_on D by A1,FINSEQ_2:11;
-    hence thesis;
+    thus thesis;
   end;
 end;
 

@@ -2,7 +2,7 @@
 ::  by Adam Grabowski
 ::
 :: Received November 8, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,10 +20,10 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, ORDINAL1, NUMBERS,
       CARD_3, FINSET_1, DOMAIN_1, STRUCT_0, PRE_TOPC, TOPS_1, TDLAT_3,
       YELLOW_8, TOPMETR, BORSUK_5, ORDERS_4;
- constructors SETFAM_1, CARD_3, TOPS_1, TDLAT_3, TOPMETR, YELLOW_8, BORSUK_5,
-      ORDERS_4, TOPS_2;
- registrations SUBSET_1, NUMBERS, CARD_1, STRUCT_0, TOPS_1, TEX_1, TEX_4,
-      YELLOW13, BORSUK_3, TOPMETR;
+ constructors CARD_3, TOPS_1, TDLAT_3, TOPMETR, YELLOW_8, BORSUK_5, ORDERS_4,
+      TOPS_2;
+ registrations SUBSET_1, CARD_1, STRUCT_0, TOPS_1, TEX_1, TEX_4, YELLOW13,
+      TOPMETR;
  requirements BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0;
  theorems TARSKI, ZFMISC_1, PRE_TOPC, TOPS_1, XBOOLE_0, XBOOLE_1, SUBSET_1,
@@ -32,8 +32,6 @@ environ
  schemes ORDINAL1, SUBSET_1;
 
 begin :: Preliminaries
-
-Lm1: for T being empty TopSpace, A being Subset of T holds A = {};
 
 theorem Th1:
   for T being 1-sorted, A, B being Subset of T holds A meets B` iff A \ B <> {}
@@ -115,7 +113,7 @@ end;
 
 begin
 
-theorem Th5:
+theorem Th3:
   for T being TopSpace, A being Subset of T holds Int A = (Cl A`)`
 proof
   let T be TopSpace, A be Subset of T;
@@ -206,7 +204,7 @@ A5: x = Fr A by TARSKI:def 1;
   hence thesis by A5,Def1;
 end;
 
-theorem Th8:
+theorem Th6:
   for T being TopSpace, F, G being Subset-Family of T st F c= G
   holds Fr F c= Fr G
 proof
@@ -251,11 +249,11 @@ A3: B in F \/ G by A1,Def1;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
-  Fr F c= Fr (F \/ G) & Fr G c= Fr (F \/ G) by Th8,XBOOLE_1:7;
+  Fr F c= Fr (F \/ G) & Fr G c= Fr (F \/ G) by Th6,XBOOLE_1:7;
   hence thesis by XBOOLE_1:8;
 end;
 
-theorem Th10: :: 1.3.0.
+theorem Th8: :: 1.3.0.
   for T being TopStruct, A being Subset of T holds Fr A = Cl A \ Int A
 proof
   let T be TopStruct, A be Subset of T;
@@ -265,7 +263,7 @@ proof
   hence thesis;
 end;
 
-theorem Th11: :: 1.3.1. Characterization of Fr via basis
+theorem Th9: :: 1.3.1. Characterization of Fr via basis
   for T being non empty TopSpace, A being Subset of T, p being
   Point of T holds p in Fr A iff for U being Subset of T st U is open & p in U
   holds A meets U & U \ A <> {}
@@ -306,7 +304,7 @@ A1: p in Fr A;
     let B be Basis of p, U be Subset of T;
     assume U in B;
     then U is open & p in U by YELLOW_8:12;
-    hence A meets U & U \ A <> {} by A1,Th11;
+    hence A meets U & U \ A <> {} by A1,Th9;
   end;
   assume
 A2: for B being Basis of p, U being Subset of T st U in B holds A meets
@@ -342,7 +340,7 @@ A1: p in Fr A;
     let U be Subset of T;
     assume U in B;
     then U is open & p in U by YELLOW_8:12;
-    hence A meets U & U \ A <> {} by A1,Th11;
+    hence A meets U & U \ A <> {} by A1,Th9;
   end;
   given B being Basis of p such that
 A2: for U being Subset of T st U in B holds A meets U & U \ A <> {};
@@ -399,7 +397,7 @@ proof
   hence thesis;
 end;
 
-theorem Th16: :: Theorem 1.3.2. (k)
+theorem Th14: :: Theorem 1.3.2. (k)
   for T being TopSpace, A being Subset of T holds A is open closed
   iff Fr A = {}
 proof
@@ -415,7 +413,7 @@ A2: Int A = A by TOPS_1:23;
   end;
   assume
 A3: Fr A = {};
-  Fr A = Cl A \ Int A by Th10;
+  Fr A = Cl A \ Int A by Th8;
   then
 A4: Cl A c= Int A by A3,XBOOLE_1:37;
 A5: Int A c= A by TOPS_1:16;
@@ -434,7 +432,7 @@ definition
   x in Cl (A \ {x});
 end;
 
-theorem Th17:
+theorem Th15:
   for T being TopSpace, A being Subset of T, x being set st x
   is_an_accumulation_point_of A holds x is Point of T
 proof
@@ -490,7 +488,7 @@ end;
 
 :: 1.3.3. Characterizations of a Derivative
 
-theorem Th18:
+theorem Th16:
   for T being non empty TopSpace, A being Subset of T, x being set
   holds x in Der A iff x is_an_accumulation_point_of A
 proof
@@ -498,11 +496,11 @@ proof
   thus x in Der A implies x is_an_accumulation_point_of A by Def3;
   assume
 A1: x is_an_accumulation_point_of A;
-  then x is Point of T by Th17;
+  then x is Point of T by Th15;
   hence thesis by A1,Def3;
 end;
 
-theorem Th19:
+theorem Th17:
   for T being non empty TopSpace, A being Subset of T, x being
   Point of T holds x in Der A iff for U being open Subset of T st x in U ex y
   being Point of T st y in A /\ U & x <> y
@@ -510,7 +508,7 @@ proof
   let T be non empty TopSpace, A be Subset of T, x be Point of T;
   hereby
     assume x in Der A;
-    then x is_an_accumulation_point_of A by Th18;
+    then x is_an_accumulation_point_of A by Th16;
     then
 A1: x in Cl (A \ {x}) by Def2;
     let U be open Subset of T;
@@ -544,7 +542,7 @@ A8: y in A \ {x} by A7,ZFMISC_1:56;
   end;
   then x in Cl (A \ {x}) by PRE_TOPC:24;
   then x is_an_accumulation_point_of A by Def2;
-  hence thesis by Th18;
+  hence thesis by Th16;
 end;
 
 theorem
@@ -555,7 +553,7 @@ proof
   let T be non empty TopSpace, A be Subset of T, x be Point of T;
   hereby
     assume x in Der A;
-    then x is_an_accumulation_point_of A by Th18;
+    then x is_an_accumulation_point_of A by Th16;
     then
 A1: x in Cl (A \ {x}) by Def2;
     let B be Basis of x, U be Subset of T;
@@ -595,7 +593,7 @@ A9: y in A \ {x} by A8,ZFMISC_1:56;
   end;
   then x in Cl (A \ {x}) by PRE_TOPC:24;
   then x is_an_accumulation_point_of A by Def2;
-  hence thesis by Th18;
+  hence thesis by Th16;
 end;
 
 theorem
@@ -607,7 +605,7 @@ proof
   hereby
     set B = the Basis of x;
     assume x in Der A;
-    then x is_an_accumulation_point_of A by Th18;
+    then x is_an_accumulation_point_of A by Th16;
     then
 A1: x in Cl (A \ {x}) by Def2;
     take B;
@@ -647,7 +645,7 @@ A9: y in A \ {x} by A8,ZFMISC_1:56;
   end;
   then x in Cl (A \ {x}) by PRE_TOPC:24;
   then x is_an_accumulation_point_of A by Def2;
-  hence thesis by Th18;
+  hence thesis by Th16;
 end;
 
 begin :: 1.3.3. Isolated Points
@@ -669,7 +667,7 @@ proof
 A1: p in A \ Der A;
     then not p in Der A by XBOOLE_0:def 5;
     then
-A2: not p is_an_accumulation_point_of A by Th18;
+A2: not p is_an_accumulation_point_of A by Th16;
     p in A by A1,XBOOLE_0:def 5;
     hence p is_isolated_in A by A2,Def4;
   end;
@@ -677,12 +675,12 @@ A2: not p is_an_accumulation_point_of A by Th18;
 A3: p is_isolated_in A;
   then not p is_an_accumulation_point_of A by Def4;
   then
-A4: not p in Der A by Th18;
+A4: not p in Der A by Th16;
   p in A by A3,Def4;
   hence thesis by A4,XBOOLE_0:def 5;
 end;
 
-theorem Th23:
+theorem Th21:
   for T being non empty TopSpace, A being Subset of T, p being
 Point of T holds p is_an_accumulation_point_of A iff for U being open Subset of
   T st p in U ex q being Point of T st q <> p & q in A & q in U
@@ -691,11 +689,11 @@ proof
   hereby
     assume p is_an_accumulation_point_of A;
     then
-A1: p in Der A by Th18;
+A1: p in Der A by Th16;
     let U be open Subset of T;
     assume p in U;
     then consider q being Point of T such that
-A2: q in A /\ U & p <> q by A1,Th19;
+A2: q in A /\ U & p <> q by A1,Th17;
     take q;
     thus q <> p & q in A & q in U by A2,XBOOLE_0:def 4;
   end;
@@ -712,11 +710,11 @@ A4: q <> p & q in A & q in U by A3;
     take q;
     thus thesis by A4,XBOOLE_0:def 4;
   end;
-  then p in Der A by Th19;
-  hence thesis by Th18;
+  then p in Der A by Th17;
+  hence thesis by Th16;
 end;
 
-theorem Th24:
+theorem Th22:
   for T being non empty TopSpace, A being Subset of T, p being
 Point of T holds p is_isolated_in A iff ex G being open Subset of T st G /\ A =
   {p}
@@ -728,7 +726,7 @@ A1: p is_isolated_in A;
     then not p is_an_accumulation_point_of A by Def4;
     then consider U being open Subset of T such that
 A2: p in U and
-A3: not ex q being Point of T st q <> p & q in A & q in U by Th23;
+A3: not ex q being Point of T st q <> p & q in A & q in U by Th21;
     take U;
 A4: p in A by A1,Def4;
     U /\ A = {p}
@@ -766,7 +764,7 @@ A8:   q in A & q in G;
     hence thesis by A6,XBOOLE_0:def 4;
   end;
   then
-A9: not p is_an_accumulation_point_of A by Th23;
+A9: not p is_an_accumulation_point_of A by Th21;
   p in A by A6,XBOOLE_0:def 4;
   hence thesis by A9,Def4;
 end;
@@ -787,11 +785,11 @@ A1: {p} /\ [#]T = {p} by XBOOLE_1:28;
   hereby
     assume p is isolated;
     then p is_isolated_in [#]T by Def5;
-    then ex G being open Subset of T st G /\ [#]T = {p} by Th24;
+    then ex G being open Subset of T st G /\ [#]T = {p} by Th22;
     hence {p} is open;
   end;
   assume {p} is open;
-  then p is_isolated_in [#]T by A1,Th24;
+  then p is_isolated_in [#]T by A1,Th22;
   hence thesis by Def5;
 end;
 
@@ -879,7 +877,7 @@ A5: x = Der A by TARSKI:def 1;
   hence thesis by A5,Def6;
 end;
 
-theorem Th28:
+theorem Th26:
   F c= G implies Der F c= Der G
 proof
   assume
@@ -920,13 +918,13 @@ A3: B in F \/ G by A1,Def6;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
-  Der F c= Der (F \/ G) & Der G c= Der (F \/ G) by Th28,XBOOLE_1:7;
+  Der F c= Der (F \/ G) & Der G c= Der (F \/ G) by Th26,XBOOLE_1:7;
   hence thesis by XBOOLE_1:8;
 end;
 
 :: 1.3.4. Properties of a Derivative of a Set
 
-theorem Th30:
+theorem Th28:
   for T being non empty TopSpace, A being Subset of T holds Der A c= Cl A
 proof
   let T be non empty TopSpace, A be Subset of T;
@@ -940,13 +938,13 @@ A1: x in Der A;
     assume
 A2: G is open;
     assume x9 in G;
-    then ex y being Point of T st y in A /\ G & x <> y by A1,A2,Th19;
+    then ex y being Point of T st y in A /\ G & x <> y by A1,A2,Th17;
     hence thesis by XBOOLE_0:4;
   end;
   hence thesis by PRE_TOPC:24;
 end;
 
-theorem Th31: :: Theorem 1.3.4. (a)
+theorem Th29: :: Theorem 1.3.4. (a)
   for T being TopSpace, A being Subset of T holds Cl A = A \/ Der A
 proof
   let T be TopSpace, A be Subset of T;
@@ -954,7 +952,7 @@ proof
   suppose
 A1: T is non empty;
     then
-A2: Der A c= Cl A by Th30;
+A2: Der A c= Cl A by Th28;
     thus Cl A c= A \/ Der A
     proof
       let x be set;
@@ -981,7 +979,7 @@ A6:       y in U by XBOOLE_0:3;
           take y;
           thus thesis by A4,A5,A6,XBOOLE_0:def 4;
         end;
-        then x9 in Der A by A1,Th19;
+        then x9 in Der A by A1,Th17;
         hence thesis by XBOOLE_0:def 3;
       end;
     end;
@@ -1007,7 +1005,7 @@ A9: T is empty;
   end;
 end;
 
-theorem Th32: :: Theorem 1.3.4. (b)
+theorem Th30: :: Theorem 1.3.4. (b)
   for T being non empty TopSpace, A, B being Subset of T st A c= B
   holds Der A c= Der B
 proof
@@ -1024,14 +1022,14 @@ A2: x in Der A;
     let U be open Subset of T;
     assume x9 in U;
     then
-A3: ex y being Point of T st y in A /\ U & x9 <> y by A2,Th19;
+A3: ex y being Point of T st y in A /\ U & x9 <> y by A2,Th17;
     A /\ U c= B /\ U by A1,XBOOLE_1:26;
     hence thesis by A3;
   end;
-  hence thesis by Th19;
+  hence thesis by Th17;
 end;
 
-theorem Th33: :: Theorem 1.3.4. (c)
+theorem Th31: :: Theorem 1.3.4. (c)
   for T being non empty TopSpace, A, B being Subset of T holds Der
   (A \/ B) = Der A \/ Der B
 proof
@@ -1040,7 +1038,7 @@ proof
   proof
     let x be set;
     assume x in Der (A \/ B);
-    then x is_an_accumulation_point_of A \/ B by Th18;
+    then x is_an_accumulation_point_of A \/ B by Th16;
     then
 A1: x in Cl ((A \/ B) \ {x}) by Def2;
     (A \/ B) \ {x} = (A \ {x}) \/ (B \ {x}) by XBOOLE_1:42;
@@ -1048,14 +1046,14 @@ A1: x in Cl ((A \/ B) \ {x}) by Def2;
     then x in Cl (A \ {x}) or x in Cl (B \ {x}) by A1,XBOOLE_0:def 3;
     then
     x is_an_accumulation_point_of A or x is_an_accumulation_point_of B by Def2;
-    then x in Der A or x in Der B by Th18;
+    then x in Der A or x in Der B by Th16;
     hence thesis by XBOOLE_0:def 3;
   end;
   let x be set;
   assume x in Der A \/ Der B;
   then x in Der A or x in Der B by XBOOLE_0:def 3;
   then
-A2: x is_an_accumulation_point_of A or x is_an_accumulation_point_of B by Th18;
+A2: x is_an_accumulation_point_of A or x is_an_accumulation_point_of B by Th16;
   x in Cl ((A \/ B) \ {x})
   proof
     B \ {x} c= (A \/ B) \ {x} by XBOOLE_1:7,33;
@@ -1075,10 +1073,10 @@ A4: Cl (A \ {x}) c= Cl ((A \/ B) \ {x}) by PRE_TOPC:19;
     end;
   end;
   then x is_an_accumulation_point_of A \/ B by Def2;
-  hence thesis by Th18;
+  hence thesis by Th16;
 end;
 
-theorem Th34:
+theorem Th32:
   for T being non empty TopSpace, A being Subset of T st T is T_1
   holds Der Der A c= Der A
 proof
@@ -1092,13 +1090,13 @@ A2: x in Der Der A;
   assume not x in Der A;
   then consider G being open Subset of T such that
 A3: x9 in G and
-A4: not ex y being Point of T st y in A /\ G & x9 <> y by Th19;
+A4: not ex y being Point of T st y in A /\ G & x9 <> y by Th17;
   Cl {x9} = {x9} by A1,YELLOW_8:26;
   then
 A5: G \ {x9} is open by FRECHET:4;
   consider y being Point of T such that
 A6: y in Der A /\ G and
-A7: x <> y by A2,A3,Th19;
+A7: x <> y by A2,A3,Th17;
   y in Der A by A6,XBOOLE_0:def 4;
   then
 A8: y in Der A \ {x} by A7,ZFMISC_1:56;
@@ -1125,7 +1123,7 @@ A14: g in A \ {x} by XBOOLE_0:3;
   q in Der A by A10,XBOOLE_0:def 5;
   then consider y being Point of T such that
 A15: y in A /\ U and
-A16: q <> y by A11,A5,Th19;
+A16: q <> y by A11,A5,Th17;
   y in A by A15,XBOOLE_0:def 4;
   then
 A17: y in A \ {q} by A16,ZFMISC_1:56;
@@ -1140,7 +1138,7 @@ A20: f in A \ {x9} by ZFMISC_1:56;
   hence thesis by A12,A20,XBOOLE_0:3;
 end;
 
-theorem Th35:
+theorem Th33:
   for T being TopSpace, A being Subset of T st T is T_1 holds Cl Der A = Der A
 proof
   let T be TopSpace, A be Subset of T;
@@ -1149,9 +1147,9 @@ A1: T is T_1;
   per cases;
   suppose
 A2: T is non empty;
-    Cl Der A = Der A \/ Der Der A by Th31;
+    Cl Der A = Der A \/ Der Der A by Th29;
     then
-A3: Cl Der A c= Der A \/ Der A by A1,A2,Th34,XBOOLE_1:9;
+A3: Cl Der A c= Der A \/ Der A by A1,A2,Th32,XBOOLE_1:9;
     Der A c= Cl Der A by PRE_TOPC:18;
     hence thesis by A3,XBOOLE_0:def 10;
   end;
@@ -1167,12 +1165,12 @@ registration
   cluster Der A -> closed;
   coherence
   proof
-    Der A = Cl Der A by Th35;
+    Der A = Cl Der A by Th33;
     hence thesis;
   end;
 end;
 
-theorem Th36: :: Theorem 1.3.4. d)
+theorem Th34: :: Theorem 1.3.4. d)
   for T being non empty TopSpace, F being Subset-Family of T holds
   union Der F c= Der union F
 proof
@@ -1186,7 +1184,7 @@ A2: Y in Der F by TARSKI:def 4;
   consider B being Subset of T such that
 A3: Y = Der B and
 A4: B in F by A2,Def6;
-  Der B c= Der union F by A4,Th32,ZFMISC_1:74;
+  Der B c= Der union F by A4,Th30,ZFMISC_1:74;
   hence thesis by A1,A3;
 end;
 
@@ -1196,10 +1194,10 @@ theorem
 proof
   assume A c= B;
   then
-A1: Der A c= Der B by Th32;
+A1: Der A c= Der B by Th30;
   assume x is_an_accumulation_point_of A;
-  then x in Der A by Th18;
-  hence thesis by A1,Th18;
+  then x in Der A by Th16;
+  hence thesis by A1,Th16;
 end;
 
 begin :: 1.3.4. Density-in-itself
@@ -1217,7 +1215,7 @@ definition
   [#]T is dense-in-itself;
 end;
 
-theorem Th38:
+theorem Th36:
   T is T_1 & A is dense-in-itself implies Cl A is dense-in-itself
 proof
   assume
@@ -1226,10 +1224,10 @@ A1: T is T_1;
   then A c= Der A by Def7;
   then
 A2: Der A = A \/ Der A by XBOOLE_1:12
-    .= Cl A by Th31;
-  Der Cl A = Der (A \/ Der A) by Th31
-    .= Der A \/ Der Der A by Th33
-    .= Cl A by A1,A2,Th34,XBOOLE_1:12;
+    .= Cl A by Th29;
+  Der Cl A = Der (A \/ Der A) by Th29
+    .= Der A \/ Der Der A by Th31
+    .= Cl A by A1,A2,Th32,XBOOLE_1:12;
   hence thesis by Def7;
 end;
 
@@ -1240,7 +1238,7 @@ definition
   for A being Subset of T st A in F holds A is dense-in-itself;
 end;
 
-theorem Th39:
+theorem Th37:
   for F being Subset-Family of T st F is dense-in-itself holds
   union F c= union Der F
 proof
@@ -1263,13 +1261,13 @@ A4: A c= Der A by Def7;
   end;
 end;
 
-theorem Th40:
+theorem Th38:
   F is dense-in-itself implies union F is dense-in-itself
 proof
   assume F is dense-in-itself;
   then
-A1: union F c= union Der F by Th39;
-  union Der F c= Der union F by Th36;
+A1: union F c= union Der F by Th37;
+  union Der F c= Der union F by Th34;
   then union F c= Der union F by A1,XBOOLE_1:1;
   hence thesis by Def7;
 end;
@@ -1285,7 +1283,7 @@ end;
 registration
   let T be TopSpace, A be open closed Subset of T;
   cluster Fr A -> empty;
-  coherence by Th16;
+  coherence by Th14;
 end;
 
 registration
@@ -1299,13 +1297,13 @@ end;
 registration
   let T be non empty non discrete TopSpace, A be non open Subset of T;
   cluster Fr A -> non empty;
-  coherence by Th16;
+  coherence by Th14;
 end;
 
 registration
   let T be non empty non discrete TopSpace, A be non closed Subset of T;
   cluster Fr A -> non empty;
-  coherence by Th16;
+  coherence by Th14;
 end;
 
 begin :: Perfect Sets
@@ -1325,56 +1323,47 @@ registration
   coherence by Def10;
 end;
 
-theorem Th42:
+theorem Th40:
   for T being TopSpace holds Der {}T = {}T
 proof
   let T be TopSpace;
-  per cases;
-  suppose
-    T is non empty;
-    then reconsider T9 = T as non empty TopSpace;
-    Cl {}T9 is empty;
-    then {} = {}T \/ Der {}T by Th31
+    Cl {}T is empty;
+    then {} = {}T \/ Der {}T by Th29
       .= Der {}T;
     hence thesis;
-  end;
-  suppose
-    T is empty;
-    hence thesis by Lm1;
-  end;
 end;
 
-Lm2: for T being TopSpace, A being Subset of T st A is closed dense-in-itself
+Lm1: for T being TopSpace, A being Subset of T st A is closed dense-in-itself
 holds Der A = A
 proof
   let T be TopSpace, A be Subset of T;
   assume
 A1: A is closed dense-in-itself;
   then A = Cl A by PRE_TOPC:22
-    .= Der A \/ A by Th31;
+    .= Der A \/ A by Th29;
   hence Der A c= A by XBOOLE_1:7;
   thus thesis by A1,Def7;
 end;
 
-theorem Th43:
+theorem Th41:
   for T being TopSpace, A being Subset of T holds A is perfect iff Der A = A
 proof
   let T be TopSpace, A be Subset of T;
-  thus A is perfect implies Der A = A by Lm2;
+  thus A is perfect implies Der A = A by Lm1;
   assume
 A1: Der A = A;
-A2: Cl A = Der A \/ A by Th31
+A2: Cl A = Der A \/ A by Th29
     .= A by A1;
   A is dense-in-itself by A1,Def7;
   hence thesis by A2;
 end;
 
-theorem Th44:
+theorem Th42:
   for T being TopSpace holds {}T is perfect
 proof
   let T be TopSpace;
-  Der {}T = {}T by Th42;
-  hence thesis by Th43;
+  Der {}T = {}T by Th40;
+  hence thesis by Th41;
 end;
 
 registration
@@ -1385,7 +1374,7 @@ registration
     let A be Subset of T;
     assume A is empty;
     then A = {}T;
-    hence thesis by Th44;
+    hence thesis by Th42;
   end;
 end;
 
@@ -1416,7 +1405,7 @@ registration
   coherence;
 end;
 
-theorem Th45:
+theorem Th43:
   for T being TopSpace holds {}T is scattered
 proof
   let T be TopSpace;
@@ -1438,7 +1427,7 @@ registration
     let A be Subset of T;
     assume A is empty;
     then A = {}T;
-    hence thesis by Th45;
+    hence thesis by Th43;
   end;
 end;
 
@@ -1454,7 +1443,7 @@ A1: for A being Subset of T holds A in CC iff P[A] from SUBSET_1:sch 3;
 A2: [#]T = C \/ C` & C misses C` by PRE_TOPC:2,XBOOLE_1:79;
 A3: CC is dense-in-itself by A1,Def9;
   assume T is T_1;
-  then Cl C is dense-in-itself by A3,Th38,Th40;
+  then Cl C is dense-in-itself by A3,Th36,Th38;
   then Cl C in CC by A1;
   then
 A4: Cl C c= C by ZFMISC_1:74;
@@ -1471,7 +1460,7 @@ A7: B c= C` & B is dense-in-itself;
   end;
   then
 A8: C` is scattered by Def11;
-  C is dense-in-itself by A3,Th40;
+  C is dense-in-itself by A3,Th38;
   hence thesis by A5,A8,A2;
 end;
 
@@ -1491,7 +1480,7 @@ registration
   coherence by TDLAT_3:15,16;
 end;
 
-theorem Th47:
+theorem Th45:
   for T being discrete TopSpace, A being Subset of T holds Der A = {}
 proof
   let T be discrete TopSpace, A be Subset of T;
@@ -1501,7 +1490,7 @@ A1: T is non empty;
     assume Der A <> {};
     then consider x being set such that
 A2: x in Der A by XBOOLE_0:def 1;
-    x is_an_accumulation_point_of A by A1,A2,Th18;
+    x is_an_accumulation_point_of A by A1,A2,Th16;
     then x in Cl (A \ {x}) by Def2;
     then x in A \ {x} by PRE_TOPC:22;
     hence thesis by ZFMISC_1:56;
@@ -1516,7 +1505,7 @@ end;
 registration
   let T be discrete non empty TopSpace, A be Subset of T;
   cluster Der A -> empty;
-  coherence by Th47;
+  coherence by Th45;
 end;
 
 begin :: Density of a Topological Space and Separable Spaces
@@ -1566,7 +1555,7 @@ definition
   density T c= omega;
 end;
 
-theorem Th49:
+theorem Th46:
   for T being countable TopSpace holds T is separable
 proof
   let T be countable TopSpace;
@@ -1577,7 +1566,7 @@ end;
 
 registration
   cluster countable -> separable for TopSpace;
-  coherence by Th49;
+  coherence by Th46;
 end;
 
 begin :: Exercise 1.3.E.
@@ -1586,14 +1575,14 @@ theorem
   for A being Subset of R^1 st A = RAT holds A` = IRRAT by BORSUK_5:def 1
 ,TOPMETR:17;
 
-Lm3: RAT = REAL \ IRRAT
+Lm2: RAT = REAL \ IRRAT
 proof
   REAL \ IRRAT = REAL /\ RAT by BORSUK_5:def 1,XBOOLE_1:48;
   hence thesis by NUMBERS:12,XBOOLE_1:28;
 end;
 
 theorem
-  for A being Subset of R^1 st A = IRRAT holds A` = RAT by Lm3,TOPMETR:17;
+  for A being Subset of R^1 st A = IRRAT holds A` = RAT by Lm2,TOPMETR:17;
 
 theorem
   for A being Subset of R^1 st A = RAT holds Int A = {}
@@ -1602,7 +1591,7 @@ proof
   assume A = RAT;
   then Cl A` = [#]R^1 by BORSUK_5:28,def 1,TOPMETR:17;
   then (Cl A`)` = {}R^1 by XBOOLE_1:37;
-  hence thesis by Th5;
+  hence thesis by Th3;
 end;
 
 theorem
@@ -1610,14 +1599,14 @@ theorem
 proof
   let A be Subset of R^1;
   assume A = IRRAT;
-  then Cl A` = [#]R^1 by Lm3,BORSUK_5:15,TOPMETR:17;
+  then Cl A` = [#]R^1 by Lm2,BORSUK_5:15,TOPMETR:17;
   then (Cl A`)` = {}R^1 by XBOOLE_1:37;
-  hence thesis by Th5;
+  hence thesis by Th3;
 end;
 
 reconsider B = RAT as Subset of R^1 by NUMBERS:12,TOPMETR:17;
 
-theorem Th54:
+theorem Th51:
   RAT is dense Subset of R^1
 proof
   Cl B = the carrier of R^1 by BORSUK_5:15;
@@ -1626,28 +1615,28 @@ end;
 
 reconsider A = IRRAT as Subset of R^1 by TOPMETR:17;
 
-theorem Th55:
+theorem Th52:
   IRRAT is dense Subset of R^1
 proof
   Cl A = the carrier of R^1 by BORSUK_5:28;
   hence thesis by TOPS_3:def 2;
 end;
 
-theorem Th56:
+theorem Th53:
   RAT is boundary Subset of R^1
 proof
-  B` is dense by Th55,BORSUK_5:def 1,TOPMETR:17;
+  B` is dense by Th52,BORSUK_5:def 1,TOPMETR:17;
   hence thesis by TOPS_1:def 4;
 end;
 
-theorem Th57:
+theorem Th54:
   IRRAT is boundary Subset of R^1
 proof
-  A` is dense by Lm3,Th54,TOPMETR:17;
+  A` is dense by Lm2,Th51,TOPMETR:17;
   hence thesis by TOPS_1:def 4;
 end;
 
-theorem Th58:
+theorem Th55:
   REAL is non boundary Subset of R^1
 proof
   reconsider A = [#]REAL as Subset of R^1 by TOPMETR:17;
@@ -1664,5 +1653,5 @@ proof
   take A,B;
   A \/ B = RAT \/ REAL by BORSUK_5:def 1,XBOOLE_1:39
     .= REAL by NUMBERS:12,XBOOLE_1:12;
-  hence thesis by Th56,Th57,Th58;
+  hence thesis by Th53,Th54,Th55;
 end;

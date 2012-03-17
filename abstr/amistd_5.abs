@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received November 20, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,195 +17,171 @@ environ
  vocabularies NUMBERS, ORDINAL1, SETFAM_1, ARYTM_1, ARYTM_3, CARD_1, SUBSET_1,
       AMI_1, XBOOLE_0, RELAT_1, TARSKI, FUNCOP_1, GLIB_000, GOBOARD5, AMISTD_1,
       UNIALG_1, FUNCT_1, CARD_5, STRUCT_0, VALUED_1, FSM_1, FUNCT_4, TURING_1,
-      CIRCUIT2, AMISTD_2, PARTFUN1, SCMNORM, NAT_1, RELOC, PBOOLE, AMISTD_5,
-      COMPOS_1, MSUALG_1, FINSET_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, MCART_1, SETFAM_1, MEMBERED,
+      CIRCUIT2, AMISTD_2, PARTFUN1, EXTPRO_1, NAT_1, RELOC, PBOOLE, AMISTD_5,
+      COMPOS_1, MSUALG_1, FINSET_1, QUANTAL1, MEMSTR_0, SCMFSA6B;
+ notations TARSKI, XBOOLE_0, XTUPLE_0, SUBSET_1, ORDINAL1, SETFAM_1, MEMBERED,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, FINSET_1, CARD_1,
       NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FUNCOP_1, NAT_D,
-      FUNCT_7, VALUED_0, VALUED_1, AFINSQ_1, STRUCT_0, MEMSTR_0, COMPOS_1,
-      EXTPRO_1, AMISTD_1, AMISTD_2;
+      FUNCT_7, VALUED_0, VALUED_1, AFINSQ_1, MEASURE6, STRUCT_0, MEMSTR_0,
+      COMPOS_0, COMPOS_1, EXTPRO_1, AMISTD_1, AMISTD_2;
  constructors WELLORD2, REALSET1, NAT_D, AMISTD_1, XXREAL_2, PRE_POLY,
-      AFINSQ_1, ORDINAL4, RECDEF_2, VALUED_1, AMISTD_2, PBOOLE, RELSET_1,
-      FUNCT_7, FUNCT_4, MEMSTR_0;
+      AFINSQ_1, ORDINAL4, VALUED_1, AMISTD_2, PBOOLE, RELSET_1, FUNCT_7,
+      FUNCT_4, MEMSTR_0, MEASURE6, XTUPLE_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3, REALSET1, FUNCT_7,
       STRUCT_0, AMISTD_1, CARD_1, FUNCT_4, XXREAL_2, RELSET_1, GRFUNC_1,
       FUNCT_2, ORDINAL1, AFINSQ_1, VALUED_1, VALUED_0, COMPOS_1, EXTPRO_1,
-      XCMPLX_0, REAL_1, PBOOLE, AMISTD_2, MEMSTR_0;
+      XCMPLX_0, REAL_1, PBOOLE, AMISTD_2, MEMSTR_0, MEASURE6, COMPOS_0,
+      XTUPLE_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
 begin  :: Relocable instructions
 
 theorem :: AMISTD_5:1
-  for N be with_non-empty_elements non empty set
-  for S be regular J/A-independent homogeneous
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N
+  for N be with_zero set
+  for S be IC-Ins-separated non empty with_non-empty_values AMI-Struct over N
   for I be Instruction of S st I is jump-only
   for k be Element of NAT holds IncAddr(I,k) is jump-only;
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent
-  with_explicit_jumps
-  standard-ins IC-Ins-separated halting
-  non empty AMI-Struct over N,
+  let N be with_zero set,
+  S be with_explicit_jumps IC-Ins-separated halting
+  non empty with_non-empty_values AMI-Struct over N,
   I be IC-relocable Instruction of S, k be Element of NAT;
  cluster IncAddr(I,k) -> IC-relocable;
 end;
 
 definition
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N, I be Instruction of S;
+  let N be with_zero set,
+  S be halting
+    IC-Ins-separated non empty with_non-empty_values AMI-Struct over N,
+  I be Instruction of S;
   attr I is relocable means
 :: AMISTD_5:def 1
-  for j,k being natural number, s being State of S holds
+  for j,k being Nat, s being State of S holds
     Exec(IncAddr(I,j+k),IncIC(s,k)) =  IncIC(Exec(IncAddr(I,j),s),k);
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent
-   halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
  cluster relocable -> IC-relocable for Instruction of S;
 end;
 
 definition
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be halting
+   IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
   attr S is relocable means
 :: AMISTD_5:def 2
  for I being Instruction of S holds I is relocable;
 end;
 
 theorem :: AMISTD_5:2
- for N being with_non-empty_elements non empty set,
+ for N being with_zero set,
   I being Instruction of STC N, s be State of STC N,
-  k being natural number
+  k being Nat
  holds Exec(I,IncIC(s,k)) = IncIC(Exec(I,s),k);
 
 definition
- let N be with_non-empty_elements non empty set;
+ let N be with_zero set;
  let S be halting IC-Ins-separated
-   non empty AMI-Struct over N;
+   non empty with_non-empty_values AMI-Struct over N;
  attr S is IC-recognized means
 :: AMISTD_5:def 3
 
  for q be non halt-free finite
-   (the Instructions of S)-valued NAT-defined Function
+   (the InstructionsF of S)-valued NAT-defined Function
  for p being q-autonomic
   FinPartState of S st  p is non empty
    holds IC S in dom p;
 end;
 
 theorem :: AMISTD_5:3
- for N being with_non-empty_elements non empty set
+ for N being with_zero set
  for S being halting IC-Ins-separated
-   non empty AMI-Struct over N
+   non empty with_non-empty_values AMI-Struct over N
  holds S is IC-recognized iff
   for q be non halt-free finite
-   (the Instructions of S)-valued NAT-defined Function
+   (the InstructionsF of S)-valued NAT-defined Function
   for p being q-autonomic
   FinPartState of S st DataPart p <> {}
    holds IC S in dom p;
 
 registration
- let N be with_non-empty_elements non empty set;
+ let N be with_zero set;
  cluster Data-Locations STC N -> empty;
 end;
 
 registration
- let N be with_non-empty_elements non empty set;
+ let N be with_zero set;
  let p be PartState of STC N;
  cluster DataPart p -> empty;
 end;
 
 registration
- let N be with_non-empty_elements non empty set;
+ let N be with_zero set;
  cluster STC N -> IC-recognized relocable;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster STC N -> proper-halt;
+  let N be with_zero set;
+  cluster relocable IC-recognized
+   for standard halting
+   IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster relocable IC-recognized proper-halt
-   for regular homogeneous J/A-independent standard halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
-end;
-
-registration
-  let N be with_non-empty_elements non empty set;
-  let S be relocable
-   regular homogeneous J/A-independent
-    halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+  let N be with_zero set;
+  let S be relocable halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
  cluster -> relocable for Instruction of S;
 end;
 
-reserve k for natural number;
+reserve k for Nat;
 
 theorem :: AMISTD_5:4
-  for N be with_non-empty_elements non empty set
-  for S be relocable
-   regular homogeneous J/A-independent
-    halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N
+  for N be with_zero set
+  for S be relocable halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N
   for INS being Instruction of S, s being State of S
    holds  Exec(IncAddr(INS,k),IncIC(s,k)) =  IncIC(Exec(INS,s),k);
 
 theorem :: AMISTD_5:5
-  for N be with_non-empty_elements non empty set
-  for S be relocable
-   regular homogeneous J/A-independent
-    halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N
+  for N be with_zero set
+  for S be relocable halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N
   for INS being Instruction of S, s being State of S,
       j, k being Element of NAT st IC s = j+k
  holds  Exec(INS, DecIC(s,k)) =  DecIC(Exec(IncAddr(INS, k), s),k);
 
-registration let N be with_non-empty_elements non empty set;
- cluster relocable IC-recognized proper-halt
-  for regular homogeneous J/A-independent
-     halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+registration let N be with_zero set;
+ cluster relocable IC-recognized
+  for halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
 end;
 
-reserve N for with_non-empty_elements non empty set,
+reserve N for with_zero set,
    S for IC-recognized
-    halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+    halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
 
 theorem :: AMISTD_5:6
   for q be non halt-free finite
-   (the Instructions of S)-valued NAT-defined Function
+   (the InstructionsF of S)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of S
    holds IC S in dom p;
 
 definition let N;
  let S be halting IC-Ins-separated
-   non empty AMI-Struct over N;
+   non empty with_non-empty_values AMI-Struct over N;
  attr S is CurIns-recognized means
 :: AMISTD_5:def 4
 
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
  for p being q-autonomic non empty FinPartState of S
   for s being State of S st  p c= s
  for P being Instruction-Sequence of S
@@ -217,10 +193,21 @@ registration let N;
  cluster STC N -> CurIns-recognized;
 end;
 
+registration let N be with_zero set;
+ cluster relocable IC-recognized CurIns-recognized
+  for halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
+end;
+
+reserve
+   S for IC-recognized CurIns-recognized
+    halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
+
+
 theorem :: AMISTD_5:7
- S is CurIns-recognized implies
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
  for p being q-autonomic non empty FinPartState of S,
      s1,s2 being State of S st  p c= s1 &  p c= s2
  for P1,P2 being Instruction-Sequence of S
@@ -229,17 +216,14 @@ theorem :: AMISTD_5:7
  holds IC Comput(P1,s1,i) = IC Comput(P2,s2,i) &
    CurInstr(P1,Comput(P1,s1,i)) = CurInstr(P2,Comput(P2,s2,i));
 
-reserve S for relocable IC-recognized proper-halt
-    regular homogeneous J/A-independent
-     halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+reserve S for relocable IC-recognized CurIns-recognized
+     halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
 
 theorem :: AMISTD_5:8
- S is CurIns-recognized implies
   for k being Element of NAT
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
    for p being q-autonomic FinPartState of S
   st IC S in dom p
  for s being State of S st  p c= s
@@ -250,10 +234,9 @@ theorem :: AMISTD_5:8
      IncIC(Comput(P,s,i),k);
 
 theorem :: AMISTD_5:9
- S is CurIns-recognized implies
   for k being Element of NAT
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
   for p being q-autonomic FinPartState of S st IC S in dom p
   for s being State of S st IncIC(p,k) c= s holds
   for P being Instruction-Sequence of S
@@ -264,10 +247,9 @@ theorem :: AMISTD_5:9
 reserve m,j for Element of NAT;
 
 theorem :: AMISTD_5:10
- S is CurIns-recognized implies
   for k being Element of NAT
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
   for p being non empty FinPartState of S st IC
   S in dom p
    for s being State of S st  p c= s &
@@ -278,9 +260,8 @@ theorem :: AMISTD_5:10
    =  DecIC(Comput(P+*Reloc(q,k),s+*IncIC(p,k),i),k);
 
 theorem :: AMISTD_5:11
- S is CurIns-recognized implies
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
   for p being non empty FinPartState of S st IC S in dom p
   for k being Element of NAT holds
    p is q-autonomic iff IncIC(p,k) is Reloc(q,k)-autonomic;
@@ -290,10 +271,9 @@ definition let N,S;
 :: AMISTD_5:def 5
  for k being Element of NAT
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
- for p being q-autonomic non empty FinPartState of S,
-      s1, s2 being State of S st IC S in dom p &  p c= s1 &
-       IncIC( p,k) c= s2
+  (the InstructionsF of S)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of S,
+      s1, s2 being State of S st p c= s1 & IncIC( p,k) c= s2
   for P1,P2 being Instruction-Sequence of S
    st q c= P1 & Reloc(q,k) c= P2
   for i being Element of NAT
@@ -303,10 +283,9 @@ definition let N,S;
 :: AMISTD_5:def 6
  for k being Element of NAT
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
    for p being q-autonomic non empty FinPartState of S,
-      s1, s2 being State of S st IC S in dom p &
-       p c= s1 & IncIC( p,k) c= s2
+      s1, s2 being State of S st p c= s1 & IncIC( p,k) c= s2
   for P1,P2 being Instruction-Sequence of S
    st q c= P1 & Reloc(q,k) c= P2
   for i being Element of NAT holds
@@ -314,35 +293,30 @@ definition let N,S;
 end;
 
 registration let N;
- cluster STC N -> relocable1;
+ cluster STC N -> relocable1 relocable2;
 end;
 
-registration let N be with_non-empty_elements non empty set;
- cluster relocable1 for relocable IC-recognized proper-halt
-  regular homogeneous J/A-independent
-     halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+registration let N be with_zero set;
+ cluster relocable1 relocable2
+   for relocable IC-recognized CurIns-recognized
+     halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
 end;
 
-reserve S for relocable1 relocable IC-recognized proper-halt
-    regular homogeneous J/A-independent
-     halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+reserve S for relocable1 relocable2
+  relocable IC-recognized CurIns-recognized halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
 
 theorem :: AMISTD_5:12
-  S is relocable1 proper-halt implies
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
   for p being q-autonomic non empty FinPartState of S,
       k being Element of NAT st IC S in dom p
    holds p is q-halted iff IncIC(p,k) is Reloc(q,k)-halted;
 
 theorem :: AMISTD_5:13
- S is relocable1 relocable2 CurIns-recognized proper-halt implies
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
   for p being q-halted q-autonomic non empty FinPartState of S
    st IC S in dom p
   for k being Element of NAT holds DataPart(Result(q, p)) =
@@ -350,33 +324,52 @@ theorem :: AMISTD_5:13
 
 registration let N,S;
   let q be non halt-free finite
-   (the Instructions of S)-valued NAT-defined Function;
+   (the InstructionsF of S)-valued NAT-defined Function;
   let p be q-autonomic q-halted non empty FinPartState of S,
     k be Element of NAT;
   cluster IncIC(p,k) -> Reloc(q,k)-halted;
 end;
 
 theorem :: AMISTD_5:14
- S is CurIns-recognized relocable1 relocable2 proper-halt implies
   for F being data-only PartFunc of FinPartSt S, FinPartSt S,
       l being Element of NAT
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function,
+  (the InstructionsF of S)-valued NAT-defined Function,
       p being q-autonomic q-halted non empty FinPartState of S
         st IC S in dom p
   for k being Element of
    NAT holds q,  p computes F
     iff Reloc(q,k), IncIC( p,k) computes F;
 
-reserve S for
-  IC-recognized
-    halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+reserve S for IC-recognized CurIns-recognized halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
 
 theorem :: AMISTD_5:15
-  S is CurIns-recognized implies
  for q be non halt-free finite
-  (the Instructions of S)-valued NAT-defined Function
+  (the InstructionsF of S)-valued NAT-defined Function
   for p being q-autonomic
    FinPartState of S st IC S in dom p holds IC p in dom q;
+
+definition
+  let N be with_zero set;
+  let S be halting IC-Ins-separated non empty with_non-empty_values
+         AMI-Struct over N;
+  let k be Nat;
+  let F be NAT-defined (the InstructionsF of S)-valued Function;
+  attr F is k-halting means
+:: AMISTD_5:def 7
+ for s being k-started State of S
+  for P being Instruction-Sequence of S st F c= P
+   holds P halts_on s;
+end;
+
+registration
+  let N be with_zero set;
+  let S be halting IC-Ins-separated non empty with_non-empty_values
+         AMI-Struct over N;
+ cluster parahalting -> 0-halting for
+        NAT-defined (the InstructionsF of S)-valued Function;
+ cluster 0-halting -> parahalting for
+         NAT-defined (the InstructionsF of S)-valued Function;
+end;
+

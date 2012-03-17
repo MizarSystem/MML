@@ -2,7 +2,7 @@
 ::  by Eugeniusz Kusak, Wojciech Leo\'nczuk and Micha{\l} Muzalewski
 ::
 :: Received November 23, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,7 +16,7 @@ environ
 
  vocabularies VECTSP_1, SUBSET_1, RLVECT_1, ALGSTR_0, XBOOLE_0, ARYTM_1,
       ARYTM_3, RELAT_1, SUPINF_2, ZFMISC_1, STRUCT_0, BINOP_1, FUNCT_1,
-      MCART_1, TARSKI, PARSP_1;
+      MCART_1, TARSKI, PARSP_1, RECDEF_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, FUNCT_2,
       BINOP_1, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1;
  constructors BINOP_1, DOMAIN_1, VECTSP_1, RLVECT_1, RELSET_1;
@@ -42,7 +42,7 @@ definition
   F:] means
 :: PARSP_1:def 1
 
-  it.(x,y) = [x`1+y`1,x`2+y`2,x`3+y`3];
+  it.(x,y) = [x`1_3+y`1_3,x`2_3+y`2_3,x`3_3+y`3_3];
 end;
 
 definition
@@ -54,7 +54,7 @@ definition
 end;
 
 theorem :: PARSP_1:1
-  x+y = [x`1+y`1,x`2+y`2,x`3+y`3];
+  x+y = [x`1_3+y`1_3,x`2_3+y`2_3,x`3_3+y`3_3];
 
 theorem :: PARSP_1:2
   [a,b,c]+[f,g,h]=[a+f,b+g,c+h];
@@ -65,7 +65,7 @@ definition
   of F:] means
 :: PARSP_1:def 3
 
-  it.(x) = [-x`1,-x`2,-x`3];
+  it.(x) = [-x`1_3,-x`2_3,-x`3_3];
 end;
 
 definition
@@ -77,7 +77,7 @@ definition
 end;
 
 theorem :: PARSP_1:3
-  -x = [-x`1,-x`2,-x`3];
+  -x = [-x`1_3,-x`2_3,-x`3_3];
 
 ::
 ::                      2. PARALLELITY STRUCTURE
@@ -116,7 +116,7 @@ end;
 
 definition
   let F;
-  func C3(F) -> set equals
+  func C_3(F) -> set equals
 :: PARSP_1:def 7
   [:the carrier of F,the carrier of F,the carrier of
   F:];
@@ -124,19 +124,19 @@ end;
 
 registration
   let F;
-  cluster C3(F) -> non empty;
+  cluster C_3(F) -> non empty;
 end;
 
 definition
   let F;
-  func 4C3(F) -> set equals
+  func 4C_3(F) -> set equals
 :: PARSP_1:def 8
-  [:C3(F),C3(F),C3(F),C3(F):];
+  [:C_3(F),C_3(F),C_3(F),C_3(F):];
 end;
 
 registration
   let F;
-  cluster 4C3(F) -> non empty;
+  cluster 4C_3(F) -> non empty;
 end;
 
 reserve x for set,
@@ -148,18 +148,19 @@ definition
   func PRs(F) -> set means
 :: PARSP_1:def 9
 
-  x in it iff x in 4C3(F) & ex a,b,c,d st x =
-[a,b,c,d] & (a`1-b`1)*(c`2-d`2) - (c`1-d`1)*(a`2-b`2) = 0.F & (a`1-b`1)*(c`3-d
-  `3) - (c`1-d`1)*(a`3-b`3) = 0.F & (a`2-b`2)*(c`3-d`3) - (c`2-d`2)*(a`3-b`3) =
+  x in it iff x in 4C_3(F) & ex a,b,c,d st x =
+[a,b,c,d] & (a`1_3-b`1_3)*(c`2_3-d`2_3) - (c`1_3-d`1_3)*(a`2_3-b`2_3) = 0.F &
+  (a`1_3-b`1_3)*(c`3_3-d`3_3) - (c`1_3-d`1_3)*(a`3_3-b`3_3) = 0.F &
+   (a`2_3-b`2_3)*(c`3_3-d`3_3) - (c`2_3-d`2_3)*(a`3_3-b`3_3) =
   0.F;
 end;
 
 theorem :: PARSP_1:4
-  PRs(F) c= [:C3(F),C3(F),C3(F),C3(F):];
+  PRs(F) c= [:C_3(F),C_3(F),C_3(F),C_3(F):];
 
 definition
   let F;
-  func PR(F) -> Relation4 of C3(F) equals
+  func PR(F) -> Relation4 of C_3(F) equals
 :: PARSP_1:def 10
   PRs(F);
 end;
@@ -168,7 +169,7 @@ definition
   let F;
   func MPS(F) -> ParStr equals
 :: PARSP_1:def 11
-  ParStr (# C3(F),PR(F) #);
+  ParStr (# C_3(F),PR(F) #);
 end;
 
 registration
@@ -177,7 +178,7 @@ registration
 end;
 
 theorem :: PARSP_1:5
-  the carrier of MPS(F) = C3(F);
+  the carrier of MPS(F) = C_3(F);
 
 theorem :: PARSP_1:6
   the 4_arg_relation of MPS(F) = PR(F);
@@ -188,15 +189,19 @@ theorem :: PARSP_1:7
   a,b '||' c,d iff [a,b,c,d] in PR(F);
 
 theorem :: PARSP_1:8
-  [a,b,c,d] in PR(F) iff ([a,b,c,d] in 4C3(F) & ex e,f,g,h st [a,b,c,d]
-= [e,f,g,h] & (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F & (e`1-f`1)*(g`3-
-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F & (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) =
-  0.F);
+  [a,b,c,d] in PR(F) iff ([a,b,c,d] in 4C_3(F) &
+   ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+    (e`1_3-f`1_3)*(g`2_3-h`2_3) - (g`1_3-h`1_3)*(e`2_3-f`2_3) = 0.F &
+    (e`1_3-f`1_3)*(g`3_3-h`3_3) - (g`1_3-h`1_3)*(e`3_3-f`3_3) = 0.F &
+    (e`2_3-f`2_3)*(g`3_3-h`3_3) - (g`2_3-h`2_3)*(e`3_3-f`3_3) = 0.F);
 
 theorem :: PARSP_1:9
-  a,b '||' c,d iff ([a,b,c,d] in 4C3(F) & ex e,f,g,h st [a,b,c,d]
-= [e,f,g,h] & (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F & (e`1-f`1)*(g`3-
-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F & (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) =
+  a,b '||' c,d iff ([a,b,c,d] in 4C_3(F) &
+  ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+  (e`1_3-f`1_3)*(g`2_3-h`2_3) - (g`1_3-h`1_3)*(e`2_3-f`2_3) = 0.F &
+  (e`1_3-f`1_3)*(g`3_3-
+h`3_3) - (g`1_3-h`1_3)*(e`3_3-f`3_3) = 0.F &
+   (e`2_3-f`2_3)*(g`3_3-h`3_3) - (g`2_3-h`2_3)*(e`3_3-f`3_3) =
   0.F);
 
 theorem :: PARSP_1:10
@@ -204,12 +209,14 @@ theorem :: PARSP_1:10
   carrier of F:];
 
 theorem :: PARSP_1:11
-  [a,b,c,d] in 4C3(F);
+  [a,b,c,d] in 4C_3(F);
 
 theorem :: PARSP_1:12
-  a,b '||' c,d iff ex e,f,g,h st [a,b,c,d] = [e,f,g,h] & (e`1-f`1)
-*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F & (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f
-  `3) = 0.F & (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F;
+  a,b '||' c,d iff ex e,f,g,h st [a,b,c,d] = [e,f,g,h] & (e`1_3-f`1_3)
+*(g`2_3-h`2_3) - (g`1_3-h`1_3)*(e`2_3-f`2_3) = 0.F &
+   (e`1_3-f`1_3)*(g`3_3-h`3_3) - (g`1_3-h`1_3)*(e`3_3-f
+  `3_3) = 0.F & (e`2_3-f`2_3)*(g`3_3-h`3_3) - (g`2_3-h`2_3)*(e`3_3-f`3_3) = 0.F
+;
 
 theorem :: PARSP_1:13
   a,b '||' b,a;

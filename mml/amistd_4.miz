@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received May 8, 2001
-:: Copyright (c) 2001-2011 Association of Mizar Users
+:: Copyright (c) 2001-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,31 +17,36 @@ environ
  vocabularies SETFAM_1, XBOOLE_0, AMI_1, FSM_1, CAT_1, FUNCT_1, RELAT_1,
       STRUCT_0, SUBSET_1, FUNCT_4, FUNCOP_1, GOBOARD5, FRECHET, AMISTD_1,
       ZFMISC_1, NUMBERS, CARD_1, GLIB_000, AMISTD_2, CARD_5, NET_1, TARSKI,
-      AMI_7, ORDINAL1, UNIALG_1;
+      AMISTD_4, ORDINAL1, UNIALG_1, NAT_1, QUANTAL1, GOBRD13, MEMSTR_0,
+      COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ZFMISC_1,
-      MCART_1, NUMBERS, FUNCOP_1, FUNCT_4, NAT_1, STRUCT_0, MEMSTR_0, COMPOS_1,
-      EXTPRO_1, FUNCT_7, AMISTD_1, AMISTD_2;
+      XTUPLE_0, MCART_1, NUMBERS, FUNCOP_1, FUNCT_4, ORDINAL1, NAT_1, STRUCT_0,
+      MEMSTR_0, COMPOS_0, COMPOS_1, EXTPRO_1, FUNCT_7, MEASURE6, AMISTD_1,
+      AMISTD_2;
  constructors ZFMISC_1, AMISTD_2, NAT_1, PRE_POLY, EXTPRO_1, AMISTD_1,
-      DOMAIN_1, FUNCT_7, FUNCT_4, MEMSTR_0, RELSET_1;
+      DOMAIN_1, FUNCT_7, FUNCT_4, MEMSTR_0, RELSET_1, MEASURE6, PBOOLE,
+      XTUPLE_0;
  registrations SETFAM_1, FUNCOP_1, STRUCT_0, AMISTD_1, AMISTD_2, ZFMISC_1,
       CARD_1, RELSET_1, ORDINAL1, COMPOS_1, EXTPRO_1, ORDINAL6, FUNCT_7,
-      FUNCT_4, MEMSTR_0;
+      FUNCT_4, MEMSTR_0, MEASURE6, COMPOS_0, XTUPLE_0;
  requirements SUBSET, BOOLE;
- definitions EXTPRO_1, COMPOS_1, AMISTD_1, XBOOLE_0, FUNCOP_1, MEMSTR_0;
- theorems FUNCT_7, TARSKI, AMISTD_1, SUBSET_1, FUNCOP_1, FUNCT_4, ZFMISC_1,
-      YELLOW_8, FUNCT_1, YELLOW15, XBOOLE_0, XBOOLE_1, RELAT_1, PARTFUN1,
-      MCART_1, ORDINAL1, COMPOS_1, STRUCT_0, MEMSTR_0;
+ definitions EXTPRO_1, COMPOS_1, AMISTD_1, XBOOLE_0, FUNCOP_1, MEMSTR_0,
+      XTUPLE_0;
+ theorems FUNCT_7, TARSKI, AMISTD_1, SUBSET_1, FUNCOP_1, ZFMISC_1,
+      FUNCT_1, XBOOLE_0, XBOOLE_1, PARTFUN1,
+      ORDINAL1, STRUCT_0, MEMSTR_0, MEASURE6, XTUPLE_0;
  schemes SUBSET_1;
 
 begin :: Preliminaries
 
-reserve N for with_non-empty_elements non empty set;
+reserve N for with_zero set;
 
 definition
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   A be IC-Ins-separated non
-empty AMI-Struct over N, s be State of A, o be Object of A,
-  a be Element of ObjectKind o;
+empty with_non-empty_values AMI-Struct over N, s be State of A,
+o be Object of A,
+  a be Element of Values o;
   redefine func s+*(o,a) -> State of A;
   coherence
   proof
@@ -51,15 +56,17 @@ empty AMI-Struct over N, s be State of A, o be Object of A,
   end;
 end;
 
-theorem Th6:
+theorem Th1:
   for A being standard IC-Ins-separated non empty
-AMI-Struct over N, I being Instruction of A, s being State
-of A, o being Object of A, w being Element of ObjectKind o st I is sequential &
+with_non-empty_values AMI-Struct over N, I being Instruction of A,
+s being State
+of A, o being Object of A, w being Element of Values o st I is sequential &
   o <> IC A holds IC Exec(I,s) = IC Exec(I,s+*(o,w))
 proof
   let A be standard IC-Ins-separated non empty
-AMI-Struct over N, I be Instruction of A, s be State of A, o be Object of
-  A, w be Element of ObjectKind o such that
+with_non-empty_values AMI-Struct over N, I be Instruction of A,
+s be State of A, o be Object of
+  A, w be Element of Values o such that
 A1: for s being State of A holds Exec(I,s).IC A = succ IC s and
 A2: o <> IC A;
   thus IC Exec(I,s) = succ IC s by A1
@@ -69,93 +76,96 @@ end;
 
 theorem
   for A being standard IC-Ins-separated non empty
-AMI-Struct over N, I being Instruction of A, s being State
-of A, o being Object of A, w being Element of ObjectKind o st I is sequential &
+with_non-empty_values AMI-Struct over N, I being Instruction of A,
+s being State
+of A, o being Object of A, w being Element of Values o st I is sequential &
   o <> IC A holds IC Exec(I,s+*(o,w)) = IC (Exec(I,s) +* (o,w))
 proof
   let A be standard IC-Ins-separated non empty
-AMI-Struct over N, I be Instruction of A, s be State of A, o be Object of
-  A, w be Element of ObjectKind o such that
+with_non-empty_values AMI-Struct over N, I be Instruction of A,
+s be State of A, o be Object of
+  A, w be Element of Values o such that
 A1: I is sequential and
 A2: o <> IC A;
-  thus IC Exec(I,s+*(o,w)) = IC Exec(I,s) by A1,A2,Th6
+  thus IC Exec(I,s+*(o,w)) = IC Exec(I,s) by A1,A2,Th1
     .= IC (Exec(I,s) +* (o,w)) by A2,FUNCT_7:32;
 end;
 
 begin :: Input and Output of Instructions
 
 definition
-  let N be set, A be AMI-Struct over N;
+  let A be COM-Struct;
   attr A is with_non_trivial_Instructions means
   :Def1:
-  the Instructions of A
-  is non trivial;
+  the InstructionsF of A is non trivial;
 end;
 
 definition
-  let N be set, A be non empty AMI-Struct over N;
+  let N be with_zero set, A be non empty with_non-empty_values
+  AMI-Struct over N;
   attr A is with_non_trivial_ObjectKinds means
   :Def2:
   for o being Object of A
-  holds ObjectKind o is non trivial;
+  holds Values o is non trivial;
 end;
 
 registration
-  let N be with_non-empty_elements set;
+  let N be with_zero set;
   cluster STC N -> with_non_trivial_ObjectKinds;
   coherence
   proof
     let o be Object of STC N;
 A1: the carrier of STC N = {0} by AMISTD_1:def 7;
-A2: the Object-Kind of STC N = 0 .--> NAT
+A2: the Object-Kind of STC N = 0 .--> 0
     by AMISTD_1:def 7;
     per cases by A1;
     suppose
-A7:   o in {0};
-      ObjectKind o = (0 .--> NAT).o by A2
-        .= NAT by A7,FUNCOP_1:7;
+A3:   o in {0};
+A4:  the ValuesF of STC N = N --> NAT by AMISTD_1:def 7;
+      0 in N by MEASURE6:def 2;
+      then the_Values_of STC N = 0 .--> NAT by A2,A4,FUNCOP_1:89;
+      then Values o = (0 .--> NAT).o
+        .= NAT by A3,FUNCOP_1:7;
       hence thesis;
     end;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   cluster with_explicit_jumps
-    IC-relocable with_non_trivial_ObjectKinds
-with_non_trivial_Instructions
- for regular J/A-independent homogeneous standard halting
-  standard-ins IC-Ins-separated
-    non empty AMI-Struct over N;
+    IC-relocable with_non_trivial_ObjectKinds with_non_trivial_Instructions
+ for standard halting
+  IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
   existence
   proof
     take STC N;
 A1: [1,0,0] in {[1,0,0],[0,0,0]} & [0,0,0] in {[1,0,0],[0,0,0]}
        by TARSKI:def 2;
-    the Instructions of STC N = {[0,0,0],[1,0,0]} & [1,0,0] <> [0,0,0] by
-AMISTD_1:def 7,MCART_1:25;
-    then the Instructions of STC N is non trivial by A1,ZFMISC_1:def 10;
+    the InstructionsF of STC N = {[0,0,0],[1,0,0]} & [1,0,0] <> [0,0,0] by
+AMISTD_1:def 7,XTUPLE_0:3;
+    then the InstructionsF of STC N is non trivial by A1,ZFMISC_1:def 10;
     hence thesis by Def1;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements set;
+  let N be with_zero set;
   cluster STC N -> with_non_trivial_Instructions;
   coherence
   proof
-A:  [0,0,0] <> [1,0,0] by MCART_1:25;
-     the Instructions of STC N = {[0,0,0],[1,0,0]} by AMISTD_1:def 7;
-     then [0,0,0] in the Instructions of STC N
-        & [1,0,0] in the Instructions of STC N by TARSKI:def 2;
-    hence the Instructions of STC N is non trivial by A,ZFMISC_1:def 10;
+A1:  [0,0,0] <> [1,0,0] by XTUPLE_0:3;
+     the InstructionsF of STC N = {[0,0,0],[1,0,0]} by AMISTD_1:def 7;
+     then [0,0,0] in the InstructionsF of STC N
+        & [1,0,0] in the InstructionsF of STC N by TARSKI:def 2;
+    hence the InstructionsF of STC N is non trivial by A1,ZFMISC_1:def 10;
   end;
 end;
 
 registration
-  let N be with_non-empty_elements set;
+  let N be with_zero set;
   cluster with_non_trivial_ObjectKinds with_non_trivial_Instructions
-    IC-Ins-separated for non empty AMI-Struct over N;
+    IC-Ins-separated for non empty with_non-empty_values AMI-Struct over N;
   existence
   proof
     take STC N;
@@ -164,30 +174,33 @@ registration
 end;
 
 registration
-  let N be with_non-empty_elements set, A be with_non_trivial_ObjectKinds non
-  empty AMI-Struct over N, o be Object of A;
-  cluster ObjectKind o -> non trivial;
+  let N be with_zero set,
+   A be with_non_trivial_ObjectKinds non
+  empty with_non-empty_values AMI-Struct over N, o be Object of A;
+  cluster Values o -> non trivial;
   coherence by Def2;
 end;
 
 registration
-  let N be with_non-empty_elements set, A be with_non_trivial_Instructions
-  AMI-Struct over N;
-  cluster the Instructions of A -> non trivial;
+  let N be with_zero set,
+  A be with_non_trivial_Instructions
+  with_non-empty_values AMI-Struct over N;
+  cluster the InstructionsF of A -> non trivial;
   coherence by Def1;
 end;
 
 registration
-  let N be with_non-empty_elements set, A be IC-Ins-separated non empty
-  AMI-Struct over N;
-  cluster ObjectKind IC A -> non trivial;
-  coherence by MEMSTR_0:def 3;
+  let N be with_zero set,
+  A be IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N;
+  cluster Values IC A -> non trivial;
+  coherence by MEMSTR_0:def 6;
 end;
 
 definition
 
-  let N be with_non-empty_elements set, A be non empty
-  AMI-Struct over N, I be Instruction of A;
+  let N be with_zero set, A be non empty
+  with_non-empty_values AMI-Struct over N, I be Instruction of A;
   func Output I -> Subset of A means
   :Def3:
   for o being Object of A holds o in
@@ -213,18 +226,18 @@ end;
 
 definition
 
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   A be IC-Ins-separated non
-  empty AMI-Struct over N, I be Instruction of A;
+  empty with_non-empty_values AMI-Struct over N, I be Instruction of A;
   func Out_\_Inp I -> Subset of A means
   :Def4:
   for o being Object of A holds o
-in it iff for s being State of A, a being Element of ObjectKind o holds Exec(I,
+in it iff for s being State of A, a being Element of Values o holds Exec(I,
   s) = Exec(I,s+*(o,a));
   existence
   proof
     defpred P[set] means ex l being Object of A st l = $1 & for s being State
-    of A, a being Element of ObjectKind l holds Exec(I,s) = Exec(I,s+*(l,a));
+    of A, a being Element of Values l holds Exec(I,s) = Exec(I,s+*(l,a));
     consider X being Subset of A such that
 A1: for x being set holds x in X iff x in the carrier of A & P[x] from
     SUBSET_1:sch 1;
@@ -234,7 +247,7 @@ A1: for x being set holds x in X iff x in the carrier of A & P[x] from
       assume l in X;
       then P[l] by A1;
       hence
-      for s being State of A, a being Element of ObjectKind l holds Exec(
+      for s being State of A, a being Element of Values l holds Exec(
       I,s) = Exec(I,s+*(l,a));
     end;
     thus thesis by A1;
@@ -242,7 +255,7 @@ A1: for x being set holds x in X iff x in the carrier of A & P[x] from
   uniqueness
   proof
     defpred P[Object of A] means for s being State of A, a being Element of
-    ObjectKind $1 holds Exec(I,s) = Exec(I,s+*($1,a));
+    Values $1 holds Exec(I,s) = Exec(I,s+*($1,a));
     let a, b be Subset of A such that
 A2: for o being Object of A holds o in a iff P[o] and
 A3: for o being Object of A holds o in b iff P[o];
@@ -251,12 +264,12 @@ A3: for o being Object of A holds o in b iff P[o];
   func Out_U_Inp I -> Subset of A means
   :Def5:
   for o being Object of A holds o
-in it iff ex s being State of A, a being Element of ObjectKind o st Exec(I,s+*(
+in it iff ex s being State of A, a being Element of Values o st Exec(I,s+*(
   o,a)) <> Exec(I,s) +* (o,a);
   existence
   proof
     defpred P[set] means ex l being Object of A st l = $1 & ex s being State
-of A, a being Element of ObjectKind l st Exec(I,s+*(l,a)) <> Exec(I,s) +* (l,a)
+of A, a being Element of Values l st Exec(I,s+*(l,a)) <> Exec(I,s) +* (l,a)
     ;
     consider X being Subset of A such that
 A4: for x being set holds x in X iff x in the carrier of A & P[x] from
@@ -266,7 +279,7 @@ A4: for x being set holds x in X iff x in the carrier of A & P[x] from
     hereby
       assume l in X;
       then P[l] by A4;
-      hence ex s being State of A, a being Element of ObjectKind l st Exec(I,s
+      hence ex s being State of A, a being Element of Values l st Exec(I,s
       +*(l,a)) <> Exec(I,s) +* (l,a);
     end;
     thus thesis by A4;
@@ -274,7 +287,7 @@ A4: for x being set holds x in X iff x in the carrier of A & P[x] from
   uniqueness
   proof
     defpred P[Object of A] means ex s being State of A, a being Element of
-    ObjectKind $1 st Exec(I,s+*($1,a)) <> Exec(I,s) +* ($1,a);
+    Values $1 st Exec(I,s+*($1,a)) <> Exec(I,s) +* ($1,a);
     let a, b be Subset of A such that
 A5: for o being Object of A holds o in a iff P[o] and
 A6: for o being Object of A holds o in b iff P[o];
@@ -284,29 +297,29 @@ end;
 
 definition
 
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   A be IC-Ins-separated non
-  empty AMI-Struct over N, I be Instruction of A;
+  empty with_non-empty_values AMI-Struct over N, I be Instruction of A;
   func Input I -> Subset of A equals
   Out_U_Inp I \ Out_\_Inp I;
   coherence;
 end;
 
-theorem Th10:
+theorem Th3:
   for A being with_non_trivial_ObjectKinds IC-Ins-separated
-non empty AMI-Struct over N, I being Instruction
+non empty with_non-empty_values AMI-Struct over N, I being Instruction
   of A holds Out_\_Inp I c= Output I
 proof
   let A be with_non_trivial_ObjectKinds IC-Ins-separated non empty
-  AMI-Struct over N, I be Instruction of A;
+  with_non-empty_values AMI-Struct over N, I be Instruction of A;
   for o being Object of A holds o in Out_\_Inp I implies o in Output I
   proof
     let o be Object of A;
-    set s = the State of A,a = the Element of ObjectKind o;
+    set s = the State of A,a = the Element of Values o;
     consider w being set such that
-A1: w in ObjectKind o and
-A2: w <> a by YELLOW15:3;
-    reconsider w as Element of ObjectKind o by A1;
+A1: w in Values o and
+A2: w <> a by SUBSET_1:48;
+    reconsider w as Element of Values o by A1;
     set t = s +* (o,w);
 A3: dom t = the carrier of A by PARTFUN1:def 2;
 A4: dom s = the carrier of A by PARTFUN1:def 2;
@@ -322,11 +335,12 @@ A6: Exec(I,t+*(o,a)).o = (t+*(o,a)).o by Def3
   hence thesis by SUBSET_1:2;
 end;
 
-theorem Th11:
+theorem Th4:
   for A being IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A holds Output I c= Out_U_Inp I
+  with_non-empty_values AMI-Struct over N,
+  I being Instruction of A holds Output I c= Out_U_Inp I
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A;
   for o being Object of A holds o in Output I implies o in Out_U_Inp I
   proof
@@ -336,7 +350,7 @@ A1: not thesis;
     for s being State of A holds s.o = Exec(I,s).o
     proof
       let s be State of A;
-      reconsider so = s.o as Element of ObjectKind o by MEMSTR_0:77;
+      reconsider so = s.o as Element of Values o by MEMSTR_0:77;
 A2:   Exec(I,s+*(o,so)) = Exec(I,s) +* (o,so) by A1,Def5;
       dom Exec(I,s) = the carrier of A by PARTFUN1:def 2;
       hence s.o = (Exec(I,s) +* (o,so)).o by FUNCT_7:31
@@ -349,17 +363,18 @@ end;
 
 theorem
   for A being with_non_trivial_ObjectKinds IC-Ins-separated
-non empty AMI-Struct over N, I being Instruction of A holds
+non empty with_non-empty_values AMI-Struct over N, I being Instruction of A
+ holds
   Out_\_Inp I = Output I \ Input I
 proof
   let A be with_non_trivial_ObjectKinds IC-Ins-separated non empty
-  AMI-Struct over N, I be Instruction of A;
+  with_non-empty_values AMI-Struct over N, I be Instruction of A;
   for o being Object of A holds o in Out_\_Inp I iff o in Output I \ Input
   I
   proof
     let o be Object of A;
     hereby
-A1:   Out_\_Inp I c= Output I by Th10;
+A1:   Out_\_Inp I c= Output I by Th3;
       assume
 A2:   o in Out_\_Inp I;
       Out_\_Inp I misses Input I by XBOOLE_1:85;
@@ -373,7 +388,7 @@ A4: not o in Input I by XBOOLE_0:def 5;
     per cases by A4,XBOOLE_0:def 5;
     suppose
 A5:   not o in Out_U_Inp I;
-      Output I c= Out_U_Inp I by Th11;
+      Output I c= Out_U_Inp I by Th4;
       then not o in Output I by A5;
       hence thesis by A3,XBOOLE_0:def 5;
     end;
@@ -387,11 +402,12 @@ end;
 
 theorem
   for A being with_non_trivial_ObjectKinds IC-Ins-separated
-non empty AMI-Struct over N, I being Instruction of A holds
+non empty with_non-empty_values AMI-Struct over N, I being Instruction of A
+ holds
   Out_U_Inp I = Output I \/ Input I
 proof
   let A be with_non_trivial_ObjectKinds IC-Ins-separated non empty
-  AMI-Struct over N, I be Instruction of A;
+  with_non-empty_values AMI-Struct over N, I be Instruction of A;
   for o being Object of A st o in Out_U_Inp I holds o in Output I \/ Input
   I
   proof
@@ -408,29 +424,30 @@ A2:   not o in Input I;
       end;
       suppose
 A3:     o in Out_\_Inp I;
-        Out_\_Inp I c= Output I by Th10;
+        Out_\_Inp I c= Output I by Th3;
         hence thesis by A3;
       end;
     end;
     hence thesis by XBOOLE_0:def 3;
   end;
   hence Out_U_Inp I c= Output I \/ Input I by SUBSET_1:2;
-  Output I c= Out_U_Inp I & Input I c= Out_U_Inp I by Th11,XBOOLE_1:36;
+  Output I c= Out_U_Inp I & Input I c= Out_U_Inp I by Th4,XBOOLE_1:36;
   hence thesis by XBOOLE_1:8;
 end;
 
-theorem Th15:
+theorem Th7:
   for A being IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A, o being Object of A st
-  ObjectKind o is trivial holds not o in Out_U_Inp I
+  with_non-empty_values AMI-Struct over N, I being Instruction of A,
+  o being Object of A st
+  Values o is trivial holds not o in Out_U_Inp I
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A, o be Object of A such that
-A1: ObjectKind o is trivial;
+A1: Values o is trivial;
   assume o in Out_U_Inp I;
-  then consider s being State of A, a being Element of ObjectKind o such that
+  then consider s being State of A, a being Element of Values o such that
 A2: Exec(I,s+*(o,a)) <> Exec(I,s) +* (o,a) by Def5;
-  s.o is Element of ObjectKind o by MEMSTR_0:77;
+  s.o is Element of Values o by MEMSTR_0:77;
   then s.o = a by A1,ZFMISC_1:def 10;
   then
 A3: Exec(I,s+*(o,a)) = Exec(I,s) by FUNCT_7:35;
@@ -443,7 +460,7 @@ A5: for x being set st x in the carrier of A holds (Exec(I,s) +* (o,a)).x =
     per cases;
     suppose
 A6:   x = o;
-A7:   Exec(I,s).o is Element of ObjectKind o by MEMSTR_0:77;
+A7:   Exec(I,s).o is Element of Values o by MEMSTR_0:77;
       thus (Exec(I,s) +* (o,a)).x = a by A4,A6,FUNCT_7:31
         .= Exec(I,s).x by A1,A6,A7,ZFMISC_1:def 10;
     end;
@@ -458,35 +475,38 @@ end;
 
 theorem
   for A being IC-Ins-separated non empty
-  AMI-Struct over N , I being Instruction of A, o being Object of A st
-  ObjectKind o is trivial holds not o in Input I
+  with_non-empty_values AMI-Struct over N , I being Instruction of A,
+  o being Object of A st
+  Values o is trivial holds not o in Input I
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A, o be Object of A;
 A1: Input I c= Out_U_Inp I by XBOOLE_1:36;
-  assume ObjectKind o is trivial;
-  hence thesis by A1,Th15;
+  assume Values o is trivial;
+  hence thesis by A1,Th7;
 end;
 
 theorem
   for A being IC-Ins-separated non empty
-  AMI-Struct over N , I being Instruction of A, o being Object of A st
-  ObjectKind o is trivial holds not o in Output I
+  with_non-empty_values AMI-Struct over N , I being Instruction of A,
+  o being Object of A st
+  Values o is trivial holds not o in Output I
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A, o be Object of A;
   assume
-A1: ObjectKind o is trivial;
-  Output I c= Out_U_Inp I by Th11;
-  hence thesis by A1,Th15;
+A1: Values o is trivial;
+  Output I c= Out_U_Inp I by Th4;
+  hence thesis by A1,Th7;
 end;
 
-theorem Th18:
+theorem Th10:
   for A being IC-Ins-separated non empty
-AMI-Struct over N, I being Instruction of A holds I is halting iff Output I
+with_non-empty_values AMI-Struct over N, I being Instruction of A
+ holds I is halting iff Output I
   is empty
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A;
   thus I is halting implies Output I is empty
   proof
@@ -510,67 +530,70 @@ FUNCT_1:2;
   hence contradiction by A3,Def3;
 end;
 
-theorem Th19:
+theorem Th11:
   for A being with_non_trivial_ObjectKinds IC-Ins-separated
-non empty AMI-Struct over N, I being Instruction
+non empty with_non-empty_values AMI-Struct over N, I being Instruction
   of A st I is halting holds Out_\_Inp I is empty
 proof
   let A be with_non_trivial_ObjectKinds IC-Ins-separated non empty
-  AMI-Struct over N, I be Instruction of A such that
+  with_non-empty_values AMI-Struct over N, I be Instruction of A such that
 A1: I is halting;
-  Out_\_Inp I c= Output I by Th10;
-  then Out_\_Inp I c= {} by A1,Th18;
+  Out_\_Inp I c= Output I by Th3;
+  then Out_\_Inp I c= {} by A1,Th10;
   hence thesis by XBOOLE_1:3;
 end;
 
-theorem Th20:
+theorem Th12:
   for A being IC-Ins-separated non empty
-AMI-Struct over N, I being Instruction of A st I is halting holds Out_U_Inp
+with_non-empty_values AMI-Struct over N, I being Instruction of A
+ st I is halting holds Out_U_Inp
   I is empty
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A such that
 A1: for s being State of A holds Exec(I,s) = s;
   assume not thesis;
   then consider o being Object of A such that
 A2: o in Out_U_Inp I by SUBSET_1:4;
-  consider s being State of A, a being Element of ObjectKind o such that
+  consider s being State of A, a being Element of Values o such that
 A3: Exec(I,s+*(o,a)) <> Exec(I,s) +* (o,a) by A2,Def5;
   Exec(I,s+*(o,a)) = s+*(o,a) by A1
     .= Exec(I,s) +* (o,a) by A1;
   hence thesis by A3;
 end;
 
-theorem Th21:
+theorem Th13:
   for A being IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A st I is halting holds Input I
+  with_non-empty_values AMI-Struct over N, I being Instruction of A
+   st I is halting holds Input I
   is empty
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A;
   assume I is halting;
-  then Input I = {} \ Out_\_Inp I by Th20
+  then Input I = {} \ Out_\_Inp I by Th12
     .= {};
   hence thesis;
 end;
 
 registration
 
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   A be halting IC-Ins-separated
-non empty AMI-Struct over N, I be halting Instruction of A;
+non empty with_non-empty_values AMI-Struct over N,
+I be halting Instruction of A;
   cluster Input I -> empty;
-  coherence by Th21;
+  coherence by Th13;
   cluster Output I -> empty;
-  coherence by Th18;
+  coherence by Th10;
   cluster Out_U_Inp I -> empty;
-  coherence by Th20;
+  coherence by Th12;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   cluster halting with_non_trivial_ObjectKinds IC-Ins-separated for non
-    empty AMI-Struct over N;
+    empty with_non-empty_values AMI-Struct over N;
   existence
   proof
     take STC N;
@@ -579,19 +602,19 @@ registration
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   A be halting
   with_non_trivial_ObjectKinds IC-Ins-separated non empty
-  AMI-Struct over N, I be halting Instruction of A;
+  with_non-empty_values AMI-Struct over N, I be halting Instruction of A;
   cluster Out_\_Inp I -> empty;
-  coherence by Th19;
+  coherence by Th11;
 end;
 
 registration
   let N;
   cluster with_non_trivial_Instructions
   IC-Ins-separated
-    for non empty AMI-Struct over N;
+    for non empty with_non-empty_values AMI-Struct over N;
   existence
   proof
     take STC N;
@@ -601,15 +624,15 @@ end;
 
 theorem
   for A being standard IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A st I is
+  with_non-empty_values AMI-Struct over N, I being Instruction of A st I is
   sequential holds not IC A in Out_\_Inp I
 proof
   let A be standard IC-Ins-separated non empty
-  AMI-Struct over N, I be Instruction of A;
+  with_non-empty_values AMI-Struct over N, I be Instruction of A;
   set t = the State of A;
   set l = IC A;
    reconsider sICt = succ IC t as Element of NAT by ORDINAL1:def 12;
-   reconsider w = sICt as Element of ObjectKind l by MEMSTR_0:def 3;
+   reconsider w = sICt as Element of Values l by MEMSTR_0:def 6;
   set s = t +* (l,w);
   assume for s being State of A holds Exec(I,s).IC A = succ IC s;
   then
@@ -621,13 +644,14 @@ end;
 
 theorem
   for A being IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A st ex s being State of A st
+  with_non-empty_values AMI-Struct over N, I being Instruction of A st
+   ex s being State of A st
   Exec(I,s).IC A <> IC s holds IC A in Output I by Def3;
 
 registration
   let N;
   cluster standard for IC-Ins-separated non empty
-    AMI-Struct over N;
+    with_non-empty_values AMI-Struct over N;
   existence
   proof
     take STC N;
@@ -637,11 +661,11 @@ end;
 
 theorem
   for A being standard IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A st I is
+  with_non-empty_values AMI-Struct over N, I being Instruction of A st I is
   sequential holds IC A in Output I
 proof
   let A be standard IC-Ins-separated non empty
-  AMI-Struct over N, I be Instruction of A such that
+  with_non-empty_values AMI-Struct over N, I be Instruction of A such that
 A1: for s being State of A holds Exec(I, s).IC A = succ IC s;
   set s = the State of A;
   Exec(I,s).IC A = succ IC s by A1;
@@ -649,41 +673,44 @@ A1: for s being State of A holds Exec(I, s).IC A = succ IC s;
   hence thesis by Def3;
 end;
 
-theorem Th26:
+theorem Th17:
   for A being IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A st ex s being State of A st
+  with_non-empty_values AMI-Struct over N, I being Instruction of A st
+   ex s being State of A st
   Exec(I,s).IC A <> IC s holds IC A in Out_U_Inp I
 proof
-  let A be IC-Ins-separated non empty AMI-Struct over
+  let A be IC-Ins-separated non empty with_non-empty_values AMI-Struct over
   N, I be Instruction of A;
   assume ex s being State of A st Exec(I,s).IC A <> IC s;
   then
 A1: IC A in Output I by Def3;
-  Output I c= Out_U_Inp I by Th11;
+  Output I c= Out_U_Inp I by Th4;
   hence thesis by A1;
 end;
 
 theorem
   for A being standard IC-Ins-separated non empty
-  AMI-Struct over N, I being Instruction of A st I is
+  with_non-empty_values AMI-Struct over N, I being Instruction of A st I is
   sequential holds IC A in Out_U_Inp I
 proof
   let A be standard IC-Ins-separated non empty
-  AMI-Struct over N, I be Instruction of A;
+  with_non-empty_values AMI-Struct over N, I be Instruction of A;
   set s = the State of A;
   assume for s being State of A holds Exec(I,s).IC A = succ IC s;
   then Exec(I,s).IC A = succ IC s;
   then Exec(I,s).IC A <> IC s by ORDINAL1:9;
-  hence thesis by Th26;
+  hence thesis by Th17;
 end;
 
 theorem
-  for A being IC-Ins-separated standard-ins non empty
-   AMI-Struct over N, I being Instruction of A, o being Object
+  for A being IC-Ins-separated non empty
+   with_non-empty_values AMI-Struct over N, I being Instruction of A,
+   o being Object
   of A st I is jump-only holds o in Output I implies o = IC A
 proof
-  let A be IC-Ins-separated standard-ins non empty
-  AMI-Struct over N, I be Instruction of A, o be Object of A;
+  let A be IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N, I be Instruction of A,
+  o be Object of A;
   assume
 A1: for s being State of A, o being Object of A, J being Instruction of
   A st InsCode I = InsCode J & o in Data-Locations A holds Exec(J,s).o = s.o;

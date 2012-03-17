@@ -10,9 +10,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -34,7 +36,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -43,12 +45,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="254">
+<Func kind="K" nr="268">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WSIERP_1" nr="2">
@@ -57,69 +59,13 @@
 <Cluster/>
 <Func kind="K" nr="31"/>
 </Typ>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
 </ArgTypes>
-<Func kind="K" nr="55">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="27"/>
-</Cluster>
-</FCluster>
-<FCluster aid="WSIERP_1" nr="3">
-<ArgTypes>
-<Typ kind="M" nr="6">
-<Cluster/>
-<Func kind="K" nr="31"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="248">
+<Func kind="K" nr="263">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="11"/>
-<Adjective nr="27"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<CCluster aid="WSIERP_1" nr="1">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="6">
-<Cluster/>
-<Func kind="K" nr="31"/>
-</Typ>
-<Cluster>
-<Adjective nr="44"/>
-</Cluster>
-</CCluster>
-<CCluster aid="WSIERP_1" nr="2">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="6">
-<Cluster/>
-<Func kind="K" nr="32"/>
-</Typ>
-<Cluster>
-<Adjective nr="42"/>
-</Cluster>
-</CCluster>
-<CCluster aid="WSIERP_1" nr="3">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="13"/>
-<Adjective nr="18"/>
-<Adjective nr="44"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="13"/>
-<Adjective nr="18"/>
-<Adjective nr="42"/>
-</Cluster>
-</CCluster>
 </Registrations>

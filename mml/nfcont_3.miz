@@ -2,7 +2,7 @@
 ::  by Hiroyuki Okazaki , Noboru Endou and Yasunari Shidama
 ::
 :: Received August 17, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,9 +21,9 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
       PARTFUN1, FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, NAT_1,
       VALUED_0, COMPLEX1, ZFMISC_1, SEQ_1, SEQ_2, RCOMP_1, FCONT_1, STRUCT_0,
-      PRE_TOPC, RLVECT_1, VFUNCT_1, NORMSP_0, NORMSP_1, BHSP_1, NFCONT_1;
+      PRE_TOPC, RLVECT_1, VFUNCT_1, NORMSP_0, NORMSP_1, NFCONT_1;
  constructors REAL_1, COMPLEX1, MEMBERED, SEQ_2, RCOMP_1, SEQ_1, RELSET_1,
-      FCONT_1, NFCONT_1, BHSP_1, VFUNCT_1;
+      FCONT_1, NFCONT_1, VFUNCT_1, COMSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, VALUED_0, FUNCT_2, RELAT_1, FUNCT_1, ZFMISC_1, STRUCT_0,
       VFUNCT_1;
@@ -96,16 +96,14 @@ for h be sequence of S,r be Real holds r(#)h = r*h
 proof
    let h be sequence of S;
    let r be Real;
-A1:rng (r(#)h) c= the carrier of S;
    dom h = NAT by FUNCT_2:def 1; then
-A2:dom (r(#)h) = NAT by VFUNCT_1:def 4; then
-A3:r(#)h is sequence of S by A1,FUNCT_2:2;
+A1:dom (r(#)h) = NAT by VFUNCT_1:def 4;
    now let n;
-    (r(#)h).n = (r(#)h)/.n by A2,PARTFUN1:def 6; then
-    (r(#)h).n = r * (h/.n) by A2,VFUNCT_1:def 4;
+    (r(#)h).n = (r(#)h)/.n; then
+    (r(#)h).n = r * (h/.n) by A1,VFUNCT_1:def 4;
     hence (r(#)h).n = r * (h.n);
    end;
-   hence thesis by A3,NORMSP_1:def 5;
+   hence thesis by NORMSP_1:def 5;
 end;
 
 theorem Th4:
@@ -801,46 +799,44 @@ A6:  for x1 st x1 in dom(f|X) & abs(x1-x0) < s
     assume that
 A7:  x1 in X and
 A8:  abs(x1-x0)<s;
-B0:  x0 in REAL by XREAL_0:def 1;
-B1:  x1 in REAL by XREAL_0:def 1;
-A9: dom (f|X) = dom f /\ X by RELAT_1:61
+A9:  x0 in REAL by XREAL_0:def 1;
+A10:  x1 in REAL by XREAL_0:def 1;
+A11: dom (f|X) = dom f /\ X by RELAT_1:61
        .= X by A1,XBOOLE_1:28; then
     ||. f/.x1 - f/.x0 .||
-      = ||.(f|X)/.x1 - f/.x0 .|| by A7,PARTFUN2:15,B1
-     .= ||.(f|X)/.x1 - (f|X)/.x0 .|| by A3,A9,PARTFUN2:15,B0;
-    hence thesis by A6,A9,A7,A8;
+      = ||.(f|X)/.x1 - f/.x0 .|| by A7,PARTFUN2:15,A10
+     .= ||.(f|X)/.x1 - (f|X)/.x0 .|| by A3,A11,PARTFUN2:15,A9;
+    hence thesis by A6,A11,A7,A8;
    end;
    assume
-A10:for x0,r st x0 in X & 0 <r
+A12:for x0,r st x0 in X & 0 <r
      ex s st 0 < s & for x1 st x1 in X & abs(x1-x0) < s
                          holds ||. f/.x1 - f/.x0 .|| < r;
-A11:dom (f|X) = dom f /\ X by RELAT_1:61
-    .= X by A1,XBOOLE_1:28;
    now let x0;
-    assume A12: x0 in dom(f|X); then
-A13:x0 in X by RELAT_1:57;
+    assume A13: x0 in dom(f|X); then
+A14:x0 in X;
     for r st 0 < r ex s st 0 < s & for x1 st x1 in dom(f|X) & abs(x1-x0) < s
       holds ||.(f|X)/.x1-(f|X)/.x0 .||<r
     proof
      let r;
      assume 0 < r; then
      consider s such that
-A14:  0<s and
-A15:  for x1 st x1 in X & abs(x1-x0) < s holds ||. f/.x1 - f/.x0 .|| < r
-        by A10,A13;
+A15:  0<s and
+A16:  for x1 st x1 in X & abs(x1-x0) < s holds ||. f/.x1 - f/.x0 .|| < r
+        by A12,A14;
      take s;
-     thus 0<s by A14;
+     thus 0<s by A15;
      let x1 such that
-A16:  x1 in dom(f|X) and
-A17:  abs(x1-x0)<s;
-B0:  x0 in REAL by XREAL_0:def 1;
-B1:  x1 in REAL by XREAL_0:def 1;
+A17:  x1 in dom(f|X) and
+A18:  abs(x1-x0)<s;
+A19:  x0 in REAL by XREAL_0:def 1;
+A20:  x1 in REAL by XREAL_0:def 1;
      ||.(f|X)/.x1-(f|X)/.x0 .||
-       = ||.(f|X)/.x1 - f/.x0 .|| by A12,PARTFUN2:15,B0
-      .= ||. f/.x1 - f/.x0 .|| by A16,PARTFUN2:15,B1;
-     hence thesis by A11,A15,A16,A17;
+       = ||.(f|X)/.x1 - f/.x0 .|| by A13,PARTFUN2:15,A19
+      .= ||. f/.x1 - f/.x0 .|| by A17,PARTFUN2:15,A20;
+     hence thesis by A16,A17,A18;
     end;
-    hence f|X is_continuous_in x0 by Th8,A12;
+    hence f|X is_continuous_in x0 by Th8,A13;
    end;
    hence thesis by Def2;
 end;
@@ -868,7 +864,7 @@ A3:  0<r;
     hence ||. f/.x1 - f/.x0 .|| < r by A3,NORMSP_1:6;
    end; then
    f|dom f is continuous by Th17;
-   hence thesis by RELAT_1:69;
+   hence thesis;
 end;
 end;
 
@@ -891,7 +887,7 @@ proof
     assume A1: x0 in dom(f|X); then
     x0 in dom f by RELAT_1:57; then
 A2: f is_continuous_in x0 by Def2;
-    x0 in X by A1,RELAT_1:57;
+    x0 in X by A1;
     hence f|X is_continuous_in x0 by A2,Th6;
    end;
    hence thesis by Def2;
@@ -924,7 +920,7 @@ A1:  x0 in dom(f|X qua PartFunc of REAL,the carrier of S) by MEMBERED:9;
 A2: X = {x0} by ZFMISC_1:132;
     now let p be real number;
      assume A3: p in dom(f|X); then
-A4:  p in {x0} by A2,RELAT_1:57;
+A4:  p in {x0} by A2;
      thus f|X is_continuous_in p
      proof
       thus p in dom (f|X) by A3;
@@ -988,7 +984,7 @@ A8: rng s1 c= dom f1 /\ dom f2 by A3,VFUNCT_1:def 1;
        by A8,A7,Th2;
    end; then
    (f1+f2)|X is continuous by Th16;
-   hence thesis by RELAT_1:69;
+   hence thesis;
 end;
 cluster f1-f2 -> continuous for PartFunc of REAL,the carrier of S;
 coherence
@@ -1015,7 +1011,7 @@ A16:rng s1 c= dom f1 /\ dom f2 by A11,VFUNCT_1:def 2;
       by A16,A15,Th2;
    end; then
    (f1-f2) |X is continuous by Th16;
-   hence thesis by RELAT_1:69;
+   hence thesis;
 end;
 end;
 
@@ -1271,9 +1267,9 @@ A11: rng s2 c= dom f by A7,XBOOLE_1:1;
     hence (f/*q1).n= s1.n by A7,FUNCT_2:109;
    end; then
 A12: f/*q1=s1 by FUNCT_2:63;
-   lim s2 in dom(f|(dom f)) by A10,RELAT_1:69; then
+   lim s2 in dom(f|(dom f)) by A10; then
    f|(dom f) is_continuous_in (lim s2) by A2,Def2; then
-A13: f is_continuous_in (lim s2) by RELAT_1:68; then
+A13: f is_continuous_in (lim s2); then
    f/.(lim s2) = lim (f/*s2) by A9,A11,Def1;
    hence
     q2 is subsequence of s1 & q2 is convergent & (lim q2) in rng f
@@ -1320,22 +1316,22 @@ A2:  for x1,x2 st x1 in dom(f|X) & x2 in dom(f|X)
     take r;
     thus 0<r by A1;
     let x1,x2;
-B:   x1 in REAL & x2 in REAL by XREAL_0:def 1;
-    assume A3: x1 in dom(f|X) & x2 in dom(f|X); then
-    (f|X)/.x1 = f/.x1 & (f|X)/.x2 = f/.x2 by PARTFUN2:15,B;
-    hence thesis by A2,A3;
+A3:   x1 in REAL & x2 in REAL by XREAL_0:def 1;
+    assume A4: x1 in dom(f|X) & x2 in dom(f|X); then
+    (f|X)/.x1 = f/.x1 & (f|X)/.x2 = f/.x2 by PARTFUN2:15,A3;
+    hence thesis by A2,A4;
    end;
    given r be real number such that
-A4: 0<r and
-A5: for x1,x2 st x1 in dom(f|X) & x2 in dom(f|X)
+A5: 0<r and
+A6: for x1,x2 st x1 in dom(f|X) & x2 in dom(f|X)
         holds ||.f/.x1-f/.x2.|| <= r*abs(x1-x2);
    take r;
-   thus 0<r by A4;
+   thus 0<r by A5;
    let x1,x2;
-B:   x1 in REAL & x2 in REAL by XREAL_0:def 1;
-   assume A6: x1 in dom(f|X) & x2 in dom(f|X); then
-   (f|X)/.x1 = f/.x1 & (f|X)/.x2 = f/.x2 by PARTFUN2:15,B;
-   hence thesis by A5,A6;
+A7:   x1 in REAL & x2 in REAL by XREAL_0:def 1;
+   assume A8: x1 in dom(f|X) & x2 in dom(f|X); then
+   (f|X)/.x1 = f/.x1 & (f|X)/.x2 = f/.x2 by PARTFUN2:15,A7;
+   hence thesis by A6,A8;
 end;
 
 registration let S;
@@ -1671,11 +1667,11 @@ proof
    assume A1: for x0 st x0 in X holds f/.x0 = x0*r+p;
 A2:now let x1,x2;
     assume A3: x1 in dom(f|X) & x2 in dom(f|X); then
-    x2 in X by RELAT_1:57; then
+    x2 in X; then
 A4: f/.x2 = x2*r+p by A1;
 A5: 0<=abs(x1-x2) by COMPLEX1:46;
 A6: (x1-x2) is Real by XREAL_0:def 1;
-    x1 in X by A3,RELAT_1:57; then
+    x1 in X by A3; then
     f/.x1 = x1*r+p by A1; then
     ||. f/.x1-f/.x2.|| = ||. x1*r+(p-(p+x2*r)).|| by A4,RLVECT_1:def 3
       .= ||. x1*r+(p-p-x2*r).|| by RLVECT_1:27

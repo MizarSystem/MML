@@ -12,6 +12,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="WELLORD2"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
@@ -24,7 +25,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="85">
+<Func kind="K" nr="93">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -40,7 +41,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="26">
+<Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -53,18 +54,18 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="29">
+<Func kind="K" nr="27">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
+<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ORDERS_1" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="54">
+<Func kind="K" nr="52">
 <Func kind="K" nr="5"/>
 </Func>
 <Cluster>
@@ -84,9 +85,9 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="15"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -2,7 +2,7 @@
 ::  by Katarzyna Jankowska
 ::
 :: Received May 20, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,11 +20,11 @@ environ
       FUNCT_2, ALGSTR_0, BINOP_1, GROUP_1, ABIAN, INT_1, CARD_3, ARYTM_1,
       FINSET_1, FINSUB_1, MATRIX_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FINSEQ_1, FUNCT_2, STRUCT_0, ALGSTR_0, NAT_1, NAT_D, GROUP_1, GROUP_4,
-      BINOP_1, VECTSP_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2, FINSEQ_3,
-      FINSEQ_4, NUMBERS, XXREAL_0;
+      FINSEQ_1, FUNCT_2, STRUCT_0, ALGSTR_0, ORDINAL1, NAT_1, NAT_D, GROUP_1,
+      GROUP_4, BINOP_1, VECTSP_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2,
+      FINSEQ_3, FINSEQ_4, NUMBERS, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, FINSUB_1, XXREAL_0, NAT_1, NAT_D,
-      FINSEQOP, FINSEQ_4, GROUP_4, MATRIX_1, VECTSP_1, RELSET_1;
+      FINSEQOP, FINSEQ_4, GROUP_4, MATRIX_1, VECTSP_1, RELSET_1, PRE_POLY;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0, NAT_1,
       FINSEQ_1, FINSEQ_2, STRUCT_0, GROUP_1, MATRIX_1, ORDINAL1, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -270,7 +270,7 @@ end;
 
 begin :: Deleting of Rows and Columns in a Matrix
 
-theorem Th10:
+theorem Th8:
   for M be Matrix of n,m,D holds for k st k in Seg n holds M.k= Line(M,k)
 proof
   let M be Matrix of n,m,D;
@@ -318,7 +318,7 @@ A1: k in dom M;
   then 1 <= k & k <= len M by FINSEQ_3:25;
   then reconsider N = M as Matrix of len M, width M, K by MATRIX_1:20;
   k in Seg len N by A1,FINSEQ_1:def 3;
-  hence thesis by Th10;
+  hence thesis by Th8;
 end;
 
 definition
@@ -393,42 +393,42 @@ FINSEQ_2:11;
             thus thesis;
           end;
           consider N being Matrix of len M,m,K such that
-A15:      for k,l st [k,l] in Indices N holds P[k,l,N*(k,l)] from
+A14:      for k,l st [k,l] in Indices N holds P[k,l,N*(k,l)] from
           MATRIX_1:sch 2(A10);
           dom M = Seg len M by FINSEQ_1:def 3;
           then
-A16:      Indices N = [:dom M, Seg m :] by A6,MATRIX_1:23;
-A17:      for k,l st k in dom M & l in Seg m holds N*(k,l)=Del(Line(M,k), i).l
+A15:      Indices N = [:dom M, Seg m :] by A6,MATRIX_1:23;
+A16:      for k,l st k in dom M & l in Seg m holds N*(k,l)=Del(Line(M,k), i).l
           proof
             let k,l;
             assume k in dom M & l in Seg m;
-            then [k,l] in Indices N by A16,ZFMISC_1:87;
-            hence thesis by A15;
+            then [k,l] in Indices N by A15,ZFMISC_1:87;
+            hence thesis by A14;
           end;
-A18:      width N = m by A6,MATRIX_1:23;
+A17:      width N = m by A6,MATRIX_1:23;
           reconsider N as Matrix of K;
           take N;
           for k st k in dom M holds N.k=Del(Line(M,k),i)
           proof
             let k;
             assume
-A19:        k in dom M;
+A18:        k in dom M;
             then k in Seg len M by FINSEQ_1:def 3;
             then
-A20:        N.k=Line(N,k) by Th10;
-            then reconsider s=N.k as FinSequence;
-A21:        len s= m by A18,A20,MATRIX_1:def 7;
+A19:        N.k=Line(N,k) by Th8;
+            reconsider s=N.k as FinSequence;
+A20:        len s= m by A17,A19,MATRIX_1:def 7;
             then
-A22:        dom s = Seg m by FINSEQ_1:def 3;
-A23:        now
+A21:        dom s = Seg m by FINSEQ_1:def 3;
+A22:        now
               let j be Nat;
               assume
-A24:          j in dom s;
-              then Line(N,k).j=N*(k,j) by A18,A22,MATRIX_1:def 7;
-              hence s.j=Del(Line(M,k),i).j by A17,A19,A20,A22,A24;
+A23:          j in dom s;
+              then Line(N,k).j=N*(k,j) by A17,A21,MATRIX_1:def 7;
+              hence s.j=Del(Line(M,k),i).j by A16,A18,A19,A21,A23;
             end;
-            len Del (Line(M,k),i)=m by A8,A19;
-            hence thesis by A21,A23,FINSEQ_2:9;
+            len Del (Line(M,k),i)=m by A8,A18;
+            hence thesis by A20,A22,FINSEQ_2:9;
           end;
           hence thesis by A6,MATRIX_1:23;
         end;
@@ -439,23 +439,23 @@ A24:          j in dom s;
   proof
     let M1,M2 be Matrix of K;
     assume that
-A25: len M1=len M and
-A26: for k st k in dom M holds M1.k=Del(Line(M,k),i) and
-A27: len M2=len M and
-A28: for k st k in dom M holds M2.k=Del(Line(M,k),i);
-A29: dom M1 = dom M by A25,FINSEQ_3:29;
+A24: len M1=len M and
+A25: for k st k in dom M holds M1.k=Del(Line(M,k),i) and
+A26: len M2=len M and
+A27: for k st k in dom M holds M2.k=Del(Line(M,k),i);
+A28: dom M1 = dom M by A24,FINSEQ_3:29;
     now
       let k be Nat;
       assume
-A30:  k in dom M1;
-      hence M1.k=Del(Line(M,k),i) by A26,A29
-        .=M2.k by A28,A29,A30;
+A29:  k in dom M1;
+      hence M1.k=Del(Line(M,k),i) by A25,A28
+        .=M2.k by A27,A28,A29;
     end;
-    hence thesis by A25,A27,FINSEQ_2:9;
+    hence thesis by A24,A26,FINSEQ_2:9;
   end;
 end;
 
-theorem Th11:
+theorem Th9:
   for M1,M2 being Matrix of D st M1@=M2@ & len M1=len M2 holds M1 = M2
 proof
   let M1,M2 be Matrix of D;
@@ -479,7 +479,7 @@ A5: [i,j] in Indices M1;
   hence thesis by A2,A3,MATRIX_1:21;
 end;
 
-theorem Th12:
+theorem Th10:
   for M being Matrix of D st width M > 0 holds len (M@)=width M &
   width (M@)=len M
 proof
@@ -531,9 +531,9 @@ proof
   let M1,M2 be Matrix of D;
   assume width M1>0 & width M2>0;
   then
-A1: width (M1@)=len M1 & width (M2@)=len M2 by Th12;
+A1: width (M1@)=len M1 & width (M2@)=len M2 by Th10;
   assume M1@=M2@;
-  hence thesis by A1,Th11;
+  hence thesis by A1,Th9;
 end;
 
 theorem
@@ -548,9 +548,9 @@ A2: width M2>0;
   assume that
 A3: M1@=M2@ and
 A4: width (M1) =width (M2);
-  len M1=width (M1@) by A1,Th12;
+  len M1=width (M1@) by A1,Th10;
   then
-A5: len M1=len M2 by A2,A3,Th12;
+A5: len M1=len M2 by A2,A3,Th10;
 A6: Indices M2=[:dom M2,Seg width M2:];
   for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j)
   proof
@@ -565,7 +565,7 @@ A7: [i,j] in Indices M1;
   hence thesis by A4,A5,MATRIX_1:21;
 end;
 
-theorem Th15:
+theorem Th13:
   for M being Matrix of D st len M>0 & width M>0 holds (M@)@=M
 proof
   let M be Matrix of D;
@@ -573,12 +573,12 @@ proof
 A1: len M>0 and
 A2: width M>0;
   set N=M@;
-A3: width N= len M by A2,Th12;
+A3: width N= len M by A2,Th10;
 A4: len (N@) = width N by MATRIX_1:def 6;
 A5: len N = width M by MATRIX_1:def 6;
   dom M = Seg len M & dom (N@) = Seg len (N@) by FINSEQ_1:def 3;
   then
-A6: Indices (N@)=Indices M by A1,A5,A3,A4,Th12;
+A6: Indices (N@)=Indices M by A1,A5,A3,A4,Th10;
 A7: for i,j st [i,j] in Indices (N@) holds (N@)*(i,j) = M*(i,j)
   proof
     let i,j;
@@ -588,12 +588,12 @@ A8: [i,j] in Indices (N@);
     then (N@)*(i,j)=N*(j,i) by MATRIX_1:def 6;
     hence thesis by A6,A8,MATRIX_1:def 6;
   end;
-  width N>0 by A1,A2,Th12;
-  then width (N@)=width M by A5,Th12;
+  width N>0 by A1,A2,Th10;
+  then width (N@)=width M by A5,Th10;
   hence thesis by A3,A4,A7,MATRIX_1:21;
 end;
 
-theorem Th16:
+theorem Th14:
   for M being Matrix of D holds for i st i in dom M holds Line(M,i )=Col(M@,i)
 proof
   let M be Matrix of D;
@@ -646,8 +646,8 @@ A4: len M>0;
     end;
     suppose
       width M>0;
-      then (M@)@=M by A4,Th15;
-      hence thesis by A2,Th16;
+      then (M@)@=M by A4,Th13;
+      hence thesis by A2,Th14;
     end;
   end;
 end;
@@ -732,7 +732,7 @@ begin :: Sets of Permutations
 definition
   let IT be set;
   attr IT is permutational means
-  :Def9:
+  :Def7:
   ex n st for x st x in IT holds x is Permutation of Seg n;
 end;
 
@@ -757,13 +757,13 @@ end;
 definition
   let P be permutational non empty set;
   func len P -> Nat means
-  :Def10:
+  :Def8:
   ex s st s in P & it=len s;
   existence
   proof
     set x = the Element of P;
     consider n such that
-A1: for y st y in P holds y is Permutation of Seg n by Def9;
+A1: for y st y in P holds y is Permutation of Seg n by Def7;
     reconsider n as Element of NAT by ORDINAL1:def 12;
     reconsider q = x as Permutation of Seg n by A1;
 A2: dom q=Seg n by FUNCT_2:52;
@@ -778,7 +778,7 @@ A2: dom q=Seg n by FUNCT_2:52;
 A3: s1 in P and
 A4: n1=len s1;
     consider n such that
-A5: for y st y in P holds y is Permutation of Seg n by Def9;
+A5: for y st y in P holds y is Permutation of Seg n by Def7;
     s1 is Function of Seg n,Seg n by A3,A5;
     then n in NAT & dom s1=Seg n by FUNCT_2:52,ORDINAL1:def 12;
     then
@@ -805,13 +805,13 @@ definition
   proof
     let x be Element of P;
     consider n such that
-A1: for y st y in P holds y is Permutation of Seg n by Def9;
+A1: for y st y in P holds y is Permutation of Seg n by Def7;
     reconsider n as Element of NAT by ORDINAL1:def 12;
     reconsider q=x as Permutation of Seg n by A1;
 A2: dom q=Seg n by FUNCT_2:52;
     then reconsider q as FinSequence by FINSEQ_1:def 2;
     len q=n by A2,FINSEQ_1:def 3;
-    then Seg (len P) = Seg n by Def10;
+    then Seg (len P) = Seg n by Def8;
     hence thesis by A1;
   end;
 end;
@@ -827,7 +827,7 @@ proof
     assume x in P;
     hence x is Permutation of Seg n by TARSKI:def 1;
   end;
-  then reconsider P as permutational non empty set by Def9;
+  then reconsider P as permutational non empty set by Def7;
   take P;
   len P= n
   proof
@@ -835,7 +835,7 @@ proof
     reconsider y=x as Function of Seg n,Seg n by TARSKI:def 1;
 A1: dom y=Seg n by FUNCT_2:52;
     then reconsider s=y as FinSequence by FINSEQ_1:def 2;
-    n in NAT & len P= len s by Def10,ORDINAL1:def 12;
+    n in NAT & len P= len s by Def8,ORDINAL1:def 12;
     hence thesis by A1,FINSEQ_1:def 3;
   end;
   hence thesis;
@@ -844,7 +844,7 @@ end;
 definition
   let n;
   func Permutations n -> set means
-  :Def11:
+  :Def9:
   x in it iff x is Permutation of Seg n;
   existence
   proof
@@ -899,7 +899,7 @@ A1: for x holds x in P iff x in Funcs(Seg n,Seg n) & P[x] from
       assume x in P;
       hence x is Permutation of Seg n by A1;
     end;
-    then reconsider P as permutational non empty set by Def9;
+    then reconsider P as permutational non empty set by Def7;
     x in P iff x is Permutation of Seg n
     proof
       thus x in P implies x is Permutation of Seg n by A1;
@@ -908,7 +908,7 @@ A2:   x is Permutation of Seg n;
       then x in Funcs(Seg n,Seg n) by FUNCT_2:9;
       hence thesis by A1,A2;
     end;
-    hence thesis by Def11;
+    hence thesis by Def9;
   end;
 end;
 
@@ -916,12 +916,12 @@ theorem
   len Permutations(n)=n
 proof
   set x = the Element of Permutations(n);
-  reconsider q=x as Permutation of Seg n by Def11;
+  reconsider q=x as Permutation of Seg n by Def9;
 A1: dom q=Seg n by FUNCT_2:52;
   then reconsider q as FinSequence by FINSEQ_1:def 2;
   n in NAT by ORDINAL1:def 12;
   then len q=n by A1,FINSEQ_1:def 3;
-  hence thesis by Def10;
+  hence thesis by Def8;
 end;
 
 theorem
@@ -931,7 +931,7 @@ A1: Permutations 1 c={idseq 1}
   proof
     let p be set;
     assume p in Permutations 1;
-    then reconsider q=p as Permutation of Seg 1 by Def11;
+    then reconsider q=p as Permutation of Seg 1 by Def9;
 A2: dom q=Seg 1 by FUNCT_2:52;
     rng q = Seg 1 & 1 in {1} by FUNCT_2:def 3,TARSKI:def 1;
     then q.1 in Seg 1 by FINSEQ_1:2,FUNCT_2:4;
@@ -947,7 +947,7 @@ A3: q.1=1 by FINSEQ_1:2,TARSKI:def 1;
     let x;
     assume x in {idseq 1};
     then x= idseq 1 by TARSKI:def 1;
-    hence thesis by Def11;
+    hence thesis by Def9;
   end;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
@@ -960,7 +960,7 @@ definition
   let n;
 
   func Group_of_Perm(n) -> strict multMagma means
-  :Def13:
+  :Def10:
   the carrier of it =
 Permutations(n) & for q,p be Element of Permutations(n) holds (the multF of it)
   .(q,p)=p*q;
@@ -972,8 +972,8 @@ A1: for q,p being Element of Permutations(n) ex z being Element of
     Permutations(n) st P[q,p,z]
     proof
       let q,p be Element of Permutations(n);
-      reconsider p,q as Permutation of Seg n by Def11;
-      reconsider z=p*q as Element of Permutations(n) by Def11;
+      reconsider p,q as Permutation of Seg n by Def9;
+      reconsider z=p*q as Element of Permutations(n) by Def9;
       take z;
       thus thesis;
     end;
@@ -1007,43 +1007,43 @@ registration
   cluster Group_of_Perm(n) -> non empty;
   coherence
   proof
-    the carrier of Group_of_Perm(n) = Permutations(n) by Def13;
+    the carrier of Group_of_Perm(n) = Permutations(n) by Def10;
     hence the carrier of Group_of_Perm(n) is non empty;
   end;
 end;
 
-theorem Th23:
+theorem Th20:
   idseq n is Element of Group_of_Perm(n)
 proof
-  the carrier of Group_of_Perm(n) = Permutations(n) by Def13;
-  hence thesis by Def11;
+  the carrier of Group_of_Perm(n) = Permutations(n) by Def10;
+  hence thesis by Def9;
 end;
 
-theorem Th24:
+theorem Th21:
   p *(idseq n)=p & (idseq n)*p=p
 proof
 A1: Seg n = {} implies Seg n= {};
-  p is Permutation of Seg n by Def11;
+  p is Permutation of Seg n by Def9;
   then
 A2: rng p= Seg n by FUNCT_2:def 3;
-  p is Function of Seg n,Seg n by Def11;
+  p is Function of Seg n,Seg n by Def9;
   then dom p= Seg n by A1,FUNCT_2:def 1;
   hence thesis by A2,RELAT_1:52,54;
 end;
 
-theorem Th25:
+theorem Th22:
   p *p"=idseq n & p"*p=idseq n
 proof
-  p is Permutation of Seg n by Def11;
+  p is Permutation of Seg n by Def9;
   hence thesis by FUNCT_2:61;
 end;
 
-theorem Th26:
+theorem Th23:
   p" is Element of Group_of_Perm(n)
 proof
-  reconsider p as Permutation of Seg n by Def11;
-  p" is Element of Permutations(n) by Def11;
-  hence thesis by Def13;
+  reconsider p as Permutation of Seg n by Def9;
+  p" is Element of Permutations(n) by Def9;
+  hence thesis by Def10;
 end;
 
 registration
@@ -1055,32 +1055,32 @@ A1: ex e being Element of Group_of_Perm(n) st for p being Element of
     Group_of_Perm(n) holds p * e = p & e * p = p & ex g being Element of
     Group_of_Perm(n) st p * g = e & g * p = e
     proof
-      reconsider e=idseq n as Element of Group_of_Perm(n) by Th23;
+      reconsider e=idseq n as Element of Group_of_Perm(n) by Th20;
       take e;
-      reconsider e9=idseq n as Element of Permutations(n) by Def11;
+      reconsider e9=idseq n as Element of Permutations(n) by Def9;
 A2:   for p being Element of Group_of_Perm(n) holds ex g being Element of
       Group_of_Perm(n) st p * g= e & g * p=e
       proof
         let p be Element of Group_of_Perm(n);
-        reconsider q=p as Element of Permutations(n) by Def13;
-        reconsider r=q as Permutation of Seg n by Def11;
-        reconsider f=r" as Element of Permutations(n) by Def11;
-        reconsider g=f as Element of Group_of_Perm(n) by Th26;
+        reconsider q=p as Element of Permutations(n) by Def10;
+        reconsider r=q as Permutation of Seg n by Def9;
+        reconsider f=r" as Element of Permutations(n) by Def9;
+        reconsider g=f as Element of Group_of_Perm(n) by Th23;
         take g;
-A3:     g * p= q*f by Def13
-          .=e by Th25;
-        p * g= f*q by Def13
-          .=e by Th25;
+A3:     g * p= q*f by Def10
+          .=e by Th22;
+        p * g= f*q by Def10
+          .=e by Th22;
         hence thesis by A3;
       end;
       for p being Element of Group_of_Perm(n) holds p * e =p & e* p=p
       proof
         let p be Element of Group_of_Perm(n);
-        reconsider p9=p as Element of Permutations(n) by Def13;
-A4:     e * p =p9 * e9 by Def13
-          .=p by Th24;
-        p * e =e9 * p9 by Def13
-          .=p by Th24;
+        reconsider p9=p as Element of Permutations(n) by Def10;
+A4:     e * p =p9 * e9 by Def10
+          .=p by Th21;
+        p * e =e9 * p9 by Def10
+          .=p by Th21;
         hence thesis by A4;
       end;
       hence thesis by A2;
@@ -1088,40 +1088,40 @@ A4:     e * p =p9 * e9 by Def13
     for p,q,r being Element of Group_of_Perm(n) holds (p * q) * r = p * (q * r)
     proof
       let p,q,r be Element of Group_of_Perm(n);
-      reconsider p9=p,q9=q,r9=r as Element of Permutations(n) by Def13;
+      reconsider p9=p,q9=q,r9=r as Element of Permutations(n) by Def10;
 A5:   q9*p9 is Permutation of Seg n & r9*q9 is Permutation of Seg n
       proof
-        reconsider p9,q9,r9 as Permutation of Seg n by Def11;
+        reconsider p9,q9,r9 as Permutation of Seg n by Def9;
         q9*p9 is Permutation of Seg n & r9*q9 is Permutation of Seg n;
         hence thesis;
       end;
       then
-A6:   q9 * p9 is Element of Permutations(n) by Def11;
-A7:   r9 * q9 is Element of Permutations(n) by A5,Def11;
-      (p * q) * r =(the multF of Group_of_Perm n).((q9*p9),r9) by Def13
-        .=r9*(q9 *p9 ) by A6,Def13
+A6:   q9 * p9 is Element of Permutations(n) by Def9;
+A7:   r9 * q9 is Element of Permutations(n) by A5,Def9;
+      (p * q) * r =(the multF of Group_of_Perm n).((q9*p9),r9) by Def10
+        .=r9*(q9 *p9 ) by A6,Def10
         .=(r9 *q9) * p9 by RELAT_1:36
-        .=(the multF of Group_of_Perm n).(p9,(r9*q9)) by A7,Def13
-        .=p *(q* r) by Def13;
+        .=(the multF of Group_of_Perm n).(p9,(r9*q9)) by A7,Def10
+        .=p *(q* r) by Def10;
       hence thesis;
     end;
     hence thesis by A1,GROUP_1:1;
   end;
 end;
 
-theorem Th28:
+theorem Th24:
   idseq n= 1_Group_of_Perm(n)
 proof
-  reconsider e=idseq n as Element of Group_of_Perm(n) by Th23;
-  reconsider e9=idseq n as Element of Permutations(n) by Def11;
+  reconsider e=idseq n as Element of Group_of_Perm(n) by Th20;
+  reconsider e9=idseq n as Element of Permutations(n) by Def9;
   for p being Element of Group_of_Perm(n) holds p * e=p & e* p=p
   proof
     let p be Element of Group_of_Perm(n);
-    reconsider p9=p as Element of Permutations(n) by Def13;
-A1: e * p =p9 * e9 by Def13
-      .=p by Th24;
-    p * e =e9 * p9 by Def13
-      .=p by Th24;
+    reconsider p9=p as Element of Permutations(n) by Def10;
+A1: e * p =p9 * e9 by Def10
+      .=p by Th21;
+    p * e =e9 * p9 by Def10
+      .=p by Th21;
     hence thesis by A1;
   end;
   hence thesis by GROUP_1:4;
@@ -1139,7 +1139,7 @@ definition
   let n;
   let IT be Permutation of Seg n;
   attr IT is even means
-  :Def15:
+  :Def12:
   ex l be FinSequence of Group_of_Perm(n) st (
   len l) mod 2=0 & IT=Product l & for i st i in dom l ex q st l.i=q & q is
   being_transposition;
@@ -1160,9 +1160,9 @@ proof
 A1: (len l) mod 2=0 by NAT_D:def 2;
   Product <*> the carrier of Group_of_Perm(n)=1_Group_of_Perm(n) by GROUP_4:8;
   then
-A2: idseq n=Product l by Th28;
+A2: idseq n=Product l by Th24;
   for i st i in dom l ex q st l.i=q & q is being_transposition;
-  hence thesis by A1,A2,Def15;
+  hence thesis by A1,A2,Def12;
 end;
 
 definition
@@ -1190,7 +1190,7 @@ A1: Permutations n c= Funcs(Seg n,Seg n)
   proof
     let x;
     assume x in Permutations n;
-    then x is Function of Seg n,Seg n by Def11;
+    then x is Function of Seg n,Seg n by Def9;
     hence thesis by FUNCT_2:9;
   end;
   Funcs(Seg n,Seg n) is finite by FRAENKEL:6;

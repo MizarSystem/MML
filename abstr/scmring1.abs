@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received November 29, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,111 +15,76 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, CARD_1, AMI_2, XBOOLE_0, STRUCT_0, ZFMISC_1,
-      ARYTM_3, SUPINF_2, RELAT_1, FINSEQ_1, SCMFSA7B, FUNCSDOM, FUNCT_1,
-      CARD_3, AMI_1, NAT_1, FUNCT_4, FUNCOP_1, MCART_1, PARTFUN1, ORDINAL1,
-      ARYTM_1, FUNCT_2, FUNCT_5, TARSKI, SCMRING1, GROUP_9, RECDEF_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, BINOP_1, CARD_1, NAT_1, RECDEF_2, NUMBERS, STRUCT_0,
-      ALGSTR_0, FUNCSDOM, MCART_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
-      FUNCT_4, CAT_2, AMI_2;
- constructors XXREAL_0, FINSEQ_4, REALSET2, CAT_2, RELSET_1, AMI_2, FUNCOP_1,
-      SETFAM_1, FINSEQ_2, RECDEF_2;
- registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, FINSEQ_1,
-      CARD_3, STRUCT_0, GR_CY_1, GCD_1, AMI_2, CARD_1, ORDINAL2, FUNCT_1,
-      CARD_2, ALGSTR_0, ALGSTR_1, FUNCT_2, RELSET_1, FINSET_1;
- requirements NUMERALS, REAL, SUBSET, BOOLE;
+      ARYTM_3, SUPINF_2, RELAT_1, FINSEQ_1, FUNCSDOM, FUNCT_1, CARD_3, AMI_1,
+      NAT_1, FUNCT_4, FUNCOP_1, ORDINAL1, ARYTM_1, FUNCT_5, TARSKI, SCMRING1,
+      GROUP_9, AFINSQ_1, PBOOLE;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, RELAT_1, FUNCT_1,
+      FUNCT_2, BINOP_1, PBOOLE, AFINSQ_1, CARD_1, ORDINAL1, NUMBERS, STRUCT_0,
+      ALGSTR_0, FUNCSDOM, MCART_1, CARD_3, FINSEQ_1, FUNCOP_1, FUNCT_4,
+      FUNCT_5, AMI_2, SCMRINGI;
+ constructors REALSET2, FUNCT_5, RELSET_1, AMI_2, FUNCOP_1, COMPOS_1, SCMRINGI,
+      BINOP_1, FUNCT_4, XTUPLE_0;
+ registrations XBOOLE_0, ORDINAL1, FUNCOP_1, FINSEQ_1, CARD_3, STRUCT_0, AMI_2,
+      CARD_1, ORDINAL2, FUNCT_1, FUNCT_2, RELSET_1, AFINSQ_1, SCM_INST,
+      XTUPLE_0;
+ requirements NUMERALS, SUBSET, BOOLE;
 
 
 begin  :: The construction of { \bf SCM } over ring
 
 reserve i, j, k for Element of NAT,
   I for Element of Segm 8,
-  i1, i2 for
-  Element of NAT,
+  i1, i2 for Element of NAT,
   d1, d2, d3, d4 for Element of SCM-Data-Loc,
-  S for non empty
-  1-sorted;
+  S for non empty 1-sorted;
 
-registration
-  cluster SCM-Instr -> non trivial;
-end;
+reserve G for non empty 1-sorted;
 
 definition
+ canceled 2;
   let S be non empty 1-sorted;
-  func SCM-Instr S -> non empty set equals
-:: SCMRING1:def 1
-  { [0,{},{}] }
-   \/ { [I,{},<*a,b*>] where I is Element of Segm 8,
-    a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
-   \/ { [6,<*i*>,{}] where i is Element of NAT: not contradiction }
-   \/ { [7,<*i*>,<*a*>] where i is Element of NAT,a is Element of SCM-Data-Loc:
-        not contradiction }
-   \/ { [5,{},<*a,r*>] where a is
-  Element of SCM-Data-Loc, r is Element of S: not contradiction };
-end;
-
-registration
-  let S be non empty 1-sorted;
-  cluster SCM-Instr S -> non trivial;
-end;
-
-definition
-  let S be 1-sorted;
-  attr S is good means
-:: SCMRING1:def 2
-
-  the carrier of S <> NAT;
-end;
-
-registration
-  cluster trivial -> good for 1-sorted;
-end;
-
-reserve G for good non empty 1-sorted;
-
-definition
-  let S be non empty 1-sorted;
-  func SCM-OK S -> Function of SCM-Memory, {the carrier of S} \/ { NAT } means
+ func SCM-VAL S -> ManySortedSet of 2 equals
 :: SCMRING1:def 3
-
-  for k being Element of SCM-Memory holds (k = NAT implies
-  it.k = NAT) & (k in SCM-Data-Loc implies it.k = the carrier of S);
+  <%NAT,the carrier of S%>;
 end;
 
-definition
-  let S be non empty 1-sorted;
-  mode SCM-State of S is Element of product SCM-OK S;
-end;
-
-theorem :: SCMRING1:1
-  NAT <> SCM-Instr S;
+canceled;
 
 theorem :: SCMRING1:2
-  for i being Element of SCM-Memory holds (SCM-OK G).i = NAT iff i
-  = NAT;
+ ((SCM-VAL G)*SCM-OK).NAT = NAT;
 
 theorem :: SCMRING1:3
-  for i being Element of SCM-Memory holds (SCM-OK G).i = the
-  carrier of G iff i in SCM-Data-Loc;
+  for i being Element of SCM-Memory st i in SCM-Data-Loc
+   holds ((SCM-VAL G)*SCM-OK).i = the carrier of G;
 
-theorem :: SCMRING1:4
-  (SCM-OK G).d1 = the carrier of G;
-
-theorem :: SCMRING1:5
-  pi(product SCM-OK S,NAT) = NAT;
-
-theorem :: SCMRING1:6
-  pi(product SCM-OK G,d1) = the carrier of G;
+registration let G;
+ cluster ((SCM-VAL G)*SCM-OK) -> non-empty;
+end;
 
 definition
-  let S be non empty 1-sorted, s be SCM-State of S;
+  let S be non empty 1-sorted;
+  mode SCM-State of S is Element of product((SCM-VAL S)*SCM-OK);
+end;
+
+theorem :: SCMRING1:4
+  ((SCM-VAL G)*SCM-OK).d1 = the carrier of G;
+
+theorem :: SCMRING1:5
+  pi(product((SCM-VAL G)*SCM-OK),NAT) = NAT;
+
+theorem :: SCMRING1:6
+  for a being Element of SCM-Data-Loc
+   holds pi(product((SCM-VAL G)*SCM-OK),a) = the carrier of G;
+
+definition
+  let G; let s be SCM-State of G;
   func IC s -> Element of NAT equals
 :: SCMRING1:def 4
   s.NAT;
 end;
 
 definition
-  let R be good non empty 1-sorted, s be SCM-State of R, u be Nat;
+  let R be non empty 1-sorted, s be SCM-State of R, u be Nat;
   func SCM-Chg(s,u) -> SCM-State of R equals
 :: SCMRING1:def 5
   s +* (NAT .--> u);
@@ -136,7 +101,7 @@ theorem :: SCMRING1:9
   for s being SCM-State of G, u, v being Nat holds SCM-Chg(s,u).v = s.v;
 
 definition
-  let R be good non empty 1-sorted, s be SCM-State of R, t be Element of
+  let R be non empty 1-sorted, s be SCM-State of R, t be Element of
   SCM-Data-Loc, u be Element of R;
   func SCM-Chg(s,t,u) -> SCM-State of R equals
 :: SCMRING1:def 6
@@ -157,65 +122,10 @@ Element of G, mk being Element of SCM-Data-Loc st mk <> t holds SCM-Chg(s,t,u).
   mk = s.mk;
 
 definition
-  let R be good non empty 1-sorted, s be SCM-State of R, a be Element of
+  let R be non empty 1-sorted, s be SCM-State of R, a be Element of
   SCM-Data-Loc;
   redefine func s.a -> Element of R;
 end;
-
-definition
-  let S be non empty 1-sorted, x be Element of SCM-Instr S;
-  given mk, ml being Element of SCM-Data-Loc, I such that
- x = [I,{},<*mk,ml*>];
-  func x address_1 -> Element of SCM-Data-Loc means
-:: SCMRING1:def 7
-
-  ex f being
-  FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.1;
-  func x address_2 -> Element of SCM-Data-Loc means
-:: SCMRING1:def 8
-
-  ex f being
-  FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.2;
-end;
-
-theorem :: SCMRING1:13
-  for x being Element of SCM-Instr S, mk, ml being Element of
-SCM-Data-Loc st x = [I,{},<*mk,ml*>] holds x address_1 = mk & x address_2 = ml;
-
-definition
-  let R be non empty 1-sorted, x be Element of SCM-Instr R;
-  given mk being Element of NAT, I such that
- x = [I,<*mk*>,{}];
-  func x jump_address -> Element of NAT means
-:: SCMRING1:def 9
-
-  ex f being FinSequence of
-  NAT st f = x`2_3 & it = f/.1;
-end;
-
-theorem :: SCMRING1:14
-  for x being Element of SCM-Instr S, mk being Element of NAT
-   st x = [ I,<*mk*>,{}] holds x jump_address = mk;
-
-definition
-  let S be non empty 1-sorted, x be Element of SCM-Instr S;
-  given mk being Element of NAT, ml being Element of SCM-Data-Loc, I such that
- x = [I,<*mk*>,<*ml*>];
-  func x cjump_address -> Element of NAT means
-:: SCMRING1:def 10
-
-  ex mk being Element of NAT st <*mk*> = x`2_3 & it = <*mk*>/.1;
-  func x cond_address -> Element of SCM-Data-Loc means
-:: SCMRING1:def 11
-
-  ex ml being Element of SCM-Data-Loc st <*ml*> = x`3_3 & it = <*ml*>/.1;
-end;
-
-theorem :: SCMRING1:15
-  for x being Element of SCM-Instr S, mk being Element of NAT, ml being
-  Element of SCM-Data-Loc st x = [I,<*mk*>,<*ml*>]
-   holds x cjump_address = mk & x
-  cond_address = ml;
 
 definition
   let S be non empty 1-sorted, d be Element of SCM-Data-Loc, s be Element of S;
@@ -223,28 +133,8 @@ definition
 end;
 
 definition
-  let S be non empty 1-sorted, x be Element of SCM-Instr S;
-  given mk being Element of SCM-Data-Loc, r being Element of S, I such that
- x = [I,{},<*mk,r*>];
-  func x const_address -> Element of SCM-Data-Loc means
-:: SCMRING1:def 12
-
-  ex f being
-  FinSequence of SCM-Data-Loc \/ the carrier of S st f = x`3_3 & it = f/.1;
-  func x const_value -> Element of S means
-:: SCMRING1:def 13
-
-  ex f being FinSequence of
-  SCM-Data-Loc \/ the carrier of S st f = x`3_3 & it = f/.2;
-end;
-
-theorem :: SCMRING1:16
-  for x being Element of SCM-Instr S, mk being Element of SCM-Data-Loc,
-  r being Element of S st x = [I,{},<*mk,r*>] holds x const_address = mk & x
-  const_value = r;
-
-definition
-  let R be good Ring, x be Element of SCM-Instr R, s be SCM-State of R;
+ canceled 7;
+  let R be Ring, x be Element of SCM-Instr R, s be SCM-State of R;
   func SCM-Exec-Res (x,s) -> SCM-State of R equals
 :: SCMRING1:def 14
   SCM-Chg(SCM-Chg(s, x address_1, s.(x address_2)), succ IC s)
@@ -266,28 +156,17 @@ definition
   otherwise s;
 end;
 
-registration
-  let S be non empty 1-sorted, f be Action of SCM-Instr S, product SCM-OK S,
-      x be Element of SCM-Instr S;
-  cluster f.x -> Function-like Relation-like;
-end;
-
 definition
-  let R be good Ring;
-  func SCM-Exec R -> Action of SCM-Instr R, product SCM-OK R means
+  let R be Ring;
+  func SCM-Exec R -> Action of SCM-Instr R,
+    product((SCM-VAL R)*SCM-OK) means
 :: SCMRING1:def 15
   for x being Element of SCM-Instr R, y being SCM-State of R
   holds (it.x).y = SCM-Exec-Res (x,y);
 end;
 
-theorem :: SCMRING1:17
- for S being non empty 1-sorted
-  holds  SCM-Instr S c= [:NAT,NAT*,proj2 SCM-Instr S:];
+canceled 6;
 
-registration let S be non empty 1-sorted;
- cluster proj2 SCM-Instr S -> FinSequence-membered;
-end;
-
-theorem :: SCMRING1:18
-  [0,{},{}] in SCM-Instr S;
+theorem :: SCMRING1:19
+ for s being SCM-State of S holds dom s = SCM-Memory;
 

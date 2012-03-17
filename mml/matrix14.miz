@@ -2,7 +2,7 @@
 ::  by Yatsuka Nakamura , Kunio Oniumi and Wenpai Chang
 ::
 :: Received April 2, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,9 +23,10 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, XXREAL_0, RELAT_1, FUNCT_1, BINOP_1,
       ALGSTR_0, ZFMISC_1, MATRIX_1, FVSUM_1, PARTFUN1, FUNCT_3, NUMBERS,
       FINSEQ_7, FUNCT_2, FUNCOP_1, FINSEQ_1, STRUCT_0, GROUP_1, MATRIX_3,
-      MATRIX_6, XCMPLX_0, NAT_1, NAT_D, VECTSP_1, FINSEQ_2, FINSOP_1, RFINSEQ;
+      MATRIX_6, XCMPLX_0, ORDINAL1, NAT_1, NAT_D, VECTSP_1, FINSEQ_2, FINSOP_1,
+      RFINSEQ;
  constructors FUNCT_3, FINSEQ_7, SETWISEO, FINSOP_1, JORDAN3, RFINSEQ,
-      INTEGRA2, MATRIX_6, POLYNOM1, NAT_D, RELSET_1, FVSUM_1;
+      MATRIX_6, NAT_D, RELSET_1, FVSUM_1;
  registrations FINSEQ_2, XREAL_0, NAT_1, FUNCOP_1, STRUCT_0, VECTSP_1,
       ORDINAL1, XXREAL_0, RELAT_1, CARD_1, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -55,13 +56,7 @@ definition
   let K be non empty ZeroStr;
   let n;
   redefine func 0*(K,n) -> Element of n-tuples_on (the carrier of K);
-  coherence
-  proof
-    len (0*(K,n))=n & (0*(K,n)) in (the carrier of K)* by CARD_1:def 7
-,FINSEQ_1:def 11;
-    then 0*(K,n) in { s where s is Element of (the carrier of K)*:len s = n };
-    hence thesis by FINSEQ_2:def 4;
-  end;
+  coherence;
 end;
 
 reserve L for non empty addLoopStr;
@@ -500,22 +495,10 @@ A1: len (<* a *>) =1 by FINSEQ_1:39;
 end;
 
 definition
-  let K be non empty set, n be Nat, a be Element of K;
-  redefine func n |-> a -> FinSequence of K;
-  coherence
-  proof
-    reconsider n9 = n as Element of NAT by ORDINAL1:def 12;
-    n9 |-> a is FinSequence of K;
-    hence thesis;
-  end;
-end;
-
-definition
   let K;
   let n,i be Nat;
   func Base_FinSeq(K,n,i) -> FinSequence of K equals
-  Replace((n |-> 0.K),i,1.K
-  );
+  Replace((n |-> 0.K),i,1.K);
   coherence;
 end;
 
@@ -2463,52 +2446,52 @@ FINSEQ_4:15;
     end;
   end;
   consider Q0 being Matrix of n,n,K such that
-A13: for i,j being Nat st [i,j] in Indices Q0 holds P[i,j,Q0*(i,j)] from
+A9: for i,j being Nat st [i,j] in Indices Q0 holds P[i,j,Q0*(i,j)] from
   MATRIX_1:sch 2(A3);
-A14: 0+1<=n by A1,NAT_1:13;
-A15: for j st 1<j & j<=n holds Q0*(1,j)= -a*(P*(1,j))
+A10: 0+1<=n by A1,NAT_1:13;
+A11: for j st 1<j & j<=n holds Q0*(1,j)= -a*(P*(1,j))
   proof
     let j;
     assume that
-A16: 1<j and
-A17: j<=n;
-    [1,j] in Indices Q0 by A14,A16,A17,MATRIX_1:37;
-    hence thesis by A13,A16;
+A12: 1<j and
+A13: j<=n;
+    [1,j] in Indices Q0 by A10,A12,A13,MATRIX_1:37;
+    hence thesis by A9,A12;
   end;
-A18: Indices Q0=[:Seg n,Seg n:] & 1 in Seg n by A14,FINSEQ_1:1,MATRIX_1:24;
-A19: for i st 1<i & i<=n holds Q0.i=Base_FinSeq(K,n,i)
+A14: Indices Q0=[:Seg n,Seg n:] & 1 in Seg n by A10,FINSEQ_1:1,MATRIX_1:24;
+A15: for i st 1<i & i<=n holds Q0.i=Base_FinSeq(K,n,i)
   proof
     let i;
     assume that
-A20: 1<i and
-A21: i<=n;
-    i in Seg n by A20,A21,FINSEQ_1:1;
-    then [i,1] in Indices Q0 by A18,ZFMISC_1:87;
+A16: 1<i and
+A17: i<=n;
+    i in Seg n by A16,A17,FINSEQ_1:1;
+    then [i,1] in Indices Q0 by A14,ZFMISC_1:87;
     then consider p being FinSequence of K such that
-A22: p = Q0.i and
+A18: p = Q0.i and
     Q0*(i,1) = p.1 by MATRIX_1:def 5;
-A23: for j be Nat st 1<=j & j<=n holds p.j=(Base_FinSeq(K,n,i)).j
+A19: for j be Nat st 1<=j & j<=n holds p.j=(Base_FinSeq(K,n,i)).j
     proof
       let j be Nat;
       assume 1<=j & j<=n;
       then
-A24:  [i,j] in Indices Q0 by A20,A21,MATRIX_1:37;
+A20:  [i,j] in Indices Q0 by A16,A17,MATRIX_1:37;
       then ex p2 being FinSequence of K st p2 = Q0.i & Q0*(i,j) = p2.j by
 MATRIX_1:def 5;
-      hence thesis by A13,A20,A22,A24;
+      hence thesis by A9,A16,A18,A20;
     end;
     len Q0 = n by MATRIX_1:def 2;
-    then i in Seg len Q0 by A20,A21,FINSEQ_1:1;
+    then i in Seg len Q0 by A16,A17,FINSEQ_1:1;
     then i in dom Q0 by FINSEQ_1:def 3;
-    then p in rng Q0 by A22,FUNCT_1:def 3;
+    then p in rng Q0 by A18,FUNCT_1:def 3;
     then
-A25: len p=n by MATRIX_1:def 2;
+A21: len p=n by MATRIX_1:def 2;
     len (Base_FinSeq(K,n,i))= n by Th23;
-    hence thesis by A22,A25,A23,FINSEQ_1:14;
+    hence thesis by A18,A21,A19,FINSEQ_1:14;
   end;
-  [1,1] in Indices Q0 by A14,MATRIX_1:37;
-  then Q0*(1,1)=a by A13;
-  hence thesis by A1,A2,A15,A19,Th37;
+  [1,1] in Indices Q0 by A10,MATRIX_1:37;
+  then Q0*(1,1)=a by A9;
+  hence thesis by A1,A2,A11,A15,Th37;
 end;
 
 theorem Th39:
@@ -2558,335 +2541,335 @@ A7:   i<>1;
     end;
   end;
   consider P0 being Matrix of n,n,K such that
-A12: for i,j being Nat st [i,j] in Indices P0 holds P[i,j,P0*(i,j)] from
+A8: for i,j being Nat st [i,j] in Indices P0 holds P[i,j,P0*(i,j)] from
   MATRIX_1:sch 2(A4);
-A13: 0+1<=n by A1,NAT_1:13;
-A14: for i st 1<i & i<=n holds P0.i=Base_FinSeq(K,n,i)
+A9: 0+1<=n by A1,NAT_1:13;
+A10: for i st 1<i & i<=n holds P0.i=Base_FinSeq(K,n,i)
   proof
     let i;
     assume that
-A15: 1<i and
-A16: i<=n;
-    [i,1] in Indices P0 by A13,A15,A16,MATRIX_1:37;
+A11: 1<i and
+A12: i<=n;
+    [i,1] in Indices P0 by A9,A11,A12,MATRIX_1:37;
     then consider p being FinSequence of K such that
-A17: p = P0.i and
+A13: p = P0.i and
     P0*(i,1) = p.1 by MATRIX_1:def 5;
-A18: for j be Nat st 1<=j & j<=n holds p.j=(Base_FinSeq(K,n,i)).j
+A14: for j be Nat st 1<=j & j<=n holds p.j=(Base_FinSeq(K,n,i)).j
     proof
       let j be Nat;
       assume 1<=j & j<=n;
       then
-A19:  [i,j] in Indices P0 by A15,A16,MATRIX_1:37;
+A15:  [i,j] in Indices P0 by A11,A12,MATRIX_1:37;
       then ex p2 being FinSequence of K st p2 = P0.i & P0*(i,j) = p2.j by
 MATRIX_1:def 5;
-      hence thesis by A12,A15,A17,A19;
+      hence thesis by A8,A11,A13,A15;
     end;
     len P0 = n by MATRIX_1:def 2;
-    then i in Seg len P0 by A15,A16,FINSEQ_1:1;
+    then i in Seg len P0 by A11,A12,FINSEQ_1:1;
     then i in dom P0 by FINSEQ_1:def 3;
-    then p in rng P0 by A17,FUNCT_1:def 3;
+    then p in rng P0 by A13,FUNCT_1:def 3;
     then
-A20: len p=n by MATRIX_1:def 2;
+A16: len p=n by MATRIX_1:def 2;
     len (Base_FinSeq(K,n,i))= n by Th23;
-    hence thesis by A17,A20,A18,FINSEQ_1:14;
+    hence thesis by A13,A16,A14,FINSEQ_1:14;
   end;
-A21: len ((a")*(Base_FinSeq(K,n,1))) =len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+A17: len ((a")*(Base_FinSeq(K,n,1))) =len (Base_FinSeq(K,n,1)) by MATRIXR1:16
     .=n by Th23;
-A22: Indices P0=[: Seg n,Seg n :] by MATRIX_1:24;
-A23: len (Base_FinSeq(K,n,1))=n by Th23;
-A24: [1,1] in Indices P0 by A13,MATRIX_1:37;
+A18: Indices P0=[: Seg n,Seg n :] by MATRIX_1:24;
+A19: len (Base_FinSeq(K,n,1))=n by Th23;
+A20: [1,1] in Indices P0 by A9,MATRIX_1:37;
   then
-A25: P0*(1,1)= a" by A12;
+A21: P0*(1,1)= a" by A8;
   then
-A26: P0 is invertible by A1,A2,A14,Th38;
-A27: len P0=n by MATRIX_1:24;
+A22: P0 is invertible by A1,A2,A10,Th38;
+A23: len P0=n by MATRIX_1:24;
   then
-A28: 1 in Seg len P0 by A13,FINSEQ_1:1;
-A29: for k be Nat st 1<=k & k<=n holds (Col(P0,1)).k=((a")*(Base_FinSeq(K,n,
+A24: 1 in Seg len P0 by A9,FINSEQ_1:1;
+A25: for k be Nat st 1<=k & k<=n holds (Col(P0,1)).k=((a")*(Base_FinSeq(K,n,
   1))).k
   proof
     let k be Nat;
     assume that
-A30: 1<=k and
-A31: k<=n;
-A32: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A23,A30,A31,
+A26: 1<=k and
+A27: k<=n;
+A28: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A19,A26,A27,
 FINSEQ_4:15;
-    k in Seg n by A30,A31,FINSEQ_1:1;
+    k in Seg n by A26,A27,FINSEQ_1:1;
     then
-A33: k in dom ((a")*(Base_FinSeq(K,n,1))) by A21,FINSEQ_1:def 3;
-A34: now
+A29: k in dom ((a")*(Base_FinSeq(K,n,1))) by A17,FINSEQ_1:def 3;
+A30: now
       assume
-A35:  k<>1;
+A31:  k<>1;
       thus ((a")*(Base_FinSeq(K,n,1))).k = (a")*((Base_FinSeq(K,n,1))/.k) by
-A33,A32,FVSUM_1:50
-        .= (a")*(0.K) by A30,A31,A32,A35,Th25
+A29,A28,FVSUM_1:50
+        .= (a")*(0.K) by A26,A27,A28,A31,Th25
         .= 0.K by VECTSP_1:6;
     end;
-    k in Seg n by A30,A31,FINSEQ_1:1;
+    k in Seg n by A26,A27,FINSEQ_1:1;
     then
-A36: k in dom P0 by A27,FINSEQ_1:def 3;
-A37: now
-      k in Seg n by A30,A31,FINSEQ_1:1;
-      then [k,1] in Indices P0 by A27,A28,A22,ZFMISC_1:87;
+A32: k in dom P0 by A23,FINSEQ_1:def 3;
+A33: now
+      k in Seg n by A26,A27,FINSEQ_1:1;
+      then [k,1] in Indices P0 by A23,A24,A18,ZFMISC_1:87;
       then
-A38:  ex p being FinSequence of K st p = P0.k & P0*(k,1) = p.1 by
+A34:  ex p being FinSequence of K st p = P0.k & P0*(k,1) = p.1 by
 MATRIX_1:def 5;
       assume
-A39:  k<>1;
-      then k in NAT & 1<k by A30,ORDINAL1:def 12,XXREAL_0:1;
-      then P0*(k,1)=(Base_FinSeq(K,n,k)).1 by A14,A31,A38
-        .= 0.K by A13,A39,Th25;
-      hence (Col(P0,1)).k= 0.K by A36,MATRIX_1:def 8;
+A35:  k<>1;
+      then k in NAT & 1<k by A26,ORDINAL1:def 12,XXREAL_0:1;
+      then P0*(k,1)=(Base_FinSeq(K,n,k)).1 by A10,A27,A34
+        .= 0.K by A9,A35,Th25;
+      hence (Col(P0,1)).k= 0.K by A32,MATRIX_1:def 8;
     end;
-A40: now
+A36: now
       assume
-A41:  k=1;
+A37:  k=1;
       hence ((a")*(Base_FinSeq(K,n,1))).k =(a")*((Base_FinSeq(K,n,1))/.1) by
-A33,A32,FVSUM_1:50
-        .=(a")*(1.K) by A31,A32,A41,Th24
+A29,A28,FVSUM_1:50
+        .=(a")*(1.K) by A27,A28,A37,Th24
         .= a" by VECTSP_1:def 6;
     end;
-    1<=n by A30,A31,XXREAL_0:2;
-    then 1 in dom P0 by A27,FINSEQ_3:25;
-    hence thesis by A25,A34,A40,A37,MATRIX_1:def 8;
+    1<=n by A26,A27,XXREAL_0:2;
+    then 1 in dom P0 by A23,FINSEQ_3:25;
+    hence thesis by A21,A30,A36,A33,MATRIX_1:def 8;
   end;
-A42: len A=n by MATRIX_1:24;
+A38: len A=n by MATRIX_1:24;
   then
-A43: 1 in Seg len A by A3,FINSEQ_1:1;
+A39: 1 in Seg len A by A3,FINSEQ_1:1;
   then
-A44: 1 in dom A by FINSEQ_1:def 3;
-A45: width A=n by MATRIX_1:24;
+A40: 1 in dom A by FINSEQ_1:def 3;
+A41: width A=n by MATRIX_1:24;
   then
-A46: len (Line(A,1))=n by MATRIX_1:def 7;
+A42: len (Line(A,1))=n by MATRIX_1:def 7;
   then
-A47: 1 in dom (Line(A,1)) by A42,A43,FINSEQ_1:def 3;
-A48: 1 in Seg width A by A45,A3,FINSEQ_1:1;
-A49: for i st 1<i & i<=n & A*(i,1)= 0.K holds (A*P0)*(i,1)= 0.K
+A43: 1 in dom (Line(A,1)) by A38,A39,FINSEQ_1:def 3;
+A44: 1 in Seg width A by A41,A3,FINSEQ_1:1;
+A45: for i st 1<i & i<=n & A*(i,1)= 0.K holds (A*P0)*(i,1)= 0.K
   proof
     set Q=A,P=P0;
     let i;
     assume that
-A50: 1<i & i<=n and
-A51: A*(i,1)= 0.K;
-A52: 1<=n by A50,XXREAL_0:2;
+A46: 1<i & i<=n and
+A47: A*(i,1)= 0.K;
+A48: 1<=n by A46,XXREAL_0:2;
     reconsider p=Col(P,1),q=a"*(Base_FinSeq(K,n,1)) as FinSequence of K;
-A53: len (Col(P,1))=len P by MATRIX_1:def 8
+A49: len (Col(P,1))=len P by MATRIX_1:def 8
       .=n by MATRIX_1:24;
-A54: len ((a")*(Base_FinSeq(K,n,1))) =len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+A50: len ((a")*(Base_FinSeq(K,n,1))) =len (Base_FinSeq(K,n,1)) by MATRIXR1:16
       .=n by Th23;
-A55: for k be Nat st 1 <=k & k <= n holds p.k=q.k
+A51: for k be Nat st 1 <=k & k <= n holds p.k=q.k
     proof
       let k be Nat;
       assume that
-A56:  1 <=k and
-A57:  k <= n;
-A58:  len (Base_FinSeq(K,n,1))=n by Th23;
+A52:  1 <=k and
+A53:  k <= n;
+A54:  len (Base_FinSeq(K,n,1))=n by Th23;
       then
-A59:  ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A56,A57,FINSEQ_4:15
+A55:  ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A52,A53,FINSEQ_4:15
 ;
-      k in dom P by A27,A56,A57,FINSEQ_3:25;
+      k in dom P by A23,A52,A53,FINSEQ_3:25;
       then
-A60:  p.k=P*(k,1) by MATRIX_1:def 8;
-      k in dom ((a")*(Base_FinSeq(K,n,1))) by A54,A56,A57,FINSEQ_3:25;
+A56:  p.k=P*(k,1) by MATRIX_1:def 8;
+      k in dom ((a")*(Base_FinSeq(K,n,1))) by A50,A52,A53,FINSEQ_3:25;
       then
-A61:  ((a")*(Base_FinSeq(K,n,1))).k = (a")*((Base_FinSeq(K,n,1))/.k) by A59,
+A57:  ((a")*(Base_FinSeq(K,n,1))).k = (a")*((Base_FinSeq(K,n,1))/.k) by A55,
 FVSUM_1:50;
-      per cases by A56,XXREAL_0:1;
+      per cases by A52,XXREAL_0:1;
       suppose
-A62:    1=k;
-        then q.k= (a")*(1.K) by A57,A59,A61,Th24
+A58:    1=k;
+        then q.k= (a")*(1.K) by A53,A55,A57,Th24
           .=a" by VECTSP_1:def 6;
-        hence thesis by A12,A24,A60,A62;
+        hence thesis by A8,A20,A56,A58;
       end;
       suppose
-A63:    1<k;
-        ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A56,A57,A58,
+A59:    1<k;
+        ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A52,A53,A54,
 FINSEQ_4:15;
         then
-A64:    (a")*(Base_FinSeq(K,n,1))/.k = a"*(0.K) by A57,A63,Th25
+A60:    (a")*(Base_FinSeq(K,n,1))/.k = a"*(0.K) by A53,A59,Th25
           .= 0.K by VECTSP_1:6;
-        [k,1] in Indices P by A52,A56,A57,MATRIX_1:37;
+        [k,1] in Indices P by A48,A52,A53,MATRIX_1:37;
         then
-A65:    ex p2 being FinSequence of K st p2 = P.k & P*(k,1) = p2. 1 by
+A61:    ex p2 being FinSequence of K st p2 = P.k & P*(k,1) = p2. 1 by
 MATRIX_1:def 5;
         k in NAT by ORDINAL1:def 12;
-        then p.k=(Base_FinSeq(K,n,k)).1 by A14,A57,A60,A63,A65;
-        hence thesis by A52,A61,A63,A64,Th25;
+        then p.k=(Base_FinSeq(K,n,k)).1 by A10,A53,A56,A59,A61;
+        hence thesis by A48,A57,A59,A60,Th25;
       end;
     end;
-A66: width Q=n by MATRIX_1:24;
+A62: width Q=n by MATRIX_1:24;
     then
-A67: len Line(Q,i) = n by MATRIX_1:def 7;
+A63: len Line(Q,i) = n by MATRIX_1:def 7;
     then
-A68: (Line(Q,i))/.1 = (Line(Q,i)).1 by A3,FINSEQ_4:15
-      .= Q*(i,1) by A48,MATRIX_1:def 7;
-    [i,1] in Indices (Q*P) by A50,A52,MATRIX_1:37;
-    hence (Q*P)*(i,1)= |( Line(Q,i), Col(P,1) )| by A27,A66,MATRIX_3:def 4
-      .= |( Line(Q,i), a"*(Base_FinSeq(K,n,1)) )| by A53,A54,A55,FINSEQ_1:14
-      .= a"* |( Line(Q,i), (Base_FinSeq(K,n,1)) )| by A23,A67,Th10
-      .= a"* (Q*(i,1)) by A3,A67,A68,Th35
-      .= 0.K by A51,VECTSP_1:6;
+A64: (Line(Q,i))/.1 = (Line(Q,i)).1 by A3,FINSEQ_4:15
+      .= Q*(i,1) by A44,MATRIX_1:def 7;
+    [i,1] in Indices (Q*P) by A46,A48,MATRIX_1:37;
+    hence (Q*P)*(i,1)= |( Line(Q,i), Col(P,1) )| by A23,A62,MATRIX_3:def 4
+      .= |( Line(Q,i), a"*(Base_FinSeq(K,n,1)) )| by A49,A50,A51,FINSEQ_1:14
+      .= a"* |( Line(Q,i), (Base_FinSeq(K,n,1)) )| by A19,A63,Th10
+      .= a"* (Q*(i,1)) by A3,A63,A64,Th35
+      .= 0.K by A47,VECTSP_1:6;
   end;
-A69: for j st 1<j & j<=n holds (A*P0)*(1,j)= 0.K
+A65: for j st 1<j & j<=n holds (A*P0)*(1,j)= 0.K
   proof
     let j;
     assume that
-A70: 1<j and
-A71: j<=n;
-A72: len (Base_FinSeq(K,n,j))=n by Th23;
+A66: 1<j and
+A67: j<=n;
+A68: len (Base_FinSeq(K,n,j))=n by Th23;
     reconsider p=Col(P0,j),q=-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)) +Base_FinSeq
     (K,n,j) as FinSequence of K;
-A73: len ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))) =len (Base_FinSeq(K,n,1)
+A69: len ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))) =len (Base_FinSeq(K,n,1)
     ) by MATRIXR1:16
       .=n by Th23;
-A74: len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))) =len ((-(a")*(A*(1,j)))*(
+A70: len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))) =len ((-(a")*(A*(1,j)))*(
     Base_FinSeq(K,n,1))) by Th6
       .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16
       .=n by Th23;
-A75: [1,j] in Indices P0 by A13,A70,A71,MATRIX_1:37;
-A76: for k be Nat st 1 <=k & k <= n holds p.k=q.k
+A71: [1,j] in Indices P0 by A9,A66,A67,MATRIX_1:37;
+A72: for k be Nat st 1 <=k & k <= n holds p.k=q.k
     proof
-A77:  len ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))) = len (Base_FinSeq(K,n
+A73:  len ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))) = len (Base_FinSeq(K,n
       ,1)) by MATRIXR1:16
         .=n by Th23;
       let k be Nat;
       assume that
-A78:  1 <=k and
-A79:  k <= n;
-      k in Seg n by A78,A79,FINSEQ_1:1;
+A74:  1 <=k and
+A75:  k <= n;
+      k in Seg n by A74,A75,FINSEQ_1:1;
       then
-A80:  k in dom ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))) by A73,FINSEQ_1:def 3;
+A76:  k in dom ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))) by A69,FINSEQ_1:def 3;
       len (Base_FinSeq(K,n,1))=n by Th23;
       then
-A81:  ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A78,A79,FINSEQ_4:15
+A77:  ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A74,A75,FINSEQ_4:15
 ;
-A82:  (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k =((-(a")*(A*(1,j)))*(
+A78:  (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k =((-(a")*(A*(1,j)))*(
       Base_FinSeq(K,n,1))).k by Th6
-        .=(-(a")*(A*(1,j)))*((Base_FinSeq(K,n,1))/.k) by A80,A81,FVSUM_1:50;
+        .=(-(a")*(A*(1,j)))*((Base_FinSeq(K,n,1))/.k) by A76,A77,FVSUM_1:50;
       len (Base_FinSeq(K,n,1))=n by Th23;
       then
-A83:  (
-(Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A78,A79,FINSEQ_4:15;
-      k in dom P0 by A27,A78,A79,FINSEQ_3:25;
+A79:  (
+(Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A74,A75,FINSEQ_4:15;
+      k in dom P0 by A23,A74,A75,FINSEQ_3:25;
       then
-A84:  p.k=P0*(k,j) by MATRIX_1:def 8;
-      per cases by A78,XXREAL_0:1;
+A80:  p.k=P0*(k,j) by MATRIX_1:def 8;
+      per cases by A74,XXREAL_0:1;
       suppose
-A85:    1=k;
-        k <= len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))) by A79,A77,Th6;
+A81:    1=k;
+        k <= len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))) by A75,A73,Th6;
         then
-A86:    (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k =(-(a")*(A*(1,j)))*((
-        Base_FinSeq(K,n,1))/.k) by A78,A82,FINSEQ_4:15
-          .=(-(a")*(A*(1,j)))*(1.K) by A79,A83,A85,Th24
+A82:    (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k =(-(a")*(A*(1,j)))*((
+        Base_FinSeq(K,n,1))/.k) by A74,A78,FINSEQ_4:15
+          .=(-(a")*(A*(1,j)))*(1.K) by A75,A79,A81,Th24
           .=-(a")*(A*(1,j)) by VECTSP_1:def 6;
-A87:    p.k=-(a")*(A*(1,j)) by A12,A70,A75,A84,A85;
-        (Base_FinSeq(K,n,j))/.k = (Base_FinSeq(K,n,j)).k by A72,A78,A79,
+A83:    p.k=-(a")*(A*(1,j)) by A8,A66,A71,A80,A81;
+        (Base_FinSeq(K,n,j))/.k = (Base_FinSeq(K,n,j)).k by A68,A74,A75,
 FINSEQ_4:15
-          .= 0.K by A70,A79,A85,Th25;
-        then q.k= -(a")*(A*(1,j)) + 0.K by A74,A72,A78,A79,A86,Th5;
-        hence thesis by A87,RLVECT_1:4;
+          .= 0.K by A66,A75,A81,Th25;
+        then q.k= -(a")*(A*(1,j)) + 0.K by A70,A68,A74,A75,A82,Th5;
+        hence thesis by A83,RLVECT_1:4;
       end;
       suppose
-A88:    1<k;
-        [k,j] in Indices P0 & k in NAT by A70,A71,A78,A79,MATRIX_1:37
+A84:    1<k;
+        [k,j] in Indices P0 & k in NAT by A66,A67,A74,A75,MATRIX_1:37
 ,ORDINAL1:def 12;
         then
-A89:    p.k=(Base_FinSeq(K,n,k)).j by A12,A84,A88;
+A85:    p.k=(Base_FinSeq(K,n,k)).j by A8,A80,A84;
         per cases;
         suppose
-A90:      k <> j;
+A86:      k <> j;
           len (Base_FinSeq(K,n,1))=n by Th23;
-          then ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A78,A79,
+          then ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A74,A75,
+FINSEQ_4:15;
+          then
+A87:      (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k =(-(a")*(A*(1,j)))*(
+          0.K) by A75,A78,A84,Th25
+            .= 0.K by VECTSP_1:6;
+A88:      (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k =(-(a")*(A*(1,j))*(
+          Base_FinSeq(K,n,1))).k by A70,A74,A75,FINSEQ_4:15;
+A89:      p.k= 0.K by A66,A67,A85,A86,Th25;
+          (Base_FinSeq(K,n,j))/.k = (Base_FinSeq(K,n,j)).k by A68,A74,A75,
+FINSEQ_4:15
+            .= 0.K by A74,A75,A86,Th25;
+          then q.k= 0.K + 0.K by A70,A68,A74,A75,A88,A87,Th5;
+          hence thesis by A89,RLVECT_1:4;
+        end;
+        suppose
+A90:      k=j;
+          len (Base_FinSeq(K,n,1))=n by Th23;
+          then ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A74,A75,
 FINSEQ_4:15;
           then
 A91:      (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k =(-(a")*(A*(1,j)))*(
-          0.K) by A79,A82,A88,Th25
+          0.K) by A75,A78,A84,Th25
             .= 0.K by VECTSP_1:6;
 A92:      (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k =(-(a")*(A*(1,j))*(
-          Base_FinSeq(K,n,1))).k by A74,A78,A79,FINSEQ_4:15;
-A93:      p.k= 0.K by A70,A71,A89,A90,Th25;
-          (Base_FinSeq(K,n,j))/.k = (Base_FinSeq(K,n,j)).k by A72,A78,A79,
+          Base_FinSeq(K,n,1))).k by A70,A74,A75,FINSEQ_4:15;
+A93:      p.k=1.K by A74,A75,A85,A90,Th24;
+          (Base_FinSeq(K,n,j))/.k = (Base_FinSeq(K,n,j)).k by A68,A74,A75,
 FINSEQ_4:15
-            .= 0.K by A78,A79,A90,Th25;
-          then q.k= 0.K + 0.K by A74,A72,A78,A79,A92,A91,Th5;
+            .= 1.K by A74,A75,A90,Th24;
+          then q.k= 0.K + 1.K by A70,A68,A74,A75,A92,A91,Th5;
           hence thesis by A93,RLVECT_1:4;
-        end;
-        suppose
-A94:      k=j;
-          len (Base_FinSeq(K,n,1))=n by Th23;
-          then ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k) by A78,A79,
-FINSEQ_4:15;
-          then
-A95:      (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k =(-(a")*(A*(1,j)))*(
-          0.K) by A79,A82,A88,Th25
-            .= 0.K by VECTSP_1:6;
-A96:      (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k =(-(a")*(A*(1,j))*(
-          Base_FinSeq(K,n,1))).k by A74,A78,A79,FINSEQ_4:15;
-A97:      p.k=1.K by A78,A79,A89,A94,Th24;
-          (Base_FinSeq(K,n,j))/.k = (Base_FinSeq(K,n,j)).k by A72,A78,A79,
-FINSEQ_4:15
-            .= 1.K by A78,A79,A94,Th24;
-          then q.k= 0.K + 1.K by A74,A72,A78,A79,A96,A95,Th5;
-          hence thesis by A97,RLVECT_1:4;
         end;
       end;
     end;
-A98: width A=n by MATRIX_1:24;
+A94: width A=n by MATRIX_1:24;
     then
-A99: len Line(A,1) = n by MATRIX_1:def 7;
+A95: len Line(A,1) = n by MATRIX_1:def 7;
     then
-A100: (Line(A,1))/.1 = (Line(A,1)).1 by A3,FINSEQ_4:15
-      .= a by A48,MATRIX_1:def 7;
-A101: j in Seg n by A70,A71,FINSEQ_1:1;
-A102: len (Col(P0,j))=len P0 by MATRIX_1:def 8
+A96: (Line(A,1))/.1 = (Line(A,1)).1 by A3,FINSEQ_4:15
+      .= a by A44,MATRIX_1:def 7;
+A97: j in Seg n by A66,A67,FINSEQ_1:1;
+A98: len (Col(P0,j))=len P0 by MATRIX_1:def 8
       .=n by MATRIX_1:24;
-    len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)) =n by A74,A72
+    len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)) =n by A70,A68
 ,Th2;
     then
-A103: Col(P0,j)=-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j) by A102
-,A76,FINSEQ_1:14;
-A104: (Line(A,1))/.j = (Line(A,1)).j by A70,A71,A99,FINSEQ_4:15
-      .= A*(1,j) by A101,A98,MATRIX_1:def 7;
-    [1,j] in Indices (A*P0) by A13,A70,A71,MATRIX_1:37;
-    then (A*P0)*(1,j)= |( Line(A,1), Col(P0,j) )| by A27,A98,MATRIX_3:def 4
+A99: Col(P0,j)=-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j) by A98
+,A72,FINSEQ_1:14;
+A100: (Line(A,1))/.j = (Line(A,1)).j by A66,A67,A95,FINSEQ_4:15
+      .= A*(1,j) by A97,A94,MATRIX_1:def 7;
+    [1,j] in Indices (A*P0) by A9,A66,A67,MATRIX_1:37;
+    then (A*P0)*(1,j)= |( Line(A,1), Col(P0,j) )| by A23,A94,MATRIX_3:def 4
       .= |( Line(A,1), -(a")*(A*(1,j))*(Base_FinSeq(K,n,1)) )| +|( Line(A,1)
-    , Base_FinSeq(K,n,j) )| by A46,A74,A72,A103,Th11
+    , Base_FinSeq(K,n,j) )| by A42,A70,A68,A99,Th11
       .= |( Line(A,1), (-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1)) )| +|( Line(A,
     1), Base_FinSeq(K,n,j) )| by Th6
       .=(-(a")*(A*(1,j)))* |( Line(A,1), (Base_FinSeq(K,n,1)) )| +|( Line(A,
-    1), Base_FinSeq(K,n,j) )| by A46,A23,Th10
-      .=(-(a")*(A*(1,j)))* a +|( Line(A,1), Base_FinSeq(K,n,j) )| by A46,A3
-,A100,Th35
+    1), Base_FinSeq(K,n,j) )| by A42,A19,Th10
+      .=(-(a")*(A*(1,j)))* a +|( Line(A,1), Base_FinSeq(K,n,j) )| by A42,A3
+,A96,Th35
       .= -((a")*(A*(1,j)))* a +|( Line(A,1), Base_FinSeq(K,n,j) )| by
 VECTSP_1:9
       .= -((A*(1,j))*((a")* a)) +|( Line(A,1), Base_FinSeq(K,n,j) )| by
 GROUP_1:def 3
       .= -((A*(1,j))*(1.K)) +|( Line(A,1), Base_FinSeq(K,n,j) )| by A2,
 VECTSP_1:def 10
-      .= -((A*(1,j))*(1.K)) +( Line(A,1))/.j by A46,A70,A71,Th35
-      .= -(A*(1,j)) + A*(1,j) by A104,VECTSP_1:def 6
+      .= -((A*(1,j))*(1.K)) +( Line(A,1))/.j by A42,A66,A67,Th35
+      .= -(A*(1,j)) + A*(1,j) by A100,VECTSP_1:def 6
       .= 0.K by RLVECT_1:5;
     hence thesis;
   end;
-A105: Indices A=[: Seg n,Seg n :] & Indices (A*P0)=[: Seg n,Seg n :] by
+A101: Indices A=[: Seg n,Seg n :] & Indices (A*P0)=[: Seg n,Seg n :] by
 MATRIX_1:24;
-A106: len (Col(P0,1))=len P0 by MATRIX_1:def 8
+A102: len (Col(P0,1))=len P0 by MATRIX_1:def 8
     .=n by MATRIX_1:24;
   len ((a")*(Base_FinSeq(K,n,1)))=len (Base_FinSeq(K,n,1)) by MATRIXR1:16
     .= n by Th23;
   then
-A107: Col(P0,1)=(a")*(Base_FinSeq(K,n,1)) by A106,A29,FINSEQ_1:14;
-A108: len ((a")*(Line(A,1)))=len ((Line(A,1))) by MATRIXR1:16
-    .= n by A45,MATRIX_1:def 7;
+A103: Col(P0,1)=(a")*(Base_FinSeq(K,n,1)) by A102,A25,FINSEQ_1:14;
+A104: len ((a")*(Line(A,1)))=len ((Line(A,1))) by MATRIXR1:16
+    .= n by A41,MATRIX_1:def 7;
   [1,1] in Indices A by A3,MATRIX_1:37;
-  then (A*P0)*(1,1)= |( Line(A,1), Col(P0,1) )| by A27,A45,A105,MATRIX_3:def 4
-    .= (a")*( |( Line(A,1), Base_FinSeq(K,n,1) )| ) by A46,A23,A107,Th10
-    .=(a")*(Line(A,1))/.1 by A46,A3,Th35
-    .=((a")*(Line(A,1)))/.1 by A47,POLYNOM1:def 1
-    .=((a")*(Line(A,1))).1 by A3,A108,FINSEQ_4:15
-    .=(a")*(A*(1,1)) by A48,A44,MATRIX12:3
+  then (A*P0)*(1,1)= |( Line(A,1), Col(P0,1) )| by A23,A41,A101,MATRIX_3:def 4
+    .= (a")*( |( Line(A,1), Base_FinSeq(K,n,1) )| ) by A42,A19,A103,Th10
+    .=(a")*(Line(A,1))/.1 by A42,A3,Th35
+    .=((a")*(Line(A,1)))/.1 by A43,POLYNOM1:def 1
+    .=((a")*(Line(A,1))).1 by A3,A104,FINSEQ_4:15
+    .=(a")*(A*(1,1)) by A44,A40,MATRIX12:3
     .=1.K by A2,VECTSP_1:def 10;
-  hence thesis by A26,A69,A49;
+  hence thesis by A22,A65,A45;
 end;
 
 theorem Th40:

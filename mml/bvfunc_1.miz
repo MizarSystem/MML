@@ -2,7 +2,7 @@
 ::  by Shunichi Kobayashi and Kui Jia
 ::
 :: Received October 22, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,20 +21,19 @@ environ
       FUNCT_1, FUNCT_2, SETFAM_1, EQREL_1, NUMBERS, PARTIT1, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, XREAL_0, PARTIT1, BINARITH, RELSET_1;
  registrations SUBSET_1, XREAL_0, XBOOLEAN, EQREL_1, MARGREL1, FUNCT_1,
-      FUNCT_2;
+      FUNCT_2, RELSET_1;
  requirements REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, MARGREL1, XBOOLEAN;
+ definitions TARSKI, XBOOLE_0, MARGREL1, XBOOLEAN, FUNCT_2;
  theorems TARSKI, FUNCT_1, FUNCT_2, MARGREL1, EQREL_1, SETFAM_1, PARTIT1,
-      XBOOLE_0, FUNCOP_1, XBOOLEAN;
+      XBOOLE_0, FUNCOP_1, XBOOLEAN, RELAT_1, PARTFUN1;
  schemes DOMAIN_1, FUNCT_2, FUNCT_1;
 
 begin :: Chap. 1  Boolean Operations
 
 definition
   let k,l be boolean set;
-
   redefine pred k <= l means
-  :Def3:
+:Def1:
   k => l = TRUE;
   compatibility
   proof
@@ -50,49 +49,34 @@ reserve Y for non empty set;
 reserve B for Subset of Y;
 
 scheme
-  BVFUniq1 {Y() -> non empty set, F(set) -> set}: for f1,f2 being Element of
-  Funcs(Y(),BOOLEAN) st (for x being Element of Y() holds f1.x = F(x)) & (for x
+  BVFUniq1 {Y() -> non empty set, F(set) -> set}:
+  for f1,f2 being Function of Y(),BOOLEAN
+  st (for x being Element of Y() holds f1.x = F(x)) & (for x
   being Element of Y() holds f2.x = F(x)) holds f1 = f2 proof
-  let f1,f2 be Element of Funcs(Y(),BOOLEAN);
+  let f1,f2 be Function of Y(),BOOLEAN;
   assume that
 A1: for x being Element of Y() holds f1.x = F(x) and
 A2: for x being Element of Y() holds f2.x = F(x);
-  consider k3 being Function such that
-A3: f1=k3 and
-A4: dom k3=Y() and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A5: f2=k4 and
-A6: dom k4=Y() and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for u being set st u in Y() holds k3.u=k4.u
-  proof
-    let u be set;
-    assume u in Y();
-    then reconsider u9=u as Element of Y();
-    f2.u9 = F(u9) by A2;
-    hence thesis by A1,A3,A5;
-  end;
-  hence thesis by A3,A4,A5,A6,FUNCT_1:2;
+  let u be Element of Y();
+  thus f2.u = F(u) by A2 .= f1.u by A1;
 end;
 
 definition
-
   let Y;
-  let a be Element of Funcs(Y,BOOLEAN);
-  redefine func 'not' a ->Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
+  redefine func 'not' a -> Function of Y,BOOLEAN;
   coherence
   proof
-    reconsider a as Element of Funcs(Y,BOOLEAN);
-    'not' a is Element of Funcs(Y,BOOLEAN);
+    reconsider a as Function of Y,BOOLEAN;
+    'not' a is Function of Y,BOOLEAN;
     hence thesis;
   end;
-  let b be Element of Funcs(Y,BOOLEAN);
-  redefine func a '&' b ->Element of Funcs(Y,BOOLEAN);
+  let b be Function of Y,BOOLEAN;
+  redefine func a '&' b -> Function of Y,BOOLEAN;
   coherence
   proof
-    reconsider a,b as Element of Funcs(Y,BOOLEAN);
-    a '&' b is Element of Funcs(Y,BOOLEAN);
+    reconsider a,b as Function of Y,BOOLEAN;
+    a '&' b is Function of Y,BOOLEAN;
     hence thesis;
   end;
 end;
@@ -100,7 +84,7 @@ end;
 definition
   let p,q be boolean-valued Function;
   func p 'or' q -> boolean-valued Function means
-  :Def5:
+  :Def2:
   dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) 'or' (q.x);
   existence
@@ -141,7 +125,7 @@ A7:   x in dom s1;
   commutativity;
   idempotence;
   func p 'xor' q -> Function means
-  :Def6:
+  :Def3:
   dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) 'xor' (q.x);
   existence
@@ -182,7 +166,7 @@ registration
     assume x in rng(p 'xor' q);
     then consider y being set such that
 A1: y in dom(p 'xor' q) & x = (p 'xor' q).y by FUNCT_1:def 3;
-    x = (p.y) 'xor' (q.y) by A1,Def6;
+    x = (p.y) 'xor' (q.y) by A1,Def3;
     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
     hence thesis;
   end;
@@ -190,64 +174,62 @@ end;
 
 definition
   let A be non empty set;
-  let p,q be Element of Funcs(A,BOOLEAN);
-  redefine func p 'or' q -> Element of Funcs(A,BOOLEAN) means
-  :Def7:
+  let p,q be Function of A,BOOLEAN;
+  redefine func p 'or' q -> Function of A,BOOLEAN means
+  :Def4:
   for x being Element of A holds it.x = (p.x) 'or' (q.x);
   coherence
   proof
-    ( ex f being Function st p = f & dom f = A & rng f c= BOOLEAN)& ex f
-    being Function st q = f & dom f = A & rng f c= BOOLEAN by FUNCT_2:def 2;
-    then
-A1: dom(p 'or' q) = A /\ A by Def5
+   dom p = A & dom q = A by PARTFUN1:def 2;
+   then
+A1: dom(p 'or' q) = A /\ A by Def2
       .= A;
     rng(p 'or' q) c= BOOLEAN by MARGREL1:def 16;
-    hence thesis by A1,FUNCT_2:def 2;
+    hence thesis by A1,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
+    let IT be Function of A,BOOLEAN;
 A2: dom IT = A by FUNCT_2:def 1;
     hereby
       assume
 A3:   IT = p 'or' q;
       let x be Element of A;
       dom p = A & dom q = A by FUNCT_2:def 1;
-      then dom(p 'or' q) = A /\ A by Def5
+      then dom(p 'or' q) = A /\ A by Def2
         .= A;
-      hence IT.x = (p.x) 'or' (q.x) by A3,Def5;
+      hence IT.x = (p.x) 'or' (q.x) by A3,Def2;
     end;
 A4: dom q = A by FUNCT_2:def 1;
 A5: dom IT = A /\ A by FUNCT_2:def 1
       .= dom p /\ dom q by A4,FUNCT_2:def 1;
     assume for x being Element of A holds IT.x = (p.x) 'or' (q.x);
     then for x being set st x in dom IT holds IT.x = (p.x) 'or' (q.x) by A2;
-    hence thesis by A5,Def5;
+    hence thesis by A5,Def2;
   end;
-  redefine func p 'xor' q -> Element of Funcs(A,BOOLEAN) means
+  redefine func p 'xor' q -> Function of A,BOOLEAN means
   for x being Element of A holds it.x = (p.x) 'xor' (q.x);
   coherence
   proof
-    ( ex f being Function st p = f & dom f = A & rng f c= BOOLEAN)& ex f
-    being Function st q = f & dom f = A & rng f c= BOOLEAN by FUNCT_2:def 2;
-    then
-A6: dom(p 'xor' q) = A /\ A by Def6
+   dom p = A & dom q = A by PARTFUN1:def 2;
+   then
+A6: dom(p 'xor' q) = A /\ A by Def3
       .= A;
     rng(p 'xor' q) c= BOOLEAN by MARGREL1:def 16;
-    hence thesis by A6,FUNCT_2:def 2;
+    hence thesis by A6,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
+    let IT be Function of A,BOOLEAN;
 A7: dom IT = A by FUNCT_2:def 1;
     hereby
       assume
 A8:   IT = p 'xor' q;
       let x be Element of A;
       dom p = A & dom q = A by FUNCT_2:def 1;
-      then dom(p 'xor' q) = A /\ A by Def6
+      then dom(p 'xor' q) = A /\ A by Def3
         .= A;
-      hence IT.x = (p.x) 'xor' (q.x) by A8,Def6;
+      hence IT.x = (p.x) 'xor' (q.x) by A8,Def3;
     end;
 A9: dom q = A by FUNCT_2:def 1;
 A10: dom IT = A /\ A by FUNCT_2:def 1
@@ -255,33 +237,14 @@ A10: dom IT = A /\ A by FUNCT_2:def 1
     assume for x being Element of A holds IT.x = (p.x) 'xor' (q.x);
     then
     for x being set st x in dom IT holds IT.x = (p.x) 'xor' (q.x) by A7;
-    hence thesis by A10,Def6;
-  end;
-end;
-
-definition
-  let Y;
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  redefine func a 'or' b ->Element of Funcs(Y,BOOLEAN);
-  coherence
-  proof
-    reconsider a,b as Element of Funcs(Y,BOOLEAN);
-    a 'or' b is Element of Funcs(Y,BOOLEAN);
-    hence thesis;
-  end;
-  redefine func a 'xor' b ->Element of Funcs(Y,BOOLEAN);
-  coherence
-  proof
-    reconsider a,b as Element of Funcs(Y,BOOLEAN);
-    a 'xor' b is Element of Funcs(Y,BOOLEAN);
-    hence thesis;
+    hence thesis by A10,Def3;
   end;
 end;
 
 definition
   let p,q be boolean-valued Function;
   func p 'imp' q -> Function means
-  :Def9:
+  :Def6:
   dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) => (q.x);
   existence
@@ -311,7 +274,7 @@ A6:   x in dom s1;
     hence thesis by A2,A4,FUNCT_1:2;
   end;
   func p 'eqv' q -> Function means
-  :Def10:
+  :Def7:
   dom it = dom p /\ dom q &
   for x being set st x in dom it holds it.x = (p.x) <=> (q.x);
   existence
@@ -352,7 +315,7 @@ registration
     assume x in rng(p 'imp' q);
     then consider y being set such that
 A1: y in dom(p 'imp' q) & x = (p 'imp' q).y by FUNCT_1:def 3;
-    x = (p.y) => (q.y) by A1,Def9
+    x = (p.y) => (q.y) by A1,Def6
       .= 'not' (p.y) 'or' (q.y);
     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
     hence thesis;
@@ -364,7 +327,7 @@ A1: y in dom(p 'imp' q) & x = (p 'imp' q).y by FUNCT_1:def 3;
     assume x in rng(p 'eqv' q);
     then consider y being set such that
 A2: y in dom(p 'eqv' q) & x = (p 'eqv' q).y by FUNCT_1:def 3;
-    x = 'not' ((p.y) 'xor' (q.y)) by A2,Def10;
+    x = 'not' ((p.y) 'xor' (q.y)) by A2,Def7;
     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
     hence thesis;
   end;
@@ -372,32 +335,31 @@ end;
 
 definition
   let A be non empty set;
-  let p,q be Element of Funcs(A,BOOLEAN);
-  redefine func p 'imp' q -> Element of Funcs(A,BOOLEAN) means
-  :Def11:
+  let p,q be Function of A,BOOLEAN;
+  redefine func p 'imp' q -> Function of A,BOOLEAN means
+  :Def8:
   for x being Element of A holds it.x = 'not' p.x 'or' q.x;
   coherence
   proof
-    ( ex f being Function st p = f & dom f = A & rng f c= BOOLEAN)& ex f
-    being Function st q = f & dom f = A & rng f c= BOOLEAN by FUNCT_2:def 2;
-    then
-A1: dom(p 'imp' q) = A /\ A by Def9
+   dom p = A & dom q = A by PARTFUN1:def 2;
+   then
+A1: dom(p 'imp' q) = A /\ A by Def6
       .= A;
     rng(p 'imp' q) c= BOOLEAN by MARGREL1:def 16;
-    hence thesis by A1,FUNCT_2:def 2;
+    hence thesis by A1,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
+    let IT be Function of A,BOOLEAN;
 A2: dom q = A by FUNCT_2:def 1;
     hereby
       assume
 A3:   IT = p 'imp' q;
       let x be Element of A;
       dom p = A & dom q = A by FUNCT_2:def 1;
-      then dom(p 'imp' q) = A /\ A by Def9
+      then dom(p 'imp' q) = A /\ A by Def6
         .= A;
-      hence IT.x = p.x => q.x by A3,Def9
+      hence IT.x = p.x => q.x by A3,Def6
         .= 'not' p.x 'or' (q.x);
     end;
     assume
@@ -412,33 +374,32 @@ A5: for x being set st x in dom IT holds IT.x = (p.x) => (q.x)
     end;
     dom IT = A /\ A by FUNCT_2:def 1
       .= dom p /\ dom q by A2,FUNCT_2:def 1;
-    hence thesis by A5,Def9;
+    hence thesis by A5,Def6;
   end;
-  redefine func p 'eqv' q -> Element of Funcs(A,BOOLEAN) means
-  :Def12:
+  redefine func p 'eqv' q -> Function of A,BOOLEAN means
+  :Def9:
   for x being Element of A holds it.x = 'not' (p.x 'xor' q.x);
   coherence
   proof
-    ( ex f being Function st p = f & dom f = A & rng f c= BOOLEAN)& ex f
-    being Function st q = f & dom f = A & rng f c= BOOLEAN by FUNCT_2:def 2;
-    then
-A6: dom(p 'eqv' q) = A /\ A by Def10
+   dom p = A & dom q = A by PARTFUN1:def 2;
+   then
+A6: dom(p 'eqv' q) = A /\ A by Def7
       .= A;
     rng(p 'eqv' q) c= BOOLEAN by MARGREL1:def 16;
-    hence thesis by A6,FUNCT_2:def 2;
+    hence thesis by A6,FUNCT_2:2;
   end;
   compatibility
   proof
-    let IT be Element of Funcs(A,BOOLEAN);
+    let IT be Function of A,BOOLEAN;
 A7: dom q = A by FUNCT_2:def 1;
     hereby
       assume
 A8:   IT = p 'eqv' q;
       let x be Element of A;
       dom p = A & dom q = A by FUNCT_2:def 1;
-      then dom(p 'eqv' q) = A /\ A by Def10
+      then dom(p 'eqv' q) = A /\ A by Def7
         .= A;
-      hence IT.x = 'not' (p.x 'xor' q.x) by A8,Def10;
+      hence IT.x = 'not' (p.x 'xor' q.x) by A8,Def7;
     end;
     assume
 A9: for x being Element of A holds IT.x = 'not' (p.x 'xor' q.x);
@@ -452,38 +413,19 @@ A10: for x being set st x in dom IT holds IT.x = (p.x) <=> (q.x)
     end;
     dom IT = A /\ A by FUNCT_2:def 1
       .= dom p /\ dom q by A7,FUNCT_2:def 1;
-    hence thesis by A10,Def10;
+    hence thesis by A10,Def7;
   end;
 end;
 
 definition
   let Y;
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  redefine func a 'imp' b ->Element of Funcs(Y,BOOLEAN);
-  coherence
-  proof
-    reconsider a,b as Element of Funcs(Y,BOOLEAN);
-    a 'imp' b is Element of Funcs(Y,BOOLEAN);
-    hence thesis;
-  end;
-  redefine func a 'eqv' b ->Element of Funcs(Y,BOOLEAN);
-  coherence
-  proof
-    reconsider a,b as Element of Funcs(Y,BOOLEAN);
-    a 'eqv' b is Element of Funcs(Y,BOOLEAN);
-    hence thesis;
-  end;
-end;
-
-definition
-  let Y;
-  func O_el(Y) ->Element of Funcs(Y,BOOLEAN) means
-  :Def13:
+  func O_el(Y) ->Function of Y,BOOLEAN means
+  :Def10:
   for x being Element of Y holds it.x= FALSE;
   existence
   proof
     reconsider f = Y --> FALSE as Function of Y, BOOLEAN;
-    reconsider f as Element of Funcs(Y,BOOLEAN);
+    reconsider f as Function of Y,BOOLEAN;
     take f;
     let x be Element of Y;
     thus thesis by FUNCOP_1:7;
@@ -491,7 +433,7 @@ definition
   uniqueness
   proof
     deffunc F(set) = FALSE;
-    thus for f1,f2 being Element of Funcs(Y,BOOLEAN) st (for x being Element
+    thus for f1,f2 being Function of Y,BOOLEAN st (for x being Element
 of Y holds f1.x = F(x)) & (for x being Element of Y holds f2.x = F(x)) holds f1
     = f2 from BVFUniq1;
   end;
@@ -499,13 +441,13 @@ end;
 
 definition
   let Y;
-  func I_el(Y) ->Element of Funcs(Y,BOOLEAN) means
-  :Def14:
+  func I_el(Y) ->Function of Y,BOOLEAN means
+  :Def11:
   for x being Element of Y holds it.x= TRUE;
   existence
   proof
     reconsider f = Y --> TRUE as Function of Y, BOOLEAN;
-    reconsider f as Element of Funcs(Y,BOOLEAN);
+    reconsider f as Function of Y,BOOLEAN;
     take f;
     let x be Element of Y;
     thus thesis by FUNCOP_1:7;
@@ -513,410 +455,236 @@ definition
   uniqueness
   proof
     deffunc F(set) = TRUE;
-    thus for f1,f2 being Element of Funcs(Y,BOOLEAN) st (for x being Element
+    thus for f1,f2 being Function of Y,BOOLEAN st (for x being Element
 of Y holds f1.x = F(x)) & (for x being Element of Y holds f2.x = F(x)) holds f1
     = f2 from BVFUniq1;
   end;
 end;
 
-theorem
-  for a being boolean-valued Function holds 'not' 'not' a=a;
+canceled;
 
-theorem Th5:
+theorem Th2:
   'not' I_el(Y)=O_el(Y) & 'not' O_el(Y)=I_el(Y)
 proof
 A1: for x being Element of Y holds ('not' O_el Y).x= TRUE
   proof
     let x be Element of Y;
-    ('not' O_el Y).x= 'not' (O_el Y).x & (O_el Y).x= FALSE by Def13,
+    ('not' O_el Y).x= 'not' (O_el Y).x & (O_el Y).x= FALSE by Def10,
 MARGREL1:def 19;
     hence thesis;
   end;
   for x being Element of Y holds ('not' I_el Y).x= FALSE
   proof
     let x be Element of Y;
-    ('not' I_el Y).x= 'not' ((I_el Y).x) & (I_el Y).x= TRUE by Def14,
+    ('not' I_el Y).x= 'not' ((I_el Y).x) & (I_el Y).x= TRUE by Def11,
 MARGREL1:def 19;
     hence thesis;
   end;
-  hence thesis by A1,Def13,Def14;
+  hence thesis by A1,Def10,Def11;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a '&' a=a;
+  for a,b being Function of Y,BOOLEAN holds a '&' a=a;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a '&' b '&' c = a
-  '&' (b '&' c)
+  for a,b,c being Function of Y,BOOLEAN
+   holds a '&' b '&' c = a '&' (b '&' c)
 proof
-  let a,b,c be Element of Funcs(Y,BOOLEAN);
-  reconsider a9 = a, b9 = b, c9 = c as Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a '&' b '&' c)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a '&' (b '&' c)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a9 '&' b9 '&' c9).x = (a9 '&' (b9 '&' c9 )).x
-  proof
-    let x be Element of Y;
-A5: a9.x '&' (b.x '&' c.x) = (a.x '&' b.x) '&' c.x & a9.x '&' b9.x = (a9
-    '&' b9) .x by MARGREL1:def 20;
-    (a9 '&' (b9 '&' c9)).x = a9.x '&' (b9 '&' c9).x & a9.x '&' (b9 '&' c9)
-    .x = a9.x '&' (b9.x '&' c9.x) by MARGREL1:def 20;
-    hence thesis by A5,MARGREL1:def 20;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b,c be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a '&' b '&' c).x = (a '&' b).x '&' c.x by MARGREL1:def 20
+       .= a.x '&' b.x '&' c.x by MARGREL1:def 20
+       .= a.x '&' (b.x '&' c.x)
+       .= a.x '&' (b '&' c).x by MARGREL1:def 20
+       .= (a '&' (b '&' c)).x by MARGREL1:def 20;
 end;
 
-theorem Th8:
-  for a being Element of Funcs(Y,BOOLEAN) holds a '&' O_el(Y)=O_el( Y)
+theorem Th5:
+  for a being Function of Y,BOOLEAN holds a '&' O_el(Y)=O_el( Y)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: a '&' O_el(Y)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: O_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a '&' O_el Y).x = (O_el Y).x
-  proof
-    let x be Element of Y;
-    a.x '&' FALSE = FALSE & FALSE = (O_el Y).x by Def13;
-    hence thesis by MARGREL1:def 20;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a '&' O_el(Y)).x = a.x '&' (O_el Y).x by MARGREL1:def 20
+        .= a.x '&' FALSE by Def10
+        .= O_el(Y).x by Def10;
+end;
+
+theorem Th6:
+  for a being Function of Y,BOOLEAN holds a '&' I_el(Y)=a
+proof
+  let a be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a '&' I_el(Y)).x = a.x '&' I_el(Y).x by MARGREL1:def 20
+        .= a.x '&' TRUE by Def11
+        .= a.x;
+end;
+
+theorem
+  for a being Function of Y,BOOLEAN holds a 'or' a=a;
+
+theorem
+  for a,b,c being Function of Y,BOOLEAN
+   holds a 'or' b 'or' c = a 'or' (b 'or' c)
+proof
+  let a,b,c be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'or' b 'or' c).x = (a 'or' b).x 'or' c.x by Def4
+     .= a.x 'or' b.x 'or' c.x by Def4
+     .= a.x 'or' (b.x 'or' c.x)
+     .= a.x 'or' (b 'or' c).x by Def4
+     .= (a 'or' (b 'or' c)).x by Def4;
 end;
 
 theorem Th9:
-  for a being Element of Funcs(Y,BOOLEAN) holds a '&' I_el(Y)=a
+  for a being Function of Y,BOOLEAN holds a 'or' O_el(Y)=a
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: a '&' I_el(Y)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a '&' I_el Y).x = a.x
-  proof
-    let x be Element of Y;
-    a.x '&' (I_el Y).x = a.x '&' TRUE by Def14;
-    hence thesis by MARGREL1:def 20;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'or' O_el(Y)).x = a.x 'or' O_el(Y).x by Def4
+    .= a.x 'or' FALSE by Def10
+    .= a.x;
 end;
 
-theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds a 'or' a=a;
-
-theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a 'or' b 'or' c = a
-  'or' (b 'or' c)
+theorem Th10:
+  for a being Function of Y,BOOLEAN holds a 'or' I_el(Y)= I_el(Y)
 proof
-  let a,b,c be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: (a 'or' b 'or' c)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a 'or' (b 'or' c)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'or' b 'or' c).x = (a 'or' (b 'or' c)) .x
-  proof
-    let x be Element of Y;
-A5: (a.x 'or' b.x) 'or' c.x = (a 'or' b).x 'or' c.x by Def7;
-    (a 'or' (b 'or' c)).x = a.x 'or' (b 'or' c).x & a.x 'or' (b 'or' c).x
-    = a.x 'or' (b.x 'or' c.x) by Def7;
-    hence thesis by A5,Def7;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
-end;
-
-theorem Th12:
-  for a being Element of Funcs(Y,BOOLEAN) holds a 'or' O_el(Y)=a
-proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: a 'or' O_el(Y)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'or' O_el Y).x = a.x
-  proof
-    let x be Element of Y;
-    a.x 'or' (O_el Y).x = a.x 'or' FALSE by Def13;
-    hence thesis by Def7;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
-end;
-
-theorem Th13:
-  for a being Element of Funcs(Y,BOOLEAN) holds a 'or' I_el(Y)= I_el(Y)
-proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: a 'or' I_el(Y)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: I_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'or' I_el Y).x = (I_el Y).x
-  proof
-    let x be Element of Y;
-    a.x 'or' TRUE = TRUE & TRUE = (I_el Y).x by Def14;
-    hence thesis by Def7;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus (a 'or' I_el(Y)).x = a.x 'or' I_el(Y).x by Def4
+     .= a.x 'or' TRUE by Def11
+     .= I_el(Y).x by Def11;
 end;
 
 theorem ::Distributive
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a '&' b) 'or' c = (
-  a 'or' c) '&' (b 'or' c)
+  for a,b,c being Function of Y,BOOLEAN
+   holds (a '&' b) 'or' c = (a 'or' c) '&' (b 'or' c)
 proof
-  let a,b,c be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: ((a '&' b) 'or' c)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (a 'or' c) '&' (b 'or' c)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a '&' b 'or' c).x = ((a 'or' c) '&' (b
-  'or' c)).x
-  proof
-    let x be Element of Y;
-    (a '&' b 'or' c).x = (a '&' b).x 'or' c.x by Def7;
-    then
-A5: (a '&' b 'or' c).x = (a.x '&' b.x) 'or' c.x by MARGREL1:def 20;
-    c.x 'or' (a.x '&' b.x) = (c.x 'or' a.x) '&' (c.x 'or' b.x) & (a.x 'or'
-    c.x) = (a 'or' c).x by Def7,XBOOLEAN:9;
-    then (a '&' b 'or' c).x = (a 'or' c).x '&' (b 'or' c).x by A5,Def7
-      .= ((a 'or' c) '&' (b 'or' c)).x by MARGREL1:def 20;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b,c be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus ((a '&' b) 'or' c).x = (a '&' b).x 'or' c.x by Def4
+    .= a.x '&' b.x 'or' c.x by MARGREL1:def 20
+    .= (a.x 'or' c.x) '&' (b.x 'or' c.x) by XBOOLEAN:9
+    .= (a.x 'or' c.x) '&' (b 'or' c).x by Def4
+    .= (a 'or' c).x '&' (b 'or' c).x by Def4
+    .= ((a 'or' c) '&' (b 'or' c)).x by MARGREL1:def 20;
 end;
 
 theorem ::Distributive
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'or' b) '&' c = (
-  a '&' c) 'or' (b '&' c)
+  for a,b,c being Function of Y,BOOLEAN
+  holds (a 'or' b) '&' c = (a '&' c) 'or' (b '&' c)
 proof
-  let a,b,c be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: ((a 'or' b) '&' c)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (a '&' c) 'or' (b '&' c)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ((a 'or' b) '&' c).x = (a '&' c 'or' b
-  '&' c).x
-  proof
-    let x be Element of Y;
-    ((a 'or' b) '&' c).x = (a 'or' b).x '&' c.x by MARGREL1:def 20;
-    then
-A5: ((a 'or' b) '&' c).x = (a.x 'or' b.x) '&' c.x by Def7;
-    c.x '&' (a.x 'or' b.x) = (c.x '&' a.x) 'or' (c.x '&' b.x) & (a.x '&' c
-    .x) = (a '&' c).x by MARGREL1:def 20,XBOOLEAN:8;
-    then ((a 'or' b) '&' c).x = (a '&' c).x 'or' (b '&' c).x by A5,
-MARGREL1:def 20
-      .= (a '&' c 'or' b '&' c).x by Def7;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b,c be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus ((a 'or' b) '&' c).x = (a 'or' b).x '&' c.x by MARGREL1:def 20
+    .= (a.x 'or' b.x) '&' c.x by Def4
+    .= a.x '&' c.x 'or' b.x '&' c.x by XBOOLEAN:8
+    .= a.x '&' c.x 'or' (b '&' c).x by MARGREL1:def 20
+    .= (a '&' c).x 'or' (b '&' c).x by MARGREL1:def 20
+    .= ((a '&' c) 'or' (b '&' c)).x by Def4;
 end;
 
 theorem ::De'Morgan
-  for a,b being Element of Funcs(Y,BOOLEAN) holds 'not' (a 'or' b)=(
-  'not' a) '&' ('not' b)
+  for a,b being Function of Y,BOOLEAN
+   holds 'not' (a 'or' b)=('not' a) '&' ('not' b)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: 'not' (a 'or' b)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: ('not' a) '&' ('not' b)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ('not' (a 'or' b)).x = ('not' a '&' 'not' b).x
-  proof
-    let x be Element of Y;
-    (a 'or' b).x = a.x 'or' b.x by Def7;
-    then
-A5: ('not' (a 'or' b)).x = 'not'(a.x 'or' b.x) by MARGREL1:def 19
-      .= 'not' a.x '&' 'not' b.x;
-    'not' a.x = ('not' a).x by MARGREL1:def 19;
-    then ('not' (a 'or' b)).x = ('not' a).x '&' ('not' b).x by A5,
-MARGREL1:def 19
-      .= ('not' a '&' 'not' b).x by MARGREL1:def 20;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus ('not' (a 'or' b)).x = 'not' ((a 'or' b).x) by MARGREL1:def 19
+     .= 'not' (a.x 'or' b.x) by Def4
+     .= ('not' a).x '&' 'not' b.x by MARGREL1:def 19
+     .= ('not' a).x '&' ('not' b).x by MARGREL1:def 19
+     .= (('not' a) '&' ('not' b)).x by MARGREL1:def 20;
 end;
 
 theorem ::De'Morgan
-  for a,b being Element of Funcs(Y,BOOLEAN) holds 'not' (a '&' b)=('not'
-  a) 'or' ('not' b)
+  for a,b being Function of Y,BOOLEAN
+  holds 'not' (a '&' b)=('not' a) 'or' ('not' b)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: ('not' (a '&' b))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (('not' a) 'or' ('not' b))=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ('not'(a '&' b)).x = ('not' a 'or' 'not' b).x
-  proof
-    let x be Element of Y;
-    (a '&' b).x = a.x '&' b.x by MARGREL1:def 20;
-    then
-A5: ('not'(a '&' b)).x = 'not' a.x 'or' 'not' b.x by MARGREL1:def 19;
-    'not' a.x = ('not' a).x by MARGREL1:def 19;
-    then ('not'(a '&' b)).x = ('not' a).x 'or' ('not' b).x by A5,
-MARGREL1:def 19
-      .= ('not' a 'or' 'not' b).x by Def7;
-    hence thesis;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+  let a,b be Function of Y,BOOLEAN;
+  let x be Element of Y;
+  thus ('not' (a '&' b)).x = 'not' (a '&' b).x by MARGREL1:def 19
+       .= 'not' a.x 'or' 'not' b.x by MARGREL1:def 20
+       .= 'not' a.x 'or' ('not' b).x by MARGREL1:def 19
+       .= ('not' a).x 'or' ('not' b).x by MARGREL1:def 19
+       .= (('not' a) 'or' ('not' b)).x by Def4;
 end;
 
 definition
   let Y;
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   pred a '<' b means
-  :Def15:
+  :Def12:
   for x being Element of Y st a.x= TRUE holds b.x= TRUE;
   reflexivity;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds ( a '<' b & b '<' a
+  for a,b,c being Function of Y,BOOLEAN holds ( a '<' b & b '<' a
   implies a=b)& ( a '<' b & b '<' c implies a '<' c)
 proof
-  let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for a,b,c being Element of Funcs(Y,BOOLEAN) holds a '<' b & b '<' a
+  let a,b,c be Function of Y,BOOLEAN;
+A1: for a,b,c being Function of Y,BOOLEAN holds a '<' b & b '<' a
   implies a = b
   proof
-    let a,b,c be Element of Funcs(Y,BOOLEAN);
-    consider k3 being Function such that
-A2: a=k3 and
-A3: dom k3=Y and
-    rng k3 c= BOOLEAN by FUNCT_2:def 2;
-    consider k4 being Function such that
-A4: b=k4 and
-A5: dom k4=Y and
-    rng k4 c= BOOLEAN by FUNCT_2:def 2;
+    let a,b,c be Function of Y,BOOLEAN;
     assume
 A6: a '<' b & b '<' a;
-    for x being Element of Y holds a.x = b.x
-    proof
       let x be Element of Y;
       a.x = FALSE & b.x = FALSE or a.x = FALSE & b.x = TRUE or a.x = TRUE
       & b.x = FALSE or a.x = TRUE & b.x = TRUE by XBOOLEAN:def 3;
-      hence thesis by A6,Def15;
-    end;
-    then for u being set st u in Y holds k3.u=k4.u by A2,A4;
-    hence b=a by A2,A3,A4,A5,FUNCT_1:2;
+      hence thesis by A6,Def12;
   end;
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a '<' b & b '<' c
+  for a,b,c being Function of Y,BOOLEAN holds a '<' b & b '<' c
   implies a '<' c
   proof
-    let a,b,c be Element of Funcs(Y,BOOLEAN);
+    let a,b,c be Function of Y,BOOLEAN;
     assume that
 A7: a '<' b and
 A8: b '<' c;
     for x being Element of Y st a.x= TRUE holds c.x=TRUE
     proof
       let x be Element of Y;
-      b.x = TRUE implies c.x = TRUE by A8,Def15;
-      hence thesis by A7,Def15;
+      b.x = TRUE implies c.x = TRUE by A8,Def12;
+      hence thesis by A7,Def12;
     end;
-    hence thesis by Def15;
+    hence thesis by Def12;
   end;
   hence thesis by A1;
 end;
 
-theorem Th19:
-  for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'imp' b)=I_el
+theorem Th16:
+  for a,b being Function of Y,BOOLEAN holds (a 'imp' b)=I_el
   (Y) iff a '<' b
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-A1: for a,b being Element of Funcs(Y,BOOLEAN) holds a '<' b implies (a 'imp'
+  let a,b be Function of Y,BOOLEAN;
+A1: for a,b being Function of Y,BOOLEAN holds a '<' b implies (a 'imp'
   b)=I_el(Y)
   proof
-    let a,b be Element of Funcs(Y,BOOLEAN);
-    consider k3 being Function such that
-A2: (a 'imp' b) =k3 and
-A3: dom k3=Y and
-    rng k3 c= BOOLEAN by FUNCT_2:def 2;
-    consider k4 being Function such that
-A4: I_el(Y)=k4 and
-A5: dom k4=Y and
-    rng k4 c= BOOLEAN by FUNCT_2:def 2;
+    let a,b be Function of Y,BOOLEAN;
     assume
 A6: a '<' b;
-A7: for x being Element of Y holds a.x = FALSE & b.x = FALSE or a.x =
-    FALSE & b.x = TRUE or a.x = TRUE & b.x = TRUE
-    proof
-      let x be Element of Y;
-      a.x= TRUE implies b.x=TRUE by A6,Def15;
-      hence thesis by XBOOLEAN:def 3;
-    end;
 A8: for x being Element of Y holds ('not' a.x) 'or' b.x = TRUE
     proof
       let x be Element of Y;
       a.x = FALSE & b.x = FALSE or a.x = FALSE & b.x = TRUE or a.x = TRUE
-      & b.x = TRUE by A7;
+      & b.x = TRUE by A6,Def12,XBOOLEAN:def 3;
       hence thesis;
     end;
-    for x being Element of Y holds (a 'imp' b).x = (I_el Y).x
-    proof
       let x be Element of Y;
-      (a 'imp' b).x = ('not' a.x) 'or' b.x & (I_el Y).x= TRUE by Def11,Def14;
+      (a 'imp' b).x = ('not' a.x) 'or' b.x & (I_el Y).x= TRUE by Def8,Def11;
       hence thesis by A8;
-    end;
-    then for u being set st u in Y holds k3.u=k4.u by A2,A4;
-    hence thesis by A2,A3,A4,A5,FUNCT_1:2;
   end;
-  for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'imp' b)=I_el(Y)
+  for a,b being Function of Y,BOOLEAN holds (a 'imp' b)=I_el(Y)
   implies a '<' b
   proof
-    let a,b be Element of Funcs(Y,BOOLEAN);
+    let a,b be Function of Y,BOOLEAN;
     assume
 A9: (a 'imp' b)=I_el(Y);
 A10: for x being Element of Y holds ('not' a.x) 'or' b.x = TRUE
     proof
       let x be Element of Y;
-      (a 'imp' b).x=('not' a.x) 'or' b.x by Def11;
-      hence thesis by A9,Def14;
+      (a 'imp' b).x=('not' a.x) 'or' b.x by Def8;
+      hence thesis by A9,Def11;
     end;
     for x being Element of Y holds a.x = FALSE & b.x = FALSE or a.x =
     FALSE & b.x = TRUE or a.x = TRUE & b.x = TRUE
@@ -929,35 +697,27 @@ XBOOLEAN:def 3;
       hence thesis by A11;
     end;
     then for x being Element of Y st a.x= TRUE holds b.x=TRUE;
-    hence thesis by Def15;
+    hence thesis by Def12;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b)=I_el(Y) iff a = b
+  for a,b being Function of Y,BOOLEAN holds (a 'eqv' b)=I_el(Y) iff a = b
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
-A1: for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b)=I_el(Y)
+  let a,b be Function of Y,BOOLEAN;
+A1: for a,b being Function of Y,BOOLEAN holds (a 'eqv' b)=I_el(Y)
   implies a = b
   proof
-    let a,b be Element of Funcs(Y,BOOLEAN);
-    consider k3 being Function such that
-A2: a=k3 and
-A3: dom k3=Y and
-    rng k3 c= BOOLEAN by FUNCT_2:def 2;
-    consider k4 being Function such that
-A4: b=k4 and
-A5: dom k4=Y and
-    rng k4 c= BOOLEAN by FUNCT_2:def 2;
+    let a,b be Function of Y,BOOLEAN;
     assume
 A6: (a 'eqv' b)=I_el(Y);
 A7: for x being Element of Y holds ('not' a.x '&' b.x) 'or' (a.x '&' 'not'
     b.x) = FALSE
     proof
       let x be Element of Y;
-      (a 'eqv' b).x = 'not' (a.x 'xor' b.x) by Def12;
-      then 'not' (a.x 'xor' b.x) = TRUE by A6,Def14;
+      (a 'eqv' b).x = 'not' (a.x 'xor' b.x) by Def9;
+      then 'not' (a.x 'xor' b.x) = TRUE by A6,Def11;
       hence thesis;
     end;
 A8: for x being Element of Y holds ('not' a.x '&' b.x) = FALSE & (a.x '&'
@@ -969,8 +729,6 @@ XBOOLEAN:def 3;
       ('not' a.x '&' b.x) 'or' (a.x '&' 'not' b.x) = FALSE by A7;
       hence thesis by A9;
     end;
-    for x being Element of Y holds a.x = b.x
-    proof
       let x be Element of Y;
       ('not' a.x '&' b.x) = FALSE by A8;
       then
@@ -978,22 +736,11 @@ A10:  'not' a.x = TRUE & b.x = FALSE or 'not' a.x = FALSE & b.x = FALSE
       or 'not' a.x = FALSE & b.x = TRUE by MARGREL1:12,XBOOLEAN:def 3;
       (a.x '&' 'not' b.x) = FALSE by A8;
       hence thesis by A10;
-    end;
-    then for u being set st u in Y holds k3.u=k4.u by A2,A4;
-    hence thesis by A2,A3,A4,A5,FUNCT_1:2;
   end;
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a = b implies (a 'eqv'
+  for a,b being Function of Y,BOOLEAN holds a = b implies (a 'eqv'
   b)=I_el(Y)
   proof
-    let a,b be Element of Funcs(Y,BOOLEAN);
-    consider k3 being Function such that
-A11: (a 'eqv' b)=k3 and
-A12: dom k3=Y and
-    rng k3 c= BOOLEAN by FUNCT_2:def 2;
-    consider k4 being Function such that
-A13: I_el(Y)=k4 and
-A14: dom k4=Y and
-    rng k4 c= BOOLEAN by FUNCT_2:def 2;
+    let a,b be Function of Y,BOOLEAN;
     assume
 A15: a = b;
 A16: for x being Element of Y holds ('not' a.x '&' b.x) = FALSE & (a.x '&'
@@ -1006,84 +753,58 @@ A16: for x being Element of Y holds ('not' a.x '&' b.x) = FALSE & (a.x '&'
 XBOOLEAN:def 3;
       hence thesis;
     end;
-    for x being Element of Y holds (a 'eqv' b).x = (I_el Y).x
-    proof
       let x be Element of Y;
       (a.x '&' 'not' b.x) = FALSE by A16;
       then 'not' (a.x 'xor' b.x) = TRUE by A16;
-      then (a 'eqv' b).x= TRUE by Def12;
-      hence thesis by Def14;
-    end;
-    then for u being set st u in Y holds k3.u=k4.u by A11,A13;
-    hence thesis by A11,A12,A13,A14,FUNCT_1:2;
+      then (a 'eqv' b).x= TRUE by Def9;
+      hence thesis by Def11;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds O_el(Y) '<' a & a '<' I_el(Y)
+  for a being Function of Y,BOOLEAN holds O_el(Y) '<' a & a '<' I_el(Y)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: O_el(Y) 'imp' a=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: I_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ((O_el Y) 'imp' a).x=(I_el Y).x
+  let a be Function of Y,BOOLEAN;
+A5: (O_el Y) 'imp' a = I_el Y
   proof
     let x be Element of Y;
-    ((O_el Y) 'imp' a).x=('not' (O_el Y).x) 'or' a.x by Def11;
-    then ((O_el Y) 'imp' a).x=TRUE 'or' a.x by Def13;
-    hence thesis by Def14;
+    ((O_el Y) 'imp' a).x=('not' (O_el Y).x) 'or' a.x by Def8;
+    then ((O_el Y) 'imp' a).x=TRUE 'or' a.x by Def10;
+    hence thesis by Def11;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  then
-A5: k3=k4 by A2,A4,FUNCT_1:2;
-  consider k4 being Function such that
-A6: I_el(Y)=k4 and
-A7: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  consider k3 being Function such that
-A8: a 'imp' I_el(Y)=k3 and
-A9: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds (a 'imp' I_el Y).x=(I_el Y).x
+  a 'imp' I_el(Y)=I_el(Y)
   proof
     let x be Element of Y;
-    (a 'imp' I_el Y).x='not' a.x 'or' (I_el Y).x by Def11;
-    then (a 'imp' I_el Y).x='not' a.x 'or' TRUE by Def14;
-    hence thesis by Def14;
+    (a 'imp' I_el Y).x='not' a.x 'or' (I_el Y).x by Def8;
+    then (a 'imp' I_el Y).x='not' a.x 'or' TRUE by Def11;
+    hence thesis by Def11;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A8,A6;
-  then a 'imp' I_el(Y)=I_el(Y) by A8,A9,A6,A7,FUNCT_1:2;
-  hence thesis by A1,A3,A5,Th19;
+  hence thesis by A5,Th16;
 end;
 
 begin :: Chap. 3  Infimum and Supremum
 
 definition
   let Y;
-  let a be Element of Funcs(Y,BOOLEAN);
-  func B_INF(a) ->Element of Funcs(Y,BOOLEAN) equals
-  :Def16:
+  let a be Function of Y,BOOLEAN;
+  func B_INF(a) ->Function of Y,BOOLEAN equals
+  :Def13:
   I_el(Y) if for x being Element of Y holds a.x=TRUE
   otherwise O_el(Y);
   correctness;
-  func B_SUP(a) ->Element of Funcs(Y,BOOLEAN) equals
-  :Def17:
+  func B_SUP(a) ->Function of Y,BOOLEAN equals
+  :Def14:
   O_el(Y) if for x being Element of Y holds a.x=FALSE
   otherwise I_el(Y);
   correctness;
 end;
 
-theorem Th22:
-  for a being Element of Funcs(Y,BOOLEAN) holds 'not' B_INF(a) =
+theorem Th19:
+  for a being Function of Y,BOOLEAN holds 'not' B_INF(a) =
   B_SUP('not' a) & 'not' B_SUP(a)=B_INF('not' a)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
 A1: (for x being Element of Y holds ('not' a).x=TRUE) implies for x being
   Element of Y holds a.x=FALSE
   proof
@@ -1120,12 +841,12 @@ A8:     for x being Element of Y holds ('not' a).x= FALSE
           then 'not' a.x= FALSE by A7;
           hence thesis by MARGREL1:def 19;
         end;
-        B_INF(a) = I_el(Y) by A7,Def16;
+        B_INF(a) = I_el(Y) by A7,Def13;
         then
-A9:     'not' B_INF(a) = O_el(Y) by Th5;
+A9:     'not' B_INF(a) = O_el(Y) by Th2;
         B_INF('not' a) = O_el(Y) & 'not' B_SUP(a) = 'not' I_el(Y) by A1,A7
-,Def16,Def17;
-        hence thesis by A9,A8,Def17,Th5;
+,Def13,Def14;
+        hence thesis by A9,A8,Def14,Th2;
       end;
       case
 A10:    (for x being Element of Y holds a.x=FALSE) & not (for x being
@@ -1137,12 +858,12 @@ A11:    for x being Element of Y holds ('not' a).x= TRUE
           then 'not' a.x= TRUE by A10;
           hence thesis by MARGREL1:def 19;
         end;
-        'not' B_SUP(a) = 'not' O_el(Y) by A10,Def17;
+        'not' B_SUP(a) = 'not' O_el(Y) by A10,Def14;
         then
-A12:    'not' B_SUP(a) = I_el(Y) by Th5;
+A12:    'not' B_SUP(a) = I_el(Y) by Th2;
         B_SUP('not' a) = I_el(Y) & 'not' B_INF(a) = 'not' O_el(Y) by A3,A10
-,Def16,Def17;
-        hence thesis by A12,A11,Def16,Th5;
+,Def13,Def14;
+        hence thesis by A12,A11,Def13,Th2;
       end;
       case
 A13:    (for x being Element of Y holds a.x=TRUE ) & for x being
@@ -1158,12 +879,12 @@ A13:    (for x being Element of Y holds a.x=TRUE ) & for x being
     assume that
 A14: not( for x being Element of Y holds a.x=TRUE ) and
 A15: not(for x being Element of Y holds a.x=FALSE);
-    'not' B_INF(a) = 'not' O_el(Y) by A14,Def16;
+    'not' B_INF(a) = 'not' O_el(Y) by A14,Def13;
     then
-A16: 'not' B_INF(a) = I_el(Y) by Th5;
-    'not' B_SUP(a) = 'not' I_el(Y) & B_INF('not' a) = O_el(Y) by A1,A15,Def16
-,Def17;
-    hence thesis by A3,A14,A16,Def17,Th5;
+A16: 'not' B_INF(a) = I_el(Y) by Th2;
+    'not' B_SUP(a) = 'not' I_el(Y) & B_INF('not' a) = O_el(Y) by A1,A15,Def13
+,Def14;
+    hence thesis by A3,A14,A16,Def14,Th2;
   end;
   hence thesis by A5;
 end;
@@ -1177,7 +898,7 @@ A1: not (for x being Element of Y holds (O_el Y).x= TRUE)
     now
       assume for x being Element of Y holds (O_el Y).x= TRUE;
       let x be Element of Y;
-      (O_el Y).x= FALSE by Def13;
+      (O_el Y).x= FALSE by Def10;
       hence thesis;
     end;
     hence thesis;
@@ -1189,13 +910,13 @@ A2: not (for x being Element of Y holds (I_el Y).x= FALSE)
 A3:   for x being Element of Y holds (I_el Y).x= FALSE;
       let x be Element of Y;
       (I_el Y).x= FALSE by A3;
-      hence thesis by Def14;
+      hence thesis by Def11;
     end;
     hence thesis;
   end;
   ( for x being Element of Y holds (O_el Y).x= FALSE)& for x being Element
-  of Y holds (I_el Y).x= TRUE by Def13,Def14;
-  hence thesis by A1,A2,Def16,Def17;
+  of Y holds (I_el Y).x= TRUE by Def10,Def11;
+  hence thesis by A1,A2,Def13,Def14;
 end;
 
 registration
@@ -1203,21 +924,16 @@ registration
   cluster O_el(Y) -> constant;
   coherence
   proof
-    thus O_el(Y) is constant
-    proof
-A1:   ex f being Function st O_el(Y) = f & dom f = Y & rng f c= BOOLEAN by
-FUNCT_2:def 2;
       for n1,n2 being set st n1 in dom O_el(Y) & n2 in dom O_el(Y) holds
       O_el(Y).n1=O_el(Y).n2
       proof
         let n1,n2 be set;
         assume n1 in dom O_el(Y) & n2 in dom O_el(Y);
-        then reconsider n1, n2 as Element of Y by A1;
-        (O_el Y).n2= FALSE & (O_el Y).n1 = O_el(Y).n1 by Def13;
-        hence thesis by Def13;
+        then reconsider n1, n2 as Element of Y by PARTFUN1:def 2;
+        (O_el Y).n2= FALSE & (O_el Y).n1 = O_el(Y).n1 by Def10;
+        hence thesis by Def10;
       end;
       hence thesis by FUNCT_1:def 10;
-    end;
   end;
 end;
 
@@ -1228,16 +944,14 @@ registration
   proof
     thus I_el(Y) is constant
     proof
-A1:   ex f being Function st I_el(Y) = f & dom f = Y & rng f c= BOOLEAN by
-FUNCT_2:def 2;
       for n1,n2 being set st n1 in dom I_el(Y) & n2 in dom I_el(Y) holds
       I_el(Y).n1=I_el(Y).n2
       proof
         let n1,n2 be set;
         assume n1 in dom I_el(Y) & n2 in dom I_el(Y);
-        then reconsider n1, n2 as Element of Y by A1;
-        (I_el Y).n2= TRUE & (I_el Y).n1 = I_el(Y).n1 by Def14;
-        hence thesis by Def14;
+        then reconsider n1, n2 as Element of Y by PARTFUN1:def 2;
+        (I_el Y).n2= TRUE & (I_el Y).n1 = I_el(Y).n1 by Def11;
+        hence thesis by Def11;
       end;
       hence thesis by FUNCT_1:def 10;
     end;
@@ -1246,7 +960,7 @@ end;
 
 registration
   let Y be non empty set;
-  cluster constant for Element of Funcs(Y,BOOLEAN);
+  cluster constant for Function of Y,BOOLEAN;
   existence
   proof
     take O_el(Y);
@@ -1254,10 +968,10 @@ registration
   end;
 end;
 
-theorem Th24:
-  for a being constant Element of Funcs(Y,BOOLEAN) holds a=O_el(Y) or a=I_el(Y)
+theorem Th21:
+  for a being constant Function of Y,BOOLEAN holds a=O_el(Y) or a=I_el(Y)
 proof
-  let a be constant Element of Funcs(Y,BOOLEAN);
+  let a be constant Function of Y,BOOLEAN;
 A1: (for n1,n2 being set st n1 in Y & n2 in Y holds a.n1=a.n2) implies (for
   x being Element of Y holds a.x=TRUE ) or for x being Element of Y holds a.x=
   FALSE
@@ -1275,15 +989,15 @@ A5:   a.x1<>TRUE by A3;
     end;
     hence thesis;
   end;
-  ex f being Function st a = f & dom f = Y & rng f c= BOOLEAN by FUNCT_2:def 2;
-  hence thesis by A1,Def13,Def14,FUNCT_1:def 10;
+  dom a = Y by PARTFUN1:def 2;
+hence thesis by A1,Def10,Def11,FUNCT_1:def 10;
 end;
 
-theorem Th25:
-  for d being constant Element of Funcs(Y,BOOLEAN) holds B_INF(d)
+theorem Th22:
+  for d being constant Function of Y,BOOLEAN holds B_INF(d)
   = d & B_SUP(d) = d
 proof
-  let d be constant Element of Funcs(Y,BOOLEAN);
+  let d be constant Function of Y,BOOLEAN;
 A1: now
     assume
 A2: (for x being Element of Y holds d.x=TRUE ) or for x being Element
@@ -1293,14 +1007,14 @@ A2: (for x being Element of Y holds d.x=TRUE ) or for x being Element
       case
 A3:     (for x being Element of Y holds d.x=TRUE) & not (for x being
         Element of Y holds d.x=FALSE);
-        then d = I_el(Y) by Def14;
-        hence thesis by A3,Def16,Def17;
+        then d = I_el(Y) by Def11;
+        hence thesis by A3,Def13,Def14;
       end;
       case
 A4:     (for x being Element of Y holds d.x=FALSE) & not (for x being
         Element of Y holds d.x=TRUE);
-        then d = O_el(Y) by Def13;
-        hence thesis by A4,Def16,Def17;
+        then d = O_el(Y) by Def10;
+        hence thesis by A4,Def13,Def14;
       end;
       case
 A5:     (for x being Element of Y holds d.x=TRUE) & for x being
@@ -1317,14 +1031,14 @@ A5:     (for x being Element of Y holds d.x=TRUE) & for x being
 A6: not( for x being Element of Y holds d.x=TRUE ) and
 A7: not(for x being Element of Y holds d.x=FALSE);
     now
-      per cases by Th24;
+      per cases by Th21;
       case
         d=O_el(Y);
-        hence thesis by A7,Def13;
+        hence thesis by A7,Def10;
       end;
       case
         d=I_el(Y);
-        hence thesis by A6,Def14;
+        hence thesis by A6,Def11;
       end;
     end;
     hence thesis;
@@ -1333,10 +1047,10 @@ A7: not(for x being Element of Y holds d.x=FALSE);
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds B_INF(a '&' b) = B_INF
+  for a,b being Function of Y,BOOLEAN holds B_INF(a '&' b) = B_INF
   (a) '&' B_INF(b) & B_SUP(a 'or' b) = B_SUP(a) 'or' B_SUP(b)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
 A1: now
     assume
 A2: for x being Element of Y holds (a '&' b).x=TRUE;
@@ -1358,7 +1072,7 @@ A3: for x being Element of Y holds a.x = TRUE
       hence thesis;
     end;
     then
-A4: B_SUP(a) = I_el(Y) by Def17;
+A4: B_SUP(a) = I_el(Y) by Def14;
 A5: for x being Element of Y holds b.x = TRUE
     proof
       let x be Element of Y;
@@ -1377,20 +1091,20 @@ A5: for x being Element of Y holds b.x = TRUE
       hence thesis;
     end;
     then
-A6: B_SUP(a) 'or' B_SUP(b) = I_el(Y) 'or' I_el(Y) by A4,Def17;
+A6: B_SUP(a) 'or' B_SUP(b) = I_el(Y) 'or' I_el(Y) by A4,Def14;
 A7: not (for x being Element of Y holds (a 'or' b).x=FALSE)
     proof
       now
         assume for x being Element of Y holds (a 'or' b).x=FALSE;
         let x be Element of Y;
-        (a 'or' b).x = a.x 'or' b.x & a.x = TRUE by A3,Def7;
+        (a 'or' b).x = a.x 'or' b.x & a.x = TRUE by A3,Def4;
         hence thesis;
       end;
       hence thesis;
     end;
-    B_INF(a) '&' B_INF(b) = B_INF(a) '&' I_el(Y) by A5,Def16
-      .= I_el Y '&' I_el Y by A3,Def16;
-    hence thesis by A2,A7,A6,Def16,Def17;
+    B_INF(a) '&' B_INF(b) = B_INF(a) '&' I_el(Y) by A5,Def13
+      .= I_el Y '&' I_el Y by A3,Def13;
+    hence thesis by A2,A7,A6,Def13,Def14;
   end;
 A8: now
     assume
@@ -1400,7 +1114,7 @@ A10: for x being Element of Y holds a.x = FALSE
       let x be Element of Y;
       (a 'or' b).x=FALSE by A9;
       then
-A11:  a.x 'or' b.x = FALSE by Def7;
+A11:  a.x 'or' b.x = FALSE by Def4;
       a.x = TRUE or a.x = FALSE by XBOOLEAN:def 3;
       hence thesis by A11;
     end;
@@ -1419,13 +1133,13 @@ A13: for x being Element of Y holds b.x = FALSE
       let x be Element of Y;
       (a 'or' b).x=FALSE by A9;
       then
-A14:  a.x 'or' b.x = FALSE by Def7;
+A14:  a.x 'or' b.x = FALSE by Def4;
       b.x = TRUE or b.x = FALSE by XBOOLEAN:def 3;
       hence thesis by A14;
     end;
-    then B_SUP(b) = O_el(Y) by Def17;
+    then B_SUP(b) = O_el(Y) by Def14;
     then
-A15: B_SUP(a) 'or' B_SUP(b) = O_el(Y) 'or' O_el(Y) by A10,Def17;
+A15: B_SUP(a) 'or' B_SUP(b) = O_el(Y) 'or' O_el(Y) by A10,Def14;
     not (for x being Element of Y holds a.x=TRUE)
     proof
       now
@@ -1437,7 +1151,7 @@ A15: B_SUP(a) 'or' B_SUP(b) = O_el(Y) 'or' O_el(Y) by A10,Def17;
       hence thesis;
     end;
     then
-A16: B_INF(a) = O_el(Y) by Def16;
+A16: B_INF(a) = O_el(Y) by Def13;
     not (for x being Element of Y holds b.x=TRUE)
     proof
       now
@@ -1448,8 +1162,8 @@ A16: B_INF(a) = O_el(Y) by Def16;
       end;
       hence thesis;
     end;
-    then B_INF(a) '&' B_INF(b) = O_el(Y) '&' O_el(Y) by A16,Def16;
-    hence thesis by A9,A15,A12,Def16,Def17;
+    then B_INF(a) '&' B_INF(b) = O_el(Y) '&' O_el(Y) by A16,Def13;
+    hence thesis by A9,A15,A12,Def13,Def14;
   end;
   now
     assume that
@@ -1465,11 +1179,11 @@ A20:  for x being Element of Y holds b.x = FALSE;
       let x be Element of Y;
       a.x = FALSE by A19;
       then a.x 'or' b.x = FALSE by A20;
-      hence thesis by Def7;
+      hence thesis by Def4;
     end;
-    then B_SUP(a) = I_el(Y) or B_SUP(b) = I_el(Y) by A18,Def17;
+    then B_SUP(a) = I_el(Y) or B_SUP(b) = I_el(Y) by A18,Def14;
     then
-A21: B_SUP(a) 'or' B_SUP(b) = I_el(Y) by Th13;
+A21: B_SUP(a) 'or' B_SUP(b) = I_el(Y) by Th10;
     (for x being Element of Y holds a.x = TRUE) & (for x being Element of
     Y holds b.x = TRUE) implies for x being Element of Y holds (a '&' b).x=TRUE
     proof
@@ -1481,98 +1195,54 @@ A23:  for x being Element of Y holds b.x = TRUE;
       then a.x '&' b.x = TRUE by A23;
       hence thesis by MARGREL1:def 20;
     end;
-    then B_INF(a) = O_el(Y) or B_INF(b) = O_el(Y) by A17,Def16;
-    then B_INF(a) '&' B_INF(b) = O_el(Y) by Th8;
-    hence thesis by A17,A18,A21,Def16,Def17;
+    then B_INF(a) = O_el(Y) or B_INF(b) = O_el(Y) by A17,Def13;
+    then B_INF(a) '&' B_INF(b) = O_el(Y) by Th5;
+    hence thesis by A17,A18,A21,Def13,Def14;
   end;
   hence thesis by A1,A8;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN), d being constant Element of
-Funcs(Y,BOOLEAN) holds B_INF(d 'imp' a) = d 'imp' B_INF(a) & B_INF(a 'imp' d) =
+  for a being Function of Y,BOOLEAN, d being constant Function of Y,BOOLEAN
+ holds B_INF(d 'imp' a) = d 'imp' B_INF(a) & B_INF(a 'imp' d) =
   B_SUP(a) 'imp' d
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let d be constant Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: I_el(Y) 'imp' I_el(Y)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: I_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ((I_el Y) 'imp' I_el Y).x = (I_el Y).x
+  let a be Function of Y,BOOLEAN;
+  let d be constant Function of Y,BOOLEAN;
+A5: (I_el Y) 'imp' I_el Y = I_el Y
   proof
     let x be Element of Y;
-    (I_el Y).x = TRUE by Def14;
-    then ((I_el Y) 'imp' I_el Y).x = ('not' TRUE) 'or' TRUE by Def11;
-    hence thesis by Def14;
+    (I_el Y).x = TRUE by Def11;
+    then ((I_el Y) 'imp' I_el Y).x = ('not' TRUE) 'or' TRUE by Def8;
+    hence thesis by Def11;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  then
-A5: I_el(Y) 'imp' I_el(Y)=I_el(Y) by A1,A2,A3,A4,FUNCT_1:2;
-A6: B_SUP(a) 'imp' d = B_SUP(a) 'imp' B_INF(d) by Th25;
-A7: B_INF(d) = d by Th25;
-  consider k4 being Function such that
-A8: I_el(Y)=k4 and
-A9: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  consider k3 being Function such that
-A10: O_el(Y) 'imp' I_el(Y)=k3 and
-A11: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ((O_el Y) 'imp' I_el Y).x = (I_el Y).x
+A6: B_SUP(a) 'imp' d = B_SUP(a) 'imp' B_INF(d) by Th22;
+A7: B_INF(d) = d by Th22;
+A12: O_el(Y) 'imp' I_el(Y)=I_el(Y)
   proof
     let x be Element of Y;
     ((O_el Y) 'imp' I_el Y).x = ('not' (O_el Y).x) 'or' (I_el Y).x & (
-    I_el Y).x = TRUE by Def11,Def14;
+    I_el Y).x = TRUE by Def8,Def11;
     hence thesis;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A10,A8;
-  then
-A12: O_el(Y) 'imp' I_el(Y)=I_el(Y) by A10,A11,A8,A9,FUNCT_1:2;
-  consider k4 being Function such that
-A13: O_el(Y)=k4 and
-A14: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  consider k3 being Function such that
-A15: I_el(Y) 'imp' O_el(Y)=k3 and
-A16: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ((I_el Y) 'imp' O_el Y).x = (O_el Y).x
+A18: I_el(Y) 'imp' O_el(Y)=O_el(Y)
   proof
     let x be Element of Y;
-    (O_el Y).x = FALSE by Def13;
+    (O_el Y).x = FALSE by Def10;
     then
-A17: ('not' (I_el Y).x) 'or' (O_el Y).x = ('not' TRUE) 'or' FALSE by Def14;
-    ((I_el Y) 'imp' O_el Y).x = ('not' (I_el Y).x) 'or' (O_el Y).x by Def11;
-    hence thesis by A17,Def13;
+A17: ('not' (I_el Y).x) 'or' (O_el Y).x = ('not' TRUE) 'or' FALSE by Def11;
+    ((I_el Y) 'imp' O_el Y).x = ('not' (I_el Y).x) 'or' (O_el Y).x by Def8;
+    hence thesis by A17,Def10;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A15,A13;
-  then
-A18: I_el(Y) 'imp' O_el(Y)=O_el(Y) by A15,A16,A13,A14,FUNCT_1:2;
-  consider k4 being Function such that
-A19: I_el(Y)=k4 and
-A20: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  consider k3 being Function such that
-A21: O_el(Y) 'imp' O_el(Y)=k3 and
-A22: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  for x being Element of Y holds ((O_el Y) 'imp' O_el Y).x = (I_el Y).x
+A23: O_el(Y) 'imp' O_el(Y)=I_el(Y)
   proof
     let x be Element of Y;
-    (O_el Y).x = FALSE by Def13;
-    then ((O_el Y) 'imp' O_el Y).x = TRUE 'or' FALSE by Def11;
-    hence thesis by Def14;
+    (O_el Y).x = FALSE by Def10;
+    then ((O_el Y) 'imp' O_el Y).x = TRUE 'or' FALSE by Def8;
+    hence thesis by Def11;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A21,A19;
-  then
-A23: O_el(Y) 'imp' O_el(Y)=I_el(Y) by A21,A22,A19,A20,FUNCT_1:2;
-A24: d 'imp' B_INF(a) = B_INF(d) 'imp' B_INF(a) by Th25;
-A25: B_SUP(a) 'imp' d = B_SUP(a) 'imp' B_SUP(d) by Th25;
+A24: d 'imp' B_INF(a) = B_INF(d) 'imp' B_INF(a) by Th22;
+A25: B_SUP(a) 'imp' d = B_SUP(a) 'imp' B_SUP(d) by Th22;
 A26: now
     assume
 A27: (for x being Element of Y holds d.x=TRUE ) or for x being Element
@@ -1595,22 +1265,22 @@ A32:          for x being Element of Y holds (a 'imp' d).x = TRUE
               proof
                 let x be Element of Y;
                 d.x = TRUE & a.x = TRUE by A28,A31;
-                then (a 'imp' d).x = ('not' TRUE) 'or' TRUE by Def11;
+                then (a 'imp' d).x = ('not' TRUE) 'or' TRUE by Def8;
                 hence thesis;
               end;
 A33:          for x being Element of Y holds (d 'imp' a).x = TRUE
               proof
                 let x be Element of Y;
                 d.x = TRUE & a.x = TRUE by A28,A31;
-                then (d 'imp' a).x = ('not' TRUE) 'or' TRUE by Def11;
+                then (d 'imp' a).x = ('not' TRUE) 'or' TRUE by Def8;
                 hence thesis;
               end;
-              B_INF(a) = I_el(Y) by A31,Def16;
+              B_INF(a) = I_el(Y) by A31,Def13;
               then
-A34:          d 'imp' B_INF(a) = I_el(Y) by A24,A5,A28,Def16;
-A35:          B_SUP(a) = I_el(Y) by A31,Def17;
-              B_SUP(d) = I_el(Y) by A28,Def17;
-              hence thesis by A25,A5,A33,A32,A35,A34,Def16;
+A34:          d 'imp' B_INF(a) = I_el(Y) by A24,A5,A28,Def13;
+A35:          B_SUP(a) = I_el(Y) by A31,Def14;
+              B_SUP(d) = I_el(Y) by A28,Def14;
+              hence thesis by A25,A5,A33,A32,A35,A34,Def13;
             end;
             case
 A36:          (for x being Element of Y holds a.x=FALSE) & not (for x
@@ -1618,7 +1288,7 @@ A36:          (for x being Element of Y holds a.x=FALSE) & not (for x
 A37:          for x being Element of Y holds (d 'imp' a).x = FALSE
               proof
                 let x be Element of Y;
-                (d 'imp' a).x = ('not' d.x) 'or' a.x & d.x = TRUE by A28,Def11;
+                (d 'imp' a).x = ('not' d.x) 'or' a.x & d.x = TRUE by A28,Def8;
                 hence thesis by A36;
               end;
 A38:          now
@@ -1632,16 +1302,16 @@ A40:          for x being Element of Y holds (a 'imp' d).x = TRUE
               proof
                 let x be Element of Y;
                 d.x = TRUE & a.x = FALSE by A28,A36;
-                then (a 'imp' d).x = ('not' FALSE) 'or' TRUE by Def11;
+                then (a 'imp' d).x = ('not' FALSE) 'or' TRUE by Def8;
                 hence thesis;
               end;
-A41:          B_SUP(a) = O_el(Y) by A36,Def17;
-              B_SUP(d) = I_el(Y) by A28,Def17;
+A41:          B_SUP(a) = O_el(Y) by A36,Def14;
+              B_SUP(d) = I_el(Y) by A28,Def14;
               then
-A42:          B_SUP(a) 'imp' d = I_el(Y) by A12,A41,Th25;
-A43:          B_INF(a) = O_el(Y) by A36,Def16;
-              B_INF(d) = I_el(Y) by A28,Def16;
-              hence thesis by A24,A18,A38,A40,A43,A42,Def16;
+A42:          B_SUP(a) 'imp' d = I_el(Y) by A12,A41,Th22;
+A43:          B_INF(a) = O_el(Y) by A36,Def13;
+              B_INF(d) = I_el(Y) by A28,Def13;
+              hence thesis by A24,A18,A38,A40,A43,A42,Def13;
             end;
             case
 A44:          (for x being Element of Y holds a.x=FALSE) & for x
@@ -1649,18 +1319,18 @@ A44:          (for x being Element of Y holds a.x=FALSE) & for x
 A45:          for x being Element of Y holds (d 'imp' a).x = TRUE
               proof
                 let x be Element of Y;
-                (d 'imp' a).x = ('not' d.x) 'or' a.x & a.x = TRUE by A44,Def11;
+                (d 'imp' a).x = ('not' d.x) 'or' a.x & a.x = TRUE by A44,Def8;
                 hence thesis;
               end;
-A46:          B_INF(d) = I_el(Y) by A28,Def16;
+A46:          B_INF(d) = I_el(Y) by A28,Def13;
 A47:          for x being Element of Y holds (a 'imp' d).x = TRUE
               proof
                 let x be Element of Y;
-                (a 'imp' d).x = ('not' a.x) 'or' d.x & d.x = TRUE by A28,Def11;
+                (a 'imp' d).x = ('not' a.x) 'or' d.x & d.x = TRUE by A28,Def8;
                 hence thesis;
               end;
-              B_INF(a) = I_el(Y) & B_SUP(a) = O_el(Y) by A44,Def16,Def17;
-              hence thesis by A24,A6,A5,A12,A45,A47,A46,Def16;
+              B_INF(a) = I_el(Y) & B_SUP(a) = O_el(Y) by A44,Def13,Def14;
+              hence thesis by A24,A6,A5,A12,A45,A47,A46,Def13;
             end;
           end;
           hence thesis;
@@ -1670,45 +1340,33 @@ A48:      for x being Element of Y holds (a 'imp' d).x = TRUE
           proof
             let x be Element of Y;
             ('not' a.x) 'or' d.x = ('not' a).x 'or' d.x by MARGREL1:def 19;
-            then ('not' a.x) 'or' d.x = ('not' a 'or' d).x by Def7;
-            then ('not' a.x) 'or' d.x = ('not' a 'or' I_el Y).x by A7,A28,Def16
-;
+            then ('not' a.x) 'or' d.x = ('not' a 'or' d).x by Def4;
             then
-A49:        ('not' a.x) 'or' d.x = (I_el Y).x by Th13;
-            (a 'imp' d).x = ('not' a.x) 'or' d.x by Def11;
-            hence thesis by A49,Def14;
+B49:        ('not' a.x) 'or' d.x = ('not' a 'or' I_el Y).x by A7,A28,Def13;
+            (a 'imp' d).x = ('not' a.x) 'or' d.x by Def8;
+            hence thesis by Th10,Def11,B49;
           end;
-A50:      B_INF(d) = I_el(Y) by A28,Def16;
+A50:      B_INF(d) = I_el(Y) by A28,Def13;
           assume that
 A51:      not( for x being Element of Y holds a.x=TRUE ) and
 A52:      not(for x being Element of Y holds a.x=FALSE);
-A53:      B_INF(a) = O_el(Y) by A51,Def16;
-          B_SUP(a) = I_el(Y) by A52,Def17;
+A53:      B_INF(a) = O_el(Y) by A51,Def13;
+          B_SUP(a) = I_el(Y) by A52,Def14;
           then
-A54:      B_SUP(a) 'imp' d = I_el(Y) by A5,A50,Th25;
-          consider k4 being Function such that
-A55:      a=k4 and
-A56:      dom k4=Y and
-          rng k4 c= BOOLEAN by FUNCT_2:def 2;
-          consider k3 being Function such that
-A57:      (d 'imp' a)=k3 and
-A58:      dom k3=Y and
-          rng k3 c= BOOLEAN by FUNCT_2:def 2;
-          for x being Element of Y holds (d 'imp' a).x = a.x
+A54:      B_SUP(a) 'imp' d = I_el(Y) by A5,A50,Th22;
+          d 'imp' a = a
           proof
             let x be Element of Y;
             ('not' d.x) 'or' a.x = ('not' d).x 'or' a.x by MARGREL1:def 19;
-            then ('not' d.x) 'or' a.x = ('not' d 'or' a).x by Def7;
+            then ('not' d.x) 'or' a.x = ('not' d 'or' a).x by Def4;
             then ('not' d.x) 'or' a.x = ('not' (I_el Y) 'or' a).x by A7,A28
-,Def16;
+,Def13;
             then
-A59:        ('not' d.x) 'or' a.x = ((O_el Y) 'or' a).x by Th5;
-            (d 'imp' a).x = ('not' d.x) 'or' a.x by Def11;
-            hence thesis by A59,Th12;
+A59:        ('not' d.x) 'or' a.x = ((O_el Y) 'or' a).x by Th2;
+            (d 'imp' a).x = ('not' d.x) 'or' a.x by Def8;
+            hence thesis by A59,Th9;
           end;
-          then for u being set st u in Y holds k3.u=k4.u by A57,A55;
-          hence thesis by A24,A18,A50,A53,A57,A58,A55,A56,A48,A54,Def16,
-FUNCT_1:2;
+          hence thesis by A24,A18,A28,Def13,A53,A48,A54;
         end;
         hence thesis by A29;
       end;
@@ -1728,7 +1386,7 @@ A64:          for x being Element of Y holds (a 'imp' d).x = FALSE
               proof
                 let x be Element of Y;
                 d.x = FALSE & a.x = TRUE by A60,A63;
-                then (a 'imp' d).x = ('not' TRUE) 'or' FALSE by Def11;
+                then (a 'imp' d).x = ('not' TRUE) 'or' FALSE by Def8;
                 hence thesis;
               end;
 A65:          now
@@ -1742,16 +1400,16 @@ A67:          for x being Element of Y holds (d 'imp' a).x = TRUE
               proof
                 let x be Element of Y;
                 d.x = FALSE & a.x = TRUE by A60,A63;
-                then (d 'imp' a).x = ('not' FALSE) 'or' TRUE by Def11;
+                then (d 'imp' a).x = ('not' FALSE) 'or' TRUE by Def8;
                 hence thesis;
               end;
-A68:          B_SUP(a) = I_el(Y) by A63,Def17;
-              B_SUP(d) = O_el(Y) by A60,Def17;
+A68:          B_SUP(a) = I_el(Y) by A63,Def14;
+              B_SUP(d) = O_el(Y) by A60,Def14;
               then
-A69:          B_SUP(a) 'imp' d = O_el(Y) by A18,A68,Th25;
-A70:          B_INF(a) = I_el(Y) by A63,Def16;
-              B_INF(d) = O_el(Y) by A60,Def16;
-              hence thesis by A24,A12,A67,A65,A70,A69,Def16;
+A69:          B_SUP(a) 'imp' d = O_el(Y) by A18,A68,Th22;
+A70:          B_INF(a) = I_el(Y) by A63,Def13;
+              B_INF(d) = O_el(Y) by A60,Def13;
+              hence thesis by A24,A12,A67,A65,A70,A69,Def13;
             end;
             case
 A71:          (for x being Element of Y holds a.x=FALSE) & not (for
@@ -1760,19 +1418,19 @@ A72:          for x being Element of Y holds (d 'imp' a).x = TRUE
               proof
                 let x be Element of Y;
                 d.x = FALSE & a.x = FALSE by A60,A71;
-                then (d 'imp' a).x = ('not' FALSE) 'or' FALSE by Def11;
+                then (d 'imp' a).x = ('not' FALSE) 'or' FALSE by Def8;
                 hence thesis;
               end;
-A73:          B_INF(d) = O_el(Y) by A60,Def16;
+A73:          B_INF(d) = O_el(Y) by A60,Def13;
 A74:          for x being Element of Y holds (a 'imp' d).x = TRUE
               proof
                 let x be Element of Y;
-                (a 'imp' d).x = ('not' a.x) 'or' d.x & a.x = FALSE by A71,Def11
+                (a 'imp' d).x = ('not' a.x) 'or' d.x & a.x = FALSE by A71,Def8
 ;
                 hence thesis;
               end;
-              B_INF(a) = O_el(Y) & B_SUP(a) = O_el(Y) by A71,Def16,Def17;
-              hence thesis by A24,A6,A23,A72,A74,A73,Def16;
+              B_INF(a) = O_el(Y) & B_SUP(a) = O_el(Y) by A71,Def13,Def14;
+              hence thesis by A24,A6,A23,A72,A74,A73,Def13;
             end;
             case
 A75:          (for x being Element of Y holds a.x=FALSE) & for x
@@ -1780,65 +1438,54 @@ A75:          (for x being Element of Y holds a.x=FALSE) & for x
 A76:          for x being Element of Y holds (a 'imp' d).x = TRUE
               proof
                 let x be Element of Y;
-                (a 'imp' d).x = ('not' a.x) 'or' d.x & a.x = FALSE by A75,Def11
+                (a 'imp' d).x = ('not' a.x) 'or' d.x & a.x = FALSE by A75,Def8
 ;
                 hence thesis;
               end;
 A77:          for x being Element of Y holds (d 'imp' a).x = TRUE
               proof
                 let x be Element of Y;
-                (d 'imp' a).x = ('not' d.x) 'or' a.x & a.x = TRUE by A75,Def11;
+                (d 'imp' a).x = ('not' d.x) 'or' a.x & a.x = TRUE by A75,Def8;
                 hence thesis;
               end;
-A78:          B_INF(d) = O_el(Y) by A60,Def16;
-              B_SUP(a) = O_el(Y) by A75,Def17;
+A78:          B_INF(d) = O_el(Y) by A60,Def13;
+              B_SUP(a) = O_el(Y) by A75,Def14;
               then
-A79:          B_SUP(a) 'imp' d = I_el(Y) by A23,A78,Th25;
-              B_INF(a) = I_el(Y) by A75,Def16;
-              hence thesis by A24,A12,A77,A76,A78,A79,Def16;
+A79:          B_SUP(a) 'imp' d = I_el(Y) by A23,A78,Th22;
+              B_INF(a) = I_el(Y) by A75,Def13;
+              hence thesis by A24,A12,A77,A76,A78,A79,Def13;
             end;
           end;
           hence thesis;
         end;
         now
-A80:      B_INF(d) = O_el(Y) by A60,Def16;
+A80:      B_INF(d) = O_el(Y) by A60,Def13;
 A81:      for x being Element of Y holds (d 'imp' a).x = TRUE
           proof
             let x be Element of Y;
             ('not' d.x) 'or' a.x = ('not' d).x 'or' a.x by MARGREL1:def 19;
             then ('not' d.x) 'or' a.x = ('not' (O_el Y) 'or' a).x by A7,A80
-,Def7;
-            then ('not' d.x) 'or' a.x = ((I_el Y) 'or' a).x by Th5;
-            then ('not' d.x) 'or' a.x = (I_el Y).x by Th13;
-            then ('not' d.x) 'or' a.x = TRUE by Def14;
-            hence thesis by Def11;
+,Def4;
+            then ('not' d.x) 'or' a.x = ((I_el Y) 'or' a).x by Th2;
+            then ('not' d.x) 'or' a.x = TRUE by Def11,Th10;
+            hence thesis by Def8;
           end;
-          consider k4 being Function such that
-A82:      'not' a=k4 and
-A83:      dom k4=Y and
-          rng k4 c= BOOLEAN by FUNCT_2:def 2;
-          consider k3 being Function such that
-A84:      (a 'imp' d)=k3 and
-A85:      dom k3=Y and
-          rng k3 c= BOOLEAN by FUNCT_2:def 2;
-          for x being Element of Y holds (a 'imp' d).x = ('not' a).x
+          (a 'imp' d)='not' a
           proof
             let x be Element of Y;
             ('not' a.x) 'or' d.x = ('not' a).x 'or' d.x by MARGREL1:def 19;
-            then ('not' a.x) 'or' d.x = ('not' a 'or' d).x by Def7;
-            then ('not' a.x) 'or' d.x = ('not' a).x by A7,A80,Th12;
-            hence thesis by Def11;
+            then ('not' a.x) 'or' d.x = ('not' a 'or' d).x by Def4;
+            then ('not' a.x) 'or' d.x = ('not' a).x by A7,A80,Th9;
+            hence thesis by Def8;
           end;
-          then for u being set st u in Y holds k3.u=k4.u by A84,A82;
-          then (a 'imp' d)='not' a by A84,A85,A82,A83,FUNCT_1:2;
           then
-A86:      B_INF(a 'imp' d) = 'not' B_SUP(a) by Th22;
+A86:      B_INF(a 'imp' d) = 'not' B_SUP(a) by Th19;
           assume ( not( for x being Element of Y holds a.x=TRUE ))& not(for
           x being Element of Y holds a.x=FALSE);
           then
-A87:      B_INF(a) = O_el(Y) & B_SUP(a) = I_el(Y) by Def16,Def17;
-          B_INF(d) = O_el(Y) by A60,Def16;
-          hence thesis by A24,A6,A18,A23,A81,A86,A87,Def16,Th5;
+A87:      B_INF(a) = O_el(Y) & B_SUP(a) = I_el(Y) by Def13,Def14;
+          B_INF(d) = O_el(Y) by A60,Def13;
+          hence thesis by A24,A6,A18,A23,A81,A86,A87,Def13,Th2;
         end;
         hence thesis by A61;
       end;
@@ -1857,14 +1504,14 @@ A88:    (for x being Element of Y holds d.x=TRUE) & for x being
 A89: not( for x being Element of Y holds d.x=TRUE ) and
 A90: not(for x being Element of Y holds d.x=FALSE);
     now
-      per cases by Th24;
+      per cases by Th21;
       case
         d=O_el(Y);
-        hence thesis by A90,Def13;
+        hence thesis by A90,Def10;
       end;
       case
         d=I_el(Y);
-        hence thesis by A89,Def14;
+        hence thesis by A89,Def11;
       end;
     end;
     hence thesis;
@@ -1873,15 +1520,15 @@ A90: not(for x being Element of Y holds d.x=FALSE);
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN), d being constant Element of
-  Funcs(Y,BOOLEAN) holds B_INF(d 'or' a) = d 'or' B_INF(a) & B_SUP(d '&' a) = d
+  for a being Function of Y,BOOLEAN, d being constant Function of Y,BOOLEAN
+  holds B_INF(d 'or' a) = d 'or' B_INF(a) & B_SUP(d '&' a) = d
   '&' B_SUP(a) & B_SUP(a '&' d) = B_SUP(a) '&' d
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let d be constant Element of Funcs(Y,BOOLEAN);
-A1: d 'or' B_INF(a) = B_INF(d) 'or' B_INF(a) by Th25;
-A2: d '&' B_SUP(a) = B_SUP(d) '&' B_SUP(a) by Th25;
-A3: B_INF(d) = d by Th25;
+  let a be Function of Y,BOOLEAN;
+  let d be constant Function of Y,BOOLEAN;
+A1: d 'or' B_INF(a) = B_INF(d) 'or' B_INF(a) by Th22;
+A2: d '&' B_SUP(a) = B_SUP(d) '&' B_SUP(a) by Th22;
+A3: B_INF(d) = d by Th22;
 A4: now
     assume
 A5: (for x being Element of Y holds d.x=TRUE ) or for x being Element
@@ -1917,12 +1564,12 @@ A12:            for x being Element of Y holds (d '&' a).x = FALSE;
 A13:          for x being Element of Y holds (d 'or' a).x = TRUE
               proof
                 let x be Element of Y;
-                (d 'or' a).x = d.x 'or' a.x & a.x = TRUE by A9,Def7;
+                (d 'or' a).x = d.x 'or' a.x & a.x = TRUE by A9,Def4;
                 hence thesis;
               end;
-A14:          B_INF(a) = I_el(Y) & B_SUP(a) = I_el(Y) by A9,Def16,Def17;
-              B_INF(d) = I_el(Y) & B_SUP(d) = I_el(Y) by A6,Def16,Def17;
-              hence thesis by A1,A2,A13,A11,A14,Def16,Def17;
+A14:          B_INF(a) = I_el(Y) & B_SUP(a) = I_el(Y) by A9,Def13,Def14;
+              B_INF(d) = I_el(Y) & B_SUP(d) = I_el(Y) by A6,Def13,Def14;
+              hence thesis by A1,A2,A13,A11,A14,Def13,Def14;
             end;
             case
 A15:          (for x being Element of Y holds a.x=FALSE) & not (for x
@@ -1936,16 +1583,16 @@ A16:          for x being Element of Y holds (d '&' a).x = FALSE
 A17:          for x being Element of Y holds (d 'or' a).x = TRUE
               proof
                 let x be Element of Y;
-                (d 'or' a).x = d.x 'or' a.x & d.x = TRUE by A6,Def7;
+                (d 'or' a).x = d.x 'or' a.x & d.x = TRUE by A6,Def4;
                 hence thesis;
               end;
-              B_SUP(a) = O_el(Y) by A15,Def17;
+              B_SUP(a) = O_el(Y) by A15,Def14;
               then
-A18:          d '&' B_SUP(a) = O_el(Y) by Th8;
-A19:          B_INF(a) = O_el(Y) by A15,Def16;
-              B_INF(d) = I_el(Y) by A6,Def16;
-              then d 'or' B_INF(a) = I_el(Y) by A1,A19,Th12;
-              hence thesis by A17,A16,A18,Def16,Def17;
+A18:          d '&' B_SUP(a) = O_el(Y) by Th5;
+A19:          B_INF(a) = O_el(Y) by A15,Def13;
+              B_INF(d) = I_el(Y) by A6,Def13;
+              then d 'or' B_INF(a) = I_el(Y) by A1,A19,Th9;
+              hence thesis by A17,A16,A18,Def13,Def14;
             end;
             case
 A20:          (for x being Element of Y holds a.x=FALSE) & for x
@@ -1961,15 +1608,15 @@ A22:          for x being Element of Y holds (d 'or' a).x = TRUE
               proof
                 let x be Element of Y;
                 d.x = TRUE & a.x = FALSE by A6,A20;
-                then (d 'or' a).x = TRUE 'or' FALSE by Def7;
+                then (d 'or' a).x = TRUE 'or' FALSE by Def4;
                 hence thesis;
               end;
-              B_SUP(a) = O_el(Y) by A20,Def17;
+              B_SUP(a) = O_el(Y) by A20,Def14;
               then
-A23:          d '&' B_SUP(a) = O_el(Y) by Th8;
-              B_INF(d) = I_el(Y) by A6,Def16;
-              then d 'or' B_INF(a) = I_el(Y) by A1,Th13;
-              hence thesis by A22,A21,A23,Def16,Def17;
+A23:          d '&' B_SUP(a) = O_el(Y) by Th5;
+              B_INF(d) = I_el(Y) by A6,Def13;
+              then d 'or' B_INF(a) = I_el(Y) by A1,Th10;
+              hence thesis by A22,A21,A23,Def13,Def14;
             end;
           end;
           hence thesis;
@@ -1978,37 +1625,21 @@ A23:          d '&' B_SUP(a) = O_el(Y) by Th8;
           assume that
 A24:      not( for x being Element of Y holds a.x=TRUE ) and
           not(for x being Element of Y holds a.x=FALSE);
-A25:      B_INF(a) = O_el(Y) by A24,Def16;
-          B_INF(d) = I_el(Y) by A6,Def16;
+A25:      B_INF(a) = O_el(Y) by A24,Def13;
+          B_INF(d) = I_el(Y) by A6,Def13;
           then
-A26:      d 'or' B_INF(a) = I_el(Y) by A1,A25,Th12;
-A27:      d = I_el(Y) by A3,A6,Def16;
-A28:      for x being Element of Y holds (d 'or' a).x = TRUE
-          proof
-            let x be Element of Y;
-            (d 'or' a).x = (I_el Y).x by A27,Th13;
-            hence thesis by Def14;
-          end;
-          consider k4 being Function such that
-A29:      a=k4 and
-A30:      dom k4=Y and
-          rng k4 c= BOOLEAN by FUNCT_2:def 2;
-          consider k3 being Function such that
-A31:      (d '&' a)=k3 and
-A32:      dom k3=Y and
-          rng k3 c= BOOLEAN by FUNCT_2:def 2;
-          for x being Element of Y holds (d '&' a).x = a.x
+A26:      d 'or' B_INF(a) = I_el(Y) by A1,A25,Th9;
+A27:      d = I_el(Y) by A3,A6,Def13;
+A28:      for x being Element of Y holds (d 'or' a).x = TRUE by A27,Th10,Def11;
+A33:      d '&' a = a
           proof
             let x be Element of Y;
             (d '&' a).x = (I_el Y).x '&' a.x by A27,MARGREL1:def 20;
-            then (d '&' a).x = TRUE '&' a.x by Def14;
+            then (d '&' a).x = TRUE '&' a.x by Def11;
             hence thesis;
           end;
-          then for u being set st u in Y holds k3.u=k4.u by A31,A29;
-          then
-A33:      B_SUP(d '&' a) = B_SUP(a) by A31,A32,A29,A30,FUNCT_1:2;
-          B_SUP(d) = I_el(Y) by A6,Def17;
-          hence thesis by A2,A28,A33,A26,Def16,Th9;
+          B_SUP(d) = I_el(Y) by A6,Def14;
+          hence thesis by A2,A28,A33,A26,Def13,Th6;
         end;
         hence thesis by A7;
       end;
@@ -2027,22 +1658,22 @@ A37:          (for x being Element of Y holds a.x=TRUE) & not (for x
 A38:          for x being Element of Y holds (d 'or' a).x = TRUE
               proof
                 let x be Element of Y;
-                (d 'or' a).x = d.x 'or' a.x & d.x = FALSE by A34,Def7;
+                (d 'or' a).x = d.x 'or' a.x & d.x = FALSE by A34,Def4;
                 hence thesis by A37;
               end;
-              B_SUP(d) = O_el(Y) by A34,Def17;
+              B_SUP(d) = O_el(Y) by A34,Def14;
               then
-A39:          d '&' B_SUP(a) = O_el(Y) by A2,Th8;
+A39:          d '&' B_SUP(a) = O_el(Y) by A2,Th5;
 A40:          for x being Element of Y holds (d '&' a).x = FALSE
               proof
                 let x be Element of Y;
                 (d '&' a).x = d.x '&' a.x & d.x = FALSE by A34,MARGREL1:def 20;
                 hence thesis;
               end;
-A41:          B_INF(a) = I_el(Y) by A37,Def16;
-              B_INF(d) = O_el(Y) by A34,Def16;
-              then d 'or' B_INF(a) = I_el(Y) by A1,A41,Th12;
-              hence thesis by A38,A40,A39,Def16,Def17;
+A41:          B_INF(a) = I_el(Y) by A37,Def13;
+              B_INF(d) = O_el(Y) by A34,Def13;
+              then d 'or' B_INF(a) = I_el(Y) by A1,A41,Th9;
+              hence thesis by A38,A40,A39,Def13,Def14;
             end;
             case
 A42:          (for x being Element of Y holds a.x=FALSE) & not (for x
@@ -2051,7 +1682,7 @@ A43:          for x being Element of Y holds (d 'or' a).x = FALSE
               proof
                 let x be Element of Y;
                 d.x = FALSE & a.x = FALSE by A34,A42;
-                then (d 'or' a).x = FALSE 'or' FALSE by Def7;
+                then (d 'or' a).x = FALSE 'or' FALSE by Def4;
                 hence thesis;
               end;
 A44:          now
@@ -2061,9 +1692,9 @@ A45:            for x being Element of Y holds (d 'or' a).x = TRUE;
                 (d 'or' a).x = FALSE by A43;
                 hence contradiction by A45;
               end;
-              B_SUP(d) = O_el(Y) by A34,Def17;
+              B_SUP(d) = O_el(Y) by A34,Def14;
               then
-A46:          d '&' B_SUP(a) = O_el(Y) by A2,Th8;
+A46:          d '&' B_SUP(a) = O_el(Y) by A2,Th5;
 A47:          for x being Element of Y holds (d '&' a).x = FALSE
               proof
                 let x be Element of Y;
@@ -2071,9 +1702,9 @@ A47:          for x being Element of Y holds (d '&' a).x = FALSE
                 then (d '&' a).x = FALSE '&' FALSE by MARGREL1:def 20;
                 hence thesis;
               end;
-A48:          B_INF(a) = O_el(Y) by A42,Def16;
-              B_INF(d) = O_el(Y) by A34,Def16;
-              hence thesis by A1,A44,A47,A48,A46,Def16,Def17;
+A48:          B_INF(a) = O_el(Y) by A42,Def13;
+              B_INF(d) = O_el(Y) by A34,Def13;
+              hence thesis by A1,A44,A47,A48,A46,Def13,Def14;
             end;
             case
 A49:          (for x being Element of Y holds a.x=FALSE) & for x
@@ -2082,12 +1713,12 @@ A50:          for x being Element of Y holds (d 'or' a).x = TRUE
               proof
                 let x be Element of Y;
                 d.x = FALSE & a.x = TRUE by A34,A49;
-                then (d 'or' a).x = FALSE 'or' TRUE by Def7;
+                then (d 'or' a).x = FALSE 'or' TRUE by Def4;
                 hence thesis;
               end;
-              B_SUP(d) = O_el(Y) by A34,Def17;
+              B_SUP(d) = O_el(Y) by A34,Def14;
               then
-A51:          d '&' B_SUP(a) = O_el(Y) by A2,Th8;
+A51:          d '&' B_SUP(a) = O_el(Y) by A2,Th5;
 A52:          for x being Element of Y holds (d '&' a).x = FALSE
               proof
                 let x be Element of Y;
@@ -2095,10 +1726,10 @@ A52:          for x being Element of Y holds (d '&' a).x = FALSE
                 then (d '&' a).x = FALSE '&' TRUE by MARGREL1:def 20;
                 hence thesis;
               end;
-A53:          B_INF(a) = I_el(Y) by A49,Def16;
-              B_INF(d) = O_el(Y) by A34,Def16;
-              then d 'or' B_INF(a) = I_el(Y) by A1,A53,Th12;
-              hence thesis by A50,A52,A51,Def16,Def17;
+A53:          B_INF(a) = I_el(Y) by A49,Def13;
+              B_INF(d) = O_el(Y) by A34,Def13;
+              then d 'or' B_INF(a) = I_el(Y) by A1,A53,Th9;
+              hence thesis by A50,A52,A51,Def13,Def14;
             end;
           end;
           hence thesis;
@@ -2107,38 +1738,26 @@ A53:          B_INF(a) = I_el(Y) by A49,Def16;
           for x being Element of Y holds (d '&' a).x = FALSE
           proof
             let x be Element of Y;
-            (d '&' a).x = ((O_el Y) '&' a).x by A3,A34,Def16;
-            then (d '&' a).x = (O_el Y).x by Th8;
-            hence thesis by Def13;
+            (d '&' a).x = ((O_el Y) '&' a).x by A3,A34,Def13;
+            hence thesis by Def10,Th5;
           end;
           then
-A54:      B_SUP(d '&' a) = O_el(Y) by Def17;
+A54:      B_SUP(d '&' a) = O_el(Y) by Def14;
           assume that
 A55:      not( for x being Element of Y holds a.x=TRUE ) and
           not(for x being Element of Y holds a.x=FALSE);
-          B_INF(d) = O_el(Y) by A34,Def16;
+          B_INF(d) = O_el(Y) by A34,Def13;
           then
-A56:      d 'or' B_INF(a) = O_el(Y) 'or' O_el(Y) by A1,A55,Def16;
-          consider k4 being Function such that
-A57:      a=k4 and
-A58:      dom k4=Y and
-          rng k4 c= BOOLEAN by FUNCT_2:def 2;
-          consider k3 being Function such that
-A59:      (d 'or' a)=k3 and
-A60:      dom k3=Y and
-          rng k3 c= BOOLEAN by FUNCT_2:def 2;
-          for x being Element of Y holds (d 'or' a).x = a.x
+A56:      d 'or' B_INF(a) = O_el(Y) 'or' O_el(Y) by A1,A55,Def13;
+A61:      d 'or' a = a
           proof
             let x be Element of Y;
-            (d 'or' a).x = d.x 'or' a.x by Def7;
+            (d 'or' a).x = d.x 'or' a.x by Def4;
             then (d 'or' a).x = FALSE 'or' a.x by A34;
             hence thesis;
           end;
-          then for u being set st u in Y holds k3.u=k4.u by A59,A57;
-          then
-A61:      k3=k4 by A60,A58,FUNCT_1:2;
-          B_SUP(d) = O_el(Y) by A34,Def17;
-          hence thesis by A2,A55,A59,A57,A61,A54,A56,Def16,Th8;
+          B_SUP(d) = O_el(Y) by A34,Def14;
+          hence thesis by A2,A55,A61,A54,A56,Def13,Th5;
         end;
         hence thesis by A35;
       end;
@@ -2157,14 +1776,14 @@ A62:    (for x being Element of Y holds d.x=TRUE) & for x being
 A63: not( for x being Element of Y holds d.x=TRUE ) and
 A64: not(for x being Element of Y holds d.x=FALSE);
     now
-      per cases by Th24;
+      per cases by Th21;
       case
         d=O_el(Y);
-        hence thesis by A64,Def13;
+        hence thesis by A64,Def10;
       end;
       case
         d=I_el(Y);
-        hence thesis by A63,Def14;
+        hence thesis by A63,Def11;
       end;
     end;
     hence thesis;
@@ -2173,45 +1792,45 @@ A64: not(for x being Element of Y holds d.x=FALSE);
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds (
+  for a being Function of Y,BOOLEAN,x being Element of Y holds (
   B_INF a).x <= a.x
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let x be Element of Y;
 A1: now
     assume not (for x being Element of Y holds a.x=TRUE);
-    then B_INF(a) = O_el(Y) by Def16;
-    then (B_INF a).x = FALSE by Def13;
+    then B_INF(a) = O_el(Y) by Def13;
+    then (B_INF a).x = FALSE by Def10;
     then (B_INF a).x => a.x = TRUE;
-    hence thesis by Def3;
+    hence thesis by Def1;
   end;
   now
     assume for x being Element of Y holds a.x=TRUE;
     then a.x = TRUE;
     then (B_INF a).x => a.x = TRUE;
-    hence thesis by Def3;
+    hence thesis by Def1;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),x being Element of Y holds a.x
+  for a being Function of Y,BOOLEAN,x being Element of Y holds a.x
   <= (B_SUP a).x
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let x be Element of Y;
 A1: now
     assume not (for x being Element of Y holds a.x=FALSE);
-    then B_SUP(a) = I_el(Y) by Def17;
-    then (B_SUP a).x = TRUE by Def14;
+    then B_SUP(a) = I_el(Y) by Def14;
+    then (B_SUP a).x = TRUE by Def11;
     then a.x => (B_SUP a).x = TRUE;
-    hence thesis by Def3;
+    hence thesis by Def1;
   end;
   now
     assume for x being Element of Y holds a.x=FALSE;
     then a.x = FALSE;
     then a.x => (B_SUP a).x = TRUE;
-    hence thesis by Def3;
+    hence thesis by Def1;
   end;
   hence thesis by A1;
 end;
@@ -2220,17 +1839,17 @@ begin :: Chap. 4  Boolean Valued Functions and Partitions
 
 definition
   let Y;
-  let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
+  let a be Function of Y,BOOLEAN,PA be a_partition of Y;
   pred a is_dependent_of PA means
-  :Def18:
+  :Def15:
   for F being set st F in PA for x1,x2
   being set st x1 in F & x2 in F holds a.x1=a.x2;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds a is_dependent_of %I(Y)
+  for a being Function of Y,BOOLEAN holds a is_dependent_of %I(Y)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   for F being set st F in %I(Y) holds for x1,x2 being set st x1 in F & x2
   in F holds a.x1=a.x2
   proof
@@ -2248,37 +1867,36 @@ A3: x2 in F;
     x1=z by A1,A2,TARSKI:def 1;
     hence thesis by A1,A3,TARSKI:def 1;
   end;
-  hence thesis by Def18;
+  hence thesis by Def15;
 end;
 
 theorem
-  for a being constant Element of Funcs(Y,BOOLEAN) holds a
+  for a being constant Function of Y,BOOLEAN holds a
   is_dependent_of %O(Y)
 proof
-  let a be constant Element of Funcs(Y,BOOLEAN);
+  let a be constant Function of Y,BOOLEAN;
   for F being set st F in %O(Y) holds for x1,x2 being set st x1 in F & x2
   in F holds a.x1=a.x2
   proof
     let F be set;
-A1: for x1,x2 being Element of Y holds a.x1=a.x2
+    for x1,x2 being Element of Y holds a.x1=a.x2
     proof
       let x1,x2 be Element of Y;
-      per cases by Th24;
+      per cases by Th21;
       suppose
 A2:     a = O_el(Y);
-        then a.x1 = FALSE by Def13;
-        hence thesis by A2,Def13;
+        then a.x1 = FALSE by Def10;
+        hence thesis by A2,Def10;
       end;
       suppose
 A3:     a = I_el(Y);
-        then a.x1 = TRUE by Def14;
-        hence thesis by A3,Def14;
+        then a.x1 = TRUE by Def11;
+        hence thesis by A3,Def11;
       end;
     end;
-    assume F in %O(Y);
-    hence thesis by A1;
+    hence thesis;
   end;
-  hence thesis by Def18;
+  hence thesis by Def15;
 end;
 
 definition
@@ -2302,9 +1920,9 @@ end;
 
 definition
   let Y;
-  let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
-  func B_INF(a,PA) -> Element of Funcs(Y,BOOLEAN) means
-  :Def19:
+  let a be Function of Y,BOOLEAN,PA be a_partition of Y;
+  func B_INF(a,PA) -> Function of Y,BOOLEAN means
+  :Def16:
   for y being
 Element of Y holds ( (for x being Element of Y st x in EqClass(y,PA) holds a.x=
 TRUE) implies it.y = TRUE ) & (not (for x being Element of Y st x in EqClass(y,
@@ -2329,30 +1947,20 @@ A1: for e being Element of Y ex u being Element of BOOLEAN st P[e,u]
     end;
     consider f being Function of Y,BOOLEAN such that
 A2: for e being Element of Y holds P[e,f.e] from FUNCT_2:sch 3(A1);
-    reconsider f as Element of Funcs(Y,BOOLEAN) by FUNCT_2:8;
-    reconsider f as Element of Funcs(Y,BOOLEAN);
+    reconsider f as Function of Y,BOOLEAN;
+    reconsider f as Function of Y,BOOLEAN;
     take f;
     thus thesis by A2;
   end;
   uniqueness
   proof
-    let A1,A2 be Element of Funcs(Y,BOOLEAN) such that
+    let A1,A2 be Function of Y,BOOLEAN such that
 A3: for y being Element of Y holds ( (for x being Element of Y st x in
 EqClass(y,PA) holds a.x=TRUE) implies A1.y = TRUE ) & (not (for x being Element
     of Y st x in EqClass(y,PA) holds a.x=TRUE) implies A1.y = FALSE) and
 A4: for y being Element of Y holds ( (for x being Element of Y st x in
 EqClass(y,PA) holds a.x=TRUE) implies A2.y = TRUE ) & (not (for x being Element
     of Y st x in EqClass(y,PA) holds a.x=TRUE) implies A2.y = FALSE);
-    consider k4 being Function such that
-A5: A2=k4 and
-A6: dom k4=Y and
-    rng k4 c= BOOLEAN by FUNCT_2:def 2;
-    consider k3 being Function such that
-A7: A1=k3 and
-A8: dom k3=Y and
-    rng k3 c= BOOLEAN by FUNCT_2:def 2;
-    for y being Element of Y holds A1.y = A2.y
-    proof
       let y be Element of Y;
 A9:   now
         assume
@@ -2367,17 +1975,14 @@ A11:    for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE;
         hence thesis by A3,A11;
       end;
       hence thesis by A9;
-    end;
-    then for u being set st u in Y holds k3.u=k4.u by A7,A5;
-    hence A1=A2 by A7,A8,A5,A6,FUNCT_1:2;
   end;
 end;
 
 definition
   let Y;
-  let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
-  func B_SUP(a,PA) -> Element of Funcs(Y,BOOLEAN) means
-  :Def20:
+  let a be Function of Y,BOOLEAN,PA be a_partition of Y;
+  func B_SUP(a,PA) -> Function of Y,BOOLEAN means
+  :Def17:
   for y being
 Element of Y holds ( (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE)
 implies it.y = TRUE ) & (not (ex x being Element of Y st x in EqClass(y,PA) & a
@@ -2402,30 +2007,20 @@ A1: for e being Element of Y ex u being Element of BOOLEAN st P[e,u]
     end;
     consider f being Function of Y,BOOLEAN such that
 A2: for e being Element of Y holds P[e,f.e] from FUNCT_2:sch 3(A1);
-    reconsider f as Element of Funcs(Y,BOOLEAN) by FUNCT_2:8;
-    reconsider f as Element of Funcs(Y,BOOLEAN);
+    reconsider f as Function of Y,BOOLEAN;
+    reconsider f as Function of Y,BOOLEAN;
     take f;
     thus thesis by A2;
   end;
   uniqueness
   proof
-    let A1,A2 be Element of Funcs(Y,BOOLEAN) such that
+    let A1,A2 be Function of Y,BOOLEAN such that
 A3: for y being Element of Y holds ( (ex x being Element of Y st x in
 EqClass(y,PA) & a.x=TRUE) implies A1.y = TRUE ) & (not (ex x being Element of Y
     st x in EqClass(y,PA) & a.x=TRUE) implies A1.y = FALSE) and
 A4: for y being Element of Y holds ( (ex x being Element of Y st x in
 EqClass(y,PA) & a.x=TRUE) implies A2.y = TRUE ) & (not (ex x being Element of Y
     st x in EqClass(y,PA) & a.x=TRUE) implies A2.y = FALSE);
-    consider k4 being Function such that
-A5: A2=k4 and
-A6: dom k4=Y and
-    rng k4 c= BOOLEAN by FUNCT_2:def 2;
-    consider k3 being Function such that
-A7: A1=k3 and
-A8: dom k3=Y and
-    rng k3 c= BOOLEAN by FUNCT_2:def 2;
-    for y being Element of Y holds A1.y = A2.y
-    proof
       let y be Element of Y;
 A9:   now
         assume
@@ -2440,17 +2035,14 @@ A11:    ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE;
         hence thesis by A3,A11;
       end;
       hence thesis by A9;
-    end;
-    then for u being set st u in Y holds k3.u=k4.u by A7,A5;
-    hence A1=A2 by A7,A8,A5,A6,FUNCT_1:2;
   end;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a being Function of Y,BOOLEAN,PA being a_partition of Y
   holds B_INF(a,PA) is_dependent_of PA
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let PA be a_partition of Y;
   for F being set st F in PA holds for x1,x2 being set st x1 in F & x2 in
   F holds B_INF(a,PA).x1=B_INF(a,PA).x2
@@ -2465,30 +2057,28 @@ A3: x2 in F;
     reconsider x1 as Element of Y by A1,A2;
 A4: EqClass(x1,PA) = F or EqClass(x1,PA) misses F by A1,EQREL_1:def 4;
     reconsider x2 as Element of Y by A1,A3;
-    x2 in EqClass(x2,PA) by EQREL_1:def 6;
-    then EqClass(x2,PA) meets F by A3,XBOOLE_0:3;
-    then
-A5: x1 in EqClass(x1,PA) & EqClass(x2,PA) = F by A1,EQREL_1:def 4,def 6;
+A5: x1 in EqClass(x1,PA) & EqClass(x2,PA) = F
+           by A1,EQREL_1:def 6,A3;
     per cases;
     suppose
 A6:   for x being Element of Y st x in EqClass(x1,PA) holds a.x=TRUE;
-      then (B_INF(a,PA)).x1 = TRUE by Def19;
-      hence thesis by A2,A4,A5,A6,Def19,XBOOLE_0:3;
+      then (B_INF(a,PA)).x1 = TRUE by Def16;
+      hence thesis by A2,A4,A5,A6,Def16,XBOOLE_0:3;
     end;
     suppose
 A7:   not (for x being Element of Y st x in EqClass(x1,PA) holds a.x= TRUE);
-      then (B_INF(a,PA)).x1 = FALSE by Def19;
-      hence thesis by A2,A4,A5,A7,Def19,XBOOLE_0:3;
+      then (B_INF(a,PA)).x1 = FALSE by Def16;
+      hence thesis by A2,A4,A5,A7,Def16,XBOOLE_0:3;
     end;
   end;
-  hence thesis by Def18;
+  hence thesis by Def15;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a being Function of Y,BOOLEAN,PA being a_partition of Y
   holds B_SUP(a,PA) is_dependent_of PA
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let PA be a_partition of Y;
   for F being set st F in PA holds for x1,x2 being set st x1 in F & x2 in
   F holds B_SUP(a,PA).x1=B_SUP(a,PA).x2
@@ -2507,124 +2097,91 @@ A4: EqClass(x2,PA) = EqClass(x1,PA) by A2,A3,EQREL_1:def 6,XBOOLE_0:3;
     per cases;
     suppose
 A5:   ex x being Element of Y st x in EqClass(x1,PA) & a.x=TRUE;
-      then (B_SUP(a,PA)).x1 = TRUE by Def20;
-      hence thesis by A4,A5,Def20;
+      then (B_SUP(a,PA)).x1 = TRUE by Def17;
+      hence thesis by A4,A5,Def17;
     end;
     suppose
 A6:   not (ex x being Element of Y st x in EqClass(x1,PA) & a.x=TRUE);
-      then (B_SUP(a,PA)).x1 = FALSE by Def20;
-      hence thesis by A4,A6,Def20;
+      then (B_SUP(a,PA)).x1 = FALSE by Def17;
+      hence thesis by A4,A6,Def17;
     end;
   end;
-  hence thesis by Def18;
+  hence thesis by Def15;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a being Function of Y,BOOLEAN,PA being a_partition of Y
   holds B_INF(a,PA) '<' a
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let PA be a_partition of Y;
-  consider k3 being Function such that
-A1: B_INF(a,PA) 'imp' a=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: I_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (B_INF(a,PA) 'imp' a).y = (I_el Y).y
+  B_INF(a,PA) 'imp' a = I_el Y
   proof
     let y be Element of Y;
     per cases;
     suppose
 A5:   for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE;
-      y in EqClass(y,PA) by EQREL_1:def 6;
-      then
-A6:   a.y = TRUE by A5;
+A6:   a.y = TRUE by A5,EQREL_1:def 6;
       'not' B_INF(a,PA).y = ('not' B_INF(a,PA)).y by MARGREL1:def 19;
       then
       'not' (B_INF(a,PA)).y 'or' a.y = ('not' B_INF(a,PA)).y 'or' (I_el Y)
-      .y by A6,Def14
-        .= ('not' B_INF(a,PA) 'or' I_el Y).y by Def7
-        .= (I_el Y).y by Th13;
-      hence thesis by Def11;
+      .y by A6,Def11
+        .= ('not' B_INF(a,PA) 'or' I_el Y).y by Def4
+        .= (I_el Y).y by Th10;
+      hence thesis by Def8;
     end;
     suppose
       not (for x being Element of Y st x in EqClass(y,PA) holds a.x= TRUE );
-      then (B_INF(a,PA)).y = FALSE by Def19;
-      then 'not' (B_INF(a,PA)).y 'or' a.y = (I_el Y).y 'or' a.y by Def14
-        .= ((I_el Y) 'or' a).y by Def7
-        .= (I_el Y).y by Th13;
-      hence thesis by Def11;
+      then (B_INF(a,PA)).y = FALSE by Def16;
+      then 'not' (B_INF(a,PA)).y 'or' a.y = (I_el Y).y 'or' a.y by Def11
+        .= ((I_el Y) 'or' a).y by Def4
+        .= (I_el Y).y by Th10;
+      hence thesis by Def8;
     end;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  then k3=k4 by A2,A4,FUNCT_1:2;
-  hence thesis by A1,A3,Th19;
+  hence thesis by Th16;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a being Function of Y,BOOLEAN,PA being a_partition of Y
   holds a '<' B_SUP(a,PA)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let PA be a_partition of Y;
-  consider k3 being Function such that
-A1: a 'imp' B_SUP(a,PA)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: I_el(Y)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (a 'imp' B_SUP(a,PA)).y = (I_el Y).y
+ a 'imp' B_SUP(a,PA) = I_el Y
   proof
     let y be Element of Y;
     per cases;
     suppose
       ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE;
-      then (B_SUP(a,PA)).y = TRUE by Def20;
-      then (B_SUP(a,PA)).y = (I_el Y).y by Def14;
+      then (B_SUP(a,PA)).y = TRUE by Def17;
+      then (B_SUP(a,PA)).y = (I_el Y).y by Def11;
       then ('not' a.y) 'or' (B_SUP(a,PA)).y = ('not' a).y 'or' (I_el Y).y by
 MARGREL1:def 19
-        .= ('not' a 'or' I_el Y).y by Def7
-        .= (I_el Y).y by Th13;
-      hence thesis by Def11;
+        .= ('not' a 'or' I_el Y).y by Def4
+        .= (I_el Y).y by Th10;
+      hence thesis by Def8;
     end;
     suppose
 A5:   not (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE);
-      y in EqClass(y,PA) by EQREL_1:def 6;
-      then a.y<>TRUE by A5;
+      a.y<>TRUE by A5,EQREL_1:def 6;
       then a.y=FALSE by XBOOLEAN:def 3;
       then ('not' a.y) 'or' (B_SUP(a,PA)).y = (I_el Y).y 'or' (B_SUP(a,PA)).y
-      by Def14
-        .= ((I_el Y) 'or' B_SUP(a,PA)).y by Def7
-        .= (I_el Y).y by Th13;
-      hence thesis by Def11;
+      by Def11
+        .= ((I_el Y) 'or' B_SUP(a,PA)).y by Def4
+        .= (I_el Y).y by Th10;
+      hence thesis by Def8;
     end;
   end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  then a 'imp' B_SUP(a,PA)=I_el(Y) by A1,A2,A3,A4,FUNCT_1:2;
-  hence thesis by Th19;
+  hence thesis by Th16;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a being Function of Y,BOOLEAN,PA being a_partition of Y
   holds 'not' B_INF(a,PA) = B_SUP('not' a,PA)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   let PA be a_partition of Y;
-  consider k3 being Function such that
-A1: 'not' B_INF(a,PA)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: B_SUP('not' a,PA)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds ('not' B_INF(a,PA)).y = (B_SUP('not' a,PA )).y
-  proof
     let y be Element of Y;
 A5: now
       assume that
@@ -2651,38 +2208,25 @@ A15: now
       assume that
 A16:  not(for x being Element of Y st x in EqClass(y,PA) holds a.x= TRUE) and
 A17:  ex x being Element of Y st x in EqClass(y,PA) & ('not' a).x= TRUE;
-      (B_INF(a,PA)).y = FALSE by A16,Def19;
+      (B_INF(a,PA)).y = FALSE by A16,Def16;
       then ('not' B_INF(a,PA)).y = 'not' FALSE by MARGREL1:def 19;
-      hence thesis by A17,Def20;
+      hence thesis by A17,Def17;
     end;
     now
       assume that
 A18:  for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE and
 A19:  not(ex x being Element of Y st x in EqClass(y,PA) & ('not' a).x =TRUE );
-      (B_INF(a,PA)).y = TRUE by A18,Def19;
+      (B_INF(a,PA)).y = TRUE by A18,Def16;
       then ('not' B_INF(a,PA)).y = 'not' TRUE by MARGREL1:def 19;
-      hence thesis by A19,Def20;
+      hence thesis by A19,Def17;
     end;
     hence thesis by A5,A15,A10;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds B_INF(a,%O(Y))=B_INF(a)
+  for a being Function of Y,BOOLEAN holds B_INF(a,%O(Y))=B_INF(a)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: B_INF(a,%O(Y))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: B_INF(a)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (B_INF(a,%O Y)).y = (B_INF a).y
-  proof
+  let a be Function of Y,BOOLEAN;
     let y be Element of Y;
 A5: now
       EqClass(y,%O(Y)) in %O(Y);
@@ -2697,88 +2241,53 @@ A7: now
       assume that
 A8:   not(for x being Element of Y holds a.x=TRUE) and
 A9:   not(for x being Element of Y st x in EqClass(y,%O(Y)) holds a.x = TRUE);
-      B_INF(a) = O_el(Y) by A8,Def16;
-      then (B_INF a).y = FALSE by Def13;
-      hence thesis by A9,Def19;
+      B_INF(a) = O_el(Y) by A8,Def13;
+      then (B_INF a).y = FALSE by Def10;
+      hence thesis by A9,Def16;
     end;
     now
       assume that
 A10:  for x being Element of Y holds a.x=TRUE and
 A11:  for x being Element of Y st x in EqClass(y,%O(Y)) holds a.x=TRUE;
-      B_INF(a) = I_el(Y) by A10,Def16;
-      then (B_INF a).y = TRUE by Def14;
-      hence thesis by A11,Def19;
+      B_INF(a) = I_el(Y) by A10,Def13;
+      then (B_INF a).y = TRUE by Def11;
+      hence thesis by A11,Def16;
     end;
     hence thesis by A5,A7;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds B_SUP(a,%O(Y))=B_SUP(a)
+  for a being Function of Y,BOOLEAN holds B_SUP(a,%O(Y))=B_SUP(a)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: B_SUP(a,%O(Y))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: B_SUP(a)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (B_SUP(a,%O Y)).y = (B_SUP a).y
-  proof
+  let a be Function of Y,BOOLEAN;
     let y be Element of Y;
     EqClass(y,%O(Y)) in %O(Y);
     then EqClass(y,%O(Y)) in {Y} by PARTIT1:def 8;
     then
 A5: EqClass(y,%O(Y))=Y by TARSKI:def 1;
-A6: now
-      assume that
-A7:   not(ex x being Element of Y st x in EqClass(y,%O(Y)) & a.x=TRUE ) and
-A8:   not(for x being Element of Y holds a.x=FALSE);
-      consider x1 being Element of Y such that
-A9:   a.x1<>FALSE by A8;
-      a.x1=TRUE by A9,XBOOLEAN:def 3;
-      hence contradiction by A5,A7;
-    end;
 A10: now
       assume that
 A11:  not(ex x being Element of Y st x in EqClass(y,%O(Y)) & a.x=TRUE ) and
 A12:  for x being Element of Y holds a.x=FALSE;
-      B_SUP(a) = O_el(Y) by A12,Def17;
-      then (B_SUP a).y = FALSE by Def13;
-      hence thesis by A11,Def20;
+      B_SUP(a) = O_el(Y) by A12,Def14;
+      then (B_SUP a).y = FALSE by Def10;
+      hence thesis by A11,Def17;
     end;
     now
       assume that
 A13:  ex x being Element of Y st x in EqClass(y,%O(Y)) & a.x=TRUE and
       not(for x being Element of Y holds a.x=FALSE);
-      B_SUP(a) = I_el(Y) by A13,Def17;
-      then (B_SUP a).y = TRUE by Def14;
-      hence thesis by A13,Def20;
+      B_SUP(a) = I_el(Y) by A13,Def14;
+      then (B_SUP a).y = TRUE by Def11;
+      hence thesis by A13,Def17;
     end;
-    hence thesis by A10,A6;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+    hence thesis by A10,A5,XBOOLEAN:def 3;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds B_INF(a,%I(Y))=a
+  for a being Function of Y,BOOLEAN holds B_INF(a,%I(Y))=a
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: B_INF(a,%I(Y))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (B_INF(a,%I Y)).y = a.y
-  proof
+  let a be Function of Y,BOOLEAN;
     let y be Element of Y;
 A5: now
       EqClass(y,%I(Y)) in %I(Y);
@@ -2799,12 +2308,11 @@ A11:  a.x1<>TRUE by A8;
       x1=z by A10,A6,TARSKI:def 1;
       hence contradiction by A9,A11,A7,TARSKI:def 1;
     end;
-A12: y in EqClass(y,%I(Y)) by EQREL_1:def 6;
 A13: now
       assume
 A14:  for x being Element of Y st x in EqClass(y,%I(Y)) holds a.x=TRUE;
-      then a.y = TRUE by A12;
-      hence thesis by A14,Def19;
+      then a.y = TRUE by EQREL_1:def 6;
+      hence thesis by A14,Def16;
     end;
     now
       assume that
@@ -2812,28 +2320,15 @@ A15:  not(for x being Element of Y st x in EqClass(y,%I(Y)) holds a.x
       =TRUE) and
 A16:  a.y<>TRUE;
       a.y = FALSE by A16,XBOOLEAN:def 3;
-      hence thesis by A15,Def19;
+      hence thesis by A15,Def16;
     end;
     hence thesis by A13,A5;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds B_SUP(a,%I(Y))=a
+  for a being Function of Y,BOOLEAN holds B_SUP(a,%I(Y))=a
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  consider k3 being Function such that
-A1: B_SUP(a,%I(Y))=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (B_SUP(a,%I Y)).y = a.y
-  proof
+  let a be Function of Y,BOOLEAN;
     let y be Element of Y;
 A5: now
       EqClass(y,%I(Y)) in %I(Y);
@@ -2858,38 +2353,24 @@ A12: now
 A13:  not(ex x being Element of Y st x in EqClass(y,%I(Y)) & a.x=TRUE ) and
 A14:  a.y<>TRUE;
       a.y = FALSE by A14,XBOOLEAN:def 3;
-      hence thesis by A13,Def20;
+      hence thesis by A13,Def17;
     end;
     y in EqClass(y,%I(Y)) by EQREL_1:def 6;
-    hence thesis by A5,A12,Def20;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
+    hence thesis by A5,A12,Def17;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a,b being Function of Y,BOOLEAN,PA being a_partition of Y
   holds B_INF(a '&' b,PA)=B_INF(a,PA) '&' B_INF(b,PA)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   let PA be a_partition of Y;
-  consider k3 being Function such that
-A1: B_INF(a '&' b,PA)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: B_INF(a,PA) '&' B_INF(b,PA)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (B_INF(a '&' b,PA)).y = (B_INF(a,PA) '&'
-  B_INF(b,PA)).y
-  proof
     let y be Element of Y;
 A5: now
       assume that
       for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE and
 A6:   not(for x being Element of Y st x in EqClass(y,PA) holds b.x= TRUE);
-      (B_INF(b,PA)).y = FALSE by A6,Def19;
+      (B_INF(b,PA)).y = FALSE by A6,Def16;
       then (B_INF(a,PA)).y '&' (B_INF(b,PA)).y = FALSE;
       then
 A7:   (B_INF(a,PA) '&' B_INF(b,PA)).y = FALSE by MARGREL1:def 20;
@@ -2899,13 +2380,13 @@ A9:   b.x1<>TRUE by A6;
       b.x1=FALSE by A9,XBOOLEAN:def 3;
       then a.x1 '&' b.x1 = FALSE;
       then (a '&' b).x1 <>TRUE by MARGREL1:def 20;
-      hence thesis by A8,A7,Def19;
+      hence thesis by A8,A7,Def16;
     end;
 A10: now
       assume that
 A11:  not(for x being Element of Y st x in EqClass(y,PA) holds a.x= TRUE) and
 A12:  not(for x being Element of Y st x in EqClass(y,PA) holds b.x= TRUE);
-      (B_INF(b,PA)).y = FALSE by A12,Def19;
+      (B_INF(b,PA)).y = FALSE by A12,Def16;
       then (B_INF(a,PA)).y '&' (B_INF(b,PA)).y = FALSE;
       then
 A13:  (B_INF(a,PA) '&' B_INF(b,PA)).y = FALSE by MARGREL1:def 20;
@@ -2915,7 +2396,7 @@ A15:  a.xa<>TRUE by A11;
       a.xa=FALSE by A15,XBOOLEAN:def 3;
       then a.xa '&' b.xa = FALSE;
       then (a '&' b).xa<>TRUE by MARGREL1:def 20;
-      hence thesis by A14,A13,Def19;
+      hence thesis by A14,A13,Def16;
     end;
 A16: now
       assume that
@@ -2930,17 +2411,17 @@ A20:    x in EqClass(y,PA);
         then a.x '&' b.x = TRUE '&' TRUE by A17,A20;
         hence thesis by MARGREL1:def 20;
       end;
-      (B_INF(b,PA)).y = TRUE by A18,Def19;
-      then (B_INF(a,PA)).y '&' (B_INF(b,PA)).y = TRUE '&' TRUE by A17,Def19;
+      (B_INF(b,PA)).y = TRUE by A18,Def16;
+      then (B_INF(a,PA)).y '&' (B_INF(b,PA)).y = TRUE '&' TRUE by A17,Def16;
       then (B_INF(a,PA) '&' B_INF(b,PA)).y = TRUE by MARGREL1:def 20;
-      hence thesis by A19,Def19;
+      hence thesis by A19,Def16;
     end;
     now
       assume that
 A21:  not(for x being Element of Y st x in EqClass(y,PA) holds a.x= TRUE) and
 A22:  for x being Element of Y st x in EqClass(y,PA) holds b.x=TRUE;
-      (B_INF(b,PA)).y = TRUE by A22,Def19;
-      then (B_INF(a,PA)).y '&' (B_INF(b,PA)).y = FALSE '&' TRUE by A21,Def19;
+      (B_INF(b,PA)).y = TRUE by A22,Def16;
+      then (B_INF(a,PA)).y '&' (B_INF(b,PA)).y = FALSE '&' TRUE by A21,Def16;
       then
 A23:  (B_INF(a,PA) '&' B_INF(b,PA)).y = FALSE by MARGREL1:def 20;
       consider x1 being Element of Y such that
@@ -2949,31 +2430,17 @@ A25:  a.x1<>TRUE by A21;
       a.x1=FALSE by A25,XBOOLEAN:def 3;
       then a.x1 '&' b.x1 = FALSE;
       then (a '&' b).x1 <>TRUE by MARGREL1:def 20;
-      hence thesis by A24,A23,Def19;
+      hence thesis by A24,A23,Def16;
     end;
     hence thesis by A16,A5,A10;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y
+  for a,b being Function of Y,BOOLEAN,PA being a_partition of Y
   holds B_SUP(a 'or' b,PA)=B_SUP(a,PA) 'or' B_SUP(b,PA)
 proof
-  let a,b be Element of Funcs(Y,BOOLEAN);
+  let a,b be Function of Y,BOOLEAN;
   let PA be a_partition of Y;
-  consider k3 being Function such that
-A1: B_SUP(a 'or' b,PA)=k3 and
-A2: dom k3=Y and
-  rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: B_SUP(a,PA) 'or' B_SUP(b,PA)=k4 and
-A4: dom k4=Y and
-  rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  for y being Element of Y holds (B_SUP(a 'or' b,PA)).y = (B_SUP(a,PA)
-  'or' B_SUP(b,PA)).y
-  proof
     let y be Element of Y;
 A5: now
       assume
@@ -2983,29 +2450,29 @@ A7:   x1 in EqClass(y,PA) and
 A8:   (a 'or' b).x1=TRUE;
 A9:   a.x1 = FALSE & b.x1 = FALSE or a.x1 = FALSE & b.x1 = TRUE or a.x1 =
       TRUE & b.x1 = FALSE or a.x1 = TRUE & b.x1 = TRUE by XBOOLEAN:def 3;
-A10:  a.x1 'or' b.x1=TRUE by A8,Def7;
+A10:  a.x1 'or' b.x1=TRUE by A8,Def4;
       now
         per cases by A10,A9;
         case
           a.x1 = FALSE & b.x1 = TRUE;
-          then (B_SUP(b,PA)).y = TRUE by A7,Def20;
+          then (B_SUP(b,PA)).y = TRUE by A7,Def17;
           then (B_SUP(a,PA)).y 'or' (B_SUP(b,PA)).y = TRUE;
-          then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = TRUE by Def7;
-          hence thesis by A6,Def20;
+          then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = TRUE by Def4;
+          hence thesis by A6,Def17;
         end;
         case
           a.x1 = TRUE & b.x1 = FALSE;
-          then (B_SUP(a,PA)).y = TRUE by A7,Def20;
+          then (B_SUP(a,PA)).y = TRUE by A7,Def17;
           then (B_SUP(a,PA)).y 'or' (B_SUP(b,PA)).y = TRUE;
-          then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = TRUE by Def7;
-          hence thesis by A6,Def20;
+          then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = TRUE by Def4;
+          hence thesis by A6,Def17;
         end;
         case
           a.x1 = TRUE & b.x1 = TRUE;
-          then (B_SUP(b,PA)).y = TRUE by A7,Def20;
+          then (B_SUP(b,PA)).y = TRUE by A7,Def17;
           then (B_SUP(a,PA)).y 'or' (B_SUP(b,PA)).y = TRUE;
-          then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = TRUE by Def7;
-          hence thesis by A6,Def20;
+          then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = TRUE by Def4;
+          hence thesis by A6,Def17;
         end;
       end;
       hence thesis;
@@ -3019,34 +2486,31 @@ A11:  not (ex x being Element of Y st x in EqClass(y,PA) & (a 'or' b) .x=TRUE);
 A12:    x1 in EqClass(y,PA) and
 A13:    b.x1=TRUE;
         a.x1 'or' b.x1 = TRUE by A13;
-        then (a 'or' b).x1 = TRUE by Def7;
+        then (a 'or' b).x1 = TRUE by Def4;
         hence contradiction by A11,A12;
       end;
       then
-A14:  (B_SUP(b,PA)).y = FALSE by Def20;
+A14:  (B_SUP(b,PA)).y = FALSE by Def17;
       now
         assume ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE;
         then consider x1 being Element of Y such that
 A15:    x1 in EqClass(y,PA) and
 A16:    a.x1=TRUE;
         a.x1 'or' b.x1 = TRUE by A16;
-        then (a 'or' b).x1 = TRUE by Def7;
+        then (a 'or' b).x1 = TRUE by Def4;
         hence contradiction by A11,A15;
       end;
-      then (B_SUP(a,PA)).y 'or' (B_SUP(b,PA)).y = FALSE 'or' FALSE by A14,Def20
+      then (B_SUP(a,PA)).y 'or' (B_SUP(b,PA)).y = FALSE 'or' FALSE by A14,Def17
 ;
-      then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = FALSE by Def7;
-      hence thesis by A11,Def20;
+      then (B_SUP(a,PA) 'or' B_SUP(b,PA)).y = FALSE by Def4;
+      hence thesis by A11,Def17;
     end;
     hence thesis by A5;
-  end;
-  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:2;
 end;
 
 definition
   let Y;
-  let f be Element of Funcs(Y,BOOLEAN);
+  let f be Function of Y,BOOLEAN;
   func GPart(f) -> a_partition of Y equals
   {{x where x is Element of Y:f.x =
   TRUE }, {x9 where x9 is Element of Y:f.x9 = FALSE}} \ {{}};
@@ -3145,9 +2609,9 @@ A12:  B in ({C,D} \ {{}});
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds a is_dependent_of GPart( a)
+  for a being Function of Y,BOOLEAN holds a is_dependent_of GPart( a)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
+  let a be Function of Y,BOOLEAN;
   defpred P[set] means a.$1 = TRUE;
   reconsider C={x where x is Element of Y: P[x]} as Subset of Y from DOMAIN_1:
   sch 7;
@@ -3184,14 +2648,14 @@ A2:   x1 in F & x2 in F;
       hence thesis;
     end;
   end;
-  hence thesis by Def18;
+  hence thesis by Def15;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN),PA being a_partition of Y st a
+  for a being Function of Y,BOOLEAN,PA being a_partition of Y st a
   is_dependent_of PA holds PA is_finer_than GPart(a)
 proof
-  let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
+  let a be Function of Y,BOOLEAN, PA be a_partition of Y;
   defpred P[set] means a.$1 = TRUE;
   reconsider C={x where x is Element of Y: P[x]} as Subset of Y from DOMAIN_1:
   sch 7;
@@ -3236,7 +2700,7 @@ A7:       t in g;
             end;
             case
               a.t=FALSE;
-              hence contradiction by A1,A2,A5,A7,Def18;
+              hence contradiction by A1,A2,A5,A7,Def15;
             end;
           end;
           hence thesis;
@@ -3260,7 +2724,7 @@ A11:      t in g;
             per cases by A4,A11;
             case
               a.t=TRUE;
-              hence contradiction by A1,A2,A9,A11,Def18;
+              hence contradiction by A1,A2,A9,A11,Def15;
             end;
             case
               a.t=FALSE;
@@ -3385,14 +2849,14 @@ proof
   proof
     assume x <= (y => z);
     then
-A1: x => (y => z) = TRUE by Def3;
+A1: x => (y => z) = TRUE by Def1;
     x => (y => z) = (x '&' y) => z;
-    hence thesis by A1,Def3;
+    hence thesis by A1,Def1;
   end;
     assume x '&' y <= z; then
-A2: (x '&' y) => z = TRUE by Def3;
+A2: (x '&' y) => z = TRUE by Def1;
     (x '&' y) => z = x => (y => z);
-    hence thesis by A2,Def3;
+    hence thesis by A2,Def1;
 end;
 
 theorem

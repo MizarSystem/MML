@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received February 10, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,17 +16,18 @@ environ
 
  vocabularies NUMBERS, ZFMISC_1, XBOOLE_0, SUBSET_1, FUNCT_1, RELAT_1, FUNCT_4,
       TARSKI, CARD_1, ARYTM_3, MCART_1, NAT_1, ARYTM_1, XXREAL_0, FUNCT_7,
-      RECDEF_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, MCART_2, DOMAIN_1,
-      NUMBERS, XCMPLX_0, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
-      FUNCT_7, XXREAL_0;
- constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, INT_1, MCART_2, BINARITH,
-      FUNCT_7, NAT_D, RELSET_1;
- registrations SUBSET_1, ORDINAL1, RELSET_1, XREAL_0, NAT_1, INT_1;
+      RECDEF_2, XTUPLE_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, MCART_1, DOMAIN_1,
+      NUMBERS, XCMPLX_0, ORDINAL1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, FUNCT_7, XXREAL_0;
+ constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, INT_1, BINARITH,
+      FUNCT_7, NAT_D, RELSET_1, XTUPLE_0;
+ registrations SUBSET_1, ORDINAL1, RELSET_1, XREAL_0, NAT_1, INT_1, XTUPLE_0;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, XTUPLE_0;
  theorems MCART_1, NAT_1, FUNCT_1, FUNCT_2, RELSET_1, INT_1, FUNCT_4, XBOOLE_0,
-      XBOOLE_1, DOMAIN_1, MCART_2, FUNCT_7, XREAL_1, XXREAL_0, XREAL_0, NAT_D;
+      XBOOLE_1, DOMAIN_1, FUNCT_7, XREAL_1, XXREAL_0, XREAL_0, NAT_D, XTUPLE_0;
  schemes NAT_1, RECDEF_1, FUNCT_1, XBOOLE_0, PARTFUN1;
 
 begin
@@ -36,63 +37,27 @@ reserve a,b,c,d,e,z,A,B,C,D,E for set;
 :: Projections
 
 definition
-  let x be set;
-  given x1,x2,x3 being set such that
-A1: x = [x1,x2,x3];
-  func x`1_3 means
+  let x be triple set;
+  consider x1,x2,x3 being set such that
+A1: x = [x1,x2,x3] by XTUPLE_0:def 5;
+A2: [x1,x2,x3]`1_3 = x1;
+A3: [x1,x2,x3]`2_3 = x2;
+A4: [x1,x2,x3]`3_3 = x3;
+  redefine func x`1_3 means
   :Def1:
   for y1,y2,y3 being set holds x = [y1,y2,y3] implies
   it = y1;
-  existence
-  proof
-    take x1;
-    thus thesis by A1,MCART_1:25;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A2: for y1,y2,y3 being set st x = [y1,y2,y3] holds z1 = y1 and
-A3: for y1,y2,y3 being set st x = [y1,y2,y3] holds z2 = y1;
-    z1 = x1 by A1,A2;
-    hence thesis by A1,A3;
-  end;
-  func x`2_3 means
+  compatibility by A1,A2,XTUPLE_0:3;
+  redefine func x`2_3 means
   :Def2:
   for y1,y2,y3 being set holds x = [y1,y2,y3] implies
   it = y2;
-  existence
-  proof
-    take x2;
-    thus thesis by A1,MCART_1:25;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A4: for y1,y2,y3 being set st x = [y1,y2,y3] holds z1 = y2 and
-A5: for y1,y2,y3 being set st x = [y1,y2,y3] holds z2 = y2;
-    z1 = x2 by A1,A4;
-    hence thesis by A1,A5;
-  end;
-  func x`3_3 means
+  compatibility by A1,A3,XTUPLE_0:3;
+  redefine func x`3_3 means
   :Def3:
   for y1,y2,y3 being set holds x = [y1,y2,y3] implies
   it = y3;
-  existence
-  proof
-    take x3;
-    thus thesis by A1,MCART_1:25;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A6: for y1,y2,y3 being set st x = [y1,y2,y3] holds z1 = y3 and
-A7: for y1,y2,y3 being set st x = [y1,y2,y3] holds z2 = y3;
-    z1 = x3 by A1,A6;
-    hence thesis by A1,A7;
-  end;
+  compatibility by A1,A4,XTUPLE_0:3;
 end;
 
 theorem Th1:
@@ -136,81 +101,33 @@ A2: C is non empty by MCART_1:31;
 end;
 
 definition
-  let x be set;
-  given x1,x2,x3,x4 being set such that
-A1: x = [x1,x2,x3,x4];
-  func x`1_4 means
+  let x be quadruple set;
+  consider x1,x2,x3,x4 being set such that
+A1: x = [x1,x2,x3,x4] by XTUPLE_0:def 9;
+A2: [x1,x2,x3,x4]`1_4 = x1;
+A3: [x1,x2,x3,x4]`2_4 = x2;
+A4: [x1,x2,x3,x4]`3_4 = x3;
+A5: [x1,x2,x3,x4]`4_4 = x4;
+  redefine func x`1_4 means
   :Def4:
   for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4]
   implies it = y1;
-  existence
-  proof
-    take x1;
-    thus thesis by A1,MCART_1:29;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A2: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y1 and
-A3: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y1;
-    z1 = x1 by A1,A2;
-    hence thesis by A1,A3;
-  end;
-  func x`2_4 means
+  compatibility by A1,A2,XTUPLE_0:5;
+  redefine func x`2_4 means
   :Def5:
   for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4]
   implies it = y2;
-  existence
-  proof
-    take x2;
-    thus thesis by A1,MCART_1:29;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A4: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y2 and
-A5: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y2;
-    z1 = x2 by A1,A4;
-    hence thesis by A1,A5;
-  end;
-  func x`3_4 means
+  compatibility by A1,A3,XTUPLE_0:5;
+  redefine func x`3_4 means
   :Def6:
   for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4]
   implies it = y3;
-  existence
-  proof
-    take x3;
-    thus thesis by A1,MCART_1:29;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A6: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y3 and
-A7: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y3;
-    z1 = x3 by A1,A6;
-    hence thesis by A1,A7;
-  end;
-  func x`4_4 means
+  compatibility by A1,A4,XTUPLE_0:5;
+  redefine func x`4_4 means
   :Def7:
   for y1,y2,y3,y4 being set holds x = [y1,y2,y3,y4]
   implies it = y4;
-  existence
-  proof
-    take x4;
-    thus thesis by A1,MCART_1:29;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A8: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z1 = y4 and
-A9: for y1,y2,y3,y4 being set st x = [y1,y2,y3,y4] holds z2 = y4;
-    z1 = x4 by A1,A8;
-    hence thesis by A1,A9;
-  end;
+  compatibility by A1,A5,XTUPLE_0:5;
 end;
 
 theorem Th4:
@@ -225,8 +142,7 @@ A2: z`3_4 = c by A1,Def6;
 end;
 
 theorem
-  z in [:A,B,C,D:] implies z`1_4 in A & z`2_4 in B & z`3_4 in C & z`4_4
-  in D
+  z in [:A,B,C,D:] implies z`1_4 in A & z`2_4 in B & z`3_4 in C & z`4_4 in D
 proof
   assume
 A1: z in [:A,B,C,D:];
@@ -256,150 +172,10 @@ A2: C is non empty & D is non empty by MCART_1:51;
 end;
 
 definition
-  let x be set;
-  given x1,x2,x3,x4,x5 being set such that
-A1: x = [x1,x2,x3,x4,x5];
-  func x`1_5 means
-  :Def8:
-  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4,
-  y5] implies it = y1;
-  existence
-  proof
-    take x1;
-    thus thesis by A1,MCART_2:6;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A2: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y1 and
-A3: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y1;
-    z1 = x1 by A1,A2;
-    hence thesis by A1,A3;
-  end;
-  func x`2_5 means
-  :Def9:
-  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4,
-  y5] implies it = y2;
-  existence
-  proof
-    take x2;
-    thus thesis by A1,MCART_2:6;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A4: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y2 and
-A5: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y2;
-    z1 = x2 by A1,A4;
-    hence thesis by A1,A5;
-  end;
-  func x`3_5 means
-  :Def10:
-  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4
-  ,y5] implies it = y3;
-  existence
-  proof
-    take x3;
-    thus thesis by A1,MCART_2:6;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A6: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 = y3 and
-A7: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 = y3;
-    z1 = x3 by A1,A6;
-    hence thesis by A1,A7;
-  end;
-  func x`4_5 means
-  :Def11:
-  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4
-  ,y5] implies it = y4;
-  existence
-  proof
-    take x4;
-    thus thesis by A1,MCART_2:6;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A8: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 =
-    y4 and
-A9: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 =
-    y4;
-    z1 = x4 by A1,A8;
-    hence thesis by A1,A9;
-  end;
-  func x`5_5 means
-  :Def12:
-  for y1,y2,y3,y4,y5 being set holds x = [y1,y2,y3,y4
-  ,y5] implies it = y5;
-  existence
-  proof
-    take x5;
-    thus thesis by A1,MCART_2:6;
-  end;
-  uniqueness
-  proof
-    let z1,z2 be set;
-    assume that
-A10: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z1 =
-    y5 and
-A11: for y1,y2,y3,y4,y5 being set st x = [y1,y2,y3,y4,y5] holds z2 =
-    y5;
-    z1 = x5 by A1,A10;
-    hence thesis by A1,A11;
-  end;
+ canceled 5;
 end;
 
-theorem Th7:
-  (ex a,b,c,d,e st z = [a,b,c,d,e]) implies z = [ z`1_5, z`2_5, z
-  `3_5, z`4_5, z`5_5 ]
-proof
-  given a,b,c,d,e such that
-A1: z = [a,b,c,d,e];
-A2: z`3_5 = c & z`4_5 = d by A1,Def10,Def11;
-  z`1_5 = a & z`2_5 = b by A1,Def8,Def9;
-  hence thesis by A1,A2,Def12;
-end;
-
-theorem
-  z in [:A,B,C,D,E:] implies z`1_5 in A & z`2_5 in B & z`3_5 in C & z
-  `4_5 in D & z`5_5 in E
-proof
-  assume
-A1: z in [:A,B,C,D,E:];
-  then
-A2: C is non empty & D is non empty by MCART_2:11;
-A3: E is non empty by A1,MCART_2:11;
-A4: A is non empty & B is non empty by A1,MCART_2:11;
-  then consider
-  a being Element of A, b being Element of B, c being Element of C, d
-  being Element of D, e being Element of E such that
-A5: z = [a,b,c,d,e] by A1,A2,A3,MCART_2:15;
-A6: z`5_5 = e by A5,Def12;
-A7: z`3_5 = c & z`4_5 = d by A5,Def10,Def11;
-  z`1_5 = a & z`2_5 = b by A5,Def8,Def9;
-  hence thesis by A4,A2,A3,A7,A6;
-end;
-
-theorem
-  z in [:A,B,C,D,E:] implies z = [ z`1_5, z`2_5, z`3_5, z`4_5, z`5_5 ]
-proof
-  assume
-A1: z in [:A,B,C,D,E:];
-  then
-A2: C is non empty & D is non empty by MCART_2:11;
-A3: E is non empty by A1,MCART_2:11;
-  A is non empty & B is non empty by A1,MCART_2:11;
-  then ex a being Element of A, b being Element of B, c being Element of C, d
-  being Element of D, e being Element of E st z = [a,b,c,d,e] by A1,A2,A3,
-MCART_2:15;
-  hence thesis by Th7;
-end;
+canceled 3;
 
 :: Conditional schemes
 
@@ -466,8 +242,6 @@ A16: c in C();
   hereby
     assume
 A17: P[c];
-    then
-A18: c in D1 by A3,A16;
     not Q[c] by A1,A16,A17;
     then
 A19: not c in D2 by A7;
@@ -475,24 +249,21 @@ A19: not c in D2 by A7;
     then not c in D3 by A4;
     hence f.c = (f1 +* f2).c by A8,FUNCT_4:11
       .= f1.c by A10,A19,FUNCT_4:11
-      .= F(c) by A6,A18;
+      .= F(c) by A6,A17,A3,A16;
   end;
   hereby
     assume
 A20: Q[c];
-    then
-A21: c in D2 by A7,A16;
     not R[c] by A1,A16,A20;
     then not c in D3 by A4;
     hence f.c = (f1 +* f2).c by A8,FUNCT_4:11
-      .= f2.c by A10,A21,FUNCT_4:13
-      .= G(c) by A11,A21;
+      .= f2.c by A10,A20,A7,A16,FUNCT_4:13
+      .= G(c) by A11,A20,A7,A16;
   end;
-  assume R[c];
-  then
-A22: c in D3 by A4,A16;
-  hence f.c = f3.c by A8,FUNCT_4:13
-    .= H(c) by A9,A22;
+  assume
+Z:  R[c];
+  hence f.c = f3.c by A8,A4,A16,FUNCT_4:13
+    .= H(c) by A9,Z,A4,A16;
 end;
 
 scheme
@@ -574,8 +345,6 @@ A20: c in C();
   hereby
     assume
 A21: P[c];
-    then
-A22: c in D1 by A3,A20;
     not R[c] by A1,A20,A21;
     then
 A23: not c in D3 by A10;
@@ -587,13 +356,11 @@ A24: not c in D2 by A7;
     hence f.c = (f1 +* f2 +* f3).c by A11,FUNCT_4:11
       .= (f1 +* f2).c by A13,A23,FUNCT_4:11
       .= f1.c by A8,A24,FUNCT_4:11
-      .= F(c) by A6,A22;
+      .= F(c) by A6,A21,A3,A20;
   end;
   hereby
     assume
 A25: Q[c];
-    then
-A26: c in D2 by A7,A20;
     not R[c] by A1,A20,A25;
     then
 A27: not c in D3 by A10;
@@ -601,25 +368,22 @@ A27: not c in D3 by A10;
     then not c in D4 by A4;
     hence f.c = (f1 +* f2 +* f3).c by A11,FUNCT_4:11
       .= (f1 +* f2).c by A13,A27,FUNCT_4:11
-      .= f2.c by A8,A26,FUNCT_4:13
-      .= G(c) by A9,A26;
+      .= f2.c by A8,A25,A7,A20,FUNCT_4:13
+      .= G(c) by A9,A25,A7,A20;
   end;
   hereby
     assume
 A28: R[c];
-    then
-A29: c in D3 by A10,A20;
     not S[c] by A1,A20,A28;
     then not c in D4 by A4;
     hence f.c = (f1 +* f2 +* f3).c by A11,FUNCT_4:11
-      .= f3.c by A13,A29,FUNCT_4:13
-      .= H(c) by A14,A29;
+      .= f3.c by A13,A28,A10,A20,FUNCT_4:13
+      .= H(c) by A14,A28,A10,A20;
   end;
-  assume S[c];
-  then
-A30: c in D4 by A4,A20;
-  hence f.c = f4.c by A11,FUNCT_4:13
-    .= I(c) by A12,A30;
+  assume
+Z: S[c];
+  hence f.c = f4.c by A11,A4,A20,FUNCT_4:13
+    .= I(c) by A12,Z,A4,A20;
 end;
 
 :: 1 step
@@ -641,16 +405,15 @@ A2: for n being Element of NAT, x being Element of [:A(),B():] ex y being
     consider ai being Element of A(), bi being Element of B() such that
 A3: P[n,x`1,x`2,ai,bi] by A1;
     take [ai,bi];
-    [ai,bi]`1 = ai by MCART_1:7;
-    hence thesis by A3,MCART_1:7;
+    thus thesis by A3;
   end;
   consider f being Function of NAT, [:A(),B():] such that
 A4: f.0 = [A0(),B0()] and
 A5: for e being Element of NAT holds P1[e,f.e,f.(e+1)] from RECDEF_1:sch
   2( A2);
   take pr1 f, pr2 f;
-  (f.0)`1 = (pr1 f).0 & (f.0)`2 = (pr2 f).0 by FUNCT_2:def 5,def 6;
-  hence (pr1 f).0 = A0() & (pr2 f).0 = B0() by A4,MCART_1:def 1,def 2;
+   [A0(),B0()]`1 = A0() & [A0(),B0()]`2 = B0();
+  hence (pr1 f).0 = A0() & (pr2 f).0 = B0() by A4,FUNCT_2:def 5,def 6;
   let i be Element of NAT;
 A6: (f.(i+1))`1 = (pr1 f).(i+1) & (f.(i+1))`2 = (pr2 f).(i+1) by FUNCT_2:def 5
 ,def 6;
@@ -699,7 +462,7 @@ A9: g.(n+1) = Y(n+1) by A3
   end;
   then
 A10: (g.(0+2))`2_3 = G(0+1,g.(0+1))`2_3
-    .= (g.(0+1))`3_3 by Def2;
+    .= (g.(0+1))`3_3;
   take f;
   thus dom f = NAT by A4;
   thus
@@ -720,19 +483,19 @@ A16: f.(x+1) = (g.x)`2_3 by A5;
     thus
 A17: f.(x+1+2) = (g.(x+1+2))`1_3 by A5
       .= G(x+1+1,g.(x+1+1))`1_3 by A7
-      .= (g.(x+1+1))`2_3 by Def1;
+      .= (g.(x+1+1))`2_3;
     thus (g.(x+1+1))`1_3 = (g.(x+1))`2_3 by A15;
     thus (g.(x+1+2))`1_3 = G(x+1+1,g.(x+1+1))`1_3 by A7
-      .= (g.(x+1))`3_3 by A15,Def1;
+      .= (g.(x+1))`3_3 by A15;
     hence (g.(x+1+2))`1_3 = (g.(x+1+1))`2_3 by A15;
     thus (g.(x+1+2))`2_3 = G(x+1+1,g.(x+1+1))`2_3 by A7
-      .= (g.(x+1+1))`3_3 by Def2;
+      .= (g.(x+1+1))`3_3;
     per cases;
     suppose
 A18:  x = 0;
       hence f.(x+1+2) = (g.(1+2))`1_3 by A5
         .= G(1+1,g.(1+1))`1_3 by A7
-        .= (g.(0+1))`3_3 by A15,A18,Def1
+        .= (g.(0+1))`3_3 by A15,A18
         .= r13 by A12,Def3
         .= F(0+1,B(),(g.0)`3_3) by A6,Def3
         .= F(x+1,f.(x+1),f.(x+1+1)) by A6,A15,A16,A18,Def2;
@@ -749,17 +512,17 @@ A20:  x-'1+1 = x by XREAL_1:235;
 A21:  x-1 = x-'1 by XREAL_0:def 2;
       x+1 = x-1+2;
       hence f.(x+1+2) = G(x-'1+1,g.(x-'1+1))`3_3 by A7,A15,A17,A21
-        .= F(x+1,f.(x+1),f.(x+1+1)) by A15,A16,A20,Def3;
+        .= F(x+1,f.(x+1),f.(x+1+1)) by A15,A16,A20;
     end;
   end;
 A22: f.(0+2) = (g.(0+2))`1_3 by A5
     .= G(0+1,g.(0+1))`1_3 by A7
-    .= (g.(0+1))`2_3 by Def1;
+    .= (g.(0+1))`2_3;
   thus
 A23: f.1 = (g.1)`1_3 by A5
     .= B() by A12,Def1;
 A24: (g.(0+2))`1_3 = G(0+1,g.(0+1))`1_3 by A7
-    .= (g.1)`2_3 by Def1
+    .= (g.1)`2_3
     .= r03 by A12,Def2
     .= (g.0)`3_3 by A6,Def3;
   then (g.(0+2))`1_3 = r03 by A6,Def3
@@ -832,9 +595,8 @@ A10: F().(k+2) = F(k,F().k,F().(k+1)) & G().(k+2) = F(k,G().k,G().(k+1))
     then 2 <= m by NAT_1:26;
     then
 A11: m = k+2 by XREAL_1:235;
-    then k+1 < m by XREAL_1:6;
     then
-A12: F().(k+1) = G().(k+1) by A9;
+A12: F().(k+1) = G().(k+1) by A9,XREAL_1:6;
     k+0 < m by A11,XREAL_1:6;
     hence contradiction by A8,A9,A11,A12,A10;
   end;
@@ -934,7 +696,7 @@ A20: dom f = NAT and
 A21: for x being Element of NAT holds f.x = M(x) from FUNCT_1:sch 4;
 A22: f.(0+3) = (g.(0+3))`1_4 by A21
     .= G(0+2,g.(0+2))`1_4 by A8
-    .= (g.(0+2))`2_4 by Def4;
+    .= (g.(0+2))`2_4;
   take f;
   thus dom f = NAT by A20;
   defpred P[Element of NAT] means f.($1+3) = (g.($1+2))`2_4 & (g.$1)`2_4 = (g.
@@ -942,7 +704,7 @@ A22: f.(0+3) = (g.(0+3))`1_4 by A21
 $1+1))`2_4 = (g.($1+2))`1_4 & (g.($1+1))`3_4 = (g.($1+2))`2_4 & (g.($1+1))`4_4
 = (g.($1+2))`3_4 & (g.($1+2))`2_4 = (g.($1+3))`1_4 & f.($1+3) = F($1,f.$1,f.($1
   +1),f.($1+2));
-A23: (g.(0+2))`2_4 = G(0+2,g.(0+2))`1_4 by Def4
+A23: (g.(0+2))`2_4 = G(0+2,g.(0+2))`1_4
     .= (g.(0+3))`1_4 by A8;
   thus
 A24: f.0 = (g.0)`1_4 by A21
@@ -964,17 +726,17 @@ A30: f.(x+1+1) = (g.x)`3_4 by A21;
     thus
 A31: f.(x+1+3) = (g.(x+1+3))`1_4 by A21
       .= G(x+1+2,g.(x+1+2))`1_4 by A8
-      .= (g.(x+1+2))`2_4 by Def4;
+      .= (g.(x+1+2))`2_4;
     thus (g.(x+1+1))`1_4 = (g.(x+1))`2_4 by A29;
     thus (g.(x+1))`3_4 = (g.(x+1+1))`2_4 by A29;
     thus (g.(x+1))`4_4 = (g.(x+1+1))`3_4 by A29;
-    thus (g.(x+1+1))`2_4 = G(x+2,g.(x+2))`1_4 by Def4
+    thus (g.(x+1+1))`2_4 = G(x+2,g.(x+2))`1_4
       .= (g.(x+1+2))`1_4 by A8,A28;
-    thus (g.(x+1+1))`3_4 = G(x+2,g.(x+2))`2_4 by Def5
+    thus (g.(x+1+1))`3_4 = G(x+2,g.(x+2))`2_4
       .= (g.(x+1+2))`2_4 by A8,A28;
-    thus (g.(x+1+1))`4_4 = G(x+2,g.(x+2))`3_4 by Def6
+    thus (g.(x+1+1))`4_4 = G(x+2,g.(x+2))`3_4
       .= (g.(x+1+2))`3_4 by A8,A28;
-    thus (g.(x+1+2))`2_4 = G(x+1+2,g.(x+1+2))`1_4 by Def4
+    thus (g.(x+1+2))`2_4 = G(x+1+2,g.(x+1+2))`1_4
       .= (g.(x+1+3))`1_4 by A8;
     per cases;
     suppose
@@ -983,9 +745,9 @@ A31: f.(x+1+3) = (g.(x+1+3))`1_4 by A21
 A32:  x = 0 by NAT_1:25;
       hence f.(x+1+3) = (g.(1+3))`1_4 by A21
         .= G(1+2,g.(1+2))`1_4 by A8
-        .= (g.(0+3))`2_4 by Def4
+        .= (g.(0+3))`2_4
         .= G(0+2,g.(0+2))`2_4 by A8
-        .= (g.(0+2))`3_4 by Def5
+        .= (g.(0+2))`3_4
         .= r14 by A7,Def6
         .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2)) by A15,A25,A26,A29,A32,Def7;
     end;
@@ -995,11 +757,11 @@ A33:  x = 1;
 A34:  f.(x+1+1) = r04 & f.(x+1+2) = r14 by A13,A29,A30,Def6,Def7;
       thus f.(x+1+3) = (g.(1+1+3))`1_4 by A21,A33
         .= G(2+2,g.(2+2))`1_4 by A8
-        .= (g.(1+3))`2_4 by Def4
+        .= (g.(1+3))`2_4
         .= G(1+2,g.(1+2))`2_4 by A8
-        .= (g.(0+3))`3_4 by Def5
+        .= (g.(0+3))`3_4
         .= G(0+2,g.(0+2))`3_4 by A8
-        .= (g.(0+2))`4_4 by Def6
+        .= (g.(0+2))`4_4
         .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2)) by A7,A26,A33,A34,Def7;
     end;
     suppose
@@ -1016,11 +778,11 @@ A39:  x-2 = x-'2 by XREAL_0:def 2;
 A40:  x+1 = x-1+2;
       thus f.(x+1+3) = (g.(x+(1+2)))`2_4 by A31
         .= G(x+2,g.(x+2))`2_4 by A8
-        .= (g.(x-'1+3))`3_4 by A36,Def5
+        .= (g.(x-'1+3))`3_4 by A36
         .= G(x+1,g.(x+1))`3_4 by A8,A36,A40
-        .= (g.(x-'2+3))`4_4 by A39,Def6
+        .= (g.(x-'2+3))`4_4 by A39
         .= G(x-'2+2,g.(x-'2+2))`4_4 by A8
-        .= F(x+1,(g.x)`2_4,(g.x)`3_4,(g.x)`4_4) by A38,Def7
+        .= F(x+1,(g.x)`2_4,(g.x)`3_4,(g.x)`4_4) by A38
         .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2)) by A21,A29,A30;
     end;
   end;
@@ -1097,12 +859,9 @@ A10: F().(k+3) = F(k,F().k,F().(k+1),F().(k+2)) & G().(k+3) = F(k,G().k,G(
     then 3 <= m by NAT_1:27;
     then
 A11: m = k+3 by XREAL_1:235;
-    then k+1 < m by XREAL_1:6;
     then
-A12: F().(k+1) = G().(k+1) by A9;
-    k+2 < m by A11,XREAL_1:6;
-    then
-A13: F().(k+2) = G().(k+2) by A9;
+A12: F().(k+1) = G().(k+1) by A9,XREAL_1:6;
+A13: F().(k+2) = G().(k+2) by A9,A11,XREAL_1:6;
     k+0 < m by A11,XREAL_1:6;
     hence contradiction by A8,A9,A11,A12,A13,A10;
   end;
@@ -1126,294 +885,6 @@ A6: dom F() = NAT by FUNCT_2:def 1;
 end;
 
 :: 4 steps
-
-scheme
-  LambdaRec4Ex { A,B,C,D() -> set, F(set,set,set,set,set) -> set }: ex f being
-Function st dom f = NAT & f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() & for n
-  being Element of NAT holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3)) proof
-  defpred C4[set] means In($1,NAT) > 2;
-  defpred C3[set] means $1 = 2;
-  defpred C2[set] means $1 = 1;
-  defpred C1[set] means $1 = 0;
-  deffunc G(Element of NAT,set) = [$2`2_5, $2`3_5, $2`4_5, $2`5_5, F($1+1,$2
-  `2_5,$2`3_5,$2`4_5,$2`5_5)];
-  set r05 = F(0,A(),B(),C(),D());
-  set r15 = F(1,B(),C(),D(),r05);
-  set r25 = F(2,C(),D(),r05,r15);
-  set r35 = F(3,D(),r05,r15,r25);
-  deffunc H(Nat,set) = G($1+3,$2);
-  consider h being Function such that
-  dom h = NAT and
-A1: h.0 = [ D(), r05, r15, r25, r35 ] and
-A2: for n being Nat holds h.(n+1) = H(n,h.n) from NAT_1:sch 11;
-  deffunc X4(set) = h.(In($1,NAT)-'3);
-  deffunc X3(set) = [ C(), D(), r05, r15, r25 ];
-  deffunc X2(set) = [ B(), C(), D(), r05, r15 ];
-  deffunc X1(set) = [ A(), B(), C(), D(), r05 ];
-A3: for c being set st c in NAT holds C1[c] or C2[c] or C3[c] or C4[c]
-  proof
-    let c be set;
-    assume c in NAT;
-    then In (c,NAT) = c by FUNCT_7:def 1;
-    hence thesis by NAT_1:26;
-  end;
-A4: for c being set st c in NAT holds (C1[c] implies not C2[c]) & (C1[c]
-implies not C3[c]) & (C1[c] implies not C4[c]) & (C2[c] implies not C3[c]) & (
-  C2[c] implies not C4[c]) & (C3[c] implies not C4[c])
-  proof
-    let c be set;
-    assume c in NAT;
-    then In (c,NAT) = c by FUNCT_7:def 1;
-    hence thesis;
-  end;
-  consider g being Function such that
-  dom g = NAT and
-A5: for x being set st x in NAT holds (C1[x] implies g.x = X1(x)) & (C2[
-x] implies g.x = X2(x)) & (C3[x] implies g.x = X3(x)) & (C4[x] implies g.x = X4
-  (x)) from ExFunc4Cond(A4,A3);
-A6: In (3,NAT) = 3 by FUNCT_7:def 1;
-  then
-A7: g.3 = X4(3) by A5
-    .= [ D(), r05, r15, r25, r35 ] by A1,A6,XREAL_1:232;
-A8: g.2 = [ C(), D(), r05, r15, r25 ] by A5;
-  then
-A9: (g.(0+2))`3_5 = r05 by Def10
-    .= (g.(0+3))`2_5 by A7,Def9;
-A10: g.1 = [ B(), C(), D(), r05, r15 ] by A5;
-  then
-A11: (g.(0+1))`2_5 = C() by Def9
-    .= (g.(0+2))`1_5 by A8,Def8;
-A12: g.0 = [ A(), B(), C(), D(), r05 ] by A5;
-  then
-A13: (g.0)`3_5 = C() by Def10
-    .= (g.(0+1))`2_5 by A10,Def9;
-A14: (g.(0+2))`5_5 = r25 by A8,Def12
-    .= (g.(0+3))`4_5 by A7,Def11;
-A15: (g.(0+2))`4_5 = r15 by A8,Def11
-    .= (g.(0+3))`3_5 by A7,Def10;
-A16: (g.(0+1))`4_5 = r05 by A10,Def11
-    .= (g.(0+2))`3_5 by A8,Def10;
-A17: (g.(0+1))`3_5 = D() by A10,Def10
-    .= (g.(0+2))`2_5 by A8,Def9;
-A18: (g.(0+1))`5_5 = r15 by A10,Def12
-    .= (g.(0+2))`4_5 by A8,Def11;
-A19: (g.0)`5_5 = r05 by A12,Def12
-    .= (g.(0+1))`4_5 by A10,Def11;
-A20: (g.0)`4_5 = D() by A12,Def11
-    .= (g.(0+1))`3_5 by A10,Def10;
-A21: (g.(0+1))`1_5 = B() by A10,Def8
-    .= (g.0)`2_5 by A12,Def9;
-A22: for n being Element of NAT holds g.(n+4) = G(n+3,g.(n+3))
-  proof
-    let n be Element of NAT;
-A23: In (n+3,NAT) = n+3 by FUNCT_7:def 1;
-    0+2 < n+3 by NAT_1:2,XREAL_1:8;
-    then
-A24: g.(n+3) = X4(n+3) by A5,A23
-      .= h.n by A23,NAT_D:34;
-A25: In (n+4,NAT) = n+4 by FUNCT_7:def 1;
-A26: n+4-3 = n+(4-3) & 0 <= n+1 by NAT_1:2;
-    0+2 < n+4 by NAT_1:2,XREAL_1:8;
-    hence g.(n+4) = X4(n+4) by A5,A25
-      .= h.(n+1) by A25,A26,XREAL_0:def 2
-      .= G(n+3,g.(n+3)) by A2,A24;
-  end;
-  deffunc M(Element of NAT) = (g.$1)`1_5;
-  consider f being Function such that
-A27: dom f = NAT and
-A28: for x being Element of NAT holds f.x = M(x) from FUNCT_1:sch 4;
-A29: f.(0+4) = (g.(0+4))`1_5 by A28
-    .= G(0+3,g.(0+3))`1_5 by A22
-    .= (g.(0+3))`2_5 by Def8;
-  take f;
-  thus dom f = NAT by A27;
-  defpred P[Element of NAT] means f.($1+4) = (g.($1+3))`2_5 & (g.$1)`2_5 = (g.
-($1+1))`1_5 & (g.$1)`3_5 = (g.($1+1))`2_5 & (g.$1)`4_5 = (g.($1+1))`3_5 & (g.$1
-)`5_5 = (g.($1+1))`4_5 & (g.($1+1))`2_5 = (g.($1+2))`1_5 & (g.($1+1))`3_5 = (g.
-($1+2))`2_5 & (g.($1+1))`4_5 = (g.($1+2))`3_5 & (g.($1+1))`5_5 = (g.($1+2))`4_5
-& (g.($1+2))`2_5 = (g.($1+3))`1_5 & (g.($1+2))`3_5 = (g.($1+3))`2_5 & (g.($1+2)
-)`4_5 = (g.($1+3))`3_5 & (g.($1+2))`5_5 = (g.($1+3))`4_5 & (g.($1+3))`2_5 = (g.
-($1+4))`1_5 & (g.($1+3))`3_5 = (g.($1+4))`2_5 & (g.($1+3))`4_5 = (g.($1+4))`3_5
-& (g.($1+3))`5_5 = (g.($1+4))`4_5 & f.($1+4) = F($1,f.$1,f.($1+1),f.($1+2),f.(
-  $1+3));
-A30: (g.(0+3))`2_5 = G(0+3,(g.(0+3)))`1_5 by Def8
-    .= (g.(0+4))`1_5 by A22;
-  thus
-A31: f.0 = (g.0)`1_5 by A28
-    .= A() by A12,Def8;
-  thus
-A32: f.1 = (g.1)`1_5 by A28
-    .= B() by A10,Def8;
-  thus
-A33: f.2 = (g.2)`1_5 by A28
-    .= C() by A8,Def8;
-  thus
-A34: f.3 = (g.3)`1_5 by A28
-    .= D() by A7,Def8;
-A35: for x being Element of NAT st P[x] holds P[x+1]
-  proof
-    let x be Element of NAT;
-    assume
-A36: P[x];
-    then
-A37: f.(x+1+1) = (g.x)`3_5 by A28;
-    thus
-A38: f.(x+1+4) = (g.(x+1+4))`1_5 by A28
-      .= G(x+1+3,g.(x+1+3))`1_5 by A22
-      .= (g.(x+1+3))`2_5 by Def8;
-    thus (g.(x+1+1))`1_5 = (g.(x+1))`2_5 by A36;
-    thus (g.(x+1))`3_5 = (g.(x+1+1))`2_5 by A36;
-    thus (g.(x+1))`4_5 = (g.(x+1+1))`3_5 by A36;
-    thus (g.(x+1))`5_5 = (g.(x+1+1))`4_5 by A36;
-    thus (g.(x+1+1))`2_5 = (g.(x+1+2))`1_5 by A36;
-    thus (g.(x+1+1))`3_5 = (g.(x+1+2))`2_5 by A36;
-    thus (g.(x+1+1))`4_5 = (g.(x+1+2))`3_5 by A36;
-    thus (g.(x+1+1))`5_5 = (g.(x+1+2))`4_5 by A36;
-    thus (g.(x+1+2))`2_5 = (g.(x+1+3))`1_5 by A36;
-    thus (g.(x+1+2))`3_5 = (g.(x+1+3))`2_5 by A36;
-    thus (g.(x+1+2))`4_5 = (g.(x+1+3))`3_5 by A36;
-    thus (g.(x+1+2))`5_5 = (g.(x+1+3))`4_5 by A36;
-    thus (g.(x+1+3))`2_5 = G(x+1+3,(g.(x+1+3)))`1_5 by Def8
-      .= (g.(x+1+4))`1_5 by A22;
-    thus (g.(x+1+3))`3_5 = G(x+1+3,(g.(x+1+3)))`2_5 by Def9
-      .= (g.(x+1+4))`2_5 by A22;
-    thus (g.(x+1+3))`4_5 = G(x+1+3,(g.(x+1+3)))`3_5 by Def10
-      .= (g.(x+1+4))`3_5 by A22;
-    thus (g.(x+1+3))`5_5 = G(x+1+3,(g.(x+1+3)))`4_5 by Def11
-      .= (g.(x+1+4))`4_5 by A22;
-A39: f.(x+1+2) = (g.x)`4_5 by A28,A36;
-    per cases;
-    suppose
-A40:  x <= 2;
-      thus thesis
-      proof
-        per cases by A40,NAT_1:26;
-        suppose
-A41:      x = 0;
-          hence f.(x+1+4) = (g.(1+4))`1_5 by A28
-            .= G(1+3,g.(1+3))`1_5 by A22
-            .= (g.(0+4))`2_5 by Def8
-            .= G(0+3,g.(0+3))`2_5 by A22
-            .= (g.(0+3))`3_5 by Def9
-            .= r15 by A7,Def10
-            .= F(0+1,B(),C(),D(),(g.0)`5_5) by A12,Def12
-            .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by A12,A32,A33,A36
-,A39,A41,Def11;
-        end;
-        suppose
-A42:      x = 1;
-          then
-A43:      f.(x+1+3) = r15 by A10,A36,Def12;
-A44:      f.(x+1+1) = D() & f.(x+1+2) = r05 by A10,A37,A39,A42,Def10,Def11;
-          thus f.(x+1+4) = (g.(1+1+4))`1_5 by A28,A42
-            .= G(2+3,g.(2+3))`1_5 by A22
-            .= (g.(1+4))`2_5 by Def8
-            .= G(1+3,g.(1+3))`2_5 by A22
-            .= (g.(0+4))`3_5 by Def9
-            .= G(0+3,g.(0+3))`3_5 by A22
-            .= (g.(0+3))`4_5 by Def10
-            .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by A7,A33,A42,A44
-,A43,Def11;
-        end;
-        suppose
-A45:      x = 2;
-          then
-A46:      f.(x+1+3) = r25 by A8,A36,Def12;
-A47:      f.(x+1+1) = r05 & f.(x+1+2) = r15 by A8,A37,A39,A45,Def10,Def11;
-          thus f.(x+1+4) = (g.(2+1+4))`1_5 by A28,A45
-            .= G(3+3,g.(3+3))`1_5 by A22
-            .= (g.(2+4))`2_5 by Def8
-            .= G(2+3,g.(2+3))`2_5 by A22
-            .= (g.(1+4))`3_5 by Def9
-            .= G(1+3,g.(1+3))`3_5 by A22
-            .= (g.(0+4))`4_5 by Def10
-            .= G(0+3,g.(0+3))`4_5 by A22
-            .= (g.(0+3))`5_5 by Def11
-            .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by A7,A34,A45,A47
-,A46,Def12;
-        end;
-      end;
-    end;
-    suppose
-A48:  2 < x;
-      then 1 < x by XXREAL_0:2;
-      then 1-1 <= x-1 by XREAL_1:13;
-      then
-A49:  x-1 = x-'1 by XREAL_0:def 2;
-A50:  2-2 <= x-2 by A48,XREAL_1:13;
-      then
-A51:  x-2 = x-'2 by XREAL_0:def 2;
-A52:  x-'2+3 = x-2+3 by A50,XREAL_0:def 2
-        .= x+1;
-A53:  1+2 <= x by A48,NAT_1:13;
-      then
-A54:  x-'3+3 = x by XREAL_1:235;
-      3-3 <= x-3 by A53,XREAL_1:13;
-      then
-A55:  x-3 = x-'3 by XREAL_0:def 2;
-A56:  x+2 = x-1+3;
-      thus f.(x+1+4) = (g.(x+(1+3)))`2_5 by A38
-        .= G(x+3,g.(x+3))`2_5 by A22
-        .= (g.(x-'1+4))`3_5 by A49,Def9
-        .= G(x+2,g.(x+2))`3_5 by A22,A49,A56
-        .= (g.(x-'2+4))`4_5 by A51,Def10
-        .= G(x+1,g.(x+1))`4_5 by A22,A52
-        .= (g.(x-'3+4))`5_5 by A55,Def11
-        .= G(x-'3+3,g.(x-'3+3))`5_5 by A22
-        .= F(x+1,(g.x)`2_5,(g.x)`3_5,(g.x)`4_5,(g.x)`5_5) by A54,Def12
-        .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by A28,A36,A37,A39;
-    end;
-  end;
-A57: (g.(0+3))`5_5 = G(0+3,(g.(0+3)))`4_5 by Def11
-    .= (g.(0+4))`4_5 by A22;
-A58: (g.(0+3))`4_5 = G(0+3,(g.(0+3)))`3_5 by Def10
-    .= (g.(0+4))`3_5 by A22;
-A59: (g.(0+3))`3_5 = G(0+3,(g.(0+3)))`2_5 by Def9
-    .= (g.(0+4))`2_5 by A22;
-  (g.(0+2))`2_5 = D() by A8,Def9
-    .= (g.(0+3))`1_5 by A7,Def8;
-  then
-A60: P[0] by A7,A31,A32,A33,A34,A29,A21,A13,A20,A19,A11,A17,A16,A18,A9,A15,A14
-,A30,A59,A58,A57,Def9;
-  for x being Element of NAT holds P[x] from NAT_1:sch 1(A60,A35);
-  hence thesis;
-end;
-
-scheme
-  LambdaRec4ExD { X() -> non empty set, A,B,C,D() -> Element of X(), F(set,set
-,set,set,set) -> Element of X() }: ex f being Function of NAT,X() st f.0 = A()
-& f.1 = B() & f.2 = C() & f.3 = D() & for n being Element of NAT holds f.(n+4)
-  = F(n,f.n,f.(n+1),f.(n+2),f.(n+3)) proof
-  consider f being Function such that
-A1: dom f = NAT and
-A2: f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() and
-A3: for n being Element of NAT holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f
-  .(n+3)) from LambdaRec4Ex;
-  rng f c= X()
-  proof
-    let y be set;
-    assume y in rng f;
-    then consider n being set such that
-A4: n in dom f and
-A5: f.n = y by FUNCT_1:def 3;
-    reconsider n as Element of NAT by A1,A4;
-    per cases;
-    suppose
-      n <= 3;
-      then n = 0 or n = 1 or n = 2 or n = 3 by NAT_1:27;
-      hence thesis by A2,A5;
-    end;
-    suppose
-      n > 3;
-      then 3+1 <= n by NAT_1:13;
-      then n-4 is Element of NAT by INT_1:5;
-      then f.(n-4+4) = F(n-4,f.(n-4),f.(n-4+1),f.(n-4+2),f.(n-4+3)) by A3;
-      hence thesis by A5;
-    end;
-  end;
-  then f is Function of NAT,X() by A1,FUNCT_2:def 1,RELSET_1:4;
-  hence thesis by A2,A3;
-end;
 
 scheme
   LambdaRec4Un { A,B,C,D() -> set, F,G() -> Function, F(set,set,set,set,set)
@@ -1444,9 +915,8 @@ A10: F().(k+4) = F(k,F().k,F().(k+1),F().(k+2),F().(k+3)) & G().(k+4) = F(
     then 4 <= m by NAT_1:28;
     then
 A11: m = k+4 by XREAL_1:235;
-    then k+1 < m by XREAL_1:6;
     then
-A12: F().(k+1) = G().(k+1) by A9;
+A12: F().(k+1) = G().(k+1) by A9,XREAL_1:6;
     k+3 < m by A11,XREAL_1:6;
     then
 A13: F().(k+3) = G().(k+3) by A9;

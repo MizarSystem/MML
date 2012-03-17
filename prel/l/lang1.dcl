@@ -9,6 +9,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -26,7 +27,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LANG1" nr="2">
@@ -35,8 +36,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LANG1" nr="3">
@@ -45,7 +46,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="55"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LANG1" nr="4">
@@ -54,7 +55,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LANG1" nr="5">
@@ -63,9 +64,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="50"/>
-<Adjective nr="51"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </RCluster>
 <FCluster aid="LANG1" nr="1">
@@ -74,12 +75,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="132">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LANG1" nr="2">
@@ -91,13 +92,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="141">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LANG1" nr="3">
@@ -109,13 +110,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LANG1" nr="4">
@@ -126,12 +127,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 </Registrations>

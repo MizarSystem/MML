@@ -12,11 +12,12 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -28,14 +29,14 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="23">
-<Func kind="K" nr="54"/>
+<Adjective nr="26">
+<Func kind="K" nr="52"/>
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="21">
-<Func kind="K" nr="22">
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="19">
+<Func kind="K" nr="20">
+<Func kind="K" nr="52"/>
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -52,11 +53,11 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="50"/>
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="48"/>
+<Func kind="K" nr="52"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="99">
+<Func kind="K" nr="114">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -69,15 +70,15 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="50"/>
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="48"/>
+<Func kind="K" nr="52"/>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="50"/>
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="48"/>
+<Func kind="K" nr="52"/>
 </Typ>
 <Not>
 <And>
@@ -86,7 +87,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="99">
+<Func kind="K" nr="114">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>

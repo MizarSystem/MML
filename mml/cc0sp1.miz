@@ -2,7 +2,7 @@
 ::  by Katuhiko Kanazashi , Hiroyuki Okazaki and Yasunari Shidama
 ::
 :: Received November 20, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -31,9 +31,9 @@ environ
  constructors REAL_1, REALSET1, COMPLEX1, IDEAL_1, SEQ_1, C0SP1, PARTFUN3,
       BINOP_2, TOPMETR, SEQ_4, MEASURE6, CLOPBAN2, CSSPACE3, COMSEQ_2;
  registrations XBOOLE_0, SUBSET_1, STRUCT_0, XREAL_0, REALSET1, ALGSTR_0,
-      NUMBERS, ORDINAL1, MEMBERED, RELAT_1, VECTSP_1, VECTSP_2, VALUED_0,
-      C0SP1, XXREAL_0, FUNCT_2, VALUED_1, RFUNCT_1, COMPLEX1, FUNCOP_1,
-      CFUNCDOM, CLVECT_1, XCMPLX_0, COMSEQ_2, CLOPBAN2, RELSET_1;
+      NUMBERS, ORDINAL1, MEMBERED, VECTSP_1, VECTSP_2, VALUED_0, C0SP1,
+      XXREAL_0, FUNCT_2, VALUED_1, RFUNCT_1, COMPLEX1, FUNCOP_1, CFUNCDOM,
+      CLVECT_1, XCMPLX_0, COMSEQ_2, CLOPBAN2, RELSET_1, SEQ_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions REALSET1, ALGSTR_0, TARSKI, XCMPLX_0, RLVECT_1, VECTSP_1,
       STRUCT_0, GROUP_1, BINOP_1, VALUED_1, C0SP1, CFUNCDOM, CLVECT_1,
@@ -49,7 +49,7 @@ begin :: Banach Algebra of Bounded Complex-Valued Functionals
 
 definition
   let V be ComplexAlgebra;
-  mode ComplexSubAlgebra of V -> ComplexAlgebra means :DefComplexAlgebra:
+  mode ComplexSubAlgebra of V -> ComplexAlgebra means :Def1:
     the carrier of it c= the carrier of V
     & the addF of it = (the addF of V)||the carrier of it
     & the multF of it = (the multF of V)||the carrier of it
@@ -60,6 +60,28 @@ definition
     take V;
     thus thesis by RELSET_1:19;
   end;
+end;
+
+Lm1: now
+  let z be Complex;
+  let X being non empty set,
+      V being ComplexAlgebra,
+      V1 being non empty Subset of V,
+      d1,d2 being Element of X,
+      A being BinOp of X,
+      M being Function of [:X,X:],X,
+      MR being Function of [:COMPLEX,X:],X such that
+A1:   V1 = X and ::& d1 = 0.V & d2 = 1.V
+A2:   MR = (the Mult of V) | [:COMPLEX,V1:];
+      let W be non empty ComplexAlgebraStr such that
+A3:   W = ComplexAlgebraStr(# X,M,A,MR,d2,d1#);
+  let w be VECTOR of W;
+  let v be Element of V;
+  assume
+A4: w = v;
+  z in COMPLEX by XCMPLX_0:def 2;
+  then [z,w] in [:COMPLEX,V1:] by A1,A3,ZFMISC_1:def 2;
+  hence z*w = z*v by A4,A2,A3,FUNCT_1:49;
 end;
 
 theorem Th1:
@@ -90,18 +112,18 @@ A6: MR = (the Mult of V) | [:COMPLEX,V1:] and
 A7: for v be Element of V st v in V1 holds -v in V1;
   reconsider W = ComplexAlgebraStr(# X,M,A,MR,d2,d1#)
                        as non empty ComplexAlgebraStr;
-A9: now
+A8: now
       let x,y be Element of W;
       reconsider x1 = x, y1 = y as Element of V by A1,TARSKI:def 3;
       x + y = (the addF of V).([x,y]) by A1,A4,FUNCT_1:49;
       hence x + y = (the addF of V).(x,y);
     end;
-A10: now
+A9: now
       let a,x be VECTOR of W;
       a * x = (the multF of V).([a,x]) by A1,A5,FUNCT_1:49;
       hence a * x = (the multF of V).(a,x);
     end;
-A12: W is Abelian add-associative right_zeroed right_complementable
+A10: W is Abelian add-associative right_zeroed right_complementable
   commutative associative right_unital right-distributive vector-distributive
   scalar-distributive scalar-associative vector-associative
   proof
@@ -111,22 +133,22 @@ A12: W is Abelian add-associative right_zeroed right_complementable
     hereby
       let x,y be VECTOR of W;
       reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-      x + y = x1 + y1 & y + x = y1 + x1 by A9;
+      x + y = x1 + y1 & y + x = y1 + x1 by A8;
       hence x + y = y + x;
     end;
     hereby
       let x,y,z be VECTOR of W;
       reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
-      x + (y + z) = Av.(x1,y + z) by A9; then
-A13:  x + (y + z) = x1 + (y1 + z1) by A9;
-      (x + y) + z = Av.(x + y,z1) by A9;
-      then (x + y) + z = (x1 + y1) + z1 by A9;
-      hence (x + y) + z = x + (y + z) by A13,RLVECT_1:def 3;
+      x + (y + z) = Av.(x1,y + z) by A8; then
+A11:  x + (y + z) = x1 + (y1 + z1) by A8;
+      (x + y) + z = Av.(x + y,z1) by A8;
+      then (x + y) + z = (x1 + y1) + z1 by A8;
+      hence (x + y) + z = x + (y + z) by A11,RLVECT_1:def 3;
     end;
     hereby
       let x be VECTOR of W;
       reconsider y = x, z = 0.W as VECTOR of V by A1,TARSKI:def 3;
-      thus x + 0.W = y + 0.V by A2,A9
+      thus x + 0.W = y + 0.V by A2,A8
                   .= x by RLVECT_1:4;
     end;
     thus W is right_complementable
@@ -134,103 +156,92 @@ A13:  x + (y + z) = x1 + (y1 + z1) by A9;
       let x be Element of W;
       reconsider x1 = x as Element of V by A1,TARSKI:def 3;
       consider v be Element of V such that
-A14:  x1 + v = 0.V by ALGSTR_0:def 11;
-      v = - x1 by A14,VECTSP_1:16;
+A12:  x1 + v = 0.V by ALGSTR_0:def 11;
+      v = - x1 by A12,VECTSP_1:16;
       then reconsider y = v as Element of W by A1,A7;
       take y;
-      thus thesis by A2,A9,A14;
+      thus thesis by A2,A8,A12;
     end;
     hereby
       let v,w be Element of W;
       reconsider v1 = v, w1=w as Element of V by A1,TARSKI:def 3;
-      v * w = v1 * w1 & w * v = w1 * v1 by A10;
+      v * w = v1 * w1 & w * v = w1 * v1 by A9;
       hence v * w = w * v;
     end;
     hereby
       let a,b,x be Element of W;
       reconsider y=x, a1=a, b1=b as Element of V by A1,TARSKI:def 3;
-      a * (b * x) = Mv.(a,b * x) by A10; then
-A15:  a * (b * x) = a1 * (b1 * y) by A10;
-      a * b = a1 * b1 by A10;
-      then (a * b) * x = (a1 * b1) * y by A10;
-      hence (a * b) * x = a * (b * x) by A15,GROUP_1:def 3;
+      a * (b * x) = Mv.(a,b * x) by A9; then
+A13:  a * (b * x) = a1 * (b1 * y) by A9;
+      a * b = a1 * b1 by A9;
+      then (a * b) * x = (a1 * b1) * y by A9;
+      hence (a * b) * x = a * (b * x) by A13,GROUP_1:def 3;
     end;
     hereby
       let v be Element of W;
       reconsider v1 = v as Element of V by A1,TARSKI:def 3;
-      v * 1.W =v1*1.V by A3,A10;
+      v * 1.W =v1*1.V by A3,A9;
       hence v * 1.W = v by VECTSP_1:def 4;
     end;
     hereby
       let x,y,z be Element of W;
       reconsider x1=x, y1=y, z1=z as Element of V by A1,TARSKI:def 3;
-      y+z = y1+z1 by A9;
-      then x*(y+z) = x1*(y1+z1) by A10; then
-A16:  x*(y+z) = x1*y1 + x1*z1 by VECTSP_1:def 2;
-      x*y = x1*y1 & x*z = x1*z1 by A10;
-      hence x*(y+z) = x*y + x*z by A9,A16;
+      y+z = y1+z1 by A8;
+      then x*(y+z) = x1*(y1+z1) by A9; then
+A14:  x*(y+z) = x1*y1 + x1*z1 by VECTSP_1:def 2;
+      x*y = x1*y1 & x*z = x1*z1 by A9;
+      hence x*(y+z) = x*y + x*z by A8,A14;
     end;
-C:  for a be Complex,x,y be VECTOR of W  holds a*(x+y) = a*x + a*y
+    thus for a be Complex,x,y be VECTOR of W  holds a*(x+y) = a*x + a*y
     proof
       let a be Complex;
       let x,y be VECTOR of W;
       reconsider x1=x, y1=y as Element of V by A1,TARSKI:def 3;
-A17:  a*x = (the Mult of V).(a,x) by A1,A6,FUNCT_1:49
-         .=a*x1;
-A18:  a*y = (the Mult of V).(a,y) by A1,A6,FUNCT_1:49
-         .= a*y1;
-      a*(x+y) = (the Mult of V).(a,x+y) by A1,A6,FUNCT_1:49
-             .= a*(x1+y1) by A9; then
+A15:  a*x =a*x1 by A1,A6,Lm1;
+A16:  a*y = a*y1 by A1,A6,Lm1;
+      x+y = x1+y1 by A8;
+      then a*(x+y) = a*(x1+y1) by A1,A6,Lm1; then
       a*(x+y) =a*x1 + a*y1 by CLVECT_1:def 2;
-    hence thesis by A9,A17,A18;
+      hence thesis by A8,A15,A16;
     end;
-B:  for a,b be Complex,v be VECTOR of W holds (a + b) * v = a * v + b * v
+    thus for a,b be Complex,v be VECTOR of W holds (a + b) * v = a * v + b * v
     proof
       let a,b be Complex;
       let x be Element of W;
       reconsider x1=x as Element of V by A1,TARSKI:def 3;
-A21:  a*x = (the Mult of V).(a,x) by A1,A6,FUNCT_1:49
-         .= a*x1;
-A22:  b*x = (the Mult of V).(b,x) by A1,A6,FUNCT_1:49
-         .= b*x1;
-      (a+b)*x = (the Mult of V).(a+b,x) by A1,A6,FUNCT_1:49
-             .= (a+b)*x1;
+A17:  a*x = a*x1 by A1,A6,Lm1;
+A18:  b*x = b*x1 by A1,A6,Lm1;
+      (a+b)*x = (a+b)*x1 by A1,A6,Lm1;
       then (a+b)*x = a*x1 + b*x1 by CLVECT_1:def 3;
-      hence (a+b)*x =a*x + b*x by A9,A21,A22;
+      hence (a+b)*x =a*x + b*x by A8,A17,A18;
     end;
-A: for a,b be Complex,v be VECTOR of W holds (a * b) * v = a * (b * v)
+    thus for a,b be Complex,v be VECTOR of W holds (a * b) * v = a * (b * v)
     proof
       let a,b be Complex;
       let x be Element of W;
       reconsider x1=x as Element of V by A1,TARSKI:def 3;
       reconsider y=b*x as Element of W;
       reconsider y1=b*x1 as Element of V;
-A24:  b*x = (the Mult of V).(b,x) by A1,A6,FUNCT_1:49
-         .= b*x1;
-A25:  a*(b*x) = (the Mult of V).(a,y) by A1,A6,FUNCT_1:49
-             .= a*(b*x1) by A24;
-      (a*b)*x = (the Mult of V).(a*b,x) by A1,A6,FUNCT_1:49
-             .= (a*b)*x1;
-      hence thesis by A25,CLVECT_1:def 4;
+A19:  b*x = b*x1 by A1,A6,Lm1;
+A20:  a*(b*x) = a*(b*x1) by A1,A6,A19,Lm1;
+      (a*b)*x = (a*b)*x1 by A1,A6,Lm1;
+      hence thesis by A20,CLVECT_1:def 4;
     end;
-  for x,y be Element of W,a be Complex holds a * (x * y) = (a * x) * y
+    thus for x,y be Element of W,a be Element of COMPLEX holds
+    a * (x * y) = (a * x) * y
     proof
       let x,y be Element of W;
-      let a being Complex;
+      let a be Element of COMPLEX;
       reconsider x1=x, y1=y as Element of V by A1,TARSKI:def 3;
-      set z=x*y;
-      set z1=x1*y1;
-A28:  a*x =(the Mult of V).(a,x) by A1,A6,FUNCT_1:49
-         .= a*x1;
-A30:  a*(x*y) = (the Mult of V).(a,z) by A1,A6,FUNCT_1:49
-             .= a*(x1*y1) by A10;
+A21:  a*x = a*x1 by A1,A6,Lm1;
+A22:  a*(x*y) = a*(x1*y1) by A1,A6,Lm1,A9;
       a * (x1 * y1) = (a * x1) * y1 by CFUNCDOM:def 9;
-      hence thesis by A10,A28,A30;
+      hence thesis by A9,A21,A22;
     end;
-  hence thesis by C,B,A,CFUNCDOM:def 9,CLVECT_1:def 2,def 3,def 4;
+    thus thesis;
   end;
   0.W = 0.V & 1.W= 1.V by A2,A3;
-  hence thesis by A1,A4,A5,A6,A12,DefComplexAlgebra;
+  hence thesis by A1,A4,A5,A6,A10,Def1;
 end;
 
 registration let V be ComplexAlgebra;
@@ -248,37 +259,37 @@ end;
 end;
 
 definition let V be ComplexAlgebra, V1 be Subset of V;
-  attr V1 is Cadditively-linearly-closed means  :Def10:
+  attr V1 is Cadditively-linearly-closed means  :Def2:
   V1 is add-closed having-inverse &
   for a be Complex, v be Element of V st v in V1 holds a * v in V1;
 end;
 
 definition let V be ComplexAlgebra, V1 be Subset of V such that
-A1: V1 is Cadditively-linearly-closed non empty;
-  func Mult_(V1,V) -> Function of [:COMPLEX,V1:], V1 equals  :Def11:
+B1: V1 is Cadditively-linearly-closed non empty;
+  func Mult_(V1,V) -> Function of [:COMPLEX,V1:], V1 equals  :Def3:
   (the Mult of V) | [:COMPLEX,V1:];
   correctness
   proof
-A2: [:COMPLEX,V1:] c= [:COMPLEX,the carrier of V:]
+A1: [:COMPLEX,V1:] c= [:COMPLEX,the carrier of V:]
       & dom(the Mult of V) = [:COMPLEX,the carrier of V:]
                                         by FUNCT_2:def 1,ZFMISC_1:95;
-A3: for z be set st z in [:COMPLEX,V1:]
+A2: for z be set st z in [:COMPLEX,V1:]
                  holds ((the Mult of V) | [:COMPLEX,V1:]).z in V1
     proof
       let z be set such that
-A4:   z in [:COMPLEX,V1:];
+A3:   z in [:COMPLEX,V1:];
       consider r,x be set such that
-A5:   r in COMPLEX and
-A6:   x in V1 and
-A7:   z=[r,x] by A4,ZFMISC_1:def 2;
-      reconsider r as Complex by A5;
-      reconsider y=x as VECTOR of V by A6;
-      [r,x] in dom((the Mult of V) | [:COMPLEX,V1:]) by A2,A4,A7,RELAT_1:62;
-      then ((the Mult of V) | [:COMPLEX,V1:]).z = r*y by A7,FUNCT_1:47;
-      hence thesis by A1,A6,Def10;
+A4:   r in COMPLEX and
+A5:   x in V1 and
+A6:   z=[r,x] by A3,ZFMISC_1:def 2;
+      reconsider r as Complex by A4;
+      reconsider y=x as VECTOR of V by A5;
+      [r,x] in dom((the Mult of V) | [:COMPLEX,V1:]) by A1,A3,A6,RELAT_1:62;
+      then ((the Mult of V) | [:COMPLEX,V1:]).z = r*y by A6,FUNCT_1:47;
+      hence thesis by B1,A5,Def2;
     end;
-    dom((the Mult of V) | [:COMPLEX,V1:])=[:COMPLEX,V1:] by A2,RELAT_1:62;
-    hence thesis by A3,FUNCT_2:3;
+    dom((the Mult of V) | [:COMPLEX,V1:])=[:COMPLEX,V1:] by A1,RELAT_1:62;
+    hence thesis by A2,FUNCT_2:3;
   end;
 end;
 
@@ -324,66 +335,68 @@ registration let X be non empty set;
     for v,u be Element of V st v in W & u in W holds v + u in W
     proof
       let v,u be Element of V such that
-  A2: v in W & u in W;
+  A1: v in W & u in W;
       consider v1 be Function of X,COMPLEX such that
-  A3:                v1=v & v1|X is bounded by A2;
+  A2:                v1=v & v1|X is bounded by A1;
       consider u1 be Function of X,COMPLEX such that
-  A4:                u1=u & u1|X is bounded by A2;
+  A3:                u1=u & u1|X is bounded by A1;
       dom(v1+u1) = X /\ X by FUNCT_2:def 1; then
-  A5: v1+u1 is Function of X,COMPLEX & (v1+u1)|X is bounded
-                          by A3,A4,CFUNCT_1:75;
+  A4: v1+u1 is Function of X,COMPLEX & (v1+u1)|X is bounded
+                          by A2,A3,CFUNCT_1:75;
       reconsider h = v+u as Element of Funcs(X,COMPLEX);
-  A6: ex f being Function st h = f & dom f = X & rng f c= COMPLEX
+  A5: ex f being Function st h = f & dom f = X & rng f c= COMPLEX
                                                          by FUNCT_2:def 2;
       dom v1 /\ dom u1 = X /\ dom u1 by FUNCT_2:def 1; then
-  A7: dom v1 /\ dom u1 = X /\ X by FUNCT_2:def 1;
+  A6: dom v1 /\ dom u1 = X /\ X by FUNCT_2:def 1;
       for x be set st x in dom h holds h.x = v1.x + u1.x
-                          by A3,A4,CFUNCDOM:1; then
-      v+u=v1+u1 by A7,A6,VALUED_1:def 1;
-      hence v+u in W by A5;
+                          by A2,A3,CFUNCDOM:1; then
+      v+u=v1+u1 by A6,A5,VALUED_1:def 1;
+      hence v+u in W by A4;
     end; then
-  A8:W is add-closed by IDEAL_1:def 1;
+  A7:W is add-closed by IDEAL_1:def 1;
     for v be Element of V st v in W holds -v in W
     proof
       let v be Element of V such that
-  A9: v in W;
+  A8: v in W;
       consider v1 be Function of X,COMPLEX such that
-  A10: v1=v & v1|X is bounded by A9;
-  A11: -v1 is Function of X,COMPLEX & (-v1)|X is bounded
-                           by A10,CFUNCT_1:74;
+  A9: v1=v & v1|X is bounded by A8;
+  A10: -v1 is Function of X,COMPLEX & (-v1)|X is bounded
+                           by A9,CFUNCT_1:74;
       reconsider h = -v, v2 = v as Element of Funcs(X,COMPLEX);
-  A12: h=(-1r)*v by CLVECT_1:3;
-  A13: ex f being Function st h = f & dom f = X & rng f c= COMPLEX
+  A11: h=(-1r)*v by CLVECT_1:3;
+  A12: ex f being Function st h = f & dom f = X & rng f c= COMPLEX
                                                         by FUNCT_2:def 2;
-  A14: dom v1 =X by FUNCT_2:def 1;
+  A13: dom v1 =X by FUNCT_2:def 1;
       now let x be set;
         assume x in dom h; then
         reconsider y=x as Element of X;
-        h.x = (-1r)*(v2.y) by A12,CFUNCDOM:4;
-        hence h.x = -v1.x by A10;
+        h.x = (-1r)*(v2.y) by A11,CFUNCDOM:4;
+        hence h.x = -v1.x by A9;
       end; then
-      -v=-v1 by A14,A13,VALUED_1:9;
-      hence -v in W by A11;
+      -v=-v1 by A13,A12,VALUED_1:9;
+      hence -v in W by A10;
     end; then
-  A15:W is having-inverse by C0SP1:def 1;
+  A14:W is having-inverse by C0SP1:def 1;
     for a be Complex, u be Element of V st u in W holds a * u in W
     proof
       let a be Complex, u be Element of V such that
-  A16: u in W;
+  A15: u in W;
       consider u1 be Function of X,COMPLEX such that
-  A17:u1=u & u1|X is bounded by A16;
+  A16:u1=u & u1|X is bounded by A15;
+A17: a in COMPLEX by XCMPLX_0:def 2;
+  then
   A18:a(#)u1 is Function of X,COMPLEX & (a(#)u1)|X is bounded
-                               by A17,CFUNCT_1:72;
+                               by A16,CFUNCT_1:72;
       reconsider h = a*u as Element of Funcs(X,COMPLEX);
   A19:ex f being Function st h = f & dom f = X & rng f c= COMPLEX
                                                          by FUNCT_2:def 2;
   A20:dom u1 = X by FUNCT_2:def 1;
-      for x be set st x in dom h holds h.x = a*(u1.x) by A17,CFUNCDOM:4; then
-      a*u=a(#)u1 by A20,A19,VALUED_1:def 5;
+      for x be set st x in dom h holds h.x = a*(u1.x) by A17,A16,CFUNCDOM:4;
+      then a*u=a(#)u1 by A20,A19,VALUED_1:def 5;
       hence a*u in W by A18;
     end;
     hence ComplexBoundedFunctions(X) is Cadditively-linearly-closed
-                                      by A8,A15,Def10;
+                                      by A7,A14,Def2;
   A21:for v,u be Element of V st v in W & u in W holds v * u in W
     proof
       let v,u be Element of V such that
@@ -420,7 +433,7 @@ registration let V be ComplexAlgebra;
     reconsider W = [#]V as non empty Subset of V;
     W is add-closed having-inverse &
       for a be Complex, v be Element of V st v in W holds a * v in W; then
-A1: W is Cadditively-linearly-closed by Def10;
+A1: W is Cadditively-linearly-closed by Def2;
     1.V in W & for v,u be Element of V st v in W & u in W holds v * u in W;
     then W is multiplicatively-closed by C0SP1:def 4;
     hence thesis by A1;
@@ -442,16 +455,16 @@ proof
   let V be ComplexAlgebra,
       V1 be Cadditively-linearly-closed multiplicatively-closed
     non empty Subset of V;
-A2: Mult_(V1,V) = (the Mult of V) | [:COMPLEX,V1:] by Def11;
-A3: V1 is add-closed having-inverse non empty by Def10;
-A4: One_(V1,V) =1_V & mult_(V1,V) = (the multF of V) || V1
+A1: Mult_(V1,V) = (the Mult of V) | [:COMPLEX,V1:] by Def3;
+A2: V1 is add-closed having-inverse non empty by Def2;
+A3: One_(V1,V) =1_V & mult_(V1,V) = (the multF of V) || V1
                               by C0SP1:def 6,def 8;
   Zero_(V1,V) = 0.V & Add_(V1,V)= (the addF of V)||V1
-                              by A3,C0SP1:def 5,def 7;
-  hence thesis by A2,A3,A4,Th1;
+                              by A2,C0SP1:def 5,def 7;
+  hence thesis by A1,A2,A3,Th1;
 end;
 
-theorem Th4:
+theorem Th3:
   for V be ComplexAlgebra, V1 be ComplexSubAlgebra of V holds
   ( for v1,w1 be Element of V1, v,w be Element of V st
      v1=v & w1=w holds v1+w1=v+w ) &
@@ -464,26 +477,28 @@ proof
   let V be ComplexAlgebra, V1 be ComplexSubAlgebra of V;
   hereby let x1,y1 be Element of V1, x,y be Element of V;
     assume
-AS1:x1=x & y1=y;
+A1:x1=x & y1=y;
     x1 + y1 = ((the addF of V)||the carrier of V1).([x1,y1])
-                         by DefComplexAlgebra;
-    hence x1 + y1 = x+y by AS1,FUNCT_1:49;
+                         by Def1;
+    hence x1 + y1 = x+y by A1,FUNCT_1:49;
   end;
   hereby let x1,y1 be Element of V1, x,y be Element of V;
     assume
-AS2:x1=x & y1=y;
+A2:x1=x & y1=y;
     x1 * y1 = ((the multF of V)||the carrier of V1).([x1,y1])
-                         by DefComplexAlgebra;
-    hence x1 * y1 = x*y by AS2,FUNCT_1:49;
+                         by Def1;
+    hence x1 * y1 = x*y by A2,FUNCT_1:49;
   end;
   hereby let v1 be Element of V1, v be Element of V, a be Complex;
     assume
-AS3:v1 = v;
-    a * v1 = ((the Mult of V) | [:COMPLEX,the carrier of V1:]).([a,v1])
-                               by DefComplexAlgebra;
-    hence a * v1 = a * v by AS3,FUNCT_1:49;
+A3:v1 = v;
+    reconsider a1 = a as Element of COMPLEX by XCMPLX_0:def 2;
+    a1 * v1 = ((the Mult of V) | [:COMPLEX,the carrier of V1:]).([a1,v1])
+                               by Def1;
+    then a1 * v1 = a1 * v by A3,FUNCT_1:49;
+    hence a * v1 = a * v;
   end;
-  thus thesis by DefComplexAlgebra;
+  thus thesis by Def1;
 end;
 
 definition let X be non empty set;
@@ -511,14 +526,14 @@ registration let X be non empty set;
     reconsider v1=v as VECTOR of CAlgebra X by TARSKI:def 3;
     C_Algebra_of_BoundedFunctions(X) is ComplexSubAlgebra of CAlgebra(X)
                                                                 by Th2;
-    then 1r * v = 1r*v1 by Th4;
+    then 1r * v = 1r*v1 by Th3;
     hence 1r * v =v by CFUNCDOM:12;
   end;
   hence thesis by CLVECT_1:def 5;
 end;
 end;
 
-theorem Th8:
+theorem Th5:
   for X being non empty set,
       F, G, H being VECTOR of C_Algebra_of_BoundedFunctions(X),
       f, g, h being Function of X,COMPLEX st f=F & g=G & h=H holds
@@ -535,15 +550,15 @@ A2:C_Algebra_of_BoundedFunctions(X) is ComplexSubAlgebra of CAlgebra(X)
    hereby assume
 A3: H = F+G;
     let x be Element of X;
-    h1=f1+g1 by A2,A3,Th4;
+    h1=f1+g1 by A2,A3,Th3;
     hence h.x = f.x+g.x by A1,CFUNCDOM:1;
    end;
    assume for x be Element of X holds h.x = f.x+g.x; then
    h1=f1+g1 by A1,CFUNCDOM:1;
-   hence H =F+G by A2,Th4;
+   hence H =F+G by A2,Th3;
 end;
 
-theorem Th9:
+theorem Th6:
   for X being non empty set, a being Complex,
       F, G being VECTOR of C_Algebra_of_BoundedFunctions(X),
       f, g being Function of X,COMPLEX st f=F & g=G holds
@@ -557,18 +572,19 @@ proof
 A1: f=F & g=G;
 A2:C_Algebra_of_BoundedFunctions X is ComplexSubAlgebra of CAlgebra X by Th2;
   reconsider f1=F, g1=G as VECTOR of CAlgebra X by TARSKI:def 3;
+A3: a in COMPLEX by XCMPLX_0:def 2;
   hereby assume
-A3: G = a*F;
+A4: G = a*F;
    let x be Element of X;
-   g1=a*f1 by A2,A3,Th4;
-   hence g.x=a*f.x by A1,CFUNCDOM:4;
+   g1=a*f1 by A2,A4,Th3;
+   hence g.x=a*f.x by A1,A3,CFUNCDOM:4;
   end;
   assume for x be Element of X holds g.x=a*f.x; then
-  g1=a*f1 by A1,CFUNCDOM:4;
-  hence G =a*F by A2,Th4;
+  g1=a*f1 by A1,A3,CFUNCDOM:4;
+  hence G =a*F by A2,Th3;
 end;
 
-theorem Th10:
+theorem Th7:
   for X being non empty set,
       F, G, H being VECTOR of C_Algebra_of_BoundedFunctions(X),
       f, g, h being Function of X,COMPLEX st f=F & g=G & h=H holds
@@ -584,38 +600,38 @@ A2:C_Algebra_of_BoundedFunctions X is ComplexSubAlgebra of CAlgebra X by Th2;
    hereby assume
 A3: H = F*G;
     let x be Element of X;
-    h1 = f1*g1 by A2,A3,Th4;
+    h1 = f1*g1 by A2,A3,Th3;
     hence h.x = f.x * g.x by A1,CFUNCDOM:2;
    end;
    assume for x be Element of X holds h.x = f.x * g.x; then
    h1 = f1 * g1 by A1,CFUNCDOM:2;
-   hence H = F * G by A2,Th4;
+   hence H = F * G by A2,Th3;
 end;
 
-theorem Th11:
+theorem Th8:
   for X being non empty set holds
     0.C_Algebra_of_BoundedFunctions X = X -->0
 proof
   let X be non empty set;
 A1:C_Algebra_of_BoundedFunctions X is ComplexSubAlgebra of CAlgebra X by Th2;
   0.CAlgebra X = X -->0;
-  hence thesis by A1,Th4;
+  hence thesis by A1,Th3;
 end;
 
-theorem Th12:
+theorem Th9:
   for X being non empty set holds
     1_C_Algebra_of_BoundedFunctions X = X --> 1r
 proof
   let X be non empty set;
 A1:C_Algebra_of_BoundedFunctions X is ComplexSubAlgebra of CAlgebra X by Th2;
    1_CAlgebra X = X -->1r;
-   hence thesis by A1,Th4;
+   hence thesis by A1,Th3;
 end;
 
 definition let X be non empty set, F be set;
   assume
 A1: F in ComplexBoundedFunctions(X);
-  func modetrans(F,X) -> Function of X,COMPLEX means :DefB7:
+  func modetrans(F,X) -> Function of X,COMPLEX means :Def7:
   it = F & it|X is bounded;
   correctness by A1;
 end;
@@ -639,7 +655,7 @@ A1:now let z be set;
 end;
 end;
 
-Lm1:
+Lm2:
   for C being non empty set,
       f being PartFunc of C,COMPLEX holds
      ( |.f.| is bounded iff f is bounded )
@@ -651,32 +667,32 @@ A1: dom f = dom |.f.| by VALUED_1:def 11;
   proof
     assume |.f.| is bounded;
     then consider r1 being real number such that
-A3: for y being set st y in dom |.f.| holds
-    |.(|.f.| .y).| < r1 by SEQ_2:def 5;
+A2: for y being set st y in dom |.f.| holds
+    |.(|.f.| .y).| < r1 by COMSEQ_2:def 3;
     now let y be set;
      assume
-A5:  y in dom f;
-     then |.(|.f.|.y).| < r1 by A1,A3;
-     then |.|.(f.y).|.| < r1 by A1,A5,VALUED_1:def 11;
+A3:  y in dom f;
+     then |.(|.f.|.y).| < r1 by A1,A2;
+     then |.|.(f.y).|.| < r1 by A1,A3,VALUED_1:def 11;
      hence not r1 <= |.(f.y).|;
     end;
-    hence thesis by SEQ_2:def 5;
+    hence thesis by COMSEQ_2:def 3;
   end;
     assume f is bounded;
     then consider r2 being real number such that
-A7: for y being set st y in dom f holds |.(f.y).| < r2 by SEQ_2:def 5;
+A4: for y being set st y in dom f holds |.(f.y).| < r2 by COMSEQ_2:def 3;
     now
      take r2;
      let y be set;
      assume
-A8:  y in dom |.f.|;
-     then |.|.(f.y).|.| < r2 by A1,A7;
-     hence |.(|.f.|.y).| < r2 by A8,VALUED_1:def 11;
+A5:  y in dom |.f.|;
+     then |.|.(f.y).|.| < r2 by A1,A4;
+     hence |.(|.f.|.y).| < r2 by A5,VALUED_1:def 11;
     end;
-    hence |.f.| is bounded by SEQ_2:def 5;
+    hence |.f.| is bounded by COMSEQ_2:def 3;
 end;
 
-theorem Th13:
+theorem Th10:
   for X being non empty set,
       f being Function of X,COMPLEX st f | X is bounded holds
                     PreNorms f is bounded_above
@@ -687,7 +703,7 @@ A1: dom |.f.| = dom f by VALUED_1:def 11;
 A2: dom (|.f.| | X) = X /\ (dom |.f.|) by RELAT_1:61;
 A3: |.f.| | X = |.(f | X).| by RFUNCT_1:46;
   assume f|X is bounded;
-  then |.f.| | X is bounded by A3,Lm1;
+  then |.f.| | X is bounded by A3,Lm2;
   then consider p being real number such that
 A4: for c being set st c in dom (|.f.| | X) holds
                |.((|.f.| | X).c).| <= p by RFUNCT_1:72;
@@ -710,7 +726,7 @@ A9:r=|.f.t.|;
   hence thesis by XXREAL_2:def 10;
 end;
 
-theorem Th14:
+theorem Th11:
   for X being non empty set,
       f being Function of X,COMPLEX holds
   f|X is bounded iff PreNorms f is bounded_above
@@ -728,12 +744,12 @@ A2:now let t be Element of X;
    take K;
    thus f|X is bounded by A2,CFUNCT_1:69;
   end;
-  hence thesis by Th13;
+  hence thesis by Th10;
 end;
 
 definition let X be non empty set;
   func ComplexBoundedFunctionsNorm(X) ->
-              Function of ComplexBoundedFunctions(X),REAL means:DefB9C:
+              Function of ComplexBoundedFunctions(X),REAL means:Def9:
   for x be set st x in ComplexBoundedFunctions(X) holds
   it.x = upper_bound PreNorms(modetrans(x,X));
 existence
@@ -748,24 +764,24 @@ end;
 uniqueness
 proof
   let NORM1,NORM2 be Function of ComplexBoundedFunctions(X),REAL such that
-A1:for x be set st x in ComplexBoundedFunctions(X) holds
-  NORM1.x = upper_bound PreNorms(modetrans(x,X)) and
 A2:for x be set st x in ComplexBoundedFunctions(X) holds
+  NORM1.x = upper_bound PreNorms(modetrans(x,X)) and
+A3:for x be set st x in ComplexBoundedFunctions(X) holds
               NORM2.x = upper_bound PreNorms(modetrans(x,X));
-A3:dom NORM1 = ComplexBoundedFunctions(X) &
+A4:dom NORM1 = ComplexBoundedFunctions(X) &
   dom NORM2 = ComplexBoundedFunctions(X) by FUNCT_2:def 1;
   for z be set st z in ComplexBoundedFunctions(X) holds NORM1.z = NORM2.z
   proof
     let z be set such that
-A4: z in ComplexBoundedFunctions(X);
-    NORM1.z = upper_bound PreNorms(modetrans(z,X)) by A1,A4;
-    hence thesis by A2,A4;
+A5: z in ComplexBoundedFunctions(X);
+    NORM1.z = upper_bound PreNorms(modetrans(z,X)) by A2,A5;
+    hence thesis by A3,A5;
   end;
-  hence thesis by A3,FUNCT_1:2;
+  hence thesis by A4,FUNCT_1:2;
 end;
 end;
 
-theorem Th16:
+theorem Th12:
   for X being non empty set,
       f being Function of X,COMPLEX st f|X is bounded holds
                              modetrans(f,X) = f
@@ -774,10 +790,10 @@ proof
       f be Function of X,COMPLEX;
   assume f|X is bounded; then
   f in ComplexBoundedFunctions X;
-  hence thesis by DefB7;
+  hence thesis by Def7;
 end;
 
-theorem Th17:
+theorem Th13:
   for X being non empty set,
       f being Function of X,COMPLEX st f|X is bounded holds
   (ComplexBoundedFunctionsNorm(X)).f = upper_bound PreNorms f
@@ -788,8 +804,8 @@ proof
 A1:f|X is bounded; then
   f in ComplexBoundedFunctions(X); then
   (ComplexBoundedFunctionsNorm(X)).f = upper_bound PreNorms(modetrans(f,X))
-    by DefB9C;
-  hence thesis by Th16,A1;
+    by Def9;
+  hence thesis by Th12,A1;
 end;
 
 definition let X be non empty set;
@@ -810,7 +826,7 @@ registration let X be non empty set;
   correctness;
 end;
 
-Lm2:
+Lm3:
 now
  let X be non empty set;
  set F = C_Normed_Algebra_of_BoundedFunctions(X);
@@ -828,7 +844,7 @@ A2:x*e=(the multF of (CAlgebra X))||(ComplexBoundedFunctions(X)).
                                      by A1,C0SP1:def 8; then
 A3:e*x=(the multF of (CAlgebra X))||(ComplexBoundedFunctions(X)).
                                      (1_CAlgebra(X),f) by C0SP1:def 6;
-A4:1_CAlgebra(X) = 1_C_Algebra_of_BoundedFunctions(X) by Th12;
+A4:1_CAlgebra(X) = 1_C_Algebra_of_BoundedFunctions(X) by Th9;
  then [f,1_CAlgebra(X)]
      in [:(ComplexBoundedFunctions(X)),(ComplexBoundedFunctions(X)):]
                                                        by ZFMISC_1:87;
@@ -848,11 +864,11 @@ proof
   reconsider e = One_(ComplexBoundedFunctions(X),CAlgebra(X)) as
             Element of C_Normed_Algebra_of_BoundedFunctions(X);
   take e;
-  thus thesis by Lm2;
+  thus thesis by Lm3;
 end;
 end;
 
-theorem Th18:
+theorem Th14:
   for W being Normed_Complex_AlgebraStr,
       V being ComplexAlgebra st
       ComplexAlgebraStr(# the carrier of W,the multF of W,
@@ -955,7 +971,7 @@ A13: W is vector-associative
   proof
     let x, y be VECTOR of W;
     reconsider x1 = x, y1 = y as Element of V by A1;
-    let a be Complex;
+    let a be Element of COMPLEX;
     a * (x * y) = a * (x1 * y1) by A1;
     then a * (x * y) = (a * x1) * y1 by CFUNCDOM:def 9;
     hence a * (x * y) = (a * x) * y by A1;
@@ -971,7 +987,7 @@ A13: W is vector-associative
 ,GROUP_1:def 3,def 12,RLVECT_1:def 2,def 3,def 4;
 end;
 
-theorem Th19:
+theorem Th15:
   for X being non empty set holds
     C_Normed_Algebra_of_BoundedFunctions(X) is ComplexAlgebra
 proof
@@ -979,7 +995,7 @@ proof
   set W=C_Normed_Algebra_of_BoundedFunctions X;
   set V=C_Algebra_of_BoundedFunctions X;
   C_Algebra_of_BoundedFunctions X is ComplexAlgebra;
-  hence thesis by Th18;
+  hence thesis by Th14;
 end;
 
 theorem
@@ -994,13 +1010,13 @@ proof
 A1: [1r,f1] in [:COMPLEX,(ComplexBoundedFunctions X):];
   Mult_ (ComplexBoundedFunctions(X),CAlgebra(X)).(1r,F)
    =((the Mult of CAlgebra(X)) | [:COMPLEX,ComplexBoundedFunctions(X):]).
-                                     (1r,f1) by Def11
+                                     (1r,f1) by Def3
   .= (the Mult of CAlgebra(X)).(1r,f1) by A1,FUNCT_1:49
   .= F by CFUNCDOM:12;
   hence thesis;
 end;
 
-theorem Th21:
+theorem Th17:
   for X being non empty set holds
     C_Normed_Algebra_of_BoundedFunctions(X) is ComplexLinearSpace
 proof
@@ -1010,25 +1026,25 @@ proof
   proof
     let v be Point of C_Normed_Algebra_of_BoundedFunctions(X);
     reconsider v1 = v as Element of ComplexBoundedFunctions(X);
-A2: 1r*v = ((the Mult of CAlgebra(X))|
-             [:COMPLEX,ComplexBoundedFunctions(X):]).([1r,v1]) by Def11
+A1: 1r*v = ((the Mult of CAlgebra(X))|
+             [:COMPLEX,ComplexBoundedFunctions(X):]).([1r,v1]) by Def3
         .= (the Mult of CAlgebra(X)).(1r,v1) by FUNCT_1:49
         .= v1  by CFUNCDOM:12;
-    thus thesis by A2;
+    thus thesis by A1;
   end;
-  hence thesis by Th19,CLVECT_1:def 5;
+  hence thesis by Th15,CLVECT_1:def 5;
 end;
 
-theorem Th22:
+theorem Th18:
   for X being non empty set holds
     X --> 0 = 0.(C_Normed_Algebra_of_BoundedFunctions(X))
 proof
   let X be non empty set;
-  X --> 0 = 0.(C_Algebra_of_BoundedFunctions(X)) by Th11;
+  X --> 0 = 0.(C_Algebra_of_BoundedFunctions(X)) by Th8;
   hence thesis;
 end;
 
-theorem Th23:
+theorem Th19:
   for X being non empty set,
       x being Element of X,
       f being Function of X,COMPLEX,
@@ -1044,9 +1060,9 @@ A1: f = F and
 A2: f | X is bounded;
   reconsider r=|.f.x.| as ext-real number;
 A3:r in PreNorms f;
-  PreNorms f is non empty bounded_above by Th14,A2; then
+  PreNorms f is non empty bounded_above by Th11,A2; then
   r <= upper_bound PreNorms(f) by A3,SEQ_4:def 1;
-  hence |.f.x.| <= ||.F.|| by A1,A2,Th17;
+  hence |.f.x.| <= ||.F.|| by A1,A2,Th13;
 end;
 
 theorem
@@ -1071,12 +1087,12 @@ A3: r0 in PreNorms g by XBOOLE_0:def 1;
   end;
   then
 A4:  0 <= r1 by A3;
-  PreNorms g is non empty bounded_above by Th14,A2;
+  PreNorms g is non empty bounded_above by Th11,A2;
   then 0 <= upper_bound (PreNorms g) by A3,A4,SEQ_4:def 1;
-  hence 0 <= ||.F.|| by A1,A2,Th17;
+  hence 0 <= ||.F.|| by A1,A2,Th13;
 end;
 
-theorem Th25:
+theorem Th21:
   for X being non empty set,
       F being Point of C_Normed_Algebra_of_BoundedFunctions(X) st
         F = 0.(C_Normed_Algebra_of_BoundedFunctions X) holds
@@ -1090,7 +1106,7 @@ proof
   then consider g being Function of X,COMPLEX such that
 A1:g = F and
 A2:g | X is bounded;
-A3:( not PreNorms g is empty & PreNorms g is bounded_above ) by A2,Th14;
+A3:( not PreNorms g is empty & PreNorms g is bounded_above ) by A2,Th11;
   consider r0 being set such that
 A4:r0 in PreNorms g by XBOOLE_0:def 1;
   reconsider r0 as Real by A4;
@@ -1103,17 +1119,17 @@ A7:now
    assume r in PreNorms g;
    then consider t be Element of X such that
 A8:r=|.(g.t).|;
-   z=g by A6,A1,Th22; then
+   z=g by A6,A1,Th18; then
    |.(g.t).| = |.(0).| by FUNCOP_1:7
            .= 0;
    hence 0 <= r & r <=0 by A8;
   end; then
   0<=r0 by A4; then
   upper_bound (PreNorms g) = 0 by A7,A3,A4,A5,SEQ_4:def 1;
-  hence 0 = ||.F.|| by A1,A2,Th17;
+  hence 0 = ||.F.|| by A1,A2,Th13;
 end;
 
-theorem Th26:
+theorem Th22:
   for X being non empty set,
       f, g, h being Function of X,COMPLEX,
       F, G, H being Point of C_Normed_Algebra_of_BoundedFunctions(X)
@@ -1127,10 +1143,10 @@ proof
                        as VECTOR of C_Algebra_of_BoundedFunctions(X);
 A1: H = F + G iff h1 = f1 + g1;
   assume f = F & g = G & h = H;
-  hence thesis by A1,Th8;
+  hence thesis by A1,Th5;
  end;
 
-theorem Th27:
+theorem Th23:
   for X being non empty set,
       a being Complex,
       f, g being Function of X,COMPLEX,
@@ -1145,10 +1161,10 @@ proof
   reconsider f1 = F, g1 = G as VECTOR of C_Algebra_of_BoundedFunctions(X);
 A1: G = a * F iff g1 = a * f1;
   assume f = F & g = G;
-  hence thesis by A1,Th9;
+  hence thesis by A1,Th6;
 end;
 
-theorem Th28:
+theorem Th24:
   for X being non empty set,
       f, g, h being Function of X,COMPLEX,
       F, G, H being Point of C_Normed_Algebra_of_BoundedFunctions(X)
@@ -1162,10 +1178,10 @@ proof
                         as VECTOR of C_Algebra_of_BoundedFunctions(X);
 A1: H = F * G iff h1 = f1 * g1;
   assume f = F & g = G & h = H;
-  hence thesis by A1,Th10;
+  hence thesis by A1,Th7;
 end;
 
-theorem Th29:
+theorem Th25:
   for X being non empty set,
       a being Complex,
       F, G being Point of C_Normed_Algebra_of_BoundedFunctions(X) holds
@@ -1182,14 +1198,14 @@ A1:now
    then consider g being Function of X,COMPLEX such that
 A2:F = g and
 A3:g | X is bounded;
-A4:not PreNorms g is empty & PreNorms g is bounded_above by A3,Th14;
+A4:not PreNorms g is empty & PreNorms g is bounded_above by A3,Th11;
    consider r0 being set such that
 A5:r0 in PreNorms g by XBOOLE_0:def 1;
    reconsider r0 as Real by A5;
 A6:( ( for s being real number st s in PreNorms g holds
          s <= 0 ) implies upper_bound (PreNorms g) <= 0 ) by SEQ_4:45;
    assume F = 0.C_Normed_Algebra_of_BoundedFunctions(X); then
-A7:   z = g by A2,Th22;
+A7:   z = g by A2,Th18;
 A8:now
     let r be Real;
     assume r in PreNorms g;
@@ -1201,7 +1217,7 @@ A9: r=|.(g.t).|;
    end; then
    0<=r0 by A5; then
    upper_bound (PreNorms g) = 0  by A8,A4,A6,A5,SEQ_4:def 1;
-   hence ||.F.|| = 0 by A2,A3,Th17;
+   hence ||.F.|| = 0 by A2,A3,Th13;
   end;
 A10:||.(F + G).|| <= ||.F.|| + ||.G.||
   proof
@@ -1220,11 +1236,11 @@ A16: f1 | X is bounded;
 A17:now
      let t be Element of X;
      |. f1.t .| <= ||.F.|| & |. g1.t .| <= ||.G.||
-                                        by A15,A16,A13,A14,Th23; then
+                                        by A15,A16,A13,A14,Th19; then
 A18:     |. f1.t .| + |. g1.t .| <= ||.F.|| + ||.G.|| by XREAL_1:7;
      ( |.(h1.t).| = |.(f1.t) + (g1.t).|
           & |.(f1.t) + (g1.t).| <= |.(f1.t).| + |.(g1.t).| )
-                                   by A15,A13,A11,Th26,COMPLEX1:56;
+                                   by A15,A13,A11,Th22,COMPLEX1:56;
      hence |.(h1.t).| <= ||.F.|| + ||.G.|| by A18,XXREAL_0:2;
     end;
 A19:now
@@ -1236,7 +1252,7 @@ A19:now
     ( for s being real number st s in PreNorms h1 holds
               s <= ||.F.|| + ||.G.|| ) implies
        upper_bound(PreNorms h1) <= ||.F.|| + ||.G.|| by SEQ_4:45;
-    hence ||.(F + G).|| <= ||.F.|| + ||.G.|| by A11,A12,A19,Th17;
+    hence ||.(F + G).|| <= ||.F.|| + ||.G.|| by A11,A12,A19,Th13;
   end;
 A20:||.(a * F).|| = (|.a.|) * ||.F.||
   proof
@@ -1250,11 +1266,11 @@ A23: h1 = a * F and
 A24: h1 | X is bounded;
 A25:now
      let t be Element of X;
-     |.(h1.t).| = |.a * (f1.t).| by A21,A23,Th27; then
+     |.(h1.t).| = |.a * (f1.t).| by A21,A23,Th23; then
      |.(h1.t).| = |.a.| * |.(f1.t).| by COMPLEX1:65;
-     hence |.(h1.t).| <= |.a.| * ||.F.|| by A21,A22,Th23,XREAL_1:64;
+     hence |.(h1.t).| <= |.a.| * ||.F.|| by A21,A22,Th19,XREAL_1:64;
     end;
-A27:now
+A26:now
      let r be real number;
      assume r in PreNorms h1;
      then ex t being Element of X st r = |.(h1.t).|;
@@ -1263,43 +1279,43 @@ A27:now
     ( ( for s being real number st s in PreNorms h1 holds
           s <= |.a.| * ||.F.|| ) implies
         upper_bound (PreNorms h1) <= |.a.| * ||.F.|| ) by SEQ_4:45; then
-A28:       ||.(a * F).|| <= |.a.| * ||.F.|| by A23,A24,A27,Th17;
+A27:       ||.(a * F).|| <= |.a.| * ||.F.|| by A23,A24,A26,Th13;
     per cases;
     suppose
-A29:  a <> 0;
-A30:  now
+A28:  a <> 0;
+A29:  now
        let t be Element of X;
        |.(a " ).| = |.(1 / a).|; then
-A31:   |.(a " ).| = 1 / |.a.| by COMPLEX1:80;
-       h1.t = a * (f1.t) by A21,A23,Th27;
+A30:   |.(a " ).| = 1 / |.a.| by COMPLEX1:80;
+       h1.t = a * (f1.t) by A21,A23,Th23;
        then (a") * (h1.t) = ((a") * a) * (f1.t); then
-A32:   (a") * (h1.t) = 1 * (f1.t) by A29,XCMPLX_0:def 7;
+A31:   (a") * (h1.t) = 1 * (f1.t) by A28,XCMPLX_0:def 7;
        ( |.(a") * (h1.t).| = |.(a " ).| * |.(h1.t).|
                      & 0 <= |.(a " ).|) by COMPLEX1:65;
        hence |.(f1.t).| <= ((|.a.|) " ) * ||.(a * F).||
-                           by A23,A24,A32,A31,Th23,XREAL_1:64;
+                           by A23,A24,A31,A30,Th19,XREAL_1:64;
       end;
-A33:  now
+A32:  now
        let r be Real;
        assume r in PreNorms f1;
        then ex t being Element of X st r = |.(f1.t).|;
-       hence r <= ((|.a.|) " ) * ||.(a * F).|| by A30;
+       hence r <= ((|.a.|) " ) * ||.(a * F).|| by A29;
       end;
       ( for s being real number st s in PreNorms f1 holds
          s <= ((|.a.|) " ) * ||.(a * F).|| ) implies
              upper_bound (PreNorms f1) <= ((|.a.|) " ) * ||.(a * F).||
                                            by SEQ_4:45;
-      then ||.F.|| <= ((|.a.|) " ) * ||.(a * F).|| by A21,A22,A33,Th17;
+      then ||.F.|| <= ((|.a.|) " ) * ||.(a * F).|| by A21,A22,A32,Th13;
       then |.a.| * ||.F.|| <= |.a.| * (((|.a.|) " ) * ||.(a * F).||)
                                               by XREAL_1:64; then
       |.a.| * ||.F.|| <= (|.a.| * ((|.a.|) " )) * ||.(a * F).||;
-      then |.a.| * ||.F.|| <= 1 * ||.(a * F).|| by A29,XCMPLX_0:def 7;
-      hence ||.(a * F).|| = |.a.| * ||.F.|| by A28,XXREAL_0:1;
+      then |.a.| * ||.F.|| <= 1 * ||.(a * F).|| by A28,XCMPLX_0:def 7;
+      hence ||.(a * F).|| = |.a.| * ||.F.|| by A27,XXREAL_0:1;
     end;
     suppose
-A35:  a = 0;
+A33:  a = 0;
       reconsider fz = F as VECTOR of C_Algebra_of_BoundedFunctions(X);
-      a * fz = (a + a) * fz by A35
+      a * fz = (a + a) * fz by A33
             .= (a * fz) + (a * fz) by CLVECT_1:def 3;
       then 0.C_Algebra_of_BoundedFunctions(X)
                      = (- (a * fz)) + ((a * fz) + (a * fz)) by VECTSP_1:16;
@@ -1308,9 +1324,9 @@ A35:  a = 0;
       then 0.C_Algebra_of_BoundedFunctions(X)
         = (0.C_Algebra_of_BoundedFunctions(X)) + (a * fz) by VECTSP_1:16;
       then
-A36:  a * F = 0.C_Normed_Algebra_of_BoundedFunctions(X) by RLVECT_1:4;
-      |.a.| * ||.F.|| = 0 * ||.F.|| by A35;
-      hence ||.(a * F).|| = |.a.| * ||.F.|| by A36,Th25;
+A34:  a * F = 0.C_Normed_Algebra_of_BoundedFunctions(X) by RLVECT_1:4;
+      |.a.| * ||.F.|| = 0 * ||.F.|| by A33;
+      hence ||.(a * F).|| = |.a.| * ||.F.|| by A34,Th21;
     end;
     end;
     now
@@ -1318,35 +1334,35 @@ A36:  a * F = 0.C_Normed_Algebra_of_BoundedFunctions(X) by RLVECT_1:4;
      reconsider z = X --> 0c as Function of X,COMPLEX;
      F in ComplexBoundedFunctions(X);
      then consider g being Function of X,COMPLEX such that
-A37: F = g and
-A38: g | X is bounded;
+A35: F = g and
+A36: g | X is bounded;
      assume
-A39:||.F.|| = 0;
+A37:||.F.|| = 0;
     now
      let t be Element of X;
-     |.(g.t).| = 0 by A37,A38,A39,Th23;
+     |.(g.t).| = 0 by A35,A36,A37,Th19;
      hence g.t = 0
               .= z.t by FUNCOP_1:7;
     end;
     then g = z by FUNCT_2:63;
-    hence F = 0.C_Normed_Algebra_of_BoundedFunctions(X) by A37,Th22;
+    hence F = 0.C_Normed_Algebra_of_BoundedFunctions(X) by A35,Th18;
   end;
   hence thesis by A1,A20,A10;
 end;
 
-Th30:
+Lm4:
   for X being non empty set holds
     C_Normed_Algebra_of_BoundedFunctions(X) is
       reflexive discerning ComplexNormSpace-like
 proof
   let X be non empty set;
-  thus ||.(0.C_Normed_Algebra_of_BoundedFunctions(X)).|| = 0 by Th29;
+  thus ||.(0.C_Normed_Algebra_of_BoundedFunctions(X)).|| = 0 by Th25;
   for x, y being Point of C_Normed_Algebra_of_BoundedFunctions(X)
   for a being Complex holds
   ( ( ||.x.|| = 0 implies x = 0.C_Normed_Algebra_of_BoundedFunctions(X) )
   & ( x = 0.C_Normed_Algebra_of_BoundedFunctions(X) implies ||.x.|| = 0 )
   & ||.(a * x).|| = |.a.| * ||.x.|| & ||.(x + y).|| <= ||.x.|| + ||.y.|| )
-                      by Th29;
+                      by Th25;
   hence thesis by CLVECT_1:def 13,NORMSP_0:def 5;
 end;
 
@@ -1355,10 +1371,10 @@ registration let X be non empty set;
       Abelian add-associative right_zeroed vector-distributive
       scalar-distributive scalar-associative scalar-unital discerning
       reflexive ComplexNormSpace-like;
-  coherence by Th21,Th30;
+  coherence by Th17,Lm4;
 end;
 
-theorem Th31:
+theorem Th26:
   for X being non empty set,
       f, g, h being Function of X,COMPLEX,
       F, G, H being Point of C_Normed_Algebra_of_BoundedFunctions(X)
@@ -1378,7 +1394,7 @@ A3: for x being Element of X holds h.x = (f.x) - (g.x);
      h.x = (f.x) - (g.x) by A3;
      hence (h.x) + (g.x) = f.x;
     end;
-    then F = H + G by A1,Th26;
+    then F = H + G by A1,Th22;
     then F - G = H + (G - G) by RLVECT_1:def 3;
     then F - G = H + (0.C_Normed_Algebra_of_BoundedFunctions X)
                                                          by RLVECT_1:15;
@@ -1392,7 +1408,7 @@ A3: for x being Element of X holds h.x = (f.x) - (g.x);
 A4: H + G = F by RLVECT_1:13;
     now
      let x be Element of X;
-     f.x = (h.x) + (g.x) by A1,A4,Th26;
+     f.x = (h.x) + (g.x) by A1,A4,Th22;
      hence (f.x) - (g.x) = h.x;
     end;
     hence for x being Element of X holds h.x = (f.x) - (g.x);
@@ -1400,7 +1416,7 @@ A4: H + G = F by RLVECT_1:13;
   hence thesis by A2;
 end;
 
-theorem Th32:
+theorem Th27:
   for X being non empty set,
       seq being sequence of C_Normed_Algebra_of_BoundedFunctions(X)
                     st seq is CCauchy holds seq is convergent
@@ -1430,16 +1446,16 @@ A6:   h1 | X is bounded;
       vseq.m in ComplexBoundedFunctions X;
       then ex vseqm being Function of X,COMPLEX st
       vseq.m = vseqm & vseqm | X is bounded; then
-A7:   modetrans((vseq.m),X) = vseq.m by Th16;
+A7:   modetrans((vseq.m),X) = vseq.m by Th12;
       vseq.k in ComplexBoundedFunctions X;
       then ex vseqk being Function of X,COMPLEX st
       vseq.k = vseqk & vseqk | X is bounded; then
-A8:   modetrans ((vseq.k),X) = vseq.k by Th16;
+A8:   modetrans ((vseq.k),X) = vseq.k by Th12;
       ( xseq.m = (modetrans((vseq.m),X)).x
                 & xseq.k = modetrans( (vseq.k),X).x ) by A3;
-      then (xseq.m) - (xseq.k) = h1.x by A7,A8,A5,Th31;
+      then (xseq.m) - (xseq.k) = h1.x by A7,A8,A5,Th26;
       hence |.(xseq.m) - (xseq.k).|
-                    <= ||.((vseq.m) - (vseq.k)).|| by A5,A6,Th23;
+                    <= ||.((vseq.m) - (vseq.k)).|| by A5,A6,Th19;
     end;
     now
      let e be Real;
@@ -1501,13 +1517,13 @@ A21: xseq.n = modetrans((vseq.n),X).x by A18;
      vseq.n in ComplexBoundedFunctions X; then
 A22: ex h1 being Function of X,COMPLEX st
         vseq.n = h1 & h1 | X is bounded;
-     then modetrans((vseq.n),X) = vseq.n by Th16;
-     then |.(xseq.n).| <= ||.(vseq.n).|| by A17,A22,A21,Th23;
+     then modetrans((vseq.n),X) = vseq.n by Th12;
+     then |.(xseq.n).| <= ||.(vseq.n).|| by A17,A22,A21,Th19;
      then |.xseq.|.n <= ||.(vseq.n).|| by VALUED_1:18;
      hence |.xseq.|.n <= ||.vseq.||.n by NORMSP_0:def 4;
    end;
    ( |.xseq.| is convergent & |.(tseq.x).| = lim (|.xseq.| ))
-                                         by A19,COMSEQ_2:11;
+                                         by A19,SEQ_2:27;
    hence |.(tseq.x).| <= lim ||.vseq.|| by A16,A20,SEQ_2:18;
   end; then
    for x be Element of X st x in  X /\ (dom tseq) holds
@@ -1555,16 +1571,16 @@ A32:    h1 | X is bounded;
         vseq.m in ComplexBoundedFunctions X;
         then ex vseqm being Function of X,COMPLEX st
                      vseq.m = vseqm & vseqm | X is bounded; then
-A33:    modetrans((vseq.m),X) = vseq.m by Th16;
+A33:    modetrans((vseq.m),X) = vseq.m by Th12;
         vseq.k in ComplexBoundedFunctions(X);
         then ex vseqk being Function of X,COMPLEX st
                      vseq.k = vseqk & vseqk | X is bounded; then
-A34:    modetrans((vseq.k),X) = vseq.k by Th16;
+A34:    modetrans((vseq.k),X) = vseq.k by Th12;
         ( xseq.m = modetrans((vseq.m),X).x
                     & xseq.k = modetrans((vseq.k),X).x ) by A26;
-        then (xseq.m) - (xseq.k) = h1.x by A33,A34,A31,Th31;
+        then (xseq.m) - (xseq.k) = h1.x by A33,A34,A31,Th26;
         hence |.((xseq.m) - (xseq.k)).|
-                  <= ||.((vseq.m) - (vseq.k)).|| by A31,A32,Th23;
+                  <= ||.((vseq.m) - (vseq.k)).|| by A31,A32,Th19;
       end;
 A35:  for m being Element of NAT st m >= k holds rseq.m <= e
       proof
@@ -1592,12 +1608,12 @@ A37:  now
       end; then
 A38:  rseq = |.(xseq - fseq).| by FUNCT_2:12;
 A39:  fseq is convergent by CFCONT_1:26;
-A41:  lim rseq <= e by A39,A35,A38,A27,RSSPACE2:5;
+A40:  lim rseq <= e by A39,A35,A38,A27,RSSPACE2:5;
       lim fseq = fseq.0 by CFCONT_1:28;
       then lim fseq = xseq.n by FUNCOP_1:7;
       then lim (xseq-fseq)=(tseq.x)-(xseq.n) by A27,A28,A39,COMSEQ_2:26;
-      then lim rseq = |.((tseq.x)-(xseq.n)).| by A39,A27,A38,COMSEQ_2:11;
-      then |.((xseq.n)-(tseq.x)).|<= e by A41,COMPLEX1:60;
+      then lim rseq = |.((tseq.x)-(xseq.n)).| by A39,A27,A38,SEQ_2:27;
+      then |.((xseq.n)-(tseq.x)).|<= e by A40,COMPLEX1:60;
       hence |.(modetrans((vseq.n),X).x - tseq.x).| <= e by A26;
      end;
      hence for x being Element of X
@@ -1607,7 +1623,7 @@ A41:  lim rseq <= e by A39,A35,A38,A27,RSSPACE2:5;
       for x being Element of X
         holds |.(modetrans((vseq.n),X).x-tseq.x).|<=e;
   end;
-A42:for e being Real st e > 0 holds
+A41:for e being Real st e > 0 holds
        ex k being Element of NAT st
             for n being Element of NAT st n >= k holds
                           ||.((vseq.n) - tv).|| <= e
@@ -1615,37 +1631,37 @@ A42:for e being Real st e > 0 holds
     let e be Real;
     assume e > 0;
     then consider k being Element of NAT such that
-A43:for n being Element of NAT st n >= k holds
+A42:for n being Element of NAT st n >= k holds
            for x being Element of X holds
              |.(modetrans((vseq.n),X).x-tseq.x).|<= e by A23;
     take k;
     hereby
      let n be Element of NAT;
      assume
-A44:    n >= k;
+A43:    n >= k;
      vseq.n in ComplexBoundedFunctions X;
      then consider f1 being Function of X,COMPLEX such that
-A45:    f1 = vseq.n and
+A44:    f1 = vseq.n and
         f1 | X is bounded;
      (vseq.n) - tv in ComplexBoundedFunctions X;
      then consider h1 being Function of X,COMPLEX such that
-A46:    h1 = (vseq.n) - tv and
-A47:    h1 | X is bounded;
-A48: now
+A45:    h1 = (vseq.n) - tv and
+A46:    h1 | X is bounded;
+A47: now
       let t be Element of X;
       modetrans(vseq.n,X) = f1 & h1.t=(f1.t)-(tseq.t)
-        by A45,A46,DefB7,Th31;
-      hence |.(h1.t).| <= e by A43,A44;
+        by A44,A45,Def7,Th26;
+      hence |.(h1.t).| <= e by A42,A43;
      end;
-A49: now
+A48: now
       let r be Real;
       assume r in PreNorms h1;
       then ex t being Element of X st r = |.(h1.t).|;
-      hence r <= e by A48;
+      hence r <= e by A47;
      end;
      (for s being real number st s in PreNorms h1 holds s<=e) implies
        upper_bound (PreNorms h1) <= e by SEQ_4:45;
-     hence ||.((vseq.n)-tv).||<=e by A46,A47,A49,Th17;
+     hence ||.((vseq.n)-tv).||<=e by A45,A46,A48,Th13;
     end;
   end;
   for e being Real st e > 0 holds ex m being Element of NAT st
@@ -1654,16 +1670,16 @@ A49: now
   proof
     let e be Real;
     assume
-A50:  e > 0;
+A49:  e > 0;
     consider m being Element of NAT such that
-A51:for n being Element of NAT st n >= m holds
-                         ||.((vseq.n)-tv).||<= e / 2 by A42,A50;
+A50:for n being Element of NAT st n >= m holds
+                         ||.((vseq.n)-tv).||<= e / 2 by A41,A49;
     take m;
-A52:e / 2 < e by A50,XREAL_1:216;
+A51:e / 2 < e by A49,XREAL_1:216;
     hereby let n be Element of NAT;
      assume n >= m;
-     then ||.((vseq.n) - tv).|| <= e / 2 by A51;
-     hence ||.((vseq.n) - tv).|| < e by A52,XXREAL_0:2;
+     then ||.((vseq.n) - tv).|| <= e / 2 by A50;
+     hence ||.((vseq.n) - tv).|| < e by A51,XXREAL_0:2;
     end;
   end;
   hence thesis by CLVECT_1:def 15;
@@ -1674,7 +1690,7 @@ registration let X be non empty set;
   coherence
   proof
     for seq being sequence of C_Normed_Algebra_of_BoundedFunctions(X)
-      st seq is CCauchy holds seq is convergent by Th32;
+      st seq is CCauchy holds seq is convergent by Th27;
     hence thesis by CLOPBAN1:def 13;
   end;
 end;
@@ -1686,14 +1702,14 @@ proof
   let X be non empty set;
   set B = C_Normed_Algebra_of_BoundedFunctions(X);
   reconsider B = C_Normed_Algebra_of_BoundedFunctions(X)
-                           as non empty Normed_Complex_Algebra by Th19;
+                           as non empty Normed_Complex_Algebra by Th15;
   set X1 = ComplexBoundedFunctions X;
   1.B in ComplexBoundedFunctions X;
   then consider ONE being Function of X,COMPLEX such that
 A1: ONE = 1.B and
 A2: ONE | X is bounded;
   1.B = 1_C_Algebra_of_BoundedFunctions(X); then
-A3: 1. B = X --> 1r by Th12;
+A3: 1. B = X --> 1r by Th9;
   for s being set holds (s in PreNorms ONE iff s = 1)
   proof
     set t = the Element of X;
@@ -1710,7 +1726,7 @@ A5:  s = |.((X --> 1).t).| by A1,A3;
   end;
   then PreNorms ONE = {1} by TARSKI:def 1;
   then upper_bound (PreNorms ONE) = 1 by SEQ_4:9; then
-A6: ||.(1. B).|| = 1 by A1,A2,Th17;
+A6: ||.(1. B).|| = 1 by A1,A2,Th13;
 A7:now
     let a be Complex;
     let f, g be Element of B;
@@ -1736,12 +1752,12 @@ A12: h1 = a * g and
     h1 | X is bounded;
     now
      let x be Element of X;
-     h3.x = a * (h2.x) by A11,A10,Th27;
-     then h3.x = a * ((f1.x) * (g1.x)) by A8,A9,A11,Th28;
+     h3.x = a * (h2.x) by A11,A10,Th23;
+     then h3.x = a * ((f1.x) * (g1.x)) by A8,A9,A11,Th24;
      then h3.x = (f1.x) * (a * (g1.x));
-     hence h3.x = (f1.x) * (h1.x) by A9,A12,Th27;
+     hence h3.x = (f1.x) * (h1.x) by A9,A12,Th23;
     end;
-    hence a * (f * g) = f * (a * g) by A8,A12,A10,Th28;
+    hence a * (f * g) = f * (a * g) by A8,A12,A10,Th24;
   end;
 A13:now
     let f, g be Element of B;
@@ -1753,12 +1769,12 @@ A15: f1 | X is bounded;
     then consider g1 being Function of X,COMPLEX such that
 A16:     g1 = g and
 A17:     g1 | X is bounded;
-A18: ( not PreNorms g1 is empty & PreNorms g1 is bounded_above) by A17,Th13;
+A18: ( not PreNorms g1 is empty & PreNorms g1 is bounded_above) by A17,Th10;
     f * g in ComplexBoundedFunctions(X);
     then consider h1 being Function of X,COMPLEX such that
 A19: h1 = f * g and
 A20: h1 | X is bounded;
-A21: not PreNorms f1 is empty & PreNorms f1 is bounded_above by A15,Th13;
+A21: not PreNorms f1 is empty & PreNorms f1 is bounded_above by A15,Th10;
     now
       let s be real number;
       assume s in PreNorms h1;
@@ -1773,7 +1789,7 @@ A25: (upper_bound (PreNorms f1)) * |.(g1.t).|
                                           by A23,XREAL_1:64;
 A26:  |.(f1.t).|*|.(g1.t).|<=(upper_bound(PreNorms f1))*|.(g1.t).|
                                                  by A24,XREAL_1:64;
-      |.h1.t.| = |.((f1.t) * (g1.t)).| by A14,A16,A19,Th28;
+      |.h1.t.| = |.((f1.t) * (g1.t)).| by A14,A16,A19,Th24;
       then abs (h1.t) = |.(f1.t).| * |.(g1.t).| by COMPLEX1:65;
       hence s <= (upper_bound (PreNorms f1)) * (upper_bound (PreNorms g1))
                                    by A22,A26,A25,XXREAL_0:2;
@@ -1781,9 +1797,9 @@ A26:  |.(f1.t).|*|.(g1.t).|<=(upper_bound(PreNorms f1))*|.(g1.t).|
     then
 A27:upper_bound (PreNorms h1) <= (upper_bound (PreNorms f1)) *
        (upper_bound PreNorms g1) by SEQ_4:45;
-A28: ||.g.|| = upper_bound PreNorms g1 by A16,A17,Th17;
-    ||.f.|| = upper_bound PreNorms f1 by A14,A15,Th17;
-    hence ||.(f * g).|| <= ||.f.|| * ||.g.|| by A19,A20,A28,A27,Th17;
+A28: ||.g.|| = upper_bound PreNorms g1 by A16,A17,Th13;
+    ||.f.|| = upper_bound PreNorms f1 by A14,A15,Th13;
+    hence ||.(f * g).|| <= ||.f.|| * ||.g.|| by A19,A20,A28,A27,Th13;
   end;
 A29:now
     let f, g, h be Element of B;
@@ -1817,15 +1833,15 @@ A36: gPh1 = g + h and
     gPh1 | X is bounded;
     now
      let x be Element of X;
-     F1.x = (gPh1.x) * (f1.x) by A30,A36,A33,Th28;
-     then F1.x = ((g1.x) + (h1.x)) * (f1.x) by A32,A31,A36,Th26;
+     F1.x = (gPh1.x) * (f1.x) by A30,A36,A33,Th24;
+     then F1.x = ((g1.x) + (h1.x)) * (f1.x) by A32,A31,A36,Th22;
      then F1.x = ((g1.x) * (f1.x)) + ((h1.x) * (f1.x));
-     then F1.x = (gf1.x) + ((h1.x) * (f1.x)) by A30,A32,A35,Th28;
-     hence F1.x = (gf1.x) + (hf1.x) by A30,A31,A34,Th28;
+     then F1.x = (gf1.x) + ((h1.x) * (f1.x)) by A30,A32,A35,Th24;
+     hence F1.x = (gf1.x) + (hf1.x) by A30,A31,A34,Th24;
     end;
-    hence (g + h) * f = (g * f) + (h * f) by A35,A34,A33,Th26;
+    hence (g + h) * f = (g * f) + (h * f) by A35,A34,A33,Th22;
   end;
-  for f being Element of B holds (1. B) * f = f by Lm2; then
+  for f being Element of B holds (1. B) * f = f by Lm3; then
 A37:B is left_unital by VECTSP_1:def 8;
 A38:B is Banach_Algebra-like_1 by A13,CLOPBAN2:def 9;
 A39:B is Banach_Algebra-like_2 by A6,CLOPBAN2:def 10;

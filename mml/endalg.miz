@@ -3,7 +3,7 @@
 ::  by Jaros{\l}aw Gryko
 ::
 :: Received October 17, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,7 +17,7 @@ environ
 
  vocabularies UNIALG_1, FUNCT_2, STRUCT_0, FUNCT_1, MSUALG_3, SUBSET_1,
       RELAT_1, XBOOLE_0, TARSKI, BINOP_1, ALGSTR_0, MESFUNC1, VECTSP_1,
-      GROUP_1, MSUALG_1, AUTALG_1, PBOOLE, CARD_3, PZFMISC1, MEMBER_1, CARD_1,
+      GROUP_1, MSUALG_1, AUTALG_1, PBOOLE, MEMBER_1, CARD_1,
       FUNCOP_1, MSUHOM_1, MSSUBFAM, GROUP_6, WELLORD1, ZFMISC_1, ENDALG;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PBOOLE,
       CARD_3, BINOP_1, PARTFUN1, FUNCT_2, FUNCOP_1, NUMBERS, STRUCT_0,
@@ -26,7 +26,7 @@ environ
  constructors BINOP_1, CARD_3, PZFMISC1, VECTSP_1, GROUP_6, ALG_1, MSUALG_3,
       MSUHOM_1, AUTALG_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, FUNCT_2, PBOOLE, STRUCT_0,
-      VECTSP_1, MSUALG_1, ALGSTR_0, RELSET_1;
+      VECTSP_1, MSUALG_1, ALGSTR_0, RELSET_1, AUTALG_1;
  requirements SUBSET, BOOLE;
  definitions AUTALG_1, FUNCT_1, TARSKI, VECTSP_1, XBOOLE_0, GROUP_1, FUNCOP_1,
       STRUCT_0, ALGSTR_0, FUNCT_2;
@@ -129,14 +129,14 @@ proof
   hence thesis by FUNCT_2:9;
 end;
 
-theorem Th3:
+theorem Th2:
   id the carrier of UA in UAEnd UA
 proof
   id the carrier of UA is_homomorphism UA, UA by ALG_1:5;
   hence thesis by Def1;
 end;
 
-theorem Th4:
+theorem Th3:
   for f1, f2 be Element of UAEnd UA holds f1 * f2 in UAEnd UA
 proof
   let f1, f2 be Element of UAEnd UA;
@@ -158,7 +158,7 @@ A1: for x, y be Element of UAEnd UA ex m be Element of UAEnd UA st P[x,y,m ]
     proof
       let x, y be Element of UAEnd UA;
       reconsider xx = x, yy = y as Function of UA, UA;
-      reconsider m = yy * xx as Element of UAEnd UA by Th4;
+      reconsider m = yy * xx as Element of UAEnd UA by Th3;
       take m;
       thus thesis;
     end;
@@ -185,11 +185,11 @@ definition
   let UA;
   func UAEndMonoid UA -> strict multLoopStr means
   :Def3:
-  the carrier of it =
-  UAEnd UA & the multF of it = UAEndComp UA & 1.it = id the carrier of UA;
+  the carrier of it = UAEnd UA &
+  the multF of it = UAEndComp UA & 1.it = id the carrier of UA;
   existence
   proof
-    reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
+    reconsider i = id the carrier of UA as Element of UAEnd UA by Th2;
     take multLoopStr(#UAEnd UA, UAEndComp UA, i#);
     thus thesis;
   end;
@@ -201,7 +201,7 @@ registration
   cluster UAEndMonoid UA -> non empty;
   coherence
   proof
-    reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
+    reconsider i = id the carrier of UA as Element of UAEnd UA by Th2;
     set M = multLoopStr(#UAEnd UA, UAEndComp UA, i#);
     1.M = i;
     hence thesis by Def3;
@@ -210,8 +210,7 @@ end;
 
 Lm1: now
   let UA;
-  set F = UAEndMonoid UA;
-  let x, e be Element of F;
+  let x, e be Element of UAEndMonoid UA;
   reconsider i = e, y = x as Element of UAEnd UA by Def3;
   assume
 A1: e = id the carrier of UA;
@@ -228,10 +227,9 @@ registration
   cluster UAEndMonoid UA -> well-unital associative;
   coherence
   proof
-    reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
+    reconsider i = id the carrier of UA as Element of UAEnd UA by Th2;
     set H = multLoopStr (# UAEnd UA, UAEndComp UA, i#);
-    set F = UAEndMonoid UA;
-    thus F is well-unital
+    thus UAEndMonoid UA is well-unital
     proof
       let x be Element of UAEndMonoid UA;
       1.UAEndMonoid UA = i by Def3;
@@ -252,11 +250,11 @@ A1:   g * h = C * B by Def2;
   end;
 end;
 
-theorem Th5:
+theorem Th4:
   for x, y be Element of UAEndMonoid UA for f, g be Element of
   UAEnd UA st x = f & y = g holds x * y = g * f
 proof
-  reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
+  reconsider i = id the carrier of UA as Element of UAEnd UA by Th2;
   let x, y be Element of UAEndMonoid UA;
   let f, g be Element of UAEnd UA;
   set H = multLoopStr (# UAEnd UA, UAEndComp UA,i #);
@@ -275,32 +273,27 @@ reserve S for non void non empty ManySortedSign,
 
 definition
   let S, U1;
-  func MSAEnd U1 -> MSFunctionSet of the Sorts of U1, the Sorts of U1 means
-  :
-  Def4: (
-for f be Element of it holds f is ManySortedFunction of U1, U1) & for h
+  set T = the Sorts of U1;
+  func MSAEnd U1 -> MSFunctionSet of U1,U1 means
+  :Def4:
+  (for f be Element of it holds f is ManySortedFunction of U1, U1) & for h
   be ManySortedFunction of U1, U1 holds h in it iff h is_homomorphism U1, U1;
   existence
   proof
     defpred P[set] means ex msf be ManySortedFunction of U1, U1 st $1 = msf &
     msf is_homomorphism U1, U1;
-    set T = the Sorts of U1;
     consider X be set such that
-A1: for x be set holds x in X iff x in product MSFuncs (T, T) & P[x]
+A1: for x be set holds x in X iff x in MSFuncs(T,T) & P[x]
     from XBOOLE_0:sch 1;
-    id T in product MSFuncs (T, T) & ex F being ManySortedFunction of U1,
-    U1 st id T = F & F is_homomorphism U1, U1 by AUTALG_1:19,MSUALG_3:9;
+    id T in MSFuncs(T,T) & ex F being ManySortedFunction of U1,
+    U1 st id T = F & F is_homomorphism U1, U1 by AUTALG_1:20,MSUALG_3:9;
     then reconsider X as non empty set by A1;
-    X is MSFunctionSet of T, T
+    X c= MSFuncs(T,T)
     proof
-      thus T is_transformable_to T;
       let q be set;
-      assume q in X;
-      then ex msf be ManySortedFunction of U1, U1 st q = msf & msf
-      is_homomorphism U1, U1 by A1;
-      hence thesis;
+      thus thesis by A1;
     end;
-    then reconsider X as MSFunctionSet of T, T;
+    then reconsider X as MSFunctionSet of U1,U1;
     take X;
     thus for f be Element of X holds f is ManySortedFunction of U1, U1;
     let h be ManySortedFunction of U1, U1;
@@ -310,14 +303,12 @@ A1: for x be set holds x in X iff x in product MSFuncs (T, T) & P[x]
       is_homomorphism U1, U1 by A1;
       hence h is_homomorphism U1, U1;
     end;
-A2: h in product MSFuncs(T, T) by AUTALG_1:19;
-    assume h is_homomorphism U1, U1;
-    hence thesis by A1,A2;
+    h in MSFuncs(T,T) by AUTALG_1:20;
+    hence thesis by A1;
   end;
   uniqueness
   proof
-    set T = the Sorts of U1;
-    let F1, F2 be MSFunctionSet of T, T such that
+    let F1, F2 be MSFunctionSet of U1,U1 such that
 A3: for f be Element of F1 holds f is ManySortedFunction of U1, U1 and
 A4: for h be ManySortedFunction of U1, U1 holds h in F1 iff h
     is_homomorphism U1, U1 and
@@ -347,22 +338,16 @@ A9:   q in F1;
 end;
 
 theorem
-  MSAEnd U1 c= product MSFuncs (the Sorts of U1, the Sorts of U1)
-proof
-  let q be set;
-  assume q in MSAEnd U1;
-  then q is Element of MSAEnd U1;
-  hence thesis by AUTALG_1:19;
-end;
+  MSAEnd U1 c= MSFuncs(the Sorts of U1, the Sorts of U1);
 
-theorem Th10:
+theorem Th7:
   id the Sorts of U1 in MSAEnd U1
 proof
   id the Sorts of U1 is_homomorphism U1, U1 by MSUALG_3:9;
   hence thesis by Def4;
 end;
 
-theorem Th11:
+theorem Th8:
   for f1, f2 be Element of MSAEnd U1 holds f1 ** f2 in MSAEnd U1
 proof
   let f1, f2 be Element of MSAEnd U1;
@@ -371,7 +356,7 @@ proof
   hence thesis by Def4;
 end;
 
-theorem Th12:
+theorem Th9:
   for F be ManySortedFunction of MSAlg UA, MSAlg UA for f be
   Element of UAEnd UA st F = 0 .--> f holds F in MSAEnd MSAlg UA
 proof
@@ -400,7 +385,7 @@ A1: for x, y be Element of MSAEnd U1 ex m be Element of MSAEnd U1 st P[x,y ,m]
     proof
       let x, y be Element of MSAEnd U1;
       reconsider xx = x, yy = y as ManySortedFunction of U1, U1;
-      reconsider m = yy ** xx as Element of MSAEnd U1 by Th11;
+      reconsider m = yy ** xx as Element of MSAEnd U1 by Th8;
       take m;
       thus thesis;
     end;
@@ -431,7 +416,7 @@ definition
   MSAEnd U1 & the multF of it = MSAEndComp U1 & 1.it = id the Sorts of U1;
   existence
   proof
-    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
+    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th7;
     take H = multLoopStr(#MSAEnd U1, MSAEndComp U1, i#);
     thus the carrier of H = MSAEnd U1;
     thus the multF of H = MSAEndComp U1;
@@ -445,7 +430,7 @@ registration
   cluster MSAEndMonoid U1 -> non empty;
   coherence
   proof
-    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
+    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th7;
     set H = multLoopStr(#MSAEnd U1, MSAEndComp U1, i#);
     1.H = i;
     hence thesis by Def6;
@@ -472,7 +457,7 @@ registration
   cluster MSAEndMonoid U1 -> well-unital associative;
   coherence
   proof
-    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
+    reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th7;
     set H = multLoopStr(#MSAEnd U1, MSAEndComp U1, i#);
     thus MSAEndMonoid U1 is well-unital
     proof
@@ -495,11 +480,11 @@ A1:   g * h = C ** B by Def5;
   end;
 end;
 
-theorem Th13:
+theorem Th10:
   for x, y be Element of MSAEndMonoid U1 for f, g be Element of
   MSAEnd U1 st x = f & y = g holds x * y = g ** f
 proof
-  reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th10;
+  reconsider i = id the Sorts of U1 as Element of MSAEnd U1 by Th7;
   let x, y be Element of MSAEndMonoid U1;
   let f, g be Element of MSAEnd U1;
   set H = multLoopStr(# MSAEnd U1, MSAEndComp U1, i #);
@@ -513,7 +498,7 @@ end;
 theorem
   id the Sorts of U1 = 1_MSAEndMonoid U1 by Def6;
 
-theorem Th16:
+theorem Th12:
   for f be Element of UAEnd UA holds 0 .--> f is
   ManySortedFunction of MSAlg UA, MSAlg UA
 proof
@@ -564,7 +549,7 @@ A8: x = h.q by FUNCT_1:def 3;
     consider q9 be Element of UAEnd UA such that
 A9: q9 = q by A1,A7;
     x = 0 .--> q & 0 .--> q is ManySortedFunction of MSAlg UA, MSAlg UA by A1
-,A2,A7,A8,Th16;
+,A2,A7,A8,Th12;
     then consider d be ManySortedFunction of MSAlg UA, MSAlg UA such that
 A10: d = x;
     q9 is_homomorphism UA, UA by Def1;
@@ -618,7 +603,7 @@ definition
   mode Homomorphism of G,H is multiplicative unity-preserving Function of G,H;
 end;
 
-theorem Th17:
+theorem Th13:
   for G be well-unital non empty multLoopStr holds id the
   carrier of G is Homomorphism of G,G
 proof
@@ -640,12 +625,12 @@ definition
   let G,H be well-unital non empty multLoopStr;
 
   pred G,H are_isomorphic means
-  :Def12:
+  :Def7:
   ex h be Homomorphism of G,H st h is bijective;
   reflexivity
   proof
     let G be well-unital non empty multLoopStr;
-    reconsider i = id the carrier of G as Homomorphism of G,G by Th17;
+    reconsider i = id the carrier of G as Homomorphism of G,G by Th13;
 A1: the carrier of G c= rng i
     proof
       let y be set;
@@ -665,17 +650,17 @@ A2:   y in the carrier of G;
   end;
 end;
 
-theorem Th18:
+theorem Th14:
   for h be Function st (dom h = UAEnd UA & for x be set st x in
   UAEnd UA holds h.x = 0 .--> x) holds h is Homomorphism of UAEndMonoid UA,
   MSAEndMonoid (MSAlg UA)
 proof
-  reconsider i = id the Sorts of MSAlg UA as Element of MSAEnd MSAlg UA by Th10
+  reconsider i = id the Sorts of MSAlg UA as Element of MSAEnd MSAlg UA by Th7
 ;
   set G = UAEndMonoid UA;
   set H = MSAEndMonoid (MSAlg UA), M = multLoopStr (# MSAEnd MSAlg UA,
     MSAEndComp MSAlg UA,i #);
-  reconsider e = id the carrier of UA as Element of UAEnd UA by Th3;
+  reconsider e = id the carrier of UA as Element of UAEnd UA by Th2;
   let h be Function such that
 A1: dom h = UAEnd UA and
 A2: for x be set st x in UAEnd UA holds h.x = 0 .--> x;
@@ -691,17 +676,17 @@ A6: for a,b being Element of G holds h9.(a * b) = h9.a * h9.b
     let a, b be Element of UAEndMonoid UA;
     reconsider a9 = a, b9 = b as Element of UAEnd UA by Def3;
     reconsider A = 0 .--> a9, B = 0 .--> b9 as ManySortedFunction of MSAlg UA,
-    MSAlg UA by Th16;
+    MSAlg UA by Th12;
     reconsider ha = h9.a, hb = h9.b as Element of MSAEnd MSAlg UA by Def6;
-A7: h9.(b9 * a9) = 0 .--> (b9 * a9) by A2,Th4;
-    reconsider A9 = A, B9 = B as Element of MSAEndMonoid MSAlg UA by A4,Th12;
+A7: h9.(b9 * a9) = 0 .--> (b9 * a9) by A2,Th3;
+    reconsider A9 = A, B9 = B as Element of MSAEndMonoid MSAlg UA by A4,Th9;
 A8: ha = A9 & hb = B9 by A2;
-    thus h9.(a * b) = h9.(b9 * a9) by Th5
+    thus h9.(a * b) = h9.(b9 * a9) by Th4
       .= MSAlg (b9 * a9) by A7,MSUHOM_1:def 3
       .= (MSAlg b9) ** (MSAlg a9) by MSUHOM_1:26
       .= B ** MSAlg a9 by MSUHOM_1:def 3
       .= B ** A by MSUHOM_1:def 3
-      .= h9.a * h9.b by A8,Th13;
+      .= h9.a * h9.b by A8,Th10;
   end;
   h9.1.G = h9.e by Def3
     .= MSAlg (e) by A5,MSUHOM_1:def 3
@@ -711,14 +696,14 @@ A8: ha = A9 & hb = B9 by A2;
   hence thesis by A6,GROUP_1:def 13,GROUP_6:def 6;
 end;
 
-theorem Th19:
+theorem Th15:
   for h be Homomorphism of UAEndMonoid UA, MSAEndMonoid (MSAlg UA)
   st for x be set st x in UAEnd UA holds h.x = 0 .--> x holds h is bijective
 proof
-  reconsider e = id the Sorts of MSAlg UA as Element of MSAEnd MSAlg UA by Th10
+  reconsider e = id the Sorts of MSAlg UA as Element of MSAEnd MSAlg UA by Th7
 ;
   set N = multLoopStr (# MSAEnd MSAlg UA, MSAEndComp MSAlg UA,e#);
-  reconsider i = id the carrier of UA as Element of UAEnd UA by Th3;
+  reconsider i = id the carrier of UA as Element of UAEnd UA by Th2;
   let h be Homomorphism of UAEndMonoid UA, MSAEndMonoid (MSAlg UA);
   set G = UAEndMonoid UA;
   set H = MSAEndMonoid MSAlg UA, M = multLoopStr (# UAEnd UA, UAEndComp UA,i#);
@@ -761,9 +746,9 @@ proof
     consider h be Function such that
 A1: dom h = UAEnd UA & for x be set st x in UAEnd UA holds h.x = F(x)
     from FUNCT_1:sch 3;
-    reconsider h as Homomorphism of G, H by A1,Th18;
-    h is bijective by A1,Th19;
+    reconsider h as Homomorphism of G, H by A1,Th14;
+    h is bijective by A1,Th15;
     hence thesis;
   end;
-  hence thesis by Def12;
+  hence thesis by Def7;
 end;

@@ -2,7 +2,7 @@
 ::  by Masaaki Niimura and Yasushi Fuwa
 ::
 :: Received January 3, 2003
-:: Copyright (c) 2003-2011 Association of Mizar Users
+:: Copyright (c) 2003-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,12 +18,12 @@ environ
       POWER, RELAT_1, CARD_1, FINSEQ_1, NEWTON, SUBSET_1, TARSKI, XBOOLE_0,
       FINSEQ_2, FUNCT_1, PARTFUN1, CARD_3, ORDINAL4, RADIX_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1,
-      NAT_1, NAT_D, FUNCT_1, PARTFUN1, NEWTON, POWER, FINSEQ_1, FINSEQ_2,
+      ORDINAL1, NAT_D, FUNCT_1, PARTFUN1, NEWTON, POWER, FINSEQ_1, FINSEQ_2,
       GR_CY_1, RADIX_1;
  constructors REAL_1, NAT_D, NEWTON, POWER, BINARITH, GR_CY_1, RADIX_1,
       RELSET_1;
- registrations RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, NEWTON, XBOOLE_0, VALUED_0, FINSEQ_2, CARD_1, FINSEQ_1;
+ registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED,
+      NEWTON, XBOOLE_0, VALUED_0, FINSEQ_2, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RADIX_1;
  theorems RADIX_1, POWER, NAT_1, INT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, PRE_FF,
@@ -95,7 +95,7 @@ A3: i <= n+1 by NAT_1:12;
   1 <= i by A1,FINSEQ_1:1;
   then
 A4: i in Seg (n+1) by A3,FINSEQ_1:1;
-  Radix(k) |^ i divides Radix(k) |^ n by A2,RADIX_1:6;
+  Radix(k) |^ i divides Radix(k) |^ n by A2,NEWTON:89;
   then consider t be Nat such that
 A5: Radix(k) |^ n = (Radix(k) |^ i)*t by NAT_D:def 3;
   Radix(k) <> 0 by POWER:34;
@@ -120,7 +120,7 @@ definition
   correctness;
 end;
 
-theorem Th2:
+theorem Th1:
   i1 in k-SD_Sub implies -Radix(k-'1) - 1 <= i1 & i1 <= Radix(k-'1)
 proof
   assume i1 in k-SD_Sub;
@@ -129,7 +129,7 @@ proof
   hence thesis;
 end;
 
-theorem Th3:
+theorem Th2:
   k-SD_Sub_S c= k-SD_Sub
 proof
   let e be set;
@@ -147,7 +147,7 @@ A4: g >= -Radix(k-'1) - 1 by A2,XXREAL_0:2;
   hence thesis by A1,A4;
 end;
 
-theorem Th4:
+theorem Th3:
   k-SD_Sub_S c= (k+1)-SD_Sub_S
 proof
   let e be set;
@@ -199,7 +199,7 @@ A7: g >= -Radix(k) + 1 by A5,XXREAL_0:2;
   hence thesis by A4,A7;
 end;
 
-theorem Th6:
+theorem Th5:
   0 in 0-SD_Sub_S
 proof
   reconsider ZERO = 0 as Integer;
@@ -211,7 +211,7 @@ A1: Radix(0-'1) = 1 by POWER:24;
   hence thesis by A1;
 end;
 
-theorem Th7:
+theorem Th6:
   0 in k-SD_Sub_S
 proof
   defpred P[Nat] means 0 in $1-SD_Sub_S;
@@ -220,22 +220,22 @@ A1: for k being Nat st P[k] holds P[(k+1)]
     let kk be Nat;
     assume
 A2: 0 in kk-SD_Sub_S;
-    kk-SD_Sub_S c= (kk+1)-SD_Sub_S by Th4;
+    kk-SD_Sub_S c= (kk+1)-SD_Sub_S by Th3;
     hence thesis by A2;
   end;
-A3: P[0] by Th6;
+A3: P[0] by Th5;
   for k being Nat holds P[k] from NAT_1:sch 2(A3,A1);
   hence thesis;
 end;
 
-theorem Th8:
+theorem Th7:
   0 in k-SD_Sub
 proof
-  0 in k-SD_Sub_S & k-SD_Sub_S c= k-SD_Sub by Th3,Th7;
+  0 in k-SD_Sub_S & k-SD_Sub_S c= k-SD_Sub by Th2,Th6;
   hence thesis;
 end;
 
-theorem Th9:
+theorem Th8:
   for e being set st e in k-SD_Sub holds e is Integer
 proof
   let e be set;
@@ -245,50 +245,50 @@ proof
   hence thesis;
 end;
 
-theorem Th10:
+theorem Th9:
   k-SD_Sub c= INT
 proof
   let e be set;
   assume e in k-SD_Sub;
-  then e is Integer by Th9;
+  then e is Integer by Th8;
   hence thesis by INT_1:def 2;
 end;
 
-theorem Th11:
+theorem Th10:
   k-SD_Sub_S c= INT
 proof
   let e be set;
   assume
 A1: e in k-SD_Sub_S;
-  k-SD_Sub_S c= k-SD_Sub by Th3;
-  then e is Integer by A1,Th9;
+  k-SD_Sub_S c= k-SD_Sub by Th2;
+  then e is Integer by A1,Th8;
   hence thesis by INT_1:def 2;
 end;
 
 registration
   let k;
   cluster k-SD_Sub_S -> non empty;
-  coherence by Th7;
+  coherence by Th6;
   cluster k-SD_Sub -> non empty;
-  coherence by Th8;
+  coherence by Th7;
 end;
 
 definition
   let k;
   redefine func k-SD_Sub_S -> non empty Subset of INT;
-  coherence by Th11;
+  coherence by Th10;
 end;
 
 definition
   let k;
   redefine func k-SD_Sub -> non empty Subset of INT;
-  coherence by Th10;
+  coherence by Th9;
 end;
 
 reserve a for Tuple of n,k-SD;
 reserve aSub for Tuple of n,k-SD_Sub;
 
-theorem Th12:
+theorem Th11:
   i in Seg n implies aSub.i is Element of k-SD_Sub
 proof
 A1: len aSub = n by CARD_1:def 7;
@@ -320,7 +320,7 @@ definition
   coherence;
 end;
 
-theorem Th13:
+theorem Th12:
   for x be Integer, k be Nat holds -1 <= SDSub_Add_Carry(x,k) &
   SDSub_Add_Carry(x,k) <= 1
 proof
@@ -340,7 +340,7 @@ proof
   end;
 end;
 
-theorem Th14:
+theorem Th13:
   2 <= k & i1 in k-SD implies SDSub_Add_Data(i1,k) >= -Radix(k-'1)
   & SDSub_Add_Data(i1,k) <= Radix(k-'1) - 1
 proof
@@ -379,11 +379,11 @@ A8:   0 - 1 <= Radix(k-'1) - 1 & i1 - Radix(k) <= -1 by XREAL_1:9,20;
   hence thesis;
 end;
 
-theorem Th15:
+theorem Th14:
   for x be Integer, k be Nat st 2 <= k holds SDSub_Add_Carry(x,k) in k-SD_Sub_S
 proof
   let x be Integer, k be Nat;
-A1: SDSub_Add_Carry(x,k) <= 1 by Th13;
+A1: SDSub_Add_Carry(x,k) <= 1 by Th12;
   assume k >= 2;
   then k > 1 by XXREAL_0:2;
   then k - 1 > 1 - 1 by XREAL_1:14;
@@ -392,7 +392,7 @@ A2: k -' 1 > 0 by XREAL_0:def 2;
   then 2 to_power (k -' 1) > 1 by POWER:35;
   then
 A3: -Radix(k-'1) <= -1 by XREAL_1:24;
-  -1 <= SDSub_Add_Carry(x,k) by Th13;
+  -1 <= SDSub_Add_Carry(x,k) by Th12;
   then
 A4: SDSub_Add_Carry(x,k) >= -Radix(k-'1) by A3,XXREAL_0:2;
   Radix(k-'1) - 1 >= 1 by A2,INT_1:52,POWER:35;
@@ -402,19 +402,19 @@ A5: SDSub_Add_Carry(x,k) <= Radix(k-'1) - 1 by A1,XXREAL_0:2;
   hence thesis by A5,A4;
 end;
 
-theorem Th16:
+theorem Th15:
   2 <= k & i1 in k-SD implies SDSub_Add_Data(i1,k) +
   SDSub_Add_Carry(i2,k) in k-SD_Sub
 proof
-A1: SDSub_Add_Carry(i2,k) >= -1 by Th13;
+A1: SDSub_Add_Carry(i2,k) >= -1 by Th12;
   assume
 A2: 2 <= k & i1 in k-SD;
-  then SDSub_Add_Data(i1,k) >= -Radix(k-'1) by Th14;
+  then SDSub_Add_Data(i1,k) >= -Radix(k-'1) by Th13;
   then
 A3: SDSub_Add_Data(i1,k) + SDSub_Add_Carry(i2,k) >= -Radix(k-'1) + - 1 by A1,
 XREAL_1:7;
-A4: SDSub_Add_Carry(i2,k) <= 1 by Th13;
-  SDSub_Add_Data(i1,k) <= Radix(k-'1) - 1 by A2,Th14;
+A4: SDSub_Add_Carry(i2,k) <= 1 by Th12;
+  SDSub_Add_Data(i1,k) <= Radix(k-'1) - 1 by A2,Th13;
   then
 A5: SDSub_Add_Data(i1,k) + SDSub_Add_Carry(i2,k) <= Radix(k-'1) - 1 + 1 by A4,
 XREAL_1:7;
@@ -423,7 +423,7 @@ XREAL_1:7;
   hence thesis by A3,A5;
 end;
 
-theorem Th17:
+theorem Th16:
   SDSub_Add_Carry(0,k) = 0
 proof
   set x = 0;
@@ -438,7 +438,7 @@ definition
   func DigA_SDSub(x,i) -> Integer equals
   :Def5:
   x.i if i in Seg n, 0 if i = 0;
-  coherence;
+  coherence by INT_1:def 2;
   consistency by FINSEQ_1:1;
 end;
 
@@ -464,7 +464,7 @@ A1:   i <= n by FINSEQ_1:1;
   end;
 end;
 
-theorem Th18:
+theorem Th17:
   2 <= k & i in Seg (n+1) implies SD2SDSubDigit(a,i,k) is Element of k-SD_Sub
 proof
   assume that
@@ -479,14 +479,14 @@ A3:   i in Seg n;
       SDD in k-SD_Sub
       proof
      DigA(a,i) is Element of k-SD by A3,RADIX_1:16;
-        hence thesis by A1,Th16;
+        hence thesis by A1,Th15;
       end;
       hence SD2SDSubDigit(a,i,k) in k-SD_Sub by A3,Def6;
     end;
     suppose
 A4:   i = n + 1;
       SDSub_Add_Carry(DigA(a,i-'1),k) in k-SD_Sub_S & k-SD_Sub_S c= k
-      -SD_Sub by A1,Th3,Th15;
+      -SD_Sub by A1,Th2,Th14;
       then SDC in k-SD_Sub;
       hence SD2SDSubDigit(a,i,k) in k-SD_Sub by A4,Def6;
     end;
@@ -501,7 +501,7 @@ A1: 2 <= k & i in Seg (n+1);
   func SD2SDSubDigitS(x,i,k) -> Element of k-SD_Sub equals
   :Def7:
   SD2SDSubDigit(x,i,k);
-  coherence by A1,Th18;
+  coherence by A1,Th17;
 end;
 
 definition
@@ -557,7 +557,7 @@ proof
   assume
 A1: i in Seg n;
   then aSub.i = DigA_SDSub(aSub,i) by Def5;
-  hence thesis by A1,Th12;
+  hence thesis by A1,Th11;
 end;
 
 theorem
@@ -568,10 +568,10 @@ proof
 A1: 2 <= k and
 A2: i1 in k-SD & i2 in k-SD_Sub;
   set z = i1+i2;
-  i1 <= Radix(k) - 1 & i2 <= Radix(k-'1) by A2,Th2,RADIX_1:13;
+  i1 <= Radix(k) - 1 & i2 <= Radix(k-'1) by A2,Th1,RADIX_1:13;
   then
 A3: z <= Radix(k) - 1 + Radix(k-'1) by XREAL_1:7;
-  -Radix(k) + 1 <= i1 & -Radix(k-'1) - 1 <= i2 by A2,Th2,RADIX_1:13;
+  -Radix(k) + 1 <= i1 & -Radix(k-'1) - 1 <= i2 by A2,Th1,RADIX_1:13;
   then
 A4: -Radix(k) + 1 + ( -Radix(k-'1) - 1 ) <= z by XREAL_1:7;
 A5: SDSub_Add_Data(z,k) >= -Radix(k-'1) & SDSub_Add_Data(z,k) <= Radix(k-'1)
@@ -686,7 +686,7 @@ definition
   coherence;
 end;
 
-theorem Th21:
+theorem Th20:
   for i st i in Seg n holds 2 <= k implies DigA_SDSub(SD2SDSub(
 DecSD(m,n+1,k)),i) = DigA_SDSub(SD2SDSub(DecSD((m mod (Radix(k) |^ n)),n,k)),i)
 proof
@@ -722,7 +722,7 @@ A9:   DigA_SDSub(SD2SDSub(DecSD(M,n,k)),i) = SDSub_Add_Data(DigA(DecSD(m,
       n+1,k),i),k) + SDSub_Add_Carry(DigA(DecSD(M,n,k),0),k) by A7,XREAL_1:232
         .= SDSub_Add_Data(DigA(DecSD(m,n+1,k),i),k) + SDSub_Add_Carry(0,k)
       by RADIX_1:def 3
-        .= SDSub_Add_Data(DigA(DecSD(m,n+1,k),i),k) + 0 by Th17;
+        .= SDSub_Add_Data(DigA(DecSD(m,n+1,k),i),k) + 0 by Th16;
       DigA_SDSub(SD2SDSub(DecSD(m,n+1,k)),i) = SD2SDSubDigitS(DecSD(m,n+1
       ,k),i,k) by A5,Def8
         .= SD2SDSubDigit(DecSD(m,n+1,k),i,k) by A6,A5,Def7
@@ -732,7 +732,7 @@ A9:   DigA_SDSub(SD2SDSub(DecSD(M,n,k)),i) = SDSub_Add_Data(DigA(DecSD(m,
       DecSD(m,n+1,k),0),k) by A8,XREAL_1:232
         .= SDSub_Add_Data(DigA(DecSD(m,n+1,k),i),k) + SDSub_Add_Carry(0,k)
       by RADIX_1:def 3
-        .= SDSub_Add_Data(DigA(DecSD(m,n+1,k),i),k) + 0 by Th17;
+        .= SDSub_Add_Data(DigA(DecSD(m,n+1,k),i),k) + 0 by Th16;
       hence thesis by A9;
     end;
     suppose
@@ -882,7 +882,7 @@ A34: dom xnpp = Seg n by A32,FINSEQ_1:def 3;
       then
 A35:  j in Seg n by A32,FINSEQ_1:1;
       then xpp.j = SDSub2INTDigit(X,j,k) by A26,A27
-        .= SDSub2INTDigit(XN,j,k) by A6,A35,Th21
+        .= SDSub2INTDigit(XN,j,k) by A6,A35,Th20
         .= xnpp.j by A33,A34,A35;
       hence thesis;
     end;
@@ -1002,7 +1002,7 @@ A60: SDSub2INT(SD2SDSub(X)).2 = CRY by A59,PARTFUN1:def 6;
       .= SDSub_Add_Data(DigA(X,1),k) + SDSub_Add_Carry(DigA(X,0),k) by
 XREAL_1:232
       .= SDSub_Add_Data(DigA(X,1),k) + SDSub_Add_Carry(0,k) by RADIX_1:def 3
-      .= SDSub_Add_Data(DigA(X,1),k) + 0 by Th17
+      .= SDSub_Add_Data(DigA(X,1),k) + 0 by Th16
       .= DigA(X,1) - Radix(k) * SDSub_Add_Carry(DigA(X,1),k);
     then SDSub2INT(SD2SDSub(X)).1 = DigA(X,1) - CRY by A57,PARTFUN1:def 6;
     then SDSub2INT(SD2SDSub(X)) = <* DIG1, DIG2 *> by A56,A60,FINSEQ_1:44;

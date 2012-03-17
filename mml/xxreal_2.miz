@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received June 26, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,7 +21,7 @@ environ
       FINSUB_1, SETWISEO, NUMBERS, MEMBERED, XXREAL_0, XCMPLX_0, XREAL_0,
       INT_1, NAT_1, RAT_1, XXREAL_1;
  constructors XXREAL_0, MEMBERED, XREAL_0, INT_1, FINSET_1, RAT_1, XXREAL_1,
-      SETWISEO, XCMPLX_0, REAL_1, NAT_1;
+      SETWISEO, XCMPLX_0, REAL_1, NAT_1, XTUPLE_0;
  registrations XXREAL_0, MEMBERED, XXREAL_1, XBOOLE_0, FINSET_1, NUMBERS,
       SETWISEO, FINSUB_1, XREAL_0, INT_1, NAT_1, CARD_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
@@ -587,20 +587,22 @@ end;
 
 definition
   let X be ext-real-membered set;
-  attr X is bounded means
+  attr X is real-bounded means
 :Def11:
   X is bounded_below bounded_above;
 end;
 
 registration
-  cluster bounded -> bounded_above bounded_below for ext-real-membered set;
+  cluster real-bounded -> bounded_above bounded_below
+          for ext-real-membered set;
   coherence by Def11;
-  cluster bounded_above bounded_below -> bounded for ext-real-membered set;
+  cluster bounded_above bounded_below -> real-bounded
+          for ext-real-membered set;
   coherence by Def11;
 end;
 
 registration
-  cluster finite -> bounded for real-membered set;
+  cluster finite -> real-bounded for real-membered set;
   coherence
   proof
     let X be real-membered set;
@@ -642,7 +644,7 @@ A2:   X is empty;
 end;
 
 registration
-  cluster bounded for non empty natural-membered set;
+  cluster real-bounded for non empty natural-membered set;
   existence
   proof
     take {0};
@@ -1179,7 +1181,7 @@ A2: x <= sup X by A1,Th4;
 end;
 
 registration
-  cluster bounded -> finite for integer-membered set;
+  cluster real-bounded -> finite for integer-membered set;
   coherence
   proof
     let X be integer-membered set;
@@ -1264,8 +1266,8 @@ A2: r is LowerBound of Y;
 end;
 
 theorem
-  for X,Y being ext-real-membered set st X c= Y & Y is bounded holds X
-  is bounded
+  for X,Y being ext-real-membered set st X c= Y & Y is real-bounded holds
+  X is real-bounded
 proof
   let X,Y be ext-real-membered set;
   assume
@@ -1579,7 +1581,7 @@ A3: x <= y by A1;
   hence thesis by Def4;
 end;
 
-theorem Th69:
+theorem Th65:
   for X,Y being ext-real-membered set, x being UpperBound of X, y
   being UpperBound of Y holds min(x,y) is UpperBound of X /\ Y
 proof
@@ -1595,7 +1597,7 @@ A2: a <= y by Def1;
   hence thesis by A2,XXREAL_0:20;
 end;
 
-theorem Th70:
+theorem Th66:
   for X,Y being ext-real-membered set, x being LowerBound of X, y
   being LowerBound of Y holds max(x,y) is LowerBound of X /\ Y
 proof
@@ -1617,7 +1619,7 @@ proof
   let X,Y be ext-real-membered set;
 A1: sup Y is UpperBound of Y by Def3;
   sup X is UpperBound of X by Def3;
-  then min(sup X,sup Y) is UpperBound of X /\ Y by A1,Th69;
+  then min(sup X,sup Y) is UpperBound of X /\ Y by A1,Th65;
   hence thesis by Def3;
 end;
 
@@ -1627,16 +1629,16 @@ proof
   let X,Y be ext-real-membered set;
 A1: inf Y is LowerBound of Y by Def4;
   inf X is LowerBound of X by Def4;
-  then max(inf X,inf Y) is LowerBound of X /\ Y by A1,Th70;
+  then max(inf X,inf Y) is LowerBound of X /\ Y by A1,Th66;
   hence thesis by Def4;
 end;
 
 registration
-  cluster bounded -> real-membered for ext-real-membered set;
+  cluster real-bounded -> real-membered for ext-real-membered set;
   coherence
   proof
     let X be ext-real-membered set such that
-A1: X is bounded;
+A1: X is real-bounded;
     let x be set;
     assume
 A2: x in X;
@@ -1655,7 +1657,7 @@ A7: r in REAL by XREAL_0:def 1;
   end;
 end;
 
-theorem Th73:
+theorem Th69:
   A c= [.inf A, sup A.]
 proof
   let x be ext-real number;
@@ -1672,14 +1674,14 @@ theorem
 proof
   assume
 A1: sup A = inf A;
-  then A c= [.inf A,inf A.] by Th73;
+  then A c= [.inf A,inf A.] by Th69;
   then
 A2: A c= {inf A} by XXREAL_1:17;
   A <> {} by A1,Th38,Th39;
   hence thesis by A2,ZFMISC_1:33;
 end;
 
-theorem Th75:
+theorem Th71:
   x <= y & x is UpperBound of A implies y is UpperBound of A
 proof
   assume that
@@ -1691,7 +1693,7 @@ A2: x is UpperBound of A;
   hence thesis by A1,XXREAL_0:2;
 end;
 
-theorem Th76:
+theorem Th72:
   y <= x & x is LowerBound of A implies y is LowerBound of A
 proof
   assume that
@@ -1730,7 +1732,7 @@ A2: sup A <> +infty;
 A3: sup A = -infty;
     take 0;
     -infty is UpperBound of A by A3,Def3;
-    hence thesis by Th75;
+    hence thesis by Th71;
   end;
   suppose
     sup A in REAL;
@@ -1767,7 +1769,7 @@ A2: inf A <> -infty;
 A3: inf A = +infty;
     take 0;
     +infty is LowerBound of A by A3,Def4;
-    hence thesis by Th76;
+    hence thesis by Th72;
   end;
   suppose
     inf A in REAL;
@@ -2108,7 +2110,7 @@ A7: x in [.inf A,r.] by A6,XXREAL_1:1;
   end;
 end;
 
-theorem Th82:
+theorem Th78:
   for A being non left_end non right_end non empty interval
   ext-real-membered set holds A =].inf A,sup A.[
 proof
@@ -2176,11 +2178,11 @@ A1: A is empty;
 A2: A is not empty;
     take inf A, sup A;
     thus inf A <= sup A by A2,Th40;
-    thus thesis by A2,Th82;
+    thus thesis by A2,Th78;
   end;
 end;
 
-theorem Th84:
+theorem Th80:
   A is interval implies for x,y,r st x in A & y in A & x <= r & r
   <= y holds r in A
 proof
@@ -2196,7 +2198,7 @@ A6: r in [.x,y.] by A4,A5,XXREAL_1:1;
   hence thesis by A6;
 end;
 
-theorem Th85:
+theorem Th81:
   A is interval implies for x,r st x in A & x <= r & r < sup A holds r in A
 proof
   assume
@@ -2208,7 +2210,7 @@ A4: r < sup A;
   per cases;
   suppose
     ex y st y in A & r < y;
-    hence thesis by A1,A2,A3,Th84;
+    hence thesis by A1,A2,A3,Th80;
   end;
   suppose
     not ex y st y in A & r < y;
@@ -2217,7 +2219,7 @@ A4: r < sup A;
   end;
 end;
 
-theorem Th86:
+theorem Th82:
   A is interval implies for x,r st x in A & inf A < r & r <= x holds r in A
 proof
   assume
@@ -2229,7 +2231,7 @@ A4: r <= x;
   per cases;
   suppose
     ex y st y in A & r > y;
-    hence thesis by A1,A2,A4,Th84;
+    hence thesis by A1,A2,A4,Th80;
   end;
   suppose
     not ex y st y in A & r > y;
@@ -2249,7 +2251,7 @@ A3: r < sup A;
   per cases;
   suppose
     ex y st y in A & r > y;
-    hence thesis by A1,A3,Th85;
+    hence thesis by A1,A3,Th81;
   end;
   suppose
     not ex y st y in A & r > y;
@@ -2258,7 +2260,7 @@ A3: r < sup A;
   end;
 end;
 
-theorem Th88:
+theorem Th84:
   (for x,y,r st x in A & y in A & x < r & r < y holds r in A)
   implies A is interval
 proof
@@ -2394,13 +2396,13 @@ A8: x < r by A5,XXREAL_1:4;
   end;
 end;
 
-theorem Th92:
+theorem Th88:
   (for x,y,r st x in A & y in A & x <= r & r <= y holds r in A)
   implies A is interval
 proof
   assume for x,y,r st x in A & y in A & x <= r & r <= y holds r in A;
   then for x,y,r st x in A & y in A & x < r & r < y holds r in A;
-  hence thesis by Th88;
+  hence thesis by Th84;
 end;
 
 theorem
@@ -2422,7 +2424,7 @@ A8: r <= y;
     per cases by A5,A6,XBOOLE_0:def 3;
     suppose
       x in A & y in A;
-      then r in A by A1,A7,A8,Th84;
+      then r in A by A1,A7,A8,Th80;
       hence thesis by XBOOLE_0:def 3;
     end;
     suppose that
@@ -2431,12 +2433,12 @@ A10:  y in B;
       per cases;
       suppose
         r <= z;
-        then r in A by A1,A3,A7,A9,Th84;
+        then r in A by A1,A3,A7,A9,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
       suppose
         z <= r;
-        then r in B by A2,A4,A8,A10,Th84;
+        then r in B by A2,A4,A8,A10,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
     end;
@@ -2446,22 +2448,22 @@ A12:  y in A;
       per cases;
       suppose
         z <= r;
-        then r in A by A1,A3,A8,A12,Th84;
+        then r in A by A1,A3,A8,A12,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
       suppose
         r <= z;
-        then r in B by A2,A4,A7,A11,Th84;
+        then r in B by A2,A4,A7,A11,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
     end;
     suppose
       x in B & y in B;
-      then r in B by A2,A7,A8,Th84;
+      then r in B by A2,A7,A8,Th80;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
-  hence thesis by Th92;
+  hence thesis by Th88;
 end;
 
 theorem
@@ -2484,7 +2486,7 @@ A8: r < y;
     per cases by A5,A6,XBOOLE_0:def 3;
     suppose
       x in A & y in A;
-      then r in A by A1,A7,A8,Th84;
+      then r in A by A1,A7,A8,Th80;
       hence thesis by XBOOLE_0:def 3;
     end;
     suppose that
@@ -2493,12 +2495,12 @@ A10:  y in B;
       per cases;
       suppose
         r < z;
-        then r in A by A1,A3,A7,A9,Th85;
+        then r in A by A1,A3,A7,A9,Th81;
         hence thesis by XBOOLE_0:def 3;
       end;
       suppose
         z <= r;
-        then r in B by A2,A4,A8,A10,Th84;
+        then r in B by A2,A4,A8,A10,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
     end;
@@ -2513,17 +2515,17 @@ A13:    z < r;
       end;
       suppose
         r <= z;
-        then r in B by A2,A4,A7,A11,Th84;
+        then r in B by A2,A4,A7,A11,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
     end;
     suppose
       x in B & y in B;
-      then r in B by A2,A7,A8,Th84;
+      then r in B by A2,A7,A8,Th80;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
-  hence thesis by Th88;
+  hence thesis by Th84;
 end;
 
 theorem
@@ -2546,7 +2548,7 @@ A8: r < y;
     per cases by A5,A6,XBOOLE_0:def 3;
     suppose
       x in A & y in A;
-      then r in A by A1,A7,A8,Th84;
+      then r in A by A1,A7,A8,Th80;
       hence thesis by XBOOLE_0:def 3;
     end;
     suppose that
@@ -2555,12 +2557,12 @@ A10:  y in B;
       per cases;
       suppose
         r <= z;
-        then r in A by A1,A4,A7,A9,Th84;
+        then r in A by A1,A4,A7,A9,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
       suppose
         z < r;
-        then r in B by A2,A8,A10,Th86;
+        then r in B by A2,A8,A10,Th82;
         hence thesis by XBOOLE_0:def 3;
       end;
     end;
@@ -2570,7 +2572,7 @@ A12:  y in A;
       per cases;
       suppose
         z <= r;
-        then r in A by A1,A4,A8,A12,Th84;
+        then r in A by A1,A4,A8,A12,Th80;
         hence thesis by XBOOLE_0:def 3;
       end;
       suppose
@@ -2581,11 +2583,11 @@ A13:    r < z;
     end;
     suppose
       x in B & y in B;
-      then r in B by A2,A7,A8,Th84;
+      then r in B by A2,A7,A8,Th80;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
-  hence thesis by Th88;
+  hence thesis by Th84;
 end;
 
 registration
@@ -2629,7 +2631,7 @@ A1: for r being Element of ExtREAL st r in A holds +infty <= r;
   hence contradiction by A1,XXREAL_0:4;
 end;
 
-theorem Th8:
+theorem Th94:
   for A being non empty Subset of ExtREAL, r being ext-real number
   st r < sup A ex s being Element of ExtREAL st s in A & r < s
 proof
@@ -2647,7 +2649,7 @@ A2: for s being Element of ExtREAL st s in A holds not r < s;
   hence contradiction by A1,Def3;
 end;
 
-theorem Th9:
+theorem Th95:
   for A being non empty Subset of ExtREAL, r being Element of ExtREAL
     st inf A < r
    ex s being Element of ExtREAL st s in A & s < r
@@ -2676,8 +2678,8 @@ A1: for r,s being Element of ExtREAL st r in A & s in B holds r <= s;
   assume not sup A <= inf B;
   then consider s1 being Element of ExtREAL such that
 A2: s1 in A and
-A3: inf B < s1 by Th8;
-  ex s2 being Element of ExtREAL st s2 in B & s2 < s1 by A3,Th9;
+A3: inf B < s1 by Th94;
+  ex s2 being Element of ExtREAL st s2 in B & s2 < s1 by A3,Th95;
   hence contradiction by A1,A2;
 end;
 

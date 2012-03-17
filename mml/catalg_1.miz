@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received January 28, 1997
-:: Copyright (c) 1997-2011 Association of Mizar Users
+:: Copyright (c) 1997-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,24 +18,25 @@ environ
       MEMBER_1, XBOOLE_0, FINSEQ_1, MSUALG_1, STRUCT_0, PROB_2, MSAFREE,
       ZFMISC_1, CARD_1, FINSEQ_2, MCART_1, SUBSET_1, ORDINAL4, MSUALG_6, CAT_5,
       INSTALG1, NUMBERS, MARGREL1, CAT_1, PUA2MSS1, GRAPH_1, PARTFUN1,
-      MSUALG_3, CATALG_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1,
-      MCART_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1,
-      MSAFREE1, FINSEQ_1, FINSEQ_2, CARD_3, FINSEQ_4, FUNCT_6, STRUCT_0,
-      PBOOLE, MSUALG_1, MSUALG_3, MSAFREE, PUA2MSS1, MSUALG_6, INSTALG1,
-      GRAPH_1, CAT_1, XXREAL_0;
- constructors ENUMSET1, XXREAL_0, NAT_1, FINSEQ_4, MSSUBFAM, CAT_1, MSUALG_3,
-      MSATERM, MSAFREE1, PUA2MSS1, MSUALG_6, INSTALG1, XREAL_0, RELSET_1;
+      MSUALG_3, CATALG_1, MONOID_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, NUMBERS, MCART_1,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, MSAFREE1,
+      FINSEQ_1, FINSEQ_2, CARD_3, FINSEQ_4, FUNCT_6, STRUCT_0, PBOOLE,
+      MSUALG_1, MSUALG_3, MSAFREE, PUA2MSS1, MSUALG_6, INSTALG1, GRAPH_1,
+      CAT_1;
+ constructors ENUMSET1, FINSEQ_4, CAT_1, MSUALG_3, MSAFREE1, PUA2MSS1,
+      MSUALG_6, INSTALG1, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
-      FUNCOP_1, XREAL_0, FINSEQ_1, FINSEQ_2, STRUCT_0, MSUALG_1, RELSET_1,
-      MSAFREE, INSTALG1, MSAFREE1, MSSUBFAM, PBOOLE, CARD_1;
- requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+      FUNCOP_1, FINSEQ_1, FINSEQ_2, STRUCT_0, MSUALG_1, RELSET_1, MSAFREE,
+      INSTALG1, MSAFREE1, MSSUBFAM, PBOOLE, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, STRUCT_0, MSUALG_1, MSUALG_3, PUA2MSS1, MSUALG_6,
-      INSTALG1, PROB_2, MSAFREE1, XBOOLE_0, FUNCOP_1, PBOOLE;
+      INSTALG1, PROB_2, MSAFREE1, XBOOLE_0, FUNCOP_1, PBOOLE, CAT_1, XTUPLE_0;
  theorems TARSKI, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FUNCT_3, MCART_1, ENUMSET1, FUNCT_6, FINSEQ_4, MONOID_1,
       CARD_3, PBOOLE, PRALG_2, MSUALG_3, INSTALG1, CAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, FUNCOP_1, PARTFUN1, CARD_1;
+      XBOOLE_1, FUNCOP_1, PARTFUN1, CARD_1, XTUPLE_0;
  schemes FUNCT_1, CLASSES1, PBOOLE, XBOOLE_0;
 
 begin :: Preliminaries
@@ -55,7 +56,7 @@ A1: for i being set st i in I holds F.i = f(i) from PBOOLE:sch 4;
     proof
       let x be set;
       assume x in dom F;
-      then x in I by PARTFUN1:def 2;
+      then x in I;
       then F.x = f|(A.x) by A1;
       hence thesis;
     end;
@@ -117,8 +118,8 @@ A6: (f-MSF(I,A)).i = f|(A.i) by Def1;
     dom (f-MSF(I,A)) = I by PARTFUN1:def 2;
     then (rngs (f-MSF(I,A))).i = rng (f|(A.i)) by A5,A6,FUNCT_6:22;
     then rng (f|(A.i)) c= B.i by A1,A5,PBOOLE:def 2;
-    then (g*f)|(A.i) = g*(f|(A.i)) & (B.i)|(f|(A.i)) = f|(A.i) by RELAT_1:83,94
-;
+    then (g*f)|(A.i) = g*(f|(A.i)) & (B.i)|`(f|(A.i)) = f|(A.i)
+      by RELAT_1:83,94;
     then
 A7: (g*f)|(A.i) = (g|(B.i))*(f|(A.i)) by MONOID_1:1;
     ((g*f)-MSF(I,A)).i = (g*f)|(A.i) & (g-MSF(I,B)).i = g|(B.i) by A5,Def1;
@@ -161,7 +162,7 @@ definition
   let A be MSAlgebra over S;
 
   attr A is empty means
-  : Def3:
+  : Def2:
   the Sorts of A is empty-yielding;
 end;
 
@@ -191,7 +192,7 @@ registration
   let S be non empty non void ManySortedSign;
   let A be non empty MSAlgebra over S;
   cluster the Sorts of A -> non empty-yielding;
-  coherence by Def3;
+  coherence by Def2;
 end;
 
 registration
@@ -211,7 +212,7 @@ definition
   let A be set;
 
   func CatSign A -> strict ManySortedSign means
-  : Def5:
+  : Def3:
   the carrier of it = [:
   {0},2-tuples_on A:] & the carrier' of it = [:{1},1-tuples_on A:] \/ [:{2},3
 -tuples_on A:] & (for a being set st a in A holds (the Arity of it).[1,<*a*>] =
@@ -377,11 +378,11 @@ A36:  [1,<*a*>] = [1,<*y1*>] & R.[1,<*a*>] = [0,<*y1,y1*>] or [1,<*a
       ex y1,y2,y3 being set st y1 in A & y2 in A & y3 in A & ([1,<*a*>] =
 [1, <*y1*>] & Ar.[1,<*a*>] = {} or [1,<*a*>] = [2,<*y1,y2,y3*>] & Ar.[1,<*a*>]
       = <* [0,<*y2,y3*>],[0,<*y1,y2*>]*>) by A18,A35;
-      hence (the Arity of S).[1,<*a*>] = {} by ZFMISC_1:27;
+      hence (the Arity of S).[1,<*a*>] = {} by XTUPLE_0:1;
 A37:  <*a*>.1 = a & <*y1*>.1 = y1 by FINSEQ_1:40;
-      <*a*> = <*y1*> by A36,ZFMISC_1:27;
-      hence (the ResultSort of S).[1,<*a*>] = [0,<*a,a*>] by A36,A37,
-ZFMISC_1:27;
+      <*a*> = <*y1*> by A36,XTUPLE_0:1;
+      hence (the ResultSort of S).[1,<*a*>] = [0,<*a,a*>] by A36,A37,XTUPLE_0:1
+;
     end;
     let a,b,c be set;
     assume that
@@ -404,7 +405,7 @@ A41: [2,<*a,b,c*>] = [1,<*y1*>] & Ar.[2,<*a,b,c*>] = {} or [2,<*a,b,c
 A18;
 A42: <*a,b,c*> = <*a*>^<*b*>^<*c*> & <*y1,y2,y3*> = <*y1*>^<*y2*>^<*y3*>
     by FINSEQ_1:def 10;
-A43: <*a,b,c*> = <*y1,y2,y3*> by A41,ZFMISC_1:27;
+A43: <*a,b,c*> = <*y1,y2,y3*> by A41,XTUPLE_0:1;
     then
 A44: <*a*>^<*b*> = <*y1*>^<*y2*> by A42,FINSEQ_2:17;
     then <*a*> = <*y1*> by FINSEQ_2:17;
@@ -413,7 +414,7 @@ A45: a = y1 by Lm1;
     b = y2 by A44,FINSEQ_2:17;
     hence
     (the Arity of S).[2,<*a,b,c*>] = <*[0,<*b,c*>],[0,<*a,b*>]*> by A41,A43,A42
-,A45,FINSEQ_2:17,ZFMISC_1:27;
+,A45,FINSEQ_2:17,XTUPLE_0:1;
     consider y1,y2,y3 being set such that
     y1 in A and
     y2 in A and
@@ -422,8 +423,8 @@ A46: [2,<*a,b,c*>] = [1,<*y1*>] & R.[2,<*a,b,c*>] = [0,<*y1,y1*>] or [
 2,<*a,b,c*>] = [2,<*y1,y2,y3*>] & R.[2,<*a,b,c*>] = [0,<*y1,y3*>] by A33,A40;
 A47: <*a,b,c*>.1 = a & <*y1,y2,y3*>.1 = y1 by FINSEQ_1:45;
 A48: <*a,b,c*>.3 = c by FINSEQ_1:45;
-    <*a,b,c*> = <*y1,y2,y3*> by A46,ZFMISC_1:27;
-    hence thesis by A46,A47,A48,FINSEQ_1:45,ZFMISC_1:27;
+    <*a,b,c*> = <*y1,y2,y3*> by A46,XTUPLE_0:1;
+    hence thesis by A46,A47,A48,FINSEQ_1:45,XTUPLE_0:1;
   end;
   correctness
   proof
@@ -524,7 +525,7 @@ registration
   coherence
   proof
     assume the carrier of CatSign A = {};
-    then [:{0},2-tuples_on A:] = {} by Def5;
+    then [:{0},2-tuples_on A:] = {} by Def3;
     then A = {};
     then
 A1: 1 <> 0 & 3 <> 0 implies 1-tuples_on A = {} & 3-tuples_on A = {} by
@@ -532,7 +533,7 @@ FINSEQ_3:119;
     then [:{1},1-tuples_on A:] = {} by ZFMISC_1:90;
     then [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] = {} by A1,ZFMISC_1:90
 ;
-    hence thesis by Def5;
+    hence thesis by Def3;
   end;
 end;
 
@@ -541,10 +542,10 @@ registration
   cluster CatSign A -> non empty non void;
   coherence
   proof
-    the carrier of CatSign A = [:{0},2-tuples_on A:] by Def5;
+    the carrier of CatSign A = [:{0},2-tuples_on A:] by Def3;
     hence the carrier of CatSign A is non empty;
     the carrier' of CatSign A = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on
-    A:] by Def5;
+    A:] by Def3;
     hence the carrier' of CatSign A is non empty;
   end;
 end;
@@ -556,7 +557,7 @@ end;
 definition
   let S be Signature;
   attr S is Categorial means
-  : Def6:
+  : Def4:
   ex A being set st CatSign A is
   Subsignature of S & the carrier of S = [:{0},2-tuples_on A:];
 end;
@@ -584,7 +585,7 @@ A5: dom q = Seg 2 by A4,FINSEQ_1:def 3;
     then q.1 in rng q by FUNCT_1:def 3;
     then reconsider a = q.1 as Element of A9;
     the carrier' of CatSign A = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on
-    A :] by Def5;
+    A :] by Def3;
     then
     <*a*> is Element of 1-tuples_on A9 & [:{1},1-tuples_on A:] \/ [:{2},3
     -tuples_on A:] c= the carrier' of S by A1,FINSEQ_2:98,INSTALG1:10;
@@ -600,7 +601,7 @@ registration
     thus S is Categorial
     proof
       take {{}};
-      thus thesis by Def5,INSTALG1:15;
+      thus thesis by Def3,INSTALG1:15;
     end;
     thus thesis;
   end;
@@ -613,17 +614,17 @@ end;
 definition
   let A be set;
   mode CatSignature of A -> Signature means
-    : Def7:
+    : Def5:
     CatSign A is Subsignature
     of it & the carrier of it = [:{0},2-tuples_on A:];
   existence
   proof
     set S = CatSign A;
-    S is Subsignature of S & the carrier of S = [:{0},2-tuples_on A:] by Def5,
+    S is Subsignature of S & the carrier of S = [:{0},2-tuples_on A:] by Def3,
 INSTALG1:15;
-    then reconsider S as CatSignature by Def6;
+    then reconsider S as CatSignature by Def4;
     take S;
-    thus thesis by Def5,INSTALG1:15;
+    thus thesis by Def3,INSTALG1:15;
   end;
 end;
 
@@ -635,7 +636,7 @@ proof
   assume that
   CatSign A2 is Subsignature of S and
 A1: the carrier of S = [:{0},2-tuples_on A2:];
-A2: [:{0},2-tuples_on A1:] = [:{0},2-tuples_on A2:] by A1,Def7;
+A2: [:{0},2-tuples_on A1:] = [:{0},2-tuples_on A2:] by A1,Def5;
   then
 A3: 2-tuples_on A1 c= 2-tuples_on A2 by ZFMISC_1:94;
   hereby
@@ -659,7 +660,7 @@ registration
   proof
     let S be CatSignature of A;
     take A;
-    thus thesis by Def7;
+    thus thesis by Def5;
   end;
 end;
 
@@ -670,7 +671,7 @@ registration
   proof
 
     let S be CatSignature of A;
-    CatSign A is Subsignature of S by Def7;
+    CatSign A is Subsignature of S by Def5;
     then the carrier of CatSign A c= the carrier of S by INSTALG1:10;
     hence the carrier of S is not empty;
   end;
@@ -682,9 +683,9 @@ registration
   existence
   proof
     set S = CatSign A;
-    S is Subsignature of S & the carrier of S = [:{0},2-tuples_on A:] by Def5,
+    S is Subsignature of S & the carrier of S = [:{0},2-tuples_on A:] by Def3,
 INSTALG1:15;
-    then S is CatSignature of A by Def7;
+    then S is CatSignature of A by Def5;
     hence thesis;
   end;
 end;
@@ -695,16 +696,16 @@ definition
   coherence
   proof
     set S = CatSign A;
-    S is Subsignature of S & the carrier of S = [:{0}, 2-tuples_on A:] by Def5,
+    S is Subsignature of S & the carrier of S = [:{0}, 2-tuples_on A:] by Def3,
 INSTALG1:15;
-    hence thesis by Def7;
+    hence thesis by Def5;
   end;
 end;
 
 definition
   let S be ManySortedSign;
   func underlay S means
-  : Def8:
+  : Def6:
   for x being set holds x in it iff ex a being
 set, f being Function st [a,f] in (the carrier of S) \/ (the carrier' of S) & x
   in rng f;
@@ -716,26 +717,26 @@ set, f being Function st [a,f] in (the carrier of S) \/ (the carrier' of S) & x
     hereby
       assume x in X;
       then consider a being set such that
-A1:   [a,x] in union SubFuncs proj2 A by RELAT_1:def 5;
+A1:   [a,x] in union SubFuncs proj2 A by XTUPLE_0:def 13;
       consider b being set such that
 A2:   [a,x] in b and
 A3:   b in SubFuncs proj2 A by A1,TARSKI:def 4;
       reconsider b as Function by A3,FUNCT_6:def 1;
       b in proj2 A by A3,FUNCT_6:def 1;
       then consider c being set such that
-A4:   [c,b] in A by RELAT_1:def 5;
+A4:   [c,b] in A by XTUPLE_0:def 13;
       take c,b;
-      thus [c,b] in A & x in rng b by A2,A4,RELAT_1:def 5;
+      thus [c,b] in A & x in rng b by A2,A4,XTUPLE_0:def 13;
     end;
     given a being set, f being Function such that
 A5: [a,f] in (the carrier of S) \/ (the carrier' of S) and
 A6: x in rng f;
     consider b being set such that
-A7: [b,x] in f by A6,RELAT_1:def 5;
-    f in proj2 A by A5,RELAT_1:def 5;
+A7: [b,x] in f by A6,XTUPLE_0:def 13;
+    f in proj2 A by A5,XTUPLE_0:def 13;
     then f in SubFuncs proj2 A by FUNCT_6:def 1;
     then [b,x] in union SubFuncs proj2 A by A7,TARSKI:def 4;
-    hence thesis by RELAT_1:def 5;
+    hence thesis by XTUPLE_0:def 13;
   end;
   uniqueness
   proof
@@ -746,24 +747,24 @@ A7: [b,x] in f by A6,RELAT_1:def 5;
   end;
 end;
 
-theorem Th15:
+theorem Th5:
   for A being set holds underlay CatSign A = A
 proof
   let A be set;
   set S = CatSign A;
-A1: the carrier' of S = [:{1},1-tuples_on A:] \/ [:{2}, 3-tuples_on A:] by Def5
+A1: the carrier' of S = [:{1},1-tuples_on A:] \/ [:{2}, 3-tuples_on A:] by Def3
 ;
   hereby
     let x be set;
     assume x in underlay CatSign A;
     then consider a being set, f being Function such that
 A2: [a,f] in (the carrier of S) \/ (the carrier' of S) and
-A3: x in rng f by Def8;
+A3: x in rng f by Def6;
     [a,f] in the carrier of S or [a,f] in the carrier' of S by A2,
 XBOOLE_0:def 3;
     then
     [a,f] in [:{0},2-tuples_on A:] or [a,f] in [:{1},1-tuples_on A:] or [a
-    ,f] in [:{2},3-tuples_on A:] by A1,Def5,XBOOLE_0:def 3;
+    ,f] in [:{2},3-tuples_on A:] by A1,Def3,XBOOLE_0:def 3;
     then f in 2-tuples_on A or f in 1-tuples_on A or f in 3-tuples_on A by
 ZFMISC_1:87;
     then f is FinSequence of A by FINSEQ_2:def 3;
@@ -774,19 +775,19 @@ ZFMISC_1:87;
   assume x in A;
   then
 A4: <*x,x*> in 2-tuples_on A by FINSEQ_2:137;
-  the carrier of S = [:{0},2-tuples_on A:] by Def5;
+  the carrier of S = [:{0},2-tuples_on A:] by Def3;
   then [0,<*x,x*>] in the carrier of S by A4,ZFMISC_1:105;
   then
 A5: [0,<*x,x*>] in (the carrier of S) \/ (the carrier' of S) by XBOOLE_0:def 3;
   rng <*x,x*> = {x,x} by FINSEQ_2:127;
   then x in rng <*x,x*> by TARSKI:def 2;
-  hence thesis by A5,Def8;
+  hence thesis by A5,Def6;
 end;
 
 definition
   let S be ManySortedSign;
   attr S is delta-concrete means
-  : Def9:
+  : Def7:
   ex f being Function of NAT,NAT st (
   for s being set st s in the carrier of S ex i being (Element of NAT), p being
 FinSequence st s = [i,p] & len p = f.i & [:{i}, (f.i)-tuples_on underlay S:] c=
@@ -835,8 +836,8 @@ A6: dom f = NAT & rng f c= NAT and
 A7: for i being set st i in NAT holds P[i,f.i] from FUNCT_1:sch 5(A1);
     reconsider f as Function of NAT,NAT by A6,FUNCT_2:2;
     take f;
-A8: A = underlay S by Th15;
-A9: the carrier of S = [:{0},2-tuples_on A:] by Def5;
+A8: A = underlay S by Th5;
+A9: the carrier of S = [:{0},2-tuples_on A:] by Def3;
     hereby
       let s be set;
       assume s in the carrier of S;
@@ -844,7 +845,7 @@ A9: the carrier of S = [:{0},2-tuples_on A:] by Def5;
 A10:  i in {0} and
 A11:  p in 2-tuples_on A and
 A12:  s = [i,p] by A9,ZFMISC_1:84;
-      reconsider p as FinSequence by A11,FINSEQ_2:def 3;
+      reconsider p as FinSequence by A11;
       take i = 0, p;
       f.i = 2 by A7;
       hence s = [i,p] & len p = f.i by A10,A11,A12,FINSEQ_2:132,TARSKI:def 1;
@@ -852,7 +853,7 @@ A12:  s = [i,p] by A9,ZFMISC_1:84;
     end;
     let o be set;
 A13: the carrier' of S = [:{1},1-tuples_on A:] \/ [:{2}, 3-tuples_on A:] by
-Def5;
+Def3;
     assume
 A14: o in the carrier' of S;
     per cases by A13,A14,XBOOLE_0:def 3;
@@ -897,7 +898,7 @@ registration
   end;
 end;
 
-theorem Th16:
+theorem Th6:
   for S being delta-concrete ManySortedSign, x being set st x in
 the carrier of S or x in the carrier' of S ex i being (Element of NAT), p being
   FinSequence st x = [i,p] & rng p c= underlay S
@@ -911,7 +912,7 @@ A3: for s being set st s in the carrier of S ex i being (Element of NAT)
   underlay S:] c= the carrier of S and
 A4: for o being set st o in the carrier' of S ex i being (Element of NAT
   ), p being FinSequence st o = [i,p] & len p = f.i & [:{i}, (f.i)-tuples_on
-  underlay S:] c= the carrier' of S by Def9;
+  underlay S:] c= the carrier' of S by Def7;
   per cases by A1;
   suppose
     x in the carrier of S;
@@ -922,7 +923,7 @@ A5: x = [i,p] and
     take i,p;
     thus x = [i,p] by A5;
     let a be set;
-    thus thesis by A2,A5,Def8;
+    thus thesis by A2,A5,Def6;
   end;
   suppose
     x in the carrier' of S;
@@ -933,7 +934,7 @@ A6: x = [i,p] and
     take i,p;
     thus x = [i,p] by A6;
     let a be set;
-    thus thesis by A2,A6,Def8;
+    thus thesis by A2,A6,Def6;
   end;
 end;
 
@@ -952,7 +953,7 @@ A2: for s being set st s in the carrier of S ex i being (Element of NAT)
   underlay S:] c= the carrier of S and
 A3: for o being set st o in the carrier' of S ex i being (Element of NAT
   ), p being FinSequence st o = [i,p] & len p = f.i & [:{i}, (f.i)-tuples_on
-  underlay S:] c= the carrier' of S by Def9;
+  underlay S:] c= the carrier' of S by Def7;
   per cases by A1;
   suppose
 A4: [i,p1] in the carrier of S & [i,p2] in the carrier of S;
@@ -960,13 +961,13 @@ A4: [i,p1] in the carrier of S & [i,p2] in the carrier of S;
 A5: [i,p1] = [j1,q1] and
 A6: len q1 = f.j1 and
     [:{j1}, (f.j1)-tuples_on underlay S:] c= the carrier of S by A2;
-A7: i = j1 & p1 = q1 by A5,ZFMISC_1:27;
+A7: i = j1 & p1 = q1 by A5,XTUPLE_0:1;
     consider j2 being (Element of NAT), q2 being FinSequence such that
 A8: [i,p2] = [j2,q2] and
 A9: len q2 = f.j2 and
     [:{j2}, (f.j2)-tuples_on underlay S:] c= the carrier of S by A2,A4;
-    i = j2 by A8,ZFMISC_1:27;
-    hence thesis by A6,A8,A9,A7,ZFMISC_1:27;
+    i = j2 by A8,XTUPLE_0:1;
+    hence thesis by A6,A8,A9,A7,XTUPLE_0:1;
   end;
   suppose
 A10: [i,p1] in the carrier' of S & [i,p2] in the carrier' of S;
@@ -974,13 +975,13 @@ A10: [i,p1] in the carrier' of S & [i,p2] in the carrier' of S;
 A11: [i,p1] = [j1,q1] and
 A12: len q1 = f.j1 and
     [:{j1}, (f.j1)-tuples_on underlay S:] c= the carrier' of S by A3;
-A13: i = j1 & p1 = q1 by A11,ZFMISC_1:27;
+A13: i = j1 & p1 = q1 by A11,XTUPLE_0:1;
     consider j2 being (Element of NAT), q2 being FinSequence such that
 A14: [i,p2] = [j2,q2] and
 A15: len q2 = f.j2 and
     [:{j2}, (f.j2)-tuples_on underlay S:] c= the carrier' of S by A3,A10;
-    i = j2 by A14,ZFMISC_1:27;
-    hence thesis by A12,A14,A15,A13,ZFMISC_1:27;
+    i = j2 by A14,XTUPLE_0:1;
+    hence thesis by A12,A14,A15,A13,XTUPLE_0:1;
   end;
 end;
 
@@ -999,17 +1000,17 @@ A2: for s being set st s in the carrier of S ex i being (Element of NAT)
   underlay S:] c= the carrier of S and
 A3: for o being set st o in the carrier' of S ex i being (Element of NAT
   ), p being FinSequence st o = [i,p] & len p = f.i & [:{i}, (f.i)-tuples_on
-  underlay S:] c= the carrier' of S by Def9;
+  underlay S:] c= the carrier' of S by Def7;
   hereby
     assume [i,p1] in the carrier of S;
     then consider j1 being (Element of NAT), q1 being FinSequence such that
 A4: [i,p1] = [j1,q1] and
 A5: len q1 = f.j1 and
 A6: [:{j1}, (f.j1)-tuples_on underlay S:] c= the carrier of S by A2;
-    p1 = q1 by A4,ZFMISC_1:27;
+    p1 = q1 by A4,XTUPLE_0:1;
     then
 A7: p2 in (f.j1)-tuples_on underlay S by A1,A5,FINSEQ_2:132;
-    i = j1 by A4,ZFMISC_1:27;
+    i = j1 by A4,XTUPLE_0:1;
     then [i,p2] in [:{j1}, (f.j1)-tuples_on underlay S:] by A7,ZFMISC_1:105;
     hence [i,p2] in the carrier of S by A6;
   end;
@@ -1018,10 +1019,10 @@ A7: p2 in (f.j1)-tuples_on underlay S by A1,A5,FINSEQ_2:132;
 A8: [i,p1] = [j1,q1] and
 A9: len q1 = f.j1 and
 A10: [:{j1}, (f.j1)-tuples_on underlay S:] c= the carrier' of S by A3;
-  p1 = q1 by A8,ZFMISC_1:27;
+  p1 = q1 by A8,XTUPLE_0:1;
   then
 A11: p2 in (f.j1)-tuples_on underlay S by A1,A9,FINSEQ_2:132;
-  i = j1 by A8,ZFMISC_1:27;
+  i = j1 by A8,XTUPLE_0:1;
   then [i,p2] in [:{j1}, (f.j1)-tuples_on underlay S:] by A11,ZFMISC_1:105;
   hence thesis by A10;
 end;
@@ -1034,14 +1035,14 @@ proof
   set s = the SortSymbol of S;
   consider A being set such that
 A1: CatSign A is Subsignature of S and
-A2: the carrier of S = [:{0},2-tuples_on A:] by Def6;
+A2: the carrier of S = [:{0},2-tuples_on A:] by Def4;
   consider f being Function of NAT,NAT such that
 A3: for s being set st s in the carrier of S ex i being (Element of NAT)
   , p being FinSequence st s = [i,p] & len p = f.i & [:{i}, (f.i)-tuples_on
   underlay S:] c= the carrier of S and
   for o being set st o in the carrier' of S ex i being (Element of NAT), p
 being FinSequence st o = [i,p] & len p = f.i & [:{i}, (f.i)-tuples_on underlay
-  S:] c= the carrier' of S by Def9;
+  S:] c= the carrier' of S by Def7;
   consider i being (Element of NAT), p being FinSequence such that
 A4: s = [i,p] and
 A5: len p = f.i & [:{i}, (f.i)-tuples_on underlay S:] c= the carrier of
@@ -1059,7 +1060,7 @@ A7: A c= underlay S
 A8: [0,<*x,x*>] in (the carrier of S) \/ the carrier' of S by XBOOLE_0:def 3;
     rng <*x,x*> = {x,x} by FINSEQ_2:127;
     then x in rng <*x,x*> by TARSKI:def 2;
-    hence thesis by A8,Def8;
+    hence thesis by A8,Def6;
   end;
   i = 0 by A2,A4,ZFMISC_1:105;
   then
@@ -1072,7 +1073,7 @@ A9: 2-tuples_on underlay S c= 2-tuples_on A by A2,A5,A6,ZFMISC_1:94;
     hence thesis by A9,FINSEQ_2:138;
   end;
   then A = underlay S by A7,XBOOLE_0:def 10;
-  hence thesis by A1,A2,Def7;
+  hence thesis by A1,A2,Def5;
 end;
 
 begin :: Symbols of categorial sygnature
@@ -1085,7 +1086,7 @@ registration
   proof
     consider A being set such that
     CatSign A is Subsignature of S and
-A1: the carrier of S = [:{0},2-tuples_on A:] by Def6;
+A1: the carrier of S = [:{0},2-tuples_on A:] by Def4;
     s`2 in 2-tuples_on A by A1,MCART_1:10;
     hence thesis;
   end;
@@ -1098,7 +1099,7 @@ registration
   coherence
   proof
     ex i being (Element of NAT), p being FinSequence st ( s = [ i,p])&( rng
-    p c= underlay S) by Th16;
+    p c= underlay S) by Th6;
     hence thesis by MCART_1:7;
   end;
 end;
@@ -1110,7 +1111,7 @@ registration
   coherence
   proof
     ex i being (Element of NAT), p being FinSequence st ( o = [ i,p])&( rng
-    p c= underlay S) by Th16;
+    p c= underlay S) by Th6;
     hence thesis by MCART_1:7;
   end;
 end;
@@ -1123,7 +1124,7 @@ registration
   proof
     consider A being set such that
     CatSign A is Subsignature of S and
-A1: the carrier of S = [:{0},2-tuples_on A:] by Def6;
+A1: the carrier of S = [:{0},2-tuples_on A:] by Def4;
     s`2 in 2-tuples_on A by A1,MCART_1:10;
     then ex a,b being set st a in A & b in A & s`2 = <*a,b*> by FINSEQ_2:137;
     hence thesis;
@@ -1137,7 +1138,7 @@ registration
   coherence
   proof
     ex i being (Element of NAT), p being FinSequence st ( s = [ i,p])&( rng
-    p c= underlay S) by Th16;
+    p c= underlay S) by Th6;
     hence thesis by MCART_1:7;
   end;
 end;
@@ -1149,7 +1150,7 @@ registration
   coherence
   proof
     ex i being (Element of NAT), p being FinSequence st ( o = [ i,p])&( rng
-    p c= underlay S) by Th16;
+    p c= underlay S) by Th6;
     hence thesis by MCART_1:7;
   end;
 end;
@@ -1169,7 +1170,7 @@ definition
   correctness;
 end;
 
-theorem Th20:
+theorem Th10:
   for A being non empty set, S being CatSignature of A for a being
   Element of A holds idsym a in the carrier' of S & for b being Element of A
 holds homsym(a,b) in the carrier of S & for c being Element of A holds compsym(
@@ -1178,8 +1179,8 @@ proof
   let A be non empty set, S be CatSignature of A;
   let a be Element of A;
 A1: the carrier' of CatSign A = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A
-  :] by Def5;
-A2: CatSign A is Subsignature of S by Def7;
+  :] by Def3;
+A2: CatSign A is Subsignature of S by Def5;
   then
 A3: the carrier of CatSign A c= the carrier of S by INSTALG1:10;
 A4: the carrier' of CatSign A c= the carrier' of S by A2,INSTALG1:10;
@@ -1188,7 +1189,7 @@ A4: the carrier' of CatSign A c= the carrier' of S by A2,INSTALG1:10;
   then [1,<*a*>] in the carrier' of CatSign A by A1,XBOOLE_0:def 3;
   hence idsym a in the carrier' of S by A4;
   let b be Element of A;
-A5: the carrier of CatSign A = [:{0},2-tuples_on A:] by Def5;
+A5: the carrier of CatSign A = [:{0},2-tuples_on A:] by Def3;
   <*a,b*> in 2-tuples_on A by FINSEQ_2:137;
   then [0,<*a,b*>] in [:{0},2-tuples_on A:] by ZFMISC_1:105;
   hence homsym(a,b) in the carrier of S by A3,A5;
@@ -1203,37 +1204,37 @@ definition
   let A be non empty set;
   let a be Element of A;
   redefine func idsym a -> OperSymbol of CatSign A;
-  correctness by Th20;
+  correctness by Th10;
   let b be Element of A;
   redefine func homsym(a,b) -> SortSymbol of CatSign A;
-  correctness by Th20;
+  correctness by Th10;
   let c be Element of A;
   redefine func compsym(a,b,c) -> OperSymbol of CatSign A;
-  correctness by Th20;
+  correctness by Th10;
 end;
 
-theorem Th21:
+theorem Th11:
   for a,b being set st idsym(a) = idsym(b) holds a = b
 proof
   let a,b be set;
   assume idsym(a) = idsym(b);
-  then <*a*> = <*b*> by ZFMISC_1:27;
+  then <*a*> = <*b*> by XTUPLE_0:1;
   hence thesis by Lm1;
 end;
 
-theorem Th22:
+theorem Th12:
   for a1,b1,a2,b2 being set st homsym(a1,a2) = homsym(b1,b2) holds
   a1 = b1 & a2 = b2
 proof
   let a1,b1,a2,b2 be set;
   assume homsym(a1,a2) = homsym(b1,b2);
   then
-A1: <*a1,a2*> = <*b1,b2*> by ZFMISC_1:27;
+A1: <*a1,a2*> = <*b1,b2*> by XTUPLE_0:1;
   <*a1,a2*>.1 = a1 & <*a1,a2*>.2 = a2 by FINSEQ_1:44;
   hence thesis by A1,FINSEQ_1:44;
 end;
 
-theorem Th23:
+theorem Th13:
   for a1,b1,a2,b2,a3,b3 being set st compsym(a1,a2,a3) = compsym(
   b1,b2,b3) holds a1 = b1 & a2 = b2 & a3 = b3
 proof
@@ -1241,18 +1242,18 @@ proof
 A1: <*a1,a2,a3*>.3 = a3 by FINSEQ_1:45;
   assume compsym(a1,a2,a3) = compsym(b1,b2,b3);
   then
-A2: <*a1,a2,a3*> = <*b1,b2,b3*> by ZFMISC_1:27;
+A2: <*a1,a2,a3*> = <*b1,b2,b3*> by XTUPLE_0:1;
   <*a1,a2,a3*>.1 = a1 & <*a1,a2,a3*>.2 = a2 by FINSEQ_1:45;
   hence thesis by A2,A1,FINSEQ_1:45;
 end;
 
-theorem Th24:
+theorem Th14:
   for A being non empty set, S being CatSignature of A for s being
   SortSymbol of S ex a,b being Element of A st s = homsym(a,b)
 proof
   let A be non empty set, S be CatSignature of A;
   let s be SortSymbol of S;
-A1: the carrier of S = [:{0},2-tuples_on A:] by Def7;
+A1: the carrier of S = [:{0},2-tuples_on A:] by Def5;
   then s`2 in 2-tuples_on A by MCART_1:10;
   then s`2 in {z where z is Element of A*: len z = 2} by FINSEQ_2:def 4;
   then consider z being Element of A* such that
@@ -1267,13 +1268,13 @@ A5: z = <*z.1,z.2*> by A3,FINSEQ_1:44;
   hence thesis by A2,A5,TARSKI:def 1;
 end;
 
-theorem Th25:
+theorem Th15:
   for A being non empty set, o being OperSymbol of CatSign A holds
   o`1 = 1 & len o`2 = 1 or o`1 = 2 & len o`2 = 3
 proof
   let A be non empty set, o be OperSymbol of CatSign A;
   the carrier' of CatSign A = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A
-  :] by Def5;
+  :] by Def3;
   then o in [:{1},1-tuples_on A:] or o in [:{2},3-tuples_on A:] by
 XBOOLE_0:def 3;
   then o`1 in {1} & o`2 in 1-tuples_on A or o`1 in {2} & o`2 in 3-tuples_on A
@@ -1281,14 +1282,14 @@ XBOOLE_0:def 3;
   hence thesis by CARD_1:def 7,TARSKI:def 1;
 end;
 
-theorem Th26:
+theorem Th16:
   for A being non empty set, o being OperSymbol of CatSign A st o
   `1 = 1 or len o`2 = 1 ex a being Element of A st o = idsym(a)
 proof
   let A be non empty set, o be OperSymbol of CatSign A such that
 A1: o`1 = 1 or len o`2 = 1;
   the carrier' of CatSign A = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A
-  :] by Def5;
+  :] by Def3;
   then o in [:{1},1-tuples_on A:] or o in [:{2},3-tuples_on A:] by
 XBOOLE_0:def 3;
   then
@@ -1302,14 +1303,14 @@ A4: o`2 = <*a*> by A1,CARD_1:def 7,FINSEQ_2:135,TARSKI:def 1;
   thus thesis by A1,A2,A4,CARD_1:def 7,TARSKI:def 1;
 end;
 
-theorem Th27:
+theorem Th17:
   for A being non empty set, o being OperSymbol of CatSign A st o
   `1 = 2 or len o`2 = 3 ex a,b,c being Element of A st o = compsym(a,b,c)
 proof
   let A be non empty set, o be OperSymbol of CatSign A such that
 A1: o`1 = 2 or len o`2 = 3;
   the carrier' of CatSign A = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A
-  :] by Def5;
+  :] by Def3;
   then o in [:{1},1-tuples_on A:] or o in [:{2},3-tuples_on A:] by
 XBOOLE_0:def 3;
   then
@@ -1325,12 +1326,12 @@ end;
 
 theorem
   for A being non empty set, a being Element of A holds the_arity_of
-  idsym(a) = {} & the_result_sort_of idsym(a) = homsym(a,a) by Def5;
+  idsym(a) = {} & the_result_sort_of idsym(a) = homsym(a,a) by Def3;
 
 theorem
   for A being non empty set, a,b,c being Element of A holds the_arity_of
 compsym(a,b,c) = <*homsym(b,c),homsym(a,b)*> & the_result_sort_of compsym(a,b,c
-  ) = homsym(a,c) by Def5;
+  ) = homsym(a,c) by Def3;
 
 begin :: Signature homomorphism generated by a functor
 
@@ -1339,7 +1340,7 @@ definition
   let F be Functor of C1,C2;
   func Upsilon F -> Function of the carrier of CatSign the carrier of C1, the
   carrier of CatSign the carrier of C2 means
-  : Def13:
+  : Def11:
   for s being SortSymbol of
   CatSign the carrier of C1 holds it.s = [0,(Obj F)*s`2];
   uniqueness
@@ -1373,7 +1374,7 @@ A5:   a in dom Up and
 A6:   x = Up.a by FUNCT_1:def 3;
       reconsider a as SortSymbol of CatSign the carrier of C1 by A3,A5;
       the carrier of CatSign the carrier of C1 = [:{0},2-tuples_on the
-      carrier of C1:] by Def5;
+      carrier of C1:] by Def3;
       then a`2 in 2-tuples_on the carrier of C1 by MCART_1:12;
       then consider a1,a2 being set such that
 A7:   a1 in the carrier of C1 & a2 in the carrier of C1 and
@@ -1389,7 +1390,7 @@ A9:   dom ((Obj F)*<*a1,a2*>) = dom <*a1,a2*> by RELAT_1:27
       then
 A10:  p.1 = (Obj F).a1 by A9,FINSEQ_1:2,FUNCT_1:12;
 A11:  the carrier of CatSign the carrier of C2 = [:{0},2-tuples_on the
-      carrier of C2:] by Def5;
+      carrier of C2:] by Def3;
       <*a1,a2*>.2 = a2 & 2 in {1,2} by FINSEQ_1:44,TARSKI:def 2;
       then
 A12:  p.2 = (Obj F).a2 by A9,FINSEQ_1:2,FUNCT_1:12;
@@ -1406,7 +1407,7 @@ ZFMISC_1:105;
   end;
   func Psi F -> Function of the carrier' of CatSign the carrier of C1, the
   carrier' of CatSign the carrier of C2 means
-  : Def14:
+  : Def12:
   for o being OperSymbol of
   CatSign the carrier of C1 holds it.o = [o`1,(Obj F)*o`2];
   uniqueness
@@ -1439,7 +1440,7 @@ A16: for s being OperSymbol of CatSign the carrier of C1 holds Up.s =
 A17:  a in dom Up and
 A18:  x = Up.a by FUNCT_1:def 3;
 A19:  the carrier' of CatSign the carrier of C1 = [:{1},1-tuples_on the
-      carrier of C1:] \/ [:{2},3-tuples_on the carrier of C1:] by Def5;
+      carrier of C1:] \/ [:{2},3-tuples_on the carrier of C1:] by Def3;
       reconsider a as OperSymbol of CatSign the carrier of C1 by A15,A17;
       per cases by A19,XBOOLE_0:def 3;
       suppose
@@ -1464,7 +1465,7 @@ A24:    len p = 1 by A23,FINSEQ_1:def 3;
 A25:    [1,p] in [:{1},1-tuples_on the carrier of C2:] by ZFMISC_1:105;
 A26:    a`1 = 1 by A20,MCART_1:12;
         the carrier' of CatSign the carrier of C2 = [:{1},1-tuples_on the
-        carrier of C2:] \/ [:{2},3-tuples_on the carrier of C2:] by Def5;
+        carrier of C2:] \/ [:{2},3-tuples_on the carrier of C2:] by Def3;
         then [1,p] in the carrier' of CatSign the carrier of C2 by A25,
 XBOOLE_0:def 3;
         hence thesis by A16,A18,A26,A22;
@@ -1501,7 +1502,7 @@ FINSEQ_1:45;
 A34:    [2,p] in [:{2},3-tuples_on the carrier of C2:] by ZFMISC_1:105;
 A35:    a`1 = 2 by A27,MCART_1:12;
         the carrier' of CatSign the carrier of C2 = [:{1},1-tuples_on the
-        carrier of C2:] \/ [:{2},3-tuples_on the carrier of C2:] by Def5;
+        carrier of C2:] \/ [:{2},3-tuples_on the carrier of C2:] by Def3;
         then [2,p] in the carrier' of CatSign the carrier of C2 by A34,
 XBOOLE_0:def 3;
         hence thesis by A16,A18,A35,A29;
@@ -1527,21 +1528,21 @@ A2: len p = 1 by A1,FINSEQ_1:def 3;
   hence f*<*x*> = <*f.x*> by A2,FINSEQ_1:40;
 end;
 
-theorem Th30:
+theorem Th20:
   for C1,C2 being Category, F being Functor of C1,C2 for a,b being
   Object of C1 holds (Upsilon F).homsym(a,b) = homsym(F.a,F.b)
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
   let a,b be Object of C1;
 A1: dom Obj F = the carrier of C1 by FUNCT_2:def 1;
-  thus (Upsilon F).homsym(a,b) = [0,(Obj F)*(homsym(a,b))`2] by Def13
+  thus (Upsilon F).homsym(a,b) = [0,(Obj F)*(homsym(a,b))`2] by Def11
     .= [0,(Obj F)*<*a,b*>] by MCART_1:7
     .= [0,<*(Obj F).a,(Obj F).b*>] by A1,FINSEQ_2:125
-    .= [0,<*F.a,(Obj F).b*>] by CAT_1:def 17
-    .= homsym(F.a,F.b) by CAT_1:def 17;
+    .= [0,<*F.a,(Obj F).b*>]
+    .= homsym(F.a,F.b);
 end;
 
-theorem Th31:
+theorem Th21:
   for C1,C2 being Category, F being Functor of C1,C2 for a being
   Object of C1 holds (Psi F).idsym(a) = idsym(F.a)
 proof
@@ -1549,12 +1550,12 @@ proof
   let a be Object of C1;
 A1: dom Obj F = the carrier of C1 by FUNCT_2:def 1;
   (idsym a)`1 = 1 & (idsym a)`2 = <*a*> by MCART_1:7;
-  hence (Psi F).idsym(a) = [1,(Obj F)*<*a*>] by Def14
+  hence (Psi F).idsym(a) = [1,(Obj F)*<*a*>] by Def12
     .= [1,<*(Obj F).a*>] by A1,Lm2
-    .= idsym(F.a) by CAT_1:def 17;
+    .= idsym(F.a);
 end;
 
-theorem Th32:
+theorem Th22:
   for C1,C2 being Category, F being Functor of C1,C2 for a,b,c
   being Object of C1 holds (Psi F).compsym(a,b,c) = compsym(F.a,F.b,F.c)
 proof
@@ -1562,14 +1563,14 @@ proof
   let a,b,c be Object of C1;
 A1: dom Obj F = the carrier of C1 by FUNCT_2:def 1;
   (compsym(a,b,c))`1 = 2 & (compsym(a,b,c))`2 = <*a,b,c*> by MCART_1:7;
-  hence (Psi F).compsym(a,b,c) = [2,(Obj F)*<*a,b,c*>] by Def14
+  hence (Psi F).compsym(a,b,c) = [2,(Obj F)*<*a,b,c*>] by Def12
     .= [2,<*(Obj F).a,(Obj F).b,(Obj F).c*>] by A1,FINSEQ_2:126
-    .= [2,<*F.a,(Obj F).b,(Obj F).c*>] by CAT_1:def 17
-    .= [2,<*F.a,F.b,(Obj F).c*>] by CAT_1:def 17
-    .= compsym(F.a,F.b,F.c) by CAT_1:def 17;
+    .= [2,<*F.a,(Obj F).b,(Obj F).c*>]
+    .= [2,<*F.a,F.b,(Obj F).c*>]
+    .= compsym(F.a,F.b,F.c);
 end;
 
-theorem Th33:
+theorem Th23:
   for C1,C2 being Category, F being Functor of C1,C2 holds Upsilon
   F, Psi F form_morphism_between CatSign the carrier of C1, CatSign the carrier
   of C2
@@ -1581,27 +1582,27 @@ proof
   thus rng f c= the carrier of S2 & rng g c= the carrier' of S2;
   now
     let o be OperSymbol of CatSign the carrier of C1;
-    per cases by Th25;
+    per cases by Th15;
     suppose
       o`1 = 1;
       then consider a being Object of C1 such that
-A1:   o = idsym(a) by Th26;
+A1:   o = idsym(a) by Th16;
       thus (f*the ResultSort of S1).o = f.the_result_sort_of o by FUNCT_2:15
-        .= f.homsym(a,a) by A1,Def5
-        .= homsym(F.a,F.a) by Th30
-        .= the_result_sort_of idsym(F.a) by Def5
-        .= (the ResultSort of S2).(g.idsym a) by Th31
+        .= f.homsym(a,a) by A1,Def3
+        .= homsym(F.a,F.a) by Th20
+        .= the_result_sort_of idsym(F.a) by Def3
+        .= (the ResultSort of S2).(g.idsym a) by Th21
         .= ((the ResultSort of S2)*g).o by A1,FUNCT_2:15;
     end;
     suppose
       o`1 = 2;
       then consider a,b,c being Object of C1 such that
-A2:   o = compsym(a,b,c) by Th27;
+A2:   o = compsym(a,b,c) by Th17;
       thus (f*the ResultSort of S1).o = f.the_result_sort_of o by FUNCT_2:15
-        .= f.homsym(a,c) by A2,Def5
-        .= homsym(F.a,F.c) by Th30
-        .= the_result_sort_of compsym(F.a,F.b,F.c) by Def5
-        .= (the ResultSort of S2).(g.compsym(a,b,c)) by Th32
+        .= f.homsym(a,c) by A2,Def3
+        .= homsym(F.a,F.c) by Th20
+        .= the_result_sort_of compsym(F.a,F.b,F.c) by Def3
+        .= (the ResultSort of S2).(g.compsym(a,b,c)) by Th22
         .= ((the ResultSort of S2)*g).o by A2,FUNCT_2:15;
     end;
   end;
@@ -1611,33 +1612,33 @@ A2:   o = compsym(a,b,c) by Th27;
   then reconsider o9 = o as OperSymbol of S1;
   assume
 A3: p = (the Arity of S1).o;
-  per cases by Th25;
+  per cases by Th15;
   suppose
     o9`1 = 1;
     then consider a being Object of C1 such that
-A4: o = idsym(a) by Th26;
+A4: o = idsym(a) by Th16;
 A5: f*{} = {};
-    p = {} by A3,A4,Def5;
-    hence f*p = the_arity_of idsym(F.a) by A5,Def5
-      .= (the Arity of S2).(g.o) by A4,Th31;
+    p = {} by A3,A4,Def3;
+    hence f*p = the_arity_of idsym(F.a) by A5,Def3
+      .= (the Arity of S2).(g.o) by A4,Th21;
   end;
   suppose
     o9`1 = 2;
     then consider a,b,c being Object of C1 such that
-A6: o = compsym(a,b,c) by Th27;
-    dom f = the carrier of S1 & p = <*homsym(b,c),homsym(a,b)*> by A3,A6,Def5,
+A6: o = compsym(a,b,c) by Th17;
+    dom f = the carrier of S1 & p = <*homsym(b,c),homsym(a,b)*> by A3,A6,Def3,
 FUNCT_2:def 1;
     hence f*p = <*f.homsym(b,c),f.homsym(a,b)*> by FINSEQ_2:125
-      .= <*homsym(F.b,F.c),f.homsym(a,b)*> by Th30
-      .= <*homsym(F.b,F.c),homsym(F.a,F.b)*> by Th30
-      .= the_arity_of compsym(F.a,F.b,F.c) by Def5
-      .= (the Arity of S2).(g.o) by A6,Th32;
+      .= <*homsym(F.b,F.c),f.homsym(a,b)*> by Th20
+      .= <*homsym(F.b,F.c),homsym(F.a,F.b)*> by Th20
+      .= the_arity_of compsym(F.a,F.b,F.c) by Def3
+      .= (the Arity of S2).(g.o) by A6,Th22;
   end;
 end;
 
 begin :: Algebra of morphisms
 
-theorem Th34:
+theorem Th24:
   for C being non empty set, A being MSAlgebra over CatSign C for
   a being Element of C holds Args(idsym(a), A) = {{}}
 proof
@@ -1645,7 +1646,7 @@ proof
   let a be Element of C;
   thus Args(idsym(a), A) = product ((the Sorts of A)*the_arity_of idsym a) by
 PRALG_2:3
-    .= product ((the Sorts of A)*{}) by Def5
+    .= product ((the Sorts of A)*{}) by Def3
     .= {{}} by CARD_3:10;
 end;
 
@@ -1662,14 +1663,14 @@ A2: the carrier of CatSign the carrier of C = dom the Sorts of A by
 PARTFUN1:def 2;
   thus Args(compsym(a,b,c), A) = product ((the Sorts of A)*the_arity_of
   compsym(a,b,c)) by PRALG_2:3
-    .= product ((the Sorts of A)*<*homsym(b,c),homsym(a,b)*>) by Def5
+    .= product ((the Sorts of A)*<*homsym(b,c),homsym(a,b)*>) by Def3
     .= product <*(the Sorts of A).homsym(b,c), (the Sorts of A).homsym(a,b)
   *> by A2,FINSEQ_2:125
     .= product <*Hom(b,c), (the Sorts of A).homsym(a,b)*> by A1
     .= product <*Hom(b,c), Hom(a,b)*> by A1;
   thus Result(compsym(a,b,c), A) = (the Sorts of A).the_result_sort_of compsym
   (a,b,c) by PRALG_2:3
-    .= (the Sorts of A).homsym(a,c) by Def5
+    .= (the Sorts of A).homsym(a,c) by Def3
     .= Hom(a,c) by A1;
 end;
 
@@ -1700,7 +1701,7 @@ A5: o in the carrier' of CS;
 A6: now
       assume o`1 = 1;
       then consider a being Element of X() such that
-A7:   o = idsym a by A5,Th26;
+A7:   o = idsym a by A5,Th16;
       set F = {} :-> I(a);
       reconsider u = F as set;
       take u, a;
@@ -1716,7 +1717,7 @@ A7:   o = idsym a by A5,Th26;
 A8: now
       assume o`1 = 2;
       then consider a,b,c being Element of X() such that
-A9:   o = compsym(a,b,c) by A5,Th27;
+A9:   o = compsym(a,b,c) by A5,Th17;
       defpred P[set,set] means ex f,g being set st f in H(a,b) & g in H(b,c) &
       $1 = <*g,f*> & $2 = R(a,b,c,g,f);
 A10:  now
@@ -1753,7 +1754,7 @@ A17:  <*g,f*>.1 = g & <*g,f*>.2 = f by FINSEQ_1:44;
       <*g,f*>.1 = g9 by A15,FINSEQ_1:44;
       hence F.<*g,f*> = R(a,b,c,g,f) by A15,A16,A17,FINSEQ_1:44;
     end;
-    o`1 = 1 or o`1 = 2 by A5,Th25;
+    o`1 = 1 or o`1 = 2 by A5,Th15;
     hence thesis by A6,A8;
   end;
   consider O being Function such that
@@ -1768,7 +1769,7 @@ A20: now
     let s be set;
     assume s in the carrier of CS;
     then consider a,b being Element of X() such that
-A21: s = homsym(a,b) by Th24;
+A21: s = homsym(a,b) by Th14;
     take u = H(a,b);
     thus P[s,u] by A21;
   end;
@@ -1786,18 +1787,18 @@ A23: for s being set st s in the carrier of CS holds P[s,S.s] from
 A24: (S#*the Arity of CS).o = S#.the_arity_of o by FUNCT_2:15
       .= product (S*the_arity_of o) by FINSEQ_2:def 5;
 A25: (S*the ResultSort of CS).o = S.the_result_sort_of o by FUNCT_2:15;
-    per cases by Th25;
+    per cases by Th15;
     suppose
       o`1 = 1 & 1 <> 2;
       then consider a being Element of X() such that
 A26:  o = idsym a & ex F being Function of {{}}, H(a,a) st F = O.o &
       F.{} = I(a) by A19;
-A27:  the_arity_of idsym(a) = {} & {} = S*{} by Def5;
-A28:  the_result_sort_of idsym(a) = homsym(a,a) by Def5;
+A27:  the_arity_of idsym(a) = {} & {} = S*{} by Def3;
+A28:  the_result_sort_of idsym(a) = homsym(a,a) by Def3;
       consider c,b being Element of X() such that
 A29:  homsym(a,a) = homsym(c,b) and
 A30:  S.homsym(a,a) = H(c,b) by A23;
-      a = b & a = c by A29,Th22;
+      a = b & a = c by A29,Th12;
       hence thesis by A24,A25,A26,A30,A27,A28,CARD_3:10;
     end;
     suppose
@@ -1807,22 +1808,22 @@ A31:  o = compsym(a,b,c) and
 A32:  ex F being Function of product<*H(b,c),H(a,b)*>, H(a,c) st F =
 O.o & for f,g being set st f in H(a,b) & g in H(b,c) holds F.<*g,f*> = R(a,b,c,
       g,f) by A19;
-A33:  the_result_sort_of compsym(a,b,c) = homsym(a,c) by Def5;
+A33:  the_result_sort_of compsym(a,b,c) = homsym(a,c) by Def3;
       consider ax,cx being Element of X() such that
 A34:  homsym(a,c) = homsym(ax,cx) and
 A35:  S.homsym(a,c) = H(ax,cx) by A23;
-      ax = a & cx = c by A34,Th22;
+      ax = a & cx = c by A34,Th12;
       then
 A36:  (S*the ResultSort of CS).o = H(a,c) by A31,A35,A33,FUNCT_2:15;
-A37:  the_arity_of compsym(a,b,c) = <*homsym(b,c),homsym(a,b)*> by Def5;
+A37:  the_arity_of compsym(a,b,c) = <*homsym(b,c),homsym(a,b)*> by Def3;
       consider a9,b9 being Element of X() such that
 A38:  homsym(a,b) = homsym(a9,b9) and
 A39:  S.homsym(a,b) = H(a9,b9) by A23;
       consider b99,c9 being Element of X() such that
 A40:  homsym(b,c) = homsym(b99,c9) and
 A41:  S.homsym(b,c) = H(b99,c9) by A23;
-A42:  b99 = b & c9 = c by A40,Th22;
-      a9 = a & b9 = b by A38,Th22;
+A42:  b99 = b & c9 = c by A40,Th12;
+      a9 = a & b9 = b by A38,Th12;
       then
       (S#*the Arity of CS).o = product<*H(b,c),H(a,b)*> by A22,A24,A31,A39,A41
 ,A42,A37,FINSEQ_2:125;
@@ -1838,15 +1839,15 @@ A42:  b99 = b & c9 = c by A40,Th22;
     consider a9,b9 being Element of X() such that
 A43: homsym(a,b) = homsym(a9,b9) and
 A44: S.homsym(a,b) = H(a9,b9) by A23;
-    a = a9 by A43,Th22;
-    hence (the Sorts of A).homsym(a,b) = H(a,b) by A43,A44,Th22;
+    a = a9 by A43,Th12;
+    hence (the Sorts of A).homsym(a,b) = H(a,b) by A43,A44,Th12;
   end;
   hereby
     let a be Element of X();
     (idsym a)`1 = 1 by MCART_1:7;
     then ex b being Element of X() st idsym a = idsym b & ex F being Function
     of {{}}, H(b,b) st F = O.idsym a & F.{} = I(b) by A19;
-    hence Den(idsym(a),A).{} = I(a) by Th21;
+    hence Den(idsym(a),A).{} = I(a) by Th11;
   end;
   let a,b,c be Element of X();
   set o = compsym(a,b,c);
@@ -1856,23 +1857,23 @@ A45: o = compsym(a9,b9,c9) and
 A46: ex F being Function of product<*H(b9,c9),H(a9,b9)*>, H(a9,c9) st F
 = O.o & for f,g being set st f in H(a9,b9) & g in H(b9,c9) holds F.<*g,f*> = R(
   a9,b9,c9,g,f) by A19;
-A47: c = c9 by A45,Th23;
+A47: c = c9 by A45,Th13;
   let f,g be Element of Y();
   assume
 A48: f in H(a,b) & g in H(b,c);
-  a = a9 & b = b9 by A45,Th23;
+  a = a9 & b = b9 by A45,Th13;
   hence thesis by A46,A47,A48;
 end;
 
 definition
   let C be Category;
   func MSAlg C -> strict MSAlgebra over CatSign the carrier of C means
-  : Def15
+  : Def13
   :
   ( for a,b being Object of C holds (the Sorts of it).homsym(a,b) = Hom(a,b)) &
   (for a being Object of C holds Den(idsym(a),it).{} = id a) & for a,b,c being
 Object of C for f,g being Morphism of C st dom f = a & cod f = b & dom g = b &
-  cod g = c holds Den(compsym(a,b,c),it).<*g,f*> = g*f;
+  cod g = c holds Den(compsym(a,b,c),it).<*g,f*> = g(*)f;
   uniqueness
   proof
     let A1,A2 be strict MSAlgebra over CatSign the carrier of C such that
@@ -1880,25 +1881,27 @@ A1: for a,b being Object of C holds (the Sorts of A1).homsym(a,b) =
     Hom(a,b) and
 A2: for a being Object of C holds Den(idsym(a),A1).{} = id a and
 A3: for a,b,c being Object of C for f,g being Morphism of C st dom f =
-a & cod f = b & dom g = b & cod g = c holds Den(compsym(a,b,c),A1).<*g,f*> = g*
+a & cod f = b & dom g = b & cod g = c
+  holds Den(compsym(a,b,c),A1).<*g,f*> = g(*)
     f and
 A4: for a,b being Object of C holds (the Sorts of A2).homsym(a,b) =
     Hom(a,b) and
 A5: for a being Object of C holds Den(idsym(a),A2).{} = id a and
 A6: for a,b,c being Object of C for f,g being Morphism of C st dom f =
-a & cod f = b & dom g = b & cod g = c holds Den(compsym(a,b,c),A2).<*g,f*> = g*
+a & cod f = b & dom g = b & cod g = c
+   holds Den(compsym(a,b,c),A2).<*g,f*> = g(*)
     f;
 A7: now
       let i be set;
       assume i in the carrier' of CatSign the carrier of C;
       then reconsider o = i as OperSymbol of CatSign the carrier of C;
-      per cases by Th25;
+      per cases by Th15;
       suppose
         o`1 = 1;
         then consider a being Object of C such that
-A8:     o = idsym(a) by Th26;
-A9:     id a in Hom(a,a) by CAT_1:26;
-A10:    the_result_sort_of idsym a = homsym(a,a) by Def5;
+A8:     o = idsym(a) by Th16;
+A9:     id a in Hom(a,a) by CAT_1:27;
+A10:    the_result_sort_of idsym a = homsym(a,a) by Def3;
         (the Sorts of A1).homsym(a,a) = Hom(a,a) by A1;
         then Result(idsym a,A1) = Hom(a,a) by A10,PRALG_2:3;
         then
@@ -1915,14 +1918,14 @@ A13:      x = {} by TARSKI:def 1;
         then Result(idsym a,A2) = Hom(a,a) by A10,PRALG_2:3;
         then
 A14:    dom Den(idsym a,A2) = Args(idsym a,A2) by A9,FUNCT_2:def 1;
-        Args(idsym a,A1) = {{}} & Args(idsym a,A2) = {{}} by Th34;
+        Args(idsym a,A1) = {{}} & Args(idsym a,A2) = {{}} by Th24;
         hence (the Charact of A1).i = (the Charact of A2).i by A8,A11,A14,A12,
 FUNCT_1:2;
       end;
       suppose
         o`1 = 2;
         then consider a,b,c being Object of C such that
-A15:    o = compsym(a,b,c) by Th27;
+A15:    o = compsym(a,b,c) by Th17;
 A16:    now
           assume product <*Hom(b,c),Hom(a,b)*> <> {};
           then reconsider X = product <*Hom(b,c),Hom(a,b)*> as non empty set;
@@ -1935,9 +1938,9 @@ A18:      f in Hom(a,b) and
 A19:      cod f = b & dom g = b by A17,A18,CAT_1:1;
           cod g = c by A17,CAT_1:1;
           then
-A20:      cod (g*f) = c by A19,CAT_1:17;
+A20:      cod (g(*)f) = c by A19,CAT_1:17;
           dom f = a by A18,CAT_1:1;
-          then dom (g*f) = a by A19,CAT_1:17;
+          then dom (g(*)f) = a by A19,CAT_1:17;
           hence Hom(a,c) <> {} by A20,CAT_1:1;
         end;
 A21:    now
@@ -1950,7 +1953,7 @@ A24:      x = <*g,f*> by FINSEQ_3:124;
           reconsider g,f as Morphism of C by A22,A23;
 A25:      dom g = b & cod g = c by A22,CAT_1:1;
 A26:      dom f = a & cod f = b by A23,CAT_1:1;
-          then Den(compsym(a,b,c),A1).x = g*f by A3,A24,A25;
+          then Den(compsym(a,b,c),A1).x = g(*)f by A3,A24,A25;
           hence Den(compsym(a,b,c),A1).x = Den(compsym(a,b,c),A2).x by A6,A24
 ,A26,A25;
         end;
@@ -1971,7 +1974,7 @@ FUNCT_2:def 1;
       let i be set;
       assume i in the carrier of CatSign the carrier of C;
       then consider a,b being Object of C such that
-A30:  i = homsym(a,b) by Th24;
+A30:  i = homsym(a,b) by Th14;
       thus (the Sorts of A1).i = Hom(a,b) by A1,A30
         .= (the Sorts of A2).i by A4,A30;
     end;
@@ -1982,9 +1985,9 @@ A30:  i = homsym(a,b) by Th24;
   proof
     deffunc I(Object of C) = id $1;
     deffunc R(Object of C,Object of C,Object of C, (Morphism of C), Morphism
-    of C) = $4*$5;
+    of C) = $4(*)$5;
     deffunc H(Object of C,Object of C) = Hom($1,$2);
-A31: for a being Object of C holds I(a) in H(a,a) by CAT_1:26;
+A31: for a being Object of C holds I(a) in H(a,a) by CAT_1:27;
 A32: now
       let a,b,c be Object of C, f,g be Morphism of C;
       assume that
@@ -1993,10 +1996,10 @@ A34:  g in H(b,c);
 A35:  cod f = b & dom g = b by A33,A34,CAT_1:1;
       cod g = c by A34,CAT_1:1;
       then
-A36:  cod (g*f) = c by A35,CAT_1:17;
+A36:  cod (g(*)f) = c by A35,CAT_1:17;
       dom f = a by A33,CAT_1:1;
-      then dom (g*f) = a by A35,CAT_1:17;
-      hence R(a,b,c,g,f) in H(a,c) by A36,CAT_1:1;
+      then dom (g(*)f) = a by A35,CAT_1:17;
+      hence R(a,b,c,g,f) in H(a,c) by A36;
     end;
 A37: for a,b being Object of C holds H(a,b) c= the carrier' of C;
     consider A being strict MSAlgebra over CatSign the carrier of C such that
@@ -2010,32 +2013,32 @@ of the carrier' of C st f in H(a,b) & g in H(b,c) holds Den(compsym(a,b,c),A).
     now
       let a,b,c be Object of C, f,g be Morphism of C;
       assume dom f = a & cod f = b & dom g = b & cod g = c;
-      then f in Hom(a,b) & g in Hom(b,c) by CAT_1:1;
-      hence Den(compsym(a,b,c),A).<*g,f*> = g*f by A39;
+      then f in Hom(a,b) & g in Hom(b,c);
+      hence Den(compsym(a,b,c),A).<*g,f*> = g(*)f by A39;
     end;
     hence thesis by A38;
   end;
 end;
 
-theorem Th36:
+theorem Th25:
   for A being Category, a being Object of A holds Result(idsym a,
   MSAlg A) = Hom(a,a)
 proof
   let A be Category, a be Object of A;
   thus Result(idsym a, MSAlg A) = (the Sorts of MSAlg A).the_result_sort_of
   idsym a by PRALG_2:3
-    .= (the Sorts of MSAlg A).homsym(a,a) by Def5
-    .= Hom(a,a) by Def15;
+    .= (the Sorts of MSAlg A).homsym(a,a) by Def3
+    .= Hom(a,a) by Def13;
 end;
 
-theorem Th37:
+theorem Th26:
   for A being Category, a,b,c being Object of A holds Args(compsym
   (a,b,c), MSAlg A) = product <*Hom(b,c), Hom(a,b)*> & Result(compsym(a,b,c),
   MSAlg A) = Hom(a,c)
 proof
   let A be Category, a,b,c be Object of A;
   for a,b being Object of A holds (the Sorts of MSAlg A).homsym(a,b) = Hom
-  (a,b) by Def15;
+  (a,b) by Def13;
   hence thesis by Lm3;
 end;
 
@@ -2057,43 +2060,43 @@ A4:   z in (the Sorts of MSAlg C).y by A2,XBOOLE_0:3;
       then reconsider x,y as SortSymbol of CatSign the carrier of C by A3,A4,
 FUNCT_1:def 2;
       consider a,b being Object of C such that
-A5:   x = homsym(a,b) by Th24;
-A6:   z in Hom(a,b) by A3,A5,Def15;
+A5:   x = homsym(a,b) by Th14;
+A6:   z in Hom(a,b) by A3,A5,Def13;
       consider c,d being Object of C such that
-A7:   y = homsym(c,d) by Th24;
-A8:   z in Hom(c,d) by A4,A7,Def15;
+A7:   y = homsym(c,d) by Th14;
+A8:   z in Hom(c,d) by A4,A7,Def13;
       reconsider z as Morphism of C by A6;
 A9:   dom z = a & cod z = b by A6,CAT_1:1;
       dom z = c by A8,CAT_1:1;
       hence contradiction by A1,A5,A7,A8,A9,CAT_1:1;
     end;
     let o be OperSymbol of CatSign the carrier of C;
-    per cases by Th25;
+    per cases by Th15;
     suppose
       o`1 = 1;
       then consider a being Object of C such that
-A10:  o = idsym a by Th26;
-      Result(o, MSAlg C) = Hom(a,a) by A10,Th36;
-      hence thesis by CAT_1:26;
+A10:  o = idsym a by Th16;
+      Result(o, MSAlg C) = Hom(a,a) by A10,Th25;
+      hence thesis by CAT_1:27;
     end;
     suppose
       o`1 = 2;
       then consider a,b,c being Object of C such that
-A11:  o = compsym(a,b,c) by Th27;
+A11:  o = compsym(a,b,c) by Th17;
       set A = the Element of Args(o, MSAlg C);
       assume
 A12:  Args(o, MSAlg C) <> {};
-      Args(o, MSAlg C) = product <*Hom(b,c), Hom(a,b)*> by A11,Th37;
+      Args(o, MSAlg C) = product <*Hom(b,c), Hom(a,b)*> by A11,Th26;
       then
 A13:  ex g,f being set st g in Hom(b,c) & f in Hom(a,b) & A = <*g,f*> by A12,
 FINSEQ_3:124;
-      Result(o, MSAlg C) = Hom(a,c) by A11,Th37;
+      Result(o, MSAlg C) = Hom(a,c) by A11,Th26;
       hence thesis by A13,CAT_1:24;
     end;
   end;
 end;
 
-theorem Th38:
+theorem Th27:
   for C1,C2 being Category, F being Functor of C1,C2 holds F-MSF(
   the carrier of CatSign the carrier of C1, the Sorts of MSAlg C1) is
 ManySortedFunction of MSAlg C1, (MSAlg C2)|(CatSign the carrier of C1, Upsilon
@@ -2108,21 +2111,21 @@ proof
   assume i in the carrier of S1;
   then reconsider s = i as SortSymbol of S1;
   consider a,b being Object of C1 such that
-A1: s = homsym(a,b) by Th24;
-  f, g form_morphism_between S1,S2 by Th33;
+A1: s = homsym(a,b) by Th14;
+  f, g form_morphism_between S1,S2 by Th23;
   then the Sorts of B1 = (the Sorts of A2)*f by INSTALG1:def 3;
   then
 A2: (the Sorts of A2).(f.s) = (the Sorts of B1).s by FUNCT_2:15;
-  f.s = homsym(F.a,F.b) by A1,Th30;
+  f.s = homsym(F.a,F.b) by A1,Th20;
   then
-A3: (the Sorts of A2).(f.s) = Hom(F.a,F.b) by Def15;
-A4: (the Sorts of A1).s = Hom(a,b) by A1,Def15;
+A3: (the Sorts of A2).(f.s) = Hom(F.a,F.b) by Def13;
+A4: (the Sorts of A1).s = Hom(a,b) by A1,Def13;
   H.s = F|((the Sorts of A1).s) by Def1;
-  then H.s = hom(F,a,b) by A4,CAT_1:def 22;
+  then H.s = hom(F,a,b) by A4;
   hence thesis by A2,A4,A3;
 end;
 
-theorem Th39:
+theorem Th28:
   for C being Category, a,b,c being Object of C for x being set
 holds x in Args(compsym(a,b,c), MSAlg C) iff ex g,f being Morphism of C st x =
   <*g,f*> & dom f = a & cod f = b & dom g = b & cod g = c
@@ -2130,7 +2133,7 @@ proof
   let C be Category, a,b,c be Object of C, x be set;
   set A = MSAlg C;
   for a,b being Object of C holds (the Sorts of A).homsym(a,b) = Hom(a,b )
-  by Def15;
+  by Def13;
   then
 A1: Args(compsym(a,b,c), A) = product <*Hom(b,c),Hom(a,b)*> by Lm3;
   hereby
@@ -2146,11 +2149,11 @@ A3: x = <*g,f*> by A1,FINSEQ_3:124;
   given g,f being Morphism of C such that
 A4: x = <*g,f*> and
 A5: dom f = a & cod f = b & dom g = b & cod g = c;
-  f in Hom(a,b) & g in Hom(b,c) by A5,CAT_1:1;
+  f in Hom(a,b) & g in Hom(b,c) by A5;
   hence thesis by A1,A4,FINSEQ_3:124;
 end;
 
-theorem Th40:
+theorem Th29:
   for C1,C2 being Category, F being Functor of C1,C2 for a,b,c
 being Object of C1 for f,g being Morphism of C1 st f in Hom(a,b) & g in Hom(b,c
   ) for x being Element of Args(compsym(a,b,c),MSAlg C1) st x = <*g,f*> for H
@@ -2176,37 +2179,37 @@ A4: dom (F.g) = F.b & cod (F.g) = F.c by CAT_1:1;
   F.f in Hom(F.a,F.b) by A1,CAT_1:81;
   then dom (F.f) = F.a & cod (F.f) = F.b by CAT_1:1;
   then
-A5: <*F.g,F.f*> in Args(compsym(F.a,F.b,F.c), A2) by A4,Th39;
+A5: <*F.g,F.f*> in Args(compsym(F.a,F.b,F.c), A2) by A4,Th28;
 A6: dom g = b & cod g = c by A2,CAT_1:1;
   dom f = a & cod f = b by A1,CAT_1:1;
   then
-A7: x in Args(o, A1) by A3,A6,Th39;
+A7: x in Args(o, A1) by A3,A6,Th28;
   let H be ManySortedFunction of A1, B such that
 A8: H = F-MSF(the carrier of CS1, the Sorts of A1);
-  (the Sorts of A1).homsym(b,c) = Hom(b,c) by Def15;
+  (the Sorts of A1).homsym(b,c) = Hom(b,c) by Def13;
   then H.homsym(b,c) = F|Hom(b,c) by A8,Def1;
   then
 A9: (H.homsym(b,c)).g = F.g by A2,FUNCT_1:49;
 A10: dom <*g,f*> = Seg 2 by FINSEQ_1:89;
   then
 A11: 1 in dom <*g,f*> by FINSEQ_1:2,TARSKI:def 2;
-  (the Sorts of A1).homsym(a,b) = Hom(a,b) by Def15;
+  (the Sorts of A1).homsym(a,b) = Hom(a,b) by Def13;
   then H.homsym(a,b) = F|Hom(a,b) by A8,Def1;
   then
 A12: (H.homsym(a,b)).f = F.f by A1,FUNCT_1:49;
 A13: 2 in dom <*g,f*> by A10,FINSEQ_1:2,TARSKI:def 2;
-  u,p form_morphism_between CS1, CS2 by Th33;
+  u,p form_morphism_between CS1, CS2 by Th23;
   then
 A14: Args(o, B) = Args(p.o, A2) by INSTALG1:24
-    .= Args(compsym(F.a,F.b,F.c), A2) by Th32;
+    .= Args(compsym(F.a,F.b,F.c), A2) by Th22;
   then consider g9,f9 being Morphism of C2 such that
 A15: H#x = <*g9,f9*> and
   dom f9 = F.a and
   cod f9 = F.b and
   dom g9 = F.b and
-  cod g9 = F. c by A5,Th39;
+  cod g9 = F. c by A5,Th28;
 A16: <*g9,f9*>.1 = g9 by FINSEQ_1:44;
-A17: the_arity_of o = <*homsym(b,c),homsym(a,b)*> by Def5;
+A17: the_arity_of o = <*homsym(b,c),homsym(a,b)*> by Def3;
   then <*g,f*>.1 = g & (the_arity_of o)/.1 = homsym(b,c) by FINSEQ_1:44
 ,FINSEQ_4:17;
   then
@@ -2217,10 +2220,10 @@ A18: <*g9,f9*>.1 = F.g by A3,A7,A5,A14,A15,A9,A11,MSUALG_3:24;
   hence thesis by A15,A18,A16,FINSEQ_1:44;
 end;
 
-theorem Th42:
+theorem Th30:
   for C being Category, a,b,c being Object of C, f,g being
 Morphism of C st f in Hom(a,b) & g in Hom(b,c) holds Den(compsym(a,b,c), MSAlg
-  C).<*g,f*> = g*f
+  C).<*g,f*> = g(*)f
 proof
   let C be Category, a,b,c be Object of C, f,g be Morphism of C;
   assume that
@@ -2228,7 +2231,7 @@ A1: f in Hom(a,b) and
 A2: g in Hom(b,c);
 A3: dom g = b & cod g = c by A2,CAT_1:1;
   dom f = a & cod f = b by A1,CAT_1:1;
-  hence thesis by A3,Def15;
+  hence thesis by A3,Def13;
 end;
 
 theorem
@@ -2243,28 +2246,28 @@ A1: f in Hom(a,b) and
 A2: g in Hom(b,c) and
 A3: h in Hom(c,d);
 A4: cod g = c by A2,CAT_1:1;
-A5: Den(compsym(b,c,d), MSAlg C).<*h,g*> = h*g by A2,A3,Th42;
+A5: Den(compsym(b,c,d), MSAlg C).<*h,g*> = h(*)g by A2,A3,Th30;
 A6: cod f = b by A1,CAT_1:1;
 A7: dom h = c by A3,CAT_1:1;
   cod h = d by A3,CAT_1:1;
   then
-A8: cod (h*g) = d by A4,A7,CAT_1:17;
+A8: cod (h(*)g) = d by A4,A7,CAT_1:17;
 A9: dom g = b by A2,CAT_1:1;
-  then dom (h*g) = b by A4,A7,CAT_1:17;
+  then dom (h(*)g) = b by A4,A7,CAT_1:17;
   then
-A10: h*g in Hom(b,d) by A8,CAT_1:1;
+A10: h(*)g in Hom(b,d) by A8;
   dom f = a by A1,CAT_1:1;
   then
-A11: dom (g*f) = a by A6,A9,CAT_1:17;
-  cod (g*f) = c by A6,A9,A4,CAT_1:17;
+A11: dom (g(*)f) = a by A6,A9,CAT_1:17;
+  cod (g(*)f) = c by A6,A9,A4,CAT_1:17;
   then
-A12: g*f in Hom(a,c) by A11,CAT_1:1;
-  Den(compsym(a,b,c), MSAlg C).<*g,f*> = g*f by A1,A2,Th42;
+A12: g(*)f in Hom(a,c) by A11;
+  Den(compsym(a,b,c), MSAlg C).<*g,f*> = g(*)f by A1,A2,Th30;
   hence Den(compsym(a,c,d), MSAlg C).<*h, Den(compsym(a,b,c), MSAlg C).<*g,f*>
-  *> = h*(g*f) by A3,A12,Th42
-    .= (h*g)*f by A6,A9,A4,A7,CAT_1:18
+  *> = h(*)(g(*)f) by A3,A12,Th30
+    .= (h(*)g)(*)f by A6,A9,A4,A7,CAT_1:18
     .= Den(compsym(a,b,d),MSAlg C).<*Den(compsym(b,c,d),MSAlg C).<*h,g*>,f*>
-  by A1,A5,A10,Th42;
+  by A1,A5,A10,Th30;
 end;
 
 theorem
@@ -2277,12 +2280,12 @@ proof
 A1: f in Hom(a,b);
   then dom f = a by CAT_1:1;
   then
-A2: f*id a = f by CAT_1:22;
+A2: f(*)id a = f by CAT_1:22;
   cod f = b by A1,CAT_1:1;
   then
-A3: (id b)*f = f by CAT_1:21;
-  id b in Hom(b,b) & id a in Hom(a,a) by CAT_1:26;
-  hence thesis by A1,A3,A2,Th42;
+A3: (id b)(*)f = f by CAT_1:21;
+  id b in Hom(b,b) & id a in Hom(a,a) by CAT_1:27;
+  hence thesis by A1,A3,A2,Th30;
 end;
 
 theorem
@@ -2297,72 +2300,72 @@ proof
   set A1 = MSAlg C1, A2 = MSAlg C2;
   set f = Upsilon F, G = Psi F;
   set B1 = A2|(S1, f, G);
-A1: f, G form_morphism_between S1,S2 by Th33;
+A1: f, G form_morphism_between S1,S2 by Th23;
   reconsider H = F-MSF(the carrier of S1, the Sorts of A1) as
-  ManySortedFunction of A1,B1 by Th38;
+  ManySortedFunction of A1,B1 by Th27;
   take H;
   thus H = F-MSF(the carrier of S1, the Sorts of A1);
   let o be OperSymbol of S1;
   assume
 A2: Args(o,A1) <> {};
-  per cases by Th25;
+  per cases by Th15;
   suppose
     o`1 = 1;
     then consider a being Object of C1 such that
-A3: o = idsym(a) by Th26;
+A3: o = idsym(a) by Th16;
     let x be Element of Args(o,A1);
 A4: Args(G.o,A2) = Args(o,B1) by A1,INSTALG1:24;
-A5: G.o = idsym(F.a) by A3,Th31;
-    then Args(G.o,A2) = {{}} by Th34;
+A5: G.o = idsym(F.a) by A3,Th21;
+    then Args(G.o,A2) = {{}} by Th24;
     then
 A6: H#x = {} by A4,TARSKI:def 1;
     reconsider h = id a as Morphism of a,a;
-    dom id a = a & cod id a = a by CAT_1:19;
+    dom id a = a & cod id a = a by CAT_1:58;
     then
-A7: id a in Hom(a,a) by CAT_1:1;
-    Args(o,A1) = {{}} by A3,Th34;
+A7: id a in Hom(a,a);
+    Args(o,A1) = {{}} by A3,Th24;
     then x = {} by TARSKI:def 1;
     hence
     (H.(the_result_sort_of o)).(Den(o,A1).x) = (H.(the_result_sort_of o))
-    .h by A3,Def15
-      .= (H.homsym(a,a)).h by A3,Def5
+    .h by A3,Def13
+      .= (H.homsym(a,a)).h by A3,Def3
       .= (F|((the Sorts of A1).homsym(a,a))).h by Def1
-      .= (F|Hom(a,a)).h by Def15
-      .= hom(F,a,a).h by CAT_1:def 22
+      .= (F|Hom(a,a)).h by Def13
+      .= hom(F,a,a).h
       .= F.h by A7,CAT_1:88
       .= id (F.a) by CAT_1:71
-      .= Den(G.o,A2).(H#x) by A5,A6,Def15
-      .= Den(o,B1).(H#x) by Th33,INSTALG1:23;
+      .= Den(G.o,A2).(H#x) by A5,A6,Def13
+      .= Den(o,B1).(H#x) by Th23,INSTALG1:23;
   end;
   suppose
 A8: o`1 = 2;
     let x be Element of Args(o,A1);
     consider a,b,c being Object of C1 such that
-A9: o = compsym(a,b,c) by A8,Th27;
-A10: G.o = compsym(F.a,F.b,F.c) by A9,Th32;
+A9: o = compsym(a,b,c) by A8,Th17;
+A10: G.o = compsym(F.a,F.b,F.c) by A9,Th22;
     consider g,h being Morphism of C1 such that
 A11: x = <*g,h*> and
 A12: dom h = a and
 A13: cod h = b and
 A14: dom g = b and
-A15: cod g = c by A2,A9,Th39;
-A16: g in Hom(b,c) & h in Hom(a,b) by A12,A13,A14,A15,CAT_1:1;
-    dom (g*h) = a & cod (g*h) = c by A12,A13,A14,A15,CAT_1:17;
+A15: cod g = c by A2,A9,Th28;
+A16: g in Hom(b,c) & h in Hom(a,b) by A12,A13,A14,A15;
+    dom (g(*)h) = a & cod (g(*)h) = c by A12,A13,A14,A15,CAT_1:17;
     then
-A17: g*h in Hom(a,c) by CAT_1:1;
-    then reconsider gh = g*h as Morphism of a,c by CAT_1:def 4;
+A17: g(*)h in Hom(a,c);
+    then reconsider gh = g(*)h as Morphism of a,c by CAT_1:def 5;
 A18: dom (F.h) = F.a & cod (F.h) = F.b by A12,A13,CAT_1:72;
 A19: dom (F.g) = F.b & cod (F.g) = F.c by A14,A15,CAT_1:72;
     thus (H.(the_result_sort_of o)).(Den(o,A1).x) = (H.(the_result_sort_of o))
-    .gh by A9,A11,A12,A13,A14,A15,Def15
-      .= (H.homsym(a,c)).gh by A9,Def5
+    .gh by A9,A11,A12,A13,A14,A15,Def13
+      .= (H.homsym(a,c)).gh by A9,Def3
       .= (F|((the Sorts of A1).homsym(a,c))).gh by Def1
-      .= (F|Hom(a,c)).gh by Def15
-      .= hom(F,a,c).gh by CAT_1:def 22
+      .= (F|Hom(a,c)).gh by Def13
+      .= hom(F,a,c).gh
       .= F.gh by A17,CAT_1:88
-      .= (F.g)*(F.h) by A13,A14,CAT_1:64
-      .= Den(G.o,A2).<*F.g,F.h*> by A10,A18,A19,Def15
-      .= Den(G.o,A2).(H#x) by A9,A11,A16,Th40
-      .= Den(o,B1).(H#x) by Th33,INSTALG1:23;
+      .= (F.g)(*)(F.h) by A13,A14,CAT_1:64
+      .= Den(G.o,A2).<*F.g,F.h*> by A10,A18,A19,Def13
+      .= Den(G.o,A2).(H#x) by A9,A11,A16,Th29
+      .= Den(o,B1).(H#x) by Th23,INSTALG1:23;
   end;
 end;

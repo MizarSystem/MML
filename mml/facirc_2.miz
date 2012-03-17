@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek , Shin'nosuke Yamaguchi and Katsumi Wasaki
 ::
 :: Received March 22, 2002
-:: Copyright (c) 2002-2011 Association of Mizar Users
+:: Copyright (c) 2002-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,22 +19,24 @@ environ
       FUNCT_4, TARSKI, CARD_1, NAT_1, FINSEQ_2, XBOOLEAN, PBOOLE, ARYTM_3,
       FACIRC_1, SUBSET_1, CIRCUIT1, MSAFREE2, ORDINAL4, XXREAL_0, MCART_1,
       FSM_1, CIRCUIT2, GLIB_000, FACIRC_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
-      MCART_1, RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+ notations TARSKI, XBOOLE_0, ENUMSET1,
+      XTUPLE_0, SUBSET_1, CARD_1, NUMBERS, ORDINAL1,
+      NAT_1, MCART_1, RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCOP_1, FUNCT_4, PBOOLE, MARGREL1, BINARITH, CLASSES1, PARTFUN1,
       MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, CLASSES1, BINARITH, CIRCUIT1, CIRCUIT2,
-      FACIRC_1, NAT_1, RELSET_1, BINOP_1, WELLORD1;
+      FACIRC_1, NAT_1, RELSET_1, BINOP_1, WELLORD1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
       XREAL_0, NAT_1, FINSEQ_1, MARGREL1, FINSEQ_2, CARD_3, STRUCT_0, MSUALG_1,
-      CIRCCOMB, FACIRC_1, CIRCCMB2, CARD_1, RELSET_1, MSAFREE2, FINSET_1;
+      CIRCCOMB, FACIRC_1, CIRCCMB2, CARD_1, RELSET_1, MSAFREE2, FINSET_1,
+      FUNCT_4, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, TARSKI, CIRCUIT2, CIRCCOMB, FACIRC_1, XBOOLE_0,
-      MSAFREE2, MARGREL1;
- theorems TARSKI, ZFMISC_1, ENUMSET1, MCART_1, NAT_1, RELAT_1, ORDINAL1,
+      MSAFREE2, MARGREL1, XTUPLE_0;
+ theorems TARSKI, ZFMISC_1, ENUMSET1, MCART_1, NAT_1, ORDINAL1,
       FUNCT_1, FUNCT_2, FINSEQ_1, PARTFUN1, FUNCT_4, FINSEQ_6, PBOOLE,
       CIRCUIT2, CIRCCOMB, FACIRC_1, CIRCCMB2, CIRCUIT1, FUNCOP_1, XBOOLE_0,
-      XBOOLE_1, FINSEQ_2, XREAL_1, CLASSES1, CARD_1;
+      XBOOLE_1, FINSEQ_2, XREAL_1, CLASSES1, CARD_1, XTUPLE_0, XREGULAR;
  schemes NAT_1, CIRCCMB2, PBOOLE, PARTFUN1;
 
 begin
@@ -139,12 +141,10 @@ definition
   proof
     set S = SingleMSS(x);
     let A1, A2 be Boolean strict MSAlgebra over S;
-A1: dom the Charact of A1 = {} by PARTFUN1:def 2;
-A2: dom the Charact of A2 = {} by PARTFUN1:def 2;
-A3: the Sorts of A1 = (the carrier of S) --> BOOLEAN by CIRCCOMB:57;
-A4: the Charact of A1 = {} by A1;
-    the Charact of A2 = {} by A2;
-    hence thesis by A3,A4,CIRCCOMB:57;
+A1: the Sorts of A1 = (the carrier of S) --> BOOLEAN by CIRCCOMB:57;
+A2: the Charact of A1 = {};
+    the Charact of A2 = {};
+    hence thesis by A1,A2,CIRCCOMB:57;
   end;
 end;
 
@@ -156,7 +156,7 @@ proof
   the ResultSort of SingleMSS x tolerates the ResultSort of S by PARTFUN1:59;
 end;
 
-theorem Th5:
+theorem Th4:
   for x being set, S being non empty ManySortedSign st x in the carrier of S
   holds (SingleMSS x) +* S = the ManySortedSign of S
 proof
@@ -170,8 +170,8 @@ A2: {} \/ the carrier' of S = the carrier' of S;
 A3: the carrier of SingleMSS x = {x} by Def1;
 A4: the ResultSort of SingleMSS x = {};
 A5: the Arity of SingleMSS x = {};
-A6: {}+*the ResultSort of S = the ResultSort of S by FUNCT_4:20;
-A7: {}+*the Arity of S = the Arity of S by FUNCT_4:20;
+A6: {}+*the ResultSort of S = the ResultSort of S;
+A7: {}+*the Arity of S = the Arity of S;
 A8: the carrier of T = the carrier of S by A1,A3,CIRCCOMB:def 2;
 A9: the carrier' of T = the carrier' of S by A2,A4,CIRCCOMB:def 2;
   the ResultSort of T = the ResultSort of S by A4,A6,CIRCCOMB:def 2;
@@ -189,17 +189,14 @@ proof
   assume
 A1: x in the carrier of S;
   then
-A2: S1 +* S = S by Th5;
+A2: S1 +* S = S by Th4;
 A3: {x} c= the carrier of S by A1,ZFMISC_1:31;
 A4: the carrier of S1 = {x} by Def1;
 A5: the Sorts of A = (the carrier of S) --> BOOLEAN by CIRCCOMB:57;
   the Sorts of A1 = (the carrier of S1) --> BOOLEAN by CIRCCOMB:57;
   then
 A6: the Sorts of A1 tolerates the Sorts of A by A5,FUNCOP_1:87;
-  dom the Charact of A1 = {} by PARTFUN1:def 2;
-  then the Charact of A1 = {};
-  then
-A7: the Charact of A = (the Charact of A1)+*the Charact of A by FUNCT_4:20;
+A7: the Charact of A = (the Charact of A1)+*the Charact of A;
 A8: the Sorts of A1+*A = (the Sorts of A1)+*the Sorts of A by A6,CIRCCOMB:def 4
 ;
 A9: the Charact of A = the Charact of A1+*A by A6,A7,CIRCCOMB:def 4;
@@ -446,7 +443,7 @@ A25: for n being Nat, S being non empty ManySortedSign, x being set
   end;
 end;
 
-theorem Th7:
+theorem Th6:
   for x,y being FinSequence, f,g,h being ManySortedSet of NAT st
   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
@@ -520,7 +517,7 @@ A24: for n being Nat holds h1.(n+1) = F(n,h1.n) by A21;
   hence thesis by A19;
 end;
 
-theorem Th8:
+theorem Th7:
   for a,b being FinSequence holds
   0-BitAdderStr(a,b) = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
   0-BitAdderCirc(a,b) = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
@@ -544,7 +541,7 @@ A = g.n & z = h.n holds f.(n+1) = S +* BitAdderWithOverflowStr(a .(n+1), b.(n+1
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th9:
+theorem Th8:
   for a,b being FinSequence, c being set st
   c = [<*>, (0-tuples_on BOOLEAN)-->FALSE] holds
   1-BitAdderStr(a,b) = 1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->FALSE)+*
@@ -567,7 +564,7 @@ A7: for n being Nat, S being non empty ManySortedSign,
   holds f.(n+1) = S+*BitAdderWithOverflowStr(a.(n+1),b.(n+1), z) &
   g.(n+1) = A+*BitAdderWithOverflowCirc(a.(n+1),b.(n+1), z) &
   h.(n+1) = MajorityOutput(a.(n+1), b.(n+1), z) by A1,Def4;
-  1-BitMajorityOutput(a,b) = h.(0+1) by A1,A4,A5,A6,A7,Th7;
+  1-BitMajorityOutput(a,b) = h.(0+1) by A1,A4,A5,A6,A7,Th6;
   hence thesis by A2,A3,A4,A5,A6,A7;
 end;
 
@@ -583,10 +580,10 @@ proof
   let a,b be set;
 A1: <*a*>.1 = a by FINSEQ_1:40;
   <*b*>.1 = b by FINSEQ_1:40;
-  hence thesis by A1,Th9;
+  hence thesis by A1,Th8;
 end;
 
-theorem Th11:
+theorem Th10:
   for n be Element of NAT for p,q being FinSeqLen of n
   for p1,p2, q1,q2 being FinSequence holds
   n-BitAdderStr(p^p1, q^q1) = n-BitAdderStr(p^p2, q^q2) &
@@ -680,8 +677,8 @@ A30: A = g1.i;
 A31: for i being Nat holds L[i] from NAT_1:sch 2(A13,A14);
   hence n-BitAdderStr(p^p1, q^q1) = n-BitAdderStr(p^p2, q^q2) &
   n-BitAdderCirc(p^p1, q^q1) = n-BitAdderCirc(p^p2, q^q2) by A1,A2,A7,A8;
-A32: n-BitMajorityOutput(p^p1, q^q1) = h1.n by A3,A4,A5,A6,Th7;
-  n-BitMajorityOutput(p^p2, q^q2) = h2.n by A9,A10,A11,A12,Th7;
+A32: n-BitMajorityOutput(p^p1, q^q1) = h1.n by A3,A4,A5,A6,Th6;
+  n-BitMajorityOutput(p^p2, q^q2) = h2.n by A9,A10,A11,A12,Th6;
   hence thesis by A31,A32;
 end;
 
@@ -711,10 +708,10 @@ A6: for n being Nat, S being non empty ManySortedSign,
   f.(n+1) = S +* BitAdderWithOverflowStr(p.(n+1), q.(n+1), z) &
   g.(n+1) = A +* BitAdderWithOverflowCirc(p.(n+1), q.(n+1), z) &
   h.(n+1) = MajorityOutput(p.(n+1), q.(n+1), z) by Def4;
-A7: n-BitMajorityOutput(x^<*a*>, y^<*b*>) = h.n by A3,A4,A5,A6,Th7;
-A8: (n+1)-BitAdderStr(x^<*a*>, y^<*b*>) = f.(n+1) by A3,A4,A5,A6,Th7;
-A9: (n+1)-BitAdderCirc(x^<*a*>, y^<*b*>) = g.(n+1) by A3,A4,A5,A6,Th7;
-A10: (n+1)-BitMajorityOutput(x^<*a*>, y^<*b*>) = h.(n+1) by A3,A4,A5,A6,Th7;
+A7: n-BitMajorityOutput(x^<*a*>, y^<*b*>) = h.n by A3,A4,A5,A6,Th6;
+A8: (n+1)-BitAdderStr(x^<*a*>, y^<*b*>) = f.(n+1) by A3,A4,A5,A6,Th6;
+A9: (n+1)-BitAdderCirc(x^<*a*>, y^<*b*>) = g.(n+1) by A3,A4,A5,A6,Th6;
+A10: (n+1)-BitMajorityOutput(x^<*a*>, y^<*b*>) = h.(n+1) by A3,A4,A5,A6,Th6;
 A11: len x = n by CARD_1:def 7;
 A12: len y = n by CARD_1:def 7;
 A13: p.(n+1) = a by A11,FINSEQ_1:42;
@@ -722,13 +719,13 @@ A14: q.(n+1) = b by A12,FINSEQ_1:42;
 A15: x^<*> = x by FINSEQ_1:34;
 A16: y^<*> = y by FINSEQ_1:34;
   then
-A17: n-BitAdderStr(p, q) = n-BitAdderStr(x, y) by A15,Th11;
-A18: n-BitAdderCirc(p, q) = n-BitAdderCirc(x, y) by A15,A16,Th11;
-  n-BitMajorityOutput(p, q) = n-BitMajorityOutput(x, y) by A15,A16,Th11;
+A17: n-BitAdderStr(p, q) = n-BitAdderStr(x, y) by A15,Th10;
+A18: n-BitAdderCirc(p, q) = n-BitAdderCirc(x, y) by A15,A16,Th10;
+  n-BitMajorityOutput(p, q) = n-BitMajorityOutput(x, y) by A15,A16,Th10;
   hence thesis by A1,A2,A6,A7,A8,A9,A10,A13,A14,A17,A18;
 end;
 
-theorem Th13:
+theorem Th12:
   for n be Element of NAT for x,y being FinSequence holds
   (n+1)-BitAdderStr(x, y) = n-BitAdderStr(x, y) +*
   BitAdderWithOverflowStr(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y)) &
@@ -752,14 +749,14 @@ A6: for n being Nat, S being non empty ManySortedSign,
   f.(n+1) = S +* BitAdderWithOverflowStr(x .(n+1), y.(n+1), z) &
   g.(n+1) = A +* BitAdderWithOverflowCirc(x .(n+1), y.(n+1), z) &
   h.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z) by Def4;
-A7: n-BitMajorityOutput(x, y) = h.n by A3,A4,A5,A6,Th7;
-A8: (n+1)-BitAdderStr(x, y) = f.(n+1) by A3,A4,A5,A6,Th7;
-A9: (n+1)-BitAdderCirc(x, y) = g.(n+1) by A3,A4,A5,A6,Th7;
-  (n+1)-BitMajorityOutput(x, y) = h.(n+1) by A3,A4,A5,A6,Th7;
+A7: n-BitMajorityOutput(x, y) = h.n by A3,A4,A5,A6,Th6;
+A8: (n+1)-BitAdderStr(x, y) = f.(n+1) by A3,A4,A5,A6,Th6;
+A9: (n+1)-BitAdderCirc(x, y) = g.(n+1) by A3,A4,A5,A6,Th6;
+  (n+1)-BitMajorityOutput(x, y) = h.(n+1) by A3,A4,A5,A6,Th6;
   hence thesis by A1,A2,A6,A7,A8,A9;
 end;
 
-theorem Th14:
+theorem Th13:
   for n,m be Element of NAT st n <= m for x,y being FinSequence holds
   InnerVertices (n-BitAdderStr(x,y)) c= InnerVertices (m-BitAdderStr(x,y))
 proof
@@ -781,7 +778,7 @@ A6: InnerVertices (n-BitAdderStr(x,y)) c=
     InnerVertices ((n+j)-BitAdderStr(x,y));
 A7: ((n+j)+1)-BitAdderStr(x,y) = (n+j)-BitAdderStr(x,y) +*
     BitAdderWithOverflowStr(x .((n+j)+1), y.((n+j)+1),
-    (n+j)-BitMajorityOutput(x, y)) by Th13;
+    (n+j)-BitMajorityOutput(x, y)) by Th12;
 A8: InnerVertices (((n+j)-BitAdderStr(x,y) +*
     BitAdderWithOverflowStr(x .((n+j)+1), y.((n+j)+1),
     (n+j)-BitMajorityOutput(x, y))))
@@ -814,14 +811,14 @@ proof
   let x,y be FinSequence;
   (n+1)-BitAdderStr(x,y) = n-BitAdderStr(x,y) +*
   BitAdderWithOverflowStr(x .(n+1), y.(n+1),
-  n-BitMajorityOutput(x, y)) by Th13;
+  n-BitMajorityOutput(x, y)) by Th12;
   hence thesis by FACIRC_1:27;
 end;
 
 definition
   let k,n be Nat such that
-A1: k >= 1 and
-A2: k <= n;
+X1: k >= 1 and
+X2: k <= n;
   let x,y be FinSequence;
   func (k,n)-BitAdderOutput(x,y) ->
   Element of InnerVertices (n-BitAdderStr(x,y)) means
@@ -831,27 +828,27 @@ A2: k <= n;
   uniqueness;
   existence
   proof consider i being Nat such that
-A3: k = 1+i by A1,NAT_1:10;
+A1: k = 1+i by X1,NAT_1:10;
     reconsider n9=n,k9=k,i as Element of NAT by ORDINAL1:def 12;
     set o = BitAdderOutput(x .k, y.k, i-BitMajorityOutput(x,y));
-    A4: InnerVertices
+    A2: InnerVertices
  (k9-BitAdderStr(x,y)) c= InnerVertices (n9-BitAdderStr(x,y))
-    by A2,Th14;
-A5: o in InnerVertices BitAdderWithOverflowStr(x .(i+1), y.(i+1),
-    i-BitMajorityOutput(x, y)) by A3,FACIRC_1:90;
-A6: k-BitAdderStr(x,y) = (i-BitAdderStr(x, y)) +*
+    by X2,Th13;
+A3: o in InnerVertices BitAdderWithOverflowStr(x .(i+1), y.(i+1),
+    i-BitMajorityOutput(x, y)) by A1,FACIRC_1:90;
+A4: k-BitAdderStr(x,y) = (i-BitAdderStr(x, y)) +*
     BitAdderWithOverflowStr(x .(i+1), y.(i+1), i-BitMajorityOutput(x, y))
-    by A3,Th13;
+    by A1,Th12;
     reconsider o as Element of
     BitAdderWithOverflowStr(x .(i+1), y.(i+1), i-BitMajorityOutput(x, y))
-    by A5;
+    by A3;
     (the carrier of
     BitAdderWithOverflowStr(x .(i+1), y.(i+1), i-BitMajorityOutput(x, y)))
     \/ the carrier of i-BitAdderStr(x,y)
-    = the carrier of k-BitAdderStr(x,y) by A6,CIRCCOMB:def 2;
+    = the carrier of k-BitAdderStr(x,y) by A4,CIRCCOMB:def 2;
     then o in the carrier of k-BitAdderStr(x,y) by XBOOLE_0:def 3;
-    then o in InnerVertices (k-BitAdderStr(x,y)) by A5,A6,CIRCCOMB:15;
-    hence thesis by A3,A4;
+    then o in InnerVertices (k-BitAdderStr(x,y)) by A3,A4,CIRCCOMB:15;
+    hence thesis by A1,A2;
   end;
 end;
 
@@ -920,7 +917,7 @@ proof
   let x,y be FinSequence;
   defpred P[Element of NAT] means
   InnerVertices ($1-BitAdderStr(x,y)) is Relation;
-  0-BitAdderStr(x,y) = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) by Th8;
+  0-BitAdderStr(x,y) = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) by Th7;
   then
 A1: P[ 0 ] by FACIRC_1:38;
 A2: for i being Element of NAT st P[i] holds P[i+1]
@@ -930,7 +927,7 @@ A2: for i being Element of NAT st P[i] holds P[i+1]
 A3: InnerVertices (i-BitAdderStr(x,y)) is Relation;
 A4: (i+1)-BitAdderStr(x, y) = i-BitAdderStr(x, y) +*
     BitAdderWithOverflowStr(x .(i+1), y.(i+1),
-    i-BitMajorityOutput(x, y)) by Th13;
+    i-BitMajorityOutput(x, y)) by Th12;
     InnerVertices BitAdderWithOverflowStr(x .(i+1), y.(i+1),
     i-BitMajorityOutput(x, y)) is Relation by FACIRC_1:88;
     hence thesis by A3,A4,FACIRC_1:3;
@@ -939,7 +936,7 @@ A4: (i+1)-BitAdderStr(x, y) = i-BitAdderStr(x, y) +*
   hence thesis;
 end;
 
-theorem Th18:
+theorem Th17:
   for x,y,c being set holds InnerVertices MajorityIStr(x,y,c) =
   {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']}
 proof
@@ -964,7 +961,7 @@ A2: 1GateCircStr(<*x,y*>,'&') tolerates 1GateCircStr(<*y,c*>,'&')
   hence thesis;
 end;
 
-theorem Th19:
+theorem Th18:
   for x,y,c being set st
   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&']
   holds InputVertices MajorityIStr(x,y,c) = {x,y,c}
@@ -989,7 +986,7 @@ A10: [1,y] in <*y*> by TARSKI:def 1;
 A11: <*y,c*> in {<*y,c*>} by TARSKI:def 1;
 A12: {<*y,c*>} in [<*y,c*>,'&'] by TARSKI:def 2;
   then
-A13: y <> [<*y,c*>,'&'] by A5,A7,A9,A10,A11,ORDINAL1:3;
+A13: y <> [<*y,c*>,'&'] by A5,A7,A9,A10,A11,XREGULAR:9;
 A14: c in {2,c} by TARSKI:def 2;
 A15: {2,c} in [2,c] by TARSKI:def 2;
   dom<*y,c*> = Seg 2 by FINSEQ_1:89;
@@ -998,7 +995,7 @@ A16: 2 in dom <*y,c*> by FINSEQ_1:1;
   <*y,c*>.2 = c by FINSEQ_1:44;
   then [2,c] in <*y,c*> by A16,FUNCT_1:1;
   then
-A17: c <> [<*y,c*>,'&'] by A11,A12,A14,A15,ORDINAL1:3;
+A17: c <> [<*y,c*>,'&'] by A11,A12,A14,A15,XREGULAR:9;
   dom<*x,y*> = Seg 2 by FINSEQ_1:89;
   then
 A18: 2 in dom <*x,y*> by FINSEQ_1:1;
@@ -1007,7 +1004,7 @@ A18: 2 in dom <*x,y*> by FINSEQ_1:1;
 A19: [2,y] in <*x,y*> by A18,FUNCT_1:1;
 A20: <*x,y*> in {<*x,y*>} by TARSKI:def 1;
   {<*x,y*>} in [<*x,y*>,'&'] by TARSKI:def 2;
-  then y <> [<*x,y*>,'&'] by A6,A8,A19,A20,ORDINAL1:3;
+  then y <> [<*x,y*>,'&'] by A6,A8,A19,A20,XREGULAR:9;
   then
 A21: not [<*x,y*>,'&'] in {y,c} by A3,TARSKI:def 2;
 A22: x in {1,x} by TARSKI:def 2;
@@ -1021,7 +1018,7 @@ A25: [1,x] in <*x*> by TARSKI:def 1;
 A26: <*x,y*> in {<*x,y*>} by TARSKI:def 1;
   {<*x,y*>} in [<*x,y*>,'&'] by TARSKI:def 2;
   then
-A27: x <> [<*x,y*>,'&'] by A22,A23,A24,A25,A26,ORDINAL1:3;
+A27: x <> [<*x,y*>,'&'] by A22,A23,A24,A25,A26,XREGULAR:9;
 A28: not c in {[<*x,y*>,'&'], [<*y,c*>,'&']} by A3,A17,TARSKI:def 2;
 A29: not x in {[<*x,y*>,'&'], [<*y,c*>,'&']} by A1,A27,TARSKI:def 2;
 A30: x in {2,x} by TARSKI:def 2;
@@ -1035,7 +1032,7 @@ A33: [2,x] in <*c,x*> by A32,FUNCT_1:1;
 A34: <*c,x*> in {<*c,x*>} by TARSKI:def 1;
   {<*c,x*>} in [<*c,x*>,'&'] by TARSKI:def 2;
   then
-A35: x <> [<*c,x*>,'&'] by A30,A31,A33,A34,ORDINAL1:3;
+A35: x <> [<*c,x*>,'&'] by A30,A31,A33,A34,XREGULAR:9;
 A36: c in {1,c} by TARSKI:def 2;
 A37: {1,c} in [1,c] by TARSKI:def 2;
   <*c,x*> = <*c*>^<*x*> by FINSEQ_1:def 9;
@@ -1046,7 +1043,7 @@ A38: <*c*> c= <*c,x*> by FINSEQ_6:10;
 A39: [1,c] in <*c*> by TARSKI:def 1;
 A40: <*c,x*> in {<*c,x*>} by TARSKI:def 1;
   {<*c,x*>} in [<*c,x*>,'&'] by TARSKI:def 2;
-  then c <> [<*c,x*>,'&'] by A36,A37,A38,A39,A40,ORDINAL1:3;
+  then c <> [<*c,x*>,'&'] by A36,A37,A38,A39,A40,XREGULAR:9;
   then
 A41: not [<*c,x*>,'&'] in {x,y,c} by A2,A35,ENUMSET1:def 1;
   InputVertices MajorityIStr(x,y,c)
@@ -1134,7 +1131,7 @@ A41: not [<*c,x*>,'&'] in {x,y,c} by A2,A35,ENUMSET1:def 1;
   hence thesis;
 end;
 
-theorem Th20:
+theorem Th19:
   for x,y,c being set holds InnerVertices MajorityStr(x,y,c) =
   {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
 proof
@@ -1171,7 +1168,7 @@ A5: InnerVertices (Ccx +* Cxyc) =
     .= {xy, yc, cx} \/ {MajorityOutput(x,y,c)} by CIRCCOMB:42;
 end;
 
-theorem Th21:
+theorem Th20:
   for x,y,c being set st
   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&']
   holds InputVertices MajorityStr(x,y,c) = {x,y,c}
@@ -1197,7 +1194,7 @@ A7: Seg 3 = dom <*xy, yc, cx*> by FINSEQ_1:def 3;
 A8: 3 in dom <*xy, yc, cx*> by FINSEQ_1:1;
   <*xy, yc, cx*>.3 = cx by FINSEQ_1:45;
   then [3,cx] in <*xy, yc, cx*> by A8,FUNCT_1:1;
-  then cx in rng <*xy, yc, cx*> by RELAT_1:def 5;
+  then cx in rng <*xy, yc, cx*> by XTUPLE_0:def 13;
   then
 A9: the_rank_of cx in the_rank_of [<*xy, yc, cx*>, or3] by CLASSES1:82;
   rng <*x,y*> = {x,y} by FINSEQ_2:127;
@@ -1206,7 +1203,7 @@ A10: y in rng <*x,y*> by TARSKI:def 2;
 A11: 1 in dom <*xy, yc, cx*> by A7,FINSEQ_1:1;
   <*xy, yc, cx*>.1 = xy by FINSEQ_1:45;
   then [1,xy] in <*xy, yc, cx*> by A11,FUNCT_1:1;
-  then xy in rng <*xy, yc, cx*> by RELAT_1:def 5;
+  then xy in rng <*xy, yc, cx*> by XTUPLE_0:def 13;
   then
 A12: the_rank_of xy in the_rank_of [<*xy, yc, cx*>, or3] by CLASSES1:82;
   rng <*y,c*> = {y,c} by FINSEQ_2:127;
@@ -1215,7 +1212,7 @@ A13: c in rng <*y,c*> by TARSKI:def 2;
 A14: 2 in dom <*xy, yc, cx*> by A7,FINSEQ_1:1;
   <*xy, yc, cx*>.2 = yc by FINSEQ_1:45;
   then [2,yc] in <*xy, yc, cx*> by A14,FUNCT_1:1;
-  then yc in rng <*xy, yc, cx*> by RELAT_1:def 5;
+  then yc in rng <*xy, yc, cx*> by XTUPLE_0:def 13;
   then
 A15: the_rank_of yc in the_rank_of [<*xy, yc, cx*>, or3] by CLASSES1:82;
 A16: {xy, yc, cx} \ {xy, yc, cx} = {} by XBOOLE_1:37;
@@ -1233,12 +1230,12 @@ A18: a in {x,y,c};
   thus InputVertices MajorityStr(x,y,c)
   = ((InputVertices MI) \ InnerVertices S) \/
   ((InputVertices S) \ InnerVertices MI) by CIRCCMB2:5,CIRCCOMB:47
-    .= {x,y,c} \/ ({xy, yc, cx} \ InnerVertices MI) by A1,A2,A3,A4,A5,A17,Th19
-    .= {x,y,c} \/ {} by A16,Th18
+    .= {x,y,c} \/ ({xy, yc, cx} \ InnerVertices MI) by A1,A2,A3,A4,A5,A17,Th18
+    .= {x,y,c} \/ {} by A16,Th17
     .= {x,y,c};
 end;
 
-theorem Th22:
+theorem Th21:
   for S1,S2 being non empty ManySortedSign
   st S1 tolerates S2 & InputVertices S1 = InputVertices S2
   holds InputVertices (S1+*S2) = InputVertices S1
@@ -1257,7 +1254,7 @@ A4: InnerVertices S2 misses InputVertices S2 by XBOOLE_1:79;
     .= InputVertices S1 by A2;
 end;
 
-theorem Th23:
+theorem Th22:
   for x,y,c being set st
   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&'] &
   c <> [<*x,y*>, 'xor'] holds
@@ -1269,11 +1266,11 @@ A2: y <> [<*c,x*>, '&'] and
 A3: c <> [<*x,y*>, '&'] and
 A4: c <> [<*x,y*>, 'xor'];
 A5: InputVertices 2GatesCircStr(x,y,c, 'xor') = {x,y,c} by A4,FACIRC_1:57;
-  InputVertices MajorityStr(x,y,c) = {x,y,c} by A1,A2,A3,Th21;
-  hence thesis by A5,Th22,CIRCCOMB:47;
+  InputVertices MajorityStr(x,y,c) = {x,y,c} by A1,A2,A3,Th20;
+  hence thesis by A5,Th21,CIRCCOMB:47;
 end;
 
-theorem Th24:
+theorem Th23:
   for x,y,c being set holds InnerVertices BitAdderWithOverflowStr(x,y,c) =
   {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
   {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
@@ -1287,7 +1284,7 @@ proof
   InnerVertices MajorityStr(x,y,c) by FACIRC_1:56
     .= {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
   ({[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
-  {MajorityOutput(x,y,c)}) by Th20
+  {MajorityOutput(x,y,c)}) by Th19
     .= {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
   {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
   by XBOOLE_1:4;
@@ -1307,7 +1304,7 @@ registration
 A1: F is empty;
     let x be set;
     assume x in dom F;
-    hence thesis by A1;
+    thus thesis by A1;
   end;
   let f be nonpair-yielding Function;
   let x be set;
@@ -1338,7 +1335,7 @@ A3: for n being Element of NAT st P[n] holds P[n+1]
     proof
       let n be Element of NAT;
       (n+1)-BitMajorityOutput(x, y) =
-      MajorityOutput(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y)) by Th13
+      MajorityOutput(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y)) by Th12
         .= [<*[<*x .(n+1),y.(n+1)*>, '&'],
       [<*y.(n+1),n-BitMajorityOutput(x, y)*>, '&'],
       [<*n-BitMajorityOutput(x, y),x .(n+1)*>, '&']*>, or3];
@@ -1349,7 +1346,7 @@ A3: for n being Element of NAT st P[n] holds P[n+1]
   end;
 end;
 
-theorem Th25:
+theorem Th24:
   for x,y being FinSequence, n being Element of NAT holds
   (n-BitMajorityOutput(x,y))`1 = <*> &
   (n-BitMajorityOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->FALSE &
@@ -1365,7 +1362,7 @@ proof
   ($1-BitMajorityOutput(x,y))`2 = or3 &
   proj1 ($1-BitMajorityOutput(x,y))`2 = 3-tuples_on BOOLEAN;
 A1: dom ((0-tuples_on BOOLEAN)-->FALSE) = 0-tuples_on BOOLEAN by FUNCOP_1:13;
-  0-BitMajorityOutput(x,y) = [<*>, (0-tuples_on BOOLEAN)-->FALSE] by Th8;
+  0-BitMajorityOutput(x,y) = [<*>, (0-tuples_on BOOLEAN)-->FALSE] by Th7;
   then
 A2: P[ 0 ] by A1,MCART_1:7;
 A3: now
@@ -1373,7 +1370,7 @@ A3: now
     assume P[n];
     set c = n-BitMajorityOutput(x, y);
 A4: (n+1)-BitMajorityOutput(x, y) =
-    MajorityOutput(x .(n+1), y.(n+1), c) by Th13
+    MajorityOutput(x .(n+1), y.(n+1), c) by Th12
       .= [<*[<*x .(n+1),y.(n+1)*>, '&'], [<*y.(n+1),c*>, '&'],
     [<*c,x .(n+1)*>, '&']*>, or3];
 A5: dom or3 = 3-tuples_on BOOLEAN by FUNCT_2:def 1;
@@ -1384,7 +1381,7 @@ A5: dom or3 = 3-tuples_on BOOLEAN by FUNCT_2:def 1;
   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
 end;
 
-theorem Th26:
+theorem Th25:
   for n being Element of NAT, x,y being FinSequence, p being set holds
   n-BitMajorityOutput(x,y) <> [p, '&'] &
   n-BitMajorityOutput(x,y) <> [p, 'xor']
@@ -1392,14 +1389,14 @@ proof
   let n be Element of NAT, x,y be FinSequence, p be set;
 A1: dom '&' = 2-tuples_on BOOLEAN by FUNCT_2:def 1;
 A2: dom 'xor' = 2-tuples_on BOOLEAN by FUNCT_2:def 1;
-A3: proj1 [p, '&']`2 = 2-tuples_on BOOLEAN by A1,MCART_1:7;
-A4: proj1 [p, 'xor']`2 = 2-tuples_on BOOLEAN by A2,MCART_1:7;
+A3: proj1 [p, '&']`2 = 2-tuples_on BOOLEAN by A1;
+A4: proj1 [p, 'xor']`2 = 2-tuples_on BOOLEAN by A2;
   proj1 (n-BitMajorityOutput(x,y))`2 = 0-tuples_on BOOLEAN or
-  proj1 (n-BitMajorityOutput(x,y))`2 = 3-tuples_on BOOLEAN by Th25;
+  proj1 (n-BitMajorityOutput(x,y))`2 = 3-tuples_on BOOLEAN by Th24;
   hence thesis by A3,A4,FINSEQ_2:110;
 end;
 
-theorem Th27:
+theorem Th26:
   for f,g being nonpair-yielding FinSequence for n being Element of NAT holds
   InputVertices ((n+1)-BitAdderStr(f,g)) =
   (InputVertices (n-BitAdderStr(f,g)))\/
@@ -1418,7 +1415,7 @@ A1: for n being Element of NAT holds h.n = H(n) from PBOOLE:sch 5;
   deffunc h(Nat) = h.$1;
   deffunc o(set, Nat) = MajorityOutput(f.($2+1),g.($2+1), $1);
   set k = (0-tuples_on BOOLEAN)-->FALSE;
-A2: 0-BitAdderStr(f,g) = 1GateCircStr(<*>, k) by Th8;
+A2: 0-BitAdderStr(f,g) = 1GateCircStr(<*>, k) by Th7;
   then
 A3: InnerVertices Sn(0) is Relation by FACIRC_1:38;
 A4: InputVertices Sn(0) is without_pairs by A2,FACIRC_1:39;
@@ -1434,9 +1431,9 @@ A9: n in NAT by ORDINAL1:def 12;
     then
 A10: h(n) = n-BitMajorityOutput(f,g) by A1;
     then
-A11: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A8,A9,Th26;
-    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A8,A9,A10,Th26;
-    hence InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A11,Th23;
+A11: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A8,A9,Th25;
+    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A8,A9,A10,Th25;
+    hence InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A11,Th22;
   end;
 A12: for n being Nat, x being set st x = h.n holds
   (InputVertices S(x, n)) \ {x} is without_pairs
@@ -1465,14 +1462,14 @@ A18: S = Sn(n) and
 A19: x = h.n;
 A20: x = n-BitMajorityOutput(f,g) by A1,A17,A19;
 A21: h(n+1) = (n+1)-BitMajorityOutput(f,g ) by A1;
-    thus Sn(n+1) = S +* S(x,n) by A17,A18,A20,Th13;
-    thus h.(n+1) = o(x, n) by A17,A20,A21,Th13;
+    thus Sn(n+1) = S +* S(x,n) by A17,A18,A20,Th12;
+    thus h.(n+1) = o(x, n) by A17,A20,A21,Th12;
     InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A19;
     hence x in InputVertices S(x,n) by ENUMSET1:def 1;
 A22: InnerVertices S(x, n) =
     {[<*f.(n+1),g.(n+1)*>, 'xor'], 2GatesCircOutput(f.(n+1),g.(n+1),x,'xor')}
     \/ {[<*f.(n+1),g.(n+1)*>,'&'], [<*g.(n+1),x*>,'&'],
-    [<*x,f.(n+1)*>,'&']} \/ {MajorityOutput(f.(n+1),g.(n+1),x)} by Th24;
+    [<*x,f.(n+1)*>,'&']} \/ {MajorityOutput(f.(n+1),g.(n+1),x)} by Th23;
     o(x,n) in {o(x,n)} by TARSKI:def 1;
     hence o(x, n) in InnerVertices S(x, n) by A22,XBOOLE_0:def 3;
   end;
@@ -1499,7 +1496,7 @@ A1: P[ 0 ]
   proof
     let x,y be nonpair-yielding FinSeqLen of 0;
     set f = (0-tuples_on BOOLEAN)-->FALSE;
-    0-BitAdderStr(x,y) = 1GateCircStr(<*>, f) by Th8;
+    0-BitAdderStr(x,y) = 1GateCircStr(<*>, f) by Th7;
     hence thesis by CIRCCOMB:42;
   end;
 A2: for i being Element of NAT st P[i] holds P[i+1]
@@ -1531,19 +1528,19 @@ A14: rng x = rng x9 \/ rng <*z1*> by A4,FINSEQ_1:31
       .= rng x9 \/ {z1} by FINSEQ_1:38;
 A15: rng y = rng y9 \/ rng <*z2*> by A5,FINSEQ_1:31
       .= rng y9 \/ {z2} by FINSEQ_1:38;
-A16: i-BitMajorityOutput(x,y) <> [<*z1,z2*>, '&'] by Th26;
-A17: i-BitMajorityOutput(x,y) <> [<*z1,z2*>, 'xor'] by Th26;
+A16: i-BitMajorityOutput(x,y) <> [<*z1,z2*>, '&'] by Th25;
+A17: i-BitMajorityOutput(x,y) <> [<*z1,z2*>, 'xor'] by Th25;
 A18: x9 = x9^{} by FINSEQ_1:34;
     y9 = y9^{} by FINSEQ_1:34;
-    then i-BitAdderStr(x,y) = i-BitAdderStr(x9,y9) by A4,A5,A18,Th11;
+    then i-BitAdderStr(x,y) = i-BitAdderStr(x9,y9) by A4,A5,A18,Th10;
     hence InputVertices S = (InputVertices (i-BitAdderStr(x9,y9)))\/
     ((InputVertices BitAdderWithOverflowStr(z1,z2,
-    i-BitMajorityOutput(x,y)) \ {i-BitMajorityOutput(x,y)})) by A9,A12,Th27
+    i-BitMajorityOutput(x,y)) \ {i-BitMajorityOutput(x,y)})) by A9,A12,Th26
       .= (rng x9 \/ rng y9)\/ ((InputVertices BitAdderWithOverflowStr(z1,z2,
     i-BitMajorityOutput(x,y)) \ {i-BitMajorityOutput(x,y)})) by A3
       .= (rng x9 \/ rng y9)\/
     ({z1,z2,i-BitMajorityOutput(x,y)} \ {i-BitMajorityOutput(x,y)})
-    by A16,A17,Th23
+    by A16,A17,Th22
       .= (rng x9 \/ rng y9)\/ {z1,z2} by A13,ENUMSET1:86
       .= rng x9 \/ rng y9 \/ ({z1} \/ {z2}) by ENUMSET1:1
       .= rng x9 \/ rng y9 \/ {z1} \/ {z2} by XBOOLE_1:4
@@ -1585,7 +1582,7 @@ A8: c in the carrier of S by FACIRC_1:72;
     .= a3 '&' a1 by FACIRC_1:def 6;
 end;
 
-theorem Th29:
+theorem Th28:
   for x,y,c being set for s being State of MajorityCirc(x,y,c)
   for a1,a2,a3 being Element of BOOLEAN st
   a1 = s.[<*x,y*>,'&'] & a2 = s.[<*y,c*>,'&'] & a3 = s.[<*c,x*>,'&']
@@ -1630,7 +1627,7 @@ A6: a3 = s.c;
   set xy =[<*x,y*>,'&'], yc = [<*y,c*>,'&'], cx = [<*c,x*>,'&'];
   set S = MajorityStr(x,y,c);
   reconsider x9 = x, y9 = y, c9 = c as Vertex of S by FACIRC_1:72;
-A7: InputVertices S = {x,y,c} by A1,A2,A3,Th21;
+A7: InputVertices S = {x,y,c} by A1,A2,A3,Th20;
   then
 A8: x in InputVertices S by ENUMSET1:def 1;
 A9: y in InputVertices S by A7,ENUMSET1:def 1;
@@ -1643,11 +1640,11 @@ A15: (Following s).xy = a1 '&' a2 by A4,A5,A6,Lm3;
 A16: (Following s).yc = a2 '&' a3 by A4,A5,A6,Lm3;
   (Following s).cx = a3 '&' a1 by A4,A5,A6,Lm3;
   hence (Following(s,2)).MajorityOutput(x,y,c) =
-  a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A14,A15,A16,Th29;
+  a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A14,A15,A16,Th28;
   thus thesis by A4,A5,A6,A11,A12,A13,A14,Lm3;
 end;
 
-theorem Th30:
+theorem Th29:
   for x,y,c being set st
   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&']
   for s being State of MajorityCirc(x,y,c)
@@ -1674,7 +1671,7 @@ A10: ffs.[<*x,y*>,'&'] = a1 '&' a2 by A1,A2,A3,A8,Lm4;
 A11: ffs.[<*y,c*>,'&'] = a2 '&' a3 by A1,A2,A3,A6,Lm4;
 A12: ffs.[<*c,x*>,'&'] = a3 '&' a1 by A1,A2,A3,A7,Lm4;
 A13: ffs = Following Following s by FACIRC_1:15;
-A14: InputVertices S = {x,y,c} by A1,A2,A3,Th21;
+A14: InputVertices S = {x,y,c} by A1,A2,A3,Th20;
   then
 A15: x in InputVertices S by ENUMSET1:def 1;
 A16: y in InputVertices S by A14,ENUMSET1:def 1;
@@ -1697,12 +1694,12 @@ A25: v in InputVertices S \/ InnerVertices S by A24,XBOOLE_1:45;
       end;
       suppose v in InnerVertices S;
         then v in {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
-        {MajorityOutput(x,y,c)} by Th20;
+        {MajorityOutput(x,y,c)} by Th19;
         then v in {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} or
         v in {MajorityOutput(x,y,c)} by XBOOLE_0:def 3;
         then v = [<*x,y*>,'&'] or v = [<*y,c*>,'&'] or v = [<*c,x*>,'&'] or
         v = MajorityOutput(x,y,c) by ENUMSET1:def 1,TARSKI:def 1;
-        hence thesis by A9,A10,A11,A12,A21,A22,A23,Lm3,Th29;
+        hence thesis by A9,A10,A11,A12,A21,A22,A23,Lm3,Th28;
       end;
     end;
   end;
@@ -1744,7 +1741,7 @@ A13: c in the carrier of S2 by FACIRC_1:72;
   reconsider t = s as State of A1+*A2;
   InputVertices S1 = {x,y,c} by A4,FACIRC_1:57;
   then
-A14: InputVertices S1 = InputVertices S2 by A1,A2,A3,Th21;
+A14: InputVertices S1 = InputVertices S2 by A1,A2,A3,Th20;
 A15: InnerVertices S1 misses InputVertices S1 by XBOOLE_1:79;
 A16: InnerVertices S2 misses InputVertices S2 by XBOOLE_1:79;
 A17: dom s1 = the carrier of S1 by CIRCUIT1:3;
@@ -1766,7 +1763,7 @@ A24: a3 = s2.c by A7,A13,A21,FUNCT_1:47;
   hence thesis by A1,A2,A3,A22,A23,A24,Lm4;
 end;
 
-theorem Th32:
+theorem Th31:
   for x,y,c being set st
   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&'] &
   c <> [<*x,y*>, 'xor'] for s being State of BitAdderWithOverflowCirc(x,y,c)
@@ -1787,7 +1784,7 @@ A4: c <> [<*x,y*>, 'xor'];
   reconsider t = s as State of A1+*A2;
   InputVertices S1 = {x,y,c} by A4,FACIRC_1:57;
   then
-A5: InputVertices S1 = InputVertices S2 by A1,A2,A3,Th21;
+A5: InputVertices S1 = InputVertices S2 by A1,A2,A3,Th20;
 A6: InnerVertices S1 misses InputVertices S1 by XBOOLE_1:79;
 A7: InnerVertices S2 misses InputVertices S2 by XBOOLE_1:79;
   then
@@ -1799,7 +1796,7 @@ A11: Following(s2,3) = Following(t,3)|the carrier of S2 by A5,A6,FACIRC_1:31;
   then
 A12: Following(s1,2) = Following Following(s1,2) by CIRCUIT2:def 6
     .= Following(s1,2+1) by FACIRC_1:12;
-  Following(s2,2) is stable by A1,A2,A3,Th30;
+  Following(s2,2) is stable by A1,A2,A3,Th29;
   then
 A13: Following(s2,2) = Following Following(s2,2) by CIRCUIT2:def 6
     .= Following(s2,2+1) by FACIRC_1:12;
@@ -1902,9 +1899,9 @@ A8: n in NAT by ORDINAL1:def 12;
     then
 A9: x = n-BitMajorityOutput(f,g) by A6,A8;
     then
-A10: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A8,Th26;
-    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A8,A9,Th26;
-    hence thesis by A2,A10,Th32;
+A10: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A8,Th25;
+    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A8,A9,Th25;
+    hence thesis by A2,A10,Th31;
   end;
   set Sn = n-BitAdderStr(f,g);
   set An = n-BitAdderCirc(f,g);
@@ -1925,7 +1922,7 @@ A +* BitAdderWithOverflowCirc(f.(n+1), g.(n+1), z) & h1.(n+1) = MajorityOutput(
     let i be set;
     assume i in NAT;
     then reconsider j = i as Element of NAT;
-    thus h1.i = j-BitMajorityOutput(f,g) by A13,A14,A15,A16,Th7
+    thus h1.i = j-BitMajorityOutput(f,g) by A13,A14,A15,A16,Th6
       .= h.i by A6;
   end;
   then
@@ -1943,7 +1940,7 @@ A18: ex u,v being ManySortedSet of NAT st Sn = u.(n(2)) & An = v.(n(2)) &
   end;
 A19: InnerVertices S0 is Relation & InputVertices S0 is without_pairs
   by FACIRC_1:38,39;
-A20: [<*>, (0-tuples_on BOOLEAN)-->FALSE] = o0 by Th8;
+A20: [<*>, (0-tuples_on BOOLEAN)-->FALSE] = o0 by Th7;
   InnerVertices S0 = {[<*>, (0-tuples_on BOOLEAN)-->FALSE]} by CIRCCOMB:42;
   then
 A21: h.0 = o0 & o0 in InnerVertices S0 by A6,A20,TARSKI:def 1;
@@ -1958,10 +1955,10 @@ A25: n in NAT by ORDINAL1:def 12;
     then
 A26: x = n-BitMajorityOutput(f,g) by A6,A24;
     then
-A27: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A25,Th26;
-    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A25,A26,Th26;
+A27: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A25,Th25;
+    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A25,A26,Th25;
     then
-A28: InputVertices S(x, n) = {f.(n+1),g.(n+1),x} by A27,Th23;
+A28: InputVertices S(x, n) = {f.(n+1),g.(n+1),x} by A27,Th22;
     let a be pair set;
     assume
 A29: a in (InputVertices S(x, n)) \ {x};
@@ -1980,17 +1977,17 @@ A34: n in NAT by ORDINAL1:def 12;
     then
 A35: x = n-BitMajorityOutput(f,g) by A6,A33;
     h.(n+1) = (n+1)-BitMajorityOutput(f,g) by A6;
-    hence h.(n+1) = o(x, n) by A34,A35,Th13;
-A36: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A34,A35,Th26;
-    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A34,A35,Th26;
-    then InputVertices S(x, n) = {f.(n+1),g.(n+1),x} by A36,Th23;
+    hence h.(n+1) = o(x, n) by A34,A35,Th12;
+A36: x <> [<*f.(n+1),g.(n+1)*>, '&'] by A34,A35,Th25;
+    x <> [<*f.(n+1),g.(n+1)*>, 'xor'] by A34,A35,Th25;
+    then InputVertices S(x, n) = {f.(n+1),g.(n+1),x} by A36,Th22;
     hence x in InputVertices S(x, n) by ENUMSET1:def 1;
     set xx = f.(n+1), xy = g.(n+1);
 A37: o(x, n) in {o(x, n)} by TARSKI:def 1;
     InnerVertices S(x, n) =
     {[<*xx,xy*>, 'xor'], 2GatesCircOutput(xx,xy,x,'xor')} \/
     {[<*xx,xy*>,'&'], [<*xy,x*>,'&'], [<*x,xx*>,'&']} \/
-    {MajorityOutput(xx,xy,x)} by Th24;
+    {MajorityOutput(xx,xy,x)} by Th23;
     hence thesis by A37,XBOOLE_0:def 3;
   end;
   for s being State of An holds Following(s,n(0)+n(2)*n(1)) is stable

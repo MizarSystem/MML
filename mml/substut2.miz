@@ -3,7 +3,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,61 +20,68 @@ environ
       RELAT_1, BVFUNC_2, XBOOLE_0, FUNCT_1, TARSKI, ZF_LANG, FUNCT_4, FUNCOP_1,
       CLASSES2, SUBLEMMA, PARTFUN1, CQC_SIM1, ARYTM_3, XXREAL_0, ARYTM_1,
       SUBSTUT2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
       QC_LANG2, QC_LANG3, PARTFUN1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
       CQC_LANG, FUNCOP_1, RELAT_1, FUNCT_4, FUNCT_2, CQC_SIM1, DOMAIN_1,
       MCART_1, SUBSTUT1, SUBLEMMA;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, INT_1, QC_LANG3, CQC_SIM1,
-      SUBLEMMA, RELSET_1;
+      SUBLEMMA, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       XXREAL_0, XREAL_0, NAT_1, INT_1, QC_LANG1, CQC_LANG, SUBSTUT1, SUBLEMMA,
-      CARD_1;
+      CARD_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FUNCOP_1;
+ definitions TARSKI, FUNCOP_1, XTUPLE_0;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, CQC_LANG, QC_LANG1,
       ZFMISC_1, RELAT_1, QC_LANG3, PARTFUN1, RELSET_1, QC_LANG2, SUBSTUT1,
       FUNCT_4, SUBLEMMA, CQC_SIM1, FUNCT_2, NAT_1, INT_1, XREAL_1, XXREAL_0,
-      FUNCOP_1, FINSEQ_1, CARD_1;
+      FUNCOP_1, CARD_1, XTUPLE_0;
  schemes CQC_LANG, NAT_1;
 
 begin :: Further Properties of Substitution
 
+reserve Al for QC-alphabet;
 reserve a,b,b1 for set,
   i,j,k,n for Element of NAT,
-  p,q,r,s for Element of CQC-WFF,
-  x,y,y1 for bound_QC-variable,
-  P for QC-pred_symbol of k,
-  l,ll for CQC-variable_list of k,
-  Sub,Sub1 for CQC_Substitution,
-  S,S1,S2 for Element of CQC-Sub-WFF,
-  P1,P2 for Element of QC-pred_symbols;
+  p,q,r,s for Element of CQC-WFF(Al),
+  x,y,y1 for bound_QC-variable of Al,
+  P for QC-pred_symbol of k,Al,
+  l,ll for CQC-variable_list of k,Al,
+  Sub,Sub1 for CQC_Substitution of Al,
+  S,S1,S2 for Element of CQC-Sub-WFF(Al),
+  P1,P2 for Element of QC-pred_symbols(Al);
 
 theorem Th1:
-  for Sub holds ex S st S`1 = VERUM & S`2 = Sub
+  for Sub holds ex S st S`1 = VERUM(Al) & S`2 = Sub
 proof
   let Sub;
-  reconsider S = [VERUM,Sub] as Element of QC-Sub-WFF by QC_LANG1:def 12
-,SUBSTUT1:def 16;
+  VERUM(Al) = <*[0,0]*> by QC_LANG1:def 14;
+  then reconsider S = [VERUM(Al),Sub] as Element of QC-Sub-WFF(Al)
+    by SUBSTUT1:def 16;
   take S;
-  S`1 = VERUM by MCART_1:7;
-  then S in CQC-Sub-WFF by SUBSTUT1:def 39;
-  then reconsider S as Element of CQC-Sub-WFF;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A1: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
+  S`1 = VERUM(Al) by MCART_1:7;
+  then reconsider S as Element of CQC-Sub-WFF(Al) by A1;
   S`2 = Sub by MCART_1:7;
   hence thesis by MCART_1:7;
 end;
 
-Lm1: for k,l being Element of NAT st P is (QC-pred_symbol of k) & P is (
-QC-pred_symbol of l) holds k = l
+Lm1: for k,l being Element of NAT st P is (QC-pred_symbol of k,Al) & P is (
+QC-pred_symbol of l,Al) holds k = l
 proof
   let k,l be Element of NAT;
   assume
-A1: P is (QC-pred_symbol of k) & P is (QC-pred_symbol of l);
-  then P in l-ary_QC-pred_symbols;
-  then P in {P2 : the_arity_of P2 = l} by QC_LANG1:def 7;
+A1: P is (QC-pred_symbol of k,Al) & P is (QC-pred_symbol of l,Al);
+  then P in l-ary_QC-pred_symbols(Al);
+  then P in {P2 : the_arity_of P2 = l} by QC_LANG1:def 9;
   then
 A2: ex P2 st P2 = P & the_arity_of P2 = l;
-  P in k-ary_QC-pred_symbols by A1;
-  then P in {P1 : the_arity_of P1 = k} by QC_LANG1:def 7;
+  P in k-ary_QC-pred_symbols(Al) by A1;
+  then P in {P1 : the_arity_of P1 = k} by QC_LANG1:def 9;
   then ex P1 st P1 = P & the_arity_of P1 = k;
   hence thesis by A2;
 end;
@@ -83,22 +90,27 @@ theorem Th2:
   for Sub holds ex S st S`1 = P!ll & S`2 = Sub
 proof
   let Sub;
-  P is QC-pred_symbol of the_arity_of P by QC_LANG3:1;
+  P is QC-pred_symbol of the_arity_of P,Al by QC_LANG3:1;
   then k = the_arity_of P by Lm1;
-  then [<*P*>^ll,Sub] in QC-Sub-WFF & len ll = the_arity_of P by CARD_1:def 7
-,SUBSTUT1:def 16;
-  then reconsider S = [P!ll,Sub] as Element of QC-Sub-WFF by QC_LANG1:def 10;
+  then [<*P*>^ll,Sub] in QC-Sub-WFF(Al) & len ll = the_arity_of P
+    by CARD_1:def 7,SUBSTUT1:def 16;
+  then reconsider S = [P!ll,Sub] as Element of QC-Sub-WFF(Al)
+    by QC_LANG1:def 12;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A1: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
   take S;
   S`1 = P!ll by MCART_1:7;
-  then S in CQC-Sub-WFF by SUBSTUT1:def 39;
-  then reconsider S as Element of CQC-Sub-WFF;
+  then reconsider S as Element of CQC-Sub-WFF(Al) by A1;
   S`2 = Sub by MCART_1:7;
   hence thesis by MCART_1:7;
 end;
 
 theorem
-  for k,l being Element of NAT st P is (QC-pred_symbol of k) & P is (
-  QC-pred_symbol of l) holds k = l by Lm1;
+  for k,l being Element of NAT st P is (QC-pred_symbol of k,Al) & P is (
+  QC-pred_symbol of l,Al) holds k = l by Lm1;
 
 theorem Th4:
   (for Sub holds ex S st S`1 = p & S`2 = Sub) implies for Sub holds
@@ -110,15 +122,19 @@ A1: for Sub holds ex S st S`1 = p & S`2 = Sub;
   consider S such that
 A2: S`1 = p & S`2 = Sub by A1;
   S = [p,Sub] by A2,SUBSTUT1:10;
-  then [p,Sub] in QC-Sub-WFF;
-  then [@p,Sub] in QC-Sub-WFF by QC_LANG1:def 11;
-  then [<*[1, 0]*>^@p,Sub] in QC-Sub-WFF by SUBSTUT1:def 16;
-  then reconsider S = ['not' p,Sub] as Element of QC-Sub-WFF by QC_LANG1:def 13
-;
+  then [p,Sub] in QC-Sub-WFF(Al);
+  then [@p,Sub] in QC-Sub-WFF(Al) by QC_LANG1:def 13;
+  then [<*[1, 0]*>^@p,Sub] in QC-Sub-WFF(Al) by SUBSTUT1:def 16;
+  then reconsider S = ['not' p,Sub] as Element of QC-Sub-WFF(Al)
+   by QC_LANG1:def 15;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A3: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
   take S;
   S`1 = 'not' p by MCART_1:7;
-  then S in CQC-Sub-WFF by SUBSTUT1:def 39;
-  then reconsider S as Element of CQC-Sub-WFF;
+  then reconsider S as Element of CQC-Sub-WFF(Al) by A3;
   S`2 = Sub by MCART_1:7;
   hence thesis by MCART_1:7;
 end;
@@ -136,26 +152,30 @@ A3: S1`1 = p & S1`2 = Sub by A1;
   consider S2 such that
 A4: S2`1 = q & S2`2 = Sub by A2;
   S2 = [q,Sub] by A4,SUBSTUT1:10;
-  then [q,Sub] in QC-Sub-WFF;
+  then [q,Sub] in QC-Sub-WFF(Al);
   then
-A5: [@q,Sub] in QC-Sub-WFF by QC_LANG1:def 11;
+A5: [@q,Sub] in QC-Sub-WFF(Al) by QC_LANG1:def 13;
   S1 = [p,Sub] by A3,SUBSTUT1:10;
-  then [p,Sub] in QC-Sub-WFF;
-  then [@p,Sub] in QC-Sub-WFF by QC_LANG1:def 11;
-  then [<*[2, 0]*>^@p^@q,Sub] in QC-Sub-WFF by A5,SUBSTUT1:def 16;
-  then reconsider S = [p '&' q,Sub] as Element of QC-Sub-WFF by QC_LANG1:def 14
-;
+  then [p,Sub] in QC-Sub-WFF(Al);
+  then [@p,Sub] in QC-Sub-WFF(Al) by QC_LANG1:def 13;
+  then [<*[2, 0]*>^@p^@q,Sub] in QC-Sub-WFF(Al) by A5,SUBSTUT1:def 16;
+  then reconsider S = [p '&' q,Sub] as Element of QC-Sub-WFF(Al)
+     by QC_LANG1:def 16;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A6: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
   take S;
   S`1 = p '&' q by MCART_1:7;
-  then S in CQC-Sub-WFF by SUBSTUT1:def 39;
-  then reconsider S as Element of CQC-Sub-WFF;
+  then reconsider S as Element of CQC-Sub-WFF(Al) by A6;
   S`2 = Sub by MCART_1:7;
   hence thesis by MCART_1:7;
 end;
 
 definition
-  let p, Sub;
-  redefine func [p,Sub] -> Element of [:QC-WFF,vSUB:];
+  let Al, p, Sub;
+  redefine func [p,Sub] -> Element of [:QC-WFF(Al),vSUB(Al):];
   coherence by ZFMISC_1:def 2;
 end;
 
@@ -194,11 +214,10 @@ proof
   set S = [All(x,p),Sub];
   assume
 A1: x in rng finSub;
-  reconsider q = S`1 as Element of CQC-WFF by MCART_1:7;
-A2: S`2 = Sub by MCART_1:7;
-A3: S`1 = All(x,p) by MCART_1:7;
-  then bound_in q = x & the_scope_of q = p by QC_LANG2:7;
-  hence thesis by A1,A3,A2,SUBSTUT1:def 36;
+  reconsider q = S`1 as Element of CQC-WFF(Al);
+A2: S`2 = Sub;
+  bound_in q = x & the_scope_of q = p by QC_LANG2:7;
+  hence thesis by A1,A2,SUBSTUT1:def 36;
 end;
 
 theorem Th8:
@@ -208,10 +227,9 @@ proof
   set S = [All(x,p),Sub];
   assume
 A1: not x in rng finSub;
-  reconsider q = S`1 as Element of CQC-WFF by MCART_1:7;
-A2: S`1 = All(x,p) by MCART_1:7;
-  then S`2 = Sub & bound_in q = x by MCART_1:7,QC_LANG2:7;
-  hence thesis by A1,A2,SUBSTUT1:def 36;
+  reconsider q = S`1 as Element of CQC-WFF(Al);
+  S`2 = Sub & bound_in q = x by QC_LANG2:7;
+  hence thesis by A1,SUBSTUT1:def 36;
 end;
 
 theorem Th9:
@@ -220,7 +238,6 @@ theorem Th9:
 proof
   set finSub = RestrictSub(x,All(x,p),Sub);
 A1: now
-
     reconsider F = {[x,x.upVar(finSub,p)]} as Function;
     dom F = {x} by RELAT_1:9;
     then dom finSub misses dom F by Th6;
@@ -230,8 +247,8 @@ A2: @finSub \/ F = @finSub +* F by FUNCT_4:31;
     assume
 A3: x in rng finSub;
     then ExpandSub(x,p,finSub) = finSub \/ F by SUBSTUT1:def 13;
-    then {[x,x.upVar(finSub,p)]} = x .--> x.upVar(finSub,p) & ExpandSub(x,p,
-    finSub) = @finSub +* F by A2,FUNCT_4:82,SUBSTUT1:def 2;
+    then {[x,x.upVar(finSub,p)]} = x .--> x.upVar(finSub,p) &
+    ExpandSub(x,p,finSub) = @finSub +* F by A2,FUNCT_4:82,SUBSTUT1:def 2;
     hence thesis by A3,Th7;
   end;
   now
@@ -256,12 +273,12 @@ theorem Th10:
   ) & S`1 = p implies [S,x] is quantifiable & ex S1 st S1 = [All(x,p),Sub]
 proof
   set Sub1 = @RestrictSub(x,All(x,p),Sub) +* (x|S_Bound([All(x,p),Sub]));
-  reconsider Sub as CQC_Substitution;
+  reconsider Sub as CQC_Substitution of Al;
   assume that
 A1: S`2 = Sub1 and
 A2: S`1 = p;
-A3: [S,x]`2 = x & ([S,x]`1)`1 = p by A2,MCART_1:7;
-A4: the_scope_of All(x,p) = p & All(x,p) is universal by QC_LANG1:def 19
+A3: [S,x]`2 = x & ([S,x]`1)`1 = p by A2;
+A4: the_scope_of All(x,p) = p & All(x,p) is universal by QC_LANG1:def 21
 ,QC_LANG2:7;
   Sub1 = ExpandSub(x,p,RestrictSub(x,All(x,p),Sub)) & bound_in All(x,p) =
   x by Th9,QC_LANG2:7;
@@ -269,10 +286,10 @@ A4: the_scope_of All(x,p) = p & All(x,p) is universal by QC_LANG1:def 19
   then consider a such that
 A5: a = [[All(x,p),Sub],Sub1] and
 A6: All(x,p),Sub PQSub Sub1;
-  a in QSub by A5,A6,SUBSTUT1:def 15;
+  a in QSub(Al) by A5,A6,SUBSTUT1:def 15;
   then
-A7: QSub.[All(x,p),Sub] = Sub1 by A5,FUNCT_1:1;
-A8: ([S,x]`1)`2 = Sub1 by A1,MCART_1:7;
+A7: (QSub(Al)).[All(x,p),Sub] = Sub1 by A5,FUNCT_1:1;
+A8: ([S,x]`1)`2 = Sub1 by A1;
   hence [S,x] is quantifiable by A7,A3,SUBSTUT1:def 22;
 A9: [S,x] is quantifiable by A7,A8,A3,SUBSTUT1:def 22;
   then reconsider Sub as second_Q_comp of [S,x] by A7,A8,A3,SUBSTUT1:def 23;
@@ -289,7 +306,10 @@ proof
 A1: for Sub holds ex S st S`1 = p & S`2 = Sub;
   let Sub;
   set Sub1 = @RestrictSub(x,All(x,p),Sub) +* (x|S_Bound([All(x,p),Sub]));
-  reconsider Sub1 as CQC_Substitution by PARTFUN1:45,SUBSTUT1:def 1;
+  Sub1 is CQC_Substitution of Al iff Sub1 is Element of
+    PFuncs(bound_QC-variables(Al),bound_QC-variables(Al)) by SUBSTUT1:def 1;
+  then reconsider Sub1 as CQC_Substitution of Al
+   by PARTFUN1:45;
   ex S st S`1 = p & S`2 = Sub1 by A1;
   then consider S1 such that
 A2: S1 = [All(x,p),Sub] by Th10;
@@ -300,18 +320,18 @@ end;
 theorem Th12:
   for p, Sub holds ex S st S`1 = p & S`2 = Sub
 proof
-  defpred P[Element of CQC-WFF] means for Sub holds ex S st S`1 = $1 & S`2 =
-  Sub;
-A1: for p,q,x,k for ll being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!ll] & (P[p] implies P['not' p]) & (P[p
-  ] & P[q] implies P[p '&' q]) & (P[p] implies P[All(x,p)]) by Th1,Th2,Th4,Th5
-,Th11;
+  defpred P[Element of CQC-WFF(Al)] means
+      for Sub holds ex S st S`1 = $1 & S`2 = Sub;
+A1: for p,q,x,k for ll being CQC-variable_list of k,Al for P being
+QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!ll] &
+(P[p] implies P['not' p]) & (P[p] & P[q] implies P[p '&' q]) &
+(P[p] implies P[All(x,p)]) by Th1,Th2,Th4,Th5,Th11;
   thus for p holds P[p] from CQC_LANG:sch 1(A1);
 end;
 
 definition
-  let p,Sub;
-  redefine func [p,Sub] -> Element of CQC-Sub-WFF;
+  let Al,p,Sub;
+  redefine func [p,Sub] -> Element of CQC-Sub-WFF(Al);
   coherence
   proof
     ex S st S`1 = p & S`2 = Sub by Th12;
@@ -320,42 +340,46 @@ definition
 end;
 
 notation
-  let x,y;
+  let Al,x,y;
   synonym Sbst(x,y) for x .--> y;
 end;
 
 definition
-  let x,y;
-  redefine func Sbst(x,y) -> CQC_Substitution;
+  let Al,x,y;
+  redefine func Sbst(x,y) -> CQC_Substitution of Al;
   coherence
   proof
+A1: x .--> y is CQC_Substitution of Al iff x .--> y is Element of
+    PFuncs(bound_QC-variables(Al),bound_QC-variables(Al)) by SUBSTUT1:def 1;
     dom(x .--> y) = {x} & rng(x .--> y) = {y} by FUNCOP_1:8,13;
-    then x .--> y is PartFunc of bound_QC-variables,bound_QC-variables by
-RELSET_1:4;
-    hence thesis by PARTFUN1:45,SUBSTUT1:def 1;
+    then x .--> y is PartFunc of bound_QC-variables(Al),bound_QC-variables(Al)
+       by RELSET_1:4;
+    hence thesis by A1,PARTFUN1:45;
   end;
 end;
 
 begin :: Facts about Substitution and Quantifiers of a Formula
 
 definition
-
-  let p,x,y;
-  func p.(x,y) -> Element of CQC-WFF equals
+  let Al,p,x,y;
+  func p.(x,y) -> Element of CQC-WFF(Al) equals
   CQC_Sub([p,Sbst(x,y)]);
   coherence;
 end;
 
 scheme
-  CQCInd1 {P[set]} : for p holds P[p]
+  CQCInd1 { Al() -> QC-alphabet, P[set]} :
+for p being Element of CQC-WFF(Al()) holds P[p]
 provided
-A1: for p st QuantNbr(p) = 0 holds P[p] and
-A2: for k st for p st QuantNbr(p) = k holds P[p] holds for p st QuantNbr
-(p) = k+1 holds P[p]
+A1: for p being Element of CQC-WFF(Al()) st QuantNbr(p) = 0 holds P[p] and
+A2: for k st for p being Element of CQC-WFF(Al()) st QuantNbr(p) = k
+holds P[p] holds for p being Element of CQC-WFF(Al()) st QuantNbr(p) = k+1
+holds P[p]
 proof
-  let p;
-  defpred Q[Element of NAT] means for p st QuantNbr(p) = $1 holds P[p];
-A3: for k st Q[k] holds Q[k + 1] by A2;
+  let p be Element of CQC-WFF(Al());
+  defpred Q[Element of NAT] means for p being Element of CQC-WFF(Al())
+   st QuantNbr(p) = $1 holds P[p];
+A3: for k being Element of NAT st Q[k] holds Q[k + 1] by A2;
 A4: Q[0] by A1;
   for k holds Q[k] from NAT_1:sch 1(A4,A3);
   then Q[QuantNbr(p)];
@@ -363,14 +387,17 @@ A4: Q[0] by A1;
 end;
 
 scheme
-  CQCInd2 {P[set]}: for p holds P[p]
+  CQCInd2 {Al() -> QC-alphabet, P[set]}:
+   for p being Element of CQC-WFF(Al()) holds P[p]
 provided
-A1: for p st QuantNbr(p) <= 0 holds P[p] and
-A2: for k st for p st QuantNbr(p) <= k holds P[p] holds for p st
-QuantNbr(p) <= k+1 holds P[p]
+A1: for p being Element of CQC-WFF(Al()) st QuantNbr(p) <= 0 holds P[p] and
+A2: for k st for p being Element of CQC-WFF(Al()) st QuantNbr(p) <= k
+holds P[p] holds for p being Element of CQC-WFF(Al())
+st QuantNbr(p) <= k+1 holds P[p]
 proof
-  let p;
-  defpred Q[Element of NAT] means for p st QuantNbr(p) <= $1 holds P[p];
+  let p being Element of CQC-WFF(Al());
+  defpred Q[Element of NAT] means
+    for p being Element of CQC-WFF(Al()) st QuantNbr(p) <= $1 holds P[p];
 A3: for k st Q[k] holds Q[k + 1] by A2;
 A4: Q[0] by A1;
   for k holds Q[k] from NAT_1:sch 1(A4,A3);
@@ -379,10 +406,10 @@ A4: Q[0] by A1;
 end;
 
 theorem
-  VERUM.(x,y) = VERUM
+  VERUM(Al).(x,y) = VERUM(Al)
 proof
-  set S = [VERUM,Sbst(x,y)];
-  S is Sub_VERUM by SUBSTUT1:def 19;
+  set S = [VERUM(Al),Sbst(x,y)];
+  S is Al-Sub_VERUM by SUBSTUT1:def 19;
   hence thesis by SUBLEMMA:3;
 end;
 
@@ -410,11 +437,12 @@ A1: CQC_Sub([(P!l),Sub]) = P!CQC_Subst(l,Sub) by SUBLEMMA:8;
 end;
 
 definition
-  let S be Element of QC-Sub-WFF;
-  redefine func S`2 -> CQC_Substitution;
+  let Al;
+  let S be Element of QC-Sub-WFF(Al);
+  redefine func S`2 -> CQC_Substitution of Al;
   coherence
   proof
-    ex p being Element of QC-WFF,Sub st S = [p,Sub] by SUBSTUT1:8;
+    ex p being Element of QC-WFF(Al),Sub st S = [p,Sub] by SUBSTUT1:8;
     hence thesis by MCART_1:7;
   end;
 end;
@@ -423,14 +451,8 @@ theorem Th16:
   ['not' p,Sub] = Sub_not [p,Sub]
 proof
   set S = [p,Sub];
-  (Sub_not S)`1 = 'not' S`1 by SUBLEMMA:16;
-  then
-A1: (Sub_not S)`1 = 'not' p by MCART_1:7;
-  (Sub_not S)`2 = S`2 by SUBLEMMA:16;
-  then
-A2: (Sub_not S)`2 = Sub by MCART_1:7;
   Sub_not S = ['not' S`1,S`2] by SUBSTUT1:def 20;
-  hence thesis by A1,A2,MCART_1:8;
+  hence thesis;
 end;
 
 theorem
@@ -472,8 +494,8 @@ theorem Th19:
 proof
   set S1 = [p,Sub];
   set S2 = [q,Sub];
-A1: S1`1 = p & S2`1 = q by MCART_1:7;
-A2: S1`2 = Sub & S2`2 = Sub by MCART_1:7;
+A1: S1`1 = p & S2`1 = q;
+A2: S1`2 = Sub & S2`2 = Sub;
   then CQCSub_&(S1,S2) = Sub_&(S1,S2) by SUBLEMMA:def 3;
   hence thesis by A2,A1,SUBSTUT1:def 21;
 end;
@@ -486,7 +508,7 @@ proof
   set S = [p '&' q,Sbst(x,y)];
   set S1 = [p,Sbst(x,y)];
   set S2 = [q,Sbst(x,y)];
-A1: S1`2 = Sbst(x,y) & S2`2 = Sbst(x,y) by MCART_1:7;
+A1: S1`2 = Sbst(x,y) & S2`2 = Sbst(x,y);
   S = CQCSub_&(S1,S2) by Th19;
   then
 A2: S = Sub_&(S1,S2) by A1,SUBLEMMA:def 3;
@@ -516,7 +538,7 @@ A2: for Sub holds QuantNbr(q) = QuantNbr(CQC_Sub([q,Sub]));
   set S = [p '&' q,Sub];
   set S1 = [p,Sub];
   set S2 = [q,Sub];
-A3: S1`2 = Sub & S2`2 = Sub by MCART_1:7;
+A3: S1`2 = Sub & S2`2 = Sub;
   S = CQCSub_&(S1,S2) by Th19;
   then S = Sub_&(S1,S2) by A3,SUBLEMMA:def 3;
   then CQC_Sub(S) = (CQC_Sub(S1)) '&' (CQC_Sub(S2)) by A3,SUBSTUT1:31;
@@ -529,60 +551,63 @@ CQC_SIM1:17
 end;
 
 definition
-  func CFQ -> Function of CQC-Sub-WFF,vSUB equals
-  QSub|CQC-Sub-WFF;
+  let Al;
+  func CFQ(Al) -> Function of CQC-Sub-WFF(Al),vSUB(Al) equals
+  (QSub(Al))|CQC-Sub-WFF(Al);
   coherence
   proof
     now
       let a;
-      assume a in CQC-Sub-WFF;
-      then consider p being Element of QC-WFF,Sub such that
+      assume a in CQC-Sub-WFF(Al);
+      then consider p being Element of QC-WFF(Al),Sub such that
 A1:   a = [p,Sub] by SUBSTUT1:8;
 A2:   now
         set b = {};
         assume not p is universal;
         then p,Sub PQSub b by SUBSTUT1:def 14;
-        then [[p,Sub],b] in QSub by SUBSTUT1:def 15;
-        hence a in dom QSub by A1,FUNCT_1:1;
+        then [[p,Sub],b] in QSub(Al) by SUBSTUT1:def 15;
+        hence a in dom QSub(Al) by A1,FUNCT_1:1;
       end;
       now
         set b = ExpandSub(bound_in p,the_scope_of p, RestrictSub(bound_in p,p,
         Sub));
         assume p is universal;
         then p,Sub PQSub b by SUBSTUT1:def 14;
-        then [[p,Sub],b] in QSub by SUBSTUT1:def 15;
-        hence a in dom QSub by A1,FUNCT_1:1;
+        then [[p,Sub],b] in QSub(Al) by SUBSTUT1:def 15;
+        hence a in dom QSub(Al) by A1,FUNCT_1:1;
       end;
-      hence a in dom QSub by A2;
+      hence a in dom QSub(Al) by A2;
     end;
-    then CQC-Sub-WFF c= dom QSub by TARSKI:def 3;
+    then CQC-Sub-WFF(Al) c= dom QSub(Al) by TARSKI:def 3;
     then
-A3: dom(QSub|CQC-Sub-WFF) = CQC-Sub-WFF by RELAT_1:62;
-    rng(QSub|CQC-Sub-WFF) c= vSUB
+A3: dom((QSub(Al))|CQC-Sub-WFF(Al)) = CQC-Sub-WFF(Al) by RELAT_1:62;
+    rng((QSub(Al))|CQC-Sub-WFF(Al)) c= vSUB(Al)
     proof
       let b;
-      assume b in rng(QSub|CQC-Sub-WFF);
+      assume b in rng((QSub(Al))|CQC-Sub-WFF(Al));
       then consider a such that
-A4:   a in dom(QSub|CQC-Sub-WFF) & (QSub|CQC-Sub-WFF).a = b by FUNCT_1:def 3;
-A5:   QSub|CQC-Sub-WFF c= QSub by RELAT_1:59;
-      [a,b] in QSub|CQC-Sub-WFF by A4,FUNCT_1:1;
-      then consider p being Element of QC-WFF,Sub,b1 such that
+A4:   a in dom((QSub(Al))|CQC-Sub-WFF(Al)) & ((QSub(Al))|CQC-Sub-WFF(Al)).a = b
+        by FUNCT_1:def 3;
+A5:   (QSub(Al))|CQC-Sub-WFF(Al) c= QSub(Al) by RELAT_1:59;
+      [a,b] in (QSub(Al))|CQC-Sub-WFF(Al) by A4,FUNCT_1:1;
+      then consider p being Element of QC-WFF(Al),Sub,b1 such that
 A6:   [a,b] = [[p,Sub],b1] and
 A7:   p,Sub PQSub b1 by A5,SUBSTUT1:def 15;
 A8:   now
-        assume not p is universal;
-        then b1 = {} by A7,SUBSTUT1:def 14;
-        then b1 is PartFunc of bound_QC-variables,bound_QC-variables by
+A9:    b1 is CQC_Substitution of Al iff b1 is Element of
+       PFuncs(bound_QC-variables(Al),bound_QC-variables(Al)) by SUBSTUT1:def 1;
+       assume not p is universal;
+       then b1 = {} by A7,SUBSTUT1:def 14;
+       then b1 is PartFunc of bound_QC-variables(Al),bound_QC-variables(Al) by
 RELSET_1:12;
-        then b1 is CQC_Substitution by PARTFUN1:45,SUBSTUT1:def 1;
-        hence b is CQC_Substitution by A6,ZFMISC_1:27;
+       hence b is CQC_Substitution of Al by A9,A6,PARTFUN1:45,XTUPLE_0:1;
       end;
       now
         assume p is universal;
         then
         b1 = ExpandSub(bound_in p,the_scope_of p, RestrictSub(bound_in p,
         p,Sub)) by A7,SUBSTUT1:def 14;
-        hence b is CQC_Substitution by A6,ZFMISC_1:27;
+        hence b is CQC_Substitution of Al by A6,XTUPLE_0:1;
       end;
       hence thesis by A8;
     end;
@@ -591,24 +616,24 @@ RELSET_1:12;
 end;
 
 definition
-  let p,x,Sub;
-  func QScope(p,x,Sub) -> CQC-WFF-like Element of [:QC-Sub-WFF,
-  bound_QC-variables:] equals
-  [[p,CFQ.[All(x,p),Sub]],x];
+  let Al,p,x,Sub;
+  func QScope(p,x,Sub) -> CQC-WFF-like Element of [:QC-Sub-WFF(Al),
+  bound_QC-variables(Al):] equals
+  [[p,(CFQ(Al)).[All(x,p),Sub]],x];
   coherence;
 end;
 
 definition
-  let p,x,Sub;
+  let Al,p,x,Sub;
   func Qsc(p,x,Sub) -> second_Q_comp of QScope(p,x,Sub) equals
   Sub;
   coherence
   proof
-A1: QScope(p,x,Sub)`1 = [p,CFQ.[All(x,p),Sub]] by MCART_1:7;
-    then (QScope(p,x,Sub)`1)`2 = (QSub|CQC-Sub-WFF).[All(x,p),Sub] by MCART_1:7
-;
+A1: QScope(p,x,Sub)`1 = [p,(CFQ(Al)).[All(x,p),Sub]] by MCART_1:7;
+    then (QScope(p,x,Sub)`1)`2 = ((QSub(Al))|CQC-Sub-WFF(Al)).[All(x,p),Sub]
+     by MCART_1:7;
     then
-A2: (QScope(p,x,Sub)`1)`2 = QSub.[All(x,p),Sub] by FUNCT_1:49;
+A2: (QScope(p,x,Sub)`1)`2 = (QSub(Al)).[All(x,p),Sub] by FUNCT_1:49;
 A3: QScope(p,x,Sub)`2 = x & (QScope(p,x,Sub)`1)`1 = p by A1,MCART_1:7;
     then QScope(p,x,Sub) is quantifiable by A2,SUBSTUT1:def 22;
     hence thesis by A3,A2,SUBSTUT1:def 23;
@@ -619,22 +644,19 @@ theorem Th22:
   [All(x,p),Sub] = CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) &
   QScope(p,x,Sub) is quantifiable
 proof
-  set S = [p,CFQ.[All(x,p),Sub]];
-  set B = [[p,CFQ.[All(x,p),Sub]],x];
-A1: B`1 = S by MCART_1:7;
+  set S = [p,(CFQ(Al)).[All(x,p),Sub]];
+  set B = [[p,(CFQ(Al)).[All(x,p),Sub]],x];
+A1: B`2 = x & (B`1)`1 = p;
+  [All(x,p),Sub] in CQC-Sub-WFF(Al);
   then
-A2: B`2 = x & (B`1)`1 = p by MCART_1:7;
-  [All(x,p),Sub] in CQC-Sub-WFF;
+A2: [All(x,p),Sub] in dom CFQ(Al) by FUNCT_2:def 1;
+  (B`1)`2 = (QSub(Al)).[All(B`2,(B`1)`1),Sub] by A2,FUNCT_1:47;
   then
-A3: [All(x,p),Sub] in dom CFQ by FUNCT_2:def 1;
-  (B`1)`2 = CFQ.[All(x,p),Sub] by A1,MCART_1:7;
-  then (B`1)`2 = QSub.[All(B`2,(B`1)`1),Sub] by A2,A3,FUNCT_1:47;
-  then
-A4: B is quantifiable by SUBSTUT1:def 22;
+A3: B is quantifiable by SUBSTUT1:def 22;
   then
   CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) = Sub_All(QScope(p,x,Sub),Qsc(p
   ,x,Sub)) by SUBLEMMA:def 5;
-  hence thesis by A2,A4,SUBSTUT1:def 24;
+  hence thesis by A1,A3,SUBSTUT1:def 24;
 end;
 
 theorem Th23:
@@ -645,7 +667,7 @@ proof
 A1: for Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]));
   let Sub;
   set S1 = [All(x,p),Sub];
-  set S = [p,CFQ.[All(x,p),Sub]];
+  set S = [p,(CFQ(Al)).[All(x,p),Sub]];
   set y = S_Bound(@CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)));
 A2: QScope(p,x,Sub) is quantifiable by Th22;
 A3: Sub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) = CQCSub_All(QScope(p,x,Sub),Qsc(p
@@ -658,7 +680,7 @@ A5: CQC_Sub(S1) = CQCQuant(S1,CQC_Sub(CQCSub_the_scope_of S1)) by SUBLEMMA:28;
   CQCSub_the_scope_of S1 = Sub_the_scope_of Sub_All(QScope(p,x,Sub),Qsc(p,
   x,Sub)) by A3,A4,SUBLEMMA:def 6
     .= [S,x]`1 by A2,SUBSTUT1:21
-    .= S by MCART_1:7;
+    .= S;
   then
   CQC_Sub(S1) = CQCQuant(CQCSub_All(QScope(p,x,Sub), Qsc(p,x,Sub)),CQC_Sub
   (S)) by A5,Th22;
@@ -669,21 +691,21 @@ A5: CQC_Sub(S1) = CQCQuant(S1,CQC_Sub(CQCSub_the_scope_of S1)) by SUBLEMMA:28;
 end;
 
 theorem Th24:
-  QuantNbr(VERUM) = QuantNbr(CQC_Sub([VERUM,Sub]))
+  QuantNbr(VERUM(Al)) = QuantNbr(CQC_Sub([VERUM(Al),Sub]))
 proof
-  [VERUM,Sub] is Sub_VERUM by SUBSTUT1:def 19;
+  [VERUM(Al),Sub] is Al-Sub_VERUM by SUBSTUT1:def 19;
   hence thesis by SUBLEMMA:3;
 end;
 
 theorem
   for p, Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]))
 proof
-  defpred P[Element of CQC-WFF] means for Sub holds QuantNbr($1) = QuantNbr(
-  CQC_Sub([$1,Sub]));
-A1: for r,s,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[r] implies P['not' r]) & (P[r]
-& P[s] implies P[r '&' s]) & (P[r] implies P[All(x, r)]) by Th15,Th18,Th21,Th23
-,Th24;
+  defpred P[Element of CQC-WFF(Al)] means for Sub holds
+QuantNbr($1) = QuantNbr(CQC_Sub([$1,Sub]));
+A1: for r,s,x,k for l being CQC-variable_list of k,Al for P being
+QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!l] & (P[r]
+implies P['not' r]) & (P[r] & P[s] implies P[r '&' s]) & (P[r]
+implies P[All(x, r)]) by Th15,Th18,Th21,Th23,Th24;
   thus for r holds P[r] from CQC_LANG:sch 1(A1);
 end;
 
@@ -691,73 +713,86 @@ theorem
   p is atomic implies ex k,P,ll st p = P!ll
 proof
   assume p is atomic;
-  then consider k being Element of NAT, P being (QC-pred_symbol of k), l being
-  QC-variable_list of k such that
-A1: p = P!l by QC_LANG1:def 16;
-A2: { l.j : 1 <= j & j <= len l & l.j in fixed_QC-variables } = {} by A1,
+  then consider k being Element of NAT, P being (QC-pred_symbol of k,Al),
+l being QC-variable_list of k,Al such that
+A1: p = P!l by QC_LANG1:def 18;
+A2: { l.j : 1 <= j & j <= len l & l.j in fixed_QC-variables(Al) } = {} by A1,
 CQC_LANG:7;
-  { l.i : 1 <= i & i <= len l & l.i in free_QC-variables } = {} by A1,
+  { l.i : 1 <= i & i <= len l & l.i in free_QC-variables(Al) } = {} by A1,
 CQC_LANG:7;
-  then reconsider l as CQC-variable_list of k by A2,CQC_LANG:5;
+  then reconsider l as CQC-variable_list of k,Al by A2,CQC_LANG:5;
   take k,P,l;
   thus thesis by A1;
 end;
 
 scheme
-  CQCInd3 {P[set]} : for p st QuantNbr(p) = 0 holds P[p]
+  CQCInd3 {Al() -> QC-alphabet, P[set]} :
+for p being Element of CQC-WFF(Al()) st QuantNbr(p) = 0 holds P[p]
 provided
-A1: for r,s,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[r] implies P['not' r]) & (P[r]
-& P[s] implies P[r '&' s])
+A1: for r,s being Element of CQC-WFF(Al())
+for x being bound_QC-variable of Al()
+for k
+for l being CQC-variable_list of k,Al()
+for P being QC-pred_symbol of k,Al()
+holds P[VERUM(Al())] & P[P!l] &
+(P[r] implies P['not' r]) & (P[r] & P[s] implies P[r '&' s])
 proof
-  defpred Prop[Element of CQC-WFF] means QuantNbr($1) = 0 implies P[$1];
-A2: for x, p st Prop[p] holds Prop[All(x, p)]
+  defpred Prop[Element of CQC-WFF(Al())] means QuantNbr($1) = 0 implies P[$1];
+A2: for x being bound_QC-variable of Al(), p being Element of CQC-WFF(Al())
+st Prop[p] holds Prop[All(x, p)]
   proof
-    let x,p such that
+  let x be bound_QC-variable of Al(), p be Element of CQC-WFF(Al()) such that
     Prop[p];
     assume QuantNbr(All(x,p)) = 0;
     then QuantNbr(p)+1 = 0 by CQC_SIM1:18;
     hence thesis;
   end;
-  for p,q st Prop[p] & Prop[q] holds Prop[p '&' q]
+  for p,q being Element of CQC-WFF(Al())
+  st Prop[p] & Prop[q] holds Prop[p '&' q]
   proof
-    let p,q such that
-A3: ( Prop[p])& Prop[q];
+    let p,q be Element of CQC-WFF(Al()) such that
+A3: Prop[p] & Prop[q];
     assume QuantNbr(p '&' q) = 0;
     then QuantNbr(p) + QuantNbr(q) = 0 by CQC_SIM1:17;
     hence thesis by A1,A3;
   end;
   then
-A4: for r,s,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds Prop[VERUM] & Prop[P!l] & (Prop[r] implies Prop['not'
-r]) & (Prop[r] & Prop[s] implies Prop[r '&' s]) & (Prop[r] implies Prop[All(x,
-  r)]) by A1,A2,CQC_SIM1:16;
-  for p holds Prop[p] from CQC_LANG:sch 1(A4);
+A4: for r,s being Element of CQC-WFF(Al())
+    for x being bound_QC-variable of Al()
+    for k
+    for l being CQC-variable_list of k,Al()
+    for P being QC-pred_symbol of k,Al()
+holds Prop[VERUM(Al())] & Prop[P!l] &
+(Prop[r] implies Prop['not' r]) & (Prop[r] & Prop[s] implies Prop[r '&' s])&
+(Prop[r] implies Prop[All(x,r)]) by A1,A2,CQC_SIM1:16;
+  for p being Element of CQC-WFF(Al()) holds Prop[p] from CQC_LANG:sch 1(A4);
   hence thesis;
 end;
 
 begin :: Results about the Construction of Formulas
 
-reserve F1,F2,F3 for QC-formula,
+reserve F1,F2,F3 for QC-formula of Al,
   L for FinSequence;
 
 definition
-  let G,H be QC-formula;
+  let Al;
+  let G,H be QC-formula of Al;
   assume
 A1: G is_subformula_of H;
   mode PATH of G,H -> FinSequence means
-    :Def6:
+    :Def5:
     1 <= len it & it.1 = G & it.(
-len it) = H & for k st 1 <= k & k < len it ex G1,H1 being Element of QC-WFF st
-    it.k = G1 & it.(k+1) = H1 & G1 is_immediate_constituent_of H1;
+len it) = H & for k st 1 <= k & k < len it ex G1,H1
+being Element of QC-WFF(Al) st it.k = G1 & it.(k+1) = H1 &
+G1 is_immediate_constituent_of H1;
   existence
   proof
     ex n,L st 1 <= n & len L = n & L.1 = G & L.n = H & for k st 1 <= k & k
-    < n ex G1,H1 being Element of QC-WFF st L.k = G1 & L.(k+1) = H1 & G1
+    < n ex G1,H1 being Element of QC-WFF(Al) st L.k = G1 & L.(k+1) = H1 & G1
     is_immediate_constituent_of H1 by A1,QC_LANG2:def 20;
     then consider L such that
 A2: ex n st 1 <= n & len L = n & L.1 = G & L.n = H & for k st 1 <= k &
-    k < n ex G1,H1 being Element of QC-WFF st L.k = G1 & L.(k+1) = H1 & G1
+    k < n ex G1,H1 being Element of QC-WFF(Al) st L.k = G1 & L.(k+1) = H1 & G1
     is_immediate_constituent_of H1;
     take L;
     thus thesis by A2;
@@ -800,15 +835,15 @@ A10: 1+1+(-1) <= j+(-1) by A8,XREAL_1:6;
     then reconsider j1 = j-1 as Element of NAT by INT_1:3;
     j1+1 = j;
     then
-A11: ex G1,H1 being Element of QC-WFF st L.j1 = G1 & L.j = H1 & G1
-    is_immediate_constituent_of H1 by A1,A10,A9,Def6;
-    then reconsider F3 = L.j1 as QC-formula;
+A11: ex G1,H1 being Element of QC-WFF(Al) st L.j1 = G1 & L.j = H1 & G1
+    is_immediate_constituent_of H1 by A1,A10,A9,Def5;
+    then reconsider F3 = L.j1 as QC-formula of Al;
     take F3;
     k < k+1 by NAT_1:13;
     then F3 is_proper_subformula_of F2 by A6,A7,A11,QC_LANG2:63,XXREAL_0:2;
     hence thesis by QC_LANG2:def 21;
   end;
-  L.n = F2 by A1,Def6;
+  L.n = F2 by A1,Def5;
   then
 A12: P[0];
   for k holds P[k] from NAT_1:sch 1(A12,A5);
@@ -818,7 +853,7 @@ end;
 
 theorem Th28:
   for L being PATH of F1,p st F1 is_subformula_of p & 1 <= i & i
-  <= len L holds L.i is Element of CQC-WFF
+  <= len L holds L.i is Element of CQC-WFF(Al)
 proof
   let L be PATH of F1,p;
   set n = len L;
@@ -833,7 +868,7 @@ A4: n+(-i) <= n-1+i+(-i) by XREAL_1:6;
   i+(-i) <= n+(-i) by A3,XREAL_1:6;
   then reconsider l = n-i as Element of NAT by INT_1:3;
   defpred P[Element of NAT] means $1 <= n-1 implies L.(n-$1) is Element of
-  CQC-WFF;
+  CQC-WFF(Al);
 A5: for k st P[k] holds P[k+1]
   proof
     let k such that
@@ -845,7 +880,7 @@ A7: k+1 <= n-1;
 A8: 2+k+(-k) <= n+(-k) by XREAL_1:6;
     then reconsider j = n-k as Element of NAT by INT_1:3;
     k < k+1 by NAT_1:13;
-    then reconsider q = L.j as Element of CQC-WFF by A6,A7,XXREAL_0:2;
+    then reconsider q = L.j as Element of CQC-WFF(Al) by A6,A7,XXREAL_0:2;
     n <= n+k by NAT_1:11;
     then n+(-k) <= n+k+(-k) by XREAL_1:6;
     then
@@ -853,20 +888,20 @@ A9: j-1 < n by XREAL_1:146,XXREAL_0:2;
 A10: 1+1+(-1) <= j+(-1) by A8,XREAL_1:6;
     then reconsider j1 = j-1 as Element of NAT by INT_1:3;
     j1+1 = j;
-    then consider G1,H1 being Element of QC-WFF such that
+    then consider G1,H1 being Element of QC-WFF(Al) such that
 A11: L.j1 = G1 and
-A12: q = H1 & G1 is_immediate_constituent_of H1 by A1,A10,A9,Def6;
-A13: (ex F being Element of QC-WFF st q = G1 '&' F) implies thesis by A11,
+A12: q = H1 & G1 is_immediate_constituent_of H1 by A1,A10,A9,Def5;
+A13: (ex F being Element of QC-WFF(Al) st q = G1 '&' F) implies thesis by A11,
 CQC_LANG:9;
 A14: (ex x st q = All(x,G1)) implies thesis by A11,CQC_LANG:13;
-A15: (ex F being Element of QC-WFF st q = F '&' G1) implies thesis by A11,
+A15: (ex F being Element of QC-WFF(Al) st q = F '&' G1) implies thesis by A11,
 CQC_LANG:9;
     q = 'not' G1 implies thesis by A11,CQC_LANG:8;
     hence thesis by A12,A13,A15,A14,QC_LANG2:def 19;
   end;
-A16: P[0] by A1,Def6;
+A16: P[0] by A1,Def5;
   for k holds P[k] from NAT_1:sch 1(A16,A5);
-  then L.(n-l) is Element of CQC-WFF by A4;
+  then L.(n-l) is Element of CQC-WFF(Al) by A4;
   hence thesis;
 end;
 
@@ -906,10 +941,10 @@ A10: 1+1+(-1) <= j+(-1) by A9,XREAL_1:6;
     then
 A11: j-1 < m by XREAL_1:146,XXREAL_0:2;
     j1+1 = j;
-    then consider G1,H1 being Element of QC-WFF such that
+    then consider G1,H1 being Element of QC-WFF(Al) such that
 A12: L.j1 = G1 and
-A13: L.j = H1 & G1 is_immediate_constituent_of H1 by A2,A10,A11,Def6;
-    reconsider r = G1 as Element of CQC-WFF by A2,A10,A11,A12,Th28;
+A13: L.j = H1 & G1 is_immediate_constituent_of H1 by A2,A10,A11,Def5;
+    reconsider r = G1 as Element of CQC-WFF(Al) by A2,A10,A11,A12,Th28;
     k < k+1 by NAT_1:13;
     then consider q such that
 A14: q = L.j and
@@ -923,9 +958,9 @@ A17:  q = All(x,G1);
       hence thesis by A12;
     end;
 A18: now
-      given F being Element of QC-WFF such that
+      given F being Element of QC-WFF(Al) such that
 A19:  q = F '&' G1;
-      reconsider F as Element of CQC-WFF by A19,CQC_LANG:9;
+      reconsider F as Element of CQC-WFF(Al) by A19,CQC_LANG:9;
       take r;
       n <= n+QuantNbr(F) by NAT_1:11;
       then
@@ -936,9 +971,9 @@ XREAL_1:6;
       hence thesis by A12,A20,XXREAL_0:2;
     end;
 A21: now
-      given F being Element of QC-WFF such that
+      given F being Element of QC-WFF(Al) such that
 A22:  q = G1 '&' F;
-      reconsider F as Element of CQC-WFF by A22,CQC_LANG:9;
+      reconsider F as Element of CQC-WFF(Al) by A22,CQC_LANG:9;
       take r;
       n <= n+QuantNbr(F) by NAT_1:11;
       then
@@ -957,7 +992,7 @@ A24:  q = 'not' G1;
     end;
     hence thesis by A14,A13,A21,A18,A16,QC_LANG2:def 19;
   end;
-  L.m = p by A2,Def6;
+  L.m = p by A2,Def5;
   then
 A25: P[0] by A1;
   for k holds P[k] from NAT_1:sch 1(A25,A6);
@@ -968,14 +1003,14 @@ end;
 theorem
   QuantNbr(p) = n & q is_subformula_of p implies QuantNbr(q) <= n
 proof
-  set L = the PATH of q,p;
+  set L =the  PATH of q,p;
   set m = len L;
   assume that
 A1: QuantNbr(p) = n and
 A2: q is_subformula_of p;
-  1 <= m by A2,Def6;
+  1 <= m by A2,Def5;
   then ex r st r = L.1 & QuantNbr(r) <= n by A1,A2,Th29;
-  hence thesis by A2,Def6;
+  hence thesis by A2,Def5;
 end;
 
 theorem
@@ -983,8 +1018,8 @@ theorem
 proof
   let n,p such that
 A1: for q st q is_subformula_of p holds QuantNbr(q) = n;
-  defpred P[Element of CQC-WFF] means $1 is_subformula_of p implies QuantNbr(
-  $1) = 0;
+  defpred P[Element of CQC-WFF(Al)] means
+   $1 is_subformula_of p implies QuantNbr($1) = 0;
 A2: for x, r st P[r] holds P[All(x, r)]
   proof
     let x,r such that
@@ -1027,10 +1062,10 @@ A10: r is_immediate_constituent_of 'not' r by QC_LANG2:43;
     hence thesis by A9,CQC_SIM1:16,QC_LANG2:def 21;
   end;
   then
-A11: for r,s,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[r] implies P['not' r]) & (P[r]
-  & P[s] implies P[r '&' s]) & (P[r] implies P[All(x, r)]) by A5,A2,CQC_SIM1:14
-,15;
+A11: for r,s,x,k for l being CQC-variable_list of k,Al for P being
+QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!l] &
+(P[r] implies P['not' r]) & (P[r] & P[s] implies P[r '&' s]) &
+(P[r] implies P[All(x, r)]) by A5,A2,CQC_SIM1:14,15;
 A12: for r holds P[r] from CQC_LANG:sch 1(A11);
   QuantNbr(p) = n by A1;
   hence thesis by A12;
@@ -1042,8 +1077,8 @@ theorem
 proof
   let p such that
 A1: for q st q is_subformula_of p holds for x,r holds q <> All(x,r);
-  defpred P[Element of CQC-WFF] means $1 is_subformula_of p implies QuantNbr(
-  $1) = 0;
+  defpred P[Element of CQC-WFF(Al)] means $1 is_subformula_of p
+implies QuantNbr($1) = 0;
 A2: for r,s st P[r] & P[s] holds P[r '&' s]
   proof
     let r,s such that
@@ -1068,10 +1103,10 @@ A7: r is_immediate_constituent_of 'not' r by QC_LANG2:43;
     hence thesis by A6,CQC_SIM1:16,QC_LANG2:def 21;
   end;
   then
-A8: for r,s,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[r] implies P['not' r]) & (P[r]
-  & P[s] implies P[r '&' s]) & (P[r] implies P[All(x, r)]) by A1,A2,CQC_SIM1:14
-,15;
+A8: for r,s,x,k for l being CQC-variable_list of k,Al for P being
+QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!l] &
+(P[r] implies P['not' r]) & (P[r] & P[s] implies P[r '&' s]) &
+(P[r] implies P[All(x, r)]) by A1,A2,CQC_SIM1:14,15;
   for r holds P[r] from CQC_LANG:sch 1(A8);
   hence thesis;
 end;
@@ -1082,8 +1117,8 @@ theorem Th33:
 proof
   let p such that
 A1: for q st q is_subformula_of p holds QuantNbr(q) <> 1;
-  defpred P[Element of CQC-WFF] means $1 is_subformula_of p implies QuantNbr(
-  $1) = 0;
+  defpred P[Element of CQC-WFF(Al)] means $1 is_subformula_of p
+implies QuantNbr($1) = 0;
 A2: for x, r st P[r] holds P[All(x, r)]
   proof
     let x,r such that
@@ -1122,10 +1157,10 @@ A10: r is_immediate_constituent_of 'not' r by QC_LANG2:43;
     hence thesis by A9,CQC_SIM1:16,QC_LANG2:def 21;
   end;
   then
-A11: for r,s,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[r] implies P['not' r]) & (P[r]
-  & P[s] implies P[r '&' s]) & (P[r] implies P[All(x, r)]) by A5,A2,CQC_SIM1:14
-,15;
+A11: for r,s,x,k for l being CQC-variable_list of k,Al for P being
+QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!l] &
+(P[r] implies P['not' r]) & (P[r] & P[s] implies P[r '&' s]) &
+(P[r] implies P[All(x, r)]) by A5,A2,CQC_SIM1:14,15;
   for r holds P[r] from CQC_LANG:sch 1(A11);
   hence thesis;
 end;

@@ -2,7 +2,7 @@
 ::  by Noboru Endou , Yasunari Shidama and Keiichi Miyajima
 ::
 :: Received July 9, 2007
-:: Copyright (c) 2007-2011 Association of Mizar Users
+:: Copyright (c) 2007-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,23 +23,23 @@ environ
       PRVECT_2, NORMSP_0, METRIC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_3, XCMPLX_0,
       XXREAL_0, NUMBERS, XREAL_0, COMPLEX1, NAT_1, RELAT_1, FUNCT_1, RVSUM_1,
-      STRUCT_0, ALGSTR_0, FUNCT_2, FUNCT_3, BINOP_1, REAL_1, SEQ_1, SEQ_2,
-      RLVECT_1, VECTSP_1, SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQOP, SQUARE_1,
-      PRE_TOPC, EUCLID, PRVECT_1, NORMSP_0, NORMSP_1, RSSPACE3, LOPBAN_1,
-      REAL_NS1;
+      STRUCT_0, ALGSTR_0, FUNCT_2, FUNCT_3, BINOP_1, REAL_1, SEQ_1, COMSEQ_2,
+      SEQ_2, RLVECT_1, VECTSP_1, SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQOP,
+      SQUARE_1, PRE_TOPC, EUCLID, PRVECT_1, NORMSP_0, NORMSP_1, RSSPACE3,
+      LOPBAN_1, REAL_NS1;
  constructors FUNCT_3, FINSEQOP, REAL_1, SEQ_2, COMPLEX1, SQUARE_1, BINOP_2,
       SETWISEO, PRVECT_1, RSSPACE3, LOPBAN_1, REAL_NS1, SEQ_1, RVSUM_1,
-      NORMSP_1, RELSET_1;
+      NORMSP_1, RELSET_1, COMSEQ_2;
  registrations STRUCT_0, FINSEQ_2, FINSEQ_1, CARD_3, RLVECT_1, PRVECT_1,
       XREAL_0, MEMBERED, NORMSP_1, REAL_NS1, ORDINAL1, FUNCT_1, FUNCT_2,
-      RELAT_1, XBOOLE_0, NUMBERS, VALUED_0, NORMSP_0, CARD_1;
+      RELAT_1, XBOOLE_0, NUMBERS, VALUED_0, NORMSP_0, CARD_1, EUCLID, COMSEQ_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions RLVECT_1, NORMSP_1, FINSEQ_2, EUCLID, STRUCT_0, SQUARE_1,
       ALGSTR_0, NORMSP_0;
  theorems BINOP_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQOP,
-      FUNCOP_1, SETWISEO, TARSKI, CARD_3, RLVECT_1, RELAT_1, RVSUM_1, ABSVALUE,
-      FVSUM_1, SEQ_2, PRVECT_1, NORMSP_1, SQUARE_1, EUCLID, XREAL_1, LOPBAN_1,
-      RSSPACE3, REAL_NS1, XXREAL_0, VALUED_1, XREAL_0, NORMSP_0, CARD_1;
+      SETWISEO, TARSKI, CARD_3, RLVECT_1, RELAT_1, RVSUM_1, ABSVALUE, FVSUM_1,
+      SEQ_2, PRVECT_1, NORMSP_1, SQUARE_1, EUCLID, XREAL_1, LOPBAN_1, RSSPACE3,
+      REAL_NS1, XXREAL_0, VALUED_1, XREAL_0, NORMSP_0, CARD_1;
  schemes FUNCT_1, BINOP_1, FUNCT_2, FINSEQ_1, PRVECT_1, CLASSES1;
 
 begin :: The Product Space of Real Linear Spaces
@@ -133,13 +133,7 @@ proof
 A1: Seg len F = dom F by FINSEQ_1:def 3;
   assume
 A2: for i be Element of NAT st i in dom F holds 0 = F.i;
-A3: now
-    let j be Nat;
-    assume
-A4: j in Seg i;
-    then R1.j = 0 by FUNCOP_1:7;
-    hence R1.j = R2.j by A2,A1,A4;
-  end;
+A3: for j be Nat st j in Seg i holds R1.j = R2.j by A2,A1;
   len R1 = i by CARD_1:def 7;
   then dom R1 = dom R2 by FINSEQ_3:29;
   then R1 = R2 by A1,A3,FINSEQ_1:13;
@@ -1015,14 +1009,11 @@ A6: ||.x.|| = 0;
     now
       let i be Element of dom carr G;
       reconsider i0 = i as Element of dom G by A2,FINSEQ_3:29;
-      dom carr G = Seg len carr G by FINSEQ_1:def 3;
-      then
-A7:   dom carr G = Seg len G by Def4;
       (carr G).i0 = the carrier of G.i0 by Def4;
       then reconsider zzi0=z.i0 as Element of G.i0 by CARD_3:9;
       ||.x.|| = |.normsequence(G,z).| by Th7;
       then normsequence(G,z) = 0*n by A6,EUCLID:8;
-      then normsequence(G,z).i = 0 by A7,FUNCOP_1:7;
+      then normsequence(G,z).i = 0;
       then ||.(zzi0).|| = 0 by Def11;
       then z.i = 0.(G.i) by NORMSP_0:def 5;
       hence z.i = the ZeroF of (G.i);
@@ -1033,17 +1024,17 @@ A7:   dom carr G = Seg len G by Def4;
   reconsider z=x as Element of product carr G by A1;
   reconsider xx = x, yy = y as Element of product carr G by A1;
   reconsider ax=a * x as Element of product carr G by A1;
-A8: ||.y.|| = |.normsequence(G,yy).| & |.normsequence(G,xx)+ normsequence(G
+A7: ||.y.|| = |.normsequence(G,yy).| & |.normsequence(G,xx)+ normsequence(G
   ,yy) .| <= |.normsequence(G,xx).| + |.normsequence(G,yy).| by Th7,EUCLID:12;
-A9: len normsequence(G,ax) = n by CARD_1:def 7;
+A8: len normsequence(G,ax) = n by CARD_1:def 7;
   then
-A10: dom normsequence(G,ax) = Seg n by FINSEQ_1:def 3;
-A11: for i be Nat st i in dom normsequence(G,ax) holds normsequence(G,ax).i
+A9: dom normsequence(G,ax) = Seg n by FINSEQ_1:def 3;
+A10: for i be Nat st i in dom normsequence(G,ax) holds normsequence(G,ax).i
   = (abs(a) * normsequence(G,z)).i
   proof
     let i be Nat;
     assume i in dom normsequence(G,ax);
-    then reconsider i0 = i as Element of dom G by A10,FINSEQ_1:def 3;
+    then reconsider i0 = i as Element of dom G by A9,FINSEQ_1:def 3;
     reconsider i1 = i0 as Element of dom carr G by A2,FINSEQ_3:29;
     (carr G).i0 = the carrier of G.i0 & dom carr G = dom G by A2,Def4,
 FINSEQ_3:29;
@@ -1056,31 +1047,31 @@ FINSEQ_3:29;
     hence thesis by Def11;
   end;
   len (abs(a) * normsequence(G,z)) = n by CARD_1:def 7;
-  then |.normsequence(G,ax).| = |.abs(a)*normsequence(G,z).| by A9,A11,
+  then |.normsequence(G,ax).| = |.abs(a)*normsequence(G,z).| by A8,A10,
 FINSEQ_2:9;
   then
-A12: |.normsequence(G,ax).| = abs(abs a) * |.normsequence(G,z).| by EUCLID:11;
+A11: |.normsequence(G,ax).| = abs(abs a) * |.normsequence(G,z).| by EUCLID:11;
   reconsider z = x + y as Element of product carr G by A1;
-A13: for i be Element of NAT st i in Seg n holds 0 <= normsequence(G,z).i &
+A12: for i be Element of NAT st i in Seg n holds 0 <= normsequence(G,z).i &
   normsequence(G,z).i <= (normsequence(G,xx)+ normsequence(G,yy)).i
   proof
-A14: dom xx = dom carr G by CARD_3:9;
-A15: Seg n = dom G & dom carr G = dom G by A2,FINSEQ_1:def 3,FINSEQ_3:29;
+A13: dom xx = dom carr G by CARD_3:9;
+A14: Seg n = dom G & dom carr G = dom G by A2,FINSEQ_1:def 3,FINSEQ_3:29;
     let i be Element of NAT such that
-A16: i in Seg n;
-    i in dom z by A16,A15,CARD_3:9;
-    hence thesis by A1,A16,A15,A14,Th8,Th9;
+A15: i in Seg n;
+    i in dom z by A15,A14,CARD_3:9;
+    hence thesis by A1,A15,A14,A13,Th8,Th9;
   end;
-A17: len normsequence(G,z) = n by Def11;
+A16: len normsequence(G,z) = n by Def11;
   then
   len normsequence(G,z) = len (normsequence(G,xx)+ normsequence(G,yy)) by
 CARD_1:def 7;
   then
-A18: |.normsequence(G,z).| <= |.normsequence(G,xx)+ normsequence(G,yy).| by A17
-,A13,Th2;
+A17: |.normsequence(G,z).| <= |.normsequence(G,xx)+ normsequence(G,yy).| by A16
+,A12,Th2;
   ||.x + y.|| = |.normsequence(G,z).| & ||.x.|| = |.normsequence(G,xx).|
   by Th7;
-  hence thesis by A12,A18,A8,Th7,XXREAL_0:2;
+  hence thesis by A11,A17,A7,Th7,XXREAL_0:2;
 end;
 
 registration
@@ -1393,18 +1384,18 @@ A12: for k be Element of NAT holds PQ[k,yseq.k] from FUNCT_2:sch 3(A8);
 A13: now
     let i0 be Element of NAT;
     assume
-A14: i0 in Seg I;
+ i0 in Seg I;
     then reconsider i=i0 as Element of dom G by FINSEQ_1:def 3;
     take i;
     consider rseqi be Real_Sequence, seqi be sequence of G.i such that
-A15: rseqi=yyseq.i & seqi is convergent & rseqi is convergent & lim
+A14: rseqi=yyseq.i & seqi is convergent & rseqi is convergent & lim
 rseqi= 0 &( rseqi=||.seqi-lim seqi.|| & for m be Element of NAT holds ex seqm
     be Element of product carr G st seqm= seq.m & seqi.m=seqm.i) by A7;
     take rseqi,seqi;
     thus (for k be Element of NAT holds rseqi.k = (yseq.k).i0) & i=i0 & seqi
     is convergent & rseqi is convergent & lim rseqi=(0*I).i & rseqi=||.seqi-lim
 seqi.|| & for m be Element of NAT holds ex seqm be Element of product carr G st
-    seqm= seq.m & seqi.m=seqm.i by A12,A14,A15,FUNCOP_1:7;
+    seqm= seq.m & seqi.m=seqm.i by A12,A14;
   end;
   the carrier of REAL-NS I = REAL I by REAL_NS1:def 4;
   then reconsider xseq=yseq as sequence of REAL-NS I;
@@ -1412,13 +1403,13 @@ seqi.|| & for m be Element of NAT holds ex seqm be Element of product carr G st
   then consider
   xseq be sequence of REAL-NS I, yseq be Function of NAT,REAL I such
   that
-A16: xseq=yseq and
-A17: for i0 be Element of NAT st i0 in Seg I ex i be Element of dom G,
+A15: xseq=yseq and
+A16: for i0 be Element of NAT st i0 in Seg I ex i be Element of dom G,
   rseqi be Real_Sequence, seqi be sequence of G.i st (for k be Element of NAT
 holds rseqi.k = (yseq.k).i0) & i=i0 & seqi is convergent & rseqi is convergent
 & lim rseqi=(0*I).i & rseqi=||.seqi-lim seqi.|| & for m be Element of NAT holds
   ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i by A13;
-A18: for i be Element of NAT st i in Seg I ex rseqi be Real_Sequence st (for
+A17: for i be Element of NAT st i in Seg I ex rseqi be Real_Sequence st (for
 k be Element of NAT holds rseqi.k = (yseq.k).i) & rseqi is convergent & (0*I).i
   = lim rseqi
   proof
@@ -1429,86 +1420,86 @@ k be Element of NAT holds rseqi.k = (yseq.k).i) & rseqi is convergent & (0*I).i
 G.i st (for k be Element of NAT holds rseqi.k = (yseq.k).i0) & i=i0 & seqi is
 convergent & rseqi is convergent & lim rseqi=(0*I).i & rseqi=||.seqi-lim seqi
     .|| & for m be Element of NAT holds ex seqm be Element of product carr G st
-    seqm= seq.m & seqi.m=seqm.i by A17;
+    seqm= seq.m & seqi.m=seqm.i by A16;
     hence thesis;
   end;
-A19: product G = NORMSTR(# product carr G,zeros G, [:addop G:],[:multop G:],
+A18: product G = NORMSTR(# product carr G,zeros G, [:addop G:],[:multop G:],
     productnorm G #) by Th6;
   now
     let x be set;
     assume x in NAT;
     then reconsider i=x as Element of NAT;
-    reconsider seqimx0 = seq.i-x0 as Element of product carr G by A19;
-A20: now
-      reconsider mx0=-x0 as Element of product carr G by A19;
+    reconsider seqimx0 = seq.i-x0 as Element of product carr G by A18;
+A19: now
+      reconsider mx0=-x0 as Element of product carr G by A18;
       let k be Nat;
       assume
-A21:  k in dom normsequence(G,seqimx0);
-A22:  len G= len normsequence(G,seqimx0) by Def11;
-      then reconsider k0=k as Element of dom G by A21,FINSEQ_3:29;
-      k in Seg I by A21,A22,FINSEQ_1:def 3;
+A20:  k in dom normsequence(G,seqimx0);
+A21:  len G= len normsequence(G,seqimx0) by Def11;
+      then reconsider k0=k as Element of dom G by A20,FINSEQ_3:29;
+      k in Seg I by A20,A21,FINSEQ_1:def 3;
       then consider
       k1 be Element of dom G, rseqk1i be Real_Sequence, seqk1i be
       sequence of G.k1 such that
-A23:  for j be Element of NAT holds rseqk1i.j = (yseq.j).k and
-A24:  k1=k and
+A22:  for j be Element of NAT holds rseqk1i.j = (yseq.j).k and
+A23:  k1=k and
       seqk1i is convergent and
       rseqk1i is convergent and
       lim rseqk1i=(0*I).k1 and
-A25:  rseqk1i=||.seqk1i-lim seqk1i.|| and
-A26:  for m be Element of NAT holds ex seqk1m be Element of product
-      carr G st seqk1m= seq.m & seqk1i.m=seqk1m.k1 by A17;
+A24:  rseqk1i=||.seqk1i-lim seqk1i.|| and
+A25:  for m be Element of NAT holds ex seqk1m be Element of product
+      carr G st seqk1m= seq.m & seqk1i.m=seqk1m.k1 by A16;
       consider seqk0 be sequence of G.k0 such that
       seqk0 is convergent and
-A27:  y0.k0 = lim seqk0 and
-A28:  for m be Element of NAT holds ex seqm0 be Element of product
+A26:  y0.k0 = lim seqk0 and
+A27:  for m be Element of NAT holds ex seqm0 be Element of product
       carr G st seqm0= seq.m & seqk0.m=seqm0.k0 by A2;
-A29:  ex seqm0 be Element of product carr G st seqm0= seq.i & seqk0.i=
-      seqm0.k0 by A28;
+A28:  ex seqm0 be Element of product carr G st seqm0= seq.i & seqk0.i=
+      seqm0.k0 by A27;
       now
         let x be set;
         assume x in NAT;
         then reconsider m = x as Element of NAT;
         ( ex seqk1m be Element of product carr G st seqk1m= seq.m &
 seqk1i.m=seqk1m.k1) & ex seqm0 be Element of product carr G st seqm0= seq.m &
-        seqk0.m = seqm0.k0 by A28,A26;
-        hence seqk1i.x = seqk0.x by A24;
+        seqk0.m = seqm0.k0 by A27,A25;
+        hence seqk1i.x = seqk0.x by A23;
       end;
       then
-A30:  seqk1i=seqk0 by A24,FUNCT_2:12;
+A29:  seqk1i=seqk0 by A23,FUNCT_2:12;
       len G = len carr G by Def4;
       then
-A31:  dom G = dom carr G by FINSEQ_3:29;
+A30:  dom G = dom carr G by FINSEQ_3:29;
       -x0 = (-1) * x0 by RLVECT_1:16;
-      then mx0.k0 = (-1)*(lim seqk0) by A1,A19,A27,A31,Lm4;
+      then mx0.k0 = (-1)*(lim seqk0) by A1,A18,A26,A30,Lm4;
       then -(lim seqk0) = mx0.k0 by RLVECT_1:16;
       then
-A32:  seqimx0.k0 = seqk0.i - lim seqk0 by A19,A29,A31,Lm3;
+A31:  seqimx0.k0 = seqk0.i - lim seqk0 by A18,A28,A30,Lm3;
       thus (normsequence(G,seqimx0)).k = (the normF of G.k0).(seqimx0.k0) by
 Def11
-        .= ||.(seqk0 -lim seqk0).i .|| by A32,NORMSP_1:def 4
-        .= (||.seqk1i - (lim seqk1i).||).i by A24,A30,NORMSP_0:def 4
-        .= (yseq.i).k by A23,A25;
+        .= ||.(seqk0 -lim seqk0).i .|| by A31,NORMSP_1:def 4
+        .= (||.seqk1i - (lim seqk1i).||).i by A23,A29,NORMSP_0:def 4
+        .= (yseq.i).k by A22,A24;
     end;
     len (yseq.i)= I by CARD_1:def 7;
     then len (yseq.i) = len normsequence(G,seqimx0) by Def11;
     then dom (yseq.i) = dom normsequence(G,seqimx0) by FINSEQ_3:29;
     then
-A33: yseq.i = normsequence(G,seqimx0) by A20,FINSEQ_1:13;
+A32: yseq.i = normsequence(G,seqimx0) by A19,FINSEQ_1:13;
     thus ||.xseq-0.(REAL-NS I).||.x =||.(xseq-0.(REAL-NS I)).i .|| by
 NORMSP_0:def 4
       .=||.xseq.i-0.(REAL-NS I).|| by NORMSP_1:def 4
       .=||.xseq.i.|| by RLVECT_1:13
-      .=|.yseq.i.| by A16,REAL_NS1:1
-      .=||.seq.i -x0.|| by A33,Th7
+      .=|.yseq.i.| by A15,REAL_NS1:1
+      .=||.seq.i -x0.|| by A32,Th7
       .=||.(seq -x0).i.|| by NORMSP_1:def 4
       .=||.seq-x0.||.x by NORMSP_0:def 4;
   end;
   then
-A34: ||.xseq-0.(REAL-NS I).|| =||.seq-x0.|| by FUNCT_2:12;
+A33: ||.xseq-0.(REAL-NS I).|| =||.seq-x0.|| by FUNCT_2:12;
   (0*I) = 0.(REAL-NS I) by REAL_NS1:def 4;
-  then xseq is convergent & lim xseq = 0.(REAL-NS I) by A16,A18,REAL_NS1:11;
-  then ||.seq-x0.|| is convergent & lim ||.seq-x0.|| =0 by A34,Lm8;
+  then xseq is convergent & lim xseq = 0.(REAL-NS I) by A15,A17,REAL_NS1:11;
+  then ||.seq-x0.|| is convergent & lim ||.seq-x0.|| =0 by A33,Lm8;
   hence thesis by Lm8;
 end;
 

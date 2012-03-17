@@ -1,0 +1,1033 @@
+:: Routh's, {M}enelaus' and Generalized {C}eva's Theorems
+::  by Boris A. Shminke
+:: 
+:: Received January 16, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies PRE_TOPC, EUCLID, REAL_1, EUCLID_6, ARYTM_1, CARD_1, ARYTM_3,
+      MCART_1, RELAT_1, PARSP_2, RLTOPSP1, XXREAL_0, COMPLEX1, SIN_COS,
+      COMPLEX2, ZFMISC_1, EUCLID_3, PROJPL_1, INCSP_1, TARSKI, SQUARE_1, AFF_1,
+      SUBSET_1, PROJRED2, RUSUB_5, SUPINF_2, XBOOLE_0;
+ notations XBOOLE_0, XXREAL_0, PRE_TOPC, REAL_1, EUCLID_6, BINOP_2, NUMBERS,
+      RLVECT_1, RLTOPSP1, SIN_COS, EUCLID_3, EUCLID, ZFMISC_1, COMPLEX2,
+      TARSKI, SQUARE_1, XREAL_0, ORDINAL1, SUBSET_1, EUCLID_4, STRUCT_0;
+ constructors XXREAL_0, PRE_TOPC, REAL_1, EUCLID_6, BINOP_2, NUMBERS, RLVECT_1,
+      RLTOPSP1, SIN_COS, EUCLID_3, EUCLID, MONOID_0, ZFMISC_1, COMPLEX2,
+      TARSKI, SQUARE_1, XREAL_0, ORDINAL1, SUBSET_1, EUCLID_4, STRUCT_0;
+ registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
+      MONOID_0, STRUCT_0, EUCLID, XCMPLX_0, TOPMETR, FUNCT_2, PRE_TOPC,
+      METRIC_1, BORSUK_1, SIN_COS6, VALUED_0, RVSUM_1, RLTOPSP1, SQUARE_1,
+      REAL_1, SUBSET_1;
+ requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
+ definitions EUCLID_6, RLTOPSP1, ZFMISC_1, EUCLID_3, EUCLID_4, SQUARE_1,
+      XREAL_0, SUBSET_1;
+ theorems EUCLID, EUCLID_6, ZFMISC_1, COMPLEX2, SIN_COS6, EUCLID_3, XCMPLX_1,
+      EUCLID_4, XREAL_0, XBOOLE_0;
+
+begin :: Some Properties of the Area of Triangle
+
+ reserve A, B, C, A1, B1, C1, A2, B2, C2, C3 for Point of TOP-REAL 2,
+  lambda, mu, nu, alpha, beta, gamma for Real,
+  X, Y, Z for Subset of TOP-REAL 2;
+
+notation
+ let X,Y;
+ synonym X is_parallel_to Y for X misses Y;
+end;
+
+definition
+  let X, Y, Z;
+  pred X, Y, Z are_concurrent means :def2:
+  ((X is_parallel_to Y & Y is_parallel_to Z & Z is_parallel_to X) or
+  ex A st (A in X & A in Y & A in Z));
+end;
+
+theorem
+  Th1: (A + B) `1 = A `1 + B `1 & (A + B) `2 = A `2 + B `2
+proof
+  A + B = |[((A `1) + (B `1)), ((A `2) + (B `2))]| by EUCLID:55;
+  hence thesis by EUCLID:52;
+end;
+
+theorem
+  Th2: (lambda * A) `1 = lambda * A `1 & (lambda * A) `2 = lambda * A `2
+proof
+  lambda * A = |[lambda * A `1, lambda * A `2]| by EUCLID:57;
+  hence thesis by EUCLID:52;
+end;
+
+theorem
+  Th3: (- A) `1 = - A `1 & (- A) `2 = - A `2
+proof
+  - A = |[- A `1, - A `2]| by EUCLID:59;
+  hence thesis by EUCLID:52;
+end;
+
+theorem
+  Th4: (lambda * A + mu * B) `1 = lambda * A `1 + mu * B `1 &
+  (lambda * A + mu * B) `2 = lambda * A `2 + mu * B `2
+proof
+  (lambda * A + mu * B) `1 = (lambda * A) `1 + (mu * B) `1 by Th1
+  .= lambda * A `1 + (mu * B) `1 by Th2;
+  hence (lambda * A + mu * B) `1 = lambda * A `1 + mu * B `1 by Th2;
+  (lambda * A + mu * B) `2 = (lambda * A) `2 + (mu * B) `2 by Th1
+  .= lambda * A `2 + (mu * B) `2 by Th2;
+  hence thesis by Th2;
+end;
+
+theorem
+  ((- lambda) * A) `1 = - lambda * A `1 &
+  ((- lambda) * A) `2 = - lambda * A `2
+proof
+  ((- lambda) * A) `1 = (- (lambda * A)) `1 by EUCLID:40
+  .= - (lambda * A) `1 by Th3;
+  hence ((- lambda) * A) `1 = - lambda * A `1 by Th2;
+  ((- lambda) * A) `2 = (- (lambda * A)) `2 by EUCLID:40
+  .= - (lambda * A) `2 by Th3;
+  hence thesis by Th2;
+end;
+
+theorem
+  (lambda * A - mu * B) `1 = lambda * A `1 - mu * B `1 &
+  (lambda * A - mu * B) `2 = lambda * A `2 - mu * B `2
+proof
+  (lambda * A - mu * B) `1 = (lambda * A) `1 - (mu * B) `1 by EUCLID_6:41
+  .= lambda * A `1 - (mu * B) `1 by Th2;
+  hence (lambda * A - mu * B) `1 = lambda * A `1 - mu * B `1 by Th2;
+  (lambda * A - mu * B) `2 = (lambda * A) `2 - (mu * B) `2 by EUCLID_6:41
+  .= lambda * A `2 - (mu * B) `2 by Th2;
+  hence thesis by Th2;
+end;
+
+theorem
+  Th7: the_area_of_polygon3((1 - lambda) * A + lambda * A1, B, C) =
+  (1 - lambda) * the_area_of_polygon3(A, B, C) +
+  lambda * the_area_of_polygon3(A1, B, C)
+proof
+  the_area_of_polygon3((1 - lambda) * A + lambda * A1, B, C) =
+  ((((1- lambda) * A `1 + lambda * A1 `1) * B `2
+  - B `1 * ((1- lambda) * A + lambda * A1) `2)
+  + (B `1 * C `2 - C `1 * B `2) + (C `1 * ((1- lambda) * A + lambda * A1) `2
+  - ((1- lambda) * A + lambda * A1) `1 * C `2)) / 2 by Th4
+  .= ((((1- lambda) * A `1 + lambda * A1 `1) * B `2 -
+  B `1 * ((1- lambda) * A `2 + lambda * A1 `2)) + (B `1 * C `2 - C `1 * B `2)
+  + (C `1 * ((1- lambda) * A + lambda * A1) `2
+  - ((1- lambda) * A + lambda * A1) `1 * C `2)) / 2 by Th4
+  .= ((((1- lambda) * A `1 + lambda * A1 `1) * B `2 -
+  B `1 * ((1- lambda) * A `2 + lambda * A1 `2)) + (B `1 * C `2 - C `1 * B `2)
+  + (C `1 * ((1- lambda) * A `2 + lambda * A1 `2)
+  - ((1- lambda) * A + lambda * A1) `1 * C `2)) / 2 by Th4
+  .= ((((1- lambda) * A `1 + lambda * A1 `1) * B `2 -
+  B `1 * ((1- lambda) * A `2 + lambda * A1 `2)) + (B `1 * C `2 - C `1 * B `2)
+  + (C `1 * ((1- lambda) * A `2 + lambda * A1 `2)
+  - ((1- lambda) * A `1 + lambda * A1 `1) * C `2)) / 2 by Th4;
+  hence thesis;
+end;
+
+theorem
+  Th8: (angle(A, B, C) = 0 & A, B, C are_mutually_different) implies
+  (angle(B, C, A) = PI or angle(B, A, C) = PI)
+proof
+  set z1 = (euc2cpx A);
+  set z2 = (euc2cpx B);
+  set z3 = (euc2cpx C);
+  assume that A: angle(A, B, C) = 0 and B: A, B, C are_mutually_different;
+  A <> B & A <> C & B <> C by B, ZFMISC_1:def 5;
+  then C: z1 <> z2 & z1 <> z3 & z2 <> z3 by EUCLID_3:4;
+  per cases;
+  suppose angle (z2, z3, z1) = 0 & angle (z3, z1, z2) = PI;
+    hence thesis by COMPLEX2:82;
+  end;
+  suppose not (angle (z2, z3, z1) = 0 & angle (z3, z1, z2) = PI);
+    hence thesis by COMPLEX2:87, C, A;
+  end;
+end;
+
+theorem
+  Th9: A, B, C is_collinear iff the_area_of_polygon3(A, B, C) = 0
+proof
+  hereby
+    assume A, B, C is_collinear;
+    then per cases by EUCLID_6:def 3;
+    suppose A in LSeg(B, C);
+      then consider lambda such that
+      A: A = (1 - lambda) * B + lambda * C & 0 <= lambda & lambda <= 1;
+      the_area_of_polygon3(A, B, C) =
+      (1 - lambda) * the_area_of_polygon3(B, B, C)
+      + lambda * the_area_of_polygon3(C, B, C) by Th7, A;
+      hence the_area_of_polygon3(A, B, C) = 0;
+    end;
+    suppose B in LSeg(C, A);
+      then consider lambda such that
+      A: B = (1 - lambda) * C + lambda * A & 0 <= lambda & lambda <= 1;
+      the_area_of_polygon3(A, B, C) =
+      - the_area_of_polygon3((1 - lambda) * C + lambda * A, A, C) by A
+      .= - (1 - lambda) * the_area_of_polygon3(C, A, C)
+      - lambda * the_area_of_polygon3(A, A, C) by Th7;
+      hence the_area_of_polygon3(A, B, C) = 0;
+    end;
+    suppose C in LSeg(A, B);
+      then consider lambda such that
+      A: C = (1 - lambda) * A + lambda * B & 0 <= lambda & lambda <= 1;
+      the_area_of_polygon3(A, B, C) =
+      - the_area_of_polygon3((1 - lambda) * A + lambda * B, B, A) by A
+      .= - (1 - lambda) * the_area_of_polygon3(A, B, A)
+      - lambda * the_area_of_polygon3(B, B, A) by Th7;
+      hence the_area_of_polygon3(A, B, C) = 0;
+    end;
+  end;
+  assume the_area_of_polygon3(A, B, C) = 0;
+  then |.A - B.| * |.C - B.| * sin angle (C, B, A) / 2 = 0 by EUCLID_6:5;
+  then per cases;
+  suppose |.(A - B).| = 0;
+    then A = B by EUCLID_6:42;
+    then not A, B, C are_mutually_different by ZFMISC_1:def 5;
+    hence A, B, C is_collinear by EUCLID_6:20;
+  end;
+  suppose |.(C - B).| = 0;
+    then C = B by EUCLID_6:42;
+    then not A, B, C are_mutually_different by ZFMISC_1:def 5;
+    hence A, B, C is_collinear by EUCLID_6:20;
+  end;
+  suppose A: sin (angle (C, B, A)) = 0;
+    2 * PI * 0 <= angle(C, B, A) & angle(C, B, A) < 2 * PI + 2 * PI * 0
+    by COMPLEX2:70;
+    then angle(C, B, A) = 2 * PI * 0 or angle(C, B, A) = PI + 2 * PI * 0
+    by SIN_COS6:21, A;
+    then per cases;
+    suppose angle(C, B, A) = 0;
+      then angle(B, C, A) = PI or angle(B, A, C) = PI
+      or not C, B, A are_mutually_different by Th8;
+      then C in LSeg(B, A) or A in LSeg(B, C)
+      or not (C <> B & C <> A & B <> A) by EUCLID_6:11, ZFMISC_1:def 5;
+      then C in LSeg(B, A) or A in LSeg(B, C)
+      or not A, B, C are_mutually_different by ZFMISC_1:def 5;
+      hence thesis by EUCLID_6:def 3, EUCLID_6:20;
+    end;
+    suppose angle(C, B, A) = PI;
+      then B in LSeg(C, A) by EUCLID_6:11;
+      hence thesis by EUCLID_6:def 3;
+    end;
+  end;
+end;
+
+theorem
+  Th21: the_area_of_polygon3(0. (TOP-REAL 2), B, C) =
+  (B `1 * C `2 - C `1 * B `2) / 2
+proof
+  the_area_of_polygon3(0. (TOP-REAL 2), B, C) = ((0 * B `2 - B `1 *
+  (|[0,0]|) `2) + (B `1 * C `2 - C `1 * B `2) + (C `1 * (|[0,0]|) `2 -
+  (|[0,0]|) `1 * C `2)) / 2 by EUCLID:52, EUCLID:54
+  .= ((0 - B `1 * 0) + (B `1 * C `2 - C `1 * B `2) + (C `1 * (|[0,0]|) `2 -
+  (|[0,0]|) `1 * C `2)) / 2 by EUCLID:52
+  .= ((B `1 * C `2 - C `1 * B `2) + (C `1 * 0 - (|[0,0]|) `1 * C `2)) / 2
+  by EUCLID:52
+  .= ((B `1 * C `2 - C `1 * B `2) + (0 - 0 * C `2)) / 2 by EUCLID:52;
+  hence thesis;
+end;
+
+theorem
+  the_area_of_polygon3(A + A1, B, C) = the_area_of_polygon3(A, B, C) +
+  the_area_of_polygon3(A1, B, C) - the_area_of_polygon3(0. (TOP-REAL 2), B, C)
+proof
+  the_area_of_polygon3(A + A1, B, C) = (((A `1 + A1 `1) * B `2 - B `1 * (A +
+  A1) `2) + (B `1 * C `2 - C `1 * B `2) + (C `1 * (A + A1) `2 - (A + A1) `1 *
+  C `2)) / 2 by Th1
+  .= (((A `1 + A1 `1) * B `2 - B `1 * (A `2 + A1 `2)) + (B `1 * C `2 - C `1 *
+  B `2) + (C `1 * (A + A1) `2 - (A + A1) `1 * C `2)) / 2 by Th1
+  .= (((A `1 + A1 `1) * B `2 - B `1 * (A `2 + A1 `2)) + (B `1 * C `2 - C `1 *
+  B `2) + (C `1 * (A `2 + A1 `2) - (A + A1) `1 * C `2)) / 2 by Th1
+  .= (((A `1 + A1 `1) * B `2 - B `1 * (A `2 + A1 `2)) + (B `1 * C `2 - C `1 *
+  B `2) + (C `1 * (A `2 + A1 `2) - (A `1 + A1 `1) * C `2)) / 2 by Th1
+  .= (((A `1 + A1 `1) * B `2 - B `1 * (A `2 + A1 `2)) + 2 * (B `1 * C `2 -
+  C `1 * B `2) + (C `1 * (A `2 + A1 `2) - (A `1 + A1 `1) * C `2)) / 2 - (B `1
+  * C `2 - C `1 * B `2) / 2;
+  hence thesis by Th21;
+end;
+
+theorem
+  Th12: A in LSeg(B, C) implies A in Line(B, C)
+proof
+  assume A in LSeg(B, C);
+  then consider lambda such that
+  A: A = (1 - lambda) * B + lambda * C & 0 <= lambda & lambda <=1;
+  thus thesis by A;
+end;
+
+theorem
+  Th13: B <> C implies (A, B, C is_collinear iff A in Line(B, C))
+proof
+  assume A: B <> C;
+  hereby
+    assume A, B, C is_collinear;
+    then per cases by EUCLID_6:def 3;
+    suppose A in LSeg(B, C);
+      hence A in Line(B, C) by Th12;
+    end;
+    suppose B in LSeg(C, A);
+      then B: B in Line(C, A) by Th12;
+      C: C in Line(C, A) & A in Line(C, A) by EUCLID_4:41;
+      then Line(C, A) c= Line(B, C) by EUCLID_4:43, B, A;
+      hence A in Line(B, C) by C;
+    end;
+    suppose C in LSeg(A, B);
+      then B: C in Line(A, B) by Th12;
+      C: A in Line(A, B) & B in Line(A, B) by EUCLID_4:41;
+      then Line(A, B) c= Line(B, C) by EUCLID_4:43, B, A;
+      hence A in Line(B, C) by C;
+    end;
+  end;
+  assume A in Line(B, C);
+  then consider lambda such that
+  A: A = (1 - lambda) * B + lambda * C;
+  the_area_of_polygon3(A, B, C) =
+  (1 - lambda) * the_area_of_polygon3(B, B, C) +
+  lambda * the_area_of_polygon3(C, B, C) by Th7, A;
+  hence thesis by Th9;
+end;
+
+Lm1:
+  (A1 = (1 - lambda) * B + lambda * C & B1 = (1 - mu) * C + mu * A & C2 = (1 -
+  alpha) * A + alpha * A1) implies the_area_of_polygon3(B, B1, C2) = ((1 - mu)
+  - alpha * (1 - mu + lambda * mu)) * the_area_of_polygon3(A, B, C)
+proof
+  assume that A: A1 = (1 - lambda) * B + lambda * C and B: B1 = (1 - mu) * C +
+  mu * A and C: C2 = (1 - alpha) * A + alpha * A1;
+  the_area_of_polygon3(B, B1, C2)
+  = the_area_of_polygon3((1 - alpha) * A + alpha * A1, B, B1) by C
+  .= (1 - alpha) * the_area_of_polygon3(A, B, B1) + alpha *
+  the_area_of_polygon3(A1, B, B1) by Th7
+  .= (1 - alpha) * the_area_of_polygon3(B1, A, B) + alpha * ((1 - lambda) *
+  the_area_of_polygon3(B, B, B1) + lambda * the_area_of_polygon3(C, B, B1))
+  by Th7, A
+  .= (1 - alpha) * ((1 - mu) * the_area_of_polygon3(C, A, B) + mu *
+  the_area_of_polygon3(A, A, B)) + alpha * lambda *
+  the_area_of_polygon3(B1, C, B) by Th7, B
+  .= (1 - alpha) * (1 - mu) * the_area_of_polygon3(C, A, B) + alpha * lambda *
+  ((1 - mu) * the_area_of_polygon3(C, C, B) + mu *
+  the_area_of_polygon3(A, C, B)) by Th7, B
+  .= (1 - alpha) * (1 - mu) * the_area_of_polygon3(A, B, C) - alpha * lambda *
+  mu * the_area_of_polygon3(A, B, C);
+  hence thesis;
+end;
+
+theorem
+  Th14: A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C implies
+  A <> A1
+proof
+  assume that A: A, B, C is_a_triangle and B: A1 = (1 - lambda) * B + lambda
+  * C;
+  A, B, C are_mutually_different by A, EUCLID_6:20;
+  then H: A <> B & A <> C & B <> C by ZFMISC_1:def 5;
+  hereby
+    assume A = A1;
+    then A in Line(B, C) by B;
+    hence contradiction by H, Th13, A;
+  end;
+end;
+
+theorem
+  Th15: A, B, C is_a_triangle implies A, C, B is_a_triangle &
+  B, A, C is_a_triangle & B, C, A is_a_triangle & C, A, B is_a_triangle &
+  C, B, A is_a_triangle
+proof
+  assume A, B, C is_a_triangle;
+  then A: the_area_of_polygon3(A, B, C) <> 0 by Th9;
+  then the_area_of_polygon3(A, C, B) <> 0;
+  hence A, C, B is_a_triangle by Th9;
+  the_area_of_polygon3(B, A, C) <> 0 by A;
+  hence B, A, C is_a_triangle by Th9;
+  the_area_of_polygon3(B, C, A) <> 0 by A;
+  hence B, C, A is_a_triangle by Th9;
+  the_area_of_polygon3(C, A, B) <> 0 by A;
+  hence C, A, B is_a_triangle by Th9;
+  the_area_of_polygon3(C, B, A) <> 0 by A;
+  hence C, B, A is_a_triangle by Th9;
+end;
+
+Lm2:
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C & B1 = (1 - mu)
+  * C + mu * A & mu <> 1 & A, A1, C2 is_collinear & B, B1, C2 is_collinear)
+  implies ((1 - mu) + lambda * mu) <> 0 & (ex alpha st (C2 = (1 - alpha) * A +
+  alpha * A1 & alpha = (1 - mu) / ((1 - mu) + lambda * mu)))
+proof
+  assume that A: A, B, C is_a_triangle and B: A1 = (1 - lambda) * B + lambda *
+  C and C: B1 = (1 - mu) * C + mu * A and D: mu <> 1 and E: A, A1, C2
+  is_collinear and F: B, B1, C2 is_collinear;
+  H2: A <> A1 by Th14, A, B;
+  H3: the_area_of_polygon3(A, B, C) <> 0 by A, Th9;
+  C2, A, A1 is_collinear by Th15, E;
+  then C2 in Line(A, A1) by H2, Th13;
+  then consider alpha such that G1: C2 = (1 - alpha) * A + alpha * A1;
+  0 = the_area_of_polygon3(B, B1, C2) by F, Th9
+  .= ((1 - mu) - ((1 - mu) + lambda * mu) * alpha) *
+  the_area_of_polygon3(A, B, C) by Lm1, G1, B, C;
+  then G3: (1 - mu) - ((1 - mu) + lambda * mu) * alpha = 0 & 1 - mu <> 0 by H3
+  , D;
+  then ((1 - mu) + lambda * mu) <> 0;
+  hence thesis by G1, XCMPLX_1:89, G3;
+end;
+
+Lm3:
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & ((1 - mu) + lambda * mu) <> 0) implies
+  (ex C2 st A, A1, C2 is_collinear & B, B1, C2 is_collinear)
+proof
+  assume that A1: A, B, C is_a_triangle and
+  A2: A1 = (1 - lambda) * B + lambda * C and
+  A3: B1 = (1 - mu) * C + mu * A and A4: ((1 - mu) + lambda * mu) <> 0;
+  B2: A <> A1 by Th14, A1, A2;
+  consider alpha such that B3: alpha = (1 - mu) / ((1 - mu) + lambda * mu);
+  consider C2 such that B4: C2 = (1 - alpha) * A + alpha * A1;
+  take C2;
+  C2 in Line(A, A1) by B4;
+  then C2, A, A1 is_collinear by B2, Th13;
+  hence A, A1, C2 is_collinear by Th15;
+  the_area_of_polygon3(B, B1, C2)
+  = ((1 - mu) - ((1 - mu) / ((1 - mu) + lambda * mu)) * (1 - mu + lambda *
+  mu)) * the_area_of_polygon3(A, B, C) by B3, Lm1, A2, A3, B4
+  .= ((1 - mu) - (1 - mu)) * the_area_of_polygon3(A, B, C) by XCMPLX_1:87, A4;
+  hence B, B1, C2 is_collinear by Th9;
+end;
+
+Lm4:
+  (lambda <> 1 & mu <> 1 & nu <> 1) implies (
+  0 = lambda * mu * nu - (1 - lambda) * (1 - mu) * (1 - nu) iff
+  (lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) = 1)
+proof
+  set q = ((1 - lambda) * (1 - mu) * (1 - nu));
+  assume lambda <> 1 & mu <> 1 & nu <> 1;
+  then A: (1 - lambda) <> 0 & (1 - mu) <> 0 & (1 - nu) <> 0;
+  0 = lambda * mu * nu - q iff 0 = q * 1 + (- mu * nu * lambda);
+  then 0 = lambda * mu * nu - q iff q * (1 + (- lambda * mu * nu) / q) = 0
+  by XCMPLX_1:235, A;
+  then 0 = lambda * mu * nu - q iff 1 + (- (lambda * mu * nu)) / q = 0 by A;
+  then 0 = lambda * mu * nu - q iff 1 + (- ((lambda * mu * nu) / q)) = 0
+  by XCMPLX_1:187;
+  then 0 = lambda * mu * nu - q iff 1 = (lambda * (mu * nu)) /
+  ((1 - lambda) * ((1 - mu) * (1 - nu)));
+  then 0 = lambda * mu * nu - q iff 1 = ((lambda / (1 - lambda)) * (mu * nu))
+  / ((1 - mu) * (1 - nu)) by XCMPLX_1:83;
+  then 0 = lambda * mu * nu - q iff 1 = (lambda / (1 - lambda)) * ((mu * nu)
+  / ((1 - mu) * (1 - nu))) by XCMPLX_1:74;
+  then 0 = lambda * mu * nu - q iff 1 = (lambda / (1 - lambda)) * (((mu / (1
+  - mu)) * nu) / (1 - nu)) by XCMPLX_1:83;
+  then 0 = lambda * mu * nu - q iff 1 = (lambda / (1 - lambda)) * ((mu / (1 -
+  mu)) * (nu / (1 - nu))) by XCMPLX_1:74;
+  hence thesis;
+end;
+
+Lm6:
+  (mu <> 1 & 0 = lambda * mu * nu - (1 - lambda) * (1 - mu) * (1 - nu))
+  implies (1 - mu + mu * lambda = 0 implies 1 - lambda + lambda * nu = 0)
+proof
+  assume that A: mu <> 1 and B: 0 = lambda * mu * nu - (1 - lambda) * (1 - mu)
+  * (1 - nu) and C: 1 - mu + mu * lambda = 0;
+  D: 1 - mu <> 0 by A;
+  0 = (- (1 - mu)) * nu - (1 - lambda) * (1 - mu) * (1 - nu) by B, C;
+  then 0 = (1 - mu) * (nu + (1 - lambda) * (1 - nu));
+  hence thesis by D;
+end;
+
+theorem
+  Th18: (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A  & mu <> 1) implies ((1 - mu) + lambda * mu <> 0
+  iff not Line(A, A1) is_parallel_to Line(B, B1))
+proof
+  assume that A1: A, B, C is_a_triangle and A2: A1 = (1 - lambda) * B +
+  lambda * C and A3: B1 = (1 - mu) * C + mu * A and A4: mu <> 1;
+  A5: A <> A1 by A1, A2, Th14;
+  B, C, A is_a_triangle by Th15, A1;
+  then A6: B <> B1 by A3, Th14;
+  hereby
+    assume (1 - mu) + lambda * mu <> 0;
+    then consider C2 such that
+    B1: A, A1, C2 is_collinear & B, B1, C2 is_collinear by Lm3, A1, A2, A3;
+    C2, A, A1 is_collinear & C2, B, B1 is_collinear by Th15, B1;
+    then C2 in Line(A, A1) & C2 in Line(B, B1) by A5, A6, Th13;
+    hence not Line(A, A1) is_parallel_to Line(B, B1) by XBOOLE_0:3;
+  end;
+  assume not Line(A, A1) is_parallel_to Line(B, B1);
+  then consider C2 being set such that
+B2: C2 in Line(A, A1) & C2 in Line(B, B1)
+  by XBOOLE_0:3;
+   reconsider C2 as Point of TOP-REAL 2 by B2;
+  C2, A, A1 is_collinear & C2, B, B1 is_collinear by B2, A5, A6, Th13;
+  then A, A1, C2 is_collinear & B, B1, C2 is_collinear by Th15;
+  hence thesis by Lm2, A1, A2, A3, A4;
+end;
+
+Lm7:
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C & B1 = (1 - mu)
+  * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 & mu <> 1 & nu <> 1
+  & not (((1 - mu) + lambda * mu) <> 0 & ((1 - lambda) + nu * lambda) <> 0 &
+  ((1 - nu) + mu * nu) <> 0)) implies ((lambda / (1 - lambda)) * (mu / (1 -
+  mu)) * (nu / (1 - nu)) = 1 iff (Line(A, A1) is_parallel_to Line(B, B1) &
+  Line(B, B1) is_parallel_to Line(C, C1) & Line(C, C1) is_parallel_to Line(A,
+  A1)))
+proof
+  assume that A1: A, B, C is_a_triangle and A2: A1 = (1 - lambda) * B +
+  lambda * C and A3: B1 = (1 - mu) * C + mu * A and A4: C1 = (1 - nu) * A +
+  nu * B and A5: lambda <> 1 and A6: mu <> 1 and A7: nu <> 1 and A8: not (((
+  1 - mu) + lambda * mu) <> 0 & ((1 - lambda) + nu * lambda) <> 0 & ((1 - nu)
+  + mu * nu) <> 0);
+  A9: B, C, A is_a_triangle by Th15, A1;
+  A10: C, A, B is_a_triangle by Th15, A1;
+  hereby
+    assume (lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) = 1;
+    then B1: 0 = lambda * mu * nu - (1 - lambda) * (1 - mu) * (1 - nu)
+    by Lm4, A5, A6, A7;
+    then B2: 0 = nu * lambda * mu - (1 - nu) * (1 - lambda) * (1 - mu);
+    B3: 0 = mu * nu * lambda - (1 - mu) * (1 - nu) * (1 - lambda) by B1;
+    1 - mu + lambda * mu = 0 & 1 - nu + mu * nu = 0 &
+    1 - lambda + nu * lambda = 0
+    proof
+      per cases by A8;
+      suppose H0: 1 - mu + lambda * mu = 0;
+        then 1 - lambda + nu * lambda = 0 by Lm6, A6, B1;
+        hence thesis by Lm6, A5, B2, H0;
+      end;
+      suppose H1: 1 - lambda + nu * lambda = 0;
+        then 1 - nu + nu * mu = 0 by Lm6, A5, B2;
+        hence thesis by Lm6, A7, B3, H1;
+      end;
+      suppose H2: 1 - nu + mu * nu = 0;
+        then 1 - mu + lambda * mu = 0 by Lm6, A7, B3;
+        hence thesis by Lm6, A6, B1, H2;
+      end;
+    end;
+    hence Line(A, A1) is_parallel_to Line(B, B1) & Line(B, B1) is_parallel_to
+    Line(C, C1) & Line(C, C1) is_parallel_to Line(A, A1) by A1, A9, Th18, A2,
+    A3, A4, A5, A6, A7, A10;
+  end;
+  assume Line(A, A1) is_parallel_to Line(B, B1) &
+  Line(B, B1) is_parallel_to Line(C, C1);
+  then B4: 1 - mu + lambda * mu = 0 & 1 - nu + mu * nu = 0 by A1, A9, Th18,
+  A2, A3, A4, A6, A7;
+  then lambda * mu * nu - (1 - lambda) * (1 - mu) * (1 - nu) =
+  lambda * mu * nu - (1 - lambda) * (1 - mu) * (- mu * nu)
+  .= (lambda + (1 - lambda) * (1 - mu)) * mu * nu
+  .= 0 by B4;
+  hence thesis by Lm4, A5, A6, A7;
+end;
+
+begin :: Ceva's Theorem and Others
+
+:: Pre-Routh's Theorem
+theorem
+  Th10: (A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B) implies
+  the_area_of_polygon3(A1, B1, C1) = ((1 - lambda) * (1 - mu) * (1 - nu) +
+  lambda * mu * nu) * the_area_of_polygon3(A, B, C)
+proof
+  assume that A: A1 = (1 - lambda) * B + lambda * C
+  and B: B1 = (1 - mu) * C + mu * A and C: C1 = (1 - nu) * A + nu * B;
+  the_area_of_polygon3(A1, B1, C1) =
+  (1 - lambda) * the_area_of_polygon3(B, B1, C1) +
+  lambda * the_area_of_polygon3(C, B1, C1) by Th7, A
+  .= - (1 - lambda) * the_area_of_polygon3((1 - mu) * C + mu * A, B, C1) -
+  lambda * the_area_of_polygon3((1 - mu) * C + mu * A, C, C1) by B
+  .= - (1 - lambda) * ((1 - mu) * the_area_of_polygon3(C, B, C1) +
+  mu * the_area_of_polygon3(A, B, C1)) -
+  lambda * the_area_of_polygon3((1 - mu) * C + mu * A, C, C1) by Th7
+  .= - (1 - lambda) * ((1 - mu) * the_area_of_polygon3(C, B, C1) +
+  mu * the_area_of_polygon3(A, B, C1)) -
+  lambda * ((1 - mu) * the_area_of_polygon3(C, C, C1) +
+  mu * the_area_of_polygon3(A, C, C1)) by Th7
+  .= (1 - lambda) * (1 - mu) * the_area_of_polygon3((1 - nu) * A + nu * B, B,
+  C) + (1 - lambda) * mu * the_area_of_polygon3((1 - nu) * A +
+  nu * B, B, A) + lambda * mu * the_area_of_polygon3((1 - nu) * A +
+  nu * B, C, A) by C
+  .= (1 - lambda) * (1 - mu) * ((1 - nu) * the_area_of_polygon3(A, B, C) +
+  nu * the_area_of_polygon3(B, B, C))
+  + (1 - lambda) * mu * the_area_of_polygon3((1 - nu) * A +
+  nu * B, B, A) + lambda * mu * the_area_of_polygon3((1 - nu) * A +
+  nu * B, C, A) by Th7
+  .= (1 - lambda) * (1 - mu) * (1 - nu) * the_area_of_polygon3(A, B, C)
+  + (1 - lambda) * mu * ((1 - nu) * the_area_of_polygon3(A, B, A)
+  + nu * the_area_of_polygon3(B, B, A)) +
+  lambda * mu * the_area_of_polygon3((1 - nu) * A + nu * B, C, A) by Th7
+  .= (1 - lambda) * (1 - mu) * (1 - nu) * the_area_of_polygon3(A, B, C) +
+  lambda * mu * ((1 - nu) * the_area_of_polygon3(A, C, A) +
+  nu * the_area_of_polygon3(B, C, A)) by Th7;
+  hence thesis;
+end;
+
+:: Menelaus' Theorem
+theorem
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 &
+  mu <> 1 & nu <> 1) implies (A1, B1, C1 is_collinear iff
+  (lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) = -1)
+proof
+  assume that A: A, B, C is_a_triangle and
+  B: A1 = (1 - lambda) * B + lambda * C and
+  C: B1 = (1 - mu) * C + mu * A and D: C1 = (1 - nu) * A + nu * B and
+  E: lambda <> 1 & mu <> 1 & nu <> 1;
+  F: the_area_of_polygon3(A, B, C) <> 0 by Th9, A;
+  set q = ((1 - lambda) * (1 - mu) * (1 - nu));
+  G: (1 - lambda) <> 0 & (1 - mu) <> 0 & (1 - nu) <> 0 by E;
+  A1, B1, C1 is_collinear iff the_area_of_polygon3(A1, B1, C1) = 0 by Th9;
+  then  A1, B1, C1 is_collinear iff
+  (q + lambda * mu * nu) * the_area_of_polygon3(A, B, C) = 0
+  by Th10, B, C, D;
+  then A1, B1, C1 is_collinear iff 1 * q + (lambda * mu * nu) = 0 by F;
+  then A1, B1, C1 is_collinear iff q * (1 + (lambda * mu * nu) / q) = 0
+  by XCMPLX_1:235, G;
+  then A1, B1, C1 is_collinear iff 1 + (lambda * mu * nu) / q = 0 by G;
+  then A1, B1, C1 is_collinear iff - 1 = (lambda * (mu * nu)) /
+  ((1 - lambda) * ((1 - mu) * (1 - nu)));
+  then A1, B1, C1 is_collinear iff - 1 =
+  ((lambda / (1 - lambda)) * (mu * nu))
+  / ((1 - mu) * (1 - nu)) by XCMPLX_1:83;
+  then A1, B1, C1 is_collinear iff - 1 = (lambda / (1 - lambda)) * ((mu * nu)
+  / ((1 - mu) * (1 - nu))) by XCMPLX_1:74;
+  then A1, B1, C1 is_collinear iff - 1 = (lambda / (1 - lambda)) * (((mu /
+  (1 - mu)) * nu) / (1 - nu)) by XCMPLX_1:83;
+  then A1, B1, C1 is_collinear iff - 1 = (lambda / (1 - lambda)) * ((mu /
+  (1 - mu)) * (nu / (1 - nu))) by XCMPLX_1:74;
+  hence thesis;
+end;
+
+:: Routh's Theorem
+theorem
+  Th16: (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 &
+  mu <> 1 & nu <> 1 & A, A1, C2 is_collinear & B, B1, C2 is_collinear &
+  B, B1, A2 is_collinear & C, C1, A2 is_collinear & A, A1, B2 is_collinear &
+  C, C1, B2 is_collinear) implies (((1 - mu) + lambda * mu) * ((1 - lambda) +
+  nu * lambda) * ((1 - nu) + mu * nu)) <> 0 & the_area_of_polygon3(A2, B2, C2)
+  = ((mu * nu * lambda - (1 - mu) * (1 - nu) * (1 - lambda)) ^2 / (((1 - mu) +
+  lambda * mu) * ((1 - lambda) + nu * lambda) * ((1 - nu) + mu * nu))) *
+  the_area_of_polygon3(A, B, C)
+proof
+  assume that A1: A, B, C is_a_triangle and
+  A2: A1 = (1 - lambda) * B + lambda * C and
+  A3: B1 = (1 - mu) * C + mu * A and A4: C1 = (1 - nu) * A + nu * B and
+  A5: lambda <> 1 and A6: mu <> 1 and A7: nu <> 1 and
+  A8: A, A1, C2 is_collinear and A9: B, B1, C2 is_collinear and
+  A10: B, B1, A2 is_collinear and A11: C, C1, A2 is_collinear and
+  A12: A, A1, B2 is_collinear and A13: C, C1, B2 is_collinear;
+  C2: C, A, B is_a_triangle by Th15, A1;
+  C3: B, C, A is_a_triangle by Th15, A1;
+  set q1 = ((1 - mu) + lambda * mu);
+  set q2 = ((1 - lambda) + nu * lambda);
+  set q3 = ((1 - nu) + mu * nu);
+  consider alpha such that B1: C2 = (1 - alpha) * A + alpha * A1 and
+  B2: alpha = (1 - mu) / q1 by Lm2, A1, A2, A3, A6, A8, A9;
+  B7: q1 <> 0 by Lm2, A1, A2, A3, A6, A8, A9;
+  consider beta such that B3: B2 = (1 - beta) * C + beta * C1 and
+  B4: beta = (1 - lambda) / q2 by Lm2, C2, A4, A2, A5, A13, A12;
+  B8: q2 <> 0 by Lm2, C2, A4, A2, A5, A13, A12;
+  consider gamma such that B5: A2 = (1 - gamma) * B + gamma * B1 and
+  B6: gamma = (1 - nu) / q3 by Lm2, C3, A3, A4, A7, A10, A11;
+  B9: q3 <> 0 by Lm2, C3, A3, A4, A7, A10, A11;
+  1 - alpha = (1 * q1 - (1 - mu)) /q1 by B2, B7, XCMPLX_1:127;
+  then C4: 1 - alpha = lambda * mu * (1 / q1) by XCMPLX_1:99;
+  1 - beta = (1 * q2 - (1 - lambda)) /q2 by B4, B8, XCMPLX_1:127;
+  then C5: 1 - beta = nu * lambda * (1 / q2) by XCMPLX_1:99;
+  1 - gamma = (1 * q3 - (1 - nu)) /q3 by B6, B9, XCMPLX_1:127;
+  then C6: 1 - gamma = mu * nu * (1 / q3) by XCMPLX_1:99;
+  C7: alpha = (1 - mu) * (1 / q1) by B2, XCMPLX_1:99;
+  C8: beta = (1 - lambda) * (1 / q2) by B4, XCMPLX_1:99;
+  C9: gamma = (1 - nu) * (1 / q3) by B6, XCMPLX_1:99;
+  thus (q1 * q2 * q3) <> 0 by B7, B8, B9;
+  set S = the_area_of_polygon3(A, B, C);
+  the_area_of_polygon3(A2, B2, C2)
+  = (1 - gamma) * the_area_of_polygon3(B, B2, C2) +
+  gamma * the_area_of_polygon3((1 - mu) * C + mu * A, B2, C2) by A3, Th7, B5
+  .= (1 - gamma) * the_area_of_polygon3(B, B2, C2) + gamma * ((1 - mu) *
+  the_area_of_polygon3(C, B2, C2) + mu * the_area_of_polygon3(A, B2, C2))
+  by Th7
+  .= - (1 - gamma) * the_area_of_polygon3(C2, B2, B) - gamma * ((1 - mu) *
+  the_area_of_polygon3((1 - beta) * C + beta * C1, C, C2) + mu *
+  the_area_of_polygon3(C2, B2, A)) by B3
+  .= - (1 - gamma) * the_area_of_polygon3(C2, B2, B) - gamma * ((1 - mu) *
+  ((1 - beta) * the_area_of_polygon3(C, C, C2) + beta *
+  the_area_of_polygon3(C1, C, C2)) + mu * the_area_of_polygon3(C2, B2, A))
+  by Th7
+  .= - (1 - gamma) * the_area_of_polygon3((1 - alpha) * A + alpha * A1, B2,
+  B) - gamma * (1 - mu) * beta * the_area_of_polygon3(C1, C, C2) - gamma *
+  mu * the_area_of_polygon3(C2, B2, A) by B1
+  .= - (1 - gamma) * ((1 - alpha) * the_area_of_polygon3(A, B2, B) + alpha *
+  the_area_of_polygon3((1 - lambda) * B + lambda * C, B2, B)) - gamma *
+  (1 - mu) * beta * the_area_of_polygon3(C1, C, C2) - gamma * mu *
+  the_area_of_polygon3(C2, B2, A) by A2, Th7
+  .= - (1 - gamma) * ((1 - alpha) * the_area_of_polygon3(A, B2, B) + alpha *
+  ((1 - lambda) * the_area_of_polygon3(B, B2, B) + lambda *
+  the_area_of_polygon3(C, B2, B))) - gamma * (1 - mu) * beta *
+  the_area_of_polygon3(C1, C, C2) - gamma * mu *
+  the_area_of_polygon3(C2, B2, A) by Th7
+  .= - (1 - gamma) * ((1 - alpha) * the_area_of_polygon3(A, B2, B) - alpha *
+  lambda * the_area_of_polygon3((1 - beta) * C + beta * C1, C, B)) - gamma *
+  (1 - mu) * beta * the_area_of_polygon3(C1, C, C2) - gamma * mu *
+  the_area_of_polygon3(C2, B2, A) by B3
+  .= - (1 - gamma) * ((1 - alpha) * the_area_of_polygon3(A, B2, B) -
+  alpha * lambda * ((1 - beta) * the_area_of_polygon3(C, C, B) +
+  beta * the_area_of_polygon3(C1, C, B)))
+  - gamma * (1 - mu) * beta * the_area_of_polygon3(C1, C, C2)
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by Th7
+  .= - (1 - gamma) * ((1 - alpha) * the_area_of_polygon3(A, B2, B) -
+  alpha * lambda * beta * the_area_of_polygon3((1 - nu) * A + nu * B, C, B))
+  - gamma * (1 - mu) * beta * the_area_of_polygon3(C1, C, C2)
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by A4
+  .= - (1 - gamma) * ((1 - alpha) * the_area_of_polygon3(A, B2, B) -
+  alpha * lambda * beta * ((1 - nu) * the_area_of_polygon3(A, C, B) +
+  nu * the_area_of_polygon3(B, C, B)))
+  - gamma * (1 - mu) * beta * the_area_of_polygon3(C1, C, C2)
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by Th7
+  .= (1 - gamma) * ((1 - alpha) * the_area_of_polygon3((1 - beta) * C +
+  beta * C1, A, B) - alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * the_area_of_polygon3(C1, C, C2)
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by B3
+  .= (1 - gamma) * ((1 - alpha) * ((1 - beta) * the_area_of_polygon3(C, A, B)
+  + beta * the_area_of_polygon3(C1, A, B)) - alpha * lambda * beta * (1 - nu)
+  * S) - gamma * (1 - mu) * beta * the_area_of_polygon3(C1, C, C2) - gamma *
+  mu * the_area_of_polygon3(C2, B2, A) by Th7
+  .= (1 - gamma) * ((1 - alpha) * ((1 - beta) * S
+  + beta * ((1 - nu) * the_area_of_polygon3(A, A, B) +
+  nu * the_area_of_polygon3(B, A, B))) -
+  alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * the_area_of_polygon3(C1, C, C2)
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by Th7, A4
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * ((1 - nu) * the_area_of_polygon3(A, C, C2) +
+  nu * the_area_of_polygon3(B, C, C2))
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by Th7, A4
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * ((1 - nu) * the_area_of_polygon3((1 - alpha) *
+  A + alpha * A1, A, C) + nu * the_area_of_polygon3(C2, B, C))
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by B1
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * ((1 - nu) * ((1 - alpha) *
+  the_area_of_polygon3(A, A, C) + alpha * the_area_of_polygon3(A1, A, C)) +
+  nu * the_area_of_polygon3(C2, B, C))
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by Th7
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * ((1 - nu) * alpha *
+  the_area_of_polygon3((1 - lambda) * B + lambda * C, A, C) +
+  nu * the_area_of_polygon3(C2, B, C))
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by A2
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * ((1 - nu) * alpha * (
+  (1 - lambda) * the_area_of_polygon3(B, A, C) +
+  lambda * the_area_of_polygon3(C, A, C)) +
+  nu * the_area_of_polygon3(C2, B, C))
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by Th7
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * (- (1 - nu) * alpha * (1 - lambda) * S +
+  nu * ((1 - alpha) * S +
+  alpha * the_area_of_polygon3((1 - lambda) * B + lambda * C, B, C)))
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by A2, Th7, B1
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  - gamma * (1 - mu) * beta * (- (1 - nu) * alpha * (1 - lambda) * S +
+  nu * ((1 - alpha) * S +
+  alpha * ((1 - lambda) * the_area_of_polygon3(B, B, C) +
+  lambda * the_area_of_polygon3(C, B, C))))
+  - gamma * mu * the_area_of_polygon3(C2, B2, A) by Th7
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  + (gamma * (1 - mu) * beta * (1 - nu) * alpha * (1 - lambda) * S -
+  gamma * (1 - mu) * beta * nu * (1 - alpha) * S) - gamma * mu * (
+  (1 - alpha) * the_area_of_polygon3(A, B2, A) +
+  alpha * the_area_of_polygon3(A1, B2, A)) by Th7, B1
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  + (gamma * (1 - mu) * beta * (1 - nu) * alpha * (1 - lambda) * S -
+  gamma * (1 - mu) * beta * nu * (1 - alpha) * S) - gamma * mu * alpha *
+  the_area_of_polygon3((1 - lambda) * B + lambda * C, B2, A) by A2
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  + (gamma * (1 - mu) * beta * (1 - nu) * alpha * (1 - lambda) * S -
+  gamma * (1 - mu) * beta * nu * (1 - alpha) * S) - gamma * mu * alpha * (
+  (1 - lambda) * the_area_of_polygon3(B, B2, A) + lambda *
+  the_area_of_polygon3(C, B2, A)) by Th7
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  + (gamma * (1 - mu) * beta * (1 - nu) * alpha * (1 - lambda) * S -
+  gamma * (1 - mu) * beta * nu * (1 - alpha) * S) - gamma * mu * alpha * (
+  (1 - lambda) * the_area_of_polygon3((1 - beta) * C + beta * C1, A, B)
+  + lambda * the_area_of_polygon3(B2, A, C)) by B3
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  + (gamma * (1 - mu) * beta * (1 - nu) * alpha * (1 - lambda) * S -
+  gamma * (1 - mu) * beta * nu * (1 - alpha) * S) - gamma * mu * alpha * (
+  (1 - lambda) * ((1 - beta) * the_area_of_polygon3(C, A, B) +
+  beta * the_area_of_polygon3(C1, A, B))
+  + lambda * the_area_of_polygon3(B2, A, C)) by Th7
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S -
+  (1 - gamma) * alpha * lambda * beta * (1 - nu) * S)
+  + (gamma * (1 - mu) * beta * (1 - nu) * alpha * (1 - lambda) * S -
+  gamma * (1 - mu) * beta * nu * (1 - alpha) * S) - gamma * mu * alpha * (
+  (1 - lambda) * ((1 - beta) * S + beta * ((1 - nu) *
+  the_area_of_polygon3(A, A, B) + nu * the_area_of_polygon3(B, A, B))) +
+  lambda * the_area_of_polygon3(B2, A, C)) by Th7, A4
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S - (1 - gamma) * alpha *
+  lambda * beta * (1 - nu) * S) + (gamma * (1 - mu) * beta * (1 - nu) * alpha
+  * (1 - lambda) * S - gamma * (1 - mu) * beta * nu * (1 - alpha) * S) -
+  gamma * mu * alpha * ((1 - lambda) * (1 - beta) * S + lambda * (
+  (1 - beta) * the_area_of_polygon3(C, A, C) + beta *
+  the_area_of_polygon3(C1, A, C))) by Th7, B3
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S - (1 - gamma) * alpha *
+  lambda * beta * (1 - nu) * S) + (gamma * (1 - mu) * beta * (1 - nu) * alpha
+  * (1 - lambda) * S - gamma * (1 - mu) * beta * nu * (1 - alpha) * S) -
+  gamma * mu * alpha * ((1 - lambda) * (1 - beta) * S + lambda * beta * (
+  the_area_of_polygon3((1 - nu) * A + nu * B, A, C))) by A4
+  .= ((1 - gamma) * (1 - alpha) * (1 - beta) * S - (1 - gamma) * alpha *
+  lambda * beta * (1 - nu) * S) + (gamma * (1 - mu) * beta * (1 - nu) * alpha
+  * (1 - lambda) * S - gamma * (1 - mu) * beta * nu * (1 - alpha) * S) -
+  gamma * mu * alpha * ((1 - lambda) * (1 - beta) * S + lambda * beta * ((1 -
+  nu) * the_area_of_polygon3(A, A, C) + nu * the_area_of_polygon3(B, A, C)))
+  by Th7
+  .= (((1 - gamma) * (1 - alpha) * (1 - beta) - (1 - gamma) * alpha * lambda
+  * beta * (1 - nu)) + (gamma * (1 - mu) * beta * (1 - nu) * alpha * (1 -
+  lambda) - gamma * (1 - mu) * beta * nu * (1 - alpha)) + (gamma * mu * alpha
+  * lambda * beta * nu - gamma * mu * alpha * (1 - lambda) * (1 - beta))) *
+  S
+  .= (((mu * nu * (1 / q3)) * (lambda * mu * (1 / q1)) * (nu * lambda * (1 /
+  q2)) - (mu * nu * (1 / q3)) * ((1 - mu) * (1 / q1)) * lambda * ((1 - lambda
+  ) * (1 / q2)) * (1 - nu)) + (((1 - nu) * (1 / q3)) * (1 - mu) * ((1 -
+  lambda) * (1 / q2)) * (1 - nu) * ((1 - mu) * (1 / q1)) * (1 - lambda) - ((1
+  - nu) * (1 / q3)) * (1 - mu) * ((1 - lambda) * (1 / q2)) * nu * (lambda *
+  mu * (1 / q1))) + (((1 - nu) * (1 / q3)) * mu * ((1 - mu) * (1 / q1)) *
+  lambda * ((1 - lambda) * (1 / q2)) * nu - ((1 - nu) * (1 / q3)) * mu * ((1
+  - mu) * (1 / q1)) * (1 - lambda) * (nu * lambda * (1 / q2)))) * S
+  by C4, C7, C5, C8, C6, C9
+  .= (mu * nu * lambda - (1 - mu) * (1 - nu) * (1 - lambda)) ^2 *
+  ((1 / q1) * (1 / q2) * (1 / q3)) * S
+  .= (mu * nu * lambda - (1 - mu) * (1 - nu) * (1 - lambda)) ^2 *
+  ((1 / (q1 * q2)) * (1 / q3)) * S by XCMPLX_1:102
+  .= (mu * nu * lambda - (1 - mu) * (1 - nu) * (1 - lambda)) ^2 *
+  (1 / (q1 * q2 * q3)) * S by XCMPLX_1:102;
+  hence thesis by XCMPLX_1:99;
+end;
+
+:: Feynman's (one-seventh area) Triangle
+theorem
+  (A, B, C is_a_triangle & A1 = (2 / 3) * B + (1 / 3) * C &
+  B1 = (2 / 3) * C + (1 / 3) * A & C1 = (2 / 3) * A + (1 / 3) * B &
+  A, A1, C2 is_collinear & B, B1, C2 is_collinear & B, B1, A2 is_collinear &
+  C, C1, A2 is_collinear & A, A1, B2 is_collinear & C, C1, B2 is_collinear)
+  implies the_area_of_polygon3(A2, B2, C2) = the_area_of_polygon3(A, B, C) / 7
+proof
+  assume that A1: A, B, C is_a_triangle and
+  A2: A1 = (2 / 3) * B + (1 / 3) * C & B1 = (2 / 3) * C + (1 / 3) * A &
+  C1 = (2 / 3) * A + (1 / 3) * B and A3:
+  A, A1, C2 is_collinear & B, B1, C2 is_collinear & B, B1, A2 is_collinear &
+  C, C1, A2 is_collinear & A, A1, B2 is_collinear & C, C1, B2 is_collinear;
+  (1 / 3) is Real by XREAL_0:def 1;
+  then consider lambda, mu, nu such that
+  B1: lambda = (1 / 3) & mu = (1 / 3) & nu = (1 / 3);
+  A1 = (1 - lambda) * B + lambda * C & B1 = (1 - mu) * C + mu * A &
+  C1 = (1 - nu) * A + nu * B & lambda <> 1 & mu <> 1 & nu <> 1 &
+  1 - lambda = 2 / 3 & 1 - mu = 2 / 3 & 1 - nu = 2 / 3 by A2, B1;
+  then the_area_of_polygon3(A2, B2, C2) = ((1 / 3) * (1 / 3) * (1 / 3) -
+  (2 / 3) * (2 / 3) * (2 / 3)) ^2 / (((2 / 3) + (1 / 3) * (1 / 3)) * ((2 / 3)
+  + (1 / 3) * (1 / 3)) * ((2 / 3) + (1 / 3) * (1 / 3))) *
+  the_area_of_polygon3(A, B, C) by Th16, A1, A3;
+  hence thesis;
+end;
+
+Lm5:
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C &
+  B1 = (1 - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 &
+  mu <> 1 & nu <> 1 & A, A1, C2 is_collinear & B, B1, C2 is_collinear &
+  B, B1, A2 is_collinear & C, C1, A2 is_collinear & A, A1, B2 is_collinear &
+  C, C1, B2 is_collinear) implies ((lambda / (1 - lambda)) * (mu / (1 - mu))
+  * (nu / (1 - nu)) = 1 iff A2, B2, C2 is_collinear)
+proof
+  assume that A1: A, B, C is_a_triangle and
+  A2: A1 = (1 - lambda) * B + lambda * C and
+  A3: B1 = (1 - mu) * C + mu * A and A4: C1 = (1 - nu) * A + nu * B and
+  A5: lambda <> 1 and A6: mu <> 1 and A7: nu <> 1 and
+  A8: A, A1, C2 is_collinear and A9: B, B1, C2 is_collinear and
+  A10: B, B1, A2 is_collinear and A11: C, C1, A2 is_collinear and
+  A12: A, A1, B2 is_collinear and A13: C, C1, B2 is_collinear;
+  set q = ((1 - lambda) * (1 - mu) * (1 - nu));
+  B2: 0 = lambda * mu * nu - q iff (lambda / (1 - lambda)) * (mu / (1 - mu)) *
+  (nu / (1 - nu)) = 1 by Lm4, A5, A6, A7;
+  B1: (((1 - mu) + lambda * mu) * ((1 - lambda) + nu * lambda) * ((1 - nu) +
+  mu * nu)) <> 0 & the_area_of_polygon3(A2, B2, C2) = ((mu * nu * lambda - (1
+  - mu) * (1 - nu) * (1 - lambda)) ^2 / (((1 - mu) + lambda * mu) * ((1 -
+  lambda) + nu * lambda) * ((1 - nu) + mu * nu))) * the_area_of_polygon3(A,
+  B, C) by Th16, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13;
+  the_area_of_polygon3(A, B, C) <> 0 by Th9, A1;
+  hence thesis by B1, Th9, B2;
+end;
+
+:: Ceva's Theorem
+theorem
+  Th19: (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C & B1 = (1
+  - mu) * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 & mu <> 1 &
+  nu <> 1 & ((1 - mu) + lambda * mu) <> 0 & ((1 - lambda) + nu * lambda) <> 0
+  & ((1 - nu) + mu * nu) <> 0) implies ((lambda / (1 - lambda)) * (mu / (1 -
+  mu)) * (nu / (1 - nu)) = 1 iff (ex A2 st A, A1, A2 is_collinear & B, B1, A2
+  is_collinear & C, C1, A2 is_collinear))
+proof
+  set q1 = ((1 - mu) + lambda * mu);
+  set q2 = ((1 - lambda) + nu * lambda);
+  set q3 = ((1 - nu) + mu * nu);
+  assume that A1: A, B, C is_a_triangle and A2: A1 = (1 - lambda) * B +
+  lambda * C and A3: B1 = (1 - mu) * C + mu * A and A4: C1 = (1 - nu) * A +
+  nu * B and A5: lambda <> 1 and A6: mu <> 1 and A7: nu <> 1 and A8: q1 <> 0
+  and A9: q2 <> 0 and A10: q3 <> 0;
+  B2: C, A, B is_a_triangle by Th15, A1;
+  B3: B, C, A is_a_triangle by Th15, A1;
+  consider C2 such that B4: A, A1, C2 is_collinear and B5: B, B1, C2
+  is_collinear by Lm3, A1, A2, A3, A8;
+  consider B2 such that B6: C, C1, B2 is_collinear and B7: A, A1, B2
+  is_collinear by Lm3, B2, A4, A2, A9;
+  consider A2 such that B8: B, B1, A2 is_collinear and B9: C, C1, A2
+  is_collinear by Lm3, B3, A3, A4, A10;
+  D1: A <> A1 by Th14, A1, A2;
+  C2, A, A1 is_collinear by Th15, B4;
+  then D2: C2 in Line(A, A1) by D1, Th13;
+  B2, A, A1 is_collinear by Th15, B7;
+  then D3: B2 in Line(A, A1) by D1, Th13;
+  hereby
+    assume C1: (lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) =
+    1;
+    per cases;
+    suppose C2: B2 <> C2;
+      take A2;
+      A2, B2, C2 is_collinear by C1, Lm5, A1, A2, A3, A4, A5, A6, A7, B4, B5,
+      B6, B7, B8, B9;
+      then C3: A2 in Line(B2, C2) by Th13, C2;
+      Line(B2, C2) c= Line(A, A1) by EUCLID_4:42, D2, D3;
+      then A2, A, A1 is_collinear by Th13, D1, C3;
+      hence A, A1, A2 is_collinear by Th15;
+      thus B, B1, A2 is_collinear & C, C1, A2 is_collinear by B8, B9;
+    end;
+    suppose C4: B2 = C2;
+      take B2;
+      thus A, A1, B2 is_collinear & B, B1, B2 is_collinear & C, C1, B2
+      is_collinear by C4, B5, B6, B7;
+    end;
+  end;
+  given C3 such that C1: A, A1, C3 is_collinear and C2: B, B1, C3
+  is_collinear and C3: C, C1, C3 is_collinear;
+  C4: C3, B2, C2 is_collinear
+  proof
+    per cases;
+    suppose C4: B2 <> C2;
+      C3, A, A1 is_collinear by Th15, C1;
+      then C5: C3 in Line(A, A1) by Th13, D1;
+      Line(A, A1) c= Line(B2, C2) by EUCLID_4:43, D2, D3, C4;
+      hence thesis by C4, Th13, C5;
+    end;
+    suppose B2 = C2;
+      then not C3, B2, C2 are_mutually_different by ZFMISC_1:def 5;
+      hence thesis by EUCLID_6:20;
+    end;
+  end;
+  C3 = A2
+  proof
+    assume C5: C3 <> A2;
+    C, A, B is_a_triangle by Th15, A1;
+    then C7: C <> C1 by Th14, A4;
+    then C10: Line(C, C1) is being_line by EUCLID_4:def 4;
+    B, C, A is_a_triangle by Th15, A1;
+    then C8: B <> B1 by Th14, A3;
+    then C9: Line(B, B1) is being_line by EUCLID_4:def 4;
+    C3, B, B1 is_collinear by Th15, C2;
+    then H1: C3 in Line(B, B1) by Th13, C8;
+    A2, B, B1 is_collinear by Th15, B8;
+    then H2: A2 in Line(B, B1) by Th13, C8;
+    A2, C, C1 is_collinear by Th15, B9;
+    then H3: A2 in Line(C, C1) by Th13, C7;
+    C3, C, C1 is_collinear by Th15, C3;
+    then C3 in Line(C, C1) by Th13, C7;
+    then H4: Line(B, B1) = Line(C, C1) by EUCLID_4:44, H1, C5, H2, H3, C9,
+    C10;
+    H5: 1 - nu <> 0 by A7;
+    B in Line(B, B1) by EUCLID_4:41;
+    then B, C, C1 is_collinear by Th13, C7, H4;
+    then the_area_of_polygon3(B, C, C1) = 0 by Th9;
+    then the_area_of_polygon3(C1, B, C) = 0;
+    then (1 - nu) * the_area_of_polygon3(A, B, C) + nu * the_area_of_polygon3
+    (B, B, C) = 0 by Th7, A4;
+    then the_area_of_polygon3(A, B, C) = 0 by H5;
+    hence contradiction by Th9, A1;
+  end;
+  hence thesis by C4, Lm5, A1, A2, A3, A4, A5, A6, A7, B4, B5, B6, B7, B8, B9;
+end;
+
+:: Generalized Ceva's Theorem
+theorem
+  (A, B, C is_a_triangle & A1 = (1 - lambda) * B + lambda * C & B1 = (1 - mu)
+  * C + mu * A & C1 = (1 - nu) * A + nu * B & lambda <> 1 & mu <> 1 & nu <> 1)
+  implies ((lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) = 1 iff
+  Line(A, A1), Line(B, B1), Line(C, C1) are_concurrent)
+proof
+  assume that A1: A, B, C is_a_triangle and A2: A1 = (1 - lambda) * B +
+  lambda * C and A3: B1 = (1 - mu) * C + mu * A and A4: C1 = (1 - nu) * A +
+  nu * B and A5: lambda <> 1 and A6: mu <> 1 and A7: nu <> 1;
+  A8: A <> A1 by Th14, A1, A2;
+  A9: B, C, A is_a_triangle by Th15, A1;
+  then A10: B <> B1 by Th14, A3;
+  A11: C, A, B is_a_triangle by Th15, A1;
+  then A12: C <> C1 by Th14, A4;
+  hereby
+    assume B1:
+    (lambda / (1 - lambda)) * (mu / (1 - mu)) * (nu / (1 - nu)) = 1;
+    per cases;
+    suppose 1 - mu + lambda * mu <> 0 & 1 - lambda + nu * lambda <> 0 &
+      1 - nu + mu * nu <> 0;
+      then consider A2 such that B2: A, A1, A2 is_collinear & B, B1, A2
+      is_collinear & C, C1, A2 is_collinear by B1, Th19, A1, A2, A3, A4, A5,
+      A6, A7;
+      A2, A, A1 is_collinear & A2, B, B1 is_collinear & A2, C, C1
+      is_collinear by Th15, B2;
+      then A2 in Line(A, A1) & A2 in Line(B, B1) & A2 in Line(C, C1) by Th13,
+      A8, A10, A12;
+      hence Line(A, A1), Line(B, B1), Line(C, C1) are_concurrent by def2;
+    end;
+    suppose not (1 - mu + lambda * mu <> 0 & 1 - lambda + nu * lambda <> 0 &
+      1 - nu + mu * nu <> 0);
+      then Line(A, A1) is_parallel_to Line(B, B1) & Line(B, B1)
+      is_parallel_to Line(C, C1) & Line(C, C1) is_parallel_to Line(A, A1)
+      by B1, Lm7, A1, A2, A3, A4, A5, A6, A7;
+      hence Line(A, A1), Line(B, B1), Line(C, C1) are_concurrent by def2;
+    end;
+  end;
+  assume Line(A, A1), Line(B, B1), Line(C, C1) are_concurrent;
+  then per cases by def2;
+  suppose B1: Line(A, A1) is_parallel_to Line(B, B1) & Line(B, B1)
+    is_parallel_to Line(C, C1) & Line(C, C1) is_parallel_to Line(A, A1);
+    then 1 - mu + lambda * mu = 0 & 1 - nu + mu * nu = 0 & 1 - lambda + nu *
+    lambda = 0 by Th18, A1, A9, A11, A2, A3, A4, A5, A6, A7;
+    hence thesis by Lm7, B1, A1, A2, A3, A4, A5, A6, A7;
+  end;
+  suppose ex C2 st (C2 in Line(A, A1) & C2 in Line(B, B1) &
+    C2 in Line(C, C1));
+    then consider C2 such that B2: C2 in Line(A, A1) & C2 in Line(B, B1) &
+    C2 in Line(C, C1);
+    not Line(A, A1) is_parallel_to Line(B, B1) & not Line(B, B1)
+    is_parallel_to Line(C, C1) & not Line(C, C1) is_parallel_to Line(A, A1)
+    by B2, XBOOLE_0:3;
+    then B3: 1 - mu + lambda * mu <> 0 & 1 - nu + mu * nu <> 0 & 1 - lambda +
+    nu * lambda <> 0 by Th18, A1, A2, A3, A4, A5, A6, A7, A9, A11;
+    C2, A, A1 is_collinear & C2, B, B1 is_collinear & C2, C, C1 is_collinear
+    by B2, Th13, A8, A10, A12;
+    then A, A1, C2 is_collinear & B, B1, C2 is_collinear & C, C1, C2
+    is_collinear by Th15;
+    hence thesis by B3, Th19, A1, A2, A3, A4, A5, A6, A7;
+  end;
+end;

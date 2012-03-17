@@ -7,7 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="MCART_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -20,77 +20,158 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="59"/>
+</Typ>
+<Typ kind="M" nr="6">
+<Cluster/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="95"/>
+<Func kind="K" nr="88">
+<LocusVar nr="2"/>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="59"/>
 </Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="95"/>
+<Func kind="K" nr="88">
+<LocusVar nr="2"/>
+</Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="21"/>
-<Adjective nr="27">
+<Adjective nr="24"/>
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+</Cluster>
+</RCluster>
+<RCluster aid="QC_LANG1" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="11" value="false"/>
+<Adjective nr="35">
+<LocusVar nr="1"/>
+</Adjective>
 </Cluster>
 </RCluster>
 <FCluster aid="QC_LANG1" nr="1">
-<ArgTypes/>
-<Func kind="K" nr="95"/>
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="QC_LANG1" nr="2">
-<ArgTypes/>
-<Func kind="K" nr="96"/>
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="QC_LANG1" nr="3">
-<ArgTypes/>
-<Func kind="K" nr="97"/>
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="QC_LANG1" nr="4">
-<ArgTypes/>
-<Func kind="K" nr="98"/>
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="QC_LANG1" nr="5">
-<ArgTypes/>
-<Func kind="K" nr="99"/>
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="QC_LANG1" nr="6">
 <ArgTypes>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="101">
+<Func kind="K" nr="87">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
+<FCluster aid="QC_LANG1" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="88">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="QC_LANG1" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="89">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="QC_LANG1" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="90">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="QC_LANG1" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="91">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="QC_LANG1" nr="6">
+<ArgTypes>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="92">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="QC_LANG1" nr="7">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="59"/>
+</Typ>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="94">
+<LocusVar nr="2"/>
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<CCluster aid="QC_LANG1" nr="1">
+<ArgTypes/>
+<Cluster/>
+<Typ kind="M" nr="6">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</CCluster>
 </Registrations>

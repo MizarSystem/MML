@@ -3,7 +3,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received December 13, 1994
-:: Copyright (c) 1994-2011 Association of Mizar Users
+:: Copyright (c) 1994-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -26,7 +26,7 @@ environ
  constructors BINOP_1, CARD_3, PZFMISC1, GROUP_6, ALG_1, MSUALG_3, MSUHOM_1,
       RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1,
-      PBOOLE, STRUCT_0, MSUALG_1;
+      PBOOLE, STRUCT_0, MSUALG_1, SUBSET_1;
  requirements BOOLE, SUBSET;
 
 
@@ -136,58 +136,38 @@ theorem :: AUTALG_1:17
 ManySortedFunction of A, B for G be ManySortedFunction of B, A st F is "1-1" &
   F is "onto" & G ** F = id A holds G = F"";
 
-begin
-
-:: On the Group of Automorphisms of Many Sorted Algebra
-
-reserve S for non void non empty ManySortedSign,
-  U1, U2 for non-empty MSAlgebra over S;
-
 theorem :: AUTALG_1:18
-  for A, B be ManySortedSet of I st A is_transformable_to B for x
-  be set st x in product MSFuncs(A, B) holds x is ManySortedFunction of A, B;
-
-theorem :: AUTALG_1:19
-  for A, B be ManySortedSet of I st A is_transformable_to B for g
-  be ManySortedFunction of A, B holds g in product MSFuncs(A, B);
-
-theorem :: AUTALG_1:20
-  for A, B be ManySortedSet of I st A is_transformable_to B holds
-  MSFuncs(A, B) is non-empty;
+  A is_transformable_to B implies (Funcs)(A,B) is non-empty;
 
 definition
   let I, A, B;
   assume
  A is_transformable_to B;
-
-  mode MSFunctionSet of A, B -> non empty set means
+  func MSFuncs(A,B) -> non empty set equals
 :: AUTALG_1:def 4
 
-    for x be set st x in it holds x is ManySortedFunction of A, B;
+  product (Funcs)(A,B);
 end;
+
+theorem :: AUTALG_1:19
+  A is_transformable_to B implies
+  for x be set st x in MSFuncs(A,B) holds
+  x is ManySortedFunction of A,B;
+
+theorem :: AUTALG_1:20
+  A is_transformable_to B implies
+  for g be ManySortedFunction of A, B holds g in MSFuncs(A,B);
 
 registration
   let I, A;
-  cluster MSFuncs(A, A) -> non-empty;
-end;
-
-definition
-  let S, U1, U2;
-  mode MSFunctionSet of U1, U2 is MSFunctionSet of the Sorts of U1, the Sorts
-    of U2;
-end;
-
-registration
-  let I be set;
-  let D be ManySortedSet of I;
-  cluster non empty for MSFunctionSet of D, D;
+  cluster (Funcs)(A,A) -> non-empty;
 end;
 
 definition
   let I be set;
   let D be ManySortedSet of I;
-  let A be non empty MSFunctionSet of D, D;
-  redefine mode Element of A -> ManySortedFunction of D, D;
+  let A be non empty Subset of MSFuncs(D,D);
+  redefine mode Element of A -> ManySortedFunction of D,D;
 end;
 
 registration
@@ -196,26 +176,37 @@ registration
   cluster id A -> "1-1";
 end;
 
+begin
+
+:: On the Group of Automorphisms of Many Sorted Algebra
+
+reserve S for non void non empty ManySortedSign,
+  U1, U2 for non-empty MSAlgebra over S;
+
+definition
+  let S, U1, U2;
+  mode MSFunctionSet of U1, U2 is
+       non empty Subset of MSFuncs(the Sorts of U1, the Sorts of U2);
+end;
+
 theorem :: AUTALG_1:21
-  id the Sorts of U1 in product MSFuncs (the Sorts of U1, the Sorts of
-  U1);
+  id the Sorts of U1 in MSFuncs(the Sorts of U1, the Sorts of U1);
 
 definition
   let S, U1;
-  func MSAAut U1 -> MSFunctionSet of the Sorts of U1, the Sorts of U1 means
+  func MSAAut U1 -> MSFunctionSet of U1,U1 means
 :: AUTALG_1:def 5
 
-   for
- h be ManySortedFunction of U1, U1 holds h in it iff h is_isomorphism
-  U1, U1;
+  for h be ManySortedFunction of U1, U1 holds h in it iff
+  h is_isomorphism U1, U1;
 end;
 
 theorem :: AUTALG_1:22
-  for f be Element of MSAAut U1 holds f in product MSFuncs (the Sorts of
-  U1, the Sorts of U1);
+  for f be Element of MSAAut U1 holds
+  f in MSFuncs(the Sorts of U1, the Sorts of U1);
 
 theorem :: AUTALG_1:23
-  MSAAut U1 c= product MSFuncs (the Sorts of U1, the Sorts of U1);
+  MSAAut U1 c= MSFuncs(the Sorts of U1, the Sorts of U1);
 
 theorem :: AUTALG_1:24
   id the Sorts of U1 in MSAAut U1;
@@ -227,8 +218,8 @@ theorem :: AUTALG_1:26
   for f1, f2 be Element of MSAAut U1 holds f1 ** f2 in MSAAut U1;
 
 theorem :: AUTALG_1:27
-  for F be ManySortedFunction of MSAlg UA, MSAlg UA for f be
-  Element of UAAut UA st F = 0 .--> f holds F in MSAAut MSAlg UA;
+  for F be ManySortedFunction of MSAlg UA, MSAlg UA
+  for f be Element of UAAut UA st F = 0 .--> f holds F in MSAAut MSAlg UA;
 
 definition
   let S, U1;
@@ -258,21 +249,21 @@ theorem :: AUTALG_1:29
   id the Sorts of U1 = 1_MSAAutGroup U1;
 
 theorem :: AUTALG_1:30
-  for f be Element of MSAAut U1 for g be Element of MSAAutGroup U1 st f
-  = g holds f"" = g";
+  for f be Element of MSAAut U1 for g be Element of MSAAutGroup U1 st
+  f = g holds f"" = g";
 
 begin
 
 :: On the Relationship of Automorphisms of 1-Sorted and Many Sorted Algebras
 
 theorem :: AUTALG_1:31
-  for UA1, UA2 be Universal_Algebra st UA1, UA2 are_similar for F
-  be ManySortedFunction of MSAlg UA1, (MSAlg UA2 Over MSSign UA1) holds F.0 is
-  Function of UA1, UA2;
+  for UA1, UA2 be Universal_Algebra st UA1, UA2 are_similar
+  for F be ManySortedFunction of MSAlg UA1, (MSAlg UA2 Over MSSign UA1) holds
+  F.0 is Function of UA1, UA2;
 
 theorem :: AUTALG_1:32
-  for f be Element of UAAut UA holds 0 .--> f is
-  ManySortedFunction of MSAlg UA, MSAlg UA;
+  for f be Element of UAAut UA holds
+  0 .--> f is ManySortedFunction of MSAlg UA, MSAlg UA;
 
 theorem :: AUTALG_1:33
   for h be Function st (dom h = UAAut UA & for x be set st x in
@@ -285,3 +276,4 @@ theorem :: AUTALG_1:34
 
 theorem :: AUTALG_1:35
   UAAutGroup UA, MSAAutGroup (MSAlg UA) are_isomorphic;
+

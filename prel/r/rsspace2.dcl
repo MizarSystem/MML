@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -32,33 +33,33 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="67"/>
 <Adjective nr="92"/>
-<Adjective nr="102"/>
-<Adjective nr="105"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="108"/>
+<Adjective nr="111"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RSSPACE2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="165"/>
+<Func kind="K" nr="173"/>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="102"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="108"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="165"/>
+<Func kind="K" nr="173"/>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="111"/>
 </Cluster>
 </FCluster>
 </Registrations>

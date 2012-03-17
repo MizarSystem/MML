@@ -2,7 +2,7 @@
 ::  by Noboru Endou
 ::
 :: Received August 20, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,10 +19,10 @@ environ
       TARSKI, COMPLEX1, VFUNCT_1, REAL_1, XXREAL_0, XXREAL_2, XREAL_0,
       ORDINAL1, RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, FUNCT_1, RELSET_1, PARTFUN1, STRUCT_0, RLVECT_1, VALUED_1, SEQ_2,
-      COMPLEX1, CFUNCT_1, NORMSP_0, CLVECT_1, XXREAL_0, VFUNCT_1;
- constructors XXREAL_0, REAL_1, COMPLEX1, CLVECT_1, VALUED_1, SEQ_2, RELSET_1,
-      VFUNCT_1;
+      REAL_1, FUNCT_1, RELSET_1, PARTFUN1, STRUCT_0, RLVECT_1, VALUED_1,
+      COMSEQ_2, COMPLEX1, CFUNCT_1, NORMSP_0, CLVECT_1, XXREAL_0, VFUNCT_1;
+ constructors REAL_1, COMPLEX1, CLVECT_1, VALUED_1, RELSET_1, VFUNCT_1,
+      COMSEQ_2;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, STRUCT_0, VALUED_0,
       RFUNCT_1;
  requirements SUBSET, BOOLE, ARITHM;
@@ -37,7 +37,7 @@ begin
 reserve M for non empty set;
 reserve V for ComplexNormSpace;
 reserve f,f1,f2,f3 for PartFunc of M,V;
-reserve z,z1,z2 for Complex;
+reserve z,z1,z2 for Element of COMPLEX;
 
 ::
 ::OPERATIONS ON PARTIAL FUNCTIONS FROM A DOMAIN TO THE SET OF COMPLEX NUMBERS
@@ -53,7 +53,7 @@ definition
   defpred P[set] means $1 in dom f1 /\ dom f2;
   set X = dom f1 /\ dom f2;
   func f1(#)f2 -> PartFunc of M,V means
-  :Def3:
+  :Def1:
   dom it = dom f1 /\ dom f2 &
   for c be Element of M st c in dom it holds it/.c = (f1/.c) * (f2/.c);
   existence
@@ -86,7 +86,7 @@ definition
   defpred P[set] means $1 in dom f;
   set M = dom f;
   func z(#)f -> PartFunc of X,V means
-  :Def4:
+  :Def2:
   dom it = dom f &
   for x be Element of X st x in dom it holds it/.x = z * (f/.x);
   existence
@@ -125,12 +125,12 @@ A1: x in dom (f1(#)f2) \ (f1(#)f2)"{0.V};
     then reconsider x1=x as Element of M;
 A2: x in dom (f1(#)f2) by A1,XBOOLE_0:def 5;
     then
-A3: x1 in dom f1 /\ dom f2 by Def3;
+A3: x1 in dom f1 /\ dom f2 by Def1;
     not x in (f1(#)f2)"{0.V} by A1,XBOOLE_0:def 5;
     then not (f1(#)f2)/.x1 in {0.V} by A2,PARTFUN2:26;
     then (f1(#)f2)/.x1 <> 0.V by TARSKI:def 1;
     then
-A4: (f1/.x1) * (f2/.x1) <> 0.V by A2,Def3;
+A4: (f1/.x1) * (f2/.x1) <> 0.V by A2,Def1;
     then (f1/.x1) <> 0c by CLVECT_1:1;
     then
 A5: not f1/.x1 in {0} by TARSKI:def 1;
@@ -169,12 +169,12 @@ A13: x in dom f2 \ (f2)"{0.V} by A9,XBOOLE_0:def 4;
 A14: x in dom f2 by XBOOLE_0:def 5;
     then x1 in dom f1 /\ dom f2 by A11,XBOOLE_0:def 4;
     then
-A15: x1 in dom (f1(#)f2) by Def3;
+A15: x1 in dom (f1(#)f2) by Def1;
     not x in (f2)"{0.V} by A13,XBOOLE_0:def 5;
     then not (f2/.x1) in {0.V} by A14,PARTFUN2:26;
     then (f2/.x1) <> 0.V by TARSKI:def 1;
     then f1/.x1 * (f2/.x1) <>0.V by A12,CLVECT_1:2;
-    then (f1(#)f2)/.x1 <> 0.V by A15,Def3;
+    then (f1(#)f2)/.x1 <> 0.V by A15,Def1;
     then not (f1(#)f2)/.x1 in {0.V} by TARSKI:def 1;
     then not x in (f1(#)f2)"{0.V} by PARTFUN2:26;
     hence thesis by A15,XBOOLE_0:def 5;
@@ -262,23 +262,23 @@ A2:   x in (z(#)f)"{0.V};
 A3:   x in dom (z(#)f) by PARTFUN2:26;
       (z(#)f)/.x in {0.V} by A2,PARTFUN2:26;
       then (z(#)f)/.x = 0.V by TARSKI:def 1;
-      then z*f/.x = 0.V by A3,Def4;
+      then z*f/.x = 0.V by A3,Def2;
       then z*f/.x = z*0.V by CLVECT_1:1;
       then f/.x = 0.V by A1,CLVECT_1:11;
       then
 A4:   f/.x in {0.V} by TARSKI:def 1;
-      x in dom f by A3,Def4;
+      x in dom f by A3,Def2;
       hence thesis by A4,PARTFUN2:26;
     end;
     assume
 A5: x in (f)"{0.V};
     then x in dom f by PARTFUN2:26;
     then
-A6: x in dom (z(#)f) by Def4;
+A6: x in dom (z(#)f) by Def2;
     f/.x in {0.V} by A5,PARTFUN2:26;
     then z*f/.x = z*0.V by TARSKI:def 1;
     then z*f/.x = 0.V by CLVECT_1:1;
-    then (z(#)f)/.x = 0.V by A6,Def4;
+    then (z(#)f)/.x = 0.V by A6,Def2;
     then (z(#)f)/.x in {0.V} by TARSKI:def 1;
     hence x in (z(#)f)"{0.V} by A6,PARTFUN2:26;
   end;
@@ -343,16 +343,16 @@ theorem
 proof
   let f1,f2 be PartFunc of M,COMPLEX;
   let f3 be PartFunc of M,V;
-A1: dom (f1 (#) f2 (#) f3) = dom (f1 (#) f2) /\ dom f3 by Def3
+A1: dom (f1 (#) f2 (#) f3) = dom (f1 (#) f2) /\ dom f3 by Def1
     .= dom f1 /\ dom f2 /\ dom f3 by VALUED_1:def 4
     .= dom f1 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
-    .= dom f1 /\ dom (f2 (#) f3) by Def3
-    .= dom (f1 (#) (f2 (#) f3)) by Def3;
+    .= dom f1 /\ dom (f2 (#) f3) by Def1
+    .= dom (f1 (#) (f2 (#) f3)) by Def1;
   now
     let x be Element of M;
     assume
 A2: x in dom (f1(#)f2(#)f3);
-    then x in dom (f1 (#) f2) /\ dom f3 by Def3;
+    then x in dom (f1 (#) f2) /\ dom f3 by Def1;
     then
 A3: x in dom (f1 (#) f2) by XBOOLE_0:def 4;
 A4: dom (f1 (#) f2) = dom f1 /\ dom f2 by VALUED_1:def 4;
@@ -364,13 +364,13 @@ A5: f1.x = f1/.x by PARTFUN1:def 6;
 A6: f2.x = f2/.x by PARTFUN1:def 6;
 A7: (f1 (#) f2)/.x = (f1 (#) f2).x by A3,PARTFUN1:def 6
       .= f1/.x * f2/.x by A3,A5,A6,VALUED_1:def 4;
-    x in dom f1 /\ dom (f2(#)f3) by A1,A2,Def3;
+    x in dom f1 /\ dom (f2(#)f3) by A1,A2,Def1;
     then
 A8: x in dom (f2 (#) f3) by XBOOLE_0:def 4;
-    thus (f1 (#) f2 (#) f3)/.x = (f1 (#) f2)/.x * (f3/.x) by A2,Def3
+    thus (f1 (#) f2 (#) f3)/.x = (f1 (#) f2)/.x * (f3/.x) by A2,Def1
       .= f1/.x * (f2/.x * (f3/.x)) by A7,CLVECT_1:def 4
-      .= f1/.x * ((f2 (#) f3)/.x) by A8,Def3
-      .= (f1 (#) (f2 (#) f3))/.x by A1,A2,Def3;
+      .= f1/.x * ((f2 (#) f3)/.x) by A8,Def1
+      .= (f1 (#) (f2 (#) f3))/.x by A1,A2,Def1;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -380,13 +380,13 @@ theorem
   (f1 + f2) (#) f3 = f1 (#) f3 + f2 (#) f3
 proof
   let f1,f2 be PartFunc of M,COMPLEX;
-A1: dom ((f1 + f2) (#) f3) = dom (f1 + f2) /\ dom f3 by Def3
+A1: dom ((f1 + f2) (#) f3) = dom (f1 + f2) /\ dom f3 by Def1
     .= dom f1 /\ dom f2 /\ (dom f3 /\ dom f3) by VALUED_1:def 1
     .= dom f1 /\ dom f2 /\ dom f3 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ dom f2 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
-    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Def3
-    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Def3
+    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Def1
+    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Def1
     .= dom (f1 (#) f3 + f2 (#) f3) by VFUNCT_1:def 1;
 A2: dom (f1 + f2) = dom f1 /\ dom f2 by VALUED_1:def 1;
   now
@@ -397,7 +397,7 @@ A3: x in dom ((f1 + f2)(#)f3);
 A4: x in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,VFUNCT_1:def 1;
     then
 A5: x in dom (f1(#)f3) by XBOOLE_0:def 4;
-    x in dom (f1 + f2) /\ dom f3 by A3,Def3;
+    x in dom (f1 + f2) /\ dom f3 by A3,Def1;
     then
 A6: x in dom (f1 + f2) by XBOOLE_0:def 4;
     then x in dom f1 by A2,XBOOLE_0:def 4;
@@ -409,10 +409,10 @@ A8: f2/.x = f2.x by PARTFUN1:def 6;
 A9: (f1 + f2)/.x = (f1 + f2).x by A6,PARTFUN1:def 6
       .= f1/.x + f2/.x by A6,A7,A8,VALUED_1:def 1;
 A10: x in dom (f2 (#) f3) by A4,XBOOLE_0:def 4;
-    thus ((f1 + f2) (#) f3)/.x = (f1 + f2)/.x * (f3/.x) by A3,Def3
+    thus ((f1 + f2) (#) f3)/.x = (f1 + f2)/.x * (f3/.x) by A3,Def1
       .= f1/.x * (f3/.x) + f2/.x * (f3/.x) by A9,CLVECT_1:def 3
-      .= ((f1 (#) f3)/.x) + f2/.x* (f3/.x) by A5,Def3
-      .= ((f1 (#) f3)/.x) + ((f2 (#) f3)/.x) by A10,Def3
+      .= ((f1 (#) f3)/.x) + f2/.x* (f3/.x) by A5,Def1
+      .= ((f1 (#) f3)/.x) + ((f2 (#) f3)/.x) by A10,Def1
       .= ((f1 (#) f3) + (f2 (#) f3))/.x by A1,A3,VFUNCT_1:def 1;
   end;
   hence thesis by A1,PARTFUN2:1;
@@ -422,30 +422,30 @@ theorem
   for f3 be PartFunc of M,COMPLEX holds f3(#)(f1 + f2) = f3(#)f1 + f3(#) f2
 proof
   let f3 be PartFunc of M,COMPLEX;
-A1: dom (f3 (#) (f1 + f2)) = dom f3 /\ dom (f1 + f2) by Def3
+A1: dom (f3 (#) (f1 + f2)) = dom f3 /\ dom (f1 + f2) by Def1
     .= dom f3 /\ (dom f1 /\ dom f2) by VFUNCT_1:def 1
     .= dom f3 /\ dom f3 /\ dom f1 /\ dom f2 by XBOOLE_1:16
     .= dom f3 /\ dom f1 /\ dom f3 /\ dom f2 by XBOOLE_1:16
     .= dom f3 /\ dom f1 /\ (dom f3 /\ dom f2) by XBOOLE_1:16
-    .= dom (f3 (#) f1) /\ (dom f3 /\ dom f2) by Def3
-    .= dom (f3 (#) f1) /\ dom (f3 (#) f2) by Def3
+    .= dom (f3 (#) f1) /\ (dom f3 /\ dom f2) by Def1
+    .= dom (f3 (#) f1) /\ dom (f3 (#) f2) by Def1
     .= dom (f3 (#) f1 + f3 (#) f2) by VFUNCT_1:def 1;
   now
     let x be Element of M;
     assume
 A2: x in dom (f3(#)(f1 + f2));
-    then x in dom f3 /\ dom (f1 + f2) by Def3;
+    then x in dom f3 /\ dom (f1 + f2) by Def1;
     then
 A3: x in dom (f1 + f2) by XBOOLE_0:def 4;
 A4: x in dom (f3(#)f1) /\ dom (f3(#)f2) by A1,A2,VFUNCT_1:def 1;
     then
 A5: x in dom (f3(#)f1) by XBOOLE_0:def 4;
 A6: x in dom (f3 (#) f2) by A4,XBOOLE_0:def 4;
-    thus (f3 (#) (f1 + f2))/.x = f3/.x * ((f1 + f2)/.x) by A2,Def3
+    thus (f3 (#) (f1 + f2))/.x = f3/.x * ((f1 + f2)/.x) by A2,Def1
       .= f3/.x * ((f1/.x) + (f2/.x)) by A3,VFUNCT_1:def 1
       .= f3/.x * (f1/.x) + f3/.x * (f2/.x) by CLVECT_1:def 2
-      .= ((f3 (#) f1)/.x) + f3/.x* (f2/.x) by A5,Def3
-      .= ((f3 (#) f1)/.x) + ((f3 (#) f2)/.x) by A6,Def3
+      .= ((f3 (#) f1)/.x) + f3/.x* (f2/.x) by A5,Def1
+      .= ((f3 (#) f1)/.x) + ((f3 (#) f2)/.x) by A6,Def1
       .= ((f3 (#) f1) + (f3 (#) f2))/.x by A1,A2,VFUNCT_1:def 1;
   end;
   hence thesis by A1,PARTFUN2:1;
@@ -455,27 +455,27 @@ theorem
   for f1 be PartFunc of M,COMPLEX holds z (#) (f1 (#) f2) = z (#) f1 (#) f2
 proof
   let f1 be PartFunc of M,COMPLEX;
-A1: dom (f1 (#) f2) = dom f1 /\ dom f2 by Def3;
-A2: dom (z(#)(f1 (#) f2)) = dom (f1 (#) f2) by Def4
+A1: dom (f1 (#) f2) = dom f1 /\ dom f2 by Def1;
+A2: dom (z(#)(f1 (#) f2)) = dom (f1 (#) f2) by Def2
     .= dom (z(#)f1) /\ dom f2 by A1,VALUED_1:def 5
-    .= dom (z(#)f1(#)f2) by Def3;
+    .= dom (z(#)f1(#)f2) by Def1;
   now
     let x be Element of M;
     assume
 A3: x in dom (z(#)(f1(#)f2));
-    then x in dom (z(#)f1) /\ dom f2 by A2,Def3;
+    then x in dom (z(#)f1) /\ dom f2 by A2,Def1;
     then x in dom (z(#)f1) by XBOOLE_0:def 4;
     then
 A4: (z(#)f1)/.x = (z(#)f1).x by PARTFUN1:def 6;
-A5: x in dom (f1(#)f2) by A3,Def4;
+A5: x in dom (f1(#)f2) by A3,Def2;
     then x in dom f1 by A1,XBOOLE_0:def 4;
     then
 A6: f1/.x = f1.x by PARTFUN1:def 6;
-    thus (z(#)(f1(#)f2))/.x = z * ((f1(#)f2)/.x) by A3,Def4
-      .= z*(f1/.x * (f2/.x)) by A5,Def3
+    thus (z(#)(f1(#)f2))/.x = z * ((f1(#)f2)/.x) by A3,Def2
+      .= z*(f1/.x * (f2/.x)) by A5,Def1
       .= (z*f1/.x) * (f2/.x) by CLVECT_1:def 4
       .= (z(#)f1)/.x * (f2/.x) by A4,A6,VALUED_1:6
-      .= (z(#)f1 (#) f2)/.x by A2,A3,Def3;
+      .= (z(#)f1 (#) f2)/.x by A2,A3,Def1;
   end;
   hence thesis by A2,PARTFUN2:1;
 end;
@@ -484,25 +484,25 @@ theorem
   for f1 be PartFunc of M,COMPLEX holds z (#) (f1 (#) f2) = f1 (#) (z (#) f2)
 proof
   let f1 be PartFunc of M,COMPLEX;
-A1: dom (z(#)(f1 (#) f2)) = dom (f1 (#) f2) by Def4
-    .= dom f1 /\ dom f2 by Def3
-    .= dom f1 /\ dom (z(#)f2) by Def4
-    .= dom (f1(#)(z(#)f2)) by Def3;
+A1: dom (z(#)(f1 (#) f2)) = dom (f1 (#) f2) by Def2
+    .= dom f1 /\ dom f2 by Def1
+    .= dom f1 /\ dom (z(#)f2) by Def2
+    .= dom (f1(#)(z(#)f2)) by Def1;
   now
     let x be Element of M;
     assume
 A2: x in dom (z(#)(f1(#)f2));
     then
-A3: x in dom (f1(#)f2) by Def4;
-    x in dom f1 /\ dom (z(#)f2) by A1,A2,Def3;
+A3: x in dom (f1(#)f2) by Def2;
+    x in dom f1 /\ dom (z(#)f2) by A1,A2,Def1;
     then
 A4: x in dom (z(#)f2) by XBOOLE_0:def 4;
-    thus (z(#)(f1(#)f2))/.x = z * (f1(#)f2)/.x by A2,Def4
-      .= z * (f1/.x * (f2/.x)) by A3,Def3
+    thus (z(#)(f1(#)f2))/.x = z * (f1(#)f2)/.x by A2,Def2
+      .= z * (f1/.x * (f2/.x)) by A3,Def1
       .= f1/.x * z * (f2/.x) by CLVECT_1:def 4
       .= f1/.x * (z * (f2/.x)) by CLVECT_1:def 4
-      .= f1/.x * ((z(#)f2)/.x) by A4,Def4
-      .= (f1(#)(z(#)f2))/.x by A1,A2,Def3;
+      .= f1/.x * ((z(#)f2)/.x) by A4,Def2
+      .= (f1(#)(z(#)f2))/.x by A1,A2,Def1;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -511,14 +511,14 @@ theorem
   for f1,f2 be PartFunc of M,COMPLEX holds (f1 - f2) (#) f3 = f1(#)f3 - f2(#)f3
 proof
   let f1,f2 be PartFunc of M,COMPLEX;
-A1: dom ((f1 - f2) (#) f3) = dom (f1 + -f2) /\ dom f3 by Def3
+A1: dom ((f1 - f2) (#) f3) = dom (f1 + -f2) /\ dom f3 by Def1
     .= dom f1 /\ dom (-f2) /\ (dom f3 /\ dom f3) by VALUED_1:def 1
     .= dom f1 /\ dom f2 /\ (dom f3 /\ dom f3) by VALUED_1:8
     .= dom f1 /\ dom f2 /\ dom f3 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ dom f2 /\ dom f3 by XBOOLE_1:16
     .= dom f1 /\ dom f3 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
-    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Def3
-    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Def3
+    .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Def1
+    .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Def1
     .= dom (f1 (#) f3 - f2 (#) f3) by VFUNCT_1:def 2;
   now
     let x be Element of M;
@@ -528,7 +528,7 @@ A2: x in dom ((f1 - f2)(#)f3);
 A3: x in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,VFUNCT_1:def 2;
     then
 A4: x in dom (f1(#)f3) by XBOOLE_0:def 4;
-    x in dom (f1 - f2) /\ dom f3 by A2,Def3;
+    x in dom (f1 - f2) /\ dom f3 by A2,Def1;
     then
 A5: x in dom (f1 - f2) by XBOOLE_0:def 4;
     then
@@ -547,10 +547,10 @@ A9: (f1 + -f2)/.x = f1.x + (-f2).x by A5,VALUED_1:def 1
 A10: (-f2).x = -(f2.x) & f2/.x = f2.x by A7,PARTFUN1:def 6,VALUED_1:8;
 A11: x in dom (f2 (#) f3) by A3,XBOOLE_0:def 4;
     (-f2)/.x = (-f2).x by A7,PARTFUN1:def 6;
-    hence ((f1 - f2) (#) f3)/.x = (f1/.x - f2/.x) * (f3/.x) by A2,A10,A9,Def3
+    hence ((f1 - f2) (#) f3)/.x = (f1/.x - f2/.x) * (f3/.x) by A2,A10,A9,Def1
       .= f1/.x * (f3/.x) - f2/.x * (f3/.x) by CLVECT_1:10
-      .= ((f1 (#) f3)/.x) - f2/.x * (f3/.x) by A4,Def3
-      .= ((f1 (#) f3)/.x) - ((f2 (#) f3)/.x) by A11,Def3
+      .= ((f1 (#) f3)/.x) - f2/.x * (f3/.x) by A4,Def1
+      .= ((f1 (#) f3)/.x) - ((f2 (#) f3)/.x) by A11,Def1
       .= ((f1 (#) f3) - (f2 (#) f3))/.x by A1,A2,VFUNCT_1:def 2;
   end;
   hence thesis by A1,PARTFUN2:1;
@@ -562,29 +562,29 @@ proof
   let f3 be PartFunc of M,COMPLEX;
 A1: dom (f3 (#) f1 - f3 (#) f2) = dom (f3 (#) f1) /\ dom (f3 (#) f2)
     by VFUNCT_1:def 2
-    .= dom (f3 (#) f1) /\ (dom f3 /\ dom f2) by Def3
-    .= dom f3 /\ dom f1 /\ (dom f3 /\ dom f2) by Def3
+    .= dom (f3 (#) f1) /\ (dom f3 /\ dom f2) by Def1
+    .= dom f3 /\ dom f1 /\ (dom f3 /\ dom f2) by Def1
     .= dom f3 /\ (dom f3 /\ dom f1) /\ dom f2 by XBOOLE_1:16
     .= dom f3 /\ dom f3 /\ dom f1 /\ dom f2 by XBOOLE_1:16
     .= dom f3 /\ (dom f1 /\ dom f2) by XBOOLE_1:16
     .= dom f3 /\ dom (f1 - f2) by VFUNCT_1:def 2
-    .= dom (f3(#)(f1 - f2)) by Def3;
+    .= dom (f3(#)(f1 - f2)) by Def1;
   now
     let x be Element of M;
     assume
 A2: x in dom (f3(#)(f1 - f2));
-    then x in dom f3 /\ dom (f1 - f2) by Def3;
+    then x in dom f3 /\ dom (f1 - f2) by Def1;
     then
 A3: x in dom (f1 - f2) by XBOOLE_0:def 4;
 A4: x in dom (f3(#)f1) /\ dom (f3(#)f2) by A1,A2,VFUNCT_1:def 2;
     then
 A5: x in dom (f3(#)f1) by XBOOLE_0:def 4;
 A6: x in dom (f3 (#) f2) by A4,XBOOLE_0:def 4;
-    thus (f3 (#) (f1 - f2))/.x = f3/.x * ((f1 - f2)/.x) by A2,Def3
+    thus (f3 (#) (f1 - f2))/.x = f3/.x * ((f1 - f2)/.x) by A2,Def1
       .= f3/.x * ((f1/.x) - (f2/.x)) by A3,VFUNCT_1:def 2
       .= f3/.x * (f1/.x) - f3/.x * (f2/.x) by CLVECT_1:9
-      .= ((f3 (#) f1)/.x) - f3/.x * (f2/.x) by A5,Def3
-      .= ((f3 (#) f1)/.x) - ((f3 (#) f2)/.x) by A6,Def3
+      .= ((f3 (#) f1)/.x) - f3/.x * (f2/.x) by A5,Def1
+      .= ((f3 (#) f1)/.x) - ((f3 (#) f2)/.x) by A6,Def1
       .= ((f3 (#) f1) - (f3 (#) f2))/.x by A1,A2,VFUNCT_1:def 2;
   end;
   hence thesis by A1,PARTFUN2:1;
@@ -593,26 +593,26 @@ end;
 theorem
   z(#)(f1 + f2) = z(#)f1 + z(#)f2
 proof
-A1: dom (z(#)(f1 + f2)) = dom (f1 + f2) by Def4
+A1: dom (z(#)(f1 + f2)) = dom (f1 + f2) by Def2
     .= dom f1 /\ dom f2 by VFUNCT_1:def 1
-    .= dom f1 /\ dom (z(#)f2) by Def4
-    .= dom (z(#)f1) /\ dom (z(#)f2) by Def4
+    .= dom f1 /\ dom (z(#)f2) by Def2
+    .= dom (z(#)f1) /\ dom (z(#)f2) by Def2
     .= dom (z(#)f1 + z(#)f2) by VFUNCT_1:def 1;
   now
     let x be Element of M;
     assume
 A2: x in dom (z(#)(f1 + f2));
     then
-A3: x in dom (f1 + f2) by Def4;
+A3: x in dom (f1 + f2) by Def2;
 A4: x in dom (z(#)f1) /\ dom (z(#)f2) by A1,A2,VFUNCT_1:def 1;
     then
 A5: x in dom (z(#)f1) by XBOOLE_0:def 4;
 A6: x in dom (z(#)f2) by A4,XBOOLE_0:def 4;
-    thus (z(#)(f1 + f2))/.x = z * ((f1 + f2)/.x) by A2,Def4
+    thus (z(#)(f1 + f2))/.x = z * ((f1 + f2)/.x) by A2,Def2
       .= z * ((f1/.x) + (f2/.x)) by A3,VFUNCT_1:def 1
       .= z * (f1/.x) + z * (f2/.x) by CLVECT_1:def 2
-      .= ((z(#)f1)/.x) + z * (f2/.x) by A5,Def4
-      .= ((z(#)f1)/.x) + ((z(#)f2)/.x) by A6,Def4
+      .= ((z(#)f1)/.x) + z * (f2/.x) by A5,Def2
+      .= ((z(#)f1)/.x) + ((z(#)f2)/.x) by A6,Def2
       .= (z(#)f1 + z(#)f2)/.x by A1,A2,VFUNCT_1:def 1;
   end;
   hence thesis by A1,PARTFUN2:1;
@@ -621,19 +621,19 @@ end;
 theorem Th14:
   (z1*z2)(#)f = z1(#)(z2(#)f)
 proof
-A1: dom ((z1*z2) (#) f) = dom f by Def4
-    .= dom (z2(#)f) by Def4
-    .= dom (z1(#)(z2(#)f)) by Def4;
+A1: dom ((z1*z2) (#) f) = dom f by Def2
+    .= dom (z2(#)f) by Def2
+    .= dom (z1(#)(z2(#)f)) by Def2;
   now
     let x be Element of M;
     assume
 A2: x in dom ((z1*z2)(#)f);
     then
-A3: x in dom (z2(#)f) by A1,Def4;
-    thus ((z1*z2)(#)f)/.x = z1*z2 * f/.x by A2,Def4
+A3: x in dom (z2(#)f) by A1,Def2;
+    thus ((z1*z2)(#)f)/.x = z1*z2 * f/.x by A2,Def2
       .= z1*(z2 * f/.x) by CLVECT_1:def 4
-      .= z1 * ((z2(#)f)/.x) by A3,Def4
-      .= (z1(#)(z2(#)f))/.x by A1,A2,Def4;
+      .= z1 * ((z2(#)f)/.x) by A3,Def2
+      .= (z1(#)(z2(#)f))/.x by A1,A2,Def2;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -641,26 +641,26 @@ end;
 theorem
   z(#)(f1 - f2) = z(#)f1 - z(#)f2
 proof
-A1: dom (z(#)(f1 - f2)) = dom (f1 - f2) by Def4
+A1: dom (z(#)(f1 - f2)) = dom (f1 - f2) by Def2
     .= dom f1 /\ dom f2 by VFUNCT_1:def 2
-    .= dom f1 /\ dom (z(#)f2) by Def4
-    .= dom (z(#)f1) /\ dom (z(#)f2) by Def4
+    .= dom f1 /\ dom (z(#)f2) by Def2
+    .= dom (z(#)f1) /\ dom (z(#)f2) by Def2
     .= dom (z(#)f1 - z(#)f2) by VFUNCT_1:def 2;
   now
     let x be Element of M;
     assume
 A2: x in dom (z(#)(f1 - f2));
     then
-A3: x in dom (f1 - f2) by Def4;
+A3: x in dom (f1 - f2) by Def2;
 A4: x in dom (z(#)f1) /\ dom (z(#)f2) by A1,A2,VFUNCT_1:def 2;
     then
 A5: x in dom (z(#)f1) by XBOOLE_0:def 4;
 A6: x in dom (z(#)f2) by A4,XBOOLE_0:def 4;
-    thus (z(#)(f1 - f2))/.x = z * ((f1 - f2)/.x) by A2,Def4
+    thus (z(#)(f1 - f2))/.x = z * ((f1 - f2)/.x) by A2,Def2
       .= z * ((f1/.x) - (f2/.x)) by A3,VFUNCT_1:def 2
       .= z * (f1/.x) - z * (f2/.x) by CLVECT_1:9
-      .= ((z(#)f1)/.x) - z * (f2/.x) by A5,Def4
-      .= ((z(#)f1)/.x) - ((z(#)f2)/.x) by A6,Def4
+      .= ((z(#)f1)/.x) - z * (f2/.x) by A5,Def2
+      .= ((z(#)f1)/.x) - ((z(#)f2)/.x) by A6,Def2
       .= (z(#)f1 - z(#)f2)/.x by A1,A2,VFUNCT_1:def 2;
   end;
   hence thesis by A1,PARTFUN2:1;
@@ -671,7 +671,7 @@ theorem
 proof
 A1: dom (f1 - f2) = dom f2 /\ dom f1 by VFUNCT_1:def 2
     .= dom (f2 - f1) by VFUNCT_1:def 2
-    .= dom ((-1r)(#)(f2 - f1)) by Def4;
+    .= dom ((-1r)(#)(f2 - f1)) by Def2;
   now
 A2: dom (f1 - f2) = dom f2 /\ dom f1 by VFUNCT_1:def 2
       .= dom (f2 - f1) by VFUNCT_1:def 2;
@@ -681,7 +681,7 @@ A3: x in dom (f1-f2);
       .= -((f2/.x) - (f1/.x)) by RLVECT_1:33
       .= (-1r)*((f2/.x) - (f1/.x)) by CLVECT_1:3
       .= (-1r)*((f2 - f1)/.x) by A3,A2,VFUNCT_1:def 2
-      .= ((-1r)(#)(f2 - f1))/.x by A1,A3,Def4;
+      .= ((-1r)(#)(f2 - f1))/.x by A1,A3,Def2;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -719,10 +719,10 @@ proof
 A1: now
     let c be Element of M;
     assume c in dom (1r(#)f);
-    hence (1r(#)f)/.c = 1r * f/.c by Def4
+    hence (1r(#)f)/.c = 1r * f/.c by Def2
       .= f/.c by CLVECT_1:def 5;
   end;
-  dom (1r(#)f) = dom f by Def4;
+  dom (1r(#)f) = dom f by Def2;
   hence thesis by A1,PARTFUN2:1;
 end;
 
@@ -784,7 +784,7 @@ theorem
   for f1 be PartFunc of M,COMPLEX holds ||.f1(#)f2.|| = |.f1.|(#)||.f2 .||
 proof
   let f1 be PartFunc of M,COMPLEX;
-A1: dom (f1 (#) f2) = dom f1 /\ dom f2 by Def3;
+A1: dom (f1 (#) f2) = dom f1 /\ dom f2 by Def1;
 A2: dom f1 /\ dom f2 = dom f1 /\ dom (||.f2.||) by NORMSP_0:def 3
     .= dom (|.f1.|) /\ dom (||.f2.||) by VALUED_1:def 11
     .= dom (|.f1.|(#)||.f2.||) by VALUED_1:def 4;
@@ -801,7 +801,7 @@ A6: c in dom (f1 (#) f2) by A4,NORMSP_0:def 3;
     then
 A7: f1/.c = f1.c by PARTFUN1:def 6;
     thus (||.f1(#)f2.||).c = ||.(f1(#)f2)/.c.|| by A4,NORMSP_0:def 3
-      .= ||.f1/.c * (f2/.c).|| by A6,Def3
+      .= ||.f1/.c * (f2/.c).|| by A6,Def1
       .= |.(f1/.c).| * ||.(f2/.c).|| by CLVECT_1:def 13
       .= ((|.f1.|).c) * ||.(f2/.c).|| by A7,VALUED_1:18
       .= ((|.f1.|).c) * (||.f2.||).c by A5,NORMSP_0:def 3
@@ -814,7 +814,7 @@ theorem
   ||.z(#)f.|| = |.z.|(#)||.f.||
 proof
 A1: dom (||.z(#)f.||) = dom (z(#)f) by NORMSP_0:def 3
-    .= dom f by Def4
+    .= dom f by Def2
     .= dom (||.f.||) by NORMSP_0:def 3
     .= dom (|.z.|(#)||.f.||) by VALUED_1:def 5;
   now
@@ -825,7 +825,7 @@ A2: c in dom (||.z(#)f.||);
 A3: c in dom (||.f.||) by A1,VALUED_1:def 5;
 A4: c in dom (z(#)f) by A2,NORMSP_0:def 3;
     thus (||.z(#)f.||).c = ||.(z(#)f)/.c.|| by A2,NORMSP_0:def 3
-      .=||.z*(f/.c).|| by A4,Def4
+      .=||.z*(f/.c).|| by A4,Def2
       .=|.z.|*||.f/.c.|| by CLVECT_1:def 13
       .=|.z.|*(||.f.||.c) by A3,NORMSP_0:def 3
       .=(|.z.|(#)||.f.||).c by A1,A2,VALUED_1:def 5;
@@ -837,14 +837,14 @@ theorem Th23:
   -f = (-1r)(#)f
 proof
 A1: dom (-f) = dom f by VFUNCT_1:def 5
-    .= dom ((-1r)(#)f) by Def4;
+    .= dom ((-1r)(#)f) by Def2;
   now
     let c be Element of M;
     assume
 A2: c in dom ((-1r)(#)f);
     hence (-f)/.c = -(f/.c) by A1,VFUNCT_1:def 5
       .= (-1r) * f/.c by CLVECT_1:3
-      .= ((-1r)(#)f)/.c by A2,Def4;
+      .= ((-1r)(#)f)/.c by A2,Def2;
   end;
   hence thesis by A1,PARTFUN2:1;
 end;
@@ -1004,7 +1004,7 @@ A3: c in dom (f1(#)f2) /\ X by RELAT_1:61;
 A4: c in X by XBOOLE_0:def 4;
 A5: c in dom (f1(#)f2) by A3,XBOOLE_0:def 4;
     then
-A6: c in dom f1 /\ dom f2 by Def3;
+A6: c in dom f1 /\ dom f2 by Def1;
     then
 A7: c in dom f1 by XBOOLE_0:def 4;
     then c in dom f1 /\ X by A4,XBOOLE_0:def 4;
@@ -1020,20 +1020,20 @@ A9: (f1|X)/.c = (f1|X).c by PARTFUN1:def 6
 A10: c in dom (f2|X) by RELAT_1:61;
     then c in dom (f1|X) /\ dom (f2|X) by A8,XBOOLE_0:def 4;
     then
-A11: c in dom ((f1|X) (#) (f2|X)) by Def3;
+A11: c in dom ((f1|X) (#) (f2|X)) by Def1;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A2,PARTFUN2:15
-      .= (f1/.c) * (f2/.c) by A5,Def3
+      .= (f1/.c) * (f2/.c) by A5,Def1
       .= ((f1|X)/.c) * ((f2|X)/.c) by A10,A9,PARTFUN2:15
-      .= ((f1|X)(#)(f2|X))/.c by A11,Def3;
+      .= ((f1|X)(#)(f2|X))/.c by A11,Def1;
   end;
   dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:61
-    .= dom f1 /\ dom f2 /\ (X /\ X) by Def3
+    .= dom f1 /\ dom f2 /\ (X /\ X) by Def1
     .= dom f1 /\ (dom f2 /\ (X /\ X)) by XBOOLE_1:16
     .= dom f1 /\ (dom f2 /\ X /\ X) by XBOOLE_1:16
     .= dom f1 /\ (X /\ dom (f2|X)) by RELAT_1:61
     .= dom f1 /\ X /\ dom (f2|X) by XBOOLE_1:16
     .= dom (f1|X) /\ dom (f2|X) by RELAT_1:61
-    .= dom ((f1|X)(#)(f2|X)) by Def3;
+    .= dom ((f1|X)(#)(f2|X)) by Def1;
   hence (f1(#)f2)|X = f1|X (#) f2|X by A1,PARTFUN2:1;
 A12: now
     let c be Element of M;
@@ -1044,7 +1044,7 @@ A14: c in dom (f1(#)f2) /\ X by RELAT_1:61;
     then
 A15: c in dom (f1(#)f2) by XBOOLE_0:def 4;
     then
-A16: c in dom f1 /\ dom f2 by Def3;
+A16: c in dom f1 /\ dom f2 by Def1;
     then
 A17: c in dom f1 by XBOOLE_0:def 4;
     c in X by A14,XBOOLE_0:def 4;
@@ -1057,17 +1057,17 @@ A19: (f1|X)/.c = (f1|X).c by PARTFUN1:def 6
     c in dom f2 by A16,XBOOLE_0:def 4;
     then c in dom (f1|X) /\ dom f2 by A18,XBOOLE_0:def 4;
     then
-A20: c in dom ((f1|X) (#) f2) by Def3;
+A20: c in dom ((f1|X) (#) f2) by Def1;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A13,PARTFUN2:15
-      .= (f1/.c) * (f2/.c) by A15,Def3
+      .= (f1/.c) * (f2/.c) by A15,Def1
       .= ((f1|X)/.c) * (f2/.c) by A17,A19,PARTFUN1:def 6
-      .= ((f1|X)(#)f2)/.c by A20,Def3;
+      .= ((f1|X)(#)f2)/.c by A20,Def1;
   end;
   dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:61
-    .= dom f1 /\ dom f2 /\ X by Def3
+    .= dom f1 /\ dom f2 /\ X by Def1
     .= dom f1 /\ X /\ dom f2 by XBOOLE_1:16
     .= dom (f1|X) /\ dom f2 by RELAT_1:61
-    .= dom ((f1|X)(#) f2) by Def3;
+    .= dom ((f1|X)(#) f2) by Def1;
   hence (f1(#)f2)|X = f1|X (#) f2 by A12,PARTFUN2:1;
 A21: now
     let c be Element of M;
@@ -1079,7 +1079,7 @@ A23: c in dom (f1(#)f2) /\ X by RELAT_1:61;
 A24: c in X by XBOOLE_0:def 4;
 A25: c in dom (f1(#)f2) by A23,XBOOLE_0:def 4;
     then
-A26: c in dom f1 /\ dom f2 by Def3;
+A26: c in dom f1 /\ dom f2 by Def1;
     then c in dom f2 by XBOOLE_0:def 4;
     then c in dom f2 /\ X by A24,XBOOLE_0:def 4;
     then
@@ -1087,17 +1087,17 @@ A27: c in dom (f2|X) by RELAT_1:61;
     c in dom f1 by A26,XBOOLE_0:def 4;
     then c in dom f1 /\ dom (f2|X) by A27,XBOOLE_0:def 4;
     then
-A28: c in dom (f1 (#) (f2|X)) by Def3;
+A28: c in dom (f1 (#) (f2|X)) by Def1;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A22,PARTFUN2:15
-      .= (f1/.c) * (f2/.c) by A25,Def3
+      .= (f1/.c) * (f2/.c) by A25,Def1
       .= (f1/.c) * ((f2|X)/.c) by A27,PARTFUN2:15
-      .= (f1(#)(f2|X))/.c by A28,Def3;
+      .= (f1(#)(f2|X))/.c by A28,Def1;
   end;
   dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:61
-    .= dom f1 /\ dom f2 /\ X by Def3
+    .= dom f1 /\ dom f2 /\ X by Def1
     .= dom f1 /\ (dom f2 /\ X) by XBOOLE_1:16
     .= dom f1 /\ dom (f2|X) by RELAT_1:61
-    .= dom (f1 (#) (f2|X)) by Def3;
+    .= dom (f1 (#) (f2|X)) by Def1;
   hence thesis by A21,PARTFUN2:1;
 end;
 
@@ -1178,21 +1178,21 @@ A3: c in dom (z(#)f) /\ X by RELAT_1:61;
     then
 A4: c in X by XBOOLE_0:def 4;
 A5: c in dom (z(#)f) by A3,XBOOLE_0:def 4;
-    then c in dom f by Def4;
+    then c in dom f by Def2;
     then c in dom f /\ X by A4,XBOOLE_0:def 4;
     then
 A6: c in dom (f|X) by RELAT_1:61;
     then
-A7: c in dom (z(#)(f|X)) by Def4;
+A7: c in dom (z(#)(f|X)) by Def2;
     thus ((z(#)f)|X)/.c = (z(#)f)/.c by A2,PARTFUN2:15
-      .= z*(f/.c) by A5,Def4
+      .= z*(f/.c) by A5,Def2
       .= z*((f|X)/.c) by A6,PARTFUN2:15
-      .= (z(#)(f|X))/.c by A7,Def4;
+      .= (z(#)(f|X))/.c by A7,Def2;
   end;
   dom ((z(#)f)|X) = dom (z(#)f) /\ X by RELAT_1:61
-    .= dom f /\ X by Def4
+    .= dom f /\ X by Def2
     .= dom (f|X) by RELAT_1:61
-    .= dom (z(#)(f|X)) by Def4;
+    .= dom (z(#)(f|X)) by Def2;
   hence thesis by A1,PARTFUN2:1;
 end;
 
@@ -1245,12 +1245,12 @@ proof
   proof
     assume f1 is total & f2 is total;
     then dom f1 = M & dom f2 = M by PARTFUN1:def 2;
-    hence dom (f1(#)f2) = M /\ M by Def3
+    hence dom (f1(#)f2) = M /\ M by Def1
       .= M;
   end;
   assume f1(#)f2 is total;
   then dom (f1(#)f2) = M by PARTFUN1:def 2;
-  then dom f1 /\ dom f2 = M by Def3;
+  then dom f1 /\ dom f2 = M by Def1;
   then M c= dom f1 & M c= dom f2 by XBOOLE_1:17;
   hence dom f1 = M & dom f2 = M by XBOOLE_0:def 10;
 end;
@@ -1262,11 +1262,11 @@ proof
   proof
     assume f is total;
     then dom f = M by PARTFUN1:def 2;
-    hence dom (z(#)f) = M by Def4;
+    hence dom (z(#)f) = M by Def2;
   end;
   assume z(#)f is total;
   then dom (z(#)f) = M by PARTFUN1:def 2;
-  hence dom f = M by Def4;
+  hence dom f = M by Def2;
 end;
 
 theorem Th35:
@@ -1323,7 +1323,7 @@ proof
   assume f1 is total & f2 is total;
   then f1(#)f2 is total by Th33;
   then dom (f1(#)f2) = M by PARTFUN1:def 2;
-  hence thesis by Def3;
+  hence thesis by Def1;
 end;
 
 theorem
@@ -1333,7 +1333,7 @@ proof
   assume f is total;
   then z(#)f is total by Th34;
   then dom (z(#)f) = M by PARTFUN1:def 2;
-  hence thesis by Def4;
+  hence thesis by Def2;
 end;
 
 theorem
@@ -1361,7 +1361,7 @@ definition
   let V;
   let f,Y;
   pred f is_bounded_on Y means
-  :Def7:
+  :Def3:
   ex r be Real st for x be Element of M st
   x in Y /\ dom f holds ||.f/.x.|| <= r;
 end;
@@ -1373,7 +1373,7 @@ proof
 A1: Y c= X and
 A2: f is_bounded_on X;
   consider r be Real such that
-A3: for x be Element of M st x in X /\ dom f holds ||.f/.x.|| <= r by A2,Def7;
+A3: for x be Element of M st x in X /\ dom f holds ||.f/.x.|| <= r by A2,Def3;
   take r;
   let x be Element of M;
   assume x in Y /\ dom f;
@@ -1387,7 +1387,7 @@ theorem
 proof
   assume X /\ dom f = {};
   then for x be Element of M holds x in X /\ dom f implies ||.f/.x.|| <= 0;
-  hence thesis by Def7;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -1401,9 +1401,9 @@ proof
 A1: ||.0c*(f/.c).|| <= 0 by CLVECT_1:def 13;
     assume c in Y /\ dom (0c(#)f);
     then c in dom (0c(#)f) by XBOOLE_0:def 4;
-    hence ||.(0c(#)f)/.c.|| <= p by A1,Def4;
+    hence ||.(0c(#)f)/.c.|| <= p by A1,Def2;
   end;
-  hence thesis by Def7;
+  hence thesis by Def3;
 end;
 
 theorem Th44:
@@ -1411,7 +1411,7 @@ theorem Th44:
 proof
   assume f is_bounded_on Y;
   then consider r1 be Real such that
-A1: for c be Element of M st c in Y /\ dom f holds ||.f/.c.|| <= r1 by Def7;
+A1: for c be Element of M st c in Y /\ dom f holds ||.f/.c.|| <= r1 by Def3;
   take p = |.z.|*abs(r1);
   let c be Element of M;
   assume
@@ -1419,7 +1419,7 @@ A2: c in Y /\ dom (z(#)f);
   then
 A3: c in Y by XBOOLE_0:def 4;
 A4: c in dom (z(#)f) by A2,XBOOLE_0:def 4;
-  then c in dom f by Def4;
+  then c in dom f by Def2;
   then c in Y /\ dom f by A3,XBOOLE_0:def 4;
   then
 A5: ||.f/.c.|| <= r1 by A1;
@@ -1427,7 +1427,7 @@ A5: ||.f/.c.|| <= r1 by A1;
   then |.z.| >= 0 & ||.f/.c.|| <= abs(r1) by A5,COMPLEX1:46,XXREAL_0:2;
   then |.z.| * ||.(f/.c).|| <= |.z.|*abs(r1) by XREAL_1:64;
   then ||.z * (f/.c).|| <= p by CLVECT_1:def 13;
-  hence thesis by A4,Def4;
+  hence thesis by A4,Def2;
 end;
 
 theorem Th45:
@@ -1436,7 +1436,7 @@ proof
   assume
 A1: f is_bounded_on Y;
   then consider r1 be Real such that
-A2: for c be Element of M st c in Y /\ dom f holds ||.f/.c.|| <= r1 by Def7;
+A2: for c be Element of M st c in Y /\ dom f holds ||.f/.c.|| <= r1 by Def3;
   now
     let c be set;
     assume
@@ -1463,10 +1463,10 @@ A1: f1 is_bounded_on X and
 A2: f2 is_bounded_on Y;
   consider r1 be Real such that
 A3: for c be Element of M st c in X /\ dom f1 holds ||.(f1/.c).|| <= r1
-  by A1,Def7;
+  by A1,Def3;
   consider r2 be Real such that
 A4: for c be Element of M st c in Y /\ dom f2 holds ||.(f2/.c).|| <= r2
-  by A2,Def7;
+  by A2,Def3;
   take r=r1+r2;
   let c be Element of M;
   assume
@@ -1505,7 +1505,7 @@ A3: for c be Element of M st c in X /\ dom f1 holds |. f1/.c .| <= r1 by A1,
 CFUNCT_1:69;
   consider r2 be Real such that
 A4: for c be Element of M st c in Y /\ dom f2 holds ||.(f2/.c).|| <= r2
-  by A2,Def7;
+  by A2,Def3;
   reconsider r1 as Real by XREAL_0:def 1;
   now
     take r=r1*r2;
@@ -1518,7 +1518,7 @@ A6: c in X /\ Y by XBOOLE_0:def 4;
 A7: c in X by XBOOLE_0:def 4;
 A8: c in dom (f1(#)f2) by A5,XBOOLE_0:def 4;
     then
-A9: c in dom f1 /\ dom f2 by Def3;
+A9: c in dom f1 /\ dom f2 by Def1;
     then c in dom f1 by XBOOLE_0:def 4;
     then c in X /\ dom f1 by A7,XBOOLE_0:def 4;
     then
@@ -1531,9 +1531,9 @@ A12: ||.(f2/.c).|| <= r2 by A4;
     0<=|.(f1/.c).| & 0<=||.(f2/.c).|| by CLVECT_1:105,COMPLEX1:46;
     then |.(f1/.c).|*||.(f2/.c).|| <= r by A10,A12,XREAL_1:66;
     then ||.f1/.c * (f2/.c).|| <= r by CLVECT_1:def 13;
-    hence ||.(f1(#)f2)/.c.|| <= r by A8,Def3;
+    hence ||.(f1(#)f2)/.c.|| <= r by A8,Def1;
   end;
-  hence thesis by Def7;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -1554,9 +1554,9 @@ proof
 A1: f is_bounded_on X and
 A2: f is_bounded_on Y;
   consider r1 be Real such that
-A3: for c be Element of M st c in X /\ dom f holds ||.f/.c.|| <= r1 by A1,Def7;
+A3: for c be Element of M st c in X /\ dom f holds ||.f/.c.|| <= r1 by A1,Def3;
   consider r2 be Real such that
-A4: for c be Element of M st c in Y /\ dom f holds ||.f/.c.|| <= r2 by A2,Def7;
+A4: for c be Element of M st c in Y /\ dom f holds ||.f/.c.|| <= r2 by A2,Def3;
   take r = abs(r1) + abs(r2);
   let c be Element of M;
   assume
@@ -1661,9 +1661,9 @@ proof
   assume that
 A1: f1|X is constant and
 A2: f2|Y is constant;
-  consider z1 be Complex such that
-A3: for c be Element of M st c in X /\ dom f1 holds f1.c = z1 by A1,PARTFUN2:57
-;
+  consider z1 be Element of COMPLEX such that
+A3: for c be Element of M st c in X /\ dom f1 holds f1.c = z1
+  by A1,PARTFUN2:57;
   consider r2 being VECTOR of V such that
 A4: for c be Element of M st c in Y /\ dom f2 holds (f2/.c) = r2 by A2,
 PARTFUN2:35;
@@ -1677,7 +1677,7 @@ A6: c in X /\ Y by XBOOLE_0:def 4;
 A7: c in Y by XBOOLE_0:def 4;
 A8: c in dom (f1(#)f2) by A5,XBOOLE_0:def 4;
     then
-A9: c in (dom f1 /\ dom f2) by Def3;
+A9: c in (dom f1 /\ dom f2) by Def1;
     then
 A10: c in dom f1 by XBOOLE_0:def 4;
     then
@@ -1688,7 +1688,7 @@ A12: c in Y /\ dom f2 by A7,XBOOLE_0:def 4;
     c in X by A6,XBOOLE_0:def 4;
     then
 A13: c in X /\ dom f1 by A10,XBOOLE_0:def 4;
-    thus (f1(#)f2)/.c = f1/.c * (f2/.c) by A8,Def3
+    thus (f1(#)f2)/.c = f1/.c * (f2/.c) by A8,Def1
       .= z1 * (f2/.c) by A3,A13,A11
       .= z1 * r2 by A4,A12;
   end;
@@ -1708,10 +1708,10 @@ A2: c in Y /\ dom (z(#)f);
     then
 A3: c in Y by XBOOLE_0:def 4;
 A4: c in dom (z(#)f) by A2,XBOOLE_0:def 4;
-    then c in dom f by Def4;
+    then c in dom f by Def2;
     then
 A5: c in Y /\ dom f by A3,XBOOLE_0:def 4;
-    thus (z(#)f)/.c = z * f/.c by A4,Def4
+    thus (z(#)f)/.c = z * f/.c by A4,Def2
       .= z*r by A1,A5;
   end;
   hence thesis by PARTFUN2:35;
@@ -1763,7 +1763,7 @@ A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:35;
     assume c in Y /\ dom f;
     hence ||.f/.c.|| <= p by A1;
   end;
-  hence thesis by Def7;
+  hence thesis by Def3;
 end;
 
 theorem

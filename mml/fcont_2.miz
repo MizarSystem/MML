@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz and Konrad Raczkowski
 ::
 :: Received June 18, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,13 +21,15 @@ environ
       SEQM_3, FCONT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, XXREAL_2, VALUED_0, COMPLEX1, REAL_1, NAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, SQUARE_1, VALUED_1, SEQ_1, SEQ_2, SEQ_4, PARTFUN2,
+      PARTFUN1, FUNCT_2, SQUARE_1, VALUED_1, SEQ_1, COMSEQ_2,
+      SEQ_2, SEQ_4, PARTFUN2,
       RFUNCT_1, RFUNCT_2, RCOMP_1, FCONT_1, RECDEF_1;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1, SEQ_2,
       SEQM_3, SEQ_4, RCOMP_1, PARTFUN2, RFUNCT_1, RFUNCT_2, FCONT_1, SEQ_1,
-      RECDEF_1, XXREAL_2, RELSET_1, BINOP_2;
+      RECDEF_1, XXREAL_2, RELSET_1, BINOP_2, COMSEQ_2;
  registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
-      RFUNCT_2, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1, XXREAL_2, FCONT_1;
+      RFUNCT_2, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1, XXREAL_2, FCONT_1,
+      COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions VALUED_1;
  theorems TARSKI, SUBSET_1, NAT_1, FUNCT_1, ABSVALUE, SEQ_2, SEQ_4, PARTFUN2,
@@ -774,7 +776,7 @@ end;
 theorem
   X c= dom f & f|X is constant implies f|X is uniformly_continuous by Th10;
 
-theorem Th16:
+theorem Th15:
   p<= g & [.p,g.] c= dom f & f|[.p,g.] is continuous implies for r
   st r in [.f.p,f.g.] \/ [.f.g,f.p.] ex s st s in [.p,g.] & r = f.s
 proof
@@ -834,7 +836,7 @@ A18: dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 2
     then (f1-f)|[.p,g.] is continuous by A3,A12,FCONT_1:18;
     then abs(f1-f)|[.p,g.] is continuous by A13,FCONT_1:21;
     then abs(f1-f)^|[.p,g.] is continuous by A14,FCONT_1:22;
-    then (abs(f1-f)^).:[.p,g.] is bounded by A5,A18,FCONT_1:29,RCOMP_1:10;
+    then (abs(f1-f)^).:[.p,g.] is real-bounded by A5,A18,FCONT_1:29,RCOMP_1:10;
     then consider M being real number such that
 A19: M is UpperBound of (abs(f1-f)^).:[.p,g.] by XXREAL_2:def 10;
 A20: for x1 be real number st x1 in (abs(f1-f)^).:[.p,g.] holds x1<=M
@@ -1018,7 +1020,7 @@ A63: dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 2
     then (f1-f)|[.p,g.] is continuous by A3,A57,FCONT_1:18;
     then abs(f1-f)|[.p,g.] is continuous by A58,FCONT_1:21;
     then abs(f1-f)^|[.p,g.] is continuous by A59,FCONT_1:22;
-    then (abs(f1-f)^).:[.p,g.] is bounded by A5,A63,FCONT_1:29,RCOMP_1:10;
+    then (abs(f1-f)^).:[.p,g.] is real-bounded by A5,A63,FCONT_1:29,RCOMP_1:10;
     then consider M being real number such that
 A64: M is UpperBound of (abs(f1-f)^).:[.p,g.] by XXREAL_2:def 10;
 A65: for x1 be real number st x1 in (abs(f1-f)^).:[.p,g.] holds x1<=M
@@ -1168,7 +1170,7 @@ A96: f.p = f.g;
   hence thesis by A6,A51,XXREAL_0:1;
 end;
 
-theorem Th17:
+theorem Th16:
   p<=g & [.p,g.] c= dom f & f|[.p,g.] is continuous implies for r
 st r in [.(lower_bound (f.:[.p,g.])),(upper_bound (f.:[.p,g.])).] ex s st s in
   [.p,g.] & r = f.s
@@ -1179,7 +1181,7 @@ A2: [.p,g.] c= dom f and
 A3: f|[.p,g.] is continuous;
   [.p,g.] is compact by RCOMP_1:6;
   then
-A4: f.:[.p,g.] is bounded by A2,A3,FCONT_1:29,RCOMP_1:10;
+A4: f.:[.p,g.] is real-bounded by A2,A3,FCONT_1:29,RCOMP_1:10;
   set ub=upper_bound (f.:[.p,g.]);
   set lb=lower_bound (f.:[.p,g.]);
   [.p,g.] <> {} by A1,XXREAL_1:1;
@@ -1203,7 +1205,7 @@ A13:  [.x1,x2.] c= [.p,g.] by A5,A6,XXREAL_2:def 12;
       then f|[.x1,x2.] is continuous by A3,FCONT_1:16;
       then consider s such that
 A14:  s in [.x1,x2.] and
-A15:  r=f.s by A2,A9,A7,A8,A10,A11,A12,Th16,XBOOLE_1:1;
+A15:  r=f.s by A2,A9,A7,A8,A10,A11,A12,Th15,XBOOLE_1:1;
       take s;
       thus s in [.p,g.] & r=f.s by A13,A14,A15;
     end;
@@ -1214,7 +1216,7 @@ A18:  [.x2,x1.] c= [.p,g.] by A5,A6,XXREAL_2:def 12;
       then f|[.x2,x1.] is continuous by A3,FCONT_1:16;
       then consider s such that
 A19:  s in [.x2,x1.] and
-A20:  r=f.s by A2,A9,A7,A8,A10,A16,A17,Th16,XBOOLE_1:1;
+A20:  r=f.s by A2,A9,A7,A8,A10,A16,A17,Th15,XBOOLE_1:1;
       take s;
       thus s in [.p,g.] & r=f.s by A18,A19,A20;
     end;
@@ -1222,7 +1224,7 @@ A20:  r=f.s by A2,A9,A7,A8,A10,A16,A17,Th16,XBOOLE_1:1;
   hence thesis;
 end;
 
-theorem Th18:
+theorem Th17:
   f is one-to-one & [.p,g.] c= dom f & p<=g & f|[.p,g.] is
   continuous implies f|[.p,g.] is increasing or f|[.p,g.] is decreasing
 proof
@@ -1274,7 +1276,7 @@ A19:            [.x1,g.] c= [.p,g.] by A18,XXREAL_2:def 12;
                 then f|[.x1,g.] is continuous by A4,FCONT_1:16;
                 then consider s such that
 A20:            s in [.x1,g.] and
-A21:            f.s=f.p by A2,A14,A19,A17,Th16,XBOOLE_1:1;
+A21:            f.s=f.p by A2,A14,A19,A17,Th15,XBOOLE_1:1;
                 s in {t: x1<=t & t<=g} by A20,RCOMP_1:def 1;
                 then
 A22:            ex r st r=s & x1<=r & r<=g;
@@ -1297,7 +1299,7 @@ A27:            [.p,x1.] c= [.p,g.] by A26,XXREAL_2:def 12;
                 then f|[.p,x1.] is continuous by A4,FCONT_1:16;
                 then consider s such that
 A28:            s in [.p,x1.] and
-A29:            f.s=f.g by A2,A13,A27,A25,Th16,XBOOLE_1:1;
+A29:            f.s=f.g by A2,A13,A27,A25,Th15,XBOOLE_1:1;
                 s in {t: p<=t & t<=x1} by A28,RCOMP_1:def 1;
                 then
 A30:            ex r st r=s & p<=r & r<=x1;
@@ -1333,7 +1335,7 @@ A40:      [.p,x1.] c= [.p,g.] by A35,XXREAL_2:def 12;
           then f|[.p,x1.] is continuous by A4,FCONT_1:16;
           then consider s such that
 A41:      s in [.p,x1.] and
-A42:      f.s=f.x2 by A2,A39,A38,A36,Th16,XBOOLE_1:1;
+A42:      f.s=f.x2 by A2,A39,A38,A36,Th15,XBOOLE_1:1;
           s in {t: p<=t & t<=x1} by A41,RCOMP_1:def 1;
           then
 A43:      ex r st r=s & p<=r & r<=x1;
@@ -1374,7 +1376,7 @@ A53:                [.p,x1.] c= [.p,g.] by A51,XXREAL_2:def 12;
                     then f|[.p,x1.] is continuous by A4,FCONT_1:16;
                     then consider s such that
 A54:                s in [.p,x1.] and
-A55:                f.s=f.g by A2,A46,A53,A52,Th16,XBOOLE_1:1;
+A55:                f.s=f.g by A2,A46,A53,A52,Th15,XBOOLE_1:1;
                     s in {t: p<=t & t<=x1} by A54,RCOMP_1:def 1;
                     then
 A56:                ex r st r=s & p<=r & r<=x1;
@@ -1408,7 +1410,7 @@ A61:                [.x1,g.] c= [.p,g.] by A59,XXREAL_2:def 12;
                     then f|[.x1,g.] is continuous by A4,FCONT_1:16;
                     then consider s such that
 A62:                s in [.x1,g.] and
-A63:                f.s=f.p by A2,A47,A61,A60,Th16,XBOOLE_1:1;
+A63:                f.s=f.p by A2,A47,A61,A60,Th15,XBOOLE_1:1;
                     s in {t: x1<=t & t<=g} by A62,RCOMP_1:def 1;
                     then
 A64:                ex r st r=s & x1<=r & r<=g;
@@ -1447,7 +1449,7 @@ A74:      [.x2,g.] c= [.p,g.] by A69,XXREAL_2:def 12;
           then f|[.x2,g.] is continuous by A4,FCONT_1:16;
           then consider s such that
 A75:      s in [.x2,g.] and
-A76:      f.s=f.x1 by A2,A73,A72,A70,Th16,XBOOLE_1:1;
+A76:      f.s=f.x1 by A2,A73,A72,A70,Th15,XBOOLE_1:1;
           s in {t: x2<=t & t<=g} by A75,RCOMP_1:def 1;
           then
 A77:      ex r st r=s & x2<=r & r <=g;
@@ -1494,10 +1496,10 @@ A16: ex r st r=x2 & p<=r & r<=g;
 A17: ex r st r=x1 & p<=r & r<=g;
   [.p,g.] is compact by RCOMP_1:6;
   then
-A18: f.:[.p,g.] is bounded by A3,A4,FCONT_1:29,RCOMP_1:10;
+A18: f.:[.p,g.] is real-bounded by A3,A4,FCONT_1:29,RCOMP_1:10;
 A19: x1 in [.p,g.]/\dom f by A3,A11,XBOOLE_0:def 4;
   now
-    per cases by A1,A2,A3,A4,Th18;
+    per cases by A1,A2,A3,A4,Th17;
     suppose
 A20:  f|[.p,g.] is increasing;
 A21:  now
@@ -1535,7 +1537,7 @@ A23:  now
 end;
 
 ::$N Darboux Theorem
-theorem Th20:
+theorem Th19:
   p<=g & [.p,g.] c= dom f & f|[.p,g.] is continuous implies f.:[.p
   ,g.]=[.lower_bound (f.:[.p,g.]),upper_bound (f.:[.p,g.]).]
 proof
@@ -1545,7 +1547,7 @@ A2: [.p,g.] c= dom f and
 A3: f|[.p,g.] is continuous;
   [.p,g.] is compact by RCOMP_1:6;
   then
-A4: f.:[.p,g.] is bounded by A2,A3,FCONT_1:29,RCOMP_1:10;
+A4: f.:[.p,g.] is real-bounded by A2,A3,FCONT_1:29,RCOMP_1:10;
   now
     let y be Real;
     thus y in f.:[.p,g.] implies y in [.lower_bound(f.:[.p,g.]),upper_bound(f
@@ -1561,7 +1563,7 @@ A6:   y>=lower_bound(f.:[.p,g.]) by A4,SEQ_4:def 2;
       hence thesis by RCOMP_1:def 1;
     end;
     assume y in [.lower_bound(f.:[.p,g.]),upper_bound(f.:[.p,g.]).];
-    then ex x0 st x0 in [.p,g.] & y=f.x0 by A1,A2,A3,Th17;
+    then ex x0 st x0 in [.p,g.] & y=f.x0 by A1,A2,A3,Th16;
     hence y in f.:[.p,g.] by A2,FUNCT_1:def 6;
   end;
   hence thesis by SUBSET_1:3;
@@ -1578,7 +1580,7 @@ A1: p<=g and
 A2: [.p,g.] c= dom f and
 A3: f|[.p,g.] is continuous;
   now
-    per cases by A1,A2,A3,Th18;
+    per cases by A1,A2,A3,Th17;
     suppose
       f|[.p,g.] is increasing;
       then (f|[.p,g.])"|(f.:[.p,g.]) is increasing by RFUNCT_2:51;
@@ -1586,9 +1588,9 @@ A3: f|[.p,g.] is continuous;
       then f"|(f.:[.p,g.]) is monotone by RELAT_1:72;
       then
 A4:   f"|[.lower_bound (f.:[.p,g.]),upper_bound (f.: [.p,g .]).] is
-      monotone by A1,A2,A3,Th20;
+      monotone by A1,A2,A3,Th19;
       (f").:([.lower_bound (f.:[.p,g.]),upper_bound (f.:[.p,g.]).])=(f")
-      .:(f .: [.p,g.]) by A1,A2,A3,Th20
+      .:(f .: [.p,g.]) by A1,A2,A3,Th19
         .=((f")|(f.:[.p,g.])).:(f.:[.p,g.]) by RELAT_1:129
         .=((f|[.p,g.])").:(f.:[.p,g.]) by RFUNCT_2:17
         .= ((f|[.p,g.])").:(rng (f|[.p,g.])) by RELAT_1:115
@@ -1606,9 +1608,9 @@ A4:   f"|[.lower_bound (f.:[.p,g.]),upper_bound (f.: [.p,g .]).] is
       then f"|(f.:[.p,g.]) is monotone by RELAT_1:72;
       then
 A5:   f"|[.lower_bound (f.:[.p,g.]),upper_bound (f.: [.p,g .]).] is
-      monotone by A1,A2,A3,Th20;
+      monotone by A1,A2,A3,Th19;
       (f").:([.lower_bound (f.:[.p,g.]),upper_bound (f.:[.p,g.]).])=(f")
-      .:(f .: [.p,g.]) by A1,A2,A3,Th20
+      .:(f .: [.p,g.]) by A1,A2,A3,Th19
         .=((f")|(f.:[.p,g.])).:(f.:[.p,g.]) by RELAT_1:129
         .=((f|[.p,g.])").:(f.:[.p,g.]) by RFUNCT_2:17
         .=((f|[.p,g.])").:(rng (f|[.p,g.])) by RELAT_1:115

@@ -2,7 +2,7 @@
 ::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
 ::
 :: Received December 7, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -22,14 +22,16 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XXREAL_0,
       XREAL_0, XXREAL_2, XXREAL_3, MEMBERED, MEMBER_1, REAL_1, NAT_1, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1, RFUNCT_1, RVSUM_1,
-      INTEGRA1, VALUED_1, SEQ_1, SEQ_2, SEQ_4, FINSEQ_6, RCOMP_1, FINSEQ_5,
+      INTEGRA1, VALUED_1, SEQ_1, COMSEQ_2,
+      SEQ_2, SEQ_4, FINSEQ_6, RCOMP_1, FINSEQ_5,
       CLASSES1, RFINSEQ, MEASURE5, MEASURE6;
  constructors PARTFUN1, REAL_1, NAT_1, SEQM_3, RFUNCT_1, RFINSEQ, BINARITH,
       FINSEQ_5, FINSEQ_6, INTEGRA1, SEQ_1, XXREAL_2, NAT_D, RVSUM_1, SEQ_4,
-      CLASSES1, RELSET_1, SEQ_2, MEMBER_1, MEASURE6;
+      CLASSES1, RELSET_1, SEQ_2, MEMBER_1, MEASURE6, COMSEQ_2;
  registrations RELAT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, FINSEQ_1, RFINSEQ, INTEGRA1, VALUED_0, VALUED_1,
-      XXREAL_2, CARD_1, SEQ_2, RELSET_1, XXREAL_3, MEMBER_1, MEASURE5;
+      XXREAL_2, CARD_1, SEQ_2, RELSET_1, XXREAL_3, MEMBER_1, MEASURE5,
+      COMSEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, VALUED_1, RELAT_1, MEMBER_1, XXREAL_2, XXREAL_3;
  theorems SEQ_4, SUBSET_1, PARTFUN1, INTEGRA1, RFUNCT_1, FUNCT_1, FINSEQ_1,
@@ -356,11 +358,7 @@ definition
   let A be real-membered set;
   let x be real number;
   redefine func x ** A -> Subset of REAL;
-  coherence
-  proof
-    thus thesis by MEMBERED:3;
-  end;
-
+  coherence by MEMBERED:3;
 end;
 
 theorem
@@ -415,25 +413,7 @@ end;
 
 theorem
   for X being real-membered set, a being real number holds
-    X is empty iff a ** X is empty
-proof
-  let X be real-membered set, a be real number;
-  thus X is empty implies a ** X is empty
-  proof
-    assume that
-A1: X is empty and
-A2: a ** X is non empty;
-    reconsider XX = X as empty set by A1;
-    a ** XX is empty;
-    hence contradiction by A2;
-  end;
-  assume that
-A3: a ** X is empty and
-A4: X is non empty;
-  consider x being set such that
-A5: x in X by A4,XBOOLE_0:def 1;
-  thus contradiction by A3,A5;
-end;
+    X is empty iff a ** X is empty;
 
 theorem Th8:
   for X be Subset of REAL holds r**X = {r*x : x in X}
@@ -1167,109 +1147,109 @@ A3: rng(upper_sum_set(f)) is bounded_below by INTEGRA1:def 12;
   f is lower_integrable by A2,INTEGRA1:def 16;
   then
 A4: rng(lower_sum_set(f)) is bounded_above by INTEGRA1:def 13;
-A11: now
+A5: now
     per cases;
     suppose
-A12:  r >= 0;
-A13:  for D be set st D in divs A holds (upper_sum_set(r(#)f)).D = (r(#)(
+A6:  r >= 0;
+A7:  for D be set st D in divs A holds (upper_sum_set(r(#)f)).D = (r(#)(
       upper_sum_set(f))).D
       proof
         let D be set;
         assume
-A14:    D in divs A;
+A8:    D in divs A;
         then reconsider D as Division of A by INTEGRA1:def 3;
         (upper_sum_set(r(#)f)).D = upper_sum(r(#) f,D) by INTEGRA1:def 10
-          .= r*upper_sum(f,D) by A1,A12,Th27
+          .= r*upper_sum(f,D) by A1,A6,Th27
           .= r*(upper_sum_set(f)).D by INTEGRA1:def 10
-          .= (r(#)(upper_sum_set(f))).D by A14,RFUNCT_1:57;
+          .= (r(#)(upper_sum_set(f))).D by A8,RFUNCT_1:57;
         hence thesis;
       end;
-A16:  divs A = dom(upper_sum_set(f)) by FUNCT_2:def 1
+A9:  divs A = dom(upper_sum_set(f)) by FUNCT_2:def 1
         .= dom(r(#)upper_sum_set(f)) by VALUED_1:def 5;
       divs A = dom upper_sum_set(r(#)f) by FUNCT_2:def 1;
-      then upper_sum_set(r(#)f) = r(#)upper_sum_set(f) by A16,A13,FUNCT_1:2;
+      then upper_sum_set(r(#)f) = r(#)upper_sum_set(f) by A9,A7,FUNCT_1:2;
       then
-A17:  upper_integral(r(#)f) = lower_bound rng(r(#) upper_sum_set(f)) by
+A10:  upper_integral(r(#)f) = lower_bound rng(r(#) upper_sum_set(f)) by
 INTEGRA1:def 14
         .= lower_bound(r**(rng(upper_sum_set(f)))) by Th17
-        .= r*lower_bound(rng(upper_sum_set(f))) by A3,A12,Th15
+        .= r*lower_bound(rng(upper_sum_set(f))) by A3,A6,Th15
         .= r*upper_integral(f) by INTEGRA1:def 14;
-A18:  for D be set st D in divs A holds (lower_sum_set(r(#)f)).D = (r(#)(
+A11:  for D be set st D in divs A holds (lower_sum_set(r(#)f)).D = (r(#)(
       lower_sum_set(f))).D
       proof
         let D be set;
         assume
-A19:    D in divs A;
+A12:    D in divs A;
         then reconsider D as Division of A by INTEGRA1:def 3;
         (lower_sum_set(r(#)f)).D = lower_sum(r(#) f,D) by INTEGRA1:def 11
-          .= r*lower_sum(f,D) by A1,A12,Th29
+          .= r*lower_sum(f,D) by A1,A6,Th29
           .= r*(lower_sum_set(f)).D by INTEGRA1:def 11
-          .= (r(#)(lower_sum_set(f))).D by A19,RFUNCT_1:57;
+          .= (r(#)(lower_sum_set(f))).D by A12,RFUNCT_1:57;
         hence thesis;
       end;
-A21:  divs A = dom(lower_sum_set(f)) by FUNCT_2:def 1
+A13:  divs A = dom(lower_sum_set(f)) by FUNCT_2:def 1
         .= dom(r(#)lower_sum_set(f)) by VALUED_1:def 5;
       divs A = dom lower_sum_set(r(#)f) by FUNCT_2:def 1;
-      then lower_sum_set(r(#)f) = r(#)lower_sum_set(f) by A21,A18,FUNCT_1:2;
+      then lower_sum_set(r(#)f) = r(#)lower_sum_set(f) by A13,A11,FUNCT_1:2;
       then lower_integral(r(#)f) = upper_bound rng(r(#) lower_sum_set(f)) by
 INTEGRA1:def 15
         .= upper_bound(r**(rng(lower_sum_set(f)))) by Th17
-        .= r*upper_bound(rng(lower_sum_set(f))) by A4,A12,Th13
+        .= r*upper_bound(rng(lower_sum_set(f))) by A4,A6,Th13
         .= r*lower_integral(f) by INTEGRA1:def 15
         .= r*upper_integral(f) by A2,INTEGRA1:def 16;
-      hence upper_integral(r(#)f) = lower_integral(r(#)f) by A17;
-      thus upper_integral(r(#)f) = r*integral(f) by A17,INTEGRA1:def 17;
+      hence upper_integral(r(#)f) = lower_integral(r(#)f) by A10;
+      thus upper_integral(r(#)f) = r*integral(f) by A10,INTEGRA1:def 17;
     end;
     suppose
-A22:  r < 0;
-A23:  for D be set st D in divs A holds (upper_sum_set(r(#)f)).D = (r(#)(
+A14:  r < 0;
+A15:  for D be set st D in divs A holds (upper_sum_set(r(#)f)).D = (r(#)(
       lower_sum_set(f))).D
       proof
         let D be set;
         assume
-A24:    D in divs A;
+A16:    D in divs A;
         then reconsider D as Division of A by INTEGRA1:def 3;
         (upper_sum_set(r(#)f)).D=upper_sum(r(#)f,D) by INTEGRA1:def 10
-          .= r*lower_sum(f,D) by A1,A22,Th30
+          .= r*lower_sum(f,D) by A1,A14,Th30
           .= r*(lower_sum_set(f)).D by INTEGRA1:def 11
-          .= (r(#)(lower_sum_set(f))).D by A24,RFUNCT_1:57;
+          .= (r(#)(lower_sum_set(f))).D by A16,RFUNCT_1:57;
         hence thesis;
       end;
-A26:  divs A = dom(lower_sum_set(f)) by FUNCT_2:def 1
+A17:  divs A = dom(lower_sum_set(f)) by FUNCT_2:def 1
         .= dom(r(#)lower_sum_set(f)) by VALUED_1:def 5;
       divs A = dom upper_sum_set(r(#)f) by FUNCT_2:def 1;
-      then upper_sum_set(r(#)f) = r(#)lower_sum_set(f) by A26,A23,FUNCT_1:2;
+      then upper_sum_set(r(#)f) = r(#)lower_sum_set(f) by A17,A15,FUNCT_1:2;
       then
-A27:  upper_integral(r(#)f) = lower_bound rng(r(#) lower_sum_set(f)) by
+A18:  upper_integral(r(#)f) = lower_bound rng(r(#) lower_sum_set(f)) by
 INTEGRA1:def 14
         .= lower_bound(r**(rng(lower_sum_set(f)))) by Th17
-        .= r*upper_bound(rng(lower_sum_set(f))) by A4,A22,Th14
+        .= r*upper_bound(rng(lower_sum_set(f))) by A4,A14,Th14
         .= r*lower_integral(f) by INTEGRA1:def 15;
-A28:  for D be set st D in divs A holds (lower_sum_set(r(#)f)).D = (r(#)(
+A19:  for D be set st D in divs A holds (lower_sum_set(r(#)f)).D = (r(#)(
       upper_sum_set(f))).D
       proof
         let D be set;
         assume
-A29:    D in divs A;
+A20:    D in divs A;
         then reconsider D as Division of A by INTEGRA1:def 3;
         (lower_sum_set(r(#)f)).D=lower_sum(r(#)f,D) by INTEGRA1:def 11
-          .= r*upper_sum(f,D) by A1,A22,Th28
+          .= r*upper_sum(f,D) by A1,A14,Th28
           .= r*(upper_sum_set(f)).D by INTEGRA1:def 10
-          .= (r(#)(upper_sum_set(f))).D by A29,RFUNCT_1:57;
+          .= (r(#)(upper_sum_set(f))).D by A20,RFUNCT_1:57;
         hence thesis;
       end;
-A31:  divs A = dom(upper_sum_set(f)) by FUNCT_2:def 1
+A21:  divs A = dom(upper_sum_set(f)) by FUNCT_2:def 1
         .= dom(r(#)upper_sum_set(f)) by VALUED_1:def 5;
       divs A = dom lower_sum_set(r(#)f) by FUNCT_2:def 1;
-      then lower_sum_set(r(#)f) = r(#)upper_sum_set(f) by A31,A28,FUNCT_1:2;
+      then lower_sum_set(r(#)f) = r(#)upper_sum_set(f) by A21,A19,FUNCT_1:2;
       then lower_integral(r(#)f) = upper_bound rng(r(#) upper_sum_set(f)) by
 INTEGRA1:def 15
         .= upper_bound(r**(rng(upper_sum_set(f)))) by Th17
-        .= r*lower_bound(rng(upper_sum_set(f))) by A3,A22,Th16
+        .= r*lower_bound(rng(upper_sum_set(f))) by A3,A14,Th16
         .= r*upper_integral(f) by INTEGRA1:def 14
         .= r*lower_integral(f) by A2,INTEGRA1:def 16;
-      hence upper_integral(r(#)f) = lower_integral(r(#)f) by A27;
-      upper_integral(r(#)f) = r*upper_integral(f) by A2,A27,INTEGRA1:def 16
+      hence upper_integral(r(#)f) = lower_integral(r(#)f) by A18;
+      upper_integral(r(#)f) = r*upper_integral(f) by A2,A18,INTEGRA1:def 16
         .= r*integral(f) by INTEGRA1:def 17;
       hence upper_integral(r(#)f) = r*integral(f);
     end;
@@ -1280,26 +1260,26 @@ INTEGRA1:def 15
     now
       per cases;
       suppose
-A32:    r>=0;
+A22:    r>=0;
         for D be set st D in divs A /\ dom(lower_sum_set(r(#)f)) holds r*
         (upper_bound rng f)*vol(A) >= (lower_sum_set(r(#)f)).D
         proof
           let D be set;
           assume D in divs A /\ dom(lower_sum_set(r(#)f));
           then D is Division of A by INTEGRA1:def 3;
-          hence thesis by A1,A32,Th21;
+          hence thesis by A1,A22,Th21;
         end;
         hence thesis;
       end;
       suppose
-A33:    r<0;
+A23:    r<0;
         for D be set st D in divs A /\ dom(lower_sum_set(r(#)f)) holds r*
         (lower_bound rng f)*vol(A) >= (lower_sum_set(r(#)f)).D
         proof
           let D be set;
           assume D in divs A /\ dom(lower_sum_set(r(#)f));
           then D is Division of A by INTEGRA1:def 3;
-          hence thesis by A1,A33,Th22;
+          hence thesis by A1,A23,Th22;
         end;
         hence thesis;
       end;
@@ -1309,33 +1289,33 @@ A33:    r<0;
   then (lower_sum_set(r(#)f))|divs A is bounded_above by RFUNCT_1:70;
   then rng lower_sum_set(r(#)f) is bounded_above by INTEGRA1:13;
   then
-A34: r(#)f is lower_integrable by INTEGRA1:def 13;
+A24: r(#)f is lower_integrable by INTEGRA1:def 13;
   ex a st for D be set st D in divs A /\ dom(upper_sum_set(r(#)f)) holds a
   <= (upper_sum_set(r(#)f)).D
   proof
     now
       per cases;
       suppose
-A35:    r>=0;
+A25:    r>=0;
         for D be set st D in divs A /\ dom(upper_sum_set(r(#)f)) holds r*(
         lower_bound rng f)*vol(A) <= (upper_sum_set(r(#)f)).D
         proof
           let D be set;
           assume D in divs A /\ dom(upper_sum_set(r(#)f));
           then D is Division of A by INTEGRA1:def 3;
-          hence thesis by A1,A35,Th19;
+          hence thesis by A1,A25,Th19;
         end;
         hence thesis;
       end;
       suppose
-A36:    r<0;
+A26:    r<0;
         for D be set st D in divs A /\ dom(upper_sum_set(r(#)f)) holds r*
         (upper_bound rng f)*vol(A) <= (upper_sum_set(r(#)f)).D
         proof
           let D be set;
           assume D in divs A /\ dom(upper_sum_set(r(#)f));
           then D is Division of A by INTEGRA1:def 3;
-          hence thesis by A1,A36,Th20;
+          hence thesis by A1,A26,Th20;
         end;
         hence thesis;
       end;
@@ -1345,7 +1325,7 @@ A36:    r<0;
   then (upper_sum_set(r(#)f))|divs A is bounded_below by RFUNCT_1:71;
   then rng upper_sum_set(r(#)f) is bounded_below by INTEGRA1:11;
   then r(#)f is upper_integrable by INTEGRA1:def 12;
-  hence thesis by A34,A11,INTEGRA1:def 16,def 17;
+  hence thesis by A24,A5,INTEGRA1:def 16,def 17;
 end;
 
 begin :: Monotonicity of Integral

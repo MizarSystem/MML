@@ -8,13 +8,13 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -32,19 +32,28 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="48" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="55"/>
+<Adjective nr="67"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+<Adjective nr="70"/>
 <Adjective nr="71"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NATTRA_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="48" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+<Adjective nr="70"/>
+<Adjective nr="71"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -53,11 +62,16 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="55"/>
+<Adjective nr="66"/>
+<Adjective nr="67"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+<Adjective nr="70"/>
 <Adjective nr="71"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 </Registrations>

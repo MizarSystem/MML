@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz
 ::
 :: Received November 23, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,15 +23,17 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, CARD_1, FINSET_1,
       MEMBERED, ORDINAL1, NUMBERS, XXREAL_2, XCMPLX_0, XXREAL_0, XREAL_0,
       SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1, RELSET_1, PARTFUN1, SEQ_1,
+      COMSEQ_2,
       SEQ_2, SEQM_3, FUNCT_2, BINOP_1, BINOP_2, FINSEQ_1, FUNCOP_1, NAT_1,
       VALUED_0, VALUED_1, MEMBER_1, RVSUM_1, FINSEQ_2, RECDEF_1, FINSEQOP;
  constructors FUNCOP_1, REAL_1, NAT_1, COMPLEX1, PARTFUN1, SEQ_2, SEQM_3,
       SQUARE_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, FINSET_1, RELSET_1,
-      BINOP_1, BINOP_2, SETWISEO, FINSEQOP, ZFMISC_1, RVSUM_1, MEMBER_1;
+      BINOP_1, BINOP_2, SETWISEO, FINSEQOP, ZFMISC_1, RVSUM_1, MEMBER_1,
+      COMSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2, FUNCOP_1, SEQ_2,
       FINSET_1, BINOP_2, FUNCT_1, FINSEQ_2, SUBSET_1, NAT_1, RELAT_1, FINSEQ_1,
-      CARD_1, SEQM_3, MEMBER_1, PBOOLE;
+      CARD_1, SEQM_3, MEMBER_1, PBOOLE, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, SEQ_2, COMPLEX1, FINSEQ_1, FINSEQ_2, SQUARE_1,
       XXREAL_2, VALUED_0, FINSEQOP, SUBSET_1, VALUED_1;
@@ -53,7 +55,7 @@ reserve Nseq for increasing sequence of NAT;
 reserve x for set;
 reserve X,Y for Subset of REAL;
 
-theorem Th8:
+theorem Th1:
   for X,Y st for r,p st r in X & p in Y holds r<p ex g st for r,p
   st r in X & p in Y holds r<=g & g<=p
 proof
@@ -67,7 +69,7 @@ A1: for r,p st r in X & p in Y holds r <= g & g <= p by AXIOMS:1;
   thus thesis by A1;
 end;
 
-theorem Th9:
+theorem Th2:
   0<p & (ex r st r in X) & (for r st r in X holds r+p in X) implies
   for g ex r st r in X & g<r
 proof
@@ -90,7 +92,7 @@ A8: r+p<=p1 by A5,A7;
     hence r<p1 by A8,XXREAL_0:2;
   end;
   then consider g2 such that
-A9: for r,p1 st r in X & p1 in Y holds r<=g2 & g2<=p1 by Th8;
+A9: for r,p1 st r in X & p1 in Y holds r<=g2 & g2<=p1 by Th1;
   consider g1 such that
 A10: for r st r in X holds not g1<r by A4;
   g1 is Real by XREAL_0:def 1;
@@ -108,14 +110,14 @@ A13: r1 in X & g2-p<r1 by A5;
   hence contradiction by A2,A9,A12;
 end;
 
-theorem Th10:
+theorem Th3:
   for r ex n st r<n
 proof
   let r;
   for r st r in NAT holds r+1 in NAT by AXIOMS:2;
   then consider p such that
 A1: p in NAT and
-A2: r<p by Th9;
+A2: r<p by Th2;
   consider n1 such that
 A3: n1=p by A1;
   take n1;
@@ -123,12 +125,12 @@ A3: n1=p by A1;
 end;
 
 theorem
-  X is bounded iff ex s st 0<s & for r st r in X holds abs(r)<s
+  X is real-bounded iff ex s st 0<s & for r st r in X holds abs(r)<s
 proof
-  thus X is bounded implies ex s st 0<s & for r st r in X holds abs(r)<s
+  thus X is real-bounded implies ex s st 0<s & for r st r in X holds abs(r)<s
   proof
     assume
-A1: X is bounded;
+A1: X is real-bounded;
     then consider s1 such that
 A2:  s1 is UpperBound of X by XXREAL_2:def 10;
 A3: for r st r in X holds r<=s1 by A2,XXREAL_2:def 1;
@@ -195,7 +197,7 @@ definition
   end;
 end;
 
-theorem Th16:
+theorem Th5:
   for X being real-membered set holds X is non empty bounded_above
 implies ex g st (for r st r in X holds r<=g) & for s st 0<s ex r st r in X & g-
   s<r
@@ -230,7 +232,7 @@ A10: for r st r in X holds not g-s1<r;
   hence thesis by A6,A8;
 end;
 
-theorem Th17:
+theorem Th6:
   for X being real-membered set holds (for r st r in X holds r<=g1
 ) & (for s st 0<s ex r st (r in X & g1-s<r)) & (for r st r in X holds r<=g2) &
   (for s st 0<s ex r st (r in X & g2-s<r)) implies g1=g2
@@ -254,7 +256,7 @@ A5: now
   hence thesis by A5,XXREAL_0:1;
 end;
 
-theorem Th18:
+theorem Th7:
   for X being real-membered set holds X is non empty bounded_below
 implies ex g st (for r st r in X holds g<=r) & for s st 0<s ex r st r in X & r<
   g+s
@@ -290,7 +292,7 @@ A10: for r st r in X holds not r<g+s1;
   hence thesis by A7,A8;
 end;
 
-theorem Th19:
+theorem Th8:
   for X being real-membered set holds (for r st r in X holds g1<=r
 ) & (for s st 0<s ex r st (r in X & r<g1+s)) & (for r st r in X holds g2<=r) &
   (for s st 0<s ex r st (r in X & r<g2+s)) implies g1=g2
@@ -320,10 +322,10 @@ definition
   assume
 A1: X is non empty bounded_above;
   func upper_bound X -> real number means
-  :Def4:
+  :Def1:
   (for r st r in X holds r<=it) & for s st 0<s ex r st r in X & it-s<r;
-  existence by A1,Th16;
-  uniqueness by Th17;
+  existence by A1,Th5;
+  uniqueness by Th6;
 end;
 
 definition
@@ -331,10 +333,10 @@ definition
   assume
 A1: X is non empty bounded_below;
   func lower_bound X -> real number means
-  :Def5:
+  :Def2:
   (for r st r in X holds it<=r) & for s st 0<s ex r st r in X & r<it+s;
-  existence by A1,Th18;
-  uniqueness by Th19;
+  existence by A1,Th7;
+  uniqueness by Th8;
 end;
 
 Lm1: for X being non empty real-membered set st (for s st s in X holds s >= r)
@@ -358,7 +360,7 @@ A4: 0 < s;
     assume s in X;
     hence thesis by A1;
    end;
-  hence thesis by A1,A3,Def5;
+  hence thesis by A1,A3,Def2;
 end;
 
 Lm2: for X being non empty real-membered set, r st (for s st s in X holds s <=
@@ -383,7 +385,7 @@ A4: 0 < s;
     assume s in X;
     hence thesis by A1;
    end;
-  hence thesis by A1,A3,Def4;
+  hence thesis by A1,A3,Def1;
 end;
 
 registration
@@ -428,10 +430,10 @@ definition
   coherence by XREAL_0:def 1;
 end;
 
-theorem Th22:
+theorem Th9:
   lower_bound {r} = r & upper_bound {r} = r by XXREAL_2:11,13;
 
-theorem Th23:
+theorem Th10:
   lower_bound {r} = upper_bound {r}
 proof
   lower_bound {r}=r by XXREAL_2:13;
@@ -439,20 +441,20 @@ proof
 end;
 
 theorem
-  X is bounded non empty implies lower_bound X <= upper_bound X
+  X is real-bounded non empty implies lower_bound X <= upper_bound X
 proof
-  assume X is bounded non empty;
-  then reconsider X as bounded non empty real-membered set;
+  assume X is real-bounded non empty;
+  then reconsider X as real-bounded non empty real-membered set;
   lower_bound X <= upper_bound X by XXREAL_2:40;
   hence thesis;
 end;
 
 theorem
-  X is bounded non empty implies ((ex r,p st r in X & p in X & p<>r) iff
+  X is real-bounded non empty implies ((ex r,p st r in X & p in X & p<>r) iff
   lower_bound X < upper_bound X)
 proof
   assume that
-A1: X is bounded and
+A1: X is real-bounded and
 A2: X is non empty;
   thus (ex r,p st r in X & p in X & p<>r) implies lower_bound X<upper_bound X
   proof
@@ -463,19 +465,19 @@ A5: p<>r;
 A6: now
       assume
 A7:   r<p;
-      lower_bound X<=r by A1,A3,Def5;
+      lower_bound X<=r by A1,A3,Def2;
       then
 A8:   lower_bound X<p by A7,XXREAL_0:2;
-      p<=upper_bound X by A1,A4,Def4;
+      p<=upper_bound X by A1,A4,Def1;
       hence thesis by A8,XXREAL_0:2;
     end;
     now
       assume
 A9:   p<r;
-      lower_bound X<=p by A1,A4,Def5;
+      lower_bound X<=p by A1,A4,Def2;
       then
 A10:  lower_bound X<r by A9,XXREAL_0:2;
-      r<=upper_bound X by A1,A3,Def4;
+      r<=upper_bound X by A1,A3,Def1;
       hence thesis by A10,XXREAL_0:2;
     end;
     hence thesis by A5,A6,XXREAL_0:1;
@@ -487,14 +489,14 @@ A12: lower_bound X<upper_bound X and
 A13: for r,p st r in X & p in X holds p=r;
   x in X iff x=r by A13,A11;
   then X={r} by TARSKI:def 1;
-  hence contradiction by A12,Th23;
+  hence contradiction by A12,Th10;
 end;
 
 ::
 :: Theorems about the Convergence and the Limit
 ::
 
-theorem Th26:
+theorem Th13:
   seq is convergent implies abs seq is convergent
 proof
   assume seq is convergent;
@@ -523,7 +525,7 @@ end;
 registration
   let seq be convergent Real_Sequence;
   cluster abs seq -> convergent for Real_Sequence;
-  coherence by Th26;
+  coherence by Th13;
 end;
 
 theorem
@@ -572,7 +574,7 @@ A5: -abs seq is convergent & lim(-abs seq)=-lim abs seq by A1,SEQ_2:10;
   thus thesis by A1,A2,A5,A3,SEQ_2:20;
 end;
 
-theorem Th29:
+theorem Th16:
   seq1 is subsequence of seq & seq is convergent implies seq1 is convergent
 proof
   assume that
@@ -598,7 +600,7 @@ A7: n<=Nseq.m by A5,XXREAL_0:2;
   hence thesis by A4,A7;
 end;
 
-theorem Th30:
+theorem Th17:
   seq1 is subsequence of seq & seq is convergent implies lim seq1= lim seq
 proof
   assume that
@@ -620,11 +622,11 @@ A7: n<=Nseq.m by A6,XXREAL_0:2;
     seq1.m=seq.(Nseq.m) by A3,FUNCT_2:15;
     hence abs((seq1.m)-(lim seq))<p by A5,A7;
   end;
-  seq1 is convergent by A1,A2,Th29;
+  seq1 is convergent by A1,A2,Th16;
   hence thesis by A4,SEQ_2:def 7;
 end;
 
-theorem Th31:
+theorem Th18:
   seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
   implies seq1 is convergent
 proof
@@ -702,7 +704,7 @@ A10:  n<=m;
     end;
     hence ex n st for m st n<=m holds abs(seq1.m-(lim seq))<p by A6;
   end;
-  seq1 is convergent by A1,A2,Th31;
+  seq1 is convergent by A1,A2,Th18;
   hence thesis by A4,SEQ_2:def 7;
 end;
 
@@ -724,13 +726,13 @@ registration
   let seq be convergent Real_Sequence;
   let k;
   cluster seq ^\ k -> convergent for Real_Sequence;
-  coherence by Th29;
+  coherence by Th16;
 end;
 
 theorem
-  seq is convergent implies lim (seq^\k)=lim seq by Th30;
+  seq is convergent implies lim (seq^\k)=lim seq by Th17;
 
-theorem Th35:
+theorem Th21:
   seq^\k is convergent implies seq is convergent
 proof
   assume seq^\k is convergent;
@@ -793,11 +795,11 @@ A7: abs((seq^\k).m1-(lim(seq^\k)))<p by A3;
     m1+k=m by A6;
     hence abs(seq.m-(lim(seq^\k)))<p by A7,NAT_1:def 3;
   end;
-  seq is convergent by A1,Th35;
+  seq is convergent by A1,Th21;
   hence thesis by A2,SEQ_2:def 7;
 end;
 
-theorem Th37:
+theorem Th23:
   seq is convergent & lim seq<>0 implies ex k st (seq ^\k) is non-zero
 proof
   assume that
@@ -825,12 +827,12 @@ theorem
 proof
   assume seq is convergent & lim seq <>0;
   then consider k such that
-A1: seq ^\k is non-zero by Th37;
+A1: seq ^\k is non-zero by Th23;
   take seq ^\k;
   thus thesis by A1;
 end;
 
-theorem Th40:
+theorem Th25:
  seq is constant & (r in rng seq or ex n st seq.n=r ) implies lim seq=r
 proof
  assume
@@ -873,7 +875,7 @@ A10: seq.n=r by A9;
 end;
 
 theorem
-  seq is constant implies for n holds lim seq=seq.n by Th40;
+  seq is constant implies for n holds lim seq=seq.n by Th25;
 
 theorem
   seq is convergent & lim seq<>0 implies for seq1 st seq1 is subsequence
@@ -885,11 +887,11 @@ A2: lim seq<>0;
   let seq1 such that
 A3: seq1 is subsequence of seq and
 A4: seq1 is non-zero;
-  lim seq1=lim seq by A1,A3,Th30;
-  hence thesis by A1,A2,A3,A4,Th29,SEQ_2:22;
+  lim seq1=lim seq by A1,A3,Th17;
+  hence thesis by A1,A2,A3,A4,Th16,SEQ_2:22;
 end;
 
-theorem Th43:
+theorem Th28:
   0<=r & (for n holds seq.n=1/(n+r)) implies seq is convergent
 proof
   assume that
@@ -900,7 +902,7 @@ A2: for n holds seq.n=1/(n+r);
   assume
 A3: 0<p;
   consider k1 such that
-A4: p"<k1 by Th10;
+A4: p"<k1 by Th3;
   p"+(0 qua Nat)<k1+r by A1,A4,XREAL_1:8;
   then 1/(k1+r)<1/p" by A3,XREAL_1:76;
   then
@@ -918,7 +920,7 @@ A7: 1/(m+r)<p by A5,XXREAL_0:2;
   hence thesis by A1,A7,ABSVALUE:def 1;
 end;
 
-theorem Th44:
+theorem Th29:
   0<=r & (for n holds seq.n=1/(n+r)) implies lim seq=0
 proof
   assume that
@@ -929,7 +931,7 @@ A3: now
     assume
 A4: 0<p;
     consider k1 such that
-A5: p"<k1 by Th10;
+A5: p"<k1 by Th3;
     p"+(0 qua Nat)<k1+r by A1,A5,XREAL_1:8;
     then 1/(k1+r)<1/p" by A4,XREAL_1:76;
     then
@@ -946,13 +948,13 @@ A8: 1/(m+r)<p by A6,XXREAL_0:2;
     seq.m=1/(m+r) & 0<=m by A2;
     hence abs(seq.m-0)<p by A1,A8,ABSVALUE:def 1;
   end;
-  seq is convergent by A1,A2,Th43;
+  seq is convergent by A1,A2,Th28;
   hence thesis by A3,SEQ_2:def 7;
 end;
 
 theorem
-  (for n holds seq.n=1/(n+1)) implies seq is convergent & lim seq=0 by Th43
-,Th44;
+  (for n holds seq.n=1/(n+1)) implies seq is convergent & lim seq=0 by Th28
+,Th29;
 
 theorem
   0<=r & (for n holds seq.n=g/(n+r)) implies seq is convergent & lim seq =0
@@ -972,14 +974,14 @@ A4: now
       .=g/(n+r) by XCMPLX_0:def 9
       .=seq.n by A2;
   end;
-A5: g(#)seq1 is convergent by A1,A3,Th43,SEQ_2:7;
-  lim (g(#)seq1)=g*(lim seq1) by A1,A3,Th43,SEQ_2:8
-    .=g*(0 qua Nat) by A1,A3,Th44
+A5: g(#)seq1 is convergent by A1,A3,Th28,SEQ_2:7;
+  lim (g(#)seq1)=g*(lim seq1) by A1,A3,Th28,SEQ_2:8
+    .=g*(0 qua Nat) by A1,A3,Th29
     .=0;
   hence thesis by A5,A4,FUNCT_2:63;
 end;
 
-theorem Th47:
+theorem Th32:
   0<=r & (for n holds seq.n=1/(n*n+r)) implies seq is convergent
 proof
   assume that
@@ -988,7 +990,7 @@ A2: for n holds seq.n=1/(n*n+r);
   take 0;
   let p;
   consider k1 such that
-A3: p"<k1 by Th10;
+A3: p"<k1 by Th3;
   assume
 A4: 0<p;
   then
@@ -1016,7 +1018,7 @@ A10: 1/(m*m+r)<p by A9,XXREAL_0:2;
   hence thesis by A1,A10,ABSVALUE:def 1;
 end;
 
-theorem Th48:
+theorem Th33:
   0<=r & (for n holds seq.n=1/(n*n+r)) implies lim seq=0
 proof
   assume that
@@ -1025,7 +1027,7 @@ A2: for n holds seq.n=1/(n*n+r);
 A3: now
     let p;
     consider k1 such that
-A4: p"<k1 by Th10;
+A4: p"<k1 by Th3;
     assume
 A5: 0<p;
     then
@@ -1052,13 +1054,13 @@ A10: 1/(m*m+r)<p by A9,XXREAL_0:2;
     seq.m=1/(m*m+r) & 0<=m*m by A2;
     hence abs(seq.m-0)<p by A1,A10,ABSVALUE:def 1;
   end;
-  seq is convergent by A1,A2,Th47;
+  seq is convergent by A1,A2,Th32;
   hence thesis by A3,SEQ_2:def 7;
 end;
 
 theorem
-  (for n holds seq.n=1/(n*n+1)) implies seq is convergent & lim seq=0 by Th47
-,Th48;
+  (for n holds seq.n=1/(n*n+1)) implies seq is convergent & lim seq=0 by Th32
+,Th33;
 
 theorem
   0<=r & (for n holds seq.n=g/(n*n+r)) implies seq is convergent & lim seq=0
@@ -1078,9 +1080,9 @@ A4: now
       .=g/(n*n+r) by XCMPLX_0:def 9
       .=seq.n by A2;
   end;
-A5: g(#)seq1 is convergent by A1,A3,Th47,SEQ_2:7;
-  lim (g(#)seq1)=g*(lim seq1) by A1,A3,Th47,SEQ_2:8
-    .=g*(0 qua Nat) by A1,A3,Th48
+A5: g(#)seq1 is convergent by A1,A3,Th32,SEQ_2:7;
+  lim (g(#)seq1)=g*(lim seq1) by A1,A3,Th32,SEQ_2:8
+    .=g*(0 qua Nat) by A1,A3,Th33
     .=0;
   hence thesis by A5,A4,FUNCT_2:63;
 end;
@@ -1120,7 +1122,7 @@ A8: 0<s;
     seq.0 in X by A4;
     then consider p1 such that
 A9: p1 in X and
-A10: upper_bound X-s<p1 by A6,A8,Def4;
+A10: upper_bound X-s<p1 by A6,A8,Def1;
     consider n1 such that
 A11: p1=seq.n1 by A4,A9;
     take n=n1;
@@ -1131,7 +1133,7 @@ A11: p1=seq.n1 by A4,A9;
     then
 A12: -s<seq.m -g by XREAL_1:20;
     seq.m in X by A4;
-    then seq.m<=g by A6,A5,Def4;
+    then seq.m<=g by A6,A5,Def1;
     then seq.m +(0 qua Nat)<g+s by A8,XREAL_1:8;
     then seq.m -g<s by XREAL_1:19;
     hence thesis by A12,SEQ_2:1;
@@ -1164,7 +1166,7 @@ A6:    for p being real number st p in X holds r<=p;
     seq.0 in X by A3;
     then consider p1 such that
 A7: p1 in X and
-A8: p1<lower_bound X+s by A5,A4,Def5;
+A8: p1<lower_bound X+s by A5,A4,Def2;
     consider n1 such that
 A9: p1=seq.n1 by A3,A7;
     take n=n1;
@@ -1179,7 +1181,7 @@ A11: now
       hence r<=p by A10;
     end;
     seq.m in X by A3;
-    then (0 qua Nat)+g<=seq.m by A5,A11,Def5;
+    then (0 qua Nat)+g<=seq.m by A5,A11,Def2;
     then
 A12: 0<=seq.m-g by XREAL_1:19;
     assume n<=m;
@@ -1206,7 +1208,7 @@ A3: seq is non-increasing implies thesis by A2;
   end;
 end;
 
-theorem Th53:
+theorem Th36:
   seq is monotone & seq is bounded implies seq is convergent;
 
 theorem
@@ -1228,7 +1230,7 @@ A4: now
   end;
   seq1.0=seq.m by FUNCOP_1:7;
   then
-A5: lim seq1=seq.m by Th40;
+A5: lim seq1=seq.m by Th25;
   now
     let n be Nat;
     n in NAT by ORDINAL1:def 12;
@@ -1236,7 +1238,7 @@ A5: lim seq1=seq.m by Th40;
   end;
   then
 A6: seq2=seq^\m by NAT_1:def 3;
-  then lim seq2=lim seq by A1,A2,Th30;
+  then lim seq2=lim seq by A1,A2,Th17;
   hence thesis by A1,A2,A5,A6,A4,SEQ_2:18;
 end;
 
@@ -1259,7 +1261,7 @@ A4: now
   end;
   seq1.0=seq.m by FUNCOP_1:7;
   then
-A5: lim seq1=seq.m by Th40;
+A5: lim seq1=seq.m by Th25;
   now
     let n be Nat;
     n in NAT by ORDINAL1:def 12;
@@ -1267,11 +1269,11 @@ A5: lim seq1=seq.m by Th40;
   end;
   then
 A6: seq2=seq^\m by NAT_1:def 3;
-  then lim seq2=lim seq by A1,A2,Th30;
+  then lim seq2=lim seq by A1,A2,Th17;
   hence thesis by A1,A2,A5,A6,A4,SEQ_2:18;
 end;
 
-theorem Th56:
+theorem Th39:
   for seq ex Nseq st seq*Nseq is monotone
 proof
   let seq;
@@ -1443,17 +1445,17 @@ A35:  X[0] by A22,A26;
 end;
 
 ::$N Bolzano-Weierstrass Theorem (1 dimension)
-theorem Th57:
+theorem Th40:
   seq is bounded implies ex seq1 st seq1 is subsequence of seq &
   seq1 is convergent
 proof
   assume
 A1: seq is bounded;
   consider Nseq such that
-A2: seq*Nseq is monotone by Th56;
+A2: seq*Nseq is monotone by Th39;
   take seq1=seq*Nseq;
   thus seq1 is subsequence of seq;
-  thus thesis by A1,A2,Th53,SEQM_3:29;
+  thus thesis by A1,A2,Th36,SEQM_3:29;
 end;
 
 ::$N Cauchy sequence
@@ -1516,7 +1518,7 @@ A10:  abs(seq.m -seq.n1)<1 by A6;
   then seq is bounded by SEQ_2:3;
   then consider seq1 such that
 A11: seq1 is subsequence of seq and
-A12: seq1 is convergent by Th57;
+A12: seq1 is convergent by Th40;
   consider g1 such that
 A13: for s st 0<s ex n st for m st n<=m holds abs(seq1.m -g1)<s by A12,
 SEQ_2:def 6;
@@ -1569,19 +1571,19 @@ proof
 A1: seq is constant and
 A2: seq1 is convergent;
   thus lim (seq+seq1)=(lim seq)+(lim seq1) by A1,A2,SEQ_2:6
-    .=(seq.0)+(lim seq1) by A1,Th40;
+    .=(seq.0)+(lim seq1) by A1,Th25;
   thus lim (seq-seq1)=(lim seq)-(lim seq1) by A1,A2,SEQ_2:12
-    .=(seq.0)-(lim seq1) by A1,Th40;
+    .=(seq.0)-(lim seq1) by A1,Th25;
   thus lim (seq1-seq)=(lim seq1)-(lim seq) by A1,A2,SEQ_2:12
-    .=(lim seq1)-(seq.0) by A1,Th40;
+    .=(lim seq1)-(seq.0) by A1,Th25;
   thus lim (seq(#)seq1)=(lim seq)*(lim seq1) by A1,A2,SEQ_2:15
-    .=(seq.0)*(lim seq1) by A1,Th40;
+    .=(seq.0)*(lim seq1) by A1,Th25;
 end;
 
 begin :: Addenda
 :: from PSCOMP_1
 
-theorem Th60:
+theorem Th43:
   for X being non empty real-membered set for t st for s st s in X
   holds s >= t holds lower_bound X >= t
 proof
@@ -1596,16 +1598,16 @@ A2: s > 0 by XREAL_1:50;
   X is bounded_below proof take t; let s be ext-real number;
     thus thesis by A1;
    end;
-  then ex t9 be real number st t9 in X & t9 < r+s by A2,Def5;
+  then ex t9 be real number st t9 in X & t9 < r+s by A2,Def2;
   hence contradiction by A1;
 end;
 
-theorem Th61:
+theorem Th44:
   for X being non empty real-membered set st (for s st s in X holds s >=
 r) & for t st for s st s in X holds s >= t holds r >= t holds r = lower_bound X
   by Lm1;
 
-theorem Th62:
+theorem Th45:
   for X being non empty real-membered set, r for t st for s st s
   in X holds s <= t holds upper_bound X <= t
 proof
@@ -1621,11 +1623,11 @@ A2: s > 0 by XREAL_1:50;
     let s be ext-real number;
     thus thesis by A1;
    end;
-  then ex t9 be real number st t9 in X & r-s < t9 by A2,Def4;
+  then ex t9 be real number st t9 in X & r-s < t9 by A2,Def1;
   hence contradiction by A1;
 end;
 
-theorem Th63:
+theorem Th46:
   for X being non empty real-membered set, r st (for s st s in X holds s
   <= r) & for t st for s st s in X holds s <= t holds r <= t holds r =
   upper_bound X by Lm2;
@@ -1636,8 +1638,8 @@ theorem
 proof
   let X be non empty real-membered set, Y be real-membered set;
   assume X c= Y & Y is bounded_below;
-  then t in X implies t >= lower_bound Y by Def5;
-  hence thesis by Th60;
+  then t in X implies t >= lower_bound Y by Def2;
+  hence thesis by Th43;
 end;
 
 theorem
@@ -1646,8 +1648,8 @@ theorem
 proof
   let X be non empty real-membered set, Y be real-membered set;
   assume X c= Y & Y is bounded_above;
-  then t in X implies t <= upper_bound Y by Def4;
-  hence thesis by Th62;
+  then t in X implies t <= upper_bound Y by Def1;
+  hence thesis by Th45;
 end;
 
 :: from CQC_SIM1, 2007.03.15, A.T.
@@ -1667,7 +1669,7 @@ reserve k,n for Element of NAT,
 theorem
   0c is_a_unity_wrt addcomplex by BINOP_2:1,SETWISEO:14;
 
-theorem Th67:
+theorem Th50:
   compcomplex is_an_inverseOp_wrt addcomplex
 proof
   let c;
@@ -1679,11 +1681,11 @@ proof
     .= the_unity_wrt addcomplex by BINOP_2:1;
 end;
 
-theorem Th68:
-  addcomplex is having_an_inverseOp by Th67,FINSEQOP:def 2;
+theorem Th51:
+  addcomplex is having_an_inverseOp by Th50,FINSEQOP:def 2;
 
-theorem Th69:
-  the_inverseOp_wrt addcomplex = compcomplex by Th67,Th68,FINSEQOP:def 3;
+theorem Th52:
+  the_inverseOp_wrt addcomplex = compcomplex by Th50,Th51,FINSEQOP:def 3;
 
 definition
   redefine func diffcomplex equals
@@ -1706,7 +1708,7 @@ end;
 theorem
   1r is_a_unity_wrt multcomplex by BINOP_2:6,SETWISEO:14;
 
-theorem Th71:
+theorem Th54:
   multcomplex is_distributive_wrt addcomplex
 proof
   now
@@ -1752,10 +1754,10 @@ theorem
   (c multcomplex).c9 = c*c9 by Lm3;
 
 theorem
-  c multcomplex is_distributive_wrt addcomplex by Th71,FINSEQOP:54;
+  c multcomplex is_distributive_wrt addcomplex by Th54,FINSEQOP:54;
 
 definition
-  func abscomplex -> Function of COMPLEX,REAL means :Def8:
+  func abscomplex -> Function of COMPLEX,REAL means :Def5:
   for c holds it.c = |.c.|;
   existence from FUNCT_2:sch 4;
   uniqueness from BINOP_2:sch 1;
@@ -1894,7 +1896,7 @@ A1: dom abs z = dom z & dom g = dom z by RELAT_1:27,VALUED_1:def 11;
 A2:   x in dom abs z;
 A3:   z.x is Element of COMPLEX by XCMPLX_0:def 2;
       thus (abs z).x = abs(z.x) by VALUED_1:18
-        .= abscomplex.(z.x) by A3,Def8
+        .= abscomplex.(z.x) by A3,Def5
         .= g.x by A1,A2,FUNCT_1:12;
     end;
     hence thesis by A1,FUNCT_1:2;
@@ -1902,7 +1904,7 @@ A3:   z.x is Element of COMPLEX by XCMPLX_0:def 2;
 end;
 
 definition let n;
-  func COMPLEX n -> FinSequence-DOMAIN of COMPLEX equals
+  func COMPLEX n -> FinSequenceSet of COMPLEX equals
   n-tuples_on COMPLEX;
   correctness;
 end;
@@ -1921,7 +1923,7 @@ proof
   hence thesis by FINSEQ_1:def 3;
 end;
 
-theorem Th74:
+theorem Th57:
   k in Seg n implies z.k in COMPLEX
 proof
   len z = n by CARD_1:def 7;
@@ -1934,7 +1936,7 @@ definition let n,z1,z2;
   coherence by FINSEQ_2:120;
 end;
 
-theorem Th75:
+theorem Th58:
   k in Seg n & c1 = z1.k & c2 = z2.k implies (z1 + z2).k = c1 + c2
 proof
   assume that
@@ -1964,7 +1966,7 @@ definition let n,z;
   coherence by FINSEQ_2:113;
 end;
 
-theorem Th77:
+theorem Th60:
   k in Seg n & c = z.k implies (-z).k = -c
 proof
   assume that
@@ -1983,14 +1985,13 @@ proof
 end;
 
 theorem
-  z + -z = 0c n & -z + z = 0c n by Th68,Th69,BINOP_2:1,FINSEQOP:73;
+  z + -z = 0c n & -z + z = 0c n by Th51,Th52,BINOP_2:1,FINSEQOP:73;
 
 theorem
-  z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1 by Th68,Th69,BINOP_2:1,FINSEQOP:74
+  z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1 by Th51,Th52,BINOP_2:1,FINSEQOP:74
 ;
 
-theorem
-  -(-z) = z;
+canceled;
 
 theorem
   -z1 = -z2 implies z1 = z2
@@ -2005,7 +2006,7 @@ proof
   then z1 + (z + -z)= (z2 + z) + -z by FINSEQOP:28;
   then
 A1: z1 + (z + -z)= z2 + (z + -z) by FINSEQOP:28;
-  z + -z = 0c n by Th68,Th69,BINOP_2:1,FINSEQOP:73;
+  z + -z = 0c n by Th51,Th52,BINOP_2:1,FINSEQOP:73;
   then z1 = z2 + 0c n by A1,BINOP_2:1,FINSEQOP:56;
   hence thesis by BINOP_2:1,FINSEQOP:56;
 end;
@@ -2013,15 +2014,15 @@ end;
 theorem
   z1 + z = z2 + z or z1 + z = z + z2 implies z1 = z2 by Lm6;
 
-theorem Th83:
+theorem Th66:
   -(z1 + z2) = -z1 + -z2
 proof
   (z1 + z2) + (-z1 + -z2) = z2 + z1 + -z1 + -z2 by FINSEQOP:28
     .= z2 + (z1 + -z1) + -z2 by FINSEQOP:28
-    .= z2 + 0c n + -z2 by Th68,Th69,BINOP_2:1,FINSEQOP:73
+    .= z2 + 0c n + -z2 by Th51,Th52,BINOP_2:1,FINSEQOP:73
     .= z2 + -z2 by BINOP_2:1,FINSEQOP:56
-    .= 0c n by Th68,Th69,BINOP_2:1,FINSEQOP:73;
-  hence thesis by Th68,Th69,BINOP_2:1,FINSEQOP:74;
+    .= 0c n by Th51,Th52,BINOP_2:1,FINSEQOP:73;
+  hence thesis by Th51,Th52,BINOP_2:1,FINSEQOP:74;
 end;
 
 definition let n,z1,z2;
@@ -2056,43 +2057,43 @@ end;
 theorem
   z1 - -z2 = z1 + z2;
 
-theorem Th88:
+theorem Th71:
   -(z1 - z2) = z2 - z1
 proof
-  thus -(z1 - z2) = -z1 + -(-z2) by Th83
+  thus -(z1 - z2) = -z1 + -(-z2) by Th66
     .= z2 - z1;
 end;
 
-theorem Th89:
+theorem Th72:
   -(z1 - z2) = -z1 + z2
 proof
-  thus -(z1 - z2) = -z1 + -(-z2) by Th83
+  thus -(z1 - z2) = -z1 + -(-z2) by Th66
     .= -z1 + z2;
 end;
 
-theorem Th90:
+theorem Th73:
   z - z = 0c n
 proof
-  thus z - z = z + -z .= 0c n by Th68,Th69,BINOP_2:1,FINSEQOP:73;
+  thus z - z = z + -z .= 0c n by Th51,Th52,BINOP_2:1,FINSEQOP:73;
 end;
 
-theorem Th91:
+theorem Th74:
   z1 - z2 = 0c n implies z1 = z2
 proof
   assume z1 - z2 = 0c n;
   then z1 + - z2 = 0c n;
-  then z1 = -(-z2) by Th68,Th69,BINOP_2:1,FINSEQOP:74;
+  then z1 = -(-z2) by Th51,Th52,BINOP_2:1,FINSEQOP:74;
   hence thesis;
 end;
 
-theorem Th92:
+theorem Th75:
   z1 - z2 - z3 = z1 - (z2 + z3)
 proof
   thus z1 - z2 - z3 = z1 + -z2 + -z3 .= z1 + (- z2 + -z3) by FINSEQOP:28
-    .= z1 - (z2 + z3) by Th83;
+    .= z1 - (z2 + z3) by Th66;
 end;
 
-theorem Th93:
+theorem Th76:
   z1 + (z2 - z3) = z1 + z2 - z3
 proof
   thus z1 + (z2 - z3) = z1 + (z2 + -z3) .= z1 + z2 + -z3 by FINSEQOP:28
@@ -2102,35 +2103,35 @@ end;
 theorem
   z1 - (z2 - z3) = z1 - z2 + z3
 proof
-  thus z1 - (z2 - z3) = z1 + (-z2 + z3) by Th89
+  thus z1 - (z2 - z3) = z1 + (-z2 + z3) by Th72
     .= z1 + -z2 + z3 by FINSEQOP:28
     .= z1 - z2 + z3;
 end;
 
 theorem
-  z1 - z2 + z3 = z1 + z3 - z2 by Th93;
+  z1 - z2 + z3 = z1 + z3 - z2 by Th76;
 
-theorem Th96:
+theorem Th79:
   z1 = z1 + z - z
 proof
   thus z1 = z1 + 0c n by BINOP_2:1,FINSEQOP:56
-    .= z1 + (z - z) by Th90
-    .= z1 + z - z by Th93;
+    .= z1 + (z - z) by Th73
+    .= z1 + z - z by Th76;
 end;
 
-theorem Th97:
+theorem Th80:
   z1 + (z2 - z1) = z2
 proof
   thus z1 + (z2 - z1) = z2 + -z1 + z1 .= z2 + (-z1 + z1) by FINSEQOP:28
-    .= z2 + 0c n by Th68,Th69,BINOP_2:1,FINSEQOP:73
+    .= z2 + 0c n by Th51,Th52,BINOP_2:1,FINSEQOP:73
     .= z2 by BINOP_2:1,FINSEQOP:56;
 end;
 
-theorem Th98:
+theorem Th81:
   z1 = z1 - z + z
 proof
   thus z1 = z1 + 0c n by BINOP_2:1,FINSEQOP:56
-    .= z1 + (-z + z) by Th68,Th69,BINOP_2:1,FINSEQOP:73
+    .= z1 + (-z + z) by Th51,Th52,BINOP_2:1,FINSEQOP:73
     .= z1 + -z + z by FINSEQOP:28
     .= z1 - z + z;
 end;
@@ -2140,7 +2141,7 @@ definition let n,z,c;
   coherence by FINSEQ_2:113;
 end;
 
-theorem Th99:
+theorem Th82:
   k in Seg n & c9 = z.k implies (c*z).k = c*c9
 proof
   assume that
@@ -2168,12 +2169,12 @@ proof
   set c1M = multcomplex[;](c1,id COMPLEX), c2M = multcomplex[;](c2,id COMPLEX);
   thus (c1 + c2)*z = multcomplex[;](addcomplex.(c1,c2),id COMPLEX)*z by
 BINOP_2:def 3
-    .= addcomplex.:(c1M,c2M)*z by Th71,FINSEQOP:35
+    .= addcomplex.:(c1M,c2M)*z by Th54,FINSEQOP:35
     .= c1*z + c2*z by FUNCOP_1:25;
 end;
 
 theorem
-  c*(z1+z2) = c*z1 + c*z2 by Th71,FINSEQOP:51,54;
+  c*(z1+z2) = c*z1 + c*z2 by Th54,FINSEQOP:51,54;
 
 theorem
   1r*z = z
@@ -2189,7 +2190,7 @@ proof
 A1: rng z c= COMPLEX;
   thus 0c*z = multcomplex[;](0c,(id COMPLEX)*z) by FUNCOP_1:34
     .= multcomplex[;](0c,z) by A1,RELAT_1:53
-    .= 0c n by Th68,Th71,BINOP_2:1,FINSEQOP:76;
+    .= 0c n by Th51,Th54,BINOP_2:1,FINSEQOP:76;
 end;
 
 theorem
@@ -2200,7 +2201,7 @@ definition let n,z;
   correctness by FINSEQ_2:113;
 end;
 
-theorem Th106:
+theorem Th89:
   k in Seg n & c = z.k implies (abs z).k = |.c.|
 proof
   assume that
@@ -2209,33 +2210,33 @@ A2: c = z.k;
   len abs z = n by CARD_1:def 7;
   then k in dom abs z by A1,FINSEQ_1:def 3;
   hence (abs z).k = abscomplex.c by A2,FUNCT_1:12
-    .= |.c.| by Def8;
+    .= |.c.| by Def5;
 end;
 
-theorem Th107:
+theorem Th90:
   abs 0c n = n |-> 0
 proof
   thus abs 0c n = n |-> abscomplex.0c by FINSEQOP:16
-    .= n |-> 0 by Def8,COMPLEX1:44;
+    .= n |-> 0 by Def5,COMPLEX1:44;
 end;
 
-theorem Th108:
+theorem Th91:
   abs -z = abs z
 proof
   now
     let j be Nat;
     assume
 A1: j in Seg n;
-    then reconsider c = z.j, c9 = (-z).j as Element of COMPLEX by Th74;
-    thus (abs -z).j = |.c9.| by A1,Th106
-      .= |.-c.| by A1,Th77
+    then reconsider c = z.j, c9 = (-z).j as Element of COMPLEX by Th57;
+    thus (abs -z).j = |.c9.| by A1,Th89
+      .= |.-c.| by A1,Th60
       .= |.c.| by COMPLEX1:52
-      .= (abs z).j by A1,Th106;
+      .= (abs z).j by A1,Th89;
   end;
   hence thesis by FINSEQ_2:119;
 end;
 
-theorem Th109:
+theorem Th92:
   abs(c*z) = |.c.|*(abs z)
 proof
   now
@@ -2243,12 +2244,12 @@ proof
     reconsider w = j as Element of NAT by ORDINAL1:def 12;
     assume
 A1: j in Seg n;
-    then reconsider c9 = z.j, cc = (c*z).j as Element of COMPLEX by Th74;
+    then reconsider c9 = z.j, cc = (c*z).j as Element of COMPLEX by Th57;
     reconsider ac = (abs z).w as Real;
-    thus (abs(c*z)).j = |.cc.| by A1,Th106
-      .= |.c*c9.| by A1,Th99
+    thus (abs(c*z)).j = |.cc.| by A1,Th89
+      .= |.c*c9.| by A1,Th82
       .= |.c.|*|.c9.| by COMPLEX1:65
-      .= |.c.|*ac by A1,Th106
+      .= |.c.|*ac by A1,Th89
       .= (|.c.|*(abs z)).j by RVSUM_1:45;
   end;
   hence thesis by FINSEQ_2:119;
@@ -2261,16 +2262,16 @@ definition
   correctness;
 end;
 
-theorem Th110:
+theorem Th93:
   |.0c n.| = 0
 proof
-  thus |.0c n .| = sqrt Sum sqr (n |-> (0 qua Real)) by Th107
+  thus |.0c n .| = sqrt Sum sqr (n |-> (0 qua Real)) by Th90
     .= sqrt Sum (n |-> (0 qua Real)^2) by RVSUM_1:56
     .= sqrt (n*(0 qua Nat)) by RVSUM_1:80
     .= 0 by SQUARE_1:17;
 end;
 
-theorem Th111:
+theorem Th94:
   |.z.| = 0 implies z = 0c n
 proof
   assume
@@ -2279,17 +2280,17 @@ A1: |.z.| = 0;
     let j be Nat;
     assume
 A2: j in Seg n;
-    then reconsider c = z.j as Element of COMPLEX by Th74;
+    then reconsider c = z.j as Element of COMPLEX by Th57;
     0 <= Sum sqr abs z by RVSUM_1:86;
     then (abs z).j = (n|->0).j by A1,RVSUM_1:91,SQUARE_1:24;
-    then |.c.| = (n|-> 0).j by A2,Th106;
-    then c = 0c by A2,COMPLEX1:45,FUNCOP_1:7;
-    hence z.j = (n|->0c).j by A2,FUNCOP_1:7;
+    then |.c.| = (n|-> 0).j by A2,Th89;
+    then c = 0c by COMPLEX1:45;
+    hence z.j = (n|->0c).j;
   end;
   hence thesis by FINSEQ_2:119;
 end;
 
-theorem Th112:
+theorem Th95:
   0 <= |.z.|
 proof
   0 <= Sum sqr abs z by RVSUM_1:86;
@@ -2297,20 +2298,20 @@ proof
 end;
 
 theorem
-  |.-z.| = |.z.| by Th108;
+  |.-z.| = |.z.| by Th91;
 
 theorem
   |.c*z.| = |.c.|*|.z.|
 proof
 A1: 0 <= |.c.|^2 & 0 <= Sum sqr abs z by RVSUM_1:86,XREAL_1:63;
-  thus |.c*z.| = sqrt Sum sqr (|.c.|*abs z) by Th109
+  thus |.c*z.| = sqrt Sum sqr (|.c.|*abs z) by Th92
     .= sqrt Sum (|.c.|^2 * sqr abs z) by RVSUM_1:58
     .= sqrt (|.c.|^2 * Sum sqr abs z) by RVSUM_1:87
     .= sqrt |.c.|^2 * sqrt Sum sqr abs z by A1,SQUARE_1:29
     .= |.c.|*|.z.| by COMPLEX1:46,SQUARE_1:22;
 end;
 
-theorem Th115:
+theorem Th98:
   |.z1 + z2.| <= |.z1.| + |.z2.|
 proof
 A1: 0 <= Sum sqr abs (z1 + z2) by RVSUM_1:86;
@@ -2323,8 +2324,8 @@ A4: for k be Nat holds k in Seg n implies 0 <= (mlt(abs z1,abs z2)).k
     set r = (mlt(abs z1,abs z2)).k;
     assume
 A5: k in Seg n;
-    then reconsider c1 = z1.k, c2 = z2.k as Element of COMPLEX by Th74;
-    (abs z1).k = |.c1.| & (abs z2).k = |.c2.| by A5,Th106;
+    then reconsider c1 = z1.k, c2 = z2.k as Element of COMPLEX by Th57;
+    (abs z1).k = |.c1.| & (abs z2).k = |.c2.| by A5,Th89;
     then
 A6: r = |.c1.|*|.c2.| by RVSUM_1:60;
     0 <= |.c1.| & 0 <= |.c2.| by COMPLEX1:46;
@@ -2357,20 +2358,20 @@ A9: for k be Nat holds k in Seg n implies (sqr abs (z1 + z2)).k <= (sqr (abs
 A10: dom (abs z1 + abs z2) = Seg n by FINSEQ_1:def 3;
     assume
 A11: k in Seg n;
-    then reconsider c12 = (z1 + z2).k as Element of COMPLEX by Th74;
+    then reconsider c12 = (z1 + z2).k as Element of COMPLEX by Th57;
     reconsider abs912 = (abs (z1 + z2)).k as Real;
     0 <= |.c12.| by COMPLEX1:46;
     then
-A12: 0 <= abs912 by A11,Th106;
+A12: 0 <= abs912 by A11,Th89;
     reconsider abs1 = (abs z1).k, abs2 = (abs z2).k as Real;
-    reconsider c1 = z1.k, c2 = z2.k as Element of COMPLEX by A11,Th74;
+    reconsider c1 = z1.k, c2 = z2.k as Element of COMPLEX by A11,Th57;
     reconsider abs12 = (abs z1 + abs z2).k as Real;
     |.c1 + c2.| <= |.c1.| + |.c2.| by COMPLEX1:56;
-    then |.c12.| <= |.c1.| + |.c2.| by A11,Th75;
-    then |.c12.| <= |.c1.| + abs2 by A11,Th106;
-    then |.c12.| <= abs1 + abs2 by A11,Th106;
+    then |.c12.| <= |.c1.| + |.c2.| by A11,Th58;
+    then |.c12.| <= |.c1.| + abs2 by A11,Th89;
+    then |.c12.| <= abs1 + abs2 by A11,Th89;
     then |.c12.| <= abs12 by A11,A10,VALUED_1:def 1;
-    then abs912 <= abs12 by A11,Th106;
+    then abs912 <= abs12 by A11,Th89;
     then (abs912)^2 <= (abs12)^2 by A12,SQUARE_1:15;
     then (abs912)^2 <= r2 by VALUED_1:11;
     hence thesis by VALUED_1:11;
@@ -2398,71 +2399,71 @@ RVSUM_1:89
   hence thesis by A3,A14,SQUARE_1:22;
 end;
 
-theorem Th116:
+theorem Th99:
   |.z1 - z2.| <= |.z1.| + |.z2.|
 proof
-  |.z1 - z2.| <= |.z1.| + |.-z2.| by Th115;
-  hence thesis by Th108;
+  |.z1 - z2.| <= |.z1.| + |.-z2.| by Th98;
+  hence thesis by Th91;
 end;
 
 theorem
   |.z1.| - |.z2.| <= |.z1 + z2.|
 proof
-  z1 = z1 + z2 - z2 by Th96;
-  then |.z1.| <= |.z1 + z2.| + |.z2.| by Th116;
+  z1 = z1 + z2 - z2 by Th79;
+  then |.z1.| <= |.z1 + z2.| + |.z2.| by Th99;
   hence thesis by XREAL_1:20;
 end;
 
 theorem
   |.z1.| - |.z2.| <= |.z1 - z2.|
 proof
-  z1 = z1 - z2 + z2 by Th98;
-  then |.z1.| <= |.z1 - z2.| + |.z2.| by Th115;
+  z1 = z1 - z2 + z2 by Th81;
+  then |.z1.| <= |.z1 - z2.| + |.z2.| by Th98;
   hence thesis by XREAL_1:20;
 end;
 
-theorem Th119:
+theorem Th102:
   |.z1 - z2.| = 0 iff z1 = z2
 proof
   thus |.z1 - z2.| = 0 implies z1 = z2
   proof
     assume |.z1 - z2.| = 0;
-    then z1 - z2 = 0c n by Th111;
-    hence thesis by Th91;
+    then z1 - z2 = 0c n by Th94;
+    hence thesis by Th74;
   end;
   assume z1 = z2;
-  then z1 - z2 = 0c n by Th90;
-  hence thesis by Th110;
+  then z1 - z2 = 0c n by Th73;
+  hence thesis by Th93;
 end;
 
 theorem
   z1 <> z2 implies 0 < |.z1 - z2.|
 proof
   assume z1 <> z2;
-  then 0 <> |.z1 - z2.| by Th119;
-  hence thesis by Th112;
+  then 0 <> |.z1 - z2.| by Th102;
+  hence thesis by Th95;
 end;
 
-theorem Th121:
+theorem Th104:
   |.z1 - z2.| = |.z2 - z1.|
 proof
-  thus |.z1 - z2.| = |.-(z2 - z1).| by Th88
-    .= |.z2 - z1.| by Th108;
+  thus |.z1 - z2.| = |.-(z2 - z1).| by Th71
+    .= |.z2 - z1.| by Th91;
 end;
 
-theorem Th122:
+theorem Th105:
   |.z1 - z2.| <= |.z1 - z.| + |.z - z2.|
 proof
-  |.z1 - z2.| = |.z1 - z + z - z2.| by Th98
-    .= |.(z1 - z) + (z - z2).| by Th93;
-  hence thesis by Th115;
+  |.z1 - z2.| = |.z1 - z + z - z2.| by Th81
+    .= |.(z1 - z) + (z - z2).| by Th76;
+  hence thesis by Th98;
 end;
 
 definition
   let n;
   let A be Subset of COMPLEX n;
   attr A is open means
-  :Def17:
+  :Def14:
   for x st x in A ex r st 0 < r & for z st |.z.| < r holds x + z in A;
 end;
 
@@ -2515,7 +2516,7 @@ A4: B in AA by A2,TARSKI:def 4;
   B is open by A1,A4;
   then consider r such that
 A5: 0 < r and
-A6: for z st |.z.| < r holds x + z in B by A3,Def17;
+A6: for z st |.z.| < r holds x + z in B by A3,Def14;
   take r;
   thus 0 < r by A5;
   let z;
@@ -2539,11 +2540,11 @@ A4: x in C;
   then x in A by A3,XBOOLE_0:def 4;
   then consider r1 such that
 A5: 0 < r1 and
-A6: for z st |.z.| < r1 holds x + z in A by A1,Def17;
+A6: for z st |.z.| < r1 holds x + z in A by A1,Def14;
   x in B by A3,A4,XBOOLE_0:def 4;
   then consider r2 such that
 A7: 0 < r2 and
-A8: for z st |.z.| < r2 holds x + z in B by A2,Def17;
+A8: for z st |.z.| < r2 holds x + z in B by A2,Def14;
   take min(r1,r2);
   thus 0 < min(r1,r2) by A5,A7,XXREAL_0:15;
   let z;
@@ -2571,11 +2572,11 @@ definition
   end;
 end;
 
-theorem Th127:
+theorem Th110:
   z in Ball(x,r) iff |.x - z.| < r
 proof
 A1: z in { z2 : |.z2 - x.| < r } iff ex z1 st z = z1 & |.z1 - x.| < r;
-  |.z - x.| = |.x - z.| by Th121;
+  |.z - x.| = |.x - z.| by Th104;
   hence thesis by A1;
 end;
 
@@ -2584,7 +2585,7 @@ theorem
 proof
   assume
 A1: 0 < r;
-  |.x - x.| = 0 by Th119;
+  |.x - x.| = 0 by Th102;
   hence thesis by A1;
 end;
 
@@ -2593,21 +2594,21 @@ theorem
 proof
   let x;
   assume x in Ball(z1,r1); then
-A1: |.z1 - x.| < r1 by Th127;
+A1: |.z1 - x.| < r1 by Th110;
   take r = r1 - |.z1 - x.|;
   thus 0 < r by A1,XREAL_1:50;
   let z;
   assume |.z.| < r; then
 A2: |.z.| + |.z1 - x.| < r + |.z1 - x.| by XREAL_1:6;
-  z1 - x - z = z1 - (x + z) by Th92;
-  then |.z1 - (x + z).| <= |.z.| + |.z1 - x.| by Th116;
+  z1 - x - z = z1 - (x + z) by Th75;
+  then |.z1 - (x + z).| <= |.z.| + |.z1 - x.| by Th99;
   then |.z1 - (x + z).| < r + |.z1 - x.| by A2,XXREAL_0:2;
-  hence thesis by Th127;
+  hence thesis by Th110;
 end;
 
 definition let n,x,A;
   func dist(x,A) -> Real means
-  :Def20:
+  :Def17:
   for X being Subset of REAL st X = {|.x
   - z.| : z in A} holds it = lower_bound X;
   existence
@@ -2644,7 +2645,7 @@ definition let n,A,r;
   end;
 end;
 
-theorem Th130:
+theorem Th113:
   for X being Subset of REAL, r st X <> {} & for r9 st r9 in X
   holds r <= r9 holds lower_bound X >= r
 proof
@@ -2660,14 +2661,14 @@ A3: X is bounded_below by XXREAL_2:def 9;
     assume r9 > 0;
     then consider r1 be real number such that
 A4: r1 in X and
-A5: r1 < lower_bound X + r9 by A1,A3,Def5;
+A5: r1 < lower_bound X + r9 by A1,A3,Def2;
     r <= r1 by A2,A4;
     hence lower_bound X + r9 >= r by A5,XXREAL_0:2;
   end;
   hence thesis by XREAL_1:41;
 end;
 
-theorem Th131:
+theorem Th114:
   A <> {} implies dist(x,A) >= 0
 proof
   defpred P[set] means $1 in A;
@@ -2681,13 +2682,13 @@ A3: now
     let r9;
     assume r9 in X;
     then ex z st r9 = |.x - z.| & z in A;
-    hence r9>= 0 by Th112;
+    hence r9>= 0 by Th95;
   end;
-  dist(x,A) = lower_bound X by Def20;
-  hence thesis by A2,A3,Th130;
+  dist(x,A) = lower_bound X by Def17;
+  hence thesis by A2,A3,Th113;
 end;
 
-theorem Th132:
+theorem Th115:
   A <> {} implies dist(x + z,A) <= dist(x,A) + |.z.|
 proof
   defpred P[set] means $1 in A;
@@ -2700,32 +2701,32 @@ A1: Y is bounded_below
     let r be ext-real number;
     assume r in Y;
     then ex z1 st r = |.x + z - z1 .| & z1 in A;
-    hence thesis by Th112;
+    hence thesis by Th95;
   end;
   reconsider X = {f(z1) : P[z1]} as Subset of REAL from DOMAIN_1:sch 8;
   assume A <> {};
   then consider z2 such that
 A2: z2 in A by SUBSET_1:4;
-A3: dist(x+z,A) = lower_bound Y by Def20;
+A3: dist(x+z,A) = lower_bound Y by Def17;
 A4: now let r9;
     assume r9 in X;
     then consider z3 such that
 A5: r9 = |.x - z3.| and
 A6: z3 in A;
-    |.x + z - z3.| = |.x - z3 + z.| by Th93; then
-A7: |.x + z - z3.| <= r9 + |.z.| by A5,Th115;
+    |.x + z - z3.| = |.x - z3 + z.| by Th76; then
+A7: |.x + z - z3.| <= r9 + |.z.| by A5,Th98;
     |.x + z - z3.| in Y by A6;
-    then |.x + z - z3.| >= dist(x + z,A) by A3,A1,Def5;
+    then |.x + z - z3.| >= dist(x + z,A) by A3,A1,Def2;
     then r9+ |.z.| >= dist(x + z,A) by A7,XXREAL_0:2;
     hence r9 >= dist(x + z,A) - |.z.| by XREAL_1:20;
   end;
 A8: |.x - z2.| in X by A2;
-  dist(x,A) = lower_bound X by Def20;
-  then dist(x + z,A) - |.z.| <= dist(x,A) by A8,A4,Th130;
+  dist(x,A) = lower_bound X by Def17;
+  then dist(x + z,A) - |.z.| <= dist(x,A) by A8,A4,Th113;
   hence thesis by XREAL_1:20;
 end;
 
-theorem Th133:
+theorem Th116:
   x in A implies dist(x,A) = 0
 proof
   defpred P[set] means $1 in A;
@@ -2741,13 +2742,13 @@ A3: now
 A4: 0<r1;
     take r;
     thus r in X by A1;
-    thus r<(0 qua Nat)+r1 by A4,Th119;
+    thus r<(0 qua Nat)+r1 by A4,Th102;
   end;
 A5: now
     let r be real number;
     assume r in X;
     then ex z st r = |.x - z .| & z in A;
-    hence 0<=r by Th112;
+    hence 0<=r by Th95;
   end;
 A6: X is bounded_below
   proof
@@ -2755,8 +2756,8 @@ A6: X is bounded_below
     let x be ext-real number;
     thus thesis by A5;
   end;
-  thus dist(x,A) = lower_bound X by Def20
-    .= 0 by A2,A5,A6,A3,Def5;
+  thus dist(x,A) = lower_bound X by Def17
+    .= 0 by A2,A5,A6,A3,Def2;
 end;
 
 theorem
@@ -2767,7 +2768,7 @@ A1: not x in A and
 A2: A <> {} and
 A3: for x st for r st r > 0 ex z st |.z.| < r & x + z in A holds x in A and
 A4: dist(x,A) <= 0;
-A5: dist(x,A) = 0 by A2,A4,Th131;
+A5: dist(x,A) = 0 by A2,A4,Th114;
   now
     deffunc f(Element of COMPLEX n) = |.x - $1.|;
     defpred P[set] means $1 in A;
@@ -2782,17 +2783,17 @@ A8: X is bounded_below
       let r be ext-real number;
       assume r in X;
       then ex z st r = |.x - z .| & z in A;
-      hence thesis by Th112;
+      hence thesis by Th95;
     end;
 A9: |.x - z.| in X by A7;
-    dist(x,A) = lower_bound X & (0 qua Nat)+r = r by Def20;
+    dist(x,A) = lower_bound X & (0 qua Nat)+r = r by Def17;
     then consider r9 be real number such that
 A10: r9 in X and
-A11: r9< r by A5,A6,A9,A8,Def5;
+A11: r9< r by A5,A6,A9,A8,Def2;
     consider z1 such that
 A12: r9 = |.x - z1.| & z1 in A by A10;
     take z = z1 - x;
-    thus |.z.| < r & x + z in A by A11,A12,Th97,Th121;
+    thus |.z.| < r & x + z in A by A11,A12,Th80,Th104;
   end;
   hence contradiction by A1,A3;
 end;
@@ -2800,24 +2801,24 @@ end;
 theorem
   A <> {} implies |.z1 - x.| + dist(x,A) >= dist(z1,A)
 proof
-  x + (z1 - x) = z1 by Th97;
-  hence thesis by Th132;
+  x + (z1 - x) = z1 by Th80;
+  hence thesis by Th115;
 end;
 
-theorem Th136:
+theorem Th119:
   z in Ball(A,r) iff dist(z,A) < r
 proof
   z in { z2 : dist(z2,A) < r } iff ex z1 st z = z1 & dist(z1,A) < r;
   hence thesis;
 end;
 
-theorem Th137:
+theorem Th120:
   0 < r & x in A implies x in Ball(A,r)
 proof
   assume that
 A1: 0 < r and
 A2: x in A;
-  dist(x,A) = 0 by A2,Th133;
+  dist(x,A) = 0 by A2,Th116;
   hence thesis by A1;
 end;
 
@@ -2828,7 +2829,7 @@ proof
 A1: r > 0;
   let x be set;
   assume x in A;
-  hence thesis by A1,Th137;
+  hence thesis by A1,Th120;
 end;
 
 theorem
@@ -2838,13 +2839,13 @@ proof
 A1: A <> {};
   let x;
   assume x in Ball(A,r1); then
-A2: dist(x,A) < r1 by Th136;
+A2: dist(x,A) < r1 by Th119;
   take r = r1 - dist(x,A);
   thus 0 < r by A2,XREAL_1:50;
   let z;
   assume |.z.| < r; then
 A3: |.z.| + dist(x,A) < r + dist(x,A) by XREAL_1:6;
-  dist(x + z,A) <= |.z.| + dist(x,A) by A1,Th132;
+  dist(x + z,A) <= |.z.| + dist(x,A) by A1,Th115;
   then dist(x + z,A) < r + dist(x,A) by A3,XXREAL_0:2;
   hence thesis;
 end;
@@ -2852,7 +2853,7 @@ end;
 definition
   let n,A,B;
   func dist(A,B) -> Real means
-  :Def22:
+  :Def19:
   for X being Subset of REAL st X = {|.x
   - z.| : x in A & z in B} holds it = lower_bound X;
   existence
@@ -2879,20 +2880,9 @@ A2: for X being Subset of REAL st X = {|.x - z.| : x in A & z in B}
 end;
 
 theorem
-  for X,Y being Subset of REAL holds X <> {} & Y <> {} implies X ++ Y <> {}
-proof
-  let X,Y be Subset of REAL;
-  assume X <> {};
-  then consider x being Real such that
-A1: x in X by SUBSET_1:4;
-  assume Y <> {};
-  then consider y being Real such that
-A2: y in Y by SUBSET_1:4;
-  x + y in X ++ Y by A1,A2,MEMBER_1:46;
-  hence thesis;
-end;
+  for X,Y being Subset of REAL holds X <> {} & Y <> {} implies X ++ Y <> {};
 
-theorem Th141:
+theorem Th124:
   for X,Y being Subset of REAL holds X is bounded_below &
     Y is bounded_below implies X++Y is bounded_below
 proof
@@ -2920,7 +2910,7 @@ A8: r2 <= r99 by A4,A7;
   hence thesis by A5,A8,XREAL_1:7;
 end;
 
-theorem Th142:
+theorem Th125:
   for X,Y being Subset of REAL st
   X <> {} & X is bounded_below & Y <> {} & Y is bounded_below holds
   lower_bound (X ++ Y) = lower_bound X + lower_bound Y
@@ -2937,10 +2927,10 @@ A5: now
 A6: r9/2 > 0 by XREAL_1:215;
     then consider r1 be real number such that
 A7: r1 in X and
-A8: r1<lower_bound X+r9/2 by A1,A2,Def5;
+A8: r1<lower_bound X+r9/2 by A1,A2,Def2;
     consider r2 be real number such that
 A9: r2 in Y and
-A10: r2<lower_bound Y+r9/2 by A3,A4,A6,Def5;
+A10: r2<lower_bound Y+r9/2 by A3,A4,A6,Def2;
      reconsider r = r1 + r2 as real number;
     take r;
     thus r in X++Y by A7,A9,MEMBER_1:46;
@@ -2957,14 +2947,14 @@ A11: now
 A12: r = r11 + r22 and
 A13: r11 in X & r22 in Y;
     reconsider r1 = r11, r2 = r22 as real number by A13;
-    r1 >= lower_bound X & r2 >= lower_bound Y by A2,A4,A13,Def5;
+    r1 >= lower_bound X & r2 >= lower_bound Y by A2,A4,A13,Def2;
     hence lower_bound X + lower_bound Y<=r by A12,XREAL_1:7;
   end;
-  X ++ Y <> {} & X ++ Y is bounded_below by A1,A2,A3,A4,Th141;
-  hence thesis by A11,A5,Def5;
+  X ++ Y <> {} & X ++ Y is bounded_below by A1,A2,A3,A4,Th124;
+  hence thesis by A11,A5,Def2;
 end;
 
-theorem Th143:
+theorem Th126:
   for X,Y being Subset of REAL st Y is bounded_below & X <> {} &
   for r st r in X ex r1 st r1 in Y & r1 <= r holds
     lower_bound X >= lower_bound Y
@@ -2979,13 +2969,13 @@ A3: for r st r in X ex r1 st r1 in Y & r1 <= r;
     then consider r2 such that
 A4: r2 in Y and
 A5: r2 <= r1 by A3;
-    lower_bound Y <= r2 by A1,A4,Def5;
+    lower_bound Y <= r2 by A1,A4,Def2;
     hence r1 >= lower_bound Y by A5,XXREAL_0:2;
   end;
-  hence thesis by A2,Th130;
+  hence thesis by A2,Th113;
 end;
 
-theorem Th144:
+theorem Th127:
   A <> {} & B <> {} implies dist(A,B) >= 0
 proof
   defpred P[set,set] means $1 in A & $2 in B;
@@ -3000,13 +2990,13 @@ A4: now
     let r9;
     assume r9 in Z;
     then ex z1,z st r9 = |.z1 - z.| & z1 in A & z in B;
-    hence r9>= 0 by Th112;
+    hence r9>= 0 by Th95;
   end;
   consider z2 such that
 A5: z2 in B by A2,SUBSET_1:4;
-A6: dist(A,B) = lower_bound Z by Def22;
+A6: dist(A,B) = lower_bound Z by Def19;
   |.z1 - z2.| in Z by A3,A5;
-  hence thesis by A6,A4,Th130;
+  hence thesis by A6,A4,Th113;
 end;
 
 theorem
@@ -3023,21 +3013,21 @@ A2: now
       given z,z1 such that
 A3:   r =|.z - z1.| & z in B & z1 in A;
       take z1,z;
-      thus r =|.z1 - z.| & z1 in A & z in B by A3,Th121;
+      thus r =|.z1 - z.| & z1 in A & z in B by A3,Th104;
     end;
     now
       given z1,z such that
 A4:   r =|.z1 - z.| & z1 in A & z in B;
       take z,z1;
-      thus r =|.z - z1.| & z in B & z1 in A by A4,Th121;
+      thus r =|.z - z1.| & z in B & z1 in A by A4,Th104;
     end;
     hence r in X iff r in Y by A2;
   end;
-  dist(A,B) = lower_bound X & dist(B,A) = lower_bound Y by Def22;
+  dist(A,B) = lower_bound X & dist(B,A) = lower_bound Y by Def19;
   hence thesis by A1,SUBSET_1:3;
 end;
 
-theorem Th146:
+theorem Th129:
   A <> {} & B <> {} implies dist(x,A) + dist(x,B) >= dist(A,B)
 proof
   defpred Y[set] means $1 in B;
@@ -3060,9 +3050,9 @@ A4: Y <> {} & Y is bounded_below
     let r be ext-real number;
     assume r in Y;
     then ex z1 st r = |.x - z1 .| & z1 in B;
-    hence thesis by Th112;
+    hence thesis by Th95;
   end;
-A5: lower_bound X = dist(x,A) & lower_bound Y = dist(x,B) by Def20;
+A5: lower_bound X = dist(x,A) & lower_bound Y = dist(x,B) by Def17;
 A6: |.x - z2 .| in Y by A3;
   reconsider Z = {f(z1,z) : P[z1,z]} as Subset of REAL from DOMAIN_1:sch 9;
   consider z1 such that
@@ -3082,8 +3072,8 @@ A12: r1 = |.x - z2.| & z2 in B by A11;
 A13: r2 = |.x - z1.| and
 A14: z1 in A by A10;
     take r3 = |.z1 - z2.|;
-    r2 = |.z1 - x.| by A13,Th121;
-    hence r3 in Z & r3 <= r by A9,A14,A12,Th122;
+    r2 = |.z1 - x.| by A13,Th104;
+    hence r3 in Z & r3 <= r by A9,A14,A12,Th105;
   end;
 A15: Z is bounded_below
   proof
@@ -3091,7 +3081,7 @@ A15: Z is bounded_below
     let r be ext-real number;
     assume r in Z;
     then ex z1,z st r = |.z1 - z .| & z1 in A & z in B;
-    hence thesis by Th112;
+    hence thesis by Th95;
   end;
 A16: X <> {} & X is bounded_below
   proof
@@ -3101,14 +3091,14 @@ A16: X <> {} & X is bounded_below
     let r be ext-real number;
     assume r in X;
     then ex z st r = |.x - z .| & z in A;
-    hence thesis by Th112;
+    hence thesis by Th95;
   end;
-A17: lower_bound Z = dist(A,B) by Def22;
+A17: lower_bound Z = dist(A,B) by Def19;
 A18:  X++Y c= REAL by MEMBERED:3;
   |.x - z1.| in X by A7;
   then |.x - z1.| + |.x - z2 .| in X ++ Y by A6,MEMBER_1:46;
-  then lower_bound (X ++ Y) >= lower_bound Z by A15,A8,Th143,A18;
-  hence thesis by A16,A4,A5,A17,Th142;
+  then lower_bound (X ++ Y) >= lower_bound Z by A15,A8,Th126,A18;
+  hence thesis by A16,A4,A5,A17,Th125;
 end;
 
 theorem
@@ -3119,9 +3109,9 @@ proof
 A1: z in A and
 A2: z in B by XBOOLE_0:3;
   reconsider z as Element of COMPLEX n by A1;
-  dist(z,A) = 0 & dist(z,B) = 0 by A1,A2,Th133;
-  then (0 qua Nat) + (0 qua Nat) >= dist(A,B) by A1,A2,Th146;
-  hence thesis by A1,A2,Th144;
+  dist(z,A) = 0 & dist(z,B) = 0 by A1,A2,Th116;
+  then (0 qua Nat) + (0 qua Nat) >= dist(A,B) by A1,A2,Th129;
+  hence thesis by A1,A2,Th127;
 end;
 
 definition
@@ -3217,10 +3207,10 @@ A4:   n=0;
 A5:   R={x} by A3,A4,CARD_2:42;
       x in R by A5,TARSKI:def 1;
       then reconsider r=x as Real;
-      upper_bound R = r by A5,Th22;
+      upper_bound R = r by A5,Th9;
       hence upper_bound R in R by A5,TARSKI:def 1;
       thus R is bounded_below;
-      lower_bound R = r by A5,Th22;
+      lower_bound R = r by A5,Th9;
       hence lower_bound R in R by A5,TARSKI:def 1;
     end;
     suppose
@@ -3292,7 +3282,7 @@ A16:    s in R;
             s<>x;
             then not s in {x} by TARSKI:def 1;
             then s in X by A16,XBOOLE_0:def 5;
-            then s<=u by Def4;
+            then s<=u by Def1;
             hence s<=m by A14,XXREAL_0:2;
           end;
         end;
@@ -3309,7 +3299,7 @@ A16:    s in R;
           hence m in R by A8,XBOOLE_0:def 5;
         end;
       end;
-      hence upper_bound R in R by A15,A9,Def4;
+      hence upper_bound R in R by A15,A9,Def1;
       thus R is bounded_below;
 A17:  mi<=l by XXREAL_0:17;
 A18:  now
@@ -3325,7 +3315,7 @@ A19:    s in R;
             s<>x;
             then not s in {x} by TARSKI:def 1;
             then s in X by A19,XBOOLE_0:def 5;
-            then l<=s by Def5;
+            then l<=s by Def2;
             hence mi<=s by A17,XXREAL_0:2;
           end;
         end;
@@ -3342,7 +3332,7 @@ A19:    s in R;
           hence mi in R by A11,XBOOLE_0:def 5;
         end;
       end;
-      hence lower_bound R in R by A18,A12,Def5;
+      hence lower_bound R in R by A18,A12,Def2;
     end;
   end;
   hence thesis;
@@ -3350,7 +3340,7 @@ end;
 
 Lm9: for n holds P[n] from NAT_1:sch 1(Lm7,Lm8);
 
-theorem Th150:
+theorem Th133:
   for R being finite Subset of REAL holds R <> {} implies R is
 bounded_above & upper_bound(R) in R & R is bounded_below & lower_bound(R) in R
 proof
@@ -3446,7 +3436,7 @@ A3: n<=m;
   hence thesis;
 end;
 
-theorem Th155:
+theorem Th138:
   v is increasing implies for n,m st n in dom v & m in dom v & n<>
   m holds v.n<>v.m
 proof
@@ -3470,7 +3460,7 @@ A3: n<>m;
   hence thesis;
 end;
 
-theorem Th156:
+theorem Th139:
   v is increasing & v1 = v|Seg n implies v1 is increasing
 proof
   assume that
@@ -3530,14 +3520,14 @@ A2: card rng v = n+1;
   now
     reconsider R = rng v as finite Subset of REAL;
     set u = upper_bound(R), X = R \ {u};
-    set f = X|v;
+    set f = X|`v;
     Seq f=f*Sgm(dom f) & rng Sgm(dom f)=dom f by FINSEQ_1:50;
     then
 A3: rng Seq f = rng f by RELAT_1:28
       .= X by RELAT_1:89,XBOOLE_1:36;
     then reconsider f1 = Seq f as FinSequence of REAL by FINSEQ_1:def 4;
     reconsider X as finite set;
-    upper_bound(R) in R by A2,Th150,CARD_1:27;
+    upper_bound(R) in R by A2,Th133,CARD_1:27;
     then
 A4: {u} c= R by ZFMISC_1:31;
     then
@@ -3579,7 +3569,7 @@ A19:      k in dom v2 by A16,FINSEQ_3:25;
 A20:      r in rng v2 by A19,FUNCT_1:def 3;
           then r in R by A3,A7,XBOOLE_0:def 5;
           then
-A21:      r<=u by Def4;
+A21:      r<=u by Def1;
           not r in {u} by A3,A7,A20,XBOOLE_0:def 5;
           then
 A22:      r<>u by TARSKI:def 1;
@@ -3645,7 +3635,7 @@ A6: v2 is increasing;
   set u = upper_bound(X);
   X <> {} by A2,CARD_1:27,RELAT_1:41;
   then
-A7: upper_bound(X) in X by Th150;
+A7: upper_bound(X) in X by Th133;
   then consider m being Nat such that
 A8: m in dom v2 and
 A9: v2.m=u by A4,FINSEQ_2:10;
@@ -3685,7 +3675,7 @@ A22: k<k+1 by NAT_1:13;
     then
 A23: k+1 in dom v1 by A21,FINSEQ_3:25;
     then v1.(k+1) in rng v1 by FUNCT_1:def 3;
-    then s<=u by Def4;
+    then s<=u by Def1;
     hence contradiction by A5,A16,A17,A23,A22,SEQM_3:def 1;
   end;
 A24: 1<=m by A8,FINSEQ_3:25;
@@ -3700,7 +3690,7 @@ A27: m<m+1 by NAT_1:13;
     then
 A28: m+1 in dom v2 by A26,FINSEQ_3:25;
     then v2.(m+1) in rng v2 by FUNCT_1:def 3;
-    then s<=u by A4,Def4;
+    then s<=u by A4,Def1;
     hence contradiction by A6,A8,A9,A28,A27,SEQM_3:def 1;
   end;
 A29: len f1 = n by A14,FINSEQ_1:def 3;
@@ -3719,7 +3709,7 @@ A34:  x=v1.i by A32,A33,FUNCT_1:47;
 A35:  v1.i in rng v1 by A30,A32,FUNCT_1:def 3;
       i<=n by A14,A32,FINSEQ_1:1;
       then i<>n+1 by NAT_1:13;
-      then x<>u by A2,A5,A16,A17,A20,A30,A32,A34,Th155;
+      then x<>u by A2,A5,A16,A17,A20,A30,A32,A34,Th138;
       then not x in {u} by TARSKI:def 1;
       hence thesis by A34,A35,XBOOLE_0:def 5;
     end;
@@ -3790,7 +3780,7 @@ A55:  x=v2.i by A53,A54,FUNCT_1:47;
 A56:  v2.i in rng v2 by A51,A53,FUNCT_1:def 3;
       i<=n by A13,A53,FINSEQ_1:1;
       then i<>n+1 by NAT_1:13;
-      then x<>u by A3,A6,A8,A9,A25,A51,A53,A55,Th155;
+      then x<>u by A3,A6,A8,A9,A25,A51,A53,A55,Th138;
       then not x in {u} by TARSKI:def 1;
       hence thesis by A55,A56,XBOOLE_0:def 5;
     end;
@@ -3839,7 +3829,7 @@ A68:    i in dom f2 by A13,A49,A66,FINSEQ_1:1;
     end;
     hence (f2^<*u*>).i=v2.i;
   end;
-  f1 is increasing & f2 is increasing by A5,A6,Th156;
+  f1 is increasing & f2 is increasing by A5,A6,Th139;
   then f1=f2 by A1,A4,A29,A49,A31,A52;
   hence thesis by A48,A50,A64,FINSEQ_2:9;
 end;
@@ -3853,7 +3843,7 @@ theorem
 definition
   let v;
   func Incr(v) ->increasing FinSequence of REAL means
-  :Def25:
+  :Def21:
   rng it = rng v & len it = card rng v;
   existence
   proof
@@ -3872,7 +3862,7 @@ registration
   cluster Incr v -> non empty;
   coherence
 proof
-A1: len Incr(v)=card rng v by Def25;
+A1: len Incr(v)=card rng v by Def21;
   assume Incr(v) is empty;
   then rng v = {} by A1;
   hence contradiction;
@@ -3916,14 +3906,14 @@ A3: for t being real number st t in A \/ B holds t >= r1;
       hence t >= r1 by A3;
     end;
     then
-A4: lower_bound B >= r1 by Th60;
+A4: lower_bound B >= r1 by Th43;
     now
       let t be real number;
       assume t in A;
       then t in A \/ B by XBOOLE_0:def 3;
       hence t >= r1 by A3;
     end;
-    then lower_bound A >= r1 by Th60;
+    then lower_bound A >= r1 by Th43;
     hence thesis by A4,XXREAL_0:20;
   end;
 A5: r <= lower_bound A by XXREAL_0:17;
@@ -3932,10 +3922,10 @@ A5: r <= lower_bound A by XXREAL_0:17;
     let t be real number;
     assume t in A \/ B;
     then t in A or t in B by XBOOLE_0:def 3;
-    then lower_bound A <= t or lower_bound B <= t by Def5;
+    then lower_bound A <= t or lower_bound B <= t by Def2;
     hence thesis by A5,A1,XXREAL_0:2;
   end;
-  hence thesis by A2,Th61;
+  hence thesis by A2,Th44;
 end;
 
 theorem
@@ -3958,14 +3948,14 @@ A3: for t being real number st t in A \/ B holds t <= r1;
       hence t <= r1 by A3;
     end;
     then
-A4: upper_bound B <= r1 by Th62;
+A4: upper_bound B <= r1 by Th45;
     now
       let t be real number;
       assume t in A;
       then t in A \/ B by XBOOLE_0:def 3;
       hence t <= r1 by A3;
     end;
-    then upper_bound A <= r1 by Th62;
+    then upper_bound A <= r1 by Th45;
     hence thesis by A4,XXREAL_0:28;
   end;
 A5: r >= upper_bound A by XXREAL_0:25;
@@ -3974,10 +3964,10 @@ A5: r >= upper_bound A by XXREAL_0:25;
     let t be real number;
     assume t in A \/ B;
     then t in A or t in B by XBOOLE_0:def 3;
-    then upper_bound A >= t or upper_bound B >= t by Def4;
+    then upper_bound A >= t or upper_bound B >= t by Def1;
     hence thesis by A5,A1,XXREAL_0:2;
   end;
-  hence thesis by A2,Th63;
+  hence thesis by A2,Th46;
 end;
 
 :: from TOPMETR3, 2011.04.24, A.T
@@ -3998,7 +3988,7 @@ A2: R is bounded_above by XXREAL_2:def 10;
     assume upper_bound R >r0;
     then r1>0 by XREAL_1:50;
     then ex r being real number st r in R & (upper_bound R)-r1<r
-     by A2,Def4;
+     by A2,Def1;
     hence contradiction by A1;
   end;
   hence thesis;

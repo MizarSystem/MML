@@ -9,6 +9,7 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="NUMBERS"/>
@@ -24,10 +25,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
+<Adjective nr="31"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COMBGRAS" nr="2">
@@ -45,7 +46,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="51">
+<Adjective nr="55">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

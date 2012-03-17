@@ -9,6 +9,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -23,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="45"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="2">
@@ -32,7 +33,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="3">
@@ -41,7 +42,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="4">
@@ -50,9 +51,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 </Registrations>

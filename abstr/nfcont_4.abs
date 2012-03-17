@@ -2,7 +2,7 @@
 ::  by Keiko Narita , Artur Kornilowicz and Yasunari Shidama
 ::
 :: Received February 22, 2011
-:: Copyright (c) 2011 Association of Mizar Users
+:: Copyright (c) 2011-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,15 +21,16 @@ environ
       FINSET_1, MEMBERED, BORSUK_1, REAL_NS1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
       RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      VALUED_0, VALUED_1, REAL_1, NAT_1, MEMBERED, COMPLEX1, BINOP_2, XXREAL_2,
-      FINSEQ_1, SEQ_1, SEQ_2, RCOMP_1, FCONT_1, STRUCT_0, PRE_TOPC, RLVECT_1,
-      NORMSP_0, NORMSP_1, EUCLID, NFCONT_1, REAL_NS1, PDIFF_1, INTEGR15,
-      VALUED_2, NFCONT_3, VFUNCT_1;
+      VALUED_1, REAL_1, MEMBERED, COMPLEX1, BINOP_2, XXREAL_2, FINSEQ_1, SEQ_1,
+      SEQ_2, RCOMP_1, FCONT_1, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_0,
+      NORMSP_1, EUCLID, NFCONT_1, REAL_NS1, PDIFF_1, INTEGR15, VALUED_2,
+      NFCONT_3, VFUNCT_1;
  constructors REAL_1, COMPLEX1, SEQ_2, SEQ_4, SEQ_1, RELSET_1, FCONT_1,
-      NFCONT_1, VFUNCT_1, BINOP_2, PDIFF_1, INTEGR15, NFCONT_3, VALUED_2;
+      NFCONT_1, VFUNCT_1, BINOP_2, PDIFF_1, INTEGR15, NFCONT_3, VALUED_2,
+      COMSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      MEMBERED, VALUED_0, FUNCT_2, XXREAL_2, FUNCT_1, ZFMISC_1, STRUCT_0,
-      EUCLID, FINSEQ_1, REAL_NS1, NFCONT_3, VALUED_2;
+      VALUED_0, FUNCT_2, XXREAL_2, FUNCT_1, ZFMISC_1, STRUCT_0, EUCLID,
+      FINSEQ_1, REAL_NS1, NFCONT_3, VALUED_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE;
 
 
@@ -41,13 +42,13 @@ reserve x,X,X1 for set;
 reserve r,p for Real;
 reserve s,x0,x1,x2 for real number;
 reserve f,f1,f2 for PartFunc of REAL,REAL n;
-reserve h for PartFunc of REAL, the carrier of REAL-NS n;
+reserve h for PartFunc of REAL,REAL-NS n;
+reserve W for non empty set;
 
 definition let n,f,x0;
   pred f is_continuous_in x0 means
 :: NFCONT_4:def 1
-  ex g be PartFunc of REAL,the carrier of REAL-NS n st
-    f=g & g is_continuous_in x0;
+  ex g be PartFunc of REAL,REAL-NS n st f=g & g is_continuous_in x0;
 end;
 
 theorem :: NFCONT_4:1
@@ -86,32 +87,32 @@ definition
 end;
 
 theorem :: NFCONT_4:5
-  for f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1,g2 be PartFunc of REAL,REAL n st f1=g1 & f2=g2 holds
+  for f1,f2 be PartFunc of W,REAL-NS n,
+      g1,g2 be PartFunc of W,REAL n st f1=g1 & f2=g2 holds
     f1+f2 = g1+g2;
 
 theorem :: NFCONT_4:6
-  for f1 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1 be PartFunc of REAL,REAL n,
+  for f1 be PartFunc of W,REAL-NS n,
+      g1 be PartFunc of W,REAL n,
       a be Real st f1=g1 holds
     a(#)f1 = a(#)g1;
 
 theorem :: NFCONT_4:7
-  for f1 be PartFunc of REAL, REAL n holds (-1)(#)f1 = -f1;
+  for f1 be PartFunc of W,REAL n holds (-1)(#)f1 = -f1;
 
 theorem :: NFCONT_4:8
-  for f1 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1 be PartFunc of REAL,REAL n st f1=g1 holds
+  for f1 be PartFunc of W,REAL-NS n,
+      g1 be PartFunc of W,REAL n st f1=g1 holds
     -f1 = -g1;
 
 theorem :: NFCONT_4:9
- for f1 be PartFunc of REAL,the carrier of REAL-NS n,
-     g1 be PartFunc of REAL,REAL n st f1=g1 holds
+ for f1 be PartFunc of W,REAL-NS n,
+     g1 be PartFunc of W,REAL n st f1=g1 holds
   ||. f1 .|| = |. g1 .|;
 
 theorem :: NFCONT_4:10
- for f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
-     g1,g2 be PartFunc of REAL,REAL n st f1=g1 & f2=g2 holds
+ for f1,f2 be PartFunc of W,REAL-NS n,
+     g1,g2 be PartFunc of W,REAL n st f1=g1 & f2=g2 holds
   f1-f2 = g1-g2;
 
 theorem :: NFCONT_4:11
@@ -155,15 +156,15 @@ theorem :: NFCONT_4:19
   for S be RealNormSpace,
       z be Point of REAL-NS n,
       f1 be PartFunc of REAL,REAL n,
-      f2 be PartFunc of the carrier of REAL-NS n,the carrier of S
+      f2 be PartFunc of REAL-NS n,S
      st x0 in dom (f2*f1) & f1 is_continuous_in x0
         & z=f1/.x0 & f2 is_continuous_in z
     holds f2*f1 is_continuous_in x0;
 
 theorem :: NFCONT_4:20
   for S be RealNormSpace,
-      f1 be PartFunc of REAL,the carrier of S,
-      f2 be PartFunc of the carrier of S,REAL
+      f1 be PartFunc of REAL,S,
+      f2 be PartFunc of S,REAL
      st x0 in dom (f2*f1) & f1 is_continuous_in x0
       & f2 is_continuous_in f1/.x0
     holds f2*f1 is_continuous_in x0;
@@ -173,14 +174,13 @@ definition let n;
   let x0 be Element of REAL n;
   pred f is_continuous_in x0 means
 :: NFCONT_4:def 4
-  ex y0 be Point of REAL-NS n,
-     g be PartFunc of the carrier of REAL-NS n,REAL st
+  ex y0 be Point of REAL-NS n, g be PartFunc of REAL-NS n,REAL st
     x0=y0 & f=g & g is_continuous_in y0;
 end;
 
 theorem :: NFCONT_4:21
  for f be PartFunc of REAL n,REAL,
-     h be PartFunc of the carrier of REAL-NS n,REAL,
+     h be PartFunc of REAL-NS n,REAL,
      x0 be Element of REAL n,
      y0 be Point of REAL-NS n
   st f=h & x0=y0 holds
@@ -199,7 +199,7 @@ definition let n,f;
 end;
 
 theorem :: NFCONT_4:23
- for g be PartFunc of REAL,the carrier of REAL-NS n,
+ for g be PartFunc of REAL,REAL-NS n,
      f be PartFunc of REAL,REAL n st g=f holds
   g is continuous iff f is continuous;
 
@@ -278,8 +278,7 @@ theorem :: NFCONT_4:32
 definition let n,f;
   attr f is Lipschitzian means
 :: NFCONT_4:def 6
-  ex g be PartFunc of REAL,the carrier of REAL-NS n st g=f &
-  g is Lipschitzian;
+  ex g be PartFunc of REAL,REAL-NS n st g=f & g is Lipschitzian;
 end;
 
 theorem :: NFCONT_4:33
@@ -378,14 +377,14 @@ theorem :: NFCONT_4:45
 
 theorem :: NFCONT_4:46
 for n be non empty Element of NAT,
-    h be PartFunc of REAL,the carrier of REAL-NS n holds
+    h be PartFunc of REAL,REAL-NS n holds
  h is_continuous_in x0 iff
   for i be Element of NAT st i in Seg n
     holds Proj(i,n)*h is_continuous_in x0;
 
 theorem :: NFCONT_4:47
 for n be non empty Element of NAT,
-    h be PartFunc of REAL, the carrier of REAL-NS n holds
+    h be PartFunc of REAL, REAL-NS n holds
  h is continuous iff
   for i be Element of NAT st i in Seg n
     holds Proj(i,n)*h is continuous;

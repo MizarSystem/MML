@@ -2,7 +2,7 @@
 ::  by Krzysztof Hryniewiecki
 ::
 :: Received December 5, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,16 +16,18 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, STRUCT_0, FUNCT_1, GLIB_000, XBOOLE_0,
       FUNCT_5, RELAT_1, PARTFUN1, RELAT_2, FINSET_1, TREES_2, FINSEQ_1,
-      XXREAL_0, ARYTM_3, TARSKI, CARD_1, FUNCT_2, ZFMISC_1, MCART_1, GRAPH_1;
+      XXREAL_0, ARYTM_3, TARSKI, CARD_1, FUNCT_2, ZFMISC_1, MCART_1, GRAPH_1,
+      MSUALG_6, RECDEF_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_2, FUNCT_5, FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NUMBERS, NAT_1,
-      MCART_1, XXREAL_0, STRUCT_0;
+      FUNCT_2, FUNCT_5, FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NUMBERS,
+      ORDINAL1, NAT_1, XTUPLE_0, MCART_1, XXREAL_0, STRUCT_0;
  constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0,
-      FUNCT_5, RELSET_1;
+      FUNCT_5, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSET_1,
-      XREAL_0, FINSEQ_1, ORDINAL1, STRUCT_0, CARD_1, FUNCT_2, RELSET_1;
+      XREAL_0, FINSEQ_1, ORDINAL1, STRUCT_0, CARD_1, FUNCT_2, RELSET_1,
+      XTUPLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions FUNCT_1, TARSKI;
+ definitions FUNCT_1, TARSKI, XTUPLE_0;
  theorems FUNCT_2, FUNCT_1, PARTFUN1, FINSEQ_1, NAT_1, ZFMISC_1, MCART_1,
       TARSKI, RELAT_1, FINSEQ_3, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1,
       XXREAL_0, CARD_1;
@@ -65,13 +67,46 @@ reserve G, G1, G2, G3 for Graph;
 :: from CAT_1, 2008.07.02, A.T.
 
 definition
-  let C be non void non empty MultiGraphStruct, f be Edge of C;
+  let C be MultiGraphStruct, f be Edge of C;
   func dom f -> Vertex of C equals
-  (the Source of C).f;
-  correctness;
+:Def1: (the Source of C).f if C is non void non empty
+    otherwise the Vertex of C;
+  coherence
+   proof
+    thus C is non void non empty implies (the Source of C).f is Vertex of C
+     proof assume C is non void non empty;
+      then reconsider C as non void non empty MultiGraphStruct;
+      reconsider f as Edge of C;
+      (the Source of C).f is Vertex of C;
+     hence thesis;
+    end;
+    thus thesis;
+   end;
+  consistency;
   func cod f -> Vertex of C equals
-  (the Target of C).f;
-  correctness;
+:Def2: (the Target of C).f if C is non void non empty
+    otherwise the Vertex of C;
+  correctness
+   proof
+    thus C is non void non empty implies (the Target of C).f is Vertex of C
+     proof assume C is non void non empty;
+      then reconsider C as non void non empty MultiGraphStruct;
+      reconsider f as Edge of C;
+      (the Target of C).f is Vertex of C;
+     hence thesis;
+    end;
+    thus thesis;
+   end;
+end;
+
+definition
+  let C be non void non empty MultiGraphStruct, f be Edge of C;
+  redefine func dom f -> Vertex of C equals (the Source of C).f;
+  compatibility by Def1;
+  coherence;
+  redefine func cod f -> Vertex of C equals (the Target of C).f;
+  compatibility by Def2;
+  coherence;
 end;
 
 definition
@@ -80,7 +115,7 @@ definition
 A1: (the Source of G1) tolerates (the Source of G2) and
 A2: (the Target of G1) tolerates (the Target of G2);
   func G1 \/ G2 -> strict Graph means
-  :Def3:
+  :Def5:
   the carrier of it = (the carrier of G1) \/ (the carrier of G2) &
   the carrier' of it = (the carrier' of G1) \/ (the carrier' of G2) &
   (for v st v in the carrier' of G1 holds
@@ -297,7 +332,7 @@ end;
 definition
   let G, G1, G2 be Graph;
   pred G is_sum_of G1, G2 means
-  :Def4:
+  :Def6:
   (the Target of G1) tolerates (the Target of G2) &
   (the Source of G1) tolerates (the Source of G2) &
   the MultiGraphStruct of G = G1 \/ G2;
@@ -306,23 +341,23 @@ end;
 definition
   let IT be Graph;
   attr IT is oriented means
-  :Def5:
+  :Def7:
   for x,y st x in the carrier' of IT & y in the carrier' of IT &
   (the Source of IT).x = (the Source of IT).y &
   (the Target of IT).x = (the Target of IT).y holds x = y;
   attr IT is non-multi means
-  :Def6:
+  :Def8:
   for x,y st x in the carrier' of IT & y in the carrier' of IT &
   ( (the Source of IT).x = (the Source of IT).y &
   (the Target of IT).x = (the Target of IT).y or
   (the Source of IT).x = (the Target of IT).y &
   (the Source of IT).y = (the Target of IT).x ) holds x = y;
   attr IT is simple means
-  :Def7:
+  :Def9:
   not ex x st x in the carrier' of IT &
   (the Source of IT).x = (the Target of IT).x;
   attr IT is connected means
-  :Def8:
+  :Def10:
   not ex G1, G2 being Graph st
   the carrier of G1 misses the carrier of G2 & IT is_sum_of G1, G2;
 end;
@@ -330,7 +365,7 @@ end;
 definition
   let IT be MultiGraphStruct;
   attr IT is finite means
-  :Def9:
+  :Def11:
   the carrier of IT is finite & the carrier' of IT is finite;
 end;
 
@@ -350,20 +385,20 @@ registration
     reconsider G = MultiGraphStruct(# V, {}, empty1, empty1 #)
     as Graph;
     take G;
-    thus G is finite by Def9;
+    thus G is finite by Def11;
  for x,y st x in the carrier' of G & y in the carrier' of G &
     ( (the Source of G).x = (the Source of G).y &
     (the Target of G).x = (the Target of G).y or
     (the Source of G).x = (the Target of G).y &
     (the Source of G).y = (the Target of G).x ) holds x = y;
-    hence G is non-multi by Def6;
+    hence G is non-multi by Def8;
  for x,y st x in the carrier' of G & y in the carrier' of G &
     (the Source of G).x = (the Source of G).y &
     (the Target of G).x = (the Target of G).y holds x = y;
-    hence G is oriented by Def5;
+    hence G is oriented by Def7;
  not ex x st x in the carrier' of G &
     (the Source of G).x = (the Target of G).x;
-    hence G is simple by Def7;
+    hence G is simple by Def9;
  not ex G1, G2 being Graph st
     (the carrier of G1) misses (the carrier of G2) & G is_sum_of G1, G2
     proof
@@ -373,9 +408,9 @@ A2:   G is_sum_of G1, G2;
 A3:   (the carrier of G1) /\ (the carrier of G2) = {} by A1,XBOOLE_0:def 7;
       A4:   (
 the Source of G1) tolerates (the Source of G2) & (the Target of G1)
-      tolerates (the Target of G2) by A2,Def4;
-   G = G1 \/ G2 by A2,Def4;
-then A5:  (the carrier of G1) \/ (the carrier of G2) = V by A4,Def3;
+      tolerates (the Target of G2) by A2,Def6;
+   G = G1 \/ G2 by A2,Def6;
+then A5:  (the carrier of G1) \/ (the carrier of G2) = V by A4,Def5;
       set x = the Vertex of G1;
   x in the carrier of G1 & x in V by A5,XBOOLE_0:def 3;
 then A6:  1 in the carrier of G1 by TARSKI:def 1;
@@ -384,16 +419,16 @@ then A6:  1 in the carrier of G1 by TARSKI:def 1;
 then   1 in the carrier of G2 by TARSKI:def 1;
       hence contradiction by A3,A6,XBOOLE_0:def 4;
     end;
-    hence thesis by Def8;
+    hence thesis by Def10;
   end;
 end;
 
 registration
   let G be finite MultiGraphStruct;
   cluster the carrier of G -> finite;
-  coherence by Def9;
+  coherence by Def11;
   cluster the carrier' of G -> finite;
-  coherence by Def9;
+  coherence by Def11;
 end;
 
 reserve x, y for Element of (the carrier of G);
@@ -417,7 +452,7 @@ end;
 definition
   let G be Graph;
   mode Chain of G -> FinSequence means
-    :Def12:
+    :Def14:
     (for n st 1 <= n & n <= len it holds it.n in the carrier' of G) &
     ex p being FinSequence st len p = len it + 1 &
     (for n st 1 <= n & n <= len p holds p.n in the carrier of G) &
@@ -488,7 +523,7 @@ A1:   x in dom c and
 A2:   y=c.x by FUNCT_1:def 3;
       reconsider x as Element of NAT by A1;
    1<=x & x<=len c by A1,FINSEQ_3:25;
-      hence thesis by A2,Def12;
+      hence thesis by A2,Def14;
     end;
     hence thesis by FINSEQ_1:def 4;
   end;
@@ -811,7 +846,7 @@ A3: k <= len q;
 A4: k in dom q by A2,A3,FINSEQ_3:25;
  dom q c= dom p by RELAT_1:60;
 then  k <= len p by A4,FINSEQ_3:25;
-then  p.k in the carrier' of G by A2,Def12;
+then  p.k in the carrier' of G by A2,Def14;
     hence thesis by A4,FUNCT_1:47;
   end;
  ex q1 being FinSequence st len q1 = len q + 1 &
@@ -824,7 +859,7 @@ A5: len q1 = len p + 1 and
 A6: for n st 1 <= n & n <= len q1 holds q1.n in the carrier of G and
 A7: for n st 1 <= n & n <= len p ex x9, y9 being Vertex of G st x9 = q1.
     n & y9 = q1.(n+1) & p.n joins x9, y9
-    by Def12;
+    by Def14;
     reconsider q2 = q1|Seg(n+1) as FinSequence by FINSEQ_1:15;
     take q2;
     thus
@@ -893,7 +928,7 @@ then  k+1 in dom q2 by A25,FINSEQ_3:25;
     hence y9 = q2.(k+1) by A23,FUNCT_1:47;
     thus thesis by A21,A24,FUNCT_1:47;
   end;
-  hence thesis by A1,Def12;
+  hence thesis by A1,Def14;
 end;
 
 Lm3: for H1, H2 being strict Subgraph of G st
@@ -979,14 +1014,14 @@ definition
     defpred P[set] means ex y being Element of Prod, M being Graph,
     v being non empty set, e being set, s being (Function of e, v),
     t being (Function of e, v)
-    st y = $1 & v = y`1 & e = y`2 & s = y`3 & t = y`4 &
+    st y = $1 & v = y`1_4 & e = y`2_4 & s = y`3_4 & t = y`4_4 &
     M = MultiGraphStruct(# v, e, s, t #) & M is Subgraph of G;
     consider X being set such that
 A1: for x being set holds x in X iff x in Prod & P[x] from XBOOLE_0:sch 1;
     defpred P[set, set] means ex y being Element of Prod,
     M being strict Graph, v being non empty set, e being set,
     s being Function of e, v, t being Function of e, v
-    st y = $1 & v = y`1 & e = y`2 & s = y`3 & t = y`4 &
+    st y = $1 & v = y`1_4 & e = y`2_4 & s = y`3_4 & t = y`4_4 &
     M = MultiGraphStruct(# v, e, s, t #) & M is Subgraph of G & $2 = M;
 A2: for a, b, c being set st P[a,b] & P[a, c] holds b = c;
     consider Y being set such that
@@ -1014,8 +1049,8 @@ the Source of H) in PFuncs(E, V) & (the Target of H) in PFuncs(E, V) by Lm4;
       set e = the carrier' of H;
       reconsider s = the Source of H as Function of e, v;
       reconsider t = the Target of H as Function of e, v;
-A5:  v = y9`1 & e = y9`2 by MCART_1:55;
-A6:  s = y9`3 & t = y9`4 by MCART_1:55;
+A5:  v = y9`1_4 & e = y9`2_4 by MCART_1:def 8,def 9;
+A6:  s = y9`3_4 & t = y9`4_4 by MCART_1:def 10,def 11;
       hence y in X by A1,A5;
       thus thesis by A5,A6;
     end;
@@ -1143,12 +1178,12 @@ A2:   v in S12;
 A3:   [x,y] = v by RELAT_1:def 1;
    x in dom S12 by A2,A3,FUNCT_1:1;
 then    x in the carrier' of (G1 \/ G2);
-then A4:   x in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def3;
+then A4:   x in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def5;
 A5:   now
         assume
 A6:     x in the carrier' of G1;
 then A7:    x in dom S1 by FUNCT_2:def 1;
-    S1.x = S12.x by A1,A6,Def3
+    S1.x = S12.x by A1,A6,Def5
           .= y by A2,A3,FUNCT_1:1;
 then     [x,y] in S1 or [x,y] in S2 by A7,FUNCT_1:def 2;
         hence [x,y] in S1 \/ S2 by XBOOLE_0:def 3;
@@ -1157,7 +1192,7 @@ then     [x,y] in S1 or [x,y] in S2 by A7,FUNCT_1:def 2;
         assume
 A8:    x in the carrier' of G2;
 then A9:    x in dom S2 by FUNCT_2:def 1;
-    S2.x = S12.x by A1,A8,Def3
+    S2.x = S12.x by A1,A8,Def5
           .= y by A2,A3,FUNCT_1:1;
 then     [x,y] in S1 or [x,y] in S2 by A9,FUNCT_1:def 2;
         hence [x,y] in S1 \/ S2 by XBOOLE_0:def 3;
@@ -1174,9 +1209,9 @@ A13:  [x,y] = v by RELAT_1:def 1;
 A14:  x in dom S1 by A12,A13,FUNCT_1:1;
 A15:  y = S1.x by A12,A13,FUNCT_1:1;
   x in (the carrier' of G1) \/ (the carrier' of G2) by A14,XBOOLE_0:def 3;
-then   x in the carrier' of (G1 \/ G2) by A1,Def3;
+then   x in the carrier' of (G1 \/ G2) by A1,Def5;
 then A16:  x in dom S12 by FUNCT_2:def 1;
-  S12.x = y by A1,A14,A15,Def3;
+  S12.x = y by A1,A14,A15,Def5;
       hence thesis by A13,A16,FUNCT_1:def 2;
     end;
  now
@@ -1187,9 +1222,9 @@ A18:  [x,y] = v by RELAT_1:def 1;
 A19:  x in dom S2 by A17,A18,FUNCT_1:1;
 A20:  y = S2.x by A17,A18,FUNCT_1:1;
   x in (the carrier' of G1) \/ (the carrier' of G2) by A19,XBOOLE_0:def 3;
-then   x in the carrier' of (G1 \/ G2) by A1,Def3;
+then   x in the carrier' of (G1 \/ G2) by A1,Def5;
 then A21:  x in dom S12 by FUNCT_2:def 1;
-  S12.x = y by A1,A19,A20,Def3;
+  S12.x = y by A1,A19,A20,Def5;
       hence thesis by A18,A21,FUNCT_1:def 2;
     end;
     hence thesis by A10,A11,XBOOLE_0:def 3;
@@ -1206,12 +1241,12 @@ A22:  v in T12;
 A23:  [x,y] = v by RELAT_1:def 1;
   x in dom T12 by A22,A23,FUNCT_1:1;
 then   x in the carrier' of (G1 \/ G2);
-then A24:  x in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def3;
+then A24:  x in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def5;
 A25:  now
         assume
 A26:    x in the carrier' of G1;
 then A27:    x in dom T1 by FUNCT_2:def 1;
-    T1.x = T12.x by A1,A26,Def3
+    T1.x = T12.x by A1,A26,Def5
           .= y by A22,A23,FUNCT_1:1;
 then     [x,y] in T1 or [x,y] in T2 by A27,FUNCT_1:def 2;
         hence [x,y] in T1 \/ T2 by XBOOLE_0:def 3;
@@ -1220,7 +1255,7 @@ then     [x,y] in T1 or [x,y] in T2 by A27,FUNCT_1:def 2;
         assume
 A28:    x in the carrier' of G2;
 then A29:    x in dom T2 by FUNCT_2:def 1;
-    T2.x = T12.x by A1,A28,Def3
+    T2.x = T12.x by A1,A28,Def5
           .= y by A22,A23,FUNCT_1:1;
 then     [x,y] in T1 or [x,y] in T2 by A29,FUNCT_1:def 2;
         hence [x,y] in T1 \/ T2 by XBOOLE_0:def 3;
@@ -1237,9 +1272,9 @@ A33:  [x,y] = v by RELAT_1:def 1;
 A34:  x in dom T1 by A32,A33,FUNCT_1:1;
 A35:  y = T1.x by A32,A33,FUNCT_1:1;
   x in (the carrier' of G1) \/ (the carrier' of G2) by A34,XBOOLE_0:def 3;
-then   x in the carrier' of (G1 \/ G2) by A1,Def3;
+then   x in the carrier' of (G1 \/ G2) by A1,Def5;
 then A36:  x in dom T12 by FUNCT_2:def 1;
-  T12.x = y by A1,A34,A35,Def3;
+  T12.x = y by A1,A34,A35,Def5;
       hence thesis by A33,A36,FUNCT_1:def 2;
     end;
  now
@@ -1250,9 +1285,9 @@ A38:  [x,y] = v by RELAT_1:def 1;
 A39:  x in dom T2 by A37,A38,FUNCT_1:1;
 A40:  y = T2.x by A37,A38,FUNCT_1:1;
   x in (the carrier' of G1) \/ (the carrier' of G2) by A39,XBOOLE_0:def 3;
-then   x in the carrier' of (G1 \/ G2) by A1,Def3;
+then   x in the carrier' of (G1 \/ G2) by A1,Def5;
 then A41:  x in dom T12 by FUNCT_2:def 1;
-  T12.x = y by A1,A39,A40,Def3;
+  T12.x = y by A1,A39,A40,Def5;
       hence thesis by A38,A41,FUNCT_1:def 2;
     end;
     hence thesis by A30,A31,XBOOLE_0:def 3;
@@ -1265,20 +1300,20 @@ theorem Th7:
 proof
   let G be strict Graph;
 A1: (the carrier of (G \/ G))
-  = (the carrier of G) \/ (the carrier of G) by Def3
+  = (the carrier of G) \/ (the carrier of G) by Def5
     .= (the carrier of G);
 A2: (the carrier' of (G \/ G)) = (the carrier' of G) \/ (the carrier' of G)
-  by Def3
+  by Def5
     .= (the carrier' of G);
 then A3: dom (the Source of G) = the carrier' of (G \/ G) by FUNCT_2:def 1
     .= dom (the Source of (G \/ G)) by FUNCT_2:def 1;
  for v st v in dom (the Source of G) holds
-  (the Source of G).v = (the Source of (G \/ G)).v by Def3;
+  (the Source of G).v = (the Source of (G \/ G)).v by Def5;
 then A4: (the Source of G) = (the Source of (G \/ G)) by A3,FUNCT_1:2;
 A5: dom(the Target of G) = the carrier' of (G \/ G) by A2,FUNCT_2:def 1
     .= dom (the Target of (G \/ G)) by FUNCT_2:def 1;
  for v st v in dom (the Target of G) holds
-  (the Target of G).v = (the Target of (G \/ G)).v by Def3;
+  (the Target of G).v = (the Target of (G \/ G)).v by Def5;
   hence thesis by A1,A2,A4,A5,FUNCT_1:2;
 end;
 
@@ -1290,11 +1325,11 @@ proof
   A1: (the Source of G1) tolerates (the Source of G2) & (the Target of G1)
   tolerates (the Target of G2);
 then A2: (the carrier of (G1 \/ G2)) = (the carrier of G2) \/ (the carrier
-  of G1) by Def3
-    .= (the carrier of (G2 \/ G1)) by A1,Def3;
+  of G1) by Def5
+    .= (the carrier of (G2 \/ G1)) by A1,Def5;
 A3: (the carrier' of (G1 \/ G2)) =
-  (the carrier' of G2) \/ (the carrier' of G1) by A1,Def3
-    .= (the carrier' of (G2 \/ G1)) by A1,Def3;
+  (the carrier' of G2) \/ (the carrier' of G1) by A1,Def5
+    .= (the carrier' of (G2 \/ G1)) by A1,Def5;
 then A4: dom (the Source of (G1 \/ G2)) = the carrier' of (G2 \/
   G1) by FUNCT_2:def 1
     .= dom (the Source of (G2 \/ G1)) by FUNCT_2:def 1;
@@ -1304,20 +1339,20 @@ then A4: dom (the Source of (G1 \/ G2)) = the carrier' of (G2 \/
     let v;
     assume v in dom (the Source of (G1 \/ G2));
 then  v in the carrier' of (G1 \/ G2);
-then A5: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def3;
+then A5: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def5;
 A6: now
       assume
 A7:  v in the carrier' of G1;
       hence
-(the Source of (G1 \/ G2)).v = (the Source of G1).v by A1,Def3
-        .= (the Source of (G2 \/ G1)).v by A1,A7,Def3;
+(the Source of (G1 \/ G2)).v = (the Source of G1).v by A1,Def5
+        .= (the Source of (G2 \/ G1)).v by A1,A7,Def5;
     end;
  now
       assume
 A8:  v in the carrier' of G2;
       hence
-(the Source of (G1 \/ G2)).v = (the Source of G2).v by A1,Def3
-        .= (the Source of (G2 \/ G1)).v by A1,A8,Def3;
+(the Source of (G1 \/ G2)).v = (the Source of G2).v by A1,Def5
+        .= (the Source of (G2 \/ G1)).v by A1,A8,Def5;
     end;
     hence thesis by A5,A6,XBOOLE_0:def 3;
   end;
@@ -1332,20 +1367,20 @@ A10: dom ( the Target of (G1 \/ G2))
     let v;
     assume v in dom ( the Target of (G1 \/ G2));
 then  v in the carrier' of (G1 \/ G2);
-then A11: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def3;
+then A11: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,Def5;
 A12: now
       assume
 A13:  v in the carrier' of G1;
       hence
-(the Target of (G1 \/ G2)).v = (the Target of G1).v by A1,Def3
-        .= (the Target of (G2 \/ G1)).v by A1,A13,Def3;
+(the Target of (G1 \/ G2)).v = (the Target of G1).v by A1,Def5
+        .= (the Target of (G2 \/ G1)).v by A1,A13,Def5;
     end;
  now
       assume
 A14:  v in the carrier' of G2;
       hence
-(the Target of (G1 \/ G2)).v = (the Target of G2).v by A1,Def3
-        .= (the Target of (G2 \/ G1)).v by A1,A14,Def3;
+(the Target of (G1 \/ G2)).v = (the Target of G2).v by A1,Def5
+        .= (the Target of (G2 \/ G1)).v by A1,A14,Def5;
     end;
     hence thesis by A11,A12,XBOOLE_0:def 3;
   end;
@@ -1378,7 +1413,7 @@ A8: v in dom (the Source of (G1 \/ G2)) /\ dom (the Source of G3);
 then A9: v in dom (the Source of G3) by XBOOLE_0:def 4;
  v in dom (the Source of (G1 \/ G2)) by A8,XBOOLE_0:def 4;
 then  v in (the carrier' of (G1 \/ G2));
-then A10: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,A2,Def3;
+then A10: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,A2,Def5;
 A11: now
       assume
 A12:  v in (the carrier' of G1);
@@ -1386,7 +1421,7 @@ then   v in dom (the Source of G1) by FUNCT_2:def 1;
 then A13:  v in dom (the Source of G1) /\ dom (the Source of G3) by A9,
 XBOOLE_0:def 4;
       thus (the Source of (G1 \/ G2)).v = (the Source of G1).v by A1,A2,A12
-,Def3
+,Def5
         .= (the Source of G3).v by A3,A13,PARTFUN1:def 4;
     end;
  now
@@ -1396,7 +1431,7 @@ then   v in dom (the Source of G2) by FUNCT_2:def 1;
 then A15:  v in dom (the Source of G2) /\ dom (the Source of G3) by A9,
 XBOOLE_0:def 4;
       thus (the Source of (G1 \/ G2)).v = (the Source of G2).v by A1,A2,A14
-,Def3
+,Def5
         .= (the Source of G3).v by A5,A15,PARTFUN1:def 4;
     end;
     hence thesis by A10,A11,XBOOLE_0:def 3;
@@ -1411,7 +1446,7 @@ A17: v in dom (the Target of (G1 \/ G2)) /\ dom (the Target of G3);
 then A18: v in dom (the Target of G3) by XBOOLE_0:def 4;
  v in dom (the Target of (G1 \/ G2)) by A17,XBOOLE_0:def 4;
 then  v in (the carrier' of (G1 \/ G2));
-then A19: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,A2,Def3;
+then A19: v in (the carrier' of G1) \/ (the carrier' of G2) by A1,A2,Def5;
 A20: now
       assume
 A21:  v in (the carrier' of G1);
@@ -1419,7 +1454,7 @@ then   v in dom (the Target of G1) by FUNCT_2:def 1;
 then A22:  v in dom (the Target of G1) /\ dom (the Target of G3) by A18,
 XBOOLE_0:def 4;
       thus (the Target of (G1 \/ G2)).v = (the Target of G1).v by A1,A2,A21
-,Def3
+,Def5
         .= (the Target of G3).v by A4,A22,PARTFUN1:def 4;
     end;
  now
@@ -1429,7 +1464,7 @@ then   v in dom (the Target of G2) by FUNCT_2:def 1;
 then A24:  v in dom (the Target of G2) /\ dom (the Target of G3) by A18,
 XBOOLE_0:def 4;
       thus (the Target of (G1 \/ G2)).v = (the Target of G2).v by A1,A2,A23
-,Def3
+,Def5
         .= (the Target of G3).v by A6,A24,PARTFUN1:def 4;
     end;
     hence thesis by A19,A20,XBOOLE_0:def 3;
@@ -1447,7 +1482,7 @@ A27: for
 A28: v in dom (the Source of G1) /\ dom(the Source of (G2 \/ G3));
 then A29: v in dom(the Source of G1) by XBOOLE_0:def 4;
  v in (the carrier' of (G2 \/ G3)) by A28;
-then  v in (the carrier' of G2) \/ (the carrier' of G3) by A5,A6,Def3;
+then  v in (the carrier' of G2) \/ (the carrier' of G3) by A5,A6,Def5;
 then  v in (the carrier' of G2) \/ dom(the Source of G3) by FUNCT_2:def 1;
 then A30: v in dom(the Source of G2) \/ dom (the Source of G3) by FUNCT_2:def 1
 ;
@@ -1457,7 +1492,7 @@ A32:  v in dom (the Source of G2);
 then A33:  v in dom(the Source of G1) /\
       dom(the Source of G2) by A29,XBOOLE_0:def 4;
       thus (the Source of (G2 \/ G3)).v = (the Source of G2).v by A5,A6,A32
-,Def3
+,Def5
         .= (the Source of G1).v by A1,A33,PARTFUN1:def 4;
     end;
  now
@@ -1466,7 +1501,7 @@ A34:  v in dom (the Source of G3);
 then A35:  v in dom(the Source of G1) /\
       dom(the Source of G3) by A29,XBOOLE_0:def 4;
       thus (the Source of (G2 \/ G3)).v = (the Source of G3).v by A5,A6,A34
-,Def3
+,Def5
         .= (the Source of G1).v by A3,A35,PARTFUN1:def 4;
     end;
     hence thesis by A30,A31,XBOOLE_0:def 3;
@@ -1480,7 +1515,7 @@ then A35:  v in dom(the Source of G1) /\
 A37: v in dom (the Target of G1) /\ dom(the Target of (G2 \/ G3));
 then A38: v in dom(the Target of G1) by XBOOLE_0:def 4;
  v in (the carrier' of (G2 \/ G3)) by A37;
-then  v in (the carrier' of G2) \/ (the carrier' of G3) by A5,A6,Def3;
+then  v in (the carrier' of G2) \/ (the carrier' of G3) by A5,A6,Def5;
 then  v in (the carrier' of G2) \/ dom(the Target of G3) by FUNCT_2:def 1;
 then A39: v in dom(the Target of G2) \/ dom (the Target of G3) by FUNCT_2:def 1
 ;
@@ -1490,7 +1525,7 @@ A41:  v in dom (the Target of G2);
 then A42:  v in dom(the Target of G1) /\
       dom(the Target of G2) by A38,XBOOLE_0:def 4;
       thus (the Target of (G2 \/ G3)).v = (the Target of G2).v by A5,A6,A41
-,Def3
+,Def5
         .= (the Target of G1).v by A2,A42,PARTFUN1:def 4;
     end;
  now
@@ -1499,7 +1534,7 @@ A43:  v in dom(the Target of G3);
 then A44:  v in dom(the Target of G1) /\
       dom(the Target of G3) by A38,XBOOLE_0:def 4;
       thus (the Target of (G2 \/ G3)).v = (the Target of G3).v by A5,A6,A43
-,Def3
+,Def5
         .= (the Target of G1).v by A4,A44,PARTFUN1:def 4;
     end;
     hence thesis by A39,A40,XBOOLE_0:def 3;
@@ -1509,21 +1544,21 @@ PARTFUN1:def 4;
 A46: (the Target of G1) tolerates (the Target of (G2 \/ G3)) by A36,
 PARTFUN1:def 4;
 A47: the carrier' of ((G1 \/ G2) \/ G3) =
-  (the carrier' of (G1 \/ G2)) \/ (the carrier' of G3) by A25,A26,Def3
+  (the carrier' of (G1 \/ G2)) \/ (the carrier' of G3) by A25,A26,Def5
     .= (the carrier' of G1) \/ (the carrier' of G2) \/ (the carrier' of G3)
-  by A1,A2,Def3
+  by A1,A2,Def5
     .= (the carrier' of G1) \/ ((the carrier' of G2) \/
   (the carrier' of G3)) by XBOOLE_1:4
-    .= (the carrier' of G1) \/ (the carrier' of (G2 \/ G3)) by A5,A6,Def3
-    .= (the carrier' of (G1 \/ (G2 \/ G3))) by A45,A46,Def3;
+    .= (the carrier' of G1) \/ (the carrier' of (G2 \/ G3)) by A5,A6,Def5
+    .= (the carrier' of (G1 \/ (G2 \/ G3))) by A45,A46,Def5;
 A48: the carrier of ((G1 \/ G2) \/ G3) =
-  (the carrier of (G1 \/ G2)) \/ (the carrier of G3) by A25,A26,Def3
+  (the carrier of (G1 \/ G2)) \/ (the carrier of G3) by A25,A26,Def5
     .= (the carrier of G1) \/ (the carrier of G2) \/ (the carrier of G3)
-  by A1,A2,Def3
+  by A1,A2,Def5
     .= (the carrier of G1) \/
   ((the carrier of G2) \/ (the carrier of G3)) by XBOOLE_1:4
-    .= (the carrier of G1) \/ (the carrier of (G2 \/ G3)) by A5,A6,Def3
-    .= (the carrier of (G1 \/ (G2 \/ G3))) by A45,A46,Def3;
+    .= (the carrier of G1) \/ (the carrier of (G2 \/ G3)) by A5,A6,Def5
+    .= (the carrier of (G1 \/ (G2 \/ G3))) by A45,A46,Def5;
 A49: dom (the Source of ((G1 \/ G2) \/ G3)) =the carrier' of (G1 \/ (G2 \/
   G3)) by A47,FUNCT_2:def 1
     .= dom (the Source of (G1 \/ (G2 \/ G3))) by FUNCT_2:def 1;
@@ -1534,9 +1569,9 @@ A49: dom (the Source of ((G1 \/ G2) \/ G3)) =the carrier' of (G1 \/ (G2 \/
 A50: v in dom (the Source of ((G1 \/ G2) \/ G3));
  dom (the Source of ((G1 \/ G2) \/ G3)) =
     the carrier' of ((G1 \/ G2) \/ G3) by FUNCT_2:def 1
-      .= (the carrier' of (G1 \/ G2)) \/ (the carrier' of G3) by A25,A26,Def3
+      .= (the carrier' of (G1 \/ G2)) \/ (the carrier' of G3) by A25,A26,Def5
       .= (the carrier' of G1) \/ (the carrier' of G2) \/ (the carrier' of G3)
-    by A1,A2,Def3;
+    by A1,A2,Def5;
 then A51: v in (the carrier' of G1) \/ (the carrier' of G2) or
     v in (the carrier' of G3) by A50,XBOOLE_0:def 3;
 A52: now
@@ -1546,11 +1581,11 @@ A53:  v in the carrier' of G1;
 the carrier' of G1) c= (the carrier' of G1) \/ (the carrier' of G2)
       by XBOOLE_1:7;
 then
-  (the carrier' of G1) c= the carrier' of (G1 \/ G2) by A1,A2,Def3;
+  (the carrier' of G1) c= the carrier' of (G1 \/ G2) by A1,A2,Def5;
       hence (the Source of ((G1 \/ G2) \/ G3)).v =
-      (the Source of (G1 \/ G2)).v by A25,A26,A53,Def3
-        .= (the Source of G1).v by A1,A2,A53,Def3
-        .= (the Source of (G1 \/ (G2 \/ G3))).v by A45,A46,A53,Def3;
+      (the Source of (G1 \/ G2)).v by A25,A26,A53,Def5
+        .= (the Source of G1).v by A1,A2,A53,Def5
+        .= (the Source of (G1 \/ (G2 \/ G3))).v by A45,A46,A53,Def5;
     end;
 A54: now
       assume
@@ -1558,16 +1593,16 @@ A55:  v in the carrier' of G2;
         (
 the carrier' of G2) c= (the carrier' of G1) \/ (the carrier' of G2)
       by XBOOLE_1:7;
-then A56:  (the carrier' of G2) c= the carrier' of (G1 \/ G2) by A1,A2,Def3;
+then A56:  (the carrier' of G2) c= the carrier' of (G1 \/ G2) by A1,A2,Def5;
         (
 the carrier' of G2) c= (the carrier' of G2) \/ (the carrier' of G3)
       by XBOOLE_1:7;
-then A57:  (the carrier' of G2) c= the carrier' of (G2 \/ G3) by A5,A6,Def3;
+then A57:  (the carrier' of G2) c= the carrier' of (G2 \/ G3) by A5,A6,Def5;
       thus (the Source of ((G1 \/ G2) \/ G3)).v =
-      (the Source of (G1 \/ G2)).v by A25,A26,A55,A56,Def3
-        .= (the Source of G2).v by A1,A2,A55,Def3
-        .= (the Source of (G2 \/ G3)).v by A5,A6,A55,Def3
-        .= (the Source of (G1 \/ (G2 \/ G3))).v by A45,A46,A55,A57,Def3;
+      (the Source of (G1 \/ G2)).v by A25,A26,A55,A56,Def5
+        .= (the Source of G2).v by A1,A2,A55,Def5
+        .= (the Source of (G2 \/ G3)).v by A5,A6,A55,Def5
+        .= (the Source of (G1 \/ (G2 \/ G3))).v by A45,A46,A55,A57,Def5;
     end;
  now
       assume
@@ -1575,11 +1610,11 @@ A58:  v in the carrier' of G3;
         (
 the carrier' of G3) c= (the carrier' of G2) \/ (the carrier' of G3)
       by XBOOLE_1:7;
-then A59:  (the carrier' of G3) c= the carrier' of (G2 \/ G3) by A5,A6,Def3;
+then A59:  (the carrier' of G3) c= the carrier' of (G2 \/ G3) by A5,A6,Def5;
       thus (the Source of ((G1 \/ G2) \/ G3)).v =
-      (the Source of G3).v by A25,A26,A58,Def3
-        .= (the Source of (G2 \/ G3)).v by A5,A6,A58,Def3
-        .= (the Source of (G1 \/ (G2 \/ G3))).v by A45,A46,A58,A59,Def3;
+      (the Source of G3).v by A25,A26,A58,Def5
+        .= (the Source of (G2 \/ G3)).v by A5,A6,A58,Def5
+        .= (the Source of (G1 \/ (G2 \/ G3))).v by A45,A46,A58,A59,Def5;
     end;
     hence thesis by A51,A52,A54,XBOOLE_0:def 3;
   end;
@@ -1596,9 +1631,9 @@ A61: dom (the Target of ((G1 \/ G2) \/ G3)) =the carrier' of (G1 \/ (G2 \/
 A62: v in dom (the Target of ((G1 \/ G2) \/ G3));
  dom (the Target of ((G1 \/ G2) \/ G3)) =
     the carrier' of ((G1 \/ G2) \/ G3) by FUNCT_2:def 1
-      .= (the carrier' of (G1 \/ G2)) \/ (the carrier' of G3) by A25,A26,Def3
+      .= (the carrier' of (G1 \/ G2)) \/ (the carrier' of G3) by A25,A26,Def5
       .= (the carrier' of G1) \/ (the carrier' of G2) \/ (the carrier' of G3)
-    by A1,A2,Def3;
+    by A1,A2,Def5;
 then A63: v in (the carrier' of G1) \/ (the carrier' of G2) or
     v in (the carrier' of G3) by A62,XBOOLE_0:def 3;
 A64: now
@@ -1607,11 +1642,11 @@ A65:  v in the carrier' of G1;
         (
 the carrier' of G1) c= (the carrier' of G1) \/ (the carrier' of G2)
       by XBOOLE_1:7;
-then   (the carrier' of G1) c= the carrier' of (G1 \/ G2) by A1,A2,Def3;
+then   (the carrier' of G1) c= the carrier' of (G1 \/ G2) by A1,A2,Def5;
       hence (the Target of ((G1 \/ G2) \/ G3)).v =
-      (the Target of (G1 \/ G2)).v by A25,A26,A65,Def3
-        .= (the Target of G1).v by A1,A2,A65,Def3
-        .= (the Target of (G1 \/ (G2 \/ G3))).v by A45,A46,A65,Def3;
+      (the Target of (G1 \/ G2)).v by A25,A26,A65,Def5
+        .= (the Target of G1).v by A1,A2,A65,Def5
+        .= (the Target of (G1 \/ (G2 \/ G3))).v by A45,A46,A65,Def5;
     end;
 A66: now
       assume
@@ -1619,16 +1654,16 @@ A67:  v in the carrier' of G2;
         (
 the carrier' of G2) c= (the carrier' of G1) \/ (the carrier' of G2)
       by XBOOLE_1:7;
-then A68:  (the carrier' of G2) c= the carrier' of (G1 \/ G2) by A1,A2,Def3;
+then A68:  (the carrier' of G2) c= the carrier' of (G1 \/ G2) by A1,A2,Def5;
        (
 the carrier' of G2) c= (the carrier' of G2) \/ (the carrier' of G3)
       by XBOOLE_1:7;
-then A69: (the carrier' of G2) c= the carrier' of (G2 \/ G3) by A5,A6,Def3;
+then A69: (the carrier' of G2) c= the carrier' of (G2 \/ G3) by A5,A6,Def5;
       thus (the Target of ((G1 \/ G2) \/ G3)).v =
-      (the Target of (G1 \/ G2)).v by A25,A26,A67,A68,Def3
-        .= (the Target of G2).v by A1,A2,A67,Def3
-        .= (the Target of (G2 \/ G3)).v by A5,A6,A67,Def3
-        .= (the Target of (G1 \/ (G2 \/ G3))).v by A45,A46,A67,A69,Def3;
+      (the Target of (G1 \/ G2)).v by A25,A26,A67,A68,Def5
+        .= (the Target of G2).v by A1,A2,A67,Def5
+        .= (the Target of (G2 \/ G3)).v by A5,A6,A67,Def5
+        .= (the Target of (G1 \/ (G2 \/ G3))).v by A45,A46,A67,A69,Def5;
     end;
  now
       assume
@@ -1636,11 +1671,11 @@ A70: v in the carrier' of G3;
        (
 the carrier' of G3) c= (the carrier' of G2) \/ (the carrier' of G3)
       by XBOOLE_1:7;
-then A71: (the carrier' of G3) c= the carrier' of (G2 \/ G3) by A5,A6,Def3;
+then A71: (the carrier' of G3) c= the carrier' of (G2 \/ G3) by A5,A6,Def5;
       thus (the Target of ((G1 \/ G2) \/ G3)).v =
-      (the Target of G3).v by A25,A26,A70,Def3
-        .= (the Target of (G2 \/ G3)).v by A5,A6,A70,Def3
-        .= (the Target of (G1 \/ (G2 \/ G3))).v by A45,A46,A70,A71,Def3;
+      (the Target of G3).v by A25,A26,A70,Def5
+        .= (the Target of (G2 \/ G3)).v by A5,A6,A70,Def5
+        .= (the Target of (G1 \/ (G2 \/ G3))).v by A45,A46,A70,A71,Def5;
     end;
     hence thesis by A63,A64,A66,XBOOLE_0:def 3;
   end;
@@ -1652,13 +1687,13 @@ theorem Th10:
 proof
   assume
 A1: G is_sum_of G1, G2;
-then A2: (the Target of G1) tolerates (the Target of G2) by Def4;
+then A2: (the Target of G1) tolerates (the Target of G2) by Def6;
   A3: (
 the Source of G1) tolerates (the Source of G2) & the MultiGraphStruct of G
-  = G1 \/ G2 by A1,Def4;
-A4: (the Source of G2) tolerates (the Source of G1) by A1,Def4;
+  = G1 \/ G2 by A1,Def6;
+A4: (the Source of G2) tolerates (the Source of G1) by A1,Def6;
  the MultiGraphStruct of G = G2 \/ G1 by A2,A3,Th8;
-  hence thesis by A2,A4,Def4;
+  hence thesis by A2,A4,Def6;
 end;
 
 theorem
@@ -1666,7 +1701,7 @@ theorem
 proof
   let G be strict Graph;
  G = G \/ G by Th7;
-  hence thesis by Def4;
+  hence thesis by Def6;
 end;
 
 :: Graphs' inclusion ::
@@ -1796,13 +1831,13 @@ A2: for G, G1, G2 being Graph st G is_sum_of G1, G2 holds G1 c= G
 A3: G is_sum_of G1, G2;
     then
 A4: (the Source of G1) tolerates (the Source of G2) & (the Target of G1)
-    tolerates (the Target of G2) by Def4;
-A5: the MultiGraphStruct of G = G1 \/ G2 by A3,Def4;
+    tolerates (the Target of G2) by Def6;
+A5: the MultiGraphStruct of G = G1 \/ G2 by A3,Def6;
 then  the carrier of G = (the carrier of G1) \/ (the carrier of G2)
-    by A4,Def3;
+    by A4,Def5;
 then A6: (the carrier of G1) c= (the carrier of G) by XBOOLE_1:7;
  the carrier' of G = (the carrier' of G1) \/ (the carrier' of G2)
-    by A4,A5,Def3;
+    by A4,A5,Def5;
 then A7: (the carrier' of G1) c= (the carrier' of G) by XBOOLE_1:7;
  for v st v in the carrier' of G1 holds
     (the Source of G1).v = (the Source of G).v &
@@ -1814,9 +1849,9 @@ then A7: (the carrier' of G1) c= (the carrier' of G) by XBOOLE_1:7;
       assume
 A8:  v in the carrier' of G1;
       thus
-then A9:  (the Source of G1).v = (the Source of G).v by A4,A5,Def3;
+then A9:  (the Source of G1).v = (the Source of G).v by A4,A5,Def5;
       thus
-A10:  (the Target of G1).v = (the Target of G).v by A4,A5,A8,Def3;
+A10:  (the Target of G1).v = (the Target of G).v by A4,A5,A8,Def5;
       thus (the Source of G).v in the carrier of G1 by A8,A9,FUNCT_2:5;
       thus thesis by A8,A10,FUNCT_2:5;
     end;
@@ -1834,7 +1869,7 @@ theorem Th19:
 proof
   assume (the Source of G1) tolerates (the Source of G2) & (the Target of G1)
   tolerates (the Target of G2);
-then  (G1 \/ G2) is_sum_of G1, G2 by Def4;
+then  (G1 \/ G2) is_sum_of G1, G2 by Def6;
   hence thesis by Th18;
 end;
 
@@ -1862,8 +1897,8 @@ A1: G1 c= G3 and
 A2: G2 c= G3 and
 A3: G is_sum_of G1, G2;
   A4: (the Source of G1) tolerates (the Source of G2) & (the Target of G1)
-  tolerates (the Target of G2) by A3,Def4;
-A5: the MultiGraphStruct of G = G1 \/ G2 by A3,Def4;
+  tolerates (the Target of G2) by A3,Def6;
+A5: the MultiGraphStruct of G = G1 \/ G2 by A3,Def6;
 A6: G1 is Subgraph of G3 by A1,Def24;
 A7: G2 is Subgraph of G3 by A2,Def24;
 A8: (the carrier of G1) c= (the carrier of G3) by A6,Def18;
@@ -1886,23 +1921,23 @@ A12: v in the carrier' of (G1 \/ G2);
 A13: (the Source of (G1 \/ G2)).v = (the Source of G3).v &
     (the Target of (G1 \/ G2)).v = (the Target of G3).v
     proof
-A14:  v in (the carrier' of G1) \/ (the carrier' of G2) by A4,A12,Def3;
+A14:  v in (the carrier' of G1) \/ (the carrier' of G2) by A4,A12,Def5;
 A15:  now
         assume
 A16:    v in the carrier' of G1;
 then A17:    (the Source of G3).v = (the Source of G1).v by A6,Def18
-          .= (the Source of (G1 \/ G2)).v by A4,A16,Def3;
+          .= (the Source of (G1 \/ G2)).v by A4,A16,Def5;
     (the Target of G3).v = (the Target of G1).v by A6,A16,Def18
-          .= (the Target of (G1 \/ G2)).v by A4,A16,Def3;
+          .= (the Target of (G1 \/ G2)).v by A4,A16,Def5;
         hence thesis by A17;
       end;
   now
         assume
 A18:    v in the carrier' of G2;
 then A19:    (the Source of G3).v = (the Source of G2).v by A7,Def18
-          .= (the Source of (G1 \/ G2)).v by A4,A18,Def3;
+          .= (the Source of (G1 \/ G2)).v by A4,A18,Def5;
     (the Target of G3).v = (the Target of G2).v by A7,A18,Def18
-          .= (the Target of (G1 \/ G2)).v by A4,A18,Def3;
+          .= (the Target of (G1 \/ G2)).v by A4,A18,Def5;
         hence thesis by A19;
       end;
       hence thesis by A14,A15,XBOOLE_0:def 3;
@@ -1916,7 +1951,7 @@ then A19:    (the Source of G3).v = (the Source of G2).v by A7,Def18
   (the Source of G).v = (the Source of G3).v &
   (the Target of G).v = (the Target of G3).v &
   (the Source of G3).v in the carrier of G &
-  (the Target of G3).v in the carrier of G by A4,A5,A9,A11,Def3;
+  (the Target of G3).v in the carrier of G by A4,A5,A9,A11,Def5;
 end;
 
 theorem Th22:
@@ -1932,7 +1967,7 @@ the Target of G1) c= (the Target of G) & (the Target of G2) c= (the Target
   of G) by A1,Th5;
 A4: (the Source of G1) tolerates (the Source of G2) by A2,PARTFUN1:57;
  (the Target of G1) tolerates (the Target of G2) by A3,PARTFUN1:57;
-then  (G1 \/ G2) is_sum_of G1, G2 by A4,Def4;
+then  (G1 \/ G2) is_sum_of G1, G2 by A4,Def6;
   hence thesis by A1,Th21;
 end;
 
@@ -1960,10 +1995,10 @@ proof
   assume
 A2: G1 \/ G2 = G2 or G2 \/ G1 = G2;
 then
- the carrier of G2 = (the carrier of G1) \/ (the carrier of G2) by A1,Def3;
+ the carrier of G2 = (the carrier of G1) \/ (the carrier of G2) by A1,Def5;
 then A3: (the carrier of G1) c= the carrier of G2 by XBOOLE_1:7;
  the carrier' of G2 = (the carrier' of G1) \/ (the carrier' of G2)
-  by A1,A2,Def3;
+  by A1,A2,Def5;
 then A4: (the carrier' of G1) c= (the carrier' of G2) by XBOOLE_1:7;
  for v st v in the carrier' of G1 holds
   (the Source of G1).v = (the Source of G2).v &
@@ -1975,9 +2010,9 @@ then A4: (the carrier' of G1) c= (the carrier' of G2) by XBOOLE_1:7;
     assume
 A5: v in the carrier' of G1;
     thus
-then A6: (the Source of G1).v = (the Source of G2).v by A1,A2,Def3;
+then A6: (the Source of G1).v = (the Source of G2).v by A1,A2,Def5;
     thus
-A7: (the Target of G1).v = (the Target of G2).v by A1,A2,A5,Def3;
+A7: (the Target of G1).v = (the Target of G2).v by A1,A2,A5,Def5;
     thus (the Source of G2).v in the carrier of G1 by A5,A6,FUNCT_2:5;
     thus thesis by A5,A7,FUNCT_2:5;
   end;
@@ -2006,9 +2041,9 @@ A7: (the Source of G).x = (the Source of G1).y by A1,A2,A4,Def18
       .= (the Source of G).y by A1,A3,Def18;
  (the Target of G).x = (the Target of G1).y by A1,A2,A5,Def18
       .= (the Target of G).y by A1,A3,Def18;
-    hence thesis by A2,A3,A6,A7,Def5;
+    hence thesis by A2,A3,A6,A7,Def7;
   end;
-  hence thesis by Def5;
+  hence thesis by Def7;
 end;
 
 theorem
@@ -2037,9 +2072,9 @@ the Source of G1).x = (the Source of G).x & (the Source of G1).y = (the
      (
 the Target of G1).x = (the Target of G).x & (the Target of G1).y = (the
     Target of G).y by A1,A2,Def18;
-    hence thesis by A2,A3,A4,A5,Def6;
+    hence thesis by A2,A3,A4,A5,Def8;
   end;
-  hence thesis by Def6;
+  hence thesis by Def8;
 end;
 
 theorem
@@ -2057,9 +2092,9 @@ A3: (the Source of G1).x = (the Target of G1).x;
 A4: (the carrier' of G1) c= (the carrier' of G) by A1,Def18;
  (the Source of G).x = (the Target of G1).x by A1,A2,A3,Def18
       .= (the Target of G).x by A1,A2,Def18;
-    hence contradiction by A2,A4,Def7;
+    hence contradiction by A2,A4,Def9;
   end;
-  hence thesis by Def7;
+  hence thesis by Def9;
 end;
 
 :: Set of all subgraphs ::
@@ -2079,7 +2114,7 @@ then  G1 is Subgraph of G by Def24;
   hence thesis by Def25;
 end;
 
-theorem Th31:
+theorem Th29:
   for G being strict Graph holds G in bool G
 proof
   let G be strict Graph;
@@ -2109,7 +2144,7 @@ then    G is strict Subgraph of G2 by Def24;
   end;
   assume
 A2: bool G1 c= bool G2;
- G1 in bool G1 by Th31;
+ G1 in bool G1 by Th29;
 then  G1 is Subgraph of G2 by A2,Def25;
   hence thesis by Def24;
 end;
@@ -2118,7 +2153,7 @@ theorem
   for G being strict Graph holds { G } c= bool G
 proof
   let G be strict Graph;
- G in bool G by Th31;
+ G in bool G by Th29;
   hence thesis by ZFMISC_1:31;
 end;
 
@@ -2134,7 +2169,7 @@ proof
   tolerates (the Target of G2);
   assume
 A2: bool (G1 \/ G2) c= (bool G1) \/ (bool G2);
-A3: G1 \/ G2 in bool (G1 \/ G2) by Th31;
+A3: G1 \/ G2 in bool (G1 \/ G2) by Th29;
 A4: now
     assume G1 \/ G2 in bool G1;
 then  G1 \/ G2 is Subgraph of G1 by Def25;

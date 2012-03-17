@@ -247,6 +247,9 @@ $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 // create header info from .hdr file
 #mk_header =  { "0"; }
 
+// include comment info from .cmt file
+#mk_comments =  { "0"; }
+
 // Suppress the header and trailer of the final document. 
 // Thus, you can insert the resulting document into a larger one.
 #body_only = { "0"; }
@@ -298,6 +301,10 @@ $ucletters= { "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
 // .hdr file with header info (done by mkxmlhdr.pl)
 #hdr=  { `concat($anamelc, '.hdr')`; }
 
+// .cmt file with comments info (done by MizComments.pl)
+#cmt=  { `concat($anamelc, '.cmt')`; }
+
+
 #varcolor = { "Olive"; }
 
 #constcolor = { "Maroon"; }
@@ -346,6 +353,7 @@ $ucletters= { "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
 #be_s = { " be "; }
 #st_s = { " st "; }
 #is_s = { " is "; }
+#dots_s = { " ... "; }
 #fraenkel_start = { " { "; }
 #fraenkel_end = { " } "; }
 #of_sel_s = { " of "; }
@@ -426,6 +434,8 @@ key "p" [SchemePredDecl] `concat(@nr,":",@plevel)` ;
 key "pf" [DefFunc] `concat(@nr,":",@plevel)` ;
 key "pp" [DefPred] `concat(@nr,":",@plevel)` ;
 
+// lookup for comments
+key "CMT" [Comment] `@endline`;
 //
 // File: print_simple.xsltxt - html-ization of Mizar XML, simple printing funcs
 //
@@ -611,6 +621,17 @@ tpl pcomment0(#str) { <span { @class="comment"; if [$colored="1"] {
 
 tpl pcomment(#str) { pcomment0(#str=$str); <br;}
 
+// this assumes comments with :: already
+tpl pcommentedblock(#str) 
+{ 
+   <div { @class="comment"; 
+     if [$colored="1"] {
+        <font {@color=$commentcolor; br(#text=$str);}
+     }
+     else {  br(#text=$str); }
+   }
+}
+
 // argument list
 tpl arglist(#separ,#elems) 
 { 
@@ -620,6 +641,19 @@ tpl arglist(#separ,#elems)
       if [not(position() = last())] { $separ; } 
    }
 }
+
+// translate newlines to <br;
+tpl br(#text) {
+  choose {
+    when [contains($text,'&#xa;')] {
+      `substring-before($text,'&#xa;')`;
+      <br;
+       br(#text = `substring-after($text,'&#xa;')`);
+    }
+    otherwise { $text; }
+  }
+}
+
 
 
 // like jlist, but with loci
@@ -1419,6 +1453,14 @@ tpl [Is](#i,#pr,#not) { apply[*[1]](#i = $i); copy-of $is_s; if [$not="1"] { cop
 tpl [Verum](#i,#pr,#not) { if [$not="1"] { "contradiction"; } else { "verum";} }
 tpl [ErrorFrm](#i,#pr,#not) { if [$not="1"] { copy-of $not_s; } "errorfrm"; }
 
+tpl [FlexFrm](#i,#pr,#not)
+{ 
+   $conn = { if [$not="1"] { $or_s; } else { $and_s; } }
+   apply[*[1]](#i = $i, #pr = $pr, #not = $not); 
+   $conn; copy-of $dots_s; $conn; 
+   apply[*[2]](#i = $i, #pr = $pr, #not = $not);
+} 
+
 // Terms
 // #p is the parenthesis count
 // #i is the size of the var stack
@@ -2134,7 +2176,10 @@ tpl pp2(#k, #nr, #i, #vis, #la, #loci, #args, #np, #rsym, #parenth, #fnr, #pid)
    // print right args preceded by "of" for types
    for-each [$vis] 
    { 
-      if [(position() = 1) and (($k='M') or ($k='L'))] { "of "; }
+      if [(position() = 1)] 
+      { 
+         if[($k='M')] { "of "; } else { if [($k='L')] { "over "; } }
+      }
       if [position() > $la] 
       {
 	$x=`@x`;
@@ -2279,7 +2324,14 @@ tpl [Proposition]
 	 }
        }
     }
+    // we can only say that this is a lemma if it is a toplevel proposition
+    // nontoplevel could be assumptions, etc. - this is a ##TODO
+    else { if [not(string-length(@plevel)>0)] 
+    {
+       <span { @about=`concat("#E",@propnr)`; @typeof="oo:Lemma"; apply; " "; }
+    }
     else { apply; " ";} 
+    }
 }
 
 tpl mk_by_title(#line, #col) { `concat("Explain line ", $line, " column ", $col)`; }
@@ -2889,7 +2941,7 @@ tpl [RCluster] {
 // </xsl:document>
           $bogus=`1`;
        } 
-       else { rc(); } 
+       else {  <div { @about=`concat("#RC",$nr1)`; @typeof="oo:Theorem"; rc(); } }
     }
 }
 
@@ -2916,7 +2968,7 @@ tpl [CCluster] {
 // </xsl:document>
          $bogus=`1`;
       } 
-      else { cc(); } 
+      else {  <div { @about=`concat("#CC",$nr1)`; @typeof="oo:Theorem"; cc(); } }
     }
 }
 
@@ -2956,7 +3008,7 @@ tpl [FCluster] {
 // </xsl:document>
        $bogus=`1`;
       } 
-      else { fc(); } 
+      else {  <div { @about=`concat("#FC",$nr1)`; @typeof="oo:Theorem"; fc(); } }
     }
 }
 
@@ -2983,7 +3035,7 @@ tpl [IdentifyWithExp|Identify]
 // </xsl:document>
    $bogus=`1`;
     } 
-    else { iy(); } 
+    else {  <div { @about=`concat("#IE",$nr1)`; @typeof="oo:Theorem"; iy(); } }
 }
 
 tpl iy
@@ -3083,10 +3135,109 @@ tpl iy
    ";"; <br; if [$mml="1"] { <br; }
 }
 
+tpl [Reduction] 
+{ 
+    $nr1 = `@nr`;
+    if [$generate_items>0]	
+    { 
+// <xsl:document href="proofhtml/redreg/{$anamelc}.{$nr1}" format="html">
+       reduce();
+// </xsl:document>
+   $bogus=`1`;
+    } 
+    else {  <div { @about=`concat("#RD",$nr1)`; @typeof="oo:Theorem"; reduce(); } }
+}
+
+tpl reduce
+{ 
+   if [($mml="1") or ($generate_items>0)] 
+   { 
+      argtypes(#el=`Typ`);
+   }
+
+   $nr1 = `@nr`;
+
+   <a 
+   { 
+      @NAME=`concat("RD",$nr1)`;
+      pkeyword(#str="reduce "); 
+   }
+
+   if [ErrorReduction] { "errorreduction"; }
+   else { if [($mml="1") or ($generate_items>0)] 
+   { 
+	   apply[*[position() = last() - 1]]; 
+       	   pkeyword(#str=" to "); 
+       	   apply[*[position() = last()]]; 
+   }
+   else // try nice display from the compatibility formula
+   {
+     for-each [following-sibling::*[1]/Proposition/*[1]]
+     {
+       if [name() = "Pred"] // equality - terms
+       { 
+         apply[*[1]]; 
+	 pkeyword(#str=" with "); 
+	 apply[*[2]];
+       }
+       else 
+       {
+          "REDUCE DISPLAY FAILED -  PLEASE COMPLAIN!"; <br;
+	  apply[.];		 
+       }
+     }
+   }}
+   ";"; <br; if [$mml="1"] { <br; }
+}
+
+
+
 
 // ignore them
 tpl [Reservation/Typ] { ""; }
 tpl [Definiens/*] { ""; }
+
+
+tpl add_comments(#line)
+{
+  if[$mk_comments > 0] 
+  { 
+    $prevline = `$line - 1`;
+    for-each [document($cmt,/)]
+    {
+       for-each [key('CMT',$prevline)]
+       {
+         apply[.];
+       } 
+    }
+  }
+}
+
+// http://en.wikipedia.org/wiki/Cantor_Theorem to
+// http://dbpedia.org/resource/Cantor_theorem
+tpl wp2dp(#txt)
+{
+   `concat("http://dbpedia.org/resource/",substring-after($txt,'/wiki/'))`;
+}
+
+tpl add_dbpedia(#line)
+{
+  if[$mk_comments > 0] 
+  { 
+    $prevline = `$line - 1`;
+    for-each [document($cmt,/)]
+    {
+       for-each [key('CMT',$prevline)]
+       {
+          for-each [CmtLink/a]
+	  {
+	     $dbplink = wp2dp(#txt=`@href`); 
+	     <span { @rel="owl:sameAs"; @resource=$dbplink; }
+	  }
+       } 
+    }
+  }
+}
 
 
 // xsltxt cannot use xsl:document yet, so manually insert it 
@@ -3094,7 +3245,8 @@ tpl [Definiens/*] { ""; }
 // the bogus is there to ensure that the ending xsl:doc element
 // is printed by xslxtxt.jar too
 tpl [JustifiedTheorem] 
-{ 
+{
+    add_comments(#line=`@line`);
     $nr1 = `1+count(preceding-sibling::JustifiedTheorem)`;
     if [$generate_items>0]	
     { 
@@ -3112,11 +3264,13 @@ tpl [JustifiedTheorem]
          $intensity = `(1 - @interesting) * 100`;
          <div 
 	 { 
+            @about=`concat("#T",$nr1)`; @typeof="oo:Theorem";
+	    add_dbpedia(#line=`@line`);
 	    @style=`concat("background-color:rgb(",$intensity,"%,100%,", $intensity, "%);")`;
 	    jt();
          }
       }
-      else { jt(); } 
+      else { <div { @about=`concat("#T",$nr1)`; @typeof="oo:Theorem"; add_dbpedia(#line=`@line`); jt();} } 
     }
 }
 
@@ -3334,7 +3488,7 @@ tpl [DefTheorem]
 // </xsl:document>
        $bogus=`1`;
     } 
-    else { dt(); } 
+    else {  <div { @about=`concat("#DT",$nr1)`; @typeof="oo:Definition"; dt(); } }
 }
 
 // private - assumes that is inside DefTheorem
@@ -3411,7 +3565,7 @@ tpl [JustifiedProperty]
 }
 
 //  Formula | ( elProposition, Justification )
-tpl [UnknownCorrCond|Coherence|Compatibility|Consistency|Existence|Uniqueness] 
+tpl [UnknownCorrCond|Coherence|Compatibility|Consistency|Existence|Reducibility|Uniqueness] 
 { 
    <a 
    { 
@@ -3446,6 +3600,7 @@ tpl [SchemePredDecl] {
 //   element elSchemePremises { elProposition* },
 //   elProposition, Justification, elEndPosition
 tpl [SchemeBlock] {
+    add_comments(#line=`@line`);
     if [$generate_items>0]	
     { 
 // <xsl:document href="proofhtml/sch/{$anamelc}.{@schemenr}" format="html">
@@ -3453,7 +3608,7 @@ tpl [SchemeBlock] {
 // </xsl:document>
    $bogus=`1`;
    } 
-   else { sd(); } }
+   else {  <div { @about=`concat("#S",@schemenr)`; @typeof="oo:Theorem"; add_dbpedia(#line=`@line`); sd(); } } }
 
 tpl sd 
 {
@@ -3503,7 +3658,8 @@ tpl sd
 //       elCorrectness?, elPattern+ ))
 // ##TODO: commented registration and strict attr for defstruct
 tpl [Definition] 
-{     
+{    
+    add_comments(#line=`@line`); 
     if [@expandable = "true"] 
     { 
        $argtypes = `../Let/Typ`;
@@ -3557,8 +3713,15 @@ tpl [Definition]
           $bogus = `1`;
        }
        else 
-       { 
-          dfs(); 
+       {
+          if [@nr]
+	  {
+	     <div { @about=`concat("#D",@nr)`; @typeof="oo:Definition"; add_dbpedia(#line=`@line`); dfs(); }
+	  }
+	  else
+       	  {  
+             dfs(); 
+       	  }
        }
     }
 
@@ -3677,6 +3840,7 @@ tpl dfs()
 //     elCanceled | elDefinition )*, elEndPosition
 tpl [DefinitionBlock] 
 {
+   add_comments(#line=`@line`);
    <div 
    { 
       pkeyword(#str="definition");
@@ -3692,9 +3856,12 @@ tpl [Registration] { apply; }
 //   elIdentifyWithExp, CorrectnessCondition*, elCorrectness?
 tpl [IdentifyRegistration] { apply; }
 
+tpl [ReductionRegistration] { apply; }
+
 //   ( elLet | AuxiliaryItem | elRegistration | elCanceled )+, elEndPosition
 tpl [RegistrationBlock] 
 {
+    add_comments(#line=`@line`);
     <div { pkeyword(#str="registration");
     <div { @class="add"; apply[*[not(name()='EndPosition')]]; }
     pkeyword(#str="end;"); }  
@@ -3784,13 +3951,22 @@ tpl [Proof/Proof | Now/Proof | Conclusion/Proof | CaseBlock/Proof | SupposeBlock
 tpl [Proof] {
     $nm0 = `concat($ajax_proof_dir,"/",$anamelc,"/",@newlevel)`;
     $nm =  { if[$ajax_proofs=3] { `concat($ltmpftptpcgi,"?tmp=",$lbytmpdir,"&raw=1","&file=",$nm0)`; } else { $nm0; } }
-    <div { 
+    <div {
+    	 @about=`concat("#PF",@newlevel)`; @typeof="oo:Proof"; 
+	 choose 
+	 {
+	    when[(name(..) = "JustifiedTheorem")] { <span { @rel="oo:proves"; @resource=`concat("#T",../@nr)`; } }
+	    when[(name(..) = "SchemeBlock")] { <span { @rel="oo:proves"; @resource=`concat("#S",../@schemenr)`; } }
+	    // toplevel lemma, hopefully
+	    when[not(string-length(@plevel)>0)] {  <span { @rel="oo:proves"; @resource=`concat("#E",preceding-sibling::Proposition[1]/@propnr)`; } }
+	 }
 	 <a { 
 	    if [($ajax_proofs=1) or ($ajax_proofs=3)]	{ add_ajax_attrs(#u=$nm); } else { add_hs2_attrs(); }
 	    if [$proof_links>0] { @title=`@newlevel`; } 
 	    pkeyword(#str="proof "); 
 	    }
-//	  add_ar_iconif(#line=`EndPosition[1]/@line`, #col=`EndPosition[1]/@col`); 
+
+ //	  add_ar_iconif(#line=`EndPosition[1]/@line`, #col=`EndPosition[1]/@col`); 
          if [$ajax_proofs>0]	{ <span { if[$ajax_proofs=2] {@filebasedproofinsert=`@newlevel`;}} 
 // <xsl:document href="{$ajax_proof_dir}/{$anamelc}/{@newlevel}" format="html">
 	    <div { @class="add"; apply; }
@@ -3819,6 +3995,21 @@ tpl [Now](#nkw)
 	     add_hs2_attrs(); 
 	     if [$proof_links>0] { @title=`@newlevel`; } 
 	     pkeyword(#str="now "); 
+
+	     if [($display_thesis = 1)] 
+    	     {
+      	       for-each [ BlockThesis]
+  	       {
+                  " ";   
+               	  <a 
+		  {   
+	  	     add_hs_attrs();
+	  	     pcomment0(#str=" thesis: ");      
+		  }
+
+		  <span { @class="hide"; " "; apply[*[position()=last()]]; }
+  	       }
+    	     }
           }
 
           now_body();
@@ -4107,7 +4298,7 @@ tpl [/] { if [$generate_items = "1"] {
 
 else { 
   if [$body_only = "0"] { 
-    <html { 
+    <html { @prefix="oo: http://omdoc.org/ontology#";
 
 // output the css defaults for div and p (for indenting)
         <style { @type="text/css";  "
@@ -4289,3 +4480,26 @@ tpl [dc:title] { pcomment(#str=`text()`); }
 tpl [dc:creator] { pcomment(#str=`concat("by ", text())`); pcomment(#str=""); }
 tpl [dc:date] { pcomment(#str=`concat("Received ", text())`); }
 tpl [dc:rights] { pcomment(#str=`concat("Copyright ", text())`); }
+
+// comment rules
+
+tpl [Comment] 
+{ 
+   <div { @class="comment";
+   	if [$colored="1"] {
+          <font {@color=$commentcolor; apply; }
+     	}
+     	else {  apply; }
+   }
+}
+tpl [CmtLine]  { `text()`; <br; }
+tpl [CmtLink]  { ":: "; add_wp_icon(); " "; for-each [*] { copy { copy-of `@*`; copy-of `text()`;}} <br; }
+
+tpl add_wp_icon
+{
+     <img
+     {
+       	       @src= `concat($ltptproot,"WP.ico")`;
+       	       @alt= "WP: ";
+     }
+}

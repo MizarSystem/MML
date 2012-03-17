@@ -2,7 +2,7 @@
 ::  by Micha{\l} Muzalewski
 ::
 :: Received June 21, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,7 +16,7 @@ environ
 
  vocabularies XBOOLE_0, ALGSTR_0, SUBSET_1, MIDSP_1, PRE_TOPC, FUNCT_1,
       ZFMISC_1, STRUCT_0, ROBBINS1, ARYTM_3, QC_LANG1, RLVECT_1, SUPINF_2,
-      ARYTM_1, VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2;
+      ARYTM_1, VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2, NAT_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, DOMAIN_1, STRUCT_0,
       ALGSTR_0, PRE_TOPC, RLVECT_1, VECTSP_1, MIDSP_1;
  constructors BINOP_1, DOMAIN_1, VECTSP_1, MIDSP_1, RLVECT_1;
@@ -26,11 +26,7 @@ environ
  theorems BINOP_1, MIDSP_1, RLVECT_1, VECTSP_1;
  schemes BINOP_1;
 
-begin
-
-::
-:: GROUP OF FREE VECTORS
-::
+begin :: Group of Free Vectors
 
 reserve G for non empty addLoopStr;
 reserve x for Element of G;
@@ -46,18 +42,16 @@ definition
   coherence;
 end;
 
-definition
-  let M,G,w;
-  pred M,G are_associated_wrp w means
-  :Def2:
+definition let M,G,w;
+  attr w is associating means  :Def2:
   p@q = r iff w.(p,r) = w.(r,q);
 end;
 
 theorem Th1:
-  M,G are_associated_wrp w implies p@p = p
+  w is associating implies p@p = p
 proof
 A1: w.(p,p) = w.(p,p);
-  assume M,G are_associated_wrp w;
+  assume w is associating;
   hence thesis by A1,Def2;
 end;
 
@@ -69,9 +63,9 @@ definition
   let S,G,w;
   pred w is_atlas_of S,G means
   :Def3:
-  (for a,x ex b st w.(a,b) = x) & (for a,b
-,c holds w.(a,b) = w.(a,c) implies b = c) & for a,b,c holds w.(a,b) + w.(b,c) =
-  w.(a,c);
+  (for a,x ex b st w.(a,b) = x) &
+  (for a,b,c holds w.(a,b) = w.(a,c) implies b = c) &
+  for a,b,c holds w.(a,b) + w.(b,c) = w.(a,c);
 end;
 
 definition
@@ -90,7 +84,7 @@ reserve G for add-associative right_zeroed right_complementable non empty
 reserve x for Element of G;
 reserve w for Function of [:S,S:],the carrier of G;
 
-theorem Th4:
+theorem Th2:
   w is_atlas_of S,G implies w.(a,a) = 0.G
 proof
   assume w is_atlas_of S,G;
@@ -98,38 +92,38 @@ proof
   hence thesis by RLVECT_1:9;
 end;
 
-theorem Th5:
+theorem Th3:
   w is_atlas_of S,G & w.(a,b) = 0.G implies a = b
 proof
   assume that
 A1: w is_atlas_of S,G and
 A2: w.(a,b) = 0.G;
-  w.(a,b) = w.(a,a) by A1,A2,Th4;
+  w.(a,b) = w.(a,a) by A1,A2,Th2;
   hence thesis by A1,Def3;
 end;
 
-theorem Th6:
+theorem Th4:
   w is_atlas_of S,G implies w.(a,b) = -w.(b,a)
 proof
   assume
 A1: w is_atlas_of S,G;
   then w.(b,a) + w.(a,b) = w.(b,b) by Def3
-    .= 0.G by A1,Th4;
+    .= 0.G by A1,Th2;
   then -w.(b,a) = --w.(a,b) by RLVECT_1:6;
   hence thesis by RLVECT_1:17;
 end;
 
-theorem Th7:
+theorem Th5:
   w is_atlas_of S,G & w.(a,b) = w.(c,d) implies w.(b,a) = w.(d,c)
 proof
   assume that
 A1: w is_atlas_of S,G and
 A2: w.(a,b) = w.(c,d);
-  thus w.(b,a) = -w.(c,d) by A1,A2,Th6
-    .= w.(d,c) by A1,Th6;
+  thus w.(b,a) = -w.(c,d) by A1,A2,Th4
+    .= w.(d,c) by A1,Th4;
 end;
 
-theorem Th8:
+theorem Th6:
   w is_atlas_of S,G implies for b,x ex a st w.(a,b) = x
 proof
   assume
@@ -138,47 +132,47 @@ A1: w is_atlas_of S,G;
   consider a such that
 A2: w.(b,a) = -x by A1,Def3;
   take a;
-  w.(a,b) = -(-x) by A1,A2,Th6
+  w.(a,b) = -(-x) by A1,A2,Th4
     .= x by RLVECT_1:17;
   hence thesis;
 end;
 
-theorem Th9:
+theorem Th7:
   w is_atlas_of S,G & w.(b,a) = w.(c,a) implies b = c
 proof
   assume that
 A1: w is_atlas_of S,G and
 A2: w.(b,a) = w.(c,a);
-  w.(a,b) = w.(a,c) by A1,A2,Th7;
+  w.(a,b) = w.(a,c) by A1,A2,Th5;
   hence thesis by A1,Def3;
 end;
 
-theorem Th10:
+theorem Th8:
   for w being Function of [:the carrier of M,the carrier of M:],
-  the carrier of G holds w is_atlas_of the carrier of M,G & M,G
-  are_associated_wrp w implies p@q = q@p
+  the carrier of G holds w is_atlas_of the carrier of M,G &
+  w is associating implies p@q = q@p
 proof
   let w be Function of [:the carrier of M,the carrier of M:],the carrier of G;
   assume that
 A1: w is_atlas_of the carrier of M,G and
-A2: M,G are_associated_wrp w;
+A2: w is associating;
   set r = p@q;
   w.(p,r) = w.(r,q) by A2,Def2;
-  then w.(r,p) = w.(q,r) by A1,Th7;
+  then w.(r,p) = w.(q,r) by A1,Th5;
   hence thesis by A2,Def2;
 end;
 
-theorem Th11:
+theorem Th9:
   for w being Function of [:the carrier of M,the carrier of M:],
-  the carrier of G holds w is_atlas_of the carrier of M,G & M,G
-  are_associated_wrp w implies ex r st r@p = q
+  the carrier of G holds w is_atlas_of the carrier of M,G &
+  w is associating implies ex r st r@p = q
 proof
   let w be Function of [:the carrier of M,the carrier of M:],the carrier of G;
   assume that
 A1: w is_atlas_of the carrier of M,G and
-A2: M,G are_associated_wrp w;
+A2: w is associating;
   consider r such that
-A3: w.(r,q) = w.(q,p) by A1,Th8;
+A3: w.(r,q) = w.(q,p) by A1,Th6;
   take r;
   thus thesis by A2,A3,Def2;
 end;
@@ -187,7 +181,7 @@ reserve G for add-associative right_zeroed right_complementable Abelian non
   empty addLoopStr;
 reserve x for Element of G;
 
-theorem Th13:
+theorem Th10:
   for G being add-associative Abelian non empty addLoopStr, x,y,
   z,t being Element of G holds (x+y)+(z+t) = (x+z)+(y+t)
 proof
@@ -200,27 +194,27 @@ end;
 
 theorem
   for G being add-associative Abelian non empty addLoopStr, x,y being
-  Element of G holds Double (x + y) = Double x + Double y by Th13;
+  Element of G holds Double (x + y) = Double x + Double y by Th10;
 
-theorem Th15:
+theorem Th12:
   Double (-x) = -Double x
 proof
   0.G = Double 0.G by RLVECT_1:def 4
     .= Double (x+-x) by RLVECT_1:def 10
-    .= Double x + Double (-x) by Th13;
+    .= Double x + Double (-x) by Th10;
   hence thesis by RLVECT_1:6;
 end;
 
-theorem Th16:
+theorem Th13:
   for w being Function of [:the carrier of M,the carrier of M:],
-  the carrier of G holds w is_atlas_of the carrier of M,G & M,G
-are_associated_wrp w implies for a,b,c,d being Point of M holds (a@b = c@d iff
+  the carrier of G holds w is_atlas_of the carrier of M,G &
+w is associating implies for a,b,c,d being Point of M holds (a@b = c@d iff
   w.(a,d) = w.(c,b))
 proof
   let w be Function of [:the carrier of M,the carrier of M:],the carrier of G;
   assume that
 A1: w is_atlas_of the carrier of M,G and
-A2: M,G are_associated_wrp w;
+A2: w is associating;
   let a,b,c,d be Point of M;
   thus a@b = c@d implies w.(a,d) = w.(c,b)
   proof
@@ -247,7 +241,7 @@ end;
 
 reserve w for Function of [:S,S:],the carrier of G;
 
-theorem Th17:
+theorem Th14:
   w is_atlas_of S,G implies for a,b,b9,c,c9 holds w.(a,b) = w.(b,c
   ) & w.(a,b9) = w.(b9,c9) implies w.(c,c9) = Double w.(b,b9)
 proof
@@ -259,9 +253,9 @@ A2: w.(a,b) = w.(b,c) & w.(a,b9) = w.(b9,c9);
   thus w.(c,c9) = w.(c,b9) + w.(b9,c9) by A1,Def3
     .= w.(c,a) + w.(a,b9) + w.(b9,c9) by A1,Def3
     .= w.(c,b) + w.(b,a) + w.(a,b9) + w.(b9,c9) by A1,Def3
-    .= Double w.(b,a) + w.(a,b9) + w.(a,b9) by A1,A2,Th7
+    .= Double w.(b,a) + w.(a,b9) + w.(a,b9) by A1,A2,Th5
     .= Double w.(b,a) + Double w.(a,b9) by RLVECT_1:def 3
-    .= Double (w.(b,a) + w.(a,b9)) by Th13
+    .= Double (w.(b,a) + w.(a,b9)) by Th10
     .= Double w.(b,b9) by A1,Def3;
 end;
 
@@ -275,7 +269,7 @@ registration
   coherence by MIDSP_1:56;
 end;
 
-theorem Th18:
+theorem Th15:
   (for a being set holds a is Element of vectgroup(M) iff a is
 Vector of M) & 0.vectgroup(M) = ID(M) & for a,b being Element of vectgroup(M),
   x,y being Vector of M st a=x & b=y holds a+b = x+y
@@ -312,24 +306,24 @@ proof
   proof
     set p = the Point of M;
     let a be Element of G;
-    reconsider aa = a as Vector of M by Th18;
+    reconsider aa = a as Vector of M by Th15;
     consider q being Point of M such that
 A1: aa = vect(p,q) by MIDSP_1:35;
     set xx = vect(p,p@q);
-    reconsider x = xx as Element of G by Th18;
+    reconsider x = xx as Element of G by Th15;
     take x;
     xx + xx = aa by A1,MIDSP_1:42;
-    hence thesis by Th18;
+    hence thesis by Th15;
   end;
   let a be Element of G;
-  reconsider aa = a as Vector of M by Th18;
+  reconsider aa = a as Vector of M by Th15;
   consider q being Point of M such that
 A2: aa = vect(p,q) by MIDSP_1:35;
   consider r being Point of M such that
 A3: aa = vect(q,r) by MIDSP_1:35;
   assume Double a = 0.G;
-  then aa + aa = 0.G by Th18
-    .= ID(M) by Th18;
+  then aa + aa = 0.G by Th15
+    .= ID(M) by Th15;
   then vect(p,q) + vect(q,r) = vect(p,p) by A2,A3,MIDSP_1:38;
   then vect(p,r) = vect(p,p) by MIDSP_1:40;
   then vect(p,q) = vect(q,p) by A2,A3,MIDSP_1:39;
@@ -338,7 +332,7 @@ A4: p@p = q@q by MIDSP_1:37;
   p = p@p by MIDSP_1:def 3
     .= q by A4,MIDSP_1:def 3;
   hence a = ID(M) by A2,MIDSP_1:38
-    .= 0.G by Th18;
+    .= 0.G by Th15;
 end;
 
 definition
@@ -382,7 +376,7 @@ reserve G for midpoint_operator add-associative right_zeroed
   right_complementable Abelian non empty addLoopStr;
 reserve x,y for Element of G;
 
-theorem Th19:
+theorem Th16:
   for G being Fanoian add-associative right_zeroed
 right_complementable non empty addLoopStr, x being Element of G holds x = -x
   implies x = 0.G
@@ -394,7 +388,7 @@ A1: -x + x = 0.G by RLVECT_1:5;
   hence thesis by A1,VECTSP_1:def 18;
 end;
 
-theorem Th20:
+theorem Th17:
   for G being Fanoian add-associative right_zeroed
   right_complementable Abelian non empty addLoopStr, x,y being Element of G
   holds Double x = Double y implies x = y
@@ -419,7 +413,7 @@ definition
   :Def6:
   Double it = x;
   existence by Def5;
-  uniqueness by Th20;
+  uniqueness by Th17;
 end;
 
 theorem
@@ -428,7 +422,7 @@ theorem
 proof
   Double 0.G = 0.G by RLVECT_1:def 4;
   hence Half 0.G = 0.G by Def6;
-  Double (Half x + Half y) = Double Half x + Double Half y by Th13
+  Double (Half x + Half y) = Double Half x + Double Half y by Th10
     .= x + Double Half y by Def6
     .= x + y by Def6;
   hence Half (x+y) = Half x + Half y by Def6;
@@ -441,33 +435,33 @@ proof
   thus thesis by Def6;
 end;
 
-theorem Th22:
+theorem Th19:
   for M being non empty MidStr, w being Function of [:the carrier
 of M,the carrier of M:],the carrier of G holds w is_atlas_of the carrier of M,G
-& M,G are_associated_wrp w implies for a,b,c,d being Point of M holds (a@b)@(c@
+& w is associating implies for a,b,c,d being Point of M holds (a@b)@(c@
   d) = (a@c)@(b@d)
 proof
   let M be non empty MidStr, w be Function of [:the carrier of M,the carrier
   of M:],the carrier of G;
   assume that
 A1: w is_atlas_of the carrier of M,G and
-A2: M,G are_associated_wrp w;
+A2: w is associating;
   let a,b,c,d be Point of M;
-A3: w.(b,a@b) = w.(b,b@a) by A1,A2,Th10
+A3: w.(b,a@b) = w.(b,b@a) by A1,A2,Th8
     .= w.(b@a,a) by A2,Def2
-    .= w.(a@b,a) by A1,A2,Th10;
+    .= w.(a@b,a) by A1,A2,Th8;
   set p = (a@b)@(c@d);
 A4: w.(c,c@d) = w.(c@d,d) by A2,Def2;
 A5: w.(b,b@d) = w.(b@d,d) by A2,Def2;
-  w.(c,a@c) = w.(c,c@a) by A1,A2,Th10
+  w.(c,a@c) = w.(c,c@a) by A1,A2,Th8
     .= w.(c@a,a) by A2,Def2
-    .= w.(a@c,a) by A1,A2,Th10;
-  then Double w.(a@c,c@d) = w.(a,d) by A1,A4,Th17
-    .= -w.(d,a) by A1,Th6
-    .= -Double w.(b@d,a@b) by A1,A5,A3,Th17
-    .= Double -w.(b@d,a@b) by Th15
-    .= Double w.(a@b,b@d) by A1,Th6;
-  then w.(a@c,c@d) = w.(a@b,b@d) by Th20;
+    .= w.(a@c,a) by A1,A2,Th8;
+  then Double w.(a@c,c@d) = w.(a,d) by A1,A4,Th14
+    .= -w.(d,a) by A1,Th4
+    .= -Double w.(b@d,a@b) by A1,A5,A3,Th14
+    .= Double -w.(b@d,a@b) by Th12
+    .= Double w.(a@b,b@d) by A1,Th4;
+  then w.(a@c,c@d) = w.(a@b,b@d) by Th17;
   then
 A6: w.(a@c,p) + w.(p,c@d) = w.(a@b,b@d) by A1,Def3
     .= w.(p,b@d) + w.(a@b,p) by A1,Def3;
@@ -476,17 +470,17 @@ A6: w.(a@c,p) + w.(p,c@d) = w.(a@b,b@d) by A1,Def3
   hence thesis by A2,Def2;
 end;
 
-theorem Th23:
+theorem Th20:
   for M being non empty MidStr, w being Function of [:the carrier
 of M,the carrier of M:],the carrier of G holds w is_atlas_of the carrier of M,G
-  & M,G are_associated_wrp w implies M is MidSp
+  & w is associating implies M is MidSp
 proof
   let M be non empty MidStr, w be Function of [:the carrier of M,the carrier
   of M:],the carrier of G;
-  assume w is_atlas_of the carrier of M,G & M,G are_associated_wrp w;
+  assume w is_atlas_of the carrier of M,G & w is associating;
   then
   for a,b,c,d being Point of M holds a@a = a & a@b = b@a & (a@b)@(c@d) = (
-  a@c)@(b@d) & ex x being Point of M st x@a = b by Th1,Th10,Th11,Th22;
+  a@c)@(b@d) & ex x being Point of M st x@a = b by Th1,Th8,Th9,Th19;
   hence thesis by MIDSP_1:def 3;
 end;
 
@@ -508,7 +502,7 @@ definition
   let M,p,q;
   func vector(p,q) -> Element of vectgroup(M) equals
   vect(p,q);
-  coherence by Th18;
+  coherence by Th15;
 end;
 
 definition
@@ -547,13 +541,13 @@ A3: g.(p,q) = vect(p,q);
   end;
 end;
 
-theorem Th24:
+theorem Th21:
   vect(M) is_atlas_of the carrier of M, vectgroup(M)
 proof
   set w = vect(M);
 A1: ex q st w.(p,q) = x
   proof
-    reconsider xx = x as Vector of M by Th18;
+    reconsider xx = x as Vector of M by Th15;
     consider q such that
 A2: xx = vect(p,q) by MIDSP_1:35;
     take q;
@@ -569,14 +563,14 @@ A3: w.(p,q) = w.(p,r) implies q = r
   w.(p,q) + w.(q,r) = w.(p,r)
   proof
     w.(p,q) = vect(p,q) & w.(q,r) = vect(q,r) by Def8;
-    hence w.(p,q) + w.(q,r) = vect(p,q) + vect(q,r) by Th18
+    hence w.(p,q) + w.(q,r) = vect(p,q) + vect(q,r) by Th15
       .= vect(p,r) by MIDSP_1:40
       .= w.(p,r) by Def8;
   end;
   hence thesis by A1,A3,Def3;
 end;
 
-theorem Th25:
+theorem Th22:
   vect(p,q) = vect(r,s) iff p@s = q@r
 proof
   thus vect(p,q) = vect(r,s) implies p@s = q@r by MIDSP_1:37;
@@ -589,25 +583,29 @@ proof
   end;
 end;
 
-theorem Th26:
+theorem Th23:
   p@q = r iff vect(p,r) = vect(r,q)
 proof
   p@q = r iff p@q = r@r by MIDSP_1:def 3;
-  hence thesis by Th25;
+  hence thesis by Th22;
 end;
 
-theorem Th27:
-  M,vectgroup(M) are_associated_wrp vect(M)
+canceled;
+
+Lm2: vect(M) is associating
 proof
   let p,q,r;
   set w = vect(M);
   w.(p,r) = vect(p,r) & w.(r,q) = vect(r,q) by Def8;
-  hence thesis by Th26;
+  hence thesis by Th23;
 end;
 
-::
-:: REPRESENTATION THEOREM
-::
+registration let M;
+  cluster vect M -> associating;
+  coherence by Lm2;
+end;
+
+:: Representation Theorem
 
 reserve w for Function of [:S,S:],the carrier of G;
 
@@ -647,11 +645,11 @@ A5: for a,b,c,c9 st P[a,b,c] & P[a,b,c9] holds c = c9
       let a,b,c,c9 such that
 A6:   ( P[a,b,c])& P[a,b,c9];
       w.(c,c9) = w.(c,a) + w.(a,c9) by A1,Def3
-        .= w.(c9,b) + w.(b,c) by A1,A6,Th7
+        .= w.(c9,b) + w.(b,c) by A1,A6,Th5
         .= w.(c9,c) by A1,Def3
-        .= -w.(c,c9) by A1,Th6;
-      then w.(c,c9) = 0.G by Th19;
-      hence thesis by A1,Th5;
+        .= -w.(c,c9) by A1,Th4;
+      then w.(c,c9) = 0.G by Th16;
+      hence thesis by A1,Th3;
     end;
     let f,g be BinOp of S such that
 A7: ( for a,b holds w.(a,f.(a,b)) = w.(f.(a,b),b))& for a,b holds w.(a
@@ -666,7 +664,7 @@ A7: ( for a,b holds w.(a,f.(a,b)) = w.(f.(a,b),b))& for a,b holds w.(a
   end;
 end;
 
-theorem Th28:
+theorem Th25:
   w is_atlas_of S,G implies for a,b,c holds @(w).(a,b) = c iff w.(
   a,c) = w.(c,b)
 proof
@@ -685,11 +683,11 @@ A3: for a,b,c,c9 st P[a,b,c] & P[a,b,c9] holds c = c9
       let a,b,c,c9 such that
 A4:   ( P[a,b,c])& P[a,b,c9];
       w.(c,c9) = w.(c,a) + w.(a,c9) by A1,Def3
-        .= w.(c9,b) + w.(b,c) by A1,A4,Th7
+        .= w.(c9,b) + w.(b,c) by A1,A4,Th5
         .= w.(c9,c) by A1,Def3
-        .= -w.(c,c9) by A1,Th6;
-      then w.(c,c9) = 0.G by Th19;
-      hence thesis by A1,Th5;
+        .= -w.(c,c9) by A1,Th4;
+      then w.(c,c9) = 0.G by Th16;
+      hence thesis by A1,Th3;
     end;
     set c9 = @(w).(a,b);
     P[a,b,c9] by A1,Def9;
@@ -705,29 +703,23 @@ end;
 
 reserve a,b,c for Point of MidStr(#S,@(w)#);
 
-definition
-  let S,G,w;
+definition let S,G,w;
   func Atlas(w) -> Function of [:the carrier of MidStr(#S,@(w)#),the carrier
   of MidStr(#S,@(w)#):], the carrier of G equals
   w;
   coherence;
 end;
 
-Lm2: w is_atlas_of S,G implies for a,b,c holds a@b = c iff (Atlas(w)).(a,c) =
-(Atlas(w)).(c,b)
+theorem Th26:
+  w is_atlas_of S,G implies Atlas(w) is associating
 proof
-  assume
-A1: w is_atlas_of S,G;
-  let a,b,c;
-  @(w).(a,b) = c iff w.(a,c) = w.(c,b) by A1,Th28;
-  hence thesis by MIDSP_1:def 1;
-end;
-
-theorem Th32:
-  w is_atlas_of S,G implies MidStr(#S,@(w)#),G are_associated_wrp Atlas(w)
-proof
-  assume w is_atlas_of S,G;
-  then for a,b,c holds a@b = c iff (Atlas(w)).(a,c) = (Atlas(w)).(c,b) by Lm2;
+  assume A1: w is_atlas_of S,G;
+  for a,b,c holds a@b = c iff (Atlas(w)).(a,c) = (Atlas(w)).(c,b)
+  proof
+    let a,b,c;
+    @(w).(a,b) = c iff w.(a,c) = w.(c,b) by A1,Th25;
+    hence thesis by MIDSP_1:def 1;
+  end;
   hence thesis by Def2;
 end;
 
@@ -740,8 +732,8 @@ A1: w is_atlas_of S,G;
   coherence
   proof
     set M = MidStr(#S,@(w)#), W = Atlas(w);
-    M,G are_associated_wrp W by A1,Th32;
-    hence thesis by A1,Th23;
+    W is associating by A1,Th26;
+    hence thesis by A1,Th20;
   end;
 end;
 
@@ -750,24 +742,24 @@ reserve w for Function of [:the carrier of M,the carrier of M:], the carrier
   of G;
 reserve a,b,b1,b2,c for Point of M;
 
-theorem Th33:
+theorem Th27:
   M is MidSp iff ex G st ex w st w is_atlas_of the carrier of M,G
-  & M,G are_associated_wrp w
+  & w is associating
 proof
   hereby
     assume
 A1: M is MidSp;
-    thus ex G st ex w st w is_atlas_of the carrier of M,G & M,G
-    are_associated_wrp w
+    thus ex G st ex w st w is_atlas_of the carrier of M,G &
+    w is associating
     proof
       reconsider M as MidSp by A1;
       set G = vectgroup(M);
       take G;
       ex w being Function of [:the carrier of M,the carrier of M:], the
-carrier of G st w is_atlas_of the carrier of M,G & M,G are_associated_wrp w
+carrier of G st w is_atlas_of the carrier of M,G & w is associating
       proof
         take vect(M);
-        thus thesis by Th24,Th27;
+        thus thesis by Th21;
       end;
       hence thesis;
     end;
@@ -775,15 +767,16 @@ carrier of G st w is_atlas_of the carrier of M,G & M,G are_associated_wrp w
   given G being midpoint_operator add-associative right_zeroed
 right_complementable Abelian non empty addLoopStr, w being Function of [:the
   carrier of M,the carrier of M:],the carrier of G such that
-A2: w is_atlas_of the carrier of M,G & M,G are_associated_wrp w;
-  thus thesis by A2,Th23;
+A2: w is_atlas_of the carrier of M,G & w is associating;
+  thus thesis by A2,Th20;
 end;
 
 definition
   let M be non empty MidStr;
-  struct AtlasStr over M (# algebra -> non empty addLoopStr, function ->
-Function of [:the carrier of M,the carrier of M:], the carrier of the algebra
-  #);
+  struct AtlasStr over M
+    (# algebra -> non empty addLoopStr,
+      function -> Function of [:the carrier of M,the carrier of M:],
+        the carrier of the algebra #);
 end;
 
 definition
@@ -791,10 +784,10 @@ definition
   let IT be AtlasStr over M;
   attr IT is ATLAS-like means
   :Def12:
-  the algebra of IT is midpoint_operator
-add-associative right_zeroed right_complementable Abelian & M,the algebra of IT
-  are_associated_wrp the function of IT & the function of IT is_atlas_of the
-  carrier of M,the algebra of IT;
+  the algebra of IT is midpoint_operator add-associative right_zeroed
+  right_complementable Abelian &
+  the function of IT is associating &
+  the function of IT is_atlas_of the carrier of M,the algebra of IT;
 end;
 
 registration
@@ -805,7 +798,7 @@ registration
     consider G being midpoint_operator add-associative right_zeroed
 right_complementable Abelian non empty addLoopStr, w being Function of [:the
     carrier of M,the carrier of M:], the carrier of G such that
-A1: w is_atlas_of the carrier of M,G & M,G are_associated_wrp w by Th33;
+A1: w is_atlas_of the carrier of M,G & w is associating by Th27;
     take AtlasStr(# G, w #);
     thus thesis by A1,Def12;
   end;
@@ -847,31 +840,29 @@ definition
   coherence;
 end;
 
-:: SOME USEFUL PROPOSITIONS
-
-theorem Th34:
-  w is_atlas_of the carrier of M,G & M,G are_associated_wrp w
+theorem Th28:
+  w is_atlas_of the carrier of M,G & w is associating
   implies (a@c = b1@b2 iff w.(a,c) = w.(a,b1) + w.(a,b2))
 proof
   assume that
 A1: w is_atlas_of the carrier of M,G and
-A2: M,G are_associated_wrp w;
-A3: a@c = b1@b2 iff w.(a,b2) = w.(b1,c) by A1,A2,Th16;
+A2: w is associating;
+A3: a@c = b1@b2 iff w.(a,b2) = w.(b1,c) by A1,A2,Th13;
   hence a@c = b1@b2 implies w.(a,c) = w.(a,b1) + w.(a,b2) by A1,Def3;
   w.(a,c) = w.(a,b1) + w.(b1,c) by A1,Def3;
   hence thesis by A3,RLVECT_1:8;
 end;
 
-theorem Th35:
-  w is_atlas_of the carrier of M,G & M,G are_associated_wrp w
+theorem Th29:
+  w is_atlas_of the carrier of M,G & w is associating
   implies (a@c = b iff w.(a,c) = Double w.(a,b))
 proof
   assume
-A1: w is_atlas_of the carrier of M,G & M,G are_associated_wrp w;
-  then reconsider MM = M as MidSp by Th23;
+A1: w is_atlas_of the carrier of M,G & w is associating;
+  then reconsider MM = M as MidSp by Th20;
   reconsider bb = b as Point of MM;
   bb@bb = bb by MIDSP_1:def 3;
-  hence thesis by A1,Th34;
+  hence thesis by A1,Th28;
 end;
 
 reserve M for MidSp;
@@ -885,8 +876,8 @@ proof
   set w = the function of W, G = the algebra of W;
 A1: G is midpoint_operator add-associative right_zeroed right_complementable
   Abelian by Def12;
-  w is_atlas_of the carrier of M,G & M,G are_associated_wrp w by Def12;
-  hence thesis by A1,Th34;
+  w is_atlas_of the carrier of M,G & w is associating by Def12;
+  hence thesis by A1,Th28;
 end;
 
 theorem
@@ -895,8 +886,8 @@ proof
   set w = the function of W, G = the algebra of W;
 A1: G is midpoint_operator add-associative right_zeroed right_complementable
   Abelian by Def12;
-  w is_atlas_of the carrier of M,G & M,G are_associated_wrp w by Def12;
-  hence thesis by A1,Th35;
+  w is_atlas_of the carrier of M,G & w is associating by Def12;
+  hence thesis by A1,Th29;
 end;
 
 theorem
@@ -927,7 +918,7 @@ A2: w is_atlas_of (the carrier of M),(the algebra of W) by Def12;
   hence thesis by Def3;
 end;
 
-theorem Th39:
+theorem Th33:
   W.(a,a) = 0.W & (W.(a,b) = 0.W implies a = b) & W.(a,b) = -W.(b,
 a) & (W.(a,b) = W.(c,d) implies W.(b,a) = W.(d,c)) & (for b,x ex a st W.(a,b) =
 x) & (W.(b,a) = W.(c,a) implies b = c) & (a@b = c iff W.(a,c) = W.(c,b)) & (a@b
@@ -937,28 +928,28 @@ proof
 A1: w is_atlas_of (the carrier of M),G by Def12;
 A2: G is midpoint_operator add-associative right_zeroed right_complementable
   Abelian by Def12;
-  hence W.(a,a) = 0.W by A1,Th4;
-  thus W.(a,b) = 0.W implies a = b by A2,A1,Th5;
-  thus W.(a,b) = -W.(b,a) by A2,A1,Th6;
-  thus W.(a,b) = W.(c,d) implies W.(b,a) = W.(d,c) by A2,A1,Th7;
+  hence W.(a,a) = 0.W by A1,Th2;
+  thus W.(a,b) = 0.W implies a = b by A2,A1,Th3;
+  thus W.(a,b) = -W.(b,a) by A2,A1,Th4;
+  thus W.(a,b) = W.(c,d) implies W.(b,a) = W.(d,c) by A2,A1,Th5;
   thus for b,x ex a st W.(a,b) = x
   proof
     let b,x;
     consider a such that
-A3: w.(a,b) = x by A2,A1,Th8;
+A3: w.(a,b) = x by A2,A1,Th6;
     take a;
     thus thesis by A3;
   end;
-  thus W.(b,a) = W.(c,a) implies b = c by A2,A1,Th9;
-A4: M,G are_associated_wrp w by Def12;
+  thus W.(b,a) = W.(c,a) implies b = c by A2,A1,Th7;
+A4: w is associating by Def12;
   hence a@b = c iff W.(a,c) = W.(c,b) by Def2;
-  thus a@b = c@d iff W.(a,d) = W.(c,b) by A2,A4,A1,Th16;
+  thus a@b = c@d iff W.(a,d) = W.(c,b) by A2,A4,A1,Th13;
   thus thesis by A1,Def4;
 end;
 
 theorem
   (a,0.W).W = a
 proof
-  W.(a,a) = 0.W by Th39;
-  hence thesis by Th39;
+  W.(a,a) = 0.W by Th33;
+  hence thesis by Th33;
 end;

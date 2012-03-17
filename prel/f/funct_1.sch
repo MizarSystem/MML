@@ -7,6 +7,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FUNCT_1"/>
 </Signature>
 <Scheme>
@@ -20,7 +21,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Not>
@@ -128,13 +129,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="24">
+<Func kind="K" nr="42">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -152,7 +153,7 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="36">
+<Func kind="K" nr="48">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -241,13 +242,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="24">
+<Func kind="K" nr="42">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -264,7 +265,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="36">
+<Func kind="K" nr="48">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -297,13 +298,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="24">
+<Func kind="K" nr="42">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -314,7 +315,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="36">
+<Func kind="K" nr="48">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -342,19 +343,19 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="24">
+<Func kind="K" nr="42">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
 </Pred>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="25">
+<Func kind="K" nr="43">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="2"/>
@@ -372,7 +373,7 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="36">
+<Func kind="K" nr="48">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

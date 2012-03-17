@@ -2,7 +2,7 @@
 ::  by Peter Jaeger
 ::
 :: Received January 31, 2011
-:: Copyright (c) 2011 Association of Mizar Users
+:: Copyright (c) 2011-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,17 +20,18 @@ environ
       XBOOLE_0, SUBSET_1, PROB_2, SERIES_1, NAT_1, FUNCT_1, PROB_3, SERIES_3,
       LIMFUNC1, SETLIM_1, XXREAL_2, FUNCOP_1;
  notations XXREAL_0, XCMPLX_0, XREAL_0, ORDINAL1, REAL_1, XBOOLE_0, SUBSET_1,
-      NUMBERS, NAT_1, COMPLEX1, SEQ_1, SEQ_2, RELAT_1, FUNCT_1, RELSET_1,
+      NUMBERS, NAT_1, COMPLEX1, SEQ_1, COMSEQ_2,
+      SEQ_2, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, FUNCOP_1, PROB_1, PROB_2, SETLIM_1, SERIES_1, PROB_3,
       VALUED_0, VALUED_1, ZFMISC_1, LIMFUNC1, SERIES_3, NEWTON, ABIAN, SIN_COS;
  constructors RELSET_1, BINARITH, SQUARE_1, COMSEQ_3, RVSUM_1, SIN_COS, REAL_1,
       LIMFUNC1, SETLIM_1, SEQ_2, SERIES_1, KURATO_0, RINFSUP1, SEQ_1, PROB_3,
       SERIES_3, ABIAN, NEWTON, NUMBERS, NAT_D, SEQ_4, RFUNCT_1, RCOMP_1,
-      SEQM_3, FUNCT_4;
+      SEQM_3, FUNCT_4, COMSEQ_2;
  registrations FUNCT_2, FINSEQ_2, XCMPLX_0, XBOOLE_0, SUBSET_1, ORDINAL1,
       NUMBERS, XREAL_0, NAT_1, MEMBERED, VALUED_0, VALUED_1, ABIAN, XXREAL_0,
       RELAT_1, SEQ_4, FINSEQ_1, NEWTON, FUNCOP_1, PROB_2, PROB_3, SETLIM_1,
-      RELSET_1;
+      RELSET_1, COMSEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, FUNCT_2, SIN_COS, PROB_1, SETLIM_1, NEWTON;
  theorems XCMPLX_0, SIN_COS, SERIES_1, PROB_1, SEQ_2, PROB_3, SUBSET_1,
@@ -177,7 +178,7 @@ proof
         B2.n <= (Partial_Sums(x rExpSeq)).(n+1)
    proof
     let n be Element of NAT;
-    defpred J[natural number] means
+    defpred J[Nat] means
      B2.$1 <= (Partial_Sums(x rExpSeq)).(1+$1);
     (Partial_Sums((x rExpSeq))).1
      = (Partial_Sums((x rExpSeq))).0 + ((x rExpSeq)).(0+1)
@@ -778,11 +779,7 @@ registration
   let s be Element of NAT;
   let A be SetSequence of Sigma;
   cluster A^\s -> Sigma-valued;
-  coherence
-  proof
-   defpred P[set] means (A^\s).$1 is Event of Sigma;
-    thus thesis;
- end;
+  coherence;
 end;
 
 theorem Th5:
@@ -1027,105 +1024,101 @@ proof
     (for knat being Nat st n1<knat & knat<=n holds x in B.knat)
    ) by A44,XXREAL_0:2;
   A57: for x being set holds
-   ((for knat being Nat st knat<=n1 holds x in B.knat) &
-     (for knat being Nat st n1<knat & knat<=n holds x in B.knat) implies
-    (for knat being Nat st knat<=n holds x in B.knat));
-  A58: for x being set holds
      x in (Partial_Intersection (C^\(n1+n2+1))).(n-n1-1) implies
     (for qnat being Nat st n1<qnat & qnat<=n holds x in B.qnat)
    proof
     let x be set;
-    assume A59: x in (Partial_Intersection (C^\(n1+n2+1))).(n-n1-1);
-    A60: (n-n1-1)>=0 & (n-n1-1) is Element of NAT
+    assume A58: x in (Partial_Intersection (C^\(n1+n2+1))).(n-n1-1);
+    A59: (n-n1-1)>=0 & (n-n1-1) is Element of NAT
     proof
      (n-n1) is Element of NAT by A44,NAT_1:21;
      hence thesis by A44,NAT_1:20,XREAL_1:50;
     end;
-    A61: for knat being Nat st knat<=(n-n1-1) holds x in C.(knat+(n1+n2+1))
+    A60: for knat being Nat st knat<=(n-n1-1) holds x in C.(knat+(n1+n2+1))
     proof
      let knat be Nat;
      assume knat<=(n-n1-1); then
-     x in (C^\(n1+n2+1)).knat by A60,A59,PROB_3:25;
+     x in (C^\(n1+n2+1)).knat by A59,A58,PROB_3:25;
      hence thesis by NAT_1:def 3;
     end;
    for qnat being Nat st n1<qnat & qnat<=n holds x in B.qnat
    proof
     let qnat be Nat;
-    assume that A62: n1<qnat and A63: qnat<=n;
-    A64: n1+1<=qnat & qnat<=n by A62,A63,NAT_1:13;
-    A65: qnat-(n1+1) is Element of NAT by A64,NAT_1:21;
-    consider knat being Nat such that A66:knat=qnat-n1-1 by A65;
-    A67:(qnat-n1-1)<=(n-n1-1)
+    assume that A61: n1<qnat and A62: qnat<=n;
+    A63: n1+1<=qnat & qnat<=n by A61,A62,NAT_1:13;
+    A64: qnat-(n1+1) is Element of NAT by A63,NAT_1:21;
+    consider knat being Nat such that A65:knat=qnat-n1-1 by A64;
+    A66:(qnat-n1-1)<=(n-n1-1)
     proof
-     qnat-(n1+1)<=n-(n1+1) by A63,XREAL_1:9;
+     qnat-(n1+1)<=n-(n1+1) by A62,XREAL_1:9;
      hence thesis;
     end;
-    A68: x in C.(knat+(n1+n2+1)) by A66,A67,A61;
+    A67: x in C.(knat+(n1+n2+1)) by A65,A66,A60;
     x in B.qnat
     proof
      reconsider qnat as Element of NAT by ORDINAL1:def 12;
-     A69: dom (C*(Special_Function(n1,n2))) = NAT by FUNCT_2:def 1;
+     A68: dom (C*(Special_Function(n1,n2))) = NAT by FUNCT_2:def 1;
      (Special_Function(n1,n2)).qnat = IFGT(qnat,n1,qnat+n2,qnat) &
-     IFGT(qnat,n1,qnat+n2,qnat) = qnat+n2 by Def2,A62,XXREAL_0:def 11;
-     hence thesis by A69,A45,A66,A68,FUNCT_1:12;
+     IFGT(qnat,n1,qnat+n2,qnat) = qnat+n2 by Def2,A61,XXREAL_0:def 11;
+     hence thesis by A68,A45,A65,A67,FUNCT_1:12;
     end;
     hence thesis;
    end;
    hence thesis;
    end;
- A70: for x being set holds
+ A69: for x being set holds
     (for qnat being Nat st n1<qnat & qnat<=n holds x in B.qnat) implies
       x in (Partial_Intersection (C^\(n1+n2+1))).(n-n1-1)
    proof
     let x be set;
-    assume A71: for qnat being Nat st n1<qnat & qnat<=n holds x in B.qnat;
-    A72: n-n1-1>=0 & n-n1-1 is Element of NAT
+    assume A70: for qnat being Nat st n1<qnat & qnat<=n holds x in B.qnat;
+    A71: n-n1-1>=0 & n-n1-1 is Element of NAT
     proof
      n-n1 is Element of NAT by A44,NAT_1:21;
      hence thesis by A44,NAT_1:20,XREAL_1:50;
     end;
    x in (Partial_Intersection (C^\(n1+n2+1))).(n-n1-1)
    proof
-    A73: for qnat being Nat st 0<=(qnat-n1-1) & (qnat-n1-1)<=n-n1-1 holds
+    A72: for qnat being Nat st 0<=(qnat-n1-1) & (qnat-n1-1)<=n-n1-1 holds
      x in B.qnat
     proof
      let qnat be Nat;
-      assume that A74: 0<=qnat-n1-1 and
-                  A75: qnat-n1-1<=n-n1-1;
-      0+(n1+1)<=qnat-(n1+1)+(n1+1) by A74,XREAL_1:6; then
+      assume that A73: 0<=qnat-n1-1 and
+                  A74: qnat-n1-1<=n-n1-1;
+      0+(n1+1)<=qnat-(n1+1)+(n1+1) by A73,XREAL_1:6; then
       n1+1-1<=qnat-1 by XREAL_1:9; then
       n1<=qnat-1 & qnat<(qnat+1) by NAT_1:13; then
       n1<=qnat-1 & qnat-1<qnat+1-1 by XREAL_1:9; then
-      A76: n1<qnat by XXREAL_0:2;
-      qnat-(n1+1)+(n1+1)<=n-(n1+1)+(n1+1) by A75,XREAL_1:6;
-      hence thesis by A76,A71;
+      A75: n1<qnat by XXREAL_0:2;
+      qnat-(n1+1)+(n1+1)<=n-(n1+1)+(n1+1) by A74,XREAL_1:6;
+      hence thesis by A75,A70;
      end;
      for knat being Nat st 0<=knat & knat<=(n-n1-1) holds
       x in (C^\(n1+n2+1)).knat
      proof
       let knat be Nat;
-      assume that 0<=knat and A77: knat<=n-n1-1;
+      assume that 0<=knat and A76: knat<=n-n1-1;
       set qnat=knat+n1+1;
-      A78: (qnat-n1-1)<=n-n1-1 by A77;
-      A79: x in B.qnat by A78,A73;
-      A80: dom (C*(Special_Function(n1,n2))) = NAT by FUNCT_2:def 1;
-      A81: n1<qnat
+      A77: (qnat-n1-1)<=n-n1-1 by A76;
+      A78: x in B.qnat by A77,A72;
+      A79: dom (C*(Special_Function(n1,n2))) = NAT by FUNCT_2:def 1;
+      A80: n1<qnat
       proof
        (n1+1)<=(n1+1+knat) by XREAL_1:31;
        hence thesis by NAT_1:13;
       end;
       (Special_Function(n1,n2)).qnat = IFGT(qnat,n1,qnat+n2,qnat) &
-      IFGT(qnat,n1,qnat+n2,qnat) = qnat+n2 by Def2,A81,XXREAL_0:def 11; then
-      B.qnat=C.(n1+n2+1+knat) by A45,A80,FUNCT_1:12;
-      hence thesis by A79,NAT_1:def 3;
+      IFGT(qnat,n1,qnat+n2,qnat) = qnat+n2 by Def2,A80,XXREAL_0:def 11; then
+      B.qnat=C.(n1+n2+1+knat) by A45,A79,FUNCT_1:12;
+      hence thesis by A78,NAT_1:def 3;
      end; then
      for knat being Nat st knat<=(n-n1-1) holds
       x in (C^\(n1+n2+1)).knat;
-     hence thesis by A72,PROB_3:25;
+     hence thesis by A71,PROB_3:25;
     end;
    hence thesis;
    end;
-   A82: for x being set holds
+   A81: for x being set holds
           (x in (Partial_Intersection B).n iff
     (for knat being Nat st knat<=n1 holds x in B.knat) &
     (for knat being Nat st n1<knat & knat<=n holds x in B.knat))
@@ -1133,9 +1126,9 @@ proof
     let x be set;
     x in (Partial_Intersection B).n iff
      for knat being Nat st knat<=n holds x in B.knat by PROB_3:25;
-    hence thesis by A56,A57;
+    hence thesis by A56;
    end;
-   A83: for x being set holds
+   A82: for x being set holds
    ((x in (Partial_Intersection B).n) iff
    (x in (Partial_Intersection B).n1 &
     (for knat being Nat st n1<knat & knat<=n holds x in B.knat)))
@@ -1143,7 +1136,7 @@ proof
     let x be set;
     x in (Partial_Intersection B).n1 iff
      for knat being Nat st knat<=n1 holds x in B.knat by PROB_3:25;
-    hence thesis by A82;
+    hence thesis by A81;
    end;
    for x being set holds
    ((x in (Partial_Intersection B).n) iff
@@ -1153,8 +1146,8 @@ proof
     let x be set;
     x in (Partial_Intersection (C^\(n1+n2+1))).(n-n1-1) iff
     for knat being Nat st n1<knat & knat<=n holds x in B.knat
-     by A58,A70;
-    hence thesis by A83;
+     by A57,A69;
+    hence thesis by A82;
    end;
    hence thesis by A46,XBOOLE_0:def 4;
 end;
@@ -1164,7 +1157,7 @@ end;
 definition
   let Omega be non empty set, Sigma be SigmaField of Omega,
       Prob be Probability of Sigma, A be SetSequence of Sigma;
-  pred A is_all_independent_wrt Prob means  :Def8:
+  pred A is_all_independent_wrt Prob means  :Def6:
    for B being SetSequence of Sigma st
     (ex e being sequence of NAT st
      (e is one-to-one &
@@ -1270,7 +1263,7 @@ proof
  hence thesis by A19,FUNCT_1:24;
 end; then
 Prob.((Partial_Intersection B).m) =
-(Partial_Product(Prob*B)).m by A2,Def8;
+(Partial_Product(Prob*B)).m by A2,Def6;
 hence thesis by A18,A21,Th5;
 end;
 
@@ -1317,7 +1310,7 @@ proof
  thus thesis by A27,A30,FUNCT_1:24;
 end;
 Prob.((Partial_Intersection B).m) =
-(Partial_Product(Prob*B)).m by A2,A29,Def8;
+(Partial_Product(Prob*B)).m by A2,A29,Def6;
 hence thesis by A28,A3;
 end;
 A35: for q being Element of NAT holds
@@ -2095,7 +2088,7 @@ end;
 
 definition
   let X be set, A be SetSequence of X;
-  func Union_Shift_Seq A -> SetSequence of X means  :Def9:
+  func Union_Shift_Seq A -> SetSequence of X means  :Def7:
   for n being Element of NAT holds it.n = Union (A^\n);
   existence
   proof
@@ -2179,29 +2172,6 @@ definition
   end;
 end;
 
-:::definition
-:::  let Omega be non empty set,
-:::  Sigma be SigmaField of Omega,
-:::  A be SetSequence of Sigma;
-:::  func @Union_Shift_Seq A -> SetSequence of Sigma equals
-:::  Union_Shift_Seq A;
-:::  coherence
-:::  proof
-:::    defpred P[set] means (Union_Shift_Seq A).$1 is Event of Sigma;
-:::    (Union_Shift_Seq A).0 = Union (A^\0) by Def9; then
-:::    A1: P[0] by PROB_1:46;
-:::    A2: for k be Element of NAT st P[k] holds P[k+1]
-:::    proof
-:::      let k be Element of NAT;
-:::      assume (Union_Shift_Seq A).k is Event of Sigma;
-:::      Union (A^\(k+1)) in Sigma by PROB_1:46;
-:::      hence thesis by Def9;
-:::    end;
-:::    for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
-:::    hence thesis by PROB_1:57;
-:::  end;
-:::end;
-
 registration
   let Omega be non empty set,
   Sigma be SigmaField of Omega,
@@ -2210,14 +2180,14 @@ registration
   coherence
   proof
     defpred P[set] means (Union_Shift_Seq A).$1 is Event of Sigma;
-    (Union_Shift_Seq A).0 = Union (A^\0) by Def9; then
+    (Union_Shift_Seq A).0 = Union (A^\0) by Def7; then
     A1: P[0] by PROB_1:17;
     A2: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
       assume (Union_Shift_Seq A).k is Event of Sigma;
       Union (A^\(k+1)) in Sigma by PROB_1:17;
-      hence thesis by Def9;
+      hence thesis by Def7;
     end;
     for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
     hence thesis by PROB_1:25;
@@ -2234,7 +2204,7 @@ end;
 
 definition
   let X be set, A be SetSequence of X;
-  func Intersect_Shift_Seq A -> SetSequence of X means :Def12:
+  func Intersect_Shift_Seq A -> SetSequence of X means :Def9:
   for n being Element of NAT holds it.n = Intersection (A^\n);
   existence
   proof
@@ -2320,53 +2290,6 @@ definition
   end;
 end;
 
-:::definition
-:::  let Omega be non empty set,
-:::  Sigma be SigmaField of Omega,
-:::  A be SetSequence of Sigma;
-:::  func @Intersect_Shift_Seq A -> SetSequence of Sigma equals
-:::  Intersect_Shift_Seq A;
-:::coherence
-:::  proof
-:::    defpred P[set] means (Intersect_Shift_Seq A).$1 is Event of Sigma;
-:::    for n being Element of NAT holds (Complement (A^\0)).n
-:::     is Event of Sigma
-:::    proof
-:::     let n be Element of NAT;
-:::     ((A^\0).n)` is Event of Sigma by PROB_1:50;
-:::     hence thesis by PROB_1:def 4;
-:::    end; then
-:::    A1: (Complement (A^\0)) is SetSequence of Sigma
-:::        by PROB_1:57;
-:::    A2: Union Complement (A^\0) is Event of Sigma
-:::     by A1,PROB_1:58;
-:::    (Intersect_Shift_Seq A).0 =
-:::     Intersection (A^\0) by Def12; then
-:::   A3: P[0] by A2,PROB_1:50;
-:::   A4: for k be Element of NAT st P[k] holds P[k+1]
-:::       proof
-:::        let k be Element of NAT;
-:::        assume (Intersect_Shift_Seq A).k is Event of Sigma;
-:::        for n being Element of NAT holds
-:::             (Complement (A^\(k+1))).n is Event of Sigma
-:::             proof
-:::              let n be Element of NAT;
-:::              ((A^\(k+1)).n)` is Event of Sigma by PROB_1:50;
-:::              hence thesis by PROB_1:def 4;
-:::             end; then
-:::        A5: (Complement (A^\(k+1))) is SetSequence of Sigma
-:::               by PROB_1:57;
-:::        A6: Union Complement (A^\(k+1)) is Event of Sigma
-:::         by A5,PROB_1:58;
-:::        (Intersect_Shift_Seq A).(k+1) = Intersection (A^\(k+1))
-:::         by Def12;
-:::        hence thesis by A6,PROB_1:50;
-:::       end;
-:::    for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
-:::    hence thesis by PROB_1:57;
-:::  end;
-:::end;
-
 registration
   let Omega be non empty set,
   Sigma be SigmaField of Omega,
@@ -2375,22 +2298,22 @@ registration
   coherence
   proof
     defpred P[set] means (Intersect_Shift_Seq A).$1 is Event of Sigma;
-    A2: Union Complement (A^\0) is Event of Sigma
+    A1: Union Complement (A^\0) is Event of Sigma
      by PROB_1:26;
     (Intersect_Shift_Seq A).0 =
-     Intersection (A^\0) by Def12; then
-   A3: P[0] by A2,PROB_1:20;
-   A4: for k be Element of NAT st P[k] holds P[k+1]
+     Intersection (A^\0) by Def9; then
+   A2: P[0] by A1,PROB_1:20;
+   A3: for k be Element of NAT st P[k] holds P[k+1]
        proof
         let k be Element of NAT;
         assume (Intersect_Shift_Seq A).k is Event of Sigma;
-        A6: Union Complement (A^\(k+1)) is Event of Sigma
+        A4: Union Complement (A^\(k+1)) is Event of Sigma
          by PROB_1:26;
         (Intersect_Shift_Seq A).(k+1) = Intersection (A^\(k+1))
-         by Def12;
-        hence thesis by A6,PROB_1:20;
+         by Def9;
+        hence thesis by A4,PROB_1:20;
        end;
-    for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A3);
     hence thesis by PROB_1:25;
   end;
   end;
@@ -2413,7 +2336,7 @@ for x being set holds
 proof
 let x be set;
 hereby assume A1: x in (Intersect_Shift_Seq Complement A).n; then
-   A2: x in Intersection ((Complement A)^\n) by Def12;
+   A2: x in Intersection ((Complement A)^\n) by Def9;
    A3: for k being Element of NAT holds not x in (A^\n).k
    proof
     let k be Element of NAT;
@@ -2428,7 +2351,7 @@ hereby assume A1: x in (Intersect_Shift_Seq Complement A).n; then
    hence thesis by NAT_1:def 3;
    end;
    A5: not x in Union (A^\n) by A3,PROB_1:12;
-   A6: not x in (Union_Shift_Seq A).n by Def9,A5;
+   A6: not x in (Union_Shift_Seq A).n by Def7,A5;
    A7: x in Omega \ (Union_Shift_Seq A).n by A1,A6,XBOOLE_0:def 5;
    thus x in ((Union_Shift_Seq A).n)` by A7,SUBSET_1:def 4;
   end;
@@ -2436,7 +2359,7 @@ hereby assume A1: x in (Intersect_Shift_Seq Complement A).n; then
    A9: x in ((Union_Shift_Seq A).n)` iff
     x in Omega \ (Union_Shift_Seq A).n by SUBSET_1:def 4;
    A10: x in (Union_Shift_Seq A).n iff x in Union (A^\n)
-    by Def9;
+    by Def7;
    A11: for k being Element of NAT holds x in ((Complement A)^\n).k
    proof
     let k be Element of NAT;
@@ -2447,7 +2370,7 @@ hereby assume A1: x in (Intersect_Shift_Seq Complement A).n; then
      hence thesis by A14,NAT_1:def 3,SUBSET_1:def 4;
    end;
    x in Intersection ((Complement A)^\n) by A11,PROB_1:13;
-   hence x in (Intersect_Shift_Seq Complement A).n by Def12;
+   hence x in (Intersect_Shift_Seq Complement A).n by Def9;
 end;
 hence thesis by TARSKI:1;
 end;
@@ -2585,10 +2508,10 @@ proof
         by SETLIM_1:20;
         x in (A^\n).k by A1,NAT_1:def 3;
         then x in Union (A^\n) by PROB_1:12;
-        hence x in (Union_Shift_Seq A).n by Def9;
+        hence x in (Union_Shift_Seq A).n by Def7;
       end;
       assume x in (Union_Shift_Seq A).n;
-      then x in Union (A^\n) by Def9; then
+      then x in Union (A^\n) by Def7; then
       consider k being Element of NAT such that A2: x in (A^\n).k
       by PROB_1:12;
       x in A.(n+k) by A2,NAT_1:def 3;
@@ -2609,10 +2532,10 @@ A4: for k being Element of NAT holds x in (A^\n).k
         hence thesis by NAT_1:def 3;
       end;
       x in Intersection (A^\n) by A4,PROB_1:13;
-      hence x in (Intersect_Shift_Seq A).n  by Def12;
+      hence x in (Intersect_Shift_Seq A).n  by Def9;
     end;
     assume x in (Intersect_Shift_Seq A).n; then
-A5: x in Intersection (A^\n) by Def12;
+A5: x in Intersection (A^\n) by Def9;
      for k being Element of NAT holds x in A.(n+k)
      proof
        let k be Element of NAT;
@@ -2633,7 +2556,7 @@ definition
   let Sigma be SigmaField of Omega;
   let Prob be Probability of Sigma;
   let A be SetSequence of Sigma;
-  func Sum_Shift_Seq(Prob,A) -> Real_Sequence means :Def15:
+  func Sum_Shift_Seq(Prob,A) -> Real_Sequence means :Def11:
   for n being Element of NAT holds it.n = Sum( Prob*(A^\n) );
   existence
   proof
@@ -2692,38 +2615,38 @@ A8: for A being SetSequence of Sigma holds
        defpred P[set] means
          (Prob*(Partial_Union (A^\s))).$1
           <= Partial_Sums(Prob*(A^\s)).$1;
-       A10: Partial_Sums(Prob*(A^\s)).0 =
+       A9: Partial_Sums(Prob*(A^\s)).0 =
            (Prob*(A^\s)).0 by SERIES_1:def 1;
-       A11:  dom(Prob*(A^\s))=NAT by FUNCT_2:def 1;
-       A12: (Prob*(A^\s)).0=Prob.((A^\s).0)
-            by A11,FUNCT_1:12;
-       A13: Prob.((Partial_Union (A^\s)).0)=
+       A10:  dom(Prob*(A^\s))=NAT by FUNCT_2:def 1;
+       A11: (Prob*(A^\s)).0=Prob.((A^\s).0)
+            by A10,FUNCT_1:12;
+       A12: Prob.((Partial_Union (A^\s)).0)=
            Prob.((A^\s).0) by PROB_3:def 2;
-       A14: dom(Prob*(Partial_Union (A^\s)))=NAT
+       A13: dom(Prob*(Partial_Union (A^\s)))=NAT
             by FUNCT_2:def 1;
-       A15: P[0] by A14,A13,A12,A10,FUNCT_1:12;
-       A16: for k being Element of NAT st P[k] holds P[k+1]
+       A14: P[0] by A13,A12,A11,A9,FUNCT_1:12;
+       A15: for k being Element of NAT st P[k] holds P[k+1]
            proof
             let k be Element of NAT;
-            assume A17: (Prob*(Partial_Union (A^\s))).k
+            assume A16: (Prob*(Partial_Union (A^\s))).k
                          <= Partial_Sums(Prob*(A^\s)).k;
-            A18: dom(Prob*(Partial_Union (A^\s)))=
+            A17: dom(Prob*(Partial_Union (A^\s)))=
                    NAT by FUNCT_2:def 1;
-            A20: Prob.((Partial_Union (A^\s)).k
+            A18: Prob.((Partial_Union (A^\s)).k
                  \/ (A^\s).(k+1)) <=
                  Prob.((Partial_Union (A^\s)).k) +
                   Prob.((A^\s).(k+1)) by PROB_1:39;
             dom(Prob*(A^\s))=NAT by FUNCT_2:def 1;
             then
-            A21: (Prob*(A^\s)).(k+1)
+            A19: (Prob*(A^\s)).(k+1)
            =Prob.((A^\s).(k+1)) by FUNCT_1:12;
-            A22: Prob.((Partial_Union (A^\s)).(k+1)) <=
+            A20: Prob.((Partial_Union (A^\s)).(k+1)) <=
                  Prob.((Partial_Union (A^\s)).k)
                  + (Prob*(A^\s)).(k+1) implies
                  Prob.((Partial_Union (A^\s)).(k+1)) -
                   Prob.((Partial_Union (A^\s)).k)
                  <= (Prob*(A^\s)).(k+1) by XREAL_1:20;
-            A23: (Prob.((Partial_Union (A^\s)).(k+1)) -
+            A21: (Prob.((Partial_Union (A^\s)).(k+1)) -
                    (Prob*(A^\s)).(k+1))
                  <= Prob.((Partial_Union (A^\s)).k) &
                  Prob.((Partial_Union (A^\s)).k)
@@ -2731,31 +2654,31 @@ A8: for A being SetSequence of Sigma holds
                  (Prob.((Partial_Union (A^\s)).(k+1))
                   - (Prob*(A^\s)).(k+1))
                  <= Partial_Sums(Prob*(A^\s)).k by XXREAL_0:2;
-           A24: Prob.((Partial_Union (A^\s)).(k+1)) -
+           A22: Prob.((Partial_Union (A^\s)).(k+1)) -
                   (Prob*(A^\s)).(k+1)
                  <= Partial_Sums(Prob*(A^\s)).k implies
                  Prob.((Partial_Union (A^\s)).(k+1))
                  <= Partial_Sums(Prob*(A^\s)).k
                      + (Prob*(A^\s)).(k+1) by XREAL_1:20;
-           A25: Prob.((Partial_Union (A^\s)).(k+1))
+           A23: Prob.((Partial_Union (A^\s)).(k+1))
                        <= Partial_Sums(Prob*(A^\s)).(k+1)
- by A20,A21,A22,A18,A17,A23,A24,FUNCT_1:12,PROB_3:def 2,SERIES_1:def 1
+ by A18,A19,A20,A17,A16,A21,A22,FUNCT_1:12,PROB_3:def 2,SERIES_1:def 1
 ,XREAL_1:12;
                   dom(Prob*(Partial_Union (A^\s)))=NAT
                   by FUNCT_2:def 1;
-           hence thesis by A25,FUNCT_1:12;
+           hence thesis by A23,FUNCT_1:12;
            end;
-       for k being Element of NAT holds P[k] from NAT_1:sch 1(A15,A16);
+       for k being Element of NAT holds P[k] from NAT_1:sch 1(A14,A15);
        hence thesis;
        end;
-A26: for k being Element of NAT holds
+A24: for k being Element of NAT holds
         Partial_Sums( (Prob*A) ^\k ) is convergent
         proof
           let k be Element of NAT;
           (Prob*A) ^\ k is summable by A2,SERIES_1:12;
           hence thesis by SERIES_1:def 2;
         end;
-A27: for A being SetSequence of Sigma holds
+A25: for A being SetSequence of Sigma holds
         for n being Element of NAT holds (Prob*(A^\n))=( (Prob*A)^\n )
 proof
  let A be SetSequence of Sigma;
@@ -2765,129 +2688,129 @@ proof
   let k be Element of NAT;
   dom(Prob*(A^\n))=NAT by FUNCT_2:def 1;
   then
-  A28: (Prob*(A^\n)).k =Prob.(((A^\n)).k) by FUNCT_1:12;
+  A26: (Prob*(A^\n)).k =Prob.(((A^\n)).k) by FUNCT_1:12;
   dom(Prob*A)=NAT by FUNCT_2:def 1;
   then
-  A29: Prob.(A.(n+k))=(Prob*A).(n+k) by FUNCT_1:12;
+  A27: Prob.(A.(n+k))=(Prob*A).(n+k) by FUNCT_1:12;
   (Prob*A).(k+n)=((Prob*A)^\n).k by NAT_1:def 3;
-  hence thesis by A28,A29,NAT_1:def 3;
+  hence thesis by A26,A27,NAT_1:def 3;
 end;
  hence thesis by FUNCT_2:63;
 end;
 
-A30: for n being Element of NAT holds
+A28: for n being Element of NAT holds
              Partial_Sums( Prob*(A^\n) ) is convergent
              proof
               let n be Element of NAT;
               Partial_Sums( Prob*(A^\n) )=
-               Partial_Sums( (Prob*A)^\n )  by A27;
-              hence thesis by A26;
+               Partial_Sums( (Prob*A)^\n )  by A25;
+              hence thesis by A24;
              end;
-A31: for n being Element of NAT holds
+A29: for n being Element of NAT holds
              lim (Prob * Partial_Union (A^\n)) <=
              lim(Partial_Sums(Prob*(A^\n)))
              proof
               let n be Element of NAT;
-              A32: for k being Element of NAT holds
+              A30: for k being Element of NAT holds
               (Prob*(Partial_Union (A^\n))).k <=
                 (Partial_Sums(Prob*(A^\n))).k by A8;
-              A33: Prob*Partial_Union (A^\n) is convergent
+              A31: Prob*Partial_Union (A^\n) is convergent
                   by PROB_3:41;
               Partial_Sums( Prob*(A^\n) )
-                  is convergent by A30;
-              hence thesis by A33,A32,SEQ_2:18;
+                  is convergent by A28;
+              hence thesis by A31,A30,SEQ_2:18;
              end;
-A34: for n being Element of NAT holds
+A32: for n being Element of NAT holds
               Prob.Union (A^\n) <=
                lim(Partial_Sums(Prob*(A^\n)))
              proof
               let n be Element of NAT;
               lim (Prob * Partial_Union (A^\n)) <=
-                   lim(Partial_Sums(Prob*(A^\n))) by A31;
+                   lim(Partial_Sums(Prob*(A^\n))) by A29;
               hence thesis by PROB_3:41;
              end;
-A35: for n being Element of NAT holds
+A33: for n being Element of NAT holds
               Prob.Union (A^\n)<= Sum(Prob*(A^\n))
              proof
               let n be Element of NAT;
               lim(Partial_Sums(Prob*(A^\n)))=
                   Sum(Prob*(A^\n)) by SERIES_1:def 3;
-              hence thesis by A34;
+              hence thesis by A32;
              end;
-A36: for n being Element of NAT holds
+A34: for n being Element of NAT holds
               (Prob*(Union_Shift_Seq A)).n <=Sum_Shift_Seq(Prob,A).n
              proof
               let n be Element of NAT;
-              A37: dom(Prob*(Union_Shift_Seq A))=NAT by FUNCT_2:def 1;
-              A38: (Prob*(Union_Shift_Seq A)).n=
-                   Prob.((Union_Shift_Seq A).n) by A37,FUNCT_1:12;
-              A39: Prob.Union (A^\n)<=
-                   Sum(Prob*(A^\n)) by A35;
-              Sum(Prob*(A^\n))=Sum_Shift_Seq(Prob,A).n by Def15;
-              hence thesis by Def9,A38,A39;
+              A35: dom(Prob*(Union_Shift_Seq A))=NAT by FUNCT_2:def 1;
+              A36: (Prob*(Union_Shift_Seq A)).n=
+                   Prob.((Union_Shift_Seq A).n) by A35,FUNCT_1:12;
+              A37: Prob.Union (A^\n)<=
+                   Sum(Prob*(A^\n)) by A33;
+              Sum(Prob*(A^\n))=Sum_Shift_Seq(Prob,A).n by Def11;
+              hence thesis by Def7,A36,A37;
              end;
-A40: 0<=lim(Prob*Partial_Intersection Union_Shift_Seq A)
+A38: 0<=lim(Prob*Partial_Intersection Union_Shift_Seq A)
  by A7,A3,SEQ_2:17;
-A41: Sum_Shift_Seq(Prob,A) is convergent implies
+A39: Sum_Shift_Seq(Prob,A) is convergent implies
              lim(Prob*Partial_Intersection Union_Shift_Seq A)
               <= lim(Sum_Shift_Seq(Prob,A))
              proof
-              assume A42: Sum_Shift_Seq(Prob,A) is convergent;
-          A43:for n being Element of NAT holds
+              assume A40: Sum_Shift_Seq(Prob,A) is convergent;
+          A41:for n being Element of NAT holds
                   (Prob*(Partial_Intersection Union_Shift_Seq A)).n
                     <= (Prob*(Union_Shift_Seq A)).n
               proof
                let n be Element of NAT;
-               A44: Prob.((Partial_Intersection Union_Shift_Seq A).n) <=
+               A42: Prob.((Partial_Intersection Union_Shift_Seq A).n) <=
                     Prob.((Union_Shift_Seq A).n) by PROB_1:34,PROB_3:23;
-               A45: dom(Prob*(Partial_Intersection Union_Shift_Seq A))=NAT
+               A43: dom(Prob*(Partial_Intersection Union_Shift_Seq A))=NAT
                     by FUNCT_2:def 1;
-               A46: dom(Prob*(Union_Shift_Seq A))=NAT
+               A44: dom(Prob*(Union_Shift_Seq A))=NAT
                   by FUNCT_2:def 1;
                (Prob*(Union_Shift_Seq A)).n=
-                    Prob.((Union_Shift_Seq A).n) by A46,FUNCT_1:12;
-               hence thesis by A45,A44,FUNCT_1:12;
+                    Prob.((Union_Shift_Seq A).n) by A44,FUNCT_1:12;
+               hence thesis by A43,A42,FUNCT_1:12;
             end;
             lim(Prob*Partial_Intersection Union_Shift_Seq A)
                 <= lim(Sum_Shift_Seq(Prob,A))
                proof
-                A47: for n being Element of NAT holds
+                A45: for n being Element of NAT holds
                      (Prob*Partial_Intersection Union_Shift_Seq A).n
                       <= Sum_Shift_Seq(Prob,A).n
                      proof
                       let n be Element of NAT;
-                      A48: (Prob*Partial_Intersection Union_Shift_Seq A).n
-                             <= (Prob*(Union_Shift_Seq A)).n by A43;
-                      A49: (Prob*(Union_Shift_Seq A)).n
-                             <= Sum_Shift_Seq(Prob,A).n by A36;
-                      thus thesis by A48,A49,XXREAL_0:2;
+                      A46: (Prob*Partial_Intersection Union_Shift_Seq A).n
+                             <= (Prob*(Union_Shift_Seq A)).n by A41;
+                      A47: (Prob*(Union_Shift_Seq A)).n
+                             <= Sum_Shift_Seq(Prob,A).n by A34;
+                      thus thesis by A46,A47,XXREAL_0:2;
                      end;
-                thus thesis by A7,A42,A47,SEQ_2:18;
+                thus thesis by A7,A40,A45,SEQ_2:18;
                end;
       hence thesis;
       end;
 
-A50:
+A48:
 for A being SetSequence of Sigma holds
 Partial_Sums(Prob*A) is convergent implies
  (0=lim Sum_Shift_Seq(Prob,A) &
  Sum_Shift_Seq(Prob,A) is convergent)
 proof
 let A be SetSequence of Sigma;
-assume A51: Partial_Sums(Prob*A) is convergent;
+assume A49: Partial_Sums(Prob*A) is convergent;
 then
-A52: (Prob*A) is summable by SERIES_1:def 2;
-A53: for n being Element of NAT holds
+A50: (Prob*A) is summable by SERIES_1:def 2;
+A51: for n being Element of NAT holds
      Sum(Prob*A)-Sum((Prob*A)^\(n+1))=Partial_Sums(Prob*A).n
 proof
 let n be Element of NAT;
 Sum(Prob*A)-Sum((Prob*A)^\(n+1))=
 Partial_Sums(Prob*A).n+Sum((Prob*A)^\(n+1))-Sum((Prob*A)^\(n+1))
- by A52,SERIES_1:15;
+ by A50,SERIES_1:15;
 hence thesis;
 end;
 
-A54: for n being Element of NAT,m being Element of NAT st n<=m holds
+A52: for n being Element of NAT,m being Element of NAT st n<=m holds
     abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)
     =abs((Sum_Shift_Seq(Prob,A)^\1).m
        -(Sum_Shift_Seq(Prob,A)^\1).n)
@@ -2895,14 +2818,14 @@ proof
  let n be Element of NAT;
  let m be Element of NAT;
  assume n<=m;
- A55: Partial_Sums(Prob*A).m-Partial_Sums(Prob*A).n=
-     Partial_Sums(Prob*A).m-(Sum(Prob*A)-Sum((Prob*A)^\(n+1))) by A53;
- A56: Partial_Sums(Prob*A).m-Partial_Sums(Prob*A).n=
+ A53: Partial_Sums(Prob*A).m-Partial_Sums(Prob*A).n=
+     Partial_Sums(Prob*A).m-(Sum(Prob*A)-Sum((Prob*A)^\(n+1))) by A51;
+ A54: Partial_Sums(Prob*A).m-Partial_Sums(Prob*A).n=
      (Sum(Prob*A)-Sum((Prob*A)^\(m+1)))-
-     (Sum(Prob*A)-Sum((Prob*A)^\(n+1))) by A53,A55;
- A57: (Partial_Sums(Prob*A).m-Partial_Sums(Prob*A).n)=
-      (Sum((Prob*A)^\(n+1))-Sum((Prob*A)^\(m+1))) by A56;
- A58: for A being SetSequence of Sigma holds
+     (Sum(Prob*A)-Sum((Prob*A)^\(n+1))) by A51,A53;
+ A55: (Partial_Sums(Prob*A).m-Partial_Sums(Prob*A).n)=
+      (Sum((Prob*A)^\(n+1))-Sum((Prob*A)^\(m+1))) by A54;
+ A56: for A being SetSequence of Sigma holds
          for n being Element of NAT holds (Prob*(A^\n))=( (Prob*A)^\n )
  proof
   let A be SetSequence of Sigma;
@@ -2912,31 +2835,31 @@ proof
    let k be Element of NAT;
    dom(Prob*(A^\n))=NAT by FUNCT_2:def 1;
    then
-   A59: (Prob*(A^\n)).k =Prob.(((A^\n)).k) by FUNCT_1:12;
+   A57: (Prob*(A^\n)).k =Prob.(((A^\n)).k) by FUNCT_1:12;
    dom(Prob*A)=NAT by FUNCT_2:def 1;
    then
-   A60: Prob.(A.(n+k))=(Prob*A).(n+k) by FUNCT_1:12;
+   A58: Prob.(A.(n+k))=(Prob*A).(n+k) by FUNCT_1:12;
    (Prob*A).(k+n)=((Prob*A)^\n).k by NAT_1:def 3;
-   hence thesis by A59,A60,NAT_1:def 3;
+   hence thesis by A57,A58,NAT_1:def 3;
  end;
   hence thesis by FUNCT_2:63;
  end;
- A61: for n being Element of NAT holds
+ A59: for n being Element of NAT holds
        (Sum_Shift_Seq(Prob,A)^\1).n=Sum((Prob*A)^\(n+1))
  proof
   let n be Element of NAT;
-  A62:(Sum_Shift_Seq(Prob,A)^\1).n=Sum_Shift_Seq(Prob,A).(n+1)
+  A60:(Sum_Shift_Seq(Prob,A)^\1).n=Sum_Shift_Seq(Prob,A).(n+1)
         by NAT_1:def 3;
-  Sum_Shift_Seq(Prob,A).(n+1)=Sum(Prob*(A^\(n+1)) ) by Def15;
-  hence thesis by A58,A62;
+  Sum_Shift_Seq(Prob,A).(n+1)=Sum(Prob*(A^\(n+1)) ) by Def11;
+  hence thesis by A56,A60;
  end;
- A64: abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)
+ A61: abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)
      =abs((Sum_Shift_Seq(Prob,A)^\1).n
         -(Sum_Shift_Seq(Prob,A)^\1).m)
  proof
   (Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n=
-  (Sum_Shift_Seq(Prob,A)^\1).n-Sum((Prob*A)^\(m+1)) by A57,A61;
-  hence thesis by A61;
+  (Sum_Shift_Seq(Prob,A)^\1).n-Sum((Prob*A)^\(m+1)) by A55,A59;
+  hence thesis by A59;
  end;
  abs((Sum_Shift_Seq(Prob,A)^\1).n-(Sum_Shift_Seq(Prob,A)^\1).m)=
          abs((Sum_Shift_Seq(Prob,A)^\1).m-(Sum_Shift_Seq(Prob,A)^\1).n)
@@ -2948,26 +2871,26 @@ proof
   suppose 0< (Sum_Shift_Seq(Prob,A)^\1).n-
                   (Sum_Shift_Seq(Prob,A)^\1).m;
   then
-  A65:-0>-((Sum_Shift_Seq(Prob,A)^\1).n-
+  A62:-0>-((Sum_Shift_Seq(Prob,A)^\1).n-
                  (Sum_Shift_Seq(Prob,A)^\1).m);
   abs((Sum_Shift_Seq(Prob,A)^\1).m-
         (Sum_Shift_Seq(Prob,A)^\1).n)=
       -((Sum_Shift_Seq(Prob,A)^\1).m- (Sum_Shift_Seq(Prob,A)^\1).n)
-      by A65,ABSVALUE:def 1;
+      by A62,ABSVALUE:def 1;
   hence thesis;
   end;
-  suppose A66:(Sum_Shift_Seq(Prob,A)^\1).n-
+  suppose A63:(Sum_Shift_Seq(Prob,A)^\1).n-
                   (Sum_Shift_Seq(Prob,A)^\1).m<0;
    abs((Sum_Shift_Seq(Prob,A)^\1).n-
                   (Sum_Shift_Seq(Prob,A)^\1).m)=
       -((Sum_Shift_Seq(Prob,A)^\1).n-
-                  (Sum_Shift_Seq(Prob,A)^\1).m) by A66,ABSVALUE:def 1;
+                  (Sum_Shift_Seq(Prob,A)^\1).m) by A63,ABSVALUE:def 1;
   hence thesis;
   end;
   end;
- hence thesis by A64;
+ hence thesis by A61;
  end;
-A67: (for sr being real number st
+A64: (for sr being real number st
       0<sr ex n being Element of NAT st
        for m being Element of NAT st n<=m holds
     abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)<sr)
@@ -2978,38 +2901,38 @@ A67: (for sr being real number st
      abs((Sum_Shift_Seq(Prob,A)^\1).m-
         (Sum_Shift_Seq(Prob,A)^\1).n)<sr)
 proof
- assume A68: for sr being real number st 0<sr ex n being Element of NAT st
+ assume A65: for sr being real number st 0<sr ex n being Element of NAT st
               for m being Element of NAT st n<=m holds
      abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)<sr;
- let sr be real number such that A69: 0<sr;
+ let sr be real number such that A66: 0<sr;
  consider n being Element of NAT such that
- A70: for m being Element of NAT st n<=m holds
-      abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)<sr by A68,A69;
+ A67: for m being Element of NAT st n<=m holds
+      abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)<sr by A65,A66;
  take n;
- let m be Element of NAT such that A71: n<=m;
+ let m be Element of NAT such that A68: n<=m;
  abs((Partial_Sums(Prob*A)).m -(Partial_Sums(Prob*A)).n)=
  abs((Sum_Shift_Seq(Prob,A)^\1).m-
-         (Sum_Shift_Seq(Prob,A)^\1).n) by A71,A54;
- hence thesis by A70,A71;
+         (Sum_Shift_Seq(Prob,A)^\1).n) by A68,A52;
+ hence thesis by A67,A68;
 end;
-A72: Partial_Sums(Prob*A) is convergent &
-       (Sum_Shift_Seq(Prob,A)^\1) is convergent by A51,A67,SEQ_4:41;
-A73: dom((Sum_Shift_Seq(Prob,A)^\1)+
+A69: Partial_Sums(Prob*A) is convergent &
+       (Sum_Shift_Seq(Prob,A)^\1) is convergent by A49,A64,SEQ_4:41;
+A70: dom((Sum_Shift_Seq(Prob,A)^\1)+
  Partial_Sums(Prob*A))=NAT by FUNCT_2:def 1;
- consider B being Real_Sequence such that A74: B=
+ consider B being Real_Sequence such that A71: B=
 ((Sum_Shift_Seq(Prob,A)^\1)+ Partial_Sums(Prob*A));
 set B1 = NAT --> Sum(Prob*A);
-A75: (Prob*A) is summable by A51,SERIES_1:def 2;
-A76: for n being Element of NAT holds B1.n=B.n
+A72: (Prob*A) is summable by A49,SERIES_1:def 2;
+A73: for n being Element of NAT holds B1.n=B.n
 proof
  let n be Element of NAT;
- A77: for n being Element of NAT holds
+ A74: for n being Element of NAT holds
        (Sum_Shift_Seq(Prob,A)^\1).n=Sum((Prob*A)^\(n+1))
  proof
   let n be Element of NAT;
-  A78: (Sum_Shift_Seq(Prob,A)^\1).n=Sum_Shift_Seq(Prob,A).(n+1)
+  A75: (Sum_Shift_Seq(Prob,A)^\1).n=Sum_Shift_Seq(Prob,A).(n+1)
        by NAT_1:def 3;
-  A79: for A being SetSequence of Sigma holds
+  A76: for A being SetSequence of Sigma holds
           for n being Element of NAT holds (Prob*(A^\n))=( (Prob*A)^\n )
   proof
    let A be SetSequence of Sigma;
@@ -3018,44 +2941,44 @@ proof
    proof
     let k be Element of NAT;
     dom(Prob*(A^\n))=NAT by FUNCT_2:def 1; then
-    A80: (Prob*(A^\n)).k =Prob.(((A^\n)).k) by FUNCT_1:12;
+    A77: (Prob*(A^\n)).k =Prob.(((A^\n)).k) by FUNCT_1:12;
     dom(Prob*A)=NAT by FUNCT_2:def 1; then
-    A81: Prob.(A.(n+k))=(Prob*A).(n+k) by FUNCT_1:12;
+    A78: Prob.(A.(n+k))=(Prob*A).(n+k) by FUNCT_1:12;
     (Prob*A).(k+n)=((Prob*A)^\n).k by NAT_1:def 3;
-    hence thesis by A80,A81,NAT_1:def 3;
+    hence thesis by A77,A78,NAT_1:def 3;
   end;
    hence thesis by FUNCT_2:63;
   end;
-  Sum_Shift_Seq(Prob,A).(n+1)=Sum(Prob*(A^\(n+1)) ) by Def15;
-  hence thesis by A78,A79;
+  Sum_Shift_Seq(Prob,A).(n+1)=Sum(Prob*(A^\(n+1)) ) by Def11;
+  hence thesis by A75,A76;
  end;
- A82: (Sum_Shift_Seq(Prob,A)^\1).n=Sum((Prob*A)^\(n+1)) by A77;
+ A79: (Sum_Shift_Seq(Prob,A)^\1).n=Sum((Prob*A)^\(n+1)) by A74;
  Sum((Prob*A)) = Partial_Sums((Prob*A)).n + Sum((Prob*A)^\(n+1))
- by A75,SERIES_1:15; then
+ by A72,SERIES_1:15; then
  B1.n = Partial_Sums((Prob*A)).n + (Sum_Shift_Seq(Prob,A)^\1).n
- by A82,FUNCOP_1:7;
-hence thesis by A73,A74,VALUED_1:def 1;
+ by A79,FUNCOP_1:7;
+hence thesis by A70,A71,VALUED_1:def 1;
 end;
-A83: lim B1 = lim B
+A80: lim B1 = lim B
  proof
    ex k being Element of NAT st
    for n being Element of NAT st k<=n holds B1.n=B.n
    proof
      take 1;
-     thus thesis by A76;
+     thus thesis by A73;
    end;
    hence thesis by SEQ_4:19;
  end;
- A84: Sum(Prob*A)= B1.1 by FUNCOP_1:7 .= lim B by A83,SEQ_4:26;
- A85: lim B= lim (Sum_Shift_Seq(Prob,A)^\1)+
-         lim Partial_Sums((Prob*A)) by A74,A72,SEQ_2:6;
+ A81: Sum(Prob*A)= B1.1 by FUNCOP_1:7 .= lim B by A80,SEQ_4:26;
+ A82: lim B= lim (Sum_Shift_Seq(Prob,A)^\1)+
+         lim Partial_Sums((Prob*A)) by A71,A69,SEQ_2:6;
  Sum(Prob*A)=lim (Sum_Shift_Seq(Prob,A)^\1)+
-         Sum((Prob*A)) by A84,A85,SERIES_1:def 3;
- hence thesis by A72,SEQ_4:21,22;
+         Sum((Prob*A)) by A81,A82,SERIES_1:def 3;
+ hence thesis by A69,SEQ_4:21,22;
 end;
 lim(Sum_Shift_Seq(Prob,A))=0 &
-     Sum_Shift_Seq(Prob,A) is convergent by A1,A50;
-hence thesis by A5,A7,A40,A41,PROB_2:def 1;
+     Sum_Shift_Seq(Prob,A) is convergent by A1,A48;
+hence thesis by A5,A7,A38,A39,PROB_2:def 1;
 end;
 
 theorem Th14:
@@ -3126,7 +3049,7 @@ A8: for X being set, A being SetSequence of X holds
          let n be Element of NAT;
          assume A11: x in (Union_Shift_Seq A).n;
          A12: x in (Union_Shift_Seq A).n implies
-              x in Union (A^\n) by Def9;
+              x in Union (A^\n) by Def7;
          A13: ex k being Element of NAT st x in (A^\n).k
               by A11,A12,PROB_1:12;
          consider k being Element of NAT such that A14: k>=n & x in A.k
@@ -3156,7 +3079,7 @@ A8: for X being set, A being SetSequence of X holds
          ex k being Element of NAT st x in (A^\m).k by A18,A1;
          then
          x in Union (A^\m) by PROB_1:12;
-        hence thesis by Def9;
+        hence thesis by Def7;
         end;
         for m being Element of NAT holds x in (Union_Shift_Seq A).m
         proof
@@ -3191,7 +3114,7 @@ A20: for X being set, A being SetSequence of X holds
         consider n being Element of NAT such that
          A21: x in (Intersect_Shift_Seq A).n by PROB_1:12;
         A22: (Intersect_Shift_Seq A).n =
-         Intersection (A^\n) by Def12;
+         Intersection (A^\n) by Def9;
         for k being Element of NAT st k>=n holds x in A.k
             proof
              let k be Element of NAT;
@@ -3218,7 +3141,7 @@ A20: for X being set, A being SetSequence of X holds
         hence thesis by A26,NAT_1:12;
         end; then
         x in Intersection (A^\n) by PROB_1:13;
-        then x in (Intersect_Shift_Seq A).n by Def12;
+        then x in (Intersect_Shift_Seq A).n by Def9;
        hence thesis by PROB_1:12;
       end;
      for A being SetSequence of Sigma holds
@@ -3233,7 +3156,7 @@ A20: for X being set, A being SetSequence of X holds
         then consider n being Element of NAT such that
         A27: x in (Intersect_Shift_Seq (Complement A)).n by PROB_1:12;
         A28: (Intersect_Shift_Seq (Complement A)).n =
-         Intersection ((Complement A)^\n) by Def12;
+         Intersection ((Complement A)^\n) by Def9;
         set m = the Element of NAT;
         for k being Element of NAT st k>=n holds not x in A.k
             proof
@@ -3276,7 +3199,7 @@ A20: for X being set, A being SetSequence of X holds
          hence thesis by A33,NAT_1:12;
         end; then
         x in Intersection ((Complement A)^\n) by PROB_1:13;
-        then x in (Intersect_Shift_Seq Complement A).n by Def12;
+        then x in (Intersect_Shift_Seq Complement A).n by Def9;
        hence x in Union (Intersect_Shift_Seq (Complement A)) by PROB_1:12;
       end;
    hence thesis by A1,A8,A19,A20;
@@ -3545,7 +3468,7 @@ proof
              Prob.( (Intersect_Shift_Seq (Complement B)).n )
              by FUNCT_1:12;
             (Intersect_Shift_Seq (Complement B)).n =
-              Intersection ((Complement B)^\n) by Def12;
+              Intersection ((Complement B)^\n) by Def9;
             then
             A18: (Prob*(Intersect_Shift_Seq (Complement B) )).n =
             Prob.(Intersection Partial_Intersection
@@ -3615,9 +3538,9 @@ proof
            hence thesis by A26;
           end;
           (Special_Function2(k))*e is one-to-one by A22,FUNCT_1:24;
-          hence thesis by A11,A27,Def8;
+          hence thesis by A11,A27,Def6;
           end;
-          hence thesis by Def8;
+          hence thesis by Def6;
          end;
           A28: for A being SetSequence of Sigma holds
                 for n being Element of NAT holds

@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received April 14, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,7 +23,7 @@ environ
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, ORDINAL1, XBOOLE_0;
  theorems TARSKI, FUNCT_1, ZF_LANG, ZF_MODEL, ORDINAL1, ZFMISC_1, RELAT_1,
-      XBOOLE_0, FUNCT_7;
+      XBOOLE_0, FUNCT_7, XREGULAR;
  schemes TARSKI, CLASSES1, ORDINAL1, XBOOLE_0;
 
 begin
@@ -257,12 +257,12 @@ proof
   in Collapse(E,B) holds A c= B;
   consider X such that
 A1: x in X iff x in E & P[x] from XBOOLE_0:sch 1;
-  now
+ now
     given x such that
 A2: x in X;
     consider m being set such that
 A3: m in X and
-A4: not ex x st x in X & x in m by A2,TARSKI:2;
+A4: X misses m by A2,XREGULAR:1;
     reconsider m as Element of E by A1,A3;
 A5: now
       let x;
@@ -271,7 +271,7 @@ A5: now
 A6:   x in m /\ E;
       then x in m by XBOOLE_0:def 4;
       then
-A7:   not x in X by A4;
+A7:   not x in X by A4,XBOOLE_0:3;
       x in E by A6,XBOOLE_0:def 4;
       then
 A8:   ex A st Q[A] by A1,A7;
@@ -293,7 +293,7 @@ A11:  y = f.x by FUNCT_1:def 3;
     end;
     then consider A such that
 A12: rng f c= A by ORDINAL1:24;
-    for d st d in m ex B st B in A & d in Collapse (E,B)
+  for d st d in m ex B st B in A & d in Collapse (E,B)
     proof
       let d;
       assume d in m;
@@ -311,10 +311,7 @@ A15:  d in Collapse (E,B) and
     then m in Collapse (E,A) by Th1;
     hence contradiction by A1,A3;
   end;
-  then
-A16: not d in X;
-  assume not thesis;
-  hence contradiction by A1,A16;
+  hence thesis by A1;
 end;
 
 theorem Th6:
@@ -331,8 +328,7 @@ A2: d in Collapse (E,A);
   then consider B such that
 A3: B in A and
 A4: d9 in Collapse (E,B) by A1;
-  B c= A by A3,ORDINAL1:def 2;
-  then Collapse (E,B) c= Collapse (E,A) by Th4;
+  Collapse (E,B) c= Collapse (E,A) by Th4,A3,ORDINAL1:def 2;
   hence d9 in Collapse (E,A) by A4;
   thus thesis by A3,A4;
 end;
@@ -387,8 +383,7 @@ A8: f.x = B and
 A9: x in Collapse (E,B) and
     for C st x in Collapse (E,C) holds B c= C by A3;
     B in rng f by A3,A7,A8,FUNCT_1:def 3;
-    then B c= A by A6,ORDINAL1:def 2;
-    then Collapse (E,B) c= Collapse (E,A) by Th4;
+    then Collapse (E,B) c= Collapse (E,A) by Th4,A6,ORDINAL1:def 2;
     hence thesis by A9;
   end;
   thus thesis by Th7;
@@ -612,9 +607,7 @@ A72:      C in B by A65,A68,ORDINAL1:12;
           then Q[C,f|Collapse (E,C),E] by A53,A72;
           then
 A73:      f|Collapse (E,C) = h by A32,A69;
-          C c= B by A72,ORDINAL1:def 2;
-          then
-A74:      Collapse (E,C) c= Collapse (E,B) by Th4;
+A74:      Collapse (E,C) c= Collapse (E,B) by Th4,A72,ORDINAL1:def 2;
           then f|Collapse (E,C) = f|Collapse (E,B)|Collapse (E,C) by FUNCT_1:51
 ;
           then h.d1 = f|Collapse (E,B).d1 by A70,A73,FUNCT_1:49;
@@ -643,8 +636,7 @@ A78:    x = f|Collapse (E,B).y by FUNCT_1:def 6;
         consider C such that
 A79:    C in B and
 A80:    d1 in Collapse (E,C) by A57,A77,Th6;
-        C c= B by A79,ORDINAL1:def 2;
-        then Collapse (E,C) c= Collapse (E,B) by Th4;
+        Collapse (E,C) c= Collapse (E,B) by Th4,A79,ORDINAL1:def 2;
         then f|Collapse (E,B)|Collapse (E,C) = f|Collapse (E,C) by FUNCT_1:51;
         then
 A81:    f|Collapse (E,C).y = f|Collapse (E,B).y by A80,FUNCT_1:49;
@@ -686,7 +678,7 @@ definition
   ex f st f is_epsilon-isomorphism_of X, Y;
 end;
 
-theorem Th12:
+theorem Th10:
   (dom f = E & for d holds f.d = f.:d) implies rng f is epsilon-transitive
 proof
   assume that
@@ -710,7 +702,7 @@ reserve f,g,h for (Function of VAR,E),
   x for Variable,
   a,b,c for set;
 
-theorem Th13:
+theorem Th11:
   E |= the_axiom_of_extensionality implies for u,v st for w holds
   w in u iff w in v holds u = v
 proof
@@ -719,10 +711,9 @@ A1: E |= the_axiom_of_extensionality;
   All(x.0,All(x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1))
 = All(x.0,x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1) by
 ZF_LANG:7;
-  then E |= All(x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1) by
-A1,ZF_MODEL:23,def 6;
   then
-A2: E |= All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1 by ZF_MODEL:23;
+B2: E |= All(x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1) by
+A1,ZF_MODEL:23,def 6;
 A3: for f st for g st for x st g.x <> f.x holds x.2 = x holds g.x.2 in g.x.0
   iff g.x.2 in g.x.1 holds f.x.0 = f.x.1
   proof
@@ -736,8 +727,8 @@ A7:   g.x.2 in g.x.1 iff E,g |= x.2 'in' x.1 by ZF_MODEL:13;
       g.x.2 in g.x.0 iff E,g |= x.2 'in' x.0 by ZF_MODEL:13;
       hence E,g |= x.2 'in' x.0 <=> x.2 'in' x.1 by A4,A6,A7,ZF_MODEL:19;
     end;
-    E,f |= All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1 by A2,
-ZF_MODEL:def 5;
+    E,f |= All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1
+     by B2,ZF_MODEL:def 5,23;
     then E,f |= All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) implies E,f |= x.0 '='
     x.1 by ZF_MODEL:18;
     hence thesis by A5,ZF_MODEL:12,16;
@@ -804,7 +795,7 @@ A12: d2 in Collapse (E,A) and
 A13: f.d1 = f.d2 and
 A14: d1 <> d2 by A10;
     consider w such that
-A15: not(w in d1 iff w in d2) by A3,A14,Th13;
+A15: not(w in d1 iff w in d2) by A3,A14,Th11;
 A16: f.d1 = f.:d1 & f.d2 = f.:d2 by A2;
 A17: now
       assume that
@@ -849,7 +840,7 @@ A31:  A2 in A & v in Collapse(E,A2) by A12,A29,Th6;
     hence contradiction by A15,A17;
   end;
   take X = rng f;
-  thus X is epsilon-transitive by A1,A2,Th12;
+  thus X is epsilon-transitive by A1,A2,Th10;
   take f;
   thus dom f = E & rng f = X by A1;
   thus f is one-to-one by A4,FUNCT_1:def 4;

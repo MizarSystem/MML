@@ -12,13 +12,14 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -45,7 +46,7 @@
 <Func kind="K" nr="6">
 <Func kind="K" nr="7">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -58,7 +59,7 @@
 <Func kind="K" nr="32"/>
 </Adjective>
 <Adjective nr="16">
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -66,13 +67,13 @@
 <Adjective nr="22">
 <Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="23">
+<Adjective nr="26">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="90"/>
+<Adjective nr="92"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PROB_4" nr="2">
@@ -83,10 +84,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="63">
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="66">
+<Adjective nr="68">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -102,7 +103,7 @@
 <Func kind="K" nr="6">
 <Func kind="K" nr="7">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -118,7 +119,7 @@
 <LocusVar nr="2"/>
 </Adjective>
 <Adjective nr="16">
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -126,13 +127,13 @@
 <Adjective nr="22">
 <Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="23">
+<Adjective nr="26">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="90"/>
+<Adjective nr="92"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PROB_4" nr="1">
@@ -145,10 +146,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="63">
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="66">
+<Adjective nr="68">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -164,17 +165,17 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="226">
+<Func kind="K" nr="236">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="63">
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="66">
+<Adjective nr="68">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

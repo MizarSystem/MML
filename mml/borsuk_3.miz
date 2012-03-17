@@ -2,7 +2,7 @@
 ::  by Adam Grabowski
 ::
 :: Received February 13, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,13 +21,13 @@ environ
       PBOOLE, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, DOMAIN_1,
       STRUCT_0, PRE_TOPC, TOPS_2, TOPS_1, COMPTS_1, BORSUK_1, T_0TOPSP,
       FINSET_1, FUNCT_3, CONNSP_2;
- constructors SETFAM_1, FUNCT_3, TOPS_1, TOPS_2, COMPTS_1, BORSUK_1, T_0TOPSP,
-      WAYBEL_3, SUBSET_1, STRUCT_0, FUNCOP_1, BINOP_1;
+ constructors FUNCT_3, TOPS_1, TOPS_2, COMPTS_1, BORSUK_1, T_0TOPSP, FUNCOP_1,
+      BINOP_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, PRE_TOPC,
       TOPS_1, BORSUK_1, COMPTS_1, BORSUK_2, ZFMISC_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, TOPS_2, COMPTS_1, T_0TOPSP, FUNCT_1, XBOOLE_0, BINOP_1,
-      STRUCT_0, SUBSET_1;
+      STRUCT_0;
  theorems BORSUK_1, FUNCOP_1, TOPS_2, FUNCT_2, FUNCT_1, PRE_TOPC, TARSKI,
       TOPS_1, TOPMETR, ZFMISC_1, CONNSP_2, FUNCT_3, COMPTS_1, FINSET_1,
       T_0TOPSP, YELLOW12, TSEP_1, TOPGRP_1, XBOOLE_0, XBOOLE_1, SETFAM_1;
@@ -113,39 +113,11 @@ registration
 end;
 
 registration
-  cluster strict empty for TopSpace;
-  existence
-  proof
-    set T = the TopSpace;
-    take T | {}T;
-    thus thesis;
-  end;
-end;
-
-registration
   cluster empty -> compact for TopSpace;
   coherence;
 end;
 
-registration
-  let T1 be TopSpace, T2 be empty TopSpace;
-  cluster [:T1, T2:] -> empty;
-  coherence
-  proof
-    the carrier of [:T1, T2:] = [:the carrier of T1, the carrier of T2:]
-    by BORSUK_1:def 2;
-    hence thesis;
-  end;
-  cluster [:T2, T1:] -> empty;
-  coherence
-  proof
-    the carrier of [:T2, T1:] = [:the carrier of T2, the carrier of T1:]
-    by BORSUK_1:def 2;
-    hence thesis;
-  end;
-end;
-
-theorem Th6:
+theorem Th4:
   for X, Y being non empty TopSpace, x being Point of X, f being
   Function of [:Y, X | {x}:], Y st f = pr1(the carrier of Y, {x}) holds f is
   one-to-one
@@ -176,7 +148,7 @@ A12: x2 = x by A7,TARSKI:def 1
   hence thesis by A8,A11,A12;
 end;
 
-theorem Th7:
+theorem Th5:
   for X, Y being non empty TopSpace, x being Point of X, f being
   Function of [:X | {x}, Y:], Y st f = pr2({x}, the carrier of Y) holds f is
   one-to-one
@@ -207,7 +179,7 @@ A12: x1 = x by A6,TARSKI:def 1
   hence thesis by A8,A11,A12;
 end;
 
-theorem Th8:
+theorem Th6:
   for X, Y being non empty TopSpace, x being Point of X, f being
 Function of [:Y, X | {x}:], Y st f = pr1(the carrier of Y, {x}) holds f" = <:id
   Y, Y --> x:>
@@ -248,7 +220,7 @@ A10: rng idY c= Z by PRE_TOPC:8;
   then
 A11: rng KA = [:the carrier of Y, Z:] by A4,XBOOLE_0:def 10
     .= dom f by A2,FUNCT_3:def 4;
-A12: f is one-to-one by A2,Th6;
+A12: f is one-to-one by A2,Th4;
 A13: f is onto by A3,FUNCT_2:def 3;
   dom idY = the carrier of Y by FUNCT_2:def 1
     .= dom idZ by FUNCT_2:def 1;
@@ -257,7 +229,7 @@ A13: f is onto by A3,FUNCT_2:def 3;
   hence thesis by A12,A13,TOPS_2:def 4;
 end;
 
-theorem Th9:
+theorem Th7:
   for X, Y being non empty TopSpace, x being Point of X, f being
 Function of [:X | {x}, Y:], Y st f = pr2({x}, the carrier of Y) holds f" = <:Y
   --> x, id Y:>
@@ -299,7 +271,7 @@ A11: rng idZ c= Z by PRE_TOPC:8;
   then
 A12: rng KA = [:Z, the carrier of Y:] by A4,XBOOLE_0:def 10
     .= dom f by A2,FUNCT_3:def 5;
-A13: f is one-to-one by A2,Th7;
+A13: f is one-to-one by A2,Th5;
 A14: f is onto by A3,FUNCT_2:def 3;
   dom idZ = the carrier of Y by FUNCT_2:def 1
     .= dom idY by FUNCT_2:def 1;
@@ -320,18 +292,18 @@ proof
 A1: f = pr1(the carrier of Y, Z);
   thus dom f = [#][:Y, (X|Z):] by FUNCT_2:def 1;
   thus rng f = [#]Y by A1,FUNCT_3:44;
-  thus f is one-to-one by A1,Th6;
+  thus f is one-to-one by A1,Th4;
   the carrier of (X|Z) = Z by PRE_TOPC:8;
   hence f is continuous by A1,YELLOW12:39;
   reconsider Z as non empty Subset of X;
   reconsider idZ = Y --> x as continuous Function of Y, (X|Z) by Th2;
   reconsider KA = <:id Y, idZ:> as continuous Function of Y, [:Y, (X|Z):] by
 YELLOW12:41;
-  KA = f" by A1,Th8;
+  KA = f" by A1,Th6;
   hence thesis;
 end;
 
-theorem Th11:
+theorem Th9:
   for X, Y being non empty TopSpace, x being Point of X, f being
   Function of [:X | {x}, Y:], Y st f = pr2({x}, the carrier of Y) holds f is
   being_homeomorphism
@@ -343,14 +315,14 @@ proof
 A1: f = pr2(Z, the carrier of Y);
   thus dom f = [#][:(X|Z), Y:] by FUNCT_2:def 1;
   thus rng f = [#]Y by A1,FUNCT_3:46;
-  thus f is one-to-one by A1,Th7;
+  thus f is one-to-one by A1,Th5;
   the carrier of (X|Z) = Z by PRE_TOPC:8;
   hence f is continuous by A1,YELLOW12:40;
   reconsider Z as non empty Subset of X;
   reconsider idZ = Y --> x as continuous Function of Y, (X|Z) by Th2;
   reconsider KA = <:idZ, id Y:> as continuous Function of Y, [:(X|Z), Y:] by
 YELLOW12:41;
-  KA = f" by A1,Th9;
+  KA = f" by A1,Th7;
   hence thesis;
 end;
 
@@ -405,7 +377,7 @@ A9: [x, i] in [:G1, H1:] & [:G1, H1:] c= G & G1 is open & H1 is open by A4;
   hence thesis;
 end;
 
-theorem Th13:
+theorem Th11:
   for X being non empty TopSpace, Y being compact non empty
 TopSpace, G being open Subset of [:Y, X:] holds for x being set st [:[#]Y, {x}
 :] c= G holds ex R be open Subset of X st x in R & R c= { y where y is Point of
@@ -447,7 +419,7 @@ A6: r in R;
   hence thesis by CONNSP_2:def 1;
 end;
 
-theorem Th14:
+theorem Th12:
   for X being non empty TopSpace, Y being compact non empty
 TopSpace, G being open Subset of [:Y, X:] holds { x where x is Point of X : [:
   [#]Y, {x}:] c= G } in the topology of X
@@ -482,7 +454,7 @@ A1: for x be set holds x in RR iff x in bool Q & P[x] from XBOOLE_0:sch
     then ex x9 being Point of X st a = x9 & [:[#]Y, {x9}:] c= G;
     then consider R be open Subset of X such that
 A2: a in R and
-A3: R c= Q by Th13;
+A3: R c= Q by Th11;
     R in RR by A1,A2,A3;
     hence thesis by A2,TARSKI:def 4;
   end;
@@ -501,7 +473,7 @@ A4: union RR = Q by XBOOLE_0:def 10;
   hence thesis by A4,PRE_TOPC:def 1;
 end;
 
-theorem Th15:
+theorem Th13:
   for X, Y being non empty TopSpace, x being Point of X holds [: X
   | {x}, Y :], Y are_homeomorphic
 proof
@@ -512,7 +484,7 @@ proof
     .= [:Z, the carrier of Y:] by PRE_TOPC:8;
   then reconsider f= pr2(Z, the carrier of Y) as Function of [:X|Z, Y:], Y;
   take f;
-  thus thesis by Th11;
+  thus thesis by Th9;
 end;
 
 Lm3: for X being non empty TopSpace, Y being non empty TopSpace, x being Point
@@ -525,7 +497,7 @@ proof
   then consider g being Function of [: Y, X | Z :], [: X | Z, Y :] such that
 A1: g is being_homeomorphism by T_0TOPSP:def 1;
   assume Z = {x};
-  then [: X | Z, Y :], Y are_homeomorphic by Th15;
+  then [: X | Z, Y :], Y are_homeomorphic by Th13;
   then consider f being Function of [: X | Z, Y :], Y such that
 A2: f is being_homeomorphism by T_0TOPSP:def 1;
   reconsider gf = f * g as Function of [: Y, X | Z :], Y;
@@ -533,7 +505,7 @@ A2: f is being_homeomorphism by T_0TOPSP:def 1;
   hence thesis by T_0TOPSP:def 1;
 end;
 
-theorem Th16:
+theorem Th14:
   for S, T being non empty TopSpace st S, T are_homeomorphic & S
   is compact holds T is compact
 proof
@@ -547,7 +519,7 @@ A3: f is being_homeomorphism by A1,T_0TOPSP:def 1;
   hence thesis by A2,COMPTS_1:14;
 end;
 
-theorem Th17:
+theorem Th15:
   for X, Y being TopSpace, XV being SubSpace of X holds [:Y, XV:]
   is SubSpace of [:Y, X:]
 proof
@@ -752,7 +724,7 @@ st Z = [:[#]Y, V:] holds the TopStruct of [:Y, X | V:] = the TopStruct of [:Y,
 X:] | Z
 proof
   let X, Y be TopSpace, Z be Subset of [:Y, X:], V be Subset of X;
-  reconsider A = [:Y, X | V:] as SubSpace of [:Y, X:] by Th17;
+  reconsider A = [:Y, X | V:] as SubSpace of [:Y, X:] by Th15;
   assume
 A1: Z = [:[#]Y, V:];
   the carrier of A = [:the carrier of Y, the carrier of (X|V):] by
@@ -764,7 +736,7 @@ TOPMETR:3;
   hence thesis by TSEP_1:6;
 end;
 
-theorem Th18:
+theorem Th16:
   for X being non empty TopSpace, Y being compact non empty
   TopSpace, x being Point of X, Z being Subset of [:Y, X:] st Z = [:[#]Y, {x}:]
   holds Z is compact
@@ -774,7 +746,7 @@ proof
   reconsider V = {x} as non empty Subset of X;
   Y, [: Y, X | V :] are_homeomorphic by Lm3;
   then
-A1: [:Y, X | V:] is compact by Th16;
+A1: [:Y, X | V:] is compact by Th14;
   assume
 A2: Z = [:[#]Y, {x}:];
   then the TopStruct of [:Y, X | V:] = the TopStruct of ([:Y, X:] | Z) by Lm4;
@@ -788,7 +760,7 @@ registration
 coherence
 proof
   Y, [: Y, X | {x} :] are_homeomorphic by Lm3;
-  hence thesis by Th16;
+  hence thesis by Th14;
 end;
 end;
 
@@ -818,12 +790,12 @@ A1: R = { Q where Q is open Subset of X : [:[#]Y, Q:] c= union Base-Appr
     Z c= [#][:Y, X:];
     then Z c= union Base-Appr [#][:Y, X:] by BORSUK_1:13;
     then
-A3: Base-Appr [#][:Y, X:] is Cover of Z by SETFAM_1:def 11;
-    Z is compact by Th18;
+A2: Base-Appr [#][:Y, X:] is Cover of Z by SETFAM_1:def 11;
+    Z is compact by Th16;
     then consider G being Subset-Family of [:Y, X:] such that
-A4: G c= Base-Appr [#][:Y, X:] and
-A5: G is Cover of Z and
-    G is finite by A3,COMPTS_1:def 4;
+A3: G c= Base-Appr [#][:Y, X:] and
+A4: G is Cover of Z and
+    G is finite by A2,COMPTS_1:def 4;
     set uR = union G;
     set Q = { x where x is Point of X : [:[#]Y, {x}:] c= uR };
     Q c= the carrier of X
@@ -834,37 +806,37 @@ A5: G is Cover of Z and
       hence thesis;
     end;
     then reconsider Q as Subset of X;
-    Z c= union G by A5,SETFAM_1:def 11;
+    Z c= union G by A4,SETFAM_1:def 11;
     then
-A6: k9 in Q;
-A7: [:[#]Y, Q:] c= union Base-Appr [#][:Y, X:]
+A5: k9 in Q;
+A6: [:[#]Y, Q:] c= union Base-Appr [#][:Y, X:]
     proof
       let z be set;
       assume z in [:[#]Y, Q:];
       then consider x1, x2 be set such that
-A8:   x1 in [#]Y and
-A9:   x2 in Q and
-A10:  z = [x1, x2] by ZFMISC_1:def 2;
+A7:   x1 in [#]Y and
+A8:   x2 in Q and
+A9:  z = [x1, x2] by ZFMISC_1:def 2;
       consider x29 being Point of X such that
-A11:  x29 = x2 and
-A12:  [:[#]Y, {x29}:] c= uR by A9;
-      x2 in {x29} by A11,TARSKI:def 1;
+A10:  x29 = x2 and
+A11:  [:[#]Y, {x29}:] c= uR by A8;
+      x2 in {x29} by A10,TARSKI:def 1;
       then
-A13:  z in [:[#]Y, {x29}:] by A8,A10,ZFMISC_1:87;
-      uR c= union Base-Appr [#][:Y, X:] by A4,ZFMISC_1:77;
-      then [:[#]Y, {x29}:] c= union Base-Appr [#][:Y, X:] by A12,XBOOLE_1:1;
-      hence thesis by A13;
+A12:  z in [:[#]Y, {x29}:] by A7,A9,ZFMISC_1:87;
+      uR c= union Base-Appr [#][:Y, X:] by A3,ZFMISC_1:77;
+      then [:[#]Y, {x29}:] c= union Base-Appr [#][:Y, X:] by A11,XBOOLE_1:1;
+      hence thesis by A12;
     end;
-    uR is open by A4,TOPS_2:11,19;
-    then Q in the topology of X by Th14;
+    uR is open by A3,TOPS_2:11,19;
+    then Q in the topology of X by Th12;
     then Q is open by PRE_TOPC:def 2;
-    then Q in R by A1,A7;
-    hence thesis by A6,TARSKI:def 4;
+    then Q in R by A1,A6;
+    hence thesis by A5,TARSKI:def 4;
   end;
   hence thesis by SETFAM_1:def 11;
 end;
 
-theorem Th21:
+theorem Th18:
   for X, Y being compact non empty TopSpace, R being Subset-Family
 of X, F being Subset-Family of [:Y, X:] st F is Cover of [:Y, X:] & F is open &
 R = { Q where Q is open Subset of X : ex FQ being Subset-Family of [:Y, X:] st
@@ -894,7 +866,7 @@ A4: union F = [#] [:Y, X:] by A1,SETFAM_1:45;
     assume k in [#]X;
     then reconsider k9 = k as Point of X;
     reconsider Z = [:[#]Y, {k9}:] as Subset of [:Y, X:];
-    F is Cover of Z & Z is compact by A4,Th18,SETFAM_1:def 11;
+    F is Cover of Z & Z is compact by A4,Th16,SETFAM_1:def 11;
     then consider G being Subset-Family of [:Y, X:] such that
 A5: G c= F and
 A6: G is Cover of Z and
@@ -934,7 +906,7 @@ A14:    [:[#]Y, {x29}:] c= uR by A11;
       hence thesis by A5,A7;
     end;
     uR is open by A2,A5,TOPS_2:11,19;
-    then Q in the topology of X by Th14;
+    then Q in the topology of X by Th12;
     then Q is open by PRE_TOPC:def 2;
     then Q in R by A3,A9;
     hence thesis by A8,TARSKI:def 4;
@@ -942,7 +914,7 @@ A14:    [:[#]Y, {x29}:] c= uR by A11;
   hence thesis by SETFAM_1:def 11;
 end;
 
-theorem Th22:
+theorem Th19:
   for X, Y being compact non empty TopSpace, R being Subset-Family
 of X, F being Subset-Family of [:Y, X:] st F is Cover of [:Y, X:] & F is open &
 R = { Q where Q is open Subset of X : ex FQ being Subset-Family of [:Y, X:] st
@@ -954,14 +926,14 @@ proof
   assume F is Cover of [:Y, X:] & F is open & R = { Q where Q is open Subset
 of X : ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite & [:[#]Y
   , Q:] c= union FQ };
-  then R is open & R is Cover of X by Th21;
+  then R is open & R is Cover of X by Th18;
   then
   ex G being Subset-Family of X st G c= R & G is Cover of X & G is finite
   by COMPTS_1:def 1;
   hence thesis;
 end;
 
-theorem Th23:
+theorem Th20:
   for X, Y being compact non empty TopSpace, F being Subset-Family
   of [:Y, X:] st F is Cover of [:Y, X:] & F is open ex G being Subset-Family of
   [:Y, X:] st G c= F & G is Cover of [:Y, X:] & G is finite
@@ -987,7 +959,7 @@ proof
   then consider C being Subset-Family of X such that
 A1: C c= R and
 A2: C is finite and
-A3: C is Cover of X by Th22;
+A3: C is Cover of X by Th19;
   set CX = { F(f) where f is Subset of X : f in C };
   CX c= bool the carrier of [:Y, X:]
   proof
@@ -1127,7 +1099,7 @@ proof
   set T = [:T1, T2:];
   let F be Subset-Family of T;
   assume F is Cover of T & F is open;
-  hence thesis by Th23;
+  hence thesis by Th20;
 end;
 
 registration
@@ -1353,24 +1325,24 @@ A48:  s in A1 /\ oS by A46,XBOOLE_0:def 4;
   hence thesis by A3,PRE_TOPC:def 4;
 end;
 
-theorem Th25:
+theorem Th21:
   for X, Y being TopSpace, XV being SubSpace of X, YV being
   SubSpace of Y holds [:XV, YV:] is SubSpace of [:X, Y:]
 proof
   let X, Y be TopSpace, XV be SubSpace of X, YV be SubSpace of Y;
   [:XV, Y:] is SubSpace of [:X, Y:] & [:XV, YV:] is SubSpace of [:XV, Y:]
-  by Lm6,Th17;
+  by Lm6,Th15;
   hence thesis by TSEP_1:7;
 end;
 
-theorem Th26:
+theorem Th22:
   for X, Y being TopSpace, Z being Subset of [:Y, X:], V being
 Subset of X, W being Subset of Y st Z = [:W, V:] holds the TopStruct of [:Y | W
   , X | V:] = the TopStruct of [:Y, X:] | Z
 proof
   let X, Y be TopSpace, Z be Subset of [:Y, X:], V be Subset of X, W be Subset
   of Y;
-  reconsider A = [:Y | W, X | V:] as SubSpace of [:Y, X:] by Th25;
+  reconsider A = [:Y | W, X | V:] as SubSpace of [:Y, X:] by Th21;
   assume
 A1: Z = [:W, V:];
   the carrier of A = [:the carrier of (Y|W), the carrier of (X|V):] by
@@ -1428,7 +1400,7 @@ A3: S1 is non empty & S2 is non empty;
     reconsider S1 as compact non empty Subset of T1 by A1,A3;
     reconsider X = [:S1, S2:] as Subset of [:T1, T2:];
     the TopStruct of [:T1|S1, T2|S2:] = the TopStruct of ([:T1, T2:] | X)
-    by Th26;
+    by Th22;
     hence thesis by COMPTS_1:3;
   end;
   suppose

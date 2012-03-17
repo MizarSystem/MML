@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received July 12, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,9 +25,8 @@ environ
       TOPS_1, CONNSP_2, COMPTS_1, CANTOR_1, ORDERS_2, LATTICE3, ORDERS_3,
       YELLOW_0, YELLOW_2, WAYBEL_0, WAYBEL_3, WAYBEL_5, YELLOW_6, YELLOW_7,
       WAYBEL_9, YELLOW_9, WAYBEL11, WAYBEL17, WAYBEL19;
- constructors TOLER_1, TOPS_1, NATTRA_1, BORSUK_1, URYSOHN1, CANTOR_1, TOPS_2,
-      ORDERS_3, YELLOW_2, WAYBEL_3, WAYBEL17, YELLOW_9, WAYBEL19, COMPTS_1,
-      WAYBEL_2;
+ constructors TOLER_1, TOPS_1, NATTRA_1, BORSUK_1, CANTOR_1, TOPS_2, ORDERS_3,
+      YELLOW_2, WAYBEL_3, WAYBEL17, YELLOW_9, WAYBEL19, COMPTS_1, WAYBEL_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, STRUCT_0, PRE_TOPC,
       LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_2, YELLOW_6, WAYBEL_9, WAYBEL10,
       WAYBEL17, YELLOW_9, WAYBEL19, SUBSET_1, TOPS_1, RELSET_1;
@@ -45,7 +44,7 @@ begin :: Semilattice homomorphism and inheritance
 
 definition
   let S,T be Semilattice such that
-A1: S is upper-bounded implies T is upper-bounded;
+B1: S is upper-bounded implies T is upper-bounded;
   mode SemilatticeHomomorphism of S,T -> Function of S,T means
     :Def1:
     for X being finite Subset of S holds it preserves_inf_of X;
@@ -54,29 +53,29 @@ A1: S is upper-bounded implies T is upper-bounded;
     reconsider f = (the carrier of S) --> Top T as Function of S,T;
     take f;
     let X be finite Subset of S such that
-A2: ex_inf_of X,S;
+A1: ex_inf_of X,S;
     per cases;
     suppose
-A3:   X = {};
+A2:   X = {};
       then
-A4:   f.:X = {} by RELAT_1:116;
-      hence ex_inf_of f.:X,T by A1,A2,A3,WAYBEL20:5,YELLOW_0:43;
-      thus f.inf X = inf (f.:X) by A4,FUNCOP_1:7;
+A3:   f.:X = {};
+      hence ex_inf_of f.:X,T by B1,A1,A2,WAYBEL20:5,YELLOW_0:43;
+      thus f.inf X = inf (f.:X) by A3,FUNCOP_1:7;
     end;
     suppose X <> {};
       then reconsider A = X as non empty Subset of S;
       set a = the Element of A;
       reconsider a as Element of S;
-A5:   dom f = the carrier of S by FUNCOP_1:13;
+A4:   dom f = the carrier of S by FUNCOP_1:13;
       f.a = Top T by FUNCOP_1:7;
-      then Top T in f.:X by A5,FUNCT_1:def 6;
+      then Top T in f.:X by A4,FUNCT_1:def 6;
       then
-A6:   {Top T} c= f.:X by ZFMISC_1:31;
+A5:   {Top T} c= f.:X by ZFMISC_1:31;
       f.:X c= {Top T} by FUNCOP_1:81;
       then
-A7:   {Top T} = f.:X by A6,XBOOLE_0:def 10;
+A6:   {Top T} = f.:X by A5,XBOOLE_0:def 10;
       f.inf X = Top T by FUNCOP_1:7;
-      hence thesis by A7,YELLOW_0:38,39;
+      hence thesis by A6,YELLOW_0:38,39;
     end;
   end;
 end;
@@ -117,7 +116,7 @@ proof
 A1: f preserves_inf_of {}S by Def1;
   ex_inf_of {}S,S by YELLOW_0:43;
   then f.inf {}S = inf (f.:{}S) by A1,WAYBEL_0:def 30;
-  hence thesis by RELAT_1:116;
+  hence thesis;
 end;
 
 theorem Th2:
@@ -177,11 +176,9 @@ proof
 A1: f.Top S = Top T;
   thus S is upper-bounded implies T is upper-bounded;
   let X be finite Subset of S;
-A2: f.:{} = {} by RELAT_1:116;
-  then
-A3: ex_inf_of f.:{}, T by YELLOW_0:43;
+A2: ex_inf_of f.:{}, T by YELLOW_0:43;
   X = {} or f preserves_inf_of X by Th2;
-  hence thesis by A1,A2,A3,WAYBEL_0:def 30;
+  hence thesis by A1,A2,WAYBEL_0:def 30;
 end;
 
 theorem Th4:
@@ -302,7 +299,7 @@ A2: ex_inf_of e, S by YELLOW_0:43;
     f preserves_inf_of e by A1,WAYBEL_0:def 32;
     then
 A3: ex_inf_of f.:e, T by A2,WAYBEL_0:def 30;
-    f.:e = {} by RELAT_1:116;
+    f.:e = {};
     hence T is upper-bounded by A3,WAYBEL20:5;
   end;
   let X be finite Subset of S;
@@ -899,28 +896,28 @@ A6: p = f.x by A3,FUNCT_2:64;
   now
     let V be a_neighborhood of p;
 A7: p in Int V by CONNSP_2:def 1;
-A9: x in f"Int V by A6,A7,FUNCT_2:38;
+A8: x in f"Int V by A6,A7,FUNCT_2:38;
     f"Int V is open by A1,A2,TOPS_2:43;
-    then f"Int V is a_neighborhood of x by A9,CONNSP_2:3;
+    then f"Int V is a_neighborhood of x by A8,CONNSP_2:3;
     then N is_eventually_in f"Int V by A5,YELLOW_6:def 15;
     then consider i being Element of N such that
-A10: for j being Element of N st j >= i holds N.j in
+A9: for j being Element of N st j >= i holds N.j in
     f"Int V by WAYBEL_0:def 11;
-A11: the mapping of f*N = f*the mapping of N by WAYBEL_9:def 8;
-A12: the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
+A10: the mapping of f*N = f*the mapping of N by WAYBEL_9:def 8;
+A11: the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
     then reconsider i9 = i as Element of f*N;
     thus f*N is_eventually_in V
     proof
       take i9;
       let j9 be Element of f*N;
-      reconsider j = j9 as Element of N by A12;
-A13:  f.(N.j) = (f*N).j9 by A11,FUNCT_2:15;
+      reconsider j = j9 as Element of N by A11;
+A12:  f.(N.j) = (f*N).j9 by A10,FUNCT_2:15;
       assume j9 >= i9;
-      then N.j in f"Int V by A10,A12,YELLOW_0:1;
+      then N.j in f"Int V by A9,A11,YELLOW_0:1;
       then
-A14:  f.(N.j) in Int V by FUNCT_2:38;
+A13:  f.(N.j) in Int V by FUNCT_2:38;
       Int V c= V by TOPS_1:16;
-      hence thesis by A13,A14;
+      hence thesis by A12,A13;
     end;
   end;
   hence thesis by YELLOW_6:def 15;
@@ -1391,8 +1388,8 @@ theorem Th32:
 proof
   let S be non empty reflexive RelStr, D be non empty Subset of S;
   set N = Net-Str D;
-A1: dom id D = D by RELAT_1:45;
-  rng id D = D by RELAT_1:45;
+A1: dom id D = D;
+  rng id D = D;
   then reconsider g = id D as Function of D, the carrier of S
   by A1,FUNCT_2:def 1,RELSET_1:4;
   (id the carrier of S)|D = id D by FUNCT_3:1;
@@ -1488,8 +1485,8 @@ theorem Th34:
 proof
   let S be non empty reflexive RelStr;
   let D be non empty directed Subset of S;
-A1: dom id D = D by RELAT_1:45;
-  rng id D = D by RELAT_1:45;
+A1: dom id D = D;
+  rng id D = D;
   then reconsider g = id D as Function of D, the carrier of S
   by A1,FUNCT_2:def 1,RELSET_1:4;
   (id the carrier of S)|D = id D by FUNCT_3:1;

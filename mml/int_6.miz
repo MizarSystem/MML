@@ -2,7 +2,7 @@
 ::  by Christoph Schwarzweller
 ::
 :: Received May 13, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,14 +14,14 @@
 
 environ
 
- vocabularies NUMBERS, REAL_3, FINSEQ_1, RELAT_1, TARSKI, VALUED_0, ORDINAL1,
-      RFINSEQ, XXREAL_0, ARYTM_1, SUBSET_1, FUNCT_1, ARYTM_3, INT_1, ORDINAL4,
-      XBOOLE_0, NAT_1, VALUED_1, CARD_3, BINOP_2, SETWISEO, BINOP_1, SETWOP_2,
-      CARD_1, FINSOP_1, PARTFUN1, COMPLEX1, INT_2, PARTFUN3, XREAL_0, INT_6;
+ vocabularies NUMBERS, FINSEQ_1, RELAT_1, TARSKI, VALUED_0, ORDINAL1, RFINSEQ,
+      XXREAL_0, ARYTM_1, SUBSET_1, FUNCT_1, ARYTM_3, INT_1, ORDINAL4, XBOOLE_0,
+      NAT_1, VALUED_1, CARD_3, BINOP_2, SETWISEO, BINOP_1, SETWOP_2, CARD_1,
+      FINSOP_1, PARTFUN1, COMPLEX1, INT_2, PARTFUN3, XREAL_0, INT_6;
  notations TARSKI, XBOOLE_0, SUBSET_1, INT_1, INT_2, ORDINAL1, NUMBERS,
-      PARTFUN1, PARTFUN3, REAL_3, XXREAL_0, XREAL_0, FUNCT_1, VALUED_0,
-      VALUED_1, BINOP_2, SETWISEO, RFINSEQ, BINOP_1, FINSEQ_1, SETWOP_2,
-      RVSUM_1, XCMPLX_0, NAT_1, FINSOP_1;
+      RELAT_1, PARTFUN1, PARTFUN3, XXREAL_0, XREAL_0, FUNCT_1,
+      VALUED_0, VALUED_1, BINOP_2, SETWISEO, RFINSEQ, BINOP_1, FINSEQ_1,
+      SETWOP_2, RVSUM_1, XCMPLX_0, NAT_1, FINSOP_1;
  constructors FINSOP_1, RFINSEQ, INT_2, BINOP_2, REAL_1, SETWISEO, SETWOP_2,
       PARTFUN3, XXREAL_0, RVSUM_1, BINOP_1, RELSET_1;
  registrations NUMBERS, XREAL_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, RVSUM_1,
@@ -32,34 +32,34 @@ environ
  theorems INT_1, FUNCT_1, FINSEQ_1, RVSUM_1, NAT_1, SETWOP_2, FINSEQ_3,
       BINOP_2, SETWISEO, TARSKI, NAT_D, INT_2, XCMPLX_0, XCMPLX_1, XREAL_1,
       RFINSEQ, FINSEQ_5, FINSEQ_2, ABSVALUE, PARTFUN3, XBOOLE_0, XXREAL_0,
-      ORDINAL1, XBOOLE_1, PARTFUN1, XREAL_0, WSIERP_1, VALUED_0, VALUED_1,
-      COMPLEX1;
+      ORDINAL1, XBOOLE_1, PARTFUN1, XREAL_0, WSIERP_1, VALUED_1, COMPLEX1,
+      RELAT_1;
  schemes FINSEQ_1, NAT_1, INT_1;
 
 begin  :: Preliminaries
 
-Lm1: for f being integer-yielding FinSequence holds f is FinSequence of INT
+Lm1: for f being INT-valued FinSequence holds f is FinSequence of INT
 proof
-  let f be integer-yielding FinSequence;
-  rng f c= INT by VALUED_0:def 5;
+  let f be INT-valued FinSequence;
+  rng f c= INT by RELAT_1:def 19;
   hence thesis by FINSEQ_1:def 4;
 end;
 
 registration
-  let f be complex-valued FinSequence, n be natural number;
+  let f be complex-valued FinSequence, n be Nat;
   cluster f|n -> complex-valued;
   coherence;
 end;
 
 registration
-  let f be integer-valued FinSequence, n be natural number;
-  cluster f|n -> integer-valued;
+  let f be INT-valued FinSequence, n be Nat;
+  cluster f|n -> INT-valued;
   coherence;
 end;
 
 registration
-  let f be integer-valued FinSequence, n be natural number;
-  cluster f/^n -> integer-valued;
+  let f be INT-valued FinSequence, n be Nat;
+  cluster f/^n -> INT-valued;
   coherence
   proof
     per cases;
@@ -73,7 +73,7 @@ A1:   n <= len f;
         reconsider f9 = f as FinSequence of INT by Lm1;
         let u be set;
         reconsider n9 = n as Element of NAT by ORDINAL1:def 12;
-A2:     rng f c= INT by VALUED_0:def 5;
+A2:     rng f c= INT by RELAT_1:def 19;
         assume u in rng(f/^n);
         then consider x being set such that
 A3:     x in dom(f/^n) and
@@ -86,27 +86,27 @@ A5:     f.(x+n) in rng f by FUNCT_1:def 3;
         hence u in INT by A4,A5,A2;
       end;
       then rng(f/^n) c= INT by TARSKI:def 3;
-      hence thesis by VALUED_0:def 5;
+      hence thesis by RELAT_1:def 19;
     end;
   end;
 end;
 
 registration
   let i be Integer;
-  cluster <*i*> -> integer-valued;
+  cluster <*i*> -> INT-valued;
   coherence
   proof
     for u be set st u in {i} holds u in INT by INT_1:def 2;
     then
 A1: {i} c= INT by TARSKI:def 3;
     rng(<*i*>) = {i} by FINSEQ_1:39;
-    hence thesis by A1,VALUED_0:def 5;
+    hence thesis by A1,RELAT_1:def 19;
   end;
 end;
 
 registration
-  let f,g be integer-valued FinSequence;
-  cluster f ^ g -> integer-valued;
+  let f,g be INT-valued FinSequence;
+  cluster f ^ g -> INT-valued;
   coherence
   proof
     now
@@ -118,19 +118,19 @@ A2:   u in rng(f^g);
         per cases by A2,A1,XBOOLE_0:def 3;
         case
 A3:       u in rng f;
-          rng f c= INT by VALUED_0:def 5;
+          rng f c= INT by RELAT_1:def 19;
           hence u in INT by A3;
         end;
         case
 A4:       u in rng g;
-          rng g c= INT by VALUED_0:def 5;
+          rng g c= INT by RELAT_1:def 19;
           hence u in INT by A4;
         end;
       end;
       hence u in INT;
     end;
     then rng(f^g) c= INT by TARSKI:def 3;
-    hence thesis by VALUED_0:def 5;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
@@ -283,12 +283,12 @@ end;
 
 theorem Th4:
   for m1,m2 being complex-valued FinSequence st len m1 = len m2 for
-  k being natural number st k <= len m1 holds (m1(#)m2)|k = (m1|k) (#) (m2|k)
+  k being Nat st k <= len m1 holds (m1(#)m2)|k = (m1|k) (#) (m2|k)
 proof
   let m1,m2 be complex-valued FinSequence;
   assume
 A1: len m1 = len m2;
-  let k9 be natural number;
+  let k9 be Nat;
   set p = (m1(#)m2)|k9, q = (m1|k9) (#) (m2|k9);
   assume
 A2: k9 <= len m1;
@@ -329,7 +329,7 @@ A16: j in dom(m1(#)m2) by FINSEQ_1:def 3;
 end;
 
 registration
-  let F be integer-valued FinSequence;
+  let F be INT-valued FinSequence;
   cluster Sum F -> integer;
   coherence
   proof
@@ -422,18 +422,18 @@ A16: mc $$ f = mc $$ (findom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
   end;
 end;
 
-Lm5: for z being integer-yielding FinSequence holds z is FinSequence of REAL
+Lm5: for z being INT-valued FinSequence holds z is FinSequence of REAL
 proof
-  let f be integer-yielding FinSequence;
+  let f be INT-valued FinSequence;
   rng f c= REAL;
   hence thesis by FINSEQ_1:def 4;
 end;
 
 theorem Th5:
-  for f being complex-valued FinSequence, i being natural number st
+  for f being complex-valued FinSequence, i being Nat st
   i+1 <= len f holds f|i ^ <*f.(i+1)*> = f|(i+1)
 proof
-  let f be complex-valued FinSequence, i be natural number;
+  let f be complex-valued FinSequence, i be Nat;
   assume
 A1: i + 1 <= len f;
   set f1 = f|i ^ <*f.(i+1)*>, f2 = f|(i+1);
@@ -489,11 +489,11 @@ A14:  x in dom(f|i) by A5,FINSEQ_1:17;
 end;
 
 theorem Th6:
-  for f being complex-valued FinSequence st ex i being natural
-  number st i in dom f & f.i = 0 holds Product(f) = 0
+  for f being complex-valued FinSequence st ex i being Nat
+  st i in dom f & f.i = 0 holds Product(f) = 0
 proof
   defpred P[Nat] means for f being complex-valued FinSequence st len f = $1
-holds (ex i being natural number st i in dom f & f.i = 0) implies Product(f) =
+holds (ex i being Nat st i in dom f & f.i = 0) implies Product(f) =
   0;
   let m be complex-valued FinSequence;
 A1: for k being Element of NAT st P[k] holds P[k + 1]
@@ -513,7 +513,7 @@ A4:   len f1 = k by FINSEQ_1:59,NAT_1:11;
       then
 A5:   Product(f) = Product(f1) * f.(k+1) by RVSUM_1:96;
       assume
-A6:   ex i being natural number st i in dom f & f.i = 0;
+A6:   ex i being Nat st i in dom f & f.i = 0;
       per cases;
       suppose
         f.(k+1) = 0;
@@ -521,7 +521,7 @@ A6:   ex i being natural number st i in dom f & f.i = 0;
       end;
       suppose
 A7:     f.(k+1) <> 0;
-        consider j being natural number such that
+        consider j being Nat such that
 A8:     j in dom f and
 A9:     f.j = 0 by A6;
         reconsider j as Element of NAT by ORDINAL1:def 12;
@@ -548,7 +548,7 @@ A13: P[0] proof let f be complex-valued FinSequence;
   end;
 A14: for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A1);
 A15: ex j being Nat st len m = j;
-  assume ex i being natural number st i in dom m & m.i = 0;
+  assume ex i being Nat st i in dom m & m.i = 0;
   hence thesis by A14,A15;
 end;
 
@@ -588,10 +588,10 @@ A1: i * z = j by INT_1:def 3;
 end;
 
 theorem Th9:
-  for m being integer-valued FinSequence, i being natural number st
+  for m being INT-valued FinSequence, i being Nat st
   i in dom m & m.i <> 0 holds Product(m) / m.i is Integer
 proof
-  let m be integer-yielding FinSequence, i9 be natural number;
+  let m be INT-valued FinSequence, i9 be Nat;
   reconsider i = i9 as Element of NAT by ORDINAL1:def 12;
   reconsider m2 = m/^i as FinSequence of INT by Lm1;
   reconsider m1 = m|i as FinSequence of INT by Lm1;
@@ -618,10 +618,10 @@ A4: m9 = m1 ^ m2 by RFINSEQ:8;
 end;
 
 theorem Th10:
-  for m being integer-valued FinSequence, i being natural number
+  for m being INT-valued FinSequence, i being Nat
   st i in dom m ex z being Integer st z * m.i = Product(m)
 proof
-  let m be integer-yielding FinSequence, i be natural number;
+  let m be INT-valued FinSequence, i be Nat;
   assume
 A1: i in dom m;
   per cases;
@@ -640,11 +640,11 @@ A3: m.i = 0;
   end;
 end;
 
-Lm6: for m being integer-yielding FinSequence, i,j being natural number st i
+Lm6: for m being INT-valued FinSequence, i,j being Nat st i
 in dom m & j in dom m & j <> i & m.j <> 0 ex z being Integer st z * m.i =
 Product(m) / m.j
 proof
-  let m be integer-yielding FinSequence, i9,j9 be natural number;
+  let m be INT-valued FinSequence, i9,j9 be Nat;
   reconsider m9 = m as FinSequence of INT by Lm1;
   assume that
 A1: i9 in dom m and
@@ -708,10 +708,12 @@ A19:  i-1 - kj in dom(m9/^j) by FINSEQ_1:def 3;
       then ki in Seg(len f) by A18;
       then
 A20:  ki in dom f by FINSEQ_1:def 3;
+      reconsider D = INT as set;
+      reconsider ww = m9 as FinSequence of D;
       len(m|kj) < i-1 by A8,A15,XREAL_1:9;
       then f.ki = (m/^j).(ki-kj) by A8,A18,FINSEQ_1:24
-        .= (m9/^j)/.(ki - kj) by A19,PARTFUN1:def 6
-        .= m9/.(j+a) by A19,FINSEQ_5:27
+        .= (ww/^j)/.(ki - kj) by A19,PARTFUN1:def 6
+        .= ww/.(j+a) by A19,FINSEQ_5:27
         .= m.i by A1,PARTFUN1:def 6;
       hence thesis by A20;
     end;
@@ -749,11 +751,11 @@ A24: (m|kj) ^ <*m.j*> = (m|j) by Th5;
 end;
 
 theorem
-  for m being integer-valued FinSequence, i,j being natural number st i
+  for m being INT-valued FinSequence, i,j being Nat st i
   in dom m & j in dom m & j <> i & m.j <> 0 holds Product(m) / (m.i * m.j) is
   Integer
 proof
-  let m be integer-yielding FinSequence, i9,j9 be natural number;
+  let m be INT-valued FinSequence, i9,j9 be Nat;
   assume that
 A1: i9 in dom m and
 A2: j9 in dom m and
@@ -777,7 +779,7 @@ A7: u / m.i = Product(m) * ((m.j)" * (m.i)")
 end;
 
 theorem
-  for m being integer-valued FinSequence, i,j being natural number st i
+  for m being INT-valued FinSequence, i,j being Nat st i
   in dom m & j in dom m & j <> i & m.j <> 0 ex z being Integer st z * m.i =
   Product(m) / m.j by Lm6;
 
@@ -1104,21 +1106,21 @@ end;
 begin  :: Chinese Remainder Sequences
 
 notation
-  let f be integer-valued FinSequence;
+  let f be INT-valued FinSequence;
   antonym f is multiplicative-trivial for f is non-empty;
 end;
 
 definition
-  let f be integer-valued FinSequence;
+  let f be INT-valued FinSequence;
   redefine attr f is multiplicative-trivial means
   :Def1:
-  ex i being natural number st i in dom f & f.i = 0;
+  ex i being Nat st i in dom f & f.i = 0;
   compatibility
   proof
-    thus f is non-empty implies not ex i being natural number st i in dom f &
+    thus f is non-empty implies not ex i being Nat st i in dom f &
     f.i = 0 by FUNCT_1:def 9;
     assume
-A1: not ex i being natural number st i in dom f & f.i = 0;
+A1: not ex i being Nat st i in dom f & f.i = 0;
     let n be set;
     assume n in dom f;
     hence thesis by A1;
@@ -1126,7 +1128,7 @@ A1: not ex i being natural number st i in dom f & f.i = 0;
 end;
 
 registration
-  cluster multiplicative-trivial for integer-valued FinSequence;
+  cluster multiplicative-trivial for INT-valued FinSequence;
   existence
   proof
     set p = <*0*>;
@@ -1147,9 +1149,9 @@ registration
     hence 1 in dom f;
     thus thesis by FINSEQ_1:40;
   end;
-  cluster non multiplicative-trivial for integer-valued FinSequence;
+  cluster non multiplicative-trivial for INT-valued FinSequence;
   existence by Def1;
-  cluster non empty positive-yielding for integer-valued FinSequence;
+  cluster non empty positive-yielding for INT-valued FinSequence;
   existence
   proof
     set p = <*1*>;
@@ -1175,24 +1177,24 @@ registration
 end;
 
 theorem
-  for m being multiplicative-trivial integer-valued FinSequence holds
+  for m being multiplicative-trivial INT-valued FinSequence holds
   Product(m) = 0
 proof
-  let m be multiplicative-trivial integer-yielding FinSequence;
-  ex i being natural number st i in dom m & m.i = 0 by Def1;
+  let m be multiplicative-trivial INT-valued FinSequence;
+  ex i being Nat st i in dom m & m.i = 0 by Def1;
   hence thesis by Th6;
 end;
 
 definition
-  let f be integer-valued FinSequence;
+  let f be INT-valued FinSequence;
   attr f is Chinese_Remainder means
   :Def2:
-  for i,j being natural number st i
+  for i,j being Nat st i
   in dom f & j in dom f & i <> j holds f.i, f.j are_relative_prime;
 end;
 
 registration
-  cluster non empty positive-yielding Chinese_Remainder for integer-valued
+  cluster non empty positive-yielding Chinese_Remainder for INT-valued
     FinSequence;
   existence
   proof
@@ -1215,7 +1217,7 @@ A1: now
       hence i = 1 by FINSEQ_1:2,TARSKI:def 1;
     end;
 A2: now
-      let i9,j9 be natural number;
+      let i9,j9 be Nat;
       assume that
 A3:   i9 in dom f and
 A4:   j9 in dom f and
@@ -1237,7 +1239,7 @@ end;
 
 definition
   mode CR_Sequence is non empty positive-yielding Chinese_Remainder
-    integer-valued FinSequence;
+    INT-valued FinSequence;
 end;
 
 registration
@@ -1246,7 +1248,7 @@ registration
   proof
     let f be CR_Sequence;
     now
-      let i be natural number;
+      let i be Nat;
       assume i in dom f;
       then f.i in rng f by FUNCT_1:3;
       hence f.i <> 0 by PARTFUN3:def 1;
@@ -1256,15 +1258,15 @@ registration
 end;
 
 registration
-  cluster multiplicative-trivial -> non empty for integer-valued FinSequence;
+  cluster multiplicative-trivial -> non empty for INT-valued FinSequence;
   coherence;
 end;
 
 theorem Th24:
-  for f being CR_Sequence, m being natural number st 0 < m & m <=
+  for f being CR_Sequence, m being Nat st 0 < m & m <=
   len f holds f|m is CR_Sequence
 proof
-  let f be CR_Sequence, m be natural number;
+  let f be CR_Sequence, m be Nat;
   reconsider fm = f|m as FinSequence of INT by Lm1;
   assume that
 A1: m > 0 and
@@ -1283,7 +1285,7 @@ A6: i <= len f by A2,XXREAL_0:2;
     hence i in dom f by FINSEQ_1:def 3;
   end;
 A7: now
-    let i9,j9 be natural number;
+    let i9,j9 be Nat;
     assume that
 A8: i9 in dom fm and
 A9: j9 in dom fm and
@@ -1371,13 +1373,13 @@ registration
 end;
 
 theorem Th25:
-  for m being CR_Sequence, i being natural number st i in dom m
+  for m being CR_Sequence, i being Nat st i in dom m
 for mm being Integer st mm = Product(m) / m.i holds mm, m.i are_relative_prime
 proof
   defpred P[Nat] means for m being CR_Sequence st len m = $1 for i being
-  natural number st i in dom m for mm being Integer st mm = Product(m) / m.i
+  Nat st i in dom m for mm being Integer st mm = Product(m) / m.i
   holds mm, m.i are_relative_prime;
-  let m be CR_Sequence, i be natural number;
+  let m be CR_Sequence, i be Nat;
   assume
 A1: i in dom m;
   let mm be Integer;
@@ -1399,7 +1401,7 @@ A7:   len m1 = k by A5,FINSEQ_1:59,NAT_1:11;
       then k+1 in Seg(k+1);
       then
 A8:   k+1 in dom m by A5,FINSEQ_1:def 3;
-      let i9 be natural number;
+      let i9 be Nat;
       reconsider i = i9 as Element of NAT by ORDINAL1:def 12;
       assume
 A9:   i9 in dom m;
@@ -1523,22 +1525,22 @@ A40: for k be Element of NAT holds P[k] from NAT_1:sch 1(A39,A3);
   hence thesis by A1,A40,A2;
 end;
 
-Lm8: for u being integer-yielding FinSequence, m being CR_Sequence for z1,z2
-being Integer st 0 <= z1 & z1 < Product(m) & (for i being natural number st i
+Lm8: for u being INT-valued FinSequence, m being CR_Sequence for z1,z2
+being Integer st 0 <= z1 & z1 < Product(m) & (for i being Nat st i
 in dom m holds z1,u.i are_congruent_mod m.i) & 0 <= z2 & z2 < Product(m) & (for
-i being natural number st i in dom m holds z2,u.i are_congruent_mod m.i) holds
+i being Nat st i in dom m holds z2,u.i are_congruent_mod m.i) holds
 z1 = z2
 proof
-  let u be integer-yielding FinSequence, m be CR_Sequence;
+  let u be INT-valued FinSequence, m be CR_Sequence;
   let z1,z2 being Integer;
   assume that
 A1: 0 <= z1 and
 A2: z1 < Product(m) and
-A3: for i being natural number st i in dom m holds z1,u.i
+A3: for i being Nat st i in dom m holds z1,u.i
   are_congruent_mod m.i and
 A4: 0 <= z2 and
 A5: z2 < Product(m) and
-A6: for i being natural number st i in dom m holds z2,u.i
+A6: for i being Nat st i in dom m holds z2,u.i
   are_congruent_mod m.i;
   defpred P[Nat] means for m1 being CR_Sequence st m1 = m|($1) holds z1, z2
   are_congruent_mod Product(m1);
@@ -1629,11 +1631,11 @@ end;
 begin  :: Integer Arithmetic based on CRT
 
 definition
-  let u be Integer, m be integer-valued FinSequence;
+  let u be Integer, m be INT-valued FinSequence;
   func mod(u,m) -> FinSequence means
   :Def3:
   len it = len m & for i being
-  natural number st i in dom it holds it.i = u mod m.i;
+  Nat st i in dom it holds it.i = u mod m.i;
   existence
   proof
     defpred P[set,set] means $2 = u mod m.($1);
@@ -1657,10 +1659,10 @@ A2: dom p = Seg len m & for k being Nat st k in Seg len m holds P[k,p.
     let z1,z2 be FinSequence;
     assume that
 A3: len z1 = len m and
-A4: for i being natural number st i in dom z1 holds z1.i = u mod (m.i);
+A4: for i being Nat st i in dom z1 holds z1.i = u mod (m.i);
     assume that
 A5: len z2 = len m and
-A6: for i being natural number st i in dom z2 holds z2.i = u mod (m.i);
+A6: for i being Nat st i in dom z2 holds z2.i = u mod (m.i);
 A7: dom z1 = Seg len z1 by FINSEQ_1:def 3
       .= dom z2 by A3,A5,FINSEQ_1:def 3;
     now
@@ -1676,8 +1678,8 @@ A8:   x in dom z1;
 end;
 
 registration
-  let u be Integer, m be integer-valued FinSequence;
-  cluster mod(u,m) -> integer-valued;
+  let u be Integer, m be INT-valued FinSequence;
+  cluster mod(u,m) -> INT-valued;
   coherence
   proof
     now
@@ -1687,12 +1689,12 @@ registration
 A1:   x in dom mod(u,m) and
 A2:   mod(u,m).x = y by FUNCT_1:def 3;
       reconsider x as Element of NAT by A1;
-      reconsider x as natural number;
+      reconsider x as Nat;
       y = u mod m.x by A1,A2,Def3;
       hence y in INT by INT_1:def 2;
     end;
     then rng mod(u,m) c= INT by TARSKI:def 3;
-    hence thesis by VALUED_0:def 5;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
@@ -1701,7 +1703,7 @@ definition
   mode CR_coefficients of m -> FinSequence means
     :Def4:
     len it = len m & for i
-being natural number st i in dom it holds ex s being Integer, mm being Integer
+being Nat st i in dom it holds ex s being Integer, mm being Integer
     st mm = Product(m) / m.i & s * mm, 1 are_congruent_mod m.i & it.i = s * (
     Product(m) / m.i);
   existence
@@ -1735,7 +1737,7 @@ end;
 
 registration
   let m be CR_Sequence;
-  cluster -> integer-valued for CR_coefficients of m;
+  cluster -> INT-valued for CR_coefficients of m;
   coherence
   proof
     let c be CR_coefficients of m;
@@ -1746,21 +1748,21 @@ registration
 A1:   x in dom c and
 A2:   c.x = u by FUNCT_1:def 3;
       reconsider x as Element of NAT by A1;
-      reconsider x as natural number;
+      reconsider x as Nat;
       ex s being Integer, mm being Integer st mm = Product(m) / m.x & s
       * mm, 1 are_congruent_mod m.x & c.x = s * (Product(m) / m.x) by A1,Def4;
       hence u in INT by A2,INT_1:def 2;
     end;
     then rng c c= INT by TARSKI:def 3;
-    hence thesis by VALUED_0:def 5;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
 theorem Th26:
   for m being CR_Sequence, c being CR_coefficients of m, i being
-  natural number st i in dom c holds c.i,1 are_congruent_mod m.i
+  Nat st i in dom c holds c.i,1 are_congruent_mod m.i
 proof
-  let m be CR_Sequence, c be CR_coefficients of m, i be natural number;
+  let m be CR_Sequence, c be CR_coefficients of m, i be Nat;
   assume i in dom c;
   then
   ex s being Integer, mm being Integer st mm = Product(m) / m.i & s * mm
@@ -1770,10 +1772,10 @@ end;
 
 theorem Th27:
   for m being CR_Sequence, c being CR_coefficients of m, i,j being
-  natural number st i in dom c & j in dom c & i <> j holds c.i,0
+  Nat st i in dom c & j in dom c & i <> j holds c.i,0
   are_congruent_mod m.j
 proof
-  let m be CR_Sequence, c be CR_coefficients of m, i,j be natural number;
+  let m be CR_Sequence, c be CR_coefficients of m, i,j be Nat;
   assume that
 A1: i in dom c and
 A2: j in dom c and
@@ -1797,9 +1799,9 @@ end;
 
 theorem
   for m being CR_Sequence, c1,c2 being CR_coefficients of m, i being
-  natural number st i in dom c1 holds c1.i,c2.i are_congruent_mod m.i
+  Nat st i in dom c1 holds c1.i,c2.i are_congruent_mod m.i
 proof
-  let m be CR_Sequence, c1,c2 be CR_coefficients of m, i be natural number;
+  let m be CR_Sequence, c1,c2 be CR_coefficients of m, i be Nat;
   assume
 A1: i in dom c1;
   then
@@ -1818,15 +1820,15 @@ A6: c2.i = s2 * (Product(m) / m.i) by A1,Def4;
 end;
 
 theorem Th29:
-  for u being integer-valued FinSequence, m being CR_Sequence st
-len m = len u for c being CR_coefficients of m, i being natural number st i in
+  for u being INT-valued FinSequence, m being CR_Sequence st
+len m = len u for c being CR_coefficients of m, i being Nat st i in
   dom m holds Sum(u(#)c),u.i are_congruent_mod m.i
 proof
-  let u be integer-yielding FinSequence, m be CR_Sequence;
+  let u be INT-valued FinSequence, m be CR_Sequence;
   assume
 A1: len m = len u;
-  let c be CR_coefficients of m, i be natural number;
-  defpred P[Nat] means for v,cc being integer-yielding FinSequence st v = u|(
+  let c be CR_coefficients of m, i be Nat;
+  defpred P[Nat] means for v,cc being INT-valued FinSequence st v = u|(
 $1) & cc = c|($1) holds ($1 < i & Sum(v(#)cc), 0 are_congruent_mod m.i) or ($1
   >= i & Sum(v(#)cc), u.i are_congruent_mod m.i);
   assume
@@ -1843,7 +1845,7 @@ A6: k < len u and
 A7: P[k];
     now
       set v9 = u|k, cc9 = c|k;
-      let v,cc be integer-yielding FinSequence;
+      let v,cc be INT-valued FinSequence;
 A8:   0 + 1 <= k + 1 by XREAL_1:6;
       reconsider a = v(#)cc, b = v9(#)cc9 as FinSequence of REAL by Lm5;
       assume that
@@ -1972,7 +1974,7 @@ INT_1:18;
   end;
 A44: dom m = Seg(len u) by A1,FINSEQ_1:def 3;
   now
-    let v,cc be integer-yielding FinSequence;
+    let v,cc be INT-valued FinSequence;
     assume that
 A45: v = u|0 and
 A46: cc = c|0;
@@ -1996,20 +1998,20 @@ A50: u = u|(len u) by FINSEQ_1:58;
 end;
 
 theorem Th30:
-  for u being integer-valued FinSequence, m being CR_Sequence st
+  for u being INT-valued FinSequence, m being CR_Sequence st
 len m = len u for c1,c2 being CR_coefficients of m holds Sum(u(#)c1),Sum(u(#)c2
   ) are_congruent_mod Product(m)
 proof
-  let u be integer-yielding FinSequence, m be CR_Sequence;
+  let u be INT-valued FinSequence, m be CR_Sequence;
   assume
 A1: len u = len m;
   let c1, c2 be CR_coefficients of m;
   set s1 = Sum(u(#)c1) mod Product(m), s2 = Sum(u(#)c2) mod Product(m);
 A2: s1 < Product(m) by NAT_D:62;
-A3: for i being natural number st i in dom m holds s1, u.i are_congruent_mod
+A3: for i being Nat st i in dom m holds s1, u.i are_congruent_mod
   m.i
   proof
-    let i be natural number;
+    let i be Nat;
     s1 mod Product(m) = Sum(u(#)c1) mod Product(m) by NAT_D:65;
     then
 A4: s1, Sum(u(#)c1) are_congruent_mod Product(m) by NAT_D:64;
@@ -2027,10 +2029,10 @@ A7: s1 mod m.i = Sum(u(#)c1) mod m.i by NAT_D:64;
     hence thesis by A6,A7,NAT_D:64;
   end;
 A8: 0 <= s2 by NAT_D:62;
-A9: for i being natural number st i in dom m holds s2, u.i
+A9: for i being Nat st i in dom m holds s2, u.i
   are_congruent_mod m.i
   proof
-    let i be natural number;
+    let i be Nat;
     s2 mod Product(m) = Sum(u(#)c2) mod Product(m) by NAT_D:65;
     then
 A10: s2, Sum(u(#)c2) are_congruent_mod Product(m) by NAT_D:64;
@@ -2054,7 +2056,7 @@ A14: s2 < Product(m) by NAT_D:62;
 end;
 
 definition
-  let u be integer-valued FinSequence, m be CR_Sequence such that
+  let u be INT-valued FinSequence, m be CR_Sequence such that
 A1: len m = len u;
   func to_int(u,m) -> Integer means
   :Def5:
@@ -2076,19 +2078,19 @@ A1: len m = len u;
     set c = the CR_coefficients of m;
     let z1, z2 be Integer;
     assume
-A2: for c being CR_coefficients of m holds z1 = Sum(u(#)c) mod Product (m);
+A1: for c being CR_coefficients of m holds z1 = Sum(u(#)c) mod Product (m);
     assume
-A3: for c being CR_coefficients of m holds z2 = Sum(u(#)c) mod Product (m);
-    thus z1 = Sum(u(#)c) mod Product(m) by A2
-      .= z2 by A3;
+A2: for c being CR_coefficients of m holds z2 = Sum(u(#)c) mod Product (m);
+    thus z1 = Sum(u(#)c) mod Product(m) by A1
+      .= z2 by A2;
   end;
 end;
 
 theorem Th31:
-  for u being integer-valued FinSequence, m being CR_Sequence st
+  for u being INT-valued FinSequence, m being CR_Sequence st
   len m = len u holds 0 <= to_int(u,m) & to_int(u,m) < Product(m)
 proof
-  let u be integer-yielding FinSequence, m be CR_Sequence;
+  let u be INT-valued FinSequence, m be CR_Sequence;
   set z = to_int(u,m);
   set c = the CR_coefficients of m;
   assume len u = len m;
@@ -2097,11 +2099,11 @@ proof
 end;
 
 theorem Th32:
-  for u being Integer, m being CR_Sequence, i being natural number
+  for u being Integer, m being CR_Sequence, i being Nat
   st i in dom m holds u, mod(u,m).i are_congruent_mod m.i
 proof
   let u be Integer, m be CR_Sequence;
-  let i be natural number;
+  let i be Nat;
 A1: len mod(u,m) = len m by Def3;
   assume
 A2: i in dom m;
@@ -2117,10 +2119,10 @@ A3: u - (u mod m.i) = (u div m.i) * m.i;
 end;
 
 theorem Th33:
-  for u,v being Integer, m being CR_Sequence, i being natural
-number st i in dom m holds (mod(u,m) + mod(v,m)).i, u + v are_congruent_mod m.i
+  for u,v being Integer, m being CR_Sequence, i being Nat
+  st i in dom m holds (mod(u,m) + mod(v,m)).i, u + v are_congruent_mod m.i
 proof
-  let u,v be Integer, m be CR_Sequence, i be natural number;
+  let u,v be Integer, m be CR_Sequence, i be Nat;
   assume
 A1: i in dom m;
 A2: len mod(v,m) = len m by Def3;
@@ -2144,10 +2146,10 @@ A6: (mod(u,m).i + mod(v,m).i) mod m.i = (u + v) mod m.i by A3,NAT_D:66;
   hence thesis by A5,A6,NAT_D:64;
 end;
 
-Lm9: for u,v being Integer, m being CR_Sequence, i being natural number st i
+Lm9: for u,v being Integer, m being CR_Sequence, i being Nat st i
 in dom m holds (mod(u,m) - mod(v,m)).i, u - v are_congruent_mod m.i
 proof
-  let u,v be Integer, m be CR_Sequence, i be natural number;
+  let u,v be Integer, m be CR_Sequence, i be Nat;
   assume
 A1: i in dom m;
 A2: len mod(v,m) = len m by Def3;
@@ -2172,11 +2174,10 @@ A6: (mod(u,m).i - mod(v,m).i) mod m.i = (u - v) mod m.i by A3,Th7;
 end;
 
 theorem Th34:
-  for u,v being Integer, m being CR_Sequence, i being natural
-number st i in dom m holds (mod(u,m) (#) mod(v,m)).i, u * v are_congruent_mod m
-  .i
+  for u,v being Integer, m being CR_Sequence, i being Nat
+  st i in dom m holds (mod(u,m) (#) mod(v,m)).i, u * v are_congruent_mod m.i
 proof
-  let u,v be Integer, m be CR_Sequence, i be natural number;
+  let u,v be Integer, m be CR_Sequence, i be Nat;
   assume
 A1: i in dom m;
 A2: len mod(v,m) = len m by Def3;
@@ -2202,11 +2203,11 @@ A6: (mod(u,m).i * mod(v,m).i) mod m.i = (u * v) mod m.i by A3,NAT_D:67;
 end;
 
 theorem Th35:
-  for u,v being Integer, m being CR_Sequence, i being natural
-  number st i in dom m holds to_int(mod(u,m) + mod(v,m),m), u + v
+  for u,v being Integer, m being CR_Sequence, i being Nat
+  st i in dom m holds to_int(mod(u,m) + mod(v,m),m), u + v
   are_congruent_mod m.i
 proof
-  let u,v be Integer, m be CR_Sequence, i be natural number;
+  let u,v be Integer, m be CR_Sequence, i be Nat;
   set z = to_int(mod(u,m) + mod(v,m),m);
   set c = the CR_coefficients of m;
 A1: len mod(u,m) = len m by Def3;
@@ -2232,11 +2233,11 @@ A6: z,(mod(u,m)+mod(v,m)).i are_congruent_mod m.i by A5,INT_1:15;
 end;
 
 theorem Th36:
-  for u,v being Integer, m being CR_Sequence, i being natural
-  number st i in dom m holds to_int(mod(u,m) - mod(v,m),m), u - v
+  for u,v being Integer, m being CR_Sequence, i being Nat
+  st i in dom m holds to_int(mod(u,m) - mod(v,m),m), u - v
   are_congruent_mod m.i
 proof
-  let u,v be Integer, m be CR_Sequence, i be natural number;
+  let u,v be Integer, m be CR_Sequence, i be Nat;
   set z = to_int((mod(u,m) - mod(v,m)),m);
   set c = the CR_coefficients of m;
 A1: len mod(u,m) = len m by Def3;
@@ -2262,11 +2263,11 @@ A6: z,(mod(u,m)-mod(v,m)).i are_congruent_mod m.i by A5,INT_1:15;
 end;
 
 theorem Th37:
-  for u,v being Integer, m being CR_Sequence, i being natural
-  number st i in dom m holds to_int(mod(u,m) (#) mod(v,m),m), u * v
+  for u,v being Integer, m being CR_Sequence, i being Nat
+  st i in dom m holds to_int(mod(u,m) (#) mod(v,m),m), u * v
   are_congruent_mod m.i
 proof
-  let u,v be Integer, m be CR_Sequence, i be natural number;
+  let u,v be Integer, m be CR_Sequence, i be Nat;
   set z = to_int((mod(u,m) (#) mod(v,m)),m);
   set c = the CR_coefficients of m;
 A1: len mod(u,m) = len m by Def3;
@@ -2301,13 +2302,13 @@ proof
 A1: 0 <= u + v and
 A2: u + v < Product(m);
   set z = to_int(mod(u,m) + mod(v,m), m);
-A3: for i being natural number st i in dom m holds u + v, mod(u+v,m).i
+A3: for i being Nat st i in dom m holds u + v, mod(u+v,m).i
   are_congruent_mod m.i by Th32;
 A4: len mod(u+v,m) = len m by Def3;
-A5: for i being natural number st i in dom m holds z, mod(u+v,m).i
+A5: for i being Nat st i in dom m holds z, mod(u+v,m).i
   are_congruent_mod m.i
   proof
-    let i be natural number;
+    let i be Nat;
     assume
 A6: i in dom m;
     then z,u + v are_congruent_mod m.i by Th35;
@@ -2343,13 +2344,13 @@ proof
 A1: 0 <= u - v and
 A2: u - v < Product(m);
   set z = to_int(mod(u,m) - mod(v,m), m);
-A3: for i being natural number st i in dom m holds u - v, mod(u-v,m).i
+A3: for i being Nat st i in dom m holds u - v, mod(u-v,m).i
   are_congruent_mod m.i by Th32;
 A4: len mod(u-v,m) = len m by Def3;
-A5: for i being natural number st i in dom m holds z,mod(u-v,m).i
+A5: for i being Nat st i in dom m holds z,mod(u-v,m).i
   are_congruent_mod m.i
   proof
-    let i be natural number;
+    let i be Nat;
     assume
 A6: i in dom m;
     then z,u - v are_congruent_mod m.i by Th36;
@@ -2385,13 +2386,13 @@ proof
 A1: 0 <= u * v and
 A2: u * v < Product(m);
   set z = to_int(mod(u,m) (#) mod(v,m), m);
-A3: for i being natural number st i in dom m holds u * v,mod(u*v,m).i
+A3: for i being Nat st i in dom m holds u * v,mod(u*v,m).i
   are_congruent_mod m.i by Th32;
 A4: len mod(u*v,m) = len m by Def3;
-A5: for i being natural number st i in dom m holds z,mod(u*v,m).i
+A5: for i being Nat st i in dom m holds z,mod(u*v,m).i
   are_congruent_mod m.i
   proof
-    let i be natural number;
+    let i be Nat;
     assume
 A6: i in dom m;
     then z,u * v are_congruent_mod m.i by Th37;
@@ -2421,17 +2422,17 @@ end;
 begin  :: Chinese Remainder Theorem Revisited
 
 theorem
-  for u being integer-valued FinSequence, m being CR_Sequence st len u =
-  len m ex z being Integer st 0 <= z & z < Product(m) & for i being natural
-  number st i in dom u holds z,u.i are_congruent_mod m.i
+  for u being INT-valued FinSequence, m being CR_Sequence st len u =
+  len m ex z being Integer st 0 <= z & z < Product(m) & for i being Nat
+  st i in dom u holds z,u.i are_congruent_mod m.i
 proof
-  let u be integer-yielding FinSequence, m be CR_Sequence;
+  let u be INT-valued FinSequence, m be CR_Sequence;
   assume
 A1: len u = len m;
   take z = to_int(u,m);
   now
     set c = the CR_coefficients of m;
-    let i be natural number;
+    let i be Nat;
     assume
 A2: i in dom u;
     set s = Sum(u(#)c) mod Product(m);
@@ -2458,8 +2459,8 @@ A6: m.i > 0 by PARTFUN3:def 1;
 end;
 
 theorem
-  for u being integer-valued FinSequence, m being CR_Sequence for z1,z2
-  being Integer st 0 <= z1 & z1 < Product(m) & (for i being natural number st i
+  for u being INT-valued FinSequence, m being CR_Sequence for z1,z2
+  being Integer st 0 <= z1 & z1 < Product(m) & (for i being Nat st i
 in dom m holds z1,u.i are_congruent_mod m.i) & 0 <= z2 & z2 < Product(m) & (for
-i being natural number st i in dom m holds z2,u.i are_congruent_mod m.i) holds
+i being Nat st i in dom m holds z2,u.i are_congruent_mod m.i) holds
   z1 = z2 by Lm8;

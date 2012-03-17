@@ -10,6 +10,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -19,9 +20,9 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
@@ -35,21 +36,21 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="50" value="false"/>
-<Adjective nr="120"/>
-<Adjective nr="121"/>
+<Adjective nr="54" value="false"/>
+<Adjective nr="126"/>
+<Adjective nr="127"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="225">
+<Func kind="K" nr="233">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="50" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="71"/>
-<Adjective nr="74"/>
-<Adjective nr="75"/>
+<Adjective nr="54" value="false"/>
+<Adjective nr="70"/>
+<Adjective nr="77"/>
+<Adjective nr="80"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 </Registrations>

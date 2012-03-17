@@ -1,0 +1,372 @@
+:: On the memory of SCM+FSA
+::  by Library Committee
+::
+:: Received October 1, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, AMI_1, SCMFSA_2, FUNCT_4, FUNCOP_1, RELAT_1,
+      FUNCT_1, TARSKI, XBOOLE_0, CARD_1, NAT_1, ARYTM_3, FINSET_1, STRUCT_0,
+      FSM_1, AMI_3, AMI_2, CARD_3, INT_1, PARTFUN1, FINSEQ_1, XXREAL_0,
+      ZFMISC_1, SCMFSA9A, SCMFSA6A, SCMFSA6C, GOBRD13, MEMSTR_0, SF_MASTR,
+      SFMASTR1, SCMBSORT, CLASSES1, VALUED_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
+      COMPLEX1, XXREAL_2, ENUMSET1, CARD_3, CLASSES1, ORDINAL1, NAT_1, INT_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, INT_2, NAT_D, SEQ_4,
+      VALUED_0, RFINSEQ, FINSEQ_2, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1,
+      AFINSQ_1, STRUCT_0, MEMSTR_0, AMI_2, AMI_3, EXTPRO_1, FUNCT_7, SCMFSA_2,
+      FUNCOP_1, XXREAL_0;
+ constructors WELLORD2, DOMAIN_1, XXREAL_0, INT_2, SCMFSA_2, RELSET_1,
+      VALUED_1, AMI_3, PRE_POLY, AMISTD_1, FUNCT_7, MEMSTR_0, SCMFSA_1,
+      XXREAL_2, SEQ_4, XXREAL_1, ENUMSET1, CLASSES1, VALUED_0, RFINSEQ;
+ registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
+      FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, SCMFSA_2, FUNCT_4, RELAT_1,
+      VALUED_1, SCMFSA10, COMPOS_1, EXTPRO_1, SCMFSA_4, MEMSTR_0, FINSEQ_1,
+      AMI_3, COMPOS_0, SCM_INST, CARD_1, XXREAL_2, FINSUB_1, NAT_1, MEMBERED,
+      AMI_5;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve l, m, n for Element of NAT;
+
+reserve a,b for Int-Location,
+  f for FinSeq-Location,
+  s,s1,s2 for State of SCM+FSA;
+
+registration
+  let n be Nat;
+  let i be Integer;
+  cluster (intloc n) .--> i -> (the_Values_of SCM+FSA)-compatible;
+end;
+
+definition
+  let I be PartState of SCM+FSA;
+  func Initialized I -> PartState of SCM+FSA equals
+:: SCMFSA_M:def 1
+  I +* Initialize ((intloc 0) .--> 1);
+ projectivity;
+end;
+
+registration
+  let I be PartState of SCM+FSA;
+ cluster Initialized I -> 0-started;
+end;
+
+registration
+  let I be FinPartState of SCM+FSA;
+ cluster Initialized I -> finite;
+end;
+
+scheme :: SCMFSA_M:sch 1
+
+  SCMFSAEx{ G(set) -> Integer, H(set) -> FinSequence of INT,
+        I() -> Element of NAT }:
+ ex S being State of SCM+FSA st IC S = I() &
+   for i being Element of NAT holds S.intloc i = G(i) & S.fsloc i = H(i);
+
+theorem :: SCMFSA_M:1
+  for s being State of SCM+FSA, x being set st x in dom s holds x is
+  Int-Location or x is FinSeq-Location or x = IC SCM+FSA;
+
+theorem :: SCMFSA_M:2
+  for s1,s2 being State of SCM+FSA holds ((for a being
+Int-Location holds s1.a = s2.a) & for f being FinSeq-Location
+ holds s1.f = s2.f) iff DataPart s1 = DataPart s2;
+
+theorem :: SCMFSA_M:3
+  for p being PartState of SCM+FSA holds dom Initialized p = dom p
+  \/ {intloc 0} \/ {IC SCM+FSA};
+
+registration
+  let s be State of SCM+FSA;
+  cluster Initialized s -> total;
+end;
+
+theorem :: SCMFSA_M:4
+  for p being PartState of SCM+FSA holds intloc 0 in dom Initialized p;
+
+theorem :: SCMFSA_M:5
+  for p being PartState of SCM+FSA holds (Initialized p).intloc 0 =
+  1 & (Initialized p).IC SCM+FSA =  0;
+
+theorem :: SCMFSA_M:6
+  for p being PartState of SCM+FSA, a being Int-Location
+   st  a <> intloc 0 & not a in dom p
+  holds not a in dom Initialized p;
+
+theorem :: SCMFSA_M:7
+  for p being PartState of SCM+FSA, f being FinSeq-Location
+     st not f in dom p
+    holds not f in dom Initialized p;
+
+theorem :: SCMFSA_M:8  :: from SCMFSA8C
+  for s being State of SCM+FSA st s.intloc 0 = 1 & IC s =  0
+  holds Initialized s = s;
+
+theorem :: SCMFSA_M:9
+ for p being PartState of SCM+FSA holds
+   (Initialized p).intloc 0 = 1;
+
+theorem :: SCMFSA_M:10
+ intloc 0 in dom Initialize ((intloc 0).-->1);
+
+theorem :: SCMFSA_M:11
+  dom Initialize ((intloc 0) .--> 1) = {intloc 0,IC SCM+FSA};
+
+theorem :: SCMFSA_M:12
+ (Initialize((intloc 0).-->1)).intloc 0 = 1;
+
+theorem :: SCMFSA_M:13
+ for p being PartState of SCM+FSA holds
+ Initialize((intloc 0).-->1) c= Initialized p;
+
+begin :: from SF_MASTR
+
+registration
+  cluster Int-Locations -> non empty;
+end;
+
+definition
+  let IT be Int-Location;
+  attr IT is read-only means
+:: SCMFSA_M:def 2
+ IT = intloc 0;
+end;
+
+notation
+  let IT be Int-Location;
+  antonym IT is read-write for IT is read-only;
+end;
+
+registration
+  cluster intloc 0 -> read-only;
+end;
+
+registration
+  cluster read-write for Int-Location;
+end;
+
+reserve L for finite Subset of Int-Locations;
+
+definition
+  let L be finite Subset of Int-Locations;
+  func FirstNotIn L -> Int-Location means
+:: SCMFSA_M:def 3
+
+  ex sn being non empty Subset
+of NAT st it = intloc min sn & sn = {k where k is Element of NAT : not intloc k
+  in L};
+end;
+
+theorem :: SCMFSA_M:14
+  not FirstNotIn L in L;
+
+theorem :: SCMFSA_M:15
+  FirstNotIn L = intloc m & not intloc n in L implies m <= n;
+
+reserve L for finite Subset of FinSeq-Locations;
+
+definition
+  let L be finite Subset of FinSeq-Locations;
+  func First*NotIn L -> FinSeq-Location means
+:: SCMFSA_M:def 4
+
+  ex sn being non empty
+  Subset of NAT st it = fsloc min sn & sn = {k where k is Element of NAT : not
+  fsloc k in L};
+end;
+
+theorem :: SCMFSA_M:16
+  not First*NotIn L in L;
+
+theorem :: SCMFSA_M:17
+  First*NotIn L = fsloc m & not fsloc n in L implies m <= n;
+
+registration
+  let s be State of SCM+FSA, li be Int-Location, k be Integer;
+  cluster s+*(li,k) -> (the_Values_of SCM+FSA)-compatible;
+end;
+
+begin ::from SCMFSA8C
+
+registration let a be Int-Location, n be Nat;
+ cluster a .--> n -> data-only for PartState of SCM+FSA;
+end;
+
+theorem :: SCMFSA_M:18
+  for s being State of SCM+FSA st s.intloc 0 = 1
+  holds Initialize s = Initialized s;
+
+theorem :: SCMFSA_M:19
+  for s being State of SCM+FSA st s.intloc 0 = 1
+   holds DataPart Initialized s = DataPart s;
+
+theorem :: SCMFSA_M:20
+  for s1,s2 being State of SCM+FSA st s1.intloc 0 = s2.intloc 0 &
+  ((for a being read-write Int-Location holds s1.a = s2.a) & for f being
+  FinSeq-Location holds s1.f = s2.f) holds DataPart s1 = DataPart s2;
+
+theorem :: SCMFSA_M:21
+  for s being State of SCM+FSA, a being Int-Location,
+      l being Element of NAT holds
+  (s +* Start-At(l,SCM+FSA)).a = s.a;
+
+begin :: from SFMASTR1
+
+definition
+  let d be Int-Location;
+  redefine func { d } -> Subset of Int-Locations;
+  let e be Int-Location;
+  redefine func { d, e } -> Subset of Int-Locations;
+  let f be Int-Location;
+  redefine func { d, e, f } -> Subset of Int-Locations;
+  let g be Int-Location;
+  redefine func { d, e, f, g } -> Subset of Int-Locations;
+end;
+
+definition
+  let L be finite Subset of Int-Locations;
+  func RWNotIn-seq L -> Function of NAT, bool NAT means
+:: SCMFSA_M:def 5
+
+  it.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} &
+  (for i being Element of NAT,
+     sn being non empty Subset of NAT st it.i = sn
+    holds it.(i+1) = sn \ {min sn})
+  & for i being Element of NAT holds it.i is infinite;
+end;
+
+registration
+  let L be finite Subset of Int-Locations, n be Element of NAT;
+  cluster (RWNotIn-seq L).n -> non empty;
+end;
+
+reserve L for finite Subset of Int-Locations;
+
+theorem :: SCMFSA_M:22
+  not 0 in (RWNotIn-seq L).n & for m st m in (RWNotIn-seq L).n
+  holds not intloc m in L;
+
+theorem :: SCMFSA_M:23
+  min ((RWNotIn-seq L).n) < min ((RWNotIn-seq L).(n+1));
+
+theorem :: SCMFSA_M:24
+  n < m implies min ((RWNotIn-seq L).n) < min ((RWNotIn-seq L).m);
+
+definition
+  let n be Element of NAT, L be finite Subset of Int-Locations;
+  func n-thRWNotIn L -> Int-Location equals
+:: SCMFSA_M:def 6
+  intloc min ((RWNotIn-seq L).n);
+end;
+
+notation
+  let n be Element of NAT, L be finite Subset of Int-Locations;
+  synonym n-stRWNotIn L for n-thRWNotIn L;
+  synonym n-ndRWNotIn L for n-thRWNotIn L;
+  synonym n-rdRWNotIn L for n-thRWNotIn L;
+end;
+
+registration
+  let n be Element of NAT, L be finite Subset of Int-Locations;
+  cluster n-thRWNotIn L -> read-write;
+end;
+
+theorem :: SCMFSA_M:25
+  not n-thRWNotIn L in L;
+
+theorem :: SCMFSA_M:26
+  n <> m implies n-thRWNotIn L <> m-thRWNotIn L;
+
+begin :: from SFMASTR2
+
+theorem :: SCMFSA_M:27
+  for Iloc being Subset of Int-Locations, Floc being Subset of
+  FinSeq-Locations holds s1 | (Iloc \/ Floc) = s2 | (Iloc \/ Floc) iff (for x
+  being Int-Location st x in Iloc holds s1.x = s2.x) & for x being
+  FinSeq-Location st x in Floc holds s1.x = s2.x;
+
+theorem :: SCMFSA_M:28
+  for Iloc being Subset of Int-Locations holds s1 | (Iloc \/
+  FinSeq-Locations) = s2 | (Iloc \/ FinSeq-Locations) iff (for x being
+  Int-Location st x in Iloc holds s1.x = s2.x) & for x being FinSeq-Location
+  holds s1.x = s2.x;
+
+begin :: from SCM_HALT
+
+theorem :: SCMFSA_M:29
+  for x being set,i,m,n being Element of NAT
+   st x in dom (((intloc i) .--> m) +* Start-At(n,SCM+FSA))
+    holds x=intloc i or x=IC SCM+FSA;
+
+theorem :: SCMFSA_M:30
+  for s being State of SCM+FSA st
+  Initialize ((intloc 0) .--> 1) c= s holds s.intloc 0 =1;
+
+registration
+  let n be Element of NAT;
+  cluster intloc (n+1) -> read-write;
+end;
+
+begin :: from SCMBSORT
+
+registration
+  let f be FinSeq-Location,t be FinSequence of INT;
+  cluster f .--> t ->  (the_Values_of SCM+FSA)-compatible;
+end;
+
+theorem :: SCMFSA_M:31
+  for w being FinSequence of INT,f be FinSeq-Location
+  holds dom (Initialized (f.--> w)) = {intloc 0,IC SCM+FSA,f};
+
+theorem :: SCMFSA_M:32
+  for t be FinSequence of INT,f be FinSeq-Location
+  holds dom Initialize((intloc 0) .--> 1) misses dom (f .--> t);
+
+theorem :: SCMFSA_M:33
+  for w being FinSequence of INT,f be FinSeq-Location,s be State of SCM+FSA
+   st  Initialized(f .--> w) c= s
+  holds s.f = w & s.(intloc 0) = 1;
+
+theorem :: SCMFSA_M:34
+  for f being FinSeq-Location,a being Int-Location,s being State of SCM+FSA
+  holds {a,IC SCM+FSA,f} c= dom s;
+
+definition
+  func Sorting-Function -> PartFunc of FinPartSt SCM+FSA,FinPartSt SCM+FSA
+  means
+:: SCMFSA_M:def 7
+
+  for p,q being FinPartState of SCM+FSA holds [p,q] in it
+  iff ex t being FinSequence of INT,u being FinSequence of REAL
+  st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+  u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u;
+end;
+
+theorem :: SCMFSA_M:35
+  for p being set holds p in dom Sorting-Function iff
+  ex t being FinSequence of INT st p = fsloc 0 .--> t;
+
+theorem :: SCMFSA_M:36
+  for t being FinSequence of INT holds
+  ex u being FinSequence of REAL st t,u are_fiberwise_equipotent &
+  u is non-increasing & u is FinSequence of INT &
+  Sorting-Function.(fsloc 0 .--> t ) = fsloc 0 .--> u;
+
+:: SCMFSA6C:3
+
+theorem :: SCMFSA_M:37
+  (for a being read-write Int-Location holds (Initialized s).a = s.a) &
+  (for f holds (Initialized s).f = s.f);
+

@@ -10,6 +10,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -20,7 +21,7 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
@@ -32,23 +33,23 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="78">
+<Func kind="K" nr="90">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="91">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -59,7 +60,7 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
@@ -70,7 +71,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="80">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 </Func>
 </Pred>
@@ -81,14 +82,14 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
@@ -102,7 +103,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="81">
+<Func kind="K" nr="93">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -115,7 +116,7 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
@@ -123,7 +124,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Not>
 <And>
@@ -132,7 +133,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="82">
+<Func kind="K" nr="94">
 <Var nr="2"/>
 <Var nr="1"/>
 </Func>

@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received April 14, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -22,7 +22,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions FUNCT_1;
- theorems RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, SUBSET_1;
+ theorems RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, SUBSET_1, XTUPLE_0;
  schemes FUNCT_2, PARTFUN1;
 
 begin
@@ -89,6 +89,29 @@ definition
   mode BinOp of A is Function of [:A,A:],A;
 end;
 
+definition
+  let A be set, f be BinOp of A;
+  let a,b be Element of A;
+  redefine func f.(a,b) -> Element of A;
+  coherence
+  proof
+   per cases;
+   suppose A <> {};
+    then reconsider A as non empty set;
+    reconsider f as BinOp of A;
+    reconsider ab = [a,b] as Element of [:A,A:] by ZFMISC_1:def 2;
+    f.ab is Element of A;
+    hence thesis;
+   end;
+   suppose
+A1:  A = {};
+     then not [a,b] in dom f;
+     then f.(a,b) = {} by FUNCT_1:def 2;
+    hence thesis by A1,SUBSET_1:def 1;
+   end;
+  end;
+end;
+
 reserve u for UnOp of A,
   o,o9 for BinOp of A,
   a,b,c,e,e1,e2 for Element of A;
@@ -115,8 +138,8 @@ A6: P[x1,y1,z] by A1,A3;
     let x2,y2;
     assume
 A7: x = [x2,y2];
-    then x1 = x2 by A4,ZFMISC_1:27;
-    hence thesis by A4,A6,A7,ZFMISC_1:27;
+    then x1 = x2 by A4,XTUPLE_0:1;
+    hence thesis by A4,A6,A7,XTUPLE_0:1;
   end;
   consider f being Function of [:X(),Y():],Z() such that
 A8: for x st x in [:X(),Y():] holds R[x,f.x] from FUNCT_2:sch 1(A2);
@@ -164,8 +187,8 @@ A6: P[x1,y1,z] by A1;
     let x be Element of X(),y be Element of Y();
     assume
 A7: p = [x,y];
-    then x1 = x by A5,ZFMISC_1:27;
-    hence thesis by A5,A6,A7,ZFMISC_1:27;
+    then x1 = x by A5,XTUPLE_0:1;
+    hence thesis by A5,A6,A7,XTUPLE_0:1;
   end;
   consider f being Function of [:X(),Y():],Z() such that
 A8: for p being Element of [:X(),Y():] holds R[p,f.p] from FUNCT_2:sch 3
@@ -195,10 +218,10 @@ definition
   :Def2:
   for a,b holds o.(a,b) = o.(b,a);
   attr o is associative means
-  :Def3:
+
   for a,b,c holds o.(a,o.(b,c)) = o.(o.(a,b ),c);
   attr o is idempotent means
-  :Def4:
+
   for a holds o.(a,a) = a;
 end;
 
@@ -236,7 +259,7 @@ definition
   e is_a_left_unity_wrt o & e is_a_right_unity_wrt o;
 end;
 
-theorem Th11:
+theorem Th3:
   e is_a_unity_wrt o iff for a holds o.(e,a) = a & o.(a,e) = a
 proof
   thus e is_a_unity_wrt o implies for a holds o.(e,a) = a & o.(a,e) = a
@@ -248,7 +271,7 @@ proof
   hence (for a holds o.(e,a) = a) & for a holds o.(a,e) = a;
 end;
 
-theorem Th12:
+theorem Th4:
   o is commutative implies (e is_a_unity_wrt o iff for a holds o.( e,a) = a)
 proof
   assume
@@ -263,10 +286,10 @@ A2: for a holds o.(e,a) = a;
     thus o.(a,e) = o.(e,a) by A1,Def2
       .= a by A2;
   end;
-  hence thesis by Th11;
+  hence thesis by Th3;
 end;
 
-theorem Th13:
+theorem Th5:
   o is commutative implies (e is_a_unity_wrt o iff for a holds o.( a,e) = a)
 proof
   assume
@@ -281,21 +304,21 @@ A2: for a holds o.(a,e) = a;
       .= a by A2;
     thus o.(a,e) = a by A2;
   end;
-  hence thesis by Th11;
+  hence thesis by Th3;
 end;
 
-theorem Th14:
+theorem Th6:
   o is commutative implies (e is_a_unity_wrt o iff e is_a_left_unity_wrt o)
 proof
   e is_a_left_unity_wrt o iff for a holds o.(e,a) = a by Def5;
-  hence thesis by Th12;
+  hence thesis by Th4;
 end;
 
-theorem Th15:
+theorem Th7:
   o is commutative implies (e is_a_unity_wrt o iff e is_a_right_unity_wrt o)
 proof
   e is_a_right_unity_wrt o iff for a holds o.(a,e) = a by Def6;
-  hence thesis by Th13;
+  hence thesis by Th5;
 end;
 
 theorem
@@ -304,11 +327,11 @@ theorem
 proof
   assume
 A1: o is commutative;
-  then e is_a_unity_wrt o iff e is_a_left_unity_wrt o by Th14;
-  hence thesis by A1,Th15;
+  then e is_a_unity_wrt o iff e is_a_left_unity_wrt o by Th6;
+  hence thesis by A1,Th7;
 end;
 
-theorem Th17:
+theorem Th9:
   e1 is_a_left_unity_wrt o & e2 is_a_right_unity_wrt o implies e1 = e2
 proof
   assume that
@@ -318,14 +341,14 @@ A2: e2 is_a_right_unity_wrt o;
     .= e2 by A1,Def5;
 end;
 
-theorem Th18:
+theorem Th10:
   e1 is_a_unity_wrt o & e2 is_a_unity_wrt o implies e1 = e2
 proof
   assume that
   e1 is_a_left_unity_wrt o and
 A1: e1 is_a_right_unity_wrt o & e2 is_a_left_unity_wrt o and
   e2 is_a_right_unity_wrt o;
-  thus thesis by A1,Th17;
+  thus thesis by A1,Th9;
 end;
 
 definition
@@ -335,7 +358,7 @@ A1: ex e st e is_a_unity_wrt o;
   func the_unity_wrt o -> Element of A means
   it is_a_unity_wrt o;
   existence by A1;
-  uniqueness by Th18;
+  uniqueness by Th10;
 end;
 
 definition
@@ -354,7 +377,7 @@ definition
   o9 is_left_distributive_wrt o & o9 is_right_distributive_wrt o;
 end;
 
-theorem Th23:
+theorem Th11:
   o9 is_distributive_wrt o iff for a,b,c holds o9.(a,o.(b,c)) = o.
   (o9.(a,b),o9.(a,c)) & o9.(o.(a,b),c) = o.(o9.(a,c),o9.(b,c))
 proof
@@ -370,7 +393,7 @@ proof
   holds o9.(o.(a,b),c) = o.(o9.(a,c),o9.(b,c));
 end;
 
-theorem Th24:
+theorem Th12:
   for A being non empty set, o,o9 being BinOp of A holds o9 is
 commutative implies (o9 is_distributive_wrt o iff for a,b,c being Element of A
   holds o9.(a,o.(b,c)) = o.(o9.(a,b),o9.(a,c)))
@@ -394,10 +417,10 @@ A2: for a,b,c being Element of A holds o9.(a,o.(b,c)) = o.(o9.(a,b),o9 .(a,c));
       .= o.(o9.(a,c),o9.(c,b)) by A1,Def2
       .= o.(o9.(a,c),o9.(b,c)) by A1,Def2;
   end;
-  hence thesis by Th23;
+  hence thesis by Th11;
 end;
 
-theorem Th25:
+theorem Th13:
   for A being non empty set, o,o9 being BinOp of A holds o9 is
 commutative implies (o9 is_distributive_wrt o iff for a,b,c being Element of A
   holds o9.(o.(a,b),c) = o.(o9.(a,c),o9.(b,c)))
@@ -421,10 +444,10 @@ A2: for a,b,c being Element of A holds o9.(o.(a,b),c) = o.(o9.(a,c),o9 .(b,c));
       .= o.(o9.(a,b),o9.(a,c)) by A1,Def2;
     thus thesis by A2;
   end;
-  hence thesis by Th23;
+  hence thesis by Th11;
 end;
 
-theorem Th26:
+theorem Th14:
   for A being non empty set, o,o9 being BinOp of A holds o9 is
 commutative implies (o9 is_distributive_wrt o iff o9 is_left_distributive_wrt o
   )
@@ -432,10 +455,10 @@ proof
   let A be non empty set, o,o9 be BinOp of A;
   o9 is_left_distributive_wrt o iff for a,b,c being Element of A holds o9.
   (a,o.(b,c)) = o.(o9.(a,b),o9.(a,c)) by Def9;
-  hence thesis by Th24;
+  hence thesis by Th12;
 end;
 
-theorem Th27:
+theorem Th15:
   for A being non empty set, o,o9 being BinOp of A holds o9 is
 commutative implies (o9 is_distributive_wrt o iff o9 is_right_distributive_wrt
   o)
@@ -443,7 +466,7 @@ proof
   let A be non empty set, o,o9 be BinOp of A;
   o9 is_right_distributive_wrt o iff for a,b,c being Element of A holds o9
   .(o.(a,b),c) = o.(o9.(a,c),o9.(b,c)) by Def10;
-  hence thesis by Th25;
+  hence thesis by Th13;
 end;
 
 theorem
@@ -454,8 +477,8 @@ proof
   let A be non empty set, o,o9 be BinOp of A;
   assume
 A1: o9 is commutative;
-  then o9 is_distributive_wrt o iff o9 is_left_distributive_wrt o by Th26;
-  hence thesis by A1,Th27;
+  then o9 is_distributive_wrt o iff o9 is_left_distributive_wrt o by Th14;
+  hence thesis by A1,Th15;
 end;
 
 definition
@@ -465,20 +488,21 @@ definition
   for a,b holds u.(o.(a,b)) = o.((u .a),(u.b));
 end;
 
-definition
-  let A be non empty set, o be BinOp of A;
-  redefine attr o is commutative means
-  for a,b being Element of A holds o.(a,b ) = o.(b,a);
-  correctness by Def2;
-  redefine attr o is associative means
-  for a,b,c being Element of A holds o.(a,o.(b,c)) = o.(o.(a,b),c);
-  correctness by Def3;
-  redefine attr o is idempotent means
-  for a being Element of A holds o.(a,a) = a;
-  correctness by Def4;
-end;
+:: definition
+::   let A be non empty set, o be BinOp of A;
+::   redefine attr o is commutative means
+::   for a,b being Element of A holds o.(a,b ) = o.(b,a);
+::   correctness by Def2;
+::   redefine attr o is associative means
+::   for a,b,c being Element of A holds o.(a,o.(b,c)) = o.(o.(a,b),c);
+::   correctness by Def3;
+::   redefine attr o is idempotent means
+::   for a being Element of A holds o.(a,a) = a;
+::   correctness by Def4;
+:: end;
 
 definition
+ canceled 3;
   let A be non empty set, e be Element of A, o be BinOp of A;
   redefine pred e is_a_left_unity_wrt o means
   for a being Element of A holds o .(e,a) = a;
@@ -642,8 +666,8 @@ A15: P[x,y,z];
       let x1,y1;
       assume
 A16:  [x,y] = [x1,y1];
-      then x=x1 by ZFMISC_1:27;
-      hence P[x1,y1,z] by A15,A16,ZFMISC_1:27;
+      then x=x1 by XTUPLE_0:1;
+      hence P[x1,y1,z] by A15,A16,XTUPLE_0:1;
     end;
     hence thesis by A10,A14;
   end;
@@ -729,10 +753,10 @@ definition
   proof
     per cases;
     suppose
-A1:   A = {};
+   A = {};
       then dom f = {};
       then f.(x,y) = {} by FUNCT_1:def 2;
-      hence thesis by A1,SUBSET_1:def 1;
+      hence thesis;
     end;
     suppose
       A <> {};

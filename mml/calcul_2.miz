@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,12 +19,12 @@ environ
       FUNCT_1, CALCUL_1, FUNCT_2, CQC_THE1, QC_LANG1, XBOOLEAN, FINSEQ_5,
       ARYTM_1, FINSEQ_2, CALCUL_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, CARD_1, NUMBERS,
-      XXREAL_0, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, CQC_LANG, FINSET_1,
-      FINSEQ_5, FINSEQ_2, RELSET_1, FUNCT_2, WELLORD2, CALCUL_1;
+      XXREAL_0, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, QC_LANG1, CQC_LANG,
+      FINSET_1,FINSEQ_5, FINSEQ_2, RELSET_1, FUNCT_2, WELLORD2, CALCUL_1;
  constructors PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1, FINSEQ_2,
-      FINSEQ_5, CALCUL_1, RELSET_1;
+      FINSEQ_5, CALCUL_1, RELSET_1, QC_LANG1;
  registrations FUNCT_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      FINSEQ_1, CQC_LANG, FUNCT_2, FINSEQ_2, CARD_1;
+      FINSEQ_1, QC_LANG1, CQC_LANG, FUNCT_2, FINSEQ_2, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_2;
  theorems TARSKI, FINSEQ_1, FINSEQ_3, FUNCT_1, XBOOLE_0, FINSEQ_2, RELAT_1,
@@ -34,9 +34,11 @@ environ
 
 begin :: f is Subsequence of g^f
 
-reserve p,q,p1,p2,q1 for Element of CQC-WFF,
+reserve Al for QC-alphabet;
+
+reserve p,q,p1,p2,q1 for Element of CQC-WFF(Al),
   k,m,n,i for Element of NAT,
-  f, f1,f2,g for FinSequence of CQC-WFF,
+  f, f1,f2,g for FinSequence of CQC-WFF(Al),
   a,b,b1,b2,c for natural number;
 
 definition
@@ -75,7 +77,7 @@ theorem Th2:
   seq(a,0) = {}
 proof
   hereby
-    set x = the Element of seq(a,0);
+    set x =the  Element of seq(a,0);
     assume
 A1: seq(a,0) <> {};
     then reconsider x as Element of NAT by TARSKI:def 3;
@@ -189,15 +191,16 @@ registration
   cluster seq(m,n) -> finite;
   coherence
   proof
-    n is finite & n,seq(m,n) are_equipotent by Th6,CARD_1:39;
+    n is finite & n,seq(m,n) are_equipotent by Th6;
     hence thesis by CARD_1:38;
   end;
 end;
 
 registration
+  let Al;
   let f;
   cluster len f -> finite;
-  coherence by CARD_1:39;
+  coherence;
 end;
 
 theorem Th7:
@@ -517,17 +520,17 @@ end;
 begin :: The Ordering of the Antecedent is Irrelevant
 
 definition
-  let f;
-  func Begin(f) -> Element of CQC-WFF means
+  let Al,f;
+  func Begin(f) -> Element of CQC-WFF(Al) means
   :Def3:
-  it = f.1 if 1 <= len f otherwise it = VERUM;
+  it = f.1 if 1 <= len f otherwise it = VERUM(Al);
   existence
   proof
     1 <= len f implies ex p st p = f.1
     proof
       assume 1 <= len f;
       then 1 in dom f by FINSEQ_3:25;
-      then f.1 in CQC-WFF by FINSEQ_2:11;
+      then f.1 in CQC-WFF(Al) by FINSEQ_2:11;
       hence thesis;
     end;
     hence thesis;
@@ -537,37 +540,37 @@ definition
 end;
 
 definition
-  let f;
+  let Al,f;
   assume
 A1: 1 <= len f;
-  func Impl(f) -> Element of CQC-WFF means
+  func Impl(f) -> Element of CQC-WFF(Al) means
   :Def4:
   ex F being FinSequence of
-CQC-WFF st it = F.(len f) & len F = len f & (F.1 = Begin(f) or len f = 0) & for
-n st 1 <= n & n < len f holds ex p,q st p = f.(n+1) & q = F.n & F.(n+1) = p =>
-  q;
+CQC-WFF(Al) st it = F.(len f) & len F = len f & (F.1 = Begin(f) or len f = 0)
+ & for n st 1 <= n & n < len f holds ex p,q st p = f.(n+1) &
+  q = F.n & F.(n+1) = p => q;
   existence
   proof
     defpred P[Element of NAT,set,set] means ex p,q st p = f.($1+1) & q = $2 &
     $3 = p => q;
-A2: for n st 1 <= n & n < len f holds for x being Element of CQC-WFF ex y
-    being Element of CQC-WFF st P[n,x,y]
+A2: for n st 1 <= n & n < len f holds for x being Element of CQC-WFF(Al) ex y
+    being Element of CQC-WFF(Al) st P[n,x,y]
     proof
       let n such that
       1 <= n and
 A3:   n < len f;
       1 <= n+1 & n+1 <= len f by A3,NAT_1:11,13;
       then n+1 in dom f by FINSEQ_3:25;
-      then reconsider p = f.(n+1) as Element of CQC-WFF by FINSEQ_2:11;
-      let x be Element of CQC-WFF;
+      then reconsider p = f.(n+1) as Element of CQC-WFF(Al) by FINSEQ_2:11;
+      let x be Element of CQC-WFF(Al);
       take p => x,p,x;
       thus thesis;
     end;
-    consider F being FinSequence of CQC-WFF such that
+    consider F being FinSequence of CQC-WFF(Al) such that
 A4: len F = len f & (F.1 = Begin(f) or len f = 0) & for n st 1 <= n &
     n < len f holds P[n,F.n,F.(n+1)] from RECDEF_1:sch 4(A2);
     len f in dom F by A1,A4,FINSEQ_3:25;
-    then reconsider p = F.(len f) as Element of CQC-WFF by FINSEQ_2:11;
+    then reconsider p = F.(len f) as Element of CQC-WFF(Al) by FINSEQ_2:11;
     take p;
     thus thesis by A4;
   end;
@@ -576,21 +579,21 @@ A4: len F = len f & (F.1 = Begin(f) or len f = 0) & for n st 1 <= n &
     defpred P[Element of NAT,set,set] means ex p,q st p = f.($1+1) & q = $2 &
     $3 = p => q;
     let p1,p2 such that
-A5: ex F being FinSequence of CQC-WFF st p1 = F.(len f) & len F = len
+A5: ex F being FinSequence of CQC-WFF(Al) st p1 = F.(len f) & len F = len
 f & (F.1 = Begin(f) or len f = 0) & for n st 1 <= n & n < len f holds P[n,F.n,F
     .(n+1)] and
-A6: ex F being FinSequence of CQC-WFF st p2 = F.(len f) & len F = len
+A6: ex F being FinSequence of CQC-WFF(Al) st p2 = F.(len f) & len F = len
 f & (F.1 = Begin(f) or len f = 0) & for n st 1 <= n & n < len f holds P[n,F.n,F
     .(n+1)];
-    consider H being FinSequence of CQC-WFF such that
+    consider H being FinSequence of CQC-WFF(Al) such that
 A7: p2 = H.(len f) and
 A8: len H = len f & (H.1 = Begin(f) or len f = 0) & for n st 1 <= n &
     n < len f holds P[n,H.n,H.(n+1)] by A6;
-    consider G being FinSequence of CQC-WFF such that
+    consider G being FinSequence of CQC-WFF(Al) such that
 A9: p1 = G.(len f) and
 A10: len G = len f & (G.1 = Begin(f) or len f = 0) & for n st 1 <= n &
     n < len f holds P[n,G.n,G.(n+1)] by A5;
-A11: for n st 1 <= n & n < len f for x,y1,y2 being Element of CQC-WFF st P
+A11: for n st 1 <= n & n < len f for x,y1,y2 being Element of CQC-WFF(Al) st P
     [n,x,y1] & P[n,x,y2] holds y1 = y2;
     G = H from RECDEF_1:sch 8(A11,A10,A8);
     hence thesis by A9,A7;
@@ -705,7 +708,7 @@ proof
 A1: 1 <= len g and
 A2: |- f^g;
 A3: 1 <= len h by A1,FINSEQ_5:def 3;
-  then consider F being FinSequence of CQC-WFF such that
+  then consider F being FinSequence of CQC-WFF(Al) such that
 A4: Impl(h) = F.(len h) and
 A5: len F = len h and
 A6: F.1 = Begin(h) or len h = 0 and
@@ -728,9 +731,9 @@ A15: len (f^g) = (k+1)+n by A11,NAT_1:10,XXREAL_0:2;
     reconsider n as Element of NAT by ORDINAL1:def 12;
 A16: now
       k+1 in dom F by A12,A13,FINSEQ_3:25;
-      then reconsider r = F.(k+1) as Element of CQC-WFF by FINSEQ_2:11;
+      then reconsider r = F.(k+1) as Element of CQC-WFF(Al) by FINSEQ_2:11;
       set f1 = (f^g)|Seg n;
-      reconsider f1 as FinSequence of CQC-WFF by FINSEQ_1:18;
+      reconsider f1 as FinSequence of CQC-WFF(Al) by FINSEQ_1:18;
       set f2 = f1^<*r*>;
       len(f^g) <= len(f^g) + k by NAT_1:11;
       then
@@ -738,10 +741,10 @@ A17:  len(f^g) - k <= len(f^g) + k - k by XREAL_1:9;
       assume k <> 0;
       then
 A18:  0+1 <= k by NAT_1:13;
-      then consider f1k being FinSequence of CQC-WFF such that
+      then consider f1k being FinSequence of CQC-WFF(Al) such that
 A19:  ex f2,n st k+n = len (f^g) & f1k = (f^g)|Seg n & f2 = f1k^<*F.k
       *> & |- f2 by A10,A13,NAT_1:13;
-      consider f2k being FinSequence of CQC-WFF such that
+      consider f2k being FinSequence of CQC-WFF(Al) such that
 A20:  ex n st k+n = len (f^g) & f1k = (f^g)|Seg n & f2k = f1k^<*F.k*>
       & |- f2k by A19;
       consider nk being Element of NAT such that
@@ -751,7 +754,7 @@ A23:  |- f2k by A20;
       1 <= n+1 by NAT_1:11;
       then
 A24:  nk in dom (f^g) by A15,A21,A17,FINSEQ_3:25;
-      then reconsider p = (f^g).nk as Element of CQC-WFF by FINSEQ_2:11;
+      then reconsider p = (f^g).nk as Element of CQC-WFF(Al) by FINSEQ_2:11;
       n+1 = nk by A15,A21;
       then
 A25:  f2k = f1^<*(f^g).nk*>^<*F.k*> by A22,A24,FINSEQ_5:10;
@@ -786,7 +789,7 @@ A32: k+1 <= len (f^g) by A14,A11,XXREAL_0:2;
       then
 A33:  F.1 = g.(len g) by FINSEQ_5:62;
       set f1 = (f^g)|Seg n;
-      reconsider f1 as FinSequence of CQC-WFF by FINSEQ_1:18;
+      reconsider f1 as FinSequence of CQC-WFF(Al) by FINSEQ_1:18;
       set f2 = f1^<*F.1*>;
 A34:  len g in dom g by A1,FINSEQ_3:25;
       assume
@@ -799,7 +802,7 @@ A36:  (f^g).(n+1) = (f^g).(len f+len g) by A15,FINSEQ_1:22;
       then f2 = (f^g)|Seg(len (f^g)) by A15,A35,A33,A34,A36,FINSEQ_1:def 7;
       then
 A37:  f2 = (f^g)|dom(f^g) by FINSEQ_1:def 3;
-      then reconsider f2 as FinSequence of CQC-WFF by RELAT_1:69;
+      then reconsider f2 as FinSequence of CQC-WFF(Al) by RELAT_1:69;
       take f1,f2,n;
       |- f2 by A2,A37,RELAT_1:69;
       hence thesis by A15,A35;
@@ -831,7 +834,7 @@ proof
 A1: 1 <= len g by CALCUL_1:10;
   then
 A2: 1 <= len h by FINSEQ_5:def 3;
-  then consider F being FinSequence of CQC-WFF such that
+  then consider F being FinSequence of CQC-WFF(Al) such that
 A3: Impl(h) = F.(len h) and
 A4: len F = len h and
 A5: F.1 = Begin(h) or len h = 0 and
@@ -866,7 +869,7 @@ A18:  1 <= i+1 by NAT_1:13;
 A19:  k <> 0;
       then
 A20:  0+1 <= k by NAT_1:13;
-      then consider pk being Element of CQC-WFF such that
+      then consider pk being Element of CQC-WFF(Al) such that
 A21:  pk = H.k and
 A22:  |- Per(f,P)^<*pk*> by A10,A12,NAT_1:13;
       len F < len F+k by A19,XREAL_1:29;
@@ -922,7 +925,7 @@ A34:  |- g1 by CALCUL_1:33;
       1 <= len H by A2,A4,FINSEQ_5:def 3;
       then
 A35:  1 in dom H by FINSEQ_3:25;
-      then reconsider p = H.1 as Element of CQC-WFF by FINSEQ_2:11;
+      then reconsider p = H.1 as Element of CQC-WFF(Al) by FINSEQ_2:11;
       assume
 A36:  k = 0;
       take p;
@@ -1027,7 +1030,7 @@ A2: |- f^IdFinS(p,n)^<*q*>;
 A3: 1 <= len g by CALCUL_1:10;
   then
 A4: 1 <= len h by FINSEQ_5:def 3;
-  then consider F being FinSequence of CQC-WFF such that
+  then consider F being FinSequence of CQC-WFF(Al) such that
 A5: Impl(h) = F.(len h) and
 A6: len F = len h and
 A7: F.1 = Begin(h) or len h = 0 and
@@ -1064,7 +1067,7 @@ A20:  1 <= i+1 by NAT_1:13;
 A21:  k <> 0;
       then
 A22:  0+1 <= k by NAT_1:13;
-      then consider pk being Element of CQC-WFF such that
+      then consider pk being Element of CQC-WFF(Al) such that
 A23:  pk = H.k and
 A24:  |- f^<*p*>^<*pk*> by A12,A14,NAT_1:13;
       len F < len F+k by A21,XREAL_1:29;
@@ -1117,7 +1120,7 @@ A35:  q1 = H.(k+1) by A27,FINSEQ_5:58;
       len H = len h by A6,FINSEQ_5:def 3;
       then
 A36:  1 in dom H by A4,FINSEQ_3:25;
-      then reconsider p1 = H.1 as Element of CQC-WFF by FINSEQ_2:11;
+      then reconsider p1 = H.1 as Element of CQC-WFF(Al) by FINSEQ_2:11;
       assume
 A37:  k = 0;
       take p1;

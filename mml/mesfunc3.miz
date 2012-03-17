@@ -2,7 +2,7 @@
 ::  by Yasunari Shidama and Noboru Endou
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -36,15 +36,15 @@ environ
  definitions TARSKI, XBOOLE_0, BINOP_1, SUPINF_2, MESFUNC1;
  theorems MEASURE1, TARSKI, FUNCT_1, FUNCT_2, NAT_1, SUPINF_2, EXTREAL1,
       EXTREAL2, ZFMISC_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCOP_1, FINSEQ_4,
-      PROB_2, FUNCT_3, XBOOLE_0, XBOOLE_1, RELAT_1, RVSUM_1, BINOP_2, MESFUNC2,
-      MEASURE2, FINSOP_1, CARD_2, XREAL_1, XXREAL_0, ORDINAL1, NUMBERS,
+      PROB_2, FUNCT_3, XBOOLE_0, XBOOLE_1, RELAT_1, RVSUM_1, MESFUNC2,
+      MEASURE2, CARD_2, XREAL_1, XXREAL_0, ORDINAL1, NUMBERS,
       VALUED_1, XXREAL_2, VALUED_0, XXREAL_3;
  schemes FINSEQ_1, FINSEQ_2, NAT_1, PARTFUN1, BINOP_1;
 
-begin  :: Integral of Simple Valued Function ::
+begin  :: Integral of Simple Valued Function
 
 theorem Th1:
-  for n,m be Nat, a be Function of [:(Seg n),(Seg m):],REAL for p,q
+  for n,m be Nat, a be Function of [:Seg n,Seg m:],REAL for p,q
 be FinSequence of REAL st ( dom p=Seg n & for i be Nat st i in dom p holds ex r
   be FinSequence of REAL st (dom r = Seg m & p.i = Sum r & for j be Nat st j in
 dom r holds r.j=a.[i,j])) & ( dom q=Seg m & for j be Nat st j in dom q holds ex
@@ -228,17 +228,14 @@ FINSEQ_1:def 1;
 A50:  dom(s) = Seg 0 and
 A51:  q.j=Sum(s) and
       for i be Nat st i in dom(s) holds s.i=a.[i,j] by A48,A49;
-      len s = 0 by A50,FINSEQ_1:def 3;
-      then s = <*>REAL;
+      s = <*>REAL by A50;
       hence q.z=0 by A51,RVSUM_1:72;
     end;
     then q = dom q --> 0 by FUNCOP_1:11;
     then
 A52: q= m |-> 0 by A47,FINSEQ_2:def 2;
-    len p = 0 by A46,FINSEQ_1:def 3;
-    then p = <*>REAL;
-    then Sum(p)=0 by RVSUM_1:72;
-    hence Sum(p)=Sum(q) by A52,RVSUM_1:81;
+    p = <*>REAL by A46;
+    hence Sum(p)=Sum(q) by A52,RVSUM_1:72,81;
   end;
   then
 A53: P[0];
@@ -297,13 +294,7 @@ A12:  Sum G = Sum G1 + Sum (<*G.(k+1)*>) by A8,EXTREAL1:10
     end;
     hence thesis;
   end;
-A13: P[0]
-   proof let G be FinSequence of ExtREAL, g be FinSequence of REAL such that
-A14:   G=F|(Seg 0 qua set) & g = f|(Seg 0 qua set);
-    assume 0 <= len F;
-    thus Sum(G) = 0 by A14,EXTREAL1:7
-            .= Sum(g) by A14,RVSUM_1:72;
-   end;
+A13: P[0] by EXTREAL1:7,RVSUM_1:72;
   for k be Nat holds P[k] from NAT_1:sch 2(A13,A3);
   hence thesis by A2,A1;
 end;
@@ -2290,89 +2281,37 @@ end;
 
 theorem
   for p be FinSequence of ExtREAL, q be FinSequence of REAL st p=q holds
-  Sum(p)=Sum(q)
-proof
-  let p be FinSequence of ExtREAL;
-  let q be FinSequence of REAL;
-  consider P be Function of NAT,ExtREAL such that
-A1: Sum(p) = P.(len p) and
-A2: P.0 = 0. and
-A3: for i be Element of NAT st i < len p holds P.(i+1) = P.i + p.(i+1)
-  by EXTREAL1:def 2;
-  assume
-A4: p = q;
-  now
-    per cases;
-    case
-A5:   len q = 0;
-      Sum(q) = addreal "**" q by RVSUM_1:def 12;
-      hence thesis by A4,A1,A2,A5,BINOP_2:2,FINSOP_1:def 1;
-    end;
-    case
-A6:   len q <> 0;
-      Sum(q) = addreal $$ q by RVSUM_1:def 12;
-      then consider Q be Function of NAT,REAL such that
-A7:   Q.1 = q.1 and
-A8:   for n be Element of NAT st 0 <> n & n < len q holds Q.(n+1) =
-      addreal.(Q.n,q.(n+1)) and
-A9:   Sum(q) = Q.(len q) by A6,FINSOP_1:def 1;
-      defpred P1[Nat] means 0 <> $1 & $1 <= len q implies P.$1 = Q.$1;
-A10:  for k be Nat st P1[k] holds P1[k+1]
-      proof
-        let k be Nat;
-        assume
-A11:    P1[k];
-        assume that
-        0 <> k+1 and
-A12:    k+1 <= len q;
-        reconsider k as Element of NAT by ORDINAL1:def 12;
-        per cases;
-        suppose
-A13:      k = 0;
-          k < len q by A12,NAT_1:13;
-          then P.(k+1) = P.k + p.(k+1) by A4,A3
-            .= p.(k+1) by A2,A13,XXREAL_3:4;
-          hence thesis by A4,A7,A13;
-        end;
-        suppose
-A14:      k <> 0;
-A15:      k < len q by A12,NAT_1:13;
-          then
-A16:      Q.(k+1) = addreal.(Q.k,q.(k+1)) by A8,A14
-            .= Q.k + q.(k+1) by BINOP_2:def 9;
-          P.(k+1) = P.k + p.(k+1) by A4,A3,A15;
-          hence thesis by A4,A11,A12,A14,A16,NAT_1:13,SUPINF_2:1;
-        end;
-      end;
-A17:  P1[0];
-      for n be Nat holds P1[n] from NAT_1:sch 2(A17,A10);
-      hence thesis by A4,A1,A6,A9;
-    end;
-  end;
-  hence thesis;
-end;
+  Sum(p) = Sum(q) by Th2;
 
 theorem Th17:
-  for p be FinSequence of ExtREAL st (for n be Nat st n in dom p
-holds 0. <= p.n) & (ex n be Nat st n in dom p & p.n=+infty) holds Sum(p)=+infty
+  for p be FinSequence of ExtREAL st not -infty in rng p & +infty in rng p
+  holds Sum(p) = +infty
 proof
   let p be FinSequence of ExtREAL;
-  assume that
-A1: for n be Nat st n in dom p holds 0. <= p.n and
-A2: ex n be Nat st n in dom p & p.n=+infty;
-  consider m be Nat such that
+  assume
+A0: not -infty in rng p;
+   assume +infty in rng p;
+   then ex n be set st n in dom p & p.n=+infty by FUNCT_1:def 3; 
+   then consider m be Nat such that
 A3: m in dom p and
-A4: p.m = +infty by A2;
+A4: p.m = +infty;
   m in Seg len p by A3,FINSEQ_1:def 3;
   then
 A5: len p >= m by FINSEQ_1:1;
   consider f be Function of NAT,ExtREAL such that
 A6: Sum(p) = f.(len p) and
 A7: f.0 = 0. and
-A8: for i be Element of NAT st i < len p holds f.(i+1)=f.i + p.(i+1) by
-EXTREAL1:def 2;
-  defpred P[Nat] means $1 <= len p implies ($1 < m implies 0. <= f.$1) & ($1
-  >= m implies f.$1 = +infty);
+A8: for i be Element of NAT st i < len p holds f.(i+1)=f.i + p.(i+1)
+    by EXTREAL1:def 2;
+A1: for n be Nat st n in dom p holds -infty < p.n
+    proof
+      let n be Nat;
+      assume n in dom p;
+      then p.n in rng p by FUNCT_1:def 3;
+      hence thesis by A0,XXREAL_0:6;
+    end;
+  defpred P[Nat] means $1 <= len p implies
+  ($1 < m implies -infty < f.$1) & ($1 >= m implies f.$1 = +infty);
 A9: for i be Nat st P[i] holds P[i+1]
   proof
     let i be Nat;
@@ -2381,18 +2320,18 @@ A10: P[i];
     assume
 A11: i+1 <= len p;
     reconsider i as Element of NAT by ORDINAL1:def 12;
+B01: i < len p by A11,NAT_1:13;
     now
       per cases;
-      case
-A12:    i+1 < m;
+      case i+1 < m;
         1 <= i+1 by NAT_1:11;
         then i+1 in Seg len p by A11,FINSEQ_1:1;
         then i+1 in dom p by FINSEQ_1:def 3;
         then
-A13:    0. <= p.(i+1) by A1;
-        i < len p by A11,NAT_1:13;
-        then i <= i+1 & f.(i+1) = f.i + p.(i+1) by A8,NAT_1:11;
-        hence thesis by A10,A11,A12,A13,XXREAL_0:2;
+A13:    -infty < p.(i+1) by A1;
+B02:    -infty + -infty = -infty by XXREAL_3:def 2;
+        -infty + -infty < f.i + p.(i+1) by A10,A11,NAT_1:13,A13,XXREAL_3:64;
+        hence -infty < f.(i+1) by A8,B01,B02;
       end;
       case
 A14:    i+1 >= m;
@@ -2400,8 +2339,7 @@ A14:    i+1 >= m;
           per cases;
           case
 A15:        i+1 = m;
-            i < len p by A11,NAT_1:13;
-            then f.(i+1) = f.i + p.(i+1) by A8;
+            f.(i+1) = f.i + p.(i+1) by A8,B01;
             hence f.(i+1) = +infty by A4,A10,A11,A15,NAT_1:13,XXREAL_3:def 2;
           end;
           case
@@ -2520,14 +2458,15 @@ A20:  for n be Nat st n in dom F2 holds 0. <= (M*F2).n
         then (M*F2).n=M.(F2.n) & F2.n in rng F2 by FUNCT_1:3,13;
         hence thesis by SUPINF_2:39;
       end;
-A21:  for n be Nat st n in dom x2 holds 0. <= x2.n
+A21:  not -infty in rng x2
       proof
-        let n be Nat;
-        assume
-A22:    n in dom x2;
-        then 0. <= a2.n & 0. <= (M*F2).n by A13,A16,A20,A17;
+        assume not thesis;
+        then consider n being set such that
+A22:    n in dom x2 and
+A23:    x2.n = -infty by FUNCT_1:def 3;
+        0. <= a2.n & 0. <= (M*F2).n by A13,A16,A20,A17,A22;
         then 0. <= (a2.n)*( (M*F2).n);
-        hence thesis by A14,A22;
+        hence thesis by A14,A22,A23;
       end;
       consider F1 be Finite_Sep_Sequence of S, a1 be FinSequence of ExtREAL,
       x1 be FinSequence of ExtREAL such that
@@ -2568,14 +2507,15 @@ A33:  for n be Nat st n in dom F1 holds 0. <= (M*F1).n
         then (M*F1).n=M.(F1.n) & F1.n in rng F1 by FUNCT_1:3,13;
         hence thesis by SUPINF_2:39;
       end;
-A34:  for n be Nat st n in dom x1 holds 0. <= x1.n
+A34:  not -infty in rng x1
       proof
-        let n be Nat;
-        assume
-A35:    n in dom x1;
-        then 0. <= a1.n & 0. <= (M*F1).n by A26,A29,A33,A30;
+        assume not thesis;
+        then consider n being set such that
+A35:    n in dom x1 and
+A36:    x1.n = -infty by FUNCT_1:def 3;
+        0. <= a1.n & 0. <= (M*F1).n by A26,A29,A33,A30,A35;
         then 0. <= (a1.n)*( (M*F1).n);
-        hence thesis by A27,A35;
+        hence thesis by A27,A35,A36;
       end;
       now
         per cases;
@@ -2599,8 +2539,9 @@ A44:      (M*F1).i = +infty by A36,FUNCT_1:13;
           0. < a1.i by A25,A29,A36,A38;
           then +infty = ( a1.i)*((M*F1).i) by A44,XXREAL_3:def 5;
           then x1.i=+infty by A26,A27,A36;
+          then +infty in rng x1 by A26,A36,FUNCT_1:def 3;
           then
-A45:      Sum(x1)=+infty by A26,A34,A36,Th17;
+A45:      Sum(x1)=+infty by A34,Th17;
           F1.i /\ F2.j c= F2.j by XBOOLE_1:17;
           then M.(F2.j)= +infty by A40,A41,A43,MEASURE1:31,XXREAL_0:4;
           then
@@ -2608,7 +2549,8 @@ A46:      (M*F2).j = +infty by A37,FUNCT_1:13;
           0. < a2.j by A12,A16,A37,A39;
           then +infty = (a2.j)*((M*F2).j) by A46,XXREAL_3:def 5;
           then x2.j=+infty by A13,A14,A37;
-          hence thesis by A28,A13,A15,A21,A37,A45,Th17;
+          then +infty in rng x2 by A13,A37,FUNCT_1:def 3;
+          hence thesis by A28,A15,A21,A45,Th17;
         end;
         case
 A47:      for i,j be Nat st i in dom F1 & j in dom F2 & 2<= i & 2<=j
@@ -3029,5 +2971,5 @@ end;
 begin :: Additional Lemmas
 
 theorem
-  for a be FinSequence of ExtREAL, p,N be Element of ExtREAL st N = len
-  a & (for n be Nat st n in dom a holds a.n = p) holds Sum(a) = N * p by Lm1;
+  for a be FinSequence of ExtREAL, p,N be Element of ExtREAL st N = len a &
+  (for n be Nat st n in dom a holds a.n = p) holds Sum(a) = N * p by Lm1;

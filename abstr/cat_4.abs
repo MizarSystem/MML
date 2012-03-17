@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received October 27, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,13 +17,13 @@ environ
  vocabularies CAT_1, WELLORD1, XBOOLE_0, RELAT_1, FINSET_1, FUNCT_1, STRUCT_0,
       CAT_3, GRAPH_1, CARD_1, FUNCOP_1, PARTFUN1, NAT_1, ARYTM_3, SUBSET_1,
       TARSKI, ARYTM_1, FUNCT_4, FUNCT_6, ZFMISC_1, ALGSTR_1, MCART_1, DIRAF,
-      PBOOLE, EQREL_1, CAT_4;
+      PBOOLE, EQREL_1, CAT_4, MONOID_0, RELAT_2, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, BINOP_1, ALGSTR_1, XCMPLX_0,
-      NAT_1, CARD_1, FUNCT_4, STRUCT_0, GRAPH_1, CAT_1, CAT_3;
- constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, ALGSTR_1, CAT_3, RELSET_1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XREAL_0, NAT_1, ORDINAL1,
-      CARD_1, STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1;
+      ORDINAL1, CARD_1, FUNCT_4, STRUCT_0, GRAPH_1, CAT_1, CAT_3;
+ constructors BINOP_1, REAL_1, NAT_1, ALGSTR_1, CAT_3, RELSET_1;
+ registrations XBOOLE_0, FUNCT_1, FINSET_1, XREAL_0, NAT_1, ORDINAL1, CARD_1,
+      STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1, CAT_1;
  requirements NUMERALS, SUBSET, BOOLE;
 
 
@@ -60,7 +60,7 @@ Object of C, p1,p2 being Morphism of C st dom p1 = c & dom p2 = c & cod p1 = a
 definition
   struct (CatStr)ProdCatStr (# carrier,carrier' -> set, Source,Target ->
 Function of the carrier', the carrier, Comp -> PartFunc of [:the carrier', the
-    carrier' :],the carrier', Id -> Function of the carrier, the carrier',
+    carrier' :],the carrier',
 TerminalObj -> Element of the carrier, CatProd -> Function of [:the carrier,the
 carrier:],the carrier, Proj1,Proj2 -> Function of [:the carrier,the carrier:],
     the carrier' #);
@@ -91,25 +91,27 @@ definition
   let o,m;
   func c1Cat(o,m) -> strict ProdCatStr equals
 :: CAT_4:def 7
-  ProdCatStr(# {o},{m},m:->o,m:->o
-    ,(m,m):->m,o:->m, Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
+  ProdCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,
+  Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
 end;
 
-registration
-  let o,m;
-  cluster c1Cat(o,m) -> non void non empty;
+registration let o,m be set;
+ cluster c1Cat(o,m) -> non empty trivial non void trivial';
 end;
 
 theorem :: CAT_4:2
   the CatStr of c1Cat(o,m) = 1Cat(o,m);
 
 registration
-  cluster strict Category-like non void non empty for ProdCatStr;
+  cluster strict Category-like reflexive transitive
+   associative with_identities
+   non void non empty for non void non empty ProdCatStr;
 end;
 
 registration
   let o,m be set;
-  cluster c1Cat(o,m) -> Category-like;
+  cluster c1Cat(o,m) -> Category-like reflexive transitive
+   associative with_identities non empty non void;
 end;
 
 theorem :: CAT_4:3
@@ -137,7 +139,9 @@ theorem :: CAT_4:9
   o,m) holds c is_a_product_wrt p1,p2;
 
 definition
-  let IT be Category-like non void non empty ProdCatStr;
+  let IT be Category-like reflexive transitive
+    associative with_identities
+    non void non empty ProdCatStr;
   attr IT is Cartesian means
 :: CAT_4:def 8
 
@@ -151,11 +155,16 @@ theorem :: CAT_4:10
   for o,m being set holds c1Cat(o,m) is Cartesian;
 
 registration
-  cluster strict Cartesian for Category-like non void non empty ProdCatStr;
+  cluster strict Cartesian
+  for Category-like reflexive transitive associative with_identities
+   non void non empty ProdCatStr;
 end;
 
 definition
-  mode Cartesian_category is Cartesian Category-like non void non empty
+  mode Cartesian_category is Cartesian
+   Category-like non void non empty
+     reflexive transitive associative with_identities
+   non void non empty
     ProdCatStr;
 end;
 
@@ -209,8 +218,8 @@ theorem :: CAT_4:21
   C is with_finite_product;
 
 theorem :: CAT_4:22
-  Hom(a,b) <> {} & Hom(b,a) <> {} implies pr1(a,b) is retraction & pr2(a
-  ,b) is retraction;
+  Hom(a,b) <> {} & Hom(b,a) <> {}
+  implies pr1(a,b) is retraction & pr2(a,b) is retraction;
 
 definition
   let C,a,b,c;
@@ -367,7 +376,8 @@ Object of C, i1,i2 being Morphism of C st dom i1 = a & dom i2 = b & cod i1 = c
 definition
   struct (CatStr)CoprodCatStr (# carrier,carrier' -> set, Source,Target ->
 Function of the carrier', the carrier, Comp -> PartFunc of [:the carrier', the
-carrier' :],the carrier', Id -> Function of the carrier, the carrier', Initial
+carrier' :],the carrier',
+  Initial
 -> Element of the carrier, Coproduct -> Function of [:the carrier,the carrier:]
     ,the carrier, Incl1,Incl2 -> Function of [:the carrier,the carrier:],the
     carrier' #);
@@ -398,25 +408,28 @@ definition
   let o,m;
   func c1Cat*(o,m) -> strict CoprodCatStr equals
 :: CAT_4:def 25
-  CoprodCatStr(# {o},{m},m:->o,
-    m:->o,(m,m):->m,o:->m, Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
+  CoprodCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,
+Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
 end;
 
-theorem :: CAT_4:45
-  the CatStr of c1Cat*(o,m) = 1Cat(o,m);
+canceled;
 
 registration
   let o,m;
-  cluster c1Cat*(o,m) -> non void non empty;
+  cluster c1Cat*(o,m) -> non void non empty trivial trivial';
 end;
 
 registration
-  cluster strict Category-like non void non empty for CoprodCatStr;
+  cluster strict Category-like
+    reflexive transitive associative with_identities
+   for  non void non empty CoprodCatStr;
 end;
 
 registration
   let o,m be set;
-  cluster c1Cat*(o,m) -> Category-like non void non empty;
+  cluster c1Cat*(o,m) -> Category-like
+    reflexive transitive associative with_identities
+   non void non empty;
 end;
 
 theorem :: CAT_4:46
@@ -444,7 +457,9 @@ theorem :: CAT_4:52
   c1Cat*(o,m) holds c is_a_coproduct_wrt i1,i2;
 
 definition
-  let IT be Category-like non void non empty CoprodCatStr;
+  let IT be Category-like
+   reflexive transitive associative with_identities
+    non void non empty CoprodCatStr;
   attr IT is Cocartesian means
 :: CAT_4:def 26
 
@@ -459,11 +474,14 @@ theorem :: CAT_4:53
 
 registration
   cluster strict Cocartesian for
+    reflexive transitive associative with_identities
 Category-like non void non empty CoprodCatStr;
 end;
 
 definition
-  mode Cocartesian_category is Cocartesian Category-like non void non empty
+  mode Cocartesian_category is Cocartesian
+    reflexive transitive associative with_identities
+Category-like non void non empty
     CoprodCatStr;
 end;
 
@@ -509,6 +527,12 @@ theorem :: CAT_4:63
 
 theorem :: CAT_4:64
   C is with_finite_coproduct;
+
+definition
+  let C,a,b;
+  redefine func in1(a,b) -> Morphism of a,a+b;
+  redefine func in2(a,b) -> Morphism of b,a+b;
+end;
 
 theorem :: CAT_4:65
   Hom(a,b) <> {} & Hom(b,a) <> {} implies in1(a,b) is coretraction & in2

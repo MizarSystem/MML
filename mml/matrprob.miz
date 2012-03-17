@@ -3,7 +3,7 @@
 ::  by Bo Zhang and Yatsuka Nakamura
 ::
 :: Received August 18, 2006
-:: Copyright (c) 2006-2011 Association of Mizar Users
+:: Copyright (c) 2006-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,23 +20,23 @@ environ
       ARYTM_3, CARD_3, FUNCOP_1, MATRIX_1, TREES_1, ZFMISC_1, INCSP_1,
       MATRIXC1, QC_LANG1, ORDINAL4, PRE_POLY, BINOP_2, FINSEQ_3, RVSUM_1,
       STRUCT_0, VECTSP_1, SUPINF_2, FVSUM_1, MATRIXR1, MATRPROB;
- notations TARSKI, SUBSET_1, XBOOLE_0, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      ORDINAL1, NUMBERS, RELAT_1, FUNCT_1, SEQ_1, ZFMISC_1, FUNCOP_1, BINOP_1,
-      BINOP_2, FUNCT_2, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQOP, NEWTON,
-      STRUCT_0, MATRLIN, MATRIXR1, MATRIX_3, MATRIX_1, GROUP_1, FVSUM_1,
-      RLVECT_1, VECTSP_1;
- constructors XXREAL_0, REAL_1, NAT_1, BINOP_2, NEWTON, FVSUM_1, MATRIX_3,
-      MATRLIN, MATRIXR1, SEQ_1, BINOP_1, RVSUM_1, RELSET_1;
+ notations TARSKI, SUBSET_1, XBOOLE_0, XXREAL_0, XREAL_0, REAL_1, ORDINAL1,
+      NUMBERS, RELAT_1, FUNCT_1, SEQ_1, ZFMISC_1, FUNCOP_1, BINOP_1, BINOP_2,
+      FUNCT_2, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQOP, NEWTON, STRUCT_0,
+      MATRLIN, MATRIXR1, MATRIX_3, MATRIX_1, GROUP_1, FVSUM_1, RLVECT_1,
+      VECTSP_1;
+ constructors REAL_1, BINOP_2, NEWTON, FVSUM_1, MATRIX_3, MATRLIN, MATRIXR1,
+      SEQ_1, BINOP_1, RVSUM_1, RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, FINSEQ_2, STRUCT_0, VECTSP_1, MATRIX_1, MATRLIN,
-      VALUED_0, CARD_1;
+      VALUED_0, CARD_1, RVSUM_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_2, RVSUM_1;
  theorems FUNCT_1, SEQ_1, NAT_1, TARSKI, ZFMISC_1, MATRIX_3, MATRIX_2, XREAL_1,
       GOBOARD1, BINOP_2, FVSUM_1, VECTSP_1, RLVECT_1, MATRLIN, XBOOLE_0,
-      FINSEQ_1, PROB_3, MATRIX_1, GOBRD13, FINSEQ_2, FUNCOP_1, RFINSEQ,
-      FINSEQ_3, RVSUM_1, MATRIXR1, ORDINAL1, XREAL_0, MATRIXC1, XXREAL_0,
-      STRUCT_0, RELAT_1, PRE_POLY, CARD_1;
+      FINSEQ_1, PROB_3, MATRIX_1, FINSEQ_2, FUNCOP_1, RFINSEQ, FINSEQ_3,
+      RVSUM_1, MATRIXR1, ORDINAL1, XREAL_0, MATRIXC1, XXREAL_0, STRUCT_0,
+      PRE_POLY, CARD_1;
  schemes CLASSES1, FINSEQ_2, PARTFUN1, NAT_1, MATRIX_1;
 
 begin
@@ -73,13 +73,7 @@ definition
   redefine func <*x*> -> FinSequence of REAL;
   coherence
   proof
-    rng <*x*> c= REAL
-    proof
-      let y be set;
-      assume y in rng <*x*>;
-      then y in {x} by FINSEQ_1:39;
-      hence thesis by XREAL_0:def 1;
-    end;
+    rng <*x*> c= REAL;
     hence thesis by FINSEQ_1:def 4;
   end;
 end;
@@ -256,7 +250,7 @@ A1: for i be Nat st i in dom e holds 0 <= e.i;
   suppose
     len e = 0;
     then e = {};
-    hence thesis by RELAT_1:38;
+    hence thesis;
   end;
   suppose
 A2: len e <> 0;
@@ -528,11 +522,11 @@ A1: [i,j] in Indices M;
 A2: j in Seg width M by Th12;
 A3: i in Seg len M by A1,Th12;
     then i in dom M by FINSEQ_1:def 3;
-    then j in Seg len(M.i) by A2,GOBRD13:3;
+    then j in Seg len(M.i) by A2,MATRIX_1:42;
     hence i in dom M & j in dom (M.i) by A3,FINSEQ_1:def 3;
   end;
   assume i in dom M & j in dom (M.i);
-  hence thesis by GOBRD13:4;
+  hence thesis by MATRIX_1:43;
 end;
 
 theorem Th14:
@@ -2141,7 +2135,7 @@ A13:  Sum e3 = m1 * 0 by RVSUM_1:80
         .= 1 by A13;
     end;
   end;
-  reconsider e2 = m |-> 0 as FinSequence of REAL;
+  reconsider e2 = m |-> (0 qua Real) as FinSequence of REAL;
   len e2 = m by CARD_1:def 7;
   then consider M1 being Matrix of n,m,REAL such that
 A14: for i be Nat st i in Seg n holds (i in Seg n1 implies M1.i = e2) & (
@@ -2348,7 +2342,7 @@ MATRIX_1:def 5;
   then
 A12: i in dom M by FINSEQ_1:def 3;
   j in Seg width M by A10,Th12;
-  then j in Seg len(M.i) by A12,GOBRD13:3;
+  then j in Seg len(M.i) by A12,MATRIX_1:42;
   then j in dom(M.i) by FINSEQ_1:def 3;
   hence thesis by A6,A12,A11;
 end;
@@ -2501,7 +2495,7 @@ MATRIX_1:def 5;
   then
 A7: i in dom M by FINSEQ_1:def 3;
   j in Seg width M by A5,Th12;
-  then j in Seg len(M.i) by A7,GOBRD13:3;
+  then j in Seg len(M.i) by A7,MATRIX_1:42;
   then j in dom(M.i) by FINSEQ_1:def 3;
   hence thesis by A2,A7,A6;
 end;
@@ -2684,7 +2678,7 @@ A7: for j st j in dom Col(P,i) holds (Col(P,i)).j >=0 by A6,Lm3;
     hence thesis by A5,RVSUM_1:84;
   end;
   set m = width P;
-  set e = m |-> 1;
+  set e = m |-> (1 qua Real);
 A8: len e = m by CARD_1:def 7;
 A9: m > 0 by Th54;
   then

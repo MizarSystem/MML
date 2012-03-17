@@ -2,14 +2,15 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -20,9 +21,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="6"/>
-<Adjective nr="12"/>
+<Adjective nr="2"/>
+<Adjective nr="11"/>
+<Adjective nr="16"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TOPREAL8" nr="2">
@@ -31,15 +32,15 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4">
-<Func kind="K" nr="47"/>
+<Adjective nr="11"/>
+<Adjective nr="14">
+<Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="6"/>
-<Adjective nr="8" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
+<Adjective nr="16"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 </Registrations>

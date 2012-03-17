@@ -2,7 +2,7 @@
 ::  by Yatsuka Nakamura and Jaros{\l}aw Kotowicz
 ::
 :: Received August 24, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,7 +18,7 @@ environ
       FUNCT_1, BORSUK_1, ORDINAL2, RELAT_2, RELAT_1, SUBSET_1, FUNCOP_1,
       CONNSP_1, EUCLID, RLVECT_1, CONVEX1, RLTOPSP1, TARSKI, TOPREAL1, TOPS_2,
       STRUCT_0, ARYTM_3, MCART_1, ARYTM_1, PCOMPS_1, RCOMP_1, XREAL_0,
-      ORDINAL1, METRIC_1, SQUARE_1, JORDAN1;
+      ORDINAL1, METRIC_1, SQUARE_1, JORDAN1, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0, REAL_1,
       FUNCT_1, RELSET_1, FUNCT_2, BINOP_1, NUMBERS, PRE_TOPC, TOPS_2, CONNSP_1,
       SQUARE_1, RCOMP_1, STRUCT_0, METRIC_1, PCOMPS_1, BORSUK_1, TOPREAL1,
@@ -52,7 +52,7 @@ A1: 0 in {r:0<=r & r<=1};
   hence thesis by A1,RCOMP_1:def 1;
 end;
 
-theorem Th4:   ::Arcwise connectedness derives connectedness
+theorem Th1:   ::Arcwise connectedness derives connectedness
   for GX being non empty TopSpace st (for x,y being Point of GX
   ex h being Function of I[01],GX st h is continuous & x=h.0 & y=h.1)
   holds GX is connected
@@ -81,7 +81,7 @@ A7:   x in rng h by A3,A5,FUNCT_1:def 3;
   hence thesis by TOPS_2:63;
 end;
 
-theorem Th5:  ::Arcwise connectedness derives connectedness for subset
+theorem Th2:  ::Arcwise connectedness derives connectedness for subset
   for A being Subset of GX st
   (for xa,ya being Point of GX st xa in A & ya in A & xa<>ya
   ex h being Function of I[01],GX|A st h is continuous & xa=h.0 & ya=h.1)
@@ -122,7 +122,7 @@ A8:   yb in A by A6,PRE_TOPC:def 5;
         hence thesis by A2,A7;
       end;
     end;
-    then GX|A is connected by Th4;
+    then GX|A is connected by Th1;
     hence thesis by CONNSP_1:def 3;
   end;
   suppose A is empty;
@@ -139,7 +139,7 @@ theorem
   A0 is connected & A1 is connected & A0 meets A1
   holds A0 \/ A1 is connected by CONNSP_1:1,17;
 
-theorem Th7:
+theorem Th4:
   for A0,A1,A2 being Subset of GX st
   A0 is connected & A1 is connected & A2 is connected & A0 meets A1 &
   A1 meets A2 holds A0 \/ A1 \/ A2 is connected
@@ -158,7 +158,7 @@ A7: A0 \/ A1 is connected by A1,A2,A4,CONNSP_1:1,17;
   hence thesis by A3,A7,CONNSP_1:1,17;
 end;
 
-theorem Th8:
+theorem Th5:
   for A0,A1,A2,A3 being Subset of GX st A0 is connected & A1 is connected &
   A2 is connected & A3 is connected & A0 meets A1 & A1 meets A2 &
   A2 meets A3 holds A0 \/ A1 \/ A2 \/ A3 is connected
@@ -173,7 +173,7 @@ A5: A0 meets A1 and
 A6: A1 meets A2 and
 A7: A2 meets A3;
 A8: A2 /\ A3 <> {} by A7,XBOOLE_0:def 7;
-A9: A0 \/ A1 \/ A2 is connected by A1,A2,A3,A5,A6,Th7;
+A9: A0 \/ A1 \/ A2 is connected by A1,A2,A3,A5,A6,Th4;
   (A0 \/ A1 \/ A2)/\ A3= (A0 \/ A1) /\ A3 \/ A2 /\ A3 by XBOOLE_1:23;
   then (A0 \/ A1 \/ A2) meets A3 by A8,XBOOLE_0:def 7;
   hence thesis by A4,A9,CONNSP_1:1,17;
@@ -196,11 +196,11 @@ definition
   compatibility by RLTOPSP1:22;
 end;
 
-theorem Th9:
-  for n being Element of NAT, P being Subset of TOP-REAL n st P is convex holds
-  P is connected
+registration let n be Nat;
+ cluster convex -> connected for Subset of TOP-REAL n;
+ coherence
 proof
-  let n be Element of NAT, P be Subset of TOP-REAL n;
+  let P be Subset of TOP-REAL n;
   assume that
 A1: for w3,w4 being Point of TOP-REAL n st w3 in P & w4 in P holds
   LSeg(w3,w4) c= P;
@@ -235,13 +235,8 @@ A12: (TOP-REAL n)|LSeg(w1,w2) is SubSpace of (TOP-REAL n)|P by TOPMETR:3;
     gt is continuous by A9,A12,PRE_TOPC:26;
     hence thesis by A7,A8;
   end;
-  hence thesis by Th5;
+  hence thesis by Th2;
 end;
-
-registration
-  let n be Element of NAT;
-  cluster convex -> connected for Subset of TOP-REAL n;
-  coherence by Th9;
 end;
 
 reserve pa,pb for Point of TOP-REAL 2,
@@ -349,7 +344,9 @@ A1: |[ s7,t7 ]|=y and not (s1<=s7 & s7<=s2 & t1<=t7 & t7<=t2);
   hence thesis;
 end;
 
-theorem Th12:
+canceled;
+
+theorem Th7:
   {|[ s,t ]|: s1<s & s<s2 & t1<t & t<t2} =
   {|[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2} /\ {|[s5,t5]|:t1<t5} /\
   {|[s6,t6]|:t6<t2}
@@ -411,7 +408,7 @@ A23: t1<ta by A16,A21,EUCLID:52;
   hence thesis by A6,XBOOLE_0:def 10;
 end;
 
-theorem Th13:
+theorem Th8:
   {|[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)} =
   {|[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1} \/ {|[s5,t5]|:s2<s5} \/
   {|[s6,t6]|:t2<t6}
@@ -457,7 +454,7 @@ A1: { |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)} c=
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem Th14:
+theorem Th9:
   for s1,t1,s2,t2,P st P = {|[ s,t ]|:s1<s & s<s2 & t1<t & t<t2}
   holds P is convex
 proof
@@ -507,11 +504,9 @@ A34: w`2<t2 by A9,A11,A16,A18,A20,A21,A30,XREAL_1:176;
   hence thesis by A1,A19,A31,A32,A33,A34;
 end;
 
-theorem
-  for s1,t1,s2,t2,P st P = {|[ s,t ]|:s1<s & s<s2 & t1<t & t<t2}
-  holds P is connected by Th9,Th14;
+canceled;
 
-theorem Th16:
+theorem Th11:
   for s1,P st P = { |[ s,t ]|:s1<s } holds P is convex
 proof
   let s1,P;
@@ -547,10 +542,9 @@ A18: s1< w`1 by A6,A7,A9,A10,A12,A13,XREAL_1:175;
   hence thesis by A1,A11,A18;
 end;
 
-theorem
-  for s1,P st P = { |[ s,t ]|:s1<s } holds P is connected by Th9,Th16;
+canceled;
 
-theorem Th18:
+theorem Th13:
   for s2,P st P = {|[ s,t ]|:s<s2 } holds P is convex
 proof
   let s2,P;
@@ -586,10 +580,9 @@ A18: s2> w`1 by A6,A7,A9,A10,A12,A13,XREAL_1:176;
   hence thesis by A1,A11,A18;
 end;
 
-theorem
-  for s2,P st P = {|[ s,t ]|:s<s2 } holds P is connected by Th9,Th18;
+canceled;
 
-theorem Th20:
+theorem Th15:
   for t1,P st P = {|[ s,t ]|:t1<t } holds P is convex
 proof
   let t1,P;
@@ -625,10 +618,9 @@ A18: t1< w`2 by A6,A7,A9,A10,A12,A13,XREAL_1:175;
   hence thesis by A1,A11,A18;
 end;
 
-theorem
-  for t1,P st P = {|[ s,t ]|:t1<t } holds P is connected by Th9,Th20;
+canceled;
 
-theorem Th22:
+theorem Th17:
   for t2,P st P = { |[ s,t ]|: t<t2 } holds P is convex
 proof
   let t2,P;
@@ -664,10 +656,9 @@ A18: t2> w`2 by A6,A7,A9,A10,A12,A13,XREAL_1:176;
   hence thesis by A1,A11,A18;
 end;
 
-theorem
-  for t2,P st P = { |[ s,t ]|: t<t2 } holds P is connected by Th9,Th22;
+canceled;
 
-theorem Th24:
+theorem Th19:
   for s1,t1,s2,t2,P st P = { |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)}
   holds P is connected
 proof
@@ -675,7 +666,7 @@ proof
   assume P={ |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)};
   then
 A1: P={ |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
-  \/ {|[s6,t6]|:t2<t6} by Th13;
+  \/ {|[s6,t6]|:t2<t6} by Th8;
   reconsider A0={ |[ s,t ]|:s<s1}, A1={ |[ s,t ]|:t<t1},
   A2={ |[ s,t ]|:s2<s}, A3={ |[ s,t ]|:t2<t}
   as Subset of TOP-REAL 2 by Lm2,Lm3,Lm4,Lm5,Lm6;
@@ -698,16 +689,16 @@ A10: |[s2+1,t2+1]| in A2 by A6;
   then A2 /\ A3 <> {} by A10,XBOOLE_0:def 4;
   then
 A11: A2 meets A3 by XBOOLE_0:def 7;
-A12: A0 is connected by Th9,Th18;
-A13: A1 is connected by Th9,Th22;
-A14: A2 is connected by Th9,Th16;
-  A3 is connected by Th9,Th20;
-  hence thesis by A1,A5,A8,A11,A12,A13,A14,Th8;
+A12: A0 is convex by Th13;
+A13: A1 is convex by Th17;
+A14: A2 is convex by Th11;
+  A3 is convex by Th15;
+  hence thesis by A1,A5,A8,A11,A12,A13,A14,Th5;
 end;
 
 Lm9: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
 
-theorem Th25:
+theorem Th20:
   for s1 for P being Subset of TOP-REAL 2 st P = { |[ s,t ]|:s1<s } holds
   P is open
 proof
@@ -768,7 +759,7 @@ A14:  |[pq`1,pq`2]|=x by A6,EUCLID:53;
   hence thesis by Lm9,PRE_TOPC:30;
 end;
 
-theorem Th26:
+theorem Th21:
   for s1 for P being Subset of TOP-REAL 2 st P = { |[ s,t ]|:s1>s } holds
   P is open
 proof
@@ -828,7 +819,7 @@ A14:  |[pq`1,pq`2]|=x by A6,EUCLID:53;
   hence thesis by Lm9,PRE_TOPC:30;
 end;
 
-theorem Th27:
+theorem Th22:
   for s1 for P being Subset of TOP-REAL 2 st
   P = { |[ s,t ]|:s1<t } holds P is open
 proof
@@ -889,7 +880,7 @@ A14:  |[pq`1,pq`2]|=x by A6,EUCLID:53;
   hence thesis by Lm9,PRE_TOPC:30;
 end;
 
-theorem Th28:
+theorem Th23:
   for s1 for P being Subset of TOP-REAL 2 st P = { |[ s,t ]|:s1>t } holds
   P is open
 proof
@@ -949,7 +940,7 @@ A14:  |[pq`1,pq`2]|=x by A6,EUCLID:53;
   hence thesis by Lm9,PRE_TOPC:30;
 end;
 
-theorem Th29:
+theorem Th24:
   for s1,t1,s2,t2 for P being Subset of TOP-REAL 2 st
   P = { |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2} holds P is open
 proof
@@ -961,18 +952,18 @@ A1: P = { |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2};
   reconsider P2={|[s,t]|:s<s2} as Subset of TOP-REAL 2 by Lm2,Lm3;
   reconsider P3={|[s,t]|:t1<t} as Subset of TOP-REAL 2 by Lm2,Lm6;
   reconsider P4={|[s,t]|:t<t2} as Subset of TOP-REAL 2 by Lm2,Lm4;
-A2: P=P1 /\ P2 /\ P3 /\ P4 by A1,Th12;
-A3: P1 is open by Th25;
-  P2 is open by Th26;
+A2: P=P1 /\ P2 /\ P3 /\ P4 by A1,Th7;
+A3: P1 is open by Th20;
+  P2 is open by Th21;
   then
 A4: P1 /\ P2 is open by A3,TOPS_1:11;
-A5: P3 is open by Th27;
-A6: P4 is open by Th28;
+A5: P3 is open by Th22;
+A6: P4 is open by Th23;
   P1 /\ P2 /\ P3 is open by A4,A5,TOPS_1:11;
   hence thesis by A2,A6,TOPS_1:11;
 end;
 
-theorem Th30:
+theorem Th25:
   for s1,t1,s2,t2 for P being Subset of TOP-REAL 2 st
   P = { |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)} holds P is open
 proof
@@ -981,23 +972,23 @@ proof
   assume P={ |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)};
   then
 A1: P={ |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
-  \/ {|[s6,t6]|:t2<t6} by Th13;
+  \/ {|[s6,t6]|:t2<t6} by Th8;
   reconsider A0={ |[ s,t ]|:s<s1} as Subset of TOP-REAL 2 by Lm2,Lm3;
   reconsider A1={ |[ s,t ]|:t<t1} as Subset of TOP-REAL 2 by Lm2,Lm4;
   reconsider A2={ |[ s,t ]|:s2<s} as Subset of TOP-REAL 2 by Lm2,Lm5;
   reconsider A3={ |[ s,t ]|:t2<t} as Subset of TOP-REAL 2 by Lm2,Lm6;
-A2: A0 is open by Th26;
-  A1 is open by Th28;
+A2: A0 is open by Th21;
+  A1 is open by Th23;
   then
 A3: A0 \/ A1 is open by A2,TOPS_1:10;
-  A2 is open by Th25;
+  A2 is open by Th20;
   then
 A4: A0 \/ A1 \/ A2 is open by A3,TOPS_1:10;
-  A3 is open by Th27;
+  A3 is open by Th22;
   hence thesis by A1,A4,TOPS_1:10;
 end;
 
-theorem Th31:
+theorem Th26:
   for s1,t1,s2,t2,P,Q st P = { |[ sa,ta ]|:s1<sa & sa<s2 & t1<ta & ta<t2} &
   Q = { |[ sb,tb ]|:not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)} holds P misses Q
 proof
@@ -1023,7 +1014,7 @@ A11: p`1=sa by EUCLID:52;
   hence contradiction by A5,A6,A7,A8,A9,A10,A11,EUCLID:52;
 end;
 
-theorem Th32:
+theorem Th27:
   for s1,s2,t1,t2 be Real holds
   {p where p is Point of TOP-REAL 2:s1<p`1 & p`1<s2 & t1<p`2 & p`2<t2} =
   {|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2}
@@ -1068,7 +1059,7 @@ A14:  t1<pa`2 by A10,EUCLID:52;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th33:
+theorem Th28:
   for s1,s2,t1,t2 holds {qc where qc is Point of TOP-REAL 2:
   not (s1<=qc`1 & qc`1<=s2 & t1<=qc`2 & qc`2<=t2)} =
   {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)}
@@ -1103,7 +1094,7 @@ A5:   not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2);
   hence thesis by TARSKI:1;
 end;
 
-theorem Th34:
+theorem Th29:
   for s1,s2,t1,t2 holds
   { p0 where p0 is Point of TOP-REAL 2:s1<p0`1 & p0`1<s2 & t1<p0`2 & p0`2<t2}
   is Subset of TOP-REAL 2
@@ -1111,43 +1102,43 @@ proof
   let s1,s2,t1,t2;
   { |[ sc,tc ]|: s1<sc & sc<s2 & t1<tc & tc<t2}
   is Subset of TOP-REAL 2 by Lm2,Lm7;
-  hence thesis by Th32;
+  hence thesis by Th27;
 end;
 
-theorem Th35:
+theorem Th30:
   for s1,s2,t1,t2 holds { pq where pq is Point of TOP-REAL 2:
   not (s1<=pq`1 & pq`1<=s2 & t1<=pq`2 & pq`2<=t2)} is Subset of TOP-REAL 2
 proof
   let s1,s2,t1,t2;
   { |[ sb,tb ]|:not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)}
   is Subset of TOP-REAL 2 by Lm2,Lm8;
-  hence thesis by Th33;
+  hence thesis by Th28;
 end;
 
-theorem Th36:
+theorem Th31:
   for s1,t1,s2,t2,P st
   P = { p0 where p0 is Point of TOP-REAL 2:s1<p0`1 & p0`1<s2
-  & t1<p0`2 & p0`2<t2} holds P is connected
+  & t1<p0`2 & p0`2<t2} holds P is convex
 proof
   let s1,t1,s2,t2,P;
   assume P = { p0 where p0 is Point of TOP-REAL 2:s1<p0`1 & p0`1<s2
   & t1<p0`2 & p0`2<t2};
-  then P={|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2} by Th32;
-  hence thesis by Th9,Th14;
+  then P={|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2} by Th27;
+  hence thesis by Th9;
 end;
 
-theorem Th37:
+theorem Th32:
   for s1,t1,s2,t2,P st P = { pq where pq is Point of TOP-REAL 2:
   not (s1<=pq`1 & pq`1<=s2 & t1<=pq`2 & pq`2<=t2)} holds P is connected
 proof
   let s1,t1,s2,t2,P;
   assume P= { pq where pq is Point of TOP-REAL 2:
   not (s1<=pq`1 & pq`1<=s2 & t1<=pq`2 & pq`2<=t2)};
-  then P = {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)} by Th33;
-  hence thesis by Th24;
+  then P = {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)} by Th28;
+  hence thesis by Th19;
 end;
 
-theorem Th38:
+theorem Th33:
   for s1,t1,s2,t2 for P being Subset of TOP-REAL 2 st
   P = { p0 where p0 is Point of TOP-REAL 2:s1<p0`1 & p0`1<s2
   & t1<p0`2 & p0`2<t2} holds P is open
@@ -1156,11 +1147,11 @@ proof
   let P be Subset of TOP-REAL 2;
   assume P = { p0 where p0 is Point of TOP-REAL 2:s1<p0`1 & p0`1<s2
   & t1<p0`2 & p0`2<t2};
-  then P={|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2} by Th32;
-  hence thesis by Th29;
+  then P={|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2} by Th27;
+  hence thesis by Th24;
 end;
 
-theorem Th39:
+theorem Th34:
   for s1,t1,s2,t2 for P being Subset of TOP-REAL 2 st
   P = { pq where pq is Point of TOP-REAL 2:
   not (s1<=pq`1 & pq`1<=s2 & t1<=pq`2 & pq`2<=t2)} holds P is open
@@ -1169,11 +1160,11 @@ proof
   let P be Subset of TOP-REAL 2;
   assume P= { pq where pq is Point of TOP-REAL 2:
   not (s1<=pq`1 & pq`1<=s2 & t1<=pq`2 & pq`2<=t2)};
-  then P = {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)} by Th33;
-  hence thesis by Th30;
+  then P = {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)} by Th28;
+  hence thesis by Th25;
 end;
 
-theorem Th40:
+theorem Th35:
   for s1,t1,s2,t2,P,Q st
   P = {p where p is Point of TOP-REAL 2:s1<p`1 & p`1<s2 & t1<p`2 & p`2<t2} &
   Q = {qc where qc is Point of TOP-REAL 2:
@@ -1184,12 +1175,12 @@ proof
 A1: P= {p where p is Point of TOP-REAL 2:s1<p`1 & p`1<s2 & t1<p`2 & p`2<t2} and
 A2: Q= {qc where qc is Point of TOP-REAL 2:
   not (s1<=qc`1 & qc`1<=s2 & t1<=qc`2 & qc`2<=t2)};
-A3: P={|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2} by A1,Th32;
-  Q= {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)} by A2,Th33;
-  hence thesis by A3,Th31;
+A3: P={|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2} by A1,Th27;
+  Q= {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)} by A2,Th28;
+  hence thesis by A3,Th26;
 end;
 
-theorem Th41:
+theorem Th36:
   for s1,t1,s2,t2 for P,P1,P2 being Subset of TOP-REAL 2 st s1<s2 & t1<t2 &
   P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
   p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
@@ -1290,7 +1281,7 @@ A25: |[ s3,t3 ]| in { pp2 where pp2 is Point of TOP-REAL 2:
   hence
   P`<>{} by A4,A14;
   set P9 = P`;
-  P1 misses P2 by A4,A5,Th40;
+  P1 misses P2 by A4,A5,Th35;
   hence
 A26: P1 /\ P2 = {} by XBOOLE_0:def 7;
   now
@@ -1298,16 +1289,16 @@ A26: P1 /\ P2 = {} by XBOOLE_0:def 7;
     assume that
 A27: P1A=P1 and
 A28: P2B=P2;
-    P1 is connected by A4,Th36;
+    P1 is convex by A4,Th31;
     then
 A29: P1A is connected by A27,CONNSP_1:23;
-A30: P2 is connected by A5,Th37;
-A31: P2={ |[ sa,ta ]|:not (s1<=sa & sa<=s2 & t1<=ta & ta<=t2)} by A5,Th33;
+A30: P2 is connected by A5,Th32;
+A31: P2={ |[ sa,ta ]|:not (s1<=sa & sa<=s2 & t1<=ta & ta<=t2)} by A5,Th28;
     reconsider A0={ |[ s3a,t3a ]|:s3a<s1} as Subset of TOP-REAL 2 by Lm2,Lm3;
     reconsider A1={ |[ s4,t4 ]|:t4<t1} as Subset of TOP-REAL 2 by Lm2,Lm4;
     reconsider A2={ |[ s5,t5 ]|:s2<s5} as Subset of TOP-REAL 2 by Lm2,Lm5;
     reconsider A3={ |[ s6,t6 ]|:t2<t6} as Subset of TOP-REAL 2 by Lm2,Lm6;
-A32: P2=A0 \/ A1 \/ A2 \/ A3 by A31,Th13;
+A32: P2=A0 \/ A1 \/ A2 \/ A3 by A31,Th8;
     t2+1>t2 by XREAL_1:29;
     then
 A33: |[s2+1,t2+1]| in A3;
@@ -1326,7 +1317,7 @@ A37:    P1A c= CP;
         then reconsider AP=P1A /\ CP as Subset of ((TOP-REAL 2)|P9)|CP by
 PRE_TOPC:8;
 A38:    P1 /\ P` =P1A by A15,A27,XBOOLE_1:21;
-        P1 is open by A4,Th38;
+        P1 is open by A4,Th33;
         then
 A39:    P1 in the topology of TOP-REAL 2 by PRE_TOPC:def 2;
 A40:    P`= [#]((TOP-REAL 2)|P9) by PRE_TOPC:def 5;
@@ -1342,7 +1333,7 @@ A44:    AP is open by PRE_TOPC:def 2;
         then reconsider BP=P2B /\ CP as Subset of ((TOP-REAL 2)|P9)|CP by
 PRE_TOPC:8;
 A45:    P2 /\ P` =P2B by A15,A28,XBOOLE_1:21;
-        P2 is open by A5,Th39;
+        P2 is open by A5,Th34;
         then
 A46:    P2 in the topology of TOP-REAL 2 by PRE_TOPC:def 2;
         P2 /\ [#]((TOP-REAL 2)|P9)=P2B by A45,PRE_TOPC:def 5;
@@ -1361,7 +1352,7 @@ A51:      AP /\ BP = P1A /\ (P2B /\ CP) /\ CP by XBOOLE_1:16
             .= P1A /\ P2B /\ CP /\ CP by XBOOLE_1:16
             .= P1A /\ P2B /\ (CP /\ CP) by XBOOLE_1:16
             .= P1A /\ P2B /\ CP;
-          P1 misses P2 by A4,A5,Th40;
+          P1 misses P2 by A4,A5,Th35;
           then P1 /\ P2 = {} by XBOOLE_0:def 7;
           then AP misses BP by A27,A28,A51,XBOOLE_0:def 7;
           hence contradiction by A36,A42,A43,A44,A48,A49,A50,CONNSP_1:11;
@@ -1384,7 +1375,7 @@ A53:  P2B c= CP;
       then reconsider BP=P2B /\ CP as Subset of ((TOP-REAL 2)|P9)|CP by
 PRE_TOPC:8;
 A54:  P2 /\ P` =P2B by A15,A28,XBOOLE_1:21;
-      P2 is open by A5,Th39;
+      P2 is open by A5,Th34;
       then
 A55:  P2 in the topology of TOP-REAL 2 by PRE_TOPC:def 2;
 A56:  P`= [#]((TOP-REAL 2)|P9) by PRE_TOPC:def 5;
@@ -1400,7 +1391,7 @@ A60:  BP is open by PRE_TOPC:def 2;
       then reconsider AP=P1A /\ CP as Subset of ((TOP-REAL 2)|P9)|CP by
 PRE_TOPC:8;
 A61:  P1 /\ P` =P1A by A15,A27,XBOOLE_1:21;
-      P1 is open by A4,Th38;
+      P1 is open by A4,Th33;
       then
 A62:  P1 in the topology of TOP-REAL 2 by PRE_TOPC:def 2;
       P1 /\ [#]((TOP-REAL 2)|P9)=P1A by A61,PRE_TOPC:def 5;
@@ -1448,11 +1439,11 @@ A4: P1 = {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa
   `2 & pa`2 < t2};
   reconsider P2 = {pb where pb is Point of TOP-REAL 2:
   not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)} as Subset of TOP-REAL 2
-  by Th35;
+  by Th30;
 A5: P1 c= Cl P1 by PRE_TOPC:18;
   reconsider PP = P` as Subset of TOP-REAL 2;
-A6: PP=P1 \/ P2 by A1,A2,A3,A4,Th41;
-  P1 misses P2 by A1,A2,A3,A4,Th41;
+A6: PP=P1 \/ P2 by A1,A2,A3,A4,Th36;
+  P1 misses P2 by A1,A2,A3,A4,Th36;
   then
 A7: P1 c= P2` by SUBSET_1:23;
   P= (P1 \/ P2)` by A6;
@@ -1479,7 +1470,7 @@ A11: P2` c=P \/ P1 by TARSKI:def 3;
   then P \/ P1 c=P2` by TARSKI:def 3;
   then
 A12: P2`= P \/ P1 by A11,XBOOLE_0:def 10;
-A13: P2 is open by Th39;
+A13: P2 is open by Th34;
   [#](TOP-REAL 2) \ P2` = P2`` .=P2;
   then
 A14: P \/ P1 is closed by A12,A13,PRE_TOPC:def 3;
@@ -2326,10 +2317,10 @@ A4: P2 = {pb where pb is Point of TOP-REAL 2: not( s1<=pb`1 & pb`1<=s2 &
   t1<=pb`2 & pb`2<=t2)};
 A5: P2 c= Cl P2 by PRE_TOPC:18;
   reconsider P1 = {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2} as Subset of TOP-REAL 2 by Th34;
+  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2} as Subset of TOP-REAL 2 by Th29;
   reconsider PP = P` as Subset of TOP-REAL 2;
-A6: PP=P1 \/ P2 by A1,A2,A3,A4,Th41;
-  P1 misses P2 by A1,A2,A3,A4,Th41;
+A6: PP=P1 \/ P2 by A1,A2,A3,A4,Th36;
+  P1 misses P2 by A1,A2,A3,A4,Th36;
   then
 A7: P2 c= P1` by SUBSET_1:23;
   P= (P1 \/ P2)` by A6;
@@ -2355,7 +2346,7 @@ A11: P1` c=P \/ P2 by TARSKI:def 3;
   then P \/ P2 c=P1` by TARSKI:def 3;
   then
 A12: P1`= P \/ P2 by A11,XBOOLE_0:def 10;
-A13: P1 is open by Th38;
+A13: P1 is open by Th33;
   [#](TOP-REAL 2) \ P1` = P1`` .=P1;
   then
 A14: P \/ P2 is closed by A12,A13,PRE_TOPC:def 3;
@@ -2555,7 +2546,7 @@ A67:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A58,SQUARE_1:15;
   hence thesis by A5,XBOOLE_1:8;
 end;
 
-theorem Th42:
+theorem Th37:
   for s1,t1,s2,t2 for P,P1,P2 being Subset of TOP-REAL 2 st s1<s2 & t1<t2 &
   P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
   p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
@@ -2579,7 +2570,7 @@ A4: P1 = {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa
 A5: P2 = {pb where pb is Point of TOP-REAL 2: not( s1<=pb`1 & pb`1<=s2 &
   t1<=pb`2 & pb`2<=t2)};
   reconsider PP = P` as Subset of TOP-REAL 2;
-  PP=P1 \/ P2 by A1,A2,A3,A4,A5,Th41;
+  PP=P1 \/ P2 by A1,A2,A3,A4,A5,Th36;
   then P= (P1 \/ P2)`;
   then
 A6: P=([#](TOP-REAL 2)\P1) /\ ([#](TOP-REAL 2)\P2) by XBOOLE_1:53;
@@ -2618,7 +2609,7 @@ A17: x in P \/ P1 by XBOOLE_0:def 5;
   hence thesis by A8,A9,A12,A14,A15,XBOOLE_0:def 10;
 end;
 
-theorem Th43:
+theorem Th38:
   for s1,s2,t1,t2,P,P1 st P = { p where p is Point of TOP-REAL 2:
   p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
   p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1} &
@@ -2666,11 +2657,11 @@ or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1
   = s2 & p`2 <= t2 & p`2 >= t1} and
 A2: P1 = {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa
   `2 & pa`2 < t2};
-  P1 c= [#]((TOP-REAL 2)|P`)by A1,A2,Th43;
+  P1 c= [#]((TOP-REAL 2)|P`)by A1,A2,Th38;
   hence thesis;
 end;
 
-theorem Th45:
+theorem Th40:
   for s1,s2,t1,t2,P,P2 st s1<s2 & t1<t2 &
   P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
   p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
@@ -2725,7 +2716,7 @@ A3: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2
   or p`1 = s2 & p`2 <= t2 & p`2 >= t1} and
 A4: P2 = {pb where pb is Point of TOP-REAL 2: not( s1<=pb`1 & pb`1<=s2 &
   t1<=pb`2 & pb`2<=t2)};
-  P2 c= [#]((TOP-REAL 2)|P`) by A1,A2,A3,A4,Th45;
+  P2 c= [#]((TOP-REAL 2)|P`) by A1,A2,A3,A4,Th40;
   hence thesis;
 end;
 
@@ -2833,19 +2824,19 @@ A3: P = { p where p is Point of TOP-REAL 2:
   s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2},
   P2= {pc where pc is Point of TOP-REAL 2:
   not( s1<=pc`1 & pc`1<=s2 & t1<=pc`2 & pc`2<=t2)}
-  as Subset of TOP-REAL 2 by Th34,Th35;
+  as Subset of TOP-REAL 2 by Th29,Th30;
   reconsider PC = P` as Subset of TOP-REAL 2;
 A4: P1= {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa`2 &
   pa`2 < t2};
 A5: P2= {pc where pc is Point of TOP-REAL 2: not( s1<=pc`1 & pc`1<=s2 & t1<=
   pc`2 & pc`2<=t2)};
-A6: PC=P1 \/ P2 by A1,A2,A3,Th41;
-A7: PC<>{} by A1,A2,A3,A4,A5,Th41;
-A8: P1 misses P2 by A1,A2,A3,Th41;
-A9: P=(Cl P1)\P1 by A1,A2,A3,A5,Th42;
-A10: P=(Cl P2)\P2 by A1,A2,A3,A4,Th42;
+A6: PC=P1 \/ P2 by A1,A2,A3,Th36;
+A7: PC<>{} by A1,A2,A3,A4,A5,Th36;
+A8: P1 misses P2 by A1,A2,A3,Th36;
+A9: P=(Cl P1)\P1 by A1,A2,A3,A5,Th37;
+A10: P=(Cl P2)\P2 by A1,A2,A3,A4,Th37;
   for P1A,P2B be Subset of (TOP-REAL 2)|P` holds P1A=P1 & P2B=P2 implies
-  P1A is a_component & P2B is a_component by A1,A2,A3,Th41;
+  P1A is a_component & P2B is a_component by A1,A2,A3,Th36;
   hence thesis by A6,A7,A8,A9,A10,Def2;
 end;
 
@@ -2868,7 +2859,7 @@ theorem
 
 :: Moved from JORDAN1H, AK, 22.02.2006
 
-theorem Th51:
+theorem
   for p,q being Point of TOP-REAL 2 holds LSeg(p,q) \ {p,q} is convex
 proof
   let p,q,w1,w2 be Point of TOP-REAL 2;
@@ -2889,10 +2880,6 @@ A11: not p in LSeg(w1,w2) by A3,A4,A7,A8,SPPOL_1:7,TOPREAL1:6;
   then LSeg(w1,w2) misses {p,q} by A11,ZFMISC_1:51;
   hence thesis by A3,A4,TOPREAL1:6,XBOOLE_1:86;
 end;
-
-theorem
-  for p,q being Point of TOP-REAL 2
-  holds LSeg(p,q) \ {p,q} is connected by Th9,Th51;
 
 :: Moved from JORDAN1A, AK, 22.02.2006
 

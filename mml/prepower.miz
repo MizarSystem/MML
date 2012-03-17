@@ -2,7 +2,7 @@
 ::  by Konrad Raczkowski
 ::
 :: Received September 21, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,21 +17,23 @@ environ
  vocabularies NUMBERS, INT_1, COMPLEX1, ORDINAL1, XREAL_0, SUBSET_1, RAT_1,
       SEQ_1, SEQ_2, FUNCT_1, XXREAL_0, ORDINAL2, FUNCOP_1, CARD_1, NEWTON,
       REAL_1, ARYTM_3, RELAT_1, NAT_1, ARYTM_1, VALUED_1, XXREAL_2, SEQ_4,
-      SQUARE_1, VALUED_0, INT_2, PREPOWER;
- notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XXREAL_2, XREAL_0,
-      COMPLEX1, REAL_1, INT_2, INT_1, NAT_1, NAT_D, NEWTON, RELAT_1, FUNCT_1,
-      FUNCOP_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2, SQUARE_1, SEQ_4, RAT_1;
+      SQUARE_1, VALUED_0, INT_2, PREPOWER, TARSKI;
+ notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XXREAL_2,
+      XREAL_0, COMPLEX1, REAL_1, INT_2, INT_1, NAT_1, NAT_D, NEWTON, RELAT_1,
+      FUNCT_1, FUNCOP_1, VALUED_0, VALUED_1, SEQ_1, COMSEQ_2, SEQ_2, SQUARE_1,
+      SEQ_4, RAT_1;
  constructors FUNCOP_1, REAL_1, SQUARE_1, NAT_1, NAT_D, SEQ_2, SEQM_3,
-      PARTFUN1, VALUED_1, SEQ_4, NEWTON, SEQ_1, XXREAL_2, RELSET_1, BINOP_2;
+      PARTFUN1, VALUED_1, SEQ_4, NEWTON, SEQ_1, XXREAL_2, RELSET_1, BINOP_2,
+      COMSEQ_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       RAT_1, MEMBERED, NEWTON, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, FUNCOP_1,
-      SEQ_4;
+      SEQ_4, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions VALUED_1, XCMPLX_0, XXREAL_2;
+ definitions TARSKI, VALUED_1, XCMPLX_0, XXREAL_2;
  theorems ABSVALUE, NAT_1, SEQ_1, SEQ_2, INT_1, SQUARE_1, SEQ_4, RAT_1,
       RFUNCT_2, TARSKI, FUNCT_2, NEWTON, XREAL_0, XCMPLX_0, XCMPLX_1, FUNCOP_1,
       COMPLEX1, XREAL_1, XXREAL_0, INT_2, ORDINAL1, NAT_D, VALUED_1, VALUED_0,
-      FUNCT_1, XXREAL_2;
+      XXREAL_2, RELAT_1;
  schemes NAT_1, SEQ_1, FUNCT_2;
 
 begin
@@ -49,7 +51,7 @@ reserve k, l for Integer;
 reserve p, q for Rational;
 reserve s1, s2 for Real_Sequence;
 
-theorem Th2:
+theorem Th1:
   s1 is convergent & (for n holds s1.n>=a) implies lim s1 >= a
 proof
   assume that
@@ -67,7 +69,7 @@ A3: now
   hence thesis by A1,A3,SEQ_2:18;
 end;
 
-theorem Th3:
+theorem Th2:
   s1 is convergent & (for n holds s1.n<=a) implies lim s1 <= a
 proof
   assume that
@@ -112,7 +114,7 @@ A2: for n holds s2.n= a|^n;
   end;
 end;
 
-theorem Th4:
+theorem Th3:
   s1 = a GeoSeq iff s1.0 = 1 & for m holds s1.(m+1) = s1.m * a
 proof
   defpred P[Element of NAT] means s1.$1 = a GeoSeq.$1;
@@ -156,116 +158,116 @@ A2: for n holds P[n] implies P[n+1]
   proof
     let n such that
 A3: a GeoSeq.n <> 0;
-    a GeoSeq.(n+1) = a GeoSeq.n * a by Th4;
+    a GeoSeq.(n+1) = a GeoSeq.n * a by Th3;
     hence thesis by A1,A3,XCMPLX_1:6;
   end;
-A4: P[0] by Th4;
+A4: P[0] by Th3;
   thus for n holds P[n] from NAT_1:sch 1(A4,A2);
 end;
 
-theorem Th12:
-  for n being natural number holds 0 <> a implies 0 <> a |^ n
+theorem Th5:
+  for n being Nat holds 0 <> a implies 0 <> a |^ n
 proof
-  let n be natural number;
-  defpred P[natural number] means a |^ $1 <> 0;
+  let n be Nat;
+  defpred P[Nat] means a |^ $1 <> 0;
   assume
 A1: 0<>a;
-A2: for m be natural number st P[m] holds P[m+1]
+A2: for m be Nat st P[m] holds P[m+1]
   proof
-    let m be natural number;
+    let m be Nat;
     assume a |^ m <> 0;
     then (a |^ m)*a <> 0 by A1,XCMPLX_1:6;
     hence thesis by NEWTON:6;
   end;
 A3: P[0] by NEWTON:4;
-  for m be natural number holds P[m] from NAT_1:sch 2(A3,A2);
+  for m be Nat holds P[m] from NAT_1:sch 2(A3,A2);
   hence thesis;
 end;
 
-theorem Th13:
-  for n being natural number holds 0 < a implies 0 < a |^ n
+theorem Th6:
+  for n being Nat holds 0 < a implies 0 < a |^ n
 proof
-  let n be natural number;
-  defpred P[natural number] means 0 < a |^ $1;
+  let n be Nat;
+  defpred P[Nat] means 0 < a |^ $1;
   assume
 A1: 0<a;
-A2: for m be natural number st P[m] holds P[m+1]
+A2: for m be Nat st P[m] holds P[m+1]
   proof
-    let m be natural number;
+    let m be Nat;
     assume a |^ m > 0;
     then (a |^ m)*a > 0*a by A1,XREAL_1:68;
     hence thesis by NEWTON:6;
   end;
 A3: P[0] by NEWTON:4;
-  for m be natural number holds P[m] from NAT_1:sch 2(A3,A2);
+  for m be Nat holds P[m] from NAT_1:sch 2(A3,A2);
   hence thesis;
 end;
 
-theorem Th14:
-  for n being natural number holds (1/a) |^ n = 1 / a |^ n
+theorem Th7:
+  for n being Nat holds (1/a) |^ n = 1 / a |^ n
 proof
-  let n be natural number;
-  defpred P[natural number] means (1/a) |^ $1 = 1/ a |^ $1;
-A1: for m be natural number st P[m] holds P[m+1]
+  let n be Nat;
+  defpred P[Nat] means (1/a) |^ $1 = 1/ a |^ $1;
+A1: for m be Nat st P[m] holds P[m+1]
   proof
-    let m be natural number;
+    let m be Nat;
     assume (1/a) |^ m = 1 / a |^ m;
     hence (1/a) |^ (m+1) = 1 / a |^ m * (1/a) by NEWTON:6
       .= 1*1 / (a |^ m * a) by XCMPLX_1:76
       .= 1 / a |^ (m+1) by NEWTON:6;
   end;
   (1/a) |^ 0 = (1/a) GeoSeq.0 by Def1
-    .= 1/1 by Th4
-    .= 1/(a GeoSeq.0) by Th4
+    .= 1/1 by Th3
+    .= 1/(a GeoSeq.0) by Th3
     .= 1/ a |^ 0 by Def1;
   then
 A2: P[0];
-  for m be natural number holds P[m] from NAT_1:sch 2(A2,A1);
+  for m be Nat holds P[m] from NAT_1:sch 2(A2,A1);
   hence thesis;
 end;
 
 theorem
-  for n being natural number holds (b/a) |^ n = b |^ n / a |^ n
+  for n being Nat holds (b/a) |^ n = b |^ n / a |^ n
 proof
-  let n be natural number;
+  let n be Nat;
   thus (b/a) |^ n = (b*a") |^ n .= b |^ n * (a") |^ n by NEWTON:7
     .= b |^ n * (1/a) |^ n
-    .= b |^ n * (1/a |^ n) by Th14
+    .= b |^ n * (1/a |^ n) by Th7
     .= b |^ n*1 / a |^ n
     .= b |^ n / a |^ n;
 end;
 
-theorem Th17:
-  for n being natural number st 0 < a & a <= b holds a |^ n <= b |^ n
+theorem Th9:
+  for n being Nat st 0 < a & a <= b holds a |^ n <= b |^ n
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 0 < a and
 A2: a <= b;
-  defpred P[natural number] means a |^ $1 <= b |^ $1;
-A3: for m1 be natural number st P[m1] holds P[m1+1]
+  defpred P[Nat] means a |^ $1 <= b |^ $1;
+A3: for m1 be Nat st P[m1] holds P[m1+1]
   proof
-    let m1 be natural number such that
+    let m1 be Nat such that
 A4: a |^ m1 <= b |^ m1;
-    a |^ m1 > 0 by A1,Th13;
+    a |^ m1 > 0 by A1,Th6;
     then a |^ m1 * a <= b |^ m1 * b by A1,A2,A4,XREAL_1:66;
     then a |^ (m1+1) <= b |^ m1 * b by NEWTON:6;
     hence thesis by NEWTON:6;
   end;
 A5: b |^ 0 = b GeoSeq.0 by Def1
-    .= 1 by Th4;
+    .= 1 by Th3;
   a |^ 0 = a GeoSeq.0 by Def1
-    .= 1 by Th4;
+    .= 1 by Th3;
   then
 A6: P[0] by A5;
-  for m1 be natural number holds P[m1] from NAT_1:sch 2(A6,A3);
+  for m1 be Nat holds P[m1] from NAT_1:sch 2(A6,A3);
   hence thesis;
 end;
 
-Lm1: for n being natural number holds 0 < a & a < b & 1 <= n implies a |^ n <
+Lm1: for n being Nat holds 0 < a & a < b & 1 <= n implies a |^ n <
 b |^ n
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 0 < a and
 A2: a < b and
@@ -278,18 +280,18 @@ A5: for m1 st P[m1] holds P[m1+1]
     let m1;
     assume
 A6: a |^ (1+m1) < b |^ (1+m1);
-    a |^ (1+m1) > 0 by A1,Th13;
+    a |^ (1+m1) > 0 by A1,Th6;
     then a |^ (1+m1) * a < b |^ (1+m1) * b by A1,A2,A6,XREAL_1:97;
     then a |^ (1+m1+1) < b |^ (1+m1) * b by NEWTON:6;
     hence thesis by NEWTON:6;
   end;
 A7: b |^ (1+0) = b GeoSeq.(0+1) by Def1
-    .= b GeoSeq.0 * b by Th4
-    .= 1*b by Th4
+    .= b GeoSeq.0 * b by Th3
+    .= 1*b by Th3
     .= b;
   a |^ (1+0) = a GeoSeq.(0+1) by Def1
-    .= a GeoSeq.0 * a by Th4
-    .= 1*a by Th4
+    .= a GeoSeq.0 * a by Th3
+    .= 1*a by Th3
     .= a;
   then
 A8: P[0] by A2,A7;
@@ -298,10 +300,10 @@ A9: for m1 holds P[m1] from NAT_1:sch 1(A8,A5);
   hence thesis by A4,A9;
 end;
 
-theorem Th18:
-  for n being natural number st 0 <= a & a < b & 1 <= n holds a |^ n < b |^ n
+theorem Th10:
+  for n being Nat st 0 <= a & a < b & 1 <= n holds a |^ n < b |^ n
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 0 <= a and
 A2: a < b and
@@ -317,25 +319,25 @@ A4: a=0;
     reconsider m=k-k1 as Element of NAT by A3,INT_1:5;
     a |^ n = a |^ (m+1) .= a |^ m * a |^ 1 by NEWTON:8
       .= a |^ m * a GeoSeq.(0+1) by Def1
-      .= a |^ m * (a GeoSeq.0 * 0) by A4,Th4
+      .= a |^ m * (a GeoSeq.0 * 0) by A4,Th3
       .= 0;
-    hence thesis by A1,A2,Th13;
+    hence thesis by A1,A2,Th6;
   end;
 end;
 
-theorem Th19:
-  for n being natural number holds a>=1 implies a |^ n >= 1
+theorem Th11:
+  for n being Nat holds a>=1 implies a |^ n >= 1
 proof
-  let n be natural number;
+  let n be Nat;
   assume a>=1;
-  then a |^ n >= 1 |^ n by Th17;
+  then a |^ n >= 1 |^ n by Th9;
   hence thesis by NEWTON:10;
 end;
 
-theorem Th20:
-  for n being natural number st 1 <= a & 1 <= n holds a <= a |^ n
+theorem Th12:
+  for n being Nat st 1 <= a & 1 <= n holds a <= a |^ n
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 1 <= a and
 A2: 1 <= n;
@@ -350,7 +352,7 @@ A4: for m1 st P[m1] holds P[m1+1]
     hence thesis by NEWTON:6;
   end;
   a<=1*a;
-  then a<=a GeoSeq.0 * a by Th4;
+  then a<=a GeoSeq.0 * a by Th3;
   then a<=a |^ 0 * a by Def1;
   then
 A5: P[0] by NEWTON:6;
@@ -360,9 +362,9 @@ A6: for m1 holds P[m1] from NAT_1:sch 1(A5,A4);
 end;
 
 theorem
-  for n being natural number st 1 < a & 2 <= n holds a < a |^ n
+  for n being Nat st 1 < a & 2 <= n holds a < a |^ n
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 1 < a and
 A2: 2 <= n;
@@ -379,9 +381,9 @@ A5: for m1 st P[m1] holds P[m1+1]
     hence thesis by A4,XXREAL_0:2;
   end;
   a |^ (2+0) = a GeoSeq.(1+1) by Def1
-    .= a GeoSeq.(0+1) * a by Th4
-    .= a GeoSeq.0 * a * a by Th4
-    .= 1*a*a by Th4
+    .= a GeoSeq.(0+1) * a by Th3
+    .= a GeoSeq.0 * a * a by Th3
+    .= 1*a*a by Th3
     .= a*a;
   then
 A6: P[0] by A4;
@@ -390,10 +392,10 @@ A7: for m1 holds P[m1] from NAT_1:sch 1(A6,A5);
   hence thesis by A3,A7;
 end;
 
-theorem Th22:
-  for n being natural number st 0 < a & a <= 1 & 1 <= n holds a |^ n <= a
+theorem Th14:
+  for n being Nat st 0 < a & a <= 1 & 1 <= n holds a |^ n <= a
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 0 < a and
 A2: a <= 1 and
@@ -411,8 +413,8 @@ A6: for m1 st P[m1] holds P[m1+1]
     hence thesis by A5,XXREAL_0:2;
   end;
   a |^ (1+0) = a GeoSeq.(0+1) by Def1
-    .= a GeoSeq.0 * a by Th4
-    .= 1*a by Th4
+    .= a GeoSeq.0 * a by Th3
+    .= 1*a by Th3
     .= a;
   then
 A7: P[0];
@@ -422,9 +424,9 @@ A8: for m1 holds P[m1] from NAT_1:sch 1(A7,A6);
 end;
 
 theorem
-  for n being natural number st 0 < a & a < 1 & 2 <= n holds a |^ n < a
+  for n being Nat st 0 < a & a < 1 & 2 <= n holds a |^ n < a
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 0 < a and
 A2: a < 1 and
@@ -442,9 +444,9 @@ A6: for m1 st P[m1] holds P[m1+1]
     hence thesis by A5,XXREAL_0:2;
   end;
   a |^ (2+0) = a GeoSeq.(1+1) by Def1
-    .= a GeoSeq.(0+1) * a by Th4
-    .= a GeoSeq.0 * a * a by Th4
-    .= 1*a*a by Th4
+    .= a GeoSeq.(0+1) * a by Th3
+    .= a GeoSeq.0 * a * a by Th3
+    .= 1*a*a by Th3
     .= a*a;
   then
 A7: P[0] by A5;
@@ -453,17 +455,17 @@ A8: for m1 holds P[m1] from NAT_1:sch 1(A7,A6);
   hence thesis by A4,A8;
 end;
 
-theorem Th24:
-  for n being natural number holds -1 < a implies (1 + a) |^ n >= 1 + n * a
+theorem Th16:
+  for n being Nat holds -1 < a implies (1 + a) |^ n >= 1 + n * a
 proof
-  let n be natural number;
-  defpred P[natural number] means (1 + a) |^ $1 >= 1 + $1 * a;
+  let n be Nat;
+  defpred P[Nat] means (1 + a) |^ $1 >= 1 + $1 * a;
   assume
 A1: -1 < a;
-A2: for m be natural number st P[m] holds P[m+1]
+A2: for m be Nat st P[m] holds P[m+1]
   proof
 A3: -1+1<1+a by A1,XREAL_1:6;
-    let m be natural number;
+    let m be Nat;
     assume (1+a) |^ m >= 1 + m * a;
     then (1+a) |^ m * (1+a) >= (1 + m*a)*(1+a) by A3,XREAL_1:64;
     then
@@ -473,26 +475,26 @@ A4: (1+a) |^ (m+1) >= 1 + 1*a + m*a + (m*a)*a by NEWTON:6;
     hence thesis by A4,XXREAL_0:2;
   end;
   (1 + a) |^ 0 = (1+a) GeoSeq.0 by Def1
-    .= 1 by Th4;
+    .= 1 by Th3;
   then
 A5: P[0];
-  for m being natural number holds P[m] from NAT_1:sch 2(A5,A2);
+  for m being Nat holds P[m] from NAT_1:sch 2(A5,A2);
   hence thesis;
 end;
 
-theorem Th25:
-  for n being natural number st 0 < a & a < 1 holds (1 + a) |^ n
+theorem Th17:
+  for n being Nat st 0 < a & a < 1 holds (1 + a) |^ n
   <= 1 + 3 |^ n * a
 proof
-  let n be natural number;
+  let n be Nat;
   assume that
 A1: 0 < a and
 A2: a < 1;
 A3: 1 + 0 < 1 + a by A1,XREAL_1:6;
-  defpred P[natural number] means (1 + a) |^ $1 <= 1 + 3 |^ $1 * a;
-A4: for n be natural number holds P[n] implies P[n+1]
+  defpred P[Nat] means (1 + a) |^ $1 <= 1 + 3 |^ $1 * a;
+A4: for n be Nat holds P[n] implies P[n+1]
   proof
-    let n be natural number;
+    let n be Nat;
     assume (1 + a) |^ n <= 1 + 3 |^ n * a;
     then
 A5: (1 + a) |^ n * (1 + a) <= (1 + 3 |^ n * a) * (1+a) by A1,XREAL_1:64;
@@ -505,7 +507,7 @@ A7: 1 <= 3 |^ n
 A8:     0 = n;
         n is Element of NAT by ORDINAL1:def 12;
         then 3 |^ n = 3 GeoSeq.n by Def1
-          .= 1 by A8,Th4;
+          .= 1 by A8,Th3;
         hence thesis;
       end;
       suppose
@@ -528,17 +530,17 @@ A10: 3 |^ n * a + 3 |^ n * (a*a) < 3 |^ n * a + 3 |^ n * a by XREAL_1:6;
     hence thesis by NEWTON:6;
   end;
 A11: 1 + 3 |^ 0 * a = 1 + 3 GeoSeq.0 * a by Def1
-    .= 1 + 1 * a by Th4
+    .= 1 + 1 * a by Th3
     .= 1 + a;
   (1 + a) |^ 0 = (1 + a) GeoSeq.0 by Def1
-    .= 1 by Th4;
+    .= 1 by Th3;
   then
 A12: P[0] by A11,A3;
-  for n be natural number holds P[n] from NAT_1:sch 2(A12,A4);
+  for n be Nat holds P[n] from NAT_1:sch 2(A12,A4);
   hence thesis;
 end;
 
-theorem Th26:
+theorem Th18:
   s1 is convergent & (for n holds s2.n = (s1.n) |^ m) implies s2
   is convergent & lim s2 = (lim s1) |^ m
 proof
@@ -557,14 +559,14 @@ A5: now
       n in NAT by ORDINAL1:def 12;
       hence s.n = (s1.n) |^ 0 by A4
         .= (s1.n) GeoSeq.0 by Def1
-        .= 1 by Th4;
+        .= 1 by Th3;
     end;
     then
 A6: s is constant by VALUED_0:def 18;
     hence s is convergent;
     thus lim s = s.0 by A6,SEQ_4:26
       .= 1 by A5
-      .= (lim s1) GeoSeq.0 by Th4
+      .= (lim s1) GeoSeq.0 by Th3
       .= (lim s1) |^ 0 by Def1;
   end;
 A7: for m1 holds P[m1] implies P[m1+1]
@@ -598,13 +600,13 @@ A12: s3 is convergent by A8,A9;
 end;
 
 definition
-  let n be natural number;
+  let n be Nat;
   let a be real number;
   assume
 A1: 1 <= n;
 
   func n -Root a -> real number means
-  :Def3:
+  :Def2:
   it |^ n = a & it > 0 if a>0, it = 0 if a=0;
   consistency;
   existence
@@ -660,7 +662,7 @@ A11:          b = d & 0 < d & d |^ n <= a;
           assume a < b;
           then a |^ n < d |^ n by A1,A9,Lm1,A11;
           then a |^ n < a by A11,XXREAL_0:2;
-          hence contradiction by A1,A10,Th20;
+          hence contradiction by A1,A10,Th12;
       end;
       then
 A12:  X is bounded_above by A5,XXREAL_2:def 10;
@@ -671,7 +673,7 @@ A13:  a < 1 implies ex c st c in X
 A14:    a < 1;
         reconsider a as Real by XREAL_0:def 1;
         take a;
-        a |^ n <= a by A1,A9,A14,Th22;
+        a |^ n <= a by A1,A9,A14,Th14;
         hence thesis by A9;
       end;
 A15:  0 < d
@@ -703,7 +705,7 @@ A21:    d * ((1 - a / d |^ n) / (n + 1)) < d*1 by A15,XREAL_1:68;
         then b/d < 1 by A15,XCMPLX_1:60;
         then - 1 < - b/d by XREAL_1:24;
         then
-A22:    (1 + -b/d) |^ n >= 1 + n * (-b/d) by Th24;
+A22:    (1 + -b/d) |^ n >= 1 + n * (-b/d) by Th16;
         a / d |^ n < d |^ n / d |^ n by A9,A18,XREAL_1:74;
         then 0 + a / d |^ n < 1 by A9,A18,XCMPLX_1:60;
         then 0 < 1 - a / d |^ n by XREAL_1:20;
@@ -751,14 +753,14 @@ A27:    (d - b) |^ n > 1 * a by XCMPLX_1:60;
         set b = min(1/2 , (a1 / d |^ n - 1)/3 |^ n );
         set c = (1 + b) * d;
 A28:    c |^ n = (1 + b) |^ n * d |^ n by NEWTON:7;
-A29:    0 < 3 |^ n by Th13;
+A29:    0 < 3 |^ n by Th6;
         3 |^ n * b <= (a / d |^ n - 1)/3 |^ n * 3 |^ n by XREAL_1:64
 ,XXREAL_0:17;
         then 3 |^ n * b <= a / d |^ n - 1 by A29,XCMPLX_1:87;
         then
 A30:    1 + 3 |^ n * b <= a / d |^ n by XREAL_1:19;
-A31:    d |^ n > 0 by A15,Th13;
-A32:    d |^ n <> 0 by A15,Th13;
+A31:    d |^ n > 0 by A15,Th6;
+A32:    d |^ n <> 0 by A15,Th6;
         assume d |^ n < a;
         then d |^ n / d |^ n < a / d |^ n by A31,XREAL_1:74;
         then 1 < a / d |^ n by A32,XCMPLX_1:60;
@@ -771,7 +773,7 @@ A33:    b > 0 by XXREAL_0:15;
 A34:    (1 + b) * d > 1 * d by A15,XREAL_1:68;
         b <= 1/2 by XXREAL_0:17;
         then b < 1 by XXREAL_0:2;
-        then (1 + b) |^ n <= 1 + 3 |^ n * b by A33,Th25;
+        then (1 + b) |^ n <= 1 + 3 |^ n * b by A33,Th17;
         then (1 + b) |^ n <= a / d |^ n by A30,XXREAL_0:2;
         then c |^ n <= a / d |^ n * d |^ n by A31,A28,XREAL_1:64;
         then
@@ -822,23 +824,23 @@ proof
   assume that
 A1: a>0 and
 A2: n>=1;
-  thus (n -Root a) |^ n = a by A1,A2,Def3;
+  thus (n -Root a) |^ n = a by A1,A2,Def2;
   assume
 A3: n -Root (a |^ n) <> a;
   per cases by A3,XXREAL_0:1;
   suppose
 A4: n -Root (a |^ n) > a;
-    a |^ n > 0 by A1,Th13;
-    hence contradiction by A1,A2,A4,Def3;
+    a |^ n > 0 by A1,Th6;
+    hence contradiction by A1,A2,A4,Def2;
   end;
   suppose
 A5: n -Root (a |^ n) < a;
-    a |^ n > 0 by A1,Th13;
-    hence contradiction by A1,A2,A5,Def3;
+    a |^ n > 0 by A1,Th6;
+    hence contradiction by A1,A2,A5,Def2;
   end;
 end;
 
-theorem Th28:
+theorem Th19:
   for n being Nat st a>=0 & n>=1 holds (n -Root a) |^ n = a & n
   -Root (a |^ n) = a
 proof
@@ -857,34 +859,34 @@ A3: a=0;
     reconsider m=k-k1 as Element of NAT by A2,INT_1:5;
 A4: 0 |^ n = 0 |^ (m+1) .= 0 |^ m * 0 |^ 1 by NEWTON:8
       .= 0 |^ m * 0 GeoSeq.(0+1) by Def1
-      .= 0 |^ m * (0 GeoSeq.0 * 0) by Th4
+      .= 0 |^ m * (0 GeoSeq.0 * 0) by Th3
       .= 0;
-    hence (n -Root a) |^ n = a by A2,A3,Def3;
-    thus thesis by A2,A3,A4,Def3;
+    hence (n -Root a) |^ n = a by A2,A3,Def2;
+    thus thesis by A2,A3,A4,Def2;
   end;
 end;
 
-theorem Th29:
+theorem Th20:
   n>=1 implies n -Root 1 = 1
 proof
 A1: 1 |^ n = 1 by NEWTON:10;
   assume n>=1;
-  hence thesis by A1,Def3;
+  hence thesis by A1,Def2;
 end;
 
-theorem Th30:
+theorem Th21:
   a>=0 implies 1 -Root a = a
 proof
   assume
 A1: a>=0;
   a |^ 1 = a GeoSeq.(0+1) by Def1
-    .= a GeoSeq.0 * a by Th4
-    .= 1*a by Th4
+    .= a GeoSeq.0 * a by Th3
+    .= 1*a by Th3
     .= a;
-  hence thesis by A1,Th28;
+  hence thesis by A1,Th19;
 end;
 
-theorem Th31:
+theorem Th22:
   a>=0 & b>=0 & n>=1 implies n -Root (a*b) = n -Root a * n -Root b
 proof
   assume that
@@ -894,55 +896,55 @@ A3: n>=1 and
 A4: n -Root (a*b) <> n -Root a * n -Root b;
 A5: (n -Root a * n -Root b) |^ n = (n -Root a) |^ n * (n -Root b) |^ n by
 NEWTON:7
-    .= a * (n -Root b) |^ n by A1,A3,Th28
-    .= a * b by A2,A3,Th28;
+    .= a * (n -Root b) |^ n by A1,A3,Th19
+    .= a * b by A2,A3,Th19;
   per cases by A1,A2;
   suppose
 A6: a>0 & b>0;
     then
-A7: n -Root b > 0 by A3,Def3;
-A8: n -Root a > 0 by A3,A6,Def3;
+A7: n -Root b > 0 by A3,Def2;
+A8: n -Root a > 0 by A3,A6,Def2;
     a*b>0 by A6,XREAL_1:129;
     then
-A9: n -Root (a*b) > 0 by A3,Def3;
+A9: n -Root (a*b) > 0 by A3,Def2;
     per cases by A4,XXREAL_0:1;
     suppose
       n -Root (a*b) < n -Root a * n -Root b;
-      hence contradiction by A3,A5,A9,Th28;
+      hence contradiction by A3,A5,A9,Th19;
     end;
     suppose
       n -Root (a*b) > n -Root a * n -Root b;
-      hence contradiction by A3,A5,A8,A7,Th28;
+      hence contradiction by A3,A5,A8,A7,Th19;
     end;
   end;
   suppose
 A10: a=0 & b>0;
-    then n -Root (a*b) = 0 by A3,Def3;
+    then n -Root (a*b) = 0 by A3,Def2;
     hence contradiction by A4,A10;
   end;
   suppose
 A11: a>0 & b=0;
-    then n -Root (a*b) = 0 by A3,Def3;
+    then n -Root (a*b) = 0 by A3,Def2;
     hence contradiction by A4,A11;
   end;
   suppose
 A12: a=0 & b=0;
-    then n -Root (a*b) = 0 by A3,Def3;
+    then n -Root (a*b) = 0 by A3,Def2;
     hence contradiction by A4,A12;
   end;
 end;
 
-theorem Th32:
+theorem Th23:
   a>0 & n>=1 implies n -Root (1/a) = 1/(n -Root a)
 proof
   assume that
 A1: a>0 and
 A2: n>=1 and
 A3: n -Root (1/a) <> 1/(n -Root a);
-A4: n -Root a > 0 by A1,A2,Def3;
-A5: (1/(n -Root a)) |^ n = 1 / (n -Root a) |^ n by Th14
+A4: n -Root a > 0 by A1,A2,Def2;
+A5: (1/(n -Root a)) |^ n = 1 / (n -Root a) |^ n by Th7
     .= 1/a by A1,A2,Lm2;
-A6: n -Root (1/a) > 0 by A1,A2,Def3;
+A6: n -Root (1/a) > 0 by A1,A2,Def2;
   per cases by A3,XXREAL_0:1;
   suppose
     n -Root (1/a) > 1/(n -Root a);
@@ -962,14 +964,14 @@ A1: a>=0 and
 A2: b>0 and
 A3: n>=1;
   thus n -Root (a/b) = n -Root (a*b")
-    .= n -Root a * n -Root (b") by A1,A2,A3,Th31
+    .= n -Root a * n -Root (b") by A1,A2,A3,Th22
     .= n -Root a * n -Root (1/b)
-    .= n -Root a * (1/n -Root b) by A2,A3,Th32
+    .= n -Root a * (1/n -Root b) by A2,A3,Th23
     .= n -Root a * 1 / n -Root b
     .= n -Root a / n -Root b;
 end;
 
-theorem Th34:
+theorem Th25:
   a>=0 & n>=1 & m>=1 implies n -Root (m -Root a) = (n*m) -Root a
 proof
   assume that
@@ -981,37 +983,37 @@ A4: n -Root (m -Root a) <> (n*m) -Root a;
   suppose
 A5: a>0;
     then
-A6: m -Root a > 0 by A3,Def3;
+A6: m -Root a > 0 by A3,Def2;
     then
-A7: n -Root (m -Root a) > 0 by A2,Def3;
+A7: n -Root (m -Root a) > 0 by A2,Def2;
 A8: (n -Root (m -Root a)) |^ (n*m) = ((n -Root (m -Root a)) |^ n) |^ m by
 NEWTON:9
       .= (m -Root a) |^ m by A2,A6,Lm2
-      .= a by A1,A3,Th28;
+      .= a by A1,A3,Th19;
 A9: n*m>=1 by A2,A3,XREAL_1:159;
     then
-A10: (n*m) -Root a > 0 by A5,Def3;
+A10: (n*m) -Root a > 0 by A5,Def2;
     per cases by A4,XXREAL_0:1;
     suppose
       n -Root (m -Root a) < (n*m) -Root a;
-      hence contradiction by A5,A8,A9,A7,Def3;
+      hence contradiction by A5,A8,A9,A7,Def2;
     end;
     suppose
       (n*m) -Root a < n -Root (m -Root a);
-      hence contradiction by A5,A8,A9,A10,Def3;
+      hence contradiction by A5,A8,A9,A10,Def2;
     end;
   end;
   suppose
 A11: a=0;
     n*m>=1 by A2,A3,XREAL_1:159;
     then
-A12: (n*m) -Root a = 0 by A11,Def3;
-    m -Root a = 0 by A3,A11,Def3;
-    hence contradiction by A2,A4,A12,Def3;
+A12: (n*m) -Root a = 0 by A11,Def2;
+    m -Root a = 0 by A3,A11,Def2;
+    hence contradiction by A2,A4,A12,Def2;
   end;
 end;
 
-theorem Th35:
+theorem Th26:
   a>=0 & n>=1 & m>=1 implies n -Root a * m -Root a = (n*m) -Root ( a |^ (n+m))
 proof
   assume that
@@ -1022,30 +1024,30 @@ A4: n -Root a * m -Root a <> (n*m) -Root (a |^ (n+m));
 A5: (n -Root a * m -Root a) |^ (n*m) = (n -Root a) |^ (n*m) * (m -Root a) |^
   (n*m) by NEWTON:7
     .= ((n -Root a) |^ n) |^ m * (m -Root a) |^ (n*m) by NEWTON:9
-    .= a |^ m * (m -Root a) |^ (m*n) by A1,A2,Th28
+    .= a |^ m * (m -Root a) |^ (m*n) by A1,A2,Th19
     .= a |^ m * ((m -Root a) |^ m) |^ n by NEWTON:9
-    .= a |^ m * a |^ n by A1,A3,Th28
+    .= a |^ m * a |^ n by A1,A3,Th19
     .= a |^ (n+m) by NEWTON:8;
 A6: n*m>=1 by A2,A3,XREAL_1:159;
   per cases by A1;
   suppose
 A7: a>0;
     then
-A8: m -Root a > 0 by A3,Def3;
-    n -Root a > 0 by A2,A7,Def3;
+A8: m -Root a > 0 by A3,Def2;
+    n -Root a > 0 by A2,A7,Def2;
     then
 A9: n -Root a * m -Root a > 0 by A8,XREAL_1:129;
-A10: a |^ (n+m) > 0 by A7,Th13;
+A10: a |^ (n+m) > 0 by A7,Th6;
     then
-A11: (n*m) -Root (a |^ (n+m)) > 0 by A6,Def3;
+A11: (n*m) -Root (a |^ (n+m)) > 0 by A6,Def2;
     per cases by A4,XXREAL_0:1;
     suppose
       n -Root a * m -Root a < (n*m) -Root (a |^ (n+m));
-      hence contradiction by A5,A6,A10,A9,Def3;
+      hence contradiction by A5,A6,A10,A9,Def2;
     end;
     suppose
       n -Root a * m -Root a > (n*m) -Root (a |^ (n+m));
-      hence contradiction by A5,A6,A10,A11,Def3;
+      hence contradiction by A5,A6,A10,A11,Def2;
     end;
   end;
   suppose
@@ -1054,12 +1056,12 @@ A12: a=0;
     reconsider m1=k-k1 as Element of NAT by A2,INT_1:5;
 A13: a |^ (n+m) = a |^ (m1+m+1) .= a |^ (m1+m) * a by NEWTON:6
       .= 0 by A12;
-    n -Root a = 0 by A2,A12,Def3;
-    hence contradiction by A4,A6,A13,Def3;
+    n -Root a = 0 by A2,A12,Def2;
+    hence contradiction by A4,A6,A13,Def2;
   end;
 end;
 
-theorem Th36:
+theorem Th27:
   0<=a & a<=b & n>=1 implies n -Root a <= n -Root b
 proof
   assume that
@@ -1071,19 +1073,19 @@ A5: now
     per cases by A1,A2;
     suppose
       b > 0;
-      hence n -Root b >= 0 by A3,Def3;
+      hence n -Root b >= 0 by A3,Def2;
     end;
     suppose
       b=0;
-      hence n -Root b >= 0 by A3,Def3;
+      hence n -Root b >= 0 by A3,Def2;
     end;
   end;
-  (n -Root a) |^ n = a by A1,A3,Th28;
-  then (n -Root a) |^ n <= (n -Root b) |^ n by A1,A2,A3,Th28;
-  hence contradiction by A3,A4,A5,Th18;
+  (n -Root a) |^ n = a by A1,A3,Th19;
+  then (n -Root a) |^ n <= (n -Root b) |^ n by A1,A2,A3,Th19;
+  hence contradiction by A3,A4,A5,Th10;
 end;
 
-theorem Th37:
+theorem Th28:
   a>=0 & a<b & n>=1 implies n -Root a < n -Root b
 proof
   assume that
@@ -1091,26 +1093,26 @@ A1: a>=0 and
 A2: a<b and
 A3: n>=1 and
 A4: n -Root a >= n -Root b;
-  (n -Root a) |^ n = a by A1,A3,Th28;
+  (n -Root a) |^ n = a by A1,A3,Th19;
   then
 A5: (n -Root a) |^ n < (n -Root b) |^ n by A1,A2,A3,Lm2;
-  n -Root b > 0 by A1,A2,A3,Def3;
-  hence contradiction by A4,A5,Th17;
+  n -Root b > 0 by A1,A2,A3,Def2;
+  hence contradiction by A4,A5,Th9;
 end;
 
-theorem Th38:
+theorem Th29:
   a>=1 & n>=1 implies n -Root a >= 1 & a >= n -Root a
 proof
   assume that
 A1: a>=1 and
 A2: n>=1;
-  n -Root a >= n -Root 1 by A1,A2,Th36;
-  hence n -Root a >= 1 by A2,Th29;
-  n -Root a <= n -Root (a |^ n) by A1,A2,Th20,Th36;
+  n -Root a >= n -Root 1 by A1,A2,Th27;
+  hence n -Root a >= 1 by A2,Th20;
+  n -Root a <= n -Root (a |^ n) by A1,A2,Th12,Th27;
   hence thesis by A1,A2,Lm2;
 end;
 
-theorem Th39:
+theorem Th30:
   0<=a & a<1 & n>=1 implies a <= n -Root a & n -Root a < 1
 proof
   assume that
@@ -1121,7 +1123,7 @@ A4: now
     per cases by A1;
     suppose
       a>0;
-      hence a |^ n >= 0 by Th13;
+      hence a |^ n >= 0 by Th6;
     end;
     suppose
       a=0;
@@ -1132,28 +1134,28 @@ A4: now
     per cases by A1;
     suppose
       a>0;
-      hence a |^ n <= a by A2,A3,Th22;
+      hence a |^ n <= a by A2,A3,Th14;
     end;
     suppose
       a=0;
       hence a |^ n <= a by A3,NEWTON:11;
     end;
   end;
-  then n -Root (a |^ n) <= n -Root a by A3,A4,Th36;
-  hence a <= n -Root a by A1,A3,Th28;
-  n -Root a < n -Root 1 by A1,A2,A3,Th37;
-  hence thesis by A3,Th29;
+  then n -Root (a |^ n) <= n -Root a by A3,A4,Th27;
+  hence a <= n -Root a by A1,A3,Th19;
+  n -Root a < n -Root 1 by A1,A2,A3,Th28;
+  hence thesis by A3,Th20;
 end;
 
-theorem Th40:
+theorem Th31:
   a>0 & n>=1 implies n -Root a - 1 <= (a-1)/n
 proof
   assume that
 A1: a>0 and
 A2: n>=1;
-  n -Root a > 0 by A1,A2,Def3;
+  n -Root a > 0 by A1,A2,Def2;
   then n -Root a - 1 > 0 - 1 by XREAL_1:9;
-  then (1 + (n -Root a - 1)) |^ n >= 1 + n*(n -Root a - 1) by Th24;
+  then (1 + (n -Root a - 1)) |^ n >= 1 + n*(n -Root a - 1) by Th16;
   then a >= 1 + n*(n -Root a - 1) by A1,A2,Lm2;
   then a - 1 >= n*(n -Root a - 1) by XREAL_1:19;
   then (a - 1)/n >= n*(n -Root a - 1)/n by XREAL_1:72;
@@ -1169,7 +1171,7 @@ A2: 2-Root a <> sqrt a;
 A3: sqrt a >= 0 by A1,SQUARE_1:def 2;
   sqrt a |^ 2 = (sqrt a)^2 by NEWTON:81
     .= a by A1,SQUARE_1:def 2;
-  hence contradiction by A2,A3,Th28;
+  hence contradiction by A2,A3,Th19;
 end;
 
 Lm3: for s being Real_Sequence, a st a >= 1 & (for n st n>=1 holds s.n = n
@@ -1195,12 +1197,12 @@ A7: n+1>=0+1 by XREAL_1:6;
 A8: (s^\1).n = s.(n+1) by NAT_1:def 3
       .= (n+1) -Root a by A5,A7;
     then
-A9: (s^\1).n >= 1 by A1,A7,Th38;
+A9: (s^\1).n >= 1 by A1,A7,Th29;
     then (s^\1).n-1>=0 by XREAL_1:48;
     then
 A10: -1 < b by XXREAL_0:2;
     a = (1+b) |^ (n+1) by A1,A7,A8,Lm2;
-    then a >= 1 + (n+1)*b by A10,Th24;
+    then a >= 1 + (n+1)*b by A10,Th16;
     then a - 1 >= 1 + (n+1)*b - 1 by XREAL_1:9;
     then (a - 1)*(n+1)" >= (n+1)"*((n+1)*b) by XREAL_1:64;
     then (a - 1)*(n+1)" >= (n+1)"*(n+1)*b;
@@ -1262,20 +1264,20 @@ A12:  n>=0+1 by XREAL_1:6;
       then
 A13:  1<=m by A11,XXREAL_0:2;
       then
-A14:  m -Root a<1 by A1,A3,Th39;
-A15:  (m -Root a) <> 0 by A1,A13,Def3;
+A14:  m -Root a<1 by A1,A3,Th30;
+A15:  (m -Root a) <> 0 by A1,A13,Def2;
       then
 A16:  abs(1/(m -Root a) - 1) = abs(1/(m -Root a) - (m -Root a)/(m -Root a
       )) by XCMPLX_1:60
         .= abs((1 - m -Root a)/(m -Root a))
         .= abs((1 - m -Root a)*(m -Root a)")
         .= abs(1 - m -Root a)*abs((m -Root a)") by COMPLEX1:65;
-      0<m -Root a by A1,A3,A13,Th39;
+      0<m -Root a by A1,A3,A13,Th30;
       then (m -Root a)*(m -Root a)"<1*(m -Root a)" by A14,XREAL_1:68;
       then 1<(m -Root a)" by A15,XCMPLX_0:def 7;
       then
 A17:  1<abs((m -Root a)") by ABSVALUE:def 1;
-      0<>1 - m -Root a by A1,A3,A13,Th39;
+      0<>1 - m -Root a by A1,A3,A13,Th30;
       then abs(1 - m -Root a) > 0 by COMPLEX1:47;
       then
 A18:  1*abs(1 - m -Root a) < abs(1 - m -Root a)*abs((m -Root a)") by A17,
@@ -1284,7 +1286,7 @@ XREAL_1:68;
       then m1<=m by A11,XXREAL_0:2;
       then abs(s1.m-1)<b by A10;
       then abs(m -Root (1/a) - 1)<b by A5;
-      then abs(1/(m -Root a) - 1)<b by A1,A13,Th32;
+      then abs(1/(m -Root a) - 1)<b by A1,A13,Th23;
       then abs(-(m -Root a - 1)) < b by A16,A18,XXREAL_0:2;
       then abs(m -Root a - 1) < b by COMPLEX1:52;
       hence abs(s.m - 1) < b by A2,A12,A11,XXREAL_0:2;
@@ -1298,7 +1300,7 @@ definition
   let a be real number;
   let k;
   func a #Z k equals
-  :Def4:
+  :Def3:
   a |^ abs k if k >= 0, (a |^ abs k)" if k < 0;
   consistency;
   coherence;
@@ -1310,7 +1312,7 @@ registration
   cluster a #Z k -> real;
   coherence
   proof
-    a #Z k = a |^ abs(k) or a #Z k = (a |^ abs(k))" by Def4;
+    a #Z k = a |^ abs(k) or a #Z k = (a |^ abs(k))" by Def3;
     hence thesis;
   end;
 end;
@@ -1322,48 +1324,48 @@ definition
   coherence by XREAL_0:def 1;
 end;
 
-theorem Th44:
+theorem Th34:
   a #Z 0 = 1
 proof
-  thus a #Z 0 = a |^ abs(0) by Def4
+  thus a #Z 0 = a |^ abs(0) by Def3
     .= a |^ 0 by ABSVALUE:2
     .= a GeoSeq.0 by Def1
-    .= 1 by Th4;
+    .= 1 by Th3;
 end;
 
-theorem Th45:
+theorem Th35:
   a #Z 1 = a
 proof
-  thus a #Z 1 = a |^ abs(1) by Def4
+  thus a #Z 1 = a |^ abs(1) by Def3
     .= a |^ (0+1) by ABSVALUE:def 1
     .= a GeoSeq.(0+1) by Def1
-    .= a GeoSeq.0 * a by Th4
-    .= 1*a by Th4
+    .= a GeoSeq.0 * a by Th3
+    .= 1*a by Th3
     .= a;
 end;
 
-theorem Th46:
-  for n being natural number holds a #Z n = a |^ n
+theorem Th36:
+  for n being Nat holds a #Z n = a |^ n
 proof
-  let n be natural number;
-  thus a #Z n = a |^ abs(n) by Def4
+  let n be Nat;
+  thus a #Z n = a |^ abs(n) by Def3
     .= a |^ n by ABSVALUE:def 1;
 end;
 
 Lm4: 1" = 1;
 
-theorem Th47:
+theorem Th37:
   1 #Z k = 1
 proof
   per cases;
   suppose
     k>=0;
-    hence 1 #Z k = 1 |^ abs(k) by Def4
+    hence 1 #Z k = 1 |^ abs(k) by Def3
       .= 1 by NEWTON:10;
   end;
   suppose
     k<0;
-    then 1 #Z k = (1 |^ abs(k))" by Def4;
+    then 1 #Z k = (1 |^ abs(k))" by Def3;
     hence thesis by Lm4,NEWTON:10;
   end;
 end;
@@ -1376,17 +1378,17 @@ A1: a<>0;
   per cases;
   suppose
     k>=0;
-    then a #Z k = a |^ abs(k) by Def4;
-    hence thesis by A1,Th12;
+    then a #Z k = a |^ abs(k) by Def3;
+    hence thesis by A1,Th5;
   end;
   suppose
     k<0;
-    then a #Z k = (a |^ abs(k))" by Def4;
-    hence thesis by A1,Th12,XCMPLX_1:202;
+    then a #Z k = (a |^ abs(k))" by Def3;
+    hence thesis by A1,Th5,XCMPLX_1:202;
   end;
 end;
 
-theorem Th49:
+theorem Th39:
   a>0 implies a #Z k > 0
 proof
   assume
@@ -1394,119 +1396,119 @@ A1: a>0;
   per cases;
   suppose
     k>=0;
-    then a #Z k = a |^ abs(k) by Def4;
-    hence thesis by A1,Th13;
+    then a #Z k = a |^ abs(k) by Def3;
+    hence thesis by A1,Th6;
   end;
   suppose
 A2: k<0;
-A3: a |^ abs(k) > 0 by A1,Th13;
-    a #Z k = (a |^ abs(k))" by A2,Def4;
+A3: a |^ abs(k) > 0 by A1,Th6;
+    a #Z k = (a |^ abs(k))" by A2,Def3;
     hence thesis by A3;
   end;
 end;
 
-theorem Th50:
+theorem Th40:
   (a*b) #Z k = a #Z k * b #Z k
 proof
   per cases;
   suppose
 A1: k>=0;
-    hence (a*b) #Z k = (a*b) |^ abs(k) by Def4
+    hence (a*b) #Z k = (a*b) |^ abs(k) by Def3
       .= a |^ abs(k) * b |^ abs(k) by NEWTON:7
-      .= a #Z k * b |^ abs(k) by A1,Def4
-      .= a #Z k * b #Z k by A1,Def4;
+      .= a #Z k * b |^ abs(k) by A1,Def3
+      .= a #Z k * b #Z k by A1,Def3;
   end;
   suppose
 A2: k<0;
-    hence (a*b) #Z k = ((a*b) |^ abs(k))" by Def4
+    hence (a*b) #Z k = ((a*b) |^ abs(k))" by Def3
       .= (a |^ abs(k) * b |^ abs(k))" by NEWTON:7
       .= (a |^ abs(k))" * (b |^ abs(k))" by XCMPLX_1:204
-      .= a #Z k * (b |^ abs(k))" by A2,Def4
-      .= a #Z k * b #Z k by A2,Def4;
+      .= a #Z k * (b |^ abs(k))" by A2,Def3
+      .= a #Z k * b #Z k by A2,Def3;
   end;
 end;
 
-theorem Th51:
+theorem Th41:
   a #Z (-k) = 1/a #Z k
 proof
   per cases;
   suppose
 A1: k>0;
     then -k<-0 by XREAL_1:24;
-    hence a #Z (-k) = (a |^ abs(-k))" by Def4
+    hence a #Z (-k) = (a |^ abs(-k))" by Def3
       .= (a |^ abs(k))" by COMPLEX1:52
       .= 1 / a |^ abs(k)
-      .= 1 / a #Z k by A1,Def4;
+      .= 1 / a #Z k by A1,Def3;
   end;
   suppose
 A2: k=0;
-    hence a #Z (-k) = 1/1 by Th44
-      .= 1/a GeoSeq.0 by Th4
+    hence a #Z (-k) = 1/1 by Th34
+      .= 1/a GeoSeq.0 by Th3
       .= 1/a |^ 0 by Def1
-      .= 1/a #Z k by A2,Th46;
+      .= 1/a #Z k by A2,Th36;
   end;
   suppose
 A3: k<0;
-    then a #Z k = (a |^ abs(k))" by Def4
+    then a #Z k = (a |^ abs(k))" by Def3
       .= 1 / a |^ abs(k)
       .= 1 / a |^ abs(-k) by COMPLEX1:52
-      .= 1 / a #Z (-k) by A3,Def4;
+      .= 1 / a #Z (-k) by A3,Def3;
     hence thesis;
   end;
 end;
 
-theorem Th52:
+theorem Th42:
   (1/a) #Z k = 1/a #Z k
 proof
   per cases;
   suppose
 A1: k>=0;
-    hence (1/a) #Z k = (1/a) |^ abs(k) by Def4
-      .= 1 / a |^ abs(k) by Th14
-      .= 1 / a #Z k by A1,Def4;
+    hence (1/a) #Z k = (1/a) |^ abs(k) by Def3
+      .= 1 / a |^ abs(k) by Th7
+      .= 1 / a #Z k by A1,Def3;
   end;
   suppose
 A2: k<0;
-    hence (1/a) #Z k = ((1/a) |^ abs(k))" by Def4
-      .= (1 / a |^ abs(k))" by Th14
+    hence (1/a) #Z k = ((1/a) |^ abs(k))" by Def3
+      .= (1 / a |^ abs(k))" by Th7
       .= (a |^ abs(k))""
-      .= (a #Z k)" by A2,Def4
+      .= (a #Z k)" by A2,Def3
       .= 1/a #Z k;
   end;
 end;
 
-theorem Th53:
-  for m,n being natural number holds a<>0 implies a #Z (m-n) = a |^ m / a |^ n
+theorem Th43:
+  for m,n being Nat holds a<>0 implies a #Z (m-n) = a |^ m / a |^ n
 proof
-  let m,n be natural number;
+  let m,n be Nat;
   assume
 A1: a<>0;
   per cases;
   suppose
     m-n>=0;
     then reconsider m1 = m-n as Element of NAT by INT_1:3;
-A2: a #Z (m-n) * a |^ n = a |^ m1 * a |^ n by Th46
+A2: a #Z (m-n) * a |^ n = a |^ m1 * a |^ n by Th36
       .= a |^ (m1+n) by NEWTON:8
       .= a |^ m;
-    a |^ n <> 0 by A1,Th12;
+    a |^ n <> 0 by A1,Th5;
     hence thesis by A2,XCMPLX_1:89;
   end;
   suppose
     m-n<0;
     then -(m-n)>0 by XREAL_1:58;
     then reconsider m1 = n-m as Element of NAT by INT_1:3;
-A3: a #Z (n-m) = a #Z (-(m-n)) .= 1/a #Z (m-n) by Th51;
-    a #Z (n-m) * a |^ m = a |^ m1 * a |^ m by Th46
+A3: a #Z (n-m) = a #Z (-(m-n)) .= 1/a #Z (m-n) by Th41;
+    a #Z (n-m) * a |^ m = a |^ m1 * a |^ m by Th36
       .= a |^ (m1+m) by NEWTON:8
       .= a |^ n;
     then
 A4: a |^ m / a #Z (m-n) = a |^ n by A3;
-    a |^ n <> 0 by A1,Th12;
+    a |^ n <> 0 by A1,Th5;
     hence thesis by A4,XCMPLX_1:54;
   end;
 end;
 
-theorem Th54:
+theorem Th44:
   a<>0 implies a #Z (k+l) = a #Z k * a #Z l
 proof
   assume
@@ -1516,52 +1518,52 @@ A1: a<>0;
 A2: k>=0 & l>=0;
     then
 A3: k*l>=0;
-    thus a #Z (k+l) = a |^ abs(k+l) by A2,Def4
+    thus a #Z (k+l) = a |^ abs(k+l) by A2,Def3
       .= a |^ (abs(k)+abs(l)) by A3,ABSVALUE:11
       .= a |^ abs(k) * a |^ abs(l) by NEWTON:8
-      .= a #Z k * a |^ abs(l) by A2,Def4
-      .= a #Z k * a #Z l by A2,Def4;
+      .= a #Z k * a |^ abs(l) by A2,Def3
+      .= a #Z k * a #Z l by A2,Def3;
   end;
   suppose
 A4: k>=0 & l<0;
     then reconsider m = k as Element of NAT by INT_1:3;
     reconsider n = -l as Element of NAT by A4,INT_1:3;
     k+l = m - n;
-    hence a #Z (k+l) = a |^ m / a |^ n by A1,Th53
+    hence a #Z (k+l) = a |^ m / a |^ n by A1,Th43
       .= a |^ m * (a |^ n)"
       .= a |^ abs(k) * (a |^ n)" by ABSVALUE:def 1
       .= a |^ abs(k) * (a |^ abs(-l))" by ABSVALUE:def 1
       .= a |^ abs(k) * (a |^ abs(l))" by COMPLEX1:52
-      .= a #Z k * (a |^ abs(l))" by A4,Def4
-      .= a #Z k * a #Z l by A4,Def4;
+      .= a #Z k * (a |^ abs(l))" by A4,Def3
+      .= a #Z k * a #Z l by A4,Def3;
   end;
   suppose
 A5: k<0 & l>=0;
     then reconsider m = l as Element of NAT by INT_1:3;
     reconsider n = -k as Element of NAT by A5,INT_1:3;
     k+l = m - n;
-    hence a #Z (k+l) = a |^ m / a |^ n by A1,Th53
+    hence a #Z (k+l) = a |^ m / a |^ n by A1,Th43
       .= a |^ m * (a |^ n)"
       .= a |^ abs(l) * (a |^ n)" by ABSVALUE:def 1
       .= a |^ abs(l) * (a |^ abs(-k))" by ABSVALUE:def 1
       .= a |^ abs(l) * (a |^ abs(k))" by COMPLEX1:52
-      .= a #Z l * (a |^ abs(k))" by A5,Def4
-      .= a #Z k * a #Z l by A5,Def4;
+      .= a #Z l * (a |^ abs(k))" by A5,Def3
+      .= a #Z k * a #Z l by A5,Def3;
   end;
   suppose
 A6: k<0 & l<0;
     then
 A7: k*l>=0;
-    thus a #Z (k+l) = (a |^ abs(k+l))" by A6,Def4
+    thus a #Z (k+l) = (a |^ abs(k+l))" by A6,Def3
       .= (a |^ (abs(k)+abs(l)))" by A7,ABSVALUE:11
       .= (a |^ abs(k) * a |^ abs(l))" by NEWTON:8
       .= (a |^ abs(k))" * (a |^ abs(l))" by XCMPLX_1:204
-      .= a #Z k * (a |^ abs(l))" by A6,Def4
-      .= a #Z k * a #Z l by A6,Def4;
+      .= a #Z k * (a |^ abs(l))" by A6,Def3
+      .= a #Z k * a #Z l by A6,Def3;
   end;
 end;
 
-theorem Th55:
+theorem Th45:
   a #Z k #Z l = a #Z (k*l)
 proof
   per cases;
@@ -1570,22 +1572,22 @@ A1: k*l > 0;
     per cases by A1,XREAL_1:134;
     suppose
 A2:   k>0 & l>0;
-      hence a #Z k #Z l = a #Z k |^ abs(l) by Def4
-        .=a |^ abs(k) |^ abs(l) by A2,Def4
+      hence a #Z k #Z l = a #Z k |^ abs(l) by Def3
+        .=a |^ abs(k) |^ abs(l) by A2,Def3
         .=a |^ (abs(k)*abs(l)) by NEWTON:9
         .=a |^ abs(k*l) by COMPLEX1:65
-        .=a #Z (k*l) by A1,Def4;
+        .=a #Z (k*l) by A1,Def3;
     end;
     suppose
 A3:   k<0 & l<0;
-      hence a #Z k #Z l = (a #Z k |^ abs(l))" by Def4
-        .=(((a |^ abs(k))") |^ abs(l))" by A3,Def4
+      hence a #Z k #Z l = (a #Z k |^ abs(l))" by Def3
+        .=(((a |^ abs(k))") |^ abs(l))" by A3,Def3
         .=((1 / a |^ abs(k)) |^ abs(l))"
-        .=(1 / a |^ abs(k) |^ abs(l))" by Th14
+        .=(1 / a |^ abs(k) |^ abs(l))" by Th7
         .=(a |^ abs(k) |^ abs(l))""
         .=a |^ (abs(k)*abs(l)) by NEWTON:9
         .=a |^ abs(k*l) by COMPLEX1:65
-        .=a #Z (k*l) by A1,Def4;
+        .=a #Z (k*l) by A1,Def3;
     end;
   end;
   suppose
@@ -1593,22 +1595,22 @@ A4: k*l < 0;
     per cases by A4,XREAL_1:133;
     suppose
 A5:   k<0 & l>0;
-      hence a #Z k #Z l = a #Z k |^ abs(l) by Def4
-        .=((a |^ abs(k))") |^ abs(l) by A5,Def4
+      hence a #Z k #Z l = a #Z k |^ abs(l) by Def3
+        .=((a |^ abs(k))") |^ abs(l) by A5,Def3
         .=(1 / a |^ abs(k)) |^ abs(l)
-        .=1 / a |^ abs(k) |^ abs(l) by Th14
+        .=1 / a |^ abs(k) |^ abs(l) by Th7
         .=1 / a |^ (abs(k)*abs(l)) by NEWTON:9
         .=1 / a |^ abs(k*l) by COMPLEX1:65
         .=(a |^ abs(k*l))"
-        .=a #Z (k*l) by A4,Def4;
+        .=a #Z (k*l) by A4,Def3;
     end;
     suppose
 A6:   k>0 & l<0;
-      hence a #Z k #Z l = (a #Z k |^ abs(l))" by Def4
-        .=(a |^ abs(k) |^ abs(l))" by A6,Def4
+      hence a #Z k #Z l = (a #Z k |^ abs(l))" by Def3
+        .=(a |^ abs(k) |^ abs(l))" by A6,Def3
         .=(a |^ (abs(k)*abs(l)))" by NEWTON:9
         .=(a |^ abs(k*l))" by COMPLEX1:65
-        .=a #Z (k*l) by A4,Def4;
+        .=a #Z (k*l) by A4,Def3;
     end;
   end;
   suppose
@@ -1616,38 +1618,38 @@ A7: k*l = 0;
     per cases by A7,XCMPLX_1:6;
     suppose
       k=0;
-      hence a #Z k #Z l = 1 #Z l by Th44
-        .= 1 by Th47
-        .= a #Z (k*l) by A7,Th44;
+      hence a #Z k #Z l = 1 #Z l by Th34
+        .= 1 by Th37
+        .= a #Z (k*l) by A7,Th34;
     end;
     suppose
       l=0;
-      hence a #Z k #Z l = 1 by Th44
-        .= a #Z (k*l) by A7,Th44;
+      hence a #Z k #Z l = 1 by Th34
+        .= a #Z (k*l) by A7,Th34;
     end;
   end;
 end;
 
-theorem Th56:
+theorem Th46:
   a>0 & n>=1 implies (n -Root a) #Z k = n -Root (a #Z k)
 proof
   assume that
 A1: a>0 and
 A2: n>=1;
-A3: n -Root a > 0 by A1,A2,Def3;
+A3: n -Root a > 0 by A1,A2,Def2;
 A4: m>=1 implies (n -Root a) |^ m = n -Root (a |^ m)
   proof
     assume that
 A5: m>=1 and
 A6: (n -Root a) |^ m <> n -Root (a |^ m);
-A7: a |^ m > 0 by A1,Th13;
+A7: a |^ m > 0 by A1,Th6;
     then
-A8: n -Root (a |^ m) >= 0 by A2,Def3;
-A9: m -Root (n -Root (a |^ m)) = (n*m) -Root (a |^ m) by A2,A5,A7,Th34
-      .= n -Root (m -Root (a |^ m)) by A2,A5,A7,Th34
+A8: n -Root (a |^ m) >= 0 by A2,Def2;
+A9: m -Root (n -Root (a |^ m)) = (n*m) -Root (a |^ m) by A2,A5,A7,Th25
+      .= n -Root (m -Root (a |^ m)) by A2,A5,A7,Th25
       .= n -Root a by A1,A5,Lm2;
 A10: m -Root ((n -Root a) |^ m) = n -Root a by A3,A5,Lm2;
-A11: (n -Root a) |^ m >= 0 by A3,Th13;
+A11: (n -Root a) |^ m >= 0 by A3,Th6;
     per cases by A6,XXREAL_0:1;
     suppose
       (n -Root a) |^ m < n -Root (a |^ m);
@@ -1655,7 +1657,7 @@ A11: (n -Root a) |^ m >= 0 by A3,Th13;
     end;
     suppose
       (n -Root a) |^ m > n -Root (a |^ m);
-      hence contradiction by A5,A9,A10,A8,Th37;
+      hence contradiction by A5,A9,A10,A8,Th28;
     end;
   end;
   per cases;
@@ -1664,28 +1666,28 @@ A12: k>0;
     then abs(k)>0 by ABSVALUE:def 1;
     then
 A13: abs(k)>=0+1 by NAT_1:13;
-    thus (n -Root a) #Z k = (n -Root a) |^ abs(k) by A12,Def4
+    thus (n -Root a) #Z k = (n -Root a) |^ abs(k) by A12,Def3
       .= n -Root (a |^ abs(k)) by A4,A13
-      .= n -Root (a #Z k) by A12,Def4;
+      .= n -Root (a #Z k) by A12,Def3;
   end;
   suppose
 A14: k<0;
     then abs(k)>0 by COMPLEX1:47;
     then
 A15: abs(k)>=0+1 by NAT_1:13;
-A16: a |^ abs(k) > 0 by A1,Th13;
-    thus (n -Root a) #Z k = ((n -Root a) |^ abs(k))" by A14,Def4
+A16: a |^ abs(k) > 0 by A1,Th6;
+    thus (n -Root a) #Z k = ((n -Root a) |^ abs(k))" by A14,Def3
       .= (n -Root (a |^ abs(k)))" by A4,A15
       .= 1/n -Root (a |^ abs(k))
-      .= n -Root (1/a |^ abs(k)) by A2,A16,Th32
+      .= n -Root (1/a |^ abs(k)) by A2,A16,Th23
       .= n -Root ((a |^ abs(k))")
-      .= n -Root (a #Z k) by A14,Def4;
+      .= n -Root (a #Z k) by A14,Def3;
   end;
   suppose
 A17: k=0;
-    then n -Root (a #Z k) = n -Root 1 by Th44
-      .= 1 by A2,Th29;
-    hence thesis by A17,Th44;
+    then n -Root (a #Z k) = n -Root 1 by Th34
+      .= 1 by A2,Th20;
+    hence thesis by A17,Th34;
   end;
 end;
 
@@ -1711,7 +1713,7 @@ definition
   coherence by XREAL_0:def 1;
 end;
 
-theorem Th58:
+theorem Th47:
   p = 0 implies a #Q p = 1
 proof
   reconsider i = 0 as Integer;
@@ -1719,11 +1721,11 @@ proof
 A1: p=0;
   numerator(p)=0 by A1,RAT_1:14;
   hence a #Q p = 1 -Root (a #Z i) by A1,RAT_1:19
-    .= 1 -Root 1 by Th44
-    .= 1 by Th30;
+    .= 1 -Root 1 by Th34
+    .= 1 by Th21;
 end;
 
-theorem Th59:
+theorem Th48:
   a > 0 & p = 1 implies a #Q p = a
 proof
   assume that
@@ -1731,8 +1733,8 @@ A1: a>0 and
 A2: p=1;
 A3: denominator(p)=1 by A2,RAT_1:17;
   numerator(p)=p by A2,RAT_1:17;
-  hence a #Q p = 1 -Root a by A2,A3,Th45
-    .= a by A1,Th30;
+  hence a #Q p = 1 -Root a by A2,A3,Th35
+    .= a by A1,Th21;
 end;
 
 Lm5: a>=0 implies a #Z k >= 0
@@ -1744,26 +1746,26 @@ A1: a>=0;
 A2: a = 0;
     abs k = 0 or abs k >= 1 by NAT_1:14;
     then (0 |^ abs k)" = 0" or (0 |^ abs k)" = 1" by NEWTON:4,11;
-    hence thesis by A2,Def4;
+    hence thesis by A2,Def3;
   end;
   suppose
     a > 0;
-    hence thesis by Th49;
+    hence thesis by Th39;
   end;
 end;
 
-theorem Th60:
+theorem Th49:
   for n be Nat st 0 <= a holds a #Q n = a |^ n
 proof
   let n be Nat;
 A1: denominator n=1 by RAT_1:17;
 A2: numerator n=n by RAT_1:17;
   assume 0 <= a;
-  hence a #Q n = a #Z n by A1,A2,Lm5,Th30
-    .= a |^ n by Th46;
+  hence a #Q n = a #Z n by A1,A2,Lm5,Th21
+    .= a |^ n by Th36;
 end;
 
-theorem Th61:
+theorem Th50:
   for n be Nat holds n>=1 & p = n" implies a #Q p = n -Root a
 proof
   let n be Nat;
@@ -1777,27 +1779,27 @@ A3: p=1/n by A2;
 A4: denominator(p) = n by RAT_1:17;
   numerator(p)=denominator(q) by A1,A3,RAT_1:44;
   then numerator(p) = 1 by RAT_1:17;
-  hence thesis by A4,Th45;
+  hence thesis by A4,Th35;
 end;
 
-theorem Th62:
+theorem Th51:
   1 #Q p = 1
 proof
-  thus 1 #Q p = (denominator(p)) -Root 1 by Th47
-    .= 1 by Th29,RAT_1:11;
+  thus 1 #Q p = (denominator(p)) -Root 1 by Th37
+    .= 1 by Th20,RAT_1:11;
 end;
 
-theorem Th63:
+theorem Th52:
   a>0 implies a #Q p > 0
 proof
   assume a>0;
   then
-A1: a #Z numerator(p) > 0 by Th49;
+A1: a #Z numerator(p) > 0 by Th39;
   denominator(p) >= 1 by RAT_1:11;
-  hence thesis by A1,Def3;
+  hence thesis by A1,Def2;
 end;
 
-theorem Th64:
+theorem Th53:
   a>0 implies a #Q p * a #Q q = a #Q (p+q)
 proof
   set dp = denominator(p);
@@ -1823,106 +1825,106 @@ A8: dp*dq = denominator(p+q)*n by A3,A6,RAT_1:27,XCMPLX_1:6;
   assume
 A9: a>0;
   then
-A10: a #Z (nq-np) >= 0 by Th49;
+A10: a #Z (nq-np) >= 0 by Th39;
   n>0 by A4,A1,A8,XREAL_1:159;
   then
 A11: n>=0+1 by NAT_1:13;
-A12: a #Z np > 0 by A9,Th49;
+A12: a #Z np > 0 by A9,Th39;
   then
-A13: (a #Z np) |^ (dp+dq)>= 0 by Th13;
-A14: a #Z (nq-np) > 0 by A9,Th49;
+A13: (a #Z np) |^ (dp+dq)>= 0 by Th6;
+A14: a #Z (nq-np) > 0 by A9,Th39;
   then
-A15: (a #Z (nq-np)) |^ dp >= 0 by Th13;
-A16: a #Q (p+q) > 0 by A9,Th63;
-A17: a #Z numerator(p+q) > 0 by A9,Th49;
+A15: (a #Z (nq-np)) |^ dp >= 0 by Th6;
+A16: a #Q (p+q) > 0 by A9,Th52;
+A17: a #Z numerator(p+q) > 0 by A9,Th39;
   thus a #Q p * a #Q q = dp -Root (a #Z np) * dq -Root (a #Z (np+(nq-np)))
-    .= dp -Root (a #Z np) * dq -Root (a #Z np * a #Z (nq-np)) by A9,Th54
+    .= dp -Root (a #Z np) * dq -Root (a #Z np * a #Z (nq-np)) by A9,Th44
     .= dp -Root (a #Z np)*(dq -Root (a #Z np)*dq -Root (a #Z (nq-np))) by A12
-,A10,Th31,RAT_1:11
+,A10,Th22,RAT_1:11
     .= dp -Root (a #Z np) * dq -Root (a #Z np) * dq -Root (a #Z (nq-np))
     .= (dp*dq) -Root ((a #Z np) |^ (dp+dq))*dq -Root (a #Z (nq-np)) by A12,A4
-,A1,Th35
+,A1,Th26
     .= (dp*dq) -Root ((a #Z np) |^ (dp+dq)) * dq -Root (dp -Root ((a #Z (nq-
   np)) |^ dp)) by A14,A1,Lm2
     .= (dp*dq) -Root ((a #Z np) |^ (dp+dq)) * (dp*dq) -Root ((a #Z (nq-np))
-  |^ dp) by A4,A1,A15,Th34
+  |^ dp) by A4,A1,A15,Th25
     .= (dp*dq) -Root (((a #Z np) |^ (dp+dq)) * ((a #Z (nq-np)) |^ dp)) by A4,A1
-,A15,A13,Th31,XREAL_1:159
+,A15,A13,Th22,XREAL_1:159
     .= (dp*dq) -Root (((a #Z np) #Z (ddp+ddq)) * ((a #Z (nq-np)) |^ dp)) by
-Th46
+Th36
     .= (dp*dq) -Root (((a #Z np) #Z (ddp+ddq)) * ((a #Z (nq-np)) #Z ddp)) by
-Th46
-    .= (dp*dq) -Root ( a #Z (np*(ddp+ddq)) * ((a #Z (nq-np)) #Z ddp) ) by Th55
-    .= (dp*dq) -Root ( a #Z (np*(ddp+ddq)) * a #Z ((nq-np)*ddp) ) by Th55
-    .= (dp*dq) -Root (a #Z (np*ddp+np*ddq+(nq-np)*ddp) ) by A9,Th54
-    .= (denominator(p+q)*n) -Root (a #Z numerator(p+q) #Z k) by A7,A8,Th55
+Th36
+    .= (dp*dq) -Root ( a #Z (np*(ddp+ddq)) * ((a #Z (nq-np)) #Z ddp) ) by Th45
+    .= (dp*dq) -Root ( a #Z (np*(ddp+ddq)) * a #Z ((nq-np)*ddp) ) by Th45
+    .= (dp*dq) -Root (a #Z (np*ddp+np*ddq+(nq-np)*ddp) ) by A9,Th44
+    .= (denominator(p+q)*n) -Root (a #Z numerator(p+q) #Z k) by A7,A8,Th45
     .= ((denominator(p+q)*n) -Root (a #Z numerator(p+q))) #Z k by A5,A8,A17
-,Th56
-    .= ((n*denominator(p+q)) -Root (a #Z numerator(p+q))) |^ n by Th46
-    .= (n -Root (a #Q (p+q))) |^ n by A11,A2,A17,Th34
+,Th46
+    .= ((n*denominator(p+q)) -Root (a #Z numerator(p+q))) |^ n by Th36
+    .= (n -Root (a #Q (p+q))) |^ n by A11,A2,A17,Th25
     .= a #Q (p+q) by A11,A16,Lm2;
 end;
 
-theorem Th65:
+theorem Th54:
   a>0 implies 1 / a #Q p = a #Q (-p)
 proof
   assume a>0;
   then
-A1: a #Z numerator(p) > 0 by Th49;
+A1: a #Z numerator(p) > 0 by Th39;
   thus a #Q (-p) = (denominator(-p)) -Root (a #Z (-numerator(p))) by RAT_1:43
     .= (denominator(p)) -Root (a #Z (-numerator(p))) by RAT_1:43
-    .= (denominator(p)) -Root (1/a #Z numerator(p)) by Th51
-    .= 1 / a #Q p by A1,Th32,RAT_1:11;
+    .= (denominator(p)) -Root (1/a #Z numerator(p)) by Th41
+    .= 1 / a #Q p by A1,Th23,RAT_1:11;
 end;
 
-theorem Th66:
+theorem Th55:
   a>0 implies a #Q p / a #Q q = a #Q (p-q)
 proof
   assume
 A1: a>0;
-  thus a #Q (p-q) = a #Q (p+-q) .= a #Q p * a #Q (-q) by A1,Th64
-    .= a #Q p * (1/a #Q q) by A1,Th65
+  thus a #Q (p-q) = a #Q (p+-q) .= a #Q p * a #Q (-q) by A1,Th53
+    .= a #Q p * (1/a #Q q) by A1,Th54
     .= a #Q p * 1 / a #Q q
     .= a #Q p / a #Q q;
 end;
 
-theorem Th67:
+theorem Th56:
   a>0 & b>0 implies (a*b) #Q p = a #Q p * b #Q p
 proof
   assume that
 A1: a>0 and
 A2: b>0;
-A3: a #Z numerator(p) >= 0 by A1,Th49;
-A4: b #Z numerator(p) >= 0 by A2,Th49;
+A3: a #Z numerator(p) >= 0 by A1,Th39;
+A4: b #Z numerator(p) >= 0 by A2,Th39;
   thus (a*b) #Q p = (denominator(p)) -Root (a #Z numerator(p) * b #Z numerator
-  (p)) by Th50
-    .= a #Q p * b #Q p by A3,A4,Th31,RAT_1:11;
+  (p)) by Th40
+    .= a #Q p * b #Q p by A3,A4,Th22,RAT_1:11;
 end;
 
-theorem Th68:
+theorem Th57:
   a>0 implies (1/a) #Q p = 1/a #Q p
 proof
   assume
 A1: a>0;
-  thus (1/a) #Q p = (denominator(p)) -Root (1/a #Z numerator(p)) by Th52
-    .= (denominator(p)) -Root (a #Z (-numerator(p))) by Th51
+  thus (1/a) #Q p = (denominator(p)) -Root (1/a #Z numerator(p)) by Th42
+    .= (denominator(p)) -Root (a #Z (-numerator(p))) by Th41
     .= (denominator(p)) -Root (a #Z numerator(-p)) by RAT_1:43
     .= a #Q (-p) by RAT_1:43
-    .= 1/a #Q p by A1,Th65;
+    .= 1/a #Q p by A1,Th54;
 end;
 
-theorem Th69:
+theorem Th58:
   a>0 & b>0 implies (a/b) #Q p = a #Q p / b #Q p
 proof
   assume that
 A1: a>0 and
 A2: b>0;
-  thus (a/b) #Q p = (a*(1/b)) #Q p .= a #Q p * (1/b) #Q p by A1,A2,Th67
-    .= a #Q p * (1/b #Q p) by A2,Th68
+  thus (a/b) #Q p = (a*(1/b)) #Q p .= a #Q p * (1/b) #Q p by A1,A2,Th56
+    .= a #Q p * (1/b #Q p) by A2,Th57
     .= a #Q p / b #Q p;
 end;
 
-theorem Th70:
+theorem Th59:
   a > 0 implies a #Q p #Q q = a #Q (p*q)
 proof
 A1: denominator(p)>=1 by RAT_1:11;
@@ -1950,24 +1952,24 @@ A10: denominator(p*q) >= 1 by RAT_1:11;
   assume
 A11: a>0;
   then
-A12: a #Z (numerator(p)*numerator(q)) >= 0 by Th49;
-A13: a #Q (p*q) > 0 by A11,Th63;
-A14: a #Z numerator(p*q) > 0 by A11,Th49;
-  a #Z numerator(p) > 0 by A11,Th49;
+A12: a #Z (numerator(p)*numerator(q)) >= 0 by Th39;
+A13: a #Q (p*q) > 0 by A11,Th52;
+A14: a #Z numerator(p*q) > 0 by A11,Th39;
+  a #Z numerator(p) > 0 by A11,Th39;
   hence a #Q p #Q q = (denominator(q)) -Root ((denominator(p)) -Root (a #Z
-  numerator(p) #Z numerator(q))) by Th56,RAT_1:11
+  numerator(p) #Z numerator(q))) by Th46,RAT_1:11
     .= (denominator(q)) -Root ((denominator(p)) -Root (a #Z (numerator(p)*
-  numerator(q)))) by Th55
+  numerator(q)))) by Th45
     .= (denominator(p*q)*n) -Root (a #Z (numerator(p*q)*k)) by A1,A9,A12,A5,A6
-,Th34
-    .= (denominator(p*q)*n) -Root (a #Z numerator(p*q) #Z k) by Th55
-    .= ((denominator(p*q)*n) -Root (a #Z numerator(p*q))) #Z k by A14,A7,Th56
-    .= ((n*denominator(p*q)) -Root (a #Z numerator(p*q))) |^ n by Th46
-    .= (n -Root (a #Q (p*q))) |^ n by A8,A10,A14,Th34
+,Th25
+    .= (denominator(p*q)*n) -Root (a #Z numerator(p*q) #Z k) by Th45
+    .= ((denominator(p*q)*n) -Root (a #Z numerator(p*q))) #Z k by A14,A7,Th46
+    .= ((n*denominator(p*q)) -Root (a #Z numerator(p*q))) |^ n by Th36
+    .= (n -Root (a #Q (p*q))) |^ n by A8,A10,A14,Th25
     .= a #Q (p*q) by A8,A13,Lm2;
 end;
 
-theorem Th71:
+theorem Th60:
   a>=1 & p >= 0 implies a #Q p >= 1
 proof
   assume that
@@ -1975,26 +1977,26 @@ A1: a>=1 and
 A2: p>=0;
   numerator(p)>=0 by A2,RAT_1:37;
   then reconsider n = numerator(p) as Element of NAT by INT_1:3;
-A3: a #Z numerator(p) = a |^ n by Th46;
-  a |^ n >= 1 |^ n by A1,Th17;
+A3: a #Z numerator(p) = a |^ n by Th36;
+  a |^ n >= 1 |^ n by A1,Th9;
   then
 A4: a #Z numerator(p) >= 1 by A3,NEWTON:10;
   denominator(p) >= 1 by RAT_1:11;
-  hence thesis by A4,Th38;
+  hence thesis by A4,Th29;
 end;
 
-theorem Th72:
+theorem Th61:
   a>=1 & p<=0 implies a #Q p <= 1
 proof
   assume that
 A1: a>=1 and
 A2: p<=0;
-  a #Q (-p) >= 1 by A1,A2,Th71;
-  then 1 / a #Q p >= 1 by A1,Th65;
+  a #Q (-p) >= 1 by A1,A2,Th60;
+  then 1 / a #Q p >= 1 by A1,Th54;
   hence thesis by XREAL_1:191;
 end;
 
-theorem Th73:
+theorem Th62:
   a>1 & p>0 implies a #Q p > 1
 proof
   assume that
@@ -2005,14 +2007,14 @@ A3: numerator(p)>0 by A2,RAT_1:38;
   n>=0+1 by A3,NAT_1:13;
   then
 A4: a |^ n > 1 |^ n by A1,Lm1;
-  a #Z numerator(p) = a |^ n by Th46;
+  a #Z numerator(p) = a |^ n by Th36;
   then a #Z numerator(p) > 1 by A4,NEWTON:10;
   then (denominator(p)) -Root (a #Z numerator(p))>(denominator(p)) -Root 1 by
-Th37,RAT_1:11;
-  hence thesis by Th29,RAT_1:11;
+Th28,RAT_1:11;
+  hence thesis by Th20,RAT_1:11;
 end;
 
-theorem Th74:
+theorem Th63:
   a>=1 & p>=q implies a #Q p >= a #Q q
 proof
   assume that
@@ -2027,29 +2029,29 @@ A2: p>=q;
     p>q;
     then
 A3: p-q>=0 by XREAL_1:50;
-A4: a #Q q <> 0 by A1,Th63;
-A5: a #Q p / a #Q q = a #Q (p-q) by A1,Th66;
-    a #Q q >= 0 by A1,Th63;
-    then a #Q p / a #Q q * a #Q q >= 1 * a #Q q by A1,A3,A5,Th71,XREAL_1:64;
+A4: a #Q q <> 0 by A1,Th52;
+A5: a #Q p / a #Q q = a #Q (p-q) by A1,Th55;
+    a #Q q >= 0 by A1,Th52;
+    then a #Q p / a #Q q * a #Q q >= 1 * a #Q q by A1,A3,A5,Th60,XREAL_1:64;
     hence thesis by A4,XCMPLX_1:87;
   end;
 end;
 
-theorem Th75:
+theorem Th64:
   a>1 & p>q implies a #Q p > a #Q q
 proof
   assume that
 A1: a>1 and
 A2: p>q;
 A3: p-q>0 by A2,XREAL_1:50;
-A4: a #Q p / a #Q q = a #Q (p-q) by A1,Th66;
-A5: a #Q q <> 0 by A1,Th63;
-  a #Q q > 0 by A1,Th63;
-  then a #Q p / a #Q q * a #Q q > 1 * a #Q q by A1,A3,A4,Th73,XREAL_1:68;
+A4: a #Q p / a #Q q = a #Q (p-q) by A1,Th55;
+A5: a #Q q <> 0 by A1,Th52;
+  a #Q q > 0 by A1,Th52;
+  then a #Q p / a #Q q * a #Q q > 1 * a #Q q by A1,A3,A4,Th62,XREAL_1:68;
   hence thesis by A5,XCMPLX_1:87;
 end;
 
-theorem Th76:
+theorem Th65:
   a>0 & a<1 & p>0 implies a #Q p < 1
 proof
   reconsider q=0 as Rational;
@@ -2058,9 +2060,9 @@ A1: a>0 and
 A2: a<1 and
 A3: p>0;
   1/a>1 by A1,A2,Lm4,XREAL_1:88;
-  then (1/a) #Q p > (1/a) #Q q by A3,Th75;
-  then (1/a) #Q p > 1 by Th58;
-  then 1/a #Q p > 1 by A1,Th68;
+  then (1/a) #Q p > (1/a) #Q q by A3,Th64;
+  then (1/a) #Q p > 1 by Th47;
+  then 1/a #Q p > 1 by A1,Th57;
   hence thesis by XREAL_1:185;
 end;
 
@@ -2072,60 +2074,29 @@ A1: a>0 and
 A2: a<=1 and
 A3: p<=0;
   1/a >= 1 by A1,A2,Lm4,XREAL_1:85;
-  then (1/a) #Q p <= 1 by A3,Th72;
+  then (1/a) #Q p <= 1 by A3,Th61;
   then
-A4: 1/a #Q p <= 1 by A1,Th68;
-  a #Q p > 0 by A1,Th63;
+A4: 1/a #Q p <= 1 by A1,Th57;
+  a #Q p > 0 by A1,Th52;
   hence thesis by A4,XREAL_1:187;
 end;
 
-definition
-  let IT be Real_Sequence;
-  redefine attr IT is rational-valued means
-  :Def6:
-  for n holds IT.n is Rational;
-  compatibility
-  proof
-    thus IT is rational-valued implies for n holds IT.n is Rational;
-    assume
-A1: for n holds IT.n is Rational;
-    now
-      let x;
-      per cases;
-      suppose x in dom IT;
-        then x in NAT by FUNCT_2:def 1;
-        hence IT.x is rational by A1;
-      end;
-      suppose not x in dom IT;
-        hence IT.x is rational by FUNCT_1:def 2;
-      end;
-    end;
-    hence thesis by VALUED_0:10;
-  end;
-end;
-
 registration
-  cluster rational-valued for Real_Sequence;
+  cluster RAT-valued for Real_Sequence;
   existence
   proof
     reconsider s = NAT --> 0 as Real_Sequence by FUNCOP_1:45;
     take s;
-    let n;
     thus thesis;
   end;
 end;
 
 definition
-  mode Rational_Sequence is rational-valued Real_Sequence;
+  canceled;
+  mode Rational_Sequence is RAT-valued Real_Sequence;
 end;
 
-registration
-  let s be Rational_Sequence, n;
-  cluster s.n -> rational;
-  coherence;
-end;
-
-theorem Th79:
+theorem Th67:
   for a be real number ex s being Rational_Sequence st
   s is convergent & lim s = a & for n holds s.n<=a
 proof
@@ -2133,23 +2104,27 @@ proof
   deffunc O(Element of NAT) = [\($1+1)*a/]/($1+1);
   consider s being Real_Sequence such that
 A1: for n holds s.n = O(n) from SEQ_1:sch 1;
-  now
-    let n;
-    s.n = [\(n+1)*a/]/(n+1) by A1;
-    hence s.n is Rational;
+  rng s c= RAT
+  proof
+    let y be set;
+    assume y in rng s;
+    then consider n being Element of NAT such that
+A2: s.n = y by FUNCT_2:113;
+    s.n = O(n) by A1;
+    hence thesis by A2,RAT_1:def 2;
   end;
-  then reconsider s as Rational_Sequence by Def6;
+  then reconsider s as Rational_Sequence by RELAT_1:def 19;
   deffunc O(Element of NAT) = 1/($1+1);
   consider s2 being Real_Sequence such that
-A2: for n holds s2.n = O(n) from SEQ_1:sch 1;
+A3: for n holds s2.n = O(n) from SEQ_1:sch 1;
   reconsider a1 = a as Real by XREAL_0:def 1;
   reconsider s1 = NAT --> a1 as Real_Sequence;
   take s;
   set s3 = s1 - s2;
-A3: s2 is convergent by A2,SEQ_4:30;
+A4: s2 is convergent by A3,SEQ_4:30;
   then
-A4: s3 is convergent by SEQ_2:11;
-A5: now
+A5: s3 is convergent by SEQ_2:11;
+A6: now
     let n;
     (n+1)*a <= [\(n+1)*a/] + 1 by INT_1:29;
     then (n+1)*a - 1 <= [\(n+1)*a/] + 1 - 1 by XREAL_1:9;
@@ -2158,51 +2133,55 @@ A5: now
     then a - 1/(n+1) <= s.n by XCMPLX_1:87;
     then s1.n - 1/(n+1) <= s.n by FUNCOP_1:7;
     then
-A6: s1.n - s2.n <= s.n by A2;
+A7: s1.n - s2.n <= s.n by A3;
     [\(n+1)*a/] <= (n+1)*a by INT_1:def 6;
     then [\(n+1)*a/]*(n+1)" <= a*(n+1)*(n+1)" by XREAL_1:64;
     then [\(n+1)*a/]*(n+1)" <= a*((n+1)*(n+1)");
     then [\(n+1)*a/]*(n+1)" <= a*1 by XCMPLX_0:def 7;
     then [\(n+1)*a/]/(n+1) <= s1.n by FUNCOP_1:7;
-    hence s3.n <= s.n & s.n <= s1.n by A1,A6,RFUNCT_2:1;
+    hence s3.n <= s.n & s.n <= s1.n by A1,A7,RFUNCT_2:1;
   end;
-  lim s2 = 0 by A2,SEQ_4:30;
+  lim s2 = 0 by A3,SEQ_4:30;
   then
-A7: lim s3 = s1.0 - 0 by A3,SEQ_4:42
+A8: lim s3 = s1.0 - 0 by A4,SEQ_4:42
     .= a by FUNCOP_1:7;
-A8: lim s1 = s1.0 by SEQ_4:26
+A9: lim s1 = s1.0 by SEQ_4:26
     .= a by FUNCOP_1:7;
-  hence s is convergent by A4,A7,A5,SEQ_2:19;
-  thus lim s = a by A4,A7,A8,A5,SEQ_2:20;
+  hence s is convergent by A5,A8,A6,SEQ_2:19;
+  thus lim s = a by A5,A8,A9,A6,SEQ_2:20;
   let n;
-  s.n<=s1.n by A5;
+  s.n<=s1.n by A6;
   hence thesis by FUNCOP_1:7;
 end;
 
-theorem Th80:
+theorem Th68:
   ex s being Rational_Sequence st s is convergent & lim s = a &
   for n holds s.n>=a
 proof
   deffunc O(Element of NAT) = [/($1+1)*a\]/($1+1);
   consider s being Real_Sequence such that
 A1: for n holds s.n = O(n) from SEQ_1:sch 1;
-  now
-    let n;
-    [/(n+1)*a\]/(n+1) = s.n by A1;
-    hence s.n is Rational;
+  rng s c= RAT
+  proof
+    let y be set;
+    assume y in rng s;
+    then consider n being Element of NAT such that
+A2: s.n = y by FUNCT_2:113;
+    s.n = O(n) by A1;
+    hence thesis by A2,RAT_1:def 2;
   end;
-  then reconsider s as Rational_Sequence by Def6;
+  then reconsider s as Rational_Sequence by RELAT_1:def 19;
   deffunc O(Element of NAT) = 1/($1+1);
   consider s2 being Real_Sequence such that
-A2: for n holds s2.n = O(n) from SEQ_1:sch 1;
+A3: for n holds s2.n = O(n) from SEQ_1:sch 1;
   take s;
   a in REAL by XREAL_0:def 1;
   then reconsider s1 = NAT --> a as Real_Sequence by FUNCOP_1:45;
   set s3 = s1 + s2;
-A3: s2 is convergent by A2,SEQ_4:30;
+A4: s2 is convergent by A3,SEQ_4:30;
   then
-A4: s3 is convergent by SEQ_2:5;
-A5: now
+A5: s3 is convergent by SEQ_2:5;
+A6: now
     let n;
     (n+1)*a + 1 >= [/(n+1)*a\] by INT_1:def 7;
     then ((n+1)*a + 1)*(n+1)" >= [/(n+1)*a\]/(n+1) by XREAL_1:64;
@@ -2210,24 +2189,24 @@ A5: now
     then a + 1/(n+1) >= s.n by XCMPLX_1:87;
     then s1.n + 1/(n+1) >= s.n by FUNCOP_1:7;
     then
-A6: s1.n + s2.n >= s.n by A2;
+A7: s1.n + s2.n >= s.n by A3;
     [/(n+1)*a\] >= (n+1)*a by INT_1:def 7;
     then [/(n+1)*a\]*(n+1)" >= a*(n+1)*(n+1)" by XREAL_1:64;
     then [/(n+1)*a\]*(n+1)" >= a*((n+1)*(n+1)");
     then [/(n+1)*a\]*(n+1)" >= a*1 by XCMPLX_0:def 7;
     then [/(n+1)*a\]/(n+1) >= s1.n by FUNCOP_1:7;
-    hence s1.n <= s.n & s.n <= s3.n by A1,A6,SEQ_1:7;
+    hence s1.n <= s.n & s.n <= s3.n by A1,A7,SEQ_1:7;
   end;
-  lim s2 = 0 by A2,SEQ_4:30;
+  lim s2 = 0 by A3,SEQ_4:30;
   then
-A7: lim s3 = s1.0 + 0 by A3,SEQ_4:42
+A8: lim s3 = s1.0 + 0 by A4,SEQ_4:42
     .= a by FUNCOP_1:7;
-A8: lim s1 = s1.0 by SEQ_4:26
+A9: lim s1 = s1.0 by SEQ_4:26
     .= a by FUNCOP_1:7;
-  hence s is convergent by A4,A7,A5,SEQ_2:19;
-  thus lim s = a by A4,A7,A8,A5,SEQ_2:20;
+  hence s is convergent by A5,A8,A6,SEQ_2:19;
+  thus lim s = a by A5,A8,A9,A6,SEQ_2:20;
   let n;
-  s.n>=s1.n by A5;
+  s.n>=s1.n by A6;
   hence thesis by FUNCOP_1:7;
 end;
 
@@ -2235,7 +2214,7 @@ definition
   let a be real number;
   let s be Rational_Sequence;
   func a #Q s -> Real_Sequence means
-  :Def7:
+  :Def6:
   for n holds it.n = a #Q (s.n);
   existence
   proof
@@ -2276,7 +2255,7 @@ A3: for n holds abs(s.n)<d by SEQ_2:3;
 A4: d<m2 by SEQ_4:3;
   reconsider m2 as Rational;
   now
-A5: a #Q m2 >= 0 by A2,Th63;
+A5: a #Q m2 >= 0 by A2,Th52;
     let c be real number;
     assume
 A6: c>0;
@@ -2298,11 +2277,11 @@ A9: for m st n<=m holds abs(s.m -s.n)<(m1+1)" by A1,SEQ_4:41;
     then
 A10: abs(s.m -s.n)<=(m1+1)" by A9;
 A11: m1+1>=0+1 by NAT_1:13;
-    then (m1+1) -Root a - 1 <= (a-1)/(m1+1) by A2,Th40;
+    then (m1+1) -Root a - 1 <= (a-1)/(m1+1) by A2,Th31;
     then
 A12: (a #Q m2)*((m1+1) -Root a - 1) <= (a #Q m2)*((a-1)/(m1+1)) by A5,
 XREAL_1:64;
-A13: a #Q (s.n) <> 0 by A2,Th63;
+A13: a #Q (s.n) <> 0 by A2,Th52;
 A14: abs(a #Q (s.m) - a #Q (s.n)) = abs((a #Q (s.m) - a #Q (s.n))*1)
       .=abs((a #Q (s.m) - a #Q (s.n))*(a #Q (s.n)/a #Q (s.n))) by A13,
 XCMPLX_1:60
@@ -2312,23 +2291,23 @@ XCMPLX_1:60
 COMPLEX1:65
       .=abs(a #Q (s.n))*abs(a #Q (s.m)/a #Q (s.n) - a #Q (s.n)/a #Q (s.n))
       .=abs(a #Q (s.n))*abs(a #Q (s.m)/a #Q (s.n) - 1) by A13,XCMPLX_1:60
-      .=abs(a #Q (s.n))*abs(a #Q (s.m-s.n) - 1) by A2,Th66;
+      .=abs(a #Q (s.n))*abs(a #Q (s.m-s.n) - 1) by A2,Th55;
 A15: s.n<=abs(s.n) by ABSVALUE:4;
     reconsider m3 = (m1+1)" as Rational;
 A16: abs(a #Q (s.m-s.n) - 1) >= 0 by COMPLEX1:46;
-A17: a #Q (s.m-s.n) <> 0 by A2,Th63;
+A17: a #Q (s.m-s.n) <> 0 by A2,Th52;
     s.m -s.n<=abs(s.m -s.n) by ABSVALUE:4;
     then s.m -s.n <= (m1+1)" by A10,XXREAL_0:2;
-    then a #Q (s.m-s.n) <= a #Q m3 by A2,Th74;
-    then a #Q (s.m-s.n) <= (m1+1) -Root a by A11,Th61;
+    then a #Q (s.m-s.n) <= a #Q m3 by A2,Th63;
+    then a #Q (s.m-s.n) <= (m1+1) -Root a by A11,Th50;
     then
 A18: a #Q (s.m-s.n) - 1 <= (m1+1) -Root a - 1 by XREAL_1:9;
-A19: a #Q (s.m-s.n) > 0 by A2,Th63;
+A19: a #Q (s.m-s.n) > 0 by A2,Th52;
 A20: now
       per cases;
       suppose
         s.m-s.n>=0;
-        then a #Q (s.m-s.n) >= 1 by A2,Th71;
+        then a #Q (s.m-s.n) >= 1 by A2,Th60;
         then a #Q (s.m-s.n) - 1 >= 0 by XREAL_1:48;
         hence abs(a #Q (s.m-s.n) - 1) <= (m1+1) -Root a - 1 by A18,
 ABSVALUE:def 1;
@@ -2338,15 +2317,15 @@ A21:    s.m-s.n<0;
 A22:    -(s.m -s.n)<=abs(-(s.m -s.n)) by ABSVALUE:4;
         abs(s.m -s.n) = abs(-(s.m -s.n)) by COMPLEX1:52;
         then -(s.m -s.n) <= m3 by A10,A22,XXREAL_0:2;
-        then a #Q (-(s.m-s.n)) <= a #Q m3 by A2,Th74;
-        then a #Q (-(s.m-s.n)) <= (m1+1) -Root a by A11,Th61;
+        then a #Q (-(s.m-s.n)) <= a #Q m3 by A2,Th63;
+        then a #Q (-(s.m-s.n)) <= (m1+1) -Root a by A11,Th50;
         then
 A23:    a #Q (-(s.m-s.n)) - 1 <= (m1+1) -Root a - 1 by XREAL_1:9;
-        a #Q (-(s.m-s.n)) >= 1 by A2,A21,Th71;
+        a #Q (-(s.m-s.n)) >= 1 by A2,A21,Th60;
         then a #Q (-(s.m-s.n)) - 1 >= 0 by XREAL_1:48;
         then
 A24:    abs(a #Q (-(s.m-s.n)) - 1) <= (m1+1) -Root a - 1 by A23,ABSVALUE:def 1;
-        a #Q (s.m-s.n) <= 1 by A2,A21,Th72;
+        a #Q (s.m-s.n) <= 1 by A2,A21,Th61;
         then
 A25:    abs(a #Q (s.m-s.n)) <= 1 by A19,ABSVALUE:def 1;
         abs(a #Q (-(s.m-s.n)) - 1) >= 0 by COMPLEX1:46;
@@ -2363,17 +2342,17 @@ COMPLEX1:65
           .= abs(a #Q (s.m-s.n))*abs(a #Q (s.m-s.n)/a #Q (s.m-s.n) - 1/a #Q
         (s.m-s.n))
           .= abs(a #Q (s.m-s.n))*abs(1 - 1/a #Q (s.m-s.n)) by A17,XCMPLX_1:60
-          .= abs(a #Q (s.m-s.n))*abs(1 - a #Q (-(s.m-s.n))) by A2,Th65
+          .= abs(a #Q (s.m-s.n))*abs(1 - a #Q (-(s.m-s.n))) by A2,Th54
           .= abs(a #Q (s.m-s.n))*abs(-(1 - a #Q (-(s.m-s.n)))) by COMPLEX1:52
           .= abs(a #Q (s.m-s.n))*abs(a #Q (-(s.m-s.n)) - 1);
         hence abs(a #Q (s.m-s.n) - 1) <= (m1+1) -Root a - 1 by A24,A26,
 XXREAL_0:2;
       end;
     end;
-A27: a #Q (s.n) > 0 by A2,Th63;
+A27: a #Q (s.n) > 0 by A2,Th52;
     abs(s.n)<=m2 by A3,A4,XXREAL_0:2;
     then s.n<=m2 by A15,XXREAL_0:2;
-    then a #Q (s.n) <= a #Q m2 by A2,Th74;
+    then a #Q (s.n) <= a #Q m2 by A2,Th63;
     then
 A28: abs(a #Q (s.n)) <= a #Q m2 by A27,ABSVALUE:def 1;
     abs(a #Q (s.n)) >= 0 by A27,ABSVALUE:def 1;
@@ -2382,13 +2361,13 @@ A28: abs(a #Q (s.n)) <= a #Q m2 by A27,ABSVALUE:def 1;
     then abs(a #Q (s.m) - a #Q (s.n)) <= (a #Q m2)*(a-1)/(m1+1) by A14,A12,
 XXREAL_0:2;
     then abs(a #Q (s.m) - a #Q (s.n)) < c by A8,XXREAL_0:2;
-    then abs((a #Q s).m - a #Q (s.n)) < c by Def7;
-    hence abs((a #Q s).m - (a #Q s).n) < c by Def7;
+    then abs((a #Q s).m - a #Q (s.n)) < c by Def6;
+    hence abs((a #Q s).m - (a #Q s).n) < c by Def6;
   end;
   hence thesis by SEQ_4:41;
 end;
 
-theorem Th82:
+theorem Th69:
   for s being Rational_Sequence st s is convergent & a>0 holds a
   #Q s is convergent
 proof
@@ -2415,7 +2394,7 @@ A5: for n holds abs(s.n)<d by SEQ_2:3;
     consider m1 such that
 A6: 2*d < m1 by SEQ_4:3;
     reconsider m1 as Rational;
-A7: a #Q m1 > 0 by A2,Th63;
+A7: a #Q m1 > 0 by A2,Th52;
     now
       let c be real number;
       assume
@@ -2429,8 +2408,8 @@ A9:   for m st n<=m holds abs(((1/a) #Q s).m -((1/a) #Q s).n)<c* a #Q
       assume m>=n;
       then
 A10:  abs(((1/a) #Q s).m -((1/a) #Q s).n)<c* a #Q m1 by A9;
-A11:  a #Q (s.m) <> 0 by A2,Th63;
-A12:  a #Q (s.m+s.n) > 0 by A2,Th63;
+A11:  a #Q (s.m) <> 0 by A2,Th52;
+A12:  a #Q (s.m+s.n) > 0 by A2,Th52;
       abs(s.m)<d by A5;
       then
 A13:  abs(s.m)+abs(s.n)<d+d by A5,XREAL_1:8;
@@ -2443,32 +2422,32 @@ A14:  abs(-(s.m+s.n))<m1 by COMPLEX1:52;
       then -(s.m+s.n)<m1 by A14,XXREAL_0:2;
       then
 A15:  m1-(-(s.m+s.n))>0 by XREAL_1:50;
-A16:  a #Q (s.n) <> 0 by A2,Th63;
+A16:  a #Q (s.n) <> 0 by A2,Th52;
       abs(((1/a) #Q s).m -((1/a) #Q s).n) = abs((1/a) #Q (s.m) -((1/a) #Q
-      s) . n ) by Def7
-        .= abs((1/a) #Q (s.m) -(1/a) #Q (s.n)) by Def7
-        .= abs(1/a #Q (s.m) -(1/a) #Q (s.n)) by A2,Th68
-        .= abs(1/a #Q (s.m) -1/a #Q (s.n)) by A2,Th68
+      s) . n ) by Def6
+        .= abs((1/a) #Q (s.m) -(1/a) #Q (s.n)) by Def6
+        .= abs(1/a #Q (s.m) -(1/a) #Q (s.n)) by A2,Th57
+        .= abs(1/a #Q (s.m) -1/a #Q (s.n)) by A2,Th57
         .= abs((a #Q (s.m))" -1/a #Q (s.n))
         .= abs((a #Q (s.m))" -(a #Q (s.n))")
         .= abs(a #Q (s.m) - a #Q (s.n))/(abs(a #Q (s.m))*abs(a #Q (s.n))) by
 A11,A16,SEQ_2:2
         .= abs(a #Q (s.m) - a #Q (s.n))/(abs(a #Q (s.m) * a #Q (s.n))) by
 COMPLEX1:65
-        .= abs(a #Q (s.m) - a #Q (s.n))/abs(a #Q (s.m+s.n)) by A2,Th64
+        .= abs(a #Q (s.m) - a #Q (s.n))/abs(a #Q (s.m+s.n)) by A2,Th53
         .= abs(a #Q (s.m) - a #Q (s.n))/(a #Q (s.m+s.n)) by A12,ABSVALUE:def 1;
       then
 A17:  (abs(a #Q (s.m) - a #Q (s.n))/a #Q (s.m+s.n))*a #Q (s.m+s.n) < c*a
       #Q m1 * a #Q (s.m+s.n) by A10,A12,XREAL_1:68;
-      a #Q (s.m+s.n) <> 0 by A2,Th63;
+      a #Q (s.m+s.n) <> 0 by A2,Th52;
       then
 A18:  abs(a #Q (s.m) - a #Q (s.n))<c * a #Q m1 * a #Q (s.m+s.n) by A17,
 XCMPLX_1:87;
-      a #Q m1 * a #Q (s.m+s.n) = a #Q (m1+(s.m+s.n)) by A2,Th64;
-      then c*(a #Q m1 * a #Q (s.m+s.n)) < 1*c by A2,A3,A8,A15,Th76,XREAL_1:68;
+      a #Q m1 * a #Q (s.m+s.n) = a #Q (m1+(s.m+s.n)) by A2,Th53;
+      then c*(a #Q m1 * a #Q (s.m+s.n)) < 1*c by A2,A3,A8,A15,Th65,XREAL_1:68;
       then abs(a #Q (s.m) - a #Q (s.n))<c by A18,XXREAL_0:2;
-      then abs((a #Q s).m - a #Q (s.n)) < c by Def7;
-      hence abs((a #Q s).m - (a #Q s).n) < c by Def7;
+      then abs((a #Q s).m - a #Q (s.n)) < c by Def6;
+      hence abs((a #Q s).m - (a #Q s).n) < c by Def6;
     end;
     hence thesis by SEQ_4:41;
   end;
@@ -2485,7 +2464,7 @@ A2: s2 is convergent and
 A3: lim s1 = lim s2 and
 A4: a>=1;
 A5: s1-s2 is convergent by A1,A2,SEQ_2:11;
-A6: a #Q s2 is convergent by A2,A4,Th82;
+A6: a #Q s2 is convergent by A2,A4,Th69;
 A7: now
     let n;
     thus (((a #Q s1) - (a #Q s2)) + a #Q s2).n = ((a #Q s1) - (a #Q s2)).n + (
@@ -2503,7 +2482,7 @@ A9: d<m2 by SEQ_4:3;
 A10: lim(s1-s2) = lim s1 - lim s2 by A1,A2,SEQ_2:12
     .= 0 by A3;
 A11: now
-A12: a #Q m2 >= 0 by A4,Th63;
+A12: a #Q m2 >= 0 by A4,Th52;
     let c be real number;
     assume
 A13: c>0;
@@ -2526,11 +2505,11 @@ A16: for m st n<=m holds abs((s1-s2).m -0)<(m1+1)" by A5,A10,SEQ_2:def 7;
     then
 A17: abs(s1.m -s2.m)<=(m1+1)" by RFUNCT_2:1;
 A18: m1+1>=0+1 by NAT_1:13;
-    then (m1+1) -Root a - 1 <= (a-1)/(m1+1) by A4,Th40;
+    then (m1+1) -Root a - 1 <= (a-1)/(m1+1) by A4,Th31;
     then
 A19: (a #Q m2)*((m1+1) -Root a - 1) <= (a #Q m2)*((a-1)/(m1+1)) by A12,
 XREAL_1:64;
-A20: a #Q (s2.m) <> 0 by A4,Th63;
+A20: a #Q (s2.m) <> 0 by A4,Th52;
 A21: abs(a #Q (s1.m) - a #Q (s2.m)) = abs((a #Q (s1.m) - a #Q (s2.m))*1)
       .=abs((a #Q (s1.m) - a #Q (s2.m))*(a #Q (s2.m)/a #Q (s2.m))) by A20,
 XCMPLX_1:60
@@ -2541,23 +2520,23 @@ COMPLEX1:65
       .=abs(a #Q (s2.m))*abs(a #Q (s1.m)/a #Q (s2.m) - a #Q (s2.m)/a #Q (s2.
     m))
       .=abs(a #Q (s2.m))*abs(a #Q (s1.m)/a #Q (s2.m) - 1) by A20,XCMPLX_1:60
-      .=abs(a #Q (s2.m))*abs(a #Q (s1.m-s2.m) - 1) by A4,Th66;
+      .=abs(a #Q (s2.m))*abs(a #Q (s1.m-s2.m) - 1) by A4,Th55;
 A22: s2.m<=abs(s2.m) by ABSVALUE:4;
     reconsider m3 = (m1+1)" as Rational;
 A23: abs(a #Q (s1.m-s2.m) - 1) >= 0 by COMPLEX1:46;
-A24: a #Q (s1.m-s2.m) <> 0 by A4,Th63;
+A24: a #Q (s1.m-s2.m) <> 0 by A4,Th52;
     s1.m -s2.m<=abs(s1.m -s2.m) by ABSVALUE:4;
     then s1.m -s2.m <= (m1+1)" by A17,XXREAL_0:2;
-    then a #Q (s1.m-s2.m) <= a #Q m3 by A4,Th74;
-    then a #Q (s1.m-s2.m) <= (m1+1) -Root a by A18,Th61;
+    then a #Q (s1.m-s2.m) <= a #Q m3 by A4,Th63;
+    then a #Q (s1.m-s2.m) <= (m1+1) -Root a by A18,Th50;
     then
 A25: a #Q (s1.m-s2.m) - 1 <= (m1+1) -Root a - 1 by XREAL_1:9;
-A26: a #Q (s1.m-s2.m) > 0 by A4,Th63;
+A26: a #Q (s1.m-s2.m) > 0 by A4,Th52;
 A27: now
       per cases;
       suppose
         s1.m-s2.m>=0;
-        then a #Q (s1.m-s2.m) >= 1 by A4,Th71;
+        then a #Q (s1.m-s2.m) >= 1 by A4,Th60;
         then a #Q (s1.m-s2.m) - 1 >= 0 by XREAL_1:48;
         hence abs(a #Q (s1.m-s2.m) - 1) <= (m1+1) -Root a - 1 by A25,
 ABSVALUE:def 1;
@@ -2567,16 +2546,16 @@ A28:    s1.m-s2.m<0;
 A29:    -(s1.m -s2.m)<=abs(-(s1.m -s2.m)) by ABSVALUE:4;
         abs(s1.m -s2.m) = abs(-(s1.m -s2.m)) by COMPLEX1:52;
         then -(s1.m -s2.m) <= m3 by A17,A29,XXREAL_0:2;
-        then a #Q (-(s1.m-s2.m)) <= a #Q m3 by A4,Th74;
-        then a #Q (-(s1.m-s2.m)) <= (m1+1) -Root a by A18,Th61;
+        then a #Q (-(s1.m-s2.m)) <= a #Q m3 by A4,Th63;
+        then a #Q (-(s1.m-s2.m)) <= (m1+1) -Root a by A18,Th50;
         then
 A30:    a #Q (-(s1.m-s2.m)) - 1 <= (m1+1) -Root a - 1 by XREAL_1:9;
-        a #Q (-(s1.m-s2.m)) >= 1 by A4,A28,Th71;
+        a #Q (-(s1.m-s2.m)) >= 1 by A4,A28,Th60;
         then a #Q (-(s1.m-s2.m)) - 1 >= 0 by XREAL_1:48;
         then
 A31:    abs(a #Q (-(s1.m-s2.m)) - 1) <= (m1+1) -Root a - 1 by A30,
 ABSVALUE:def 1;
-        a #Q (s1.m-s2.m) <= 1 by A4,A28,Th72;
+        a #Q (s1.m-s2.m) <= 1 by A4,A28,Th61;
         then
 A32:    abs(a #Q (s1.m-s2.m)) <= 1 by A26,ABSVALUE:def 1;
         abs(a #Q (-(s1.m-s2.m)) - 1) >= 0 by COMPLEX1:46;
@@ -2594,7 +2573,7 @@ A33:    abs(a #Q (s1.m-s2.m))*abs(a #Q (-(s1.m-s2.m)) - 1) <= 1*abs(a #Q
         1/a #Q (s1.m-s2.m))
           .= abs(a #Q (s1.m-s2.m))*abs(1 - 1/a #Q (s1.m-s2.m)) by A24,
 XCMPLX_1:60
-          .= abs(a #Q (s1.m-s2.m))*abs(1 - a #Q (-(s1.m-s2.m))) by A4,Th65
+          .= abs(a #Q (s1.m-s2.m))*abs(1 - a #Q (-(s1.m-s2.m))) by A4,Th54
           .= abs(a #Q (s1.m-s2.m))*abs(-(1 - a #Q (-(s1.m-s2.m)))) by
 COMPLEX1:52
           .= abs(a #Q (s1.m-s2.m))*abs(a #Q (-(s1.m-s2.m)) - 1);
@@ -2602,10 +2581,10 @@ COMPLEX1:52
 XXREAL_0:2;
       end;
     end;
-A34: a #Q (s2.m) > 0 by A4,Th63;
+A34: a #Q (s2.m) > 0 by A4,Th52;
     abs(s2.m)<=m2 by A8,A9,XXREAL_0:2;
     then s2.m<=m2 by A22,XXREAL_0:2;
-    then a #Q (s2.m) <= a #Q m2 by A4,Th74;
+    then a #Q (s2.m) <= a #Q m2 by A4,Th63;
     then
 A35: abs(a #Q (s2.m)) <= a #Q m2 by A34,ABSVALUE:def 1;
     abs(a #Q (s2.m)) >= 0 by A34,ABSVALUE:def 1;
@@ -2615,8 +2594,8 @@ A35: abs(a #Q (s2.m)) <= a #Q m2 by A34,ABSVALUE:def 1;
     then abs(a #Q (s1.m) - a #Q (s2.m))<= (a #Q m2)*(a-1)/(m1+1) by A21,A19,
 XXREAL_0:2;
     then abs(a #Q (s1.m) - a #Q (s2.m)) < c by A15,XXREAL_0:2;
-    then abs((a #Q s1).m - a #Q (s2.m)) < c by Def7;
-    then abs((a #Q s1).m - (a #Q s2).m) < c by Def7;
+    then abs((a #Q s1).m - a #Q (s2.m)) < c by Def6;
+    then abs((a #Q s1).m - (a #Q s2).m) < c by Def6;
     hence abs(((a #Q s1) - (a #Q s2)).m - 0) < c by RFUNCT_2:1;
   end;
   then
@@ -2628,7 +2607,7 @@ SEQ_2:6
   hence thesis by A7,FUNCT_2:63;
 end;
 
-theorem Th83:
+theorem Th70:
   for s1,s2 being Rational_Sequence, a st s1 is convergent & s2 is
   convergent & lim s1 = lim s2 & a>0 holds a #Q s1 is convergent & a #Q s2 is
   convergent & lim a #Q s1 = lim a #Q s2
@@ -2641,7 +2620,7 @@ A2: s2 is convergent and
 A3: lim s1 = lim s2 and
 A4: a>0;
   thus
-A5: a #Q s1 is convergent by A1,A4,Th82;
+A5: a #Q s1 is convergent by A1,A4,Th69;
   s2 is bounded by A2,SEQ_2:13;
   then consider e be real number such that
   0<e and
@@ -2653,9 +2632,9 @@ A7: for n holds abs(s1.n)<d by SEQ_2:3;
   consider m1 such that
 A8: d+e < m1 by SEQ_4:3;
   thus
-A9: a #Q s2 is convergent by A2,A4,Th82;
+A9: a #Q s2 is convergent by A2,A4,Th69;
   reconsider m1 as Rational;
-A10: a #Q m1 > 0 by A4,Th63;
+A10: a #Q m1 > 0 by A4,Th52;
   per cases;
   suppose
     a>=1;
@@ -2667,8 +2646,8 @@ A11: a<1;
     then 1<1/a by A4,XCMPLX_1:60;
     then
 A12: lim (1/a) #Q s1 = lim (1/a) #Q s2 by A1,A2,A3,Lm7;
-A13: (1/a) #Q s2 is convergent by A2,A4,Th82;
-A14: (1/a) #Q s1 is convergent by A1,A4,Th82;
+A13: (1/a) #Q s2 is convergent by A2,A4,Th69;
+A14: (1/a) #Q s1 is convergent by A1,A4,Th69;
     then
 A15: (1/a) #Q s1 - (1/a) #Q s2 is convergent by A13,SEQ_2:11;
 A16: lim ((1/a) #Q s1 - (1/a) #Q s2) = lim (1/a) #Q s1 - lim (1/a) #Q s2
@@ -2688,7 +2667,7 @@ A19:  for m st n<=m holds abs(((1/a) #Q s1 - (1/a) #Q s2).m-0)<c*a #Q
       then abs(((1/a) #Q s1 - (1/a) #Q s2).m-0)<c*a #Q m1 by A19;
       then
 A20:  abs(((1/a) #Q s1).m - ((1/a) #Q s2).m)<c*a #Q m1 by RFUNCT_2:1;
-A21:  a #Q (s1.m) <> 0 by A4,Th63;
+A21:  a #Q (s1.m) <> 0 by A4,Th52;
       abs(s1.m)<d by A7;
       then
 A22:  abs(s1.m)+abs(s2.m)<d+e by A6,XREAL_1:8;
@@ -2701,35 +2680,35 @@ A23:  abs(-(s1.m+s2.m))<m1 by COMPLEX1:52;
       then -(s1.m+s2.m)<m1 by A23,XXREAL_0:2;
       then
 A24:  m1-(-(s1.m+s2.m))>0 by XREAL_1:50;
-A25:  a #Q (s2.m) <> 0 by A4,Th63;
-A26:  a #Q (s1.m+s2.m) > 0 by A4,Th63;
+A25:  a #Q (s2.m) <> 0 by A4,Th52;
+A26:  a #Q (s1.m+s2.m) > 0 by A4,Th52;
       abs(((1/a) #Q s1).m -((1/a) #Q s2).m) = abs((1/a) #Q (s1.m) -((1/a)
-      #Q s2).m) by Def7
-        .= abs((1/a) #Q (s1.m) -(1/a) #Q (s2.m)) by Def7
-        .= abs(1/a #Q (s1.m) -(1/a) #Q (s2.m)) by A4,Th68
-        .= abs(1/a #Q (s1.m) -1/a #Q (s2.m)) by A4,Th68
+      #Q s2).m) by Def6
+        .= abs((1/a) #Q (s1.m) -(1/a) #Q (s2.m)) by Def6
+        .= abs(1/a #Q (s1.m) -(1/a) #Q (s2.m)) by A4,Th57
+        .= abs(1/a #Q (s1.m) -1/a #Q (s2.m)) by A4,Th57
         .= abs((a #Q (s1.m))" -1/a #Q (s2.m))
         .= abs((a #Q (s1.m))" -(a #Q (s2.m))")
         .= abs(a #Q (s1.m) - a #Q (s2.m))/(abs(a #Q (s1.m))*abs(a #Q (s2.m))
       ) by A21,A25,SEQ_2:2
         .= abs(a #Q (s1.m) - a #Q (s2.m))/(abs(a #Q (s1.m) * a #Q (s2.m)))
       by COMPLEX1:65
-        .= abs(a #Q (s1.m) - a #Q (s2.m))/abs(a #Q (s1.m+s2.m)) by A4,Th64
+        .= abs(a #Q (s1.m) - a #Q (s2.m))/abs(a #Q (s1.m+s2.m)) by A4,Th53
         .= abs(a #Q (s1.m) - a #Q (s2.m))/(a #Q (s1.m+s2.m)) by A26,
 ABSVALUE:def 1;
       then
 A27:  (abs(a #Q (s1.m) - a #Q (s2.m))/a #Q (s1.m+s2.m))*a #Q (s1.m+s2.m)
       < c*a #Q m1 * a #Q (s1.m+s2.m) by A20,A26,XREAL_1:68;
-      a #Q (s1.m+s2.m) <> 0 by A4,Th63;
+      a #Q (s1.m+s2.m) <> 0 by A4,Th52;
       then
 A28:  abs(a #Q (s1.m) - a #Q (s2.m))<c * a #Q m1 * a #Q (s1.m+s2.m) by A27,
 XCMPLX_1:87;
-      a #Q m1 * a #Q (s1.m+s2.m) = a #Q (m1+(s1.m+s2.m)) by A4,Th64;
-      then c*(a #Q m1 * a #Q (s1.m+s2.m)) < 1*c by A4,A11,A18,A24,Th76,
+      a #Q m1 * a #Q (s1.m+s2.m) = a #Q (m1+(s1.m+s2.m)) by A4,Th53;
+      then c*(a #Q m1 * a #Q (s1.m+s2.m)) < 1*c by A4,A11,A18,A24,Th65,
 XREAL_1:68;
       then abs(a #Q (s1.m) - a #Q (s2.m))<c by A28,XXREAL_0:2;
-      then abs((a #Q s1).m - a #Q (s2.m)) < c by Def7;
-      then abs((a #Q s1).m - (a #Q s2).m) < c by Def7;
+      then abs((a #Q s1).m - a #Q (s2.m)) < c by Def6;
+      then abs((a #Q s1).m - (a #Q s2).m) < c by Def6;
       hence abs(((a #Q s1) - (a #Q s2)).m - 0) < c by RFUNCT_2:1;
     end;
     then ((a #Q s1) - (a #Q s2)) is convergent by SEQ_2:def 6;
@@ -2744,7 +2723,7 @@ definition
   assume
 A1: a > 0;
   func a #R b -> real number means
-  :Def8:
+  :Def7:
   ex s being Rational_Sequence st s is
   convergent & lim s = b & a #Q s is convergent & lim a #Q s = it;
   existence
@@ -2752,11 +2731,11 @@ A1: a > 0;
     consider s being Rational_Sequence such that
 A2: s is convergent and
 A3: lim s = b and
-    for n holds s.n<=b by Th79;
+    for n holds s.n<=b by Th67;
     take lim a #Q s;
-    thus thesis by A1,A2,A3,Th82;
+    thus thesis by A1,A2,A3,Th69;
   end;
-  uniqueness by A1,Th83;
+  uniqueness by A1,Th70;
 end;
 
 definition
@@ -2765,7 +2744,7 @@ definition
   coherence by XREAL_0:def 1;
 end;
 
-theorem Th85:
+theorem Th71:
   a > 0 implies a #R 0 = 1
 proof
   reconsider s = NAT --> 0 as Real_Sequence by FUNCOP_1:45;
@@ -2778,14 +2757,14 @@ A2: lim s = 0 by SEQ_4:26;
 A3: now
     let n be Nat;
     reconsider nn=n as Element of NAT by ORDINAL1:def 12;
-    thus a #Q s .n = a #Q (s.nn) by Def7
-      .= 1 by Th58,FUNCOP_1:7;
+    thus a #Q s .n = a #Q (s.nn) by Def6
+      .= 1 by Th47,FUNCOP_1:7;
   end;
   then
 A4: a #Q s is constant by VALUED_0:def 18;
   a #Q s .0 = 1 by A3;
   then lim (a #Q s) = 1 by A4,SEQ_4:26;
-  hence thesis by A1,A2,A4,Def8;
+  hence thesis by A1,A2,A4,Def7;
 end;
 
 theorem
@@ -2801,39 +2780,39 @@ A2: a > 0;
 A3: now
     let n be Nat;
     reconsider nn=n as Element of NAT by ORDINAL1:def 12;
-    thus a #Q s .n = a #Q (s.nn) by Def7
-      .= a by A2,Th59,FUNCOP_1:7;
+    thus a #Q s .n = a #Q (s.nn) by Def6
+      .= a by A2,Th48,FUNCOP_1:7;
   end;
   a in REAL by XREAL_0:def 1;
   then
 A4: a #Q s is constant by A3,VALUED_0:def 18;
   a #Q s .0 = a by A3;
   then lim (a #Q s) = a by A4,SEQ_4:26;
-  hence thesis by A2,A1,A4,Def8;
+  hence thesis by A2,A1,A4,Def7;
 end;
 
-theorem Th87:
+theorem Th73:
   1 #R a = 1
 proof
   consider s being Rational_Sequence such that
 A1: s is convergent and
 A2: a = lim s and
-  for n holds s.n<=a by Th79;
+  for n holds s.n<=a by Th67;
 A3: now
     let n be Nat;
     reconsider nn=n as Element of NAT by ORDINAL1:def 12;
-    thus 1 #Q s .n = 1 #Q (s.nn) by Def7
-      .= 1 by Th62;
+    thus 1 #Q s .n = 1 #Q (s.nn) by Def6
+      .= 1 by Th51;
   end;
   then 1 #Q s is constant by VALUED_0:def 18;
   then
 A4: lim (1 #Q s) = 1 #Q s .0 by SEQ_4:26
     .= 1 by A3;
-  1 #Q s is convergent by A1,Th82;
-  hence thesis by A1,A2,A4,Def8;
+  1 #Q s is convergent by A1,Th69;
+  hence thesis by A1,A2,A4,Def7;
 end;
 
-theorem Th88:
+theorem Th74:
   a>0 implies a #R p = a #Q p
 proof
   assume
@@ -2846,7 +2825,7 @@ A2: lim s = s.0 by SEQ_4:26
 A3: now
     let n be Nat;
     reconsider nn=n as Element of NAT by ORDINAL1:def 12;
-    thus (a #Q s).n = a #Q (s.nn) by Def7
+    thus (a #Q s).n = a #Q (s.nn) by Def6
       .= a #Q p by FUNCOP_1:7;
   end;
   a #Q p in REAL by XREAL_0:def 1;
@@ -2854,42 +2833,42 @@ A3: now
 A4: a #Q s is constant by A3,VALUED_0:def 18;
   then lim (a #Q s) = (a #Q s).0 by SEQ_4:26
     .= a #Q p by A3;
-  hence thesis by A1,A2,A4,Def8;
+  hence thesis by A1,A2,A4,Def7;
 end;
 
-theorem Th89:
+theorem Th75:
   a > 0 implies a #R (b+c) = a #R b * a #R c
 proof
   consider sb being Rational_Sequence such that
 A1: sb is convergent and
 A2: b = lim sb and
-  for n holds sb.n<=b by Th79;
+  for n holds sb.n<=b by Th67;
   consider sc being Rational_Sequence such that
 A3: sc is convergent and
 A4: c = lim sc and
-  for n holds sc.n<=c by Th79;
+  for n holds sc.n<=c by Th67;
   assume
 A5: a>0;
   then
-A6: a #Q sb is convergent by A1,Th82;
-A7: a #Q sc is convergent by A5,A3,Th82;
+A6: a #Q sb is convergent by A1,Th69;
+A7: a #Q sc is convergent by A5,A3,Th69;
   reconsider s = sb + sc as Rational_Sequence;
 A8: lim s = b + c by A1,A2,A3,A4,SEQ_2:6;
 A9: now
     let n;
-    thus a #Q s .n = a #Q (s.n) by Def7
+    thus a #Q s .n = a #Q (s.n) by Def6
       .= a #Q (sb.n + sc.n) by SEQ_1:7
-      .= a #Q (sb.n) * a #Q (sc.n) by A5,Th64
-      .= a #Q (sb.n) * (a #Q sc .n) by Def7
-      .= (a #Q sb .n) * (a #Q sc .n) by Def7;
+      .= a #Q (sb.n) * a #Q (sc.n) by A5,Th53
+      .= a #Q (sb.n) * (a #Q sc .n) by Def6
+      .= (a #Q sb .n) * (a #Q sc .n) by Def6;
   end;
 A10: s is convergent by A1,A3,SEQ_2:5;
-  then a #Q s is convergent by A5,Th82;
-  hence a #R (b+c) = lim (a #Q s) by A5,A10,A8,Def8
+  then a #Q s is convergent by A5,Th69;
+  hence a #R (b+c) = lim (a #Q s) by A5,A10,A8,Def7
     .= lim ((a #Q sb) (#) (a #Q sc)) by A9,SEQ_1:8
     .= (lim (a #Q sb)) * (lim (a #Q sc)) by A6,A7,SEQ_2:15
-    .= a #R b * (lim (a #Q sc)) by A5,A1,A2,A6,Def8
-    .= a #R b * a #R c by A5,A3,A4,A7,Def8;
+    .= a #R b * (lim (a #Q sc)) by A5,A1,A2,A6,Def7
+    .= a #R b * a #R c by A5,A3,A4,A7,Def7;
 end;
 
 Lm8: a > 0 implies a #R b >= 0
@@ -2897,17 +2876,17 @@ proof
   consider s being Rational_Sequence such that
 A1: s is convergent and
 A2: b = lim s and
-  for n holds s.n<=b by Th79;
+  for n holds s.n<=b by Th67;
   assume
 A3: a > 0;
 A4: now
     let n;
-    a #Q s .n = a #Q (s.n) by Def7;
-    hence a #Q s .n >= 0 by A3,Th63;
+    a #Q s .n = a #Q (s.n) by Def6;
+    hence a #Q s .n >= 0 by A3,Th52;
   end;
-  a #Q s is convergent by A3,A1,Th82;
-  then a #R b = lim (a #Q s) by A3,A1,A2,Def8;
-  hence thesis by A3,A1,A4,Th82,SEQ_2:17;
+  a #Q s is convergent by A3,A1,Th69;
+  then a #R b = lim (a #Q s) by A3,A1,A2,Def7;
+  hence thesis by A3,A1,A4,Th69,SEQ_2:17;
 end;
 
 Lm9: a > 0 implies a #R b <> 0
@@ -2915,35 +2894,35 @@ proof
   assume
 A1: a > 0;
   assume a #R b = 0;
-  then 0 = a #R b * a #R (-b) .= a #R (b + -b) by A1,Th89
-    .= 1 by A1,Th85;
+  then 0 = a #R b * a #R (-b) .= a #R (b + -b) by A1,Th75
+    .= 1 by A1,Th71;
   hence contradiction;
 end;
 
-theorem Th90:
+theorem Th76:
   a > 0 implies a #R (-c) = 1 / a #R c
 proof
   assume
 A1: a>0;
-  then 1 = a #R (c+-c) by Th85
-    .= a #R (-c) * a #R c by A1,Th89;
+  then 1 = a #R (c+-c) by Th71
+    .= a #R (-c) * a #R c by A1,Th75;
   then 1 / a #R c = a #R (-c) * (a #R c / a #R c) by XCMPLX_1:74
     .= a #R (-c) * 1 by A1,Lm9,XCMPLX_1:60;
   hence thesis;
 end;
 
-theorem Th91:
+theorem Th77:
   a > 0 implies a #R (b-c) = a #R b / a #R c
 proof
   assume
 A1: a > 0;
-  thus a #R (b-c) = a #R (b + -c) .= a #R b * a #R (-c) by A1,Th89
-    .= a #R b * (1 / a #R c) by A1,Th90
+  thus a #R (b-c) = a #R (b + -c) .= a #R b * a #R (-c) by A1,Th75
+    .= a #R b * (1 / a #R c) by A1,Th76
     .= a #R b * (1 * (a #R c)")
     .= a #R b / a #R c;
 end;
 
-theorem Th92:
+theorem Th78:
   a > 0 & b > 0 implies (a * b) #R c = a #R c * b #R c
 proof
   assume that
@@ -2953,33 +2932,33 @@ A3: a*b > 0 by A1,A2,XREAL_1:129;
   consider s1 being Rational_Sequence such that
 A4: s1 is convergent and
 A5: c = lim s1 and
-  for n holds s1.n>=c by Th80;
-A6: a #Q s1 is convergent by A1,A4,Th82;
-A7: b #Q s1 is convergent by A2,A4,Th82;
+  for n holds s1.n>=c by Th68;
+A6: a #Q s1 is convergent by A1,A4,Th69;
+A7: b #Q s1 is convergent by A2,A4,Th69;
   now
     let n;
-    thus (a*b) #Q s1 .n = (a*b) #Q (s1.n) by Def7
-      .= a #Q (s1.n) * b #Q (s1.n) by A1,A2,Th67
-      .= (a #Q s1 .n) * b #Q (s1.n) by Def7
-      .= (a #Q s1 .n) * (b #Q s1 .n) by Def7;
+    thus (a*b) #Q s1 .n = (a*b) #Q (s1.n) by Def6
+      .= a #Q (s1.n) * b #Q (s1.n) by A1,A2,Th56
+      .= (a #Q s1 .n) * b #Q (s1.n) by Def6
+      .= (a #Q s1 .n) * (b #Q s1 .n) by Def6;
   end;
   then
 A8: (a*b) #Q s1 = a #Q s1 (#) b #Q s1 by SEQ_1:8;
   then (a*b) #Q s1 is convergent by A6,A7,SEQ_2:14;
-  hence (a*b) #R c = lim ((a *b) #Q s1) by A3,A4,A5,Def8
+  hence (a*b) #R c = lim ((a *b) #Q s1) by A3,A4,A5,Def7
     .= lim (a #Q s1) * lim (b #Q s1) by A6,A7,A8,SEQ_2:15
-    .= a #R c * lim (b #Q s1) by A1,A4,A5,A6,Def8
-    .= a #R c * b #R c by A2,A4,A5,A7,Def8;
+    .= a #R c * lim (b #Q s1) by A1,A4,A5,A6,Def7
+    .= a #R c * b #R c by A2,A4,A5,A7,Def7;
 end;
 
-theorem Th93:
+theorem Th79:
   a>0 implies (1/a) #R c = 1 / a #R c
 proof
   assume
 A1: a>0;
-  1 = 1 #R c by Th87
+  1 = 1 #R c by Th73
     .= ((1/a)*a) #R c by A1,XCMPLX_1:106
-    .= (1/a) #R c * a #R c by A1,Th92;
+    .= (1/a) #R c * a #R c by A1,Th78;
   then 1 / a #R c = (1/a) #R c * (a #R c / a #R c) by XCMPLX_1:74
     .= (1/a) #R c * 1 by A1,Lm9,XCMPLX_1:60;
   hence thesis;
@@ -2991,14 +2970,14 @@ proof
   assume that
 A1: a>0 and
 A2: b>0;
-  thus (a/b) #R c = (a*b") #R c .= a #R c * (b") #R c by A1,A2,Th92
+  thus (a/b) #R c = (a*b") #R c .= a #R c * (b") #R c by A1,A2,Th78
     .= a #R c * (1/b) #R c
-    .= a #R c * (1 / b #R c) by A2,Th93
+    .= a #R c * (1 / b #R c) by A2,Th79
     .= a #R c * 1 / b #R c
     .= a #R c / b #R c;
 end;
 
-theorem Th95:
+theorem Th81:
   a > 0 implies a #R b > 0
 proof
   assume
@@ -3007,7 +2986,7 @@ A1: a > 0;
   hence thesis by A1,Lm8;
 end;
 
-theorem Th96:
+theorem Th82:
   a>=1 & c>=b implies a #R c >= a #R b
 proof
   assume that
@@ -3016,13 +2995,13 @@ A2: c>=b;
   consider s1 being Rational_Sequence such that
 A3: s1 is convergent and
 A4: c = lim s1 and
-A5: for n holds s1.n>=c by Th80;
-A6: a #Q s1 is convergent by A1,A3,Th82;
+A5: for n holds s1.n>=c by Th68;
+A6: a #Q s1 is convergent by A1,A3,Th69;
   consider s2 being Rational_Sequence such that
 A7: s2 is convergent and
 A8: b = lim s2 and
-A9: for n holds s2.n<=b by Th79;
-A10: a #Q s2 is convergent by A1,A7,Th82;
+A9: for n holds s2.n<=b by Th67;
+A10: a #Q s2 is convergent by A1,A7,Th69;
   now
     let n;
     s1.n>=c by A5;
@@ -3030,16 +3009,16 @@ A10: a #Q s2 is convergent by A1,A7,Th82;
 A11: s1.n>=b by A2,XXREAL_0:2;
     s2.n<=b by A9;
     then s1.n >= s2.n by A11,XXREAL_0:2;
-    then a #Q (s1.n) >= a #Q (s2.n) by A1,Th74;
-    then a #Q (s1.n) >= a #Q s2 .n by Def7;
-    hence a #Q s1 .n >= a #Q s2 .n by Def7;
+    then a #Q (s1.n) >= a #Q (s2.n) by A1,Th63;
+    then a #Q (s1.n) >= a #Q s2 .n by Def6;
+    hence a #Q s1 .n >= a #Q s2 .n by Def6;
   end;
   then lim (a #Q s1) >= lim (a #Q s2) by A6,A10,SEQ_2:18;
-  then a #R c >= lim (a #Q s2) by A1,A3,A4,A6,Def8;
-  hence thesis by A1,A7,A8,A10,Def8;
+  then a #R c >= lim (a #Q s2) by A1,A3,A4,A6,Def7;
+  hence thesis by A1,A7,A8,A10,Def7;
 end;
 
-theorem Th97:
+theorem Th83:
   a>1 & c>b implies a #R c > a #R b
 proof
   assume that
@@ -3054,40 +3033,40 @@ A6: q<p by A3,RAT_1:7;
   consider s2 being Rational_Sequence such that
 A7: s2 is convergent and
 A8: b = lim s2 and
-A9: for n holds s2.n<=b by Th79;
-A10: a #Q q < a #Q p by A1,A6,Th75;
+A9: for n holds s2.n<=b by Th67;
+A10: a #Q q < a #Q p by A1,A6,Th64;
   now
     let n;
     s2.n<=b by A9;
     then s2.n<=q by A5,XXREAL_0:2;
-    then a #Q (s2.n) <= a #Q q by A1,Th74;
-    hence a #Q s2 .n <= a #Q q by Def7;
+    then a #Q (s2.n) <= a #Q q by A1,Th63;
+    hence a #Q s2 .n <= a #Q q by Def6;
   end;
   then
-A11: lim (a #Q s2) <= a #Q q by A1,A7,Th3,Th82;
-  a #Q s2 is convergent by A1,A7,Th82;
-  then a #R b <= a #Q q by A1,A7,A8,A11,Def8;
+A11: lim (a #Q s2) <= a #Q q by A1,A7,Th2,Th69;
+  a #Q s2 is convergent by A1,A7,Th69;
+  then a #R b <= a #Q q by A1,A7,A8,A11,Def7;
   then
 A12: a #R b < a #Q p by A10,XXREAL_0:2;
   consider s1 being Rational_Sequence such that
 A13: s1 is convergent and
 A14: c = lim s1 and
-A15: for n holds s1.n>=c by Th80;
+A15: for n holds s1.n>=c by Th68;
   now
     let n;
     s1.n>=c by A15;
     then s1.n>=p by A4,XXREAL_0:2;
-    then a #Q (s1.n) >= a #Q p by A1,Th74;
-    hence a #Q s1 .n >= a #Q p by Def7;
+    then a #Q (s1.n) >= a #Q p by A1,Th63;
+    hence a #Q s1 .n >= a #Q p by Def6;
   end;
   then
-A16: lim (a #Q s1) >= a #Q p by A1,A13,Th2,Th82;
-  a #Q s1 is convergent by A1,A13,Th82;
-  then a #R c >= a #Q p by A1,A13,A14,A16,Def8;
+A16: lim (a #Q s1) >= a #Q p by A1,A13,Th1,Th69;
+  a #Q s1 is convergent by A1,A13,Th69;
+  then a #R c >= a #Q p by A1,A13,A14,A16,Def7;
   hence thesis by A12,XXREAL_0:2;
 end;
 
-theorem Th98:
+theorem Th84:
   a>0 & a<=1 & c>=b implies a #R c <= a #R b
 proof
   assume that
@@ -3095,15 +3074,15 @@ A1: a>0 and
 A2: a<=1 and
 A3: c>=b;
   1/a>=1 by A1,A2,Lm4,XREAL_1:85;
-  then (1/a) #R c >= (1/a) #R b by A3,Th96;
-  then 1/a #R c >= (1/a) #R b by A1,Th93;
+  then (1/a) #R c >= (1/a) #R b by A3,Th82;
+  then 1/a #R c >= (1/a) #R b by A1,Th79;
   then
-A4: 1/a #R c >= 1/a #R b by A1,Th93;
-  a #R b > 0 by A1,Th95;
+A4: 1/a #R c >= 1/a #R b by A1,Th79;
+  a #R b > 0 by A1,Th81;
   hence thesis by A4,XREAL_1:89;
 end;
 
-theorem Th99:
+theorem Th85:
   a >= 1 & b >= 0 implies a #R b >= 1
 proof
   assume that
@@ -3112,36 +3091,36 @@ A2: b >= 0;
   consider s being Rational_Sequence such that
 A3: s is convergent and
 A4: b = lim s and
-A5: for n holds s.n>=b by Th80;
+A5: for n holds s.n>=b by Th68;
 A6: now
     let n;
-A7: a #Q s .n = a #Q (s.n) by Def7;
+A7: a #Q s .n = a #Q (s.n) by Def6;
     s.n>=b by A5;
-    hence a #Q s .n >= 1 by A1,A2,A7,Th71;
+    hence a #Q s .n >= 1 by A1,A2,A7,Th60;
   end;
-  a #Q s is convergent by A1,A3,Th82;
-  then a #R b = lim (a #Q s) by A1,A3,A4,Def8;
-  hence thesis by A1,A3,A6,Th2,Th82;
+  a #Q s is convergent by A1,A3,Th69;
+  then a #R b = lim (a #Q s) by A1,A3,A4,Def7;
+  hence thesis by A1,A3,A6,Th1,Th69;
 end;
 
-theorem Th100:
+theorem Th86:
   a > 1 & b > 0 implies a #R b > 1
 proof
   assume that
 A1: a>1 and
 A2: b>0;
-  a #R b > a #R 0 by A1,A2,Th97;
-  hence thesis by A1,Th85;
+  a #R b > a #R 0 by A1,A2,Th83;
+  hence thesis by A1,Th71;
 end;
 
-theorem Th101:
+theorem Th87:
   a >= 1 & b <= 0 implies a #R b <= 1
 proof
   assume that
 A1: a>=1 and
 A2: b<=0;
-  a #R (-b) >= 1 by A1,A2,Th99;
-  then 1 / a #R b >= 1 by A1,Th90;
+  a #R (-b) >= 1 by A1,A2,Th85;
+  then 1 / a #R b >= 1 by A1,Th76;
   then 1 / (1 / a #R b) <= 1 by XREAL_1:211;
   hence thesis;
 end;
@@ -3153,8 +3132,8 @@ proof
 A1: a>1 and
 A2: b<0;
   -b>0 by A2,XREAL_1:58;
-  then a #R (-b) > 1 by A1,Th100;
-  then 1 / a #R b > 1 by A1,Th90;
+  then a #R (-b) > 1 by A1,Th86;
+  then 1 / a #R b > 1 by A1,Th76;
   then 1 / (1 / a #R b) < 1 by XREAL_1:212;
   hence thesis;
 end;
@@ -3184,26 +3163,26 @@ A10: s1 is non-zero by SEQ_1:5;
   then
 A11: s/"s1 is convergent by A1,A3,SEQ_2:23;
   then
-A12: s3 is convergent by A9,Th26;
+A12: s3 is convergent by A9,Th18;
   reconsider q=m0 as Rational;
   deffunc O(Element of NAT) = ((s1/"s).$1) |^ m0;
   consider s4 being Real_Sequence such that
 A13: for n holds s4.n = O(n) from SEQ_1:sch 1;
   lim (s/"s1) = lim s/lim s1 by A1,A3,A10,SEQ_2:24
     .= 1 by A3,A7,XCMPLX_1:60;
-  then lim s3 = 1 |^ m0 by A11,A9,Th26;
+  then lim s3 = 1 |^ m0 by A11,A9,Th18;
   then
 A14: lim s3 = 1 by NEWTON:10;
   lim (s1/"s) = lim s1/lim s by A1,A3,A7,SEQ_2:24
     .= 1 by A3,A7,XCMPLX_1:60;
-  then lim s4 = 1 |^ m0 by A8,A13,Th26;
+  then lim s4 = 1 |^ m0 by A8,A13,Th18;
   then
 A15: lim s4 = 1 by NEWTON:10;
   s2 is bounded by A2,SEQ_2:13;
   then consider d be real number such that
 A16: d>0 and
 A17: for n holds abs(s2.n)<d by SEQ_2:3;
-A18: s4 is convergent by A8,A13,Th26;
+A18: s4 is convergent by A8,A13,Th18;
   now
     let c be real number;
     assume
@@ -3211,7 +3190,7 @@ A19: c>0;
     then c/d>0 by A16,XREAL_1:139;
     then consider m1 such that
 A20: for m st m>=m1 holds abs(s3.m-1)<c/d by A12,A14,SEQ_2:def 7;
-A21: (lim s1) #Q p > 0 by A3,Th63;
+A21: (lim s1) #Q p > 0 by A3,Th52;
     then
 A22: abs((lim s1) #Q p) > 0 by ABSVALUE:def 1;
     then c/abs((lim s1) #Q p)>0 by A19,XREAL_1:139;
@@ -3238,18 +3217,18 @@ A28:    s1.m/lim s1 = s1.m/s.m by FUNCOP_1:7
         s1.m*(lim s1)">=(lim s1)*(lim s1)" by A3,A27,XREAL_1:64;
         then
 A29:    (s1/"s).m >= 1 by A3,A28,XCMPLX_0:def 7;
-        then ((s1/"s).m) #Q p <= ((s1/"s).m) #Q q by A6,Th74;
-        then ((s1/"s).m) #Q p <= ((s1/"s).m) |^ m0 by A29,Th60;
+        then ((s1/"s).m) #Q p <= ((s1/"s).m) #Q q by A6,Th63;
+        then ((s1/"s).m) #Q p <= ((s1/"s).m) |^ m0 by A29,Th49;
         then
 A30:    ((s1/"s).m) #Q p - 1 <= ((s1/"s).m) |^ m0 - 1 by XREAL_1:9;
-        ((s1/"s).m) #Q p >= 1 by A4,A29,Th71;
+        ((s1/"s).m) #Q p >= 1 by A4,A29,Th60;
         then ((s1/"s).m) #Q p - 1 >= 1-1 by XREAL_1:9;
         then
 A31:    ((s1/"s).m) #Q p - 1 = abs(((s1/"s).m) #Q p - 1) by ABSVALUE:def 1;
-A32:    (lim s1) #Q p <> 0 by A3,Th63;
+A32:    (lim s1) #Q p <> 0 by A3,Th52;
 A33:    abs(s4.m-1)<c/abs((lim s1) #Q p) by A23,A25;
 A34:    s1.m>0 by A5;
-        ((s1/"s).m) |^ m0 >= 1 by A29,Th19;
+        ((s1/"s).m) |^ m0 >= 1 by A29,Th11;
         then ((s1/"s).m) |^ m0 - 1 >= 1-1 by XREAL_1:9;
         then abs(((s1/"s).m) #Q p - 1) <= abs(((s1/"s).m) |^ m0 - 1) by A30,A31
 ,ABSVALUE:def 1;
@@ -3270,7 +3249,7 @@ A36:    abs((lim s1) #Q p) <> 0 by A21,ABSVALUE:def 1;
         p / (lim s1) #Q p)
           .= abs((lim s1) #Q p)*abs((s1.m) #Q p/(lim s1) #Q p - 1) by A32,
 XCMPLX_1:60
-          .= abs((lim s1) #Q p)*abs((s1.m/lim s1) #Q p - 1) by A3,A34,Th69;
+          .= abs((lim s1) #Q p)*abs((s1.m/lim s1) #Q p - 1) by A3,A34,Th58;
         then abs(s2.m - (lim s1) #Q p)< abs((lim s1) #Q p)*(c/abs((lim s1) #Q
         p)) by A22,A28,A35,XREAL_1:68;
         hence abs(s2.m - (lim s1) #Q p)<c by A36,XCMPLX_1:87;
@@ -3286,19 +3265,19 @@ A40:    s1.m>0 by A5;
         then s1.m*(s1.m)"<=(lim s1)*(s1.m)" by A37,XREAL_1:64;
         then
 A41:    (s/"s1).m >= 1 by A39,A38,XCMPLX_0:def 7;
-        then ((s/"s1).m) #Q p <= ((s/"s1).m) #Q q by A6,Th74;
-        then ((s/"s1).m) #Q p <= ((s/"s1).m) |^ m0 by A41,Th60;
+        then ((s/"s1).m) #Q p <= ((s/"s1).m) #Q q by A6,Th63;
+        then ((s/"s1).m) #Q p <= ((s/"s1).m) |^ m0 by A41,Th49;
         then
 A42:    ((s/"s1).m) #Q p - 1 <= ((s/"s1).m) |^ m0 - 1 by XREAL_1:9;
-        (s1.m) #Q p > 0 by A5,Th63;
+        (s1.m) #Q p > 0 by A5,Th52;
         then
 A43:    abs((s1.m) #Q p) > 0 by ABSVALUE:def 1;
 A44:    abs(s3.m-1)<c/d by A20,A26;
-        ((s/"s1).m) #Q p >= 1 by A4,A41,Th71;
+        ((s/"s1).m) #Q p >= 1 by A4,A41,Th60;
         then ((s/"s1).m) #Q p - 1 >= 1-1 by XREAL_1:9;
         then
 A45:    ((s/"s1).m) #Q p - 1 = abs(((s/"s1).m) #Q p - 1) by ABSVALUE:def 1;
-        ((s/"s1).m) |^ m0 >= 1 by A41,Th19;
+        ((s/"s1).m) |^ m0 >= 1 by A41,Th11;
         then ((s/"s1).m) |^ m0 - 1 >= 1-1 by XREAL_1:9;
         then abs(((s/"s1).m) #Q p - 1) <= abs(((s/"s1).m) |^ m0 - 1) by A42,A45
 ,ABSVALUE:def 1;
@@ -3311,7 +3290,7 @@ A46:    abs(((s/"s1).m) #Q p - 1)<c/d by A44,XXREAL_0:2;
         then abs((s1.m) #Q p)/d<1 by A16,XCMPLX_1:60;
         then
 A47:    c*(abs((s1.m) #Q p)/d)<c*1 by A19,XREAL_1:68;
-A48:    (s1.m) #Q p <> 0 by A5,Th63;
+A48:    (s1.m) #Q p <> 0 by A5,Th52;
         abs(s2.m - (lim s1) #Q p) = abs(((s1.m) #Q p - (lim s1) #Q p)*1) by A5
           .= abs(((s1.m) #Q p - (lim s1) #Q p)*((s1.m) #Q p/(s1.m) #Q p)) by
 A48,XCMPLX_1:60
@@ -3327,7 +3306,7 @@ XCMPLX_1:60
           .= abs((s1.m) #Q p)*abs(-(1 - (lim s1) #Q p/(s1.m) #Q p)) by
 COMPLEX1:52
           .= abs((s1.m) #Q p)*abs((lim s1) #Q p/(s1.m) #Q p - 1)
-          .= abs((s1.m) #Q p)*abs((lim s1/s1.m) #Q p - 1) by A3,A40,Th69;
+          .= abs((s1.m) #Q p)*abs((lim s1/s1.m) #Q p - 1) by A3,A40,Th58;
         then abs(s2.m - (lim s1) #Q p)<abs((s1.m) #Q p)*(c/d) by A43,A38,A46,
 XREAL_1:68;
         hence abs(s2.m - (lim s1 ) #Q p) < c by A47,XXREAL_0:2;
@@ -3338,7 +3317,7 @@ XREAL_1:68;
   hence thesis by A2,SEQ_2:def 7;
 end;
 
-theorem Th103:
+theorem Th89:
   s1 is convergent & s2 is convergent & lim s1 > 0 & (for n holds
   s1.n>0 & s2.n = (s1.n) #Q p) implies lim s2 = (lim s1) #Q p
 proof
@@ -3359,7 +3338,7 @@ A5: p<=0;
 A6: d>0 and
 A7: for n holds abs(s1.n)<d by SEQ_2:3;
     reconsider d as Real by XREAL_0:def 1;
-A8: d #Q p > 0 by A6,Th63;
+A8: d #Q p > 0 by A6,Th52;
 A9: now
       assume lim s2 = 0;
       then consider n such that
@@ -3368,16 +3347,16 @@ A10:  for m st m>=n holds abs(s2.m - 0)<d #Q p by A2,A8,SEQ_2:def 7;
         let m;
 A11:    s1.m>0 by A4;
 A12:    s1.m<>0 by A4;
-A13:    (s1.m) #Q p > 0 by A4,Th63;
+A13:    (s1.m) #Q p > 0 by A4,Th52;
         abs(s1.m)<d by A7;
         then s1.m<d by A11,ABSVALUE:def 1;
         then s1.m/s1.m<d/s1.m by A11,XREAL_1:74;
         then 1<=d/s1.m by A12,XCMPLX_1:60;
-        then (d/s1.m) #Q p <= 1 by A5,Th72;
-        then d #Q p/(s1.m) #Q p <= 1 by A6,A11,Th69;
+        then (d/s1.m) #Q p <= 1 by A5,Th61;
+        then d #Q p/(s1.m) #Q p <= 1 by A6,A11,Th58;
         then
 A14:    d #Q p/(s1.m) #Q p * (s1.m) #Q p<= 1*(s1.m) #Q p by A13,XREAL_1:64;
-A15:    (s1.m) #Q p <> 0 by A4,Th63;
+A15:    (s1.m) #Q p <> 0 by A4,Th52;
         assume m>=n;
         then abs(s2.m - 0)<d #Q p by A10;
         then abs((s1.m) #Q p)<d #Q p by A4;
@@ -3388,7 +3367,7 @@ A15:    (s1.m) #Q p <> 0 by A4,Th63;
     end;
     now
       let n;
-      (s1.n) #Q p <> 0 by A4,Th63;
+      (s1.n) #Q p <> 0 by A4,Th52;
       hence s2.n <> 0 by A4;
     end;
     then
@@ -3403,7 +3382,7 @@ A19: now
       s.n = (s2.n)" by A18
         .= ((s1.n) #Q p)" by A4
         .= 1 / (s1.n) #Q p
-        .= (s1.n) #Q (-p) by A4,Th65;
+        .= (s1.n) #Q (-p) by A4,Th54;
       hence s1.n>0 & s.n = (s1.n) #Q (-p) by A4;
     end;
 A20: dom s2 = NAT by FUNCT_2:def 1;
@@ -3413,7 +3392,7 @@ A21: dom s = NAT by FUNCT_2:def 1;
 A22: s = s2" by A21,A20,VALUED_1:def 7;
     s2" is convergent by A2,A16,A9,SEQ_2:21;
     then (lim s2)" = (lim s1) #Q (-p) by A1,A3,A5,A17,A22,A19,Lm10;
-    then 1/lim s2 = 1/(lim s1) #Q p by A3,Th65;
+    then 1/lim s2 = 1/(lim s1) #Q p by A3,Th54;
     hence thesis by XCMPLX_1:59;
   end;
 end;
@@ -3423,28 +3402,28 @@ proof
   consider s1 being Rational_Sequence such that
 A1: s1 is convergent and
 A2: b = lim s1 and
-  for n holds s1.n>=b by Th80;
+  for n holds s1.n>=b by Th68;
   reconsider s2 = p(#)s1 as Rational_Sequence;
   assume
 A3: a>0;
 A4: now
     let n;
-A5: a #Q (s1.n) > 0 by A3,Th63;
-    (a #Q s1 .n) #Q p = (a #Q (s1.n)) #Q p by Def7
-      .= a #Q (p*s1.n) by A3,Th70
+A5: a #Q (s1.n) > 0 by A3,Th52;
+    (a #Q s1 .n) #Q p = (a #Q (s1.n)) #Q p by Def6
+      .= a #Q (p*s1.n) by A3,Th59
       .= a #Q (s2.n) by SEQ_1:9
-      .= a #Q s2 .n by Def7;
-    hence a #Q s1 .n > 0 & (a #Q s1 .n) #Q p = a #Q s2 .n by A5,Def7;
+      .= a #Q s2 .n by Def6;
+    hence a #Q s1 .n > 0 & (a #Q s1 .n) #Q p = a #Q s2 .n by A5,Def6;
   end;
 A6: s2 is convergent by A1,SEQ_2:7;
   then
-A7: a #Q s2 is convergent by A3,Th82;
+A7: a #Q s2 is convergent by A3,Th69;
   lim s2 = b*p by A1,A2,SEQ_2:8;
   then
-A8: a #R (b*p) = lim (a #Q s2) by A3,A6,A7,Def8;
-A9: a #Q s1 is convergent by A3,A1,Th82;
-  then a #R b = lim (a #Q s1) by A3,A1,A2,Def8;
-  hence thesis by A3,A9,A7,A8,A4,Th95,Th103;
+A8: a #R (b*p) = lim (a #Q s2) by A3,A6,A7,Def7;
+A9: a #Q s1 is convergent by A3,A1,Th69;
+  then a #R b = lim (a #Q s1) by A3,A1,A2,Def7;
+  hence thesis by A3,A9,A7,A8,A4,Th81,Th89;
 end;
 
 Lm12: a>=1 & s1 is convergent & s2 is convergent & (for n holds s2.n = a #R (
@@ -3461,11 +3440,11 @@ A5: abs(lim s1)<abs(lim s1) + 1 by XREAL_1:29;
     lim s1<=abs lim s1 by ABSVALUE:4;
     then lim s1<=d by A5,XXREAL_0:2;
     then
-A6: a #R (lim s1) <= a #R d by A1,Th96;
-    a #R (lim s1) > 0 by A1,Th95;
+A6: a #R (lim s1) <= a #R d by A1,Th82;
+    a #R (lim s1) > 0 by A1,Th81;
     then
 A7: abs(a #R (lim s1)) <= a #R d by A6,ABSVALUE:def 1;
-A8: a #R d >= 0 by A1,Th95;
+A8: a #R d >= 0 by A1,Th81;
     let c be real number;
     assume
 A9: c>0;
@@ -3489,23 +3468,23 @@ A13: for m st n<=m holds abs(s1.m -(lim s1))<(m1+1) " by A2,SEQ_2:def 7;
     then
 A14: abs(s1.m -(lim s1))<=(m1+1)" by A13;
 A15: m1+1>=0+1 by NAT_1:13;
-    then (m1+1) -Root a - 1 <= (a-1)/(m1+1) by A1,Th40;
+    then (m1+1) -Root a - 1 <= (a-1)/(m1+1) by A1,Th31;
     then
 A16: (a #R d)*((m1+1) -Root a - 1) <= (a #R d)*((a-1)/(m1+1)) by A8,XREAL_1:64;
     s1.m -(lim s1)<=abs(s1.m -(lim s1)) by ABSVALUE:4;
     then s1.m -(lim s1) <= (m1+1)" by A14,XXREAL_0:2;
-    then a #R (s1.m-lim s1) <= a #R m3 by A1,Th96;
-    then a #R (s1.m-lim s1) <= a #Q m3 by A1,Th88;
-    then a #R (s1.m-lim s1) <= (m1+1) -Root a by A15,Th61;
+    then a #R (s1.m-lim s1) <= a #R m3 by A1,Th82;
+    then a #R (s1.m-lim s1) <= a #Q m3 by A1,Th74;
+    then a #R (s1.m-lim s1) <= (m1+1) -Root a by A15,Th50;
     then
 A17: a #R (s1.m-lim s1) - 1 <= (m1+1) -Root a - 1 by XREAL_1:9;
-A18: a #R (s1.m-lim s1) <> 0 by A1,Th95;
-A19: a #R (s1.m-lim s1) > 0 by A1,Th95;
+A18: a #R (s1.m-lim s1) <> 0 by A1,Th81;
+A19: a #R (s1.m-lim s1) > 0 by A1,Th81;
 A20: now
       per cases;
       suppose
         s1.m-lim s1>=0;
-        then a #R (s1.m-lim s1) >= 1 by A1,Th99;
+        then a #R (s1.m-lim s1) >= 1 by A1,Th85;
         then a #R (s1.m-lim s1) - 1 >= 0 by XREAL_1:48;
         hence abs(a #R (s1.m-lim s1) - 1) <= (m1+1) -Root a - 1 by A17,
 ABSVALUE:def 1;
@@ -3515,17 +3494,17 @@ A21:    s1.m-lim s1<0;
 A22:    -(s1.m -lim s1)<=abs(-(s1.m -lim s1)) by ABSVALUE:4;
         abs(s1.m -lim s1) = abs(-(s1.m -lim s1)) by COMPLEX1:52;
         then -(s1.m -lim s1) <= m3 by A14,A22,XXREAL_0:2;
-        then a #R (-(s1.m-lim s1)) <= a #R m3 by A1,Th96;
-        then a #R (-(s1.m-lim s1)) <= a #Q m3 by A1,Th88;
-        then a #R (-(s1.m-lim s1)) <= (m1+1) -Root a by A15,Th61;
+        then a #R (-(s1.m-lim s1)) <= a #R m3 by A1,Th82;
+        then a #R (-(s1.m-lim s1)) <= a #Q m3 by A1,Th74;
+        then a #R (-(s1.m-lim s1)) <= (m1+1) -Root a by A15,Th50;
         then
 A23:    a #R (-(s1.m-lim s1)) - 1 <= (m1+1) -Root a - 1 by XREAL_1:9;
-        a #R (-(s1.m-lim s1)) >= 1 by A1,A21,Th99;
+        a #R (-(s1.m-lim s1)) >= 1 by A1,A21,Th85;
         then a #R (-(s1.m-lim s1)) - 1 >= 0 by XREAL_1:48;
         then
 A24:    abs(a #R (-(s1.m-lim s1)) - 1) <= (m1+1) -Root a - 1 by A23,
 ABSVALUE:def 1;
-        a #R (s1.m-lim s1) <= 1 by A1,A21,Th101;
+        a #R (s1.m-lim s1) <= 1 by A1,A21,Th87;
         then
 A25:    abs(a #R (s1.m-lim s1)) <= 1 by A19,ABSVALUE:def 1;
         abs(a #R (-(s1.m-lim s1)) - 1) >= 0 by COMPLEX1:46;
@@ -3545,7 +3524,7 @@ A26:    abs(a #R (s1.m-lim s1))*abs(a #R (-(s1.m-lim s1)) - 1) <= 1*abs(a
         s1) - 1/a #R (s1.m-lim s1))
           .= abs(a #R (s1.m-lim s1))*abs(1 - 1/a #R (s1.m-lim s1)) by A18,
 XCMPLX_1:60
-          .= abs(a #R (s1.m-lim s1))*abs(1 - a #R (-(s1.m-lim s1))) by A1,Th90
+          .= abs(a #R (s1.m-lim s1))*abs(1 - a #R (-(s1.m-lim s1))) by A1,Th76
           .= abs(a #R (s1.m-lim s1))*abs(-(1 - a #R (-(s1.m-lim s1)))) by
 COMPLEX1:52
           .= abs(a #R (s1.m-lim s1))*abs(a #R (-(s1.m-lim s1)) - 1);
@@ -3568,7 +3547,7 @@ A27: abs(a #R (lim s1))*abs(a #R (s1.m-lim s1) - 1) <= (a #R d)*((m1+1)
     lim s1))
       .=abs(a #R (lim s1))*abs(a #R (s1.m)/a #R (lim s1) - 1) by A1,Lm9,
 XCMPLX_1:60
-      .=abs(a #R (lim s1))*abs(a #R (s1.m-lim s1) - 1) by A1,Th91;
+      .=abs(a #R (lim s1))*abs(a #R (s1.m-lim s1) - 1) by A1,Th77;
     then abs(a #R (s1.m) - a #R (lim s1))<= (a #R d)*(a-1)/(m1+1) by A27,A16,
 XXREAL_0:2;
     then abs(a #R (s1.m) - a #R (lim s1)) < c by A11,XXREAL_0:2;
@@ -3577,7 +3556,7 @@ XXREAL_0:2;
   hence thesis by A3,SEQ_2:def 7;
 end;
 
-theorem Th104:
+theorem Th90:
   a>0 & s1 is convergent & s2 is convergent & (for n holds s2.n =
   a #R (s1.n)) implies lim s2 = a #R (lim s1)
 proof
@@ -3596,7 +3575,7 @@ A5: a<1;
 A6: now
       assume
 A7:   lim s2 = 0;
-      a #R ((lim s1) + 1) > 0 by A1,Th95;
+      a #R ((lim s1) + 1) > 0 by A1,Th81;
       then consider n such that
 A8:   for m st m>=n holds abs(s2.m-0)<a #R ((lim s1) +1) by A3,A7,SEQ_2:def 7;
       consider n1 being Element of NAT such that
@@ -3617,9 +3596,9 @@ A12:    s1.m-lim s1 + lim s1 < lim s1 + 1 by XREAL_1:6;
         then abs(s2.m-0)<a #R ((lim s1)+1) by A8;
         then
 A13:    abs(a #R (s1.m))<a #R ((lim s1)+1) by A4;
-        a #R (s1.m) > 0 by A1,Th95;
+        a #R (s1.m) > 0 by A1,Th81;
         then a #R (s1.m) < a #R ((lim s1)+1) by A13,ABSVALUE:def 1;
-        hence contradiction by A1,A5,A12,Th98;
+        hence contradiction by A1,A5,A12,Th84;
       end;
       hence contradiction;
     end;
@@ -3628,16 +3607,16 @@ A14: now
       thus s2".n = (s2.n)" by VALUED_1:10
         .= (a #R (s1.n))" by A4
         .= 1/(a #R (s1.n))
-        .= (1/a) #R (s1.n) by A1,Th93;
+        .= (1/a) #R (s1.n) by A1,Th79;
     end;
     a*(1/a)<=1*(1/a) by A1,A5,XREAL_1:64;
     then
 A15: 1<=1/a by A1,XCMPLX_1:106;
-A16: a #R (lim s1) <> 0 by A1,Th95;
+A16: a #R (lim s1) <> 0 by A1,Th81;
     now
       let n;
       s2.n = a #R (s1.n) by A4;
-      hence s2.n <> 0 by A1,Th95;
+      hence s2.n <> 0 by A1,Th81;
     end;
     then
 A17: s2 is non-zero by SEQ_1:5;
@@ -3645,7 +3624,7 @@ A17: s2 is non-zero by SEQ_1:5;
 A18: lim s2" = (lim s2)" by A3,A6,SEQ_2:22;
     s2" is convergent by A3,A6,A17,SEQ_2:21;
     then (lim s2)" = (1/a) #R (lim s1) by A2,A15,A18,A14,Lm12
-      .= 1/a #R (lim s1) by A1,Th93;
+      .= 1/a #R (lim s1) by A1,Th79;
     then 1 = 1/a #R (lim s1) * lim s2 by A6,XCMPLX_0:def 7;
     then a #R (lim s1)= a #R (lim s1)*(1/a #R (lim s1) * lim s2)
       .= a #R (lim s1)*(1/a #R (lim s1)) * lim s2
@@ -3660,29 +3639,29 @@ proof
   consider s being Rational_Sequence such that
 A1: s is convergent and
 A2: c = lim s and
-  for n holds s.n<=c by Th79;
+  for n holds s.n<=c by Th67;
 A3: lim (b(#)s) = b*c by A1,A2,SEQ_2:8;
 A4: b(#)s is convergent by A1,SEQ_2:7;
   assume
 A5: a>0;
   then
-A6: (a #R b) #Q s is convergent by A1,Th82,Th95;
+A6: (a #R b) #Q s is convergent by A1,Th69,Th81;
 A7: now
     let n;
-    thus (a #R b) #Q s .n = (a #R b) #Q (s.n) by Def7
+    thus (a #R b) #Q s .n = (a #R b) #Q (s.n) by Def6
       .= a #R (b*s.n) by A5,Lm11
       .= a #R ((b(#)s).n) by SEQ_1:9;
   end;
-  a #R b > 0 by A5,Th95;
-  then (a #R b) #R c = lim ((a #R b) #Q s) by A1,A2,A6,Def8;
-  hence thesis by A5,A6,A4,A3,A7,Th104;
+  a #R b > 0 by A5,Th81;
+  then (a #R b) #R c = lim ((a #R b) #Q s) by A1,A2,A6,Def7;
+  hence thesis by A5,A6,A4,A3,A7,Th90;
 end;
 
 begin :: Addenda
 :: from PCOMPS_2, 2006.02.10, A.T.
 
 reserve r, u for real number,
-  k for natural number;
+  k for Nat;
 
 theorem
   r>0 & u > 0 implies ex k be Element of NAT st u/(2 |^ k) <= r
@@ -3704,7 +3683,7 @@ A6: for k be Element of NAT st P[k] holds P[k + 1]
     assume k <= 2 |^ k;
     then
 A7: (2 |^ k) + 1 >= k + 1 by XREAL_1:7;
-    2 |^ k >= 1 by Th19;
+    2 |^ k >= 1 by Th11;
     then
 A8: 2 |^ k + 2 |^ k >= 2 |^ k + 1 by XREAL_1:7;
     2 |^ (k + 1) = (2 |^ k) * (2 |^ 1) by NEWTON:8
@@ -3730,13 +3709,13 @@ A2: r >= 1;
   consider m be Nat such that
 A3: k = n + m by A1,NAT_1:10;
 A4: r |^ k = r |^ n * r |^ m by A3,NEWTON:8;
-  r |^ n >= 1 by A2,Th19;
-  hence thesis by A2,A4,Th19,XREAL_1:151;
+  r |^ n >= 1 by A2,Th11;
+  hence thesis by A2,A4,Th11,XREAL_1:151;
 end;
 
 :: from SCPINVAR, 2006.03.14, A.T.
 
-theorem Th108:
+theorem Th94:
   for n,m,l be Element of NAT st n divides m & n divides l holds n divides m-l
 proof
   let n,m,l be Element of NAT;
@@ -3753,7 +3732,7 @@ end;
 theorem
   m divides n iff m divides (n qua Integer);
 
-theorem Th110:
+theorem Th96:
   m gcd n= m gcd abs(n-m)
 proof
   set x=m gcd n, y=m gcd abs( n - m );
@@ -3769,7 +3748,7 @@ A4: abs( n - m )=nm by ABSVALUE:def 1;
     then y divides nm+m by A3,NAT_D:8;
     then
 A5: y divides x by A3,NAT_D:def 5;
-    x divides n-m by A1,A2,Th108;
+    x divides n-m by A1,A2,Th94;
     then x divides y by A1,A4,NAT_D:def 5;
     hence thesis by A5,NAT_D:5;
   end;
@@ -3780,11 +3759,11 @@ A7: abs( n - m )=-(n-m) by A6,ABSVALUE:def 1
       .=m-n;
     then reconsider mn=m-n as Element of NAT;
     y divides mn by A7,NAT_D:def 5;
-    then y divides mn-m by A3,Th108;
+    then y divides mn-m by A3,Th94;
     then y divides nn by INT_2:10;
     then
 A8: y divides x by A3,NAT_D:def 5;
-    x divides m-n by A1,A2,Th108;
+    x divides m-n by A1,A2,Th94;
     then x divides y by A1,A7,NAT_D:def 5;
     hence thesis by A8,NAT_D:5;
   end;
@@ -3798,7 +3777,7 @@ proof
 A1: a>=0 and
 A2: b>=0;
   thus a gcd b=abs(a) gcd abs(b) by INT_2:34
-    .=abs(a) gcd abs(abs(b)-abs(a)) by Th110
+    .=abs(a) gcd abs(abs(b)-abs(a)) by Th96
     .=abs(a) gcd abs(b-abs(a)) by A2,ABSVALUE:def 1
     .=abs(a) gcd abs(b-a) by A1,ABSVALUE:def 1
     .=a gcd (b-a) by INT_2:34;
@@ -3813,9 +3792,9 @@ theorem
   a > 0 implies a #Q l = a #Z l
 proof
   assume a > 0;
-  then a #Z l > 0 by Th49;
+  then a #Z l > 0 by Th39;
   then
-A1: a #Z l = 1-Root (a #Z l) |^ 1 by Def3;
+A1: a #Z l = 1-Root (a #Z l) |^ 1 by Def2;
   denominator l=1 by RAT_1:17;
   hence a #Q l = 1-Root (a #Z l) by RAT_1:17
     .= a #Z l by A1,NEWTON:5;
@@ -3834,7 +3813,7 @@ A2:  l > 0;
     then
 A3:   0 |^ l = 0 by NEWTON:11;
     abs l = l by ABSVALUE:def 1;
-   hence thesis by A3,Def4;
+   hence thesis by A3,Def3;
   end;
   suppose
 A4:  l < 0;
@@ -3845,6 +3824,6 @@ A4:  l < 0;
 A5:   0 |^ k = 0 by NEWTON:11;
     abs l = k by A4,ABSVALUE:def 1;
     then (0 |^ abs l)" = 0 by A5;
-   hence thesis by A4,Def4;
+   hence thesis by A4,Def3;
   end;
  end;

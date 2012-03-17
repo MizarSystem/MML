@@ -3,10 +3,10 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
@@ -15,6 +15,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -30,8 +31,8 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="10">
+<Func kind="K" nr="24">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -45,7 +46,7 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="10">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -59,9 +60,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="117">
+<Func kind="K" nr="125">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="28">
+<Func kind="K" nr="99">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -72,13 +73,13 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="10">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="117">
+<Func kind="K" nr="125">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -102,8 +103,8 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="10">
+<Func kind="K" nr="24">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -117,7 +118,7 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="10">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -131,9 +132,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
+<Func kind="K" nr="124">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="28">
+<Func kind="K" nr="99">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -144,13 +145,13 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="10">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="116">
+<Func kind="K" nr="124">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>

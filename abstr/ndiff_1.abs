@@ -2,7 +2,7 @@
 ::  by Hiroshi Imura , Morishige Kimura and Yasunari Shidama
 ::
 :: Received May 24, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,9 +25,9 @@ environ
       STRUCT_0, FUNCOP_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2, SQUARE_1, VFUNCT_1,
       NORMSP_0, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_2, NFCONT_1, FDIFF_1,
       RECDEF_1;
- constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, PARTFUN2,
-      FDIFF_1, BHSP_3, RSSPACE, VFUNCT_1, LOPBAN_3, NFCONT_1, SEQ_1, VALUED_1,
-      RECDEF_1, NORMSP_1, RELSET_1, BINOP_2, RVSUM_1;
+ constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_2, FDIFF_1, RSSPACE, VFUNCT_1,
+      LOPBAN_3, NFCONT_1, SEQ_1, RECDEF_1, RELSET_1, BINOP_2, RVSUM_1,
+      COMSEQ_2;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, FDIFF_1, STRUCT_0, LOPBAN_1, LOPBAN_2, VALUED_0, VALUED_1,
       FUNCT_2, FUNCOP_1;
@@ -142,11 +142,12 @@ theorem :: NDIFF_1:17
 
 definition
   let S;
+  let x be Point of S;
   let IT be sequence of S;
-  attr IT is convergent_to_0 means
+  attr IT is x-convergent means
 :: NDIFF_1:def 4
 
-  IT is non-zero & IT is convergent & lim IT = 0.S;
+  IT is convergent & lim IT = x;
 end;
 
 theorem :: NDIFF_1:18
@@ -161,9 +162,15 @@ theorem :: NDIFF_1:19
 theorem :: NDIFF_1:20
   for r be Real st 0<r & (for n holds seq.n=(1/(n+r))*x0 ) holds lim seq=0.S;
 
+registration
+  let S be non trivial RealNormSpace;
+  cluster non-zero (0.S)-convergent for sequence of S;
+end;
+
 theorem :: NDIFF_1:21
-  for a be convergent_to_0 Real_Sequence for z be Point of S st z <> 0.S
-  holds a*z is convergent_to_0;
+  for a be 0-convergent non-zero Real_Sequence
+    for z be Point of S st z <> 0.S
+  holds a*z is non-zero (0.S)-convergent;
 
 theorem :: NDIFF_1:22
   (for r be Point of S holds r in Y iff r in the carrier of S) iff Y=the
@@ -175,24 +182,19 @@ reserve s1 for sequence of S;
 reserve x0 for Point of S;
 
 registration
-  let S be non trivial RealNormSpace;
-  cluster convergent_to_0 for sequence of S;
-end;
-
-registration
   let S;
   cluster constant for sequence of S;
 end;
 
 :: Normed Linear Spaces versions of FDIFF_1
 
-reserve h for convergent_to_0 sequence of S;
+reserve h for (0.S)-convergent non-zero sequence of S;
 reserve c for constant sequence of S;
 
 definition
   let S,T;
   let IT be PartFunc of S,T;
-  attr IT is REST-like means
+  attr IT is RestFunc-like means
 :: NDIFF_1:def 5
 
   IT is total & for h holds (||.h.||")(#)(IT
@@ -201,24 +203,24 @@ end;
 
 registration
   let S,T;
-  cluster REST-like for PartFunc of S,T;
+  cluster RestFunc-like for PartFunc of S,T;
 end;
 
 definition
   let S,T;
-  mode REST of S,T is REST-like PartFunc of S,T;
+  mode RestFunc of S,T is RestFunc-like PartFunc of S,T;
 end;
 
 theorem :: NDIFF_1:23
-  for R be PartFunc of S,T st R is total holds R is REST-like iff for r
+  for R be PartFunc of S,T st R is total holds R is RestFunc-like iff for r
 be Real st r > 0 ex d be Real st d > 0 & for z be Point of S st z <> 0.S & ||.z
   .|| < d holds ( ||.z.||"* ||. R/.z .||) < r;
 
 theorem :: NDIFF_1:24
-  for R be REST of S,T for s be convergent_to_0 sequence of S
+  for R be RestFunc of S,T for s be non-zero (0.S)-convergent sequence of S
   holds (R/*s) is convergent & lim (R/*s) = 0.T;
 
-reserve R,R1,R2 for REST of S,T;
+reserve R,R1,R2 for RestFunc of S,T;
 reserve L,L1,L2 for Point of R_NormSpace_of_BoundedLinearOperators(S,T);
 
 theorem :: NDIFF_1:25
@@ -236,10 +238,10 @@ theorem :: NDIFF_1:27
   holds f/*s1 is convergent & f/.x0=lim(f/*s1);
 
 theorem :: NDIFF_1:28
-  for R1,R2 holds R1+R2 is REST of S,T & R1-R2 is REST of S,T;
+  for R1,R2 holds R1+R2 is RestFunc of S,T & R1-R2 is RestFunc of S,T;
 
 theorem :: NDIFF_1:29
-  for r,R holds r(#)R is REST of S,T;
+  for r,R holds r(#)R is RestFunc of S,T;
 
 definition
   let S,T;
@@ -310,12 +312,13 @@ Point of S st x in Z holds (f`|Z)/.x = 0.R_NormSpace_of_BoundedLinearOperators(
 registration
   let S;
   let h,n;
-  cluster h^\n -> convergent_to_0 for sequence of S;
+  cluster h^\n -> (0.S)-convergent non-zero for sequence of S;
 end;
 
 theorem :: NDIFF_1:34
   for x0 be Point of S for N being Neighbourhood of x0 st f
-is_differentiable_in x0 & N c= dom f holds for h be convergent_to_0 sequence of
+is_differentiable_in x0 & N c= dom f holds
+for h be (0.S)-convergent non-zero sequence of
 S for c st rng c = {x0} & rng (h+c) c= N holds (f/*(h+c) - f/*c) is convergent
   & lim (f/*(h+c) - f/*c) = 0.T;
 

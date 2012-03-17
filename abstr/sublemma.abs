@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,37 +15,39 @@
 environ
 
  vocabularies SUBSET_1, NUMBERS, CQC_LANG, QC_LANG1, XBOOLE_0, VALUAT_1,
-      FUNCT_1, FINSEQ_1, SUBSTUT1, RELAT_1, TARSKI, FUNCT_4, FUNCOP_1,
+      FUNCT_1, FINSEQ_1, RELAT_1, TARSKI, FUNCT_4, FUNCOP_1, ORDINAL1,
       PARTFUN1, FUNCT_2, MCART_1, REALSET1, XBOOLEAN, ZF_MODEL, ORDINAL4,
       ZF_LANG, ARYTM_3, NAT_1, XXREAL_0, ZFMISC_1, BVFUNC_2, CLASSES2,
-      ZF_LANG1, SUBLEMMA, CARD_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, NAT_1,
-      QC_LANG1, QC_LANG3, PARTFUN1, CARD_1, NUMBERS, XXREAL_0, FUNCOP_1,
-      CQC_LANG, RELAT_1, FUNCT_4, SEQ_4, VALUAT_1, RELSET_1, FUNCT_2, MARGREL1,
-      DOMAIN_1, MCART_1, SUBSTUT1;
- constructors DOMAIN_1, FUNCT_4, XXREAL_0, SEQ_4, QC_LANG3, VALUAT_1, SUBSTUT1,
-      RELSET_1;
+      ZF_LANG1, SUBLEMMA, CARD_1, SUBSTUT1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, FINSEQ_1, FUNCT_1,
+      ORDINAL1, NAT_1, QC_LANG1, QC_LANG3, PARTFUN1, CARD_1, NUMBERS, XXREAL_0,
+      FUNCOP_1, CQC_LANG, RELAT_1, FUNCT_4, SEQ_4, VALUAT_1, RELSET_1, FUNCT_2,
+      MARGREL1, DOMAIN_1, MCART_1, SUBSTUT1;
+ constructors DOMAIN_1, FUNCT_4, XXREAL_0, SEQ_4, QC_LANG3, VALUAT_1, RELSET_1,
+      SUBSTUT1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      MEMBERED, QC_LANG1, CQC_LANG, SUBSTUT1, XXREAL_0, XXREAL_2, CARD_1,
-      RELSET_1;
+      MEMBERED, QC_LANG1, CQC_LANG, XXREAL_0, XXREAL_2, CARD_1, RELSET_1,
+      SUBSTUT1, FUNCT_4, XTUPLE_0;
  requirements NUMERALS, SUBSET, BOOLE;
 
 
 begin :: Preliminaries
 
+reserve Al for QC-alphabet;
 reserve a,b,c,d for set,
   i,k,n for Element of NAT,
-  p,q for Element of CQC-WFF,
-  x,y,y1 for bound_QC-variable,
+  p,q for Element of CQC-WFF(Al),
+  x,y,y1 for bound_QC-variable of Al,
   A for non empty set,
-  J for interpretation of A,
-  v,w for Element of Valuations_in A,
+  J for interpretation of Al,A,
+  v,w for Element of Valuations_in(Al,A),
   f,g for Function,
-  P,P9 for QC-pred_symbol of k,
-  ll,ll9 for CQC-variable_list of k,
-  l1 for FinSequence of QC-variables,
-  Sub,Sub9,Sub1 for CQC_Substitution,
-  S,S9,S1,S2 for Element of CQC-Sub-WFF;
+  P,P9 for QC-pred_symbol of k,Al,
+  ll,ll9 for CQC-variable_list of k,Al,
+  l1 for FinSequence of QC-variables(Al),
+  Sub,Sub9,Sub1 for CQC_Substitution of Al,
+  S,S9,S1,S2 for Element of CQC-Sub-WFF(Al),
+  s for QC-symbol of Al;
 
 theorem :: SUBLEMMA:1
   for f,g,h,h1,h2 being Function st dom h1 c= dom h & dom h2 c= dom
@@ -56,40 +58,39 @@ theorem :: SUBLEMMA:2
   })) +* (x .--> vS1.x) = vS1;
 
 definition
-  let A;
-  mode Val_Sub of A is PartFunc of bound_QC-variables,A;
+  let Al,A;
+  mode Val_Sub of A,Al is PartFunc of bound_QC-variables(Al),A;
 end;
 
-reserve vS,vS1,vS2 for Val_Sub of A;
+reserve vS,vS1,vS2 for Val_Sub of A,Al;
 
 notation
-  let A, v, vS;
+  let Al, A, v, vS;
   synonym v.vS for v +* vS;
 end;
 
 definition
-  let A, v, vS;
-  redefine func v.vS -> Element of Valuations_in A;
+  let Al, A, v, vS;
+  redefine func v.vS -> Element of Valuations_in(Al,A);
 end;
 
 definition
-  let S;
-  redefine func S`1 -> Element of CQC-WFF;
+  let Al,S;
+  redefine func S`1 -> Element of CQC-WFF(Al);
 end;
 
 definition
-
-  let S, A, v;
-  func Val_S(v,S) -> Val_Sub of A equals
+  let Al, S, A, v;
+  func Val_S(v,S) -> Val_Sub of A,Al equals
 :: SUBLEMMA:def 1
   (@S`2)*v;
 end;
 
 theorem :: SUBLEMMA:3
-  S is Sub_VERUM implies CQC_Sub(S) = VERUM;
+  S is Al-Sub_VERUM implies CQC_Sub(S) = VERUM(Al);
 
 definition
-  let S, A, v, J;
+  let Al, S, A, v, J;
   pred J,v |= S means
 :: SUBLEMMA:def 2
 
@@ -97,11 +98,11 @@ definition
 end;
 
 theorem :: SUBLEMMA:4
-  S is Sub_VERUM implies for v holds (J,v |= CQC_Sub(S) iff J,v.
+  S is Al-Sub_VERUM implies for v holds (J,v |= CQC_Sub(S) iff J,v.
   Val_S(v,S) |= S);
 
 theorem :: SUBLEMMA:5
-  i in dom ll implies ll.i is bound_QC-variable;
+  i in dom ll implies ll.i is bound_QC-variable of Al;
 
 theorem :: SUBLEMMA:6
   S is Sub_atomic implies CQC_Sub(S) = (the_pred_symbol_of S`1)!
@@ -112,22 +113,23 @@ theorem :: SUBLEMMA:7
   ll9,Sub9) implies ll = ll9;
 
 definition
-  let k, P, ll, Sub;
-  redefine func Sub_P(P,ll,Sub) -> Element of CQC-Sub-WFF;
+  let k, Al, P, ll, Sub;
+  redefine func Sub_P(P,ll,Sub) -> Element of CQC-Sub-WFF(Al);
 end;
 
 theorem :: SUBLEMMA:8
   CQC_Sub(Sub_P(P,ll,Sub)) = P!CQC_Subst(ll,Sub);
 
 theorem :: SUBLEMMA:9
-  P!CQC_Subst(ll,Sub) is Element of CQC-WFF;
+  P!CQC_Subst(ll,Sub) is Element of CQC-WFF(Al);
 
 theorem :: SUBLEMMA:10
-  CQC_Subst(ll,Sub) is CQC-variable_list of k;
+  CQC_Subst(ll,Sub) is CQC-variable_list of k,Al;
 
 registration
+  let Al;
   let k, ll, Sub;
-  cluster CQC_Subst(ll,Sub) -> bound_QC-variables -valued k-element;
+  cluster CQC_Subst(ll,Sub) -> bound_QC-variables(Al) -valued k-element;
 end;
 
 theorem :: SUBLEMMA:11
@@ -150,8 +152,8 @@ theorem :: SUBLEMMA:16
   (Sub_not S)`1 = 'not' S`1 & (Sub_not S)`2 = S`2;
 
 definition
-  let S;
-  redefine func Sub_not S -> Element of CQC-Sub-WFF;
+  let Al,S;
+  redefine func Sub_not S -> Element of CQC-Sub-WFF(Al);
 end;
 
 theorem :: SUBLEMMA:17
@@ -166,10 +168,10 @@ theorem :: SUBLEMMA:19
   Sub_not S);
 
 definition
-  let S1, S2;
+  let Al, S1, S2;
   assume
  S1`2 = S2`2;
-  func CQCSub_&(S1,S2) -> Element of CQC-Sub-WFF equals
+  func CQCSub_&(S1,S2) -> Element of CQC-Sub-WFF(Al) equals
 :: SUBLEMMA:def 3
 
   Sub_&(S1,S2);
@@ -200,7 +202,7 @@ theorem :: SUBLEMMA:25
 implies for v holds (J,v |= CQC_Sub(CQCSub_&(S1,S2)) iff J,v.Val_S(v,CQCSub_&(
   S1,S2)) |= CQCSub_&(S1,S2));
 
-reserve B for Element of [:QC-Sub-WFF,bound_QC-variables:],
+reserve B for Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):],
   SQ for second_Q_comp of B;
 
 theorem :: SUBLEMMA:26
@@ -208,37 +210,41 @@ theorem :: SUBLEMMA:26
   Sub_All(B,SQ)`2 = SQ;
 
 definition
-  let B be Element of [:QC-Sub-WFF,bound_QC-variables:];
+  let Al;
+  let B be Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):];
   attr B is CQC-WFF-like means
 :: SUBLEMMA:def 4
 
-  B`1 in CQC-Sub-WFF;
+  B`1 in CQC-Sub-WFF(Al);
 end;
 
 registration
-  cluster CQC-WFF-like for Element of [:QC-Sub-WFF,bound_QC-variables:];
+  let Al;
+  cluster CQC-WFF-like for Element of [:QC-Sub-WFF(Al),
+   bound_QC-variables(Al):];
 end;
 
 definition
-  let S, x;
-  redefine func [S,x] -> CQC-WFF-like Element of [:QC-Sub-WFF,
-  bound_QC-variables:];
+  let Al, S, x;
+  redefine func [S,x] -> CQC-WFF-like Element of [:QC-Sub-WFF(Al),
+  bound_QC-variables(Al):];
 end;
 
-reserve B for CQC-WFF-like Element of [:QC-Sub-WFF,bound_QC-variables:],
+reserve B for CQC-WFF-like Element of [:QC-Sub-WFF(Al),
+  bound_QC-variables(Al):],
   xSQ for second_Q_comp of [S,x],
   SQ for second_Q_comp of B;
 
 definition
-  let B;
-  redefine func B`1 -> Element of CQC-Sub-WFF;
+  let Al, B;
+  redefine func B`1 -> Element of CQC-Sub-WFF(Al);
 end;
 
 definition
-  let B, SQ;
+  let Al, B, SQ;
   assume
  B is quantifiable;
-  func CQCSub_All(B,SQ) -> Element of CQC-Sub-WFF equals
+  func CQCSub_All(B,SQ) -> Element of CQC-Sub-WFF(Al) equals
 :: SUBLEMMA:def 5
 
   Sub_All(B,SQ);
@@ -248,20 +254,21 @@ theorem :: SUBLEMMA:27
   B is quantifiable implies CQCSub_All(B,SQ) is Sub_universal;
 
 definition
+  let Al;
   let S such that
  S is Sub_universal;
-  func CQCSub_the_scope_of S -> Element of CQC-Sub-WFF equals
+  func CQCSub_the_scope_of S -> Element of CQC-Sub-WFF(Al) equals
 :: SUBLEMMA:def 6
 
   Sub_the_scope_of S;
 end;
 
 definition
-  let S1, p;
+  let Al, S1, p;
   assume that
  S1 is Sub_universal and
  p = CQC_Sub(CQCSub_the_scope_of S1);
-  func CQCQuant(S1,p) -> Element of CQC-WFF equals
+  func CQCQuant(S1,p) -> Element of CQC-WFF(Al) equals
 :: SUBLEMMA:def 7
 
   Quant(S1,p);
@@ -289,12 +296,12 @@ theorem :: SUBLEMMA:32
   x in dom S`2 implies v.((@S`2).x) = v.Val_S(v,S).x;
 
 theorem :: SUBLEMMA:33
-  x in dom (@S`2) implies (@S`2).x is bound_QC-variable;
+  x in dom (@S`2) implies (@S`2).x is bound_QC-variable of Al;
 
 theorem :: SUBLEMMA:34
-  [:QC-WFF,vSUB:] c= dom QSub;
+  [:QC-WFF(Al),vSUB(Al):] c= dom QSub(Al);
 
-reserve B1 for Element of [:QC-Sub-WFF,bound_QC-variables:];
+reserve B1 for Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):];
 reserve SQ1 for second_Q_comp of B1;
 
 theorem :: SUBLEMMA:35
@@ -327,10 +334,10 @@ theorem :: SUBLEMMA:41
   x,All(x,S`1),xSQ));
 
 theorem :: SUBLEMMA:42
-  still_not-bound_in VERUM c= Bound_Vars(VERUM);
+  still_not-bound_in VERUM(Al) c= Bound_Vars(VERUM(Al));
 
 theorem :: SUBLEMMA:43
-  still_not-bound_in (P!ll) c= Bound_Vars(P!ll);
+  still_not-bound_in (P!ll) = Bound_Vars(P!ll);
 
 theorem :: SUBLEMMA:44
   still_not-bound_in (p) c= Bound_Vars(p) implies
@@ -348,17 +355,15 @@ theorem :: SUBLEMMA:47
   for p holds still_not-bound_in p c= Bound_Vars(p);
 
 notation
-  let A;
-  let x;
+  let Al, A, x;
   let a be Element of A;
   synonym x|a for x .--> a;
 end;
 
 definition
-  let A;
-  let x;
+  let Al, A, x;
   let a be Element of A;
-  redefine func x|a -> Val_Sub of A;
+  redefine func x|a -> Val_Sub of A,Al;
 end;
 
 reserve a for Element of A;
@@ -373,17 +378,17 @@ theorem :: SUBLEMMA:50
   J,v |= All(x,p) iff for a holds J,v.(x|a) |= p;
 
 definition
-  let S, x, xSQ, A, v;
-  func NEx_Val(v,S,x,xSQ) -> Val_Sub of A equals
+  let Al, S, x, xSQ, A, v;
+  func NEx_Val(v,S,x,xSQ) -> Val_Sub of A,Al equals
 :: SUBLEMMA:def 8
   (@RestrictSub(x,All(x,S`1),
   xSQ))*v;
 end;
 
 definition
-  let A;
-  let v,w be Val_Sub of A;
-  redefine func v+*w -> Val_Sub of A;
+  let Al, A;
+  let v,w be Val_Sub of A,Al;
+  redefine func v+*w -> Val_Sub of A,Al;
 end;
 
 theorem :: SUBLEMMA:51
@@ -419,10 +424,10 @@ CQCSub_All([S,x],xSQ)))|a)). (NEx_Val(v.((S_Bound(@CQCSub_All([S,x],xSQ)))|a),S
 begin :: The Coincidence Lemma
 
 theorem :: SUBLEMMA:57
-  rng l1 c= bound_QC-variables implies still_not-bound_in l1 = rng l1;
+  rng l1 c= bound_QC-variables(Al) implies still_not-bound_in l1 = rng l1;
 
 theorem :: SUBLEMMA:58
-  dom v = bound_QC-variables & dom (x|a) = {x};
+  dom v = bound_QC-variables(Al) & dom (x|a) = {x};
 
 theorem :: SUBLEMMA:59
   v*'ll = ll*(v|still_not-bound_in ll);
@@ -445,7 +450,7 @@ still_not-bound_in p '&' q = w|still_not-bound_in p '&' q implies (J,v |= p '&'
   q iff J,w |= p '&' q);
 
 theorem :: SUBLEMMA:63
-  for X being set st X c= bound_QC-variables holds dom (v|X) = dom
+  for X being set st X c= bound_QC-variables(Al) holds dom (v|X) = dom
   (v.(x|a)|X) & dom (v|X) = X;
 
 theorem :: SUBLEMMA:64
@@ -544,7 +549,7 @@ y in still_not-bound_in p) & (for y st y in dom vS2 holds vS2.y = v.y) & dom vS
   misses dom vS2 holds J,v.vS |= p iff J,v.(vS+*vS1+*vS2) |= p;
 
 definition
-  let p;
+  let Al, p;
   func RSub1(p) -> set means
 :: SUBLEMMA:def 9
 
@@ -552,7 +557,7 @@ definition
 end;
 
 definition
-  let p, Sub;
+  let Al, p, Sub;
   func RSub2(p,Sub) -> set means
 :: SUBLEMMA:def 10
 
@@ -593,14 +598,20 @@ theorem :: SUBLEMMA:88
 
 scheme :: SUBLEMMA:sch 1
 
-  SubCQCInd1 { Pro[set] } : for S holds Pro[S]
+  SubCQCInd1 { Al() -> QC-alphabet, Pro[set] } :
+  for S being Element of CQC-Sub-WFF(Al())  holds Pro[S]
 provided
- for S,S9 being Element of CQC-Sub-WFF, x being bound_QC-variable,SQ
-be second_Q_comp of [S,x], k being Element of NAT,ll being CQC-variable_list of
-k, P being (QC-pred_symbol of k), e being Element of vSUB holds Pro[Sub_P(P,ll,
-e)] & (S is Sub_VERUM implies Pro[S]) & (Pro[S] implies Pro[Sub_not S]) & (S`2
-= (S9)`2 & Pro[S] & Pro[S9] implies Pro[CQCSub_&(S,S9)]) & ([S,x] is
-quantifiable & Pro[S] implies Pro[CQCSub_All([S,x], SQ)]);
+ for S,S9 being Element of CQC-Sub-WFF(Al()),
+x being bound_QC-variable of Al(),
+SQ being second_Q_comp of [S,x],
+k being Element of NAT,
+ll being CQC-variable_list of k, Al(),
+P being (QC-pred_symbol of k,Al()),
+e being Element of vSUB(Al())
+holds Pro[Sub_P(P,ll,e)] & (S is Al()-Sub_VERUM implies Pro[S]) &
+(Pro[S] implies Pro[Sub_not S]) &
+(S`2 = (S9)`2 & Pro[S] & Pro[S9] implies Pro[CQCSub_&(S,S9)]) &
+([S,x] is quantifiable & Pro[S] implies Pro[CQCSub_All([S,x], SQ)]);
 
 :: Substitution Lemma (Ebb et al, Chapter III, 8.3)
 

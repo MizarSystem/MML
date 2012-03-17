@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received October 15, 2008
-:: Copyright (c) 2008-2011 Association of Mizar Users
+:: Copyright (c) 2008-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -75,14 +75,14 @@ definition
   let X;
   attr X is rational-functions-membered means
   :Def5:
-  x in X implies x is rational-valued Function;
+  x in X implies x is RAT-valued Function;
 end;
 
 definition
   let X;
   attr X is integer-functions-membered means
   :Def6:
-  x in X implies x is integer-valued Function;
+  x in X implies x is INT-valued Function;
 end;
 
 definition
@@ -100,23 +100,27 @@ registration
     assume
 A1: for x being set st x in X holds x is natural-valued Function;
     let x;
-    thus thesis by A1;
+    assume x in X;
+    then x is natural-valued Function by A1;
+    hence thesis;
   end;
   cluster integer-functions-membered -> rational-functions-membered for set;
   coherence
   proof
     let X;
     assume
-A2: for x being set st x in X holds x is integer-valued Function;
+A2: for x being set st x in X holds x is INT-valued Function;
     let x;
-    thus thesis by A2;
+    assume x in X;
+    then x is INT-valued Function by A2;
+    hence thesis;
   end;
   cluster rational-functions-membered -> real-functions-membered for set;
   coherence
   proof
     let X;
     assume
-A3: for x being set st x in X holds x is rational-valued Function;
+A3: for x being set st x in X holds x is RAT-valued Function;
     let x;
     thus thesis by A3;
   end;
@@ -849,7 +853,7 @@ end;
 
 registration
   let X be rational-functions-membered set;
-  cluster -> rational-valued for Element of X;
+  cluster -> RAT-valued for Element of X;
   coherence
   proof
     X is empty or X is non empty;
@@ -859,7 +863,7 @@ end;
 
 registration
   let X be integer-functions-membered set;
-  cluster -> integer-valued for Element of X;
+  cluster -> INT-valued for Element of X;
   coherence
   proof
     X is empty or X is non empty;
@@ -882,19 +886,7 @@ registration
   let Y be complex-functions-membered set;
   let f be PartFunc of X,Y;
   cluster f.x -> Function-like Relation-like;
-  coherence
-  proof
-    per cases;
-    suppose
-      x in dom f;
-      then f.x in rng f by FUNCT_1:def 3;
-      hence thesis;
-    end;
-    suppose
-      not x in dom f;
-      hence thesis by FUNCT_1:def 2;
-    end;
-  end;
+  coherence;
 end;
 
 registration
@@ -902,19 +894,7 @@ registration
   let Y be ext-real-functions-membered set;
   let f be PartFunc of X,Y;
   cluster f.x -> Function-like Relation-like;
-  coherence
-  proof
-    per cases;
-    suppose
-      x in dom f;
-      then f.x in rng f by FUNCT_1:def 3;
-      hence thesis;
-    end;
-    suppose
-      not x in dom f;
-      hence thesis by FUNCT_1:def 2;
-    end;
-  end;
+  coherence;
 end;
 
 registration
@@ -981,7 +961,7 @@ registration
   let X, x;
   let Y be rational-functions-membered set;
   let f be PartFunc of X,Y;
-  cluster f.x -> rational-valued;
+  cluster f.x -> RAT-valued;
   coherence
   proof
     per cases;
@@ -1001,7 +981,7 @@ registration
   let X, x;
   let Y be integer-functions-membered set;
   let f be PartFunc of X,Y;
-  cluster f.x -> integer-valued;
+  cluster f.x -> INT-valued;
   coherence
   proof
     per cases;
@@ -1268,8 +1248,7 @@ registration
  cluster -> complex-functions-valued for Y-valued Function;
  coherence
   proof let f be Y-valued Function;
-    rng f c= Y by RELAT_1:def 19;
-   hence rng f is complex-functions-membered;
+   thus rng f is complex-functions-membered;
   end;
 end;
 
@@ -1339,11 +1318,11 @@ A6: for x being set st x in dom f holds f.x is real-valued Function;
     hence thesis by A6;
   end;
   redefine attr f is rational-functions-valued means
-  for x being set st x in dom f holds f.x is rational-valued Function;
+  for x being set st x in dom f holds f.x is RAT-valued Function;
   compatibility
   proof
     thus f is rational-functions-valued implies for x being set st x in dom f
-    holds f.x is rational-valued Function
+    holds f.x is RAT-valued Function
     proof
       assume
 A7:   rng f is rational-functions-membered;
@@ -1353,18 +1332,18 @@ A7:   rng f is rational-functions-membered;
       hence thesis by A7;
     end;
     assume
-A8: for x being set st x in dom f holds f.x is rational-valued Function;
+A8: for x being set st x in dom f holds f.x is RAT-valued Function;
     let y be set;
     assume y in rng f;
     then ex x being set st x in dom f & f.x = y by FUNCT_1:def 3;
     hence thesis by A8;
   end;
   redefine attr f is integer-functions-valued means
-  for x being set st x in dom f holds f.x is integer-valued Function;
+  for x being set st x in dom f holds f.x is INT-valued Function;
   compatibility
   proof
     thus f is integer-functions-valued implies for x being set st x in dom f
-    holds f.x is integer-valued Function
+    holds f.x is INT-valued Function
     proof
       assume
 A9:   rng f is integer-functions-membered;
@@ -1374,7 +1353,7 @@ A9:   rng f is integer-functions-membered;
       hence thesis by A9;
     end;
     assume
-A10: for x being set st x in dom f holds f.x is integer-valued Function;
+A10: for x being set st x in dom f holds f.x is INT-valued Function;
     let y be set;
     assume y in rng f;
     then ex x being set st x in dom f & f.x = y by FUNCT_1:def 3;
@@ -1506,12 +1485,7 @@ registration
   let X;
   let Y be complex-functions-membered set;
   cluster -> complex-functions-valued for PartFunc of X,Y;
-  coherence
-  proof
-    let f be PartFunc of X,Y;
-    let x;
-    thus thesis;
-  end;
+  coherence;
 end;
 
 registration
@@ -1672,7 +1646,7 @@ end;
 registration
   let f be rational-functions-valued Function;
   let x;
-  cluster f.x -> rational-valued;
+  cluster f.x -> RAT-valued;
   coherence
   proof
     per cases;
@@ -1691,7 +1665,7 @@ end;
 registration
   let f be integer-functions-valued Function;
   let x;
-  cluster f.x -> integer-valued;
+  cluster f.x -> INT-valued;
   coherence
   proof
     per cases;
@@ -2083,8 +2057,8 @@ registration
 end;
 
 registration
-  let f be rational-valued Function, r be rational number;
-  cluster f (/) r -> rational-valued;
+  let f be RAT-valued Function, r be rational number;
+  cluster f (/) r -> RAT-valued;
   coherence;
 end;
 
@@ -3043,7 +3017,7 @@ definition
   let X;
   let Y be natural-functions-membered set;
   let f be PartFunc of X,Y;
-  let c be natural number;
+  let c be Nat;
   redefine func f[+]c -> PartFunc of X, N_PFuncs(DOMS(Y));
   coherence
   proof
@@ -3430,7 +3404,7 @@ definition
   let X;
   let Y be natural-functions-membered set;
   let f be PartFunc of X,Y;
-  let c be natural number;
+  let c be Nat;
   redefine func f[#]c -> PartFunc of X, N_PFuncs(DOMS(Y));
   coherence
   proof
@@ -3710,7 +3684,7 @@ definition
   let X;
   let Y be rational-functions-membered set;
   let f be PartFunc of X,Y;
-  let g be rational-valued Function;
+  let g be RAT-valued Function;
   redefine func f<+>g -> PartFunc of X /\ dom g, Q_PFuncs(DOMS(Y));
   coherence
   proof
@@ -3747,7 +3721,7 @@ definition
   let X;
   let Y be integer-functions-membered set;
   let f be PartFunc of X,Y;
-  let g be integer-valued Function;
+  let g be INT-valued Function;
   redefine func f<+>g -> PartFunc of X /\ dom g, I_PFuncs(DOMS(Y));
   coherence
   proof
@@ -3903,21 +3877,21 @@ A1: dom h = dom f /\ dom g by Th61;
       then consider x such that
 A2:   x in dom h and
 A3:   h.x = y by FUNCT_1:def 3;
-B4:   h.x = f.x - g.x by A2,Th62;
+A4:   h.x = f.x - g.x by A2,Th62;
       then reconsider y as Function by A3;
-A4:   rng y c= COMPLEX
+A5:   rng y c= COMPLEX
       proof
         let b be set;
-        thus thesis by A3,B4,XCMPLX_0:def 2;
+        thus thesis by A3,A4,XCMPLX_0:def 2;
       end;
       x in dom f by A1,A2,XBOOLE_0:def 4;
       then f.x in Y by PARTFUN1:4;
       then dom(f.x) in {dom m where m is Element of Y: not contradiction};
       then
-A5:   dom(f.x) c= DOMS(Y) by ZFMISC_1:74;
+A6:   dom(f.x) c= DOMS(Y) by ZFMISC_1:74;
       h.x = f.x - g.x by A2,Th62;
       then dom y = dom(f.x) by A3,VALUED_1:def 2;
-      then y is PartFunc of DOMS(Y),COMPLEX by A5,A4,RELSET_1:4;
+      then y is PartFunc of DOMS(Y),COMPLEX by A6,A5,RELSET_1:4;
       hence thesis by Def8;
     end;
     hence thesis by A1,RELSET_1:4,XBOOLE_1:27;
@@ -3965,7 +3939,7 @@ definition
   let X;
   let Y be rational-functions-membered set;
   let f be PartFunc of X,Y;
-  let g be rational-valued Function;
+  let g be RAT-valued Function;
   redefine func f<->g -> PartFunc of X /\ dom g, Q_PFuncs(DOMS(Y));
   coherence
   proof
@@ -4002,7 +3976,7 @@ definition
   let X;
   let Y be integer-functions-membered set;
   let f be PartFunc of X,Y;
-  let g be integer-valued Function;
+  let g be INT-valued Function;
   redefine func f<->g -> PartFunc of X /\ dom g, I_PFuncs(DOMS(Y));
   coherence
   proof
@@ -4234,7 +4208,7 @@ definition
   let X;
   let Y be rational-functions-membered set;
   let f be PartFunc of X,Y;
-  let g be rational-valued Function;
+  let g be RAT-valued Function;
   redefine func f<#>g -> PartFunc of X /\ dom g, Q_PFuncs(DOMS(Y));
   coherence
   proof
@@ -4271,7 +4245,7 @@ definition
   let X;
   let Y be integer-functions-membered set;
   let f be PartFunc of X,Y;
-  let g be integer-valued Function;
+  let g be INT-valued Function;
   redefine func f<#>g -> PartFunc of X /\ dom g, I_PFuncs(DOMS(Y));
   coherence
   proof
@@ -4456,7 +4430,7 @@ definition
   let X;
   let Y be rational-functions-membered set;
   let f be PartFunc of X,Y;
-  let g be rational-valued Function;
+  let g be RAT-valued Function;
   redefine func f</>g -> PartFunc of X /\ dom g, Q_PFuncs(DOMS(Y));
   coherence
   proof

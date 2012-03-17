@@ -10,9 +10,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -22,9 +24,12 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="XXREAL_2"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="XXREAL_1"/>
+<ArticleID name="RCOMP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
@@ -54,20 +59,37 @@
 <Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="15">
 <Cluster/>
-<Func kind="K" nr="282">
+<Func kind="K" nr="312">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="63" value="false"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
-<Adjective nr="82"/>
-<Adjective nr="87"/>
+<Adjective nr="77" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="103"/>
+</Cluster>
+</RCluster>
+<RCluster aid="JORDAN5A" nr="2">
+<ArgTypes/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="6">
+<Func kind="K" nr="28"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="52"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN5A" nr="1">
@@ -77,12 +99,54 @@
 <Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="282">
+<Func kind="K" nr="312">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="153"/>
-<Adjective nr="178"/>
+<Adjective nr="169"/>
+<Adjective nr="194"/>
 </Cluster>
 </FCluster>
+<FCluster aid="JORDAN5A" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="226">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="73"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="6">
+<Func kind="K" nr="28"/>
+</Func>
+</Typ>
+</FCluster>
+<CCluster aid="JORDAN5A" nr="1">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="52"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="6">
+<Func kind="K" nr="28"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="73"/>
+</Cluster>
+</CCluster>
 </Registrations>

@@ -2,7 +2,7 @@
 ::  by Yasumasa Suzuki
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,15 +25,14 @@ environ
       ORDINAL1, NUMBERS, RLVECT_1, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0,
       RLSUB_1, NORMSP_0, NORMSP_1, VALUED_1, SEQ_1, SEQ_2, SERIES_1, POWER,
       RSSPACE, RSSPACE3, LOPBAN_1;
- constructors PARTFUN1, BINOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
-      SEQM_3, PREPOWER, SERIES_1, REALSET1, RLSUB_1, RSSPACE3, LOPBAN_1, SEQ_1,
-      VALUED_1, RELSET_1, BINOP_2, RVSUM_1;
+ constructors REAL_1, COMPLEX1, SEQ_2, PREPOWER, SERIES_1, REALSET1, RLSUB_1,
+      RSSPACE3, LOPBAN_1, SEQ_1, RELSET_1, BINOP_2, COMSEQ_2, BINOP_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, REALSET1, STRUCT_0, RLVECT_1, LOPBAN_1, VALUED_0,
-      RSSPACE, VALUED_1, FUNCT_2, NORMSP_0;
+      RSSPACE, VALUED_1, FUNCT_2, SERIES_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, REALSET1, BINOP_1, RLVECT_1, RLSUB_1, STRUCT_0, ALGSTR_0,
-      VALUED_1, NORMSP_0;
+ definitions TARSKI, REALSET1, BINOP_1, RLVECT_1, STRUCT_0, ALGSTR_0, VALUED_1,
+      NORMSP_0;
  theorems XBOOLE_0, RELAT_1, TARSKI, ABSVALUE, ZFMISC_1, SEQ_1, SEQM_3,
       SERIES_1, COMSEQ_3, FUNCT_1, NAT_1, SEQ_2, FUNCT_2, RLVECT_1, RLSUB_1,
       NORMSP_1, XREAL_0, RSSPACE2, XCMPLX_1, SEQ_4, POWER, RSSPACE, RSSPACE3,
@@ -94,7 +93,7 @@ A2: for x being set holds x in IT iff x in the_set_of_RealSequences &
     for x be set st x in IT holds x in the_set_of_RealSequences by A2;
     then
 A3: IT is Subset of the_set_of_RealSequences by TARSKI:def 3;
-    seq_id(Zeroseq) rto_power p is summable
+    seq_id(Zeroseq) rto_power p is absolutely_summable
     proof
       reconsider rseq=seq_id(Zeroseq) rto_power p as Real_Sequence;
       now
@@ -104,7 +103,7 @@ A3: IT is Subset of the_set_of_RealSequences by TARSKI:def 3;
           .=0 to_power p by ABSVALUE:2
           .=0 by A1,POWER:def 2;
       end;
-      hence thesis by COMSEQ_3:3,SERIES_1:35;
+      hence thesis by COMSEQ_3:3;
     end;
     then IT is non empty by A2;
     hence thesis by A2,A3,RSSPACE:def 7;
@@ -698,20 +697,20 @@ end;
   proof
     let NORM1,NORM2 be Function of the_set_of_RealSequences_l^p, REAL such
     that
-A1: for x be set st x in the_set_of_RealSequences_l^p holds NORM1.x =
+A2: for x be set st x in the_set_of_RealSequences_l^p holds NORM1.x =
     ( Sum(seq_id(x) rto_power p) ) to_power (1/p) and
-A2: for x be set st x in the_set_of_RealSequences_l^p holds NORM2.x =
+A3: for x be set st x in the_set_of_RealSequences_l^p holds NORM2.x =
     ( Sum(seq_id(x) rto_power p) ) to_power (1/p);
-A3: for z be set st z in the_set_of_RealSequences_l^p holds NORM1.z = NORM2.z
+A4: for z be set st z in the_set_of_RealSequences_l^p holds NORM1.z = NORM2.z
     proof
       let z be set such that
-A4:   z in the_set_of_RealSequences_l^p;
-      NORM1.z = ( Sum(seq_id(z) rto_power p) ) to_power (1/p) by A1,A4;
-      hence thesis by A2,A4;
+A5:   z in the_set_of_RealSequences_l^p;
+      NORM1.z = ( Sum(seq_id(z) rto_power p) ) to_power (1/p) by A2,A5;
+      hence thesis by A3,A5;
     end;
-A5: dom NORM2 = the_set_of_RealSequences_l^p by FUNCT_2:def 1;
+A6: dom NORM2 = the_set_of_RealSequences_l^p by FUNCT_2:def 1;
     dom NORM1 = the_set_of_RealSequences_l^p by FUNCT_2:def 1;
-    hence thesis by A5,A3,FUNCT_1:2;
+    hence thesis by A6,A4,FUNCT_1:2;
   end;
 end;
 
@@ -956,7 +955,7 @@ A8: abs(rseq.n) to_power p =0 by A3,A5,A6,RSSPACE:17;
   hence thesis;
 end;
 
-Lm6: for p be Real st 1 <=p for lp be non empty NORMSTR st lp = NORMSTR (#
+Lm5: for p be Real st 1 <=p for lp be non empty NORMSTR st lp = NORMSTR (#
   the_set_of_RealSequences_l^p, Zero_(the_set_of_RealSequences_l^p,
   Linear_Space_of_RealSequences), Add_(the_set_of_RealSequences_l^p,
   Linear_Space_of_RealSequences), Mult_(the_set_of_RealSequences_l^p,
@@ -993,7 +992,7 @@ A4: abs((seq_id(x)).n) >=0 by COMPLEX1:46;
   hence thesis by FUNCT_2:12;
 end;
 
-Lm7: for p be Real st 1 <=p for lp be non empty NORMSTR st lp = NORMSTR (#
+Lm6: for p be Real st 1 <=p for lp be non empty NORMSTR st lp = NORMSTR (#
   the_set_of_RealSequences_l^p, Zero_(the_set_of_RealSequences_l^p,
   Linear_Space_of_RealSequences), Add_(the_set_of_RealSequences_l^p,
   Linear_Space_of_RealSequences), Mult_(the_set_of_RealSequences_l^p,
@@ -1012,11 +1011,11 @@ A2: lp = NORMSTR (# the_set_of_RealSequences_l^p, Zero_(
 A3: (seq_id(x) rto_power p) is summable by A1,A2,Th10;
   let a be Real;
   thus ( Sum(seq_id(a*x) rto_power p) ) = ( Sum((abs(a) to_power p)(#)(seq_id(
-  x) rto_power p)) ) by A1,A2,Lm6
+  x) rto_power p)) ) by A1,A2,Lm5
     .=(abs(a) to_power p) * Sum(seq_id(x) rto_power p) by A3,SERIES_1:10;
 end;
 
-Lm8: for p be Real st 1 <=p for lp be non empty NORMSTR st lp = NORMSTR (#
+Lm7: for p be Real st 1 <=p for lp be non empty NORMSTR st lp = NORMSTR (#
   the_set_of_RealSequences_l^p, Zero_(the_set_of_RealSequences_l^p,
   Linear_Space_of_RealSequences), Add_(the_set_of_RealSequences_l^p,
   Linear_Space_of_RealSequences), Mult_(the_set_of_RealSequences_l^p,
@@ -1044,7 +1043,7 @@ A5: 0<=Sum(seq_id(x) rto_power p) by A4,SERIES_1:18;
   let a be Real;
 A6: (abs(a) to_power p) >= 0 by A1,Lm1,COMPLEX1:46;
   thus ( Sum(seq_id(a*x) rto_power p) ) to_power (1/p) =((abs(a) to_power p) *
-  Sum(seq_id(x) rto_power p) ) to_power (1/p) by A1,A3,Lm7
+  Sum(seq_id(x) rto_power p) ) to_power (1/p) by A1,A3,Lm6
     .= ((abs(a) to_power p) to_power (1/p)) * ( Sum(seq_id(x) rto_power p)
   to_power (1/p)) by A2,A5,A6,Lm2
     .= (abs(a) to_power (p*(1/p))) * ( Sum(seq_id(x) rto_power p) to_power (
@@ -1123,7 +1122,7 @@ A19: ||.x.|| = (the normF of lp). x
     .= ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by A3,Def3;
   ||.(a*x).|| = (the normF of lp). (a*x)
     .= ( Sum(seq_id(a*x) rto_power p) ) to_power (1/p) by A3,Def3
-    .=(abs(a))* ||.x.|| by A1,A3,A19,Lm8;
+    .=(abs(a))* ||.x.|| by A1,A3,A19,Lm7;
   hence thesis by A2,A7,A13,A15,A11,A12,A18,Lm1,SERIES_1:18;
 end;
 
@@ -1158,7 +1157,7 @@ theorem
 Linear_Space_of_RealSequences), l_norm^p #) holds lp is RealNormSpace by Th9
 ,Th14;
 
-Lm9: for p be Real st 0 < p for c be Real, seq be Real_Sequence st seq is
+Lm8: for p be Real st 0 < p for c be Real, seq be Real_Sequence st seq is
 convergent for rseq be Real_Sequence st ( for i be Element of NAT holds rseq .i
 = (abs(seq.i -c)) to_power p ) holds rseq is convergent & lim rseq = (abs(lim
 seq-c)) to_power p
@@ -1191,7 +1190,7 @@ A7: lim b = abs(lim seq - c) by A2,A3,RSSPACE3:1;
   hence thesis by A1,A7,A6,A5,HOLDER_1:10;
 end;
 
-Lm10: for p be Real st 0 < p for c be Real, seq, seq1 be Real_Sequence st seq
+Lm9: for p be Real st 0 < p for c be Real, seq, seq1 be Real_Sequence st seq
 is convergent & seq1 is convergent for rseq be Real_Sequence st ( for i be
 Element of NAT holds rseq .i = (abs(seq.i -c)) to_power p +seq1.i ) holds rseq
 is convergent & lim rseq = (abs(lim seq-c)) to_power p + lim seq1
@@ -1215,13 +1214,13 @@ A5: for i be Element of NAT holds rseq .i =( (abs(seq.i -c)) to_power p
   end;
   then
 A6: rseq = b + seq1 by SEQ_1:7;
-A7: b is convergent by A1,A2,A4,Lm9;
+A7: b is convergent by A1,A2,A4,Lm8;
   hence rseq is convergent by A3,A6,SEQ_2:5;
-  lim b = (abs(lim seq-c)) to_power p by A1,A2,A4,Lm9;
+  lim b = (abs(lim seq-c)) to_power p by A1,A2,A4,Lm8;
   hence thesis by A3,A7,A6,SEQ_2:6;
 end;
 
-Lm11: for a,b be Real_Sequence holds a=a+b-b
+Lm10: for a,b be Real_Sequence holds a=a+b-b
 proof
   let a,b be Real_Sequence;
   now
@@ -1235,7 +1234,7 @@ proof
   hence thesis by FUNCT_2:63;
 end;
 
-Lm12: for p be Real st p >= 1 for a,b be Real_Sequence st a rto_power p is
+Lm11: for p be Real st p >= 1 for a,b be Real_Sequence st a rto_power p is
 summable & b rto_power p is summable holds (a + b) rto_power p is summable
 proof
   let p be Real such that
@@ -1481,7 +1480,7 @@ A49:      lim rseqb = Partial_Sums ((seq_id(tseq)-seq_id(vseq.n))
           rto_power p).i by A42,A43;
 A50:      rseqb is convergent by A42,A43;
           then lim rseq = abs(lim rseq0-(seq_id(vseq.n)).(i+1)) to_power p +
-          lim rseqb by A1,A45,A48,Lm10
+          lim rseqb by A1,A45,A48,Lm9
             .= abs(tseq.(i+1)+-(seq_id(vseq.n)).(i+1)) to_power p + lim
           rseqb by A46
             .= abs(tseq.(i+1)+(-seq_id(vseq.n)).(i+1)) to_power p + lim
@@ -1494,7 +1493,7 @@ A50:      rseqb is convergent by A42,A43;
 Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i by RSSPACE:1
             .=Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).(i+1)
           by SERIES_1:def 1;
-          hence thesis by A1,A50,A45,A48,Lm10;
+          hence thesis by A1,A50,A45,A48,Lm9;
         end;
       end;
       then
@@ -1527,7 +1526,7 @@ SEQ_1:10
             hence thesis by A53;
           end;
           then lim rseq = abs(lim(rseq0) -(seq_id(vseq.n)).0) to_power p by A1
-,A54,Lm9
+,A54,Lm8
             .= abs(tseq.0+-(seq_id(vseq.n)).0) to_power p by A55
             .=abs(tseq.0+(-(seq_id(vseq.n))).0) to_power p by SEQ_1:10
             .=abs((tseq-(seq_id((vseq.n)))).0) to_power p by SEQ_1:7
@@ -1535,7 +1534,7 @@ SEQ_1:10
             .=((seq_id(tseq)+-(seq_id(vseq.n))) rto_power p).0 by Def1
             .=Partial_Sums ((seq_id(tseq)-(seq_id(vseq.n))) rto_power p).0
           by SERIES_1:def 1;
-          hence thesis by A1,A54,A56,Lm9;
+          hence thesis by A1,A54,A56,Lm8;
         end;
       end;
       then
@@ -1668,9 +1667,9 @@ A83: ((seq_id(tseq)-seq_id(vseq.m)) rto_power p ) is summable by A82;
     set a=(seq_id(tseq) -seq_id(vseq.m));
 A84: a +b =(seq_id(tseq)+seq_id(vseq.m))+(-seq_id(vseq.m)) by SEQ_1:13
       .=seq_id(tseq)+seq_id(vseq.m)-seq_id(vseq.m)
-      .=d by Lm11;
+      .=d by Lm10;
     seq_id( (vseq.m) ) rto_power p is summable by A1,A3,Def2;
-    hence thesis by A1,A83,A84,Lm12;
+    hence thesis by A1,A83,A84,Lm11;
   end;
   then reconsider tv=tseq as Point of lp by A1,A3,Th10;
   for e be Real st e > 0 ex m be Element of NAT st for n be Element of

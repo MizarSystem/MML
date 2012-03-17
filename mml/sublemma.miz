@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,42 +15,45 @@
 environ
 
  vocabularies SUBSET_1, NUMBERS, CQC_LANG, QC_LANG1, XBOOLE_0, VALUAT_1,
-      FUNCT_1, FINSEQ_1, SUBSTUT1, RELAT_1, TARSKI, FUNCT_4, FUNCOP_1,
+      FUNCT_1, FINSEQ_1, RELAT_1, TARSKI, FUNCT_4, FUNCOP_1, ORDINAL1,
       PARTFUN1, FUNCT_2, MCART_1, REALSET1, XBOOLEAN, ZF_MODEL, ORDINAL4,
       ZF_LANG, ARYTM_3, NAT_1, XXREAL_0, ZFMISC_1, BVFUNC_2, CLASSES2,
-      ZF_LANG1, SUBLEMMA, CARD_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, NAT_1,
+      ZF_LANG1, SUBLEMMA, CARD_1, SUBSTUT1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, FINSEQ_1, FUNCT_1, ORDINAL1, NAT_1,
       QC_LANG1, QC_LANG3, PARTFUN1, CARD_1, NUMBERS, XXREAL_0, FUNCOP_1,
       CQC_LANG, RELAT_1, FUNCT_4, SEQ_4, VALUAT_1, RELSET_1, FUNCT_2, MARGREL1,
       DOMAIN_1, MCART_1, SUBSTUT1;
- constructors DOMAIN_1, FUNCT_4, XXREAL_0, SEQ_4, QC_LANG3, VALUAT_1, SUBSTUT1,
-      RELSET_1;
+ constructors DOMAIN_1, FUNCT_4, XXREAL_0, SEQ_4, QC_LANG3, VALUAT_1,
+      RELSET_1, SUBSTUT1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      MEMBERED, QC_LANG1, CQC_LANG, SUBSTUT1, XXREAL_0, XXREAL_2, CARD_1,
-      RELSET_1;
+      MEMBERED, QC_LANG1, CQC_LANG, XXREAL_0, XXREAL_2, CARD_1,
+      RELSET_1, SUBSTUT1, FUNCT_4, XTUPLE_0;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0, FUNCOP_1;
+ definitions TARSKI, XBOOLE_0, FUNCOP_1, XTUPLE_0;
  theorems TARSKI, FINSEQ_1, FUNCT_1, MCART_1, VALUAT_1, XBOOLE_0, XBOOLE_1,
       FINSEQ_2, CQC_LANG, QC_LANG1, ZFMISC_1, RELAT_1, QC_LANG3, FUNCOP_1,
-      FUNCT_2, RELSET_1, QC_LANG2, SUBSTUT1, FUNCT_4, FUNCT_7, ORDINAL1,
-      XXREAL_2, CARD_1;
+      FUNCT_2, RELSET_1, QC_LANG2, FUNCT_4, FUNCT_7, ORDINAL1,
+      CARD_1, SUBSTUT1, XTUPLE_0;
  schemes CQC_LANG, XBOOLE_0, SUBSTUT1;
 
 begin :: Preliminaries
 
+reserve Al for QC-alphabet;
 reserve a,b,c,d for set,
   i,k,n for Element of NAT,
-  p,q for Element of CQC-WFF,
-  x,y,y1 for bound_QC-variable,
+  p,q for Element of CQC-WFF(Al),
+  x,y,y1 for bound_QC-variable of Al,
   A for non empty set,
-  J for interpretation of A,
-  v,w for Element of Valuations_in A,
+  J for interpretation of Al,A,
+  v,w for Element of Valuations_in(Al,A),
   f,g for Function,
-  P,P9 for QC-pred_symbol of k,
-  ll,ll9 for CQC-variable_list of k,
-  l1 for FinSequence of QC-variables,
-  Sub,Sub9,Sub1 for CQC_Substitution,
-  S,S9,S1,S2 for Element of CQC-Sub-WFF;
+  P,P9 for QC-pred_symbol of k,Al,
+  ll,ll9 for CQC-variable_list of k,Al,
+  l1 for FinSequence of QC-variables(Al),
+  Sub,Sub9,Sub1 for CQC_Substitution of Al,
+  S,S9,S1,S2 for Element of CQC-Sub-WFF(Al),
+  s for QC-symbol of Al;
 
 theorem Th1:
   for f,g,h,h1,h2 being Function st dom h1 c= dom h & dom h2 c= dom
@@ -141,62 +144,63 @@ proof
 end;
 
 definition
-  let A;
-  mode Val_Sub of A is PartFunc of bound_QC-variables,A;
+  let Al,A;
+  mode Val_Sub of A,Al is PartFunc of bound_QC-variables(Al),A;
 end;
 
-reserve vS,vS1,vS2 for Val_Sub of A;
+reserve vS,vS1,vS2 for Val_Sub of A,Al;
 
 notation
-  let A, v, vS;
+  let Al, A, v, vS;
   synonym v.vS for v +* vS;
 end;
 
 definition
-  let A, v, vS;
-  redefine func v.vS -> Element of Valuations_in A;
+  let Al, A, v, vS;
+  redefine func v.vS -> Element of Valuations_in(Al,A);
   coherence
   proof
-    v is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
-    then ex f st v = f & dom f = bound_QC-variables & rng f c= A by
+    v is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
+    then ex f st v = f & dom f = bound_QC-variables(Al) & rng f c= A by
 FUNCT_2:def 2;
-    then dom (v +* vS) = bound_QC-variables \/ dom vS by FUNCT_4:def 1;
+    then dom (v +* vS) = bound_QC-variables(Al) \/ dom vS by FUNCT_4:def 1;
     then
-A1: dom (v +* vS) = bound_QC-variables by XBOOLE_1:12;
+A1: dom (v +* vS) = bound_QC-variables(Al) by XBOOLE_1:12;
     rng (v +* vS) c= rng v \/ rng vS by FUNCT_4:17;
-    then ex g st v +* vS = g & dom g = bound_QC-variables & rng g c= A by A1;
-    then v +* vS in Funcs(bound_QC-variables,A) by FUNCT_2:def 2;
+    then v +* vS in Funcs(bound_QC-variables(Al),A) by A1,FUNCT_2:def 2;
     hence thesis by VALUAT_1:def 1;
   end;
 end;
 
 definition
-  let S;
-  redefine func S`1 -> Element of CQC-WFF;
+  let Al,S;
+  redefine func S`1 -> Element of CQC-WFF(Al);
   coherence
   proof
-    S in CQC-Sub-WFF;
-    then ex S1 being Element of QC-Sub-WFF st S = S1 & S1`1 is Element of
-    CQC-WFF by SUBSTUT1:def 39;
+    S in CQC-Sub-WFF(Al);
+    then S in {S1 where S1 is Element of QC-Sub-WFF(Al) : S1`1 is Element of
+     CQC-WFF(Al)} by SUBSTUT1:def 39;
+    then ex S1 being Element of QC-Sub-WFF(Al) st S = S1 & S1`1 is Element of
+    CQC-WFF(Al);
     hence thesis;
   end;
 end;
 
 definition
-
-  let S, A, v;
-  func Val_S(v,S) -> Val_Sub of A equals
+  let Al, S, A, v;
+  func Val_S(v,S) -> Val_Sub of A,Al equals
   (@S`2)*v;
   coherence;
 end;
 
 theorem Th3:
-  S is Sub_VERUM implies CQC_Sub(S) = VERUM
+  S is Al-Sub_VERUM implies CQC_Sub(S) = VERUM(Al)
 proof
-  ex F being Function of QC-Sub-WFF,QC-WFF st CQC_Sub(S) = F.S & for S9
-being Element of QC-Sub-WFF holds (S9 is Sub_VERUM implies F.S9 = VERUM) & ( S9
-  is Sub_atomic implies F.S9 = (the_pred_symbol_of ((S9)`1))! CQC_Subst(
-Sub_the_arguments_of S9,(S9)`2)) & (S9 is Sub_negative implies F.S9 = 'not' (F.
+  ex F being Function of QC-Sub-WFF(Al),QC-WFF(Al) st CQC_Sub(S) = F.S & for S9
+being Element of QC-Sub-WFF(Al) holds (S9 is Al-Sub_VERUM implies
+ F.S9 = VERUM(Al)) & ( S9 is Sub_atomic implies F.S9 = (the_pred_symbol_of
+ ((S9)`1))! CQC_Subst(Sub_the_arguments_of S9,(S9)`2)) &
+  (S9 is Sub_negative implies F.S9 = 'not' (F.
   (Sub_the_argument_of S9))) & (S9 is Sub_conjunctive implies F.S9 = (F.
   Sub_the_left_argument_of S9) '&' (F.Sub_the_right_argument_of S9)) & (S9 is
   Sub_universal implies F.S9 = Quant(S9,F.Sub_the_scope_of S9)) by
@@ -205,34 +209,34 @@ SUBSTUT1:def 38;
 end;
 
 definition
-  let S, A, v, J;
+  let Al, S, A, v, J;
   pred J,v |= S means
-  :Def3:
+  :Def2:
   J,v |= S`1;
 end;
 
 theorem Th4:
-  S is Sub_VERUM implies for v holds (J,v |= CQC_Sub(S) iff J,v.
+  S is Al-Sub_VERUM implies for v holds (J,v |= CQC_Sub(S) iff J,v.
   Val_S(v,S) |= S)
 proof
   assume
-A1: S is Sub_VERUM;
+A1: S is Al-Sub_VERUM;
   let v;
-  ex Sub st S = [VERUM,Sub] by A1,SUBSTUT1:def 19;
-  then S`1 = VERUM by MCART_1:7;
-  then J,v.Val_S(v,S) |= VERUM iff J,v.Val_S(v,S) |= S by Def3;
+  ex Sub st S = [VERUM(Al),Sub] by A1,SUBSTUT1:def 19;
+  then S`1 = VERUM(Al) by MCART_1:7;
+  then J,v.Val_S(v,S) |= VERUM(Al) iff J,v.Val_S(v,S) |= S by Def2;
   hence J,v |= CQC_Sub(S) implies J,v.Val_S(v,S) |= S by VALUAT_1:32;
-  J,v.Val_S(v,S) |= S implies J,v |= VERUM by VALUAT_1:32;
+  J,v.Val_S(v,S) |= S implies J,v |= VERUM(Al) by VALUAT_1:32;
   hence thesis by A1,Th3;
 end;
 
 theorem Th5:
-  i in dom ll implies ll.i is bound_QC-variable
+  i in dom ll implies ll.i is bound_QC-variable of Al
 proof
   assume i in dom ll;
   then
 A1: ll.i in rng ll by FUNCT_1:3;
-  rng ll c= bound_QC-variables by RELAT_1:def 19;
+  rng ll c= bound_QC-variables(Al) by RELAT_1:def 19;
   hence thesis by A1;
 end;
 
@@ -240,10 +244,11 @@ theorem Th6:
   S is Sub_atomic implies CQC_Sub(S) = (the_pred_symbol_of S`1)!
   CQC_Subst(Sub_the_arguments_of S,S`2)
 proof
-  ex F being Function of QC-Sub-WFF,QC-WFF st CQC_Sub(S) = F.S & for S9
-being Element of QC-Sub-WFF holds (S9 is Sub_VERUM implies F.S9 = VERUM) & ( S9
-  is Sub_atomic implies F.S9 = (the_pred_symbol_of ((S9)`1))! CQC_Subst(
-Sub_the_arguments_of S9,(S9)`2)) & (S9 is Sub_negative implies F.S9 = 'not' (F.
+  ex F being Function of QC-Sub-WFF(Al),QC-WFF(Al) st CQC_Sub(S) = F.S & for S9
+being Element of QC-Sub-WFF(Al) holds (S9 is Al-Sub_VERUM implies F.S9 =
+  VERUM(Al)) & ( S9 is Sub_atomic implies F.S9 =
+  (the_pred_symbol_of ((S9)`1))! CQC_Subst(Sub_the_arguments_of S9,(S9)`2)) &
+  (S9 is Sub_negative implies F.S9 = 'not' (F.
   (Sub_the_argument_of S9))) & (S9 is Sub_conjunctive implies F.S9 = (F.
   Sub_the_left_argument_of S9) '&' (F.Sub_the_right_argument_of S9)) & (S9 is
   Sub_universal implies F.S9 = Quant(S9,F.Sub_the_scope_of S9)) by
@@ -258,84 +263,89 @@ proof
   assume
 A1: Sub_the_arguments_of Sub_P(P,ll,Sub) = Sub_the_arguments_of Sub_P(P9
   ,ll9,Sub9);
-  consider k1 being Element of NAT, P1 being (QC-pred_symbol of k1), ll1 being
-  QC-variable_list of k1, e1 being Element of vSUB such that
+  consider k1 being Element of NAT, P1 being (QC-pred_symbol of k1,Al),
+   ll1 being QC-variable_list of k1,Al , e1 being Element of vSUB(Al) such that
 A2: Sub_the_arguments_of Sub_P(P,ll,Sub) = ll1 and
 A3: Sub_P(P,ll,Sub) = Sub_P(P1,ll1,e1) by SUBSTUT1:def 29;
-A4: P!ll = <*P*>^ll & P1!ll1 = <*P1*>^ll1 by QC_LANG1:6;
+A4: P!ll = <*P*>^ll & P1!ll1 = <*P1*>^ll1 by QC_LANG1:8;
   Sub_P(P,ll,Sub) = [P!ll,Sub] by SUBSTUT1:9;
   then [P!ll,Sub] = [P1!ll1,e1] by A3,SUBSTUT1:9;
   then
-A5: <*P1*>^ll1 = <*P*>^ll by A4,ZFMISC_1:27;
+A5: <*P1*>^ll1 = <*P*>^ll by A4,XTUPLE_0:1;
   (<*P1*>^ll1).1 = P1 & (<*P*>^ll).1 = P by FINSEQ_1:41;
   then
 A6: ll1 = ll by A5,FINSEQ_1:33;
-  consider k2 being Element of NAT, P2 being (QC-pred_symbol of k2), ll2 being
-  QC-variable_list of k2, e2 being Element of vSUB such that
+  consider k2 being Element of NAT, P2 being (QC-pred_symbol of k2,Al),
+   ll2 being QC-variable_list of k2,Al, e2 being Element of vSUB(Al) such that
 A7: Sub_the_arguments_of Sub_P(P9,ll9,Sub9) = ll2 and
 A8: Sub_P(P9,ll9,Sub9) = Sub_P(P2,ll2,e2) by SUBSTUT1:def 29;
-A9: P9!ll9 = <*P9*>^ll9 & P2!ll2 = <*P2*>^ll2 by QC_LANG1:6;
+A9: P9!ll9 = <*P9*>^ll9 & P2!ll2 = <*P2*>^ll2 by QC_LANG1:8;
   Sub_P(P9,ll9,Sub9) = [P9!ll9,Sub9] by SUBSTUT1:9;
   then [P9!ll9,Sub9] = [P2!ll2,e2] by A8,SUBSTUT1:9;
   then
-A10: <*P2*>^ll2 = <*P9*>^ll9 by A9,ZFMISC_1:27;
+A10: <*P2*>^ll2 = <*P9*>^ll9 by A9,XTUPLE_0:1;
   (<*P2*>^ll2).1 = P2 & (<*P9*>^ll9).1 = P9 by FINSEQ_1:41;
   hence thesis by A1,A2,A7,A6,A10,FINSEQ_1:33;
 end;
 
 definition
-  let k, P, ll, Sub;
-  redefine func Sub_P(P,ll,Sub) -> Element of CQC-Sub-WFF;
+  let k, Al, P, ll, Sub;
+  redefine func Sub_P(P,ll,Sub) -> Element of CQC-Sub-WFF(Al);
   coherence
   proof
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A1: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
     Sub_P(P,ll,Sub) = [P!ll,Sub] by SUBSTUT1:9;
-    then Sub_P(P,ll,Sub)`1 = P!ll by MCART_1:7;
-    then Sub_P(P,ll,Sub) in CQC-Sub-WFF by SUBSTUT1:def 39;
-    hence thesis;
+    then Sub_P(P,ll,Sub)`1 = P!ll & P!ll in CQC-WFF(Al) by MCART_1:7;
+    hence thesis by A1;
   end;
 end;
 
-theorem Th9:
+theorem Th8:
   CQC_Sub(Sub_P(P,ll,Sub)) = P!CQC_Subst(ll,Sub)
 proof
-A1: P!ll is atomic by QC_LANG1:def 16;
+A1: P!ll is atomic by QC_LANG1:def 18;
 A2: Sub_P(P,ll,Sub) = [P!ll,Sub] by SUBSTUT1:9;
   then
 A3: Sub_P(P,ll,Sub)`2 = Sub by MCART_1:7;
   Sub_P(P,ll,Sub)`1 = P!ll by A2,MCART_1:7;
   then
   Sub_the_arguments_of Sub_P(P,ll,Sub) = ll & the_pred_symbol_of (Sub_P(P,
-  ll, Sub)`1) = P by A1,QC_LANG1:def 20,SUBSTUT1:def 29;
+  ll, Sub)`1) = P by A1,QC_LANG1:def 22,SUBSTUT1:def 29;
   hence thesis by A3,Th6;
 end;
 
 theorem
-  P!CQC_Subst(ll,Sub) is Element of CQC-WFF
+  P!CQC_Subst(ll,Sub) is Element of CQC-WFF(Al)
 proof
-  CQC_Sub(Sub_P(P,ll,Sub)) = P!CQC_Subst(ll,Sub) by Th9;
+  CQC_Sub(Sub_P(P,ll,Sub)) = P!CQC_Subst(ll,Sub) by Th8;
   hence thesis;
 end;
 
-theorem Th11:
-  CQC_Subst(ll,Sub) is CQC-variable_list of k
+theorem Th10:
+  CQC_Subst(ll,Sub) is CQC-variable_list of k,Al
 proof
-  reconsider ll as FinSequence of bound_QC-variables by SUBSTUT1:34;
-  reconsider s = CQC_Subst(ll,Sub) as FinSequence of bound_QC-variables;
+  reconsider ll as FinSequence of bound_QC-variables(Al) by SUBSTUT1:34;
+  reconsider s = CQC_Subst(ll,Sub) as FinSequence of bound_QC-variables(Al);
 A1: s = CQC_Subst(@ll,Sub) by SUBSTUT1:def 5;
   len ll = k by CARD_1:def 7;
   then len @ll = k by SUBSTUT1:def 4;
   then len s = k by A1,SUBSTUT1:def 3;
-  then s is CQC-variable_list of k by SUBSTUT1:34;
+  then s is CQC-variable_list of k,Al by SUBSTUT1:34;
   hence thesis by A1,SUBSTUT1:def 4;
 end;
 
 registration
+  let Al;
   let k, ll, Sub;
-  cluster CQC_Subst(ll,Sub) -> bound_QC-variables -valued k-element;
-  coherence by Th11;
+  cluster CQC_Subst(ll,Sub) -> bound_QC-variables(Al) -valued k-element;
+  coherence by Th10;
 end;
 
-theorem Th12:
+theorem Th11:
   not x in dom S`2 implies (v.Val_S(v,S)).x = v.x
 proof
   assume not x in dom(S`2);
@@ -346,18 +356,19 @@ A1: not x in dom @S`2 by SUBSTUT1:def 2;
   hence thesis by FUNCT_4:11;
 end;
 
-theorem Th13:
+theorem Th12:
   x in dom S`2 implies (v.Val_S(v,S)).x = Val_S(v,S).x
 proof
   assume x in dom S`2;
   then
 A1: x in dom @S`2 by SUBSTUT1:def 2;
-  rng @S`2 c= bound_QC-variables & dom v = bound_QC-variables by FUNCT_2:def 1;
+  rng @S`2 c= bound_QC-variables(Al) & dom v = bound_QC-variables(Al)
+   by FUNCT_2:def 1;
   then x in dom Val_S(v,S) by A1,RELAT_1:27;
   hence thesis by FUNCT_4:13;
 end;
 
-theorem Th14:
+theorem Th13:
   (v.Val_S(v,Sub_P(P,ll,Sub)))*'ll = v*'(CQC_Subst(ll,Sub))
 proof
   set S9 = Sub_P(P,ll,Sub);
@@ -369,21 +380,22 @@ A2: (S9)`2 = Sub by MCART_1:7;
 A3: len ((v.Val_S(v,S9))*'ll) = k by VALUAT_1:def 3;
   then
 A4: dom ((v.Val_S(v,S9))*'ll) = Seg k by FINSEQ_1:def 3;
-A5: for j be Nat st j in dom ((v.Val_S(v,S9))*'ll) holds (v.Val_S(v,S9))*'ll
+A5: for j be natural number st j in dom
+  ((v.Val_S(v,S9))*'ll) holds (v.Val_S(v,S9))*'ll
   .j = v*'(CQC_Subst(ll,Sub)).j
   proof
-    let j be Nat such that
+    let j be natural number such that
 A6: j in dom ((v.Val_S(v,S9))*'ll);
 A7: 1 <= j & j <= k by A4,A6,FINSEQ_1:1;
     reconsider j as Element of NAT by ORDINAL1:def 12;
     j in Seg (len ll) by A4,A6,CARD_1:def 7;
     then j in dom ll by FINSEQ_1:def 3;
-    then reconsider x = ll.j as bound_QC-variable by Th5;
+    then reconsider x = ll.j as bound_QC-variable of Al by Th5;
 A8: now
       assume
 A9:   ll.j in dom Sub;
       then
-      (v.Val_S(v,S9)).(ll.j) = Val_S(v,S9).x & ll.j in dom @(S9)`2 by A2,Th13,
+      (v.Val_S(v,S9)).(ll.j) = Val_S(v,S9).x & ll.j in dom @(S9)`2 by A2,Th12,
 SUBSTUT1:def 2;
       then (v.Val_S(v,S9)).(ll.j) = v.((@(S9)`2).(ll.j)) by FUNCT_1:13;
       then
@@ -395,7 +407,7 @@ A11:  ((v.Val_S(v,S9))*'ll).j = (v.Val_S(v,S9)).(ll.j) by A7,VALUAT_1:def 3;
     now
       assume not ll.j in dom Sub;
       then
-A12:  v.(ll9.j) = v.(ll.j) & (v.Val_S(v,S9)).(ll.j) = v.x by A2,A1,A7,Th12,
+A12:  v.(ll9.j) = v.(ll.j) & (v.Val_S(v,S9)).(ll.j) = v.x by A2,A1,A7,Th11,
 SUBSTUT1:def 3;
       (v*'ll9).j = v.(ll9.j) by A7,VALUAT_1:def 3;
       hence thesis by A7,A12,VALUAT_1:def 3;
@@ -406,31 +418,31 @@ SUBSTUT1:def 3;
   hence thesis by A3,A5,FINSEQ_2:9;
 end;
 
-theorem Th15:
+theorem Th14:
   Sub_P(P,ll,Sub)`1 = P!ll
 proof
   Sub_P(P,ll,Sub) = [P!ll,Sub] by SUBSTUT1:9;
   hence thesis by MCART_1:7;
 end;
 
-theorem Th16:
+theorem Th15:
   for v holds (J,v |= CQC_Sub(Sub_P(P,ll,Sub)) iff J,v.Val_S(v,
   Sub_P(P,ll,Sub)) |= Sub_P(P,ll,Sub))
 proof
   set S9 = Sub_P(P,ll,Sub);
   set ll9 = CQC_Subst(ll,Sub);
-  reconsider p = P!ll9 as Element of CQC-WFF;
-  reconsider ll9 as CQC-variable_list of k;
+  reconsider p = P!ll9 as Element of CQC-WFF(Al);
+  reconsider ll9 as CQC-variable_list of k,Al;
   let v;
 A1: Valid(p,J).v = TRUE iff v*'ll9 in J.P by VALUAT_1:7;
 A2: (v.Val_S(v,S9))*'ll in J.P iff Valid(P!ll,J).((v.Val_S(v,S9))) = TRUE by
 VALUAT_1:7;
-A3: J,v.Val_S(v,S9) |= P!ll iff J,v.Val_S(v,S9) |= Sub_P(P,ll,Sub)`1 by Th15;
-  J,v |= CQC_Sub(Sub_P(P,ll,Sub)) iff J,v |= p by Th9;
-  hence thesis by A1,A2,A3,Def3,Th14,VALUAT_1:def 7;
+A3: J,v.Val_S(v,S9) |= P!ll iff J,v.Val_S(v,S9) |= Sub_P(P,ll,Sub)`1 by Th14;
+  J,v |= CQC_Sub(Sub_P(P,ll,Sub)) iff J,v |= p by Th8;
+  hence thesis by A1,A2,A3,Def2,Th13,VALUAT_1:def 7;
 end;
 
-theorem Th17:
+theorem Th16:
   (Sub_not S)`1 = 'not' S`1 & (Sub_not S)`2 = S`2
 proof
   Sub_not S = ['not' S`1,S`2] by SUBSTUT1:def 20;
@@ -438,33 +450,37 @@ proof
 end;
 
 definition
-  let S;
-  redefine func Sub_not S -> Element of CQC-Sub-WFF;
+  let Al,S;
+  redefine func Sub_not S -> Element of CQC-Sub-WFF(Al);
   coherence
   proof
-    'not' S`1 in CQC-WFF;
-    then (Sub_not S)`1 in CQC-WFF by Th17;
-    then Sub_not S in CQC-Sub-WFF by SUBSTUT1:def 39;
-    hence thesis;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A1: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
+    'not' S`1 in CQC-WFF(Al);
+    then (Sub_not S)`1 in CQC-WFF(Al) by Th16;
+    hence thesis by A1;
   end;
 end;
 
-theorem Th18:
+theorem Th17:
   not J,v.Val_S(v,S) |= S iff J,v.Val_S(v,S) |= Sub_not S
 proof
 A1: not J,v.Val_S(v,S) |= S`1 iff J,v.Val_S(v,S) |= 'not' S`1 by VALUAT_1:17;
-  J,v.Val_S(v,S) |= 'not' S`1 iff J,v.Val_S(v,S) |= (Sub_not S)`1 by Th17;
-  hence thesis by A1,Def3;
+  J,v.Val_S(v,S) |= 'not' S`1 iff J,v.Val_S(v,S) |= (Sub_not S)`1 by Th16;
+  hence thesis by A1,Def2;
 end;
 
-theorem Th19:
+theorem Th18:
   Val_S(v,S) = Val_S(v,Sub_not S)
 proof
   Sub_not S = ['not' S`1,S`2] by SUBSTUT1:def 20;
   hence thesis by MCART_1:7;
 end;
 
-theorem Th20:
+theorem Th19:
   (for v holds (J,v |= CQC_Sub(S) iff J,v.Val_S(v,S) |= S))
   implies for v holds (J,v |= CQC_Sub(Sub_not S) iff J,v.Val_S(v,Sub_not S) |=
   Sub_not S)
@@ -473,77 +489,81 @@ proof
 A1: for v holds (J,v |= CQC_Sub(S) iff J,v.Val_S(v,S) |= S);
   let v;
 A2: J,v |= 'not' CQC_Sub(S) iff not J,v |= CQC_Sub(S) by VALUAT_1:17;
-  not J,v.Val_S(v,S) |= S iff J,v.Val_S(v,S) |= Sub_not S by Th18;
-  hence thesis by A1,A2,Th19,SUBSTUT1:29;
+  not J,v.Val_S(v,S) |= S iff J,v.Val_S(v,S) |= Sub_not S by Th17;
+  hence thesis by A1,A2,Th18,SUBSTUT1:29;
 end;
 
 definition
-  let S1, S2;
+  let Al, S1, S2;
   assume
 A1: S1`2 = S2`2;
-  func CQCSub_&(S1,S2) -> Element of CQC-Sub-WFF equals
-  :Def4:
+  func CQCSub_&(S1,S2) -> Element of CQC-Sub-WFF(Al) equals
+  :Def3:
   Sub_&(S1,S2);
   coherence
   proof
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A2: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
     Sub_&(S1,S2) = [(S1`1) '&' (S2`1),S1`2] by A1,SUBSTUT1:def 21;
     then Sub_&(S1,S2)`1 = (S1`1) '&' (S2`1) by MCART_1:7;
-    then Sub_&(S1,S2) in CQC-Sub-WFF by SUBSTUT1:def 39;
-    hence thesis;
+    hence thesis by A2;
   end;
 end;
 
-theorem Th21:
+theorem Th20:
   S1`2 = S2`2 implies CQCSub_&(S1,S2)`1 = (S1`1) '&' (S2`1) &
   CQCSub_&(S1,S2)`2 = S1`2
 proof
   assume
 A1: S1`2 = S2`2;
   then Sub_&(S1,S2) = [(S1`1) '&' (S2`1),S1`2] by SUBSTUT1:def 21;
-  then CQCSub_&(S1,S2) = [(S1`1) '&' (S2`1),S1`2] by A1,Def4;
+  then CQCSub_&(S1,S2) = [(S1`1) '&' (S2`1),S1`2] by A1,Def3;
   hence thesis by MCART_1:7;
 end;
 
-theorem Th22:
+theorem Th21:
   S1`2 = S2`2 implies CQCSub_&(S1,S2)`2 = S1`2
 proof
   assume
 A1: S1`2 = S2`2;
-  then CQCSub_&(S1,S2) = Sub_&(S1,S2) by Def4;
+  then CQCSub_&(S1,S2) = Sub_&(S1,S2) by Def3;
   then CQCSub_&(S1,S2) = [(S1`1) '&' (S2`1),S1`2] by A1,SUBSTUT1:def 21;
   hence thesis by MCART_1:7;
 end;
 
 theorem
   S1`2 = S2`2 implies Val_S(v,S1) = Val_S(v,CQCSub_&(S1,S2)) & Val_S(v,
-  S2) = Val_S(v,CQCSub_&(S1,S2)) by Th22;
+  S2) = Val_S(v,CQCSub_&(S1,S2)) by Th21;
 
-theorem Th24:
+theorem Th23:
   S1`2 = S2`2 implies CQC_Sub(CQCSub_&(S1,S2)) = (CQC_Sub(S1)) '&'
   (CQC_Sub(S2))
 proof
   assume
 A1: S1`2 = S2`2;
-  then CQCSub_&(S1,S2) = Sub_&(S1,S2) by Def4;
+  then CQCSub_&(S1,S2) = Sub_&(S1,S2) by Def3;
   hence thesis by A1,SUBSTUT1:31;
 end;
 
-theorem Th25:
+theorem Th24:
   S1`2 = S2`2 implies (J,v.Val_S(v,S1) |= S1 & J,v.Val_S(v,S2) |=
   S2 iff J,v.Val_S(v,CQCSub_&(S1,S2)) |= CQCSub_&(S1,S2))
 proof
   assume
 A1: S1`2 = S2`2;
-  then Val_S(v,S1) = Val_S(v,CQCSub_&(S1,S2)) by Th22;
+  then Val_S(v,S1) = Val_S(v,CQCSub_&(S1,S2)) by Th21;
   then
 A2: J,v.Val_S(v,S1) |= S1`1 & J,v.Val_S(v,S1) |= S2`1 iff J,v.Val_S(v,
   CQCSub_&(S1,S2)) |= (S1`1) '&' (S2`1) by VALUAT_1:18;
   J,v.Val_S(v,CQCSub_&(S1,S2)) |= (S1`1) '&' (S2`1) iff J,v.Val_S(v,
-  CQCSub_&(S1,S2)) |= CQCSub_&(S1,S2)`1 by A1,Th21;
-  hence thesis by A1,A2,Def3;
+  CQCSub_&(S1,S2)) |= CQCSub_&(S1,S2)`1 by A1,Th20;
+  hence thesis by A1,A2,Def2;
 end;
 
-theorem Th26:
+theorem Th25:
   S1`2 = S2`2 & (for v holds (J,v |= CQC_Sub(S1) iff J,v.Val_S(v,
   S1) |= S1)) & (for v holds (J,v |= CQC_Sub(S2) iff J,v.Val_S(v,S2) |= S2))
 implies for v holds (J,v |= CQC_Sub(CQCSub_&(S1,S2)) iff J,v.Val_S(v,CQCSub_&(
@@ -557,14 +577,14 @@ A2: ( for v holds (J,v |= CQC_Sub(S1) iff J,v.Val_S(v,S1) |= S1))& for v
 A3: J,v |= (CQC_Sub(S1)) & J,v |= (CQC_Sub(S2)) iff J,v.Val_S(v,S1) |= S1 &
   J,v.Val_S(v,S2) |= S2 by A2;
   J,v |= CQC_Sub(CQCSub_&(S1,S2)) iff J,v |= (CQC_Sub(S1)) '&' (CQC_Sub(S2
-  )) by A1,Th24;
-  hence thesis by A1,A3,Th25,VALUAT_1:18;
+  )) by A1,Th23;
+  hence thesis by A1,A3,Th24,VALUAT_1:18;
 end;
 
-reserve B for Element of [:QC-Sub-WFF,bound_QC-variables:],
+reserve B for Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):],
   SQ for second_Q_comp of B;
 
-theorem Th27:
+theorem Th26:
   B is quantifiable implies Sub_All(B,SQ)`1 = All(B`2,(B`1)`1) &
   Sub_All(B,SQ)`2 = SQ
 proof
@@ -574,152 +594,171 @@ proof
 end;
 
 definition
-  let B be Element of [:QC-Sub-WFF,bound_QC-variables:];
+  let Al;
+  let B be Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):];
   attr B is CQC-WFF-like means
-  :Def5:
-  B`1 in CQC-Sub-WFF;
+  :Def4:
+  B`1 in CQC-Sub-WFF(Al);
 end;
 
 registration
-  cluster CQC-WFF-like for Element of [:QC-Sub-WFF,bound_QC-variables:];
+  let Al;
+  cluster CQC-WFF-like for Element of [:QC-Sub-WFF(Al),
+   bound_QC-variables(Al):];
   existence
   proof
-    set Sub = the CQC_Substitution,x = the bound_QC-variable;
-    set B = [[VERUM,Sub],x];
-    reconsider S = [VERUM,Sub] as Element of QC-Sub-WFF by QC_LANG1:def 12
-,SUBSTUT1:def 16;
-    [VERUM,Sub] in QC-Sub-WFF by QC_LANG1:def 12,SUBSTUT1:def 16;
-    then reconsider B as Element of [:QC-Sub-WFF,bound_QC-variables:] by
-ZFMISC_1:87;
+    set Sub = the CQC_Substitution of Al,x =the  bound_QC-variable of Al;
+    set B = [[VERUM(Al),Sub],x];
+
+A1: VERUM(Al) = <*[0,0]*> by QC_LANG1:def 14;
+A2: [<*[0, 0]*>,Sub] in QC-Sub-WFF(Al) by SUBSTUT1:def 16;
+    reconsider S = [VERUM(Al),Sub] as Element of QC-Sub-WFF(Al)
+      by A1,SUBSTUT1:def 16;
+    [VERUM(Al),Sub] in QC-Sub-WFF(Al) by A2,QC_LANG1:def 14;
+    then reconsider B as Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):]
+    by ZFMISC_1:87;
     take B;
-    S`1 is Element of CQC-WFF by MCART_1:7;
-    then S in CQC-Sub-WFF by SUBSTUT1:def 39;
-    then B`1 in CQC-Sub-WFF by MCART_1:7;
-    hence thesis by Def5;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+A3: X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    S`1 is Element of CQC-WFF(Al) by MCART_1:7;
+    then S in CQC-Sub-WFF(Al) by A3;
+    then B`1 in CQC-Sub-WFF(Al) by MCART_1:7;
+    hence thesis by Def4;
   end;
 end;
 
 definition
-  let S, x;
-  redefine func [S,x] -> CQC-WFF-like Element of [:QC-Sub-WFF,
-  bound_QC-variables:];
+  let Al, S, x;
+  redefine func [S,x] -> CQC-WFF-like Element of [:QC-Sub-WFF(Al),
+  bound_QC-variables(Al):];
   coherence
   proof
-    [S,x]`1 = S by MCART_1:7;
-    hence thesis by Def5;
+    [S,x]`1 = S;
+    hence thesis by Def4;
   end;
 end;
 
-reserve B for CQC-WFF-like Element of [:QC-Sub-WFF,bound_QC-variables:],
+reserve B for CQC-WFF-like Element of [:QC-Sub-WFF(Al),
+  bound_QC-variables(Al):],
   xSQ for second_Q_comp of [S,x],
   SQ for second_Q_comp of B;
 
 definition
-  let B;
-  redefine func B`1 -> Element of CQC-Sub-WFF;
-  coherence by Def5;
+  let Al, B;
+  redefine func B`1 -> Element of CQC-Sub-WFF(Al);
+  coherence by Def4;
 end;
 
 definition
-  let B, SQ;
+  let Al, B, SQ;
   assume
 A1: B is quantifiable;
-  func CQCSub_All(B,SQ) -> Element of CQC-Sub-WFF equals
-  :Def6:
+  func CQCSub_All(B,SQ) -> Element of CQC-Sub-WFF(Al) equals
+  :Def5:
   Sub_All(B,SQ);
   coherence
   proof
-    All(B`2,(B`1)`1) in CQC-WFF;
-    then Sub_All(B,SQ)`1 in CQC-WFF by A1,Th27;
-    then Sub_All(B,SQ) in CQC-Sub-WFF by SUBSTUT1:def 39;
-    hence thesis;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A2: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
+    All(B`2,(B`1)`1) in CQC-WFF(Al);
+    then Sub_All(B,SQ)`1 in CQC-WFF(Al) by A1,Th26;
+    hence thesis by A2;
   end;
 end;
 
-theorem Th28:
+theorem Th27:
   B is quantifiable implies CQCSub_All(B,SQ) is Sub_universal
 proof
   assume
 A1: B is quantifiable;
   then Sub_All(B,SQ) is Sub_universal by SUBSTUT1:14;
-  hence thesis by A1,Def6;
+  hence thesis by A1,Def5;
 end;
 
 definition
+  let Al;
   let S such that
-A1: S is Sub_universal;
-  func CQCSub_the_scope_of S -> Element of CQC-Sub-WFF equals
-  :Def7:
+X1: S is Sub_universal;
+  func CQCSub_the_scope_of S -> Element of CQC-Sub-WFF(Al) equals
+  :Def6:
   Sub_the_scope_of S;
   coherence
   proof
-    consider B being Element of [:QC-Sub-WFF,bound_QC-variables:], SQ being
-    second_Q_comp of B such that
-A2: S = Sub_All(B,SQ) and
-A3: B`1 = Sub_the_scope_of S and
-A4: B is quantifiable by A1,SUBSTUT1:def 34;
-    S`1 = All(B`2,(B`1)`1) by A2,A4,Th27;
-    then (B`1)`1 is Element of CQC-WFF by CQC_LANG:13;
-    then B`1 in CQC-Sub-WFF by SUBSTUT1:def 39;
-    hence thesis by A3;
+    consider B being Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):],
+SQ being second_Q_comp of B such that
+A1: S = Sub_All(B,SQ) and
+A2: B`1 = Sub_the_scope_of S and
+A3: B is quantifiable by X1,SUBSTUT1:def 34;
+    set X = { G where G is Element of QC-Sub-WFF(Al) :
+              G`1 is Element of CQC-WFF(Al) };
+    X = CQC-Sub-WFF(Al) by SUBSTUT1:def 39;
+    then A4: for G being Element of QC-Sub-WFF(Al) holds
+        G`1 is Element of CQC-WFF(Al) implies G in CQC-Sub-WFF(Al);
+    S`1 = All(B`2,(B`1)`1) by A1,A3,Th26;
+    then (B`1)`1 is Element of CQC-WFF(Al) by CQC_LANG:13;
+    hence thesis by A4,A2;
   end;
 end;
 
 definition
-  let S1, p;
+  let Al, S1, p;
   assume that
 A1: S1 is Sub_universal and
 A2: p = CQC_Sub(CQCSub_the_scope_of S1);
-  func CQCQuant(S1,p) -> Element of CQC-WFF equals
-  :Def8:
+  func CQCQuant(S1,p) -> Element of CQC-WFF(Al) equals
+  :Def7:
   Quant(S1,p);
   coherence
   proof
-    CQCSub_the_scope_of S1 = Sub_the_scope_of S1 by A1,Def7;
+    CQCSub_the_scope_of S1 = Sub_the_scope_of S1 by A1,Def6;
     then CQC_Sub(S1) = Quant(S1,p) by A1,A2,SUBSTUT1:32;
     hence thesis;
   end;
 end;
 
-theorem Th29:
+theorem Th28:
   S is Sub_universal implies CQC_Sub(S) = CQCQuant(S,CQC_Sub(
   CQCSub_the_scope_of S))
 proof
   assume
 A1: S is Sub_universal;
-  then CQCSub_the_scope_of S = Sub_the_scope_of S by Def7;
+  then CQCSub_the_scope_of S = Sub_the_scope_of S by Def6;
   then CQCQuant(S,CQC_Sub(CQCSub_the_scope_of S)) = Quant(S,CQC_Sub(
-  Sub_the_scope_of S)) by A1,Def8;
+  Sub_the_scope_of S)) by A1,Def7;
   hence thesis by A1,SUBSTUT1:32;
 end;
 
-theorem Th30:
+theorem Th29:
   B is quantifiable implies CQCSub_the_scope_of(CQCSub_All(B,SQ)) = B`1
 proof
   assume
 A1: B is quantifiable;
   then
-A2: CQCSub_All(B,SQ) = Sub_All(B,SQ) by Def6;
+A2: CQCSub_All(B,SQ) = Sub_All(B,SQ) by Def5;
   then CQCSub_All(B,SQ) is Sub_universal by A1,SUBSTUT1:14;
   then
   CQCSub_the_scope_of(CQCSub_All(B,SQ)) = Sub_the_scope_of(Sub_All(B,SQ))
-  by A2,Def7;
+  by A2,Def6;
   hence thesis by A1,SUBSTUT1:21;
 end;
 
 begin :: The Substitution Lemma
 
-theorem Th31:
+theorem Th30:
   [S,x] is quantifiable implies CQCSub_the_scope_of(CQCSub_All([S,
   x],xSQ)) = S & CQCQuant(CQCSub_All([S,x],xSQ),CQC_Sub(CQCSub_the_scope_of
   CQCSub_All([S,x],xSQ))) = CQCQuant(CQCSub_All([S,x],xSQ),CQC_Sub(S))
 proof
   assume [S,x] is quantifiable;
-  then CQCSub_the_scope_of(CQCSub_All([S,x],xSQ)) = [S,x]`1 by Th30;
-  hence thesis by MCART_1:7;
+  then CQCSub_the_scope_of(CQCSub_All([S,x],xSQ)) = [S,x]`1 by Th29;
+  hence thesis;
 end;
 
-theorem Th32:
+theorem Th31:
   [S,x] is quantifiable implies CQCQuant(CQCSub_All([S,x],xSQ),
   CQC_Sub(S)) = All(S_Bound(@CQCSub_All([S,x],xSQ)),CQC_Sub(S))
 proof
@@ -728,47 +767,47 @@ proof
 A1: Quant(S1,p) = All(S_Bound(@S1),p) by SUBSTUT1:def 37;
   assume
 A2: [S,x] is quantifiable;
-  then CQCSub_All([S,x],xSQ) = Sub_All([S,x],xSQ) by Def6;
+  then CQCSub_All([S,x],xSQ) = Sub_All([S,x],xSQ) by Def5;
   then CQCSub_All([S,x],xSQ) is Sub_universal by A2,SUBSTUT1:14;
   then
-A3: CQCQuant(S1,p) = Quant(S1,p) by Def8;
-  CQCQuant(S1,CQC_Sub(S)) = CQCQuant(S1,p) by A2,Th31;
-  hence thesis by A2,A3,A1,Th31;
+A3: CQCQuant(S1,p) = Quant(S1,p) by Def7;
+  CQCQuant(S1,CQC_Sub(S)) = CQCQuant(S1,p) by A2,Th30;
+  hence thesis by A2,A3,A1,Th30;
 end;
 
 theorem
   x in dom S`2 implies v.((@S`2).x) = v.Val_S(v,S).x
 proof
   assume x in dom S`2;
-  then v.Val_S(v,S).x = Val_S(v,S).x & x in dom @S`2 by Th13,SUBSTUT1:def 2;
+  then v.Val_S(v,S).x = Val_S(v,S).x & x in dom @S`2 by Th12,SUBSTUT1:def 2;
   hence thesis by FUNCT_1:13;
 end;
 
 theorem
-  x in dom (@S`2) implies (@S`2).x is bound_QC-variable
+  x in dom (@S`2) implies (@S`2).x is bound_QC-variable of Al
 proof
   assume x in dom (@S`2);
   then (@S`2).x in rng @S`2 by FUNCT_1:3;
   hence thesis;
 end;
 
-theorem Th35:
-  [:QC-WFF,vSUB:] c= dom QSub
+theorem Th34:
+  [:QC-WFF(Al),vSUB(Al):] c= dom QSub(Al)
 proof
   let a;
-  assume a in [:QC-WFF,vSUB:];
+  assume a in [:QC-WFF(Al),vSUB(Al):];
   then consider b,c such that
-A1: b in QC-WFF and
-A2: c in vSUB and
+A1: b in QC-WFF(Al) and
+A2: c in vSUB(Al) and
 A3: a = [b,c] by ZFMISC_1:def 2;
-  reconsider Sub = c as CQC_Substitution by A2;
-  reconsider p = b as Element of QC-WFF by A1;
+  reconsider Sub = c as CQC_Substitution of Al by A2;
+  reconsider p = b as Element of QC-WFF(Al) by A1;
 A4: now
     set b = {};
     set a = [[p,Sub],b];
     assume not p is universal;
     then p,Sub PQSub b by SUBSTUT1:def 14;
-    then a in QSub by SUBSTUT1:def 15;
+    then a in QSub(Al) by SUBSTUT1:def 15;
     hence thesis by A3,FUNCT_1:1;
   end;
   now
@@ -777,16 +816,16 @@ A4: now
     set a = [[p,Sub],b];
     assume p is universal;
     then p,Sub PQSub b by SUBSTUT1:def 14;
-    then a in QSub by SUBSTUT1:def 15;
+    then a in QSub(Al) by SUBSTUT1:def 15;
     hence thesis by A3,FUNCT_1:1;
   end;
   hence thesis by A4;
 end;
 
-reserve B1 for Element of [:QC-Sub-WFF,bound_QC-variables:];
+reserve B1 for Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):];
 reserve SQ1 for second_Q_comp of B1;
 
-theorem Th36:
+theorem Th35:
   B is quantifiable & B1 is quantifiable & Sub_All(B,SQ) = Sub_All
   (B1,SQ1) implies B`2 = B1`2 & SQ = SQ1
 proof
@@ -796,11 +835,11 @@ A2: B1 is quantifiable & Sub_All(B,SQ) = Sub_All(B1,SQ1);
   Sub_All(B,SQ) = [All(B`2,(B`1)`1),SQ] by A1,SUBSTUT1:def 24;
   then
 A3: [All(B`2,(B`1)`1),SQ] = [All(B1`2,(B1`1)`1),SQ1] by A2,SUBSTUT1:def 24;
-  then All(B`2,(B`1)`1) = All(B1`2,(B1`1)`1) by ZFMISC_1:27;
-  hence thesis by A3,QC_LANG2:5,ZFMISC_1:27;
+  then All(B`2,(B`1)`1) = All(B1`2,(B1`1)`1) by XTUPLE_0:1;
+  hence thesis by A3,QC_LANG2:5,XTUPLE_0:1;
 end;
 
-theorem Th37:
+theorem Th36:
   B is quantifiable & B1 is quantifiable & CQCSub_All(B,SQ) =
   Sub_All(B1,SQ1) implies B`2 = B1`2 & SQ = SQ1
 proof
@@ -808,8 +847,8 @@ proof
 A1: B is quantifiable and
 A2: B1 is quantifiable and
 A3: CQCSub_All(B,SQ) = Sub_All(B1,SQ1);
-  Sub_All(B,SQ) = Sub_All(B1,SQ1) by A1,A3,Def6;
-  hence thesis by A1,A2,Th36;
+  Sub_All(B,SQ) = Sub_All(B1,SQ1) by A1,A3,Def5;
+  hence thesis by A1,A2,Th35;
 end;
 
 theorem
@@ -818,18 +857,18 @@ proof
   set S1 = CQCSub_All([S,x],xSQ);
   assume
 A1: [S,x] is quantifiable;
-  then S1 = Sub_All([S,x],xSQ) by Def6;
+  then S1 = Sub_All([S,x],xSQ) by Def5;
   then S1 is Sub_universal by A1,SUBSTUT1:14;
-  then consider B being Element of [:QC-Sub-WFF,bound_QC-variables:], SQ being
-  second_Q_comp of B such that
+  then consider B being Element of [:QC-Sub-WFF(Al),bound_QC-variables(Al):],
+   SQ being second_Q_comp of B such that
 A2: S1 = Sub_All(B,SQ) and
 A3: B`2 = Sub_the_bound_of S1 and
 A4: B is quantifiable by SUBSTUT1:def 33;
-  [S,x]`2 = B`2 by A1,A2,A4,Th37;
-  hence thesis by A3,MCART_1:7;
+  [S,x]`2 = B`2 by A1,A2,A4,Th36;
+  hence thesis by A3;
 end;
 
-theorem Th39:
+theorem Th38:
   [S,x] is quantifiable & x in rng RestrictSub(x,All(x,S`1),xSQ)
 implies not S_Bound(@CQCSub_All([S,x],xSQ)) in rng RestrictSub(x,All(x,S`1),xSQ
   ) & not S_Bound(@CQCSub_All([S,x],xSQ)) in Bound_Vars(S`1)
@@ -838,46 +877,50 @@ proof
   assume that
 A1: [S,x] is quantifiable and
 A2: x in rng RestrictSub(x,All(x,S`1),xSQ);
-A3: S1 = Sub_All([S,x],xSQ) by A1,Def6;
-  then S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th27;
+A3: S1 = Sub_All([S,x],xSQ) by A1,Def5;
+  then S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th26;
   then
-A4: S1`1 = All(x,([S,x]`1)`1) by MCART_1:7;
+A4: S1`1 = All(x,([S,x]`1)`1);
   then
 A5: bound_in S1`1 = x by QC_LANG2:7;
   set finSub = RestrictSub(bound_in S1`1,S1`1,S1`2);
-A6: Dom_Bound_Vars(the_scope_of S1`1) = {i : x.i in Bound_Vars(the_scope_of
+A6: Dom_Bound_Vars(the_scope_of S1`1) = {s : x.s in Bound_Vars(the_scope_of
   S1`1)} by SUBSTUT1:def 9;
-  S1`2 = xSQ by A1,A3,Th27;
+  S1`2 = xSQ by A1,A3,Th26;
   then
-A7: finSub = RestrictSub(x,All(x,S`1),xSQ) by A4,A5,MCART_1:7;
+A7: finSub = RestrictSub(x,All(x,S`1),xSQ) by A4,A5;
   set Y = Dom_Bound_Vars(the_scope_of S1`1) \/ Sub_Var(finSub);
-  set n = min NSub(the_scope_of S1`1,finSub);
-A8: upVar(finSub,the_scope_of S1`1) = n by SUBSTUT1:def 12;
+  set n = upVar(finSub,the_scope_of S1`1);
   NSub(the_scope_of S1`1,finSub) = NAT \ Y by SUBSTUT1:def 11;
-  then reconsider X = NAT \ Y as non empty Subset of NAT;
-A9: n = min X by SUBSTUT1:def 11;
+  then reconsider X = NAT \ Y as non empty Subset of QC-symbols(Al);
+A8: n in NSub(the_scope_of S1`1,finSub)
+  proof
+    upVar(finSub,the_scope_of S1`1) = the Element of
+     NSub(the_scope_of S1`1,finSub) by SUBSTUT1:def 12;
+    hence thesis;
+  end;
   Dom_Bound_Vars(the_scope_of S1`1) c= Dom_Bound_Vars(the_scope_of S1`1)
-\/ Sub_Var(finSub) & min X in NAT\(Dom_Bound_Vars(the_scope_of S1`1) \/ Sub_Var
-  ( finSub)) by XBOOLE_1:7,XXREAL_2:def 7;
-  then not n in Dom_Bound_Vars(the_scope_of S1`1) by A9,XBOOLE_0:def 5;
+   \/ Sub_Var(finSub) & n in NAT\(Dom_Bound_Vars(the_scope_of S1`1)
+   \/ Sub_Var(finSub)) by A8,SUBSTUT1:def 11,XBOOLE_1:7;
+  then not n in Dom_Bound_Vars(the_scope_of S1`1) by XBOOLE_0:def 5;
   then
-A10: not x.n in Bound_Vars(the_scope_of S1`1) by A6;
-  S1`1 = All(x,S`1) by A4,MCART_1:7;
+A9: not x.n in Bound_Vars(the_scope_of S1`1) by A6;
+  S1`1 = All(x,S`1) by A4;
   then
-A11: not x.upVar(finSub,the_scope_of S1`1) in Bound_Vars(S`1) by A8,A10,
-QC_LANG2:7;
-  Sub_Var(finSub) c= Y & min X in NAT\(Dom_Bound_Vars(the_scope_of S1`1)
-  \/ Sub_Var(finSub)) by XBOOLE_1:7,XXREAL_2:def 7;
+A10: not x.upVar(finSub,the_scope_of S1`1) in Bound_Vars(S`1) by A9,QC_LANG2:7
+;
+  Sub_Var(finSub) c= Y & n in NAT\(Dom_Bound_Vars(the_scope_of S1`1)
+  \/ Sub_Var(finSub)) by A8,SUBSTUT1:def 11,XBOOLE_1:7;
   then
-A12: not n in Sub_Var(finSub) by A9,XBOOLE_0:def 5;
-  Sub_Var(finSub) = {i : x.i in rng finSub} by SUBSTUT1:def 10;
+A11: not n in Sub_Var(finSub) by XBOOLE_0:def 5;
+  Sub_Var(finSub) = {s : x.s in rng finSub} by SUBSTUT1:def 10;
   then
-A13: not x.upVar(finSub,the_scope_of S1`1) in rng finSub by A8,A12;
+A12: not x.upVar(finSub,the_scope_of S1`1) in rng finSub by A11;
   S1 = @S1 by SUBSTUT1:def 35;
-  hence thesis by A2,A5,A7,A13,A11,SUBSTUT1:def 36;
+  hence thesis by A2,A5,A7,A12,A10,SUBSTUT1:def 36;
 end;
 
-theorem Th40:
+theorem Th39:
   [S,x] is quantifiable & not x in rng RestrictSub(x,All(x,S`1),
 xSQ) implies not S_Bound(@CQCSub_All([S,x],xSQ)) in rng RestrictSub(x,All(x,S`1
   ),xSQ)
@@ -886,32 +929,32 @@ proof
   assume that
 A1: [S,x] is quantifiable and
 A2: not x in rng RestrictSub(x,All(x,S`1),xSQ);
-A3: S1 = Sub_All([S,x],xSQ) by A1,Def6;
+A3: S1 = Sub_All([S,x],xSQ) by A1,Def5;
   then
-A4: S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th27;
+A4: S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th26;
   then
-A5: S1`1 = All(x,([S,x]`1)`1) by MCART_1:7;
+A5: S1`1 = All(x,([S,x]`1)`1);
   set finSub = RestrictSub(bound_in S1`1,S1`1,S1`2);
 A6: S1 = @S1 by SUBSTUT1:def 35;
-  S1`1 = All(x,([S,x]`1)`1) by A4,MCART_1:7;
+  S1`1 = All(x,([S,x]`1)`1) by A4;
   then
 A7: bound_in(S1`1) = x by QC_LANG2:7;
-  S1`2 = xSQ by A1,A3,Th27;
-  then not bound_in(S1`1) in rng finSub by A2,A7,A5,MCART_1:7;
+  S1`2 = xSQ by A1,A3,Th26;
+  then not bound_in(S1`1) in rng finSub by A2,A7,A5;
   hence thesis by A2,A7,A6,SUBSTUT1:def 36;
 end;
 
-theorem Th41:
+theorem Th40:
   [S,x] is quantifiable implies not S_Bound(@CQCSub_All([S,x],xSQ)
   ) in rng RestrictSub(x,All(x,S`1),xSQ)
 proof
   assume
 A1: [S,x] is quantifiable;
-  then x in rng RestrictSub(x,All(x,S`1),xSQ) implies thesis by Th39;
-  hence thesis by A1,Th40;
+  then x in rng RestrictSub(x,All(x,S`1),xSQ) implies thesis by Th38;
+  hence thesis by A1,Th39;
 end;
 
-theorem Th42:
+theorem Th41:
   [S,x] is quantifiable implies S`2 = ExpandSub(x,S`1,RestrictSub(
   x,All(x,S`1),xSQ))
 proof
@@ -919,61 +962,63 @@ proof
   set q = All(x,S`1);
   assume [S,x] is quantifiable;
   then
-A1: ([S,x]`1)`2 = QSub.[All([S,x]`2,([S,x]`1)`1),xSQ] by SUBSTUT1:def 23;
-  [All([S,x]`2,([S,x]`1)`1),xSQ] = [All(x,([S,x]`1)`1),xSQ] by MCART_1:7;
-  then
-A2: [All([S,x]`2,([S,x]`1)`1),xSQ] = [All(x,S`1),xSQ] by MCART_1:7;
-  Z in [:QC-WFF,vSUB:] by ZFMISC_1:def 2;
-  then [Z,([S,x]`1)`2] in QSub by A1,A2,Th35,FUNCT_1:1;
-  then [Z,S`2] in QSub by MCART_1:7;
-  then consider p being QC-formula,Sub1,b such that
+A1: ([S,x]`1)`2 = (QSub(Al)).[All([S,x]`2,([S,x]`1)`1),xSQ] by SUBSTUT1:def 23;
+A2: Z in [:QC-WFF(Al),vSUB(Al):] by ZFMISC_1:def 2;
+  [:QC-WFF(Al),vSUB(Al):] c= dom QSub(Al) by Th34;
+  then [Z,([S,x]`1)`2] in QSub(Al) by A2,A1,FUNCT_1:1;
+  then [Z,S`2] in QSub(Al);
+  then consider p being QC-formula of Al,Sub1,b such that
 A3: [Z,S`2] = [[p,Sub1],b] and
 A4: p,Sub1 PQSub b by SUBSTUT1:def 15;
-  Z = [p,Sub1] by A3,ZFMISC_1:27;
+  Z = [p,Sub1] by A3,XTUPLE_0:1;
   then
-A5: All(x,S`1) = p & xSQ = Sub1 by ZFMISC_1:27;
-A6: q is universal by QC_LANG1:def 19;
+A5: All(x,S`1) = p & xSQ = Sub1 by XTUPLE_0:1;
+A6: q is universal by QC_LANG1:def 21;
   then
-A7: bound_in q = x by QC_LANG1:def 25;
-  S`2 = b by A3,ZFMISC_1:27;
+A7: bound_in q = x by QC_LANG1:def 27;
+  S`2 = b by A3,XTUPLE_0:1;
   then
   S`2 = ExpandSub(bound_in q,the_scope_of q,RestrictSub(bound_in q,q, xSQ
   )) by A4,A5,A6,SUBSTUT1:def 14;
-  hence thesis by A6,A7,QC_LANG1:def 26;
+  hence thesis by A6,A7,QC_LANG1:def 28;
 end;
 
 theorem
-  still_not-bound_in VERUM c= Bound_Vars(VERUM) by QC_LANG3:3,SUBSTUT1:2;
+  still_not-bound_in VERUM(Al) c= Bound_Vars(VERUM(Al))
+proof
+  Bound_Vars(VERUM(Al)) = {} by SUBSTUT1:2;
+  hence thesis by QC_LANG3:3;
+end;
 
-theorem Th44:
-  still_not-bound_in (P!ll) c= Bound_Vars(P!ll)
+theorem Th43:
+  still_not-bound_in (P!ll) = Bound_Vars(P!ll)
 proof
   set l1 = the_arguments_of (P!ll);
-A1: P!ll is atomic by QC_LANG1:def 16;
+A1: P!ll is atomic by QC_LANG1:def 18;
   then consider
-  n being Element of NAT, P9 being (QC-pred_symbol of n), ll9 being
-  QC-variable_list of n such that
+  n being Element of NAT, P9 being (QC-pred_symbol of n,Al), ll9 being
+  QC-variable_list of n,Al such that
 A2: l1 = ll9 and
-A3: P!ll = P9!ll9 by QC_LANG1:def 21;
+A3: P!ll = P9!ll9 by QC_LANG1:def 23;
   Bound_Vars(P!ll) = Bound_Vars(l1) by A1,SUBSTUT1:3;
   then
 A4: Bound_Vars(P!ll) = { l1.i : 1 <= i & i <= len l1 & l1.i in
-  bound_QC-variables} by SUBSTUT1:def 7;
+  bound_QC-variables(Al)} by SUBSTUT1:def 7;
   still_not-bound_in (P!ll) = still_not-bound_in ll by QC_LANG3:5;
   then
-A5: still_not-bound_in (P!ll) = variables_in(ll,bound_QC-variables) by
+A5: still_not-bound_in (P!ll) = variables_in(ll,bound_QC-variables(Al)) by
 QC_LANG3:2;
 A6: (<*P9*>^ll9).1 = P9 & (<*P*>^ll).1 = P by FINSEQ_1:41;
-  P!ll = <*P*>^ll & P9!ll9 = <*P9*>^ll9 by QC_LANG1:6;
+  P!ll = <*P*>^ll & P9!ll9 = <*P9*>^ll9 by QC_LANG1:8;
   then ll9 = ll by A3,A6,FINSEQ_1:33;
   hence thesis by A4,A5,A2,QC_LANG3:def 1;
 end;
 
-theorem Th45:
+theorem Th44:
   still_not-bound_in (p) c= Bound_Vars(p) implies
   still_not-bound_in ('not' p) c= Bound_Vars('not' p)
 proof
-  'not' p is negative by QC_LANG1:def 17;
+  'not' p is negative by QC_LANG1:def 19;
   then Bound_Vars('not' p) = Bound_Vars(the_argument_of ('not' p)) by
 SUBSTUT1:4;
   then
@@ -982,13 +1027,13 @@ A1: Bound_Vars('not' p) = Bound_Vars(p) by QC_LANG2:1;
   hence thesis by A1,QC_LANG3:7;
 end;
 
-theorem Th46:
+theorem Th45:
   still_not-bound_in p c= Bound_Vars(p) & still_not-bound_in q c=
   Bound_Vars(q) implies still_not-bound_in (p '&' q) c= Bound_Vars(p '&' q)
 proof
 A1: still_not-bound_in (p '&' q) = still_not-bound_in p \/
   still_not-bound_in q by QC_LANG3:10;
-  p '&' q is conjunctive by QC_LANG1:def 18;
+  p '&' q is conjunctive by QC_LANG1:def 20;
   then Bound_Vars(p '&' q) = Bound_Vars(the_left_argument_of (p '&' q)) \/
   Bound_Vars(the_right_argument_of (p '&' q)) by SUBSTUT1:5;
   then
@@ -1001,12 +1046,12 @@ A2: Bound_Vars(p '&' q) = Bound_Vars(p) \/ Bound_Vars(q) by QC_LANG2:4;
   hence thesis by A2,A1,XBOOLE_1:13;
 end;
 
-theorem Th47:
+theorem Th46:
   still_not-bound_in p c= Bound_Vars(p) implies still_not-bound_in
   All(x,p) c= Bound_Vars(All(x,p))
 proof
 A1: still_not-bound_in All(x,p) = (still_not-bound_in p) \ {x} by QC_LANG3:12;
-  All(x,p) is universal by QC_LANG1:def 19;
+  All(x,p) is universal by QC_LANG1:def 21;
   then Bound_Vars(All(x,p)) = Bound_Vars(the_scope_of All(x,p)) \/ {bound_in
   All(x,p)} by SUBSTUT1:6;
   then Bound_Vars(All(x,p)) = Bound_Vars(p) \/ {bound_in All(x,p)} by
@@ -1021,29 +1066,30 @@ A2: Bound_Vars(p) \ {x} c= Bound_Vars(All(x,p)) by XBOOLE_1:1;
   hence thesis by A2,XBOOLE_1:1;
 end;
 
-theorem Th48:
+theorem Th47:
   for p holds still_not-bound_in p c= Bound_Vars(p)
 proof
-  defpred P[Element of QC-WFF] means still_not-bound_in $1 c= Bound_Vars($1);
-A1: for p,q,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[p] implies P['not' p]) & (P[p]
-& P[q] implies P[p '&' q]) & (P[p] implies P[All(x,p)]) by Th44,Th45,Th46,Th47,
-QC_LANG3:3,SUBSTUT1:2;
+  defpred P[Element of QC-WFF(Al)] means still_not-bound_in
+   $1 c= Bound_Vars($1);
+  Bound_Vars(VERUM(Al)) = {} by SUBSTUT1:2;
+  then
+A1: for p,q,x,k for l being CQC-variable_list of k,Al for P being
+  QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!l] &
+  (P[p] implies P['not' p]) & (P[p] & P[q] implies P[p '&' q]) &
+  (P[p] implies P[All(x,p)]) by Th43,Th44,Th45,Th46,QC_LANG3:3;
   thus for p holds P[p] from CQC_LANG:sch 1(A1);
 end;
 
 notation
-  let A;
-  let x;
+  let Al, A, x;
   let a be Element of A;
   synonym x|a for x .--> a;
 end;
 
 definition
-  let A;
-  let x;
+  let Al, A, x;
   let a be Element of A;
-  redefine func x|a -> Val_Sub of A;
+  redefine func x|a -> Val_Sub of A,Al;
   coherence
   proof
     dom(x .--> a) = {x} & rng(x .--> a) = {a} by FUNCOP_1:8,13;
@@ -1053,7 +1099,7 @@ end;
 
 reserve a for Element of A;
 
-theorem Th49:
+theorem Th48:
   x <> b implies v.(x|a).b = v.b
 proof
   assume x <> b;
@@ -1061,7 +1107,7 @@ proof
   hence thesis by FUNCT_4:11;
 end;
 
-theorem Th50:
+theorem Th49:
   x = y implies v.(x|a).y = a
 proof
   assume
@@ -1073,7 +1119,7 @@ A2: y in dom (x .--> a) by FUNCOP_1:13;
   hence thesis by A2,FUNCT_4:13;
 end;
 
-theorem Th51:
+theorem Th50:
   J,v |= All(x,p) iff for a holds J,v.(x|a) |= p
 proof
   thus J,v |= All(x,p) implies for a holds J,v.(x|a) |= p
@@ -1081,7 +1127,7 @@ proof
     assume
 A1: J,v |= All(x,p);
     let a;
-    for y st x <> y holds v.(x|a).y = v.y by Th49;
+    for y st x <> y holds v.(x|a).y = v.y by Th48;
     hence thesis by A1,VALUAT_1:29;
   end;
   thus (for a holds J,v.(x|a) |= p) implies J,v |= All(x,p)
@@ -1097,21 +1143,21 @@ A4:   for b st b in dom w holds w.b = v.(x|c).b
       proof
         let b;
         assume b in dom w;
-        then reconsider y = b as bound_QC-variable;
+        then reconsider y = b as bound_QC-variable of Al;
         now
           assume
 A5:       x <> y;
           then w.y = v.y by A3;
-          hence thesis by A5,Th49;
+          hence thesis by A5,Th48;
         end;
-        hence thesis by Th50;
+        hence thesis by Th49;
       end;
-      v.(x|c) is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
+      v.(x|c) is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
       then
-A6:   ex f st v.(x|c) = f & dom f = bound_QC-variables & rng f c= A by
+A6:   ex f st v.(x|c) = f & dom f = bound_QC-variables(Al) & rng f c= A by
 FUNCT_2:def 2;
-      w is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
-      then ex f st w = f & dom f = bound_QC-variables & rng f c= A by
+      w is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
+      then ex f st w = f & dom f = bound_QC-variables(Al) & rng f c= A by
 FUNCT_2:def 2;
       then v.(x|c) = w by A4,A6,FUNCT_1:2;
       hence thesis by A2;
@@ -1121,17 +1167,17 @@ FUNCT_2:def 2;
 end;
 
 definition
-  let S, x, xSQ, A, v;
-  func NEx_Val(v,S,x,xSQ) -> Val_Sub of A equals
+  let Al, S, x, xSQ, A, v;
+  func NEx_Val(v,S,x,xSQ) -> Val_Sub of A,Al equals
   (@RestrictSub(x,All(x,S`1),
   xSQ))*v;
   coherence;
 end;
 
 definition
-  let A;
-  let v,w be Val_Sub of A;
-  redefine func v+*w -> Val_Sub of A;
+  let Al, A;
+  let v,w be Val_Sub of A,Al;
+  redefine func v+*w -> Val_Sub of A,Al;
   coherence
   proof
     dom (v+*w) = dom v \/ dom w & rng (v+*w) c= A by FUNCT_4:def 1 ;
@@ -1139,7 +1185,7 @@ definition
   end;
 end;
 
-theorem Th52:
+theorem Th51:
   [S,x] is quantifiable & x in rng RestrictSub(x,All(x,S`1),xSQ)
 implies S_Bound(@CQCSub_All([S,x],xSQ)) = x.upVar(RestrictSub(x,All(x,S`1),xSQ)
   ,S`1)
@@ -1148,24 +1194,24 @@ proof
   assume that
 A1: [S,x] is quantifiable and
 A2: x in rng RestrictSub(x,All(x,S`1),xSQ);
-A3: S1 = Sub_All([S,x],xSQ) by A1,Def6;
+A3: S1 = Sub_All([S,x],xSQ) by A1,Def5;
   then
-A4: S1`2 = xSQ by A1,Th27;
-A5: S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,A3,Th27;
+A4: S1`2 = xSQ by A1,Th26;
+A5: S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,A3,Th26;
   then
-A6: S1`1 = All(x,([S,x]`1)`1) by MCART_1:7;
+A6: S1`1 = All(x,([S,x]`1)`1);
   then
-A7: S1`1 = All(x,S`1) & x = bound_in S1`1 by MCART_1:7,QC_LANG2:7;
+A7: S1`1 = All(x,S`1) & x = bound_in S1`1 by QC_LANG2:7;
   set finSub = RestrictSub(bound_in S1`1,S1`1,S1`2);
 A8: @S1 = S1 by SUBSTUT1:def 35;
-  S1`1 = All(x,([S,x]`1)`1) by A5,MCART_1:7;
+  S1`1 = All(x,([S,x]`1)`1) by A5;
   then bound_in(S1`1) = x by QC_LANG2:7;
-  then bound_in(S1`1) in rng finSub by A2,A4,A6,MCART_1:7;
+  then bound_in(S1`1) in rng finSub by A2,A4,A6;
   then S_Bound(@S1) = x.upVar(finSub,the_scope_of S1`1) by A8,SUBSTUT1:def 36;
   hence thesis by A4,A7,QC_LANG2:7;
 end;
 
-theorem Th53:
+theorem Th52:
   [S,x] is quantifiable & not x in rng RestrictSub(x,All(x,S`1),
   xSQ) implies S_Bound(@CQCSub_All([S,x],xSQ)) = x
 proof
@@ -1173,22 +1219,22 @@ proof
   assume that
 A1: [S,x] is quantifiable and
 A2: not x in rng RestrictSub(x,All(x,S`1),xSQ);
-A3: S1 = Sub_All([S,x],xSQ) by A1,Def6;
+A3: S1 = Sub_All([S,x],xSQ) by A1,Def5;
   then
-A4: S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th27;
+A4: S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th26;
   then
-A5: S1`1 = All(x,([S,x]`1)`1) by MCART_1:7;
+A5: S1`1 = All(x,([S,x]`1)`1);
   set finSub = RestrictSub(bound_in S1`1,S1`1,S1`2);
 A6: @S1 = S1 by SUBSTUT1:def 35;
-  S1`1 = All(x,([S,x]`1)`1) by A4,MCART_1:7;
+  S1`1 = All(x,([S,x]`1)`1) by A4;
   then
 A7: bound_in(S1`1) = x by QC_LANG2:7;
-  S1`2 = xSQ by A1,A3,Th27;
-  then not bound_in(S1`1) in rng finSub by A2,A7,A5,MCART_1:7;
+  S1`2 = xSQ by A1,A3,Th26;
+  then not bound_in(S1`1) in rng finSub by A2,A7,A5;
   hence thesis by A7,A6,SUBSTUT1:def 36;
 end;
 
-theorem Th54:
+theorem Th53:
   [S,x] is quantifiable implies for a holds Val_S(v.((S_Bound(@
 CQCSub_All([S,x],xSQ)))|a),S) = NEx_Val(v.((S_Bound(@CQCSub_All([S,x],xSQ)))|a)
   ,S,x,xSQ)+*(x|a) & dom RestrictSub(x,All(x,S`1),xSQ) misses {x}
@@ -1199,135 +1245,129 @@ A1: [S,x] is quantifiable;
   let a;
   set S1 = CQCSub_All([S,x],xSQ);
   set z = S_Bound(@S1);
-A2: S`2 = ExpandSub(x,S`1,RestrictSub(x,All(x,S`1),xSQ)) by A1,Th42;
+A2: S`2 = ExpandSub(x,S`1,RestrictSub(x,All(x,S`1),xSQ)) by A1,Th41;
 A3: now
     reconsider F = {[x,x]} as Function;
-A4: dom (x|a) = {x} by FUNCOP_1:13;
     assume
-A5: not x in rng finSub;
+A4: not x in rng finSub;
     then S`2 = finSub \/ F by A2,SUBSTUT1:def 13;
     then
-A6: @S`2 = finSub \/ F by SUBSTUT1:def 2;
-A7: now
+A5: @S`2 = finSub \/ F by SUBSTUT1:def 2;
+A6: now
       set q = All(x,S`1);
       set X = {y1 : y1 in still_not-bound_in q & y1 is Element of dom xSQ & y1
       <> x & y1 <> xSQ.y1};
       assume not dom finSub misses {x};
       then dom finSub /\ {x} <> {} by XBOOLE_0:def 7;
       then consider b such that
-A8:   b in dom finSub /\ {x} by XBOOLE_0:def 1;
+A7:   b in dom finSub /\ {x} by XBOOLE_0:def 1;
       finSub = xSQ|X by SUBSTUT1:def 6;
       then finSub = (@xSQ)|X by SUBSTUT1:def 2;
       then @finSub = (@xSQ)|X by SUBSTUT1:def 2;
       then dom @finSub = dom @xSQ /\ X by RELAT_1:61;
       then
-A9:   dom @finSub c= X by XBOOLE_1:17;
-      b in dom finSub by A8,XBOOLE_0:def 4;
+A8:   dom @finSub c= X by XBOOLE_1:17;
+      b in dom finSub by A7,XBOOLE_0:def 4;
       then b in dom @finSub by SUBSTUT1:def 2;
-      then b in X by A9;
+      then b in X by A8;
       then
-A10:  ex y st y = b & y in still_not-bound_in q & y is Element of dom xSQ
+A9:  ex y st y = b & y in still_not-bound_in q & y is Element of dom xSQ
       & y <> x & y <> xSQ.y;
-      b in {x} by A8,XBOOLE_0:def 4;
-      hence contradiction by A10,TARSKI:def 1;
+      b in {x} by A7,XBOOLE_0:def 4;
+      hence contradiction by A9,TARSKI:def 1;
     end;
     hence dom finSub misses {x};
     dom {[x,x]} = {x} by RELAT_1:9;
-    then dom @finSub misses dom F by A7,SUBSTUT1:def 2;
+    then dom @finSub misses dom F by A6,SUBSTUT1:def 2;
     then
-A11: @finSub \/ F = (@finSub +* F) by FUNCT_4:31;
-    v.(z|a) is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
+A10: @finSub \/ F = (@finSub +* F) by FUNCT_4:31;
+    v.(z|a) is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
     then
-A12: ex f st v.(z|a) = f & dom f = bound_QC-variables & rng f c= A by
+A11: ex f st v.(z|a) = f & dom f = bound_QC-variables(Al) & rng f c= A by
 FUNCT_2:def 2;
-A13: rng F = {x} by RELAT_1:9;
-    then dom (F*v.(z|a)) = dom F by A12,RELAT_1:27;
+A12: rng F = {x} by RELAT_1:9;
+    then dom (F*v.(z|a)) = dom F by A11,RELAT_1:27;
     then
-A14: dom (F*v.(z|a)) = {x} by RELAT_1:9;
-A15: {[x,x]} = x .--> x by FUNCT_4:82;
+A13: dom (F*v.(z|a)) = {x} by RELAT_1:9;
+A14: {[x,x]} = x .--> x by FUNCT_4:82;
     for b st b in dom (x|a) holds (x|a).b = (F*v.(z|a)).b
     proof
       let b such that
-A16:  b in dom (x|a);
-      b in dom (F*v.(z|a)) by A14,A16,FUNCOP_1:13;
-      then
-A17:  (F*v.(z|a)).b = v.(z|a).(F.b) by FUNCT_1:12;
-      b = x by A4,A16,TARSKI:def 1;
-      then (x|a).b = a & F.b = x by A15,FUNCOP_1:72;
-      hence thesis by A1,A5,A17,Th50,Th53;
+A15:  b in dom (x|a);
+A16:  (F*v.(z|a)).b = v.(z|a).(F.b) by A13,A15,FUNCT_1:12;
+      b = x by A15,TARSKI:def 1;
+      then (x|a).b = a & F.b = x by A14,FUNCOP_1:72;
+      hence thesis by A1,A4,A16,Th49,Th52;
     end;
     then
-A18: (x|a) = (F*v.(z|a)) by A14,FUNCOP_1:13,FUNCT_1:2;
-    (@finSub +* F)* v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a)) by A12,A13,
+A17: (x|a) = (F*v.(z|a)) by A13,FUNCOP_1:13,FUNCT_1:2;
+    (@finSub +* F)* v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a)) by A11,A12,
 FUNCT_7:9;
-    hence Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ) +* (x|a) by A11,A6,A18,
+    hence Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ) +* (x|a) by A10,A5,A17,
 SUBSTUT1:def 2;
   end;
   now
     reconsider F = {[x,x.upVar(finSub,S`1)]} as Function;
     assume
-A19: x in rng finSub;
-A20: now
+A18: x in rng finSub;
+A19: now
       set q = All(x,S`1);
       set X = {y1 : y1 in still_not-bound_in q & y1 is Element of dom xSQ & y1
       <> x & y1 <> xSQ.y1};
       assume dom finSub meets {x};
       then consider b such that
-A21:  b in dom finSub and
-A22:  b in {x} by XBOOLE_0:3;
+A20:  b in dom finSub and
+A21:  b in {x} by XBOOLE_0:3;
       finSub = xSQ|X by SUBSTUT1:def 6;
       then finSub = (@xSQ)|X by SUBSTUT1:def 2;
       then @finSub = (@xSQ)|X by SUBSTUT1:def 2;
       then dom @finSub = dom @xSQ /\ X by RELAT_1:61;
       then
-A23:  dom @finSub c= X by XBOOLE_1:17;
-      b in dom @finSub by A21,SUBSTUT1:def 2;
-      then b in X by A23;
+A22:  dom @finSub c= X by XBOOLE_1:17;
+      b in dom @finSub by A20,SUBSTUT1:def 2;
+      then b in X by A22;
       then ex y st y = b & y in still_not-bound_in q & y is Element of dom xSQ
       & y <> x & y <> xSQ.y;
-      hence contradiction by A22,TARSKI:def 1;
+      hence contradiction by A21,TARSKI:def 1;
     end;
     hence dom finSub misses {x};
     dom {[x,x.upVar(finSub,S`1)]} = {x} by RELAT_1:9;
-    then dom @finSub misses dom F by A20,SUBSTUT1:def 2;
+    then dom @finSub misses dom F by A19,SUBSTUT1:def 2;
     then
-A24: @finSub \/ F = (@finSub +* F) by FUNCT_4:31;
-A25: dom (x|a) = {x} by FUNCOP_1:13;
-    v.(z|a) is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
+A23: @finSub \/ F = (@finSub +* F) by FUNCT_4:31;
+    v.(z|a) is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
     then
-A26: ex f st v.(z|a) = f & dom f = bound_QC-variables & rng f c= A by
+A24: ex f st v.(z|a) = f & dom f = bound_QC-variables(Al) & rng f c= A by
 FUNCT_2:def 2;
     rng F = {x.upVar(finSub,S`1)} by RELAT_1:9;
-    then dom (F*v.(z|a)) = dom F by A26,RELAT_1:27;
+    then dom (F*v.(z|a)) = dom F by A24,RELAT_1:27;
     then
-A27: dom (F*v.(z|a)) = {x} by RELAT_1:9;
-A28: {[x,x.upVar(finSub,S`1)]} = x .--> x.upVar(finSub,S`1) by FUNCT_4:82;
+A25: dom (F*v.(z|a)) = {x} by RELAT_1:9;
+A26: {[x,x.upVar(finSub,S`1)]} = x .--> x.upVar(finSub,S`1) by FUNCT_4:82;
     for b st b in dom (x|a) holds (x|a).b = (F*v.(z|a)).b
     proof
       let b such that
-A29:  b in dom (x|a);
-      b in dom (F*v.(z|a)) by A27,A29,FUNCOP_1:13;
-      then
-A30:  (F*v.(z|a)).b = (v.(z|a)).(F.b) by FUNCT_1:12;
-      b = x by A25,A29,TARSKI:def 1;
-      then (x|a).b = a & F.b = x.upVar(finSub,S`1) by A28,FUNCOP_1:72;
-      hence thesis by A1,A19,A30,Th50,Th52;
+A27:  b in dom (x|a);
+A28:  (F*v.(z|a)).b = (v.(z|a)).(F.b) by A25,A27,FUNCT_1:12;
+      b = x by A27,TARSKI:def 1;
+      then (x|a).b = a & F.b = x.upVar(finSub,S`1) by A26,FUNCOP_1:72;
+      hence thesis by A1,A18,A28,Th49,Th51;
     end;
     then
-A31: (x|a) = (F*v.(z|a)) by A27,FUNCOP_1:13,FUNCT_1:2;
+A29: (x|a) = (F*v.(z|a)) by A25,FUNCOP_1:13,FUNCT_1:2;
     rng F = {x.upVar(finSub,S`1)} by RELAT_1:9;
     then
-A32: (@finSub +* F)*v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a)) by A26,FUNCT_7:9
+A30: (@finSub +* F)*v.(z|a) = (@finSub*v.(z|a)) +* (F*v.(z|a)) by A24,FUNCT_7:9
 ;
-    S`2 = finSub \/ F by A2,A19,SUBSTUT1:def 13;
+    S`2 = finSub \/ F by A2,A18,SUBSTUT1:def 13;
     then @S`2 = finSub \/ F by SUBSTUT1:def 2;
-    hence Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ) +* (x|a) by A24,A32,A31,
+    hence Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ) +* (x|a) by A23,A30,A29,
 SUBSTUT1:def 2;
   end;
   hence thesis by A3;
 end;
 
-theorem Th55:
+theorem Th54:
   [S,x] is quantifiable implies ((for a holds J,(v.((S_Bound(@
   CQCSub_All([S,x],xSQ)))|a)). Val_S(v.((S_Bound(@CQCSub_All([S,x],xSQ)))|a),S)
 |= S) iff for a holds J,(v.((S_Bound(@CQCSub_All([S,x],xSQ)))|a)). (NEx_Val(v.(
@@ -1343,7 +1383,7 @@ A1: [S,x] is quantifiable;
     assume
 A2: for a holds J,(v.(z|a)).Val_S(v.(z|a),S) |= S;
     let a;
-    Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ)+*(x|a) by A1,Th54;
+    Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ)+*(x|a) by A1,Th53;
     hence thesis by A2;
   end;
   thus (for a holds J,(v.(z|a)).(NEx_Val(v.(z|a),S,x,xSQ)+*(x|a)) |= S)
@@ -1352,12 +1392,12 @@ A2: for a holds J,(v.(z|a)).Val_S(v.(z|a),S) |= S;
     assume
 A3: for a holds J,(v.(z|a)).(NEx_Val(v.(z|a),S,x,xSQ)+*(x|a)) |= S;
     let a;
-    Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ)+*(x|a) by A1,Th54;
+    Val_S(v.(z|a),S) = NEx_Val(v.(z|a),S,x,xSQ)+*(x|a) by A1,Th53;
     hence thesis by A3;
   end;
 end;
 
-theorem Th56:
+theorem Th55:
   [S,x] is quantifiable implies for a holds NEx_Val(v.((S_Bound(@
   CQCSub_All([S,x],xSQ)))|a),S,x,xSQ) = NEx_Val(v,S,x,xSQ)
 proof
@@ -1369,14 +1409,14 @@ A1: [S,x] is quantifiable;
   let a;
   set z = S_Bound(@S1);
   set NF = NEx_Val(v.(z|a),S,x,xSQ);
-  v is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
-  then ex f st v = f & dom f = bound_QC-variables & rng f c= A by FUNCT_2:def 2
-;
+  v is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
+  then ex f st v = f & dom f = bound_QC-variables(Al) & rng f c= A
+   by FUNCT_2:def 2;
   then rng @finSub c= dom v;
   then
 A2: dom NF1 = dom @finSub by RELAT_1:27;
-  v.(z|a) is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
-  then ex f st v.(z|a) = f & dom f = bound_QC-variables & rng f c= A by
+  v.(z|a) is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
+  then ex f st v.(z|a) = f & dom f = bound_QC-variables(Al) & rng f c= A by
 FUNCT_2:def 2;
   then
 A3: rng @finSub c= dom (v.(z|a));
@@ -1387,18 +1427,18 @@ A4: dom NF = dom @finSub by RELAT_1:27;
     let b such that
 A5: b in dom NF;
 A6: @finSub.b in rng @finSub by A4,A5,FUNCT_1:3;
-    then reconsider x = @finSub.b as bound_QC-variable;
-    not z in rng finSub by A1,Th41;
+    then reconsider x = @finSub.b as bound_QC-variable of Al;
+    not z in rng finSub by A1,Th40;
     then z <> x by A6,SUBSTUT1:def 2;
     then
-A7: v.(z|a).x = v.x by Th49;
+A7: v.(z|a).x = v.x by Th48;
     NF.b = (v.(z|a)).x by A5,FUNCT_1:12;
     hence thesis by A4,A2,A5,A7,FUNCT_1:12;
   end;
   hence thesis by A3,A2,FUNCT_1:2,RELAT_1:27;
 end;
 
-theorem Th57:
+theorem Th56:
   [S,x] is quantifiable implies ((for a holds J,(v.((S_Bound(@
 CQCSub_All([S,x],xSQ)))|a)). (NEx_Val(v.((S_Bound(@CQCSub_All([S,x],xSQ)))|a),S
 ,x,xSQ)+*(x|a)) |= S) iff for a holds J,(v.((S_Bound(@CQCSub_All([S,x],xSQ)))|a
@@ -1414,7 +1454,7 @@ A1: [S,x] is quantifiable;
     assume
 A2: for a holds J,(v.(z|a)).(NEx_Val(v.(z|a),S,x,xSQ)+*(x|a)) |= S;
     let a;
-    NEx_Val(v.(z|a),S,x,xSQ) = NEx_Val(v,S,x,xSQ) by A1,Th56;
+    NEx_Val(v.(z|a),S,x,xSQ) = NEx_Val(v,S,x,xSQ) by A1,Th55;
     hence thesis by A2;
   end;
   thus (for a holds J,(v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S) implies for
@@ -1423,68 +1463,68 @@ A2: for a holds J,(v.(z|a)).(NEx_Val(v.(z|a),S,x,xSQ)+*(x|a)) |= S;
     assume
 A3: for a holds J,(v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S;
     let a;
-    NEx_Val(v.(z|a),S,x,xSQ) = NEx_Val(v,S,x,xSQ) by A1,Th56;
+    NEx_Val(v.(z|a),S,x,xSQ) = NEx_Val(v,S,x,xSQ) by A1,Th55;
     hence thesis by A3;
   end;
 end;
 
 begin :: The Coincidence Lemma
 
-theorem Th58:
-  rng l1 c= bound_QC-variables implies still_not-bound_in l1 = rng l1
+theorem Th57:
+  rng l1 c= bound_QC-variables(Al) implies still_not-bound_in l1 = rng l1
 proof
-A1: variables_in(l1,bound_QC-variables) = { l1.k : 1 <= k & k <= len l1 & l1
-  .k in bound_QC-variables} by QC_LANG3:def 1;
+A1: variables_in(l1,bound_QC-variables(Al)) = { l1.k : 1 <= k & k <= len l1 &
+   l1.k in bound_QC-variables(Al)} by QC_LANG3:def 1;
   assume
-A2: rng l1 c= bound_QC-variables;
-A3: rng l1 c= variables_in(l1,bound_QC-variables)
+A2: rng l1 c= bound_QC-variables(Al);
+A3: rng l1 c= variables_in(l1,bound_QC-variables(Al))
   proof
     let b;
     assume
 A4: b in rng l1;
-    then consider k being Nat such that
+    then consider k being natural number such that
 A5: k in dom l1 and
 A6: l1.k = b by FINSEQ_2:10;
     k in Seg len l1 by A5,FINSEQ_1:def 3;
     then 1 <= k & k <= len l1 by FINSEQ_1:1;
     hence thesis by A2,A1,A4,A5,A6;
   end;
-  variables_in(l1,bound_QC-variables) c= rng l1
+  variables_in(l1,bound_QC-variables(Al)) c= rng l1
   proof
     let b;
-    assume b in variables_in(l1,bound_QC-variables);
+    assume b in variables_in(l1,bound_QC-variables(Al));
     then consider k such that
 A7: b = l1.k and
 A8: 1 <= k & k <= len l1 and
-    l1.k in bound_QC-variables by A1;
+    l1.k in bound_QC-variables(Al) by A1;
     k in Seg len l1 by A8,FINSEQ_1:1;
     then k in dom l1 by FINSEQ_1:def 3;
     hence thesis by A7,FUNCT_1:3;
   end;
-  then variables_in(l1,bound_QC-variables) = rng l1 by A3,XBOOLE_0:def 10;
+  then variables_in(l1,bound_QC-variables(Al)) = rng l1 by A3,XBOOLE_0:def 10;
   hence thesis by QC_LANG3:2;
 end;
 
-theorem Th59:
-  dom v = bound_QC-variables & dom (x|a) = {x}
+theorem Th58:
+  dom v = bound_QC-variables(Al) & dom (x|a) = {x}
 proof
-  v is Element of Funcs(bound_QC-variables,A) by VALUAT_1:def 1;
-  then ex f st v = f & dom f = bound_QC-variables & rng f c= A by FUNCT_2:def 2
-;
-  hence dom v = bound_QC-variables;
+  v is Element of Funcs(bound_QC-variables(Al),A) by VALUAT_1:def 1;
+  then ex f st v = f & dom f = bound_QC-variables(Al) & rng f c= A
+   by FUNCT_2:def 2;
+  hence dom v = bound_QC-variables(Al);
   thus thesis by FUNCOP_1:13;
 end;
 
-theorem Th60:
+theorem Th59:
   v*'ll = ll*(v|still_not-bound_in ll)
 proof
-  rng ll c= bound_QC-variables by RELAT_1:def 19;
+  rng ll c= bound_QC-variables(Al) by RELAT_1:def 19;
   then
-A1: rng ll = still_not-bound_in ll by Th58;
+A1: rng ll = still_not-bound_in ll by Th57;
   dom (v|still_not-bound_in ll) = dom v /\ still_not-bound_in ll by RELAT_1:61;
   then
-  dom (v|still_not-bound_in ll) = bound_QC-variables /\ still_not-bound_in
-  ll by Th59;
+  dom (v|still_not-bound_in ll) = bound_QC-variables(Al) /\ still_not-bound_in
+  ll by Th58;
   then rng ll = dom (v|still_not-bound_in ll) by A1,XBOOLE_1:28;
   then
 A2: dom (ll*(v|still_not-bound_in ll)) = dom ll by RELAT_1:27;
@@ -1497,16 +1537,16 @@ FINSEQ_1:def 2;
 A4: len f = k by SUBSTUT1:34;
   then
 A5: dom f = Seg k by FINSEQ_1:def 3;
-A6: for j be Nat st j in dom f holds f.j = (v*'ll).j
+A6: for j be natural number st j in dom f holds f.j = (v*'ll).j
   proof
-A7: rng ll c= bound_QC-variables by RELAT_1:def 19;
-    let j be Nat such that
+A7: rng ll c= bound_QC-variables(Al) by RELAT_1:def 19;
+    let j be natural number such that
 A8: j in dom f;
     reconsider j as Element of NAT by ORDINAL1:def 12;
     ll.j in rng ll by A2,A8,FUNCT_1:3;
-    then ll.j in bound_QC-variables by A7;
+    then ll.j in bound_QC-variables(Al) by A7;
     then
-A9: ll.j in dom v by Th59;
+A9: ll.j in dom v by Th58;
     ll.j in still_not-bound_in ll by A1,A2,A8,FUNCT_1:3;
     then ll.j in dom v /\ still_not-bound_in ll by A9,XBOOLE_0:def 4;
     then
@@ -1519,7 +1559,7 @@ A10: (v|still_not-bound_in ll).(ll.j) = v.(ll.j) by FUNCT_1:48;
   hence thesis by A4,A6,FINSEQ_2:9;
 end;
 
-theorem Th61:
+theorem Th60:
   for v,w holds (v|still_not-bound_in (P!ll) = w|
   still_not-bound_in (P!ll) implies (J,v |= P!ll iff J,w |= P!ll))
 proof
@@ -1529,11 +1569,11 @@ A1: v|still_not-bound_in (P!ll) = w|still_not-bound_in (P!ll);
 A2: still_not-bound_in (P!ll) = still_not-bound_in ll by QC_LANG3:5;
 A3: w*'ll in J.P iff Valid(P!ll,J).w = TRUE by VALUAT_1:7;
 A4: Valid(P!ll,J).v = TRUE iff v*'ll in J.P by VALUAT_1:7;
-  ll*(w|still_not-bound_in ll) in J.P iff w*'ll in J.P by Th60;
-  hence thesis by A1,A2,A4,A3,Th60,VALUAT_1:def 7;
+  ll*(w|still_not-bound_in ll) in J.P iff w*'ll in J.P by Th59;
+  hence thesis by A1,A2,A4,A3,Th59,VALUAT_1:def 7;
 end;
 
-theorem Th62:
+theorem Th61:
   (for v,w holds v|still_not-bound_in p = w|still_not-bound_in p
   implies (J,v |= p iff J,w |= p)) implies for v,w holds v|still_not-bound_in
 'not' p = w|still_not-bound_in 'not' p implies (J,v |= 'not' p iff J,w |= 'not'
@@ -1549,7 +1589,7 @@ A2: still_not-bound_in 'not' p = still_not-bound_in p by QC_LANG3:7;
   hence thesis by VALUAT_1:17;
 end;
 
-theorem Th63:
+theorem Th62:
   (for v,w holds v|still_not-bound_in p = w|still_not-bound_in p
   implies (J,v |= p iff J,w |= p)) & (for v,w holds v|still_not-bound_in q = w|
 still_not-bound_in q implies (J,v |= q iff J,w |= q)) implies for v,w holds v|
@@ -1571,17 +1611,17 @@ A2: still_not-bound_in p '&' q = X by QC_LANG3:10;
   hence thesis by VALUAT_1:18;
 end;
 
-theorem Th64:
-  for X being set st X c= bound_QC-variables holds dom (v|X) = dom
+theorem Th63:
+  for X being set st X c= bound_QC-variables(Al) holds dom (v|X) = dom
   (v.(x|a)|X) & dom (v|X) = X
 proof
   let X be set;
 A1: dom (v.(x|a)|X) = dom (v.(x|a)) /\ X by RELAT_1:61;
   dom (v|X) = dom v /\ X by RELAT_1:61;
   then
-A2: dom (v|X) = bound_QC-variables /\ X by Th59;
-  assume X c= bound_QC-variables;
-  hence thesis by A2,A1,Th59,XBOOLE_1:28;
+A2: dom (v|X) = bound_QC-variables(Al) /\ X by Th58;
+  assume X c= bound_QC-variables(Al);
+  hence thesis by A2,A1,Th58,XBOOLE_1:28;
 end;
 
 theorem
@@ -1590,10 +1630,10 @@ theorem
 proof
   assume
 A1: v|still_not-bound_in p = w|still_not-bound_in p;
-  dom (v|still_not-bound_in p) = dom (v.(x|a)|still_not-bound_in p) by Th64;
+  dom (v|still_not-bound_in p) = dom (v.(x|a)|still_not-bound_in p) by Th63;
   then
 A2: dom (v.(x|a)|still_not-bound_in p) = dom (w.(x|a)|still_not-bound_in p)
-  by A1,Th64;
+  by A1,Th63;
   for b st b in dom (v.(x|a)|still_not-bound_in p) holds (v.(x|a)|
   still_not-bound_in p).b = (w.(x|a)|still_not-bound_in p).b
   proof
@@ -1601,23 +1641,23 @@ A2: dom (v.(x|a)|still_not-bound_in p) = dom (w.(x|a)|still_not-bound_in p)
 A3: b in dom (v.(x|a)|still_not-bound_in p);
 A4: (v.(x|a)|still_not-bound_in p).b = v.(x|a).b & (w.(x|a)|
     still_not-bound_in p ).b = w.(x|a).b by A2,A3,FUNCT_1:47;
-    b in dom (v|still_not-bound_in p) by A3,Th64;
+    b in dom (v|still_not-bound_in p) by A3,Th63;
     then
 A5: (v|still_not-bound_in p).b = v.b by FUNCT_1:47;
-    b in dom (w|still_not-bound_in p) by A1,A3,Th64;
+    b in dom (w|still_not-bound_in p) by A1,A3,Th63;
     then
 A6: v.b = w.b by A1,A5,FUNCT_1:47;
 A7: now
       assume
 A8:   b <> x;
-      then v.(x|a).b = v.b by Th49;
-      hence thesis by A4,A6,A8,Th49;
+      then v.(x|a).b = v.b by Th48;
+      hence thesis by A4,A6,A8,Th48;
     end;
     now
       assume
 A9:   b = x;
-      then v.(x|a).b = a by Th50;
-      hence thesis by A4,A9,Th50;
+      then v.(x|a).b = a by Th49;
+      hence thesis by A4,A9,Th49;
     end;
     hence thesis by A7;
   end;
@@ -1633,14 +1673,14 @@ proof
   hence thesis by XBOOLE_1:7;
 end;
 
-theorem Th67:
+theorem Th66:
   v|(still_not-bound_in p \ {x}) = w|(still_not-bound_in p \ {x})
   implies v.(x|a)|still_not-bound_in p = w.(x|a)|still_not-bound_in p
 proof
-A1: dom (w.(x|a)|still_not-bound_in p) = still_not-bound_in p by Th64;
+A1: dom (w.(x|a)|still_not-bound_in p) = still_not-bound_in p by Th63;
   then
 A2: dom (v.(x|a)|still_not-bound_in p) = dom (w.(x|a)|still_not-bound_in p)
-  by Th64;
+  by Th63;
   assume
 A3: v|(still_not-bound_in p \ {x}) = w|(still_not-bound_in p \ {x});
   for b st b in dom (v.(x|a)|still_not-bound_in p) holds (v.(x|a)|
@@ -1655,14 +1695,14 @@ A6: now
 A7:   b <> x;
       then
 A8:   not b in {x} by TARSKI:def 1;
-      b in still_not-bound_in p by A4,Th64;
+      b in still_not-bound_in p by A4,Th63;
       then
 A9:   b in still_not-bound_in p \ {x} by A8,XBOOLE_0:def 5;
-      then b in dom (w|(still_not-bound_in p \ {x})) by Th64;
+      then b in dom (w|(still_not-bound_in p \ {x})) by Th63;
       then
 A10:  w|(still_not-bound_in p \ {x}).b = w.b by FUNCT_1:47;
-A11:  v.(x|a).b = v.b & w.(x|a).b = w.b by A7,Th49;
-      b in dom (v|(still_not-bound_in p \ {x})) by A9,Th64;
+A11:  v.(x|a).b = v.b & w.(x|a).b = w.b by A7,Th48;
+      b in dom (v|(still_not-bound_in p \ {x})) by A9,Th63;
       hence thesis by A3,A5,A10,A11,FUNCT_1:47;
     end;
     now
@@ -1670,15 +1710,15 @@ A12:  w.(x|a)|(still_not-bound_in p).b = w.(x|a).b by A2,A4,FUNCT_1:47;
       assume
 A13:  b = x;
       v.(x|a)|(still_not-bound_in p).b = v.(x|a).b by A4,FUNCT_1:47;
-      then v.(x|a)|(still_not-bound_in p).b = a by A13,Th50;
-      hence thesis by A13,A12,Th50;
+      then v.(x|a)|(still_not-bound_in p).b = a by A13,Th49;
+      hence thesis by A13,A12,Th49;
     end;
     hence thesis by A6;
   end;
-  hence thesis by A1,Th64,FUNCT_1:2;
+  hence thesis by A1,Th63,FUNCT_1:2;
 end;
 
-theorem Th68:
+theorem Th67:
   (for v,w holds v|still_not-bound_in p = w|still_not-bound_in p
 implies (J,v |= p iff J,w |= p)) implies for v,w holds v|still_not-bound_in All
 (x,p) = w|still_not-bound_in All(x,p) implies (J,v |= All(x,p) iff J,w |= All(x
@@ -1698,7 +1738,7 @@ A4: (for a holds J,w.(x|a) |= p) implies for a holds J,v.(x|a) |= p
     assume
 A5: for a holds J,w.(x|a) |= p;
     let a;
-    v.(x|a)|still_not-bound_in p = w.(x|a)|still_not-bound_in p by A3,Th67;
+    v.(x|a)|still_not-bound_in p = w.(x|a)|still_not-bound_in p by A3,Th66;
     then J,v.(x|a) |= p iff J,w.(x|a) |= p by A1;
     hence thesis by A5;
   end;
@@ -1707,29 +1747,29 @@ A5: for a holds J,w.(x|a) |= p;
     assume
 A6: for a holds J,v.(x|a) |= p;
     let a;
-    v.(x|a)|still_not-bound_in p = w.(x|a)|still_not-bound_in p by A3,Th67;
+    v.(x|a)|still_not-bound_in p = w.(x|a)|still_not-bound_in p by A3,Th66;
     then J,v.(x|a) |= p iff J,w.(x|a) |= p by A1;
     hence thesis by A6;
   end;
-  hence thesis by A4,Th51;
+  hence thesis by A4,Th50;
 end;
 
 :: Coincidence Lemma (Ebb et al, Chapter III, 5.1)
 
-theorem Th70:
+theorem Th68:
   for p holds for v,w holds v|still_not-bound_in p = w|
   still_not-bound_in p implies (J,v |= p iff J,w |= p)
 proof
-  defpred P[Element of CQC-WFF] means for v,w holds v|still_not-bound_in $1 =
-  w|still_not-bound_in $1 implies (J,v |= $1 iff J,w |= $1);
-A1: for p,q,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[p] implies P['not' p]) & (P[p]
-& P[q] implies P[p '&' q]) & (P[p] implies P[All(x,p)]) by Th61,Th62,Th63,Th68,
-VALUAT_1:32;
+  defpred P[Element of CQC-WFF(Al)] means for v,w holds v|still_not-bound_in
+   $1 = w|still_not-bound_in $1 implies (J,v |= $1 iff J,w |= $1);
+A1: for p,q,x,k for l being CQC-variable_list of k,Al for P being
+QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!l] & (P[p] implies P['not' p])
+   & (P[p] & P[q] implies P[p '&' q]) & (P[p] implies P[All(x,p)])
+   by Th60,Th61,Th62,Th67,VALUAT_1:32;
   thus for p holds P[p] from CQC_LANG:sch 1(A1);
 end;
 
-theorem Th71:
+theorem Th69:
   [S,x] is quantifiable implies (v.((S_Bound(@CQCSub_All([S,x],xSQ
 )))|a)). (NEx_Val(v,S,x,xSQ)+*(x|a))|still_not-bound_in S`1 = (v.(NEx_Val(v,S,x
   ,xSQ)+*(x|a)))|still_not-bound_in S`1
@@ -1741,8 +1781,8 @@ proof
   set V2 = v.(NEx_Val(v,S,x,xSQ)+*(x|a));
   set X = still_not-bound_in S`1;
 A1: dom V1 = dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a)) by FUNCT_4:def 1;
-  dom (v.(z|a)) = bound_QC-variables by Th59;
-  then dom (v.(z|a)) = dom v by Th59;
+  dom (v.(z|a)) = bound_QC-variables(Al) by Th58;
+  then dom (v.(z|a)) = dom v by Th58;
   then
 A2: dom V1 = dom V2 by A1,FUNCT_4:def 1;
   assume
@@ -1750,7 +1790,7 @@ A3: [S,x] is quantifiable;
 A4: now
     assume not x in rng finSub;
     then
-A5: z = x by A3,Th53;
+A5: z = x by A3,Th52;
     for b st b in dom V1 holds V1.b = V2.b
     proof
       let b such that
@@ -1759,17 +1799,15 @@ A7:   now
         assume
 A8:     b <> z;
 A9:     now
-          not b in {x} by A5,A8,TARSKI:def 1;
-          then
-A10:      not b in dom (x|a) by Th59;
+A10:      not b in dom (x|a) by A5,A8,TARSKI:def 1;
           assume not b in dom NEx_Val(v,S,x,xSQ);
           then not b in dom NEx_Val(v,S,x,xSQ) \/ dom (x|a) by A10,
 XBOOLE_0:def 3;
           then
 A11:      not b in dom (NEx_Val(v,S,x,xSQ)+*(x|a)) by FUNCT_4:def 1;
-          reconsider x = b as bound_QC-variable by A6;
+          reconsider x = b as bound_QC-variable of Al by A6;
           V1.b = (v.(z|a)).b by A11,FUNCT_4:11;
-          then V1.b = v.x by A8,Th49;
+          then V1.b = v.x by A8,Th48;
           hence thesis by A11,FUNCT_4:11;
         end;
         now
@@ -1789,7 +1827,7 @@ A13:      b in dom NEx_Val(v,S,x,xSQ);
         assume b = z;
         then b in {x} by A5,TARSKI:def 1;
         then
-A14:    b in dom (x|a) by Th59;
+A14:    b in dom (x|a) by Th58;
         dom (NEx_Val(v,S,x,xSQ)+*(x|a)) = dom NEx_Val(v,S,x,xSQ) \/ dom (
         x|a) by FUNCT_4:def 1;
         then
@@ -1808,12 +1846,12 @@ A17: dom (V1|X) = (dom (v.(z|a)) \/ dom (NEx_Val(v,S,x,xSQ)+*(x|a))) /\ X
     by A1,RELAT_1:61;
 A18: for b st b in dom (V1|X) holds V1|X.b = V2|X.b
     proof
-A19:  X c= Bound_Vars(S`1) by Th48;
+A19:  X c= Bound_Vars(S`1) by Th47;
       let b such that
 A20:  b in dom (V1|X);
       b in X by A17,A20,XBOOLE_0:def 4;
       then
-A21:  b <> z by A3,A16,A19,Th39;
+A21:  b <> z by A3,A16,A19,Th38;
 A22:  V2|X = v|X +* (NEx_Val(v,S,x,xSQ)+*(x|a))|X by FUNCT_4:71;
 A23:  V1|X = (v.(z|a))|X +* (NEx_Val(v,S,x,xSQ)+*(x|a))|X by FUNCT_4:71;
       then
@@ -1827,14 +1865,14 @@ A27:    b in dom (v.(z|a)|X) by A20,A24,XBOOLE_0:def 3;
         then b in dom (v.(z|a)) /\ X by RELAT_1:61;
         then
 A28:    b in X by XBOOLE_0:def 4;
-        b in bound_QC-variables by A20;
-        then b in dom v by Th59;
+        b in bound_QC-variables(Al) by A20;
+        then b in dom v by Th58;
         then
 A29:    b in dom v /\ X by A28,XBOOLE_0:def 4;
         V1|X.b = (v.(z|a))|X.b by A23,A26,FUNCT_4:11;
         then V1|X.b = v.(z|a).b by A27,FUNCT_1:47;
         then
-A30:    V1|X.b = v.b by A21,Th49;
+A30:    V1|X.b = v.b by A21,Th48;
         V2|X.b = v|X.b by A22,A26,FUNCT_4:11;
         hence thesis by A30,A29,FUNCT_1:48;
       end;
@@ -1852,7 +1890,7 @@ A31:    b in dom ((NEx_Val(v,S,x,xSQ)+*(x|a))|X);
   hence thesis by A4;
 end;
 
-theorem Th72:
+theorem Th70:
   [S,x] is quantifiable implies ((for a holds J,(v.((S_Bound(@
 CQCSub_All([S,x],xSQ)))|a)).(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S) iff for a holds J
   ,v.(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S )
@@ -1870,11 +1908,11 @@ A2: for a holds J,(v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S;
     let a;
     set V1 = (v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a));
     set V2 = v.(NEx_Val(v,S,x,xSQ)+*(x|a));
-    V1|X = V2|X by A1,Th71;
+    V1|X = V2|X by A1,Th69;
     then
-A3: J,V1 |= S`1 iff J,V2 |= S`1 by Th70;
+A3: J,V1 |= S`1 iff J,V2 |= S`1 by Th68;
     J,V1 |= S by A2;
-    hence thesis by A3,Def3;
+    hence thesis by A3,Def2;
   end;
   thus (for a holds J,v.(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S) implies for a holds
   J,(v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S
@@ -1885,25 +1923,25 @@ A4: for a holds J,v.(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S;
     let a;
     set V1 = (v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a));
     set V2 = v.(NEx_Val(v,S,x,xSQ)+*(x|a));
-    V1|X = V2|X by A1,Th71;
+    V1|X = V2|X by A1,Th69;
     then
-A5: J,V1 |= S`1 iff J,V2 |= S`1 by Th70;
+A5: J,V1 |= S`1 iff J,V2 |= S`1 by Th68;
     J,V2 |= S by A4;
-    hence thesis by A5,Def3;
+    hence thesis by A5,Def2;
   end;
 end;
 
-theorem Th73:
+theorem Th71:
   dom NEx_Val(v,S,x,xSQ) = dom RestrictSub(x,All(x,S`1),xSQ)
 proof
-  rng (@RestrictSub(x,All(x,S`1),xSQ)) c= bound_QC-variables;
-  then rng (@RestrictSub(x,All(x,S`1),xSQ)) c= dom v by Th59;
+  rng (@RestrictSub(x,All(x,S`1),xSQ)) c= bound_QC-variables(Al);
+  then rng (@RestrictSub(x,All(x,S`1),xSQ)) c= dom v by Th58;
   then dom NEx_Val(v,S,x,xSQ) = dom (@RestrictSub(x,All(x,S`1),xSQ)) by
 RELAT_1:27;
   hence thesis by SUBSTUT1:def 2;
 end;
 
-theorem Th75:
+theorem Th72:
   (for a holds J,v.(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S) iff for a
   holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S
 proof
@@ -1927,7 +1965,7 @@ A2: for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S;
   end;
 end;
 
-theorem Th76:
+theorem Th73:
   (for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S) iff for a
   holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S`1
 proof
@@ -1938,7 +1976,7 @@ proof
 A1: for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S;
     let a;
     J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S iff J,(v.NEx_Val(v,S,x,xSQ)).(x|a)
-    |= S`1 by Def3;
+    |= S`1 by Def2;
     hence thesis by A1;
   end;
   thus (for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S`1) implies for a holds
@@ -1948,12 +1986,12 @@ A1: for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S;
 A2: for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S`1;
     let a;
     J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S iff J,(v.NEx_Val(v,S,x,xSQ)).(x|a)
-    |= S`1 by Def3;
+    |= S`1 by Def2;
     hence thesis by A2;
   end;
 end;
 
-theorem Th78:
+theorem Th74:
   for v,vS,vS1,vS2 st (for y st y in dom vS1 holds not y in
   still_not-bound_in ll) & (for y st y in dom vS2 holds vS2.y = v.y) & dom vS
   misses dom vS2 holds (v.vS)*'ll = (v.(vS+*vS1+*vS2))*'ll
@@ -1968,15 +2006,15 @@ A4: len ll1 = k by VALUAT_1:def 3;
   then
 A5: dom ll1 = Seg k by FINSEQ_1:def 3;
 A6: len ll2 = k by VALUAT_1:def 3;
-  for i be Nat st i in dom ll1 holds ll1.i = ll2.i
+  for i be natural number st i in dom ll1 holds ll1.i = ll2.i
   proof
-    let i be Nat such that
+    let i be natural number such that
 A7: i in dom ll1;
 A8: i in dom ll2 by A6,A5,A7,FINSEQ_1:def 3;
     reconsider i as Element of NAT by ORDINAL1:def 12;
 A9: dom ll2 c= dom ll by RELAT_1:25;
 A10: now
-      reconsider x = ll.i as bound_QC-variable by A8,A9,Th5;
+      reconsider x = ll.i as bound_QC-variable of Al by A8,A9,Th5;
       assume
 A11:  ll.i in dom (vS+*vS1+*vS2);
 A12:  now
@@ -1986,10 +2024,10 @@ A13:    now
 A14:      i <= len ll by A5,A7,FINSEQ_1:1;
           1 <= i by A5,A7,FINSEQ_1:1;
           then
-          x in { ll.n : 1 <= n & n <= len ll & ll.n in bound_QC-variables
+          x in { ll.n : 1 <= n & n <= len ll & ll.n in bound_QC-variables(Al)
           } by A14;
           then
-A15:      x in variables_in(ll,bound_QC-variables) by QC_LANG3:def 1;
+A15:      x in variables_in(ll,bound_QC-variables(Al)) by QC_LANG3:def 1;
           assume x in dom vS1;
           then not x in still_not-bound_in ll by A1;
           hence contradiction by A15,QC_LANG3:2;
@@ -2042,7 +2080,7 @@ A24:  ll1.i = v.(ll.i) by A7,FUNCT_1:12;
   hence thesis by A4,A6,FINSEQ_2:9;
 end;
 
-theorem Th79:
+theorem Th75:
   for v,vS,vS1,vS2 st (for y st y in dom vS1 holds not y in
 still_not-bound_in (P!ll)) & (for y st y in dom vS2 holds vS2.y = v.y) & dom vS
   misses dom vS2 holds J,v.vS |= P!ll iff J,v.(vS+*vS1+*vS2) |= P!ll
@@ -2060,10 +2098,10 @@ A3: for y st y in dom vS1 holds not y in still_not-bound_in ll
 A4: (v.(vS+*vS1+*vS2))*'ll in J.P iff Valid(P!ll,J).(v.(vS+*vS1+*vS2)) =
   TRUE by VALUAT_1:7;
   Valid(P!ll,J).(v.vS) = TRUE iff (v.vS)*'ll in J.P by VALUAT_1:7;
-  hence thesis by A2,A3,A4,Th78,VALUAT_1:def 7;
+  hence thesis by A2,A3,A4,Th74,VALUAT_1:def 7;
 end;
 
-theorem Th80:
+theorem Th76:
   (for v,vS,vS1,vS2 st (for y st y in dom vS1 holds not y in
   still_not-bound_in p) & (for y st y in dom vS2 holds vS2.y = v.y) & dom vS
 misses dom vS2 holds J,v.vS |= p iff J,v.(vS+*vS1+*vS2) |= p) implies for v,vS,
@@ -2089,7 +2127,7 @@ A3: ( for y st y in dom vS2 holds vS2.y = v.y)& dom vS misses dom vS2;
   hence thesis by VALUAT_1:17;
 end;
 
-theorem Th81:
+theorem Th77:
   (for v,vS,vS1,vS2 st (for y st y in dom vS1 holds not y in
   still_not-bound_in p) & (for y st y in dom vS2 holds vS2.y = v.y) & dom vS
 misses dom vS2 holds J,v.vS |= p iff J,v.(vS+*vS1+*vS2) |= p) & (for v,vS,vS1,
@@ -2141,7 +2179,7 @@ A7: J,v.vS |= p & J,v.vS |= q;
   hence thesis by A5,VALUAT_1:18;
 end;
 
-theorem Th82:
+theorem Th78:
   (for y st y in dom vS1 holds not y in still_not-bound_in All(x,p
   )) implies for y st y in (dom vS1) \ {x} holds not y in still_not-bound_in p
 proof
@@ -2160,7 +2198,7 @@ XBOOLE_1:39;
   hence thesis by A4,XBOOLE_0:def 3;
 end;
 
-theorem Th83:
+theorem Th79:
   for vS1 being Function holds (for y st y in dom vS1 holds vS1.y
 = v.y) & dom vS misses dom vS1 implies for y st y in (dom vS1) \ {x} holds vS1|
   ((dom vS1) \ {x}).y = (v.vS).y
@@ -2179,7 +2217,7 @@ A4: vS1|((dom vS1) \ {x}).y = v.y by A1,A3;
   hence thesis by A4,FUNCT_4:11;
 end;
 
-theorem Th84:
+theorem Th80:
   (for v,vS,vS1,vS2 st (for y st y in dom vS1 holds not y in
   still_not-bound_in p) & (for y st y in dom vS2 holds vS2.y = v.y) & dom vS
 misses dom vS2 holds J,v.vS |= p iff J,v.(vS+*vS1+*vS2) |= p) implies for v,vS,
@@ -2196,158 +2234,155 @@ A2: for y st y in dom vS1 holds not y in still_not-bound_in All(x,p) and
 A3: ( for y st y in dom vS2 holds vS2.y = v.y)& dom vS misses dom vS2;
   set vS19 = vS1|((dom vS1) \ {x});
   set vS29 = vS2|((dom vS2) \ {x});
-A4: dom vS29 c= (dom vS2) \ {x} by RELAT_1:58;
-  then
-A5: for y st y in dom vS29 holds vS29.y = (v.vS).y by A3,Th83;
-A6: dom vS29 misses {x} by A4,XBOOLE_1:63,79;
-A7: dom vS19 c= (dom vS1) \ {x} by RELAT_1:58;
-  then
-A8: for y st y in dom vS19 holds not y in still_not-bound_in p by A2,Th82;
-A9: (for a holds J,(v.vS).(x|a) |= p) implies for a holds J,(v.vS).((x|a)+*
+A4: for y st y in dom vS29 holds vS29.y = (v.vS).y by A3,Th79;
+A5: dom vS29 misses {x} by XBOOLE_1:63,79;
+A6: for y st y in dom vS19 holds not y in still_not-bound_in p by A2,Th78;
+A7: (for a holds J,(v.vS).(x|a) |= p) implies for a holds J,(v.vS).((x|a)+*
   vS19+*vS29) |= p
   proof
     assume
-A10: for a holds J,(v.vS).(x|a) |= p;
+A8: for a holds J,(v.vS).(x|a) |= p;
     let a;
-    dom vS29 misses dom (x|a) by A6,Th59;
-    then J,(v.vS).(x|a) |= p iff J,(v.vS).((x|a)+*vS19+*vS29) |= p by A1,A8,A5;
-    hence thesis by A10;
+    dom vS29 misses dom (x|a) by A5,Th58;
+    then J,(v.vS).(x|a) |= p iff J,(v.vS).((x|a)+*vS19+*vS29) |= p by A1,A6,A4;
+    hence thesis by A8;
   end;
-A11: dom vS19 misses {x} by A7,XBOOLE_1:63,79;
-A12: for a holds (v.vS).((x|a)+*vS19+*vS29) = v.(vS+*vS1+*vS2).(x|a)
+A9: dom vS19 misses {x} by XBOOLE_1:63,79;
+A10: for a holds (v.vS).((x|a)+*vS19+*vS29) = v.(vS+*vS1+*vS2).(x|a)
   proof
     let a;
-    dom vS19 misses dom (x|a) by A11,Th59;
+    dom vS19 misses dom (x|a) by A9,Th58;
     then (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*(vS19+*(x|a)+*vS29) by
 FUNCT_4:35;
     then
-A13: (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*(vS19+*((x|a)+*vS29)) by FUNCT_4:14;
-    dom vS29 misses dom (x|a) by A6,Th59;
-    then (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*(vS19+*(vS29+*(x|a))) by A13,
+A11: (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*(vS19+*((x|a)+*vS29)) by FUNCT_4:14;
+    dom vS29 misses dom (x|a) by A5,Th58;
+    then (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*(vS19+*(vS29+*(x|a))) by A11,
 FUNCT_4:35;
     then
-A14: (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS19+*vS29)+*(x|a)) by FUNCT_4:14;
-A15: now
+A12: (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS19+*vS29)+*(x|a)) by FUNCT_4:14;
+A13: now
       assume x in dom vS1;
       then
-A16:  vS19 +* (x .--> vS1.x) = vS1 by Th2;
-A17:  now
+A14:  vS19 +* (x .--> vS1.x) = vS1 by Th2;
+A15:  now
         assume not x in dom vS2;
         then vS29 = vS2|(dom vS2) by ZFMISC_1:57;
-        then vS29 = vS2 by RELAT_1:68;
+        then vS29 = vS2;
         then
-A18:    vS29 +* {} = vS2 by FUNCT_4:21;
+A16:    vS29 +* {} = vS2;
         dom (x .--> vS1.x) = {x} by FUNCOP_1:13;
-        then dom {} c= dom (x|a) & dom (x .--> vS1.x) = dom (x|a) by Th59,
+        then dom {} c= dom (x|a) & dom (x .--> vS1.x) = dom (x|a) by Th58,
 XBOOLE_1:2;
         hence
-        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A14,A16
-,A18,Th1;
+        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A12,A14
+,A16,Th1;
       end;
       now
         dom (x .--> vS2.x) = {x} by FUNCOP_1:13;
         then
-A19:    dom (x .--> vS2.x) = dom (x|a) by Th59;
+A17:    dom (x .--> vS2.x) = dom (x|a) by Th58;
         dom (x .--> vS1.x) = {x} by FUNCOP_1:13;
         then
-A20:    dom (x .--> vS1.x) = dom (x|a) by Th59;
+A18:    dom (x .--> vS1.x) = dom (x|a) by Th58;
         assume x in dom vS2;
         then vS29 +* (x .--> vS2.x) = vS2 by Th2;
         hence
-        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A14,A16
-,A20,A19,Th1;
+        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A12,A14
+,A18,A17,Th1;
       end;
-      hence (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A17;
+      hence (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A15;
     end;
     now
-A21:  dom {} c= dom (x|a) by XBOOLE_1:2;
+A19:  dom {} c= dom (x|a) by XBOOLE_1:2;
       assume not x in dom vS1;
       then vS19 = vS1|(dom vS1) by ZFMISC_1:57;
       then
-A22:  vS19 = vS1 by RELAT_1:68;
+A20:  vS19 = vS1 by RELAT_1:68;
       then
-A23:  vS19 +* {} = vS1 by FUNCT_4:21;
-A24:  now
+A21:  vS19 +* {} = vS1;
+A22:  now
         dom (x .--> vS2.x) = {x} by FUNCOP_1:13;
         then
-A25:    dom (x .--> vS2.x) = dom (x|a) by Th59;
+A23:    dom (x .--> vS2.x) = dom (x|a) by Th58;
         assume x in dom vS2;
         then vS29 +* (x .--> vS2.x) = vS2 by Th2;
         hence
-        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A14,A23
-,A21,A25,Th1;
+        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A12,A21
+,A19,A23,Th1;
       end;
       now
         assume not x in dom vS2;
         then vS29 = vS2|(dom vS2) by ZFMISC_1:57;
         hence
-        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A14,A22,
+        (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A12,A20,
 RELAT_1:68;
       end;
-      hence (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A24;
+      hence (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*((vS1+*vS2)+*(x|a)) by A22;
     end;
-    then (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*(vS1+*vS2)+*(x|a) by A15,
+    then (v.vS).((x|a)+*vS19+*vS29) = (v+*vS)+*(vS1+*vS2)+*(x|a) by A13,
 FUNCT_4:14;
     then (v.vS).((x|a)+*vS19+*vS29) = ((v+*vS)+*vS1+*vS2)+*(x|a) by FUNCT_4:14;
     then (v.vS).((x|a)+*vS19+*vS29) = (v+*(vS+*vS1)+*vS2)+*(x|a) by FUNCT_4:14;
     hence thesis by FUNCT_4:14;
   end;
-A26: (for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p) implies for a holds J,(v.vS
+A24: (for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p) implies for a holds J,(v.vS
   ).((x|a)+*vS19+*vS29) |= p
   proof
     assume
-A27: for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p;
+A25: for a holds J,v.(vS+*vS1+*vS2).(x|a) |= p;
     let a;
-    (v.vS).((x|a)+*vS19+*vS29) = v.(vS+*vS1+*vS2).(x|a) by A12;
-    hence thesis by A27;
+    (v.vS).((x|a)+*vS19+*vS29) = v.(vS+*vS1+*vS2).(x|a) by A10;
+    hence thesis by A25;
   end;
-A28: (for a holds J,(v.vS).((x|a)+*vS19+*vS29) |= p) implies for a holds J,(
+A26: (for a holds J,(v.vS).((x|a)+*vS19+*vS29) |= p) implies for a holds J,(
   v.vS).(x|a) |= p
   proof
     assume
-A29: for a holds J,(v.vS).((x|a)+*vS19+*vS29) |= p;
+A27: for a holds J,(v.vS).((x|a)+*vS19+*vS29) |= p;
     let a;
-    dom vS29 misses dom (x|a) by A6,Th59;
-    then J,(v.vS).(x|a) |= p iff J,(v.vS).((x|a)+*vS19+*vS29) |= p by A1,A8,A5;
-    hence thesis by A29;
+    dom vS29 misses dom (x|a) by A5,Th58;
+    then J,(v.vS).(x|a) |= p iff J,(v.vS).((x|a)+*vS19+*vS29) |= p by A1,A6,A4;
+    hence thesis by A27;
   end;
   (for a holds J,(v.vS).((x|a)+*vS19+*vS29) |= p) implies for a holds J,v
   .(vS+*vS1+*vS2).(x|a) |= p
   proof
     assume
-A30: for a holds J,(v.vS).((x|a)+*vS19+*vS29) |= p;
+A28: for a holds J,(v.vS).((x|a)+*vS19+*vS29) |= p;
     let a;
-    (v.vS).((x|a)+*vS19+*vS29) = v.(vS+*vS1+*vS2).(x|a) by A12;
-    hence thesis by A30;
+    (v.vS).((x|a)+*vS19+*vS29) = v.(vS+*vS1+*vS2).(x|a) by A10;
+    hence thesis by A28;
   end;
-  hence thesis by A9,A28,A26,Th51;
+  hence thesis by A7,A26,A24,Th50;
 end;
 
-theorem Th85:
+theorem Th81:
   for p holds for v,vS,vS1,vS2 st (for y st y in dom vS1 holds not
 y in still_not-bound_in p) & (for y st y in dom vS2 holds vS2.y = v.y) & dom vS
   misses dom vS2 holds J,v.vS |= p iff J,v.(vS+*vS1+*vS2) |= p
 proof
-  defpred P[Element of CQC-WFF] means for v,vS,vS1,vS2 st (for y st y in dom
-vS1 holds not y in still_not-bound_in $1) & (for y st y in dom vS2 holds vS2.y
-= v.y) & dom vS misses dom vS2 holds J,v.vS |= $1 iff J,v.(vS+*vS1+*vS2) |= $1;
-A1: for p,q,x,k for l being CQC-variable_list of k for P being
-QC-pred_symbol of k holds P[VERUM] & P[P!l] & (P[p] implies P['not' p]) & (P[p]
-& P[q] implies P[p '&' q]) & (P[p] implies P[All(x,p)]) by Th79,Th80,Th81,Th84,
-VALUAT_1:32;
+  defpred P[Element of CQC-WFF(Al)] means for v,vS,vS1,vS2 st
+   (for y st y in dom vS1 holds not y in still_not-bound_in $1) &
+   (for y st y in dom vS2 holds vS2.y = v.y) & dom vS misses dom vS2 holds
+    J,v.vS |= $1 iff J,v.(vS+*vS1+*vS2) |= $1;
+A1: for p,q,x,k for l being CQC-variable_list of k,Al for P being
+QC-pred_symbol of k,Al holds P[VERUM(Al)] & P[P!l] & (P[p] implies P['not' p])
+ & (P[p] & P[q] implies P[p '&' q]) & (P[p] implies P[All(x,p)])
+  by Th75,Th76,Th77,Th80,VALUAT_1:32;
   thus for p holds P[p] from CQC_LANG:sch 1(A1);
 end;
 
 definition
-  let p;
+  let Al, p;
   func RSub1(p) -> set means
-  :Def10:
+  :Def9:
   b in it iff ex x st x = b & not x in still_not-bound_in p;
   existence
   proof
     defpred P[set] means ex x st x = $1 & not x in still_not-bound_in p;
     consider X being set such that
-A1: for b holds b in X iff b in bound_QC-variables & P[b] from
+A1: for b holds b in X iff b in bound_QC-variables(Al) & P[b] from
     XBOOLE_0:sch 1;
     take X;
     thus thesis by A1;
@@ -2368,16 +2403,16 @@ A3: for b holds b in X2 iff ex x st x = b & not x in still_not-bound_in p;
 end;
 
 definition
-  let p, Sub;
+  let Al, p, Sub;
   func RSub2(p,Sub) -> set means
-  :Def11:
+  :Def10:
   b in it iff ex x st x = b & x in still_not-bound_in p & x = (@Sub).x;
   existence
   proof
     defpred P[set] means ex x st x = $1 & x in still_not-bound_in p & x = (@
     Sub).x;
     consider X being set such that
-A1: for b holds b in X iff b in bound_QC-variables & P[b] from
+A1: for b holds b in X iff b in bound_QC-variables(Al) & P[b] from
     XBOOLE_0:sch 1;
     take X;
     thus thesis by A1;
@@ -2400,7 +2435,7 @@ A3: for b holds b in X2 iff ex x st x = b & x in still_not-bound_in p
   end;
 end;
 
-theorem Th86:
+theorem Th82:
   dom ((@Sub)|RSub1(p)) misses dom ((@Sub)|RSub2(p,Sub))
 proof
   now
@@ -2418,17 +2453,17 @@ XBOOLE_1:16;
 A2: a in RSub1(p) /\ RSub2(p,Sub) by XBOOLE_0:def 4;
     then a in RSub2(p,Sub) by XBOOLE_0:def 4;
     then
-A3: ex b being bound_QC-variable st b = a & b in still_not-bound_in p & b
-    = (@Sub).b by Def11;
+A3: ex b being bound_QC-variable of Al st b = a & b in still_not-bound_in p & b
+    = (@Sub).b by Def10;
     a in RSub1(p) by A2,XBOOLE_0:def 4;
-    then ex b being bound_QC-variable st b = a & not b in still_not-bound_in p
-    by Def10;
+    then ex b being bound_QC-variable of Al st b = a & not b in
+     still_not-bound_in p by Def9;
     hence contradiction by A3;
   end;
   hence thesis;
 end;
 
-theorem Th87:
+theorem Th83:
   @RestrictSub(x,All(x,p),Sub) = @Sub \ ((@Sub)|RSub1(All(x,p)) +*
   (@Sub)|RSub2(All(x,p),Sub))
 proof
@@ -2439,7 +2474,7 @@ proof
   proof
     let b;
 A1: dom ((@Sub)|RSub1(All(x,p))) misses dom ((@Sub)|RSub2(All(x,p),Sub))
-    by Th86;
+    by Th82;
     assume b in @RestrictSub(x,All(x,p),Sub);
     then b in RestrictSub(x,All(x,p),Sub) by SUBSTUT1:def 2;
     then b in Sub|X by SUBSTUT1:def 6;
@@ -2456,7 +2491,7 @@ A5: ex y1 st y1 = c & y1 in still_not-bound_in All(x,p) & y1 is Element of
     now
       assume c in RSub2(All(x,p),Sub);
       then ex y st y = c & y in still_not-bound_in All(x,p) & y = (@Sub).y by
-Def11;
+Def10;
       hence contradiction by A5,SUBSTUT1:def 2;
     end;
     then not b in [:RSub2(All(x,p),Sub),rng @Sub:] by A4,ZFMISC_1:87;
@@ -2465,7 +2500,7 @@ Def11;
 A6: not b in (@Sub)|RSub2(All(x,p),Sub) by RELAT_1:67;
     now
       assume c in RSub1(All(x,p));
-      then ex y st y = c & not y in still_not-bound_in All(x,p) by Def10;
+      then ex y st y = c & not y in still_not-bound_in All(x,p) by Def9;
       hence contradiction by A5;
     end;
     then not b in [:RSub1(All(x,p)),rng @Sub:] by A4,ZFMISC_1:87;
@@ -2483,7 +2518,7 @@ FUNCT_4:31;
   RestrictSub(x,All(x,p),Sub)
   proof
 A8: dom ((@Sub)|RSub1(All(x,p))) misses dom ((@Sub)|RSub2(All(x,p),Sub))
-    by Th86;
+    by Th82;
     let b;
     assume
 A9: b in @Sub \ ((@Sub)|RSub1(All(x,p)) +* (@Sub)|RSub2(All(x,p),Sub) );
@@ -2492,7 +2527,7 @@ A10: b in @Sub by XBOOLE_0:def 5;
     consider c,d such that
 A11: b = [c,d] by A9,RELAT_1:def 1;
 A12: c in dom (@Sub) by A10,A11,FUNCT_1:1;
-    then reconsider z = c as bound_QC-variable;
+    then reconsider z = c as bound_QC-variable of Al;
 A13: d = (@Sub).c by A10,A11,FUNCT_1:1;
     then
 A14: d in rng @Sub by A12,FUNCT_1:3;
@@ -2507,7 +2542,7 @@ FUNCT_4:31;
     then
 A16: not z in RSub1(All(x,p)) by A14,ZFMISC_1:87;
     then
-A17: z in still_not-bound_in All(x,p) by Def10;
+A17: z in still_not-bound_in All(x,p) by Def9;
     then z in (still_not-bound_in p) \ {x} by QC_LANG3:12;
     then not z in {x} by XBOOLE_0:def 5;
     then
@@ -2518,9 +2553,9 @@ A19: d in rng @Sub by A12,A13,FUNCT_1:3;
     then not [z,d] in [:RSub2(All(x,p),Sub),rng @Sub:] by A10,A11,
 XBOOLE_0:def 4;
     then not z in RSub2(All(x,p),Sub) by A19,ZFMISC_1:87;
-    then not z in still_not-bound_in All(x,p) or z <> (@Sub).z by Def11;
+    then not z in still_not-bound_in All(x,p) or z <> (@Sub).z by Def10;
     then
-A20: z <> Sub.z by A16,Def10,SUBSTUT1:def 2;
+A20: z <> Sub.z by A16,Def9,SUBSTUT1:def 2;
 A21: d in rng @Sub by A12,A13,FUNCT_1:3;
     z is Element of dom Sub by A12,SUBSTUT1:def 2;
     then z in X by A17,A18,A20;
@@ -2533,7 +2568,7 @@ A21: d in rng @Sub by A12,A13,FUNCT_1:3;
   end;
 end;
 
-theorem Th88:
+theorem Th84:
   dom @RestrictSub(x,p,Sub) misses dom ((@Sub)|RSub1(p)) \/ dom ((
   @Sub)|RSub2(p,Sub))
 proof
@@ -2560,13 +2595,13 @@ A7: now
       assume b in dom ((@Sub)|RSub2(p,Sub));
       then b in RSub2(p,Sub) by A1,XBOOLE_0:def 4;
       then ex y1 st y1 = b & y1 in still_not-bound_in p & y1 = (@ Sub).y1 by
-Def11;
+Def10;
       hence contradiction by A6,SUBSTUT1:def 2;
     end;
     now
       assume b in dom ((@Sub)|RSub1(p));
       then b in RSub1(p) by A3,XBOOLE_0:def 4;
-      then ex y1 st y1 = b & not y1 in still_not-bound_in p by Def10;
+      then ex y1 st y1 = b & not y1 in still_not-bound_in p by Def9;
       hence contradiction by A6;
     end;
     hence contradiction by A5,A7,XBOOLE_0:def 3;
@@ -2574,7 +2609,7 @@ Def11;
   hence thesis;
 end;
 
-theorem Th89:
+theorem Th85:
   [S,x] is quantifiable implies @(CQCSub_All([S,x],xSQ))`2 = @
 RestrictSub(x,All(x,S`1),xSQ) +* (@xSQ)|RSub1(All(x,S`1)) +* (@xSQ)|RSub2(All(x
   ,S`1),xSQ)
@@ -2582,22 +2617,22 @@ proof
   set S1 = CQCSub_All([S,x],xSQ);
 A1: (@xSQ)|RSub2(All(x,S`1),xSQ) c= @xSQ by RELAT_1:59;
   dom ((@xSQ)|RSub1(All(x,S`1))) misses dom ((@xSQ)|RSub2(All(x,S`1),xSQ))
-  by Th86;
+  by Th82;
   then
 A2: ((@xSQ)|RSub1(All(x,S`1)) +* (@xSQ)|RSub2(All(x,S`1),xSQ)) = ((@xSQ)|
   RSub1(All(x,S`1)) \/ (@xSQ)|RSub2(All(x,S`1),xSQ)) by FUNCT_4:31;
   assume
 A3: [S,x] is quantifiable;
-  then S1 = Sub_All([S,x],xSQ) by Def6;
+  then S1 = Sub_All([S,x],xSQ) by Def5;
   then
-A4: @S1`2 = @xSQ by A3,Th27;
+A4: @S1`2 = @xSQ by A3,Th26;
 A5: @RestrictSub(x,All(x,S`1),xSQ) = @xSQ \ ((@xSQ)|RSub1(All(x,S`1)) +* (@
-  xSQ)|RSub2(All(x,S`1),xSQ)) by Th87;
+  xSQ)|RSub2(All(x,S`1),xSQ)) by Th83;
   then reconsider
   F = @xSQ \ ((@xSQ)|RSub1(All(x,S`1)) +* (@xSQ)|RSub2(All(x,S`1),
-  xSQ)) as PartFunc of bound_QC-variables,bound_QC-variables;
+  xSQ)) as PartFunc of bound_QC-variables(Al),bound_QC-variables(Al);
   dom F misses (dom ((@xSQ)|RSub1(All(x,S`1))) \/ dom ((@xSQ)|RSub2(All(x
-  ,S`1),xSQ))) by A5,Th88;
+  ,S`1),xSQ))) by A5,Th84;
   then
 A6: dom F misses dom ((@xSQ)|RSub1(All(x,S`1)) +* (@xSQ)|RSub2(All(x,S`1),
   xSQ)) by FUNCT_4:def 1;
@@ -2612,7 +2647,7 @@ A6: dom F misses dom ((@xSQ)|RSub1(All(x,S`1)) +* (@xSQ)|RSub2(All(x,S`1),
   hence thesis by A4,A5,FUNCT_4:14;
 end;
 
-theorem Th90:
+theorem Th86:
   [S,x] is quantifiable implies ex vS1,vS2 st (for y st y in dom
   vS1 holds not y in still_not-bound_in All(x,S`1)) & (for y st y in dom vS2
   holds vS2.y = v.y) & dom NEx_Val(v,S,x,xSQ) misses dom vS2 & v.Val_S(v,
@@ -2622,12 +2657,12 @@ proof
   assume [S,x] is quantifiable;
   then
 A1: Val_S(v,S1) = ((@RestrictSub(x,All(x,S`1),xSQ) +* (@xSQ)|RSub1(All(x,S`1
-  ))) +* (@xSQ)|RSub2(All(x,S`1),xSQ))*v by Th89;
+  ))) +* (@xSQ)|RSub2(All(x,S`1),xSQ))*v by Th85;
   take vS1 = (@xSQ)|RSub1(All(x,S`1))*v;
   take vS2 = (@xSQ)|RSub2(All(x,S`1),xSQ)*v;
-  rng ((@xSQ)|RSub1(All(x,S`1))) c= bound_QC-variables;
+  rng ((@xSQ)|RSub1(All(x,S`1))) c= bound_QC-variables(Al);
   then
-A2: rng ((@xSQ)|RSub1(All(x,S`1))) c= dom v by Th59;
+A2: rng ((@xSQ)|RSub1(All(x,S`1))) c= dom v by Th58;
   thus for y st y in dom vS1 holds not y in still_not-bound_in All(x,S`1)
   proof
     let y;
@@ -2635,12 +2670,12 @@ A2: rng ((@xSQ)|RSub1(All(x,S`1))) c= dom v by Th59;
     then y in dom ((@xSQ)|RSub1(All(x,S`1))) by A2,RELAT_1:27;
     then y in dom @xSQ /\ RSub1(All(x,S`1)) by RELAT_1:61;
     then y in RSub1(All(x,S`1)) by XBOOLE_0:def 4;
-    then ex y1 st y1 = y & not y1 in still_not-bound_in All(x,S`1 ) by Def10;
+    then ex y1 st y1 = y & not y1 in still_not-bound_in All(x,S`1 ) by Def9;
     hence thesis;
   end;
-  rng ((@xSQ)|RSub2(All(x,S`1),xSQ)) c= bound_QC-variables;
+  rng ((@xSQ)|RSub2(All(x,S`1),xSQ)) c= bound_QC-variables(Al);
   then
-A3: rng ((@xSQ)|RSub2(All(x,S`1),xSQ)) c= dom v by Th59;
+A3: rng ((@xSQ)|RSub2(All(x,S`1),xSQ)) c= dom v by Th58;
   thus for y st y in dom vS2 holds vS2.y = v.y
   proof
     let y;
@@ -2651,7 +2686,7 @@ A4: y in dom ((@xSQ)|RSub2(All(x,S`1),xSQ)) by A3,RELAT_1:27;
     then y in RSub2(All(x,S`1),xSQ) by XBOOLE_0:def 4;
     then
     ex y1 st y1 = y & y1 in still_not-bound_in All(x,S`1) & y1 = (@xSQ).y1
-    by Def11;
+    by Def10;
     then v.y = v.(((@xSQ)|RSub2(All(x,S`1),xSQ)).y) by A4,FUNCT_1:47;
     hence thesis by A4,FUNCT_1:13;
   end;
@@ -2661,7 +2696,7 @@ A4: y in dom ((@xSQ)|RSub2(All(x,S`1),xSQ)) by A3,RELAT_1:27;
     & y <> x & y <> xSQ.y};
     RestrictSub(x,All(x,S`1),xSQ) = (xSQ|X) by SUBSTUT1:def 6;
     then RestrictSub(x,All(x,S`1),xSQ) = (@xSQ)|X by SUBSTUT1:def 2;
-    then dom NEx_Val(v,S,x,xSQ) = dom ((@xSQ)|X) by Th73;
+    then dom NEx_Val(v,S,x,xSQ) = dom ((@xSQ)|X) by Th71;
     then
 A5: dom NEx_Val(v,S,x,xSQ) = dom (@xSQ) /\ X by RELAT_1:61;
     dom vS2 = dom ((@xSQ)|RSub2(All(x,S`1),xSQ)) by A3,RELAT_1:27;
@@ -2679,7 +2714,7 @@ A9:   ex y st y = b & y in still_not-bound_in All(x,S`1) & y is Element of
       b in RSub2(All(x,S`1),xSQ) by A6,A8,XBOOLE_0:def 4;
       then
       ex y1 st y1 = b & y1 in still_not-bound_in All(x,S`1) & y1 = (@xSQ).
-      y1 by Def11;
+      y1 by Def10;
       hence contradiction by A9,SUBSTUT1:def 2;
     end;
     hence thesis;
@@ -2690,7 +2725,7 @@ FUNCT_7:9;
   hence thesis by A1,A3,FUNCT_7:9;
 end;
 
-theorem Th91:
+theorem Th87:
   [S,x] is quantifiable implies for v holds (J,v.NEx_Val(v,S,x,xSQ
 ) |= All(x,S`1) iff J,v.Val_S(v,CQCSub_All([S,x],xSQ)) |= CQCSub_All([S,x],xSQ)
   )
@@ -2698,8 +2733,8 @@ proof
   set S1 = CQCSub_All([S,x],xSQ);
   assume
 A1: [S,x] is quantifiable;
-  then S1 = Sub_All([S,x],xSQ) by Def6;
-  then S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th27;
+  then S1 = Sub_All([S,x],xSQ) by Def5;
+  then S1`1 = All([S,x]`2,([S,x]`1)`1) by A1,Th26;
   then S1`1 = All(x,([S,x]`1)`1) by MCART_1:7;
   then
 A2: S1`1 = All(x,S`1) by MCART_1:7;
@@ -2708,13 +2743,13 @@ A2: S1`1 = All(x,S`1) by MCART_1:7;
 A3: ( ( for y st y in dom vS1 holds not y in still_not-bound_in All(x,S
 `1))& for y st y in dom vS2 holds vS2.y = v.y )& dom NEx_Val(v,S,x,xSQ) misses
   dom vS2 and
-A4: v.Val_S(v,S1) = v.(NEx_Val(v,S,x,xSQ) +* vS1 +* vS2) by A1,Th90;
+A4: v.Val_S(v,S1) = v.(NEx_Val(v,S,x,xSQ) +* vS1 +* vS2) by A1,Th86;
   J,v.NEx_Val(v,S,x,xSQ) |= All(x,S`1) iff J,v.(NEx_Val(v,S,x,xSQ) +* vS1
-  +* vS2) |= All(x,S`1) by A3,Th85;
-  hence thesis by A4,A2,Def3;
+  +* vS2) |= All(x,S`1) by A3,Th81;
+  hence thesis by A4,A2,Def2;
 end;
 
-theorem Th92:
+theorem Th88:
   [S,x] is quantifiable & (for v holds (J,v |= CQC_Sub(S) iff J,v.
   Val_S(v,S) |= S)) implies for v holds (J,v |= CQC_Sub(CQCSub_All([S,x],xSQ))
   iff J,v.Val_S(v,CQCSub_All([S,x],xSQ)) |= CQCSub_All([S,x],xSQ))
@@ -2726,9 +2761,9 @@ A2: for v holds (J,v |= CQC_Sub(S) iff J,v.Val_S(v,S) |= S);
   set S1 = CQCSub_All([S,x],xSQ);
   set z = S_Bound(@S1);
 A3: (for a holds J,(v.(z|a)).Val_S(v.(z|a),S) |= S) iff for a holds J,(v.(z
-  |a)).(NEx_Val(v.(z|a),S,x,xSQ)+*(x|a)) |= S by A1,Th55;
+  |a)).(NEx_Val(v.(z|a),S,x,xSQ)+*(x|a)) |= S by A1,Th54;
   set q = CQC_Sub(S);
-A4: J,v |= All(z,q) iff for a holds J,v.(z|a) |= q by Th51;
+A4: J,v |= All(z,q) iff for a holds J,v.(z|a) |= q by Th50;
 A5: (for a holds J,v.(z|a) |= q) implies for a holds J,(v.(z|a)).Val_S(v.(z|
   a),S) |= S
   proof
@@ -2748,60 +2783,81 @@ A8: for a holds J,(v.(z|a)).Val_S(v.(z|a),S) |= S;
     hence thesis by A2;
   end;
   set p = CQC_Sub(CQCSub_the_scope_of S1);
-A9: J,v |= CQCQuant(S1,p) iff J,v |= CQCQuant(S1,CQC_Sub(S)) by A1,Th31;
+A9: J,v |= CQCQuant(S1,p) iff J,v |= CQCQuant(S1,CQC_Sub(S)) by A1,Th30;
 A10: (for a holds J,(v.(z|a)).(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S) iff for a
-  holds J,v.(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S by A1,Th72;
+  holds J,v.(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S by A1,Th70;
 A11: J,v.NEx_Val(v,S,x,xSQ) |= All(x,S`1) implies for a holds J,(v.NEx_Val(v
   ,S,x,xSQ)).(x|a) |= S
   proof
     assume J,v.NEx_Val(v,S,x,xSQ) |= All(x,S`1);
-    then for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S`1 by Th51;
-    hence thesis by Th76;
+    then for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S`1 by Th50;
+    hence thesis by Th73;
   end;
 A12: (for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S) implies J,v.NEx_Val(v
   ,S,x,xSQ) |= All(x,S`1)
   proof
     assume for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S;
-    then for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S`1 by Th76;
-    hence thesis by Th51;
+    then for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S`1 by Th73;
+    hence thesis by Th50;
   end;
-  S1 is Sub_universal by A1,Th28;
-  hence thesis by A1,A9,A4,A5,A7,A3,A10,A12,A11,Th29,Th32,Th57,Th75,Th91;
+  S1 is Sub_universal by A1,Th27;
+  hence thesis by A1,A9,A4,A5,A7,A3,A10,A12,A11,Th28,Th31,Th56,Th72,Th87;
 end;
 
 scheme
-  SubCQCInd1 { Pro[set] } : for S holds Pro[S]
+  SubCQCInd1 { Al() -> QC-alphabet, Pro[set] } :
+  for S being Element of CQC-Sub-WFF(Al())  holds Pro[S]
 provided
-A1: for S,S9 being Element of CQC-Sub-WFF, x being bound_QC-variable,SQ
-be second_Q_comp of [S,x], k being Element of NAT,ll being CQC-variable_list of
-k, P being (QC-pred_symbol of k), e being Element of vSUB holds Pro[Sub_P(P,ll,
-e)] & (S is Sub_VERUM implies Pro[S]) & (Pro[S] implies Pro[Sub_not S]) & (S`2
-= (S9)`2 & Pro[S] & Pro[S9] implies Pro[CQCSub_&(S,S9)]) & ([S,x] is
-quantifiable & Pro[S] implies Pro[CQCSub_All([S,x], SQ)])
+A1: for S,S9 being Element of CQC-Sub-WFF(Al()),
+x being bound_QC-variable of Al(),
+SQ being second_Q_comp of [S,x],
+k being Element of NAT,
+ll being CQC-variable_list of k, Al(),
+P being (QC-pred_symbol of k,Al()),
+e being Element of vSUB(Al())
+holds Pro[Sub_P(P,ll,e)] & (S is Al()-Sub_VERUM implies Pro[S]) &
+(Pro[S] implies Pro[Sub_not S]) &
+(S`2 = (S9)`2 & Pro[S] & Pro[S9] implies Pro[CQCSub_&(S,S9)]) &
+([S,x] is quantifiable & Pro[S] implies Pro[CQCSub_All([S,x], SQ)])
 proof
-A2: [S,x] is quantifiable & Pro[S] implies Pro[Sub_All([S,x],xSQ)]
+A2: for S,S9 being Element of CQC-Sub-WFF(Al()),
+    x being bound_QC-variable of Al(),
+    xSQ being second_Q_comp of [S,x] holds
+    [S,x] is quantifiable & Pro[S] implies Pro[Sub_All([S,x],xSQ)]
   proof
+    let S,S9 be Element of CQC-Sub-WFF(Al());
+    let x be bound_QC-variable of Al();
+    let xSQ be second_Q_comp of [S,x];
     assume that
 A3: [S,x] is quantifiable and
 A4: Pro[S];
-    CQCSub_All([S,x], xSQ) = Sub_All([S,x],xSQ) by A3,Def6;
-    hence thesis by A1,A3,A4;
+    Pro[CQCSub_All([S,x], xSQ)] by A1,A3,A4;
+    hence thesis by A3,Def5;
   end;
+  for S,S9 being Element of CQC-Sub-WFF(Al()) holds
   S`2 = (S9)`2 & Pro[S] & Pro[S9] implies Pro[Sub_&(S,S9)]
   proof
+    let S,S9 be Element of CQC-Sub-WFF(Al());
     assume that
 A5: S`2 = (S9)`2 and
 A6: ( Pro[S])& Pro[S9];
-    CQCSub_&(S,S9) = Sub_&(S,S9) by A5,Def4;
+    CQCSub_&(S,S9) = Sub_&(S,S9) by A5,Def3;
     hence thesis by A1,A5,A6;
   end;
   then
-A7: for S,S9 being Element of CQC-Sub-WFF, x being bound_QC-variable,SQ be
-second_Q_comp of [S,x], k being Element of NAT,ll being CQC-variable_list of k,
-P being (QC-pred_symbol of k), e being Element of vSUB holds Pro[Sub_P(P,ll,e)]
-& (S is Sub_VERUM implies Pro[S]) & (Pro[S] implies Pro[Sub_not S]) & (S`2 = (
-  S9)`2 & Pro[S] & Pro[S9] implies Pro[Sub_&(S,S9)]) & ([S,x] is quantifiable &
-  Pro[S] implies Pro[Sub_All([S,x], SQ)]) by A1,A2;
+A7: for S,S9 being Element of CQC-Sub-WFF(Al()),
+        x being bound_QC-variable of Al(),
+        SQ be second_Q_comp of [S,x],
+        k being Element of NAT,
+        ll being CQC-variable_list of k,Al(),
+        P being (QC-pred_symbol of k,Al()),
+        e being Element of vSUB(Al())
+    holds Pro[Sub_P(P,ll,e)] &
+    (S is Al()-Sub_VERUM implies Pro[S]) &
+    (Pro[S] implies Pro[Sub_not S]) &
+    (S`2 = (S9)`2 & Pro[S] & Pro[S9] implies Pro[Sub_&(S,S9)]) &
+    ([S,x] is quantifiable & Pro[S] implies Pro[Sub_All([S,x], SQ)])
+  by A1,A2;
   thus thesis from SUBSTUT1:sch 5(A7);
 end;
 
@@ -2810,13 +2866,14 @@ end;
 theorem
   for S, v holds (J,v |= CQC_Sub(S) iff J,v.Val_S(v,S) |= S)
 proof
-  defpred Pro[Element of CQC-Sub-WFF] means for v holds (J,v |= CQC_Sub($1)
+  defpred Pro[Element of CQC-Sub-WFF(Al)] means for v holds (J,v |= CQC_Sub($1)
   iff J,v.Val_S(v,$1) |= $1);
-A1: for S,S9 being Element of CQC-Sub-WFF, x being bound_QC-variable,SQ be
-second_Q_comp of [S,x], k being Element of NAT,ll being CQC-variable_list of k,
-P being (QC-pred_symbol of k), e being Element of vSUB holds Pro[Sub_P(P,ll,e)]
-& (S is Sub_VERUM implies Pro[S]) & (Pro[S] implies Pro[Sub_not S]) & (S`2 = (
-S9)`2 & Pro[S] & Pro[S9]implies Pro[CQCSub_&(S,S9)]) & ([S,x] is quantifiable &
-  Pro[S] implies Pro[CQCSub_All([S,x], SQ)]) by Th4,Th16,Th20,Th26,Th92;
+A1: for S,S9 being Element of CQC-Sub-WFF(Al), x being bound_QC-variable of Al,
+  SQ be second_Q_comp of [S,x], k being Element of NAT,ll being
+  CQC-variable_list of k,Al, P being (QC-pred_symbol of k,Al), e being
+  Element of vSUB(Al) holds Pro[Sub_P(P,ll,e)] & (S is Al-Sub_VERUM
+  implies Pro[S]) & (Pro[S] implies Pro[Sub_not S]) & (S`2 = (S9)`2 & Pro[S]
+  & Pro[S9] implies Pro[CQCSub_&(S,S9)]) & ([S,x] is quantifiable &
+  Pro[S] implies Pro[CQCSub_All([S,x], SQ)]) by Th4,Th15,Th19,Th25,Th88;
   thus for S holds Pro[S] from SubCQCInd1(A1);
 end;

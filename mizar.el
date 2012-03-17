@@ -405,7 +405,7 @@ MoMM should be installed for this."
  "defpred" "environ" "equals" "existence"
  "func" "if" "identify" "irreflexivity" 
  "it" "means" "mode" "of"  "otherwise" "over" 
- "pred" "provided" "qua" "reconsider" "redefine" "reflexivity" 
+ "pred" "provided" "qua" "reconsider" "redefine" "reduce" "reducibility" "reflexivity" 
  "reserve" "struct" "such" "synonym" 
  "that" "then" "thesis" "when" "where" "with""is" 
  "associativity" "commutativity" "connectedness" "irreflexivity" "reduce" "reducibility"
@@ -497,6 +497,7 @@ common mizar editing functions."
   (define-key mizar-mode-map  "\C-c\C-p" 'mizar-previous-error)
   (define-key mizar-mode-map "\C-c\C-e" 'mizar-strip-errors)
   (define-key mizar-mode-map "\C-c\C-d" 'mizar-hide-proofs)
+  (define-key mizar-mode-map "\C-cp" 'mizar-hide-all-proofs)
   (define-key mizar-mode-map "\C-cg" 'mizar-grep-abs)
   (define-key mizar-mode-map "\C-c\C-g" 'mizar-grep-full)
   (define-key mizar-mode-map "\C-cb" 'mizar-grep-gab)
@@ -1326,8 +1327,15 @@ The variable `mizar-ref-table' might be modified by this function."
     (set-buffer-modified-p mod)))))
 
 
-(defcustom mizar-atp-completion nil
+(defcustom mizar-atp-completion t
 "*Semicolon following \"by\" calls ATP to provide justification."
+:type 'boolean
+:group 'mizar-proof-advisor)
+
+(defcustom mizar-atp-leave-semicolon t
+"*If t, the ATP call leaves the semicolon that was used to generate a *4 error.
+If nil, the semicolon is commented afterwards, so that for example proof .. end 
+block keep there thesis. This is useful for re-trying to shorten proofblocks with ATPs."
 :type 'boolean
 :group 'mizar-proof-advisor)
 
@@ -1358,12 +1366,36 @@ Used automatically if `mizar-atp-completion' is on."
 	 (miz-pos (concat (number-to-string line) ":" (number-to-string miz-col)))
 	 (buf (buffer-name))
 	 (msg (concat "ATP was called on this step, awaiting response for position " pos)))
+    (mizar-remote-solve-atp "Positions" miz-pos (concat buf "__" pos) (list buf line col beg))
+    (unless mizar-atp-leave-semicolon
+      (goto-char beg)
+      (if (looking-at ";")  (replace-match " ")))
     (put-text-property beg end 'help-echo msg)
     (put-text-property beg end 'atp-asked (intern pos))
-    (mizar-remote-solve-atp "Positions" miz-pos (concat buf "__" pos) (list buf line col beg))
     (message "Calling ATP on position %s " pos)
     (set-buffer-modified-p mod))))
 
+(defun mizar-atp-review-proofs (beg end)
+"Call ATP on toplevel @proofs inside the block."
+(interactive "r")
+(let ((old-mizar-atp-leave-semicolon mizar-atp-leave-semicolon)
+      (old-mizar-comment-atp mizar-comment-atp))
+  (unwind-protect
+      (progn
+	(setq mizar-atp-leave-semicolon nil
+	      mizar-comment-atp t)
+	(goto-char beg)
+	(while (re-search-forward "^@proof" end t)
+	  (forward-line -1)
+	  (end-of-line)
+	  (skip-chars-backward " \t")
+	  (insert " by;") 
+	  (mizar-atp-autocomplete)
+	  (sit-for 15)
+	  (forward-line 2)
+	  ))
+    (setq mizar-atp-leave-semicolon old-mizar-atp-leave-semicolon
+	  mizar-comment-atp old-mizar-comment-atp))))
 
 (defvar mizar-bubble-ref-increment 10
 "Extent of lines where refs get incrementally bubble-helped.")
@@ -4696,7 +4728,7 @@ Show them in the buffer *Constructors List*."
   ("Predicates" "[ \n\r]\\(pred\\b.*\\)" 1)
   ("Functors" "[ \n\r]\\(func\\b.*\\)" 1)
   ("Notations" "[ \n\r]\\(\\(synonym\\|antonym\\)\\b.*\\)" 1)
-  ("Registrations" "[ \n\r]\\(\\(cluster\\|identify\\)\\b.*\\)" 1)
+  ("Registrations" "[ \n\r]\\(\\(cluster\\|identify\\|reduce\\)\\b.*\\)" 1)
   ("Schemes" "^[ ]*scheme[ \n\r]+\\([a-zA-Z0-9_']+\\)" 1)
   ("Named Defs" "[ \n\r]\\(:[a-zA-Z0-9_']+:\\)[ \n\r]" 1)
   ("Named Theorems" "^[ ]*theorem[ \n\r]+\\([a-zA-Z0-9_']+:\\)[ \n\r]" 1)
@@ -5429,6 +5461,15 @@ instead of adding, to enable proof checking again."
     (message "... Done")
     )))
 
+(defun mizar-hide-all-proofs (&optional remove)
+"Put @@ before all proof keywords in the whole buffer to disable checking.
+With prefix (which makes REMOVE non-nil) remove them 
+instead of adding, to enable proof checking again."
+(interactive "P")
+(mizar-hide-proofs (point-min)
+		   (point-max) remove)
+)
+
 (defun mizar-move-then (&optional beg end reverse)
 "Change the placement of the 'then' keyword between BEG and END.
 With prefix (REVERSE non-nil) move from the end of lines to beginnings,
@@ -5674,7 +5715,7 @@ file suffix to use."
 )
 
 ;;;;;;;;;;;;;;;   AR 4 mizar and html and mw services
-(defcustom ar4mizar-server "http://mws.cs.ru.nl/"
+(defcustom ar4mizar-server "http://mizar.cs.ualberta.ca/"
 "Server for the AR4Mizar services."
 :type 'string
 :group 'mizar-remote)
@@ -5730,6 +5771,12 @@ file suffix to use."
     (overlay-put overlay 'invisible sym)))
 
 
+(defun mizar-is-ref (ref)
+"Tells if REF is an explicit Mizar reference."
+(or
+ (not (string-match ":" ref)) 
+ (string-match "\\([A-Z0-9_]+:\\(def \\|sch \\|th \\)?[0-9]+\\)" ref)))
+
 (defun my-switch-to-url-buffer (status &optional output-buffer pushback)
   "Switch to buffer returned by `url-retreive', rename it to OUTPUT-BUFFER or *atp-output*.
    If PUSHBACK is given, it must be a list (buffer-name line column position) telling
@@ -5755,9 +5802,9 @@ file suffix to use."
 		  (allrefs nil) (atpres "ATP-Unsolved"))
 	     (while (re-search-forward regpos (point-max) t)
 	       (setq allrefs (nconc allrefs (split-string (match-string 1) ","))))
-	     (setq allrefs (unique allrefs))
+	     (setq allrefs (unique allrefs))	     
 	     (if allrefs (setq atpres (mapconcat 'identity allrefs ",")))
-	     (insert-atp-result mizbuf line col mizpoint mizpos atpres)
+	     (insert-atp-result mizbuf line col mizpoint mizpos atpres allrefs bufname)
 	     (message "ATP answered for position %s with %s" mizpos atpres))))
      (setup-atp-output-invisibility)))
 
@@ -5766,8 +5813,12 @@ file suffix to use."
 :type 'integer
 :group 'mizar-proof-advisor)
 
+(defcustom mizar-comment-atp nil
+"*Keep the ATP responses commented."
+:type 'boolean
+:group 'mizar-proof-advisor)
 
-(defun insert-atp-result (mizbuf line col mizpoint mizpos atpres)
+(defun insert-atp-result (mizbuf line col mizpoint mizpos atpres allrefs bufname)
 "Try to find text with property 'atp-asked set to MIZPOS around MIZPOINT and replace with ATPRES."
 (save-excursion
   (set-buffer mizbuf)
@@ -5775,11 +5826,29 @@ file suffix to use."
 	 (end (min (point-max) (+ mizpoint (* 4 mizar-atp-desync-limit))))
 	 (pos1 (text-property-any start end 'atp-asked (intern mizpos))))
     (if (not pos1) (message "Position for ATP solution of %s not found" mizpos)
-      (goto-char pos1)
-      (if (not (looking-at "; :: ATP asked ... *"))
-	  (message "Position for ATP solution of %s user-edited. No inserting." mizpos)
-	(replace-match (concat "by " atpres ";"))
-	(mizar-bubble-ref-incremental))))))
+      (save-excursion
+	(goto-char pos1)
+	(if (not (looking-at ". :: ATP asked ... *"))
+	    (message "Position for ATP solution of %s user-edited. No inserting." mizpos)
+	  (if (not allrefs)
+	      (replace-match 
+	       (concat (if mizar-comment-atp ":: " "")
+		       "by " atpres "; :: " 
+		       (create-display-button "[ATP details]" 
+					      "Show details of ATP call" bufname)))
+	    (let (proper-refs other-refs)
+		(dolist (r1 allrefs) 
+		  (if (mizar-is-ref r1) (setq proper-refs (cons r1 proper-refs))
+		    (setq other-refs (cons r1 other-refs))))
+		(looking-at ". :: ATP asked ... *")  ;; need to repeat because the block above destroyed match-data
+		(replace-match 
+		 (concat 
+		  (if proper-refs (concat (if mizar-comment-atp ":: " "") "by " (mapconcat 'identity proper-refs ","))) "; :: " 
+		  (create-display-button "[ATP details]" 
+					 (if other-refs (concat "Implicit (click for more): " 
+								(mapconcat 'identity other-refs ", ")) 
+					   "Show details of ATP call") bufname))))
+	    (mizar-bubble-ref-incremental))))))))
 
 (defvar mizar-invis-button-map
   (let ((map (make-sparse-keymap)))
@@ -5833,6 +5902,36 @@ The value 1 is default - no parallelization."
 :type 'integer
 :group 'mizar-remote)
 
+
+(defun mizar-display-link ()
+"Display property mizar-address in other window."
+(interactive)
+(let ((buf (get-text-property (point) 'mizar-address)))
+  (display-buffer buf)))
+
+(defun mizar-display-link-mouse (event)
+  (interactive "e")
+  (select-window (event-window event))
+  (goto-char (event-point event))
+  (mizar-display-link))
+
+(defvar mizar-display-button-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-m" 'mizar-display-link)
+    (define-key map [mouse-1] 'mizar-display-link-mouse)
+    map)
+"Keymap for showing links in other window
+Commands:
+\\{mizar-display-link}")
+
+(defun create-display-button (name title buffer)
+"Creates the NAME button with TITLE opening BUFFER in other window."
+(let* ((expl-button name)
+       (props (list 'mouse-face 'highlight 'face 'underline 
+		    'mizar-address buffer 'help-echo title
+		      local-map-kword mizar-display-button-map)))
+    (add-text-properties 0 (length expl-button) props expl-button)
+    expl-button))
 
 ;; frontend
 (defun mizar-remote-solve-atp (&optional solve positions output-buffer pushback)
@@ -6243,11 +6342,13 @@ window.onload = myfunc;
 	  '("Proof checking"
 	    ["proof -> @proof on region" mizar-hide-proofs t]
 	    ["@proof -> proof on region" (mizar-hide-proofs (region-beginning)
-							   (region-end) t) t]
-	    ["proof -> @proof on buffer" (mizar-hide-proofs (point-min)
-							   (point-max)) t]
-	    ["@proof -> proof on buffer" (mizar-hide-proofs (point-min)
-							   (point-max) t) t]
+							   (region-end) t)
+              :active t
+              :help "Also C-u C-c C-d"]
+	    ["proof -> @proof on buffer" mizar-hide-all-proofs t]
+	    ["@proof -> proof on buffer" (mizar-hide-all-proofs t)
+	     :active t
+              :help "Also C-u C-c p"]	     
 	    )
 	  '("Then placement"
 	    ["start of lines on region" mizar-move-then t]

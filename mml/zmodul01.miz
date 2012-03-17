@@ -1,0 +1,4186 @@
+:: $\mathbb Z$-modules
+::  by Yuichi Futa , Hiroyuki Okazaki and Yasunari Shidama
+::
+:: Received September 5, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, ALGSTR_0, STRUCT_0, SUBSET_1, BINOP_1, FUNCT_1,
+      ZFMISC_1, XBOOLE_0, ORDINAL1, RELAT_1, ARYTM_3, PARTFUN1, SUPINF_2,
+      FUNCT_5, MCART_1, ARYTM_1, CARD_1, FINSEQ_1, CARD_3, TARSKI, XXREAL_0,
+      RLVECT_1, REALSET1, RLSUB_1, ZMODUL01, INT_1, FINSEQ_4, LATTICES,
+      EQREL_1, PBOOLE, RLSUB_2, RMOD_2, RMOD_3, BINOM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      PARTFUN1, MCART_1, FUNCT_2, BINOP_1, DOMAIN_1, FUNCT_3, FUNCT_5, NUMBERS,
+      XCMPLX_0, XXREAL_0, NAT_1, INT_1, REALSET1, FINSEQ_1, FINSEQ_4, STRUCT_0,
+      ALGSTR_0, LATTICES, RLVECT_1, BINOM;
+ constructors BINOP_1, NAT_1, FUNCT_3, FUNCT_5, REALSET1, RELSET_1, LATTICES,
+      RLSUB_1, ALGSTR_1, BINOM, FINSEQ_4;
+ registrations ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, STRUCT_0, ALGSTR_0,
+      FINSEQ_1, CARD_1, SUBSET_1, INT_1, REALSET1, LATTICES, RELAT_1, ALGSTR_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, STRUCT_0, ALGSTR_0, RLVECT_1, LATTICES, XBOOLE_0,
+      REALSET1, BINOP_1, BINOM;
+ theorems FUNCT_1, NAT_1, TARSKI, RELAT_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
+      FINSEQ_1, ALGSTR_0, BINOM, CARD_1, FINSEQ_3, INT_1, RLVECT_1, BINOP_1,
+      LATTICES, MCART_1, ZFMISC_1, PARTFUN1, FUNCT_2, RELSET_1, XREAL_1,
+      RLSUB_2, XTUPLE_0;
+ schemes NAT_1, BINOP_1, FUNCT_1, XBOOLE_0;
+
+begin :: 1. Definition of Z-module
+
+definition
+  struct (addLoopStr) Z_ModuleStruct
+    (# carrier -> set,
+         ZeroF -> Element of the carrier,
+          addF -> BinOp of the carrier,
+          Mult -> Function of [:INT, the carrier :], the carrier #);
+end;
+
+registration
+  cluster non empty for Z_ModuleStruct;
+  existence
+  proof
+    set ZS = the non empty set,
+        O = the Element of ZS,
+        F = the BinOp of ZS,
+        G = the Function of [:INT,ZS:],ZS;
+    take Z_ModuleStruct(#ZS,O,F,G#);
+    thus the carrier of Z_ModuleStruct(#ZS,O,F,G#) is non empty;
+  end;
+end;
+
+definition
+  let V be Z_ModuleStruct;
+  mode VECTOR of V is Element of V;
+end;
+
+reserve V for non empty Z_ModuleStruct;
+reserve x, y, y1 for set;
+reserve a, b for integer number;
+reserve v for VECTOR of V;
+
+definition
+  let V,v;
+  let a be integer number;
+  func a * v -> Element of V equals
+  (the Mult of V).(a,v);
+  coherence
+  proof
+    reconsider a as Element of INT by INT_1:def 2;
+    (the Mult of V).(a,v) is Element of V;
+    hence thesis;
+  end;
+end;
+
+registration
+  let ZS be non empty set, O be Element of ZS, F be BinOp of ZS,
+      G be Function of [:INT,ZS:],ZS;
+  cluster Z_ModuleStruct (# ZS,O,F,G #) -> non empty;
+  coherence;
+end;
+
+definition
+  let IT be non empty Z_ModuleStruct;
+  attr IT is vector-distributive means  :Def2:
+  for a for v,w being VECTOR of IT holds a * (v + w) = a * v + a * w;
+  attr IT is scalar-distributive means  :Def3:
+  for a,b for v being VECTOR of IT holds (a + b) * v = a * v + b * v;
+  attr IT is scalar-associative means   :Def4:
+  for a,b for v being VECTOR of IT holds (a * b) * v = a * (b * v);
+  attr IT is scalar-unital means        :Def5:
+  for v being VECTOR of IT holds 1 * v = v;
+end;
+
+definition
+  func Trivial-Z_ModuleStruct -> strict Z_ModuleStruct equals
+  Z_ModuleStruct(#1,op0,op2,pr2(INT,1)#);
+  coherence;
+end;
+
+registration
+  cluster Trivial-Z_ModuleStruct -> trivial non empty;
+  coherence by CARD_1:49;
+end;
+
+registration
+  cluster strict Abelian add-associative right_zeroed right_complementable
+  scalar-distributive vector-distributive scalar-associative scalar-unital
+  for non empty Z_ModuleStruct;
+  existence
+  proof
+    take S = Trivial-Z_ModuleStruct;
+    thus S is strict;
+    thus S is Abelian;
+    thus S is add-associative;
+    thus S is right_zeroed;
+    thus S is right_complementable;
+    thus for a,b for v being VECTOR of S holds (a + b) * v = a * v + b * v
+    by STRUCT_0:def 10;
+    thus for a for v,w being VECTOR of S holds a * (v + w) = a * v + a * w
+    by STRUCT_0:def 10;
+    thus for a,b for v being VECTOR of S holds (a * b) * v = a * (b * v)
+    by STRUCT_0:def 10;
+    thus for v being VECTOR of S holds 1 * v = v by STRUCT_0:def 10;
+  end;
+end;
+
+definition
+  mode Z_Module is Abelian add-associative right_zeroed
+    right_complementable scalar-distributive vector-distributive
+    scalar-associative scalar-unital non empty Z_ModuleStruct;
+end;
+
+reserve V for Z_Module;
+reserve v, w for VECTOR of V;
+
+definition
+  let IT be non empty Z_ModuleStruct;
+  attr IT is Mult-cancelable means  :Def7:
+  for a for v being VECTOR of IT st a * v = 0.IT
+  holds a = 0 or v = 0.IT;
+end;
+
+theorem Th1:
+  a = 0 or v = 0.V implies a * v = 0.V
+  proof
+    reconsider N1=1,N0=0 as Integer;
+    assume
+    A1: a = 0 or v = 0.V;
+    now
+      per cases by A1;
+      suppose
+        A2: a = 0;
+        v + N0 * v = N1 * v + N0 * v by Def5
+        .= (N1 + N0) * v by Def3
+        .= v by Def5
+        .= v + 0.V by RLVECT_1:4;
+        hence thesis by A2,RLVECT_1:8;
+      end;
+      suppose
+        A3: v = 0.V;
+        a * 0.V + a * 0.V = a * (0.V + 0.V) by Def2
+        .= a * 0.V by RLVECT_1:4
+        .= a * 0.V + 0.V by RLVECT_1:4;
+        hence thesis by A3,RLVECT_1:8;
+      end;
+    end;
+    hence thesis;
+  end;
+
+theorem Th2:
+  - v = (- 1) * v
+  proof
+    reconsider N1=1,N0=0,M1 = -1 as Integer;
+    v + (- 1) * v = 1 * v + (- 1) * v by Def5
+    .= (1 + (- 1)) * v by Def3
+    .= 0.V by Th1;
+    hence (- v) = (- v) + (v + (- 1) * v) by RLVECT_1:4
+    .= ((- v) + v) + (- 1) * v by RLVECT_1:def 3
+    .= 0.V + (- 1) * v by RLVECT_1:def 10
+    .= (- 1) * v by RLVECT_1:4;
+  end;
+
+theorem Th3:
+  V is Mult-cancelable & v = - v implies v = 0.V
+  proof
+    assume A1:V is Mult-cancelable;
+    assume v = - v;
+    then 0.V = v + v by RLVECT_1:def 10
+    .= 1 * v + v by Def5
+    .= 1 * v + 1 * v by Def5
+    .= (1 + 1) * v by Def3
+    .= 2 * v;
+    hence thesis by A1,Def7;
+  end;
+
+theorem
+  V is Mult-cancelable & v + v = 0.V implies v = 0.V
+  proof
+    assume A1: V is Mult-cancelable;
+    assume v + v = 0.V;
+    then v = - v by RLVECT_1:def 10;
+    hence thesis by A1,Th3;
+  end;
+
+theorem Th5:
+  a * (- v) = (- a) * v
+  proof
+    thus a * (- v) = a * ((- 1) * v) by Th2
+    .= (a *(- 1)) * v by Def4
+    .= (- a) * v;
+  end;
+
+theorem Th6:
+  a * (- v) = - (a * v)
+  proof
+    thus a * (- v) = (- (1 * a)) * v by Th5
+    .= ((- 1) * a) * v
+    .= (- 1) * (a * v) by Def4
+    .= - (a * v) by Th2;
+  end;
+
+theorem
+  (- a) * (- v) = a * v
+  proof
+    thus (- a) * (- v) = (- (- a)) * v by Th5
+    .= a * v;
+  end;
+
+theorem Th8:
+  a * (v - w) = a * v - a * w
+  proof
+  thus a * (v - w) = a * v + a * (- w) by Def2
+    .= a * v - a * w by Th6;
+end;
+
+theorem Th9:
+  (a - b) * v = a * v - b * v
+proof
+  thus (a - b) * v = (a + (- b)) * v .= a * v + (- b) * v by Def3
+    .= a * v + b * (- v) by Th5
+    .= a * v - b * v by Th6;
+end;
+
+theorem
+  V is Mult-cancelable &
+  a <> 0 & a * v = a * w implies v = w
+  proof
+    assume A1:V is Mult-cancelable;
+    assume that
+    A2: a <> 0 and
+    A3: a * v = a * w;
+    0.V = a * v - a * w by A3,RLVECT_1:15
+    .= a * (v - w) by Th8;
+    then v - w = 0.V by A2,A1,Def7;
+    hence thesis by RLVECT_1:21;
+  end;
+
+theorem
+  V is Mult-cancelable & v <> 0.V & a * v = b * v implies a = b
+  proof
+    assume A1: V is Mult-cancelable;
+    assume that
+    A2: v <> 0.V and
+    A3: a * v = b * v;
+    0.V = a * v - b * v by A3,RLVECT_1:15
+    .= (a - b) * v by Th9;
+    then (- b) + a = 0 by A2,A1,Def7;
+    hence thesis;
+  end;
+
+reserve V for Z_Module;
+reserve u,v,w for VECTOR of V;
+reserve F,G,H,I for FinSequence of V;
+reserve j,k,n for Element of NAT;
+reserve f,f9,g for Function of NAT, the carrier of V;
+
+Lm1: Sum(<*>(the carrier of V)) = 0.V
+proof
+  set S = <*>(the carrier of V);
+  ex f st Sum(S) = f.(len S) & f.0 = 0.V & for j,v st j < len S &
+  v = S.(j + 1) holds f.(j + 1) = f.j + v by RLVECT_1:def 12;
+  hence thesis;
+end;
+
+Lm2: len F = 0 implies Sum(F) = 0.V
+proof
+  assume len F = 0;
+  then F = <*>(the carrier of V);
+  hence thesis by Lm1;
+end;
+
+theorem Th12:
+  len F = len G & (for k,v st k in dom F & v = G.k holds F.k = a * v)
+  implies Sum(F) = a * Sum(G)
+  proof
+    defpred P[set] means for H,I st len H = len I & len H = $1 & (for k, v
+    st k in Seg len H & v = I.k holds H.k = a * v) holds Sum(H) = a * Sum(I);
+    A1: dom F = Seg len F by FINSEQ_1:def 3;
+    now
+      let n;
+      assume
+      A2: for H, I st len H = len I & len H = n & for k, v st k in Seg len H &
+      v = I.k holds H.k = a * v holds Sum(H) = a * Sum(I);
+      let H, I;
+      assume that
+      A3: len H = len I and
+      A4: len H = n + 1 and
+      A5: for k, v st k in Seg len H & v = I.k holds H.k = a * v;
+      reconsider p = H | (Seg n),q = I | (Seg n) as FinSequence of the carrier
+      of V by FINSEQ_1:18;
+      A6: n <= n + 1 by NAT_1:12;
+      then
+      A7: len q = n by A3,A4,FINSEQ_1:17;
+      A8: len p = n by A4,A6,FINSEQ_1:17;
+      A9:
+      now
+        len p <= len H by A4,A6,FINSEQ_1:17;
+        then
+        A10: Seg len p c= Seg len H by FINSEQ_1:5;
+        A11: dom p = Seg n by A4,A6,FINSEQ_1:17;
+        let k, v;
+        assume that
+        A12: k in Seg len p and
+        A13: v = q.k;
+        dom q = Seg n by A3,A4,A6,FINSEQ_1:17;
+        then I.k = q.k by A8,A12,FUNCT_1:47;
+        then H.k = a * v by A5,A12,A13,A10;
+        hence p.k = a * v by A8,A12,A11,FUNCT_1:47;
+      end;
+      1 <= n + 1 by NAT_1:11;
+      then n + 1 in dom H & n + 1 in dom I by A3,A4,FINSEQ_3:25;
+      then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V by
+FUNCT_1:102;
+      A14: v1 = a * v2 by A4,A5,FINSEQ_1:4;
+      A15: dom q = Seg len q by FINSEQ_1:def 3;
+      dom p = Seg len p by FINSEQ_1:def 3;
+      hence Sum(H) = Sum(p) + v1 by A4,A8,RLVECT_1:38
+      .= a * Sum(q) + a * v2 by A2,A8,A7,A9,A14
+      .= a * (Sum(q) + v2) by Def2
+      .= a * Sum(I) by A3,A4,A7,A15,RLVECT_1:38;
+    end;
+    then
+    A16: for n st P[n] holds P[n+1];
+    now
+      let H, I;
+      assume that
+      A17: len H = len I and
+      A18: len H = 0 and
+      for k, v st k in Seg len H & v = I.k holds H.k = a * v;
+      Sum(H) = 0.V by A18,Lm2;
+      hence Sum(H) = a * Sum(I) by A17,A18,Lm2,Th1;
+    end;
+    then
+    A19: P[0];
+    for n holds P[n] from NAT_1:sch 1(A19,A16);
+    hence thesis by A1;
+  end;
+
+theorem
+  for V being Z_Module, a being Integer holds
+  a * Sum(<*>(the carrier of V)) = 0.V by Lm1,Th1;
+
+theorem
+  for V being Z_Module, a being Integer, v, u being VECTOR of V holds
+  a * Sum<* v,u *> = a * v + a * u
+  proof
+    let V be Z_Module, a be Integer, v, u be VECTOR of V;
+    thus a * Sum<* v,u *> = a * (v + u) by RLVECT_1:45
+    .= a * v + a * u by Def2;
+  end;
+
+theorem
+  for V being Z_Module, a being Integer, v, u, w being VECTOR of V
+  holds a * Sum<* v,u,w *> = a * v + a * u + a * w
+  proof
+    let V be Z_Module, a be Integer, v, u, w be VECTOR of V;
+    thus a * Sum<* v,u,w *> = a * (v + u + w) by RLVECT_1:46
+    .= a * (v + u) + a * w by Def2
+    .= a * v + a * u + a * w by Def2;
+  end;
+
+theorem
+  (- a) * v = - a * v
+  proof
+    thus (- a) * v = a * (- v) by Th5
+    .= - a * v by Th6;
+  end;
+
+theorem
+  len F = len G & (for k st k in dom F holds G.k = a * F/.k )
+  implies Sum(G) = a * Sum(F)
+  proof
+    assume that
+    A1: len F = len G and
+    A2: for k st k in dom F holds G.k = a * F/.k;
+    A3: dom F = Seg len F & dom G = Seg len G by FINSEQ_1:def 3;
+    now
+      let k, v;
+      assume that
+      A4: k in dom G and
+      A5: v = F.k;
+      v = F/.k by A1,A3,A4,A5,PARTFUN1:def 6;
+      hence G.k = a * v by A1,A2,A3,A4;
+    end;
+    hence thesis by A1,Th12;
+  end;
+
+begin :: 2. Submodules and cosets of submodules in Z-module
+
+reserve V, X, Y for Z_Module;
+reserve u, u1, u2, v, v1, v2 for VECTOR of V;
+reserve a for integer number;
+reserve V1, V2, V3 for Subset of V;
+reserve x for set;
+
+definition
+  let V,V1;
+  attr V1 is linearly-closed means  :Def8:
+  (for v, u st v in V1 & u in V1 holds v + u in V1) &
+  for a, v st v in V1 holds a * v in V1;
+end;
+
+theorem Th18:
+  V1 <> {} & V1 is linearly-closed implies 0.V in V1
+proof
+  assume that
+  A1: V1 <> {} and
+  A2: V1 is linearly-closed;
+  set x = the Element of V1;
+  reconsider x as Element of V by A1,TARSKI:def 3;
+  0 * x in V1 by A1,A2,Def8;
+  hence thesis by Th1;
+end;
+
+theorem Th19:
+  V1 is linearly-closed implies for v st v in V1 holds - v in V1
+  proof
+    assume
+    A1: V1 is linearly-closed;
+    let v;
+    assume v in V1;
+    then (- 1) * v in V1 by A1,Def8;
+    hence thesis by Th2;
+  end;
+
+theorem Th20:
+  V1 is linearly-closed implies for v, u st v in V1 & u in V1 holds v - u in V1
+  proof
+    assume
+    A1: V1 is linearly-closed;
+    let v, u;
+    assume that
+    A2: v in V1 and
+    A3: u in V1;
+    - u in V1 by A1,A3,Th19;
+    hence thesis by A1,A2,Def8;
+  end;
+
+theorem
+  the carrier of V = V1 implies V1 is linearly-closed
+  proof
+    assume
+    A1: the carrier of V = V1;
+    hence for v, u st v in V1 & u in V1 holds v + u in V1;
+    let a, v;
+    thus thesis by A1;
+  end;
+
+theorem Th22:
+  V1 is linearly-closed & V2 is linearly-closed &
+  V3 = {v + u : v in V1 & u in V2} implies V3 is linearly-closed
+  proof
+    assume that
+    A1: V1 is linearly-closed & V2 is linearly-closed and
+    A2: V3 = {v + u : v in V1 & u in V2};
+    thus for v, u st v in V3 & u in V3 holds v + u in V3
+    proof
+      let v, u;
+      assume that
+      A3: v in V3 and
+      A4: u in V3;
+      consider v1, v2 such that
+      A5: v = v1 + v2 and
+      A6: v1 in V1 & v2 in V2 by A2,A3;
+      consider u1, u2 such that
+      A7: u = u1 + u2 and
+      A8: u1 in V1 & u2 in V2 by A2,A4;
+      A9: v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 3
+      .= ((v1 + u1) + v2) + u2 by RLVECT_1:def 3
+      .= (v1 + u1) + (v2 + u2) by RLVECT_1:def 3;
+      v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def8;
+      hence thesis by A2,A9;
+    end;
+    let a, v;
+    assume v in V3;
+    then consider v1, v2 such that
+    A10: v = v1 + v2 and
+    A11: v1 in V1 & v2 in V2 by A2;
+    A12: a * v = a * v1 + a * v2 by A10,Def2;
+    a * v1 in V1 & a * v2 in V2 by A1,A11,Def8;
+    hence thesis by A2,A12;
+  end;
+
+registration let V;
+ cluster {0.V} -> linearly-closed for Subset of V;
+ coherence
+  proof let S be Subset of V such that
+A1: S = {0.V};
+    thus for v, u st v in S & u in S holds v + u in S
+    proof
+      let v, u;
+      assume v in S & u in S;
+      then v = 0.V & u = 0.V by A1,TARSKI:def 1;
+      then v + u = 0.V by RLVECT_1:4;
+      hence thesis by A1,TARSKI:def 1;
+    end;
+    let a, v;
+    assume
+    A2: v in S;
+    then v = 0.V by A1,TARSKI:def 1;
+    hence thesis by A2,Th1;
+  end;
+end;
+
+registration let V;
+ cluster linearly-closed for Subset of V;
+ existence
+  proof
+   take {0.V};
+   thus thesis;
+  end;
+end;
+
+registration let V;
+ let V1,V2 be linearly-closed Subset of V;
+ cluster V1 /\ V2 -> linearly-closed for Subset of V;
+ coherence
+  proof let S be Subset of V such that
+A1: S = V1 /\ V2;
+    thus for v, u st v in S & u in S holds v + u in S
+    proof
+      let v, u;
+      assume
+      A2: v in S & u in S;
+      then v in V2 & u in V2 by A1,XBOOLE_0:def 4;
+      then
+      A3: v + u in V2 by Def8;
+      v in V1 & u in V1 by A2,A1,XBOOLE_0:def 4;
+      then v + u in V1 by Def8;
+      hence thesis by A3,A1,XBOOLE_0:def 4;
+    end;
+    let a, v;
+    assume
+    A4: v in S;
+    then v in V2 by A1,XBOOLE_0:def 4;
+    then
+    A5: a * v in V2 by Def8;
+    v in V1 by A4,A1,XBOOLE_0:def 4;
+    then a * v in V1 by Def8;
+    hence thesis by A5,A1,XBOOLE_0:def 4;
+  end;
+end;
+
+definition
+  let V;
+  mode Submodule of V -> Z_Module means  :Def9:
+  the carrier of it c= the carrier of V & 0.it = 0.V
+  & the addF of it = (the addF of V) ||the carrier of it
+  & the Mult of it = (the Mult of V) | [:INT, the carrier of it:];
+  existence
+  proof
+    the addF of V = (the addF of V) ||the carrier of V &
+    the Mult of V = (the Mult of V) | [:INT, the carrier of V:] by RELSET_1:19;
+    hence thesis;
+  end;
+end;
+
+reserve W, W1, W2 for Submodule of V;
+reserve w, w1, w2 for VECTOR of W;
+
+theorem Th23:
+  x in W1 & W1 is Submodule of W2 implies x in W2
+  proof
+    assume x in W1 & W1 is Submodule of W2;
+    then x in the carrier of W1
+    & the carrier of W1 c= the carrier of W2 by Def9,STRUCT_0:def 5;
+    hence thesis by STRUCT_0:def 5;
+  end;
+
+theorem Th24:
+  x in W implies x in V
+  proof
+    assume x in W;
+    then
+    A1: x in the carrier of W by STRUCT_0:def 5;
+    the carrier of W c= the carrier of V by Def9;
+    hence thesis by A1,STRUCT_0:def 5;
+  end;
+
+theorem Th25:
+  w is VECTOR of V
+  proof
+    w in V by Th24,RLVECT_1:1;
+    hence thesis by STRUCT_0:def 5;
+  end;
+
+theorem
+  0.W = 0.V by Def9;
+
+theorem
+  0.W1 = 0.W2
+  proof
+    thus 0.W1 = 0.V by Def9
+    .= 0.W2 by Def9;
+  end;
+
+theorem Th28:
+  w1 = v & w2 = u implies w1 + w2 = v + u
+  proof
+    assume
+    A1: v = w1 & u = w2;
+    w1 + w2 = ((the addF of V) ||the carrier of W).[w1,w2] by Def9;
+    hence thesis by A1,FUNCT_1:49;
+  end;
+
+theorem Th29:
+  w = v implies a * w = a * v
+  proof
+    reconsider a as Element of INT by INT_1:def 2;
+    assume
+    A1: w = v;
+    a * w = ((the Mult of V) |
+    [:INT, the carrier of W:]).[a,w] by Def9;
+    hence thesis by A1,FUNCT_1:49;
+  end;
+
+theorem Th30:
+  w = v implies - v = - w
+  proof
+    A1: - v = (- 1) * v & - w = (- 1) * w by Th2;
+    assume w = v;
+    hence thesis by A1,Th29;
+  end;
+
+theorem Th31:
+  w1 = v & w2 = u implies w1 - w2 = v - u
+  proof
+    assume that
+    A1: w1 = v and
+    A2: w2 = u;
+    - w2 = - u by A2,Th30;
+    hence thesis by A1,Th28;
+  end;
+
+Lm3: the carrier of W = V1 implies V1 is linearly-closed
+proof
+  set VW = the carrier of W;
+  reconsider WW = W as Z_Module;
+  assume
+  A1: the carrier of W = V1;
+  thus for v, u st v in V1 & u in V1 holds v + u in V1
+  proof
+    let v, u;
+    assume v in V1 & u in V1;
+    then reconsider vv = v, uu = u as VECTOR of WW by A1;
+    reconsider vw = vv + uu as Element of VW;
+    vw in V1 by A1;
+    hence thesis by Th28;
+  end;
+  let a, v;
+  assume v in V1;
+  then reconsider vv = v as VECTOR of WW by A1;
+  reconsider vw = a * vv as Element of VW;
+  vw in V1 by A1;
+  hence thesis by Th29;
+end;
+
+theorem Th32:
+  V is Submodule of V
+  proof
+    thus the carrier of V c= the carrier of V & 0.V = 0.V;
+    thus thesis by RELSET_1:19;
+  end;
+
+theorem Th33:
+  0.V in W
+  proof
+    0.W in W by RLVECT_1:1;
+    hence thesis by Def9;
+  end;
+
+theorem
+  0.W1 in W2
+  proof
+    0.W1 = 0.V by Def9;
+    hence thesis by Th33;
+  end;
+
+theorem
+  0.W in V by Th24,RLVECT_1:1;
+
+theorem Th36:
+  u in W & v in W implies u + v in W
+  proof
+    reconsider VW = the carrier of W as Subset of V by Def9;
+    assume u in W & v in W;
+    then
+    A1: u in the carrier of W & v in the carrier of W by STRUCT_0:def 5;
+    VW is linearly-closed by Lm3;
+    then u + v in the carrier of W by A1,Def8;
+    hence thesis by STRUCT_0:def 5;
+  end;
+
+theorem Th37:
+  v in W implies a * v in W
+  proof
+    reconsider VW = the carrier of W as Subset of V by Def9;
+    assume v in W;
+    then
+    A1: v in the carrier of W by STRUCT_0:def 5;
+    VW is linearly-closed by Lm3;
+    then a * v in the carrier of W by A1,Def8;
+    hence thesis by STRUCT_0:def 5;
+  end;
+
+theorem Th38:
+  v in W implies - v in W
+  proof
+    assume v in W;
+    then (- 1) * v in W by Th37;
+    hence thesis by Th2;
+  end;
+
+theorem Th39:
+  u in W & v in W implies u - v in W
+  proof
+    assume that
+    A1: u in W and
+    A2: v in W;
+    - v in W by A2,Th38;
+    hence thesis by A1,Th36;
+  end;
+
+reserve D for non empty set;
+reserve d1 for Element of D;
+reserve A for BinOp of D;
+reserve M for Function of [:INT,D:],D;
+
+theorem Th40:
+  V1 = D & d1 = 0.V & A = (the addF of V) ||V1 &
+  M = (the Mult of V) | [:INT,V1:] implies Z_ModuleStruct (# D,d1,A,M #)
+  is Submodule of V
+  proof
+    assume that
+    A1: V1 = D and
+    A2: d1 = 0.V and
+    A3: A = (the addF of V) || V1 and
+    A4: M = (the Mult of V) | [:INT,V1:];
+    set W = Z_ModuleStruct (# D,d1,A,M #);
+    A5: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
+    proof
+      let a;
+      let x be VECTOR of W;
+      reconsider a1=a as Element of INT by INT_1:def 2;
+      thus a * x = (the Mult of V) . [a1,x] by A1,A4,FUNCT_1:49
+      .= (the Mult of V).(a,x);
+    end;
+    A6: for x, y being VECTOR of W holds x + y = (the addF of V).(x,y)
+    proof
+      let x, y be VECTOR of W;
+      thus x + y = (the addF of V) . [x,y] by A1,A3,FUNCT_1:49
+      .= (the addF of V).(x,y);
+    end;
+    A7: W is Abelian add-associative right_zeroed right_complementable
+    vector-distributive scalar-distributive scalar-associative scalar-unital
+    proof
+      set MV = the Mult of V;
+      set AV = the addF of V;
+      thus W is Abelian
+      proof
+        let x, y be VECTOR of W;
+        reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
+        thus x + y = x1 + y1 by A6
+        .= y1 + x1
+        .= y + x by A6;
+      end;
+      thus W is add-associative
+      proof
+        let x, y, z be VECTOR of W;
+        reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
+        thus (x + y) + z = AV.(x + y,z1) by A6
+        .= (x1 + y1) + z1 by A6
+        .= x1 + (y1 + z1) by RLVECT_1:def 3
+        .= AV.(x1,y + z) by A6
+        .= x + (y + z) by A6;
+      end;
+      thus W is right_zeroed
+      proof
+        let x be VECTOR of W;
+        reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
+        thus x + 0.W = y + 0.V by A2,A6
+        .= x by RLVECT_1:4;
+      end;
+      thus W is right_complementable
+      proof
+        let x be VECTOR of W;
+        reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
+        consider v such that
+        A8:   x1 + v = 0.V by ALGSTR_0:def 11;
+        v = - x1 by A8,RLVECT_1:def 10
+        .= (- 1) * x1 by Th2
+        .= (- 1) * x by A5;
+        then reconsider y = v as VECTOR of W;
+        take y;
+        thus thesis by A2,A6,A8;
+      end;
+      thus for a being integer number for x, y being VECTOR of W
+      holds a * (x + y) = a * x + a * y
+      proof
+        let a be integer number;
+        let x, y be VECTOR of W;
+        reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
+        reconsider a as Integer;
+        a * (x + y) = MV.(a,x + y) by A5
+        .= a * (x1 + y1) by A6
+        .= a * x1 + a * y1 by Def2
+        .= AV.(MV.(a,x1),a * y) by A5
+        .= AV.(a * x, a * y) by A5
+        .= a * x + a * y by A6;
+        hence thesis;
+      end;
+      thus for a, b being integer number for
+      x being VECTOR of W holds (a + b) * x = a * x + b * x
+      proof
+        let a, b be integer number;
+        let x be VECTOR of W;
+        reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
+        reconsider a, b as Integer;
+        (a + b) * x = (a + b) * y by A5
+        .= a * y + b * y by Def3
+        .= AV.(MV.(a,y),b * x) by A5
+        .= AV.(a * x,b * x) by A5
+        .= a * x + b * x by A6;
+        hence thesis;
+      end;
+      thus for a, b being integer number
+      for x being VECTOR of W holds (a * b) * x = a * (b * x)
+      proof
+        let a, b be integer number;
+        let x be VECTOR of W;
+        reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
+        reconsider a, b as Integer;
+        (a * b) * x = (a * b) * y by A5
+        .= a * (b * y) by Def4
+        .= MV.(a,b * x) by A5
+        .= a * (b * x) by A5;
+        hence thesis;
+      end;
+      let x be VECTOR of W;
+      reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
+      thus 1 * x = 1 * y by A5
+      .= x by Def5;
+    end;
+    0.W = 0.V by A2;
+    hence thesis by A1,A3,A4,A7,Def9;
+  end;
+
+theorem Th41:
+  for V,X being strict Z_Module st V is Submodule of X &
+  X is Submodule of V holds V = X
+  proof
+    let V,X be strict Z_Module;
+    assume that
+    A1: V is Submodule of X and
+    A2: X is Submodule of V;
+    set VX = the carrier of X;
+    set VV = the carrier of V;
+    VV c= VX & VX c= VV by A1,A2,Def9;
+    then
+    A3: VV = VX by XBOOLE_0:def 10;
+    set AX = the addF of X;
+    set AV = the addF of V;
+    AV = AX||VV & AX = AV||VX by A1,A2,Def9;
+    then
+    A4: AV = AX by A3,RELAT_1:72;
+    set MX = the Mult of X;
+    set MV = the Mult of V;
+    A5: MX = MV | [:INT,VX:] by A2,Def9;
+    0.V = 0.X & MV = MX | [:INT,VV:] by A1,Def9;
+    hence thesis by A3,A4,A5,RELAT_1:72;
+  end;
+
+theorem Th42:
+  V is Submodule of X & X is Submodule of Y implies V is Submodule of Y
+  proof
+    assume that
+    A1: V is Submodule of X and
+    A2: X is Submodule of Y;
+    the carrier of V c= the carrier of X & the carrier of X c= the carrier
+    of Y by A1,A2,Def9;
+    hence the carrier of V c= the carrier of Y by XBOOLE_1:1;
+    0.V = 0.X by A1,Def9;
+    hence 0.V = 0.Y by A2,Def9;
+    thus the addF of V = (the addF of Y) ||the carrier of V
+    proof
+      set AY = the addF of Y;
+      set VX = the carrier of X;
+      set AX = the addF of X;
+      set VV = the carrier of V;
+      set AV = the addF of V;
+      VV c= VX by A1,Def9;
+      then
+      A3: [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:96;
+      AV = AX||VV by A1,Def9;
+      then AV = AY||VX||VV by A2,Def9;
+      hence thesis by A3,FUNCT_1:51;
+    end;
+    set MY = the Mult of Y;
+    set MX = the Mult of X;
+    set MV = the Mult of V;
+    set VX = the carrier of X;
+    set VV = the carrier of V;
+    VV c= VX by A1,Def9;
+    then
+    A4: [:INT,VV:] c= [:INT,VX:] by ZFMISC_1:95;
+    MV = MX | [:INT,VV:] by A1,Def9;
+    then MV = (MY | [:INT,VX:]) | [:INT,VV:] by A2,Def9;
+    hence thesis by A4,FUNCT_1:51;
+  end;
+
+theorem Th43:
+  the carrier of W1 c= the carrier of W2 implies W1 is Submodule of W2
+  proof
+    set VW1 = the carrier of W1;
+    set VW2 = the carrier of W2;
+    set AV = the addF of V;
+    set MV = the Mult of V;
+    assume
+    A1: the carrier of W1 c= the carrier of W2;
+    then
+    A2: [:VW1,VW1:] c= [:VW2,VW2:] by ZFMISC_1:96;
+    0.W1 = 0.V by Def9;
+    hence the carrier of W1 c= the carrier of W2 & 0.W1 = 0.W2 by A1,Def9;
+    the addF of W1 = AV||VW1 & the addF of W2 = AV||VW2 by Def9;
+    hence the addF of W1 = (the addF of W2) ||
+    the carrier of W1 by A2,FUNCT_1:51;
+    A3: [:INT,VW1:] c= [:INT,VW2:] by A1,ZFMISC_1:95;
+    the Mult of W1 = MV | [:INT,VW1:] & the Mult of W2 = MV | [:INT,VW2 :]
+    by Def9;
+    hence thesis by A3,FUNCT_1:51;
+  end;
+
+theorem
+  (for v st v in W1 holds v in W2) implies W1 is Submodule of W2
+  proof
+    assume
+    A1: for v st v in W1 holds v in W2;
+    the carrier of W1 c= the carrier of W2
+    proof
+      let x be set;
+      assume
+      A2: x in the carrier of W1;
+      the carrier of W1 c= the carrier of V by Def9;
+      then reconsider v = x as VECTOR of V by A2;
+      v in W1 by A2,STRUCT_0:def 5;
+      then v in W2 by A1;
+      hence thesis by STRUCT_0:def 5;
+    end;
+    hence thesis by Th43;
+  end;
+
+registration
+  let V;
+  cluster strict for Submodule of V;
+  existence
+  proof
+    the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
+    then reconsider V1 = the carrier of V as Subset of V;
+    the addF of V = (the addF of V) ||V1 & the Mult of V = (the Mult of V)
+    | [: INT,V1:] by RELSET_1:19;
+    then Z_ModuleStruct(#the carrier of V,0.V,the addF of V,the Mult of V #)
+    is Submodule of V by Th40;
+    hence thesis;
+  end;
+end;
+
+theorem Th45:
+  for W1, W2 being strict Submodule of V holds
+  the carrier of W1 = the carrier of W2 implies W1 = W2
+  proof
+    let W1, W2 be strict Submodule of V;
+    assume the carrier of W1 = the carrier of W2;
+    then W1 is Submodule of W2 & W2 is Submodule of W1 by Th43;
+    hence thesis by Th41;
+  end;
+
+theorem Th46:
+  for W1, W2 being strict Submodule of V holds
+  (for v holds v in W1 iff v in W2) implies W1 = W2
+  proof
+    let W1, W2 be strict Submodule of V;
+    assume
+    A1: for v holds v in W1 iff v in W2;
+    x in the carrier of W1 iff x in the carrier of W2
+    proof
+      thus x in the carrier of W1 implies x in the carrier of W2
+      proof
+        assume
+        A2: x in the carrier of W1;
+        the carrier of W1 c= the carrier of V by Def9;
+        then reconsider v = x as VECTOR of V by A2;
+        v in W1 by A2,STRUCT_0:def 5;
+        then v in W2 by A1;
+        hence thesis by STRUCT_0:def 5;
+      end;
+      assume
+      A3: x in the carrier of W2;
+      the carrier of W2 c= the carrier of V by Def9;
+      then reconsider v = x as VECTOR of V by A3;
+      v in W2 by A3,STRUCT_0:def 5;
+      then v in W1 by A1;
+      hence thesis by STRUCT_0:def 5;
+    end;
+    then the carrier of W1 = the carrier of W2 by TARSKI:1;
+    hence thesis by Th45;
+  end;
+
+theorem
+  for V being strict Z_Module, W being strict Submodule of V holds
+  the carrier of W = the carrier of V implies W = V
+  proof
+    let V be strict Z_Module, W be strict Submodule of V;
+    assume
+    A1: the carrier of W = the carrier of V;
+    V is Submodule of V by Th32;
+    hence thesis by A1,Th45;
+  end;
+
+theorem
+  for V being strict Z_Module, W being strict Submodule of V holds
+  (for v being VECTOR of V holds v in W iff v in V) implies W = V
+  proof
+    let V be strict Z_Module, W be strict Submodule of V;
+    assume
+    A1: for v being VECTOR of V holds v in W iff v in V;
+    V is Submodule of V by Th32;
+    hence thesis by A1,Th46;
+  end;
+
+theorem
+  the carrier of W = V1 implies V1 is linearly-closed by Lm3;
+
+theorem Th50:
+  V1 <> {} & V1 is linearly-closed implies ex W being strict
+  Submodule of V st V1 = the carrier of W
+  proof
+    assume that
+    A1: V1 <> {} and
+    A2: V1 is linearly-closed;
+    reconsider D = V1 as non empty set by A1;
+    set M = (the Mult of V) | [:INT,V1:];
+    set VV = the carrier of V;
+    dom(the Mult of V) = [:INT,VV:] by FUNCT_2:def 1;
+    then
+    A3: dom M = [:INT,VV:] /\ [:INT,V1:] by RELAT_1:61;
+    [:INT,V1:] c= [:INT,VV:] by ZFMISC_1:95;
+    then
+    A4: dom M = [:INT,D:] by A3,XBOOLE_1:28;
+    now
+      let y be set;
+      thus y in D implies ex x being set st x in dom M & y = M.x
+      proof
+        assume
+        A5: y in D;
+        then reconsider v1 = y as Element of VV;
+        reconsider N1=1 as Element of INT by INT_1:def 2;
+        A6: [N1,y] in [:INT,D:] by A5,ZFMISC_1:87;
+        then M. [1,y] = 1 * v1 by FUNCT_1:49
+        .= y by Def5;
+        hence thesis by A4,A6;
+      end;
+      given x being set such that
+      A7: x in dom M and
+      A8: y = M.x;
+      consider x1,x2 being set such that
+      A9: x1 in INT and
+      A10: x2 in D and
+      A11: x = [x1,x2] by A4,A7,ZFMISC_1:def 2;
+      reconsider xx1 = x1 as Integer by A9;
+      reconsider v2 = x2 as Element of VV by A10;
+      [x1,x2] in [:INT,V1:] by A9,A10,ZFMISC_1:87;
+      then y = xx1 * v2 by A8,A11,FUNCT_1:49;
+      hence y in D by A2,A10,Def8;
+    end;
+    then D = rng M by FUNCT_1:def 3;
+    then reconsider M as Function of [:INT,D:],D
+    by A4,FUNCT_2:def 1,RELSET_1:4;
+    set A = (the addF of V) ||V1;
+    reconsider d1 = 0.V as Element of D by A2,Th18;
+    dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
+    then dom A = [:VV,VV:] /\ [:V1,V1:] by RELAT_1:61;
+    then
+    A12: dom A = [:D,D:] by XBOOLE_1:28;
+    now
+      let y be set;
+      thus y in D implies ex x being set st x in dom A & y = A.x
+      proof
+        assume
+        A13:  y in D;
+        then reconsider v1 = y, v0 = d1 as Element of VV;
+        A14:  [d1,y] in [:D,D:] by A13,ZFMISC_1:87;
+        then A. [d1,y] = v0 + v1 by FUNCT_1:49
+        .= y by RLVECT_1:4;
+        hence thesis by A12,A14;
+      end;
+      given x being set such that
+      A15: x in dom A and
+      A16: y = A.x;
+      consider x1,x2 being set such that
+      A17: x1 in D & x2 in D and
+      A18: x = [x1,x2] by A12,A15,ZFMISC_1:def 2;
+      reconsider v1 = x1, v2 = x2 as Element of VV by A17;
+      [x1,x2] in [:V1,V1:] by A17,ZFMISC_1:87;
+      then y = v1 + v2 by A16,A18,FUNCT_1:49;
+      hence y in D by A2,A17,Def8;
+    end;
+    then D = rng A by FUNCT_1:def 3;
+    then reconsider A as Function of [:D,D:],D
+    by A12,FUNCT_2:def 1,RELSET_1:4;
+    set W = Z_ModuleStruct (# D,d1,A,M #);
+    W is Submodule of V by Th40;
+    hence thesis;
+  end;
+
+definition
+  let V;
+  func (0).V -> strict Submodule of V means  :Def10:
+  the carrier of it = {0.V};
+  correctness by Th45,Th50;
+end;
+
+definition
+  let V;
+  func (Omega).V -> strict Submodule of V equals
+  the Z_ModuleStruct of V;
+  coherence
+  proof
+    set W = the Z_ModuleStruct of V;
+    A1: for u, v, w being VECTOR of W holds (u + v) + w = u + (v + w)
+    proof
+      let u, v, w be VECTOR of W;
+      reconsider u9=u,v9=v,w9=w as VECTOR of V;
+      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 3
+      .= u + (v + w);
+    end;
+    A2: for v being VECTOR of W holds v + 0.W = v
+    proof
+      let v be VECTOR of W;
+      reconsider v9=v as VECTOR of V;
+      thus v + 0.W = v9 + 0.V .= v by RLVECT_1:4;
+    end;
+    A3: W is right_complementable
+    proof
+      let v be VECTOR of W;
+      reconsider v9=v as VECTOR of V;
+      consider w9 being VECTOR of V such that
+A4:   v9 + w9 = 0.V by ALGSTR_0:def 11;
+      reconsider w=w9 as VECTOR of W;
+      take w;
+      thus thesis by A4;
+    end;
+    A5: for a being integer number for v,w being VECTOR of W holds
+    a * (v + w) = a * v + a * w
+    proof
+      let a be integer number;
+      let v, w be VECTOR of W;
+      reconsider v9=v, w9=w as VECTOR of V;
+      thus a * (v + w) = a * (v9 + w9)
+      .= a * v9 + a * w9 by Def2
+      .= a * v + a * w;
+    end;
+    A6: for a, b being integer number for v being VECTOR of W holds
+    (a * b) * v = a * (b * v)
+    proof
+      let a, b be integer number;
+      let v be VECTOR of W;
+      reconsider v9=v as VECTOR of V;
+      thus (a * b) * v = (a * b) * v9
+      .= a * (b * v9) by Def4
+      .= a * (b * v);
+    end;
+    A7: for a, b being integer number for v being VECTOR of W holds
+    (a + b) * v = a * v + b * v
+    proof
+      let a, b be integer number;
+      let v be VECTOR of W;
+      reconsider v9=v as VECTOR of V;
+      thus (a + b) * v = (a + b) * v9 .= a * v9 + b * v9 by Def3
+      .= a * v + b * v;
+    end;
+    A8: for a for v, w be VECTOR of W, v9,w9 be VECTOR of V st v=v9 & w=w9
+    holds v+w = v9+w9 & a*v = a*v9;
+    A9: for v, w being VECTOR of W holds v + w = w + v
+    proof
+      let v, w be VECTOR of W;
+      reconsider v9=v, w9=w as VECTOR of V;
+      thus v + w = w9 + v9 by A8
+      .= w + v;
+    end;
+    for v being VECTOR of W holds 1 * v = v
+    proof
+      let v be VECTOR of W;
+      reconsider v9=v as VECTOR of V;
+      thus 1 * v = 1 * v9 .= v by Def5;
+    end;
+    then reconsider W as Z_Module
+    by A9,A1,A2,A3,A5,A7,A6,Def2,Def3,Def4,Def5,RLVECT_1:def 2,def 3,def 4;
+    A10: the Mult of W = (the Mult of V) | [:INT, the carrier of W:]
+    by RELSET_1:19;
+    0.W = 0.V & the addF of W = (the addF of V) ||the carrier of W
+    by RELSET_1:19;
+    hence thesis by A10,Def9;
+  end;
+end;
+
+theorem Th51:
+  (0).W = (0).V
+  proof
+    the carrier of (0).W = {0.W} & the carrier of (0).V = {0.V} by Def10;
+    then
+    A1: the carrier of (0).W = the carrier of (0).V by Def9;
+    (0).W is Submodule of V by Th42;
+    hence thesis by A1,Th45;
+  end;
+
+theorem Th52:
+  (0).W1 = (0).W2
+  proof
+    (0).W1 = (0).V by Th51;
+    hence thesis by Th51;
+  end;
+
+theorem
+  (0).W is Submodule of V by Th42;
+
+theorem Th54:
+  (0).V is Submodule of W
+  proof
+    the carrier of (0).V = {0.V} by Def10
+    .= {0.W} by Def9;
+    hence thesis by Th43;
+  end;
+
+theorem
+  (0).W1 is Submodule of W2
+  proof
+    (0).W1 = (0).W2 by Th52;
+    hence thesis;
+  end;
+
+theorem
+  for V being strict Z_Module holds V is Submodule of (Omega).V;
+
+definition
+  let V,v,W;
+  func v + W -> Subset of V equals
+  {v + u : u in W};
+  coherence
+  proof
+    set Y = {v + u : u in W};
+    defpred P[set] means ex u st $1 = v + u & u in W;
+    consider X being set such that
+    A1: for x being set holds x in X iff x in the carrier of V & P[x]
+    from XBOOLE_0:sch 1;
+    X c= the carrier of V
+    proof
+      let x be set;
+      assume x in X;
+      hence thesis by A1;
+    end;
+    then reconsider X as Subset of V;
+    A2: Y c= X
+    proof
+      let x be set;
+      assume x in Y;
+      then ex u st x = v + u & u in W;
+      hence thesis by A1;
+    end;
+    X c= Y
+    proof
+      let x be set;
+      assume x in X;
+      then ex u st x = v + u & u in W by A1;
+      hence thesis;
+    end;
+    hence thesis by A2,XBOOLE_0:def 10;
+  end;
+end;
+
+Lm4: 0.V + W = the carrier of W
+proof
+  set A = {0.V + u : u in W};
+  A1: the carrier of W c= A
+  proof
+    let x be set;
+    assume x in the carrier of W;
+    then
+    A2: x in W by STRUCT_0:def 5;
+    then x in V by Th24;
+    then reconsider y = x as Element of V by STRUCT_0:def 5;
+    0.V + y = x by RLVECT_1:4;
+    hence thesis by A2;
+  end;
+  A c= the carrier of W
+  proof
+    let x be set;
+    assume x in A;
+    then consider u such that
+    A3: x = 0.V + u and
+    A4: u in W;
+    x = u by A3,RLVECT_1:4;
+    hence thesis by A4,STRUCT_0:def 5;
+  end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+definition
+  let V,W;
+  mode Coset of W -> Subset of V means  :Def13:
+  ex v st it = v + W;
+  existence
+  proof
+    reconsider VW = the carrier of W as Subset of V by Def9;
+    take VW;
+    take 0.V;
+    thus thesis by Lm4;
+  end;
+end;
+
+reserve B,C for Coset of W;
+
+theorem Th57:
+  0.V in v + W iff v in W
+  proof
+    thus 0.V in v + W implies v in W
+    proof
+      assume 0.V in v + W;
+      then consider u such that
+      A1: 0.V = v + u and
+      A2: u in W;
+      v = - u by A1,RLVECT_1:def 10;
+      hence thesis by A2,Th38;
+    end;
+    assume v in W;
+    then
+    A3: - v in W by Th38;
+    0.V = v - v by RLVECT_1:15
+    .= v + (- v);
+    hence thesis by A3;
+  end;
+
+theorem Th58:
+  v in v + W
+  proof
+    v + 0.V = v & 0.V in W by Th33,RLVECT_1:4;
+    hence thesis;
+  end;
+
+theorem
+  0.V + W = the carrier of W by Lm4;
+
+theorem Th60:
+  v + (0).V = {v}
+  proof
+    thus v + (0).V c= {v}
+    proof
+      let x be set;
+      assume x in v + (0).V;
+      then consider u such that
+      A1: x = v + u and
+      A2: u in (0).V;
+      A3: the carrier of (0).V = {0.V} by Def10;
+      u in the carrier of (0).V by A2,STRUCT_0:def 5;
+      then u = 0.V by A3,TARSKI:def 1;
+      then x = v by A1,RLVECT_1:4;
+      hence thesis by TARSKI:def 1;
+    end;
+    let x be set;
+    assume x in {v};
+    then
+    A4: x = v by TARSKI:def 1;
+    0.V in (0).V & v = v + 0.V by Th33,RLVECT_1:4;
+    hence thesis by A4;
+  end;
+
+Lm5: v in W iff v + W = the carrier of W
+proof
+  0.V in W & v + 0.V = v by Th33,RLVECT_1:4;
+  then
+  A1: v in {v + u : u in W};
+  thus v in W implies v + W = the carrier of W
+  proof
+    assume
+    A2: v in W;
+    thus v + W c= the carrier of W
+    proof
+      let x be set;
+      assume x in v + W;
+      then consider u such that
+      A3: x = v + u and
+      A4: u in W;
+      v + u in W by A2,A4,Th36;
+      hence thesis by A3,STRUCT_0:def 5;
+    end;
+    let x be set;
+    assume x in the carrier of W;
+    then reconsider y = x, z = v as Element of W by A2,STRUCT_0:def 5;
+    reconsider y1 = y, z1 = z as VECTOR of V by Th25;
+    A5: z + (y - z) = (y + z) - z by RLVECT_1:def 3
+    .= y + (z - z) by RLVECT_1:def 3
+    .= y + 0.W by RLVECT_1:15
+    .= x by RLVECT_1:4;
+    y - z in W by STRUCT_0:def 5;
+    then
+    A6: y1 - z1 in W by Th31;
+    y - z = y1 - z1 by Th31;
+    then z1 + (y1 - z1) = x by A5,Th28;
+    hence thesis by A6;
+  end;
+  thus thesis by A1,STRUCT_0:def 5;
+end;
+
+theorem Th61:
+  v + (Omega).V = the carrier of V
+  proof
+    v in (Omega).V by STRUCT_0:def 5;
+    hence thesis by Lm5;
+  end;
+
+theorem Th62:
+  0.V in v + W iff v + W = the carrier of W
+  proof
+    0.V in v + W iff v in W by Th57;
+    hence thesis by Lm5;
+  end;
+
+theorem
+  v in W iff v + W = the carrier of W by Lm5;
+
+theorem
+  v in W implies (a * v) + W = the carrier of W
+  proof
+    assume
+    A1: v in W;
+    thus (a * v) + W c= the carrier of W
+    proof
+      let x be set;
+      assume x in (a * v) + W;
+      then consider u such that
+      A2: x = a * v + u and
+      A3: u in W;
+      a * v in W by A1,Th37;
+      then a * v + u in W by A3,Th36;
+      hence thesis by A2,STRUCT_0:def 5;
+    end;
+    let x be set;
+    assume
+    A4: x in the carrier of W;
+    then
+    A5: x in W by STRUCT_0:def 5;
+    the carrier of W c= the carrier of V by Def9;
+    then reconsider y = x as Element of V by A4;
+    A6: a * v + (y - a * v) = (y + a * v) - a * v by RLVECT_1:def 3
+    .= y + (a * v - a * v) by RLVECT_1:def 3
+    .= y + 0.V by RLVECT_1:15
+    .= x by RLVECT_1:4;
+    a * v in W by A1,Th37;
+    then y - a * v in W by A5,Th39;
+    hence thesis by A6;
+  end;
+
+theorem Th65:
+  u in W iff v + W = (v + u) + W
+  proof
+    thus u in W implies v + W = (v + u) + W
+    proof
+      assume
+      A1: u in W;
+      thus v + W c= (v + u) + W
+      proof
+        let x be set;
+        assume x in v + W;
+        then consider v1 such that
+        A2: x = v + v1 and
+        A3: v1 in W;
+        A4: (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 3
+        .= v + ((v1 + u) - u) by RLVECT_1:def 3
+        .= v + (v1 + (u - u)) by RLVECT_1:def 3
+        .= v + (v1 + 0.V) by RLVECT_1:15
+        .= x by A2,RLVECT_1:4;
+        v1 - u in W by A1,A3,Th39;
+        hence thesis by A4;
+      end;
+      let x be set;
+      assume x in (v + u) + W;
+      then consider v2 such that
+      A5: x = (v + u) + v2 and
+      A6: v2 in W;
+      A7: x = v + (u + v2) by A5,RLVECT_1:def 3;
+      u + v2 in W by A1,A6,Th36;
+      hence thesis by A7;
+    end;
+    assume
+    A8: v + W = (v + u) + W;
+    0.V in W & v + 0.V = v by Th33,RLVECT_1:4;
+    then v in (v + u) + W by A8;
+    then consider u1 such that
+    A9: v = (v + u) + u1 and
+    A10: u1 in W;
+    v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:4,def 3;
+    then u + u1 = 0.V by RLVECT_1:8;
+    then u = - u1 by RLVECT_1:def 10;
+    hence thesis by A10,Th38;
+  end;
+
+theorem
+  u in W iff v + W = (v - u) + W
+  proof
+    A1: - u in W implies u in W
+    proof
+      assume - u in W;
+      then - (- u) in W by Th38;
+      hence thesis by RLVECT_1:17;
+    end;
+    - u in W iff v + W = (v + (- u)) + W by Th65;
+    hence thesis by A1,Th38;
+  end;
+
+theorem Th67:
+  v in u + W iff u + W = v + W
+  proof
+    thus v in u + W implies u + W = v + W
+    proof
+      assume v in u + W;
+      then consider z being VECTOR of V such that
+      A1: v = u + z and
+      A2: z in W;
+      thus u + W c= v + W
+      proof
+        let x be set;
+        assume x in u + W;
+        then consider v1 such that
+A3:     x = u + v1 and
+A4:     v1 in W;
+        v - z = u + (z - z) by A1,RLVECT_1:def 3
+        .= u + 0.V by RLVECT_1:15
+        .= u by RLVECT_1:4;
+        then
+A5:     x = v + (v1 + (- z)) by A3,RLVECT_1:def 3
+        .= v + (v1 - z);
+        v1 - z in W by A2,A4,Th39;
+        hence thesis by A5;
+      end;
+      let x be set;
+      assume x in v + W;
+      then consider v2 such that
+      A6: x = v + v2 & v2 in W;
+      z + v2 in W & x = u + (z + v2) by A1,A2,A6,Th36,RLVECT_1:def 3;
+      hence thesis;
+    end;
+    thus thesis by Th58;
+  end;
+
+theorem Th68:
+  u in v1 + W & u in v2 + W implies v1 + W = v2 + W
+  proof
+    assume that
+    A1: u in v1 + W and
+    A2: u in v2 + W;
+    consider x1 being VECTOR of V such that
+    A3: u = v1 + x1 and
+    A4: x1 in W by A1;
+    consider x2 being VECTOR of V such that
+    A5: u = v2 + x2 and
+    A6: x2 in W by A2;
+    thus v1 + W c= v2 + W
+    proof
+      let x be set;
+      assume x in v1 + W;
+      then consider u1 such that
+      A7: x = v1 + u1 and
+      A8: u1 in W;
+      x2 - x1 in W by A4,A6,Th39;
+      then
+      A9: (x2 - x1) + u1 in W by A8,Th36;
+      u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:def 3
+      .= v1 + 0.V by RLVECT_1:15
+      .= v1 by RLVECT_1:4;
+      then x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:def 3
+      .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 3;
+      hence thesis by A9;
+    end;
+    let x be set;
+    assume x in v2 + W;
+    then consider u1 such that
+    A10: x = v2 + u1 and
+    A11: u1 in W;
+    x1 - x2 in W by A4,A6,Th39;
+    then
+    A12: (x1 - x2) + u1 in W by A11,Th36;
+    u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:def 3
+    .= v2 + 0.V by RLVECT_1:15
+    .= v2 by RLVECT_1:4;
+    then x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:def 3
+    .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 3;
+    hence thesis by A12;
+  end;
+
+theorem
+  v in W implies a * v in v + W
+  proof
+    assume v in W;
+    then
+    A1: (a - 1) * v in W by Th37;
+    a * v = ((a - 1) + 1) * v .= (a - 1) * v + 1 * v by Def3
+    .= v + (a - 1) * v by Def5;
+    hence thesis by A1;
+  end;
+
+theorem Th70:
+  u + v in v + W iff u in W
+  proof
+    thus u + v in v + W implies u in W
+    proof
+      assume u + v in v + W;
+      then ex v1 st u + v = v + v1 & v1 in W;
+      hence thesis by RLVECT_1:8;
+    end;
+    assume u in W;
+    hence thesis;
+  end;
+
+theorem
+  v - u in v + W iff u in W
+  proof
+    A1: v - u = (- u) + v;
+    A2: - u in W implies - (- u) in W by Th38;
+    u in W implies - u in W by Th38;
+    hence thesis by A1,A2,Th70,RLVECT_1:17;
+  end;
+
+theorem Th72:
+  u in v + W iff ex v1 st v1 in W & u = v + v1
+  proof
+    thus u in v + W implies ex v1 st v1 in W & u = v + v1
+    proof
+      assume u in v + W;
+      then ex v1 st u = v + v1 & v1 in W;
+      hence thesis;
+    end;
+    given v1 such that
+    A1: v1 in W & u = v + v1;
+    thus thesis by A1;
+  end;
+
+theorem Th73:
+  u in v + W iff ex v1 st v1 in W & u = v - v1
+  proof
+    thus u in v + W implies ex v1 st v1 in W & u = v - v1
+    proof
+      assume u in v + W;
+      then consider v1 such that
+      A1: u = v + v1 and
+      A2: v1 in W;
+      take x = - v1;
+      thus x in W by A2,Th38;
+      thus thesis by A1,RLVECT_1:17;
+    end;
+    given v1 such that
+    A3: v1 in W and
+    A4: u = v - v1;
+    - v1 in W by A3,Th38;
+    hence thesis by A4;
+  end;
+
+theorem Th74:
+  (ex v st v1 in v + W & v2 in v + W) iff v1 - v2 in W
+  proof
+    thus (ex v st v1 in v + W & v2 in v + W) implies v1 - v2 in W
+    proof
+      given v such that
+      A1: v1 in v + W and
+      A2: v2 in v + W;
+      consider u2 such that
+      A3: u2 in W and
+      A4: v2 = v + u2 by A2,Th72;
+      consider u1 such that
+      A5: u1 in W and
+      A6: v1 = v + u1 by A1,Th72;
+      v1 - v2 = (u1 + v) + ((- v) - u2) by A6,A4,RLVECT_1:30
+      .= ((u1 + v) + (- v)) - u2 by RLVECT_1:def 3
+      .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 3
+      .= (u1 + 0.V) - u2 by RLVECT_1:5
+      .= u1 - u2 by RLVECT_1:4;
+      hence thesis by A5,A3,Th39;
+    end;
+    assume v1 - v2 in W;
+    then
+    A7: - (v1 - v2) in W by Th38;
+    take v1;
+    thus v1 in v1 + W by Th58;
+    v1 + (- (v1 - v2)) = v1 + ((- v1) + v2) by RLVECT_1:33
+    .= (v1 + (- v1)) + v2 by RLVECT_1:def 3
+    .= 0.V + v2 by RLVECT_1:5
+    .= v2 by RLVECT_1:4;
+    hence thesis by A7;
+  end;
+
+theorem Th75:
+  v + W = u + W implies ex v1 st v1 in W & v + v1 = u
+  proof
+    assume v + W = u + W;
+    then v in u + W by Th58;
+    then consider u1 such that
+    A1: v = u + u1 and
+    A2: u1 in W;
+    take v1 = u - v;
+    0.V = (u + u1) - v by A1,RLVECT_1:15
+    .= u1 + (u - v) by RLVECT_1:def 3;
+    then v1 = - u1 by RLVECT_1:def 10;
+    hence v1 in W by A2,Th38;
+    thus v + v1 = (u + v) - v by RLVECT_1:def 3
+    .= u + (v - v) by RLVECT_1:def 3
+    .= u + 0.V by RLVECT_1:15
+    .= u by RLVECT_1:4;
+  end;
+
+theorem Th76:
+  v + W = u + W implies ex v1 st v1 in W & v - v1 = u
+  proof
+    assume v + W = u + W;
+    then u in v + W by Th58;
+    then consider u1 such that
+    A1: u = v + u1 and
+    A2: u1 in W;
+    take v1 = v - u;
+    0.V = (v + u1) - u by A1,RLVECT_1:15
+    .= u1 + (v - u) by RLVECT_1:def 3;
+    then v1 = - u1 by RLVECT_1:def 10;
+    hence v1 in W by A2,Th38;
+    thus v - v1 = (v - v) + u by RLVECT_1:29
+    .= 0.V + u by RLVECT_1:15
+    .= u by RLVECT_1:4;
+  end;
+
+theorem Th77:
+  for W1, W2 being strict Submodule of V st v + W1 = v + W2 holds W1 = W2
+  proof
+    let W1, W2 be strict Submodule of V;
+      assume
+      A1: v + W1 = v + W2;
+      the carrier of W1 = the carrier of W2
+      proof
+        A2: the carrier of W1 c= the carrier of V by Def9;
+        thus the carrier of W1 c= the carrier of W2
+        proof
+          let x be set;
+          assume
+          A3: x in the carrier of W1;
+          then reconsider y = x as Element of V by A2;
+          set z = v + y;
+          x in W1 by A3,STRUCT_0:def 5;
+          then z in v + W2 by A1;
+          then consider u such that
+          A4: z = v + u and
+          A5: u in W2;
+          y = u by A4,RLVECT_1:8;
+          hence thesis by A5,STRUCT_0:def 5;
+        end;
+        let x be set;
+        assume
+        A6:   x in the carrier of W2;
+        the carrier of W2 c= the carrier of V by Def9;
+        then reconsider y = x as Element of V by A6;
+        set z = v + y;
+        x in W2 by A6,STRUCT_0:def 5;
+        then z in v + W1 by A1;
+        then consider u such that
+        A7: z = v + u and
+        A8: u in W1;
+        y = u by A7,RLVECT_1:8;
+        hence thesis by A8,STRUCT_0:def 5;
+      end;
+      hence thesis by Th45;
+  end;
+
+theorem Th78:
+  for W1, W2 being strict Submodule of V st v + W1 = u + W2 holds W1 = W2
+  proof
+    let W1, W2 be strict Submodule of V;
+    assume
+    A1: v + W1 = u + W2;
+    set V2 = the carrier of W2;
+    set V1 = the carrier of W1;
+    assume
+    A2: W1 <> W2;
+    A3:
+    now
+      set x = the Element of V1 \ V2;
+      assume V1 \ V2 <> {};
+      then x in V1 by XBOOLE_0:def 5;
+      then
+      A4: x in W1 by STRUCT_0:def 5;
+      then x in V by Th24;
+      then reconsider x as Element of V by STRUCT_0:def 5;
+      set z = v + x;
+      z in u + W2 by A1,A4;
+      then consider u1 such that
+      A5: z = u + u1 and
+      A6: u1 in W2;
+      x = 0.V + x by RLVECT_1:4
+      .= v - v + x by RLVECT_1:15
+      .= - v + (u + u1) by A5,RLVECT_1:def 3;
+      then
+      A7: (v + (- v + (u + u1))) + W1 = v + W1 by A4,Th65;
+      v + (- v + (u + u1)) = (v - v) + (u + u1) by RLVECT_1:def 3
+      .= 0.V + (u + u1) by RLVECT_1:15
+      .= u + u1 by RLVECT_1:4;
+      then (u + u1) + W2 = (u + u1) + W1 by A1,A6,A7,Th65;
+      hence thesis by A2,Th77;
+    end;
+    A8:
+    now
+      set x = the Element of V2 \ V1;
+      assume V2 \ V1 <> {};
+      then x in V2 by XBOOLE_0:def 5;
+      then
+      A9: x in W2 by STRUCT_0:def 5;
+      then x in V by Th24;
+      then reconsider x as Element of V by STRUCT_0:def 5;
+      set z = u + x;
+      z in v + W1 by A1,A9;
+      then consider u1 such that
+      A10: z = v + u1 and
+      A11: u1 in W1;
+      x = 0.V + x by RLVECT_1:4
+      .= u - u + x by RLVECT_1:15
+      .= - u + (v + u1) by A10,RLVECT_1:def 3;
+      then
+      A12: (u + (- u + (v + u1))) + W2 = u + W2 by A9,Th65;
+      u + (- u + (v + u1)) = (u - u) + (v + u1) by RLVECT_1:def 3
+      .= 0.V + (v + u1) by RLVECT_1:15
+      .= v + u1 by RLVECT_1:4;
+      then (v + u1) + W1 = (v + u1) + W2 by A1,A11,A12,Th65;
+      hence thesis by A2,Th77;
+    end;
+    V1 <> V2 by A2,Th45;
+    then not V1 c= V2 or not V2 c= V1 by XBOOLE_0:def 10;
+    hence thesis by A3,A8,XBOOLE_1:37;
+  end;
+
+theorem
+  C is linearly-closed iff C = the carrier of W
+  proof
+    thus C is linearly-closed implies C = the carrier of W
+    proof
+      assume
+      A1: C is linearly-closed;
+      consider v such that
+      A2: C = v + W by Def13;
+      C <> {} by A2,Th58;
+      then 0.V in v + W by A1,A2,Th18;
+      hence thesis by A2,Th62;
+    end;
+    thus thesis by Lm3;
+  end;
+
+theorem
+  for W1, W2 being strict Submodule of V, C1 being Coset of W1,
+  C2 being Coset of W2 st C1 = C2 holds W1 = W2
+  proof
+    let W1, W2 be strict Submodule of V, C1 be Coset of W1, C2 be Coset of W2;
+    (ex v1 st C1 = v1 + W1) & ex v2 st C2 = v2 + W2 by Def13;
+    hence thesis by Th78;
+  end;
+
+theorem
+  {v} is Coset of (0).V
+  proof
+    v + (0).V = {v} by Th60;
+    hence thesis by Def13;
+  end;
+
+theorem Th82:
+  V1 is Coset of (0).V implies ex v st V1 = {v}
+  proof
+    assume V1 is Coset of (0).V;
+    then consider v such that
+    A1: V1 = v + (0).V by Def13;
+    take v;
+    thus thesis by A1,Th60;
+  end;
+
+theorem Th83:
+  the carrier of W is Coset of W
+  proof
+    the carrier of W = 0.V + W by Lm4;
+    hence thesis by Def13;
+  end;
+
+theorem
+  the carrier of V is Coset of (Omega).V
+  proof
+    set v = the VECTOR of V;
+    the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
+    then reconsider A = the carrier of V as Subset of V;
+    A = v + (Omega).V by Th61;
+    hence thesis by Def13;
+  end;
+
+theorem
+  V1 is Coset of (Omega).V implies V1 = the carrier of V
+  proof
+    assume V1 is Coset of (Omega).V;
+    then ex v st V1 = v + (Omega).V by Def13;
+    hence thesis by Th61;
+  end;
+
+theorem
+  0.V in C iff C = the carrier of W
+  proof
+    ex v st C = v + W by Def13;
+    hence thesis by Th62;
+  end;
+
+theorem Th87:
+  u in C iff C = u + W
+  proof
+    thus u in C implies C = u + W
+    proof
+      assume
+      A1: u in C;
+      ex v st C = v + W by Def13;
+      hence thesis by A1,Th67;
+    end;
+    thus thesis by Th58;
+  end;
+
+theorem
+  u in C & v in C implies ex v1 st v1 in W & u + v1 = v
+  proof
+    assume u in C & v in C;
+    then C = u + W & C = v + W by Th87;
+    hence thesis by Th75;
+  end;
+
+theorem Th89:
+  u in C & v in C implies ex v1 st v1 in W & u - v1 = v
+  proof
+    assume u in C & v in C;
+    then C = u + W & C = v + W by Th87;
+    hence thesis by Th76;
+  end;
+
+theorem
+  (ex C st v1 in C & v2 in C) iff v1 - v2 in W
+  proof
+    thus (ex C st v1 in C & v2 in C) implies v1 - v2 in W
+    proof
+      given C such that
+      A1: v1 in C & v2 in C;
+      ex v st C = v + W by Def13;
+      hence thesis by A1,Th74;
+    end;
+    assume v1 - v2 in W;
+    then consider v such that
+    A2: v1 in v + W & v2 in v + W by Th74;
+    reconsider C = v + W as Coset of W by Def13;
+    take C;
+    thus thesis by A2;
+  end;
+
+theorem
+  u in B & u in C implies B = C
+  proof
+    assume
+    A1: u in B & u in C;
+    (ex v1 st B = v1 + W) & ex v2 st C = v2 + W by Def13;
+    hence thesis by A1,Th68;
+  end;
+
+begin :: 3. Operations on submodules in Z-module
+
+reserve V for Z_Module;
+reserve W, W1, W2, W3 for Submodule of V;
+reserve u, u1, u2, v, v1, v2 for VECTOR of V;
+reserve a, a1, a2 for integer number;
+reserve X, Y, y, y1, y2 for set;
+
+definition
+  let V,W1,W2;
+  func W1 + W2 -> strict Submodule of V means  :Def14:
+  the carrier of it = {v + u : v in W1 & u in W2};
+  existence
+  proof
+    reconsider V1 = the carrier of W1, V2 = the carrier of W2 as Subset of V
+    by Def9;
+    set VS = {v + u : v in W1 & u in W2};
+    VS c= the carrier of V
+    proof
+      let x be set;
+      assume x in VS;
+      then ex v1, v2 st x = v1 + v2 & v1 in W1 & v2 in W2;
+      hence thesis;
+    end;
+    then reconsider VS as Subset of V;
+    A1: 0.V = 0.V + 0.V by RLVECT_1:4;
+    0.V in W1 & 0.V in W2 by Th33;
+    then
+    A2: 0.V in VS by A1;
+    A3: VS = {v + u : v in V1 & u in V2}
+    proof
+      thus VS c= {v + u : v in V1 & u in V2}
+      proof
+        let x be set;
+        assume x in VS;
+        then consider v,u such that
+        A4: x = v + u and
+        A5: v in W1 & u in W2;
+        v in V1 & u in V2 by A5,STRUCT_0:def 5;
+        hence thesis by A4;
+      end;
+      let x be set;
+      assume x in {v + u : v in V1 & u in V2};
+      then consider v,u such that
+      A6: x = v + u and
+      A7: v in V1 & u in V2;
+      v in W1 & u in W2 by A7,STRUCT_0:def 5;
+      hence thesis by A6;
+    end;
+    V1 is linearly-closed & V2 is linearly-closed by Lm3;
+    hence thesis by A2,A3,Th22,Th50;
+  end;
+  uniqueness by Th45;
+  commutativity
+proof let W be strict Submodule of V;
+  let W1,W2;
+  set A = {v + u : v in W1 & u in W2};
+  set B = {v + u : v in W2 & u in W1};
+  A8: B c= A
+  proof
+    let x be set;
+    assume x in B;
+    then ex v, u st x = v + u & v in W2 & u in W1;
+    hence thesis;
+  end;
+  A c= B
+  proof
+    let x be set;
+    assume x in A;
+    then ex v, u st x = v + u & v in W1 & u in W2;
+    hence thesis;
+  end;
+  hence thesis by A8,XBOOLE_0:def 10;
+end;
+end;
+
+definition
+  let V,W1,W2;
+  func W1 /\ W2 -> strict Submodule of V means  :Def15:
+  the carrier of it = (the carrier of W1) /\ (the carrier of W2);
+  existence
+  proof
+    set VW2 = the carrier of W2;
+    set VW1 = the carrier of W1;
+    set VV = the carrier of V;
+    0.V in W2 by Th33;
+    then
+    A1: 0.V in VW2 by STRUCT_0:def 5;
+    VW1 c= VV & VW2 c= VV by Def9;
+    then VW1 /\ VW2 c= VV /\ VV by XBOOLE_1:27;
+    then reconsider
+    V1 = VW1, V2 = VW2, V3 = VW1 /\ VW2 as Subset of V by Def9;
+    V1 is linearly-closed & V2 is linearly-closed by Lm3;
+    then
+    A2: V3 is linearly-closed;
+    0.V in W1 by Th33;
+    then 0.V in VW1 by STRUCT_0:def 5;
+    then VW1 /\ VW2 <> {} by A1,XBOOLE_0:def 4;
+    hence thesis by A2,Th50;
+  end;
+  uniqueness by Th45;
+  commutativity;
+end;
+
+theorem Th92:
+  x in W1 + W2 iff ex v1, v2 st v1 in W1 & v2 in W2 & x = v1 + v2
+  proof
+    thus x in W1 + W2 implies ex v1, v2 st v1 in W1 & v2 in W2 & x = v1 + v2
+    proof
+      assume x in W1 + W2;
+      then x in the carrier of W1 + W2 by STRUCT_0:def 5;
+      then x in {v + u : v in W1 & u in W2} by Def14;
+      then consider v1, v2 such that
+      A1: x = v1 + v2 & v1 in W1 & v2 in W2;
+      take v1, v2;
+      thus thesis by A1;
+    end;
+    given v1, v2 such that
+    A2: v1 in W1 & v2 in W2 & x = v1 + v2;
+    x in {v + u : v in W1 & u in W2} by A2;
+    then x in the carrier of W1 + W2 by Def14;
+    hence thesis by STRUCT_0:def 5;
+  end;
+
+theorem
+  v in W1 or v in W2 implies v in W1 + W2
+  proof
+    assume
+    A1: v in W1 or v in W2;
+    now
+      per cases by A1;
+      suppose
+        A2: v in W1;
+        v = v + 0.V & 0.V in W2 by Th33,RLVECT_1:4;
+        hence thesis by A2,Th92;
+      end;
+      suppose
+        A3: v in W2;
+        v = 0.V + v & 0.V in W1 by Th33,RLVECT_1:4;
+        hence thesis by A3,Th92;
+      end;
+    end;
+    hence thesis;
+  end;
+
+theorem Th94:
+  x in W1 /\ W2 iff x in W1 & x in W2
+  proof
+    x in W1 /\ W2 iff x in the carrier of W1 /\ W2 by STRUCT_0:def 5;
+    then x in W1 /\ W2 iff x in (the carrier of W1) /\ (the carrier of W2)
+    by Def15;
+    then x in W1 /\ W2 iff x in the carrier of W1 & x in the carrier of W2
+    by XBOOLE_0:def 4;
+    hence thesis by STRUCT_0:def 5;
+  end;
+
+Lm6: the carrier of W1 c= the carrier of W1 + W2
+proof
+  let x be set;
+  set A = {v + u : v in W1 & u in W2};
+  assume x in the carrier of W1;
+  then reconsider v = x as Element of W1;
+  reconsider v as VECTOR of V by Th25;
+  A1: v = v + 0.V by RLVECT_1:4;
+  v in W1 & 0.V in W2 by Th33,STRUCT_0:def 5;
+  then x in A by A1;
+  hence thesis by Def14;
+end;
+
+Lm7: for W2 being strict Submodule of V holds
+the carrier of W1 c= the carrier of W2 implies W1 + W2 = W2
+proof
+  let W2 be strict Submodule of V;
+  assume
+  A1: the carrier of W1 c= the carrier of W2;
+  A2: the carrier of W1 + W2 c= the carrier of W2
+  proof
+    let x be set;
+    assume x in the carrier of W1 + W2;
+    then x in {v + u : v in W1 & u in W2} by Def14;
+    then consider v,u such that
+    A3: x = v + u and
+    A4: v in W1 and
+    A5: u in W2;
+    W1 is Submodule of W2 by A1,Th43;
+    then v in W2 by A4,Th23;
+    then v + u in W2 by A5,Th36;
+    hence thesis by A3,STRUCT_0:def 5;
+  end;
+  the carrier of W2 c= the carrier of W1+W2 by Lm6;
+  then the carrier of W1 + W2 = the carrier of W2 by A2,XBOOLE_0:def 10;
+  hence thesis by Th45;
+end;
+
+theorem
+  for W being strict Submodule of V holds W + W = W by Lm7;
+
+theorem Th96:
+  W1 + (W2 + W3) = (W1 + W2) + W3
+  proof
+    set A = {v + u : v in W1 & u in W2};
+    set B = {v + u : v in W2 & u in W3};
+    set C = {v + u : v in W1 + W2 & u in W3};
+    set D = {v + u : v in W1 & u in W2 + W3};
+    A1: the carrier of W1 + (W2 + W3) = D by Def14;
+    A2: C c= D
+    proof
+      let x be set;
+      assume x in C;
+      then consider v,u such that
+      A3: x = v + u and
+      A4: v in W1 + W2 and
+      A5: u in W3;
+      v in the carrier of W1 + W2 by A4,STRUCT_0:def 5;
+      then v in A by Def14;
+      then consider u1,u2 such that
+      A6: v = u1 + u2 and
+      A7: u1 in W1 and
+      A8: u2 in W2;
+      u2 + u in B by A5,A8;
+      then u2 + u in the carrier of W2 + W3 by Def14;
+      then
+      A9: u2 + u in W2 + W3 by STRUCT_0:def 5;
+      v + u =u1 + (u2 + u) by A6,RLVECT_1:def 3;
+      hence thesis by A3,A7,A9;
+    end;
+    D c= C
+    proof
+      let x be set;
+      assume x in D;
+      then consider v, u such that
+      A10: x = v + u and
+      A11: v in W1 and
+      A12: u in W2 + W3;
+      u in the carrier of W2 + W3 by A12,STRUCT_0:def 5;
+      then u in B by Def14;
+      then consider u1,u2 such that
+      A13: u = u1 + u2 and
+      A14: u1 in W2 and
+      A15: u2 in W3;
+      v + u1 in A by A11,A14;
+      then v + u1 in the carrier of W1 + W2 by Def14;
+      then
+      A16: v + u1 in W1 + W2 by STRUCT_0:def 5;
+      v + u = (v + u1) + u2 by A13,RLVECT_1:def 3;
+      hence thesis by A10,A15,A16;
+    end;
+    then D = C by A2,XBOOLE_0:def 10;
+    hence thesis by A1,Def14;
+  end;
+
+theorem Th97:
+  W1 is Submodule of W1 + W2
+  proof
+    the carrier of W1 c= the carrier of W1 + W2 by Lm6;
+    hence W1 is Submodule of W1 + W2 by Th43;
+  end;
+
+theorem Th98:
+  for W2 being strict Submodule of V holds
+  W1 is Submodule of W2 iff W1 + W2 = W2
+  proof
+    let W2 be strict Submodule of V;
+    thus W1 is Submodule of W2 implies W1 + W2 = W2
+    proof
+      assume W1 is Submodule of W2;
+      then the carrier of W1 c= the carrier of W2 by Def9;
+      hence thesis by Lm7;
+    end;
+    thus thesis by Th97;
+  end;
+
+theorem Th99:
+  for W being strict Submodule of V holds (0).V + W = W
+  proof
+    let W be strict Submodule of V;
+    (0).V is Submodule of W by Th54;
+    then the carrier of (0).V c= the carrier of W by Def9;
+    hence thesis by Lm7;
+  end;
+
+theorem
+  (0).V + (Omega).V = the Z_ModuleStruct of V by Th99;
+
+theorem Th101:
+  (Omega).V + W = the Z_ModuleStruct of V
+  proof
+    the carrier of W c= the carrier of V by Def9;
+    hence thesis by Lm7;
+  end;
+
+theorem
+  for V being strict Z_Module holds (Omega).V + (Omega).V = V by Th101;
+
+theorem
+  for W being strict Submodule of V holds W /\ W = W
+  proof
+    let W be strict Submodule of V;
+    the carrier of W = (the carrier of W) /\ (the carrier of W);
+    hence thesis by Def15;
+  end;
+
+theorem Th104:
+  W1 /\ (W2 /\ W3) = (W1 /\ W2) /\ W3
+  proof
+    set V1 = the carrier of W1;
+    set V2 = the carrier of W2;
+    set V3 = the carrier of W3;
+    the carrier of W1 /\ (W2 /\ W3)
+    = V1 /\ (the carrier of W2 /\ W3) by Def15
+    .= V1 /\ (V2 /\ V3) by Def15
+    .= (V1 /\ V2) /\ V3 by XBOOLE_1:16
+    .= (the carrier of W1 /\ W2) /\ V3 by Def15;
+    hence thesis by Def15;
+  end;
+
+Lm8: the carrier of W1 /\ W2 c= the carrier of W1
+proof
+  the carrier of W1 /\ W2
+  = (the carrier of W1) /\ (the carrier of W2) by Def15;
+  hence thesis by XBOOLE_1:17;
+end;
+
+theorem Th105:
+  W1 /\ W2 is Submodule of W1
+  proof
+    the carrier of W1 /\ W2 c= the carrier of W1 by Lm8;
+    hence W1 /\ W2 is Submodule of W1 by Th43;
+  end;
+
+theorem Th106:
+  for W1 being strict Submodule of V holds W1 is Submodule of W2 iff
+  W1 /\ W2 = W1
+  proof
+    let W1 be strict Submodule of V;
+    thus W1 is Submodule of W2 implies W1 /\ W2 = W1
+    proof
+      assume W1 is Submodule of W2;
+      then
+      A1: the carrier of W1 c= the carrier of W2 by Def9;
+      the carrier of W1 /\ W2 = (the carrier of W1) /\ (the carrier of W2 )
+      by Def15;
+      hence thesis by A1,Th45,XBOOLE_1:28;
+    end;
+    thus thesis by Th105;
+  end;
+
+theorem Th107:
+  (0).V /\ W = (0).V
+  proof
+    0.V in W by Th33;
+    then 0.V in the carrier of W by STRUCT_0:def 5;
+    then {0.V} c= the carrier of W by ZFMISC_1:31;
+    then
+    A1: {0.V} /\ (the carrier of W) = {0.V} by XBOOLE_1:28;
+    the carrier of (0).V /\ W = (the carrier of (0).V) /\ (the carrier of W)
+    by Def15
+    .= {0.V} /\ (the carrier of W) by Def10;
+    hence thesis by A1,Def10;
+  end;
+
+theorem
+  (0).V /\ (Omega).V = (0).V by Th107;
+
+theorem Th109:
+  for W being strict Submodule of V holds (Omega).V /\ W = W
+  proof
+    let W be strict Submodule of V;
+    the carrier of (Omega). V /\ W = (the carrier of V) /\ (the carrier of W)
+    & the carrier of W c= the carrier of V by Def15,Def9;
+    hence thesis by Th45,XBOOLE_1:28;
+  end;
+
+theorem
+  for V being strict Z_Module holds (Omega).V /\ (Omega).V = V by Th109;
+
+Lm9: the carrier of W1 /\ W2 c= the carrier of W1 + W2
+proof
+  the carrier of W1 /\ W2 c= the carrier of W1 &
+  the carrier of W1 c= the carrier of W1 + W2 by Lm6,Lm8;
+  hence thesis by XBOOLE_1:1;
+end;
+
+theorem
+  W1 /\ W2 is Submodule of W1 + W2 by Lm9,Th43;
+
+Lm10: the carrier of (W1 /\ W2) + W2 = the carrier of W2
+proof
+  thus the carrier of (W1 /\ W2) + W2 c= the carrier of W2
+  proof
+    let x be set;
+    assume x in the carrier of (W1 /\ W2) + W2;
+    then x in {u + v : u in W1 /\ W2 & v in W2} by Def14;
+    then consider u, v such that
+    A1: x = u + v and
+    A2: u in W1 /\ W2 and
+    A3: v in W2;
+    u in W2 by A2,Th94;
+    then u + v in W2 by A3,Th36;
+    hence thesis by A1,STRUCT_0:def 5;
+  end;
+  let x be set;
+   the carrier of W2 c= the carrier of (W1 /\ W2) + W2 by Lm6;
+  hence thesis;
+end;
+
+theorem
+  for W2 being strict Submodule of V
+  holds (W1 /\ W2) + W2 = W2 by Lm10,Th45;
+
+Lm11: the carrier of W1 /\ (W1 + W2) = the carrier of W1
+proof
+  thus the carrier of W1 /\ (W1 + W2) c= the carrier of W1
+  proof
+    let x be set;
+    assume
+    A1: x in the carrier of W1 /\ (W1 + W2);
+    the carrier of W1 /\ (W1 + W2)
+    = (the carrier of W1) /\ (the carrier of W1 + W2) by Def15;
+    hence thesis by A1,XBOOLE_0:def 4;
+  end;
+  let x be set;
+  assume
+  A2: x in the carrier of W1;
+  the carrier of W1 c= the carrier of V by Def9;
+  then reconsider x1 = x as Element of V by A2;
+  A3: x1 + 0.V = x1 & 0.V in W2 by Th33,RLVECT_1:4;
+  x in W1 by A2,STRUCT_0:def 5;
+  then x in {u + v : u in W1 & v in W2} by A3;
+  then x in the carrier of W1 + W2 by Def14;
+  then x in (the carrier of W1) /\ (the carrier of W1 + W2) by A2,
+XBOOLE_0:def 4;
+  hence thesis by Def15;
+end;
+
+theorem
+  for W1 being strict Submodule of V
+  holds W1 /\ (W1 + W2) = W1 by Lm11,Th45;
+
+Lm12: the carrier of (W1 /\ W2) + (W2 /\ W3) c=
+the carrier of W2 /\ (W1 + W3)
+proof
+  let x be set;
+  assume x in the carrier of (W1 /\ W2) + (W2 /\ W3);
+  then x in {u + v : u in W1 /\ W2 & v in W2 /\ W3} by Def14;
+  then consider u, v such that
+  A1: x = u + v and
+  A2: u in W1 /\ W2 & v in W2 /\ W3;
+  u in W2 & v in W2 by A2,Th94;
+  then
+  A3: x in W2 by A1,Th36;
+  u in W1 & v in W3 by A2,Th94;
+  then x in W1 + W3 by A1,Th92;
+  then x in W2 /\ (W1 + W3) by A3,Th94;
+  hence thesis by STRUCT_0:def 5;
+end;
+
+theorem
+  (W1 /\ W2) + (W2 /\ W3) is Submodule of W2 /\ (W1 + W3) by Lm12,Th43;
+
+Lm13: W1 is Submodule of W2 implies
+the carrier of W2 /\ (W1 + W3) = the carrier of (W1 /\ W2) + (W2 /\ W3)
+proof
+  assume
+  A1: W1 is Submodule of W2;
+  thus the carrier of W2 /\ (W1 + W3) c= the carrier of (W1 /\ W2) + (W2 /\ W3)
+  proof
+    let x be set;
+    assume x in the carrier of W2 /\ (W1 + W3);
+    then
+    A2: x in (the carrier of W2) /\ (the carrier of W1 + W3) by Def15;
+    then x in the carrier of W1 + W3 by XBOOLE_0:def 4;
+    then x in {u + v : u in W1 & v in W3} by Def14;
+    then consider u1, v1 such that
+    A3: x = u1 + v1 and
+    A4: u1 in W1 and
+    A5: v1 in W3;
+    A6: u1 in W2 by A1,A4,Th23;
+    x in the carrier of W2 by A2,XBOOLE_0:def 4;
+    then u1 + v1 in W2 by A3,STRUCT_0:def 5;
+    then (v1 + u1) - u1 in W2 by A6,Th39;
+    then v1 + (u1 - u1) in W2 by RLVECT_1:def 3;
+    then v1 + 0.V in W2 by RLVECT_1:15;
+    then v1 in W2 by RLVECT_1:4;
+    then
+    A7: v1 in W2 /\ W3 by A5,Th94;
+    u1 in W1 /\ W2 by A4,A6,Th94;
+    then x in (W1 /\ W2) + (W2 /\ W3) by A3,A7,Th92;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  thus thesis by Lm12;
+end;
+
+theorem
+  W1 is Submodule of W2 implies W2 /\ (W1 + W3) = (W1 /\ W2) + (W2 /\ W3)
+  by Lm13,Th45;
+
+Lm14: the carrier of W2 + (W1 /\ W3) c=
+the carrier of (W1 + W2) /\ (W2 + W3)
+proof
+  let x be set;
+  assume x in the carrier of W2 + (W1 /\ W3);
+  then x in {u + v : u in W2 & v in W1 /\ W3} by Def14;
+  then consider u, v such that
+  A1: x = u + v & u in W2 and
+  A2: v in W1 /\ W3;
+  v in W3 by A2,Th94;
+  then x in {u1 + u2 : u1 in W2 & u2 in W3} by A1;
+  then
+  A3: x in the carrier of W2 + W3 by Def14;
+  v in W1 by A2,Th94;
+  then x in {v1 + v2 : v1 in W1 & v2 in W2} by A1;
+  then x in the carrier of W1 + W2 by Def14;
+  then x in (the carrier of W1 + W2) /\ (the carrier of W2 + W3) by A3,
+XBOOLE_0:def 4;
+  hence thesis by Def15;
+end;
+
+theorem
+  W2 + (W1 /\ W3) is Submodule of (W1 + W2) /\ (W2 + W3) by Lm14,Th43;
+
+Lm15: W1 is Submodule of W2 implies
+the carrier of W2 + (W1 /\ W3) = the carrier of (W1 + W2) /\ (W2 + W3)
+proof
+  reconsider V2 = the carrier of W2 as Subset of V by Def9;
+  A1: V2 is linearly-closed by Lm3;
+  assume W1 is Submodule of W2;
+  then
+  A2: the carrier of W1 c= the carrier of W2 by Def9;
+  thus the carrier of W2 + (W1 /\ W3) c= the carrier of (W1 + W2) /\ (W2 + W3)
+  by Lm14;
+  let x be set;
+  assume x in the carrier of (W1 + W2) /\ (W2 + W3);
+  then x in (the carrier of W1 + W2) /\ (the carrier of W2 + W3) by Def15;
+  then x in the carrier of W1 + W2 by XBOOLE_0:def 4;
+  then x in {u1 + u2 : u1 in W1 & u2 in W2} by Def14;
+  then consider u1, u2 such that
+  A3: x = u1 + u2 and
+  A4: u1 in W1 & u2 in W2;
+  u1 in the carrier of W1 & u2 in the carrier of W2 by A4,STRUCT_0:def 5;
+  then u1 + u2 in V2 by A2,A1,Def8;
+  then
+  A5: u1 + u2 in W2 by STRUCT_0:def 5;
+  0.V in W1 /\ W3 & (u1 + u2) + 0.V = u1 + u2 by Th33,RLVECT_1:4;
+  then x in {u + v : u in W2 & v in W1 /\ W3} by A3,A5;
+  hence thesis by Def14;
+end;
+
+theorem
+  W1 is Submodule of W2 implies W2 + (W1 /\ W3) = (W1 + W2) /\ (W2 + W3)
+  by Lm15,Th45;
+
+theorem Th118:
+  W1 is strict Submodule of W3 implies W1 + (W2 /\ W3) = (W1 + W2) /\ W3
+  proof
+    assume
+    A1: W1 is strict Submodule of W3;
+    thus (W1 + W2) /\ W3
+     = (W1 /\ W3) + (W3 /\ W2) by A1,Lm13,Th45
+    .= W1 + (W2 /\ W3) by A1,Th106;
+  end;
+
+theorem
+  for W1,W2 being strict Submodule of V holds W1 + W2 = W2 iff W1 /\ W2 = W1
+  proof
+    let W1,W2 be strict Submodule of V;
+    W1 + W2 = W2 iff W1 is Submodule of W2 by Th98;
+    hence thesis by Th106;
+  end;
+
+theorem
+  for W2,W3 being strict Submodule of V holds W1 is Submodule of W2
+  implies W1 + W3 is Submodule of W2 + W3
+  proof
+    let W2,W3 be strict Submodule of V;
+    assume
+    A1: W1 is Submodule of W2;
+    (W1 + W3) + (W2 + W3)
+     = ((W1 + W3) + W3) + W2 by Th96
+    .= (W1 + (W3 + W3)) + W2 by Th96
+    .= (W1 + W3) + W2 by Lm7
+    .= (W1 + W2) + W3 by Th96
+    .= W2 + W3 by A1,Th98;
+    hence thesis by Th98;
+  end;
+
+theorem
+  (ex W st the carrier of W = (the carrier of W1) \/ (the carrier of W2))
+  iff W1 is Submodule of W2 or W2 is Submodule of W1
+  proof
+    set VW1 = the carrier of W1;
+    set VW2 = the carrier of W2;
+    thus
+    (ex W st the carrier of W = (the carrier of W1) \/ (the carrier of W2))
+    implies W1 is Submodule of W2 or W2 is Submodule of W1
+    proof
+      given W such that
+      A1: the carrier of W = (the carrier of W1) \/ (the carrier of W2);
+      set VW = the carrier of W;
+      assume that
+      A2: not W1 is Submodule of W2 and
+      A3: not W2 is Submodule of W1;
+      not VW2 c= VW1 by A3,Th43;
+      then consider y being set such that
+      A4: y in VW2 and
+      A5: not y in VW1 by TARSKI:def 3;
+      reconsider y as Element of VW2 by A4;
+      reconsider y as VECTOR of V by Th25;
+      reconsider A1 = VW as Subset of V by Def9;
+      A6: A1 is linearly-closed by Lm3;
+      not VW1 c= VW2 by A2,Th43;
+      then consider x being set such that
+      A7: x in VW1 and
+      A8: not x in VW2 by TARSKI:def 3;
+      reconsider x as Element of VW1 by A7;
+      reconsider x as VECTOR of V by Th25;
+      A9:
+      now
+        reconsider A2 = VW2 as Subset of V by Def9;
+        A10:  A2 is linearly-closed by Lm3;
+        assume x + y in VW2;
+        then (x + y) - y in VW2 by A10,Th20;
+        then x + (y - y) in VW2 by RLVECT_1:def 3;
+        then x + 0.V in VW2 by RLVECT_1:15;
+        hence contradiction by A8,RLVECT_1:4;
+      end;
+      A11:
+      now
+        reconsider A2 = VW1 as Subset of V by Def9;
+        A12: A2 is linearly-closed by Lm3;
+        assume x + y in VW1;
+        then (y + x) - x in VW1 by A12,Th20;
+        then y + (x - x) in VW1 by RLVECT_1:def 3;
+        then y + 0.V in VW1 by RLVECT_1:15;
+        hence contradiction by A5,RLVECT_1:4;
+      end;
+      x in VW & y in VW by A1,XBOOLE_0:def 3;
+      then x + y in VW by A6,Def8;
+      hence thesis by A1,A11,A9,XBOOLE_0:def 3;
+    end;
+    A13:
+    now
+      assume W1 is Submodule of W2;
+      then VW1 c= VW2 by Def9;
+      then VW1 \/ VW2 = VW2 by XBOOLE_1:12;
+      hence thesis;
+    end;
+    A14:
+    now
+      assume W2 is Submodule of W1;
+      then VW2 c= VW1 by Def9;
+      then VW1 \/ VW2 = VW1 by XBOOLE_1:12;
+      hence thesis;
+    end;
+    assume W1 is Submodule of W2 or W2 is Submodule of W1;
+    hence thesis by A13,A14;
+  end;
+
+definition
+  let V;
+  func Submodules(V) -> set means  :Def16:
+  for x holds x in it iff x is strict Submodule of V;
+  existence
+  proof
+    defpred Q[set,set] means ex W being strict Submodule of V
+    st $2 = W & $1 = the carrier of W;
+    defpred P[set] means ex W being strict Submodule of V
+    st $1 = the carrier of W;
+    consider B being set such that
+    A1: for x holds x in B iff x in bool(the carrier of V) & P[x]
+    from XBOOLE_0:sch 1;
+    A2: for x, y1, y2 st Q[x,y1] & Q[x,y2] holds y1 = y2 by Th45;
+    consider f being Function such that
+    A3: for x, y holds [x,y] in f iff x in B & Q[x,y] from FUNCT_1:sch 1(A2);
+    for x holds x in B iff ex y st [x,y] in f
+    proof
+      let x;
+      thus x in B implies ex y st [x,y] in f
+      proof
+        assume
+        A4: x in B;
+        then consider W being strict Submodule of V such that
+        A5: x = the carrier of W by A1;
+        reconsider y = W as set;
+        take y;
+        thus thesis by A3,A4,A5;
+      end;
+      given y such that
+      A6: [x,y] in f;
+      thus thesis by A3,A6;
+    end;
+    then
+    A7: B = dom f by XTUPLE_0:def 12;
+    for y holds y in rng f iff y is strict Submodule of V
+    proof
+      let y;
+      thus y in rng f implies y is strict Submodule of V
+      proof
+        assume y in rng f;
+        then consider x such that
+        A8: x in dom f & y = f.x by FUNCT_1:def 3;
+        [x,y] in f by A8,FUNCT_1:def 2;
+        then ex W being strict Submodule of V st y = W & x = the carrier of W
+        by A3;
+        hence thesis;
+      end;
+      assume y is strict Submodule of V;
+      then reconsider W = y as strict Submodule of V;
+      reconsider x = the carrier of W as set;
+      the carrier of W c= the carrier of V by Def9;
+      then
+      A9: x in dom f by A1,A7;
+      then [x,y] in f by A3,A7;
+      then y = f.x by A9,FUNCT_1:def 2;
+      hence thesis by A9,FUNCT_1:def 3;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let D1, D2 be set;
+    assume
+    A10: for x holds x in D1 iff x is strict Submodule of V;
+    assume
+    A11: for x holds x in D2 iff x is strict Submodule of V;
+    now
+      let x;
+      thus x in D1 implies x in D2
+      proof
+        assume x in D1;
+        then x is strict Submodule of V by A10;
+        hence thesis by A11;
+      end;
+      assume x in D2;
+      then x is strict Submodule of V by A11;
+      hence x in D1 by A10;
+    end;
+    hence thesis by TARSKI:1;
+  end;
+end;
+
+registration
+  let V;
+  cluster Submodules(V) -> non empty;
+  coherence
+  proof
+    set x = the strict Submodule of V;
+    x in Submodules(V) by Def16;
+    hence thesis;
+  end;
+end;
+
+theorem
+  for V being strict Z_Module holds V in Submodules(V)
+  proof
+    let V be strict Z_Module;
+    (Omega).V in Submodules(V) by Def16;
+    hence thesis;
+  end;
+
+definition
+  let V,W1,W2;
+  pred V is_the_direct_sum_of W1,W2 means  :Def17:
+  the Z_ModuleStruct of V = W1 + W2 & W1 /\ W2 = (0).V;
+end;
+
+Lm16: for V being Z_Module, W being strict Submodule of V holds
+(for v being VECTOR of V holds v in W) implies W = the Z_ModuleStruct of V
+proof
+  let V be Z_Module, W be strict Submodule of V;
+  assume for v being VECTOR of V holds v in W;
+  then for v be VECTOR of V holds (v in W iff v in (Omega).V) by RLVECT_1:1;
+  hence thesis by Th46;
+end;
+
+Lm17: for V being Z_Module, W1,W2 being Submodule of V holds
+W1 + W2 = the Z_ModuleStruct of V
+iff for v being VECTOR of V ex v1,v2 being VECTOR of V
+st v1 in W1 & v2 in W2 & v = v1 + v2
+proof
+  let V be Z_Module, W1,W2 be Submodule of V;
+  thus W1 + W2 = the Z_ModuleStruct of V implies
+  for v being VECTOR of V
+  ex v1, v2 being VECTOR of V st v1 in W1 & v2 in W2 & v = v1 + v2
+  proof
+    assume
+    A1: W1 + W2 = the Z_ModuleStruct of V;
+    let v be VECTOR of V;
+    v in the Z_ModuleStruct of V by RLVECT_1:1;
+    hence thesis by A1,Th92;
+  end;
+  assume
+  A2: for v being VECTOR of V ex v1, v2 being VECTOR of V
+  st v1 in W1 & v2 in W2 & v = v1 + v2;
+  now
+    let u be VECTOR of V;
+    ex v1, v2 being VECTOR of V st v1 in W1 & v2 in W2 & u = v1 + v2 by A2;
+    hence u in W1 + W2 by Th92;
+  end;
+  hence thesis by Lm16;
+end;
+
+definition
+  let V be Z_Module;
+  let W be Submodule of V;
+  attr W is with_Linear_Compl means  :Def18:
+  ex C being Submodule of V st V is_the_direct_sum_of C,W;
+end;
+
+registration
+  let V be Z_Module;
+  cluster with_Linear_Compl for Submodule of V;
+  correctness
+  proof
+    (0).V + (Omega).V = the Z_ModuleStruct of V
+    & (0).V = (0).V /\ (Omega). V by Th99,Th107;
+    then
+    V is_the_direct_sum_of (0).V,(Omega).V by Def17;
+    then
+    (Omega).V is with_Linear_Compl  by Def18;
+    hence thesis;
+  end;
+end;
+
+definition
+  let V be Z_Module;
+  let W be Submodule of V;
+  assume A1: W is with_Linear_Compl;
+  mode Linear_Compl of W -> Submodule of V means  :Def19:
+  V is_the_direct_sum_of it,W;
+  existence by A1,Def18;
+end;
+
+Lm18: V is_the_direct_sum_of W1,W2 implies V is_the_direct_sum_of W2,W1
+proof
+  assume
+  A1: V is_the_direct_sum_of W1,W2;
+  then
+  A2: W2 /\ W1 = (0).V by Def17;
+  the Z_ModuleStruct of V = W1 + W2 by A1,Def17;
+  hence thesis by A2,Def17;
+end;
+
+theorem
+  for V being Z_Module, W1, W2 being Submodule of V holds V
+  is_the_direct_sum_of W1,W2 implies W2 is Linear_Compl of W1
+  proof
+    let V be Z_Module, W1, W2 be Submodule of V;
+    assume V is_the_direct_sum_of W1,W2;
+    then A1:V is_the_direct_sum_of W2,W1 by Lm18;
+    then W1 is with_Linear_Compl by Def18;
+    hence thesis by Def19,A1;
+  end;
+
+theorem Th124:
+  for V being Z_Module, W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W holds
+  V is_the_direct_sum_of L,W & V is_the_direct_sum_of W,L
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    thus V is_the_direct_sum_of L,W by Def19;
+    hence thesis by Lm18;
+  end;
+
+theorem
+  for V being Z_Module, W being with_Linear_Compl Submodule of V, L being
+  Linear_Compl of W holds W + L = the Z_ModuleStruct of V
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of W,L by Th124;
+    hence W + L = the Z_ModuleStruct of V by Def17;
+  end;
+
+theorem
+  for V being Z_Module, W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W holds W /\ L = (0).V
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of W,L by Th124;
+    hence W /\ L = (0).V by Def17;
+  end;
+
+theorem
+  V is_the_direct_sum_of W1,W2
+  implies V is_the_direct_sum_of W2,W1 by Lm18;
+
+theorem
+  for V being Z_Module, W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W holds W is Linear_Compl of L
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of L,W by Def19;
+    then A1:V is_the_direct_sum_of W,L by Lm18;
+    then L is with_Linear_Compl by Def18;
+    hence thesis by Def19,A1;
+  end;
+
+theorem Th129:
+  for V being Z_Module holds V is_the_direct_sum_of (0).V,
+  (Omega).V & V is_the_direct_sum_of (Omega).V,(0).V
+  proof
+    let V be Z_Module;
+A1: (0).V + (Omega).V = the Z_ModuleStruct of V
+    & (0).V = (0).V /\ (Omega). V by Th99,Th107;
+    hence V is_the_direct_sum_of (0).V,(Omega).V by Def17;
+    thus thesis by A1,Def17;
+  end;
+
+theorem
+  for V being Z_Module holds (0).V is Linear_Compl of (Omega).V &
+  (Omega).V is Linear_Compl of (0).V
+  proof
+    let V be Z_Module;
+    A1:  V is_the_direct_sum_of (0).V,(Omega).V &
+    V is_the_direct_sum_of (Omega).V, (0).V by Th129;
+    then
+    A2: (Omega).V is with_Linear_Compl by Def18;
+    (0).V is with_Linear_Compl by A1,Def18;
+    hence thesis by Def19,A1,A2;
+  end;
+
+reserve C for Coset of W;
+reserve C1 for Coset of W1;
+reserve C2 for Coset of W2;
+
+theorem Th131:
+  C1 meets C2 implies C1 /\ C2 is Coset of W1 /\ W2
+  proof
+    set v = the Element of C1 /\ C2;
+    set C = C1 /\ C2;
+    assume
+    A1: C1 /\ C2 <> {};
+    then reconsider v as Element of V by TARSKI:def 3;
+    v in C2 by A1,XBOOLE_0:def 4;
+    then
+    A2: C2 = v + W2 by Th87;
+    v in C1 by A1,XBOOLE_0:def 4;
+    then
+    A3: C1 = v + W1 by Th87;
+    C is Coset of W1 /\ W2
+    proof
+      take v;
+      thus C c= v + W1 /\ W2
+      proof
+        let x;
+        assume
+        A4: x in C;
+        then x in C1 by XBOOLE_0:def 4;
+        then consider u1 such that
+        A5: u1 in W1 and
+        A6: x = v + u1 by A3,Th72;
+        x in C2 by A4,XBOOLE_0:def 4;
+        then consider u2 such that
+        A7: u2 in W2 and
+        A8: x = v + u2 by A2,Th72;
+        u1 = u2 by A6,A8,RLVECT_1:8;
+        then u1 in W1 /\ W2 by A5,A7,Th94;
+        hence thesis by A6;
+      end;
+      let x;
+      assume x in v + (W1 /\ W2);
+      then consider u such that
+      A9: u in W1 /\ W2 and
+      A10: x = v + u by Th72;
+      u in W2 by A9,Th94;
+      then
+      A11: x in {v + u2 : u2 in W2} by A10;
+      u in W1 by A9,Th94;
+      then x in {v + u1 : u1 in W1} by A10;
+      hence thesis by A3,A2,A11,XBOOLE_0:def 4;
+    end;
+    hence thesis;
+  end;
+
+Lm19: ex C st v in C
+proof
+  reconsider C = v + W as Coset of W by Def13;
+  take C;
+  thus thesis by Th58;
+end;
+
+theorem Th132:
+  for V being Z_Module, W1, W2 being Submodule of V holds V
+  is_the_direct_sum_of W1,W2 iff for C1 being Coset of W1, C2 being Coset of W2
+  ex v being VECTOR of V st C1 /\ C2 = {v}
+  proof
+    let V be Z_Module, W1, W2 be Submodule of V;
+    set VW1 = the carrier of W1;
+    set VW2 = the carrier of W2;
+    0.V in W2 by Th33;
+    then
+    A1: 0.V in VW2 by STRUCT_0:def 5;
+    thus V is_the_direct_sum_of W1,W2 implies
+    for C1 being Coset of W1, C2 being Coset of W2
+    ex v being VECTOR of V st C1 /\ C2 = {v}
+    proof
+      assume
+      A2: V is_the_direct_sum_of W1,W2;
+      then
+      A3: the Z_ModuleStruct of V = W1 + W2 by Def17;
+      let C1 be Coset of W1, C2 be Coset of W2;
+      consider v1 being VECTOR of V such that
+      A4: C1 = v1 + W1 by Def13;
+      v1 in the Z_ModuleStruct of V by RLVECT_1:1;
+      then consider v11, v12 being VECTOR of V such that
+      A5: v11 in W1 and
+      A6: v12 in W2 and
+      A7: v1 = v11 + v12 by A3,Th92;
+      consider v2 being VECTOR of V such that
+      A8: C2 = v2 + W2 by Def13;
+      v2 in the Z_ModuleStruct of V by RLVECT_1:1;
+      then consider v21, v22 being VECTOR of V such that
+      A9: v21 in W1 and
+      A10: v22 in W2 and
+      A11: v2 = v21 + v22 by A3,Th92;
+      take v = v12 + v21;
+      {v} = C1 /\ C2
+      proof
+        thus
+        A12:  {v} c= C1 /\ C2
+        proof
+          let x;
+          assume x in {v};
+          then
+          A13: x = v by TARSKI:def 1;
+          v21 = v2 - v22 by A11,RLSUB_2:61;
+          then v21 in C2 by A8,A10,Th73;
+          then C2 = v21 + W2 by Th87;
+          then
+          A14: x in C2 by A6,A13;
+          v12 = v1 - v11 by A7,RLSUB_2:61;
+          then v12 in C1 by A4,A5,Th73;
+          then C1 = v12 + W1 by Th87;
+          then x in C1 by A9,A13;
+          hence thesis by A14,XBOOLE_0:def 4;
+        end;
+        let x;
+        assume
+        A15: x in C1 /\ C2;
+        then C1 meets C2 by XBOOLE_0:4;
+        then reconsider C = C1 /\ C2 as Coset of W1 /\ W2 by Th131;
+        A16: v in {v} by TARSKI:def 1;
+        W1 /\ W2 = (0).V by A2,Def17;
+        then ex u being VECTOR of V st C = {u} by Th82;
+        hence thesis by A12,A15,A16,TARSKI:def 1;
+      end;
+      hence thesis;
+    end;
+    assume
+    A17: for C1 being Coset of W1, C2 being Coset of W2
+    ex v being VECTOR of V st C1 /\ C2 = {v};
+    A18: VW2 is Coset of W2 by Th83;
+    now
+      let u be VECTOR of V;
+      consider C1 being Coset of W1 such that
+      A19: u in C1 by Lm19;
+      consider v being VECTOR of V such that
+      A20: C1 /\ VW2 = {v} by A18,A17;
+      A21: v in {v} by TARSKI:def 1;
+      then v in C1 by A20,XBOOLE_0:def 4;
+      then consider v1 being VECTOR of V such that
+      A22: v1 in W1 and
+      A23: u - v1 = v by A19,Th89;
+      v in VW2 by A20,A21,XBOOLE_0:def 4;
+      then
+      A24: v in W2 by STRUCT_0:def 5;
+      u = v1 + v by A23,RLSUB_2:61;
+      hence u in W1 + W2 by A24,A22,Th92;
+    end;
+    hence the Z_ModuleStruct of V = W1 + W2 by Lm16;
+    VW1 is Coset of W1 by Th83;
+    then consider v being VECTOR of V such that
+    A25: VW1 /\ VW2 = {v} by A18,A17;
+    0.V in W1 by Th33;
+    then 0.V in VW1 by STRUCT_0:def 5;
+    then
+    A26: 0.V in {v} by A25,A1,XBOOLE_0:def 4;
+    the carrier of (0).V = {0.V} by Def10
+    .= VW1 /\ VW2 by A25,A26,TARSKI:def 1
+    .= the carrier of W1 /\ W2 by Def15;
+    hence thesis by Th45;
+  end;
+
+theorem
+  for V being Z_Module, W1,W2 being Submodule of V holds
+  W1 + W2 = the Z_ModuleStruct of V
+  iff for v being VECTOR of V ex v1, v2 being VECTOR of V
+  st v1 in W1 & v2 in W2 & v = v1 + v2 by Lm17;
+
+theorem Th134:
+  V is_the_direct_sum_of W1,W2 & v1 + v2 = u1 + u2 & v1 in
+  W1 & u1 in W1 & v2 in W2 & u2 in W2 implies v1 = u1 & v2 = u2
+  proof
+    reconsider C2 = v1 + W2 as Coset of W2 by Def13;
+    reconsider C1 = the carrier of W1 as Coset of W1 by Th83;
+    A1: v1 in C2 by Th58;
+    assume V is_the_direct_sum_of W1,W2;
+    then consider u being VECTOR of V such that
+    A2: C1 /\ C2 = {u} by Th132;
+    assume that
+    A3: v1 + v2 = u1 + u2 and
+    A4: v1 in W1 and
+    A5: u1 in W1 and
+    A6: v2 in W2 & u2 in W2;
+    A7: v2 - u2 in W2 by A6,Th39;
+    v1 in C1 by A4,STRUCT_0:def 5;
+    then v1 in C1 /\ C2 by A1,XBOOLE_0:def 4;
+    then
+    A8: v1 = u by A2,TARSKI:def 1;
+    u1 = (v1 + v2) - u2 by A3,RLSUB_2:61
+    .= v1 + (v2 - u2) by RLVECT_1:def 3;
+    then
+    A9: u1 in C2 by A7;
+    u1 in C1 by A5,STRUCT_0:def 5;
+    then
+    A10: u1 in C1 /\ C2 by A9,XBOOLE_0:def 4;
+    hence v1 = u1 by A2,A8,TARSKI:def 1;
+    u1 = u by A10,A2,TARSKI:def 1;
+    hence thesis by A3,A8,RLVECT_1:8;
+  end;
+
+theorem
+  V = W1 + W2 & (ex v st for v1,v2,u1,u2 st v1 + v2 = u1 + u2 &
+  v1 in W1 & u1 in W1 & v2 in W2 & u2 in W2 holds v1 = u1 & v2 = u2) implies
+  V is_the_direct_sum_of W1,W2
+  proof
+    assume
+    A1: V = W1 + W2;
+    the carrier of (0).V = {0.V} & (0).V is Submodule of W1 /\ W2
+    by Th54,Def10;
+    then
+    A2: {0.V} c= the carrier of W1 /\ W2 by Def9;
+    given v such that
+    A3: for v1, v2, u1, u2 st v1 + v2 = u1 + u2 & v1 in W1 & u1 in W1 &
+    v2 in W2 & u2 in W2 holds v1 = u1 & v2 = u2;
+    assume not thesis;
+    then W1 /\ W2 <> (0).V by A1,Def17;
+    then the carrier of W1 /\ W2 <> {0.V} by Def10;
+    then {0.V} c< the carrier of W1 /\ W2 by A2,XBOOLE_0:def 8;
+    then consider x such that
+    A4: x in the carrier of W1 /\ W2 and
+    A5: not x in {0.V} by XBOOLE_0:6;
+    A6: x <> 0.V by A5,TARSKI:def 1;
+    A7: x in W1 /\ W2 by A4,STRUCT_0:def 5;
+    then x in V by Th24;
+    then reconsider u = x as VECTOR of V by STRUCT_0:def 5;
+    consider v1, v2 such that
+    A8: v1 in W1 and
+    A9: v2 in W2 and
+    A10: v = v1 + v2 by A1,Lm17;
+    A11: v = v1 + v2 + 0.V by A10,RLVECT_1:4
+    .= (v1 + v2) + (u - u) by RLVECT_1:15
+    .= ((v1 + v2) + u) - u by RLVECT_1:def 3
+    .= ((v1 + u) + v2) - u by RLVECT_1:def 3
+    .= (v1 + u) + (v2 - u) by RLVECT_1:def 3;
+    x in W2 by A7,Th94;
+    then
+    A12: v2 - u in W2 by A9,Th39;
+    x in W1 by A7,Th94;
+    then v1 + u in W1 by A8,Th36;
+    then v2 - u = v2 by A3,A8,A9,A10,A11,A12
+    .= v2 - 0.V by RLVECT_1:13;
+    hence thesis by A6,RLVECT_1:23;
+  end;
+
+definition
+  let V,v,W1,W2;
+  assume
+  A1: V is_the_direct_sum_of W1,W2;
+  func v |-- (W1,W2) -> Element of [:the carrier of V, the carrier of V:]
+  means  :Def20:
+  v = it`1 + it`2 & it`1 in W1 & it`2 in W2;
+  existence
+  proof
+    W1 + W2 = the Z_ModuleStruct of V by A1,Def17;
+    then consider v1, v2 such that
+    A2: v1 in W1 & v2 in W2 & v = v1 + v2 by Lm17;
+    take [v1,v2];
+    [v1,v2]`1 = v1 by MCART_1:7;
+    hence thesis by A2,MCART_1:7;
+  end;
+  uniqueness
+  proof
+    let t1, t2 be
+      Element of [:the carrier of V, the carrier of V:];
+    assume v = t1`1 + t1`2 & t1`1 in W1 & t1`2 in W2 & v = t2`1 + t2`2 & t2`1
+    in W1 & t2`2 in W2;
+    then
+    A3: t1`1 = t2`1 & t1`2 = t2`2 by A1,Th134;
+    t1 = [t1`1,t1`2] by MCART_1:21;
+    hence thesis by A3,MCART_1:21;
+  end;
+end;
+
+theorem Th136:
+  V is_the_direct_sum_of W1,W2 implies (v |-- (W1,W2))`1 = (v |-- (W2,W1))`2
+  proof
+    assume
+    A1: V is_the_direct_sum_of W1,W2;
+    then
+    A2: (v |-- (W1,W2))`2 in W2 by Def20;
+    A3: V is_the_direct_sum_of W2,W1 by A1,Lm18;
+    then
+    A4: v = (v |-- (W2,W1))`2 + (v |-- (W2,W1))`1
+    & (v |-- (W2,W1))`1 in W2 by Def20;
+    A5: (v |-- (W2,W1))`2 in W1 by A3,Def20;
+    v = (v |-- (W1,W2))`1 + (v |-- (W1,W2))`2 & (v |-- (W1,W2))`1 in W1
+    by A1,Def20;
+    hence thesis by A1,A2,A4,A5,Th134;
+  end;
+
+theorem Th137:
+  V is_the_direct_sum_of W1,W2 implies (v |-- (W1,W2))`2 = (v |-- (W2,W1))`1
+  proof
+    assume
+    A1: V is_the_direct_sum_of W1,W2;
+    then
+    A2: (v |-- (W1,W2))`2 in W2 by Def20;
+    A3: V is_the_direct_sum_of W2,W1 by A1,Lm18;
+    then
+    A4: v = (v |-- (W2,W1))`2 + (v |-- (W2,W1))`1
+    & (v |-- (W2,W1))`1 in W2 by Def20;
+    A5: (v |-- (W2,W1))`2 in W1 by A3,Def20;
+    v = (v |-- (W1,W2))`1 + (v |-- (W1,W2))`2 & (v |-- (W1,W2))`1 in W1
+    by A1,Def20;
+    hence thesis by A1,A2,A4,A5,Th134;
+  end;
+
+theorem
+  for V being Z_Module,  W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W, v being VECTOR of V,
+  t being Element of [:the carrier of V, the carrier of V:]
+  holds t`1 + t`2 = v & t`1 in W & t`2 in L implies t = v |-- (W,L)
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of W,L by Th124;
+    hence thesis by Def20;
+  end;
+
+theorem
+  for V being Z_Module, W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W, v being VECTOR of V holds
+  (v |-- (W,L))`1 + (v |-- (W,L))`2 = v
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of W,L by Th124;
+    hence thesis by Def20;
+  end;
+
+theorem
+  for V being Z_Module, W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W, v being VECTOR of V holds
+  (v |-- (W,L))`1 in W & (v |-- (W,L))`2 in L
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of W,L by Th124;
+    hence thesis by Def20;
+  end;
+
+theorem
+  for V being Z_Module, W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W, v being VECTOR of V holds
+  (v |-- (W,L))`1 = (v |-- (L,W))`2
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of W,L by Th124;
+    hence thesis by Th136;
+  end;
+
+theorem
+  for V being Z_Module, W being with_Linear_Compl Submodule of V,
+  L being Linear_Compl of W, v being VECTOR of V holds
+  (v |-- (W,L))`2 = (v |-- (L,W))`1
+  proof
+    let V be Z_Module, W be with_Linear_Compl Submodule of V,
+    L be Linear_Compl of W;
+    V is_the_direct_sum_of W,L by Th124;
+    hence thesis by Th137;
+  end;
+
+reserve A1,A2,B for Element of Submodules(V);
+
+definition
+  let V;
+  func SubJoin(V) -> BinOp of Submodules(V) means  :Def21:
+  for A1, A2, W1, W2 st A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 + W2;
+  existence
+  proof
+    defpred P[Element of Submodules(V),Element of Submodules(V), Element of
+    Submodules(V)] means for W1, W2 st $1 = W1 & $2 = W2 holds $3 = W1 + W2;
+    A1: for A1, A2 ex B st P[A1,A2,B]
+    proof
+      let A1, A2;
+      reconsider W1 = A1, W2 = A2 as Submodule of V by Def16;
+      reconsider C = W1 + W2 as Element of Submodules(V) by Def16;
+      take C;
+      thus thesis;
+    end;
+    ex o being BinOp of Submodules(V) st for a, b being Element of Submodules
+    (V) holds P[a,b,o.(a,b)] from BINOP_1:sch 3(A1);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let o1, o2 be BinOp of Submodules(V);
+    assume
+    A2: for A1, A2, W1, W2 st A1 = W1 & A2 = W2 holds o1.(A1,A2) = W1 + W2;
+    assume
+    A3: for A1, A2, W1, W2 st A1 = W1 & A2 = W2 holds o2.(A1,A2) = W1 + W2;
+    now
+      let x, y be set;
+      assume
+      A4: x in Submodules(V) & y in Submodules(V);
+      then reconsider A = x, B = y as Element of Submodules(V);
+      reconsider W1 = x, W2 = y as Submodule of V by A4,Def16;
+      o1.(A,B) = W1 + W2 by A2;
+      hence o1.(x,y) = o2.(x,y) by A3;
+    end;
+    hence thesis by BINOP_1:1;
+  end;
+end;
+
+definition
+  let V;
+  func SubMeet(V) -> BinOp of Submodules(V) means  :Def22:
+  for A1, A2, W1, W2 st A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 /\ W2;
+  existence
+  proof
+    defpred P[Element of Submodules(V),Element of Submodules(V), Element of
+    Submodules(V)] means for W1, W2 st $1 = W1 & $2 = W2 holds $3 = W1 /\ W2;
+    A1: for A1, A2 ex B st P[A1,A2,B]
+    proof
+      let A1, A2;
+      reconsider W1 = A1, W2 = A2 as Submodule of V by Def16;
+      reconsider C = W1 /\ W2 as Element of Submodules(V) by Def16;
+      take C;
+      thus thesis;
+    end;
+    ex o being BinOp of Submodules(V) st for a,b being Element of
+    Submodules(V) holds P[a,b,o.(a,b)] from BINOP_1:sch 3(A1);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let o1, o2 be BinOp of Submodules(V);
+    assume
+    A2: for A1, A2, W1, W2 st A1 = W1 & A2 = W2 holds o1.(A1,A2) = W1 /\ W2;
+    assume
+    A3: for A1, A2, W1, W2 st A1 = W1 & A2 = W2 holds o2.(A1,A2) = W1 /\ W2;
+    now
+      let x, y be set;
+      assume
+      A4: x in Submodules(V) & y in Submodules(V);
+      then reconsider A = x, B = y as Element of Submodules(V);
+      reconsider W1 = x, W2 = y as Submodule of V by A4,Def16;
+      o1.(A,B) = W1 /\ W2 by A2;
+      hence o1.(x,y) = o2.(x,y) by A3;
+    end;
+    hence thesis by BINOP_1:1;
+  end;
+end;
+
+theorem Th143:
+  LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #) is Lattice
+  proof
+    set S = LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #);
+    A1: for A, B being Element of S holds A "/\" B = B "/\" A
+    proof
+      let A, B be Element of S;
+      reconsider W1 = A, W2 = B as Submodule of V by Def16;
+      thus A "/\" B = W1 /\ W2 by Def22
+      .= B "/\" A by Def22;
+    end;
+    A2: for A, B being Element of S holds (A "/\" B) "\/" B = B
+    proof
+      let A, B be Element of S;
+      reconsider W1 = A, W2 = B as strict Submodule of V by Def16;
+      reconsider AB = W1 /\ W2 as Element of S by Def16;
+      thus (A "/\" B) "\/" B = SubJoin(V).(AB,B) by Def22
+      .= (W1 /\ W2) + W2 by Def21
+      .= B by Lm10,Th45;
+    end;
+    A3: for A, B, C being Element of S holds
+    A "\/" (B "\/" C) = (A "\/" B) "\/" C
+    proof
+      let A, B, C be Element of S;
+      reconsider W1 = A, W2 = B, W3 = C as Submodule of V by Def16;
+      reconsider AB = W1 + W2, BC = W2 + W3 as Element of S by Def16;
+      thus A "\/" (B "\/" C) = SubJoin(V).(A,BC) by Def21
+      .= W1 + (W2 + W3) by Def21
+      .= (W1 + W2) + W3 by Th96
+      .= SubJoin(V).(AB,C) by Def21
+      .= (A "\/" B) "\/" C by Def21;
+    end;
+    A4: for A, B being Element of S holds A "/\" (A "\/" B) = A
+    proof
+      let A, B be Element of S;
+      reconsider W1 = A, W2 = B as strict Submodule of V by Def16;
+      reconsider AB = W1 + W2 as Element of S by Def16;
+      thus A "/\" (A "\/" B) = SubMeet(V).(A,AB) by Def21
+      .= W1 /\ (W1 + W2) by Def22
+      .= A by Lm11,Th45;
+    end;
+    A5: for A, B, C being Element of S holds
+    A "/\" (B "/\" C) = (A "/\" B) "/\" C
+    proof
+      let A, B, C be Element of S;
+      reconsider W1 = A, W2 = B, W3 = C as Submodule of V by Def16;
+      reconsider AB = W1 /\ W2, BC = W2 /\ W3 as Element of S by Def16;
+      thus A "/\" (B "/\" C) = SubMeet(V).(A,BC) by Def22
+      .= W1 /\ (W2 /\ W3) by Def22
+      .= (W1 /\ W2) /\ W3 by Th104
+      .= SubMeet(V).(AB,C) by Def22
+      .= (A "/\" B) "/\" C by Def22;
+    end;
+    for A, B being Element of S holds A "\/" B = B "\/" A
+    proof
+      let A, B be Element of S;
+      reconsider W1 = A, W2 = B as Submodule of V by Def16;
+      thus A "\/" B = W1 + W2 by Def21
+      .= B "\/" A by Def21;
+    end;
+    then S is join-commutative join-associative
+    meet-absorbing meet-commutative meet-associative join-absorbing
+    by A3,A2,A1,A5,A4,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    hence thesis;
+  end;
+
+registration
+  let V;
+  cluster LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #)
+  -> Lattice-like;
+  coherence by Th143;
+end;
+
+theorem Th144:
+  for V being Z_Module holds LattStr (# Submodules(V),
+  SubJoin(V), SubMeet(V) #) is lower-bounded
+  proof
+    let V be Z_Module;
+    set S = LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #);
+    ex C being Element of S st for A being Element of S holds C "/\" A = C &
+    A "/\" C = C
+    proof
+      reconsider C = (0).V as Element of S by Def16;
+      take C;
+      let A be Element of S;
+      reconsider W = A as Submodule of V by Def16;
+      thus C "/\" A = (0).V /\ W by Def22
+      .= C by Th107;
+      hence thesis;
+    end;
+    hence thesis by LATTICES:def 13;
+  end;
+
+theorem Th145:
+  for V being Z_Module holds LattStr (# Submodules(V),
+  SubJoin(V), SubMeet(V) #) is upper-bounded
+  proof
+    let V be Z_Module;
+    set S = LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #);
+    ex C being Element of S st for A being Element of S holds C "\/" A = C &
+    A "\/" C = C
+    proof
+      reconsider C = (Omega).V as Element of S by Def16;
+      take C;
+      let A be Element of S;
+      reconsider W = A as Submodule of V by Def16;
+      thus C "\/" A = (Omega).V + W by Def21
+      .= C by Th101;
+      hence thesis;
+    end;
+    hence thesis by LATTICES:def 14;
+  end;
+
+theorem
+  for V being Z_Module holds LattStr (# Submodules(V),
+  SubJoin(V), SubMeet(V) #) is 01_Lattice
+  proof
+    let V be Z_Module;
+    LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #) is lower-bounded
+    upper-bounded Lattice by Th144,Th145;
+    hence thesis;
+  end;
+
+theorem
+  for V being Z_Module holds LattStr (# Submodules(V),
+  SubJoin(V), SubMeet(V) #) is modular
+  proof
+    let V be Z_Module;
+    set S = LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #);
+    for A, B, C being Element of S st A [= C holds A "\/" (B "/\" C) = (A "\/"
+    B) "/\" C
+    proof
+      let A, B, C be Element of S;
+      reconsider W1 = A, W2 = B, W3 = C as strict Submodule of V by Def16;
+      assume
+      A1: A [= C;
+      reconsider AB = W1 + W2 as Element of S by Def16;
+      reconsider BC = W2 /\ W3 as Element of S by Def16;
+      W1 + W3 = A "\/" C by Def21
+      .= W3 by A1,LATTICES:def 3;
+      then
+      A2: W1 is Submodule of W3 by Th98;
+      thus A "\/" (B "/\" C) = SubJoin(V).(A,BC) by Def22
+      .= W1 + (W2 /\ W3) by Def21
+      .= (W1 + W2) /\ W3 by A2,Th118
+      .= SubMeet(V).(AB,C) by Def22
+      .= (A "\/" B) "/\" C by Def21;
+    end;
+    hence thesis by LATTICES:def 12;
+  end;
+
+theorem
+  for V being Z_Module, W1,W2,W3 being strict Submodule of V holds
+  W1 is Submodule of W2 implies W1 /\ W3 is Submodule of W2 /\ W3
+  proof
+    let V be Z_Module, W1,W2,W3 be strict Submodule of V;
+    set S = LattStr (# Submodules(V), SubJoin(V), SubMeet(V) #);
+    reconsider A = W1, B = W2, C = W3, AC = W1 /\ W3, BC = W2 /\ W3
+    as Element of S by Def16;
+    assume
+    A1: W1 is Submodule of W2;
+    A "\/" B = W1 + W2 by Def21
+    .= B by A1,Th98;
+    then A [= B by LATTICES:def 3;
+    then A "/\" C [= B "/\" C by LATTICES:9;
+    then
+    A2: (A "/\" C) "\/" (B "/\" C) = (B "/\" C) by LATTICES:def 3;
+    A3: B "/\" C = W2 /\ W3 by Def22;
+    (A "/\" C) "\/" (B "/\" C) = SubJoin(V).(SubMeet(V).(A,C),BC) by Def22
+    .= SubJoin(V).(AC,BC) by Def22
+    .= (W1 /\ W3) + (W2 /\ W3) by Def21;
+    hence thesis by A2,A3,Th98;
+  end;
+
+theorem
+  for V being Z_Module, W being strict Submodule of V holds
+  (for v being VECTOR of V holds v in W) implies
+  W = the Z_ModuleStruct of V by Lm16;
+
+theorem
+  ex C st v in C by Lm19;
+
+begin :: 4.Transformation of Abelian group to Z-module
+
+definition
+  let AG be non empty addLoopStr;
+  func Int-mult-left(AG) -> Function of
+  [:INT,the carrier of AG:], the carrier of AG means  :Def23:
+  for i being Element of INT, a being Element of AG holds
+  (i >= 0 implies it.(i,a) = (Nat-mult-left(AG)).(i,a)) &
+  (i < 0 implies it.(i,a) = (Nat-mult-left(AG)).(-i,-a));
+  existence
+  proof
+    defpred P[Element of INT,Element of AG,Element of AG] means
+    ($1 >= 0 implies $3 = (Nat-mult-left(AG)).($1,$2)) &
+    ($1 < 0 implies $3 = (Nat-mult-left(AG)).(-$1,-$2));
+    A1: for x being Element of INT for y being Element of AG
+    ex z being Element of AG st P[x,y,z]
+    proof
+      let x be Element of INT, y be Element of AG;
+      per cases;
+      suppose x >= 0;
+        then
+        reconsider x0=x as Element of NAT by INT_1:3;
+        reconsider z = (Nat-mult-left(AG)).(x0,y) as Element of AG;
+        P[x,y,z];
+        hence thesis;
+      end;
+      suppose A2: x < 0;
+        then
+        reconsider x0=-x as Element of NAT by INT_1:3;
+        reconsider z = (Nat-mult-left(AG)).(x0,-y) as Element of AG;
+        P[x,y,z] by A2;
+        hence thesis;
+      end;
+    end;
+    consider f being Function of [:INT,the carrier of AG:],the carrier of AG
+    such that
+    A3:  for x being Element of INT for y being Element of the carrier of AG
+    holds P[x,y,f.(x,y)] from BINOP_1:sch 3(A1);
+    take f;
+    thus thesis by A3;
+  end;
+  uniqueness
+  proof
+    let f1, f2 be Function of [:INT,the carrier of AG:], the carrier of AG;
+    assume
+    A4: for i being Element of INT,a being Element of AG holds
+    (i >= 0 implies f1.(i,a) = (Nat-mult-left(AG)).(i,a)) &
+    (i < 0 implies  f1.(i,a) = (Nat-mult-left(AG)).(-i,-a));
+    assume
+    A5: for i being Element of INT,a being Element of AG holds
+    (i >= 0 implies f2.(i,a) = (Nat-mult-left(AG)).(i,a)) &
+    (i < 0 implies f2.(i,a) = (Nat-mult-left(AG)).(-i,-a));
+    for x, y being set st x in INT & y in the carrier of AG
+    holds f1.(x,y)= f2.(x,y)
+    proof let x, y be set;
+      assume A6: x in INT & y in the carrier of AG;
+      then
+      reconsider x0=x as Element of INT;
+      reconsider y0=y as Element of AG by A6;
+      per cases;
+      suppose A7: 0 <= x0;
+        hence f1.(x,y) = (Nat-mult-left(AG)).(x0,y0) by A4
+        .= f2.(x,y) by A5,A7;
+      end;
+      suppose A8: 0 > x0;
+        hence f1.(x,y) = (Nat-mult-left(AG)).(-x0,-y0) by A4
+        .= f2.(x,y) by A5,A8;
+      end;
+    end;
+    hence f1=f2 by BINOP_1:def 21;
+  end;
+end;
+
+theorem
+  for R being non empty addLoopStr, a being Element of R,
+  i be Element of INT, i1 be Element of NAT st i=i1 holds
+  (Int-mult-left(R)).(i,a) = i1 * a by Def23;
+
+theorem Th152:
+  for R being non empty addLoopStr, a being Element of R,
+  i be Element of INT st i=0 holds
+  (Int-mult-left(R)).(i,a) = 0.R
+  proof
+    let R be non empty addLoopStr,
+    a be Element of R, i be Element of INT;
+    assume i=0;
+    hence (Int-mult-left(R)).(i,a) = 0 * a by Def23
+    .=0.R by BINOM:12;
+  end;
+
+theorem Th153:
+  for R being add-associative right_zeroed right_complementable
+  non empty addLoopStr,
+  i be Element of NAT holds
+  (Nat-mult-left(R)).(i,0.R) = 0.R
+  proof
+    let R being add-associative right_zeroed right_complementable
+    non empty addLoopStr,
+    i be Element of NAT;
+    defpred P[Element of NAT] means (Nat-mult-left(R)).($1,0.R) = 0.R;
+    A1: P[0] by BINOM:def 3;
+    A2: for n be Element of NAT st P[n] holds P[n+1]
+    proof
+      let n be Element of NAT;
+      assume A3:P[n];
+      (Nat-mult-left(R)).(n+1,0.R) = 0.R + 0.R by A3,BINOM:def 3
+      .= 0.R by RLVECT_1:4;
+      hence P[n+1];
+    end;
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    hence thesis;
+  end;
+
+theorem Th154:
+  for R being add-associative right_zeroed right_complementable
+  non empty addLoopStr,
+  i be Element of INT holds
+  (Int-mult-left(R)).(i,0.R) = 0.R
+  proof
+    let R being add-associative right_zeroed right_complementable
+    non empty addLoopStr,
+    i be Element of INT;
+    per cases;
+    suppose 0 <= i;
+      then
+      reconsider i1=i as Element of NAT by INT_1:3;
+      thus
+      (Int-mult-left(R)).(i,0.R) = (Nat-mult-left(R)).(i1,0.R) by Def23
+      .=0.R by Th153;
+    end;
+    suppose A1: 0 > i;
+      then
+      reconsider i1=-i as Element of NAT by INT_1:3;
+      thus (Int-mult-left(R)).(i,0.R) = (Nat-mult-left(R)).(i1,-(0.R))
+      by Def23,A1
+      .= (Nat-mult-left(R)).(i1,0.R) by RLVECT_1:12
+      .=0.R by Th153;
+    end;
+  end;
+
+theorem Th155:
+  for R being right_zeroed non empty addLoopStr, a being Element of R,
+  i be Element of INT st i = 1
+  holds (Int-mult-left(R)).(i,a) = a
+  proof
+    let R be right_zeroed non empty addLoopStr,
+    a be Element of R,
+    i be Element of INT;
+    assume i=1;
+    hence (Int-mult-left(R)).(i,a) = 1 * a by Def23
+    .= a by BINOM:13;
+  end;
+
+theorem Th156:
+  for R being Abelian right_zeroed add-associative right_complementable
+  non empty addLoopStr,
+  a being Element of R, i, j, k being Element of NAT
+  st i <= j & k = j-i holds
+  (Nat-mult-left(R)).(k,a)
+  = (Nat-mult-left(R)).(j,a) - (Nat-mult-left(R)).(i,a)
+  proof
+    let R be Abelian right_zeroed add-associative
+    right_complementable non empty addLoopStr,
+    a being Element of R, i, j, k being Element of NAT;
+    assume A1: i <= j & k = j-i;
+    A2:j*a = (k+i)*a by A1
+   .= k*a + i*a by BINOM:15;
+   thus (Nat-mult-left(R)).(j,a)-(Nat-mult-left(R)).(i,a)
+   = (k*a) +((i*a) -(i*a)) by A2,RLVECT_1:28
+   .= (k*a) + 0.R by RLVECT_1:15
+   .= (Nat-mult-left(R)).(k,a) by RLVECT_1:4;
+ end;
+
+theorem Th157:
+  for R being Abelian right_zeroed add-associative right_complementable
+  non empty addLoopStr,
+  a being Element of R, i being Element of NAT
+  holds -(Nat-mult-left(R)).(i,a) = (Nat-mult-left(R)).(i,-a)
+  proof
+    let R be Abelian right_zeroed add-associative right_complementable
+    non empty addLoopStr,
+    a being Element of R, i being Element of NAT;
+    defpred P[Element of NAT] means
+    (Nat-mult-left(R)).($1,a) + (Nat-mult-left(R)).($1,-a) =0.R;
+    A1: P[0]
+    proof
+      (Nat-mult-left(R)).(0,a) + (Nat-mult-left(R)).(0,-a)
+      = 0.R + (Nat-mult-left(R)).(0,-a) by BINOM:def 3
+      .= 0.R + 0.R by BINOM:def 3
+      .= 0.R by RLVECT_1:4;
+      hence thesis;
+    end;
+    A2: for n be Element of NAT st P[n] holds P[n+1]
+    proof
+      let n be Element of NAT;
+      assume A3:P[n];
+      (Nat-mult-left(R)).(n+1,a) + (Nat-mult-left(R)).(n+1,-a)
+      =a + (Nat-mult-left(R)).(n,a) + (Nat-mult-left(R)).(n+1,-a)
+      by BINOM:def 3
+      .= a + (Nat-mult-left(R)).(n,a) + (-a + (Nat-mult-left(R)).(n,-a))
+      by BINOM:def 3
+      .= a + (Nat-mult-left(R)).(n,a) + (Nat-mult-left(R)).(n,-a) + -a
+      by RLVECT_1:def 3
+      .= a + ((Nat-mult-left(R)).(n,a) + (Nat-mult-left(R)).(n,-a)) + -a
+      by RLVECT_1:def 3
+      .= a + -a by A3,RLVECT_1:4
+      .= 0.R by RLVECT_1:5;
+      hence P[n+1];
+    end;
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    then
+    (Nat-mult-left(R)).(i,a) + (Nat-mult-left(R)).(i,-a) =0.R;
+    hence thesis by RLVECT_1:6;
+  end;
+
+theorem Th158:
+  for R being Abelian right_zeroed add-associative right_complementable
+  non empty addLoopStr,
+  a being Element of R, i, j being Element of INT
+  st i in NAT & not j in NAT
+  holds (Int-mult-left(R)).(i+j,a)
+  = (Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(j,a)
+  proof
+    let R be Abelian right_zeroed add-associative
+    right_complementable non empty addLoopStr,
+    a be Element of R, i, j be Element of INT;
+    assume A1: i in NAT & not j in NAT;
+    then
+    reconsider i1=i as Element of NAT;
+    A2: j < 0 by A1,INT_1:3;
+    then
+    reconsider j1=-j as Element of NAT by INT_1:3;
+    A3: i+j is Element of INT by INT_1:def 2;
+    per cases;
+    suppose A4: j1 <= i1;
+      reconsider k1=i1-j1 as Element of NAT by A4,INT_1:5;
+      thus (Int-mult-left(R)).(i+j,a) = (Nat-mult-left(R)).(k1,a)
+      by A3,Def23
+      .= (Nat-mult-left(R)).(i1,a) - (Nat-mult-left(R)).(j1,a)
+      by Th156,A4
+      .=(Nat-mult-left(R)).(i1,a) + (Nat-mult-left(R)).(j1,-a)
+      by Th157
+      .=(Int-mult-left(R)).(i,a) + (Nat-mult-left(R)).(j1,-a)
+      by Def23
+      .=(Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(j,a) by A2,Def23;
+    end;
+    suppose A5: j1 > i1;
+      then
+      reconsider k1=j1-i1 as Element of NAT by INT_1:5;
+      A6: i1-j1 < 0 by A5,XREAL_1:49;
+      thus (Int-mult-left(R)).(i+j,a) = (Nat-mult-left(R)).(-(i1-j1),-a)
+      by A3,A6,Def23
+      .= (Nat-mult-left(R)).(k1,-a)
+      .= (Nat-mult-left(R)).(j1,-a) - (Nat-mult-left(R)).(i1,-a)
+      by Th156,A5
+      .=(Nat-mult-left(R)).(j1,-a) + (Nat-mult-left(R)).(i1,-(-a))
+      by Th157
+      .=(Nat-mult-left(R)).(j1,-a) + (Nat-mult-left(R)).(i1,a)
+      by RLVECT_1:17
+      .=(Int-mult-left(R)).(j,a) + (Nat-mult-left(R)).(i1,a)
+      by A2,Def23
+      .=(Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(j,a) by Def23;
+    end;
+  end;
+
+theorem Th159:
+  for R being Abelian right_zeroed add-associative
+  right_complementable non empty addLoopStr,
+  a being Element of R, i, j being Element of INT
+  holds (Int-mult-left(R)).(i+j,a)
+  = (Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(j,a)
+  proof
+    let R be Abelian right_zeroed add-associative right_complementable
+    non empty addLoopStr,
+    a being Element of R, i, j being Element of INT;
+    per cases;
+    suppose A1: i in NAT & j in NAT;
+      then
+      reconsider i1=i as Element of NAT;
+      reconsider j1=j as Element of NAT by A1;
+      A2: i+j is Element of INT by INT_1:def 2;
+      thus (Int-mult-left(R)).(i+j,a)
+      = (i1+j1)*a by A2,Def23
+      .= i1*a + j1*a by BINOM:15
+      .= (Int-mult-left(R)).(i,a) + (Nat-mult-left(R)).(j1,a) by Def23
+      .= (Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(j,a) by Def23;
+    end;
+    suppose i in NAT & not j in NAT;
+      hence (Int-mult-left(R)).(i+j,a)
+      = (Int-mult-left(R)).(i,a)
+      +(Int-mult-left(R)).(j,a) by Th158;
+    end;
+    suppose not i in NAT & j in NAT;
+      hence (Int-mult-left(R)).(i+j,a)
+      =(Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(j,a) by Th158;
+    end;
+    suppose not i in NAT & not j in NAT;
+      then
+      A3: i < 0 & j < 0 by INT_1:3;
+      then
+      reconsider i1=-i as Element of NAT by INT_1:3;
+      reconsider j1=-j as Element of NAT by A3,INT_1:3;
+      A4: -(i+j) = i1+j1;
+      A5: i+j is Element of INT by INT_1:def 2;
+      thus (Int-mult-left(R)).(i+j,a)
+      =(i1+j1)*(-a) by A3,A4,A5,Def23
+      .=i1*(-a) + j1*(-a) by BINOM:15
+      .= (Int-mult-left(R)).(i,a) + (Nat-mult-left(R)).(j1,-a)
+      by A3,Def23
+      .= (Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(j,a) by A3,Def23;
+    end;
+  end;
+
+theorem Th160:
+  for R being Abelian right_zeroed add-associative
+  right_complementable non empty addLoopStr,
+  a, b being Element of R, i being Element of NAT
+  holds (Nat-mult-left(R)).(i,a+b)
+  = (Nat-mult-left(R)).(i,a) + (Nat-mult-left(R)).(i,b)
+  proof
+    let R be Abelian right_zeroed add-associative right_complementable
+    non empty addLoopStr,
+    a, b be Element of R, i being Element of NAT;
+    defpred P[Element of NAT] means (Nat-mult-left(R)).($1,a+b)
+    = (Nat-mult-left(R)).($1,a) + (Nat-mult-left(R)).($1,b);
+    A1: P[0]
+    proof
+      (Nat-mult-left(R)).(0,a+b) = 0.R by BINOM:def 3
+      .= 0.R + 0.R by RLVECT_1:4
+      .= (Nat-mult-left(R)).(0,a) + 0.R by BINOM:def 3
+      .= (Nat-mult-left(R)).(0,a) + (Nat-mult-left(R)).(0,b) by BINOM:def 3;
+      hence thesis;
+    end;
+    A2: for n be Element of NAT st P[n] holds P[n+1]
+    proof
+      let n be Element of NAT;
+      assume A3:P[n];
+      (Nat-mult-left(R)).(n+1,a+b)
+      =(a+b) + (Nat-mult-left(R)).(n,a+b) by BINOM:def 3
+      .= (a+b) + (Nat-mult-left(R)).(n,a) + (Nat-mult-left(R)).(n,b)
+      by A3,RLVECT_1:def 3
+      .= a+ (Nat-mult-left(R)).(n,a) + b + (Nat-mult-left(R)).(n,b)
+      by RLVECT_1:def 3
+      .= (Nat-mult-left(R)).(n+1,a) + b + (Nat-mult-left(R)).(n,b)
+      by BINOM:def 3
+      .= (Nat-mult-left(R)).(n+1,a) + (b + (Nat-mult-left(R)).(n,b))
+      by RLVECT_1:def 3
+      .= (Nat-mult-left(R)).(n+1,a) + (Nat-mult-left(R)).(n+1,b)
+      by BINOM:def 3;
+      hence P[n+1];
+    end;
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    hence thesis;
+  end;
+
+theorem Th161:
+  for R being Abelian right_zeroed add-associative
+  right_complementable non empty addLoopStr,
+  a, b being Element of R, i being Element of INT
+  holds (Int-mult-left(R)).(i,a+b)
+  = (Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(i,b)
+  proof
+    let R be Abelian right_zeroed add-associative right_complementable
+    non empty addLoopStr,
+    a, b be Element of R, i be Element of INT;
+    per cases;
+    suppose 0 <= i;
+      then
+      reconsider i1=i as Element of NAT by INT_1:3;
+      thus (Int-mult-left(R)).(i,a+b)
+      = (Nat-mult-left(R)).(i1,a+b) by Def23
+      .= i1*a + i1*b by Th160
+      .= (Int-mult-left(R)).(i,a) + (Nat-mult-left(R)).(i1,b) by Def23
+      .= (Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(i,b) by Def23;
+    end;
+    suppose A1: 0 > i;
+      then
+      reconsider i1=-i as Element of NAT by INT_1:3;
+      (a+b) + ( (-a) + (-b ) )
+      = b + a + (-a) + (-b ) by RLVECT_1:def 3
+      .= b + (a + (-a)) + (-b ) by RLVECT_1:def 3
+      .= b + 0.R + (-b ) by RLVECT_1:5
+      .= b +  (-b ) by RLVECT_1:4
+      .= 0.R by RLVECT_1:5;
+      then
+      A2: -(a+b) = (-a) + (-b ) by RLVECT_1:6;
+      thus (Int-mult-left(R)).(i,a+b) = (Nat-mult-left(R)).(i1,-(a+b))
+      by Def23,A1
+      .=i1*(-a) + i1*(-b) by A2,Th160
+      .= (Int-mult-left(R)).(i,a) + (Nat-mult-left(R)).(i1,-b)
+      by A1,Def23
+      .= (Int-mult-left(R)).(i,a) + (Int-mult-left(R)).(i,b)
+      by A1,Def23;
+    end;
+  end;
+
+theorem Th162:
+  for R being Abelian right_zeroed add-associative
+  right_complementable non empty addLoopStr,
+  a being Element of R, i, j being Element of NAT holds
+  (Nat-mult-left(R)).(i*j,a) = (Nat-mult-left(R)).(i,(Nat-mult-left(R)).(j,a))
+  proof
+    let R be Abelian right_zeroed add-associative right_complementable
+    non empty addLoopStr,
+    a be Element of R, i, j be Element of NAT;
+    defpred P[Element of NAT] means (Nat-mult-left(R)).($1*j,a)
+    =(Nat-mult-left(R)).($1,(Nat-mult-left(R)).(j,a));
+    A1: P[0]
+    proof
+      (Nat-mult-left(R)).(0*j,a) = 0.R by BINOM:def 3
+      .= (Nat-mult-left(R)).(0,(Nat-mult-left(R)).(j,a)) by BINOM:def 3;
+      hence thesis;
+    end;
+    A2: for n be Element of NAT st P[n] holds P[n+1]
+    proof
+      let n be Element of NAT;
+      assume A3:P[n];
+      (Nat-mult-left(R)).((n+1)*j,a) = (j+(n*j))*a
+      .= j*a+(n*j)*a by BINOM:15
+      .= (Nat-mult-left(R)).(n+1,j*a) by A3,BINOM:def 3;
+      hence P[n+1];
+    end;
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+    hence thesis;
+  end;
+
+Lm20:
+for R being Abelian right_zeroed add-associative right_complementable
+non empty addLoopStr,
+a being Element of R, i, j being Element of INT st i <> 0 & j <> 0 holds
+(Int-mult-left(R)).(i*j,a) = (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a))
+proof
+  let R be Abelian right_zeroed add-associative right_complementable
+  non empty addLoopStr,
+  a be Element of R, i, j be Element of INT;
+  assume A1: i <> 0 & j <> 0;
+  per cases;
+  suppose A2: i in NAT & j in NAT;
+    then
+    reconsider i1=i as Element of NAT;
+    reconsider  j1=j as Element of NAT by A2;
+    A3: i*j is Element of INT by INT_1:def 2;
+    thus (Int-mult-left(R)).(i*j,a)
+    = (Nat-mult-left(R)).(i1*j1,a) by A3,Def23
+    .= (Nat-mult-left(R)).(i1,(Nat-mult-left(R)).(j1,a)) by Th162
+    .= (Nat-mult-left(R)).(i1,(Int-mult-left(R)).(j,a)) by Def23
+    .= (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a)) by Def23;
+  end;
+  suppose A4: i in NAT & not j in NAT;
+    then
+    A5: 0 < i & j < 0 by A1,INT_1:3;
+    reconsider i1= i as Element of NAT by A4;
+    reconsider j1=-j as Element of NAT by A5,INT_1:3;
+    A6: -(i*j) = i1*j1;
+    A7: j*i <  0 * i by A5,XREAL_1:68;
+    i*j is Element of INT by INT_1:def 2;
+    hence (Int-mult-left(R)).(i*j,a)
+    =(Nat-mult-left(R)).(i1*j1,-a) by A7,A6,Def23
+    .= (Nat-mult-left(R)).(i1,(Nat-mult-left(R)).(j1,-a)) by Th162
+    .= (Nat-mult-left(R)).(i1,(Int-mult-left(R)).(j,a)) by Def23,A5
+    .= (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a)) by Def23;
+  end;
+  suppose A8: not i in NAT & j in NAT;
+    then
+    A9: 0 < j & i < 0 by A1,INT_1:3;
+    then
+    reconsider i1= -i as Element of NAT by INT_1:3;
+    reconsider j1= j as Element of NAT by A8;
+    A10: -(i*j) = i1*j1;
+    A11: i*j < 0 * j by A9,XREAL_1:68;
+    A12: i*j is Element of INT by INT_1:def 2;
+    thus (Int-mult-left(R)).(i*j,a)
+    =(Nat-mult-left(R)).(i1*j1,-a) by A11,A10,A12,Def23
+    .= (Nat-mult-left(R)).(i1,(Nat-mult-left(R)).(j1,-a)) by Th162
+    .= (Nat-mult-left(R)).(i1,-((Nat-mult-left(R)).(j1,a))) by Th157
+    .= (Nat-mult-left(R)).(i1,-(Int-mult-left(R)).(j,a)) by Def23
+    .= (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a)) by A9,Def23;
+  end;
+  suppose not i in NAT & not j in NAT;
+    then
+    A13: i < 0 & j < 0 by INT_1:3;
+    then
+    reconsider i1=-i as Element of NAT by INT_1:3;
+    reconsider j1=-j as Element of NAT by A13,INT_1:3;
+    A14: i*j is Element of INT by INT_1:def 2;
+    -(Nat-mult-left(R)).(j1,a)  = (Nat-mult-left(R)).(j1,-a) by Th157;
+    then
+    (Nat-mult-left(R)).(j1,-a) + (Nat-mult-left(R)).(j1,a) = 0.R
+    by RLVECT_1:def 10;
+    then
+    A15: (Nat-mult-left(R)).(j1,a) = - (Nat-mult-left(R)).(j1,-a)
+    by RLVECT_1:def 10;
+    thus (Int-mult-left(R)).(i*j,a) =(Nat-mult-left(R)).(i1*j1,a)
+    by A14,Def23
+    .= (Nat-mult-left(R)).(i1,(Nat-mult-left(R)).(j1,a))
+    by Th162
+    .= (Nat-mult-left(R)).(i1,-((Int-mult-left(R)).(j,a)))
+    by A13,A15,Def23
+    .= (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a))
+    by A13,Def23;
+  end;
+end;
+
+Lm21:
+for R being Abelian right_zeroed add-associative right_complementable
+non empty addLoopStr,
+a being Element of R, i, j being Element of INT st i = 0 or j = 0 holds
+(Int-mult-left(R)).(i*j,a) = (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a))
+proof
+  let R be Abelian right_zeroed add-associative right_complementable
+  non empty addLoopStr,
+  a be Element of R, i, j be Element of INT;
+  assume A1: i = 0 or j = 0;
+  per cases by A1;
+  suppose A2: i = 0;
+    hence (Int-mult-left(R)).(i*j,a) = 0.R by Th152
+    .= (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a)) by A2,Th152;
+  end;
+  suppose A3: j = 0;
+    hence (Int-mult-left(R)).(i*j,a) = 0.R by Th152
+    .= (Int-mult-left(R)).(i,0.R) by Th154
+    .= (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a)) by Th152,A3;
+  end;
+end;
+
+theorem Th163:
+  for R being Abelian right_zeroed add-associative right_complementable
+  non empty addLoopStr,
+  a being Element of R, i, j being Element of INT holds
+  (Int-mult-left(R)).(i*j,a) = (Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a))
+  proof
+    let R be Abelian right_zeroed add-associative right_complementable
+    non empty addLoopStr,
+    a be Element of R, i, j be Element of INT;
+    per cases;
+    suppose i = 0 or j = 0;
+      hence (Int-mult-left(R)).(i*j,a)
+      =(Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a)) by Lm21;
+    end;
+    suppose not (i = 0 or j = 0);
+      hence (Int-mult-left(R)).(i*j,a)
+      =(Int-mult-left(R)).(i,(Int-mult-left(R)).(j,a)) by Lm20;
+    end;
+  end;
+
+theorem
+  for AG be non empty Abelian add-associative right_zeroed
+  right_complementable addLoopStr holds
+  Z_ModuleStruct(# the carrier of AG, the ZeroF of AG, the addF of AG,
+  Int-mult-left(AG) #) is Z_Module
+  proof
+    let AG be non empty Abelian add-associative right_zeroed
+    right_complementable addLoopStr;
+    reconsider
+    ZS = Z_ModuleStruct(# the carrier of AG, the ZeroF of AG, the addF of AG,
+    Int-mult-left(AG) #) as non empty Z_ModuleStruct;
+    set ML= the Mult of ZS;
+    set AD= the addF of ZS;
+    set CA= the carrier of ZS;
+    set Z0= the ZeroF of ZS;
+    set MLI = Int-mult-left(AG);
+    A1: for v, w being Element of ZS holds v + w = w + v
+    proof
+      let v, w being Element of ZS;
+      reconsider v1=v,w1=w as Element of AG;
+      thus v + w = v1+w1
+      .= w1+v1
+      .= w+v;
+    end;
+    A2: for u, v, w being Element of ZS holds (u + v) + w = u + (v + w)
+    proof
+      let u, v, w being Element of ZS;
+      reconsider u1=u,v1=v,w1=w as Element of AG;
+      thus (u + v) + w = u1+v1+w1
+      .= u1+(v1+w1) by RLVECT_1:def 3
+      .= u+(v+w);
+    end;
+    A3: for v being Element of ZS holds v + 0.ZS = v
+    proof
+      let v be VECTOR of ZS;
+      reconsider v1=v as Element of AG;
+      thus v + 0.ZS = v1+0.AG
+      .= v by RLVECT_1:def 4;
+    end;
+    A4: now
+      let v be VECTOR of ZS;
+      reconsider v1=v as Element of AG;
+      consider w1 being Element of AG such that
+      A5: v1+w1 = 0.AG by ALGSTR_0:def 11;
+      reconsider w=w1 as Element of ZS;
+      v+w = 0.ZS by A5;
+      hence v is right_complementable by ALGSTR_0:def 11;
+    end;
+    A6: for a, b be integer number, v being VECTOR of ZS
+    holds (a + b) * v = a * v + b * v
+    proof
+      let a, b be integer number, v being VECTOR of ZS;
+      reconsider a1=a,b1=b as Element of INT by INT_1:def 2;
+      reconsider v1=v as Element of AG;
+      thus (a+b) * v = MLI.(a1,v1) + MLI.(b1,v1) by Th159
+      .= a * v + b * v;
+    end;
+    A7: for a be integer number, v, w being VECTOR of ZS
+    holds a * (v + w) = a * v + a * w
+    proof
+      let a be integer number, v, w being VECTOR of ZS;
+      reconsider a1=a as Element of INT by INT_1:def 2;
+      reconsider v1=v,w1=w as Element of AG;
+      thus a * (v + w) = MLI.(a1,v1+w1)
+      .= MLI.(a1,v1) + MLI.(a1,w1) by Th161
+      .= a * v + a * w;
+    end;
+    A8: for a, b be integer number for v being VECTOR of
+    ZS holds (a * b) * v = a * (b * v)
+    proof
+      let a, b be integer number, v be VECTOR of ZS;
+      reconsider a1=a, b1=b as Element of INT by INT_1:def 2;
+      reconsider v1=v as Element of AG;
+      thus (a*b) * v = MLI.(a1,MLI.(b1,v1)) by Th163
+      .= a * (b * v);
+    end;
+    for v being VECTOR of ZS holds 1 * v = v
+    proof
+      let v be VECTOR of ZS;
+      reconsider i=1 as Element of INT by INT_1:def 2;
+      reconsider v1=v as Element of AG;
+      thus 1 * v = MLI.(i,v1)
+      .= v by Th155;
+    end;
+    hence thesis by A1,A2,A3,A4,A6,A7,A8,Def2,Def3,Def4,Def5,ALGSTR_0:def 16
+,RLVECT_1:def 2,def 3,def 4;
+end;
+

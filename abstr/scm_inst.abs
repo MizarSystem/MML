@@ -1,0 +1,175 @@
+:: On a Mathematical Model of Programs
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, XBOOLE_0, CARD_1, ZFMISC_1, FINSEQ_1, FUNCT_1,
+      RELAT_1, AMI_1, PARTFUN1, XXREAL_0, TARSKI, AMI_2, RECDEF_2, UNIALG_1,
+      AMISTD_2, VALUED_0, COMPOS_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, CARD_1, NUMBERS,
+      RELAT_1, FUNCT_1, PARTFUN1, VALUED_0, XXREAL_0, MCART_1, DOMAIN_1,
+      FINSEQ_1, FINSEQ_4, RECDEF_2, COMPOS_0;
+ constructors DOMAIN_1, FINSEQ_4, FINSEQ_2, VALUED_1, COMPOS_0, XTUPLE_0;
+ registrations XBOOLE_0, ORDINAL1, XREAL_0, FINSEQ_1, RELAT_1, CARD_1, FUNCT_1,
+      COMPOS_0, VALUED_0, XTUPLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+
+
+begin :: A small concrete machine
+
+reserve x,y,z for set;
+
+notation
+  synonym SCM-Halt for {};
+end;
+
+definition
+  redefine func SCM-Halt -> Element of Segm 9;
+end;
+
+definition
+  func SCM-Data-Loc equals
+:: SCM_INST:def 1
+  [:{1},NAT:];
+end;
+
+registration
+  cluster SCM-Data-Loc -> non empty;
+end;
+
+reserve I,J,K for Element of Segm 9,
+  i,a,a1,a2 for Element of NAT,
+  b,b1,b2,c,c1 for Element of SCM-Data-Loc;
+
+definition
+  func SCM-Instr -> non empty set equals
+:: SCM_INST:def 2
+  {[SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } }
+   \/ { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
+end;
+
+theorem :: SCM_INST:1
+  [0,{},{}] in SCM-Instr;
+
+registration
+  cluster SCM-Instr -> non empty;
+end;
+
+theorem :: SCM_INST:2
+  [6,<*a2*>,{}] in SCM-Instr;
+
+theorem :: SCM_INST:3
+  x in { 7, 8 } implies [x,<*a2*>,<*b2*>] in SCM-Instr;
+
+theorem :: SCM_INST:4
+  x in { 1,2,3,4,5} implies [x,{},<*b1,c1*>] in SCM-Instr;
+
+definition
+  let x be Element of SCM-Instr;
+  given mk, ml being Element of SCM-Data-Loc, I such that
+ x = [ I, {}, <*mk, ml*>];
+  func x address_1 -> Element of SCM-Data-Loc means
+:: SCM_INST:def 3
+
+  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.1;
+  func x address_2 -> Element of SCM-Data-Loc means
+:: SCM_INST:def 4
+
+  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.2;
+end;
+
+theorem :: SCM_INST:5
+  for x being Element of SCM-Instr, mk, ml being Element of SCM-Data-Loc, I
+   st x = [ I, {}, <*mk, ml*>] holds x address_1 = mk & x address_2 = ml;
+
+definition
+  let x be Element of SCM-Instr;
+  given mk being Element of NAT, I such that
+ x = [ I, <*mk*>, {}];
+  func x jump_address -> Element of NAT means
+:: SCM_INST:def 5
+ ex f being FinSequence of NAT st f = x`2_3 & it = f/.1;
+end;
+
+theorem :: SCM_INST:6
+  for x being Element of SCM-Instr, mk being Element of NAT, I st x = [
+  I, <*mk*>, {}] holds x jump_address = mk;
+
+definition
+  let x be Element of SCM-Instr;
+  given mk being Element of NAT, ml being Element of SCM-Data-Loc, I such that
+ x = [ I, <*mk*>, <*ml*>];
+  func x cjump_address -> Element of NAT means
+:: SCM_INST:def 6
+
+  ex mk being Element of NAT st <*mk*> = x`2_3 & it = <*mk*>/.1;
+  func x cond_address -> Element of SCM-Data-Loc means
+:: SCM_INST:def 7
+
+  ex ml being Element of SCM-Data-Loc st <*ml*> = x`3_3 & it = <*ml*>/.1;
+end;
+
+theorem :: SCM_INST:7
+  for x being Element of SCM-Instr, mk being Element of NAT, ml being
+Element of SCM-Data-Loc, I
+ st x = [ I, <*mk*>, <*ml*>] holds x cjump_address = mk &
+  x cond_address = ml;
+
+theorem :: SCM_INST:8
+ SCM-Instr c= [:NAT,NAT*,proj2 SCM-Instr:];
+
+registration
+ cluster proj2 SCM-Instr -> FinSequence-membered;
+end;
+
+theorem :: SCM_INST:9
+ for x being Element of SCM-Instr holds
+  x in {[SCM-Halt,{},{}] } & InsCode x = 0 or
+  x in { [J,<*a*>,{}] : J = 6 } & InsCode x = 6 or
+  x in { [K,<*a1*>,<*b1*>] : K in { 7,8 } }
+        & (InsCode x = 7 or InsCode x = 8) or
+  x in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} }
+    & (InsCode x = 1 or InsCode x = 2 or InsCode x = 3
+      or InsCode x = 4 or InsCode x = 5);
+
+begin :: from AMI_3
+
+reserve i,j,k for Element of NAT;
+
+registration
+ cluster SCM-Instr -> standard-ins;
+end;
+
+reserve I,J,K for Element of Segm 9,
+  a,a1,a2 for Element of NAT,
+  b,b1,b2,c,c1 for Element of SCM-Data-Loc;
+
+theorem :: SCM_INST:10
+  for l being Element of SCM-Instr holds InsCode l <= 8;
+
+registration
+ cluster SCM-Instr -> homogeneous;
+end;
+
+reserve T for InsType of SCM-Instr,
+        I for Element of SCM-Instr;
+
+registration
+ cluster SCM-Instr -> J/A-independent;
+ end;
+
+registration
+ cluster SCM-Instr -> with_halt;
+end;

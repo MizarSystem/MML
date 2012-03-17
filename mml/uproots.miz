@@ -2,7 +2,7 @@
 ::  by Piotr Rudnicki
 ::
 :: Received December 30, 2003
-:: Copyright (c) 2003-2011 Association of Mizar Users
+:: Copyright (c) 2003-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,26 +21,26 @@ environ
       PBOOLE, XREAL_0, SGRAPH1, FINSOP_1, BINOP_1, GROUP_1, STRUCT_0, POLYNOM1,
       POLYNOM3, AFINSQ_1, MESFUNC1, ALGSEQ_1, VECTSP_1, POLYNOM5, LATTICES,
       VECTSP_2, COMPLFLD, POLYNOM2, FVSUM_1, MEMBERED, CLASSES1, UPROOTS;
- notations TARSKI, XBOOLE_0, XCMPLX_0, XXREAL_0, SUBSET_1, ORDINAL1, CARD_1,
+ notations TARSKI, XBOOLE_0,
+      XTUPLE_0, XCMPLX_0, XXREAL_0, SUBSET_1, ORDINAL1, CARD_1,
       NUMBERS, XREAL_0, ZFMISC_1, REAL_1, VECTSP_2, BINOP_1, RELAT_1, FUNCT_1,
       PBOOLE, RELSET_1, PARTFUN1, FINSEQ_1, FINSEQ_2, DOMAIN_1, FUNCT_2,
       XXREAL_2, VALUED_0, NAT_1, NAT_D, STRUCT_0, ALGSTR_0, RLVECT_1, VFUNCT_1,
       VECTSP_1, FINSOP_1, NORMSP_1, GROUP_4, RVSUM_1, ALGSEQ_1, COMPLFLD,
-      BHSP_1, POLYNOM3, POLYNOM4, POLYNOM5, FINSET_1, MCART_1, FUNCT_4,
-      FUNCOP_1, CLASSES1, FVSUM_1, WSIERP_1, MEMBERED, GROUP_1, RECDEF_1,
-      PRE_POLY;
+      POLYNOM3, POLYNOM4, POLYNOM5, FINSET_1, MCART_1, FUNCT_4, FUNCOP_1,
+      CLASSES1, FVSUM_1, WSIERP_1, MEMBERED, GROUP_1, RECDEF_1, PRE_POLY;
  constructors WELLORD2, SETWISEO, REAL_1, FINSEQOP, FINSOP_1, NAT_D, WSIERP_1,
-      VECTSP_2, REALSET2, ALGSTR_1, GROUP_4, BHSP_1, MATRIX_2, MONOID_0,
-      GOBOARD1, POLYNOM2, POLYNOM4, POLYNOM5, SEQ_1, RECDEF_1, BINOP_2,
-      CLASSES1, XXREAL_2, RELSET_1, FUNCT_7, FVSUM_1, VFUNCT_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1,
-      MEMBERED, FINSEQ_1, STRUCT_0, VECTSP_1, COMPLFLD, ALGSTR_1, MONOID_0,
-      PRE_POLY, POLYNOM3, POLYNOM4, POLYNOM5, FINSEQ_2, VALUED_0, XXREAL_2,
-      FUNCT_2, RELSET_1, GROUP_1, VFUNCT_1;
+      VECTSP_2, REALSET2, ALGSTR_1, GROUP_4, MATRIX_2, GOBOARD1, POLYNOM2,
+      POLYNOM4, POLYNOM5, SEQ_1, RECDEF_1, BINOP_2, CLASSES1, XXREAL_2,
+      RELSET_1, FUNCT_7, FVSUM_1, VFUNCT_1, XTUPLE_0;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1, MEMBERED,
+      FINSEQ_1, STRUCT_0, VECTSP_1, COMPLFLD, ALGSTR_1, PRE_POLY, POLYNOM3,
+      POLYNOM4, POLYNOM5, FINSEQ_2, VALUED_0, XXREAL_2, FUNCT_2, RELSET_1,
+      GROUP_1, VFUNCT_1, XTUPLE_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, VECTSP_2, FUNCT_1, POLYNOM3, POLYNOM5, FINSEQ_2, RVSUM_1,
-      GROUP_4, RLVECT_1, FUNCOP_1, RELAT_1, STRUCT_0;
+      GROUP_4, RLVECT_1, FUNCOP_1, RELAT_1, STRUCT_0, XTUPLE_0;
  theorems GROUP_1, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2,
       RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, VECTSP_1, POLYNOM5, INT_1, AXIOMS,
       RVSUM_1, FVSUM_1, FINSEQ_3, FINSEQ_2, POLYNOM4, POLYNOM3, FUNCT_7,
@@ -54,7 +54,7 @@ environ
 
 begin :: Preliminaries
 
-theorem Th2:
+theorem Th1:
   for f being FinSequence of NAT st for i being Element of NAT st i
   in dom f holds f.i <> 0 holds Sum f = len f iff f = (len f) |-> 1
 proof
@@ -105,8 +105,6 @@ A15:    j in Seg len g;
         then 0 qua Nat+1 <= g.a by NAT_1:13;
         hence h1.j <= g1.j by A15,FUNCOP_1:7;
       end;
-      len h1 = len g1 by CARD_1:def 7;
-      then
 A16:  Sum h1 <= Sum g1 by A14,RVSUM_1:82;
       Sum h = n*1 by A9,RVSUM_1:80
         .= n;
@@ -148,7 +146,7 @@ end;
 :: Stolen from POLYNOM2
 
 scheme
-  IndFinSeq0 { k() -> natural number, P[set]} : for i being Element of NAT st
+  IndFinSeq0 { k() -> Nat, P[set]} : for i being Element of NAT st
   1 <= i & i <= k() holds P[i]
 provided
 A1: P[1] and
@@ -181,7 +179,7 @@ A8: k9 < k by XXREAL_0:1;
   end;
 end;
 
-theorem Th3:
+theorem Th2:
   for L be add-associative right_zeroed right_complementable non
 empty addLoopStr, r be FinSequence of L st len r >= 2 & for k being Element of
   NAT st 2 < k & k in dom r holds r.k = 0.L holds Sum r = r/.1 + r/.2
@@ -456,7 +454,7 @@ registration
   coherence;
 end;
 
-theorem Th5:
+theorem Th3:
   for A being finite set holds len canFS A = card A
 proof
   let A be finite set;
@@ -469,26 +467,26 @@ registration
   cluster canFS A -> non empty;
   coherence
   proof
-    len canFS A = card A by Th5;
+    len canFS A = card A by Th3;
     hence thesis;
   end;
 end;
 
-theorem Th6:
+theorem Th4:
   for a being set holds canFS({a}) = <* a *>
 proof
   let a be set;
 A1: rng canFS({a}) = {a} by FUNCT_2:def 3;
-  len canFS({a}) = card {a} by Th5
+  len canFS({a}) = card {a} by Th3
     .= 1 by CARD_1:30;
   hence thesis by A1,FINSEQ_1:39;
 end;
 
-theorem Th7:
+theorem Th5:
   for A being finite set holds (canFS A)" is Function of A, Seg card A
 proof
   let A be finite set;
-  len canFS A = card A by Th5;
+  len canFS A = card A by Th3;
   then dom canFS A = Seg card A by FINSEQ_1:def 3;
   then
 A1: rng ((canFS A)") = Seg card A by FUNCT_1:33;
@@ -563,7 +561,7 @@ A11:      b.x <> 0 by A10,PRE_POLY:def 7;
   end;
 end;
 
-theorem Th8:
+theorem Th6:
   for X being set, S being finite Subset of X, n being Element of
   NAT, i being set st not i in S holds (S, n)-bag.i = 0
 proof
@@ -575,7 +573,7 @@ A1: not i in S;
     .= 0 by PRE_POLY:52;
 end;
 
-theorem Th9:
+theorem Th7:
   for X being set, S being finite Subset of X, n being Element of
   NAT, i being set st i in S holds (S, n)-bag.i = n
 proof
@@ -587,13 +585,13 @@ A1: i in S;
     .= n by A1,FUNCOP_1:7;
 end;
 
-theorem Th10:
+theorem Th8:
   for X being set, S being finite Subset of X, n being Element of
   NAT st n <> 0 holds support (S, n)-bag = S
 proof
   let X be set, S be finite Subset of X, n be Element of NAT;
   assume n <> 0;
-  then for x being set holds x in S iff (S, n)-bag.x <> 0 by Th8,Th9;
+  then for x being set holds x in S iff (S, n)-bag.x <> 0 by Th6,Th7;
   hence thesis by PRE_POLY:def 7;
 end;
 
@@ -609,19 +607,19 @@ A1: S is empty or n = 0;
     per cases;
     suppose
       i in S;
-      hence (S, n)-bag.i = 0 by A1,Th9
+      hence (S, n)-bag.i = 0 by A1,Th7
         .= (EmptyBag X).i by PRE_POLY:52;
     end;
     suppose
       not i in S;
-      hence (S, n)-bag.i = 0 by Th8
+      hence (S, n)-bag.i = 0 by Th6
         .= (EmptyBag X).i by PRE_POLY:52;
     end;
   end;
   hence thesis by PBOOLE:3;
 end;
 
-theorem Th12:
+theorem Th10:
   for X being set, S, T being finite Subset of X, n being Element
   of NAT st S misses T holds (S \/ T, n)-bag = (S,n)-bag + (T,n)-bag
 proof
@@ -638,9 +636,9 @@ A2:   not i in S \/ T;
       then
 A3:   not i in T by XBOOLE_0:def 3;
 A4:   not i in S by A2,XBOOLE_0:def 3;
-      thus (S \/ T, n)-bag.i = 0 by A2,Th8
-        .= (S,n)-bag.i + (0 qua Nat) by A4,Th8
-        .= (S,n)-bag.i + (T,n)-bag.i by A3,Th8
+      thus (S \/ T, n)-bag.i = 0 by A2,Th6
+        .= (S,n)-bag.i + (0 qua Nat) by A4,Th6
+        .= (S,n)-bag.i + (T,n)-bag.i by A3,Th6
         .= ((S,n)-bag + (T,n)-bag).i by PRE_POLY:def 5;
     end;
     suppose
@@ -648,9 +646,9 @@ A5:   i in S;
       then
 A6:   not i in T by A1,XBOOLE_0:def 4;
       i in S \/ T by A5,XBOOLE_0:def 3;
-      hence (S \/ T, n)-bag.i = n by Th9
-        .= (S,n)-bag.i + (0 qua Nat) by A5,Th9
-        .= (S,n)-bag.i +(T,n)-bag.i by A6,Th8
+      hence (S \/ T, n)-bag.i = n by Th7
+        .= (S,n)-bag.i + (0 qua Nat) by A5,Th7
+        .= (S,n)-bag.i +(T,n)-bag.i by A6,Th6
         .= ((S,n)-bag + (T,n)-bag).i by PRE_POLY:def 5;
     end;
     suppose
@@ -658,9 +656,9 @@ A7:   i in T;
       then
 A8:   not i in S by A1,XBOOLE_0:def 4;
       i in S \/ T by A7,XBOOLE_0:def 3;
-      hence (S \/ T, n)-bag.i = n by Th9
-        .= (T,n)-bag.i + (0 qua Nat) by A7,Th9
-        .= (S,n)-bag.i + (T,n)-bag.i by A8,Th8
+      hence (S \/ T, n)-bag.i = n by Th7
+        .= (T,n)-bag.i + (0 qua Nat) by A7,Th7
+        .= (S,n)-bag.i + (T,n)-bag.i by A8,Th6
         .= ((S,n)-bag + (T,n)-bag).i by PRE_POLY:def 5;
     end;
   end;
@@ -755,7 +753,7 @@ A11: n = Sum f & f = b*cS;
   end;
 end;
 
-theorem Th13:
+theorem Th11:
   for A being set, b being Rbag of A st b = EmptyBag A holds Sum b = 0
 proof
   let A be set, b be Rbag of A;
@@ -766,7 +764,7 @@ proof
   hence thesis by Def3,RVSUM_1:72;
 end;
 
-theorem Th14:
+theorem Th12:
   for A being set, b being bag of A st Sum b = 0 holds b = EmptyBag A
 proof
   let A be set, b be bag of A;
@@ -800,7 +798,7 @@ A9:   f.i <> 0 by A6,A8,PRE_POLY:def 7;
   hence thesis by BAGORDER:19;
 end;
 
-theorem Th15:
+theorem Th13:
   for A being set, S being finite Subset of A, b being bag of A
   holds S = support b & degree b = card S iff b = (S, 1)-bag
 proof
@@ -809,7 +807,7 @@ proof
   set f = b*cS;
 A1: dom b = A by PARTFUN1:def 2;
   set g = (card S) |-> 1;
-A2: len cS = card S by Th5;
+A2: len cS = card S by Th3;
 A3: rng cS = S by FUNCT_2:def 3;
   then
 A4: dom f = dom cS by A1,RELAT_1:27;
@@ -831,8 +829,8 @@ A9: F = b*cS by A6,Def4;
       hence F.i <> 0 by A6,PRE_POLY:def 7;
     end;
     then
-A10: F = len F |-> 1 by A2,A5,A7,A8,A9,Th2;
-A11: support b = support sb by A6,Th10;
+A10: F = len F |-> 1 by A2,A5,A7,A8,A9,Th1;
+A11: support b = support sb by A6,Th8;
     now
       thus dom b = dom sb by A1,PARTFUN1:def 2;
       let x be set;
@@ -848,7 +846,7 @@ A14:    cS".x in Seg len F by A4,A9,FINSEQ_1:def 3;
         hence b.x = b.(cS.(cS".x)) by A12,FUNCT_1:35
           .= F.(cS".x) by A9,A13,FUNCT_1:13
           .= 1 by A10,A14,FUNCOP_1:7
-          .= sb.x by A6,A12,Th9;
+          .= sb.x by A6,A12,Th7;
       end;
       suppose
 A15:    not x in support b;
@@ -880,18 +878,18 @@ A20: dom f = Seg card S by A4,A2,FINSEQ_1:def 3;
     assume
 A21: i in dom f;
     hence f.i = b.(cS.i) by FUNCT_1:12
-      .= 1 by A4,A19,A18,A21,Th9,FUNCT_1:3
+      .= 1 by A4,A19,A18,A21,Th7,FUNCT_1:3
       .= g.i by A20,A21,FUNCOP_1:7;
   end;
   then
 A22: f = g by FINSEQ_2:9;
-  thus S = support b by A18,Th10;
+  thus S = support b by A18,Th8;
   then degree b = Sum f by Def4;
   hence degree b = (card S)*1 by A22,RVSUM_1:80
     .= card S;
 end;
 
-theorem Th16:
+theorem Th14:
   for A being set, S being finite Subset of A, b being Rbag of A
   st support b c= S ex f being FinSequence of REAL st f = b*canFS(S) & Sum b =
   Sum f
@@ -903,10 +901,10 @@ A2: card support b <= card S by A1,NAT_1:43;
 A3: rng cs = support b by FUNCT_2:def 3;
   set cS = canFS(S);
   set f = b*cS;
-  len cS = card S by Th5;
+  len cS = card S by Th3;
   then
 A4: dom cS = Seg card S by FINSEQ_1:def 3;
-  len cs = card support b by Th5;
+  len cs = card support b by Th3;
   then
 A5: dom cs = Seg card support b by FINSEQ_1:def 3;
   consider g being FinSequence of REAL such that
@@ -959,7 +957,7 @@ A19: card S = (card support b) + d and
     rng canFS(dd) = dd & dd c= NAT by A18,FUNCT_2:def 3,XBOOLE_1:1;
     then reconsider cdd = canFS(dd) as FinSequence of NAT by FINSEQ_1:def 4;
     set cdi = cdd qua Function";
-    reconsider cdi as Function of dd, Seg card dd by Th7;
+    reconsider cdi as Function of dd, Seg card dd by Th5;
     reconsider cdi as Function of dd, NAT by FUNCT_2:7;
     deffunc Z(set) = cdi /. $1 + card support b;
     consider z being Function such that
@@ -977,8 +975,8 @@ A23:    x in dom cSr and
 A24:    y = cSr.x by FUNCT_1:def 3;
 A25:    cSr.x = cS.x by A23,FUNCT_1:47;
         x in dom cS by A23,RELAT_1:57;
-        then reconsider j = x as Element of NAT by A23;
-A26:    x in findom f \ dd by A23,RELAT_1:57;
+        then reconsider j = x as Element of NAT;
+A26:    x in findom f \ dd by A23;
         then not j in dd by XBOOLE_0:def 5;
         then
 A27:    f.j <> 0 by A26;
@@ -1070,7 +1068,7 @@ A45:    f.x <> 0;
 A46: dom (cs"*cS) \/ dom z = dom F by TARSKI:1;
     then
 A47: dom p = dom F by FUNCT_4:def 1;
-    len cdd = card dd by Th5;
+    len cdd = card dd by Th3;
     then
 A48: dom cdd = Seg d by A19,A35,FINSEQ_1:def 3;
     then
@@ -1210,7 +1208,7 @@ A83:    cdi.x in Seg card dd by A20,A81,FUNCT_2:5;
         dom cdi = dd by FUNCT_2:def 1;
         then
 A84:    cdi /. x = cdi.x by A20,A81,PARTFUN1:def 6;
-        hence f.x = h.(cdix) by A19,A35,A20,A80,A81,FUNCOP_1:7,FUNCT_2:5
+        thus f.x = h.(cdix) by A80
           .= F.px by A10,A19,A62,A35,A82,A84,A83,FINSEQ_1:def 7
           .= (F*p).x by A12,A42,A78,A79,FUNCT_1:12;
       end;
@@ -1332,7 +1330,7 @@ A110: Sum gr = Sum gr + Sum h .= Sum F by RVSUM_1:75;
   end;
 end;
 
-theorem Th17:
+theorem Th15:
   for A being set, b, b1, b2 being Rbag of A st b = b1 + b2 holds
   Sum b = Sum b1 + Sum b2
 proof
@@ -1348,7 +1346,7 @@ A3: dom b1 = A by PARTFUN1:def 2;
   set cS = canFS SS;
   consider f1r being FinSequence of REAL such that
 A4: f1r = b1*canFS(SS) and
-A5: Sum b1 = Sum f1r by Th16,XBOOLE_1:7;
+A5: Sum b1 = Sum f1r by Th14,XBOOLE_1:7;
 A6: rng cS = SS by FUNCT_2:def 3;
   then
 A7: dom f1r = dom cS by A3,A4,RELAT_1:27;
@@ -1357,7 +1355,7 @@ A8: b = b1 + b2;
   then S c= SS by PRE_POLY:75;
   then consider f being FinSequence of REAL such that
 A9: f = b*canFS(SS) and
-A10: Sum b = Sum f by Th16;
+A10: Sum b = Sum f by Th14;
   dom b = A by PARTFUN1:def 2;
   then
 A11: dom f = dom cS by A9,A6,RELAT_1:27;
@@ -1365,7 +1363,7 @@ A11: dom f = dom cS by A9,A6,RELAT_1:27;
 A12: len f1r = len f by A7,FINSEQ_3:29;
   consider f2r being FinSequence of REAL such that
 A13: f2r = b2*canFS(SS) and
-A14: Sum b2 = Sum f2r by Th16,XBOOLE_1:7;
+A14: Sum b2 = Sum f2r by Th14,XBOOLE_1:7;
 A15: dom f2r = dom cS by A1,A13,A6,RELAT_1:27;
 A16: now
     let k be Element of NAT such that
@@ -1381,7 +1379,7 @@ A19: f.k = b.(cS.k) by A9,A11,A7,A17,FUNCT_1:12;
   hence thesis by A10,A5,A14,A12,A16,INTEGRA1:21;
 end;
 
-theorem Th18: :: GROUP_4:18 but about a different Product
+theorem Th16: :: GROUP_4:18 but about a different Product
   for L being associative commutative unital non empty multMagma
 , f, g being FinSequence of L, p being Permutation of dom f st g = f * p holds
   Product(g) = Product(f)
@@ -1403,7 +1401,7 @@ definition
   p <> 0_. L;
 end;
 
-theorem Th19:
+theorem Th17:
   for L being non empty ZeroStr, p being Polynomial of L holds p
   is non-zero iff len p > 0
 proof
@@ -1440,11 +1438,11 @@ registration
   correctness
   proof
     len <%x, 1.L%> = 2 by POLYNOM5:40;
-    hence thesis by Th19;
+    hence thesis by Th17;
   end;
 end;
 
-theorem Th20:
+theorem Th18:
   for L being non empty ZeroStr, p being Polynomial of L st len p
   > 0 holds p.(len p -'1) <> 0.L
 proof
@@ -1455,7 +1453,7 @@ proof
   hence thesis by ALGSEQ_1:10;
 end;
 
-theorem Th21:
+theorem Th19:
   for L being non empty ZeroStr, p being AlgSequence of L st len p
   = 1 holds p = <%p.0%> & p.0 <> 0.L
 proof
@@ -1465,7 +1463,7 @@ A1: len p = 1;
   hence thesis by A1,ALGSEQ_1:14;
 end;
 
-theorem Th22: :: from POLYNOM4:5 right-distributive
+theorem Th20: :: from POLYNOM4:5 right-distributive
   for L be add-associative right_zeroed right_complementable
   right-distributive non empty doubleLoopStr, p be Polynomial of L holds p*'(
   0_.(L)) = 0_.(L)
@@ -1504,7 +1502,7 @@ for
   end;
 end;
 
-theorem Th23:
+theorem Th21:
   for L being add-associative right_zeroed right_complementable
 distributive domRing-like non empty doubleLoopStr, p, q being Polynomial of L
   st p*'q = 0_. L holds p = 0_. L or q = 0_. L
@@ -1580,7 +1578,7 @@ registration
 A1: 0_. L = 0.PRL by POLYNOM3:def 10;
     assume x*y = 0.PRL;
     then xp*'yp = 0_. L by A1,POLYNOM3:def 10;
-    hence thesis by A1,Th23;
+    hence thesis by A1,Th21;
   end;
 end;
 
@@ -1590,7 +1588,7 @@ registration
   correctness
   proof
     p <> 0_. L & q <> 0_. L by Def5;
-    then p*'q <> 0_. L by Th23;
+    then p*'q <> 0_. L by Th21;
     hence thesis by Def5;
   end;
 end;
@@ -1626,7 +1624,7 @@ A3: x in Roots q;
   end;
 end;
 
-theorem Th25:
+theorem Th23:
   for L being domRing, p, q being Polynomial of L holds Roots (p*'
   q) = Roots p \/ Roots q
 proof
@@ -1682,7 +1680,7 @@ A5:   x in Roots q;
   hence thesis by TARSKI:1;
 end;
 
-theorem Th26:
+theorem Th24:
   for L being add-associative right_zeroed right_complementable
   distributive non empty doubleLoopStr, p being (Polynomial of L), pc being (
   Element of Polynom-Ring L) st p = pc holds -p = -pc
@@ -1699,7 +1697,7 @@ A1: p = pc;
   hence thesis by RLVECT_1:def 10;
 end;
 
-theorem Th27:
+theorem Th25:
   for L being add-associative right_zeroed right_complementable
   distributive non empty doubleLoopStr, p, q being (Polynomial of L), pc, qc
   being (Element of Polynom-Ring L) st p= pc & q = qc holds p-q = pc-qc
@@ -1709,11 +1707,11 @@ proof
   Polynom-Ring L) such that
 A1: p = pc and
 A2: q = qc;
-  -q = -qc by A2,Th26;
+  -q = -qc by A2,Th24;
   hence thesis by A1,POLYNOM3:def 10;
 end;
 
-theorem Th28:
+theorem Th26:
   for L being Abelian add-associative right_zeroed
   right_complementable distributive non empty doubleLoopStr, p, q, r being (
   Polynomial of L) holds p*'q-p*'r = p*'(q-r)
@@ -1722,14 +1720,14 @@ proof
   distributive non empty doubleLoopStr, p, q, r be (Polynomial of L);
   set PRL = Polynom-Ring L;
   reconsider pc = p, qc = q, rc = r as Element of PRL by POLYNOM3:def 10;
-A1: qc-rc = q-r by Th27;
+A1: qc-rc = q-r by Th25;
   p*'q = pc*qc & p*'r = pc*rc by POLYNOM3:def 10;
-  hence p*'q-p*'r = pc*qc - pc*rc by Th27
+  hence p*'q-p*'r = pc*qc - pc*rc by Th25
     .= pc*(qc-rc) by VECTSP_1:11
     .= p*'(q-r) by A1,POLYNOM3:def 10;
 end;
 
-theorem Th29:
+theorem Th27:
   for L being add-associative right_zeroed right_complementable
   distributive non empty doubleLoopStr, p, q being (Polynomial of L) st p-q =
   0_. L holds p = q
@@ -1741,11 +1739,11 @@ proof
   assume
 A1: q-r = 0_. L;
   0_. L = 0.PRL by POLYNOM3:def 10;
-  then qc-rc = 0.PRL by A1,Th27;
+  then qc-rc = 0.PRL by A1,Th25;
   hence thesis by VECTSP_1:27;
 end;
 
-theorem Th30:
+theorem Th28:
   for L being Abelian add-associative right_zeroed
 right_complementable distributive domRing-like non empty doubleLoopStr, p, q,
   r being Polynomial of L st p <> 0_. L & p*'q = p*'r holds q = r
@@ -1757,12 +1755,12 @@ distributive domRing-like non empty doubleLoopStr, p, q, r be Polynomial of L
 A1: p <> 0_. L;
   assume p*'q = p*'r;
   then p*'q-p*'r = 0_. L by POLYNOM3:29;
-  then p*'(q-r) = 0_. L by Th28;
-  then q-r = 0_. L by A1,Th23;
-  hence thesis by Th29;
+  then p*'(q-r) = 0_. L by Th26;
+  then q-r = 0_. L by A1,Th21;
+  hence thesis by Th27;
 end;
 
-theorem Th31:
+theorem Th29:
   for L being domRing, n being Element of NAT, p being Polynomial
   of L st p <> 0_. L holds p`^n <> 0_. L
 proof
@@ -1775,7 +1773,7 @@ A2: for n being Element of NAT st P[n] holds P[n+1]
     let n be Element of NAT such that
 A3: P[n];
     p`^(n+1) = (p`^n) *' p by POLYNOM5:19;
-    hence thesis by A1,A3,Th23;
+    hence thesis by A1,A3,Th21;
   end;
   (1_. L).0 = 1.L & (0_. L).0 = 0.L by FUNCOP_1:7,POLYNOM3:30;
   then
@@ -1784,7 +1782,7 @@ A4: P[ 0 ] by POLYNOM5:15;
   hence thesis;
 end;
 
-theorem Th32:
+theorem Th30:
   for L being comRing, i, j being Element of NAT, p being
   Polynomial of L holds (p`^i) *' (p`^j) = p `^(i+j)
 proof
@@ -1808,7 +1806,7 @@ A3: P[ 0 ];
   hence thesis;
 end;
 
-theorem Th33:
+theorem Th31:
   for L being non empty multLoopStr_0 holds 1_.(L) = <%1.L%>
 proof
   let L be non empty multLoopStr_0;
@@ -1842,11 +1840,11 @@ well-unital right-distributive non empty doubleLoopStr, p being Polynomial of
 proof
   let L be add-associative right_zeroed right_complementable well-unital
   right-distributive non empty doubleLoopStr, p being Polynomial of L;
-  thus p*'<%1.L%> = p*'1_.(L) by Th33
+  thus p*'<%1.L%> = p*'1_.(L) by Th31
     .= p by POLYNOM3:35;
 end;
 
-theorem Th35:
+theorem Th33:
   for L being add-associative right_zeroed right_complementable
 distributive non empty doubleLoopStr, p, q being Polynomial of L st len p = 0
   or len q = 0 holds len (p*'q) = 0
@@ -1865,12 +1863,12 @@ A1: len p = 0 or len q = 0;
   suppose
     len q = 0;
     then q = 0_. L by POLYNOM4:5;
-    then p*'q = 0_. L by Th22;
+    then p*'q = 0_. L by Th20;
     hence thesis by POLYNOM4:3;
   end;
 end;
 
-theorem Th36:
+theorem Th34:
   for L being add-associative right_zeroed right_complementable
   distributive non empty doubleLoopStr, p, q being Polynomial of L st p*'q is
   non-zero holds p is non-zero & q is non-zero
@@ -1880,9 +1878,9 @@ proof
   assume that
 A1: p*'q is non-zero and
 A2: p is non non-zero or q is non non-zero;
-  len p = 0 or len q = 0 by A2,Th19;
-  then len (p*'q) = 0 by Th35;
-  hence thesis by A1,Th19;
+  len p = 0 or len q = 0 by A2,Th17;
+  then len (p*'q) = 0 by Th33;
+  hence thesis by A1,Th17;
 end;
 
 theorem
@@ -1918,7 +1916,7 @@ A2: 0 qua Nat+1 <= len q by NAT_1:13;
   hence thesis by A1,POLYNOM4:10;
 end;
 
-theorem Th38:
+theorem Th36:
   for L being add-associative right_zeroed right_complementable
   distributive commutative associative well-unital domRing-like non empty
 doubleLoopStr, p, q being Polynomial of L st 1 < len p & 1 < len q holds len p
@@ -1929,7 +1927,7 @@ commutative associative well-unital domRing-like non empty doubleLoopStr, p,
   q be Polynomial of L such that
 A1: 1 < len p and
 A2: 1 < len q;
-  p.(len p -'1) <> 0.L & q.(len q -'1)<>0.L by A1,A2,Th20;
+  p.(len p -'1) <> 0.L & q.(len q -'1)<>0.L by A1,A2,Th18;
   then p.(len p -'1) * q.(len q -'1)<>0.L by VECTSP_2:def 1;
   then
 A3: len (p*'q) = len p + len q - 1 by POLYNOM4:10;
@@ -1938,7 +1936,7 @@ A3: len (p*'q) = len p + len q - 1 by POLYNOM4:10;
   hence thesis by A3;
 end;
 
-theorem Th39:
+theorem Th37:
   for L being add-associative right_zeroed right_complementable
   left-distributive non empty doubleLoopStr, a, b being Element of L, p being
 Polynomial of L holds (<%a, b%>*'p).0 = a*p.0 & for i being Nat holds (<%a, b%>
@@ -1998,10 +1996,10 @@ A16: 1 in dom r by FINSEQ_3:25;
     .= p.0 * q.((i+1)+1-'1) by XREAL_1:232
     .= p.0 * q.(i+1) by NAT_D:34
     .= a*q.(i+1) by POLYNOM5:38;
-  hence thesis by A6,A8,A10,A11,Th3;
+  hence thesis by A6,A8,A10,A11,Th2;
 end;
 
-theorem Th40:
+theorem Th38:
   for L being add-associative right_zeroed right_complementable
   distributive well-unital commutative associative non degenerated non empty
   doubleLoopStr, r being Element of L, q being non-zero Polynomial of L holds
@@ -2015,12 +2013,12 @@ A1: p.(len p -'1) * q.(len q -'1) = p.(1+1-'1) * q.(len q -'1) by POLYNOM5:40
     .= p.(1) * q.(len q -'1) by NAT_D:34
     .= 1.L * q.(len q -'1) by POLYNOM5:38
     .= q.(len q -'1) by VECTSP_1:def 8;
-  len <%r, 1.L%> = 2 & len q > 0 by Th19,POLYNOM5:40;
-  hence len (<%r, 1.L%>*'q) = len q +(1+1)-1 by A1,Th20,POLYNOM4:10
+  len <%r, 1.L%> = 2 & len q > 0 by Th17,POLYNOM5:40;
+  hence len (<%r, 1.L%>*'q) = len q +(1+1)-1 by A1,Th18,POLYNOM4:10
     .= len q +1;
 end;
 
-theorem Th41:
+theorem Th39:
   for L being non degenerated comRing, x being Element of L, i
   being Element of NAT holds len (<%x, 1.L%>`^i) = i+1
 proof
@@ -2031,10 +2029,10 @@ A1: for i being Element of NAT st P[i] holds P[i+1]
   proof
     let i be Element of NAT such that
 A2: P[i];
-    reconsider ri = r`^i as non-zero Polynomial of L by A2,Th19;
-    thus len (r`^(i+1)) = len ((r`^1)*'ri) by Th32
+    reconsider ri = r`^i as non-zero Polynomial of L by A2,Th17;
+    thus len (r`^(i+1)) = len ((r`^1)*'ri) by Th30
       .= len (r*'ri) by POLYNOM5:16
-      .= i+1+1 by A2,Th40;
+      .= i+1+1 by A2,Th38;
   end;
   r`^0 = 1_. L by POLYNOM5:15;
   then
@@ -2047,12 +2045,12 @@ registration
   cluster <%x, 1.L%>`^n -> non-zero;
   correctness
   proof
-    len (<%x, 1.L%>`^n) = n+1 by Th41;
-    hence thesis by Th19;
+    len (<%x, 1.L%>`^n) = n+1 by Th39;
+    hence thesis by Th17;
   end;
 end;
 
-theorem Th42:
+theorem Th40:
   for L being non degenerated comRing, x being Element of L, q
 being non-zero (Polynomial of L), i being Element of NAT holds len ((<%x, 1.L%>
   `^i)*'q) = i + len q
@@ -2065,13 +2063,13 @@ A1: for i being Element of NAT st P[i] holds P[i+1]
   proof
     let i be Element of NAT such that
 A2: P[i];
-    len q > 0 by Th19;
+    len q > 0 by Th17;
     then
-A3: (r`^i)*'q is non-zero by A2,Th19;
-    thus len ((r`^(i+1))*'q) = len ((r`^1)*'(r`^i)*'q) by Th32
+A3: (r`^i)*'q is non-zero by A2,Th17;
+    thus len ((r`^(i+1))*'q) = len ((r`^1)*'(r`^i)*'q) by Th30
       .= len (r*'(r`^i)*'q) by POLYNOM5:16
       .= len (r*'((r`^i)*'q)) by POLYNOM3:33
-      .= (i+len q)+1 by A2,A3,Th40
+      .= (i+len q)+1 by A2,A3,Th38
       .= (i+1)+len q;
   end;
   len ((r`^0)*'q) = len ((1_. L)*'q) by POLYNOM5:15
@@ -2081,7 +2079,7 @@ A4: P[ 0 ];
   thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A4,A1);
 end;
 
-theorem Th43:
+theorem Th41:
   for L being add-associative right_zeroed right_complementable
   distributive well-unital commutative associative non degenerated non empty
 doubleLoopStr, r being Element of L, p, q being Polynomial of L st p = <%r, 1.
@@ -2099,14 +2097,14 @@ A3: now
     hence contradiction by A2,FUNCOP_1:7;
   end;
   then q is non-zero by Def5;
-  then len p = len q + 1 by A1,Th40;
+  then len p = len q + 1 by A1,Th38;
   then
 A4: lp1 = len q by NAT_D:34;
   then consider lp2 being Nat such that
 A5: lp1 = lp2+1 by A3,NAT_1:6,POLYNOM4:5;
   reconsider lp2 as Element of NAT by ORDINAL1:def 12;
 A6: q.lp1 = 0.L by A4,ALGSEQ_1:8;
-  (<%x, 1.L%>*'q).lp1 = x*q.(lp1)+(1.L)*q.lp2 by A5,Th39
+  (<%x, 1.L%>*'q).lp1 = x*q.(lp1)+(1.L)*q.lp2 by A5,Th37
     .= 0.L +(1.L)*q.lp2 by A6,VECTSP_1:6
     .= (1.L)*q.lp2 by RLVECT_1:4
     .= q.lp2 by VECTSP_1:def 8;
@@ -2156,7 +2154,7 @@ A5: for i being Nat holds it2.i = p.(n + i);
   end;
 end;
 
-theorem Th44:
+theorem Th42:
   for L being non empty ZeroStr,p being Polynomial of L holds
   poly_shift(p,0) = p
 proof
@@ -2172,7 +2170,7 @@ proof
   hence thesis by FUNCT_2:12;
 end;
 
-theorem Th45:
+theorem Th43:
   for L being non empty ZeroStr, n being Element of NAT, p being
   Polynomial of L st n >= len p holds poly_shift(p,n) = 0_. L
 proof
@@ -2191,7 +2189,7 @@ A2: now
   hence thesis by A2,FUNCOP_1:11;
 end;
 
-theorem Th46:
+theorem Th44:
   for L being non degenerated non empty multLoopStr_0, n being
 Element of NAT, p being Polynomial of L st n <= len p holds len poly_shift(p,n)
   + n = len p
@@ -2229,7 +2227,7 @@ A7: i+n >= len p by XREAL_1:20;
     .= len p;
 end;
 
-theorem Th47:
+theorem Th45:
   for L being non degenerated comRing, x being Element of L, n
   being Element of NAT, p being Polynomial of L st n < len p holds eval(
   poly_shift(p,n),x) = x*eval(poly_shift(p,n+1),x) + p.n
@@ -2256,8 +2254,8 @@ A8: x*f1 = (x multfield)*f1 & dom ((x multfield)*f1) = dom f1 by FVSUM_1:def 6
 A9: 1_L = 1.L;
   now
 A10: n+1 <= len p by A1,NAT_1:13;
-A11: len ps1 +1+n = len ps1 + (n+1) .= len p by A10,Th46
-      .= len ps + n by A1,Th46;
+A11: len ps1 +1+n = len ps1 + (n+1) .= len p by A10,Th44
+      .= len ps + n by A1,Th44;
     thus len f = len f;
 A12: len <*p.n*> = 1 by FINSEQ_1:40;
 A13: len ((x*f1)) = len f1 by A8,FINSEQ_3:29;
@@ -2310,14 +2308,14 @@ A24:  j1 in dom f1 by A21,FINSEQ_3:25;
   hence thesis by A2,A5,FVSUM_1:72;
 end;
 
-theorem Th48:
+theorem Th46:
   for L being non degenerated comRing, p being Polynomial of L st
   len p = 1 holds Roots p = {}
 proof
   let L be non degenerated comRing, p be Polynomial of L;
   assume len p = 1;
   then
-A1: p =<%p.0%> & p.0 <> 0.L by Th21;
+A1: p =<%p.0%> & p.0 <> 0.L by Th19;
   assume Roots p <> {};
   then consider x being set such that
 A2: x in Roots p by XBOOLE_0:def 1;
@@ -2341,63 +2339,63 @@ for i being Nat holds it.i = eval(poly_shift(p, i+1),r) if len p > 0 otherwise
     hereby
       r in Roots p by A1,POLYNOM5:def 9;
       then
-A2:   len p <> 1 by Th48;
+A1:   len p <> 1 by Th46;
       deffunc F(Nat) = eval(poly_shift(p, $1+1),r);
       set lq = len p -'1;
       consider q being sequence of L such that
-A3:   for k being Element of NAT holds q.k = F(k) from FUNCT_2:sch 4;
+A2:   for k being Element of NAT holds q.k = F(k) from FUNCT_2:sch 4;
       reconsider q as sequence of L;
       assume
-A4:   len p > 0;
+A3:   len p > 0;
       then consider p1 being Nat such that
-A5:   len p = p1+1 by NAT_1:6;
-A6:   lq = p1 by A5,NAT_D:34;
+A4:   len p = p1+1 by NAT_1:6;
+A5:   lq = p1 by A4,NAT_D:34;
       then
-A7:   lq < len p by A5,NAT_1:13;
-      len p >= 0 qua Nat+1 by A4,NAT_1:13;
+A6:   lq < len p by A4,NAT_1:13;
+      len p >= 0 qua Nat+1 by A3,NAT_1:13;
       then consider lq1 being Nat such that
-A8:   lq = lq1 + 1 by A5,A6,A2,NAT_1:6;
-A9:   now
+A7:   lq = lq1 + 1 by A4,A5,A1,NAT_1:6;
+A8:   now
         let i be Nat;
         assume i >= lq;
-        then i >= p1 by A5,NAT_D:34;
+        then i >= p1 by A4,NAT_D:34;
         then
-A10:    i+1 >= len p by A5,XREAL_1:6;
+A9:    i+1 >= len p by A4,XREAL_1:6;
         i in NAT by ORDINAL1:def 12;
-        hence q.i = eval(poly_shift(p, i+1),r) by A3
-          .= eval(0_.L,r) by A10,Th45
+        hence q.i = eval(poly_shift(p, i+1),r) by A2
+          .= eval(0_.L,r) by A9,Th43
           .= 0.L by POLYNOM4:17;
       end;
       reconsider lq1 as Element of NAT by ORDINAL1:def 12;
-      q.lq1 = eval(poly_shift(p, lq1+1),r) by A3
-        .= r*eval(poly_shift(p, len p),r) + p.lq by A5,A6,A8,A7,Th47
-        .= r*eval(0_. L,r) + p.lq by Th45
+      q.lq1 = eval(poly_shift(p, lq1+1),r) by A2
+        .= r*eval(poly_shift(p, len p),r) + p.lq by A4,A5,A7,A6,Th45
+        .= r*eval(0_. L,r) + p.lq by Th43
         .= r*0.L + p.lq by POLYNOM4:17
         .= 0.L + p.lq by VECTSP_1:6
         .= p.lq by RLVECT_1:4;
       then
-A11:  q.lq1 <> 0.L by A5,A6,ALGSEQ_1:10;
-      reconsider q as AlgSequence of L by A9,ALGSEQ_1:def 1;
-A12:  lq1 = lq -'1 by A8,NAT_D:34;
-A13:  now
+A10:  q.lq1 <> 0.L by A4,A5,ALGSEQ_1:10;
+      reconsider q as AlgSequence of L by A8,ALGSEQ_1:def 1;
+A11:  lq1 = lq -'1 by A7,NAT_D:34;
+A12:  now
         let m be Nat;
         assume
-A14:    m is_at_least_length_of q;
+A13:    m is_at_least_length_of q;
         assume
-A15:    lq > m;
+A14:    lq > m;
         then consider lq1 being Nat such that
-A16:    lq = lq1 + 1 by NAT_1:6;
-        lq1 >= m by A15,A16,NAT_1:13;
-        then lq -'1 >= m by A16,NAT_D:34;
-        hence contradiction by A12,A11,A14,ALGSEQ_1:def 2;
+A15:    lq = lq1 + 1 by NAT_1:6;
+        lq1 >= m by A14,A15,NAT_1:13;
+        then lq -'1 >= m by A15,NAT_D:34;
+        hence contradiction by A11,A10,A13,ALGSEQ_1:def 2;
       end;
       take q;
-      lq is_at_least_length_of q by A9,ALGSEQ_1:def 2;
-      hence len q + 1 =p1+1-'1+1 by A5,A13,ALGSEQ_1:def 3
-        .=len p by A5,NAT_D:34;
+      lq is_at_least_length_of q by A8,ALGSEQ_1:def 2;
+      hence len q + 1 =p1+1-'1+1 by A4,A12,ALGSEQ_1:def 3
+        .=len p by A4,NAT_D:34;
       let k be Nat;
       k in NAT by ORDINAL1:def 12;
-      hence q.k = F(k) by A3;
+      hence q.k = F(k) by A2;
     end;
     thus thesis;
   end;
@@ -2407,24 +2405,24 @@ A16:    lq = lq1 + 1 by NAT_1:6;
     hereby
       assume len p > 0;
       assume that
-A17:  len it1 + 1 = len p and
-A18:  for i being Nat holds it1.i = eval(poly_shift(p, i+1),r) and
-A19:  len it2 + 1 = len p and
-A20:  for i being Nat holds it2.i = eval(poly_shift(p, i+1),r);
+A16:  len it1 + 1 = len p and
+A17:  for i being Nat holds it1.i = eval(poly_shift(p, i+1),r) and
+A18:  len it2 + 1 = len p and
+A19:  for i being Nat holds it2.i = eval(poly_shift(p, i+1),r);
       now
         let k be Nat such that
         k < len it1;
-        thus it1.k = eval(poly_shift(p, k+1),r) by A18
-          .= it2.k by A20;
+        thus it1.k = eval(poly_shift(p, k+1),r) by A17
+          .= it2.k by A19;
       end;
-      hence it1 = it2 by A17,A19,ALGSEQ_1:12;
+      hence it1 = it2 by A16,A18,ALGSEQ_1:12;
     end;
     thus thesis;
   end;
   consistency;
 end;
 
-theorem Th49:
+theorem Th47:
   for L being non degenerated comRing, r being Element of L, p
 being non-zero Polynomial of L st r is_a_root_of p holds len poly_quotient(p,r)
   > 0
@@ -2435,13 +2433,13 @@ A1: r is_a_root_of p;
   assume len poly_quotient(p,r) <= 0;
   then
 A2: len poly_quotient(p,r) = 0;
-  len p > 0 by Th19;
+  len p > 0 by Th17;
   then len poly_quotient(p,r) + 1 = len p by A1,Def7;
-  then Roots p = {} by A2,Th48;
+  then Roots p = {} by A2,Th46;
   hence contradiction by A1,POLYNOM5:def 9;
 end;
 
-theorem Th50:
+theorem Th48:
   for L being add-associative right_zeroed right_complementable
   left-distributive well-unital non empty doubleLoopStr, x being Element of L
   holds Roots <%-x, 1.L%> = {x}
@@ -2470,7 +2468,7 @@ A2: x is_a_root_of <%-x, 1.L%> by POLYNOM5:def 6;
   hence thesis by TARSKI:def 1;
 end;
 
-theorem Th51:
+theorem Th49:
   for L being non trivial comRing, x being Element of L, p, q
   being Polynomial of L st p = <%-x,1.L%>*'q holds x is_a_root_of p
 proof
@@ -2484,7 +2482,7 @@ A2: eval(<%-x,1.L%>,x) = (-x)+x by POLYNOM5:47
 end;
 
 ::$N Little Bezout Theorem (Factor Theorem)
-theorem Th52: :: Factor theorem (Bezout)
+theorem Th50: :: Factor theorem (Bezout)
   for L being non degenerated comRing, r being Element of L, p
 being Polynomial of L st r is_a_root_of p holds p = <%-r,1.L%>*'poly_quotient(p
   ,r)
@@ -2501,11 +2499,11 @@ A2: len p > 0;
       .= 1.L by POLYNOM5:38;
     then
 A3: r.(len r -'1) * pq.(len pq -'1) = pq.(len pq -'1) by VECTSP_1:def 8;
-    p is non-zero by A2,Th19;
+    p is non-zero by A2,Th17;
     then
-A4: len pq > 0 by A1,Th49;
+A4: len pq > 0 by A1,Th47;
     now
-      len (r *' pq) = len r + len pq - 1 by A4,A3,Th20,POLYNOM4:10
+      len (r *' pq) = len r + len pq - 1 by A4,A3,Th18,POLYNOM4:10
         .= len pq +(1+1)-1 by POLYNOM5:40
         .= len pq +1
         .= len p by A1,A2,Def7;
@@ -2514,8 +2512,8 @@ A4: len pq > 0 by A1,Th49;
       let k be Nat;
       assume k < len p;
 A5:   0.L = eval(p,x) by A1,POLYNOM5:def 6
-        .= eval(poly_shift(p,0),x) by Th44
-        .= x*eval(poly_shift(p,0 qua Nat+1),x) + p.0 by A2,Th47;
+        .= eval(poly_shift(p,0),x) by Th42
+        .= x*eval(poly_shift(p,0 qua Nat+1),x) + p.0 by A2,Th45;
 A6:   (-x)*eval(poly_shift(p, 0 qua Nat+1),x) = (-x)*eval(poly_shift(p, 0
       qua Nat+1),x) + 0.L by RLVECT_1:def 4
         .= (-x)*eval(poly_shift(p, 0 qua Nat+1),x) + x*eval(poly_shift(p,1),
@@ -2534,11 +2532,11 @@ A9:     pq.k = eval(poly_shift(p, k+1),x) by A1,A2,Def7;
         suppose
 A10:      k+1 >= len p;
           then
-A11:      pq.(k+1) = eval(0_.L,x) by A8,Th45,NAT_1:12
+A11:      pq.(k+1) = eval(0_.L,x) by A8,Th43,NAT_1:12
             .= 0.L by POLYNOM4:17;
-A12:      pq.k = eval(0_.L,x) by A9,A10,Th45
+A12:      pq.k = eval(0_.L,x) by A9,A10,Th43
             .= 0.L by POLYNOM4:17;
-          (r*'pq).(k+1) = (-x)*pq.(k+1)+(1.L)*pq.k by Th39
+          (r*'pq).(k+1) = (-x)*pq.(k+1)+(1.L)*pq.k by Th37
             .= 0.L + (1.L)*pq.k by A11,VECTSP_1:6
             .= 0.L + 0.L by A12,VECTSP_1:6
             .= 0.L by RLVECT_1:4;
@@ -2546,18 +2544,18 @@ A12:      pq.k = eval(0_.L,x) by A9,A10,Th45
         end;
         suppose
           k+1 < len p;
-          then pq.k = x*eval(poly_shift(p, k+1+1),x) + p.(k+1) by A9,Th47;
+          then pq.k = x*eval(poly_shift(p, k+1+1),x) + p.(k+1) by A9,Th45;
           then
 A13:      -x*pq.(k+1)+pq.k = -x*pq.(k+1)+x*eval(poly_shift(p, k+1+1),x)+p
           .(k+1) by RLVECT_1:def 3
             .= 0.L + p.(k+1) by A8,RLVECT_1:5;
-          (r*'pq).(k+1) = (-x)*pq.(k+1)+(1.L)*pq.k by Th39
+          (r*'pq).(k+1) = (-x)*pq.(k+1)+(1.L)*pq.k by Th37
             .= (-x)*pq.(k+1)+pq.k by VECTSP_1:def 8
             .= -x*pq.(k+1)+pq.k by VECTSP_1:9;
           hence thesis by A13,RLVECT_1:4;
         end;
       end;
-      (r*'pq).0 = (-x)*pq.0 by Th39
+      (r*'pq).0 = (-x)*pq.0 by Th37
         .= (-x)*eval(poly_shift(p, 0 qua Nat+1),x) by A1,A2,Def7;
       then
 A14:  P[ 0 ] by A6;
@@ -2608,10 +2606,10 @@ A4: len p = n+1;
       then consider x being Element of L such that
 A5:   x is_a_root_of p by POLYNOM5:def 7;
       set r = <%-x,1.L%>, pq = poly_quotient(p,x);
-A6:   p = <%-x,1.L%>*'poly_quotient(p,x) by A5,Th52;
+A6:   p = <%-x,1.L%>*'poly_quotient(p,x) by A5,Th50;
       then
-A7:   Roots p = (Roots r)\/Roots pq by Th25;
-A8:   Roots r = {x} by Th50;
+A7:   Roots p = (Roots r)\/Roots pq by Th23;
+A8:   Roots r = {x} by Th48;
       then reconsider Rr = Roots r as finite set;
 A9:   len pq + 1 = len p by A4,A5,Def7;
       then consider k being Element of NAT such that
@@ -2625,7 +2623,7 @@ A12:  card Rp <= k + 1 by A10,CARD_2:43;
       Roots pq is finite by A3,A4,A9;
       hence Roots p is finite by A8,A7;
       take m = card Rp;
-      thus m = card Roots p by A6,Th25;
+      thus m = card Roots p by A6,Th23;
       k+1 < n+1 by A4,A9,A11,XREAL_1:8;
       hence thesis by A4,A12,XXREAL_0:2;
     end;
@@ -2650,9 +2648,9 @@ A16: P[1]
     let p be Polynomial of L;
     assume
 A17: len p = 1;
-    hence Roots p is finite by Th48;
+    hence Roots p is finite by Th46;
     take 0;
-    thus 0 = card Roots p by A17,Th48,CARD_1:27;
+    thus 0 = card Roots p by A17,Th46,CARD_1:27;
     thus thesis by A17;
   end;
   for n being Nat st n >= 1 holds P[n] from NAT_1:sch 8(A16,A2);
@@ -2688,7 +2686,7 @@ A1: F c= NAT from FRAENKEL:sch 10;
       .= (r`^0) *' p by POLYNOM5:15;
     then
 A2: 0 in F;
-A3: len p > 0 by Th19;
+A3: len p > 0 by Th17;
     F c= len p
     proof
       let a be set;
@@ -2704,11 +2702,11 @@ A7:   now
         then p = 0_. L by A6,POLYNOM4:2;
         hence contradiction by A3,POLYNOM4:3;
       end;
-      then reconsider q as non-zero Polynomial of L by Th19;
+      then reconsider q as non-zero Polynomial of L by Th17;
       now
         assume k >= len p;
         then k+len q > len p + (0 qua Nat) by A7,XREAL_1:8;
-        hence contradiction by A6,Th42;
+        hence contradiction by A6,Th40;
       end;
       then k in {i where i is Element of NAT : i < len p};
       hence thesis by A4,AXIOMS:4;
@@ -2722,7 +2720,7 @@ A7:   now
   uniqueness;
 end;
 
-theorem Th54:
+theorem Th52:
   for L being non degenerated comRing, p being non-zero (
 Polynomial of L), x being Element of L holds x is_a_root_of p iff multiplicity(
   p,x) >= 1
@@ -2742,7 +2740,7 @@ A4: ex q being Polynomial of L st p = (r`^k) *' q by A1;
   hereby
     assume x is_a_root_of p;
     then
-A5: p = r*'poly_quotient(p,x) by Th52;
+A5: p = r*'poly_quotient(p,x) by Th50;
     r`^1 = r by POLYNOM5:16;
     then 1 in F by A1,A5;
     hence multiplicity(p,x) >= 1 by A2,XXREAL_2:def 8;
@@ -2755,10 +2753,10 @@ A7: k = k1+1 by A3,NAT_1:6;
   reconsider k1 as Element of NAT by ORDINAL1:def 12;
   p = r *' (r`^k1) *' q by A6,A7,POLYNOM5:19
     .= r *' ((r`^k1) *' q) by POLYNOM3:33;
-  hence thesis by Th51;
+  hence thesis by Th49;
 end;
 
-theorem Th55:
+theorem Th53:
   for L being non degenerated comRing, x being Element of L holds
   multiplicity(<%-x, 1.L%>,x) = 1
 proof
@@ -2783,12 +2781,12 @@ A7: now
     hence contradiction by A6,POLYNOM4:3;
   end;
   then
-A8: q is non-zero by Th19;
+A8: q is non-zero by Th17;
 A9: now
     assume k > 1;
     then k >= 1+1 by NAT_1:13;
     then k+len q > 2+(0 qua Nat) by A7,XREAL_1:8;
-    hence contradiction by A6,A5,A8,Th42;
+    hence contradiction by A6,A5,A8,Th40;
   end;
   r = (r`^1) by POLYNOM5:16;
   then r = (r`^1) *' 1_. L by POLYNOM3:35;
@@ -2821,14 +2819,14 @@ A4:     x in support b;
         then
 A5:     b.xx >= 0 qua Nat+1 by NAT_1:13;
         b.x = F(xx) by A1;
-        then xx is_a_root_of p by A5,Th54;
+        then xx is_a_root_of p by A5,Th52;
         hence x in Roots p by POLYNOM5:def 9;
       end;
       assume
 A6:   x in Roots p;
       then reconsider xx = x as Element of L;
       xx is_a_root_of p by A6,POLYNOM5:def 9;
-      then multiplicity(p,xx) >= 1 by Th54;
+      then multiplicity(p,xx) >= 1 by Th52;
       then b.xx >= 1 by A1;
       hence x in support b by PRE_POLY:def 7;
     end;
@@ -2855,13 +2853,13 @@ A8: for x being Element of L holds it2.x = multiplicity(p,x);
   end;
 end;
 
-theorem Th56:
+theorem Th54:
   for L being domRing, x being Element of L holds BRoots <%-x, 1.L
   %> = ({x}, 1)-bag
 proof
   let L be domRing, x be Element of L;
   set r = <%-x, 1.L%>;
-  Roots r = {x} by Th50;
+  Roots r = {x} by Th48;
   then
 A1: support BRoots r = {x} by Def9;
 A2: x in {x} by TARSKI:def 1;
@@ -2873,21 +2871,21 @@ A2: x in {x} by TARSKI:def 1;
     suppose
 A3:   i = x;
       thus (BRoots r).i = multiplicity(r,i1) by Def9
-        .= 1 by A3,Th55
-        .= (({x}, 1)-bag).i by A2,A3,Th9;
+        .= 1 by A3,Th53
+        .= (({x}, 1)-bag).i by A2,A3,Th7;
     end;
     suppose
       i <> x;
       then
 A4:   not i in {x} by TARSKI:def 1;
       hence (BRoots r).i = 0 by A1,PRE_POLY:def 7
-        .= (({x}, 1)-bag).i by A4,Th8;
+        .= (({x}, 1)-bag).i by A4,Th6;
     end;
   end;
   hence thesis by PBOOLE:3;
 end;
 
-theorem Th57:
+theorem Th55:
   for L being domRing, x be Element of L, p, q being non-zero
 Polynomial of L holds multiplicity(p*'q,x) = multiplicity(p,x) + multiplicity(q
   ,x)
@@ -2926,7 +2924,7 @@ A14: ex qq being Polynomial of L st q = (r`^j) *' qq by A8;
 A15: q = (r`^j) *' qq by A14;
 A16: p*'q = (r`^i) *' pq *' (r`^j) *' qq by A7,A15,POLYNOM3:33
     .= (r`^i) *' (r`^j) *' pq *' qq by POLYNOM3:33
-    .= (r`^(i+j)) *' pq *' qq by Th32
+    .= (r`^(i+j)) *' pq *' qq by Th30
     .= (r`^(i+j)) *' (pq *' qq) by POLYNOM3:33;
 A17: now
     assume i+j < k;
@@ -2937,28 +2935,28 @@ A18: 0 < k-(i+j) by XREAL_1:20;
     consider kk being Nat such that
 A19: kij = kk+1 by A18,NAT_1:6;
     reconsider kk as Element of NAT by ORDINAL1:def 12;
-    (r`^kij) = (r`^1) *' (r`^kk) by A19,Th32
+    (r`^kij) = (r`^1) *' (r`^kk) by A19,Th30
       .= r *' (r`^kk) by POLYNOM5:16;
     then
 A20: (r`^kij) *' pqq = r *' ((r`^kk) *' pqq) by POLYNOM3:33;
     (0_. L).1 = 0.L & r.1 = 1.L by FUNCOP_1:7,POLYNOM5:38;
     then
-A21: r`^(i+j) <> 0_. L by Th31;
+A21: r`^(i+j) <> 0_. L by Th29;
     k = kij + (i+j);
-    then p*'q = ((r`^(i+j)) *' (r`^kij)) *' pqq by A12,Th32
+    then p*'q = ((r`^(i+j)) *' (r`^kij)) *' pqq by A12,Th30
       .= (r`^(i+j)) *' ((r`^kij) *' pqq) by POLYNOM3:33;
-    then x is_a_root_of (pq *' qq) by A16,A21,A20,Th30,Th51;
+    then x is_a_root_of (pq *' qq) by A16,A21,A20,Th28,Th49;
     then x in Roots (pq *' qq) by POLYNOM5:def 9;
     then
-A22: x in (Roots pq \/ Roots qq) by Th25;
+A22: x in (Roots pq \/ Roots qq) by Th23;
     per cases by A22,XBOOLE_0:def 3;
     suppose
       x in Roots(pq);
       then x is_a_root_of pq by POLYNOM5:def 9;
-      then pq = r *' poly_quotient(pq,x) by Th52;
+      then pq = r *' poly_quotient(pq,x) by Th50;
       then p = (r`^i) *' r *' poly_quotient(pq,x) by A7,POLYNOM3:33
         .= (r`^i) *' (r`^1) *' poly_quotient(pq,x) by POLYNOM5:16
-        .= (r`^(i+1)) *' poly_quotient(pq,x) by Th32;
+        .= (r`^(i+1)) *' poly_quotient(pq,x) by Th30;
       then i+1 in f by A3;
       then i+1 <= i by A5,XXREAL_2:def 8;
       hence contradiction by NAT_1:13;
@@ -2966,10 +2964,10 @@ A22: x in (Roots pq \/ Roots qq) by Th25;
     suppose
       x in Roots(qq);
       then x is_a_root_of qq by POLYNOM5:def 9;
-      then qq = r *' poly_quotient(qq,x) by Th52;
+      then qq = r *' poly_quotient(qq,x) by Th50;
       then q = (r`^j) *' r *' poly_quotient(qq,x) by A15,POLYNOM3:33
         .= (r`^j) *' (r`^1) *' poly_quotient(qq,x) by POLYNOM5:16
-        .= (r`^(j+1)) *' poly_quotient(qq,x) by Th32;
+        .= (r`^(j+1)) *' poly_quotient(qq,x) by Th30;
       then j+1 in g by A8;
       then j+1 <= j by A13,XXREAL_2:def 8;
       hence contradiction by NAT_1:13;
@@ -2980,7 +2978,7 @@ A22: x in (Roots pq \/ Roots qq) by Th25;
   hence thesis by A2,A4,A9,A10,A5,A13,A17,XXREAL_0:1;
 end;
 
-theorem Th58:
+theorem Th56:
   for L being domRing, p, q being non-zero Polynomial of L holds
   BRoots(p*'q) = BRoots(p) + BRoots(q)
 proof
@@ -2990,7 +2988,7 @@ proof
     assume i in the carrier of L;
     then reconsider x = i as Element of L;
     thus (BRoots(p*'q)).i = multiplicity(p*'q, x) by Def9
-      .= multiplicity(p,x) + multiplicity(q,x) by Th57
+      .= multiplicity(p,x) + multiplicity(q,x) by Th55
       .= (BRoots p).i + multiplicity(q,x) by Def9
       .= (BRoots p).i + (BRoots q).i by Def9
       .= (BRoots(p) + BRoots(q)).i by PRE_POLY:def 5;
@@ -3000,23 +2998,23 @@ end;
 
 Lm2: now
   let L be domRing, p, q be non-zero Polynomial of L;
-  BRoots(p*'q) = BRoots(p) + BRoots(q) by Th58;
-  hence degree BRoots (p*'q) = degree (BRoots p) + degree BRoots q by Th17;
+  BRoots(p*'q) = BRoots(p) + BRoots(q) by Th56;
+  hence degree BRoots (p*'q) = degree (BRoots p) + degree BRoots q by Th15;
 end;
 
-theorem Th59:
+theorem Th57:
   for L being domRing, p being non-zero Polynomial of L st len p =
   1 holds degree BRoots p = 0
 proof
   let L be domRing, p being non-zero Polynomial of L;
   assume len p = 1;
-  then Roots p = {} by Th48;
+  then Roots p = {} by Th46;
   then support BRoots p = {} by Def9;
   then BRoots p = EmptyBag the carrier of L by BAGORDER:19;
-  hence thesis by Th13;
+  hence thesis by Th11;
 end;
 
-theorem Th60:
+theorem Th58:
   for L being domRing, x be Element of L, n being Element of NAT
   holds degree BRoots (<%-x, 1.L%>`^n) = n
 proof
@@ -3030,13 +3028,13 @@ A2: P[n];
     r`^(n+1) = (r`^n)*'r by POLYNOM5:19;
     then
 A3: degree BRoots(r`^(n+1)) = degree BRoots (r`^n) + degree BRoots r by Lm2
-      .= n + degree ({x},1)-bag by A2,Th56;
+      .= n + degree ({x},1)-bag by A2,Th54;
     card {x} = 1 by CARD_1:30;
-    hence thesis by A3,Th15;
+    hence thesis by A3,Th13;
   end;
   len 1_. L = 1 & r`^0 = 1_. L by POLYNOM4:4,POLYNOM5:15;
   then
-A4: P[ 0 ] by Th59;
+A4: P[ 0 ] by Th57;
   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A4, A1);
 end;
 
@@ -3062,7 +3060,7 @@ A5: k >= 0 qua Nat+1 by A4,NAT_1:13;
       per cases by A5,XXREAL_0:1;
       suppose
 A6:     k = 1;
-        hence degree BRoots p = 1-1 by A3,Th59
+        hence degree BRoots p = 1-1 by A3,Th57
           .= len p -' 1 by A3,A6,XREAL_1:233;
       end;
       suppose
@@ -3070,7 +3068,7 @@ A7:     k > 1;
         then p is with_roots by A3,POLYNOM5:def 8;
         then consider x being Element of L such that
 A8:     x is_a_root_of p by POLYNOM5:def 7;
-A9:     multiplicity(p,x) >= 1 by A8,Th54;
+A9:     multiplicity(p,x) >= 1 by A8,Th52;
         set r = <%-x, 1.L%>;
         consider F being finite non empty Subset of NAT such that
 A10:    F = {l where l is Element of NAT : ex q being Polynomial of L
@@ -3083,17 +3081,17 @@ A13:    ex q being Polynomial of L st p = (<%-x, 1.L%>`^l) *' q by A10;
         set rr = <%-x, 1.L%>`^l;
         consider q being Polynomial of L such that
 A14:    p = (<%-x, 1.L%>`^l) *' q by A13;
-        reconsider q as non-zero Polynomial of L by A14,Th36;
-        len q > 0 by Th19;
+        reconsider q as non-zero Polynomial of L by A14,Th34;
+        len q > 0 by Th17;
         then
 A15:    len q >= 0 qua Nat+1 by NAT_1:13;
         thus thesis
         proof
-          len q > 0 by Th19;
+          len q > 0 by Th17;
           then
-A16:      q.(len q -'1) <> 0.L by Th20;
-          len rr > 0 by Th19;
-          then rr.(len rr -'1) <> 0.L by Th20;
+A16:      q.(len q -'1) <> 0.L by Th18;
+          len rr > 0 by Th17;
+          then rr.(len rr -'1) <> 0.L by Th18;
           then
 A17:      rr.(len rr -'1) * q.(len q -'1) <> 0.L by A16,VECTSP_2:def 1;
 A18:      l*2 -l+1 = l+1;
@@ -3109,15 +3107,15 @@ A23:        len p = len rr + len q -1 by A14,A17,POLYNOM4:10
               .= len rr by A22;
             thus degree BRoots p = degree (BRoots rr) + degree BRoots q by A14
 ,Lm2
-              .= degree (BRoots rr) + (0 qua Nat) by A22,Th59
-              .= 2*l-l+1-1 by Th60
+              .= degree (BRoots rr) + (0 qua Nat) by A22,Th57
+              .= 2*l-l+1-1 by Th58
               .= len p -' 1 by A3,A5,A20,A23,XREAL_1:233;
           end;
           suppose
 A24:        len q > 1;
             then
 A25:        degree BRoots rr = l+1 -' 1 & degree BRoots q = len q -' 1 by A2,A3
-,A14,A20,A21,Th38;
+,A14,A20,A21,Th36;
             thus degree BRoots p = degree (BRoots rr) + degree BRoots q by A14
 ,Lm2
               .= len rr-'1 + (len q -'1) by A19,A18,A25,POLYNOM5:23
@@ -3132,7 +3130,7 @@ A25:        degree BRoots rr = l+1 -' 1 & degree BRoots q = len q -' 1 by A2,A3
     end;
   end;
 A26: for n being Nat holds P[n] from NAT_1:sch 4(A1);
-  len p > 0 by Th19;
+  len p > 0 by Th17;
   hence thesis by A26;
 end;
 
@@ -3243,7 +3241,7 @@ A12:  i in dom f1;
   end;
 end;
 
-theorem Th62:
+theorem Th60:
   for L being Abelian add-associative right_zeroed
   right_complementable commutative distributive well-unital non empty
   doubleLoopStr holds poly_with_roots(EmptyBag the carrier of L) = <%1.L%>
@@ -3264,10 +3262,10 @@ A2: poly_with_roots(b) = Product FlattenSeq f by Def11;
   Polynom-Ring L);
   then Product FlattenSeq f = 1.Polynom-Ring L by GROUP_4:8
     .= 1_.(L) by POLYNOM3:36;
-  hence thesis by A2,Th33;
+  hence thesis by A2,Th31;
 end;
 
-theorem Th63:
+theorem Th61:
   for L being add-associative right_zeroed right_complementable
   distributive non empty doubleLoopStr, c being Element of L holds
   poly_with_roots(({c},1)-bag) = <% -c, 1.L %>
@@ -3282,22 +3280,22 @@ A2: s = canFS(support b) and
 A3: for i being Element of NAT st i in dom f holds f.i = fpoly_mult_root
   (s/.i,b.(s/.i)) and
 A4: poly_with_roots(b) = Product FlattenSeq f by Def11;
-A5: support b = {c} by Th10;
+A5: support b = {c} by Th8;
   then
-A6: s = <* c *> by A2,Th6;
+A6: s = <* c *> by A2,Th4;
 A7: card support b = 1 by A5,CARD_1:30;
   then
 A8: 1 in dom f by A1,FINSEQ_3:25;
   then
 A9: f.1 = f/.1 by PARTFUN1:def 6;
-  len s = 1 by A2,A7,Th5;
+  len s = 1 by A2,A7,Th3;
   then 1 in dom s by FINSEQ_3:25;
   then
 A10: s/.1 = s.1 by PARTFUN1:def 6
     .= c by A6,FINSEQ_1:40;
   set f1 = fpoly_mult_root(s/.1,b.(s/.1));
   c in {c} by TARSKI:def 1;
-  then b.(s/.1) = 1 by A10,Th9;
+  then b.(s/.1) = 1 by A10,Th7;
   then
 A11: len f1 = 1 by Def10;
   then
@@ -3312,7 +3310,7 @@ A14: f.1 = fpoly_mult_root(s/.1,b.(s/.1)) by A3,A8;
     .= <% -c, 1.L %> by A10,A12,Def10;
 end;
 
-theorem Th64:
+theorem Th62:
   for L being add-associative right_zeroed right_complementable
   distributive non empty doubleLoopStr, b being bag of the carrier of L, f
 being FinSequence of (the carrier of Polynom-Ring L)*, s being FinSequence of L
@@ -3331,7 +3329,7 @@ A3: for i being Element of NAT st i in dom f holds f.i = fpoly_mult_root
   consider g being FinSequence of NAT such that
 A4: degree b = Sum g and
 A5: g = b*canFS(support b) by Def4;
-  len s = card support b by A2,Th5;
+  len s = card support b by A2,Th3;
   then
 A6: dom f = dom s by A1,FINSEQ_3:29;
 A7: now
@@ -3362,7 +3360,7 @@ A12: len (f.i) = b.(s/.i) by Def10;
   hence thesis by A4,A7,FINSEQ_1:13;
 end;
 
-theorem Th65:
+theorem Th63:
   for L being add-associative right_zeroed right_complementable
   distributive non empty doubleLoopStr, b being bag of the carrier of L, f
 being FinSequence of (the carrier of Polynom-Ring L)*, s being FinSequence of L
@@ -3378,7 +3376,7 @@ A1: len f = card support b and
 A2: s = canFS(support b) and
 A3: for i being Element of NAT st i in dom f holds f.i = fpoly_mult_root
   (s/.i,b.(s/.i));
- len f = len s by A1,A2,Th5;
+ len f = len s by A1,A2,Th3;
   then
 A4: dom f = dom s by FINSEQ_3:29;
   hereby
@@ -3502,7 +3500,7 @@ A44: (f.i).j = <% -s/.i, 1.L%> by A40,Def10;
   hence contradiction by A2,A35,A42,FUNCT_2:def 3;
 end;
 
-theorem Th66:
+theorem Th64:
   for L being comRing for b1,b2 being bag of the carrier of L
   holds poly_with_roots(b1+b2) = (poly_with_roots b1)*'(poly_with_roots b2)
 proof
@@ -3531,15 +3529,15 @@ A12: for i being Element of NAT st i in dom f holds f.i = fpoly_mult_root
   (s/.i,b.(s/.i)) and
 A13: poly_with_roots(b1+b2) = Product FlattenSeq f by Def11;
   set ff = FlattenSeq f, ff1 = FlattenSeq f1, ff2 = FlattenSeq f2;
-A14: len ff = degree b by A10,A11,A12,Th64;
-A15: len ff2 = degree b2 by A2,A3,A4,Th64;
+A14: len ff = degree b by A10,A11,A12,Th62;
+A15: len ff2 = degree b2 by A2,A3,A4,Th62;
   set g = (FlattenSeq f1) ^ (FlattenSeq f2);
   len g = len ff1 + len ff2 by FINSEQ_1:22
-    .= degree b1 + degree b2 by A6,A7,A8,A15,Th64
-    .= degree b by Th17;
+    .= degree b1 + degree b2 by A6,A7,A8,A15,Th62
+    .= degree b by Th15;
   then
 A16: dom ff = dom g by A14,FINSEQ_3:29;
-A17: len s = card support b by A11,Th5;
+A17: len s = card support b by A11,Th3;
   now
     let x be set;
     per cases;
@@ -3565,28 +3563,28 @@ A25:  card (g"{x}) = card (ff1"{x}) + card (ff2"{x}) by FINSEQ_3:57;
       suppose
 A26:    s/.i in support b1 & not s/.i in support b2;
         then
-A27:    card(ff2"{x}) = 0 by A2,A3,A4,A19,A22,A23,Th65;
-        thus card Coim(ff,x) = b.(s/.i) by A10,A11,A12,A19,A22,A23,A24,Th65
+A27:    card(ff2"{x}) = 0 by A2,A3,A4,A19,A22,A23,Th63;
+        thus card Coim(ff,x) = b.(s/.i) by A10,A11,A12,A19,A22,A23,A24,Th63
           .= b1.(s/.i) + b2.(s/.i) by PRE_POLY:def 5
           .= b1.(s/.i) + (0 qua Nat) by A26,PRE_POLY:def 7
-          .= card Coim(g,x) by A6,A7,A8,A19,A22,A23,A25,A26,A27,Th65;
+          .= card Coim(g,x) by A6,A7,A8,A19,A22,A23,A25,A26,A27,Th63;
       end;
       suppose
 A28:    not s/.i in support b1 & s/.i in support b2;
         then
-A29:    card(ff2"{x}) = b2.(s/.i) by A2,A3,A4,A19,A22,A23,Th65;
-        thus card Coim(ff,x) = b.(s/.i) by A10,A11,A12,A19,A22,A23,A24,Th65
+A29:    card(ff2"{x}) = b2.(s/.i) by A2,A3,A4,A19,A22,A23,Th63;
+        thus card Coim(ff,x) = b.(s/.i) by A10,A11,A12,A19,A22,A23,A24,Th63
           .= b1.(s/.i) + b2.(s/.i) by PRE_POLY:def 5
           .= 0 qua Nat+b2.(s/.i) by A28,PRE_POLY:def 7
-          .= card Coim(g,x) by A6,A7,A8,A19,A22,A23,A25,A28,A29,Th65;
+          .= card Coim(g,x) by A6,A7,A8,A19,A22,A23,A25,A28,A29,Th63;
       end;
       suppose
 A30:    s/.i in support b1 & s/.i in support b2;
         then
-A31:    card(ff2"{x}) = b2.(s/.i) by A2,A3,A4,A19,A22,A23,Th65;
-        thus card Coim(ff,x) = b.(s/.i) by A10,A11,A12,A19,A22,A23,A24,Th65
+A31:    card(ff2"{x}) = b2.(s/.i) by A2,A3,A4,A19,A22,A23,Th63;
+        thus card Coim(ff,x) = b.(s/.i) by A10,A11,A12,A19,A22,A23,A24,Th63
           .= b1.(s/.i) + b2.(s/.i) by PRE_POLY:def 5
-          .= card Coim(g,x) by A6,A7,A8,A19,A22,A23,A25,A30,A31,Th65;
+          .= card Coim(g,x) by A6,A7,A8,A19,A22,A23,A25,A30,A31,Th63;
       end;
     end;
     suppose
@@ -3609,7 +3607,7 @@ A38:      (f1.i).j = ff1.k by A34,PRE_POLY:29;
           f1.i = fpoly_mult_root(s1/.i,b1.(s1/.i)) by A8,A36;
           then
 A39:      (f1.i).j = <% -s1/.i, 1.L %> by A37,Def10;
-          len s1 = card support b1 by A7,Th5;
+          len s1 = card support b1 by A7,Th3;
           then i in dom s1 by A6,A36,FINSEQ_3:29;
           then s1.i = s1/.i & s1.i in rng s1 by FUNCT_1:3,PARTFUN1:def 6;
           then s1/.i in support b1 by A7,FUNCT_2:def 3;
@@ -3648,7 +3646,7 @@ A52:      (f2.i).j = ff2.k by A48,PRE_POLY:29;
           f2.i = fpoly_mult_root(s2/.i,b2.(s2/.i)) by A4,A50;
           then
 A53:      (f2.i).j = <% -s2/.i, 1.L %> by A51,Def10;
-          len s2 = card support b2 by A3,Th5;
+          len s2 = card support b2 by A3,Th3;
           then i in dom s2 by A2,A50,FINSEQ_3:29;
           then s2.i = s2/.i & s2.i in rng s2 by FUNCT_1:3,PARTFUN1:def 6;
           then s2/.i in support b2 by A3,FUNCT_2:def 3;
@@ -3684,7 +3682,7 @@ A61:      1 in dom (f.l) by A57,A58,A55,FINSEQ_3:25;
   FlattenSeq f1) ^ (FlattenSeq f2)) * p by A16,RFINSEQ:4;
   hence
   poly_with_roots(b1+b2) = Product ((FlattenSeq f1) ^ (FlattenSeq f2)) by A13
-,A16,Th18
+,A16,Th16
     .= (Product FlattenSeq f1) * (Product FlattenSeq f2) by GROUP_4:5
     .= (poly_with_roots b1)*'(poly_with_roots b2) by A9,A5,POLYNOM3:def 10;
 end;
@@ -3698,7 +3696,7 @@ proof
 A1: p.(len p-'1) = 1.L;
   defpred P[Nat] means for p being non-zero Polynomial of L st len p = $1 & $1
   >= 1 & p.(len p -'1) = 1.L holds p = poly_with_roots(BRoots(p));
-  len p > 0 by Th19;
+  len p > 0 by Th17;
   then
 A2: len p >= 0 qua Nat+1 by NAT_1:13;
 A3: for n being Nat st n >= 1 & P[n] holds P[n+1]
@@ -3716,23 +3714,23 @@ A7: p.(len p -'1) = 1.L;
 A8: x is_a_root_of p by POLYNOM5:def 7;
     set r = <%-x,1.L%>;
     set q = poly_quotient(p,x);
-A9: p = r*'q by A8,Th52;
-    then reconsider q as non-zero Polynomial of L by Th36;
+A9: p = r*'q by A8,Th50;
+    then reconsider q as non-zero Polynomial of L by Th34;
 A10: len r = 2 by POLYNOM5:40;
     then
-A11: r.(len r -'1) <> 0.L by Th20;
-    len q > 0 by Th19;
-    then q.(len q -'1) <> 0.L by Th20;
+A11: r.(len r -'1) <> 0.L by Th18;
+    len q > 0 by Th17;
+    then q.(len q -'1) <> 0.L by Th18;
     then r.(len r -'1) * q.(len q -'1) <> 0.L by A11,VECTSP_2:def 1;
     then
 A12: len p = len q + (1+1)- 1 by A9,A10,POLYNOM4:10;
-    q.(len q -'1) = 1.L by A7,A9,Th43;
+    q.(len q -'1) = 1.L by A7,A9,Th41;
     then
 A13: q = poly_with_roots(BRoots(q)) by A4,A5,A6,A12;
-A14: poly_with_roots(({x},1)-bag) = <%-x,1.L%> by Th63;
-    BRoots r = ({x},1)-bag by Th56;
-    then BRoots(p) = ({x},1)-bag + BRoots(q) by A9,Th58;
-    hence thesis by A9,A13,A14,Th66;
+A14: poly_with_roots(({x},1)-bag) = <%-x,1.L%> by Th61;
+    BRoots r = ({x},1)-bag by Th54;
+    then BRoots(p) = ({x},1)-bag + BRoots(q) by A9,Th56;
+    hence thesis by A9,A13,A14,Th64;
   end;
 A15: P[1]
   proof
@@ -3740,12 +3738,12 @@ A15: P[1]
 A16: len p = 1 and
     1 >= 1 and
 A17: p.(len p -'1) = 1.L;
-    degree BRoots p = 0 by A16,Th59;
+    degree BRoots p = 0 by A16,Th57;
     then
-A18: BRoots p = EmptyBag the carrier of L by Th14;
+A18: BRoots p = EmptyBag the carrier of L by Th12;
     len p -'1 = 0 by A16,XREAL_1:232;
     hence p = <%1.L%> by A16,A17,ALGSEQ_1:def 5
-      .= poly_with_roots(BRoots(p)) by A18,Th62;
+      .= poly_with_roots(BRoots(p)) by A18,Th60;
   end;
   for n being Nat st n >= 1 holds P[n] from NAT_1:sch 8(A15,A3);
   hence thesis by A1,A2;
@@ -3769,7 +3767,7 @@ A3: rng cs = s by FUNCT_2:def 3;
   defpred P[Element of NAT] means ex t being finite Subset of cL, g being
 FinSequence of cPRL st t = rng (cs | Seg $1) & g = f | Seg $1 & poly_with_roots
   ((t,1)-bag) = Product(g);
-A4: len cs = card s by Th5;
+A4: len cs = card s by Th3;
   then
 A5: dom f = dom cs by A1,FINSEQ_3:29;
 A6: for j being Element of NAT st 1 <= j & j < len f holds P[j] implies P[j +1]
@@ -3811,7 +3809,7 @@ A17: csja1 = csja \/ cs|{j+1} by RELAT_1:78;
 A18: t1 = t \/ {csj1} by A13,A17,RELAT_1:12;
     reconsider epj1 =<% -csj1, 1.L %> as Element of cPRL by POLYNOM3:def 10;
     reconsider pj1 = poly_with_roots(({csj1},1)-bag) as Polynomial of L;
-A19: pj1 = epj1 by Th63;
+A19: pj1 = epj1 by Th61;
     reconsider t1 as finite Subset of cL by A18;
     take t1, g1;
     thus t1 = rng (cs | Seg (j+1)) & g1 = f | Seg (j+1);
@@ -3837,8 +3835,8 @@ A26:  i < j+1 by NAT_1:13;
       x = cs.i by A22,A23,FUNCT_1:47;
       hence contradiction by A1,A4,A3,A9,A21,A25,A26,GRAPH_5:7;
     end;
-    then (t1,1)-bag = (t,1)-bag + ({csj1},1)-bag by A18,Th12;
-    hence poly_with_roots((t1,1)-bag) = pt *' pj1 by Th66
+    then (t1,1)-bag = (t,1)-bag + ({csj1},1)-bag by A18,Th10;
+    hence poly_with_roots((t1,1)-bag) = pt *' pj1 by Th64
       .= Product(g) * epj1 by A15,A19,POLYNOM3:def 10
       .= Product(g1) by A16,GROUP_4:6;
   end;
@@ -3871,7 +3869,7 @@ A36: 1 in dom f by A28,FINSEQ_3:25;
     then reconsider f1 = f.1 as Element of cPRL by FINSEQ_2:11;
 A37: g.1 = f1 by A31,FUNCT_1:49;
     f1 = <% -cs1, 1.L %> by A2,A36;
-    hence thesis by A37,A35,Th63;
+    hence thesis by A37,A35,Th61;
   end;
   for i being Element of NAT st 1 <= i & i <= len f holds P[i] from
   INT_1:sch 7 (A29,A6);
@@ -3900,7 +3898,7 @@ A3: rng cs = s by FUNCT_2:def 3;
   defpred P[Element of NAT] means ex t being finite Subset of cL, g being
   FinSequence of cL st t = rng (cs | Seg $1) & g = f | Seg $1 & eval(
   poly_with_roots((t,1)-bag),x) = Product(g);
-A4: len cs = card s by Th5;
+A4: len cs = card s by Th3;
   then
 A5: dom f = dom cs by A1,FINSEQ_3:29;
 A6: for j being Element of NAT st 1 <= j & j < len f holds P[j] implies P[j +1]
@@ -3944,7 +3942,7 @@ A18: t1 = t \/ {csj1} by A13,A17,RELAT_1:12;
     take t1, g1;
     thus t1 = rng (cs | Seg (j+1)) & g1 = f | Seg (j+1);
     reconsider pj1 = poly_with_roots(({csj1},1)-bag) as Polynomial of L;
-A19: pj1 = <% -csj1, 1.L %> by Th63;
+A19: pj1 = <% -csj1, 1.L %> by Th61;
     t misses {csj1}
     proof
       assume not thesis;
@@ -3967,8 +3965,8 @@ A26:  i < j+1 by NAT_1:13;
       x = cs.i by A22,A23,FUNCT_1:47;
       hence contradiction by A1,A4,A3,A9,A21,A25,A26,GRAPH_5:7;
     end;
-    then (t1,1)-bag = (t,1)-bag + ({csj1},1)-bag by A18,Th12;
-    then poly_with_roots((t1,1)-bag) = pt *' pj1 by Th66;
+    then (t1,1)-bag = (t,1)-bag + ({csj1},1)-bag by A18,Th10;
+    then poly_with_roots((t1,1)-bag) = pt *' pj1 by Th64;
     hence
     eval(poly_with_roots((t1,1)-bag),x) = Product(g) * eval(pj1,x) by A15,
 POLYNOM4:24
@@ -4003,7 +4001,7 @@ A36: 1 in dom f by A28,FINSEQ_3:25;
     then reconsider f1 = f.1 as Element of cL by FINSEQ_2:11;
 A37: g.1 = f1 by A31,FUNCT_1:49;
     f1 = eval(<% -cs1, 1.L %>,x) by A2,A36;
-    hence thesis by A37,A35,Th63;
+    hence thesis by A37,A35,Th61;
   end;
   for i being Element of NAT st 1 <= i & i <= len f holds P[i] from
   INT_1:sch 7 (A29,A6);

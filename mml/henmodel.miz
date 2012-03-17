@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -22,30 +22,32 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, CALCUL_1, RELAT_1,
       FUNCT_1, ORDINAL1, XCMPLX_0, XXREAL_0, NAT_1, FINSEQ_1, QC_LANG1,
       CQC_LANG, CQC_THE1, VALUAT_1, FINSET_1, RELSET_1, FUNCT_2, CARD_1,
-      MARGREL1, CQC_SIM1, DOMAIN_1, MCART_1, NUMBERS, FINSEQ_3, CALCUL_2,
-      INT_1, WELLORD1, WELLORD2;
+      MARGREL1, CQC_SIM1, DOMAIN_1, XTUPLE_0, MCART_1, NUMBERS, FINSEQ_3,
+      CALCUL_2, INT_1, WELLORD1, WELLORD2;
  constructors SETFAM_1, WELLORD1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_1,
-      FINSEQ_3, CQC_SIM1, SUBSTUT2, CALCUL_1, CALCUL_2, RELSET_1;
+      FINSEQ_3, CQC_SIM1, SUBSTUT2, CALCUL_1, CALCUL_2, RELSET_1, XTUPLE_0;
  registrations SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0,
-      XREAL_0, INT_1, FINSEQ_1, QC_LANG1, CQC_LANG, FINSEQ_2, CARD_1;
+      XREAL_0, INT_1, FINSEQ_1, QC_LANG1, CQC_LANG, FINSEQ_2, CARD_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCT_1, FINSEQ_2;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, FINSEQ_2, XTUPLE_0;
  theorems TARSKI, FINSEQ_1, FINSEQ_3, FUNCT_1, VALUAT_1, XBOOLE_0, FINSEQ_2,
       ZFMISC_1, RELAT_1, QC_LANG3, XBOOLE_1, NAT_1, MARGREL1, FUNCT_2,
       RELSET_1, FINSET_1, CALCUL_1, CQC_THE1, ORDINAL2, AXIOMS, CALCUL_2,
-      CARD_2, INT_1, ORDINAL1, WELLORD1, WELLORD2, CARD_3, MCART_1, SUBSTUT2,
-      XREAL_1, XXREAL_0, FUNCOP_1, CARD_1;
+      CARD_2, INT_1, ORDINAL1, WELLORD1, WELLORD2, MCART_1, SUBSTUT2, XREAL_1,
+      XXREAL_0, FUNCOP_1, CARD_1;
  schemes FUNCT_1, FINSEQ_1, CLASSES1;
 
 begin :: Preliminaries and Equivalences of Inconsistency
 
+reserve Al for QC-alphabet;
+
 reserve a,a1,a2,b,c,d for set,
-  X,Y,Z for Subset of CQC-WFF,
+  X,Y,Z for Subset of CQC-WFF(Al),
   i,k,m,n for Element of NAT,
-  p,q for Element of CQC-WFF,
-  P for QC-pred_symbol of k,
-  ll for CQC-variable_list of k,
-  f,f1,f2,g for FinSequence of CQC-WFF;
+  p,q for Element of CQC-WFF(Al),
+  P for QC-pred_symbol of k,Al,
+  ll for CQC-variable_list of k,Al,
+  f,f1,f2,g for FinSequence of CQC-WFF(Al);
 reserve A for non empty finite Subset of NAT;
 
 theorem Th1:
@@ -114,113 +116,108 @@ proof
 A1: RelIncl A,RelIncl a are_isomorphic by WELLORD2:8,13;
   consider F1 being Function such that
 A2: F1 is_isomorphism_of RelIncl A,RelIncl a by A1,WELLORD1:def 8;
-  dom F1 = field RelIncl A by A2,WELLORD1:def 7;
-  then
-A3: dom F1 = A by WELLORD2:def 1;
+A3: dom F1 = field RelIncl A by A2,WELLORD1:def 7;
+  then dom F1 = A by WELLORD2:def 1;
   then consider b such that
 A4: b in dom F1 by XBOOLE_0:def 1;
   rng F1 is finite by A3,FINSET_1:8;
   then field RelIncl a is finite by A2,WELLORD1:def 7;
   then
 A5: a is finite by WELLORD2:def 1;
-A6: now
-    assume not a in omega;
-    hence contradiction by A5,FINSET_1:1,ORDINAL1:16;
-  end;
   F1.b in rng F1 by A4,FUNCT_1:3;
   then field RelIncl a is non empty by A2,WELLORD1:def 7;
   then a is non empty by WELLORD2:def 1;
   then
-A8: {} in a by ORDINAL1:16,XBOOLE_1:3;
-A9: now
+A6: {} in a by ORDINAL1:16,XBOOLE_1:3;
+A7: now
     assume a is limit_ordinal;
-    then omega c= a by A8,ORDINAL1:def 11;
+    then omega c= a by A6,ORDINAL1:def 11;
     hence contradiction by A5;
   end;
   RelIncl a,RelIncl A are_isomorphic by A1,WELLORD1:40;
   then consider F being Function such that
-A11: F is_isomorphism_of RelIncl a,RelIncl A by WELLORD1:def 8;
-A12: for m,n st m in dom F & n in dom F & n < m holds F.n in F.m
+A8: F is_isomorphism_of RelIncl a,RelIncl A by WELLORD1:def 8;
+A9: for m,n st m in dom F & n in dom F & n < m holds F.n in F.m
   proof
     let m,n such that
-A13: m in dom F and
-A14: n in dom F and
-A15: n < m;
-    F.n in rng F by A14,FUNCT_1:3;
-    then F.n in field RelIncl A by A11,WELLORD1:def 7;
+A10: m in dom F and
+A11: n in dom F and
+A12: n < m;
+    F.n in rng F by A11,FUNCT_1:3;
+    then F.n in field RelIncl A by A8,WELLORD1:def 7;
     then
-A16: F.n in A by WELLORD2:def 1;
+A13: F.n in A by WELLORD2:def 1;
     then reconsider b = F.n as Element of NAT;
-    n in field RelIncl a by A11,A14,WELLORD1:def 7;
+    n in field RelIncl a by A8,A11,WELLORD1:def 7;
     then
-A17: n in a by WELLORD2:def 1;
-    F.m in rng F by A13,FUNCT_1:3;
-    then F.m in field RelIncl A by A11,WELLORD1:def 7;
+A14: n in a by WELLORD2:def 1;
+    F.m in rng F by A10,FUNCT_1:3;
+    then F.m in field RelIncl A by A8,WELLORD1:def 7;
     then
-A18: F.m in A by WELLORD2:def 1;
+A15: F.m in A by WELLORD2:def 1;
     then reconsider c = F.m as Element of NAT;
-    n in {i: i < m } by A15;
+    n in {i: i < m } by A12;
     then n in m by AXIOMS:4;
     then
-A19: n c= m by ORDINAL1:def 2;
-    m in field RelIncl a by A11,A13,WELLORD1:def 7;
+A16: n c= m by ORDINAL1:def 2;
+    m in field RelIncl a by A8,A10,WELLORD1:def 7;
     then m in a by WELLORD2:def 1;
-    then [n,m] in RelIncl a by A17,A19,WELLORD2:def 1;
-    then [F.n,F.m] in RelIncl A by A11,WELLORD1:def 7;
+    then [n,m] in RelIncl a by A14,A16,WELLORD2:def 1;
+    then [F.n,F.m] in RelIncl A by A8,WELLORD1:def 7;
     then
-A20: F.n c= F.m by A16,A18,WELLORD2:def 1;
-    F is one-to-one by A11,WELLORD1:def 7;
-    then F.n <> F.m by A13,A14,A15,FUNCT_1:def 4;
-    then F.n c< F.m by A20,XBOOLE_0:def 8;
+A17: F.n c= F.m by A13,A15,WELLORD2:def 1;
+    F is one-to-one by A8,WELLORD1:def 7;
+    then F.n <> F.m by A10,A11,A12,FUNCT_1:def 4;
+    then F.n c< F.m by A17,XBOOLE_0:def 8;
     then b in c by ORDINAL1:11;
     hence thesis;
   end;
-  reconsider a as Element of NAT by A6;
-  dom F = field RelIncl a by A11,WELLORD1:def 7;
+  reconsider a as Element of NAT by A5,FINSET_1:1,ORDINAL1:16;
+  dom F = field RelIncl a by A8,WELLORD1:def 7;
   then
-A21: dom F = a by WELLORD2:def 1;
-A22: now
+A18: dom F = a by WELLORD2:def 1;
+A19: now
     let b be Ordinal;
     assume succ b = a;
     then b in a by ORDINAL1:6;
     hence b is Element of NAT by ORDINAL1:10;
   end;
-A23: ex m st succ m = a
+A20: ex m st succ m = a
   proof
     consider b being Ordinal such that
-A24: succ b = a by A9,ORDINAL1:29;
-    reconsider b as Element of NAT by A22,A24;
+A21: succ b = a by A7,ORDINAL1:29;
+    reconsider b as Element of NAT by A19,A21;
     take b;
-    thus thesis by A24;
+    thus thesis by A21;
   end;
   then consider m such that
-A25: succ m = a;
-A26: rng F = field RelIncl A by A11,WELLORD1:def 7;
+A22: succ m = a;
+A23: rng F = field RelIncl A by A8,WELLORD1:def 7;
   then
-A27: rng F = A by WELLORD2:def 1;
-  then reconsider F as Function of a,A by A21,FUNCT_2:1;
-A28: for n,m st m in dom F & n in dom F & n < m holds F.n in F.m by A12;
-  rng F = A by A26,WELLORD2:def 1;
+A24: rng F = A by WELLORD2:def 1;
+  then reconsider F as Function of a,A by A18,FUNCT_2:1;
+A25: for n,m st m in dom F & n in dom F & n < m holds F.n in F.m by A9;
+  rng F = A by A23,WELLORD2:def 1;
   then
-A29: F.(union a) = union rng F by A23,A28,Th1;
-A30: union a = m by A25,ORDINAL2:2;
-  hence union A in A by A27,A21,A25,A29,FUNCT_1:3,ORDINAL1:6;
+A26: F.(union a) = union rng F by A20,A25,Th1;
+A27: union a = m by A22,ORDINAL2:2;
+  hence union A in A by A24,A18,A22,A26,FUNCT_1:3,ORDINAL1:6;
   thus for b st b in A holds (b in union A or b = union A)
   proof
     let b such that
-A31: b in A;
+A28: b in A;
     now
-A32:  m in dom F by A21,A25,ORDINAL1:6;
+A29:  m in dom F by A18,A22,ORDINAL1:6;
       assume
-A33:  b <> union A;
+A30:  b <> union A;
       consider c such that
-A34:  c in dom F and
-A35:  F.c = b by A27,A31,FUNCT_1:def 3;
-      reconsider c as Element of NAT by A34,ORDINAL1:10;
-      c in m or c = m by A25,A34,ORDINAL1:8;
-      then c in {k : k < m} by A27,A25,A29,A33,A35,AXIOMS:4,ORDINAL2:2;
+A31:  c in dom F and
+A32:  F.c = b by A24,A28,FUNCT_1:def 3;
+      reconsider c as Element of NAT by A31,ORDINAL1:10;
+      c in m or c = m by A22,A31,ORDINAL1:8;
+      then c in {k : k < m} by A24,A22,A26,A30,A32,AXIOMS:4,ORDINAL2:2;
       then ex k st k = c & k < m;
-      hence thesis by A12,A27,A29,A30,A34,A35,A32;
+      hence thesis by A9,A24,A26,A27,A31,A32,A29;
     end;
     hence thesis;
   end;
@@ -305,34 +302,38 @@ A16: X is empty;
 end;
 
 definition
+  let Al;
   let X,p;
-
   pred X |- p means
-  :Def2:
+  :Def1:
   ex f st rng f c= X & |- f^<*p*>;
 end;
 
 definition
+  let Al;
   let X;
   attr X is Consistent means
-  :Def3:
+  :Def2:
   for p holds not (X |- p & X |- 'not' p);
 end;
 
 notation
+  let Al;
   let X;
   antonym X is Inconsistent for X is Consistent;
 end;
 
 definition
-  let f be FinSequence of CQC-WFF;
+  let Al;
+  let f be FinSequence of CQC-WFF(Al);
   attr f is Consistent means
-  :Def4:
+  :Def3:
   for p holds not (|- f^<*p*> & |- f^<*'not' p*>);
 end;
 
 notation
-  let f be FinSequence of CQC-WFF;
+  let Al;
+  let f be FinSequence of CQC-WFF(Al);
   antonym f is Inconsistent for f is Consistent;
 end;
 
@@ -345,9 +346,9 @@ A2: rng g c= X;
   now
     assume g is Inconsistent;
     then consider p such that
-A3: |- g^<*p*> & |- g^<*'not' p*> by Def4;
-    X |- p & X |- 'not' p by A2,A3,Def2;
-    hence contradiction by A1,Def3;
+A3: |- g^<*p*> & |- g^<*'not' p*> by Def3;
+    X |- p & X |- 'not' p by A2,A3,Def1;
+    hence contradiction by A1,Def2;
   end;
   hence thesis;
 end;
@@ -373,14 +374,14 @@ proof
     assume X is Inconsistent;
     then consider q such that
 A1: X |- q and
-A2: X |- 'not' q by Def3;
+A2: X |- 'not' q by Def2;
     consider f2 such that
 A3: rng f2 c= X and
-A4: |- f2^<*'not' q*> by A2,Def2;
+A4: |- f2^<*'not' q*> by A2,Def1;
     let p;
     consider f1 such that
 A5: rng f1 c= X and
-A6: |- f1^<*q*> by A1,Def2;
+A6: |- f1^<*q*> by A1,Def1;
     take f3 = f1^f2;
 A7: rng f3 = rng f1 \/ rng f2 by FINSEQ_1:31;
 A8: |- f1^f2^<*'not' q*> by A4,CALCUL_2:20;
@@ -388,8 +389,8 @@ A8: |- f1^f2^<*'not' q*> by A4,CALCUL_2:20;
     hence thesis by A5,A3,A8,A7,CALCUL_2:25,XBOOLE_1:8;
   end;
   assume for p holds X |- p;
-  then X |- VERUM & X |- 'not' VERUM;
-  hence thesis by Def3;
+  then X |- VERUM(Al) & X |- 'not' VERUM(Al);
+  hence thesis by Def2;
 end;
 
 :: One direction of Ebb et al, Chapter IV, Lemma 7.4
@@ -400,23 +401,23 @@ proof
   assume X is Inconsistent;
   then consider p such that
 A1: X |- p and
-A2: X |- 'not' p by Def3;
+A2: X |- 'not' p by Def2;
   consider f1 such that
 A3: rng f1 c= X and
-A4: |- f1^<*p*> by A1,Def2;
+A4: |- f1^<*p*> by A1,Def1;
   consider f2 such that
 A5: rng f2 c= X and
-A6: |- f2^<*'not' p*> by A2,Def2;
-  reconsider Y = rng(f1^f2) as Subset of CQC-WFF;
+A6: |- f2^<*'not' p*> by A2,Def1;
+  reconsider Y = rng(f1^f2) as Subset of CQC-WFF(Al);
   take Y;
   Y = rng f1 \/ rng f2 by FINSEQ_1:31;
   hence Y c= X by A3,A5,XBOOLE_1:8;
   |- f1^f2^<*'not' p*> by A6,CALCUL_2:20;
   then
-A7: Y |- 'not' p by Def2;
+A7: Y |- 'not' p by Def1;
   |- f1^f2^<*p*> by A4,Th5;
-  then Y |- p by Def2;
-  hence thesis by A7,Def3;
+  then Y |- p by Def1;
+  hence thesis by A7,Def2;
 end;
 
 Lm1: for f,g be FinSequence holds Seg len(f^g) = Seg len f \/ seq(len f,len g)
@@ -433,7 +434,7 @@ proof
   assume X \/ {p} |- q;
   then consider f such that
 A1: rng f c= X \/ {p} and
-A2: |- f^<*q*> by Def2;
+A2: |- f^<*q*> by Def1;
 A3: now
     set g = f - {p};
     reconsider A = f"{p} as finite set;
@@ -599,8 +600,8 @@ A45: len h = len g + len IdFinS(p,n) by FINSEQ_1:22
     then
 A46: dom F = B by A18,FINSEQ_1:def 3;
     then reconsider F as Relation of B,B by A21,RELSET_1:4;
-    B = {} implies B = {};
-    then reconsider F as Function of B,B by A46,FUNCT_2:def 1;
+    rng F c= B;
+    then reconsider F as Function of B,B by A46,FUNCT_2:2;
     F is one-to-one
     proof
       let a1,a2 such that
@@ -728,7 +729,7 @@ A85:    F.k = Sgm(C).k by A18,A73;
     end;
     then
 A86: Per(f,F) = h by A70,FINSEQ_1:13;
-    reconsider h as FinSequence of CQC-WFF by A70,A71,FINSEQ_1:13;
+    reconsider h as FinSequence of CQC-WFF(Al) by A70,A71,FINSEQ_1:13;
     (F*f).j = p by A14,A68,A69,FUNCT_1:13;
     then
 A87: h.j = p by A86,CALCUL_2:def 2;
@@ -747,7 +748,7 @@ A91:  rng g = rng f \ {p} by FINSEQ_3:65;
     then consider k be Nat such that
 A92: k in dom IdFinS(p,n) and
     j = len g + k by A88,FINSEQ_1:25;
-    reconsider g as FinSequence of CQC-WFF by FINSEQ_3:86;
+    reconsider g as FinSequence of CQC-WFF(Al) by FINSEQ_3:86;
     1 <= k & k <= len IdFinS(p,n) by A92,FINSEQ_3:25;
     then 1 <= len IdFinS(p,n) by XXREAL_0:2;
     then
@@ -783,7 +784,7 @@ proof
     assume X |- p;
     then consider f such that
 A1: rng f c= X and
-A2: |- f^<*p*> by Def2;
+A2: |- f^<*p*> by Def1;
     set f2 = f^<*'not' p*>;
     set f1 = f^<*'not' p*>^<*'not' p*>;
 A3: Ant(f1) = f^<*'not' p*> by CALCUL_1:5;
@@ -801,7 +802,7 @@ A6: 0+1 <= len f2 by CALCUL_1:10;
     then
 A7: rng f2 = rng f \/ {'not' p} by A6,CALCUL_1:3;
     |- f^<*'not' p*>^<*p*> by A2,Th5;
-    then not f^<*'not' p*> is Consistent by A5,Def4;
+    then not f^<*'not' p*> is Consistent by A5,Def3;
     hence thesis by A1,A7,Th4,XBOOLE_1:9;
   end;
   thus X \/ {'not' p} is Inconsistent implies X |- p
@@ -810,7 +811,7 @@ A7: rng f2 = rng f \/ {'not' p} by A6,CALCUL_1:3;
     then X \/ {'not' p} |- p by Th6;
     then consider f such that
 A8: rng f c= X \/ {'not' p} and
-A9: |- f^<*p*> by Def2;
+A9: |- f^<*p*> by Def1;
     now
       set g = f - {'not' p};
       reconsider A = f"{'not' p} as finite set;
@@ -976,8 +977,8 @@ A51:  len h = len g + len IdFinS('not' p,n) by FINSEQ_1:22
       then
 A52:  dom F = B by A24,FINSEQ_1:def 3;
       then reconsider F as Relation of B,B by A27,RELSET_1:4;
-      B = {} implies B = {};
-      then reconsider F as Function of B,B by A52,FUNCT_2:def 1;
+      rng F c= B;
+      then reconsider F as Function of B,B by A52,FUNCT_2:2;
       F is one-to-one
       proof
         let a1,a2 such that
@@ -1105,7 +1106,7 @@ A91:      F.k = Sgm(C).k by A24,A79;
       end;
       then
 A92:  Per(f,F) = h by A76,FINSEQ_1:13;
-      reconsider h as FinSequence of CQC-WFF by A76,A77,FINSEQ_1:13;
+      reconsider h as FinSequence of CQC-WFF(Al) by A76,A77,FINSEQ_1:13;
       (F*f).j = 'not' p by A20,A74,A75,FUNCT_1:13;
       then
 A93:  h.j = 'not' p by A92,CALCUL_2:def 2;
@@ -1124,7 +1125,7 @@ A97:    rng g = rng f \ {'not' p} by FINSEQ_3:65;
       then consider k be Nat such that
 A98:  k in dom IdFinS('not' p,n) and
       j = len g + k by A94,FINSEQ_1:25;
-      reconsider g as FinSequence of CQC-WFF by FINSEQ_3:86;
+      reconsider g as FinSequence of CQC-WFF(Al) by FINSEQ_3:86;
       1 <= k & k <= len IdFinS('not' p,n) by A98,FINSEQ_3:25;
       then 1 <= len IdFinS('not' p,n) by XXREAL_0:2;
       then
@@ -1141,9 +1142,9 @@ A101: rng g c= X \ {'not' p} by XBOOLE_1:40;
 A102: rng g c= X by A101,XBOOLE_1:1;
       |- g^<*p*>^<*p*> by CALCUL_2:21;
       then |- g^<*p*> by A100,CALCUL_2:26;
-      hence thesis by A102,Def2;
+      hence thesis by A102,Def1;
     end;
-    hence thesis by A9,Def2;
+    hence thesis by A9,Def1;
   end;
 end;
 
@@ -1157,7 +1158,7 @@ proof
     assume X |- 'not' p;
     then consider f such that
 A1: rng f c= X and
-A2: |- f^<*'not' p*> by Def2;
+A2: |- f^<*'not' p*> by Def1;
     set f2 = f^<*p*>;
     set f1 = f^<*p*>^<*p*>;
 A3: Ant(f1) = f^<*p*> by CALCUL_1:5;
@@ -1175,7 +1176,7 @@ A6: 0+1 <= len f2 by CALCUL_1:10;
     then
 A7: rng f2 = rng f \/ {p} by A6,CALCUL_1:3;
     |- f^<*p*>^<*'not' p*> by A2,Th5;
-    then not f^<*p*> is Consistent by A5,Def4;
+    then not f^<*p*> is Consistent by A5,Def3;
     hence thesis by A1,A7,Th4,XBOOLE_1:9;
   end;
   thus X \/ {p} is Inconsistent implies X |- 'not' p
@@ -1184,7 +1185,7 @@ A7: rng f2 = rng f \/ {p} by A6,CALCUL_1:3;
     then X \/ {p} |- 'not' p by Th6;
     then consider f such that
 A8: rng f c= X \/ {p} and
-A9: |- f^<*'not' p*> by Def2;
+A9: |- f^<*'not' p*> by Def1;
     now
       set g = f - {p};
       reconsider A = f"{p} as finite set;
@@ -1350,8 +1351,8 @@ A51:  len h = len g + len IdFinS(p,n) by FINSEQ_1:22
       then
 A52:  dom F = B by A24,FINSEQ_1:def 3;
       then reconsider F as Relation of B,B by A27,RELSET_1:4;
-      B = {} implies B = {};
-      then reconsider F as Function of B,B by A52,FUNCT_2:def 1;
+      rng F c= B;
+      then reconsider F as Function of B,B by A52,FUNCT_2:2;
       F is one-to-one
       proof
         let a1,a2 such that
@@ -1479,7 +1480,7 @@ A91:      F.k = Sgm(C).k by A24,A79;
       end;
       then
 A92:  Per(f,F) = h by A76,FINSEQ_1:13;
-      reconsider h as FinSequence of CQC-WFF by A76,A77,FINSEQ_1:13;
+      reconsider h as FinSequence of CQC-WFF(Al) by A76,A77,FINSEQ_1:13;
       (F*f).j = p by A20,A74,A75,FUNCT_1:13;
       then
 A93:  h.j = p by A92,CALCUL_2:def 2;
@@ -1498,7 +1499,7 @@ A97:    rng g = rng f \ {p} by FINSEQ_3:65;
       then consider k be Nat such that
 A98:  k in dom IdFinS(p,n) and
       j = len g + k by A94,FINSEQ_1:25;
-      reconsider g as FinSequence of CQC-WFF by FINSEQ_3:86;
+      reconsider g as FinSequence of CQC-WFF(Al) by FINSEQ_3:86;
       1 <= k & k <= len IdFinS(p,n) by A98,FINSEQ_3:25;
       then 1 <= len IdFinS(p,n) by XXREAL_0:2;
       then
@@ -1515,9 +1516,9 @@ A101: rng g c= X \ {p} by XBOOLE_1:40;
 A102: rng g c= X by A101,XBOOLE_1:1;
       |- g^<*'not' p*>^<*'not' p*> by CALCUL_2:21;
       then |- g^<*'not' p*> by A100,CALCUL_2:26;
-      hence thesis by A102,Def2;
+      hence thesis by A102,Def1;
     end;
-    hence thesis by A9,Def2;
+    hence thesis by A9,Def1;
   end;
 end;
 
@@ -1525,11 +1526,11 @@ begin :: Unions of Consistent Sets
 :: Ebb et al, Chapter IV, Lemma 7.7
 
 theorem
-  for f being Function of NAT,bool CQC-WFF st (for n,m st m in dom f & n
+  for f being Function of NAT,bool CQC-WFF(Al) st (for n,m st m in dom f & n
   in dom f & n < m holds f.n is Consistent & f.n c= f.m) holds (union rng f) is
   Consistent
 proof
-  let f be Function of NAT,bool CQC-WFF;
+  let f be Function of NAT,bool CQC-WFF(Al);
   assume
 A1: for n,m st m in dom f & n in dom f & n < m holds f.n is Consistent &
   f.n c= f.m;
@@ -1549,27 +1550,27 @@ A5: Z is Inconsistent by Th7;
     for n,m st m in dom f & n in dom f & n < m holds f.n c= f.m by A1;
     then consider k such that
 A6: Z c= f.k by A4,Th3;
-    reconsider Y = f.k as Subset of CQC-WFF;
+    reconsider Y = f.k as Subset of CQC-WFF(Al);
     consider p such that
 A7: Z |- p and
-A8: Z |- 'not' p by A5,Def3;
+A8: Z |- 'not' p by A5,Def2;
     consider f1 such that
 A9: rng f1 c= Z and
-A10: |- f1^<*p*> by A7,Def2;
+A10: |- f1^<*p*> by A7,Def1;
     consider f2 such that
 A11: rng f2 c= Z and
-A12: |- f2^<*'not' p*> by A8,Def2;
+A12: |- f2^<*'not' p*> by A8,Def1;
     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:31;
     then rng(f1^f2) c= Z by A9,A11,XBOOLE_1:8;
     then
 A13: rng(f1^f2) c= Y by A6,XBOOLE_1:1;
     |- f1^f2^<*'not' p*> by A12,CALCUL_2:20;
     then
-A14: Y |- 'not' p by A13,Def2;
+A14: Y |- 'not' p by A13,Def1;
     |- f1^f2^<*p*> by A10,Th5;
-    then Y |- p by A13,Def2;
+    then Y |- p by A13,Def1;
     then
-A15: not Y is Consistent by A14,Def3;
+A15: not Y is Consistent by A14,Def2;
     k in NAT;
     then k in dom f by FUNCT_2:def 1;
     hence contradiction by A15,A2;
@@ -1580,18 +1581,18 @@ end;
 begin :: Construction of a Henkin Model
 
 reserve A for non empty set,
-  v for Element of Valuations_in A,
-  J for interpretation of A;
+  v for Element of Valuations_in(Al,A),
+  J for interpretation of Al,A;
 
 theorem Th12:
   X is Inconsistent implies for J,v holds not J,v |= X
 proof
-  reconsider p = 'not' VERUM as Element of CQC-WFF;
+  reconsider p = 'not' VERUM(Al) as Element of CQC-WFF(Al);
   assume not X is Consistent;
-  then X |- 'not' VERUM by Th6;
+  then X |- 'not' VERUM(Al) by Th6;
   then consider f such that
 A1: rng f c= X and
-A2: |- f^<*'not' VERUM*> by Def2;
+A2: |- f^<*'not' VERUM(Al)*> by Def1;
   let J,v;
 A3: Suc(f^<*p*>) = p by CALCUL_1:5;
   rng Ant(f^<*p*>) c= X by A1,CALCUL_1:5;
@@ -1600,48 +1601,55 @@ A3: Suc(f^<*p*>) = p by CALCUL_1:5;
 A4: X |= p by CALCUL_1:32;
   now
     assume J,v |= X;
-    then J,v |= 'not' VERUM by A4,CALCUL_1:def 12;
-    then not J,v |= VERUM by VALUAT_1:17;
+    then J,v |= 'not' VERUM(Al) by A4,CALCUL_1:def 12;
+    then not J,v |= VERUM(Al) by VALUAT_1:17;
     hence contradiction by VALUAT_1:32;
   end;
   hence thesis;
 end;
 
 theorem Th13:
-  {VERUM} is Consistent
+  {VERUM(Al)} is Consistent
 proof
 
-set A = the non empty set,J = the interpretation of A,v = the Element of
-Valuations_in A;
-  J,v |= VERUM by VALUAT_1:32;
-  then for p st p in {VERUM} holds J,v |= p by TARSKI:def 1;
-  then J,v |= {VERUM} by CALCUL_1:def 11;
+set A =the  non empty set,J =the  interpretation of Al,A ,v =the  Element of
+Valuations_in(Al,A);
+  J,v |= VERUM(Al) by VALUAT_1:32;
+  then for p st p in {VERUM(Al)} holds J,v |= p by TARSKI:def 1;
+  then J,v |= {VERUM(Al)} by CALCUL_1:def 11;
   hence thesis by Th12;
 end;
 
 registration
-  cluster Consistent for Subset of CQC-WFF;
-  existence by Th13;
+  let Al;
+  cluster Consistent for Subset of CQC-WFF(Al);
+  existence
+  proof
+    {VERUM(Al)} is Consistent by Th13;
+    hence thesis;
+  end;
 end;
 
-reserve CX for Consistent Subset of CQC-WFF,
-  P9 for Element of QC-pred_symbols;
+reserve CX for Consistent Subset of CQC-WFF(Al),
+  P9 for Element of QC-pred_symbols(Al);
 
 definition
-  func HCar -> non empty set equals
-  bound_QC-variables;
+  let Al;
+  func HCar(Al) -> non empty set equals
+  bound_QC-variables(Al);
   coherence;
 end;
 
 definition
-  let P be (Element of QC-pred_symbols), ll be CQC-variable_list of (
-  the_arity_of P);
-  redefine func P!ll -> Element of CQC-WFF;
+  let Al;
+  let P be (Element of QC-pred_symbols(Al)), ll be CQC-variable_list of (
+  the_arity_of P), Al;
+  redefine func P!ll -> Element of CQC-WFF(Al);
   coherence
   proof
     set k = the_arity_of P;
-    reconsider P9 = P as QC-pred_symbol of k by QC_LANG3:1;
-    P9!ll is Element of CQC-WFF;
+    reconsider P9 = P as QC-pred_symbol of k,Al by QC_LANG3:1;
+    P9!ll is Element of CQC-WFF(Al);
     hence thesis;
   end;
 end;
@@ -1649,82 +1657,89 @@ end;
 :: The Henkin Model (Ebb et al, Chapter V, §1)
 
 definition
+  let Al;
   let CX;
-  mode Henkin_interpretation of CX -> interpretation of HCar means
-    :Def6:
+  mode Henkin_interpretation of CX -> interpretation of Al,HCar(Al) means
+    :Def5:
     for
-P being (Element of QC-pred_symbols), r being Element of relations_on HCar st
-    it.P = r holds for a holds a in r iff ex ll being CQC-variable_list of (
-    the_arity_of P) st a = ll & CX |- P!ll;
+P being (Element of QC-pred_symbols(Al)), r being Element of relations_on
+HCar(Al) st it.P = r holds for a holds a in r iff
+ex ll being CQC-variable_list of (the_arity_of P), Al st a = ll &
+CX |- P!ll;
   existence
   proof
     defpred P[set,set] means ex P9 st P9 = $1 & $2 = {ll where ll is
-    CQC-variable_list of (the_arity_of P9) : CX |- P9!ll};
-    set A = QC-pred_symbols;
+    CQC-variable_list of (the_arity_of P9), Al : CX |- P9!ll};
+    set A = QC-pred_symbols(Al);
 A1: for a st a in A ex b st P[a,b]
     proof
       let a;
       assume a in A;
-      then reconsider a as Element of QC-pred_symbols;
+      then reconsider a as Element of QC-pred_symbols(Al);
       consider b such that
-A2:   b = {ll where ll is CQC-variable_list of (the_arity_of a) : CX |- a!ll};
+A2:   b = {ll where ll is CQC-variable_list of (the_arity_of a), Al :
+           CX |- a!ll};
       take b;
       take a;
       thus thesis by A2;
     end;
     consider f being Function such that
 A3: dom f = A & for a st a in A holds P[a,f.a] from CLASSES1:sch 1(A1);
-A4: for P being (Element of QC-pred_symbols), r being Element of
-    relations_on HCar st f.P = r holds for a holds a in r iff ex ll being
-    CQC-variable_list of (the_arity_of P) st a = ll & CX |- P!ll
+A4: for P being (Element of QC-pred_symbols(Al)), r being Element of
+    relations_on HCar(Al) st f.P = r holds for a holds a in r iff ex ll being
+    CQC-variable_list of (the_arity_of P), Al st a = ll & CX |- P!ll
     proof
-      let P be (Element of QC-pred_symbols), r be Element of relations_on HCar
+      let P be (Element of QC-pred_symbols(Al)),
+        r be Element of relations_on HCar(Al)
       such that
 A5:   f.P = r;
       let a;
-      thus a in r implies ex ll being CQC-variable_list of (the_arity_of P) st
+      thus a in r implies ex ll being CQC-variable_list of
+      (the_arity_of P), Al st
       a = ll & CX |- P!ll
       proof
         assume
 A6:     a in r;
         ex P9 st P9 = P & f.P = {ll where ll is CQC-variable_list of (
-        the_arity_of P9) : CX |- P9!ll} by A3;
+        the_arity_of P9), Al : CX |- P9!ll} by A3;
         hence thesis by A5,A6;
       end;
-      thus (ex ll being CQC-variable_list of (the_arity_of P) st a = ll & CX
-      |- P!ll) implies a in r
+      thus (ex ll being CQC-variable_list of (the_arity_of P), Al
+      st a = ll & CX |- P!ll) implies a in r
       proof
-        given ll being CQC-variable_list of (the_arity_of P) such that
+        given ll being CQC-variable_list of (the_arity_of P),Al such that
 A7:     a = ll & CX |- P!ll;
         ex P9 st P9 = P & f.P = {l where l is CQC-variable_list of (
-        the_arity_of P9) : CX |- P9!l} by A3;
+        the_arity_of P9), Al : CX |- P9!l} by A3;
         hence thesis by A5,A7;
       end;
     end;
-A8: for P being (Element of QC-pred_symbols), r being Element of
-    relations_on HCar st f.P = r holds r = empty_rel(HCar) or the_arity_of P =
-    the_arity_of r
+A8: for P being (Element of QC-pred_symbols(Al)), r being Element of
+    relations_on HCar(Al) st f.P = r holds r = empty_rel(HCar(Al)) or
+    the_arity_of P = the_arity_of r
     proof
-      let P be (Element of QC-pred_symbols), r be Element of relations_on HCar
+      let P be (Element of QC-pred_symbols(Al)),
+      r be Element of relations_on HCar(Al)
       such that
 A9:   f.P = r;
       consider P9 such that
 A10:  P9 = P & f.P = {ll where ll is CQC-variable_list of (
-      the_arity_of P9) : CX |- P9!ll} by A3;
+      the_arity_of P9), Al : CX |- P9!ll} by A3;
       assume
-A11:  not r = empty_rel(HCar);
+A11:  not r = empty_rel(HCar(Al));
       then r <> {} by MARGREL1:9;
       then consider a such that
 A12:  a in r by XBOOLE_0:def 1;
-      consider ll9 being CQC-variable_list of (the_arity_of P9) such that
+      consider ll9 being CQC-variable_list of (the_arity_of P9), Al
+      such that
 A13:  a = ll9 and
       CX |- P9!ll9 by A9,A12,A10;
-      rng ll9 c= bound_QC-variables by RELAT_1:def 19;
-      then reconsider a as FinSequence of HCar by A13,FINSEQ_1:def 4;
+      rng ll9 c= bound_QC-variables(Al) by RELAT_1:def 19;
+      then reconsider a as FinSequence of HCar(Al) by A13,FINSEQ_1:def 4;
       the_arity_of r = len a by A11,A12,MARGREL1:def 10;
       hence thesis by A10,A13,CARD_1:def 7;
     end;
-    b in rng f implies b in relations_on HCar
+    b in rng f implies b in relations_on HCar(Al)
     proof
       assume b in rng f;
       then consider a such that
@@ -1732,48 +1747,49 @@ A14:  a in dom f and
 A15:  b = f.a by FUNCT_1:def 3;
       consider P9 such that
 A16:  P9 = a & f.a = {ll where ll is CQC-variable_list of (
-      the_arity_of P9) : CX |- P9!ll} by A3,A14;
-      c in b implies c in HCar*
+      the_arity_of P9), Al : CX |- P9!ll} by A3,A14;
+      c in b implies c in HCar(Al)*
       proof
         assume c in b;
         then consider
-        ll being CQC-variable_list of (the_arity_of P9) such that
+        ll being CQC-variable_list of (the_arity_of P9), Al such that
 A17:    c = ll and
         CX |- P9!ll by A15,A16;
-        rng ll c= bound_QC-variables by RELAT_1:def 19;
-        then ll is FinSequence of HCar by FINSEQ_1:def 4;
+        rng ll c= bound_QC-variables(Al) by RELAT_1:def 19;
+        then ll is FinSequence of HCar(Al) by FINSEQ_1:def 4;
         hence thesis by A17,FINSEQ_1:def 11;
       end;
       then
-A18:  b c= HCar* by TARSKI:def 3;
-      for fin,fin9 being FinSequence of HCar st fin in b & fin9 in b
+A18:  b c= HCar(Al)* by TARSKI:def 3;
+      for fin,fin9 being FinSequence of HCar(Al) st fin in b & fin9 in b
       holds len fin = len fin9
       proof
-        let fin,fin9 be FinSequence of HCar;
+        let fin,fin9 be FinSequence of HCar(Al);
         assume that
 A19:    fin in b and
 A20:    fin9 in b;
-        ex ll being CQC-variable_list of (the_arity_of P9) st fin = ll &
+        ex ll being CQC-variable_list of (the_arity_of P9), Al st fin = ll &
         CX |- P9!ll by A15,A16,A19;
         then
 A21:    len fin = the_arity_of P9 by CARD_1:def 7;
-        ex ll9 being CQC-variable_list of (the_arity_of P9) st fin9 = ll9
+        ex ll9 being CQC-variable_list of (the_arity_of P9), Al st fin9 = ll9
         & CX |- P9!ll9 by A15,A16,A20;
         hence thesis by A21,CARD_1:def 7;
       end;
       hence thesis by A18,MARGREL1:def 7;
     end;
-    then rng f c= relations_on HCar by TARSKI:def 3;
-    then reconsider f as Function of A,relations_on HCar by A3,FUNCT_2:2;
-    reconsider f as interpretation of HCar by A8,VALUAT_1:def 5;
+    then rng f c= relations_on HCar(Al) by TARSKI:def 3;
+    then reconsider f as Function of A,relations_on HCar(Al) by A3,FUNCT_2:2;
+    reconsider f as interpretation of Al,HCar(Al) by A8,VALUAT_1:def 5;
     take f;
     thus thesis by A4;
   end;
 end;
 
 definition
-  func valH -> Element of Valuations_in HCar equals
-  id bound_QC-variables;
+  let Al;
+  func valH(Al) -> Element of Valuations_in (Al,HCar(Al)) equals
+  id bound_QC-variables(Al);
   coherence by VALUAT_1:def 1;
 end;
 
@@ -1782,60 +1798,60 @@ begin :: Some Properties of the Henkin Model
 reserve JH for Henkin_interpretation of CX;
 
 theorem Th14:
-  valH*'ll = ll
+  (valH(Al))*'ll = ll
 proof
-A1: for i st i in dom (valH*'ll) holds valH.(ll.i) = ll.i
+A1: for i st i in dom ((valH(Al))*'ll) holds (valH(Al)).(ll.i) = ll.i
   proof
-A2: dom(valH*'ll) c= dom ll by RELAT_1:25;
+A2: dom((valH(Al))*'ll) c= dom ll by RELAT_1:25;
     let i;
-    assume i in dom (valH*'ll);
+    assume i in dom ((valH(Al))*'ll);
     then
 A3: ll.i in rng ll by A2,FUNCT_1:3;
-    rng ll c= bound_QC-variables by RELAT_1:def 19;
+    rng ll c= bound_QC-variables(Al) by RELAT_1:def 19;
     hence thesis by A3,FUNCT_1:18;
   end;
-A4: for i st 1 <= i & i <= k holds valH.(ll.i) = ll.i
+A4: for i st 1 <= i & i <= k holds (valH(Al)).(ll.i) = ll.i
   proof
     let i such that
 A5: 1 <= i and
 A6: i <= k;
-    i <= len (valH*'ll) by A6,VALUAT_1:def 3;
-    then i in dom (valH*'ll) by A5,FINSEQ_3:25;
+    i <= len ((valH(Al))*'ll) by A6,VALUAT_1:def 3;
+    then i in dom ((valH(Al))*'ll) by A5,FINSEQ_3:25;
     hence thesis by A1;
   end;
 A7: len ll = k by CARD_1:def 7;
   then
 A8: dom ll = Seg k by FINSEQ_1:def 3;
-A9: for i being Nat st i in dom ll holds (valH*'ll).i = ll.i
+A9: for i being Nat st i in dom ll holds ((valH(Al))*'ll).i = ll.i
   proof
     let i be Nat such that
 A10: i in dom ll;
     reconsider i as Element of NAT by ORDINAL1:def 12;
 A11: 1 <= i & i <= k by A8,A10,FINSEQ_1:1;
-    then (valH*'ll).i = valH.(ll.i) by VALUAT_1:def 3;
+    then ((valH(Al))*'ll).i = (valH(Al)).(ll.i) by VALUAT_1:def 3;
     hence thesis by A4,A11;
   end;
-  len (valH*'ll) = k by VALUAT_1:def 3;
+  len ((valH(Al))*'ll) = k by VALUAT_1:def 3;
   hence thesis by A7,A9,FINSEQ_2:9;
 end;
 
 theorem Th15:
-  |- f^<*VERUM*>
+  |- f^<*VERUM(Al)*>
 proof
-  set PR = <*[f^<*VERUM*>,1]*>;
-A1: rng PR = {[f^<*VERUM*>,1]} by FINSEQ_1:38;
+  set PR = <*[f^<*VERUM(Al)*>,1]*>;
+A1: rng PR = {[f^<*VERUM(Al)*>,1]} by FINSEQ_1:38;
   now
     let a;
     assume a in rng PR;
     then
-A2: a = [f^<*VERUM*>,1] by A1,TARSKI:def 1;
-    f^<*VERUM*> in set_of_CQC-WFF-seq by CALCUL_1:def 6;
-    hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A2,CQC_THE1:21
+A2: a = [f^<*VERUM(Al)*>,1] by A1,TARSKI:def 1;
+    f^<*VERUM(Al)*> in set_of_CQC-WFF-seq(Al) by CALCUL_1:def 6;
+    hence a in [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by A2,CQC_THE1:21
 ,ZFMISC_1:87;
   end;
-  then rng PR c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by TARSKI:def 3;
+  then rng PR c= [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds:] by TARSKI:def 3;
   then reconsider
-  PR as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds :] by
+  PR as FinSequence of [:set_of_CQC-WFF-seq(Al),Proof_Step_Kinds :] by
 FINSEQ_1:def 4;
   now
     let n be Nat such that
@@ -1843,51 +1859,51 @@ A3: 1 <= n and
 A4: n <= len PR;
     n <= 1 by A4,FINSEQ_1:39;
     then n = 1 by A3,XXREAL_0:1;
-    then PR.n = [f^<*VERUM*>,1] by FINSEQ_1:40;
-    then (PR.n)`1 = f^<*VERUM*> & (PR.n)`2 = 1 by MCART_1:7;
+    then PR.n = [f^<*VERUM(Al)*>,1] by FINSEQ_1:40;
+    then (PR.n)`1 = f^<*VERUM(Al)*> & (PR.n)`2 = 1 by MCART_1:7;
     hence PR,n is_a_correct_step by CALCUL_1:def 7;
   end;
   then
 A5: PR is a_proof by CALCUL_1:def 8;
-  PR.1 = [f^<*VERUM*>,1] by FINSEQ_1:40;
-  then PR.(len PR) = [f^<*VERUM*>,1] by FINSEQ_1:40;
-  then (PR.(len PR))`1 = f^<*VERUM*> by MCART_1:7;
+  PR.1 = [f^<*VERUM(Al)*>,1] by FINSEQ_1:40;
+  then PR.(len PR) = [f^<*VERUM(Al)*>,1] by FINSEQ_1:40;
+  then (PR.(len PR))`1 = f^<*VERUM(Al)*> by MCART_1:7;
   hence thesis by A5,CALCUL_1:def 9;
 end;
 
 theorem
-  JH,valH |= VERUM iff CX |- VERUM
+  JH,valH(Al) |= VERUM(Al) iff CX |- VERUM(Al)
 proof
-  set f = <*>CQC-WFF;
-  rng f c= CX & |- f^<*VERUM*> by Th15,RELAT_1:38,XBOOLE_1:2;
-  hence thesis by Def2,VALUAT_1:32;
+  set f = <*>CQC-WFF(Al);
+  rng f c= CX & |- f^<*VERUM(Al)*> by Th15,XBOOLE_1:2;
+  hence thesis by Def1,VALUAT_1:32;
 end;
 
 theorem
-  JH,valH |= P!ll iff CX |- P!ll
+  JH,valH(Al) |= P!ll iff CX |- P!ll
 proof
-  thus JH,valH |= P!ll implies CX |- P!ll
+  thus JH,valH(Al) |= P!ll implies CX |- P!ll
   proof
     set rel = JH.P;
-    reconsider rel as Element of relations_on HCar;
-    assume JH,valH |= P!ll;
-    then Valid(P!ll,JH).valH = TRUE by VALUAT_1:def 7;
-    then (valH*'ll) in rel by VALUAT_1:7;
+    reconsider rel as Element of relations_on HCar(Al);
+    assume JH,valH(Al) |= P!ll;
+    then Valid(P!ll,JH).valH(Al) = TRUE by VALUAT_1:def 7;
+    then ((valH(Al))*'ll) in rel by VALUAT_1:7;
     then ll in rel by Th14;
     then
-    ex ll9 being CQC-variable_list of (the_arity_of P) st ll9 = ll & CX |-
-    P!ll9 by Def6;
+    ex ll9 being CQC-variable_list of (the_arity_of P), Al st
+    ll9 = ll & CX |- P!ll9 by Def5;
     hence thesis;
   end;
-  thus CX |- P!ll implies JH,valH |= P!ll
+  thus CX |- P!ll implies JH,valH(Al) |= P!ll
   proof
-    P is (QC-pred_symbol of the_arity_of P) by QC_LANG3:1;
+    P is (QC-pred_symbol of the_arity_of P, Al) by QC_LANG3:1;
     then
 A1: the_arity_of P = k by SUBSTUT2:3;
     assume CX |- P!ll;
-    then ll in JH.P by A1,Def6;
-    then (valH*'ll) in JH.P by Th14;
-    then Valid(P!ll,JH).valH = TRUE by VALUAT_1:7;
+    then ll in JH.P by A1,Def5;
+    then ((valH(Al))*'ll) in JH.P by Th14;
+    then Valid(P!ll,JH).valH(Al) = TRUE by VALUAT_1:7;
     hence thesis by VALUAT_1:def 7;
   end;
 end;

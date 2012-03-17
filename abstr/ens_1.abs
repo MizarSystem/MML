@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received August 1, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,14 +16,15 @@ environ
 
  vocabularies XBOOLE_0, SUBSET_1, FUNCT_2, TARSKI, FUNCT_1, RELAT_1, ZFMISC_1,
       MCART_1, GRAPH_1, PARTFUN1, CAT_1, STRUCT_0, QC_LANG1, CLASSES2,
-      FUNCOP_1, FUNCT_4, CAT_2, OPPCAT_1, FUNCT_5, ARYTM_0, ENS_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, RELAT_1,
-      FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1, FUNCT_4, FUNCT_5, CLASSES2,
-      FUNCOP_1, STRUCT_0, GRAPH_1, CAT_1, CAT_2, OPPCAT_1;
+      FUNCOP_1, FUNCT_4, CAT_2, OPPCAT_1, FUNCT_5, ARYTM_0, ENS_1, MONOID_0,
+      RELAT_2, BINOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, MCART_1, DOMAIN_1,
+      RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1, FUNCT_4, CLASSES2,
+      FUNCOP_1, FUNCT_5, STRUCT_0, GRAPH_1, CAT_1, CAT_2, OPPCAT_1;
  constructors PARTFUN1, DOMAIN_1, CLASSES2, CAT_2, OPPCAT_1, FUNCOP_1,
-      RELSET_1;
+      RELSET_1, FUNCT_5, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, RELSET_1, STRUCT_0,
-      PARTFUN1;
+      PARTFUN1, RELAT_1, CAT_1, XTUPLE_0, OPPCAT_1, CAT_2;
  requirements SUBSET, BOOLE;
 
 
@@ -191,29 +192,25 @@ definition
   (for m2,
 m1 holds [m2,m1] in dom it iff dom m2 = cod m1) & for m2,m1 st dom m2 = cod m1
   holds it.[m2,m1] = m2*m1;
-  func fId V -> Function of V,Maps V means
-:: ENS_1:def 12
-
-  for A holds it.A = id$ A;
 end;
 
 definition
+ canceled;
   let V;
-  func Ens(V) -> CatStr equals
+  func Ens(V) -> non empty non void strict CatStr equals
 :: ENS_1:def 13
-  CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V
-  #);
+  CatStr(# V,Maps V,fDom V,fCod V,fComp V#);
 end;
-
-theorem :: ENS_1:21
-  CatStr(# V,Maps V,fDom V,fCod V,fComp V,fId V #) is Category;
 
 registration
   let V;
-  cluster Ens(V) -> strict Category-like non void non empty;
+  cluster Ens(V) -> Category-like
+   reflexive transitive associative with_identities;
 end;
 
 reserve a,b for Object of Ens(V);
+
+canceled;
 
 theorem :: ENS_1:22
   A is Object of Ens(V);
@@ -264,10 +261,10 @@ theorem :: ENS_1:27
   Hom(a,b) = Maps(@a,@b);
 
 theorem :: ENS_1:28
-  dom g = cod f implies g*f = (@g)*(@f);
+  dom g = cod f implies g(*)f = (@g)*(@f);
 
 theorem :: ENS_1:29
-  id a = id$(@a);
+  id a = id$ @a;
 
 theorem :: ENS_1:30
   a = {} implies a is initial;
@@ -290,22 +287,28 @@ theorem :: ENS_1:35
   being set st a = {x};
 
 theorem :: ENS_1:36
-  f is monic iff (@f)`2 is one-to-one;
+ for a,b being Object of Ens(V), f being Morphism of a,b st Hom(a,b) <> {}
+  holds f is monic iff (@f)`2 is one-to-one;
 
 theorem :: ENS_1:37
-  f is epi & (ex A st ex x1,x2 being set st x1 in A & x2 in A & x1
+ for a,b being Object of Ens(V), f being Morphism of a,b
+   st Hom(a,b) <> {}
+  holds f is epi & (ex A st ex x1,x2 being set st x1 in A & x2 in A & x1
   <> x2) implies @f is surjective;
 
 theorem :: ENS_1:38
-  @f is surjective implies f is epi;
+ for a,b being Object of Ens(V) st Hom(a,b) <> {}
+ for f being Morphism of a,b st  @f is surjective
+  holds f is epi;
 
 theorem :: ENS_1:39
-  for W being Universe, f being Morphism of Ens(W) st f is epi holds @f
+  for W being Universe, a,b being Object of Ens(W) st Hom(a,b) <> {}
+  for f being Morphism of a,b st f is epi holds @f
   is surjective;
 
 theorem :: ENS_1:40
-  for W being non empty Subset of V holds Ens(W) is_full_subcategory_of
-  Ens ( V );
+  for W being non empty Subset of V
+   holds Ens W is full Subcategory of Ens V;
 
 begin :: Representable Functors
 
@@ -339,11 +342,11 @@ definition
   func hom(a,f) -> Function of Hom(a,dom f),Hom(a,cod f) means
 :: ENS_1:def 19
 
-  for g st g in Hom(a,dom f) holds it.g = f*g;
+  for g st g in Hom(a,dom f) holds it.g = f(*)g;
   func hom(f,a) -> Function of Hom(cod f,a),Hom(dom f,a) means
 :: ENS_1:def 20
 
-  for g st g in Hom(cod f,a) holds it.g = g*f;
+  for g st g in Hom(cod f,a) holds it.g = g(*)f;
 end;
 
 theorem :: ENS_1:43
@@ -353,10 +356,10 @@ theorem :: ENS_1:44
   hom(id c,a) = id Hom(c,a);
 
 theorem :: ENS_1:45
-  dom g = cod f implies hom(a,g*f) = hom(a,g)*hom(a,f);
+  dom g = cod f implies hom(a,g(*)f) = hom(a,g)*hom(a,f);
 
 theorem :: ENS_1:46
-  dom g = cod f implies hom(g*f,a) = hom(f,a)*hom(g,a);
+  dom g = cod f implies hom(g(*)f,a) = hom(f,a)*hom(g,a);
 
 theorem :: ENS_1:47
   [[Hom(a,dom f),Hom(a,cod f)],hom(a,f)] is Element of Maps(Hom(C) );
@@ -392,7 +395,7 @@ definition
   func hom(f,g) -> Function of Hom(cod f,dom g),Hom(dom f,cod g) means
 :: ENS_1:def 23
 
-  for h st h in Hom(cod f,dom g) holds it.h = g*h*f;
+  for h st h in Hom(cod f,dom g) holds it.h = g(*)h(*)f;
 end;
 
 theorem :: ENS_1:52
@@ -408,8 +411,8 @@ theorem :: ENS_1:55
   hom(f,g) = hom(dom f,g)*hom(f,dom g);
 
 theorem :: ENS_1:56
-  cod g = dom f & dom g9 = cod f9 implies hom(f*g,g9*f9) = hom(g, g9)*hom(f,f9)
-;
+  cod g = dom f & dom g9 = cod f9 implies
+    hom(f(*)g,g9(*)f9) = hom(g, g9)*hom(f,f9);
 
 definition
   let C;

@@ -12,6 +12,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FDIFF_1"/>
@@ -20,7 +21,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="17"/>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -36,7 +37,7 @@
 <Adjective nr="22">
 <Func kind="K" nr="28"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 </CCluster>
 </Registrations>

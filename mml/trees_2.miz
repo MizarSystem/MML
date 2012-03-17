@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received January 10, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -30,7 +30,8 @@ environ
  definitions RELAT_1, TARSKI, FUNCT_1, TREES_1, ORDINAL1, XBOOLE_0, BINOP_1;
  theorems FUNCT_1, NAT_1, FINSEQ_1, TREES_1, TARSKI, ORDERS_1, ZFMISC_1,
       FINSET_1, CARD_1, CARD_2, WELLORD2, FUNCOP_1, FUNCT_2, RELAT_1, FINSEQ_2,
-      ORDINAL1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, PARTFUN1, RELSET_1;
+      ORDINAL1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, PARTFUN1, RELSET_1,
+      XTUPLE_0;
  schemes FUNCT_1, FRAENKEL, NAT_1, CARD_2, CLASSES1, DOMAIN_1, XBOOLE_0;
 
 begin
@@ -69,7 +70,7 @@ then  p is_a_prefix_of r by XBOOLE_0:def 8;
   hence thesis by Th1;
 end;
 
-theorem Th4:
+theorem Th3:
   len v1 = k+1 implies ex v2,x st v1 = v2^<*x*> & len v2 = k
 proof
   assume
@@ -85,7 +86,7 @@ then  k + len v = k+1 by A1,A2,FINSEQ_1:22;
   hence thesis by A1,A2,A3,FINSEQ_1:17,40;
 end;
 
-theorem Th6:
+theorem Th4:
   ProperPrefixes (v^<*x*>) = ProperPrefixes v \/ {v}
 proof
   thus ProperPrefixes (v^<*x*>) c= ProperPrefixes v \/ {v}
@@ -139,7 +140,7 @@ A5: for t being Element of T() st len t = k holds P[t];
     assume len t = k+1;
     then consider v, x such that
 A6: t = v^<*x*> and
-A7: len v = k by Th4;
+A7: len v = k by Th3;
     reconsider v as FinSequence of NAT by A6,FINSEQ_1:36;
     reconsider v as Element of T() by A6,TREES_1:21;
  rng <*x*> c= rng t by A6,FINSEQ_1:30;
@@ -155,7 +156,7 @@ A9: X[k] from NAT_1:sch 1(A3,A4);
   hence thesis by A9;
 end;
 
-theorem Th7:
+theorem Th5:
   (for p holds p in W1 iff p in W2) implies W1 = W2
 proof
   assume
@@ -179,7 +180,7 @@ definition
   let W1,W2;
   redefine pred W1 = W2 means
   for p holds p in W1 iff p in W2;
-  compatibility by Th7;
+  compatibility by Th5;
 end;
 
 theorem
@@ -212,10 +213,10 @@ A5: not q in W;
  ex r st r in W|p & q = p^r by A1,A4,A5,TREES_1:def 9;
     hence contradiction by A1,A5,TREES_1:def 6;
   end;
-  hence thesis by Th7;
+  hence thesis by Th5;
 end;
 
-theorem Th9:
+theorem Th7:
   p in W & q in W & not p is_a_prefix_of q implies
   q in W with-replacement (p,W1)
 proof
@@ -235,8 +236,8 @@ A2: q in W and
 A3: not p,q are_c=-comparable;
 A4: not p is_a_prefix_of q by A3,XBOOLE_0:def 9;
  not q is_a_prefix_of p by A3,XBOOLE_0:def 9;
-then A5: p in W with-replacement (q,W2) by A1,A2,Th9;
-A6: q in W with-replacement (p,W1) by A1,A2,A4,Th9;
+then A5: p in W with-replacement (q,W2) by A1,A2,Th7;
+A6: q in W with-replacement (p,W1) by A1,A2,A4,Th7;
   let r;
   thus r in (W with-replacement (p,W1)) with-replacement (q,W2) implies
   r in (W with-replacement (q,W2)) with-replacement (p,W1)
@@ -466,7 +467,7 @@ A6: w^<*i*> in W;
   hence thesis by A5;
 end;
 
-theorem Th16:
+theorem Th14:
   W = union { W-level n: not contradiction }
 proof
   thus W c= union { W-level n: not contradiction }
@@ -547,7 +548,7 @@ proof
   hence thesis by A1,NAT_1:39;
 end;
 
-theorem Th19:
+theorem Th17:
   W is finite-order implies ex n st for w holds
   ex B being finite set st B = succ w & card B <= n
 proof
@@ -587,12 +588,12 @@ then A10: card C <= n by FINSEQ_1:57;
   hence thesis by A10,XXREAL_0:2;
 end;
 
-theorem Th20:
+theorem Th18:
   W is finite-order implies succ w is finite
 proof
   assume W is finite-order;
   then consider n such that
-A1: for w holds ex B being finite set st B = succ w & card B <= n by Th19;
+A1: for w holds ex B being finite set st B = succ w & card B <= n by Th17;
  ex B being finite set st B = succ w & card B <= n by A1;
   hence thesis;
 end;
@@ -601,10 +602,10 @@ registration
   let W be finite-order Tree;
   let w be Element of W;
   cluster succ w -> finite;
-  coherence by Th20;
+  coherence by Th18;
 end;
 
-theorem Th21:
+theorem Th19:
   {} is Chain of W proof reconsider S = {} as Subset of W by XBOOLE_1:2;
  S is Chain of W
   proof
@@ -614,7 +615,7 @@ theorem Th21:
   hence thesis;
 end;
 
-theorem Th22:
+theorem Th20:
   {{}} is Chain of W
 proof
  {} in W by TREES_1:22;
@@ -636,7 +637,7 @@ registration
   cluster non empty for Chain of W;
   existence
   proof
- {{}} is Chain of W by Th22;
+ {{}} is Chain of W by Th20;
     hence thesis;
   end;
 end;
@@ -660,7 +661,7 @@ registration
     consider X such that
 A1: Y in X iff Y in bool W & X[Y] from XBOOLE_0:sch 1;
      {}
- is Chain of W & for p st p in {} holds ProperPrefixes p c= {} by Th21;
+ is Chain of W & for p st p in {} holds ProperPrefixes p c= {} by Th19;
 then A2: X <> {} by A1;
  now
       let Z;
@@ -782,7 +783,7 @@ end;
 reserve C for Chain of W,
   B for Branch of W;
 
-theorem Th23:
+theorem Th21:
   v1 in C & v2 in C implies v1 in ProperPrefixes v2 or v2 is_a_prefix_of v1
 proof
   assume
@@ -796,14 +797,14 @@ A4: not v1 is_a_proper_prefix_of v2 by A2,TREES_1:12;
   hence thesis by A4,XBOOLE_0:def 8;
 end;
 
-theorem Th24:
+theorem Th22:
   v1 in C & v2 in C & v is_a_prefix_of v2 implies
   v1 in ProperPrefixes v or v is_a_prefix_of v1
 proof
   assume that
 A1: v1 in C & v2 in C and
 A2: v is_a_prefix_of v2;
- v1 in ProperPrefixes v2 or v2 is_a_prefix_of v1 by A1,Th23;
+ v1 in ProperPrefixes v2 or v2 is_a_prefix_of v1 by A1,Th21;
 then  v1 is_a_proper_prefix_of v2 or v is_a_prefix_of v1
   by A2,TREES_1:12,XBOOLE_1:1;
 then  v,v1 are_c=-comparable by A2,Th2,XBOOLE_0:def 9;
@@ -816,13 +817,13 @@ registration
   let W;
   cluster finite for Chain of W;
   existence
-  proof reconsider C = {} as Chain of W by Th21;
+  proof reconsider C = {} as Chain of W by Th19;
     take C;
     thus thesis;
   end;
 end;
 
-theorem Th25:
+theorem Th23:
   for C being finite Chain of W st card C > n ex p st p in C & len p >= n
 proof
   let C be finite Chain of W;
@@ -868,8 +869,8 @@ A18: not y in ProperPrefixes q \/ {x} by A16,XBOOLE_0:def 5;
 A19: not y in ProperPrefixes q by A18,XBOOLE_0:def 3;
 A20: not y in {x} by A18,XBOOLE_0:def 3;
 A21: q is_a_prefix_of p by TREES_1:def 1;
-then A22: q is_a_prefix_of x by A9,A14,A15,Th24;
-A23: q is_a_prefix_of y by A9,A17,A19,A21,Th24;
+then A22: q is_a_prefix_of x by A9,A14,A15,Th22;
+A23: q is_a_prefix_of y by A9,A17,A19,A21,Th22;
 A24: x <> y by A20,TARSKI:def 1;
  x = q or x <> q;
 then  q is_a_proper_prefix_of y or q is_a_proper_prefix_of x
@@ -882,7 +883,7 @@ then  k+1 <= len x or k+1 <= len y by NAT_1:13;
   hence thesis;
 end;
 
-theorem Th26:
+theorem Th24:
   for C holds { w: ex p st p in C & w is_a_prefix_of p } is Chain of W
 proof
   let C;
@@ -916,7 +917,7 @@ then  p is_a_prefix_of r2 or q is_a_prefix_of r1 by A2,A4,XBOOLE_1:1;
   hence thesis;
 end;
 
-theorem Th27:
+theorem Th25:
   p is_a_prefix_of q & q in B implies p in B
 proof
   assume p is_a_prefix_of q;
@@ -928,25 +929,25 @@ then  ProperPrefixes q c= B by Def7;
   hence thesis by A1,A2;
 end;
 
-theorem Th28:
+theorem Th26:
   {} in B
 proof
   set x = the Element of B;
   reconsider x as Element of W;
  <*> NAT is_a_prefix_of x by XBOOLE_1:2;
-  hence thesis by Th27;
+  hence thesis by Th25;
 end;
 
-theorem Th29:
+theorem Th27:
   p in C & q in C & len p <= len q implies p is_a_prefix_of q
 proof
   assume p in C & q in C & len p <= len q & not p is_a_prefix_of q;
   then  q
- in ProperPrefixes p & not q is_a_proper_prefix_of p by Th23,TREES_1:6;
+ in ProperPrefixes p & not q is_a_proper_prefix_of p by Th21,TREES_1:6;
   hence contradiction by TREES_1:12;
 end;
 
-theorem Th30:
+theorem Th28:
   ex B st C c= B
 proof
   defpred X[set] means $1 is Chain of W & C c= $1 &
@@ -954,7 +955,7 @@ proof
   consider X such that
 A1: Y in X iff Y in bool W & X[Y] from XBOOLE_0:sch 1;
   set Z = { w: ex p st p in C & w is_a_prefix_of p };
-A2: Z is Chain of W by Th26;
+A2: Z is Chain of W by Th24;
 A3: C c= Z
   proof
     let x;
@@ -1209,7 +1210,7 @@ then  P[f.k,g.(f.k)] by A6;
   hence thesis by A3,A7,A13;
 end;
 
-theorem Th31:
+theorem Th29:
   for T being Tree st (for n ex C being finite Chain of T st card C = n) &
   for t being Element of T holds succ t is finite
   ex B being Chain of T st not B is finite
@@ -1258,8 +1259,8 @@ A17: len p >= len x + (k+1) by A15;
 then A18: len p >= len x + 1 by A17,XXREAL_0:2;
 A19: r is_a_prefix_of p by TREES_1:def 1;
 A20: len r = len x + 1 by A18,FINSEQ_1:17;
-A21: r in B by A16,A19,Th27;
-then  x is_a_prefix_of r by A14,A20,Th29,NAT_1:11;
+A21: r in B by A16,A19,Th25;
+then  x is_a_prefix_of r by A14,A20,Th27,NAT_1:11;
     then consider j being FinSequence such that
 A22: r = x^j by TREES_1:1;
  len x + len j = len r by A22,FINSEQ_1:22;
@@ -1291,10 +1292,10 @@ A29: for B being Branch of T st e in B for p st p in B holds len p < len e + n;
     consider C being finite Chain of T such that
 A30: card C = n+1 by A1;
     consider B being Branch of T such that
-A31: C c= B by Th30;
+A31: C c= B by Th28;
  n+0 < n+1 by XREAL_1:6;
-then A32: ex p st p in C & len p >= n by A30,Th25;
- e in B & len e = 0 by Th28;
+then A32: ex p st p in C & len p >= n by A30,Th23;
+ e in B & len e = 0 by Th26;
     hence contradiction by A29,A31,A32;
   end;
   defpred QQ[set] means ex t being Element of T st t = $1 & P[t];
@@ -1412,7 +1413,7 @@ theorem
 proof
   let T be finite-order Tree;
  for t being Element of T holds succ t is finite;
-  hence thesis by Th31;
+  hence thesis by Th29;
 end;
 
 definition
@@ -1467,12 +1468,12 @@ definition
   redefine func T.t -> Element of D;
   coherence
   proof
- T.t in rng T & rng T c= D by FUNCT_1:def 3,RELAT_1:def 19;
+ T.t in rng T & rng T c= D by FUNCT_1:def 3;
     hence thesis;
   end;
 end;
 
-theorem Th33:
+theorem Th31:
   dom T1 = dom T2 & (for p st p in dom T1 holds T1.p = T2.p) implies T1 = T2
 proof
   assume that
@@ -1527,7 +1528,7 @@ definition
   let p;
   func T|p -> DecoratedTree means
   :
-  Def11: dom it = (dom T)|p & for q st q in (dom T)|p holds it.q = T.(p^q);
+  Def10: dom it = (dom T)|p & for q st q in (dom T)|p holds it.q = T.(p^q);
   existence
   proof
     deffunc U(FinSequence) = T.(p^$1);
@@ -1549,11 +1550,11 @@ A5:   q in (dom T)|p;
 then    T1.q = T.(p^q) by A2;
       hence T1.q = T2.q by A4,A5;
     end;
-    hence thesis by A1,A3,Th33;
+    hence thesis by A1,A3,Th31;
   end;
 end;
 
-theorem Th34:
+theorem Th32:
   p in dom T implies rng (T|p) c= rng T
 proof
   assume
@@ -1564,9 +1565,9 @@ A1: p in dom T;
 A2: y in dom (T|p) and
 A3: x = (T|p).y by FUNCT_1:def 3;
   reconsider y as Element of dom (T|p) by A2;
-A4: dom (T|p) = (dom T)|p by Def11;
+A4: dom (T|p) = (dom T)|p by Def10;
 then A5: p^y in dom T by A1,TREES_1:def 6;
- x = T.(p^y) by A3,A4,Def11;
+ x = T.(p^y) by A3,A4,Def10;
   hence thesis by A5,FUNCT_1:def 3;
 end;
 
@@ -1576,7 +1577,7 @@ definition
   redefine func Leaves T -> Subset of D;
   coherence
   proof
- T.:Leaves dom T c= rng T & rng T c= D by RELAT_1:111,def 19;
+ T.:Leaves dom T c= rng T & rng T c= D by RELAT_1:111;
     hence thesis by XBOOLE_1:1;
   end;
 end;
@@ -1588,7 +1589,7 @@ registration
   cluster T|p -> D-valued;
   coherence
   proof
- rng (T|p) c= rng T & rng T c= D by Th34,RELAT_1:def 19;
+ rng (T|p) c= rng T & rng T c= D by Th32;
 then  rng (T|p) c= D by XBOOLE_1:1;
     hence thesis by RELAT_1:def 19;
   end;
@@ -1665,7 +1666,7 @@ A12:  not p is_a_prefix_of q & D1.q = T.q or
       ex r st r in dom T1 & q = p^r & D2.q = T1.r by A6,A9,A10;
       hence contradiction by A11,A12,FINSEQ_1:33,TREES_1:1;
     end;
-    hence thesis by A6,A8,Th33;
+    hence thesis by A6,A8,Th31;
   end;
 end;
 
@@ -1679,7 +1680,7 @@ registration
   end;
 end;
 
-theorem Th35:
+theorem Th33:
   (for x st x in D holds x is Tree) implies union D is Tree
 proof
   assume
@@ -1723,7 +1724,7 @@ A7: X in D by A4,TARSKI:def 4;
   hence thesis;
 end;
 
-theorem Th36:
+theorem Th34:
   (for x st x in X holds x is Function) & X is c=-linear implies
   union X is Relation-like Function-like
 proof
@@ -1757,7 +1758,7 @@ then  x c= y or y c= x by XBOOLE_0:def 9;
   hence thesis by A7,A9,FUNCT_1:def 1;
 end;
 
-theorem Th37:
+theorem Th35:
   (for x st x in D holds x is DecoratedTree) & D is c=-linear
   implies union D is DecoratedTree
 proof
@@ -1765,7 +1766,7 @@ proof
 A1: for x st x in D holds x is DecoratedTree and
 A2: D is c=-linear;
  for x holds x in D implies x is Function by A1;
-  then reconsider T = union D as Function by A2,Th36;
+  then reconsider T = union D as Function by A2,Th34;
   defpred X[set,set] means ex T1 st $1 = T1 & dom T1 = $2;
 A3: for x st x in D ex y st X[x,y]
   proof
@@ -1786,7 +1787,7 @@ A5: y in dom f & x = f.y by FUNCT_1:def 3;
  ex T1 st y = T1 & dom T1 = x by A4,A5;
     hence x is Tree;
   end;
-then A6: union E is Tree by Th35;
+then A6: union E is Tree by Th33;
  dom T = union E
   proof
     thus dom T c= union E
@@ -1794,7 +1795,7 @@ then A6: union E is Tree by Th35;
       let x;
       assume x in dom T;
       then consider y such that
-A7:  [x,y] in T by RELAT_1:def 4;
+A7:  [x,y] in T by XTUPLE_0:def 12;
       consider X such that
 A8:  [x,y] in X and
 A9:  X in D by A7,TARSKI:def 4;
@@ -1802,7 +1803,7 @@ A9:  X in D by A7,TARSKI:def 4;
 A10:  X = T1 and
 A11:  dom T1 = f.X by A4,A9;
 A12:  dom T1 in rng f by A4,A9,A11,FUNCT_1:def 3;
-A13:  x in dom T1 by A8,A10,RELAT_1:def 4;
+A13:  x in dom T1 by A8,A10,XTUPLE_0:def 12;
   dom T1 c= union E by A12,ZFMISC_1:74;
       hence thesis by A13;
     end;
@@ -1819,12 +1820,12 @@ A18: y = T1 and
 A19: dom T1 = X by A4,A16,A17;
  [x,T1.x] in T1 by A14,A19,FUNCT_1:1;
 then  [x,T1.x] in union D by A4,A16,A18,TARSKI:def 4;
-    hence thesis by RELAT_1:def 4;
+    hence thesis by XTUPLE_0:def 12;
   end;
   hence thesis by A6,Def8;
 end;
 
-theorem Th38:
+theorem Th36:
   (for x st x in D9 holds x is DecoratedTree of D) & D9 is c=-linear implies
   union D9 is DecoratedTree of D
 proof
@@ -1832,7 +1833,7 @@ proof
 A1: for x st x in D9 holds x is DecoratedTree of D and
 A2: D9 is c=-linear;
  for x st x in D9 holds x is DecoratedTree by A1;
-  then reconsider T = union D9 as DecoratedTree by A2,Th37;
+  then reconsider T = union D9 as DecoratedTree by A2,Th35;
  rng T c= D
   proof
     let x;
@@ -1846,8 +1847,7 @@ A5: X in D9 by TARSKI:def 4;
     reconsider X as DecoratedTree of D by A1,A5;
  y in dom X & x = X.y by A4,FUNCT_1:1;
 then A6: x in rng X by FUNCT_1:def 3;
- rng X c= D by RELAT_1:def 19;
-    hence thesis by A6;
+    thus thesis by A6;
   end;
   hence thesis by RELAT_1:def 19;
 end;
@@ -1915,7 +1915,7 @@ A10:      dom T c= M by XBOOLE_1:7;
 A11:      t in dom T;
 A12:      ProperPrefixes t c= M by A9,A10,XBOOLE_1:1;
 A13:      {t} c= M by A10,A11,ZFMISC_1:31;
-      ProperPrefixes p = ProperPrefixes t \/ {t} by A8,Th6;
+      ProperPrefixes p = ProperPrefixes t \/ {t} by A8,Th4;
           hence thesis by A12,A13,XBOOLE_1:8;
         end;
 then     ProperPrefixes p c= M or ProperPrefixes p c= dom T & dom T c= M
@@ -2252,7 +2252,7 @@ A109: T2 is DecoratedTree by A67,A105;
  x <= y or y <= x;
     hence T1 c= T2 or T2 c= T1 by A70,A104,A107,A108,A109;
   end;
-  then reconsider T = union rng f as DecoratedTree of D() by A67,Th38;
+  then reconsider T = union rng f as DecoratedTree of D() by A67,Th36;
   take T;
   consider T9 being DecoratedTree of D(), k such that
 A110: 0 = k & f.0 = T9 & T9.{} = d() &
@@ -2602,7 +2602,7 @@ A10:      dom T c= M by XBOOLE_1:7;
 A11:      t in dom T;
 A12:      ProperPrefixes t c= M by A9,A10,XBOOLE_1:1;
 A13:      {t} c= M by A10,A11,ZFMISC_1:31;
-      ProperPrefixes p = ProperPrefixes t \/ {t} by A8,Th6;
+      ProperPrefixes p = ProperPrefixes t \/ {t} by A8,Th4;
           hence thesis by A12,A13,XBOOLE_1:8;
         end;
 then     ProperPrefixes p c= M or ProperPrefixes p c= dom T & dom T c= M
@@ -2940,7 +2940,7 @@ A109: T2 is DecoratedTree by A67,A105;
  x <= y or y <= x;
     hence T1 c= T2 or T2 c= T1 by A70,A104,A107,A108,A109;
   end;
-  then reconsider T = union rng f as DecoratedTree of D() by A67,Th38;
+  then reconsider T = union rng f as DecoratedTree of D() by A67,Th36;
   take T;
   consider T9 being DecoratedTree of D(), k such that
 A110: 0 = k & f.0 = T9 & T9.{} = d() &
@@ -3051,7 +3051,7 @@ A1: for n being Element of NAT holds T1-level n = T2-level n;
   proof
     let p be FinSequence of NAT;
 A2: T1 = union { T1-level n where n is Element of NAT: not contradiction }
-    by Th16;
+    by Th14;
     hereby
       assume p in T1;
       then consider Y being set such that
@@ -3066,7 +3066,7 @@ A5:   Y = T1-level n by A4;
     assume
 A6: p in T2;
     T2 = union { T2-level n where n is Element of NAT: not contradiction }
-    by Th16;
+    by Th14;
     then consider Y being set such that
 A7: p in Y and
 A8: Y in { T2-level n where n is Element of NAT: not contradiction }
@@ -3076,7 +3076,7 @@ A9: Y = T2-level n by A8;
     Y = T1-level n by A1,A9;
     hence thesis by A7;
   end;
-  hence thesis by Th7;
+  hence thesis by Th5;
 end;
 
 theorem
@@ -3115,7 +3115,7 @@ proof
   let X,Y be set;
   let B be c=-linear Subset of PFuncs(X,Y);
   for x be set st x in B holds x is Function;
-  then reconsider f = union B as Function by Th36;
+  then reconsider f = union B as Function by Th34;
   per cases;
   suppose
     B <> {};

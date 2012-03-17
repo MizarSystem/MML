@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received March 6, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,16 +16,18 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, XBOOLE_0, ZFMISC_1, TARSKI, SUBSET_1, MCART_1,
       FUNCT_2, PARTFUN1, CARD_1, FUNCOP_1, FUNCT_4, BINOP_1, FUNCT_5;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, WELLORD2,
-      FUNCT_2, MCART_1, BINOP_1, FUNCT_3, CARD_1, PARTFUN1, FUNCOP_1, FUNCT_4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, RELAT_1, FUNCT_1,
+      DOMAIN_1, WELLORD2, RELSET_1,
+      FUNCT_2, MCART_1, BINOP_1, PARTFUN1, FUNCT_3, CARD_1, FUNCOP_1, FUNCT_4;
  constructors PARTFUN1, WELLORD2, BINOP_1, FUNCT_3, FUNCOP_1, FUNCT_4, CARD_1,
-      RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1;
+      RELSET_1, DOMAIN_1, XTUPLE_0;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, WELLORD2, XBOOLE_0, BINOP_1, FUNCOP_1;
+ definitions TARSKI, FUNCT_1, WELLORD2, XBOOLE_0, BINOP_1, FUNCOP_1, XTUPLE_0;
  theorems TARSKI, ZFMISC_1, FUNCT_1, WELLORD2, FUNCT_2, MCART_1, FUNCT_3,
       RELAT_1, CARD_1, PARTFUN1, FUNCOP_1, FUNCT_4, ENUMSET1, XBOOLE_0,
-      XBOOLE_1;
+      XBOOLE_1, RELSET_1, XTUPLE_0;
  schemes FUNCT_1, PARTFUN1, XBOOLE_0;
 
 begin
@@ -36,7 +38,7 @@ reserve X,Y,Z,X1,X2,Y1,Y2,x,y,z,t,x1,x2 for set,
 scheme
   LambdaFS { FS()->set, f(set)->set }: ex f st dom f = FS() & for g st g in FS
   () holds f.g = f(g) proof
-  consider f such that
+   consider f such that
 A1: dom f = FS() & for x st x in FS() holds f.x = f(x) from FUNCT_1:sch
   3;
   take f;
@@ -51,134 +53,12 @@ proof
   hence thesis;
 end;
 
-theorem
-  [x,y] in X implies x in proj1 X & y in proj2 X by RELAT_1:def 4,def 5;
-
-theorem Th5:
-  X c= Y implies proj1 X c= proj1 Y & proj2 X c= proj2 Y
-proof
-  assume
-A1: x in X implies x in Y;
-  thus proj1 X c= proj1 Y
-  proof
-    let x;
-    assume x in proj1 X;
-    then consider y such that
-A2: [x,y] in X by RELAT_1:def 4;
-    [x,y] in Y by A1,A2;
-    hence thesis by RELAT_1:def 4;
-  end;
-  let y;
-  assume y in proj2 X;
-  then consider x such that
-A3: [x,y] in X by RELAT_1:def 5;
-  [x,y] in Y by A1,A3;
-  hence thesis by RELAT_1:def 5;
-end;
-
-theorem Th6:
-  proj1(X \/ Y) = proj1 X \/ proj1 Y & proj2(X \/ Y) = proj2 X \/ proj2 Y
-proof
-  thus proj1(X \/ Y) c= proj1 X \/ proj1 Y
-  proof
-    let x;
-    assume x in proj1(X \/ Y);
-    then consider y such that
-A1: [x,y] in X \/ Y by RELAT_1:def 4;
-    [x,y] in X or [x,y] in Y by A1,XBOOLE_0:def 3;
-    then x in proj1 X or x in proj1 Y by RELAT_1:def 4;
-    hence thesis by XBOOLE_0:def 3;
-  end;
-A2: Y c= X \/ Y by XBOOLE_1:7;
-  then
-A3: proj1 Y c= proj1(X \/ Y) by Th5;
-A4: proj2 Y c= proj2(X \/ Y) by A2,Th5;
-A5: X c= X \/ Y by XBOOLE_1:7;
-  then proj1 X c= proj1(X \/ Y) by Th5;
-  hence proj1 X \/ proj1 Y c= proj1 (X \/ Y) by A3,XBOOLE_1:8;
-  thus proj2(X \/ Y) c= proj2 X \/ proj2 Y
-  proof
-    let y;
-    assume y in proj2(X \/ Y);
-    then consider x such that
-A6: [x,y] in X \/ Y by RELAT_1:def 5;
-    [x,y] in X or [x,y] in Y by A6,XBOOLE_0:def 3;
-    then y in proj2 X or y in proj2 Y by RELAT_1:def 5;
-    hence thesis by XBOOLE_0:def 3;
-  end;
-  proj2 X c= proj2(X \/ Y) by A5,Th5;
-  hence thesis by A4,XBOOLE_1:8;
-end;
-
-theorem
-  proj1(X /\ Y) c= proj1 X /\ proj1 Y & proj2(X /\ Y) c= proj2 X /\ proj2 Y
-proof
-  thus proj1(X /\ Y) c= proj1 X /\ proj1 Y
-  proof
-    let x;
-    assume x in proj1(X /\ Y);
-    then consider y such that
-A1: [x,y] in X /\ Y by RELAT_1:def 4;
-    [x,y] in Y by A1,XBOOLE_0:def 4;
-    then
-A2: x in proj1 Y by RELAT_1:def 4;
-    [x,y] in X by A1,XBOOLE_0:def 4;
-    then x in proj1 X by RELAT_1:def 4;
-    hence thesis by A2,XBOOLE_0:def 4;
-  end;
-  let y;
-  assume y in proj2(X /\ Y);
-  then consider x such that
-A3: [x,y] in X /\ Y by RELAT_1:def 5;
-  [x,y] in Y by A3,XBOOLE_0:def 4;
-  then
-A4: y in proj2 Y by RELAT_1:def 5;
-  [x,y] in X by A3,XBOOLE_0:def 4;
-  then y in proj2 X by RELAT_1:def 5;
-  hence thesis by A4,XBOOLE_0:def 4;
-end;
+canceled 6;
 
 theorem Th8:
-  proj1 X \ proj1 Y c= proj1(X \ Y) & proj2 X \ proj2 Y c= proj2(X \ Y)
-proof
-  thus proj1 X \ proj1 Y c= proj1(X \ Y)
-  proof
-    let x;
-    assume
-A1: x in proj1 X \ proj1 Y;
-    then consider y such that
-A2: [x,y] in X by RELAT_1:def 4;
-    not x in proj1 Y by A1,XBOOLE_0:def 5;
-    then not [x,y] in Y by RELAT_1:def 4;
-    then [x,y] in X \ Y by A2,XBOOLE_0:def 5;
-    hence thesis by RELAT_1:def 4;
-  end;
-  let y;
-  assume
-A3: y in proj2 X \ proj2 Y;
-  then consider x such that
-A4: [x,y] in X by RELAT_1:def 5;
-  not y in proj2 Y by A3,XBOOLE_0:def 5;
-  then not [x,y] in Y by RELAT_1:def 5;
-  then [x,y] in X \ Y by A4,XBOOLE_0:def 5;
-  hence thesis by RELAT_1:def 5;
-end;
-
-theorem
-  proj1 X \+\ proj1 Y c= proj1(X \+\ Y) & proj2 X \+\ proj2 Y c= proj2(X \+\ Y)
-proof
-  proj2 X \ proj2 Y c= proj2(X \ Y) & proj2 Y \ proj2 X c= proj2(Y \ X) by Th8;
-  then
-A1: proj2 X \+\ proj2 Y c= proj2(X\Y) \/ proj2(Y\X) by XBOOLE_1:13;
-  proj1 X \ proj1 Y c= proj1(X \ Y) & proj1 Y \ proj1 X c= proj1(Y \ X) by Th8;
-  then proj1 X \+\ proj1 Y c= proj1(X\Y) \/ proj1(Y\X) by XBOOLE_1:13;
-  hence thesis by A1,Th6;
-end;
-
-theorem Th10:
   proj1 {} = {} & proj2 {} = {};
 
-theorem Th11:
+theorem Th9:
   Y <> {} or [:X,Y:] <> {} or [:Y,X:] <> {} implies proj1 [:X,Y:]
   = X & proj2 [:Y,X:] = X
 proof
@@ -191,42 +71,42 @@ A1: Y <> {} by ZFMISC_1:90;
     x in X implies [x,y] in [:X,Y:] by A1,ZFMISC_1:87;
     hence x in X iff ex y st [x,y] in [:X,Y:] by ZFMISC_1:87;
   end;
-  hence proj1 [:X,Y:] = X by RELAT_1:def 4;
+  hence proj1 [:X,Y:] = X by XTUPLE_0:def 12;
   now
     let x;
     x in X implies [y,x] in [:Y,X:] by A1,ZFMISC_1:87;
     hence x in X iff ex y st [y,x] in [:Y,X:] by ZFMISC_1:87;
   end;
-  hence thesis by RELAT_1:def 5;
+  hence thesis by XTUPLE_0:def 13;
 end;
 
-theorem Th12:
+theorem Th10:
   proj1 [:X,Y:] c= X & proj2 [:X,Y:] c= Y
 proof
   thus proj1 [:X,Y:] c= X
   proof
     let x;
     assume x in proj1 [:X,Y:];
-    then ex y st [x,y] in [:X,Y:] by RELAT_1:def 4;
+    then ex y st [x,y] in [:X,Y:] by XTUPLE_0:def 12;
     hence thesis by ZFMISC_1:87;
   end;
   let y;
   assume y in proj2 [:X,Y:];
-  then ex x st [x,y] in [:X,Y:] by RELAT_1:def 5;
+  then ex x st [x,y] in [:X,Y:] by XTUPLE_0:def 13;
   hence thesis by ZFMISC_1:87;
 end;
 
-theorem Th13:
+theorem Th11:
   Z c= [:X,Y:] implies proj1 Z c= X & proj2 Z c= Y
 proof
   assume Z c= [:X,Y:];
   then
-A1: proj1 Z c= proj1 [:X,Y:] & proj2 Z c= proj2 [:X,Y:] by Th5;
-  proj1 [:X,Y:] c= X & proj2 [:X,Y:] c= Y by Th12;
+A1: proj1 Z c= proj1 [:X,Y:] & proj2 Z c= proj2 [:X,Y:] by XTUPLE_0:8,9;
+  proj1 [:X,Y:] c= X & proj2 [:X,Y:] c= Y by Th10;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
-theorem Th15:
+theorem Th12:
   proj1 {[x,y]} = {x} & proj2 {[x,y]} = {y}
 proof
   thus proj1 {[x,y]} c= {x}
@@ -234,9 +114,9 @@ proof
     let z;
     assume z in proj1 {[x,y]};
     then consider t such that
-A1: [z,t] in {[x,y]} by RELAT_1:def 4;
+A1: [z,t] in {[x,y]} by XTUPLE_0:def 12;
     [z,t] = [x,y] by A1,TARSKI:def 1;
-    then z = x by ZFMISC_1:27;
+    then z = x by XTUPLE_0:1;
     hence thesis by TARSKI:def 1;
   end;
   thus {x} c= proj1 {[x,y]}
@@ -245,16 +125,16 @@ A1: [z,t] in {[x,y]} by RELAT_1:def 4;
     assume z in {x};
     then z = x by TARSKI:def 1;
     then [z,y] in {[x,y]} by TARSKI:def 1;
-    hence thesis by RELAT_1:def 4;
+    hence thesis by XTUPLE_0:def 12;
   end;
   thus proj2 {[x,y]} c= {y}
   proof
     let z;
     assume z in proj2 {[x,y]};
     then consider t such that
-A2: [t,z] in {[x,y]} by RELAT_1:def 5;
+A2: [t,z] in {[x,y]} by XTUPLE_0:def 13;
     [t,z] = [x,y] by A2,TARSKI:def 1;
-    then z = y by ZFMISC_1:27;
+    then z = y by XTUPLE_0:1;
     hence thesis by TARSKI:def 1;
   end;
   thus {y} c= proj2 {[x,y]}
@@ -263,23 +143,23 @@ A2: [t,z] in {[x,y]} by RELAT_1:def 5;
     assume z in {y};
     then z = y by TARSKI:def 1;
     then [x,z] in {[x,y]} by TARSKI:def 1;
-    hence thesis by RELAT_1:def 5;
+    hence thesis by XTUPLE_0:def 13;
   end;
 end;
 
 theorem
   proj1 {[x,y],[z,t]} = {x,z} & proj2 {[x,y],[z,t]} = {y,t}
 proof
-A1: proj2 {[x,y]} = {y} & proj2 {[z,t]} = {t} by Th15;
+A1: proj2 {[x,y]} = {y} & proj2 {[z,t]} = {t} by Th12;
   {[x,y],[z,t]} = {[x,y]} \/ {[z,t]} by ENUMSET1:1;
   then
 A2: proj1 {[x,y],[z,t]} = proj1 {[x,y]} \/ proj1 {[z,t]} & proj2 {[x,y],[z,t
-  ]} = proj2 {[x,y]} \/ proj2 {[z,t]} by Th6;
-  proj1 {[x,y]} = {x} & proj1 {[z,t]} = {z} by Th15;
+  ]} = proj2 {[x,y]} \/ proj2 {[z,t]} by XTUPLE_0:23,27;
+  proj1 {[x,y]} = {x} & proj1 {[z,t]} = {z} by Th12;
   hence thesis by A2,A1,ENUMSET1:1;
 end;
 
-theorem Th17:
+theorem Th14:
   not (ex x,y st [x,y] in X) implies proj1 X = {} & proj2 X = {}
 proof
   set x = the Element of proj2 X;
@@ -288,27 +168,27 @@ A1: not (ex x,y st [x,y] in X);
   hereby
     set x = the Element of proj1 X;
     assume proj1 X <> {};
-    then ex y st [x,y] in X by RELAT_1:def 4;
+    then ex y st [x,y] in X by XTUPLE_0:def 12;
     hence contradiction by A1;
   end;
   assume proj2 X <> {};
-  then ex y st [y,x] in X by RELAT_1:def 5;
+  then ex y st [y,x] in X by XTUPLE_0:def 13;
   hence thesis by A1;
 end;
 
 theorem
   proj1 X = {} or proj2 X = {} implies not ex x,y st [x,y] in X by
-RELAT_1:def 4,def 5;
+XTUPLE_0:def 12,def 13;
 
 theorem
   proj1 X = {} iff proj2 X = {}
 proof
   proj1 X = {} or proj2 X = {} implies not ex x,y st [x,y] in X by
-RELAT_1:def 4,def 5;
-  hence thesis by Th17;
+XTUPLE_0:def 12,def 13;
+  hence thesis by Th14;
 end;
 
-theorem Th20:
+theorem Th17:
   proj1 dom f = proj2 dom ~f & proj2 dom f = proj1 dom ~f
 proof
   thus proj1 dom f c= proj2 dom ~f
@@ -316,36 +196,36 @@ proof
     let x;
     assume x in proj1 dom f;
     then consider y such that
-A1: [x,y] in dom f by RELAT_1:def 4;
+A1: [x,y] in dom f by XTUPLE_0:def 12;
     [y,x] in dom ~f by A1,FUNCT_4:42;
-    hence thesis by RELAT_1:def 5;
+    hence thesis by XTUPLE_0:def 13;
   end;
   thus proj2 dom ~f c= proj1 dom f
   proof
     let y;
     assume y in proj2 dom ~f;
     then consider x such that
-A2: [x,y] in dom ~f by RELAT_1:def 5;
+A2: [x,y] in dom ~f by XTUPLE_0:def 13;
     [y,x] in dom f by A2,FUNCT_4:42;
-    hence thesis by RELAT_1:def 4;
+    hence thesis by XTUPLE_0:def 12;
   end;
   thus proj2 dom f c= proj1 dom ~f
   proof
     let y;
     assume y in proj2 dom f;
     then consider x such that
-A3: [x,y] in dom f by RELAT_1:def 5;
+A3: [x,y] in dom f by XTUPLE_0:def 13;
     [y,x] in dom ~f by A3,FUNCT_4:42;
-    hence thesis by RELAT_1:def 4;
+    hence thesis by XTUPLE_0:def 12;
   end;
   thus proj1 dom ~f c= proj2 dom f
   proof
     let x;
     assume x in proj1 dom ~f;
     then consider y such that
-A4: [x,y] in dom ~f by RELAT_1:def 4;
+A4: [x,y] in dom ~f by XTUPLE_0:def 12;
     [y,x] in dom f by A4,FUNCT_4:42;
-    hence thesis by RELAT_1:def 5;
+    hence thesis by XTUPLE_0:def 13;
   end;
 end;
 
@@ -356,7 +236,7 @@ definition
 
   let f;
   func curry f -> Function means
-  :Def3:
+  :Def1:
   dom it = proj1 dom f & for x st x in
   proj1 dom f ex g st it.x = g & dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) &
   for y st y in dom g holds g.y = f.(x,y);
@@ -433,7 +313,7 @@ A20:    y in proj2 (dom f /\ [:{x},proj2 dom f:]);
     hence thesis by A9,A11,FUNCT_1:2;
   end;
   func uncurry f -> Function means
-  : Def4:
+  : Def2:
   (for t holds t in dom it iff ex x,g
 ,y st t = [x,y] & x in dom f & g = f.x & y in dom g) & for x,g st x in dom it &
   g = f.x`1 holds it.x = g.x`2;
@@ -475,12 +355,12 @@ A26: dom F = Y & for x st x in Y holds P[x,F.x] from FUNCT_1:sch 2(A25
         assume
 A27:    t in dom F;
         take x = t`1;
-A28:    t in [:X,union rng g:] by A23,A26,A27;
+    t in [:X,union rng g:] by A23,A26,A27;
         then
 A29:    x in X by MCART_1:10;
         then reconsider h = f.x as Function by A21;
         take h, t`2;
-        thus thesis by A21,A23,A26,A27,A28,A29,MCART_1:21;
+        thus thesis by A21,A23,A26,A27,A29,MCART_1:21;
       end;
       given x be set, h be Function, y be set such that
 A30:  t = [x,y] and
@@ -543,32 +423,32 @@ definition
   correctness;
 end;
 
-theorem Th26:
+theorem Th19:
   [x,y] in dom f implies x in dom curry f & (curry f).x is Function
 proof
   assume [x,y] in dom f;
   then
-A1: x in proj1 dom f by RELAT_1:def 4;
-  hence x in dom curry f by Def3;
+A1: x in proj1 dom f by XTUPLE_0:def 12;
+  hence x in dom curry f by Def1;
   ex g st (curry f).x = g & dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) &
-  for y st y in dom g holds g.y = f.(x,y) by A1,Def3;
+  for y st y in dom g holds g.y = f.(x,y) by A1,Def1;
   hence thesis;
 end;
 
-theorem Th27:
+theorem Th20:
   [x,y] in dom f & g = (curry f).x implies y in dom g & g.y = f.(x ,y)
 proof
   assume that
 A1: [x,y] in dom f and
 A2: g = (curry f).x;
-  x in proj1 dom f by A1,RELAT_1:def 4;
+  x in proj1 dom f by A1,XTUPLE_0:def 12;
   then
 A3: ex h st (curry f).x = h & dom h = proj2 (dom f /\ [:{x},proj2 dom f :])
-  & for y st y in dom h holds h.y = f.(x,y) by Def3;
-  y in proj2 dom f by A1,RELAT_1:def 5;
+  & for y st y in dom h holds h.y = f.(x,y) by Def1;
+  y in proj2 dom f by A1,XTUPLE_0:def 13;
   then [x,y] in [:{x},proj2 dom f:] by ZFMISC_1:105;
   then [x,y] in dom f /\ [:{x},proj2 dom f:] by A1,XBOOLE_0:def 4;
-  hence y in dom g by A2,A3,RELAT_1:def 5;
+  hence y in dom g by A2,A3,XTUPLE_0:def 13;
   hence thesis by A2,A3;
 end;
 
@@ -577,10 +457,10 @@ theorem
 proof
   assume [x,y] in dom f;
   then [y,x] in dom ~f by FUNCT_4:42;
-  hence thesis by Th26;
+  hence thesis by Th19;
 end;
 
-theorem
+theorem Th22:
   [x,y] in dom f & g = (curry' f).y implies x in dom g & g.x = f.(x,y)
 proof
   assume [x,y] in dom f;
@@ -588,43 +468,43 @@ proof
 A1: [y,x] in dom ~f by FUNCT_4:42;
   assume
 A2: g = (curry' f).y;
-  then g.x = (~f).(y,x) by A1,Th27;
-  hence thesis by A1,A2,Th27,FUNCT_4:43;
+  then g.x = (~f).(y,x) by A1,Th20;
+  hence thesis by A1,A2,Th20,FUNCT_4:43;
 end;
 
 theorem
   dom curry' f = proj2 dom f
 proof
-  dom curry ~f = proj1 dom ~f by Def3;
-  hence thesis by Th20;
+  dom curry ~f = proj1 dom ~f by Def1;
+  hence thesis by Th17;
 end;
 
-theorem Th31:
+theorem Th24:
   [:X,Y:] <> {} & dom f = [:X,Y:] implies dom curry f = X & dom curry' f = Y
 proof
   assume that
 A1: [:X,Y:] <> {} and
 A2: dom f = [:X,Y:];
-  dom curry f = proj1 dom f by Def3;
-  hence dom curry f = X by A1,A2,Th11;
-  thus dom curry' f = proj1 dom ~f by Def3
+  dom curry f = proj1 dom f by Def1;
+  hence dom curry f = X by A1,A2,Th9;
+  thus dom curry' f = proj1 dom ~f by Def1
     .= proj1 [:Y,X:] by A2,FUNCT_4:46
-    .= Y by A1,Th11;
+    .= Y by A1,Th9;
 end;
 
-theorem Th32:
+theorem Th25:
   dom f c= [:X,Y:] implies dom curry f c= X & dom curry' f c= Y
 proof
   assume
 A1: dom f c= [:X,Y:];
-  dom curry f = proj1 dom f by Def3;
-  hence dom curry f c= X by A1,Th13;
-A2: dom curry' f = proj1 dom ~f by Def3;
+  dom curry f = proj1 dom f by Def1;
+  hence dom curry f c= X by A1,Th11;
+A2: dom curry' f = proj1 dom ~f by Def1;
   dom ~f c= [:Y,X:] by A1,FUNCT_4:45;
-  hence thesis by A2,Th13;
+  hence thesis by A2,Th11;
 end;
 
-theorem Th33:
+theorem Th26:
   rng f c= Funcs(X,Y) implies dom uncurry f = [:dom f,X:] & dom
   uncurry' f = [:X,dom f:]
 proof
@@ -656,7 +536,7 @@ A8: y in dom g;
     then ex g1 st g = g1 & dom g1 = X & rng g1 c= Y by A1,FUNCT_2:def 2;
     hence thesis by A5,A6,A8,ZFMISC_1:87;
   end;
-A9: t in dom uncurry f iff P[t] by Def4;
+A9: t in dom uncurry f iff P[t] by Def2;
   thus dom uncurry f = [:dom f,X:] from XBOOLE_0:sch 2(A9,A2);
   hence thesis by FUNCT_4:46;
 end;
@@ -666,8 +546,8 @@ theorem
 proof
   assume
 A1: not ex x,y st [x,y] in dom f;
-  then proj1 dom f = {} by Th17;
-  then dom curry f = {} by Def3;
+  then proj1 dom f = {} by Th14;
+  then dom curry f = {} by Def1;
   hence curry f = {};
   now
     let x,y;
@@ -675,8 +555,8 @@ A1: not ex x,y st [x,y] in dom f;
     then [y,x] in dom f by FUNCT_4:42;
     hence contradiction by A1;
   end;
-  then proj1 dom ~f = {} by Th17;
-  then dom curry ~f = {} by Def3;
+  then proj1 dom ~f = {} by Th14;
+  then dom curry ~f = {} by Def1;
   hence thesis;
 end;
 
@@ -689,14 +569,14 @@ A1: not (ex x st x in dom f & f.x is Function);
 A2: now
     set t = the Element of dom uncurry f;
     assume dom uncurry f <> {};
-    then ex x,g,y st t = [x,y] & x in dom f & g = f.x & y in dom g by Def4;
+    then ex x,g,y st t = [x,y] & x in dom f & g = f.x & y in dom g by Def2;
     hence contradiction by A1;
   end;
   hence uncurry f = {};
   thus thesis by A2,Th1,RELAT_1:41;
 end;
 
-theorem Th36:
+theorem Th29:
   [:X,Y:] <> {} & dom f = [:X,Y:] & x in X implies ex g st (curry
   f).x = g & dom g = Y & rng g c= rng f & for y st y in Y holds g.y = f.(x,y)
 proof
@@ -707,14 +587,14 @@ A3: x in X;
   {x} c= X by A3,ZFMISC_1:31;
   then
 A4: [:{x},Y:] /\ dom f = [:{x},Y:] by A2,ZFMISC_1:101;
-  x in proj1 dom f by A1,A2,A3,Th11;
+  x in proj1 dom f by A1,A2,A3,Th9;
   then consider g such that
 A5: (curry f).x = g and
 A6: dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) & for y st y in dom g
-  holds g.y = f.(x,y) by Def3;
+  holds g.y = f.(x,y) by Def1;
   take g;
-A7: proj2 [:{x},Y:] = Y by Th11;
-A8: proj2 dom f = Y by A2,A3,Th11;
+A7: proj2 [:{x},Y:] = Y by Th9;
+A8: proj2 dom f = Y by A2,A3,Th9;
   rng g c= rng f
   proof
     let z;
@@ -727,19 +607,19 @@ A9: y in dom g & z = g.y by FUNCT_1:def 3;
   hence thesis by A5,A6,A8,A4,A7;
 end;
 
-theorem Th37:
+theorem Th30:
   x in dom curry f implies (curry f).x is Function
 proof
   assume
 A1: x in dom curry f;
-  dom curry f = proj1 dom f by Def3;
+  dom curry f = proj1 dom f by Def1;
   then
   ex g st (curry f).x = g & dom g = proj2 (dom f /\ [:{x},proj2 dom f:] )
-  & for y st y in dom g holds g.y = f.(x,y) by A1,Def3;
+  & for y st y in dom g holds g.y = f.(x,y) by A1,Def1;
   hence thesis;
 end;
 
-theorem Th38:
+theorem Th31:
   x in dom curry f & g = (curry f).x implies dom g = proj2 (dom f
 /\ [:{x},proj2 dom f:]) & dom g c= proj2 dom f & rng g c= rng f & for y st y in
   dom g holds g.y = f.(x,y) & [x,y] in dom f
@@ -747,14 +627,14 @@ proof
   assume that
 A1: x in dom curry f and
 A2: g = (curry f).x;
-  dom curry f = proj1 dom f by Def3;
+  dom curry f = proj1 dom f by Def1;
   then consider h such that
 A3: (curry f).x = h and
 A4: dom h = proj2 (dom f /\ [:{x},proj2 dom f:]) and
-A5: for y st y in dom h holds h.y = f.(x,y) by A1,Def3;
+A5: for y st y in dom h holds h.y = f.(x,y) by A1,Def1;
   thus dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) by A2,A3,A4;
   dom f /\ [:{x},proj2 dom f:] c= dom f by XBOOLE_1:17;
-  hence dom g c= proj2 dom f by A2,A3,A4,Th5;
+  hence dom g c= proj2 dom f by A2,A3,A4,XTUPLE_0:9;
   thus rng g c= rng f
   proof
     let y;
@@ -763,7 +643,7 @@ A5: for y st y in dom h holds h.y = f.(x,y) by A1,Def3;
 A6: z in dom g and
 A7: y = g.z by FUNCT_1:def 3;
     consider t such that
-A8: [t,z] in dom f /\ [:{x},proj2 dom f:] by A2,A3,A4,A6,RELAT_1:def 5;
+A8: [t,z] in dom f /\ [:{x},proj2 dom f:] by A2,A3,A4,A6,XTUPLE_0:def 13;
     [t,z] in dom f & [t,z] in [:{x},proj2 dom f:] by A8,XBOOLE_0:def 4;
     then
 A9: [x,z] in dom f by ZFMISC_1:105;
@@ -774,12 +654,12 @@ A9: [x,z] in dom f by ZFMISC_1:105;
   assume
 A10: y in dom g;
   then consider t such that
-A11: [t,y] in dom f /\ [:{x},proj2 dom f:] by A2,A3,A4,RELAT_1:def 5;
+A11: [t,y] in dom f /\ [:{x},proj2 dom f:] by A2,A3,A4,XTUPLE_0:def 13;
   [t,y] in dom f & [t,y] in [:{x},proj2 dom f:] by A11,XBOOLE_0:def 4;
   hence thesis by A2,A3,A5,A10,ZFMISC_1:105;
 end;
 
-theorem Th39:
+theorem Th32:
   [:X,Y:] <> {} & dom f = [:X,Y:] & y in Y implies ex g st (curry'
   f).y = g & dom g = X & rng g c= rng f & for x st x in X holds g.x = f.(x,y)
 proof
@@ -791,7 +671,7 @@ A4: dom ~f = [:Y,X:] by A2,FUNCT_4:46;
   X <> {} by A1,ZFMISC_1:90;
   then consider g such that
 A5: (curry ~f).y = g & dom g = X & rng g c= rng ~f and
-A6: for x st x in X holds g.x = (~f).(y,x) by A3,A4,Th36;
+A6: for x st x in X holds g.x = (~f).(y,x) by A3,A4,Th29;
   take g;
   rng ~f c= rng f by FUNCT_4:41;
   hence (curry' f).y = g & dom g = X & rng g c= rng f by A5,XBOOLE_1:1;
@@ -805,7 +685,7 @@ A8: g.x = (~f).(y,x) by A6;
 end;
 
 theorem
-  x in dom curry' f implies (curry' f).x is Function by Th37;
+  x in dom curry' f implies (curry' f).x is Function by Th30;
 
 theorem
   x in dom curry' f & g = (curry' f).x implies dom g = proj1 (dom f /\
@@ -815,55 +695,55 @@ proof
 A1: rng ~f c= rng f by FUNCT_4:41;
   assume
 A2: x in dom curry' f & g = (curry' f).x;
-  then dom g = proj2 (dom ~f /\ [:{x},proj2 dom ~f:]) by Th38;
+  then dom g = proj2 (dom ~f /\ [:{x},proj2 dom ~f:]) by Th31;
   then
-A3: dom g = proj2 (dom ~f /\ [:{x},proj1 dom f:]) by Th20;
+A3: dom g = proj2 (dom ~f /\ [:{x},proj1 dom f:]) by Th17;
   thus
 A4: dom g c= proj1 (dom f /\ [:proj1 dom f,{x}:])
   proof
     let z;
     assume z in dom g;
     then consider y such that
-A5: [y,z] in dom ~f /\ [:{x},proj1 dom f:] by A3,RELAT_1:def 5;
+A5: [y,z] in dom ~f /\ [:{x},proj1 dom f:] by A3,XTUPLE_0:def 13;
     [y,z] in [:{x},proj1 dom f:] by A5,XBOOLE_0:def 4;
     then
 A6: [z,y] in [:proj1 dom f,{x}:] by ZFMISC_1:88;
     [y,z] in dom ~f by A5,XBOOLE_0:def 4;
     then [z,y] in dom f by FUNCT_4:42;
     then [z,y] in dom f /\ [:proj1 dom f,{x}:] by A6,XBOOLE_0:def 4;
-    hence thesis by RELAT_1:def 4;
+    hence thesis by XTUPLE_0:def 12;
   end;
   thus proj1 (dom f /\ [:proj1 dom f,{x}:]) c= dom g
   proof
     let z;
     assume z in proj1 (dom f /\ [:proj1 dom f,{x}:]);
     then consider y such that
-A7: [z,y] in dom f /\ [:proj1 dom f,{x}:] by RELAT_1:def 4;
+A7: [z,y] in dom f /\ [:proj1 dom f,{x}:] by XTUPLE_0:def 12;
     [z,y] in [:proj1 dom f,{x}:] by A7,XBOOLE_0:def 4;
     then
 A8: [y,z] in [:{x},proj1 dom f:] by ZFMISC_1:88;
     [z,y] in dom f by A7,XBOOLE_0:def 4;
     then [y,z] in dom ~f by FUNCT_4:42;
     then [y,z] in dom ~f /\ [:{x},proj1 dom f:] by A8,XBOOLE_0:def 4;
-    hence thesis by A3,RELAT_1:def 5;
+    hence thesis by A3,XTUPLE_0:def 13;
   end;
-  dom g c= proj2 dom ~f & rng g c= rng ~f by A2,Th38;
-  hence dom g c= proj1 dom f & rng g c= rng f by A1,Th20,XBOOLE_1:1;
+  dom g c= proj2 dom ~f & rng g c= rng ~f by A2,Th31;
+  hence dom g c= proj1 dom f & rng g c= rng f by A1,Th17,XBOOLE_1:1;
   let y;
   assume
 A9: y in dom g;
   then consider z such that
-A10: [y,z] in dom f /\ [:proj1 dom f,{x}:] by A4,RELAT_1:def 4;
+A10: [y,z] in dom f /\ [:proj1 dom f,{x}:] by A4,XTUPLE_0:def 12;
   [y,z] in [:proj1 dom f,{x}:] by A10,XBOOLE_0:def 4;
   then
 A11: z = x by ZFMISC_1:106;
   [y,z] in dom f by A10,XBOOLE_0:def 4;
   then [z,y] in dom ~f by FUNCT_4:42;
   then (~f).(x,y) = f.(y,x) by A11,FUNCT_4:43;
-  hence thesis by A2,A9,A10,A11,Th38,XBOOLE_0:def 4;
+  hence thesis by A2,A9,A10,A11,Th31,XBOOLE_0:def 4;
 end;
 
-theorem Th42:
+theorem Th35:
   dom f = [:X,Y:] implies rng curry f c= Funcs(Y,rng f) & rng
   curry' f c= Funcs(X,rng f)
 proof
@@ -873,7 +753,7 @@ A2: now
     assume
 A3: [:X,Y:] <> {};
     then
-A4: dom curry f = X by A1,Th31;
+A4: dom curry f = X by A1,Th24;
     thus rng curry f c= Funcs(Y,rng f)
     proof
       let z;
@@ -882,10 +762,10 @@ A4: dom curry f = X by A1,Th31;
 A5:   x in dom curry f and
 A6:   z = (curry f).x by FUNCT_1:def 3;
       ex g st (curry f).x = g & dom g = Y & rng g c= rng f & for y st y
-      in Y holds g.y = f.(x,y) by A1,A3,A4,A5,Th36;
+      in Y holds g.y = f.(x,y) by A1,A3,A4,A5,Th29;
       hence thesis by A6,FUNCT_2:def 2;
     end;
-A7: dom curry' f = Y by A1,A3,Th31;
+A7: dom curry' f = Y by A1,A3,Th24;
     thus rng curry' f c= Funcs(X,rng f)
     proof
       let z;
@@ -894,7 +774,7 @@ A7: dom curry' f = Y by A1,A3,Th31;
 A8:   y in dom curry' f and
 A9:   z = (curry' f).y by FUNCT_1:def 3;
       ex g st (curry' f).y = g & dom g = X & rng g c= rng f & for x st x
-      in X holds g.x = f.(x,y) by A1,A3,A7,A8,Th39;
+      in X holds g.x = f.(x,y) by A1,A3,A7,A8,Th32;
       hence thesis by A9,FUNCT_2:def 2;
     end;
   end;
@@ -904,11 +784,11 @@ A10: dom f = {};
     then X = {} or Y = {} by A1;
     then
 A11: [:Y,X:] = {} by ZFMISC_1:90;
-    {} = dom curry f by A10,Def3,Th10;
+    {} = dom curry f by A10,Def1,Th8;
     then
 A12: rng curry f = {} by RELAT_1:42;
-    dom ~f = [:Y,X:] & dom curry ~f = proj1 dom ~f by A1,Def3,FUNCT_4:46;
-    then rng curry' f = {} by A11,Th10,RELAT_1:42;
+    dom ~f = [:Y,X:] & dom curry ~f = proj1 dom ~f by A1,Def1,FUNCT_4:46;
+    then rng curry' f = {} by A11,Th8,RELAT_1:42;
     hence thesis by A12,XBOOLE_1:2;
   end;
   hence thesis by A1,A2;
@@ -926,12 +806,12 @@ A1: rng ~f c= rng f by FUNCT_4:41;
     then consider z such that
 A2: z in dom curry f and
 A3: t = (curry f).z by FUNCT_1:def 3;
-    dom curry f = proj1 dom f by Def3;
+    dom curry f = proj1 dom f by Def1;
     then consider g such that
 A4: (curry f).z = g and
     dom g = proj2 (dom f /\ [:{z},proj2 dom f:]) and
-    for y st y in dom g holds g.y = f.(z,y) by A2,Def3;
-    dom g c= proj2 dom f & rng g c= rng f by A2,A4,Th38;
+    for y st y in dom g holds g.y = f.(z,y) by A2,Def1;
+    dom g c= proj2 dom f & rng g c= rng f by A2,A4,Th31;
     hence thesis by A3,A4,PARTFUN1:def 3;
   end;
   let t;
@@ -939,20 +819,20 @@ A4: (curry f).z = g and
   then consider z such that
 A5: z in dom curry' f and
 A6: t = (curry' f).z by FUNCT_1:def 3;
-  dom curry ~f = proj1 dom ~f by Def3;
+  dom curry ~f = proj1 dom ~f by Def1;
   then consider g such that
 A7: (curry ~f).z = g and
   dom g = proj2 (dom ~f /\ [:{z},proj2 dom ~f:]) and
-  for y st y in dom g holds g.y = (~f).(z,y) by A5,Def3;
-  rng g c= rng ~f by A5,A7,Th38;
+  for y st y in dom g holds g.y = (~f).(z,y) by A5,Def1;
+  rng g c= rng ~f by A5,A7,Th31;
   then
 A8: rng g c= rng f by A1,XBOOLE_1:1;
-  dom g c= proj2 dom ~f by A5,A7,Th38;
-  then dom g c= proj1 dom f by Th20;
+  dom g c= proj2 dom ~f by A5,A7,Th31;
+  then dom g c= proj1 dom f by Th17;
   hence thesis by A6,A7,A8,PARTFUN1:def 3;
 end;
 
-theorem Th44:
+theorem Th37:
   rng f c= PFuncs(X,Y) implies dom uncurry f c= [:dom f,X:] & dom
   uncurry' f c= [:X,dom f:]
 proof
@@ -967,7 +847,7 @@ A2: dom uncurry f c= [:dom f,X:]
 A3: x = [y,z] and
 A4: y in dom f and
 A5: g = f.y and
-A6: z in dom g by Def4;
+A6: z in dom g by Def2;
     g in rng f by A4,A5,FUNCT_1:def 3;
     then g is PartFunc of X,Y by A1,PARTFUN1:46;
     then dom g c= X by RELAT_1:def 18;
@@ -979,7 +859,7 @@ A6: z in dom g by Def4;
   hence thesis by A2,ZFMISC_1:88;
 end;
 
-theorem Th45:
+theorem Th38:
   x in dom f & g = f.x & y in dom g implies [x,y] in dom uncurry f
   & (uncurry f).(x,y) = g.y & g.y in rng uncurry f
 proof
@@ -988,9 +868,9 @@ A1: x in dom f and
 A2: g = f.x and
 A3: y in dom g;
   thus
-A4: [x,y] in dom uncurry f by A1,A2,A3,Def4;
-  [x,y]`1 = x & [x,y]`2 = y by MCART_1:7;
-  hence (uncurry f).(x,y) = g.y by A2,A4,Def4;
+A4: [x,y] in dom uncurry f by A1,A2,A3,Def2;
+  [x,y]`1 = x & [x,y]`2 = y;
+  hence (uncurry f).(x,y) = g.y by A2,A4,Def2;
   hence thesis by A4,FUNCT_1:def 3;
 end;
 
@@ -1000,15 +880,15 @@ theorem
 proof
   assume
 A1: x in dom f & g = f.x & y in dom g;
-  then [x,y] in dom uncurry f by Th45;
+  then [x,y] in dom uncurry f by Th38;
   hence
 A2: [y,x] in dom uncurry' f by FUNCT_4:42;
-  (uncurry f).(x,y) = g.y by A1,Th45;
+  (uncurry f).(x,y) = g.y by A1,Th38;
   hence (uncurry' f).(y,x) = g.y by A2,FUNCT_4:43;
   hence thesis by A2,FUNCT_1:def 3;
 end;
 
-theorem Th47:
+theorem Th40:
   rng f c= PFuncs(X,Y) implies rng uncurry f c= Y & rng uncurry' f c= Y
 proof
   assume
@@ -1024,48 +904,48 @@ A4: x = (uncurry f).y by FUNCT_1:def 3;
     consider z,g,t such that
 A5: y = [z,t] and
 A6: z in dom f & g = f.z and
-A7: t in dom g by A3,Def4;
+A7: t in dom g by A3,Def2;
     g in rng f by A6,FUNCT_1:def 3;
     then
 A8: ex g1 st g = g1 & dom g1 c= X & rng g1 c= Y by A1,PARTFUN1:def 3;
-    (uncurry f).(z,t) = g.t & g.t in rng g by A6,A7,Th45,FUNCT_1:def 3;
+    (uncurry f).(z,t) = g.t & g.t in rng g by A6,A7,Th38,FUNCT_1:def 3;
     hence thesis by A4,A5,A8;
   end;
   rng uncurry' f c= rng uncurry f by FUNCT_4:41;
   hence thesis by A2,XBOOLE_1:1;
 end;
 
-theorem Th48:
+theorem Th41:
   rng f c= Funcs(X,Y) implies rng uncurry f c= Y & rng uncurry' f c= Y
 proof
 A1: Funcs(X,Y) c= PFuncs(X,Y) by FUNCT_2:72;
   assume rng f c= Funcs(X,Y);
   then rng f c= PFuncs(X,Y) by A1,XBOOLE_1:1;
-  hence thesis by Th47;
+  hence thesis by Th40;
 end;
 
-theorem Th49:
+theorem Th42:
   curry {} = {} & curry' {} = {}
 proof
-A1: dom curry {} = proj1 dom {} by Def3;
+A1: dom curry {} = proj1 dom {} by Def1;
   hence curry {} = {};
   thus thesis by A1,Th1;
 end;
 
-theorem Th50:
+theorem Th43:
   uncurry {} = {} & uncurry' {} = {}
 proof
 A1: now
     set t = the Element of dom uncurry {};
     assume dom uncurry {} <> {};
-    then ex x,g,y st t = [x,y] & x in dom {} & g = {} .x & y in dom g by Def4;
+    then ex x,g,y st t = [x,y] & x in dom {} & g = {} .x & y in dom g by Def2;
     hence contradiction;
   end;
   hence uncurry {} = {};
   thus thesis by A1,Th1,RELAT_1:41;
 end;
 
-theorem Th51:
+theorem Th44:
   dom f1 = [:X,Y:] & dom f2 = [:X,Y:] & curry f1 = curry f2 implies f1 = f2
 proof
   assume that
@@ -1082,13 +962,13 @@ A5:   z in [:X,Y:];
 A6:   (curry f1).z`1 = g1 and
       dom g1 = Y and
       rng g1 c= rng f1 and
-A7:   for y st y in Y holds g1.y = f1.(z`1,y) by A1,Th36,MCART_1:10;
+A7:   for y st y in Y holds g1.y = f1.(z`1,y) by A1,Th29,MCART_1:10;
 A8:   z = [z`1,z`2] by A5,MCART_1:21;
 A9:   z`2 in Y by A5,MCART_1:10;
       then
 A10:  f1.(z`1,z`2) = g1.z`2 by A7;
       ex g2 being Function st (curry f2).z`1 = g2 & dom g2 = Y & rng g2 c=
-rng f2 & for y st y in Y holds g2.y = f2.(z`1,y) by A2,A5,Th36,MCART_1:10;
+rng f2 & for y st y in Y holds g2.y = f2.(z`1,y) by A2,A5,Th29,MCART_1:10;
       then f2.(z`1,z`2) = g1.z`2 by A3,A9,A6;
       hence f1.z = f2.z by A8,A10;
     end;
@@ -1098,7 +978,7 @@ rng f2 & for y st y in Y holds g2.y = f2.(z`1,y) by A2,A5,Th36,MCART_1:10;
   hence thesis by A4;
 end;
 
-theorem Th52:
+theorem Th45:
   dom f1 = [:X,Y:] & dom f2 = [:X,Y:] & curry' f1 = curry' f2 implies f1 = f2
 proof
   assume that
@@ -1107,12 +987,12 @@ A2: dom f2 = [:X,Y:] and
 A3: curry' f1 = curry' f2;
   dom ~f1 = [:Y,X:] & dom ~f2 = [:Y,X:] by A1,A2,FUNCT_4:46;
   then
-A4: ~f1 = ~f2 by A3,Th51;
+A4: ~f1 = ~f2 by A3,Th44;
   ~~f1 = f1 by A1,FUNCT_4:52;
   hence thesis by A2,A4,FUNCT_4:52;
 end;
 
-theorem Th53:
+theorem Th46:
   rng f1 c= Funcs(X,Y) & rng f2 c= Funcs(X,Y) & X <> {} & uncurry
   f1 = uncurry f2 implies f1 = f2
 proof
@@ -1121,7 +1001,7 @@ A1: rng f1 c= Funcs(X,Y) and
 A2: rng f2 c= Funcs(X,Y) and
 A3: X <> {} and
 A4: uncurry f1 = uncurry f2;
-A5: dom uncurry f1 = [:dom f1,X:] & dom uncurry f2 = [:dom f2,X:] by A1,A2,Th33
+A5: dom uncurry f1 = [:dom f1,X:] & dom uncurry f2 = [:dom f2,X:] by A1,A2,Th26
 ;
   then dom f1 = {} implies dom f1 = dom f2 by A3,A4,ZFMISC_1:90;
   then
@@ -1142,14 +1022,14 @@ A11: dom g2 = X and
     rng g2 c= Y by A2,FUNCT_2:def 2;
     now
       let y;
-A12:  [x,y]`1 = x & [x,y]`2 = y by MCART_1:7;
+A12:  [x,y]`1 = x & [x,y]`2 = y;
       assume
 A13:  y in X;
       then
-A14:  [x,y] in dom uncurry f2 by A4,A7,A8,A9,Def4;
-      [x,y] in dom uncurry f1 by A7,A8,A9,A13,Def4;
-      then (uncurry f1).[x,y] = g1.y by A8,A12,Def4;
-      hence g1.y = g2.y by A4,A10,A14,A12,Def4;
+A14:  [x,y] in dom uncurry f2 by A4,A7,A8,A9,Def2;
+      [x,y] in dom uncurry f1 by A7,A8,A9,A13,Def2;
+      then (uncurry f1).[x,y] = g1.y by A8,A12,Def2;
+      hence g1.y = g2.y by A4,A10,A14,A12,Def2;
     end;
     hence f1.x = f2.x by A8,A9,A10,A11,FUNCT_1:2;
   end;
@@ -1164,21 +1044,21 @@ proof
 A1: rng f1 c= Funcs(X,Y) and
 A2: rng f2 c= Funcs(X,Y) and
 A3: X <> {} & uncurry' f1 = uncurry' f2;
-  dom uncurry f1 = [:dom f1,X:] by A1,Th33;
+  dom uncurry f1 = [:dom f1,X:] by A1,Th26;
   then
 A4: uncurry f1 = ~~(uncurry f1) by FUNCT_4:52;
-  dom uncurry f2 = [:dom f2,X:] by A2,Th33;
-  hence thesis by A1,A2,A3,A4,Th53,FUNCT_4:52;
+  dom uncurry f2 = [:dom f2,X:] by A2,Th26;
+  hence thesis by A1,A2,A3,A4,Th46,FUNCT_4:52;
 end;
 
-theorem Th55:
+theorem Th48:
   rng f c= Funcs(X,Y) & X <> {} implies curry uncurry f = f &
   curry' uncurry' f = f
 proof
   assume that
 A1: rng f c= Funcs(X,Y) and
 A2: X <> {};
-A3: dom uncurry f = [:dom f,X:] by A1,Th33;
+A3: dom uncurry f = [:dom f,X:] by A1,Th26;
 A4: now
 A5: now
       let x;
@@ -1186,7 +1066,7 @@ A5: now
 A6:   x in dom f;
       then consider h such that
 A7:   (curry uncurry f).x = h & dom h = X & rng h c= rng uncurry f and
-A8:   y in X implies h.y = (uncurry f).(x,y) by A2,A3,Th36;
+A8:   y in X implies h.y = (uncurry f).(x,y) by A2,A3,Th29;
       f.x in rng f by A6,FUNCT_1:def 3;
       then consider g such that
 A9:   f.x = g & dom g = X and
@@ -1195,19 +1075,19 @@ A9:   f.x = g & dom g = X and
         let y;
         assume
 A10:    y in X;
-        then (uncurry f).(x,y) = g.y by A6,A9,Th45;
+        then (uncurry f).(x,y) = g.y by A6,A9,Th38;
         hence g.y = h.y by A8,A10;
       end;
       hence f.x = (curry uncurry f).x by A9,A7,FUNCT_1:2;
     end;
     assume dom f <> {};
-    then dom curry uncurry f = dom f by A2,A3,Th31;
+    then dom curry uncurry f = dom f by A2,A3,Th24;
     hence curry uncurry f = f by A5,FUNCT_1:2;
   end;
 A11: now
     assume dom f = {};
     then dom uncurry f = {} & f = {} by A3,ZFMISC_1:90;
-    hence curry uncurry f = f by Th49,RELAT_1:41;
+    hence curry uncurry f = f by Th42,RELAT_1:41;
   end;
   hence curry uncurry f = f by A4;
   thus thesis by A3,A11,A4,FUNCT_4:52;
@@ -1219,32 +1099,32 @@ proof
   assume
 A1: dom f = [:X,Y:];
 A2: now
-A3: rng curry' f c= Funcs(X,rng f) by A1,Th42;
+A3: rng curry' f c= Funcs(X,rng f) by A1,Th35;
     assume
 A4: dom f <> {};
     then X <> {} by A1,ZFMISC_1:90;
     then
-A5: curry' uncurry' curry' f = curry' f by A3,Th55;
-    dom curry' f = Y by A1,A4,Th31;
+A5: curry' uncurry' curry' f = curry' f by A3,Th48;
+    dom curry' f = Y by A1,A4,Th24;
     then
-A6: dom uncurry' curry' f = [:X,Y:] by A3,Th33;
-A7: rng curry f c= Funcs(Y,rng f) by A1,Th42;
+A6: dom uncurry' curry' f = [:X,Y:] by A3,Th26;
+A7: rng curry f c= Funcs(Y,rng f) by A1,Th35;
     Y <> {} by A1,A4,ZFMISC_1:90;
     then
-A8: curry uncurry curry f = curry f by A7,Th55;
-    dom curry f = X by A1,A4,Th31;
-    then dom uncurry curry f = [:X,Y:] by A7,Th33;
-    hence thesis by A1,A8,A5,A6,Th51,Th52;
+A8: curry uncurry curry f = curry f by A7,Th48;
+    dom curry f = X by A1,A4,Th24;
+    then dom uncurry curry f = [:X,Y:] by A7,Th26;
+    hence thesis by A1,A8,A5,A6,Th44,Th45;
   end;
   now
     assume dom f = {};
     then f = {};
-    hence thesis by Th49,Th50;
+    hence thesis by Th42,Th43;
   end;
   hence thesis by A2;
 end;
 
-theorem Th57:
+theorem Th50:
   dom f c= [:X,Y:] implies uncurry curry f = f & uncurry' curry' f = f
 proof
   assume
@@ -1260,17 +1140,17 @@ A4: dom uncurry curry f = dom f
         assume x in dom uncurry curry f;
         then
         ex y,g,z st x = [y,z] & y in dom curry f & g = (curry f).y & z in
-        dom g by Def4;
-        hence thesis by Th38;
+        dom g by Def2;
+        hence thesis by Th31;
       end;
       let x;
       assume
 A5:   x in dom f;
       then
 A6:   x = [x`1,x`2] by A3,MCART_1:21;
-      then reconsider g = (curry f).x`1 as Function by A5,Th26;
-      x`2 in dom g & x`1 in dom curry f by A5,A6,Th26,Th27;
-      hence thesis by A6,Th45;
+      then reconsider g = (curry f).x`1 as Function by A5,Th19;
+      x`2 in dom g & x`1 in dom curry f by A5,A6,Th19,Th20;
+      hence thesis by A6,Th38;
     end;
     now
       let x;
@@ -1278,9 +1158,9 @@ A6:   x = [x`1,x`2] by A3,MCART_1:21;
 A7:   x in dom f;
       then
 A8:   x = [x`1,x`2] by A3,MCART_1:21;
-      then reconsider g = (curry f).x`1 as Function by A7,Th26;
-      (uncurry curry f).x = g.x`2 by A4,A7,Def4;
-      then f.(x`1,x`2) = (uncurry curry f).(x`1,x`2) by A7,A8,Th27;
+      then reconsider g = (curry f).x`1 as Function by A7,Th19;
+      (uncurry curry f).x = g.x`2 by A4,A7,Def2;
+      then f.(x`1,x`2) = (uncurry curry f).(x`1,x`2) by A7,A8,Th20;
       hence f.x = (uncurry curry f).x by A8;
     end;
     hence uncurry curry f = f by A4,FUNCT_1:2;
@@ -1291,7 +1171,7 @@ A8:   x = [x`1,x`2] by A3,MCART_1:21;
   hence thesis by A1,FUNCT_4:52;
 end;
 
-theorem Th58:
+theorem Th51:
   rng f c= PFuncs(X,Y) & not {} in rng f implies curry uncurry f =
   f & curry' uncurry' f = f
 proof
@@ -1300,8 +1180,8 @@ A1: rng f c= PFuncs(X,Y) and
 A2: not {} in rng f;
 A3: dom curry uncurry f = dom f
   proof
-    dom uncurry f c= [:dom f,X:] by A1,Th44;
-    hence dom curry uncurry f c= dom f by Th32;
+    dom uncurry f c= [:dom f,X:] by A1,Th37;
+    hence dom curry uncurry f c= dom f by Th25;
     let x;
     assume
 A4: x in dom f;
@@ -1313,21 +1193,21 @@ A5: f.x = g and
     set y = the Element of dom g;
     g <> {} by A2,A4,A5,FUNCT_1:def 3;
     then
-A6: [x,y] in dom uncurry f by A4,A5,Th45;
-    dom curry uncurry f = proj1 dom uncurry f by Def3;
-    hence thesis by A6,RELAT_1:def 4;
+A6: [x,y] in dom uncurry f by A4,A5,Th38;
+    dom curry uncurry f = proj1 dom uncurry f by Def1;
+    hence thesis by A6,XTUPLE_0:def 12;
   end;
   now
     let x;
     assume
 A7: x in dom f;
-    then reconsider h = (curry uncurry f).x as Function by A3,Th37;
+    then reconsider h = (curry uncurry f).x as Function by A3,Th30;
     f.x in rng f by A7,FUNCT_1:def 3;
     then consider g such that
 A8: f.x = g and
     dom g c= X and
     rng g c= Y by A1,PARTFUN1:def 3;
-A9: dom h = proj2 (dom uncurry f /\ [:{x},proj2 dom uncurry f:]) by A3,A7,Th38;
+A9: dom h = proj2 (dom uncurry f /\ [:{x},proj2 dom uncurry f:]) by A3,A7,Th31;
 A10: dom h = dom g
     proof
       thus dom h c= dom g
@@ -1336,7 +1216,7 @@ A10: dom h = dom g
         assume z in dom h;
         then consider t such that
 A11:    [t,z] in dom uncurry f /\ [:{x},proj2 dom uncurry f:] by A9,
-RELAT_1:def 5;
+XTUPLE_0:def 13;
         [t,z] in [:{x},proj2 dom uncurry f:] by A11,XBOOLE_0:def 4;
         then
 A12:    t = x by ZFMISC_1:105;
@@ -1344,27 +1224,27 @@ A12:    t = x by ZFMISC_1:105;
         then consider x1,g1,x2 such that
 A13:    [t,z] = [x1,x2] and
         x1 in dom f and
-A14:    g1 = f.x1 & x2 in dom g1 by Def4;
-        t = x1 by A13,ZFMISC_1:27;
-        hence thesis by A8,A13,A14,A12,ZFMISC_1:27;
+A14:    g1 = f.x1 & x2 in dom g1 by Def2;
+        t = x1 by A13,XTUPLE_0:1;
+        hence thesis by A8,A13,A14,A12,XTUPLE_0:1;
       end;
       let y;
       assume y in dom g;
-      then [x,y] in dom uncurry f by A7,A8,Th45;
-      hence thesis by Th27;
+      then [x,y] in dom uncurry f by A7,A8,Th38;
+      hence thesis by Th20;
     end;
     now
       let y;
       assume
 A15:  y in dom h;
-      hence h.y = (uncurry f).(x,y) by A3,A7,Th38
-        .= g.y by A7,A8,A10,A15,Th45;
+      hence h.y = (uncurry f).(x,y) by A3,A7,Th31
+        .= g.y by A7,A8,A10,A15,Th38;
     end;
     hence f.x = (curry uncurry f).x by A8,A10,FUNCT_1:2;
   end;
   hence
 A16: curry uncurry f = f by A3,FUNCT_1:2;
-  dom uncurry f c= [:dom f,X:] by A1,Th44;
+  dom uncurry f c= [:dom f,X:] by A1,Th37;
   hence thesis by A16,FUNCT_4:52;
 end;
 
@@ -1374,8 +1254,8 @@ proof
   assume that
 A1: dom f1 c= [:X,Y:] and
 A2: dom f2 c= [:X,Y:];
-  uncurry curry f1 = f1 by A1,Th57;
-  hence thesis by A2,Th57;
+  uncurry curry f1 = f1 by A1,Th50;
+  hence thesis by A2,Th50;
 end;
 
 theorem
@@ -1384,8 +1264,8 @@ proof
   assume that
 A1: dom f1 c= [:X,Y:] and
 A2: dom f2 c= [:X,Y:];
-  uncurry' curry' f1 = f1 by A1,Th57;
-  hence thesis by A2,Th57;
+  uncurry' curry' f1 = f1 by A1,Th50;
+  hence thesis by A2,Th50;
 end;
 
 theorem
@@ -1397,8 +1277,8 @@ A1: rng f1 c= PFuncs(X,Y) and
 A2: rng f2 c= PFuncs(X,Y) and
 A3: not {} in rng f1 and
 A4: not {} in rng f2;
-  curry uncurry f1 = f1 by A1,A3,Th58;
-  hence thesis by A2,A4,Th58;
+  curry uncurry f1 = f1 by A1,A3,Th51;
+  hence thesis by A2,A4,Th51;
 end;
 
 theorem
@@ -1410,11 +1290,11 @@ A1: rng f1 c= PFuncs(X,Y) and
 A2: rng f2 c= PFuncs(X,Y) and
 A3: not {} in rng f1 and
 A4: not {} in rng f2;
-  curry' uncurry' f1 = f1 by A1,A3,Th58;
-  hence thesis by A2,A4,Th58;
+  curry' uncurry' f1 = f1 by A1,A3,Th51;
+  hence thesis by A2,A4,Th51;
 end;
 
-theorem Th63:
+theorem Th56:
   X c= Y implies Funcs(Z,X) c= Funcs(Z,Y)
 proof
   assume
@@ -1428,7 +1308,7 @@ A3: rng f c= X by FUNCT_2:def 2;
   hence thesis by A2,FUNCT_2:def 2;
 end;
 
-theorem Th64:
+theorem Th57:
   Funcs({},X) = {{}}
 proof
   thus Funcs({},X) c= {{}}
@@ -1493,7 +1373,7 @@ A10: rng g = {g.x} by A7,FUNCT_1:4;
   hence thesis by CARD_1:5;
 end;
 
-theorem Th66:
+theorem Th59:
   Funcs(X,{x}) = {X --> x}
 proof
   thus Funcs(X,{x}) c= {X --> x}
@@ -1529,7 +1409,7 @@ A8: y = X --> x by TARSKI:def 1;
   hence thesis by A8,FUNCT_2:def 2;
 end;
 
-theorem Th67:
+theorem Th60:
   X1,Y1 are_equipotent & X2,Y2 are_equipotent implies Funcs(X1,X2)
   ,Funcs(Y1,Y2) are_equipotent & card Funcs(X1,X2) = card Funcs(Y1,Y2)
 proof
@@ -1637,7 +1517,7 @@ theorem
 proof
   assume card X1 = card Y1 & card X2 = card Y2;
   then X1,Y1 are_equipotent & X2,Y2 are_equipotent by CARD_1:5;
-  hence thesis by Th67;
+  hence thesis by Th60;
 end;
 
 theorem
@@ -1678,7 +1558,7 @@ A11:  f.x = [g1|X1,g1|X2] by A1,A3,A9;
         then
         g1.x = g1|X1.x & g2.x = g2|X1.x or g1.x = g1|X2.x & g2.x = g2|X2.
         x by FUNCT_1:49;
-        hence g1.x = g2.x by A11,A7,A8,ZFMISC_1:27;
+        hence g1.x = g2.x by A11,A7,A8,XTUPLE_0:1;
       end;
       hence thesis by A9,A10,A5,A6,FUNCT_1:2;
     end;
@@ -1769,7 +1649,7 @@ A10:    x1 = g1 and
 A11:    dom g1 = [:X,Y:] and
         rng g1 c= Z by A1,A4,FUNCT_2:def 2;
         f.x1 = curry g1 by A1,A4,A10;
-        hence thesis by A6,A10,A11,A7,A8,A9,Th51;
+        hence thesis by A6,A10,A11,A7,A8,A9,Th44;
       end;
       thus dom f = Funcs([:X,Y:],Z) by A1;
       thus rng f c= Funcs(X,Funcs(Y,Z))
@@ -1783,9 +1663,9 @@ A13:    y = f.x by FUNCT_1:def 3;
 A14:    x = g and
 A15:    dom g = [:X,Y:] and
 A16:    rng g c= Z by A1,A12,FUNCT_2:def 2;
-A17:    dom curry g = X by A3,A15,Th31;
+A17:    dom curry g = X by A3,A15,Th24;
         rng curry g c= Funcs(Y,rng g) & Funcs(Y,rng g) c= Funcs(Y,Z) by A15,A16
-,Th42,Th63;
+,Th35,Th56;
         then
 A18:    rng curry g c= Funcs(Y,Z) by XBOOLE_1:1;
         y = curry g by A1,A12,A13,A14;
@@ -1797,11 +1677,11 @@ A18:    rng curry g c= Funcs(Y,Z) by XBOOLE_1:1;
 A19:  y = g and
 A20:  dom g = X and
 A21:  rng g c= Funcs(Y,Z) by FUNCT_2:def 2;
-      dom uncurry g = [:X,Y:] & rng uncurry g c= Z by A20,A21,Th33,Th48;
+      dom uncurry g = [:X,Y:] & rng uncurry g c= Z by A20,A21,Th26,Th41;
       then
 A22:  uncurry g in Funcs([:X,Y:],Z) by FUNCT_2:def 2;
       Y <> {} by A3,ZFMISC_1:90;
-      then curry uncurry g = g by A21,Th55;
+      then curry uncurry g = g by A21,Th48;
       then f.(uncurry g) = y by A1,A19,A22;
       hence thesis by A1,A22,FUNCT_1:def 3;
     end;
@@ -1811,18 +1691,18 @@ A22:  uncurry g in Funcs([:X,Y:],Z) by FUNCT_2:def 2;
     assume
 A23: [:X,Y:] = {};
     then
-A24: Funcs([:X,Y:],Z) = {{}} by Th64;
+A24: Funcs([:X,Y:],Z) = {{}} by Th57;
 A25: now
       assume Y = {};
-      then Funcs(Y,Z) = {{}} by Th64;
-      then Funcs(X,Funcs(Y,Z)) = {X --> {}} by Th66;
+      then Funcs(Y,Z) = {{}} by Th57;
+      then Funcs(X,Funcs(Y,Z)) = {X --> {}} by Th59;
       hence Funcs([:X,Y:],Z),Funcs(X,Funcs(Y,Z)) are_equipotent by A24,
 CARD_1:28;
     end;
     X = {} or Y = {} by A23;
-    hence Funcs([:X,Y:],Z),Funcs(X,Funcs(Y,Z)) are_equipotent by A24,A25,Th64;
-    X = {} implies Funcs(X,Funcs(Y,Z)) = {{}} by Th64;
-    hence card Funcs([:X,Y:],Z) = card Funcs(X,Funcs(Y,Z)) by A23,A25,Th64,
+    hence Funcs([:X,Y:],Z),Funcs(X,Funcs(Y,Z)) are_equipotent by A24,A25,Th57;
+    X = {} implies Funcs(X,Funcs(Y,Z)) = {{}} by Th57;
+    hence card Funcs([:X,Y:],Z) = card Funcs(X,Funcs(Y,Z)) by A23,A25,Th57,
 CARD_1:5;
   end;
   hence thesis by A2;
@@ -1857,7 +1737,7 @@ A10:  rng g2 c= [:X,Y:] by A1,A3,FUNCT_2:def 2;
       [pr1(X,Y)*g1,pr2(X,Y)*g1] = f.x1 by A1,A2,A5
         .= [pr1(X,Y)*g2,pr2(X,Y)*g2] by A1,A3,A4,A8;
       then
-A11:  pr1(X,Y)*g1 = pr1(X,Y)*g2 & pr2(X,Y)*g1 = pr2(X,Y)*g2 by ZFMISC_1:27;
+A11:  pr1(X,Y)*g1 = pr1(X,Y)*g2 & pr2(X,Y)*g1 = pr2(X,Y)*g2 by XTUPLE_0:1;
       now
         let x;
         assume
@@ -1895,14 +1775,8 @@ A21:  x = f.y by FUNCT_1:def 3;
       consider g such that
 A22:  y = g and
 A23:  dom g = Z & rng g c= [:X,Y:] by A1,A20,FUNCT_2:def 2;
-      rng(pr1(X,Y)*g) c= rng pr1(X,Y) & rng pr1(X,Y) c= X by FUNCT_3:43
-,RELAT_1:26;
-      then
-A24:  rng(pr1(X,Y)*g) c= X by XBOOLE_1:1;
-      rng(pr2(X,Y)*g) c= rng pr2(X,Y ) & rng pr2(X,Y) c= Y by FUNCT_3:45
-,RELAT_1:26;
-      then
-A25:  rng(pr2(X,Y)*g) c= Y by XBOOLE_1:1;
+A24:  rng(pr1(X,Y)*g) c= X;
+A25:  rng(pr2(X,Y)*g) c= Y;
       dom pr2(X,Y) = [:X,Y:] by FUNCT_3:def 5;
       then dom(pr2(X,Y)*g) = Z by A23,RELAT_1:27;
       then
@@ -2100,7 +1974,7 @@ A10:  [g1.x,g1.y] = f.x1 by A1,A3,A8
         let z;
         assume z in {x,y};
         then z = x or z = y by TARSKI:def 2;
-        hence g1.z = g2.z by A10,ZFMISC_1:27;
+        hence g1.z = g2.z by A10,XTUPLE_0:1;
       end;
       hence thesis by A8,A9,A6,A7,FUNCT_1:2;
     end;
@@ -2184,3 +2058,127 @@ definition
   redefine func op2 -> BinOp of 1;
   coherence by CARD_1:49;
 end;
+
+:: from CAT_2, 2011.11.25, A.T.
+
+reserve C,D,E for non empty set;
+reserve c for Element of C,
+  d for Element of D;
+
+definition
+  let D,X,E;
+  let F be FUNCTION_DOMAIN of X,E;
+  let f be Function of D,F;
+  let d be Element of D;
+  redefine func f.d -> Element of F;
+  coherence
+  proof
+    thus f.d is Element of F;
+  end;
+end;
+
+reserve f for Function of [:C,D:],E;
+
+theorem Th1:
+  curry f is Function of C,Funcs(D,E)
+proof
+A1: dom f = [:C,D:] by FUNCT_2:def 1;
+A2: rng curry f c= Funcs(D,E)
+  proof
+A3: rng curry f c= Funcs(D,rng f) by A1,Th35;
+    let x be set;
+    assume x in rng curry f;
+    then consider g being Function such that
+A4: x = g and
+A5: dom g = D and
+A6: rng g c= rng f by A3,FUNCT_2:def 2;
+    rng g c= E by A6,XBOOLE_1:1;
+    then g is Function of D,E by A5,FUNCT_2:def 1,RELSET_1:4;
+    hence thesis by A4,FUNCT_2:8;
+  end;
+  dom curry f = C by A1,Th24;
+  hence thesis by A2,FUNCT_2:def 1,RELSET_1:4;
+end;
+
+theorem Th2:
+  curry' f is Function of D,Funcs(C,E)
+proof
+A1: dom f = [:C,D:] by FUNCT_2:def 1;
+A2: rng curry' f c= Funcs(C,E)
+  proof
+A3: rng curry' f c= Funcs(C,rng f) by A1,Th35;
+    let x be set;
+    assume x in rng curry' f;
+    then consider g being Function such that
+A4: x = g and
+A5: dom g = C and
+A6: rng g c= rng f by A3,FUNCT_2:def 2;
+    rng g c= E by A6,XBOOLE_1:1;
+    then g is Function of C,E by A5,FUNCT_2:def 1,RELSET_1:4;
+    hence thesis by A4,FUNCT_2:8;
+  end;
+  dom curry' f = D by A1,Th24;
+  hence thesis by A2,FUNCT_2:def 1,RELSET_1:4;
+end;
+
+definition
+  let C,D,E,f;
+  redefine func curry f -> Function of C,Funcs(D,E);
+  coherence by Th1;
+  redefine func curry' f -> Function of D,Funcs(C,E);
+  coherence by Th2;
+end;
+
+theorem
+  f.(c,d) = ((curry f).c).d
+proof
+  [c,d] in [:C,D:];
+  then [c,d] in dom f by FUNCT_2:def 1;
+  hence thesis by Th20;
+end;
+
+theorem
+  f.(c,d) = ((curry' f).d).c
+proof
+  [c,d] in [:C,D:];
+  then [c,d] in dom f by FUNCT_2:def 1;
+  hence thesis by Th22;
+end;
+
+:: from ISOCAT_2, 2011.11.25, A.T.
+
+definition
+  let A,B,C be non empty set;
+  let f be Function of A, Funcs(B,C);
+  redefine func uncurry f -> Function of [:A,B:],C;
+  coherence
+  proof
+A1: rng f c= Funcs(B,C);
+    then
+A2: rng uncurry f c= C by Th41;
+    dom uncurry f = [:dom f,B:] by A1,Th26
+      .= [:A,B:] by FUNCT_2:def 1;
+    hence thesis by A2,FUNCT_2:def 1,RELSET_1:4;
+  end;
+end;
+
+theorem
+  for A,B,C being non empty set, f being Function of A,Funcs(B,C)
+  holds curry uncurry f = f
+proof
+  let A,B,C be non empty set, f be Function of A,Funcs(B,C);
+  rng f c= Funcs(B,C);
+  hence thesis by Th48;
+end;
+
+theorem
+  for A,B,C being non empty set, f being Function of A, Funcs(B,C)
+for a being Element of A, b being Element of B
+      holds (uncurry f).(a,b) = f.a.b
+proof
+  let A,B,C be non empty set, f be Function of A, Funcs(B,C);
+  let a be Element of A, b be Element of B;
+  dom f = A & dom(f.a) = B by FUNCT_2:def 1;
+  hence thesis by Th38;
+end;
+

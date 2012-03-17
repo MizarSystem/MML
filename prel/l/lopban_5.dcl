@@ -12,9 +12,9 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -30,46 +30,42 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="NORMSP_2"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="CLASSES2"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="GRAPH_1"/>
-<ArticleID name="CAT_1"/>
-<ArticleID name="CAT_2"/>
-<ArticleID name="GRCAT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="LOPBAN_1"/>
 </Signature>
 <FCluster aid="LOPBAN_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="97"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
-<Adjective nr="124"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="100"/>
 <Adjective nr="125"/>
 <Adjective nr="126"/>
 <Adjective nr="127"/>
 <Adjective nr="128"/>
-<Adjective nr="132"/>
-<Adjective nr="133"/>
+<Adjective nr="129"/>
+<Adjective nr="130"/>
+<Adjective nr="131"/>
 <Adjective nr="135"/>
-<Adjective nr="175"/>
+<Adjective nr="136"/>
+<Adjective nr="138"/>
+<Adjective nr="173"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="194">
+<Func kind="K" nr="198">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="69"/>
-<Adjective nr="70"/>
-<Adjective nr="71"/>
+<Adjective nr="38" value="false"/>
 <Adjective nr="72"/>
-<Adjective nr="79"/>
+<Adjective nr="73"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
+<Adjective nr="82"/>
 </Cluster>
 </FCluster>
 </Registrations>

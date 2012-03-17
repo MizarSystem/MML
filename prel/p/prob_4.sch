@@ -12,13 +12,14 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -41,10 +42,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="63">
+<Adjective nr="65">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="66">
+<Adjective nr="68">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -70,9 +71,9 @@
 <Func kind="F" nr="2"/>
 </Adjective>
 <Adjective nr="17"/>
-<Adjective nr="23">
+<Adjective nr="26">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
@@ -80,7 +81,7 @@
 <Func kind="K" nr="6">
 <Func kind="K" nr="7">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -94,7 +95,7 @@
 <Func kind="K" nr="32"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="220">
+<Func kind="K" nr="230">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

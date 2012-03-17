@@ -1,0 +1,1044 @@
+:: Simple Graphs as Simplicial Complexes: the {M}ycielskian of a Graph
+::  by Piotr Rudnicki and Lorna Stewart
+:: 
+:: Received February 8, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies MATROID0, NAT_1, FINSET_1, CARD_1, ARYTM_3, SUBSET_1, XXREAL_0,
+      CLASSES1, SGRAPH1, SIMPLEX0, TARSKI, GRAPH_1, GLIB_000, PBOOLE, XBOOLE_0,
+      ZFMISC_1, NUMBERS, FUNCT_1, RELAT_1, COMBGRAS, MYCIELSK, DILWORTH,
+      CIRCUIT2, AOFA_000, EQREL_1, PEPIN, CIRCUIT1, FUNCT_2, ARYTM_1, ORDINAL1,
+      PROB_1, BSPACE, STRUCT_0, NEWTON, STIRL2_1, UPROOTS, FINSEQ_1, CARD_3,
+      FINSEQ_2, PROB_2, GROUP_10, RAMSEY_1, SCMYCIEL;
+ notations TARSKI, XBOOLE_0, ORDINAL1, RELAT_1, FUNCT_1, FUNCT_2, MATROID0,
+      XCMPLX_0, NAT_1, FINSET_1, ENUMSET1, FINSEQ_1, FINSEQ_2, CARD_1,
+      SUBSET_1, XXREAL_0, ZFMISC_1, NUMBERS, NEWTON, UPROOTS, RVSUM_1, PROB_2,
+      FUNCOP_1, CLASSES1, AOFA_000, EQREL_1, BSPACE, STIRL2_1, PBOOLE,
+      CARD_LAR, MYCIELSK, GROUP_10, RAMSEY_1, CARD_3;
+ constructors MATROID0, LEXBFS, UPROOTS, CARD_LAR, RVSUM_1, BSPACE, STIRL2_1,
+      BINOP_2, PROB_2, DOMAIN_1, CLASSES1, MYCIELSK, RAMSEY_1, RELSET_1,
+      COHSP_1;
+ registrations LEXBFS, FINSET_1, XXREAL_0, ORDINAL1, SETFAM_1, RELSET_1,
+      XREAL_0, NAT_1, CARD_FIN, SUBSET_1, EQREL_1, CARD_1, NEWTON, VALUED_0,
+      XBOOLE_0, PARTFUN1, FUNCT_2, SIMPLEX0, MYCIELSK, ZFMISC_1, FINSEQ_1,
+      COHSP_1;
+ requirements SUBSET, NUMERALS, REAL, ARITHM, BOOLE;
+
+
+begin  :: Preliminaries
+       :: Could not find in MML
+
+theorem :: SCMYCIEL:1
+for x, X being set holds not [x,X] in X;
+
+theorem :: SCMYCIEL:2
+for x, X being set holds [x,X] <> X;
+
+theorem :: SCMYCIEL:3
+for x, X being set holds [x,X] <> x;
+
+theorem :: SCMYCIEL:4
+for x1,y1,x2,y2,X being set
+ st x1 in X & x2 in X & {x1,[y1,X]} = {x2,[y2,X]}
+  holds x1 = x2 & y1 = y2;
+
+theorem :: SCMYCIEL:5   :: belongs to PENCIL_1
+for X, v being set st 3 c= card X
+  ex v1, v2 being set st v1 in X & v2 in X & v1<>v & v2<>v & v1<>v2;
+
+theorem :: SCMYCIEL:6
+for x being set holds singletons {x} = { {x} };
+
+registration
+ cluster finite-yielding for FinSequence;
+end;
+
+theorem :: SCMYCIEL:7
+for X being non empty finite set, P being a_partition of X
+ st card P < card X
+  ex p, x, y being set st p in P & x in p & y in p & x <> y;
+
+registration
+ cluster union {{}} -> empty;
+end;
+
+theorem :: SCMYCIEL:8
+for x being set holds union { {}, {x} } = {x};
+
+theorem :: SCMYCIEL:9   :: variant of SUBSET_1:46 or CARD_1:65
+for X being set, s being Subset of X
+ st s is 1-element
+  ex x being set st x in X & s = {x};
+
+theorem :: SCMYCIEL:10
+for X being set holds
+ card { {X,[x,X]} where x is Element of X : x in X } = card X;
+
+definition
+  let G be set;
+  func PairsOf G -> Subset of G means
+:: SCMYCIEL:def 1
+    for e being set holds e in it iff e in G & card e = 2 ;
+end;
+
+theorem :: SCMYCIEL:11
+for X being set, e being set
+ st e in PairsOf X
+  ex x, y being set st x <> y & x in union X & y in union X & e = {x, y};
+
+theorem :: SCMYCIEL:12
+for X, x, y being set st x <> y & {x, y} in X holds {x, y} in PairsOf X;
+
+theorem :: SCMYCIEL:13
+for X, x, y being set
+ st {x, y} in PairsOf X holds x <> y & x in union X & y in union X;
+
+theorem :: SCMYCIEL:14
+for G, H being set st G c= H holds PairsOf G c= PairsOf H;
+
+theorem :: SCMYCIEL:15
+for X being finite set holds
+ card { {x,[y, union X]} where x, y is Element of union X
+                         : {x,y} in PairsOf X } = 2 * card PairsOf X;
+
+theorem :: SCMYCIEL:16 :: ordunordpairs:
+for X being finite set holds
+ card {[x, y] where x, y is Element of union X
+                         : {x,y} in PairsOf X } = 2 * card PairsOf X;
+
+registration
+  let X be finite set;
+  cluster PairsOf X -> finite;
+end;
+
+definition
+  let X be set;
+  attr X is void means
+:: SCMYCIEL:def 2
+    X = {{}};
+end;
+
+registration
+  cluster void for set;
+end;
+
+registration
+ cluster void -> finite for set;
+end;
+
+registration
+  let G be void set;
+  cluster union G -> empty;
+end;
+
+theorem :: SCMYCIEL:17
+for X being set st X is void holds PairsOf X = {};
+
+theorem :: SCMYCIEL:18
+for X being set st union X = {} holds X = {} or X = {{}};
+
+definition
+  let X be set;
+  attr X is pairfree means
+:: SCMYCIEL:def 3
+    PairsOf X is empty;
+end;
+
+theorem :: SCMYCIEL:19
+for X, x being set st card union X = 1 holds X is pairfree;
+
+registration
+ cluster finite-membered non empty for set;
+end;
+
+registration
+  let X be finite-membered set, Y be set;
+  cluster X /\ Y -> finite-membered;
+  cluster X \ Y -> finite-membered;
+end;
+
+begin  :: Simple graphs as simplicial complexes
+
+definition
+  let n be Nat;
+  let X be set;
+  attr X is n-at_most_dimensional means
+:: SCMYCIEL:def 4
+  for x being set st x in X holds card x c= n+1;
+end;
+
+registration
+  let n be Nat;
+  cluster n-at_most_dimensional -> finite-membered for set;
+end;
+
+registration
+  let n be Nat;
+  cluster n-at_most_dimensional subset-closed non empty for set;
+end;
+
+theorem :: SCMYCIEL:20
+for G being subset-closed non empty set holds {} in G;
+
+theorem :: SCMYCIEL:21
+for n being natural number, X being n-at_most_dimensional set,
+    x being Element of X
+ st x in X holds card x <= n+1;
+
+registration
+  let n be Nat;
+  let X, Y be n-at_most_dimensional set;
+  cluster X \/ Y -> n-at_most_dimensional;
+end;
+
+registration
+  let n be Nat;
+  let X be n-at_most_dimensional set, Y be set;
+  cluster X /\ Y -> n-at_most_dimensional;
+  cluster X \ Y -> n-at_most_dimensional;
+end;
+
+registration
+  let n be Nat, X be n-at_most_dimensional set;
+  cluster -> n-at_most_dimensional for Subset of X;
+end;
+
+definition
+  let s be set;
+  attr s is SimpleGraph-like means
+:: SCMYCIEL:def 5
+       s is 1-at_most_dimensional subset-closed non empty;
+end;
+
+registration
+ cluster SimpleGraph-like ->
+         1-at_most_dimensional subset-closed non empty for set;
+ cluster 1-at_most_dimensional subset-closed non empty
+         -> SimpleGraph-like for set;
+end;
+
+theorem :: SCMYCIEL:22
+{{}} is SimpleGraph-like;
+
+registration
+  cluster {{}} -> SimpleGraph-like;
+end;
+
+registration
+  cluster SimpleGraph-like for set;
+end;
+
+definition
+ mode SimpleGraph is SimpleGraph-like set;
+end;
+
+registration
+  cluster void for SimpleGraph;
+  cluster finite for SimpleGraph;
+end;
+
+notation  :: meant for graphs
+  let G be set;
+  synonym Vertices G for union G;
+  synonym Edges G for PairsOf G;
+end;
+
+notation
+  let X be set;
+  synonym X is edgeless for X is pairfree;
+end;
+
+theorem :: SCMYCIEL:23
+for G being SimpleGraph st Vertices G is finite holds G is finite;
+
+theorem :: SCMYCIEL:24
+for G being SimpleGraph, x being set holds x in Vertices G iff {x} in G;
+
+theorem :: SCMYCIEL:25
+for x being set holds { {}, {x} } is SimpleGraph;
+
+definition  :: meant for graphs
+  let X be finite finite-membered set;
+  func order X -> Nat equals
+:: SCMYCIEL:def 6
+   card union X;
+end;
+
+definition  :: meant for graphs
+  let X be finite set;
+  func size X -> Nat equals
+:: SCMYCIEL:def 7
+card PairsOf X;
+end;
+
+theorem :: SCMYCIEL:26
+for G being finite SimpleGraph holds order G <= card G;
+
+definition
+  let G be SimpleGraph;
+  mode Vertex of G is Element of Vertices G;
+  mode Edge of G is Element of Edges G;
+end;
+
+theorem :: SCMYCIEL:27
+for G being SimpleGraph holds G = { {} } \/ singletons Vertices G \/ Edges G;
+
+theorem :: SCMYCIEL:28
+for G being SimpleGraph st Vertices G = {} holds G is void;
+
+theorem :: SCMYCIEL:29
+for G being SimpleGraph, x being set
+ st x in G & x <> {}
+  holds (ex y being set st x = {y} & y in Vertices G) or x in Edges G;
+
+theorem :: SCMYCIEL:30 :: Gsingle:
+for G being SimpleGraph, x being set st Vertices G = {x} holds G = { {}, {x} };
+
+theorem :: SCMYCIEL:31
+for X being set ex G being SimpleGraph st G is edgeless & Vertices G = X;
+
+definition
+ let G be SimpleGraph, v be Element of Vertices G;
+ func Adjacent v -> Subset of Vertices G  means
+:: SCMYCIEL:def 8
+  for x being Element of Vertices G holds x in it iff {v, x} in Edges G;
+end;
+
+definition
+  let X be set;
+  mode SimpleGraph of X -> SimpleGraph means
+:: SCMYCIEL:def 9
+    Vertices it = X;
+end;
+
+definition
+ let X be set;
+ func CompleteSGraph X -> SimpleGraph of X equals
+:: SCMYCIEL:def 10
+   { V where V is finite Subset of X : card V <= 2};
+end;
+
+theorem :: SCMYCIEL:32
+for G being SimpleGraph
+  st (for x, y being set st x in Vertices G & y in Vertices G
+        holds {x, y} in G)
+   holds G = CompleteSGraph Vertices G;
+
+registration
+ let X be finite set;
+ cluster CompleteSGraph X -> finite;
+end;
+
+theorem :: SCMYCIEL:33
+for X being set, x being set st x in X holds {x} in CompleteSGraph X;
+
+theorem :: SCMYCIEL:34
+for X being set, x, y being set st x in X & y in X
+  holds {x,y} in CompleteSGraph X;
+
+theorem :: SCMYCIEL:35
+CompleteSGraph {} = {{}};
+
+theorem :: SCMYCIEL:36
+for  x being set holds CompleteSGraph {x} = {{},{x}};
+
+theorem :: SCMYCIEL:37
+for  x, y being set holds CompleteSGraph {x,y} = {{},{x},{y},{x,y}};
+
+theorem :: SCMYCIEL:38
+for X, Y being set st X c= Y holds CompleteSGraph X c= CompleteSGraph Y;
+
+theorem :: SCMYCIEL:39
+for G being SimpleGraph, x being set st x in Vertices G
+  holds CompleteSGraph {x} c= G;
+
+registration
+  let G be SimpleGraph;
+  cluster SimpleGraph-like for Subset of G;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Subgraph of G is SimpleGraph-like Subset of G;
+end;
+
+definition
+ let G be SimpleGraph;
+ func Complement G -> SimpleGraph equals
+:: SCMYCIEL:def 11
+  (CompleteSGraph Vertices G) \ Edges G;
+ involutiveness;
+end;
+
+theorem :: SCMYCIEL:40 :: Compl1:
+ for G being SimpleGraph holds Vertices G = Vertices Complement G;
+
+theorem :: SCMYCIEL:41 :: Compl1a:
+for G being SimpleGraph, x, y being set
+ st x <> y & x in Vertices G & y in Vertices G
+  holds {x,y} in Edges G iff {x,y} nin Edges Complement G;
+
+begin :: Induced Subgraphs
+
+definition
+ let G be SimpleGraph, L be set;
+ func G SubgraphInducedBy L -> Subset of G equals
+:: SCMYCIEL:def 12
+   G /\ bool L;
+end;
+
+registration
+ let G be SimpleGraph, L be set;
+ cluster G SubgraphInducedBy L -> SimpleGraph-like;
+end;
+
+theorem :: SCMYCIEL:42 :: Sub3b:
+for G being SimpleGraph holds G = G SubgraphInducedBy Vertices G;
+
+theorem :: SCMYCIEL:43
+for G being SimpleGraph, L being set
+ holds G SubgraphInducedBy L = G SubgraphInducedBy (L /\ Vertices G);
+
+registration
+ let G be finite SimpleGraph, L be set;
+ cluster G SubgraphInducedBy L -> finite;
+end;
+
+registration
+ let G be SimpleGraph, L be finite set;
+ cluster G SubgraphInducedBy L -> finite;
+end;
+
+theorem :: SCMYCIEL:44
+for G, H being SimpleGraph
+ st G c= H holds G c= H SubgraphInducedBy Vertices G;
+
+theorem :: SCMYCIEL:45
+for G being SimpleGraph, L being set
+ holds Vertices (G SubgraphInducedBy L) = (Vertices G) /\ L;
+
+theorem :: SCMYCIEL:46
+for G being SimpleGraph, x being set
+ st x in Vertices G holds G SubgraphInducedBy {x} = { {}, {x} };
+
+begin :: Clique, clique number, clique cover
+
+definition
+  let G be SimpleGraph;
+  attr G is clique means
+:: SCMYCIEL:def 13
+    G = CompleteSGraph Vertices G;
+end;
+
+theorem :: SCMYCIEL:47
+for G being SimpleGraph
+ st for x, y being set st x <> y & x in Vertices G & y in Vertices G
+      holds {x,y} in Edges G
+  holds G is clique;
+
+theorem :: SCMYCIEL:48
+{{}} is clique;
+
+registration
+  cluster clique for SimpleGraph;
+
+  let G be SimpleGraph;
+  cluster clique for Subgraph of G;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Clique of G is clique Subgraph of G;
+end;
+
+theorem :: SCMYCIEL:49
+for X being set holds (CompleteSGraph X) is clique;
+
+registration
+ let X be set;
+ cluster CompleteSGraph X -> clique;
+end;
+
+theorem :: SCMYCIEL:50
+for G being SimpleGraph, x being set st x in Vertices G
+ holds { {}, {x} } is Clique of G;
+
+theorem :: SCMYCIEL:51
+for G being SimpleGraph, x, y being set
+ st x in Vertices G & y in Vertices G & {x,y} in G
+  holds { {}, {x}, {y}, {x,y} } is Clique of G;
+
+registration
+ let G be SimpleGraph;
+ cluster finite for Clique of G;
+end;
+
+theorem :: SCMYCIEL:52
+for G being SimpleGraph, x being set st x in union G
+ ex C being finite Clique of G st Vertices C = {x};
+
+theorem :: SCMYCIEL:53
+for C being clique SimpleGraph, u, v being set
+ st u in Vertices C & v in Vertices C holds {u, v} in C;
+
+definition
+  let G be SimpleGraph;
+  attr G is with_finite_clique# means
+:: SCMYCIEL:def 14
+   ex C being finite Clique of G
+    st for D being finite Clique of G holds order D <= order C;
+end;
+
+registration
+  cluster with_finite_clique# for SimpleGraph;
+end;
+
+registration
+  cluster finite -> with_finite_clique# for SimpleGraph;
+end;
+
+definition
+  let G be with_finite_clique# SimpleGraph;
+  func clique# G -> Nat means
+:: SCMYCIEL:def 15
+  (ex C being finite Clique of G st order C = it)
+    & for T being finite Clique of G holds order T <= it;
+end;
+
+theorem :: SCMYCIEL:54
+for G being with_finite_clique# SimpleGraph
+  st clique# G = 0 holds Vertices G = {};
+
+theorem :: SCMYCIEL:55
+for G being void SimpleGraph holds clique# G = 0;
+
+theorem :: SCMYCIEL:56
+for G being SimpleGraph, x, y being set
+ st {x,y} in G holds G SubgraphInducedBy {x,y} is Clique of G;
+
+theorem :: SCMYCIEL:57
+for G being with_finite_clique# SimpleGraph
+  st Edges G <> {} holds clique# G >= 2;
+
+theorem :: SCMYCIEL:58  :: CliqueSubno0:
+for G, H being with_finite_clique# SimpleGraph
+ st G c= H holds clique# G <= clique# H;
+
+theorem :: SCMYCIEL:59
+for X being finite set holds clique# CompleteSGraph X = card X;
+
+definition
+  let G be SimpleGraph, P be a_partition of Vertices G;
+  attr P is Clique-wise means
+:: SCMYCIEL:def 16
+    for x being set st x in P holds G SubgraphInducedBy x is Clique of G;
+end;
+
+registration
+ let G be SimpleGraph;
+ cluster Clique-wise for a_partition of Vertices G;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Clique-partition of G is Clique-wise a_partition of Vertices G;
+end;
+
+registration
+ let G be void SimpleGraph;
+ cluster empty -> Clique-wise for a_partition of Vertices G;
+end;
+
+definition
+  let G be SimpleGraph;
+  attr G is with_finite_cliquecover# means
+:: SCMYCIEL:def 17
+  ex C being Clique-partition of G st C is finite;
+end;
+
+registration
+  cluster finite -> with_finite_cliquecover# for SimpleGraph;
+end;
+
+registration
+  let G be with_finite_cliquecover# SimpleGraph;
+  cluster finite for Clique-partition of G;
+end;
+
+registration
+  let G be with_finite_cliquecover# SimpleGraph, S be Subset of Vertices G;
+  cluster G SubgraphInducedBy S -> with_finite_cliquecover#;
+end;
+
+definition
+  let G be with_finite_cliquecover# SimpleGraph;
+  func cliquecover# G -> Nat means
+:: SCMYCIEL:def 18
+  (ex C being finite Clique-partition of G st card C = it)
+   & for C being finite Clique-partition of G holds it <= card C;
+end;
+
+begin :: Stable set, coloring
+
+definition
+ let G be SimpleGraph, S be Subset of Vertices G;
+ attr S is stable means
+:: SCMYCIEL:def 19
+  for x, y being set st x <> y & x in S & y in S holds {x,y} nin G;
+end;
+
+theorem :: SCMYCIEL:60
+for G being SimpleGraph holds {}(Vertices G) is stable;
+
+theorem :: SCMYCIEL:61
+for G being SimpleGraph, S being Subset of Vertices G, v being set
+ st S = {v} holds S is stable;
+
+registration
+  let G be SimpleGraph;
+  cluster trivial -> stable for Subset of Vertices G;
+end;
+
+registration
+  let G be SimpleGraph;
+  cluster stable for Subset of Vertices G;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode StableSet of G is stable Subset of Vertices G;
+    :: other possible names: AntiChain of R, IndependentSet of R
+end;
+
+theorem :: SCMYCIEL:62
+for G being SimpleGraph, x, y being set
+ st x in Vertices G & y in Vertices G & {x,y} nin G
+  holds {x, y} is StableSet of G;
+
+theorem :: SCMYCIEL:63  :: Height4:
+for G being with_finite_clique# SimpleGraph st clique# G = 1
+  holds Vertices G is StableSet of G;
+
+registration
+  let G be SimpleGraph;
+  cluster finite for StableSet of G;
+end;
+
+theorem :: SCMYCIEL:64  :: AChain0:
+for G being SimpleGraph, A being StableSet of G, B being Subset of A
+ holds B is StableSet of G;
+
+definition
+  let G be SimpleGraph, P be a_partition of Vertices G;
+  attr P is StableSet-wise means
+:: SCMYCIEL:def 20
+    for x being set st x in P holds x is StableSet of G;
+end;
+
+theorem :: SCMYCIEL:65
+for G being SimpleGraph holds SmallestPartition Vertices G is StableSet-wise;
+
+registration
+  let G be SimpleGraph;
+  cluster StableSet-wise for a_partition of Vertices G;
+end;
+
+definition
+  let G be SimpleGraph;
+  mode Coloring of G is StableSet-wise a_partition of Vertices G;
+end;
+
+definition
+  let G be SimpleGraph;
+  attr G is finitely_colorable means
+:: SCMYCIEL:def 21
+   ex C being Coloring of G st C is finite;
+end;
+
+registration
+  cluster finitely_colorable for SimpleGraph;
+end;
+
+registration
+  cluster finite -> finitely_colorable for SimpleGraph;
+end;
+
+registration
+  let G be finitely_colorable SimpleGraph;
+  cluster finite for Coloring of G;
+end;
+
+theorem :: SCMYCIEL:66
+for G being SimpleGraph, S being Clique of G, L being set
+ st L c= Vertices S holds G SubgraphInducedBy L is Clique of G;
+
+theorem :: SCMYCIEL:67
+for G being SimpleGraph, C being Coloring of G, S being Subset of Vertices G
+  holds C | S is Coloring of (G SubgraphInducedBy S);
+
+registration
+ let G be finitely_colorable SimpleGraph, S be set;
+ cluster G SubgraphInducedBy S -> finitely_colorable;
+end;
+
+definition
+  let G be finitely_colorable SimpleGraph;
+  func chromatic# G -> Nat means
+:: SCMYCIEL:def 22
+  (ex C being finite Coloring of G st card C = it)
+   & for C being finite Coloring of G holds it <= card C;
+end;
+
+theorem :: SCMYCIEL:68
+for G, H being finitely_colorable SimpleGraph
+ st G c= H holds chromatic# G <= chromatic# H;
+
+theorem :: SCMYCIEL:69
+for X being finite set holds chromatic# CompleteSGraph X = card X;
+
+theorem :: SCMYCIEL:70
+for G being finitely_colorable SimpleGraph,
+    C being finite Coloring of G, c being set
+ st c in C & card C = chromatic# G
+  ex v being Element of Vertices G st v in c &
+   for d being Element of C st d <> c
+    ex w being Element of Vertices G st w in Adjacent(v) & w in d;
+
+definition
+  let G be SimpleGraph;
+  attr G is with_finite_stability# means
+:: SCMYCIEL:def 23
+   ex A being finite StableSet of G
+    st for B being finite StableSet of G holds card B <= card A;
+end;
+
+registration
+  cluster finite -> with_finite_stability# for SimpleGraph;
+end;
+
+registration
+  let G be with_finite_stability# SimpleGraph;
+  cluster -> finite for StableSet of G;
+end;
+
+registration
+  cluster with_finite_stability# non void for SimpleGraph;
+end;
+
+definition
+  let G be with_finite_stability# SimpleGraph;
+  func stability# G -> Nat means
+:: SCMYCIEL:def 24
+   (ex A being finite StableSet of G st card(A) = it)
+     & for T being finite StableSet of G holds card T <= it;
+end;
+
+registration
+  let G be with_finite_stability# non void SimpleGraph;
+  cluster stability# G -> positive;
+end;
+
+theorem :: SCMYCIEL:71  :: Width4:
+for G being with_finite_stability# SimpleGraph
+  st stability# G = 1 holds G is clique;
+
+registration  :: see analoguous in DILWORTH
+:: I have done it through Ramsey.  How else to prove it?
+:: For posets one gets it directly from Dilworth.
+ cluster with_finite_clique# with_finite_stability# -> finite for SimpleGraph;
+end;
+
+theorem :: SCMYCIEL:72
+for G being SimpleGraph, C being Clique of G
+  holds Vertices C is StableSet of Complement G;
+
+theorem :: SCMYCIEL:73
+for G being SimpleGraph, C being Clique of Complement G
+  holds Vertices C is StableSet of G;
+
+theorem :: SCMYCIEL:74
+for G being SimpleGraph, C being StableSet of G
+  holds (Complement G) SubgraphInducedBy C is Clique of Complement G;
+
+theorem :: SCMYCIEL:75
+for G being SimpleGraph, C being StableSet of Complement G
+  holds G SubgraphInducedBy C is Clique of G;
+
+registration
+  let G be with_finite_clique# SimpleGraph;
+  cluster Complement G -> with_finite_stability#;
+end;
+
+registration
+  let G be with_finite_stability# SimpleGraph;
+  cluster Complement G -> with_finite_clique#;
+end;
+
+theorem :: SCMYCIEL:76
+for G being with_finite_clique# SimpleGraph
+  holds clique# G = stability# Complement G;
+
+theorem :: SCMYCIEL:77 :: staRcliCR:
+for G being with_finite_stability# SimpleGraph
+ holds stability# G = clique# Complement G;
+
+theorem :: SCMYCIEL:78
+for G being SimpleGraph, C being Clique-partition of Complement G
+  holds C is Coloring of G;
+
+theorem :: SCMYCIEL:79
+for G being SimpleGraph, C being Clique-partition of G
+  holds C is Coloring of Complement G;
+
+theorem :: SCMYCIEL:80
+for G being SimpleGraph, C being Coloring of G
+  holds C is Clique-partition of Complement G;
+
+theorem :: SCMYCIEL:81 :: ChrComplClico:
+for G being SimpleGraph, C being Coloring of Complement G
+  holds C is Clique-partition of G;
+
+registration
+  let G be finitely_colorable SimpleGraph;
+  cluster Complement G -> with_finite_cliquecover#;
+end;
+
+registration
+  let G be with_finite_cliquecover# SimpleGraph;
+  cluster Complement G -> finitely_colorable;
+end;
+
+theorem :: SCMYCIEL:82
+for G being finitely_colorable SimpleGraph
+ holds chromatic# G = cliquecover# Complement G;
+
+theorem :: SCMYCIEL:83 :: covRchrCR:
+for G being with_finite_cliquecover# SimpleGraph
+  holds cliquecover# G = chromatic# Complement G;
+
+begin  :: Mycielskian of a graph
+
+definition
+  let G be SimpleGraph;
+  func Mycielskian G -> SimpleGraph equals
+:: SCMYCIEL:def 25
+   { {} } \/
+   { {x} where x is Element of (union G) \/ [:union G,{union G}:] \/ {union G}
+             : not contradiction } \/
+   (Edges G) \/
+   { {x,[y,union G]} where x, y is Element of union G : {x,y} in Edges G } \/
+   { {union G,[x,union G]} where x is Element of union G : x in Vertices G };
+end;
+
+theorem :: SCMYCIEL:84  :: Mycielskian0:
+for G being SimpleGraph holds G c= Mycielskian G;
+
+theorem :: SCMYCIEL:85
+for G being SimpleGraph, v being set
+ holds v in Vertices Mycielskian G
+   iff v in union G or (ex x being set st x in union G & v = [x,union G])
+       or v = union G;
+
+theorem :: SCMYCIEL:86
+for G being SimpleGraph
+ holds Vertices Mycielskian G = union G \/ [:union G,{union G}:] \/ {union G};
+
+theorem :: SCMYCIEL:87
+for G being SimpleGraph holds union G in union Mycielskian G;
+
+theorem :: SCMYCIEL:88
+for G being void SimpleGraph holds Mycielskian G = {{},{union G}};
+
+registration
+ let G be finite SimpleGraph;
+ cluster Mycielskian G -> finite;
+end;
+
+theorem :: SCMYCIEL:89
+for G being finite SimpleGraph holds order Mycielskian G = 2*(order G) + 1;
+
+theorem :: SCMYCIEL:90
+for G being SimpleGraph, e being set
+ holds e in Edges Mycielskian G iff
+  e in Edges G or
+  (ex x, y being Element of union G st e = {x,[y,union G]} & {x,y} in Edges G)
+or (ex y being Element of union G st e = {union G,[y,union G]} & y in union G);
+
+theorem :: SCMYCIEL:91
+for G being SimpleGraph
+ holds Edges Mycielskian G = (Edges G)
+  \/ { {x,[y,union G]} where x, y is Element of union G : {x,y} in Edges G }
+  \/ { {union G,[y,union G]} where y is Element of union G : y in union G };
+
+theorem :: SCMYCIEL:92
+for G being finite SimpleGraph holds size Mycielskian G = 3*(size G) + order G;
+
+theorem :: SCMYCIEL:93
+for G being SimpleGraph, s, t being set
+ st {s, t} in Edges Mycielskian G
+  holds {s, t} in Edges G or
+        (s in union G or s = union G)
+           & (ex y being set st y in union G & t = [y,union G]) or
+        (t in union G or t = union G)
+           & (ex y being set st y in union G & s = [y,union G]);
+
+theorem :: SCMYCIEL:94
+for G being SimpleGraph, u being set
+ st { union G, u } in Edges Mycielskian G
+  holds ex x being set st x in union G & u = [x, union G];
+
+theorem :: SCMYCIEL:95
+for G being SimpleGraph, u being set
+ st u in Vertices G holds { [u, union G] } in Mycielskian G;
+
+theorem :: SCMYCIEL:96
+for G being SimpleGraph, u being set
+ st u in Vertices G holds { [u, union G], union G} in Mycielskian G;
+
+theorem :: SCMYCIEL:97
+for G being SimpleGraph, x, y being set
+ holds not {[x,union G],[y,union G]} in Edges Mycielskian G;
+
+theorem :: SCMYCIEL:98
+for G being SimpleGraph, x, y being set
+ st x <> y holds not {[x,union G],[y,union G]} in Mycielskian G;
+
+theorem :: SCMYCIEL:99
+for G being SimpleGraph, x, y being set
+ st {[x,union G], y} in Edges Mycielskian G
+  holds x <> y & x in union G &  (y in union G or y = union G);
+
+theorem :: SCMYCIEL:100
+for G being SimpleGraph, x, y being set
+ st {[x,union G], y} in Mycielskian G holds x <> y;
+
+theorem :: SCMYCIEL:101
+for G being SimpleGraph, x, y being set
+ st y in union G & {[x,union G], y} in Mycielskian G holds {x, y} in G;
+
+theorem :: SCMYCIEL:102
+for G being SimpleGraph, x, y being set
+ st {x, y} in Edges G holds {[x,union G], y} in Mycielskian G;
+
+theorem :: SCMYCIEL:103
+for G being SimpleGraph, x, y being set
+ st x in Vertices G & y in Vertices G & {x, y} in Mycielskian G
+  holds {x, y} in G;
+
+theorem :: SCMYCIEL:104
+for G being SimpleGraph holds G = (Mycielskian G) SubgraphInducedBy Vertices G;
+
+theorem :: SCMYCIEL:105
+for G being SimpleGraph, C being finite Clique of Mycielskian G
+ st 3 <= order C for v being Vertex of C holds v <> union G;
+
+theorem :: SCMYCIEL:106  :: MClique0
+for G being with_finite_clique# SimpleGraph st clique# G = 0
+for D being finite Clique of Mycielskian G holds order D <= 1;
+
+theorem :: SCMYCIEL:107 :: MGsingle:
+for G being SimpleGraph, x being set st Vertices G = {x}
+holds Mycielskian G = {{},{x},{[x,union G]}, {union G}, {[x,union G],union G}};
+
+theorem :: SCMYCIEL:108  :: MClique1
+for G being with_finite_clique# SimpleGraph st clique# G = 1
+for D being finite Clique of Mycielskian G holds order D <= 2;
+
+theorem :: SCMYCIEL:109  :: MClique2
+for G being with_finite_clique# SimpleGraph st 2 <= clique# G
+for D being finite Clique of Mycielskian G holds order D <= clique# G;
+
+registration
+  let G be with_finite_clique# SimpleGraph;
+  cluster Mycielskian G -> with_finite_clique#;
+end;
+
+theorem :: SCMYCIEL:110  :: MClique
+for G being with_finite_clique# SimpleGraph
+ st 2 <= clique# G holds clique# Mycielskian G = clique# G;
+
+theorem :: SCMYCIEL:111
+for G being finitely_colorable SimpleGraph
+ ex E being Coloring of Mycielskian G st card E = 1 + chromatic# G;
+
+registration
+ let G be finitely_colorable SimpleGraph;
+ cluster Mycielskian G -> finitely_colorable;
+end;
+
+theorem :: SCMYCIEL:112
+for G being finitely_colorable SimpleGraph
+ holds chromatic# Mycielskian G = 1 + chromatic# G;
+
+definition
+  let G be SimpleGraph;
+  func MycielskianSeq G -> ManySortedSet of NAT means
+:: SCMYCIEL:def 26
+  ex myc being Function
+   st it = myc & myc.0 = G &
+     for k being Nat, G being SimpleGraph
+       st G = myc.k holds myc.(k+1) = Mycielskian G;
+end;
+
+theorem :: SCMYCIEL:113
+for G being SimpleGraph holds (MycielskianSeq G).0 = G;
+
+theorem :: SCMYCIEL:114
+for G being SimpleGraph, n be Nat holds (MycielskianSeq G).n is SimpleGraph;
+
+registration
+  let G be SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> SimpleGraph-like;
+end;
+
+theorem :: SCMYCIEL:115
+for G, H being SimpleGraph, n be Nat
+  holds (MycielskianSeq G).(n+1) = Mycielskian (MycielskianSeq G).n;
+
+registration
+  let G be with_finite_clique# SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> with_finite_clique#;
+end;
+
+registration
+  let G be finitely_colorable SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> finitely_colorable;
+end;
+
+registration
+  let G be finite SimpleGraph, n be Nat;
+  cluster (MycielskianSeq G).n -> finite;
+end;
+
+theorem :: SCMYCIEL:116
+for G being finite SimpleGraph, n being Nat
+ holds order ((MycielskianSeq G).n) = 2|^n*(order G) + 2|^n - 1;
+
+theorem :: SCMYCIEL:117 :: MSnsize:
+for G being finite SimpleGraph, n being Nat
+ holds size (MycielskianSeq G).n
+     = 3|^n*(size G) + (3|^n - 2|^n)*(order G) + (n+1) block 3;
+
+theorem :: SCMYCIEL:118
+for n being Nat
+ holds clique# ((MycielskianSeq CompleteSGraph 2).n) = 2 &
+       chromatic# ((MycielskianSeq CompleteSGraph 2).n) = n+2;
+
+theorem :: SCMYCIEL:119
+for n being Nat
+ ex G being finite SimpleGraph st clique# G = 2 & chromatic# G > n;
+
+theorem :: SCMYCIEL:120
+for n being Nat
+ ex G being finite SimpleGraph st stability# G = 2 & cliquecover# G > n;
+

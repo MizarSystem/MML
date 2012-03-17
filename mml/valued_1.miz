@@ -2,7 +2,7 @@
 ::  by Library Committee
 ::
 :: Received December 18, 2007
-:: Copyright (c) 2007-2011 Association of Mizar Users
+:: Copyright (c) 2007-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,11 +18,11 @@ environ
       XXREAL_0, VALUED_0, RAT_1, COMPLEX1, ARYTM_1, ARYTM_3, MEMBERED,
       PARTFUN1, TARSKI, SUBSET_1, CARD_1, XCMPLX_0, XREAL_0, INT_1, SQUARE_1,
       FUNCT_4, FINSET_1, NAT_1, ORDINAL2, VALUED_1, AMISTD_1, FUNCOP_1,
-      AMISTD_2, CAT_1, AMISTD_3, ZFMISC_1;
+      AMISTD_2, AMISTD_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1, XCMPLX_0,
-      NUMBERS, ZFMISC_1, COMPLEX1, XXREAL_0, XXREAL_2, FUNCOP_1, XREAL_0,
-      RAT_1, INT_1, INT_2, SQUARE_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, FUNCT_4, FINSEQ_1, MEMBERED, NAT_1, VALUED_0;
+      NUMBERS, COMPLEX1, XXREAL_0, XXREAL_2, FUNCOP_1, XREAL_0, RAT_1, INT_1,
+      INT_2, SQUARE_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_4,
+      FINSEQ_1, MEMBERED, NAT_1, VALUED_0;
  constructors PARTFUN1, RAT_1, VALUED_0, SQUARE_1, MEMBERED, INT_2, FINSEQ_1,
       NAT_1, FUNCT_4, NAT_D, RELSET_1, XXREAL_2, FUNCOP_1, DOMAIN_1, WELLORD2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XREAL_0,
@@ -34,8 +34,8 @@ environ
  theorems FUNCT_1, FUNCT_2, RELSET_1, PARTFUN1, VALUED_0, COMPLEX1, FINSEQ_1,
       XBOOLE_0, TARSKI, GRFUNC_1, RELAT_1, FUNCT_4, FINSET_1, NAT_1, INT_1,
       ORDINAL1, XXREAL_0, FUNCOP_1, ZFMISC_1, XXREAL_2, XBOOLE_1, CARD_1,
-      CARD_2, DOMAIN_1, WELLORD2;
- schemes FUNCT_1, CLASSES1, FRAENKEL, RECDEF_1, NAT_1, DOMAIN_1;
+      CARD_2, RAT_1, XTUPLE_0;
+ schemes FUNCT_1, CLASSES1, FRAENKEL, RECDEF_1, NAT_1;
 
 begin :: f1 + f2
 
@@ -57,9 +57,9 @@ holds h is FinSequence
 proof
   let f, g be FinSequence, h be Function such that
 A1: dom h = dom f /\ dom g;
-  consider n being natural number such that
+  consider n being Nat such that
 A2: dom f = Seg n by FINSEQ_1:def 2;
-  consider m being natural number such that
+  consider m being Nat such that
 A3: dom g = Seg m by FINSEQ_1:def 2;
   h is FinSequence-like
   proof
@@ -156,26 +156,32 @@ registration
 end;
 
 registration
-  let f1,f2 be rational-valued Function;
-  cluster f1+f2 -> rational-valued;
+  let f1,f2 be RAT-valued Function;
+  cluster f1+f2 -> RAT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (f1+f2);
-    then (f1+f2).x = f1.x + f2.x by Def1;
-    hence thesis;
+    let y be set;
+    assume y in rng(f1+f2);
+    then consider x being set such that
+A1: x in dom (f1+f2) and
+A2: (f1+f2).x = y by FUNCT_1:def 3;
+    (f1+f2).x = f1.x + f2.x by A1,Def1;
+    hence thesis by A2,RAT_1:def 2;
   end;
 end;
 
 registration
-  let f1,f2 be integer-valued Function;
-  cluster f1+f2 -> integer-valued;
+  let f1,f2 be INT-valued Function;
+  cluster f1+f2 -> INT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (f1+f2);
-    then (f1+f2).x = f1.x + f2.x by Def1;
-    hence thesis;
+    let y be set;
+    assume y in rng(f1+f2);
+    then consider x being set such that
+A1: x in dom (f1+f2) and
+A2: (f1+f2).x = y by FUNCT_1:def 3;
+    (f1+f2).x = f1.x + f2.x by A1,Def1;
+    hence thesis by A2,INT_1:def 2;
   end;
 end;
 
@@ -227,7 +233,7 @@ definition
   redefine func f1+f2 -> PartFunc of C,RAT;
   coherence
   proof
-    dom (f1+f2) = dom f1 /\ dom f2 & rng (f1+f2) c= RAT by Def1,VALUED_0:def 4;
+    dom (f1+f2) = dom f1 /\ dom f2 & rng (f1+f2) c= RAT by Def1,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -240,7 +246,7 @@ definition
   redefine func f1+f2 -> PartFunc of C,INT;
   coherence
   proof
-    dom (f1+f2) = dom f1 /\ dom f2 & rng (f1+f2) c= INT by Def1,VALUED_0:def 5;
+    dom (f1+f2) = dom f1 /\ dom f2 & rng (f1+f2) c= INT by Def1,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -429,31 +435,37 @@ registration
 end;
 
 registration
-  let f be rational-valued Function, r be rational number;
-  cluster r+f -> rational-valued;
+  let f be RAT-valued Function, r be rational number;
+  cluster r+f -> RAT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (r+f);
-    then (r+f).x = r + f.x by Def2;
-    hence thesis;
+    let y be set;
+    assume y in rng (r+f);
+    then consider x being set such that
+A1: x in dom (r+f) and
+A2: (r+f).x = y by FUNCT_1:def 3;
+    (r+f).x = r + f.x by A1,Def2;
+    hence thesis by A2,RAT_1:def 2;
   end;
 end;
 
 registration
-  let f be integer-valued Function, r be integer number;
-  cluster r+f -> integer-valued;
+  let f be INT-valued Function, r be integer number;
+  cluster r+f -> INT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (r+f);
-    then (r+f).x = r + f.x by Def2;
-    hence thesis;
+    let y be set;
+    assume y in rng (r+f);
+    then consider x being set such that
+A1: x in dom (r+f) and
+A2: (r+f).x = y by FUNCT_1:def 3;
+    (r+f).x = r + f.x by A1,Def2;
+    hence thesis by A2,INT_1:def 2;
   end;
 end;
 
 registration
-  let f be natural-valued Function, r be natural number;
+  let f be natural-valued Function, r be Nat;
   cluster r+f -> natural-valued;
   coherence
   proof
@@ -498,7 +510,7 @@ definition
   redefine func r+f -> PartFunc of C,RAT;
   coherence
   proof
-    dom (r+f) = dom f & rng (r+f) c= RAT by Def2,VALUED_0:def 4;
+    dom (r+f) = dom f & rng (r+f) c= RAT by Def2,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -511,7 +523,7 @@ definition
   redefine func r+f -> PartFunc of C,INT;
   coherence
   proof
-    dom (r+f) = dom f & rng (r+f) c= INT by Def2,VALUED_0:def 5;
+    dom (r+f) = dom f & rng (r+f) c= INT by Def2,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -520,7 +532,7 @@ definition
   let C be set;
   let D be natural-membered set;
   let f be PartFunc of C,D;
-  let r be natural number;
+  let r be Nat;
   redefine func r+f -> PartFunc of C,NAT;
   coherence
   proof
@@ -589,7 +601,7 @@ registration
   let C be set;
   let D be natural-membered non empty set;
   let f be Function of C,D;
-  let r be natural number;
+  let r be Nat;
   cluster r+f -> total for PartFunc of C,NAT;
   coherence
   proof
@@ -631,7 +643,7 @@ definition
   coherence;
 end;
 
-theorem Th3:
+theorem
   for f being complex-valued Function, r being complex number holds dom
   (f-r) = dom f & for c being set st c in dom f holds (f-r).c = f.c - r
 proof
@@ -653,14 +665,14 @@ registration
 end;
 
 registration
-  let f be rational-valued Function, r be rational number;
-  cluster f-r -> rational-valued;
+  let f be RAT-valued Function, r be rational number;
+  cluster f-r -> RAT-valued;
   coherence;
 end;
 
 registration
-  let f be integer-valued Function, r be integer number;
-  cluster f-r -> integer-valued;
+  let f be INT-valued Function, r be integer number;
+  cluster f-r -> INT-valued;
   coherence;
 end;
 
@@ -698,7 +710,7 @@ definition
   redefine func f-r -> PartFunc of C,RAT;
   coherence
   proof
-    dom (f-r) = dom f & rng (f-r) c= RAT by Def2,VALUED_0:def 4;
+    dom (f-r) = dom f & rng (f-r) c= RAT by Def2,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -711,7 +723,7 @@ definition
   redefine func f-r -> PartFunc of C,INT;
   coherence
   proof
-    dom (f-r) = dom f & rng (f-r) c= INT by Def2,VALUED_0:def 5;
+    dom (f-r) = dom f & rng (f-r) c= INT by Def2,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -850,26 +862,32 @@ registration
 end;
 
 registration
-  let f1,f2 be rational-valued Function;
-  cluster f1(#)f2 -> rational-valued;
+  let f1,f2 be RAT-valued Function;
+  cluster f1(#)f2 -> RAT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (f1(#)f2);
-    then (f1(#)f2).x = f1.x * f2.x by Def4;
-    hence thesis;
+    let y be set;
+    assume y in rng (f1(#)f2);
+    then consider x being set such that
+A1: x in dom (f1(#)f2) and
+A2: (f1(#)f2).x = y by FUNCT_1:def 3;
+    (f1(#)f2).x = f1.x * f2.x by A1,Def4;
+    hence thesis by A2,RAT_1:def 2;
   end;
 end;
 
 registration
-  let f1,f2 be integer-valued Function;
-  cluster f1(#)f2 -> integer-valued;
+  let f1,f2 be INT-valued Function;
+  cluster f1(#)f2 -> INT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (f1(#)f2);
-    then (f1(#)f2).x = f1.x * f2.x by Def4;
-    hence thesis;
+    let y be set;
+    assume y in rng (f1(#)f2);
+    then consider x being set such that
+A1: x in dom (f1(#)f2) and
+A2: (f1(#)f2).x = y by FUNCT_1:def 3;
+    (f1(#)f2).x = f1.x * f2.x by A1,Def4;
+    hence thesis by A2,INT_1:def 2;
   end;
 end;
 
@@ -922,7 +940,7 @@ definition
   coherence
   proof
     dom (f1(#)f2) = dom f1 /\ dom f2 & rng (f1(#)f2) c= RAT by Def4,
-VALUED_0:def 4;
+RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -936,7 +954,7 @@ definition
   coherence
   proof
     dom (f1(#)f2) = dom f1 /\ dom f2 & rng (f1(#)f2) c= INT by Def4,
-VALUED_0:def 5;
+RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1122,31 +1140,37 @@ registration
 end;
 
 registration
-  let f be rational-valued Function, r be rational number;
-  cluster r(#)f -> rational-valued;
+  let f be RAT-valued Function, r be rational number;
+  cluster r(#)f -> RAT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (r(#)f);
-    then (r(#)f).x = r * f.x by Def5;
-    hence thesis;
+    let y be set;
+    assume y in rng (r(#)f);
+    then consider x being set such that
+A1: x in dom (r(#)f) and
+A2: (r(#)f).x = y by FUNCT_1:def 3;
+    (r(#)f).x = r * f.x by A1,Def5;
+    hence thesis by A2,RAT_1:def 2;
   end;
 end;
 
 registration
-  let f be integer-valued Function, r be integer number;
-  cluster r(#)f -> integer-valued;
+  let f be INT-valued Function, r be integer number;
+  cluster r(#)f -> INT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (r(#)f);
-    then (r(#)f).x = r * f.x by Def5;
-    hence thesis;
+    let y be set;
+    assume y in rng (r(#)f);
+    then consider x being set such that
+A1: x in dom (r(#)f) and
+A2: (r(#)f).x = y by FUNCT_1:def 3;
+    (r(#)f).x = r * f.x by A1,Def5;
+    hence thesis by A2,INT_1:def 2;
   end;
 end;
 
 registration
-  let f be natural-valued Function, r be natural number;
+  let f be natural-valued Function, r be Nat;
   cluster r(#)f -> natural-valued;
   coherence
   proof
@@ -1191,7 +1215,7 @@ definition
   redefine func r(#)f -> PartFunc of C,RAT;
   coherence
   proof
-    dom (r(#)f) = dom f & rng (r(#)f) c= RAT by Def5,VALUED_0:def 4;
+    dom (r(#)f) = dom f & rng (r(#)f) c= RAT by Def5,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1204,7 +1228,7 @@ definition
   redefine func r(#)f -> PartFunc of C,INT;
   coherence
   proof
-    dom (r(#)f) = dom f & rng (r(#)f) c= INT by Def5,VALUED_0:def 5;
+    dom (r(#)f) = dom f & rng (r(#)f) c= INT by Def5,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1213,7 +1237,7 @@ definition
   let C be set;
   let D be natural-membered set;
   let f be PartFunc of C,D;
-  let r be natural number;
+  let r be Nat;
   redefine func r(#)f -> PartFunc of C,NAT;
   coherence
   proof
@@ -1282,7 +1306,7 @@ registration
   let C be set;
   let D be natural-membered non empty set;
   let f be Function of C,D;
-  let r be natural number;
+  let r be Nat;
   cluster r(#)f -> total for PartFunc of C,NAT;
   coherence
   proof
@@ -1389,14 +1413,14 @@ registration
 end;
 
 registration
-  let f be rational-valued Function;
-  cluster -f -> rational-valued;
+  let f be RAT-valued Function;
+  cluster -f -> RAT-valued;
   coherence;
 end;
 
 registration
-  let f be integer-valued Function;
-  cluster -f -> integer-valued;
+  let f be INT-valued Function;
+  cluster -f -> INT-valued;
   coherence;
 end;
 
@@ -1431,7 +1455,7 @@ definition
   redefine func -f -> PartFunc of C,RAT;
   coherence
   proof
-    dom -f = dom f & rng -f c= RAT by Def5,VALUED_0:def 4;
+    dom -f = dom f & rng -f c= RAT by Def5,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1443,7 +1467,7 @@ definition
   redefine func -f -> PartFunc of C,INT;
   coherence
   proof
-    dom -f = dom f & rng -f c= INT by Def5,VALUED_0:def 5;
+    dom -f = dom f & rng -f c= INT by Def5,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1573,14 +1597,17 @@ registration
 end;
 
 registration
-  let f be rational-valued Function;
-  cluster f" -> rational-valued;
+  let f be RAT-valued Function;
+  cluster f" -> RAT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom (f");
-    then f".x = (f.x)" by Def7;
-    hence thesis;
+    let y be set;
+    assume y in rng (f");
+    then consider x being set such that
+A1: x in dom (f") and
+A2: (f").x = y by FUNCT_1:def 3;
+    f".x = (f.x)" by A1,Def7;
+    hence thesis by A2,RAT_1:def 2;
   end;
 end;
 
@@ -1615,7 +1642,7 @@ definition
   redefine func f" -> PartFunc of C,RAT;
   coherence
   proof
-    dom (f") = dom f & rng (f") c= RAT by Def7,VALUED_0:def 4;
+    dom (f") = dom f & rng (f") c= RAT by Def7,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1712,14 +1739,14 @@ registration
 end;
 
 registration
-  let f be rational-valued Function;
-  cluster f^2 -> rational-valued;
+  let f be RAT-valued Function;
+  cluster f^2 -> RAT-valued;
   coherence;
 end;
 
 registration
-  let f be integer-valued Function;
-  cluster f^2 -> integer-valued;
+  let f be INT-valued Function;
+  cluster f^2 -> INT-valued;
   coherence;
 end;
 
@@ -1760,7 +1787,7 @@ definition
   redefine func f^2 -> PartFunc of C,RAT;
   coherence
   proof
-    dom (f^2) = dom f & rng (f^2) c= RAT by Th11,VALUED_0:def 4;
+    dom (f^2) = dom f & rng (f^2) c= RAT by Th11,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1772,7 +1799,7 @@ definition
   redefine func f^2 -> PartFunc of C,INT;
   coherence
   proof
-    dom (f^2) = dom f & rng (f^2) c= INT by Th11,VALUED_0:def 5;
+    dom (f^2) = dom f & rng (f^2) c= INT by Th11,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1857,14 +1884,14 @@ registration
 end;
 
 registration
-  let f1,f2 be rational-valued Function;
-  cluster f1-f2 -> rational-valued;
+  let f1,f2 be RAT-valued Function;
+  cluster f1-f2 -> RAT-valued;
   coherence;
 end;
 
 registration
-  let f1,f2 be integer-valued Function;
-  cluster f1-f2 -> integer-valued;
+  let f1,f2 be INT-valued Function;
+  cluster f1-f2 -> INT-valued;
   coherence;
 end;
 
@@ -1941,7 +1968,7 @@ definition
   redefine func f1-f2 -> PartFunc of C,RAT;
   coherence
   proof
-    dom (f1-f2) = dom f1 /\ dom f2 & rng (f1-f2) c= RAT by Th12,VALUED_0:def 4;
+    dom (f1-f2) = dom f1 /\ dom f2 & rng (f1-f2) c= RAT by Th12,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -1954,7 +1981,7 @@ definition
   redefine func f1-f2 -> PartFunc of C,INT;
   coherence
   proof
-    dom (f1-f2) = dom f1 /\ dom f2 & rng (f1-f2) c= INT by Th12,VALUED_0:def 5;
+    dom (f1-f2) = dom f1 /\ dom f2 & rng (f1-f2) c= INT by Th12,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -2109,8 +2136,8 @@ registration
 end;
 
 registration
-  let f1,f2 be rational-valued Function;
-  cluster f1/"f2 -> rational-valued;
+  let f1,f2 be RAT-valued Function;
+  cluster f1/"f2 -> RAT-valued;
   coherence;
 end;
 
@@ -2151,7 +2178,7 @@ definition
   coherence
   proof
     dom (f1/"f2) = dom f1 /\ dom f2 & rng (f1/"f2) c= RAT by Th16,
-VALUED_0:def 4;
+RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -2256,7 +2283,7 @@ A6:   x in dom h;
   projectivity
   proof
     let r be real-valued Function;
-    let h be real-valued Function;
+    let h be complex-valued Function;
     assume that
     dom r = dom h and
 A7: for c being set st c in dom r holds r.c = |.h.c.|;
@@ -2294,19 +2321,22 @@ A2: not c in dom f;
 end;
 
 registration
-  let f be rational-valued Function;
-  cluster |.f.| -> rational-valued;
+  let f be RAT-valued Function;
+  cluster |.f.| -> RAT-valued;
   coherence
   proof
-    let x be set;
-    assume x in dom |.f.|;
-    then |.f.|.x = |.f.x.| by Def11;
-    hence thesis;
+    let y be set;
+    assume y in rng |.f.|;
+    then consider x being set such that
+A1: x in dom |.f.| and
+A2: (|.f.|).x = y by FUNCT_1:def 3;
+    |.f.|.x = |.f.x.| by A1,Def11;
+    hence thesis by A2,RAT_1:def 2;
   end;
 end;
 
 registration
-  let f be integer-valued Function;
+  let f be INT-valued Function;
   cluster |.f.| -> natural-valued;
   coherence
   proof
@@ -2347,7 +2377,7 @@ definition
   redefine func |.f.| -> PartFunc of C,RAT;
   coherence
   proof
-    dom |.f.| = dom f & rng |.f.| c= RAT by Def11,VALUED_0:def 4;
+    dom |.f.| = dom f & rng |.f.| c= RAT by Def11,RELAT_1:def 19;
     hence thesis by RELSET_1:4;
   end;
 end;
@@ -2695,22 +2725,22 @@ end;
 
 :: from SCMPDS_4, 2008.03.16, A.T.
 
-theorem Th25:
+theorem Th24:
   for p being Function,k,il being Nat st il in dom p
   holds il+k in dom Shift(p,k)
 proof
   let p be Function, k,il be Nat such that
-A2: il in dom p;
-A1:  dom Shift(p,k) = { loc+k where loc is Element of NAT : loc in dom p}
+A1: il in dom p;
+A2:  dom Shift(p,k) = { loc+k where loc is Element of NAT : loc in dom p}
       by Def12;
    reconsider loc = il as Element of NAT by ORDINAL1:def 12;
-   loc+k in dom Shift(p,k) by A1,A2;
+   loc+k in dom Shift(p,k) by A2,A1;
   hence thesis;
 end;
 
 :: missing, 2008.03.16, A.T.
 
-theorem Th26:
+theorem Th25:
   for p being Function, k being Nat holds rng Shift(p,k) c= rng p
 proof
   let p be Function, k being Nat;
@@ -2734,14 +2764,14 @@ proof
   let p be Function such that
 A1: dom p c= NAT;
   let k be Nat;
-  thus rng Shift(p,k) c= rng p by Th26;
+  thus rng Shift(p,k) c= rng p by Th25;
   let y be set;
   assume y in rng p;
   then consider x being set such that
 A2: x in dom p and
 A3: y = p.x by FUNCT_1:def 3;
   reconsider x as Element of NAT by A1,A2;
-  x+k in dom Shift(p,k) & Shift(p,k).(x+k) = y by A2,A3,Def12,Th25;
+  x+k in dom Shift(p,k) & Shift(p,k).(x+k) = y by A2,A3,Def12,Th24;
   hence thesis by FUNCT_1:def 3;
 end;
 
@@ -3009,75 +3039,74 @@ theorem
 proof
   let k be Nat;
   let F be NAT-defined Function;
-A1: dom F c= NAT by RELAT_1:def 18;
   defpred P[set,set] means
   ex il being Element of NAT
    st $1 = il & $2 = k+il;
-A2: for e being set st e in dom F ex u being set st P[e,u]
+A1: for e being set st e in dom F ex u being set st P[e,u]
   proof
     let e be set;
     assume e in dom F;
-    then reconsider e as Element of NAT by A1;
+    then reconsider e as Element of NAT;
     take k+e, e;
     thus thesis;
   end;
   consider f being Function such that
-A3: dom f = dom F and
-A4: for x being set st x in dom F holds P[x,f.x] from CLASSES1:sch 1(A2);
+A2: dom f = dom F and
+A3: for x being set st x in dom F holds P[x,f.x] from CLASSES1:sch 1(A1);
   take f;
   hereby
     let x1, x2 be set such that
-A5: x1 in dom f and
-A6: x2 in dom f and
-A7: f.x1 = f.x2;
+A4: x1 in dom f and
+A5: x2 in dom f and
+A6: f.x1 = f.x2;
     consider i1 being Element of NAT such that
-A8: x1 = i1 and
-A9: f.x1 = k+i1 by A3,A4,A5;
+A7: x1 = i1 and
+A8: f.x1 = k+i1 by A2,A3,A4;
     consider i2 being Element of NAT such that
-A10: x2 = i2 and
-A11: f.x2 = k+i2 by A3,A4,A6;
-    thus x1 = x2 by A8,A7,A9,A11,A10;
+A9: x2 = i2 and
+A10: f.x2 = k+i2 by A2,A3,A5;
+    thus x1 = x2 by A7,A6,A8,A10,A9;
   end;
-  thus dom f = dom F by A3;
-A12: dom Shift(F,k) =
+  thus dom f = dom F by A2;
+A11: dom Shift(F,k) =
   { (m+k) where m is Element of NAT: m in dom F } by Def12;
   hereby
     let y be set;
     assume y in rng f;
     then consider x being set such that
-A13: x in dom f and
-A14: f.x = y by FUNCT_1:def 3;
+A12: x in dom f and
+A13: f.x = y by FUNCT_1:def 3;
     consider il being Element of NAT such that
-A15: x = il and
-A16: f.x = k+il by A3,A4,A13;
-   thus y in dom Shift(F,k) by A3,A12,A13,A14,A15,A16;
+A14: x = il and
+A15: f.x = k+il by A2,A3,A12;
+   thus y in dom Shift(F,k) by A2,A11,A12,A13,A14,A15;
   end;
   let y be set;
   assume y in dom Shift(F,k);
   then consider m being Element of NAT such that
-A17: y = (m+k) and
-A18: m in dom F by A12;
+A16: y = (m+k) and
+A17: m in dom F by A11;
   consider il being Element of NAT such that
-A19: m = il and
-A20: f.m = k+il by A4,A18;
-  thus thesis by A3,A17,A18,A19,A20,FUNCT_1:def 3;
+A18: m = il and
+A19: f.m = k+il by A3,A17;
+  thus thesis by A2,A16,A17,A18,A19,FUNCT_1:def 3;
 end;
 
-theorem
-  for F being NAT-defined Function holds Shift(F,0) = F
+registration
+ let F be NAT-defined Function;
+ reduce Shift(F,0) to F;
+ reducibility
 proof
-  let F be NAT-defined Function;
-A1: dom F c= NAT by RELAT_1:def 18;
-A2: dom F = { m+(0 qua complex number) where m is Element of NAT: m in dom F }
+A1: dom F = { m+(0 qua complex number) where m is Element of NAT: m in dom F }
   proof
     hereby
      let a be set;
      assume
-A3:   a in dom F;
-      then reconsider l=a as Element of NAT by A1;
+A2:   a in dom F;
+      then reconsider l=a as Element of NAT;
       a = (l qua complex number)+(0 qua complex number);
      hence a in { m+(0 qua complex number)
-      where m is Element of NAT: m in dom F } by A3;
+      where m is Element of NAT: m in dom F } by A2;
     end;
     let a be set;
     assume
@@ -3088,8 +3117,12 @@ A3:   a in dom F;
   end;
   for m being Element of NAT st m in dom F
    holds F.(m+(0 qua complex number)) = F.m;
-  hence thesis by A2,Def12;
+  hence thesis by A1,Def12;
 end;
+end;
+
+theorem
+  for F being NAT-defined Function holds Shift(F,0) = F;
 
 registration
   let X be non empty set;
@@ -3150,9 +3183,8 @@ A1: dom Shift(F,k) =
     { (m+k) where m is Element of NAT: m in dom F } by Def12;
     consider a being set such that
 A2: a in dom F by XBOOLE_0:def 1;
-    dom F c= NAT by RELAT_1:def 18;
-    then reconsider a as Element of NAT by A2;
-    consider m being natural number such that
+    reconsider a as Element of NAT by A2;
+    consider m being Nat such that
 A3: a = m;
     reconsider m as Element of NAT by ORDINAL1:def 12;
     (m+k) in dom Shift(F,k) by A1,A2,A3;
@@ -3186,11 +3218,7 @@ end;
 registration
   let F be NAT-defined Relation;
   cluster dom F -> natural-membered;
- coherence
-  proof
-    dom F c= NAT by RELAT_1:def 18;
-   hence thesis;
-  end;
+ coherence;
 end;
 
 definition
@@ -3213,7 +3241,7 @@ registration
  coherence;
 end;
 
-theorem Th31:
+theorem Th30:
   for F being non empty NAT-defined finite Function holds
   LastLoc F in dom F by XXREAL_2:def 8;
 
@@ -3234,41 +3262,18 @@ end;
 
 theorem
   for F being non empty NAT-defined finite Function holds
-  FirstLoc F in dom F
-proof
-  let F be non empty NAT-defined finite Function;
-   set M = dom F;
-  min M in M by XXREAL_2:def 7;
-  hence thesis;
-end;
+  FirstLoc F in dom F by XXREAL_2:def 7;
 
 theorem
   for F, G being non empty NAT-defined finite Function st F c= G holds
-  FirstLoc G <= FirstLoc F
-proof
-  let F, G be non empty NAT-defined finite Function such that
-A1: F c= G;
-    set N = dom G;
-   set M = dom F;
-  M c= N by A1,RELAT_1:11;
-  then min N <= min M by XXREAL_2:60;
-  hence thesis;
-end;
+  FirstLoc G <= FirstLoc F by RELAT_1:11,XXREAL_2:60;
 
 theorem
   for l1 being Element of NAT
   for F being non empty NAT-defined finite Function st l1 in dom
-  F holds FirstLoc F <= l1
-proof let l1 be Element of NAT;
-  let F be non empty NAT-defined finite Function such that
-A1: l1 in dom F;
-   set M = dom F;
-  l1 in M by A1;
-  then min M <= l1 by XXREAL_2:def 7;
-  hence thesis;
-end;
+  F holds FirstLoc F <= l1 by XXREAL_2:def 7;
 
-theorem Th37:
+theorem Th36:
   for F being non empty NAT-defined finite Function
   holds dom CutLastLoc F = (dom F) \ {LastLoc F}
 proof
@@ -3283,9 +3288,9 @@ A3: dom R = {LastLoc F} by FUNCOP_1:13;
     let x be set;
     assume x in dom CutLastLoc F;
     then consider y being set such that
-A4: [x,y] in F \ R by A2,RELAT_1:def 4;
+A4: [x,y] in F \ R by A2,XTUPLE_0:def 12;
 A5: not [x,y] in R by A4,XBOOLE_0:def 5;
-A6: x in dom F by A4,RELAT_1:def 4;
+A6: x in dom F by A4,XTUPLE_0:def 12;
     per cases by A5,TARSKI:def 1;
     suppose x <> LastLoc F;
       then not x in dom R by A3,TARSKI:def 1;
@@ -3309,10 +3314,10 @@ theorem
   holds dom F = dom CutLastLoc F \/ {LastLoc F}
 proof
   let F be non empty NAT-defined finite Function;
-  LastLoc F in dom F by Th31;
+  LastLoc F in dom F by Th30;
   then
 A1: {LastLoc F} c= dom F by ZFMISC_1:31;
-  dom CutLastLoc F = (dom F) \ {LastLoc F} by Th37;
+  dom CutLastLoc F = (dom F) \ {LastLoc F} by Th36;
   hence thesis by A1,XBOOLE_1:45;
 end;
 
@@ -3330,7 +3335,7 @@ registration
   cluster CutLastLoc F -> empty;
   coherence
   proof
-    LastLoc F in dom F by Th31;
+    LastLoc F in dom F by Th30;
     then
 A1: [LastLoc F,F.LastLoc F] in F by FUNCT_1:def 2;
     assume not thesis;
@@ -3355,7 +3360,7 @@ proof
     then [a,b] in {[LastLoc F,F.LastLoc F]} by FUNCT_4:82;
     then
 A1: [a,b] = [LastLoc F,F.LastLoc F] by TARSKI:def 1;
-    LastLoc F in dom F by Th31;
+    LastLoc F in dom F by Th30;
     hence thesis by A1,FUNCT_1:def 2;
   end;
   hence card CutLastLoc F = card F - card (LastLoc F .--> F.LastLoc F)
@@ -3370,30 +3375,26 @@ registration let X be set, f be X-defined complex-valued Function;
  cluster -f -> X-defined;
  coherence
   proof
-A:  dom -f = dom f by Def5;
-    dom f c= X by RELAT_1:def 18;
-   hence dom -f c= X by A;
+A1:  dom -f = dom f by Def5;
+   thus dom -f c= X by A1;
   end;
  cluster f" -> X-defined;
  coherence
   proof
-A:  dom(f") = dom f by Def7;
-    dom f c= X by RELAT_1:def 18;
-   hence dom(f") c= X by A;
+A2:  dom(f") = dom f by Def7;
+   thus dom(f") c= X by A2;
   end;
  cluster f^2 -> X-defined;
  coherence
   proof
-A:  dom(f^2) = dom f by Th11;
-    dom f c= X by RELAT_1:def 18;
-   hence dom(f^2) c= X by A;
+A3:  dom(f^2) = dom f by Th11;
+   thus dom(f^2) c= X by A3;
   end;
  cluster |.f.| -> X-defined;
  coherence
   proof
-A:  dom |.f.| = dom f by Def11;
-    dom f c= X by RELAT_1:def 18;
-   hence dom |.f.| c= X by A;
+A4:  dom |.f.| = dom f by Def11;
+   thus dom |.f.| c= X by A4;
   end;
 end;
 
@@ -3411,30 +3412,30 @@ registration let X be set,
  cluster -f -> total;
  coherence
   proof
-A:  dom -f = dom f by Def5;
+A1:  dom -f = dom f by Def5;
     dom f = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A1,PARTFUN1:def 2;
   end;
  cluster f" -> total;
  coherence
   proof
-A:  dom(f") = dom f by Def7;
+A2:  dom(f") = dom f by Def7;
     dom f = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A2,PARTFUN1:def 2;
   end;
  cluster f^2 -> total;
  coherence
   proof
-A:  dom(f^2) = dom f by Th11;
+A3:  dom(f^2) = dom f by Th11;
     dom f = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A3,PARTFUN1:def 2;
   end;
  cluster |.f.| -> total;
  coherence
   proof
-A:  dom |.f.| = dom f by Def11;
+A4:  dom |.f.| = dom f by Def11;
     dom f = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A4,PARTFUN1:def 2;
   end;
 end;
 
@@ -3444,23 +3445,16 @@ registration
  cluster r+f -> X-defined;
  coherence
   proof
-A:  dom(r+f) = dom f by Def2;
-    dom f c= X by RELAT_1:def 18;
-   hence dom(r+f) c= X by A;
+A1:  dom(r+f) = dom f by Def2;
+   thus dom(r+f) c= X by A1;
   end;
  cluster f-r -> X-defined;
- coherence
-  proof
-A:  dom(f-r) = dom f by Th3;
-    dom f c= X by RELAT_1:def 18;
-   hence dom(f-r) c= X by A;
-  end;
+ coherence;
  cluster r(#)f -> X-defined;
  coherence
   proof
-A:  dom(r(#)f) = dom f by Def5;
-    dom f c= X by RELAT_1:def 18;
-   hence dom(r(#)f) c= X by A;
+A2:  dom(r(#)f) = dom f by Def5;
+   thus dom(r(#)f) c= X by A2;
   end;
 end;
 
@@ -3470,21 +3464,18 @@ registration let X be set,
  cluster r+f -> total;
  coherence
   proof
-A:  dom(r+f) = dom f by Def2;
+A1:  dom(r+f) = dom f by Def2;
     dom f = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A1,PARTFUN1:def 2;
   end;
  cluster f-r -> total;
- coherence
-  proof
-   thus thesis;
-  end;
+ coherence;
  cluster r(#)f -> total;
  coherence
   proof
-A:  dom(r(#)f) = dom f by Def5;
+A2:  dom(r(#)f) = dom f by Def5;
     dom f = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A2,PARTFUN1:def 2;
   end;
 end;
 
@@ -3496,9 +3487,8 @@ registration
   proof
     dom(f1 + f2) = dom f1 /\ dom f2 by Def1;
     then
-A:  dom(f1 + f2) c= dom f2 by XBOOLE_1:17;
-    dom f2 c= X by RELAT_1:def 18;
-   hence dom(f1 + f2) c= X by A,XBOOLE_1:1;
+A1:  dom(f1 + f2) c= dom f2 by XBOOLE_1:17;
+   thus dom(f1 + f2) c= X by A1,XBOOLE_1:1;
   end;
  cluster f1 - f2 -> X-defined;
  coherence;
@@ -3507,9 +3497,8 @@ A:  dom(f1 + f2) c= dom f2 by XBOOLE_1:17;
   proof
     dom(f1(#)f2) = dom f1 /\ dom f2 by Def4;
     then
-A:  dom(f1(#)f2) c= dom f2 by XBOOLE_1:17;
-    dom f2 c= X by RELAT_1:def 18;
-   hence dom(f1(#)f2) c= X by A,XBOOLE_1:1;
+A2:  dom(f1(#)f2) c= dom f2 by XBOOLE_1:17;
+   thus dom(f1(#)f2) c= X by A2,XBOOLE_1:1;
   end;
  cluster f1/"f2 -> X-defined;
  coherence;
@@ -3520,19 +3509,37 @@ registration let X be set;
  cluster f1 + f2 -> total;
  coherence
   proof
-A:  dom(f1 + f2) = dom f1 /\ dom f2 by Def1;
+A1:  dom(f1 + f2) = dom f1 /\ dom f2 by Def1;
     dom f1 = X & dom f2 = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A1,PARTFUN1:def 2;
   end;
  cluster f1 - f2 -> total;
  coherence;
  cluster f1(#)f2 -> total;
  coherence
   proof
-A:  dom(f1(#)f2) = dom f1 /\ dom f2 by Def4;
+A2:  dom(f1(#)f2) = dom f1 /\ dom f2 by Def4;
     dom f1 = X & dom f2 = X by PARTFUN1:def 2;
-   hence thesis by A,PARTFUN1:def 2;
+   hence thesis by A2,PARTFUN1:def 2;
   end;
  cluster f1/"f2 -> total;
  coherence;
 end;
+
+registration let X be non empty set;
+ let F be X-valued non empty NAT-defined finite Function;
+ cluster CutLastLoc F -> X-valued;
+ coherence;
+end;
+
+theorem
+ for f being Function
+ for i,n being Nat st i in dom Shift(f,n)
+  ex j being Nat st j in dom f & i = j + n
+ proof let f be Function;
+  let i,n be Nat;
+A: dom Shift(f,n) = { m+n:m in dom f } by Def12;
+  assume i in dom Shift(f,n);
+   then ex m being Element of NAT st i = m + n & m in dom f by A;
+  hence ex j being Nat st j in dom f & i = j + n;
+ end;

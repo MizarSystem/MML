@@ -2,7 +2,7 @@
 ::  by Library Committee
 ::
 :: Received April 6, 2002
-:: Copyright (c) 2002-2011 Association of Mizar Users
+:: Copyright (c) 2002-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,8 +25,9 @@ begin
 reserve X, Y, Z, x, y, z for set;
 
 scheme
-  Separation { A()-> set, P[set] } : ex X being set st for x being set holds x
-  in X iff x in A() & P[x] proof
+  Separation { A()-> set, P[set] } :
+  ex X being set st for x being set holds x in X iff x in A() & P[x]
+  proof
   defpred Q[set,set] means $1 = $2 & P[$2];
 A1: for x,y,z st Q[x,y] & Q[x,z] holds y = z;
   consider X such that
@@ -49,9 +50,8 @@ registration
   existence
   proof
     defpred P[set] means contradiction;
-    set X = the set;
     consider Y such that
-A1: x in Y iff x in X & P[x] from Separation;
+A1: x in Y iff x in the set & P[x] from Separation;
     take Y;
     thus not ex x being set st x in Y by A1;
   end;
@@ -72,15 +72,11 @@ definition
     thus x in union {X,Y} implies x in X or x in Y
     proof
       assume x in union {X,Y};
-      then ex X0 being set st x in X0 & X0 in {X,Y} by TARSKI:def 4;
+      then ex Z being set st x in Z & Z in {X,Y} by TARSKI:def 4;
       hence thesis by TARSKI:def 2;
     end;
-    assume x in X or x in Y;
-    then consider X0 being set such that
-A1: X0 = X or X0 = Y and
-A2: x in X0;
-    X0 in {X,Y} by A1,TARSKI:def 2;
-    hence thesis by A2,TARSKI:def 4;
+    X in {X,Y} & Y in {X,Y} by TARSKI:def 2;
+    hence thesis by TARSKI:def 4;
   end;
   uniqueness
   proof
@@ -233,8 +229,7 @@ registration
   cluster non empty for set;
   existence
   proof
-    set x = the set;
-    take {x};
+    take { the set };
     thus thesis;
   end;
 end;
@@ -297,8 +292,8 @@ A1: x in X /\ Y by Def1;
 end;
 
 theorem
-  X misses Y & x in X \/ Y implies x in X & not x in Y or x in Y & not x
-  in X by Def3,Th3;
+  X misses Y & x in X \/ Y implies x in X & not x in Y or x in Y & not x in X
+  by Def3,Th3;
 
 scheme
   Extensionality { X,Y() -> set, P[set] } : X() = Y()
@@ -322,8 +317,11 @@ A3: x in Y() implies x in X()
 end;
 
 scheme
-  SetEq { P[set] } : for X1,X2 being set st (for x being set holds x in X1 iff
-  P[x]) & (for x being set holds x in X2 iff P[x]) holds X1 = X2 proof
+  SetEq { P[set] } :
+  for X1,X2 being set st
+    (for x being set holds x in X1 iff P[x]) &
+    (for x being set holds x in X2 iff P[x]) holds X1 = X2
+  proof
   let X1,X2 be set such that
 A1: for x being set holds x in X1 iff P[x] and
 A2: for x being set holds x in X2 iff P[x];
@@ -337,7 +335,7 @@ theorem
   X c< Y implies ex x st x in Y & not x in X
 proof
   assume X c< Y;
-  then ( not for x holds x in X iff x in Y)& X c= Y by Def8,TARSKI:1;
+  then (not for x holds x in X iff x in Y) & X c= Y by Def8,TARSKI:1;
   hence thesis by TARSKI:def 3;
 end;
 

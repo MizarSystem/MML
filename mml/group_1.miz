@@ -2,7 +2,7 @@
 ::  by Wojciech A. Trybulec
 ::
 :: Received July 3, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,7 +20,7 @@ environ
       TARSKI, RLVECT_1, SUPINF_2, GROUP_1;
  notations TARSKI, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, BINOP_1, STRUCT_0, ALGSTR_0,
-      RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, INT_2;
+      RLVECT_1, INT_1, ORDINAL1, NAT_1, FINSEQOP, SETWISEO, INT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
       FINSEQOP, RLVECT_1, SEQ_1;
  registrations ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
@@ -71,16 +71,16 @@ definition
   let IT be multMagma;
 
   attr IT is unital means
-  :Def2:
+  :Def1:
   ex e being Element of IT st for h being
   Element of IT holds h * e = h & e * h = h;
   attr IT is Group-like means
-  :Def3:
+  :Def2:
   ex e being Element of IT st for h being
 Element of IT holds h * e = h & e * h = h & ex g being Element of IT st h * g =
   e & g * h = e;
   attr IT is associative means
-  :Def4:
+  :Def3:
   for x,y,z being Element of IT holds (x*y )*z = x*(y*z);
 end;
 
@@ -101,7 +101,7 @@ registration
   cluster strict Group-like associative non empty for multMagma;
   existence
   proof
-    multMagma (# REAL, addreal #) is Group-like associative by Def3,Def4,Lm1;
+    multMagma (# REAL, addreal #) is Group-like associative by Def2,Def3,Lm1;
     hence thesis;
   end;
 end;
@@ -113,7 +113,7 @@ end;
 theorem
   ((for r,s,t holds (r * s) * t = r * (s * t)) & ex t st for s1 holds s1
 * t = s1 & t * s1 = s1 & ex s2 st s1 * s2 = t & s2 * s1 = t) implies S is Group
-  by Def3,Def4;
+  by Def2,Def3;
 
 theorem
   (for r,s,t holds r * s * t = r * (s * t)) & (for r,s holds (ex t st r
@@ -155,7 +155,7 @@ A13: ex r2 st r2 * s = t2 by A2;
   hence thesis by A10,A11;
 end;
 
-theorem Th7:
+theorem Th3:
   multMagma (# REAL, addreal #) is associative Group-like
 proof
   set G = multMagma (# REAL, addreal #);
@@ -192,22 +192,22 @@ definition
   let G be multMagma such that
 A1: G is unital;
   func 1_G -> Element of G means
-  :Def5:
+  :Def4:
   for h being Element of G holds h * it = h & it * h = h;
-  existence by A1,Def2;
+  existence by A1,Def1;
   uniqueness
   proof
     let e1,e2 be Element of G;
     assume that
-A2: for h being Element of G holds h * e1 = h & e1 * h = h and
-A3: for h being Element of G holds h * e2 = h & e2 * h = h;
-    thus e1 = e2 * e1 by A3
-      .= e2 by A2;
+A1: for h being Element of G holds h * e1 = h & e1 * h = h and
+A2: for h being Element of G holds h * e2 = h & e2 * h = h;
+    thus e1 = e2 * e1 by A2
+      .= e2 by A1;
   end;
 end;
 
 theorem
-  (for h holds h * e = h & e * h = h) implies e = 1_G by Def5;
+  (for h holds h * e = h & e * h = h) implies e = 1_G by Def4;
 
 reserve G for Group;
 reserve f,g,h for Element of G;
@@ -215,17 +215,17 @@ reserve f,g,h for Element of G;
 definition
   let G,h;
   func h" -> Element of G means
-  :Def6:
+  :Def5:
   h * it = 1_G & it * h = 1_G;
   existence
   proof
     consider e being Element of G such that
 A1: for h being Element of G holds h * e = h & e * h = h & ex g being
-    Element of G st h * g = e & g * h = e by Def3;
+    Element of G st h * g = e & g * h = e by Def2;
     consider g being Element of G such that
 A2: h * g = e & g * h = e by A1;
     take g;
-    thus thesis by A1,A2,Def5;
+    thus thesis by A1,A2,Def4;
   end;
   uniqueness
   proof
@@ -235,41 +235,41 @@ A3: h * h1 = 1_G and
     h1 * h = 1_G and
     h * h2 = 1_G and
 A4: h2 * h = 1_G;
-    thus h1 = 1_G * h1 by Def5
-      .= h2 * (h * h1) by A4,Def4
-      .= h2 by A3,Def5;
+    thus h1 = 1_G * h1 by Def4
+      .= h2 * (h * h1) by A4,Def3
+      .= h2 by A3,Def4;
   end;
   involutiveness;
 end;
 
 theorem
-  h * g = 1_G & g * h = 1_G implies g = h" by Def6;
+  h * g = 1_G & g * h = 1_G implies g = h" by Def5;
 
-theorem Th14:
+theorem Th6:
   h * g = h * f or g * h = f * h implies g = f
 proof
   assume h * g = h * f or g * h = f * h;
-  then h" * (h * g) = h" * h * f or g * h * h" = f * (h * h") by Def4;
-  then h" * (h * g) = 1_G * f or g * (h * h") = f * (h * h") by Def4,Def6;
-  then h" * (h * g) = f or g * 1_G = f * (h * h") by Def5,Def6;
-  then h" * h * g = f or g = f * (h * h") by Def4,Def5;
-  then h" * h * g = f or g = f * 1_G by Def6;
-  then 1_G * g = f or g = f by Def5,Def6;
-  hence thesis by Def5;
+  then h" * (h * g) = h" * h * f or g * h * h" = f * (h * h") by Def3;
+  then h" * (h * g) = 1_G * f or g * (h * h") = f * (h * h") by Def3,Def5;
+  then h" * (h * g) = f or g * 1_G = f * (h * h") by Def4,Def5;
+  then h" * h * g = f or g = f * (h * h") by Def3,Def4;
+  then h" * h * g = f or g = f * 1_G by Def5;
+  then 1_G * g = f or g = f by Def4,Def5;
+  hence thesis by Def4;
 end;
 
 theorem
   h * g = h or g * h = h implies g = 1_G
 proof
-  h * 1_G = h & 1_G * h = h by Def5;
-  hence thesis by Th14;
+  h * 1_G = h & 1_G * h = h by Def4;
+  hence thesis by Th6;
 end;
 
-theorem Th16:
+theorem Th8:
   (1_G)" = 1_G
 proof
-  (1_G)" * 1_G = 1_G by Def6;
-  hence thesis by Def5;
+  (1_G)" * 1_G = 1_G by Def5;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -277,139 +277,138 @@ theorem
 proof
   assume h" = g";
   then
-A1: h * g" = 1_G by Def6;
-  g * g" = 1_G by Def6;
-  hence thesis by A1,Th14;
+A1: h * g" = 1_G by Def5;
+  g * g" = 1_G by Def5;
+  hence thesis by A1,Th6;
 end;
 
 theorem
   h" = 1_G implies h = 1_G
 proof
-  (1_G)" = 1_G by Th16;
+  (1_G)" = 1_G by Th8;
   hence thesis;
 end;
 
-theorem
-  h"" = h;
+canceled;
 
-theorem Th20:
+theorem Th12:
   h * g = 1_G implies h = g" & g = h"
 proof
   assume
 A1: h * g = 1_G;
-  h * h" = 1_G & g" * g = 1_G by Def6;
-  hence thesis by A1,Th14;
+  h * h" = 1_G & g" * g = 1_G by Def5;
+  hence thesis by A1,Th6;
 end;
 
-theorem Th21:
+theorem Th13:
   h * f = g iff f = h" * g
 proof
-  h * (h" * g) = h * h" * g by Def4
-    .= 1_G * g by Def6
-    .= g by Def5;
-  hence h * f = g implies f = h" * g by Th14;
+  h * (h" * g) = h * h" * g by Def3
+    .= 1_G * g by Def5
+    .= g by Def4;
+  hence h * f = g implies f = h" * g by Th6;
   assume f = h" * g;
-  hence h * f = h * h" * g by Def4
-    .= 1_G * g by Def6
-    .= g by Def5;
+  hence h * f = h * h" * g by Def3
+    .= 1_G * g by Def5
+    .= g by Def4;
 end;
 
-theorem Th22:
+theorem Th14:
   f * h = g iff f = g * h"
 proof
-  g * h" * h = g * (h" * h) by Def4
-    .= g * 1_G by Def6
-    .= g by Def5;
-  hence f * h = g implies f = g * h" by Th14;
+  g * h" * h = g * (h" * h) by Def3
+    .= g * 1_G by Def5
+    .= g by Def4;
+  hence f * h = g implies f = g * h" by Th6;
   assume f = g * h";
-  hence f * h = g * (h" * h) by Def4
-    .= g * 1_G by Def6
-    .= g by Def5;
+  hence f * h = g * (h" * h) by Def3
+    .= g * 1_G by Def5
+    .= g by Def4;
 end;
 
 theorem
   ex f st g * f = h
 proof
   take g" * h;
-  thus thesis by Th21;
+  thus thesis by Th13;
 end;
 
 theorem
   ex f st f * g = h
 proof
   take h * g";
-  thus thesis by Th22;
+  thus thesis by Th14;
 end;
 
-theorem Th25:
+theorem Th17:
   (h * g)" = g" * h"
 proof
-  (g" * h") * (h * g) = g" * h" * h * g by Def4
-    .= g" * (h" * h) * g by Def4
-    .= g" * 1_G * g by Def6
-    .= g" * g by Def5
-    .= 1_G by Def6;
-  hence thesis by Th20;
+  (g" * h") * (h * g) = g" * h" * h * g by Def3
+    .= g" * (h" * h) * g by Def3
+    .= g" * 1_G * g by Def5
+    .= g" * g by Def4
+    .= 1_G by Def5;
+  hence thesis by Th12;
 end;
 
-theorem Th26:
+theorem Th18:
   g * h = h * g iff (g * h)" = g" * h"
 proof
-  thus g * h = h * g implies (g * h)" = g" * h" by Th25;
+  thus g * h = h * g implies (g * h)" = g" * h" by Th17;
   assume (g * h)" = g" * h";
   then
-A1: (h * g) * (g * h)" = h * g * g" * h" by Def4
-    .= h * (g * g") * h" by Def4
-    .= h * 1_G * h" by Def6
-    .= h * h" by Def5
-    .= 1_G by Def6;
-  (g * h) * (g * h)" = 1_G by Def6;
-  hence thesis by A1,Th14;
+A1: (h * g) * (g * h)" = h * g * g" * h" by Def3
+    .= h * (g * g") * h" by Def3
+    .= h * 1_G * h" by Def5
+    .= h * h" by Def4
+    .= 1_G by Def5;
+  (g * h) * (g * h)" = 1_G by Def5;
+  hence thesis by A1,Th6;
 end;
 
-theorem Th27:
+theorem Th19:
   g * h = h * g iff g" * h" = h" * g"
 proof
   thus g * h = h * g implies g" * h" = h" * g"
   proof
     assume
 A1: g * h = h * g;
-    hence g" * h" = (g * h)" by Th25
-      .= h" * g" by A1,Th26;
+    hence g" * h" = (g * h)" by Th17
+      .= h" * g" by A1,Th18;
   end;
   assume
 A2: g" * h" = h" * g";
-  thus g * h = (g * h)"" .= (h" * g")" by Th25
-    .= h"" * g"" by A2,Th25
+  thus g * h = (g * h)"" .= (h" * g")" by Th17
+    .= h"" * g"" by A2,Th17
     .= h * g;
 end;
 
-theorem Th28:
+theorem Th20:
   g * h = h * g iff g * h" = h" * g
 proof
   thus g * h = h * g implies g * h" = h" * g
   proof
     assume
 A1: g * h = h * g;
-    (g * h") * (g" * h) = g * h" * g" * h by Def4
-      .= g * (h" * g") * h by Def4
-      .= g * (g" * h") * h by A1,Th27
-      .= g * g" * h" * h by Def4
-      .= 1_G * h" * h by Def6
-      .= h" * h by Def5
-      .= 1_G by Def6;
-    then g * h" = (g" * h)" by Th20
-      .= h" * g"" by Th25;
+    (g * h") * (g" * h) = g * h" * g" * h by Def3
+      .= g * (h" * g") * h by Def3
+      .= g * (g" * h") * h by A1,Th19
+      .= g * g" * h" * h by Def3
+      .= 1_G * h" * h by Def5
+      .= h" * h by Def4
+      .= 1_G by Def5;
+    then g * h" = (g" * h)" by Th12
+      .= h" * g"" by Th17;
     hence thesis;
   end;
   assume g * h" = h" * g;
-  then g * (h" * h) = h" * g * h by Def4;
-  then g * 1_G = h" * g * h by Def6;
-  then g = h" * g * h by Def5;
-  then g = h" * (g * h) by Def4;
-  then h * g = h * h" * (g * h) by Def4;
-  then h * g = 1_G * (g * h) by Def6;
-  hence thesis by Def5;
+  then g * (h" * h) = h" * g * h by Def3;
+  then g * 1_G = h" * g * h by Def5;
+  then g = h" * g * h by Def4;
+  then g = h" * (g * h) by Def3;
+  then h * g = h * h" * (g * h) by Def3;
+  then h * g = 1_G * (g * h) by Def5;
+  hence thesis by Def4;
 end;
 
 reserve u for UnOp of G;
@@ -417,7 +416,7 @@ reserve u for UnOp of G;
 definition
   let G;
   func inverse_op(G) -> UnOp of G means
-  :Def7:
+  :Def6:
   it.h = h";
   existence
   proof
@@ -448,12 +447,12 @@ registration
 proof
   let h,g,f be Element of G;
   set o = the multF of G;
-  thus o.(h,o.(g,f)) = h * (g * f) .= h * g * f by Def4
+  thus o.(h,o.(g,f)) = h * (g * f) .= h * g * f by Def3
     .= o.(o.(h,g),f);
 end;
 end;
 
-theorem Th32:
+theorem Th21:
   for G being unital non empty multMagma holds 1_G is_a_unity_wrt
   the multF of G
 proof
@@ -461,18 +460,18 @@ proof
   set o = the multF of G;
   now
     let h be Element of G;
-    thus o.(1_G,h) = 1_G * h .= h by Def5;
-    thus o.(h,1_G) = h * 1_G .= h by Def5;
+    thus o.(1_G,h) = 1_G * h .= h by Def4;
+    thus o.(h,1_G) = h * 1_G .= h by Def4;
   end;
   hence thesis by BINOP_1:3;
 end;
 
-theorem Th33:
+theorem Th22:
   for G being unital non empty multMagma holds the_unity_wrt the
   multF of G = 1_G
 proof
   let G be unital non empty multMagma;
-  1_G is_a_unity_wrt the multF of G by Th32;
+  1_G is_a_unity_wrt the multF of G by Th21;
   hence thesis by BINOP_1:def 8;
 end;
 
@@ -482,20 +481,20 @@ registration
 coherence
 proof
   take 1_G;
-  thus thesis by Th32;
+  thus thesis by Th21;
 end;
 end;
 
-theorem Th35:
+theorem Th23:
   inverse_op(G) is_an_inverseOp_wrt the multF of G
 proof
   let h be Element of G;
-  thus (the multF of G).(h,inverse_op(G).h) = h * h" by Def7
-    .= 1_G by Def6
-    .= the_unity_wrt the multF of G by Th33;
-  thus (the multF of G).(inverse_op(G).h,h) = h" * h by Def7
-    .= 1_G by Def6
-    .= the_unity_wrt the multF of G by Th33;
+  thus (the multF of G).(h,inverse_op(G).h) = h * h" by Def6
+    .= 1_G by Def5
+    .= the_unity_wrt the multF of G by Th22;
+  thus (the multF of G).(inverse_op(G).h,h) = h" * h by Def6
+    .= 1_G by Def5
+    .= the_unity_wrt the multF of G by Th22;
 end;
 
 registration
@@ -503,7 +502,7 @@ registration
   cluster the multF of G -> having_an_inverseOp;
   coherence
 proof
-  inverse_op(G) is_an_inverseOp_wrt the multF of G by Th35;
+  inverse_op(G) is_an_inverseOp_wrt the multF of G by Th23;
   hence thesis by FINSEQOP:def 2;
 end;
 end;
@@ -512,14 +511,14 @@ theorem
   the_inverseOp_wrt the multF of G = inverse_op(G)
 proof
   set o = the multF of G;
-  o is having_an_inverseOp & inverse_op(G) is_an_inverseOp_wrt o by Th35;
+  o is having_an_inverseOp & inverse_op(G) is_an_inverseOp_wrt o by Th23;
   hence thesis by FINSEQOP:def 3;
 end;
 
 definition
   let G be non empty multMagma;
   func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
-  :Def8:
+  :Def7:
   for h being Element of G holds it.(h,0) = 1_G & for n being Element of
   NAT holds it.(h,n + 1) = it.(h,n) * h;
   existence
@@ -618,7 +617,7 @@ end;
 definition
   let G,i,h;
   func h |^ i -> Element of G equals
-  :Def9:
+  :Def8:
   power(G).(h,abs(i)) if 0 <= i
   otherwise (power(G).(h,abs(i)))";
   correctness;
@@ -632,18 +631,18 @@ definition
   proof
     let g be Element of G;
     abs(n) = n by ABSVALUE:def 1;
-    hence thesis by Def9;
+    hence thesis by Def8;
   end;
 end;
 
 Lm2: h |^ (n + 1) = h |^ n * h
 proof
   reconsider n as Element of NAT by ORDINAL1:def 12;
-  h |^ (n + 1) = h |^ n * h by Def8;
+  h |^ (n + 1) = h |^ n * h by Def7;
   hence thesis;
 end;
 
-Lm3: h |^ 0 = 1_G by Def8;
+Lm3: h |^ 0 = 1_G by Def7;
 
 Lm4: (1_G) |^ n = 1_G
 proof
@@ -652,37 +651,37 @@ A1: now
     let n;
     assume P[n];
     then (1_G) |^ (n + 1) = 1_G * 1_G by Lm2
-      .= 1_G by Def5;
+      .= 1_G by Def4;
     hence P[n+1];
   end;
-A2: P[0] by Def8;
+A2: P[0] by Def7;
   for n holds P[n] from NAT_1:sch 2(A2,A1);
   hence thesis;
 end;
 
 theorem
-  h |^ 0 = 1_G by Def8;
+  h |^ 0 = 1_G by Def7;
 
-theorem Th44:
+theorem Th26:
   h |^ 1 = h
 proof
   thus h |^ 1 = h |^(0 + 1) .= h |^ 0 * h by Lm2
-    .= 1_G * h by Def8
-    .= h by Def5;
+    .= 1_G * h by Def7
+    .= h by Def4;
 end;
 
-theorem Th45:
+theorem Th27:
   h |^ 2 = h * h
 proof
   thus h |^ 2 = h |^ (1 + 1) .= h |^ 1 * h by Lm2
-    .= h * h by Th44;
+    .= h * h by Th26;
 end;
 
 theorem
   h |^ 3 = h * h * h
 proof
   thus h |^ 3 = h |^ (2 + 1) .= h |^ 2 * h by Lm2
-    .= h * h * h by Th45;
+    .= h * h * h by Th27;
 end;
 
 theorem
@@ -691,12 +690,12 @@ proof
   thus h |^ 2 = 1_G implies h = h"
   proof
     assume h |^ 2 = 1_G;
-    then h * h = 1_G by Th45;
-    hence thesis by Th20;
+    then h * h = 1_G by Th27;
+    hence thesis by Th12;
   end;
   assume h = h";
-  hence h |^ 2 = h * h" by Th45
-    .= 1_G by Def6;
+  hence h |^ 2 = h * h" by Th27
+    .= 1_G by Def5;
 end;
 
 Lm5: h |^ (n + m) = h |^ n * (h |^ m)
@@ -710,14 +709,14 @@ A2: for n holds h |^ (n + m) = h |^ n * (h |^ m);
     let n;
     thus h |^ (n + (m + 1)) = h |^ (n + m + 1) .= h |^ (n + m) * h by Lm2
       .= h |^ n * (h |^ m) * h by A2
-      .= h |^ n * (h |^ m * h) by Def4
+      .= h |^ n * (h |^ m * h) by Def3
       .= h |^ n * (h |^ (m + 1)) by Lm2;
   end;
 A3: P[0]
   proof
     let n;
-    thus h |^ (n + 0) = h |^ n * 1_G by Def5
-      .= h |^ n * (h |^ 0) by Def8;
+    thus h |^ (n + 0) = h |^ n * 1_G by Def4
+      .= h |^ n * (h |^ 0) by Def7;
   end;
   for m holds P[m] from NAT_1:sch 2(A3,A1);
   hence thesis;
@@ -727,7 +726,7 @@ Lm6: h |^ (n + 1) = h |^ n * h & h |^ (n + 1) = h * (h |^ n)
 proof
   thus h |^ (n + 1) = h |^ n * h by Lm2;
   thus h |^ (n + 1) = h |^ 1 * (h |^ n) by Lm5
-    .= h * (h |^ n) by Th44;
+    .= h * (h |^ n) by Th26;
 end;
 
 Lm7: h |^ (n * m) = h |^ n |^ m
@@ -742,14 +741,14 @@ A2: for n holds h |^ (n * m) = h |^ n |^ m;
     thus h |^ (n * (m + 1)) = h |^ (n * m + n * 1)
       .= h |^ (n * m) * (h |^ n) by Lm5
       .= h |^ n |^ m * (h |^ n) by A2
-      .= h |^ n |^ m * (h |^ n |^ 1) by Th44
+      .= h |^ n |^ m * (h |^ n |^ 1) by Th26
       .= h |^ n |^ (m + 1) by Lm5;
   end;
 A3: P[0]
   proof
     let n;
-    thus h |^ (n * 0) = 1_G by Def8
-      .= h |^ n |^ 0 by Def8;
+    thus h |^ (n * 0) = 1_G by Def7
+      .= h |^ n |^ 0 by Def7;
   end;
   for m holds P[m] from NAT_1:sch 2(A3,A1);
   hence thesis;
@@ -762,13 +761,13 @@ A1: now
     let n;
     assume P[n];
     then h" |^ (n + 1) = (h |^ n)" * h" by Lm2
-      .= (h * (h |^ n))" by Th25
+      .= (h * (h |^ n))" by Th17
       .= (h |^ (n + 1))" by Lm6;
     hence P[n+1];
   end;
-  h" |^ 0 = 1_G by Def8
-    .= (1_G)" by Th16
-    .= (h |^ 0)" by Def8;
+  h" |^ 0 = 1_G by Def7
+    .= (1_G)" by Th8
+    .= (h |^ 0)" by Def7;
   then
 A2: P[0];
   for n holds P[n] from NAT_1:sch 2(A2,A1);
@@ -786,18 +785,18 @@ A2: g * h = h * g implies g * (h |^ n) = h |^ n * g;
     assume
 A3: g * h = h * g;
     thus g * (h |^ (n + 1)) = g * (h * (h |^ n)) by Lm6
-      .= g * h * (h |^ n) by Def4
-      .= h * ((h |^ n) * g)by A2,A3,Def4
-      .= h * (h |^ n) * g by Def4
+      .= g * h * (h |^ n) by Def3
+      .= h * ((h |^ n) * g)by A2,A3,Def3
+      .= h * (h |^ n) * g by Def3
       .= h |^ (n + 1) * g by Lm6;
   end;
 A4: P[0]
   proof
     assume g * h = h * g;
-    thus g * (h |^ 0) = g * 1_G by Def8
-      .= g by Def5
-      .= 1_G * g by Def5
-      .= h |^ 0 * g by Def8;
+    thus g * (h |^ 0) = g * 1_G by Def7
+      .= g by Def4
+      .= 1_G * g by Def4
+      .= h |^ 0 * g by Def7;
   end;
   for n holds P[n] from NAT_1:sch 2(A4,A1);
   hence thesis;
@@ -816,21 +815,21 @@ A2: for m st g * h = h * g holds g |^ n * (h |^ m) = h |^ m * (g |^ n);
     assume
 A3: g * h = h * g;
     thus g |^ (n + 1) * (h |^ m) = g * (g |^ n) * (h |^ m) by Lm6
-      .= g * ((g |^ n) * (h |^ m)) by Def4
+      .= g * ((g |^ n) * (h |^ m)) by Def3
       .= g * ((h |^ m) * (g |^ n)) by A2,A3
-      .= g * (h |^ m) * (g |^ n) by Def4
+      .= g * (h |^ m) * (g |^ n) by Def3
       .= h |^ m * g * (g |^ n) by A3,Lm9
-      .= h |^ m * (g * (g |^ n)) by Def4
+      .= h |^ m * (g * (g |^ n)) by Def3
       .= h |^ m * (g |^ (n + 1)) by Lm6;
   end;
 A4: P[0]
   proof
     let m;
     assume g * h = h * g;
-    thus g |^ 0 * (h |^ m) = 1_G * (h |^ m)by Def8
-      .= h |^ m by Def5
-      .= h |^ m * 1_G by Def5
-      .= h |^ m * (g |^ 0) by Def8;
+    thus g |^ 0 * (h |^ m) = 1_G * (h |^ m)by Def7
+      .= h |^ m by Def4
+      .= h |^ m * 1_G by Def4
+      .= h |^ m * (g |^ 0) by Def7;
   end;
   for n holds P[n] from NAT_1:sch 2(A4,A1);
   hence thesis;
@@ -848,27 +847,27 @@ A2: g * h = h * g implies (g * h) |^ n = g |^ n * (h |^ n);
     assume
 A3: g * h = h * g;
     hence (g * h) |^ (n + 1) = g |^ n * (h |^ n) * (h * g) by A2,Lm6
-      .= g |^ n * (h |^ n) * h * g by Def4
-      .= g |^ n * ((h |^ n) * h) * g by Def4
+      .= g |^ n * (h |^ n) * h * g by Def3
+      .= g |^ n * ((h |^ n) * h) * g by Def3
       .= g |^ n * (h |^ (n + 1)) * g by Lm6
       .= h |^ (n + 1) * (g |^ n) * g by A3,Lm10
-      .= h |^ (n + 1) * ((g |^ n) * g) by Def4
+      .= h |^ (n + 1) * ((g |^ n) * g) by Def3
       .= h |^ (n + 1) * (g |^ (n + 1)) by Lm6
       .= g |^ (n + 1) * (h |^ (n + 1)) by A3,Lm10;
   end;
 A4: P[0]
   proof
     assume g * h = h * g;
-    thus (g * h) |^ 0 = 1_G by Def8
-      .= 1_G * 1_G by Def5
-      .= g |^ 0 * 1_G by Def8
-      .= g |^ 0 * (h |^ 0) by Def8;
+    thus (g * h) |^ 0 = 1_G by Def7
+      .= 1_G * 1_G by Def4
+      .= g |^ 0 * 1_G by Def7
+      .= g |^ 0 * (h |^ 0) by Def7;
   end;
   for n holds P[n] from NAT_1:sch 2(A4,A1);
   hence thesis;
 end;
 
-theorem Th60:
+theorem Th30:
   i <= 0 implies h |^ i = (h |^ abs(i))"
 proof
   assume
@@ -876,13 +875,13 @@ A1: i <= 0;
   per cases by A1;
   suppose
     i < 0;
-    hence thesis by Def9;
+    hence thesis by Def8;
   end;
   suppose
 A2: i = 0;
     hence h |^ i = 1_G by Lm3
-      .= (1_G)" by Th16
-      .= (h |^ 0)" by Def8
+      .= (1_G)" by Th8
+      .= (h |^ 0)" by Def7
       .= (h |^ abs(i))" by A2,ABSVALUE:def 1;
   end;
 end;
@@ -891,16 +890,16 @@ theorem
   (1_G) |^ i = 1_G
 proof
   (1_G) |^ i = (1_G) |^ abs(i) or (1_G) |^ i = ((1_G) |^ abs(i))" & (1_G)"
-  = 1_G by Def9,Th16;
+  = 1_G by Def8,Th8;
   hence thesis by Lm4;
 end;
 
-theorem Th62:
+theorem Th32:
   h |^ (-1) = h"
 proof
   abs( - 1 ) = - (-1) by ABSVALUE:def 1;
-  hence h |^ (-1) = (h |^ 1)" by Def9
-    .= h" by Th44;
+  hence h |^ (-1) = (h |^ 1)" by Def8
+    .= h" by Th26;
 end;
 
 Lm12: h |^ (- i) = (h |^ i)"
@@ -911,20 +910,20 @@ A1: i >= 0;
     per cases by A1,XREAL_1:24;
     suppose
 A2:   - i < -0;
-      hence h |^ (- i) = (h |^ abs( - i ))" by Def9
+      hence h |^ (- i) = (h |^ abs( - i ))" by Def8
         .= (h |^ (- (- i)))" by A2,ABSVALUE:def 1
         .= (h |^ i)";
     end;
     suppose
 A3:   i = 0;
       hence h |^ (- i) = 1_G by Lm3
-        .= (1_G)" by Th16
+        .= (1_G)" by Th8
         .= (h |^ i)" by A3,Lm3;
     end;
   end;
   suppose
 A4: i < 0;
-    then h |^ i = (h |^ abs(i))" by Def9;
+    then h |^ i = (h |^ abs(i))" by Def8;
     hence thesis by A4,ABSVALUE:def 1;
   end;
 end;
@@ -949,39 +948,39 @@ A4:   abs( j - 1 ) + 1 = j - 1 + 1 by ABSVALUE:def 1
         .= j;
 A5:   abs j = j by A2,ABSVALUE:def 1;
 A6:   abs j = abs(-j) by COMPLEX1:52;
-      thus h|^(j - 1) * (h * (h|^(- j))) = h|^(j - 1) * h * (h|^(- j)) by Def4
-        .= h |^ abs( j - 1 ) * h * (h |^ (- j)) by A3,Def9
-        .= h |^ abs( j - 1 ) * h * ((h |^ abs( - j ))") by A2,Th60
+      thus h|^(j - 1) * (h * (h|^(- j))) = h|^(j - 1) * h * (h|^(- j)) by Def3
+        .= h |^ abs( j - 1 ) * h * (h |^ (- j)) by A3,Def8
+        .= h |^ abs( j - 1 ) * h * ((h |^ abs( - j ))") by A2,Th30
         .= h |^ (abs( j - 1 ) + 1) * ((h |^ abs( - j ))") by Lm6
-        .= 1_G by A4,A5,A6,Def6;
+        .= 1_G by A4,A5,A6,Def5;
     end;
     suppose
 A7:   j < 0;
 A8:   1 - j = - (j - 1);
       thus h |^ (j - 1) * (h * (h |^ (- j))) = (h |^ abs( j - 1 ))" * (h * (h
-      |^ (- j))) by A7,Def9
-        .= (h |^ abs( j - 1 ))" * (h * (h |^ abs( - j ))) by A7,Def9
+      |^ (- j))) by A7,Def8
+        .= (h |^ abs( j - 1 ))" * (h * (h |^ abs( - j ))) by A7,Def8
         .= (h |^ abs( j - 1 ))" * (h |^ (1 + abs( - j ))) by Lm6
         .= (h |^ abs( j - 1 ))" * (h |^ (1 + (- j))) by A7,ABSVALUE:def 1
         .= (h |^ abs( j - 1 ))" * (h |^ abs( j - 1 )) by A7,A8,ABSVALUE:def 1
-        .= 1_G by Def6;
+        .= 1_G by Def5;
     end;
     suppose
 A9:   j = 0;
-      hence h |^ (j - 1) * (h * (h |^ (- j))) = h" * (h * (h |^ (- j))) by Th62
-        .= h " * h * (h |^ (- j)) by Def4
-        .= 1_G * (h |^ (- j)) by Def6
-        .= h |^ 0 by A9,Def5
-        .= 1_G by Def8;
+      hence h |^ (j - 1) * (h * (h |^ (- j))) = h" * (h * (h |^ (- j))) by Th32
+        .= h " * h * (h |^ (- j)) by Def3
+        .= 1_G * (h |^ (- j)) by Def5
+        .= h |^ 0 by A9,Def4
+        .= 1_G by Def7;
     end;
   end;
   h|^(j - 1) * (h|^(1 - j)) = h|^(j - 1) * (h|^(- (j - 1)))
     .= h |^ (j - 1) * (h |^ (j - 1))" by Lm12
-    .= 1_G by Def6;
-  then h * (h |^ (- j)) = h |^ (1 - j) by A1,Th14;
-  then (h |^ (1 - j))" = (h |^ (- j))" * h" by Th25
+    .= 1_G by Def5;
+  then h * (h |^ (- j)) = h |^ (1 - j) by A1,Th6;
+  then (h |^ (1 - j))" = (h |^ (- j))" * h" by Th17
     .= (h |^ (- (- j))) * h" by Lm12
-    .= h |^ j * (h |^ (-1)) by Th62;
+    .= h |^ j * (h |^ (-1)) by Th32;
   then h |^ j * (h |^ (-1)) = h |^ (- (1 - j)) by Lm12;
   hence thesis;
 end;
@@ -1015,52 +1014,52 @@ A3:   n + 1 = abs( j + 1 ) by ABSVALUE:def 1;
       n + 1 >= 0;
       hence
       h |^ (j + 1) * ((h |^ (-1)) * (h |^ (- j))) = h |^ abs( j + 1 ) * (
-      (h |^ (-1)) * (h |^ (- j))) by Def9
-        .= h |^ abs( j + 1 ) * (h" * (h |^ (- j))) by Th62
+      (h |^ (-1)) * (h |^ (- j))) by Def8
+        .= h |^ abs( j + 1 ) * (h" * (h |^ (- j))) by Th32
         .= h |^ abs( j + 1 ) * (h" * (h |^ j)") by Lm12
-        .= h |^ abs( j + 1 ) * (h" * (h |^ abs( j ))") by A2,Def9
-        .= h |^ abs( j + 1 ) * ((h |^ abs( j ) * h)") by Th25
+        .= h |^ abs( j + 1 ) * (h" * (h |^ abs( j ))") by A2,Def8
+        .= h |^ abs( j + 1 ) * ((h |^ abs( j ) * h)") by Th17
         .= h |^ abs( j + 1 ) * (h |^ (abs( j ) + 1))" by Lm6
         .= h |^ abs( j + 1 ) * (h |^ abs( j + 1 ))" by A3,ABSVALUE:def 1
-        .= 1_G by Def6;
+        .= 1_G by Def5;
     end;
     suppose
       j < - 1;
       then
 A4:   j + 1 < - 1 + 1 by XREAL_1:6;
       hence h |^ (j + 1) * ((h |^ (-1)) * (h |^ (- j))) = (h |^ abs( j + 1 ))"
-      * ((h |^ (-1)) * (h |^ (- j))) by Def9
-        .= (h |^ abs( j + 1 ))" * (h" * (h |^ (- j))) by Th62
-        .= (h |^ abs( j + 1 ))" * h" * (h |^ (- j)) by Def4
-        .= (h * (h |^ abs( j + 1 )))" * (h |^ (- j)) by Th25
+      * ((h |^ (-1)) * (h |^ (- j))) by Def8
+        .= (h |^ abs( j + 1 ))" * (h" * (h |^ (- j))) by Th32
+        .= (h |^ abs( j + 1 ))" * h" * (h |^ (- j)) by Def3
+        .= (h * (h |^ abs( j + 1 )))" * (h |^ (- j)) by Th17
         .= (h |^ (abs( j + 1 ) + 1))" * (h |^ (- j)) by Lm6
         .= (h |^ (- (j + 1) + 1))" * (h |^ (- j)) by A4,ABSVALUE:def 1
-        .= 1_G by Def6;
+        .= 1_G by Def5;
     end;
     suppose
 A5:   j = - 1;
       hence h |^ (j + 1) * ((h |^ (-1)) * (h |^ (- j))) = 1_G * ((h |^ (-1)) *
       (h |^ (- j))) by Lm3
-        .= (h |^ (-1)) * (h |^ (- j)) by Def5
-        .= h" * (h |^ (- j)) by Th62
+        .= (h |^ (-1)) * (h |^ (- j)) by Def4
+        .= h" * (h |^ (- j)) by Th32
         .= h" * (h |^ j)" by Lm12
-        .= h" * h"" by A5,Th62
-        .= 1_G by Def6;
+        .= h" * h"" by A5,Th32
+        .= 1_G by Def5;
     end;
   end;
   h |^ (j + 1) * (h |^ (- (j + 1))) = h |^ (j + 1) * (h |^ (j + 1))" by Lm12
-    .= 1_G by Def6;
+    .= 1_G by Def5;
   then
-A6: h |^ (- (j + 1)) = h |^ (-1) * (h |^ (- j)) by A1,Th14;
+A6: h |^ (- (j + 1)) = h |^ (-1) * (h |^ (- j)) by A1,Th6;
   thus h |^ (j + 1) = h |^ (- (- (j + 1)))
     .= ((h |^ (-1)) * (h |^ (- j)))" by A6,Lm12
-    .= (h |^ (- j))" * (h |^ (-1))" by Th25
+    .= (h |^ (- j))" * (h |^ (-1))" by Th17
     .= h |^ (- (- j)) * (h |^ (-1))" by Lm12
     .= h |^ j * (h |^ (- (-1))) by Lm12
     .= h |^ j * (h |^ 1);
 end;
 
-theorem Th63:
+theorem Th33:
   h |^ (i + j) = (h |^ i) * (h |^ j)
 proof
   defpred P[Integer] means for i holds h |^ (i + $1) = h |^ i * (h |^ $1);
@@ -1075,7 +1074,7 @@ A2: for i holds h |^ (i + j) = h |^ i * (h |^ j);
       thus h |^ (i + (j - 1)) = h |^ ((i - 1) + j)
         .= h |^ (i - 1) * (h |^ j) by A2
         .= h |^ i * (h |^ (-1)) * (h |^ j) by Lm14
-        .= h |^ i * ((h |^ (-1)) * (h |^ j)) by Def4
+        .= h |^ i * ((h |^ (-1)) * (h |^ j)) by Def3
         .= h |^ i * (h |^ (j + (-1))) by A2
         .= h |^ i * (h |^ (j - 1));
     end;
@@ -1083,14 +1082,14 @@ A2: for i holds h |^ (i + j) = h |^ i * (h |^ j);
     thus h |^ (i + (j + 1)) = h |^ ((i + 1) + j)
       .= h |^ (i + 1) * (h |^ j) by A2
       .= h |^ i * (h |^ 1) * (h |^ j) by Lm16
-      .= h |^ i * ((h |^ 1) * (h |^ j)) by Def4
+      .= h |^ i * ((h |^ 1) * (h |^ j)) by Def3
       .= h |^ i * (h |^ (j + 1)) by A2;
   end;
 A3: P[0]
   proof
     let i;
-    thus h |^ (i + 0) = h |^ i * 1_G by Def5
-      .= h |^ i * (h |^ 0) by Def8;
+    thus h |^ (i + 0) = h |^ i * 1_G by Def4
+      .= h |^ i * (h |^ 0) by Def7;
   end;
   for j holds P[j] from INT_1:sch 4(A3,A1);
   hence thesis;
@@ -1099,8 +1098,8 @@ end;
 theorem
   h |^ (i + 1) = h |^ i * h & h |^ (i + 1) = h * (h |^ i)
 proof
-  h |^ 1 = h by Th44;
-  hence thesis by Th63;
+  h |^ 1 = h by Th26;
+  hence thesis by Th33;
 end;
 
 Lm17: h" |^ i = (h |^ i)"
@@ -1114,9 +1113,9 @@ proof
   end;
   suppose
 A1: i < 0;
-    hence h" |^ i = (h" |^ abs(i))" by Def9
+    hence h" |^ i = (h" |^ abs(i))" by Def8
       .= (h |^ abs(i))"" by Lm8
-      .= (h |^ i)" by A1,Def9;
+      .= (h |^ i)" by A1,Def8;
   end;
 end;
 
@@ -1173,7 +1172,7 @@ theorem
 theorem
   h" |^ i = (h |^ i)" by Lm17;
 
-theorem Th73:
+theorem Th38:
   g * h = h * g implies (g * h) |^ i = g |^ i * (h |^ i)
 proof
   assume
@@ -1182,21 +1181,21 @@ A1: g * h = h * g;
   suppose
 A2: i >= 0;
     then
-A3: h |^ i = h |^ abs(i) by Def9;
-    (g * h) |^ i = (g * h) |^ abs(i) & g |^ i = g |^ abs(i) by A2,Def9;
+A3: h |^ i = h |^ abs(i) by Def8;
+    (g * h) |^ i = (g * h) |^ abs(i) & g |^ i = g |^ abs(i) by A2,Def8;
     hence thesis by A1,A3,Lm11;
   end;
   suppose
 A4: i < 0;
-    hence (g * h) |^ i = ((h * g) |^ abs(i))" by A1,Def9
+    hence (g * h) |^ i = ((h * g) |^ abs(i))" by A1,Def8
       .= (h |^ abs(i) * (g |^ abs(i)))" by A1,Lm11
-      .= (g |^ abs(i))" * (h |^ abs(i))" by Th25
-      .= g |^ i * (h |^ abs(i))" by A4,Def9
-      .= g |^ i * (h |^ i) by A4,Def9;
+      .= (g |^ abs(i))" * (h |^ abs(i))" by Th17
+      .= g |^ i * (h |^ abs(i))" by A4,Def8
+      .= g |^ i * (h |^ i) by A4,Def8;
   end;
 end;
 
-theorem Th74:
+theorem Th39:
   g * h = h * g implies g |^ i * (h |^ j) = h |^ j * (g |^ i)
 proof
   assume
@@ -1204,28 +1203,28 @@ A1: g * h = h * g;
   per cases;
   suppose
     i >= 0 & j >= 0;
-    then g |^ i = g |^ abs(i) & h |^ j = h |^ abs( j ) by Def9;
+    then g |^ i = g |^ abs(i) & h |^ j = h |^ abs( j ) by Def8;
     hence thesis by A1,Lm10;
   end;
   suppose
 A2: i >= 0 & j < 0;
 A3: g|^abs(i) * (h|^abs( j )) = h|^abs( j ) * (g|^abs(i)) by A1,Lm10;
-    g |^ i = g |^ abs(i) & h |^ j = (h |^ abs( j ))" by A2,Def9;
-    hence thesis by A3,Th28;
+    g |^ i = g |^ abs(i) & h |^ j = (h |^ abs( j ))" by A2,Def8;
+    hence thesis by A3,Th20;
   end;
   suppose
 A4: i < 0 & j >= 0;
 A5: g|^abs(i) * (h|^abs( j )) = h|^abs( j ) * (g|^abs(i)) by A1,Lm10;
-    g |^ i = (g |^ abs(i))" & h |^ j = h |^ abs( j ) by A4,Def9;
-    hence thesis by A5,Th28;
+    g |^ i = (g |^ abs(i))" & h |^ j = h |^ abs( j ) by A4,Def8;
+    hence thesis by A5,Th20;
   end;
   suppose
     i < 0 & j < 0;
     then
-A6: g |^ i = (g |^ abs(i))" & h |^ j = (h |^ abs( j ))" by Def9;
-    hence g |^ i * (h |^ j) = (h |^ abs( j ) * (g |^ abs(i)))" by Th25
+A6: g |^ i = (g |^ abs(i))" & h |^ j = (h |^ abs( j ))" by Def8;
+    hence g |^ i * (h |^ j) = (h |^ abs( j ) * (g |^ abs(i)))" by Th17
       .= (g |^ abs(i) * (h |^ abs( j )))" by A1,Lm10
-      .= h |^ j * (g |^ i) by A6,Th25;
+      .= h |^ j * (g |^ i) by A6,Th17;
   end;
 end;
 
@@ -1234,15 +1233,15 @@ theorem
 proof
   assume
 A1: g * h = h * g;
-  thus g * (h |^ i) = g |^ 1 * (h |^ i) by Th44
-    .= h |^ i * (g |^ 1) by A1,Th74
-    .= h |^ i * g by Th44;
+  thus g * (h |^ i) = g |^ 1 * (h |^ i) by Th26
+    .= h |^ i * (g |^ 1) by A1,Th39
+    .= h |^ i * g by Th26;
 end;
 
 definition
   let G,h;
   attr h is being_of_order_0 means
-  :Def11:
+  :Def10:
   h |^ n = 1_G implies n = 0;
 end;
 
@@ -1252,14 +1251,14 @@ registration
   coherence
   proof
     (1_G) |^ 8 = 1_G by Lm4;
-    hence thesis by Def11;
+    hence thesis by Def10;
   end;
 end;
 
 definition
   let G,h;
   func ord h -> Element of NAT means
-  :Def12:
+  :Def11:
   it = 0 if h is being_of_order_0
   otherwise
   h |^ it = 1_G & it <> 0 & for m st h |^ m = 1_G & m <> 0 holds it <= m;
@@ -1270,7 +1269,7 @@ definition
     hereby
       assume not h is being_of_order_0;
       then
-A1:   ex n being Nat st P[n] by Def11;
+A1:   ex n being Nat st P[n] by Def10;
       consider k being Nat such that
 A2:   P[k] and
 A3:   for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A1);
@@ -1297,18 +1296,18 @@ n1 <= m )& h |^ n2 = 1_G &( n2 <> 0 & for m st h |^ m = 1_G & m <> 0 holds n2
   correctness;
 end;
 
-theorem Th82:
+theorem Th41:
   h |^ ord h = 1_G
 proof
   per cases;
   suppose
     h is being_of_order_0;
-    then ord h = 0 by Def12;
-    hence thesis by Def8;
+    then ord h = 0 by Def11;
+    hence thesis by Def7;
   end;
   suppose
     h is not being_of_order_0;
-    hence thesis by Def12;
+    hence thesis by Def11;
   end;
 end;
 
@@ -1317,7 +1316,7 @@ theorem
 proof
 A1: for n st (1_G) |^ n = 1_G & n <> 0 holds 1 <= n by NAT_1:14;
   ( not 1_G is being_of_order_0)& (1_G) |^ 1 = 1_G by Lm4;
-  hence thesis by A1,Def12;
+  hence thesis by A1,Def11;
 end;
 
 theorem
@@ -1325,9 +1324,9 @@ theorem
 proof
   assume
 A1: ord h = 1;
-  then not h is being_of_order_0 by Def12;
-  then h |^ 1 = 1_G by A1,Def12;
-  hence thesis by Th44;
+  then not h is being_of_order_0 by Def11;
+  then h |^ 1 = 1_G by A1,Def11;
+  hence thesis by Th26;
 end;
 
 theorem
@@ -1351,18 +1350,18 @@ A4:   n <> 0;
       per cases;
       suppose
         ord h = 0;
-        then h is being_of_order_0 by Def12;
-        hence thesis by A3,A4,Def11;
+        then h is being_of_order_0 by Def11;
+        hence thesis by A3,A4,Def10;
       end;
       suppose
 A5:     ord h <> 0;
-        then h is not being_of_order_0 by Def12;
-        then ord h <= n by A3,A4,Def12;
+        then h is not being_of_order_0 by Def11;
+        then ord h <= n by A3,A4,Def11;
         then consider m being Nat such that
 A6:     n = ord h + m by NAT_1:10;
         h |^ n = h |^ ord h * (h |^ m) by A6,Lm5
-          .= 1_G * (h |^ m) by Th82
-          .= h |^ m by Def5;
+          .= 1_G * (h |^ m) by Th41
+          .= h |^ m by Def4;
         then ord h divides m by A2,A3,A5,A6,NAT_1:16;
         then consider i being Nat such that
 A7:     m = ord h * i by NAT_D:def 3;
@@ -1399,7 +1398,7 @@ definition
 
   let IT be multMagma;
   attr IT is commutative means
-  :Def16:
+  :Def12:
   for x, y being Element of IT holds x*y = y*x;
 end;
 
@@ -1407,7 +1406,7 @@ registration
   cluster strict commutative for Group;
   existence
   proof
-    reconsider G0 = multMagma (# REAL, addreal #) as Group by Th7;
+    reconsider G0 = multMagma (# REAL, addreal #) as Group by Th3;
     take G0;
     thus G0 is strict;
     let a,g be Element of G0;
@@ -1421,13 +1420,13 @@ definition
   let FS be commutative non empty multMagma;
   let x,y be Element of FS;
   redefine func x*y;
-  commutativity by Def16;
+  commutativity by Def12;
 end;
 
 theorem
   multMagma (# REAL, addreal #) is commutative Group
 proof
-  reconsider G = multMagma (# REAL, addreal #) as Group by Th7;
+  reconsider G = multMagma (# REAL, addreal #) as Group by Th3;
   G is commutative
   proof
     let h,g be Element of G;
@@ -1442,10 +1441,10 @@ reserve A for commutative Group;
 reserve a,b for Element of A;
 
 theorem
-  (a * b)" = a" * b" by Th25;
+  (a * b)" = a" * b" by Th17;
 
 theorem
-  (a * b) |^ i = a |^ i * (b |^ i) by Th73;
+  (a * b) |^ i = a |^ i * (b |^ i) by Th38;
 
 theorem
   addLoopStr (# the carrier of A, the multF of A, 1_A #) is Abelian
@@ -1463,35 +1462,35 @@ A1: for a,b be Element of G, x,y be Element of A st a = x & b = y holds a
   hereby
     let a,b,c be Element of G;
     reconsider x = a, y = b, z = c as Element of A;
-    thus a + b + c = x * y * z .= x * (y * z) by Def4
+    thus a + b + c = x * y * z .= x * (y * z) by Def3
       .= a + (b + c);
   end;
   hereby
     let a be Element of G;
     reconsider x = a as Element of A;
-    thus a + 0.G = x * 1_A .= a by Def5;
+    thus a + 0.G = x * 1_A .= a by Def4;
   end;
   let a be Element of G;
   reconsider x = a as Element of A;
   reconsider b = inverse_op(A).x as Element of G;
   take b;
-  thus a + b = x * x" by Def7
-    .= 0.G by Def6;
+  thus a + b = x * x" by Def6
+    .= 0.G by Def5;
 end;
 
 begin :: Addenda
 :: from COMPTRIG, 2006.08.12, A.T.
 
-theorem Th98:
+theorem Th50:
   for L be unital non empty multMagma for x be Element of L holds
   (power L).(x,1) = x
 proof
   let L be unital non empty multMagma;
   let x be Element of L;
   0+1 = 1;
-  hence (power L).(x,1) = (power L).(x,0) * x by Def8
-    .= 1_L * x by Def8
-    .= x by Def5;
+  hence (power L).(x,1) = (power L).(x,0) * x by Def7
+    .= 1_L * x by Def7
+    .= x by Def4;
 end;
 
 theorem
@@ -1501,8 +1500,8 @@ proof
   let L be unital non empty multMagma;
   let x be Element of L;
   1+1 = 2;
-  hence (power L).(x,2) = (power L).(x,1) * x by Def8
-    .= x * x by Th98;
+  hence (power L).(x,2) = (power L).(x,1) * x by Def7
+    .= x * x by Th50;
 end;
 
 theorem
@@ -1518,18 +1517,18 @@ A1: now
     let n be Element of NAT;
     assume P[n];
     then (power L).(x*y,n+1) = (power L).(x,n) * (power L).(y,n) * (x*y) by
-Def8
-      .= (power L).(x,n) * ((power L).(y,n) * (x*y)) by Def4
-      .= (power L).(x,n) * (x*((power L).(y,n)*y)) by Def4
-      .= (power L).(x,n) * (x*(power L).(y,n+1)) by Def8
-      .= (power L).(x,n)*x * (power L).(y,n+1) by Def4
-      .= (power L).(x,n+1) * (power L).(y,n+1) by Def8;
+Def7
+      .= (power L).(x,n) * ((power L).(y,n) * (x*y)) by Def3
+      .= (power L).(x,n) * (x*((power L).(y,n)*y)) by Def3
+      .= (power L).(x,n) * (x*(power L).(y,n+1)) by Def7
+      .= (power L).(x,n)*x * (power L).(y,n+1) by Def3
+      .= (power L).(x,n+1) * (power L).(y,n+1) by Def7;
     hence P[n+1];
   end;
-  (power L).(x*y,0) = 1_L by Def8
-    .= 1_L * 1_L by Def5
-    .= (power L).(x,0) * 1_L by Def8
-    .= (power L).(x,0) * (power L).(y,0) by Def8;
+  (power L).(x*y,0) = 1_L by Def7
+    .= 1_L * 1_L by Def4
+    .= (power L).(x,0) * 1_L by Def7
+    .= (power L).(x,0) * (power L).(y,0) by Def7;
   then
 A2: P[0];
   thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A1);

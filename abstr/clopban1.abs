@@ -2,7 +2,7 @@
 ::  by Noboru Endou
 ::
 :: Received February 24, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -20,19 +20,18 @@ environ
       ALGSTR_0, MONOID_0, TARSKI, MSSUBFAM, UNIALG_1, RLSUB_1, RSSPACE, NAT_1,
       PRE_TOPC, SEQ_2, ORDINAL2, NORMSP_1, XREAL_0, XXREAL_0, CARD_1, REAL_1,
       XXREAL_2, SEQ_4, REWRITE1, RSSPACE3, CSSPACE3, SEQ_1, VALUED_1, CLOPBAN1,
-      METRIC_1, RELAT_2;
+      METRIC_1, RELAT_2, FCONT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XCMPLX_0,
-      XXREAL_0, XXREAL_2, XREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0,
-      MONOID_0, ORDINAL1, NUMBERS, MEASURE6, RLVECT_1, NORMSP_0, NORMSP_1,
-      VALUED_1, SEQ_1, SEQ_2, SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE,
-      CSSPACE3, LOPBAN_1, GRCAT_1;
- constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQM_3,
-      FUNCSDOM, MONOID_0, MEASURE6, LOPBAN_1, CSSPACE3, SEQ_1, XXREAL_2, SEQ_4,
-      RELSET_1, BINOP_2, RVSUM_1, SEQ_2;
+      XXREAL_0, XXREAL_2, XREAL_0, COMPLEX1, REAL_1, ORDINAL1, NAT_1, STRUCT_0,
+      ALGSTR_0, MONOID_0, NUMBERS, RLVECT_1, NORMSP_0, NORMSP_1, VALUED_1,
+      SEQ_1, SEQ_2, SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3,
+      LOPBAN_1, VECTSP_1;
+ constructors DOMAIN_1, REAL_1, COMPLEX1, FUNCSDOM, MONOID_0, LOPBAN_1,
+      CSSPACE3, SEQ_1, SEQ_4, RELSET_1, BINOP_2, SEQ_2, COMSEQ_2, FUNCT_3;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, MONOID_0,
-      CLVECT_1, CSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4, FUNCT_1;
+      XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, MONOID_0, CLVECT_1,
+      CSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4, FUNCT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -145,7 +144,6 @@ begin :: Complex Vector Space of Linear Operators
 definition
   let X, Y be non empty CLSStruct;
   let IT be Function of X,Y;
-
   attr IT is homogeneous means
 :: CLOPBAN1:def 3
 
@@ -251,20 +249,20 @@ holds seq is convergent & lim seq = g implies ||.seq.|| is convergent & lim ||.
 definition
   let X, Y be ComplexNormSpace;
   let IT be LinearOperator of X,Y;
-  attr IT is bounded means
+  attr IT is Lipschitzian means
 :: CLOPBAN1:def 6
 
-  ex K being Real st 0 <= K & for x being
-  VECTOR of X holds ||. IT.x .|| <= K * ||. x .||;
+  ex K being Real st 0 <= K &
+  for x being VECTOR of X holds ||. IT.x .|| <= K * ||. x .||;
 end;
 
 theorem :: CLOPBAN1:20
   for X,Y be ComplexNormSpace holds for f be LinearOperator of X,Y
-  st (for x be VECTOR of X holds f.x=0.Y) holds f is bounded;
+  st (for x be VECTOR of X holds f.x=0.Y) holds f is Lipschitzian;
 
 registration
   let X, Y be ComplexNormSpace;
-  cluster bounded for LinearOperator of X,Y;
+  cluster Lipschitzian for LinearOperator of X,Y;
 end;
 
 definition
@@ -273,7 +271,7 @@ definition
   C_VectorSpace_of_LinearOperators(X,Y) means
 :: CLOPBAN1:def 7
 
-  for x being set holds x in it iff x is bounded LinearOperator of X,Y;
+  for x being set holds x in it iff x is Lipschitzian LinearOperator of X,Y;
 end;
 
 registration
@@ -349,7 +347,7 @@ definition
   let X, Y be ComplexNormSpace;
   let f be set such that
  f in BoundedLinearOperators(X,Y);
-  func modetrans(f,X,Y) -> bounded LinearOperator of X,Y equals
+  func modetrans(f,X,Y) -> Lipschitzian LinearOperator of X,Y equals
 :: CLOPBAN1:def 9
 
   f;
@@ -365,12 +363,12 @@ definition
 end;
 
 theorem :: CLOPBAN1:26
-  for X,Y be ComplexNormSpace, g be bounded LinearOperator of X,Y
+  for X,Y be ComplexNormSpace, g be Lipschitzian LinearOperator of X,Y
   holds PreNorms(g) is bounded_above;
 
 theorem :: CLOPBAN1:27
   for X,Y be ComplexNormSpace, g be LinearOperator of X,Y holds g is
-  bounded iff PreNorms(g) is bounded_above;
+  Lipschitzian iff PreNorms(g) is bounded_above;
 
 definition
   let X, Y be ComplexNormSpace;
@@ -383,11 +381,11 @@ definition
 end;
 
 theorem :: CLOPBAN1:28
-  for X,Y be ComplexNormSpace, f be bounded LinearOperator of X,Y
+  for X,Y be ComplexNormSpace, f be Lipschitzian LinearOperator of X,Y
   holds modetrans(f,X,Y)=f;
 
 theorem :: CLOPBAN1:29
-  for X,Y be ComplexNormSpace, f be bounded LinearOperator of X,Y
+  for X,Y be ComplexNormSpace, f be Lipschitzian LinearOperator of X,Y
   holds BoundedLinearOperatorsNorm(X,Y).f = upper_bound PreNorms(f);
 
 definition
@@ -405,8 +403,9 @@ theorem :: CLOPBAN1:30
   0.C_NormSpace_of_BoundedLinearOperators(X,Y);
 
 theorem :: CLOPBAN1:31
-  for X,Y be ComplexNormSpace, f being Point of
-C_NormSpace_of_BoundedLinearOperators(X,Y), g be bounded LinearOperator of X,Y
+  for X,Y be ComplexNormSpace,
+  f being Point of C_NormSpace_of_BoundedLinearOperators(X,Y),
+  g be Lipschitzian LinearOperator of X,Y
   st g=f holds for t be VECTOR of X holds ||.g.t.|| <= ||.f.|| * ||.t.||;
 
 theorem :: CLOPBAN1:32

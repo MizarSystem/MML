@@ -2,7 +2,7 @@
 ::  by Rafa{\l} Kwiatek
 ::
 :: Received July 27, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,9 +17,10 @@ environ
  vocabularies NUMBERS, NAT_1, XREAL_0, ORDINAL1, FINSEQ_1, RELAT_1, FUNCT_1,
       XXREAL_0, XBOOLE_0, SUBSET_1, ARYTM_3, TARSKI, FINSEQ_2, XCMPLX_0,
       RVSUM_1, CARD_3, REAL_1, CARD_1, ORDINAL4, REALSET1, ARYTM_1, PARTFUN1,
-      INT_2, INT_1, FINSET_1, SQUARE_1, FUNCOP_1, NEWTON;
+      INT_2, INT_1, FINSET_1, SQUARE_1, FUNCOP_1, NEWTON, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, FINSEQ_1,
+      XREAL_0, REAL_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      VALUED_0, FINSET_1, FINSEQ_1,
       FINSEQ_2, FUNCOP_1, INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1,
       XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, NAT_D, BINOP_2,
@@ -31,7 +32,7 @@ environ
  definitions TARSKI, XBOOLE_0, FINSEQ_1, SQUARE_1, FINSEQ_2, RVSUM_1;
  theorems TARSKI, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FUNCT_1, INT_1, XREAL_0,
       XBOOLE_0, XCMPLX_1, INT_2, CARD_2, CARD_1, XBOOLE_1, XREAL_1, XCMPLX_0,
-      XXREAL_0, RELAT_1, FINSOP_1, ORDINAL1, NAT_D, PARTFUN1, VALUED_1,
+      XXREAL_0, FINSOP_1, ORDINAL1, NAT_D, PARTFUN1, VALUED_1,
       FUNCOP_1, ZFMISC_1;
  schemes NAT_1, FINSEQ_1, SUBSET_1, NAT_D;
 
@@ -41,11 +42,7 @@ reserve i,j,k,n,m,l,s,t,r for Nat;
 reserve a,b for real number;
 reserve F,G,H for FinSequence of REAL;
 
-Lm1:
-  for F,G being FinSequence st len F = len G &
-  (for i st i in dom F holds F.i = G.i) holds F = G by FINSEQ_2:9;
-
-theorem Th5:
+theorem Th1:
   n>=1 implies Seg n = {1} \/ {k where k is Element of NAT: 1<k & k <n} \/ {n}
 proof
   assume
@@ -97,7 +94,7 @@ XBOOLE_0:def 3;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
-theorem Th6:
+theorem Th2:
   len (a*F) = len F
 proof
   reconsider G = F as Element of (len F)-tuples_on REAL by FINSEQ_2:92;
@@ -105,22 +102,10 @@ proof
   hence thesis;
 end;
 
-theorem Th7:
+theorem
   dom G = dom (a*G) by VALUED_1:def 5;
 
 :: x |^ n Function
-
-definition
-  let i be Nat;
-  let x be real number;
-  redefine func i |-> x -> FinSequence of REAL;
-  coherence
-  proof
-    let z be set;
-    assume z in rng (i |-> x);
-    hence thesis;
-  end;
-end;
 
 registration
   let x be complex number, n be Nat;
@@ -158,23 +143,18 @@ end;
 theorem
   z|^0 = 1 by RVSUM_1:94;
 
-theorem Th10:
+theorem Th5:
   z|^1 = z
 proof
-  reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
-  z|^1 = Product(<*z*>) by FINSEQ_2:59
+  thus z|^1 = Product(<*z*>) by FINSEQ_2:59
     .= z by RVSUM_1:95;
-  hence thesis;
 end;
 
-theorem Th11:
-  z|^(s+1) = z|^s*z
+theorem Th6:
+  z|^(s+1) = z|^s * z
 proof
-  defpred P[Nat] means z|^($1+1) = z|^$1*z;
-  reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
-  z|^(s+1) = Product((s |-> z) ^ <*z*>) by FINSEQ_2:60
-    .= Product(s |-> z)*z by RVSUM_1:96;
-  hence thesis;
+  thus z|^(s+1) = Product((s |-> z) ^ <*z*>) by FINSEQ_2:60
+    .= z|^s*z by RVSUM_1:96;
 end;
 
 registration
@@ -188,7 +168,7 @@ A1: for a being Nat st P[a] holds P[a+1]
       let a be Nat;
       assume P[a];
       then reconsider b = x|^a as Nat;
-      x|^(a+1) = b*x by Th11;
+      x|^(a+1) = b*x by Th6;
       hence thesis;
     end;
 A2: P[0] by RVSUM_1:94;
@@ -207,7 +187,7 @@ proof
   hence thesis;
 end;
 
-theorem Th13:
+theorem Th8:
   x|^(s+t) = x|^s * x|^t
 proof
   reconsider x as Element of COMPLEX by XCMPLX_0:def 2;
@@ -223,14 +203,14 @@ proof
   hence thesis;
 end;
 
-theorem Th15:
+theorem Th10:
   1|^s = 1
 proof
   defpred P[Nat] means 1|^$1 = 1;
 A1: now
     let s;
     assume P[s];
-    then 1|^(s+1) = 1 * 1 by Th11;
+    then 1|^(s+1) = 1 * 1 by Th6;
     hence P[s+1];
   end;
 A2: P[0] by RVSUM_1:94;
@@ -238,46 +218,35 @@ A2: P[0] by RVSUM_1:94;
   hence thesis;
 end;
 
-theorem Th16:
+theorem Th11:
   s >= 1 implies 0|^s = 0
 proof
   defpred P[Nat] means 0|^$1 = 0;
 A1: now
     let n be Nat;
     assume n>=1 & P[n];
-    0|^(n+1) = 0|^n * 0 by Th11
+    0|^(n+1) = 0|^n * 0 by Th6
       .= 0;
     hence P[n+1];
   end;
-A2: P[1] by Th10;
+A2: P[1] by Th5;
   for n be Nat st n >=1 holds P[n] from NAT_1:sch 8(A2,A1);
   hence thesis;
 end;
 
 :: n! Function
 
-definition
+registration
   let n be Nat;
-  redefine func idseq n -> FinSequence of REAL;
-  coherence
-  proof
-    let x be set;
-    assume x in rng idseq n;
-    then consider y be set such that
-A1: y in dom idseq n and
-A2: x = idseq n.y by FUNCT_1:def 3;
-A3: y in Seg n by A1,RELAT_1:45;
-    reconsider y as Element of NAT by A1;
-    (idseq n).y = y by A3,FUNCT_1:18;
-    hence thesis by A2;
-  end;
+  cluster idseq n -> natural-valued;
+  coherence;
 end;
 
 definition
   let n be Nat;
-  func n! -> Real equals
+  func n! -> Element of REAL equals
   Product idseq n;
-  coherence;
+  coherence by XREAL_0:def 1;
 end;
 
 registration
@@ -286,7 +255,7 @@ registration
   coherence;
 end;
 
-theorem Th18:
+theorem Th12:
   0! = 1 by RVSUM_1:94;
 
 theorem
@@ -295,19 +264,18 @@ theorem
 theorem
   2! = 2
 proof
-  2! = 1*2 by FINSEQ_2:52,RVSUM_1:99;
-  hence thesis;
+  thus 2! = 1*2 by FINSEQ_2:52,RVSUM_1:99
+  .= 2;
 end;
 
-theorem Th21:
+theorem Th15:
   (s+1)! = (s!) * (s+1)
 proof
-  set r1 = s+1;
-  idseq (s+1) = idseq s ^ <* r1 *> by FINSEQ_2:51;
+  idseq (s+1) = idseq s ^ <* s+1 *> by FINSEQ_2:51;
   hence thesis by RVSUM_1:96;
 end;
 
-theorem Th22:
+theorem Th16:
   s! is Element of NAT
 proof
   defpred P[Nat] means $1! is Element of NAT;
@@ -315,7 +283,7 @@ A1: now
     let s;
     assume P[s];
     then reconsider k=s! as Element of NAT;
-    (s+1)! = (s+1) * k by Th21;
+    (s+1)! = (s+1) * k by Th15;
     hence P[s+1];
   end;
 A2: P[0] by RVSUM_1:94;
@@ -326,10 +294,10 @@ end;
 registration
   let n;
   cluster n! -> natural;
-  coherence by Th22;
+  coherence by Th16;
 end;
 
-theorem Th23:
+theorem Th17:
   s! > 0
 proof
   defpred P[Nat] means $1!>0;
@@ -337,7 +305,7 @@ A1: now
     let s;
     assume P[s];
     then (s+1) * (s!)>(s+1) * 0;
-    hence P[s+1] by Th21;
+    hence P[s+1] by Th15;
   end;
 A2: P[0] by RVSUM_1:94;
   for s holds P[s] from NAT_1:sch 2(A2,A1);
@@ -347,7 +315,7 @@ end;
 registration
   let n;
   cluster n! -> positive;
-  coherence by Th23;
+  coherence by Th17;
 end;
 
 theorem
@@ -404,8 +372,7 @@ A1:   n >= k;
       n choose k = (n!)/((k!) * (l!)) by A1,Def3;
       hence thesis;
     end;
-    suppose
-      n < k;
+    suppose n < k;
       hence thesis by Def3;
     end;
   end;
@@ -417,17 +384,17 @@ definition
   coherence by XREAL_0:def 1;
 end;
 
-theorem Th29:
+theorem Th19:
   s choose 0 = 1
 proof
   reconsider m = s-0 as Element of NAT by ORDINAL1:def 12;
   m = s;
-  then (s choose 0) = (s!)/(1 * (s!)) by Def3,Th18
+  then (s choose 0) = (s!)/(1 * (s!)) by Def3,Th12
     .= 1 by XCMPLX_1:60;
   hence thesis;
 end;
 
-theorem Th30:
+theorem Th20:
   s >= t & r = s-t implies s choose t = s choose r
 proof
   assume
@@ -442,16 +409,16 @@ A3: r = s-t;
   hence thesis by A1,A3,Def3;
 end;
 
-theorem Th31:
+theorem Th21:
   s choose s = 1
 proof
   reconsider m = s-s as Element of NAT by INT_1:5;
   m = 0;
-  then s choose s = s choose 0 by Th30;
-  hence thesis by Th29;
+  then s choose s = s choose 0 by Th20;
+  hence thesis by Th19;
 end;
 
-theorem Th32:
+theorem Th22:
   (t+1) choose (s+1) = (t choose (s+1)) + (t choose s)
 proof
   per cases by XXREAL_0:1;
@@ -471,13 +438,13 @@ A4:   (t choose (s+1)) + (t choose s) = (t!)/(((s+1)!) * (m2!)) + (t!)/((s
         .= ((t!)*((s!)*(m1!))+(t!)*(((s+1)!)*(m2!)))/((((s+1)!)*(m2!))*((s!)
       *(m1!))) by XCMPLX_1:116
         .= (t!*((s!)*(m1!))+(t!)*(s!*(s+1)*(m2!)))/((((s+1)!)*(m2!))*((s!)*(
-      m1!))) by Th21
+      m1!))) by Th15
         .= (s!*((t!)*((m1!)+(s+1)*(m2!))))/(s!*((m1!)*((s+1)!*(m2!))))
         .=(t!*(((m2+1)!)+(s+1)*(m2!)))/(m1!*((s+1)!*(m2!))) by XCMPLX_1:91
-        .= (t!*((m2!)*(m2+1)+(m2!)*(s+1)))/(m1!*((s+1)!*(m2!))) by Th21
+        .= (t!*((m2!)*(m2+1)+(m2!)*(s+1)))/(m1!*((s+1)!*(m2!))) by Th15
         .= (m2!*((t!)*((m2+1)+(s+1))))/(m2!*(((s+1)!)*(m1!)))
         .= ((t!)*(t-(s-(s+1))))/(((s+1)!)*(m1!)) by XCMPLX_1:91
-        .= ((t+1)!)/(((s+1)!)*(m1!)) by Th21;
+        .= ((t+1)!)/(((s+1)!)*(m1!)) by Th15;
       m = m1;
       hence thesis by A4,A3,Def3;
     end;
@@ -487,8 +454,8 @@ A5: s=t;
     then s<t+1 by NAT_1:13;
     then
 A6: t choose (s+1)=0 by A5,Def3;
-    (t+1) choose (s+1)=1 by A5,Th31;
-    hence thesis by A5,A6,Th31;
+    (t+1) choose (s+1)=1 by A5,Th21;
+    hence thesis by A5,A6,Th21;
   end;
   suppose
 A7: s>t;
@@ -501,7 +468,7 @@ A9: s+1>t+0 by A7,XREAL_1:8;
   end;
 end;
 
-theorem Th33:
+theorem Th23:
   s >= 1 implies s choose 1 = s
 proof
   defpred P[Nat] means $1 choose 1 = $1;
@@ -510,11 +477,11 @@ A1: now
     assume that
     n>=1 and
 A2: P[n];
-    (n+1) choose 1 = (n+1) choose (0+1) .= n + n choose 0 by A2,Th32
-      .= n+1 by Th29;
+    (n+1) choose 1 = (n+1) choose (0+1) .= n + n choose 0 by A2,Th22
+      .= n+1 by Th19;
     hence P[n+1];
   end;
-A3: P[1] by Th31;
+A3: P[1] by Th21;
   for n be Nat st n >= 1 holds P[n] from NAT_1:sch 8(A3,A1);
   hence thesis;
 end;
@@ -525,11 +492,11 @@ proof
   assume that
 A1: s>=1 and
 A2: t = s-1;
-  s choose t = s choose 1 by A1,A2,Th30;
-  hence thesis by A1,Th33;
+  s choose t = s choose 1 by A1,A2,Th20;
+  hence thesis by A1,Th23;
 end;
 
-theorem Th35:
+theorem Th25:
   s choose r is Element of NAT
 proof
   defpred P[Nat] means for r holds ($1 choose r) is Element of NAT;
@@ -551,19 +518,19 @@ A5:     r = t+1 by A4,NAT_1:6;
         reconsider m1 = (s choose t), m2 = (s choose (t+1)) as Element of NAT
         by A2;
         m1 + m2 =(s choose t) + (s choose (t+1));
-        hence thesis by A5,Th32;
+        hence thesis by A5,Th22;
       end;
       hence thesis;
     end;
     let r;
     r = 0 or r<>0;
-    hence thesis by A3,Th29;
+    hence thesis by A3,Th19;
   end;
 A6: P[0]
   proof
     let r;
     r = 0 or r > 0;
-    hence thesis by Def3,Th29;
+    hence thesis by Def3,Th19;
   end;
   for s holds P[s] from NAT_1:sch 2(A6,A1);
   hence thesis;
@@ -597,8 +564,8 @@ A9:   dom F = Seg 1 by A3,A7,FINSEQ_1:def 3;
       then F.1 = n choose n by A4,A8;
       hence Sum F = Sum<*n choose n*> by A9,FINSEQ_1:def 8
         .= n choose n by FINSOP_1:11
-        .= 1 by Th31
-        .= (n+(m+1)) choose (n+1) by A7,Th31;
+        .= 1 by Th21
+        .= (n+(m+1)) choose (n+1) by A7,Th21;
     end;
     suppose
 A10:  m <> 0;
@@ -619,7 +586,7 @@ A16:  (n+m) choose n = (G^<*x*>).(len G +1) by A4,A5,A6,A11,FINSEQ_1:4
         .= x by FINSEQ_1:42;
       thus Sum F = Sum G + x by A5,RVSUM_1:74
         .= (n+m) choose (n+1) + (n+m) choose n by A2,A6,A10,A12,A16
-        .= (n+m+1) choose (n+1) by Th32
+        .= (n+m+1) choose (n+1) by Th22
         .= (n+(m+1)) choose (n+1);
     end;
   end;
@@ -630,7 +597,7 @@ end;
 registration
   let k,n be Nat;
   cluster n choose k -> natural;
-  coherence by Th35;
+  coherence by Th25;
 end;
 
 definition
@@ -716,11 +683,11 @@ A12:  i in Seg (n+1) by A7,FINSEQ_1:def 3;
       then H.i = (n choose m)* a|^l *b|^m by A10;
       hence thesis by A8,A11;
     end;
-    hence thesis by A7,A9,Lm1;
+    hence thesis by A7,A9,FINSEQ_2:9;
   end;
 end;
 
-theorem Th38:
+theorem Th27:
   (a,b) In_Power 0 = <*1*>
 proof
   set F = (a,b) In_Power 0;
@@ -737,12 +704,12 @@ A4: i = 1 by A2,A3,TARSKI:def 1;
   reconsider l1 = 0-m1 as Element of NAT by A4;
   1 in dom (a,b) In_Power 0 by A2,TARSKI:def 1;
   then F.1 = (0 choose 0)*a|^l1*b|^m1 by A4,Def4
-    .= 1*a|^0*b|^0 by A4,Th31
+    .= 1*a|^0*b|^0 by A4,Th21
     .= 1 by RVSUM_1:94;
   hence thesis by A1,FINSEQ_1:40;
 end;
 
-theorem Th39:
+theorem Th28:
   ((a,b) In_Power s).1 = a|^s
 proof
   reconsider m1 = 1-1 as Element of NAT by INT_1:5;
@@ -753,12 +720,12 @@ A1: dom ((a,b) In_Power s) = Seg (s+1) by FINSEQ_1:def 3;
   s+1>=0+1 by XREAL_1:6;
   then 1 in dom ((a,b) In_Power s) by A1;
   then ((a,b) In_Power s).1 = (s choose 0)*a|^l1*b|^m1 by Def4
-    .= 1*a|^l1*b|^m1 by Th29
+    .= 1*a|^l1*b|^m1 by Th19
     .= a|^s by RVSUM_1:94;
   hence thesis;
 end;
 
-theorem Th40:
+theorem Th29:
   ((a,b) In_Power s).(s+1) = b|^s
 proof
   reconsider m1 = s+1-1 as Element of NAT by INT_1:5,NAT_1:12;
@@ -767,13 +734,13 @@ proof
   then dom ((a,b) In_Power s) = Seg (s+1) by FINSEQ_1:def 3;
   then s+1 in dom ((a,b) In_Power s) by FINSEQ_1:4;
   then ((a,b) In_Power s).(s+1) = (s choose s)*a|^l1*b|^m1 by Def4
-    .= 1*a|^l1*b|^m1 by Th31
+    .= 1*a|^l1*b|^m1 by Th21
     .= 1*b|^m1 by RVSUM_1:94
     .= b|^s;
   hence thesis;
 end;
 
-theorem Th41:
+theorem Th30:
   (a+b) |^ s = Sum((a,b) In_Power s)
 proof
   defpred P[Nat] means (a+b) |^ $1 = Sum((a,b) In_Power $1);
@@ -786,19 +753,19 @@ A1: for n st P[n] holds P[n+1]
     set G2 = (<*0 qua Real*>^(b*((a,b) In_Power n)));
     assume P[n];
     then
-A2: (a+b) |^ (n+1) = (a+b)*Sum((a,b) In_Power n) by Th11
+A2: (a+b) |^ (n+1) = (a+b)*Sum((a,b) In_Power n) by Th6
       .= a*Sum((a,b) In_Power n) + b*Sum((a,b) In_Power n)
       .= Sum(a*((a,b) In_Power n)) + b*Sum((a,b) In_Power n) by RVSUM_1:87
       .= Sum(a*((a,b) In_Power n)) + Sum(b*((a,b) In_Power n)) by RVSUM_1:87;
     len G2 = len <*0*> + len (b*((a,b) In_Power n)) by FINSEQ_1:22
       .= 1+ len (b*((a,b) In_Power n)) by FINSEQ_1:40
-      .= 1+ len ((a,b) In_Power n) by Th6
+      .= 1+ len ((a,b) In_Power n) by Th2
       .= n+1+1 by Def4;
     then reconsider F2 = G2 as Element of (n+1+1)-tuples_on REAL by FINSEQ_2:92
 ;
     len G1 = len (a*((a,b) In_Power n)) + len <*0*> by FINSEQ_1:22
       .= len (a*((a,b) In_Power n)) +1 by FINSEQ_1:40
-      .= len ((a,b) In_Power n) +1 by Th6
+      .= len ((a,b) In_Power n) +1 by Th2
       .= n+1+1 by Def4;
     then reconsider F1 = G1 as Element of (n+1+1)-tuples_on REAL by FINSEQ_2:92
 ;
@@ -836,7 +803,7 @@ A14:  i in {1} implies F.i = ((a,b) In_Power (n+1)).i
         then
 A15:    1 in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
         then
-A16:    1 in dom (a*((a,b) In_Power n)) by Th7;
+A16:    1 in dom (a*((a,b) In_Power n)) by VALUED_1:def 5;
         assume i in {1};
         then
 A17:    i = 1 by TARSKI:def 1;
@@ -844,17 +811,17 @@ A17:    i = 1 by TARSKI:def 1;
 A18:    r = ((a,b) In_Power n).1 by A15,PARTFUN1:def 6;
         r = ((a,b) In_Power n).i by A17,A15,PARTFUN1:def 6;
         then
-A19:    r = a|^n by A17,Th39;
+A19:    r = a|^n by A17,Th28;
 A20:    r1 = ((a*((a,b) In_Power n))^<*0*>).1 by A12,A17,PARTFUN1:def 6
           .= (a*((a,b) In_Power n)).1 by A16,FINSEQ_1:def 7
           .= a *a|^n by A18,A19,RVSUM_1:44
-          .= a|^(n+1) by Th11;
+          .= a|^(n+1) by Th6;
 A21:    r2 = F2.i by A13,PARTFUN1:def 6;
 A22:    r1 = F1.i by A12,PARTFUN1:def 6;
         r2 = (<*0*>^(b*((a,b) In_Power n))).1 by A13,A17,PARTFUN1:def 6
           .= 0 by FINSEQ_1:41;
         then F.i = r1+0 by A22,A21,RVSUM_1:11
-          .= ((a,b) In_Power (n+1)).i by A17,A20,Th39;
+          .= ((a,b) In_Power (n+1)).i by A17,A20,Th28;
         hence thesis;
       end;
       i>=1 by A11,FINSEQ_1:1;
@@ -889,14 +856,14 @@ A31:    i<=n+1 by A26,NAT_1:13;
 A32:    i in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
         then
 A33:    r = ((a,b) In_Power n).i by PARTFUN1:def 6;
-        i in dom (a*((a,b) In_Power n)) by A32,Th7;
+        i in dom (a*((a,b) In_Power n)) by A32,VALUED_1:def 5;
         then
 A34:    r1 = (a*((a,b) In_Power n)).i by A27,FINSEQ_1:def 7
           .= a*r by A33,RVSUM_1:44;
         i-1<=n+1-1 by A31,XREAL_1:9;
         then reconsider l1 = n-m1 as Element of NAT by INT_1:5;
 A35:    l1+1 = n+1-(m2+1);
-A36:    j in dom (b*((a,b) In_Power n)) by A29,Th7;
+A36:    j in dom (b*((a,b) In_Power n)) by A29,VALUED_1:def 5;
 A37:    r2 = (<*0*>^(b*((a,b) In_Power n))).i by A13,PARTFUN1:def 6;
         then r2 = (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A23,
 FINSEQ_1:40
@@ -905,14 +872,14 @@ FINSEQ_1:40
         then F.i = a*r + b*x by A24,A27,A37,A34,VALUED_1:def 1
           .= a*(a|^l1*(n choose m1)*b|^m1) + b*x by A32,A33,Def4
           .= a*a|^l1*((n choose m1)*b|^m1) + b*x
-          .= a|^(l1+1)*((n choose m1)*b|^m1) + b*x by Th11
+          .= a|^(l1+1)*((n choose m1)*b|^m1) + b*x by Th6
           .= a|^(l1+1)*((n choose m1)*b|^m1) + b*(b|^m2*((n choose m2)*a|^l2
         )) by A29,A30,Def4
           .= a|^(l1+1)*((n choose m1)*b|^m1) + b*b|^m2*((n choose m2)*a|^l2)
           .= a|^(l1+1)*((n choose (m2+1))*b|^(m2+1)) + b|^(m2+1)*((n choose
-        m2)*a|^l2) by Th11
+        m2)*a|^l2) by Th6
           .= ((n choose (m2+1)) + (n choose m2))*a|^(l1+1)*b|^(m2+1)
-          .= ((n+1) choose (m2+1))*a|^(l1+1)*b|^(m2+1) by Th32
+          .= ((n+1) choose (m2+1))*a|^(l1+1)*b|^(m2+1) by Th22
           .= ((a,b) In_Power (n+1)).i by A9,A35,Def4;
         hence thesis;
       end;
@@ -930,24 +897,24 @@ A41:    j = n+1+1-1 by A39,TARSKI:def 1
 A42:    j in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
         then
 A43:    x = ((a,b) In_Power n).(n+1) by A41,PARTFUN1:def 6
-          .= b|^n by Th40;
+          .= b|^n by Th29;
 A44:    x = ((a,b) In_Power n).j by A42,PARTFUN1:def 6;
-A45:    j in dom (b*((a,b) In_Power n)) by A42,Th7;
+A45:    j in dom (b*((a,b) In_Power n)) by A42,VALUED_1:def 5;
 A46:    r2 = (<*0*>^(b*((a,b) In_Power n))).(1+n+1) by A13,A40,PARTFUN1:def 6
           .= (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A41,FINSEQ_1:39
           .= (b*((a,b) In_Power n)).j by A45,FINSEQ_1:def 7
           .= b*b|^n by A44,A43,RVSUM_1:44
-          .= b|^(n+1) by Th11;
+          .= b|^(n+1) by Th6;
 A47:    r2 = F2.i by A13,PARTFUN1:def 6;
         n+1 = len ((a,b) In_Power n) by Def4
-          .= len (a*((a,b) In_Power n)) by Th6;
+          .= len (a*((a,b) In_Power n)) by Th2;
         then
 A48:    r1 = ((a*((a,b) In_Power n))^<*0*>).(len (a*((a,b) In_Power n))+1
         ) by A12,A40,PARTFUN1:def 6
           .= 0 by FINSEQ_1:42;
         r1 = F1.i by A12,PARTFUN1:def 6;
         then F.i = 0+r2 by A48,A47,RVSUM_1:11
-          .= ((a,b) In_Power (n+1)).i by A40,A46,Th40;
+          .= ((a,b) In_Power (n+1)).i by A40,A46,Th29;
         hence thesis;
       end;
 A49:  now
@@ -958,13 +925,13 @@ A49:  now
         hence thesis by A14,A25,A38,XBOOLE_0:def 3;
       end;
       dom ((a,b) In_Power (n+1)) = Seg (n+1+1) by A10,FINSEQ_1:def 3;
-      hence thesis by A9,A49,Th5,NAT_1:12;
+      hence thesis by A9,A49,Th1,NAT_1:12;
     end;
     len ((a,b) In_Power (n+1)) = len F by A6,Def4;
-    hence thesis by A2,A4,A8,Lm1;
+    hence thesis by A2,A4,A8,FINSEQ_2:9;
   end;
   (a+b) |^ 0 = Sum<*1 qua Real*> by FINSOP_1:11,RVSUM_1:94
-    .= Sum((a,b) In_Power 0) by Th38;
+    .= Sum((a,b) In_Power 0) by Th27;
   then
 A50: P[0];
   for n holds P[n] from NAT_1:sch 2(A50,A1);
@@ -1035,11 +1002,11 @@ A10:  i in Seg (n+1) by A5,FINSEQ_1:def 3;
       then H.i = n choose m by A8;
       hence thesis by A6,A9;
     end;
-    hence thesis by A5,A7,Lm1;
+    hence thesis by A5,A7,FINSEQ_2:9;
   end;
 end;
 
-theorem Th43:
+theorem Th31:
   Newton_Coeff s = (1,1) In_Power s
 proof
 A1: for i st i in dom (Newton_Coeff s) holds (Newton_Coeff s).i = ((1,1)
@@ -1058,28 +1025,28 @@ A3: dom (Newton_Coeff s) = Seg len (Newton_Coeff s) by FINSEQ_1:def 3
     dom (Newton_Coeff s) = Seg len ((1,1) In_Power s) by A3,Def4
       .= dom ((1,1) In_Power s) by FINSEQ_1:def 3;
     then ((1,1) In_Power s).i = (s choose m1)*1|^l1*1|^m1 by A2,Def4
-      .= (s choose m1)*1*1|^m1 by Th15
-      .= (s choose m1)*1 by Th15
+      .= (s choose m1)*1*1|^m1 by Th10
+      .= (s choose m1)*1 by Th10
       .= (Newton_Coeff s).i by A2,Def5;
     hence thesis;
   end;
   len (Newton_Coeff s) = s+1 by Def5
     .= len ((1,1) In_Power s) by Def4;
-  hence thesis by A1,Lm1;
+  hence thesis by A1,FINSEQ_2:9;
 end;
 
 theorem
   2|^s = Sum(Newton_Coeff s)
 proof
-  2|^s = (1+1) |^ s .= Sum((1,1) In_Power s) by Th41
-    .= Sum(Newton_Coeff s) by Th43;
+  2|^s = (1+1) |^ s .= Sum((1,1) In_Power s) by Th30
+    .= Sum(Newton_Coeff s) by Th31;
   hence thesis;
 end;
 
 begin :: Addenda
 :: from NAT_LAT
 
-theorem Th45:
+theorem Th33:
   l >= 1 implies k*l >= k
 proof
   assume
@@ -1102,30 +1069,30 @@ A5: P[0];
   hence thesis;
 end;
 
-theorem Th46:
+theorem Th34:
   l >= 1 & n >= k*l implies n >= k
 proof
   assume that
 A1: l>=1 and
 A2: n>=k*l;
-  k*l>=k by A1,Th45;
+  k*l>=k by A1,Th33;
   hence thesis by A2,XXREAL_0:2;
 end;
 
 definition
   let n;
   redefine func n! -> Element of NAT;
-  coherence by Th22;
+  coherence by Th16;
 end;
 
-theorem Th47:
+theorem Th35:
   l <> 0 implies l divides l!
 proof
   assume l<>0;
   then consider n being Nat such that
 A1: l = n+1 by NAT_1:6;
   reconsider n as Element of NAT by ORDINAL1:def 12;
-  (n+1)! = (n+1) * (n!) by Th21;
+  (n+1)! = (n+1) * (n!) by Th15;
   hence thesis by A1,NAT_D:def 3;
 end;
 
@@ -1139,14 +1106,14 @@ A1: n<>0;
   hence thesis by A1,XREAL_1:29;
 end;
 
-theorem Th49:
+theorem Th37:
   k/(k+1) < 1
 proof
   m < m+1 by XREAL_1:29;
   hence thesis by XREAL_1:189;
 end;
 
-theorem Th50:
+theorem Th38:
   l! >= l
 proof
   defpred P[Nat] means $1! >= $1;
@@ -1155,7 +1122,7 @@ A1: for l st P[l] holds P[l+1]
     let l;
     assume
 A2: l!>=l;
-A3: l!*(l+1)=(l+1)! by Th21;
+A3: l!*(l+1)=(l+1)! by Th15;
     l=0 & (l+1)!>=(l+1) or l>=1 & (l+1)!>=(l+1)
     proof
       per cases by NAT_1:14;
@@ -1166,7 +1133,7 @@ A3: l!*(l+1)=(l+1)! by Th21;
       case
 A4:     l>=1;
         (l+1)!>=(l+1)*l by A2,A3,XREAL_1:64;
-        hence thesis by A4,Th46;
+        hence thesis by A4,Th34;
       end;
     end;
     hence thesis;
@@ -1176,7 +1143,7 @@ A5: P[0];
   hence thesis;
 end;
 
-theorem Th51:
+theorem Th39:
   m<>1 & m divides n implies not m divides (n+1)
 proof
   assume that
@@ -1197,7 +1164,7 @@ A6: t=n*s/(n+1) by XCMPLX_1:89
     assume
 A7: t > s;
     s>0 by A5;
-    hence contradiction by A7,A6,Th49,XREAL_1:157;
+    hence contradiction by A7,A6,Th37,XREAL_1:157;
   end;
   then reconsider r =s-t as Element of NAT by INT_1:5;
   1=m*s-m*t by A4,A5;
@@ -1205,7 +1172,7 @@ A7: t > s;
   hence contradiction by A1,NAT_1:15;
 end;
 
-theorem Th53:
+theorem Th40:
   j<>0 implies j divides (j+k)!
 proof
   defpred P[Nat] means for j st j<>0 holds j divides (j+$1)!;
@@ -1217,25 +1184,25 @@ A2: for j st j<>0 holds j divides (j+k)!;
     let j;
     assume j<>0;
     then j divides ((j+k)!)*((j+k)+1) by A2,NAT_D:9;
-    hence thesis by Th21;
+    hence thesis by Th15;
   end;
-A3: P[0] by Th47;
+A3: P[0] by Th35;
   for k holds P[k] from NAT_1:sch 2(A3,A1);
   hence thesis;
 end;
 
-theorem Th54:
+theorem Th41:
   j<=l & j<>0 implies j divides l!
 proof
   assume that
 A1: j<=l and
 A2: j<>0;
   ex k being Nat st l=j+k by A1,NAT_1:10;
-  hence thesis by A2,Th53;
+  hence thesis by A2,Th40;
 end;
 
 theorem
-  j<>1 & j<>0 & j divides (l!+1) implies j>l by Th51,Th54;
+  j<>1 & j<>0 & j divides (l!+1) implies j>l by Th39,Th41;
 
 :: The fundamental properties of lcm, hcf
 
@@ -1268,7 +1235,7 @@ A7: M divides L by A6,NAT_D:def 4;
   hence thesis by A4,NAT_D:5;
 end;
 
-theorem Th57:
+theorem Th44:
   m divides n iff m lcm n = n
 proof
   thus m divides n implies m lcm n = n
@@ -1308,7 +1275,7 @@ A1: M divides m by NAT_D:def 4;
   hence thesis by A1,NAT_D:5;
 end;
 
-theorem Th60:
+theorem Th47:
   m lcm n divides m*n
 proof
   set s=m*n;
@@ -1346,7 +1313,7 @@ A7: L divides K by A6,NAT_D:def 5;
   hence thesis by A7,NAT_D:5;
 end;
 
-theorem Th62:
+theorem Th49:
   n divides m implies n gcd m = n
 proof
   set N = n gcd m;
@@ -1391,27 +1358,27 @@ A1: m divides M by NAT_D:def 5;
   hence thesis by A1,NAT_D:5;
 end;
 
-theorem Th66:
+theorem Th53:
   (m gcd n) lcm n = n
 proof
   set M = m gcd n;
   M divides n by NAT_D:def 5;
-  hence thesis by Th57;
+  hence thesis by Th44;
 end;
 
-theorem Th67:
+theorem Th54:
   m gcd (m lcm n) = m
 proof
   set M = m lcm n;
   m divides M by NAT_D:def 4;
-  hence thesis by Th62;
+  hence thesis by Th49;
 end;
 
 theorem
   m gcd (m lcm n) = (n gcd m) lcm m
 proof
-  m gcd (m lcm n) = m by Th67;
-  hence thesis by Th66;
+  m gcd (m lcm n) = m by Th54;
+  hence thesis by Th53;
 end;
 
 theorem
@@ -1438,7 +1405,7 @@ A2: m divides n;
   hence thesis by A1,NAT_D:def 5;
 end;
 
-theorem Th71:
+theorem Th58:
   n > 0 implies n gcd m > 0
 proof
   assume that
@@ -1457,7 +1424,7 @@ proof
 A1: m>0 and
 A2: n>0 and
 A3: m lcm n <= 0;
-A4: (m lcm n) divides m*n by Th60;
+A4: (m lcm n) divides m*n by Th47;
   m lcm n = 0 or m lcm n < 0 by A3;
   then ex r being Nat st m*n = 0*r by A4,NAT_D:def 3;
   hence contradiction by A1,A2;
@@ -1708,7 +1675,7 @@ A9: x is prime by A5,A8;
   end;
 end;
 
-theorem Th82:
+theorem Th68:
   SetPrimenumber p c= SetPrimes
 proof
   let x;
@@ -1735,7 +1702,7 @@ A3: x9 < q by A1,XXREAL_0:2;
   hence thesis by A3,Def7;
 end;
 
-theorem Th84:
+theorem Th70:
   SetPrimenumber p c= Seg p
 proof
   let x be set;
@@ -1749,22 +1716,22 @@ A2: 1 <= q by INT_2:def 4;
   hence thesis by A2;
 end;
 
-theorem Th85:
+theorem Th71:
   SetPrimenumber p is finite
 proof
-  SetPrimenumber p c= Seg p by Th84;
+  SetPrimenumber p c= Seg p by Th70;
   hence thesis;
 end;
 
 registration
   let n be Nat;
   cluster SetPrimenumber n -> finite;
-  coherence by Th85;
+  coherence by Th71;
 end;
 
 reserve p for Prime;
 
-theorem Th86:
+theorem Th72:
   ex p st p is prime & p>l
 proof
   reconsider two = 2 as Prime by INT_2:28;
@@ -1785,7 +1752,7 @@ A2:   l=1;
     end;
     case
 A3:   2<=l;
-      l<=l! by Th50;
+      l<=l! by Th38;
       then 2<=l! by A3,XXREAL_0:2;
       then (2+0) <= (l!+1) by XREAL_1:7;
       then consider j being Element of NAT such that
@@ -1795,7 +1762,7 @@ A5:   j divides (l!+1) by INT_2:31;
       take j9;
 A6:   j<>0 by A4,INT_2:def 4;
       j<>1 by A4,INT_2:def 4;
-      hence thesis by A5,A6,Th51,Th54;
+      hence thesis by A5,A6,Th39,Th41;
     end;
   end;
   hence thesis;
@@ -1844,7 +1811,7 @@ theorem
 theorem
   SetPrimenumber n \/ {n} is finite;
 
-theorem Th94:
+theorem Th76:
   for f being Prime, g being Nat st f < g holds SetPrimenumber f
   \/ {f} c= SetPrimenumber g
 proof
@@ -1910,7 +1877,7 @@ A3:   m is Prime;
 A4:   not m in SetPrimenumber m by Def7;
 A5:   ex k be Nat st P[k]
       proof
-        ex p st p is prime & p>m by Th86;
+        ex p st p is prime & p>m by Th72;
         hence thesis;
       end;
       consider k be Nat such that
@@ -1939,7 +1906,7 @@ A12:      SetPrimenumber m c= SetPrimenumber m\/{m} by XBOOLE_1:7;
           hence thesis by A12;
         end;
       end;
-      SetPrimenumber m\/{m} c= SetPrimenumber k by A3,A6,Th94;
+      SetPrimenumber m\/{m} c= SetPrimenumber k by A3,A6,Th76;
       then SetPrimenumber k=SetPrimenumber m\/{m} by A7,XBOOLE_0:def 10;
       hence n + 1 = card SetPrimenumber k by A2,A4,CARD_2:41;
       thus thesis by A6;
@@ -1968,14 +1935,14 @@ A18: f<>g;
       case
 A19:    f<g;
 A20:    not f in SetPrimenumber f by Def7;
-        card (SetPrimenumber f\/{f}) <= card SetPrimenumber g by A19,Th94,
+        card (SetPrimenumber f\/{f}) <= card SetPrimenumber g by A19,Th76,
 NAT_1:43;
         hence thesis by A16,A17,A20,CARD_2:41;
       end;
       case
 A21:    g<f;
 A22:    not g in SetPrimenumber g by Def7;
-        card (SetPrimenumber g\/{g}) <= card SetPrimenumber f by A21,Th94,
+        card (SetPrimenumber g\/{g}) <= card SetPrimenumber f by A21,Th76,
 NAT_1:43;
         hence thesis by A16,A17,A22,CARD_2:41;
       end;
@@ -1988,7 +1955,7 @@ theorem
   SetPrimenumber n = {k where k is Element of NAT: k<n & k is prime} by Lm3;
 
 ::$N The Infinitude of Primes
-theorem Th97:
+theorem Th79:
   SetPrimes is infinite
 proof
   assume
@@ -2003,13 +1970,13 @@ A3: card SP = n by CARD_1:def 2;
   set p=primenumber (n+1);
   set SPp = SetPrimenumber p;
 A4: n+1 = card SetPrimenumber p by Def8;
-  card SPp <= card SP by Th82,NAT_1:43;
+  card SPp <= card SP by Th68,NAT_1:43;
   hence contradiction by A3,A4,NAT_1:13;
 end;
 
 registration
   cluster SetPrimes -> non empty infinite;
-  coherence by Th97;
+  coherence by Th79;
 end;
 
 reserve i for Nat;
@@ -2121,8 +2088,8 @@ theorem
   for x being complex number holds x |^ 2 = x * x & x^2 = x |^ 2
 proof
   let x be complex number;
-  thus x * x = (x |^ 1) * x by Th10
-    .= x |^ (1+1) by Th11
+  thus x * x = (x |^ 1) * x by Th5
+    .= x |^ (1+1) by Th6
     .= x |^ 2;
   hence thesis;
 end;
@@ -2145,7 +2112,7 @@ A1: for k holds P[k] implies P[k+1]
     let k such that
 A2: for x st x > 0 holds x|^k > 0;
     let x;
-A3: x|^(k+1) = x * x|^k by Th11;
+A3: x|^(k+1) = x * x|^k by Th6;
     assume
 A4: x > 0;
     then x|^k > 0 by A2;
@@ -2163,7 +2130,7 @@ theorem
 proof
   assume n>0;
   then n>=1+0 by NAT_1:13;
-  hence thesis by Th16;
+  hence thesis by Th11;
 end;
 
 :: from CARD_4 and WSIERP_1, 2007.02.07, AK
@@ -2187,14 +2154,14 @@ proof
   then 2|^n - n >= 1 by XREAL_1:19;
   then
 A1: 2*(2|^n - n) >= 2*1 by XREAL_1:64;
-  2|^(n+1) - (n + 1 + 1) = 2*2|^n - (2*n - n + 2) by Th11
+  2|^(n+1) - (n + 1 + 1) = 2*2|^n - (2*n - n + 2) by Th6
     .= 2*(2|^n - n) + (n - 2);
   then 2|^(n+1) - (n + 1 + 1) >= 2 + (n - 2) by A1,XREAL_1:6;
   then 2|^(n+1) >= 0 + (n + 1 + 1) by XREAL_1:19;
   hence 2|^(n+1) >= n + 1 + 1;
 end;
 
-theorem Th104:
+theorem Th85:
   2|^n >= n + 1
 proof
   for n holds P[n] from NAT_1:sch 2(Lm4,Lm5);
@@ -2204,7 +2171,7 @@ end;
 theorem
   2|^n > n
 proof
-  2|^n >= n + 1 by Th104;
+  2|^n >= n + 1 by Th85;
   hence thesis by NAT_1:13;
 end;
 
@@ -2303,17 +2270,17 @@ A23: 0 < b() & b() < a() by A1,A2;
   consider k such that
 A24: Q(k) = a() gcd b() & Q(k + 1) = 0 from NAT_D:sch 1(A23,A8,A14);
   take k;
-  thus F(k) = a() gcd b() by A1,A9,A24,Th71;
-  a() gcd b() > 0 by A1,Th71;
+  thus F(k) = a() gcd b() by A1,A9,A24,Th58;
+  a() gcd b() > 0 by A1,Th58;
   hence G(k) = IFEQ(q.k,0,0,G(k)) by A24,FUNCOP_1:def 8
     .= 0 by A7,A24;
 end;
 
 :: from CARD_4, 2008.05.11, A.T.
 
-reserve k,n,n1,n2,m1,m2 for natural number;
+reserve k,n,n1,n2,m1,m2 for Nat;
 
-theorem Th106:
+theorem Th87:
   r <> 0 or n = 0 iff r|^n <> 0
 proof
   defpred P[Nat] means r <> 0 or $1 = 0 iff r|^$1 <> 0;
@@ -2321,7 +2288,7 @@ A1: P[k] implies P[k+1]
   proof
     assume
 A2: P[k];
-    r|^(k+1) = r|^k*r by Th11;
+    r|^(k+1) = r|^k*r by Th6;
     hence thesis by A2;
   end;
 A3: P[0] by RVSUM_1:94;
@@ -2340,13 +2307,13 @@ A3: n1 = n2+n by NAT_1:10;
   n <> 0 by A2,A3;
   then consider k being Nat such that
 A4: n = k+1 by NAT_1:6;
-A5: 2|^n2 <> 0 by Th106;
+A5: 2|^n2 <> 0 by Th87;
   reconsider k as Element of NAT by ORDINAL1:def 12;
-  2|^n1 = (2|^n2)*(2|^(k+1)) by A3,A4,Th13;
+  2|^n1 = (2|^n2)*(2|^(k+1)) by A3,A4,Th8;
   then (2|^n1)*(2*m1+1) = 2|^n2*(2|^(k+1)*(2*m1+1));
   then 2|^(k+1)*(2*m1+1) = 2*m2+1 by A1,A5,XCMPLX_1:5;
-  then 2*m2+1 = 2|^k*(2|^1)*(2*m1+1) by Th13
-    .= 2*(2|^k)*(2*m1+1) by Th10
+  then 2*m2+1 = 2|^k*(2|^1)*(2*m1+1) by Th8
+    .= 2*(2|^k)*(2*m1+1) by Th5
     .= 2*((2|^k)*(2*m1+1));
   then
 A6: 2 divides 2*m2+1 by NAT_D:def 3;
@@ -2357,7 +2324,7 @@ end;
 theorem
   (2|^n1)*(2*m1+1) = (2|^n2)*(2*m2+1) implies n1 = n2 & m1 = m2
 proof
-A1: 2|^n1 <> 0 by Th106;
+A1: 2|^n1 <> 0 by Th87;
   assume
 A2: (2|^n1)*(2*m1+1) = (2|^n2)*(2*m2+1);
   then
@@ -2367,3 +2334,15 @@ A3: n2 <= n1 by Lm6;
   then 2*m1+1 = 2*m2+1 by A2,A1,XCMPLX_1:5;
   hence thesis;
 end;
+
+theorem
+  k <= n implies m |^ k divides m |^ n
+proof
+  assume k <= n;
+  then consider t being Nat such that
+A1: n = k + t by NAT_1:10;
+  reconsider t as Element of NAT by ORDINAL1:def 12;
+  m |^ n = (m |^ k)*(m |^ t) by A1,Th8;
+  hence thesis by NAT_D:def 3;
+end;
+

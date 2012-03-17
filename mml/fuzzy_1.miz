@@ -3,7 +3,7 @@
 ::  by Takashi Mitsuishi , Noboru Endou and Yasunari Shidama
 ::
 :: Received May 18, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,8 +16,8 @@
 environ
 
  vocabularies NUMBERS, XBOOLE_0, SUBSET_1, FUNCT_3, XXREAL_1, CARD_1, RELAT_1,
-      TARSKI, FUNCT_1, VALUED_0, LATTICE3, XXREAL_0, PARTFUN1, INTEGRA1, SEQ_4,
-      ARYTM_1, ARYTM_3, COMPLEX1, FUZZY_1, MEASURE5;
+      TARSKI, FUNCT_1, VALUED_0, LATTICE3, XXREAL_0, PARTFUN1, SEQ_4, ARYTM_1,
+      ARYTM_3, COMPLEX1, FUZZY_1, MEASURE5;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, SQUARE_1, COMPLEX1,
       REAL_1, RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, VALUED_0, SEQ_1,
       SEQ_4, RFUNCT_1, MEASURE5, INTEGRA1, RCOMP_1;
@@ -81,7 +81,7 @@ definition
 
   let f,g be real-valued Function;
   pred f is_less_than g means
-  :Def2:
+  :Def1:
   dom f c= dom g & for x being set st x in dom f holds f.x <= g.x;
   reflexivity;
 end;
@@ -96,7 +96,7 @@ definition
   let X be non empty set;
   let f,g be Membership_Func of X;
   redefine pred f is_less_than g means
-  :Def3:
+  :Def2:
   for x being Element of X holds f .x <= g.x;
   compatibility
   proof
@@ -109,13 +109,13 @@ A1:     f is_less_than g;
         proof
           let x be Element of X;
           dom f = X by FUNCT_2:def 1;
-          hence thesis by A1,Def2;
+          hence thesis by A1,Def1;
         end;
       end;
       assume for x being Element of X holds f.x <= g.x;
       then dom g = X & for x being set st x in dom f holds f.x <= g.x by
 FUNCT_2:def 1;
-      hence thesis by Def2;
+      hence thesis by Def1;
     end;
   end;
 end;
@@ -128,7 +128,7 @@ A1: A c= B & B c= A;
 A2: for c being Element of C st c in C holds f.c = g.c
   proof
     let c be Element of C;
-    f.c <= g.c & g.c <= f.c by A1,Def3;
+    f.c <= g.c & g.c <= f.c by A1,Def2;
     hence thesis by XXREAL_0:1;
   end;
   C = dom f & C = dom g by FUNCT_2:def 1;
@@ -152,7 +152,7 @@ definition
   let C be non empty set;
   let h,g be Membership_Func of C;
   func min(h,g) -> Membership_Func of C means
-  :Def4:
+  :Def3:
   for c being Element of C holds it.c = min(h.c,g.c);
   existence
   proof
@@ -236,7 +236,7 @@ definition
   let C be non empty set;
   let h,g be Membership_Func of C;
   func max(h,g) -> Membership_Func of C means
-  :Def5:
+  :Def4:
   for c being Element of C holds it.c = max(h.c,g.c);
   existence
   proof
@@ -319,7 +319,7 @@ definition
   let C be non empty set;
   let h be Membership_Func of C;
   func 1_minus h -> Membership_Func of C means
-  :Def6:
+  :Def5:
   for c being Element of C holds it.c = 1-h.c;
   existence
   proof
@@ -400,13 +400,13 @@ A17: for c being Element of C holds h1.c = 1-h2.c;
 end;
 
 theorem
-  min(h.c,g.c) = min(h,g).c & max(h.c,g.c) = max(h,g).c by Def4,Def5;
+  min(h.c,g.c) = min(h,g).c & max(h.c,g.c) = max(h,g).c by Def3,Def4;
 
 theorem
   max(h,h) = h & min(h,h) = h & max(h,h) = min(h,h) & min(f,g) = min(g,f
   ) & max(f,g) = max(g,f);
 
-theorem Th8:
+theorem Th7:
   max(max(f,g),h) = max(f,max(g,h)) & min(min(f,g),h) = min(f,min(g ,h))
 proof
 A1: C = dom min(min(f,g),h) & C = dom min(f,min(g,h)) by FUNCT_2:def 1;
@@ -414,45 +414,45 @@ A2: for x being Element of C st x in C holds max(max(f,g),h).x = max(f,max(g
   ,h)).x
   proof
     let x be Element of C;
-    max(max(f,g),h).x = max(max(f,g).x,h.x) by Def5
-      .= max(max(f.x,g.x),h.x) by Def5
+    max(max(f,g),h).x = max(max(f,g).x,h.x) by Def4
+      .= max(max(f.x,g.x),h.x) by Def4
       .= max(f.x,max(g.x,h.x)) by XXREAL_0:34
-      .= max(f.x,max(g,h).x) by Def5
-      .= max(f,max(g,h)).x by Def5;
+      .= max(f.x,max(g,h).x) by Def4
+      .= max(f,max(g,h)).x by Def4;
     hence thesis;
   end;
 A3: for x being Element of C st x in C holds min(min(f,g),h).x = min(f,min(g
   ,h)).x
   proof
     let x be Element of C;
-    min(min(f,g),h).x = min(min(f,g).x,h.x) by Def4
-      .= min(min(f.x,g.x),h.x) by Def4
+    min(min(f,g),h).x = min(min(f,g).x,h.x) by Def3
+      .= min(min(f.x,g.x),h.x) by Def3
       .= min(f.x,min(g.x,h.x)) by XXREAL_0:33
-      .= min(f.x,min(g,h).x) by Def4
-      .= min(f,min(g,h)).x by Def4;
+      .= min(f.x,min(g,h).x) by Def3
+      .= min(f,min(g,h)).x by Def3;
     hence thesis;
   end;
   C = dom max(max(f,g),h) & C = dom max(f,max(g,h)) by FUNCT_2:def 1;
   hence thesis by A1,A2,A3,PARTFUN1:5;
 end;
 
-theorem Th9:
+theorem Th8:
   max(f,min(f,g)) = f & min(f,max(f,g)) = f
 proof
 A1: C = dom min(f,max(f,g)) by FUNCT_2:def 1;
 A2: for x being Element of C st x in C holds max(f,min(f,g)).x = f.x
   proof
     let x be Element of C;
-    max(f,min(f,g)).x = max(f.x,min(f,g).x) by Def5
-      .= max(f.x,min(f.x,g.x)) by Def4
+    max(f,min(f,g)).x = max(f.x,min(f,g).x) by Def4
+      .= max(f.x,min(f.x,g.x)) by Def3
       .= f.x by XXREAL_0:36;
     hence thesis;
   end;
 A3: for x being Element of C st x in C holds min(f,max(f,g)).x = f.x
   proof
     let x be Element of C;
-    min(f,max(f,g)).x = min(f.x,max(f,g).x) by Def4
-      .= min(f.x,max(f.x,g.x)) by Def5
+    min(f,max(f,g)).x = min(f.x,max(f,g).x) by Def3
+      .= min(f.x,max(f.x,g.x)) by Def4
       .= f.x by XXREAL_0:35;
     hence thesis;
   end;
@@ -460,7 +460,7 @@ A3: for x being Element of C st x in C holds min(f,max(f,g)).x = f.x
   hence thesis by A1,A2,A3,PARTFUN1:5;
 end;
 
-theorem Th10:
+theorem Th9:
   min(f,max(g,h)) = max(min(f,g),min(f,h)) & max(f,min(g,h)) = min
   (max(f,g),max(f,h))
 proof
@@ -469,34 +469,33 @@ A2: for x being Element of C st x in C holds min(f,max(g,h)).x = max(min(f,g
   ),min(f,h)).x
   proof
     let x be Element of C;
-    min(f,max(g,h)).x = min(f.x,max(g,h).x) by Def4
-      .= min(f.x,max(g.x,h.x)) by Def5
+    min(f,max(g,h)).x = min(f.x,max(g,h).x) by Def3
+      .= min(f.x,max(g.x,h.x)) by Def4
       .= max(min(f.x,g.x),min(f.x,h.x)) by XXREAL_0:38
-      .= max(min(f,g).x,min(f.x,h.x)) by Def4
-      .= max(min(f,g).x,min(f,h).x) by Def4
-      .= max(min(f,g),min(f,h)).x by Def5;
+      .= max(min(f,g).x,min(f.x,h.x)) by Def3
+      .= max(min(f,g).x,min(f,h).x) by Def3
+      .= max(min(f,g),min(f,h)).x by Def4;
     hence thesis;
   end;
 A3: for x being Element of C st x in C holds max(f,min(g,h)).x = min(max(f,g
   ),max(f,h)).x
   proof
     let x be Element of C;
-    max(f,min(g,h)).x = max(f.x,min(g,h).x) by Def5
-      .= max(f.x,min(g.x,h.x)) by Def4
+    max(f,min(g,h)).x = max(f.x,min(g,h).x) by Def4
+      .= max(f.x,min(g.x,h.x)) by Def3
       .= min(max(f.x,g.x),max(f.x,h.x)) by XXREAL_0:39
-      .= min(max(f,g).x,max(f.x,h.x)) by Def5
-      .= min(max(f,g).x,max(f,h).x) by Def5
-      .= min(max(f,g),max(f,h)).x by Def4;
+      .= min(max(f,g).x,max(f.x,h.x)) by Def4
+      .= min(max(f,g).x,max(f,h).x) by Def4
+      .= min(max(f,g),max(f,h)).x by Def3;
     hence thesis;
   end;
   C = dom min(f,max(g,h)) & C = dom max(min(f,g),min(f,h)) by FUNCT_2:def 1;
   hence thesis by A1,A2,A3,PARTFUN1:5;
 end;
 
-theorem
-  1_minus(1_minus(h)) = h;
+canceled;
 
-theorem Th12:
+theorem Th11:
   1_minus(max(f,g)) = min(1_minus(f),1_minus(g)) & 1_minus(min(f,g
   )) = max(1_minus(f),1_minus(g))
 proof
@@ -506,12 +505,12 @@ A2: for x being Element of C st x in C holds (1_minus(max(f,g))).x = min(
   1_minus(f),1_minus(g)).x
   proof
     let x be Element of C;
-A3: (1_minus(max(f,g))).x =1 - max(f,g).x by Def6
-      .=1 - max(f.x,g.x) by Def5
+A3: (1_minus(max(f,g))).x =1 - max(f,g).x by Def5
+      .=1 - max(f.x,g.x) by Def4
       .=1 - (f.x + g.x + abs(f.x - g.x))/2 by COMPLEX1:74;
-    min(1_minus(f),1_minus(g)).x =min((1_minus(f)).x,(1_minus(g)).x) by Def4
-      .=min((1 - f.x),(1_minus(g)).x) by Def6
-      .=min((1 - f.x),(1- g.x)) by Def6
+    min(1_minus(f),1_minus(g)).x =min((1_minus(f)).x,(1_minus(g)).x) by Def3
+      .=min((1 - f.x),(1_minus(g)).x) by Def5
+      .=min((1 - f.x),(1- g.x)) by Def5
       .=((1-f.x) + (1-g.x) - abs((1-f.x) - (1-g.x)))/2 by COMPLEX1:73
       .=(2-f.x -g.x- abs(-(f.x-g.x)))/2
       .=(2-(f.x + g.x) - abs(f.x-g.x))/2 by COMPLEX1:52
@@ -522,12 +521,12 @@ A4: for x being Element of C st x in C holds (1_minus(min(f,g))).x = max(
   1_minus(f),1_minus(g)).x
   proof
     let x be Element of C;
-A5: (1_minus(min(f,g))).x =1 - min(f,g).x by Def6
-      .=1 - min(f.x,g.x) by Def4
+A5: (1_minus(min(f,g))).x =1 - min(f,g).x by Def5
+      .=1 - min(f.x,g.x) by Def3
       .=1 - (f.x + g.x - abs(f.x - g.x))/2 by COMPLEX1:73;
-    max(1_minus(f),1_minus(g)).x =max((1_minus(f)).x,(1_minus(g)).x) by Def5
-      .=max((1 - f.x),(1_minus(g)).x) by Def6
-      .=max((1 - f.x),(1- g.x)) by Def6
+    max(1_minus(f),1_minus(g)).x =max((1_minus(f)).x,(1_minus(g)).x) by Def4
+      .=max((1 - f.x),(1_minus(g)).x) by Def5
+      .=max((1 - f.x),(1- g.x)) by Def5
       .=((1-f.x) + (1-g.x) + abs((1-f.x) - (1-g.x)))/2 by COMPLEX1:74
       .=(2-f.x -g.x + abs(-(f.x-g.x)))/2
       .=(2-(f.x + g.x) + abs(f.x-g.x))/2 by COMPLEX1:52
@@ -560,7 +559,7 @@ definition
   correctness;
 end;
 
-theorem Th14:
+theorem Th13:
   for a,b be Element of REAL, f be PartFunc of C,REAL st rng f c=
 [.a,b.] & a <= b holds for x being Element of C st x in dom f holds a <= f.x &
   f.x <= b
@@ -586,49 +585,49 @@ A3: a=lower_bound A & b=upper_bound A by INTEGRA1:5;
   hence thesis;
 end;
 
-theorem Th15:
+theorem Th14:
   EMF(C) c= f
 proof
   let x be Element of C;
 A1: rng f c= [.0,1.] by RELAT_1:def 19;
   dom f = C & (EMF(C)).x = 0 by FUNCT_2:def 1,FUNCT_3:def 3;
-  hence thesis by A1,Th14;
+  hence thesis by A1,Th13;
 end;
 
-theorem Th16:
+theorem Th15:
   f c= UMF(C)
 proof
   let x be Element of C;
 A1: rng f c= [.0,1.] by RELAT_1:def 19;
   dom f = C & (UMF(C)).x = 1 by FUNCT_2:def 1,FUNCT_3:def 3;
-  hence thesis by A1,Th14;
+  hence thesis by A1,Th13;
 end;
 
-theorem Th17:
+theorem Th16:
   for x be Element of C,h be Membership_Func of C holds (EMF(C)).x
   <= h.x & h.x <= (UMF(C)).x
 proof
   let x be Element of C;
   let h be Membership_Func of C;
-  EMF C c= h & h c= UMF C by Th15,Th16;
-  hence thesis by Def3;
+  EMF C c= h & h c= UMF C by Th14,Th15;
+  hence thesis by Def2;
 end;
 
-theorem Th18:
+theorem Th17:
   min(f,g) c= f & f c= max(f,g)
 proof
   thus min(f,g) c= f
   proof
     let x be Element of C;
-    min(f,g).x = min(f.x,g.x) by Def4;
+    min(f,g).x = min(f.x,g.x) by Def3;
     hence thesis by XXREAL_0:17;
   end;
   let x be Element of C;
-  max(f,g).x = max(f.x,g.x) by Def5;
+  max(f,g).x = max(f.x,g.x) by Def4;
   hence thesis by XXREAL_0:25;
 end;
 
-theorem Th19:
+theorem Th18:
   max(f,UMF(C)) = UMF(C) & min(f,UMF(C)) = f & max(f,EMF(C)) = f &
   min(f,EMF(C)) = EMF(C)
 proof
@@ -636,42 +635,42 @@ A1: C = dom max(f,EMF(C)) & C = dom min(f,EMF(C)) by FUNCT_2:def 1;
 A2: for x being Element of C st x in C holds min(f,UMF(C)).x = f.x
   proof
     let x be Element of C;
-A3: f.x <= (UMF(C)).x by Th17;
-    min(f,UMF(C)).x = min(f.x,(UMF(C)).x) by Def4
+A3: f.x <= (UMF(C)).x by Th16;
+    min(f,UMF(C)).x = min(f.x,(UMF(C)).x) by Def3
       .=f.x by A3,XXREAL_0:def 9;
     hence thesis;
   end;
 A4: for x being Element of C st x in C holds min(f,EMF(C)).x = (EMF(C)).x
   proof
     let x be Element of C;
-A5: (EMF(C)).x <= f.x by Th17;
-    min(f,EMF(C)).x = min(f.x,(EMF(C)).x) by Def4
+A5: (EMF(C)).x <= f.x by Th16;
+    min(f,EMF(C)).x = min(f.x,(EMF(C)).x) by Def3
       .=(EMF(C)).x by A5,XXREAL_0:def 9;
     hence thesis;
   end;
 A6: for x being Element of C st x in C holds max(f,EMF(C)).x = f.x
   proof
     let x be Element of C;
-A7: (EMF(C)).x <= f.x by Th17;
-    max(f,EMF(C)).x = max(f.x,(EMF(C)).x) by Def5
+A7: (EMF(C)).x <= f.x by Th16;
+    max(f,EMF(C)).x = max(f.x,(EMF(C)).x) by Def4
       .=f.x by A7,XXREAL_0:def 10;
     hence thesis;
   end;
-  max(f,UMF(C)) c= UMF(C) & UMF(C) c= max(f,UMF(C)) by Th16,Th18;
+  max(f,UMF(C)) c= UMF(C) & UMF(C) c= max(f,UMF(C)) by Th15,Th17;
   hence max(f,UMF(C)) = UMF(C) by Lm1;
 A8: C = dom EMF(C) by FUNCT_2:def 1;
   C = dom min(f,UMF(C)) & C = dom f by FUNCT_2:def 1;
   hence thesis by A2,A6,A1,A8,A4,PARTFUN1:5;
 end;
 
-theorem Th20:
+theorem Th19:
   f c= h & g c= h implies max(f,g) c= h
 proof
   assume
 A1: f c= h & g c= h;
   let x be Element of C;
-A2: max(f.x,g.x) = max(f,g).x by Def5;
-  f.x <= h.x & g.x <= h.x by A1,Def3;
+A2: max(f.x,g.x) = max(f,g).x by Def4;
+  f.x <= h.x & g.x <= h.x by A1,Def2;
   hence thesis by A2,XXREAL_0:28;
 end;
 
@@ -681,10 +680,10 @@ proof
   assume
 A1: f c= g;
   let x be Element of C;
-  f.x <= g.x by A1,Def3;
+  f.x <= g.x by A1,Def2;
   then max(f.x,h.x) <= max(g.x,h.x) by XXREAL_0:26;
-  then max(f.x,h.x) <= max(g,h).x by Def5;
-  hence thesis by Def5;
+  then max(f.x,h.x) <= max(g,h).x by Def4;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -693,10 +692,10 @@ proof
   assume
 A1: f c= g & h c= h1;
   let x be Element of C;
-  f.x <= g.x & h.x <= h1.x by A1,Def3;
+  f.x <= g.x & h.x <= h1.x by A1,Def2;
   then max(f.x,h.x) <= max(g.x,h1.x) by XXREAL_0:26;
-  then max(f,h).x <= max(g.x,h1.x) by Def5;
-  hence thesis by Def5;
+  then max(f,h).x <= max(g.x,h1.x) by Def4;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -704,8 +703,8 @@ theorem
 proof
   assume f c= g;
   then
-A1: max(f,g) c= g by Th20;
-  g c= max(f,g) by Th18;
+A1: max(f,g) c= g by Th19;
+  g c= max(f,g) by Th17;
   hence thesis by A1,Lm1;
 end;
 
@@ -715,19 +714,19 @@ proof
   let x be Element of C;
   min(f.x,g.x) <= f.x & f.x <= max(f.x,g.x) by XXREAL_0:17,25;
   then min(f.x,g.x) <= max(f.x,g.x) by XXREAL_0:2;
-  then min(f.x,g.x) <= max(f,g).x by Def5;
-  hence thesis by Def4;
+  then min(f.x,g.x) <= max(f,g).x by Def4;
+  hence thesis by Def3;
 end;
 
-theorem Th25:
+theorem Th24:
   h c= f & h c= g implies h c= min(f,g)
 proof
   assume
 A1: h c= f & h c= g;
   let x be Element of C;
-  h.x <= f.x & h.x <= g.x by A1,Def3;
+  h.x <= f.x & h.x <= g.x by A1,Def2;
   then h.x <= min(f.x,g.x) by XXREAL_0:20;
-  hence thesis by Def4;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -736,10 +735,10 @@ proof
   assume
 A1: f c= g;
   let x be Element of C;
-  f.x <= g.x by A1,Def3;
+  f.x <= g.x by A1,Def2;
   then min(f.x,h.x) <= min(g.x,h.x) by XXREAL_0:18;
-  then min(f,h).x <= min(g.x,h.x) by Def4;
-  hence thesis by Def4;
+  then min(f,h).x <= min(g.x,h.x) by Def3;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -748,13 +747,13 @@ proof
   assume
 A1: f c= g & h c= h1;
   let x be Element of C;
-  f.x <= g.x & h.x <= h1.x by A1,Def3;
+  f.x <= g.x & h.x <= h1.x by A1,Def2;
   then min(f.x,h.x) <= min(g.x,h1.x) by XXREAL_0:18;
-  then min(f,h).x <= min(g.x,h1.x) by Def4;
-  hence thesis by Def4;
+  then min(f,h).x <= min(g.x,h1.x) by Def3;
+  hence thesis by Def3;
 end;
 
-theorem Th30:
+theorem Th27:
   f c= g implies min(f,g) = f
 proof
   assume
@@ -762,9 +761,9 @@ A1: f c= g;
 A2: for x being Element of C st x in C holds min(f,g).x = f.x
   proof
     let x be Element of C;
-    f.x <= g.x by A1,Def3;
+    f.x <= g.x by A1,Def2;
     then f.x = min(f.x,g.x) by XXREAL_0:def 9
-      .= min(f,g).x by Def4;
+      .= min(f,g).x by Def3;
     hence thesis;
   end;
   C = dom min(f,g) & C = dom f by FUNCT_2:def 1;
@@ -780,11 +779,11 @@ A2: min(g,h)= EMF(C);
 A3: for x being Element of C st x in C holds f.x = (EMF(C)).x
   proof
     let x be Element of C;
-    f.x <= g.x & f.x <= h.x by A1,Def3;
+    f.x <= g.x & f.x <= h.x by A1,Def2;
     then f.x <= min(g.x,h.x) by XXREAL_0:20;
     then
-A4: f.x <= min(g,h).x by Def4;
-    (EMF(C)).x <= f.x by Th17;
+A4: f.x <= min(g,h).x by Def3;
+    (EMF(C)).x <= f.x by Th16;
     hence thesis by A2,A4,XXREAL_0:1;
   end;
   C = dom f & C = dom EMF(C) by FUNCT_2:def 1;
@@ -797,12 +796,12 @@ proof
   assume
 A1: max(min(f,g),min(f,h)) = f;
   let x be Element of C;
-  max(min(f,g),min(f,h)).x = max(min(f,g).x,min(f,h).x) by Def5
-    .=max(min(f,g).x,min(f.x,h.x)) by Def4
-    .=max(min(f.x,g.x),min(f.x,h.x)) by Def4
+  max(min(f,g),min(f,h)).x = max(min(f,g).x,min(f,h).x) by Def4
+    .=max(min(f,g).x,min(f.x,h.x)) by Def3
+    .=max(min(f.x,g.x),min(f.x,h.x)) by Def3
     .=min(f.x,max(g.x,h.x)) by XXREAL_0:38;
   then f.x <= max(g.x,h.x) by A1,XXREAL_0:def 9;
-  hence thesis by Def5;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -814,12 +813,12 @@ A2: min(g,h) = EMF(C);
 A3: for x being Element of C st x in C holds min(f,h).x = (EMF(C)).x
   proof
     let x be Element of C;
-    f.x <= g.x by A1,Def3;
+    f.x <= g.x by A1,Def2;
     then min(f.x,h.x) <= min(g.x,h.x) by XXREAL_0:18;
-    then min(f.x,h.x) <= min(g,h).x by Def4;
+    then min(f.x,h.x) <= min(g,h).x by Def3;
     then
-A4: min(f,h).x <= min(g,h).x by Def4;
-    (EMF(C)).x <= min(f,h).x by Th17;
+A4: min(f,h).x <= min(g,h).x by Def3;
+    (EMF(C)).x <= min(f,h).x by Th16;
     hence thesis by A2,A4,XXREAL_0:1;
   end;
   C = dom min(f,h) & C = dom EMF(C) by FUNCT_2:def 1;
@@ -829,7 +828,7 @@ end;
 theorem
   f c= EMF(C) implies f = EMF(C)
 proof
-  EMF(C) c= f by Th15;
+  EMF(C) c= f by Th14;
   hence thesis by Lm1;
 end;
 
@@ -843,19 +842,19 @@ A1: max(f,g) = EMF(C);
 A2: for x being Element of C st x in C holds f.x = (EMF(C)).x
     proof
       let x be Element of C;
-      max(f.x,g.x) =(EMF(C)).x by A1,Def5;
+      max(f.x,g.x) =(EMF(C)).x by A1,Def4;
       then
 A3:   f.x <= (EMF(C)).x by XXREAL_0:25;
-      (EMF(C)).x <= f.x by Th17;
+      (EMF(C)).x <= f.x by Th16;
       hence thesis by A3,XXREAL_0:1;
     end;
 A4: for x being Element of C st x in C holds g.x = (EMF(C)).x
     proof
       let x be Element of C;
-      max(f.x,g.x) =(EMF(C)).x by A1,Def5;
+      max(f.x,g.x) =(EMF(C)).x by A1,Def4;
       then
 A5:   g.x <= (EMF(C)).x by XXREAL_0:25;
-      (EMF(C)).x <= g.x by Th17;
+      (EMF(C)).x <= g.x by Th16;
       hence thesis by A5,XXREAL_0:1;
     end;
     C = dom f & C = dom EMF(C) by FUNCT_2:def 1;
@@ -873,25 +872,25 @@ proof
   hereby
     assume
 A1: f = max(g,h);
-    hence g c= f & h c= f by Th18;
+    hence g c= f & h c= f by Th17;
     let h1;
     assume
 A2: g c= h1 & h c= h1;
     thus f c= h1
     proof
       let x be Element of C;
-      g.x <= h1.x & h.x <= h1.x by A2,Def3;
+      g.x <= h1.x & h.x <= h1.x by A2,Def2;
       then max(g.x,h.x) <= h1.x by XXREAL_0:28;
-      hence thesis by A1,Def5;
+      hence thesis by A1,Def4;
     end;
   end;
   assume that
 A3: g c= f & h c= f and
 A4: for h1 st g c= h1 & h c= h1 holds f c= h1;
-  g c= max(g,h) & h c= max(g,h) by Th18;
+  g c= max(g,h) & h c= max(g,h) by Th17;
   then
 A5: f c= max(g,h) by A4;
-  max(g,h) c= f by A3,Th20;
+  max(g,h) c= f by A3,Th19;
   hence thesis by A5,Lm1;
 end;
 
@@ -901,25 +900,25 @@ proof
   hereby
     assume
 A1: f = min(g,h);
-    hence f c= g & f c= h by Th18;
+    hence f c= g & f c= h by Th17;
     let h1;
     assume
 A2: h1 c= g & h1 c= h;
     thus h1 c= f
     proof
       let x be Element of C;
-      h1.x <= g.x & h1.x <= h.x by A2,Def3;
+      h1.x <= g.x & h1.x <= h.x by A2,Def2;
       then min(g.x,h.x) >= h1.x by XXREAL_0:20;
-      hence thesis by A1,Def4;
+      hence thesis by A1,Def3;
     end;
   end;
   assume that
 A3: f c= g & f c= h and
 A4: for h1 st h1 c= g & h1 c= h holds h1 c= f;
-  min(g,h) c= g & min(g,h) c= h by Th18;
+  min(g,h) c= g & min(g,h) c= h by Th17;
   then
 A5: min(g,h) c= f by A4;
-  f c= min(g,h) by A3,Th25;
+  f c= min(g,h) by A3,Th24;
   hence thesis by A5,Lm1;
 end;
 
@@ -930,10 +929,10 @@ proof
 A1: f c= max(g,h) and
 A2: min(f,h) = EMF(C);
   let x be Element of C;
-  min(f,max(g,h)) = f by A1,Th30;
-  then f = max(min(f,g),min(f,h)) by Th10
-    .= min(f,g) by A2,Th19;
-  then f.x = min(f.x,g.x) by Def4;
+  min(f,max(g,h)) = f by A1,Th27;
+  then f = max(min(f,g),min(f,h)) by Th9
+    .= min(f,g) by A2,Th18;
+  then f.x = min(f.x,g.x) by Def3;
   hence thesis by XXREAL_0:def 9;
 end;
 
@@ -942,13 +941,13 @@ proof
   assume
 A1: f c= g;
   let x be Element of C;
-  f.x <= g.x by A1,Def3;
+  f.x <= g.x by A1,Def2;
   then 1-(g.x) <= 1-(f.x) by XREAL_1:10;
-  then (1_minus(g)).x <= 1-(f.x) by Def6;
-  hence thesis by Def6;
+  then (1_minus(g)).x <= 1-(f.x) by Def5;
+  hence thesis by Def5;
 end;
 
-theorem Th39:
+theorem Th36:
   f c= g iff 1_minus g c= 1_minus f
 proof
   1_minus 1_minus f = f & 1_minus 1_minus g = g;
@@ -959,30 +958,30 @@ theorem
   f c= 1_minus g implies g c= 1_minus f
 proof
   1_minus 1_minus f = f;
-  hence thesis by Th39;
+  hence thesis by Th36;
 end;
 
 theorem
   1_minus max(f,g) c= 1_minus f
 proof
-  f c= max(f,g) by Th18;
-  hence thesis by Th39;
+  f c= max(f,g) by Th17;
+  hence thesis by Th36;
 end;
 
 theorem
   1_minus f c= 1_minus min(f,g)
 proof
-  min(f,g) c= f by Th18;
-  hence thesis by Th39;
+  min(f,g) c= f by Th17;
+  hence thesis by Th36;
 end;
 
-theorem Th44:
+theorem Th40:
   1_minus(EMF(C)) = UMF(C) & 1_minus(UMF(C)) = EMF(C)
 proof
 A1: for x being Element of C st x in C holds (1_minus(EMF(C))).x = (UMF(C)). x
   proof
     let x be Element of C;
-    (1_minus(EMF(C))).x = 1 - (EMF(C)).x by Def6
+    (1_minus(EMF(C))).x = 1 - (EMF(C)).x by Def5
       .= 1 - 0 by FUNCT_3:def 3
       .= 1;
     hence thesis by FUNCT_3:def 3;
@@ -992,7 +991,7 @@ A1: for x being Element of C st x in C holds (1_minus(EMF(C))).x = (UMF(C)). x
 A2: for x being Element of C st x in C holds (1_minus(UMF(C))).x = (EMF(C)). x
   proof
     let x be Element of C;
-    (1_minus(UMF(C))).x = 1 - (UMF(C)).x by Def6
+    (1_minus(UMF(C))).x = 1 - (UMF(C)).x by Def5
       .= 1 - 1 by FUNCT_3:def 3
       .= 0;
     hence thesis by FUNCT_3:def 3;
@@ -1016,35 +1015,35 @@ end;
 theorem
   f \+\ EMF(C) = f
 proof
-  thus f \+\ EMF(C) = max(min(f,UMF(C)),min(1_minus(f),EMF(C))) by Th44
-    .= max(f,min(1_minus(f),EMF(C))) by Th19
-    .= max(f,EMF(C)) by Th19
-    .= f by Th19;
+  thus f \+\ EMF(C) = max(min(f,UMF(C)),min(1_minus(f),EMF(C))) by Th40
+    .= max(f,min(1_minus(f),EMF(C))) by Th18
+    .= max(f,EMF(C)) by Th18
+    .= f by Th18;
 end;
 
 theorem
   f \+\ UMF(C) = 1_minus f
 proof
-  thus f \+\ UMF(C) = max(min(f,EMF(C)),min(1_minus(f),UMF(C))) by Th44
-    .= max(EMF(C),min(1_minus(f),UMF(C))) by Th19
-    .= min(1_minus(f),UMF(C)) by Th19
-    .= 1_minus f by Th19;
+  thus f \+\ UMF(C) = max(min(f,EMF(C)),min(1_minus(f),UMF(C))) by Th40
+    .= max(EMF(C),min(1_minus(f),UMF(C))) by Th18
+    .= min(1_minus(f),UMF(C)) by Th18
+    .= 1_minus f by Th18;
 end;
 
 theorem
   min(min(max(f,g),max(g,h)),max(h,f)) = max(max(min(f,g),min(g,h)),min( h,f))
 proof
   thus min(min(max(f,g),max(g,h)),max(h,f)) = max(min(min(max(f,g),max(g,h)),h
-  ),min(min(max(f,g),max(g,h)),f)) by Th10
-    .=max(min(max(f,g),min(max(g,h),h)),min(min(max(f,g),max(g,h)),f)) by Th8
-    .=max(min(max(f,g),min(max(h,g),h)),min(min(max(f,g),f),max(g,h))) by Th8
-    .=max(min(max(f,g),h),min(min(max(f,g),f),max(g,h))) by Th9
-    .=max(min(max(f,g),h),min(f,max(g,h))) by Th9
-    .=max(min(h,max(f,g)),max(min(f,g),min(f,h) )) by Th10
-    .=max(max(min(f,g),min(f,h)),max(min(h,f),min(h,g))) by Th10
-    .=max(max(max(min(f,g),min(f,h)),min(f,h)),min(h,g)) by Th8
-    .=max(max(min(f,g),max(min(f,h),min(f,h))),min(h,g)) by Th8
-    .=max(max(min(f,g),min(g,h)),min(h,f)) by Th8;
+  ),min(min(max(f,g),max(g,h)),f)) by Th9
+    .=max(min(max(f,g),min(max(g,h),h)),min(min(max(f,g),max(g,h)),f)) by Th7
+    .=max(min(max(f,g),min(max(h,g),h)),min(min(max(f,g),f),max(g,h))) by Th7
+    .=max(min(max(f,g),h),min(min(max(f,g),f),max(g,h))) by Th8
+    .=max(min(max(f,g),h),min(f,max(g,h))) by Th8
+    .=max(min(h,max(f,g)),max(min(f,g),min(f,h) )) by Th9
+    .=max(max(min(f,g),min(f,h)),max(min(h,f),min(h,g))) by Th9
+    .=max(max(max(min(f,g),min(f,h)),min(f,h)),min(h,g)) by Th7
+    .=max(max(min(f,g),max(min(f,h),min(f,h))),min(h,g)) by Th7
+    .=max(max(min(f,g),min(g,h)),min(h,f)) by Th7;
 end;
 
 theorem
@@ -1052,18 +1051,18 @@ theorem
 proof
   set f1 = 1_minus f, g1 = 1_minus g;
   let x be Element of C;
-  1_minus (f \+\ g) = min( 1_minus min(f,g1) , 1_minus min(f1,g)) by Th12
-    .= min( max(f1,1_minus g1),1_minus min(f1,g)) by Th12
-    .= min( max(f1,g),max(1_minus f1,g1)) by Th12
-    .= max(min(max(f1,g),f),min(max(f1,g),g1)) by Th10
-    .= max( max(min(f,f1),min(f,g)) ,min(max(f1,g),g1)) by Th10
-    .= max( max(min(f,f1),min(f,g)) , max(min(g1,f1),min(g1,g))) by Th10
-    .= max( max(max(min(f,g),min(f,f1)),min(g1,f1)) , min(g1,g)) by Th8
-    .= max( max(max(min(g1,f1),min(f,g)),min(f,f1)) , min(g1,g)) by Th8
-    .= max( max(min(g1,f1),min(f,g)), max(min(f,f1) , min(g1,g))) by Th8;
+  1_minus (f \+\ g) = min( 1_minus min(f,g1) , 1_minus min(f1,g)) by Th11
+    .= min( max(f1,1_minus g1),1_minus min(f1,g)) by Th11
+    .= min( max(f1,g),max(1_minus f1,g1)) by Th11
+    .= max(min(max(f1,g),f),min(max(f1,g),g1)) by Th9
+    .= max( max(min(f,f1),min(f,g)) ,min(max(f1,g),g1)) by Th9
+    .= max( max(min(f,f1),min(f,g)) , max(min(g1,f1),min(g1,g))) by Th9
+    .= max( max(max(min(f,g),min(f,f1)),min(g1,f1)) , min(g1,g)) by Th7
+    .= max( max(max(min(g1,f1),min(f,g)),min(f,f1)) , min(g1,g)) by Th7
+    .= max( max(min(g1,f1),min(f,g)), max(min(f,f1) , min(g1,g))) by Th7;
   then
   (1_minus (f \+\ g)).x = max(max(min(f,g),min(f1,g1)).x,max(min(f,f1),min
-  (g1,g)).x) by Def5;
+  (g1,g)).x) by Def4;
   hence thesis by XXREAL_0:25;
 end;
 
@@ -1072,19 +1071,19 @@ theorem
 proof
   set f1 = 1_minus f, g1 = 1_minus g;
   let x be Element of C;
-  max(f \+\ g, min(f,g)) = max(min(f,g1),max(min(f1,g),min(f,g))) by Th8
-    .= max(min(f,g1),min(max(min(f1,g),f),max(g,min(f1,g)))) by Th10
-    .= max(min(f,g1),min(max(min(f1,g),f),g)) by Th9
-    .= min(max(min(f,g1),max(f,min(f1,g))),max(min(f,g1),g)) by Th10
-    .= min(max(max(f,min(f,g1)),min(f1,g)) ,max(min(f,g1),g)) by Th8
-    .= min(max(f,min(f1,g)) ,max(min(f,g1),g)) by Th9
-    .= min( min(max(f,f1),max(f,g)) ,max(g,min(f,g1))) by Th10
-    .= min( min(max(f,f1),max(f,g)) , min(max(g,f),max(g,g1)) ) by Th10
-    .= min(min( min(max(f,f1),max(f,g)),max(g,f) ),max(g,g1) ) by Th8
-    .= min(min( max(f,f1),min(max(f,g),max(f,g)) ),max(g,g1) ) by Th8
-    .= min(max(f,g),min(max(f,f1),max(g,g1))) by Th8;
+  max(f \+\ g, min(f,g)) = max(min(f,g1),max(min(f1,g),min(f,g))) by Th7
+    .= max(min(f,g1),min(max(min(f1,g),f),max(g,min(f1,g)))) by Th9
+    .= max(min(f,g1),min(max(min(f1,g),f),g)) by Th8
+    .= min(max(min(f,g1),max(f,min(f1,g))),max(min(f,g1),g)) by Th9
+    .= min(max(max(f,min(f,g1)),min(f1,g)) ,max(min(f,g1),g)) by Th7
+    .= min(max(f,min(f1,g)) ,max(min(f,g1),g)) by Th8
+    .= min( min(max(f,f1),max(f,g)) ,max(g,min(f,g1))) by Th9
+    .= min( min(max(f,f1),max(f,g)) , min(max(g,f),max(g,g1)) ) by Th9
+    .= min(min( min(max(f,f1),max(f,g)),max(g,f) ),max(g,g1) ) by Th7
+    .= min(min( max(f,f1),min(max(f,g),max(f,g)) ),max(g,g1) ) by Th7
+    .= min(max(f,g),min(max(f,f1),max(g,g1))) by Th7;
   then
-  max(f \+\ g, min(f,g)).x = min(max(f,g).x,min(max(f,f1),max(g,g1)).x) by Def4
+  max(f \+\ g, min(f,g)).x = min(max(f,g).x,min(max(f,f1),max(g,g1)).x) by Def3
 ;
   hence thesis by XXREAL_0:17;
 end;

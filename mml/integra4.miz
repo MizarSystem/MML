@@ -2,7 +2,7 @@
 ::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
 ::
 :: Received February 1, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,15 +23,16 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, INT_1, XXREAL_2, VALUED_0, ZFMISC_1, FUNCT_1,
       RELSET_1, FINSET_1, FUNCT_2, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1,
-      FINSEQ_2, SEQ_2, SEQ_4, RCOMP_1, FDIFF_1, SQUARE_1, RVSUM_1, MEASURE5,
+      FINSEQ_2, COMSEQ_2,
+      SEQ_2, SEQ_4, RCOMP_1, FDIFF_1, SQUARE_1, RVSUM_1, MEASURE5,
       INTEGRA1, INTEGRA2, INTEGRA3, RFUNCT_3, PARTFUN1, XXREAL_0;
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP, FINSOP_1,
       PARTFUN2, FDIFF_1, ZFMISC_1, RFUNCT_3, INTEGRA2, SEQ_1, XXREAL_2,
-      RVSUM_1, SEQ_4, RELSET_1, SEQ_2, INTEGRA3;
+      RVSUM_1, SEQ_4, RELSET_1, SEQ_2, INTEGRA3, COMSEQ_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, INTEGRA1,
       VALUED_0, VALUED_1, XXREAL_2, CARD_1, SEQ_2, SEQ_4, RELSET_1, SEQM_3,
-      MEASURE5;
+      MEASURE5, COMSEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SQUARE_1, RVSUM_1, FINSEQ_2, VALUED_1, XXREAL_2;
  theorems SEQ_4, SUBSET_1, PARTFUN1, INTEGRA1, RFUNCT_1, FUNCT_1, FINSEQ_1,
@@ -77,134 +78,83 @@ end;
 theorem Th2:
   chi(A,A) is integrable & integral(chi(A,A))=vol(A)
 proof
-A1: rng(lower_sum_set(chi(A,A))) c= rng((lower_sum_set(chi(A,A)))|(divs A))
-  proof
-    let x1 be set;
-    x1 in rng lower_sum_set(chi(A,A)) implies x1 in rng ((lower_sum_set(
-    chi(A,A)))|(divs A))
-    proof
-      assume x1 in rng lower_sum_set(chi(A,A));
-      then consider D1 being Element of divs A such that
-A2:   D1 in dom lower_sum_set(chi(A,A)) and
-A3:   (lower_sum_set(chi(A,A))).D1=x1 by PARTFUN1:3;
-      D1 in divs A /\ dom lower_sum_set(chi(A,A)) by A2,XBOOLE_1:28;
-      then
-A4:   D1 in dom ((lower_sum_set(chi(A,A)))|(divs A)) by RELAT_1:61;
-      then ((lower_sum_set(chi(A,A)))|(divs A)).D1=(lower_sum_set(chi(A,A))).
-      D1 by FUNCT_1:47;
-      hence thesis by A3,A4,FUNCT_1:def 3;
-    end;
-    hence thesis;
-  end;
   divs A /\ dom upper_sum_set(chi(A,A))=divs A /\ divs A by FUNCT_2:def 1
-,INTEGRA1:def 10;
+;
   then
-A5: divs A meets dom upper_sum_set(chi(A,A)) by XBOOLE_0:def 7;
-A6: for D1 being Element of divs A st D1 in divs A /\ dom upper_sum_set(chi(
+A1: divs A meets dom upper_sum_set(chi(A,A)) by XBOOLE_0:def 7;
+A2: for D1 being Element of divs A st D1 in divs A /\ dom upper_sum_set(chi(
   A,A)) holds (upper_sum_set(chi(A,A)))/.D1=vol(A)
   proof
     let D1 be Element of divs A;
     reconsider D2 = D1 as Division of A by INTEGRA1:def 3;
     assume D1 in divs A /\ dom upper_sum_set(chi(A,A));
-    then
-A7: D1 in dom upper_sum_set(chi(A,A)) by XBOOLE_0:def 4;
-    then (upper_sum_set(chi(A,A)))/.D1=(upper_sum_set(chi(A,A))).D1 by
-PARTFUN1:def 6
-      .=upper_sum(chi(A,A),D2) by A7,FUNCT_2:def 1,INTEGRA1:def 10
+    (upper_sum_set(chi(A,A)))/.D1=(upper_sum_set(chi(A,A))).D1
+      .=upper_sum(chi(A,A),D2) by INTEGRA1:def 10
       .=Sum(upper_volume(chi(A,A),D2)) by INTEGRA1:def 8;
     hence thesis by INTEGRA1:24;
   end;
   then (upper_sum_set chi(A,A))|divs A is constant by PARTFUN2:35;
   then consider x being Element of REAL such that
-A8: rng((upper_sum_set(chi(A,A)))|(divs A))={x} by A5,PARTFUN2:37;
-A9: rng(upper_sum_set(chi(A,A))) c= rng((upper_sum_set(chi(A,A)))|(divs A))
-  proof
-    let x1 be set;
-    x1 in rng upper_sum_set(chi(A,A)) implies x1 in rng ((upper_sum_set(
-    chi(A,A)))|(divs A))
-    proof
-      assume x1 in rng upper_sum_set(chi(A,A));
-      then consider D1 being Element of divs A such that
-A10:  D1 in dom upper_sum_set(chi(A,A)) and
-A11:  (upper_sum_set(chi(A,A))).D1=x1 by PARTFUN1:3;
-      D1 in divs A /\ dom upper_sum_set(chi(A,A)) by A10,XBOOLE_1:28;
-      then
-A12:  D1 in dom ((upper_sum_set(chi(A,A)))|(divs A)) by RELAT_1:61;
-      then ((upper_sum_set(chi(A,A)))|(divs A)).D1=(upper_sum_set(chi(A,A))).
-      D1 by FUNCT_1:47;
-      hence thesis by A11,A12,FUNCT_1:def 3;
-    end;
-    hence thesis;
-  end;
-  then
-A13: chi(A,A) is upper_integrable by A8,INTEGRA1:def 12;
+A3: rng((upper_sum_set(chi(A,A)))|(divs A))={x} by A1,PARTFUN2:37;
+A4: chi(A,A) is upper_integrable by A3,INTEGRA1:def 12;
   vol(A) in rng upper_sum_set(chi(A,A))
   proof
     set D1 = the Element of divs A;
     D1 in divs A;
     then
-A14: D1 in dom upper_sum_set(chi(A,A)) by FUNCT_2:def 1,INTEGRA1:def 10;
+A5: D1 in dom upper_sum_set(chi(A,A)) by FUNCT_2:def 1;
     then
-A15: (upper_sum_set(chi(A,A))).D1 in rng upper_sum_set(chi(A,A)) by
+A6: (upper_sum_set(chi(A,A))).D1 in rng upper_sum_set(chi(A,A)) by
 FUNCT_1:def 3;
-A16: (upper_sum_set(chi(A,A))).D1 = (upper_sum_set(chi(A,A)))/.D1 by A14,
-PARTFUN1:def 6;
-    D1 in divs A /\ dom upper_sum_set(chi(A,A)) by A14,XBOOLE_0:def 4;
-    hence thesis by A6,A15,A16;
+A7: (upper_sum_set(chi(A,A))).D1 = (upper_sum_set(chi(A,A)))/.D1;
+    D1 in divs A /\ dom upper_sum_set(chi(A,A)) by A5,XBOOLE_0:def 4;
+    hence thesis by A2,A6,A7;
   end;
   then
-A17: x=vol(A) by A8,A9,TARSKI:def 1;
-  rng((upper_sum_set(chi(A,A)))|(divs A)) c= rng(upper_sum_set(chi(A,A)))
-  by RELAT_1:70;
-  then rng upper_sum_set(chi(A,A))={x} by A8,A9,XBOOLE_0:def 10;
-  then lower_bound rng upper_sum_set(chi(A,A))=vol(A) by A17,SEQ_4:9;
+A8: x=vol(A) by A3,TARSKI:def 1;
+  rng upper_sum_set(chi(A,A))={x} by A3;
+  then lower_bound rng upper_sum_set(chi(A,A))=vol(A) by A8,SEQ_4:9;
   then
-A18: upper_integral(chi(A,A))=vol(A) by INTEGRA1:def 14;
+A9: upper_integral(chi(A,A))=vol(A) by INTEGRA1:def 14;
   divs A /\ dom lower_sum_set(chi(A,A))=divs A /\ divs A by FUNCT_2:def 1
-,INTEGRA1:def 11;
+;
   then
-A19: divs A meets dom lower_sum_set(chi(A,A)) by XBOOLE_0:def 7;
-A20: for D1 being Element of divs A st D1 in divs A /\ dom lower_sum_set(chi
+A10: divs A meets dom lower_sum_set(chi(A,A)) by XBOOLE_0:def 7;
+A11: for D1 being Element of divs A st D1 in divs A /\ dom lower_sum_set(chi
   (A,A)) holds (lower_sum_set(chi(A,A)))/.D1=vol(A)
   proof
     let D1 be Element of divs A;
     reconsider D2 = D1 as Division of A by INTEGRA1:def 3;
     assume D1 in divs A /\ dom lower_sum_set(chi(A,A));
-    then
-A21: D1 in dom lower_sum_set(chi(A,A)) by XBOOLE_0:def 4;
-    then (lower_sum_set(chi(A,A)))/.D1=(lower_sum_set(chi(A,A))).D1 by
-PARTFUN1:def 6
-      .=lower_sum(chi(A,A),D2) by A21,FUNCT_2:def 1,INTEGRA1:def 11
+    (lower_sum_set(chi(A,A)))/.D1=(lower_sum_set(chi(A,A))).D1
+      .=lower_sum(chi(A,A),D2) by INTEGRA1:def 11
       .=Sum(lower_volume(chi(A,A),D2)) by INTEGRA1:def 9;
     hence thesis by INTEGRA1:23;
   end;
   then (lower_sum_set chi(A,A))|divs A is constant by PARTFUN2:35;
   then consider x being Element of REAL such that
-A22: rng((lower_sum_set(chi(A,A)))|(divs A))={x} by A19,PARTFUN2:37;
+A12: rng((lower_sum_set(chi(A,A)))|(divs A))={x} by A10,PARTFUN2:37;
   vol(A) in rng lower_sum_set(chi(A,A))
   proof
     set D1 = the Element of divs A;
     D1 in divs A;
     then
-A23: D1 in dom lower_sum_set(chi(A,A)) by FUNCT_2:def 1,INTEGRA1:def 11;
+A13: D1 in dom lower_sum_set(chi(A,A)) by FUNCT_2:def 1;
     then
-A24: (lower_sum_set(chi(A,A))).D1 in rng lower_sum_set(chi(A,A)) by
+A14: (lower_sum_set(chi(A,A))).D1 in rng lower_sum_set(chi(A,A)) by
 FUNCT_1:def 3;
-A25: (lower_sum_set(chi(A,A))).D1 = (lower_sum_set(chi(A,A)))/.D1 by A23,
-PARTFUN1:def 6;
-    D1 in divs A /\ dom lower_sum_set(chi(A,A)) by A23,XBOOLE_0:def 4;
-    hence thesis by A20,A24,A25;
+A15: (lower_sum_set(chi(A,A))).D1 = (lower_sum_set(chi(A,A)))/.D1;
+    D1 in divs A /\ dom lower_sum_set(chi(A,A)) by A13,XBOOLE_0:def 4;
+    hence thesis by A11,A14,A15;
   end;
   then
-A26: x=vol(A) by A22,A1,TARSKI:def 1;
-  rng((lower_sum_set(chi(A,A)))|(divs A)) c= rng(lower_sum_set(chi(A,A)))
-  by RELAT_1:70;
-  then rng lower_sum_set(chi(A,A))={x} by A22,A1,XBOOLE_0:def 10;
-  then upper_bound rng lower_sum_set(chi(A,A))=vol(A) by A26,SEQ_4:9;
+A16: x=vol(A) by A12,TARSKI:def 1;
+  rng lower_sum_set(chi(A,A))={x} by A12;
+  then upper_bound rng lower_sum_set(chi(A,A))=vol(A) by A16,SEQ_4:9;
   then
-A27: lower_integral(chi(A,A))=vol(A) by INTEGRA1:def 15;
-  chi(A,A) is lower_integrable by A22,A1,INTEGRA1:def 13;
-  hence thesis by A13,A18,A27,INTEGRA1:def 16,def 17;
+A17: lower_integral(chi(A,A))=vol(A) by INTEGRA1:def 15;
+  chi(A,A) is lower_integrable by A12,INTEGRA1:def 13;
+  hence thesis by A4,A9,A17,INTEGRA1:def 16,def 17;
 end;
 
 theorem Th3:
@@ -290,7 +240,7 @@ A2: integral(chi(A,A))=vol(A) by Th2;
   assume rng f={r};
   then
 A3: f=r(#)chi(A,A) by Th3;
-A4: rng chi(A,A) is bounded by INTEGRA1:17;
+A4: rng chi(A,A) is real-bounded by INTEGRA1:17;
   then
 A5: chi(A,A)|A is bounded_above by INTEGRA1:14;
 A6: chi(A,A)|A is bounded_below by A4,INTEGRA1:12;
@@ -318,7 +268,7 @@ proof
   let f be PartFunc of A,REAL;
   let D be Element of divs A;
   divs A /\ dom upper_sum_set(f)=divs A /\ divs A by FUNCT_2:def 1
-,INTEGRA1:def 10;
+;
   then
 A1: divs A meets dom upper_sum_set(f) by XBOOLE_0:def 7;
   assume
@@ -350,53 +300,31 @@ INTEGRA1:def 6
     then
 A9: upper_volume(f,D2)=<*(0 qua Real)*> by A4,FINSEQ_1:40;
     assume D1 in divs A /\ dom upper_sum_set(f);
-    then
-A10: D1 in dom upper_sum_set(f) by XBOOLE_0:def 4;
-    then (upper_sum_set(f))/.D1=(upper_sum_set(f)).D1 by PARTFUN1:def 6
-      .=upper_sum(f,D2) by A10,FUNCT_2:def 1,INTEGRA1:def 10
+    (upper_sum_set(f))/.D1=(upper_sum_set(f)).D1
+      .=upper_sum(f,D2) by INTEGRA1:def 10
       .=Sum(upper_volume(f,D2)) by INTEGRA1:def 8;
     hence thesis by A9,FINSOP_1:11;
   end;
   then (upper_sum_set f)|divs A is constant by PARTFUN2:35;
   then consider x being Element of REAL such that
-A11: rng((upper_sum_set(f))|(divs A))={x} by A1,PARTFUN2:37;
-A12: rng(upper_sum_set(f)) c= rng((upper_sum_set(f))|(divs A))
-  proof
-    let x1 be set;
-    x1 in rng upper_sum_set(f) implies x1 in rng ((upper_sum_set(f))|(
-    divs A) )
-    proof
-      assume x1 in rng upper_sum_set(f);
-      then consider D1 being Element of divs A such that
-A13:  D1 in dom upper_sum_set(f) and
-A14:  (upper_sum_set(f)).D1=x1 by PARTFUN1:3;
-      D1 in divs A /\ dom upper_sum_set(f) by A13,XBOOLE_1:28;
-      then
-A15:  D1 in dom ((upper_sum_set(f))|(divs A)) by RELAT_1:61;
-      then ((upper_sum_set(f))|(divs A)).D1=(upper_sum_set(f)).D1 by FUNCT_1:47
-;
-      hence thesis by A14,A15,FUNCT_1:def 3;
-    end;
-    hence thesis;
-  end;
-  hence f is upper_integrable by A11,INTEGRA1:def 12;
+A10: rng((upper_sum_set(f))|(divs A))={x} by A1,PARTFUN2:37;
+  thus f is upper_integrable by A10,INTEGRA1:def 12;
   0 in rng upper_sum_set(f)
   proof
     set D1 = the Element of divs A;
     D1 in divs A;
     then
-A16: D1 in dom upper_sum_set(f) by FUNCT_2:def 1,INTEGRA1:def 10;
+A11: D1 in dom upper_sum_set(f) by FUNCT_2:def 1;
     then
-A17: (upper_sum_set(f)).D1 in rng upper_sum_set(f) by FUNCT_1:def 3;
-A18: (upper_sum_set(f)).D1 = (upper_sum_set(f))/.D1 by A16,PARTFUN1:def 6;
-    D1 in divs A /\ dom upper_sum_set(f) by A16,XBOOLE_0:def 4;
-    hence thesis by A3,A17,A18;
+A12: (upper_sum_set(f)).D1 in rng upper_sum_set(f) by FUNCT_1:def 3;
+A13: (upper_sum_set(f)).D1 = (upper_sum_set(f))/.D1;
+    D1 in divs A /\ dom upper_sum_set(f) by A11,XBOOLE_0:def 4;
+    hence thesis by A3,A12,A13;
   end;
   then
-A19: x=0 by A11,A12,TARSKI:def 1;
-  rng((upper_sum_set(f))|(divs A)) c= rng(upper_sum_set(f)) by RELAT_1:70;
-  then rng upper_sum_set(f)={x} by A11,A12,XBOOLE_0:def 10;
-  then lower_bound rng upper_sum_set(f)=0 by A19,SEQ_4:9;
+A14: x=0 by A10,TARSKI:def 1;
+  rng upper_sum_set(f)={x} by A10;
+  then lower_bound rng upper_sum_set(f)=0 by A14,SEQ_4:9;
   hence thesis by INTEGRA1:def 14;
 end;
 
@@ -406,7 +334,7 @@ proof
   let f be PartFunc of A,REAL;
   let D be Element of divs A;
   divs A /\ dom lower_sum_set(f)=divs A /\ divs A by FUNCT_2:def 1
-,INTEGRA1:def 11;
+;
   then
 A1: divs A meets dom lower_sum_set(f) by XBOOLE_0:def 7;
   assume
@@ -438,53 +366,31 @@ INTEGRA1:def 7
     then
 A9: lower_volume(f,D2)=<*(0 qua Real)*> by A4,FINSEQ_1:40;
     assume D1 in divs A /\ dom lower_sum_set(f);
-    then
-A10: D1 in dom lower_sum_set(f) by XBOOLE_0:def 4;
-    then (lower_sum_set(f))/.D1=(lower_sum_set(f)).D1 by PARTFUN1:def 6
-      .=lower_sum(f,D2) by A10,FUNCT_2:def 1,INTEGRA1:def 11
+    (lower_sum_set(f))/.D1=(lower_sum_set(f)).D1
+      .=lower_sum(f,D2) by INTEGRA1:def 11
       .=Sum(lower_volume(f,D2)) by INTEGRA1:def 9;
     hence thesis by A9,FINSOP_1:11;
   end;
   then (lower_sum_set f)|divs A is constant by PARTFUN2:35;
   then consider x being Element of REAL such that
-A11: rng((lower_sum_set(f))|(divs A))={x} by A1,PARTFUN2:37;
-A12: rng(lower_sum_set(f)) c= rng((lower_sum_set(f))|(divs A))
-  proof
-    let x1 be set;
-    x1 in rng lower_sum_set(f) implies x1 in rng ((lower_sum_set(f))|(
-    divs A ) )
-    proof
-      assume x1 in rng lower_sum_set(f);
-      then consider D1 being Element of divs A such that
-A13:  D1 in dom lower_sum_set(f) and
-A14:  (lower_sum_set(f)).D1=x1 by PARTFUN1:3;
-      D1 in divs A /\ dom lower_sum_set(f) by A13,XBOOLE_1:28;
-      then
-A15:  D1 in dom ((lower_sum_set(f))|(divs A)) by RELAT_1:61;
-      then ((lower_sum_set(f))|(divs A)).D1=(lower_sum_set(f)).D1 by FUNCT_1:47
-;
-      hence thesis by A14,A15,FUNCT_1:def 3;
-    end;
-    hence thesis;
-  end;
-  hence f is lower_integrable by A11,INTEGRA1:def 13;
+A10: rng((lower_sum_set(f))|(divs A))={x} by A1,PARTFUN2:37;
+  thus f is lower_integrable by A10,INTEGRA1:def 13;
   0 in rng lower_sum_set(f)
   proof
     set D1 = the Element of divs A;
     D1 in divs A;
     then
-A16: D1 in dom lower_sum_set(f) by FUNCT_2:def 1,INTEGRA1:def 11;
+A11: D1 in dom lower_sum_set(f) by FUNCT_2:def 1;
     then
-A17: (lower_sum_set(f)).D1 in rng lower_sum_set(f) by FUNCT_1:def 3;
-A18: (lower_sum_set(f)).D1 = (lower_sum_set(f))/.D1 by A16,PARTFUN1:def 6;
-    D1 in divs A /\ dom lower_sum_set(f) by A16,XBOOLE_0:def 4;
-    hence thesis by A3,A17,A18;
+A12: (lower_sum_set(f)).D1 in rng lower_sum_set(f) by FUNCT_1:def 3;
+A13: (lower_sum_set(f)).D1 = (lower_sum_set(f))/.D1;
+    D1 in divs A /\ dom lower_sum_set(f) by A11,XBOOLE_0:def 4;
+    hence thesis by A3,A12,A13;
   end;
   then
-A19: x=0 by A11,A12,TARSKI:def 1;
-  rng((lower_sum_set(f))|(divs A)) c= rng(lower_sum_set(f)) by RELAT_1:70;
-  then rng lower_sum_set(f)={x} by A11,A12,XBOOLE_0:def 10;
-  then upper_bound rng lower_sum_set(f)=0 by A19,SEQ_4:9;
+A14: x=0 by A10,TARSKI:def 1;
+  rng lower_sum_set(f)={x} by A10;
+  then upper_bound rng lower_sum_set(f)=0 by A14,SEQ_4:9;
   hence thesis by INTEGRA1:def 15;
 end;
 
@@ -660,7 +566,7 @@ FINSEQ_1:14;
         hence contradiction by A4,INTEGRA1:24;
       end;
       then delta(T) is non-zero by SEQ_1:5;
-      then delta(T) is convergent_to_0 by A2,A3,FDIFF_1:def 1;
+      then delta(T) is 0-convergent non-zero by A2,A3,FDIFF_1:def 1;
       hence thesis by A1,A4,INTEGRA3:20;
     end;
     suppose
@@ -770,7 +676,7 @@ FINSEQ_1:14;
         hence contradiction by A4,INTEGRA1:24;
       end;
       then delta(T) is non-zero by SEQ_1:5;
-      then delta(T) is convergent_to_0 by A2,A3,FDIFF_1:def 1;
+      then delta(T) is 0-convergent non-zero by A2,A3,FDIFF_1:def 1;
       hence thesis by A1,A4,INTEGRA3:21;
     end;
     suppose
@@ -827,14 +733,14 @@ A1: f|A is bounded;
     let r be ext-real number;
     assume r in rng upper_sum_set(f);
     then consider D being Element of divs A such that
-A2: D in dom upper_sum_set(f) and
-A3: (upper_sum_set(f)).D=r by PARTFUN1:3;
+ D in dom upper_sum_set(f) and
+A2: (upper_sum_set(f)).D=r by PARTFUN1:3;
     reconsider D as Division of A by INTEGRA1:def 3;
-    r = upper_sum(f,D) by A2,A3,FUNCT_2:def 1,INTEGRA1:def 10;
+    r = upper_sum(f,D) by A2,INTEGRA1:def 10;
     then
-A4: lower_sum(f,D) <= r by A1,INTEGRA1:28;
+A3: lower_sum(f,D) <= r by A1,INTEGRA1:28;
     (lower_bound rng f)*vol(A)<=lower_sum(f,D) by A1,INTEGRA1:25;
-    hence thesis by A4,XXREAL_0:2;
+    hence thesis by A3,XXREAL_0:2;
   end;
   then rng upper_sum_set(f) is bounded_below by XXREAL_2:def 9;
   hence f is upper_integrable by INTEGRA1:def 12;
@@ -843,14 +749,14 @@ A4: lower_sum(f,D) <= r by A1,INTEGRA1:28;
     let r be ext-real number;
     assume r in rng lower_sum_set(f);
     then consider D being Element of divs A such that
-A5: D in dom lower_sum_set(f) and
-A6: (lower_sum_set(f)).D=r by PARTFUN1:3;
+ D in dom lower_sum_set(f) and
+A4: (lower_sum_set(f)).D=r by PARTFUN1:3;
     reconsider D as Division of A by INTEGRA1:def 3;
-    r = lower_sum(f,D) by A5,A6,FUNCT_2:def 1,INTEGRA1:def 11;
+    r = lower_sum(f,D) by A4,INTEGRA1:def 11;
     then
-A7: upper_sum(f,D) >= r by A1,INTEGRA1:28;
+A5: upper_sum(f,D) >= r by A1,INTEGRA1:28;
     (upper_bound rng f)*vol(A)>=upper_sum(f,D) by A1,INTEGRA1:27;
-    hence thesis by A7,XXREAL_0:2;
+    hence thesis by A5,XXREAL_0:2;
   end;
   then rng lower_sum_set(f) is bounded_above by XXREAL_2:def 10;
   hence thesis by INTEGRA1:def 13;
@@ -1451,7 +1357,7 @@ A7: lim delta(T)=0;
 A8: lower_sum(f,T) is convergent by A1,A6,A7,Th8;
 A9: upper_sum(f,T) is convergent by A1,A6,A7,Th9;
     then
-A10: upper_sum(f,T)-lower_sum(f,T) is convergent by A8,SEQ_2:11;
+A10: upper_sum(f,T)-lower_sum(f,T) is convergent by A8;
     reconsider osc1=upper_sum(max+(f),T)-lower_sum(max+(f),T) as Real_Sequence;
     reconsider osc=upper_sum(f,T)-lower_sum(f,T) as Real_Sequence;
     lim upper_sum(f,T)-lim lower_sum(f,T)=0 by A1,A2,A6,A7,Th12;
@@ -1507,12 +1413,13 @@ A17:      j in dom D by FINSEQ_1:def 3;
           then
 A18:      LV1.j=(lower_bound (rng (max+(f)|divset(D,j))))*vol(divset(D,j)
           ) by INTEGRA1:def 7;
-A19:      rng (f|divset(D,j)) is bounded & ex r st r in rng (f|divset(D,j
+A19:      rng (f|divset(D,j)) is real-bounded & ex r st r in rng (f|divset(D,j
           ))
           proof
 A20:        rng f is bounded_below by A1,INTEGRA1:11;
             rng f is bounded_above by A1,INTEGRA1:13;
-            hence rng (f|divset(D,j)) is bounded by A20,RELAT_1:70,XXREAL_2:45;
+            hence rng (f|divset(D,j)) is real-bounded
+            by A20,RELAT_1:70,XXREAL_2:45;
             consider r such that
 A21:        r in divset(D,j) by SUBSET_1:4;
             j in dom D by A16,FINSEQ_1:def 3;
@@ -1914,7 +1821,7 @@ A115:       r in divset(D,j) by SUBSET_1:4;
           end;
           (max+f)|A is bounded_above by A1,Th14;
           then rng max+(f) is bounded_above by INTEGRA1:13;
-          then rng (max+(f)|divset(D,j)) is bounded by A109,RELAT_1:70
+          then rng (max+(f)|divset(D,j)) is real-bounded by A109,RELAT_1:70
 ,XXREAL_2:45;
           then
 A116:     upper_bound(rng(max+(f)|divset(D,j)))- lower_bound(rng(max+(f)
@@ -2308,7 +2215,7 @@ A7: lim delta(T)=0;
 A8: lower_sum(f,T) is convergent by A1,A6,A7,Th8;
 A9: upper_sum(f,T) is convergent by A1,A6,A7,Th9;
     then
-A10: upper_sum(f,T)-lower_sum(f,T) is convergent by A8,SEQ_2:11;
+A10: upper_sum(f,T)-lower_sum(f,T) is convergent by A8;
     reconsider osc1=upper_sum(g,T)-lower_sum(g,T) as Real_Sequence;
     reconsider osc=upper_sum(f,T)-lower_sum(f,T) as Real_Sequence;
     lim upper_sum(f,T)-lim lower_sum(f,T)=0 by A1,A2,A6,A7,Th12;
@@ -2393,7 +2300,8 @@ A23:        r in divset(D,j) by SUBSET_1:4;
             hence thesis;
           end;
           rng g is bounded_above by A3,INTEGRA1:13;
-          then rng (g|divset(D,j)) is bounded by A17,RELAT_1:70,XXREAL_2:45;
+          then rng (g|divset(D,j)) is real-bounded
+          by A17,RELAT_1:70,XXREAL_2:45;
           then
 A24:      upper_bound(rng(g|divset(D,j)))-lower_bound(rng(g|divset(D,j)))
           >=0 by A22,SEQ_4:11,XREAL_1:48;
@@ -2531,7 +2439,7 @@ A9: lim delta(T)=0;
 A10: lower_sum(g,T) is convergent by A3,A8,A9,Th8;
 A11: upper_sum(g,T) is convergent by A3,A8,A9,Th9;
     then
-A12: upper_sum(g,T)-lower_sum(g,T) is convergent by A10,SEQ_2:11;
+A12: upper_sum(g,T)-lower_sum(g,T) is convergent by A10;
     lim upper_sum(g,T)-lim lower_sum(g,T)=0 by A3,A4,A8,A9,Th12;
     then
 A13: lim(upper_sum(g,T)-lower_sum(g,T))=0 by A11,A10,SEQ_2:12;
@@ -2543,7 +2451,7 @@ A15: upper_sum(f,T) is convergent by A1,A8,A9,Th9;
     lim upper_sum(f,T)-lim lower_sum(f,T)=0 by A1,A2,A8,A9,Th12;
     then
 A16: lim(upper_sum(f,T)-lower_sum(f,T))=0 by A15,A14,SEQ_2:12;
-A17: upper_sum(f,T)-lower_sum(f,T) is convergent by A15,A14,SEQ_2:11;
+A17: upper_sum(f,T)-lower_sum(f,T) is convergent by A15,A14;
 A18: for b be real number st 0<b ex n st for m st n <= m holds abs(osc2.m-
     0)<b
     proof
@@ -2645,7 +2553,8 @@ A32:        r in divset(D,j) by SUBSET_1:4;
             hence thesis;
           end;
           rng g is bounded_above by A3,INTEGRA1:13;
-          then rng (g|divset(D,j)) is bounded by A26,RELAT_1:70,XXREAL_2:45;
+          then rng (g|divset(D,j)) is real-bounded
+          by A26,RELAT_1:70,XXREAL_2:45;
           then
 A33:      upper_bound(rng(g|divset(D,j)))-lower_bound(rng(g|divset(D,j))
           )>=0 by A31,SEQ_4:11,XREAL_1:48;
@@ -2698,7 +2607,8 @@ A45:        r in divset(D,j) by SUBSET_1:4;
             hence thesis;
           end;
           rng f is bounded_above by A1,INTEGRA1:13;
-          then rng (f|divset(D,j)) is bounded by A39,RELAT_1:70,XXREAL_2:45;
+          then rng (f|divset(D,j)) is real-bounded
+          by A39,RELAT_1:70,XXREAL_2:45;
           then
 A46:      upper_bound(rng(f|divset(D,j)))-lower_bound(rng(f|divset(D,j))
           )>=0 by A44,SEQ_4:11,XREAL_1:48;
@@ -2759,7 +2669,8 @@ A57:        r in divset(D,j) by SUBSET_1:4;
             hence thesis;
           end;
           rng h is bounded_above by A5,INTEGRA1:13;
-          then rng (h|divset(D,j)) is bounded by A51,RELAT_1:70,XXREAL_2:45;
+          then rng (h|divset(D,j)) is real-bounded
+          by A51,RELAT_1:70,XXREAL_2:45;
           then
 A58:      upper_bound(rng(h|divset(D,j)))-lower_bound(rng(h|divset(D,j))
           )>=0 by A56,SEQ_4:11,XREAL_1:48;

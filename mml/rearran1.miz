@@ -2,7 +2,7 @@
 ::  by Yuji Sakai and Jaros{\l}aw Kotowicz
 ::
 :: Received May 22, 1993
-:: Copyright (c) 1993-2011 Association of Mizar Users
+:: Copyright (c) 1993-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,19 +19,21 @@ environ
       ARYTM_1, TARSKI, ARYTM_3, ZFMISC_1, ORDINAL4, RFINSEQ, RFUNCT_3,
       CLASSES1, CARD_3, PBOOLE, FINSEQ_2, FUNCT_3, VALUED_0, REARRAN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MEMBERED, FUNCT_1,
-      RELSET_1, CARD_1, FINSET_1, NUMBERS, XXREAL_0, XCMPLX_0, REAL_1, NAT_1,
-      PARTFUN1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, FINSEQOP, RVSUM_1,
-      CLASSES1, RFINSEQ, RFUNCT_3;
+      RELSET_1, CARD_1, FINSET_1, NUMBERS, XXREAL_0, XCMPLX_0, REAL_1,
+      ORDINAL1, NAT_1, PARTFUN1, FINSEQ_1,
+      FINSEQ_2, VALUED_1, SEQ_1, RFUNCT_1, FINSEQOP,
+      RVSUM_1, CLASSES1, RFINSEQ, RFUNCT_3;
  constructors REAL_1, NAT_1, FINSEQOP, RVSUM_1, RFINSEQ, RFUNCT_3, SEQ_1,
       CLASSES1, RELSET_1, BINOP_2;
  registrations SUBSET_1, RELSET_1, PARTFUN1, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, VALUED_0, CARD_1, FINSEQ_2, FUNCT_1;
+      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, VALUED_0, CARD_1, FINSEQ_2, FUNCT_1,
+      INT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_2, RELAT_1;
  theorems FINSEQ_1, NAT_1, FUNCT_1, FINSEQ_2, TARSKI, CARD_2, CARD_1, PARTFUN1,
       FINSET_1, FINSEQ_3, RFUNCT_1, RVSUM_1, ZFMISC_1, RFINSEQ, RFUNCT_3,
       RELAT_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, FUNCOP_1, ORDINAL1,
-      VALUED_1, CLASSES1;
+      VALUED_1, CLASSES1, INT_1;
  schemes NAT_1, FINSEQ_1;
 
 begin
@@ -532,7 +534,7 @@ end;
 definition
   let D be non empty finite set, A be RearrangmentGen of D;
   func Co_Gen A -> RearrangmentGen of D means
-  :Def4:
+
   for m be Nat st 1 <= m & m <= len it - 1 holds it.m = D \ A.(len A -m);
   existence
   proof
@@ -611,14 +613,13 @@ A18:  m in dom f by A5,A16,A17,FINSEQ_3:25;
       then
 A19:  C.m = f.m by FINSEQ_1:def 7
         .= D \ A.(len A - m) by A2,A18;
-      now
         per cases;
-        case
+        suppose
           m = len C - 1;
           then C.(m+1) = D by A5,FINSEQ_1:42;
           hence thesis by A19;
         end;
-        case
+        suppose
           m <> len C - 1;
           then
 A20:      m < len C - 1 by A17,XXREAL_0:1;
@@ -640,8 +641,6 @@ A25:      1 <= len A - (m+1) by XREAL_1:19;
           then A.l c= A.(l+1) by A25,Def2;
           hence thesis by A19,A24,XBOOLE_1:34;
         end;
-      end;
-      hence thesis;
     end;
     then reconsider C as RearrangmentGen of D by A1,A5,A7,Def2,Th1;
     take C;
@@ -671,14 +670,13 @@ A33:  m in dom f1;
       then
 A34:  1<=m by A32,FINSEQ_1:1;
 A35:  m<=len A by A32,A33,FINSEQ_1:1;
-      now
         per cases;
-        case
+        suppose
 A36:      m = len A;
           then f1.m = D by A31,A30,Th3;
           hence f1.m = f2.m by A29,A30,A36,Th3;
         end;
-        case
+        suppose
           m <> len A;
           then m<len A by A35,XXREAL_0:1;
           then m+1<=len A by NAT_1:13;
@@ -687,60 +685,38 @@ A37:      m<=len A - 1 by XREAL_1:19;
           then f1.m1 = D \ A.(len A -m1) by A27,A31,A30,A34;
           hence f1.m = f2.m by A28,A29,A30,A34,A37;
         end;
-      end;
-      hence f1.m = f2.m;
     end;
     hence thesis by A31,A29,FINSEQ_2:9;
   end;
+ involutiveness
+  proof let B,A be RearrangmentGen of D such that
+A38: for m be Nat st 1 <= m & m <= len B - 1 holds B.m = D \ A.(len A -m);
+   let m be Nat such that
+A39: 1 <= m & m <= len A - 1;
+A40: len A = card D by Th1;
+A41: len B = card D by Th1;
+   len A -1 < len A by XREAL_1:44;
+   then
+A42: m < len A by A39,XXREAL_0:2;
+   then len A - m in NAT by INT_1:5;
+   then reconsider n = len B - m as Nat by A40,A41;
+A43: len A - n = m by A40,A41;
+   m+1 <= len A by A39,XREAL_1:19;
+   then
+A44: 1 <= n by A40,A41,XREAL_1:19;
+A45: n <= len B - 1 by A39,XREAL_1:10;
+   len A - n in dom A by A43,A39,A42,FINSEQ_3:25;
+   then
+A46: A.(len A -n) c= D by Lm5;
+   thus A.m = A.(len A -n) by A40,A41
+     .= D /\ A.(len A -n) by A46,XBOOLE_1:28
+     .= D \ (D \ A.(len A -n)) by XBOOLE_1:48
+     .= D \ B.(len B -m) by A44,A45,A38;
+
+  end;
 end;
 
-theorem
-  for A be RearrangmentGen of D holds Co_Gen(Co_Gen A) = A
-proof
-  let A be RearrangmentGen of D;
-  set C = Co_Gen(A), B = Co_Gen(C);
-A1: len A = card D by Th1;
-A2: len B = card D by Th1;
-A3: len C = card D by Th1;
-A4: for m be Nat st m in Seg len A holds A.m = B.m
-  proof
-    let m be Nat;
-    assume m in Seg len A;
-    then
-A5: m in dom A by FINSEQ_1:def 3;
-    then
-A6: m <= len A by FINSEQ_3:25;
-A7: 1 <= m by A5,FINSEQ_3:25;
-    now
-      per cases;
-      case
-A8:     m = len A;
-        then A.m = D by Th3;
-        hence thesis by A1,A2,A8,Th3;
-      end;
-      case
-        m<> len A;
-        then m < len A by A6,XXREAL_0:1;
-        then
-A9:     m+1 <= len A by NAT_1:13;
-        then
-A10:    m <= len A -1 by XREAL_1:19;
-        max(0,len A - m) = len A - m by A6,FINSEQ_2:4;
-        then reconsider k = len A - m as Element of NAT by FINSEQ_2:5;
-A11:    len A - m <= len A -1 by A7,XREAL_1:13;
-        1 <= len A - m by A9,XREAL_1:19;
-        then C.k = D \ A.(len A - k) by A3,A1,A11,Def4
-          .= D \ A.m;
-        hence B.m = D \ (D \ A.m) by A3,A1,A2,A7,A10,Def4
-          .= D /\ A.m by XBOOLE_1:48
-          .= A.m by A5,Lm5,XBOOLE_1:28;
-      end;
-    end;
-    hence thesis;
-  end;
-  dom A=Seg len A & dom B=Seg len B by FINSEQ_1:def 3;
-  hence thesis by A1,A2,A4,FINSEQ_1:13;
-end;
+canceled;
 
 theorem Th12:
   for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
@@ -956,8 +932,7 @@ RFUNCT_3:def 8;
         then
 A48:    chi(A.m,C).c = 0 by RFUNCT_1:64;
 A49:    m in Seg n by A43,A46,FINSEQ_1:1;
-        then
-A50:    n0.m = 0 by FUNCOP_1:7;
+A50:    n0.m = 0;
         dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
           .= C by RFUNCT_1:61;
         hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A47,VALUED_1:def 5

@@ -2,7 +2,7 @@
 ::  by Jing-Chao Chen
 ::
 :: Received December 10, 1997
-:: Copyright (c) 1997-2011 Association of Mizar Users
+:: Copyright (c) 1997-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,21 +18,21 @@ environ
       AMISTD_2, ARYTM_3, SUBSET_1, FUNCT_4, FUNCOP_1, AMI_3, RELAT_1, TARSKI,
       XBOOLE_0, CAT_1, NAT_1, SCMFSA6A, FUNCT_1, XXREAL_0, VALUED_1, CARD_3,
       ARYTM_1, FSM_1, SF_MASTR, SCMFSA7B, UNIALG_2, CIRCUIT2, GRAPHSP,
-      SCMFSA6B, SCMFSA_9, PBOOLE, ORDINAL1, PARTFUN1, SCMNORM, RELOC, SCMFSA6C,
-      COMPOS_1;
+      SCMFSA6B, SCMFSA_9, PBOOLE, ORDINAL1, PARTFUN1, EXTPRO_1, RELOC,
+      SCMFSA6C, COMPOS_1, MEMSTR_0, SCMPDS_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, RELAT_1,
       FUNCT_1, FUNCT_2, PARTFUN1, AFINSQ_1, FUNCOP_1, FUNCT_4, CARD_3,
-      MEMSTR_0, COMPOS_1, EXTPRO_1, VALUED_1, PBOOLE, NAT_1, AMISTD_1,
-      AMISTD_2, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, XXREAL_0;
+      MEMSTR_0, COMPOS_0, COMPOS_1, EXTPRO_1, VALUED_1, PBOOLE, ORDINAL1,
+      NAT_1, AMISTD_1, AMISTD_2, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
+      SCMFSA7B, SCMFSA8A, SCMFSA8B, XXREAL_0, SCMFSA_M;
  constructors XXREAL_0, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA8A, FUNCT_4,
       SCMFSA8B, AMISTD_2, RELSET_1, PRE_POLY, PBOOLE, SCMFSA7B, DOMAIN_1,
-      AMISTD_1, MEMSTR_0;
+      AMISTD_1, MEMSTR_0, SCMFSA_M;
  registrations SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XREAL_0, NAT_1, INT_1,
       CARD_3, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA7B, SCMFSA8A, ORDINAL1,
       XBOOLE_0, FINSET_1, VALUED_1, FUNCT_4, FUNCT_2, XXREAL_0, VALUED_0,
       AFINSQ_1, FUNCOP_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1, PBOOLE,
-      RELAT_1, MEMSTR_0;
+      RELAT_1, MEMSTR_0, FINSEQ_1, AMI_3, COMPOS_0, SCMFSA_M;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -42,11 +42,11 @@ reserve P,Q for Instruction-Sequence of SCM+FSA;
 
 theorem :: SCMFSA_9:1
   for I being Program of SCM+FSA, a being Int-Location holds card
-  if=0(a, I ';' Goto  0, Stop SCM+FSA) = card I + 6;
+  if=0(a, I ";" Goto  0, Stop SCM+FSA) = card I + 6;
 
 theorem :: SCMFSA_9:2
   for I being Program of SCM+FSA, a being Int-Location holds card
-  if>0(a, I ';' Goto  0, Stop SCM+FSA) = card I + 6;
+  if>0(a, I ";" Goto  0, Stop SCM+FSA) = card I + 6;
 
 :: WHILE  Statement
 
@@ -57,17 +57,17 @@ definition
   let I be Program of SCM+FSA;
   func while=0(a,I) -> Program of SCM+FSA equals
 :: SCMFSA_9:def 1
-  if=0(a, I ';' Goto  0,
+  if=0(a, I ";" Goto  0,
   Stop SCM+FSA) +* (  (card I +4) .--> goto  0 );
   func while>0(a,I) -> Program of SCM+FSA equals
 :: SCMFSA_9:def 2
-  if>0(a, I ';' Goto  0,
+  if>0(a, I ";" Goto  0,
   Stop SCM+FSA) +* (  (card I +4) .--> goto  0 );
 end;
 
 theorem :: SCMFSA_9:3
   for I being Program of SCM+FSA, a being Int-Location holds card
-  if=0(a,Stop SCM+FSA,if>0(a,Stop SCM+FSA,I ';' Goto  0)) = card I + 11;
+  if=0(a,Stop SCM+FSA,if>0(a,Stop SCM+FSA,I ";" Goto  0)) = card I + 11;
 
 definition
   let a be Int-Location;
@@ -75,7 +75,7 @@ definition
   func while<0(a,I) -> Program of SCM+FSA equals
 :: SCMFSA_9:def 3
   if=0(a,Stop SCM+FSA,if>0(a,
-Stop SCM+FSA,I ';' Goto  0)) +* (  (card I +4) .--> goto  0 )
+Stop SCM+FSA,I ";" Goto  0)) +* (  (card I +4) .--> goto  0 )
   ;
 end;
 
@@ -184,7 +184,7 @@ reserve s for State of SCM+FSA,
 definition
   let s,I,a,P;
   func StepWhile=0(a,I,P,s) ->
-    Function of NAT,product the Object-Kind of SCM+FSA means
+    Function of NAT,product the_Values_of SCM+FSA means
 :: SCMFSA_9:def 4
 
   it.0 = s &
@@ -226,7 +226,7 @@ s being State of SCM+FSA st
   I is_closed_on StepWhile=0(a,I,P,s).k,P+*while=0(a,I) &
   I is_halting_on StepWhile=0(a,I,P,s).k,P+*while=0(a,I)) &
    ex f being Function of
-  product the Object-Kind of SCM+FSA,NAT st
+  product the_Values_of SCM+FSA,NAT st
    for k being Nat holds
     ((f.(StepWhile=0(a,I,P,s).(k+1)) < f.(StepWhile=0(a,I,P,s).k) or
      f.(StepWhile=0(a,I,P,s).k) = 0) &
@@ -235,8 +235,8 @@ s being State of SCM+FSA st
 
 theorem :: SCMFSA_9:28
   for I being parahalting Program of SCM+FSA, a being read-write
-  Int-Location, s being State of SCM+FSA st ex f being Function of product the
-Object-Kind of SCM+FSA,NAT st
+  Int-Location, s being State of SCM+FSA st
+   ex f being Function of product the_Values_of SCM+FSA,NAT st
   for k being Nat
    holds (f.(StepWhile=0(a,I,P,s).(k+1)) < f.(StepWhile=0(a,I,P,s).k)
     or f.(StepWhile=0(a,I,P,s).k) = 0) &
@@ -245,7 +245,7 @@ Object-Kind of SCM+FSA,NAT st
 
 theorem :: SCMFSA_9:29
   for I being parahalting Program of SCM+FSA, a being read-write
-  Int-Location st ex f being Function of product the Object-Kind of SCM+FSA,NAT
+  Int-Location st ex f being Function of product the_Values_of SCM+FSA,NAT
 st (for s being State of SCM+FSA,P
  holds (f.(StepWhile=0(a,I,P,s).1) < f.s
  or f.s =
@@ -353,7 +353,7 @@ reserve s for State of SCM+FSA,
 
 definition
   let s,I,a,P;
-  func StepWhile>0(a,I,P,s) -> Function of NAT,product the Object-Kind of
+  func StepWhile>0(a,I,P,s) -> Function of NAT,product the_Values_of
   SCM+FSA means
 :: SCMFSA_9:def 5
 
@@ -392,7 +392,7 @@ s being State of SCM+FSA st (for k being Nat
  holds I is_closed_on StepWhile>0(a,I,P,s).k,P+*while>0(a,I) &
   I is_halting_on StepWhile>0(a,I,P,s).k,P+*while>0(a,I)) &
   ex f being Function of
-  product the Object-Kind of SCM+FSA,NAT st (for k being Nat holds (f.(
+  product the_Values_of SCM+FSA,NAT st (for k being Nat holds (f.(
 StepWhile>0(a,I,P,s).(k+1)) < f.(StepWhile>0(a,I,P,s).k) or
  f.(StepWhile>0(a,I,P,s).k
   ) = 0) & ( f.(StepWhile>0(a,I,P,s).k)=0 iff
@@ -401,8 +401,8 @@ StepWhile>0(a,I,P,s).(k+1)) < f.(StepWhile>0(a,I,P,s).k) or
 
 theorem :: SCMFSA_9:47
   for I being parahalting Program of SCM+FSA, a being read-write
-  Int-Location, s being State of SCM+FSA st ex f being Function of product the
-Object-Kind of SCM+FSA,NAT st (for k being Nat
+  Int-Location, s being State of SCM+FSA st
+  ex f being Function of product the_Values_of SCM+FSA,NAT st (for k being Nat
  holds (f.(StepWhile>0(a,I,P,s).(k+
   1)) < f.(StepWhile>0(a,I,P,s).k) or f.(StepWhile>0(a,I,P,s).k) = 0) & ( f.(
 StepWhile>0(a,I,P,s).k)=0 iff (StepWhile>0(a,I,P,s).k).a <= 0 ) )
@@ -411,7 +411,7 @@ StepWhile>0(a,I,P,s).k)=0 iff (StepWhile>0(a,I,P,s).k).a <= 0 ) )
 
 theorem :: SCMFSA_9:48
   for I being parahalting Program of SCM+FSA, a being read-write
-  Int-Location st ex f being Function of product the Object-Kind of SCM+FSA,NAT
+  Int-Location st ex f being Function of product the_Values_of SCM+FSA,NAT
 st (for s being State of SCM+FSA,P holds (f.(StepWhile>0(a,I,P,s).1) < f.s
  or f.s =
   0) & ( f.s =0 iff s.a <= 0 )) holds while>0(a,I) is parahalting;

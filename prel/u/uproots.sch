@@ -10,12 +10,13 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -28,8 +29,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="80"/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="88"/>
+<Func kind="K" nr="92"/>
 </Typ>
 <Not>
 <And>
@@ -55,8 +56,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="80"/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="88"/>
+<Func kind="K" nr="92"/>
 </Typ>
 <Not>
 <And>
@@ -75,7 +76,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="95">
+<Func kind="K" nr="108">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

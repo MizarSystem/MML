@@ -13,6 +13,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -33,23 +34,23 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="90"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="96"/>
+<Adjective nr="113"/>
+<Adjective nr="114"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="24">
+<Adjective nr="27">
 <Func kind="K" nr="32"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="120">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -65,13 +66,13 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="24">
+<Adjective nr="27">
 <Func kind="K" nr="32"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="120">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -85,20 +86,20 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="197">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="24">
+<Adjective nr="27">
 <Func kind="K" nr="32"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="120">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -106,27 +107,27 @@
 <CCluster aid="POLYNOM8" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="79"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="65"/>
 <Adjective nr="85"/>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="91"/>
+<Adjective nr="95"/>
+<Adjective nr="98"/>
+<Adjective nr="113"/>
+<Adjective nr="114"/>
 </Cluster>
 <Typ kind="G" nr="11">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="85"/>
-<Adjective nr="89"/>
-<Adjective nr="92"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="91"/>
+<Adjective nr="95"/>
+<Adjective nr="98"/>
 <Adjective nr="113"/>
+<Adjective nr="114"/>
+<Adjective nr="120"/>
 </Cluster>
 </CCluster>
 </Registrations>

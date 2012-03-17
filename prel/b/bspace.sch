@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -44,7 +45,7 @@
 </Pred>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="172">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -69,9 +70,9 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="100">
+<Func kind="K" nr="108">
 <Var nr="1"/>
-<Func kind="K" nr="102">
+<Func kind="K" nr="110">
 <Var nr="2"/>
 </Func>
 </Func>

@@ -2,7 +2,7 @@
 ::  by Zbigniew Karno and Toshihiko Watanabe
 ::
 :: Received July 16, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,12 +19,12 @@ environ
       XXREAL_0, ARYTM_3, CARD_1, FUNCT_1, TDLAT_1, LATTICES, EQREL_1, PBOOLE,
       LATTICE3, REWRITE1, TDLAT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, SETFAM_1, STRUCT_0, FUNCT_1,
-      NUMBERS, FINSET_1, FINSEQ_1, NAT_1, PRE_TOPC, TOPS_1, TOPS_2, PCOMPS_1,
-      BINOP_1, LATTICES, LATTICE3, TDLAT_1, XXREAL_0;
+      NUMBERS, FINSET_1, FINSEQ_1, ORDINAL1, NAT_1, PRE_TOPC, TOPS_1, TOPS_2,
+      PCOMPS_1, BINOP_1, LATTICES, LATTICE3, TDLAT_1, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1, TOPS_1, TOPS_2,
       PCOMPS_1, LATTICE3, TDLAT_1;
  registrations XBOOLE_0, SUBSET_1, MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1,
-      TDLAT_1, XREAL_0, FINSEQ_1;
+      TDLAT_1, XREAL_0, FINSEQ_1, RELAT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions LATTICE3, RELAT_1, STRUCT_0;
  theorems TARSKI, ZFMISC_1, SETFAM_1, FINSEQ_1, FUNCT_1, NAT_1, PRE_TOPC,
@@ -399,6 +399,30 @@ A5:   A in H;
     then H c= G by TARSKI:def 3;
     hence thesis by A4,XBOOLE_0:def 10;
   end;
+ projectivity
+  proof let G,F be Subset-Family of T such that
+A6:  for A being Subset of T holds
+  A in G iff ex B being Subset of T st A = Int B & B in F;
+  let A being Subset of T;
+   thus A in G implies ex B being Subset of T st A = Int B & B in G
+    proof
+     assume A in G;
+     then consider B being Subset of T such that
+A7:   A = Int B and
+A8:   B in F by A6;
+     take C = Int B;
+     thus A = Int C by A7;
+     thus C in G by A8,A6;
+    end;
+  given B being Subset of T such that
+A9: A = Int B and
+A10: B in G;
+   consider C being Subset of T such that
+A11: B = Int C and
+ C in F by A10,A6;
+   A = B by A9,A11;
+  hence A in G by A10;
+  end;
 end;
 
 ::Properties of the Interior Operation Int.
@@ -443,45 +467,7 @@ A3:   X in Int F;
   hence thesis by TARSKI:1;
 end;
 
-theorem
-  for F being Subset-Family of T holds Int F = Int Int F
-proof
-  let F be Subset-Family of T;
-A1: Int Int F = {D where D is Subset of T : ex B being Subset of T st D =
-  Int B & B in Int F} by Th16;
-A2: Int F = {A where A is Subset of T : ex B being Subset of T st A = Int B
-  & B in F} by Th16;
-  for X being set holds X in Int F iff X in Int Int F
-  proof
-    let X be set;
-A3: now
-      assume
-A4:   X in Int Int F;
-      then reconsider C = X as Subset of T;
-      ex Q being Subset of T st Q = C & ex B being Subset of T st Q = Int
-      B & B in Int F by A1,A4;
-      then consider B being Subset of T such that
-A5:   C = Int B and
-A6:   B in Int F;
-      ex Q being Subset of T st Q = B & ex R being Subset of T st Q = Int
-      R & R in F by A2,A6;
-      hence X in Int F by A5,Def1;
-    end;
-    now
-      assume
-A7:   X in Int F;
-      then reconsider C = X as Subset of T;
-      consider B being Subset of T such that
-A8:   C = Int B and
-A9:   B in F by A7,Def1;
-A10:  C = Int Int B by A8;
-      Int B in Int F by A9,Def1;
-      hence X in Int Int F by A1,A10;
-    end;
-    hence thesis by A3;
-  end;
-  hence thesis by TARSKI:1;
-end;
+canceled;
 
 theorem Th18:
   for F being Subset-Family of T holds Int F is open
@@ -894,16 +880,7 @@ A24:    Im(p,1) = {p.1} by FUNCT_1:59;
       end;
       hence thesis by A10,NAT_1:3;
     end;
-A25: X[ 0 ]
-    proof
-      let G be Subset-Family of T;
-      assume that
-A26:  G = p.:(Seg 0) and
-      0 <= n and
-      1 <= n;
-      G = {} by A26,RELAT_1:116;
-      hence thesis by Th19,SETFAM_1:1;
-    end;
+A25: X[ 0 ] by Th19,SETFAM_1:1;
 A27: for k being Nat holds X[k] from NAT_1:sch 2(A25,A5);
 A28: now
       assume
@@ -922,7 +899,7 @@ A31:  0 < n by NAT_1:3;
       assume n = 0;
       then Seg n = {};
       then F = p.:{} by A3,A4,RELAT_1:113;
-      then F = {} by RELAT_1:116;
+      then F = {};
       hence thesis by Th19,SETFAM_1:1;
     end;
     hence thesis by A28,A30;

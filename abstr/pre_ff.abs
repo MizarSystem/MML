@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek and Piotr Rudnicki
 ::
 :: Received October 8, 1993
-:: Copyright (c) 1993-2011 Association of Mizar Users
+:: Copyright (c) 1993-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,22 +21,13 @@ environ
       XREAL_0, INT_1, NAT_D, MCART_1, DOMAIN_1, POWER, FUNCT_1, PARTFUN1,
       FUNCT_2, FINSEQ_1, FINSEQ_2, NAT_1, NEWTON;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, MEMBERED, PARTFUN1,
-      NEWTON, POWER, SEQ_1, RELSET_1;
+      NEWTON, POWER, SEQ_1, RELSET_1, FINSEQ_2;
  registrations SUBSET_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
       MEMBERED, XBOOLE_0, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Fibonacci sequence
-
-definition
-  let X1, X2 be non empty set;
-  let Y1 be non empty Subset of X1;
-  let Y2 be non empty Subset of X2;
-  let x be Element of [:Y1,Y2:];
-  redefine func x`1 -> Element of Y1;
-  redefine func x`2 -> Element of Y2;
-end;
 
 :: Definition of fib
 
@@ -45,14 +36,13 @@ definition
   func Fib (n) -> Element of NAT means
 :: PRE_FF:def 1
 
-  ex fib being Function of NAT, [:
-NAT, NAT:] st it = (fib.n)`1 & fib.0 = [0,1] & for n being Nat holds fib.(n+1)
-  = [ (fib.n)`2, (fib.n)`1 + (fib.n)`2 ];
+  ex fib being Function of NAT, [:NAT, NAT:] st it = (fib.n)`1 & fib.0 = [0,1]
+  & for n being Nat holds fib.(n+1) = [ (fib.n)`2, (fib.n)`1 + (fib.n)`2 ];
 end;
 
 theorem :: PRE_FF:1
-  Fib(0) = 0 & Fib(1) = 1 & for n being Nat holds Fib((n+1)+1) = Fib(n)
-  + Fib(n+1);
+  Fib(0) = 0 & Fib(1) = 1 &
+  for n being Nat holds Fib((n+1)+1) = Fib(n) + Fib(n+1);
 
 :: Fusc function auxiliaries
 
@@ -75,23 +65,23 @@ theorem :: PRE_FF:7
   for i being Integer st i is Element of NAT holds i div 2 is Element of NAT;
 
 theorem :: PRE_FF:8
-  for a, b, c being real number st a <= b & c > 1 holds c to_power
-  a <= c to_power b;
+  for a, b, c being real number st a <= b & c > 1 holds
+  c to_power a <= c to_power b;
 
 theorem :: PRE_FF:9
-  for r, s being real number st r>=s holds [\r/]>=[\s/];
+  for r, s being real number st r>=s holds [\r/] >= [\s/];
 
 theorem :: PRE_FF:10
   for a, b, c being real number st a > 1 & b > 0 & c >= b holds
   log (a, c) >= log (a, b);
 
 theorem :: PRE_FF:11
-  for n being Nat st n > 0 holds [\ log (2, 2*n) /] +1 <> [\ log (
-  2, 2*n + 1) /];
+  for n being Nat st n > 0 holds
+  [\ log (2, 2*n) /] +1 <> [\ log (2, 2*n + 1) /];
 
 theorem :: PRE_FF:12
-  for n being Nat st n > 0 holds [\ log (2, 2*n) /] +1 >= [\ log (
-  2, 2*n + 1) /];
+  for n being Nat st n > 0 holds
+  [\ log (2, 2*n) /] +1 >= [\ log (2, 2*n + 1) /];
 
 theorem :: PRE_FF:13
   for n being Nat st n > 0 holds [\ log(2, 2*n) /] = [\ log(2, 2*n + 1) /];
@@ -121,24 +111,25 @@ of NAT*)^<*((fusc.n qua Element of NAT*)/.k)+ ((fusc.n qua Element of NAT*)/.(k
 end;
 
 theorem :: PRE_FF:15
-  Fusc 0 = 0 & Fusc 1 = 1 & for n being Nat holds Fusc (2*n) =
-  Fusc n & Fusc (2*n+1) = Fusc n + Fusc (n+1);
+  Fusc 0 = 0 & Fusc 1 = 1 &
+  for n being Nat holds Fusc (2*n) = Fusc n &
+  Fusc (2*n+1) = Fusc n + Fusc (n+1);
 
 :: Auxiliary functions specific for Fib and Fusc of little general interest
 
 theorem :: PRE_FF:16
-  for nn, nn9 being Nat st nn <> 0 & nn = 2*nn9 holds nn9 < nn;
+  for n being Nat st n <> 0 holds n < 2*n;
 
 theorem :: PRE_FF:17
-  for nn, nn9 being Nat st nn = 2*nn9+1 holds nn9 < nn;
+  for n being Nat holds n < 2*n+1;
 
 theorem :: PRE_FF:18
-  for A, B being Nat holds B = A * Fusc 0 + B * Fusc (0+1);
+  for A, B being Nat holds B = A * Fusc 0 + B * Fusc 1;
 
 theorem :: PRE_FF:19
-  for nn, nn9, A, B, N being Nat st nn = 2*nn9+1 & Fusc N = A * Fusc nn
-  + B * Fusc (nn+1) holds Fusc N = A * Fusc nn9 + (B+A) * Fusc (nn9+1);
+  for n, A, B, N being Nat st Fusc N = A * Fusc (2*n+1) + B * Fusc (2*n+1+1)
+  holds Fusc N = A * Fusc n + (B+A) * Fusc (n+1);
 
 theorem :: PRE_FF:20
-  for nn, nn9, A, B, N being Nat st nn = 2*nn9 & Fusc N = A * Fusc nn +
-  B * Fusc (nn+1) holds Fusc N = (A+B) * Fusc nn9 + B * Fusc (nn9+1);
+  for n, A, B, N being Nat st Fusc N = A * Fusc (2*n) + B * Fusc (2*n+1)
+  holds Fusc N = (A+B) * Fusc n + B * Fusc (n+1);

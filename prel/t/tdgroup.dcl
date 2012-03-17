@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -32,14 +33,14 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="115"/>
-<Adjective nr="116"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="63"/>
+<Adjective nr="68"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="121"/>
+<Adjective nr="123"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TDGROUP" nr="2">
@@ -48,35 +49,35 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="43" value="false"/>
-<Adjective nr="95"/>
-<Adjective nr="117"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="101"/>
+<Adjective nr="124"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="153"/>
+<Func kind="K" nr="161"/>
 <Cluster>
-<Adjective nr="57"/>
-<Adjective nr="115"/>
-<Adjective nr="116"/>
+<Adjective nr="63"/>
+<Adjective nr="121"/>
+<Adjective nr="123"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TDGROUP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="38" value="false"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="159">
+<Func kind="K" nr="167">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="95"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 </Registrations>

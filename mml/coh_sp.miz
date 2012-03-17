@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz and Konrad Raczkowski
 ::
 :: Received December 29, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,17 +16,20 @@ environ
 
  vocabularies TARSKI, XBOOLE_0, CLASSES1, ZFMISC_1, EQREL_1, TOLER_1, SETFAM_1,
       SUBSET_1, FUNCT_2, FUNCT_1, RELAT_1, MCART_1, GRAPH_1, ENS_1, PARTFUN1,
-      CAT_1, COH_SP;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
+      CAT_1, COH_SP, STRUCT_0, MONOID_0, RELAT_2, BINOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
       MCART_1, FUNCT_1, PARTFUN1, CLASSES1, FUNCT_2, BINOP_1, EQREL_1, TOLER_1,
-      CAT_1;
- constructors BINOP_1, EQREL_1, CLASSES1, TOLER_1, CAT_1, RELSET_1;
+      STRUCT_0, GRAPH_1, CAT_1;
+ constructors BINOP_1, EQREL_1, CLASSES1, TOLER_1, CAT_1, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      EQREL_1, CAT_2;
+      EQREL_1, CAT_2, RELAT_1, CAT_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, CLASSES1, XBOOLE_0, BINOP_1, RELAT_1;
+ definitions TARSKI, CLASSES1, XBOOLE_0, BINOP_1, RELAT_1, CAT_1, GRAPH_1,
+      XTUPLE_0;
  theorems TARSKI, ZFMISC_1, TOLER_1, ENUMSET1, RELAT_1, FUNCT_2, CLASSES1,
-      PARTFUN1, MCART_1, FUNCT_1, DOMAIN_1, CAT_1, XBOOLE_0, XBOOLE_1, EQREL_1;
+      PARTFUN1, MCART_1, FUNCT_1, DOMAIN_1, CAT_1, XBOOLE_0, XBOOLE_1, EQREL_1,
+      XTUPLE_0;
  schemes TOLER_1, TARSKI, FUNCT_2, BINOP_1, XBOOLE_0;
 
 begin
@@ -39,7 +42,7 @@ definition
   let IT be set;
 
   attr IT is binary_complete means
-  :Def2:
+  :Def1:
   for A st A c= IT & (for a,b st a in
   A & b in A holds a \/ b in IT) holds union A in IT;
 end;
@@ -92,7 +95,7 @@ theorem
   {} in C
 proof
   {} c= C & for a,b st a in {} & b in {} holds a \/ b in C by XBOOLE_1:2;
-  hence thesis by Def2,ZFMISC_1:2;
+  hence thesis by Def1,ZFMISC_1:2;
 end;
 
 theorem Th2:
@@ -116,7 +119,7 @@ A2: A c= bool X and
     then b c= X by XBOOLE_1:1;
     hence thesis;
   end;
-  hence thesis by A1,Def2,CLASSES1:def 1;
+  hence thesis by A1,Def1,CLASSES1:def 1;
 end;
 
 theorem
@@ -136,7 +139,7 @@ end;
 definition
   let C be Coherence_Space;
   func Web(C) -> Tolerance of union C means
-  :Def3:
+  :Def2:
   for x,y holds [x,y] in it iff ex X st X in C & x in X & y in X;
   existence
   proof
@@ -184,13 +187,13 @@ A1: T = Web(C);
       assume [x,y] in T;
       then consider X such that
 A2:   X in C and
-A3:   x in X & y in X by A1,Def3;
+A3:   x in X & y in X by A1,Def2;
       {x,y} c= X by A3,ZFMISC_1:32;
       hence thesis by A2,CLASSES1:def 1;
     end;
 A4: x in {x,y} & y in {x,y} by TARSKI:def 2;
     assume {x,y} in C;
-    hence thesis by A1,A4,Def3;
+    hence thesis by A1,A4,Def2;
   end;
   assume
 A5: for x,y holds [x,y] in T iff {x,y} in C;
@@ -211,7 +214,7 @@ A8: x in X & y in X;
     then {x,y} in C by A7,CLASSES1:def 1;
     hence thesis by A5;
   end;
-  hence thesis by Def3;
+  hence thesis by Def2;
 end;
 
 theorem Th6:
@@ -276,7 +279,7 @@ A17: {y} = x by A3;
     {y,y} in C by A4,A16;
     hence thesis by A17,ENUMSET1:29;
   end;
-  hence thesis by A5,A12,Def2;
+  hence thesis by A5,A12,Def1;
 end;
 
 theorem Th7:
@@ -377,7 +380,7 @@ definition
   let X be set;
   let E be Tolerance of X;
   func CohSp(E) -> Coherence_Space means
-  :Def4:
+  :Def3:
   for a holds a in it iff for x, y st x in a & y in a holds [x,y] in E;
   existence
   proof
@@ -428,14 +431,13 @@ A17:  b c= X by A16,XBOOLE_1:1;
       hence thesis by A1,A17;
     end;
     ( P[{}])& {} c= X by XBOOLE_1:2;
-    then reconsider Z as Coherence_Space by A1,A14,A2,Def2,CLASSES1:def 1;
+    then reconsider Z as Coherence_Space by A1,A14,A2,Def1,CLASSES1:def 1;
     take Z;
     let a;
     thus a in Z implies for x,y st x in a & y in a holds [x,y] in E by A1;
     assume
 A18: for x,y st x in a & y in a holds [x,y] in E;
-    then a is TolSet of E by TOLER_1:def 1;
-    then a c= X by TOLER_1:18;
+    then a c= X by TOLER_1:18,def 1;
     hence thesis by A1,A18;
   end;
   uniqueness
@@ -471,7 +473,7 @@ proof
       then
 A1:   {x,y} in CohSp(E) by Th5;
       x in {x,y} & y in {x,y} by TARSKI:def 2;
-      hence thesis by A1,Def4;
+      hence thesis by A1,Def3;
     end;
     assume
 A2: [x,y] in E;
@@ -487,7 +489,7 @@ A6:   v = x or v = y by A5,TARSKI:def 2;
       u = x or u = y by A4,TARSKI:def 2;
       hence thesis by A2,A3,A6,EQREL_1:6,TOLER_1:7;
     end;
-    then {x,y} in CohSp(E) by Def4;
+    then {x,y} in CohSp(E) by Def3;
     hence [x,y] in Web(CohSp(E)) by Th5;
   end;
   hence thesis by RELAT_1:def 2;
@@ -500,13 +502,13 @@ proof
   proof
     let x;
     assume x in CohSp(Web(C));
-    then for y,z st y in x & z in x holds [y,z] in Web(C) by Def4;
+    then for y,z st y in x & z in x holds [y,z] in Web(C) by Def3;
     hence thesis by Th7;
   end;
   let x;
   assume x in C;
   then for y,z st y in x & z in x holds [y,z] in Web(C) by Th7;
-  hence thesis by Def4;
+  hence thesis by Def3;
 end;
 
 theorem Th14:
@@ -515,12 +517,12 @@ proof
   thus a in CohSp(E) implies a is TolSet of E
   proof
     assume a in CohSp(E);
-    then for x,y st x in a & y in a holds [x,y] in E by Def4;
+    then for x,y st x in a & y in a holds [x,y] in E by Def3;
     hence thesis by TOLER_1:def 1;
   end;
   assume a is TolSet of E;
   then for x,y st x in a & y in a holds [x,y] in E by TOLER_1:def 1;
-  hence thesis by Def4;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -674,7 +676,7 @@ Function of union T,union TT & for x,y st {x,y} in T holds {f.x,f.y} in TT};
       set f = id union A;
       take m = [[A,A],f];
 A1:   union A = {} implies union A = {};
-      then reconsider f as Element of FuncsC(X) by Th17;
+      reconsider f as Element of FuncsC(X) by Th17;
       now
         let x,y;
         assume
@@ -725,16 +727,17 @@ registration
   cluster l`2 -> Function-like Relation-like;
   coherence
   proof
-    ex g be Element of FuncsC(X), C1,C2 be Element of CSp(X) st l = [[C1,C2
-],g] &( union C2 = {} implies union C1 = {})& g is Function of union C1,union
+    consider g be Element of FuncsC(X), C1,C2 be Element of CSp(X) such that
+W:  l = [[C1,C2],g] &
+    ( union C2 = {} implies union C1 = {})& g is Function of union C1,union
     C2 & for x,y st {x,y} in C1 holds {g.x,g.y} in C2 by Th18;
-    hence thesis by MCART_1:def 2;
+     [[C1,C2],g]`2 = g;
+    hence thesis by W;
   end;
 end;
 
 definition
   let X,l;
-
   func dom l -> Element of CSp(X) equals
   l`1`1;
   coherence
@@ -744,8 +747,8 @@ A1: l = [[C1,C2],g] and
     union C2 = {} implies union C1 = {} and
     g is Function of union C1,union C2 and
     for x,y st {x,y} in C1 holds {g.x,g.y} in C2 by Th18;
-    [C1,C2] = l`1 by A1,MCART_1:def 1;
-    hence thesis by MCART_1:def 1;
+    [C1,C2] = [[C1,C2],g]`1 & [C1,C2]`1 = C1;
+    hence thesis by A1;
   end;
   func cod l -> Element of CSp(X) equals
   l`1`2;
@@ -756,8 +759,8 @@ A2: l = [[C1,C2],g] and
     union C2 = {} implies union C1 = {} and
     g is Function of union C1,union C2 and
     for x,y st {x,y} in C1 holds {g.x,g.y} in C2 by Th18;
-    [C1,C2] = l`1 by A2,MCART_1:def 1;
-    hence thesis by MCART_1:def 2;
+    [C1,C2] = [[C1,C2],g]`1 & [C1,C2]`2 = C2;
+    hence thesis by A2;
   end;
 end;
 
@@ -769,8 +772,8 @@ A1: l = [[C1,C2],g] and
   union C2 = {} implies union C1 = {} and
   g is Function of union C1,union C2 and
   for x,y st {x,y} in C1 holds {g.x,g.y} in C2 by Th18;
-  [C1,C2] = l`1 by A1,MCART_1:def 1;
-  then l`1 = [dom l,cod l] by MCART_1:8;
+  [C1,C2] = [[C1,C2],g]`1;
+  then l`1 = [dom l,cod l] by A1,MCART_1:8;
   hence thesis by A1,MCART_1:8;
 end;
 
@@ -806,8 +809,8 @@ y1 & x2 = y2
 proof
   let x1,y1,x2,y2,x3,y3 be set;
   assume [[x1,x2],x3] = [[y1,y2],y3];
-  then [x1,x2] = [y1,y2] by ZFMISC_1:27;
-  hence thesis by ZFMISC_1:27;
+  then [x1,x2] = [y1,y2] by XTUPLE_0:1;
+  hence thesis by XTUPLE_0:1;
 end;
 
 theorem Th21:
@@ -823,7 +826,7 @@ A3: for x,y st {x,y} in C1 holds {g.x,g.y} in C2 by Th18;
 A4: l = [[dom l,cod l],l`2] by Th20;
   then
 A5: C2 = cod l by A1,Lm2;
-A6: g = l`2 & C1 = dom l by A1,A4,Lm2,ZFMISC_1:27;
+A6: g = l`2 & C1 = dom l by A1,A4,Lm2,XTUPLE_0:1;
   hence (union cod l <> {} or union dom l = {}) & l`2 is Function of union dom
   l,union cod l by A1,A2,A4,Lm2;
   let x,y;
@@ -836,7 +839,7 @@ definition
   assume
 A1: cod l1 = dom l2;
   func l2*l1 -> Element of MapsC(X) equals
-  :Def13:
+  :Def10:
   [[dom l1,cod l2],l2`2*l1`2];
   coherence
   proof
@@ -870,9 +873,9 @@ theorem Th22:
   l1 & cod(l2*l1) = cod l2
 proof
   assume dom l2 = cod l1;
-  then [[dom l1,cod l2],l2`2*l1`2] = l2*l1 by Def13
+  then [[dom l1,cod l2],l2`2*l1`2] = l2*l1 by Def10
     .= [[dom(l2*l1),cod(l2*l1)],(l2*l1)`2] by Th20;
-  hence thesis by Lm2,ZFMISC_1:27;
+  hence thesis by Lm2,XTUPLE_0:1;
 end;
 
 theorem Th23:
@@ -905,7 +908,7 @@ theorem Th24:
   (id$ C)`2 = id union C & dom id$ C = C & cod id$ C = C
 proof
   [[dom id$ C,cod id$ C],(id$ C)`2] = [[C,C],id union C] by Th20;
-  hence thesis by Lm2,ZFMISC_1:27;
+  hence thesis by Lm2,XTUPLE_0:1;
 end;
 
 theorem Th25:
@@ -935,7 +938,7 @@ end;
 definition
   let X;
   func CDom X -> Function of MapsC(X),CSp(X) means
-  :Def14:
+  :Def11:
   for l holds it.l = dom l;
   existence
   proof
@@ -956,7 +959,7 @@ A2: for l holds h2.l = dom l;
     hence thesis by FUNCT_2:63;
   end;
   func CCod X -> Function of MapsC(X),CSp(X) means
-  :Def15:
+  :Def12:
   for l holds it.l = cod l;
   existence
   proof
@@ -977,10 +980,9 @@ A4: for l holds h2.l = cod l;
     hence thesis by FUNCT_2:63;
   end;
   func CComp X -> PartFunc of [:MapsC(X),MapsC(X):],MapsC(X) means
-  :Def16:
-  (
-for l2,l1 holds [l2,l1] in dom it iff dom l2 = cod l1) & for l2,l1 st dom l2 =
-  cod l1 holds it.[l2,l1] = l2*l1;
+  :Def13:
+  (for l2,l1 holds [l2,l1] in dom it iff dom l2 = cod l1) &
+   for l2,l1 st dom l2 = cod l1 holds it.[l2,l1] = l2*l1;
   existence
   proof
     defpred P[set,set,set] means for l2,l1 st l2=$1 & l1=$2 holds dom l2 = cod
@@ -1068,98 +1070,150 @@ A21:  dom l2 = cod l1 by A12,A19,A20;
     end;
     hence thesis by A16,PARTFUN1:5;
   end;
-  func CId X -> Function of CSp(X),MapsC(X) means
-  :Def17:
-  for C holds it.C = id$ C;
-  existence
-  proof
-    deffunc F(Element of CSp(X)) = id$ $1;
-    thus ex f being Function of CSp(X),MapsC(X) st for x being Element of CSp(
-    X) holds f.x = F(x) from FUNCT_2:sch 4;
-  end;
-  uniqueness
-  proof
-    let h1,h2 be Function of CSp(X),MapsC(X) such that
-A22: for C holds h1.C = id$ C and
-A23: for C holds h2.C = id$ C;
-    now
-      let C;
-      thus h1.C = id$ C by A22
-        .= h2.C by A23;
-    end;
-    hence thesis by FUNCT_2:63;
-  end;
 end;
 
-theorem Th26:
-  CatStr(# CSp(X),MapsC(X),CDom X,CCod X,CComp X,CId X #) is Category
-proof
-  set M = MapsC(X), d = CDom X, c = CCod X, p = CComp X, i = CId X;
-  now
-    thus for f,g being Element of M holds [g,f] in dom(p) iff d.g=c.f
-    proof
-      let f,g be Element of M;
-      d.g = dom g & c.f = cod f by Def14,Def15;
-      hence thesis by Def16;
-    end;
-    thus for f,g being Element of M st d.g=c.f holds d.(p.(g,f)) = d.f & c.(p.
-    (g,f)) = c.g
-    proof
-      let f,g be Element of M such that
-A1:   d.g=c.f;
-A2:   d.g = dom g & c.f = cod f by Def14,Def15;
-      then
-A3:   p.[g,f] = g*f by A1,Def16;
-A4:   d.f = dom f & c.g = cod g by Def14,Def15;
-      dom(g*f) = dom f & cod(g*f) = cod g by A1,A2,Th22;
-      hence thesis by A3,A4,Def14,Def15;
-    end;
-    thus for f,g,h being Element of M st d.h = c.g & d.g = c.f holds p.(h,p.(g
-    ,f)) = p.(p.(h,g),f)
-    proof
-      let f,g,h be Element of M such that
-A5:   d.h = c.g and
-A6:   d.g = c.f;
-A7:   dom h = d.h & cod g = c.g by Def14,Def15;
-      then
-A8:   dom(h*g) = dom g by A5,Th22;
-A9:   dom g = d.g & cod f = c.f by Def14,Def15;
-      then
-A10:  cod(g*f) = dom h by A5,A6,A7,Th22;
-      thus p.(h,p.(g,f)) = p.[h,g*f] by A6,A9,Def16
-        .= h*(g*f) by A10,Def16
-        .= (h*g)*f by A5,A6,A7,A9,Th23
-        .= p.[h*g,f] by A6,A9,A8,Def16
-        .= p.(p.(h,g),f) by A5,A7,Def16;
-    end;
-    let b be Element of CSp(X);
-A11: i.b = id$ b by Def17;
-A12: cod id$ b = b by Th24;
-A13: dom id$ b = b by Th24;
-    hence d.(i.b) = b & c.(i.b) = b by A11,A12,Def14,Def15;
-    thus for f being Element of M st c.f=b holds p.(i.b,f) = f
-    proof
-      let f be Element of M such that
-A14:  c.f = b;
-A15:  cod f = c.f by Def15;
-      then (id$ b)*f = f by A14,Th25;
-      hence thesis by A11,A13,A14,A15,Def16;
-    end;
-    let g be Element of M such that
-A16: d.g=b;
-A17: dom g = d.g by Def14;
-    then g*(id$ b) = g by A16,Th25;
-    hence p.(g,i.b) = g by A11,A12,A16,A17,Def16;
-  end;
-  hence thesis by CAT_1:def 5;
-end;
+canceled;
 
 definition
+ canceled;
   let X;
-  func CohCat(X) -> Category equals
-  CatStr(# CSp(X),MapsC(X),CDom X,CCod X,
-    CComp X,CId X #);
-  coherence by Th26;
+  func CohCat(X) -> non empty non void strict CatStr equals
+  CatStr(# CSp(X),MapsC(X),CDom X,CCod X,CComp X #);
+  coherence;
+end;
+
+registration let X;
+ cluster CohCat X -> Category-like transitive associative reflexive;
+ coherence
+  proof
+   set M = MapsC(X), d = CDom X, c = CCod X, p = CComp X;
+   set C = CohCat X;
+  thus
+P1:  C is Category-like
+   proof
+    let ff,gg be Morphism of C;
+     reconsider f=ff, g=gg as Element of M;
+   d.gg = dom g & c.ff = cod f by Def11,Def12;
+   hence thesis by Def13;
+  end;
+  thus
+P2: C is transitive
+   proof
+     let ff,gg be Morphism of C such that
+A1:   dom gg=cod ff;
+      [gg,ff] in dom the Comp of C by A1,P1,CAT_1:def 6;
+      then
+U:    (the Comp of C).(gg,ff) = gg(*)ff by CAT_1:def 1;
+      reconsider f=ff, g=gg as Element of M;
+A2:   d.g = dom g & c.f = cod f by Def11,Def12;
+      then
+A3:   p.[g,f] = g*f by A1,Def13;
+A4:   d.f = dom f & c.g = cod g by Def11,Def12;
+      dom(g*f) = dom f & cod(g*f) = cod g by A1,A2,Th22;
+      hence thesis by A3,A4,Def11,Def12,U;
+    end;
+thus
+  C is associative
+   proof
+     let ff,gg,hh be Morphism of C such that
+A5:   dom hh = cod gg and
+A6:   dom gg = cod ff;
+      reconsider f=ff, g=gg, h=hh as Element of M;
+A7:   dom h = d.h & cod g = c.g by Def11,Def12;
+      then
+A8:   dom(h*g) = dom g by A5,Th22;
+A9:   dom g = d.g & cod f = c.f by Def11,Def12;
+      then
+A10:  cod(g*f) = dom h by A5,A6,A7,Th22;
+       [hh,gg] in dom the Comp of C by P1,CAT_1:def 6,A5;
+       then
+X2:    hh(*)gg =(the Comp of C).(hh,gg) by CAT_1:def 1;
+       dom(hh(*)gg) = dom gg by P2,CAT_1:def 7,A5;
+       then
+X3:     [hh(*)gg,ff] in dom the Comp of C by P1,CAT_1:def 6,A6;
+       [gg,ff] in dom the Comp of C by P1,CAT_1:def 6,A6;
+       then
+X1:    gg(*)ff =(the Comp of C).(gg,ff) by CAT_1:def 1;
+       cod(gg(*)ff) = cod gg by P2,CAT_1:def 7,A6;
+       then [hh,gg(*)ff] in dom the Comp of C by P1,CAT_1:def 6,A5;
+      hence hh(*)(gg(*)ff)
+         = (the Comp of C).(hh,(the Comp of C).(gg,ff)) by X1,CAT_1:def 1
+        .= p.[h,g*f] by A6,A9,Def13
+        .= h*(g*f) by A10,Def13
+        .= (h*g)*f by A5,A6,A7,A9,Th23
+        .= p.[h*g,f] by A6,A9,A8,Def13
+        .= (the Comp of C).((the Comp of C).(hh,gg),ff) by A5,A7,Def13
+        .= hh(*)gg(*)ff by X2,X3,CAT_1:def 1;
+   end;
+    let a be Object of C;
+     reconsider aa = a as Element of CSp X;
+     reconsider ii = id$ aa as Morphism of C;
+
+A12: cod ii = cod id$ aa by Def12 .= aa by Th24;
+     dom ii = dom id$ aa by Def11 .= aa by Th24;
+     then id$ aa in Hom(a,a) by A12;
+    hence Hom(a,a)<>{};
+  end;
+end;
+
+LmX:
+  for a being Element of CohCat X, aa being Element of CSp X st a = aa
+  for i being Morphism of a,a st i = id$ aa
+  for b being Element of CohCat X holds
+   (Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g) &
+   (Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f)
+  proof let a be Element of CohCat X, aa be Element of CSp X such that
+Z1: a = aa;
+   let i be Morphism of a,a such that
+Z2: i = id$ aa;
+  let b be Element of CohCat X;
+  thus Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g
+   proof assume
+Z3:  Hom(a,b)<>{};
+    let g be Morphism of a,b;
+     reconsider gg = g as Element of MapsC X;
+     Hom(a,a)<>{};
+     then
+A1:  cod i = a by CAT_1:5 .= dom g by Z3,CAT_1:5;
+A3:  dom gg = dom g by Def11 .= aa by Z1,Z3,CAT_1:5;
+     then
+A2:  cod id$ aa = dom gg by Th24;
+     [g,i] in dom the Comp of CohCat X by A1,CAT_1:def 6;
+    hence g(*)i = (the Comp of CohCat X).(g,i) by CAT_1:def 1
+       .= gg*id$ aa by A2,Z2,Def13
+       .= g by A3,Th25;
+   end;
+   thus Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f
+   proof assume
+Z3:  Hom(b,a)<>{};
+    let g be Morphism of b,a;
+     reconsider gg = g as Element of MapsC X;
+     Hom(a,a)<>{};
+     then
+A1:  dom i = a by CAT_1:5 .= cod g by Z3,CAT_1:5;
+A3:  cod gg = cod g by Def12 .= aa by Z1,Z3,CAT_1:5;
+     then
+A2:  dom id$ aa = cod gg by Th24;
+     [i,g] in dom the Comp of CohCat X by A1,CAT_1:def 6;
+    hence i(*)g = (the Comp of CohCat X).(i,g) by CAT_1:def 1
+       .= (id$ aa)*gg by Z2,A2,Def13
+       .= g by A3,Th25;
+   end;
+  end;
+
+registration let X;
+ cluster CohCat X -> with_identities;
+ coherence
+  proof let a being Element of CohCat X;
+    reconsider aa = a as Element of CSp X;
+    reconsider ii = id$ aa as Morphism of CohCat X;
+A12: cod ii = cod id$ aa by Def12 .= aa by Th24;
+     dom ii = dom id$ aa by Def11 .= aa by Th24;
+    then ii in Hom(a,a) by A12;
+    then reconsider ii as Morphism of a,a by CAT_1:def 5;
+   take ii;
+   thus thesis by LmX;
+  end;
 end;
 
 begin :: Category of Tolerances
@@ -1167,7 +1221,7 @@ begin :: Category of Tolerances
 definition
   let X be set;
   func Toler(X) -> set means
-  :Def19:
+  :Def16:
   x in it iff x is Tolerance of X;
   existence
   proof
@@ -1211,7 +1265,7 @@ registration
   coherence
   proof
     set T = the Tolerance of X;
-    T in Toler X by Def19;
+    T in Toler X by Def16;
     hence thesis;
   end;
 end;
@@ -1233,7 +1287,7 @@ registration
     {} c= X by XBOOLE_1:2;
     then
 A1: Toler({}) in F;
-    {} in Toler({}) by Def19,TOLER_1:14;
+    {} in Toler({}) by Def16,TOLER_1:14;
     hence thesis by A1,TARSKI:def 4;
   end;
 end;
@@ -1251,58 +1305,58 @@ A2: a in f by TARSKI:def 4;
     consider Y be Subset of X such that
 A3: a = Toler(Y) by A2;
     take Y;
-    thus thesis by A1,A3,Def19;
+    thus thesis by A1,A3,Def16;
   end;
   given A such that
 A4: A c= X and
 A5: x is Tolerance of A;
   reconsider A as Subset of X by A4;
 A6: Toler(A) in f;
-  x in Toler(A) by A5,Def19;
+  x in Toler(A) by A5,Def16;
   hence thesis by A6,TARSKI:def 4;
 end;
 
 theorem
-  Total a in Toler(a) by Def19;
+  Total a in Toler(a) by Def16;
 
-theorem Th30:
+theorem Th29:
   {} in Toler_on_subsets(X)
 proof
   set F = {Toler(Y) where Y is Subset of X: not contradiction};
   {} c= X by XBOOLE_1:2;
   then
 A1: Toler({}) in F;
-  {} in Toler({}) by Def19,TOLER_1:14;
+  {} in Toler({}) by Def16,TOLER_1:14;
   hence thesis by A1,TARSKI:def 4;
 end;
 
-theorem Th31:
+theorem Th30:
   a c= X implies Total a in Toler_on_subsets(X)
 proof
   set F = {Toler(Y) where Y is Subset of X: not contradiction};
   assume a c= X;
   then
 A1: Toler(a) in F;
-  Total a in Toler(a) by Def19;
+  Total a in Toler(a) by Def16;
   hence thesis by A1,TARSKI:def 4;
 end;
 
-theorem Th32:
+theorem Th31:
   a c= X implies id a in Toler_on_subsets(X)
 proof
   set F = {Toler(Y) where Y is Subset of X: not contradiction};
   assume a c= X;
   then
 A1: Toler(a) in F;
-  id a in Toler(a) by Def19;
+  id a in Toler(a) by Def16;
   hence thesis by A1,TARSKI:def 4;
 end;
 
 theorem
-  Total X in Toler_on_subsets(X) by Th31;
+  Total X in Toler_on_subsets(X) by Th30;
 
 theorem
-  id X in Toler_on_subsets(X) by Th32;
+  id X in Toler_on_subsets(X) by Th31;
 
 definition
   let X;
@@ -1321,7 +1375,7 @@ registration
 X:  t is Tolerance of Y};
     now
       reconsider o = {} as Subset of X by XBOOLE_1:2;
-      reconsider e = {} as Element of Toler_on_subsets(X) by Th30;
+      reconsider e = {} as Element of Toler_on_subsets(X) by Th29;
       take m = [e,o];
       thus m in FV by TOLER_1:14;
     end;
@@ -1334,33 +1388,33 @@ reserve T,T1,T2 for Element of TOL(X);
 theorem
   [{},{}] in TOL(X)
 proof
-  {} in Toler_on_subsets(X) & {} c= X by Th30,XBOOLE_1:2;
+  {} in Toler_on_subsets(X) & {} c= X by Th29,XBOOLE_1:2;
   hence thesis by TOLER_1:14;
 end;
 
-theorem Th36:
+theorem Th35:
   a c= X implies [id a,a] in TOL(X)
 proof
   assume
 A1: a c= X;
-  then id a in Toler_on_subsets(X) by Th32;
+  then id a in Toler_on_subsets(X) by Th31;
   hence thesis by A1;
 end;
 
-theorem Th37:
+theorem Th36:
   a c= X implies [Total a,a] in TOL(X)
 proof
   assume
 A1: a c= X;
-  then Total a in Toler_on_subsets(X) by Th31;
+  then Total a in Toler_on_subsets(X) by Th30;
   hence thesis by A1;
 end;
 
 theorem
-  [id X,X] in TOL(X) by Th36;
+  [id X,X] in TOL(X) by Th35;
 
 theorem
-  [Total X,X] in TOL(X) by Th37;
+  [Total X,X] in TOL(X) by Th36;
 
 definition
   let X,T;
@@ -1369,10 +1423,11 @@ definition
   proof
     T in { [t,Y] where t is Element of Toler_on_subsets(X), Y is Subset of
 X:  t is Tolerance of Y};
-    then
-    ex t be Element of Toler_on_subsets(X),Y be Subset of X st T = [t,Y] &
-    t is Tolerance of Y;
-    hence thesis by MCART_1:def 2;
+    then consider t be Element of Toler_on_subsets(X),Y be Subset of X
+    such that
+W:   T = [t,Y] & t is Tolerance of Y;
+    [t,Y]`2 = Y;
+    hence thesis by W;
   end;
   redefine func T`1 -> Tolerance of T`2;
   coherence
@@ -1383,8 +1438,8 @@ X:  t is Tolerance of Y};
     t be Element of Toler_on_subsets(X),Y be Subset of X such that
 A1: T = [t,Y] and
 A2: t is Tolerance of Y;
-    T`2 = Y by A1,MCART_1:def 2;
-    hence thesis by A1,A2,MCART_1:def 1;
+    [t,Y]`2 = Y & [t,Y]`1 = t;
+    hence thesis by A1,A2;
   end;
 end;
 
@@ -1403,8 +1458,8 @@ registration
   proof
     set F = { Funcs(T`2,TT`2) where T is Element of TOL(X), TT is Element of
     TOL(X): not contradiction };
-    reconsider T = [Total {}X,{}X] as Element of TOL(X) by Th37;
-    T`2 = {}X by MCART_1:def 2;
+    reconsider T = [Total {}X,{}X] as Element of TOL(X) by Th36;
+    [Total {}X,{}X]`2 = {}X;
     then
 A1: id {}X in Funcs(T`2,T`2) by FUNCT_2:9;
     Funcs(T`2,T`2) in F;
@@ -1424,7 +1479,7 @@ end;
 
 reserve f for Element of FuncsT(X);
 
-theorem Th40:
+theorem Th39:
   x in FuncsT(X) iff ex T1,T2 st (T2`2 = {} implies T1`2 = {}) & x
   is Function of T1`2,T2`2
 proof
@@ -1469,20 +1524,11 @@ registration
     now
       set a = [Total {}X,{}X], f = id a`2;
       take m = [[a,a],f];
-      reconsider a as Element of TOL(X) by Th37;
-A1:   a`2 = {} implies a`2 = {};
-      then reconsider f as Element of FuncsT(X) by Th40;
-      now
-        let x,y;
-        assume
-A2:     [x,y] in a`1;
-        then x in a`2 by ZFMISC_1:87;
-        then
-A3:     f.x = x by FUNCT_1:18;
-        y in a`2 by A2,ZFMISC_1:87;
-        hence [f.x,f.y] in a`1 by A2,A3,FUNCT_1:18;
-      end;
-      hence m in FV by A1;
+      reconsider a as Element of TOL(X) by Th36;
+   a`2 = {} implies a`2 = {};
+      then reconsider f as Element of FuncsT(X) by Th39;
+      for x,y st [x,y] in a`1 holds [f.x,f.y] in a`1;
+     hence m in FV;
     end;
     hence thesis;
   end;
@@ -1490,7 +1536,7 @@ end;
 
 reserve m,m1,m2,m3 for Element of MapsT(X);
 
-theorem Th41:
+theorem Th40:
   ex f,T1,T2 st m = [[T1,T2],f] & (T2`2 = {} implies T1`2 = {}) &
   f is Function of T1`2,T2`2 & for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1
 proof
@@ -1501,7 +1547,7 @@ proof
   hence thesis;
 end;
 
-theorem Th42:
+theorem Th41:
   for f being Function of T1`2,T2`2 st (T2`2={} implies T1`2={}) &
 (for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1) holds [[T1,T2],f] in MapsT(X
   )
@@ -1510,7 +1556,7 @@ proof
   assume that
 A1: T2`2={} implies T1`2={} and
 A2: for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1;
-  reconsider f9 = f as Element of FuncsT(X) by A1,Th40;
+  reconsider f9 = f as Element of FuncsT(X) by A1,Th39;
   for x,y st [x,y] in T1`1 holds [f9.x,f9.y] in T2`1 by A2;
   hence thesis by A1;
 end;
@@ -1520,10 +1566,12 @@ registration
   cluster m`2 -> Function-like Relation-like;
   coherence
   proof
-    ex f be Element of FuncsT(X), T1,T2 be Element of TOL(X) st m = [[T1,T2
-],f] &( T2`2 = {} implies T1`2 = {})& f is Function of T1`2,T2`2 & for x,y st [
-    x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th41;
-    hence thesis by MCART_1:def 2;
+    consider f be Element of FuncsT(X), T1,T2 be Element of TOL(X) such that
+W:    m = [[T1,T2],f] &
+      ( T2`2 = {} implies T1`2 = {})& f is Function of T1`2,T2`2 & for x,y st [
+    x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th40;
+    [[T1,T2],f]`2 =f;
+    hence thesis by W;
   end;
 end;
 
@@ -1538,9 +1586,9 @@ definition
 A1: m = [[T1,T2],f] and
     T2`2 = {} implies T1`2 = {} and
     f is Function of T1`2,T2`2 and
-    for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th41;
-    [T1,T2] = m`1 by A1,MCART_1:def 1;
-    hence thesis by MCART_1:def 1;
+    for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th40;
+    [T1,T2] = [[T1,T2],f]`1 & [T1,T2]`1 = T1;
+    hence thesis by A1;
   end;
   func cod m -> Element of TOL(X) equals
   m`1`2;
@@ -1550,29 +1598,29 @@ A1: m = [[T1,T2],f] and
 A2: m = [[T1,T2],f] and
     T2`2 = {} implies T1`2 = {} and
     f is Function of T1`2,T2`2 and
-    for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th41;
-    [T1,T2] = m`1 by A2,MCART_1:def 1;
-    hence thesis by MCART_1:def 2;
+    for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th40;
+    [T1,T2] = [[T1,T2],f]`1 & [T1,T2]`2 = T2;
+    hence thesis by A2;
   end;
 end;
 
-theorem Th43:
+theorem Th42:
   m = [[dom m,cod m],m`2]
 proof
   consider f,T1,T2 such that
 A1: m = [[T1,T2],f] and
   T2`2 = {} implies T1`2 = {} and
   f is Function of T1`2,T2`2 and
-  for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th41;
-  [T1,T2] = m`1 by A1,MCART_1:def 1;
-  then m`1 = [dom m,cod m] by MCART_1:8;
+  for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th40;
+  [T1,T2] = [[T1,T2],f]`1;
+  then m`1 = [dom m,cod m] by A1,MCART_1:8;
   hence thesis by A1,MCART_1:8;
 end;
 
 Lm3: m`2 = m1`2 & dom m = dom m1 & cod m = cod m1 implies m = m1
 proof
-  m = [[dom m,cod m],m`2] by Th43;
-  hence thesis by Th43;
+  m = [[dom m,cod m],m`2] by Th42;
+  hence thesis by Th42;
 end;
 
 definition
@@ -1592,22 +1640,22 @@ A2:   (id T`2).x = x by FUNCT_1:18;
       y in T`2 by A1,ZFMISC_1:87;
       hence [f.x,f.y] in T`1 by A1,A2,FUNCT_1:18;
     end;
-    hence thesis by Th42;
+    hence thesis by Th41;
   end;
 end;
 
-theorem Th44:
+theorem Th43:
   ((cod m)`2 <> {} or (dom m)`2 = {}) & m`2 is Function of (dom m)
   `2,(cod m)`2 & for x,y st [x,y] in (dom m)`1 holds [m`2.x,m`2.y] in (cod m)`1
 proof
   consider f,T1,T2 such that
 A1: m = [[T1,T2],f] and
 A2: ( T2`2 = {} implies T1`2 = {})& f is Function of T1`2,T2`2 and
-A3: for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th41;
-A4: m = [[dom m,cod m],m`2] by Th43;
+A3: for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1 by Th40;
+A4: m = [[dom m,cod m],m`2] by Th42;
   then
 A5: T2 = cod m by A1,Lm2;
-A6: f = m`2 & T1 = dom m by A1,A4,Lm2,ZFMISC_1:27;
+A6: f = m`2 & T1 = dom m by A1,A4,Lm2,XTUPLE_0:1;
   hence
   ((cod m)`2<>{} or (dom m)`2={} ) & m`2 is Function of (dom m)`2,(cod m)
   `2 by A1,A2,A4,Lm2;
@@ -1621,13 +1669,13 @@ definition
   assume
 A1: cod m1 = dom m2;
   func m2*m1 -> Element of MapsT(X) equals
-  :Def28:
+  :Def24:
   [[dom m1,cod m2],m2`2*m1`2];
   coherence
   proof
-A2: (cod m2)`2 <> {} or (dom m2)`2 = {} by Th44;
-A3: (cod m1)`2 <> {} or (dom m1)`2 = {} by Th44;
-A4: m1`2 is Function of (dom m1)`2,(cod m1)`2 by Th44;
+A2: (cod m2)`2 <> {} or (dom m2)`2 = {} by Th43;
+A3: (cod m1)`2 <> {} or (dom m1)`2 = {} by Th43;
+A4: m1`2 is Function of (dom m1)`2,(cod m1)`2 by Th43;
 A5: now
       let x,y;
       assume
@@ -1638,88 +1686,88 @@ A7:   x in dom m1`2 by A3,A4,FUNCT_2:def 1;
       y in (dom m1)`2 by A6,ZFMISC_1:87;
       then
 A8:   y in dom m1`2 by A3,A4,FUNCT_2:def 1;
-      [m1`2.x,m1`2.y] in (cod m1)`1 by A6,Th44;
-      then [m2`2.(m1`2.x),m2`2.(m1`2.y)] in (cod m2)`1 by A1,Th44;
+      [m1`2.x,m1`2.y] in (cod m1)`1 by A6,Th43;
+      then [m2`2.(m1`2.x),m2`2.(m1`2.y)] in (cod m2)`1 by A1,Th43;
       then [(m2`2*m1`2).x,m2`2.(m1`2.y)] in (cod m2)`1 by A7,FUNCT_1:13;
       hence [(m2`2*m1`2).x,(m2`2*m1`2).y] in (cod m2)`1 by A8,FUNCT_1:13;
     end;
-    m2`2 is Function of (dom m2)`2,(cod m2)`2 by Th44;
+    m2`2 is Function of (dom m2)`2,(cod m2)`2 by Th43;
     then m2`2*m1`2 is Function of (dom m1)`2,(cod m2)`2 by A1,A3,A4,FUNCT_2:13;
-    hence thesis by A1,A3,A2,A5,Th42;
+    hence thesis by A1,A3,A2,A5,Th41;
   end;
 end;
 
-theorem Th45:
+theorem Th44:
   dom m2 = cod m1 implies (m2*m1)`2 = m2`2*m1`2 & dom(m2*m1) = dom
   m1 & cod(m2*m1) = cod m2
 proof
   assume dom m2 = cod m1;
-  then [[dom m1,cod m2],m2`2*m1`2] = m2*m1 by Def28
-    .= [[dom(m2*m1),cod(m2*m1)],(m2*m1)`2] by Th43;
-  hence thesis by Lm2,ZFMISC_1:27;
+  then [[dom m1,cod m2],m2`2*m1`2] = m2*m1 by Def24
+    .= [[dom(m2*m1),cod(m2*m1)],(m2*m1)`2] by Th42;
+  hence thesis by Lm2,XTUPLE_0:1;
 end;
 
-theorem Th46:
+theorem Th45:
   dom m2 = cod m1 & dom m3 = cod m2 implies m3*(m2*m1) = (m3*m2)* m1
 proof
   assume that
 A1: dom m2 = cod m1 and
 A2: dom m3 = cod m2;
-A3: cod(m2*m1) = cod m2 by A1,Th45;
-  (m2*m1)`2 = m2`2*m1`2 by A1,Th45;
+A3: cod(m2*m1) = cod m2 by A1,Th44;
+  (m2*m1)`2 = m2`2*m1`2 by A1,Th44;
   then
-A4: (m3*(m2*m1))`2 = m3`2*(m2`2*m1`2) by A2,A3,Th45;
-A5: dom(m3*m2) = dom m2 by A2,Th45;
+A4: (m3*(m2*m1))`2 = m3`2*(m2`2*m1`2) by A2,A3,Th44;
+A5: dom(m3*m2) = dom m2 by A2,Th44;
   then
-A6: dom((m3*m2)*m1) = dom m1 by A1,Th45;
-  dom(m2*m1) = dom m1 by A1,Th45;
+A6: dom((m3*m2)*m1) = dom m1 by A1,Th44;
+  dom(m2*m1) = dom m1 by A1,Th44;
   then
-A7: dom(m3*(m2*m1)) = dom m1 by A2,A3,Th45;
-  cod(m3*m2) = cod m3 by A2,Th45;
+A7: dom(m3*(m2*m1)) = dom m1 by A2,A3,Th44;
+  cod(m3*m2) = cod m3 by A2,Th44;
   then
-A8: cod((m3*m2)*m1) = cod m3 by A1,A5,Th45;
-  (m3*m2)`2 = m3`2*m2`2 by A2,Th45;
+A8: cod((m3*m2)*m1) = cod m3 by A1,A5,Th44;
+  (m3*m2)`2 = m3`2*m2`2 by A2,Th44;
   then
-A9: ((m3*m2)*m1)`2 = (m3`2*m2`2)*m1`2 by A1,A5,Th45;
-  cod(m3*(m2*m1)) = cod m3 by A2,A3,Th45;
+A9: ((m3*m2)*m1)`2 = (m3`2*m2`2)*m1`2 by A1,A5,Th44;
+  cod(m3*(m2*m1)) = cod m3 by A2,A3,Th44;
   hence thesis by A4,A7,A9,A6,A8,Lm3,RELAT_1:36;
 end;
 
-theorem Th47:
+theorem Th46:
   (id$ T)`2 = id T`2 & dom id$ T = T & cod id$ T = T
 proof
-  [[dom id$ T,cod id$ T],(id$ T)`2] = [[T,T],id T`2] by Th43;
-  hence thesis by Lm2,ZFMISC_1:27;
+  [[dom id$ T,cod id$ T],(id$ T)`2] = [[T,T],id T`2] by Th42;
+  hence thesis by Lm2,XTUPLE_0:1;
 end;
 
-theorem Th48:
+theorem Th47:
   m*(id$ dom m) = m & (id$ cod m)*m = m
 proof
   set i1 = id$ dom m, i2 = id$ cod m;
-A1: i1`2 = id (dom m)`2 & dom i1 = dom m by Th47;
-A2: m`2 is Function of (dom m)`2,(cod m)`2 by Th44;
+A1: i1`2 = id (dom m)`2 & dom i1 = dom m by Th46;
+A2: m`2 is Function of (dom m)`2,(cod m)`2 by Th43;
   then
 A3: rng m`2 c= (cod m)`2 by RELAT_1:def 19;
-  (cod m)`2 <> {} or (dom m)`2 = {} by Th44;
+  (cod m)`2 <> {} or (dom m)`2 = {} by Th43;
   then
 A4: dom m`2 = (dom m)`2 by A2,FUNCT_2:def 1;
-A5: cod i1 = dom m by Th47;
+A5: cod i1 = dom m by Th46;
   then
-A6: cod(m*i1) = cod m by Th45;
-  (m*i1)`2 = m`2*i1`2 & dom(m*i1) = dom i1 by A5,Th45;
+A6: cod(m*i1) = cod m by Th44;
+  (m*i1)`2 = m`2*i1`2 & dom(m*i1) = dom i1 by A5,Th44;
   hence m*i1 = m by A4,A1,A6,Lm3,RELAT_1:52;
-A7: i2`2 = id (cod m)`2 & cod i2 = cod m by Th47;
-A8: dom i2 = cod m by Th47;
+A7: i2`2 = id (cod m)`2 & cod i2 = cod m by Th46;
+A8: dom i2 = cod m by Th46;
   then
-A9: cod(i2*m) = cod i2 by Th45;
-  (i2*m)`2 = i2`2*m`2 & dom(i2*m) = dom m by A8,Th45;
+A9: cod(i2*m) = cod i2 by Th44;
+  (i2*m)`2 = i2`2*m`2 & dom(i2*m) = dom m by A8,Th44;
   hence thesis by A3,A7,A9,Lm3,RELAT_1:53;
 end;
 
 definition
   let X;
   func fDom X -> Function of MapsT(X),TOL(X) means
-  :Def29:
+  :Def25:
   for m holds it.m = dom m;
   existence
   proof
@@ -1740,7 +1788,7 @@ A2: for m holds h2.m = dom m;
     hence thesis by FUNCT_2:63;
   end;
   func fCod X -> Function of MapsT(X),TOL(X) means
-  :Def30:
+  :Def26:
   for m holds it.m = cod m;
   existence
   proof
@@ -1761,7 +1809,7 @@ A4: for m holds h2.m = cod m;
     hence thesis by FUNCT_2:63;
   end;
   func fComp X -> PartFunc of [:MapsT(X),MapsT(X):],MapsT(X) means
-  :Def31:
+  :Def27:
   (
 for m2,m1 holds [m2,m1] in dom it iff dom m2 = cod m1) & for m2,m1 st dom m2 =
   cod m1 holds it.[m2,m1] = m2*m1;
@@ -1852,96 +1900,144 @@ A21:  dom m2 = cod m1 by A12,A19,A20;
     end;
     hence thesis by A16,PARTFUN1:5;
   end;
-  func fId X -> Function of TOL(X),MapsT(X) means
-  :Def32:
-  for T holds it.T = id$ T;
-  existence
-  proof
-    deffunc F(Element of TOL(X)) = id$ $1;
-    thus ex f being Function of TOL(X),MapsT(X) st for x being Element of TOL(
-    X) holds f.x = F(x) from FUNCT_2:sch 4;
-  end;
-  uniqueness
-  proof
-    let h1,h2 be Function of TOL(X),MapsT(X) such that
-A22: for T holds h1.T = id$ T and
-A23: for T holds h2.T = id$ T;
-    now
-      let T;
-      thus h1.T = id$ T by A22
-        .= h2.T by A23;
-    end;
-    hence thesis by FUNCT_2:63;
-  end;
-end;
-
-theorem Th49:
-  CatStr(# TOL(X),MapsT(X),fDom X,fCod X,fComp X,fId X #) is Category
-proof
-  set M = MapsT(X), d = fDom X, c = fCod X, p = fComp X, i = fId X;
-  now
-    thus for f,g being Element of M holds [g,f] in dom(p) iff d.g=c.f
-    proof
-      let f,g be Element of M;
-      d.g = dom g & c.f = cod f by Def29,Def30;
-      hence thesis by Def31;
-    end;
-    thus for f,g being Element of M st d.g=c.f holds d.(p.(g,f)) = d.f & c.(p.
-    (g,f)) = c.g
-    proof
-      let f,g be Element of M such that
-A1:   d.g=c.f;
-A2:   d.g = dom g & c.f = cod f by Def29,Def30;
-      then
-A3:   p.[g,f] = g*f by A1,Def31;
-A4:   d.f = dom f & c.g = cod g by Def29,Def30;
-      dom(g*f) = dom f & cod(g*f) = cod g by A1,A2,Th45;
-      hence thesis by A3,A4,Def29,Def30;
-    end;
-    thus for f,g,h being Element of M st d.h = c.g & d.g = c.f holds p.(h,p.(g
-    ,f)) = p.(p.(h,g),f)
-    proof
-      let f,g,h be Element of M such that
-A5:   d.h = c.g and
-A6:   d.g = c.f;
-A7:   dom h = d.h & cod g = c.g by Def29,Def30;
-      then
-A8:   dom(h*g) = dom g by A5,Th45;
-A9:   dom g = d.g & cod f = c.f by Def29,Def30;
-      then
-A10:  cod(g*f) = dom h by A5,A6,A7,Th45;
-      thus p.(h,p.(g,f)) = p.[h,g*f] by A6,A9,Def31
-        .= h*(g*f) by A10,Def31
-        .= (h*g)*f by A5,A6,A7,A9,Th46
-        .= p.[h*g,f] by A6,A9,A8,Def31
-        .= p.(p.(h,g),f) by A5,A7,Def31;
-    end;
-    let b be Element of TOL(X);
-A11: i.b = id$ b by Def32;
-A12: cod id$ b = b by Th47;
-A13: dom id$ b = b by Th47;
-    hence d.(i.b) = b & c.(i.b) = b by A11,A12,Def29,Def30;
-    thus for f being Element of M st c.f=b holds p.(i.b,f) = f
-    proof
-      let f be Element of M such that
-A14:  c.f = b;
-A15:  cod f = c.f by Def30;
-      then (id$ b)*f = f by A14,Th48;
-      hence thesis by A11,A13,A14,A15,Def31;
-    end;
-    let g be Element of M such that
-A16: d.g=b;
-A17: dom g = d.g by Def29;
-    then g*(id$ b) = g by A16,Th48;
-    hence p.(g,i.b) = g by A11,A12,A16,A17,Def31;
-  end;
-  hence thesis by CAT_1:def 5;
 end;
 
 definition
+ canceled;
   let X;
-  func TolCat(X) -> Category equals
-  CatStr(# TOL(X),MapsT(X),fDom X,fCod X,
-    fComp X,fId X #);
-  coherence by Th49;
+  func TolCat(X) -> non empty non void strict CatStr equals
+  CatStr(# TOL(X),MapsT(X),fDom X,fCod X,fComp X#);
+  coherence;
 end;
+
+registration
+  let X;
+  cluster TolCat(X) -> Category-like transitive associative reflexive;
+  coherence
+   proof set C = TolCat X;
+    set M = MapsT(X), d = fDom X, c = fCod X, p = fComp X;
+thus P1:  C is Category-like
+  proof
+      let ff,gg be Morphism of C;
+      reconsider f=ff, g=gg as Element of M;
+      d.g = dom g & c.f = cod f by Def25,Def26;
+      hence thesis by Def27;
+   end;
+thus P2: C is transitive
+   proof
+      let ff,gg be Morphism of C such that
+A1:   dom gg=cod ff;
+      [gg,ff] in dom the Comp of C by A1,P1,CAT_1:def 6;
+      then
+U:    (the Comp of C).(gg,ff) = gg(*)ff by CAT_1:def 1;
+      reconsider f=ff, g=gg as Element of M;
+A2:   d.g = dom g & c.f = cod f by Def25,Def26;
+      then
+A3:   p.[g,f] = g*f by A1,Def27;
+A4:   d.f = dom f & c.g = cod g by Def25,Def26;
+      dom(g*f) = dom f & cod(g*f) = cod g by A1,A2,Th44;
+      hence thesis by A3,A4,Def25,Def26,U;
+    end;
+thus  C is associative
+   proof
+      let ff,gg,hh be Morphism of C such that
+A5:   dom hh = cod gg and
+A6:   dom gg = cod ff;
+      reconsider f=ff, g=gg, h=hh as Element of M;
+A7:   dom h = d.h & cod g = c.g by Def25,Def26;
+      then
+A8:   dom(h*g) = dom g by A5,Th44;
+A9:   dom g = d.g & cod f = c.f by Def25,Def26;
+      then
+A10:  cod(g*f) = dom h by A5,A6,A7,Th44;
+       [hh,gg] in dom the Comp of C by A5,P1,CAT_1:def 6;
+       then
+X2:    hh(*)gg = (the Comp of C).(hh,gg) by CAT_1:def 1;
+       [gg,ff] in dom the Comp of C by A6,P1,CAT_1:def 6;
+       then
+X1:    gg(*)ff = (the Comp of C).(gg,ff) by CAT_1:def 1;
+       dom(hh(*)gg) = dom gg by P2,CAT_1:def 7,A5;
+       then
+X3:     [hh(*)gg,ff] in dom the Comp of C by P1,CAT_1:def 6,A6;
+       cod(gg(*)ff) = cod gg by P2,CAT_1:def 7,A6;
+       then [hh,gg(*)ff] in dom the Comp of C by P1,CAT_1:def 6,A5;
+      hence hh(*)(gg(*)ff)
+         = (the Comp of C).(hh,(the Comp of C).(gg,ff)) by X1,CAT_1:def 1
+        .= p.[h,g*f] by A6,A9,Def27
+        .= h*(g*f) by A10,Def27
+        .= (h*g)*f by A5,A6,A7,A9,Th45
+        .= p.[h*g,f] by A6,A9,A8,Def27
+        .= (the Comp of C).((the Comp of C).(hh,gg),ff) by A5,A7,Def27
+        .= hh(*)gg(*)ff by X2,X3,CAT_1:def 1;
+    end;
+    let a be Object of C;
+     reconsider aa = a as Element of TOL X;
+     reconsider ii = id$ aa as Morphism of C;
+A12: cod ii = cod id$ aa by Def26 .= aa by Th46;
+     dom ii = dom id$ aa by Def25 .= aa by Th46;
+     then id$ aa in Hom(a,a) by A12;
+    hence Hom(a,a)<>{};
+   end;
+end;
+
+LmX:
+  for a being Element of TolCat X, aa being Element of TOL X st a = aa
+  for i being Morphism of a,a st i = id$ aa
+  for b being Element of TolCat X holds
+   (Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g) &
+   (Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f)
+  proof let a be Element of TolCat X, aa be Element of TOL X such that
+Z1: a = aa;
+   let i be Morphism of a,a such that
+Z2: i = id$ aa;
+  let b be Element of TolCat X;
+  thus Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g
+   proof assume
+Z3:  Hom(a,b)<>{};
+    let g be Morphism of a,b;
+     reconsider gg = g as Element of MapsT X;
+     Hom(a,a)<>{};
+     then
+A1:  cod i = a by CAT_1:5 .= dom g by Z3,CAT_1:5;
+A3:  dom gg = dom g by Def25 .= aa by Z1,Z3,CAT_1:5;
+     then
+A2:  cod id$ aa = dom gg by Th46;
+     [g,i] in dom the Comp of TolCat X by A1,CAT_1:def 6;
+    hence g(*)i = (the Comp of TolCat X).(g,i) by CAT_1:def 1
+       .= gg*id$ aa by A2,Z2,Def27
+       .= g by A3,Th47;
+   end;
+   thus Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f
+   proof assume
+Z3:  Hom(b,a)<>{};
+    let g be Morphism of b,a;
+     reconsider gg = g as Element of MapsT X;
+     Hom(a,a)<>{};
+     then
+A1:  dom i = a by CAT_1:5 .= cod g by Z3,CAT_1:5;
+A3:  cod gg = cod g by Def26 .= aa by Z1,Z3,CAT_1:5;
+     then
+A2:  dom id$ aa = cod gg by Th46;
+     [i,g] in dom the Comp of TolCat X by A1,CAT_1:def 6;
+    hence i(*)g = (the Comp of TolCat X).(i,g) by CAT_1:def 1
+       .= (id$ aa)*gg by Z2,A2,Def27
+       .= g by A3,Th47;
+   end;
+  end;
+
+registration
+  let X;
+  cluster TolCat(X) -> with_identities;
+  coherence
+  proof let a being Element of TolCat X;
+    reconsider aa = a as Element of TOL X;
+    reconsider ii = id$ aa as Morphism of TolCat X;
+A12: cod ii = cod id$ aa by Def26 .= aa by Th46;
+     dom ii = dom id$ aa by Def25 .= aa by Th46;
+    then ii in Hom(a,a) by A12;
+    then reconsider ii as Morphism of a,a by CAT_1:def 5;
+   take ii;
+   thus thesis by LmX;
+  end;
+end;
+

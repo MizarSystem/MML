@@ -2,7 +2,7 @@
 ::  by Broderick Arneson and Piotr Rudnicki
 ::
 :: Received November 17, 2006
-:: Copyright (c) 2006-2011 Association of Mizar Users
+:: Copyright (c) 2006-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,52 +19,42 @@ environ
       ARYTM_1, NAT_1, ZFMISC_1, FINSEQ_1, UPROOTS, VALUED_0, RELAT_2, BAGORDER,
       PRE_POLY, WELLORD1, GLIB_000, GLIB_001, ORDINAL4, PBOOLE, PARTFUN1,
       MCART_1, FUNCT_2, FINSUB_1, CHORD, TOPGEN_1, RCOMP_1, FINSEQ_4, GRAPH_1,
-      MEMBERED, ABIAN, LEXBFS;
- notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, CARD_1, NUMBERS, SUBSET_1,
+      MEMBERED, ABIAN, LEXBFS, MATROID0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, MCART_1, CARD_1, NUMBERS, SUBSET_1,
       XXREAL_0, VALUED_0, XREAL_0, RELAT_1, RELAT_2, WELLORD1, MEMBERED,
       XXREAL_2, PARTFUN1, FUNCT_1, FUNCT_2, PBOOLE, ORDINAL1, FINSET_1,
       XCMPLX_0, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001, BAGORDER,
       TERMORD, UPROOTS, CHORD, FINSEQ_1, DOMAIN_1, ABIAN, RELSET_1, RECDEF_1,
       FINSUB_1, RFUNCT_3, PRE_POLY;
  constructors DOMAIN_1, FUNCT_4, XXREAL_2, BAGORDER, TERMORD, UPROOTS, CHORD,
-      RECDEF_1, RFUNCT_3, WELLORD2, RELSET_1, PBOOLE;
+      RECDEF_1, RFUNCT_3, RELSET_1, PBOOLE, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, XXREAL_0, XREAL_0, XXREAL_2, NAT_1, INT_1, MEMBERED, FINSEQ_1,
-      CARD_1, UPROOTS, FUNCT_2, GLIB_000, ABIAN, BAGORDER, TERMORD, CARD_FIN,
-      GLIB_001, CHORD, VALUED_0, FINSUB_1, PARTFUN1, RELSET_1, PRE_POLY;
+      CARD_1, UPROOTS, GLIB_000, ABIAN, BAGORDER, TERMORD, GLIB_001, CHORD,
+      VALUED_0, FINSUB_1, PARTFUN1, RELSET_1, PRE_POLY, XTUPLE_0;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
- definitions GLIB_000, GLIB_001, FUNCOP_1, TARSKI;
+ definitions GLIB_000, GLIB_001, FUNCOP_1, TARSKI, XTUPLE_0;
  theorems AXIOMS, CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, INT_1, NAT_1,
       BAGORDER, TERMORD, ORDINAL1, PARTFUN1, PBOOLE, NAT_D, XREAL_0, RELAT_1,
       RELSET_1, TARSKI, XBOOLE_0, XBOOLE_1, XREAL_1, ZFMISC_1, ENUMSET1, CHORD,
       NECKLACE, FINSEQ_4, WELLORD1, UPROOTS, CARD_FIN, TREES_1, NAT_2,
-      XXREAL_0, XXREAL_2, VALUED_0, MCART_1, FINSUB_1, SYSREL, GRFUNC_1,
-      PRE_POLY;
+      XXREAL_0, XXREAL_2, VALUED_0, MCART_1, FINSUB_1, SYSREL, GRFUNC_1;
  schemes NAT_1, FUNCT_1, RECDEF_1, FRAENKEL, PBOOLE, FUNCT_2, CLASSES1;
 
 begin :: Preliminaries
 :: What should be the order of RELSET_1, FUNCT_1, FUNCT_2 such that the
 :: qua Function and qua Relation are not needed.
 
-Lm1: for f being Function st f is one-to-one holds card (dom f) = card (rng f)
-proof
-  let f be Function;
-  assume f is one-to-one;
-  then
-A1: dom f, f .: (dom f) are_equipotent by CARD_1:33;
-  f .: (dom f) = rng f by RELAT_1:113;
-  hence thesis by A1,CARD_1:5;
-end;
-
-Lm2: for F being Function, x,y being set holds dom(F+*(x.-->y)) = dom F \/ {x}
+Lm1: for F being Function, x,y being set holds dom(F+*(x.-->y)) = dom F \/ {x}
 proof
   let F be Function, x,y be set;
   thus dom(F+*(x.-->y)) = dom F \/ dom(x.-->y) by FUNCT_4:def 1
     .= dom F \/ {x} by FUNCOP_1:13;
 end;
 
-Lm3: for f being one-to-one Function, X, Y being set st X c= Y for x being set
+Lm2: for f being one-to-one Function, X, Y being set st X c= Y for x being set
 st x in dom ((f|X)") holds (f|X)".x = (f|Y)".x
 proof
   let f be one-to-one Function, X, Y be set;
@@ -177,7 +167,7 @@ A21: P[ 0 ] by CARD_1:30;
   hence thesis;
 end;
 
-Lm4: for a,b,c being real number st a < b holds c-b+1 < c-a+1
+Lm3: for a,b,c being real number st a < b holds c-b+1 < c-a+1
 proof
   let a,b,c be real number;
   assume a < b;
@@ -196,23 +186,12 @@ A3: k - m < k - n by A2,XREAL_1:15;
   hence thesis by A1,A3,XREAL_1:233;
 end;
 
-definition
+notation
   let S be set;
-  attr S is with_finite-elements means
-  :Def1:
-  for x being Element of S holds x is finite;
+  synonym S is with_finite-elements for S is finite-membered;
 end;
 
 registration
-  cluster non empty with_finite-elements for set;
-  existence
-  proof
-    set x = {1};
-    take x;
-    thus x is non empty;
-    for y be Element of x holds y is finite;
-    hence thesis by Def1;
-  end;
   cluster non empty finite with_finite-elements for Subset of bool NAT;
   existence
   proof
@@ -221,18 +200,12 @@ registration
     take x;
     thus x is non empty;
     thus x is finite;
-    for y being Element of x holds y is finite by TARSKI:def 1;
-    hence thesis by Def1;
+    thus thesis;
   end;
 end;
 
-registration
-  let S be with_finite-elements set;
-  cluster -> finite for Element of S;
-  coherence by Def1;
-end;
-
 definition
+ canceled;
   let f,g be Function;
   func f .\/ g -> Function means
   :Def2:
@@ -396,26 +369,6 @@ definition
   rng f c= bool NAT;
 end;
 
-Lm5: for F being Function st (for x being set st x in rng F holds x is finite)
-holds F is finite-yielding
-proof
-  let F be Function such that
-A1: for x being set st x in rng F holds x is finite;
-  now
-    let y be set;
-    per cases;
-    suppose
-      y in dom F;
-      hence F.y is finite by A1,FUNCT_1:3;
-    end;
-    suppose
-      not y in dom F;
-      hence F.y is finite by FUNCT_1:def 2;
-    end;
-  end;
-  hence thesis by CARD_FIN:def 3;
-end;
-
 registration
   cluster finite-yielding natsubset-yielding for Function;
   existence
@@ -423,7 +376,7 @@ registration
     set F = NAT --> {};
     take F;
     for x be set st x in rng F holds x is finite;
-    hence F is finite-yielding by Lm5;
+    hence F is finite-yielding by FINSET_1:def 2;
     now
       let x be set;
       assume x in rng F;
@@ -699,7 +652,7 @@ registration
   end;
 end;
 
-Lm6: for G being _Graph, W being Walk of G, e,v being set st e Joins W.last(),
+Lm4: for G being _Graph, W being Walk of G, e,v being set st e Joins W.last(),
 v,G holds W.addEdge(e).length() = W.length() + 1
 proof
   let G be _Graph, W be Walk of G, e,v be set;
@@ -710,7 +663,7 @@ A1: W.addEdge(e).edgeSeq() = W.edgeSeq()^<*e*> by GLIB_001:82;
   hence thesis by A1,FINSEQ_1:22;
 end;
 
-Lm7: for G being _Graph, W being Walk of G holds W.length() = W.reverse()
+Lm5: for G being _Graph, W being Walk of G holds W.length() = W.reverse()
 .length()
 proof
   let G be _Graph, W be Walk of G;
@@ -720,7 +673,7 @@ A1: len W = 2*W.length() + 1 by GLIB_001:112;
   hence thesis;
 end;
 
-Lm8: for G being _Graph, W being Walk of G for e,x being set st e Joins W
+Lm6: for G being _Graph, W being Walk of G for e,x being set st e Joins W
 .last(),x,G for n being Nat st n in dom W holds W.addEdge(e).n = W.n & n in dom
 W.addEdge(e)
 proof
@@ -983,7 +936,7 @@ A17:  dom (vs | Seg n) = Seg n by A13,RELAT_1:62;
       then rng ((vs | Seg n)") = Seg n by A14,FUNCT_1:33;
       then dom (s*((vs | Seg n)")) = dom ((vs | Seg n)") by A11,RELAT_1:27
         .= rng (vs | Seg n) by A14,FUNCT_1:33;
-      then card dom (s*((vs | Seg n)")) = n by A14,A17,A16,Lm1;
+      then card dom (s*((vs | Seg n)")) = n by A14,A17,A16,CARD_1:70;
       hence thesis by A15,CARD_1:62;
     end;
     reconsider S as preVNumberingSeq of G by A7,Def8;
@@ -1019,7 +972,7 @@ A27:        S.n = (vs" qua Relation)*s by A18,A5,A24;
             card (S.n) = card dom (S.n) by CARD_1:62
               .= card dom (vs") by A27,A26,RELAT_1:27
               .= card rng vs by FUNCT_1:33
-              .= card dom vs by Lm1
+              .= card dom vs by CARD_1:70
               .= len vs by CARD_1:62;
             hence thesis by A18,A12,A22,A25;
           end;
@@ -1165,7 +1118,7 @@ A68:        x in dom ((vs | Seg n)") by FUNCT_1:11;
             then
 A69:        x in dom ((vs | Seg (n+1))") by A51,FUNCT_1:33;
 A70:        ((vs | Seg n)").x in dom s by A67,FUNCT_1:11;
-            ((vs | Seg n)").x = ((vs | Seg (n+1))").x by A52,A68,Lm3;
+            ((vs | Seg n)").x = ((vs | Seg (n+1))").x by A52,A68,Lm2;
             then x in dom (s*((vs | Seg (n+1))")) by A70,A69,FUNCT_1:11;
             hence x in dom (S.(n+1)) by A4;
           end;
@@ -1209,7 +1162,7 @@ A85:      m < n+1 by NAT_1:13;
           then
 A86:      x <> w by A44,A84,A85,FUNCT_1:def 4;
           thus (S.(n+1)).x = s.(((vs | Seg (n+1))").x) by A75,A77,FUNCT_1:12
-            .= s.(((vs | Seg n)").x) by A52,A80,Lm3
+            .= s.(((vs | Seg n)").x) by A52,A80,Lm2
             .= (S.n).x by A78,A79,FUNCT_1:12
             .= ((S.n) +* (w .--> (S.Lifespan()-'n))).x by A86,FUNCT_4:83;
         end;
@@ -1928,9 +1881,7 @@ A4:   now
         then VG c= dom VLG by A3,XBOOLE_1:37;
         hence contradiction by A2,XBOOLE_0:def 10;
       end;
-      then S is non empty by RELAT_1:42;
-      then
-A5:   for x being Element of S holds x is finite;
+A5:   for x being set st x in S holds x is finite;
 A6:   rng F c= rng V2G by RELAT_1:70;
       now
 A7:     rng V2G c= bool NAT
@@ -1949,7 +1900,7 @@ A8:     x in S;
       then for x being set holds x in S implies x in bool NAT;
       then reconsider
       S as non empty finite with_finite-elements Subset of bool NAT
-      by A4,A5,Def1,RELAT_1:42,TARSKI:def 3;
+      by A4,A5,FINSET_1:def 6,RELAT_1:42,TARSKI:def 3;
       deffunc F(finite Subset of NAT) = ($1,1)-bag;
       set B = {F(x) where x is Element of S: x in S};
       consider z being set such that
@@ -2090,16 +2041,16 @@ A8: rng f c= Fin NAT by FUNCT_2:def 2;
     rng F c= {{nn}} by FUNCOP_1:13;
     then
 A9: rng F c= Fin NAT by A5,XBOOLE_1:1;
-A13:  dom L2 = dom f \/ dom F by A6,Def2;
-A10: rng L2 c= Fin NAT
+A10:  dom L2 = dom f \/ dom F by A6,Def2;
+A11: rng L2 c= Fin NAT
     proof
       let y be set;
       assume y in rng L2;
       then consider x being set such that
-A11:  x in dom L2 and
-A12:  y = L2.x by FUNCT_1:def 3;
-A14:  y = f.x \/ F.x by A6,A11,A12,Def2,A13;
-      per cases by A11,A13,XBOOLE_0:def 3;
+A12:  x in dom L2 and
+A13:  y = L2.x by FUNCT_1:def 3;
+A14:  y = f.x \/ F.x by A6,A12,A13,Def2,A10;
+      per cases by A12,A10,XBOOLE_0:def 3;
       suppose that
 A15:    x in dom f and
 A16:    not x in dom F;
@@ -2124,10 +2075,10 @@ A23:    F.x in rng F by A22,FUNCT_1:3;
     end;
     dom F = G.AdjacentSet({v}) \ dom L`1 by FUNCOP_1:13;
     then
-XX: dom F c= the_Vertices_of G;
-    dom L2 = dom f \/ dom F by A6,A13;
-    then dom L2 = the_Vertices_of G by A6,A7,XBOOLE_1:12,XX;
-    then L2 in Funcs(the_Vertices_of G, Fin NAT) by A10,FUNCT_2:def 2;
+A24: dom F c= the_Vertices_of G;
+    dom L2 = dom f \/ dom F by A10;
+    then dom L2 = the_Vertices_of G by A7,A24,XBOOLE_1:12;
+    then L2 in Funcs(the_Vertices_of G, Fin NAT) by A11,FUNCT_2:def 2;
     hence thesis by A4,ZFMISC_1:def 2;
   end;
 end;
@@ -2141,8 +2092,6 @@ proof
   set, k be Nat such that
 A1: not x in G.AdjacentSet({v});
   set F = (G.AdjacentSet({v}) \ dom L`1) --> {G.order()-'k};
-  dom F = G.AdjacentSet({v}) \ dom L`1 by FUNCOP_1:13;
-  then
 A2: not x in dom F by A1,XBOOLE_0:def 5;
   then
 A3: F.x = {} by FUNCT_1:def 2;
@@ -2173,8 +2122,6 @@ proof
   set, k be Nat such that
 A1: x in dom L`1;
   set F = (G.AdjacentSet({v}) \ dom L`1) --> {G.order()-'k};
-  dom F = G.AdjacentSet({v}) \ dom L`1 by FUNCOP_1:13;
-  then
 A2: not x in dom F by A1,XBOOLE_0:def 5;
   then
 A3: F.x = {} by FUNCT_1:def 2;
@@ -2393,7 +2340,7 @@ registration
   coherence by Th28;
 end;
 
-Lm9: for G being _Graph, v being set holds dom (LexBFS:Init(G))`2 =
+Lm7: for G being _Graph, v being set holds dom (LexBFS:Init(G))`2 =
 the_Vertices_of G & (LexBFS:Init(G))`2.v = {}
 proof
   let G be _Graph, v be set;
@@ -2978,7 +2925,7 @@ A8:     (Seg G.order()) \ Seg (G.order() -' k) c= (Seg G.order()) \ Seg (
     end;
   end;
   CS.0 = LexBFS:Init(G) by Def17;
-  then (CS.0)`2.v = {} by Lm9;
+  then (CS.0)`2.v = {} by Lm7;
   then
 A9: P[ 0 ] by XBOOLE_1:2;
 A10: for k being Nat holds P[k] from NAT_1:sch 2(A9,A1);
@@ -3742,8 +3689,8 @@ A46: Q is open by GLIB_001:120;
     then
 A47: 3 in dom P by FINSEQ_3:25;
     then
-A48: 3 in dom Qr by A38,Lm8;
-    v2 = Qr.3 by A21,A38,A47,Lm8;
+A48: 3 in dom Qr by A38,Lm6;
+    v2 = Qr.3 by A21,A38,A47,Lm6;
     then
 A49: v2 = Q.(len Q-3+1) by A48,A44,GLIB_001:24;
     v4 = Qr.first() by A23,A38,GLIB_001:63;
@@ -3751,8 +3698,8 @@ A49: v2 = Q.(len Q-3+1) by A48,A44,GLIB_001:24;
 A50: v4 = Q.last() by GLIB_001:22;
 A51: len Qr = len P + 2 by A38,GLIB_001:64;
     then
-A52: len Qr-2 in dom Qr by A38,A31,Lm8;
-    v3 = Qr.(len Qr - 2) by A22,A38,A51,A31,Lm8;
+A52: len Qr-2 in dom Qr by A38,A31,Lm6;
+    v3 = Qr.(len Qr - 2) by A22,A38,A51,A31,Lm6;
     then
 A53: v3 = Q.(len Q-(len Qr-2)+1) by A52,A44,GLIB_001:24;
     v5 = Qr.last() by A38,GLIB_001:63;
@@ -3761,9 +3708,9 @@ A54: v5 = Q.first() by GLIB_001:22;
     Qr is chordless by A16,A17,A18,A38,A45,A43,CHORD:97;
     then
 A55: Q is chordless by CHORD:91;
-    Qr.length() = k-1+1 by A19,A38,Lm6;
+    Qr.length() = k-1+1 by A19,A38,Lm4;
     then
-A56: Q.length() = (k+1)-1 by Lm7;
+A56: Q.length() = (k+1)-1 by Lm5;
 A57: now
       let x be set;
       assume x in Q.vertices();
@@ -3923,9 +3870,9 @@ A115: c = Q.first();
     3 in dom P by A103,FINSEQ_3:25;
     then
 A116: Qr.3 = v by A107,A109,GLIB_001:65;
-    Qr.length() = 2+1 by A104,A109,Lm6;
+    Qr.length() = 2+1 by A104,A109,Lm4;
     then
-A117: Q.length() = (3+1)-1 by Lm7;
+A117: Q.length() = (3+1)-1 by Lm5;
     1 in dom P by A103,FINSEQ_3:25;
     then Qr.1 = b by A106,A109,GLIB_001:65;
     then b = Q.(len Qr-1+1) by A112,GLIB_001:24;
@@ -4041,7 +3988,7 @@ definition
   proof
     set f = the_Vertices_of G --> 0;
 A1: rng {} c= NAT;
-A2: rng f c= NAT;
+A2: rng f c= NAT by RELAT_1:def 19;
     dom f = the_Vertices_of G by FUNCOP_1:13;
     then
 A3: f in Funcs(the_Vertices_of G, NAT) by A2,FUNCT_2:def 2;
@@ -4137,7 +4084,7 @@ definition
   proof
     set k = G.order()-'n;
     set L1 = L`1 +* (v .--> k);
-A1: dom L1 = dom L`1 \/ {v} by Lm2;
+A1: dom L1 = dom L`1 \/ {v} by Lm1;
     rng (v .--> k) c= {k} by FUNCOP_1:13;
     then rng (v .--> k) c= NAT by XBOOLE_1:1;
     then
@@ -4330,7 +4277,9 @@ theorem Th57:
 proof
   let G be finite _Graph, v be set;
   set g = the_Vertices_of G --> {};
-A1: (MCS:Init(G))`2 = g by MCART_1:def 2;
+  [{},g]`2 =g;
+  then
+A1: (MCS:Init(G))`2 = g;
   then dom (MCS:Init(G))`2 = the_Vertices_of G by FUNCOP_1:13;
   then reconsider f = g as PartFunc of the_Vertices_of G, rng g by A1,
 RELSET_1:4;
@@ -4432,7 +4381,10 @@ A1: not x in G.AdjacentSet({v});
   set VLG = L`1;
   set GL = MCS:LabelAdjacent(L,v);
   set V2 = GL`2;
-A2: V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1) by MCART_1:def 2;
+  [L`1,(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1)]`2
+     =(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1);
+  then
+A2: V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1);
   not x in G.AdjacentSet({v}) \ dom VLG by A1,XBOOLE_0:def 5;
   hence thesis by A2,Def4;
 end;
@@ -4447,7 +4399,10 @@ A1: x in dom L`1;
   set VLG = L`1;
   set GL = MCS:LabelAdjacent(L,v);
   set V2 = GL`2;
-A2: V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1) by MCART_1:def 2;
+  [L`1,(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1)]`2
+     =(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1);
+  then
+A2: V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1);
   not x in G.AdjacentSet({v}) \ dom VLG by A1,XBOOLE_0:def 5;
   hence thesis by A2,Def4;
 end;
@@ -4465,7 +4420,10 @@ A3: not x in dom L`1;
   set VLG = L`1;
   set GL = MCS:LabelAdjacent(L,v);
   set V2 = GL`2;
-A4: V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1) by MCART_1:def 2;
+  [L`1,(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1)]`2
+     =(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1);
+  then
+A4: V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1);
   x in G.AdjacentSet({v}) \ dom VLG by A2,A3,XBOOLE_0:def 5;
   hence thesis by A1,A4,Def4;
 end;
@@ -4481,7 +4439,10 @@ A1: dom L`2 = the_Vertices_of G;
   set VLG = L`1;
   set GL = MCS:LabelAdjacent(L,v);
   set V2 = GL`2;
-  V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1) by MCART_1:def 2;
+  [L`1,(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1)]`2
+     =(L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1);
+  then
+  V2 = V2G.incSubset(G.AdjacentSet({v})\dom VLG,1);
   hence thesis by A1,Def4;
 end;
 
@@ -4503,8 +4464,10 @@ A1: card (dom ((MCS:CSeq(G)).n)`1) < G.order();
   then consider L being MCS:Labeling of G such that
 A2: L = [CSN`1 +* (w .--> k), CSN`2] and
 A3: CN1 = MCS:LabelAdjacent(L, w) by Def22;
-  CN1`1 = L`1 by A3,MCART_1:def 1;
-  hence thesis by A2,MCART_1:def 1;
+  [L`1,(L`2).incSubset(G.AdjacentSet({w}) \ dom L`1, 1)]`1
+     = L`1;
+  then CN1`1 = [CSN`1 +* (w .--> k), CSN`2]`1 by A3,A2;
+  hence thesis;
 end;
 
 theorem Th65:
@@ -4546,10 +4509,11 @@ A7: P[k];
       hence thesis by NAT_1:13;
     end;
   end;
+A8: [ {}, the_Vertices_of G --> 0 ]`1 = {};
   (MCS:CSeq(G)).0 = MCS:Init(G) by Def26;
   then
-A8: P[ 0 ] by CARD_1:27,MCART_1:def 1,RELAT_1:38;
-  for k being Nat holds P[k] from NAT_1:sch 2(A8,A6);
+A9: P[ 0 ] by A8;
+  for k being Nat holds P[k] from NAT_1:sch 2(A9,A6);
   hence thesis by A1;
 end;
 
@@ -4722,52 +4686,53 @@ proof
   set GS = MCS:CSeq(G);
   set S = GS``1;
 A1: GS.0 = MCS:Init(G) by Def26;
+A2: [ {}, the_Vertices_of G --> 0 ]`1 = {};
   S.0 = (GS.0)`1 by Def25;
-  hence S.0 = {} by A1,MCART_1:def 1;
+  hence S.0 = {} by A1,A2;
   now
     let k, n be Nat such that
-A2: S.k = S.n;
-A3: S.(k+1) = (GS.(k+1))`1 by Def25;
-A4: S.k = (GS.k)`1 by Def25;
-A5: S.(n+1) = (GS.(n+1))`1 by Def25;
-A6: S.n = (GS.n)`1 by Def25;
+A3: S.k = S.n;
+A4: S.(k+1) = (GS.(k+1))`1 by Def25;
+A5: S.k = (GS.k)`1 by Def25;
+A6: S.(n+1) = (GS.(n+1))`1 by Def25;
+A7: S.n = (GS.n)`1 by Def25;
     per cases;
     suppose
-A7:   k <= G.order() & n <= G.order();
+A8:   k <= G.order() & n <= G.order();
       then card dom ((GS.n)`1) = n by Th65;
-      hence S.(k+1) = S.(n+1) by A2,A4,A6,A7,Th65;
+      hence S.(k+1) = S.(n+1) by A3,A5,A7,A8,Th65;
     end;
     suppose
-A8:   k <= G.order() & n >= G.order();
+A9:   k <= G.order() & n >= G.order();
       then
-A9:   GS.n = GS.(G.order()) by Th66;
-A10:  card dom ((GS.(G.order()))`1) = G.order() by Th65;
-A11:  n+1 >= G.order() by A8,NAT_1:13;
-      card dom ((GS.k)`1) = k by A8,Th65;
-      then k+1 >= G.order() by A2,A4,A6,A9,A10,NAT_1:13;
-      hence S.(k+1) = (GS.(G.order()))`1 by A3,Th66
-        .= S.(n+1) by A5,A11,Th66;
+A10:   GS.n = GS.(G.order()) by Th66;
+A11:  card dom ((GS.(G.order()))`1) = G.order() by Th65;
+A12:  n+1 >= G.order() by A9,NAT_1:13;
+      card dom ((GS.k)`1) = k by A9,Th65;
+      then k+1 >= G.order() by A3,A5,A7,A10,A11,NAT_1:13;
+      hence S.(k+1) = (GS.(G.order()))`1 by A4,Th66
+        .= S.(n+1) by A6,A12,Th66;
     end;
     suppose
-A12:  k >= G.order() & n <= G.order();
+A13:  k >= G.order() & n <= G.order();
       then
-A13:  GS.k = GS.(G.order()) by Th66;
-A14:  card dom ((GS.(G.order()))`1) = G.order() by Th65;
-      card dom ((GS.n)`1) = n by A12,Th65;
+A14:  GS.k = GS.(G.order()) by Th66;
+A15:  card dom ((GS.(G.order()))`1) = G.order() by Th65;
+      card dom ((GS.n)`1) = n by A13,Th65;
       then
-A15:  n+1 >= G.order() by A2,A4,A6,A13,A14,NAT_1:13;
-      k+1 >= G.order() by A12,NAT_1:13;
-      hence S.(k+1) = (GS.(G.order()))`1 by A3,Th66
-        .= S.(n+1) by A5,A15,Th66;
+A16:  n+1 >= G.order() by A3,A5,A7,A14,A15,NAT_1:13;
+      k+1 >= G.order() by A13,NAT_1:13;
+      hence S.(k+1) = (GS.(G.order()))`1 by A4,Th66
+        .= S.(n+1) by A6,A16,Th66;
     end;
     suppose
-A16:  k >= G.order() & n >= G.order();
+A17:  k >= G.order() & n >= G.order();
       then
-A17:  n+1 >= G.order() by NAT_1:13;
-A18:  k+1 >= G.order() by A16,NAT_1:13;
+A18:  n+1 >= G.order() by NAT_1:13;
+A19:  k+1 >= G.order() by A17,NAT_1:13;
       thus S.(k+1) = (GS.(k+1))`1 by Def25
-        .= (GS.(G.order()))`1 by A18,Th66
-        .= (GS.(n+1))`1 by A17,Th66
+        .= (GS.(G.order()))`1 by A19,Th66
+        .= (GS.(n+1))`1 by A18,Th66
         .= S.(n+1) by Def25;
     end;
   end;
@@ -4776,16 +4741,16 @@ A18:  k+1 >= G.order() by A16,NAT_1:13;
   hence S is halting;
   GS.Lifespan() = S.Lifespan() by Th72;
   hence
-A19: S.Lifespan() = G.order() by Th70;
+A20: S.Lifespan() = G.order() by Th70;
   let n be Nat such that
-A20: n < S.Lifespan();
+A21: n < S.Lifespan();
   take w = MCS:PickUnnumbered(GS.n);
-A21: (GS.n)`1 = S.n by Def25;
-  then dom (S.n) <> the_Vertices_of G by A19,A20,Th69;
-  hence not w in dom (S.n) by A21,Th59;
-A22: (GS.(n+1))`1 = S.(n+1) by Def25;
-  n = card dom (S.n) by A19,A20,A21,Th65;
-  hence thesis by A19,A20,A21,A22,Th64;
+A22: (GS.n)`1 = S.n by Def25;
+  then dom (S.n) <> the_Vertices_of G by A20,A21,Th69;
+  hence not w in dom (S.n) by A22,Th59;
+A23: (GS.(n+1))`1 = S.(n+1) by Def25;
+  n = card dom (S.n) by A20,A21,A22,Th65;
+  hence thesis by A20,A21,A22,A23,Th64;
 end;
 
 registration
@@ -4852,7 +4817,7 @@ A2: n = card dom VLN by A1,Th65;
   set CN1 = (MCS:CSeq(G)).(n+1);
   set CSlv = [ CSN`1 +* (w .--> k), CSN`2 ];
   set CSlv1 = CSN`1 +* (w .--> k);
-A3: dom CSlv1 = dom (CSN`1) \/ {w} by Lm2;
+A3: dom CSlv1 = dom (CSN`1) \/ {w} by Lm1;
   rng (w .--> k) = {k} by FUNCOP_1:8;
   then
 A4: rng (CSN`1) \/ rng (w .--> k) c= NAT by XBOOLE_1:8;
@@ -4868,37 +4833,39 @@ A5: CN1 = MCS:Step(CSN) by Def26
   set VLv = CSlv`1;
   set V21 = CN1`2;
   set V2N = CSN`2;
-A6: V2v = V2N by MCART_1:def 2;
-  VLv = CSN`1 +* (w .--> k) by MCART_1:def 1;
+A6: [ CSN`1 +* (w .--> k), CSN`2 ]`1 = CSN`1 +* (w .--> k) &
+   [ CSN`1 +* (w .--> k), CSN`2 ]`2 = CSN`2;
+A7: V2v = V2N by A6;
+  VLv = CSN`1 +* (w .--> k) by A6;
   then
-A7: dom VLv = (dom CSN`1) \/ {w} by Lm2;
+A8: dom VLv = (dom CSN`1) \/ {w} by Lm1;
   then
-A8: dom VLN c= dom VLv by XBOOLE_1:7;
-A9: now
+A9: dom VLN c= dom VLv by XBOOLE_1:7;
+A10: now
     let v be set;
     assume
-A10: not v in G.AdjacentSet({w}) or v in dom VLN;
-    per cases by A10;
+A11: not v in G.AdjacentSet({w}) or v in dom VLN;
+    per cases by A11;
     suppose
       not v in G.AdjacentSet({w});
-      hence V21.v = V2N.v by A5,A6,Th60;
+      hence V21.v = V2N.v by A5,A7,Th60;
     end;
     suppose
       v in dom VLN;
-      hence V21.v = V2N.v by A5,A6,A8,Th61;
+      hence V21.v = V2N.v by A5,A7,A9,Th61;
     end;
   end;
-A11: dom V2N = the_Vertices_of G by FUNCT_2:def 1;
+A12: dom V2N = the_Vertices_of G by FUNCT_2:def 1;
   now
     let v be set;
     assume that
-A12: v in G.AdjacentSet({w}) and
-A13: not v in dom VLN;
-    not v in {w} by A12,CHORD:49;
-    then not v in dom VLv by A7,A13,XBOOLE_0:def 3;
-    hence V21.v = V2N.v + 1 by A5,A6,A11,A12,Th62;
+A13: v in G.AdjacentSet({w}) and
+A14: not v in dom VLN;
+    not v in {w} by A13,CHORD:49;
+    then not v in dom VLv by A8,A14,XBOOLE_0:def 3;
+    hence V21.v = V2N.v + 1 by A5,A7,A12,A13,Th62;
   end;
-  hence thesis by A9;
+  hence thesis by A10;
 end;
 
 theorem Th76:
@@ -4999,7 +4966,8 @@ A25:      V12.x = VK2.x by A12,A21;
     set V20 = C0`2;
     assume not x in dom VL0;
 A26: C0 = MCS:Init(G) by Def26;
-    then dom VL0 = {} by MCART_1:def 1,RELAT_1:38;
+    [ {}, the_Vertices_of G --> 0 ]`1 = {};
+    then dom VL0 = {} by A26;
     hence V20.x = card (G.AdjacentSet({x}) /\ dom VL0) by A26,Th57,CARD_1:27;
   end;
   then
@@ -5514,7 +5482,7 @@ A115:   R.ja = D.jr by A64;
         then
 A116:   i + k - k <= len D + 1 - k by XREAL_1:9;
         set kr = len D - k + 1;
-A117:   kr < jr by A111,Lm4;
+A117:   kr < jr by A111,Lm3;
         reconsider jr as odd Element of NAT by A64,A114;
         reconsider kr as odd Element of NAT by A64,A113;
         len D - ja <= len D - 1 by A110,XREAL_1:10;
@@ -5539,7 +5507,7 @@ A124:   R.j = D.jr by A64;
         then
 A125:   i + j - j >= len D + 1 - j by XREAL_1:9;
         reconsider jr as odd Element of NAT by A64,A123;
-        kr < jr by A120,Lm4;
+        kr < jr by A120,Lm3;
         hence L.(R.j) < L.(R.k) by A105,A124,A122,A125,CHORD:2;
       end;
       0 + 1 < len D - i + 1 by A108,XREAL_1:8;

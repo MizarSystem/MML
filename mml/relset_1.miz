@@ -2,7 +2,7 @@
 ::  by Edmund Woronowicz
 ::
 :: Received April 14, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,11 +16,11 @@ environ
 
  vocabularies RELAT_1, SUBSET_1, ZFMISC_1, TARSKI, XBOOLE_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1;
- constructors TARSKI, SUBSET_1, RELAT_1;
+ constructors TARSKI, SUBSET_1, RELAT_1, XTUPLE_0;
  registrations XBOOLE_0, RELAT_1, SUBSET_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, RELAT_1;
- theorems TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1;
+ theorems TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1, XTUPLE_0;
  schemes RELAT_1;
 
 begin
@@ -52,12 +52,12 @@ registration
     proof
       let x;
       assume x in dom R;
-      then ex y st [x,y] in R by RELAT_1:def 4;
+      then ex y st [x,y] in R by XTUPLE_0:def 12;
       hence thesis by ZFMISC_1:87;
     end;
     let y;
     assume y in rng R;
-    then ex x st [x,y] in R by RELAT_1:def 5;
+    then ex x st [x,y] in R by XTUPLE_0:def 13;
     hence thesis by ZFMISC_1:87;
   end;
 end;
@@ -257,13 +257,13 @@ A1: for x st x in X ex y st [x,y] in R;
       now
         assume x in X;
         then ex y st [x,y] in R by A1;
-        hence x in dom R by RELAT_1:6;
+        hence x in dom R by XTUPLE_0:def 12;
       end;
       hence x in dom R iff x in X;
     end;
     hence dom R = X by TARSKI:1;
   end;
-  thus thesis by RELAT_1:def 4;
+  thus thesis by XTUPLE_0:def 12;
 end;
 
 theorem
@@ -278,13 +278,13 @@ A1: for y st y in Y ex x st [x,y] in R;
       now
         assume y in Y;
         then ex x st [x,y] in R by A1;
-        hence y in rng R by RELAT_1:6;
+        hence y in rng R by XTUPLE_0:def 13;
       end;
       hence y in rng R iff y in Y;
     end;
     hence rng R = Y by TARSKI:1;
   end;
-  thus thesis by RELAT_1:def 5;
+  thus thesis by XTUPLE_0:def 13;
 end;
 
 definition
@@ -328,16 +328,16 @@ proof
 A1: now
       assume x in rng R;
       then consider y such that
-A2:   [y,x] in R by RELAT_1:def 5;
+A2:   [y,x] in R by XTUPLE_0:def 13;
       [x,y] in R~ by A2,RELAT_1:def 7;
-      hence x in dom (R~) by RELAT_1:6;
+      hence x in dom (R~) by XTUPLE_0:def 12;
     end;
     now
       assume x in dom (R~);
       then consider y such that
-A3:   [x,y] in R~ by RELAT_1:def 4;
+A3:   [x,y] in R~ by XTUPLE_0:def 12;
       [y,x] in R by A3,RELAT_1:def 7;
-      hence x in rng R by RELAT_1:6;
+      hence x in rng R by XTUPLE_0:def 13;
     end;
     hence x in dom (R~) iff x in rng R by A1;
   end;
@@ -347,16 +347,16 @@ A3:   [x,y] in R~ by RELAT_1:def 4;
 A4: now
       assume x in dom R;
       then consider y such that
-A5:   [x,y] in R by RELAT_1:def 4;
+A5:   [x,y] in R by XTUPLE_0:def 12;
       [y,x] in R~ by A5,RELAT_1:def 7;
-      hence x in rng (R~) by RELAT_1:6;
+      hence x in rng (R~) by XTUPLE_0:def 13;
     end;
     now
       assume x in rng (R~);
       then consider y such that
-A6:   [y,x] in R~ by RELAT_1:def 5;
+A6:   [y,x] in R~ by XTUPLE_0:def 13;
       [x,y] in R by A6,RELAT_1:def 7;
-      hence x in dom R by RELAT_1:6;
+      hence x in dom R by XTUPLE_0:def 12;
     end;
     hence x in rng (R~) iff x in dom R by A4;
   end;
@@ -369,22 +369,12 @@ theorem
 registration
   let A be empty set, B be set;
   cluster -> empty for Relation of A,B;
-  coherence
-  proof
-    let R be Relation of A,B;
-    dom R = {};
-    hence thesis;
-  end;
+  coherence;
   cluster -> empty for Relation of B,A;
-  coherence
-  proof
-    let R be Relation of B,A;
-    rng R = {};
-    hence thesis;
-  end;
+  coherence;
 end;
 
-theorem Th28:
+theorem Th13:
   id X c= [:X,X:]
 proof
   [:X,X:] c= [:X,X:];
@@ -399,9 +389,9 @@ proof
 end;
 
 theorem
-  id X is Relation of X,X by Th28;
+  id X is Relation of X,X by Th13;
 
-theorem Th30:
+theorem Th15:
   id A c= R implies A c= dom R & A c= rng R
 proof
   assume
@@ -411,14 +401,14 @@ A1: id A c= R;
     let x;
     assume x in A;
     then [x,x] in id A by RELAT_1:def 10;
-    hence thesis by A1,RELAT_1:6;
+    hence thesis by A1,XTUPLE_0:def 12;
   end;
   thus A c= rng R
   proof
     let x;
     assume x in A;
     then [x,x] in id A by RELAT_1:def 10;
-    hence thesis by A1,RELAT_1:6;
+    hence thesis by A1,XTUPLE_0:def 13;
   end;
 end;
 
@@ -427,9 +417,9 @@ theorem
 proof
   assume
 A1: id X c= R;
-  then X c= dom R by Th30;
+  then X c= dom R by Th15;
   hence X = dom R by XBOOLE_0:def 10;
-  thus thesis by A1,Th30;
+  thus thesis by A1,Th15;
 end;
 
 theorem
@@ -437,8 +427,8 @@ theorem
 proof
   assume
 A1: id Y c= R;
-  hence Y c= dom R by Th30;
-  Y c= rng R by A1,Th30;
+  hence Y c= dom R by Th15;
+  Y c= rng R by A1,Th15;
   hence Y = rng R by XBOOLE_0:def 10;
 end;
 
@@ -459,12 +449,12 @@ end;
 
 definition
   let X,Y,B,R;
-  redefine func B|R -> Relation of X,Y;
+  redefine func B|`R -> Relation of X,Y;
   coherence
   proof
     now
       let x,y;
-      assume [x,y] in B|R;
+      assume [x,y] in B|`R;
       then [x,y] in R by RELAT_1:def 12;
       hence [x,y] in [:X,Y:];
     end;
@@ -503,11 +493,11 @@ A2:   [x,y] in R;
 end;
 
 theorem
-  Y1|R is Relation of X,Y1
+  Y1|`R is Relation of X,Y1
 proof
   now
     let x,y;
-    assume [x,y] in Y1|R;
+    assume [x,y] in Y1|`R;
     then y in Y1 & x in X by RELAT_1:def 12,ZFMISC_1:87;
     hence [x,y] in [:X,Y1:] by ZFMISC_1:87;
   end;
@@ -515,7 +505,7 @@ proof
 end;
 
 theorem
-  Y c= Y1 implies Y1|R = R
+  Y c= Y1 implies Y1|`R = R
 proof
   assume
 A1: Y c= Y1;
@@ -525,9 +515,9 @@ A1: Y c= Y1;
       assume
 A2:   [x,y] in R;
       then y in Y by ZFMISC_1:87;
-      hence [x,y] in Y1|R by A1,A2,RELAT_1:def 12;
+      hence [x,y] in Y1|`R by A1,A2,RELAT_1:def 12;
     end;
-    hence [x,y] in Y1|R iff [x,y] in R by RELAT_1:def 12;
+    hence [x,y] in Y1|`R iff [x,y] in R by RELAT_1:def 12;
   end;
   hence thesis by RELAT_1:def 2;
 end;
@@ -548,7 +538,7 @@ definition
   end;
 end;
 
-theorem Th38:
+theorem Th22:
   R.:X = rng R & R"Y = dom R
 proof
   now
@@ -556,14 +546,14 @@ proof
 A1: now
       assume y in rng R;
       then consider x such that
-A2:   [x,y] in R by RELAT_1:def 5;
+A2:   [x,y] in R by XTUPLE_0:def 13;
       x in X by A2,ZFMISC_1:87;
       hence y in R.:X by A2,RELAT_1:def 13;
     end;
     now
       assume y in R.:X;
       then ex x st [x,y] in R & x in X by RELAT_1:def 13;
-      hence y in rng R by RELAT_1:6;
+      hence y in rng R by XTUPLE_0:def 13;
     end;
     hence y in R.:X iff y in rng R by A1;
   end;
@@ -573,14 +563,14 @@ A2:   [x,y] in R by RELAT_1:def 5;
 A3: now
       assume x in dom R;
       then consider y such that
-A4:   [x,y] in R by RELAT_1:def 4;
+A4:   [x,y] in R by XTUPLE_0:def 12;
       y in Y by A4,ZFMISC_1:87;
       hence x in R"Y by A4,RELAT_1:def 14;
     end;
     now
       assume x in R"Y;
       then ex y st [x,y] in R & y in Y by RELAT_1:def 14;
-      hence x in dom R by RELAT_1:6;
+      hence x in dom R by XTUPLE_0:def 12;
     end;
     hence x in R"Y iff x in dom R by A3;
   end;
@@ -590,7 +580,7 @@ end;
 theorem
   R.:(R"Y) = rng R & R"(R.:X) = dom R
 proof
-  R"Y = dom R & R.:X = rng R by Th38;
+  R"Y = dom R & R.:X = rng R by Th22;
   hence thesis by RELAT_1:113,134;
 end;
 
@@ -648,14 +638,14 @@ proof
   proof
     assume x in dom R;
     then consider y being set such that
-A1: [x,y] in R by RELAT_1:def 4;
+A1: [x,y] in R by XTUPLE_0:def 12;
     reconsider b = y as Element of E by A1,ZFMISC_1:87;
     take b;
     thus thesis by A1;
   end;
   given y being Element of E such that
 A2: [x,y] in R;
-  thus thesis by A2,RELAT_1:6;
+  thus thesis by A2,XTUPLE_0:def 12;
 end;
 
 theorem
@@ -666,14 +656,14 @@ proof
   proof
     assume y in rng R;
     then consider x being set such that
-A1: [x,y] in R by RELAT_1:def 5;
+A1: [x,y] in R by XTUPLE_0:def 13;
     reconsider a = x as Element of D by A1,ZFMISC_1:87;
     take a;
     thus thesis by A1;
   end;
   given x being Element of D such that
 A2: [x,y] in R;
-  thus thesis by A2,RELAT_1:6;
+  thus thesis by A2,XTUPLE_0:def 13;
 end;
 
 theorem
@@ -809,7 +799,7 @@ A1: for i being set st i in N holds Im(R,i) = Im(S,i);
     assume
 A2: [a,b] in R;
     then
-A3: a in dom R by RELAT_1:def 4;
+A3: a in dom R by XTUPLE_0:def 12;
     a in {a} by TARSKI:def 1;
     then b in Im(R,a) by A2,RELAT_1:def 13;
     then b in Im(S,a) by A1,A3;
@@ -819,7 +809,7 @@ A3: a in dom R by RELAT_1:def 4;
   assume
 A4: [a,b] in S;
   then
-A5: a in dom S by RELAT_1:def 4;
+A5: a in dom S by XTUPLE_0:def 12;
   a in {a} by TARSKI:def 1;
   then b in Im(S,a) by A4,RELAT_1:def 13;
   then b in Im(R,a) by A1,A5;

@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
@@ -24,11 +25,11 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="122">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -37,14 +38,14 @@
 </FCluster>
 <FCluster aid="URYSOHN1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="131"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="URYSOHN1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="124"/>
+<Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

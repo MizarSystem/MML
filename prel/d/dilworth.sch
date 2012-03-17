@@ -31,10 +31,10 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="15">
-<Func kind="K" nr="52">
+<Func kind="K" nr="50">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="52">
+<Func kind="K" nr="50">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

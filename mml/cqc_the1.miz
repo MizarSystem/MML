@@ -3,7 +3,7 @@
 ::  by Agata Darmochwa{\l}
 ::
 :: Received May 25, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,17 +15,18 @@
 
 environ
 
- vocabularies NUMBERS, ORDINAL1, SUBSET_1, XXREAL_0, ARYTM_3, XBOOLE_0, TARSKI,
-      FINSET_1, CARD_1, MCART_1, ZFMISC_1, CQC_LANG, QC_LANG1, XBOOLEAN,
-      BVFUNC_2, FUNCT_1, FINSEQ_1, NAT_1, RELAT_1, ORDINAL4, ARYTM_1, CQC_THE1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
+ vocabularies NUMBERS, SUBSET_1, XXREAL_0, ARYTM_3, XBOOLE_0, TARSKI, FINSET_1,
+      CARD_1, MCART_1, ZFMISC_1, CQC_LANG, XBOOLEAN, BVFUNC_2, QC_LANG1,
+      FUNCT_1, FINSEQ_1, NAT_1, RELAT_1, ORDINAL4, ARYTM_1, CQC_THE1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
       NUMBERS, NAT_1, FINSET_1, FINSEQ_1, MCART_1, QC_LANG1, CQC_LANG,
       XXREAL_0;
- constructors XXREAL_0, XREAL_0, NAT_1, CQC_LANG;
+ constructors XXREAL_0, XREAL_0, NAT_1, CQC_LANG, XTUPLE_0;
  registrations SUBSET_1, RELSET_1, FINSET_1, XXREAL_0, XREAL_0, FINSEQ_1,
-      CQC_LANG, ORDINAL1, CARD_1;
+      CQC_LANG, ORDINAL1, CARD_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, XTUPLE_0;
  theorems TARSKI, ZFMISC_1, FINSET_1, FINSEQ_1, MCART_1, FUNCT_1, NAT_1,
       XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, RELAT_1;
  schemes NAT_1, FRAENKEL, XBOOLE_0;
@@ -34,10 +35,11 @@ begin
 
 :: --------- Auxiliary theorems
 
+reserve Al for QC-alphabet;
 reserve i,j,n,k,l for Element of NAT;
 reserve a for set;
 
-theorem Th11:
+theorem Th1:
   {k: k <= n + 1} = {i: i <= n} \/ {n + 1}
 proof
   thus {k: k <= n + 1} c= {i: i <= n} \/ {n + 1}
@@ -69,7 +71,7 @@ then   i <= n + 1 by A5,XXREAL_0:2;
   end;
 end;
 
-theorem Th12:
+theorem Th2:
   for n holds {k: k <= n} is finite
 proof
   defpred P[Element of NAT] means {k: k <= $1} is finite;
@@ -99,7 +101,7 @@ A4: for n st P[n] holds P[n+1]
     let n;
     assume
 A5: P[n];
- {l: l <= n + 1} = {k: k <= n} \/ {n + 1} by Th11;
+ {l: l <= n + 1} = {k: k <= n} \/ {n + 1} by Th1;
     hence thesis by A5;
   end;
   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
@@ -118,23 +120,24 @@ theorem
 
 :: --------- The axiomatic of a first-order calculus
 
-reserve T,S,X,Y for Subset of CQC-WFF;
-reserve p,q,r,t,F,H,G for Element of CQC-WFF;
-reserve s for QC-formula;
-reserve x,y for bound_QC-variable;
+reserve T,S,X,Y for Subset of CQC-WFF(Al);
+reserve p,q,r,t,F,H,G for Element of CQC-WFF(Al);
+reserve s for QC-formula of Al;
+reserve x,y for bound_QC-variable of Al;
 
 definition
-  let T;
+  let Al,T;
   attr T is being_a_theory means
   :Def1:
-  VERUM in T & for p,q,r,s,x,y holds
+  VERUM(Al) in T & for p,q,r,s,x,y holds
   ('not' p => p) => p in T & p => ('not' p => q) in T &
   (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in T &
   p '&' q => q '&' p in T & (p in T & p => q in T implies q in T) &
   All(x,p) => p in T &
   (p => q in T & not x in still_not-bound_in p implies p => All(x,q) in T) &
-  (s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s & s.x in T
-  implies s.y in T);
+  (s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s
+&
+s.x in T implies s.y in T);
 end;
 
 theorem
@@ -143,8 +146,8 @@ proof
   assume that
 A1: T is being_a_theory and
 A2: S is being_a_theory;
- VERUM in T & VERUM in S by A1,A2,Def1;
-  hence VERUM in T /\ S by XBOOLE_0:def 4;
+ VERUM(Al) in T & VERUM(Al) in S by A1,A2,Def1;
+  hence VERUM(Al) in T /\ S by XBOOLE_0:def 4;
   let p,q,r,s,x,y;
    ('not' p => p) => p in T & ('not' p => p) => p in S by A1,A2,Def1;
   hence ('not' p => p) => p in T /\ S by XBOOLE_0:def 4;
@@ -169,9 +172,9 @@ A4: p => q in T & not x in still_not-bound_in p implies p => All(x,q) in T
   by A2,Def1;
   hence p => q in T /\ S & not x in still_not-bound_in p implies
   p => All(x,q) in T /\ S by A4,XBOOLE_0:def 4;
-A5: s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s & s.x
-  in T implies s.y in T by A1,Def1;
- s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s & s.x
+A5: s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
+s.x in T implies s.y in T by A1,Def1;
+ s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s & s.x
   in S implies s.y in S by A2,Def1;
   hence thesis by A5,XBOOLE_0:def 4;
 end;
@@ -179,28 +182,28 @@ end;
 :: --------- The consequence operation
 
 definition
-  let X;
-  func Cn(X) -> Subset of CQC-WFF means
+  let Al,X;
+  func Cn(X) -> Subset of CQC-WFF(Al) means
   :Def2:
   t in it iff for T st T is being_a_theory & X c= T holds t in T;
   existence
   proof
     defpred P[set] means for T st T is being_a_theory & X c= T holds $1 in T;
     consider Y being set such that
-A1: for a holds a in Y iff a in CQC-WFF & P[a] from XBOOLE_0:sch 1;
- Y c= CQC-WFF
+A1: for a holds a in Y iff a in CQC-WFF(Al) & P[a] from XBOOLE_0:sch 1;
+ Y c= CQC-WFF(Al)
     proof
       let a;
       assume a in Y;
       hence thesis by A1;
     end;
-    then reconsider Z=Y as Subset of CQC-WFF;
+    then reconsider Z=Y as Subset of CQC-WFF(Al);
     take Z;
     thus thesis by A1;
   end;
   uniqueness
   proof
-    let Y,Z be Subset of CQC-WFF such that
+    let Y,Z be Subset of CQC-WFF(Al) such that
 A2: t in Y iff for T st T is being_a_theory & X c= T holds t in T and
 A3: t in Z iff for T st T is being_a_theory & X c= T holds t in T;
  a in Y iff a in Z
@@ -209,7 +212,7 @@ A3: t in Z iff for T st T is being_a_theory & X c= T holds t in T;
       proof
         assume
 A4:     a in Y;
-        then reconsider t=a as Element of CQC-WFF;
+        then reconsider t=a as Element of CQC-WFF(Al);
      for T st T is being_a_theory & X c= T holds t in T by A2,A4;
         hence thesis by A3;
       end;
@@ -217,7 +220,7 @@ A4:     a in Y;
       proof
         assume
 A5:     a in Z;
-        then reconsider t=a as Element of CQC-WFF;
+        then reconsider t=a as Element of CQC-WFF(Al);
     for T st T is being_a_theory & X c= T holds t in T by A3,A5;
         hence thesis by A2;
       end;
@@ -226,28 +229,28 @@ A5:     a in Z;
   end;
 end;
 
-theorem Th27:
-  VERUM in Cn(X)
+theorem Th6:
+  VERUM(Al) in Cn(X)
 proof
- T is being_a_theory & X c= T implies VERUM in T by Def1;
+ T is being_a_theory & X c= T implies VERUM(Al) in T by Def1;
   hence thesis by Def2;
 end;
 
-theorem Th28:
+theorem Th7:
   ('not' p => p) => p in Cn(X)
 proof
  T is being_a_theory & X c= T implies ('not' p => p) => p in T by Def1;
   hence thesis by Def2;
 end;
 
-theorem Th29:
+theorem Th8:
   p => ('not' p => q) in Cn(X)
 proof
  T is being_a_theory & X c= T implies p => ('not' p => q) in T by Def1;
   hence thesis by Def2;
 end;
 
-theorem Th30:
+theorem Th9:
   (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in Cn(X)
 proof
  T is being_a_theory & X c= T implies
@@ -255,14 +258,14 @@ proof
   hence thesis by Def2;
 end;
 
-theorem Th31:
+theorem Th10:
   p '&' q => q '&' p in Cn(X)
 proof
  T is being_a_theory & X c= T implies p '&' q => q '&' p in T by Def1;
   hence thesis by Def2;
 end;
 
-theorem Th32:
+theorem Th11:
   p in Cn(X) & p => q in Cn(X) implies q in Cn(X)
 proof
   assume
@@ -278,14 +281,14 @@ A3: X c= T;
   hence thesis by Def2;
 end;
 
-theorem Th33:
+theorem Th12:
   All(x,p) => p in Cn(X)
 proof
  T is being_a_theory & X c= T implies All(x,p) => p in T by Def1;
   hence thesis by Def2;
 end;
 
-theorem Th34:
+theorem Th13:
   p => q in Cn(X) & not x in still_not-bound_in p implies
   p => All(x,q) in Cn(X)
 proof
@@ -303,17 +306,17 @@ A4: X c= T;
   hence thesis by Def2;
 end;
 
-theorem Th35:
-  s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
+theorem Th14:
+  s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
   s.x in Cn(X) implies s.y in Cn(X)
 proof
   assume that
-A1: s.x in CQC-WFF and
-A2: s.y in CQC-WFF and
+A1: s.x in CQC-WFF(Al) and
+A2: s.y in CQC-WFF(Al) and
 A3: not x in still_not-bound_in s and
 A4: s.x in Cn(X);
-  reconsider s1 = s.x as Element of CQC-WFF by A1;
-  reconsider q = s.y as Element of CQC-WFF by A2;
+  reconsider s1 = s.x as Element of CQC-WFF(Al) by A1;
+  reconsider q = s.y as Element of CQC-WFF(Al) by A2;
  T is being_a_theory & X c= T implies q in T
   proof
     assume that
@@ -325,19 +328,19 @@ A6: X c= T;
   hence thesis by Def2;
 end;
 
-theorem Th36:
+theorem Th15:
   Cn(X) is being_a_theory
 proof
-  thus VERUM in Cn(X) by Th27;
+  thus VERUM(Al) in Cn(X) by Th6;
   let p,q,r,s,x,y;
   thus ('not' p => p) =>p in Cn(X) & p => ('not' p => q) in Cn(X) &
   (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in Cn(X) &
   p '&' q => q '&' p in Cn(X) & (p in Cn(X) & p => q in Cn(X) implies q in
-  Cn(X)) by Th28,Th29,Th30,Th31,Th32;
-  thus thesis by Th33,Th34,Th35;
+  Cn(X)) by Th7,Th8,Th9,Th10,Th11;
+  thus thesis by Th12,Th13,Th14;
 end;
 
-theorem Th37:
+theorem Th16:
   T is being_a_theory & X c= T implies Cn(X) c= T
 proof
   assume
@@ -350,18 +353,18 @@ A1: T is being_a_theory & X c= T;
   end;
 end;
 
-theorem Th38:
+theorem Th17:
   X c= Cn(X)
 proof
   let a;
   assume
 A1: a in X;
-  then reconsider t=a as Element of CQC-WFF;
+  then reconsider t=a as Element of CQC-WFF(Al);
  for T st T is being_a_theory & X c= T holds t in T by A1;
   hence thesis by Def2;
 end;
 
-theorem Th39:
+theorem Th18:
   X c= Y implies Cn(X) c= Cn(Y)
 proof
   assume
@@ -371,7 +374,7 @@ A1: X c= Y;
     let a;
     assume
 A2: a in Cn(X);
-    then reconsider t=a as Element of CQC-WFF;
+    then reconsider t=a as Element of CQC-WFF(Al);
  for T st T is being_a_theory & Y c= T holds t in T
     proof
       let T such that
@@ -389,14 +392,14 @@ proof
   let a;
   assume
 A1: a in Cn(Cn(X));
-  then reconsider t=a as Element of CQC-WFF;
+  then reconsider t=a as Element of CQC-WFF(Al);
  for T st T is being_a_theory & X c= T holds t in T
   proof
     let T;
     assume that
 A2: T is being_a_theory and
 A3: X c= T;
- Cn(X) c= T by A2,A3,Th37;
+ Cn(X) c= T by A2,A3,Th16;
     hence thesis by A1,A2,Def2;
   end;
   hence thesis by Def2;
@@ -405,18 +408,18 @@ end;
 theorem
   Cn(Cn(X)) = Cn(X)
 proof
- Cn(Cn(X)) c= Cn(X) & Cn(X) c= Cn(Cn(X)) by Lm1,Th38;
+ Cn(Cn(X)) c= Cn(X) & Cn(X) c= Cn(Cn(X)) by Lm1,Th17;
   hence thesis by XBOOLE_0:def 10;
 end;
 
-theorem Th41:
+theorem Th20:
   T is being_a_theory iff Cn(T) = T
 proof
   thus T is being_a_theory implies Cn(T) = T
   proof
     assume
 A1: T is being_a_theory;
-A2: T c= Cn(T) by Th38;
+A2: T c= Cn(T) by Th17;
  Cn(T) c= T
     proof
       let a;
@@ -425,7 +428,7 @@ A2: T c= Cn(T) by Th38;
     end;
     hence thesis by A2,XBOOLE_0:def 10;
   end;
-  thus thesis by Th36;
+  thus thesis by Th15;
 end;
 
 :: ---------- The notion of proof
@@ -445,18 +448,18 @@ registration
   end;
 end;
 
-theorem Th43:
+theorem Th21:
   0 in Proof_Step_Kinds & 1 in Proof_Step_Kinds & 2 in Proof_Step_Kinds &
   3 in Proof_Step_Kinds & 4 in Proof_Step_Kinds & 5 in Proof_Step_Kinds &
   6 in Proof_Step_Kinds & 7 in Proof_Step_Kinds & 8 in Proof_Step_Kinds &
   9 in Proof_Step_Kinds;
 
 theorem
-  Proof_Step_Kinds is finite by Th12;
+  Proof_Step_Kinds is finite by Th2;
 
-reserve f,g for FinSequence of [:CQC-WFF,Proof_Step_Kinds:];
+reserve f,g for FinSequence of [:CQC-WFF(Al),Proof_Step_Kinds:];
 
-theorem Th45:
+theorem Th23:
   for n being Nat holds 1 <= n & n <= len f implies
   (f.n)`2 = 0 or (f.n)`2 = 1 or (f.n)`2 = 2 or (f.n)`2 = 3 or (f.n)`2 = 4
   or (f.n)`2 = 5 or (f.n)`2 = 6 or (f.n)`2 = 7 or (f.n)`2 = 8 or (f.n)`2 = 9
@@ -467,7 +470,7 @@ A1: 1 <= n & n <= len f;
  dom f = Seg len f by FINSEQ_1:def 3;
 then  n in dom f by A1,FINSEQ_1:1;
   then
- rng f c= [:CQC-WFF,Proof_Step_Kinds:] & f.n in rng f by FINSEQ_1:def 4
+ rng f c= [:CQC-WFF(Al),Proof_Step_Kinds:] & f.n in rng f by FINSEQ_1:def 4
 ,FUNCT_1:def 3;
 then  (f.n)`2 in Proof_Step_Kinds by MCART_1:10;
 then  ex k st k = (f.n)`2 & k <= 9;
@@ -475,10 +478,11 @@ then  ex k st k = (f.n)`2 & k <= 9;
 end;
 
 definition
-  let PR be (FinSequence of [:CQC-WFF,Proof_Step_Kinds:]),n be Nat,X;
+  let Al;
+  let PR be (FinSequence of [:CQC-WFF(Al),Proof_Step_Kinds:]),n be Nat,X;
   pred PR,n is_a_correct_step_wrt X means
   :Def4:
-  (PR.n)`1 in X if (PR.n)`2 = 0, (PR.n)`1 = VERUM if (PR.n)`2 = 1,
+  (PR.n)`1 in X if (PR.n)`2 = 0, (PR.n)`1 = VERUM(Al) if (PR.n)`2 = 1,
   ex p st (PR.n)`1 = ('not' p => p) => p if (PR.n)`2 = 2,
   ex p,q st (PR.n)`1 = p => ('not' p => q) if (PR.n)`2 = 3,
   ex p,q,r st (PR.n)`1 = (p => q) => ('not'(q '&' r) => 'not'(p '&' r))
@@ -488,14 +492,14 @@ definition
   (PR.i)`1 = p => q if (PR.n)`2 = 7,
   ex i,p,q,x st 1 <= i & i < n & (PR.i)`1 = p => q &
   not x in still_not-bound_in p & (PR.n)`1 = p => All(x,q) if (PR.n)`2 = 8,
-  ex i,x,y,s st 1 <= i & i < n & s.x in CQC-WFF & s.y in CQC-WFF &
+  ex i,x,y,s st 1 <= i & i < n & s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) &
   not x in still_not-bound_in s & s.x = (PR.i)`1 & s.y = (PR.n)`1
   if (PR.n)`2 = 9;
   consistency;
 end;
 
 definition
-  let X,f;
+  let Al,X,f;
   pred f is_a_proof_wrt X means
   :Def5:
   f <> {} & for n st 1 <= n & n <= len f holds f,n is_a_correct_step_wrt X;
@@ -510,7 +514,7 @@ then  f <> {} by Def5;
   hence thesis by RELAT_1:41;
 end;
 
-theorem Th58:
+theorem Th25:
   f is_a_proof_wrt X implies 1 <= len f
 proof
   assume
@@ -527,12 +531,12 @@ theorem
 proof
   assume
 A1: f is_a_proof_wrt X;
-then A2: 1 <= len f by Th58;
+then A2: 1 <= len f by Th25;
 then A3: f,1 is_a_correct_step_wrt X by A1,Def5;
   assume
   A4: ( not (f.1)`2 = 0)& not (f.1)`2 = 1 & ( not (f.1)`2 = 2)& not (f.1)`2 = 3
   & ( not (f.1)`2 = 4)& not (f.1)`2 = 5 & not (f.1)`2 = 6;
-  per cases by A2,A4,Th45;
+  per cases by A2,A4,Th23;
   suppose
  (f.1)`2 = 7;
 then  ex i,j,p,q st 1 <= i & i < 1 & 1 <= j & j < i &
@@ -548,13 +552,13 @@ then  ex i,p,q,x st 1 <= i & i < 1 & (f.i)`1 = p => q &
   suppose
  (f.1)`2 = 9;
 then  ex i,x,y,s st 1 <= i & i < 1 &
-    s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
+    s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
     s.x = (f.i)`1 & (f.1)`1 = s.y by A3,Def4;
     hence contradiction;
   end;
 end;
 
-theorem Th60:
+theorem Th27:
   1 <= n & n <= len f implies
   (f,n is_a_correct_step_wrt X iff f^g,n is_a_correct_step_wrt X)
 proof
@@ -571,7 +575,7 @@ then A4: n <= len(f^g) by A2,XXREAL_0:2;
   proof
     assume
 A5: f,n is_a_correct_step_wrt X;
-    per cases by A1,A4,Th45;
+    per cases by A1,A4,Th23;
     case
   ((f^g).n)`2 = 0;
       hence thesis by A3,A5,Def4;
@@ -639,9 +643,8 @@ then   f.i = (f^g).i by FINSEQ_1:def 7;
 A21:  1 <= i and
 A22:  i < n and
       A23:  s
-.x in CQC-WFF & s.y in CQC-WFF & ( not x in still_not-bound_in s)& s.x =
-      (f.i)`1 & (f.n)`1 = s.y
-      by A3,A5,Def4;
+.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & ( not x in still_not-bound_in s)&
+s.x = (f.i)`1 & (f.n)`1 = s.y by A3,A5,Def4;
   i <= len f by A2,A22,XXREAL_0:2;
 then   i in Seg(len f) by A21,FINSEQ_1:1;
 then   i in dom f by FINSEQ_1:def 3;
@@ -651,7 +654,7 @@ then   f.i = (f^g).i by FINSEQ_1:def 7;
   end;
   assume
 A24: f^g,n is_a_correct_step_wrt X;
-  per cases by A1,A2,Th45;
+  per cases by A1,A2,Th23;
   case
  (f.n)`2 = 0;
     hence thesis by A3,A24,Def4;
@@ -719,9 +722,8 @@ then  f.i = (f^g).i by FINSEQ_1:def 7;
 A40: 1 <= i and
 A41: i < n and
     A42: s
-.x in CQC-WFF & s.y in CQC-WFF & ( not x in still_not-bound_in s)& s.x =
-    ((f^g).i)`1 & ((f^g).n)`1 = s.y
-    by A3,A24,Def4;
+.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & ( not x in still_not-bound_in s)&
+s.x = ((f^g).i)`1 & ((f^g).n)`1 = s.y by A3,A24,Def4;
  i <= len f by A2,A41,XXREAL_0:2;
 then  i in Seg(len f) by A40,FINSEQ_1:1;
 then  i in dom f by FINSEQ_1:def 3;
@@ -730,7 +732,7 @@ then  f.i = (f^g).i by FINSEQ_1:def 7;
   end;
 end;
 
-theorem Th61:
+theorem Th28:
   1 <= n & n <= len g & g,n is_a_correct_step_wrt X implies
   (f^g),(n+len f) is_a_correct_step_wrt X
 proof
@@ -743,7 +745,7 @@ then  n in dom g by FINSEQ_1:def 3;
 then A4: g.n = (f^g).(n+len f) by FINSEQ_1:def 7;
  n + len f <= len f + len g by A2,XREAL_1:6;
 then A5: n+len f <= len(f^g) by FINSEQ_1:22;
-  per cases by A1,A5,Th45,NAT_1:12;
+  per cases by A1,A5,Th23,NAT_1:12;
   case
  ((f^g).(n+len f))`2 = 0;
     hence thesis by A3,A4,Def4;
@@ -814,9 +816,8 @@ then  g.i = (f^g).(len f+i) by FINSEQ_1:def 7;
 A24: 1 <= i and
 A25: i < n and
     A26: s
-.x in CQC-WFF & s.y in CQC-WFF & ( not x in still_not-bound_in s)& s.x =
-    (g.i)`1 & (g.n)`1 = s.y
-    by A3,A4,Def4;
+.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & ( not x in still_not-bound_in s)&
+s.x = (g.i)`1 & (g.n)`1 = s.y by A3,A4,Def4;
 A27: 1 <= len f+i & len f+i < n+len f by A24,A25,NAT_1:12,XREAL_1:6;
  i <= len g by A2,A25,XXREAL_0:2;
 then  i in Seg(len g) by A24,FINSEQ_1:1;
@@ -826,7 +827,7 @@ then  g.i = (f^g).(len f+i) by FINSEQ_1:def 7;
   end;
 end;
 
-theorem Th62:
+theorem Th29:
   f is_a_proof_wrt X & g is_a_proof_wrt X implies f^g is_a_proof_wrt X
 proof
   assume that
@@ -841,7 +842,7 @@ A4: n <= len(f^g);
     suppose
 A5:   n <= len f;
 then    f,n is_a_correct_step_wrt X by A1,A3,Def5;
-      hence thesis by A3,A5,Th60;
+      hence thesis by A3,A5,Th27;
     end;
     suppose
 A6:   len f < n;
@@ -851,7 +852,7 @@ A7:  k + len f <= len g + len f by A4,FINSEQ_1:22;
 then A8:  1 <= k by XREAL_1:6;
 A9:  k <= len g by A7,XREAL_1:6;
 then   k + len f = n & g,k is_a_correct_step_wrt X by A2,A8,Def5;
-      hence thesis by A8,A9,Th61;
+      hence thesis by A8,A9,Th28;
     end;
   end;
   hence thesis;
@@ -868,7 +869,7 @@ A2: X c= Y;
   assume
 A3: 1 <= n & n <= len f;
 then A4: f,n is_a_correct_step_wrt X by A1,Def5;
-  per cases by A3,Th45;
+  per cases by A3,Th23;
   case
  (f.n)`2 = 0;
 then  (f.n)`1 in X by A4,Def4;
@@ -912,7 +913,7 @@ then  (f.n)`1 in X by A4,Def4;
   end;
 end;
 
-theorem Th64:
+theorem Th31:
   f is_a_proof_wrt X & 1 <= l & l <= len f implies (f.l)`1 in Cn(X)
 proof
   assume that
@@ -931,43 +932,43 @@ A5:   n in NAT by ORDINAL1:def 12;
 A6:   1 <= n and
 A7:   n <= len f;
 A8:   f,n is_a_correct_step_wrt X by A1,A5,A6,A7,Def5;
-  now per cases by A6,A7,Th45;
+  now per cases by A6,A7,Th23;
         suppose
       (f.n)`2 = 0;
 then A9:      (f.n)`1 in X by A8,Def4;
-      X c= Cn(X) by Th38;
+      X c= Cn(X) by Th17;
           hence thesis by A9;
         end;
         suppose
       (f.n)`2 = 1;
-then       (f.n)`1 = VERUM by A8,Def4;
-          hence thesis by Th27;
+then       (f.n)`1 = VERUM(Al) by A8,Def4;
+          hence thesis by Th6;
         end;
         suppose
       (f.n)`2 = 2;
 then       ex p st (f.n)`1 = ('not' p => p) => p by A8,Def4;
-          hence thesis by Th28;
+          hence thesis by Th7;
         end;
         suppose
       (f.n)`2 = 3;
 then       ex p,q st (f.n)`1 = p => ('not' p => q) by A8,Def4;
-          hence thesis by Th29;
+          hence thesis by Th8;
         end;
         suppose
       (f.n)`2 = 4;
 then       ex p,q,r st (f.n)`1 = (p => q) => ('not'(q '&' r) => 'not'
           (p '&' r)) by A8,Def4;
-          hence thesis by Th30;
+          hence thesis by Th9;
         end;
         suppose
       (f.n)`2 = 5;
 then       ex p,q st (f.n)`1 = p '&' q => q '&' p by A8,Def4;
-          hence thesis by Th31;
+          hence thesis by Th10;
         end;
         suppose
       (f.n)`2 = 6;
 then       ex p,x st (f.n)`1 = All(x,p) => p by A8,Def4;
-          hence thesis by Th33;
+          hence thesis by Th12;
         end;
         suppose
       (f.n)`2 = 7;
@@ -982,7 +983,7 @@ A16:      i <= len f by A7,A11,XXREAL_0:2;
 then       j <= len f by A13,XXREAL_0:2;
 then A17:      (f.j)`1 in Cn(X) by A4,A12,A15;
       (f.i)`1 in Cn(X) by A4,A10,A11,A16;
-          hence thesis by A14,A17,Th32;
+          hence thesis by A14,A17,Th11;
         end;
         suppose
       (f.n)`2 = 8;
@@ -994,7 +995,7 @@ f.i)`1 = p => q & not x in still_not-bound_in p & (f.n)`1 = p => All(x,
           q)
           by A8,Def4;
       i <= len f by A7,A19,XXREAL_0:2;
-          hence thesis by A4,A18,A19,A20,Th34;
+          hence thesis by A4,A18,A19,A20,Th13;
         end;
         suppose
       (f.n)`2 = 9;
@@ -1002,11 +1003,10 @@ f.i)`1 = p => q & not x in still_not-bound_in p & (f.n)`1 = p => All(x,
 A21:      1 <= i and
 A22:      i < n and
           A23:      s
-.x in CQC-WFF & s.y in CQC-WFF & ( not x in still_not-bound_in s)& s.x =
-          (f.i)`1 & (f.n)`1 = s.y
-          by A8,Def4;
+.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & ( not x in still_not-bound_in s)&
+s.x = (f.i)`1 & (f.n)`1 = s.y by A8,Def4;
       i <= len f by A7,A22,XXREAL_0:2;
-          hence thesis by A4,A21,A22,A23,Th35;
+          hence thesis by A4,A21,A22,A23,Th14;
         end;
       end;
       hence thesis;
@@ -1018,10 +1018,10 @@ A22:      i < n and
 end;
 
 definition
-  let f;
+  let Al,f;
   assume
 A1: f <> {};
-  func Effect(f) -> Element of CQC-WFF equals
+  func Effect(f) -> Element of CQC-WFF(Al) equals
   :Def6:
   (f.(len f))`1;
   coherence
@@ -1031,39 +1031,39 @@ then  0+1 <= len f by A1,NAT_1:13;
 then A2: len f in Seg len f by FINSEQ_1:1;
  Seg len f = dom f by FINSEQ_1:def 3;
 then A3: f.(len f) in rng f by A2,FUNCT_1:def 3;
- rng f c= [:CQC-WFF,Proof_Step_Kinds:] by FINSEQ_1:def 4;
+ rng f c= [:CQC-WFF(Al),Proof_Step_Kinds:] by FINSEQ_1:def 4;
     hence thesis by A3,MCART_1:10;
   end;
 end;
 
-theorem Th66:
+theorem Th32:
   f is_a_proof_wrt X implies Effect(f) in Cn(X)
 proof
   assume
 A1: f is_a_proof_wrt X;
-then A2: 1 <= len f by Th58;
-then A3: (f.(len f))`1 in Cn(X) by A1,Th64;
+then A2: 1 <= len f by Th25;
+then A3: (f.(len f))`1 in Cn(X) by A1,Th31;
  f <> {} by A2;
   hence thesis by A3,Def6;
 end;
 
 :: ---------- A consequence as a set of all provable formulas
 
-Lm2: for X holds {p: ex f st f is_a_proof_wrt X & Effect(f) = p} c= CQC-WFF
+Lm2: for X holds {p: ex f st f is_a_proof_wrt X & Effect(f) = p} c= CQC-WFF(Al)
 proof
   let X;
   defpred P[set] means ex f st f is_a_proof_wrt X & Effect(f) = $1;
-  thus {p: P[p] } c= CQC-WFF from FRAENKEL:sch 10;
+  thus {p: P[p] } c= CQC-WFF(Al) from FRAENKEL:sch 10;
 end;
 
-theorem Th67:
+theorem Th33:
   X c= {F: ex f st f is_a_proof_wrt X & Effect(f) = F}
 proof
   let a;
   assume
 A1: a in X;
-  then reconsider p=a as Element of CQC-WFF;
-  reconsider pp=[p,0] as Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,
+  then reconsider p=a as Element of CQC-WFF(Al);
+  reconsider pp=[p,0] as Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,
 ZFMISC_1:87;
   set f=<*pp*>;
 A2: len f = 1 by FINSEQ_1:40;
@@ -1082,22 +1082,22 @@ then  f is_a_proof_wrt X by Def5;
   hence thesis by A4;
 end;
 
-Lm3: for X holds VERUM in {F: ex f st f is_a_proof_wrt X & Effect(f) = F}
+Lm3: for X holds VERUM(Al) in {F: ex f st f is_a_proof_wrt X & Effect(f) = F}
 proof
   let X;
-  reconsider pp=[VERUM,1] as Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,
-ZFMISC_1:87;
+  reconsider pp=[VERUM(Al),1] as Element of [:CQC-WFF(Al),Proof_Step_Kinds:]
+by Th21,ZFMISC_1:87;
   set f=<*pp*>;
 A1: len f = 1 by FINSEQ_1:40;
 A2: f.1 = pp by FINSEQ_1:40;
-then  (f.len f)`1 = VERUM by A1,MCART_1:7;
-then A3: Effect(f) = VERUM by Def6;
+then  (f.len f)`1 = VERUM(Al) by A1,MCART_1:7;
+then A3: Effect(f) = VERUM(Al) by Def6;
  1 <= n & n <= len f implies f,n is_a_correct_step_wrt X
   proof
     assume 1 <= n & n <= len f;
 then A4: n=1 by A1,XXREAL_0:1;
 A5: (f.1)`2 = 1 by A2,MCART_1:7;
- (f.n)`1 = VERUM by A2,A4,MCART_1:7;
+ (f.n)`1 = VERUM(Al) by A2,A4,MCART_1:7;
     hence thesis by A4,A5,Def4;
   end;
 then  f is_a_proof_wrt X by Def5;
@@ -1109,7 +1109,7 @@ Lm4: for X holds
 proof
   let X;
   reconsider pp=[('not' p => p) => p,2] as
-  Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,ZFMISC_1:87;
+  Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,ZFMISC_1:87;
   set f=<*pp*>;
 A1: len f = 1 by FINSEQ_1:40;
 A2: f.1 = pp by FINSEQ_1:40;
@@ -1132,7 +1132,7 @@ p => ('not' p => q) in {F: ex f st f is_a_proof_wrt X & Effect(f) = F}
 proof
   let X;
   reconsider pp=[p => ('not' p => q),3] as
-  Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,ZFMISC_1:87;
+  Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,ZFMISC_1:87;
   set f=<*pp*>;
 A1: len f = 1 by FINSEQ_1:40;
 A2: f.1 = pp by FINSEQ_1:40;
@@ -1155,7 +1155,7 @@ Lm6: for X holds (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in
 proof
   let X;
   reconsider pp=[(p => q) => ('not'(q '&' r) => 'not'(p '&' r)),4] as
-  Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,ZFMISC_1:87;
+  Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,ZFMISC_1:87;
   set f=<*pp*>;
 A1: len f = 1 by FINSEQ_1:40;
 A2: f.1 = pp by FINSEQ_1:40;
@@ -1179,7 +1179,7 @@ Lm7: for X holds p '&' q => q '&' p in
 proof
   let X;
   reconsider pp=[p '&' q => q '&' p,5] as
-  Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,ZFMISC_1:87;
+  Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,ZFMISC_1:87;
   set f=<*pp*>;
 A1: len f = 1 by FINSEQ_1:40;
 A2: f.1 = pp by FINSEQ_1:40;
@@ -1215,7 +1215,7 @@ A5: g is_a_proof_wrt X and
 A6: Effect(g) = p => q;
 A7: f <> {} by A3,Def5;
 A8: g <> {} by A5,Def5;
-  reconsider qq=[q,7] as Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,
+  reconsider qq=[q,7] as Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,
 ZFMISC_1:87;
   set h=f^g^<*qq*>;
 A9: len h = len(f^g) + len(<*qq*>) by FINSEQ_1:22
@@ -1233,23 +1233,23 @@ A13: n <= len h;
       suppose
     n <= len f + len g;
 then A14:    n <= len(f^g) by FINSEQ_1:22;
-    f^g is_a_proof_wrt X by A3,A5,Th62;
+    f^g is_a_proof_wrt X by A3,A5,Th29;
 then     f^g,n is_a_correct_step_wrt X by A12,A14,Def5;
-        hence thesis by A12,A14,Th60;
+        hence thesis by A12,A14,Th27;
       end;
       suppose
 A15:    n = len h;
 then     h.n = qq by A9,FINSEQ_1:42;
 then A16:    (h.n)`2 = 7 & (h.n)`1 = q by MCART_1:7;
-    len f <> 0 by A3,Th58;
+    len f <> 0 by A3,Th25;
 then     len f in Seg(len f) by FINSEQ_1:3;
 then A17:    len f in dom f by FINSEQ_1:def 3;
     h = f^(g^<*qq*>) by FINSEQ_1:32;
 then A18:    (h.len f)`1 = (f.len f)`1 by A17,FINSEQ_1:def 7
           .= p by A4,A7,Def6;
-    dom g = Seg(len g) & len g <> 0 by A5,Th58,FINSEQ_1:def 3;
+    dom g = Seg(len g) & len g <> 0 by A5,Th25,FINSEQ_1:def 3;
 then A19:    len g in dom g by FINSEQ_1:3;
-    1 <= len f & len f <= len f + len g by A3,Th58,NAT_1:11;
+    1 <= len f & len f <= len f + len g by A3,Th25,NAT_1:11;
 then     len f + len g in Seg(len f + len g) by FINSEQ_1:3;
 then     len f + len g in Seg(len(f^g)) by FINSEQ_1:22;
 then     len f + len g in dom(f^g) by FINSEQ_1:def 3;
@@ -1257,10 +1257,10 @@ then A20:    (h.(len f + len g))`1 = ((f^g).(len f + len g))`1 by
 FINSEQ_1:def 7
           .= (g.len g)`1 by A19,FINSEQ_1:def 7
           .= p => q by A6,A8,Def6;
-    1 <= len g by A5,Th58;
+    1 <= len g by A5,Th25;
 then     len f + 1 <= len f + len g by XREAL_1:7;
 then A21:    len f < len f + len g by NAT_1:13;
-A22:    1 <= len f & 1 <= len f + len g by A3,Th58,NAT_1:12;
+A22:    1 <= len f & 1 <= len f + len g by A3,Th25,NAT_1:12;
     len f + len g < n by A10,A15,NAT_1:13;
         hence thesis by A16,A18,A20,A21,A22,Def4;
       end;
@@ -1276,7 +1276,7 @@ All(x,p) => p in {F: ex f st f is_a_proof_wrt X & Effect(f) = F}
 proof
   let X;
   reconsider pp=[All(x,p) => p,6] as
-  Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,ZFMISC_1:87;
+  Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,ZFMISC_1:87;
   set f=<*pp*>;
 A1: len f = 1 by FINSEQ_1:40;
 A2: f.1 = pp by FINSEQ_1:40;
@@ -1308,7 +1308,7 @@ A3: f is_a_proof_wrt X and
 A4: Effect(f) = p => q;
 A5: f <> {} by A3,Def5;
   reconsider qq=[p => All(x,q),8] as
-  Element of [:CQC-WFF,Proof_Step_Kinds:] by Th43,ZFMISC_1:87;
+  Element of [:CQC-WFF(Al),Proof_Step_Kinds:] by Th21,ZFMISC_1:87;
   set h = f^<*qq*>;
 A6: len h = len f + len <*qq*> by FINSEQ_1:22
     .= len f + 1 by FINSEQ_1:39;
@@ -1321,18 +1321,18 @@ A8: n <= len h;
       suppose
 A9:    n <= len f;
 then     f,n is_a_correct_step_wrt X by A3,A7,Def5;
-        hence thesis by A7,A9,Th60;
+        hence thesis by A7,A9,Th27;
       end;
       suppose
 A10:    n = len h;
 then     h.n = qq by A6,FINSEQ_1:42;
         then A11:    (h.n)`2 = 8 & (h.n)`1 = p => All(x,q) by MCART_1:7;
-    len f <> 0 by A3,Th58;
+    len f <> 0 by A3,Th25;
 then     len f in Seg(len f) by FINSEQ_1:3;
 then     len f in dom f by FINSEQ_1:def 3;
 then A12:    (h.len f)`1 = (f.len f)`1 by FINSEQ_1:def 7
           .= p => q by A4,A5,Def6;
-A13:    1 <= len f by A3,Th58;
+A13:    1 <= len f by A3,Th25;
     len f < n by A6,A10,NAT_1:13;
         hence thesis by A2,A11,A12,A13,Def4;
       end;
@@ -1346,14 +1346,14 @@ then A14: h is_a_proof_wrt X by Def5;
   hence thesis by A14;
 end;
 
-Lm11: for X holds s.x in CQC-WFF & s.y in CQC-WFF &
+Lm11: for X holds s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) &
 not x in still_not-bound_in s &
 s.x in {F: ex f st f is_a_proof_wrt X & Effect(f) = F} implies
 s.y in {G: ex f st f is_a_proof_wrt X & Effect(f) = G}
 proof
   let X;
   assume that
-A1: s.x in CQC-WFF & s.y in CQC-WFF and
+A1: s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) and
 A2: not x in still_not-bound_in s and
 A3: s.x in {F: ex f st f is_a_proof_wrt X & Effect(f) = F};
  ex t st t=s.x & ex f st f is_a_proof_wrt X & Effect(f) = t by A3;
@@ -1361,8 +1361,8 @@ A3: s.x in {F: ex f st f is_a_proof_wrt X & Effect(f) = F};
 A4: f is_a_proof_wrt X and
 A5: Effect(f) = s.x;
 A6: f <> {} by A4,Def5;
-  reconsider qq=[s.y,9] as Element of [:CQC-WFF,Proof_Step_Kinds:] by A1,Th43,
-ZFMISC_1:87;
+  reconsider qq=[s.y,9] as Element of [:CQC-WFF(Al),Proof_Step_Kinds:]
+by A1,Th21,ZFMISC_1:87;
   set h = f^<*qq*>;
 A7: len h = len f + len <*qq*> by FINSEQ_1:22
     .= len f + 1 by FINSEQ_1:39;
@@ -1375,18 +1375,18 @@ A9: n <= len h;
       suppose
 A10:    n <= len f;
 then     f,n is_a_correct_step_wrt X by A4,A8,Def5;
-        hence thesis by A8,A10,Th60;
+        hence thesis by A8,A10,Th27;
       end;
       suppose
 A11:    n = len h;
 then     h.n = qq by A7,FINSEQ_1:42;
 then A12:    (h.n)`2 = 9 & (h.n)`1 = s.y by MCART_1:7;
-    len f <> 0 by A4,Th58;
+    len f <> 0 by A4,Th25;
 then     len f in Seg(len f) by FINSEQ_1:3;
 then     len f in dom f by FINSEQ_1:def 3;
 then A13:    (h.len f)`1 = (f.len f)`1 by FINSEQ_1:def 7
           .= s.x by A5,A6,Def6;
-A14:    1 <= len f by A4,Th58;
+A14:    1 <= len f by A4,Th25;
     len f < n by A7,A11,NAT_1:13;
         hence thesis by A1,A2,A12,A13,A14,Def4;
       end;
@@ -1400,14 +1400,14 @@ then A15: h is_a_proof_wrt X by Def5;
   hence thesis by A15;
 end;
 
-theorem Th68:
+theorem Th34:
   for X holds Y = {p: ex f st f is_a_proof_wrt X & Effect(f) = p}
   implies Y is being_a_theory
 proof
   let X;
   assume
 A1: Y = {p: ex f st f is_a_proof_wrt X & Effect(f) = p};
-  hence VERUM in Y by Lm3;
+  hence VERUM(Al) in Y by Lm3;
   let p,q,r,s,x,y;
   thus ('not' p => p) => p in Y by A1,Lm4;
   thus p => ('not' p => q) in Y by A1,Lm5;
@@ -1428,29 +1428,29 @@ proof
   assume
  a in {p: ex f st f is_a_proof_wrt X & Effect(f) = p};
 then  ex q st q=a & ex f st f is_a_proof_wrt X & Effect(f) = q;
-  hence thesis by Th66;
+  hence thesis by Th32;
 end;
 
-theorem Th69:
+theorem Th35:
   for X holds {p: ex f st f is_a_proof_wrt X & Effect(f) = p} = Cn(X)
 proof
   let X;
   set PX = {p: ex f st f is_a_proof_wrt X & Effect(f) = p};
 A1: PX c= Cn(X) by Lm12;
-  reconsider PX as Subset of CQC-WFF by Lm2;
- X c= PX by Th67;
+  reconsider PX as Subset of CQC-WFF(Al) by Lm2;
+ X c= PX by Th33;
 then
- Cn(X) c= {p: ex f st f is_a_proof_wrt X & Effect(f) = p} by Th37,Th68;
+ Cn(X) c= {p: ex f st f is_a_proof_wrt X & Effect(f) = p} by Th16,Th34;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem Th70:
+theorem Th36:
   p in Cn(X) iff ex f st f is_a_proof_wrt X & Effect(f) = p
 proof
   thus p in Cn(X) implies ex f st f is_a_proof_wrt X & Effect(f) = p
   proof
     assume p in Cn(X);
-then  p in {F: ex f st f is_a_proof_wrt X & Effect(f) = F} by Th69;
+then  p in {F: ex f st f is_a_proof_wrt X & Effect(f) = F} by Th35;
 then  ex F st F=p & ex f st f is_a_proof_wrt X & Effect(f) = F;
     hence thesis;
   end;
@@ -1459,7 +1459,7 @@ then  ex F st F=p & ex f st f is_a_proof_wrt X & Effect(f) = F;
     given f such that
 A1: f is_a_proof_wrt X & Effect(f) = p;
  p in {F: ex f st f is_a_proof_wrt X & Effect(f) = F} by A1;
-    hence thesis by Th69;
+    hence thesis by Th35;
   end;
 end;
 
@@ -1469,14 +1469,14 @@ proof
   assume p in Cn(X);
   then consider f such that
 A1: f is_a_proof_wrt X and
-A2: Effect(f) = p by Th70;
+A2: Effect(f) = p by Th36;
 A3: f <> {} by A1,Def5;
- rng f c= [:CQC-WFF,Proof_Step_Kinds:] by FINSEQ_1:def 4;
+ rng f c= [:CQC-WFF(Al),Proof_Step_Kinds:] by FINSEQ_1:def 4;
   then consider A being set such that
 A4: A is finite and
-A5: A c= CQC-WFF and
+A5: A c= CQC-WFF(Al) and
 A6: rng f c= [:A,Proof_Step_Kinds:] by FINSET_1:14;
-  reconsider Z=A as Subset of CQC-WFF by A5;
+  reconsider Z=A as Subset of CQC-WFF(Al) by A5;
   take Y = Z /\ X;
   thus Y c= X by XBOOLE_1:17;
   thus Y is finite by A4;
@@ -1485,7 +1485,7 @@ A6: rng f c= [:A,Proof_Step_Kinds:] by FINSET_1:14;
     assume
 A7: 1 <= n & n <= len f;
 then A8: f,n is_a_correct_step_wrt X by A1,Def5;
-    per cases by A7,Th45;
+    per cases by A7,Th23;
     case
   (f.n)`2 = 0;
 then A9:  (f.n)`1 in X by A8,Def4;
@@ -1534,120 +1534,145 @@ then   (f.n)`1 in A by A6,MCART_1:10;
   end;
 then  f is_a_proof_wrt Y by A3,Def5;
 then  p in {q: ex f st f is_a_proof_wrt Y & Effect(f) = q} by A2;
-  hence thesis by Th69;
+  hence thesis by Th35;
 end;
 
-:: --------- TAUT - the set of all tautologies
+:: --------- TAUT(Al) - the set of all tautologies
 
 definition
-
-  func TAUT -> Subset of CQC-WFF equals
-  Cn({}(CQC-WFF));
+  let Al;
+  func TAUT(Al) -> Subset of CQC-WFF(Al) equals
+  Cn({}(CQC-WFF(Al)));
   correctness;
 end;
 
-theorem Th74:
-  T is being_a_theory implies TAUT c= T
+theorem Th38:
+  T is being_a_theory implies TAUT(Al) c= T
 proof
   assume
 A1: T is being_a_theory;
- Cn({}(CQC-WFF)) c= Cn(T) by Th39,XBOOLE_1:2;
-  hence thesis by A1,Th41;
+ Cn({}(CQC-WFF(Al))) c= Cn(T) by Th18,XBOOLE_1:2;
+  hence thesis by A1,Th20;
 end;
 
 theorem
-  TAUT c= Cn(X) by Th36,Th74;
-
-theorem Th76:
-  TAUT is being_a_theory by Th36;
-
-theorem Th77:
-  VERUM in TAUT by Def1,Th76;
+  TAUT(Al) c= Cn(X) by Th15,Th38;
 
 theorem
-  ('not' p => p) =>p in TAUT by Def1,Th76;
+  TAUT(Al) is being_a_theory by Th15;
+
+theorem Th41:
+  VERUM(Al) in TAUT(Al)
+proof
+  TAUT(Al) is being_a_theory by Th15;
+  hence thesis by Def1;
+end;
 
 theorem
-  p => ('not' p => q) in TAUT by Def1,Th76;
+  ('not' p => p) =>p in TAUT(Al)
+proof
+  TAUT(Al) is being_a_theory by Th15;
+  hence thesis by Def1;
+end;
 
 theorem
-  (p => q) => ('not'(q '&' r) => 'not' (p '&' r)) in TAUT by Def1,Th76;
+  p => ('not' p => q) in TAUT(Al)
+proof
+  TAUT(Al) is being_a_theory by Th15;
+  hence thesis by Def1;
+end;
 
 theorem
-  p '&' q => q '&' p in TAUT by Def1,Th76;
+  (p => q) => ('not'(q '&' r) => 'not' (p '&' r)) in TAUT(Al)
+proof
+  TAUT(Al) is being_a_theory by Th15;
+  hence thesis by Def1;
+end;
 
 theorem
-  p in TAUT & p => q in TAUT implies q in TAUT by Def1,Th76;
+  p '&' q => q '&' p in TAUT(Al)
+proof
+  TAUT(Al) is being_a_theory by Th15;
+  hence thesis by Def1;
+end;
 
 theorem
-  All(x,p) => p in TAUT by Th33;
+  p in TAUT(Al) & p => q in TAUT(Al) implies q in TAUT(Al)
+proof
+  TAUT(Al) is being_a_theory by Th15;
+  hence thesis by Def1;
+end;
 
 theorem
-  p => q in TAUT & not x in still_not-bound_in p implies
-  p => All(x,q) in TAUT by Th34;
+  All(x,p) => p in TAUT(Al) by Th12;
 
 theorem
-  s.x in CQC-WFF & s.y in CQC-WFF & not x in still_not-bound_in s &
-  s.x in TAUT implies s.y in TAUT by Th35;
+  p => q in TAUT(Al) & not x in still_not-bound_in p implies
+  p => All(x,q) in TAUT(Al) by Th13;
+
+theorem
+  s.x in CQC-WFF(Al) & s.y in CQC-WFF(Al) & not x in still_not-bound_in s
+&
+  s.x in TAUT(Al) implies s.y in TAUT(Al) by Th14;
 
 :: --------- Relation of consequence of a set of formulas
 
 definition
-  let X,s;
+  let Al,X,s;
   pred X|-s means
-  :Def9:
+  :Def8:
   s in Cn(X);
 end;
 
 theorem
-  X |- VERUM
+  X |- VERUM(Al)
 proof
- VERUM in Cn(X) by Th27;
-  hence thesis by Def9;
+ VERUM(Al) in Cn(X) by Th6;
+  hence thesis by Def8;
 end;
 
 theorem
   X |- ('not' p => p) => p
 proof
- ('not' p => p) => p in Cn(X) by Th28;
-  hence thesis by Def9;
+ ('not' p => p) => p in Cn(X) by Th7;
+  hence thesis by Def8;
 end;
 
 theorem
   X |- p => ('not' p => q)
 proof
- p => ('not' p => q) in Cn(X) by Th29;
-  hence thesis by Def9;
+ p => ('not' p => q) in Cn(X) by Th8;
+  hence thesis by Def8;
 end;
 
 theorem
   X |- (p => q) => ('not'(q '&' r) => 'not'(p '&' r))
 proof
- (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in Cn(X) by Th30;
-  hence thesis by Def9;
+ (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in Cn(X) by Th9;
+  hence thesis by Def8;
 end;
 
 theorem
   X |- p '&' q => q '&' p
 proof
- p '&' q => q '&' p in Cn(X) by Th31;
-  hence thesis by Def9;
+ p '&' q => q '&' p in Cn(X) by Th10;
+  hence thesis by Def8;
 end;
 
 theorem
   X |- p & X |- p => q implies X |- q
 proof
   assume X |- p & X |- p => q;
-then  p in Cn(X) & p => q in Cn(X) by Def9;
-then  q in Cn(X) by Th32;
-  hence thesis by Def9;
+then  p in Cn(X) & p => q in Cn(X) by Def8;
+then  q in Cn(X) by Th11;
+  hence thesis by Def8;
 end;
 
 theorem
   X |- All(x,p) => p
 proof
- All(x,p) => p in Cn(X) by Th33;
-  hence thesis by Def9;
+ All(x,p) => p in Cn(X) by Th12;
+  hence thesis by Def8;
 end;
 
 theorem
@@ -1656,39 +1681,40 @@ proof
   assume that
 A1: X |- p => q and
 A2: not x in still_not-bound_in p;
- p => q in Cn(X) by A1,Def9;
-then  p => All(x,q) in Cn(X) by A2,Th34;
-  hence thesis by Def9;
+ p => q in Cn(X) by A1,Def8;
+then  p => All(x,q) in Cn(X) by A2,Th13;
+  hence thesis by Def8;
 end;
 
 theorem
-  s.y in CQC-WFF & not x in still_not-bound_in s & X |- s.x implies X |- s.y
+  s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
+X |- s.x implies X |- s.y
 proof
   assume that
-A1: s.y in CQC-WFF & not x in still_not-bound_in s and
+A1: s.y in CQC-WFF(Al) & not x in still_not-bound_in s and
 A2: X |- (s.x);
- s.x in Cn(X) by A2,Def9;
-then  s.y in Cn(X) by A1,Th35;
-  hence thesis by Def9;
+ s.x in Cn(X) by A2,Def8;
+then  s.y in Cn(X) by A1,Th14;
+  hence thesis by Def8;
 end;
 
 definition
-  let s;
+  let Al,s;
   attr s is valid means
-  :Def10:
-  {}(CQC-WFF)|-s;
+  :Def9:
+  {}(CQC-WFF(Al))|-s;
 end;
 
-Lm13: s is valid iff s in TAUT
+Lm13: s is valid iff s in TAUT(Al)
 proof
- s is valid iff {}(CQC-WFF) |- s by Def10;
-  hence thesis by Def9;
+ s is valid iff {}(CQC-WFF(Al)) |- s by Def9;
+  hence thesis by Def8;
 end;
 
 definition
-  let s;
+  let Al,s;
   redefine attr s is valid means
-  s in TAUT;
+  s in TAUT(Al);
   compatibility by Lm13;
 end;
 
@@ -1696,55 +1722,76 @@ theorem
   p is valid implies X |- p
 proof
   assume p is valid;
-then A1: p in TAUT by Lm13;
- TAUT c= Cn(X) by Th36,Th74;
-  hence thesis by A1,Def9;
+then A1: p in TAUT(Al) by Lm13;
+ TAUT(Al) c= Cn(X) by Th15,Th38;
+  hence thesis by A1,Def8;
 end;
 
 theorem
-  VERUM is valid by Lm13,Th77;
+  VERUM(Al) is valid
+proof
+  VERUM(Al) in TAUT(Al) by Th41;
+  hence thesis by Lm13;
+end;
 
 theorem
   ('not' p => p) =>p is valid
 proof
- ('not' p => p) =>p in TAUT by Def1,Th76;
+ ('not' p => p) =>p in TAUT(Al)
+  proof
+    TAUT(Al) is being_a_theory by Th15;
+    hence thesis by Def1;
+  end;
   hence thesis by Lm13;
 end;
 
 theorem
   p => ('not' p => q) is valid
 proof
- p => ('not' p => q) in TAUT by Def1,Th76;
+ p => ('not' p => q) in TAUT(Al)
+  proof
+    TAUT(Al) is being_a_theory by Th15;
+    hence thesis by Def1;
+  end;
   hence thesis by Lm13;
 end;
 
 theorem
   (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) is valid
 proof
- (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in TAUT by Def1,Th76;
+ (p => q) => ('not'(q '&' r) => 'not'(p '&' r)) in TAUT(Al)
+  proof
+    TAUT(Al) is being_a_theory by Th15;
+    hence thesis by Def1;
+  end;
   hence thesis by Lm13;
 end;
 
 theorem
   p '&' q => q '&' p is valid
 proof
- p '&' q => q '&' p in TAUT by Def1,Th76;
+ p '&' q => q '&' p in TAUT(Al)
+  proof
+    TAUT(Al) is being_a_theory by Th15;
+    hence thesis by Def1;
+  end;
   hence thesis by Lm13;
 end;
 
 theorem
   p is valid & p => q is valid implies q is valid
 proof
+A1: TAUT(Al) is being_a_theory by Th15;
   assume p is valid & p => q is valid;
-then  p in TAUT & p => q in TAUT by Lm13;
-then  q in TAUT by Def1,Th76;
+  then  p in TAUT(Al) & p => q in TAUT(Al) by Lm13;
+  then  q in TAUT(Al) by Def1, A1;
   hence thesis by Lm13;
 end;
 
 theorem
   All(x,p) => p is valid
 proof
- All(x,p) => p in TAUT by Th33;
+ All(x,p) => p in TAUT(Al) by Th12;
   hence thesis by Lm13;
 end;
 
@@ -1755,19 +1802,19 @@ proof
   assume that
 A1: p => q is valid and
 A2: not x in still_not-bound_in p;
- p => q in TAUT by A1,Lm13;
-then  p => All(x,q) in TAUT by A2,Th34;
+ p => q in TAUT(Al) by A1,Lm13;
+then  p => All(x,q) in TAUT(Al) by A2,Th13;
   hence thesis by Lm13;
 end;
 
 theorem
-  s.y in CQC-WFF & not x in still_not-bound_in s &
+  s.y in CQC-WFF(Al) & not x in still_not-bound_in s &
   s.x is valid implies s.y is valid
 proof
   assume that
-A1: s.y in CQC-WFF & not x in still_not-bound_in s and
+A1: s.y in CQC-WFF(Al) & not x in still_not-bound_in s and
 A2: s.x is valid;
- s.x in TAUT by A2,Lm13;
-then  s.y in TAUT by A1,Th35;
+ s.x in TAUT(Al) by A2,Lm13;
+then  s.y in TAUT(Al) by A1,Th14;
   hence thesis by Lm13;
 end;

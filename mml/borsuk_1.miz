@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received August 1, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,22 +19,23 @@ environ
       CONNSP_2, TOPS_1, RCOMP_1, FINSET_1, PCOMPS_1, METRIC_1, XXREAL_1,
       CARD_1, XREAL_0, ORDINAL1, XXREAL_0, REAL_1, BORSUK_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, REAL_1, FINSET_1, RELAT_1, FUNCT_1, MCART_1, DOMAIN_1, RCOMP_1,
-      SETFAM_1, EQREL_1, FUNCT_3, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1,
-      STRUCT_0, METRIC_1, PCOMPS_1, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1,
-      CONNSP_2;
+      XREAL_0, REAL_1, FINSET_1, RELAT_1, FUNCT_1, XTUPLE_0, MCART_1, DOMAIN_1,
+      RCOMP_1, SETFAM_1, EQREL_1, FUNCT_3, RELSET_1, PARTFUN1, FUNCT_2,
+      BINOP_1, STRUCT_0, METRIC_1, PCOMPS_1, PRE_TOPC, TOPS_1, TOPS_2,
+      COMPTS_1, CONNSP_2;
  constructors SETFAM_1, DOMAIN_1, FUNCT_3, FINSET_1, MEMBERED, EQREL_1,
-      RCOMP_1, TOPS_1, TOPS_2, COMPTS_1, CONNSP_2, PCOMPS_1, RELSET_1;
+      RCOMP_1, TOPS_1, TOPS_2, COMPTS_1, CONNSP_2, PCOMPS_1, RELSET_1,
+      XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FINSET_1, XREAL_0, MEMBERED, EQREL_1, STRUCT_0, PRE_TOPC, TOPS_1,
-      METRIC_1, PCOMPS_1, RELSET_1;
+      METRIC_1, PCOMPS_1, RELSET_1, ZFMISC_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, PRE_TOPC, TOPS_2, CONNSP_2, COMPTS_1, EQREL_1, STRUCT_0,
-      XBOOLE_0, SUBSET_1, BINOP_1, RELAT_1, SETFAM_1;
+      XBOOLE_0, SUBSET_1, BINOP_1, RELAT_1, SETFAM_1, XTUPLE_0;
  theorems TARSKI, ZFMISC_1, DOMAIN_1, PRE_TOPC, FUNCT_1, FUNCT_2, TOPS_1,
       EQREL_1, FUNCT_3, SUBSET_1, TOPS_2, CONNSP_2, COMPTS_1, SETFAM_1,
       PCOMPS_1, METRIC_1, RCOMP_1, MCART_1, RELAT_1, XBOOLE_0, XBOOLE_1,
-      XREAL_0, XXREAL_1;
+      XREAL_0, XXREAL_1, XTUPLE_0;
  schemes CLASSES1, DOMAIN_1;
 
 begin
@@ -43,7 +44,7 @@ reserve e,u for set;
 
 :: Topological preliminaries
 
-theorem Th35:
+theorem Th1:
   for X being TopStruct, Y being SubSpace of X holds the carrier
   of Y c= the carrier of X
 proof
@@ -125,7 +126,7 @@ registration
   coherence by TOPS_2:46;
 end;
 
-theorem Th37:
+theorem Th2:
   for A being continuous Function of X,Y, G being Subset of Y
   holds A"Int G c= Int(A"G)
 proof
@@ -139,7 +140,7 @@ A2: A"Int G is open by TOPS_2:43;
   hence thesis by A2,A1,TOPS_1:22;
 end;
 
-theorem Th38:
+theorem Th3:
   for W being Point of Y, A being continuous Function of X,Y, G
   being a_neighborhood of W holds A"G is a_neighborhood of A"{W}
 proof
@@ -149,7 +150,7 @@ proof
   then {W} c= Int G by ZFMISC_1:31;
   then
 A1: A"{W} c= A"Int G by RELAT_1:143;
-  A"Int G c= Int(A"G) by Th37;
+  A"Int G c= Int(A"G) by Th2;
   hence A"{W} c= Int(A"G) by A1,XBOOLE_1:1;
 end;
 
@@ -157,10 +158,10 @@ definition
   let X,Y be non empty TopSpace, W be Point of Y, A be continuous Function of
   X,Y, G be a_neighborhood of W;
   redefine func A"G -> a_neighborhood of A"{W};
-  correctness by Th38;
+  correctness by Th3;
 end;
 
-theorem Th39:
+theorem Th4:
   for X being non empty TopSpace, A,B being Subset of X, U being
   a_neighborhood of B st A c= B holds U is a_neighborhood of A
 proof
@@ -209,7 +210,7 @@ definition
   let X,Y be TopSpace;
 
   func [:X,Y:] -> strict TopSpace means
-  :Def5:
+  :Def2:
   the carrier of it = [: the
   carrier of X, the carrier of Y:] & the topology of it = { union A where A is
 Subset-Family of it: A c= { [:X1,Y1:] where X1 is Subset of X, Y1 is Subset of
@@ -411,16 +412,34 @@ X1 in the topology of X & Y1 in the topology of Y & [:X1,Y1:] c= a /\ b;
 end;
 
 registration
+  let T1 be TopSpace, T2 be empty TopSpace;
+  cluster [:T1, T2:] -> empty;
+  coherence
+  proof
+    the carrier of [:T1, T2:] = [:the carrier of T1, the carrier of T2:]
+    by Def2;
+    hence thesis;
+  end;
+  cluster [:T2, T1:] -> empty;
+  coherence
+  proof
+    the carrier of [:T2, T1:] = [:the carrier of T2, the carrier of T1:]
+    by Def2;
+    hence thesis;
+  end;
+end;
+
+registration
   let X,Y be non empty TopSpace;
   cluster [:X,Y:] -> non empty;
   coherence
   proof
-    the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+    the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
     hence the carrier of [:X,Y:] is non empty;
   end;
 end;
 
-theorem Th45:
+theorem Th5:
   for X, Y being TopSpace for B being Subset of [:X,Y:] holds B is
   open iff ex A being Subset-Family of [:X,Y:] st B = union A & for e st e in A
   ex X1 being Subset of X, Y1 being Subset of Y st e = [:X1,Y1:] & X1 is open &
@@ -430,7 +449,7 @@ proof
   let B be Subset of [:X,Y:];
 A1: the topology of [:X,Y:] = { union A where A is Subset-Family of [:X,Y:]:
   A c= { [:X1,Y1:] where X1 is Subset of X, Y1 is Subset of Y : X1 in the
-  topology of X & Y1 in the topology of Y}} by Def5;
+  topology of X & Y1 in the topology of Y}} by Def2;
   thus B is open implies ex A being Subset-Family of [:X,Y:] st B = union A &
 for e st e in A ex X1 being Subset of X, Y1 being Subset of Y st e = [:X1,Y1:]
   & X1 is open & Y1 is open
@@ -476,7 +495,7 @@ definition
   redefine func [:A,B:] -> Subset of [:X,Y:];
   correctness
   proof
-    thus [:A,B:] is Subset of [:X,Y:] by Def5;
+    thus [:A,B:] is Subset of [:X,Y:] by Def2;
   end;
 end;
 
@@ -485,11 +504,11 @@ definition
   redefine func [x,y] -> Point of [:X,Y:];
   correctness
   proof
-    thus [x,y] is Point of [:X,Y:] by Def5;
+    thus [x,y] is Point of [:X,Y:] by Def2;
   end;
 end;
 
-theorem Th46:
+theorem Th6:
   for X, Y being TopSpace for V being Subset of X, W being Subset
   of Y st V is open & W is open holds [:V,W:] is open
 proof
@@ -505,10 +524,10 @@ A3: e in PP;
     thus e = [:V,W:] & V is open & W is open by A1,A3,TARSKI:def 1;
   end;
   [:V,W:] = union {[:V,W:]} by ZFMISC_1:25;
-  hence thesis by A2,Th45;
+  hence thesis by A2,Th5;
 end;
 
-theorem Th47:
+theorem Th7:
   for X, Y being TopSpace for V being Subset of X, W being Subset
   of Y holds Int [:V,W:] = [:Int V, Int W:]
 proof
@@ -524,7 +543,7 @@ A3: e in Q by TOPS_1:22;
     consider A being Subset-Family of [:X,Y:] such that
 A4: Q = union A and
 A5: for e st e in A ex X1 being Subset of X, Y1 being Subset of Y st e
-    = [:X1,Y1:] & X1 is open & Y1 is open by A1,Th45;
+    = [:X1,Y1:] & X1 is open & Y1 is open by A1,Th5;
     consider a being set such that
 A6: e in a and
 A7: a in A by A3,A4,TARSKI:def 4;
@@ -545,10 +564,10 @@ A12: Y1 c= Int W by A10,TOPS_1:24;
   end;
   Int V c= V & Int W c= W by TOPS_1:16;
   then [:Int V, Int W:] c= [:V,W:] by ZFMISC_1:96;
-  hence thesis by Th46,TOPS_1:24;
+  hence thesis by Th6,TOPS_1:24;
 end;
 
-theorem Th48:
+theorem Th8:
   for x being Point of X, y being Point of Y, V being
   a_neighborhood of x, W being a_neighborhood of y holds [:V,W:] is
   a_neighborhood of [x,y]
@@ -557,10 +576,10 @@ proof
   a_neighborhood of y;
   x in Int V & y in Int W by CONNSP_2:def 1;
   then [x,y] in [:Int V, Int W:] by ZFMISC_1:87;
-  hence [x,y] in Int [:V,W:] by Th47;
+  hence [x,y] in Int [:V,W:] by Th7;
 end;
 
-theorem Th49:
+theorem Th9:
   for A being Subset of X, B being Subset of Y, V being
   a_neighborhood of A, W being a_neighborhood of B holds [:V,W:] is
   a_neighborhood of [:A,B:]
@@ -569,22 +588,22 @@ proof
   a_neighborhood of B;
   A c= Int V & B c= Int W by CONNSP_2:def 2;
   then [:A,B:] c= [:Int V, Int W:] by ZFMISC_1:96;
-  hence [:A,B:] c= Int [:V,W:] by Th47;
+  hence [:A,B:] c= Int [:V,W:] by Th7;
 end;
 
 definition
   let X,Y be non empty TopSpace, x be Point of X, y be Point of Y, V be
   a_neighborhood of x, W be a_neighborhood of y;
   redefine func [:V,W:] -> a_neighborhood of [x,y];
-  correctness by Th48;
+  correctness by Th8;
 end;
 
-theorem Th50:
+theorem Th10:
   for XT being Point of [:X,Y:] ex W being Point of X, T being
   Point of Y st XT=[W,T]
 proof
   let XT be Point of [:X,Y:];
-  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
   hence thesis by DOMAIN_1:1;
 end;
 
@@ -595,7 +614,7 @@ definition
   correctness
   proof
     W is a_neighborhood of {t} by CONNSP_2:8;
-    hence [:V,W:] is a_neighborhood of [:A,{t}:] by Th49;
+    hence [:V,W:] is a_neighborhood of [:A,{t}:] by Th9;
   end;
 end;
 
@@ -632,11 +651,11 @@ proof
   then
   ex X1 being Subset of X, Y1 being Subset of Y st B = [:X1,Y1:] & [:X1,Y1
   :] c= A & X1 is open & Y1 is open;
-  hence thesis by Th46;
+  hence thesis by Th6;
 end;
 end;
 
-theorem Th52:
+theorem Th11:
   for X, Y being TopSpace for A,B being Subset of [:X,Y:] st A c=
   B holds Base-Appr A c= Base-Appr B
 proof
@@ -652,7 +671,7 @@ A4: X1 is open & Y1 is open;
   hence thesis by A2,A4;
 end;
 
-theorem Th53:
+theorem Th12:
   for X, Y being TopSpace, A being Subset of [:X,Y:] holds union
   Base-Appr A c= A
 proof
@@ -667,7 +686,7 @@ A2: B in Base-Appr A by TARSKI:def 4;
   hence thesis by A1;
 end;
 
-theorem Th54:
+theorem Th13:
   for X, Y being TopSpace, A being Subset of [:X,Y:] st A is open
   holds A = union Base-Appr A
 proof
@@ -676,7 +695,7 @@ proof
   then consider B being Subset-Family of [:X,Y:] such that
 A1: A = union B and
 A2: for e st e in B ex X1 being Subset of X, Y1 being Subset of Y st e =
-  [:X1,Y1:] & X1 is open & Y1 is open by Th45;
+  [:X1,Y1:] & X1 is open & Y1 is open by Th5;
   thus A c= union Base-Appr A
   proof
     let e;
@@ -689,19 +708,19 @@ A4: u in B by A1,TARSKI:def 4;
     then u in Base-Appr A;
     hence thesis by A3,TARSKI:def 4;
   end;
-  thus thesis by Th53;
+  thus thesis by Th12;
 end;
 
-theorem Th55:
+theorem Th14:
   for X, Y being TopSpace, A being Subset of [:X,Y:] holds Int A =
   union Base-Appr A
 proof
   let X, Y be TopSpace, A be Subset of [:X,Y:];
-  Int A = union Base-Appr Int A & Base-Appr Int A c= Base-Appr A by Th52,Th54,
+  Int A = union Base-Appr Int A & Base-Appr Int A c= Base-Appr A by Th11,Th13,
 TOPS_1:16;
   hence Int A c= union Base-Appr A by ZFMISC_1:77;
   union Base-Appr A is open by TOPS_2:19;
-  hence thesis by Th53,TOPS_1:24;
+  hence thesis by Th12,TOPS_1:24;
 end;
 
 definition
@@ -711,7 +730,7 @@ definition
   .:pr1(the carrier of X,the carrier of Y);
   coherence
   proof
-    the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+    the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
     hence thesis;
   end;
   correctness;
@@ -720,13 +739,13 @@ definition
   .:pr2(the carrier of X,the carrier of Y);
   coherence
   proof
-    the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+    the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
     hence thesis;
   end;
   correctness;
 end;
 
-theorem Th56:
+theorem Th15:
   for A being Subset of [:X,Y:], H being Subset-Family of [:X,Y:]
 st for e st e in H holds e c= A & ex X1 being Subset of X, Y1 being Subset of Y
   st e =[:X1,Y1:] holds [:union(Pr1(X,Y).:H), meet(Pr2(X,Y).:H):] c= A
@@ -735,11 +754,11 @@ proof
   assume
 A1: for e st e in H holds e c= A & ex X1 being Subset of X, Y1 being
   Subset of Y st e =[:X1,Y1:];
-  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
   hence thesis by A1,EQREL_1:51;
 end;
 
-theorem Th57:
+theorem Th16:
   for H being Subset-Family of [:X,Y:], C being set st C in Pr1(X,
   Y).:H ex D being Subset of [:X,Y:] st D in H & C = pr1(the carrier of X, the
   carrier of Y).:D
@@ -753,11 +772,11 @@ A3: C = Pr1(X,Y).u by FUNCT_1:def 6;
   reconsider u as Subset of [:X,Y:] by A1;
   take u;
   thus u in H by A2;
-  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
   hence thesis by A3,EQREL_1:47;
 end;
 
-theorem Th58:
+theorem Th17:
   for H being Subset-Family of [:X,Y:], C being set st C in Pr2(X,
   Y).:H ex D being Subset of [:X,Y:] st D in H & C = pr2(the carrier of X, the
   carrier of Y).:D
@@ -771,11 +790,11 @@ A3: C = Pr2(X,Y).u by FUNCT_1:def 6;
   reconsider u as Subset of [:X,Y:] by A1;
   take u;
   thus u in H by A2;
-  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+  the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
   hence thesis by A3,EQREL_1:48;
 end;
 
-theorem Th59:
+theorem Th18:
   for D being Subset of [:X,Y:] st D is open holds for X1 being
 Subset of X, Y1 being Subset of Y holds (X1 = pr1(the carrier of X, the carrier
 of Y).:D implies X1 is open) & (Y1 = pr2(the carrier of X, the carrier of Y).:D
@@ -788,18 +807,17 @@ proof
   then consider H being Subset-Family of [:X,Y:] such that
 A1: D = union H and
 A2: for e st e in H ex X1 being Subset of X, Y1 being Subset of Y st e =
-  [:X1,Y1:] & X1 is open & Y1 is open by Th45;
+  [:X1,Y1:] & X1 is open & Y1 is open by Th5;
   reconsider K = H as Subset-Family of [:the carrier of X, the carrier of Y:]
-  by Def5;
+  by Def2;
   let X1 be Subset of X, Y1 be Subset of Y;
-A3: {} X = {};
   thus X1 = pr1(the carrier of X, the carrier of Y).:D implies X1 is open
   proof
     set p = pr1(the carrier of X, the carrier of Y);
     set P = .:p;
     reconsider PK = P.:K as Subset-Family of X;
     reconsider PK as Subset-Family of X;
-A4: PK is open
+A3: PK is open
     proof
       let X1 be Subset of X;
       reconsider x1 = X1 as Subset of X;
@@ -807,46 +825,45 @@ A4: PK is open
       then consider
       c being Subset of[:the carrier of X, the carrier of Y:] such
       that
-A5:   c in K and
-A6:   x1 = P.c by FUNCT_2:65;
+A4:   c in K and
+A5:   x1 = P.c by FUNCT_2:65;
       dom P = bool[:the carrier of X, the carrier of Y:] by FUNCT_2:def 1;
       then
-A7:   X1 = p.:c by A6,FUNCT_3:7;
-A8:   c = {} or c <> {};
+A6:   X1 = p.:c by A5,FUNCT_3:7;
+A7:   c = {} or c <> {};
       ex X2 being Subset of X, Y2 being Subset of Y st c = [:X2,Y2:] & X2
-      is open & Y2 is open by A2,A5;
-      hence thesis by A3,A7,A8,EQREL_1:49,RELAT_1:116;
+      is open & Y2 is open by A2,A4;
+      hence thesis by A6,A7,EQREL_1:49;
     end;
     assume X1 = p.:D;
     then X1 = union(P.:K) by A1,EQREL_1:53;
-    hence thesis by A4,TOPS_2:19;
+    hence thesis by A3,TOPS_2:19;
   end;
   reconsider PK = P.:K as Subset-Family of Y;
   reconsider PK as Subset-Family of Y;
-A9: {} Y = {};
-A10: PK is open
+A8: PK is open
   proof
     let Y1 be Subset of Y;
     reconsider y1 = Y1 as Subset of Y;
     assume Y1 in PK;
     then consider
     c being Subset of[:the carrier of X, the carrier of Y:] such that
-A11: c in K and
-A12: y1 = P.c by FUNCT_2:65;
+A9: c in K and
+A10: y1 = P.c by FUNCT_2:65;
     dom P = bool[:the carrier of X, the carrier of Y:] by FUNCT_2:def 1;
     then
-A13: Y1 = p.:c by A12,FUNCT_3:7;
-A14: c = {} or c <> {};
+A11: Y1 = p.:c by A10,FUNCT_3:7;
+A12: c = {} or c <> {};
     ex X2 being Subset of X, Y2 being Subset of Y st c = [:X2,Y2:] & X2
-    is open & Y2 is open by A2,A11;
-    hence thesis by A9,A13,A14,EQREL_1:49,RELAT_1:116;
+    is open & Y2 is open by A2,A9;
+    hence thesis by A11,A12,EQREL_1:49;
   end;
   assume Y1 = p.:D;
   then Y1 = union(P.:K) by A1,EQREL_1:53;
-  hence thesis by A10,TOPS_2:19;
+  hence thesis by A8,TOPS_2:19;
 end;
 
-theorem Th60:
+theorem Th19:
   for H being Subset-Family of [:X,Y:] st H is open holds Pr1(X,Y)
   .:H is open & Pr2(X,Y).:H is open
 proof
@@ -861,9 +878,9 @@ A2: P2 is open
     assume Y1 in P2;
     then consider D being Subset of [:X,Y:] such that
 A3: D in H and
-A4: Y1 = pr2(the carrier of X, the carrier of Y).:D by Th58;
+A4: Y1 = pr2(the carrier of X, the carrier of Y).:D by Th17;
     D is open by A1,A3,TOPS_2:def 1;
-    hence thesis by A4,Th59;
+    hence thesis by A4,Th18;
   end;
   P1 is open
   proof
@@ -871,24 +888,24 @@ A4: Y1 = pr2(the carrier of X, the carrier of Y).:D by Th58;
     assume X1 in P1;
     then consider D being Subset of [:X,Y:] such that
 A5: D in H and
-A6: X1 = pr1(the carrier of X, the carrier of Y).:D by Th57;
+A6: X1 = pr1(the carrier of X, the carrier of Y).:D by Th16;
     D is open by A1,A5,TOPS_2:def 1;
-    hence thesis by A6,Th59;
+    hence thesis by A6,Th18;
   end;
   hence thesis by A2;
 end;
 
-theorem Th61:
+theorem Th20:
   for H being Subset-Family of [:X,Y:] st Pr1(X,Y).:H = {} or Pr2(
   X,Y).:H = {} holds H = {}
 proof
   let H be Subset-Family of [:X,Y:];
   dom Pr1(X,Y) = bool the carrier of [:X,Y:] & dom Pr2(X,Y) = bool the
   carrier of [:X,Y:] by FUNCT_2:def 1;
-  hence thesis by RELAT_1:119;
+  hence thesis;
 end;
 
-theorem Th62:
+theorem Th21:
   for H being Subset-Family of [:X,Y:], X1 being Subset of X, Y1
 being Subset of Y st H is Cover of [:X1,Y1:] holds (Y1 <> {} implies Pr1(X,Y).:
   H is Cover of X1) & (X1 <> {} implies Pr2(X,Y).:H is Cover of Y1)
@@ -897,7 +914,7 @@ proof
 A1: dom .:pr2(the carrier of X, the carrier of Y) = bool dom pr2(the
   carrier of X, the carrier of Y) by FUNCT_3:def 1
     .= bool[:the carrier of X,the carrier of Y:] by FUNCT_3:def 5;
-A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
   assume
 A3: [:X1,Y1:] c= union H;
   thus Y1 <> {} implies Pr1(X,Y).:H is Cover of X1
@@ -954,7 +971,7 @@ FUNCT_1:def 6;
   hence e in union (Pr2(X,Y).:H) by A16,TARSKI:def 4;
 end;
 
-theorem Th63:
+theorem Th22:
   for X, Y being TopSpace, H being Subset-Family of X, Y being
   Subset of X st H is Cover of Y ex F being Subset-Family of X st F c= H & F is
   Cover of Y & for C being set st C in F holds C meets Y
@@ -997,7 +1014,7 @@ A5: u in H by A2,TARSKI:def 4;
   hence C /\ Y <> {};
 end;
 
-theorem Th64:
+theorem Th23:
   for F being Subset-Family of X, H being Subset-Family of [:X,Y:]
 st F is finite & F c= Pr1(X,Y).:H ex G being Subset-Family of [:X,Y:] st G c= H
   & G is finite & F = Pr1(X,Y).:G
@@ -1049,7 +1066,7 @@ theorem
   for X1 being Subset of X, Y1 being Subset of Y st [:X1,Y1:] <> {}
   holds Pr1(X,Y). [:X1,Y1:] = X1 & Pr2(X,Y). [:X1,Y1:] = Y1 by EQREL_1:50;
 
-theorem Th67:
+theorem Th25:
   for t being Point of Y, A being Subset of X st A is compact for
   G being a_neighborhood of [:A,{t}:] ex V being a_neighborhood of A, W being
   a_neighborhood of t st [:V,W:] c= G
@@ -1057,23 +1074,23 @@ proof
   let t be Point of Y, A be Subset of X such that
 A1: A is compact;
   let G be a_neighborhood of [:A,{t}:];
-A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
+A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
   now
     per cases;
     suppose
 A3:   A <> {} X;
       [:A,{t}:] c= Int G by CONNSP_2:def 2;
-      then [:A,{t}:] c= union Base-Appr G by Th55;
+      then [:A,{t}:] c= union Base-Appr G by Th14;
       then Base-Appr G is Cover of [:A,{t}:] by SETFAM_1:def 11;
       then consider K being Subset-Family of [:X,Y:] such that
 A4:   K c= Base-Appr G and
 A5:   K is Cover of [:A,{t}:] and
-A6:   for c being set st c in K holds c meets [:A,{t}:] by Th63;
+A6:   for c being set st c in K holds c meets [:A,{t}:] by Th22;
       reconsider PK = Pr1(X,Y).:K as Subset-Family of X;
       K is open by A4,TOPS_2:11;
       then
-A7:   Pr1(X,Y).:K is open by Th60;
-      PK is Cover of A by A5,Th62;
+A7:   Pr1(X,Y).:K is open by Th19;
+      PK is Cover of A by A5,Th21;
       then consider M being Subset-Family of X such that
 A8:   M c= Pr1(X,Y).:K and
 A9:   M is Cover of A and
@@ -1081,7 +1098,7 @@ A10:  M is finite by A1,A7,COMPTS_1:def 4;
       consider N being Subset-Family of [:X,Y:] such that
 A11:  N c= K and
 A12:  N is finite and
-A13:  Pr1(X,Y).:N = M by A8,A10,Th64;
+A13:  Pr1(X,Y).:N = M by A8,A10,Th23;
       reconsider F = Pr1(X,Y).:N as Subset-Family of X;
 A14:  N is Cover of [:A,{t}:]
       proof
@@ -1092,7 +1109,7 @@ A16:    [e1,e2] in [:A,{t}:];
         then [e1,e2]`2 in {t} by MCART_1:10;
         then [e1,e2]`2 = t by TARSKI:def 1;
         then
-A17:    [e1,e2] = [[e1,e2]`1,t] by A16,MCART_1:21;
+A17:    [e1,e2] = [[e1,e2]`1,t];
         [e1,e2]`1 in A by A16,MCART_1:10;
         then consider X1 being set such that
 A18:    [e1,e2]`1 in X1 and
@@ -1120,7 +1137,7 @@ A25:    t in Y2 by A22,A23,MCART_1:10;
         then [e1,e2] in [:X2,Y2:] by A25,A17,ZFMISC_1:87;
         hence [e1,e2] in union N by A20,A22,TARSKI:def 4;
       end;
-      then F is Cover of A by Th62;
+      then F is Cover of A by Th21;
       then
 A26:  A c= union F by SETFAM_1:def 11;
       reconsider H = Pr2(X,Y).:N as Subset-Family of Y;
@@ -1129,7 +1146,7 @@ A27:  now
         assume C in H;
         then consider D being Subset of [:X,Y:] such that
 A28:    D in N and
-A29:    C = pr2(the carrier of X, the carrier of Y).:D by Th58;
+A29:    C = pr2(the carrier of X, the carrier of Y).:D by Th17;
         D meets [:A,{t}:] by A6,A11,A28;
         then D /\ [:A,{t}:] <> {} by XBOOLE_0:def 7;
         then consider x being Point of [:X,Y:] such that
@@ -1147,16 +1164,16 @@ A33:    x = [x`1,t] by A2,MCART_1:21;
       end;
       [:A,{t}:] c= union N by A14,SETFAM_1:def 11;
       then N <> {} by A3,ZFMISC_1:2;
-      then H <> {} by Th61;
+      then H <> {} by Th20;
       then
 A34:  t in meet H by A27,SETFAM_1:def 1;
 A35:  N c= Base-Appr G by A4,A11,XBOOLE_1:1;
       then
 A36:  N is open by TOPS_2:11;
-      then meet H is open by A12,Th60,TOPS_2:20;
+      then meet H is open by A12,Th19,TOPS_2:20;
       then t in Int meet H by A34,TOPS_1:23;
       then reconsider W = meet H as a_neighborhood of t by CONNSP_2:def 1;
-      union F is open by A36,Th60,TOPS_2:19;
+      union F is open by A36,Th19,TOPS_2:19;
       then A c= Int union F by A26,TOPS_1:23;
       then reconsider V = union F as a_neighborhood of A by CONNSP_2:def 2;
       take V,W;
@@ -1170,7 +1187,7 @@ A36:  N is open by TOPS_2:11;
         e c= G & ex X1 being Subset of X, Y1 being Subset of Y st e =[:X1
         ,Y1:];
       end;
-      hence [:V,W:] c= G by Th56;
+      hence [:V,W:] c= G by Th15;
     end;
     suppose
       A = {} X;
@@ -1178,7 +1195,7 @@ A36:  N is open by TOPS_2:11;
       then reconsider V = {} X as a_neighborhood of A by CONNSP_2:def 2;
       set W = the a_neighborhood of t;
       take V,W;
-      [:V,W:] = {} by ZFMISC_1:90;
+      [:V,W:] = {};
       hence [:V,W:] c= G by XBOOLE_1:2;
     end;
   end;
@@ -1205,7 +1222,7 @@ registration
   coherence;
 end;
 
-theorem Th68:
+theorem Th26:
   for A being Subset of X st A in TrivDecomp X ex x being Point of X st A = {x}
 proof
   let A be Subset of X;
@@ -1232,7 +1249,7 @@ proof
 A1: B in TrivDecomp X and
 A2: B meets Int V;
   consider x being Point of X such that
-A3: B = {x} by A1,Th68;
+A3: B = {x} by A1,Th26;
   x in Int V by A2,A3,ZFMISC_1:50;
   hence thesis by A3,ZFMISC_1:31;
 end;
@@ -1240,7 +1257,7 @@ end;
 definition
   let X be TopSpace, D be a_partition of the carrier of X;
   func space D -> strict TopSpace means
-  :Def10:
+  :Def7:
   the carrier of it = D & the
   topology of it = { A where A is Subset of D : union A in the topology of X};
   existence
@@ -1325,16 +1342,16 @@ end;
 registration
   let X be non empty TopSpace, D be a_partition of the carrier of X;
   cluster space D -> non empty;
-  coherence by Def10;
+  coherence by Def7;
 end;
 
-theorem Th69:
+theorem Th27:
   for D being non empty a_partition of the carrier of X, A being
 Subset of D holds union A in the topology of X iff A in the topology of space D
 proof
   let D be non empty a_partition of the carrier of X, B be Subset of D;
 A1: the topology of space D = { A where A is Subset of D : union A in the
-  topology of X } by Def10;
+  topology of X } by Def7;
   hence union B in the topology of X implies B in the topology of space D;
   assume B in the topology of space D;
   then ex A being Subset of D st B = A & union A in the topology of X by A1;
@@ -1347,8 +1364,8 @@ definition
   proj D;
   coherence
   proof
-    reconsider F = proj D as Function of X, space D by Def10;
-A1: the carrier of space D = D by Def10;
+    reconsider F = proj D as Function of X, space D by Def7;
+A1: the carrier of space D = D by Def7;
     F is continuous
     proof
       let W be Point of X, G be a_neighborhood of F.W;
@@ -1358,7 +1375,7 @@ A1: the carrier of space D = D by Def10;
       then
 A2:   W in union Int G by A1,EQREL_1:67;
       Int G in the topology of space D by PRE_TOPC:def 2;
-      then union Int G in the topology of X by A1,Th69;
+      then union Int G in the topology of X by A1,Th27;
       then H is open by PRE_TOPC:def 2;
       then W in Int H by A2,TOPS_1:23;
       then W in Int(F"Int G) by A1,EQREL_1:67;
@@ -1376,19 +1393,19 @@ theorem
   for D being non empty a_partition of the carrier of X, W being Point
   of X holds W in Proj D.W by EQREL_1:def 9;
 
-theorem Th71:
+theorem Th29:
   for D being non empty a_partition of the carrier of X, W being
   Point of space D ex W9 being Point of X st Proj(D).W9=W
 proof
   let D be non empty a_partition of the carrier of X, W be Point of space D;
-  reconsider p = W as Element of D by Def10;
+  reconsider p = W as Element of D by Def7;
   consider W9 being Point of X such that
 A1: (proj D).W9 = p by EQREL_1:68;
   take W9;
   thus thesis by A1;
 end;
 
-theorem Th72:
+theorem Th30:
   for D being non empty a_partition of the carrier of X holds rng
   Proj D = the carrier of space D
 proof
@@ -1396,7 +1413,7 @@ proof
   thus rng Proj D c= the carrier of space D;
   let e;
   assume e in the carrier of space D;
-  then ex p being Point of X st (Proj D).p = e by Th71;
+  then ex p being Point of X st (Proj D).p = e by Th29;
   hence thesis by FUNCT_2:4;
 end;
 
@@ -1418,7 +1435,7 @@ A1:   e in E;
         per cases by A1,XBOOLE_0:def 3;
         suppose
 A2:       e in D;
-          bool the carrier of X c= bool the carrier of XX by Th35,ZFMISC_1:67;
+          bool the carrier of X c= bool the carrier of XX by Th1,ZFMISC_1:67;
           hence thesis by A2,TARSKI:def 3;
         end;
         suppose
@@ -1461,7 +1478,7 @@ A8:   union {{p} where p is Point of XX : not p in the carrier of X} = (
       the carrier of X} by ZFMISC_1:78
         .= (the carrier of X) \/ ((the carrier of XX) \ the carrier of X) by A8
 ,EQREL_1:def 4
-        .= the carrier of XX by Th35,XBOOLE_1:45;
+        .= the carrier of XX by Th1,XBOOLE_1:45;
       let A be Subset of XX;
       assume
 A9:   A in E;
@@ -1530,7 +1547,7 @@ A13:      A misses the carrier of X by ZFMISC_1:50;
   correctness;
 end;
 
-theorem Th74:
+theorem Th31:
   for XX being non empty TopSpace, X being non empty SubSpace of
 XX, D being non empty a_partition of the carrier of X, A being Subset of XX st
 A in TrivExt D holds A in D or ex x being Point of XX st not x in [#]X & A = {x
@@ -1559,7 +1576,7 @@ A3:   not x in the carrier of X;
   hence thesis;
 end;
 
-theorem Th75:
+theorem Th32:
   for XX being non empty TopSpace, X being non empty SubSpace of
   XX, D being non empty a_partition of the carrier of X, x being Point of XX st
   not x in the carrier of X holds {x} in TrivExt D
@@ -1578,7 +1595,7 @@ XBOOLE_0:def 3;
   hence thesis by A1,A2,TARSKI:def 1;
 end;
 
-theorem Th76:
+theorem Th33:
   for XX being non empty TopSpace, X being non empty SubSpace of
 XX, D being non empty a_partition of the carrier of X, W being Point of XX st W
   in the carrier of X holds Proj(TrivExt D).W=Proj(D).W
@@ -1594,7 +1611,7 @@ A1: W in the carrier of X;
   hence thesis by EQREL_1:65;
 end;
 
-theorem Th77:
+theorem Th34:
   for XX being non empty TopSpace, X being non empty SubSpace of
   XX, D being non empty a_partition of the carrier of X, W being Point of XX st
   not W in the carrier of X holds Proj TrivExt D.W = {W}
@@ -1602,11 +1619,11 @@ proof
   let XX be non empty TopSpace, X be non empty SubSpace of XX, D be non empty
   a_partition of the carrier of X, W be Point of XX;
   assume not W in the carrier of X;
-  then W in {W} & {W} in TrivExt D by Th75,TARSKI:def 1;
+  then W in {W} & {W} in TrivExt D by Th32,TARSKI:def 1;
   hence thesis by EQREL_1:65;
 end;
 
-theorem Th78:
+theorem Th35:
   for XX being non empty TopSpace, X being non empty SubSpace of
   XX, D being non empty a_partition of the carrier of X, W,W9 being Point of XX
 st not W in the carrier of X & Proj(TrivExt D).W=Proj(TrivExt D).W9 holds W=W9
@@ -1615,12 +1632,12 @@ proof
   a_partition of the carrier of X, W,W9 be Point of XX;
   assume not W in the carrier of X;
   then
-A1: Proj TrivExt D.W = {W} by Th77;
+A1: Proj TrivExt D.W = {W} by Th34;
   W9 in Proj TrivExt D.W9 by EQREL_1:def 9;
   hence thesis by A1,TARSKI:def 1;
 end;
 
-theorem Th79:
+theorem Th36:
   for XX being non empty TopSpace , X being non empty SubSpace of
   XX for D being non empty a_partition of the carrier of X for e being Point of
   XX st Proj TrivExt D.e in the carrier of space D holds e in the carrier of X
@@ -1630,12 +1647,12 @@ proof
   let e be Point of XX;
   assume Proj TrivExt D.e in the carrier of space D;
   then
-A1: Proj TrivExt D.e in D by Def10;
+A1: Proj TrivExt D.e in D by Def7;
   e in Proj TrivExt D.e by EQREL_1:def 9;
   hence thesis by A1;
 end;
 
-theorem Th80:
+theorem Th37:
   for XX being non empty TopSpace , X being non empty SubSpace of
   XX for D being non empty a_partition of the carrier of X for e st e in the
   carrier of X holds Proj TrivExt D.e in the carrier of space D
@@ -1646,8 +1663,8 @@ proof
   assume
 A1: e in the carrier of X;
   then reconsider x = e as Point of X;
-  the carrier of X c= the carrier of XX by Th35;
-  then Proj D.x = Proj TrivExt D.x by A1,Th76;
+  the carrier of X c= the carrier of XX by Th1;
+  then Proj D.x = Proj TrivExt D.x by A1,Th33;
   hence thesis;
 end;
 
@@ -1661,7 +1678,7 @@ definition
   let X be non empty TopSpace;
   mode u.s.c._decomposition of X -> non empty a_partition of the carrier of X
     means
-    :Def13:
+    :Def10:
     for A being Subset of X st A in it for V being a_neighborhood of
 A ex W being Subset of X st W is open & A c= W & W c= V & for B being Subset of
     X st B in it & B meets W holds B c= W;
@@ -1672,28 +1689,28 @@ A ex W being Subset of X st W is open & A c= W & W c= V & for B being Subset of
   end;
 end;
 
-theorem Th81:
+theorem Th38:
   for D being u.s.c._decomposition of X, t being Point of space D,
 G being a_neighborhood of Proj D " {t} holds Proj(D).:G is a_neighborhood of t
 proof
   let D be u.s.c._decomposition of X, t be Point of space D, G be
   a_neighborhood of Proj D " {t};
-A1: the carrier of space D = D by Def10;
+A1: the carrier of space D = D by Def7;
   then Proj D " {t} = t by EQREL_1:66;
   then consider W being Subset of X such that
 A2: W is open and
 A3: Proj D " {t} c= W and
 A4: W c= G and
-A5: for B being Subset of X st B in D & B meets W holds B c= W by A1,Def13;
+A5: for B being Subset of X st B in D & B meets W holds B c= W by A1,Def10;
   set Q = Proj D .:W;
 A6: Proj D .: Proj D " {t} c= Q by A3,RELAT_1:123;
   union Q = proj D " Q by A1,EQREL_1:67
     .= W by A5,EQREL_1:69;
   then union Q in the topology of X by A2,PRE_TOPC:def 2;
-  then Q in the topology of space D by A1,Th69;
+  then Q in the topology of space D by A1,Th27;
   then
 A7: Q is open by PRE_TOPC:def 2;
-  rng Proj D = the carrier of space D by Th72;
+  rng Proj D = the carrier of space D by Th30;
   then {t} c= Q by A6,FUNCT_1:77;
   then
 A8: t in Q by ZFMISC_1:31;
@@ -1702,7 +1719,7 @@ A8: t in Q by ZFMISC_1:31;
   hence thesis by CONNSP_2:def 1;
 end;
 
-theorem Th82:
+theorem Th39:
   TrivDecomp X is u.s.c._decomposition of X
 proof
   thus for A being Subset of X st A in TrivDecomp X for V being a_neighborhood
@@ -1714,7 +1731,7 @@ definition
   let X be TopSpace;
   let IT be SubSpace of X;
   attr IT is closed means
-  :Def14:
+  :Def11:
   for A being Subset of X st A = the carrier of IT holds A is closed;
 end;
 
@@ -1783,7 +1800,7 @@ A1: A in TrivExt D;
 A2: A c= Int V by CONNSP_2:def 2;
 A3: Int V c= V by TOPS_1:16;
     now
-      per cases by A1,Th74;
+      per cases by A1,Th31;
       suppose
 A4:     A in D;
         then reconsider C = A as Subset of X;
@@ -1795,7 +1812,7 @@ A4:     A in D;
 A5:     W is open and
 A6:     C c= W and
 A7:     W c= E and
-A8:     for B being Subset of X st B in D & B meets W holds B c= W by A4,Def13;
+A8:     for B being Subset of X st B in D & B meets W holds B c= W by A4,Def10;
         consider G being Subset of XX such that
 A9:     G is open and
 A10:    W = G /\ [#] X by A5,TOPS_2:24;
@@ -1814,7 +1831,7 @@ A13:    B meets H;
         then
 A14:    W c= H by A11,XBOOLE_1:19;
         now
-          per cases by A12,Th74;
+          per cases by A12,Th31;
           suppose
 A15:        B in D;
             B meets G by A13,XBOOLE_1:74;
@@ -1838,7 +1855,7 @@ A17:    ex x being Point of XX st not x in [#] X & A = {x};
         [#]X c= [#]XX by PRE_TOPC:def 4;
         then reconsider C = [#]X as Subset of XX;
         take W = Int V \ C;
-        C is closed by Def14;
+        C is closed by Def11;
         then (Int V) /\ C` is open;
         hence W is open by SUBSET_1:13;
         consider x being Point of XX such that
@@ -1859,7 +1876,7 @@ A22:      W misses C by XBOOLE_1:79;
         end;
         then consider y being Point of XX such that
         not y in [#]X and
-A23:    B = {y} by A20,Th74;
+A23:    B = {y} by A20,Th31;
         y in W by A21,A23,ZFMISC_1:50;
         hence B c= W by A23,ZFMISC_1:31;
       end;
@@ -1872,7 +1889,7 @@ definition
   let X be non empty TopSpace;
   let IT be u.s.c._decomposition of X;
   attr IT is DECOMPOSITION-like means
-  :Def15:
+  :Def12:
   for A being Subset of X st A in IT holds A is compact;
 end;
 
@@ -1883,11 +1900,11 @@ registration
   cluster DECOMPOSITION-like for u.s.c._decomposition of X;
   existence
   proof
-    reconsider D = TrivDecomp X as u.s.c._decomposition of X by Th82;
+    reconsider D = TrivDecomp X as u.s.c._decomposition of X by Th39;
     take D;
     let A be Subset of X;
     assume A in D;
-    then ex x being Point of X st A = {x} by Th68;
+    then ex x being Point of X st A = {x} by Th26;
     hence thesis;
   end;
 end;
@@ -1910,20 +1927,20 @@ definition
       then consider W being Point of XX such that
 A1:   A = (proj TrivExt D).W by EQREL_1:68;
 A2:   A = Proj TrivExt D.W by A1;
-A3:   the carrier of space D = D by Def10;
+A3:   the carrier of space D = D by Def7;
       now
         per cases;
         suppose
           W in the carrier of X;
           then reconsider W9 = W as Point of X;
-A4:       A = (Proj D).W9 by A2,Th76;
+A4:       A = (Proj D).W9 by A2,Th33;
           then reconsider B = A as Subset of X by A3,TARSKI:def 3;
-          B is compact by A3,A4,Def15;
+          B is compact by A3,A4,Def12;
           hence thesis by COMPTS_1:19;
         end;
         suppose
           not W in the carrier of X;
-          then A = {W} by A2,Th77;
+          then A = {W} by A2,Th34;
           hence thesis;
         end;
       end;
@@ -1940,12 +1957,12 @@ definition
   correctness
   proof
 A1: the topology of space TrivExt D = { A where A is Subset of TrivExt D :
-    union A in the topology of X} by Def10;
-A2: the carrier of space TrivExt D = TrivExt D by Def10;
+    union A in the topology of X} by Def7;
+A2: the carrier of space TrivExt D = TrivExt D by Def7;
 A3: the topology of space D = { A where A is Subset of D : union A in the
-    topology of Y} by Def10;
-A4: the carrier of space D = D by Def10;
-A5: [#] space D = D & [#] space TrivExt D = TrivExt D by Def10;
+    topology of Y} by Def7;
+A4: the carrier of space D = D by Def7;
+A5: [#] space D = D & [#] space TrivExt D = TrivExt D by Def7;
     now
       thus [#](space D) c= [#](space TrivExt D) by A5,XBOOLE_1:7;
       let P be Subset of space D;
@@ -1971,7 +1988,7 @@ A10:    B = C /\ [#]Y by A8,PRE_TOPC:def 4;
 A11:      e = {x} and
 A12:      x in C \ [#] Y;
           not x in the carrier of Y by A12,XBOOLE_0:def 5;
-          hence thesis by A11,Th75;
+          hence thesis by A11,Th32;
         end;
         then reconsider
         Q = P \/ {{x} where x is Point of X : x in C \ [#] Y} as
@@ -2041,8 +2058,8 @@ A22:    now
 A23:      e = {x} and
 A24:      x in C \ [#] Y;
 A25:      not x in the carrier of Y by A24,XBOOLE_0:def 5;
-          then not Proj TrivExt D.x in the carrier of space D by Th79;
-          hence contradiction by A21,A23,A25,Th77;
+          then not Proj TrivExt D.x in the carrier of space D by Th36;
+          hence contradiction by A21,A23,A25,Th34;
         end;
         e in Q by A20,XBOOLE_0:def 4;
         hence thesis by A22,XBOOLE_0:def 3;
@@ -2058,14 +2075,14 @@ A28:  union P is Subset of Y by A4,EQREL_1:61;
           assume
 A29:      e in (union Q) /\ [#] Y;
           then
-A30:      Proj TrivExt D.e in the carrier of space D by Th80;
+A30:      Proj TrivExt D.e in the carrier of space D by Th37;
           e in union Q by A29,XBOOLE_0:def 4;
           then consider u such that
 A31:      e in u and
 A32:      u in Q by TARSKI:def 4;
           take u;
           thus e in u by A31;
-          u is Element of TrivExt D by A32,Def10;
+          u is Element of TrivExt D by A32,Def7;
           then u = Proj TrivExt D.e by A31,EQREL_1:65;
           hence thesis by A27,A32,A30,XBOOLE_0:def 4;
         end;
@@ -2091,14 +2108,14 @@ PRE_TOPC:def 4;
     proof
       let A be Subset of space TrivExt D such that
 A37:  A = the carrier of T;
-      reconsider C = A` as Subset of TrivExt D by Def10;
+      reconsider C = A` as Subset of TrivExt D by Def7;
       reconsider B = union A as Subset of X by A2,EQREL_1:61;
       B = the carrier of Y by A4,A37,EQREL_1:def 4;
-      then B is closed by Def14;
+      then B is closed by Def11;
       then
 A38:  B` in the topology of X by PRE_TOPC:def 2;
       union C = B` by A2,EQREL_1:63;
-      then A` in the topology of space TrivExt D by A38,Th69;
+      then A` in the topology of space TrivExt D by A38,Th27;
       then A` is open by PRE_TOPC:def 2;
       hence thesis by TOPS_1:3;
     end;
@@ -2117,7 +2134,7 @@ Lm3: TopSpaceMetr RealSpace = TopStruct(#the carrier of RealSpace,
 
 definition
   func I[01] -> TopStruct means
-  :Def16:
+  :Def13:
   for P being Subset of TopSpaceMetr(
   RealSpace) st P = [.0,1.] holds it = (TopSpaceMetr RealSpace)|P;
   existence
@@ -2147,34 +2164,34 @@ registration
   proof
     reconsider P = [.0,1.] as non empty Subset of TopSpaceMetr RealSpace by Lm3
 ,METRIC_1:def 13,XXREAL_1:1;
-    I[01] = (TopSpaceMetr RealSpace)|P by Def16;
+    I[01] = (TopSpaceMetr RealSpace)|P by Def13;
     hence thesis;
   end;
 end;
 
-theorem Th83:
+theorem Th40:
   the carrier of I[01] = [.0,1.]
 proof
   reconsider P = [.0,1.] as Subset of TopSpaceMetr RealSpace by Lm3,
 METRIC_1:def 13;
-A1: I[01] = (TopSpaceMetr RealSpace)|P by Def16;
+A1: I[01] = (TopSpaceMetr RealSpace)|P by Def13;
   thus the carrier of I[01] = [#] I[01] .= [.0,1.] by A1,PRE_TOPC:def 5;
 end;
 
 definition
   func 0[01] -> Point of I[01] equals
   0;
-  coherence by Th83,XXREAL_1:1;
+  coherence by Th40,XXREAL_1:1;
   func 1[01] -> Point of I[01] equals
   1;
-  coherence by Th83,XXREAL_1:1;
+  coherence by Th40,XXREAL_1:1;
 end;
 
 definition
   let A be non empty TopSpace, B be non empty SubSpace of A, F be Function of
   A,B;
   attr F is being_a_retraction means
-  :Def19:
+  :Def16:
   for W being Point of A st W in the carrier of B holds F.W=W;
 end;
 
@@ -2203,15 +2220,15 @@ A1: R is being_a_retraction;
     now
       given xx,xx9 being Point of XX such that
 A2:   Proj TrivExt D.xx=Proj TrivExt D.xx9 & (Proj D*R).xx<>(Proj D*R) .xx9;
-      xx in the carrier of X by A2,Th78;
-      then R.xx=xx by A1,Def19;
+      xx in the carrier of X by A2,Th35;
+      then R.xx=xx by A1,Def16;
       then
 A3:   Proj D.xx = (Proj D*R).xx by FUNCT_2:15;
-      xx9 in the carrier of X by A2,Th78;
+      xx9 in the carrier of X by A2,Th35;
       then
-A4:   R.xx9=xx9 by A1,Def19;
-      Proj TrivExt D.xx=Proj D.xx & Proj TrivExt D.xx9=Proj D.xx9 by A2,Th76
-,Th78;
+A4:   R.xx9=xx9 by A1,Def16;
+      Proj TrivExt D.xx=Proj D.xx & Proj TrivExt D.xx9=Proj D.xx9 by A2,Th33
+,Th35;
       hence contradiction by A2,A4,A3,FUNCT_2:15;
     end;
     then consider
@@ -2224,8 +2241,8 @@ A5: F*(Proj TrivExt D)=(Proj D)*R by EQREL_1:56;
       let W be Point of space TrivExt D;
       let G be a_neighborhood of F.W;
       reconsider GG=(Proj D*R)"G as a_neighborhood of Proj TrivExt D"{W} by A5
-,Th39,EQREL_1:57;
-      reconsider V9=Proj TrivExt D.:GG as a_neighborhood of W by Th81;
+,Th4,EQREL_1:57;
+      reconsider V9=Proj TrivExt D.:GG as a_neighborhood of W by Th38;
       take V=V9;
       F.:V=(Proj D*R).:GG by A5,RELAT_1:126;
       hence thesis by FUNCT_1:75;
@@ -2234,14 +2251,14 @@ A5: F*(Proj TrivExt D)=(Proj D)*R by EQREL_1:56;
     take F9;
     let W be Point of space TrivExt D;
     consider W9 being Point of XX such that
-A6: Proj TrivExt D.W9=W by Th71;
+A6: Proj TrivExt D.W9=W by Th29;
     assume
 A7: W in the carrier of space D;
-    then W9 in the carrier of X by A6,Th79;
+    then W9 in the carrier of X by A6,Th36;
     then
-A8: W9=R.W9 by A1,Def19;
+A8: W9=R.W9 by A1,Def16;
 A9: F9.W = (F*Proj TrivExt D).W9 by A6,FUNCT_2:15;
-    Proj D.W9=Proj TrivExt D.W9 by A6,A7,Th76,Th79;
+    Proj D.W9=Proj TrivExt D.W9 by A6,A7,Th33,Th36;
     hence thesis by A5,A6,A8,A9,FUNCT_2:15;
   end;
 end;
@@ -2259,10 +2276,10 @@ A1: for A being Point of XX holds CH1. [A,0[01]] =A & CH1. [A,1[01]] in
   the carrier of X & (A in the carrier of X implies for T being Point of I[01]
   holds CH1. [A,T] =A);
   the carrier of [:XX,I[01]:]=[:the carrier of XX, the carrier of I[01] :]
-  by Def5;
+  by Def2;
   then reconsider
   II=[:Proj TrivExt D, id the carrier of I[01]:] as Function of the
-  carrier of [:XX,I[01]:], the carrier of [:space TrivExt D,I[01]:] by Def5;
+  carrier of [:XX,I[01]:], the carrier of [:space TrivExt D,I[01]:] by Def2;
   now
     given xx,xx9 being Point of [:XX,I[01]:] such that
 A2: II.xx=II.xx9 and
@@ -2270,14 +2287,14 @@ A3: (Proj TrivExt D*CH1).xx<>(Proj TrivExt D*CH1).xx9;
 A4: (Proj TrivExt D*CH1).xx = Proj TrivExt D.(CH1.xx) & (Proj TrivExt D*
     CH1).xx9 = Proj TrivExt D.(CH1.xx9) by FUNCT_2:15;
     consider x being Point of XX, t being Point of I[01] such that
-A5: xx=[x,t] by Th50;
+A5: xx=[x,t] by Th10;
     consider x9 being Point of XX, t9 being Point of I[01] such that
-A6: xx9=[x9,t9] by Th50;
+A6: xx9=[x9,t9] by Th10;
 A7: II.(x,t)=[Proj TrivExt D.x,t] & II.(x9,t9)=[Proj TrivExt D.x9,t9] by
 EQREL_1:58;
-    then t=t9 & Proj TrivExt D.x=Proj TrivExt D.x9 by A2,A5,A6,ZFMISC_1:27;
-    then CH1.xx=x & CH1.xx9=x9 by A1,A3,A5,A6,Th78;
-    hence contradiction by A2,A3,A5,A6,A7,A4,ZFMISC_1:27;
+    then t=t9 & Proj TrivExt D.x=Proj TrivExt D.x9 by A2,A5,A6,XTUPLE_0:1;
+    then CH1.xx=x & CH1.xx9=x9 by A1,A3,A5,A6,Th35;
+    hence contradiction by A2,A3,A5,A6,A7,A4,XTUPLE_0:1;
   end;
   then consider
   THETA being Function of the carrier of [:space TrivExt D,I[01]:],
@@ -2288,26 +2305,26 @@ A8: Proj TrivExt D*CH1 = THETA*II by EQREL_1:56;
   proof
     let WT be Point of [:space TrivExt D,I[01]:];
     reconsider xt9=WT as Element of [:the carrier of space TrivExt D, the
-    carrier of I[01]:] by Def5;
+    carrier of I[01]:] by Def2;
     let G be a_neighborhood of THETA.WT;
     reconsider FF = Proj TrivExt D*CH1 as continuous Function of [:XX,I[01]:],
     space TrivExt D;
     consider W being Point of space TrivExt D, T being Point of I[01] such
     that
-A9: WT=[W,T] by Th50;
+A9: WT=[W,T] by Th10;
     II"{xt9} = [:Proj TrivExt D"{W},{T}:] by A9,EQREL_1:60;
     then reconsider
-    GG=FF"G as a_neighborhood of [:Proj TrivExt D"{W},{T}:] by A8,Th39,
+    GG=FF"G as a_neighborhood of [:Proj TrivExt D"{W},{T}:] by A8,Th4,
 EQREL_1:57;
     W in the carrier of space TrivExt D;
     then
-A10: W in TrivExt D by Def10;
+A10: W in TrivExt D by Def7;
     then (Proj TrivExt D)"{W} = W by EQREL_1:66;
-    then Proj TrivExt D"{W} is compact by A10,Def15;
+    then Proj TrivExt D"{W} is compact by A10,Def12;
     then consider U being a_neighborhood of Proj TrivExt D"{W}, V being
     a_neighborhood of T such that
-A11: [:U,V:] c= GG by Th67;
-    reconsider H9=Proj(TrivExt D).:U as a_neighborhood of W by Th81;
+A11: [:U,V:] c= GG by Th25;
+    reconsider H9=Proj(TrivExt D).:U as a_neighborhood of W by Th38;
     reconsider H99=[:H9,V:] as a_neighborhood of WT by A9;
     take H=H99;
     II.:[:U,V:]=[:Proj TrivExt D.:U,V:] by EQREL_1:59;
@@ -2324,7 +2341,7 @@ RELAT_1:123;
   take THETA99=THETA9;
   let W be Point of space(TrivExt D);
   consider W9 being Point of XX such that
-A13: Proj(TrivExt D).W9=W by Th71;
+A13: Proj(TrivExt D).W9=W by Th29;
   II.(W9,0[01]) = [W,0[01]] by A13,EQREL_1:58;
   then
 A14: (THETA9*II). [W9,0[01]] = THETA9. [W,0[01]] by FUNCT_2:15;
@@ -2335,14 +2352,14 @@ A15: CH1. [W9,1[01]] in the carrier of X by A1;
   then
 A16: (THETA9*II). [W9,1[01]] = THETA9. [W,1[01]] by FUNCT_2:15;
   (THETA9*II). [W9,1[01]] = Proj TrivExt D.(CH1. [W9,1[01]]) by A8,FUNCT_2:15;
-  hence THETA99. [W,1[01]] in the carrier of space(D) by A16,A15,Th80;
+  hence THETA99. [W,1[01]] in the carrier of space(D) by A16,A15,Th37;
   assume
 A17: W in the carrier of space(D);
   let T be Point of I[01];
   II.(W9,T) = [W,T] by A13,EQREL_1:58;
   then
 A18: (THETA9*II). [W9,T] = THETA9. [W,T] by FUNCT_2:15;
-  CH1.(W9,T) =W9 by A1,A13,A17,Th79;
+  CH1.(W9,T) =W9 by A1,A13,A17,Th36;
   hence thesis by A8,A13,A18,FUNCT_2:15;
 end;
 
@@ -2352,8 +2369,8 @@ proof
   let r be real number;
 A1: [.0,1.] = { r1 where r1 is Real : 0 <= r1 & r1 <= 1 } by RCOMP_1:def 1;
   r is Real by XREAL_0:def 1;
-  hence 0 <= r & r <= 1 implies r in the carrier of I[01] by A1,Th83;
+  hence 0 <= r & r <= 1 implies r in the carrier of I[01] by A1,Th40;
   assume r in the carrier of I[01];
-  then ex r2 being Real st r2 = r & 0 <= r2 & r2 <= 1 by A1,Th83;
+  then ex r2 being Real st r2 = r & 0 <= r2 & r2 <= 1 by A1,Th40;
   hence thesis;
 end;

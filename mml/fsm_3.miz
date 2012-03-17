@@ -3,7 +3,7 @@
 ::  by Micha{\l} Trybulec
 ::
 :: Received May 25, 2009
-:: Copyright (c) 2009-2011 Association of Mizar Users
+:: Copyright (c) 2009-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,20 +19,21 @@ environ
       ARYTM_3, CARD_1, FINSEQ_1, ORDINAL4, RELAT_1, FUNCT_1, FLANG_1, FSM_1,
       STRUCT_0, ZFMISC_1, TARSKI, FINSET_1, REWRITE2, PRELAMB, FSM_2, LANG1,
       REWRITE1, MCART_1, FSM_3;
- notations CARD_1, TARSKI, XBOOLE_0, ZFMISC_1, XCMPLX_0, NAT_1, DOMAIN_1,
+ notations CARD_1, TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, XCMPLX_0, ORDINAL1, DOMAIN_1,
       FUNCT_1, RELSET_1, XXREAL_0, FINSET_1, AFINSQ_1, SUBSET_1, REWRITE1,
-      CATALAN2, FLANG_1, STRUCT_0, NUMBERS, MCART_1, FINSEQ_1, REWRITE3;
- constructors XXREAL_0, NAT_1, MEMBERED, REWRITE1, FLANG_1, XREAL_0, REWRITE3,
-      RELSET_1;
+      FLANG_1, STRUCT_0, NUMBERS, MCART_1, FINSEQ_1, REWRITE3;
+ constructors NAT_1, MEMBERED, REWRITE1, FLANG_1, XREAL_0, REWRITE3, RELSET_1,
+      XTUPLE_0;
  registrations CARD_1, NAT_1, XREAL_0, XBOOLE_0, MEMBERED, XXREAL_0, STRUCT_0,
       SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FINSET_1, FINSEQ_1, REWRITE3,
-      CATALAN2, FUNCT_1, RELSET_1;
+      FUNCT_1, RELSET_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0;
+ definitions STRUCT_0, XTUPLE_0;
  theorems AFINSQ_1, CARD_1, FLANG_1, FUNCT_1, NAT_1, ORDINAL1, RELAT_1,
       RELSET_1, REWRITE1, STRUCT_0, SUBSET_1, TARSKI, XBOOLE_0, XBOOLE_1,
       XREAL_1, XXREAL_0, ZFMISC_1, FINSEQ_1, FINSEQ_3, FINSEQ_5, MCART_1,
-      REWRITE3;
+      REWRITE3, XTUPLE_0;
  schemes FINSEQ_1, FRAENKEL, NAT_1, RELSET_1;
 
 begin
@@ -100,8 +101,9 @@ proof
 A1: len v = 0 and
 A2: u = v^<%e%> by FLANG_1:7;
   take e;
-  v = <%>E by A1;
-  then u = <%e%> by A2,AFINSQ_1:29;
+ v = <%>E by A1;
+  then u = {}^<%e%> by A2;
+  then u = <%e%>;
   hence thesis by AFINSQ_1:34;
 end;
 
@@ -131,7 +133,8 @@ A5: len u <> k + 1;
     take u, v2;
     thus len u <= k by A2,A5,NAT_1:8;
     thus len v2 <= k;
-    thus u = u^v2 by AFINSQ_1:29;
+    thus u = u^{}
+      .= u^v2;
   end;
 end;
 
@@ -200,24 +203,25 @@ A4: len u = 1 by A2,Th9;
   given w such that
 A5: u^w = v or w^u = v;
 A6: len v = 1 by A3,Th9;
+F: u^{} = u & {}^u = u;
   per cases by A5;
   suppose
 A7: u^w = v;
     len (u^w) = 1 + len w by A4,AFINSQ_1:17;
     then w = <%>E by A6,A7;
-    hence contradiction by A1,A7,AFINSQ_1:29;
+    hence contradiction by A1,A7,F;
   end;
   suppose
 A8: w^u = v;
     len (w^u) = 1 + len w by A4,AFINSQ_1:17;
     then w = <%>E by A6,A8;
-    hence contradiction by A1,A8,AFINSQ_1:29;
+    hence contradiction by A1,A8,F;
   end;
 end;
 
 :: Transition Systems over Lex(E)
 
-theorem Th12:
+theorem Th11:
   for TS being transition-system over Lex E
    holds the Tran of TS is Function implies TS is deterministic
 proof
@@ -274,8 +278,8 @@ A4: T = w-succ_of (S, TS);
 A5: now
       let xc be Element of cTS, xi be Element of E^omega such that
 A6:   x = [xc, xi];
-      xc = S by A6,ZFMISC_1:27;
-      hence len xi = 1 & T = xi-succ_of (xc, TS) by A3,A4,A6,ZFMISC_1:27;
+      xc = S by A6,XTUPLE_0:1;
+      hence len xi = 1 & T = xi-succ_of (xc, TS) by A3,A4,A6,XTUPLE_0:1;
     end;
     w in Lex(E) by A3,Th9;
     then reconsider x as Element of [: cTS, Lex(E) :] by ZFMISC_1:87;
@@ -368,7 +372,7 @@ A5:   x = [xc, xi] by ZFMISC_1:def 2;
     then
 A6: the Tran of bTS is Function by FUNCT_1:def 1;
     the carrier of bTS = bool (the carrier of TS) by Def1;
-    hence thesis by A6,Th12;
+    hence thesis by A6,Th11;
   end;
 end;
 
@@ -383,14 +387,14 @@ registration
   end;
 end;
 
-theorem Th13:
+theorem Th12:
   x, <%e%> ==>* y, <%>E, _bool TS implies x, <%e%> ==>. y, <%>E, _bool TS
 proof
   not <%>E in rng dom (the Tran of _bool TS) by REWRITE3:def 1;
   hence thesis by REWRITE3:92;
 end;
 
-theorem Th14:
+theorem Th13:
   len w = 1 implies (X = w-succ_of (S, TS) iff S, w ==>* X, _bool TS)
 proof
   assume
@@ -408,8 +412,7 @@ A1: len w = 1;
   then
 A2: S, w ==>* X, <%>E, _bool TS by REWRITE3:def 7;
   ex e st w = <%e%> & w.0 = e by A1,Th4;
-  then S, w ==>. X, <%>E, _bool TS by A2,Th13;
-  then S, w^<%>E ==>. X, <%>E, _bool TS by AFINSQ_1:29;
+  then S, w^{} ==>. X, <%>E, _bool TS by A2,Th12;
   then
 A3: S, w -->. X, _bool TS by REWRITE3:24;
   then X in _bool TS by REWRITE3:15;
@@ -504,7 +507,7 @@ A1: card the InitS of TS = 1 by CARD_1:30;
   end;
 end;
 
-theorem Th15:
+theorem Th14:
   the carrier of _bool SA = bool the carrier of SA
 proof
   the transition-system of _bool SA = _bool the transition-system of SA by Def3
@@ -519,7 +522,7 @@ registration
   coherence
   proof
     bool the carrier of SA is finite;
-    hence thesis by Th15;
+    hence thesis by Th14;
   end;
 end;
 
@@ -540,7 +543,7 @@ definition
   end;
 end;
 
-theorem Th16:
+theorem Th15:
   for Q being Subset of SA holds w in left-Lang(Q) iff Q meets w
   -succ_of (the InitS of SA, SA)
 proof
@@ -646,11 +649,11 @@ registration
   end;
 end;
 
-theorem Th17:
+theorem Th16:
   the carrier of _bool A = bool the carrier of A
 proof
   the semiautomaton of _bool A = _bool the semiautomaton of A by Def6;
-  hence thesis by Th15;
+  hence thesis by Th14;
 end;
 
 registration
@@ -660,7 +663,7 @@ registration
   coherence
   proof
     bool the carrier of A is finite;
-    hence thesis by Th17;
+    hence thesis by Th16;
   end;
 end;
 
@@ -681,7 +684,7 @@ definition
   end;
 end;
 
-theorem Th18:
+theorem Th17:
   for Q being Subset of A holds w in right-Lang(Q) iff w-succ_of (
   Q, A) meets (the FinalS of A)
 proof
@@ -709,7 +712,7 @@ definition
   end;
 end;
 
-theorem Th19:
+theorem Th18:
   w in Lang(A) iff ex p, q st p in the InitS of A & q in the
   FinalS of A & p, w ==>* q, A
 proof
@@ -725,7 +728,7 @@ proof
   thus thesis;
 end;
 
-theorem Th20:
+theorem Th19:
   w in Lang(A) iff w-succ_of (the InitS of A, A) meets (the FinalS of A)
 proof
   thus w in Lang(A) implies w-succ_of (the InitS of A, A) meets (the FinalS of
@@ -735,7 +738,7 @@ proof
     then consider p, q such that
 A1: p in the InitS of A and
 A2: q in the FinalS of A and
-A3: p, w ==>* q, A by Th19;
+A3: p, w ==>* q, A by Th18;
     q in w-succ_of (the InitS of A, A) by A1,A3,REWRITE3:103;
     hence thesis by A2,XBOOLE_0:3;
   end;
@@ -754,14 +757,14 @@ proof
 A1: w in Lang(A) implies w in left-Lang(the FinalS of A)
   proof
     assume w in Lang(A);
-    then w-succ_of (the InitS of A, A) meets (the FinalS of A) by Th20;
+    then w-succ_of (the InitS of A, A) meets (the FinalS of A) by Th19;
     hence thesis;
   end;
   w in left-Lang(the FinalS of A) implies w in Lang(A)
   proof
     assume w in left-Lang(the FinalS of A);
-    then the FinalS of A meets w-succ_of (the InitS of A, A) by Th16;
-    hence thesis by Th20;
+    then the FinalS of A meets w-succ_of (the InitS of A, A) by Th15;
+    hence thesis by Th19;
   end;
   hence thesis by A1,SUBSET_1:3;
 end;
@@ -772,14 +775,14 @@ proof
 A1: w in Lang(A) implies w in right-Lang(the InitS of A)
   proof
     assume w in Lang(A);
-    then w-succ_of (the InitS of A, A) meets (the FinalS of A) by Th20;
+    then w-succ_of (the InitS of A, A) meets (the FinalS of A) by Th19;
     hence thesis;
   end;
   w in right-Lang(the InitS of A) implies w in Lang(A)
   proof
     assume w in right-Lang(the InitS of A);
-    then w-succ_of (the InitS of A, A) meets (the FinalS of A) by Th18;
-    hence thesis by Th20;
+    then w-succ_of (the InitS of A, A) meets (the FinalS of A) by Th17;
+    hence thesis by Th19;
   end;
   hence thesis by A1,SUBSET_1:3;
 end;
@@ -789,7 +792,7 @@ end;
 
 reserve TS for non empty transition-system over Lex(E) \/ {<%>E};
 
-theorem Th23:
+theorem Th22:
   for R being RedSequence of ==>.-relation(TS) st (R.1)`2 = <%e%>^
   u & (R.len R)`2 = <%>E holds (R.2)`2 = <%e%>^u or (R.2)`2 = u
 proof
@@ -826,12 +829,13 @@ A9: u1 = <%f%> and
     u1 in {<%>E};
     then
 A10: u1 = <%>E by TARSKI:def 1;
+B10: {}^w = w;
     v = (R.1)`2 & w = (R.2)`2 by A4,A5,MCART_1:7;
-    hence thesis by A1,A7,A10,AFINSQ_1:29;
+    hence thesis by A1,A7,A10,B10;
   end;
 end;
 
-theorem Th24:
+theorem Th23:
   for R being RedSequence of ==>.-relation(TS) st (R.1)`2 = u & (R
   .len R)`2 = <%>E holds len R > len u
 proof
@@ -867,7 +871,7 @@ A12:    (R9.len R9)`2 = <%>E by A5,A8,A9,REWRITE3:1;
         1 in dom R9 by A11,FINSEQ_3:25;
         then
 A13:    (<*R.1*>^R9).(1 + 1) = R9.1 by REWRITE3:1;
-        per cases by A4,A5,A7,Th23;
+        per cases by A4,A5,A7,Th22;
         suppose
           (R.2)`2 = <%e%>^u1;
           hence len R > len u by A2,A3,A7,A8,A9,A10,A13,A12,XXREAL_0:2;
@@ -888,7 +892,7 @@ A14: P[0];
   hence thesis;
 end;
 
-theorem Th25:
+theorem Th24:
   for R being RedSequence of ==>.-relation(TS) st (R.1)`2 = u^v &
   (R.len R)`2 = <%>E ex l st l in dom R & (R.l)`2 = v
 proof
@@ -911,8 +915,9 @@ A6:     len u = 0;
         take j;
         rng R <> {};
         hence j in dom R by FINSEQ_3:32;
+B:      {}^v = v;
         u = {} by A6;
-        hence (R.j)`2 = v by A4,AFINSQ_1:29;
+        hence (R.j)`2 = v by A4,B;
       end;
       suppose
 A7:     len u > 0;
@@ -922,7 +927,7 @@ A8:     u = <%e%>^u1 by Th7;
         then len u + len v >= 1 + len v by XREAL_1:6;
         then len(u^v) >= 1 + len v by AFINSQ_1:17;
         then len(u^v) >= 1 by Th1;
-        then len R + len(u^v) > len(u^v) + 1 by A4,A5,Th24,XREAL_1:8;
+        then len R + len(u^v) > len(u^v) + 1 by A4,A5,Th23,XREAL_1:8;
         then len R > 1 by XREAL_1:6;
         then consider R9 being RedSequence of ==>.-relation(TS) such that
 A9:     len R9 + 1 = len R and
@@ -938,7 +943,7 @@ A13:    (R9.len R9)`2 = <%>E by A5,A9,A10;
 A14:    (R.1)`2 = <%e%>^(u1^v) by A4,A8,AFINSQ_1:27;
         thus ex k st k in dom R & (R.k)`2 = v
         proof
-          per cases by A4,A5,A14,Th23;
+          per cases by A4,A5,A14,Th22;
           suppose
             (R.2)`2 = u^v;
             then consider l such that
@@ -1003,7 +1008,7 @@ A4:   for w st w^v = u holds w2 = w;
   consistency;
 end;
 
-theorem Th26:
+theorem Th25:
   for p being RedSequence of ==>.-relation(TS) st p.1 = [x, u^w] &
 p.len p = [y, v^w] ex q being RedSequence of ==>.-relation(TS) st q.1 = [x, u]
   & q.len q = [y, v]
@@ -1084,7 +1089,7 @@ A21: q.1 = [(p.1)`1, chop(dim2(p.1, E), w)] by A6
   hence thesis by A21;
 end;
 
-theorem Th27:
+theorem Th26:
   ==>.-relation(TS) reduces [x, u^w], [y, v^w] implies
   ==>.-relation(TS) reduces [x, u], [y, v]
 proof
@@ -1094,20 +1099,20 @@ proof
   = [y, v^w] by REWRITE1:def 3;
   then
   ex q being RedSequence of ==>.-relation(TS) st q.1 = [x, u ] & q.len q =
-  [y, v] by Th26;
+  [y, v] by Th25;
   hence thesis by REWRITE1:def 3;
 end;
 
-theorem Th28:
+theorem Th27:
   x, u^w ==>* y, v^w, TS implies x, u ==>* y, v, TS
 proof
   assume x, u^w ==>* y, v^w, TS;
   then ==>.-relation(TS) reduces [x, u^w], [y, v^w] by REWRITE3:def 6;
-  then ==>.-relation(TS) reduces [x, u], [y, v] by Th27;
+  then ==>.-relation(TS) reduces [x, u], [y, v] by Th26;
   hence thesis by REWRITE3:def 6;
 end;
 
-theorem Th29:
+theorem Th28:
   for p, q being Element of TS st p, u^v ==>* q, TS holds ex r
   being Element of TS st p, u ==>* r, TS & r, v ==>* q, TS
 proof
@@ -1123,7 +1128,7 @@ A4: (R.len R)`2 = <%>E by A3,MCART_1:7;
   (R.1)`2 = u^v by A2,MCART_1:7;
   then consider l such that
 A5: l in dom R and
-A6: (R.l)`2 = v by A4,Th25;
+A6: (R.l)`2 = v by A4,Th24;
   per cases;
   suppose
 A7: l + 1 in dom R;
@@ -1135,9 +1140,8 @@ A9: l <= len R by A5,FINSEQ_3:25;
 A10: 1 in dom R & 1 <= l by A5,FINSEQ_3:25,FINSEQ_5:6;
     reconsider l as Element of NAT by ORDINAL1:def 12;
     ==>.-relation(TS) reduces R.1, R.l by A5,A10,REWRITE1:17;
-    then p, u^v ==>* r, v, TS by A2,A8,REWRITE3:def 6;
-    then p, u^v ==>* r, <%>E^v, TS by AFINSQ_1:29;
-    then p, u ==>* r, <%>E, TS by Th28;
+    then p, u^v ==>* r, {}^v, TS by A2,A8,REWRITE3:def 6;
+    then p, u ==>* r, <%>E, TS by Th27;
     hence p, u ==>* r, TS by REWRITE3:def 7;
     0 + 1 <= len R by NAT_1:13;
     then len R in dom R by FINSEQ_3:25;
@@ -1149,12 +1153,12 @@ A10: 1 in dom R & 1 <= l by A5,FINSEQ_3:25,FINSEQ_5:6;
     not l + 1 in dom R;
     then
 A11: v = <%>E by A4,A5,A6,REWRITE3:3;
-    then p, u ==>* q, TS by A1,AFINSQ_1:29;
-    hence thesis by A11,REWRITE3:95;
+    u^{} = u;
+    hence thesis by A1,A11,REWRITE3:95;
   end;
 end;
 
-theorem Th30:
+theorem Th29:
   w^v-succ_of (X, TS) = v-succ_of (w-succ_of (X, TS), TS)
 proof
 A1: now
@@ -1181,14 +1185,14 @@ A8: q in X and
 A9: q, w^v ==>* r, TS by A7,REWRITE3:103;
     consider p being Element of TS such that
 A10: q, w ==>* p, TS and
-A11: p, v ==>* r, TS by A9,Th29;
+A11: p, v ==>* r, TS by A9,Th28;
     p in w-succ_of (X, TS) by A8,A10,REWRITE3:103;
     hence x in v-succ_of (w-succ_of (X, TS), TS) by A11,REWRITE3:103;
   end;
   hence thesis by A1,TARSKI:1;
 end;
 
-theorem Th31:
+theorem Th30:
   _bool TS is non empty transition-system over Lex(E) \/ {<%>E}
 proof
   Lex(E) c= Lex(E) \/ {<%>E} by XBOOLE_1:7;
@@ -1198,7 +1202,7 @@ proof
   hence thesis by RELSET_1:5,XBOOLE_1:1;
 end;
 
-theorem Th32:
+theorem Th31:
   w-succ_of ({ v-succ_of (X, TS) }, _bool TS) = { v^w-succ_of (X, TS) }
 proof
   defpred P[Nat] means len u <= $1 implies for v holds u-succ_of({ v-succ_of (
@@ -1212,8 +1216,11 @@ A2: P[0]
 A3: u = <%>E;
     let v;
     reconsider vso = { v-succ_of (X, TS) } as Subset of _bool TS by Def1;
-    u-succ_of (vso, _bool TS) = vso by A1,A3,REWRITE3:104;
-    hence thesis by A3,AFINSQ_1:29;
+  u-succ_of (vso, _bool TS) = vso by A1,A3,REWRITE3:104;
+    hence u-succ_of({ v-succ_of (  X, TS) }, _bool TS)
+       = { v^{}-succ_of (X, TS) }
+      .= { v^{}-succ_of (X, TS) }
+      .= { v^u-succ_of (X, TS) } by A3;
   end;
 A4: now
     let k;
@@ -1242,9 +1249,9 @@ A9:       now
 A10:        x in { v^u-succ_of (X, TS) };
             then reconsider P = x as Element of _bool TS by Def1;
             x = v^u-succ_of (X, TS) by A10,TARSKI:def 1;
-            then x = u-succ_of (v-succ_of (X, TS), TS) by Th30;
+            then x = u-succ_of (v-succ_of (X, TS), TS) by Th29;
             then
-A11:        v-succ_of (X, TS), u ==>* x, _bool TS by A8,Th14;
+A11:        v-succ_of (X, TS), u ==>* x, _bool TS by A8,Th13;
             v-succ_of (X, TS) is Element of _bool TS & v-succ_of (X, TS)
             in { v-succ_of (X, TS) } by Def1,TARSKI:def 1;
             then P in u-succ_of ( { v-succ_of (X, TS) }, _bool TS) by A11,
@@ -1259,9 +1266,9 @@ A12:        x in u-succ_of ({ v-succ_of (X, TS) }, _bool TS);
             consider Q being Element of _bool TS such that
 A13:        Q in { v-succ_of (X, TS) } & Q, u ==>* P, _bool TS by A12,
 REWRITE3:103;
-            Q = v-succ_of (X, TS) & P = u-succ_of (Q, TS) by A8,A13,Th14,
+            Q = v-succ_of (X, TS) & P = u-succ_of (Q, TS) by A8,A13,Th13,
 TARSKI:def 1;
-            then P = v^u-succ_of (X, TS) by Th30;
+            then P = v^u-succ_of (X, TS) by Th29;
             hence x in { v^u-succ_of (X, TS) } by TARSKI:def 1;
           end;
           hence
@@ -1272,7 +1279,7 @@ TARSKI:def 1;
       suppose
 A14:    k <> 0;
         reconsider bTS = _bool TS as non empty transition-system over Lex(E)
-        \/ {<%>E} by Th31;
+        \/ {<%>E} by Th30;
         consider v1, v2 such that
 A15:    len v1 <= k and
 A16:    len v2 <= k and
@@ -1283,7 +1290,7 @@ A19:    the Tran of bTS = the Tran of _bool TS;
         then
         v1^v2-succ_of ({ v-succ_of (X, TS) }, _bool TS) = v1^v2-succ_of (
         { v-succ_of (X, TS) }, bTS) by REWRITE3:105
-          .= v2-succ_of (v1-succ_of ({ v-succ_of (X, TS) }, bTS), bTS) by Th30
+          .= v2-succ_of (v1-succ_of ({ v-succ_of (X, TS) }, bTS), bTS) by Th29
           .= v2-succ_of (v1-succ_of ({ v-succ_of (X, TS) }, _bool TS), bTS)
         by A19,REWRITE3:105
           .= v2-succ_of(v1-succ_of({ v-succ_of (X, TS) }, _bool TS), _bool
@@ -1304,7 +1311,7 @@ end;
 
 reserve SA for non empty semiautomaton over Lex(E) \/ {<%>E};
 
-theorem Th33:
+theorem Th32:
   w-succ_of ({ <%>E-succ_of (X, SA) }, _bool SA) = { w-succ_of (X, SA) }
 proof
   set TS = the transition-system of SA;
@@ -1313,27 +1320,27 @@ proof
   hence w-succ_of ({ Es }, _bool SA) = w-succ_of ({ Es }, _bool TS) by
 REWRITE3:105
     .= w-succ_of ({ <%>E-succ_of (X, TS) }, _bool TS) by REWRITE3:105
-    .= { <%>E^w-succ_of (X, TS) } by Th32
-    .= { w-succ_of (X, TS) } by AFINSQ_1:29
+    .= { {}^w-succ_of (X, TS) } by Th31
+    .= { w-succ_of (X, TS) }
     .= { w-succ_of (X, SA) } by REWRITE3:105;
 end;
 
 reserve A for non empty automaton over Lex(E) \/ {<%>E};
 reserve P for Subset of A;
 
-theorem Th34:
+theorem Th33:
   x in the FinalS of A & x in P implies P in the FinalS of _bool A
 proof
   assume x in the FinalS of A & x in P;
   then
 A1: P meets the FinalS of A by XBOOLE_0:3;
-  P is Element of _bool A by Th17;
+  P is Element of _bool A by Th16;
   then
   P in { Q where Q is Element of _bool A : Q meets (the FinalS of A) } by A1;
   hence thesis by Def6;
 end;
 
-theorem Th35:
+theorem Th34:
   X in the FinalS of _bool A implies X meets the FinalS of A
 proof
   assume
@@ -1345,7 +1352,7 @@ A1: X in the FinalS of _bool A;
   hence thesis;
 end;
 
-theorem Th36:
+theorem Th35:
   the InitS of _bool A = { <%>E-succ_of (the InitS of A, A) }
 proof
   the InitS of _bool A = the InitS of the semiautomaton of _bool A
@@ -1355,7 +1362,7 @@ proof
   hence thesis by REWRITE3:105;
 end;
 
-theorem Th37:
+theorem Th36:
   w-succ_of ({ <%>E-succ_of (X, A) }, _bool A) = { w-succ_of (X, A ) }
 proof
   set SA = the semiautomaton of A;
@@ -1364,50 +1371,50 @@ proof
   hence w-succ_of ({ Es }, _bool A) = w-succ_of ({ Es }, _bool SA) by
 REWRITE3:105
     .= w-succ_of ({ <%>E-succ_of (X, SA) }, _bool SA) by REWRITE3:105
-    .= { w-succ_of (X, SA) } by Th33
+    .= { w-succ_of (X, SA) } by Th32
     .= { w-succ_of (X, A) } by REWRITE3:105;
 end;
 
-theorem Th38:
+theorem Th37:
   w-succ_of (the InitS of _bool A, _bool A) = { w-succ_of (the InitS of A, A) }
 proof
   set Es = <%>E-succ_of (the InitS of A, A);
-  the InitS of _bool A = { Es } by Th36;
-  hence thesis by Th37;
+  the InitS of _bool A = { Es } by Th35;
+  hence thesis by Th36;
 end;
 
-theorem Th39:
+theorem Th38:
   Lang(A) = Lang(_bool A)
 proof
   set DA = _bool A;
 A1: w in Lang(A) implies w in Lang(DA)
   proof
     assume w in Lang(A);
-    then w-succ_of (the InitS of A, A) meets the FinalS of A by Th20;
+    then w-succ_of (the InitS of A, A) meets the FinalS of A by Th19;
     then ex x st x in w-succ_of (the InitS of A, A) & x in the FinalS of A by
 XBOOLE_0:3;
     then
-A2: w-succ_of (the InitS of A, A) in the FinalS of DA by Th34;
-    w-succ_of (the InitS of DA, DA) = { w-succ_of (the InitS of A, A) } by Th38
+A2: w-succ_of (the InitS of A, A) in the FinalS of DA by Th33;
+    w-succ_of (the InitS of DA, DA) = { w-succ_of (the InitS of A, A) } by Th37
 ;
     then w-succ_of (the InitS of A, A) in w-succ_of (the InitS of DA, DA) by
 TARSKI:def 1;
     then w-succ_of (the InitS of DA, DA) meets the FinalS of DA by A2,
 XBOOLE_0:3;
-    hence thesis by Th20;
+    hence thesis by Th19;
   end;
   w in Lang(DA) implies w in Lang(A)
   proof
     assume w in Lang(DA);
-    then w-succ_of (the InitS of DA, DA) meets the FinalS of DA by Th20;
+    then w-succ_of (the InitS of DA, DA) meets the FinalS of DA by Th19;
     then consider x such that
 A3: x in w-succ_of (the InitS of DA, DA) and
 A4: x in the FinalS of DA by XBOOLE_0:3;
     w-succ_of (the InitS of _bool A, _bool A) = { w-succ_of (the InitS of
-    A, A) } by Th38;
+    A, A) } by Th37;
     then x = w-succ_of (the InitS of A, A) by A3,TARSKI:def 1;
-    then w-succ_of (the InitS of A, A) meets the FinalS of A by A4,Th35;
-    hence thesis by Th20;
+    then w-succ_of (the InitS of A, A) meets the FinalS of A by A4,Th34;
+    hence thesis by Th19;
   end;
   hence thesis by A1,SUBSET_1:3;
 end;
@@ -1419,7 +1426,7 @@ proof
   let A be non empty automaton over Lex(E) \/ {<%>E};
   set DA = _bool A;
   take DA;
-  thus thesis by Th39;
+  thus thesis by Th38;
 end;
 
 theorem
@@ -1429,6 +1436,6 @@ being non empty deterministic finite automaton over Lex(E) st Lang(FA) = Lang(
 proof
   let FA be non empty finite automaton over Lex(E) \/ {<%>E};
   set bNFA = _bool FA;
-  Lang(FA) = Lang(bNFA) by Th39;
+  Lang(FA) = Lang(bNFA) by Th38;
   hence thesis;
 end;

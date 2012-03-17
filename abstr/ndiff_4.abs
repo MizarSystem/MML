@@ -1,0 +1,442 @@
+:: The Differentiable Functions from $\mathbbR$ into ${\mathbbR}^n$
+::  by Keiko Narita , Artur Korni\l owicz and Yasunari Shidama
+::
+:: Received September 28, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
+      NAT_1, FDIFF_1, SUBSET_1, RELAT_1, LOPBAN_1, RCOMP_1, TARSKI, SEQ_1,
+      ARYTM_3, VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2, FCONT_1,
+      COMPLEX1, STRUCT_0, CARD_1, VALUED_0, XXREAL_0, FUNCOP_1, XREAL_0,
+      ORDINAL1, XBOOLE_0, CARD_3, FINSEQ_1, FINSEQ_2, BORSUK_1, REAL_NS1,
+      RLVECT_1, SQUARE_1, RVSUM_1, SUPINF_1, XXREAL_1, PDIFF_1, EUCLID,
+      RFINSEQ2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
+      SQUARE_1, NAT_1, VALUED_0, COMPLEX1, BINOP_2, SUPINF_1, FINSEQ_1,
+      VALUED_1, FINSEQ_2, SEQ_1, SEQ_2, FINSEQOP, RVSUM_1, RCOMP_1, FDIFF_1,
+      EXTREAL1, RFINSEQ2, STRUCT_0, PRE_TOPC, RLVECT_1, VFUNCT_1, NORMSP_0,
+      NORMSP_1, EUCLID, LOPBAN_1, NFCONT_1, NDIFF_1, REAL_NS1, PDIFF_1,
+      INTEGR15, PDIFF_6, NFCONT_3, NDIFF_3, NFCONT_4, PDIFF_7;
+ constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_2, FDIFF_1, RSSPACE, VFUNCT_1,
+      NFCONT_1, NDIFF_1, SEQ_1, RELSET_1, EXTREAL1, RVSUM_1, BINOP_2, PDIFF_1,
+      INTEGR15, JORDAN2B, FINSEQOP, RFINSEQ2, PDIFF_6, PDIFF_7, NFCONT_3,
+      NDIFF_3, NFCONT_4, VALUED_2, COMSEQ_2;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_1,
+      FUNCT_2, NUMBERS, XBOOLE_0, VALUED_0, EUCLID, FINSEQ_2, NORMSP_0,
+      NORMSP_1, XXREAL_0, LOPBAN_1, LOPBAN_2, NAT_1, PDIFF_1, RCOMP_1,
+      VALUED_1, FDIFF_1, NDIFF_1, NDIFF_3, REAL_NS1, FCONT_3, VALUED_2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+
+begin :: Basic Properties of the differentiable functions of PartFunc of REAL,REAL n
+
+reserve F for non trivial RealNormSpace;
+reserve G for RealNormSpace;
+reserve y,X for set;
+reserve x,x0,x1,x2,g,g1,g2,r,r1,s,p,p1,p2 for Real;
+reserve i,m,k for Element of NAT;
+reserve n,k for non empty Element of NAT;
+reserve Y for Subset of REAL;
+reserve Z for open Subset of REAL;
+reserve s1,s3 for Real_Sequence;
+reserve seq,seq1 for sequence of G;
+reserve f,f1,f2 for PartFunc of REAL,REAL n;
+reserve g,g1,g2 for PartFunc of REAL,REAL-NS n;
+reserve h for 0-convergent non-zero Real_Sequence;
+reserve c for constant Real_Sequence;
+
+theorem :: NDIFF_4:1  ::: move eventually to VALUED_2
+  for f1, f2 being PartFunc of REAL, REAL m holds
+  f1-f2 = f1+-f2;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL,REAL n;
+  let x be real number;
+  pred f is_differentiable_in x means
+:: NDIFF_4:def 1
+  ex g be PartFunc of REAL,REAL-NS n st f=g & g is_differentiable_in x;
+end;
+
+theorem :: NDIFF_4:2
+  for n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL n,
+      h be PartFunc of REAL,REAL-NS n,
+      x be real number st h=f
+  holds f is_differentiable_in x iff h is_differentiable_in x;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL,REAL n;
+  let x be real number;
+  func diff(f,x) -> Element of REAL n means
+:: NDIFF_4:def 2
+  ex g be PartFunc of REAL,REAL-NS n st f=g & it = diff(g,x);
+end;
+
+theorem :: NDIFF_4:3
+  for n be non empty Element of NAT,
+      f be PartFunc of REAL,REAL n,
+      h be PartFunc of REAL,REAL-NS n,
+      x be real number st h=f
+holds diff(f,x) = diff(h,x);
+
+definition
+  let n,f,X;
+  pred f is_differentiable_on X means
+:: NDIFF_4:def 3
+
+  X c= dom f & for x st x in X holds f|X is_differentiable_in x;
+end;
+
+theorem :: NDIFF_4:4
+  f is_differentiable_on X implies X is Subset of REAL;
+
+theorem :: NDIFF_4:5
+  f is_differentiable_on Z iff Z c= dom f & for x st x in Z holds
+  f is_differentiable_in x;
+
+theorem :: NDIFF_4:6
+  f is_differentiable_on Y implies Y is open;
+
+definition
+  let n,f,X;
+  assume
+ f is_differentiable_on X;
+  func f`|X -> PartFunc of REAL,REAL n means
+:: NDIFF_4:def 4
+
+  dom it = X & for x st x in X holds it.x = diff(f,x);
+end;
+
+theorem :: NDIFF_4:7
+  (Z c= dom f & ex r be Element of REAL n st rng f = {r})
+  implies f is_differentiable_on Z &
+  for x st x in Z holds (f`|Z)/.x = 0*n;
+
+theorem :: NDIFF_4:8
+  for x0 being real number,f be PartFunc of REAL,REAL n,
+  g be PartFunc of REAL,REAL-NS n, N being Neighbourhood of x0
+st f=g & f is_differentiable_in x0 & N c= dom f
+for h,c st rng c = {x0} & rng (h+c)c= N
+holds h"(#)((g/*(h+c)) - g/*c) is convergent
+& diff(f,x0) = lim (h"(#)((g/*(h+c)) - g/*c));
+
+theorem :: NDIFF_4:9
+  f is_differentiable_in x0 implies r(#)f is_differentiable_in x0
+  & diff((r(#)f),x0) = r*diff(f,x0);
+
+theorem :: NDIFF_4:10
+  f is_differentiable_in x0 implies
+  -f is_differentiable_in x0 & diff(-f,x0) = -diff(f,x0);
+
+theorem :: NDIFF_4:11
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1+f2 is_differentiable_in x0 & diff(f1+f2,x0) = diff(f1,x0)+diff(f2,x0);
+
+theorem :: NDIFF_4:12
+  f1 is_differentiable_in x0 & f2 is_differentiable_in x0 implies
+  f1-f2 is_differentiable_in x0 & diff(f1-f2,x0) = diff(f1,x0)-diff(f2,x0);
+
+theorem :: NDIFF_4:13
+  Z c= dom f & f is_differentiable_on Z implies
+  r(#)f is_differentiable_on Z &
+  for x st x in Z holds ((r(#)f)`|Z).x =r*diff(f,x);
+
+theorem :: NDIFF_4:14
+  Z c= dom f & f is_differentiable_on Z implies
+  -f is_differentiable_on Z & for x st x in Z holds ((-f)`|Z).x = -diff(f,x);
+
+theorem :: NDIFF_4:15
+  Z c= dom (f1+f2) & f1 is_differentiable_on Z & f2 is_differentiable_on Z
+  implies f1+f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1+f2)`|Z).x = diff(f1,x) + diff(f2,x);
+
+theorem :: NDIFF_4:16
+  Z c= dom (f1-f2) & f1 is_differentiable_on Z & f2 is_differentiable_on Z
+  implies f1-f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1-f2)`|Z).x = diff(f1,x) - diff(f2,x);
+
+theorem :: NDIFF_4:17
+  Z c= dom f & f|Z is constant implies f is_differentiable_on Z &
+  for x st x in Z holds (f`|Z).x = 0*n;
+
+theorem :: NDIFF_4:18
+  for r,p be Element of REAL n st Z c= dom f &
+  (for x st x in Z holds f/.x = x*r + p)
+  holds f is_differentiable_on Z & for x st x in Z holds (f`|Z).x = r;
+
+theorem :: NDIFF_4:19
+  for x0 being Real holds f is_differentiable_in x0 implies
+  f is_continuous_in x0;
+
+theorem :: NDIFF_4:20
+  f is_differentiable_on X implies f|X is continuous;
+
+theorem :: NDIFF_4:21
+  f is_differentiable_on X & Z c= X implies f is_differentiable_on Z;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL, REAL n;
+  attr f is differentiable means
+:: NDIFF_4:def 5
+
+  f is_differentiable_on dom f;
+end;
+
+registration
+ let n;
+ cluster REAL --> 0*n -> differentiable for Function of REAL,REAL n;
+end;
+
+registration
+ let n;
+ cluster differentiable for Function of REAL, REAL n;
+end;
+
+theorem :: NDIFF_4:22
+  for f being differentiable PartFunc of REAL, REAL n
+   st Z c= dom f holds
+  f is_differentiable_on Z;
+
+reserve GR,R for RestFunc of REAL-NS n;
+reserve DFG,L for LinearFunc of REAL-NS n;
+
+theorem :: NDIFF_4:23
+  for R be PartFunc of REAL,REAL-NS n
+    st R is total holds R is RestFunc-like iff for r be Real st r > 0
+    ex d be Real st d > 0 & for z be Real
+    st z <> 0 & |. z .| < d holds |.z.|"* ||. R/.z .|| < r;
+
+theorem :: NDIFF_4:24
+for g be PartFunc of REAL,REAL-NS n,
+    x0 be real number st
+ 1 <= i & i <= n & g is_differentiable_in x0 holds
+   (Proj(i,n)*g) is_differentiable_in x0 &
+   Proj(i,n).(diff(g,x0)) = diff((Proj(i,n)*g),x0);
+
+theorem :: NDIFF_4:25
+for g be PartFunc of REAL,REAL-NS n,
+    x0 be real number holds
+g is_differentiable_in x0 iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*g is_differentiable_in x0);
+
+theorem :: NDIFF_4:26
+for f be PartFunc of REAL,REAL n,
+    x0 be real number st
+ 1 <= i & i <= n & f is_differentiable_in x0 holds
+   (Proj(i,n)*f) is_differentiable_in x0 &
+   Proj(i,n).(diff(f,x0)) = diff((Proj(i,n)*f),x0);
+
+theorem :: NDIFF_4:27
+for f be PartFunc of REAL,REAL n,
+    x0 be real number holds
+f is_differentiable_in x0 iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*f is_differentiable_in x0);
+
+theorem :: NDIFF_4:28
+for g be PartFunc of REAL,REAL-NS n st
+ 1 <= i & i <= n & g is_differentiable_on X holds
+   (Proj(i,n)*g) is_differentiable_on X &
+   Proj(i,n)*(g`|X) = (Proj(i,n)*g)`|X;
+
+theorem :: NDIFF_4:29
+for f be PartFunc of REAL,REAL n st
+ 1 <= i & i <= n & f is_differentiable_on X holds
+   (Proj(i,n)*f) is_differentiable_on X &
+   Proj(i,n)*(f`|X) = (Proj(i,n)*f)`|X;
+
+theorem :: NDIFF_4:30
+for g be PartFunc of REAL,REAL-NS n holds
+g is_differentiable_on X iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*g is_differentiable_on X);
+
+theorem :: NDIFF_4:31
+for f be PartFunc of REAL,REAL n holds
+f is_differentiable_on X iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*f is_differentiable_on X);
+
+theorem :: NDIFF_4:32
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1 st J=proj(1,1)
+ holds J is_continuous_in x0;
+
+theorem :: NDIFF_4:33
+for I be Function of REAL,REAL-NS 1 st I=proj(1,1) qua Function"
+ holds I is_continuous_in x0;
+
+theorem :: NDIFF_4:34
+for S,T be RealNormSpace,
+    f1 be PartFunc of S,REAL,
+    f2 be PartFunc of REAL,T,
+    x0 be Point of S
+     st x0 in dom (f2*f1) & f1 is_continuous_in x0
+      & f2 is_continuous_in f1/.x0
+ holds f2*f1 is_continuous_in x0;
+
+theorem :: NDIFF_4:35
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st J=proj(1,1)
+  & x0 in dom f & y0 in dom g & x0=<*y0*> & f = g*J
+ holds f is_continuous_in x0 iff g is_continuous_in y0;
+
+theorem :: NDIFF_4:36
+for I be Function of REAL,REAL-NS 1,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st I=proj(1,1) qua Function" &
+      x0 in dom f & y0 in dom g & x0=<*y0*> & f*I = g
+ holds f is_continuous_in x0 iff g is_continuous_in y0;
+
+theorem :: NDIFF_4:37
+for I be Function of REAL,REAL-NS 1 st I = proj(1,1) qua Function"
+ holds I is_differentiable_in x0 & diff(I,x0) = <*1*>;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL-NS n,REAL;
+  let x be Point of REAL-NS n;
+  pred f is_differentiable_in x means
+:: NDIFF_4:def 6
+
+  ex g be PartFunc of REAL n,REAL, y be Element of REAL n
+  st f=g & x=y & g is_differentiable_in y;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL-NS n,REAL;
+  let x be Point of REAL-NS n;
+  func diff(f,x) -> Function of REAL-NS n,REAL means
+:: NDIFF_4:def 7
+
+  ex g be PartFunc of REAL n,REAL, y be Element of REAL n
+   st f=g & x=y & it = diff(g,y);
+end;
+
+theorem :: NDIFF_4:38
+for J be Function of REAL 1,REAL,
+      x0 be Element of REAL 1
+   st J=proj(1,1)
+ holds J is_differentiable_in x0 & diff(J,x0) = J;
+
+theorem :: NDIFF_4:39
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1
+   st J=proj(1,1)
+ holds J is_differentiable_in x0 & diff(J,x0) = J;
+
+theorem :: NDIFF_4:40
+  for I be Function of REAL,REAL-NS 1 st
+  I=proj(1,1) qua Function" holds
+  (for R being RestFunc of REAL-NS 1,REAL-NS n holds
+      R*I is RestFunc of REAL-NS n) &
+  for L being LinearOperator of REAL-NS 1,REAL-NS n holds
+     L*I is LinearFunc of REAL-NS n;
+
+theorem :: NDIFF_4:41
+  for J be Function of REAL-NS 1,REAL st J = proj(1,1) holds
+  (for R being RestFunc of REAL-NS n holds
+      R*J is RestFunc of REAL-NS 1,REAL-NS n) &
+  for L being LinearFunc of REAL-NS n holds
+     L*J is Lipschitzian LinearOperator of REAL-NS 1,REAL-NS n;
+
+theorem :: NDIFF_4:42
+for I be Function of REAL,REAL-NS 1,
+    x0 be Point of REAL-NS 1,
+    y0 be Element of REAL,
+    g be PartFunc of REAL,REAL-NS n,
+    f be PartFunc of REAL-NS 1,REAL-NS n
+   st I=proj(1,1) qua Function" & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f*I = g & f is_differentiable_in x0
+   holds g is_differentiable_in y0
+     & diff(g,y0)=diff(f,x0).<*1*>
+     & for r be Element of REAL holds diff(f,x0).<*r*> = r*diff(g,y0);
+
+theorem :: NDIFF_4:43
+for I be Function of REAL,REAL-NS 1,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st I=proj(1,1) qua Function" & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f*I = g
+ holds f is_differentiable_in x0 iff g is_differentiable_in y0;
+
+theorem :: NDIFF_4:44
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st J=proj(1,1) & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f = g*J
+ holds f is_differentiable_in x0 iff g is_differentiable_in y0;
+
+theorem :: NDIFF_4:45
+for J be Function of REAL-NS 1,REAL,
+      x0 be Point of REAL-NS 1,
+      y0 be Element of REAL,
+      g be PartFunc of REAL,REAL-NS n,
+      f be PartFunc of REAL-NS 1,REAL-NS n
+   st J=proj(1,1) & x0 in dom f & y0 in dom g
+   & x0=<*y0*> & f = g*J & g is_differentiable_in y0
+  holds
+   f is_differentiable_in x0
+   & diff(g,y0)=diff(f,x0).<*1*>
+   & for r be Element of REAL holds diff(f,x0).<*r*> = r*diff(g,y0);
+
+theorem :: NDIFF_4:46
+  for R be RestFunc of REAL-NS n st R/.0=0.(REAL-NS n)
+  for e be Real st e > 0 ex d be Real st
+    d > 0 & for h be Real st |.h.| < d holds ||.R/.h.|| <= e*|.h.|;
+
+reserve m for non empty Element of NAT;
+
+theorem :: NDIFF_4:47
+  for R be RestFunc of REAL-NS n
+  for L be Lipschitzian LinearOperator of REAL-NS n,REAL-NS m holds
+  L*R is RestFunc of REAL-NS m;
+
+theorem :: NDIFF_4:48
+  for R1 be RestFunc of REAL-NS n st R1/.0=0.(REAL-NS n)
+  for R2 be RestFunc of REAL-NS n,REAL-NS m st R2/.0.(REAL-NS n)=0.(REAL-NS m)
+  for L be LinearFunc of REAL-NS n holds R2*(L+R1) is RestFunc of REAL-NS m;
+
+theorem :: NDIFF_4:49
+  for R1 be RestFunc of REAL-NS n st R1/.0=0.(REAL-NS n)
+  for R2 be RestFunc of REAL-NS n,REAL-NS m st R2/.0.(REAL-NS n)=0.(REAL-NS m)
+  for L1 be LinearFunc of REAL-NS n
+  for L2 be Lipschitzian LinearOperator of REAL-NS n,REAL-NS m holds
+    L2*R1+ R2*(L1+R1) is RestFunc of REAL-NS m;
+
+theorem :: NDIFF_4:50
+  for x0 be Element of REAL
+  for g be PartFunc of REAL,REAL-NS n st
+    g is_differentiable_in x0
+  for f be PartFunc of REAL-NS n,REAL-NS m st
+    f is_differentiable_in (g/.x0) holds
+  f*g is_differentiable_in x0 & diff(f*g,x0) = diff(f,g/.x0).diff(g,x0);

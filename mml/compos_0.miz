@@ -1,0 +1,981 @@
+:: Commands Structure
+::  by Andrzej Trybulec
+::
+:: Received May 20, 2010
+:: Copyright (c) 2010-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, ORDINAL1, CARD_1,
+      FUNCOP_1, RELAT_1, TARSKI, NAT_1, AFINSQ_1, AMISTD_1, AMISTD_2, ARYTM_1,
+      ZFMISC_1, AMI_1, ARYTM_3, RECDEF_2, COMPOS_1, FINSEQ_1, UNIALG_1, CARD_5,
+      XXREAL_0, VALUED_0, INT_1, SCMPDS_5, FUNCT_4, COMPOS_0, XTUPLE_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, MCART_1, SUBSET_1, SETFAM_1,
+      ORDINAL1, PBOOLE, CARD_1, CARD_3, XXREAL_0, XCMPLX_0, RELAT_1, FUNCT_1,
+      PARTFUN1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, FUNCT_7,
+      FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, RECDEF_2, AFINSQ_1,
+      STRUCT_0;
+ constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, RELSET_1, FUNCT_7,
+      PRE_POLY, PBOOLE, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0,
+      XTUPLE_0;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
+      FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
+      RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, AFINSQ_1, VALUED_1, XCMPLX_0,
+      PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2,
+      ZFMISC_1, SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions RELAT_1, FUNCOP_1, ORDINAL1, PBOOLE, PARTFUN1, MCART_1, ZFMISC_1,
+      TARSKI, STRUCT_0, FUNCT_1, XBOOLE_0, NAT_1, FUNCT_4, NAT_D, AFINSQ_1,
+      VALUED_0, VALUED_1, CARD_3, XTUPLE_0;
+ theorems ZFMISC_1, TARSKI, CARD_3, FINSEQ_1, ENUMSET1, FUNCOP_1, FUNCT_1,
+      XBOOLE_0, XBOOLE_1, ORDINAL1, MCART_1, RECDEF_2, VALUED_1,
+      FUNCT_7, CHAIN_1, XTUPLE_0;
+
+begin
+
+reserve x,A for set,
+  i,j,k,m,n, l, l1, l2 for Nat;
+reserve D for non empty set,
+  z for Nat;
+
+definition
+  let S be set;
+  attr S is standard-ins means
+:Def1:
+   ex X being non empty set
+    st S c= [: NAT,NAT*,X*:];
+end;
+
+registration
+ cluster {[0,{},{}]} -> standard-ins;
+ coherence
+  proof
+   take {{}};
+A1: {{}} c= {{}}* by ZFMISC_1:31,FINSEQ_1:49;
+A2:  {{}} c= NAT* by ZFMISC_1:31,FINSEQ_1:49;
+  {[0,{},{}]} = [:{0},{{}},{{}}:] by MCART_1:35;
+   hence {[0,{},{}]} c= [: NAT,NAT*,{{}}*:] by A1,A2,MCART_1:73;
+  end;
+ cluster {[1,{},{}]} -> standard-ins;
+ coherence
+  proof
+   take {{}};
+A3: {{}} c= {{}}* by ZFMISC_1:31,FINSEQ_1:49;
+A4:  {{}} c= NAT* by ZFMISC_1:31,FINSEQ_1:49;
+  {[1,{},{}]} = [:{1},{{}},{{}}:] by MCART_1:35;
+   hence {[1,{},{}]} c= [: NAT,NAT*,{{}}*:] by A3,A4,MCART_1:73;
+  end;
+end;
+
+notation
+  let x;
+  synonym InsCode x for x`1_3;
+  synonym JumpPart x for x`2_3;
+  synonym AddressPart x for x`3_3;
+end;
+
+registration
+ cluster non empty standard-ins for set;
+ existence
+  proof
+   take {[0,{},{}]};
+   thus thesis;
+  end;
+end;
+
+registration
+  let S be non empty standard-ins set;
+  let I be Element of S;
+  cluster AddressPart I -> Function-like Relation-like;
+  coherence
+  proof
+   consider X being non empty set such that
+A1:  S c= [:NAT,NAT*,X*:] by Def1;
+    I in S;
+    then AddressPart I in X* by A1,RECDEF_2:2;
+    hence thesis;
+  end;
+  cluster JumpPart I -> Function-like Relation-like;
+  coherence
+  proof
+   consider X being non empty set such that
+A2:  S c= [:NAT,NAT*,X*:] by Def1;
+    I in S;
+    then JumpPart I in NAT* by A2,RECDEF_2:2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let S be non empty standard-ins set;
+  let I be Element of S;
+  cluster AddressPart I -> FinSequence-like;
+  coherence
+  proof
+   consider X being non empty set such that
+A1:  S c= [:NAT,NAT*,X*:] by Def1;
+    I in S;
+    then AddressPart I in X* by A1,RECDEF_2:2;
+    hence thesis;
+  end;
+  cluster JumpPart I -> FinSequence-like;
+  coherence
+  proof
+   consider X being non empty set such that
+A2:  S c= [:NAT,NAT*,X*:] by Def1;
+    I in S;
+    then JumpPart I in NAT* by A2,RECDEF_2:2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let S be non empty standard-ins set;
+ let x be Element of S;
+ cluster InsCode x -> natural;
+ coherence
+  proof
+    consider X being non empty set such that
+A1:   S c= [:NAT,NAT*,X*:] by Def1;
+   x in S;
+   then x`1_3 in NAT by A1,RECDEF_2:2;
+   hence thesis;
+  end;
+end;
+
+registration
+  cluster standard-ins -> Relation-like for set;
+  coherence
+   proof let S be set;
+    assume S is standard-ins;
+    then ex X being non empty set st S c= [: NAT,NAT*,X*:] by Def1;
+    hence thesis;
+   end;
+end;
+
+definition
+  let S be standard-ins set;
+  func InsCodes S equals
+   proj1_3 S;
+  correctness;
+end;
+
+registration
+  let S be non empty standard-ins set;
+  cluster InsCodes S ->non empty;
+  coherence
+   proof
+    ex X being non empty set st S c= [: NAT,NAT*,X*:]
+     by Def1;
+    then reconsider II = dom S as Relation;
+    assume InsCodes S is empty;
+     then II = {};
+    hence contradiction;
+   end;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  mode InsType of S is Element of InsCodes S;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  let I be Element of S;
+  redefine func InsCode I -> InsType of S;
+  coherence
+   proof
+     consider X being non empty set such that
+A1:    S c= [:NAT,NAT*,X*:] by Def1;
+     I in S;
+     then I = [ I`1_3, I`2_3, I`3_3 ] by A1,RECDEF_2:3;
+     then [ I`1_3, I`2_3 ] in proj1 S by XTUPLE_0:def 12;
+    hence thesis by XTUPLE_0:def 12;
+   end;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  let T be InsType of S;
+  func JumpParts T equals
+  { JumpPart I where I is Element of S: InsCode I = T };
+  coherence;
+  func AddressParts T equals
+  { AddressPart I where I is Element of S: InsCode I = T };
+  coherence;
+end;
+
+registration
+  let S be non empty standard-ins set;
+  let T be InsType of S;
+  cluster AddressParts T -> functional;
+  coherence
+  proof
+    let f be set;
+    assume f in AddressParts T;
+    then ex I being Element of S st f = AddressPart I & InsCode I = T;
+    hence thesis;
+  end;
+  cluster JumpParts T -> non empty functional;
+  coherence
+  proof
+    consider y being set such that
+A1:  [T,y] in proj1 S by XTUPLE_0:def 12;
+    consider x being set such that
+A2:  [[T,y],x] in S by A1,XTUPLE_0:def 12;
+    reconsider I = [T,y,x] as Element of S by A2;
+    InsCode I = T by RECDEF_2:def 1;
+    then JumpPart I in JumpParts T;
+   hence JumpParts T is non empty;
+    let f be set;
+    assume f in JumpParts T;
+    then ex I being Element of S st f = JumpPart I & InsCode I = T;
+    hence thesis;
+  end;
+end;
+
+definition
+  let S be non empty standard-ins set;
+  attr S is homogeneous means
+:Def5:
+  for I, J being Element of S st InsCode I = InsCode J holds
+  dom JumpPart I = dom JumpPart J;
+  canceled;
+  attr S is J/A-independent means
+:Def7:
+ for T being InsType of S,
+     f1,f2 being natural-valued Function st
+      f1 in JumpParts T & dom f1 = dom f2
+    for p being set st [T,f1,p] in S holds [T,f2,p] in S;
+end;
+
+Lm1:
+  for T being InsType of {[0,{},{}]}
+   holds JumpParts T = {0}
+proof
+  let T be InsType of {[0,{},{}]};
+  set A = { JumpPart I where I is Element of {[0,{},{}]}:
+   InsCode I = T };
+  {0} = A
+  proof
+    hereby
+      let a be set;
+      assume a in {0};
+      then
+A1:   a = 0 by TARSKI:def 1;
+A2:   InsCodes {[0,{},{}]} = {0} by MCART_1:92;
+A3:     T = 0 by A2,TARSKI:def 1;
+        reconsider I = [0,0,0] as Element of {[0,{},{}]} by TARSKI:def 1;
+A4:     JumpPart I = 0 by RECDEF_2:def 2;
+        InsCode I = 0 by RECDEF_2:def 1;
+        hence a in A by A1,A3,A4;
+    end;
+    let a be set;
+    assume a in A;
+    then consider I being Element of {[0,{},{}]} such that
+A5:    a = JumpPart I & InsCode I = T;
+     I = [0,{},{}] by TARSKI:def 1;
+     then a = 0 by A5,RECDEF_2:def 2;
+    hence thesis by TARSKI:def 1;
+  end;
+  hence thesis;
+end;
+
+registration
+ cluster {[0,{},{}]} -> J/A-independent homogeneous;
+ coherence
+  proof
+    thus {[0,{},{}]} is J/A-independent
+    proof
+     let T be InsType of {[0,{},{}]},
+         f1,f2 be natural-valued Function such that
+A1:  f1 in JumpParts T and
+A2:  dom f1 = dom f2;
+     let p be set;
+A3:    f1 in {0} by A1,Lm1;
+     f1 = 0 & f2 = 0 by A3,A2,CARD_3:10;
+    hence thesis;
+    end;
+   let I, J being Element of {[0,{},{}]} such that InsCode I = InsCode J;
+    I = [0,{},{}] & J = [0,{},{}] by TARSKI:def 1;
+   hence thesis;
+  end;
+end;
+
+registration
+ cluster J/A-independent homogeneous for non empty standard-ins set;
+ existence
+  proof
+   take S = {[0,{},{}]};
+   thus thesis;
+  end;
+end;
+
+registration
+  let S be homogeneous non empty standard-ins set;
+  let T be InsType of S;
+  cluster JumpParts T -> with_common_domain;
+  coherence
+  proof
+    let f, g be Function;
+    assume that
+A1: f in JumpParts T and
+A2: g in JumpParts T;
+A3: ex I being Element of S st f = JumpPart I & InsCode I = T by A1;
+    ex J being Element of S st g = JumpPart J & InsCode J = T by A2;
+    hence thesis by A3,Def5;
+  end;
+end;
+
+registration
+ let S be non empty standard-ins set;
+ let I be Element of S;
+ cluster JumpPart I -> NAT-valued for Function;
+ coherence
+   proof let f be Function such that
+A1: f = JumpPart I;
+   consider X being non empty set such that
+A2:   S c= [:NAT,NAT*,X*:] by Def1;
+   I in S;
+   then JumpPart I in NAT* by A2,RECDEF_2:2;
+  hence thesis by A1,FINSEQ_1:def 11;
+  end;
+end;
+
+Lm2:
+:: Mozna by go po uogolnieniu przeniesc do CARD_3? !!!
+ for S be homogeneous non empty standard-ins set
+ for I being Element of S, x st x in dom JumpPart I
+  holds (product" JumpParts InsCode I).x c= NAT
+ proof let S be homogeneous non empty standard-ins set;
+  let I being Element of S, x being set such that
+A1: x in dom JumpPart I;
+   JumpPart I in JumpParts InsCode I;
+   then dom product" JumpParts InsCode I = dom JumpPart I by CARD_3:100;
+   then
+A2:  (product" JumpParts InsCode I).x =
+   {f.x where f is Element of JumpParts InsCode I: not contradiction}
+           by A1,CARD_3:74;
+   let e be set;
+   assume e in (product" JumpParts InsCode I).x;
+     then consider f being Element of JumpParts InsCode I such that
+A3:   e = f.x by A2;
+     f in JumpParts InsCode I;
+     then ex J being Element of S st f = JumpPart J & InsCode J = InsCode I;
+   hence e in NAT by A3,ORDINAL1:def 12;
+ end;
+
+Lm3:
+ for S be homogeneous non empty standard-ins set
+   st S is J/A-independent
+ for I being Element of S, x st x in dom JumpPart I
+  holds NAT c= (product" JumpParts InsCode I).x
+ proof let S be homogeneous non empty standard-ins set such that
+A1: S is J/A-independent;
+    consider D0 being non empty set such that
+A2:   S c= [:NAT,NAT*,D0*:] by Def1;
+   let I being Element of S, x being set such that
+A3: x in dom JumpPart I;
+A4: JumpPart I in JumpParts InsCode I;
+   then
+ dom product" JumpParts InsCode I = dom JumpPart I by CARD_3:100;
+   then
+A5:  (product" JumpParts InsCode I).x =
+   {f.x where f is Element of JumpParts InsCode I: not contradiction}
+           by A3,CARD_3:74;
+  let e be set;
+  assume e in NAT;
+   then reconsider e as Element of NAT;
+   set g = (JumpPart I)+*(x,e);
+A6: dom g = dom JumpPart I by FUNCT_7:30;
+   I in S;
+   then [InsCode I,JumpPart I,AddressPart I] in S by A2,RECDEF_2:3;
+   then reconsider J = [InsCode I,g,AddressPart I] as Element of S
+       by A4,A1,A6,Def7;
+   InsCode J = InsCode I by RECDEF_2:def 1;
+   then JumpPart J in JumpParts InsCode I;
+   then reconsider g as Element of JumpParts InsCode I by RECDEF_2:def 2;
+   e = g.x by A3,FUNCT_7:31;
+  hence thesis by A5;
+ end;
+
+theorem Th1:
+ for S be standard-ins non empty set
+ for I,J being Element of S
+  st InsCode I = InsCode J & JumpPart I = JumpPart J &
+   AddressPart I = AddressPart J
+ holds I = J
+proof
+ let  S be standard-ins non empty set;
+ let I,J be Element of S;
+  consider X being non empty set such that
+A1:   S c= [:NAT,NAT*,X*:] by Def1;
+A2: I in S;
+  J in S;
+ hence thesis by A2,A1,RECDEF_2:10;
+end;
+
+reserve y for set;
+
+registration
+  let S be homogeneous J/A-independent standard-ins non empty set;
+  let T be InsType of S;
+  cluster JumpParts T -> product-like;
+  coherence
+proof
+  consider y being set such that
+A1: [T,y] in proj1 S by XTUPLE_0:def 12;
+  consider z being set such that
+A2: [[T,y],z] in S by A1,XTUPLE_0:def 12;
+  reconsider I = [T,y,z] as Element of S by A2;
+A3: InsCode I = T by RECDEF_2:def 1;
+A4: JumpPart I = y by RECDEF_2:def 2;
+  set f = (dom JumpPart I) --> NAT;
+A5:   dom f = dom JumpPart I by FUNCOP_1:13;
+  for x being set holds x in JumpParts T iff
+   ex g being Function st x = g & dom g = dom f &
+     for y st y in dom f holds g.y in f.y
+   proof let x be set;
+    thus x in JumpParts T implies
+      ex g being Function st x = g & dom g = dom f &
+     for y st y in dom f holds g.y in f.y
+    proof assume x in JumpParts T;
+      then consider K being Element of S such that
+A6:    x = JumpPart K and
+A7:    InsCode K = T;
+     take g = JumpPart K;
+     thus x = g by A6;
+     thus
+A8:    dom g = dom f by A7,A3,Def5,A5;
+     let y;
+     assume
+A9:    y in dom f;
+      then f.y = NAT by A5,FUNCOP_1:7;
+     hence g.y in f.y by A8,A9,FUNCT_1:102;
+    end;
+     given g being Function such that
+A10:   x = g and
+A11:   dom g = dom f and
+A12:   for y st y in dom f holds g.y in f.y;
+A13:   dom g = dom JumpPart I by A11,FUNCOP_1:13;
+   set J = [T,g,z];
+A14: y in JumpParts T by A4,A3;
+   then
+A15: dom g = dom product" JumpParts T by A13,A4,CARD_3:100;
+A16:  for x st x in dom(product" JumpParts T)
+     holds g.x in (product" JumpParts T).x
+    proof let x;
+     assume
+A17:    x in dom(product" JumpParts T);
+A18:   NAT c= (product" JumpParts InsCode I).x by A17,A15,A13,Lm3;
+      f.x = NAT by A15,A13,A17,FUNCOP_1:7;
+      then g.x in NAT by A12,A15,A17,A11;
+     hence g.x in (product" JumpParts T).x by A3,A18;
+    end;
+A19:  g is natural-valued
+     proof let x;
+      assume
+A20:     x in dom g;
+       then
+A21:    (product" JumpParts InsCode I).x c= NAT by Lm2,A13;
+       g.x in (product" JumpParts T).x by A15,A16,A20;
+      hence g.x is natural by A21,A3;
+     end;
+    reconsider J as Element of S by A14,Def7,A4,A19,A13;
+A22: InsCode J = T by RECDEF_2:def 1;
+     g = JumpPart J by RECDEF_2:def 2;
+    hence x in JumpParts T by A22,A10;
+   end;
+  then JumpParts T = product f by CARD_3:def 5;
+ hence JumpParts T is product-like;
+end;
+end;
+
+definition
+  let S be standard-ins set;
+  let I be Element of S;
+  attr I is ins-loc-free means
+:Def8: JumpPart I is empty;
+end;
+
+registration
+  let S be standard-ins non empty set;
+  let I be Element of S;
+ cluster JumpPart I -> natural-valued for Function;
+ coherence;
+end;
+
+definition
+  let S be homogeneous J/A-independent standard-ins non empty set;
+  let I be Element of S;
+  let k be Nat;
+  func IncAddr(I,k) -> Element of S means
+:Def9:
+  InsCode it = InsCode I &
+  AddressPart it = AddressPart I &
+  JumpPart it = k + JumpPart I;
+  existence
+  proof
+    consider D0 being non empty set such that
+A1:   S c= [:NAT,NAT*,D0*:] by Def1;
+    set p = k + JumpPart I;
+    set f = product" JumpParts InsCode I;
+A2: JumpPart I in JumpParts InsCode I;
+A3: JumpParts InsCode I = product f by CARD_3:78;
+A4: dom p = dom JumpPart I by VALUED_1:def 2;
+     then
+A5: dom p  = DOM JumpParts InsCode I by A2,CARD_3:108
+      .= dom f by CARD_3:def 12;
+    for z being set st z in dom p holds p.z in f.z
+    proof
+      let z be set;
+      assume
+A6:  z in dom p;
+      reconsider z as Element of NAT by A6;
+A7:    f.z c= NAT by A6,A4,Lm2;
+       NAT c= f.z by A6,A4,Lm3;
+       then
+A8:    f.z = NAT by A7,XBOOLE_0:def 10;
+        reconsider il = (JumpPart I).z as Element of NAT by ORDINAL1:def 12;
+        p.z = k + il by A6,VALUED_1:def 2;
+        hence thesis by A8;
+    end;
+    then p in JumpParts InsCode I by A3,A5,CARD_3:9;
+    then consider II being Element of S such that
+A9: p = JumpPart II and
+ InsCode I = InsCode II;
+A10:  JumpPart I in JumpParts InsCode I;
+     I in S;
+     then [InsCode I, JumpPart I, AddressPart I] = I by A1,RECDEF_2:3;
+     then reconsider IT = [InsCode I, JumpPart II, AddressPart I]
+                       as Element of S by A10,Def7,A4,A9;
+    take IT;
+    thus InsCode IT = InsCode I by RECDEF_2:def 1;
+    thus AddressPart IT = AddressPart I by RECDEF_2:def 3;
+    thus JumpPart IT = k + JumpPart I by A9,RECDEF_2:def 2;
+  end;
+  uniqueness by Th1;
+end;
+
+canceled;
+
+theorem
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I being Element of S holds IncAddr(I, 0) = I
+proof
+  let S be homogeneous J/A-independent standard-ins non empty set,
+  I be Element of S;
+A1: InsCode IncAddr(I, 0) = InsCode I by Def9;
+A2: AddressPart IncAddr(I, 0) = AddressPart I by Def9;
+A3:  JumpPart IncAddr(I, 0) = (0 qua Nat) + JumpPart I by Def9;
+   then
+A4: dom JumpPart I = dom JumpPart IncAddr(I, 0) by VALUED_1:def 2;
+  for k being Nat st k in dom JumpPart I holds
+  (JumpPart IncAddr(I, 0)).k = (JumpPart I).k
+  proof
+    let k be Nat;
+    assume k in dom JumpPart I;
+    hence (JumpPart IncAddr(I, 0)).k
+        = (0 qua Nat) + (JumpPart I).k by A4,A3,VALUED_1:def 2
+       .= (JumpPart I).k;
+  end;
+   then JumpPart IncAddr(I, 0) = JumpPart I by A4,FINSEQ_1:13;
+  hence thesis by A1,A2,Th1;
+end;
+
+theorem Th4:
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I being Element of S st I is ins-loc-free holds IncAddr(I, k) = I
+proof
+  let S be homogeneous J/A-independent standard-ins non empty set,
+  I be Element of S such that
+A1: JumpPart I is empty;
+  set f = IncAddr(I, k);
+A2: InsCode f = InsCode I by Def9;
+A3: AddressPart f = AddressPart I by Def9;
+A4: JumpPart f = k + JumpPart I by Def9;
+   JumpPart f = JumpPart I by A1,A4;
+  hence thesis by A2,A3,Th1;
+end;
+
+theorem
+  for S being homogeneous J/A-independent standard-ins non empty set,
+      I being Element of S
+  holds JumpParts InsCode I = JumpParts InsCode IncAddr(I,k)
+proof
+  let S be homogeneous J/A-independent standard-ins non empty set,
+      I be Element of S;
+  set A = { JumpPart J where J is Element of S:
+  InsCode I = InsCode J }, B = { JumpPart J where J is Element of S:
+  InsCode IncAddr(I,k) = InsCode J };
+  A = B
+  proof
+    hereby
+      let a be set;
+      assume a in A;
+      then consider J being Element of S such that
+A1:   a = JumpPart J and
+A2:   InsCode J = InsCode I;
+      InsCode J = InsCode IncAddr(I,k) by A2,Def9;
+      hence a in B by A1;
+    end;
+    let a be set;
+    assume a in B;
+    then consider J being Element of S such that
+A3: a = JumpPart J and
+A4: InsCode J = InsCode IncAddr(I,k);
+    InsCode J = InsCode I by A4,Def9;
+    hence thesis by A3;
+  end;
+  hence thesis;
+end;
+
+theorem Th6:
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I, J being Element of S st
+  ex k being Nat st IncAddr(I,k) = IncAddr(J,k) holds I = J
+proof
+  let S be homogeneous J/A-independent standard-ins non empty set,
+      I, J be Element of S;
+  given k being Nat such that
+A1: IncAddr(I,k) = IncAddr(J,k);
+A2: InsCode I = InsCode IncAddr(I,k) by Def9
+    .= InsCode J by A1,Def9;
+A3: AddressPart I = AddressPart IncAddr(I,k) by Def9
+       .= AddressPart J by A1,Def9;
+A4: JumpPart IncAddr(I,k) = k + JumpPart I by Def9;
+    then
+A5: dom JumpPart I = dom  JumpPart IncAddr(I,k) by VALUED_1:def 2;
+A6: JumpPart IncAddr(J,k) = k + JumpPart J by Def9;
+    then
+A7: dom JumpPart J = dom  JumpPart IncAddr(J,k) by VALUED_1:def 2;
+A8: dom JumpPart I = dom JumpPart J by A2,Def5;
+  for x being set st x in dom JumpPart I holds
+  (JumpPart I).x = (JumpPart J).x
+  proof
+    let x be set;
+    assume
+A9: x in dom JumpPart I;
+A10:   (JumpPart IncAddr(I,k)).x = k + (JumpPart I).x
+             by A4,A5,A9,VALUED_1:def 2;
+A11:   (JumpPart IncAddr(J,k)).x = k + (JumpPart J).x
+             by A6,A8,A9,A7,VALUED_1:def 2;
+      thus thesis by A1,A10,A11;
+  end;
+   then JumpPart I = JumpPart J by A8,FUNCT_1:2;
+  hence thesis by A2,A3,Th1;
+end;
+
+theorem
+  for S being homogeneous J/A-independent standard-ins non empty set,
+      I being Element of S
+  holds IncAddr(IncAddr(I,k),m) = IncAddr(I,k+m)
+proof
+  let S be homogeneous J/A-independent standard-ins non empty set,
+      I be Element of S;
+A1: InsCode IncAddr(IncAddr(I,k),m) = InsCode IncAddr(I,k) by Def9
+    .= InsCode I by Def9
+    .= InsCode IncAddr(I,k+m) by Def9;
+A2: AddressPart IncAddr(IncAddr(I,k),m) = AddressPart IncAddr(I,k) by Def9
+    .= AddressPart I by Def9
+    .= AddressPart IncAddr(I,k+m) by Def9;
+A3: JumpPart IncAddr(IncAddr(I,k),m) = m + JumpPart IncAddr(I,k) by Def9;
+A4: JumpPart IncAddr(I,k) = k + JumpPart I by Def9;
+A5: JumpPart IncAddr(I,k+m) = k+m + JumpPart I by Def9;
+    then
+A6: dom JumpPart IncAddr(I,k+m) = dom JumpPart I by VALUED_1:def 2
+    .= dom JumpPart IncAddr(I,k) by A4,VALUED_1:def 2
+    .= dom JumpPart IncAddr(IncAddr(I,k),m) by A3,VALUED_1:def 2;
+  for n being set st n in dom JumpPart IncAddr(IncAddr(I,k),m) holds
+  (JumpPart IncAddr(IncAddr(I,k),m)).n = (JumpPart IncAddr(I,k+m)).n
+  proof
+    let n be set;
+    assume
+A7:   n in dom JumpPart IncAddr(IncAddr(I,k),m);
+    then
+A8: n in dom JumpPart IncAddr(I,k) by A3,VALUED_1:def 2;
+    then
+A9: n in dom JumpPart I by A4,VALUED_1:def 2;
+A10:   (JumpPart IncAddr(I,k)).n = k + (JumpPart I).n
+            by A4,A8,VALUED_1:def 2;
+A11:   (JumpPart IncAddr(IncAddr(I,k),m)).n = m + (JumpPart IncAddr(I,k)).n
+      by A7,A3,VALUED_1:def 2;
+      n in dom JumpPart IncAddr(I,k+m) by A5,A9,VALUED_1:def 2;
+      then (JumpPart IncAddr(I,k+m)).n = k + m + (JumpPart I).n
+       by A5,VALUED_1:def 2;
+      hence thesis by A11,A10;
+  end;
+   then JumpPart IncAddr(IncAddr(I,k),m) = JumpPart IncAddr(I,k+m)
+                   by A6,FUNCT_1:2;
+  hence thesis by A1,A2,Th1;
+end;
+
+theorem
+  for S being homogeneous J/A-independent standard-ins non empty set,
+  I being Element of S, x being set st x in dom JumpPart I holds
+  (JumpPart I).x in (product" JumpParts InsCode I).x
+proof
+  let S be homogeneous J/A-independent standard-ins non empty set,
+  I be Element of S, x be set such that
+A1: x in dom JumpPart I;
+A2: JumpPart I in JumpParts InsCode I;
+A3: dom product" JumpParts InsCode I = DOM JumpParts InsCode I
+  by CARD_3:def 12
+    .= dom JumpPart I by A2,CARD_3:108;
+  (JumpPart I).x in pi(JumpParts InsCode I,x) by A2,CARD_3:def 6;
+  hence thesis
+  by A1,A3,CARD_3:def 12;
+end;
+
+registration
+ cluster {[0,{},{}],[1,{},{}]} -> standard-ins;
+ coherence
+proof
+ take {{}};
+A1: {{}} c= {{}}* by ZFMISC_1:31,FINSEQ_1:49;
+A2:  {{}} c= NAT* by ZFMISC_1:31,FINSEQ_1:49;
+  {[0,{},{}]} = [:{0},{{}},{{}}:] by MCART_1:35;
+  then
+A3: {[0,{},{}]} c= [: NAT,NAT*,{{}}*:] by A1,A2,MCART_1:73;
+  {[1,{},{}]} = [:{1},{{}},{{}}:] by MCART_1:35;
+  then
+A4: {[1,{},{}]} c= [: NAT,NAT*,{{}}*:] by A1,A2,MCART_1:73;
+  {[0,{},{}]} \/ {[1,{},{}]} = {[0,{},{}],[1,0,0]} by ENUMSET1:1;
+ hence thesis by A3,A4,XBOOLE_1:8;
+end;
+end;
+
+theorem Th9:
+  for x being Element of {[0,{},{}],[1,{},{}]}
+    holds JumpPart x = {}
+ proof let x be Element of {[0,{},{}],[1,{},{}]};
+   x = [0,{},{}] or x = [1,{},{}] by TARSKI:def 2;
+
+  hence thesis by RECDEF_2:def 2;
+ end;
+
+Lm4:
+  for T being InsType of {[0,{},{}],[1,{},{}]}
+   holds JumpParts T = {0}
+proof
+  let T be InsType of {[0,{},{}],[1,{},{}]};
+  set A = { JumpPart I where I is Element of {[0,{},{}],[1,{},{}]}:
+   InsCode I = T };
+  {0} = A
+  proof
+    hereby
+      let a be set;
+      assume a in {0};
+      then
+A1:   a = 0 by TARSKI:def 1;
+A2:   InsCodes {[0,{},{}]} = {0} & InsCodes {[1,{},{}]} = {1} by MCART_1:92;
+      InsCodes {[0,{},{}],[1,{},{}]}
+         = proj1_3({[0,{},{}]} \/ {[1,{},{}]}) by ENUMSET1:1
+        .= InsCodes {[0,{},{}]} \/ InsCodes {[1,{},{}]} by XTUPLE_0:31;
+      then T in {0} or T in {1} by A2,XBOOLE_0:def 3;
+      then
+A3:     T = 0 or T = 1 by TARSKI:def 1;
+        reconsider I = [0,0,0], J = [1,0,0] as Element of {[0,{},{}],[1,{},{}]}
+        by TARSKI:def 2;
+A4:     JumpPart I = 0 & JumpPart J = 0 by RECDEF_2:def 2;
+        InsCode I = 0 & InsCode J = 1 by RECDEF_2:def 1;
+        hence a in A by A1,A3,A4;
+    end;
+    let a be set;
+    assume a in A;
+    then consider I being Element of {[0,{},{}],[1,{},{}]} such that
+A5:    a = JumpPart I & InsCode I = T;
+     I = [0,{},{}] or I = [1,{},{}] by TARSKI:def 2;
+     then a = 0 by A5,RECDEF_2:def 2;
+    hence thesis by TARSKI:def 1;
+  end;
+  hence thesis;
+end;
+
+registration
+ cluster {[0,{},{}],[1,{},{}]} -> J/A-independent homogeneous;
+ coherence
+  proof set S = {[0,{},{}],[1,{},{}]};
+   thus S is J/A-independent
+    proof
+     let T be InsType of S,
+         f1,f2 be natural-valued Function such that
+A1:  f1 in JumpParts T and
+A2:  dom f1 = dom f2;
+     let p be set;
+A3:    f1 in {0} by A1,Lm4;
+     f1 = 0 & f2 = 0 by A3,A2,CARD_3:10;
+    hence thesis;
+    end;
+   let I, J being Element of S such that InsCode I = InsCode J;
+    JumpPart I = {} & JumpPart J = {} by Th9;
+   hence thesis;
+  end;
+end;
+
+theorem
+ for S being standard-ins non empty set
+ for T being InsType of S
+  ex I being Element of S st InsCode I = T
+ proof let S be standard-ins non empty set;
+  let T be InsType of S;
+   consider y being set such that
+A1: [T,y] in proj1 S by XTUPLE_0:def 12;
+   consider z being set such that
+A2: [[T,y],z] in S by A1,XTUPLE_0:def 12;
+   reconsider I = [[T,y],z] as Element of S by A2;
+  take I;
+   I = [T,y,z];
+  hence InsCode I = T by RECDEF_2:def 1;
+ end;
+
+theorem
+ for S being homogeneous standard-ins non empty set
+ for I being Element of S st JumpPart I = {}
+  holds JumpParts InsCode I = {0}
+proof let S be homogeneous standard-ins non empty set;
+ let I be Element of S;
+  assume
+A1: JumpPart I = 0;
+   set T = InsCode I;
+  hereby
+    let a be set;
+    assume a in JumpParts T;
+    then consider II being Element of S such that
+A2: a = JumpPart II and
+A3: InsCode II = T;
+    dom JumpPart II = dom JumpPart I by A3,Def5;
+    then a = 0 by A1,A2;
+   hence a in {0} by TARSKI:def 1;
+  end;
+  let a be set;
+  assume a in {0};
+  then a = 0 by TARSKI:def 1;
+  hence a in JumpParts T by A1;
+end;
+
+begin :: The halt instruction
+
+:: Wymagamy, zeby zbior instrukcji mial instrukcje z InsCode rowym
+:: zero i zeby ta instrukcja to byla [0,{},{}], a wiec ma byc jedyna
+:: instrukcja o kodzie 0. Wymaga to modyfikacji
+:: maszyny SCMPDS, gdzie z instrukcje halt robi goto 0 (tzn. przeskok
+:: o 0);
+
+definition let X be set;
+ attr X is with_halt means
+:Def10: [0,{},{}] in X;
+end;
+
+registration
+ cluster with_halt -> non empty for set;
+ coherence by Def10;
+end;
+
+registration
+ cluster {[0,{},{}]} -> with_halt;
+ coherence
+  proof
+   thus [0,{},{}] in {[0,{},{}]} by TARSKI:def 1;
+  end;
+ cluster {[0,{},{}],[1,{},{}]} -> with_halt;
+ coherence
+  proof
+   thus [0,{},{}] in {[0,{},{}],[1,{},{}]} by TARSKI:def 2;
+  end;
+end;
+
+registration
+ cluster with_halt standard-ins for set;
+ existence
+  proof
+   take S = {[0,{},{}]};
+   thus thesis;
+  end;
+end;
+
+registration
+ cluster J/A-independent homogeneous for with_halt standard-ins set;
+ existence
+  proof
+   take S = {[0,{},{}]};
+   thus thesis;
+  end;
+end;
+
+definition
+  let S be with_halt set;
+  func halt S -> Element of S equals
+   [0,{},{}];
+  coherence by Def10;
+end;
+
+registration
+  let S be with_halt standard-ins set;
+  cluster halt S -> ins-loc-free;
+  coherence
+   proof
+    thus JumpPart halt S is empty by RECDEF_2:def 2;
+   end;
+end;
+
+registration
+  let S be with_halt standard-ins set;
+ cluster ins-loc-free for Element of S;
+ existence
+  proof
+   take halt S;
+   thus thesis;
+  end;
+end;
+
+registration let S be with_halt standard-ins set;
+ let I be ins-loc-free Element of S;
+ cluster JumpPart I -> empty;
+ coherence by Def8;
+end;
+
+theorem
+  for S being homogeneous J/A-independent standard-ins non empty
+     with_halt set,
+  I being Element of S st IncAddr(I,k) = halt S holds I = halt S
+proof
+  let S be homogeneous J/A-independent standard-ins non empty with_halt set,
+      I be Element of S;
+  assume IncAddr(I,k) = halt S;
+  then IncAddr(I,k) = IncAddr(halt S,k) by Th4;
+  hence thesis by Th6;
+end;
+
+definition
+  let S be homogeneous J/A-independent standard-ins non empty
+     with_halt set;
+  let i be Element of S;
+  attr i is No-StopCode means
+  i <> halt S;
+end;
+
+begin :: Typ "instrukcje"
+
+definition
+ mode Instructions is J/A-independent homogeneous
+        with_halt standard-ins set;
+end;
+
+registration
+ cluster non trivial for Instructions;
+ existence
+  proof
+   take {[0,{},{}],[1,{},{}]};
+    [0,{},{}] <> [1,{},{}] by XTUPLE_0:3;
+   hence thesis by CHAIN_1:3;
+  end;
+end;

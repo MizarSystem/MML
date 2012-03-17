@@ -2,7 +2,7 @@
 ::  by Yatsuka Nakamura and Piotr Rudnicki
 ::
 :: Received July 29, 1997
-:: Copyright (c) 1997-2011 Association of Mizar Users
+:: Copyright (c) 1997-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,21 +19,22 @@ environ
       GLIB_000, STRUCT_0, TREES_2, ORDINAL4, NAT_1, PARTFUN1, TARSKI, RELAT_2,
       FINSET_1, FUNCT_4, FUNCOP_1, ZFMISC_1, FINSEQ_6, GRAPH_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, NAT_1, INT_1,
-      FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, XXREAL_2, STRUCT_0, GRAPH_1,
-      GRAPH_2, MSSCYC_1, ABIAN, XXREAL_0;
- constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, FINSEQ_4, BINARITH, ABIAN,
-      LANG1, GRAPH_2, MSSCYC_1, VALUED_1, SEQ_1, XXREAL_2, RELSET_1, PRE_POLY;
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, ORDINAL1, NAT_1,
+      INT_1, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, XXREAL_2, STRUCT_0,
+      GRAPH_1, GRAPH_2, MSSCYC_1, ABIAN, XXREAL_0;
+ constructors WELLORD2, FUNCT_4, FINSEQ_4, ABIAN, GRAPH_2, MSSCYC_1, XXREAL_2,
+      RELSET_1, PRE_POLY;
  registrations XBOOLE_0, ORDINAL1, FUNCOP_1, FINSET_1, XXREAL_0, XREAL_0,
       NAT_1, INT_1, CARD_1, MEMBERED, FINSEQ_1, ABIAN, GRAPH_2, MSSCYC_1,
-      RELAT_1, XXREAL_2, STRUCT_0, RELSET_1;
+      RELAT_1, XXREAL_2, STRUCT_0, RELSET_1, FINSEQ_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin :: Preliminaries
 
 definition
-  let D be set, T be FinSequence-DOMAIN of D, S be non empty Subset of T;
+  let D be set, T be non empty FinSequenceSet of D,
+      S be non empty Subset of T;
   redefine mode Element of S -> FinSequence of D;
 end;
 
@@ -373,14 +374,18 @@ reserve G for Graph,
 
 definition
   let G be Graph;
-  func G-CycleSet -> FinSequence-DOMAIN of the carrier' of G means
+  func G-CycleSet -> FinSequenceSet of the carrier' of G means
 :: GRAPH_3:def 8
 
   for x being set holds x in it iff x is cyclic Path of G;
 end;
 
 theorem :: GRAPH_3:51
-  {} is Element of G-CycleSet;
+  {} in G-CycleSet;
+
+registration let G be Graph;
+ cluster G-CycleSet -> non empty;
+end;
 
 theorem :: GRAPH_3:52
   for c being Element of G-CycleSet st v in G-VSet rng c holds {
@@ -427,7 +432,7 @@ definition
   let X be set;
   assume
  Degree(v, X) <> 0;
-  func X-PathSet v -> FinSequence-DOMAIN of the carrier' of G equals
+  func X-PathSet v -> non empty FinSequenceSet of the carrier' of G equals
 :: GRAPH_3:def 11
 
   {

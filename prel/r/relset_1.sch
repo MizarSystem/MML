@@ -7,6 +7,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="RELSET_1"/>
 </Signature>
 <Scheme>
@@ -215,7 +216,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="34">
+<Func kind="K" nr="32">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

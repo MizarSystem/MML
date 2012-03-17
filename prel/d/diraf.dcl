@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -29,10 +30,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="94"/>
-<Adjective nr="97"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="100"/>
+<Adjective nr="103"/>
 </Cluster>
 </RCluster>
 <RCluster aid="DIRAF" nr="2">
@@ -41,27 +42,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="42" value="false"/>
-<Adjective nr="94"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="100"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
 </Cluster>
 </RCluster>
 <FCluster aid="DIRAF" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="41" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="140">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="94"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="100"/>
 </Cluster>
 </FCluster>
 </Registrations>

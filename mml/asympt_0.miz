@@ -2,7 +2,7 @@
 ::  by Richard Krueger , Piotr Rudnicki and Paul Shelley
 ::
 :: Received November 4, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,13 +19,15 @@ environ
       FUNCOP_1, VALUED_1, RELAT_1, SEQ_2, ORDINAL2, COMPLEX1, LIMFUNC1,
       FUNCT_2, INT_1, POWER, NEWTON, ASYMPT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, INT_1, NAT_1, VALUED_1, SEQ_1, SEQ_2,
-      NEWTON, POWER, FUNCOP_1, XXREAL_2, FINSET_1, LIMFUNC1, XXREAL_0;
+      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, XXREAL_0, XXREAL_2, SQUARE_1,
+      INT_1, NAT_1, VALUED_1, SEQ_1,
+      COMSEQ_2, SEQ_2,
+      NEWTON, POWER, FUNCOP_1, FINSET_1, LIMFUNC1;
  constructors REAL_1, NAT_1, SEQ_2, LIMFUNC1, NEWTON, POWER, SEQ_1, VALUED_1,
-      PARTFUN1, XXREAL_2, RELSET_1, FUNCOP_1;
+      PARTFUN1, XXREAL_2, RELSET_1, FUNCOP_1, COMSEQ_2, SQUARE_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, MEMBERED, VALUED_0, VALUED_1, FUNCT_2, POWER,
-      XXREAL_2, FUNCT_1;
+      XXREAL_2, FUNCT_1, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, VALUED_1;
  theorems TARSKI, FUNCT_2, INT_1, NAT_1, SEQ_1, SEQ_2, ABSVALUE, LIMFUNC1,
@@ -131,7 +133,7 @@ definition
   let c be real number;
 
   attr c is logbase means
-  :Def3:
+  :Def1:
   c > 0 & c <> 1;
 end;
 
@@ -152,7 +154,7 @@ registration
   existence
   proof
     take 2;
-    thus thesis by Def3;
+    thus thesis by Def1;
   end;
   cluster non negative for Real;
   existence by XXREAL_0:def 7;
@@ -162,26 +164,26 @@ registration
   existence
   proof
     take 1;
-    thus thesis by Def3;
+    thus thesis by Def1;
   end;
 end;
 
 definition
   let f be Real_Sequence;
   attr f is eventually-nonnegative means
-  :Def4:
+  :Def2:
   ex N st for n st n >= N holds f.n >= 0;
   attr f is positive means
-  :Def5:
+  :Def3:
   for n holds f.n > 0;
   attr f is eventually-positive means
-  :Def6:
+  :Def4:
   ex N st for n st n >= N holds f.n > 0;
   attr f is eventually-nonzero means
-  :Def7:
+  :Def5:
   ex N st for n st n >= N holds f.n <> 0;
   attr f is eventually-nondecreasing means
-  :Def8:
+  :Def6:
   ex N st for n st n >= N holds f.n <= f.(n+1);
 end;
 
@@ -228,22 +230,6 @@ registration
   end;
 end;
 
-definition
-  let c,d;
-  redefine func min(c,d) -> Real;
-  coherence by XREAL_0:def 1;
-  redefine func max(c,d) -> Real;
-  coherence by XREAL_0:def 1;
-end;
-
-definition
-  let N,M;
-  redefine func min(N,M) -> Element of NAT;
-  coherence by XXREAL_0:15;
-  redefine func max(N,M) -> Element of NAT;
-  coherence by XXREAL_0:16;
-end;
-
 registration
   cluster positive -> eventually-positive for Real_Sequence;
   coherence
@@ -254,7 +240,7 @@ A1: f is positive;
     take 0;
     let n;
     assume n >= 0;
-    thus thesis by A1,Def5;
+    thus thesis by A1,Def3;
   end;
   cluster eventually-positive -> eventually-nonnegative eventually-nonzero
     for Real_Sequence;
@@ -263,7 +249,7 @@ A1: f is positive;
     let f be Real_Sequence;
     assume f is eventually-positive;
     then consider N such that
-A2: for n st n >= N holds f.n > 0 by Def6;
+A2: for n st n >= N holds f.n > 0 by Def4;
     thus f is eventually-nonnegative
     proof
       take N;
@@ -288,9 +274,9 @@ A2: for n st n >= N holds f.n > 0 by Def6;
 A3: f is eventually-nonnegative and
 A4: f is eventually-nonzero;
     consider N such that
-A5: for n st n >= N holds f.n >= 0 by A3,Def4;
+A5: for n st n >= N holds f.n >= 0 by A3,Def2;
     consider M such that
-A6: for n st n >= M holds f.n <> 0 by A4,Def7;
+A6: for n st n >= M holds f.n <> 0 by A4,Def5;
     take a = max( N, M );
     let n;
     assume
@@ -310,9 +296,9 @@ definition
   coherence
   proof
     consider M such that
-A1: for n st n >= M holds g.n >= 0 by Def4;
+A1: for n st n >= M holds g.n >= 0 by Def2;
     consider N such that
-A2: for n st n >= N holds f.n >= 0 by Def4;
+A2: for n st n >= N holds f.n >= 0 by Def2;
     set a = max(N, M);
     f+g is eventually-nonnegative
     proof
@@ -336,12 +322,11 @@ end;
 
 definition
   let f be eventually-nonnegative Real_Sequence, c be positive Real;
-
   redefine func c(#)f -> eventually-nonnegative Real_Sequence;
   coherence
   proof
     consider N such that
-A1: for n st n >= N holds f.n >= 0 by Def4;
+A1: for n st n >= N holds f.n >= 0 by Def2;
     c(#)f is eventually-nonnegative
     proof
       take N;
@@ -361,7 +346,7 @@ definition
   coherence
   proof
     consider N such that
-A1: for n st n >= N holds f.n >= 0 by Def4;
+A1: for n st n >= N holds f.n >= 0 by Def2;
     c+f is eventually-nonnegative
     proof
       take N;
@@ -381,7 +366,7 @@ definition
   coherence
   proof
     consider N such that
-A1: for n st n >= N holds f.n >= 0 by Def4;
+A1: for n st n >= N holds f.n >= 0 by Def2;
     c+f is eventually-positive
     proof
       take N;
@@ -398,7 +383,7 @@ end;
 definition
   let f,g be Real_Sequence;
   func max(f, g) -> Real_Sequence means
-  :Def10:
+  :Def7:
   for n holds it.n = max( f.n, g .n );
   existence
   proof
@@ -430,14 +415,14 @@ registration
   coherence
   proof
     consider N such that
-A1: for n st n >= N holds g.n >= 0 by Def4;
+A1: for n st n >= N holds g.n >= 0 by Def2;
     take N;
     let n;
     assume n >= N;
     then
 A2: g.n >= 0 by A1;
     max( f.n, g.n ) >= g.n by XXREAL_0:25;
-    hence thesis by A2,Def10;
+    hence thesis by A2,Def7;
   end;
 end;
 
@@ -447,20 +432,20 @@ registration
   coherence
   proof
     consider N such that
-A1: for n st n >= N holds g.n > 0 by Def6;
+A1: for n st n >= N holds g.n > 0 by Def4;
     take N;
     let n;
     assume n >= N;
     then g.n > 0 by A1;
     then max( f.n, g.n ) > 0 by XXREAL_0:25;
-    hence thesis by Def10;
+    hence thesis by Def7;
   end;
 end;
 
 definition
   let f,g be Real_Sequence;
   pred g majorizes f means
-  :Def11:
+  :Def8:
   ex N st for n st n >= N holds f.n <= g.n;
 end;
 
@@ -518,9 +503,9 @@ A4: 0<als by A2,COMPLEX1:47;
   then
 A5: 0<(als*als)/2 by XREAL_1:215;
   consider N2 such that
-A6: for n st n >= N2 holds g.n > 0 by Def6;
+A6: for n st n >= N2 holds g.n > 0 by Def4;
   consider N1 such that
-A7: for n st n >= N1 holds f.n > 0 by Def6;
+A7: for n st n >= N1 holds f.n > 0 by Def4;
 A8: 0<>als by A2,COMPLEX1:47;
 A9: now
     set N3=N1+N2;
@@ -601,7 +586,7 @@ A2: not 0<=(lim f);
   then consider N1 such that
 A3: for m st N1<=m holds abs(f.m-(lim f))<-(lim f) by A1,SEQ_2:def 7;
   consider N such that
-A4: for n st n >= N holds 0<=f.n by Def4;
+A4: for n st n >= N holds 0<=f.n by Def2;
   set n1 = max( N, N1 );
 A5: now
     assume f.n1=0;
@@ -636,7 +621,7 @@ A4: f.n-f.n<=g.n-f.n by XREAL_1:9;
     hence 0<=(g-f).n by A4;
   end;
   then
-A5: g-f is eventually-nonnegative by Def4;
+A5: g-f is eventually-nonnegative by Def2;
 A6: lim(g-f) = (lim(g)) - (lim(f)) by A1,SEQ_2:12;
   g-f is convergent by A1,SEQ_2:11;
   then 0 <= lim(g-f) by A5,Th3;
@@ -651,7 +636,7 @@ Real_Sequence st f/"g is divergent_to+infty holds g/"f is convergent & lim(g/"f
 proof
   let f be Real_Sequence, g be eventually-nonzero Real_Sequence;
   consider N1 such that
-A1: for n st n >= N1 holds g.n <> 0 by Def7;
+A1: for n st n >= N1 holds g.n <> 0 by Def5;
   assume
 A2: f/"g is divergent_to+infty;
 A3: now
@@ -736,7 +721,7 @@ A1: IT is functional
       hence thesis;
     end;
     consider N such that
-A2: for n st n >= N holds f.n >= 0 by Def4;
+A2: for n st n >= N holds f.n >= 0 by Def2;
     f is Element of Funcs(NAT, REAL) & for n st n >= N holds f.n <= 1*f.n
     & f.n >= 0 by A2,FUNCT_2:8;
     then f in IT;
@@ -771,7 +756,7 @@ A3: for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A2;
     assume n >= N;
     hence t9.n >= 0 by A1,A3;
   end;
-  hence thesis by Def4;
+  hence thesis by Def2;
 end;
 
 theorem :: Threshold Rule (page 81)
@@ -804,7 +789,7 @@ A6:   N > 0;
 A7:   for n st n < N holds t.n <= b*f.n
       proof
         let n;
-A8:     f.n > 0 by Def5;
+A8:     f.n > 0 by Def3;
         assume n < N;
         then t.n / f.n in B;
         then t.n / f.n <= b by XXREAL_2:def 8;
@@ -824,7 +809,7 @@ A9:       b <= c;
             per cases;
             suppose
 A10:          n < N;
-              f.n > 0 by Def5;
+              f.n > 0 by Def3;
               then
 A11:          b*f.n <= c*f.n by A9,XREAL_1:64;
               t.n <= b*f.n by A7,A10;
@@ -851,7 +836,7 @@ A12:      b > c;
             end;
             suppose
 A13:          n >= N;
-              f.n > 0 by Def5;
+              f.n > 0 by Def3;
               then
 A14:          c*f.n <= b*f.n by A12,XREAL_1:64;
               t.n <= c*f.n by A1,A4,A13;
@@ -866,7 +851,7 @@ A14:          c*f.n <= b*f.n by A12,XREAL_1:64;
 A15: c > 0 and
 A16: for n holds t.n <= c*f.n;
   consider N such that
-A17: for n st n >= N holds t.n >= 0 by Def4;
+A17: for n st n >= N holds t.n >= 0 by Def2;
   t is Element of Funcs(NAT, REAL) & for n st n >= N holds t.n <= c*f.n &
   t.n >= 0 by A16,A17,FUNCT_2:8;
   hence thesis by A15;
@@ -988,7 +973,7 @@ A5:   now
         let n;
 A6:     f.n <= max( f.n, g.n ) & g.n <= max( f.n, g.n ) by XXREAL_0:25;
 A7:     1*max(f,g).n + 1*max(f,g).n = (1+1)*max(f,g).n;
-        (f+g).n = f.n + g.n & max(f,g).n = max( f.n, g.n ) by Def10,SEQ_1:7;
+        (f+g).n = f.n + g.n & max(f,g).n = max( f.n, g.n ) by Def7,SEQ_1:7;
         then (f+g).n <= 2*max(f,g).n by A6,A7,XREAL_1:7;
         then
 A8:     c*(f+g).n <= c*(2*max(f,g).n) by A3,XREAL_1:64;
@@ -1009,9 +994,9 @@ A11: ex c,N st c > 0 & for n st n >= N holds t.n <= c*max(f,g).n & t.n >= 0;
 A12: c > 0 and
 A13: for n st n >= N1 holds t.n <= c*max(f,g).n & t.n >= 0 by A11;
     consider M1 being Element of NAT such that
-A14: for n st n >= M1 holds f.n >= 0 by Def4;
+A14: for n st n >= M1 holds f.n >= 0 by Def2;
     consider M2 being Element of NAT such that
-A15: for n st n >= M2 holds g.n >= 0 by Def4;
+A15: for n st n >= M2 holds g.n >= 0 by Def2;
     set N = max(N1, max(M1, M2));
 A16: max(M1,M2) <= N by XXREAL_0:25;
     M2 <= max(M1,M2) by XXREAL_0:25;
@@ -1034,7 +1019,7 @@ A22:  f.n + g.n >= 0 + g.n by XREAL_1:7;
       then g.n >= 0 by A15;
       then
 A23:  f.n + g.n >= f.n + 0 by XREAL_1:7;
-      max(f,g).n = max(f.n,g.n) & (f+g).n = f.n + g.n by Def10,SEQ_1:7;
+      max(f,g).n = max(f.n,g.n) & (f+g).n = f.n + g.n by Def7,SEQ_1:7;
       then
 A24:  c*max(f,g).n <= c*(f+g).n by A12,A23,A22,A20,XREAL_1:64;
 A25:  n >= N1 by A18,A21,XXREAL_0:2;
@@ -1052,7 +1037,7 @@ theorem Th10: :: Reflexivity of Big_Oh (page 83; Problem 3.9)
 proof
   let f be eventually-nonnegative Real_Sequence;
   consider N such that
-A1: for n st n >= N holds f.n >= 0 by Def4;
+A1: for n st n >= N holds f.n >= 0 by Def2;
   f is Element of Funcs(NAT, REAL) & for n st n >= N holds f.n <= 1*f.n &
   f.n >= 0 by A1,FUNCT_2:8;
   hence thesis;
@@ -1071,7 +1056,7 @@ A2: ex c,N st c > 0 & for n st n >= N holds t.n <= c*g.n & t.n>=0;
   ct > 0 and
 A3: for n st n >= Nt holds t.n <= ct*g.n & t.n >= 0 by A2;
   consider Ng being Element of NAT such that
-A4: for n st n >= Ng holds g.n >= 0 by Def4;
+A4: for n st n >= Ng holds g.n >= 0 by Def2;
   let x be set;
   assume x in Big_Oh(f);
   then consider s being Element of Funcs(NAT, REAL) such that
@@ -1225,9 +1210,9 @@ A2: lim( f/"g ) > 0;
   consider N such that
 A3: for n st N <= n holds abs((f/"g).n-l) < delta by A1,A2,SEQ_2:def 7;
   consider N2 such that
-A4: for n st n >= N2 holds g.n > 0 by Def6;
+A4: for n st n >= N2 holds g.n > 0 by Def4;
   consider N1 such that
-A5: for n st n >= N1 holds f.n >= 0 by Def4;
+A5: for n st n >= N1 holds f.n >= 0 by Def2;
   set b = max( N, N1 );
   set a = max( b, N2 );
 A6: now
@@ -1285,9 +1270,9 @@ A1: f/"g is convergent & lim( f/"g ) = 0;
   then consider N such that
 A2: for n st N<=n holds abs((f/"g).n-0)<1 by SEQ_2:def 7;
   consider N1 such that
-A3: for n st n>=N1 holds f.n >= 0 by Def4;
+A3: for n st n>=N1 holds f.n >= 0 by Def2;
   consider N2 such that
-A4: for n st n>=N2 holds g.n > 0 by Def6;
+A4: for n st n>=N2 holds g.n > 0 by Def4;
 A5: not g in Big_Oh(f)
   proof
     assume g in Big_Oh(f);
@@ -1322,7 +1307,7 @@ A13:  g.n*(g.n)" <= c*f.n*(g.n)" by XREAL_1:64;
       hence q.n <= (f/"g).n by FUNCOP_1:7;
     end;
     then
-A14: f/"g majorizes q by Def11;
+A14: f/"g majorizes q by Def8;
     now
       take p = 1/c;
       let p1 be real number;
@@ -1418,7 +1403,7 @@ A1: IT is functional
       hence thesis;
     end;
     consider N such that
-A2: for n st n >= N holds f.n >= 0 by Def4;
+A2: for n st n >= N holds f.n >= 0 by Def2;
     f is Element of Funcs(NAT, REAL) & for n st n >= N holds f.n >= 1*f.n
     & f.n >= 0 by A2,FUNCT_2:8;
     then f in IT;
@@ -1453,7 +1438,7 @@ A3: for n st n >= N holds s.n >= d*f.n & s.n >= 0 by A2;
     assume n >= N;
     hence t9.n >= 0 by A1,A3;
   end;
-  hence thesis by Def4;
+  hence thesis by Def2;
 end;
 
 theorem Th19: :: Duality Rule (page 86)
@@ -1464,7 +1449,7 @@ proof
 A1: g is Element of Funcs(NAT, REAL) by FUNCT_2:8;
   hereby
     consider N1 such that
-A2: for n st n >= N1 holds g.n >= 0 by Def4;
+A2: for n st n >= N1 holds g.n >= 0 by Def2;
     assume f in Big_Omega(g);
     then consider t being Element of Funcs(NAT, REAL) such that
 A3: f = t and
@@ -1499,7 +1484,7 @@ A11: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
 A12: c > 0 and
 A13: for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A11;
   consider N1 such that
-A14: for n st n >= N1 holds f.n >= 0 by Def4;
+A14: for n st n >= N1 holds f.n >= 0 by Def2;
   set a = max(N, N1);
 A15: a >= N1 by XXREAL_0:25;
 A16: a >= N by XXREAL_0:25;
@@ -1568,7 +1553,7 @@ A5:   for n st n >= N holds d*f.n <= t.n & t.n >= 0 by A4;
         hence t.n >= 0 by A5;
       end;
       then
-A6:   t is eventually-nonnegative by Def4;
+A6:   t is eventually-nonnegative by Def2;
       t in Big_Omega(f) by A4;
       hence x in Big_Omega(g) by A3,A6,A2,Th21;
     end;
@@ -1586,7 +1571,7 @@ A9: for n st n >= N holds d*g.n <= t.n & t.n >= 0 by A8;
       hence t.n >= 0 by A9;
     end;
     then
-A10: t is eventually-nonnegative by Def4;
+A10: t is eventually-nonnegative by Def2;
     f in Big_Oh(f) by Th10;
     then f in Big_Oh(g) by A1,Th15;
     then
@@ -1647,7 +1632,7 @@ A6:   N > 0;
 A7:   for n st n < N holds b*f.n <= t.n
       proof
         let n;
-A8:     f.n > 0 by Def5;
+A8:     f.n > 0 by Def3;
         assume n < N;
         then t.n / f.n in B;
         then t.n / f.n >= b by XXREAL_2:def 7;
@@ -1665,7 +1650,7 @@ A9:       b <= d;
           then consider n1 such that
 A10:      b = t.n1 / f.n1 and
           n1 < N;
-          t.n1 > 0 & f.n1 > 0 by Def5;
+          t.n1 > 0 & f.n1 > 0 by Def3;
           then t.n1*(f.n1)" > 0*(f.n1)" by XREAL_1:68;
           hence b > 0 by A10,XCMPLX_0:def 9;
           let n;
@@ -1678,7 +1663,7 @@ A10:      b = t.n1 / f.n1 and
             end;
             suppose
 A11:          n >= N;
-              f.n > 0 by Def5;
+              f.n > 0 by Def3;
               then
 A12:          b*f.n <= d*f.n by A9,XREAL_1:64;
               d*f.n <= t.n by A1,A4,A11;
@@ -1696,7 +1681,7 @@ A13:      b > d;
             per cases;
             suppose
 A14:          n < N;
-              f.n > 0 by Def5;
+              f.n > 0 by Def3;
               then
 A15:          d*f.n <= b*f.n by A13,XREAL_1:64;
               b*f.n <= t.n by A7,A14;
@@ -1715,7 +1700,7 @@ A15:          d*f.n <= b*f.n by A13,XREAL_1:64;
 A16: d > 0 and
 A17: for n holds d*f.n <= t.n;
   t is Element of Funcs(NAT, REAL) & for n st n >= 0 holds d*f.n <= t.n &
-  t.n >= 0 by A17,Def5,FUNCT_2:8;
+  t.n >= 0 by A17,Def3,FUNCT_2:8;
   hence thesis by A16;
 end;
 
@@ -1725,9 +1710,9 @@ theorem :: Maximum Rule for Big_Omega (page 86)
 proof
   let f,g be eventually-nonnegative Real_Sequence;
   consider N1 such that
-A1: for n st n >= N1 holds f.n >= 0 by Def4;
+A1: for n st n >= N1 holds f.n >= 0 by Def2;
   consider N2 such that
-A2: for n st n >= N2 holds g.n >= 0 by Def4;
+A2: for n st n >= N2 holds g.n >= 0 by Def2;
   now
     let x be set;
     hereby
@@ -1757,7 +1742,7 @@ A12:    f.n >= 0 by A1;
         n >= N2 by A9,A11,XXREAL_0:2;
         then
 A13:    g.n >= 0 by A2;
-A14:    max(f,g).n = max( f.n, g.n ) by Def10;
+A14:    max(f,g).n = max( f.n, g.n ) by Def7;
         max(f,g).n <= (f+g).n
         proof
           per cases by A14,XXREAL_0:16;
@@ -1798,7 +1783,7 @@ A22: now
       then 2"*(f+g).n <= max(f.n,g.n) by SEQ_1:7;
       then d*(2"*(f+g).n) <= d*max(f.n,g.n) by A19,XREAL_1:64;
       then
-A23:  d*(2"*(f+g).n) <= d*max(f,g).n by Def10;
+A23:  d*(2"*(f+g).n) <= d*max(f,g).n by Def7;
       assume n >= a;
       then
 A24:  n >= N by A21,XXREAL_0:2;
@@ -1879,7 +1864,7 @@ A13: c > 0 and
 A14: d > 0 and
 A15: for n st n >= N holds d*f.n <= t.n & t.n <= c*f.n by A12;
     consider N1 such that
-A16: for n st n >= N1 holds f.n >= 0 by Def4;
+A16: for n st n >= N1 holds f.n >= 0 by Def2;
     set a = max( N, N1 );
 A17: a >= N1 by XXREAL_0:25;
 A18: a >= N by XXREAL_0:25;
@@ -1991,7 +1976,7 @@ A8:   N > 0;
 A9:   for n st n < N holds t.n >= a*f.n
       proof
         let n;
-A10:    f.n > 0 by Def5;
+A10:    f.n > 0 by Def3;
         assume n < N;
         then t.n / f.n in B;
         then t.n / f.n >= a by XXREAL_2:def 7;
@@ -2001,7 +1986,7 @@ A10:    f.n > 0 by Def5;
 A11:  for n st n < N holds t.n <= b*f.n
       proof
         let n;
-A12:    f.n > 0 by Def5;
+A12:    f.n > 0 by Def3;
         assume n < N;
         then t.n / f.n in B;
         then t.n / f.n <= b by XXREAL_2:def 8;
@@ -2017,7 +2002,7 @@ A12:    f.n > 0 by Def5;
         thus C > 0 by A4,XXREAL_0:25;
 A13:    now
           let n;
-          f.n > 0 & t.n > 0 by Def5;
+          f.n > 0 & t.n > 0 by Def3;
           then 0*(f.n)" < t.n*(f.n)" by XREAL_1:68;
           hence 0 < t.n / f.n by XCMPLX_0:def 9;
         end;
@@ -2029,7 +2014,7 @@ A13:    now
         end;
         hence D > 0 by A5,XXREAL_0:15;
         let n;
-A14:    f.n > 0 by Def5;
+A14:    f.n > 0 by Def3;
         per cases;
         suppose
 A15:      n < N;
@@ -2069,9 +2054,9 @@ A1: Big_Theta(max(f,g)) = { s where s is Element of Funcs(NAT, REAL) : ex c,
 d,N st c > 0 & d > 0 & for n st n >= N holds d*max(f,g).n <= s.n & s.n <= c*max
   (f,g).n } by Th27;
   consider N2 such that
-A2: for n st n >= N2 holds g.n >= 0 by Def4;
+A2: for n st n >= N2 holds g.n >= 0 by Def2;
   consider N1 such that
-A3: for n st n >= N1 holds f.n >= 0 by Def4;
+A3: for n st n >= N1 holds f.n >= 0 by Def2;
 A4: Big_Theta(f+g) = { s where s is Element of Funcs(NAT, REAL) : ex c,d,N
 st c > 0 & d > 0 & for n st n >= N holds d*(f+g).n <= s.n & s.n <= c*(f+g).n }
   by Th27;
@@ -2100,7 +2085,7 @@ A14:  now
         let n;
 A15:    g.n <= max( f.n, g.n ) & 1*max(f,g).n + 1*max(f,g).n = (1+1)*max(
         f,g).n by XXREAL_0:25;
-A16:    max(f,g).n = max( f.n, g.n ) by Def10;
+A16:    max(f,g).n = max( f.n, g.n ) by Def7;
         (f+g).n = f.n + g.n & f.n <= max( f.n, g.n ) by SEQ_1:7,XXREAL_0:25;
         then (f+g).n <= 2*max(f,g).n by A16,A15,XREAL_1:7;
         then
@@ -2138,9 +2123,9 @@ XXREAL_0:2;
       hence x in Big_Theta(max(f,g)) by A1,A5,A8,A14;
     end;
     consider N1 being Element of NAT such that
-A22: for n st n >= N1 holds f.n >= 0 by Def4;
+A22: for n st n >= N1 holds f.n >= 0 by Def2;
     consider N2 being Element of NAT such that
-A23: for n st n >= N2 holds g.n >= 0 by Def4;
+A23: for n st n >= N2 holds g.n >= 0 by Def2;
     assume x in Big_Theta(max(f,g));
     then consider t being Element of Funcs(NAT, REAL) such that
 A24: t = x and
@@ -2173,12 +2158,12 @@ A35:  f.n + g.n >= 0 + g.n by XREAL_1:7;
       then 2"*(f+g).n <= max(f.n,g.n) by SEQ_1:7;
       then d*(2"*(f+g).n) <= d*max(f.n,g.n) by A27,XREAL_1:64;
       then
-A36:  d*(2"*(f+g).n) <= d*max(f,g).n by Def10;
+A36:  d*(2"*(f+g).n) <= d*max(f,g).n by Def7;
       n >= N2 by A30,A34,XXREAL_0:2;
       then g.n >= 0 by A23;
       then
 A37:  f.n + g.n >= f.n + 0 by XREAL_1:7;
-      max(f,g).n = max(f.n,g.n) & (f+g).n = f.n + g.n by Def10,SEQ_1:7;
+      max(f,g).n = max(f.n,g.n) & (f+g).n = f.n + g.n by Def7,SEQ_1:7;
       then max(f,g).n <= (f+g).n by A37,A35,XXREAL_0:16;
       then
 A38:  c*max(f,g).n <= c*(f+g).n by A26,XREAL_1:64;
@@ -2255,7 +2240,7 @@ A1: IT is functional
       hence thesis;
     end;
     consider N such that
-A2: for n st n >= N holds f.n >= 0 by Def4;
+A2: for n st n >= N holds f.n >= 0 by Def2;
     f is Element of Funcs(NAT, REAL) & for n st n >= N & n in X holds f.n
     <= 1*f .n & f.n >= 0 by A2,FUNCT_2:8;
     then f in IT;
@@ -2291,7 +2276,7 @@ A1: IT is functional
       hence thesis;
     end;
     consider N such that
-A2: for n st n >= N holds f.n >= 0 by Def4;
+A2: for n st n >= N holds f.n >= 0 by Def2;
     f is Element of Funcs(NAT, REAL) & for n st n >= N & n in X holds f.n
     >= 1*f .n & f.n >= 0 by A2,FUNCT_2:8;
     then f in IT;
@@ -2351,7 +2336,7 @@ proof
     let x be set;
     hereby
       consider N1 such that
-A1:   for n st n >= N1 holds f.n >= 0 by Def4;
+A1:   for n st n >= N1 holds f.n >= 0 by Def2;
       assume x in Big_Theta(f,X);
       then consider t being Element of Funcs(NAT, REAL) such that
 A2:   x = t and
@@ -2430,7 +2415,7 @@ end;
 definition :: Definition of f(bn) (page 89)
   let f be Real_Sequence, b be Element of NAT;
   func f taken_every b -> Real_Sequence means
-  :Def18:
+  :Def15:
   for n holds it.n = f.(b* n);
   existence
   proof
@@ -2458,14 +2443,14 @@ end;
 definition
   let f be eventually-nonnegative Real_Sequence, b be Element of NAT;
   pred f is_smooth_wrt b means
-  :Def19:
+  :Def16:
   f is eventually-nondecreasing & f taken_every b in Big_Oh(f);
 end;
 
 definition
   let f be eventually-nonnegative Real_Sequence;
   attr f is smooth means
-  :Def20:
+  :Def17:
   for b being Element of NAT st b >= 2 holds f is_smooth_wrt b;
 end;
 
@@ -2477,10 +2462,10 @@ proof
   given b being Element of NAT such that
 A1: b >= 2 and
 A2: f is_smooth_wrt b;
-A3: f is eventually-nondecreasing by A2,Def19;
+A3: f is eventually-nondecreasing by A2,Def16;
   then consider N3 such that
-A4: for n st n >= N3 holds f.n <= f.(n+1) by Def8;
-  f taken_every b in Big_Oh(f) by A2,Def19;
+A4: for n st n >= N3 holds f.n <= f.(n+1) by Def6;
+  f taken_every b in Big_Oh(f) by A2,Def16;
   then consider t being Element of Funcs(NAT, REAL) such that
 A5: f taken_every b = t and
 A6: ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0;
@@ -2554,7 +2539,7 @@ A24:    c*f.m <= (c to_power (k+1))*f.n by A7,POWER:27;
         end;
         then (f taken_every b).m <= c*f.m by A5,A8;
         then
-A25:    f.(b*m) <= c*f.m by Def18;
+A25:    f.(b*m) <= c*f.m by Def15;
         f.(b|^(k+1)*n) = f.((b to_power (k+1))*n)
           .= f.((b to_power 1)*(b to_power k)*n) by A1,POWER:27
           .= f.(b*b|^k*n) by POWER:25
@@ -2569,23 +2554,23 @@ A26:  P[0];
       for k holds P[k] from NAT_1:sch 1( A26, A22 );
       then f.(b|^i*n) <= c|^i*f.n;
       then
-A27:  (f taken_every i1).n <= c|^i*f.n by Def18;
+A27:  (f taken_every i1).n <= c|^i*f.n by Def15;
 A28:  n >= N3 by A10,A18,XXREAL_0:2;
       then a*n >= N3 by A16,XXREAL_0:2;
       then f.(a*n) <= f.(i1*n) by A4,A17,Th1;
-      then (f taken_every a).n <= f.(i1*n) by Def18;
-      then (f taken_every a).n <= (f taken_every i1).n by Def18;
+      then (f taken_every a).n <= f.(i1*n) by Def15;
+      then (f taken_every a).n <= (f taken_every i1).n by Def15;
       hence (f taken_every a).n <= c|^i*f.n by A27,XXREAL_0:2;
       f.n <= f.(a*n) by A4,A28,A16,Th1;
-      hence (f taken_every a).n >= 0 by A21,Def18;
+      hence (f taken_every a).n >= 0 by A21,Def15;
     end;
     c|^i = c to_power i;
     then f taken_every a is Element of Funcs(NAT, REAL) & c|^i > 0 by A7,
 FUNCT_2:8,POWER:34;
     then f taken_every a in Big_Oh(f) by A15;
-    hence f is_smooth_wrt a by A3,Def19;
+    hence f is_smooth_wrt a by A3,Def16;
   end;
-  hence thesis by Def20;
+  hence thesis by Def17;
 end;
 
 theorem Th38: :: First half of smoothness rule proof (page 90)
@@ -2600,8 +2585,8 @@ proof
 A1: f is smooth and
 A2: b >= 2 and
 A3: t in Big_Oh(f, { b|^n where n is Element of NAT : not contradiction } );
-A4: f is_smooth_wrt b by A1,A2,Def20;
-  then f taken_every b in Big_Oh(f) by Def19;
+A4: f is_smooth_wrt b by A1,A2,Def17;
+  then f taken_every b in Big_Oh(f) by Def16;
   then consider s being Element of Funcs(NAT,REAL) such that
 A5: f taken_every b = s and
 A6: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0;
@@ -2609,11 +2594,11 @@ A6: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0;
 A7: c > 0 and
 A8: for n st n >= N3 holds s.n <= c*f.n & s.n >= 0 by A6;
 A9: b > 1 by A2,XXREAL_0:2;
-  f is eventually-nondecreasing by A4,Def19;
+  f is eventually-nondecreasing by A4,Def16;
   then consider N1 such that
-A10: for m st m >= N1 holds f.m <= f.(m+1) by Def8;
+A10: for m st m >= N1 holds f.m <= f.(m+1) by Def6;
   consider N2 such that
-A11: for m st m >= N2 holds t.m <= t.(m+1) by Def8;
+A11: for m st m >= N2 holds t.m <= t.(m+1) by Def6;
   set X = { b|^n where n is Element of NAT : not contradiction };
   consider r being Element of Funcs(NAT, REAL) such that
 A12: r = t and
@@ -2638,7 +2623,7 @@ A20: N0 >= N4 by A19,XXREAL_0:2;
   then
 A21: N0 >= N3 by A19,XXREAL_0:2;
   consider N5 such that
-A22: for n st n >= N5 holds t.n >= 0 by Def4;
+A22: for n st n >= N5 holds t.n >= 0 by Def2;
   set N = max(N5, max(1, b*N0));
 A23: N >= max(1, b*N0) by XXREAL_0:25;
   max(1, b*N0) >= b*N0 by XXREAL_0:25;
@@ -2706,7 +2691,7 @@ A42: n >= N0 by A25,A31,XXREAL_0:2;
     then n2 >= N4 by A39,XXREAL_0:2;
     then
 A43: t.n2 <= a*f.n2 by A12,A15,A37;
-    f.(b*n1) = s.n1 by A5,Def18;
+    f.(b*n1) = s.n1 by A5,Def15;
     then f.(b*n1) <= c*f.n1 by A8,A41;
     then
 A44: a*f.(b*n1) <= a*(c*f.n1) by A14,XREAL_1:64;
@@ -2741,20 +2726,20 @@ A1: f is smooth and
 A2: b >= 2 and
 A3: t in Big_Omega(f, { b|^n where n is Element of NAT : not contradiction } );
   consider N2 such that
-A4: for m st m >= N2 holds t.m <= t.(m+1) by Def8;
-A5: f is_smooth_wrt b by A1,A2,Def20;
-  then (f taken_every b) in Big_Oh(f) by Def19;
+A4: for m st m >= N2 holds t.m <= t.(m+1) by Def6;
+A5: f is_smooth_wrt b by A1,A2,Def17;
+  then (f taken_every b) in Big_Oh(f) by Def16;
   then consider s being Element of Funcs(NAT,REAL) such that
 A6: (f taken_every b) = s and
 A7: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0;
   consider c,N3 such that
 A8: c > 0 and
 A9: for n st n >= N3 holds s.n <= c*f.n & s.n >= 0 by A7;
-  f is eventually-nondecreasing by A5,Def19;
+  f is eventually-nondecreasing by A5,Def16;
   then consider N1 such that
-A10: for m st m >= N1 holds f.m <= f.(m+1) by Def8;
+A10: for m st m >= N1 holds f.m <= f.(m+1) by Def6;
   consider N5 such that
-A11: for n st n >= N5 holds t.n >= 0 by Def4;
+A11: for n st n >= N5 holds t.n >= 0 by Def2;
   set X = { b|^n where n is Element of NAT : not contradiction };
   consider r being Element of Funcs(NAT, REAL) such that
 A12: r = t and
@@ -2845,7 +2830,7 @@ A41: a*f.n1 <= t.n1 by A12,A15,A38;
     then c"*s.n1 <= c"*(c*f.n1) by A8,XREAL_1:64;
     then c"*s.n1 <= (c"*c)*f.n1;
     then c"*s.n1 <= 1*f.n1 by A8,XCMPLX_0:def 7;
-    then c"*f.(b*n1) <= f.n1 by A6,Def18;
+    then c"*f.(b*n1) <= f.n1 by A6,Def15;
     then
 A42: a*(c"*f.(b*n1)) <= a*f.n1 by A14,XREAL_1:64;
     [\log(b,n)/] <= log(b,n) by INT_1:def 6;
@@ -3075,9 +3060,9 @@ A25: ex c,N st c > 0 & for n st n >= N holds t.n <= c*(f+g).n & t.n >= 0;
 A26: c > 0 and
 A27: for n st n >= N3 holds t.n <= c*(f+g).n & t.n >= 0 by A25;
     consider N1 such that
-A28: for n st n >= N1 holds f.n >= 0 by Def4;
+A28: for n st n >= N1 holds f.n >= 0 by Def2;
     consider N2 such that
-A29: for n st n >= N2 holds g.n >= 0 by Def4;
+A29: for n st n >= N2 holds g.n >= 0 by Def2;
     set N = max(N3,max(N1,N2));
 A30: N >= max(N1,N2) by XXREAL_0:25;
     defpred Q[Element of NAT,Real] means (t.$1 <= c*f.$1 implies $2 = 0) & (c*
@@ -3257,7 +3242,7 @@ A24:    r.n <= e*f.n by A19,XXREAL_0:2;
         e*f.n <= e*max(f.n, g.n) by A14,XREAL_1:64,XXREAL_0:25;
         then r.n <= e*max(f.n, g.n) by A24,XXREAL_0:2;
         then max(r.n, s.n) <= e*max(f.n, g.n) by A23,XXREAL_0:28;
-        then max(r.n, s.n) <= e*max(f,g).n by Def10;
+        then max(r.n, s.n) <= e*max(f,g).n by Def7;
         hence t.n <= e*max(f,g).n by A5,A10,A6;
         max(f9.n, g9.n) >= f9.n & f9.n >= 0 by A10,A13,A18,XXREAL_0:25;
         hence t.n >= 0 by A5;
@@ -3272,9 +3257,9 @@ A26: ex c,N st c > 0 & for n st n >= N holds t.n <= c*max(f,g).n & t.n >= 0;
 A27: c > 0 and
 A28: for n st n >= N3 holds t.n <= c*max(f,g).n & t.n >= 0 by A26;
     consider N1 such that
-A29: for n st n >= N1 holds f.n >= 0 by Def4;
+A29: for n st n >= N1 holds f.n >= 0 by Def2;
     consider N2 such that
-A30: for n st n >= N2 holds g.n >= 0 by Def4;
+A30: for n st n >= N2 holds g.n >= 0 by Def2;
     set N = max(N3,max(N1,N2));
     defpred P[Element of NAT,Real] means (f.$1 >= g.$1 or $1 < N implies $2 =
     t.$1) & (f.$1 < g.$1 & $1 >= N implies $2 = 0);
@@ -3389,7 +3374,7 @@ A50:  0*g.n <= c*g.n by A27;
       suppose
 A51:    f.n < g.n;
         then max(f.n,g.n) = g.n by XXREAL_0:def 10;
-        then max(f,g).n = g.n by Def10;
+        then max(f,g).n = g.n by Def7;
         hence g9.n <= c*g.n & g9.n >= 0 by A36,A49,A51;
       end;
     end;
@@ -3414,7 +3399,7 @@ A57:  0*f.n <= c*f.n by A27;
       suppose
 A58:    f.n >= g.n;
         then max(f.n,g.n) = f.n by XXREAL_0:def 10;
-        then max(f,g).n = f.n by Def10;
+        then max(f,g).n = f.n by Def7;
         hence f9.n <= c*f.n & f9.n >= 0 by A33,A56,A58;
       end;
       suppose

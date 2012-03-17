@@ -2,7 +2,7 @@
 ::  by Yuichi Futa , Hiroyuki Okazaki and Yasunari Shidama
 ::
 :: Received August 17, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,18 +18,16 @@ environ
       FINSEQ_1, STRUCT_0, FUNCT_1, XBOOLE_0, VALUED_1, ORDINAL4, ARYTM_3,
       RELAT_1, PARTFUN1, NAT_1, INT_1, CARD_3, CARD_1, SUPINF_2, TARSKI,
       FUNCT_2, ARYTM_1, RLVECT_3, RLVECT_X, XXREAL_0, VALUED_0, FUNCT_4,
-      FUNCOP_1;
+      FUNCOP_1, FINSEQ_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, DOMAIN_1, FUNCOP_1, FUNCT_4, FINSET_1, CARD_1, NUMBERS,
-      XXREAL_0, REAL_1, NAT_1, INT_1, VALUED_0, BINOP_2, FINSEQ_1, SEQ_1,
-      STRUCT_0, RLVECT_1, RLSUB_1, RLVECT_2, RLVECT_3, RUSUB_4, VFUNCT_1,
-      BINOM;
- constructors FINSEQ_4, REALSET1, RLSUB_2, RLVECT_2, RLVECT_3, FUNCT_4,
-      ARYTM_1, ARYTM_0, RUSUB_4, SQUARE_1, XXREAL_2, BINOP_2, SEQ_1, FUNCSDOM,
-      VALUED_2, TOPREALB, VFUNCT_1, BINOM;
+      XXREAL_0, REAL_1, ORDINAL1, INT_1, VALUED_0, BINOP_2, FINSEQ_1, SEQ_1,
+      FINSEQ_2, STRUCT_0, RLVECT_1, RLSUB_1, RLVECT_2, RLVECT_3, RUSUB_4,
+      VFUNCT_1, BINOM;
+ constructors REALSET1, RLVECT_2, RLVECT_3, FUNCT_4, RUSUB_4, BINOP_2, SEQ_1,
+      FUNCSDOM, TOPREALB, VFUNCT_1, BINOM;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSET_1, NUMBERS, STRUCT_0,
-      ORDINAL1, REAL_1, INT_1, XREAL_0, RLVECT_2, VALUED_0, FINSEQ_1, FINSEQ_2,
-      CARD_1, RVSUM_1;
+      ORDINAL1, INT_1, XREAL_0, RLVECT_2, VALUED_0, FINSEQ_1, FINSEQ_2, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions RLVECT_2, TARSKI, RUSUB_4, FINSEQ_1;
  theorems FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, RLSUB_1,
@@ -889,7 +887,7 @@ Lm1:
  for RS be RealLinearSpace,
      X be Subset of RS,
      g1,h1 be FinSequence of RS,
-        a1 be integer-valued FinSequence st
+        a1 be INT-valued FinSequence st
        rng g1 c= X & len g1 =len h1 & len g1 = len a1 &
        for i be Nat
          st i in Seg (len g1) holds
@@ -899,7 +897,7 @@ Lm1:
     let RS be RealLinearSpace, X be Subset of RS;
     defpred P[Nat] means
     for g,h be FinSequence of RS,
-     s be integer-valued FinSequence st
+     s be INT-valued FinSequence st
             rng g c= X &
             len g = $1 & len g = len h & len g = len s &
             for i be Nat st i in Seg (len g) holds
@@ -907,7 +905,7 @@ Lm1:
   Sum(h) in Z_Lin(X);
 A1: P[0]
 proof
- let g,h be FinSequence of RS, s be integer-valued FinSequence;
+ let g,h be FinSequence of RS, s be INT-valued FinSequence;
  set x = Sum(h);
  assume A2:rng g c= X &
     len g = 0 & len g = len h & len g = len s &
@@ -919,7 +917,7 @@ end;
 A3: now let n be Nat;
     assume A4: P[n];
    now let g,h be FinSequence of RS,
-     s be integer-valued FinSequence, x be set;
+     s be INT-valued FinSequence, x be set;
      assume A5: x=Sum(h) & rng g c= X &
             len g = n+1 & len g = len h & len g = len s &
             for i be Nat st i in Seg (len g) holds h/.i=(s.i)*(g/.i);
@@ -983,7 +981,7 @@ end;
 Lm2:
 for x be set st x in Z_Lin(A) holds
     ex g1,h1 be FinSequence of V,
-        a1 be integer-valued FinSequence
+        a1 be INT-valued FinSequence
    st x=Sum(h1) &
        rng g1 c= A & len g1 =len h1 & len g1 = len a1 &
        for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i)
@@ -1025,30 +1023,40 @@ end;
 theorem
   for x be set holds x in Z_Lin(A) iff
     ex g1,h1 be FinSequence of V,
-        a1 be integer-valued FinSequence
+        a1 be INT-valued FinSequence
    st x=Sum(h1) &
        rng g1 c= A & len g1 =len h1 & len g1 = len a1 &
        for i be Nat
         st i in Seg (len g1) holds
            h1/.i=(a1.i)*(g1/.i) by Lm1,Lm2;
 
+registration
+  let D be non empty set, n be Nat;
+  cluster n-element D-valued for FinSequence;
+  existence
+  proof
+    take n |-> the Element of D;
+    thus thesis;
+  end;
+end;
+
 definition
   let RS be RealLinearSpace;
   let f be FinSequence of RS;
   func Z_Lin(f) -> Subset of RS equals
     {Sum(g) where g is (len f)-element FinSequence of RS :
-    ex a be (len f)-element integer-valued FinSequence
+    ex a be (len f)-element INT-valued FinSequence
      st for i be Nat st i in Seg (len f) holds g/.i=(a.i)*(f/.i)};
 correctness
 proof
 now let x be set;
   assume x in {Sum(g) where g is (len f)-element FinSequence of RS :
-  ex a be (len f)-element integer-valued FinSequence
+  ex a be (len f)-element INT-valued FinSequence
    st for i be Nat
        st i in Seg (len f) holds
      g/.i=(a.i)*(f/.i)}; then
   ex g be (len f)-element FinSequence of RS st
-  x=Sum(g) & ex a be (len f)-element integer-valued FinSequence
+  x=Sum(g) & ex a be (len f)-element INT-valued FinSequence
    st for i be Nat st i in Seg (len f) holds g/.i=(a.i)*(f/.i);
   hence x in the carrier of RS;
 end;
@@ -1062,7 +1070,7 @@ for RS be RealLinearSpace,
       x be set holds
    x in Z_Lin(f) iff
      ex g be (len f)-element FinSequence of RS,
-          a be (len f)-element integer-valued FinSequence st
+          a be (len f)-element INT-valued FinSequence st
           x=Sum(g) & for i be Nat st i in Seg (len f) holds
           g/.i=(a.i)*(f/.i)
 proof
@@ -1071,17 +1079,17 @@ let RS be RealLinearSpace,
       x be set;
  hereby assume x in Z_Lin(f); then
 consider g be (len f)-element FinSequence of RS such that
-A1: x=Sum(g) & ex s be (len f)-element integer-valued FinSequence
+A1: x=Sum(g) & ex s be (len f)-element INT-valued FinSequence
           st for i be Nat st i in Seg (len f) holds
           g/.i=(s.i)*(f/.i);
-consider s be (len f)-element integer-valued FinSequence such that
+consider s be (len f)-element INT-valued FinSequence such that
 A2: for i be Nat st i in Seg (len f) holds g/.i=(s.i)*(f/.i) by A1;
 take g,s;
 thus x=Sum(g) & for i be Nat st i in Seg (len f) holds
           g/.i=(s.i)*(f/.i) by A1,A2;
 end;
 assume ex g be (len f)-element FinSequence of RS,
-          a be (len f)-element integer-valued FinSequence st
+          a be (len f)-element INT-valued FinSequence st
           x=Sum(g) & for i be Nat st i in Seg (len f) holds
           g/.i=(a.i)*(f/.i);
 hence x in Z_Lin(f);
@@ -1101,12 +1109,12 @@ let x, y be Element of RS;
 let a, b be Element of INT;
  assume A1:x in Z_Lin(f) & y in Z_Lin(f);
 consider g be (len f)-element FinSequence of RS,
-          s be (len f)-element integer-valued FinSequence such that
+          s be (len f)-element INT-valued FinSequence such that
 A2:     x=Sum(g) &
           for i be Nat st i in Seg (len f) holds
           g/.i=(s.i)*(f/.i) by A1,Th26;
 consider h be (len f)-element FinSequence of RS,
-         t be (len f)-element integer-valued FinSequence such that
+         t be (len f)-element INT-valued FinSequence such that
 A3:    y=Sum(h) & for i be Nat st i in Seg (len f) holds
           h/.i=(t.i)*(f/.i) by A1,Th26;
 defpred P0[Nat,set] means $2=a*(s.$1) + b*(t.$1);
@@ -1117,7 +1125,7 @@ A5: dom u = Seg (len f)
   & for i be Nat st i in Seg (len f) holds P0[i,u.i] from FINSEQ_1:sch 5(A4);
  len u = len f by A5,FINSEQ_1:def 3;
  then
- reconsider u as (len f)-element integer-valued FinSequence by CARD_1:def 7;
+ reconsider u as (len f)-element INT-valued FinSequence by CARD_1:def 7;
 defpred P1[Nat,set] means $2=a*g/.$1 + b*h/.$1;
 A6: for k be Nat st k in Seg (len f) holds
             ex x being Element of RS st P1[k,x];
@@ -1288,86 +1296,78 @@ end; then
 A3: s is FinSequence-like by FINSEQ_1:def 2;
 rng s c= INT
 proof
-  A4: rng ( (Seg (len f)) --> 0) \/
- rng ( {i} --> 1) = {0} \/ rng ( {i} --> 1) by A1,FUNCOP_1:8
-  .= {0} \/ {1} by FUNCOP_1:8;
-  0 in INT by INT_1:def 1;
-  then A5: {0} c= INT by ZFMISC_1:31;
-  1 in INT by INT_1:def 1; then
-  A6: {1} c= INT by ZFMISC_1:31;
-  A7: {0} \/ {1} c= INT by A5,A6,XBOOLE_1:8;
   rng s c= rng ( (Seg (len f)) --> 0) \/ rng ( {i} --> 1) by FUNCT_4:17;
-  hence thesis by A4,A7,XBOOLE_1:1;
+  hence thesis by XBOOLE_1:1;
 end; then
 reconsider s as FinSequence of INT by A3,FINSEQ_1:def 4;
   len s = len f by A2,FINSEQ_1:def 3; then
- reconsider s as (len f)-element integer-valued FinSequence by CARD_1:def 7;
+ reconsider s as (len f)-element INT-valued FinSequence by CARD_1:def 7;
   defpred Q[Nat,set] means $2=s.$1*f/.$1;
-A8: for k be Nat st k in Seg (len f) holds
+A6: for k be Nat st k in Seg (len f) holds
       ex x being Element of RS st Q[k,x];
   consider w be FinSequence of RS such that
-A9: dom w = Seg len f & for i be Nat st i in Seg (len f) holds
-          Q[i,w.i] from FINSEQ_1:sch 5(A8);
-A10:len w = len f by A9,FINSEQ_1:def 3;
+A7: dom w = Seg len f & for i be Nat st i in Seg (len f) holds
+          Q[i,w.i] from FINSEQ_1:sch 5(A6);
+A8:len w = len f by A7,FINSEQ_1:def 3;
  then reconsider w as (len f)-element FinSequence of RS by CARD_1:def 7;
 now let i be Nat;
-   assume A11: i in Seg len f;
-     hence w/.i=w.i by A9,PARTFUN1:def 6
-        .=s.i*f/.i by A9,A11;
+   assume A9: i in Seg len f;
+     hence w/.i=w.i by A7,PARTFUN1:def 6
+        .=s.i*f/.i by A7,A9;
 end; then
-A12:Sum(w) in Z_Lin(f);
-A13:w = ( (Seg (len w)) --> 0.RS) +* ( {i} --> f/.i)
+A10:Sum(w) in Z_Lin(f);
+A11:w = ( (Seg (len w)) --> 0.RS) +* ( {i} --> f/.i)
 proof
-  consider w1 be Function such that A14: w1 = (( Seg (len f)) --> 0.RS);
-  A15: dom w1 = Seg (len f) by A14,FUNCOP_1:13;
-  consider w2 be Function such that A16: w2 = ( {i} --> f/.i);
-  A17: dom w2 = {i} by A16,FUNCOP_1:13;
-  consider ww be Function such that A18: ww = w1 +* w2;
-  A19: dom ww = Seg (len f) \/ {i} by A15,A17,A18,FUNCT_4:def 1
+  consider w1 be Function such that A12: w1 = (( Seg (len f)) --> 0.RS);
+  A13: dom w1 = Seg (len f) by A12,FUNCOP_1:13;
+  consider w2 be Function such that A14: w2 = ( {i} --> f/.i);
+  A15: dom w2 = {i} by A14,FUNCOP_1:13;
+  consider ww be Function such that A16: ww = w1 +* w2;
+  A17: dom ww = Seg (len f) \/ {i} by A13,A15,A16,FUNCT_4:def 1
   .= Seg (len f) by A1,ZFMISC_1:40; then
   reconsider ww as FinSequence by FINSEQ_1:def 2;
-  rng w1 c= {0.RS} by A14,FUNCOP_1:13;
-  then A20: rng w1 c= (the carrier of RS) by XBOOLE_1:1;
-  rng w2 c= {f/.i} by A16,FUNCOP_1:13;
-  then A21: rng w2 c= (the carrier of RS) by XBOOLE_1:1;
-  A22: rng ww c= rng w1 \/ rng w2 by A18,FUNCT_4:17;
-  rng w1 \/ rng w2 c= (the carrier of RS) by A20,A21,XBOOLE_1:8;
-  then rng ww c= (the carrier of RS) by A22,XBOOLE_1:1;
+  rng w1 c= {0.RS} by A12,FUNCOP_1:13;
+  then A18: rng w1 c= (the carrier of RS) by XBOOLE_1:1;
+  rng w2 c= {f/.i} by A14,FUNCOP_1:13;
+  then A19: rng w2 c= (the carrier of RS) by XBOOLE_1:1;
+  A20: rng ww c= rng w1 \/ rng w2 by A16,FUNCT_4:17;
+  rng w1 \/ rng w2 c= (the carrier of RS) by A18,A19,XBOOLE_1:8;
+  then rng ww c= (the carrier of RS) by A20,XBOOLE_1:1;
   then
   reconsider ww as FinSequence of RS by FINSEQ_1:def 4;
   for j being Nat st j in dom w holds w/.j = ww/.j
   proof
-    let j be Nat such that A23: j in dom w;
-    A24: dom({i} --> 1) ={i} by FUNCOP_1:13;
+    let j be Nat such that A21: j in dom w;
+    A22: dom({i} --> 1) ={i} by FUNCOP_1:13;
     per cases;
-    suppose A25: j in dom w2;
-      then A26: j = i by A17,TARSKI:def 1;
-      then w/.j = w.i by A23,PARTFUN1:def 6;
-      then A27: w/.j = s.i*f/.i by A9,A23,A26;
-      A28:i in {i} by TARSKI:def 1;
-      then A29: s.i = ({i} --> 1).i by A24,FUNCT_4:13
-      .= 1 by A28,FUNCOP_1:7;
-      ww/.j = ww.j by A9,A19,A23,PARTFUN1:def 6
-      .= w2.j by A18,A25,FUNCT_4:13
-      .= f/.i by A16,A17,A25,FUNCOP_1:7;
-      hence thesis by A27,A29,RLVECT_1:def 8;
+    suppose A23: j in dom w2;
+      then A24: j = i by A15,TARSKI:def 1;
+      then w/.j = w.i by A21,PARTFUN1:def 6;
+      then A25: w/.j = s.i*f/.i by A7,A21,A24;
+      A26:i in {i} by TARSKI:def 1;
+      then A27: s.i = ({i} --> 1).i by A22,FUNCT_4:13
+      .= 1 by A26,FUNCOP_1:7;
+      ww/.j = ww.j by A7,A17,A21,PARTFUN1:def 6
+      .= w2.j by A16,A23,FUNCT_4:13
+      .= f/.i by A14,A15,A23,FUNCOP_1:7;
+      hence thesis by A25,A27,RLVECT_1:def 8;
     end;
-    suppose A30: not j in dom w2;
-      w/.j = w.j by A23,PARTFUN1:def 6;
-      then A31: w/.j = s.j*f/.j by A9,A23;
-      not j in dom({i} --> 1) by A17,A30;
-      then A32: s.j = ( (Seg (len f)) --> 0).j by FUNCT_4:11
-      .= 0 by A9,A23,FUNCOP_1:7;
-      ww/.j = ww.j by A9,A19,A23,PARTFUN1:def 6
-      .= w1.j by A18,A30,FUNCT_4:11
-      .= 0.RS by A9,A14,A23,FUNCOP_1:7;
-      hence thesis by A31,A32,RLVECT_1:10;
+    suppose A28: not j in dom w2;
+      w/.j = w.j by A21,PARTFUN1:def 6;
+      then A29: w/.j = s.j*f/.j by A7,A21;
+      not j in dom({i} --> 1) by A15,A28;
+      then A30: s.j = ( (Seg (len f)) --> 0).j by FUNCT_4:11
+      .= 0 by A7,A21,FUNCOP_1:7;
+      ww/.j = ww.j by A7,A17,A21,PARTFUN1:def 6
+      .= w1.j by A16,A28,FUNCT_4:11
+      .= 0.RS by A7,A12,A21,FUNCOP_1:7;
+      hence thesis by A29,A30,RLVECT_1:10;
     end;
   end;
-  hence thesis by A9,A10,A14,A16,A18,A19,FINSEQ_5:12;
+  hence thesis by A7,A8,A12,A14,A16,A17,FINSEQ_5:12;
 end;
-i in Seg (len w) by A9,A1,FINSEQ_1:def 3;
-hence f/.i in Z_Lin(f) by A12,A13,Th29;
+i in Seg (len w) by A7,A1,FINSEQ_1:def 3;
+hence f/.i in Z_Lin(f) by A10,A11,Th29;
 end;
 
 theorem Th31:
@@ -1390,7 +1390,7 @@ theorem Th32:
 for RS be RealLinearSpace,
       f be non empty FinSequence of RS,
      g,h be FinSequence of RS,
-     s be integer-valued FinSequence
+     s be INT-valued FinSequence
         st rng g c= Z_Lin(f) &
             len g = len s & len g = len h &
             for i be Nat st i in Seg (len g) holds
@@ -1409,7 +1409,7 @@ z0 * (f/.1) + 0.RS in Z_Lin(f) by RLVECT_1:10; then
 A2: 0.RS + 0.RS in Z_Lin(f) by RLVECT_1:10;
 defpred P[Nat] means
 for g,h be FinSequence of RS,
-     s be integer-valued FinSequence
+     s be INT-valued FinSequence
         st rng g c= Z_Lin(f) &
             len g = $1 & len g = len s & len g = len h &
             for i be Nat st i in Seg (len g) holds
@@ -1417,7 +1417,7 @@ for g,h be FinSequence of RS,
   Sum(h) in Z_Lin(f);
 A3: P[0]
 proof
-let g,h be FinSequence of RS, s be integer-valued FinSequence;
+let g,h be FinSequence of RS, s be INT-valued FinSequence;
  assume A4:rng g c= Z_Lin(f) &
             len g = 0 & len g = len s & len g = len h &
             for i be Nat st i in Seg (len g) holds
@@ -1429,13 +1429,13 @@ end;
 A5:now let n be Nat;
     assume A6: P[n];
    now let g,h be FinSequence of RS,
-     s be integer-valued FinSequence;
+     s be INT-valued FinSequence;
      assume A7:rng g c= Z_Lin(f) &
             len g = n+1 & len g = len s & len g = len h &
             for i be Nat st i in Seg (len g) holds h/.i=(s.i)*(g/.i);
      reconsider gn = g|n as FinSequence of RS;
      reconsider hn = h|n as FinSequence of RS;
-     reconsider sn = s|n as integer-valued FinSequence;
+     reconsider sn = s|n as INT-valued FinSequence;
      A8:rng gn c= Z_Lin(f) &
             len gn = n & len gn = len sn & len gn = len hn &
             for i be Nat st i in Seg (len gn) holds
@@ -1506,7 +1506,7 @@ proof
   let x be set;
   hereby assume x in Z_Lin (rng f); then
     consider g,h be FinSequence of RS,
-        a be integer-valued FinSequence such that
+        a be INT-valued FinSequence such that
 A1:x=Sum(h) & rng g c= rng f & len g =len h & len g = len a &
      for i be Nat st i in Seg (len g) holds
      h/.i=(a.i)*(g/.i) by Lm2;
@@ -1515,7 +1515,7 @@ A1:x=Sum(h) & rng g c= rng f & len g =len h & len g = len a &
 end;
 assume x in Z_Lin f;
 then consider g be (len f)-element FinSequence of RS,
-       a be (len f)-element integer-valued FinSequence such that
+       a be (len f)-element INT-valued FinSequence such that
   A2:  x=Sum(g) & for i be Nat st i in Seg (len f) holds
           g/.i=(a.i)*(f/.i) by Th26;
   len f =len g & len a = len f by CARD_1:def 7;
@@ -1538,7 +1538,7 @@ end;
 
 theorem Th35:
   for x be set, g1,h1 be FinSequence of V,
-      a1 be integer-valued FinSequence st x=Sum(h1) &
+      a1 be INT-valued FinSequence st x=Sum(h1) &
     rng g1 c= Z_Lin(A) & len g1 =len h1 & len g1 = len a1 &
     for i be Nat st i in Seg (len g1) holds
         h1/.i=(a1.i)*(g1/.i) holds x in Z_Lin(A)
@@ -1546,14 +1546,14 @@ proof
   reconsider z0=0 as Element of INT by NUMBERS:17,TARSKI:def 3;
   reconsider z1=1 as Element of INT by NUMBERS:17,TARSKI:def 3;
   defpred P[Nat] means for x be set, g1,h1 be FinSequence of V,
-  a1 be integer-valued FinSequence st x = Sum(h1) &
+  a1 be INT-valued FinSequence st x = Sum(h1) &
   rng g1 c= Z_Lin(A) & len g1 = $1 & len g1 =len h1 & len g1 = len a1 &
   for i be Nat st i in Seg (len g1) holds
   h1/.i=(a1.i)*(g1/.i) holds x in Z_Lin(A);
   A1: P[0]
   proof
     let x be set, g1,h1 be FinSequence of V,
-    a1 be integer-valued FinSequence;
+    a1 be INT-valued FinSequence;
     assume A2: x = Sum(h1) &
     rng g1 c= Z_Lin(A) & len g1 = 0 & len g1 =len h1 & len g1 = len a1 &
     for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i);
@@ -1564,13 +1564,13 @@ proof
 A3: now let n be Nat;
     assume A4: P[n];
     now let x be set, g1,h1 be FinSequence of V,
-      a1 be integer-valued FinSequence;
+      a1 be INT-valued FinSequence;
       assume A5: x = Sum(h1) &
       rng g1 c= Z_Lin(A) & len g1 = n+1 & len g1 =len h1 & len g1 = len a1 &
       for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i);
       reconsider gn = g1|n as FinSequence of V;
       reconsider hn = h1|n as FinSequence of V;
-      reconsider an = a1|n as integer-valued FinSequence;
+      reconsider an = a1|n as INT-valued FinSequence;
       A6:rng gn c= Z_Lin(A) &
             len gn = n & len gn = len an & len gn = len hn &
             for i be Nat st i in Seg (len gn) holds
@@ -1640,7 +1640,7 @@ A1: Z_Lin(A) c= Z_Lin( Z_Lin(A)) by Th13;
     let x be set;
     assume x in Z_Lin( Z_Lin(A));
     then consider g1,h1 be FinSequence of V,
-    a1 be integer-valued FinSequence such that
+    a1 be INT-valued FinSequence such that
 A2: x=Sum(h1) &
     rng g1 c= Z_Lin(A) & len g1 = len h1 & len g1 = len a1 &
     for i be Nat st i in Seg (len g1) holds h1/.i=(a1.i)*(g1/.i) by Lm2;

@@ -2,7 +2,7 @@
 ::  by Miros{\l}aw Wojciechowski
 ::
 :: Received June 12, 1997
-:: Copyright (c) 1997-2011 Association of Mizar Users
+:: Copyright (c) 1997-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,15 +16,18 @@ environ
 
  vocabularies CAT_1, ENS_1, FUNCT_1, GRAPH_1, RELAT_1, SUBSET_1, MCART_1,
       NATTRA_1, STRUCT_0, XBOOLE_0, PZFMISC1, TARSKI, OPPCAT_1, CAT_2, FUNCT_2,
-      YONEDA_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, MCART_1, RELAT_1, FUNCT_1, BINOP_1,
-      FUNCT_2, STRUCT_0, GRAPH_1, CAT_1, CAT_2, OPPCAT_1, ENS_1, NATTRA_1;
- constructors PARTFUN1, DOMAIN_1, NATTRA_1, ENS_1, RELSET_1;
- registrations XBOOLE_0, FUNCT_1, RELSET_1, ENS_1, STRUCT_0, FUNCT_2;
+      YONEDA_1, MONOID_0, PARTFUN1;
+ notations TARSKI, XBOOLE_0,
+      XTUPLE_0, SUBSET_1, MCART_1, RELAT_1, FUNCT_1, BINOP_1,
+      FUNCT_2, STRUCT_0, GRAPH_1, CAT_1, CAT_2, OPPCAT_1, ENS_1,
+      CAT_3, NATTRA_1;
+ constructors DOMAIN_1, NATTRA_1, ENS_1, RELSET_1, CAT_3, XTUPLE_0;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, ENS_1, STRUCT_0, FUNCT_2,
+      RELAT_1, CAT_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, BINOP_1, GRAPH_1;
+ definitions TARSKI, BINOP_1, GRAPH_1, CAT_1, XTUPLE_0;
  theorems ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, CAT_1, CAT_2, OPPCAT_1, ENS_1,
-      NATTRA_1, ISOCAT_1, RELAT_1;
+      NATTRA_1, ISOCAT_1, RELAT_1, CAT_3, XTUPLE_0;
  schemes FUNCT_2;
 
 begin
@@ -44,37 +47,37 @@ end;
 theorem Th1:
   for f,g being Function, m1,m2 being Morphism of EnsHom A st cod
   m1 = dom m2 & [[dom m1,cod m1],f] = m1 & [[dom m2,cod m2],g] = m2 holds [[dom
-  m1,cod m2],g*f] = m2*m1
+  m1,cod m2],g*f] = m2(*)m1
 proof
   let f,g be Function;
   let m1,m2 be Morphism of EnsHom A such that
 A1: cod m1 = dom m2 and
 A2: [[dom m1,cod m1],f] = m1 and
 A3: [[dom m2,cod m2],g] = m2;
-A4: EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A,fComp Hom A,
-    fId Hom A #) by ENS_1:def 13;
+A4: EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A,fComp Hom A#)
+            by ENS_1:def 13;
   then reconsider m19=m1 as Element of Maps Hom A;
   reconsider m29=m2 as Element of Maps Hom A by A4;
 A5: cod m19= m1`1`2 by ENS_1:def 4
     .=[dom m1,cod m1]`2 by A2,MCART_1:7
-    .=dom m2 by A1,MCART_1:7
-    .=[dom m2,cod m2]`1 by MCART_1:7
+    .=dom m2 by A1
+    .=[dom m2,cod m2]`1
     .=m2`1`1 by A3,MCART_1:7
     .= dom m29 by ENS_1:def 3;
   [[dom m19,cod m19],m19`2] =m1 by ENS_1:8;
   then
-A6: m19`2=f by A2,ZFMISC_1:27;
+A6: m19`2=f by A2,XTUPLE_0:1;
   [[dom m29,cod m29],m29`2] =m2 by ENS_1:8;
   then
-A7: m29`2= g by A3,ZFMISC_1:27;
-A8: cod m2 =[dom m2,cod m2]`2 by MCART_1:7
+A7: m29`2= g by A3,XTUPLE_0:1;
+A8: cod m2 =[dom m2,cod m2]`2
     .=m2`1`2 by A3,MCART_1:7
     .= cod m29 by ENS_1:def 4;
 A9: dom m19= m1`1`1 by ENS_1:def 3
     .=[dom m1,cod m1]`1 by A2,MCART_1:7
-    .=dom m1 by MCART_1:7;
+    .=dom m1;
   [m2,m1] in dom(the Comp of EnsHom A) by A1,CAT_1:15;
-  then m2*m1 = (fComp Hom A).(m29,m19) by A4,CAT_1:def 1
+  then m2(*)m1 = (fComp Hom A).(m29,m19) by A4,CAT_1:def 1
     .= m29*m19 by A5,ENS_1:def 11
     .= [[dom m1,cod m2],g*f] by A5,A9,A8,A7,A6,ENS_1:def 6;
   hence thesis;
@@ -87,7 +90,7 @@ definition
   coherence by ENS_1:49;
 end;
 
-theorem Th3:
+theorem Th2:
   for f being Morphism of A holds <|cod f,?>
   is_naturally_transformable_to <|dom f,?>
 proof
@@ -100,8 +103,8 @@ A1: for a being Object of A holds [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)] in
   Hom(F1.a,F2.a)
   proof
     let a be Object of A;
-A2: EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp Hom
-      A,fId Hom A #) by ENS_1:def 13;
+A2: EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp Hom A #)
+       by ENS_1:def 13;
     then reconsider m = [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)] as Morphism of
     EnsHom A by ENS_1:48;
     reconsider m9=m as Element of Maps Hom A by ENS_1:48;
@@ -109,19 +112,19 @@ A3: cod(m)= (fCod Hom A).m by A2
       .= cod m9 by ENS_1:def 10
       .= m`1`2 by ENS_1:def 4
       .= [Hom(cod f,a),Hom(dom f,a)]`2 by MCART_1:7
-      .= Hom(dom f,a) by MCART_1:7
+      .= Hom(dom f,a)
       .= (Obj (hom?-(Hom A,dom f))).a by ENS_1:60
-      .= (hom?-(Hom A,dom f)).a by CAT_1:def 17
+      .= (hom?-(Hom A,dom f)).a
       .= F2.a by ENS_1:def 25;
     dom(m)=(fDom Hom A).m by A2
       .= dom m9 by ENS_1:def 9
       .= m`1`1 by ENS_1:def 3
       .= [Hom(cod f,a),Hom(dom f,a)]`1 by MCART_1:7
-      .= Hom(cod f,a) by MCART_1:7
+      .= Hom(cod f,a)
       .= (Obj (hom?-(Hom A,cod f))).a by ENS_1:60
-      .= (hom?-(Hom A,cod f)).a by CAT_1:def 17
+      .= (hom?-(Hom A,cod f)).a
       .=F1.a by ENS_1:def 25;
-    hence thesis by A3,CAT_1:1;
+    hence thesis by A3;
   end;
 A4: for a being Element of A holds F(a) in the carrier' of B
   proof
@@ -137,7 +140,7 @@ A6: for a being Object of A holds t.a is Morphism of F1.a,F2.a
     let a;
     [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)] in Hom(F1.a,F2.a) by A1;
     then [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)] is Morphism of F1.a,F2.a by
-CAT_1:def 4;
+CAT_1:def 5;
     hence thesis by A5;
   end;
   for a being Object of A holds Hom(F1.a,F2.a) <> {} by A1;
@@ -145,7 +148,7 @@ CAT_1:def 4;
 A7: F1 is_transformable_to F2 by NATTRA_1:def 2;
   then reconsider t as transformation of F1,F2 by A6,NATTRA_1:def 3;
   for a,b being Object of A st Hom(a,b) <> {} for g being Morphism of a,b
-  holds t.b*F1.g = F2.g*t.a
+  holds t.b*F1/.g = F2/.g*t.a
   proof
     let a,b be Object of A such that
 A8: Hom(a,b) <> {};
@@ -158,186 +161,184 @@ A12:  cod g =b by A8,CAT_1:5;
       per cases;
       suppose
 A13:    Hom(dom f,b) = {};
-A14:    rng hom(cod f,g) c= Hom(cod f,cod g) by RELAT_1:def 19;
         Hom(cod f,b) = {} by A13,ENS_1:42;
-        hence thesis by A12,A14,FUNCT_2:def 1;
+        hence thesis by A12;
       end;
       suppose
-A15:    Hom(dom f,b) <> {};
+A14:    Hom(dom f,b) <> {};
         cod g = b by A8,CAT_1:5;
         then
-A16:    rng hom(cod f,g) c= Hom(cod f,cod g) & Hom(cod f,cod g)=dom hom(f
-        ,b) by A15,FUNCT_2:def 1,RELAT_1:def 19;
+A15:    rng hom(cod f,g) c= Hom(cod f,cod g) & Hom(cod f,cod g)=dom hom(f
+        ,b) by A14,FUNCT_2:def 1,RELAT_1:def 19;
         let e be set;
         assume e in rng hom(cod f,g);
-        hence thesis by A16;
+        hence thesis by A15;
       end;
     end;
-A17: rng hom(f,a) c= dom hom(dom f,g)
+A16: rng hom(f,a) c= dom hom(dom f,g)
     proof
-A18:  dom g =a by A8,CAT_1:5;
+A17:  dom g =a by A8,CAT_1:5;
       per cases;
       suppose
-A19:    Hom(dom f,cod g) = {};
-A20:    rng hom(f,a) c= Hom(dom f,a) by RELAT_1:def 19;
-        Hom(dom f,dom g) = {} by A19,ENS_1:42;
-        hence thesis by A18,A20,FUNCT_2:def 1;
+A18:    Hom(dom f,cod g) = {};
+        Hom(dom f,dom g) = {} by A18,ENS_1:42;
+        hence thesis by A17;
       end;
       suppose
-A21:    Hom(dom f,cod g) <> {};
+A19:    Hom(dom f,cod g) <> {};
         let e be set;
         assume
-A22:    e in rng hom(f,a);
-        rng hom(f,a) c= Hom(dom f,a) & Hom(dom f,a) = dom hom(dom f,g) by A18
-,A21,FUNCT_2:def 1,RELAT_1:def 19;
-        hence thesis by A22;
+A20:    e in rng hom(f,a);
+        rng hom(f,a) c= Hom(dom f,a) & Hom(dom f,a) = dom hom(dom f,g) by A17
+,A19,FUNCT_2:def 1,RELAT_1:def 19;
+        hence thesis by A20;
       end;
     end;
-A23: dom (hom(f,b)*hom(cod f,g)) = dom(hom(dom f,g)*hom(f,a))
+A21: dom (hom(f,b)*hom(cod f,g)) = dom(hom(dom f,g)*hom(f,a))
     proof
       per cases;
       suppose
-A24:    Hom(cod f,dom g)= {};
+A22:    Hom(cod f,dom g)= {};
         dom (hom(f,b)*hom(cod f,g))=dom (hom(cod f,g)) by A11,RELAT_1:27
-          .=Hom(cod f,dom g) by A24,FUNCT_2:def 1
-          .=dom (hom(f,a)) by A10,A24,FUNCT_2:def 1
-          .=dom(hom(dom f,g)*hom(f,a)) by A17,RELAT_1:27;
+          .=Hom(cod f,dom g) by A22
+          .=dom (hom(f,a)) by A10,A22
+          .=dom(hom(dom f,g)*hom(f,a)) by A16,RELAT_1:27;
         hence thesis;
       end;
       suppose
-A25:    Hom(cod f,dom g) <> {};
+A23:    Hom(cod f,dom g) <> {};
         then
-A26:    Hom(cod f,cod g) <> {} by ENS_1:42;
-A27:    Hom(dom f,a) <> {} by A10,A25,ENS_1:42;
+A24:    Hom(cod f,cod g) <> {} by ENS_1:42;
+A25:    Hom(dom f,a) <> {} by A10,A23,ENS_1:42;
         dom (hom(f,b)*hom(cod f,g))=dom (hom(cod f,g)) by A11,RELAT_1:27
-          .=Hom(cod f,dom g) by A26,FUNCT_2:def 1
+          .=Hom(cod f,dom g) by A24,FUNCT_2:def 1
           .=Hom(cod f,a) by A8,CAT_1:5
-          .=dom (hom(f,a)) by A27,FUNCT_2:def 1
-          .=dom(hom(dom f,g)*hom(f,a)) by A17,RELAT_1:27;
+          .=dom (hom(f,a)) by A25,FUNCT_2:def 1
+          .=dom(hom(dom f,g)*hom(f,a)) by A16,RELAT_1:27;
         hence thesis;
       end;
     end;
-A28: for x being set st x in dom (hom(f,b)*hom(cod f,g)) holds (hom(f,b)*
+A26: for x being set st x in dom (hom(f,b)*hom(cod f,g)) holds (hom(f,b)*
     hom(cod f,g)).x = (hom(dom f,g)*hom(f,a)).x
     proof
       let x be set such that
-A29:  x in dom (hom(f,b)*hom(cod f,g));
+A27:  x in dom (hom(f,b)*hom(cod f,g));
       per cases;
       suppose
-A30:    Hom(cod f,dom g) <> {};
-A31:    x in dom hom(cod f,g) by A29,FUNCT_1:11;
-        Hom(cod f,cod g) <> {} by A30,ENS_1:42;
+A28:    Hom(cod f,dom g) <> {};
+A29:    x in dom hom(cod f,g) by A27,FUNCT_1:11;
+        Hom(cod f,cod g) <> {} by A28,ENS_1:42;
         then
-A32:    x in Hom(cod f,dom g) by A31,FUNCT_2:def 1;
+A30:    x in Hom(cod f,dom g) by A29,FUNCT_2:def 1;
         then reconsider x as Morphism of A;
-A33:    dom(g) = cod(x) & dom(x) = cod(f) by A32,CAT_1:1;
-A34:    dom(g) = cod(x) by A32,CAT_1:1;
+A31:    dom(g) = cod(x) & dom(x) = cod(f) by A30,CAT_1:1;
+A32:    dom(g) = cod(x) by A30,CAT_1:1;
         then
-A35:    cod(g*x)=cod(g) by CAT_1:17
+A33:    cod(g(*)x)=cod(g) by CAT_1:17
           .=b by A8,CAT_1:5;
-A36:    hom(f,a).x =x*f by A10,A32,ENS_1:def 20;
+A34:    hom(f,a).x =x(*)f by A10,A30,ENS_1:def 20;
         then reconsider h=hom(f,a).x as Morphism of A;
-A37:    dom(x) = cod(f) by A32,CAT_1:1;
+A35:    dom(x) = cod(f) by A30,CAT_1:1;
         then
-A38:    dom(x*f) =dom f by CAT_1:17;
-        dom(g*x) =dom x by A34,CAT_1:17
-          .=cod f by A32,CAT_1:1;
+A36:    dom(x(*)f) =dom f by CAT_1:17;
+        dom(g(*)x) =dom x by A32,CAT_1:17
+          .=cod f by A30,CAT_1:1;
         then
-A39:    g*x in Hom(cod f,b) by A35,CAT_1:1;
-        cod(x*f)=cod(x) by A37,CAT_1:17
-          .=dom g by A32,CAT_1:1;
+A37:    g(*)x in Hom(cod f,b) by A33;
+        cod(x(*)f)=cod(x) by A35,CAT_1:17
+          .=dom g by A30,CAT_1:1;
         then
-A40:    hom(f,a).x in Hom(dom f,dom g) by A36,A38,CAT_1:1;
-        (hom(f,b)*hom(cod f,g)).x = hom(f,b).(hom(cod f,g).x) by A29,FUNCT_1:12
-          .=hom(f,b).(g*x) by A32,ENS_1:def 19
-          .=(g*x)*f by A39,ENS_1:def 20
-          .= g*(x*f) by A33,CAT_1:18
-          .= g*(h) by A10,A32,ENS_1:def 20
-          .= hom(dom f,g).(hom(f,a).x) by A40,ENS_1:def 19
-          .= (hom(dom f,g)*hom(f,a)).x by A23,A29,FUNCT_1:12;
+A38:    hom(f,a).x in Hom(dom f,dom g) by A34,A36;
+        (hom(f,b)*hom(cod f,g)).x = hom(f,b).(hom(cod f,g).x) by A27,FUNCT_1:12
+          .=hom(f,b).(g(*)x) by A30,ENS_1:def 19
+          .=(g(*)x)(*)f by A37,ENS_1:def 20
+          .= g(*)(x(*)f) by A31,CAT_1:18
+          .= g(*)(h) by A10,A30,ENS_1:def 20
+          .= hom(dom f,g).(hom(f,a).x) by A38,ENS_1:def 19
+          .= (hom(dom f,g)*hom(f,a)).x by A21,A27,FUNCT_1:12;
         hence thesis;
       end;
       suppose
-A41:    Hom(cod f,dom g) = {};
-        x in dom hom(cod f,g) by A29,FUNCT_1:11;
-        hence thesis by A41,FUNCT_2:def 1;
+A39:    Hom(cod f,dom g) = {};
+        x in dom hom(cod f,g) by A27,FUNCT_1:11;
+        hence thesis by A39;
       end;
     end;
-A42: Hom(F2.a,F2.b)<>{} by A8,CAT_1:84;
-A43: cod g =b by A8,CAT_1:5;
+A40: Hom(F2.a,F2.b)<>{} by A8,CAT_1:84;
+A41: cod g =b by A8,CAT_1:5;
     reconsider f4 = t.a as Morphism of EnsHom A;
-A44: t.a = (t qua Function of the carrier of A, the carrier' of B).a by A7,
+A42: t.a = (t qua Function of the carrier of A, the carrier' of B).a by A7,
 NATTRA_1:def 5
       .= [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)] by A5;
     then reconsider f49=f4 as Element of Maps Hom A by ENS_1:48;
-A45: Hom(F1.a,F2.a)<>{} by A1;
+A43: Hom(F1.a,F2.a)<>{} by A1;
     reconsider f1=t.b as Morphism of EnsHom A;
-A46: t.b= (t qua Function of the carrier of A, the carrier' of B).b by A7,
+A44: t.b= (t qua Function of the carrier of A, the carrier' of B).b by A7,
 NATTRA_1:def 5
       .= [[Hom(cod f,b),Hom(dom f,b)],hom(f,b)] by A5;
     then reconsider f19=f1 as Element of Maps Hom A by ENS_1:48;
-A47: EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp Hom
-      A,fId Hom A #) by ENS_1:def 13;
+A45: EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp Hom
+      A #) by ENS_1:def 13;
     then
-A48: cod(f1) = (fCod Hom A).f1 .= cod f19 by ENS_1:def 10
+A46: cod(f1) = (fCod Hom A).f1 .= cod f19 by ENS_1:def 10
       .= f1`1`2 by ENS_1:def 4
-      .= [Hom(cod f,b),Hom(dom f,b)]`2 by A46,MCART_1:7
-      .= Hom(dom f,b) by MCART_1:7;
-A49: dom(f4) = (fDom Hom A).f4 by A47
+      .= [Hom(cod f,b),Hom(dom f,b)]`2 by A44,MCART_1:7
+      .= Hom(dom f,b);
+A47: dom(f4) = (fDom Hom A).f4 by A45
       .= dom f49 by ENS_1:def 9
       .= f4`1`1 by ENS_1:def 3
-      .= [Hom(cod f,a),Hom(dom f,a)]`1 by A44,MCART_1:7
-      .=Hom(cod f,a) by MCART_1:7;
-A50: cod(f4) = (fCod Hom A).f4 by A47
+      .= [Hom(cod f,a),Hom(dom f,a)]`1 by A42,MCART_1:7
+      .=Hom(cod f,a);
+A48: cod(f4) = (fCod Hom A).f4 by A45
       .= cod f49 by ENS_1:def 10
       .= f4`1`2 by ENS_1:def 4
-      .= [Hom(cod f,a),Hom(dom f,a)]`2 by A44,MCART_1:7
-      .= Hom(dom f,a) by MCART_1:7;
-    reconsider f2=F1.g as Morphism of EnsHom A;
-A51: f2 = (hom?-(cod f)).g by A8,NATTRA_1:def 1
+      .= [Hom(cod f,a),Hom(dom f,a)]`2 by A42,MCART_1:7
+      .= Hom(dom f,a);
+    reconsider f2=F1/.g as Morphism of EnsHom A;
+A49: f2 = (hom?-(cod f)).g by A8,CAT_3:def 10
       .=[[Hom(cod f,dom g),Hom(cod f,cod g)],hom(cod f,g)] by ENS_1:def 21;
     then reconsider f29=f2 as Element of Maps Hom A by ENS_1:47;
-A52: dom(f2) = (fDom Hom A).f2 by A47
+A50: dom(f2) = (fDom Hom A).f2 by A45
       .= dom f29 by ENS_1:def 9
       .= f2`1`1 by ENS_1:def 3
-      .= [Hom(cod f,dom g),Hom(cod f,cod g)]`1 by A51,MCART_1:7
-      .= Hom(cod f,dom g) by MCART_1:7;
-A53: cod(f2) = (fCod Hom A).f2 by A47
+      .= [Hom(cod f,dom g),Hom(cod f,cod g)]`1 by A49,MCART_1:7
+      .= Hom(cod f,dom g);
+A51: cod(f2) = (fCod Hom A).f2 by A45
       .= cod f29 by ENS_1:def 10
       .= f2`1`2 by ENS_1:def 4
-      .= [Hom(cod f,dom g),Hom(cod f,cod g)]`2 by A51,MCART_1:7
-      .= Hom(cod f,cod g) by MCART_1:7;
-A54: dom(f1) =(fDom Hom A).f1 by A47
+      .= [Hom(cod f,dom g),Hom(cod f,cod g)]`2 by A49,MCART_1:7
+      .= Hom(cod f,cod g);
+A52: dom(f1) =(fDom Hom A).f1 by A45
       .= dom f19 by ENS_1:def 9
       .= f1`1`1 by ENS_1:def 3
-      .=[Hom(cod f,b),Hom(dom f,b)]`1 by A46,MCART_1:7
-      .=Hom(cod f,b) by MCART_1:7;
+      .=[Hom(cod f,b),Hom(dom f,b)]`1 by A44,MCART_1:7
+      .=Hom(cod f,b);
     then
-A55: cod f2 = dom f1 by A8,A53,CAT_1:5;
-    reconsider f3 = F2.g as Morphism of EnsHom A;
-A56: f3= (hom?-(dom f)).g by A8,NATTRA_1:def 1
+A53: cod f2 = dom f1 by A8,A51,CAT_1:5;
+    reconsider f3 = F2/.g as Morphism of EnsHom A;
+A54: f3= (hom?-(dom f)).g by A8,CAT_3:def 10
       .=[[Hom(dom f,dom g),Hom(dom f,cod g)],hom(dom f,g)] by ENS_1:def 21;
     then reconsider f39=f3 as Element of Maps Hom A by ENS_1:47;
-A57: cod(f3) = (fCod Hom A).f3 by A47
+A55: cod(f3) = (fCod Hom A).f3 by A45
       .= cod f39 by ENS_1:def 10
       .= f3`1`2 by ENS_1:def 4
-      .= [Hom(dom f,dom g),Hom(dom f,cod g)]`2 by A56,MCART_1:7
-      .= Hom(dom f,cod g) by MCART_1:7;
-A58: dom(f3) =(fDom Hom A).f3 by A47
+      .= [Hom(dom f,dom g),Hom(dom f,cod g)]`2 by A54,MCART_1:7
+      .= Hom(dom f,cod g);
+A56: dom(f3) =(fDom Hom A).f3 by A45
       .= dom f39 by ENS_1:def 9
       .= f3`1`1 by ENS_1:def 3
-      .= [Hom(dom f,dom g),Hom(dom f,cod g)]`1 by A56,MCART_1:7
-      .= Hom(dom f,dom g) by MCART_1:7;
+      .= [Hom(dom f,dom g),Hom(dom f,cod g)]`1 by A54,MCART_1:7
+      .= Hom(dom f,dom g);
     then
-A59: cod f4 = dom f3 by A8,A50,CAT_1:5;
+A57: cod f4 = dom f3 by A8,A48,CAT_1:5;
     Hom(F1.b,F2.b)<>{} by A1;
-    then t.b*F1.g = f1*f2 by A9,CAT_1:def 10
-      .= [[Hom(cod f,dom g),Hom(dom f,b)],hom(f,b)*hom(cod f,g)] by A46,A54,A48
-,A51,A52,A53,A55,Th1
-      .= [[ Hom(cod f,a),Hom(dom f,cod g)],hom(dom f,g)*hom(f,a)] by A10,A43
-,A23,A28,FUNCT_1:2
-      .= f3*f4 by A56,A58,A57,A44,A49,A50,A59,Th1
-      .= F2.g*t.a by A42,A45,CAT_1:def 10;
+    then t.b*F1/.g = f1(*)f2 by A9,CAT_1:def 13
+      .= [[Hom(cod f,dom g),Hom(dom f,b)],hom(f,b)*hom(cod f,g)] by A44,A52,A46
+,A49,A50,A51,A53,Th1
+      .= [[ Hom(cod f,a),Hom(dom f,cod g)],hom(dom f,g)*hom(f,a)] by A10,A41
+,A21,A26,FUNCT_1:2
+      .= f3(*)f4 by A54,A56,A55,A42,A47,A48,A57,Th1
+      .= F2/.g*t.a by A40,A43,CAT_1:def 13;
     hence thesis;
   end;
   hence thesis by A7,NATTRA_1:def 7;
@@ -359,7 +360,7 @@ A1: for o being Object of A holds [[Hom(cod f,o),Hom(dom f,o)],hom(f,id o)
     proof
       let o be Object of A;
 A2:   EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp
-        Hom A,fId Hom A #) by ENS_1:def 13;
+        Hom A #) by ENS_1:def 13;
 A3:   hom(f,id o)=hom(f,o) by ENS_1:53;
       then reconsider
       m = [[Hom(cod f,o),Hom(dom f,o)],hom(f,id o)] as Morphism of
@@ -369,19 +370,19 @@ A4:   cod(m) = (fCod Hom A).m by A2
         .= cod m9 by ENS_1:def 10
         .= m`1`2 by ENS_1:def 4
         .= [Hom(cod f,o),Hom(dom f,o)]`2 by MCART_1:7
-        .= Hom(dom f,o) by MCART_1:7
+        .= Hom(dom f,o)
         .= (Obj (hom?-(Hom A,dom f))).o by ENS_1:60
-        .= (hom?-(Hom A,dom f)).o by CAT_1:def 17
+        .= (hom?-(Hom A,dom f)).o
         .=F2.o by ENS_1:def 25;
       dom(m) = (fDom Hom A).m by A2
         .= dom m9 by ENS_1:def 9
         .= m`1`1 by ENS_1:def 3
         .= [Hom(cod f,o),Hom(dom f,o)]`1 by MCART_1:7
-        .= Hom(cod f,o) by MCART_1:7
+        .= Hom(cod f,o)
         .= (Obj (hom?-(Hom A,cod f))).o by ENS_1:60
-        .= (hom?-(Hom A,cod f)).o by CAT_1:def 17
+        .= (hom?-(Hom A,cod f)).o
         .= F1.o by ENS_1:def 25;
-      hence thesis by A4,CAT_1:1;
+      hence thesis by A4;
     end;
 A5: for o being Element of A holds F(o) in the carrier' of EnsHom(A)
     proof
@@ -398,7 +399,7 @@ A7: for o being Object of A holds t.o is Morphism of F1.o,F2.o
       let o;
       [[Hom(cod f,o),Hom(dom f,o)],hom(f,id o)] in Hom(F1.o,F2.o) by A1;
       then [[Hom(cod f,o),Hom(dom f,o)],hom(f,id o)] is Morphism of F1.o,F2.o
-      by CAT_1:def 4;
+      by CAT_1:def 5;
       hence thesis by A6;
     end;
     for o being Object of A holds Hom(F1.o,F2.o) <> {} by A1;
@@ -406,7 +407,7 @@ A7: for o being Object of A holds t.o is Morphism of F1.o,F2.o
 A8: F1 is_transformable_to F2 by NATTRA_1:def 2;
     then reconsider t as transformation of F1,F2 by A7,NATTRA_1:def 3;
 A9: for a,b being Object of A st Hom(a,b) <> {} for g being Morphism of a
-    ,b holds t.b*F1.g = F2.g*t.a
+    ,b holds t.b*F1/.g = F2/.g*t.a
     proof
       let a,b be Object of A such that
 A10:  Hom(a,b) <> {};
@@ -419,191 +420,189 @@ A14:    cod g =b by A10,CAT_1:5;
         per cases;
         suppose
 A15:      Hom(dom f,b) = {};
-A16:      rng hom(cod f,g) c= Hom(cod f,cod g) by RELAT_1:def 19;
           Hom(cod f,b) = {} by A15,ENS_1:42;
-          hence thesis by A14,A16,FUNCT_2:def 1;
+          hence thesis by A14;
         end;
         suppose
-A17:      Hom(dom f,b) <> {};
+A16:      Hom(dom f,b) <> {};
           cod g =b by A10,CAT_1:5;
           then
-A18:      rng hom(cod f,g) c= Hom(cod f,cod g) & Hom(cod f,cod g)=dom hom
-          (f,b) by A17,FUNCT_2:def 1,RELAT_1:def 19;
+A17:      rng hom(cod f,g) c= Hom(cod f,cod g) & Hom(cod f,cod g)=dom hom
+          (f,b) by A16,FUNCT_2:def 1,RELAT_1:def 19;
           let e be set;
           assume e in rng hom(cod f,g);
-          hence thesis by A18;
+          hence thesis by A17;
         end;
       end;
-A19:  rng hom(f,a) c= dom hom(dom f,g)
+A18:  rng hom(f,a) c= dom hom(dom f,g)
       proof
-A20:    dom g =a by A10,CAT_1:5;
+A19:    dom g =a by A10,CAT_1:5;
         per cases;
         suppose
-A21:      Hom(dom f,cod g) = {};
-A22:      rng hom(f,a) c= Hom(dom f,a) by RELAT_1:def 19;
-          Hom(dom f,dom g) = {} by A21,ENS_1:42;
-          hence thesis by A20,A22,FUNCT_2:def 1;
+A20:      Hom(dom f,cod g) = {};
+          Hom(dom f,dom g) = {} by A20,ENS_1:42;
+          hence thesis by A19;
         end;
         suppose
-A23:      Hom(dom f,cod g) <> {};
+A21:      Hom(dom f,cod g) <> {};
           let e be set;
           assume
-A24:      e in rng hom(f,a);
-          rng hom(f,a) c= Hom(dom f,a) & Hom(dom f,a)=dom hom(dom f,g) by A20
-,A23,FUNCT_2:def 1,RELAT_1:def 19;
-          hence thesis by A24;
+A22:      e in rng hom(f,a);
+          rng hom(f,a) c= Hom(dom f,a) & Hom(dom f,a)=dom hom(dom f,g) by A19
+,A21,FUNCT_2:def 1,RELAT_1:def 19;
+          hence thesis by A22;
         end;
       end;
-A25:  dom (hom(f,b)*hom(cod f,g)) = dom(hom(dom f,g)*hom(f,a))
+A23:  dom (hom(f,b)*hom(cod f,g)) = dom(hom(dom f,g)*hom(f,a))
       proof
         per cases;
         suppose
-A26:      Hom(cod f,dom g)= {};
+A24:      Hom(cod f,dom g)= {};
           dom (hom(f,b)*hom(cod f,g)) = dom (hom(cod f,g)) by A13,RELAT_1:27
-            .=Hom(cod f,a) by A12,A26,FUNCT_2:def 1
-            .=dom (hom(f,a)) by A12,A26,FUNCT_2:def 1
-            .=dom(hom(dom f,g)*hom(f,a)) by A19,RELAT_1:27;
+            .=Hom(cod f,a) by A12,A24
+            .=dom (hom(f,a)) by A12,A24
+            .=dom(hom(dom f,g)*hom(f,a)) by A18,RELAT_1:27;
           hence thesis;
         end;
         suppose
-A27:      Hom(cod f,dom g) <> {};
+A25:      Hom(cod f,dom g) <> {};
           then
-A28:      Hom(cod f,cod g) <> {} by ENS_1:42;
-A29:      Hom(dom f,a) <> {} by A12,A27,ENS_1:42;
+A26:      Hom(cod f,cod g) <> {} by ENS_1:42;
+A27:      Hom(dom f,a) <> {} by A12,A25,ENS_1:42;
           dom (hom(f,b)*hom(cod f,g)) = dom (hom(cod f,g)) by A13,RELAT_1:27
-            .=Hom(cod f,a) by A12,A28,FUNCT_2:def 1
-            .=dom (hom(f,a)) by A29,FUNCT_2:def 1
-            .=dom(hom(dom f,g)*hom(f,a)) by A19,RELAT_1:27;
+            .=Hom(cod f,a) by A12,A26,FUNCT_2:def 1
+            .=dom (hom(f,a)) by A27,FUNCT_2:def 1
+            .=dom(hom(dom f,g)*hom(f,a)) by A18,RELAT_1:27;
           hence thesis;
         end;
       end;
-A30:  for x being set st x in dom (hom(f,b)*hom(cod f,g)) holds (hom(f,b)
+A28:  for x being set st x in dom (hom(f,b)*hom(cod f,g)) holds (hom(f,b)
       *hom(cod f,g)).x = (hom(dom f,g)*hom(f,a)).x
       proof
         let x be set such that
-A31:    x in dom (hom(f,b)*hom(cod f,g));
+A29:    x in dom (hom(f,b)*hom(cod f,g));
         per cases;
         suppose
-A32:      Hom(cod f,dom g) <> {};
-A33:      x in dom hom(cod f,g) by A31,FUNCT_1:11;
-          Hom(cod f,cod g) <> {} by A32,ENS_1:42;
+A30:      Hom(cod f,dom g) <> {};
+A31:      x in dom hom(cod f,g) by A29,FUNCT_1:11;
+          Hom(cod f,cod g) <> {} by A30,ENS_1:42;
           then
-A34:      x in Hom(cod f,dom g) by A33,FUNCT_2:def 1;
+A32:      x in Hom(cod f,dom g) by A31,FUNCT_2:def 1;
           then reconsider x as Morphism of A;
-A35:      dom(g) = cod(x) by A34,CAT_1:1;
+A33:      dom(g) = cod(x) by A32,CAT_1:1;
           cod g =b by A10,CAT_1:5;
           then
-A36:      cod(g*x)=b by A35,CAT_1:17;
-          dom(g*x) =dom x by A35,CAT_1:17
-            .=cod f by A34,CAT_1:1;
+A34:      cod(g(*)x)=b by A33,CAT_1:17;
+          dom(g(*)x) =dom x by A33,CAT_1:17
+            .=cod f by A32,CAT_1:1;
           then
-A37:      g*x in Hom(cod f,b) by A36,CAT_1:1;
-A38:      dom(x) = cod(f) by A34,CAT_1:1;
+A35:      g(*)x in Hom(cod f,b) by A34;
+A36:      dom(x) = cod(f) by A32,CAT_1:1;
           then
-A39:      dom(x*f) =dom f by CAT_1:17;
-A40:      hom(f,a).x =x*f by A12,A34,ENS_1:def 20;
+A37:      dom(x(*)f) =dom f by CAT_1:17;
+A38:      hom(f,a).x =x(*)f by A12,A32,ENS_1:def 20;
           then reconsider h=hom(f,a).x as Morphism of A;
-A41:      dom(g) = cod(x) & dom(x) = cod(f) by A34,CAT_1:1;
-          cod(x*f)=cod(x) by A38,CAT_1:17
-            .=dom g by A34,CAT_1:1;
+A39:      dom(g) = cod(x) & dom(x) = cod(f) by A32,CAT_1:1;
+          cod(x(*)f)=cod(x) by A36,CAT_1:17
+            .=dom g by A32,CAT_1:1;
           then
-A42:      hom(f,a).x in Hom(dom f,dom g) by A40,A39,CAT_1:1;
-          (hom(f,b)*hom(cod f,g)).x = hom(f,b).(hom(cod f,g).x) by A31,
+A40:      hom(f,a).x in Hom(dom f,dom g) by A38,A37;
+          (hom(f,b)*hom(cod f,g)).x = hom(f,b).(hom(cod f,g).x) by A29,
 FUNCT_1:12
-            .=hom(f,b).(g*x) by A34,ENS_1:def 19
-            .=(g*x)*f by A37,ENS_1:def 20
-            .= g*(x*f) by A41,CAT_1:18
-            .= g*(h) by A12,A34,ENS_1:def 20
-            .= hom(dom f,g).(hom(f,a).x) by A42,ENS_1:def 19
-            .= (hom(dom f,g)*hom(f,a)).x by A25,A31,FUNCT_1:12;
+            .=hom(f,b).(g(*)x) by A32,ENS_1:def 19
+            .=(g(*)x)(*)f by A35,ENS_1:def 20
+            .= g(*)(x(*)f) by A39,CAT_1:18
+            .= g(*)(h) by A12,A32,ENS_1:def 20
+            .= hom(dom f,g).(hom(f,a).x) by A40,ENS_1:def 19
+            .= (hom(dom f,g)*hom(f,a)).x by A23,A29,FUNCT_1:12;
           hence thesis;
         end;
         suppose
-A43:      Hom(cod f,dom g) = {};
-          x in dom hom(cod f,g) by A31,FUNCT_1:11;
-          hence thesis by A43,FUNCT_2:def 1;
+A41:      Hom(cod f,dom g) = {};
+          x in dom hom(cod f,g) by A29,FUNCT_1:11;
+          hence thesis by A41;
         end;
       end;
-A44:  Hom(F2.a,F2.b)<>{} by A10,CAT_1:84;
-A45:  cod g =b by A10,CAT_1:5;
+A42:  Hom(F2.a,F2.b)<>{} by A10,CAT_1:84;
+A43:  cod g =b by A10,CAT_1:5;
       reconsider f4=t.a as Morphism of EnsHom A;
-A46:  t.a = (t qua Function of the carrier of A, the carrier' of B).a by A8,
+A44:  t.a = (t qua Function of the carrier of A, the carrier' of B).a by A8,
 NATTRA_1:def 5
         .= [[Hom(cod f,a),Hom(dom f,a)],hom(f,id a)] by A6
         .= [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)] by ENS_1:53;
       then reconsider f49=f4 as Element of Maps Hom A by ENS_1:48;
-A47:  Hom(F1.a,F2.a)<>{} by A1;
+A45:  Hom(F1.a,F2.a)<>{} by A1;
       reconsider f1=t.b as Morphism of EnsHom A;
-A48:  t.b = (t qua Function of the carrier of A, the carrier' of B).b by A8,
+A46:  t.b = (t qua Function of the carrier of A, the carrier' of B).b by A8,
 NATTRA_1:def 5
         .= [[Hom(cod f,b),Hom(dom f,b)],hom(f,id b)] by A6
         .=[[Hom(cod f,b),Hom(dom f,b)],hom(f,b)] by ENS_1:53;
       then reconsider f19=f1 as Element of Maps Hom A by ENS_1:48;
-A49:  EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp
-        Hom A,fId Hom A #) by ENS_1:def 13;
+A47:  EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp
+        Hom A #) by ENS_1:def 13;
       then
-A50:  cod(f1) = (fCod Hom A).f1 .= cod f19 by ENS_1:def 10
+A48:  cod(f1) = (fCod Hom A).f1 .= cod f19 by ENS_1:def 10
         .= f1`1`2 by ENS_1:def 4
-        .= [Hom(cod f,b),Hom(dom f,b)]`2 by A48,MCART_1:7
-        .= Hom(dom f,b) by MCART_1:7;
-A51:  dom(f4) =(fDom Hom A).f4 by A49
+        .= [Hom(cod f,b),Hom(dom f,b)]`2 by A46,MCART_1:7
+        .= Hom(dom f,b);
+A49:  dom(f4) =(fDom Hom A).f4 by A47
         .= dom f49 by ENS_1:def 9
         .= f4`1`1 by ENS_1:def 3
-        .=[Hom(cod f,a),Hom(dom f,a)]`1 by A46,MCART_1:7
-        .=Hom(cod f,a) by MCART_1:7;
-A52:  cod(f4) = (fCod Hom A).f4 by A49
+        .=[Hom(cod f,a),Hom(dom f,a)]`1 by A44,MCART_1:7
+        .=Hom(cod f,a);
+A50:  cod(f4) = (fCod Hom A).f4 by A47
         .= cod f49 by ENS_1:def 10
         .= f4`1`2 by ENS_1:def 4
-        .= [Hom(cod f,a),Hom(dom f,a)]`2 by A46,MCART_1:7
-        .= Hom(dom f,a) by MCART_1:7;
-      reconsider f2=F1.g as Morphism of EnsHom A;
-A53:  f2 = (hom?-(cod f)).g by A10,NATTRA_1:def 1
+        .= [Hom(cod f,a),Hom(dom f,a)]`2 by A44,MCART_1:7
+        .= Hom(dom f,a);
+      reconsider f2=F1/.g as Morphism of EnsHom A;
+A51:  f2 = (hom?-(cod f)).g by A10,CAT_3:def 10
         .=[[Hom(cod f,dom g),Hom(cod f,cod g)],hom(cod f,g)] by ENS_1:def 21;
       then reconsider f29=f2 as Element of Maps Hom A by ENS_1:47;
-A54:  dom(f2) =(fDom Hom A).f2 by A49
+A52:  dom(f2) =(fDom Hom A).f2 by A47
         .= dom f29 by ENS_1:def 9
         .= f2`1`1 by ENS_1:def 3
-        .=[Hom(cod f,dom g),Hom(cod f,cod g)]`1 by A53,MCART_1:7
-        .=Hom(cod f,dom g) by MCART_1:7;
-A55:  cod(f2) = (fCod Hom A).f2 by A49
+        .=[Hom(cod f,dom g),Hom(cod f,cod g)]`1 by A51,MCART_1:7
+        .=Hom(cod f,dom g);
+A53:  cod(f2) = (fCod Hom A).f2 by A47
         .= cod f29 by ENS_1:def 10
         .= f2`1`2 by ENS_1:def 4
-        .= [Hom(cod f,dom g),Hom(cod f,cod g)]`2 by A53,MCART_1:7
-        .= Hom(cod f,cod g) by MCART_1:7;
-A56:  dom(f1) = (fDom Hom A).f1 by A49
+        .= [Hom(cod f,dom g),Hom(cod f,cod g)]`2 by A51,MCART_1:7
+        .= Hom(cod f,cod g);
+A54:  dom(f1) = (fDom Hom A).f1 by A47
         .= dom f19 by ENS_1:def 9
         .= f1`1`1 by ENS_1:def 3
-        .= [Hom(cod f,b),Hom(dom f,b)]`1 by A48,MCART_1:7
-        .= Hom(cod f,b) by MCART_1:7;
+        .= [Hom(cod f,b),Hom(dom f,b)]`1 by A46,MCART_1:7
+        .= Hom(cod f,b);
       then
-A57:  cod f2 = dom f1 by A10,A55,CAT_1:5;
-      reconsider f3=F2.g as Morphism of EnsHom A;
-A58:  f3 = (hom?-(dom f)).g by A10,NATTRA_1:def 1
+A55:  cod f2 = dom f1 by A10,A53,CAT_1:5;
+      reconsider f3=F2/.g as Morphism of EnsHom A;
+A56:  f3 = (hom?-(dom f)).g by A10,CAT_3:def 10
         .=[[Hom(dom f,dom g),Hom(dom f,cod g)],hom(dom f,g)] by ENS_1:def 21;
       then reconsider f39=f3 as Element of Maps Hom A by ENS_1:47;
-A59:  cod(f3) = (fCod Hom A).f3 by A49
+A57:  cod(f3) = (fCod Hom A).f3 by A47
         .= cod f39 by ENS_1:def 10
         .= f3`1`2 by ENS_1:def 4
-        .= [Hom(dom f,dom g),Hom(dom f,cod g)]`2 by A58,MCART_1:7
-        .= Hom(dom f,cod g) by MCART_1:7;
-A60:  dom(f3) =(fDom Hom A).f3 by A49
+        .= [Hom(dom f,dom g),Hom(dom f,cod g)]`2 by A56,MCART_1:7
+        .= Hom(dom f,cod g);
+A58:  dom(f3) =(fDom Hom A).f3 by A47
         .= dom f39 by ENS_1:def 9
         .= f3`1`1 by ENS_1:def 3
-        .=[Hom(dom f,dom g),Hom(dom f,cod g)]`1 by A58,MCART_1:7
-        .=Hom(dom f,dom g) by MCART_1:7;
+        .=[Hom(dom f,dom g),Hom(dom f,cod g)]`1 by A56,MCART_1:7
+        .=Hom(dom f,dom g);
       then
-A61:  cod f4 = dom f3 by A10,A52,CAT_1:5;
+A59:  cod f4 = dom f3 by A10,A50,CAT_1:5;
       Hom(F1.b,F2.b)<>{} by A1;
-      then t.b*F1.g = f1*f2 by A11,CAT_1:def 10
-        .=[[Hom(cod f,dom g),Hom(dom f,b)],hom(f,b)*hom(cod f,g)] by A48,A56
-,A50,A53,A54,A55,A57,Th1
-        .=[[ Hom(cod f,a),Hom(dom f,cod g)],hom(dom f,g)*hom(f,a)] by A12,A45
-,A25,A30,FUNCT_1:2
-        .=f3*f4 by A58,A60,A59,A46,A51,A52,A61,Th1
-        .= F2.g*t.a by A44,A47,CAT_1:def 10;
+      then t.b*F1/.g = f1(*)f2 by A11,CAT_1:def 13
+        .=[[Hom(cod f,dom g),Hom(dom f,b)],hom(f,b)*hom(cod f,g)] by A46,A54
+,A48,A51,A52,A53,A55,Th1
+        .=[[ Hom(cod f,a),Hom(dom f,cod g)],hom(dom f,g)*hom(f,a)] by A12,A43
+,A23,A28,FUNCT_1:2
+        .=f3(*)f4 by A56,A58,A57,A44,A49,A50,A59,Th1
+        .= F2/.g*t.a by A42,A45,CAT_1:def 13;
       hence thesis;
     end;
-    F1 is_naturally_transformable_to F2 by Th3;
+    F1 is_naturally_transformable_to F2 by Th2;
     then reconsider t as natural_transformation of F1,F2 by A9,NATTRA_1:def 8;
     for o be Element of A holds t.o= [[Hom(cod f,o),Hom( dom f,o)],hom(f,id o)]
     proof
@@ -620,53 +619,53 @@ A61:  cod f4 = dom f3 by A10,A52,CAT_1:5;
     in Hom(<|cod f,?>.a,<|dom f,?>.a)
     proof
       let a be Object of A;
-A62:  EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp
-        Hom A,fId Hom A #) by ENS_1:def 13;
+A60:  EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp
+        Hom A #) by ENS_1:def 13;
       then reconsider
       m = [[Hom(cod f,a),Hom(dom f,a)],hom(f,a)] as Morphism of
       EnsHom A by ENS_1:48;
       reconsider m9=m as Element of Maps Hom A by ENS_1:48;
-A63:  cod(m) = (fCod Hom A).m by A62
+A61:  cod(m) = (fCod Hom A).m by A60
         .= cod m9 by ENS_1:def 10
         .= m`1`2 by ENS_1:def 4
         .= [Hom(cod f,a),Hom(dom f,a)]`2 by MCART_1:7
-        .= Hom(dom f,a) by MCART_1:7
+        .= Hom(dom f,a)
         .= (Obj (hom?-(Hom A,dom f))).a by ENS_1:60
-        .= (hom?-(Hom A,dom f)).a by CAT_1:def 17
+        .= (hom?-(Hom A,dom f)).a
         .=<|dom f,?>.a by ENS_1:def 25;
-      dom(m) =(fDom Hom A).m by A62
+      dom(m) =(fDom Hom A).m by A60
         .= dom m9 by ENS_1:def 9
         .= m`1`1 by ENS_1:def 3
         .=[Hom(cod f,a),Hom(dom f,a)]`1 by MCART_1:7
-        .=Hom(cod f,a) by MCART_1:7
+        .=Hom(cod f,a)
         .= (Obj (hom?-(Hom A,cod f))).a by ENS_1:60
-        .= (hom?-(Hom A,cod f)).a by CAT_1:def 17
+        .= (hom?-(Hom A,cod f)).a
         .=<|cod f,?>.a by ENS_1:def 25;
-      hence thesis by A63,CAT_1:1;
+      hence thesis by A61;
     end;
     then for a being Object of A holds Hom(<|cod f,?>.a,<|dom f,?>.a) <> {};
     then
-A64: <|cod f,?> is_transformable_to <|dom f,?> by NATTRA_1:def 2;
+A62: <|cod f,?> is_transformable_to <|dom f,?> by NATTRA_1:def 2;
     let h1,h2 be natural_transformation of <|cod f,?>, <|dom f,?> such that
-A65: for o be Object of A holds h1.o = [[Hom(cod f,o),Hom(dom f,o)],
+A63: for o be Object of A holds h1.o = [[Hom(cod f,o),Hom(dom f,o)],
     hom(f,id o)] and
-A66: for o be Object of A holds h2.o =[[Hom(cod f,o),Hom(dom f,o)],hom
+A64: for o be Object of A holds h2.o =[[Hom(cod f,o),Hom(dom f,o)],hom
     (f,id o)];
     now
       let o;
-      thus h1.o =[[Hom(cod f,o),Hom(dom f,o)],hom(f,id o)] by A65
-        .= h2.o by A66;
+      thus h1.o =[[Hom(cod f,o),Hom(dom f,o)],hom(f,id o)] by A63
+        .= h2.o by A64;
     end;
-    hence thesis by A64,NATTRA_1:19;
+    hence thesis by A62,NATTRA_1:19;
   end;
 end;
 
-theorem Th4:
+theorem Th3:
   for f being Element of the carrier' of A holds [[<|cod f,?>,<|dom
   f,?>],<|f,?>] is Element of the carrier' of Functors(A,EnsHom(A))
 proof
   let f be Element of the carrier' of A;
-  <|cod f,?> is_naturally_transformable_to <|dom f,?> by Th3;
+  <|cod f,?> is_naturally_transformable_to <|dom f,?> by Th2;
   then [[<|cod f,?>,<|dom f,?>],<|f,?>] in NatTrans(A,EnsHom(A)) by
 NATTRA_1:def 16;
   hence thesis by NATTRA_1:def 17;
@@ -687,14 +686,15 @@ A1: for f being Element of the carrier' of A holds F(f) in the carrier' of
     proof
       let f;
       [[<|cod f,?>,<|dom f,?>],<|f,?>] is Morphism of Functors(A,EnsHom(A)
-      ) by Th4;
+      ) by Th3;
       hence thesis;
     end;
     consider F being Function of the carrier' of A, the carrier' of Functors(A
     ,EnsHom(A)) such that
 A2: for f being Element of the carrier' of A holds F.f = F(f) from
     FUNCT_2:sch 8(A1);
-A3: for f,g being Morphism of A st dom g = cod f holds F.(g*f) = (F.f)*(F .g)
+A3: for f,g being Morphism of A st dom g = cod f
+     holds F.(g(*)f) = (F.f)(*)(F .g)
     proof
       let f,g be Morphism of A;
       reconsider t1=<|g,?> as natural_transformation of <|cod g,?>,<|dom g,?>;
@@ -703,12 +703,12 @@ A4:   dom g = cod f;
       then reconsider
       t=<|f,?> as natural_transformation of <|dom g,?>,<|dom f,?>;
 A5:   F.g =[[<|cod g,?>,<|dom g,?>],t1] by A2;
-A6:   dom(g*f) = dom f by A4,CAT_1:17;
+A6:   dom(g(*)f) = dom f by A4,CAT_1:17;
       then reconsider
-      tt=t`*`t1 as natural_transformation of <|cod(g*f),?>,<|dom(g*
+      tt=t`*`t1 as natural_transformation of <|cod(g(*)f),?>,<|dom(g(*)
       f),?> by A4,CAT_1:17;
-A7:   cod(g*f) = cod g by A4,CAT_1:17;
-      for o being Object of A holds (<|g*f,?>).o =tt.o
+A7:   cod(g(*)f) = cod g by A4,CAT_1:17;
+      for o being Object of A holds (<|g(*)f,?>).o =tt.o
       proof
         set F1=<|cod f,?> , F2=<|dom f,?>;
         let o be Object of A;
@@ -720,7 +720,7 @@ A8:     f2 = [[Hom(cod g,o),Hom(dom g,o)],hom(g,id o)] by Def3;
         proof
           let a be Object of A;
 A9:       EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A, fCod Hom A,
-            fComp Hom A,fId Hom A #) by ENS_1:def 13;
+            fComp Hom A #) by ENS_1:def 13;
           then reconsider
           m = [[Hom(cod g,a),Hom(dom g,a)],hom(g,a)] as Morphism of
           EnsHom A by ENS_1:48;
@@ -729,19 +729,19 @@ A10:      cod(m) = (fCod Hom A).m by A9
             .= cod m9 by ENS_1:def 10
             .= m`1`2 by ENS_1:def 4
             .= [Hom(cod g,a),Hom(dom g,a)]`2 by MCART_1:7
-            .= Hom(dom g,a) by MCART_1:7
+            .= Hom(dom g,a)
             .= (Obj (hom?-(Hom A,dom g))).a by ENS_1:60
-            .= (hom?-(Hom A,dom g)).a by CAT_1:def 17
+            .= (hom?-(Hom A,dom g)).a
             .= <|dom g,?>.a by ENS_1:def 25;
           dom(m) = (fDom Hom A).m by A9
             .= dom m9 by ENS_1:def 9
             .= m`1`1 by ENS_1:def 3
             .= [Hom(cod g,a),Hom(dom g,a)]`1 by MCART_1:7
-            .= Hom(cod g,a) by MCART_1:7
+            .= Hom(cod g,a)
             .= (Obj (hom?-(Hom A,cod g))).a by ENS_1:60
-            .= (hom?-(Hom A,cod g)).a by CAT_1:def 17
+            .= (hom?-(Hom A,cod g)).a
             .=<|cod g,?>.a by ENS_1:def 25;
-          hence thesis by A10,CAT_1:1;
+          hence thesis by A10;
         end;
         then
 A11:    Hom(<|cod g,?>.o,<|dom g,?>.o)<> {};
@@ -750,7 +750,7 @@ A11:    Hom(<|cod g,?>.o,<|dom g,?>.o)<> {};
         proof
           let a be Object of A;
 A12:      EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A, fCod Hom A,
-            fComp Hom A,fId Hom A #) by ENS_1:def 13;
+            fComp Hom A #) by ENS_1:def 13;
           then reconsider
           m = [[Hom(cod f,a),Hom(dom f,a)],hom(f, a)] as Morphism
           of EnsHom A by ENS_1:48;
@@ -759,63 +759,63 @@ A13:      cod(m) = (fCod Hom A).m by A12
             .= cod m9 by ENS_1:def 10
             .= m`1`2 by ENS_1:def 4
             .= [Hom(cod f,a),Hom(dom f,a)]`2 by MCART_1:7
-            .= Hom(dom f,a) by MCART_1:7
+            .= Hom(dom f,a)
             .= (Obj (hom?-(Hom A,dom f))).a by ENS_1:60
-            .= (hom?-(Hom A,dom f)).a by CAT_1:def 17
+            .= (hom?-(Hom A,dom f)).a
             .= F2.a by ENS_1:def 25;
           dom(m) = (fDom Hom A).m by A12
             .= dom m9 by ENS_1:def 9
             .= m`1`1 by ENS_1:def 3
             .= [Hom(cod f,a),Hom(dom f,a)]`1 by MCART_1:7
-            .= Hom(cod f,a) by MCART_1:7
+            .= Hom(cod f,a)
             .= (Obj (hom?-(Hom A,cod f))).a by ENS_1:60
-            .= (hom?-(Hom A,cod f)).a by CAT_1:def 17
+            .= (hom?-(Hom A,cod f)).a
             .=F1.a by ENS_1:def 25;
-          hence thesis by A13,CAT_1:1;
+          hence thesis by A13;
         end;
         then
 A14:    Hom(F1.o,F2.o)<> {};
-A15:    (<|g*f,?>).o = [[Hom(cod(g),o),Hom(dom(g*f),o)], hom(g*f,id o)]
+A15:    (<|g(*)f,?>).o = [[Hom(cod(g),o),Hom(dom(g(*)f),o)], hom(g(*)f,id o)]
         by A7,Def3
-          .= [[Hom(cod g,o),Hom(dom f,o)],hom(g*f,o)] by A6,ENS_1:53;
+          .= [[Hom(cod g,o),Hom(dom f,o)],hom(g(*)f,o)] by A6,ENS_1:53;
 A16:    t.o = [[Hom(cod f,o),Hom(dom f,o)],hom(f,id o)] by A4,Def3;
 A17:    EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A, fComp
-          Hom A,fId Hom A #) by ENS_1:def 13;
+          Hom A #) by ENS_1:def 13;
         then reconsider f19=f1 as Element of Maps Hom A;
         reconsider f29=f2 as Element of Maps Hom A by A17;
 A18:    cod(f2) = (fCod Hom A).f2 by A17
           .= cod f29 by ENS_1:def 10
           .= f2`1`2 by ENS_1:def 4
           .= [Hom(cod g,o),Hom(dom g,o)]`2 by A8,MCART_1:7
-          .= Hom(dom g,o) by MCART_1:7;
+          .= Hom(dom g,o);
 A19:    cod(f1) = (fCod Hom A).f1 by A17
           .= cod f19 by ENS_1:def 10
           .= f1`1`2 by ENS_1:def 4
           .= [Hom(cod f,o),Hom(dom f,o)]`2 by A16,MCART_1:7
-          .= Hom(dom f,o) by MCART_1:7;
+          .= Hom(dom f,o);
 A20:    dom(f1) =(fDom Hom A).f1 by A17
           .= dom f19 by ENS_1:def 9
           .= f1`1`1 by ENS_1:def 3
           .=[Hom(cod f,o),Hom(dom f,o)]`1 by A16,MCART_1:7
-          .=Hom(cod f,o) by MCART_1:7;
+          .=Hom(cod f,o);
 A21:    dom(f2) = (fDom Hom A).f2 by A17
           .= dom f29 by ENS_1:def 9
           .= f2`1`1 by ENS_1:def 3
           .= [Hom(cod g,o),Hom(dom g,o)]`1 by A8,MCART_1:7
-          .= Hom(cod g,o) by MCART_1:7;
+          .= Hom(cod g,o);
         <|dom g,?> is_naturally_transformable_to <|dom f,?> & <|cod g,?>
-        is_naturally_transformable_to <|dom g,?> by A4,Th3;
+        is_naturally_transformable_to <|dom g,?> by A4,Th2;
         then (tt).o = (t.o)*(t1.o) by A6,A7,NATTRA_1:25
-          .= f1 * f2 by A4,A14,A11,CAT_1:def 10
+          .= f1(*)f2 by A4,A14,A11,CAT_1:def 13
           .= [[Hom(cod g,o),Hom(dom f,o)], hom(f,id o)*hom(g,id o)] by A4,A16
 ,A8,A20,A18,A21,A19,Th1
           .= [[Hom(cod g,o),Hom(dom f,o)],hom(f,o)*hom(g,id o)] by ENS_1:53
           .= [[Hom(cod g,o),Hom(dom f,o)],hom(f,o)*hom(g,o)] by ENS_1:53
-          .= [[Hom(cod g,o),Hom(dom f,o)],hom(g*f,o)] by A4,ENS_1:46;
+          .= [[Hom(cod g,o),Hom(dom f,o)],hom(g(*)f,o)] by A4,ENS_1:46;
         hence thesis by A15;
       end;
       then
-A22:  (<|g*f,?> )=tt by Th3,ISOCAT_1:26;
+A22:  (<|g(*)f,?> )=tt by Th2,ISOCAT_1:26;
 A23:  F.f =[[<|dom g,?>,<|dom f,?>],t] by A2,A4;
       then
 A24:  [F.f,F.g] in dom (the Comp of Functors(A,EnsHom(A))) by A5,NATTRA_1:35;
@@ -826,16 +826,17 @@ A25:  F.g=[[F9,F19],t9] and
 A26:  F.f = [[F19,F29],t19] and
 A27:  (the Comp of Functors(A,EnsHom(A))).(F.f,F.g) = [[F9,F29],t19
       `*`t9] by NATTRA_1:def 17;
-A28:  <|f,?> = t19 by A23,A26,ZFMISC_1:27;
-      [F19,F29] = [<|dom g,?>,<|dom f,?>] by A23,A26,ZFMISC_1:27;
+A28:  <|f,?> = t19 by A23,A26,XTUPLE_0:1;
+      [F19,F29] = [<|dom g,?>,<|dom f,?>] by A23,A26,XTUPLE_0:1;
       then
-A29:  <|dom f,?> = F29 by ZFMISC_1:27;
-      [F9,F19] = [<|cod g,?>,<|dom g,?>] by A5,A25,ZFMISC_1:27;
+A29:  <|dom f,?> = F29 by XTUPLE_0:1;
+      [F9,F19] = [<|cod g,?>,<|dom g,?>] by A5,A25,XTUPLE_0:1;
       then
-A30:  <|cod g,?> = F9 & <|dom g,?> = F19 by ZFMISC_1:27;
-      <|g,?> = t9 by A5,A25,ZFMISC_1:27;
-      then F.f*F.g = [[<|cod g,?>,<|dom f,?>],t`*`t1] by A24,A27,A28,A30,A29,
-CAT_1:def 1;
+A30:  <|cod g,?> = F9 & <|dom g,?> = F19 by XTUPLE_0:1;
+      <|g,?> = t9 by A5,A25,XTUPLE_0:1;
+      then (F.f)(*)(F.g)
+          = [[<|cod g,?>,<|dom f,?>],t`*`t1] by A24,A27,A28,A30,A29,CAT_1:def 1
+;
       hence thesis by A2,A6,A7,A22;
     end;
 A31: for f being Morphism of A holds F.(id dom f) = id cod (F.f) & F.(id
@@ -848,8 +849,8 @@ A32:  dom <|id dom f,?> = the carrier of A by FUNCT_2:def 1
         .= dom id <|dom f,?> by FUNCT_2:def 1;
 A33:  F.(id dom f) =[[<|cod (id dom f),?>,<|dom (id dom f),?>],<|(id dom
       f),?>] by A2
-        .=[[<|dom f,?>,<| dom (id dom f),?>],<|(id dom f),?>] by CAT_1:19
-        .=[[<|dom f,?>,<|dom f,?>],<|id dom f,?>] by CAT_1:19;
+        .=[[<|dom f,?>,<| dom (id dom f),?>],<|(id dom f),?>] by CAT_1:58
+        .=[[<|dom f,?>,<|dom f,?>],<|id dom f,?>] by CAT_1:58;
 A34:  g = [[<|cod f,?>,<|dom f,?>],<|f,?>] by A2;
       then cod g =<|dom f,?> by NATTRA_1:33;
       then
@@ -861,21 +862,17 @@ A36:  for y st y in X holds (<|id dom f,?>).y =(id <|dom f,?>).y
         assume y in X;
         then reconsider z=y as Object of A by FUNCT_2:def 1;
         reconsider zz= id z as Morphism of z,z;
-A37:    Hom(z,z) <> {} by CAT_1:27;
-        <|cod id dom f,?> is_transformable_to <|dom f,?> by CAT_1:19;
-        then
-A38:    <|cod id dom f,?> is_transformable_to <|dom id dom f,?> by CAT_1:19;
+A37:    Hom(z,z) <> {};
+A38:    <|cod id dom f,?> is_transformable_to <|dom id dom f,?>;
         (<|id dom f,?>).z = [[Hom(cod id dom f,z),Hom(dom id dom f,z)] ,
         hom(id dom f,id z)] by Def3
-          .= [[Hom(dom f,z),Hom(dom id dom f,z)], hom(id dom f,id z)] by
-CAT_1:19
-          .= [[Hom(dom f,z),Hom(dom f,z)], hom(id dom f,id z)] by CAT_1:19
+          .= [[Hom(dom f,z),Hom(dom id dom f,z)], hom(id dom f,id z)]
+          .= [[Hom(dom f,z),Hom(dom f,z)], hom(id dom f,id z)]
           .= [[Hom(dom f,z),Hom(dom f,z)], hom(dom f,id z)] by ENS_1:53
-          .= [[Hom(dom f,z),Hom(dom f,cod id z)], hom(dom f,id z)] by CAT_1:19
-          .= [[Hom(dom f,dom id z),Hom(dom f,cod id z)], hom(dom f,id z)] by
-CAT_1:19
+          .= [[Hom(dom f,z),Hom(dom f,cod id z)], hom(dom f,id z)]
+          .= [[Hom(dom f,dom id z),Hom(dom f,cod id z)], hom(dom f,id z)]
           .= (<|dom f,?> qua Function ).id z by ENS_1:def 21
-          .= (<|dom f,?>).zz by A37,NATTRA_1:def 1
+          .= (<|dom f,?>)/.zz by A37,CAT_3:def 10
           .= id (<|dom f,?>.z) by NATTRA_1:15
           .= (id <|dom f,?> ).z by NATTRA_1:20
           .= (id <|dom f,?> qua Function).z by NATTRA_1:def 5;
@@ -887,21 +884,17 @@ A39:  for y st y in X holds (<|id cod f,?>).y =(id <|cod f,?>).y
         let y;
         assume y in X;
         then reconsider z=y as Object of A by FUNCT_2:def 1;
-A40:    Hom(z,z) <> {} by CAT_1:27;
-        <|cod id cod f,?> is_transformable_to <|cod f,?> by CAT_1:19;
-        then
-A41:    <|cod id cod f,?> is_transformable_to <|dom id cod f,?> by CAT_1:19;
+A40:    Hom(z,z) <> {};
+A41:    <|cod id cod f,?> is_transformable_to <|dom id cod f,?>;
         (<|id cod f,?>).z = [[Hom(cod id cod f,z),Hom(dom id cod f,z)],
         hom(id cod f,id z)] by Def3
-          .= [[Hom(cod f,z),Hom(dom id cod f,z)], hom(id cod f,id z)] by
-CAT_1:19
-          .= [[Hom(cod f,z),Hom(cod f,z)], hom(id cod f,id z)] by CAT_1:19
+          .= [[Hom(cod f,z),Hom(dom id cod f,z)], hom(id cod f,id z)]
+          .= [[Hom(cod f,z),Hom(cod f,z)], hom(id cod f,id z)]
           .= [[Hom(cod f,z),Hom(cod f,z)], hom(cod f,id z)] by ENS_1:53
-          .= [[Hom(cod f,z),Hom(cod f,cod id z)], hom(cod f,id z)] by CAT_1:19
-          .= [[Hom(cod f,dom id z),Hom(cod f,cod id z)], hom(cod f,id z)] by
-CAT_1:19
+          .= [[Hom(cod f,z),Hom(cod f,cod id z)], hom(cod f,id z)]
+          .= [[Hom(cod f,dom id z),Hom(cod f,cod id z)], hom(cod f,id z)]
           .= (<|cod f,?> qua Function).id z by ENS_1:def 21
-          .= (<|cod f,?>).id z by A40,NATTRA_1:def 1
+          .= (<|cod f,?>)/.id z by A40,CAT_3:def 10
           .= id (<|cod f,?>.z) by NATTRA_1:15
           .= (id <|cod f,?>).z by NATTRA_1:20
           .= (id <|cod f,?> qua Function).z by NATTRA_1:def 5;
@@ -913,8 +906,8 @@ CAT_1:19
 A42:  <|id cod f,?> =id <|cod f,?> by A39,FUNCT_1:2;
 A43:  F.(id cod f) = [[<|cod (id cod f),?>,<|dom (id cod f),?>], <|(id
       cod f),?>] by A2
-        .= [[<|cod f,?>,<| dom (id cod f),?>],<|(id cod f),?>] by CAT_1:19
-        .= [[<|cod f,?>,<|cod f,?>],<|id cod f,?>] by CAT_1:19;
+        .= [[<|cod f,?>,<| dom (id cod f),?>],<|(id cod f),?>] by CAT_1:58
+        .= [[<|cod f,?>,<|cod f,?>],<|id cod f,?>] by CAT_1:58;
       dom g =<|cod f,?> by A34,NATTRA_1:33;
       hence thesis by A33,A35,A32,A36,A43,A42,FUNCT_1:2,NATTRA_1:def 17;
     end;
@@ -933,19 +926,17 @@ A44:  for y st y in X holds (<|id c,?>).y =(id <|c,?>).y
         assume y in X;
         then reconsider z=y as Object of A by FUNCT_2:def 1;
         reconsider zz= id z as Morphism of z,z;
-A45:    Hom(z,z) <> {} by CAT_1:27;
-        <|cod id c,?> is_transformable_to <|c,?> by CAT_1:19;
-        then
-A46:    <|cod id c,?> is_transformable_to <|dom id c,?> by CAT_1:19;
+A45:    Hom(z,z) <> {};
+A46:    <|cod id c,?> is_transformable_to <|dom id c,?>;
         (<|id c,?>).z = [[Hom(cod id c,z),Hom(dom id c,z)],hom(id c,id z)
         ] by Def3
-          .= [[Hom(c,z),Hom(dom id c,z)],hom(id c,id z)] by CAT_1:19
-          .= [[Hom(c,z),Hom(c,z)],hom(id c,id z)] by CAT_1:19
+          .= [[Hom(c,z),Hom(dom id c,z)],hom(id c,id z)]
+          .= [[Hom(c,z),Hom(c,z)],hom(id c,id z)]
           .= [[Hom(c,z),Hom(c,z)],hom(c,id z)] by ENS_1:53
-          .= [[Hom(c,z),Hom(c,cod id z)],hom(c,id z)] by CAT_1:19
-          .= [[Hom(c,dom id z),Hom(c,cod id z)],hom(c,id z)] by CAT_1:19
+          .= [[Hom(c,z),Hom(c,cod id z)],hom(c,id z)]
+          .= [[Hom(c,dom id z),Hom(c,cod id z)],hom(c,id z)]
           .=(<|c,?> qua Function ).id z by ENS_1:def 21
-          .=(<|c,?>).zz by A45,NATTRA_1:def 1
+          .=(<|c,?>)/.zz by A45,CAT_3:def 10
           .= id (<|c,?>.z) by NATTRA_1:15
           .=(id <|c,?> ).z by NATTRA_1:20
           .=(id <|c,?> qua Function).z by NATTRA_1:def 5;
@@ -956,13 +947,13 @@ A46:    <|cod id c,?> is_transformable_to <|dom id c,?> by CAT_1:19;
       then
 A47:  <|id c,?>= id <|c,?> by A44,FUNCT_1:2;
       F.(id c) = [[<|cod id c,?>,<|dom id c,?>],<|id c,?>] by A2
-        .=[[<|c,?>,<|dom id c,?>],<|id c,?>] by CAT_1:19
-        .= [[<|c,?>,<|c,?>],id <|c,?>] by A47,CAT_1:19
+        .=[[<|c,?>,<|dom id c,?>],<|id c,?>] by CAT_1:58
+        .= [[<|c,?>,<|c,?>],id <|c,?>] by A47,CAT_1:58
         .=id d by NATTRA_1:def 17;
       hence thesis;
     end;
     then reconsider F as Contravariant_Functor of A,Functors(A,EnsHom(A)) by
-A31,A3,OPPCAT_1:def 7;
+A31,A3,OPPCAT_1:def 9;
     for f being Element of the carrier' of A holds F.f = [[<|cod f,?>,<|
     dom f,?>],<|f,?>] by A2;
     hence thesis;
@@ -1013,24 +1004,22 @@ A4: F.x1 = F.x2;
 A5: Hom(o1,o2) <> {} by CAT_1:2;
     then
 A6: Hom(F.o1,F.o2) <> {} by CAT_1:84;
-A7: (Obj F).o4=(F).o4 by CAT_1:def 17;
-A8: (Obj F).o3 = F.o3 by CAT_1:def 17;
-A9: Hom(o3,o4) <> {} by CAT_1:2;
+A7: Hom(o3,o4) <> {} by CAT_1:2;
     then
-A10: Hom(F.o3,F.o4) <> {} by CAT_1:84;
-A11: F.m19= F.m2 by A4,A5,NATTRA_1:def 1
-      .= F.m29 by A9,NATTRA_1:def 1;
-    (Obj F).o1 = F.o1 by CAT_1:def 17
-      .=dom (F.m29) by A11,A6,CAT_1:5
-      .= (Obj F).o3 by A10,A8,CAT_1:5;
+A8: Hom(F.o3,F.o4) <> {} by CAT_1:84;
+A9: F/.m19= F.m2 by A4,A5,CAT_3:def 10
+      .= F/.m29 by A7,CAT_3:def 10;
+    (Obj F).o1 = F.o1
+      .=dom (F/.m29) by A9,A6,CAT_1:5
+      .= (Obj F).o3 by A8,CAT_1:5;
     then
-A12: m2 is Morphism of dom m2,cod m2 & o1=o3 by A1,CAT_1:4,FUNCT_2:19;
-    (Obj F).o2 = F.o2 by CAT_1:def 17
-      .=cod(F.m29) by A11,A6,CAT_1:5
-      .=(Obj F).o4 by A10,A7,CAT_1:5;
-    then m1 is Morphism of dom m1,cod m1 & m2 is Morphism of o1,o2 by A1,A12,
+A10: m2 is Morphism of dom m2,cod m2 & o1=o3 by A1,CAT_1:4,FUNCT_2:19;
+    (Obj F).o2 = F.o2
+      .=cod(F/.m29) by A9,A6,CAT_1:5
+      .=(Obj F).o4 by A8,CAT_1:5;
+    then m1 is Morphism of dom m1,cod m1 & m2 is Morphism of o1,o2 by A1,A10,
 CAT_1:4,FUNCT_2:19;
-    hence thesis by A2,A4,A5,CAT_1:def 21;
+    hence thesis by A2,A4,A5,CAT_1:def 27;
   end;
   hence thesis by FUNCT_1:def 4;
 end;
@@ -1044,7 +1033,7 @@ definition
   {} for f1,f2 being Morphism of c,c9 holds T.f1 = T.f2 implies f1 = f2;
 end;
 
-theorem Th6:
+theorem Th5:
   for F being Contravariant_Functor of A,Functors(A,EnsHom(A)) st
   Obj F is one-to-one & F is faithful holds F is one-to-one
 proof
@@ -1089,20 +1078,18 @@ proof
     assume
 A1: Hom(o1,o2) <> {};
     let x1,x2 be Morphism of o1,o2;
-A2: x2 in Hom(o1,o2) by A1,CAT_1:def 4;
+A2: x2 in Hom(o1,o2) by A1,CAT_1:def 5;
     assume F.x1 = F.x2;
     then [[<|cod x1,?>,<|dom x1,?>],<|x1,?>]=F.x2 by Def4;
-    then [[<|cod x1,?>,<|dom x1,?>],<|x1,?>]= [[<|cod x2,?>,<|dom x2,?>],<|x2
-    ,?>] by Def4;
+    then [[<|cod x1,?>,<|dom x1,?>],<|x1,?>]
+      = [[<|cod x2,?>,<|dom x2,?>],<|x2,?>] by Def4;
     then
-    [<|cod x1,?>,<|dom x1,?>,<|x1,?>]= [[<|cod x2,?>,<|dom x2,?>],<|x2,?>
-    ] by MCART_1:def 3;
+    [<|cod x1,?>,<|dom x1,?>,<|x1,?>]= [[<|cod x2,?>,<|dom x2,?>],<|x2,?>];
     then
-    [<|cod x1,?>,<|dom x1,?>,<|x1,?>] = [<|cod x2,?>,<|dom x2,?>,<|x2,?>]
-    by MCART_1:def 3;
+    [<|cod x1,?>,<|dom x1,?>,<|x1,?>] = [<|cod x2,?>,<|dom x2,?>,<|x2,?>];
     then
-A3: <|x1,?>= <|x2,?> by MCART_1:25;
-A4: x1 in Hom(o1,o2) by A1,CAT_1:def 4;
+A3: <|x1,?>= <|x2,?> by XTUPLE_0:3;
+A4: x1 in Hom(o1,o2) by A1,CAT_1:def 5;
     then
 A5: dom x1 = o1 by CAT_1:1
       .= dom x2 by A2,CAT_1:1;
@@ -1126,31 +1113,32 @@ A5: dom x1 = o1 by CAT_1:1
     [[Hom(o2,o2),Hom(o1,o2)],hom(x1,id o2)]= [[Hom(o2,o2),Hom(o1,o2)],hom
     (x2,id o2)] by A2,CAT_1:1;
     then [[Hom(o2,o2),Hom(o1,o2)],hom(x1,id o2)]= [Hom(o2,o2),Hom(o1,o2),hom(
-    x2,id o2)] by MCART_1:def 3;
+    x2,id o2)];
     then
 A6: [Hom(o2,o2),Hom(o1,o2),hom(x1,id o2)]= [Hom(o2,o2),Hom(o1,o2),hom(x2,
-    id o2)] by MCART_1:def 3;
+    id o2)];
     reconsider dd=(id o2 ) as Morphism of A;
-A7: Hom(o2,o2) <> {} by CAT_1:27;
+A7: Hom(o2,o2) <> {};
     then
-A8: (id o2)*dd =(id o2)*(id o2) by CAT_1:def 10;
-    id o2 in Hom(o2,o2) by CAT_1:26;
+A8: (id o2)(*)dd =(id o2)*(id o2) by CAT_1:def 13;
+    id o2 in Hom(o2,o2) by CAT_1:27;
     then id o2 in Hom(cod x2,o2) by A2,CAT_1:1;
-    then id o2 in Hom(cod x2,dom id o2) by CAT_1:19;
+    then id o2 in Hom(cod x2,dom id o2);
     then
-A9: hom(x2,id o2).dd =(id o2)*(id o2)*(x2 qua Morphism of A) by A8,ENS_1:def 23
-      .=(id o2)*(x2 qua Morphism of A) by CAT_1:30
-      .=(id o2)*x2 by A1,A7,CAT_1:def 10
+A9: hom(x2,id o2).dd =((id o2)*(id o2))(*)(x2 qua Morphism of A)
+             by A8,ENS_1:def 23
+      .=(id o2)(*)(x2 qua Morphism of A)
+      .=(id o2)*x2 by A1,A7,CAT_1:def 13
       .=x2 by A1,CAT_1:28;
-    id o2 in Hom(o2,o2) by CAT_1:26;
+    id o2 in Hom(o2,o2) by CAT_1:27;
     then id o2 in Hom(cod x1,o2) by A4,CAT_1:1;
-    then id o2 in Hom(cod x1,dom id o2) by CAT_1:19;
-    then hom(x1,id o2).dd =(id o2)*(id o2)*(x1 qua Morphism of A) by A8,
-ENS_1:def 23
-      .=(id o2)*(x1 qua Morphism of A) by CAT_1:30
-      .=(id o2)*x1 by A1,A7,CAT_1:def 10
+    then id o2 in Hom(cod x1,dom id o2);
+    then hom(x1,id o2).dd
+       =((id o2)*(id o2))(*)(x1 qua Morphism of A) by A8,ENS_1:def 23
+      .=(id o2)(*)(x1 qua Morphism of A)
+      .=(id o2)*x1 by A1,A7,CAT_1:def 13
       .=x1 by A1,CAT_1:28;
-    hence thesis by A9,A6,MCART_1:25;
+    hence thesis by A9,A6,XTUPLE_0:3;
   end;
   hence thesis by Def6;
 end;
@@ -1171,7 +1159,7 @@ A1: x1 in dom (Obj F) & x2 in dom (Obj F) and
 A2: (Obj F).x1 = (Obj F).x2;
     reconsider c =x1,c1=x2 as Object of A by A1,FUNCT_2:def 1;
     reconsider f=id c1 as Morphism of c1,c1;
-A3: Hom(c1,c1) <> {} by CAT_1:27;
+A3: Hom(c1,c1) <> {};
     <|c1,?> in Funct(A,EnsHom(A)) by CAT_2:def 2;
     then reconsider d1=<|c1,?> as Object of Functors(A,EnsHom(A)) by
 NATTRA_1:def 17;
@@ -1187,19 +1175,17 @@ A4:   for y st y in X holds (<|id c1,?>).y =(id <|c1,?>).y
         assume y in X;
         then reconsider z=y as Object of A by FUNCT_2:def 1;
         reconsider zz= id z as Morphism of z,z;
-A5:     Hom(z,z) <> {} by CAT_1:27;
-        <|cod id c1,?> is_transformable_to <|c1,?> by CAT_1:19;
-        then
-A6:     <|cod id c1,?> is_transformable_to <|dom id c1,?> by CAT_1:19;
+A5:     Hom(z,z) <> {};
+A6:     <|cod id c1,?> is_transformable_to <|dom id c1,?>;
         (<|id c1,?>).z = [[Hom(cod id c1,z),Hom(dom id c1,z)],hom(id c1,
         id z)] by Def3
-          .= [[Hom(c1,z),Hom(dom id c1,z)],hom(id c1,id z)] by CAT_1:19
-          .= [[Hom(c1,z),Hom(c1,z)],hom(id c1,id z)] by CAT_1:19
+          .= [[Hom(c1,z),Hom(dom id c1,z)],hom(id c1,id z)]
+          .= [[Hom(c1,z),Hom(c1,z)],hom(id c1,id z)]
           .= [[Hom(c1,z),Hom(c1,z)],hom(c1,id z)] by ENS_1:53
-          .= [[Hom(c1,z),Hom(c1,cod id z)],hom(c1,id z)] by CAT_1:19
-          .= [[Hom(c1,dom id z),Hom(c1,cod id z)],hom(c1,id z)] by CAT_1:19
+          .= [[Hom(c1,z),Hom(c1,cod id z)],hom(c1,id z)]
+          .= [[Hom(c1,dom id z),Hom(c1,cod id z)],hom(c1,id z)]
           .= (<|c1,?> qua Function ).id z by ENS_1:def 21
-          .= (<|c1,?>).zz by A5,NATTRA_1:def 1
+          .= (<|c1,?>)/.zz by A5,CAT_3:def 10
           .= id (<|c1,?>.z) by NATTRA_1:15
           .= (id <|c1,?> ).z by NATTRA_1:20
           .= (id <|c1,?> qua Function).z by NATTRA_1:def 5;
@@ -1210,8 +1196,8 @@ A6:     <|cod id c1,?> is_transformable_to <|dom id c1,?> by CAT_1:19;
       then
 A7:   <|id c1,?>= id <|c1,?> by A4,FUNCT_1:2;
       F.(id c1) = [[<|cod id c1,?>,<|dom id c1,?>],<|id c1,?>] by Def4
-        .= [[<|c1,?>,<|dom id c1,?>],<|id c1,?>] by CAT_1:19
-        .= [[<|c1,?>,<|c1,?>],id <|c1,?>] by A7,CAT_1:19
+        .= [[<|c1,?>,<|dom id c1,?>],<|id c1,?>] by CAT_1:58
+        .= [[<|c1,?>,<|c1,?>],id <|c1,?>] by A7,CAT_1:58
         .=id d1 by NATTRA_1:def 17;
       hence thesis;
     end;
@@ -1226,19 +1212,17 @@ A9:   for y st y in X holds (<|id c,?>).y =(id <|c,?>).y
         assume y in X;
         then reconsider z=y as Object of A by FUNCT_2:def 1;
         reconsider zz= id z as Morphism of z,z;
-A10:    Hom(z,z) <> {} by CAT_1:27;
-        <|cod id c,?> is_transformable_to <|c,?> by CAT_1:19;
-        then
-A11:    <|cod id c,?> is_transformable_to <|dom id c,?> by CAT_1:19;
+A10:    Hom(z,z) <> {};
+A11:    <|cod id c,?> is_transformable_to <|dom id c,?>;
         (<|id c,?>).z = [[Hom(cod id c,z),Hom(dom id c,z)],hom(id c,id z)
         ] by Def3
-          .= [[Hom(c,z),Hom(dom id c,z)],hom(id c,id z)] by CAT_1:19
-          .= [[Hom(c,z),Hom(c,z)],hom(id c,id z)] by CAT_1:19
+          .= [[Hom(c,z),Hom(dom id c,z)],hom(id c,id z)]
+          .= [[Hom(c,z),Hom(c,z)],hom(id c,id z)]
           .= [[Hom(c,z),Hom(c,z)],hom(c,id z)] by ENS_1:53
-          .= [[Hom(c,z),Hom(c,cod id z)],hom(c,id z)] by CAT_1:19
-          .= [[Hom(c,dom id z),Hom(c,cod id z)],hom(c,id z)] by CAT_1:19
+          .= [[Hom(c,z),Hom(c,cod id z)],hom(c,id z)]
+          .= [[Hom(c,dom id z),Hom(c,cod id z)],hom(c,id z)]
           .=(<|c,?> qua Function ).id z by ENS_1:def 21
-          .=(<|c,?>).zz by A10,NATTRA_1:def 1
+          .=(<|c,?>)/.zz by A10,CAT_3:def 10
           .= id (<|c,?>.z) by NATTRA_1:15
           .=(id <|c,?> ).z by NATTRA_1:20
           .=(id <|c,?> qua Function).z by NATTRA_1:def 5;
@@ -1249,8 +1233,8 @@ A11:    <|cod id c,?> is_transformable_to <|dom id c,?> by CAT_1:19;
       then
 A12:  <|id c,?>= id <|c,?> by A9,FUNCT_1:2;
       F.(id c) = [[<|cod id c,?>,<|dom id c,?>],<|id c,?>] by Def4
-        .= [[<|c,?>,<|dom id c,?>],<|id c,?>] by CAT_1:19
-        .= [[<|c,?>,<|c,?>],id <|c,?>] by A12,CAT_1:19
+        .= [[<|c,?>,<|dom id c,?>],<|id c,?>] by CAT_1:58
+        .= [[<|c,?>,<|c,?>],id <|c,?>] by A12,CAT_1:58
         .=id d by NATTRA_1:def 17;
       hence thesis;
     end;
@@ -1262,20 +1246,20 @@ ENS_1:def 21;
     ],hom(c1,f)] by ENS_1:def 21;
     then
     [Hom(c,dom f),Hom(c,cod f),hom(c,f)]= [[Hom(c1,dom f),Hom(c1,cod f)],
-    hom(c1,f)] by MCART_1:def 3;
+    hom(c1,f)];
     then [Hom(c,dom f),Hom(c,cod f),hom(c,f)]= [Hom(c1,dom f),Hom(c1,cod f),
-    hom(c1,f)] by MCART_1:def 3;
-    then Hom(c,dom f)=Hom(c1,dom f) by MCART_1:25;
-    then Hom(c,dom f)=Hom(c1,c1) by A3,CAT_1:5;
+    hom(c1,f)];
+    then Hom(c,dom f)=Hom(c1,dom f) by XTUPLE_0:3;
+    then Hom(c,dom f)=Hom(c1,c1) by CAT_1:5;
     then
-A13: Hom(c,c1)=Hom(c1,c1) by A3,CAT_1:5;
-    id c1 in Hom(c1,c1) by CAT_1:26;
-    then reconsider h=id c1 as Morphism of c,c1 by A13,CAT_1:def 4;
-    dom h = c by A3,A13,CAT_1:5;
+A13: Hom(c,c1)=Hom(c1,c1) by CAT_1:5;
+    id c1 in Hom(c1,c1) by CAT_1:27;
+    then reconsider h=id c1 as Morphism of c,c1 by A13,CAT_1:def 5;
+    dom h = c by A13,CAT_1:5;
     hence thesis by A3,CAT_1:5;
   end;
   then Obj F is one-to-one by FUNCT_1:def 4;
-  hence thesis by Th6;
+  hence thesis by Th5;
 end;
 end;
 
@@ -1303,7 +1287,7 @@ proof
     assume
 A1: Hom(F.c9,F.c) <> {};
 A2: <|c9,?>.c9 = (hom?-(Hom A,c9)).c9 by ENS_1:def 25
-      .= (Obj (hom?-(Hom A,c9))).c9 by CAT_1:def 17
+      .= (Obj (hom?-(Hom A,c9))).c9
       .= Hom(c9,c9) by ENS_1:60;
     let g be Morphism of F.c9,F.c;
     g in the carrier' of Functors(A,EnsHom A);
@@ -1329,19 +1313,17 @@ A7:   for y st y in X holds (<|id c,?>).y =(id <|c,?>).y
         assume y in X;
         then reconsider z=y as Object of A by FUNCT_2:def 1;
         reconsider zz= id z as Morphism of z,z;
-A8:     Hom(z,z) <> {} by CAT_1:27;
-        <|cod id c,?> is_transformable_to <|c,?> by CAT_1:19;
-        then
-A9:     <|cod id c,?> is_transformable_to <|dom id c,?> by CAT_1:19;
+A8:     Hom(z,z) <> {};
+A9:     <|cod id c,?> is_transformable_to <|dom id c,?>;
         (<|id c,?>).z = [[Hom(cod id c,z),Hom(dom id c,z)],hom(id c,id z)
         ] by Def3
-          .= [[Hom(c,z),Hom(dom id c,z)],hom(id c,id z)] by CAT_1:19
-          .= [[Hom(c,z),Hom(c,z)],hom(id c,id z)] by CAT_1:19
+          .= [[Hom(c,z),Hom(dom id c,z)],hom(id c,id z)]
+          .= [[Hom(c,z),Hom(c,z)],hom(id c,id z)]
           .= [[Hom(c,z),Hom(c,z)],hom(c,id z)] by ENS_1:53
-          .= [[Hom(c,z),Hom(c,cod id z)],hom(c,id z)] by CAT_1:19
-          .= [[Hom(c,dom id z),Hom(c,cod id z)],hom(c,id z)] by CAT_1:19
+          .= [[Hom(c,z),Hom(c,cod id z)],hom(c,id z)]
+          .= [[Hom(c,dom id z),Hom(c,cod id z)],hom(c,id z)]
           .=(<|c,?> qua Function ).id z by ENS_1:def 21
-          .=(<|c,?>).zz by A8,NATTRA_1:def 1
+          .=(<|c,?>)/.zz by A8,CAT_3:def 10
           .= id (<|c,?>.z) by NATTRA_1:15
           .=(id <|c,?> ).z by NATTRA_1:20
           .=(id <|c,?> qua Function).z by NATTRA_1:def 5;
@@ -1352,8 +1334,8 @@ A9:     <|cod id c,?> is_transformable_to <|dom id c,?> by CAT_1:19;
       then
 A10:  <|id c,?>= id <|c,?> by A7,FUNCT_1:2;
       F.(id c) = [[<|cod id c,?>,<|dom id c,?>],<|id c,?>] by Def4
-        .=[[<|c,?>,<|dom id c,?>],<|id c,?>] by CAT_1:19
-        .= [[<|c,?>,<|c,?>],id <|c,?>] by A10,CAT_1:19
+        .=[[<|c,?>,<|dom id c,?>],<|id c,?>] by CAT_1:58
+        .= [[<|c,?>,<|c,?>],id <|c,?>] by A10,CAT_1:58
         .=id d by NATTRA_1:def 17;
       hence thesis;
     end;
@@ -1368,19 +1350,17 @@ A13:  for y st y in X holds (<|id c9,?>).y =(id <|c9,?>).y
         assume y in X;
         then reconsider z=y as Object of A by FUNCT_2:def 1;
         reconsider zz= id z as Morphism of z,z;
-A14:    Hom(z,z) <> {} by CAT_1:27;
-        <|cod id c9,?> is_transformable_to <|c9,?> by CAT_1:19;
-        then
-A15:    <|cod id c9,?> is_transformable_to <|dom id c9,?> by CAT_1:19;
+A14:    Hom(z,z) <> {};
+A15:    <|cod id c9,?> is_transformable_to <|dom id c9,?>;
         (<|id c9,?>).z = [[Hom(cod id c9,z),Hom(dom id c9,z)],hom(id c9,
         id z)] by Def3
-          .= [[Hom(c9,z),Hom(dom id c9,z)],hom(id c9,id z)] by CAT_1:19
-          .= [[Hom(c9,z),Hom(c9,z)],hom(id c9,id z)] by CAT_1:19
+          .= [[Hom(c9,z),Hom(dom id c9,z)],hom(id c9,id z)]
+          .= [[Hom(c9,z),Hom(c9,z)],hom(id c9,id z)]
           .= [[Hom(c9,z),Hom(c9,z)],hom(c9,id z)] by ENS_1:53
-          .= [[Hom(c9,z),Hom(c9,cod id z)],hom(c9,id z)] by CAT_1:19
-          .=[[Hom(c9,dom id z),Hom(c9,cod id z)],hom(c9,id z)] by CAT_1:19
+          .= [[Hom(c9,z),Hom(c9,cod id z)],hom(c9,id z)]
+          .=[[Hom(c9,dom id z),Hom(c9,cod id z)],hom(c9,id z)]
           .=(<|c9,?> qua Function ).id z by ENS_1:def 21
-          .=(<|c9,?>).zz by A14,NATTRA_1:def 1
+          .=(<|c9,?>)/.zz by A14,CAT_3:def 10
           .= id (<|c9,?>.z) by NATTRA_1:15
           .=(id <|c9,?> ).z by NATTRA_1:20
           .=(id <|c9,?> qua Function).z by NATTRA_1:def 5;
@@ -1391,8 +1371,8 @@ A15:    <|cod id c9,?> is_transformable_to <|dom id c9,?> by CAT_1:19;
       then
 A16:  <|id c9,?>= id <|c9,?> by A13,FUNCT_1:2;
       F.(id c9) = [[<|cod id c9,?>,<|dom id c9,?>],<|id c9,?>] by Def4
-        .=[[<|c9,?>,<|dom id c9,?>],<|id c9,?>] by CAT_1:19
-        .= [[<|c9,?>,<|c9,?>],id <|c9,?>] by A16,CAT_1:19
+        .=[[<|c9,?>,<|dom id c9,?>],<|id c9,?>] by CAT_1:58
+        .= [[<|c9,?>,<|c9,?>],id <|c9,?>] by A16,CAT_1:58
         .=id d1 by NATTRA_1:def 17;
       hence thesis;
     end;
@@ -1403,7 +1383,7 @@ A18: cod g = F2 by A3,NATTRA_1:33;
 A19: F2=F.c by A1,CAT_1:5;
 A20: F.c9= d1 by A12,OPPCAT_1:30;
 A21: <|c,?>.c9 = (hom?-(Hom A,c)).c9 by ENS_1:def 25
-      .= (Obj (hom?-(Hom A,c))).c9 by CAT_1:def 17
+      .= (Obj (hom?-(Hom A,c))).c9
       .= Hom(c,c9) by ENS_1:60;
 A22: dom g =F.c9 & cod g= F.c by A1,CAT_1:5;
     then reconsider t as natural_transformation of <|c9,?>,<|c,?> by A5,A18,A12
@@ -1413,11 +1393,11 @@ A22: dom g =F.c9 & cod g= F.c by A1,CAT_1:5;
 ;
     then Hom(<|c9,?>.c9,<|c,?>.c9) <> {} by NATTRA_1:def 2;
     then
-A23: (t.c9) in Hom(<|c9,?>.c9,<|c,?>.c9) by CAT_1:def 4;
+A23: (t.c9) in Hom(<|c9,?>.c9,<|c,?>.c9) by CAT_1:def 5;
     then
 A24: cod (t.c9) =<|c,?>.c9 by CAT_1:1;
 A25: EnsHom A = CatStr(# Hom A,Maps Hom A,fDom Hom A,fCod Hom A,fComp Hom
-      A,fId Hom A #) by ENS_1:def 13;
+      A #) by ENS_1:def 13;
     then reconsider t1=t.c9 as Element of Maps Hom A;
 A26: cod (t.c9) = (fCod Hom A).(t.c9) by A25
       .= cod t1 by ENS_1:def 10;
@@ -1425,7 +1405,7 @@ A26: cod (t.c9) = (fCod Hom A).(t.c9) by A25
     then
 A27: t1`2 in Funcs(dom t1,cod t1) by ENS_1:20;
 A28: dom (t.c9) =<|c9,?>.c9 by A23,CAT_1:1;
-    then (the Source of EnsHom A).(t.c9) <> {} by A2,CAT_1:27;
+    then (the Source of EnsHom A).(t.c9) <> {} by A2;
     then dom t1 <> {} by A25,ENS_1:def 9;
     then
 A29: cod t1 <> {} by A27;
@@ -1438,12 +1418,12 @@ A30: cod (t.c9) <> {} by A25,ENS_1:def 10;
 A31: t1`2 is Function of <|c9,?>.c9,<|c,?>.c9 by A28,A24,A27,A26,FUNCT_2:66;
     then
 A32: dom t1`2 = Hom(c9,c9) by A2,A24,A30,FUNCT_2:def 1;
-    then id c9 in dom t1`2 by CAT_1:26;
+    then id c9 in dom t1`2 by CAT_1:27;
     then
 A33: t1`2.id c9 in rng t1`2 by FUNCT_1:def 3;
     rng t1`2 c= Hom(c,c9) by A21,A31,RELAT_1:def 19;
     then t1`2.id c9 in Hom(c,c9) by A33;
-    then reconsider f = t1`2.id c9 as Morphism of c,c9 by CAT_1:def 4;
+    then reconsider f = t1`2.id c9 as Morphism of c,c9 by CAT_1:def 5;
 A34: <|c,?>.c9 <> {} by A24,A25,A29,ENS_1:def 10;
     then
 A35: dom f = c by A21,CAT_1:5;
@@ -1456,11 +1436,11 @@ A38: <|c9,?> is_transformable_to <|c,?> by A4,A19,A17,A11,NATTRA_1:def 7;
     proof
       let a be Object of A;
 A39:  <|c,?>.a = (hom?-(Hom A,c)).a by ENS_1:def 25
-        .= (Obj (hom?-(Hom A,c))).a by CAT_1:def 17
+        .= (Obj (hom?-(Hom A,c))).a
         .= Hom(c,a) by ENS_1:60;
       reconsider ta1=t.a as Element of Maps Hom A by A25;
 A40:  <|c9,?>.a = (hom?-(Hom A,c9)).a by ENS_1:def 25
-        .= (Obj (hom?-(Hom A,c9))).a by CAT_1:def 17
+        .= (Obj (hom?-(Hom A,c9))).a
         .= Hom(c9,a) by ENS_1:60;
       ta1 in Maps (dom ta1,cod ta1) by ENS_1:19;
       then
@@ -1484,7 +1464,7 @@ A50:  dom ta1`2 = Hom(c9,a)
         per cases;
         suppose
           Hom(c9,a) = {};
-          hence thesis by A45,A43,A40,A42,FUNCT_2:def 1;
+          hence thesis by A45,A43,A40,A42;
         end;
         suppose
           Hom(c9,a) <> {};
@@ -1496,10 +1476,10 @@ A51:  for x be set st x in X holds hom(f,id a).x = ta1`2.x
       proof
         reconsider t1=t.c9 as Element of Maps Hom A by A25;
         let x be set;
-A52:    f in Hom(c,cod f) by A35,CAT_1:1;
+A52:    f in Hom(c,cod f) by A35;
         assume
 A53:    x in X;
-        then reconsider y = x as Morphism of cod f,a by A36,A50,CAT_1:def 4;
+        then reconsider y = x as Morphism of cod f,a by A36,A50,CAT_1:def 5;
         reconsider h=y as Morphism of c9,a by A21,A24,A30,CAT_1:5;
 A54:    dom h = c9 by A50,A53,CAT_1:5;
         reconsider tc9=<|c9,?>.h as Element of Maps Hom A by A25;
@@ -1507,16 +1487,16 @@ A55:    cod h =a by A50,A53,CAT_1:5;
         reconsider tch=<|c,?>.h as Element of Maps Hom A by A25;
 A56:    [[Hom(c,dom h),Hom(c,cod h)],hom(c,h)] =(<|c,?> qua Function ).h
         by ENS_1:def 21
-          .=(<|c,?>).h by A50,A53,NATTRA_1:def 1;
+          .=(<|c,?>).h;
 A57:    [[Hom(c9,dom h),Hom(c9,cod h)],hom(c9,h)] =(<|c9,?> qua Function
         ).h by ENS_1:def 21
-          .=(<|c9,?>).h by A50,A53,NATTRA_1:def 1;
+          .=(<|c9,?>).h;
 A58:    cod (<|c9,?>.h) = (fCod Hom A).(<|c9,?>.h) by A25
           .= cod tc9 by ENS_1:def 10;
         then
 A59:    cod(<|c9,?>.h) =(tc9)`1`2 by ENS_1:def 4
           .= [Hom(c9,dom h),Hom(c9,cod h)]`2 by A57,MCART_1:7
-          .=Hom(c9,cod h) by MCART_1:7;
+          .=Hom(c9,cod h);
         then
 A60:    [(t.a),(<|c9,?>.h)] in dom(the Comp of EnsHom A) by A45,A40,A55,
 CAT_1:15;
@@ -1527,7 +1507,7 @@ A62:    dom (<|c9,?>.h) =(fDom Hom A).(<|c9,?>.h) by A25
           .= dom tc9 by ENS_1:def 9;
         then dom (<|c9,?>.h) = (tc9)`1`1 by ENS_1:def 3
           .= [Hom(c9,dom h),Hom(c9,cod h)]`1 by A57,MCART_1:7
-          .=Hom(c9,dom h) by MCART_1:7;
+          .=Hom(c9,dom h);
         then tc9`2 is Function of Hom(c9,dom h),Hom(c9,cod h) by A62,A58,A59
 ,A61,FUNCT_2:66;
         then
@@ -1535,80 +1515,81 @@ A63:    dom tc9`2 = Hom(c9,c9) by A50,A53,A54,A55,FUNCT_2:def 1;
 A64:    dom y =cod f by A36,A50,A53,CAT_1:5;
         tch =[[dom tch,cod tch],tch`2] by ENS_1:8;
         then [Hom(c,dom h),Hom(c,cod h),hom(c,h)]= [[dom tch,cod tch],tch`2]
-        by A56,MCART_1:def 3;
-        then [Hom(c,dom h),Hom(c,cod h),hom(c,h)]= [dom tch,cod tch,tch`2] by
-MCART_1:def 3;
+        by A56;
+        then [Hom(c,dom h),Hom(c,cod h),hom(c,h)]= [dom tch,cod tch,tch`2];
         then
-A65:    hom(c,h)=tch`2 by MCART_1:25;
+A65:    hom(c,h)=tch`2 by XTUPLE_0:3;
         tc9 =[[dom tc9,cod tc9],tc9`2] by ENS_1:8;
         then [dom tc9,cod tc9,tc9`2] = [[Hom(c9,dom h),Hom(c9,cod h)],hom(c9,
-        h)] by A57,MCART_1:def 3;
+        h)] by A57;
         then [dom tc9,cod tc9,tc9`2] = [Hom(c9,dom h),Hom(c9,cod h),hom(c9,h)
-        ] by MCART_1:def 3;
+        ] ;
         then
-A66:    tc9`2=hom(c9,h) by MCART_1:25;
+A66:    tc9`2=hom(c9,h) by XTUPLE_0:3;
 A67:    Hom(<|c9,?>.c9,<|c,?>.c9) <> {} by A38,NATTRA_1:def 2;
-        then (t.c9) in Hom(<|c9,?>.c9,<|c,?>.c9) by CAT_1:def 4;
+        then (t.c9) in Hom(<|c9,?>.c9,<|c,?>.c9) by CAT_1:def 5;
         then
 A68:    cod (t.c9) = <|c,?>.c9 by CAT_1:1;
         dom (<|c,?>.h) =(fDom Hom A).(<|c,?>.h) by A25
           .= dom tch by ENS_1:def 9;
         then dom (<|c,?>.h) = tch`1`1 by ENS_1:def 3
           .=[Hom(c,dom h),Hom(c,cod h)]`1 by A56,MCART_1:7
-          .=Hom(c,dom h) by MCART_1:7;
+          .=Hom(c,dom h);
         then
 A69:    [(<|c,?>.h),(t.c9)] in dom(the Comp of EnsHom A) by A21,A54,A68,
 CAT_1:15;
         cod (t.c9) = (fCod Hom A).(t.c9) by A25
           .= cod t1 by ENS_1:def 10;
         then
-A70:    cod t1=[Hom(c,dom h),Hom(c,cod h)]`1 by A21,A54,A68,MCART_1:7
+A70:    cod t1=[Hom(c,dom h),Hom(c,cod h)]`1 by A21,A54,A68
           .= tch`1`1 by A56,MCART_1:7
           .=dom tch by ENS_1:def 3;
+A71:     h in Hom(c9,a) by A50,A53;
+        then
+A72:      <|c,?>/.h = <|c,?>.h by CAT_3:def 10;
         Hom(<|c,?>.c9,<|c,?>.a ) <> {} by A50,A53,CAT_1:84;
         then
-A71:    (<|c,?>.h)*(t.c9) =(<|c,?>.h)*(t.c9 qua Morphism of EnsHom A) by A67,
-CAT_1:def 10
+A73:    (<|c,?>/.h)*(t.c9)
+           =(<|c,?>.h)(*)(t.c9 qua Morphism of EnsHom A)
+                    by A67,A72,CAT_1:def 13
           .= (fComp Hom A).(tch,t1) by A25,A69,CAT_1:def 1
           .= tch*t1 by A70,ENS_1:def 11
           .= [[dom t1,cod tch],tch`2*t1`2] by A70,ENS_1:def 6;
-A72:    cod tc9=(tc9)`1`2 by ENS_1:def 4
+A74:    cod tc9=(tc9)`1`2 by ENS_1:def 4
           .= [Hom(c9,dom h),Hom(c9,cod h)]`2 by A57,MCART_1:7
-          .= dom ta1 by A45,A43,A40,A55,MCART_1:7;
+          .= dom ta1 by A45,A43,A40,A55;
+A75:      <|c9,?>/.h = <|c9,?>.h by A71,CAT_3:def 10;
         Hom(<|c9,?>.c9,<|c9,?>.a ) <> {} by A50,A53,CAT_1:84;
         then
-A73:    (t.a)*(<|c9,?>.h) = (t.a qua Morphism of EnsHom A)*(<|c9,?>.h)
-        by A44,CAT_1:def 10
+A76:    (t.a)*(<|c9,?>/.h) = (t.a qua Morphism of EnsHom A)(*)(<|c9,?>.h)
+        by A44,A75,CAT_1:def 13
           .= (fComp Hom A).(ta1,tc9) by A25,A60,CAT_1:def 1
-          .= ta1*tc9 by A72,ENS_1:def 11
-          .= [[dom tc9,cod ta1],ta1`2*tc9`2] by A72,ENS_1:def 6;
-        (t.a)*(<|c9,?>.h) =(<|c,?>.h)*(t.c9) by A4,A37,A19,A17,A11,A50,A53,
+          .= ta1*tc9 by A74,ENS_1:def 11
+          .= [[dom tc9,cod ta1],ta1`2*tc9`2] by A74,ENS_1:def 6;
+        (t.a)*(<|c9,?>/.h) =(<|c,?>/.h)*(t.c9) by A4,A37,A19,A17,A11,A50,A53,
 NATTRA_1:def 8;
         then [dom tc9,cod ta1,(ta1`2*tc9`2)] = [[dom t1,cod tch],(tch`2*t1`2)
-        ] by A73,A71,MCART_1:def 3;
-        then [dom tc9,cod ta1,(ta1`2*tc9`2)] = [dom t1,cod tch,(tch`2*t1`2)]
-        by MCART_1:def 3;
+        ] by A76,A73;
+        then [dom tc9,cod ta1,(ta1`2*tc9`2)] = [dom t1,cod tch,(tch`2*t1`2)];
         then
-A74:    ta1`2*tc9`2=tch`2*t1`2 by MCART_1:25;
-A75:    id c9 in Hom(c9,cod f) by A36,CAT_1:26;
+A77:    ta1`2*tc9`2=tch`2*t1`2 by XTUPLE_0:3;
+A78:    id c9 in Hom(c9,cod f) by A36,CAT_1:27;
         hom(f,id a).x =hom(f,a).y by ENS_1:53
-          .= y * f by A36,A50,A53,ENS_1:def 20
+          .= y(*)f by A36,A50,A53,ENS_1:def 20
           .= tch`2.(t1`2.id c9) by A64,A65,A52,ENS_1:def 19
-          .= (ta1`2*tc9`2).(id c9) by A32,A74,CAT_1:26,FUNCT_1:13
-          .= ta1`2.(hom(c9,h).id c9) by A66,A63,CAT_1:26,FUNCT_1:13
-          .= ta1`2.(y * id c9) by A64,A75,ENS_1:def 19
+          .= (ta1`2*tc9`2).(id c9) by A32,A77,CAT_1:27,FUNCT_1:13
+          .= ta1`2.(hom(c9,h).id c9) by A66,A63,CAT_1:27,FUNCT_1:13
+          .= ta1`2.(y(*)id c9) by A64,A78,ENS_1:def 19
           .= ta1`2.x by A36,A64,CAT_1:22;
         hence thesis;
       end;
       dom hom(f,a) = Hom(cod f,a)
       proof
         per cases;
-        suppose
-          Hom(cod f,a) = {};
-          hence thesis by FUNCT_2:def 1;
+        suppose Hom(cod f,a) = {};
+          hence thesis;
         end;
-        suppose
-          Hom(cod f,a) <> {};
+        suppose Hom(cod f,a) <> {};
           then Hom(c,a) <> {} by A35,ENS_1:42;
           hence thesis by A35,FUNCT_2:def 1;
         end;

@@ -2,7 +2,7 @@
 ::  by Patrick Braselmann and Peter Koepke
 ::
 :: Received September 25, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -22,24 +22,26 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, CALCUL_1, RELAT_1,
       FUNCT_1, ORDINAL1, XCMPLX_0, XXREAL_0, NAT_1, FINSEQ_1, QC_LANG1,
       CQC_LANG, CQC_THE1, VALUAT_1, FINSET_1, RELSET_1, FUNCT_2, CARD_1,
-      MARGREL1, CQC_SIM1, DOMAIN_1, MCART_1, NUMBERS, FINSEQ_3, CALCUL_2,
-      INT_1, WELLORD1, WELLORD2;
+      MARGREL1, CQC_SIM1, DOMAIN_1, XTUPLE_0, MCART_1, NUMBERS, FINSEQ_3,
+      CALCUL_2, INT_1, WELLORD1, WELLORD2;
  constructors SETFAM_1, WELLORD1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_1,
-      FINSEQ_3, CQC_SIM1, SUBSTUT2, CALCUL_1, CALCUL_2, RELSET_1;
+      FINSEQ_3, CQC_SIM1, SUBSTUT2, CALCUL_1, CALCUL_2, RELSET_1, XTUPLE_0;
  registrations SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0,
-      XREAL_0, INT_1, FINSEQ_1, QC_LANG1, CQC_LANG, FINSEQ_2, CARD_1;
+      XREAL_0, INT_1, FINSEQ_1, QC_LANG1, CQC_LANG, FINSEQ_2, CARD_1, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Preliminaries and Equivalences of Inconsistency
 
+reserve Al for QC-alphabet;
+
 reserve a,a1,a2,b,c,d for set,
-  X,Y,Z for Subset of CQC-WFF,
+  X,Y,Z for Subset of CQC-WFF(Al),
   i,k,m,n for Element of NAT,
-  p,q for Element of CQC-WFF,
-  P for QC-pred_symbol of k,
-  ll for CQC-variable_list of k,
-  f,f1,f2,g for FinSequence of CQC-WFF;
+  p,q for Element of CQC-WFF(Al),
+  P for QC-pred_symbol of k,Al,
+  ll for CQC-variable_list of k,Al,
+  f,f1,f2,g for FinSequence of CQC-WFF(Al);
 reserve A for non empty finite Subset of NAT;
 
 theorem :: HENMODEL:1
@@ -58,8 +60,8 @@ m in dom f & n in dom f & n < m holds f.n c= f.m) & X c= union rng f holds ex k
   st X c= f.k;
 
 definition
+  let Al;
   let X,p;
-
   pred X |- p means
 :: HENMODEL:def 1
 
@@ -67,6 +69,7 @@ definition
 end;
 
 definition
+  let Al;
   let X;
   attr X is Consistent means
 :: HENMODEL:def 2
@@ -75,12 +78,14 @@ definition
 end;
 
 notation
+  let Al;
   let X;
   antonym X is Inconsistent for X is Consistent;
 end;
 
 definition
-  let f be FinSequence of CQC-WFF;
+  let Al;
+  let f be FinSequence of CQC-WFF(Al);
   attr f is Consistent means
 :: HENMODEL:def 3
 
@@ -88,7 +93,8 @@ definition
 end;
 
 notation
-  let f be FinSequence of CQC-WFF;
+  let Al;
+  let f be FinSequence of CQC-WFF(Al);
   antonym f is Inconsistent for f is Consistent;
 end;
 
@@ -125,58 +131,64 @@ begin :: Unions of Consistent Sets
 :: Ebb et al, Chapter IV, Lemma 7.7
 
 theorem :: HENMODEL:11
-  for f being Function of NAT,bool CQC-WFF st (for n,m st m in dom f & n
+  for f being Function of NAT,bool CQC-WFF(Al) st (for n,m st m in dom f & n
   in dom f & n < m holds f.n is Consistent & f.n c= f.m) holds (union rng f) is
   Consistent;
 
 begin :: Construction of a Henkin Model
 
 reserve A for non empty set,
-  v for Element of Valuations_in A,
-  J for interpretation of A;
+  v for Element of Valuations_in(Al,A),
+  J for interpretation of Al,A;
 
 theorem :: HENMODEL:12
   X is Inconsistent implies for J,v holds not J,v |= X;
 
 theorem :: HENMODEL:13
-  {VERUM} is Consistent;
+  {VERUM(Al)} is Consistent;
 
 registration
-  cluster Consistent for Subset of CQC-WFF;
+  let Al;
+  cluster Consistent for Subset of CQC-WFF(Al);
 end;
 
-reserve CX for Consistent Subset of CQC-WFF,
-  P9 for Element of QC-pred_symbols;
+reserve CX for Consistent Subset of CQC-WFF(Al),
+  P9 for Element of QC-pred_symbols(Al);
 
 definition
-  func HCar -> non empty set equals
+  let Al;
+  func HCar(Al) -> non empty set equals
 :: HENMODEL:def 4
-  bound_QC-variables;
+  bound_QC-variables(Al);
 end;
 
 definition
-  let P be (Element of QC-pred_symbols), ll be CQC-variable_list of (
-  the_arity_of P);
-  redefine func P!ll -> Element of CQC-WFF;
+  let Al;
+  let P be (Element of QC-pred_symbols(Al)), ll be CQC-variable_list of (
+  the_arity_of P), Al;
+  redefine func P!ll -> Element of CQC-WFF(Al);
 end;
 
 :: The Henkin Model (Ebb et al, Chapter V, §1)
 
 definition
+  let Al;
   let CX;
-  mode Henkin_interpretation of CX -> interpretation of HCar means
+  mode Henkin_interpretation of CX -> interpretation of Al,HCar(Al) means
 :: HENMODEL:def 5
 
     for
-P being (Element of QC-pred_symbols), r being Element of relations_on HCar st
-    it.P = r holds for a holds a in r iff ex ll being CQC-variable_list of (
-    the_arity_of P) st a = ll & CX |- P!ll;
+P being (Element of QC-pred_symbols(Al)), r being Element of relations_on
+HCar(Al) st it.P = r holds for a holds a in r iff
+ex ll being CQC-variable_list of (the_arity_of P), Al st a = ll &
+CX |- P!ll;
 end;
 
 definition
-  func valH -> Element of Valuations_in HCar equals
+  let Al;
+  func valH(Al) -> Element of Valuations_in (Al,HCar(Al)) equals
 :: HENMODEL:def 6
-  id bound_QC-variables;
+  id bound_QC-variables(Al);
 end;
 
 begin :: Some Properties of the Henkin Model
@@ -184,13 +196,13 @@ begin :: Some Properties of the Henkin Model
 reserve JH for Henkin_interpretation of CX;
 
 theorem :: HENMODEL:14
-  valH*'ll = ll;
+  (valH(Al))*'ll = ll;
 
 theorem :: HENMODEL:15
-  |- f^<*VERUM*>;
+  |- f^<*VERUM(Al)*>;
 
 theorem :: HENMODEL:16
-  JH,valH |= VERUM iff CX |- VERUM;
+  JH,valH(Al) |= VERUM(Al) iff CX |- VERUM(Al);
 
 theorem :: HENMODEL:17
-  JH,valH |= P!ll iff CX |- P!ll;
+  JH,valH(Al) |= P!ll iff CX |- P!ll;

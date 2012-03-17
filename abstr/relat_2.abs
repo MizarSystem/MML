@@ -2,7 +2,7 @@
 ::  by Edmund Woronowicz and Anna Zalewska
 ::
 :: Received March 15, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,9 +16,9 @@ environ
 
  vocabularies RELAT_1, TARSKI, XBOOLE_0, ZFMISC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1;
- constructors TARSKI, SUBSET_1, RELAT_1;
- registrations RELAT_1;
- requirements SUBSET;
+ constructors TARSKI, SUBSET_1, RELAT_1, XTUPLE_0;
+ registrations RELAT_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
 
 
 begin
@@ -98,6 +98,11 @@ definition
   R is_transitive_in field R;
 end;
 
+registration
+  cluster empty -> reflexive irreflexive symmetric antisymmetric asymmetric
+          connected strongly_connected transitive for Relation;
+end;
+
 theorem :: RELAT_2:1
   R is reflexive iff id field R c= R;
 
@@ -110,26 +115,31 @@ theorem :: RELAT_2:3
 theorem :: RELAT_2:4
   R is_asymmetric_in X implies R \/ id X is_antisymmetric_in X;
 
-theorem :: RELAT_2:5
-  R is symmetric & R is transitive implies R is reflexive;
+canceled 7;
 
-theorem :: RELAT_2:6
-  id X is symmetric transitive;
+registration
+  cluster symmetric transitive -> reflexive for Relation;
+end;
 
-theorem :: RELAT_2:7
-  id X is antisymmetric reflexive;
+registration
+  let X;
+  cluster id X -> symmetric transitive antisymmetric;
+end;
 
-theorem :: RELAT_2:8
-  R is irreflexive transitive implies R is asymmetric;
+registration
+  cluster irreflexive transitive -> asymmetric for Relation;
+  cluster asymmetric -> irreflexive antisymmetric for Relation;
+end;
 
-theorem :: RELAT_2:9
-  R is asymmetric implies R is irreflexive antisymmetric;
+registration
+  let R be reflexive Relation;
+  cluster R~ -> reflexive;
+end;
 
-theorem :: RELAT_2:10
-  R is reflexive implies R~ is reflexive;
-
-theorem :: RELAT_2:11
-  R is irreflexive implies R~ is irreflexive;
+registration
+  let R be irreflexive Relation;
+  cluster R~ -> irreflexive;
+end;
 
 theorem :: RELAT_2:12
   R is reflexive implies dom R = dom(R~) & rng R = rng(R~);
@@ -137,47 +147,83 @@ theorem :: RELAT_2:12
 theorem :: RELAT_2:13
   R is symmetric iff R = R~;
 
-theorem :: RELAT_2:14
-  P is reflexive & R is reflexive implies P \/ R is reflexive & P /\ R
-  is reflexive;
+registration
+  let P,R be reflexive Relation;
+  cluster P \/ R -> reflexive;
+  cluster P /\ R -> reflexive;
+end;
 
-theorem :: RELAT_2:15
-  P is irreflexive & R is irreflexive implies P \/ R is irreflexive & P
-  /\ R is irreflexive;
+registration
+  let P,R be irreflexive Relation;
+  cluster P \/ R -> irreflexive;
+  cluster P /\ R -> irreflexive;
+end;
 
-theorem :: RELAT_2:16
-  P is irreflexive implies P \ R is irreflexive;
+registration
+  let P be irreflexive Relation;
+  let R be Relation;
+  cluster P \ R -> irreflexive;
+end;
 
-theorem :: RELAT_2:17
-  R is symmetric implies R~ is symmetric;
+registration
+  let R be symmetric Relation;
+  cluster R~ -> symmetric;
+end;
 
-theorem :: RELAT_2:18
-  P is symmetric & R is symmetric implies P \/ R is symmetric & P /\ R
-  is symmetric & P \ R is symmetric;
+registration
+  let P,R be symmetric Relation;
+  cluster P \/ R -> symmetric;
+  cluster P /\ R -> symmetric;
+  cluster P \ R -> symmetric;
+end;
 
-theorem :: RELAT_2:19
-  R is asymmetric implies R~ is asymmetric;
+registration
+  let R be asymmetric Relation;
+  cluster R~ -> asymmetric;
+end;
 
-theorem :: RELAT_2:20
-  R is asymmetric implies P /\ R is asymmetric;
+registration
+  let P be Relation;
+  let R be asymmetric Relation;
+  cluster P /\ R -> asymmetric;
+  cluster R /\ P -> asymmetric;
+end;
 
-theorem :: RELAT_2:21
-  P is asymmetric implies P \ R is asymmetric;
+registration
+  let P be asymmetric Relation;
+  let R be Relation;
+  cluster P \ R -> asymmetric;
+end;
+
+canceled 8;
 
 theorem :: RELAT_2:22
   R is antisymmetric iff R /\ (R~) c= id (dom R);
 
-theorem :: RELAT_2:23
-  R is antisymmetric implies R~ is antisymmetric;
+registration
+  let R be antisymmetric Relation;
+  cluster R~ -> antisymmetric;
+end;
 
-theorem :: RELAT_2:24
-  P is antisymmetric implies P /\ R is antisymmetric & P \ R is antisymmetric;
+registration
+  let P be antisymmetric Relation;
+  let R be Relation;
+  cluster P /\ R -> antisymmetric;
+  cluster R /\ P -> antisymmetric;
+  cluster P \ R -> antisymmetric;
+end;
 
-theorem :: RELAT_2:25
-  R is transitive implies R~ is transitive;
+registration
+  let R be transitive Relation;
+  cluster R~ -> transitive;
+end;
 
-theorem :: RELAT_2:26
-  P is transitive & R is transitive implies P /\ R is transitive;
+registration
+  let P,R be transitive Relation;
+  cluster P /\ R -> transitive;
+end;
+
+canceled 4;
 
 theorem :: RELAT_2:27
   R is transitive iff R*R c= R;
@@ -185,8 +231,11 @@ theorem :: RELAT_2:27
 theorem :: RELAT_2:28
   R is connected iff [:field R,field R:] \ id (field R) c= R \/ R~;
 
-theorem :: RELAT_2:29
-  R is strongly_connected implies R is connected reflexive;
+registration
+  cluster strongly_connected -> connected reflexive for Relation;
+end;
+
+canceled;
 
 theorem :: RELAT_2:30
   R is strongly_connected iff [:field R, field R:] = R \/ R~;

@@ -1,0 +1,349 @@
+:: The Elementary Macroinstructions
+::  by Andrzej Trybulec
+::
+:: Received October 1, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TURING_1, COMPOS_1, SCMFSA6A, AMI_1, AMISTD_1, SCMPDS_5, FUNCT_1,
+      CARD_1, ARYTM_1, NAT_1, RELAT_1, ZFMISC_1, ARYTM_3, XXREAL_0, AMISTD_2,
+      TARSKI, XBOOLE_0, NUMBERS, FINSET_1, EXTPRO_1, FUNCOP_1, FUNCT_4, RELOC,
+      VALUED_1, SUBSET_1, PARTFUN1, RCOMP_1, XCMPLX_0, ORDINAL1, VALUED_0,
+      AMISTD_4;
+ notations TARSKI, XBOOLE_0, RELAT_1, ZFMISC_1, FUNCT_1, FUNCOP_1, ORDINAL1,
+      SUBSET_1, FINSET_1, PARTFUN1, FUNCT_4, CARD_1, NUMBERS, XXREAL_0,
+      XCMPLX_0, XREAL_0, NAT_D, VALUED_0, VALUED_1, COMPOS_0, COMPOS_1,
+      AMISTD_4;
+ constructors COMPOS_1, AMISTD_4, VALUED_1, NAT_D, XXREAL_0, XREAL_0, XCMPLX_0,
+      AMISTD_1, AMISTD_2, NAT_1, PRE_POLY, DOMAIN_1, RELSET_1, FUNCT_4;
+ registrations COMPOS_0, COMPOS_1, AMISTD_4, CARD_1, NAT_1, XCMPLX_0, XREAL_0,
+      ORDINAL1, VALUED_1, FUNCOP_1, AFINSQ_1, RELAT_1, XBOOLE_0, FUNCT_4,
+      FINSEQ_1, VALUED_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin
+
+registration
+ cluster with_non_trivial_Instructions for COM-Struct;
+end;
+
+reserve S for with_non_trivial_Instructions COM-Struct;
+
+registration let S;
+ cluster No-StopCode for Instruction of S;
+end;
+
+registration let S;
+ let i be No-StopCode Instruction of S;
+ cluster Macro i -> halt-ending unique-halt;
+end;
+
+definition let S;
+  let i be No-StopCode Instruction of S, J be MacroInstruction of S;
+  func i ';' J -> MacroInstruction of S equals
+:: COMPOS_2:def 1
+  Macro i ';' J;
+end;
+
+definition let S;
+  let I be MacroInstruction of S, j be No-StopCode Instruction of S;
+  func I ';' j -> MacroInstruction of S equals
+:: COMPOS_2:def 2
+  I ';' Macro j;
+end;
+
+definition let S;
+  let i,j be No-StopCode Instruction of S;
+  func i ';' j -> MacroInstruction of S equals
+:: COMPOS_2:def 3
+  Macro i ';' Macro j;
+end;
+
+reserve i,j,k for No-StopCode Instruction of S,
+        I,J,K for MacroInstruction of S;
+
+theorem :: COMPOS_2:1
+  I ';' J ';' k = I ';' (J ';' k);
+
+theorem :: COMPOS_2:2
+  I ';' j ';' K = I ';' (j ';' K);
+
+theorem :: COMPOS_2:3
+  I ';' j ';' k = I ';' (j ';' k);
+
+theorem :: COMPOS_2:4
+  i ';' J ';' K = i ';' (J ';' K);
+
+theorem :: COMPOS_2:5
+  i ';' J ';' k = i ';' (J ';' k);
+
+theorem :: COMPOS_2:6
+  i ';' j ';' K = i ';' (j ';' K);
+
+theorem :: COMPOS_2:7
+  i ';' j ';' k = i ';' (j ';' k);
+
+theorem :: COMPOS_2:8
+  i ';' j = Macro i ';' j;
+
+theorem :: COMPOS_2:9
+  i ';' j = i ';' Macro j;
+
+theorem :: COMPOS_2:10
+ card(i ';' J) = card J + 1;
+
+theorem :: COMPOS_2:11
+ card(I ';' j) = card I + 1;
+
+theorem :: COMPOS_2:12
+ card(i ';' j) = 3;
+
+theorem :: COMPOS_2:13
+ card(i ';' j ';' k) = 4;
+
+reserve i1,i2,i3,i4,i5,i6 for No-StopCode Instruction of S;
+
+theorem :: COMPOS_2:14
+ card(i1 ';' i2 ';' i3 ';' i4) = 5;
+
+theorem :: COMPOS_2:15
+ card(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 6;
+
+theorem :: COMPOS_2:16
+ card(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6) = 7;
+
+reserve I,J for non empty NAT-defined finite Function;
+
+definition
+ let I; let J be set;
+ pred I <= J means
+:: COMPOS_2:def 4
+  CutLastLoc I c= J;
+end;
+
+definition
+ let I,J;
+ redefine pred I <= J;
+ reflexivity;
+end;
+
+theorem :: COMPOS_2:17
+ for F being non empty NAT-defined finite Function
+  holds not LastLoc F in dom CutLastLoc F;
+
+registration let S;
+ let I be unique-halt non empty preProgram of S;
+ cluster CutLastLoc I -> halt-free;
+end;
+
+theorem :: COMPOS_2:18
+ for I being unique-halt Program of S,
+     J being halt-ending Program of S
+  st CutLastLoc I c= J
+ holds CutLastLoc I c= CutLastLoc J;
+
+reserve I,J for MacroInstruction of S;
+
+theorem :: COMPOS_2:19
+ for K be set st I <= J & J <= K
+  holds I <= K;
+
+theorem :: COMPOS_2:20
+ I = CutLastLoc I +* (LastLoc I .--> halt S);
+
+theorem :: COMPOS_2:21
+ CutLastLoc I = CutLastLoc J implies I = J;
+
+theorem :: COMPOS_2:22
+  I <= J & J <= I implies I = J;
+
+theorem :: COMPOS_2:23
+  I <= I ';' J;
+
+:: Potrzebne chyba beda trywialne twierdzenia, jak
+
+theorem :: COMPOS_2:24
+ for X being set st I c= X
+  holds I <= X;
+
+theorem :: COMPOS_2:25
+ I <= J implies
+ for X being set st J c= X
+ holds I <= X;
+
+theorem :: COMPOS_2:26
+ for k being Nat holds
+   k < LastLoc I iff k in dom CutLastLoc I;
+
+theorem :: COMPOS_2:27
+ for k being Nat st k < LastLoc I
+  holds (CutLastLoc I).k = I.k;
+
+theorem :: COMPOS_2:28
+ for k being Nat st k < LastLoc I & I <= J
+  holds I.k = J.k;
+
+theorem :: COMPOS_2:29
+ LastLoc I = card I - 1;
+
+theorem :: COMPOS_2:30
+ LastLoc Macro i = 1;
+
+theorem :: COMPOS_2:31
+ LastLoc(i ';' j) = 2;
+
+theorem :: COMPOS_2:32
+ LastLoc(i ';' j ';' k) = 3;
+
+theorem :: COMPOS_2:33
+ LastLoc(i1 ';' i2 ';' i3 ';' i4) = 4;
+
+theorem :: COMPOS_2:34
+ LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5) = 5;
+
+theorem :: COMPOS_2:35
+ LastLoc(i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6) = 6;
+
+:: dla zerowej pozycji nie mamy inkrementpwania adresow.
+
+theorem :: COMPOS_2:36
+  (i ';' J).0 = i;
+
+theorem :: COMPOS_2:37
+  (i ';' j ';' K).0 = i;
+
+theorem :: COMPOS_2:38
+  (i ';' j ';' k ';' K).0 = i;
+
+theorem :: COMPOS_2:39
+  (i1 ';' i2 ';' i3 ';' i4 ';' K).0 = i1;
+
+theorem :: COMPOS_2:40
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' K).0 = i1;
+
+theorem :: COMPOS_2:41
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6 ';' K).0 = i1;
+
+
+::theorem :: COMPOS_1:23
+::  for S being COM-Struct,
+::  F, G being initial non empty finite preProgram of S
+::  holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).0;
+
+::theorem :: COMPOS_1:24
+::  for S being COM-Struct,
+::  F, G being initial non empty finite preProgram of S,
+::  f being Nat st f < card F - 1
+::  holds IncAddr(F,card F -' 1).f = IncAddr(F ';' G, card F -' 1).f;
+
+theorem :: COMPOS_2:42
+ for k being Nat st k < LastLoc I
+  holds (I ';' J).k = I.k;
+
+theorem :: COMPOS_2:43
+ LastLoc(I ';' J) = LastLoc I + LastLoc J;
+
+theorem :: COMPOS_2:44
+ for j being Nat st j <= LastLoc J
+  holds (I ';' J).(LastLoc I + j) = IncAddr(J/.j,LastLoc I);
+
+theorem :: COMPOS_2:45
+ (i ';' j).1 = IncAddr(j,1);
+
+theorem :: COMPOS_2:46
+  (i ';' j ';' k).1 = IncAddr(j,1);
+
+theorem :: COMPOS_2:47
+  (i1 ';' i2 ';' i3 ';' i4).1 = IncAddr(i2,1);
+
+theorem :: COMPOS_2:48
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).1 = IncAddr(i2,1);
+
+theorem :: COMPOS_2:49
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).1 = IncAddr(i2,1);
+
+theorem :: COMPOS_2:50
+ (I ';' j).(LastLoc I) = IncAddr(j,LastLoc I);
+
+theorem :: COMPOS_2:51
+  (i1 ';' i2 ';' i3).2 = IncAddr(i3,2);
+
+theorem :: COMPOS_2:52
+  (i1 ';' i2 ';' i3 ';' i4).2 = IncAddr(i3,2);
+
+theorem :: COMPOS_2:53
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).2 = IncAddr(i3,2);
+
+theorem :: COMPOS_2:54
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).2 = IncAddr(i3,2);
+
+theorem :: COMPOS_2:55
+  (i1 ';' i2 ';' i3 ';' i4).3 = IncAddr(i4,3);
+
+theorem :: COMPOS_2:56
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).3 = IncAddr(i4,3);
+
+theorem :: COMPOS_2:57
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).3 = IncAddr(i4,3);
+
+theorem :: COMPOS_2:58
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5).4 = IncAddr(i5,4);
+
+theorem :: COMPOS_2:59
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).4 = IncAddr(i5,4);
+
+theorem :: COMPOS_2:60
+  (i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' i6).5 = IncAddr(i6,5);
+
+:: Zeby moc mowic o tym, ze Reloc(I,k) jest closed
+:: trzebaby ten atrybut zdefiniowac ogolniej
+:: ale wtedy trzeba wykorzystac fakt, ze sekwencyjnie
+:: przejscie nie moze sie cofac. Czyli maszyna
+:: musi byc standard.
+:: Potrzeba nam wiec raczej to, ze tak psedomakroinstrukcja
+:: jest "contigious" a niekoniecznie "initial"
+:: Definicje moze bez trudu zrobic ogolniejsza.
+
+definition let S;
+ let I be preProgram of S;
+ attr I is closed means
+:: COMPOS_2:def 5
+ for i being Instruction of S st i in rng I
+  holds rng JumpPart i c= dom I;
+end;
+
+registration let S;
+ cluster Stop S -> closed;
+end;
+
+registration let S;
+ cluster closed for MacroInstruction of S;
+end;
+
+:: Nie mozemy bez dodatkowych zalozen zarejestrowac
+:: ins-loc-free No-StopCode dowodzimy twierdzenie
+:: rejestracje mozna zrobic dla konkretnych komputerow.
+
+theorem :: COMPOS_2:61
+ for i being No-StopCode Instruction of S st i is ins-loc-free
+  holds Macro i is closed;
+
+registration let S;
+ let I be closed MacroInstruction of S, k be Nat;
+ cluster Reloc(I,k) -> closed;
+end;
+
+registration let S;
+ let I,J be closed MacroInstruction of S;
+ cluster I ';' J -> closed;
+end;

@@ -12,6 +12,7 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="CLASSES1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="CLASSES2"/>
@@ -23,7 +24,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CLASSES2" nr="2">
@@ -31,7 +32,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -49,7 +50,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="52">
+<Func kind="K" nr="50">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -61,11 +62,11 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="46">
+<Func kind="K" nr="44">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -77,15 +78,15 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="52">
+<Func kind="K" nr="50">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLASSES2" nr="4">
@@ -96,11 +97,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="52">
+<Func kind="K" nr="50">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLASSES2" nr="5">
@@ -109,7 +110,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="56">
+<Func kind="K" nr="54">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -124,7 +125,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="52">
+<Func kind="K" nr="50">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -139,12 +140,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <CCluster aid="CLASSES2" nr="1">
@@ -162,7 +163,7 @@
 <CCluster aid="CLASSES2" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -182,7 +183,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 </Registrations>

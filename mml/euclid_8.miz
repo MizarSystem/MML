@@ -3,7 +3,7 @@
 ::  by Xiquan Liang , Piqing Zhao and Ou Bai
 ::
 :: Received October 10, 2009
-:: Copyright (c) 2009-2011 Association of Mizar Users
+:: Copyright (c) 2009-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,21 +25,20 @@ environ
       XXREAL_1, XXREAL_0, TARSKI;
  constructors FDIFF_1, REAL_1, BINOP_2, FINSEQOP, FINSEQ_4, MONOID_0, SEQ_1,
       SQUARE_1, COMPLEX1, RFUNCT_1, EUCLIDLP, EUCLID_5, FDIFF_3, RCOMP_1,
-      EUCLID_3, SEQ_2;
+      EUCLID_3, COMSEQ_2;
  registrations NUMBERS, MEMBERED, MONOID_0, EUCLID, VALUED_0, XBOOLE_0,
       XCMPLX_0, RVSUM_1, RELAT_1, NAT_1, FINSEQ_1, FINSEQ_2;
  requirements SUBSET, NUMERALS, ARITHM, BOOLE;
  definitions VALUED_1, EUCLID, SQUARE_1, RCOMP_1, RVSUM_1;
- theorems RVSUM_1, FINSEQ_2, FINSEQ_1, XREAL_0, EUCLID_4, FINSEQ_3, EUCLID_5,
-      SQUARE_1, XCMPLX_1, EUCLIDLP, FDIFF_1, FDIFF_2, EUCLID, FUNCT_2,
-      VALUED_1, FDIFF_3, XREAL_1;
+ theorems RVSUM_1, FINSEQ_2, FINSEQ_1, XREAL_0, EUCLID_4, EUCLID_5, SQUARE_1,
+      XCMPLX_1, EUCLIDLP, FDIFF_1, FDIFF_2, EUCLID, FUNCT_2, VALUED_1, FDIFF_3,
+      XREAL_1, RFUNCT_1;
  schemes FUNCT_2;
 
 begin :: Preliminaries
 
-reserve           r, r1, r2, x, y, z,
+reserve r, r1, r2, x, y, z,
         x1, x2, x3, y1, y2, y3 for Element of REAL;
-
 reserve R, R1, R2, R3 for Element of 3-tuples_on REAL;
 reserve p, q, p1, p2, p3, q1, q2 for Element of REAL 3;
 reserve f1, f2, f3, g1, g2, g3, h1, h2, h3 for PartFunc of REAL,REAL;
@@ -165,36 +164,6 @@ A5: |[ x1,x2,x3 ]|.2 + |[ y1,y2,y3 ]|.2 = x2+y2 by A2,FINSEQ_1:45;
 end;
 
 Lm9:
-  |(p1,p2)| = p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3
-proof
-    reconsider f1=p1, f2=p2 as FinSequence of REAL;
-A1: len f1 = len <* p1.1, p1.2, p1.3 *> by Th1
-    .= 3 by FINSEQ_1:45;
- len f2 = len <* p2.1, p2.2, p2.3 *> by Th1
-    .= 3 by FINSEQ_1:45;
-    then
-|(p1,p2)| = Sum <* f1.1*f2.1, f1.2*f2.2, f1.3*f2.3 *> by A1,EUCLID_5:28
-    .= p1.1*p2.1 + p1.2*p2.2 + p1.3*f2.3 by RVSUM_1:78;
-    hence thesis;
-end;
-
-Lm10:
-  |(r*p1,p2)| = r*|(p1,p2)|
-proof
-A1:  r*p1 = |[ r*p1.1, r*p1.2, r*p1.3]| by Lm1;
-A2:  r*|(p1,p2)| = r*(p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3 ) by Lm9;
-A3:  (r*p1).1*p2.1 = (r*p1.1)*p2.1 by A1,FINSEQ_1:45
-     .= r*(p1.1*p2.1);
-A4:  (r*p1).2*p2.2 =(r*p1.2)*p2.2 by A1,FINSEQ_1:45
-     .=r*(p1.2*p2.2);
-  (r*p1).3*p2.3 = (r*p1.3)*p2.3 by A1,FINSEQ_1:45
-     .= r*(p1.3*p2.3);
-     then |(r*p1,p2)| = (r*(p1.1*p2.1) + r*(p1.2*p2.2)) + r*(p1.3*p2.3)
-       by A3,A4,Lm9;
-     hence thesis by A2;
-end;
-
-Lm11:
   (p1+p2)+(q1+q2) = (p1+q1)+(p2+q2)
 proof
   thus (p1+p2)+(q1+q2) = (p1+p2)+q1+q2 by RVSUM_1:15
@@ -202,15 +171,15 @@ proof
  .= (p1+q1)+(p2+q2) by RVSUM_1:15;
 end;
 
-Lm12:
+Lm10:
   (p1+p2)-(q1+q2) = (p1-q1)+(p2-q2)
 proof
   thus (p1+p2)-(q1+q2) = (p1+ p2)-q1-q2 by RVSUM_1:39
  .= (p1+p2)+(-q1+-q2) by RVSUM_1:15
- .= (p1-q1)+(p2-q2) by Lm11;
+ .= (p1-q1)+(p2-q2) by Lm9;
 end;
 
-Lm13:
+Lm11:
   |[ x1,x2,x3 ]| - |[ y1,y2,y3 ]| = |[ x1-y1,x2-y2,x3-y3 ]|
 proof
 A1: |[ y1,y2,y3 ]|.1 = y1 by FINSEQ_1:45;
@@ -234,7 +203,7 @@ definition
   coherence;
 end;
 
-Lm14:
+Lm12:
   p = |[ x,y,z ]| implies |(p,p)| = x^2 + y^2 + z^2
 proof
   assume p = |[ x,y,z ]|;
@@ -249,7 +218,7 @@ definition let p1, p2;
   correctness;
 end;
 
-Lm15:
+Lm13:
   |[ x1,x2,x3 ]| <X> |[ y1,y2,y3 ]|
   = |[ (x2*y3)-(x3*y2),(x3*y1)-(x1*y3),(x1*y2)-(x2*y1) ]|
 proof
@@ -260,7 +229,7 @@ A1: p1.1 = x1 & p1.2 = x2 & p1.3 = x3 by FINSEQ_1:45;
     hence thesis by A1;
 end;
 
-Lm16:
+Lm14:
   (r*p1)<X>p2 = r*(p1<X>p2) & (r*p1)<X>p2 = p1<X>(r*p2)
 proof
 A1: (p1<X>p2).1 = (p1.2*p2.3)-(p1.3*p2.2) &
@@ -269,12 +238,12 @@ A1: (p1<X>p2).1 = (p1.2*p2.3)-(p1.3*p2.2) &
 A2: (r*p1)<X>p2 = |[ r*p1.1,r*p1.2,r*p1.3 ]|<X>p2 by Lm1
    .= |[ r*p1.1,r*p1.2,r*p1.3 ]|<X>|[ p2.1,p2.2,p2.3 ]| by Th1
    .= |[ (r*p1.2*p2.3)-(r*p1.3*p2.2),(r*p1.3*p2.1)-(r*p1.1*p2.3),
-      (r*p1.1*p2.2)-(r*p1.2*p2.1) ]| by Lm15;then
+      (r*p1.1*p2.2)-(r*p1.2*p2.1) ]| by Lm13;then
 A3: (r*p1)<X>p2 = |[ r*(p1<X>p2).1,r*(p1<X>p2).2,r*(p1<X>p2).3 ]| by A1
    .= r*(p1<X>p2) by Lm1;
       (r*p1)<X>p2 = |[ p1.2*(r*p2.3)-p1.3*(r*p2.2),p1.3*(r*p2.1)-p1.1*(r*p2.3),
       p1.1*(r*p2.2)-p1.2*(r*p2.1) ]| by A2
-   .= |[ p1.1,p1.2,p1.3 ]|<X>|[ r*p2.1,r*p2.2,r*p2.3 ]| by Lm15
+   .= |[ p1.1,p1.2,p1.3 ]|<X>|[ r*p2.1,r*p2.2,r*p2.3 ]| by Lm13
    .= p1<X>|[ r*p2.1,r*p2.2,r*p2.3 ]| by Th1
    .= p1<X>(r*p2) by Lm1;
     hence thesis by A3;
@@ -301,7 +270,7 @@ A1: ex a1,a2 being Real st a1*p1+a2*p2 = 0.REAL 3
   A6: 0.REAL 3 = |[0,0,0 ]| by FINSEQ_2:62;
       p1<X>p2 = (((-a2)*(1/a1))*p2)<X>p2 by A3,A4,A5,EUCLID_4:4
      .= ((-a2)/a1*p2)<X>p2 by XCMPLX_1:99;then
-      p1<X>p2 = (-a2)/a1*(p2<X>p2) by Lm16;then
+      p1<X>p2 = (-a2)/a1*(p2<X>p2) by Lm14;then
       p1<X>p2 = ((-a2)/a1)*0.REAL 3 by FINSEQ_2:62
      .= |[ ((-a2)/a1)*(0.REAL 3).1,((-a2)/a1)*(0.REAL 3).2,
         ((-a2)/a1)*(0.REAL 3).3 ]| by Lm1
@@ -326,8 +295,8 @@ A1: ex a1,a2 being Real st a1*p1+a2*p2 = 0.REAL 3
  A11: 0.REAL 3 = |[0,0,0 ]| by FINSEQ_2:62;
       p1<X>p2 = p1<X>(((-a1)*(1/a2))*p1) by A8,A9,A10,EUCLID_4:4
      .= p1<X>((-a1)/a2*p1) by XCMPLX_1:99
-     .= (-a1)/a2*p1<X>p1 by Lm16
-     .= (-a1)/a2*(p1<X>p1) by Lm16
+     .= (-a1)/a2*p1<X>p1 by Lm14
+     .= (-a1)/a2*(p1<X>p1) by Lm14
      .= ((-a1)/a2)*0.REAL 3 by FINSEQ_2:62
      .= |[ ((-a1)/a2)*(0.REAL 3).1,((-a1)/a2)*(0.REAL 3).2,
         ((-a1)/a2)*(0.REAL 3).3 ]| by Lm1
@@ -347,21 +316,21 @@ begin :: Vector Function in 3-dimensional Euclidean Spaces
 theorem
   |. <e1> .| = 1
 proof
-  |(<e1>,<e1>)| = 1^2 + 0^2 + 0^2 by Lm14 .= 1;
+  |(<e1>,<e1>)| = 1^2 + 0^2 + 0^2 by Lm12 .= 1;
   hence thesis by SQUARE_1:18;
 end;
 
 theorem
   |. <e2> .| = 1
 proof
-  |(<e2>,<e2>)| = 0^2 + 1^2 + 0^2 by Lm14  .= 1;
+  |(<e2>,<e2>)| = 0^2 + 1^2 + 0^2 by Lm12  .= 1;
   hence thesis by SQUARE_1:18;
 end;
 
 theorem
   |. <e3> .| = 1
 proof
-  |(<e3>,<e3>)| = 0^2 + 0^2 + 1^2 by Lm14  .= 1;
+  |(<e3>,<e3>)| = 0^2 + 0^2 + 1^2 by Lm12  .= 1;
   hence thesis by SQUARE_1:18;
 end;
 
@@ -422,43 +391,21 @@ proof
   hence thesis;
 end;
 
-theorem
-  |(<e1>,|[ 0,0,0 ]|)| = 0
-proof
-A1: <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:45;
-  set e = |[ 0,0,0 ]|;
-  e.1 = 0 & e.2 = 0 & e.3 = 0 by FINSEQ_1:45;
-  then |(<e1>,e)| = 1 * 0 + 0 * 0 + 0 * 0 by A1,Lm5
-  .= 0;
-  hence thesis;
-end;
+theorem Th13:
+  |( p , |[ 0,0,0 ]| )| = 0
+  proof
+    set e = |[ 0,0,0 ]|;
+    e.1 = 0 & e.2 = 0 & e.3 = 0 by FINSEQ_1:45;
+    hence |(p,e)| = p.1 * 0 + p.2 * 0 + p.3 * 0 by Lm5
+    .= 0;
+  end;
 
-theorem
-  |(<e2>,|[ 0,0,0 ]|)| = 0
-proof
-A1: <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:45;
-  set e = |[ 0,0,0 ]|;
-  e.1 = 0 & e.2 = 0 & e.3 = 0 by FINSEQ_1:45;
-  then |(<e2>,e)| = 0 * 0 + 1 * 0 + 0 * 0 by A1,Lm5
-  .= 0;
-  hence thesis;
-end;
-
-theorem
-  |(<e3>,|[ 0,0,0 ]|)| = 0
-proof
-A1:<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:45;
-  set e = |[ 0,0,0 ]|;
-  e.1 = 0 & e.2 = 0 & e.3 = 0 by FINSEQ_1:45;
-  then |(<e3>,e)| = 0 * 0 + 0 * 0 + 1 * 0 by A1,Lm5
-  .= 0;
-  hence thesis;
-end;
+canceled 2;
 
 theorem
   <e1><X><e2> = <e3>
 proof
-  <e1><X><e2> = |[ (0 * 0)-(0 * 1),(0 * 0)-(1 * 0),(1 * 1)-(0 * 0) ]| by Lm15
+  <e1><X><e2> = |[ (0 * 0)-(0 * 1),(0 * 0)-(1 * 0),(1 * 1)-(0 * 0) ]| by Lm13
  .= <e3>;
   hence thesis;
 end;
@@ -466,7 +413,7 @@ end;
 theorem
   <e2><X><e3> = <e1>
 proof
-   <e2><X><e3> = |[ (1 * 1)-(0 * 0),(0 * 0)-(0 * 1),(0 * 0)-(1 * 0) ]| by Lm15
+   <e2><X><e3> = |[ (1 * 1)-(0 * 0),(0 * 0)-(0 * 1),(0 * 0)-(1 * 0) ]| by Lm13
   .= <e1>;
    hence thesis;
 end;
@@ -474,7 +421,7 @@ end;
 theorem
   <e3><X><e1> = <e2>
 proof
-  <e3><X><e1> = |[ (0 * 0)-(1 * 0),(1 * 1)-(0 * 0),(0 * 0)-(0 * 1) ]| by Lm15
+  <e3><X><e1> = |[ (0 * 0)-(1 * 0),(1 * 1)-(0 * 0),(0 * 0)-(0 * 1) ]| by Lm13
  .= <e2>;
   hence thesis;
 end;
@@ -483,7 +430,7 @@ theorem
   <e3><X><e2> = -<e1>
 proof
 A1: <e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:45;
-    <e3><X><e2> = |[ (0 * 0)-(1*1),(1 * 0)-(0 * 0),(0 * 1)-(0 * 0) ]| by Lm15
+    <e3><X><e2> = |[ (0 * 0)-(1*1),(1 * 0)-(0 * 0),(0 * 1)-(0 * 0) ]| by Lm13
    .= |[ (-1)*<e1>.1,(-1)*<e1>.2,(-1)*<e1>.3 ]| by A1
    .= -<e1> by Lm1;
     hence thesis;
@@ -494,7 +441,7 @@ theorem
 proof
 A1: <e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:45;
      <e1><X><e3>
-    = |[ (0 * 1)-(0 * 0),(0 * 0)-(1 * 1),(1 * 0)-(0 * 0 )]| by Lm15
+    = |[ (0 * 1)-(0 * 0),(0 * 0)-(1 * 1),(1 * 0)-(0 * 0 )]| by Lm13
    .= |[ (-1)*<e2>.1,(-1)*<e2>.2,(-1)*<e2>.3 ]| by A1
    .= -<e2> by Lm1;
     hence thesis;
@@ -504,38 +451,22 @@ theorem
   <e2><X><e1> = -<e3>
 proof
 A1: <e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:45;
-    <e2><X><e1> = |[ (1 * 0)-(0 * 0),(0 * 1)-(0 * 0),(0 * 0)-(1 * 1) ]| by Lm15
+    <e2><X><e1> = |[ (1 * 0)-(0 * 0),(0 * 1)-(0 * 0),(0 * 0)-(1 * 1) ]| by Lm13
    .= |[ (-1)*<e3>.1,(-1)*<e3>.2,(-1)*<e3>.3 ]| by A1
    .= -<e3> by Lm1;
     hence thesis;
 end;
 
 theorem
-  <e1><X>|[ 0,0,0 ]| = |[ 0,0,0 ]|
+  p <X> |[ 0,0,0 ]| = |[ 0,0,0 ]|
 proof
-  <e1><X>|[ 0,0,0 ]|
-  = |[ (0 * 0)-(0 * 0),(0 * 0)-(1 * 0),(1 * 0)-(0 * 0) ]| by Lm15
- .= |[ 0,0,0 ]|;
-  hence thesis;
-end;
-
-theorem
-  <e2><X>|[ 0,0,0 ]| = |[ 0,0,0 ]|
-proof
-   <e2><X>|[ 0,0,0 ]|
- = |[ (1 * 0)-(0 * 0),(0 * 0)-(0 * 0),(0 * 0)-(1 * 0) ]| by Lm15
+  p = |[p.1,p.2,p.3]| by Th1;
+  hence p <X> |[ 0,0,0 ]|
+  = |[ (p.2 * 0)-(p.3 * 0),(p.3 * 0)-(p.1 * 0),(p.1 * 0)-(p.2 * 0) ]| by Lm13
   .= |[ 0,0,0 ]|;
-   hence thesis;
 end;
 
-theorem
-  <e3><X>|[ 0,0,0 ]| = |[ 0,0,0 ]|
-proof
-  <e3><X>|[ 0,0,0 ]|
- = |[ (0 * 0)-(1 * 0),(1 * 0)-(0 * 0),(0 * 0)-(0 * 0) ]| by Lm15
- .= |[ 0,0,0 ]|;
-  hence thesis;
-end;
+canceled 2;
 
 theorem Th25:
   r*<e1> = |[ r,0,0 ]|
@@ -562,28 +493,9 @@ proof
 end;
 
 theorem
-  1*<e1> = <e1>
-proof
-<e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:45;
-   then 1*<e1> = |[ 1*1,1*0,1*0 ]| by Lm1  .= <e1>;
-   hence thesis;
-end;
+  1*p = p by RFUNCT_1:21;
 
-theorem
-  1*<e2> = <e2>
-proof
-<e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:45;
-    then 1*<e2> = |[ 1*0,1*1,1*0 ]| by Lm1  .= <e2>;
-   hence thesis;
-end;
-
-theorem
-  1*<e3> = <e3>
-proof
-<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:45;
-    then 1*<e3> = |[ 1*0,1*0,1*1 ]| by Lm1  .= <e3>;
-   hence thesis;
-end;
+canceled 2;
 
 theorem
   -<e1> = |[ -1,0,0 ]|
@@ -613,31 +525,13 @@ A1:<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:45;
 end;
 
 theorem
-  0 * <e1> = |[ 0,0,0 ]|
+  0 * p = |[ 0,0,0 ]|
 proof
-<e1>.1 = 1 & <e1>.2 = 0 & <e1>.3 = 0 by FINSEQ_1:45;
-   then 0 * <e1> = |[ 0 * 1,0 * 0,0 * 0 ]| by Lm1
+  thus 0 * p = |[ 0 * p.1,0 * p.2,0 * p.3]| by Lm1
  .= |[ 0,0,0 ]|;
-   hence thesis;
 end;
 
-theorem
-  0 * <e2> = |[ 0,0,0 ]|
-proof
-<e2>.1 = 0 & <e2>.2 = 1 & <e2>.3 = 0 by FINSEQ_1:45;
-    then 0 * <e2> = |[ 0 * 0,0 * 1,0 * 0 ]| by Lm1
- .= |[ 0,0,0 ]|;
-   hence thesis;
-end;
-
-theorem
-  0 * <e3> = |[ 0,0,0 ]|
-proof
-<e3>.1 = 0 & <e3>.2 = 0 & <e3>.3 = 1 by FINSEQ_1:45;
-    then 0 * <e3> = |[ 0 * 0,0 * 0,0 * 1 ]| by Lm1
-     .= |[ 0,0,0 ]|;
-   hence thesis;
-end;
+canceled 2;
 
 theorem
   p = p.1*<e1> + p.2*<e2> + p.3*<e3>
@@ -1198,7 +1092,7 @@ end;
 theorem
   r*p = |[ r*p.1, r*p.2, r*p.3 ]| by Lm1;
 
-theorem Th53:
+theorem
   -p = |[ -p.1,-p.2,-p.3 ]|
 proof
   -p = |[ (-1)*p.1,(-1)*p.2,(-1)*p.3 ]| by Lm1
@@ -1214,7 +1108,7 @@ A1: len p = 3 by Th50;
     hence thesis by A1,FINSEQ_1:45;
 end;
 
-theorem Th55:
+theorem
   p+q = |[ p.1+q.1, p.2+q.2, p.3+q.3 ]| by Lm2;
 
 theorem
@@ -1279,7 +1173,7 @@ proof
   hence thesis by FINSEQ_1:45;
 end;
 
-theorem Th62:
+theorem
   p1-p2 = |[ p1.1-p2.1, p1.2-p2.2, p1.3-p2.3 ]|
 proof
 A1:  (-p2).1 = -p2.1 by Th61;
@@ -1296,7 +1190,7 @@ theorem Th64:
   |(p,p)| = (p.1)^2 + (p.2)^2 + (p.3)^2
 proof
   p = |[ p.1,p.2,p.3 ]| by Th1;
-  hence thesis by Lm14;
+  hence thesis by Lm12;
 end;
 
 theorem Th65:
@@ -1322,21 +1216,8 @@ proof
   hence thesis by Th1;
 end;
 
-theorem Th68:
-  |(r*p1,p2)| = r*|(p1,p2)|
-proof
-A1:  r*p1 = |[ r*p1.1, r*p1.2, r*p1.3]| by Th58;
-A2:  r*|(p1,p2)| = r*(p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3 ) by Lm5;
-A3:  (r*p1).1*p2.1 = (r*p1.1)*p2.1 by A1,FINSEQ_1:45
-     .= r*(p1.1*p2.1);
-A4:  (r*p1).2*p2.2 =(r*p1.2)*p2.2 by A1,FINSEQ_1:45
-     .=r*(p1.2*p2.2);
-  (r*p1).3*p2.3 = (r*p1.3)*p2.3 by A1,FINSEQ_1:45
-     .= r*(p1.3*p2.3);
-     then |(r*p1,p2)| = (r*(p1.1*p2.1) + r*(p1.2*p2.2)) + r*(p1.3*p2.3)
-     by A3,A4,Lm5;
-     hence thesis by A2;
-end;
+theorem
+  |(r*p1,p2)| = r*|(p1,p2)| by RVSUM_1:131;
 
 theorem
   r1*p-r2*p = (r1-r2)*|[ p.1, p.2, p.3 ]|
@@ -1354,105 +1235,37 @@ end;
 theorem
   |(r*p,q)| = r*(p.1*q.1+p.2*q.2+p.3*q.3)
 proof
-  |(r*p,q)| = r*|(p,q)| by Lm10;
+  |(r*p,q)| = r*|(p,q)| by RVSUM_1:131;
   hence thesis by Lm5;
 end;
 
 theorem
   |(p,0.REAL 3)| = 0
 proof
-A1: 0.REAL 3 = |[ 0,0,0 ]| by FINSEQ_2:62;
-then A2: (0.REAL 3).1 = 0 by FINSEQ_1:45;
-A3: (0.REAL 3).2 = 0 by A1,FINSEQ_1:45;
- (0.REAL 3).3 = 0 by A1,FINSEQ_1:45;
-    then |(p,0.REAL 3)| = p.1*0 +p.2*0 +p.3*0 by A2,A3,Lm5;
-    hence thesis;
+  0.REAL 3 = |[ 0,0,0 ]| by FINSEQ_2:62;
+  hence thesis by Th13;
 end;
 
 theorem
-  |(-p1,p2)| = -|(p1,p2)|
-proof
-A1:  -p1 = |[ -p1.1, -p1.2, -p1.3]| by Th53;
-then A2:  (-p1).1 = -p1.1 by FINSEQ_1:45;
-A3:  (-p1).2 = -p1.2 by A1,FINSEQ_1:45;
-A4:  (-p1).3 = -p1.3 by A1,FINSEQ_1:45;
-A5:  |(p1,p2)| = p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3 by Lm5;
-     |(-p1,p2)| = (-p1.1)*p2.1 + (-p1.2)*p2.2 + (-p1.3)*p2.3 by A2,A3,A4,Lm5;
-     hence thesis by A5;
-end;
+  |(-p1,p2)| = -|(p1,p2)| by RVSUM_1:132;
 
 theorem
-  |(-p1,-p2)| = |(p1,p2)|
-proof
-A1:  -p1 = |[ -p1.1, -p1.2, -p1.3]| by Th53;
-A2:  -p2 = |[ -p2.1, -p2.2, -p2.3]| by Th53;
-A3:  (-p1).1 = -p1.1 by A1,FINSEQ_1:45;
-A4:  (-p1).2 = -p1.2 by A1,FINSEQ_1:45;
-A5:  (-p1).3 = -p1.3 by A1,FINSEQ_1:45;
-A6:  (-p2).1 = -p2.1 by A2,FINSEQ_1:45;
-A7:  (-p2).2 = -p2.2 by A2,FINSEQ_1:45;
-A8: (-p2).3 = -p2.3 by A2,FINSEQ_1:45;
-A9: |(p1,p2)| = p1.1*p2.1 + p1.2*p2.2 + p1.3*p2.3 by Lm5;
-    |(-p1, -p2)| = (-p1.1)*(-p2.1) + (-p1.2)*(-p2.2) + (-p1.3)*(-p2.3)
-       by A3,A4,A5,A6,A7,A8,Lm5;
-    hence thesis by A9;
-end;
-
-theorem Th74:
-  |(p1-p2,q)| = |(p1,q)| - |(p2,q)|
-proof
-A1:  |(p1,q)| = p1.1*q.1+p1.2*q.2+p1.3*q.3 by Lm5;
-A2:  |(p2,q)| = p2.1*q.1+p2.2*q.2+p2.3*q.3 by Lm5;
-A3:  p1-p2 = |[ p1.1-p2.1, p1.2-p2.2, p1.3-p2.3 ]| by Th62;
-     set p = p1-p2;
-A4:  p.2 = p1.2-p2.2 by A3,FINSEQ_1:45;
-A5:  p.3 = p1.3-p2.3 by A3,FINSEQ_1:45;
-  |(p,q)| = p.1*q.1+p.2*q.2+p.3*q.3 by Lm5;
-     then |(p,q)| = (p1.1-p2.1)*q.1+(p1.2-p2.2)*q.2+(p1.3-p2.3)*q.3
-     by A3,A4,A5,FINSEQ_1:45;
-     hence thesis by A1,A2;
-end;
-
-theorem Th75:
-  |(p1+p2,q)| = |(p1,q)|+|(p2,q)|
-proof
-A1: |(p1,q)| = p1.1*q.1 + p1.2*q.2 + p1.3*q.3 by Lm5;
-A2: |(p2,q)| = p2.1*q.1 + p2.2*q.2 + p2.3*q.3 by Lm5;
-A3: p1+p2 = |[ p1.1+p2.1, p1.2+p2.2, p1.3+p2.3]| by Th55;
-    set p = p1+p2;
-A4: p.2 = p1.2 + p2.2 by A3,FINSEQ_1:45;
-A5: p.3 = p1.3 + p2.3 by A3,FINSEQ_1:45;
- |(p,q)| = p.1*q.1 + p.2*q.2 + p.3*q.3 by Lm5;
-    then |(p,q)| = (p1.1+p2.1)*q.1 + (p1.2+p2.2)*q.2 + (p1.3+p2.3)*q.3
-       by A3,A4,A5,FINSEQ_1:45;
-    hence thesis by A1,A2;
-end;
+  |(-p1,-p2)| = |(p1,p2)| by RVSUM_1:133;
 
 theorem
-  |(r1*p1+r2*p2,q)| = r1*|(p1,q)| + r2*|(p2,q)|
-proof
-    |((r1*p1+r2*p2),q)| = |(r1*p1,q)| + |(r2*p2,q)| by Th75; then
-    |((r1*p1+r2*p2),q)| = r1*|(p1,q)| + |(r2*p2,q)| by Th68;
-    hence thesis by Th68;
-end;
+  |(p1-p2,q)| = |(p1,q)| - |(p2,q)| by RVSUM_1:134;
 
-theorem Th77:
-  |(p1+p2,q1+q2)| = |(p1,q1)|+|(p1,q2)|+|(p2,q1)|+|(p2,q2)|
-proof
-A1: |(p1+p2,q1+q2)| = |(p1,q1+q2)|+|(p2,q1+q2)| by Th75;
-A2: |(p1,q1+q2)| = |(p1,q1)|+|(p1,q2)| by Th75;
-    |(p2,q1+q2)| = |(p2,q1)|+|(p2,q2)| by Th75;
-    hence thesis by A1,A2;
-end;
+theorem
+  |(p1+p2,q)| = |(p1,q)|+|(p2,q)| by RVSUM_1:130;
 
-theorem Th78:
-  |(p1-p2,q1-q2)| = |(p1,q1)|-|(p1,q2)|-|(p2,q1)|+|(p2,q2)|
-proof
-A1: |(p1-p2,q1-q2)| = |(p1,q1-q2)|-|(p2,q1-q2)| by Th74;
-A2: |(p1,q1-q2)| = |(p1,q1)|-|(p1,q2)| by Th74;
-    |(p2,q1-q2)| = |(p2,q1)|-|(p2,q2)| by Th74;
-    hence thesis by A1,A2;
-end;
+theorem
+  |(r1*p1+r2*p2,q)| = r1*|(p1,q)| + r2*|(p2,q)| by RVSUM_1:135;
+
+theorem
+  |(p1+p2,q1+q2)| = |(p1,q1)|+|(p1,q2)|+|(p2,q1)|+|(p2,q2)| by RVSUM_1:136;
+
+theorem
+  |(p1-p2,q1-q2)| = |(p1,q1)|-|(p1,q2)|-|(p2,q1)|+|(p2,q2)| by RVSUM_1:137;
 
 theorem Th79:
   |(p,p)| = 0 iff p = 0.REAL 3
@@ -1493,18 +1306,10 @@ p.3 = 0 by A2,FINSEQ_1:45;
 end;
 
 theorem
-  |(p-q,p-q)| = |(p,p)|-2*|(p,q)|+|(q,q)|
-proof
-  |(p-q,p-q)| = |(p,p)|-|(p,q)|-|(q,p)|+|(q,q)| by Th78;
-  hence thesis;
-end;
+  |(p-q,p-q)| = |(p,p)|-2*|(p,q)|+|(q,q)| by RVSUM_1:139;
 
 theorem
-  |(p+q,p+q)| = |(p,p)|+2*|(p,q)|+|(q,q)|
-proof
-  |(p+q,p+q)| = |(p,p)|+|(p,q)|+|(q,p)|+|(q,q)| by Th77;
-  hence thesis;
-end;
+  |(p+q,p+q)| = |(p,p)|+2*|(p,q)|+|(q,q)| by RVSUM_1:138;
 
 theorem Th83:
   p1<X>p2 = -p2<X>p1
@@ -1547,7 +1352,7 @@ end;
 theorem Th86:
   p1<X>(p2+p3) = (p1<X>p2)+(p1<X>p3)
 proof
-A1: p2+p3 = |[ p2.1+p3.1, p2.2+p3.2, p2.3+p3.3 ]| by Th55; then
+A1: p2+p3 = |[ p2.1+p3.1, p2.2+p3.2, p2.3+p3.3 ]| by Lm2; then
 A2: (p2+p3).1 = p2.1+p3.1 by FINSEQ_1:45;
 A3: (p2+p3).2 = p2.2+p3.2 by A1,FINSEQ_1:45;
 A4: (p2+p3).3 = p2.3+p3.3 by A1,FINSEQ_1:45;
@@ -1601,7 +1406,7 @@ then A3: p1<X>(p2<X>p3) = |[(p1.2*p3.2+p1.3*p3.3+p1.1*p3.1)*p2.1-
 then A4: p1<X>(p2<X>p3) = |[ |(p1,p3)|*p2.1, |(p1,p3)|*p2.2, |(p1,p3)|*p2.3 ]|-
     |[ (p1.1*p2.1+p1.2*p2.2+p1.3*p2.3)*p3.1,
     (p1.1*p2.1+p1.2*p2.2+p1.3*p2.3)*p3.2,
-    (p1.1*p2.1+p1.2*p2.2+p1.3*p2.3)*p3.3 ]| by A3,Lm13;
+    (p1.1*p2.1+p1.2*p2.2+p1.3*p2.3)*p3.3 ]| by A3,Lm11;
  |(p1,p2)| = p1.1*p2.1+p1.2*p2.2+p1.3*p2.3 by Lm5;
     then p1<X>(p2<X>p3) = (|(p1,p3)|)*|[ p2.1, p2.2, p2.3 ]|-
     |[ |(p1,p2)|*p3.1, |(p1,p2)|*p3.2, |(p1,p2)|*p3.3 ]| by A4,Th59;
@@ -2195,8 +2000,6 @@ A7: (r(#)f3).t0 = r*(f3.t0) by VALUED_1:6;
     hence thesis;
 end;
 
-::p37-4(3)
-
 theorem
   (f1 is_differentiable_in t0 & f2 is_differentiable_in t0 &
   f3 is_differentiable_in t0) & (g1 is_differentiable_in t0 &
@@ -2243,20 +2046,20 @@ A2: g1 is_differentiable_in t0 & g2 is_differentiable_in t0 &
      (|[ (f2.t0)*diff(g3,t0),(f3.t0)*diff(g1,t0),
          (f1.t0)*diff(g2,t0) ]|-
       |[ (f3.t0)*diff(g2,t0),(f1.t0)*diff(g3,t0),
-         (f2.t0)*diff(g1,t0) ]|) by Lm12
+         (f2.t0)*diff(g1,t0) ]|) by Lm10
  .= (|[ (g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0),
      (g1.t0)*diff(f3,t0)-(g3.t0)*diff(f1,t0),
      (g2.t0)*diff(f1,t0)-(g1.t0)*diff(f2,t0) ]|)+
     (|[ (f2.t0)*diff(g3,t0),(f3.t0)*diff(g1,t0),
       (f1.t0)*diff(g2,t0) ]|-
       |[ (f3.t0)*diff(g2,t0),(f1.t0)*diff(g3,t0),
-      (f2.t0)*diff(g1,t0) ]|) by Lm13
+      (f2.t0)*diff(g1,t0) ]|) by Lm11
  .= |[ (g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0),
      (g1.t0)*diff(f3,t0)-(g3.t0)*diff(f1,t0),
      (g2.t0)*diff(f1,t0)-(g1.t0)*diff(f2,t0) ]|+
     |[ (f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0),
      (f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0),
-      (f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0) ]| by Lm13;
+      (f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0) ]| by Lm11;
    hence thesis;
 end;
 
@@ -2536,7 +2339,6 @@ then A5: h3(#)f3(#)g1 is_differentiable_in t0 &
     h1(#)f1(#)g3 is_differentiable_in t0 &
     h2(#)f2(#)g3 is_differentiable_in t0 &
     h2(#)f2(#)g1 is_differentiable_in t0 by A2,FDIFF_1:16;
-A6: R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
  VFuncdiff( h2(#)f2(#)g3-h3(#)f3(#)g2, h3(#)f3(#)g1-h1(#)f1(#)g3,
              h1(#)f1(#)g2-h2(#)f2(#)g1,t0 )
  = VFuncdiff( h2(#)f2(#)g3,h3(#)f3(#)g1,h1(#)f1(#)g2,t0 )-
@@ -2682,7 +2484,7 @@ A6: R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
    |[ h2.t0*f2.t0*diff(g3,t0),h3.t0*f3.t0*diff(g1,t0),
       h1.t0*f1.t0*diff(g2,t0) ]|+
    -|[ h3.t0*f3.t0*diff(g2,t0),h1.t0*f1.t0*diff(g3,t0),
-      h2.t0*f2.t0*diff(g1,t0) ]| by A6
+      h2.t0*f2.t0*diff(g1,t0) ]| by RVSUM_1:15
 .= (|[ (g3.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)),
       (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0)),
       (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)) ]|-
@@ -2701,7 +2503,7 @@ A6: R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
      (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]|)+
    |[ h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
        h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
-       h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]| by Lm13
+       h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]| by Lm11
 .= |[  h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
        h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
        h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]|+
@@ -2710,7 +2512,7 @@ A6: R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
       (g1.t0)*((f3.t0)*diff(h3,t0)+(h3.t0)*diff(f3,t0))-
       (g3.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0)),
       (g2.t0)*((f1.t0)*diff(h1,t0)+(h1.t0)*diff(f1,t0))-
-      (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]| by Lm13
+      (g1.t0)*((f2.t0)*diff(h2,t0)+(h2.t0)*diff(f2,t0)) ]| by Lm11
 .= |[  h2.t0*f2.t0*diff(g3,t0)-h3.t0*f3.t0*diff(g2,t0),
        h3.t0*f3.t0*diff(g1,t0)-h1.t0*f1.t0*diff(g3,t0),
        h1.t0*f1.t0*diff(g2,t0)-h2.t0*f2.t0*diff(g1,t0) ]|+
@@ -2821,7 +2623,6 @@ A15: 0 < r2 & [.t0 - r2,t0.] c= dom (f3(#)g1-f1(#)g3) by A13,FDIFF_3:def 4;
     then t0 in [.t0 - r2,t0.];
     hence thesis by A15;
   end;
-A16:R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
  VFuncdiff( h2(#)(f1(#)g2-f2(#)g1)-h3(#)(f3(#)g1-f1(#)g3),
                h3(#)(f2(#)g3-f3(#)g2)-h1(#)(f1(#)g2-f2(#)g1),
                h1(#)(f3(#)g1-f1(#)g3)-h2(#)(f2(#)g3-f3(#)g2),t0 )
@@ -3382,7 +3183,7 @@ A16:R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
       (h1.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
       (h1.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
       (h2.t0)*((g3.t0)*diff(f2,t0)-(g2.t0)*diff(f3,t0))+
-      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]| by Lm13
+      (h2.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0)) ]| by Lm11
 .= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
       (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0)),
       (h3.t0)*((f2.t0)*diff(g3,t0)-(f3.t0)*diff(g2,t0))+
@@ -3400,7 +3201,7 @@ A16:R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
       diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
       diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
       diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
-      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]| by A16
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]| by RVSUM_1:15
 .= |[ (h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))+
       (h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))-
       ((h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0))+
@@ -3418,7 +3219,7 @@ A16:R1 + R2 - R3 = R1 - R3 + R2 by RVSUM_1:15;
       diff(h3,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0))-
       diff(h1,t0)*((f1.t0)*(g2.t0)-(f2.t0)*(g1.t0)),
       diff(h1,t0)*((f3.t0)*(g1.t0)-(f1.t0)*(g3.t0))-
-      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]| by Lm13
+      diff(h2,t0)*((f2.t0)*(g3.t0)-(f3.t0)*(g2.t0)) ]| by Lm11
 .= |[ ((h2.t0)*((f1.t0)*diff(g2,t0)-(f2.t0)*diff(g1,t0))-
       (h3.t0)*((f3.t0)*diff(g1,t0)-(f1.t0)*diff(g3,t0)))+
       ((h2.t0)*(diff(f1,t0)*(g2.t0)-diff(f2,t0)*(g1.t0))-

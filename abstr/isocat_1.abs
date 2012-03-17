@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received November 22, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,11 +16,12 @@ environ
 
  vocabularies CAT_1, FUNCT_1, ZFMISC_1, RELAT_1, MCART_1, STRUCT_0, ALGSTR_0,
       GRAPH_1, PZFMISC1, NATTRA_1, XBOOLE_0, WELLORD1, TARSKI, PARTFUN1,
-      VALUED_1, REWRITE1, ISOCAT_1;
+      VALUED_1, REWRITE1, ISOCAT_1, MONOID_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, BINOP_1, FUNCT_3, STRUCT_0, GRAPH_1, CAT_1, CAT_2, NATTRA_1;
- constructors PARTFUN1, NATTRA_1, FUNCOP_1, RELSET_1;
- registrations RELSET_1, FUNCT_2, STRUCT_0;
+      FUNCT_2, BINOP_1, FUNCT_3, STRUCT_0, GRAPH_1, CAT_1, CAT_2, CAT_3,
+      NATTRA_1;
+ constructors NATTRA_1, FUNCOP_1, RELSET_1, CAT_3;
+ registrations RELSET_1, FUNCT_2, STRUCT_0, CAT_1, FUNCT_3;
  requirements SUBSET, BOOLE;
 
 
@@ -32,15 +33,11 @@ reserve A,B,C,D for Category,
   F for Functor of A,B,
   G for Functor of B,C;
 
-theorem :: ISOCAT_1:1
-  for F,G being Function st F is one-to-one & G is one-to-one holds
-  [:F,G:] is one-to-one;
-
-theorem :: ISOCAT_1:2
-  rng pr1(A,B) = the carrier' of A & rng pr2(B,A) = the carrier' of A;
+canceled 2;
 
 theorem :: ISOCAT_1:3
-  for f being Morphism of A st f is invertible holds F.f is invertible;
+ for a,b being Object of A
+  for f being Morphism of a,b st f is invertible holds F/.f is invertible;
 
 theorem :: ISOCAT_1:4
   for F1,F2 being Functor of A,B st F1 is_transformable_to F2 for t
@@ -63,7 +60,7 @@ definition
     (for c being Object of C ex d being
 Object of D st it.id c = id d) & (for f being Morphism of C holds it.id dom f =
 id dom(it.f) & it.id cod f = id cod(it.f)) & for f,g being Morphism of C st dom
-    g = cod f holds it.(g*f) = it.g*it.f;
+    g = cod f holds it.(g(*)f) = (it.g)(*)(it.f);
 end;
 
 reserve o,m for set;
@@ -174,8 +171,8 @@ be Functor of A,B, t be transformation of G1,G2, a be Object of A holds (t*F).a
 
 theorem :: ISOCAT_1:21
   for F1,F2 be Functor of A,B st F1 is_transformable_to F2 for t
-be transformation of F1,F2, G be Functor of B,C, a being Object of A holds (G*t
-  ).a = G.(t.a);
+be transformation of F1,F2, G be Functor of B,C, a being Object of A
+  holds (G*t).a = G/.(t.a);
 
 theorem :: ISOCAT_1:22
   for F1,F2 being Functor of A,B, G1,G2 being Functor of B,C st F1
@@ -197,7 +194,7 @@ end;
 theorem :: ISOCAT_1:23
   for F1,F2 be Functor of A,B st F1 is_naturally_transformable_to
   F2 for t be natural_transformation of F1,F2, G be Functor of B,C, a being
-  Object of A holds (G*t).a = G.(t.a);
+  Object of A holds (G*t).a = G/.(t.a);
 
 definition
   let A,B,C;
@@ -355,3 +352,15 @@ theorem :: ISOCAT_1:51
   A,B are_equivalent implies for F being Equivalence of A,B holds F is
 full & F is faithful & for b being Object of B ex a being Object of A st b, F.a
   are_isomorphic;
+
+:: The elimination of the Id selector caused the necessity to
+:: introduce corresponding functor because 'the Id of C' is sometimes
+:: separately used, not applied to an object (2012.01.25, A.T.)
+
+definition let C be Category;
+ func IdMap C -> Function of the carrier of C, the carrier' of C means
+:: ISOCAT_1:def 12
+  for o being Object of C holds it.o = id o;
+end;
+
+

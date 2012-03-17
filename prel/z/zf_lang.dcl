@@ -10,6 +10,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -30,15 +31,15 @@
 <Func kind="K" nr="32"/>
 </Adjective>
 <Adjective nr="16"/>
-<Adjective nr="21"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="31"/>
+<Adjective nr="24"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ZF_LANG" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -47,98 +48,98 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="78">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="79">
+<Func kind="K" nr="91">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="80">
+<Func kind="K" nr="92">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
 <Typ kind="M" nr="4">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="81">
+<Func kind="K" nr="93">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="4">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="82">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 </Registrations>

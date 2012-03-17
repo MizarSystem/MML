@@ -2,7 +2,7 @@
 ::  by Takashi Mitsuishi , Katsumi Wasaki and Yasunari Shidama
 ::
 :: Received December 7, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,12 +19,12 @@ environ
       ARYTM_3, VALUED_1, COMPLEX1, XBOOLE_0, ORDINAL4, VALUED_0, CARD_1,
       XXREAL_0, XREAL_0, RCOMP_1, CFCONT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, NAT_1, PARTFUN1, FUNCT_2, SEQ_1, RELSET_1, VALUED_0, VALUED_1,
-      CFUNCT_1, COMSEQ_1, COMSEQ_2, COMSEQ_3, XXREAL_0, RECDEF_1;
+      REAL_1, ORDINAL1, NAT_1, PARTFUN1, FUNCT_2, SEQ_1, RELSET_1, VALUED_0,
+      VALUED_1, CFUNCT_1, COMSEQ_1, COMSEQ_2, COMSEQ_3, XXREAL_0, RECDEF_1;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, SEQ_1, COMSEQ_2, CFUNCT_1,
       COMSEQ_3, RECDEF_1, SEQM_3, VALUED_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      XREAL_0, NAT_1, MEMBERED, VALUED_0, VALUED_1;
+      XREAL_0, NAT_1, MEMBERED, VALUED_0, VALUED_1, COMSEQ_2, SEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, COMSEQ_2, COMSEQ_3, FUNCT_1, VALUED_0, VALUED_1;
  theorems TARSKI, NAT_1, FUNCT_1, COMPLEX1, SEQ_1, SEQM_3, SEQ_4, COMSEQ_1,
@@ -52,13 +52,13 @@ definition
 
   let f,x0;
   pred f is_continuous_in x0 means
-  :Def2:
+  :Def1:
   x0 in dom f & for s1 st rng s1 c=
 dom f & s1 is convergent & lim s1 = x0 holds f/*s1 is convergent & f/.x0 = lim
   (f/*s1);
 end;
 
-theorem Th2:
+theorem Th1:
   seq1=seq2-seq3 iff for n holds seq1.n=seq2.n-seq3.n
 proof
   thus seq1=seq2-seq3 implies for n holds seq1.n=seq2.n-seq3.n
@@ -85,7 +85,7 @@ A2: for n holds seq1.n=seq2.n-seq3.n;
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th9:
+theorem Th2:
   (seq1 + seq2)*Ns = (seq1*Ns) + (seq2*Ns) & (seq1 - seq2)*Ns = (
   seq1*Ns) - (seq2*Ns) & (seq1 (#) seq2)*Ns = (seq1*Ns) (#) (seq2*Ns)
 proof
@@ -101,10 +101,10 @@ proof
   now
     let n;
     thus ((seq1 - seq2)*Ns).n = (seq1 - seq2).(Ns.n) by FUNCT_2:15
-      .= seq1.(Ns.n) - seq2.(Ns.n) by Th2
+      .= seq1.(Ns.n) - seq2.(Ns.n) by Th1
       .= (seq1*Ns).n - seq2.(Ns.n) by FUNCT_2:15
       .= (seq1*Ns).n - (seq2*Ns).n by FUNCT_2:15
-      .= (seq1*Ns - seq2*Ns).n by Th2;
+      .= (seq1*Ns - seq2*Ns).n by Th1;
   end;
   hence (seq1 - seq2)*Ns = (seq1*Ns) - (seq2*Ns) by FUNCT_2:63;
   now
@@ -118,7 +118,7 @@ proof
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th10:
+theorem Th3:
   (g(#)seq)*Ns = g(#)(seq*Ns)
 proof
   now
@@ -135,7 +135,7 @@ theorem
   (-seq)*Ns = -(seq*Ns) & (|.seq.|)*Ns = |.(seq*Ns).|
 proof
   thus (-seq)*Ns = ((-1r)(#)seq)*Ns by COMSEQ_1:11
-    .= (-1r)(#)(seq*Ns) by Th10
+    .= (-1r)(#)(seq*Ns) by Th3
     .= -(seq*Ns) by COMSEQ_1:11;
   now
     let n;
@@ -147,7 +147,7 @@ proof
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th12:
+theorem Th5:
   (seq*Ns)" = (seq")*Ns
 proof
   now
@@ -163,11 +163,11 @@ end;
 theorem
   (seq1/"seq)*Ns = (seq1*Ns)/"(seq*Ns)
 proof
-  thus (seq1/"seq)*Ns = (seq1*Ns)(#)((seq")*Ns) by Th9
-    .= (seq1*Ns)/"(seq*Ns) by Th12;
+  thus (seq1/"seq)*Ns = (seq1*Ns)(#)((seq")*Ns) by Th2
+    .= (seq1*Ns)/"(seq*Ns) by Th5;
 end;
 
-theorem Th18:
+theorem Th7:
   rng seq c= dom h1 /\ dom h2 implies (h1+h2)/*seq=h1/*seq+h2/*seq
   & (h1-h2)/*seq=h1/*seq-h2/*seq & (h1(#)h2)/*seq=(h1/*seq)(#)(h2/*seq)
 proof
@@ -196,7 +196,7 @@ A7: seq.n in rng seq by VALUED_0:28;
       .= (h1/*seq).n - h2/.(seq.n) by A3,A1,FUNCT_2:109,XBOOLE_1:1
       .= (h1/*seq).n - (h2/*seq).n by A3,A2,FUNCT_2:109,XBOOLE_1:1;
   end;
-  hence (h1-h2)/*seq=h1/*seq-h2/*seq by Th2;
+  hence (h1-h2)/*seq=h1/*seq-h2/*seq by Th1;
 A8: rng seq c= dom (h1 (#) h2) by A3,VALUED_1:def 4;
   now
     let n;
@@ -210,7 +210,7 @@ A9: seq.n in rng seq by VALUED_0:28;
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th19:
+theorem Th8:
   rng seq c= dom h implies (g(#)h)/*seq = g(#)(h/*seq)
 proof
   assume
@@ -234,11 +234,11 @@ proof
   assume
 A1: rng seq c= dom h;
   thus -(h/*seq) = (-1r)(#)(h/*seq) by COMSEQ_1:11
-    .= ((-1r)(#)h)/*seq by A1,Th19
+    .= ((-1r)(#)h)/*seq by A1,Th8
     .= (-h)/*seq by CFUNCT_1:31;
 end;
 
-theorem Th21:
+theorem Th10:
   rng seq c= dom (h^) implies h/*seq is non-zero
 proof
   assume
@@ -261,7 +261,7 @@ A4: not h/.(seq.n) in {0c} by PARTFUN2:26;
   hence thesis by COMSEQ_1:4;
 end;
 
-theorem Th22:
+theorem Th11:
   rng seq c= dom (h^) implies (h^)/*seq =(h/*seq)"
 proof
   assume
@@ -329,9 +329,9 @@ proof
   then dom h1 /\ dom h2 = COMPLEX by VALUED_1:def 1;
   then
 A1: rng seq c= dom h1 /\ dom h2;
-  hence (h1+h2)/*seq = h1/*seq + h2/*seq by Th18;
-  thus (h1-h2)/*seq = h1/*seq - h2/*seq by A1,Th18;
-  thus thesis by A1,Th18;
+  hence (h1+h2)/*seq = h1/*seq + h2/*seq by Th7;
+  thus (h1-h2)/*seq = h1/*seq - h2/*seq by A1,Th7;
+  thus thesis by A1,Th7;
 end;
 
 theorem
@@ -340,7 +340,7 @@ proof
   assume h is total;
   then dom h = COMPLEX by PARTFUN1:def 2;
   then rng seq c= dom h;
-  hence thesis by Th19;
+  hence thesis by Th8;
 end;
 
 theorem
@@ -387,7 +387,7 @@ A9: seq.n in dom((h^)|X) by RELAT_1:61;
   hence thesis by FUNCT_2:63;
 end;
 
-theorem Th39:
+theorem Th17:
   seq1 is subsequence of seq & seq is convergent implies seq1 is convergent
 proof
   assume that
@@ -395,7 +395,7 @@ A1: seq1 is subsequence of seq and
 A2: seq is convergent;
   consider g such that
 A3: for p st 0<p ex n st for m st n<=m holds |.(seq.m)-g.|<p by A2,
-COMSEQ_2:def 4;
+COMSEQ_2:def 5;
   take t=g;
   let p;
   assume 0<p;
@@ -413,7 +413,7 @@ A7: n<=Nseq.m by A5,XXREAL_0:2;
   hence |.(seq1.m)-t.|<p by A4,A7;
 end;
 
-theorem Th40:
+theorem Th18:
   seq1 is subsequence of seq & seq is convergent implies lim seq1= lim seq
 proof
   assume that
@@ -425,7 +425,7 @@ A4: now
     let p;
     assume 0<p;
     then consider n1 such that
-A5: for m st n1<=m holds |.(seq.m)-(lim seq).|<p by A2,COMSEQ_2:def 5;
+A5: for m st n1<=m holds |.(seq.m)-(lim seq).|<p by A2,COMSEQ_2:def 6;
     take n=n1;
     let m such that
 A6: n<=m;
@@ -435,11 +435,11 @@ A7: n<=Nseq.m by A6,XXREAL_0:2;
     seq1.m=seq.(Nseq.m) by A3,FUNCT_2:15;
     hence |.(seq1.m)-(lim seq).|<p by A5,A7;
   end;
-  seq1 is convergent by A1,A2,Th39;
-  hence thesis by A4,COMSEQ_2:def 5;
+  seq1 is convergent by A1,A2,Th17;
+  hence thesis by A4,COMSEQ_2:def 6;
 end;
 
-theorem Th41:
+theorem Th19:
   seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
   implies seq1 is convergent
 proof
@@ -448,7 +448,7 @@ A1: seq is convergent and
 A2: ex k st for n st k<=n holds seq1.n=seq.n;
   consider g1 such that
 A3: for p st 0<p ex n st for m st n<=m holds |.(seq.m)-g1.|<p by A1,
-COMSEQ_2:def 4;
+COMSEQ_2:def 5;
   consider k such that
 A4: for n st k<=n holds seq1.n=seq.n by A2;
   take g=g1;
@@ -493,7 +493,7 @@ A4: now
     let p;
     assume 0<p;
     then consider n1 such that
-A5: for m st n1<=m holds |.(seq.m)-(lim seq).|<p by A1,COMSEQ_2:def 5;
+A5: for m st n1<=m holds |.(seq.m)-(lim seq).|<p by A1,COMSEQ_2:def 6;
 A6: now
       assume
 A7:   n1<=k;
@@ -517,15 +517,15 @@ A10:  n<=m;
     end;
     hence ex n st for m st n<=m holds |.seq1.m-(lim seq).|<p by A6;
   end;
-  seq1 is convergent by A1,A2,Th41;
-  hence thesis by A4,COMSEQ_2:def 5;
+  seq1 is convergent by A1,A2,Th19;
+  hence thesis by A4,COMSEQ_2:def 6;
 end;
 
 theorem
   seq is convergent implies (seq ^\k) is convergent & lim (seq ^\k)=lim
-  seq by Th39,Th40;
+  seq by Th17,Th18;
 
-theorem Th44:
+theorem Th22:
   seq is convergent & (ex k st seq=seq1 ^\k) implies seq1 is convergent
 proof
   assume that
@@ -535,7 +535,7 @@ A2: ex k st seq=seq1 ^\k;
 A3: seq=seq1 ^\k by A2;
   consider g1 such that
 A4: for p st 0<p ex n st for m st n<=m holds |.seq.m-g1.|<p by A1,
-COMSEQ_2:def 4;
+COMSEQ_2:def 5;
   take g=g1;
   let p;
   assume 0<p;
@@ -574,7 +574,7 @@ A4: now
     let p;
     assume 0<p;
     then consider n1 such that
-A5: for m st n1<=m holds |.seq.m-(lim seq).|<p by A1,COMSEQ_2:def 5;
+A5: for m st n1<=m holds |.seq.m-(lim seq).|<p by A1,COMSEQ_2:def 6;
     take n=n1+k;
     let m;
     assume
@@ -595,11 +595,11 @@ A9: |.seq.m1-(lim seq).|<p by A5;
     m1+k=m by A8;
     hence |.seq1.m-(lim seq).|<p by A3,A9,NAT_1:def 3;
   end;
-  seq1 is convergent by A1,A2,Th44;
-  hence thesis by A4,COMSEQ_2:def 5;
+  seq1 is convergent by A1,A2,Th22;
+  hence thesis by A4,COMSEQ_2:def 6;
 end;
 
-theorem Th46:
+theorem Th24:
   seq is convergent & lim seq<>0 implies ex k st (seq ^\k) is non-zero
 proof
   assume that
@@ -629,12 +629,12 @@ theorem
 proof
   assume seq is convergent & lim seq <>0;
   then consider k such that
-A1: seq ^\k is non-zero by Th46;
+A1: seq ^\k is non-zero by Th24;
   take seq ^\k;
   thus thesis by A1;
 end;
 
-theorem Th48:
+theorem Th26:
   seq is constant implies seq is convergent
 proof
   assume seq is constant;
@@ -651,7 +651,7 @@ A2: 0<p;
   hence |.(seq.m)-g.|<p by A2;
 end;
 
-theorem Th49:
+theorem Th27:
   (seq is constant & g in rng seq or seq is constant & ex n st seq
   .n=g ) implies lim seq=g
 proof
@@ -678,8 +678,8 @@ A8:   0<p;
       then seq.m=g by A5;
       hence |.(seq.m)-g.|<p by A8,COMPLEX1:44;
     end;
-    seq is convergent by A2,Th48;
-    hence thesis by A7,COMSEQ_2:def 5;
+    seq is convergent by A2,Th26;
+    hence thesis by A7,COMSEQ_2:def 6;
   end;
 A9: now
     assume that
@@ -696,7 +696,7 @@ A11: seq.n=g by A10;
 end;
 
 theorem
-  seq is constant implies for n holds lim seq=seq.n by Th49;
+  seq is constant implies for n holds lim seq=seq.n by Th27;
 
 theorem
   seq is convergent & lim seq<>0 implies for seq1 st seq1 is subsequence
@@ -708,8 +708,8 @@ A2: lim seq<>0;
   let seq1 such that
 A3: seq1 is subsequence of seq and
 A4: seq1 is non-zero;
-  lim seq1=lim seq by A1,A3,Th40;
-  hence thesis by A1,A2,A3,A4,Th39,COMSEQ_2:35;
+  lim seq1=lim seq by A1,A3,Th18;
+  hence thesis by A1,A2,A3,A4,Th17,COMSEQ_2:35;
 end;
 
 theorem
@@ -720,15 +720,15 @@ proof
   assume that
 A1: seq is constant and
 A2: seq1 is convergent;
-A3: seq is convergent by A1,Th48;
+A3: seq is convergent by A1,Th26;
   hence lim (seq+seq1) =(lim seq)+(lim seq1) by A2,COMSEQ_2:14
-    .=(seq.0)+(lim seq1) by A1,Th49;
+    .=(seq.0)+(lim seq1) by A1,Th27;
   thus lim (seq-seq1) =(lim seq)-(lim seq1) by A2,A3,COMSEQ_2:26
-    .=(seq.0)-(lim seq1) by A1,Th49;
+    .=(seq.0)-(lim seq1) by A1,Th27;
   thus lim (seq1-seq) =(lim seq1)-(lim seq) by A2,A3,COMSEQ_2:26
-    .=(lim seq1)-(seq.0) by A1,Th49;
+    .=(lim seq1)-(seq.0) by A1,Th27;
   thus lim (seq(#)seq1) =(lim seq)*(lim seq1) by A2,A3,COMSEQ_2:30
-    .=(seq.0)*(lim seq1) by A1,Th49;
+    .=(seq.0)*(lim seq1) by A1,Th27;
 end;
 
 scheme
@@ -754,7 +754,7 @@ is convergent & lim s1=x0 & (for n holds s1.n<>x0) holds f/*s1 is convergent &
 proof
   thus f is_continuous_in x0 implies x0 in dom f & for s1 st rng s1 c= dom f &
 s1 is convergent & lim s1=x0 & (for n holds s1.n<>x0) holds f/*s1 is convergent
-  & f/.x0=lim(f/*s1) by Def2;
+  & f/.x0=lim(f/*s1) by Def1;
   assume that
 A1: x0 in dom f and
 A2: for s1 st rng s1 c=dom f & s1 is convergent & lim s1=x0 & (for n
@@ -790,9 +790,9 @@ A10:    p>0;
         hence |.(f/*(s2^\N)).m-f/.x0.|<p by A10;
       end;
       then
-A11:  f/*(s2^\N) is convergent by COMSEQ_2:def 4;
-      then f/.x0=lim((f/*s2)^\N) by A9,A7,COMSEQ_2:def 5;
-      hence thesis by A11,A7,Th40,Th44;
+A11:  f/*(s2^\N) is convergent by COMSEQ_2:def 5;
+      then f/.x0=lim((f/*s2)^\N) by A9,A7,COMSEQ_2:def 6;
+      hence thesis by A11,A7,Th18,Th22;
     end;
     suppose
 A12:  for n ex m st n<=m & s2.m<>x0;
@@ -847,7 +847,7 @@ A24:  now
       then reconsider F as increasing sequence of NAT by SEQM_3:def 6;
 A25:  s2*F is subsequence of s2 by VALUED_0:def 17;
       then
-A26:  s2*F is convergent & lim (s2*F)=x0 by A4,Th39,Th40;
+A26:  s2*F is convergent & lim (s2*F)=x0 by A4,Th17,Th18;
 A27:  for n st s2.n<>x0 ex m st F.m=n
       proof
         defpred P[set] means s2.$1<>x0 & for m holds F.m<>$1;
@@ -922,7 +922,7 @@ A44:  now
         assume
 A45:    0<p;
         then consider n such that
-A46:    for m st n<=m holds |.(f/*(s2*F)).m-f/.x0.|<p by A43,COMSEQ_2:def 5;
+A46:    for m st n<=m holds |.(f/*(s2*F)).m-f/.x0.|<p by A43,COMSEQ_2:def 6;
         take k=F.n;
         let m such that
 A47:    k<=m;
@@ -947,14 +947,14 @@ A48:        m=F.l by A27;
         end;
         hence |.(f/*s2).m-f/.x0.|<p;
       end;
-      hence f/*s2 is convergent by COMSEQ_2:def 4;
-      hence f/.x0=lim(f/*s2) by A44,COMSEQ_2:def 5;
+      hence f/*s2 is convergent by COMSEQ_2:def 5;
+      hence f/.x0=lim(f/*s2) by A44,COMSEQ_2:def 6;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th54:
+theorem Th32:
   f is_continuous_in x0 iff x0 in dom f & for r st 0<r ex s st 0<s
   & for x1 st x1 in dom f & |.x1-x0.|<s holds |.f/.x1-f/.x0.|<r
 proof
@@ -963,7 +963,7 @@ proof
   proof
     assume
 A1: f is_continuous_in x0;
-    hence x0 in dom f by Def2;
+    hence x0 in dom f by Def1;
     given r such that
 A2: 0<r and
 A3: for s holds not 0<s or ex x1 st x1 in dom f & |.x1-x0.|<s & not |.
@@ -1015,11 +1015,11 @@ A12:  1/(n+1)<s by XCMPLX_1:216;
       hence |.s1.m-x0.|<s by A6,XXREAL_0:2;
     end;
     then
-A13: s1 is convergent by COMSEQ_2:def 4;
-    then lim s1=x0 by A9,COMSEQ_2:def 5;
-    then f/*s1 is convergent & f/.x0=lim(f/*s1) by A1,A7,A13,Def2;
+A13: s1 is convergent by COMSEQ_2:def 5;
+    then lim s1=x0 by A9,COMSEQ_2:def 6;
+    then f/*s1 is convergent & f/.x0=lim(f/*s1) by A1,A7,A13,Def1;
     then consider n such that
-A14: for m st n<=m holds |.(f/*s1).m-f/.x0.|<r by A2,COMSEQ_2:def 5;
+A14: for m st n<=m holds |.(f/*s1).m-f/.x0.|<r by A2,COMSEQ_2:def 6;
     |.(f/*s1).n-f/.x0.|<r by A14;
     hence contradiction by A8;
   end;
@@ -1038,7 +1038,7 @@ A19: now
 A20:  0<s and
 A21:  for x1 st x1 in dom f & |.x1-x0.|<s holds |.f/.x1-f/.x0.|<p by A16;
       consider n such that
-A22:  for m st n<=m holds |.s1.m-x0.|<s by A18,A20,COMSEQ_2:def 5;
+A22:  for m st n<=m holds |.s1.m-x0.|<s by A18,A20,COMSEQ_2:def 6;
       take k=n;
       let m;
       assume k<=m;
@@ -1046,20 +1046,20 @@ A22:  for m st n<=m holds |.s1.m-x0.|<s by A18,A20,COMSEQ_2:def 5;
       then |.f/.(s1.m)-f/.x0.|<p by A17,A21;
       hence |.(f/*s1).m - f/.x0.|<p by A17,FUNCT_2:109;
     end;
-    then f/*s1 is convergent by COMSEQ_2:def 4;
-    hence f/*s1 is convergent & f/.x0 = lim (f/*s1) by A19,COMSEQ_2:def 5;
+    then f/*s1 is convergent by COMSEQ_2:def 5;
+    hence f/*s1 is convergent & f/.x0 = lim (f/*s1) by A19,COMSEQ_2:def 6;
   end;
-  hence thesis by A15,Def2;
+  hence thesis by A15,Def1;
 end;
 
-theorem Th55:
+theorem Th33:
   f1 is_continuous_in x0 & f2 is_continuous_in x0 implies f1+f2
   is_continuous_in x0 & f1-f2 is_continuous_in x0 & f1(#)f2 is_continuous_in x0
 proof
   assume that
 A1: f1 is_continuous_in x0 and
 A2: f2 is_continuous_in x0;
-A3: x0 in dom f1 & x0 in dom f2 by A1,A2,Def2;
+A3: x0 in dom f1 & x0 in dom f2 by A1,A2,Def1;
   now
     x0 in dom f1 /\ dom f2 by A3,XBOOLE_0:def 4;
     hence
@@ -1074,22 +1074,22 @@ A7: rng s1 c= dom f1 /\ dom f2 by A5,VALUED_1:def 1;
     then
 A8: rng s1 c= dom f2 by A5,XBOOLE_1:1;
     then
-A9: f2/*s1 is convergent by A2,A6,Def2;
+A9: f2/*s1 is convergent by A2,A6,Def1;
     dom (f1+f2) = dom f1 /\ dom f2 by VALUED_1:def 1;
     then dom (f1+f2) c= dom f1 by XBOOLE_1:17;
     then
 A10: rng s1 c= dom f1 by A5,XBOOLE_1:1;
     then
-A11: f1/*s1 is convergent by A1,A6,Def2;
-    then ((f1/*s1)+(f2/*s1)) is convergent by A9,COMSEQ_2:13;
-    hence (f1+f2)/*s1 is convergent by A7,Th18;
-A12: f1/.x0 = lim (f1/*s1) by A1,A6,A10,Def2;
-A13: f2/.x0 = lim (f2/*s1) by A2,A6,A8,Def2;
+A11: f1/*s1 is convergent by A1,A6,Def1;
+    then ((f1/*s1)+(f2/*s1)) is convergent by A9;
+    hence (f1+f2)/*s1 is convergent by A7,Th7;
+A12: f1/.x0 = lim (f1/*s1) by A1,A6,A10,Def1;
+A13: f2/.x0 = lim (f2/*s1) by A2,A6,A8,Def1;
     thus (f1+f2)/.x0 = f1/.x0 + f2/.x0 by A4,CFUNCT_1:1
       .= lim ((f1/*s1) + (f2/*s1)) by A11,A12,A9,A13,COMSEQ_2:14
-      .= lim ((f1+f2)/*s1) by A7,Th18;
+      .= lim ((f1+f2)/*s1) by A7,Th7;
   end;
-  hence f1+f2 is_continuous_in x0 by Def2;
+  hence f1+f2 is_continuous_in x0 by Def1;
   now
     x0 in dom f1 /\ dom f2 by A3,XBOOLE_0:def 4;
     hence
@@ -1104,22 +1104,22 @@ A17: rng s1 c= dom f1 /\ dom f2 by A15,CFUNCT_1:2;
     then
 A18: rng s1 c= dom f2 by A15,XBOOLE_1:1;
     then
-A19: f2/*s1 is convergent by A2,A16,Def2;
+A19: f2/*s1 is convergent by A2,A16,Def1;
     dom (f1-f2) = dom f1 /\ dom f2 by CFUNCT_1:2;
     then dom (f1-f2) c= dom f1 by XBOOLE_1:17;
     then
 A20: rng s1 c= dom f1 by A15,XBOOLE_1:1;
     then
-A21: f1/*s1 is convergent by A1,A16,Def2;
-    then f1/*s1-f2/*s1 is convergent by A19,COMSEQ_2:25;
-    hence (f1-f2)/*s1 is convergent by A17,Th18;
-A22: f1/.x0 = lim (f1/*s1) by A1,A16,A20,Def2;
-A23: f2/.x0 = lim (f2/*s1) by A2,A16,A18,Def2;
+A21: f1/*s1 is convergent by A1,A16,Def1;
+    then f1/*s1-f2/*s1 is convergent by A19;
+    hence (f1-f2)/*s1 is convergent by A17,Th7;
+A22: f1/.x0 = lim (f1/*s1) by A1,A16,A20,Def1;
+A23: f2/.x0 = lim (f2/*s1) by A2,A16,A18,Def1;
     thus (f1-f2)/.x0 = f1/.x0 - f2/.x0 by A14,CFUNCT_1:2
       .= lim (f1/*s1 - f2/*s1) by A21,A22,A19,A23,COMSEQ_2:26
-      .= lim ((f1-f2)/*s1) by A17,Th18;
+      .= lim ((f1-f2)/*s1) by A17,Th7;
   end;
-  hence f1-f2 is_continuous_in x0 by Def2;
+  hence f1-f2 is_continuous_in x0 by Def1;
   x0 in dom f1 /\ dom f2 by A3,XBOOLE_0:def 4;
   hence
 A24: x0 in dom (f1(#)f2) by VALUED_1:def 4;
@@ -1132,29 +1132,29 @@ A26: s1 is convergent & lim s1=x0;
   then
 A27: rng s1 c= dom f2 by A25,XBOOLE_1:1;
   then
-A28: f2/*s1 is convergent by A2,A26,Def2;
+A28: f2/*s1 is convergent by A2,A26,Def1;
 A29: rng s1 c= dom f1 /\ dom f2 by A25,VALUED_1:def 4;
   dom (f1(#)f2) = dom f1 /\ dom f2 by VALUED_1:def 4;
   then dom (f1(#)f2) c= dom f1 by XBOOLE_1:17;
   then
 A30: rng s1 c= dom f1 by A25,XBOOLE_1:1;
   then
-A31: f1/*s1 is convergent by A1,A26,Def2;
-  then (f1/*s1)(#)(f2/*s1) is convergent by A28,COMSEQ_2:29;
-  hence (f1(#)f2)/*s1 is convergent by A29,Th18;
-A32: f1/.x0 = lim (f1/*s1) by A1,A26,A30,Def2;
-A33: f2/.x0 = lim (f2/*s1) by A2,A26,A27,Def2;
+A31: f1/*s1 is convergent by A1,A26,Def1;
+  then (f1/*s1)(#)(f2/*s1) is convergent by A28;
+  hence (f1(#)f2)/*s1 is convergent by A29,Th7;
+A32: f1/.x0 = lim (f1/*s1) by A1,A26,A30,Def1;
+A33: f2/.x0 = lim (f2/*s1) by A2,A26,A27,Def1;
   thus (f1(#)f2)/.x0 = (f1/.x0) * (f2/.x0) by A24,CFUNCT_1:3
     .= lim ((f1/*s1)(#)(f2/*s1)) by A31,A32,A28,A33,COMSEQ_2:30
-    .= lim ((f1(#)f2)/*s1) by A29,Th18;
+    .= lim ((f1(#)f2)/*s1) by A29,Th7;
 end;
 
-theorem Th56:
+theorem Th34:
   f is_continuous_in x0 implies g(#)f is_continuous_in x0
 proof
   assume
 A1: f is_continuous_in x0;
-  then x0 in dom f by Def2;
+  then x0 in dom f by Def1;
   hence
 A2: x0 in dom (g(#)f) by VALUED_1:def 5;
   let s1;
@@ -1163,13 +1163,13 @@ A3: rng s1 c= dom(g(#)f) and
 A4: s1 is convergent & lim s1=x0;
 A5: rng s1 c= dom f by A3,VALUED_1:def 5;
   then
-A6: f/.x0 = lim (f/*s1) by A1,A4,Def2;
-A7: f/*s1 is convergent by A1,A4,A5,Def2;
-  then g(#)(f/*s1) is convergent by COMSEQ_2:17;
-  hence (g(#)f)/*s1 is convergent by A5,Th19;
+A6: f/.x0 = lim (f/*s1) by A1,A4,Def1;
+A7: f/*s1 is convergent by A1,A4,A5,Def1;
+  then g(#)(f/*s1) is convergent;
+  hence (g(#)f)/*s1 is convergent by A5,Th8;
   thus (g(#)f)/.x0 =g*(f/.x0) by A2,CFUNCT_1:4
     .= lim (g(#)(f/*s1)) by A7,A6,COMSEQ_2:18
-    .= lim ((g(#)f)/*s1) by A5,Th19;
+    .= lim ((g(#)f)/*s1) by A5,Th8;
 end;
 
 theorem
@@ -1177,10 +1177,10 @@ theorem
 proof
 A1: -f=(-1r)(#)f by CFUNCT_1:31;
   assume f is_continuous_in x0;
-  hence thesis by A1,Th56;
+  hence thesis by A1,Th34;
 end;
 
-theorem Th58:
+theorem Th36:
   f is_continuous_in x0 & f/.x0<>0 implies f^ is_continuous_in x0
 proof
   assume that
@@ -1189,7 +1189,7 @@ A2: f/.x0<>0;
   not f/.x0 in {0c} by A2,TARSKI:def 1;
   then
 A3: not x0 in f"{0c} by PARTFUN2:26;
-  x0 in dom f by A1,Def2;
+  x0 in dom f by A1,Def1;
   then x0 in dom f \ f"{0c} by A3,XBOOLE_0:def 5;
   hence
 A4: x0 in dom (f^) by CFUNCT_1:def 2;
@@ -1201,12 +1201,13 @@ A6: s1 is convergent & lim s1=x0;
 ,XBOOLE_1:36;
   then rng s1 c= dom f by XBOOLE_1:1;
   then
-A7: f/*s1 is convergent & f/.x0 = lim (f/*s1) by A1,A6,Def2;
-  then (f/*s1)" is convergent by A2,A5,Th21,COMSEQ_2:34;
-  hence (f^)/*s1 is convergent by A5,Th22;
+A7: f/*s1 is convergent & f/.x0 = lim (f/*s1) by A1,A6,Def1;
+  f/*s1 is non-zero by A5,Th10;
+  then (f/*s1)" is convergent by A2,A7,COMSEQ_2:34;
+  hence (f^)/*s1 is convergent by A5,Th11;
   thus (f^)/.x0 = (f/.x0)" by A4,CFUNCT_1:def 2
-    .= lim ((f/*s1)") by A2,A5,A7,Th21,COMSEQ_2:35
-    .= lim ((f^)/*s1) by A5,Th22;
+    .= lim ((f/*s1)") by A2,A5,A7,Th10,COMSEQ_2:35
+    .= lim ((f^)/*s1) by A5,Th11;
 end;
 
 theorem
@@ -1216,8 +1217,8 @@ proof
   assume that
 A1: f1 is_continuous_in x0 & f1/.x0<>0 and
 A2: f2 is_continuous_in x0;
-  f1^ is_continuous_in x0 by A1,Th58;
-  then f2(#)(f1^) is_continuous_in x0 by A2,Th55;
+  f1^ is_continuous_in x0 by A1,Th36;
+  then f2(#)(f1^) is_continuous_in x0 by A2,Th33;
   hence thesis by CFUNCT_1:39;
 end;
 
@@ -1225,11 +1226,11 @@ definition
 
   let f,X;
   pred f is_continuous_on X means
-  :Def5:
+  :Def2:
   X c= dom f & for x0 st x0 in X holds f|X is_continuous_in x0;
 end;
 
-theorem Th60:
+theorem Th38:
   for X,f holds f is_continuous_on X iff X c= dom f & for s1 st
   rng s1 c= X & s1 is convergent & lim s1 in X holds f/*s1 is convergent & f/.(
   lim s1) = lim (f/*s1)
@@ -1241,13 +1242,13 @@ convergent & lim s1 in X holds f/*s1 is convergent & f/.(lim s1) = lim (f/*s1)
     assume
 A1: f is_continuous_on X;
     then
-A2: X c= dom f by Def5;
+A2: X c= dom f by Def2;
     now
       let s1 such that
 A3:   rng s1 c= X and
 A4:   s1 is convergent and
 A5:   lim s1 in X;
-A6:   f|X is_continuous_in (lim s1) by A1,A5,Def5;
+A6:   f|X is_continuous_in (lim s1) by A1,A5,Def2;
 A7:   dom (f|X) = dom f /\ X by RELAT_1:61
         .= X by A2,XBOOLE_1:28;
       now
@@ -1260,11 +1261,11 @@ A8:     s1.n in rng s1 by VALUED_0:28;
       then
 A9:   (f|X)/*s1 = f/*s1 by FUNCT_2:63;
       f/.(lim s1) = (f|X)/.(lim s1) by A5,A7,PARTFUN2:15
-        .= lim (f/*s1) by A3,A4,A7,A6,A9,Def2;
+        .= lim (f/*s1) by A3,A4,A7,A6,A9,Def1;
       hence
-      f/*s1 is convergent & f/.(lim s1) = lim (f/*s1) by A3,A4,A7,A6,A9,Def2;
+      f/*s1 is convergent & f/.(lim s1) = lim (f/*s1) by A3,A4,A7,A6,A9,Def1;
     end;
-    hence thesis by A1,Def5;
+    hence thesis by A1,Def2;
   end;
   assume that
 A10: X c= dom f and
@@ -1294,12 +1295,12 @@ A18:  (f|X)/*s1 = f/*s1 by FUNCT_2:63;
       hence (f|X)/*s1 is convergent & (f|X)/.x1 = lim ((f|X)/*s1) by A11,A13
 ,A12,A14,A15,A16,A18;
     end;
-    hence f|X is_continuous_in x1 by A13,A12,Def2;
+    hence f|X is_continuous_in x1 by A13,A12,Def1;
   end;
-  hence thesis by A10,Def5;
+  hence thesis by A10,Def2;
 end;
 
-theorem Th61:
+theorem Th39:
   f is_continuous_on X iff X c= dom f & for x0,r st x0 in X & 0<r
   ex s st 0<s & for x1 st x1 in X & |.x1-x0.| < s holds |.f/.x1 - f/.x0.| < r
 proof
@@ -1308,17 +1309,17 @@ proof
   proof
     assume
 A1: f is_continuous_on X;
-    hence X c= dom f by Def5;
-A2: X c= dom f by A1,Def5;
+    hence X c= dom f by Def2;
+A2: X c= dom f by A1,Def2;
     let x0,r;
     assume that
 A3: x0 in X and
 A4: 0<r;
-    f|X is_continuous_in x0 by A1,A3,Def5;
+    f|X is_continuous_in x0 by A1,A3,Def2;
     then consider s such that
 A5: 0<s and
 A6: for x1 st x1 in dom(f|X) & |.x1-x0.|<s holds |.(f|X)/.x1-(f|X)/.x0
-    .| <r by A4,Th54;
+    .| <r by A4,Th32;
     take s;
     thus 0<s by A5;
     let x1;
@@ -1357,51 +1358,51 @@ A17:  |.x1-x0.|<s;
         .= |.f/.x1 - f/.x0.| by A16,PARTFUN2:15;
       hence thesis by A12,A15,A16,A17;
     end;
-    hence f|X is_continuous_in x0 by A12,A13,Th54;
+    hence f|X is_continuous_in x0 by A12,A13,Th32;
   end;
-  hence thesis by A10,Def5;
+  hence thesis by A10,Def2;
 end;
 
-theorem Th62:
+theorem Th40:
   f is_continuous_on X iff f|X is_continuous_on X
 proof
   thus f is_continuous_on X implies f|X is_continuous_on X
   proof
     assume
 A1: f is_continuous_on X;
-    then X c= dom f by Def5;
+    then X c= dom f by Def2;
     then X c= dom f /\ X by XBOOLE_1:28;
     hence X c= dom (f|X) by RELAT_1:61;
     let g;
     assume g in X;
-    then f|X is_continuous_in g by A1,Def5;
+    then f|X is_continuous_in g by A1,Def2;
     hence thesis by RELAT_1:72;
   end;
   assume
 A2: f|X is_continuous_on X;
-  then X c= dom(f|X) by Def5;
+  then X c= dom(f|X) by Def2;
   then dom f /\ X c= dom f & X c= dom f /\ X by RELAT_1:61,XBOOLE_1:17;
   hence X c= dom f by XBOOLE_1:1;
   let g;
   assume g in X;
-  then (f|X)|X is_continuous_in g by A2,Def5;
+  then (f|X)|X is_continuous_in g by A2,Def2;
   hence thesis by RELAT_1:72;
 end;
 
-theorem Th63:
+theorem Th41:
   f is_continuous_on X & X1 c= X implies f is_continuous_on X1
 proof
   assume that
 A1: f is_continuous_on X and
 A2: X1 c= X;
-  X c= dom f by A1,Def5;
+  X c= dom f by A1,Def2;
   hence
 A3: X1 c= dom f by A2,XBOOLE_1:1;
   let g;
   assume
 A4: g in X1;
   then
-A5: f|X is_continuous_in g by A1,A2,Def5;
+A5: f|X is_continuous_in g by A1,A2,Def2;
   thus f|X1 is_continuous_in g
   proof
     dom f /\ X1 c= dom f /\ X by A2,XBOOLE_1:26;
@@ -1426,7 +1427,7 @@ A13:  s1.n in rng s1 by VALUED_0:28;
         .= (f|X1)/.(s1.n) by A9,A13,PARTFUN2:15
         .= ((f|X1)/*s1).n by A9,FUNCT_2:109;
     end;
-    (f|X)/*s1 is convergent & (f|X)/.g = lim ((f|X)/*s1) by A5,A10,A11,Def2;
+    (f|X)/*s1 is convergent & (f|X)/.g = lim ((f|X)/*s1) by A5,A10,A11,Def1;
     hence thesis by A8,A12,FUNCT_2:63;
   end;
 end;
@@ -1476,12 +1477,12 @@ A9:   0<r;
         .= 0 by COMPLEX1:44;
       hence |.((f|{x0})/*s1).m - (f|{x0})/.t.| < r by A9;
     end;
-    hence (f|{x0})/*s1 is convergent by COMSEQ_2:def 4;
-    hence thesis by A8,COMSEQ_2:def 5;
+    hence (f|{x0})/*s1 is convergent by COMSEQ_2:def 5;
+    hence thesis by A8,COMSEQ_2:def 6;
   end;
 end;
 
-theorem Th65:
+theorem Th43:
   for X,f1,f2 st f1 is_continuous_on X & f2 is_continuous_on X
   holds f1+f2 is_continuous_on X & f1-f2 is_continuous_on X & f1(#) f2
   is_continuous_on X
@@ -1489,7 +1490,7 @@ proof
   let X,f1,f2;
   assume
 A1: f1 is_continuous_on X & f2 is_continuous_on X;
-  then X c= dom f1 & X c= dom f2 by Th60;
+  then X c= dom f1 & X c= dom f2 by Th38;
   then
 A2: X c= dom f1 /\ dom f2 by XBOOLE_1:19;
   then
@@ -1500,20 +1501,20 @@ A3: X c= dom (f1+f2) by CFUNCT_1:1;
 A4: rng s1 c= X and
 A5: s1 is convergent and
 A6: lim s1 in X;
-A7: f1/*s1 is convergent & f2/*s1 is convergent by A1,A4,A5,A6,Th60;
+A7: f1/*s1 is convergent & f2/*s1 is convergent by A1,A4,A5,A6,Th38;
     then
-A8: (f1/*s1)+(f2/*s1) is convergent by COMSEQ_2:13;
+A8: (f1/*s1)+(f2/*s1) is convergent;
 A9: rng s1 c= dom f1 /\ dom f2 by A2,A4,XBOOLE_1:1;
     f1/.(lim s1) = lim (f1/*s1) & f2/.(lim s1) = lim (f2/*s1) by A1,A4,A5,A6
-,Th60;
+,Th38;
     then (f1+f2)/.(lim s1) = lim (f1/*s1) + lim (f2/*s1) by A3,A6,CFUNCT_1:1
       .= lim (f1/*s1 + f2/*s1) by A7,COMSEQ_2:14
-      .= lim ((f1+f2)/*s1) by A9,Th18;
+      .= lim ((f1+f2)/*s1) by A9,Th7;
     hence
     (f1+f2)/*s1 is convergent & (f1+f2)/.(lim s1)=lim((f1+f2)/*s1) by A9,A8
-,Th18;
+,Th7;
   end;
-  hence f1+f2 is_continuous_on X by A3,Th60;
+  hence f1+f2 is_continuous_on X by A3,Th38;
 A10: X c= dom (f1-f2) by A2,CFUNCT_1:2;
   now
     let s1;
@@ -1521,20 +1522,20 @@ A10: X c= dom (f1-f2) by A2,CFUNCT_1:2;
 A11: rng s1 c= X and
 A12: s1 is convergent and
 A13: lim s1 in X;
-A14: f1/*s1 is convergent & f2/*s1 is convergent by A1,A11,A12,A13,Th60;
+A14: f1/*s1 is convergent & f2/*s1 is convergent by A1,A11,A12,A13,Th38;
     then
-A15: (f1/*s1)-(f2/*s1) is convergent by COMSEQ_2:25;
+A15: (f1/*s1)-(f2/*s1) is convergent;
 A16: rng s1 c= dom f1 /\ dom f2 by A2,A11,XBOOLE_1:1;
     f1/.(lim s1) = lim (f1/*s1) & f2/.(lim s1) = lim (f2/*s1) by A1,A11,A12,A13
-,Th60;
+,Th38;
     then (f1-f2)/.(lim s1) = lim (f1/*s1) - lim (f2/*s1) by A10,A13,CFUNCT_1:2
       .= lim (f1/*s1 - f2/*s1) by A14,COMSEQ_2:26
-      .= lim ((f1-f2)/*s1) by A16,Th18;
+      .= lim ((f1-f2)/*s1) by A16,Th7;
     hence
     (f1-f2)/*s1 is convergent & (f1-f2)/.(lim s1)=lim((f1-f2)/*s1) by A16,A15
-,Th18;
+,Th7;
   end;
-  hence f1-f2 is_continuous_on X by A10,Th60;
+  hence f1-f2 is_continuous_on X by A10,Th38;
 A17: X c= dom (f1(#)f2) by A2,CFUNCT_1:3;
   now
     let s1;
@@ -1542,20 +1543,20 @@ A17: X c= dom (f1(#)f2) by A2,CFUNCT_1:3;
 A18: rng s1 c= X and
 A19: s1 is convergent and
 A20: lim s1 in X;
-A21: f1/*s1 is convergent & f2/*s1 is convergent by A1,A18,A19,A20,Th60;
+A21: f1/*s1 is convergent & f2/*s1 is convergent by A1,A18,A19,A20,Th38;
     then
-A22: (f1/*s1)(#)(f2/*s1) is convergent by COMSEQ_2:29;
+A22: (f1/*s1)(#)(f2/*s1) is convergent;
 A23: rng s1 c= dom f1 /\ dom f2 by A2,A18,XBOOLE_1:1;
     f1/.(lim s1) = lim (f1/*s1) & f2/.(lim s1) = lim (f2/*s1) by A1,A18,A19,A20
-,Th60;
+,Th38;
     then (f1(#)f2)/.(lim s1) = lim (f1/*s1) * lim (f2/*s1) by A17,A20,
 CFUNCT_1:3
       .= lim ((f1/*s1) (#) (f2/*s1)) by A21,COMSEQ_2:30
-      .= lim ((f1(#)f2)/*s1) by A23,Th18;
+      .= lim ((f1(#)f2)/*s1) by A23,Th7;
     hence (f1(#)f2)/*s1 is convergent & (f1(#)f2)/.(lim s1)=lim((f1(#)f2)/*s1)
-    by A23,A22,Th18;
+    by A23,A22,Th7;
   end;
-  hence thesis by A17,Th60;
+  hence thesis by A17,Th38;
 end;
 
 theorem
@@ -1565,19 +1566,19 @@ theorem
 proof
   let X,X1,f1,f2;
   assume f1 is_continuous_on X & f2 is_continuous_on X1;
-  then f1 is_continuous_on X /\ X1 & f2 is_continuous_on X /\ X1 by Th63,
+  then f1 is_continuous_on X /\ X1 & f2 is_continuous_on X /\ X1 by Th41,
 XBOOLE_1:17;
-  hence thesis by Th65;
+  hence thesis by Th43;
 end;
 
-theorem Th67:
+theorem Th45:
   for g,X,f st f is_continuous_on X holds g(#)f is_continuous_on X
 proof
   let g,X,f;
   assume
 A1: f is_continuous_on X;
   then
-A2: X c= dom f by Th60;
+A2: X c= dom f by Th38;
   then
 A3: X c= dom(g(#)f) by CFUNCT_1:4;
   now
@@ -1586,18 +1587,18 @@ A3: X c= dom(g(#)f) by CFUNCT_1:4;
 A4: rng s1 c= X and
 A5: s1 is convergent and
 A6: lim s1 in X;
-A7: f/*s1 is convergent by A1,A4,A5,A6,Th60;
+A7: f/*s1 is convergent by A1,A4,A5,A6,Th38;
     then
-A8: g(#)(f/*s1) is convergent by COMSEQ_2:17;
-    f/.(lim s1) = lim (f/*s1) by A1,A4,A5,A6,Th60;
+A8: g(#)(f/*s1) is convergent;
+    f/.(lim s1) = lim (f/*s1) by A1,A4,A5,A6,Th38;
     then (g(#)f)/.(lim s1) = g * lim (f/*s1) by A3,A6,CFUNCT_1:4
       .= lim (g(#)(f/*s1)) by A7,COMSEQ_2:18
-      .= lim ((g(#)f)/*s1) by A2,A4,Th19,XBOOLE_1:1;
+      .= lim ((g(#)f)/*s1) by A2,A4,Th8,XBOOLE_1:1;
     hence
     (g(#)f)/*s1 is convergent & (g(#)f)/.(lim s1)=lim((g(#)f)/*s1) by A2,A4,A8
-,Th19,XBOOLE_1:1;
+,Th8,XBOOLE_1:1;
   end;
-  hence thesis by A3,Th60;
+  hence thesis by A3,Th38;
 end;
 
 theorem
@@ -1605,10 +1606,10 @@ theorem
 proof
 A1: -f=(-1r)(#)f by CFUNCT_1:31;
   assume f is_continuous_on X;
-  hence thesis by A1,Th67;
+  hence thesis by A1,Th45;
 end;
 
-theorem Th69:
+theorem Th47:
   f is_continuous_on X & f"{0} = {} implies f^ is_continuous_on X
 proof
   assume that
@@ -1617,12 +1618,12 @@ A2: f"{0} = {};
 A3: dom(f^) = dom f \ {} by A2,CFUNCT_1:def 2
     .= dom f;
   hence
-A4: X c= dom (f^) by A1,Def5;
+A4: X c= dom (f^) by A1,Def2;
   let g;
   assume
 A5: g in X;
   then
-A6: f|X is_continuous_in g by A1,Def5;
+A6: f|X is_continuous_in g by A1,Def2;
   g in dom(f^) /\ X by A4,A5,XBOOLE_0:def 4;
   then
 A7: g in dom((f^)|X) by RELAT_1:61;
@@ -1635,7 +1636,7 @@ A9: s1 is convergent & lim s1= g;
     then
 A10: rng s1 c= dom(f|X) by A3,RELAT_1:61;
     then
-A11: (f|X)/*s1 is convergent by A6,A9,Def2;
+A11: (f|X)/*s1 is convergent by A6,A9,Def1;
     now
       let n;
 A12:  s1.n in rng s1 by VALUED_0:28;
@@ -1680,15 +1681,15 @@ A21: now
       then f/.g in {0c} by TARSKI:def 1;
       hence contradiction by A2,A3,A4,A5,PARTFUN2:26;
     end;
-    then lim ((f|X)/*s1) <> 0c by A6,A9,A10,A17,Def2;
+    then lim ((f|X)/*s1) <> 0c by A6,A9,A10,A17,Def1;
     hence ((f^)|X)/*s1 is convergent by A11,A15,A20,COMSEQ_2:34;
-    (f|X)/.g = lim ((f|X)/*s1) by A6,A9,A10,Def2;
+    (f|X)/.g = lim ((f|X)/*s1) by A6,A9,A10,Def1;
     hence lim (((f^)|X)/*s1) = ((f|X)/.g)" by A11,A17,A21,A15,A20,COMSEQ_2:35
       .= (f/.g)" by A16,PARTFUN2:15
       .= (f^)/.g by A4,A5,CFUNCT_1:def 2
       .= ((f^)|X)/.g by A7,PARTFUN2:15;
   end;
-  hence thesis by A7,Def2;
+  hence thesis by A7,Def1;
 end;
 
 theorem
@@ -1697,10 +1698,10 @@ proof
   assume that
 A1: f is_continuous_on X and
 A2: (f|X)"{0} = {};
-  f|X is_continuous_on X by A1,Th62;
-  then (f|X)^ is_continuous_on X by A2,Th69;
+  f|X is_continuous_on X by A1,Th40;
+  then (f|X)^ is_continuous_on X by A2,Th47;
   then (f^)|X is_continuous_on X by CFUNCT_1:54;
-  hence thesis by Th62;
+  hence thesis by Th40;
 end;
 
 theorem
@@ -1710,8 +1711,8 @@ proof
   assume that
 A1: f1 is_continuous_on X & f1"{0} = {} and
 A2: f2 is_continuous_on X;
-  f1^ is_continuous_on X by A1,Th69;
-  then f2(#)(f1^) is_continuous_on X by A2,Th65;
+  f1^ is_continuous_on X by A1,Th47;
+  then f2(#)(f1^) is_continuous_on X by A2,Th43;
   hence thesis by CFUNCT_1:39;
 end;
 
@@ -1747,7 +1748,7 @@ A9: r>0;
     set y=x1-x0;
     consider s such that
 A10: 0<s and
-A11: for x1 st x1 in dom f & |.x1-x0.|<s holds |.f/.x1-f/.x0.|<r by A5,A9,Th54;
+A11: for x1 st x1 in dom f & |.x1-x0.|<s holds |.f/.x1-f/.x0.|<r by A5,A9,Th32;
     take s;
     thus s>0 by A10;
     let x2 such that
@@ -1760,18 +1761,18 @@ A13: |.x2-y-x0.|=|.x2-x1.|;
       .= |.f/.(x2-y)-f/.x0.| by A8;
     hence |.f/.x2-f/.x1.|<r by A4,A11,A12,A13;
   end;
-  hence thesis by A4,Th61;
+  hence thesis by A4,Th39;
 end;
 
 definition
   let X;
   attr X is compact means
-  :Def6:
+  :Def3:
   for s1 st (rng s1) c= X ex s2 st s2 is
   subsequence of s1 & s2 is convergent & (lim s2) in X;
 end;
 
-theorem Th73:
+theorem Th51:
   for f st dom f is compact & f is_continuous_on (dom f) holds (
   rng f) is compact
 proof
@@ -1805,7 +1806,7 @@ A7: rng q1 c= dom f by TARSKI:def 3;
     then consider s2 such that
 A8: s2 is subsequence of q1 and
 A9: s2 is convergent and
-A10: (lim s2) in dom f by A1,Def6;
+A10: (lim s2) in dom f by A1,Def3;
     take q2 = f/*s2;
     rng s2 c= rng q1 by A8,VALUED_0:21;
     then
@@ -1817,16 +1818,16 @@ A11: rng s2 c= dom f by A7,XBOOLE_1:1;
     end;
     then
 A12: f/*q1=s1 by FUNCT_2:63;
-    f|(dom f) is_continuous_in (lim s2) by A2,A10,Def5;
+    f|(dom f) is_continuous_in (lim s2) by A2,A10,Def2;
     then
 A13: f is_continuous_in (lim s2) by RELAT_1:68;
-    then f/.(lim s2) = lim (f/*s2) by A9,A11,Def2;
+    then f/.(lim s2) = lim (f/*s2) by A9,A11,Def1;
     then f.(lim s2) = lim (f/*s2) by A10,PARTFUN1:def 6;
     hence
     q2 is subsequence of s1 & q2 is convergent & (lim q2) in rng f by A7,A12,A8
-,A9,A10,A13,A11,Def2,FUNCT_1:def 3,VALUED_0:22;
+,A9,A10,A13,A11,Def1,FUNCT_1:def 3,VALUED_0:22;
   end;
-  hence thesis by Def6;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -1843,9 +1844,9 @@ A4: dom (f|Y) = dom f /\ Y by RELAT_1:61
     thus Y c= dom (f|Y) by A4;
     let g;
     assume g in Y;
-    then f|Y is_continuous_in g by A3,Def5;
+    then f|Y is_continuous_in g by A3,Def2;
     hence thesis by RELAT_1:72;
   end;
-  then rng (f|Y) is compact by A2,A4,Th73;
+  then rng (f|Y) is compact by A2,A4,Th51;
   hence thesis by RELAT_1:115;
 end;

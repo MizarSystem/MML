@@ -3,7 +3,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received April 19, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -24,13 +24,13 @@ environ
  constructors WELLORD1, BINOP_1, FUNCT_3, FUNCT_4, EQREL_1, REALSET1, FILTER_0,
       LATTICE2, RELSET_1;
  registrations SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2, EQREL_1, STRUCT_0,
-      LATTICES, FILTER_0, LATTICE2, RELSET_1;
+      LATTICES, FILTER_0, LATTICE2, RELSET_1, RELAT_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, WELLORD1, BINOP_1, FILTER_0, LATTICE2, LATTICES,
       XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_4, WELLORD1, DOMAIN_1, BINOP_1,
       EQREL_1, RELAT_1, ZFMISC_1, LATTICES, FILTER_0, LATTICE2, RELSET_1,
-      WELLORD2, XBOOLE_0, XBOOLE_1, SUBSET_1;
+      XBOOLE_0, XBOOLE_1, SUBSET_1, XTUPLE_0;
  schemes FUNCT_1, FUNCT_2, BINOP_1;
 
 begin
@@ -711,7 +711,7 @@ proof
   set a = i"\/"j;
   set b = a => j;
 A1: j"/\"(i => j) [= j by FILTER_0:2;
-A2: j"\/"j = j by LATTICES:1;
+A2: j"\/"j = j;
   thus i/\/FI [= j/\/FI implies i => j in FI
   proof
     assume (i/\/FI) "\/" (j/\/FI) = j/\/FI;
@@ -733,7 +733,7 @@ A9: a"/\"b [= j by FILTER_0:def 7;
     hence thesis by A8,FILTER_0:9;
   end;
   j [= i"\/"j by FILTER_0:3;
-  then j"/\"Top I [= i"\/"j by FILTER_0:2;
+  then j"/\"Top I [= i"\/"j;
   then
 A10: Top I [= j => (i"\/"j) by FILTER_0:def 7;
   Top I in FI by FILTER_0:11;
@@ -815,7 +815,7 @@ A1: now
     by Def5;
     then consider j such that
 A2: y = Class(R,j) by EQREL_1:36;
-A3: (Top I)"\/"j = Top I by LATTICES:18;
+A3: (Top I)"\/"j = Top I;
 A4: y = j/\/FI by A2,Def6;
     hence x"\/"y = x by A3,Th15;
     thus y"\/"x = x by A3,A4,Th15;
@@ -843,7 +843,7 @@ A5: y = Class(R,j) by A2,EQREL_1:36;
 A6: y = j/\/FI by A5,Def6;
   take z = (i=>j)/\/FI;
 A7: i"/\"(i=>j) [= j by FILTER_0:def 7;
-  (i"/\"(i=>j))"/\"Top I = i"/\"(i=>j) by LATTICES:17;
+  (i"/\"(i=>j))"/\"Top I = i"/\"(i=>j);
   then Top I [= (i"/\"(i=>j))=>j by A7,FILTER_0:def 7;
   then (i"/\"(i=>j))=>j in FI by A1,FILTER_0:9;
   then (i"/\"(i=>j))/\/FI [= y by A6,Th16;
@@ -881,7 +881,8 @@ A5: x = Class(R,a) by EQREL_1:36;
     take y;
 A6: x = a/\/FB by A5,Def6;
     hence y"\/"x = (a`"\/"a)/\/FB by Th15
-      .= Top L by A3,LATTICES:21;
+      .= (Top B)/\/FB by LATTICES:21
+      .= Top L by A3;
     hence x"\/"y = Top L;
     thus y"/\"x = (a`"/\"a)/\/FB by A6,Th15
       .= Bottom L by A2,LATTICES:20;
@@ -912,7 +913,7 @@ A4: rng |:f1,f2:| c= [:rng f1,rng f2:] by FUNCT_4:56;
   end;
 end;
 
-theorem Th22:
+theorem Th21:
   |:f1,f2:|.([a1,a2],[b1,b2]) = [f1.(a1,b1),f2.(a2,b2)]
 proof
 A1: dom |:f1,f2:| = [:[:D1,D2:],[:D1,D2:]:] by FUNCT_2:def 1;
@@ -964,7 +965,7 @@ DOMAIN_1:1;
   hence thesis by A1,A2,A3;
 end;
 
-theorem Th23:
+theorem Th22:
   f1 is commutative & f2 is commutative iff |:f1,f2:| is commutative
 proof
   defpred P[set,set] means |:f1,f2:|.($1,$2) = |:f1,f2:|.($2,$1);
@@ -978,10 +979,10 @@ A3: for d1,d19 being Element of D1, d2,d29 being Element of D2 holds P[[d1
     ,d2],[d19,d29]]
     proof
       let a1,b1 be Element of D1, a2,b2 be Element of D2;
-      thus |:f1,f2:|.([a1,a2],[b1,b2]) = [f1.(a1,b1),f2.(a2,b2)] by Th22
+      thus |:f1,f2:|.([a1,a2],[b1,b2]) = [f1.(a1,b1),f2.(a2,b2)] by Th21
         .= [f1.(b1,a1),f2.(a2,b2)] by A1
         .= [f1.(b1,a1),f2.(b2,a2)] by A2
-        .= |:f1,f2:|.([b1,b2],[a1,a2]) by Th22;
+        .= |:f1,f2:|.([b1,b2],[a1,a2]) by Th21;
     end;
     thus for a,b being Element of [:D1,D2:] holds P[a,b] from AuxCart2( A3);
   end;
@@ -992,20 +993,20 @@ A4: for a,b being Element of [:D1,D2:] holds |:f1,f2:|.(a,b) = |:f1,f2:|
   proof
     set a2 = the Element of D2;
     let a1,b1;
-    [f1.(a1,b1),f2.(a2,a2)] = |:f1,f2:|.([a1,a2],[b1,a2]) by Th22
+    [f1.(a1,b1),f2.(a2,a2)] = |:f1,f2:|.([a1,a2],[b1,a2]) by Th21
       .= |:f1,f2:|.([b1,a2],[a1,a2]) by A4
-      .= [f1.(b1,a1),f2.(a2,a2)] by Th22;
-    hence thesis by ZFMISC_1:27;
+      .= [f1.(b1,a1),f2.(a2,a2)] by Th21;
+    hence thesis by XTUPLE_0:1;
   end;
   set a1 = the Element of D1;
   let a2,b2;
-  [f1.(a1,a1),f2.(a2,b2)] = |:f1,f2:|.([a1,a2],[a1,b2]) by Th22
+  [f1.(a1,a1),f2.(a2,b2)] = |:f1,f2:|.([a1,a2],[a1,b2]) by Th21
     .= |:f1,f2:|.([a1,b2],[a1,a2]) by A4
-    .= [f1.(a1,a1),f2.(b2,a2)] by Th22;
-  hence thesis by ZFMISC_1:27;
+    .= [f1.(a1,a1),f2.(b2,a2)] by Th21;
+  hence thesis by XTUPLE_0:1;
 end;
 
-theorem Th24:
+theorem Th23:
   f1 is associative & f2 is associative iff |:f1,f2:| is associative
 proof
   thus f1 is associative & f2 is associative implies |:f1,f2:| is associative
@@ -1019,12 +1020,12 @@ A2: for a,b,c being Element of D2 holds f2.(a,f2.(b,c)) = f2.(f2.(a,b) ,c);
 A3: now
       let a1,b1,c1 be Element of D1, a2,b2,c2 be Element of D2;
       |:f1,f2:|.([a1,a2],|:f1,f2:|.([b1,b2],[c1,c2])) = |:f1,f2:|.([a1,a2]
-      ,[f1.(b1,c1),f2.(b2,c2)]) by Th22
-        .= [f1.(a1,f1.(b1,c1)),f2.(a2,f2.(b2,c2))] by Th22
+      ,[f1.(b1,c1),f2.(b2,c2)]) by Th21
+        .= [f1.(a1,f1.(b1,c1)),f2.(a2,f2.(b2,c2))] by Th21
         .= [f1.(f1.(a1,b1),c1),f2.(a2,f2.(b2,c2))] by A1
         .= [f1.(f1.(a1,b1),c1),f2.(f2.(a2,b2),c2)] by A2
-        .= |:f1,f2:|.([f1.(a1,b1),f2.(a2,b2)],[c1,c2]) by Th22
-        .= |:f1,f2:|.(|:f1,f2:|.([a1,a2],[b1,b2]),[c1,c2]) by Th22;
+        .= |:f1,f2:|.([f1.(a1,b1),f2.(a2,b2)],[c1,c2]) by Th21
+        .= |:f1,f2:|.(|:f1,f2:|.([a1,a2],[b1,b2]),[c1,c2]) by Th21;
       hence P[[a1,a2],[b1,b2],[c1,c2]];
     end;
     thus for a,b,c being Element of [:D1,D2:] holds P[a,b,c] from AuxCart3(A3);
@@ -1037,25 +1038,25 @@ A4: for a,b,c being Element of [:D1,D2:] holds |:f1,f2:|.(a,|:f1,f2:|.(b
     set a2 = the Element of D2;
     let a1,b1,c1;
     [f1.(a1,f1.(b1,c1)), f2.(a2,f2.(a2,a2))] = |:f1,f2:|.([a1,a2],[f1.(b1,
-    c1),f2.(a2,a2)]) by Th22
-      .= |:f1,f2:|.([a1,a2],|:f1,f2:|.([b1,a2],[c1,a2])) by Th22
+    c1),f2.(a2,a2)]) by Th21
+      .= |:f1,f2:|.([a1,a2],|:f1,f2:|.([b1,a2],[c1,a2])) by Th21
       .= |:f1,f2:|.(|:f1,f2:|.([a1,a2],[b1,a2]),[c1,a2]) by A4
-      .= |:f1,f2:|.([f1.(a1,b1),f2.(a2,a2)],[c1,a2]) by Th22
-      .= [f1.(f1.(a1,b1),c1), f2.(f2.(a2,a2),a2)] by Th22;
-    hence thesis by ZFMISC_1:27;
+      .= |:f1,f2:|.([f1.(a1,b1),f2.(a2,a2)],[c1,a2]) by Th21
+      .= [f1.(f1.(a1,b1),c1), f2.(f2.(a2,a2),a2)] by Th21;
+    hence thesis by XTUPLE_0:1;
   end;
   set a1 = the Element of D1;
   let a2,b2,c2;
   [f1.(a1,f1.(a1,a1)), f2.(a2,f2.(b2,c2))] = |:f1,f2:|.([a1,a2],[f1.(a1,a1
-  ),f2.(b2,c2)]) by Th22
-    .= |:f1,f2:|.([a1,a2],|:f1,f2:|.([a1,b2],[a1,c2])) by Th22
+  ),f2.(b2,c2)]) by Th21
+    .= |:f1,f2:|.([a1,a2],|:f1,f2:|.([a1,b2],[a1,c2])) by Th21
     .= |:f1,f2:|.(|:f1,f2:|.([a1,a2],[a1,b2]),[a1,c2]) by A4
-    .= |:f1,f2:|.([f1.(a1,a1),f2.(a2,b2)],[a1,c2]) by Th22
-    .= [f1.(f1.(a1,a1),a1), f2.(f2.(a2,b2),c2)] by Th22;
-  hence thesis by ZFMISC_1:27;
+    .= |:f1,f2:|.([f1.(a1,a1),f2.(a2,b2)],[a1,c2]) by Th21
+    .= [f1.(f1.(a1,a1),a1), f2.(f2.(a2,b2),c2)] by Th21;
+  hence thesis by XTUPLE_0:1;
 end;
 
-theorem Th25:
+theorem Th24:
   a1 is_a_left_unity_wrt f1 & a2 is_a_left_unity_wrt f2 iff [a1,a2
   ] is_a_left_unity_wrt |:f1,f2:|
 proof
@@ -1069,7 +1070,7 @@ A1: f1.(a1,b1) = b1;
 A2: f2.(a2,b2) = b2;
 A3: now
       let b1,b2;
-      |:f1,f2:|.([a1,a2],[b1,b2]) = [f1.(a1,b1),f2.(a2,b2)] by Th22
+      |:f1,f2:|.([a1,a2],[b1,b2]) = [f1.(a1,b1),f2.(a2,b2)] by Th21
         .= [b1,f2.(a2,b2)] by A1
         .= [b1,b2] by A2;
       hence P[[b1,b2]];
@@ -1081,18 +1082,18 @@ A4: for a being Element of [:D1,D2:] holds |:f1,f2:|.([a1,a2],a) = a;
   thus f1.(a1,b1) = b1
   proof
     set b2 = the Element of D2;
-    [f1.(a1,b1),f2.(a2,b2)] = |:f1,f2:|.([a1,a2],[b1,b2]) by Th22
+    [f1.(a1,b1),f2.(a2,b2)] = |:f1,f2:|.([a1,a2],[b1,b2]) by Th21
       .= [b1,b2] by A4;
-    hence thesis by ZFMISC_1:27;
+    hence thesis by XTUPLE_0:1;
   end;
   set b1 = the Element of D1;
   let b2;
-  [f1.(a1,b1),f2.(a2,b2)] = |:f1,f2:|.([a1,a2],[b1,b2]) by Th22
+  [f1.(a1,b1),f2.(a2,b2)] = |:f1,f2:|.([a1,a2],[b1,b2]) by Th21
     .= [b1,b2] by A4;
-  hence thesis by ZFMISC_1:27;
+  hence thesis by XTUPLE_0:1;
 end;
 
-theorem Th26:
+theorem Th25:
   a1 is_a_right_unity_wrt f1 & a2 is_a_right_unity_wrt f2 iff [a1,
   a2] is_a_right_unity_wrt |:f1,f2:|
 proof
@@ -1106,7 +1107,7 @@ A1: f1.(b1,a1) = b1;
 A2: f2.(b2,a2) = b2;
 A3: now
       let b1,b2;
-      |:f1,f2:|.([b1,b2],[a1,a2]) = [f1.(b1,a1),f2.(b2,a2)] by Th22
+      |:f1,f2:|.([b1,b2],[a1,a2]) = [f1.(b1,a1),f2.(b2,a2)] by Th21
         .= [b1,f2.(b2,a2)] by A1
         .= [b1,b2] by A2;
       hence P[[b1,b2]];
@@ -1118,15 +1119,15 @@ A4: for a being Element of [:D1,D2:] holds |:f1,f2:|.(a,[a1,a2]) = a;
   thus f1.(b1,a1) = b1
   proof
     set b2 = the Element of D2;
-    [f1.(b1,a1),f2.(b2,a2)] = |:f1,f2:|.([b1,b2],[a1,a2]) by Th22
+    [f1.(b1,a1),f2.(b2,a2)] = |:f1,f2:|.([b1,b2],[a1,a2]) by Th21
       .= [b1,b2] by A4;
-    hence thesis by ZFMISC_1:27;
+    hence thesis by XTUPLE_0:1;
   end;
   set b1 = the Element of D1;
   let b2;
-  [f1.(b1,a1),f2.(b2,a2)] = |:f1,f2:|.([b1,b2],[a1,a2]) by Th22
+  [f1.(b1,a1),f2.(b2,a2)] = |:f1,f2:|.([b1,b2],[a1,a2]) by Th21
     .= [b1,b2] by A4;
-  hence thesis by ZFMISC_1:27;
+  hence thesis by XTUPLE_0:1;
 end;
 
 theorem
@@ -1142,16 +1143,16 @@ A2: a1 is_a_right_unity_wrt f1 and
 A3: a2 is_a_left_unity_wrt f2 and
 A4: a2 is_a_right_unity_wrt f2;
     thus [a1,a2] is_a_left_unity_wrt |:f1,f2:| & [a1,a2] is_a_right_unity_wrt
-    |:f1,f2:| by A1,A2,A3,A4,Th25,Th26;
+    |:f1,f2:| by A1,A2,A3,A4,Th24,Th25;
   end;
   assume that
 A5: [a1,a2] is_a_left_unity_wrt |:f1,f2:| and
 A6: [a1,a2] is_a_right_unity_wrt |:f1,f2:|;
   thus a1 is_a_left_unity_wrt f1 & a1 is_a_right_unity_wrt f1 & a2
-  is_a_left_unity_wrt f2 & a2 is_a_right_unity_wrt f2 by A5,A6,Th25,Th26;
+  is_a_left_unity_wrt f2 & a2 is_a_right_unity_wrt f2 by A5,A6,Th24,Th25;
 end;
 
-theorem Th28:
+theorem Th27:
   f1 is_left_distributive_wrt g1 & f2 is_left_distributive_wrt g2
   iff |:f1,f2:| is_left_distributive_wrt |:g1,g2:|
 proof
@@ -1167,15 +1168,15 @@ A2: for a2,b2,c2 holds f2.(a2,g2.(b2,c2)) = g2.(f2.(a2,b2),f2.(a2,c2));
 A3: now
       let a1,b1,c1, a2,b2,c2;
       |:f1,f2:|.([a1,a2],|:g1,g2:|.([b1,b2],[c1,c2])) = |:f1,f2:|.([a1,a2]
-      ,[g1.(b1,c1),g2.(b2,c2)]) by Th22
-        .= [f1.(a1,g1.(b1,c1)),f2.(a2,g2.(b2,c2))] by Th22
+      ,[g1.(b1,c1),g2.(b2,c2)]) by Th21
+        .= [f1.(a1,g1.(b1,c1)),f2.(a2,g2.(b2,c2))] by Th21
         .= [g1.(f1.(a1,b1),f1.(a1,c1)),f2.(a2,g2.(b2,c2))] by A1
         .= [g1.(f1.(a1,b1),f1.(a1,c1)),g2.(f2.(a2,b2),f2.(a2,c2))] by A2
-        .= |:g1,g2:|.([f1.(a1,b1),f2.(a2,b2)],[f1.(a1,c1),f2.(a2,c2)]) by Th22
+        .= |:g1,g2:|.([f1.(a1,b1),f2.(a2,b2)],[f1.(a1,c1),f2.(a2,c2)]) by Th21
         .= |:g1,g2:|.(|:f1,f2:|.([a1,a2],[b1,b2]),[f1.(a1,c1),f2.(a2,c2)])
-      by Th22
+      by Th21
         .= |:g1,g2:|.(|:f1,f2:|.([a1,a2],[b1,b2]),|:f1,f2:|.([a1,a2],[c1,c2]
-      )) by Th22;
+      )) by Th21;
       hence P[[a1,a2],[b1,b2],[c1,c2]];
     end;
     thus for a,b,c being Element of [:D1,D2:] holds P[a,b,c] from AuxCart3(A3);
@@ -1186,14 +1187,14 @@ A4: for a,b,c being Element of [:D1,D2:] holds |:f1,f2:|.(a,|:g1,g2:|.(b
 A5: now
     let a1,b1,c1, a2,b2,c2;
     thus [f1.(a1,g1.(b1,c1)),f2.(a2,g2.(b2,c2))] = |:f1,f2:|.([a1,a2],[g1.(b1,
-    c1),g2.(b2,c2)]) by Th22
-      .= |:f1,f2:|.([a1,a2],|:g1,g2:|.([b1,b2],[c1,c2])) by Th22
+    c1),g2.(b2,c2)]) by Th21
+      .= |:f1,f2:|.([a1,a2],|:g1,g2:|.([b1,b2],[c1,c2])) by Th21
       .= |:g1,g2:|.(|:f1,f2:|.([a1,a2],[b1,b2]),|:f1,f2:|.([a1,a2],[c1,c2]))
     by A4
       .= |:g1,g2:|.([f1.(a1,b1),f2.(a2,b2)],|:f1,f2:|.([a1,a2],[c1,c2])) by
-Th22
-      .= |:g1,g2:|.([f1.(a1,b1),f2.(a2,b2)],[f1.(a1,c1),f2.(a2,c2)]) by Th22
-      .= [g1.(f1.(a1,b1),f1.(a1,c1)),g2.(f2.(a2,b2),f2.(a2,c2))] by Th22;
+Th21
+      .= |:g1,g2:|.([f1.(a1,b1),f2.(a2,b2)],[f1.(a1,c1),f2.(a2,c2)]) by Th21
+      .= [g1.(f1.(a1,b1),f1.(a1,c1)),g2.(f2.(a2,b2),f2.(a2,c2))] by Th21;
   end;
   thus for a1,b1,c1 holds f1.(a1,g1.(b1,c1)) = g1.(f1.(a1,b1),f1.(a1,c1))
   proof
@@ -1201,16 +1202,16 @@ Th22
     let a1,b1,c1;
     [f1.(a1,g1.(b1,c1)),f2.(a2,g2.(a2,a2))] = [g1.(f1.(a1,b1),f1.(a1,c1)),
     g2.(f2.(a2,a2),f2.(a2,a2))] by A5;
-    hence thesis by ZFMISC_1:27;
+    hence thesis by XTUPLE_0:1;
   end;
   set a1 = the Element of D1;
   let a2,b2,c2;
   [f1.(a1,g1.(a1,a1)),f2.(a2,g2.(b2,c2))] = [g1.(f1.(a1,a1),f1.(a1,a1)),g2
   .(f2.(a2,b2),f2.(a2,c2))] by A5;
-  hence thesis by ZFMISC_1:27;
+  hence thesis by XTUPLE_0:1;
 end;
 
-theorem Th29:
+theorem Th28:
   f1 is_right_distributive_wrt g1 & f2 is_right_distributive_wrt
   g2 iff |:f1,f2:| is_right_distributive_wrt |:g1,g2:|
 proof
@@ -1226,15 +1227,15 @@ A2: for b2,c2,a2 holds f2.(g2.(b2,c2),a2) = g2.(f2.(b2,a2),f2.(c2,a2));
 A3: now
       let a1,b1,c1, a2,b2,c2;
       |:f1,f2:|.(|:g1,g2:|.([b1,b2],[c1,c2]),[a1,a2]) = |:f1,f2:|.([g1.(b1
-      ,c1),g2.(b2,c2)],[a1,a2]) by Th22
-        .= [f1.(g1.(b1,c1),a1),f2.(g2.(b2,c2),a2)] by Th22
+      ,c1),g2.(b2,c2)],[a1,a2]) by Th21
+        .= [f1.(g1.(b1,c1),a1),f2.(g2.(b2,c2),a2)] by Th21
         .= [g1.(f1.(b1,a1),f1.(c1,a1)),f2.(g2.(b2,c2),a2)] by A1
         .= [g1.(f1.(b1,a1),f1.(c1,a1)),g2.(f2.(b2,a2),f2.(c2,a2))] by A2
-        .= |:g1,g2:|.([f1.(b1,a1),f2.(b2,a2)],[f1.(c1,a1),f2.(c2,a2)]) by Th22
+        .= |:g1,g2:|.([f1.(b1,a1),f2.(b2,a2)],[f1.(c1,a1),f2.(c2,a2)]) by Th21
         .= |:g1,g2:|.(|:f1,f2:|.([b1,b2],[a1,a2]),[f1.(c1,a1),f2.(c2,a2)])
-      by Th22
+      by Th21
         .= |:g1,g2:|.(|:f1,f2:|.([b1,b2],[a1,a2]),|:f1,f2:|.([c1,c2],[a1,a2]
-      )) by Th22;
+      )) by Th21;
       hence P[[a1,a2],[b1,b2],[c1,c2]];
     end;
     for a,b,c being Element of [:D1,D2:] holds P[a,b,c] from AuxCart3( A3);
@@ -1247,14 +1248,14 @@ A4: for b,c,a being Element of [:D1,D2:] holds |:f1,f2:|.(|:g1,g2:|.(b,c
 A5: now
     let a1,b1,c1, a2,b2,c2;
     thus [f1.(g1.(b1,c1),a1),f2.(g2.(b2,c2),a2)] = |:f1,f2:|.([g1.(b1,c1),g2.(
-    b2,c2)],[a1,a2]) by Th22
-      .= |:f1,f2:|.(|:g1,g2:|.([b1,b2],[c1,c2]),[a1,a2]) by Th22
+    b2,c2)],[a1,a2]) by Th21
+      .= |:f1,f2:|.(|:g1,g2:|.([b1,b2],[c1,c2]),[a1,a2]) by Th21
       .= |:g1,g2:|.(|:f1,f2:|.([b1,b2],[a1,a2]),|:f1,f2:|.([c1,c2],[a1,a2]))
     by A4
       .= |:g1,g2:|.([f1.(b1,a1),f2.(b2,a2)],|:f1,f2:|.([c1,c2],[a1,a2])) by
-Th22
-      .= |:g1,g2:|.([f1.(b1,a1),f2.(b2,a2)],[f1.(c1,a1),f2.(c2,a2)]) by Th22
-      .= [g1.(f1.(b1,a1),f1.(c1,a1)),g2.(f2.(b2,a2),f2.(c2,a2))] by Th22;
+Th21
+      .= |:g1,g2:|.([f1.(b1,a1),f2.(b2,a2)],[f1.(c1,a1),f2.(c2,a2)]) by Th21
+      .= [g1.(f1.(b1,a1),f1.(c1,a1)),g2.(f2.(b2,a2),f2.(c2,a2))] by Th21;
   end;
   thus for b1,c1,a1 holds f1.(g1.(b1,c1),a1) = g1.(f1.(b1,a1),f1.(c1,a1))
   proof
@@ -1262,16 +1263,16 @@ Th22
     let b1,c1,a1;
     [f1.(g1.(b1,c1),a1),f2.(g2.(a2,a2),a2)] = [g1.(f1.(b1,a1),f1.(c1,a1)),
     g2.(f2.(a2,a2),f2.(a2,a2))] by A5;
-    hence thesis by ZFMISC_1:27;
+    hence thesis by XTUPLE_0:1;
   end;
   set a1 = the Element of D1;
   let b2,c2,a2;
   [f1.(g1.(a1,a1),a1),f2.(g2.(b2,c2),a2)] = [g1.(f1.(a1,a1),f1.(a1,a1)),
   g2.(f2.(b2,a2),f2.(c2,a2))] by A5;
-  hence thesis by ZFMISC_1:27;
+  hence thesis by XTUPLE_0:1;
 end;
 
-theorem Th30:
+theorem Th29:
   f1 is_distributive_wrt g1 & f2 is_distributive_wrt g2 iff |:f1,
   f2:| is_distributive_wrt |:g1,g2:|
 proof
@@ -1284,17 +1285,17 @@ A2: f1 is_right_distributive_wrt g1 and
 A3: f2 is_left_distributive_wrt g2 and
 A4: f2 is_right_distributive_wrt g2;
     thus |:f1,f2:| is_left_distributive_wrt |:g1,g2:| & |:f1,f2:|
-    is_right_distributive_wrt |:g1,g2:| by A1,A2,A3,A4,Th28,Th29;
+    is_right_distributive_wrt |:g1,g2:| by A1,A2,A3,A4,Th27,Th28;
   end;
   assume that
 A5: |:f1,f2:| is_left_distributive_wrt |:g1,g2:| and
 A6: |:f1,f2:| is_right_distributive_wrt |:g1,g2:|;
   thus f1 is_left_distributive_wrt g1 & f1 is_right_distributive_wrt g1 & f2
-  is_left_distributive_wrt g2 & f2 is_right_distributive_wrt g2 by A5,A6,Th28
-,Th29;
+  is_left_distributive_wrt g2 & f2 is_right_distributive_wrt g2 by A5,A6,Th27
+,Th28;
 end;
 
-theorem Th31:
+theorem Th30:
   f1 absorbs g1 & f2 absorbs g2 iff |:f1,f2:| absorbs |:g1,g2:|
 proof
   defpred P[set,set] means |:f1,f2:|.($1,|:g1,g2:|.($1,$2)) = $1;
@@ -1309,8 +1310,8 @@ A3: for d1,d19 being Element of D1, d2,d29 being Element of D2 holds P[[d1
     proof
       let a1,b1, a2,b2;
       thus |:f1,f2:|.([a1,a2],|:g1,g2:|.([a1,a2],[b1,b2])) = |:f1,f2:|.([a1,a2
-      ],[g1.(a1,b1),g2.(a2,b2)]) by Th22
-        .= [f1.(a1,g1.(a1,b1)),f2.(a2,g2.(a2,b2))] by Th22
+      ],[g1.(a1,b1),g2.(a2,b2)]) by Th21
+        .= [f1.(a1,g1.(a1,b1)),f2.(a2,g2.(a2,b2))] by Th21
         .= [a1,f2.(a2,g2.(a2,b2))] by A1
         .= [a1,a2] by A2;
     end;
@@ -1324,16 +1325,16 @@ A4: for a,b being Element of [:D1,D2:] holds |:f1,f2:|.(a,|:g1,g2:|.(a,b
     set a2 = the Element of D2;
     let a1,b1;
     [a1,a2] = |:f1,f2:|.([a1,a2],|:g1,g2:|.([a1,a2],[b1,a2])) by A4
-      .= |:f1,f2:|.([a1,a2],[g1.(a1,b1),g2.(a2,a2)]) by Th22
-      .= [f1.(a1,g1.(a1,b1)),f2.(a2,g2.(a2,a2))] by Th22;
-    hence thesis by ZFMISC_1:27;
+      .= |:f1,f2:|.([a1,a2],[g1.(a1,b1),g2.(a2,a2)]) by Th21
+      .= [f1.(a1,g1.(a1,b1)),f2.(a2,g2.(a2,a2))] by Th21;
+    hence thesis by XTUPLE_0:1;
   end;
   set a1 = the Element of D1;
   let a2,b2;
   [a1,a2] = |:f1,f2:|.([a1,a2],|:g1,g2:|.([a1,a2],[a1,b2])) by A4
-    .= |:f1,f2:|.([a1,a2],[g1.(a1,a1),g2.(a2,b2)]) by Th22
-    .= [f1.(a1,g1.(a1,a1)),f2.(a2,g2.(a2,b2))] by Th22;
-  hence thesis by ZFMISC_1:27;
+    .= |:f1,f2:|.([a1,a2],[g1.(a1,a1),g2.(a2,b2)]) by Th21
+    .= [f1.(a1,g1.(a1,a1)),f2.(a2,g2.(a2,b2))] by Th21;
+  hence thesis by XTUPLE_0:1;
 end;
 
 definition
@@ -1368,7 +1369,7 @@ definition
   end;
 end;
 
-theorem Th32:
+theorem Th31:
   [p,q] in LattRel L iff p [= q
 proof
   thus [p,q] in LattRel L implies p [= q
@@ -1377,13 +1378,13 @@ proof
     then consider r,s such that
 A1: [p,q] = [r,s] and
 A2: r [= s;
-    p = r by A1,ZFMISC_1:27;
-    hence thesis by A1,A2,ZFMISC_1:27;
+    p = r by A1,XTUPLE_0:1;
+    hence thesis by A1,A2,XTUPLE_0:1;
   end;
   thus thesis;
 end;
 
-theorem Th33:
+theorem Th32:
   dom LattRel L = the carrier of L & rng LattRel L = the carrier
   of L & field LattRel L = the carrier of L
 proof
@@ -1401,11 +1402,11 @@ A1: [x,y] in LattRel L;
     consider p,q such that
 A2: [x,y] = [p,q] and
     p [= q by A1;
-    x = p by A2,ZFMISC_1:27;
+    x = p by A2,XTUPLE_0:1;
     hence x in the carrier of L;
   end;
   hence
-A3: dom LattRel L = the carrier of L by RELAT_1:def 4;
+A3: dom LattRel L = the carrier of L by XTUPLE_0:def 12;
   now
     let x;
     thus x in the carrier of L implies ex y st [y,x] in LattRel L
@@ -1420,10 +1421,10 @@ A4: [y,x] in LattRel L;
     consider p,q such that
 A5: [y,x] = [p,q] and
     p [= q by A4;
-    x = q by A5,ZFMISC_1:27;
+    x = q by A5,XTUPLE_0:1;
     hence x in the carrier of L;
   end;
-  hence rng LattRel L = the carrier of L by RELAT_1:def 5;
+  hence rng LattRel L = the carrier of L by XTUPLE_0:def 13;
   hence field LattRel L = (the carrier of L) \/ the carrier of L by A3,
 RELAT_1:def 6
     .= the carrier of L;
@@ -1448,15 +1449,15 @@ L_join of L1, the L_join of L2:|, |:the L_meet of L1, the L_meet of L2:|#) as
 A1: join(L2) absorbs meet(L2) by LATTICE2:26;
     join(L1) absorbs meet(L1) by LATTICE2:26;
     then
-A2: join(LL) absorbs meet(LL) by A1,Th31;
-A3: join(LL) is associative by Th24;
+A2: join(LL) absorbs meet(LL) by A1,Th30;
+A3: join(LL) is associative by Th23;
 A4: meet(L2) absorbs join(L2) by LATTICE2:27;
     meet(L1) absorbs join(L1) by LATTICE2:27;
     then
-A5: meet(LL) absorbs join(LL) by A4,Th31;
-A6: meet(LL) is commutative by Th23;
-A7: meet(LL) is associative by Th24;
-    join(LL) is commutative by Th23;
+A5: meet(LL) absorbs join(LL) by A4,Th30;
+A6: meet(LL) is commutative by Th22;
+A7: meet(LL) is associative by Th23;
+    join(LL) is commutative by Th22;
     hence thesis by A3,A6,A7,A2,A5,LATTICE2:11;
   end;
 end;
@@ -1478,24 +1479,24 @@ theorem
 proof
   let L1,L2 be non empty LattStr such that
 A1: [:L1,L2:] is Lattice;
-A2: join(L1) is associative by A1,Th24;
-A3: meet(L2) is associative by A1,Th24;
-A4: meet(L2) is commutative by A1,Th23;
+A2: join(L1) is associative by A1,Th23;
+A3: meet(L2) is associative by A1,Th23;
+A4: meet(L2) is commutative by A1,Th22;
   reconsider LL = LattStr (#[:the carrier of L1, the carrier of L2:], |:join(
     L1), join(L2):|, |:meet(L1),meet(L2):|#) as non empty LattStr;
 A5: join(LL) absorbs meet(LL) by A1,LATTICE2:26;
   then
-A6: join(L1) absorbs meet(L1) by Th31;
-A7: join(L2) is associative by A1,Th24;
-A8: join(L2) is commutative by A1,Th23;
-A9: meet(L1) is associative by A1,Th24;
-A10: meet(L1) is commutative by A1,Th23;
+A6: join(L1) absorbs meet(L1) by Th30;
+A7: join(L2) is associative by A1,Th23;
+A8: join(L2) is commutative by A1,Th22;
+A9: meet(L1) is associative by A1,Th23;
+A10: meet(L1) is commutative by A1,Th22;
 A11: meet(LL) absorbs join(LL) by A1,LATTICE2:27;
   then
-A12: meet(L1) absorbs join(L1) by Th31;
-A13: meet(L2) absorbs join(L2) by A11,Th31;
-A14: join(L2) absorbs meet(L2) by A5,Th31;
-  join(L1) is commutative by A1,Th23;
+A12: meet(L1) absorbs join(L1) by Th30;
+A13: meet(L2) absorbs join(L2) by A11,Th30;
+A14: join(L2) absorbs meet(L2) by A5,Th30;
+  join(L1) is commutative by A1,Th22;
   hence thesis by A2,A10,A9,A6,A12,A8,A7,A4,A3,A14,A13,LATTICE2:11;
 end;
 
@@ -1512,21 +1513,21 @@ end;
 
 theorem
   [p1,p2] "\/" [q1,q2] = [p1"\/"q1,p2"\/"q2] & [p1,p2] "/\" [q1,q2] = [
-  p1"/\"q1,p2"/\"q2] by Th22;
+  p1"/\"q1,p2"/\"q2] by Th21;
 
-theorem Th37:
+theorem Th36:
   [p1,p2] [= [q1,q2] iff p1 [= q1 & p2 [= q2
 proof
   thus [p1,p2] [= [q1,q2] implies p1 [= q1 & p2 [= q2
   proof
     assume [p1,p2] "\/" [q1,q2] = [q1,q2];
-    then [p1"\/"q1,p2"\/"q2] = [q1,q2] by Th22;
-    hence p1"\/"q1 = q1 & p2"\/"q2 = q2 by ZFMISC_1:27;
+    then [p1"\/"q1,p2"\/"q2] = [q1,q2] by Th21;
+    hence p1"\/"q1 = q1 & p2"\/"q2 = q2 by XTUPLE_0:1;
   end;
   assume that
 A1: p1"\/"q1 = q1 and
 A2: p2"\/"q2 = q2;
-  thus [p1,p2] "\/" [q1,q2] = [q1,q2] by A1,A2,Th22;
+  thus [p1,p2] "\/" [q1,q2] = [q1,q2] by A1,A2,Th21;
 end;
 
 theorem
@@ -1546,14 +1547,14 @@ A4: b = [q1,q2] by DOMAIN_1:1;
 A5: a = [p1,p2] by DOMAIN_1:1;
     consider r1,r2 such that
 A6: c = [r1,r2] by DOMAIN_1:1;
-A7: p2 [= r2 by A3,A5,A6,Th37;
-A8: p1 [= r1 by A3,A5,A6,Th37;
-    thus a"\/"(b"/\"c) = a"\/"([q1"/\"r1,q2"/\"r2]) by A4,A6,Th22
-      .= [p1"\/"(q1"/\"r1),p2"\/"(q2"/\"r2)] by A5,Th22
+A7: p2 [= r2 by A3,A5,A6,Th36;
+A8: p1 [= r1 by A3,A5,A6,Th36;
+    thus a"\/"(b"/\"c) = a"\/"([q1"/\"r1,q2"/\"r2]) by A4,A6,Th21
+      .= [p1"\/"(q1"/\"r1),p2"\/"(q2"/\"r2)] by A5,Th21
       .= [(p1"\/"q1)"/\"r1,p2"\/"(q2"/\"r2)] by A1,A8
       .= [(p1"\/"q1)"/\"r1,(p2"\/"q2)"/\"r2] by A2,A7
-      .= [p1"\/"q1,p2"\/"q2]"/\"c by A6,Th22
-      .= (a"\/"b)"/\"c by A5,A4,Th22;
+      .= [p1"\/"q1,p2"\/"q2]"/\"c by A6,Th21
+      .= (a"\/"b)"/\"c by A5,A4,Th21;
   end;
   assume
 A9: for a,b,c be Element of [:L1,L2:] st a [= c holds a"\/"(b"/\"c) = (a
@@ -1563,33 +1564,33 @@ A9: for a,b,c be Element of [:L1,L2:] st a [= c holds a"\/"(b"/\"c) = (a
     set p2 = the Element of L2;
     let p1,q1,r1;
     assume p1 [= r1;
-    then [p1,p2] [= [r1,p2] by Th37;
+    then [p1,p2] [= [r1,p2] by Th36;
     then
 A10: [p1,p2]"\/"([q1,p2]"/\"[r1,p2]) = ([p1,p2]"\/"[q1,p2])"/\"[r1,p2] by A9;
-A11: [p1,p2]"\/"[q1,p2] = [p1"\/"q1,p2"\/"p2] by Th22;
+A11: [p1,p2]"\/"[q1,p2] = [p1"\/"q1,p2"\/"p2] by Th21;
 A12: [p1"\/"q1,p2"\/"p2]"/\"[r1,p2] = [(p1"\/"q1)"/\"r1,(p2"\/"p2)"/\" p2]
-    by Th22;
+    by Th21;
 A13: [p1,p2]"\/"[q1"/\"r1,p2"/\"p2] = [p1"\/"(q1"/\"r1),p2"\/"(p2"/\"p2)]
-    by Th22;
-    [q1,p2]"/\"[r1,p2] = [q1"/\"r1,p2"/\"p2] by Th22;
-    hence thesis by A10,A11,A13,A12,ZFMISC_1:27;
+    by Th21;
+    [q1,p2]"/\"[r1,p2] = [q1"/\"r1,p2"/\"p2] by Th21;
+    hence thesis by A10,A11,A13,A12,XTUPLE_0:1;
   end;
   set p1 = the Element of L1;
   let p2,q2,r2;
   assume p2 [= r2;
-  then [p1,p2] [= [p1,r2] by Th37;
+  then [p1,p2] [= [p1,r2] by Th36;
   then
 A14: [p1,p2]"\/"([p1,q2]"/\"[p1,r2]) = ([p1,p2]"\/"[p1,q2])"/\"[p1,r2] by A9;
-A15: [p1,p2]"\/"[p1,q2] = [p1"\/"p1,p2"\/"q2] by Th22;
+A15: [p1,p2]"\/"[p1,q2] = [p1"\/"p1,p2"\/"q2] by Th21;
 A16: [p1"\/"p1,p2"\/"q2]"/\"[p1,r2] = [(p1"\/"p1)"/\"p1,(p2"\/"q2)"/\" r2]
-  by Th22;
+  by Th21;
 A17: [p1,p2]"\/"[p1"/\"p1,q2"/\"r2] = [p1"\/"(p1"/\"p1),p2"\/"(q2"/\"r2)] by
-Th22;
-  [p1,q2]"/\"[p1,r2] = [p1"/\"p1,q2"/\"r2] by Th22;
-  hence thesis by A14,A15,A17,A16,ZFMISC_1:27;
+Th21;
+  [p1,q2]"/\"[p1,r2] = [p1"/\"p1,q2"/\"r2] by Th21;
+  hence thesis by A14,A15,A17,A16,XTUPLE_0:1;
 end;
 
-theorem Th39:
+theorem Th38:
   L1 is D_Lattice & L2 is D_Lattice iff [:L1,L2:] is D_Lattice
 proof
   thus L1 is D_Lattice & L2 is D_Lattice implies [:L1,L2:] is D_Lattice
@@ -1600,19 +1601,19 @@ A2: L2 is D_Lattice;
 A3: join(L2) is_distributive_wrt meet(L2) by A2,LATTICE2:21;
     join(L1) is_distributive_wrt meet(L1) by A1,LATTICE2:21;
     then |:join(L1),join(L2):| is_distributive_wrt |:meet(L1),meet(L2):| by A3
-,Th30;
+,Th29;
     hence thesis by LATTICE2:22;
   end;
   assume [:L1,L2:] is D_Lattice;
   then
 A4: join([:L1,L2:]) is_distributive_wrt meet([:L1,L2:]) by LATTICE2:21;
   then
-A5: join(L2) is_distributive_wrt meet(L2) by Th30;
-  join(L1) is_distributive_wrt meet(L1) by A4,Th30;
+A5: join(L2) is_distributive_wrt meet(L2) by Th29;
+  join(L1) is_distributive_wrt meet(L1) by A4,Th29;
   hence thesis by A5,LATTICE2:22;
 end;
 
-theorem Th40:
+theorem Th39:
   L1 is lower-bounded & L2 is lower-bounded iff [:L1,L2:] is lower-bounded
 proof
   thus L1 is lower-bounded & L2 is lower-bounded implies [:L1,L2:] is
@@ -1626,7 +1627,7 @@ A2: p2"/\"q2 = p2 & q2"/\"p2 = p2;
     let b be Element of [:L1,L2:];
     consider q1,q2 such that
 A3: b = [q1,q2] by DOMAIN_1:1;
-    thus a"/\"b = [p1"/\"q1,p2"/\"q2] by A3,Th22
+    thus a"/\"b = [p1"/\"q1,p2"/\"q2] by A3,Th21
       .= [p1,p2"/\" q2] by A1
       .= a by A2;
     hence b"/\"a = a;
@@ -1641,18 +1642,18 @@ A5: a = [p1,p2] by DOMAIN_1:1;
     take p1;
     let q1;
     a = a"/\"[q1,q2] by A4
-      .= [p1"/\"q1,p2"/\"q2] by A5,Th22;
-    hence thesis by A5,ZFMISC_1:27;
+      .= [p1"/\"q1,p2"/\"q2] by A5,Th21;
+    hence thesis by A5,XTUPLE_0:1;
   end;
   set q1 = the Element of L1;
   take p2;
   let q2;
   a = a"/\"[q1,q2] by A4
-    .= [p1"/\"q1,p2"/\"q2] by A5,Th22;
-  hence thesis by A5,ZFMISC_1:27;
+    .= [p1"/\"q1,p2"/\"q2] by A5,Th21;
+  hence thesis by A5,XTUPLE_0:1;
 end;
 
-theorem Th41:
+theorem Th40:
   L1 is upper-bounded & L2 is upper-bounded iff [:L1,L2:] is upper-bounded
 proof
   thus L1 is upper-bounded & L2 is upper-bounded implies [:L1,L2:] is
@@ -1666,7 +1667,7 @@ A2: p2"\/"q2 = p2 & q2"\/"p2 = p2;
     let b be Element of [:L1,L2:];
     consider q1,q2 such that
 A3: b = [q1,q2] by DOMAIN_1:1;
-    thus a"\/"b = [p1"\/"q1,p2"\/"q2] by A3,Th22
+    thus a"\/"b = [p1"\/"q1,p2"\/"q2] by A3,Th21
       .= [p1,p2"\/" q2] by A1
       .= a by A2;
     hence b"\/"a = a;
@@ -1681,18 +1682,18 @@ A5: a = [p1,p2] by DOMAIN_1:1;
     take p1;
     let q1;
     a = a"\/"[q1,q2] by A4
-      .= [p1"\/"q1,p2"\/"q2] by A5,Th22;
-    hence thesis by A5,ZFMISC_1:27;
+      .= [p1"\/"q1,p2"\/"q2] by A5,Th21;
+    hence thesis by A5,XTUPLE_0:1;
   end;
   set q1 = the Element of L1;
   take p2;
   let q2;
   a = a"\/"[q1,q2] by A4
-    .= [p1"\/"q1,p2"\/"q2] by A5,Th22;
-  hence thesis by A5,ZFMISC_1:27;
+    .= [p1"\/"q1,p2"\/"q2] by A5,Th21;
+  hence thesis by A5,XTUPLE_0:1;
 end;
 
-theorem Th42:
+theorem Th41:
   L1 is bounded & L2 is bounded iff [:L1,L2:] is bounded
 proof
   thus L1 is bounded & L2 is bounded implies [:L1,L2:] is bounded
@@ -1703,16 +1704,16 @@ A2: L1 is upper-bounded and
 A3: L2 is lower-bounded and
 A4: L2 is upper-bounded;
     thus [:L1,L2:] is lower-bounded & [:L1,L2:] is upper-bounded by A1,A2,A3,A4
-,Th40,Th41;
+,Th39,Th40;
   end;
   assume that
 A5: [:L1,L2:] is lower-bounded and
 A6: [:L1,L2:] is upper-bounded;
   thus L1 is lower-bounded & L1 is upper-bounded & L2 is lower-bounded & L2 is
-  upper-bounded by A5,A6,Th40,Th41;
+  upper-bounded by A5,A6,Th39,Th40;
 end;
 
-theorem Th43:
+theorem Th42:
   L1 is 0_Lattice & L2 is 0_Lattice implies Bottom [:L1,L2:] = [
   Bottom L1, Bottom L2]
 proof
@@ -1724,16 +1725,16 @@ A3: now
     consider p1,p2 such that
 A4: a = [p1,p2] by DOMAIN_1:1;
     thus [Bottom L1,Bottom L2]"/\"a = [Bottom L1"/\"p1,Bottom L2"/\"p2] by A4
-,Th22
-      .= [Bottom L1,Bottom L2"/\" p2] by A1,LATTICES:15
-      .= [Bottom L1,Bottom L2] by A2,LATTICES:15;
+,Th21
+      .= [Bottom L1,Bottom L2"/\" p2] by A1
+      .= [Bottom L1,Bottom L2] by A2;
     hence a"/\"[Bottom L1,Bottom L2]=[Bottom L1,Bottom L2];
   end;
-  [:L1,L2:] is lower-bounded by A1,A2,Th40;
+  [:L1,L2:] is lower-bounded by A1,A2,Th39;
   hence thesis by A3,LATTICES:def 16;
 end;
 
-theorem Th44:
+theorem Th43:
   L1 is 1_Lattice & L2 is 1_Lattice implies Top [:L1,L2:] = [Top L1,Top L2]
 proof
   assume that
@@ -1743,16 +1744,16 @@ A3: now
     let a be Element of [:L1,L2:];
     consider p1,p2 such that
 A4: a = [p1,p2] by DOMAIN_1:1;
-    thus [Top L1,Top L2]"\/"a = [Top L1"\/"p1,Top L2"\/"p2] by A4,Th22
-      .= [ Top L1,Top L2"\/" p2] by A1,LATTICES:18
-      .= [Top L1,Top L2] by A2,LATTICES:18;
+    thus [Top L1,Top L2]"\/"a = [Top L1"\/"p1,Top L2"\/"p2] by A4,Th21
+      .= [ Top L1,Top L2"\/" p2] by A1
+      .= [Top L1,Top L2] by A2;
     hence a"\/"[Top L1,Top L2] = [Top L1,Top L2];
   end;
-  [:L1,L2:] is upper-bounded by A1,A2,Th41;
+  [:L1,L2:] is upper-bounded by A1,A2,Th40;
   hence thesis by A3,LATTICES:def 17;
 end;
 
-theorem Th45:
+theorem Th44:
   L1 is 01_Lattice & L2 is 01_Lattice implies (p1
 is_a_complement_of q1 & p2 is_a_complement_of q2 iff [p1,p2] is_a_complement_of
   [q1,q2])
@@ -1768,36 +1769,36 @@ A3: p1 is_a_complement_of q1 and
 A4: p2 is_a_complement_of q2;
 A5: p2"\/"q2 = Top L2 by A4,LATTICES:def 18;
     p1"\/"q1 = Top L1 by A3,LATTICES:def 18;
-    hence [p1,p2]"\/"[q1,q2] = [Top L1,Top L2] by A5,Th22
-      .= Top [:L1,L2:] by A1,A2,Th44;
+    hence [p1,p2]"\/"[q1,q2] = [Top L1,Top L2] by A5,Th21
+      .= Top [:L1,L2:] by A1,A2,Th43;
     hence [q1,q2]"\/"[p1,p2] = Top [:L1,L2:];
 A6: p2"/\"q2 = Bottom L2 by A4,LATTICES:def 18;
     p1"/\"q1 = Bottom L1 by A3,LATTICES:def 18;
-    hence [p1,p2]"/\"[q1,q2] = [Bottom L1,Bottom L2] by A6,Th22
-      .= Bottom [:L1,L2:] by A1,A2,Th43;
+    hence [p1,p2]"/\"[q1,q2] = [Bottom L1,Bottom L2] by A6,Th21
+      .= Bottom [:L1,L2:] by A1,A2,Th42;
     hence [q1,q2]"/\"[p1,p2] = Bottom [:L1,L2:];
   end;
   assume
 A7: [p1,p2] is_a_complement_of [q1,q2];
   then
 A8: [p1,p2]"/\"[q1,q2] = Bottom [: L1,L2:] by LATTICES:def 18;
-  [Bottom L1,Bottom L2] = Bottom [:L1,L2:] by A1,A2,Th43;
+  [Bottom L1,Bottom L2] = Bottom [:L1,L2:] by A1,A2,Th42;
   then
-A9: [p1"/\"q1,p2"/\"q2] = [Bottom L1,Bottom L2] by A8,Th22;
+A9: [p1"/\"q1,p2"/\"q2] = [Bottom L1,Bottom L2] by A8,Th21;
   then
-A10: p1"/\"q1 = Bottom L1 by ZFMISC_1:27;
+A10: p1"/\"q1 = Bottom L1 by XTUPLE_0:1;
 A11: [p1,p2]"\/"[q1,q2] = Top [:L1,L2:] by A7,LATTICES:def 18;
-A12: p2"/\"q2 = Bottom L2 by A9,ZFMISC_1:27;
-  [Top L1,Top L2] = Top [:L1,L2:] by A1,A2,Th44;
+A12: p2"/\"q2 = Bottom L2 by A9,XTUPLE_0:1;
+  [Top L1,Top L2] = Top [:L1,L2:] by A1,A2,Th43;
   then
-A13: [Top L1,Top L2] = [p1"\/"q1,p2"\/"q2] by A11,Th22;
-  then p1"\/"q1 = Top L1 by ZFMISC_1:27;
+A13: [Top L1,Top L2] = [p1"\/"q1,p2"\/"q2] by A11,Th21;
+  then p1"\/"q1 = Top L1 by XTUPLE_0:1;
   hence p1 is_a_complement_of q1 by A10,LATTICES:def 18;
-  p2"\/"q2 = Top L2 by A13,ZFMISC_1:27;
+  p2"\/"q2 = Top L2 by A13,XTUPLE_0:1;
   hence thesis by A12,LATTICES:def 18;
 end;
 
-theorem Th46:
+theorem Th45:
   L1 is C_Lattice & L2 is C_Lattice iff [:L1,L2:] is C_Lattice
 proof
   thus L1 is C_Lattice & L2 is C_Lattice implies [:L1,L2:] is C_Lattice
@@ -1805,7 +1806,7 @@ proof
     assume that
 A1: L1 is C_Lattice and
 A2: L2 is C_Lattice;
-    reconsider L = [:L1,L2:] as 01_Lattice by A1,A2,Th42;
+    reconsider L = [:L1,L2:] as 01_Lattice by A1,A2,Th41;
     L is complemented
     proof
       let a be Element of L;
@@ -1817,13 +1818,13 @@ A4:   q1 is_a_complement_of p1 by A1,LATTICES:def 19;
 A5:   q2 is_a_complement_of p2 by A2,LATTICES:def 19;
       reconsider b = [q1,q2] as Element of L;
       take b;
-      thus thesis by A1,A2,A3,A4,A5,Th45;
+      thus thesis by A1,A2,A3,A4,A5,Th44;
     end;
     hence thesis;
   end;
   assume
 A6: [:L1,L2:] is C_Lattice;
-  then reconsider C1 = L1, C2 = L2 as 01_Lattice by Th42;
+  then reconsider C1 = L1, C2 = L2 as 01_Lattice by Th41;
   C1 is complemented
   proof
     set p29 = the Element of C2;
@@ -1836,7 +1837,7 @@ A7: b is_a_complement_of [p1,p2] by A6,LATTICES:def 19;
 A8: b = [q1,q2] by DOMAIN_1:1;
     reconsider q19 = q1 as Element of C1;
     take q19;
-    thus thesis by A7,A8,Th45;
+    thus thesis by A7,A8,Th44;
   end;
   hence L1 is C_Lattice;
   C2 is complemented
@@ -1851,7 +1852,7 @@ A9: b is_a_complement_of [p1,p2] by A6,LATTICES:def 19;
 A10: b = [q1,q2] by DOMAIN_1:1;
     reconsider q29 = q2 as Element of C2;
     take q29;
-    thus thesis by A9,A10,Th45;
+    thus thesis by A9,A10,Th44;
   end;
   hence thesis;
 end;
@@ -1859,8 +1860,8 @@ end;
 theorem
   L1 is B_Lattice & L2 is B_Lattice iff [:L1,L2:] is B_Lattice
 proof
-A1: [:L1,L2:] is D_Lattice iff L1 is D_Lattice & L2 is D_Lattice by Th39;
-  [:L1,L2:] is C_Lattice iff L1 is C_Lattice & L2 is C_Lattice by Th46;
+A1: [:L1,L2:] is D_Lattice iff L1 is D_Lattice & L2 is D_Lattice by Th38;
+  [:L1,L2:] is C_Lattice iff L1 is C_Lattice & L2 is C_Lattice by Th45;
   hence thesis by A1;
 end;
 
@@ -1887,20 +1888,20 @@ A6: for s2 st p2"/\"s2 [= q2 holds s2 [= r2 by A2;
 A7: p1"/\"r1 [= q1 and
 A8: for s1 st p1"/\"s1 [= q1 holds s1 [= r1 by A1;
     take [r1,r2];
-    a"/\"[r1,r2] = [p1"/\"r1,p2"/\"r2] by A3,Th22;
-    hence a"/\"[r1,r2] [= b by A4,A7,A5,Th37;
+    a"/\"[r1,r2] = [p1"/\"r1,p2"/\"r2] by A3,Th21;
+    hence a"/\"[r1,r2] [= b by A4,A7,A5,Th36;
     let d be Element of [:L1,L2:];
     consider s1,s2 such that
 A9: d = [s1,s2] by DOMAIN_1:1;
     assume a"/\"d [= b;
     then
-A10: [p1"/\"s1,p2"/\"s2] [= b by A3,A9,Th22;
-    then p2"/\"s2 [= q2 by A4,Th37;
+A10: [p1"/\"s1,p2"/\"s2] [= b by A3,A9,Th21;
+    then p2"/\"s2 [= q2 by A4,Th36;
     then
 A11: s2 [= r2 by A6;
-    p1"/\"s1 [= q1 by A4,A10,Th37;
+    p1"/\"s1 [= q1 by A4,A10,Th36;
     then s1 [= r1 by A8;
-    hence d [= [r1,r2] by A9,A11,Th37;
+    hence d [= [r1,r2] by A9,A11,Th36;
   end;
   assume
 A12: for a,b being Element of [:L1,L2:] ex c being Element of [:L1,L2:]
@@ -1917,16 +1918,16 @@ A14: for d being Element of [:L1,L2:] st [p1,p2]"/\"d [= [q1,p2] holds
     consider r1,r2 such that
 A15: c = [r1,r2] by DOMAIN_1:1;
     take r1;
-A16: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A15,Th22;
-    hence p1"/\"r1 [= q1 by A13,Th37;
+A16: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A15,Th21;
+    hence p1"/\"r1 [= q1 by A13,Th36;
     let s1;
     assume
 A17: p1"/\"s1 [= q1;
-    p2"/\"r2 [= p2 by A13,A16,Th37;
-    then [p1"/\"s1,p2"/\"r2] [= [q1,p2] by A17,Th37;
-    then [p1,p2]"/\"[s1,r2] [= [q1,p2] by Th22;
+    p2"/\"r2 [= p2 by A13,A16,Th36;
+    then [p1"/\"s1,p2"/\"r2] [= [q1,p2] by A17,Th36;
+    then [p1,p2]"/\"[s1,r2] [= [q1,p2] by Th21;
     then [s1,r2] [= c by A14;
-    hence thesis by A15,Th37;
+    hence thesis by A15,Th36;
   end;
   set p1 = the Element of L1;
   let p2,q2;
@@ -1937,16 +1938,16 @@ A19: for d being Element of [:L1,L2:] st [p1,p2]"/\"d [= [p1,q2] holds d
   consider r1,r2 such that
 A20: c = [r1,r2] by DOMAIN_1:1;
   take r2;
-A21: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A20,Th22;
-  hence p2"/\"r2 [= q2 by A18,Th37;
+A21: [p1,p2]"/\"c = [p1"/\"r1,p2"/\"r2] by A20,Th21;
+  hence p2"/\"r2 [= q2 by A18,Th36;
   let s2;
   assume
 A22: p2"/\"s2 [= q2;
-  p1"/\"r1 [= p1 by A18,A21,Th37;
-  then [p1"/\"r1,p2"/\"s2] [= [p1,q2] by A22,Th37;
-  then [p1,p2]"/\"[r1,s2] [= [p1,q2] by Th22;
+  p1"/\"r1 [= p1 by A18,A21,Th36;
+  then [p1"/\"r1,p2"/\"s2] [= [p1,q2] by A22,Th36;
+  then [p1,p2]"/\"[r1,s2] [= [p1,q2] by Th21;
   then [r1,s2] [= c by A19;
-  hence s2 [= r2 by A20,Th37;
+  hence s2 [= r2 by A20,Th36;
 end;
 
 theorem
@@ -1963,9 +1964,9 @@ proof
   set p1 = pr1(D1,D2);
   take f = <:p2, p1:>;
 A1: dom p2 = [:D1,D2:] by FUNCT_3:def 5;
-A2: field R = the carrier of [:L1,L2:] by Th33;
+A2: field R = the carrier of [:L1,L2:] by Th32;
 A3: rng p2 = D2 by FUNCT_3:46;
-A4: field S = the carrier of [:L2,L1:] by Th33;
+A4: field S = the carrier of [:L2,L1:] by Th32;
   dom p1 = [:D1,D2:] by FUNCT_3:def 4;
   then dom p2 /\ dom p1 = [:D1,D2:] by A1;
   hence
@@ -2002,8 +2003,8 @@ A16: f.y = [p2.y,p1.y] by A14,FUNCT_3:def 7;
 A17: y = [q1,q2] by A2,A5,A14,DOMAIN_1:1;
 A18: p2.(q1,q2) = q2 by FUNCT_3:def 5;
     p1.(q1,q2) = q1 by FUNCT_3:def 4;
-    then r1 = q1 by A11,A15,A17,A13,A10,A16,ZFMISC_1:27;
-    hence thesis by A11,A15,A17,A12,A18,A10,A16,ZFMISC_1:27;
+    then r1 = q1 by A11,A15,A17,A13,A10,A16,XTUPLE_0:1;
+    hence thesis by A11,A15,A17,A12,A18,A10,A16,XTUPLE_0:1;
   end;
   let x,y;
   thus [x,y] in R implies x in field R & y in field R & [f.x,f.y] in S
@@ -2018,14 +2019,14 @@ A22: f.(q1,q2) = [p2.(q1,q2),p1.(q1,q2)] by A2,A5,A21,FUNCT_3:def 7;
 A23: p2.(q1,q2) = q2 by FUNCT_3:def 5;
     consider r1,r2 such that
 A24: a = [r1,r2] by DOMAIN_1:1;
-A25: r2 [= q2 by A20,A24,A21,Th37;
-    r1 [= q1 by A20,A24,A21,Th37;
+A25: r2 [= q2 by A20,A24,A21,Th36;
+    r1 [= q1 by A20,A24,A21,Th36;
     then
-A26: [r2,r1] [= [q2,q1] by A25,Th37;
+A26: [r2,r1] [= [q2,q1] by A25,Th36;
 A27: p1.(r1,r2) = r1 by FUNCT_3:def 4;
 A28: p2.(r1,r2) = r2 by FUNCT_3:def 5;
-A29: y = b by A19,ZFMISC_1:27;
-A30: x = a by A19,ZFMISC_1:27;
+A29: y = b by A19,XTUPLE_0:1;
+A30: x = a by A19,XTUPLE_0:1;
     hence x in field R & y in field R by A2,A29;
 A31: p1.(q1,q2) = q1 by FUNCT_3:def 4;
     f.(r1,r2) = [p2.(r1,r2),p1.(r1,r2)] by A2,A5,A24,FUNCT_3:def 7;
@@ -2047,18 +2048,18 @@ A40: p2.(r1,r2) = r2 by FUNCT_3:def 5;
 A41: p1.(r1,r2) = r1 by FUNCT_3:def 4;
   f.(r1,r2) = [p2.(r1,r2),p1.(r1,r2)] by A2,A5,A39,FUNCT_3:def 7;
   then
-A42: [r2,r1] [= [q2,q1] by A39,A34,A36,A41,A40,A35,A38,A37,Th32;
+A42: [r2,r1] [= [q2,q1] by A39,A34,A36,A41,A40,A35,A38,A37,Th31;
   then
-A43: r1 [= q1 by Th37;
-  r2 [= q2 by A42,Th37;
-  then [r1,r2] [= [q1,q2] by A43,Th37;
+A43: r1 [= q1 by Th36;
+  r2 [= q2 by A42,Th36;
+  then [r1,r2] [= [q1,q2] by A43,Th36;
   hence thesis by A39,A34;
 end;
 
 reserve B for B_Lattice,
   a,b,c,d for Element of B;
 
-theorem Th51:
+theorem Th50:
   a <=> b = (a"/\"b)"\/"(a`"/\"b`)
 proof
   thus a <=> b = (a`"\/"b)"/\"(b => a) by FILTER_0:42
@@ -2068,11 +2069,11 @@ proof
     .= ((a`"/\"b`)"\/"(a`"/\"a))"\/"((b"/\"b`)"\/"(b"/\" a)) by LATTICES:def 11
     .= ((a`"/\"b`)"\/"Bottom B)"\/"((b"/\"b`)"\/"(b"/\"a)) by LATTICES:20
     .= ((a`"/\"b`)"\/"Bottom B)"\/"(Bottom B"\/"(b"/\"a)) by LATTICES:20
-    .= (a`"/\"b`)"\/"(Bottom B"\/"(b"/\"a)) by LATTICES:14
-    .= (a"/\"b)"\/"(a`"/\"b`) by LATTICES:14;
+    .= (a`"/\"b`)"\/"(Bottom B"\/"(b"/\"a))
+    .= (a"/\"b)"\/"(a`"/\"b`);
 end;
 
-theorem Th52:
+theorem Th51:
   (a => b)` = a "/\" b` & (a <=> b)` = (a "/\" b`) "\/" (a` "/\" b
   ) & (a <=> b)` = a <=> b` & (a <=> b)` = a` <=> b
 proof
@@ -2080,21 +2081,21 @@ A1: now
     let a,b;
     thus (a => b)` = (a` "\/" b)` by FILTER_0:42
       .= a`` "/\" b` by LATTICES:24
-      .= a "/\" b` by LATTICES:22;
+      .= a "/\" b`;
   end;
   hence (a => b)` = a "/\" b`;
   thus (a <=> b)` = (a=>b)`"\/"(b=>a)` by LATTICES:23
     .= (a"/\"b`)"\/"(b=>a)` by A1
     .= (a"/\"b`)"\/"(a`"/\"b) by A1;
-  hence (a <=> b)` = (a"/\"b`)"\/"(a`"/\"b``) by LATTICES:22
-    .= a <=> b` by Th51;
-  hence (a <=> b)` = (a"/\"b`)"\/"(a`"/\"b``) by Th51
-    .= (a``"/\"b`)"\/"(a`"/\"b``) by LATTICES:22
-    .= (a`"/\"b)"\/"(a``"/\"b`) by LATTICES:22
-    .= a` <=> b by Th51;
+  hence (a <=> b)` = (a"/\"b`)"\/"(a`"/\"b``)
+    .= a <=> b` by Th50;
+  hence (a <=> b)` = (a"/\"b`)"\/"(a`"/\"b``) by Th50
+    .= (a``"/\"b`)"\/"(a`"/\"b``)
+    .= (a`"/\"b)"\/"(a``"/\"b`)
+    .= a` <=> b by Th50;
 end;
 
-theorem Th53:
+theorem Th52:
   a <=> b = a <=> c implies b = c
 proof
   set ab = a"/\"b;
@@ -2107,33 +2108,47 @@ proof
   set a9c = a`"/\"c;
   set ab9 = a"/\"b`;
   set ac9 = a"/\"c`;
-A1:(a<=>b) <=> (a<=>c) = ((a<=>b)"/\"(a<=>c))"\/"((a<=>b)`"/\"(a<=>c)`) &
-  a<=>b = ab"\/"a9b9 & a<=>c = ac"\/"a9c9 & (a<=>b)` = ab9"\/"a9b &
-  (a<=>c)` = ac9"\/"a9c &
-  (ab"\/"a9b9)"/\"(ac"\/"a9c9) = (ab"/\"(ac"\/"a9c9))"\/"(a9b9"/\"(ac"\/"
-  a9c9)) &
-  ab"/\"(ac"\/"a9c9) = (ab"/\"ac)"\/"(ab"/\"a9c9) & ab"/\"a9c9 = ab"/\"a`"/\"
-  c` &
-  a9b9"/\"(ac"\/"a9c9) = (a9b9"/\"ac)"\/"(a9b9"/\"a9c9) & b"/\"a"/\"a` = b
-  "/\"(a"/\"a`) &
-  b"/\"Bottom B = Bottom B & b`"/\"Bottom B = Bottom B & Bottom B"/\"c =
-  Bottom B & Bottom B"/\"c` = Bottom B &
-  a"/\"a` = Bottom B & a`"/\"a = Bottom B & ab = b"/\"a & a9b9 = b`"/\"a` &
-  a9b9"/\"ac = a9b9"/\"a"/\"c & b`"/\"a`"/\"a = b`"/\"(a`"/\"a) &
-  (ab"/\"ac)"\/"Bottom B = ab"/\"ac & Bottom
-  B"\/"(a9b9"/\"a9c9) = a9b9"/\"a9c9 &
-  (ab9"\/"a9b)"/\"(ac9"\/"a9c) = (ab9"/\"(ac9"\/"a9c))"\/"(a9b"/\"(ac9"\/"
-  a9c)) &
-  ab9"/\"(ac9"\/"a9c) = (ab9"/\"ac9)"\/"(ab9"/\"a9c) & ab9"/\"a9c = ab9"/\"a`
-  "/\"c &
-  a9b"/\"(ac9"\/"a9c) = (a9b"/\"ac9)"\/"(a9b"/\"a9c) & b`"/\"a"/\"a` = b`"/\"
-  (a"/\"a`) &
-  b`"/\"Bottom B = Bottom B & b"/\"Bottom B = Bottom B & Bottom B"/\"c` =
+A1:(a<=>b) <=> (a<=>c) = ((a<=>b)"/\"(a<=>c))"\/"((a<=>b)`"/\"(a<=>c)`)
+  by Th50;
+B1: a<=>b = ab"\/"a9b9 & a<=>c = ac"\/"a9c9
+  by Th50;
+C1: (a<=>b)` = ab9"\/"a9b
+  by Th51;
+D1:  (a<=>c)` = ac9"\/"a9c
+  by Th51;
+E1: (ab"\/"a9b9)"/\"(ac"\/"a9c9) = (ab"/\"(ac"\/"a9c9))"\/"(a9b9"/\"(ac"\/"
+  a9c9))
+  by LATTICES:def 11;
+F1: ab"/\"(ac"\/"a9c9) = (ab"/\"ac)"\/"(ab"/\"a9c9) & ab"/\"a9c9 = ab"/\"a`"/\"
+  c`
+  by LATTICES:def 7,def 11;
+G1: a9b9"/\"(ac"\/"a9c9) = (a9b9"/\"ac)"\/"(a9b9"/\"a9c9)
+  by LATTICES:def 11;
+H1:b"/\"a"/\"a` = b "/\"(a"/\"a`)
+  by LATTICES:def 7;
+L1:  b`"/\"Bottom B = Bottom B;
+R1:  a9b9"/\"ac = a9b9"/\"a"/\"c
+  by LATTICES:def 7;
+S1:  b`"/\"a`"/\"a = b`"/\"(a`"/\"a)
+  by LATTICES:def 7;
+T1: (ab"/\"ac)"\/"Bottom B = ab"/\"ac;
+U1:  Bottom B"\/"(a9b9"/\"a9c9) = a9b9"/\"a9c9;
+V1: (ab9"\/"a9b)"/\"(ac9"\/"a9c) = (ab9"/\"(ac9"\/"a9c))"\/"(a9b"/\"(ac9"\/"
+  a9c))
+  by LATTICES:def 11;
+X1: ab9"/\"(ac9"\/"a9c) = (ab9"/\"ac9)"\/"(ab9"/\"a9c) & ab9"/\"a9c = ab9"/\"a`
+  "/\"c
+  by LATTICES:def 7,def 11;
+Y1:  a9b"/\"(ac9"\/"a9c) = (a9b"/\"ac9)"\/"(a9b"/\"a9c)
+  by LATTICES:def 11;
+I1: b`"/\"a"/\"a` = b`"/\" (a"/\"a`)
+  by LATTICES:def 7;
+J1: b"/\"Bottom B = Bottom B & Bottom B"/\"c` =
   Bottom B & Bottom B"/\"c = Bottom B &
   a"/\"a` = Bottom B & a`"/\"a = Bottom B & ab9 = b`"/\"a & a9b = b"/\"a` &
   a9b"/\"ac9 = a9b"/\"a"/\"c` & b"/\"a`"/\"a = b"/\"(a`"/\"a) &
   (ab9"/\"ac9)"\/"Bottom B = ab9"/\"ac9 & Bottom
-  B"\/"(a9b"/\"a9c) = a9b"/\"a9c by Th51,Th52,LATTICES:14,15,20,def 7,def 11;
+  B"\/"(a9b"/\"a9c) = a9b"/\"a9c by LATTICES:20,def 7;
   ab"/\"ac = ab"/\"a"/\"c & ab"/\"a = a"/\"ab & a"/\"ab = a"/\"a"/\"b & a "/\"
   a = a &
   a9b9"/\"a9c9 = a9b9"/\"a`"/\"c` & a9b9"/\"a` = a`"/\"a9b9 & a`"/\"a9b9 = a`
@@ -2155,52 +2170,51 @@ A1:(a<=>b) <=> (a<=>c) = ((a<=>b)"/\"(a<=>c))"\/"((a<=>b)`"/\"(a<=>c)`) &
   bc) = b9c9"\/"bc & (a"/\"(b9c9"\/"bc))"\/"(a`"/\"b9c9)"\/"(a`"/\"bc) =
   (a"/\"(b9c9"\/"bc))"\/"((a`"/\"b9c9)"\/"(a`"/\"bc)) & a"\/"a` = Top B &
   (a"/\"(b9c9"\/"bc))"\/"(a`"/\"(b9c9"\/"bc)) = (a"\/"a`)"/\"(b9c9"\/"bc)
-  by LATTICES:2,17,21,def 5,def 7,def 11;
-then A2:  (a<=>b) <=> (a<=>c) = b <=> c by A1,Th51;
+  by LATTICES:21,def 5,def 7,def 11;
+then A2:  (a<=>b) <=> (a<=>c) = b <=> c by B1,A1,Th50,
+  C1,D1,E1,F1,G1,H1,I1,J1,L1,R1,S1,T1,U1,V1,X1,Y1;
   assume A3: a<=>b = a<=>c;
-  then   (a<=>b) => (a<=>c) = Top B by FILTER_0:28;
-  then A4: b <=> c = Top B by A2,A3,LATTICES:2;
+  then
+B4: (a<=>b) => (a<=>c) = Top B by FILTER_0:28;
+  ((a<=>b) => (a<=>b)) "/\" ((a<=>b) => (a<=>b)) = ((a<=>b) => (a<=>b));
+  then A4: b <=> c = Top B by A2,A3,B4;
 then A5:  b"/\"Top B [= b"/\"(b => c)  by LATTICES:6,9;
 A6:  c"/\"Top B [= c"/\"(c => b) by A4,LATTICES:6,9;
 A7:  b"/\"(b => c) [= c by FILTER_0:def 7;
 A8:  c"/\"(c => b) [= b by FILTER_0:def 7;
-A9:  b"/\"Top B = b by LATTICES:17;
-A10:  c"/\"Top B = c by LATTICES:17;
-  A11:  b [= c by A5,A7,A9,LATTICES:7;
-  c [= b  by A6,A8,A10,LATTICES:7;
+  A11:  b [= c by A5,A7,LATTICES:7;
+  c [= b  by A6,A8,LATTICES:7;
   hence thesis by A11,LATTICES:8;
 end;
 
-theorem Th54:
+theorem Th53:
   a <=> (a <=> b) = b
 proof
 A1: a"/\"((a"/\"b)"\/"(a`"/\"b`)) = (a"/\"(a"/\"b))"\/"(a"/\"(a`"/\"b`)) by
 LATTICES:def 11;
 A2: a`"/\"((a"/\"b`)"\/"(a`"/\"b)) = (a`"/\"(a"/\"b`))"\/"(a`"/\"(a`"/\"b))
   by LATTICES:def 11;
-A3: a`"/\"a` = a` by LATTICES:2;
-A4: a"/\" a = a by LATTICES:2;
-A5: Bottom B "/\"b` = Bottom B by LATTICES:15;
+A5: Bottom B "/\"b` = Bottom B;
 A6: a"\/"a` = Top B by LATTICES:21;
 A7: (a"/\"b)"\/"(a`"/\"b) = (a"\/"a`)"/\"b by LATTICES:def 11;
-A8: Bottom B"\/"(a`"/\" b) = a`"/\"b by LATTICES:14;
-A9: (a<=>b)` = (a"/\"b`)"\/"(a`"/\"b) by Th52;
+A8: Bottom B"\/"(a`"/\" b) = a`"/\"b;
+A9: (a<=>b)` = (a"/\"b`)"\/"(a`"/\"b) by Th51;
 A10: a`"/\"(a"/\"b`) = a`"/\"a"/\"b` by LATTICES:def 7;
-A11: (a"/\"b)"\/"Bottom B = a"/\"b by LATTICES:14;
+A11: (a"/\"b)"\/"Bottom B = a"/\"b;
 A12: a"/\"a` = Bottom B by LATTICES:20;
-A13: a<=>b = (a"/\"b)"\/"(a`"/\"b`) by Th51;
+A13: a<=>b = (a"/\"b)"\/"(a`"/\"b`) by Th50;
 A14: a"/\"(a"/\"b) = a"/\"a"/\"b by LATTICES:def 7;
 A15: a"/\"(a`"/\"b`) = a"/\"a`"/\"b` by LATTICES:def 7;
 A16: a`"/\"(a`"/\"b) = a`"/\"a`"/\"b by LATTICES:def 7;
-  a<=>(a<=>b) = (a"/\"(a<=>b))"\/"(a`"/\"(a<=>b)`) by Th51;
-  hence thesis by A13,A9,A1,A2,A14,A10,A4,A3,A16,A15,A12,A11,A8,A7,A6,A5,
+  a<=>(a<=>b) = (a"/\"(a<=>b))"\/"(a`"/\"(a<=>b)`) by Th50;
+  hence thesis by A13,A9,A1,A2,A14,A10,A16,A15,A12,A11,A8,A7,A6,A5,
 LATTICES:17;
 end;
 
 theorem
   (i"\/"j) => i = j => i & i => (i"/\"j) = i => j
 proof
-A1: i"\/"i = i by LATTICES:1;
+A1: i"\/"i = i;
   j"/\"(j=>i) [= i by FILTER_0:def 7;
   then
 A2: i"\/"(j"/\"(j=>i)) [= i by A1,FILTER_0:1;
@@ -2219,16 +2233,15 @@ A6: j"/\"i [= j by LATTICES:6;
   then i"/\"(i=>(i"/\"j)) [= j by A6,LATTICES:7;
   then
 A7: i=>(i"/\"j) [= i=>j by FILTER_0:def 7;
-A8: i "/\"i = i by LATTICES:2;
   i"/\"(i=>j) [= j by FILTER_0:def 7;
   then
 A9: i"/\"(i"/\"(i=>j)) [= i"/\"j by LATTICES:9;
   i"/\"(i"/\"(i=>j)) = i"/\"i"/\"(i=>j) by LATTICES:def 7;
-  then i=>j [= i=>(i"/\"j) by A9,A8,FILTER_0:def 7;
+  then i=>j [= i=>(i"/\"j) by A9,FILTER_0:def 7;
   hence thesis by A7,LATTICES:8;
 end;
 
-theorem Th56:
+theorem Th55:
   i => j [= i => (j"\/"k) & i => j [= (i"/\"k) => j & i => j [= i
   => (k"\/"j) & i => j [= (k"/\"i) => j
 proof
@@ -2244,12 +2257,12 @@ end;
 Lm1: i => j in FI implies i => (j"\/"k) in FI & i => (k"\/"j) in FI & (i"/\"k)
 => j in FI & (k"/\"i) => j in FI
 proof
-A1: i => j [= (i"/\"k) => j by Th56;
-  i => j [= i => (j"\/"k) by Th56;
+A1: i => j [= (i"/\"k) => j by Th55;
+  i => j [= i => (j"\/"k) by Th55;
   hence thesis by A1,FILTER_0:9;
 end;
 
-theorem Th57:
+theorem Th56:
   (i => k)"/\"(j => k) [= (i"\/"j) => k
 proof
 A1: (i"/\"((i=>k)"/\"(j=>k)))"\/"(j"/\"((i=>k)"/\"(j=>k))) = (i"\/"j)"/\" ((
@@ -2271,12 +2284,12 @@ proof
   assume that
 A1: i => k in FI and
 A2: j => k in FI;
-A3: (i=>k)"/\"(j=>k) [= (i"\/"j)=> k by Th57;
+A3: (i=>k)"/\"(j=>k) [= (i"\/"j)=> k by Th56;
   (i=>k)"/\"(j=>k) in FI by A1,A2,FILTER_0:8;
   hence thesis by A3,FILTER_0:9;
 end;
 
-theorem Th58:
+theorem Th57:
   (i => j)"/\"(i => k) [= i => (j"/\"k)
 proof
 A1: i"/\"(i=>j) [= j by FILTER_0:def 7;
@@ -2287,8 +2300,7 @@ A3: (i"/\"(i=>j))"/\"(i"/\"(i=>k)) = ((i"/\"(i=>j))"/\"i)"/\"(i=>k) by
 LATTICES:def 7;
 A4: i"/\"((i=>j)"/\"(i=>k)) = i"/\"(i=>j)"/\" (i=>k) by LATTICES:def 7;
 A5: i"/\"(i"/\"(i=>j)) = i"/\"i"/\" (i=>j) by LATTICES:def 7;
-  i"/\"i = i by LATTICES:2;
-  hence thesis by A2,A3,A5,A4,FILTER_0:def 7;
+  thus thesis by A2,A3,A5,A4,FILTER_0:def 7;
 end;
 
 Lm3: i => j in FI & i => k in FI implies i => (j"/\"k) in FI
@@ -2296,12 +2308,12 @@ proof
   assume that
 A1: i => j in FI and
 A2: i => k in FI;
-A3: (i=>j)"/\"(i=>k) [= i=>(j"/\"k) by Th58;
+A3: (i=>j)"/\"(i=>k) [= i=>(j"/\"k) by Th57;
   (i=>j)"/\"(i=>k) in FI by A1,A2,FILTER_0:8;
   hence thesis by A3,FILTER_0:9;
 end;
 
-theorem Th59:
+theorem Th58:
   i1 <=> i2 in FI & j1 <=> j2 in FI implies (i1"\/"j1) <=> (i2"\/"
   j2) in FI & (i1"/\"j1) <=> (i2"/\"j2) in FI
 proof
@@ -2339,7 +2351,7 @@ EQREL_1:19;
   hence thesis by FILTER_0:def 11;
 end;
 
-theorem Th60:
+theorem Th59:
   i in Class(equivalence_wrt FI,k) & j in Class(equivalence_wrt FI
   ,k) implies i"\/"j in Class(equivalence_wrt FI,k) & i"/\" j in Class(
   equivalence_wrt FI,k)
@@ -2349,15 +2361,15 @@ A1: i in Class(equivalence_wrt FI,k) and
 A2: j in Class(equivalence_wrt FI,k);
 A3: i <=> k in FI by A1,Lm4;
 A4: j <=> k in FI by A2,Lm4;
-  k"/\"k = k by LATTICES:2;
+  k"/\"k = k;
   then
-A5: (i"/\"j) <=> k in FI by A3,A4,Th59;
-  k"\/"k = k by LATTICES:1;
-  then (i"\/"j) <=> k in FI by A3,A4,Th59;
+A5: (i"/\"j) <=> k in FI by A3,A4,Th58;
+  k"\/"k = k;
+  then (i"\/"j) <=> k in FI by A3,A4,Th58;
   hence thesis by A5,Lm4;
 end;
 
-theorem Th61:
+theorem Th60:
   c"\/"(c <=>d) in Class(equivalence_wrt <.d.),c) & for b st b in
   Class(equivalence_wrt <.d.),c) holds b [= c"\/"(c <=>d)
 proof
@@ -2365,35 +2377,34 @@ proof
 A1: c in A by EQREL_1:20;
 A2: (c <=>d)<=>c = c <=>(c <=>d);
 A3: d in <.d.);
-  c <=>(c <=>d) = d by Th54;
+  c <=>(c <=>d) = d by Th53;
   then c <=>d in A by A3,A2,Lm4;
-  hence (c"\/"(c <=>d)) in A by A1,Th60;
+  hence (c"\/"(c <=>d)) in A by A1,Th59;
   let b;
   assume b in A;
   then b<=>c in <.d.) by Lm4;
   then
 A4: d [= b<=>c by FILTER_0:15;
-  (b<=>c)` = (b"/\"c`)"\/"(b`"/\"c) by Th52;
+  (b<=>c)` = (b"/\"c`)"\/"(b`"/\"c) by Th51;
   then (b"/\"c`)"\/"(b`"/\"c) [= d` by A4,LATTICES:26;
   then
 A5: ((b"/\"c`)"\/"(b`"/\"c))"/\"c` [= d`"/\"c` by LATTICES:9;
 A6: ((b"/\"c`)"\/"(b`"/\"c))"/\"c` = ((b"/\"c`)"/\"c`)"\/"((b`"/\"c)"/\"c`)
   by LATTICES:def 11;
 A7: (b`"/\"c)"/\"c`= b`"/\"(c"/\"c`) by LATTICES:def 7;
-A8: b "/\"c`"\/"Bottom B = b"/\"c` by LATTICES:14;
+A8: b "/\"c`"\/"Bottom B = b"/\"c`;
 A9: (c`"/\"d`)"\/"(b"/\"c) [= (c`"/\"d`)"\/"c by FILTER_0:1,LATTICES:6;
-A10: b"/\"Top B = b by LATTICES:17;
+A10: b"/\"Top B = b;
 A11: (b"/\"c`)"\/"(b"/\" c) = b "/\"(c`"\/"c) by LATTICES:def 11;
-A12: b`"/\" Bottom B = Bottom B by LATTICES:15;
+A12: b`"/\" Bottom B = Bottom B;
 A13: c"\/"(c"/\"d)"\/"(c`"/\"d`) = c"\/"((c"/\"d)"\/"(c`"/\"d`)) by
 LATTICES:def 5;
 A14: c = c"\/"(c"/\"d) by LATTICES:def 8;
-A15: (c"/\"d)"\/"(c`"/\" d`) = c <=>d by Th51;
-A16: c` = c`"/\"c` by LATTICES:2;
+A15: (c"/\"d)"\/"(c`"/\" d`) = c <=>d by Th50;
 A17: c`"\/"c = Top B by LATTICES:21;
 A18: Bottom B = c"/\"c` by LATTICES:20;
   (b"/\"c`)"/\"c`= b"/\"(c `"/\" c`) by LATTICES:def 7;
-  then (b"/\"c`)"\/"(b"/\"c) [= (c`"/\"d`)"\/"(b"/\"c) by A5,A16,A6,A8,A7,A18
+  then (b"/\"c`)"\/"(b"/\"c) [= (c`"/\"d`)"\/"(b"/\"c) by A5,A6,A8,A7,A18
 ,A12,FILTER_0:1;
   hence thesis by A11,A17,A10,A9,A14,A15,A13,LATTICES:7;
 end;
@@ -2412,31 +2423,29 @@ A2: (b"\/"(b<=>a)) <=> b = b"\/"a
 A3: (b"\/"(b<=>a))` = b`"/\"(b<=>a)` by LATTICES:24;
 A4: b`"/\"((b"/\"a`)"\/"(b`"/\"a)) = (b`"/\"(b"/\"a`))"\/"(b`"/\"(b`"/\" a
     )) by LATTICES:def 11;
-A5: Bottom B"/\"a` = Bottom B by LATTICES:15;
+A5: Bottom B"/\"a` = Bottom B;
 A6: b"\/"((b"/\"a)"\/"(b`"/\"a`)) = b"\/"(b "/\"a)"\/"(b`"/\"a`) by
 LATTICES:def 5;
-A7: Bottom B"\/"(b`"/\"a) = b`"/\"a by LATTICES:14;
-A8: b<=>a = (b"/\"a)"\/"(b`"/\"a`) by Th51;
+A7: Bottom B"\/"(b`"/\"a) = b`"/\"a;
+A8: b<=>a = (b"/\"a)"\/"(b`"/\"a`) by Th50;
 A9: b`"/\"b = Bottom B by LATTICES:20;
-A10: b"/\"b = b by LATTICES:2;
 A11: b`"/\"(a`"/\" b) = b`"/\"a`"/\"b by LATTICES:def 7;
-A12: b"\/"Bottom B = b by LATTICES:14;
-A13: b`"/\"b` = b` by LATTICES:2;
+A12: b"\/"Bottom B = b;
 A14: b`"/\"(b`"/\"a) = b` "/\"b`"/\"a by LATTICES:def 7;
-A15: (b<=>a)` = (b"/\"a`)"\/"(b`"/\"a) by Th52;
+A15: (b<=>a)` = (b"/\"a`)"\/"(b`"/\"a) by Th51;
 A16: b`"/\"(b"/\"a`) = b`"/\"b"/\"a` by LATTICES:def 7;
 A17: (b"\/"(b`"/\"a`))"/\"b = (b"/\"b)"\/"(b`"/\"a`"/\"b) by LATTICES:def 11;
 A18: (b"/\"a)"\/"b = b by LATTICES:def 8;
     (b"\/"(b<=>a)) <=> b = ((b"\/"(b<=>a))"/\"b)"\/"((b"\/"(b<=>a))` "/\"
-    b` ) by Th51;
+    b` ) by Th50;
     hence (b"\/"(b<=>a)) <=> b = b"\/"((b"/\"a)"\/"(b`"/\" a)) by A3,A15,A4,A16
-,A9,A14,A13,A5,A7,A8,A6,A18,A17,A11,A10,A12,LATTICES:def 5
+,A9,A14,A5,A7,A8,A6,A18,A17,A11,A12,LATTICES:def 5
       .= b"\/"((b"\/"b`)"/\"a) by LATTICES:def 11
       .= b"\/"(Top B"/\"a) by LATTICES:21
-      .= b"\/"a by LATTICES:17;
+      .= b"\/"a;
   end;
   set S = LattRel [:B/\/F,latt F:];
-A19: field S = the carrier of [:B/\/F,latt F:] by Th33;
+A19: field S = the carrier of [:B/\/F,latt F:] by Th32;
   reconsider o1 = join(B), o2 = meet(B) as BinOp of E by Th13,Th14;
 A20: LattStr(#Class E,o1/\/E,o2/\/E#) = B/\/F by Def5;
   set R = LattRel B;
@@ -2444,13 +2453,13 @@ A20: LattStr(#Class E,o1/\/E,o2/\/E#) = B/\/F by Def5;
   consider h being UnOp of the carrier of B such that
 A21: h.b = F(b) from FUNCT_2:sch 4;
   take f = <:g,h:>;
-A22: field R = the carrier of B by Th33;
+A22: field R = the carrier of B by Th32;
 A23: dom h = dom g by A1,FUNCT_2:def 1;
   hence
 A24: dom f = field R by A1,A22,FUNCT_3:50;
 A25: h.b is Element of latt F
   proof
-    b"\/"(b<=>a) in Class(E,b) by Th61;
+    b"\/"(b<=>a) in Class(E,b) by Th60;
     then [b"\/"(b<=>a),b] in E by EQREL_1:19;
     then
 A26: (b"\/"(b<=>a)) <=> b in F by FILTER_0:def 11;
@@ -2481,26 +2490,26 @@ A30: x = [y,z] by A19,A29,A20,DOMAIN_1:1;
     consider b such that
 A31: y = Class(E,b) by EQREL_1:36;
     set ty = b"\/"(b<=>a);
-    ty <=> (ty <=> z) = z by Th54;
+    ty <=> (ty <=> z) = z by Th53;
     then (ty <=> z) <=> ty = z;
     then
 A32: [ty <=> z,ty] in E by FILTER_0:def 11;
-    ty in y by A31,Th61;
+    ty in y by A31,Th60;
     then y = Class(E,ty) by A31,EQREL_1:23;
     then
 A33: ty <=> z in y by A32,EQREL_1:19;
     then
 A34: y = Class(E,ty<=>z) by A31,EQREL_1:23;
     then
-A35: ty [= (ty<=>z)"\/"((ty<=>z)<=>a ) by A31,Th61;
+A35: ty [= (ty<=>z)"\/"((ty<=>z)<=>a ) by A31,Th60;
     y = Class(E,ty<=>z) by A31,A33,EQREL_1:23;
     then
 A36: g.(ty <=> z) = y by A1;
-    (ty<=>z)"\/"((ty<=>z)<=>a) [= ty by A31,A34,Th61;
+    (ty<=>z)"\/"((ty<=>z)<=>a) [= ty by A31,A34,Th60;
     then
 A37: (ty<=>z)"\/"((ty<=>z)<=>a) = ty by A35,LATTICES:8;
     h.(ty<=>z) = ((ty<=>z)"\/"((ty<=>z)<=>a)) <=> (ty<=>z) by A21;
-    then h.(ty <=> z) = z by A37,Th54;
+    then h.(ty <=> z) = z by A37,Th53;
     then x = f.(ty <=> z) by A22,A24,A30,A36,FUNCT_3:def 7;
     hence thesis by A22,A24,FUNCT_1:def 3;
   end;
@@ -2520,14 +2529,14 @@ A44: g.x9 = Class(E,x9) by A1;
 A45: f.y = [g.y9,h.y9] by A22,A24,FUNCT_3:def 7;
 A46: f.x = [g.x9,h.x9] by A22,A24,FUNCT_3:def 7;
     then
-A47: g.x = g.y by A45,A40,ZFMISC_1:27;
+A47: g.x = g.y by A45,A40,XTUPLE_0:1;
     then
-A48: y9"\/"(y9<=>a) [= x9"\/"(x9<=>a ) by A44,A41,Th61;
-    x9"\/"(x9<=>a) [= y9"\/"(y9<=>a) by A44,A41,A47,Th61;
+A48: y9"\/"(y9<=>a) [= x9"\/"(x9<=>a ) by A44,A41,Th60;
+    x9"\/"(x9<=>a) [= y9"\/"(y9<=>a) by A44,A41,A47,Th60;
     then
 A49: y9"\/"(y9<=>a) = x9"\/"(x9<=>a) by A48,LATTICES:8;
-    h.x = h.y by A46,A45,A40,ZFMISC_1:27;
-    hence thesis by A43,A42,A49,Th53;
+    h.x = h.y by A46,A45,A40,XTUPLE_0:1;
+    hence thesis by A43,A42,A49,Th52;
   end;
   let x,y;
 A50: the carrier of latt F = F by FILTER_0:49;
@@ -2536,27 +2545,27 @@ A50: the carrier of latt F = F by FILTER_0:49;
     assume
 A51: [x,y] in R;
     then reconsider x9 = x, y9 = y as Element of B by A22,RELAT_1:15;
-A52: x9 [= y9 by A51,Th32;
+A52: x9 [= y9 by A51,Th31;
     thus x in field R & y in field R by A51,RELAT_1:15;
 A53: Top B in F by FILTER_0:11;
-    x9"/\"Top B = x9 by LATTICES:17;
+    x9"/\"Top B = x9;
     then Top B [= x9 => y9 by A52,FILTER_0:def 7;
     then x9 => y9 in F by A53,FILTER_0:9;
     then
 A54: x9/\/F [= y9/\/F by Th16;
 A55: h.x9 = (x9"\/"(x9<=>a)) <=> x9 by A21;
-A56: y9"\/" (y9<=>a) in Class(E,y9) by Th61;
+A56: y9"\/" (y9<=>a) in Class(E,y9) by Th60;
 A57: (y9"\/"(y9<=>a)) <=> y9 = y9"\/"a by A2;
 A58: (x9"\/"(x9<=>a)) <=> x9 = x9"\/"a by A2;
 A59: h.y9 = (y9"\/"(y9<=>a)) <=> y9 by A21;
-    x9"\/"(x9<=>a) in Class(E,x9) by Th61;
+    x9"\/"(x9<=>a) in Class(E,x9) by Th60;
     then reconsider hx = h.x, hy = h.y as Element of latt F by A50,A55,A59,A56
 ,Lm4;
 A60: Class(E,x9) = g.x9 by A1;
     x9"\/"a [= y9"\/"a by A52,FILTER_0:1;
     then hx [= hy by A55,A59,A58,A57,FILTER_0:51;
     then
-A61: [x9/\/F,hx] [= [y9/\/F,hy] by A54,Th37;
+A61: [x9/\/F,hx] [= [y9/\/F,hy] by A54,Th36;
 A62: y9/\/F = Class(E,y9) by Def6;
 A63: Class(E,y9) = g.y9 by A1;
 A64: f.y9 = [g.y9,h.y9] by A22,A24,FUNCT_3:def 7;
@@ -2567,7 +2576,7 @@ A65: f.x9 = [g.x9,h.x9] by A22,A24,FUNCT_3:def 7;
   assume that
 A66: x in field R and
 A67: y in field R;
-  reconsider x9 = x, y9 = y as Element of B by A66,A67,Th33;
+  reconsider x9 = x, y9 = y as Element of B by A66,A67,Th32;
 A68: h.x9 = (x9"\/"(x9<=>a)) <=> x9 by A21;
 A69: f.y9 = [g.y9,h.y9] by A22,A24,FUNCT_3:def 7;
 A70: y9/\/F = Class(E,y9) by Def6;
@@ -2575,9 +2584,9 @@ A71: Class(E,x9) = g.x9 by A1;
 A72: (y9"\/"(y9<=>a)) <=> y9 = y9"\/"a by A2;
 A73: (x9"\/"(x9<=>a)) <=> x9 = x9"\/"a by A2;
 A74: y9"/\" x9 [= y9 by LATTICES:6;
-A75: y9"\/"(y9<=>a) in Class(E,y9) by Th61;
+A75: y9"\/"(y9<=>a) in Class(E,y9) by Th60;
 A76: h.y9 = (y9"\/"(y9<=>a)) <=> y9 by A21;
-  x9"\/"(x9<=>a) in Class(E,x9) by Th61;
+  x9"\/"(x9<=>a) in Class(E,x9) by Th60;
   then reconsider hx = h.x, hy = h.y as Element of latt F by A50,A68,A76,A75
 ,Lm4;
   assume
@@ -2586,16 +2595,16 @@ A78: f.x9 = [g.x9,h.x9] by A22,A24,FUNCT_3:def 7;
 A79: Class(E,y9) = g.y9 by A1;
   x9/\/F = Class(E,x9) by Def6;
   then
-A80: [x9/\/F,hx] [= [y9/\/F,hy] by A70,A71,A79,A78,A69,A77,Th32;
-  then x9/\/F [= y9/\/F by Th37;
+A80: [x9/\/F,hx] [= [y9/\/F,hy] by A70,A71,A79,A78,A69,A77,Th31;
+  then x9/\/F [= y9/\/F by Th36;
   then
 A81: x9 => y9 in F by Th16;
   x9 => y9 = x9`"\/"y9 by FILTER_0:42;
   then a [= x9`"\/"y9 by A81,FILTER_0:15;
   then
 A82: x9"/\"a [= x9"/\"(x9`"\/"y9) by LATTICES:9;
-A83: Bottom B"\/"(x9"/\"y9) = x9"/\"y9 by LATTICES:14;
-  hx [= hy by A80,Th37;
+A83: Bottom B"\/"(x9"/\"y9) = x9"/\"y9;
+  hx [= hy by A80,Th36;
   then x9"\/"a [= y9"\/"a by A68,A76,A73,A72,FILTER_0:51;
   then
 A84: x9"/\"(x9"\/"a) [= x9"/\"(y9"\/"a) by LATTICES:9;

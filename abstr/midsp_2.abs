@@ -2,7 +2,7 @@
 ::  by Micha{\l} Muzalewski
 ::
 :: Received June 21, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,7 +16,7 @@ environ
 
  vocabularies XBOOLE_0, ALGSTR_0, SUBSET_1, MIDSP_1, PRE_TOPC, FUNCT_1,
       ZFMISC_1, STRUCT_0, ROBBINS1, ARYTM_3, QC_LANG1, RLVECT_1, SUPINF_2,
-      ARYTM_1, VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2;
+      ARYTM_1, VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2, NAT_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, DOMAIN_1, STRUCT_0,
       ALGSTR_0, PRE_TOPC, RLVECT_1, VECTSP_1, MIDSP_1;
  constructors BINOP_1, DOMAIN_1, VECTSP_1, MIDSP_1, RLVECT_1;
@@ -24,11 +24,7 @@ environ
  requirements SUBSET, BOOLE;
 
 
-begin
-
-::
-:: GROUP OF FREE VECTORS
-::
+begin :: Group of Free Vectors
 
 reserve G for non empty addLoopStr;
 reserve x for Element of G;
@@ -44,16 +40,14 @@ definition
   x + x;
 end;
 
-definition
-  let M,G,w;
-  pred M,G are_associated_wrp w means
+definition let M,G,w;
+  attr w is associating means
 :: MIDSP_2:def 2
-
   p@q = r iff w.(p,r) = w.(r,q);
 end;
 
 theorem :: MIDSP_2:1
-  M,G are_associated_wrp w implies p@p = p;
+  w is associating implies p@p = p;
 
 reserve S for non empty set;
 reserve a,b,b9,c,c9,d for Element of S;
@@ -64,9 +58,9 @@ definition
   pred w is_atlas_of S,G means
 :: MIDSP_2:def 3
 
-  (for a,x ex b st w.(a,b) = x) & (for a,b
-,c holds w.(a,b) = w.(a,c) implies b = c) & for a,b,c holds w.(a,b) + w.(b,c) =
-  w.(a,c);
+  (for a,x ex b st w.(a,b) = x) &
+  (for a,b,c holds w.(a,b) = w.(a,c) implies b = c) &
+  for a,b,c holds w.(a,b) + w.(b,c) = w.(a,c);
 end;
 
 definition
@@ -104,13 +98,13 @@ theorem :: MIDSP_2:7
 
 theorem :: MIDSP_2:8
   for w being Function of [:the carrier of M,the carrier of M:],
-  the carrier of G holds w is_atlas_of the carrier of M,G & M,G
-  are_associated_wrp w implies p@q = q@p;
+  the carrier of G holds w is_atlas_of the carrier of M,G &
+  w is associating implies p@q = q@p;
 
 theorem :: MIDSP_2:9
   for w being Function of [:the carrier of M,the carrier of M:],
-  the carrier of G holds w is_atlas_of the carrier of M,G & M,G
-  are_associated_wrp w implies ex r st r@p = q;
+  the carrier of G holds w is_atlas_of the carrier of M,G &
+  w is associating implies ex r st r@p = q;
 
 reserve G for add-associative right_zeroed right_complementable Abelian non
   empty addLoopStr;
@@ -129,8 +123,8 @@ theorem :: MIDSP_2:12
 
 theorem :: MIDSP_2:13
   for w being Function of [:the carrier of M,the carrier of M:],
-  the carrier of G holds w is_atlas_of the carrier of M,G & M,G
-are_associated_wrp w implies for a,b,c,d being Point of M holds (a@b = c@d iff
+  the carrier of G holds w is_atlas_of the carrier of M,G &
+w is associating implies for a,b,c,d being Point of M holds (a@b = c@d iff
   w.(a,d) = w.(c,b));
 
 reserve w for Function of [:S,S:],the carrier of G;
@@ -202,13 +196,13 @@ theorem :: MIDSP_2:18
 theorem :: MIDSP_2:19
   for M being non empty MidStr, w being Function of [:the carrier
 of M,the carrier of M:],the carrier of G holds w is_atlas_of the carrier of M,G
-& M,G are_associated_wrp w implies for a,b,c,d being Point of M holds (a@b)@(c@
+& w is associating implies for a,b,c,d being Point of M holds (a@b)@(c@
   d) = (a@c)@(b@d);
 
 theorem :: MIDSP_2:20
   for M being non empty MidStr, w being Function of [:the carrier
 of M,the carrier of M:],the carrier of G holds w is_atlas_of the carrier of M,G
-  & M,G are_associated_wrp w implies M is MidSp;
+  & w is associating implies M is MidSp;
 
 reserve x,y for Element of vectgroup(M);
 
@@ -242,12 +236,13 @@ theorem :: MIDSP_2:22
 theorem :: MIDSP_2:23
   p@q = r iff vect(p,r) = vect(r,q);
 
-theorem :: MIDSP_2:24
-  M,vectgroup(M) are_associated_wrp vect(M);
+canceled;
 
-::
-:: REPRESENTATION THEOREM
-::
+registration let M;
+  cluster vect M -> associating;
+end;
+
+:: Representation Theorem
 
 reserve w for Function of [:S,S:],the carrier of G;
 
@@ -272,8 +267,7 @@ end;
 
 reserve a,b,c for Point of MidStr(#S,@(w)#);
 
-definition
-  let S,G,w;
+definition let S,G,w;
   func Atlas(w) -> Function of [:the carrier of MidStr(#S,@(w)#),the carrier
   of MidStr(#S,@(w)#):], the carrier of G equals
 :: MIDSP_2:def 10
@@ -281,7 +275,7 @@ definition
 end;
 
 theorem :: MIDSP_2:26
-  w is_atlas_of S,G implies MidStr(#S,@(w)#),G are_associated_wrp Atlas(w);
+  w is_atlas_of S,G implies Atlas(w) is associating;
 
 definition
   let S,G,w;
@@ -299,13 +293,14 @@ reserve a,b,b1,b2,c for Point of M;
 
 theorem :: MIDSP_2:27
   M is MidSp iff ex G st ex w st w is_atlas_of the carrier of M,G
-  & M,G are_associated_wrp w;
+  & w is associating;
 
 definition
   let M be non empty MidStr;
-  struct AtlasStr over M (# algebra -> non empty addLoopStr, function ->
-Function of [:the carrier of M,the carrier of M:], the carrier of the algebra
-  #);
+  struct AtlasStr over M
+    (# algebra -> non empty addLoopStr,
+      function -> Function of [:the carrier of M,the carrier of M:],
+        the carrier of the algebra #);
 end;
 
 definition
@@ -314,10 +309,10 @@ definition
   attr IT is ATLAS-like means
 :: MIDSP_2:def 12
 
-  the algebra of IT is midpoint_operator
-add-associative right_zeroed right_complementable Abelian & M,the algebra of IT
-  are_associated_wrp the function of IT & the function of IT is_atlas_of the
-  carrier of M,the algebra of IT;
+  the algebra of IT is midpoint_operator add-associative right_zeroed
+  right_complementable Abelian &
+  the function of IT is associating &
+  the function of IT is_atlas_of the carrier of M,the algebra of IT;
 end;
 
 registration
@@ -361,14 +356,12 @@ definition
   0.(the algebra of W);
 end;
 
-:: SOME USEFUL PROPOSITIONS
-
 theorem :: MIDSP_2:28
-  w is_atlas_of the carrier of M,G & M,G are_associated_wrp w
+  w is_atlas_of the carrier of M,G & w is associating
   implies (a@c = b1@b2 iff w.(a,c) = w.(a,b1) + w.(a,b2));
 
 theorem :: MIDSP_2:29
-  w is_atlas_of the carrier of M,G & M,G are_associated_wrp w
+  w is_atlas_of the carrier of M,G & w is associating
   implies (a@c = b iff w.(a,c) = Double w.(a,b));
 
 reserve M for MidSp;

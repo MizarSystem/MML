@@ -12,7 +12,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -45,13 +47,13 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="301">
+<Func kind="K" nr="325">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -65,13 +67,13 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="302">
+<Func kind="K" nr="326">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -84,24 +86,24 @@
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="48"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="304">
+<Func kind="K" nr="328">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="156"/>
-<Adjective nr="159"/>
-<Adjective nr="160"/>
+<Adjective nr="163"/>
+<Adjective nr="166"/>
+<Adjective nr="167"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GOBOARD2" nr="4">
@@ -109,26 +111,26 @@
 <Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="37"/>
 </Cluster>
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="37"/>
 </Cluster>
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="48"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="304">
+<Func kind="K" nr="328">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="156"/>
-<Adjective nr="161"/>
-<Adjective nr="162"/>
+<Adjective nr="163"/>
+<Adjective nr="168"/>
+<Adjective nr="169"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GOBOARD2" nr="5">
@@ -138,22 +140,22 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="305">
+<Func kind="K" nr="329">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="156"/>
-<Adjective nr="159"/>
-<Adjective nr="160"/>
-<Adjective nr="161"/>
-<Adjective nr="162"/>
+<Adjective nr="163"/>
+<Adjective nr="166"/>
+<Adjective nr="167"/>
+<Adjective nr="168"/>
+<Adjective nr="169"/>
 </Cluster>
 </FCluster>
 </Registrations>

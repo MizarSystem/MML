@@ -9,6 +9,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -30,9 +31,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="94"/>
-<Adjective nr="99"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="100"/>
+<Adjective nr="105"/>
 </Cluster>
 </RCluster>
 </Registrations>

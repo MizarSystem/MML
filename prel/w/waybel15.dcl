@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -44,29 +45,29 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="225">
+<Func kind="K" nr="233">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="59"/>
-<Adjective nr="152"/>
+<Adjective nr="65"/>
+<Adjective nr="158"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL15" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="61"/>
-<Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="142"/>
+<Adjective nr="67"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="148"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="153">
+<Adjective nr="159">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -77,7 +78,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="149">
+<Adjective nr="155">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

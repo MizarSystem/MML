@@ -3,7 +3,7 @@
 ::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
 ::
 :: Received March 23, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -24,15 +24,17 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       RELAT_1, COMPLEX1, XXREAL_2, ZFMISC_1, RELSET_1, FUNCT_2, RCOMP_1,
       PARTFUN1, MEASURE6, FINSEQ_1, FUNCOP_1, VALUED_1, SEQ_1, RFUNCT_1,
-      FINSEQ_2, SEQ_2, SEQ_4, BINOP_2, REAL_1, NAT_1, FDIFF_1, RVSUM_1,
-      MEASURE5,
-      INTEGRA1, INTEGRA2, INTEGRA3, FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
+      FINSEQ_2, COMSEQ_2,
+      SEQ_2, SEQ_4, BINOP_2, REAL_1, NAT_1, FDIFF_1, RVSUM_1,
+      MEASURE5, INTEGRA1, INTEGRA2, INTEGRA3, FCONT_1, FCONT_2, RFUNCT_2,
+      XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, RFUNCT_1, RFUNCT_2,
       FCONT_1, FCONT_2, FDIFF_1, ZFMISC_1, MEASURE6, INTEGRA2, SEQ_1, XXREAL_2,
-      RVSUM_1, SEQ_4, RELSET_1, FUNCOP_1, SEQ_2, INTEGRA3;
+      RVSUM_1, SEQ_4, RELSET_1, FUNCOP_1, SEQ_2, INTEGRA3, COMSEQ_2;
  registrations XBOOLE_0, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
       FINSEQ_1, FINSEQ_2, RCOMP_1, INTEGRA1, VALUED_0, VALUED_1, FUNCT_2,
-      FINSET_1, XXREAL_2, CARD_1, SEQ_2, RELSET_1, ZFMISC_1, MEASURE5;
+      FINSET_1, XXREAL_2, CARD_1, SEQ_2, RELSET_1, ZFMISC_1, MEASURE5,
+      COMSEQ_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions VALUED_1, XXREAL_2;
  theorems SEQ_4, SUBSET_1, PARTFUN1, INTEGRA1, RFUNCT_1, FUNCT_1, FINSEQ_1,
@@ -248,7 +250,7 @@ definition
   let A be non empty closed_interval Subset of REAL;
   let f be PartFunc of REAL,REAL;
   pred f is_integrable_on A means
-  :Def2:
+  :Def1:
   f||A is integrable;
 end;
 
@@ -272,7 +274,7 @@ A1: A c= dom f;
   hence thesis by PARTFUN1:def 2;
 end;
 
-theorem Th7:
+theorem
   for f being PartFunc of REAL,REAL st f|A is bounded_above holds f
   ||A|A is bounded_above
 proof
@@ -295,7 +297,7 @@ A3: x in A /\ dom (f||A);
   hence thesis by RFUNCT_1:70;
 end;
 
-theorem Th8:
+theorem
   for f being PartFunc of REAL,REAL st f|A is bounded_below holds f
   ||A|A is bounded_below
 proof
@@ -318,13 +320,13 @@ A3: x in A /\ dom (f||A);
   hence thesis by RFUNCT_1:71;
 end;
 
-theorem Th9:
+theorem
   for f being PartFunc of REAL,REAL st f|A is bounded holds f||A|A
   is bounded
 proof
   let f be PartFunc of REAL,REAL;
   assume f|A is bounded;
-  then f||A|A is bounded_above & f||A|A is bounded_below by Th7,Th8;
+  then f||A|A is bounded_above & f||A|A is bounded_below;
   hence thesis;
 end;
 
@@ -339,7 +341,7 @@ proof
 A1: A c= dom f;
   assume f|A is continuous;
   then
-A2: f.:A is bounded by A1,FCONT_1:29,RCOMP_1:10;
+A2: f.:A is real-bounded by A1,FCONT_1:29,RCOMP_1:10;
   then consider a be real number such that
 A3: a is UpperBound of f.:A by XXREAL_2:def 10;
 A4: for r be real number st r in f.:A holds r <= a by A3,XXREAL_2:def 1;
@@ -408,7 +410,7 @@ A8: y=g.x by FUNCT_1:def 3;
 A9: rng g = f.:A by A6,XBOOLE_0:def 10;
   assume
 A10: f|A is continuous;
-  then f.:A is bounded by A1,FCONT_1:29,RCOMP_1:10;
+  then f.:A is real-bounded by A1,FCONT_1:29,RCOMP_1:10;
   then
 A11: g|A is bounded_above & g|A is bounded_below by A9,INTEGRA1:12,14;
   reconsider g as Function of A,REAL by A3;
@@ -654,7 +656,7 @@ INTEGRA4:8,9;
     hence thesis by A51,SEQ_2:12;
   end;
   then g is integrable by A11,INTEGRA4:12;
-  hence thesis by Def2;
+  hence thesis by Def1;
 end;
 
 theorem Th12:
@@ -791,7 +793,7 @@ A28:    i+1 <> 1;
   consider s2 being FinSequence of REAL such that
 A29: len s2 = k1 & for i be Nat st i in dom s2 holds s2.i = G(i) from
   FINSEQ_2:sch 1;
-A30: for k st k in dom D holds rng(((f`|X)||A)|divset(D,k)) is bounded
+A30: for k st k in dom D holds rng(((f`|X)||A)|divset(D,k)) is real-bounded
   proof
     dom(f`|X) = X by A2,FDIFF_1:def 7;
     then reconsider g=f`|X as PartFunc of X,REAL by RELSET_1:5;
@@ -1073,7 +1075,7 @@ A99: r in divset(D,k) and
 A100: f.(upper_bound divset(D,k))-f.(lower_bound divset(D,k))
 =diff(f,r)*vol(divset(D,k
     )) by A6;
-A101: rng(((f`|X)||A)|divset(D,k)) is bounded by A30,A98;
+A101: rng(((f`|X)||A)|divset(D,k)) is real-bounded by A30,A98;
     diff(f,r) in rng(((f`|X)||A)|divset(D,k)) by A89,A98,A99;
     then diff(f,r) <= upper_bound rng(((f`|X)||A)|divset(D,k))
      by A101,SEQ_4:def 1;
@@ -1111,7 +1113,7 @@ A105: k in dom D;
     then
 A106: vol(divset(D,k)) >= 0 & (lower_bound rng(((f`|X)||A)|divset(D,k)))*vol(
     divset(D,k)) =(lower_volume((f`|X)||A,D)).k by INTEGRA1:9,def 7;
-A107: rng(((f`|X)||A)|divset(D,k)) is bounded by A30,A105;
+A107: rng(((f`|X)||A)|divset(D,k)) is real-bounded by A30,A105;
     consider r such that
 A108: r in divset(D,k) and
 A109: f.(upper_bound divset(D,k))-f.(lower_bound divset(D,k))
@@ -1155,7 +1157,7 @@ proof
 A1: A c= X & f is_differentiable_on X and
 A2: f`|X is_integrable_on A and
 A3: (f`|X)|A is bounded;
-  (f`|X)||A is integrable by A2,Def2;
+  (f`|X)||A is integrable by A2,Def1;
   then
 A4: upper_integral((f`|X)||A)=lower_integral((f`|X)||A) by INTEGRA1:def 16;
 A5: for r be real number st r in rng upper_sum_set((f`|X)||A)
@@ -1168,12 +1170,10 @@ holds f.(upper_bound
 A6: D in dom upper_sum_set((f`|X)||A) & r=(upper_sum_set((f`|X)||A)).
     D by PARTFUN1:3;
     reconsider D as Division of A by INTEGRA1:def 3;
-    r=upper_sum((f`|X)||A,D) by A6,FUNCT_2:def 1,INTEGRA1:def 10;
+    r=upper_sum((f`|X)||A,D) by A6,INTEGRA1:def 10;
     hence thesis by A1,A3,Th12;
   end;
-  dom upper_sum_set((f`|X)||A) = divs A by FUNCT_2:def 1,INTEGRA1:def 10;
-  then rng upper_sum_set((f`|X)||A) is non empty by RELAT_1:42;
-  then f.(upper_bound A)-f.(lower_bound A) <=
+  f.(upper_bound A)-f.(lower_bound A) <=
   lower_bound rng upper_sum_set((f`|X)||A) by A5,SEQ_4:43;
   then
 A7: upper_integral((f`|X)||A) >= f.(upper_bound A)-f.(lower_bound A)
@@ -1187,12 +1187,10 @@ A8: for r be real number st r in rng lower_sum_set((f`|X)||A) holds r <= f.
 A9: D in dom lower_sum_set((f`|X)||A) & r=(lower_sum_set((f`|X)||A)).
     D by PARTFUN1:3;
     reconsider D as Division of A by INTEGRA1:def 3;
-    r=lower_sum((f`|X)||A,D) by A9,FUNCT_2:def 1,INTEGRA1:def 11;
+    r=lower_sum((f`|X)||A,D) by A9,INTEGRA1:def 11;
     hence thesis by A1,A3,Th12;
   end;
-  dom lower_sum_set((f`|X)||A) = divs A by FUNCT_2:def 1,INTEGRA1:def 11;
-  then rng lower_sum_set((f`|X)||A) is non empty by RELAT_1:42;
-  then upper_bound rng lower_sum_set((f`|X)||A) <=
+  upper_bound rng lower_sum_set((f`|X)||A) <=
    f.(upper_bound A)-f.(lower_bound A) by A8,SEQ_4:45;
   then upper_integral((f`|X)||A) <=
    f.(upper_bound A)-f.(lower_bound A) by A4,INTEGRA1:def 15;
@@ -1203,7 +1201,7 @@ end;
 
 theorem Th14:
   for f being PartFunc of REAL,REAL st f|A is non-decreasing & A
-  c= dom f holds rng (f|A) is bounded
+  c= dom f holds rng (f|A) is real-bounded
 proof
   let f be PartFunc of REAL,REAL;
   assume that
@@ -1223,7 +1221,7 @@ A4: lower_bound A in dom f /\ A by RELAT_1:61;
 A5: x in dom(f|A) and
 A6: y=(f|A).x by PARTFUN1:3;
 A7: x in dom f /\ A by A5,RELAT_1:61;
-    y=f.x & x >= lower_bound A by A3,A5,A6,FUNCT_1:47,INTEGRA2:1;
+    y=f.x & x >= lower_bound A by A5,A6,FUNCT_1:47,INTEGRA2:1;
     hence thesis by A1,A7,A4,RFUNCT_2:24;
   end;
   then
@@ -1240,7 +1238,7 @@ A9: upper_bound A in dom f /\ A by RELAT_1:61;
 A10: x in dom(f|A) and
 A11: y=(f|A).x by PARTFUN1:3;
 A12: x in dom f /\ A by A10,RELAT_1:61;
-    y=f.x & x <= upper_bound A by A3,A10,A11,FUNCT_1:47,INTEGRA2:1;
+    y=f.x & x <= upper_bound A by A10,A11,FUNCT_1:47,INTEGRA2:1;
     hence thesis by A1,A12,A9,RFUNCT_2:24;
   end;
   then rng(f|A) is bounded_above by XXREAL_2:def 10;
@@ -1272,7 +1270,7 @@ A8: for x be real number st x in rng(f|A) holds x <= f.(upper_bound A)
     then consider x such that
 A9: x in dom (f|A) and
 A10: y=(f|A).x by PARTFUN1:3;
-    x in dom f /\ A & upper_bound A >= x by A3,A9,INTEGRA2:1,RELAT_1:61;
+    x in dom f /\ A & upper_bound A >= x by A9,INTEGRA2:1,RELAT_1:61;
     then f.(upper_bound A) >= f.x by A1,A7,RFUNCT_2:24;
     hence thesis by A9,A10,FUNCT_1:47;
   end;
@@ -1286,7 +1284,7 @@ A13: for y be real number st y in rng(f|A) holds y >= f.(lower_bound A)
     then consider x such that
 A14: x in dom (f|A) and
 A15: y=(f|A).x by PARTFUN1:3;
-    x in dom f /\ A & lower_bound A <= x by A3,A14,INTEGRA2:1,RELAT_1:61;
+    x in dom f /\ A & lower_bound A <= x by A14,INTEGRA2:1,RELAT_1:61;
     then f.(lower_bound A) <= f.x by A1,A12,RFUNCT_2:24;
     hence thesis by A14,A15,FUNCT_1:47;
   end;
@@ -1358,8 +1356,8 @@ upper_bound rng (f|divset(D,k)
     then
 A11: rng(f|divset(D,k)) <> {} by RELAT_1:42;
 A12: rng (f|divset(D,k))=rng ((f||A)|divset(D,k)) by A8,FUNCT_1:51;
-    rng(f|A) is bounded by A1,A2,Th14;
-    then rng(f|divset(D,k)) is bounded by A12,RELAT_1:70,XXREAL_2:45;
+    rng(f|A) is real-bounded by A1,A2,Th14;
+    then rng(f|divset(D,k)) is real-bounded by A12,RELAT_1:70,XXREAL_2:45;
     then
 A13: f.(upper_bound divset(D,k)) - f.(lower_bound divset(D,k)) >= 0
 by A10,A11,SEQ_4:11,XREAL_1:48;
@@ -1736,12 +1734,12 @@ A87:        upper_sum(f||A,D)-lower_sum(f||A,D) < r by A86,XXREAL_0:2;
     end;
 A88: upper_sum(f||A,T) is convergent & lower_sum(f||A,T) is convergent by A61
 ,A72,INTEGRA4:8,9;
-    then upper_sum(f||A,T)-lower_sum(f||A,T) is convergent by SEQ_2:11;
+    then upper_sum(f||A,T)-lower_sum(f||A,T) is convergent;
     then lim (upper_sum(f||A,T)-lower_sum(f||A,T)) = 0 by A73,SEQ_2:def 7;
     hence thesis by A88,SEQ_2:12;
   end;
   then f||A is integrable by A61,INTEGRA4:12;
-  hence thesis by Def2;
+  hence thesis by Def1;
 end;
 
 theorem
@@ -1809,7 +1807,7 @@ A14:    A = A /\ dom f by A2,XBOOLE_1:28
     end;
     dom f = dom -f by VALUED_1:8;
     then -f is_integrable_on A by A2,A3,Lm1;
-    then ((-f)||A) is integrable by Def2;
+    then ((-f)||A) is integrable by Def1;
     then
 A15: (-1)(#)((-f)||A) is integrable by A4,INTEGRA2:31;
 A16: dom ((-f)||A) = dom (-f) /\ A by RELAT_1:61
@@ -1834,7 +1832,7 @@ A21: for z being Element of A st z in A holds ((-1)(#)((-f)||A)).z = (f||
     end;
     A = dom (f||A) by A2,A18,XBOOLE_1:28;
     then (-1)(#)((-f)||A) = (f||A) by A21,A17,PARTFUN1:5;
-    hence thesis by A15,Def2;
+    hence thesis by A15,Def1;
   end;
 end;
 
@@ -1937,7 +1935,7 @@ definition
   assume
 A1: a<=b;
   func [' a,b '] -> non empty closed_interval Subset of REAL equals
-  :Def4:
+  :Def3:
   [.a,b.];
   correctness
   proof
@@ -1950,7 +1948,7 @@ definition
   let a,b be real number;
   let f be PartFunc of REAL,REAL;
   func integral(f,a,b) -> Real equals
-  :Def5:
+  :Def4:
   integral(f,[' a,b ']) if a<=b
   otherwise -integral(f,[' b,a ']);
   correctness;
@@ -1970,8 +1968,8 @@ A2: A = [.a1,b1.] by MEASURE5:14;
   assume A = [.a,b.];
   then
 A3: a1=a & b1=b by A2,INTEGRA1:5;
-  then integral(f,a,b)=integral(f,[' a,b ']) by A1,Def5;
-  hence thesis by A1,A2,A3,Def4;
+  then integral(f,a,b)=integral(f,[' a,b ']) by A1,Def4;
+  hence thesis by A1,A2,A3,Def3;
 end;
 
 theorem
@@ -1993,8 +1991,8 @@ A4: a1 = b & b1 = a by A2,INTEGRA1:5;
     per cases by A1,A4,XXREAL_0:1;
     suppose
 A5:   b < a;
-      then integral(f,a,b)=-integral(f,[' b,a ']) by Def5;
-      hence thesis by A3,A5,Def4;
+      then integral(f,a,b)=-integral(f,[' b,a ']) by Def4;
+      hence thesis by A3,A5,Def3;
     end;
     suppose
 A6:   b = a;
@@ -2004,8 +2002,8 @@ A6:   b = a;
         .=0;
       then
 A7:   integral(f,A)=0 by INTEGRA4:6;
-      integral(f,a,b)=integral(f,[' a,b ']) by A6,Def5;
-      hence thesis by A3,A6,A7,Def4;
+      integral(f,a,b)=integral(f,[' a,b ']) by A6,Def4;
+      hence thesis by A3,A6,A7,Def3;
     end;
   end;
   hence thesis;
@@ -2041,7 +2039,7 @@ A11: g||A is Function of A,REAL by Th6,FUNCT_2:68;
   X c= dom g by A2,FDIFF_1:def 6;
   then g is_integrable_on A by A3,A9,Th11,XBOOLE_1:1;
   then
-A12: g||A is integrable by Def2;
+A12: g||A is integrable by Def1;
 A13: A c= dom(g`|X) by A2,A3,FDIFF_1:def 7;
   then
 A14: (g`|X)||A is Function of A,REAL by Th6,FUNCT_2:68;
@@ -2050,19 +2048,19 @@ A14: (g`|X)||A is Function of A,REAL by Th6,FUNCT_2:68;
   then
 A15: ((f`|X)(#)g)|(A /\ A) is bounded by A5,RFUNCT_1:84;
   then
-A16: ((f`|X)(#)g)||A|A is bounded by Th9;
+A16: ((f`|X)(#)g)||A|A is bounded;
   f|X is continuous by A1,FDIFF_1:25;
   then
 A17: f|A is continuous by A3,FCONT_1:16;
   X c= dom f by A1,FDIFF_1:def 6;
   then f is_integrable_on A by A3,A17,Th11,XBOOLE_1:1;
   then
-A18: f||A is integrable by Def2;
+A18: f||A is integrable by Def1;
 A19: A c= dom(f`|X) by A1,A3,FDIFF_1:def 7;
   then
 A20: (f`|X)||A is Function of A,REAL by Th6,FUNCT_2:68;
-A21: (g`|X)||A is integrable & (g`|X)||A|A is bounded by A6,A7,Def2,Th9;
-A22: (f`|X)||A is integrable & (f`|X)||A|A is bounded by A4,A5,Def2,Th9;
+A21: (g`|X)||A is integrable & (g`|X)||A|A is bounded by A6,A7,Def1;
+A22: (f`|X)||A is integrable & (f`|X)||A|A is bounded by A4,A5,Def1;
   dom ((f`|X)(#)g) = dom (f`|X) /\ dom g by VALUED_1:def 4;
   then A c= dom((f`|X)(#)g) by A10,A19,XBOOLE_1:19;
   then
@@ -2077,7 +2075,7 @@ A25: f||A is Function of A,REAL by Th6,FUNCT_2:68;
   then
 A26: (f(#)(g`|X))|(A /\ A) is bounded by A7,RFUNCT_1:84;
   then
-A27: (f(#)(g`|X))||A|A is bounded by Th9;
+A27: (f(#)(g`|X))||A|A is bounded;
   ((f`|X)(#)g + f(#)(g`|X))|(A /\ A) is bounded by A15,A26,RFUNCT_1:83;
   then
 A28: ((f(#)g)`|X)|A is bounded by A1,A2,FDIFF_2:20;
@@ -2088,11 +2086,11 @@ A29: (f(#)g).(upper_bound A)=f.(upper_bound A)*g.(upper_bound A) &
   then A c= dom(f(#)(g`|X)) by A24,A13,XBOOLE_1:19;
   then
 A30: (f(#)(g`|X))||A is Function of A, REAL by Th6,FUNCT_2:68;
-  g||A|A is bounded by A9,A10,Th9,Th10;
+  g||A|A is bounded by A9,A10,Th10;
   then ((f`|X)||A)(#)(g||A) is integrable by A12,A11,A20,A22,INTEGRA4:29;
   then
 A31: ((f`|X)(#)g)||A is integrable by Th4;
-  f||A|A is bounded by A17,A24,Th9,Th10;
+  f||A|A is bounded by A17,A24,Th10;
   then (f||A)(#)((g`|X)||A) is integrable by A18,A25,A14,A21,INTEGRA4:29;
   then
 A32: (f(#)(g`|X))||A is integrable by Th4;
@@ -2105,7 +2103,7 @@ A33: integral(((f`|X)(#)g+f(#)(g`|X))||A) =integral((f`|X)(#)g,A) + integral
 INTEGRA1:57;
   then ((f`|X)(#)g + f(#)(g`|X))||A is integrable by Th5;
   then
-A34: (f(#)g)`|X is_integrable_on A by A8,Def2;
+A34: (f(#)g)`|X is_integrable_on A by A8,Def1;
   integral(((f(#)g)`|X)||A)=integral((f(#)g)`|X,A)
     .=(f(#)g).(upper_bound A)-(f(#)g).(lower_bound A)
     by A1,A2,A3,A34,A28,Th13,FDIFF_2:20;

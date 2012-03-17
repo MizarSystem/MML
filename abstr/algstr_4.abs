@@ -2,7 +2,7 @@
 ::  by Marco Riccardi
 ::
 :: Received October 20, 2009
-:: Copyright (c) 2009-2011 Association of Mizar Users
+:: Copyright (c) 2009-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,16 +19,16 @@ environ
       EQREL_1, MSUALG_6, STRUCT_0, GROUP_6, MSSUBFAM, FUNCT_2, SETFAM_1,
       REALSET1, CIRCUIT2, CARD_1, XXREAL_0, FINSEQ_1, ARYTM_1, CARD_3, ARYTM_3,
       NAT_1, XCMPLX_0, MCART_1, NAT_LAT, ALGSTR_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
-      ORDINAL1, NAT_1, NUMBERS, SETFAM_1, FUNCT_6, FUNCT_2, XXREAL_0, CLASSES1,
-      FINSEQ_1, CARD_3, AFINSQ_1, NAT_D, YELLOW_6, BINOP_1, STRUCT_0, ALGSTR_0,
-      RELSET_1, GROUP_6, MCART_1, NAT_LAT, PARTFUN1, REALSET1, EQREL_1, ALG_1,
-      GROUP_2;
- constructors XXREAL_0, NAT_1, CLASSES1, AFINSQ_1, NAT_D, YELLOW_6, BINOP_1,
-      RELSET_1, FACIRC_1, GROUP_6, NAT_LAT, REALSET1, SETFAM_1, EQREL_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, XCMPLX_0, RELAT_1,
+      FUNCT_1, ORDINAL1, NUMBERS, SETFAM_1, FUNCT_6, FUNCT_2, XXREAL_0,
+      CLASSES1, FINSEQ_1, CARD_3, AFINSQ_1, NAT_D, YELLOW_6, BINOP_1, STRUCT_0,
+      ALGSTR_0, RELSET_1, GROUP_6, MCART_1, NAT_LAT, PARTFUN1, REALSET1,
+      EQREL_1, ALG_1, GROUP_2;
+ constructors NAT_1, CLASSES1, AFINSQ_1, NAT_D, YELLOW_6, BINOP_1, RELSET_1,
+      FACIRC_1, GROUP_6, NAT_LAT, REALSET1, EQREL_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, CARD_1, FUNCT_2, INT_1, STRUCT_0, RELSET_1,
-      NAT_LAT, REALSET1, EQREL_1, GROUP_2;
+      NAT_LAT, REALSET1, EQREL_1, GROUP_2, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -37,7 +37,7 @@ begin :: Preliminaries
 registration
   let X be set;
   let f be Function of NAT, X;
-  let n be natural number;
+  let n be Nat;
   cluster f|n -> T-Sequence-like;
 end;
 
@@ -64,13 +64,13 @@ scheme :: ALGSTR_4:sch 1
  FuncRecursiveUniq { F(set) -> set, F1,F2() -> Function }:
   F1() = F2()
   provided
- dom F1() = NAT & for n being natural number holds F1().n = F(F1()|n) and
- dom F2() = NAT & for n being natural number holds F2().n = F(F2()|n);
+ dom F1() = NAT & for n being Nat holds F1().n = F(F1()|n) and
+ dom F2() = NAT & for n being Nat holds F2().n = F(F2()|n);
 
 scheme :: ALGSTR_4:sch 2
  FuncRecursiveExist { F(set) -> set }:
   ex f being Function st dom f = NAT &
-  for n being natural number holds f.n = F(f|n);
+  for n being Nat holds f.n = F(f|n);
 
 scheme :: ALGSTR_4:sch 3
  FuncRecursiveUniqu2
@@ -78,14 +78,14 @@ scheme :: ALGSTR_4:sch 3
     F1,F2() -> Function of NAT, X()}:
   F1() = F2()
   provided
- for n being natural number holds F1().n = F(F1()|n) and
- for n being natural number holds F2().n = F(F2()|n);
+ for n being Nat holds F1().n = F(F1()|n) and
+ for n being Nat holds F2().n = F(F2()|n);
 
 scheme :: ALGSTR_4:sch 4
  FuncRecursiveExist2
   { X() -> non empty set, F(XFinSequence of X()) -> Element of X() }:
   ex f being Function of NAT, X() st
-  for n being natural number holds f.n = F(f|n);
+  for n being Nat holds f.n = F(f|n);
 
 definition
   let f,g be Function;
@@ -360,15 +360,15 @@ definition
   func free_magma_seq X ->
     Function of NAT, bool the_universe_of(X \/ NAT) means
 :: ALGSTR_4:def 13
-    it.0 = {} & it.1 = X & for n being natural number st n>=2 holds
+    it.0 = {} & it.1 = X & for n being Nat st n>=2 holds
       ex fs being FinSequence st len fs = n-1 &
-      (for p being natural number st p>=1 & p<=n-1 holds
+      (for p being Nat st p>=1 & p<=n-1 holds
       fs.p = [: it.p, it.(n-p) :] ) & it.n = Union disjoin fs;
 end;
 
 definition
   let X be set;
-  let n be natural number;
+  let n be Nat;
   func free_magma(X,n) equals
 :: ALGSTR_4:def 14
 (free_magma_seq X).n;
@@ -376,7 +376,7 @@ end;
 
 registration
   let X be non empty set;
-  let n be non zero natural number;
+  let n be non zero Nat;
   cluster free_magma(X,n) -> non empty;
 end;
 
@@ -396,7 +396,7 @@ theorem :: ALGSTR_4:19
     [:[:[:[:X,X:],{1}:],X:],{2}:];
 
 reserve x,y,Y for set;
-reserve n,m,p for natural number;
+reserve n,m,p for Nat;
 
 theorem :: ALGSTR_4:20
   n >= 2 implies ex fs being FinSequence st len fs = n-1 &
@@ -494,7 +494,7 @@ theorem :: ALGSTR_4:29
 definition
   let X be set;
   let w be Element of free_magma X;
-  func length w -> natural number equals
+  func length w -> Nat equals
 :: ALGSTR_4:def 18
   w`2 if X is non empty otherwise 0;
 end;
@@ -522,7 +522,7 @@ theorem :: ALGSTR_4:35
 
 definition
   let X be set;
-  let n be natural number;
+  let n be Nat;
   func canon_image(X,n) -> Function of free_magma(X,n),free_magma X means
 :: ALGSTR_4:def 19
 
@@ -531,7 +531,7 @@ end;
 
 registration
   let X be set;
-  let n be natural number;
+  let n be Nat;
   cluster canon_image(X,n) -> one-to-one;
 end;
 
@@ -553,7 +553,7 @@ theorem :: ALGSTR_4:38
 definition
   let X be non empty set;
   let M be non empty multMagma;
-  let n,m be non zero natural number;
+  let n,m be non zero Nat;
   let f be Function of free_magma(X,n),M;
   let g be Function of free_magma(X,m),M;
   func [:f,g:] ->

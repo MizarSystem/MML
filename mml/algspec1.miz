@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received September 7, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,14 +16,15 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, XBOOLE_0, TARSKI, FUNCT_4, PARTFUN1, SUBSET_1,
       PBOOLE, STRUCT_0, MSUALG_1, MARGREL1, CATALG_1, PUA2MSS1, TREES_1,
-      FINSEQ_1, INSTALG1, FUNCSDOM, MSUALG_6, PROB_2, CARD_3, ALGSPEC1;
+      FINSEQ_1, INSTALG1, FUNCSDOM, MSUALG_6, PROB_2, CARD_3, ALGSPEC1, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, MSAFREE1, FINSEQ_1,
       PBOOLE, RELSET_1, PARTFUN1, FINSEQ_2, FUNCT_4, LANG1, FUNCT_2, STRUCT_0,
       CARD_3, MSUALG_1, PROB_2, PUA2MSS1, CIRCCOMB, MSUALG_6, INSTALG1,
       CATALG_1;
  constructors MSAFREE1, CIRCCOMB, PUA2MSS1, MSUALG_6, CATALG_1, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, PBOOLE, STRUCT_0, MSUALG_1,
-      MSUALG_2, CIRCCOMB, MSUALG_6, INSTALG1, CATALG_1, RELSET_1;
+      MSUALG_2, CIRCCOMB, MSUALG_6, INSTALG1, CATALG_1, RELSET_1, FINSEQ_1,
+      FUNCT_4;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, PARTFUN1, STRUCT_0, MSUALG_1, CIRCCOMB, PUA2MSS1,
       INSTALG1, XBOOLE_0, FUNCT_2;
@@ -268,7 +269,7 @@ definition
   (id X) +* (f|X);
   coherence
   proof
-    dom id X = X by RELAT_1:45;
+    dom id X = X;
     then dom ((id X) +* f|X) = X \/ dom (f|X) by FUNCT_4:def 1;
     then dom ((id X) +* f|X) = X by RELAT_1:58,XBOOLE_1:12;
     hence thesis by PARTFUN1:def 2,RELAT_1:def 18;
@@ -280,7 +281,7 @@ theorem Th7:
   dom f) \/ f.:X
 proof
   let X be set, f be Function;
-  dom id X = X by RELAT_1:45;
+  dom id X = X;
   hence rng (X-indexing f) = (id X).:(X\dom (f|X)) \/ rng (f|X) by FRECHET:12
     .= (id X).:(X\dom (f|X)) \/ f.:X by RELAT_1:115
     .= (X\dom (f|X)) \/ f.:X by FUNCT_1:92
@@ -294,8 +295,8 @@ theorem Th8:
 proof
   let X be non empty set, f be Function, x be Element of X;
   ((id X) +* f)|X = (id X)|X +* f|X by FUNCT_4:71
-    .= (id X)|(dom id X) +* f|X by RELAT_1:45
-    .= X-indexing f by RELAT_1:69;
+    .= (id X)|(dom id X) +* f|X
+    .= X-indexing f;
   hence thesis by FUNCT_1:49;
 end;
 
@@ -316,7 +317,7 @@ theorem Th10:
   for X being set, f being Function st dom f = X holds X-indexing f = f
 proof
   let X be set, f be Function;
-A1: dom id X = X by RELAT_1:45;
+A1: dom id X = X;
   assume
 A2: dom f = X;
   then f|X = f by RELAT_1:68;
@@ -338,26 +339,24 @@ theorem Th12:
   for X being set, f being Function holds X-indexing ((id X)+*f) = X-indexing f
 proof
   let X be set, f be Function;
-A1: dom id X = X by RELAT_1:45;
   thus X-indexing ((id X)+*f) = (id X)+*(((id X)|X)+*(f|X)) by FUNCT_4:71
-    .= (id X)+*((id X)+*(f|X)) by A1,RELAT_1:68
+    .= (id X)+*((id X)+*(f|X))
     .= (id X)+*(id X)+*(f|X) by FUNCT_4:14
     .= X-indexing f;
 end;
 
-theorem Th13:
+theorem
   for X being set, f being Function st f c= id X holds X-indexing f = id X
 proof
   let X be set, f be Function;
-A1: dom id X = X by RELAT_1:45;
   assume f c= id X;
   then (id X)+*f = id X by FUNCT_4:98;
   hence X-indexing f = X-indexing id X by Th12
-    .= id X by A1,Th10;
+    .= id X;
 end;
 
 theorem
-  for X being set holds X-indexing {} = id X by Th13,XBOOLE_1:2;
+  for X being set holds X-indexing {} = id X;
 
 theorem
   for X being set, f being Function st X c= dom f holds X-indexing f = f |X
@@ -366,14 +365,14 @@ proof
   assume X c= dom f;
   then
 A1: dom (f|X) = X by RELAT_1:62;
-  thus X-indexing f = X-indexing (f|X) by RELAT_1:72
+  thus X-indexing f = X-indexing (f|X)
     .= f|X by A1,Th10;
 end;
 
 theorem
   for f being Function holds {}-indexing f = {};
 
-theorem Th18:
+theorem Th17:
   for X,Y being set, f being Function st X c= Y holds (Y-indexing
   f)|X = X-indexing f
 proof
@@ -386,7 +385,7 @@ A2: (f|Y)|X = f|X by RELAT_1:74;
   hence thesis by A2,FUNCT_4:71;
 end;
 
-theorem Th19:
+theorem Th18:
   for X,Y being set, f being Function holds (X \/ Y)-indexing f =
   (X-indexing f) +* (Y-indexing f)
 proof
@@ -412,29 +411,29 @@ A4: dom (f|X) /\ dom id Y c= dom (f|Y) by A3,XBOOLE_1:27;
     .= (X-indexing f)+*(Y-indexing f) by FUNCT_4:14;
 end;
 
-theorem Th20:
+theorem Th19:
   for X,Y being set, f being Function holds X-indexing f tolerates Y-indexing f
 proof
   let X,Y be set, f be Function;
-  Y-indexing f = ((X \/ Y)-indexing f)|Y by Th18,XBOOLE_1:7;
+  Y-indexing f = ((X \/ Y)-indexing f)|Y by Th17,XBOOLE_1:7;
   then
 A1: Y-indexing f c= (X \/ Y) -indexing f by RELAT_1:59;
-  X-indexing f = ((X \/ Y)-indexing f)|X by Th18,XBOOLE_1:7;
+  X-indexing f = ((X \/ Y)-indexing f)|X by Th17,XBOOLE_1:7;
   then X-indexing f c= (X \/ Y)-indexing f by RELAT_1:59;
   hence thesis by A1,PARTFUN1:52;
 end;
 
-theorem Th21:
+theorem Th20:
   for X,Y being set, f being Function holds (X \/ Y)-indexing f =
   (X-indexing f) \/ (Y-indexing f)
 proof
   let X,Y be set, f be Function;
-A1: X-indexing f tolerates Y-indexing f by Th20;
-  (X \/ Y)-indexing f = (X-indexing f) +* (Y-indexing f) by Th19;
+A1: X-indexing f tolerates Y-indexing f by Th19;
+  (X \/ Y)-indexing f = (X-indexing f) +* (Y-indexing f) by Th18;
   hence thesis by A1,FUNCT_4:30;
 end;
 
-theorem Th22:
+theorem Th21:
   for X being non empty set, f,g being Function st rng g c= X
   holds (X-indexing f)*g = ((id X) +* f)*g
 proof
@@ -453,7 +452,7 @@ A6: g.x in rng g by A4,FUNCT_1:def 3;
     ((X-indexing f)*g).x = (X-indexing f).(g.x) by A4,FUNCT_1:13;
     hence ((X-indexing f)*g).x = (((id X) +* f)*g).x by A1,A5,A6,Th8;
   end;
-  dom id X = X by RELAT_1:45;
+  dom id X = X;
   then
 A7: dom ((id X) +* f) = X \/ dom f by FUNCT_4:def 1;
   X c= X \/ dom f by XBOOLE_1:7;
@@ -510,7 +509,7 @@ definition
   existence
   proof
     defpred P[set,set] means f.$2 = $1;
-A1: dom id rng f = rng f by RELAT_1:45;
+A1: dom id rng f = rng f;
 A2: for o being set st o in rng f ex y being set st y in dom f & P[o,y] by
 FUNCT_1:def 3;
     consider g being Function such that
@@ -533,7 +532,7 @@ A7:   (f*g).x = f.(g.x) by A3,FUNCT_1:13;
   end;
 end;
 
-theorem Th24:
+theorem Th23:
   for f being Function, g being rng-retract of f holds rng g c= dom f
 proof
   let f,g be Function;
@@ -544,13 +543,13 @@ A2: f*g = id rng f;
   hence thesis by FUNCT_1:15;
 end;
 
-theorem Th25:
+theorem Th24:
   for f being Function, g being rng-retract of f for x being set
   st x in rng f holds g.x in dom f & f.(g.x) = x
 proof
   let f be Function, g be rng-retract of f, x be set such that
 A1: x in rng f;
-A2: rng g c= dom f by Th24;
+A2: rng g c= dom f by Th23;
 A3: dom g = rng f by Def2;
   then g.x in rng g by A1,FUNCT_1:def 3;
   hence g.x in dom f by A2;
@@ -577,15 +576,15 @@ A1: f is one-to-one;
 A2: rng f = dom g by Def2;
 A3: rng g = dom f
   proof
-    thus rng g c= dom f by Th24;
+    thus rng g c= dom f by Th23;
     let x be set;
     assume
 A4: x in dom f;
     then
 A5: f.x in rng f by FUNCT_1:def 3;
     then
-A6: g.(f.x) in dom f by Th25;
-    f.(g.(f.x)) = f.x by A5,Th25;
+A6: g.(f.x) in dom f by Th24;
+    f.(g.(f.x)) = f.x by A5,Th24;
     then x = g.(f.x) by A1,A4,A6,FUNCT_1:def 4;
     hence thesis by A2,A5,FUNCT_1:def 3;
   end;
@@ -595,13 +594,13 @@ A6: g.(f.x) in dom f by Th25;
 A7: x in dom f and
 A8: y in dom g;
 A9: g.y in rng g by A8,FUNCT_1:def 3;
-    f.(g.y) = y by A2,A8,Th25;
+    f.(g.y) = y by A2,A8,Th24;
     hence f.x = y iff g.y = x by A1,A3,A7,A9,FUNCT_1:def 4;
   end;
   hence thesis by A1,A2,A3,FUNCT_1:38;
 end;
 
-theorem Th28:
+theorem Th27:
   for f1,f2 being Function st f1 tolerates f2 for g1 being
 rng-retract of f1, g2 being rng-retract of f2 holds g1+*g2 is rng-retract of f1
   +*f2
@@ -616,8 +615,8 @@ A3: dom g1 = rng f1 by Def2;
 A4: dom g2 = rng f2 by Def2;
   thus dom (g1+*g2) = dom g1 \/ dom g2 by FUNCT_4:def 1
     .= rng (f1+*f2) by A2,A3,A4,RELAT_1:12;
-A5: rng g2 c= dom f2 by Th24;
-  rng g1 c= dom f1 by Th24;
+A5: rng g2 c= dom f2 by Th23;
+  rng g1 c= dom f1 by Th23;
   hence (f1+*f2)*(g1+*g2) = (f1*g1)+*(f2*g2) by A1,A5,FUNCT_4:69
     .= (id rng f1)+*(f2*g2) by Def2
     .= (id rng f1)+*(id rng f2) by Def2
@@ -635,7 +634,7 @@ A2: f2+*f1 = f2 by A1,FUNCT_4:98;
   set g = the rng-retract of f2;
   let g1 be rng-retract of f1;
   f1 tolerates f2 by A1,PARTFUN1:52;
-  then reconsider g2 = g+*g1 as rng-retract of f2 by A2,Th28;
+  then reconsider g2 = g+*g1 as rng-retract of f2 by A2,Th27;
   take g2;
   thus thesis by FUNCT_4:25;
 end;
@@ -654,7 +653,7 @@ the_arity_of o2 & ((id the carrier of S) +* f).the_result_sort_of o1 = ((id the
   carrier of S) +* f).the_result_sort_of o2;
 end;
 
-theorem Th30:
+theorem Th29:
   for S being non empty non void ManySortedSign, f,g being
 Function holds f,g form_a_replacement_in S iff for o1,o2 being OperSymbol of S
   st ((the carrier' of S)-indexing g).o1 = ((the carrier' of S)-indexing g).o2
@@ -681,8 +680,8 @@ A4: ((id the carrier' of S) +* g).o1 = ((the carrier' of S)-indexing g).o2
     +* f)*the_arity_of o2 by A1,Def3;
     hence
     ((the carrier of S)-indexing f)*the_arity_of o1 = ((id the carrier of
-    S) +* f)*the_arity_of o2 by A2,Th22
-      .= ((the carrier of S)-indexing f)*the_arity_of o2 by A3,Th22;
+    S) +* f)*the_arity_of o2 by A2,Th21
+      .= ((the carrier of S)-indexing f)*the_arity_of o2 by A3,Th21;
     thus ((the carrier of S)-indexing f).the_result_sort_of o1 = ((id the
     carrier of S) +* f).the_result_sort_of o1 by Th8
       .= ((id the carrier of S) +* f).the_result_sort_of o2 by A1,A4,Def3
@@ -705,15 +704,15 @@ A8: ((the carrier' of S)-indexing g).o1 = ((id the carrier' of S) +* g).o2
   then ((the carrier of S)-indexing f)*the_arity_of o1 = ((the carrier of S)
   -indexing f)*the_arity_of o2 by A5;
   hence ((id the carrier of S) +* f)*the_arity_of o1 = ((the carrier of S)
-  -indexing f)*the_arity_of o2 by A6,Th22
-    .= ((id the carrier of S) +* f)*the_arity_of o2 by A7,Th22;
+  -indexing f)*the_arity_of o2 by A6,Th21
+    .= ((id the carrier of S) +* f)*the_arity_of o2 by A7,Th21;
   thus ((id the carrier of S) +* f).the_result_sort_of o1 = ((the carrier of S
   )-indexing f).the_result_sort_of o1 by Th8
     .= ((the carrier of S)-indexing f).the_result_sort_of o2 by A5,A8
     .= ((id the carrier of S) +* f).the_result_sort_of o2 by Th8;
 end;
 
-theorem Th31:
+theorem Th30:
   for S being non empty non void ManySortedSign, f,g being
 Function holds f,g form_a_replacement_in S iff (the carrier of S)-indexing f, (
   the carrier' of S)-indexing g form_a_replacement_in S
@@ -732,18 +731,18 @@ A2: (id the carrier of S)+* ((id the carrier of S)+*(f|the carrier of S) ) =
 carrier' of S)-indexing g).o1 = ((the carrier' of S)-indexing g).o2 holds ((the
   carrier of S)-indexing f)*the_arity_of o1 = ((the carrier of S)-indexing f)*
 the_arity_of o2 & ((the carrier of S)-indexing f).the_result_sort_of o1 = ((the
-  carrier of S)-indexing f).the_result_sort_of o2 by Th30;
+  carrier of S)-indexing f).the_result_sort_of o2 by Th29;
   hence thesis by A1,A2,Def3;
 end;
 
 reserve S,S9 for non void Signature,
   f,g for Function;
 
-theorem Th32:
+theorem Th31:
   f,g form_morphism_between S,S9 implies f,g form_a_replacement_in S
 proof
-A1: dom id the carrier of S = the carrier of S by RELAT_1:45;
-A2: dom id the carrier' of S = the carrier' of S by RELAT_1:45;
+A1: dom id the carrier of S = the carrier of S;
+A2: dom id the carrier' of S = the carrier' of S;
   assume
 A3: f,g form_morphism_between S,S9;
   then dom g = the carrier' of S by PUA2MSS1:def 12;
@@ -774,21 +773,15 @@ end;
 theorem
   f, {} form_a_replacement_in S
 proof
-  reconsider g = {} as Function;
-  f, g form_a_replacement_in S
-  proof
-    let o1,o2 be OperSymbol of S;
-A1: (id the carrier' of S) +* g = id the carrier' of S by FUNCT_4:21;
-    assume
-    ((id the carrier' of S) +* g).o1 = ((id the carrier' of S) +* g). o2;
-    then o1 = (id the carrier' of S).o2 by A1,FUNCT_1:17
-      .= o2 by FUNCT_1:17;
-    hence thesis;
-  end;
+  let o1,o2 be OperSymbol of S;
+  assume
+  ((id the carrier' of S) +* {}).o1 = ((id the carrier' of S) +* {}). o2;
+  then o1 = (id the carrier' of S).o2 by FUNCT_1:17
+    .= o2 by FUNCT_1:17;
   hence thesis;
 end;
 
-theorem Th34:
+theorem Th33:
   g is one-to-one & (the carrier' of S) /\ rng g c= dom g implies
   f,g form_a_replacement_in S
 proof
@@ -833,7 +826,7 @@ A1: g is one-to-one;
   assume rng g misses the carrier' of S;
   then (the carrier' of S) /\ rng g = {} by XBOOLE_0:def 7;
   then (the carrier' of S) /\ rng g c= dom g by XBOOLE_1:2;
-  hence thesis by A1,Th34;
+  hence thesis by A1,Th33;
 end;
 
 registration
@@ -847,7 +840,7 @@ end;
 definition
   let S be non empty non void ManySortedSign;
   let f,g be Function such that
-A1: f,g form_a_replacement_in S;
+X1: f,g form_a_replacement_in S;
   func S with-replacement (f,g) -> strict non empty non void ManySortedSign
   means
   :Def4:
@@ -860,56 +853,56 @@ A1: f,g form_a_replacement_in S;
     set f1 = (the carrier of S)-indexing f, f2 = f1;
     let S1,S2 be strict non empty non void ManySortedSign;
     assume that
-A2: f1, g1 form_morphism_between S, S1 and
-A3: the carrier of S1 = rng f1 and
-A4: the carrier' of S1 = rng g1 and
-A5: f2, g2 form_morphism_between S, S2 and
-A6: the carrier of S2 = rng f2 and
-A7: the carrier' of S2 = rng g2;
-A8: the ResultSort of S1 = the ResultSort of S2
+A1: f1, g1 form_morphism_between S, S1 and
+A2: the carrier of S1 = rng f1 and
+A3: the carrier' of S1 = rng g1 and
+A4: f2, g2 form_morphism_between S, S2 and
+A5: the carrier of S2 = rng f2 and
+A6: the carrier' of S2 = rng g2;
+A7: the ResultSort of S1 = the ResultSort of S2
     proof
-      thus the carrier' of S1 = the carrier' of S2 by A4,A7;
+      thus the carrier' of S1 = the carrier' of S2 by A3,A6;
       let o be OperSymbol of S1;
       consider o1 being set such that
-A9:   o1 in dom g1 and
-A10:  o = g1.o1 by A4,FUNCT_1:def 3;
+A8:   o1 in dom g1 and
+A9:  o = g1.o1 by A3,FUNCT_1:def 3;
       consider o2 being set such that
-A11:  o2 in dom g2 and
-A12:  o = g2.o2 by A4,FUNCT_1:def 3;
-      reconsider o1,o2 as OperSymbol of S by A2,A9,A11,PUA2MSS1:def 12;
-      thus (the ResultSort of S1).o = ((the ResultSort of S1)*g1).o1 by A9,A10,
+A10:  o2 in dom g2 and
+A11:  o = g2.o2 by A3,FUNCT_1:def 3;
+      reconsider o1,o2 as OperSymbol of S by A8,A10;
+      thus (the ResultSort of S1).o = ((the ResultSort of S1)*g1).o1 by A8,A9,
 FUNCT_1:13
-        .= (f1*the ResultSort of S).o1 by A2,PUA2MSS1:def 12
+        .= (f1*the ResultSort of S).o1 by A1,PUA2MSS1:def 12
         .= f1.the_result_sort_of o1 by FUNCT_2:15
-        .= f2.the_result_sort_of o2 by A1,A10,A12,Th30
+        .= f2.the_result_sort_of o2 by X1,A9,A11,Th29
         .= (f2*the ResultSort of S).o2 by FUNCT_2:15
-        .= ((the ResultSort of S2)*g2).o2 by A5,PUA2MSS1:def 12
-        .= (the ResultSort of S2).o by A11,A12,FUNCT_1:13;
+        .= ((the ResultSort of S2)*g2).o2 by A4,PUA2MSS1:def 12
+        .= (the ResultSort of S2).o by A10,A11,FUNCT_1:13;
     end;
     the Arity of S1 = the Arity of S2
     proof
-      thus the carrier' of S1 = the carrier' of S2 by A4,A7;
+      thus the carrier' of S1 = the carrier' of S2 by A3,A6;
       let o be OperSymbol of S1;
       consider o2 being set such that
-A13:  o2 in dom g2 and
-A14:  o = g2.o2 by A4,FUNCT_1:def 3;
-      reconsider o2 as OperSymbol of S by A2,A13,PUA2MSS1:def 12;
-      thus (the Arity of S1).o = f2*the_arity_of o2 by A2,A14,PUA2MSS1:def 12
-        .= (the Arity of S2).o by A5,A14,PUA2MSS1:def 12;
+A12:  o2 in dom g2 and
+A13:  o = g2.o2 by A3,FUNCT_1:def 3;
+      reconsider o2 as OperSymbol of S by A12;
+      thus (the Arity of S1).o = f2*the_arity_of o2 by A1,A13,PUA2MSS1:def 12
+        .= (the Arity of S2).o by A4,A13,PUA2MSS1:def 12;
     end;
-    hence thesis by A3,A4,A6,A7,A8;
+    hence thesis by A2,A3,A5,A6,A7;
   end;
   existence
   proof
     set g9 = (the carrier' of S)-indexing g, gg = g9;
     set f9 = (the carrier of S)-indexing f, ff = f9;
-A15: dom g9 = the carrier' of S by PARTFUN1:def 2;
+A14: dom g9 = the carrier' of S by PARTFUN1:def 2;
     reconsider X = rng f9, Y = rng g9 as non empty set;
-    reconsider g9 as Function of the carrier' of S, Y by A15,FUNCT_2:1;
+    reconsider g9 as Function of the carrier' of S, Y by A14,FUNCT_2:1;
     set G = the rng-retract of g9;
-A16: rng G c= the carrier' of S by A15,Th24;
+A15: rng G c= the carrier' of S by A14,Th23;
     dom G = rng g9 by Def2;
-    then reconsider G as Function of Y, the carrier' of S by A16,FUNCT_2:def 1
+    then reconsider G as Function of Y, the carrier' of S by A15,FUNCT_2:def 1
 ,RELSET_1:4;
     dom f9 = the carrier of S by PARTFUN1:def 2;
     then reconsider f9 as Function of the carrier of S, X by FUNCT_2:1;
@@ -922,22 +915,22 @@ PARTFUN1:def 2;
       thus rng ff c= the carrier of R & rng gg c= the carrier' of R;
       now
         let x be OperSymbol of S;
-A17:    g9.(G.(g9.x)) = g9.x by Th25;
+A16:    g9.(G.(g9.x)) = g9.x by Th24;
         thus (r*g9).x = (the ResultSort of R).(g9.x) by FUNCT_2:15
           .= (f9*the ResultSort of S).(G.(g9.x)) by FUNCT_2:15
           .= f9.(the_result_sort_of (G.(g9.x))) by FUNCT_2:15
-          .= f9.(the_result_sort_of x) by A1,A17,Th30
+          .= f9.(the_result_sort_of x) by X1,A16,Th29
           .= (f9*the ResultSort of S).x by FUNCT_2:15;
       end;
       hence ff*the ResultSort of S = (the ResultSort of R)*gg by FUNCT_2:63;
       let o be set, p be Function;
       assume that
-A18:  o in the carrier' of S and
-A19:  p = (the Arity of S).o;
-      reconsider x = o as OperSymbol of S by A18;
-      g9.(G.(g9.x)) = g9.x by Th25;
-      then f9*the_arity_of x = f9*the_arity_of (G.(g9.x)) by A1,Th30;
-      hence ff*p = f9*.the_arity_of (G.(g9.x)) by A19,LANG1:def 13
+A17:  o in the carrier' of S and
+A18:  p = (the Arity of S).o;
+      reconsider x = o as OperSymbol of S by A17;
+      g9.(G.(g9.x)) = g9.x by Th24;
+      then f9*the_arity_of x = f9*the_arity_of (G.(g9.x)) by X1,Th29;
+      hence ff*p = f9*.the_arity_of (G.(g9.x)) by A18,LANG1:def 13
         .= (f9**(the Arity of S)).(G.(g9.x)) by FUNCT_2:15
         .= (the Arity of R).(gg.o) by FUNCT_2:15;
     end;
@@ -945,7 +938,7 @@ A19:  p = (the Arity of S).o;
   end;
 end;
 
-theorem Th36:
+theorem Th35:
   for S1,S2 being non void Signature for f being Function of the
   carrier of S1, the carrier of S2 for g being Function st f,g
   form_morphism_between S1,S2 holds f**the Arity of S1 = (the Arity of S2)*g
@@ -979,7 +972,7 @@ FINSEQ_1:def 11;
   hence thesis by A2,A6,FUNCT_1:2;
 end;
 
-theorem Th37:
+theorem Th36:
   f,g form_a_replacement_in S implies (the carrier of S)-indexing
   f is Function of the carrier of S, the carrier of S with-replacement (f,g)
 proof
@@ -989,7 +982,7 @@ proof
   hence thesis by INSTALG1:9;
 end;
 
-theorem Th38:
+theorem Th37:
   f,g form_a_replacement_in S implies for f9 being Function of the
 carrier of S, the carrier of S with-replacement (f,g) st f9 = (the carrier of S
   )-indexing f for g9 being rng-retract of (the carrier' of S)-indexing g holds
@@ -1010,10 +1003,10 @@ A3: f9 = (the carrier of S)-indexing f;
   hence the Arity of T = (the Arity of T)*id rng gg by FUNCT_2:17
     .= (the Arity of T)*(gg*g9) by Def2
     .= (the Arity of T)*gg*g9 by RELAT_1:36
-    .= f9* *(the Arity of S)*g9 by A2,A3,Th36;
+    .= f9* *(the Arity of S)*g9 by A2,A3,Th35;
 end;
 
-theorem Th39:
+theorem Th38:
   f,g form_a_replacement_in S implies for g9 being rng-retract of
 (the carrier' of S)-indexing g holds the ResultSort of S with-replacement (f,g)
   = ((the carrier of S)-indexing f)*(the ResultSort of S)*g9
@@ -1033,7 +1026,7 @@ A2: ff, gg form_morphism_between S, T by Def4;
     .= ff*(the ResultSort of S)*g9 by A2,PUA2MSS1:def 12;
 end;
 
-theorem Th40:
+theorem Th39:
   f,g form_morphism_between S,S9 implies S with-replacement (f,g)
   is Subsignature of S9
 proof
@@ -1042,73 +1035,71 @@ proof
   set G = id the carrier' of R;
   set f9 = (the carrier of S)-indexing f;
   set g9 = (the carrier' of S)-indexing g;
-A1: rng F = the carrier of R by RELAT_1:45;
-A2: dom the ResultSort of S9 = the carrier' of S9 by FUNCT_2:def 1;
-A3: dom the ResultSort of R = the carrier' of R by FUNCT_2:def 1;
+A1: dom the ResultSort of S9 = the carrier' of S9 by FUNCT_2:def 1;
+A2: dom the ResultSort of R = the carrier' of R by FUNCT_2:def 1;
   assume
-A4: f,g form_morphism_between S,S9;
+A3: f,g form_morphism_between S,S9;
   then dom f = the carrier of S by PUA2MSS1:def 12;
   then
-A5: f9 = f by Th10;
-A6: f,g form_a_replacement_in S by A4,Th32;
+A4: f9 = f by Th10;
+A5: f,g form_a_replacement_in S by A3,Th31;
   then
-A7: the carrier' of R = rng g9 by Def4;
-  thus dom F = the carrier of R & dom G = the carrier' of R by RELAT_1:45;
-A8: rng G = the carrier' of R by RELAT_1:45;
-  dom g = the carrier' of S by A4,PUA2MSS1:def 12;
+A6: the carrier' of R = rng g9 by Def4;
+  thus dom F = the carrier of R & dom G = the carrier' of R;
+  dom g = the carrier' of S by A3,PUA2MSS1:def 12;
   then
-A9: g9 = g by Th10;
-A10: f9, g9 form_morphism_between S, R by A6,Def4;
-A11: now
+A7: g9 = g by Th10;
+A8: f9, g9 form_morphism_between S, R by A5,Def4;
+A9: now
     let x be set;
     assume
-A12: x in the carrier' of R;
+A10: x in the carrier' of R;
     then consider a being set such that
-A13: a in dom g and
-A14: x = g.a by A7,A9,FUNCT_1:def 3;
-    reconsider a as OperSymbol of S by A4,A13,PUA2MSS1:def 12;
-    (the ResultSort of R)*g = f*the ResultSort of S by A10,A5,A9,
+A11: a in dom g and
+A12: x = g.a by A6,A7,FUNCT_1:def 3;
+    reconsider a as OperSymbol of S by A3,A11,PUA2MSS1:def 12;
+    (the ResultSort of R)*g = f*the ResultSort of S by A8,A4,A7,
 PUA2MSS1:def 12;
     then
-A15: (the ResultSort of R).x = (f*the ResultSort of S).a by A13,A14,FUNCT_1:13;
-    (the ResultSort of S9)*g = f*the ResultSort of S by A4,PUA2MSS1:def 12;
-    then (the ResultSort of S9).x = (f*the ResultSort of S).a by A13,A14,
+A13: (the ResultSort of R).x = (f*the ResultSort of S).a by A11,A12,FUNCT_1:13;
+    (the ResultSort of S9)*g = f*the ResultSort of S by A3,PUA2MSS1:def 12;
+    then (the ResultSort of S9).x = (f*the ResultSort of S).a by A11,A12,
 FUNCT_1:13;
     hence
     (the ResultSort of R).x = ((the ResultSort of S9)|the carrier' of R).
-    x by A12,A15,FUNCT_1:49;
+    x by A10,A13,FUNCT_1:49;
   end;
-  rng g c= the carrier' of S9 by A4,PUA2MSS1:def 12;
-  then dom ((the ResultSort of S9)|the carrier' of R) = the carrier' of R by A7
-,A9,A2,RELAT_1:62;
+  rng g c= the carrier' of S9 by A3,PUA2MSS1:def 12;
+  then dom ((the ResultSort of S9)|the carrier' of R) = the carrier' of R by A6
+,A7,A1,RELAT_1:62;
   then
-A16: the ResultSort of R = (the ResultSort of S9)|the carrier' of R by A3,A11,
+A14: the ResultSort of R = (the ResultSort of S9)|the carrier' of R by A2,A9,
 FUNCT_1:2;
-  the carrier of R = rng f9 by A6,Def4;
-  hence rng F c= the carrier of S9 & rng G c= the carrier' of S9 by A4,A7,A5,A9
-,A1,A8,PUA2MSS1:def 12;
+  the carrier of R = rng f9 by A5,Def4;
+  hence rng F c= the carrier of S9 & rng G c= the carrier' of S9 by A3,A6,A4,A7
+,PUA2MSS1:def 12;
   rng the ResultSort of R c= the carrier of R;
   hence F*the ResultSort of R = the ResultSort of R by RELAT_1:53
-    .= (the ResultSort of S9)*G by A16,RELAT_1:65;
+    .= (the ResultSort of S9)*G by A14,RELAT_1:65;
   let o be set, p be Function;
   assume that
-A17: o in the carrier' of R and
-A18: p = (the Arity of R).o;
+A15: o in the carrier' of R and
+A16: p = (the Arity of R).o;
   consider a being set such that
-A19: a in dom g and
-A20: o = g.a by A7,A9,A17,FUNCT_1:def 3;
-  reconsider a as OperSymbol of S by A4,A19,PUA2MSS1:def 12;
-A21: f*the_arity_of a = (the Arity of S9).o by A4,A20,PUA2MSS1:def 12;
-  p in (the carrier of R)* by A17,A18,FUNCT_2:5;
+A17: a in dom g and
+A18: o = g.a by A6,A7,A15,FUNCT_1:def 3;
+  reconsider a as OperSymbol of S by A3,A17,PUA2MSS1:def 12;
+A19: f*the_arity_of a = (the Arity of S9).o by A3,A18,PUA2MSS1:def 12;
+  p in (the carrier of R)* by A15,A16,FUNCT_2:5;
   then p is FinSequence of the carrier of R by FINSEQ_1:def 11;
   then
-A22: rng p c= the carrier of R by FINSEQ_1:def 4;
-  f*the_arity_of a = p by A10,A5,A9,A18,A20,PUA2MSS1:def 12;
-  hence F*p = (the Arity of S9).o by A22,A21,RELAT_1:53
-    .= (the Arity of S9).(G.o) by A17,FUNCT_1:18;
+A20: rng p c= the carrier of R by FINSEQ_1:def 4;
+  f*the_arity_of a = p by A8,A4,A7,A16,A18,PUA2MSS1:def 12;
+  hence F*p = (the Arity of S9).o by A20,A19,RELAT_1:53
+    .= (the Arity of S9).(G.o) by A15,FUNCT_1:18;
 end;
 
-theorem Th41:
+theorem Th40:
   f,g form_a_replacement_in S iff (the carrier of S)-indexing f, (
 the carrier' of S)-indexing g form_morphism_between S, S with-replacement (f,g)
 proof
@@ -1117,11 +1108,11 @@ proof
   thus f,g form_a_replacement_in S implies ff, gg form_morphism_between S, S9
   by Def4;
   assume ff, gg form_morphism_between S, S9;
-  then ff, gg form_a_replacement_in S by Th32;
-  hence thesis by Th31;
+  then ff, gg form_a_replacement_in S by Th31;
+  hence thesis by Th30;
 end;
 
-theorem Th42:
+theorem Th41:
   dom f c= the carrier of S & dom g c= the carrier' of S & f,g
 form_a_replacement_in S implies (id the carrier of S) +* f, (id the carrier' of
   S) +* g form_morphism_between S, S with-replacement (f,g)
@@ -1132,7 +1123,7 @@ A2: dom g c= the carrier' of S;
 A3: (the carrier' of S)-indexing g = (id the carrier' of S) +* g by A2,
 RELAT_1:68;
   (the carrier of S)-indexing f = (id the carrier of S) +* f by A1,RELAT_1:68;
-  hence thesis by A3,Th41;
+  hence thesis by A3,Th40;
 end;
 
 theorem
@@ -1143,15 +1134,15 @@ proof
   assume that
 A1: dom f = the carrier of S and
 A2: dom g = the carrier' of S;
-  dom g = dom id the carrier' of S by A2,RELAT_1:45;
+  dom g = dom id the carrier' of S by A2;
   then
 A3: (id the carrier' of S) +* g = g by FUNCT_4:19;
-  dom f = dom id the carrier of S by A1,RELAT_1:45;
+  dom f = dom id the carrier of S by A1;
   then (id the carrier of S) +* f = f by FUNCT_4:19;
-  hence thesis by A1,A2,A3,Th42;
+  hence thesis by A1,A2,A3,Th41;
 end;
 
-theorem Th44:
+theorem Th43:
   f,g form_a_replacement_in S implies S with-replacement ((the
   carrier of S)-indexing f, g) = S with-replacement (f,g)
 proof
@@ -1160,9 +1151,9 @@ proof
 A1: X-indexing (X-indexing f) = X-indexing f by Th11;
   assume
 A2: f,g form_a_replacement_in S;
-  then X-indexing f, Y-indexing g form_a_replacement_in S by Th31;
+  then X-indexing f, Y-indexing g form_a_replacement_in S by Th30;
   then
-A3: X-indexing f, g form_a_replacement_in S by A1,Th31;
+A3: X-indexing f, g form_a_replacement_in S by A1,Th30;
   then
 A4: the carrier of S2 = rng (X-indexing f) by A1,Def4;
 A5: the carrier' of S2 = rng (Y-indexing g) by A3,Def4;
@@ -1170,7 +1161,7 @@ A5: the carrier' of S2 = rng (Y-indexing g) by A3,Def4;
   hence thesis by A2,A4,A5,Def4;
 end;
 
-theorem Th45:
+theorem Th44:
   f,g form_a_replacement_in S implies S with-replacement (f, (the
   carrier' of S)-indexing g) = S with-replacement (f,g)
 proof
@@ -1179,9 +1170,9 @@ proof
 A1: Y-indexing (Y-indexing g) = Y-indexing g by Th11;
   assume
 A2: f,g form_a_replacement_in S;
-  then X-indexing f, Y-indexing g form_a_replacement_in S by Th31;
+  then X-indexing f, Y-indexing g form_a_replacement_in S by Th30;
   then
-A3: f, Y-indexing g form_a_replacement_in S by A1,Th31;
+A3: f, Y-indexing g form_a_replacement_in S by A1,Th30;
   then
 A4: the carrier' of S2 = rng (Y-indexing g) by A1,Def4;
 A5: the carrier of S2 = rng (X-indexing f) by A3,Def4;
@@ -1203,14 +1194,14 @@ definition
   end;
 end;
 
-theorem Th47:
+theorem Th45:
   for S being Signature holds S is Extension of S
 proof
   let S be Signature;
   thus S is Subsignature of S by INSTALG1:15;
 end;
 
-theorem Th48:
+theorem Th46:
   for S1 being Signature, S2 being Extension of S1, S3 being
   Extension of S2 holds S3 is Extension of S1
 proof
@@ -1221,7 +1212,7 @@ A1: S2 is Subsignature of S3 by Def5;
   hence thesis by Def5;
 end;
 
-theorem Th49:
+theorem Th47:
   for S1,S2 being non empty Signature st S1 tolerates S2 holds S1
   +*S2 is Extension of S1
 proof
@@ -1234,73 +1225,69 @@ CIRCCOMB:def 2;
   then
 A3: the ResultSort of S1 c= the ResultSort of S by A2,FUNCT_4:28;
   set f1 = id the carrier of S1, g1 = id the carrier' of S1;
-  thus dom f1 = the carrier of S1 & dom g1 = the carrier' of S1 by RELAT_1:45;
-A4: rng g1 = the carrier' of S1 by RELAT_1:45;
+  thus dom f1 = the carrier of S1 & dom g1 = the carrier' of S1;
   dom the ResultSort of S1 = the carrier' of S1 by FUNCT_2:def 1;
   then the ResultSort of S1 = (the ResultSort of S)|the carrier' of S1 by A3,
 GRFUNC_1:23;
   then
-A5: the ResultSort of S1 = (the ResultSort of S)*g1 by RELAT_1:65;
-A6: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 by
+A4: the ResultSort of S1 = (the ResultSort of S)*g1 by RELAT_1:65;
+A5: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 by
 CIRCCOMB:def 2;
-A7: the carrier of S = (the carrier of S1) \/ the carrier of S2 by
+A6: the carrier of S = (the carrier of S1) \/ the carrier of S2 by
 CIRCCOMB:def 2;
-  rng f1 = the carrier of S1 by RELAT_1:45;
-  hence rng f1 c= the carrier of S & rng g1 c= the carrier' of S by A4,A7,A6,
+  thus rng f1 c= the carrier of S & rng g1 c= the carrier' of S by A6,A5,
 XBOOLE_1:7;
   rng the ResultSort of S1 c= the carrier of S1;
-  hence f1*the ResultSort of S1 = (the ResultSort of S)*g1 by A5,RELAT_1:53;
+  hence f1*the ResultSort of S1 = (the ResultSort of S)*g1 by A4,RELAT_1:53;
   let o be set, p be Function such that
-A8: o in the carrier' of S1 and
-A9: p = (the Arity of S1).o;
-A10: dom the Arity of S1 = the carrier' of S1 by FUNCT_2:def 1;
-  then p in rng the Arity of S1 by A8,A9,FUNCT_1:def 3;
+A7: o in the carrier' of S1 and
+A8: p = (the Arity of S1).o;
+A9: dom the Arity of S1 = the carrier' of S1 by FUNCT_2:def 1;
+  then p in rng the Arity of S1 by A7,A8,FUNCT_1:def 3;
   then p is FinSequence of the carrier of S1 by FINSEQ_1:def 11;
   then rng p c= the carrier of S1 by FINSEQ_1:def 4;
   hence f1*p = p by RELAT_1:53
-    .= ((the Arity of S1)+*the Arity of S2).o by A1,A8,A9,A10,FUNCT_4:15
+    .= ((the Arity of S1)+*the Arity of S2).o by A1,A7,A8,A9,FUNCT_4:15
     .= (the Arity of S).o by CIRCCOMB:def 2
-    .= (the Arity of S).(g1.o) by A8,FUNCT_1:18;
+    .= (the Arity of S).(g1.o) by A7,FUNCT_1:18;
 end;
 
-theorem Th50:
+theorem Th48:
   for S1, S2 being non empty Signature holds S1+*S2 is Extension of S2
 proof
   let S1,S2 be non empty Signature;
   set S = S1+*S2;
   set f1 = id the carrier of S2, g1 = id the carrier' of S2;
-  thus dom f1 = the carrier of S2 & dom g1 = the carrier' of S2 by RELAT_1:45;
-A1: rng g1 = the carrier' of S2 by RELAT_1:45;
-A2: the carrier of S = (the carrier of S1) \/ the carrier of S2 by
+  thus dom f1 = the carrier of S2 & dom g1 = the carrier' of S2;
+A1: the carrier of S = (the carrier of S1) \/ the carrier of S2 by
 CIRCCOMB:def 2;
-A3: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 by
+A2: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 by
 CIRCCOMB:def 2;
-  rng f1 = the carrier of S2 by RELAT_1:45;
-  hence rng f1 c= the carrier of S & rng g1 c= the carrier' of S by A1,A2,A3,
+  thus rng f1 c= the carrier of S & rng g1 c= the carrier' of S by A1,A2,
 XBOOLE_1:7;
-A4: the ResultSort of S = (the ResultSort of S1)+*the ResultSort of S2 by
+A3: the ResultSort of S = (the ResultSort of S1)+*the ResultSort of S2 by
 CIRCCOMB:def 2;
   dom the ResultSort of S2 = the carrier' of S2 by FUNCT_2:def 1;
-  then the ResultSort of S2 = (the ResultSort of S)|the carrier' of S2 by A4,
+  then the ResultSort of S2 = (the ResultSort of S)|the carrier' of S2 by A3,
 FUNCT_4:25,GRFUNC_1:23;
   then
-A5: the ResultSort of S2 = (the ResultSort of S)*g1 by RELAT_1:65;
+A4: the ResultSort of S2 = (the ResultSort of S)*g1 by RELAT_1:65;
   rng the ResultSort of S2 c= the carrier of S2;
-  hence f1*the ResultSort of S2 = (the ResultSort of S)*g1 by A5,RELAT_1:53;
+  hence f1*the ResultSort of S2 = (the ResultSort of S)*g1 by A4,RELAT_1:53;
   let o be set, p be Function such that
-A6: o in the carrier' of S2 and
-A7: p = (the Arity of S2).o;
-A8: dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
-  then p in rng the Arity of S2 by A6,A7,FUNCT_1:def 3;
+A5: o in the carrier' of S2 and
+A6: p = (the Arity of S2).o;
+A7: dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
+  then p in rng the Arity of S2 by A5,A6,FUNCT_1:def 3;
   then p is FinSequence of the carrier of S2 by FINSEQ_1:def 11;
   then rng p c= the carrier of S2 by FINSEQ_1:def 4;
   hence f1*p = p by RELAT_1:53
-    .= ((the Arity of S1)+*the Arity of S2).o by A6,A7,A8,FUNCT_4:13
+    .= ((the Arity of S1)+*the Arity of S2).o by A5,A6,A7,FUNCT_4:13
     .= (the Arity of S).o by CIRCCOMB:def 2
-    .= (the Arity of S).(g1.o) by A6,FUNCT_1:18;
+    .= (the Arity of S).(g1.o) by A5,FUNCT_1:18;
 end;
 
-theorem Th51:
+theorem Th49:
   for S1,S2,S being non empty ManySortedSign for f1,g1, f2,g2
 being Function st f1 tolerates f2 & f1, g1 form_morphism_between S1, S & f2, g2
 form_morphism_between S2, S holds f1+*f2, g1+*g2 form_morphism_between S1+*S2,
@@ -1420,7 +1407,7 @@ A9: f1 tolerates f2 by A7,PARTFUN1:52;
     assume that
 A10: f1, g1 form_morphism_between S1, E and
 A11: f2, g2 form_morphism_between S2, E;
-    f1+*f2, g1+*g2 form_morphism_between S1+*S2, E by A9,A10,A11,Th51;
+    f1+*f2, g1+*g2 form_morphism_between S1+*S2, E by A9,A10,A11,Th49;
     then id the carrier of S1+*S2, g1+*g2 form_morphism_between S1+*S2, E by A6
 ,FUNCT_4:22;
     hence id the carrier of S1+*S2, id the carrier' of S1+*S2
@@ -1431,9 +1418,9 @@ A11: f2, g2 form_morphism_between S2, E;
   is Extension of S1+*S2 by A1;
   assume S1 tolerates S2;
   then
-A12: S1+*S2 is Extension of S1 by Th49;
-  S1+*S2 is Extension of S2 by Th50;
-  hence thesis by A12,Th48;
+A12: S1+*S2 is Extension of S1 by Th47;
+  S1+*S2 is Extension of S2 by Th48;
+  hence thesis by A12,Th46;
 end;
 
 registration
@@ -1466,7 +1453,7 @@ A1: the carrier' of S c= the carrier' of E by INSTALG1:10;
   end;
 end;
 
-theorem Th53:
+theorem Th51:
   for S,T being Signature st S is empty holds T is Extension of S
 proof
   let S, T be Signature;
@@ -1490,14 +1477,14 @@ registration
     per cases;
     suppose
       S is empty;
-      then S9 is Extension of S by Th53;
+      then S9 is Extension of S by Th51;
       hence thesis;
     end;
     suppose
       S is non empty;
       then reconsider S1 = S as non empty Signature;
 
-      reconsider E = S9+*S1 as Extension of S by Th50;
+      reconsider E = S9+*S1 as Extension of S by Th48;
       take E;
       thus the carrier of E is non empty;
       thus the carrier' of E is non empty;
@@ -1506,7 +1493,7 @@ registration
   end;
 end;
 
-theorem Th54:
+theorem Th52:
   for S being non void Signature, E being Extension of S st f,g
   form_a_replacement_in E holds f,g form_a_replacement_in S
 proof
@@ -1516,14 +1503,14 @@ proof
   set T = E with-replacement (f,g);
 A1: S is Subsignature of E by Def5;
   then
-A2: f9|the carrier of S = (the carrier of S)-indexing f by Th18,INSTALG1:10;
-A3: g9|the carrier' of S = (the carrier' of S)-indexing g by A1,Th18,
+A2: f9|the carrier of S = (the carrier of S)-indexing f by Th17,INSTALG1:10;
+A3: g9|the carrier' of S = (the carrier' of S)-indexing g by A1,Th17,
 INSTALG1:10;
   assume f,g form_a_replacement_in E;
-  then f9, g9 form_morphism_between E, T by Th41;
+  then f9, g9 form_morphism_between E, T by Th40;
   then f9|the carrier of S, g9|the carrier' of S form_a_replacement_in S by A1
-,Th32,INSTALG1:18;
-  hence thesis by A2,A3,Th31;
+,Th31,INSTALG1:18;
+  hence thesis by A2,A3,Th30;
 end;
 
 theorem
@@ -1539,22 +1526,22 @@ proof
 A1: (the carrier' of S)-indexing gg = gg by Th11;
   assume
 A2: f,g form_a_replacement_in E;
-  then f,g form_a_replacement_in S by Th54;
-  then (the carrier of S)-indexing f,gg form_a_replacement_in S by Th31;
+  then f,g form_a_replacement_in S by Th52;
+  then (the carrier of S)-indexing f,gg form_a_replacement_in S by Th30;
   then
-A3: f,gg form_a_replacement_in S by A1,Th31;
+A3: f,gg form_a_replacement_in S by A1,Th30;
 A4: S is Subsignature of E by Def5;
   then
-A5: g9|the carrier' of S = (the carrier' of S)-indexing g by Th18,INSTALG1:10;
-  f9, g9 form_morphism_between E, T by A2,Th41;
+A5: g9|the carrier' of S = (the carrier' of S)-indexing g by Th17,INSTALG1:10;
+  f9, g9 form_morphism_between E, T by A2,Th40;
   then
 A6: S with-replacement (f9|the carrier of S, g9|the carrier' of S) is
-  Subsignature of T by A4,Th40,INSTALG1:18;
-  f9|the carrier of S = (the carrier of S)-indexing f by A4,Th18,INSTALG1:10;
+  Subsignature of T by A4,Th39,INSTALG1:18;
+  f9|the carrier of S = (the carrier of S)-indexing f by A4,Th17,INSTALG1:10;
   then S with-replacement (f9|the carrier of S, g9|the carrier' of S) = S
-  with-replacement (f, (the carrier' of S)-indexing g) by A3,A5,Th44;
+  with-replacement (f, (the carrier' of S)-indexing g) by A3,A5,Th43;
   hence S with-replacement(f,g) is Subsignature of E with-replacement(f,g) by
-A2,A6,Th45,Th54;
+A2,A6,Th44,Th52;
 end;
 
 theorem
@@ -1574,11 +1561,11 @@ A6: f,g form_a_replacement_in S1+*S2;
   deffunc F(non void Signature) = (the carrier of $1)-indexing f;
   deffunc T(non void Signature) = $1 with-replacement (f,g);
 A7: dom F(S2) = the carrier of S2 by PARTFUN1:def 2;
-A8: F(S1) tolerates F(S2) by Th20;
-A9: S is Extension of S1 by A1,Th49;
+A8: F(S1) tolerates F(S2) by Th19;
+A9: S is Extension of S1 by A1,Th47;
   then reconsider
   F1 = F(S1) as Function of the carrier of S1, the carrier of T(S1)
-  by A6,Th37,Th54;
+  by A6,Th36,Th52;
 A10: dom (F(S1)*(the ResultSort of S1)) = the carrier' of S1 by PARTFUN1:def 2;
   deffunc G(non void Signature) = (the carrier' of $1)-indexing g;
 A11: dom F(S1) = the carrier of S1 by PARTFUN1:def 2;
@@ -1586,45 +1573,45 @@ A12: dom G(S1) = the carrier' of S1 by PARTFUN1:def 2;
   set g1 = the rng-retract of G(S1),g2 = the rng-retract of G(S2);
 A13: the ResultSort of S = (the ResultSort of S1)+*the ResultSort of S2 by
 CIRCCOMB:def 2;
-A14: rng g2 c= dom G(S2) by Th24;
+A14: rng g2 c= dom G(S2) by Th23;
 A15: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 by
 CIRCCOMB:def 2;
-  then G(S) = G(S1) \/ G(S2) by Th21;
+  then G(S) = G(S1) \/ G(S2) by Th20;
   then
 A16: rng G(S) = (rng G(S1)) \/ rng G(S2) by RELAT_1:12;
 A17: dom G(S2) = the carrier' of S2 by PARTFUN1:def 2;
-A18: S is Extension of S2 by Th50;
+A18: S is Extension of S2 by Th48;
   then reconsider
   F2 = F(S2) as Function of the carrier of S2, the carrier of T(S2)
-  by A6,Th37,Th54;
+  by A6,Th36,Th52;
 A19: dom (F(S2)*(the ResultSort of S2)) = the carrier' of S2 by PARTFUN1:def 2;
 A20: the carrier of S = (the carrier of S1) \/ the carrier of S2 by
 CIRCCOMB:def 2;
   then
-A21: F(S) = F(S1)+*F(S2) by Th19;
-  F(S) = F(S1) \/ F(S2) by A20,Th21;
+A21: F(S) = F(S1)+*F(S2) by Th18;
+  F(S) = F(S1) \/ F(S2) by A20,Th20;
   then
 A22: rng F(S) = (rng F(S1)) \/ rng F(S2) by RELAT_1:12;
 A23: dom (F2**the Arity of S2) = the carrier' of S2 by FUNCT_2:def 1;
 A24: dom (F2*) = (the carrier of S2)* by FUNCT_2:def 1;
-  G(S) = G(S1)+*G(S2) by A15,Th19;
-  then reconsider gg = g1+*g2 as rng-retract of G(S) by Th20,Th28;
-A25: rng g1 c= dom G(S1) by Th24;
-A26: the ResultSort of T(S) = F(S)*(the ResultSort of S)*gg by A6,Th39
+  G(S) = G(S1)+*G(S2) by A15,Th18;
+  then reconsider gg = g1+*g2 as rng-retract of G(S) by Th19,Th27;
+A25: rng g1 c= dom G(S1) by Th23;
+A26: the ResultSort of T(S) = F(S)*(the ResultSort of S)*gg by A6,Th38
     .= ((F(S1)*the ResultSort of S1)+*(F(S2)*the ResultSort of S2))*gg by A13
-,A21,A5,A4,A11,A7,Th20,FUNCT_4:69
+,A21,A5,A4,A11,A7,Th19,FUNCT_4:69
     .= (F(S1)*(the ResultSort of S1)*g1)+*(F(S2)*(the ResultSort of S2)*g2)
   by A8,A25,A14,A12,A17,A10,A19,A2,Th4,FUNCT_4:69
     .= (the ResultSort of T(S1))+*(F(S2)*(the ResultSort of S2)*g2) by A6,A9
-,Th39,Th54
-    .= (the ResultSort of T(S1))+*the ResultSort of T(S2) by A6,A18,Th39,Th54;
+,Th38,Th52
+    .= (the ResultSort of T(S1))+*the ResultSort of T(S2) by A6,A18,Th38,Th52;
 A27: the carrier of T(S) = rng F(S) by A6,Def4;
 A28: dom (F1**the Arity of S1) = the carrier' of S1 by FUNCT_2:def 1;
   reconsider FS = F(S) as Function of the carrier of S, the carrier of T(S) by
-A6,Th37;
+A6,Th36;
 A29: (rng the Arity of S) /\ dom (FS*) c= rng the Arity of S by XBOOLE_1:17;
 A30: the Arity of S = (the Arity of S1)+*the Arity of S2 by CIRCCOMB:def 2;
-A31: f,g form_a_replacement_in S1 by A6,A9,Th54;
+A31: f,g form_a_replacement_in S1 by A6,A9,Th52;
   then
 A32: the carrier of T(S1) = rng F(S1) by Def4;
 A33: the carrier' of T(S1) = rng G(S1) by A31,Def4;
@@ -1639,30 +1626,30 @@ XBOOLE_1:13;
   then rng the Arity of S c= dom (F1*+*(F2*)) by A35,A24,FUNCT_4:def 1;
   then
 A36: (rng the Arity of S) /\ dom (FS*) c= dom (F1*+*(F2*)) by A29,XBOOLE_1:1;
-A37: f,g form_a_replacement_in S2 by A6,A18,Th54;
+A37: f,g form_a_replacement_in S2 by A6,A18,Th52;
   then
 A38: the carrier of T(S2) = rng F(S2) by Def4;
 A39: the carrier' of T(S2) = rng G(S2) by A37,Def4;
-A40: F1* tolerates F2* by Th6,Th20;
+A40: F1* tolerates F2* by Th6,Th19;
 A41: F1* +* (F2*) c= F1* \/ F2* by FUNCT_4:29;
-  F2 = FS|the carrier of S2 by A20,Th18,XBOOLE_1:7;
+  F2 = FS|the carrier of S2 by A20,Th17,XBOOLE_1:7;
   then
 A42: F2* c= FS* by Th5,RELAT_1:59;
-  F1 = FS|the carrier of S1 by A20,Th18,XBOOLE_1:7;
+  F1 = FS|the carrier of S1 by A20,Th17,XBOOLE_1:7;
   then F1* c= FS* by Th5,RELAT_1:59;
   then F1* \/ F2* c= FS* by A42,XBOOLE_1:8;
   then
 A43: F1* +* (F2*) c= FS* by A41,XBOOLE_1:1;
 A44: the Arity of S1 tolerates the Arity of S2 by A1,CIRCCOMB:def 1;
 A45: rng the Arity of S1 c= (the carrier of S1)*;
-  the Arity of T(S) = FS**(the Arity of S)*gg by A6,Th38
+  the Arity of T(S) = FS**(the Arity of S)*gg by A6,Th37
     .= (F1*+*(F2*))*(the Arity of S)*gg by A43,A36,Th2
     .= ((F1**the Arity of S1)+*(F2**the Arity of S2))*gg by A30,A8,A45,A3,A35
 ,A24,Th6,FUNCT_4:69
     .= ((F1**the Arity of S1)*g1)+*((F2**the Arity of S2)*g2) by A25,A14,A12
 ,A17,A40,A44,A28,A23,Th4,FUNCT_4:69
-    .= (the Arity of T(S1))+*((F2**the Arity of S2)*g2) by A6,A9,Th38,Th54
-    .= (the Arity of T(S1))+*the Arity of T(S2) by A6,A18,Th38,Th54;
+    .= (the Arity of T(S1))+*((F2**the Arity of S2)*g2) by A6,A9,Th37,Th52
+    .= (the Arity of T(S1))+*the Arity of T(S2) by A6,A18,Th37,Th52;
   hence thesis by A22,A27,A32,A38,A16,A34,A33,A39,A26,CIRCCOMB:def 2;
 end;
 
@@ -1699,7 +1686,7 @@ theorem
   holds A is Algebra of S
 proof
   let S be non void Signature, A be feasible MSAlgebra over S;
-A1: S is Extension of S by Th47;
+A1: S is Extension of S by Th45;
   A is Algebra by Def6;
   hence thesis by A1,Def7;
 end;
@@ -1711,11 +1698,11 @@ proof
   let S be Signature, E be Extension of S, A be Algebra of E;
   consider E9 be non void Extension of E such that
 A1: A is feasible MSAlgebra over E9 by Def7;
-  E9 is Extension of S by Th48;
+  E9 is Extension of S by Th46;
   hence thesis by A1,Def7;
 end;
 
-theorem Th59:
+theorem Th57:
   for S being Signature, E being non empty Signature, A being
 MSAlgebra over E st A is Algebra of S holds the carrier of S c= the carrier of
   E & the carrier' of S c= the carrier' of E
@@ -1734,7 +1721,7 @@ A4: S is Subsignature of ES by Def5;
   hence thesis by A4,A1,INSTALG1:10;
 end;
 
-theorem Th60:
+theorem Th58:
   for S being non void Signature, E being non empty Signature for
 A being MSAlgebra over E st A is Algebra of S for o being OperSymbol of S holds
   (the Charact of A).o is Function of (the Sorts of A)#.the_arity_of o, (the
@@ -1789,14 +1776,14 @@ CIRCCOMB:def 2;
 A3: the Arity of T = (the Arity of E)+*the Arity of S by CIRCCOMB:def 2;
   B is Algebra of S;
   then
-A4: the carrier of S c= the carrier of E by Th59;
+A4: the carrier of S c= the carrier of E by Th57;
   the carrier of T = (the carrier of E) \/ the carrier of S by CIRCCOMB:def 2;
   then
 A5: the carrier of T = the carrier of E by A4,XBOOLE_1:12;
   then reconsider Ss = the Sorts of B as ManySortedSet of the carrier of T;
   B is Algebra of S;
   then
-A6: the carrier' of S c= the carrier' of E by Th59;
+A6: the carrier' of S c= the carrier' of E by Th57;
   the carrier' of T = (the carrier' of E) \/ the carrier' of S by
 CIRCCOMB:def 2;
   then
@@ -1816,7 +1803,7 @@ A12:  i in the carrier' of S;
 A13:  (the Arity of T).o = the_arity_of o by A8,A3,FUNCT_4:13;
       (the ResultSort of T).o = the_result_sort_of o by A1,A2,FUNCT_4:13;
       hence (the Charact of B).i is Function of (the Sorts of B)#.((the Arity
-      of T).i), (the Sorts of B).((the ResultSort of T).i) by A13,Th60;
+      of T).i), (the Sorts of B).((the ResultSort of T).i) by A13,Th58;
     end;
 A14: not i in the carrier' of S implies (the Arity of T).i = (the Arity of
     E).i & (the ResultSort of T).i = (the ResultSort of E).i by A8,A1,A3,A2,
@@ -1837,7 +1824,7 @@ FUNCT_2:15;
   hence thesis;
 end;
 
-theorem Th62:
+theorem Th60:
   for S1,S2 being non empty Signature for A being MSAlgebra over
 S1 st A is MSAlgebra over S2 holds the carrier of S1 = the carrier of S2 & the
   carrier' of S1 = the carrier' of S2
@@ -1863,7 +1850,7 @@ proof
   assume that
 A1: x in dom the Sorts of A and
 A2: y in dom the Sorts of A;
-  reconsider a = x, b = y as SortSymbol of S by A1,A2,PARTFUN1:def 2;
+  reconsider a = x, b = y as SortSymbol of S by A1,A2;
 
   assume that
 A3: (the Sorts of A).x = (the Sorts of A).y and
@@ -1874,7 +1861,7 @@ A4: x <> y;
 end;
 end;
 
-theorem Th64:
+theorem Th61:
   for S being non void Signature for A being disjoint_valued
   MSAlgebra over S for C1,C2 being Component of the Sorts of A holds C1 = C2 or
   C1 misses C2
@@ -1890,7 +1877,7 @@ A2: the Sorts of A is disjoint_valued by MSAFREE1:def 2;
   hence thesis by A1,A2,PROB_2:def 2;
 end;
 
-theorem Th65:
+theorem Th62:
   for S,S9 being non void Signature for A being non-empty
   disjoint_valued MSAlgebra over S st A is MSAlgebra over S9 holds the
   ManySortedSign of S = the ManySortedSign of S9
@@ -1901,19 +1888,19 @@ A1: dom the Sorts of A = the carrier of S by PARTFUN1:def 2;
   assume
 A2: A is MSAlgebra over E;
   then reconsider B = A as MSAlgebra over E;
-A3: the carrier of S = the carrier of E by A2,Th62;
+A3: the carrier of S = the carrier of E by A2,Th60;
 A4: now
     let x be set;
     assume x in the carrier' of S;
     then reconsider o = x as OperSymbol of S;
-    reconsider e = o as OperSymbol of E by A2,Th62;
+    reconsider e = o as OperSymbol of E by A2,Th60;
     set p = the Element of Args(o,A);
     Den(e,B) = (the Charact of B).e;
     then
 A5: rng Den(o,A) c= Result(e,B) by RELAT_1:def 19;
     Den(o,A).p in rng Den(o,A) by FUNCT_2:4;
     then Result(o,A) meets Result(e,B) by A5,XBOOLE_0:3;
-    then Result(o,A) = ((the Sorts of B)*the ResultSort of E).x by Th64
+    then Result(o,A) = ((the Sorts of B)*the ResultSort of E).x by Th61
       .= (the Sorts of B).((the ResultSort of E).e) by FUNCT_2:15;
     then (the Sorts of A).((the ResultSort of E).e) = (the Sorts of A).((the
     ResultSort of S).o) by FUNCT_2:15;
@@ -1924,7 +1911,7 @@ A6: now
     let x be set;
     assume x in the carrier' of S;
     then reconsider o = x as OperSymbol of S;
-    reconsider e = o as OperSymbol of E by A2,Th62;
+    reconsider e = o as OperSymbol of E by A2,Th60;
     reconsider p = (the Arity of E).e as Element of (the carrier of E)*;
     reconsider q = (the Arity of S).o as Element of (the carrier of S)*;
     Den(e,B) = (the Charact of B).e;
@@ -1948,9 +1935,9 @@ FUNCT_1:27;
 A12: dom the Arity of E = the carrier' of E by FUNCT_2:def 1;
 A13: dom the Arity of S = the carrier' of S by FUNCT_2:def 1;
 A14: dom the ResultSort of E = the carrier' of E by FUNCT_2:def 1;
-A15: the carrier' of S = the carrier' of E by A2,Th62;
+A15: the carrier' of S = the carrier' of E by A2,Th60;
   dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
-  then the ResultSort of S = the ResultSort of E by A2,A14,A4,Th62,FUNCT_1:2;
+  then the ResultSort of S = the ResultSort of E by A2,A14,A4,Th60,FUNCT_1:2;
   hence thesis by A3,A15,A13,A12,A6,FUNCT_1:2;
 end;
 
@@ -1964,7 +1951,7 @@ proof
   then consider E being non void Extension of S9 such that
 A1: A is feasible MSAlgebra over E by Def7;
 A2: S9 is Subsignature of E by Def5;
-A3: the ManySortedSign of S = the ManySortedSign of E by A1,Th65;
+A3: the ManySortedSign of S = the ManySortedSign of E by A1,Th62;
   then
 A4: the ResultSort of S9 c= the ResultSort of S by A2,INSTALG1:11;
   the Arity of S9 c= the Arity of S by A2,A3,INSTALG1:11;

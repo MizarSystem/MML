@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received April 10, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,19 +14,19 @@
 
 environ
 
- vocabularies ORDINAL1, CARD_1, SUBSET_1, NUMBERS, FUNCT_1, RELAT_1, FUNCOP_1,
-      XBOOLE_0, ZFMISC_1, TARSKI, FUNCT_2, MCART_1, CARD_2, ORDINAL2, FINSET_1,
-      ARYTM_3, ARYTM_1, CLASSES1, NAT_1, WELLORD1, WELLORD2, RELAT_2, SETFAM_1,
-      PARTFUN1, FUNCT_4, FINSUB_1, CARD_3, PBOOLE;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, RELAT_1, RELAT_2,
-      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, SETFAM_1, ORDINAL1, ORDINAL2,
+ vocabularies ORDINAL1, CARD_1, SUBSET_1, FUNCT_1, RELAT_1, FUNCOP_1, XBOOLE_0,
+      ZFMISC_1, TARSKI, FUNCT_2, MCART_1, FINSET_1, NAT_1, WELLORD1, WELLORD2,
+      RELAT_2, SETFAM_1, PARTFUN1, FUNCT_4, CARD_3, PBOOLE;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, CARD_1, RELAT_1,
+      RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, SETFAM_1, ORDINAL1,
       WELLORD1, MCART_1, WELLORD2, FUNCOP_1, FUNCT_4, FINSET_1, FINSUB_1,
-      CLASSES1, PBOOLE;
+      PBOOLE;
  constructors SETFAM_1, RELAT_2, WELLORD1, PARTFUN1, WELLORD2, FUNCOP_1,
       FUNCT_4, CLASSES1, ORDINAL2, ORDINAL3, FINSET_1, CARD_1, FINSUB_1,
-      RELSET_1, FUNCT_1, PBOOLE;
+      RELSET_1, FUNCT_1, PBOOLE, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
-      FUNCOP_1, FUNCT_4, FINSET_1, CARD_1, FINSUB_1, PBOOLE, RELSET_1;
+      FUNCOP_1, FUNCT_4, FINSET_1, CARD_1, FINSUB_1, PBOOLE, RELSET_1,
+      XTUPLE_0;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -35,7 +35,7 @@ begin
 reserve A,B,C for Ordinal,
   K,L,M,N for Cardinal,
   x,y,y1,y2,z,u,X,Y,Z,Z1,Z2 for set,
-  n for natural number,
+  n for Nat,
   f,f1,g,h for Function,
   Q,R for Relation;
 
@@ -425,17 +425,18 @@ registration
 end;
 
 definition
-  let X be with_common_domain functional set;
-    :: miejsce na uogolnienie
-  func DOM X -> set means
-:: CARD_3:def 11 :: overloading (dom) dozwolony
-
-  for x be Function st x in X holds it = dom x if X <> {}
-  otherwise it = {};
+  let X be functional set;
+  func DOM X -> set equals
+:: CARD_3:def 11
+ meet { dom f where f is Element of X: not contradiction };
 end;
 
 theorem :: CARD_3:72
   for X be with_common_domain functional set st X = {{}} holds DOM X = {};
+
+registration let X be empty set;
+ cluster DOM X -> empty;
+end;
 
 begin  :: Product like sets, from AMISTD_2, 2007.11.14, A.T.
 
@@ -443,18 +444,11 @@ definition
   let S be functional set;
   func product" S -> Function means
 :: CARD_3:def 12  :: tu trzeba uzyc DOM
-:: uzywajac meet mamy definicje
-:: nie przez czesci
-
-  (for x being set holds x in dom it iff
-  for f being Function st f in S holds x in dom f) &
-  for i being set st i in dom it holds it.i = pi(S,i) if S is non empty
-  otherwise it = {};
+    dom it = DOM S &
+  for i being set st i in dom it holds it.i = pi(S,i);
 end;
 
-theorem :: CARD_3:73
-  for S being non empty functional set holds
-  dom product" S = meet {dom f where f is Element of S: not contradiction};
+canceled;
 
 theorem :: CARD_3:74
   for S being non empty functional set,
@@ -482,12 +476,7 @@ registration
   cluster product-like non empty for set;
 end;
 
-theorem :: CARD_3:75
-  for S being functional with_common_domain set holds dom product" S = DOM S;
-
-theorem :: CARD_3:76
-  for S being functional set, i being set st i in dom product" S
-  holds (product" S).i = pi(S,i);
+canceled 2;
 
 theorem :: CARD_3:77
   for S being functional with_common_domain set holds S c= product product" S;
@@ -560,7 +549,7 @@ theorem :: CARD_3:91
 theorem :: CARD_3:92
   M is finite & (N c= M or N in M) implies N is finite;
 
-reserve n,k for natural number;
+reserve n,k for Nat;
 
 definition
   let X;
@@ -723,7 +712,7 @@ theorem :: CARD_3:105
 for R,S being Relation st R,S are_isomorphic & R is finite
  holds S is finite;
 
-theorem :: CARD_3:106  :: zmienic na rejestracje !!!
+theorem :: CARD_3:106
  product" {{}} = {};
 
 theorem :: CARD_3:107
@@ -743,4 +732,14 @@ definition
 :: CARD_3:def 17
 M;
 end;
+
+theorem :: CARD_3:108
+ for X being functional with_common_domain set
+   for f being Function st f in X holds dom f = DOM X;
+
+theorem :: CARD_3:109
+ for X being non empty functional set
+  st for f being Function st f in X holds x in dom f
+  holds x in DOM X;
+
 

@@ -11,6 +11,7 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -30,7 +31,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="24">
+<Pred kind="V" nr="27">
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
@@ -44,7 +45,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="65">
+<Func kind="K" nr="77">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -70,7 +71,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="24">
+<Pred kind="V" nr="27">
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
@@ -88,7 +89,7 @@
 </Pred>
 <Pred kind="R" nr="16">
 <Var nr="1"/>
-<Func kind="K" nr="64">
+<Func kind="K" nr="76">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

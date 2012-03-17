@@ -2,7 +2,7 @@
 ::  by Katsumi Wasaki
 ::
 :: Received December 18, 2007
-:: Copyright (c) 2007-2011 Association of Mizar Users
+:: Copyright (c) 2007-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,17 +19,18 @@ environ
       ARYTM_3, FUNCT_4, GFACIRC1, LATTICES, CIRCUIT1, RELAT_1, SUBSET_1,
       MSAFREE2, ORDINAL4, XXREAL_0, TARSKI, FACIRC_1, TWOSCOMP, MCART_1, FSM_1,
       CIRCUIT2, GFACIRC2;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, MCART_1, RELAT_1,
-      CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, PBOOLE, NAT_1,
-      MARGREL1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1,
-      TWOSCOMP, FACIRC_2, GFACIRC1, NUMBERS, XXREAL_0;
- constructors ENUMSET1, XXREAL_0, CIRCUIT2, FACIRC_1, TWOSCOMP, GFACIRC1,
-      SEQ_1, XREAL_0, RELSET_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1,
+      XTUPLE_0, SUBSET_1, XCMPLX_0, MCART_1, RELAT_1,
+      CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, PBOOLE, ORDINAL1,
+      NAT_1, MARGREL1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB,
+      FACIRC_1, TWOSCOMP, FACIRC_2, GFACIRC1, NUMBERS, XXREAL_0;
+ constructors ENUMSET1, CIRCUIT2, FACIRC_1, TWOSCOMP, GFACIRC1, SEQ_1, XREAL_0,
+      RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0, XREAL_0, NAT_1,
       FINSEQ_1, MARGREL1, FINSEQ_2, STRUCT_0, CIRCCOMB, FACIRC_1, CIRCCMB2,
-      FACIRC_2, MSAFREE2, FINSET_1, CARD_1;
+      FACIRC_2, MSAFREE2, FINSET_1, CARD_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions MARGREL1, FACIRC_1, GFACIRC1;
+ definitions MARGREL1, FACIRC_1, GFACIRC1, XTUPLE_0;
  theorems TARSKI, ENUMSET1, MCART_1, NAT_1, ORDINAL1, PBOOLE, XBOOLE_0,
       XBOOLE_1, XREAL_1, FUNCT_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, CIRCCOMB,
       FACIRC_1, CIRCCMB2, FACIRC_2, GFACIRC1, PARTFUN1, CARD_1;
@@ -679,8 +680,8 @@ end;
 
 definition
   let k,n be Nat such that
-A1: k >= 1 and
-A2: k <= n;
+B1: k >= 1 and
+B2: k <= n;
   let x,y be FinSequence;
   func (k,n)-BitGFA0AdderOutput(x,y) ->
   Element of InnerVertices (n-BitGFA0Str(x,y)) means
@@ -691,21 +692,21 @@ A2: k <= n;
   existence
   proof
     consider i being Nat such that
-A3: k = 1+i by A1,NAT_1:10;
+A1: k = 1+i by B1,NAT_1:10;
     reconsider i as Nat;
     deffunc S(Nat) = $1-BitGFA0Str(x,y);
     deffunc SS(Nat) = BitGFA0Str(x .($1+1), y.($1+1),
     $1-BitGFA0CarryOutput(x,y));
     set o = GFA0AdderOutput(x .k, y.k, i-BitGFA0CarryOutput(x,y));
-A4: InnerVertices (S(k)) c= InnerVertices (S(n)) by A2,Th8;
-A5: o in InnerVertices SS(i) by A3,GFACIRC1:37;
-A6: S(k) = (S(i)) +* SS(i) by A3,Th7;
-    reconsider o as Element of SS(i) by A5;
+A2: InnerVertices (S(k)) c= InnerVertices (S(n)) by B2,Th8;
+A3: o in InnerVertices SS(i) by A1,GFACIRC1:37;
+A4: S(k) = (S(i)) +* SS(i) by A1,Th7;
+    reconsider o as Element of SS(i) by A3;
     the carrier of S(k) = (the carrier of SS(i)) \/ the carrier of S(i)
-    by A6,CIRCCOMB:def 2;
+    by A4,CIRCCOMB:def 2;
     then o in the carrier of S(k) by XBOOLE_0:def 3;
-    then o in InnerVertices (S(k)) by A5,A6,CIRCCOMB:15;
-    hence thesis by A3,A4;
+    then o in InnerVertices (S(k)) by A3,A4,CIRCCOMB:15;
+    hence thesis by A1,A2;
   end;
 end;
 
@@ -828,7 +829,7 @@ proof
   let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
   dom f = 2-tuples_on BOOLEAN by FUNCT_2:def 1;
   then
-A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN by MCART_1:7;
+A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN;
   proj1 (n-BitGFA0CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
   proj1 (n-BitGFA0CarryOutput(x,y))`2 = 3-tuples_on BOOLEAN by Lm1;
   hence thesis by A1,FINSEQ_2:110;
@@ -1792,8 +1793,8 @@ end;
 
 definition
   let k,n be Nat such that
-A1: k >= 1 and
-A2: k <= n;
+B1: k >= 1 and
+B2: k <= n;
   let x,y be FinSequence;
   func (k,n)-BitGFA1AdderOutput(x,y) ->
   Element of InnerVertices (n-BitGFA1Str(x,y)) means
@@ -1804,21 +1805,21 @@ A2: k <= n;
   existence
   proof
     consider i being Nat such that
-A3: k = 1+i by A1,NAT_1:10;
+A1: k = 1+i by B1,NAT_1:10;
     reconsider i as Nat;
     deffunc S(Nat) = $1-BitGFA1Str(x,y);
     deffunc SS(Nat) = BitGFA1Str(x .($1+1), y.($1+1),
     $1-BitGFA1CarryOutput(x,y));
     set o = GFA1AdderOutput(x .k, y.k, i-BitGFA1CarryOutput(x,y));
-A4: InnerVertices (S(k)) c= InnerVertices (S(n)) by A2,Th22;
-A5: o in InnerVertices SS(i) by A3,GFACIRC1:69;
-A6: S(k) = (S(i)) +* SS(i) by A3,Th21;
-    reconsider o as Element of SS(i) by A5;
+A2: InnerVertices (S(k)) c= InnerVertices (S(n)) by B2,Th22;
+A3: o in InnerVertices SS(i) by A1,GFACIRC1:69;
+A4: S(k) = (S(i)) +* SS(i) by A1,Th21;
+    reconsider o as Element of SS(i) by A3;
     the carrier of S(k) = (the carrier of SS(i)) \/ the carrier of S(i)
-    by A6,CIRCCOMB:def 2;
+    by A4,CIRCCOMB:def 2;
     then o in the carrier of S(k) by XBOOLE_0:def 3;
-    then o in InnerVertices (S(k)) by A5,A6,CIRCCOMB:15;
-    hence thesis by A3,A4;
+    then o in InnerVertices (S(k)) by A3,A4,CIRCCOMB:15;
+    hence thesis by A1,A2;
   end;
 end;
 
@@ -1941,7 +1942,7 @@ proof
   let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
   dom f = 2-tuples_on BOOLEAN by FUNCT_2:def 1;
   then
-A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN by MCART_1:7;
+A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN;
   proj1 (n-BitGFA1CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
   proj1 (n-BitGFA1CarryOutput(x,y))`2 = 3-tuples_on BOOLEAN by Lm3;
   hence thesis by A1,FINSEQ_2:110;

@@ -2,7 +2,7 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received April 6, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,11 +16,11 @@ environ
 
  vocabularies RELAT_1, XBOOLE_0, PARTFUN1, FUNCT_1, TARSKI, SUBSET_1, ZFMISC_1,
       RELAT_2, MCART_1, SETFAM_1, FUNCT_2, GROUP_9;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, RELAT_1,
-      RELAT_2, FUNCT_1, RELSET_1, PARTFUN1;
- constructors RELAT_2, PARTFUN1, MCART_1, SETFAM_1, RELSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XTUPLE_0, SUBSET_1, SETFAM_1, MCART_1,
+      RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1;
+ constructors RELAT_2, PARTFUN1, MCART_1, SETFAM_1, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1,
-      GRFUNC_1;
+      GRFUNC_1, XTUPLE_0;
  requirements SUBSET, BOOLE;
 
 
@@ -34,7 +34,7 @@ definition
   attr R is quasi_total means
 :: FUNCT_2:def 1
 
-  X = dom R if Y = {} implies X = {} otherwise R = {};
+  X = dom R if Y <> {} otherwise R = {};
 end;
 
 registration
@@ -44,12 +44,24 @@ end;
 
 registration
   let X,Y;
-  cluster total -> quasi_total for PartFunc of X,Y;
+  cluster total -> quasi_total for Relation of X,Y;
 end;
 
 definition
   let X,Y;
   mode Function of X,Y is quasi_total PartFunc of X,Y;
+end;
+
+registration let X be empty set, Y be set;
+ cluster quasi_total -> total for Relation of X,Y;
+end;
+
+registration let X be set, Y be non empty set;
+ cluster quasi_total -> total for Relation of X,Y;
+end;
+
+registration let X be set;
+ cluster quasi_total -> total for Relation of X,X;
 end;
 
 theorem :: FUNCT_2:1
@@ -90,8 +102,6 @@ scheme :: FUNCT_2:sch 2
 provided
  for x st x in X() holds F(x) in Y();
 
-:: Set of functions from a set into a set
-
 definition
   let X,Y;
   func Funcs(X,Y) -> set means
@@ -129,8 +139,8 @@ theorem :: FUNCT_2:11
   for f being Function of X,Y st y in rng f ex x st x in X & f.x = y;
 
 theorem :: FUNCT_2:12
-  for f1,f2 being Function of X,Y st for x st x in X holds f1.x =
-  f2.x holds f1 = f2;
+  for f1,f2 being Function of X,Y st for x st x in X holds f1.x = f2.x
+  holds f1 = f2;
 
 theorem :: FUNCT_2:13
   for f being quasi_total Relation of X,Y for g being quasi_total
@@ -226,7 +236,7 @@ theorem :: FUNCT_2:33
   for f being Function of X,Y st X c= Z holds f|Z = f;
 
 theorem :: FUNCT_2:34
-  for f being Function of X,Y st Y <> {} & x in X & f.x in Z holds (Z|f)
+  for f being Function of X,Y st Y <> {} & x in X & f.x in Z holds (Z|`f)
   .x = f.x;
 
 theorem :: FUNCT_2:35
@@ -236,9 +246,7 @@ theorem :: FUNCT_2:35
 theorem :: FUNCT_2:36
   for f being Function of X,Y holds f.:P c= Y;
 
-theorem :: FUNCT_2:37
-  for f being Function of X,Y st Y = {} implies X = {} holds f.:X = rng
-  f;
+canceled;
 
 theorem :: FUNCT_2:38
   for f being Function of X,Y st Y <> {} for x holds x in f"Q iff x in X
@@ -265,15 +273,11 @@ theorem :: FUNCT_2:44
   for f being Function of X,Y for g being Function of Y,Z st (Z = {}
   implies Y = {}) holds f"Q c= (g*f)"(g.:Q);
 
-:: Empty Function
-
 theorem :: FUNCT_2:45
   for f being Function of {},Y holds f.:P = {};
 
 theorem :: FUNCT_2:46
   for f being Function of {},Y holds f"Q = {};
-
-:: Function from a singleton into a set
 
 theorem :: FUNCT_2:47
   for f being Function of {x},Y st Y <> {} holds f.x in Y;
@@ -284,15 +288,11 @@ theorem :: FUNCT_2:48
 theorem :: FUNCT_2:49
   for f being Function of {x},Y st Y <> {} holds f.:P c= {f.x};
 
-:: Function from a set into a singleton
-
 theorem :: FUNCT_2:50
   for f being Function of X,{y} st x in X holds f.x = y;
 
 theorem :: FUNCT_2:51
   for f1,f2 being Function of X,{y} holds f1 = f2;
-
-:: Function from X into X
 
 theorem :: FUNCT_2:52
   for f being Function of X,X holds dom f = X;
@@ -323,8 +323,6 @@ theorem :: FUNCT_2:55
 theorem :: FUNCT_2:56
   for f being Function of X,X holds f is one-to-one iff for x1,x2
   st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2;
-
-:: Permutation of a set
 
 definition
   let X, Y;
@@ -394,14 +392,7 @@ theorem :: FUNCT_2:61
 theorem :: FUNCT_2:62
   for f being Permutation of X st P c= X holds f.:(f"P) = P & f"(f .:P) = P;
 
-:: Function from a set into a nonempty set
-
 reserve D for non empty set;
-
-registration
-  let X,D;
-  cluster quasi_total -> total for PartFunc of X,D;
-end;
 
 registration
   let X,D,Z;
@@ -602,16 +593,8 @@ scheme :: FUNCT_2:sch 9
 provided
  for x being Element of X() holds F(x) is Element of Y();
 
-scheme :: FUNCT_2:sch 10
-
-  NonUniqExMD{X, Y() -> non empty set, P[set,set]}: ex f being Function of X()
-  , Y() st for x being Element of X() holds P[x, f.x]
-provided
- for x being Element of X() ex y being Element of Y() st P[x, y];
-
 definition
   let A,B,C be non empty set;
-
   let f be Function of A, [:B,C:];
   redefine func pr1 f -> Function of A,B means
 :: FUNCT_2:def 5
@@ -668,7 +651,7 @@ theorem :: FUNCT_2:97
 theorem :: FUNCT_2:98
   for f being Function, A0, D being set st f"D c= A0 holds f"D = (f|A0)" D;
 
-scheme :: FUNCT_2:sch 11
+scheme :: FUNCT_2:sch 10
 
   MChoice{A()-> non empty set, B()-> non empty set, F(set) -> set}: ex t being
   Function of A(),B() st for a being Element of A() holds t.a in F(a)
@@ -755,7 +738,7 @@ theorem :: FUNCT_2:107
 definition
   let X,Z be set, Y be non empty set;
   let f be Function of X,Y;
-  let p be PartFunc of Y,Z;
+  let p be Z-valued Function;
   assume
  rng f c= dom p;
   func p/*f -> Function of X,Z equals
@@ -900,3 +883,9 @@ definition
   let O,E be set;
   mode Action of O,E is Function of O, Funcs(E,E);
 end;
+
+theorem :: FUNCT_2:125
+  for x being set, A being set
+   for f,g being Function of {x}, A st f.x = g.x
+   holds f = g;
+

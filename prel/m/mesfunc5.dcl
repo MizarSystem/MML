@@ -15,6 +15,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
@@ -50,20 +51,20 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="94"/>
+<Adjective nr="96"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="26">
-<Func kind="K" nr="27">
+<Func kind="K" nr="24">
+<Func kind="K" nr="25">
 <LocusVar nr="1"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="44"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="102"/>
+<Adjective nr="104"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MESFUNC5" nr="2">
@@ -76,20 +77,20 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="101"/>
+<Adjective nr="103"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="26">
-<Func kind="K" nr="27">
+<Func kind="K" nr="24">
+<Func kind="K" nr="25">
 <LocusVar nr="1"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="44"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="103"/>
+<Adjective nr="105"/>
 </Cluster>
 </CCluster>
 </Registrations>

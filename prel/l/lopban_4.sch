@@ -14,6 +14,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -29,41 +30,32 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCSDOM"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="FUNCT_3"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="CLASSES2"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="GRAPH_1"/>
-<ArticleID name="CAT_1"/>
-<ArticleID name="CAT_2"/>
-<ArticleID name="GRCAT_1"/>
-<ArticleID name="LOPBAN_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="LOPBAN_1"/>
 <ArticleID name="LOPBAN_2"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="21">
+<Typ kind="G" nr="18">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="66"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="72"/>
 <Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
 <Adjective nr="101"/>
 <Adjective nr="102"/>
-<Adjective nr="104"/>
-<Adjective nr="112"/>
-<Adjective nr="146"/>
-<Adjective nr="150"/>
-<Adjective nr="152"/>
-<Adjective nr="166"/>
+<Adjective nr="103"/>
+<Adjective nr="107"/>
+<Adjective nr="108"/>
+<Adjective nr="110"/>
+<Adjective nr="118"/>
+<Adjective nr="121"/>
+<Adjective nr="125"/>
+<Adjective nr="127"/>
+<Adjective nr="145"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -84,7 +76,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="21"/>
-<Adjective nr="27">
+<Adjective nr="30">
 <Func kind="K" nr="32"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -116,7 +108,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="105">
+<Func kind="K" nr="115">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -141,14 +133,14 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="105">
+<Func kind="K" nr="115">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="142">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

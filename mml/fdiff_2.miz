@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Kotowicz and Konrad Raczkowski
 ::
 :: Received January 10, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,15 +19,17 @@ environ
       XREAL_0, ORDINAL1, XXREAL_0, COMPLEX1, NAT_1, TARSKI, VALUED_1, FUNCT_2,
       FUNCOP_1, XXREAL_1, FCONT_1, SQUARE_1, XBOOLE_0, ORDINAL4, LIMFUNC1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, COMPLEX1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, VALUED_0, VALUED_1,
-      SEQ_1, RELSET_1, SEQ_2, PARTFUN1, SQUARE_1, PARTFUN2, RFUNCT_1, RCOMP_1,
+      XREAL_0, COMPLEX1, REAL_1, SQUARE_1,
+      NAT_1, FUNCT_1, FUNCT_2, VALUED_0, VALUED_1,
+      SEQ_1, RELSET_1, COMSEQ_2,
+      SEQ_2, PARTFUN1, PARTFUN2, RFUNCT_1, RCOMP_1,
       FCONT_1, FDIFF_1, LIMFUNC1, RECDEF_1;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3,
       PROB_1, RCOMP_1, PARTFUN2, RFUNCT_1, RFUNCT_2, FCONT_1, LIMFUNC1,
-      FDIFF_1, SEQ_1, VALUED_1, RECDEF_1, RELSET_1, BINOP_2, RVSUM_1;
+      FDIFF_1, SEQ_1, VALUED_1, RECDEF_1, RELSET_1, BINOP_2, RVSUM_1, COMSEQ_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, FDIFF_1, FCONT_3, VALUED_0,
-      VALUED_1, FUNCT_2, FUNCOP_1, SEQ_4;
+      VALUED_1, FUNCT_2, FUNCOP_1, SEQ_4, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, FDIFF_1, SQUARE_1, SUBSET_1, LIMFUNC1, PROB_1,
       VALUED_0, VALUED_1, SEQM_3;
@@ -44,27 +46,21 @@ reserve x for set;
 reserve x0,r,r1,r2,g,g1,g2,p for Real;
 reserve n,m,k,l for Element of NAT;
 reserve a,b,d for Real_Sequence;
-reserve h,h1,h2 for convergent_to_0 Real_Sequence;
+reserve h,h1,h2 for non-zero 0-convergent Real_Sequence;
 reserve c,c1 for constant Real_Sequence;
 reserve A for open Subset of REAL;
 reserve f,f1,f2 for PartFunc of REAL,REAL;
-reserve L for LINEAR;
-reserve R for REST;
+reserve L for LinearFunc;
+reserve R for RestFunc;
 
-definition
+registration
   let h;
-  redefine func -h -> convergent_to_0 Real_Sequence;
+  cluster -h -> non-zero convergent;
   coherence
   proof
-    h is non-zero by FDIFF_1:def 1;
-    then
 A1: -h is non-zero by SEQ_1:45;
-A2: h is convergent by FDIFF_1:def 1;
-    lim h = 0 by FDIFF_1:def 1;
-    then
-A3: lim (-h) = -0 by A2,SEQ_2:10;
-    -h is convergent by A2,SEQ_2:9;
-    hence thesis by A1,A3,FDIFF_1:def 1;
+    -h is convergent by SEQ_2:9;
+    hence thesis by A1;
   end;
 end;
 
@@ -176,10 +172,9 @@ A1: rng c = {x0};
   x0 in rng c by A1,TARSKI:def 1;
   hence
 A2: lim c = x0 by SEQ_4:25;
-A3: h is convergent by FDIFF_1:def 1;
-  hence h + c is convergent by SEQ_2:5;
-  lim h = 0 by FDIFF_1:def 1;
-  hence lim (h + c) = 0 + x0 by A2,A3,SEQ_2:6
+  thus h + c is convergent by SEQ_2:5;
+  lim h = 0;
+  hence lim (h + c) = 0 + x0 by A2,SEQ_2:6
     .= x0;
 end;
 
@@ -201,26 +196,23 @@ A3: a.n = r by A1,TARSKI:def 1;
 end;
 
 theorem Th6:
-  a is subsequence of h implies a is convergent_to_0 Real_Sequence
+  a is subsequence of h implies a is 0-convergent non-zero Real_Sequence
 proof
   assume
 A1: a is subsequence of h;
   then consider I be increasing sequence of NAT such that
 A2: a = h*I by VALUED_0:def 17;
-A3: h is non-zero by FDIFF_1:def 1;
   now
     given n such that
 A4: a.n = 0;
-    h.(I.n) <> 0 by A3,SEQ_1:5;
+    h.(I.n) <> 0 by SEQ_1:5;
     hence contradiction by A2,A4,FUNCT_2:15;
   end;
   then
 A5: a is non-zero by SEQ_1:5;
-A6: h is convergent by FDIFF_1:def 1;
-  then
 A7: a is convergent by A1,SEQ_4:16;
-  lim h = 0 by FDIFF_1:def 1;
-  then lim a = 0 by A1,A6,SEQ_4:17;
+  lim h = 0;
+  then lim a = 0 by A1,SEQ_4:17;
   hence thesis by A7,A5,FDIFF_1:def 1;
 end;
 
@@ -242,8 +234,6 @@ A5: {g} c= dom f;
   deffunc F(Element of NAT) = h1.$1;
   consider a such that
 A6: for n holds a.(2*n) = F(n) & a.(2*n + 1) = G(n) from SCHEME1:sch 2;
-A7: h2 is non-zero by FDIFF_1:def 1;
-A8: h1 is non-zero by FDIFF_1:def 1;
   now
     let n;
     consider m such that
@@ -253,26 +243,24 @@ A9: n = 2*m or n = 2*m + 1 by SCHEME1:1;
       suppose
         n = 2*m;
         then a.n = h1.m by A6;
-        hence a.n <> 0 by A8,SEQ_1:5;
+        hence a.n <> 0 by SEQ_1:5;
       end;
       suppose
         n = 2*m + 1;
         then a.n = h2.m by A6;
-        hence a.n <> 0 by A7,SEQ_1:5;
+        hence a.n <> 0 by SEQ_1:5;
       end;
     end;
     hence a.n <> 0;
   end;
   then
 A10: a is non-zero by SEQ_1:5;
-A11: lim h1 = 0 by FDIFF_1:def 1;
-A12: lim h2 = 0 by FDIFF_1:def 1;
-A13: h2 is convergent by FDIFF_1:def 1;
-A14: h1 is convergent by FDIFF_1:def 1;
-  then
-A15: a is convergent by A6,A11,A13,A12,Th1;
-  lim a = 0 by A6,A14,A11,A13,A12,Th1;
-  then reconsider a as convergent_to_0 Real_Sequence by A15,A10,FDIFF_1:def 1;
+A11: lim h1 = 0;
+A12: lim h2 = 0;
+A15: a is convergent by A6,A11,A12,Th1;
+  lim a = 0 by A6,A11,A12,Th1;
+  then reconsider a as 0-convergent non-zero Real_Sequence
+    by A15,A10,FDIFF_1:def 1;
 A16: rng (a + c) c= dom f
   proof
     let x;
@@ -397,9 +385,9 @@ A6: b is convergent by A4,SEQ_4:31;
     hence 0 <> b.n by A4;
   end;
   then b is non-zero by SEQ_1:5;
-  then reconsider b as convergent_to_0 Real_Sequence by A6,A5,FDIFF_1:def 1;
-  take b;
-  take a;
+  then reconsider b as 0-convergent non-zero Real_Sequence
+    by A6,A5,FDIFF_1:def 1;
+  take b,a;
   thus rng a = {r}
   proof
     thus rng a c= {r}
@@ -649,7 +637,7 @@ A18: for g st g in dom T1 holds T1.g = F(g) from SEQ_1:sch 3;
 A19: dom T1 = REAL by A17,FDIFF_1:1;
   then
 A20: T1 is total by PARTFUN1:def 2;
-  reconsider L as LINEAR by A13,A12,FDIFF_1:def 3;
+  reconsider L as LinearFunc by A13,A12,FDIFF_1:def 3;
   defpred P[set] means $1 in ].-r,r.[;
   consider R be PartFunc of REAL,REAL such that
 A21: R is total and
@@ -663,9 +651,8 @@ A24: now
   end;
   now
     let h1;
-A25: lim h1 = 0 by FDIFF_1:def 1;
-    h1 is convergent by FDIFF_1:def 1;
-    then consider k such that
+A25: lim h1 = 0;
+    consider k such that
 A26: for n st k <= n holds abs(h1.n - 0) < r by A4,A25,SEQ_2:def 7;
     set h2 = h1^\k;
 A27: now
@@ -710,12 +697,11 @@ A36:  h2.n in ].-r,r.[ by A27;
         .= (h2").n * (R/*h2).n by A21,FUNCT_2:115
         .= (h2" (#) (R/*h2)).n by SEQ_1:8;
     end;
-A37: h2 is non-zero by FDIFF_1:def 1;
 A38: now
       let n be Nat;
 A39:  n in NAT by ORDINAL1:def 12;
       then
-A40:  h2.n <> 0 by A37,SEQ_1:5;
+A40:  h2.n <> 0 by SEQ_1:5;
       thus b.n = (h2").n * (L/*h2).n by A39,SEQ_1:8
         .= (h2").n * L.(h2.n) by A13,A39,FUNCT_2:115
         .= (h2").n * ((h2.n) * l) by A10,A11
@@ -756,12 +742,11 @@ A46: l = lim a by A3,A6,A7,A8,A28,A43,Th7;
     then lim (h2"(#) (R/*h2)) = 0 by A35,FUNCT_2:63;
     hence lim (h1"(#)(R/*h1)) = 0 by A45,A33,SEQ_4:22;
   end;
-  then reconsider R as REST by A21,FDIFF_1:def 2;
+  then reconsider R as RestFunc by A21,FDIFF_1:def 2;
 A47: now
     take N;
     thus N c= dom f by A1;
-    take L;
-    take R;
+    take L,R;
     thus L.1 = l * 1 by A10,A11
       .= l;
     let g1;
@@ -778,11 +763,11 @@ A47: now
   proof
     consider N1 be Neighbourhood of x0 such that
 A48: N1 c= dom f and
-A49: ex L be LINEAR, R be REST st L.1 = l & for g st g in N1 holds f.g
+A49: ex L be LinearFunc, R be RestFunc st L.1 = l & for g st g in N1 holds f.g
     - f.x0 = L.(g - x0) + R.(g - x0) by A47;
     take N1;
     thus N1 c= dom f by A48;
-    consider L1 be LINEAR, R1 be REST such that
+    consider L1 be LinearFunc, R1 be RestFunc such that
     L1.1 = l and
 A50: for g st g in N1 holds f.g - f.x0 = L1.(g - x0) + R1.(g - x0) by A49;
     take L1;
@@ -812,18 +797,18 @@ dom f) & for h,c st rng c = {x0} & rng (h + c) c= dom f holds h"(#)(f/*(h+c) -
 A1: f is_differentiable_in x0;
     then consider N be Neighbourhood of x0 such that
 A2: N c= dom f and
-    ex L be LINEAR, R be REST st for g st g in N holds f.g - f.x0 = L.(g -
+    ex L be LinearFunc, R be RestFunc st
+    for g st g in N holds f.g - f.x0 = L.(g -
     x0) + R.(g - x0) by FDIFF_1:def 4;
     thus ex N be Neighbourhood of x0 st N c= dom f by A2;
     let h,c such that
 A3: rng c = {x0} and
 A4: rng (h + c) c= dom f;
-A5: lim h = 0 by FDIFF_1:def 1;
+A5: lim h = 0;
     consider r be real number such that
 A6: 0 < r and
 A7: N = ].x0 - r,x0 + r.[ by RCOMP_1:def 6;
-    h is convergent by FDIFF_1:def 1;
-    then consider k such that
+    consider k such that
 A8: for n st k <= n holds abs(h.n - 0) < r by A5,A6,SEQ_2:def 7;
     set h1 = h^\k;
     rng (h1 + c) c= N
@@ -877,10 +862,11 @@ A17: for h,c st rng c = {x0} & rng (h + c) c= dom f holds h"(#)(f/*(h+c)
 end;
 
 theorem Th12:
-  f is_differentiable_in x0 & diff(f,x0) = g iff (ex N be
-  Neighbourhood of x0 st N c= dom f) & for h,c st rng c = {x0} & rng (h + c) c=
-dom f holds h"(#)(f/*(h+c) - f/*c) is convergent & lim (h"(#)(f/*(h+c) - f/*c))
-  = g
+  f is_differentiable_in x0 & diff(f,x0) = g iff
+  (ex N be Neighbourhood of x0 st N c= dom f) &
+  for h,c st rng c = {x0} & rng (h + c) c= dom f holds
+  h"(#)(f/*(h+c) - f/*c) is convergent &
+  lim (h"(#)(f/*(h+c) - f/*c)) = g
 proof
   thus f is_differentiable_in x0 & diff(f,x0) = g implies (ex N be
   Neighbourhood of x0 st N c= dom f) & for h,c st rng c = {x0} & rng (h + c) c=
@@ -946,14 +932,12 @@ A9:   ex n st c.n = x by FUNCT_2:113;
       hence thesis by A7,A9;
     end;
     set d = f1/*(h+c) - f1/*c;
-A10: lim h = 0 by FDIFF_1:def 1;
-A11: h is convergent by FDIFF_1:def 1;
-    then
+A10: lim h = 0;
 A12: h + c is convergent by SEQ_2:5;
     lim c = c.0 by SEQ_4:25;
     then lim c = x0 by A7;
     then
-A13: lim (h + c) = 0 + x0 by A11,A10,SEQ_2:6
+A13: lim (h + c) = 0 + x0 by A10,SEQ_2:6
       .= x0;
 A14: f1 is_continuous_in x0 by A2,FDIFF_1:24;
     then
@@ -1046,8 +1030,8 @@ A33:    now
             .= (f1/*(h+c)).n;
         end;
         lim (d^\k) = 0 by A28,A29,SEQ_4:20;
-        then reconsider d1 = d^\k as convergent_to_0 Real_Sequence by A28,A32,
-FDIFF_1:def 1;
+        then reconsider d1 = d^\k as 0-convergent non-zero Real_Sequence
+          by A28,A32,FDIFF_1:def 1;
         set t = d1"(#)(f2/*(d1 + a1) - f2/*a1);
         d1 + a1 = (d + a)^\k by SEQM_3:15;
         then
@@ -1077,7 +1061,7 @@ A42:    t(#)s = d1"(#)(f2/*(d1+a1) - f2/*a1) (#) ((f1/*((h+c)^\k) - f1/*
         (#)h1") by A18,VALUED_0:27
           .= ((f2/*(d1+a1) - f2/*a1)/"d1) (#) (d1(#)h1") by SEQM_3:17
           .= ((f2/*(d1+a1) - f2/*a1)/"d1) (#) d1(#)h1" by SEQ_1:14
-          .= (f2/*(d1+a1) - f2/*a1) (#) h1" by A32,SEQ_1:37
+          .= (f2/*(d1+a1) - f2/*a1) (#) h1" by SEQ_1:37
           .= ((f2/*(f1/*(h+c)))^\k - f2/*a1) (#) h1" by A17,A34,VALUED_0:27
           .= (((f2*f1)/*(h+c))^\k - f2/*a1) (#) h1" by A5,VALUED_0:31
           .= (((f2*f1)/*(h+c))^\k - ((f2/*a)^\k)) (#) h1" by A24,VALUED_0:27
@@ -1104,7 +1088,8 @@ A46:    for n holds P[(f1/*(h+c)*I1).n] and
         for n st for r st r = (f1/*(h+c)).n holds P[r] ex m st n = I1.m
         from ExIncSeqofNat(A45);
         (h*I1) is subsequence of h by VALUED_0:def 17;
-        then reconsider h1 = h*I1 as convergent_to_0 Real_Sequence by Th6;
+        then reconsider h1 = h*I1 as 0-convergent non-zero Real_Sequence
+          by Th6;
         set c1 = c*I1;
 A47:    c1 is subsequence of c by VALUED_0:def 17;
         then
@@ -1201,7 +1186,8 @@ A63:          (d*I2).n = 0;
             then
 A64:        (d*I2) is non-zero by SEQ_1:5;
             (h*I2) is subsequence of h by VALUED_0:def 17;
-            then reconsider h2 = h*I2 as convergent_to_0 Real_Sequence by Th6;
+            then reconsider h2 = h*I2 as 0-convergent non-zero
+              Real_Sequence by Th6;
             set a1 = a*I2;
             set c2 = c*I2;
             reconsider c2 as constant Real_Sequence;
@@ -1210,8 +1196,8 @@ A65:        d*I2 is subsequence of d by VALUED_0:def 17;
             then
 A66:        d*I2 is convergent by A28,SEQ_4:16;
             lim (d*I2) = 0 by A28,A29,A65,SEQ_4:17;
-            then reconsider
-d1 = d*I2 as convergent_to_0 Real_Sequence by A66,A64,FDIFF_1:def 1;
+            then reconsider d1 = d*I2 as 0-convergent non-zero
+              Real_Sequence by A66,A64,FDIFF_1:def 1;
             set t = d1"(#)(f2/*(d1+a1) - f2/*a1);
             a1 is subsequence of a by VALUED_0:def 17;
             then
@@ -1233,7 +1219,7 @@ A70:        t(#)s = d1"(#)(f2/*(d1+a1) - f2/*a1) (#) ((f1/*((h + c)*I2)
             (#)h2") by A18,FUNCT_2:110
               .= ((f2/*(d1+a1) - f2/*a1)/"d1) (#) (d1(#)h2") by RFUNCT_2:2
               .= ((f2/*(d1+a1) - f2/*a1)/"d1) (#) d1(#)h2" by SEQ_1:14
-              .= (f2/*(d1+a1) - f2/*a1) (#) h2" by A64,SEQ_1:37
+              .= (f2/*(d1+a1) - f2/*a1) (#) h2" by SEQ_1:37
               .= (f2/*(f1/*(h+c))*I2 - f2/*a1) (#) h2" by A17,A69,FUNCT_2:110
               .= ((f2*f1)/*(h+c)*I2 - f2/*a1) (#) h2" by A5,VALUED_0:31
               .= (((f2*f1)/*(h+c))*I2 - (f2/*a*I2)) (#) h2" by A24,FUNCT_2:110
@@ -2106,9 +2092,6 @@ A15:    x = x0 by A6,TARSKI:def 1;
       end;
       set fn = (h"(#)(f/*(h+c) - f/*c))^\n;
       set h1 = h^\n;
-A16:  h1 is convergent by FDIFF_1:def 1;
-      then
-A17:  abs(h1) is convergent;
       set c1 = c^\n;
 A18:  rng c1 c= A
       proof
@@ -2120,8 +2103,6 @@ A20:    x = x0 by A6,A19,TARSKI:def 1;
         x0 in N by RCOMP_1:16;
         hence thesis by A4,A20;
       end;
-      h1 is non-zero by FDIFF_1:def 1;
-      then
 A21:  abs(h1) is non-zero by SEQ_1:53;
 A22:  for m holds a.m <= abs(fn).m & abs(fn).m <= abs(h1).m
       proof
@@ -2163,15 +2144,15 @@ FUNCT_2:108,XBOOLE_1:1
           .= abs((f/*(h+c) - (f/*c))^\n).m by SEQM_3:17;
         hence thesis by A24,A26,A27,A29,A25,XREAL_1:64;
       end;
-      lim h1 = 0 by FDIFF_1:def 1;
+      lim h1 = 0;
       then
-A30:  lim abs(h1) = abs(0) by A16,SEQ_4:14
+A30:  lim abs(h1) = abs(0) by SEQ_4:14
         .= 0 by ABSVALUE:2;
 A31:  lim a = a.0 by SEQ_4:26
         .= 0 by FUNCOP_1:7;
       then
-A32:  lim abs(fn) = 0 by A17,A30,A22,SEQ_2:20;
-A33:  abs(fn) is convergent by A31,A17,A30,A22,SEQ_2:19;
+A32:  lim abs(fn) = 0 by A30,A22,SEQ_2:20;
+A33:  abs(fn) is convergent by A31,A30,A22,SEQ_2:19;
       then
 A34:  fn is convergent by A32,SEQ_4:15;
       hence h"(#)(f/*(h+c) - f/*c) is convergent by SEQ_4:21;
@@ -3098,7 +3079,6 @@ A20:  now
         c.n in rng c by VALUED_0:28;
         hence c.n = f.x0 by A10,A12,TARSKI:def 1;
       end;
-A21:  h is non-zero by FDIFF_1:def 1;
       now
         given n such that
 A22:    b.n = 0;
@@ -3107,7 +3087,7 @@ A23:    (h + c).n = h.n + c.n by SEQ_1:7
         f.(a.n + b.n) = f.((f").(f.x0)) by A10,A22,FUNCOP_1:7
           .= f.x0 by A9,FUNCT_1:34;
         then h.n + f.x0 = f.x0 by A19,A23;
-        hence contradiction by A21,SEQ_1:5;
+        hence contradiction by SEQ_1:5;
       end;
       then
 A24:  b is non-zero by SEQ_1:5;
@@ -3150,9 +3130,9 @@ A36:  rng (b + a) c= dom f
         then x in REAL;
         hence thesis by A25;
       end;
-      reconsider b as convergent_to_0 Real_Sequence by A24,A33,A35,
+      reconsider b as 0-convergent non-zero Real_Sequence by A24,A33,A35,
 FDIFF_1:def 1;
-A37:  b" is non-zero by A24,SEQ_1:33;
+A37:  b" is non-zero by SEQ_1:33;
 A38:  rng a = {(f").y0}
       proof
         thus rng a c= {(f").y0}
@@ -3198,7 +3178,7 @@ A41:  f/*a = c by FUNCT_2:63;
       end;
       then
 A42:  h = f/*(b+a) - f/*a by FUNCT_2:63;
-      then f/*(b+a) - f/*a is non-zero by FDIFF_1:def 1;
+      then f/*(b+a) - f/*a is non-zero;
       then
 A43:  b"(#)(f/*(b+a) - f/*a) is non-zero by A37,SEQ_1:35;
 A44:  rng c c= dom (f")
@@ -3370,7 +3350,6 @@ A38:  now
         hence c.n = f1.x0 by A10,A15,TARSKI:def 1;
       end;
 A39:  0 <> diff(f,(f1").y0) by A3,A36;
-A40:  h is non-zero by FDIFF_1:def 1;
       now
         given n such that
 A41:    b.n = 0;
@@ -3381,13 +3360,12 @@ A42:    f.(a.n + b.n) = f1.x0 by A9,A41,FUNCT_1:47;
         (h + c).n = h.n + c.n by SEQ_1:7
           .= h.n + f1.x0 by A38;
         then h.n + f1.x0 = f1.x0 by A24,A42;
-        hence contradiction by A40,SEQ_1:5;
+        hence contradiction by SEQ_1:5;
       end;
-      then
-A43:  b is non-zero by SEQ_1:5;
-      then reconsider b as convergent_to_0 Real_Sequence by A30,A32,
+      then b is non-zero by SEQ_1:5;
+      then reconsider b as 0-convergent non-zero Real_Sequence by A30,A32,
 FDIFF_1:def 1;
-A44:  b" is non-zero by A43,SEQ_1:33;
+A44:  b" is non-zero by SEQ_1:33;
 A45:  rng a = {(f1").y0}
       proof
         thus rng a c= {(f1").y0}
@@ -3437,7 +3415,7 @@ A49:  f/*a = c by FUNCT_2:63;
       end;
       then
 A50:  h = f/*(b+a) - f/*a by FUNCT_2:63;
-      then f/*(b+a) - f/*a is non-zero by FDIFF_1:def 1;
+      then f/*(b+a) - f/*a is non-zero;
       then
 A51:  b"(#)(f/*(b+a) - f/*a) is non-zero by A44,SEQ_1:35;
 A52:  rng c c= dom (f1")
@@ -3611,7 +3589,6 @@ A38:  now
         hence c.n = f1.x0 by A10,A15,TARSKI:def 1;
       end;
 A39:  0 <> diff(f,(f1").y0) by A3,A36;
-A40:  h is non-zero by FDIFF_1:def 1;
       now
         given n such that
 A41:    b.n = 0;
@@ -3622,13 +3599,12 @@ A42:    f.(a.n + b.n) = f1.x0 by A9,A41,FUNCT_1:47;
         (h + c).n = h.n + c.n by SEQ_1:7
           .= h.n + f1.x0 by A38;
         then h.n + f1.x0 = f1.x0 by A24,A42;
-        hence contradiction by A40,SEQ_1:5;
+        hence contradiction by SEQ_1:5;
       end;
-      then
-A43:  b is non-zero by SEQ_1:5;
-      then reconsider b as convergent_to_0 Real_Sequence by A30,A32,
+      then b is non-zero by SEQ_1:5;
+      then reconsider b as 0-convergent non-zero Real_Sequence by A30,A32,
 FDIFF_1:def 1;
-A44:  b" is non-zero by A43,SEQ_1:33;
+A44:  b" is non-zero by SEQ_1:33;
 A45:  rng a = {(f1").y0}
       proof
         thus rng a c= {(f1").y0}
@@ -3678,7 +3654,7 @@ A49:  f/*a = c by FUNCT_2:63;
       end;
       then
 A50:  h = f/*(b+a) - f/*a by FUNCT_2:63;
-      then f/*(b+a) - f/*a is non-zero by FDIFF_1:def 1;
+      then f/*(b+a) - f/*a is non-zero;
       then
 A51:  b"(#)(f/*(b+a) - f/*a) is non-zero by A44,SEQ_1:35;
 A52:  rng c c= dom (f1")
@@ -3766,15 +3742,15 @@ A11: for h,c st rng c = {y0} & rng (h + c) c= dom (f1") holds h"(#)((f1")
     proof
 A12:  f|l is increasing or f|l is decreasing
       proof
-          per cases by A3;
-          suppose
-        for x0 st x0 in l holds 0 < diff(f,x0);
-            hence thesis by A1,A2,ROLLE:9;
-          end;
-          suppose
-        for x0 st x0 in l holds diff(f,x0) < 0;
-            hence thesis by A1,A2,ROLLE:10;
-          end;
+        per cases by A3;
+        suppose
+          for x0 st x0 in l holds 0 < diff(f,x0);
+          hence thesis by A1,A2,ROLLE:9;
+        end;
+        suppose
+          for x0 st x0 in l holds diff(f,x0) < 0;
+          hence thesis by A1,A2,ROLLE:10;
+        end;
       end;
       l c= dom f by A2,FDIFF_1:def 6;
       then f1"|(f.:l) is continuous by A12,FCONT_3:17;
@@ -3860,7 +3836,6 @@ A38:  now
         hence c.n = f1.x0 by A10,A15,TARSKI:def 1;
       end;
 A39:  0 <> diff(f,(f1").y0) by A3,A36;
-A40:  h is non-zero by FDIFF_1:def 1;
       now
         given n such that
 A41:    b.n = 0;
@@ -3871,13 +3846,13 @@ A42:    f.(a.n + b.n) = f1.x0 by A9,A41,FUNCT_1:47;
         (h + c).n = h.n + c.n by SEQ_1:7
           .= h.n + f1.x0 by A38;
         then h.n + f1.x0 = f1.x0 by A24,A42;
-        hence contradiction by A40,SEQ_1:5;
+        hence contradiction by SEQ_1:5;
       end;
       then
-A43:  b is non-zero by SEQ_1:5;
-      then reconsider b as convergent_to_0 Real_Sequence by A30,A32,
+      b is non-zero by SEQ_1:5;
+      then reconsider b as 0-convergent non-zero Real_Sequence by A30,A32,
 FDIFF_1:def 1;
-A44:  b" is non-zero by A43,SEQ_1:33;
+A44:  b" is non-zero by SEQ_1:33;
 A45:  rng a = {(f1").y0}
       proof
         thus rng a c= {(f1").y0}
@@ -3927,7 +3902,7 @@ A49:  f/*a = c by FUNCT_2:63;
       end;
       then
 A50:  h = f/*(b+a) - f/*a by FUNCT_2:63;
-      then f/*(b+a) - f/*a is non-zero by FDIFF_1:def 1;
+      then f/*(b+a) - f/*a is non-zero;
       then
 A51:  b"(#)(f/*(b+a) - f/*a) is non-zero by A44,SEQ_1:35;
 A52:  rng c c= dom (f1")
@@ -3991,13 +3966,15 @@ A1: f is_differentiable_in x0;
   let h,c such that
 A2: rng c = {x0} and
 A3: rng (h + c) c= dom f and
-A4: rng (-h + c) c= dom f;
+A4: rng ((-h) + c) c= dom f;
   set fm = (-h)"(#)(f/*(-h + c) - f/*c);
-A5: lim fm = diff(f,x0) by A1,A2,A4,Th12;
+  lim (-h) = -lim h by SEQ_2:10; then
+A: -h is 0-convergent by FDIFF_1:def 1;
+A5: lim fm = diff(f,x0) by A1,A2,A4,Th12,A;
   set fp = h"(#)(f/*(h+c) - f/*c);
 A6: diff(f,x0) = diff(f,x0);
   then
-A7: fm is convergent by A1,A2,A4,Th12;
+A7: fm is convergent by A1,A2,A4,Th12,A;
 A8: fp is convergent by A1,A2,A3,A6,Th12;
   then
 A9: fp + fm is convergent by A7,SEQ_2:5;

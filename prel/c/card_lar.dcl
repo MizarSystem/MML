@@ -28,9 +28,9 @@
 <Adjective nr="9"/>
 <Adjective nr="18" value="false"/>
 <Adjective nr="22" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="34" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="27"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CARD_LAR" nr="2">
@@ -38,8 +38,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="34" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="35" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,7 +52,7 @@
 <Adjective nr="7"/>
 <Adjective nr="8"/>
 <Adjective nr="22" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CARD_LAR" nr="1">
@@ -64,7 +64,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="60">
+<Func kind="K" nr="58">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -76,7 +76,7 @@
 <Cluster>
 <Adjective nr="8"/>
 <Adjective nr="22" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -105,16 +105,16 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="27" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="28" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="34" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="35" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

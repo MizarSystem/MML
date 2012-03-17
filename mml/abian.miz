@@ -2,7 +2,7 @@
 ::  by Piotr Rudnicki and Andrzej Trybulec
 ::
 :: Received February 22, 1997
-:: Copyright (c) 1997-2011 Association of Mizar Users
+:: Copyright (c) 1997-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -14,9 +14,10 @@
 
 environ
 
- vocabularies NUMBERS, SETFAM_1, FUNCT_1, SUBSET_1, ORDINAL1, INT_1, RELAT_1,
-      CARD_1, XXREAL_0, ARYTM_3, ARYTM_1, FUNCT_7, XBOOLE_0, TARSKI, ZFMISC_1,
-      FINSET_1, EQREL_1, FUNCOP_1, MCART_1, ABIAN, XCMPLX_0;
+ vocabularies NUMBERS, SETFAM_1, FUNCT_1, SUBSET_1, INT_1, RELAT_1, CARD_1,
+      XXREAL_0, ARYTM_3, ARYTM_1, FUNCT_7, XBOOLE_0, TARSKI, ZFMISC_1,
+      FINSET_1, EQREL_1, FUNCOP_1, MCART_1, ABIAN, XCMPLX_0, NAT_1,
+      RECDEF_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       MCART_1, DOMAIN_1, FINSET_1, SETFAM_1, SEQ_4, RELAT_1, FUNCT_1, FUNCT_2,
       FUNCOP_1, INT_1, NAT_1, NAT_D, EQREL_1, FUNCT_7, XXREAL_0;
@@ -393,14 +394,14 @@ end;
 
 definition
   let f be Function;
-  pred f has_a_fixpoint means
+  attr f is with_fixpoint means
   :Def5:
   ex x st x is_a_fixpoint_of f;
 end;
 
 notation
   let f be Function;
-  antonym f has_no_fixpoint for f has_a_fixpoint;
+  antonym f is without_fixpoints for f is with_fixpoint;
 end;
 
 definition
@@ -433,8 +434,8 @@ end;
 
 theorem
   for E being set, f being Function of E, E, sE being non empty covering
-  Subset-Family of E st for X being Element of sE holds X misses f.:X holds f
-  has_no_fixpoint
+  Subset-Family of E st for X being Element of sE holds X misses f.:X holds
+  f is without_fixpoints
 proof
   let E be set, f be Function of E, E, sE be non empty covering Subset-Family
   of E;
@@ -608,16 +609,17 @@ end;
 
 theorem
   for E being non empty set, f being Function of E, E st f
-  has_no_fixpoint ex E1, E2, E3 st E1 \/ E2 \/ E3 = E & f.:E1 misses E1 & f.:E2
-  misses E2 & f.:E3 misses E3
+  is without_fixpoints ex E1, E2, E3 st E1 \/ E2 \/ E3 = E &
+  f.:E1 misses E1 & f.:E2 misses E2 & f.:E3 misses E3
 proof
   let E be non empty set, f be Function of E, E;
   defpred P[set,Element of [:bool E qua set, bool E, bool E:]] means
-$2`1 \/ $2`2 \/ $2`3 = $1 & f.:$2`1 misses $2`1 & f.:$2`2 misses $2`2 & f.:$2`3
-  misses $2`3;
+$2`1_3 \/ $2`2_3 \/ $2`3_3 = $1 &
+  f.:($2`1_3) misses $2`1_3 & f.:($2`2_3) misses $2`2_3 & f.:($2`3_3)
+  misses $2`3_3;
   deffunc i(Element of NAT) = iter(f, $1);
   assume
-A1: f has_no_fixpoint;
+A1: f is without_fixpoints;
 A2: for a being Element of Class =_f ex b being Element of [:bool E, bool E,
   bool E:] st P[a,b]
   proof
@@ -639,15 +641,15 @@ A4: c = Class(=_f, x0) by EQREL_1:def 3;
     suppose
 A5:   c1 misses c2;
       take b = [c1,c2,c3];
-A6:   b`2 = c2 by MCART_1:43;
-A7:   b`3 = c3 by MCART_1:43;
-A8:   b`1 = c1 by MCART_1:43;
-      thus b`1 \/ b`2 \/ b`3 = c
+A6:   b`2_3 = c2 by MCART_1:def 6;
+A7:   b`3_3 = c3 by MCART_1:def 7;
+A8:   b`1_3 = c1 by MCART_1:def 5;
+      thus b`1_3 \/ b`2_3 \/ b`3_3 = c
       proof
         hereby
           let x;
           assume
-A9:       x in b`1 \/ b`2 \/ b`3;
+A9:       x in b`1_3 \/ b`2_3 \/ b`3_3;
           per cases by A8,A6,A7,A9,XBOOLE_0:def 3;
           suppose
             x in c1;
@@ -680,7 +682,7 @@ A12:    dom i(k) = E by FUNCT_2:def 1;
         suppose
 A13:      k is even;
           then reconsider k as even Element of NAT;
-          thus x in b`1 \/ b`2 \/ b`3
+          thus x in b`1_3 \/ b`2_3 \/ b`3_3
           proof
             per cases;
             suppose
@@ -703,7 +705,7 @@ A13:      k is even;
         suppose
 A14:      k is odd;
           then reconsider k as odd Element of NAT;
-          thus x in b`1 \/ b`2 \/ b`3
+          thus x in b`1_3 \/ b`2_3 \/ b`3_3
           proof
             per cases;
             suppose
@@ -761,7 +763,7 @@ A26:    dom i(l1) = E by FUNCT_2:def 1;
         then yc in c2 by A17,A18,A25;
         hence thesis;
       end;
-      hence f.:b`1 misses b`1 by A5,A8,XBOOLE_1:63;
+      hence f.:(b`1_3) misses b`1_3 by A5,A8,XBOOLE_1:63;
       f.:c2 c= c1
       proof
         let y be set;
@@ -801,7 +803,7 @@ A39:    dom i(l1) = E by FUNCT_2:def 1;
         then yc in c1 by A29,A30,A38;
         hence thesis;
       end;
-      hence f.:b`2 misses b`2 by A5,A6,XBOOLE_1:63;
+      hence f.:(b`2_3) misses b`2_3 by A5,A6,XBOOLE_1:63;
       thus thesis by A7,XBOOLE_1:65;
     end;
     suppose
@@ -1040,12 +1042,12 @@ A92:      x in c1 \/ d2;
       end;
       reconsider d3 = {r} as Subset of E by ZFMISC_1:31;
       take b = [d1,d2,d3];
-A93:  b`1 = d1 by MCART_1:43;
-A94:  b`2 = d2 by MCART_1:43;
-A95:  b`3 = d3 by MCART_1:43;
+A93:  b`1_3 = d1 by MCART_1:def 5;
+A94:  b`2_3 = d2 by MCART_1:def 6;
+A95:  b`3_3 = d3 by MCART_1:def 7;
       d1 \/ d3 = c1 \/ d3 by XBOOLE_1:39
         .= c1 by A77,ZFMISC_1:40;
-      hence b`1 \/ b`2 \/ b`3 = c by A93,A94,A95,A91,XBOOLE_1:4;
+      hence b`1_3 \/ b`2_3 \/ b`3_3 = c by A93,A94,A95,A91,XBOOLE_1:4;
 A96:  c1 misses d2
       proof
         assume c1 meets d2;
@@ -1056,7 +1058,7 @@ A97:    z in c1 & z in d2 by XBOOLE_0:3;
         hence contradiction;
       end;
       then d1 misses d2 by XBOOLE_1:63;
-      hence f.:b`1 misses b`1 by A93,A86,XBOOLE_1:63;
+      hence f.:(b`1_3) misses b`1_3 by A93,A86,XBOOLE_1:63;
       f.:d2 c= c1
       proof
         let y be set;
@@ -1073,13 +1075,13 @@ A101:   odl.xx is odd by A98;
         odl.yc = ox-1 by A76,A78,A99,A100;
         hence thesis;
       end;
-      hence f.:b`2 misses b`2 by A94,A96,XBOOLE_1:63;
-      thus f.:b`3 misses b`3
+      hence f.:(b`2_3) misses b`2_3 by A94,A96,XBOOLE_1:63;
+      thus f.:(b`3_3) misses b`3_3
       proof
-        assume f.:b`3 meets b`3;
+        assume f.:(b`3_3) meets b`3_3;
         then consider y being set such that
-A102:   y in f.:b`3 and
-A103:   y in b`3 by XBOOLE_0:3;
+A102:   y in f.:(b`3_3) and
+A103:   y in b`3_3 by XBOOLE_0:3;
 A104:   y = r by A95,A103,TARSKI:def 1;
         consider x such that
         x in dom f and
@@ -1094,9 +1096,9 @@ A106:   y = f.x by A95,A102,FUNCT_1:def 6;
   consider F being Function of Class =_f, [:bool E, bool E, bool E:] such that
 A107: for a being Element of Class =_f holds P[a,F.a] from FUNCT_2:sch 3
   (A2);
-  set E3c = {(F.c)`3 where c is Element of Class =_f: not contradiction};
-  set E2c = {(F.c)`2 where c is Element of Class =_f: not contradiction};
-  set E1c = {(F.c)`1 where c is Element of Class =_f: not contradiction};
+  set E3c = {(F.c)`3_3 where c is Element of Class =_f: not contradiction};
+  set E2c = {(F.c)`2_3 where c is Element of Class =_f: not contradiction};
+  set E1c = {(F.c)`1_3 where c is Element of Class =_f: not contradiction};
   set E1 = union E1c;
   set E2 = union E2c;
   set E3 = union E3c;
@@ -1114,7 +1116,7 @@ A108: x in E1 \/ E2 or x in E3 by XBOOLE_0:def 3;
         then consider Y being set such that
 A109:   x in Y and
 A110:   Y in E1c by TARSKI:def 4;
-        ex c being Element of Class =_f st Y = (F.c)`1 by A110;
+        ex c being Element of Class =_f st Y = (F.c)`1_3 by A110;
         hence x in E by A109;
       end;
       suppose
@@ -1122,7 +1124,7 @@ A110:   Y in E1c by TARSKI:def 4;
         then consider Y being set such that
 A111:   x in Y and
 A112:   Y in E2c by TARSKI:def 4;
-        ex c being Element of Class =_f st Y = (F.c)`2 by A112;
+        ex c being Element of Class =_f st Y = (F.c)`2_3 by A112;
         hence x in E by A111;
       end;
       suppose
@@ -1130,7 +1132,7 @@ A112:   Y in E2c by TARSKI:def 4;
         then consider Y being set such that
 A113:   x in Y and
 A114:   Y in E3c by TARSKI:def 4;
-        ex c being Element of Class =_f st Y = (F.c)`3 by A114;
+        ex c being Element of Class =_f st Y = (F.c)`3_3 by A114;
         hence x in E by A113;
       end;
     end;
@@ -1141,27 +1143,27 @@ A115: x in E;
     then
 A116: x in c by EQREL_1:20;
     reconsider c as Element of Class =_f by A115,EQREL_1:def 3;
-    x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by A107,A116;
+    x in (F.c)`1_3 \/ (F.c)`2_3 \/ (F.c)`3_3 by A107,A116;
     then
-A117: x in (F.c)`1 \/ (F.c)`2 or x in (F.c)`3 by XBOOLE_0:def 3;
+A117: x in (F.c)`1_3 \/ (F.c)`2_3 or x in (F.c)`3_3 by XBOOLE_0:def 3;
     per cases by A117,XBOOLE_0:def 3;
     suppose
-A118: x in (F.c)`1;
-      (F.c)`1 in E1c;
+A118: x in (F.c)`1_3;
+      (F.c)`1_3 in E1c;
       then x in E1 by A118,TARSKI:def 4;
       then x in E1 \/ E2 by XBOOLE_0:def 3;
       hence thesis by XBOOLE_0:def 3;
     end;
     suppose
-A119: x in (F.c)`2;
-      (F.c)`2 in E2c;
+A119: x in (F.c)`2_3;
+      (F.c)`2_3 in E2c;
       then x in E2 by A119,TARSKI:def 4;
       then x in E1 \/ E2 by XBOOLE_0:def 3;
       hence thesis by XBOOLE_0:def 3;
     end;
     suppose
-A120: x in (F.c)`3;
-      (F.c)`3 in E3c;
+A120: x in (F.c)`3_3;
+      (F.c)`3_3 in E3c;
       then x in E3 by A120,TARSKI:def 4;
       hence thesis by XBOOLE_0:def 3;
     end;
@@ -1176,9 +1178,9 @@ A122: x in E1 by XBOOLE_0:3;
 A123: x in Y and
 A124: Y in E1c by A122,TARSKI:def 4;
     consider c being Element of Class =_f such that
-A125: Y = (F.c)`1 by A124;
-    x in (F.c)`1 \/ (F.c)`2 by A123,A125,XBOOLE_0:def 3;
-    then x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by XBOOLE_0:def 3;
+A125: Y = (F.c)`1_3 by A124;
+    x in (F.c)`1_3 \/ (F.c)`2_3 by A123,A125,XBOOLE_0:def 3;
+    then x in (F.c)`1_3 \/ (F.c)`2_3 \/ (F.c)`3_3 by XBOOLE_0:def 3;
     then
 A126: x in c by A107;
     ex x9 being set st x9 in E & c = Class(=_f, x9) by EQREL_1:def 3;
@@ -1195,9 +1197,9 @@ A131: x = f.xx by A121,FUNCT_1:def 6;
 A132: xx in YY and
 A133: YY in E1c by A130,TARSKI:def 4;
     consider cc being Element of Class =_f such that
-A134: YY = (F.cc)`1 by A133;
-    xx in (F.cc)`1 \/ (F.cc)`2 by A132,A134,XBOOLE_0:def 3;
-    then xx in (F.cc)`1 \/ (F.cc)`2 \/ (F.cc)`3 by XBOOLE_0:def 3;
+A134: YY = (F.cc)`1_3 by A133;
+    xx in (F.cc)`1_3 \/ (F.cc)`2_3 by A132,A134,XBOOLE_0:def 3;
+    then xx in (F.cc)`1_3 \/ (F.cc)`2_3 \/ (F.cc)`3_3 by XBOOLE_0:def 3;
     then
 A135: xx in cc by A107;
     ex xx9 being set st xx9 in E & cc = Class(=_f, xx9) by EQREL_1:def 3;
@@ -1223,9 +1225,9 @@ A140: x in E2 by XBOOLE_0:3;
 A141: x in Y and
 A142: Y in E2c by A140,TARSKI:def 4;
     consider c being Element of Class =_f such that
-A143: Y = (F.c)`2 by A142;
-    x in (F.c)`1 \/ (F.c)`2 by A141,A143,XBOOLE_0:def 3;
-    then x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by XBOOLE_0:def 3;
+A143: Y = (F.c)`2_3 by A142;
+    x in (F.c)`1_3 \/ (F.c)`2_3 by A141,A143,XBOOLE_0:def 3;
+    then x in (F.c)`1_3 \/ (F.c)`2_3 \/ (F.c)`3_3 by XBOOLE_0:def 3;
     then
 A144: x in c by A107;
     ex x9 being set st x9 in E & c = Class(=_f, x9) by EQREL_1:def 3;
@@ -1242,9 +1244,9 @@ A149: x = f.xx by A139,FUNCT_1:def 6;
 A150: xx in YY and
 A151: YY in E2c by A148,TARSKI:def 4;
     consider cc being Element of Class =_f such that
-A152: YY = (F.cc)`2 by A151;
-    xx in (F.cc)`1 \/ (F.cc)`2 by A150,A152,XBOOLE_0:def 3;
-    then xx in (F.cc)`1 \/ (F.cc)`2 \/ (F.cc)`3 by XBOOLE_0:def 3;
+A152: YY = (F.cc)`2_3 by A151;
+    xx in (F.cc)`1_3 \/ (F.cc)`2_3 by A150,A152,XBOOLE_0:def 3;
+    then xx in (F.cc)`1_3 \/ (F.cc)`2_3 \/ (F.cc)`3_3 by XBOOLE_0:def 3;
     then
 A153: xx in cc by A107;
     ex xx9 being set st xx9 in E & cc = Class(=_f, xx9) by EQREL_1:def 3;
@@ -1270,8 +1272,8 @@ A158: x in E3 by XBOOLE_0:3;
 A159: x in Y and
 A160: Y in E3c by A158,TARSKI:def 4;
     consider c being Element of Class =_f such that
-A161: Y = (F.c)`3 by A160;
-    x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by A159,A161,XBOOLE_0:def 3;
+A161: Y = (F.c)`3_3 by A160;
+    x in (F.c)`1_3 \/ (F.c)`2_3 \/ (F.c)`3_3 by A159,A161,XBOOLE_0:def 3;
     then
 A162: x in c by A107;
     ex x9 being set st x9 in E & c = Class(=_f, x9) by EQREL_1:def 3;
@@ -1288,8 +1290,8 @@ A167: x = f.xx by A157,FUNCT_1:def 6;
 A168: xx in YY and
 A169: YY in E3c by A166,TARSKI:def 4;
     consider cc being Element of Class =_f such that
-A170: YY = (F.cc)`3 by A169;
-    xx in (F.cc)`1 \/ (F.cc)`2 \/ (F.cc)`3 by A168,A170,XBOOLE_0:def 3;
+A170: YY = (F.cc)`3_3 by A169;
+    xx in (F.cc)`1_3 \/ (F.cc)`2_3 \/ (F.cc)`3_3 by A168,A170,XBOOLE_0:def 3;
     then
 A171: xx in cc by A107;
     ex xx9 being set st xx9 in E & cc = Class(=_f, xx9) by EQREL_1:def 3;
@@ -1311,10 +1313,10 @@ begin :: Addenda
 :: from SCMFSA9A, 2006.03.14, A.T.
 
 theorem
-  for n being natural number holds
+  for n being Nat holds
   n is odd iff ex k being Element of NAT st n = 2*k+1
 proof
-  let n be natural number;
+  let n be Nat;
   hereby
     assume
 A1: n is odd;
@@ -1359,14 +1361,14 @@ theorem
 :: from HEYTING3, MOEBIUS1, 2010.02.13, A.T.
 
 registration
-  cluster odd for natural number;
+  cluster odd for Nat;
   existence
   proof
     take 1;
     1 = 2*0+1;
     hence thesis;
   end;
-  cluster even for natural number;
+  cluster even for Nat;
   existence
   proof
     take 0;
@@ -1376,9 +1378,9 @@ registration
 end;
 
 theorem Th12:
-  for n being odd natural number holds 1 <= n
+  for n being odd Nat holds 1 <= n
 proof
-  let n be odd natural number;
+  let n be odd Nat;
   2 * 0 < n by NAT_1:3;
   then 0 + 1 <= n by NAT_1:13;
   hence thesis;

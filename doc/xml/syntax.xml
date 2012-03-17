@@ -3,7 +3,7 @@
 
 <?xml-stylesheet type="text/xml" href="grammar2thtml.xsl"?>
 
-<grammar initial="Article" language="Mizar" date="January 23, 2009" version="7.11.02">
+<grammar initial="Article" language="Mizar" date="February 9, 2012" version="7.13.01">
 
   <system-terms>
     <system-term term="Identifier"/>
@@ -170,22 +170,10 @@
 	<subrule kind="alternative">
 	  <non-terminal name="Definition-Item"/>
 	  <non-terminal name="Definition"/>
+	  <non-terminal name="Redefinition"/>
 	</subrule>
-      </subrule>
-      <subrule kind="zero-or-one">
-	<non-terminal name="Redefinition-Block"/>
       </subrule>
       <terminal symbol="end"/>
-    </rule>
-
-    <rule name="Redefinition-Block">
-      <terminal symbol="redefine"/>
-      <subrule kind="zero-or-more">
-	<subrule kind="alternative">
-	  <non-terminal name="Definition-Item"/>
-	  <non-terminal name="Definition"/>
-	</subrule>
-      </subrule>
     </rule>
 
     <rule name="Registration-Block">
@@ -195,6 +183,8 @@
 	  <non-terminal name="Loci-Declaration"/>
 	  <non-terminal name="Cluster-Registration"/>
 	  <non-terminal name="Identify-Registration"/>
+	  <non-terminal name="Property-Registration"/>
+	  <non-terminal name="Reduction-Registration"/>
 	  <non-terminal name="Canceled-Registration"/>
 	</subrule>
       </subrule>
@@ -253,6 +243,16 @@
 	<non-terminal name="Predicate-Definition"/>
 	<non-terminal name="Attribute-Definition"/>
 	<non-terminal name="Canceled-Definition"/>
+      </subrule>
+    </rule>
+
+    <rule name="Redefinition">
+      <terminal symbol="redefine"/>
+      <subrule kind="alternative">
+	<non-terminal name="Mode-Definition"/>
+	<non-terminal name="Functor-Definition"/>
+	<non-terminal name="Predicate-Definition"/>
+	<non-terminal name="Attribute-Definition"/>
       </subrule>
     </rule>
 
@@ -666,6 +666,7 @@
     <rule name="Existential-Registration">
       <terminal symbol="cluster"/>
       <non-terminal name="Adjective-Cluster"/>
+      <terminal symbol="for"/>
       <non-terminal name="Type-Expression"/> 
       <terminal symbol=";"/> 
       <non-terminal name="Correctness-Conditions"/>
@@ -692,6 +693,7 @@
       <non-terminal name="Adjective-Cluster"/>
       <terminal symbol="->"/>
       <non-terminal name="Adjective-Cluster"/>
+      <terminal symbol="for"/>
       <non-terminal name="Type-Expression"/>
       <terminal symbol=";"/> 
       <non-terminal name="Correctness-Conditions"/>
@@ -703,6 +705,7 @@
       <terminal symbol="->"/>
       <non-terminal name="Adjective-Cluster"/>
       <subrule kind="zero-or-one">
+	<terminal symbol="for"/>
 	<non-terminal name="Type-Expression"/>
       </subrule>
       <terminal symbol=";"/> 
@@ -729,6 +732,23 @@
       <non-terminal name="Correctness-Conditions"/>
     </rule>
 
+    <rule name="Reduction-Registration">
+      <terminal symbol="reduce"/>
+      <non-terminal name="Term-Expression"/>
+      <terminal symbol="to"/>
+      <non-terminal name="Term-Expression"/>
+      <terminal symbol=";"/> 
+      <non-terminal name="Correctness-Conditions"/>
+    </rule>
+
+    <rule name="Property-Registration">
+      <terminal symbol="sethood"/>
+      <terminal symbol="of"/>
+      <non-terminal name="Type-Expression"/>
+      <terminal symbol=";"/> 
+      <non-terminal name="Correctness-Conditions"/>
+    </rule>
+
     <rule name="Correctness-Conditions">
       <subrule kind="zero-or-more">
 	<non-terminal name="Correctness-Condition"/>
@@ -747,6 +767,7 @@
 	<terminal symbol="coherence"/>
 	<terminal symbol="compatibility"/>
 	<terminal symbol="consistency"/>
+	<terminal symbol="reducibility"/>
       </subrule>
       <non-terminal name="Justification"/>
       <terminal symbol=";"/>
@@ -1111,10 +1132,8 @@
     <rule name="Choice-Statement">
       <terminal symbol="consider"/>
       <non-terminal name="Qualified-Variables"/>
-      <subrule kind="zero-or-one">
-	<terminal symbol="such"/>
-	<non-terminal name="Conditions"/>
-      </subrule>
+      <terminal symbol="such"/>
+      <non-terminal name="Conditions"/>
       <non-terminal name="Simple-Justification"/>
       <terminal symbol=";"/>
     </rule>
@@ -1457,10 +1476,15 @@
     <rule name="Structure-Type-Expression">
       <subrule kind="alternative">
 	<subrule>
-	  <terminal symbol="("/> <non-terminal name="Structure-Type-Expression"/> <terminal symbol=")"/>
+	  <terminal symbol="("/>
+	  <non-terminal name="Structure-Type-Expression"/>
+	  <terminal symbol=")"/>
 	</subrule>
 	<subrule>
 	  <non-terminal name="Adjective-Cluster"/> 
+	  <non-terminal name="Structure-Type-Expression"/>
+	</subrule>
+	<subrule>
 	  <non-terminal name="Structure-Symbol"/>
 	  <subrule kind="zero-or-one">
 	    <terminal symbol="over"/>

@@ -2,7 +2,7 @@
 ::  by Bo Li , Yan Zhang and Artur Korni{\l}owicz
 ::
 :: Received August 18, 2006
-:: Copyright (c) 2006-2011 Association of Mizar Users
+:: Copyright (c) 2006-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,9 +15,9 @@
 environ
 
  vocabularies NUMBERS, NAT_1, INT_1, XREAL_0, ORDINAL1, RAT_1, XCMPLX_0,
-      FUNCT_1, XXREAL_0, ARYTM_1, ARYTM_3, CARD_1, RELAT_1, SUBSET_1, VALUED_0,
-      SEQ_1, FUNCOP_1, TARSKI, IRRAT_1, REAL_1, INT_2, FIB_NUM, NEWTON,
-      SQUARE_1, COMPLEX1, POWER, VALUED_1, REAL_3;
+      FUNCT_1, XXREAL_0, ARYTM_1, ARYTM_3, CARD_1, RELAT_1, SUBSET_1, SEQ_1,
+      FUNCOP_1, TARSKI, IRRAT_1, REAL_1, INT_2, FIB_NUM, NEWTON, SQUARE_1,
+      COMPLEX1, POWER, VALUED_1, REAL_3;
  notations TARSKI, SUBSET_1, FUNCT_1, ORDINAL1, NUMBERS, VALUED_0, XCMPLX_0,
       COMPLEX1, REAL_1, XXREAL_0, XREAL_0, RAT_1, SQUARE_1, INT_1, NAT_1,
       NAT_D, RELAT_1, RELSET_1, FUNCOP_1, VALUED_1, SEQ_1, FUNCT_2, NEWTON,
@@ -32,7 +32,7 @@ environ
  theorems INT_1, XREAL_0, ORDINAL1, XCMPLX_0, FUNCT_2, XCMPLX_1, FUNCT_1,
       NAT_1, RAT_1, NAT_2, FUNCOP_1, XREAL_1, NEWTON, SEQ_1, TARSKI, ABSVALUE,
       COMPLEX1, PREPOWER, WSIERP_1, SQUARE_1, EULER_1, FIB_NUM, POWER,
-      SERIES_1, XXREAL_0, NAT_D, VALUED_0, VALUED_1, RELSET_1;
+      SERIES_1, XXREAL_0, NAT_D, VALUED_1, RELSET_1, RELAT_1;
  schemes NAT_1, RECDEF_1, RECDEF_2, FIB_NUM, FUNCT_2;
 
 begin :: Preliminaries
@@ -180,27 +180,20 @@ A1: k <> 0 & p = m/k by RAT_1:8;
   thus thesis by A1;
 end;
 
-notation
-  let R be Relation;
-  synonym R is integer-yielding for R is integer-valued;
-end;
-
 registration
-  cluster integer-yielding for Real_Sequence;
+  cluster INT-valued for Real_Sequence;
   existence
   proof
     set s = NAT --> 1;
     dom s = NAT & for n being Element of NAT holds s.n is real by FUNCOP_1:13;
     then reconsider s as Real_Sequence by SEQ_1:2;
     take s;
-    let x be set such that
-    x in dom s;
-    thus s.x in INT by INT_1:def 2;
+    thus thesis;
   end;
 end;
 
 definition
-  mode Integer_Sequence is integer-yielding Real_Sequence;
+  mode Integer_Sequence is INT-valued Real_Sequence;
 end;
 
 theorem Th8:
@@ -229,7 +222,7 @@ A5: rng f c=INT by TARSKI:def 3;
     then f.x is integer by A2;
     hence thesis;
   end;
-  hence thesis by A1,A5,SEQ_1:1,VALUED_0:def 5;
+  hence thesis by A1,A5,SEQ_1:1,RELAT_1:def 19;
 end;
 
 theorem Th9:
@@ -242,7 +235,7 @@ proof
     hence f is Integer_Sequence by Th8;
   end;
   assume f is Integer_Sequence;
-  then dom f = NAT & rng f c= INT by FUNCT_2:def 1,VALUED_0:def 5;
+  then dom f = NAT & rng f c= INT by FUNCT_2:def 1,RELAT_1:def 19;
   hence thesis by FUNCT_2:2;
 end;
 
@@ -277,7 +270,7 @@ definition
   set a = m mod n;
   set b = n mod (m mod n);
   func modSeq(m,n) -> sequence of NAT means
-  :Def2:
+  :Def1:
   it.0 = m mod n & it.1 = n
   mod (m mod n) & for k being Nat holds it.(k+2) = it.k mod it.(k+1);
   existence
@@ -319,7 +312,7 @@ definition
   deffunc F(Nat,Element of NAT,Element of NAT) = modSeq(m,n).$1 div modSeq(m,n
   ).($1+1);
   func divSeq(m,n) -> sequence of NAT means
-  :Def3:
+  :Def2:
   it.0 = m div n & it.1 = n
 div (m mod n) & for k being Nat holds it.(k+2) = modSeq(m,n).k div modSeq(m,n).
   (k+1);
@@ -358,15 +351,15 @@ end;
 theorem Th12:
   divSeq(m,n).1 = n div modSeq(m,n).0
 proof
-  thus divSeq(m,n).1 = n div (m mod n) by Def3
-    .= n div modSeq(m,n).0 by Def2;
+  thus divSeq(m,n).1 = n div (m mod n) by Def2
+    .= n div modSeq(m,n).0 by Def1;
 end;
 
 theorem Th13:
   modSeq(m,n).1 = n mod modSeq(m,n).0
 proof
-  thus modSeq(m,n).1 = n mod (m mod n) by Def2
-    .= n mod modSeq(m,n).0 by Def2;
+  thus modSeq(m,n).1 = n mod (m mod n) by Def1
+    .= n mod modSeq(m,n).0 by Def1;
 end;
 
 theorem Th14:
@@ -399,7 +392,7 @@ A10:  k = 1;
       then
 A11:  a = 0 or a = 1 by A7,NAT_1:25;
       2 = 2+0;
-      hence fm.(k+1) = fm.0 mod fm.(0+1) by A10,Def2
+      hence fm.(k+1) = fm.0 mod fm.(0+1) by A10,Def1
         .= 0 by A2,A11;
     end;
     suppose
@@ -408,12 +401,12 @@ A11:  a = 0 or a = 1 by A7,NAT_1:25;
       per cases by A7,XXREAL_0:1;
       suppose
 A12:    a = k;
-        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def2
+        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def1
           .= 0 by A2,A12;
       end;
       suppose
 A13:    a < k;
-        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def2
+        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def1
           .= 0 by A5,A13;
       end;
     end;
@@ -429,18 +422,18 @@ proof
     per cases by NAT_1:25;
     suppose
 A1:   a = 0;
-      fm.(0+1) = n mod (m mod n) & fm.0 = m mod n by Def2;
+      fm.(0+1) = n mod (m mod n) & fm.0 = m mod n by Def1;
       hence thesis by A1,NAT_D:1;
     end;
     suppose
 A2:   a = 1;
-      fm.(0+2) = fm.0 mod fm.(0+1) by Def2;
+      fm.(0+2) = fm.0 mod fm.(0+1) by Def1;
       hence thesis by A2,NAT_D:1;
     end;
     suppose
       a > 1;
       then reconsider a1 = a-1 as Nat by Lm1;
-      fm.(a+1) = fm.(a1+(1+1)) .= fm.a1 mod fm.(a1+1) by Def2;
+      fm.(a+1) = fm.(a1+(1+1)) .= fm.a1 mod fm.(a1+1) by Def1;
       hence thesis by NAT_D:1;
     end;
 end;
@@ -506,7 +499,7 @@ A1: P[b] implies P[b+1]
     assume fd.(b+1+1) = 0;
     then fd.(b+(1+1)) = 0;
     then
-A2: fm.b div fm.(b+1) = 0 by Def3;
+A2: fm.b div fm.(b+1) = 0 by Def2;
     assume
 A3: fm.(b+1) <> 0;
     then fm.b = x * (fm.b div x) + (fm.b mod x) by NAT_D:2;
@@ -524,10 +517,10 @@ A6: P[0]
 A7: n div fm.0 = 0 by Th12;
     assume
 A8: fm.0 <> 0;
-    then m mod n <> 0 by Def2;
+    then m mod n <> 0 by Def1;
     then
 A9: n <> 0;
-A10: fm.0 = x by Def2;
+A10: fm.0 = x by Def1;
     then n = x * (n div x) + (n mod x) by A8,NAT_D:2;
     then n < x by A7,A10,A8,NAT_D:1;
     hence thesis by A9,NAT_D:1;
@@ -546,7 +539,7 @@ A1: P[b] implies P[b+1]
     assume that
     P[b] and
 A2: fm.(b+1) = 0;
-    thus fd.(b+1+1) = fd.(b+(1+1)) .= fm.b div fm.(b+1) by Def3
+    thus fd.(b+1+1) = fd.(b+(1+1)) .= fm.b div fm.(b+1) by Def2
       .= 0 by A2;
   end;
 A3: P[0]
@@ -590,9 +583,9 @@ A9:   k = 1;
       then
 A10:  fm.0 = 0 by Th16;
 A11:  2 = 2+0;
-      hence fd.(k+1) = fm.0 div fm.(0+1) by A9,Def3
+      hence fd.(k+1) = fm.0 div fm.(0+1) by A9,Def2
         .= 0 by A10;
-      thus fm.(k+1) = fm.0 mod fm.(0+1) by A9,A11,Def2
+      thus fm.(k+1) = fm.0 mod fm.(0+1) by A9,A11,Def1
         .= 0 by A10;
     end;
     suppose
@@ -604,16 +597,16 @@ A12:  k = k1+1;
         a = k;
         then
 A13:    fm.k1 = 0 by A3,A12,Th16;
-        thus fd.(k+1) = fd.(k1+2) .= fm.k1 div fm.(k1+1) by Def3
+        thus fd.(k+1) = fd.(k1+2) .= fm.k1 div fm.(k1+1) by Def2
           .= 0 by A13;
-        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def2
+        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def1
           .= 0 by A13;
       end;
       suppose
 A14:    a < k;
-        thus fd.(k+1) = fd.(k1+2) .= fm.k1 div fm.(k1+1) by Def3
+        thus fd.(k+1) = fd.(k1+2) .= fm.k1 div fm.(k1+1) by Def2
           .= 0 by A6,A14;
-        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def2
+        thus fm.(k+1) = fm.(k1+2) .= fm.k1 mod fm.(k1+1) by Def1
           .= 0 by A6,A14;
       end;
     end;
@@ -643,7 +636,7 @@ proof
   set fm = modSeq(m,n);
   assume
 A1: n <> 0;
-  fd.0 = m div n & fm.0 = m mod n by Def2,Def3;
+  fd.0 = m div n & fm.0 = m mod n by Def1,Def2;
   hence thesis by A1,NAT_D:2;
 end;
 
@@ -682,7 +675,7 @@ A3:   P[n];
       per cases;
       suppose
 A4:     n = 0;
-        fd.1 = 0 div (m mod 0) by Def3
+        fd.1 = 0 div (m mod 0) by Def2
           .= 0;
         hence thesis by A4;
       end;
@@ -691,7 +684,7 @@ A4:     n = 0;
         hence thesis by A3,Th17,NAT_1:11;
       end;
     end;
-    fd.0 = m div 0 by Def3
+    fd.0 = m div 0 by Def2
       .= 0;
     then
 A5: P[0];
@@ -713,7 +706,7 @@ A1: for x being set st x in dom fm holds fm.x = g.x
     let x be set;
     assume x in dom fm;
     then reconsider x as Element of NAT;
-    fm.0 = m mod 0 by Def2
+    fm.0 = m mod 0 by Def1
       .= 0;
     then
 A2: P[0];
@@ -744,7 +737,7 @@ A3:   P[x];
       per cases;
       suppose
 A4:     x = 0;
-        fd.1 = n div (0 mod n) by Def3
+        fd.1 = n div (0 mod n) by Def2
           .= n div 0;
         hence thesis by A4;
       end;
@@ -753,7 +746,7 @@ A4:     x = 0;
         hence thesis by A3,Th17,NAT_1:11;
       end;
     end;
-    fd.0 = 0 div n by Def3
+    fd.0 = 0 div n by Def2
       .= 0;
     then
 A5: P[0];
@@ -775,7 +768,7 @@ A1: for x being set st x in dom fm holds fm.x = g.x
     let x be set;
     assume x in dom fm;
     then reconsider x as Element of NAT;
-    fm.0 = 0 mod n by Def2
+    fm.0 = 0 mod n by Def1
       .= 0;
     then
 A2: P[0];
@@ -830,7 +823,7 @@ defpred P[set,Element of REAL,set] means $3 = 1 / frac($2);
 definition
   let r be real number;
   func remainders_for_scf r -> Real_Sequence means
-  :Def4:
+  :Def3:
   it.0 = r & for n being Nat holds it.(n+1) = 1 / frac(it.n);
   existence
   proof
@@ -873,7 +866,7 @@ end;
 definition
   let r be real number;
   func SimpleContinuedFraction r -> Integer_Sequence means
-  :Def5:
+  :Def4:
   for n being Nat holds it.n = [\ rfs(r).n /];
   existence
   proof
@@ -912,8 +905,8 @@ end;
 theorem Th26:
   rfs(r).(n+1) = 1 / (rfs(r).n-scf(r).n)
 proof
-  thus rfs(r).(n+1) = 1/frac(rfs(r).n) by Def4
-    .= 1/(rfs(r).n-scf(r).n) by Def5;
+  thus rfs(r).(n+1) = 1/frac(rfs(r).n) by Def3
+    .= 1/(rfs(r).n-scf(r).n) by Def4;
 end;
 
 theorem Th27:
@@ -941,13 +934,13 @@ A6:   n <= a by NAT_1:13;
       per cases by A6,XXREAL_0:1;
       suppose
 A7:     n = a;
-        thus rfs(r).(a+1) = 1 / frac(rfs(r).a) by Def4
+        thus rfs(r).(a+1) = 1 / frac(rfs(r).a) by Def3
           .= 1 / (rfs(r).a - rfs(r).a) by A1,A7
           .= 0;
       end;
       suppose
 A8:     n < a;
-        thus rfs(r).(a+1) = 1 / frac(rfs(r).a) by Def4
+        thus rfs(r).(a+1) = 1 / frac(rfs(r).a) by Def3
           .= 1 / (rfs(r).a - rfs(r).a) by A5,A8
           .= 0;
       end;
@@ -963,7 +956,7 @@ theorem
 proof
   assume
 A1: rfs(r).n = 0 & n <= m;
-  thus scf(r).m = [\rfs(r).m/] by Def5
+  thus scf(r).m = [\rfs(r).m/] by Def4
     .= [\0/] by A1,Th27
     .= 0;
 end;
@@ -972,16 +965,16 @@ theorem Th29:
   rfs(i).(n+1) = 0
 proof
   defpred P[Nat] means rfs(i).($1+1) = 0;
-A1: rfs(i).0 = i by Def4;
+A1: rfs(i).0 = i by Def3;
 A2: for n st P[n] holds P[n+1]
   proof
     let n such that
 A3: P[n];
-    thus rfs(i).(n+1+1) = 1 / frac(rfs(i).(n+1)) by Def4
+    thus rfs(i).(n+1+1) = 1 / frac(rfs(i).(n+1)) by Def3
       .= 1/(0-0) by A3
       .= 0;
   end;
-  rfs(i).(0+1) = 1 / frac(rfs(i).0) by Def4
+  rfs(i).(0+1) = 1 / frac(rfs(i).0) by Def3
     .= 1/(i-i) by A1,INT_1:25
     .= 0;
   then
@@ -994,21 +987,21 @@ theorem Th30:
   scf(i).0 = i & scf(i).(n+1) = 0
 proof
   defpred P[Nat] means rfs(i).($1+1) = 0 & scf(i).($1+1) = 0;
-  thus scf(i).0 = [\ rfs(i).0 /] by Def5
-    .= [\ i /] by Def4
+  thus scf(i).0 = [\ rfs(i).0 /] by Def4
+    .= [\ i /] by Def3
     .= i by INT_1:25;
 A1: for n st P[n] holds P[n+1]
   proof
     let n such that
 A2: P[n];
-    thus rfs(i).(n+1+1) = 1 / frac(rfs(i).(n+1)) by Def4
+    thus rfs(i).(n+1+1) = 1 / frac(rfs(i).(n+1)) by Def3
       .= 1 / (0 - 0) by A2
       .= 0;
-    thus scf(i).(n+1+1) = [\ rfs(i).(n+1+1) /] by Def5
+    thus scf(i).(n+1+1) = [\ rfs(i).(n+1+1) /] by Def4
       .= [\ 0 /] by Th29
       .= 0;
   end;
-  scf(i).(0+1) = [\ rfs(i).(0+1) /] by Def5
+  scf(i).(0+1) = [\ rfs(i).(0+1) /] by Def4
     .= [\ 0 /] by Th29
     .= 0;
   then
@@ -1026,34 +1019,34 @@ proof
 A1: i > 1;
   then
 A2: r < 0+1 by XREAL_1:189;
-A3: [\rfs(r).0/] = [\r/] by Def4
+A3: [\rfs(r).0/] = [\r/] by Def3
     .= 0 by A1,A2,Th2;
   thus
-A4: rfs(r).1 = rfs(r).(0+1) .= 1/frac(rfs(r).0) by Def4
-    .= 1/(r-0) by A3,Def4
+A4: rfs(r).1 = rfs(r).(0+1) .= 1/frac(rfs(r).0) by Def3
+    .= 1/(r-0) by A3,Def3
     .= i;
   then
-A5: scf(r).1 = [\i/] by Def5;
+A5: scf(r).1 = [\i/] by Def4;
 A6: for n st P[n] holds P[n+1]
   proof
     let n such that
 A7: P[n];
-    thus rfs(r).(n+1+2) = rfs(r).(n+2+1) .= 1/frac(rfs(r).(n+2)) by Def4
+    thus rfs(r).(n+1+2) = rfs(r).(n+2+1) .= 1/frac(rfs(r).(n+2)) by Def3
       .= 1/(0-0) by A7
       .= 0;
-    hence scf(r).(n+1+2) = [\0/] by Def5
+    hence scf(r).(n+1+2) = [\0/] by Def4
       .= 0;
   end;
-A8: rfs(r).(0+2) = rfs(r).(1+1) .= 1/frac(rfs(r).1) by Def4
+A8: rfs(r).(0+2) = rfs(r).(1+1) .= 1/frac(rfs(r).1) by Def3
     .= 1/(i-i) by A4,INT_1:25
     .= 0;
-  then scf(r).(0+2) = [\0/] by Def5
+  then scf(r).(0+2) = [\0/] by Def4
     .= 0;
   then
 A9: P[0] by A8;
 A10: for n holds P[n] from NAT_1:sch 2(A9,A6);
-  scf(r).0 = [\rfs(r).0/] by Def5
-    .= [\r/] by Def4
+  scf(r).0 = [\rfs(r).0/] by Def4
+    .= [\r/] by Def3
     .= 0 by A1,A2,Th2;
   hence thesis by A5,A10,INT_1:25;
 end;
@@ -1072,7 +1065,7 @@ A1: for n holds scf(r).n = 0 and
 A2: rfs(r).n <> 0;
 A3: scf(r).n = 0 by A1;
   set x = rfs(r).n;
-A4: scf(r).n = [\x/] by Def5;
+A4: scf(r).n = [\x/] by Def4;
   per cases by A2;
   suppose
     x < 0;
@@ -1086,9 +1079,9 @@ A4: scf(r).n = [\x/] by Def5;
     0 < x & x < 1;
     then
 A5: 1/x > 1 by Th1;
-A6: scf(r).(n+1) = 0 & scf(r).(n+1) = [\ rfs(r).(n+1) /] by A1,Def5;
-    rfs(r).(n+1) = 1 / frac(x) by Def4
-      .= 1/(x-scf(r).n) by Def5
+A6: scf(r).(n+1) = 0 & scf(r).(n+1) = [\ rfs(r).(n+1) /] by A1,Def4;
+    rfs(r).(n+1) = 1 / frac(x) by Def3
+      .= 1/(x-scf(r).n) by Def4
       .= 1/(x-0) by A1
       .= 1/x;
     hence thesis by A5,A6,INT_1:54;
@@ -1100,7 +1093,7 @@ theorem Th34:
 proof
   assume for n holds scf(r).n = 0;
   then rfs(r).0 = 0 by Th33;
-  hence thesis by Def4;
+  hence thesis by Def3;
 end;
 
 Lm8: rfs(1 / (r - scf(r).0)).n = rfs(r).(n+1) & scf(1 / (r - scf(r).0)).n =
@@ -1113,17 +1106,17 @@ A1: for n st P[n] holds P[n+1]
   proof
     let n;
     assume P[n];
-    hence rfs(1/x).(n+1) = 1/frac(rfs(r).(n+1)) by Def4
-      .= rfs(r).(n+1+1) by Def4;
-    hence scf(1/x).(n+1) = [\ rfs(r).(n+1+1) /] by Def5
-      .= scf(r).(n+1+1) by Def5;
+    hence rfs(1/x).(n+1) = 1/frac(rfs(r).(n+1)) by Def3
+      .= rfs(r).(n+1+1) by Def3;
+    hence scf(1/x).(n+1) = [\ rfs(r).(n+1+1) /] by Def4
+      .= scf(r).(n+1+1) by Def4;
   end;
-A2: rfs(1/x).0 = 1/x by Def4
-    .= 1/(rfs(r).0-scf(r).0) by Def4
-    .= 1/frac(rfs(r).0) by Def5
-    .= rfs(r).(0+1) by Def4;
-  then scf(1/x).0 = [\ rfs(r).1 /] by Def5
-    .= scf(r).(0+1) by Def5;
+A2: rfs(1/x).0 = 1/x by Def3
+    .= 1/(rfs(r).0-scf(r).0) by Def3
+    .= 1/frac(rfs(r).0) by Def4
+    .= rfs(r).(0+1) by Def3;
+  then scf(1/x).0 = [\ rfs(r).1 /] by Def4
+    .= scf(r).(0+1) by Def4;
   then
 A3: P[0] by A2;
   for n holds P[n] from NAT_1:sch 2(A3,A1);
@@ -1133,8 +1126,8 @@ end;
 theorem Th35:
   frac(r) = r - scf(r).0
 proof
-  thus frac(r) = r - [\ rfs(r).0 /] by Def4
-    .= r - scf(r).0 by Def5;
+  thus frac(r) = r - [\ rfs(r).0 /] by Def3
+    .= r - scf(r).0 by Def4;
 end;
 
 theorem
@@ -1167,17 +1160,17 @@ A2: for n being Nat st n>=1 holds P[n] implies P[n+1]
     then frac(rfs(r).n) >=0 by XREAL_1:48;
     then
 A3: 1/frac(rfs(r).n) -1 >= 0 -1 by XREAL_1:9;
-    scf(r).(n+1) = [\ rfs(r).(n+1) /] by Def5
-      .= [\ 1/frac(rfs(r).n) /] by Def4;
+    scf(r).(n+1) = [\ rfs(r).(n+1) /] by Def4
+      .= [\ 1/frac(rfs(r).n) /] by Def3;
     then scf(r).(n+1) > 1/(rfs(r).n - [\ rfs(r).n /]) -1 by INT_1:def 6;
     then
     scf(r).(n+1) -(-1) > (1/frac(rfs(r).n) -1) - (1/frac(rfs(r).n) -1) by A3,
 XREAL_1:14;
     hence thesis by INT_1:7;
   end;
-  scf(r).1 = [\ rfs(r).(0+1) /] by Def5
-    .= [\ 1/frac(rfs(r).0) /] by Def4
-    .= [\ 1/frac(r) /] by Def4;
+  scf(r).1 = [\ rfs(r).(0+1) /] by Def4
+    .= [\ 1/frac(rfs(r).0) /] by Def3
+    .= [\ 1/frac(r) /] by Def3;
   then scf(r).1 > 1/frac(r) -1 by INT_1:def 6;
   then scf(r).1 -(-1) > (1/frac(r) -1) - (1/frac(r) -1) by A1,XREAL_1:14;
   then
@@ -1205,8 +1198,8 @@ proof
   set fd = divSeq(m,n);
   set fm = modSeq(m,n);
   set r = m/n;
-A1: scf(r).0 = [\ rfs(r).0 /] by Def5
-    .= m div n by Def4;
+A1: scf(r).0 = [\ rfs(r).0 /] by Def4
+    .= m div n by Def3;
   per cases;
   suppose
 A2: n = 0;
@@ -1228,18 +1221,18 @@ A6: 0 < n;
 A7: r = (m div n) + (m mod n) / n by A6,XCMPLX_1:113;
     defpred P[Nat] means (for i being Nat st i <= $1 holds scf(r).i = fd.i) &
     for i being Nat st i+1 <= $1 holds rfs(r).(i+2) = fm.i / fm.(i+1);
-A8: rfs(r).(0+1) = 1/frac(rfs(r).0) by Def4
-      .= 1/(rfs(r).0-scf(r).0) by Def5
-      .= 1/(r-(m div n)) by A1,Def4
+A8: rfs(r).(0+1) = 1/frac(rfs(r).0) by Def3
+      .= 1/(rfs(r).0-scf(r).0) by Def4
+      .= 1/(r-(m div n)) by A1,Def3
       .= n / (m mod n) by A7,XCMPLX_1:57
-      .= n / fm.0 by Def2;
+      .= n / fm.0 by Def1;
 A9: P[0]
     proof
       hereby
         let i be Nat;
         assume i <= 0;
         then i = 0;
-        hence scf(r).i = fd.i by A1,Def3;
+        hence scf(r).i = fd.i by A1,Def2;
       end;
       let i be Nat;
       assume i+1 <= 0;
@@ -1254,11 +1247,11 @@ A11:  P[a];
 A12:    a = 0;
         set x = m mod n;
 A13:    scf(r).(0+1) = scf(1/frac(r)).0 by Th37
-          .= [\ rfs(1/frac(r)).0 /] by Def5
-          .= [\ 1 / frac(r) /] by Def4
+          .= [\ rfs(1/frac(r)).0 /] by Def4
+          .= [\ 1 / frac(r) /] by Def3
           .= [\ 1 / ((m mod n) / n )/] by Th6
           .= n div (m mod n) by XCMPLX_1:57
-          .= n div fm.0 by Def2
+          .= n div fm.0 by Def1
           .= fd.1 by Th12;
         hereby
           let i be Nat;
@@ -1274,15 +1267,15 @@ A14:    i+1 = 0 or i+1 = 0+1 by A12,NAT_1:25;
         suppose
 A15:      x = 0;
           thus rfs(r).(i+2) = rfs(r).(1+1) by A14
-            .= 1/frac(rfs(r).1) by Def4
-            .= 1/(n/fm.0-fd.1) by A8,A13,Def5
-            .= 1/(n/x-fd.1) by Def2
-            .= 1/(n/x-(n div x)) by Def3
+            .= 1/frac(rfs(r).1) by Def3
+            .= 1/(n/fm.0-fd.1) by A8,A13,Def4
+            .= 1/(n/x-fd.1) by Def1
+            .= 1/(n/x-(n div x)) by Def2
             .= 1 / (0 - (n div x)) by A15
             .= 1 / (0 - 0) by A15
             .= fm.i / 0
             .= fm.i / (n mod x) by A15
-            .= fm.i / fm.(i+1) by A14,Def2;
+            .= fm.i / fm.(i+1) by A14,Def1;
         end;
         suppose
 A16:      0 < x;
@@ -1294,26 +1287,26 @@ A18:        n mod x = 0;
             then
 A19:        n div x = n / x by Th4;
             thus rfs(r).(i+2) = rfs(r).(1+1) by A14
-              .= 1/frac(rfs(r).1) by Def4
-              .= 1/(n/fm.0-fd.1) by A8,A13,Def5
-              .= 1/(n/x-fd.1) by Def2
-              .= 1/(n/x-(n div x)) by Def3
+              .= 1/frac(rfs(r).1) by Def3
+              .= 1/(n/fm.0-fd.1) by A8,A13,Def4
+              .= 1/(n/x-fd.1) by Def1
+              .= 1/(n/x-(n div x)) by Def2
               .= 1 / 0 by A19
               .= fm.i / (n mod x) by A18
-              .= fm.i / fm.(i+1) by A14,Def2;
+              .= fm.i / fm.(i+1) by A14,Def1;
           end;
           suppose
 A20:        n mod x <> 0;
             then
 A21:        n/x - (n div x) <> 0 by Th5;
             thus rfs(r).(i+2) = rfs(r).(1+1) by A14
-              .= 1/frac(rfs(r).1) by Def4
-              .= 1/(n/fm.0-fd.1) by A8,A13,Def5
-              .= 1/(n/x-fd.1) by Def2
-              .= 1/(n/x-(n div x)) by Def3
+              .= 1/frac(rfs(r).1) by Def3
+              .= 1/(n/fm.0-fd.1) by A8,A13,Def4
+              .= 1/(n/x-fd.1) by Def1
+              .= 1/(n/x-(n div x)) by Def2
               .= x / (n mod x) by A16,A17,A20,A21,Lm2
-              .= fm.i / (n mod x) by A14,Def2
-              .= fm.i / fm.(i+1) by A14,Def2;
+              .= fm.i / (n mod x) by A14,Def1
+              .= fm.i / fm.(i+1) by A14,Def1;
           end;
         end;
       end;
@@ -1336,9 +1329,9 @@ A24:      b < a+1 or b = a+1 by XXREAL_0:1;
 A25:        b-1 = a;
             reconsider a2 = a-1 as Element of NAT by A22,INT_1:5;
 A26:        b = a-1+2 by A25;
-            thus scf(r).b = [\ rfs(r).b /] by Def5
+            thus scf(r).b = [\ rfs(r).b /] by Def4
               .= fm.a2 div fm.(a2+1) by A11,A26
-              .= fd.b by A26,Def3;
+              .= fd.b by A26,Def2;
           end;
         end;
         let b be Nat;
@@ -1362,7 +1355,7 @@ A32:        0 = fm.(b1+1);
             thus rfs(r).(b+2) = 1 / (rfs(r).(b+1)-scf(r).(b+1)) by A31,Th26
               .= 1/(rfs(r).(b+1)-fd.(b+1)) by A23,A28
               .= 1 / (fm.b1 / fm.(b1+1) - fd.(b1+1+1)) by A11,A28,A29
-              .= 1 / (fm.b1 / 0 - (fm.b1 div 0)) by A30,A32,Def3
+              .= 1 / (fm.b1 / 0 - (fm.b1 div 0)) by A30,A32,Def2
               .= fm.b / fm.(b+1) by A32;
           end;
           suppose
@@ -1379,9 +1372,9 @@ A36:          fm.b1 / fm.(b1+1) - (fm.b1 div fm.(b1+1)) = 0;
               thus rfs(r).(b+2) = 1 / (rfs(r).(b+1)-scf(r).(b+1)) by A31,Th26
                 .= 1/(rfs(r).(b+1)-(fd.(b+1))) by A23,A28
                 .= 1 / (fm.b1 / fm.(b1+1) - fd.(b1+1+1)) by A11,A28,A29
-                .= 1 / 0 by A30,A36,Def3
+                .= 1 / 0 by A30,A36,Def2
                 .= fm.(b1+1) / (fm.b1 mod fm.(b1+1)) by A35
-                .= fm.b / fm.(b+1) by A30,Def2;
+                .= fm.b / fm.(b+1) by A30,Def1;
             end;
             suppose
 A37:          fm.b1 mod fm.(b1+1) <> 0;
@@ -1390,9 +1383,9 @@ A38:          fm.b1 / fm.(b1+1) - (fm.b1 div fm.(b1+1)) <> 0 by Th5;
               thus rfs(r).(b+2) = 1 / (rfs(r).(b+1)-scf(r).(b+1)) by A31,Th26
                 .= 1 / (rfs(r).(b+1)-fd.(b+1)) by A23,A28
                 .= 1 / (fm.b1 / fm.(b1+1) - fd.(b1+1+1)) by A11,A28,A29
-                .= 1 / (fm.b1 / fm.(b1+1) - (fm.b1 div fm.(b1+1))) by A30,Def3
+                .= 1 / (fm.b1 / fm.(b1+1) - (fm.b1 div fm.(b1+1))) by A30,Def2
                 .= fm.(b1+1) / (fm.b1 mod fm.(b1+1)) by A33,A34,A37,A38,Lm2
-                .= fm.b / fm.(b+1) by A30,Def2;
+                .= fm.b / fm.(b+1) by A30,Def1;
             end;
           end;
         end;
@@ -1459,7 +1452,7 @@ A11:  now
         assume
 A12:    k = 0;
         m <= 0 or n div m <> 0 by A7,NAT_2:12;
-        hence contradiction by A9,A10,A12,Def3;
+        hence contradiction by A9,A10,A12,Def2;
       end;
       take k+1;
       let a;
@@ -1514,7 +1507,7 @@ reserve s1, s2 for Real_Sequence;
 definition
   let r be real number;
   func convergent_numerators(r) -> Real_Sequence means
-  :Def6:
+  :Def5:
   it.0 = scf(r).0
 & it.1 = scf(r).1 * scf(r).0 + 1 & for n being Nat holds it.(n+2) = scf(r).(n+2
   ) * it.(n+1) + it.n;
@@ -1554,7 +1547,7 @@ definition
   let r be real number;
   set s = scf(r);
   func convergent_denominators(r) -> Real_Sequence means
-  :Def7:
+  :Def6:
   it.0 = 1 & it.
 1 = scf(r).1 & for n being Nat holds it.(n+2) = scf(r).(n+2) * it.(n+1) + it.n;
   existence
@@ -1610,7 +1603,7 @@ A3: s1.(n+1) in NAT;
     n+2 >= 0+1 by XREAL_1:7;
     then reconsider n3=s.(n+2) as Element of NAT by Th38,INT_1:3;
     n3*n2+n1 in NAT;
-    hence thesis by Def6;
+    hence thesis by Def5;
   end;
   assume
 A4: scf(r).0 > 0;
@@ -1619,12 +1612,12 @@ A5: P[1]
     reconsider n2=s.0 as Element of NAT by A4,INT_1:3;
     reconsider n1=s.1 as Element of NAT by Th38,INT_1:3;
     n1*n2+1 in NAT;
-    hence thesis by Def6;
+    hence thesis by Def5;
   end;
   let n;
   s.0 in NAT by A4,INT_1:3;
   then
-A6: P[0] by Def6;
+A6: P[0] by Def5;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A6,A5,A1);
   hence thesis;
 end;
@@ -1637,7 +1630,7 @@ A1: scf(r).0>0;
   set s1=c_n(r);
   set s=scf(r);
   defpred P[Nat] means s1.$1>0;
-  s1.1 = s.1 * s.0 +1 & s.1 >=0 by Def6,Th38;
+  s1.1 = s.1 * s.0 +1 & s.1 >=0 by Def5,Th38;
   then
 A2: P[1] by A1;
   let n;
@@ -1649,10 +1642,10 @@ A4: s1.n>0 & s1.(n+1)>0;
     n+2>1+0 by XREAL_1:8;
     then
 A5: s.(n+2) >=0 by Th38;
-    s1.(n+2)=s.(n+2) * s1.(n+1) + s1.n by Def6;
+    s1.(n+2)=s.(n+2) * s1.(n+1) + s1.n by Def5;
     hence thesis by A5,A4;
   end;
-A6: P[0] by A1,Def6;
+A6: P[0] by A1,Def5;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A6,A2,A3);
   hence thesis;
 end;
@@ -1666,7 +1659,7 @@ A1: scf(r).0 > 0;
   set s=scf(r);
   set s1=c_n(r);
   set m=s.(n+2)*s1.(n+1);
-  s1.(n+2)-m=m+s1.n-m by Def6;
+  s1.(n+2)-m=m+s1.n-m by Def5;
   then s1.(n+2)-s.(n+2) * s1.(n+1)>0 by A1,Th45;
   then s1.(n+2)-m+m>0+m by XREAL_1:6;
   hence thesis;
@@ -1693,7 +1686,7 @@ A2: for k st X[k] holds X[k+1]
     assume for n1,n2 st n1=s1.(k+1) & n2=s1.k holds n1 gcd n2 = 1;
     then
 A3: n1 gcd n2 = 1;
-    n3 = n4 * n1 + n2 by Def6;
+    n3 = n4 * n1 + n2 by Def5;
     hence thesis by A3,EULER_1:8;
   end;
 A4: X[0]
@@ -1702,9 +1695,9 @@ A4: X[0]
     let n1,n2 such that
 A5: n1=s1.(0+1) and
 A6: n2=s1.0;
-    n1 =u * s.0 +1 by A5,Def6;
+    n1 =u * s.0 +1 by A5,Def5;
     then
-A7: n1 =u * n2 +1 by A6,Def6;
+A7: n1 =u * n2 +1 by A6,Def5;
     1 gcd n2 = 1 by NEWTON:51;
     hence thesis by A7,EULER_1:8;
   end;
@@ -1741,13 +1734,13 @@ A9: tau|^(n+2) =((1+sqrt 5)/2)|^n * ((1+sqrt 5)/2)|^2 by FIB_NUM:def 1,NEWTON:8
       .=((1+sqrt 5)/2)|^n * ((1^2+2*1*sqrt 5+(sqrt 5)^2)/ 4)
       .=((1+sqrt 5)/2)|^n * ((1+2*sqrt 5+5)/ 4) by SQUARE_1:def 2
       .=((1+sqrt 5)/2)|^n * ((6+2*sqrt 5)/ 4);
-A10: s1.(n+1+1) = s.(n+2)*s1.(n+1)+s1.n by Def6;
+A10: s1.(n+1+1) = s.(n+2)*s1.(n+1)+s1.n by Def5;
     n+2 >= 0+1 by XREAL_1:7;
     then s.(n+2) >= 1 by A2,Th40;
     then s.(n+2)*s1.(n+1) >= 1*(tau|^(n+1)) by A6,A8,XREAL_1:66;
     hence thesis by A5,A10,A7,A9,XREAL_1:7;
   end;
-  s1.0 = s.0 by Def6;
+  s1.0 = s.0 by Def5;
   then
 A11: P[0] by A3,NEWTON:4;
   s.1>=1 by A2,Th40;
@@ -1760,7 +1753,7 @@ A12: s.1*s.0+1 >= 1+1 by XREAL_1:6;
   then 1+sqrt 5 < 1+3 by XREAL_1:8;
   then
 A13: (1+sqrt 5)/2 < 4/2 by XREAL_1:74;
-  s1.1 = s.1*s.0+1 & ((1+sqrt 5)/2)|^1 = (1+sqrt 5)/2 by Def6,NEWTON:5;
+  s1.1 = s.1*s.0+1 & ((1+sqrt 5)/2)|^1 = (1+sqrt 5)/2 by Def5,NEWTON:5;
   then
 A14: P[1] by A12,A13,FIB_NUM:def 1,XXREAL_0:2;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A11,A14,A4);
@@ -1802,7 +1795,7 @@ A10: ((b+sqrt (b^2+4))/2)|^(n+2+1) =((b+sqrt (b^2+4))/2)|^(n+1+2)
       .=((b+sqrt (b^2+4))/2)|^(n+1) * ((b^2+2*b*sqrt (b^2+4)+(b^2+4))/(2*2))
     by SQUARE_1:def 2
       .=((b+sqrt (b^2+4))/2)|^(n+1) * ((b^2+b*sqrt (b^2+4)+2)/2);
-    s1.(n+1+1) = s.(n+2)*s1.(n+1)+s1.n by Def6;
+    s1.(n+1+1) = s.(n+2)*s1.(n+1)+s1.n by Def5;
     hence thesis by A5,A8,A9,A10,XREAL_1:7;
   end;
   let n;
@@ -1815,7 +1808,7 @@ A11: sqrt (b^2+4) > b by SQUARE_1:22;
   then
 A12: ((b+sqrt (b^2+4))/2)|^(0+1) > b by NEWTON:5;
 A13: s.1 >= 0 by Th38;
-A14: s1.1 = s.1*s.0+1 by Def6;
+A14: s1.1 = s.1*s.0+1 by Def5;
   s.1 <= b by A2;
   then s.1*s.0 <= b^2 by A1,A3,A13,XREAL_1:66;
   then
@@ -1831,7 +1824,7 @@ A16: (b^2+b*sqrt (b^2+4)+2)/2 >= (2*(b^2+1))/2 by XREAL_1:72;
     .=(b^2+b*sqrt (b^2+4)+2)/2;
   then
 A17: P[1] by A15,A16,XXREAL_0:2;
-  s1.0=s.0 by Def6;
+  s1.0=s.0 by Def5;
   then
 A18: P[0] by A3,A12,XXREAL_0:2;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A18,A17,A4);
@@ -1844,7 +1837,7 @@ proof
   set s=scf(r);
   set s2=c_d(r);
   defpred P[Nat] means s2.$1 in NAT;
-  s2.0 = 1 by Def7;
+  s2.0 = 1 by Def6;
   then
 A1: P[0];
 A2: for n being Nat st P[n] & P[n+1] holds P[n+2]
@@ -1858,9 +1851,9 @@ A4: s2.(n+1) in NAT;
     n+2>=0+1 by XREAL_1:7;
     then reconsider n3=s.(n+2) as Element of NAT by Th38,INT_1:3;
     n3*n2+n1 in NAT;
-    hence thesis by Def7;
+    hence thesis by Def6;
   end;
-  s2.1=s.1 by Def7;
+  s2.1=s.1 by Def6;
   then
 A5: P[1] by Th38,INT_1:3;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A1,A5,A2);
@@ -1878,7 +1871,7 @@ A1: for n being Nat st P[n] & P[n+1] holds P[n+2]
     let n be Nat;
     assume
 A2: s1.n>=0;
-A3: s1.(n+2)=s.(n+2) * s1.(n+1) + s1.n by Def7;
+A3: s1.(n+2)=s.(n+2) * s1.(n+1) + s1.n by Def6;
     n+2>1+0 by XREAL_1:8;
     then
 A4: s.(n+2) >=0 by Th38;
@@ -1887,8 +1880,8 @@ A4: s.(n+2) >=0 by Th38;
   end;
   s.1>=0 by Th38;
   then
-A5: P[1] by Def7;
-A6: P[0] by Def7;
+A5: P[1] by Def6;
+A6: P[0] by Def6;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A6,A5,A1);
   hence thesis;
 end;
@@ -1901,21 +1894,21 @@ proof
   defpred P[Nat] means s1.$1>0;
   assume scf(r).1 > 0;
   then
-A1: P[1] by Def7;
+A1: P[1] by Def6;
   let n;
 A2: for n being Nat st P[n] & P[n+1] holds P[n+2]
   proof
     let n be Nat;
     assume
 A3: s1.n>0;
-A4: s1.(n+2)=s.(n+2) * s1.(n+1) + s1.n by Def7;
+A4: s1.(n+2)=s.(n+2) * s1.(n+1) + s1.n by Def6;
     n+2>1+0 by XREAL_1:8;
     then
 A5: s.(n+2) >=0 by Th38;
     assume s1.(n+1)>0;
     hence thesis by A5,A4,A3;
   end;
-A6: P[0] by Def7;
+A6: P[0] by Def6;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A6,A1,A2);
   hence thesis;
 end;
@@ -1926,7 +1919,7 @@ proof
   set s=scf(r);
   set s1=c_d(r);
   set m=s.(n+2)*s1.(n+1);
-  s1.(n+2)-s.(n+2)*s1.(n+1)=s.(n+2)*s1.(n+1)+s1.n-s.(n+2)*s1.(n+1) by Def7;
+  s1.(n+2)-s.(n+2)*s1.(n+1)=s.(n+2)*s1.(n+1)+s1.n-s.(n+2)*s1.(n+1) by Def6;
   then s1.(n+2)-s.(n+2)*s1.(n+1)>=0 by Th51;
   then s1.(n+2)-m+m>=0+m by XREAL_1:6;
   hence thesis;
@@ -1941,7 +1934,7 @@ A1: scf(r).1 > 0;
   set s1=c_d(r);
   set s=scf(r);
   set m=s.(n+2)*s1.(n+1);
-  s1.(n+2)-s.(n+2)*s1.(n+1)=s.(n+2)*s1.(n+1)+s1.n-s.(n+2)*s1.(n+1) by Def7;
+  s1.(n+2)-s.(n+2)*s1.(n+1)=s.(n+2)*s1.(n+1)+s1.n-s.(n+2)*s1.(n+1) by Def6;
   then s1.(n+2)-s.(n+2)*s1.(n+1)>0 by A1,Th52;
   then s1.(n+2)-m+m>0+m by XREAL_1:6;
   hence thesis;
@@ -1973,7 +1966,7 @@ A7: s.(n+2)*(s2.(n+1))^2>0 by A6,XREAL_1:129;
     s2.n>0 by A3,Th52;
     then
 A8: s2.(n+1)*s2.n>0 by A5,XREAL_1:129;
-    s2.(n+1)*s2.(n+1+1) =s2.(n+1)*(s.(n+2)*s2.(n+1)+s2.n) by Def7
+    s2.(n+1)*s2.(n+1+1) =s2.(n+1)*(s.(n+2)*s2.(n+1)+s2.n) by Def6
       .=s.(n+2)*(s2.(n+1))^2+s2.(n+1)*s2.n;
     hence thesis by A8,A7,XREAL_1:29,76;
   end;
@@ -1983,13 +1976,13 @@ A9: s.1>0 by A1;
   then
 A10: 1/(s.2*(s.1)^2+s.1)<1/(s.2*(s.1)^2) by A9,XREAL_1:29,76;
   let n;
-  1/(s2.1*s2.(1+1)) =1/(s2.1*(s.(0+2)*s2.(0+1)+s2.0)) by Def7
-    .=1/(s2.1*(s.2*s.1+s2.0)) by Def7
-    .=1/(s.1*(s.2*s.1+s2.0)) by Def7
-    .=1/(s.1*(s.2*s.1+1)) by Def7
+  1/(s2.1*s2.(1+1)) =1/(s2.1*(s.(0+2)*s2.(0+1)+s2.0)) by Def6
+    .=1/(s2.1*(s.2*s.1+s2.0)) by Def6
+    .=1/(s.1*(s.2*s.1+s2.0)) by Def6
+    .=1/(s.1*(s.2*s.1+1)) by Def6
     .=1/(s.2*(s.1)^2+s.1);
   then
-A11: X[1] by A10,Def7;
+A11: X[1] by A10,Def6;
   for n being Nat st n>=1 holds X[n] from NAT_1:sch 8(A11,A4);
   hence thesis;
 end;
@@ -2009,9 +2002,9 @@ A3: s.2 <= b by A1;
   s.2 >= 0 & s.1 >= 0 by Th38;
   then
 A4: s.2*s.1 <= b^2 by A2,A3,XREAL_1:66;
-  s2.(1+1)=s.(0+2)*s2.(0+1)+s2.0 by Def7
-    .=s.2*s2.1+1 by Def7
-    .=s.2*s.1+1 by Def7;
+  s2.(1+1)=s.(0+2)*s2.(0+1)+s2.0 by Def6
+    .=s.2*s2.1+1 by Def6
+    .=s.2*s.1+1 by Def6;
   then
 A5: s2.(1+1) <= b^2+1 by A4,XREAL_1:6;
   let n;
@@ -2044,7 +2037,7 @@ A13: ((b+sqrt (b^2+4))/2)|^(n+2+1) =((b+sqrt (b^2+4))/2)|^(n+1+2)
       .=((b+sqrt (b^2+4))/2)|^(n+1) * ((b^2+2*b*sqrt (b^2+4)+(b^2+4))/(2*2))
     by SQUARE_1:def 2
       .=((b+sqrt (b^2+4))/2)|^(n+1) * ((b^2+b*sqrt (b^2+4)+2)/2);
-A14: s2.(n+2+1) =s.(n+1+2)*s2.(n+1+1)+s2.(n+1) by Def7
+A14: s2.(n+2+1) =s.(n+1+2)*s2.(n+1+1)+s2.(n+1) by Def6
       .=s.(n+3)*s2.(n+1+1)+s2.(n+1);
     s.(n+3) <= b & s2.(n+1+1) >= 0 by A1,Th51;
     then s.(n+3)*s2.(n+1+1) <= b*((b+sqrt (b^2+4))/2)|^(n+1+1) by A10,A12,
@@ -2062,7 +2055,7 @@ A15: (b^2+b*sqrt (b^2+4)+2)/2 >= (2*(b^2+1))/2 by XREAL_1:72;
     .=(b^2+b*sqrt (b^2+4)+2)/2;
   then
 A16: P[1] by A5,A15,XXREAL_0:2;
-  s2.(0+1)=s.1 by Def7;
+  s2.(0+1)=s.1 by Def6;
   then
 A17: P[0] by A2,A7,XXREAL_0:2;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A17,A16,A8);
@@ -2087,7 +2080,7 @@ A1: for k st X[k] holds X[k+1]
     assume for n1,n2 st n1=s2.(k+1) & n2=s2.k holds n1 gcd n2 = 1;
     then
 A2: n1 gcd n2 = 1;
-    n3 = n4 * n1 + n2 by Def7;
+    n3 = n4 * n1 + n2 by Def6;
     hence thesis by A2,EULER_1:8;
   end;
 A3: X[0]
@@ -2096,7 +2089,7 @@ A3: X[0]
     n1=s2.(0+1) and
 A4: n2=s2.0;
     n1 gcd 1 = 1 by NEWTON:51;
-    hence thesis by A4,Def7;
+    hence thesis by A4,Def6;
   end;
   for n holds X[n] from NAT_1:sch 2(A3,A1);
   hence thesis;
@@ -2129,7 +2122,7 @@ A6: 1/s.(n+3)<=1/1 by XREAL_1:118;
     then
 A7: s.(n+2)>=1 by Th40;
 A8: s1.n>0 by A4,Th52;
-    s1.(n+2)/s1.(n+1)=(s.(n+2) * r + s1.n)/r by Def7
+    s1.(n+2)/s1.(n+1)=(s.(n+2) * r + s1.n)/r by Def6
       .=(s.(n+2) * r)/r + s1.n/r
       .=s.(n+2)* (r/r) + s1.n/r
       .=s.(n+2)+ s1.n/r by A5,XCMPLX_1:88;
@@ -2140,7 +2133,7 @@ A8: s1.n>0 by A4,Th52;
   then s.(0+2)>=1 by Th40;
   then
 A9: 1/s.(0+2)<=1/1 by XREAL_1:118;
-  s1.0 = 1 & s1.1 = s.1 by Def7;
+  s1.0 = 1 & s1.1 = s.1 by Def6;
   then s1.(0+1)/s1.0>=1 by A2,Th40;
   then
 A10: X[0] by A9,XXREAL_0:2;
@@ -2169,7 +2162,7 @@ A5: s1.(n+1) >= s1.n / s.(n+2) by A4,A3,XREAL_1:64;
   then s1.(n+1) * s.(n+2) >= s1.n by A5,A2,XREAL_1:64;
   then s1.(n+1) * s.(n+2) + s1.(n+1) * s.(n+2)>= s1.n+s1.(n+1) * s.(n+2) by
 XREAL_1:6;
-  hence thesis by Def7;
+  hence thesis by Def6;
 end;
 
 theorem
@@ -2206,7 +2199,7 @@ A1: ((1+sqrt 5)/2)|^1 = (1+sqrt 5)/2 & (1+sqrt 5)/2 < 4/2 by NEWTON:5
 A2: for n holds scf(r).n <>0;
   then
 A3: s.1>=1 by Th40;
-  then s2.(0+1)>=1 by Def7;
+  then s2.(0+1)>=1 by Def6;
   then
 A4: P[0] by NEWTON:4;
   let n;
@@ -2229,7 +2222,7 @@ A10: tau|^(n+2) =((1+sqrt 5)/2)|^n * ((1+sqrt 5)/2)|^2 by FIB_NUM:def 1
       .=((1+sqrt 5)/2)|^n * ((1^2+2*1*sqrt 5+(sqrt 5)^2)/ 4)
       .=((1+sqrt 5)/2)|^n * ((1+2*sqrt 5+5)/ 4) by SQUARE_1:def 2
       .=((1+sqrt 5)/2)|^n * ((6+2*sqrt 5)/ 4);
-A11: s2.(n+2+1) = s.(n+1+2)*s2.(n+1+1)+s2.(n+1) by Def7
+A11: s2.(n+2+1) = s.(n+1+2)*s2.(n+1+1)+s2.(n+1) by Def6
       .=s.(n+3)*s2.(n+1+1)+s2.(n+1);
     n+3 >= 0+1 by XREAL_1:7;
     then s.(n+3) >= 1 by A2,Th40;
@@ -2240,9 +2233,9 @@ A11: s2.(n+2+1) = s.(n+1+2)*s2.(n+1+1)+s2.(n+1) by Def7
   then s.2*s.1 >= 1 by A3,XREAL_1:159;
   then
 A12: s.2*s.1+1 >= 1+1 by XREAL_1:6;
-  s2.(1+1) = s.(0+2) * s2.(0+1) + s2.0 by Def7
-    .=s.2 * s2.1 + 1 by Def7
-    .=s.2 * s.1 + 1 by Def7;
+  s2.(1+1) = s.(0+2) * s2.(0+1) + s2.0 by Def6
+    .=s.2 * s2.1 + 1 by Def6
+    .=s.2 * s.1 + 1 by Def6;
   then
 A13: P[1] by A12,A1,FIB_NUM:def 1,XXREAL_0:2;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A4,A13,A5);
@@ -2261,7 +2254,7 @@ A2: for n holds scf(r).n >= a;
   defpred P[Nat] means s2.($1+1) >= ((a+sqrt (a^2+4))/2)|^$1;
 A3: s.1>0 by A1,A2;
   then s.1>=1 by Th40;
-  then s2.(0+1)>=1 by Def7;
+  then s2.(0+1)>=1 by Def6;
   then
 A4: P[0] by NEWTON:4;
   s.2>0 by A1,A2;
@@ -2302,16 +2295,16 @@ A13: ((a+sqrt (a^2+4))/2)|^(n+2) =((a+sqrt (a^2+4))/2)|^n * ((a+sqrt (a^2+
       .=((a+sqrt (a^2+4))/2)|^n * ((a^2+2*a*sqrt (a^2+4)+(a^2+4))/(2*2)) by
 SQUARE_1:def 2
       .=((a+sqrt (a^2+4))/2)|^n * ((a^2+a*sqrt (a^2+4)+2)/2);
-A14: s2.(n+2+1) =s.(n+1+2)*s2.(n+1+1)+s2.(n+1) by Def7
+A14: s2.(n+2+1) =s.(n+1+2)*s2.(n+1+1)+s2.(n+1) by Def6
       .=s.(n+3)*s2.(n+1+1)+s2.(n+1);
     s.(n+3) >= a by A2;
     then s.(n+3)*s2.(n+1+1) >= a*((a+sqrt (a^2+4))/2)|^(n+1) by A10,A12,
 XREAL_1:66;
     hence thesis by A9,A14,A11,A13,XREAL_1:7;
   end;
-  s2.(1+1) =s.(0+2)*s2.(0+1)+s2.0 by Def7
-    .=s.2*s2.1+1 by Def7
-    .=s.2*s.1+1 by Def7;
+  s2.(1+1) =s.(0+2)*s2.(0+1)+s2.0 by Def6
+    .=s.2*s2.1+1 by Def6
+    .=s.2*s.1+1 by Def6;
   then
 A15: P[1] by A6,A7,XXREAL_0:2;
   for n being Nat holds P[n] from FIB_NUM:sch 1(A4,A15,A8);
@@ -2322,8 +2315,8 @@ theorem
   c_n(r).(n+2) / c_d(r).(n+2) = (scf(r).(n+2) * c_n(r).(n+1) + c_n(r).n)
   / (scf(r).(n+2) * c_d(r).(n+1) + c_d(r).n)
 proof
-  c_n(r).(n+2) = scf(r).(n+2) * c_n(r).(n+1) + c_n(r).n by Def6;
-  hence thesis by Def7;
+  c_n(r).(n+2) = scf(r).(n+2) * c_n(r).(n+1) + c_n(r).n by Def5;
+  hence thesis by Def6;
 end;
 
 theorem Th64:
@@ -2331,21 +2324,21 @@ theorem Th64:
 proof
   set s=scf(r), s1=c_n(r),s2=c_d(r);
   defpred G[Nat] means s1.($1+1)*s2.$1-s1.$1*s2.($1+1)=(-1)|^$1;
-A1: s2.0 = 1 & s2.1 = s.1 by Def7;
+A1: s2.0 = 1 & s2.1 = s.1 by Def6;
 A2: for n st G[n] holds G[n+1]
   proof
     let l;
     assume
 A3: s1.(l+1)*s2.l-s1.l*s2.(l+1)=(-1)|^l;
     s1.(l+2)*s2.(l+1)-s1.(l+1)*s2.(l+2) =(s.(l+2) * s1.(l+1) + s1.l)*s2.(l
-    +1)-s1.(l+1)*s2.(l+2) by Def6
+    +1)-s1.(l+1)*s2.(l+2) by Def5
       .=(s.(l+2) * s1.(l+1)*s2.(l+1) + s1.l*s2.(l+1)) -s1.(l+1)*(s.(l+2) *
-    s2.(l+1) + s2.l) by Def7
+    s2.(l+1) + s2.l) by Def6
       .=(-1)*(s1.(l+1)*s2.l-s1.l*s2.(l+1))
       .=(-1)|^(l+1) by A3,NEWTON:6;
     hence thesis;
   end;
-  s1.0 = s.0 & s1.1 = s.1 * s.0 + 1 by Def6;
+  s1.0 = s.0 & s1.1 = s.1 * s.0 + 1 by Def5;
   then
 A4: G[0] by A1,NEWTON:4;
   for n holds G[n] from NAT_1:sch 2(A4,A2);
@@ -2371,8 +2364,8 @@ theorem Th66:
 proof
   set s1=c_n(r), s2=c_d(r), s=scf(r);
   s1.(n+2)*s2.n-s1.n*s2.(n+2) =(s.(n+2)*s1.(n+1)+s1.n)*s2.n-s1.n*s2.(n+2)
-  by Def6
-    .=(s.(n+2)*s1.(n+1)+s1.n)*s2.n-s1.n*(s.(n+2)*s2.(n+1)+s2.n) by Def7
+  by Def5
+    .=(s.(n+2)*s1.(n+1)+s1.n)*s2.n-s1.n*(s.(n+2)*s2.(n+1)+s2.n) by Def6
     .=s.(n+2)*(s1.(n+1)*s2.n-s1.n*s2.(n+1))
     .=(-1)|^n * s.(n+2) by Th64;
   hence thesis;
@@ -2408,13 +2401,13 @@ A2: for n being Nat st n>=1 holds P[n] implies P[n+1]
     n>=1 and
     s1.n/s2.n=(s1.(n+1)-s1.(n-1))/(s2.(n+1)-s2.(n-1));
     s.(n+2) * s1.(n+1) + s1.n - s1.n = s1.(n+2) - s1.n & s2.(n+2) - s2.n =
-    s.(n+ 2) * s2.(n+1) + s2.n - s2.n by Def6,Def7;
+    s.(n+ 2) * s2.(n+1) + s2.n - s2.n by Def5,Def6;
     hence thesis by A1,XCMPLX_1:91;
   end;
   let n;
   (s1.(1+1)-s1.(1-1))/(s2.(1+1)-s2.(1-1)) =(s.(2+0) * s1.(0+1) + s1.0-s1.0
-  )/(s2.(2+0)-s2.0) by Def6
-    .=(s.2 * s1.1 + s1.0-s1.0)/(s.2 * s2.1 + s2.0-s2.0) by Def7
+  )/(s2.(2+0)-s2.0) by Def5
+    .=(s.2 * s1.1 + s1.0-s1.0)/(s.2 * s2.1 + s2.0-s2.0) by Def6
     .=s1.1/s2.1 by A1,XCMPLX_1:91;
   then
 A3: P[1];
@@ -2447,8 +2440,8 @@ theorem
 proof
   set s1=c_n(r), s2=c_d(r), s=scf(r);
   defpred X[Nat] means s1.(2*$1+1)/s2.(2*$1+1)>s1.(2*$1)/s2.(2*$1);
-A1: s1.(2*0)/s2.(2*0) =s.0/s2.0 by Def6
-    .=s.0/1 by Def7
+A1: s1.(2*0)/s2.(2*0) =s.0/s2.0 by Def5
+    .=s.0/1 by Def6
     .=s.0;
   assume
 A2: scf(r).1>0;
@@ -2466,8 +2459,8 @@ A4: s1.(2*(n+1)+1)*s2.(2*(n+1))>s1.(2*(n+1))*s2.(2*(n+1)+1) by XREAL_1:47;
     s2.(2*(n+1)+1)>0 & s2.(2*(n+1))>0 by A2,Th52;
     hence thesis by A4,XREAL_1:106;
   end;
-  s1.(2*0+1)/s2.(2*0+1) =(s.1 * s.0 +1) / s2.1 by Def6
-    .=(s.1 * s.0 +1) / s.1 by Def7
+  s1.(2*0+1)/s2.(2*0+1) =(s.1 * s.0 +1) / s2.1 by Def5
+    .=(s.1 * s.0 +1) / s.1 by Def6
     .=s.0 +1 / s.1 by A2,XCMPLX_1:113;
   then
 A5: X[0] by A2,A1,XREAL_1:29;
@@ -2496,8 +2489,8 @@ proof
     .=c_n(r).0 * (c_d(r).0)" by VALUED_1:10
     .=c_n(r).0 *(1/c_d(r).0)
     .=c_n(r).0 /c_d(r).0
-    .=(scf(r)).0 / c_d(r).0 by Def6
-    .=(scf(r)).0 / 1 by Def7
+    .=(scf(r)).0 / c_d(r).0 by Def5
+    .=(scf(r)).0 / 1 by Def6
     .=scf(r).0;
 end;
 
@@ -2511,8 +2504,8 @@ A1: scf(r).1<>0;
     .=c_n(r).1 * (c_d(r).1)" by VALUED_1:10
     .=c_n(r).1 *(1/c_d(r).1)
     .=c_n(r).1 /c_d(r).1
-    .=(s.1 * s.0 +1) / c_d(r).1 by Def6
-    .=(s.1 * s.0 +1) / s.1 by Def7
+    .=(s.1 * s.0 +1) / c_d(r).1 by Def5
+    .=(s.1 * s.0 +1) / s.1 by Def6
     .=s.0 +1 / s.1 by A1,XCMPLX_1:113;
 end;
 
@@ -2529,12 +2522,12 @@ A1: cocf(r).2 =c_n(r).2 * ((c_d(r))").2 by SEQ_1:8
 A2: for n holds scf(r).n>0;
   then
 A3: s.1>0;
-A4: c_d(r).2 =s.(0+2)*c_d(r).(0+1) + c_d(r).0 by Def7
-    .=s.2*s.1+c_d(r).0 by Def7
-    .=s.2*s.1+1 by Def7;
-A5: c_n(r).2 =s.(0+2) * c_n(r).(0+1) + c_n(r).0 by Def6
-    .=s.2*(s.1 * s.0 +1) +c_n(r).0 by Def6
-    .=s.2 * s.1 * s.0 +s.2 +s.0 by Def6;
+A4: c_d(r).2 =s.(0+2)*c_d(r).(0+1) + c_d(r).0 by Def6
+    .=s.2*s.1+c_d(r).0 by Def6
+    .=s.2*s.1+1 by Def6;
+A5: c_n(r).2 =s.(0+2) * c_n(r).(0+1) + c_n(r).0 by Def5
+    .=s.2*(s.1 * s.0 +1) +c_n(r).0 by Def5
+    .=s.2 * s.1 * s.0 +s.2 +s.0 by Def5;
 A6: s.2>0 by A2;
   then s.0 + 1/(s.1+1/s.2) =s.0+1/((s.1 * s.2 +1)/ s.2) by XCMPLX_1:113
     .=s.0 + s.2/(s.1 * s.2 +1) by XCMPLX_1:57
@@ -2556,17 +2549,17 @@ A1: cocf(r).3 =c_n(r).3 * ((c_d(r))").3 by SEQ_1:8
 A2: for n holds scf(r).n>0;
   then
 A3: s.1>0;
-A4: c_d(r).2 =s.(0+2)*c_d(r).(0+1) + c_d(r).0 by Def7
-    .=s.2*s.1+c_d(r).0 by Def7
-    .=s.2*s.1+1 by Def7;
-A5: c_d(r).3 =s.(1+2)*c_d(r).(1+1) + c_d(r).1 by Def7
-    .=s.3*(s.2*s.1+1)+s.1 by A4,Def7
+A4: c_d(r).2 =s.(0+2)*c_d(r).(0+1) + c_d(r).0 by Def6
+    .=s.2*s.1+c_d(r).0 by Def6
+    .=s.2*s.1+1 by Def6;
+A5: c_d(r).3 =s.(1+2)*c_d(r).(1+1) + c_d(r).1 by Def6
+    .=s.3*(s.2*s.1+1)+s.1 by A4,Def6
     .=s.1*(s.2*s.3 +1)+s.3;
-A6: c_n(r).2 =s.(0+2) * c_n(r).(0+1) + c_n(r).0 by Def6
-    .=s.2*(s.1 * s.0 +1) +c_n(r).0 by Def6
-    .=s.2 * s.1 * s.0 +s.2 +s.0 by Def6;
-A7: c_n(r).3 =s.(1+2) * c_n(r).(1+1) + c_n(r).1 by Def6
-    .=s.3*(s.2 * s.1 * s.0 +s.2 +s.0) +(s.1 * s.0 +1) by A6,Def6
+A6: c_n(r).2 =s.(0+2) * c_n(r).(0+1) + c_n(r).0 by Def5
+    .=s.2*(s.1 * s.0 +1) +c_n(r).0 by Def5
+    .=s.2 * s.1 * s.0 +s.2 +s.0 by Def5;
+A7: c_n(r).3 =s.(1+2) * c_n(r).(1+1) + c_n(r).1 by Def5
+    .=s.3*(s.2 * s.1 * s.0 +s.2 +s.0) +(s.1 * s.0 +1) by A6,Def5
     .=(s.3*s.2 * s.1 * s.0) +s.3*s.2 +s.3*s.0 +s.1 * s.0 +1;
 A8: s.2>0 by A2;
 A9: s.3>0 by A2;
@@ -2608,9 +2601,9 @@ A6: for n being Nat st n>=1 & X[n] holds X[n+1]
     n>=1 and
     s1.(2*n+1)/s2.(2*n+1)<s1.(2*n-1)/s2.(2*n-1);
     s1.(2*(n+1)+1)*s2.(2*(n+1)-1)-s1.(2*(n+1)-1)*s2.(2*(n+1)+1) =(s.(2*n+
-    1+2) * s1.(2*n+1+1) + s1.(2*n+1))*s2.(2*n+1)-s1.(2*n+1)*s2.(2*n+3) by Def6
+    1+2) * s1.(2*n+1+1) + s1.(2*n+1))*s2.(2*n+1)-s1.(2*n+1)*s2.(2*n+3) by Def5
       .=(s.(2*n+1+2) * s1.(2*n+1+1) + s1.(2*n+1))*s2.(2*n+1) -s1.(2*n+1)*(s.
-    (2*n+1+2) * s2.(2*n+1+1) + s2.(2*n+1)) by Def7
+    (2*n+1+2) * s2.(2*n+1+1) + s2.(2*n+1)) by Def6
       .=s.(2*n+1+2)*(s1.(2*n+1+1)*s2.(2*n+1)-s1.(2*n+1)*s2.(2*n+1+1))
       .=s.(2*n+1+2) * (-1)|^(2*n+1) by Th64
       .=s.(2*n+1+2) * (-1|^(2*n+1)) by WSIERP_1:2
@@ -2626,8 +2619,8 @@ A7: s1.(2*(n+1)+1)*s2.(2*(n+1)-1)<s1.(2*(n+1)-1)*s2.(2*(n+1)+1) by XREAL_1:48;
   then s.3/(s.2*s.3 + 1)>0 by A2,XREAL_1:139;
   then
 A8: 1/(s.1 +s.3/(s.2*s.3 + 1))<1/s.1 by A4,XREAL_1:29,76;
-  s1.(2*1-1)/s2.(2*1-1) = (s.1 * s.0 +1)/s2.1 by Def6
-    .= (s.1 * s.0 +1)/s.1 by Def7
+  s1.(2*1-1)/s2.(2*1-1) = (s.1 * s.0 +1)/s2.1 by Def5
+    .= (s.1 * s.0 +1)/s.1 by Def6
     .= s.0 +1 / s.1 by A4,XCMPLX_1:113;
   then
 A9: X[1] by A8,A3,XREAL_1:8;
@@ -2653,9 +2646,9 @@ A4: for n being Nat st n>=1 & X[n] holds X[n+1]
     n>=1 and
     s1.(2*n)/s2.(2*n)>s1.(2*n-2)/s2.(2*n-2);
     s1.(2*(n+1))*s2.(2*(n+1)-2)-s1.(2*(n+1)-2)*s2.(2*(n+1)) = (s.(2*n+2)
-    * s1.(2*n+1) + s1.(2*n))*s2.(2*n)-s1.(2*n)*s2.(2*n+2) by Def6
+    * s1.(2*n+1) + s1.(2*n))*s2.(2*n)-s1.(2*n)*s2.(2*n+2) by Def5
       .= (s.(2*n+2) * s1.(2*n+1) + s1.(2*n))*s2.(2*n) -s1.(2*n)*(s.(2*n+2) *
-    s2.(2*n+1) + s2.(2*n)) by Def7
+    s2.(2*n+1) + s2.(2*n)) by Def6
       .= s.(2*n+2) * (s1.(2*n+1) *s2.(2*n)-s1.(2*n)* s2.(2*n+1))
       .= s.(2*n+2) * (-1)|^(2*n) by Th64
       .= s.(2*n+2) * (1|^(2*n)) by WSIERP_1:2
@@ -2667,8 +2660,8 @@ A5: s1.(2*(n+1))*s2.(2*(n+1)-2)>s1.(2*(n+1)-2)*s2.(2*(n+1)) by A1,XREAL_1:47;
     hence thesis by A5,XREAL_1:106;
   end;
   let n;
-A6: s1.(2*1-2)/s2.(2*1-2) = s.0/s2.0 by Def6
-    .=s.0/1 by Def7
+A6: s1.(2*1-2)/s2.(2*1-2) = s.0/s2.0 by Def5
+    .=s.0/1 by Def6
     .=s.0;
 A7: s.2>0 by A1;
   cocf(r).2 = c_n(r).2 * ((c_d(r))").2 by SEQ_1:8
@@ -2734,7 +2727,7 @@ definition
   let r be real number;
   set s=scf(r);
   func backContinued_fraction r -> Real_Sequence means
-  :Def9:
+  :Def8:
   it.0 = scf(r).0 & for n being Nat holds it.(n+1) = 1/it.n + scf(r).(n+1);
   existence
   proof
@@ -2790,17 +2783,17 @@ A2: for n st X[n] holds X[n+1]
     assume
 A3: bcf(r).(n+1)=s1.(n+1)/s1.n;
 A4: s1.(n+1)>0 by A1,Th45;
-    bcf(r).(n+1+1) = 1/s3.(n+1) + s.(n+1+1) by Def9
+    bcf(r).(n+1+1) = 1/s3.(n+1) + s.(n+1+1) by Def8
       .=s1.n/s1.(n+1)+ s.(n+1+1) by A3,XCMPLX_1:57
       .=(s1.n+ s.(n+2)*s1.(n+1))/s1.(n+1) by A4,XCMPLX_1:113
-      .=s1.(n+2)/s1.(n+1) by Def6;
+      .=s1.(n+2)/s1.(n+1) by Def5;
     hence thesis;
   end;
-  bcf(r).(0+1) = 1/s3.0 + s.(0+1) by Def9
-    .=1/s.0 + s.1 by Def9
+  bcf(r).(0+1) = 1/s3.0 + s.(0+1) by Def8
+    .=1/s.0 + s.1 by Def8
     .=(1+s.0 * s.1)/s.0 by A1,XCMPLX_1:113
-    .=s1.1/s.0 by Def6
-    .=s1.(0+1)/s1.0 by Def6;
+    .=s1.1/s.0 by Def5
+    .=s1.(0+1)/s1.0 by Def5;
   then
 A5: X[0];
   for n holds X[n] from NAT_1:sch 2(A5,A2);

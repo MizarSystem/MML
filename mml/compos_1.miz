@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received May 20, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,32 +17,34 @@ environ
  vocabularies SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, ORDINAL1, CARD_1,
       FUNCOP_1, FUNCT_4, RELAT_1, TARSKI, CAT_1, FINSET_1, NAT_1, AFINSQ_1,
       AMISTD_1, AMISTD_2, ARYTM_1, VALUED_1, PARTFUN1, ZFMISC_1, AMI_1,
-      ARYTM_3, SCMNORM, PBOOLE, RECDEF_2, COMPOS_1, FINSEQ_1, UNIALG_1, CARD_5,
+      ARYTM_3, EXTPRO_1, PBOOLE, RECDEF_2, COMPOS_1, FINSEQ_1, UNIALG_1,
+      CARD_5,
       RELOC, TURING_1, XXREAL_0, VALUED_0, SCMFSA_7, INT_1, SCMPDS_4, ORDINAL4,
       SCMFSA6A, SCMPDS_5;
- notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
-      PBOOLE, FUNCT_7, CARD_1, CARD_3,
-      XXREAL_0, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1,
-      FINSET_1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4,
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
+      PBOOLE, FUNCT_7, CARD_1, CARD_3, XXREAL_0, XCMPLX_0, RELAT_1, FUNCT_1,
+      PARTFUN1, FINSET_1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4,
       FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, RECDEF_2, AFINSQ_1,
-      STRUCT_0, MEMSTR_0;
+      STRUCT_0, COMPOS_0;
  constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, RELSET_1, FUNCT_7,
-      PRE_POLY, PBOOLE, RECDEF_2, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0,
-      MEMSTR_0;
+      PRE_POLY, PBOOLE, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0,
+      COMPOS_0, XTUPLE_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
       RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, AFINSQ_1, VALUED_1, XCMPLX_0,
-      MEMSTR_0, PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2,
-      ZFMISC_1, SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5;
+      PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2,
+      ZFMISC_1, SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5, COMPOS_0,
+      XTUPLE_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions RELAT_1, FUNCOP_1, ORDINAL1, PBOOLE, PARTFUN1, MCART_1, ZFMISC_1,
       TARSKI, STRUCT_0, FUNCT_1, XBOOLE_0, NAT_1, FUNCT_4, NAT_D, AFINSQ_1,
-      VALUED_1, CARD_3, MEMSTR_0;
+      VALUED_1, CARD_3, COMPOS_0, XTUPLE_0;
  theorems ZFMISC_1, FUNCT_2, TARSKI, CARD_3, FINSEQ_1, FUNCT_4, FUNCOP_1,
       FINSET_1, FUNCT_1, GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1,
       ORDINAL1, MCART_1, PARTFUN1, RECDEF_2, CARD_1, AFINSQ_1, XREAL_1,
       VALUED_1, CARD_2, PRE_CIRC, XREAL_0, NAT_1, XXREAL_0, NAT_D, INT_1,
-      WELLORD2, ENUMSET1, AFINSQ_2;
+      WELLORD2, ENUMSET1, AFINSQ_2, FUNCT_5, COMPOS_0;
  schemes FRAENKEL, CLASSES1, FUNCT_7, DOMAIN_1;
 
 begin :: General concepts
@@ -50,25 +52,22 @@ begin :: General concepts
 reserve x,A for set,
   i,j,k,m,n, l, l1, l2 for Nat;
 reserve D for non empty set,
-  z for natural number;
+  z for Nat;
 
 definition
   struct COM-Struct(#
-    Instructions -> non empty set,
-    haltF -> Element of the Instructions
+    InstructionsF -> Instructions
      #);
 end;
 
 definition
+ canceled 7;
   func Trivial-COM -> strict COM-Struct means
-:Def1:
-  the Instructions of it = {[0,{},{}]} &
-  the haltF of it = [0,{},{}];
+:Def8:
+  the InstructionsF of it = {[0,{},{}]};
   existence
   proof
-    reconsider I = {[0,{},{}]} as non empty set;
-    reconsider i = [0,{},{}] as Element of I by TARSKI:def 1;
-    take S=COM-Struct(#I,i #);
+    take S=COM-Struct(#{[0,{},{}]} #);
     thus thesis;
   end;
   uniqueness;
@@ -76,33 +75,37 @@ end;
 
 definition
   let S be COM-Struct;
-  mode Instruction of S is Element of the Instructions of S;
+  mode Instruction of S is Element of the InstructionsF of S;
 end;
 
 definition
+ canceled;
   let S be COM-Struct;
   func halt S -> Instruction of S equals
-   the haltF of S;
+  halt the InstructionsF of S;
   coherence;
 end;
 
-definition
+:: Definicje musi zachowac, zeby nie musiec pisac
+:: halt SCM-Instr, zamiast halt SCM, zreszta wyrzucenie jej
+:: spowodowaloby problemy z typowaniem.
 
+definition
   let S be COM-Struct;
-  let I be (the Instructions of S)-valued Function;
+  let I be (the InstructionsF of S)-valued Function;
   attr I is halt-free means
-:Def7:  not halt S in rng I;
+:Def11:  not halt S in rng I;
 end;
 
 begin :: General theory
 
 reserve S for COM-Struct;
-reserve ins for Element of the Instructions of S;
+reserve ins for Element of the InstructionsF of S;
 
 definition
  let S be COM-Struct;
  mode Instruction-Sequence of S is
-    (the Instructions of S)-valued ManySortedSet of NAT;
+    (the InstructionsF of S)-valued ManySortedSet of NAT;
 end;
 
 definition
@@ -115,157 +118,28 @@ A1:  k in NAT by ORDINAL1:def 12;
     dom P = NAT by PARTFUN1:def 2;
     then
 A2:  P.k in rng P by A1,FUNCT_1:3;
-    rng P c= the Instructions of S by RELAT_1:def 19;
+    rng P c= the InstructionsF of S by RELAT_1:def 19;
    hence P.k is Instruction of S by A2;
   end;
 end;
 
-begin :: InsType & InsCode
-
-notation
-  let x;
-  synonym InsCode x for x`1_3;
-  synonym JumpPart x for x`2_3;
-  synonym AddressPart x for x`3_3;
-end;
-
-definition
-
-  let  S be COM-Struct;
-  attr S is standard-ins means
-:Def17:
-   ex X being non empty set
-    st the Instructions of S c= [: NAT,NAT*,X*:];
-end;
-
-registration
-  cluster Trivial-COM -> standard-ins;
-  coherence
-  proof
-    {} in ((union {}) \/ the Instructions of Trivial-COM)* by FINSEQ_1:49;
-    then
-A1: {{}} c= ((union {}) \/ the Instructions of Trivial-COM)* by ZFMISC_1:31;
-    take X = (union {}) \/ the Instructions of Trivial-COM;
-    {} in NAT* by FINSEQ_1:49;
-    then
-A2:  {{}} c= NAT* by ZFMISC_1:31;
-    the Instructions of Trivial-COM = {[0,{},{}]} by Def1
-      .= [:{0},{{}},{{}}:] by MCART_1:35;
-    hence the Instructions of Trivial-COM c= [: NAT,NAT*,X*:]
-     by A1,A2,MCART_1:73;
-  end;
-end;
-
-registration
-  cluster standard-ins strict for COM-Struct;
-  existence
-  proof
-    take Trivial-COM;
-    thus thesis;
-  end;
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  cluster the Instructions of S -> Relation-like;
-  coherence
-   proof
-    ex X being non empty set
-     st the Instructions of S c= [: NAT,NAT*,X*:] by Def17;
-    hence thesis;
-   end;
-end;
-
-registration
- let S be standard-ins COM-Struct;
- let x be Instruction of S;
- cluster InsCode x -> natural;
- coherence
-  proof
-    consider X being non empty set such that
-A1:   the Instructions of S c= [:NAT,NAT*,X*:] by Def17;
-   x in the Instructions of S;
-   then x`1_3 in NAT by A1,RECDEF_2:2;
-   hence thesis;
-  end;
-end;
-
-definition
-  let  S be standard-ins COM-Struct;
-  func InsCodes S equals
-  proj1 proj1 the Instructions of S;
-  correctness;
-end;
-
-registration
-  let  S be standard-ins COM-Struct;
-  cluster InsCodes S ->non empty;
-  coherence
-   proof
-    ex X being non empty set st the Instructions of S c= [: NAT,NAT*,X*:]
-     by Def17;
-    then reconsider II = dom the Instructions of S as Relation;
-    assume InsCodes S is empty;
-     then II = {};
-    hence contradiction;
-   end;
-end;
-
-definition
-  let  S be standard-ins COM-Struct;
-  mode InsType of S is Element of InsCodes S;
-end;
-
-definition
-  let  S be standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  redefine func InsCode I -> InsType of S;
-  coherence
-   proof
-     consider X being non empty set such that
-A1:    the Instructions of S c= [:NAT,NAT*,X*:] by Def17;
-     I in the Instructions of S;
-     then I = [ I`1_3, I`2_3, I`3_3 ] by A1,RECDEF_2:3;
-     then [ I`1_3, I`2_3 ] in proj1 the Instructions of S by RELAT_1:def 4;
-    hence thesis by RELAT_1:def 4;
-   end;
-end;
-
 begin
 
-theorem Th7:
- for  S be standard-ins COM-Struct
- for I,J being Instruction of S
-  st InsCode I = InsCode J & JumpPart I = JumpPart J &
-   AddressPart I = AddressPart J
- holds I = J
-proof
- let  S be standard-ins COM-Struct;
- let I,J be Instruction of S;
-  consider X being non empty set such that
-A1:   the Instructions of S c= [:NAT,NAT*,X*:] by Def17;
-A2: I in the Instructions of S;
-  J in the Instructions of S;
- hence thesis by A2,A1,RECDEF_2:10;
-end;
-
 definition
-
   let S be (COM-Struct);
-  let p be NAT-defined (the Instructions of S)-valued Function, l be set;
+  let p be NAT-defined (the InstructionsF of S)-valued Function, l be set;
   pred p halts_at l means
-:Def19: l in dom p & p.l = halt S;
+:Def12: l in dom p & p.l = halt S;
 end;
 
 definition
-
   let S be COM-Struct;
   let s be Instruction-Sequence of S, l be Nat;
   redefine pred s halts_at l means
   s.l = halt S;
   compatibility
    proof
-    thus s halts_at l implies s.l = halt S by Def19;
+    thus s halts_at l implies s.l = halt S by Def12;
     assume
 A1:    s.l = halt S;
    l in NAT by ORDINAL1:def 12;
@@ -285,7 +159,7 @@ end;
 registration
   let S;
   cluster initial 1-element NAT-defined
-    (the Instructions of S)-valued for Function;
+    (the InstructionsF of S)-valued for Function;
   existence
   proof
     set p = <%the Instruction of S%>;
@@ -294,82 +168,31 @@ registration
   end;
 end;
 
-Lm7: now
-  let S be COM-Struct;
-  set F = <%halt S%>;
-A1: dom F = {0} by FUNCOP_1:13;
-  then
-A2: card dom F = 1 by CARD_1:30;
-A3: LastLoc F = card F -' 1 by AFINSQ_1:70
-    .= 0 by A2,XREAL_1:232;
-  hence F.(LastLoc F) = halt S by FUNCOP_1:72;
-  let l be Element of NAT such that
-  F.l = halt S;
-  assume l in dom F;
-  hence l = LastLoc F by A1,A3,TARSKI:def 1;
-end;
-
 definition
   let S be COM-Struct;
   mode preProgram of S is finite
-   NAT-defined (the Instructions of S)-valued Function;
+   NAT-defined (the InstructionsF of S)-valued Function;
 end;
 
 definition
   let S be COM-Struct,
   F be non empty preProgram of S;
   attr F is halt-ending means
-  :Def25:
+  :Def14:
   F.(LastLoc F) = halt S;
   attr F is unique-halt means
-  :Def26:
+  :Def15:
   for f being Nat st
   F.f = halt S & f in dom F holds f = LastLoc F;
-end;
-
-registration let S;
-  cluster halt-ending unique-halt trivial
-   for initial non empty preProgram of S;
-  existence
-  proof
-    reconsider F = <%halt S%> as initial non empty
-     NAT-defined
-    (the Instructions of S)-valued finite Function;
-    take F;
-    thus F.(LastLoc F) = halt S by Lm7;
-    thus for f being Nat st F.f = halt S & f in dom F
-    holds f = LastLoc F by Lm7;
-    thus thesis;
-  end;
 end;
 
 registration
   let S be COM-Struct;
   cluster trivial initial non empty for preProgram of S;
-:::  (NAT-defined (the Instructions of S)-valued finite Function);
-  existence
+ existence
   proof
     reconsider F = <%halt S%> as initial non empty preProgram of S;
-:::     NAT-defined
-:::    (the Instructions of S)-valued finite Function;
     take F;
-    thus thesis;
-  end;
-end;
-
-registration
-  let S be COM-Struct;
-  cluster halt-ending unique-halt trivial
-    for initial non empty NAT-defined
-    (the Instructions of S)-valued finite Function;
-  existence
-  proof
-    reconsider F = <%halt S%> as initial non empty NAT-defined
-    (the Instructions of S)-valued finite Function;
-    take F;
-    thus F.(LastLoc F) = halt S by Lm7;
-    thus for f being Nat st F.f = halt S & f in dom F
-    holds f = LastLoc F by Lm7;
     thus thesis;
   end;
 end;
@@ -379,23 +202,21 @@ definition
   mode Program of S is initial non empty preProgram of S;
 end;
 
-definition let S;
-  mode pre-Macro of S is halt-ending unique-halt Program of S;
-end;
+canceled;
 
 theorem
-  for ins being Element of the Instructions of Trivial-COM holds
+  for ins being Element of the InstructionsF of Trivial-COM holds
   InsCode ins = 0
 proof
-  let ins be Element of the Instructions of Trivial-COM;
-  the Instructions of Trivial-COM = {[0,{},{}]} by Def1;
+  let ins be Element of the InstructionsF of Trivial-COM;
+  the InstructionsF of Trivial-COM = {[0,{},{}]} by Def8;
   then ins = [0,{},{}] by TARSKI:def 1;
   hence thesis by RECDEF_2:def 1;
 end;
 
 begin :: Addenda
 
-reserve i, j, k for natural number;
+reserve i, j, k for Nat;
 
 definition
   let S be  COM-Struct;
@@ -408,6 +229,62 @@ registration
   let S be  COM-Struct;
   cluster Stop S -> initial non empty;
   coherence;
+end;
+
+registration
+  let S be COM-Struct;
+  cluster Stop S ->
+   initial non empty NAT-defined (the InstructionsF of S)-valued trivial;
+  coherence;
+end;
+
+Lm1: now
+  let S be COM-Struct;
+  thus dom Stop S = {0} by FUNCOP_1:13;
+  hence 0 in dom Stop S by TARSKI:def 1;
+end;
+
+Lm2: for S being COM-Struct holds card Stop S -' 1 = 0
+proof let S be COM-Struct;
+  thus card Stop S -' 1 = card Stop S - 1 by PRE_CIRC:20
+    .= 1 - 1 by AFINSQ_1:33
+    .= 0;
+end;
+
+Lm3: for S being COM-Struct holds LastLoc Stop S = 0
+proof
+  let S be COM-Struct;
+  card Stop S -' 1 = 0 by Lm2;
+  hence thesis by AFINSQ_1:70;
+end;
+
+registration
+  let S be COM-Struct;
+  cluster Stop S -> halt-ending unique-halt;
+  coherence
+  proof
+    thus (Stop S).(LastLoc Stop S) = (0 .--> halt S).0 by Lm3
+      .= halt S by FUNCOP_1:72;
+    let l be Nat such that (Stop S).l = halt S;
+    assume l in dom Stop S;
+    then l in {0} by Lm1;
+    then l = 0 by TARSKI:def 1;
+    hence thesis by Lm3;
+  end;
+end;
+
+registration let S;
+  cluster halt-ending unique-halt trivial
+   for initial non empty preProgram of S;
+  existence
+  proof
+    take F= Stop S;
+    thus thesis;
+  end;
+end;
+
+definition let S;
+  mode MacroInstruction of S is halt-ending unique-halt Program of S;
 end;
 
 registration
@@ -429,12 +306,12 @@ end;
 theorem
   card Stop S = 1 by AFINSQ_1:33;
 
-reserve k, m for natural number,
+reserve k, m for Nat,
   x, x1, x2, x3, y, y1, y2, y3, X,Y,Z for set;
 
-Lm8: -1 < k;
+Lm4: -1 < k;
 
-Lm9: for a, b, c being Element of NAT st 1 <= a & 2 <= b holds
+Lm5: for a, b, c being Element of NAT st 1 <= a & 2 <= b holds
 k < a - 1 or a <= k & k <= a + b - 3 or k = a + b - 2 or
 a + b - 2 < k or k = a - 1
 proof
@@ -465,133 +342,20 @@ end;
 
 begin  :: Properties of AMI-Struct
 
-definition
-
-  let S be standard-ins COM-Struct;
-  let T be InsType of S;
-  func JumpParts T equals
-  { JumpPart I where I is Instruction of S: InsCode I = T };
-  coherence;
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  cluster AddressPart I -> Function-like Relation-like;
-  coherence
-  proof
-   consider X being non empty set such that
-A1:  the Instructions of S c= [:NAT,NAT*,X*:] by Def17;
-    I in the Instructions of S;
-    then AddressPart I in X* by A1,RECDEF_2:2;
-    hence thesis;
-  end;
-  cluster JumpPart I -> Function-like Relation-like;
-  coherence
-  proof
-   consider X being non empty set such that
-A2:  the Instructions of S c= [:NAT,NAT*,X*:] by Def17;
-    I in the Instructions of S;
-    then JumpPart I in NAT* by A2,RECDEF_2:2;
-    hence thesis;
-  end;
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  cluster AddressPart I -> FinSequence-like;
-  coherence
-  proof
-   consider X being non empty set such that
-A1:  the Instructions of S c= [:NAT,NAT*,X*:] by Def17;
-    I in the Instructions of S;
-    then AddressPart I in X* by A1,RECDEF_2:2;
-    hence thesis;
-  end;
-  cluster JumpPart I -> FinSequence-like;
-  coherence
-  proof
-   consider X being non empty set such that
-A2:  the Instructions of S c= [:NAT,NAT*,X*:] by Def17;
-    I in the Instructions of S;
-    then JumpPart I in NAT* by A2,RECDEF_2:2;
-    hence thesis;
-  end;
-end;
-
-definition
-  let S be standard-ins COM-Struct;
-  attr S is homogeneous means
-:Def33:
-  for I, J being Instruction of S st InsCode I = InsCode J holds
-  dom JumpPart I = dom JumpPart J;
-end;
-
-theorem Th85:
+theorem Th5:
   for I being Instruction of Trivial-COM holds JumpPart I = 0
 proof
   let I be Instruction of Trivial-COM;
-  the Instructions of Trivial-COM = {[0,0,0]} by Def1;
+  the InstructionsF of Trivial-COM = {[0,0,0]} by Def8;
   then I = [0,0,0] by TARSKI:def 1;
   hence thesis by RECDEF_2:def 2;
 end;
 
-definition
-  let S be standard-ins COM-Struct;
-  let T be InsType of S;
-  func AddressParts T equals
-  { AddressPart I where I is Instruction of S: InsCode I = T };
-  coherence;
-end;
-
-registration
-  let S be standard-ins COM-Struct;
-  let T be InsType of S;
-  cluster AddressParts T -> functional;
-  coherence
-  proof
-    let f be set;
-    assume f in AddressParts T;
-    then ex I being Instruction of S st f = AddressPart I & InsCode I = T;
-    hence thesis;
-  end;
-  cluster JumpParts T -> non empty functional;
-  coherence
-  proof
-    consider y being set such that
-A1:  [T,y] in proj1 the Instructions of S by RELAT_1:def 4;
-    consider x being set such that
-A2:  [[T,y],x] in the Instructions of S by A1,RELAT_1:def 4;
-    reconsider I = [T,y,x] as Instruction of S by A2;
-    InsCode I = T by RECDEF_2:def 1;
-    then JumpPart I in JumpParts T;
-   hence JumpParts T is non empty;
-    let f be set;
-    assume f in JumpParts T;
-    then ex I being Instruction of S st f = JumpPart I & InsCode I = T;
-    hence thesis;
-  end;
-end;
-
-definition
-  let S be standard-ins COM-Struct;
-  attr S is regular means
-  :Def35:
-  for I being Instruction of S, k being set st k in dom JumpPart I
-   holds (product" JumpParts InsCode I).k = NAT;
-  attr S is J/A-independent means
-:Def36: for T being InsType of S, f1,f2 being Function,
-     p being set
-    st f1 in JumpParts T & f2 in product product" JumpParts T &
-    [T,f1,p] in the Instructions of S
-    holds [T,f2,p] in the Instructions of S;
-end;
-
-theorem Th86:
-  for T being InsType of Trivial-COM holds JumpParts T = {0}
+theorem
+  for T being InsType of the InstructionsF of Trivial-COM
+   holds JumpParts T = {0}
 proof
-  let T be InsType of Trivial-COM;
+  let T be InsType of the InstructionsF of Trivial-COM;
   set A = { JumpPart I where I is Instruction of Trivial-COM:
    InsCode I = T };
   {0} = A
@@ -601,13 +365,13 @@ proof
       assume a in {0};
       then
 A1:   a = 0 by TARSKI:def 1;
-   the Instructions of Trivial-COM = {[0,0,0]} by Def1;
+   the InstructionsF of Trivial-COM = {[0,0,0]} by Def8;
       then
-A2:   InsCodes Trivial-COM = {0} by MCART_1:92;
+A2:   InsCodes the InstructionsF of Trivial-COM = {0} by MCART_1:92;
 A3:     T = 0 by A2,TARSKI:def 1;
-        reconsider I = [0,0,0] as Instruction of Trivial-COM
-        by Def1;
-A4:     JumpPart I = 0 by Th85;
+        [0,0,0] = halt Trivial-COM;
+        then reconsider I = [0,0,0] as Instruction of Trivial-COM;
+A4:     JumpPart I = 0 by Th5;
         InsCode I = 0 by RECDEF_2:def 1;
         hence a in A by A1,A3,A4;
     end;
@@ -615,235 +379,10 @@ A4:     JumpPart I = 0 by Th85;
     assume a in A;
     then ex I being Instruction of Trivial-COM st a = JumpPart I &
      InsCode I = T;
-    then a = 0 by Th85;
+    then a = 0 by Th5;
     hence thesis by TARSKI:def 1;
   end;
   hence thesis;
-end;
-
-Lm10: for I being Instruction of Trivial-COM holds JumpPart I = 0
-proof
-  let I be Instruction of Trivial-COM;
-  the Instructions of Trivial-COM = {[0,0,{}]} by Def1;
-  then I = [0,0,0] by TARSKI:def 1;
-  hence thesis by RECDEF_2:def 2;
-end;
-
-Lm11: for T being InsType of Trivial-COM holds JumpParts T = {0}
-proof
-  let T be InsType of Trivial-COM;
-  set A = { JumpPart I
-   where I is Instruction of Trivial-COM: InsCode I = T };
-  {0} = A
-  proof
-    hereby
-      let a be set;
-      assume a in {0};
-      then
-A1:   a = 0 by TARSKI:def 1;
-   the Instructions of Trivial-COM = {[0,0,{}]} by Def1;
-      then InsCodes Trivial-COM = {0} by MCART_1:92;
-      then
-A2:   T = 0 by TARSKI:def 1;
-      reconsider I = [0,0,0] as Instruction of Trivial-COM
-      by Def1;
-A3:   JumpPart I = 0 by Lm10;
-      InsCode I = 0 by RECDEF_2:def 1;
-      hence a in A by A1,A2,A3;
-    end;
-    let a be set;
-    assume a in A;
-    then ex I being Instruction of Trivial-COM
-    st a = JumpPart I & InsCode I = T;
-    then a = 0 by Lm10;
-    hence thesis by TARSKI:def 1;
-  end;
-  hence thesis;
-end;
-
-registration
-  cluster Trivial-COM -> homogeneous regular J/A-independent;
-  coherence
-  proof
-    thus Trivial-COM is homogeneous
-     proof let I, J be Instruction of Trivial-COM;
-       JumpPart I = {} & JumpPart J = {} by Th85;
-      hence thesis;
-     end;
-    thus Trivial-COM is regular
-     proof let I be Instruction of Trivial-COM;
-       JumpPart I = {} by Th85;
-      hence thesis;
-     end;
-    let T be InsType of Trivial-COM;
-    let f1,f2 be Function, p be set;
-    assume f1 in JumpParts T;
-     then
-A1:    f1 in {0} by Th86;
-     assume
-A2:    f2 in product product" JumpParts T;
-     product" JumpParts T = {} by Th86,CARD_3:106;
-     then f1 = 0 & f2 = 0 by A1,A2,CARD_3:10,TARSKI:def 1;
-    hence thesis;
-  end;
-end;
-
-registration
-  cluster regular J/A-independent homogeneous
-        for standard-ins strict COM-Struct;
-  existence
-  proof
-    take Trivial-COM;
-    thus thesis;
-  end;
-end;
-
-registration
- let S be regular homogeneous standard-ins COM-Struct;
- let T being InsType of S;
- cluster JumpParts T ->  with_common_domain;
- coherence
-  proof let f,g be Function;
-   assume f in JumpParts T;
-    then
-A1: ex I being Instruction of S st f = JumpPart I & InsCode I = T;
-   assume g in JumpParts T;
-    then ex J being Instruction of S st g = JumpPart J & InsCode J = T;
-   hence dom f = dom g by Def33,A1;
-  end;
-end;
-
-registration
- let S be regular homogeneous standard-ins COM-Struct;
- let I be Instruction of S;
- cluster JumpPart I -> NAT-valued for Function;
- coherence
-proof
- JumpPart I is NAT-valued
- proof let x;
- assume x in rng JumpPart I;
-  then consider k being set such that
-A1: k in dom JumpPart I and
-A2: (JumpPart I).k = x by FUNCT_1:def 3;
-  set X = JumpParts InsCode I;
-A3:  JumpPart I in X;
-  then k in dom product" X by A1,CARD_3:100;
-  then (JumpPart I).k in (product" X).k by A3,CARD_3:101;
- hence x in NAT by A1,A2,Def35;
- end;
- hence thesis;
-end;
-end;
-
-registration
-  let S be regular J/A-independent homogeneous standard-ins COM-Struct;
-  let T be InsType of S;
-  cluster JumpParts T -> product-like;
-  coherence
-proof
-  consider y being set such that
-A1: [T,y] in proj1 the Instructions of S by RELAT_1:def 4;
-  consider z being set such that
-A2: [[T,y],z] in the Instructions of S by A1,RELAT_1:def 4;
-  reconsider I = [T,y,z] as Instruction of S by A2;
-A3: InsCode I = T by RECDEF_2:def 1;
-A4: JumpPart I = y by RECDEF_2:def 2;
-  set f = (dom JumpPart I) --> NAT;
-A5:   dom f = dom JumpPart I by FUNCOP_1:13;
-  for x being set holds x in JumpParts T iff
-   ex g being Function st x = g & dom g = dom f &
-     for y st y in dom f holds g.y in f.y
-   proof let x be set;
-    thus x in JumpParts T implies
-      ex g being Function st x = g & dom g = dom f &
-     for y st y in dom f holds g.y in f.y
-    proof assume x in JumpParts T;
-      then consider K being Instruction of S such that
-A6:    x = JumpPart K and
-A7:    InsCode K = T;
-     take g = JumpPart K;
-     thus x = g by A6;
-     thus
-A8:    dom g = dom f by A7,A3,Def33,A5;
-     let y;
-     assume
-A9:    y in dom f;
-      then f.y = NAT by A5,FUNCOP_1:7;
-     hence g.y in f.y by A8,A9,FUNCT_1:102;
-    end;
-     given g being Function such that
-A10:   x = g and
-A11:   dom g = dom f and
-A12:   for y st y in dom f holds g.y in f.y;
-A13:   dom g = dom JumpPart I by A11,FUNCOP_1:13;
-   set J = [T,g,z];
-A14: y in JumpParts T by A4,A3;
-   then
-A15: dom g = dom product" JumpParts T by A13,A4,CARD_3:100;
-    for x st x in dom(product" JumpParts T)
-     holds g.x in (product" JumpParts T).x
-    proof let x;
-     assume
-A16:    x in dom(product" JumpParts T);
-      f.x = NAT by A15,A13,A16,FUNCOP_1:7;
-      then g.x in NAT by A12,A15,A16,A11;
-     hence g.x in (product" JumpParts T).x by A16,A15,A3,A13,Def35;
-    end;
-   then
-A17: g in product product" JumpParts T by A15,CARD_3:9;
-    reconsider J as Instruction of S by A14,Def36,A4,A17;
-A18: InsCode J = T by RECDEF_2:def 1;
-     g = JumpPart J by RECDEF_2:def 2;
-    hence x in JumpParts T by A18,A10;
-   end;
-  then JumpParts T = product f by CARD_3:def 5;
- hence JumpParts T is product-like;
-end;
-end;
-
-registration
-  cluster Trivial-COM -> regular J/A-independent;
-  coherence;
-end;
-
-registration
-  let S be homogeneous standard-ins COM-Struct;
-  let T be InsType of S;
-  cluster JumpParts T -> with_common_domain;
-  coherence
-  proof
-    let f, g be Function;
-    assume that
-A1: f in JumpParts T and
-A2: g in JumpParts T;
-A3: ex I being Instruction of S st f = JumpPart I & InsCode I = T by A1;
-    ex J being Instruction of S st g = JumpPart J & InsCode J = T by A2;
-    hence thesis by A3,Def33;
-  end;
-end;
-
-theorem
-  for S being homogeneous regular standard-ins COM-Struct,
-  I being Instruction of S, x being set st x in dom JumpPart I holds
-  (JumpPart I).x is Element of NAT
-proof
-  let S be homogeneous regular standard-ins COM-Struct,
-  I be Instruction of S, x be set such that
-A1: x in dom JumpPart I;
-A2: JumpPart I in JumpParts InsCode I;
-A3: (product" JumpParts InsCode I).x = NAT by A1,Def35;
-  for f being Function st f in JumpParts InsCode I holds x in dom f
-  proof
-    let f be Function;
-    assume f in JumpParts InsCode I;
-    then ex J being Instruction of S st f = JumpPart J & InsCode I =
-    InsCode J;
-    hence thesis by A1,Def33;
-  end;
-  then x in dom product" JumpParts InsCode I by CARD_3:def 12;
-  then (product" JumpParts InsCode I).x = pi(JumpParts InsCode I,x)
-  by CARD_3:def 12;
-  hence thesis by A2,A3,CARD_3:def 6;
 end;
 
 registration
@@ -868,29 +407,11 @@ A6: dom F = {a} by A3,A4,RELAT_1:9;
   end;
 end;
 
-definition
-  let S be standard-ins COM-Struct;
-  let I be Instruction of S;
-  attr I is ins-loc-free means
-:Def37: JumpPart I is empty;
-end;
+canceled;
 
-Lm12: now
-  let S be COM-Struct;
-  thus dom Stop S = {0} by FUNCOP_1:13;
-  hence 0 in dom Stop S by TARSKI:def 1;
-end;
-
-registration
-  let S be COM-Struct;
-  cluster Stop S ->
-   initial non empty NAT-defined (the Instructions of S)-valued trivial;
-  coherence;
-end;
-
-theorem Th89:
-  for F being pre-Macro of S st card F = 1 holds F = Stop S
-proof let F be pre-Macro of S;
+theorem Th8:
+  for F being MacroInstruction of S st card F = 1 holds F = Stop S
+proof let F be MacroInstruction of S;
   assume
 A1: card F = 1;
   then consider x being set such that
@@ -905,7 +426,7 @@ A6: a = 0 by A4;
   card F -' 1 = card F - 1 by PRE_CIRC:20
     .= 0 by A1;
   then LastLoc F = 0 by AFINSQ_1:70;
-  then F.0 = halt S by Def25;
+  then F.0 = halt S by Def14;
   then halt S in rng F by A5,FUNCT_1:def 3;
   then halt S in {b} by A2,A3,RELAT_1:9;
   then F = {[0,halt S]} by A2,A3,A6,TARSKI:def 1
@@ -913,323 +434,23 @@ A6: a = 0 by A4;
   hence thesis;
 end;
 
-Lm13: for S being COM-Struct holds card Stop S -' 1 = 0
-proof let S be COM-Struct;
-  thus card Stop S -' 1 = card Stop S - 1 by PRE_CIRC:20
-    .= 1 - 1 by AFINSQ_1:33
-    .= 0;
-end;
-
-theorem Th90:
- for S being COM-Struct holds LastLoc Stop S = 0
-proof
-  let S be COM-Struct;
-  card Stop S -' 1 = 0 by Lm13;
-  hence thesis by AFINSQ_1:70;
-end;
-
-registration
-  let S be COM-Struct;
-  cluster Stop S -> halt-ending unique-halt;
-  coherence
-  proof
-    thus (Stop S).(LastLoc Stop S) = (0 .--> halt S).0 by Th90
-      .= halt S by FUNCOP_1:72;
-    let l be Nat such that (Stop S).l = halt S;
-    assume l in dom Stop S;
-    then l in {0} by Lm12;
-    then l = 0 by TARSKI:def 1;
-    hence thesis by Th90;
-  end;
-end;
+theorem
+ for S being COM-Struct holds LastLoc Stop S = 0 by Lm3;
 
 begin  :: On the composition of macro instructions
 
-registration
-  let S be regular J/A-independent homogeneous standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
- cluster JumpPart I -> natural-valued for Function;
- coherence;
-end;
-
 definition
-  let S be regular J/A-independent homogeneous standard-ins COM-Struct;
-  let I be Element of the Instructions of S;
-  let k be natural number;
-  func IncAddr(I,k) -> Instruction of S means
-:Def38:
-  InsCode it = InsCode I &
-  AddressPart it = AddressPart I &
-  JumpPart it = k + JumpPart I;
-  existence
-  proof
-    consider D0 being non empty set such that
-A1:   the Instructions of S c= [:NAT,NAT*,D0*:] by Def17;
-    set p = k + JumpPart I;
-    set f = product" JumpParts InsCode I;
-A2: JumpPart I in JumpParts InsCode I;
-A3: JumpParts InsCode I = product f by CARD_3:78;
-A4: dom p = dom JumpPart I by VALUED_1:def 2;
-     then
-A5: dom p  = DOM JumpParts InsCode I by A2,CARD_3:def 11
-      .= dom f by CARD_3:75;
-    for z being set st z in dom p holds p.z in f.z
-    proof
-      let z be set;
-      assume
-A6:  z in dom p;
-      reconsider z as Element of NAT by A6;
-A7:    f.z = NAT by A6,A4,Def35;
-        reconsider il = (JumpPart I).z as Element of NAT by ORDINAL1:def 12;
-        p.z = k + il by A6,VALUED_1:def 2;
-        hence thesis by A7;
-    end;
-    then p in JumpParts InsCode I by A3,A5,CARD_3:9;
-    then consider II being Instruction of S such that
-A8: p = JumpPart II and
-A9: InsCode I = InsCode II;
-A10:  JumpPart I in JumpParts InsCode I;
-     product product" JumpParts InsCode I = JumpParts InsCode I by CARD_3:78;
-     then
-A11:  JumpPart II in product product" JumpParts InsCode I by A9;
-     I in the Instructions of S;
-     then [InsCode I, JumpPart I, AddressPart I] = I by A1,RECDEF_2:3;
-     then reconsider IT = [InsCode I, JumpPart II, AddressPart I]
-                       as Instruction of S by A10,A11,Def36;
-    take IT;
-    thus InsCode IT = InsCode I by RECDEF_2:def 1;
-    thus AddressPart IT = AddressPart I by RECDEF_2:def 3;
-    thus JumpPart IT = k + JumpPart I by A8,RECDEF_2:def 2;
-  end;
-  uniqueness by Th7;
-end;
-
-theorem Th91:
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  I being Element of the Instructions of S holds IncAddr(I, 0) = I
-proof
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  I be Element of the Instructions of S;
-A1: InsCode IncAddr(I, 0) = InsCode I by Def38;
-A2: AddressPart IncAddr(I, 0) = AddressPart I by Def38;
-A3:  JumpPart IncAddr(I, 0) = (0 qua Nat) + JumpPart I by Def38;
-   then
-A4: dom JumpPart I = dom JumpPart IncAddr(I, 0) by VALUED_1:def 2;
-  for k being Nat st k in dom JumpPart I holds
-  (JumpPart IncAddr(I, 0)).k = (JumpPart I).k
-  proof
-    let k be Nat;
-    assume k in dom JumpPart I;
-    hence (JumpPart IncAddr(I, 0)).k
-        = (0 qua Nat) + (JumpPart I).k by A4,A3,VALUED_1:def 2
-       .= (JumpPart I).k;
-  end;
-   then JumpPart IncAddr(I, 0) = JumpPart I by A4,FINSEQ_1:13;
-  hence thesis by A1,A2,Th7;
-end;
-
-theorem Th92:
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  I being Instruction of S st I is ins-loc-free holds IncAddr(I, k) = I
-proof
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  I be Instruction of S such that
-A1: JumpPart I is empty;
-  set f = IncAddr(I, k);
-A2: InsCode f = InsCode I by Def38;
-A3: AddressPart f = AddressPart I by Def38;
-    JumpPart f = k + JumpPart I by Def38;
-    then
-A4: dom JumpPart f = dom JumpPart I by VALUED_1:def 2;
-   JumpPart f = JumpPart I by A1,A4;
-  hence thesis by A2,A3,Th7;
-end;
-
-definition
-  let S be standard-ins COM-Struct;
-  attr S is proper-halt means
-:Def39:  halt S is ins-loc-free;
-end;
-
-registration
-  cluster Trivial-COM -> proper-halt;
-  coherence
-  proof set S = Trivial-COM;
-    halt S = [0,{},{}] by Def1;
-   hence JumpPart halt S is empty by RECDEF_2:def 2;
-  end;
-end;
-
-registration
- cluster proper-halt regular homogeneous J/A-independent
-  for standard-ins COM-Struct;
- existence
-  proof
-   take Trivial-COM;
-   thus thesis;
-  end;
-end;
-
-registration
-  let S be proper-halt standard-ins COM-Struct;
- cluster halt S -> ins-loc-free;
- coherence by Def39;
-end;
-
-registration
-  let S be proper-halt standard-ins COM-Struct;
- cluster ins-loc-free for Instruction of S;
- existence
-  proof
-   take halt S;
-   thus thesis;
-  end;
-end;
-
-registration
-  let S be proper-halt standard-ins COM-Struct;
-  let I be ins-loc-free Instruction of S;
-  cluster JumpPart I -> empty;
-  coherence by Def37;
-end;
-
-
-
-theorem
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-      I being Instruction of S
-  holds JumpParts InsCode I = JumpParts InsCode IncAddr(I,k)
-proof
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-      I be Instruction of S;
-  set A = { JumpPart J where J is Instruction of S:
-  InsCode I = InsCode J }, B = { JumpPart J where J is Instruction of S:
-  InsCode IncAddr(I,k) = InsCode J };
-  A = B
-  proof
-    hereby
-      let a be set;
-      assume a in A;
-      then consider J being Instruction of S such that
-A1:   a = JumpPart J and
-A2:   InsCode J = InsCode I;
-      InsCode J = InsCode IncAddr(I,k) by A2,Def38;
-      hence a in B by A1;
-    end;
-    let a be set;
-    assume a in B;
-    then consider J being Instruction of S such that
-A3: a = JumpPart J and
-A4: InsCode J = InsCode IncAddr(I,k);
-    InsCode J = InsCode I by A4,Def38;
-    hence thesis by A3;
-  end;
-  hence thesis;
-end;
-
-theorem Th95:
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  I, J being Instruction of S st
-  ex k being natural number st IncAddr(I,k) = IncAddr(J,k) holds I = J
-proof
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-      I, J be Instruction of S;
-  given k being natural number such that
-A1: IncAddr(I,k) = IncAddr(J,k);
-A2: InsCode I = InsCode IncAddr(I,k) by Def38
-    .= InsCode J by A1,Def38;
-A3: AddressPart I = AddressPart IncAddr(I,k) by Def38
-       .= AddressPart J by A1,Def38;
-A4: JumpPart IncAddr(I,k) = k + JumpPart I by Def38;
-    then
-A5: dom JumpPart I = dom  JumpPart IncAddr(I,k) by VALUED_1:def 2;
-A6: JumpPart IncAddr(J,k) = k + JumpPart J by Def38;
-    then
-A7: dom JumpPart J = dom  JumpPart IncAddr(J,k) by VALUED_1:def 2;
-A8: dom JumpPart I = dom JumpPart J by A2,Def33;
-  for x being set st x in dom JumpPart I holds
-  (JumpPart I).x = (JumpPart J).x
-  proof
-    let x be set;
-    assume
-A9: x in dom JumpPart I;
-A10:   (JumpPart IncAddr(I,k)).x = k + (JumpPart I).x
-             by A4,A5,A9,VALUED_1:def 2;
-A11:   (JumpPart IncAddr(J,k)).x = k + (JumpPart J).x
-             by A6,A8,A9,A7,VALUED_1:def 2;
-      thus thesis by A1,A10,A11;
-  end;
-   then JumpPart I = JumpPart J by A8,FUNCT_1:2;
-  hence thesis by A2,A3,Th7;
-end;
-
-theorem Th96:
-  for S being regular homogeneous J/A-independent proper-halt
-   standard-ins COM-Struct,
-  I being Instruction of S st IncAddr(I,k) = halt S holds I = halt S
-proof
-  let S be regular homogeneous J/A-independent proper-halt
-    standard-ins COM-Struct, I be Instruction of S;
-  assume IncAddr(I,k) = halt S;
-  then IncAddr(I,k) = IncAddr(halt S,k) by Th92;
-  hence thesis by Th95;
-end;
-
-theorem Th97:
-  for S being regular homogeneous J/A-independent
-   standard-ins COM-Struct, I being Instruction of S
-  holds IncAddr(IncAddr(I,k),m) = IncAddr(I,k+m)
-proof
-  let S be regular homogeneous J/A-independent
-   standard-ins COM-Struct, I be Instruction of S;
-A1: InsCode IncAddr(IncAddr(I,k),m) = InsCode IncAddr(I,k) by Def38
-    .= InsCode I by Def38
-    .= InsCode IncAddr(I,k+m) by Def38;
-A2: AddressPart IncAddr(IncAddr(I,k),m) = AddressPart IncAddr(I,k) by Def38
-    .= AddressPart I by Def38
-    .= AddressPart IncAddr(I,k+m) by Def38;
-A3: JumpPart IncAddr(IncAddr(I,k),m) = m + JumpPart IncAddr(I,k) by Def38;
-A4: JumpPart IncAddr(I,k) = k + JumpPart I by Def38;
-A5: JumpPart IncAddr(I,k+m) = k+m + JumpPart I by Def38;
-    then
-A6: dom JumpPart IncAddr(I,k+m) = dom JumpPart I by VALUED_1:def 2
-    .= dom JumpPart IncAddr(I,k) by A4,VALUED_1:def 2
-    .= dom JumpPart IncAddr(IncAddr(I,k),m) by A3,VALUED_1:def 2;
-  for n being set st n in dom JumpPart IncAddr(IncAddr(I,k),m) holds
-  (JumpPart IncAddr(IncAddr(I,k),m)).n = (JumpPart IncAddr(I,k+m)).n
-  proof
-    let n be set;
-    assume
-A7:   n in dom JumpPart IncAddr(IncAddr(I,k),m);
-    then
-A8: n in dom JumpPart IncAddr(I,k) by A3,VALUED_1:def 2;
-    then
-A9: n in dom JumpPart I by A4,VALUED_1:def 2;
-A10:   (JumpPart IncAddr(I,k)).n = k + (JumpPart I).n
-            by A4,A8,VALUED_1:def 2;
-A11:   (JumpPart IncAddr(IncAddr(I,k),m)).n = m + (JumpPart IncAddr(I,k)).n
-      by A7,A3,VALUED_1:def 2;
-      n in dom JumpPart IncAddr(I,k+m) by A5,A9,VALUED_1:def 2;
-      then (JumpPart IncAddr(I,k+m)).n = k + m + (JumpPart I).n
-       by A5,VALUED_1:def 2;
-      hence thesis by A11,A10;
-  end;
-   then JumpPart IncAddr(IncAddr(I,k),m) = JumpPart IncAddr(I,k+m)
-                   by A6,FUNCT_1:2;
-  hence thesis by A1,A2,Th7;
-end;
-
-definition
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  p be NAT-defined (the Instructions of S)-valued finite Function,
-  k be natural number;
+ canceled 4;
+  let S be COM-Struct,
+  p be NAT-defined (the InstructionsF of S)-valued finite Function,
+  k be Nat;
 A1: dom p c= NAT by RELAT_1:def 18;
   func IncAddr(p,k) ->
-   NAT-defined (the Instructions of S)-valued finite Function
+   NAT-defined (the InstructionsF of S)-valued finite Function
   means
-:Def40:
+:Def21:
   dom it = dom p &
-  for m being natural number st m in dom p holds it.m = IncAddr(p/.m,k);
+  for m being Nat st m in dom p holds it.m = IncAddr(p/.m,k);
   existence
   proof
     defpred P[set,set] means ex m being Element of NAT st $1 = m &
@@ -1239,7 +460,7 @@ A2: for e being set st e in dom p ex u being set st P[e,u]
       let e be set;
       assume e in dom p;
       then reconsider l=e as Element of NAT by A1;
-      consider m being natural number such that
+      consider m being Nat such that
 A3:   l = m;
       take IncAddr(p/.m,k);
       thus thesis by A3;
@@ -1247,21 +468,21 @@ A3:   l = m;
     consider f being Function such that
 A4: dom f = dom p and
 A5: for e being set st e in dom p holds P[e,f.e] from CLASSES1:sch 1(A2);
-XX: rng f c= the Instructions of S
+A6: rng f c= the InstructionsF of S
      proof let e be set;
       assume e in rng f;
        then consider u being set such that
-W1:     u in dom f and
-W2:     e = f.u by FUNCT_1:def 3;
-       P[u,f.u] by W1,A5,A4;
-      hence e in the Instructions of S by W2;
+A7:     u in dom f and
+A8:     e = f.u by FUNCT_1:def 3;
+       P[u,f.u] by A7,A5,A4;
+      hence e in the InstructionsF of S by A8;
      end;
     reconsider f as
-     NAT-defined (the Instructions of S)-valued finite Function
-               by A1,A4,XX,FINSET_1:10,RELAT_1:def 18,def 19;
+     NAT-defined (the InstructionsF of S)-valued finite Function
+               by A1,A4,A6,FINSET_1:10,RELAT_1:def 18,def 19;
     take f;
     thus dom f = dom p by A4;
-    let m be natural number;
+    let m be Nat;
     assume m in dom p;
     then ex j being Element of NAT st m = j &
     f.m = IncAddr(p/.j,k) by A5;
@@ -1269,13 +490,13 @@ W2:     e = f.u by FUNCT_1:def 3;
   end;
   uniqueness
   proof
-    let IT1,IT2 be NAT-defined (the Instructions of S)-valued finite Function
+    let IT1,IT2 be NAT-defined (the InstructionsF of S)-valued finite Function
         such that
 A9: dom IT1 = dom p and
-A10: for m being natural number st m in dom p holds
+A10: for m being Nat st m in dom p holds
     IT1.m = IncAddr(p/.m,k) and
 A11: dom IT2 = dom p and
-A12: for m being natural number st m in dom p holds
+A12: for m being Nat st m in dom p holds
     IT2.m = IncAddr(p/.m,k);
     for x being set st x in dom p holds IT1.x = IT2.x
     proof
@@ -1283,7 +504,7 @@ A12: for m being natural number st m in dom p holds
       assume
 A13:  x in dom p;
       then reconsider l=x as Element of NAT by A1;
-      consider m being natural number such that
+      consider m being Nat such that
 A14:  l = m;
       reconsider m as Element of NAT by ORDINAL1:def 12;
       thus IT1.x = IncAddr(p/.m,k) by A10,A13,A14
@@ -1294,129 +515,136 @@ A14:  l = m;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be NAT-defined (the Instructions of S)-valued finite Function,
-  k be natural number;
-  cluster IncAddr(F,k) -> NAT-defined (the Instructions of S)-valued;
+  let S be COM-Struct,
+  F be NAT-defined (the InstructionsF of S)-valued finite Function,
+  k be Nat;
+  cluster IncAddr(F,k) -> NAT-defined (the InstructionsF of S)-valued;
   coherence;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be empty (the Instructions of S)-valued NAT-defined finite Function,
-  k be natural number;
+  let S be COM-Struct,
+  F be empty (the InstructionsF of S)-valued NAT-defined finite Function,
+  k be Nat;
   cluster IncAddr(F,k) -> empty;
   coherence
   proof
     assume not thesis;
     then reconsider f = IncAddr(F,k) as non empty Function;
 A1: dom f <> {};
-    dom IncAddr(F,k) = dom F by Def40;
+    dom IncAddr(F,k) = dom F by Def21;
     hence thesis by A1;
   end;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be non empty (the Instructions of S)-valued NAT-defined finite Function,
-  k be natural number;
+  let S be COM-Struct,
+  F be non empty (the InstructionsF of S)-valued NAT-defined finite Function,
+  k be Nat;
   cluster IncAddr(F,k) -> non empty;
   coherence
   proof
-    dom IncAddr(F,k) = dom F by Def40;
+    dom IncAddr(F,k) = dom F by Def21;
     hence thesis;
   end;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be initial NAT-defined (the Instructions of S)-valued finite Function,
-  k be natural number;
+  let S be COM-Struct,
+  F be initial NAT-defined (the InstructionsF of S)-valued finite Function,
+  k be Nat;
   cluster IncAddr(F,k) -> initial;
   coherence
   proof
-    dom IncAddr(F,k) = dom F by Def40;
+    dom IncAddr(F,k) = dom F by Def21;
     hence thesis by AFINSQ_1:67;
   end;
 end;
 
-theorem Th98:
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  F being NAT-defined (the Instructions of S)-valued finite Function
-   holds IncAddr(F,0) = F
-proof
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be NAT-defined (the Instructions of S)-valued finite Function;
-  for m being natural number st m in dom F holds
+canceled 6;
+
+registration let S be COM-Struct;
+ let F be NAT-defined (the InstructionsF of S)-valued finite Function;
+ reduce IncAddr(F,0) to F;
+ reducibility
+ proof
+  for m being Nat st m in dom F holds
   F.m = IncAddr(F/.m,0)
   proof
-    let m be natural number;
+    let m be Nat;
     assume m in dom F;
     then F/.m = F.m by PARTFUN1:def 6;
-    hence thesis by Th91;
+    hence thesis by COMPOS_0:3;
   end;
-  hence thesis by Def40;
+  hence thesis by Def21;
+ end;
 end;
 
-theorem Th99:
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-  F being NAT-defined (the Instructions of S)-valued finite Function
+theorem
+  for S being COM-Struct,
+  F being NAT-defined (the InstructionsF of S)-valued finite Function
+   holds IncAddr(F,0) = F;
+
+theorem Th17:
+  for S being COM-Struct,
+  F being NAT-defined (the InstructionsF of S)-valued finite Function
   holds IncAddr(IncAddr(F,k),m) = IncAddr(F,k+m)
 proof
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
-  F be NAT-defined (the Instructions of S)-valued finite Function;
-A1: dom IncAddr(IncAddr(F,k),m) = dom IncAddr(F,k) by Def40
-    .= dom F by Def40;
-A2: dom IncAddr(F,k+m) = dom F by Def40;
+  let S be COM-Struct,
+  F be NAT-defined (the InstructionsF of S)-valued finite Function;
+A1: dom IncAddr(IncAddr(F,k),m) = dom IncAddr(F,k) by Def21
+    .= dom F by Def21;
+A2: dom IncAddr(F,k+m) = dom F by Def21;
   for x being set st x in dom F holds
   IncAddr(IncAddr(F,k),m).x = IncAddr(F,k+m).x
   proof
     let x be set such that
 A3: x in dom F;
     reconsider x as Element of NAT by A3,ORDINAL1:def 12;
-A4: x in dom IncAddr(F,k) by A3,Def40;
+A4: x in dom IncAddr(F,k) by A3,Def21;
 A5: IncAddr(F/.x,k) = IncAddr(F,k).x
-    by A3,Def40
+    by A3,Def21
       .= IncAddr(F,k)/.x by A4,PARTFUN1:def 6;
     IncAddr(IncAddr(F,k),m).x
-    = IncAddr(IncAddr(F,k)/.x,m) by A4,Def40
-      .= IncAddr(F/.x,k+m) by A5,Th97
-      .= IncAddr(F,k+m).x by A3,Def40;
+    = IncAddr(IncAddr(F,k)/.x,m) by A4,Def21
+      .= IncAddr(F/.x,k+m) by A5,COMPOS_0:7
+      .= IncAddr(F,k+m).x by A3,Def21;
     hence thesis;
   end;
   hence thesis by A1,A2,FUNCT_1:2;
 end;
 
 definition
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct;
-  let p be finite NAT-defined (the Instructions of S)-valued Function,
+  let S be COM-Struct;
+  let p be finite NAT-defined (the InstructionsF of S)-valued Function,
      k be Nat;
  func Reloc(p,k) ->
-   finite NAT-defined (the Instructions of S)-valued Function
-   equals IncAddr(Shift(p,k),k);
+   finite NAT-defined (the InstructionsF of S)-valued Function
+     equals Shift(IncAddr(p,k),k);
+::   equals IncAddr(Shift(p,k),k);
+:: Zmieniona wersja jest nieco lepsza, bo Shift jest bardziej
+:: ogolnym pojeciem niz IncAddr
  coherence;
 end;
 
-theorem Th100:
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+theorem Th18:
+  for S being COM-Struct,
   F being initial non empty finite preProgram of S,
   G being non empty
-   NAT-defined (the Instructions of S)-valued finite Function
-  holds dom CutLastLoc F misses dom Shift(IncAddr(G,card F -' 1),card F -' 1)
+   NAT-defined (the InstructionsF of S)-valued finite Function
+  holds dom CutLastLoc F misses dom Reloc(G,card F -' 1)
 proof
-  let S be regular  homogeneous J/A-independent
-   standard-ins
-  COM-Struct,
+  let S be COM-Struct,
   F be initial non empty finite preProgram of S,
   G be non empty NAT-defined
-    (the Instructions of S)-valued finite Function;
+    (the InstructionsF of S)-valued finite Function;
   set k = card F -' 1;
   assume not thesis;
   then consider il being set such that
-A1: il in dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) by XBOOLE_0:4;
+A1: il in dom CutLastLoc F /\ dom Reloc(G,k) by XBOOLE_0:4;
 A2: il in dom CutLastLoc F by A1,XBOOLE_0:def 4;
-A3: il in dom Shift(IncAddr(G,k),k) by A1,XBOOLE_0:def 4;
-  dom Shift(IncAddr(G,k),k) = { (m+k) where m is Element of NAT:
+A3: il in dom Reloc(G,k) by A1,XBOOLE_0:def 4;
+  dom Reloc(G,k) = { (m+k) where m is Element of NAT:
   m in dom IncAddr(G,k) } by VALUED_1:def 12;
   then consider m being Element of NAT such that
 A4: il = (m+k) and m in dom IncAddr(G,k) by A3;
@@ -1431,7 +659,7 @@ A6: card f = card F - 1 by VALUED_1:38
   suppose k - 1 >= 0;
     then m + k <= k - 1 by A5,A6,XREAL_0:def 2;
     then m + k - k <= k - 1 - k by XREAL_1:9;
-    hence thesis by Lm8;
+    hence thesis by Lm4;
   end;
   suppose k - 1 < 0;
     then m + k = 0 or m + k < 0 by A5,A6,XREAL_0:def 2;
@@ -1439,7 +667,7 @@ A6: card f = card F - 1 by VALUED_1:38
   end;
 end;
 
-theorem Th101:
+theorem Th19:
   for F being unique-halt initial non empty finite preProgram of S,
   I being Nat st I in dom CutLastLoc F
   holds (CutLastLoc F).I <> halt S
@@ -1451,51 +679,51 @@ A2: (CutLastLoc F).I = halt S;
 A3: dom CutLastLoc F c= dom F by GRFUNC_1:2;
   F.I = halt S by A1,A2,GRFUNC_1:2;
   then
-A4: I = LastLoc F by A1,A3,Def26;
+A4: I = LastLoc F by A1,A3,Def15;
   dom CutLastLoc F = (dom F) \ {LastLoc F} by VALUED_1:36;
   then not I in {LastLoc F} by A1,XBOOLE_0:def 5;
   hence thesis by A4,TARSKI:def 1;
 end;
 
 definition
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct;
+  let S be COM-Struct;
   let F, G be non empty finite preProgram of S;
   func F ';' G -> finite preProgram of S equals
-  CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1);
+  CutLastLoc F +* Reloc(G,card F -' 1);
   coherence;
 end;
 
 registration
-  let S be regular  homogeneous J/A-independent standard-ins COM-Struct,
+  let S be COM-Struct,
   F, G be non empty
-  (the Instructions of S)-valued NAT-defined finite Function;
+  (the InstructionsF of S)-valued NAT-defined finite Function;
   cluster F ';' G -> non empty
-  (the Instructions of S)-valued NAT-defined;
+  (the InstructionsF of S)-valued NAT-defined;
   coherence;
 end;
 
-theorem Th102:
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+theorem Th20:
+  for S being COM-Struct,
   F being initial non empty finite preProgram of S,
   G being non empty
-  (the Instructions of S)-valued NAT-defined finite Function
+  (the InstructionsF of S)-valued NAT-defined finite Function
   holds card (F ';' G) = card F + card G - 1 &
   card (F ';' G) = card F + card G -' 1
 proof
-  let S be regular homogeneous J/A-independent standard-ins COM-Struct,
+  let S be COM-Struct,
   F be initial non empty finite preProgram of S,
   G be non empty
-  (the Instructions of S)-valued NAT-defined finite Function;
+  (the InstructionsF of S)-valued NAT-defined finite Function;
   set k = card F -' 1;
-  dom IncAddr(G,k),dom Shift(IncAddr(G,k),k) are_equipotent by VALUED_1:27;
+  dom IncAddr(G,k),dom Reloc(G,k) are_equipotent by VALUED_1:27;
   then
-A1: IncAddr(G,k),Shift(IncAddr(G,k),k) are_equipotent by PRE_CIRC:21;
-  dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th100;
+A1: IncAddr(G,k),Reloc(G,k) are_equipotent by PRE_CIRC:21;
+  dom CutLastLoc F misses dom Reloc(G,k) by Th18;
   hence card (F ';' G)
-  = card CutLastLoc F + card Shift(IncAddr(G,k),k) by PRE_CIRC:22
+  = card CutLastLoc F + card Reloc(G,k) by PRE_CIRC:22
     .= card CutLastLoc F + card IncAddr(G,k) by A1,CARD_1:5
     .= card CutLastLoc F + card dom IncAddr(G,k) by CARD_1:62
-    .= card CutLastLoc F + card dom G by Def40
+    .= card CutLastLoc F + card dom G by Def21
     .= card CutLastLoc F + card G by CARD_1:62
     .= card F - 1 + card G by VALUED_1:38
     .= card F + card G - 1;
@@ -1503,7 +731,7 @@ A1: IncAddr(G,k),Shift(IncAddr(G,k),k) are_equipotent by PRE_CIRC:21;
 end;
 
 registration
-  let S be regular  homogeneous J/A-independent standard-ins COM-Struct;
+  let S be COM-Struct;
   let F, G be initial non empty finite preProgram of S;
   cluster F ';' G -> initial;
   coherence
@@ -1513,19 +741,19 @@ registration
 A1: n in dom P and
 A2: f < n;
     set k = card F -' 1;
-A3: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by FUNCT_4:def 1;
+A3: dom P = dom CutLastLoc F \/ dom Reloc(G,k) by FUNCT_4:def 1;
     per cases by A1,A3,XBOOLE_0:def 3;
     suppose n in dom CutLastLoc F;
       then f in dom CutLastLoc F by A2,AFINSQ_1:def 12;
       hence thesis by A3,XBOOLE_0:def 3;
     end;
-    suppose n in dom Shift(IncAddr(G,k),k);
+    suppose n in dom Reloc(G,k);
       then n in { w+k where w is Element of NAT:
       w in dom IncAddr(G,k) } by VALUED_1:def 12;
       then consider m being Element of NAT such that
 A4:   n = (m+k) and
 A5:   m in dom IncAddr(G,k);
-A6:   m in dom G by A5,Def40;
+A6:   m in dom G by A5,Def21;
       now per cases;
         case
 A7:       f < k;
@@ -1545,13 +773,13 @@ A9:      f in dom F by A8,AFINSQ_1:def 12;
           then consider l1 being Nat such that
 A10:      f = k + l1 by NAT_1:10;
           reconsider l1 as Element of NAT by ORDINAL1:def 12;
-A11:      dom Shift(IncAddr(G,k),k) =
+A11:      dom Reloc(G,k) =
 { w+k where w is Element of NAT: w in dom IncAddr(G,k) }
           by VALUED_1:def 12;
           l1 < m or l1 = m by A10,A4,A2,XREAL_1:6;
           then l1 in dom G by A6,AFINSQ_1:def 12;
-          then l1 in dom IncAddr(G,k) by Def40;
-          hence f in dom Shift(IncAddr(G,k),k) by A11,A10;
+          then l1 in dom IncAddr(G,k) by Def21;
+          hence f in dom Reloc(G,k) by A11,A10;
         end;
       end;
       hence thesis by A3,XBOOLE_0:def 3;
@@ -1560,14 +788,14 @@ A11:      dom Shift(IncAddr(G,k),k) =
 end;
 
 theorem
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S
   holds dom F c= dom (F ';' G)
 proof
-  let S be regular  homogeneous J/A-independent standard-ins COM-Struct,
+  let S be COM-Struct,
   F, G be initial non empty finite preProgram of S;
   set P = F ';' G;
-A1: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,card F -' 1),card F -' 1)
+A1: dom P = dom CutLastLoc F \/ dom Reloc(G,card F -' 1)
   by FUNCT_4:def 1;
 A2: dom F = dom CutLastLoc F \/ {LastLoc F} by VALUED_1:37;
   let x be set;
@@ -1584,7 +812,7 @@ A5: x = LastLoc F by TARSKI:def 1;
     reconsider f = x as Element of NAT by A4;
 A6: f = card F -' 1 by A5,AFINSQ_1:70
       .= card F - 1 + (0 qua Nat) by PRE_CIRC:20;
-    card P = card F + card G - 1 by Th102
+    card P = card F + card G - 1 by Th20
       .= card F - 1 + card G;
     then f < card P by A6,XREAL_1:6;
     hence thesis by AFINSQ_1:66;
@@ -1592,26 +820,26 @@ A6: f = card F -' 1 by A5,AFINSQ_1:70
 end;
 
 registration
- let S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+ let S being COM-Struct,
   F, G being initial non empty finite preProgram of S;
  cluster F ';' G -> initial non empty;
  coherence;
 end;
 
-theorem Th104:
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+theorem Th22:
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S
   holds CutLastLoc F c= CutLastLoc (F ';' G)
 proof
-  let S be regular  homogeneous J/A-independent standard-ins COM-Struct,
+  let S be COM-Struct,
   F, G be initial non empty finite preProgram of S;
   set k = card F -' 1;
   set P = F ';' G;
-A1: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by FUNCT_4:def 1;
+A1: dom P = dom CutLastLoc F \/ dom Reloc(G,k) by FUNCT_4:def 1;
 A2: dom CutLastLoc F =
   { m where m is Element of NAT: m < card CutLastLoc F } by AFINSQ_1:68;
 A3: card CutLastLoc P = card P - 1 by VALUED_1:38
-    .= card F + card G - 1 - 1 by Th102
+    .= card F + card G - 1 - 1 by Th20
     .= card F - 1 + (card G - 1);
 A4: for m being Element of NAT
   st m < card CutLastLoc F holds m < card CutLastLoc P
@@ -1643,10 +871,10 @@ A10: x in dom CutLastLoc F;
     then consider m being Element of NAT such that
 A11: x = m and
 A12: m < card CutLastLoc F by A2;
-A13: dom Shift(IncAddr(G,k),k) = { w+k where w is Element of NAT:
+A13: dom Reloc(G,k) = { w+k where w is Element of NAT:
     w in dom IncAddr(G,k) } by VALUED_1:def 12;
 A14: now
-      assume x in dom Shift(IncAddr(G,k),k);
+      assume x in dom Reloc(G,k);
       then consider w being Element of NAT such that
 A15:  x = w+k and w in dom IncAddr(G,k) by A13;
       m < card F - 1 by A12,VALUED_1:38;
@@ -1666,39 +894,38 @@ A17:  m = card P -' 1 by A11,AFINSQ_1:70
     then not x in {LastLoc P} by TARSKI:def 1;
     then not x in dom ( LastLoc P .--> P.LastLoc P ) by FUNCOP_1:13;
     then x in dom P \ dom ( LastLoc P .--> P.LastLoc P ) by A16,XBOOLE_0:def 5;
-    hence (CutLastLoc P).x = (CutLastLoc F +* Shift(IncAddr(G,k),k)).x
+    hence (CutLastLoc P).x = (CutLastLoc F +* Reloc(G,k)).x
     by GRFUNC_1:32
       .= (CutLastLoc F).x by A14,FUNCT_4:11;
   end;
   hence thesis by A7,GRFUNC_1:2;
 end;
 
-theorem Th105:
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+theorem Th23:
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S
   holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).0
 proof
-  let S be regular  homogeneous J/A-independent standard-ins
-  COM-Struct,
+  let S be COM-Struct,
   F, G be initial non empty finite preProgram of S;
   set k = card F -' 1;
 A1: LastLoc F = (0 qua Nat)+k by AFINSQ_1:70;
 A2: 0 in dom IncAddr(G,k) by AFINSQ_1:65;
-  dom Shift(IncAddr(G,k),k) =
+  dom Reloc(G,k) =
   {(m+k) where m is Element of NAT: m in dom IncAddr(G,k)}
   by VALUED_1:def 12;
-  then LastLoc F in dom Shift(IncAddr(G,k),k) by A1,A2;
-  hence (F ';' G).LastLoc F = (Shift(IncAddr(G,k),k)).LastLoc F by FUNCT_4:13
+  then LastLoc F in dom Reloc(G,k) by A1,A2;
+  hence (F ';' G).LastLoc F = (Reloc(G,k)).LastLoc F by FUNCT_4:13
     .= IncAddr(G,k).0 by A1,A2,VALUED_1:def 12;
 end;
 
 theorem
-  for S being regular  homogeneous J/A-independent standard-ins COM-Struct,
+  for S being COM-Struct,
   F, G being initial non empty finite preProgram of S,
   f being Nat st f < card F - 1
   holds IncAddr(F,card F -' 1).f = IncAddr(F ';' G, card F -' 1).f
 proof
-  let S be regular  homogeneous J/A-independent standard-ins COM-Struct,
+  let S be COM-Struct,
   F, G be initial non empty finite preProgram of S,
   f be Nat;
   set k = card F -' 1, P = F ';' G;
@@ -1707,45 +934,44 @@ proof
   then
 A1: f in dom CutLastLoc F by AFINSQ_1:66;
 A2: dom CutLastLoc F c= dom F by GRFUNC_1:2;
-  CutLastLoc F c= CutLastLoc P by Th104;
+  CutLastLoc F c= CutLastLoc P by Th22;
   then CutLastLoc F c= P by XBOOLE_1:1;
   then
 A3: dom CutLastLoc F c= dom P by GRFUNC_1:2;
 A4: F.f = F/.f by A1,A2,PARTFUN1:def 6;
-  dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th100;
-  then dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) = {} by XBOOLE_0:def 7;
-  then not f in dom Shift(IncAddr(G,k),k)
+  dom CutLastLoc F misses dom Reloc(G,k) by Th18;
+  then dom CutLastLoc F /\ dom Reloc(G,k) = {} by XBOOLE_0:def 7;
+  then not f in dom Reloc(G,k)
   by A1,XBOOLE_0:def 4;
   then
 A5: P.f = (CutLastLoc F).f by FUNCT_4:11
     .= F.f by A1,GRFUNC_1:2;
-  thus IncAddr(F,k).f = IncAddr(F/.f,k) by A1,A2,Def40
+  thus IncAddr(F,k).f = IncAddr(F/.f,k) by A1,A2,Def21
     .= IncAddr(P/.f,k) by A1,A3,A4,A5,PARTFUN1:def 6
-    .= IncAddr(P,k).f by A1,A3,Def40;
+    .= IncAddr(P,k).f by A1,A3,Def21;
 end;
 
 registration
-  let S be regular  homogeneous J/A-independent  proper-halt
-      standard-ins COM-Struct;
+  let S be COM-Struct;
   let F be initial non empty NAT-defined
-  (the Instructions of S)-valued finite Function;
+  (the InstructionsF of S)-valued finite Function;
   let G be halt-ending initial non empty NAT-defined
-  (the Instructions of S)-valued finite Function;
+  (the InstructionsF of S)-valued finite Function;
   cluster F ';' G -> halt-ending;
   coherence
   proof
     set P = F ';' G, k = card F -' 1;
-A1: dom Shift(IncAddr(G,k),k) = { (m+k) where m is Element of NAT:
+A1: dom Reloc(G,k) = { (m+k) where m is Element of NAT:
     m in dom IncAddr(G,k) } by VALUED_1:def 12;
 A2: card G -' 1 = LastLoc G by AFINSQ_1:70;
     then
 A3: card G -' 1 in dom G by VALUED_1:30;
     then
-A4: card G -' 1 in dom IncAddr(G,k) by Def40;
+A4: card G -' 1 in dom IncAddr(G,k) by Def21;
     then
-A5: k + (card G -' 1) in dom Shift(IncAddr(G,k),k) by A1;
+A5: k + (card G -' 1) in dom Reloc(G,k) by A1;
 A6: G/.(card G -' 1) = G.(card G -' 1) by A2,PARTFUN1:def 6,VALUED_1:30
-      .= halt S by A2,Def25;
+      .= halt S by A2,Def14;
 A7: card G - 1 >= 0 by NAT_1:14,XREAL_1:48;
     then k + (card G - 1) >= k+(0 qua Nat) by XREAL_1:6;
     then
@@ -1753,27 +979,26 @@ A8: k + card G -' 1 = k + card G - 1 by XREAL_0:def 2
       .= k + (card G - 1)
       .= k + (card G -' 1) by A7,XREAL_0:def 2;
     thus P.(LastLoc P) = P.(card P -' 1) by AFINSQ_1:70
-      .= P.(card F + card G -' 1 -' 1) by Th102
+      .= P.(card F + card G -' 1 -' 1) by Th20
       .= P.(k + card G -' 1) by NAT_1:14,NAT_D:38
-      .= Shift(IncAddr(G,k),k).(k + (card G -' 1)) by A5,A8,FUNCT_4:13
+      .= Reloc(G,k).(k + (card G -' 1)) by A5,A8,FUNCT_4:13
       .= IncAddr(G,k).(card G -' 1) by A4,VALUED_1:def 12
-      .= IncAddr(G/.(card G -' 1),k) by A3,Def40
-      .= halt S by A6,Th92;
+      .= IncAddr(G/.(card G -' 1),k) by A3,Def21
+      .= halt S by A6,COMPOS_0:4;
   end;
 end;
 
 registration
-  let S be regular  homogeneous J/A-independent  proper-halt
-   standard-ins COM-Struct;
+  let S be COM-Struct;
   let F, G be halt-ending unique-halt
   initial non empty NAT-defined
-  (the Instructions of S)-valued finite Function;
+  (the InstructionsF of S)-valued finite Function;
   cluster F ';' G -> unique-halt;
   coherence
   proof
     set P = F ';' G, k = card F -' 1;
-A1: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by FUNCT_4:def 1;
-A2: dom Shift(IncAddr(G,k),k) = { (m+k) where m is Element of NAT:
+A1: dom P = dom CutLastLoc F \/ dom Reloc(G,k) by FUNCT_4:def 1;
+A2: dom Reloc(G,k) = { (m+k) where m is Element of NAT:
     m in dom IncAddr(G,k) } by VALUED_1:def 12;
 A3: card G - 1 >= 0 by NAT_1:14,XREAL_1:48;
     then k + (card G - 1) >= k+(0 qua Nat) by XREAL_1:6;
@@ -1788,53 +1013,46 @@ A6: f in dom P;
     suppose
 A7:   f in dom CutLastLoc F;
       then
-A8:   (CutLastLoc F).f <> halt S by Th101;
-      dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th100;
+A8:   (CutLastLoc F).f <> halt S by Th19;
+      dom CutLastLoc F misses dom Reloc(G,k) by Th18;
       then CutLastLoc F c= P by FUNCT_4:32;
       hence thesis by A5,A7,A8,GRFUNC_1:2;
     end;
     suppose
-A9:   f in dom Shift(IncAddr(G,k),k);
+A9:   f in dom Reloc(G,k);
       then consider m being Element of NAT such that
 A10:  f = m+k and
 A11:  m in dom IncAddr(G,k) by A2;
-A12:  m in dom G by A11,Def40;
+A12:  m in dom G by A11,Def21;
       then
 A13:  G/.m = G.m by PARTFUN1:def 6;
-      IncAddr(G/.m,k) = IncAddr(G,k).m by A12,Def40
-        .= Shift(IncAddr(G,k),k).(m+k) by A11,VALUED_1:def 12
+      IncAddr(G/.m,k) = IncAddr(G,k).m by A12,Def21
+        .= Reloc(G,k).(m+k) by A11,VALUED_1:def 12
         .= halt S by A5,A9,A10,FUNCT_4:13;
-      then G.m = halt S by A13,Th96;
-      then m = LastLoc G by A12,Def26
+      then G.m = halt S by A13,COMPOS_0:12;
+      then m = LastLoc G by A12,Def15
         .= (card G -' 1) by AFINSQ_1:70;
       then m+k = card F + card G -' 1 -' 1 by A4,NAT_1:14,NAT_D:38
-        .= card P -' 1 by Th102;
+        .= card P -' 1 by Th20;
       hence thesis by A10,AFINSQ_1:70;
     end;
   end;
 end;
 
 definition
-
-  let S be regular homogeneous J/A-independent  proper-halt
-   standard-ins
-  COM-Struct;
-  let F, G be pre-Macro of S;
-  redefine func F ';' G -> pre-Macro of S;
+  let S be COM-Struct;
+  let F, G be MacroInstruction of S;
+  redefine func F ';' G -> MacroInstruction of S;
   coherence;
 end;
 
-theorem Th107:
-  for S being regular homogeneous J/A-independent proper-halt
-   standard-ins COM-Struct
-  holds IncAddr(Stop S, k) = Stop S
-proof
-  let S be regular homogeneous J/A-independent proper-halt
-  standard-ins
-  COM-Struct;
-A1: dom IncAddr(Stop S, k) = dom Stop S by Def40
-    .= {0} by Lm12;
-A2: dom Stop S = {0} by Lm12;
+registration let S be COM-Struct, k;
+ reduce IncAddr(Stop S, k) to Stop S;
+ reducibility
+ proof
+A1: dom IncAddr(Stop S, k) = dom Stop S by Def21
+    .= {0} by Lm1;
+A2: dom Stop S = {0} by Lm1;
   for x being set st x in {0} holds IncAddr(Stop S, k).x = (Stop S). x
   proof
     let x be set;
@@ -1846,14 +1064,19 @@ A4: x = 0 by TARSKI:def 1;
 A5: (Stop S)/.0 = (Stop S).0 by A2,A3,PARTFUN1:def 6
       .= halt S by FUNCOP_1:72;
     thus IncAddr(Stop S, k).x
-    = IncAddr((Stop S)/.0,k) by A2,A3,A4,Def40
-      .= halt S by A5,Th92
+    = IncAddr((Stop S)/.0,k) by A2,A3,A4,Def21
+      .= halt S by A5,COMPOS_0:4
       .= (Stop S).x by A4,FUNCOP_1:72;
   end;
   hence thesis by A1,A2,FUNCT_1:2;
+ end;
 end;
 
-theorem Th108:
+theorem
+  for S being COM-Struct
+  holds IncAddr(Stop S, k) = Stop S;
+
+theorem Th26:
   for k being Nat
   for S being COM-Struct
   holds Shift(Stop S, k) = k .--> halt S
@@ -1862,7 +1085,7 @@ proof
   let S be COM-Struct;
 A1: dom Shift(Stop S,k) =
   {(m+k) where m is Element of NAT: m in dom Stop S} by VALUED_1:def 12;
-A2: 0 in dom Stop S by Lm12;
+A2: 0 in dom Stop S by Lm1;
 A3: dom Shift(Stop S,k) = {k}
   proof
     hereby
@@ -1871,7 +1094,7 @@ A3: dom Shift(Stop S,k) = {k}
       then consider m being Element of NAT such that
 A4:   x = (m+k) and
 A5:   m in dom Stop S by A1;
-      m in {0} by A5,Lm12;
+      m in {0} by A5,Lm1;
       then m = 0 by TARSKI:def 1;
       hence x in {k} by A4,TARSKI:def 1;
     end;
@@ -1888,7 +1111,7 @@ A6: dom (k .--> halt S) = {k} by FUNCOP_1:13;
     assume x in {k};
     then
 A7: x = (0 qua Nat)+k by TARSKI:def 1;
-    0 in dom Stop S by Lm12;
+    0 in dom Stop S by Lm1;
     hence (Shift(Stop S, k)).x = (Stop S).0 by A7,VALUED_1:def 12
       .= halt S by FUNCOP_1:72
       .= (k .--> halt S).x by A7,FUNCOP_1:72;
@@ -1896,102 +1119,99 @@ A7: x = (0 qua Nat)+k by TARSKI:def 1;
   hence thesis by A3,A6,FUNCT_1:2;
 end;
 
-theorem Th109:
-  for S being regular homogeneous J/A-independent proper-halt
-                standard-ins COM-Struct,
-      F being pre-Macro of S
-  holds F ';' Stop S = F
-proof
-  let S be regular homogeneous J/A-independent proper-halt
-  standard-ins
-  COM-Struct, F be pre-Macro of S;
+registration let S be COM-Struct, F being MacroInstruction of S;
+ reduce F ';' Stop S to F;
+ reducibility
+ proof
   set k = card F -' 1;
-A1: F ';' Stop S = CutLastLoc F +* Shift(Stop S,k) by Th107;
-A2: dom F = dom CutLastLoc F \/ {LastLoc F} by VALUED_1:37;
-  dom Shift(Stop S,k) = dom (k .--> halt S) by Th108
+A1: dom F = dom CutLastLoc F \/ {LastLoc F} by VALUED_1:37;
+  dom Shift(Stop S,k) = dom (k .--> halt S) by Th26
     .= {k} by FUNCOP_1:13
     .= {LastLoc F} by AFINSQ_1:70;
   then
-A3: dom (F ';' Stop S) = dom F by A1,A2,FUNCT_4:def 1;
+A2: dom (F ';' Stop S) = dom F by A1,FUNCT_4:def 1;
   for x being set st x in dom F holds (F ';' Stop S).x = F.x
   proof
     let x be set such that
-A4: x in dom F;
-    dom CutLastLoc F misses dom Shift(IncAddr(Stop S,k),k) by Th100;
+A3: x in dom F;
+    dom CutLastLoc F misses dom Reloc(Stop S,k) by Th18;
     then
-A5: {} = dom CutLastLoc F /\ dom Shift(IncAddr(Stop S,k),k) by XBOOLE_0:def 7;
-    per cases by A2,A4,XBOOLE_0:def 3;
+A4: {} = dom CutLastLoc F /\ dom Reloc(Stop S,k) by XBOOLE_0:def 7;
+    per cases by A1,A3,XBOOLE_0:def 3;
     suppose
-A6:   x in dom CutLastLoc F;
-      then not x in dom Shift(IncAddr(Stop S,k),k) by A5,XBOOLE_0:def 4;
+A5:   x in dom CutLastLoc F;
+      then not x in dom Reloc(Stop S,k) by A4,XBOOLE_0:def 4;
       hence (F ';' Stop S).x = (CutLastLoc F).x by FUNCT_4:11
-        .= F.x by A6,GRFUNC_1:2;
+        .= F.x by A5,GRFUNC_1:2;
     end;
     suppose x in {LastLoc F};
       then
-A7:   x = LastLoc F by TARSKI:def 1;
+A6:   x = LastLoc F by TARSKI:def 1;
       then
-A8:   x = k by AFINSQ_1:70;
-A9:   0 in dom Stop S by Lm12;
+A7:   x = k by AFINSQ_1:70;
+A8:   0 in dom Stop S by Lm1;
       dom Shift(Stop S,k)
       = { (m+k) where m is Element of NAT: m in dom Stop S }
       by VALUED_1:def 12;
-      then (0 qua Nat)+k in dom Shift(Stop S,k) by A9;
+      then (0 qua Nat)+k in dom Shift(Stop S,k) by A8;
       hence (F ';' Stop S).x = Shift(Stop S,(0 qua Nat)+k).x
-       by A1,A8,FUNCT_4:13
-        .= (Stop S).0 by A8,A9,VALUED_1:def 12
+       by A7,FUNCT_4:13
+        .= (Stop S).0 by A7,A8,VALUED_1:def 12
         .= halt S by FUNCOP_1:72
-        .= F.x by A7,Def25;
+        .= F.x by A6,Def14;
     end;
   end;
-  hence thesis by A3,FUNCT_1:2;
-end;
-
-theorem Th110:
-  for S being regular homogeneous J/A-independent standard-ins COM-Struct,
-      F being pre-Macro of S
-  holds Stop S ';' F = F
-proof
-  let S be regular homogeneous J/A-independent
-   standard-ins
-  COM-Struct, F be pre-Macro of S;
-  set k = card Stop S -' 1;
-A1: k = 0 by Lm13;
-  hence Stop S ';' F = CutLastLoc Stop S +* Shift(F,k) by Th98
-    .= CutLastLoc Stop S +* F by A1,VALUED_1:28
-    .= F by FUNCT_4:20;
+  hence thesis by A2,FUNCT_1:2;
+ end;
 end;
 
 theorem
-  for S being regular homogeneous J/A-independent proper-halt
-   standard-ins COM-Struct,
-  F, G, H being pre-Macro of S holds F ';' G ';' H = F ';' (G ';' H)
+  for S being COM-Struct,
+      F being MacroInstruction of S
+  holds F ';' Stop S = F;
+
+registration let S be COM-Struct, F be MacroInstruction of S;
+ reduce Stop S ';' F to F;
+ reducibility
+  proof
+    card Stop S -' 1 = 0 by Lm2;
+   hence Stop S ';' F = {} +* Reloc(F,0)
+      .= Reloc(F,0)
+      .= F;
+  end;
+end;
+
+theorem Th28:
+  for S being COM-Struct,
+      F being MacroInstruction of S
+  holds Stop S ';' F = F;
+
+theorem
+  for S being COM-Struct, F, G, H being MacroInstruction of S
+   holds F ';' G ';' H = F ';' (G ';' H)
 proof
-  let S be regular homogeneous J/A-independent proper-halt
-   standard-ins
-  COM-Struct,
-  F, G, H be pre-Macro of S;
+  let S be COM-Struct, F, G, H be MacroInstruction of S;
   per cases;
   suppose
 A1: F = Stop S;
-    hence F ';' G ';' H = G ';' H by Th110
-      .= F ';' (G ';' H) by A1,Th110;
+    hence F ';' G ';' H = Stop S ';' G ';' H
+      .= F ';' (G ';' H) by A1,Th28;
   end;
   suppose
 A2: G = Stop S;
-    hence F ';' G ';' H = F ';' H by Th109
-      .= F ';' (G ';' H) by A2,Th110;
+    hence F ';' G ';' H = F ';' Stop S ';' H
+      .= F ';' (G ';' H) by A2,Th28;
   end;
   suppose that
 A3: F <> Stop S and
 A4: G <> Stop S;
     set X = {k where k is Element of NAT:
     k < card F + card G + card H - 1 - 1};
-A5: card (F ';' G ';' H) = card (F ';' G) + card H - 1 by Th102
-      .= card F + card G - 1 + card H - 1 by Th102
+A5: card (F ';' G ';' H) = card (F ';' G) + card H - 1 by Th20
+      .= card F + card G - 1 + card H - 1 by Th20
       .= card F + card G + card H - 1 - 1;
-A6: card (F ';' (G ';' H)) = card F + card (G ';' H) - 1 by Th102
-      .= card F + (card G + card H - 1) - 1 by Th102
+A6: card (F ';' (G ';' H)) = card F + card (G ';' H) - 1 by Th20
+      .= card F + (card G + card H - 1) - 1 by Th20
       .= card F + card G + card H - 1 - 1;
 A7: dom (F ';' G ';' H) = X by A5,AFINSQ_1:68;
 A8: dom (F ';' (G ';' H)) = X by A6,AFINSQ_1:68;
@@ -2002,46 +1222,46 @@ A8: dom (F ';' (G ';' H)) = X by A6,AFINSQ_1:68;
       then consider k being Element of NAT such that
 A9:   x = k and
 A10:  k < card F + card G + card H - 1 - 1;
-A11:  dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) =
+A11:  dom Reloc(G ';' H,card F -' 1) =
       { m+(card F -' 1) where m is Element of NAT:
       m in dom IncAddr(G ';' H,card F -' 1) } by VALUED_1:def 12;
-A12:  dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1) =
+A12:  dom Reloc(H,card (F ';' G) -' 1) =
       { m+(card (F ';' G) -' 1) where m is Element of NAT:
       m in dom IncAddr(H,card (F ';' G) -' 1) } by VALUED_1:def 12;
-A13:  dom Shift(IncAddr(H,card G -' 1),card G -' 1) =
+A13:  dom Reloc(H,card G -' 1) =
       { m+(card G -' 1) where m is Element of NAT:
       m in dom IncAddr(H,card G -' 1) } by VALUED_1:def 12;
 A14:  card (F ';' G) -' 1 = card (F ';' G) - 1 by PRE_CIRC:20
-        .= card F + card G - 1 - 1 by Th102;
+        .= card F + card G - 1 - 1 by Th20;
       then card (F ';' G) -' 1 = card F - 1 + (card G - 1);
       then
 A15:  card (F ';' G) -' 1 = (card G -' 1) + (card F - 1) by PRE_CIRC:20
         .= (card G -' 1) + (card F -' 1) by PRE_CIRC:20;
-A16:  dom Shift(IncAddr(G,card F -' 1),card F -' 1) =
+A16:  dom Reloc(G,card F -' 1) =
       { m+(card F -' 1) where m is Element of NAT:
       m in dom IncAddr(G,card F -' 1) } by VALUED_1:def 12;
 A17:  card F -' 1 = card F - 1 by PRE_CIRC:20;
 A18:  card G -' 1 = card G - 1 by PRE_CIRC:20;
-A19:  for W being pre-Macro of S st W <> Stop S holds 2 <= card W
+A19:  for W being MacroInstruction of S st W <> Stop S holds 2 <= card W
       proof
-        let W be pre-Macro of S;
+        let W be MacroInstruction of S;
         assume
 A20:    W <> Stop S;
         assume 2 > card W;
         then 1 + 1 > card W;
         then card W <= 1 by NAT_1:13;
-        hence contradiction by A20,Th89,NAT_1:25;
+        hence contradiction by A20,Th8,NAT_1:25;
       end;
       then 2 <= card F by A3;
       then
 A21:  1 <= card F by XXREAL_0:2;
 A22:  2 <= card G by A4,A19;
-      per cases by A21,A22,Lm9;
+      per cases by A21,A22,Lm5;
       suppose
 A23:    k < card F - 1;
-A24:    CutLastLoc F c= CutLastLoc (F ';' G) by Th104;
+A24:    CutLastLoc F c= CutLastLoc (F ';' G) by Th22;
 A25:    now
-          assume x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1);
+          assume x in dom Reloc(G ';' H,card F -' 1);
           then consider m being Element of NAT such that
 A26:      x = m+(card F -' 1) and
           m in dom IncAddr(G ';' H,card F -' 1) by A11;
@@ -2052,7 +1272,7 @@ A26:      x = m+(card F -' 1) and
         end;
 A27:    now
           assume x in dom
-          Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1);
+          Reloc(H,card (F ';' G) -' 1);
           then consider m being Element of NAT such that
 A28:      x = m+(card (F ';' G) -' 1) and
           m in dom IncAddr(H,card (F ';' G) -' 1) by A12;
@@ -2070,8 +1290,7 @@ A29:    x in dom CutLastLoc F by A9,AFINSQ_1:66;
       suppose
 A30:    k = card F - 1;
 A31:    now
-          assume x in dom
-          Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1);
+          assume x in dom Reloc(H,card (F ';' G) -' 1);
           then consider m being Element of NAT such that
 A32:      x = m+(card (F ';' G) -' 1) and
           m in dom IncAddr(H,card (F ';' G) -' 1) by A12;
@@ -2079,7 +1298,7 @@ A32:      x = m+(card (F ';' G) -' 1) and
 PRE_CIRC:20;
           then card G -' 1 = 0;
           then card G - 1 = 0 by PRE_CIRC:20;
-          hence contradiction by A4,Th89;
+          hence contradiction by A4,Th8;
         end;
 A33:    0 in dom IncAddr(G ';' H,card F -' 1) by AFINSQ_1:65;
 A34:    0 in dom IncAddr(G,card F -' 1) by AFINSQ_1:65;
@@ -2087,13 +1306,13 @@ A35:    0 in dom G by AFINSQ_1:65;
 A36:    0 in dom (G ';' H) by AFINSQ_1:65;
         k = (0 qua Nat) + (card F -' 1) by A30,PRE_CIRC:20;
         then
-A37:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A9,A11,A33;
+A37:    x in dom Reloc(G ';' H,card F -' 1) by A9,A11,A33;
 A38:    k = card F -' 1 by A30,PRE_CIRC:20;
 A39:    x = (0 qua Nat)+k by A9;
         0 in dom IncAddr(G,card F -' 1) by AFINSQ_1:65;
         then
-A40:    x in dom Shift(IncAddr(G,card F -' 1),card F -' 1) by A16,A38,A39;
-then x in dom CutLastLoc F \/ dom Shift(IncAddr(G,card F -' 1),card F -' 1)
+A40:    x in dom Reloc(G,card F -' 1) by A16,A38,A39;
+then x in dom CutLastLoc F \/ dom Reloc(G,card F -' 1)
         by XBOOLE_0:def 3;
         then
 A41:    x in dom (F ';' G) by FUNCT_4:def 1;
@@ -2104,19 +1323,19 @@ A42:      dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))
 assume x in dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ));
           then x = card (F ';' G) -' 1 by A42,TARSKI:def 1;
           then card G - 1 = 0 by A38,A9,A15,PRE_CIRC:20;
-          hence contradiction by A4,Th89;
+          hence contradiction by A4,Th8;
         end;
         then
 A43:    x in dom (F ';' G) \
         dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))
         by A41,XBOOLE_0:def 5;
         1 <= card G by NAT_1:14;
-        then card G > 1 by A4,Th89,XXREAL_0:1;
+        then card G > 1 by A4,Th8,XXREAL_0:1;
         then
 A44:    card G - 1 > 1 - 1 by XREAL_1:9;
         then card G -' 1 > 1 - 1 by PRE_CIRC:20;
         then
-A45:    not 0 in dom Shift(IncAddr(H,card G -' 1), card G -' 1) by VALUED_1:29;
+A45:    not 0 in dom Reloc(H,card G -' 1) by VALUED_1:29;
         card CutLastLoc G <> {} by A44,VALUED_1:38;
         then
 A46:    0 in dom CutLastLoc G by AFINSQ_1:65,CARD_1:27;
@@ -2127,13 +1346,13 @@ A47:    G/.0 = G.0 by A35,PARTFUN1:def 6
         thus (F ';' G ';' H).x = ((F ';' G) \
         ( LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))).x by A31,
 FUNCT_4:11
-.= (CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1)).x by A43,
+    .= (CutLastLoc F +* Reloc(G,card F -' 1)).x by A43,
 GRFUNC_1:32
-          .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A40,FUNCT_4:13
+          .= Reloc(G,card F -' 1).x by A40,FUNCT_4:13
           .= IncAddr(G,card F -' 1).0 by A34,A38,A39,VALUED_1:def 12
-          .= IncAddr((G ';' H)/.0,card F -' 1) by A35,A47,Def40
-          .= IncAddr(G ';' H,card F -' 1).0 by A36,Def40
-          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x
+          .= IncAddr((G ';' H)/.0,card F -' 1) by A35,A47,Def21
+          .= IncAddr(G ';' H,card F -' 1).0 by A36,Def21
+          .= Reloc(G ';' H,card F -' 1).x
         by A33,A38,A39,VALUED_1:def 12
           .= (F ';' (G ';' H)).x by A37,FUNCT_4:13;
       end;
@@ -2142,7 +1361,7 @@ A48:    card F <= k and
 A49:    k <= card F + card G - 3;
 A50:    now
           assume
-          x in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1);
+          x in dom Reloc(H,card (F ';' G) -' 1);
           then consider m being Element of NAT such that
 A51:      x = m+(card (F ';' G) -' 1) and
           m in dom IncAddr(H,card (F ';' G) -' 1) by A12;
@@ -2171,18 +1390,18 @@ A56:    k < (card G - 1) + (card F - 1) by A49,XXREAL_0:2;
         then
 A57:    k -' (card F -' 1) in dom CutLastLoc G by AFINSQ_1:66;
         then k -' (card F -' 1) in
-        dom CutLastLoc G \/ dom Shift(IncAddr(H,card G -' 1),card G -' 1)
+        dom CutLastLoc G \/ dom Reloc(H,card G -' 1)
         by XBOOLE_0:def 3;
         then
 A58:    k -' (card F -' 1) in dom (G ';' H) by FUNCT_4:def 1;
         then
 A59:    k -' (card F -' 1) in dom IncAddr(G ';' H,card F -' 1)
-        by Def40;
+        by Def21;
         then
-A60:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A52;
+A60:    x in dom Reloc(G ';' H,card F -' 1) by A11,A52;
         card G + card F - 2 < card F + card G - 1 by XREAL_1:15;
         then k < card F + card G - 1 by A56,XXREAL_0:2;
-        then k < card (F ';' G) by Th102;
+        then k < card (F ';' G) by Th20;
         then
 A61:    x in dom (F ';' G) by A9,AFINSQ_1:66;
         now
@@ -2200,12 +1419,11 @@ A62:    x in dom (F ';' G) \
 A63:    dom CutLastLoc G c= dom G by GRFUNC_1:2;
         then k -' (card F -' 1) in dom G by A57;
         then
-A64:    k -' (card F -' 1) in dom IncAddr(G,card F -' 1) by Def40;
+A64:    k -' (card F -' 1) in dom IncAddr(G,card F -' 1) by Def21;
         then
-A65:    x in dom Shift(IncAddr(G,card F -' 1),card F -' 1) by A16,A52;
+A65:    x in dom Reloc(G,card F -' 1) by A16,A52;
 A66:    now
-          assume k -' (card F -' 1) in
-          dom Shift(IncAddr(H,card G -' 1),card G -' 1);
+          assume k -' (card F -' 1) in dom Reloc(H,card G -' 1);
           then consider m being Element of NAT such that
 A67:      k -' (card F -' 1) = m+(card G -' 1) and
           m in dom IncAddr(H,card G -' 1) by A13;
@@ -2216,28 +1434,28 @@ A68:      m = k -' (card F -' 1) - (card G -' 1) by A67
             .= k - (card F + card G - 2);
           k - (card F + card G - 2)
           <= card F + card G - 3 - (card F + card G - 2) by A49,XREAL_1:9;
-          hence contradiction by A68,Lm8;
+          hence contradiction by A68,Lm4;
         end;
 A69:    (G ';' H)/.(k -' (card F -' 1))
-        = (CutLastLoc G +* Shift(IncAddr(H,card G -' 1),card G -' 1))
+        = (CutLastLoc G +* Reloc(H,card G -' 1))
         .(k -' (card F -' 1)) by A58,PARTFUN1:def 6
           .= (CutLastLoc G).(k -' (card F -' 1)) by A66,FUNCT_4:11
           .= G.(k -' (card F -' 1)) by A57,GRFUNC_1:2;
         thus (F ';' G ';' H).x
         = ((F ';' G) \ (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G))).x
         by A50,FUNCT_4:11
-.= (CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1)).x by A62,
+.= (CutLastLoc F +* Reloc(G,card F -' 1)).x by A62,
 GRFUNC_1:32
-          .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A65,FUNCT_4:13
+          .= Reloc(G,card F -' 1).x by A65,FUNCT_4:13
           .= IncAddr(G,card F -' 1).(k -' (card F -' 1))
            by A52,A64,VALUED_1:def 12
           .= IncAddr(G/.(k -' (card F -' 1)),card F -' 1)
-        by A57,A63,Def40
+        by A57,A63,Def21
           .= IncAddr((G ';' H)/.(k -' (card F -' 1)),card F -' 1)
         by A57,A63,A69,PARTFUN1:def 6
           .= IncAddr(G ';' H,card F -' 1).(k -' (card F -' 1))
-        by A58,Def40
-          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x
+        by A58,Def21
+          .= Reloc(G ';' H,card F -' 1).x
            by A52,A59,VALUED_1:def 12
           .= (F ';' (G ';' H)).x by A60,FUNCT_4:13;
       end;
@@ -2253,18 +1471,18 @@ A72:    k -' (card (F ';' G) -' 1) = 0 by XREAL_0:def 2;
 A73:    k -' (card (F ';' G) -' 1) in dom IncAddr(H,card (F ';' G)
         -' 1) by AFINSQ_1:65;
         then
-A74:    x in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1)
+A74:    x in dom Reloc(H,card (F ';' G) -' 1)
         by A12,A71;
 A75:    x = (card G -' 1) + (card F -' 1) by A9,A17,A18,A70;
         card G - 1 + (0 qua Nat) < card G - 1 + card H by XREAL_1:6;
         then card G -' 1 < card G + card H - 1 by PRE_CIRC:20;
-        then card G -' 1 < card (G ';' H) by Th102;
+        then card G -' 1 < card (G ';' H) by Th20;
         then
 A76:    (card G -' 1) in dom (G ';' H) by AFINSQ_1:66;
         then
-A77:    (card G -' 1) in dom IncAddr(G ';' H,card F -' 1) by Def40;
+A77:    (card G -' 1) in dom IncAddr(G ';' H,card F -' 1) by Def21;
         then
-A78:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A75;
+A78:    x in dom Reloc(G ';' H,card F -' 1) by A11,A75;
 A79:    0 in dom H by AFINSQ_1:65;
 A80:    (G ';' H)/.(card G -' 1) = (G ';' H).(card G -' 1)
         by A76,PARTFUN1:def 6;
@@ -2272,22 +1490,22 @@ A81:    0 in dom IncAddr(H,card G -' 1) by AFINSQ_1:65;
         then
 A82:    IncAddr(H,card G -' 1)/.0
         = IncAddr(H,card G -' 1).0 by PARTFUN1:def 6
-          .= IncAddr(H/.0,(card G -' 1)) by A79,Def40;
+          .= IncAddr(H/.0,(card G -' 1)) by A79,Def21;
         (G ';' H)/.(card G -' 1)
         = (G ';' H).LastLoc G by A80,AFINSQ_1:70
-          .= IncAddr(H,card G -' 1).0 by Th105
+          .= IncAddr(H,card G -' 1).0 by Th23
           .= IncAddr(H,card G -' 1)/.0 by A81,PARTFUN1:def 6;
         then
 A83:    IncAddr((G ';' H)/.(card G -' 1),card F -' 1)
-        = IncAddr(H/.0,card (F ';' G) -' 1) by A15,A82,Th97;
+        = IncAddr(H/.0,card (F ';' G) -' 1) by A15,A82,COMPOS_0:7;
         thus (F ';' G ';' H).x
-        = Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1).x
+        = Reloc(H,card (F ';' G) -' 1).x
         by A74,FUNCT_4:13
           .= IncAddr(H,card (F ';' G) -' 1).(k -' (card (F ';' G) -' 1))
         by A71,A73,VALUED_1:def 12
-          .= IncAddr(H/.0,card (F ';' G) -' 1) by A72,A79,Def40
-          .= IncAddr(G ';' H,card F -' 1).(card G -' 1) by A76,A83,Def40
-          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x
+          .= IncAddr(H/.0,card (F ';' G) -' 1) by A72,A79,Def21
+          .= IncAddr(G ';' H,card F -' 1).(card G -' 1) by A76,A83,Def21
+          .= Reloc(G ';' H,card F -' 1).x
            by A75,A77,VALUED_1:def 12
           .= (F ';' (G ';' H)).x by A78,FUNCT_4:13;
       end;
@@ -2303,9 +1521,9 @@ A85:    x = (k -' (card (F ';' G) -' 1) + (card (F ';' G) -' 1))
 A86:    k -' (card (F ';' G) -' 1) in dom H by AFINSQ_1:66;
         then
 A87:    k -' (card (F ';' G) -' 1) in dom IncAddr(H,card (F ';' G)
-        -' 1) by Def40;
+        -' 1) by Def21;
         then
-A88:    x in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1)
+A88:    x in dom Reloc(H,card (F ';' G) -' 1)
         by A12,A85;
 A89:    card F -' 1 <= (card G -' 1) + (card F -' 1) by NAT_1:11;
         then
@@ -2320,15 +1538,15 @@ A94:    k -' (card F -' 1) < card F + card G + card H - card F - 1
         by A17,A92,XREAL_0:def 2;
         k -' (card F -' 1) < card F - card F + card G + card H - 1
         by A17,A92,A93,XREAL_0:def 2;
-        then k -' (card F -' 1) < card (G ';' H) by Th102;
+        then k -' (card F -' 1) < card (G ';' H) by Th20;
         then
 A95:    k -' (card F -' 1) in dom (G ';' H) by AFINSQ_1:66;
         then k -' (card F -' 1) in dom IncAddr(G ';' H,card F -' 1)
-        by Def40;
+        by Def21;
         then
-A96:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A91;
+A96:    x in dom Reloc(G ';' H,card F -' 1) by A11,A91;
 A97:    k -' (card F -' 1) in dom IncAddr(G ';' H,card F -' 1)
-        by A95,Def40;
+        by A95,Def21;
 A98:    k - (card F -' 1) >= card (F ';' G) -' 1 - (card F -' 1)
         by A14,A84,XREAL_1:9;
         then
@@ -2345,10 +1563,10 @@ A101:   k -' (card F -' 1) =
 then k -' (card F -' 1) -' (card G -' 1) in dom H by AFINSQ_1:66;
         then
 A102:   k -' (card F -' 1) -' (card G -' 1) in
-        dom IncAddr(H,card G -' 1) by Def40;
+        dom IncAddr(H,card G -' 1) by Def21;
         then
 A103:   k -' (card F -' 1) in
-        dom Shift(IncAddr(H,card G -' 1),card G -' 1) by A13,A101;
+        dom Reloc(H,card G -' 1) by A13,A101;
 A104:   k -' (card F -' 1) -' (card G -' 1)
         = k -' (card F -' 1) - (card G -' 1) by A99,XREAL_1:233
        .= k - (card F -' 1) - (card G -' 1) by A14,A15,A84,A89,XREAL_1:233
@@ -2356,26 +1574,26 @@ A104:   k -' (card F -' 1) -' (card G -' 1)
           .= k - ((card F -' 1) + (card G -' 1))
           .= k -' (card (F ';' G) -' 1) by A14,A15,A84,XREAL_1:233;
 A105:   (G ';' H)/.(k -' (card F -' 1))
-        = ((CutLastLoc G) +* Shift(IncAddr(H,card G -' 1),card G -' 1)).
+        = ((CutLastLoc G) +* Reloc(H,card G -' 1)).
         (k -' (card F -' 1)) by A95,PARTFUN1:def 6
-.= Shift(IncAddr(H,card G -' 1),card G -' 1).(k -' (card F -' 1))
+.= Reloc(H,card G -' 1).(k -' (card F -' 1))
         by A103,FUNCT_4:13
 .= IncAddr(H,card G -' 1).(k -' (card (F ';' G) -' 1)) by A101,A102,A104,
 VALUED_1:def 12
           .= IncAddr(H/.(k -' (card (F ';' G) -' 1)),card G -' 1)
-        by A86,Def40;
+        by A86,Def21;
         thus (F ';' G ';' H).x
-        = Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1).x
+        = Reloc(H,card (F ';' G) -' 1).x
         by A88,FUNCT_4:13
           .= IncAddr(H,card (F ';' G) -' 1).(k -' (card (F ';' G) -' 1))
         by A85,A87,VALUED_1:def 12
 .= IncAddr(H/.(k -' (card (F ';' G) -' 1)),card (F ';' G) -' 1)
-        by A86,Def40
+        by A86,Def21
           .= IncAddr((G ';' H)/.(k -' (card F -' 1)),card F -' 1)
-        by A15,A105,Th97
+        by A15,A105,COMPOS_0:7
           .= IncAddr(G ';' H,card F -' 1).(k -' (card F -' 1))
-        by A95,Def40
-          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x
+        by A95,Def21
+          .= Reloc(G ';' H,card F -' 1).x
            by A91,A97,VALUED_1:def 12
           .= (F ';' (G ';' H)).x by A96,FUNCT_4:13;
       end;
@@ -2384,70 +1602,58 @@ VALUED_1:def 12
   end;
 end;
 
-theorem
-  for S being regular homogeneous standard-ins COM-Struct,
-  I being Instruction of S, x being set st x in dom JumpPart I holds
-  (JumpPart I).x in (product" JumpParts InsCode I).x
-proof
-  let S be regular homogeneous
-  standard-ins COM-Struct,
-  I be Instruction of S, x be set such that
-A1: x in dom JumpPart I;
-A2: JumpPart I in JumpParts InsCode I;
-A3: dom product" JumpParts InsCode I = DOM JumpParts InsCode I
-  by CARD_3:75
-    .= dom JumpPart I by A2,CARD_3:def 11;
-  (JumpPart I).x in pi(JumpParts InsCode I,x) by A2,CARD_3:def 6;
-  hence thesis
-  by A1,A3,CARD_3:76;
-end;
+canceled;
 
 theorem
-  for I being Instruction of Trivial-COM holds JumpPart I = 0 by Lm10;
-
-theorem
-  for T being InsType of Trivial-COM holds JumpParts T = {0} by Lm11;
+  for I being Instruction of Trivial-COM holds JumpPart I = 0 by Th5;
 
 begin :: Addenda
 
-:: from SCMRING4, 2008.03.13, A.T.
-
-reserve i, j, k for natural number,
+reserve i, j, k for Nat,
   n for Nat,
   l,il for Nat;
 
-reserve S for regular homogeneous J/A-independent standard-ins COM-Struct;
+reserve S for COM-Struct;
 
+theorem Th32:
+ for k being Nat holds
+  for p being finite NAT-defined (the InstructionsF of S)-valued Function
+   holds dom Reloc(p,k) = dom Shift(p,k)
+proof let k be Nat;
+ let p be finite NAT-defined (the InstructionsF of S)-valued Function;
+A1: dom IncAddr(p,k) = dom p by Def21;
+ thus dom Reloc(p,k)
+          = { m+k where m is Element of NAT
+              :m in dom p} by A1,VALUED_1:def 12
+         .= dom Shift(p,k) by VALUED_1:def 12;
+end;
 
-
-theorem Th117:
+theorem Th33:
   for k being Nat holds
-  for p being finite NAT-defined (the Instructions of S)-valued Function
+  for p being finite NAT-defined (the InstructionsF of S)-valued Function
    holds dom Reloc(p,k) = { j+k where j is Element of NAT:j in dom p }
 proof
   let k be Nat;
-  let p be finite NAT-defined (the Instructions of S)-valued Function;
-  thus dom Reloc(p,k) = dom Shift(p,k) by Def40
+  let p be finite NAT-defined (the InstructionsF of S)-valued Function;
+  thus dom Reloc(p,k) = dom Shift(p,k) by Th32
     .= { j+k where j is Element of NAT:j in dom p } by VALUED_1:def 12;
 end;
 
-
-
-theorem Th121:
+theorem Th34:
   for i,j being Nat holds
-  for p being NAT-defined (the Instructions of S)-valued finite Function
+  for p being NAT-defined (the InstructionsF of S)-valued finite Function
   holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i)
 proof
   let i,j be Nat;
-  let p be NAT-defined (the Instructions of S)-valued finite Function;
+  let p be NAT-defined (the InstructionsF of S)-valued finite Function;
   set f = Shift(IncAddr(p,i),j);
   set g = IncAddr(Shift(p,j),i);
-  dom(IncAddr(p,i)) = dom p by Def40;
+  dom(IncAddr(p,i)) = dom p by Def21;
   then dom(Shift(p,j)) = { m+j where m is Element of NAT:
   m in dom (IncAddr(p,i)) } by VALUED_1:def 12
     .= dom f by VALUED_1:def 12;
   then
-A1: dom f = dom g by Def40;
+A1: dom f = dom g by Def21;
   now
     let x be set;
 A2: dom f c= NAT by RELAT_1:def 18;
@@ -2460,7 +1666,7 @@ A3: x in dom f;
     then consider m being Element of NAT such that
 A4: x = m+j and
 A5: m in dom IncAddr(p,i);
-A6: m in dom p by A5,Def40;
+A6: m in dom p by A5,Def21;
     dom Shift(p,j) = { mm+j where mm is Element of NAT :
     mm in dom p} by VALUED_1:def 12;
     then
@@ -2470,35 +1676,32 @@ A8: p/.mm = p.m by A6,PARTFUN1:def 6
       .= Shift(p,j).(m + j) by A6,VALUED_1:def 12
       .= Shift(p,j)/.xx by A4,A7,PARTFUN1:def 6;
     thus f.x = IncAddr(p,i).(m) by A5,A4,VALUED_1:def 12
-      .= IncAddr(Shift(p,j)/.xx,i) by A6,A8,Def40
-      .= g.x by A7,Def40;
+      .= IncAddr(Shift(p,j)/.xx,i) by A6,A8,Def21
+      .= g.x by A7,Def21;
   end;
   hence thesis by A1,FUNCT_1:2;
 end;
 
 theorem
-  for g being NAT-defined (the Instructions of S)-valued finite Function
+  for g being NAT-defined (the InstructionsF of S)-valued finite Function
   for k being Nat holds
   for I being Instruction of S holds
   il in dom g & I = g.il implies
   IncAddr(I, k) = Reloc(g, k).(il + k)
 proof
-  let g be NAT-defined (the Instructions of S)-valued finite Function;
+  let g be NAT-defined (the InstructionsF of S)-valued finite Function;
   let k be Nat;
   let I be Instruction of S;
   assume that
 A1: il in dom g and
 A2: I = g.il;
    reconsider ii = il as Element of NAT by ORDINAL1:def 12;
-A3: il in dom IncAddr(g,k) by A1,Def40;
+A3: il in dom IncAddr(g,k) by A1,Def21;
   thus (Reloc(g, k)).(il + k)
-     = (Shift(IncAddr(g,k),k)).(il + k) by Th121
-    .= (IncAddr(g,k)).ii by A3,VALUED_1:def 12
-    .= IncAddr((g)/.ii,k) by A1,Def40
+     = (IncAddr(g,k)).ii by A3,VALUED_1:def 12
+    .= IncAddr((g)/.ii,k) by A1,Def21
     .= IncAddr(I,k) by A1,A2,PARTFUN1:def 6;
 end;
-
-begin :: SCMPDS_4
 
 reserve S for COM-Struct;
 
@@ -2587,13 +1790,13 @@ end;
 
 registration
   let S be  COM-Struct;
-  let p be NAT-defined (the Instructions of S)-valued Function,
+  let p be NAT-defined (the InstructionsF of S)-valued Function,
       q be non halt-free
-       NAT-defined (the Instructions of S)-valued Function;
+       NAT-defined (the InstructionsF of S)-valued Function;
   cluster p +* q -> non halt-free;
   coherence
    proof
-A1:   halt S in rng q by Def7;
+A1:   halt S in rng q by Def11;
      rng q c= rng(p +* q) by FUNCT_4:18;
 
     hence halt S in rng(p +* q) by A1;
@@ -2601,28 +1804,26 @@ A1:   halt S in rng q by Def7;
 end;
 
 registration
-  let S be regular homogeneous J/A-independent proper-halt
-    standard-ins COM-Struct;
+  let S be COM-Struct;
   let p be finite non halt-free
-    NAT-defined (the Instructions of S)-valued Function,
+    NAT-defined (the InstructionsF of S)-valued Function,
      k be Nat;
  cluster Reloc(p,k) -> non halt-free;
  coherence
   proof
 A1:  dom p c= NAT by RELAT_1:def 18;
-    halt S in rng p by Def7;
+    halt S in rng p by Def11;
     then consider x being set such that
 A2:  x in dom p and
 A3:  p.x = halt S by FUNCT_1:def 3;
-A4:  x in dom IncAddr(p,k) by A2,Def40;
-A5:  Shift(IncAddr(p,k),k) = IncAddr(Shift(p,k),k) by Th121;
-A6:  dom IncAddr(p,k) c= NAT by RELAT_1:def 18;
+A4:  x in dom IncAddr(p,k) by A2,Def21;
+A5:  dom IncAddr(p,k) c= NAT by RELAT_1:def 18;
      reconsider m =x as Element of NAT by A1,A2;
-    IncAddr(p,k).m = IncAddr(p/.m,k) by A2,Def40
+    IncAddr(p,k).m = IncAddr(p/.m,k) by A2,Def21
        .= IncAddr(halt S,k) by A3,A2,PARTFUN1:def 6
-       .= halt S by Th92;
+       .= halt S by COMPOS_0:4;
     then halt S in rng IncAddr(p,k) by A4,FUNCT_1:3;
-   hence halt S in rng Reloc(p,k) by A5,A6,VALUED_1:26;
+   hence halt S in rng Reloc(p,k) by A5,VALUED_1:26;
   end;
 end;
 
@@ -2638,18 +1839,16 @@ end;
 
 canceled 4;
 
-theorem Th153:
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
+theorem Th41:
+ for S being COM-Struct
   for p,q being
-   finite NAT-defined (the Instructions of S)-valued Function
+   finite NAT-defined (the InstructionsF of S)-valued Function
     holds IncAddr(p +* q, n) = IncAddr(p,n) +* IncAddr(q,n)
 proof
- let S be regular homogeneous J/A-independent
-   standard-ins
-  COM-Struct;
+ let S be COM-Struct;
   let p,q be
-   finite NAT-defined (the Instructions of S)-valued Function;
-A1: dom IncAddr(q,n) = dom q by Def40;
+   finite NAT-defined (the InstructionsF of S)-valued Function;
+A1: dom IncAddr(q,n) = dom q by Def21;
 A2: now
     let m be Nat such that
 A3:  m in dom(p +* q);
@@ -2661,7 +1860,7 @@ A5:   (p+*q)/.m = (p +* q). m by A3,PARTFUN1:def 6
         .= q/.m by A4,PARTFUN1:def 6;
       thus (IncAddr(p,n) +* IncAddr(q,n)). m = IncAddr(q,n). m by A1,A4,
 FUNCT_4:13
-        .= IncAddr((p+*q)/.m,n) by A4,A5,Def40;
+        .= IncAddr((p+*q)/.m,n) by A4,A5,Def21;
     end;
     suppose
 A6:   not  m in dom q;
@@ -2673,176 +1872,120 @@ A8:   (p+*q)/.m = (p +* q). m by A3,PARTFUN1:def 6
         .= p/.m by A7,PARTFUN1:def 6;
       thus (IncAddr(p,n) +* IncAddr(q,n)). m = IncAddr(p,n). m by A1,A6,
 FUNCT_4:11
-        .= IncAddr((p+*q)/.m,n) by A7,A8,Def40;
+        .= IncAddr((p+*q)/.m,n) by A7,A8,Def21;
     end;
   end;
-  dom IncAddr(p,n) = dom p by Def40;
+  dom IncAddr(p,n) = dom p by Def21;
   then dom(IncAddr(p,n) +* IncAddr(q,n)) = dom p \/ dom q by A1,FUNCT_4:def 1
     .= dom(p +* q) by FUNCT_4:def 1;
   hence IncAddr(p +* q, n) = IncAddr(p,n) +* IncAddr(q,n)
-   by A2,Def40;
+   by A2,Def21;
 end;
 
 theorem
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
- for p,q being finite NAT-defined (the Instructions of S)-valued Function,
+ for S being COM-Struct
+ for p,q being finite NAT-defined (the InstructionsF of S)-valued Function,
      k be Nat
   holds Reloc(p+*q,k) = Reloc(p,k)+*Reloc(q,k)
 proof
- let S be regular homogeneous J/A-independent
-   standard-ins
-  COM-Struct;
- let p,q be finite NAT-defined (the Instructions of S)-valued Function,
+ let S be COM-Struct;
+ let p,q be finite NAT-defined (the InstructionsF of S)-valued Function,
      k be Nat;
+A1: Reloc(p+*q,k) = IncAddr(Shift(p+*q,k),k) by Th34;
+A2: Reloc(p,k) = IncAddr(Shift(p,k),k) by Th34;
+A3: Reloc(q,k) = IncAddr(Shift(q,k),k) by Th34;
  thus Reloc(p+*q,k)
-      = IncAddr(Shift(p,k) +* Shift(q,k),k) by VALUED_1:23
-     .= Reloc(p,k)+*Reloc(q,k) by Th153;
+      = IncAddr(Shift(p,k) +* Shift(q,k),k) by A1,VALUED_1:23
+     .= Reloc(p,k)+*Reloc(q,k) by A2,A3,Th41;
 end;
 
 theorem
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
- for p being finite NAT-defined (the Instructions of S)-valued Function,
+ for S being COM-Struct
+ for p being finite NAT-defined (the InstructionsF of S)-valued Function,
      m,n be Nat
  holds Reloc(Reloc(p,m), n) = Reloc(p, m + n)
 proof
- let S being regular homogeneous J/A-independent standard-ins COM-Struct;
- let p being finite NAT-defined (the Instructions of S)-valued Function,
+ let S being COM-Struct;
+ let p being finite NAT-defined (the InstructionsF of S)-valued Function,
      m,n be Nat;
   thus Reloc(Reloc(p,m),n)
-     = IncAddr(IncAddr(Shift(Shift(p,m),n),m),n) by Th121
-    .= IncAddr(IncAddr(Shift(p,m+n),m),n) by VALUED_1:21
-    .= Reloc(p, m + n) by Th99;
+     = Shift(Shift(IncAddr(IncAddr(p,m),n),m),n) by Th34
+    .= Shift(Shift(IncAddr(p, m + n),m),n) by Th17
+    .= Reloc(p, m + n) by VALUED_1:21;
 end;
 
 theorem
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
-  for P,Q being NAT-defined (the Instructions of S)-valued finite Function,
+ for S being COM-Struct
+  for P,Q being NAT-defined (the InstructionsF of S)-valued finite Function,
    k being Nat st
   P c= Q holds Reloc(P,k) c= Reloc(Q,k)
 proof
- let S be regular homogeneous J/A-independent standard-ins COM-Struct;
-  let P,Q be NAT-defined (the Instructions of S)-valued finite Function;
+ let S be COM-Struct;
+  let P,Q be NAT-defined (the InstructionsF of S)-valued finite Function;
   let k be Nat;
   set rP = Reloc(P,k);
   set rQ = Reloc(Q,k);
 A1: dom Reloc(P,k) = {m + k where m is Element of NAT:
-       m in dom P} by Th117;
+       m in dom P} by Th33;
 A2: dom Shift(P,k) = {m + k where m is Element of NAT:
        m in dom P} by VALUED_1:def 12;
 A3: dom Shift(Q,k) = {m + k where m is Element of NAT:
        m in dom Q} by VALUED_1:def 12;
+A4: rQ = IncAddr(Shift(Q,k),k) by Th34;
   assume
-A4:  P c= Q;
+A5:  P c= Q;
   then
-A5: Shift(P,k) c= Shift(Q,k) by VALUED_1:20;
-A6: dom P c= dom Q by A4,GRFUNC_1:2;
-A7: now
+A6: Shift(P,k) c= Shift(Q,k) by VALUED_1:20;
+A7: dom P c= dom Q by A5,GRFUNC_1:2;
+A8: now
     let x be set;
     assume x in dom Reloc(P,k);
     then consider m1 being Element of NAT such that
-A8: x = m1 + k and
-A9: m1 in dom P by A1;
-A10:  (m1 + k) in dom Shift(Q,k) by A6,A3,A9;
-A11:  (m1 + k) in dom Shift(P,k) by A2,A9;
+A9: x = m1 + k and
+A10: m1 in dom P by A1;
+A11:  (m1 + k) in dom Shift(Q,k) by A7,A3,A10;
+A12:  (m1 + k) in dom Shift(P,k) by A2,A10;
     then
-A12: Shift(P,k)/.(m1+k) = Shift(P,k). (
+A13: Shift(P,k)/.(m1+k) = Shift(P,k). (
     m1 + k) by PARTFUN1:def 6
-      .= Shift(Q,k). (m1 + k) by A5,A11,GRFUNC_1:2
-      .= Shift(Q,k)/.(m1+k) by A10,PARTFUN1:def 6;
-    thus (rP).x
-       = IncAddr(Shift(Q,k)/.(m1+k),k) by A11,A12,Def40,A8
-      .= (rQ).x by A8,A10,Def40;
+      .= Shift(Q,k). (m1 + k) by A6,A12,GRFUNC_1:2
+      .= Shift(Q,k)/.(m1+k) by A11,PARTFUN1:def 6;
+    thus (rP).x = IncAddr(Shift(P,k),k).x by Th34
+      .= IncAddr(Shift(Q,k)/.(m1+k),k) by A12,A13,A9,Def21
+      .= (rQ).x by A9,A11,A4,Def21;
   end;
-A13: dom Shift(P,k) c= dom Shift(Q,k) by A5,GRFUNC_1:2;
+A14: dom Shift(P,k) c= dom Shift(Q,k) by A6,GRFUNC_1:2;
   now
     let x be set;
     assume x in dom rP;
-    then x in dom Shift(P,k) by Def40;
-    then x in dom Shift(Q,k) by A13;
-    hence x in dom rQ by Def40;
+    then x in dom Shift(P,k) by Th32;
+    then x in dom Shift(Q,k) by A14;
+    hence x in dom rQ by Th32;
   end;
   then dom rP c= dom rQ by TARSKI:def 3;
-  hence thesis by A7,GRFUNC_1:2;
+  hence thesis by A8,GRFUNC_1:2;
+end;
+
+registration let S be COM-Struct;
+ let P be preProgram of S;
+ reduce Reloc(P,0) to P;
+ reducibility;
 end;
 
 theorem
- for S being regular homogeneous J/A-independent standard-ins COM-Struct
-  for P being preProgram of S holds Reloc(P,0) = P
-proof
- let S be regular homogeneous J/A-independent
-   standard-ins
-  COM-Struct;
-  let P be preProgram of S;
-  now
-    let x be set;
-    hereby
-      assume
-A1:   x in dom P;
-      dom P c= NAT by RELAT_1:def 18;
-      then reconsider l = x as Element of NAT by A1;
-      reconsider n = l as Element of NAT;
-      l =  n;
-      hence x in {m where m is Element of NAT: m in dom P} by A1;
-    end;
-    assume x in {m where m is Element of NAT: m in dom P};
-    then ex m being Element of NAT st x = m & m in dom P;
-    hence x in dom P;
-  end;
-  then
-A2: dom P = {m where m is Element of NAT: m in dom P} by TARSKI:1;
-  now
-    let x be set;
-A3: dom Reloc(P,0) = {m + (0 qua Nat) where m is Element of NAT: m in dom P}
-          by Th117;
-    hereby
-      assume x in dom Reloc(P,0);
-      then ex n be Element of NAT st x = n + (0 qua Nat) & n in dom P by A3;
-      hence x in { m where m is Element of NAT: m in dom P};
-    end;
-    assume x in {m where m is Element of NAT: m in dom P};
-    then consider m being Element of NAT such that
-A4: x = m and
-A5: m in dom P;
-    x = m + (0 qua Nat) by A4;
-    hence x in dom Reloc(P,0) by A3,A5;
-  end;
-  then
-A6: dom Reloc(P,0) = {m where m is Element of NAT:m in dom P} by TARSKI:1;
-  now
-    let x be set;
-    assume x in {m where m is Element of NAT:m in dom P};
-    then consider n being Element of NAT such that
-A7: x = n and
-A8: n in dom P;
-    dom Shift(P,0) = {m + (0 qua Nat) where m is Element of NAT: m in dom P}
-           by VALUED_1:def 12;
-    then
-A10:  n + (0 qua Nat) in dom Shift(P,0) by A8;
-    then
-A11: Shift(P,0)/.(n+(0 qua Nat)) = Shift(P,0). (n + (0 qua Nat))
-          by PARTFUN1:def 6
-      .= P. n by A8,VALUED_1:def 12;
-    then consider i being Instruction of S such that
-A12: i = P. n;
-    thus (Reloc(P,0)).x
-       = IncAddr(i,0) by A10,A11,A12,A7,Def40
-      .= P.x by A7,A12,Th91;
-  end;
-  hence thesis by A2,A6,FUNCT_1:2;
-end;
+ for S being COM-Struct
+  for P being preProgram of S holds Reloc(P,0) = P;
 
 theorem
- for S being regular homogeneous J/A-independent
-   standard-ins COM-Struct
+ for S being COM-Struct
   for k being Nat holds
     for P being preProgram of S holds
     il in dom P iff il + k in dom Reloc(P,k)
 proof
- let S be regular homogeneous J/A-independent
-   standard-ins COM-Struct;
+ let S be COM-Struct;
   let k be Nat;
   let P be preProgram of S;
-  A1: dom Reloc(P,k) = { j+k where j is Element of NAT: j in dom P } by Th117;
+  A1: dom Reloc(P,k) = { j+k where j is Element of NAT: j in dom P } by Th33;
    reconsider il1 = il as Element of NAT by ORDINAL1:def 12;
     il1 in dom P implies il1 + k in dom Reloc(P,k) by A1;
   hence il in dom P implies il + k in dom Reloc(P,k);
@@ -2851,90 +1994,83 @@ proof
   hence thesis;
 end;
 
-
-
 theorem
-  for S be regular J/A-independent homogeneous proper-halt
-   standard-ins COM-Struct
+  for S be COM-Struct
   for i being Instruction of S
-  for f being Function of the Instructions of S, the Instructions of S
-   st f = (id the Instructions of S) +* (halt S .--> i)
-  for s being finite NAT-defined (the Instructions of S)-valued Function
+  for f being Function of the InstructionsF of S, the InstructionsF of S
+   st f = (id the InstructionsF of S) +* (halt S .--> i)
+  for s being finite NAT-defined (the InstructionsF of S)-valued Function
   holds IncAddr(f*s,n)
-   = ((id the Instructions of S) +* (halt S .--> IncAddr(i,n)))* IncAddr(s,n)
+   = ((id the InstructionsF of S) +* (halt S .--> IncAddr(i,n)))* IncAddr(s,n)
 proof
 
-  let S be regular J/A-independent homogeneous proper-halt
-   standard-ins COM-Struct;
-A1: dom(id the Instructions of S) = the Instructions of S by RELAT_1:45;
+  let S be COM-Struct;
   let i be Instruction of S;
-  let f be Function of the Instructions of S, the Instructions of
+  let f be Function of the InstructionsF of S, the InstructionsF of
   S such that
-A2: f = (id the Instructions of S) +* (halt S .--> i);
-  let s be finite NAT-defined (the Instructions of S)-valued Function;
+A1: f = (id the InstructionsF of S) +* (halt S .--> i);
+  let s be finite NAT-defined (the InstructionsF of S)-valued Function;
   rng(halt S .--> IncAddr(i,n)) = {IncAddr(i,n)} by FUNCOP_1:8;
   then
-A3: rng((id the Instructions of S) +* (halt S .--> IncAddr(i,n))
-  ) c= rng(id the Instructions of S) \/ {IncAddr(i,n)} by FUNCT_4:17;
-  rng(id the Instructions of S) = the Instructions of S by RELAT_1:45;
-  then
-A4: rng(id the Instructions of S) \/ {IncAddr(i,n)} = the Instructions
+A2: rng((id the InstructionsF of S) +* (halt S .--> IncAddr(i,n))
+  ) c= rng(id the InstructionsF of S) \/ {IncAddr(i,n)} by FUNCT_4:17;
+A3: rng(id the InstructionsF of S) \/ {IncAddr(i,n)} = the InstructionsF
   of S by ZFMISC_1:40;
-A5: dom(halt S .--> IncAddr(i,n)) = {halt S} by FUNCOP_1:13;
+A4: dom(halt S .--> IncAddr(i,n)) = {halt S} by FUNCOP_1:13;
   then
-  dom((id the Instructions of S) +* (halt S .--> IncAddr(i,n))
-  ) = dom(id the Instructions of S) \/ {halt S} by FUNCT_4:def 1
-    .= the Instructions of S by A1,ZFMISC_1:40;
-  then reconsider g = (id the Instructions of S) +* (halt S .-->
-  IncAddr(i,n)) as Function of the Instructions of S,the Instructions of
-  S by A3,A4,RELSET_1:4;
-A6: dom IncAddr(s,n) = dom s by Def40
+  dom((id the InstructionsF of S) +* (halt S .--> IncAddr(i,n))
+  ) = dom(id the InstructionsF of S) \/ {halt S} by FUNCT_4:def 1
+    .= the InstructionsF of S by ZFMISC_1:40;
+  then reconsider g = (id the InstructionsF of S) +* (halt S .-->
+  IncAddr(i,n)) as Function of the InstructionsF of S,the InstructionsF of
+  S by A2,A3,RELSET_1:4;
+A5: dom IncAddr(s,n) = dom s by Def21
     .= dom(f*s) by FUNCT_2:123;
-A7: dom(halt S .--> i) = {halt S} by FUNCOP_1:13;
-A8: now
+A6: dom(halt S .--> i) = {halt S} by FUNCOP_1:13;
+A7: now
     let m be Nat;
     assume
-A9:  m in dom(f*s);
+A8:  m in dom(f*s);
     then
-A10:  m in dom s by FUNCT_2:123;
+A9:  m in dom s by FUNCT_2:123;
     per cases;
     suppose
-A11:  s. m = halt S;
+A10:  s. m = halt S;
      reconsider mm = m as Element of NAT by ORDINAL1:def 12;
-A12:  IncAddr(s,n). m = IncAddr(s/.mm,n) by A10,Def40
-        .= IncAddr(halt S,n) by A10,A11,PARTFUN1:def 6
-        .= halt S by Th92;
-A13:  halt S in {halt S} by TARSKI:def 1;
-A14:  (f*s)/.m = (f*s). m by A9,PARTFUN1:def 6
-        .= f.halt S by A10,A11,FUNCT_1:13
-        .= (halt S .--> i).halt S by A2,A7,A13,FUNCT_4:13
+A11:  IncAddr(s,n). m = IncAddr(s/.mm,n) by A9,Def21
+        .= IncAddr(halt S,n) by A9,A10,PARTFUN1:def 6
+        .= halt S by COMPOS_0:4;
+A12:  halt S in {halt S} by TARSKI:def 1;
+A13:  (f*s)/.m = (f*s). m by A8,PARTFUN1:def 6
+        .= f.halt S by A9,A10,FUNCT_1:13
+        .= (halt S .--> i).halt S by A1,A6,A12,FUNCT_4:13
         .= i by FUNCOP_1:72;
-      thus (g*IncAddr(s,n)). m = g.(IncAddr(s,n). m) by A6,A9,FUNCT_1:13
-        .= (halt S .--> IncAddr(i,n)).(IncAddr(s,n). m) by A5,A12,A13,
+      thus (g*IncAddr(s,n)). m = g.(IncAddr(s,n). m) by A5,A8,FUNCT_1:13
+        .= (halt S .--> IncAddr(i,n)).(IncAddr(s,n). m) by A4,A11,A12,
 FUNCT_4:13
-        .= IncAddr((f*s)/.m,n) by A12,A14,FUNCOP_1:72;
+        .= IncAddr((f*s)/.m,n) by A11,A13,FUNCOP_1:72;
     end;
     suppose
-A15:  s. m <> halt S;
-A16:  s/.m = s. m by A10,PARTFUN1:def 6;
-A17:  not IncAddr(s/.m,n) = halt S by Th96,A15,A16;
-A18:  not s/.m in {halt S} by A15,A16,TARSKI:def 1;
-A19:  not IncAddr(s/.m,n) in {halt S} by A17,TARSKI:def 1;
-A20:  (f*s)/.m = (f*s). m by A9,PARTFUN1:def 6
-        .= f.(s. m) by A10,FUNCT_1:13
-        .= (id the Instructions of S).(s/.m) by A2,A7,A16,A18,FUNCT_4:11
+A14:  s. m <> halt S;
+A15:  s/.m = s. m by A9,PARTFUN1:def 6;
+A16:  not IncAddr(s/.m,n) = halt S by COMPOS_0:12,A14,A15;
+A17:  not s/.m in {halt S} by A14,A15,TARSKI:def 1;
+A18:  not IncAddr(s/.m,n) in {halt S} by A16,TARSKI:def 1;
+A19:  (f*s)/.m = (f*s). m by A8,PARTFUN1:def 6
+        .= f.(s. m) by A9,FUNCT_1:13
+        .= (id the InstructionsF of S).(s/.m) by A1,A6,A15,A17,FUNCT_4:11
         .= s/.m by FUNCT_1:18;
-      thus (g*IncAddr(s,n)). m = g.(IncAddr(s,n). m) by A6,A9,FUNCT_1:13
-        .= g.IncAddr(s/.m,n) by A10,Def40
-        .= (id the Instructions of S).IncAddr(s/.m,n) by A5,A19,FUNCT_4:11
-        .= IncAddr((f*s)/.m,n) by A20,FUNCT_1:18;
+      thus (g*IncAddr(s,n)). m = g.(IncAddr(s,n). m) by A5,A8,FUNCT_1:13
+        .= g.IncAddr(s/.m,n) by A9,Def21
+        .= (id the InstructionsF of S).IncAddr(s/.m,n) by A4,A18,FUNCT_4:11
+        .= IncAddr((f*s)/.m,n) by A19,FUNCT_1:18;
     end;
   end;
   dom(g*IncAddr(s,n)) = dom IncAddr(s,n) by FUNCT_2:123;
-  hence thesis by A6,A8,Def40;
+  hence thesis by A5,A7,Def21;
 end;
 
-reserve S for regular J/A-independent homogeneous standard-ins COM-Struct;
+reserve S for COM-Struct;
 reserve I,J for Program of S;
 
 theorem
@@ -2942,7 +2078,7 @@ theorem
 proof
   assume
 A1: dom I meets dom Reloc(J, card I);
-  dom Reloc(J, card I) = dom Shift(J,card I) by Def40
+  dom Reloc(J, card I) = dom Shift(J,card I) by Th32
     .= { l+card I where l is Element of NAT: l in dom J } by VALUED_1:def 12;
   then consider x being set such that
 A2: x in dom I and
@@ -3020,7 +2156,7 @@ A9: dom Shift(I,m) = A by VALUED_1:def 12;
   then
 A10: dom Shift(I,m),dom I are_equipotent by A4,A7,A8,A9,WELLORD2:15;
   thus card Reloc(I,m) = card dom Reloc(I,m) by CARD_1:62
-    .= card dom Shift(I,m) by Def40
+    .= card dom Shift(I,m) by Th32
     .= card dom I by A10,CARD_1:5
     .= card I by CARD_1:62;
 end;
@@ -3028,7 +2164,6 @@ end;
 :: from SCMPDS_5, 2011.05.16, A.T.
 
 reserve S for COM-Struct;
-
 reserve i for Instruction of S,
         I for Program of S;
 
@@ -3048,19 +2183,19 @@ proof
 A1: loc in dom stop I and
 A2: (stop I).loc <> halt S;
   set SS=Stop S, S2=Shift(SS, card I);
-XX: stop I = I +* S2 by AFINSQ_1:77;
+A3: stop I = I +* S2 by AFINSQ_1:77;
   assume not loc in dom I;
-  then loc in dom S2 by A1,FUNCT_4:12,XX;
+  then loc in dom S2 by A1,A3,FUNCT_4:12;
   then loc in {l1+ card I where l1 is Element of NAT : l1 in dom SS} by
 VALUED_1:def 12;
   then consider l1 being Element of NAT such that
-A3: loc=l1+ card I and
-A4: l1 in dom SS;
-A5:  0 in dom Stop S by Th3;
-A6: (Stop S). 0 = halt S by AFINSQ_1:34;
+A4: loc=l1+ card I and
+A5: l1 in dom SS;
+A6:  0 in dom Stop S by Th3;
+A7: (Stop S). 0 = halt S by AFINSQ_1:34;
   dom SS = { 0} by AFINSQ_1:33,CARD_1:49;
-  then l1= 0 by A4,TARSKI:def 1;
-  hence contradiction by A2,A3,A6,A5,AFINSQ_1:def 3;
+  then l1= 0 by A5,TARSKI:def 1;
+  hence contradiction by A2,A4,A7,A6,AFINSQ_1:def 3;
 end;
 
 theorem
@@ -3150,30 +2285,29 @@ theorem
   loc in dom I implies loc in dom stop I
 proof
   dom I c= dom (I ^ Stop S) by AFINSQ_1:21;
-  then dom I c= dom stop I;
   hence thesis;
 end;
 
-theorem Th63:
+theorem
  for I being initial preProgram of S st loc in dom I
   holds (stop I).loc=I.loc by AFINSQ_1:def 3;
 
 theorem
   card I in dom stop I & (stop I).card I = halt S
 proof
-Lm1: (Stop S). 0 = halt S by AFINSQ_1:34;
-Lm2: 0 in dom Stop S by Th3;
+A1: (Stop S). 0 = halt S by AFINSQ_1:34;
+A2: 0 in dom Stop S by Th3;
   set pI=stop I;
   card pI=card I+1 by Th55;
   then card I <card pI by XREAL_1:29;
   hence card I in dom pI by AFINSQ_1:66;
-  pI.(0 qua Nat +card I) = halt S by Lm1,Lm2,AFINSQ_1:def 3;
+  pI.(0 qua Nat +card I) = halt S by A1,A2,AFINSQ_1:def 3;
   hence thesis;
 end;
 
 :: from SCMPDS_7, 2011.05.27, A.T.
 
-theorem Th18:
+theorem Th65:
   loc in dom I implies Shift(stop I,n).(loc+n)=Shift(I,n).(loc+n)
 proof
 A1: dom I c= dom (stop I) by AFINSQ_1:21;
@@ -3192,24 +2326,17 @@ proof
   then
 A1:  0 in dom I by AFINSQ_1:66;
   thus Shift(stop I,n). n
-    =Shift(I,n).( 0 qua Nat +n) by A1,Th18
+    =Shift(I,n).( 0 qua Nat +n) by A1,Th65
     .=Shift(I,n). n;
 end;
 
 :: from SCMPDS_5, 2011.05.27,A.T.
 
-definition
-  let S be COM-Struct;
-  let i be Instruction of S;
-  attr i is No-StopCode means
-  i <> halt S;
-end;
-
 registration let S be COM-Struct;
  cluster empty for preProgram of S;
  existence
   proof
-    reconsider p = <%>the Instructions of S as preProgram of S;
+    reconsider p = <%>the InstructionsF of S as preProgram of S;
    take p;
    thus thesis;
   end;
@@ -3225,10 +2352,11 @@ registration let S be COM-Struct;
 end;
 
 definition
+ canceled;
   let S be COM-Struct;
-  let IT be NAT-defined (the Instructions of S)-valued Function;
+  let IT be NAT-defined (the InstructionsF of S)-valued Function;
   redefine attr IT is halt-free means
-:Def25: for x being Nat st x in dom IT holds IT.x <> halt S;
+:Def27: for x being Nat st x in dom IT holds IT.x <> halt S;
   compatibility
    proof
     thus IT is halt-free implies
@@ -3241,7 +2369,7 @@ A1:     IT is halt-free;
 A2:    x in dom IT;
        reconsider n=x as Element of NAT by ORDINAL1:def 12;
        IT.n in rng IT by A2,FUNCT_1:3;
-      hence IT.x <> halt S by A1,Def7;
+      hence IT.x <> halt S by A1,Def11;
      end;
     assume
 A3:   for x being Nat st x in dom IT holds IT.x <> halt S;
@@ -3258,12 +2386,11 @@ registration let S be COM-Struct;
  coherence
   proof let p be non empty preProgram of S;
    assume
-Z:  p is halt-free;
+A1:  p is halt-free;
    let k be Nat such that
-Z1: p.k = halt S and
-Z2: k in dom p;
-    p.k <> halt S by Def25,Z2,Z;
-   hence thesis by Z1;
+A2: p.k = halt S and
+A3: k in dom p;
+   thus thesis by A2,Def27,A3,A1;
   end;
 end;
 
@@ -3276,25 +2403,44 @@ theorem
     .= {i, halt S} by ENUMSET1:1;
  end;
 
-theorem Th68:
+registration let S;
+ let p be initial preProgram of S;
+ reduce CutLastLoc stop p to p;
+ reducibility by AFINSQ_2:83;
+end;
+
+theorem
  for p being initial preProgram of S
-  holds CutLastLoc stop p = p by AFINSQ_2:83;
+  holds CutLastLoc stop p = p;
 
 registration let S be COM-Struct;
  let p be halt-free initial preProgram of S;
  cluster stop p -> unique-halt;
  coherence
   proof let k be Nat such that
-Z1: (stop p).k = halt S and
-Z2: k in dom stop p;
-A:  dom stop p = dom CutLastLoc stop p \/ {LastLoc stop p} by VALUED_1:37;
+A1: (stop p).k = halt S and
+A2: k in dom stop p;
+A3:  dom stop p = dom CutLastLoc stop p \/ {LastLoc stop p} by VALUED_1:37;
    now assume k in dom CutLastLoc stop p;
      then
-B:    k in dom p by Th68;
-     then p.k = halt S by Th63,Z1;
-    hence contradiction by Def25,B;
+A4:    k in dom p;
+     then p.k = halt S by AFINSQ_1:def 3,A1;
+    hence contradiction by Def27,A4;
    end;
-    then k in {LastLoc stop p} by Z2,A,XBOOLE_0:def 3;
+    then k in {LastLoc stop p} by A2,A3,XBOOLE_0:def 3;
    hence k = LastLoc stop p by TARSKI:def 1;
   end;
 end;
+
+registration let S;
+ let I be Program of S, J be non halt-free Program of S;
+  cluster I ';' J -> non halt-free;
+  coherence;
+end;
+
+theorem
+ for I being Program of S
+  holds CutLastLoc stop I = I;
+
+theorem
+ InsCode halt S = 0 by RECDEF_2:def 1;

@@ -1,0 +1,929 @@
+:: Kuratowski Pairs. {T}uples and Projections
+::  by Grzegorz Bancerek, Artur Korni\l owicz and Andrzej Trybulec
+::
+:: Received December 9, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies MCART_1, RECDEF_2, XTUPLE_0, FACIRC_1, RELAT_1, TARSKI,
+    XBOOLE_0;
+ notations TARSKI, XBOOLE_0;
+ constructors TARSKI, XBOOLE_0;
+ registrations XBOOLE_0;
+ definitions TARSKI, XBOOLE_0;
+ theorems ENUMSET1, TARSKI, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+ requirements BOOLE;
+
+begin :: Pairs
+
+reserve x,x1,x2,x3,x4,y,y1,y2,y3,y4,z,z1,z2,z2,z4 for set;
+
+definition let x;
+ attr x is pair means
+:Dfx: ex x1,x2 st x = [x1,x2];
+end;
+
+registration let x1,x2;
+ cluster [x1,x2] -> pair;
+ coherence by Dfx;
+end;
+
+reserve X,Y for set;
+
+Lx4: {x} = {y1,y2} implies x = y1
+proof
+  assume { x } = { y1,y2 };
+  then y1 in { x } by TARSKI:def 2;
+  hence thesis by TARSKI:def 1;
+end;
+
+Lx5:  {x} = {y1,y2} implies y1 = y2
+proof
+  assume
+A1: { x } = { y1,y2 };
+  then x = y1 by Lx4;
+  hence thesis by A1,Lx4;
+end;
+
+Lx6: { x1,x2 } = { y1,y2 } implies x1 = y1 or x1 = y2
+proof
+  x1 in { x1,x2 } by TARSKI:def 2;
+  hence thesis by TARSKI:def 2;
+end;
+
+theorem Th1:
+  [x1,x2] = [y1,y2] implies x1 = y1 & x2 = y2
+proof
+  assume
+A1: [x1,x2] = [y1,y2];
+  per cases;
+  suppose
+A3: y1 <> y2;
+    then
+A4: {x1} <> {y1,y2} by Lx5;
+    then {x1} = {y1} by A1,Lx6;
+   then x1 in {y1} by TARSKI:def 1;
+   hence
+A5: x1 = y1 by TARSKI:def 1;
+    {y1,y2} = {x1,x2} by A1,A4,Lx6;
+   hence thesis by A3,A5,Lx6;
+  end;
+  suppose
+A6: y1 = y2;
+    then {{x1,x2},{x1}} = {{y1},{y1}} by A1,ENUMSET1:29
+        .= {{y1}} by ENUMSET1:29;
+    then { y1 } = { x1,x2 } by Lx4;
+   hence thesis by A6,Lx4;
+  end;
+end;
+
+definition
+  let x;
+  assume x is pair;
+   then consider x1,x2 such that
+A1: x = [x1,x2] by Dfx;
+  func x`1 means
+:Def1: x = [y1,y2] implies it = y1;
+  existence
+  proof
+    take x1;
+    thus thesis by A1,Th1;
+  end;
+  uniqueness
+  proof
+    let z1,z2;
+    assume that
+A2: x = [y1,y2] implies z1 = y1 and
+A3: x = [y1,y2] implies z2 = y1;
+   thus z1 = x1 by A1,A2
+     .= z2 by A1,A3;
+  end;
+  func x`2 means
+:Def2: x = [y1,y2] implies it = y2;
+  existence
+  proof
+    take x2;
+    thus thesis by A1,Th1;
+  end;
+  uniqueness
+  proof
+    let z1,z2;
+    assume that
+A4:  x = [y1,y2] implies z1 = y2 and
+A5:  x = [y1,y2] implies z2 = y2;
+   thus z1 = x2 by A1,A4
+    .= z2 by A1,A5;
+  end;
+end;
+
+registration let x1,x2;
+ reduce [x1,x2]`1 to x1;
+ reducibility by Def1;
+ reduce [x1,x2]`2 to x2;
+ reducibility by Def2;
+end;
+
+registration
+ cluster pair for set;
+ existence
+ proof
+  take [the set, the set], the set, the set;
+  thus thesis;
+ end;
+end;
+
+registration let x be pair set;
+ reduce [x`1,x`2] to x;
+ reducibility
+  proof
+   consider x1,x2 such that
+W:  x = [x1,x2] by Dfx;
+   thus [x`1,x`2] = [x1,x`2] by W,Def1
+     .= x by W,Def2;
+  end;
+end;
+
+theorem
+ for a,b being pair set st a`1 = b`1 & a`2 = b`2
+  holds a = b
+proof let a,b be pair set such that
+Z: a`1 = b`1 & a`2 = b`2;
+  a = [a`1,a`2] & b = [b`1,b`2];
+ hence a = b by Z;
+end;
+
+begin :: Triples
+
+definition
+  let x1,x2,x3;
+  func [x1,x2,x3] equals
+  [[x1,x2],x3];
+  coherence;
+end;
+
+definition let x;
+ attr x is triple means
+:Dfy: ex x1,x2,x3 st x = [x1,x2,x3];
+end;
+
+registration let x1,x2,x3;
+ cluster [x1,x2,x3] -> triple;
+ coherence by Dfy;
+end;
+
+theorem Th3:
+  [x1,x2,x3] = [y1,y2,y3] implies x1 = y1 & x2 = y2 & x3 = y3
+proof
+  assume
+A1: [x1,x2,x3] = [y1,y2,y3];
+  then [x1,x2] = [y1,y2] by Th1;
+  hence thesis by A1,Th1;
+end;
+
+registration
+ cluster triple for set;
+ existence
+ proof
+  take [the set, the set, the set], the set, the set, the set;
+  thus thesis;
+ end;
+ cluster triple -> pair for set;
+ coherence
+  proof let x be set;
+   assume ex x1,x2,x3 st x = [x1,x2,x3];
+   hence thesis;
+  end;
+end;
+
+definition
+  let x be set;
+  func x`1_3 equals x`1`1;
+   coherence;
+  func x`2_3 equals x`1`2;
+   coherence;
+end;
+
+notation
+ let x be set;
+ synonym x`3_3 for x`2;
+end;
+
+registration let x1,x2,x3;
+ reduce [x1,x2,x3]`1_3 to x1;
+ reducibility
+  proof
+   thus [x1,x2,x3]`1_3 = [[x1,x2],x3]`1`1 .= x1;
+  end;
+ reduce [x1,x2,x3]`2_3 to x2;
+ reducibility
+  proof
+   thus [x1,x2,x3]`2_3 = [[x1,x2],x3]`1`2 .= x2;
+  end;
+ reduce [x1,x2,x3]`3_3 to x3;
+ reducibility
+  proof
+   thus [x1,x2,x3]`3_3 = [[x1,x2],x3]`2 .= x3;
+  end;
+end;
+
+registration let x be triple set;
+ reduce [x`1_3,x`2_3,x`3_3] to x;
+ reducibility
+  proof
+   consider x1,x2,x3 such that
+W:  x = [x1,x2,x3] by Dfy;
+    [x1,x2,x3]`1_3 = x1 & [x1,x2,x3]`2_3 = x2 & [x1,x2,x3]`3_3 = x3;
+   hence thesis by W;
+  end;
+end;
+
+theorem
+ for a,b being triple set st a`1_3 = b`1_3 & a`2_3 = b`2_3 & a`3_3 = b`3_3
+  holds a = b
+proof let a,b be triple set such that
+Z: a`1_3 = b`1_3 & a`2_3 = b`2_3 & a`3_3 = b`3_3;
+  a = [a`1_3,a`2_3,a`3_3] & b = [b`1_3,b`2_3,b`3_3];
+ hence a = b by Z;
+end;
+
+begin :: Quadruples
+
+definition
+  let x1,x2,x3,x4;
+  func [x1,x2,x3,x4] equals
+  [[x1,x2,x3],x4];
+  coherence;
+end;
+
+definition let x;
+ attr x is quadruple means
+:Dfz: ex x1,x2,x3,x4 st x = [x1,x2,x3,x4];
+end;
+
+registration let x1,x2,x3,x4;
+ cluster [x1,x2,x3,x4] -> quadruple;
+ coherence by Dfz;
+end;
+
+theorem
+ [x1,x2,x3,x4] = [y1,y2,y3,y4]
+   implies x1 = y1 & x2 = y2 & x3 = y3 & x4 = y4
+proof
+  assume
+A1: [x1,x2,x3,x4] = [y1,y2,y3,y4];
+  then [x1,x2,x3] = [y1,y2,y3] by Th1;
+  hence thesis by A1,Th3,Th1;
+end;
+
+registration
+ cluster quadruple for set;
+ existence
+ proof
+  take [the set, the set, the set, the set],
+    the set, the set, the set, the set;
+  thus thesis;
+ end;
+ cluster quadruple -> triple for set;
+ coherence
+  proof let x;
+   given x1,x2,x3,x4 such that
+G:  x = [x1,x2,x3,x4];
+    x = [[x1,x2],x3,x4] by G;
+   hence thesis;
+  end;
+end;
+
+definition
+ let x be set;
+  func x`1_4 equals x`1`1`1;
+   coherence;
+  func x`2_4 equals x`1`1`2;
+  coherence;
+end;
+
+notation let x be set;
+ synonym x`3_4 for x`2_3;
+ synonym x`4_4 for x`2;
+end;
+
+registration let x1,x2,x3,x4;
+ reduce [x1,x2,x3,x4]`1_4 to x1;
+ reducibility
+  proof
+   thus [x1,x2,x3,x4]`1_4 = [[x1,x2,x3],x4]`1`1`1
+          .= [x1,x2,x3]`1_3
+          .= x1;
+  end;
+ reduce [x1,x2,x3,x4]`2_4 to x2;
+ reducibility
+  proof
+   thus [x1,x2,x3,x4]`2_4 = [[x1,x2,x3],x4]`1`1`2
+          .= [x1,x2,x3]`2_3
+          .= x2;
+  end;
+ reduce [x1,x2,x3,x4]`3_4 to x3;
+ reducibility
+  proof
+   thus [x1,x2,x3,x4]`3_4 = [[x1,x2,x3],x4]`1`2
+          .= x3;
+  end;
+ reduce [x1,x2,x3,x4]`4_4 to x4;
+ reducibility
+  proof
+   thus [x1,x2,x3,x4]`4_4 = [[x1,x2,x3],x4]`2
+          .= x4;
+  end;
+end;
+
+registration let x be quadruple set;
+ reduce [x`1_4,x`2_4,x`3_4,x`4_4] to x;
+ reducibility
+  proof
+   consider x1,x2,x3,x4 such that
+W:  x = [x1,x2,x3,x4] by Dfz;
+    [x1,x2,x3,x4]`1_4 = x1 & [x1,x2,x3,x4]`2_4 = x2 &
+    [x1,x2,x3,x4]`3_4 = x3 & [x1,x2,x3,x4]`4_4 = x4;
+   hence thesis by W;
+  end;
+end;
+
+reserve X,X1,X2,X3,X4,Y for set;
+
+:: Preliminaries
+
+theorem Pre1:
+ [x,y] in X implies x in union union X
+  proof assume
+A1: [x,y] in X;
+   {x} in [x,y] by TARSKI:def 2;
+   then
+A2: {x} in union X by A1,TARSKI:def 4;
+    x in {x} by TARSKI:def 1;
+   hence x in union union X by A2,TARSKI:def 4;
+  end;
+
+theorem Pre2:
+ [x,y] in X implies y in union union X
+  proof assume
+A1: [x,y] in X;
+   {x,y} in [x,y] by TARSKI:def 2;
+   then
+A2: {x,y} in union X by A1,TARSKI:def 4;
+    y in {x,y} by TARSKI:def 2;
+   hence y in union union X by A2,TARSKI:def 4;
+  end;
+
+:: Projections
+
+definition
+  let X be set;
+  func proj1 X -> set means
+:Def4:
+  x in it iff ex y st [x,y] in X;
+  existence
+  proof
+    defpred Q[set] means ex y st [$1,y] in X;
+    consider Y such that
+A0: for x holds x in Y iff x in union union X & Q[x] from XBOOLE_0:sch 1;
+    take Y;
+    let x;
+    thus x in Y implies ex y st [x,y] in X by A0;
+    given y such that
+A1:  [x,y] in X;
+    x in union union X by A1,Pre1;
+   hence thesis by A1,A0;
+  end;
+  uniqueness
+  proof
+    let X1,X2;
+    assume that
+A2: for x holds x in X1 iff ex y st [x,y] in X and
+A3: for x holds x in X2 iff ex y st [x,y] in X;
+    now
+      let x;
+      x in X1 iff ex y st [x,y] in X by A2;
+      hence x in X1 iff x in X2 by A3;
+    end;
+    hence thesis by TARSKI:1;
+  end;
+  func proj2 X -> set means
+:Def5:
+  x in it iff ex y st [y,x] in X;
+  existence
+  proof
+    defpred Q[set] means ex y st [y,$1] in X;
+    consider Y such that
+A0: for x holds x in Y iff x in union union X & Q[x] from XBOOLE_0:sch 1;
+    take Y;
+    let x;
+    thus x in Y implies ex y st [y,x] in X by A0;
+    given y such that
+A1:  [y,x] in X;
+    x in union union X by A1,Pre2;
+   hence thesis by A1,A0;
+  end;
+  uniqueness
+  proof
+    let X1,X2;
+    assume that
+A2: for x holds x in X1 iff ex y st [y,x] in X and
+A3: for x holds x in X2 iff ex y st [y,x] in X;
+    now
+      let x;
+      x in X1 iff ex y st [y,x] in X by A2;
+      hence x in X1 iff x in X2 by A3;
+    end;
+    hence thesis by TARSKI:1;
+  end;
+end;
+
+theorem Th10:
+ X c= Y implies proj1 X c= proj1 Y
+proof assume
+A1: X c= Y;
+ let x;
+ assume x in proj1 X;
+  then consider y such that
+A2: [x,y] in X by Def4;
+  [x,y] in Y by A1,A2,TARSKI:def 3;
+ hence thesis by Def4;
+end;
+
+theorem Th11:
+ X c= Y implies proj2 X c= proj2 Y
+proof assume
+A1: X c= Y;
+ let x;
+ assume x in proj2 X;
+  then consider y such that
+A2: [y,x] in X by Def5;
+  [y,x] in Y by A1,A2,TARSKI:def 3;
+ hence thesis by Def5;
+end;
+
+definition
+  let X be set;
+  func proj1_3 X -> set equals
+   proj1 proj1 X;
+  coherence;
+  func proj2_3 X -> set equals
+   proj2 proj1 X;
+  coherence;
+end;
+
+notation let X be set;
+ synonym proj3_3 X for proj2 X;
+end;
+
+theorem Th12:
+ X c= Y implies proj1_3 X c= proj1_3 Y
+proof assume X c= Y;
+  then proj1 X c= proj1 Y by Th10;
+ hence thesis by Th10;
+end;
+
+theorem Th13:
+ X c= Y implies proj2_3 X c= proj2_3 Y
+proof assume X c= Y;
+  then proj1 X c= proj1 Y by Th10;
+ hence thesis by Th11;
+end;
+
+theorem Th14:
+ x in proj1_3 X implies ex y,z st [x,y,z] in X
+proof assume x in proj1_3 X;
+  then consider y such that
+W1: [x,y] in proj1 X by Def4;
+  consider z such that
+W2: [[x,y],z] in X by W1,Def4;
+ take y,z;
+ thus thesis by W2;
+end;
+
+theorem Th14a:
+ [x,y,z] in X implies x in proj1_3 X
+ proof
+  assume [x,y,z] in X;
+   then [x,y] in proj1 X by Def4;
+  hence thesis by Def4;
+ end;
+
+theorem Th15:
+ x in proj2_3 X implies ex y,z st [y,x,z] in X
+proof assume x in proj2_3 X;
+  then consider y such that
+W1: [y,x] in proj1 X by Def5;
+  consider z such that
+W2: [[y,x],z] in X by W1,Def4;
+ take y,z;
+ thus thesis by W2;
+end;
+
+theorem Th15a:
+ [x,y,z] in X implies y in proj2_3 X
+ proof
+  assume [x,y,z] in X;
+   then [x,y] in proj1 X by Def4;
+  hence thesis by Def5;
+ end;
+
+definition
+  let X be set;
+func proj1_4 X -> set equals
+   proj1 proj1_3 X;
+  coherence;
+  func proj2_4 X -> set equals
+   proj2 proj1_3 X;
+  coherence;
+end;
+
+notation let X be set;
+  synonym proj3_4 X for proj2_3 X;
+  synonym proj4_4 X for proj2 X;
+end;
+
+theorem Th17:
+ X c= Y implies proj1_4 X c= proj1_4 Y
+proof assume X c= Y;
+  then proj1_3 X c= proj1_3 Y by Th12;
+ hence thesis by Th10;
+end;
+
+theorem Th18:
+ X c= Y implies proj2_4 X c= proj2_4 Y
+proof assume X c= Y;
+  then proj1_3 X c= proj1_3 Y by Th12;
+ hence thesis by Th11;
+end;
+
+theorem Th19:
+ x in proj1_4 X implies ex x1,x2,x3 st [x,x1,x2,x3] in X
+proof assume x in proj1_4 X;
+  then consider x1 such that
+W1: [x,x1] in proj1_3 X by Def4;
+  consider x2 such that
+W2: [[x,x1],x2] in proj1 X by W1,Def4;
+  consider x3 such that
+W3: [[[x,x1],x2],x3] in X by W2,Def4;
+ take x1,x2,x3;
+ thus thesis by W3;
+end;
+
+theorem Th19a:
+ [x,x1,x2,x3] in X implies x in proj1_4 X
+proof
+ assume [x,x1,x2,x3] in X;
+  then [[x,x1],x2,x3] in X;
+  then [x,x1] in proj1_3 X by Th14a;
+ hence thesis by Def4;
+end;
+
+theorem Th20:
+ x in proj2_4 X implies ex x1,x2,x3 st [x1,x,x2,x3] in X
+proof assume x in proj2_4 X;
+  then consider x1 such that
+W1: [x1,x] in proj1_3 X by Def5;
+  consider x2 such that
+W2: [[x1,x],x2] in proj1 X by W1,Def4;
+  consider x3 such that
+W3: [[[x1,x],x2],x3] in X by W2,Def4;
+ take x1,x2,x3;
+ thus thesis by W3;
+end;
+
+theorem Th20a:
+ [x1,x,x2,x3] in X implies x in proj2_4 X
+proof
+ assume [x1,x,x2,x3] in X;
+  then [[x1,x],x2,x3] in X;
+  then [x1,x] in proj1_3 X by Th14a;
+ hence thesis by Def5;
+end;
+
+theorem
+ for a,b being quadruple set
+  st a`1_4 = b`1_4 & a`2_4 = b`2_4 & a`3_4 = b`3_4 & a`4_4 = b`4_4
+  holds a = b
+proof let a,b be quadruple set such that
+Z: a`1_4 = b`1_4 & a`2_4 = b`2_4 & a`3_4 = b`3_4 & a`4_4 = b`4_4;
+  a = [a`1_4,a`2_4,a`3_4,a`4_4] & b = [b`1_4,b`2_4,b`3_4,b`4_4];
+ hence a = b by Z;
+end;
+
+begin :: Boolean properties
+
+registration let X be empty set;
+ cluster proj1 X -> empty;
+ coherence
+  proof
+   assume proj1 X is non empty;
+    then consider x such that
+W:   x in proj1 X by XBOOLE_0:def 1;
+    ex y st [x,y] in X by W,Def4;
+   hence contradiction;
+  end;
+end;
+
+registration let X be empty set;
+ cluster proj2 X -> empty;
+ coherence
+  proof
+   assume proj2 X is non empty;
+    then consider x such that
+W:   x in proj2 X by XBOOLE_0:def 1;
+    ex y st [y,x] in X by W,Def5;
+   hence contradiction;
+  end;
+end;
+
+registration let X be empty set;
+ cluster proj1_3 X -> empty;
+ coherence;
+end;
+
+registration let X be empty set;
+ cluster proj2_3 X -> empty;
+ coherence;
+end;
+
+registration let X be empty set;
+ cluster proj1_4 X -> empty;
+ coherence;
+end;
+
+registration let X be empty set;
+ cluster proj2_4 X -> empty;
+ coherence;
+end;
+
+theorem Th22:
+ proj1(X \/ Y) = proj1 X \/ proj1 Y
+proof
+  thus proj1(X \/ Y) c= proj1 X \/ proj1 Y
+  proof
+   let x;
+   assume x in proj1(X \/ Y);
+    then consider y such that
+A1: [x,y] in X \/ Y by Def4;
+    [x,y] in X or [x,y] in Y by A1,XBOOLE_0:def 3;
+    then x in proj1 X or x in proj1 Y by Def4;
+   hence thesis by XBOOLE_0:def 3;
+  end;
+A3: proj1 Y c= proj1(X \/ Y) by Th10,XBOOLE_1:7;
+   proj1 X c= proj1(X \/ Y) by Th10,XBOOLE_1:7;
+  hence proj1 X \/ proj1 Y c= proj1 (X \/ Y) by A3,XBOOLE_1:8;
+end;
+
+theorem
+  proj1(X /\ Y) c= proj1 X /\ proj1 Y
+proof
+  proj1(X /\ Y) c= proj1 X & proj1(X /\ Y) c= proj1 Y by Th10,XBOOLE_1:17;
+ hence thesis by XBOOLE_1:19;
+end;
+
+theorem Th24:
+  proj1 X \ proj1 Y c= proj1(X \ Y)
+proof
+ let x;
+ assume
+A1: x in proj1 X \ proj1 Y;
+  then x in proj1 X by XBOOLE_0:def 5;
+  then consider y such that
+A2: [x,y] in X by Def4;
+  not x in proj1 Y by A1,XBOOLE_0:def 5;
+  then not [x,y] in Y by Def4;
+  then [x,y] in X \ Y by A2,XBOOLE_0:def 5;
+ hence thesis by Def4;
+end;
+
+theorem
+  proj1 X \+\ proj1 Y c= proj1(X \+\ Y)
+proof
+  proj1 X \ proj1 Y c= proj1(X \ Y) & proj1 Y \ proj1 X c= proj1(Y \ X)
+     by Th24;
+  then proj1 X \+\ proj1 Y c= proj1(X\Y) \/ proj1(Y\X) by XBOOLE_1:13;
+ hence thesis by Th22;
+end;
+
+theorem Th26:
+ proj2(X \/ Y) = proj2 X \/ proj2 Y
+proof
+ thus proj2(X \/ Y) c= proj2 X \/ proj2 Y
+  proof
+   let y;
+   assume y in proj2(X \/ Y);
+    then consider x such that
+A1: [x,y] in X \/ Y by Def5;
+    [x,y] in X or [x,y] in Y by A1,XBOOLE_0:def 3;
+    then y in proj2 X or y in proj2 Y by Def5;
+   hence thesis by XBOOLE_0:def 3;
+  end;
+A3: proj2 Y c= proj2(X \/ Y) by Th11,XBOOLE_1:7;
+  proj2 X c= proj2(X \/ Y) by Th11,XBOOLE_1:7;
+ hence proj2 X \/ proj2 Y c= proj2(X \/ Y) by A3,XBOOLE_1:8;
+end;
+
+theorem
+  proj2(X /\ Y) c= proj2 X /\ proj2 Y
+proof
+  let y;
+  assume y in proj2(X /\ Y);
+  then consider x such that
+A3: [x,y] in X /\ Y by Def5;
+  [x,y] in Y by A3,XBOOLE_0:def 4;
+  then
+A4: y in proj2 Y by Def5;
+  [x,y] in X by A3,XBOOLE_0:def 4;
+  then y in proj2 X by Def5;
+  hence thesis by A4,XBOOLE_0:def 4;
+end;
+
+theorem Th28:
+  proj2 X \ proj2 Y c= proj2(X \ Y)
+proof
+  let y;
+  assume
+A3: y in proj2 X \ proj2 Y;
+  then y in proj2 X by XBOOLE_0:def 5;
+  then consider x such that
+A4: [x,y] in X by Def5;
+  not y in proj2 Y by A3,XBOOLE_0:def 5;
+  then not [x,y] in Y by Def5;
+  then [x,y] in X \ Y by A4,XBOOLE_0:def 5;
+  hence thesis by Def5;
+end;
+
+theorem
+   proj2 X \+\ proj2 Y c= proj2(X \+\ Y)
+proof
+  proj2 X \ proj2 Y c= proj2(X \ Y) & proj2 Y \ proj2 X c= proj2(Y \ X)
+      by Th28;
+  then proj2 X \+\ proj2 Y c= proj2(X\Y) \/ proj2(Y\X) by XBOOLE_1:13;
+  hence thesis by Th26;
+end;
+
+theorem Th30:
+ proj1_3(X \/ Y) = proj1_3 X \/ proj1_3 Y
+proof
+ thus proj1_3(X \/ Y) = proj1(proj1 X \/ proj1 Y) by Th22
+     .= proj1_3 X \/ proj1_3 Y by Th22;
+end;
+
+theorem
+  proj1_3(X /\ Y) c= proj1_3 X /\ proj1_3 Y
+proof
+  proj1_3(X /\ Y) c= proj1_3 X & proj1_3(X /\ Y) c= proj1_3 Y
+       by Th12,XBOOLE_1:17;
+ hence thesis by XBOOLE_1:19;
+end;
+
+theorem Th32:
+  proj1_3 X \ proj1_3 Y c= proj1_3(X \ Y)
+proof
+ let x;
+ assume
+A1: x in proj1_3 X \ proj1_3 Y;
+  then x in proj1_3 X by XBOOLE_0:def 5;
+  then consider y,z such that
+A2: [x,y,z] in X by Th14;
+  not x in proj1_3 Y by A1,XBOOLE_0:def 5;
+  then not [x,y,z] in Y by Th14a;
+  then [x,y,z] in X \ Y by A2,XBOOLE_0:def 5;
+ hence thesis by Th14a;
+end;
+
+theorem
+  proj1_3 X \+\ proj1_3 Y c= proj1_3(X \+\ Y)
+proof
+  proj1_3 X \ proj1_3 Y c= proj1_3(X \ Y) &
+  proj1_3 Y \ proj1_3 X c= proj1_3(Y \ X) by Th32;
+  then proj1_3 X \+\ proj1_3 Y c= proj1_3(X\Y) \/ proj1_3(Y\X) by XBOOLE_1:13;
+ hence thesis by Th30;
+end;
+
+theorem Th34:
+ proj2_3(X \/ Y) = proj2_3 X \/ proj2_3 Y
+proof
+ thus proj2_3(X \/ Y) = proj2(proj1 X \/ proj1 Y) by Th22
+     .= proj2_3 X \/ proj2_3 Y by Th26;
+end;
+
+theorem
+  proj2_3(X /\ Y) c= proj2_3 X /\ proj2_3 Y
+proof
+  proj2_3(X /\ Y) c= proj2_3 X & proj2_3(X /\ Y) c= proj2_3 Y
+   by Th13,XBOOLE_1:17;
+ hence thesis by XBOOLE_1:19;
+end;
+
+theorem Th36:
+  proj2_3 X \ proj2_3 Y c= proj2_3(X \ Y)
+proof
+ let x;
+ assume
+A1: x in proj2_3 X \ proj2_3 Y;
+  then x in proj2_3 X by XBOOLE_0:def 5;
+  then consider y,z such that
+A2: [y,x,z] in X by Th15;
+  not x in proj2_3 Y by A1,XBOOLE_0:def 5;
+  then not [y,x,z] in Y by Th15a;
+  then [y,x,z] in X \ Y by A2,XBOOLE_0:def 5;
+ hence thesis by Th15a;
+end;
+
+theorem
+  proj2_3 X \+\ proj2_3 Y c= proj2_3(X \+\ Y)
+proof
+  proj2_3 X \ proj2_3 Y c= proj2_3(X \ Y) &
+  proj2_3 Y \ proj2_3 X c= proj2_3(Y \ X) by Th36;
+  then proj2_3 X \+\ proj2_3 Y c= proj2_3(X\Y) \/ proj2_3(Y\X) by XBOOLE_1:13;
+ hence thesis by Th34;
+end;
+
+theorem Th38:
+ proj1_4(X \/ Y) = proj1_4 X \/ proj1_4 Y
+proof
+ thus proj1_4(X \/ Y) = proj1(proj1_3 X \/ proj1_3 Y) by Th30
+     .= proj1_4 X \/ proj1_4 Y by Th22;
+end;
+
+theorem
+  proj1_4(X /\ Y) c= proj1_4 X /\ proj1_4 Y
+proof
+  proj1_4(X /\ Y) c= proj1_4 X & proj1_4(X /\ Y) c= proj1_4 Y
+   by Th17,XBOOLE_1:17;
+ hence thesis by XBOOLE_1:19;
+end;
+
+theorem Th32:
+  proj1_4 X \ proj1_4 Y c= proj1_4(X \ Y)
+proof
+ let x;
+ assume
+A1: x in proj1_4 X \ proj1_4 Y;
+  then x in proj1_4 X by XBOOLE_0:def 5;
+  then consider x1,x2,x3 such that
+A2: [x,x1,x2,x3] in X by Th19;
+  not x in proj1_4 Y by A1,XBOOLE_0:def 5;
+  then not [x,x1,x2,x3] in Y by Th19a;
+  then [x,x1,x2,x3] in X \ Y by A2,XBOOLE_0:def 5;
+ hence thesis by Th19a;
+end;
+
+theorem
+  proj1_4 X \+\ proj1_4 Y c= proj1_4(X \+\ Y)
+proof
+  proj1_4 X \ proj1_4 Y c= proj1_4(X \ Y) &
+  proj1_4 Y \ proj1_4 X c= proj1_4(Y \ X) by Th32;
+  then proj1_4 X \+\ proj1_4 Y c= proj1_4(X\Y) \/ proj1_4(Y\X) by XBOOLE_1:13;
+ hence thesis by Th38;
+end;
+
+theorem Th34:
+ proj2_4(X \/ Y) = proj2_4 X \/ proj2_4 Y
+proof
+ thus proj2_4(X \/ Y) = proj2(proj1_3 X \/ proj1_3 Y) by Th30
+     .= proj2_4 X \/ proj2_4 Y by Th26;
+end;
+
+theorem
+  proj2_4(X /\ Y) c= proj2_4 X /\ proj2_4 Y
+proof
+  proj2_4(X /\ Y) c= proj2_4 X & proj2_4(X /\ Y) c= proj2_4 Y
+    by Th18,XBOOLE_1:17;
+ hence thesis by XBOOLE_1:19;
+end;
+
+theorem Th36:
+  proj2_4 X \ proj2_4 Y c= proj2_4(X \ Y)
+proof
+ let x;
+ assume
+A1: x in proj2_4 X \ proj2_4 Y;
+  then x in proj2_4 X by XBOOLE_0:def 5;
+  then consider x1,x2,x3 such that
+A2: [x1,x,x2,x3] in X by Th20;
+  not x in proj2_4 Y by A1,XBOOLE_0:def 5;
+  then not [x1,x,x2,x3] in Y by Th20a;
+  then [x1,x,x2,x3] in X \ Y by A2,XBOOLE_0:def 5;
+ hence thesis by Th20a;
+end;
+
+theorem
+  proj2_4 X \+\ proj2_4 Y c= proj2_4(X \+\ Y)
+proof
+  proj2_4 X \ proj2_4 Y c= proj2_4(X \ Y) &
+  proj2_4 Y \ proj2_4 X c= proj2_4(Y \ X) by Th36;
+  then proj2_4 X \+\ proj2_4 Y c= proj2_4(X\Y) \/ proj2_4(Y\X) by XBOOLE_1:13;
+ hence thesis by Th34;
+end;

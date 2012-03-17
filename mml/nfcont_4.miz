@@ -2,7 +2,7 @@
 ::  by Keiko Narita , Artur Kornilowicz and Yasunari Shidama
 ::
 :: Received February 22, 2011
-:: Copyright (c) 2011 Association of Mizar Users
+:: Copyright (c) 2011-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,21 +21,22 @@ environ
       FINSET_1, MEMBERED, BORSUK_1, REAL_NS1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
       RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      VALUED_0, VALUED_1, REAL_1, NAT_1, MEMBERED, COMPLEX1, BINOP_2, XXREAL_2,
-      FINSEQ_1, SEQ_1, SEQ_2, RCOMP_1, FCONT_1, STRUCT_0, PRE_TOPC, RLVECT_1,
-      NORMSP_0, NORMSP_1, EUCLID, NFCONT_1, REAL_NS1, PDIFF_1, INTEGR15,
-      VALUED_2, NFCONT_3, VFUNCT_1;
+      VALUED_1, REAL_1, MEMBERED, COMPLEX1, BINOP_2, XXREAL_2, FINSEQ_1, SEQ_1,
+      SEQ_2, RCOMP_1, FCONT_1, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_0,
+      NORMSP_1, EUCLID, NFCONT_1, REAL_NS1, PDIFF_1, INTEGR15, VALUED_2,
+      NFCONT_3, VFUNCT_1;
  constructors REAL_1, COMPLEX1, SEQ_2, SEQ_4, SEQ_1, RELSET_1, FCONT_1,
-      NFCONT_1, VFUNCT_1, BINOP_2, PDIFF_1, INTEGR15, NFCONT_3, VALUED_2;
+      NFCONT_1, VFUNCT_1, BINOP_2, PDIFF_1, INTEGR15, NFCONT_3, VALUED_2,
+      COMSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      MEMBERED, VALUED_0, FUNCT_2, XXREAL_2, FUNCT_1, ZFMISC_1, STRUCT_0,
-      EUCLID, FINSEQ_1, REAL_NS1, NFCONT_3, VALUED_2;
+      VALUED_0, FUNCT_2, XXREAL_2, FUNCT_1, ZFMISC_1, STRUCT_0, EUCLID,
+      FINSEQ_1, REAL_NS1, NFCONT_3, VALUED_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE;
  definitions VALUED_1, FCONT_1, NFCONT_3, INTEGR15, TARSKI;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_2, PARTFUN1, XREAL_0, PARTFUN2,
-      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0,
-      ORDINAL1, XXREAL_2, VALUED_0, FCONT_1, NFCONT_1, NORMSP_0, FINSEQ_1,
-      FINSET_1, VFUNCT_1, REAL_NS1, SUBSET_1, PDIFF_8, NFCONT_3, VALUED_2;
+      RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1,
+      XXREAL_2, VALUED_0, FCONT_1, NFCONT_1, NORMSP_0, FINSEQ_1, FINSET_1,
+      VFUNCT_1, REAL_NS1, SUBSET_1, PDIFF_8, NFCONT_3, VALUED_2;
  schemes FUNCT_1, FINSEQ_1, PARTFUN2;
 
 begin :: Basic Properties of the continuous functions of PartFunc of REAL,REAL n
@@ -45,33 +46,33 @@ reserve x,X,X1 for set;
 reserve r,p for Real;
 reserve s,x0,x1,x2 for real number;
 reserve f,f1,f2 for PartFunc of REAL,REAL n;
-reserve h for PartFunc of REAL, the carrier of REAL-NS n;
+reserve h for PartFunc of REAL,REAL-NS n;
+reserve W for non empty set;
 
 definition let n,f,x0;
   pred f is_continuous_in x0 means :Def1:
-  ex g be PartFunc of REAL,the carrier of REAL-NS n st
-    f=g & g is_continuous_in x0;
-end;
-
-theorem Def1Th:
-  h = f implies (f is_continuous_in x0 iff h is_continuous_in x0)
-proof
-  assume AS: h = f;
-  hereby assume f is_continuous_in x0;
-    then ex g be PartFunc of REAL,the carrier of REAL-NS n st
-    f=g & g is_continuous_in x0 by Def1;
-    hence h is_continuous_in x0 by AS;
-  end;
-  thus thesis by AS,Def1;
+  ex g be PartFunc of REAL,REAL-NS n st f=g & g is_continuous_in x0;
 end;
 
 theorem Th1:
+  h = f implies (f is_continuous_in x0 iff h is_continuous_in x0)
+proof
+  assume A1: h = f;
+  hereby assume f is_continuous_in x0;
+    then ex g be PartFunc of REAL,REAL-NS n st
+    f=g & g is_continuous_in x0 by Def1;
+    hence h is_continuous_in x0 by A1;
+  end;
+  thus thesis by A1,Def1;
+end;
+
+theorem Th2:
   x0 in X & f is_continuous_in x0 implies f|X is_continuous_in x0
   proof
     assume that
 A1: x0 in X and
 A2: f is_continuous_in x0;
-    consider g be PartFunc of REAL,the carrier of REAL-NS n such that
+    consider g be PartFunc of REAL,REAL-NS n such that
 A3: f=g & g is_continuous_in x0 by A2,Def1;
     g|X is_continuous_in x0 by A1,A3,NFCONT_3:6;
     hence thesis by A3,Def1;
@@ -83,10 +84,10 @@ theorem Th3:
   holds |. f/.x1 - f/.x0 .|<r
 proof
   hereby assume f is_continuous_in x0;
-    then consider g be PartFunc of REAL,the carrier of REAL-NS n
+    then consider g be PartFunc of REAL,REAL-NS n
      such that
-A2: f=g & g is_continuous_in x0 by Def1;
-    thus x0 in dom f by A2,NFCONT_3:8;
+A1: f=g & g is_continuous_in x0 by Def1;
+    thus x0 in dom f by A1,NFCONT_3:8;
     thus
     for r st 0<r ex s st 0<s & for x1 st x1
     in dom f & abs(x1-x0)<s holds |. f/.x1 - f/.x0 .|<r
@@ -94,58 +95,58 @@ A2: f=g & g is_continuous_in x0 by Def1;
       let r;
       assume 0<r;
       then consider s such that
-A5:   0<s & for x1 st x1
-      in dom g & abs(x1-x0)<s holds ||. g/.x1 - g/.x0 .||<r by A2,NFCONT_3:8;
+A2:   0<s & for x1 st x1
+      in dom g & abs(x1-x0)<s holds ||. g/.x1 - g/.x0 .||<r by A1,NFCONT_3:8;
       take s;
-      thus 0 < s by A5;
+      thus 0 < s by A2;
       let x1;
       assume x1 in dom f & abs(x1-x0)<s; then
-A6:   ||. g/.x1 - g/.x0 .|| < r by A2,A5;
-      g/.x1 = f/.x1 & g/.x0 = f/.x0 by A2,REAL_NS1:def 4;
-      hence |. f/.x1 - f/.x0 .|<r by A6,REAL_NS1:1,5;
+A3:   ||. g/.x1 - g/.x0 .|| < r by A1,A2;
+      g/.x1 = f/.x1 & g/.x0 = f/.x0 by A1,REAL_NS1:def 4;
+      hence |. f/.x1 - f/.x0 .|<r by A3,REAL_NS1:1,5;
     end;
   end;
   assume
-A1:x0 in dom f &
+A4:x0 in dom f &
   for r st 0<r ex s st 0<s & for x1 st x1
     in dom f & abs(x1-x0)<s holds |. f/.x1 - f/.x0 .|<r;
-  reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+  reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
   now let r;
     assume 0<r;
     then consider s such that
-A2: 0<s and
-A3: for x1 st x1 in dom f & abs(x1-x0)<s holds |. f/.x1 - f/.x0 .|<r by A1;
+A5: 0<s and
+A6: for x1 st x1 in dom f & abs(x1-x0)<s holds |. f/.x1 - f/.x0 .|<r by A4;
     take s;
-    thus 0<s by A2;
+    thus 0<s by A5;
     let x1;
     assume x1 in dom g & abs(x1-x0)<s; then
-A4: |. f/.x1 - f/.x0 .|<r by A3;
+A7: |. f/.x1 - f/.x0 .|<r by A6;
     g/.x1 = f/.x1 & g/.x0 = f/.x0 by REAL_NS1:def 4;
-    hence ||. g/.x1 - g/.x0 .||<r by A4,REAL_NS1:1,5;
+    hence ||. g/.x1 - g/.x0 .||<r by A7,REAL_NS1:1,5;
   end;
-  then g is_continuous_in x0 by A1,NFCONT_3:8;
+  then g is_continuous_in x0 by A4,NFCONT_3:8;
   hence thesis by Def1;
 end;
 
-theorem LM002:
+theorem Th4:
  for r be Real, z be Element of REAL n,w be Point of REAL-NS n
   st z=w holds
  {y where y is Element of REAL n: |.y-z.| < r} =
  {y where y is Point of REAL-NS n: ||.y-w.|| < r}
 proof
   let r be Real, z be Element of REAL n,w be Point of REAL-NS n;
-  assume AS: z=w;
+  assume A1: z=w;
   set N1={y where y is Element of REAL n: |.y-z.| < r};
   set N2={y where y is Point of REAL-NS n: ||.y-w.|| < r};
-A3: N1 c= N2
+A2: N1 c= N2
   proof let x be set;
     assume x in N1;
     then consider y be Element of REAL n such that
-A1:   x=y & |.y-z.| < r;
-    reconsider x1=x as Element of REAL n by A1;
+A3:   x=y & |.y-z.| < r;
+    reconsider x1=x as Element of REAL n by A3;
     reconsider x2=x1 as Point of REAL-NS n by REAL_NS1:def 4;
-    ||.x2-w.|| < r by AS,A1,REAL_NS1:1,5;
+    ||.x2-w.|| < r by A1,A3,REAL_NS1:1,5;
     hence x in N2;
   end;
   N2 c= N1
@@ -155,10 +156,10 @@ A1:   x=y & |.y-z.| < r;
 A4:   x=y & ||.y-w.|| < r;
     reconsider x3=x as Point of REAL-NS n by A4;
     reconsider x4=x3 as Element of REAL n by REAL_NS1:def 4;
-    |.x4-z.| < r by AS,A4,REAL_NS1:1,5;
+    |.x4-z.| < r by A1,A4,REAL_NS1:1,5;
     hence x in N1;
   end;
-  hence N1 = N2 by A3,XBOOLE_0:def 10;
+  hence N1 = N2 by A2,XBOOLE_0:def 10;
 end;
 
 definition
@@ -166,43 +167,43 @@ definition
   let Z be set;
   let f be PartFunc of Z,REAL n;
   deffunc F(set) = |. f/.$1 .|;
-  func |.f.| -> PartFunc of Z,REAL means :Def4:
+  func |.f.| -> PartFunc of Z,REAL means :Def2:
   dom it = dom f & for x be set st x in dom it holds it/.x = |. f/.x .|;
  existence
  proof
    consider g being Function such that
-P3: dom g = dom f & for x be set st x in dom f holds g.x = F(x)
+A1: dom g = dom f & for x be set st x in dom f holds g.x = F(x)
     from FUNCT_1:sch 3;
   now let y be set;
    assume y in rng g;
    then consider x be set such that
-   P41: x in dom g & y=g.x by FUNCT_1:def 3;
-   g.x = F(x) by P3,P41;
-   hence y in REAL by P41;
+   A2: x in dom g & y=g.x by FUNCT_1:def 3;
+   g.x = F(x) by A1,A2;
+   hence y in REAL by A2;
   end;
   then rng g c= REAL by TARSKI:def 3;
-  then g in PFuncs(Z,REAL) by P3,PARTFUN1:def 3;
+  then g in PFuncs(Z,REAL) by A1,PARTFUN1:def 3;
   then reconsider g as PartFunc of Z,REAL by PARTFUN1:46;
   take g;
-  thus dom g = dom f by P3;
+  thus dom g = dom f by A1;
   let x be set;
-  assume P6: x in dom g;
-  then g.x = F(x) by P3;
-  hence thesis by P6,PARTFUN1:def 6;
+  assume A3: x in dom g;
+  then g.x = F(x) by A1;
+  hence thesis by A3,PARTFUN1:def 6;
 end;
 uniqueness
 proof
   let g1,g2 be PartFunc of Z,REAL such that
-A1:dom g1 = dom f & for x be set st x in dom g1 holds g1/.x = F(x) and
-A2:dom g2 = dom f & for x be set st x in dom g2 holds g2/.x = F(x);
+A4:dom g1 = dom f & for x be set st x in dom g1 holds g1/.x = F(x) and
+A5:dom g2 = dom f & for x be set st x in dom g2 holds g2/.x = F(x);
   now let x be Element of Z;
-    assume P10:x in dom g1; then
-P12: g1/.x = |. f/.x .| by A1;
-    g1/.x= g2/.x by A2,P12,A1,P10;
-    then g1.x= g2/.x by P10,PARTFUN1:def 6;
-    hence g1.x= g2.x by A1,A2,P10,PARTFUN1:def 6;
+    assume A6:x in dom g1; then
+A7: g1/.x = |. f/.x .| by A4;
+    g1/.x= g2/.x by A5,A7,A4,A6;
+    then g1.x= g2/.x by A6,PARTFUN1:def 6;
+    hence g1.x= g2.x by A4,A5,A6,PARTFUN1:def 6;
   end;
-  hence g1=g2 by A1,A2,PARTFUN1:5;
+  hence g1=g2 by A4,A5,PARTFUN1:5;
 end;
 end;
 
@@ -212,169 +213,169 @@ definition
   let f be PartFunc of Z,REAL n;
   deffunc G(set) = - f/.$1;
   defpred P[set] means $1 in dom f;
-  func -f -> PartFunc of Z, REAL n means  :Def5:
+  func -f -> PartFunc of Z, REAL n means  :Def3:
   dom it = dom f & for c be set st c in dom it holds it/.c = - (f/.c);
   existence
   proof
     consider F being PartFunc of Z,REAL n such that
-A3: for c be Element of Z holds c in dom F iff P[c] and
-A4: for c be Element of Z st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
+A1: for c be Element of Z holds c in dom F iff P[c] and
+A2: for c be Element of Z st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
     take F;
-    thus thesis by A3,A4,SUBSET_1:3;
+    thus thesis by A1,A2,SUBSET_1:3;
   end;
   uniqueness
   proof
     let g1,g2 be PartFunc of Z,REAL n such that
-A1: dom g1 = dom f & for x be set st x in dom g1 holds g1/.x = -f/.x and
-A2: dom g2 = dom f & for x be set st x in dom g2 holds g2/.x = -f/.x;
+A3: dom g1 = dom f & for x be set st x in dom g1 holds g1/.x = -f/.x and
+A4: dom g2 = dom f & for x be set st x in dom g2 holds g2/.x = -f/.x;
     now let x be Element of Z;
-     assume P10:x in dom g1; then
-P12: g1/.x = - f/.x by A1;
-     g1/.x= g2/.x by A2,P12,A1,P10;
-     then g1.x= g2/.x by P10,PARTFUN1:def 6;
-     hence g1.x= g2.x by A1,A2,P10,PARTFUN1:def 6;
+     assume A5:x in dom g1; then
+A6: g1/.x = - f/.x by A3;
+     g1/.x= g2/.x by A4,A6,A3,A5;
+     then g1.x= g2/.x by A5,PARTFUN1:def 6;
+     hence g1.x= g2.x by A3,A4,A5,PARTFUN1:def 6;
    end;
-   hence g1=g2 by A1,A2,PARTFUN1:5;
+   hence g1=g2 by A3,A4,PARTFUN1:5;
  end;
 end;
 
-theorem LM003A:
-  for f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1,g2 be PartFunc of REAL,REAL n st f1=g1 & f2=g2 holds
+theorem Th5:
+  for f1,f2 be PartFunc of W,REAL-NS n,
+      g1,g2 be PartFunc of W,REAL n st f1=g1 & f2=g2 holds
     f1+f2 = g1+g2
 proof
-  let f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1,g2 be PartFunc of REAL,REAL n;
-  assume AS: f1=g1 & f2=g2;
-C1: dom(f1+f2) = dom f1 /\ dom f2 by VFUNCT_1:def 1; then
-A2: dom(f1+f2) = dom(g1+g2) by AS,VALUED_2:def 45;
-B1: now
-    let x be Element of REAL;
-    assume A3: x in dom(f1+f2); then
-V:  x in dom g1 & x in dom g2 by C1,AS,XBOOLE_0:def 4;
-W:  f1/.x=g1/.x & f2/.x=g2/.x by AS,REAL_NS1:def 4;
-    g1/.x = g1.x & g2/.x = g2.x by V,PARTFUN1:def 6; then
-R:  f1/.x + f2/.x = g1.x + g2.x by W,REAL_NS1:2;
-    (f1+f2)/.x = f1/.x + f2/.x by A3,VFUNCT_1:def 1; then
-    (f1+f2).x = f1/.x + f2/.x by A3,PARTFUN1:def 6;
-    hence (f1+f2).x = (g1+g2).x by R,A2,A3,VALUED_2:def 45;
+  let f1,f2 be PartFunc of W,REAL-NS n,
+      g1,g2 be PartFunc of W,REAL n;
+  assume A1: f1=g1 & f2=g2;
+A2: dom(f1+f2) = dom f1 /\ dom f2 by VFUNCT_1:def 1; then
+A3: dom(f1+f2) = dom(g1+g2) by A1,VALUED_2:def 45;
+A4: now
+    let x be Element of W;
+    assume A5: x in dom(f1+f2); then
+A6:  x in dom g1 & x in dom g2 by A2,A1,XBOOLE_0:def 4;
+A7:  f1/.x=g1/.x & f2/.x=g2/.x by A1,REAL_NS1:def 4;
+    g1/.x = g1.x & g2/.x = g2.x by A6,PARTFUN1:def 6; then
+A8:  f1/.x + f2/.x = g1.x + g2.x by A7,REAL_NS1:2;
+    (f1+f2)/.x = f1/.x + f2/.x by A5,VFUNCT_1:def 1; then
+    (f1+f2).x = f1/.x + f2/.x by A5,PARTFUN1:def 6;
+    hence (f1+f2).x = (g1+g2).x by A8,A3,A5,VALUED_2:def 45;
   end;
-  f1+f2 is PartFunc of REAL,REAL n by REAL_NS1:def 4;
-  hence thesis by A2,B1,PARTFUN1:5;
+  f1+f2 is PartFunc of W,REAL n by REAL_NS1:def 4;
+  hence thesis by A3,A4,PARTFUN1:5;
 end;
 
-theorem LM003B:
-  for f1 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1 be PartFunc of REAL,REAL n,
+theorem Th6:
+  for f1 be PartFunc of W,REAL-NS n,
+      g1 be PartFunc of W,REAL n,
       a be Real st f1=g1 holds
     a(#)f1 = a(#)g1
 proof
-  let f1 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1 be PartFunc of REAL,REAL n,
+  let f1 be PartFunc of W,REAL-NS n,
+      g1 be PartFunc of W,REAL n,
       a be Real;
-  assume AS: f1=g1;
-S:  dom(a(#)f1) = dom f1 by VFUNCT_1:def 4; then
-A2: dom(a(#)f1) = dom(a(#)g1) by AS,VALUED_2:def 39;
-B1: now
-    let x be Element of REAL;
-    assume A3: x in dom(a(#)f1); then
-B:  g1.x = g1/.x by AS,S,PARTFUN1:def 6;
-    f1/.x=g1/.x by AS,REAL_NS1:def 4; then
-A5: a*(f1/.x)=a*(g1/.x) by REAL_NS1:3;
-A6: (a(#)f1)/.x = a*(f1/.x) by A3,VFUNCT_1:def 4;
-    (a(#)g1).x = a(#)(g1.x) by A2,A3,VALUED_2:def 39;
-    hence (a(#)f1).x = (a(#)g1).x by A3,A5,A6,B,PARTFUN1:def 6;
+  assume A1: f1=g1;
+A2:  dom(a(#)f1) = dom f1 by VFUNCT_1:def 4; then
+A3: dom(a(#)f1) = dom(a(#)g1) by A1,VALUED_2:def 39;
+A4: now
+    let x be Element of W;
+    assume A5: x in dom(a(#)f1); then
+A6:  g1.x = g1/.x by A1,A2,PARTFUN1:def 6;
+    f1/.x=g1/.x by A1,REAL_NS1:def 4; then
+A7: a*(f1/.x)=a*(g1/.x) by REAL_NS1:3;
+A8: (a(#)f1)/.x = a*(f1/.x) by A5,VFUNCT_1:def 4;
+    (a(#)g1).x = a(#)(g1.x) by A3,A5,VALUED_2:def 39;
+    hence (a(#)f1).x = (a(#)g1).x by A5,A7,A8,A6,PARTFUN1:def 6;
   end;
-  a(#)f1 is PartFunc of REAL,REAL n by REAL_NS1:def 4;
-  hence thesis by A2,B1,PARTFUN1:5;
+  a(#)f1 is PartFunc of W,REAL n by REAL_NS1:def 4;
+  hence thesis by A3,A4,PARTFUN1:5;
 end;
 
 theorem
-  for f1 be PartFunc of REAL, REAL n holds (-1)(#)f1 = -f1
+  for f1 be PartFunc of W,REAL n holds (-1)(#)f1 = -f1
 proof
-  let f1 be PartFunc of REAL, REAL n;
-F:  dom((-1)(#)f1) = dom f1 by VALUED_2:def 39; then
-A1: dom((-1)(#)f1) = dom(-f1) by Def5;
-  now let x be Element of REAL;
-    assume A2: x in dom((-1)(#)f1);
-G:  f1.x = f1/.x by F,A2,PARTFUN1:def 6;
-A5: (-f1)/.x = -(f1/.x) by A1,A2,Def5;
-    (f1[#](-1)).x = (-1)(#)(f1.x) by A2,VALUED_2:def 39;
-    hence ((-1)(#)f1).x = (-f1).x by G,A1,A2,A5,PARTFUN1:def 6;
+  let f1 be PartFunc of W,REAL n;
+A1:  dom((-1)(#)f1) = dom f1 by VALUED_2:def 39; then
+A2: dom((-1)(#)f1) = dom(-f1) by Def3;
+  now let x be Element of W;
+    assume A3: x in dom((-1)(#)f1);
+A4:  f1.x = f1/.x by A1,A3,PARTFUN1:def 6;
+A5: (-f1)/.x = -(f1/.x) by A2,A3,Def3;
+    (f1[#](-1)).x = (-1)(#)(f1.x) by A3,VALUED_2:def 39;
+    hence ((-1)(#)f1).x = (-f1).x by A4,A2,A3,A5,PARTFUN1:def 6;
   end;
-  hence thesis by A1,PARTFUN1:5;
+  hence thesis by A2,PARTFUN1:5;
 end;
 
-theorem LM003E:
-  for f1 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1 be PartFunc of REAL,REAL n st f1=g1 holds
+theorem Th8:
+  for f1 be PartFunc of W,REAL-NS n,
+      g1 be PartFunc of W,REAL n st f1=g1 holds
     -f1 = -g1
 proof
-  let f1 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1 be PartFunc of REAL,REAL n;
-  assume AS: f1=g1;
+  let f1 be PartFunc of W,REAL-NS n,
+      g1 be PartFunc of W,REAL n;
+  assume A1: f1=g1;
   dom(-f1) = dom f1 by VFUNCT_1:def 5; then
-A2: dom(-f1) = dom(-g1) by AS,Def5;
-B1: now
-    let x be Element of REAL;
-    assume A3: x in dom(-f1);
-    f1/.x=g1/.x by AS,REAL_NS1:def 4; then
+A2: dom(-f1) = dom(-g1) by A1,Def3;
+A3: now
+    let x be Element of W;
+    assume A4: x in dom(-f1);
+    f1/.x=g1/.x by A1,REAL_NS1:def 4; then
 A5: -(f1/.x)=-(g1/.x) by REAL_NS1:4;
-A6: (-f1)/.x = -(f1/.x) by A3,VFUNCT_1:def 5;
-    (-g1)/.x = -(g1/.x) by A2,A3,Def5;
-    then (-f1).x = (-g1)/.x by A3,A5,A6,PARTFUN1:def 6;
-    hence (-f1).x = (-g1).x by A2,A3,PARTFUN1:def 6;
+A6: (-f1)/.x = -(f1/.x) by A4,VFUNCT_1:def 5;
+    (-g1)/.x = -(g1/.x) by A2,A4,Def3;
+    then (-f1).x = (-g1)/.x by A4,A5,A6,PARTFUN1:def 6;
+    hence (-f1).x = (-g1).x by A2,A4,PARTFUN1:def 6;
   end;
-  -f1 is PartFunc of REAL,REAL n by REAL_NS1:def 4;
-  hence -f1 = -g1 by A2,B1,PARTFUN1:5;
+  -f1 is PartFunc of W,REAL n by REAL_NS1:def 4;
+  hence -f1 = -g1 by A2,A3,PARTFUN1:5;
 end;
 
-theorem LM003F:
- for f1 be PartFunc of REAL,the carrier of REAL-NS n,
-     g1 be PartFunc of REAL,REAL n st f1=g1 holds
+theorem Th9:
+ for f1 be PartFunc of W,REAL-NS n,
+     g1 be PartFunc of W,REAL n st f1=g1 holds
   ||. f1 .|| = |. g1 .|
 proof
-  let f1 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1 be PartFunc of REAL,REAL n;
-  assume AS: f1=g1;
+  let f1 be PartFunc of W,REAL-NS n,
+      g1 be PartFunc of W,REAL n;
+  assume A1: f1=g1;
   dom (||. f1 .||) = dom f1 by NORMSP_0:def 3; then
-A2: dom (||. f1 .||) = dom(|. g1 .|) by AS,Def4;
+A2: dom (||. f1 .||) = dom(|. g1 .|) by A1,Def2;
   now
-    let x be Element of REAL;
+    let x be Element of W;
     assume A3: x in dom ||. f1 .||;
-A4: f1/.x=g1/.x by AS,REAL_NS1:def 4;
+A4: f1/.x=g1/.x by A1,REAL_NS1:def 4;
     set y1=g1/.x;
 A5: ||. f1/.x .||=|. y1 .| by A4,REAL_NS1:1;
 A6: (||. f1 .||).x = ||. f1/.x .|| by A3,NORMSP_0:def 3;
-    |. g1 .| /.x = |. g1/.x .| by A2,A3,Def4;
+    |. g1 .| /.x = |. g1/.x .| by A2,A3,Def2;
     hence (||. f1 .||).x = (|. g1 .|).x by A2,A3,A5,A6,PARTFUN1:def 6;
   end;
   hence thesis by A2,PARTFUN1:5;
 end;
 
-theorem LM003D:
- for f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
-     g1,g2 be PartFunc of REAL,REAL n st f1=g1 & f2=g2 holds
+theorem Th10:
+ for f1,f2 be PartFunc of W,REAL-NS n,
+     g1,g2 be PartFunc of W,REAL n st f1=g1 & f2=g2 holds
   f1-f2 = g1-g2
 proof
-  let f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
-      g1,g2 be PartFunc of REAL,REAL n;
-  assume AS: f1=g1 & f2=g2;
-K:  dom(f1-f2) = dom f1 /\ dom f2 by VFUNCT_1:def 2; then
-A2: dom(f1-f2) = dom(g1-g2) by AS,VALUED_2:def 46;
-B1: now
-    let x be Element of REAL;
-    assume A3: x in dom(f1-f2);
-a:  f1/.x=g1/.x & f2/.x=g2/.x by AS,REAL_NS1:def 4;
-    x in dom f1 & x in dom f2 by A3,K,XBOOLE_0:def 4; then
-    g1.x = g1/.x & g2/.x = g2.x by AS,PARTFUN1:def 6; then
-A5: f1/.x - f2/.x = g1.x - g2.x by a,REAL_NS1:5;
-A6: (f1-f2)/.x = f1/.x - f2/.x by A3,VFUNCT_1:def 2;
-    (f1-f2)/.x = (f1-f2).x by A3,PARTFUN1:def 6;
-    hence (f1-f2).x = (g1-g2).x by A5,A6,A2,A3,VALUED_2:def 46;
+  let f1,f2 be PartFunc of W,REAL-NS n,
+      g1,g2 be PartFunc of W,REAL n;
+  assume A1: f1=g1 & f2=g2;
+A2:  dom(f1-f2) = dom f1 /\ dom f2 by VFUNCT_1:def 2; then
+A3: dom(f1-f2) = dom(g1-g2) by A1,VALUED_2:def 46;
+A4: now
+    let x be Element of W;
+    assume A5: x in dom(f1-f2);
+A6:  f1/.x=g1/.x & f2/.x=g2/.x by A1,REAL_NS1:def 4;
+    x in dom f1 & x in dom f2 by A5,A2,XBOOLE_0:def 4; then
+    g1.x = g1/.x & g2/.x = g2.x by A1,PARTFUN1:def 6; then
+A7: f1/.x - f2/.x = g1.x - g2.x by A6,REAL_NS1:5;
+A8: (f1-f2)/.x = f1/.x - f2/.x by A5,VFUNCT_1:def 2;
+    (f1-f2)/.x = (f1-f2).x by A5,PARTFUN1:def 6;
+    hence (f1-f2).x = (g1-g2).x by A7,A8,A3,A5,VALUED_2:def 46;
   end;
-  f1-f2 is PartFunc of REAL,REAL n by REAL_NS1:def 4;
-  hence f1-f2 = g1-g2 by A2,B1,PARTFUN1:5;
+  f1-f2 is PartFunc of W,REAL n by REAL_NS1:def 4;
+  hence f1-f2 = g1-g2 by A3,A4,PARTFUN1:5;
 end;
 
 theorem
@@ -391,45 +392,45 @@ proof
     st for x1 st x1 in dom f & x1 in N holds f/.x1 in N1
   proof
     assume f is_continuous_in x0;
-    then consider g be PartFunc of REAL,the carrier of REAL-NS n such that
-B2:  f=g & g is_continuous_in x0 by Def1;
-     thus x0 in dom f by B2,NFCONT_3:9;
+    then consider g be PartFunc of REAL,REAL-NS n such that
+A1:  f=g & g is_continuous_in x0 by Def1;
+     thus x0 in dom f by A1,NFCONT_3:9;
      let N01 be Subset of REAL n such that
-X2:  ex r be Real st 0 < r &
+A2:  ex r be Real st 0 < r &
      {y where y is Element of REAL n: |.y-f/.x0.| < r} = N01;
      consider r such that
-A2:  0<r and
-A3:  { p where p is Element of REAL n : |. p - f/.x0 .| < r } = N01 by X2;
-     f/.x0 = g/.x0 by B2,REAL_NS1:def 4; then
-A4:  { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } = N01
-       by A3,LM002;
+A3:  0<r and
+A4:  { p where p is Element of REAL n : |. p - f/.x0 .| < r } = N01 by A2;
+     f/.x0 = g/.x0 by A1,REAL_NS1:def 4; then
+A5:  { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } = N01
+       by A4,Th4;
      { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r }
-     is Neighbourhood of g/.x0 by A2,NFCONT_1:3;
+     is Neighbourhood of g/.x0 by A3,NFCONT_1:3;
      then consider N being Neighbourhood of x0 such that
-A5:  for x1 st x1 in dom g & x1 in N holds g/.x1 in N01 by A4,B2,NFCONT_3:9;
+A6:  for x1 st x1 in dom g & x1 in N holds g/.x1 in N01 by A5,A1,NFCONT_3:9;
      take N;
      let x1;
      assume x1 in dom f & x1 in N;
-     then g/.x1 in N01 by B2,A5;
-     hence f/.x1 in N01 by B2,REAL_NS1:def 4;
+     then g/.x1 in N01 by A1,A6;
+     hence f/.x1 in N01 by A1,REAL_NS1:def 4;
    end;
    assume
-A8: x0 in dom f & for N1 be Subset of REAL n
+A7: x0 in dom f & for N1 be Subset of REAL n
     st ex r be Real st 0 < r &
     {y where y is Element of REAL n: |.y-f/.x0.| < r} = N1
     ex N being Neighbourhood of x0
     st for x1 st x1 in dom f & x1 in N holds f/.x1 in N1;
-    reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+    reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
     now let N1 being Neighbourhood of g/.x0;
       consider r be Real such that
-A10:  0<r and
-A11: { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } c= N1
+A8:  0<r and
+A9: { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } c= N1
        by NFCONT_1:def 1;
      set N01 = { p where p is Element of REAL n : |. p - f/.x0 .| < r };
      f/.x0 = g/.x0 by REAL_NS1:def 4; then
-A12: { p where p is Element of REAL n : |. p - f/.x0 .| < r }
-     = { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } by LM002;
+A10: { p where p is Element of REAL n : |. p - f/.x0 .| < r }
+     = { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } by Th4;
      now let x be set;
        assume x in N01;
        then ex p be Element of REAL n
@@ -438,15 +439,15 @@ A12: { p where p is Element of REAL n : |. p - f/.x0 .| < r }
      end;
      then N01 is Subset of REAL n by TARSKI:def 3;
      then consider N being Neighbourhood of x0 such that
-A13: for x1 st x1 in dom f & x1 in N holds f/.x1 in N01 by A8,A10;
+A11: for x1 st x1 in dom f & x1 in N holds f/.x1 in N01 by A7,A8;
      take N;
      let x1;
      assume x1 in dom g & x1 in N;
-     then f/.x1 in N01 by A13;
+     then f/.x1 in N01 by A11;
      then g/.x1 in N01 by REAL_NS1:def 4;
-     hence g/.x1 in N1 by A11,A12;
+     hence g/.x1 in N1 by A9,A10;
    end;
-   then g is_continuous_in x0 by A8,NFCONT_3:9;
+   then g is_continuous_in x0 by A7,NFCONT_3:9;
    hence thesis by Def1;
 end;
 
@@ -457,10 +458,10 @@ theorem
   {y where y is Element of REAL n: |.y-f/.x0.| < r} = N1
   ex N being Neighbourhood of x0 st f.:N c= N1
 proof
-  reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+  reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
   hereby assume f is_continuous_in x0; then
-P0: g is_continuous_in x0 by Def1Th;
+A1: g is_continuous_in x0 by Th1;
   hence x0 in dom f by NFCONT_3:10;
   thus for N1 be Subset of REAL n st ex r be Real st 0 < r &
     {y where y is Element of REAL n: |.y-f/.x0.| < r} = N1
@@ -468,30 +469,30 @@ P0: g is_continuous_in x0 by Def1Th;
   proof
     let N1 be Subset of REAL n;
     given r be Real such that
-P4: 0 < r & {y where y is Element of REAL n: |.y-f/.x0.| < r} = N1;
+A2: 0 < r & {y where y is Element of REAL n: |.y-f/.x0.| < r} = N1;
     f/.x0 = g/.x0 by REAL_NS1:def 4; then
-P5: { p where p is Element of REAL n : |. p - f/.x0 .| < r }
-      = { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } by LM002;
-    N1 is Neighbourhood of g/.x0 by P4,P5,NFCONT_1:3;
+A3: { p where p is Element of REAL n : |. p - f/.x0 .| < r }
+      = { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } by Th4;
+    N1 is Neighbourhood of g/.x0 by A2,A3,NFCONT_1:3;
     then consider N being Neighbourhood of x0 such that
-P6: g.:N c= N1 by P0,NFCONT_3:10;
+A4: g.:N c= N1 by A1,NFCONT_3:10;
     take N;
-    thus f.:N c= N1 by P6;
+    thus f.:N c= N1 by A4;
   end;
 end;
-assume AS: x0 in dom f & for N1 be Subset of REAL n
+assume A5: x0 in dom f & for N1 be Subset of REAL n
  st ex r be Real st 0 < r &
   {y where y is Element of REAL n: |.y-f/.x0.| < r}
    = N1 ex N being Neighbourhood of x0 st f.:N c= N1;
    now let N1 being Neighbourhood of g/.x0;
 consider r be Real such that
-A10: 0<r and
-A11: { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } c= N1
+A6: 0<r and
+A7: { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } c= N1
   by NFCONT_1:def 1;
   set N01={ p where p is Element of REAL n : |. p - f/.x0 .| < r };
 f/.x0 = g/.x0 by REAL_NS1:def 4; then
-A12: { p where p is Element of REAL n: |. p - f/.x0 .| < r }
-= { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } by LM002;
+A8: { p where p is Element of REAL n: |. p - f/.x0 .| < r }
+= { p where p is Point of REAL-NS n : ||. p - g/.x0 .|| < r } by Th4;
 now let x be set;
   assume x in N01;
   then ex p be Element of REAL n st p=x & |. p - f/.x0 .| < r;
@@ -499,12 +500,12 @@ now let x be set;
 end;
 then N01 is Subset of REAL n by TARSKI:def 3;
 then consider N being Neighbourhood of x0 such that
-A13: f.:N c= N01 by AS,A10;
+A9: f.:N c= N01 by A5,A6;
 take N;
-thus g.:N c= N1 by A11,A12,A13,XBOOLE_1:1;
+thus g.:N c= N1 by A7,A8,A9,XBOOLE_1:1;
 end;
-then g is_continuous_in x0 by AS,NFCONT_3:10;
-hence thesis by Def1Th;
+then g is_continuous_in x0 by A5,NFCONT_3:10;
+hence thesis by Th1;
 end;
 
 theorem
@@ -512,55 +513,55 @@ theorem
   f is_continuous_in x0
   proof
     given N be Neighbourhood of x0 such that
-P1: dom f /\ N = {x0};
-    reconsider g = f as PartFunc of REAL,the carrier of REAL-NS n
+A1: dom f /\ N = {x0};
+    reconsider g = f as PartFunc of REAL,REAL-NS n
       by REAL_NS1:def 4;
-    g is_continuous_in x0 by P1,NFCONT_3:11;
-    hence thesis by Def1Th;
+    g is_continuous_in x0 by A1,NFCONT_3:11;
+    hence thesis by Th1;
   end;
 
 theorem
   x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0 & f2 is_continuous_in x0
     implies f1+f2 is_continuous_in x0
 proof
-  assume AS: x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0
+  assume A1: x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0
      & f2 is_continuous_in x0;
-  reconsider g1=f1, g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+  reconsider g1=f1, g2=f2 as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-P2: g1 is_continuous_in x0 by AS,Def1Th;
-    g2 is_continuous_in x0 by AS,Def1Th; then
-P3: (g1+g2) is_continuous_in x0 & (g1-g2) is_continuous_in x0
-      by AS,P2,NFCONT_3:12;
-  g1+g2 = f1+f2 by LM003A;
-  hence thesis by P3,Def1Th;
+A2: g1 is_continuous_in x0 by A1,Th1;
+    g2 is_continuous_in x0 by A1,Th1; then
+A3: (g1+g2) is_continuous_in x0 & (g1-g2) is_continuous_in x0
+      by A1,A2,NFCONT_3:12;
+  g1+g2 = f1+f2 by Th5;
+  hence thesis by A3,Th1;
 end;
 
 theorem
   x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0 & f2 is_continuous_in x0
   implies f1-f2 is_continuous_in x0
 proof
-  assume AS: x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0 &
+  assume A1: x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0 &
     f2 is_continuous_in x0;
-   reconsider g1=f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n
      by REAL_NS1:def 4;
-P2: g1 is_continuous_in x0 by AS,Def1Th;
-   g2 is_continuous_in x0 by AS,Def1Th; then
-P3:(g1+g2) is_continuous_in x0 & (g1-g2) is_continuous_in x0
-     by AS,P2,NFCONT_3:12;
-   g1-g2 = f1-f2 by LM003D;
-   hence thesis by P3,Def1Th;
+A2: g1 is_continuous_in x0 by A1,Th1;
+   g2 is_continuous_in x0 by A1,Th1; then
+A3:(g1+g2) is_continuous_in x0 & (g1-g2) is_continuous_in x0
+     by A1,A2,NFCONT_3:12;
+   g1-g2 = f1-f2 by Th10;
+   hence thesis by A3,Th1;
 end;
 
 theorem
   f is_continuous_in x0 implies r(#)f is_continuous_in x0
   proof
-    assume AS:f is_continuous_in x0;
-    reconsider g = f as PartFunc of REAL,the carrier of REAL-NS n
+    assume A1:f is_continuous_in x0;
+    reconsider g = f as PartFunc of REAL,REAL-NS n
       by REAL_NS1:def 4;
-    g is_continuous_in x0 by AS,Def1Th; then
-P1: r(#)g is_continuous_in x0 by NFCONT_3:13;
-    r(#)g = r(#)f by LM003B;
-    hence thesis by P1,Def1Th;
+    g is_continuous_in x0 by A1,Th1; then
+A2: r(#)g is_continuous_in x0 by NFCONT_3:13;
+    r(#)g = r(#)f by Th6;
+    hence thesis by A2,Th1;
   end;
 
 theorem
@@ -568,12 +569,12 @@ theorem
     |. f .| is_continuous_in x0
   proof
     assume
-AS: x0 in dom f & f is_continuous_in x0;
-    reconsider g = f as PartFunc of REAL,the carrier of REAL-NS n
+A1: x0 in dom f & f is_continuous_in x0;
+    reconsider g = f as PartFunc of REAL,REAL-NS n
       by REAL_NS1:def 4;
-    g is_continuous_in x0 by AS,Def1Th;
-    then ||. g .|| is_continuous_in x0 by AS,NFCONT_3:14;
-    hence thesis by LM003F;
+    g is_continuous_in x0 by A1,Th1;
+    then ||. g .|| is_continuous_in x0 by A1,NFCONT_3:14;
+    hence thesis by Th9;
   end;
 
 theorem
@@ -581,20 +582,20 @@ theorem
     -f is_continuous_in x0
   proof
     assume
-AS: x0 in dom f & f is_continuous_in x0;
-    reconsider g = f as PartFunc of REAL,the carrier of REAL-NS n
+A1: x0 in dom f & f is_continuous_in x0;
+    reconsider g = f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-    g is_continuous_in x0 by AS,Def1Th; then
-aa: -g is_continuous_in x0 by AS,NFCONT_3:14;
-    -g = -f by LM003E;
-    hence thesis by aa,Def1Th;
+    g is_continuous_in x0 by A1,Th1; then
+A2: -g is_continuous_in x0 by A1,NFCONT_3:14;
+    -g = -f by Th8;
+    hence thesis by A2,Th1;
   end;
 
 theorem
   for S be RealNormSpace,
       z be Point of REAL-NS n,
       f1 be PartFunc of REAL,REAL n,
-      f2 be PartFunc of the carrier of REAL-NS n,the carrier of S
+      f2 be PartFunc of REAL-NS n,S
      st x0 in dom (f2*f1) & f1 is_continuous_in x0
         & z=f1/.x0 & f2 is_continuous_in z
     holds f2*f1 is_continuous_in x0
@@ -602,27 +603,27 @@ proof
 let S be RealNormSpace,
     z be Point of REAL-NS n,
     f1 be PartFunc of REAL,REAL n,
-    f2 be PartFunc of the carrier of REAL-NS n,the carrier of S;
-  assume AS: x0 in dom (f2*f1) & f1 is_continuous_in x0
+    f2 be PartFunc of REAL-NS n,S;
+  assume A1: x0 in dom (f2*f1) & f1 is_continuous_in x0
         & z=f1/.x0 & f2 is_continuous_in z;
-   reconsider g1= f1 as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g1= f1 as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
-P1:  g1 is_continuous_in x0 by AS,Def1Th;
+A2:  g1 is_continuous_in x0 by A1,Th1;
   f1/.x0 = g1/.x0 by REAL_NS1:def 4;
-  hence thesis by P1,AS,NFCONT_3:15;
+  hence thesis by A2,A1,NFCONT_3:15;
 end;
 
-theorem Th12Y:
+theorem Th20:
   for S be RealNormSpace,
-      f1 be PartFunc of REAL,the carrier of S,
-      f2 be PartFunc of the carrier of S,REAL
+      f1 be PartFunc of REAL,S,
+      f2 be PartFunc of S,REAL
      st x0 in dom (f2*f1) & f1 is_continuous_in x0
       & f2 is_continuous_in f1/.x0
     holds f2*f1 is_continuous_in x0
 proof
   let S be RealNormSpace,
-      f1 be PartFunc of REAL,the carrier of S,
-      f2 be PartFunc of the carrier of S,REAL;
+      f1 be PartFunc of REAL,S,
+      f2 be PartFunc of S,REAL;
   assume
 A1: x0 in dom (f2*f1);
   assume that
@@ -632,67 +633,66 @@ A3: f2 is_continuous_in f1/.x0;
 A4: rng s1 c= dom (f2*f1) and
 A5: s1 is convergent & lim s1 = x0;
 A6: dom (f2*f1) c= dom f1 by RELAT_1:25;
-A8: rng (f1/*s1) c= dom f2
+A7: rng (f1/*s1) c= dom f2
   proof
     let x;
     assume x in rng (f1/*s1);
     then consider n such that
-A7: x=(f1/*s1).n by FUNCT_2:113;
+A8: x=(f1/*s1).n by FUNCT_2:113;
     s1.n in rng s1 by VALUED_0:28;
     then f1.(s1.n) in dom f2 by A4,FUNCT_1:11;
-    hence x in dom f2 by A4,A6,A7,FUNCT_2:108,XBOOLE_1:1;
+    hence x in dom f2 by A4,A6,A8,FUNCT_2:108,XBOOLE_1:1;
   end;
-aa: now
+A9: now
     let n;
     s1.n in rng s1 by VALUED_0:28; then
-A9: s1.n in dom f1 by A4,FUNCT_1:11;
+A10: s1.n in dom f1 by A4,FUNCT_1:11;
     thus ((f2*f1)/*s1).n = (f2*f1).(s1.n) by A4,FUNCT_2:108
-      .= f2.(f1.(s1.n)) by A9,FUNCT_1:13
+      .= f2.(f1.(s1.n)) by A10,FUNCT_1:13
       .= f2.((f1/*s1).n) by A4,A6,FUNCT_2:108,XBOOLE_1:1
-      .= (f2/*(f1/*s1)).n by A8,FUNCT_2:108;
+      .= (f2/*(f1/*s1)).n by A7,FUNCT_2:108;
   end; then
-A10: f2/*(f1/*s1) = (f2*f1)/*s1 by FUNCT_2:63;
+A11: f2/*(f1/*s1) = (f2*f1)/*s1 by FUNCT_2:63;
   rng s1 c= dom f1 by A4,A6,XBOOLE_1:1; then
-A11: f1/*s1 is convergent & f1/.x0 = lim (f1/*s1) by A2,A5,NFCONT_3:def 1;
- hence (f2*f1)/*s1 is convergent by A3,A8,A10,NFCONT_1:def 6;
+A12: f1/*s1 is convergent & f1/.x0 = lim (f1/*s1) by A2,A5,NFCONT_3:def 1;
+ hence (f2*f1)/*s1 is convergent by A3,A7,A11,NFCONT_1:def 6;
  thus (f2*f1).x0 = (f2*f1)/.x0 by A1,PARTFUN1:def 6
         .=f2/.(f1/.x0) by A1,PARTFUN2:3
-        .= lim (f2/*(f1/*s1)) by A11,A3,A8,NFCONT_1:def 6
-        .= lim ((f2*f1)/*s1) by aa,FUNCT_2:63;
+        .= lim (f2/*(f1/*s1)) by A12,A3,A7,NFCONT_1:def 6
+        .= lim ((f2*f1)/*s1) by A9,FUNCT_2:63;
 end;
 
 definition let n;
   let f be PartFunc of REAL n,REAL;
   let x0 be Element of REAL n;
-  pred f is_continuous_in x0 means  :XDef1a:
-  ex y0 be Point of REAL-NS n,
-     g be PartFunc of the carrier of REAL-NS n,REAL st
+  pred f is_continuous_in x0 means  :Def4:
+  ex y0 be Point of REAL-NS n, g be PartFunc of REAL-NS n,REAL st
     x0=y0 & f=g & g is_continuous_in y0;
 end;
 
-theorem Def1aTh:
+theorem Th21:
  for f be PartFunc of REAL n,REAL,
-     h be PartFunc of the carrier of REAL-NS n,REAL,
+     h be PartFunc of REAL-NS n,REAL,
      x0 be Element of REAL n,
      y0 be Point of REAL-NS n
   st f=h & x0=y0 holds
   f is_continuous_in x0 iff h is_continuous_in y0
 proof
   let f be PartFunc of REAL n,REAL,
-      h be PartFunc of the carrier of REAL-NS n,REAL,
+      h be PartFunc of REAL-NS n,REAL,
       x0 be Element of REAL n,
       y0 be Point of REAL-NS n;
-  assume AS: f=h & x0=y0;
+  assume A1: f=h & x0=y0;
   hereby assume f is_continuous_in x0;
   then ex y1 be Point of REAL-NS n,
-  g be PartFunc of the carrier of REAL-NS n,REAL st
-  x0=y1 & f=g & g is_continuous_in y1 by XDef1a;
-  hence h is_continuous_in y0 by AS;
+  g be PartFunc of REAL-NS n,REAL st
+  x0=y1 & f=g & g is_continuous_in y1 by Def4;
+  hence h is_continuous_in y0 by A1;
   end;
-  thus thesis by AS,XDef1a;
+  thus thesis by A1,Def4;
 end;
 
-theorem Th12X:
+theorem Th22:
 for f1 be PartFunc of REAL,REAL n,
     f2 be PartFunc of REAL n,REAL st x0 in dom (f2*f1) &
  f1 is_continuous_in x0 & f2 is_continuous_in f1/.x0
@@ -701,53 +701,53 @@ proof
   let f1 be PartFunc of REAL,REAL n,
       f2 be PartFunc of REAL n,REAL;
   assume
-AS: x0 in dom (f2*f1) & f1 is_continuous_in x0
+A1: x0 in dom (f2*f1) & f1 is_continuous_in x0
      & f2 is_continuous_in f1/.x0;
-  reconsider g1=f1 as PartFunc of REAL,the carrier of REAL-NS n
+  reconsider g1=f1 as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-  reconsider g2=f2 as PartFunc of the carrier of REAL-NS n,REAL
+  reconsider g2=f2 as PartFunc of REAL-NS n,REAL
      by REAL_NS1:def 4;
-A1: g1 is_continuous_in x0 by AS,Def1Th;
+A2: g1 is_continuous_in x0 by A1,Th1;
     f1/.x0 = g1/.x0 by REAL_NS1:def 4;
-   then g2 is_continuous_in g1/.x0 by AS,Def1aTh;
-   hence thesis by A1,AS,Th12Y;
+   then g2 is_continuous_in g1/.x0 by A1,Th21;
+   hence thesis by A2,A1,Th20;
 end;
 
 definition let n,f;
-  attr f is continuous means :Def2:
+  attr f is continuous means :Def5:
   for x0 st x0 in dom f holds f is_continuous_in x0;
 end;
 
-theorem Def2Th:
- for g be PartFunc of REAL,the carrier of REAL-NS n,
+theorem Th23:
+ for g be PartFunc of REAL,REAL-NS n,
      f be PartFunc of REAL,REAL n st g=f holds
   g is continuous iff f is continuous
 proof
-  let g be PartFunc of REAL,the carrier of REAL-NS n,
+  let g be PartFunc of REAL,REAL-NS n,
       f be PartFunc of REAL,REAL n;
-  assume AS: g=f;
+  assume A1: g=f;
   hereby assume
-A1: g is continuous;
+A2: g is continuous;
   now
     let x0;
     assume x0 in dom f;
-    then g is_continuous_in x0 by A1,AS,NFCONT_3:def 2;
-    hence f is_continuous_in x0 by AS,Def1Th;
+    then g is_continuous_in x0 by A2,A1,NFCONT_3:def 2;
+    hence f is_continuous_in x0 by A1,Th1;
   end;
-  hence f is continuous by Def2;
+  hence f is continuous by Def5;
   end;
   assume
-A2: f is continuous;
+A3: f is continuous;
   now
     let x0;
     assume x0 in dom g;
-    then f is_continuous_in x0 by A2,AS,Def2;
-    hence g is_continuous_in x0 by AS,Def1Th;
+    then f is_continuous_in x0 by A3,A1,Def5;
+    hence g is_continuous_in x0 by A1,Th1;
   end;
   hence thesis by NFCONT_3:def 2;
 end;
 
-theorem Th15:
+theorem Th24:
   X c= dom f implies
   (f|X is continuous iff for x0,r st x0 in X & 0<r
     ex s st 0<s & for x1 st x1 in X & abs(x1-x0) < s
@@ -765,7 +765,7 @@ A2: f|X is continuous;
 A3: x0 in X and
 A4: 0<r;
     x0 in dom(f|X) by A1,A3,RELAT_1:62;
-    then f|X is_continuous_in x0 by A2,Def2;
+    then f|X is_continuous_in x0 by A2,Def5;
     then consider s such that
 A5: 0<s and
 A6: for x1 st x1 in dom(f|X) & abs(x1-x0)<s
@@ -812,7 +812,7 @@ A17:  abs(x1-x0)<s;
     end;
     hence f|X is_continuous_in x0 by Th3,A12;
   end;
-  hence thesis by Def2;
+  hence thesis by Def5;
 end;
 
 registration let n;
@@ -839,7 +839,7 @@ A4:   x1 in dom f;
       .= f/.x0 by A2,PARTFUN1:def 6;
       hence |. f/.x1 - f/.x0 .| < r by A3;
     end;
-    then f|dom f is continuous by Th15;
+    then f|dom f is continuous by Th24;
     hence thesis by RELAT_1:69;
   end;
 end;
@@ -864,11 +864,11 @@ registration let n;
       assume
 A1:   x0 in dom(f|X);
       then x0 in dom f by RELAT_1:57; then
-A2:   f is_continuous_in x0 by Def2;
+A2:   f is_continuous_in x0 by Def5;
       x0 in X by A1,RELAT_1:57;
-      hence thesis by A2,Th1;
+      hence thesis by A2,Th2;
     end;
-    hence thesis by Def2;
+    hence thesis by Def5;
   end;
 end;
 
@@ -892,10 +892,10 @@ registration let n,f;
   cluster f|X -> continuous for PartFunc of REAL,REAL n;
   coherence
    proof
-   reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g= f as PartFunc of REAL,REAL-NS n
      by REAL_NS1:def 4;
-   g|X is continuous PartFunc of REAL,the carrier of REAL-NS n;
-   hence thesis by Def2Th;
+   g|X is continuous PartFunc of REAL,REAL-NS n;
+   hence thesis by Th23;
   end;
 end;
 
@@ -904,11 +904,11 @@ registration let n;
   cluster f1+f2 -> continuous for PartFunc of REAL,REAL n;
   coherence
   proof
-   reconsider g1= f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g1= f1,g2=f2 as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
-P1: g1 is continuous & g2 is continuous by Def2Th;
-    g1+g2= f1+f2 by LM003A;
-    hence thesis by P1,Def2Th;
+A1: g1 is continuous & g2 is continuous by Th23;
+    g1+g2= f1+f2 by Th5;
+    hence thesis by A1,Th23;
   end;
 end;
 
@@ -916,34 +916,34 @@ theorem
   X c= dom f1 /\ dom f2 & f1|X is continuous & f2|X is continuous
   implies (f1+f2) |X is continuous & (f1-f2) |X is continuous
 proof
-  assume AS: X c= dom f1 /\ dom f2 & f1|X is continuous & f2|X
+  assume A1: X c= dom f1 /\ dom f2 & f1|X is continuous & f2|X
 is continuous;
-   reconsider g1=f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
-P2: g1|X is continuous by AS,Def2Th;
-g2|X is continuous by AS,Def2Th; then
-P3: (g1+g2) |X is continuous & (g1-g2) |X is continuous
-    by AS,P2,NFCONT_3:19;
-P4: g1+g2 = f1+f2 by LM003A;
-  g1-g2 = f1-f2 by LM003D;
-  hence thesis by P3,P4,Def2Th;
+A2: g1|X is continuous by A1,Th23;
+g2|X is continuous by A1,Th23; then
+A3: (g1+g2) |X is continuous & (g1-g2) |X is continuous
+    by A1,A2,NFCONT_3:19;
+A4: g1+g2 = f1+f2 by Th5;
+  g1-g2 = f1-f2 by Th10;
+  hence thesis by A3,A4,Th23;
 end;
 
 theorem
   X c= dom f1 & X1 c= dom f2 & f1|X is continuous & f2|X1 is continuous
   implies (f1+f2) | (X /\ X1) is continuous & (f1-f2) | (X /\ X1) is continuous
 proof
-  assume AS: X c= dom f1 & X1 c= dom f2 & f1|X is continuous & f2|X1
+  assume A1: X c= dom f1 & X1 c= dom f2 & f1|X is continuous & f2|X1
   is continuous;
-   reconsider g1=f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
-P2: g1|X is continuous by AS,Def2Th;
-    g2|X1 is continuous by AS,Def2Th; then
-P3: (g1+g2) | (X /\ X1) is continuous & (g1-g2) | (X /\ X1) is continuous
-    by AS,P2,NFCONT_3:20;
-P4: g1+g2 = f1+f2 by LM003A;
-    g1-g2 = f1-f2 by LM003D;
-    hence thesis by P3,P4,Def2Th;
+A2: g1|X is continuous by A1,Th23;
+    g2|X1 is continuous by A1,Th23; then
+A3: (g1+g2) | (X /\ X1) is continuous & (g1-g2) | (X /\ X1) is continuous
+    by A1,A2,NFCONT_3:20;
+A4: g1+g2 = f1+f2 by Th5;
+    g1-g2 = f1-f2 by Th10;
+    hence thesis by A3,A4,Th23;
 end;
 
 registration let n;
@@ -952,60 +952,60 @@ registration let n;
   cluster r(#)f -> continuous for PartFunc of REAL,REAL n;
   coherence
   proof
-   reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g= f as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
-P1: g is continuous by Def2Th;
-  r(#)g = r(#)f by LM003B;
-  hence thesis by P1,Def2Th;
+A1: g is continuous by Th23;
+  r(#)g = r(#)f by Th6;
+  hence thesis by A1,Th23;
   end;
 end;
 
 theorem
   X c= dom f & f|X is continuous implies (r(#)f) | X is continuous
   proof
-  assume AS:X c= dom f & f|X is continuous;
-  reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+  assume A1:X c= dom f & f|X is continuous;
+  reconsider g= f as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
-  g|X is continuous PartFunc of REAL,the carrier of REAL-NS n by AS,Def2Th;
+  g|X is continuous PartFunc of REAL,REAL-NS n by A1,Th23;
   then
-P1: (r(#)g) | X is continuous by AS,NFCONT_3:21;
-  r(#)g = r(#)f by LM003B;
-  hence thesis by P1,Def2Th;
+A2: (r(#)g) | X is continuous by A1,NFCONT_3:21;
+  r(#)g = r(#)f by Th6;
+  hence thesis by A2,Th23;
   end;
 
 theorem
   X c= dom f & f|X is continuous
   implies |. f .| |X is continuous & (-f) | X is continuous
 proof
-   assume AS: X c= dom f & f|X is continuous;
-   reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+   assume A1: X c= dom f & f|X is continuous;
+   reconsider g= f as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
-   g|X is continuous by AS,Def2Th; then
-P1: ||. g .|| |X is continuous & (-g) | X is continuous by AS,NFCONT_3:22;
-   hence |. f .| |X is continuous by LM003F;
-   -g = - f by LM003E;
-   hence (-f) | X is continuous by P1,Def2Th;
+   g|X is continuous by A1,Th23; then
+A2: ||. g .|| |X is continuous & (-g) | X is continuous by A1,NFCONT_3:22;
+   hence |. f .| |X is continuous by Th9;
+   -g = - f by Th8;
+   hence (-f) | X is continuous by A2,Th23;
 end;
 
 theorem
   f is total & (for x1,x2 holds f/.(x1+x2) = f/.x1 + f/.x2) &
   (ex x0 st f is_continuous_in x0) implies f|REAL is continuous
 proof
-  assume AS:
+  assume A1:
   f is total & (for x1,x2 holds f/.(x1+x2) = f/.x1 + f/.x2);
   given x0 such that
-P3: f is_continuous_in x0;
-  reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+A2: f is_continuous_in x0;
+  reconsider g= f as PartFunc of REAL,REAL-NS n
   by REAL_NS1:def 4;
-P2: now let x1,x2;
-P21:  g/.x1 = f/.x1 & g/.x2 = f/.x2 by REAL_NS1:def 4;
+A3: now let x1,x2;
+A4:  g/.x1 = f/.x1 & g/.x2 = f/.x2 by REAL_NS1:def 4;
       thus g/.(x1+x2) = f/.(x1+x2) by REAL_NS1:def 4
-      .=f/.x1 + f/.x2 by AS
-      .= g/.x1 + g/.x2 by P21,REAL_NS1:2;
+      .=f/.x1 + f/.x2 by A1
+      .= g/.x1 + g/.x2 by A4,REAL_NS1:2;
     end;
-    g is_continuous_in x0 by P3,Def1Th;
-    then g|REAL is continuous by AS,P2,NFCONT_3:23;
-    hence thesis by Def2Th;
+    g is_continuous_in x0 by A2,Th1;
+    then g|REAL is continuous by A1,A3,NFCONT_3:23;
+    hence thesis by Th23;
   end;
 
 theorem
@@ -1014,11 +1014,11 @@ theorem
   holds Y is compact
 proof
   let Y be Subset of REAL-NS n;
-  assume AS:dom f is compact & f| (dom f) is continuous & Y = (rng f);
-  reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+  assume A1:dom f is compact & f| (dom f) is continuous & Y = (rng f);
+  reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-  g| (dom g) is continuous by AS,Def2Th;
-  hence Y is compact by AS,NFCONT_3:24;
+  g| (dom g) is continuous by A1,Th23;
+  hence Y is compact by A1,NFCONT_3:24;
 end;
 
 theorem
@@ -1028,27 +1028,26 @@ theorem
   proof
     let Y be Subset of REAL, Z be Subset of REAL-NS n;
     assume
-AS: Y c= dom f & Z = (f.:Y) & Y is compact & f|Y is continuous;
-    reconsider g = f as PartFunc of REAL,the carrier of REAL-NS n
+A1: Y c= dom f & Z = (f.:Y) & Y is compact & f|Y is continuous;
+    reconsider g = f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-    g|Y is continuous by AS,Def2Th;
-    hence Z is compact by AS,NFCONT_3:25;
+    g|Y is continuous by A1,Th23;
+    hence Z is compact by A1,NFCONT_3:25;
   end;
 
 definition let n,f;
   attr f is Lipschitzian means  :Def6:
-  ex g be PartFunc of REAL,the carrier of REAL-NS n st g=f &
-  g is Lipschitzian;
+  ex g be PartFunc of REAL,REAL-NS n st g=f & g is Lipschitzian;
 end;
 
-theorem Def6Th:
+theorem Th33:
   f is Lipschitzian iff
   ex r be real number st 0<r & for x1,x2 st x1 in dom f &
   x2 in dom f holds |.f/.x1-f/.x2.| <= r*abs(x1-x2)
 proof
   hereby assume f is Lipschitzian;
   then
-  consider g be PartFunc of REAL,the carrier of REAL-NS n such that
+  consider g be PartFunc of REAL,REAL-NS n such that
 A1:  g=f & g is Lipschitzian by Def6;
   consider r be real number such that
 A2: 0<r & for x1,x2 st x1 in dom g &
@@ -1060,43 +1059,43 @@ A2: 0<r & for x1,x2 st x1 in dom g &
   proof
     let x1,x2;
     assume x1 in dom f & x2 in dom f; then
-A4: ||.g/.x1-g/.x2.||<=r*abs(x1-x2) by A1,A2;
+A3: ||.g/.x1-g/.x2.||<=r*abs(x1-x2) by A1,A2;
     f/.x1 = g/.x1 &  f/.x2 = g/.x2 by A1,REAL_NS1:def 4;
-    hence |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A4,REAL_NS1:1,5;
+    hence |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A3,REAL_NS1:1,5;
   end;
 end;
   given r be real number such that
-A5: 0<r & for x1,x2 st x1 in dom f &
+A4: 0<r & for x1,x2 st x1 in dom f &
     x2 in dom f holds |.f/.x1-f/.x2.|<=r*abs(x1-x2);
-  reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+  reconsider g= f as PartFunc of REAL,REAL-NS n
   by REAL_NS1:def 4;
   now
     let x1,x2;
     assume x1 in dom g & x2 in dom g; then
-A7: |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A5;
+A5: |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A4;
     f/.x1 = g/.x1 &  f/.x2 = g/.x2 by REAL_NS1:def 4;
-    hence ||.g/.x1-g/.x2.||<=r*abs(x1-x2) by A7,REAL_NS1:1,5;
+    hence ||.g/.x1-g/.x2.||<=r*abs(x1-x2) by A5,REAL_NS1:1,5;
   end;
-  then g is Lipschitzian by A5,NFCONT_3:def 3;
+  then g is Lipschitzian by A4,NFCONT_3:def 3;
   hence thesis by Def6;
 end;
 
-theorem Def6Th1:
+theorem Th34:
   f=h implies (f is Lipschitzian iff h is Lipschitzian)
 proof
-  assume AS: f=h;
+  assume A1: f=h;
   hereby assume f is Lipschitzian;
   then consider r be real number such that
-A1: 0<r & for x1,x2 st x1 in dom f &
-    x2 in dom f holds |.f/.x1-f/.x2.|<=r*abs(x1-x2) by Def6Th;
+A2: 0<r & for x1,x2 st x1 in dom f &
+    x2 in dom f holds |.f/.x1-f/.x2.|<=r*abs(x1-x2) by Th33;
   now
     let x1,x2;
     assume x1 in dom h & x2 in dom h; then
-A3: |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A1,AS;
-    f/.x1 = h/.x1 &  f/.x2 = h/.x2 by AS,REAL_NS1:def 4;
+A3: |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A2,A1;
+    f/.x1 = h/.x1 &  f/.x2 = h/.x2 by A1,REAL_NS1:def 4;
     hence ||. h/.x1-h/.x2 .||<=r*abs(x1-x2) by A3,REAL_NS1:1,5;
   end;
-  hence h is Lipschitzian by A1,NFCONT_3:def 3;
+  hence h is Lipschitzian by A2,NFCONT_3:def 3;
   end;
   assume h is Lipschitzian;
   then consider r be real number such that
@@ -1105,11 +1104,11 @@ A4: 0<r & for x1,x2 st x1 in dom h &
   now
     let x1,x2;
     assume x1 in dom f & x2 in dom f; then
-A6: ||.h/.x1-h/.x2.||<=r*abs(x1-x2) by A4,AS;
-    f/.x1 = h/.x1 &  f/.x2 = h/.x2 by AS,REAL_NS1:def 4;
-    hence |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A6,REAL_NS1:1,5;
+A5: ||.h/.x1-h/.x2.||<=r*abs(x1-x2) by A4,A1;
+    f/.x1 = h/.x1 &  f/.x2 = h/.x2 by A1,REAL_NS1:def 4;
+    hence |.f/.x1-f/.x2.|<=r*abs(x1-x2) by A5,REAL_NS1:1,5;
   end;
-  hence thesis by A4,Def6Th;
+  hence thesis by A4,Th33;
 end;
 
 theorem
@@ -1120,7 +1119,7 @@ proof
   hereby assume f|X is Lipschitzian; then
   consider r be real number such that
 A1: 0<r & for x1,x2 st x1 in dom (f|X) &
-    x2 in dom (f|X) holds |.(f|X)/.x1-(f|X)/.x2.|<=r*abs(x1-x2) by Def6Th;
+    x2 in dom (f|X) holds |.(f|X)/.x1-(f|X)/.x2.|<=r*abs(x1-x2) by Th33;
   take r;
   thus 0<r by A1;
   thus for x1,x2 st x1 in dom(f|X) &
@@ -1138,12 +1137,12 @@ A3: 0<r & for x1,x2 st x1 in dom(f|X) &
     x2 in dom(f|X) holds |. f/.x1-f/.x2 .|<=r*abs(x1-x2);
   now
    let x1,x2;
-   assume A5: x1 in dom(f|X) & x2 in dom(f|X);
+   assume A4: x1 in dom(f|X) & x2 in dom(f|X);
    then |. f/.x1-f/.x2 .|<=r*abs(x1-x2) by A3;
-   then |.(f|X)/.x1-f/.x2.|<=r*abs(x1-x2) by A5,PARTFUN2:15;
-   hence |.(f|X)/.x1-(f|X)/.x2.|<=r*abs(x1-x2) by A5,PARTFUN2:15;
+   then |.(f|X)/.x1-f/.x2.|<=r*abs(x1-x2) by A4,PARTFUN2:15;
+   hence |.(f|X)/.x1-(f|X)/.x2.|<=r*abs(x1-x2) by A4,PARTFUN2:15;
  end;
- hence f|X is Lipschitzian by A3,Def6Th;
+ hence f|X is Lipschitzian by A3,Th33;
 end;
 
 registration let n;
@@ -1151,11 +1150,11 @@ registration let n;
   coherence
   proof
     let f be PartFunc of REAL,REAL n;
-    reconsider g = f as PartFunc of REAL,the carrier of REAL-NS n
+    reconsider g = f as PartFunc of REAL,REAL-NS n
       by REAL_NS1:def 4;
     assume f is empty;
     then g is empty;
-    hence thesis by Def6Th1;
+    hence thesis by Th34;
   end;
 end;
 
@@ -1173,11 +1172,11 @@ registration let n;
   cluster f|X -> Lipschitzian for PartFunc of REAL,REAL n;
   coherence
   proof
-    reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+    reconsider g= f as PartFunc of REAL,REAL-NS n
       by REAL_NS1:def 4;
-    g is Lipschitzian by Def6Th1;
+    g is Lipschitzian by Th34;
     then g|X is Lipschitzian;
-    hence thesis by Def6Th1;
+    hence thesis by Th34;
   end;
 end;
 
@@ -1196,20 +1195,20 @@ registration let n;
   cluster f1+f2 -> Lipschitzian for PartFunc of REAL,REAL n;
   coherence
   proof
-   reconsider g1=f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-P1:g1 is Lipschitzian & g2 is Lipschitzian by Def6Th1;
-   g1+g2 = f1+f2 by LM003A;
-   hence thesis by P1,Def6Th1;
+A1:g1 is Lipschitzian & g2 is Lipschitzian by Th34;
+   g1+g2 = f1+f2 by Th5;
+   hence thesis by A1,Th34;
   end;
   cluster f1-f2 -> Lipschitzian for PartFunc of REAL,REAL n;
   coherence
   proof
-   reconsider g1=f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+   reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-   P1:g1 is Lipschitzian & g2 is Lipschitzian by Def6Th1;
-   g1-g2 = f1-f2 by LM003D;
-   hence thesis by P1,Def6Th1;
+   A2:g1 is Lipschitzian & g2 is Lipschitzian by Th34;
+   g1-g2 = f1-f2 by Th10;
+   hence thesis by A2,Th34;
   end;
 end;
 
@@ -1218,13 +1217,13 @@ theorem
     (f1+f2) | (X /\ X1) is Lipschitzian
 proof
    assume
-AS:f1|X is Lipschitzian & f2|X1 is Lipschitzian;
-   reconsider g1=f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+A1:f1|X is Lipschitzian & f2|X1 is Lipschitzian;
+   reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n
      by REAL_NS1:def 4;
-   g1|X is Lipschitzian & g2|X1 is Lipschitzian by Def6Th1,AS; then
-P1: (g1+g2) | (X /\ X1) is Lipschitzian by NFCONT_3:28;
-  g1+g2 = f1+f2 by LM003A;
-  hence thesis by P1,Def6Th1;
+   g1|X is Lipschitzian & g2|X1 is Lipschitzian by Th34,A1; then
+A2: (g1+g2) | (X /\ X1) is Lipschitzian by NFCONT_3:28;
+  g1+g2 = f1+f2 by Th5;
+  hence thesis by A2,Th34;
 end;
 
 theorem
@@ -1232,14 +1231,14 @@ theorem
   (f1-f2) | (X /\ X1) is Lipschitzian
 proof
   assume
-  AS:f1|X is Lipschitzian & f2|X1 is Lipschitzian;
-    reconsider g1=f1,g2=f2 as PartFunc of REAL,the carrier of REAL-NS n
+  A1:f1|X is Lipschitzian & f2|X1 is Lipschitzian;
+    reconsider g1=f1,g2=f2 as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
- g1|X is Lipschitzian & g2|X1 is Lipschitzian by Def6Th1,AS;
+ g1|X is Lipschitzian & g2|X1 is Lipschitzian by Th34,A1;
    then
- P1: (g1-g2) | (X /\ X1) is Lipschitzian by NFCONT_3:29;
- g1-g2 = f1-f2 by LM003D;
- hence thesis by P1,Def6Th1;
+ A2: (g1-g2) | (X /\ X1) is Lipschitzian by NFCONT_3:29;
+ g1-g2 = f1-f2 by Th10;
+ hence thesis by A2,Th34;
 end;
 
 registration let n;
@@ -1248,24 +1247,24 @@ registration let n;
   cluster p(#)f -> Lipschitzian for PartFunc of REAL, REAL n;
   coherence
   proof
-    reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+    reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-P1: g is Lipschitzian by Def6Th1;
-    p(#)g = p(#)f by LM003B;
-    hence thesis by P1,Def6Th1;
+A1: g is Lipschitzian by Th34;
+    p(#)g = p(#)f by Th6;
+    hence thesis by A1,Th34;
   end;
 end;
 
 theorem
   f|X is Lipschitzian & X c= dom f implies (p(#)f) | X is Lipschitzian
 proof
-   assume AS: f|X is Lipschitzian & X c= dom f;
-   reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+   assume A1: f|X is Lipschitzian & X c= dom f;
+   reconsider g= f as PartFunc of REAL,REAL-NS n
      by REAL_NS1:def 4;
-   g|X is Lipschitzian by Def6Th1,AS; then
-P1: (p(#)g) | X is Lipschitzian by AS,NFCONT_3:30;
-   p(#)g = p(#)f by LM003B;
-   hence thesis by P1,Def6Th1;
+   g|X is Lipschitzian by Th34,A1; then
+A2: (p(#)g) | X is Lipschitzian by A1,NFCONT_3:30;
+   p(#)g = p(#)f by Th6;
+   hence thesis by A2,Th34;
 end;
 
 registration let n;
@@ -1273,11 +1272,11 @@ registration let n;
   cluster |. f .| -> Lipschitzian for PartFunc of REAL,REAL;
   coherence
   proof
-    reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+    reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
-    g is Lipschitzian by Def6Th1;
+    g is Lipschitzian by Th34;
     then ||. g .|| is Lipschitzian;
-    hence thesis by LM003F;
+    hence thesis by Th9;
   end;
 end;
 
@@ -1285,17 +1284,17 @@ theorem
   f|X is Lipschitzian implies -(f|X) is Lipschitzian
     & |. f .| |X is Lipschitzian & (-f) |X is Lipschitzian
 proof
-   assume AS: f|X is Lipschitzian;
-   reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+   assume A1: f|X is Lipschitzian;
+   reconsider g= f as PartFunc of REAL,REAL-NS n
      by REAL_NS1:def 4;
-   g|X is Lipschitzian by AS,Def6Th1; then
-P1: -(g|X) is Lipschitzian & (||. g .||) |X is Lipschitzian &
+   g|X is Lipschitzian by A1,Th34; then
+A2: -(g|X) is Lipschitzian & (||. g .||) |X is Lipschitzian &
    (-g) | X is Lipschitzian by NFCONT_3:31;
-  -(g|X) = -(f|X) by LM003E;
-  hence -(f|X) is Lipschitzian by P1,Def6Th1;
-  thus (|. f .|) |X is Lipschitzian by P1,LM003F;
-  -g = - f by LM003E;
-  hence thesis by P1,Def6Th1;
+  -(g|X) = -(f|X) by Th8;
+  hence -(f|X) is Lipschitzian by A2,Th34;
+  thus (|. f .|) |X is Lipschitzian by A2,Th9;
+  -g = - f by Th8;
+  hence thesis by A2,Th34;
 end;
 
 registration let n;
@@ -1305,10 +1304,10 @@ registration let n;
     let f be PartFunc of REAL, REAL n;
     assume
 A1: f is constant;
-    reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+    reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
     g is constant by A1;
-    hence thesis by Def6Th1;
+    hence thesis by Th34;
   end;
 end;
 
@@ -1317,11 +1316,11 @@ registration let n;
   coherence
   proof
     let f be PartFunc of REAL, REAL n;
-    reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+    reconsider g= f as PartFunc of REAL,REAL-NS n
     by REAL_NS1:def 4;
     assume f is Lipschitzian;
-    then g is Lipschitzian by Def6Th1;
-    hence thesis by Def2Th;
+    then g is Lipschitzian by Th34;
+    hence thesis by Th23;
   end;
 end;
 
@@ -1331,53 +1330,53 @@ theorem
   holds f|X is continuous
 proof
   let r,p be Element of REAL n;
-  assume AS: for x0 st x0 in X holds f/.x0 = x0*r+p;
-  reconsider g= f as PartFunc of REAL,the carrier of REAL-NS n
+  assume A1: for x0 st x0 in X holds f/.x0 = x0*r+p;
+  reconsider g= f as PartFunc of REAL,REAL-NS n
    by REAL_NS1:def 4;
   reconsider r0=r, p0=p as Point of REAL-NS n by REAL_NS1:def 4;
   now let x0;
- assume A1: x0 in X;
-A2: x0*r = x0*r0 by REAL_NS1:3;
+ assume A2: x0 in X;
+A3: x0*r = x0*r0 by REAL_NS1:3;
    thus g/.x0 = f/.x0 by REAL_NS1:def 4
-        .= x0*r+p by A1,AS
-        .= x0*r0+p0 by A2,REAL_NS1:2;
+        .= x0*r+p by A2,A1
+        .= x0*r0+p0 by A3,REAL_NS1:2;
   end;
   then g|X is continuous by NFCONT_3:33;
-  hence thesis by Def2Th;
+  hence thesis by Th23;
 end;
 
-theorem X0:
+theorem Th42:
   for x0 be Element of REAL n st 1 <= i & i <= n
   holds proj(i,n) is_continuous_in x0
 proof
 let x0 be Element of REAL n;
-assume AS0: 1 <=i & i <= n;
-P2:dom proj(i,n) = REAL n by FUNCT_2:def 1;
-reconsider prg=proj(i,n) as PartFunc of the carrier of REAL-NS n,REAL
+assume A1: 1 <=i & i <= n;
+A2:dom proj(i,n) = REAL n by FUNCT_2:def 1;
+reconsider prg=proj(i,n) as PartFunc of REAL-NS n,REAL
   by REAL_NS1:def 4;
-reconsider px0 = x0 as Element of the carrier of REAL-NS n
+reconsider px0 = x0 as Element of REAL-NS n
   by REAL_NS1:def 4;
 now let r be Real;
    assume A3: 0<r;
    take s = r;
    thus 0<s by A3;
-      now let px1 be Element of the carrier of REAL-NS n;
+      now let px1 be Element of REAL-NS n;
       assume A4: px1 in dom prg & ||.px1-px0.|| < r;
         reconsider x1=px1 as Element of REAL n by REAL_NS1:def 4;
-A40:    ||.px1-px0.|| = |.x1-x0.| by REAL_NS1:1,5;
-       proj(i,n)/.(x1-x0) =proj(i,n)/.x1-proj(i,n)/.x0 by AS0,PDIFF_8:12;
+A5:    ||.px1-px0.|| = |.x1-x0.| by REAL_NS1:1,5;
+       proj(i,n)/.(x1-x0) =proj(i,n)/.x1-proj(i,n)/.x0 by A1,PDIFF_8:12;
        then |. proj(i,n)/.x1-proj(i,n)/.x0.| <= |. x1-x0 .|
-        by AS0,PDIFF_8:5;
-     hence |. proj(i,n)/.px1-proj(i,n)/.px0.| < r by A4,A40,XXREAL_0:2;
+        by A1,PDIFF_8:5;
+     hence |. proj(i,n)/.px1-proj(i,n)/.px0.| < r by A4,A5,XXREAL_0:2;
     end;
-  hence for px1 be Element of the carrier of REAL-NS n st px1 in dom prg
+  hence for px1 be Element of REAL-NS n st px1 in dom prg
      & ||.px1-px0.|| < s holds |. proj(i,n)/.px1-proj(i,n)/.px0 .|<r;
  end;
- then prg is_continuous_in px0 by P2,NFCONT_1:8;
- hence thesis by XDef1a;
+ then prg is_continuous_in px0 by A2,NFCONT_1:8;
+ hence thesis by Def4;
 end;
 
-theorem X1:
+theorem Th43:
 for n be non empty Element of NAT, h be PartFunc of REAL, REAL n holds
 h is_continuous_in x0 iff
     (x0 in dom h & for i be Element of NAT st i in Seg n
@@ -1385,24 +1384,24 @@ h is_continuous_in x0 iff
 proof
 let n be non empty Element of NAT, h be PartFunc of REAL,REAL n;
 hereby
- assume AS: h is_continuous_in x0;
+ assume A1: h is_continuous_in x0;
   hence
-  X1: x0 in dom h by Th3;
+  A2: x0 in dom h by Th3;
   thus for i be Element of NAT st i in Seg n
     holds proj(i,n)*h is_continuous_in x0
   proof
    let i be Element of NAT;
    assume i in Seg n; then
-   P1: 1<=i & i <= n by FINSEQ_1:1;
-   P20:dom (proj(i,n)) = REAL n by FUNCT_2:def 1;
+   A3: 1<=i & i <= n by FINSEQ_1:1;
+   A4:dom (proj(i,n)) = REAL n by FUNCT_2:def 1;
    rng h c= REAL n; then
-P2: dom (proj(i,n)*h) = dom h by P20,RELAT_1:27;
-   proj(i,n) is_continuous_in h/.x0 by P1,X0;
-   hence thesis by P2,AS,X1,Th12X;
+A5: dom (proj(i,n)*h) = dom h by A4,RELAT_1:27;
+   proj(i,n) is_continuous_in h/.x0 by A3,Th42;
+   hence thesis by A5,A1,A2,Th22;
   end;
 end;
 assume
-AS11: x0 in dom h &
+A6: x0 in dom h &
    for i be Element of NAT st i in Seg n
       holds (proj(i,n)*h) is_continuous_in x0;
 for r be Real st 0<r ex s be real number
@@ -1410,65 +1409,65 @@ st 0<s & for x1 be real number st x1
   in dom h & abs(x1-x0)<s holds |. h/.x1 - h/.x0 .|<r
 proof
  let r0 be Real;
- assume AX1: 0 < r0;
+ assume A7: 0 < r0;
  set r=r0/2;
- AX11:0 < r by AX1,XREAL_1:215;
+ A8:0 < r by A7,XREAL_1:215;
   defpred P[Nat,real number] means 0 < $2 &
   for x1 be real number st x1 in dom h & abs(x1- x0) < $2 holds
   |. (proj($1,n)*h).x1 - (proj($1,n)*h).x0  .| < r/n;
-  BB1: 0 < r/n by AX11,XREAL_1:139;
-  BB2: for j be Nat st j in Seg n ex x be Element of REAL st P[j,x]
+  A9: 0 < r/n by A8,XREAL_1:139;
+  A10: for j be Nat st j in Seg n ex x be Element of REAL st P[j,x]
      proof
       let j be Nat;
-      assume BX0: j in Seg n;
-  U3: proj(j,n)*h is_continuous_in x0 by AS11,BX0;
-     P20:dom (proj(j,n)) = REAL n by FUNCT_2:def 1;
+      assume A11: j in Seg n;
+  A12: proj(j,n)*h is_continuous_in x0 by A6,A11;
+     A13:dom (proj(j,n)) = REAL n by FUNCT_2:def 1;
      rng h c= REAL n; then
-     P21:dom (proj(j,n)*h) = dom h by P20,RELAT_1:27;
+     A14:dom (proj(j,n)*h) = dom h by A13,RELAT_1:27;
     consider sj be real number such that
-   BX3: 0 < sj &
+   A15: 0 < sj &
       for x1 be real number st x1 in dom (proj(j,n)*h) & abs(x1- x0) < sj holds
-       |.(proj(j,n)*h).x1 - (proj(j,n)*h).x0 .| < r/n by U3,BB1,FCONT_1:3;
+       |.(proj(j,n)*h).x1 - (proj(j,n)*h).x0 .| < r/n by A12,A9,FCONT_1:3;
     sj is Real by XREAL_0:def 1;
-    hence thesis by BX3,P21;
+    hence thesis by A15,A14;
   end;
 consider s0 be FinSequence of REAL such that
-BB3: dom s0 = Seg n &
-     for k be Nat st k in Seg n holds P[k,s0.k] from FINSEQ_1:sch 5(BB2);
+A16: dom s0 = Seg n &
+     for k be Nat st k in Seg n holds P[k,s0.k] from FINSEQ_1:sch 5(A10);
      n in Seg n by FINSEQ_1:3;
  then reconsider rs0= rng s0 as non empty ext-real-membered set
-      by BB3,FUNCT_1:3;
- rng s0 is finite by BB3,FINSET_1:8;
+      by A16,FUNCT_1:3;
+ rng s0 is finite by A16,FINSET_1:8;
  then reconsider rs0 as left_end right_end non empty ext-real-membered set;
-XA19:min rs0 in rng s0 by XXREAL_2:def 7;
+A17:min rs0 in rng s0 by XXREAL_2:def 7;
      then reconsider s = min rs0 as Real;
      take s;
-     ex i1 be set st i1 in dom s0 & s = s0.i1 by XA19,FUNCT_1:def 3;
-     hence 0 < s by BB3;
+     ex i1 be set st i1 in dom s0 & s = s0.i1 by A17,FUNCT_1:def 3;
+     hence 0 < s by A16;
 now let x1;
-  assume BX3: x1 in dom h & abs( x1- x0) < s;
+  assume A18: x1 in dom h & abs( x1- x0) < s;
  now let j be Element of NAT;
    assume 1<=j & j <= n; then
-BX1: j in Seg n by FINSEQ_1:1;
-    then s0.j in rng s0 by BB3,FUNCT_1:3;
+A19: j in Seg n by FINSEQ_1:1;
+    then s0.j in rng s0 by A16,FUNCT_1:3;
     then s <= s0.j by XXREAL_2:def 7;
-    then abs(x1- x0) < s0.j by BX3,XXREAL_0:2; then
-X100: |. (proj(j,n)*h).x1 - (proj(j,n)*h).x0 .| < r/n by BX1,BX3,BB3;
-    C1:(proj(j,n)*h).x1 =(proj(j,n)).(h.x1) by BX3,FUNCT_1:13
-         .=(proj(j,n)).(h/.x1) by BX3,PARTFUN1:def 6;
-    (proj(j,n)*h).x0 = (proj(j,n)).(h.x0) by AS11,FUNCT_1:13
-    .=(proj(j,n)).(h/.x0) by AS11,PARTFUN1:def 6;
-   hence |. proj(j,n).((h/.x1) - (h/.x0)) .| <= r/n by X100,C1,PDIFF_8:12;
+    then abs(x1- x0) < s0.j by A18,XXREAL_0:2; then
+A20: |. (proj(j,n)*h).x1 - (proj(j,n)*h).x0 .| < r/n by A19,A18,A16;
+    A21:(proj(j,n)*h).x1 =(proj(j,n)).(h.x1) by A18,FUNCT_1:13
+         .=(proj(j,n)).(h/.x1) by A18,PARTFUN1:def 6;
+    (proj(j,n)*h).x0 = (proj(j,n)).(h.x0) by A6,FUNCT_1:13
+    .=(proj(j,n)).(h/.x0) by A6,PARTFUN1:def 6;
+   hence |. proj(j,n).((h/.x1) - (h/.x0)) .| <= r/n by A20,A21,PDIFF_8:12;
  end;
  then |. h/.x1 - h/.x0 .| <= n*(r/n) by PDIFF_8:17; then
-D1:  |. h/.x1 - h/.x0 .| <= r by XCMPLX_1:87;
-  r < r0 by AX1,XREAL_1:216;
-  hence|. h/.x1 - h/.x0 .| < r0 by D1,XXREAL_0:2;
+A22:  |. h/.x1 - h/.x0 .| <= r by XCMPLX_1:87;
+  r < r0 by A7,XREAL_1:216;
+  hence|. h/.x1 - h/.x0 .| < r0 by A22,XXREAL_0:2;
   end;
   hence for x1 st x1 in dom h & abs(x1-x0) < s
     holds |. h/.x1 - h/.x0 .| < r0;
  end;
-hence thesis by AS11,Th3;
+hence thesis by A6,Th3;
 end;
 
 theorem
@@ -1480,204 +1479,204 @@ proof
 let n be non empty Element of NAT,
     h be PartFunc of REAL, REAL n;
 hereby assume
-P1: h is continuous;
+A1: h is continuous;
 thus for i be Element of NAT st i in Seg n holds (proj(i,n)*h) is continuous
 proof
 let i be Element of NAT;
- assume P2: i in Seg n;
-     P20:dom (proj(i,n)) = REAL n by FUNCT_2:def 1;
+ assume A2: i in Seg n;
+     A3:dom (proj(i,n)) = REAL n by FUNCT_2:def 1;
      rng h c= REAL n; then
-     P21:dom (proj(i,n)*h) = dom h by P20,RELAT_1:27;
+     A4:dom (proj(i,n)*h) = dom h by A3,RELAT_1:27;
  now let x0;
   assume x0 in dom (proj(i,n)*h);
-   then h is_continuous_in x0 by P1,P21,Def2;
-   hence (proj(i,n)*h) is_continuous_in x0 by P2,X1;
+   then h is_continuous_in x0 by A1,A4,Def5;
+   hence (proj(i,n)*h) is_continuous_in x0 by A2,Th43;
   end;
 hence proj(i,n)*h is continuous by FCONT_1:def 2;
 end;
 end;
 assume
-Q1:  for i be Element of NAT st i in Seg n holds (proj(i,n)*h) is continuous;
+A5:  for i be Element of NAT st i in Seg n holds (proj(i,n)*h) is continuous;
 let x0;
-  assume A2: x0 in dom h;
+  assume A6: x0 in dom h;
   now let i be Element of NAT;
-     assume P2: i in Seg n;
-     P20:dom (proj(i,n)) = REAL n by FUNCT_2:def 1;
+     assume A7: i in Seg n;
+     A8:dom (proj(i,n)) = REAL n by FUNCT_2:def 1;
      rng h c= REAL n; then
-     P21:dom (proj(i,n)*h) = dom h by P20,RELAT_1:27;
-     (proj(i,n)*h) is continuous by Q1,P2;
-     hence (proj(i,n)*h) is_continuous_in x0 by A2,P21,FCONT_1:def 2;
+     A9:dom (proj(i,n)*h) = dom h by A8,RELAT_1:27;
+     (proj(i,n)*h) is continuous by A5,A7;
+     hence (proj(i,n)*h) is_continuous_in x0 by A6,A9,FCONT_1:def 2;
  end;
- hence thesis by A2,X1;
+ hence thesis by A6,Th43;
 end;
 
-theorem Y0:
+theorem Th45:
   for x0 be Point of REAL-NS n st 1 <= i & i <= n holds
   Proj(i,n) is_continuous_in x0
 proof
 let x0 be Point of REAL-NS n;
-assume AS0: 1 <= i & i <= n;
-P2: dom (Proj(i,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
+assume A1: 1 <= i & i <= n;
+A2: dom (Proj(i,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
 now let r be Real;
    assume A3: 0<r;
    take s = r;
    thus 0< s by A3;
     now let x1 be Point of REAL-NS n;
       assume A4: x1 in dom (Proj(i,n)) & ||.x1-x0.|| < s;
-      Proj(i,n)/.(x1-x0) = Proj(i,n)/.x1-Proj(i,n)/.x0 by AS0,PDIFF_8:11;
+      Proj(i,n)/.(x1-x0) = Proj(i,n)/.x1-Proj(i,n)/.x0 by A1,PDIFF_8:11;
       then ||. Proj(i,n)/.x1-Proj(i,n)/.x0.|| <= ||. x1-x0 .||
-        by AS0,PDIFF_8:3;
+        by A1,PDIFF_8:3;
       hence ||. Proj(i,n)/.x1-Proj(i,n)/.x0.|| < r by A4,XXREAL_0:2;
     end;
     hence for x1 be Point of REAL-NS n st x1 in dom (Proj(i,n))
      & ||.x1-x0.|| < s holds ||. Proj(i,n)/.x1-Proj(i,n)/.x0 .||<r;
  end;
- hence thesis by P2,NFCONT_1:7;
+ hence thesis by A2,NFCONT_1:7;
 end;
 
-theorem Y1:
+theorem Th46:
 for n be non empty Element of NAT,
-    h be PartFunc of REAL,the carrier of REAL-NS n holds
+    h be PartFunc of REAL,REAL-NS n holds
  h is_continuous_in x0 iff
   for i be Element of NAT st i in Seg n
     holds Proj(i,n)*h is_continuous_in x0
 proof
 let n be non empty Element of NAT,
-  h be PartFunc of REAL, the carrier of REAL-NS n;
-hereby assume AS: h is_continuous_in x0; then
-  X1: x0 in dom h by NFCONT_3:7;
+  h be PartFunc of REAL, REAL-NS n;
+hereby assume A1: h is_continuous_in x0; then
+  A2: x0 in dom h by NFCONT_3:7;
   thus for i be Element of NAT st i in Seg n
     holds Proj(i,n)*h is_continuous_in x0
   proof
    let i be Element of NAT;
    assume i in Seg n; then
-   P1: 1<=i & i <= n by FINSEQ_1:1;
-   P20:dom (Proj(i,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
+   A3: 1<=i & i <= n by FINSEQ_1:1;
+   A4:dom (Proj(i,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
    rng h c= the carrier of REAL-NS n; then
-P2: dom (Proj(i,n)*h) = dom h by P20,RELAT_1:27;
-   Proj(i,n) is_continuous_in h/.x0 by P1,Y0;
-   hence (Proj(i,n)*h) is_continuous_in x0 by X1,P2,AS,NFCONT_3:15;
+A5: dom (Proj(i,n)*h) = dom h by A4,RELAT_1:27;
+   Proj(i,n) is_continuous_in h/.x0 by A3,Th45;
+   hence (Proj(i,n)*h) is_continuous_in x0 by A2,A5,A1,NFCONT_3:15;
   end;
 end;
-assume AS1: for i be Element of NAT st i in Seg n
+assume A6: for i be Element of NAT st i in Seg n
     holds (Proj(i,n)*h) is_continuous_in x0;
 1<=n by NAT_1:14;
 then 1 in Seg n by FINSEQ_1:1;
-then (Proj(1,n)*h) is_continuous_in x0 by AS1; then
-U1:x0 in dom(Proj(1,n)*h) by NFCONT_3:8;
-U2:dom(Proj(1,n)*h) c= dom h by RELAT_1:25;
+then (Proj(1,n)*h) is_continuous_in x0 by A6; then
+A7:x0 in dom(Proj(1,n)*h) by NFCONT_3:8;
+A8:dom(Proj(1,n)*h) c= dom h by RELAT_1:25;
 for r st 0<r ex s st 0<s & for x1 st x1
   in dom h & abs(x1-x0)<s holds ||. h/.x1 - h/.x0 .||<r
 proof
  let r0 be Real;
  set r=r0/2;
- assume AX1: 0 < r0; then
- AX11:0 < r by XREAL_1:215;
+ assume A9: 0 < r0; then
+ A10:0 < r by XREAL_1:215;
   defpred P[set,real number] means
   ex j be Element of NAT st $1=j & 0 < $2 &
   for x1 st x1 in dom h & abs(x1- x0) < $2 holds
       ||. (Proj(j,n)*h)/.x1 - (Proj(j,n)*h)/.x0 .|| < r/n;
-  BB1: 0 < r/n by AX11,XREAL_1:139;
-  BB2: for j0 be Nat st j0 in Seg n holds
+  A11: 0 < r/n by A10,XREAL_1:139;
+  A12: for j0 be Nat st j0 in Seg n holds
      ex x be Element of REAL st P[j0,x]
      proof
       let j0 be Nat;
-      assume BX0: j0 in Seg n;
+      assume A13: j0 in Seg n;
       reconsider j=j0 as Element of NAT by ORDINAL1:def 12;
-     U3: Proj(j,n)*h is_continuous_in x0 by AS1,BX0;
-     P20:dom (Proj(j,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
+     A14: Proj(j,n)*h is_continuous_in x0 by A6,A13;
+     A15:dom (Proj(j,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
      rng h c= the carrier of REAL-NS n; then
-     P21:dom (Proj(j,n)*h) = dom h by P20,RELAT_1:27;
+     A16:dom (Proj(j,n)*h) = dom h by A15,RELAT_1:27;
     consider sj be real number such that
-BX3: 0 < sj &
+A17: 0 < sj &
      for x1 st x1 in dom (Proj(j,n)*h) & abs(x1- x0) < sj holds
-     ||. (Proj(j,n)*h)/.x1 - (Proj(j,n)*h)/.x0 .|| < r/n by U3,BB1,NFCONT_3:8;
+     ||. (Proj(j,n)*h)/.x1 - (Proj(j,n)*h)/.x0 .|| < r/n by A14,A11,NFCONT_3:8;
      sj is Real by XREAL_0:def 1;
-   hence thesis by BX3,P21;
+   hence thesis by A17,A16;
   end;
 consider s0 be FinSequence of REAL such that
-BB3: dom s0 = Seg n &
-     for k be Nat st k in Seg n holds P[k,s0.k] from FINSEQ_1:sch 5(BB2);
+A18: dom s0 = Seg n &
+     for k be Nat st k in Seg n holds P[k,s0.k] from FINSEQ_1:sch 5(A12);
      n in Seg n by FINSEQ_1:3;
  then reconsider rs0= rng s0 as non empty ext-real-membered set
-      by BB3,FUNCT_1:3;
- rng s0 is finite by BB3,FINSET_1:8;
+      by A18,FUNCT_1:3;
+ rng s0 is finite by A18,FINSET_1:8;
  then reconsider rs0 as left_end right_end non empty ext-real-membered set;
-XA19:min rs0 in rng s0 by XXREAL_2:def 7;
+A19:min rs0 in rng s0 by XXREAL_2:def 7;
     then reconsider s = min rs0 as Real;
    take s;
    consider i1 be set such that
-XA20: i1 in dom s0 & s = s0.i1 by XA19,FUNCT_1:def 3;
+A20: i1 in dom s0 & s = s0.i1 by A19,FUNCT_1:def 3;
    ex j be Element of NAT st i1=j & 0 < s0.i1 &
       for x1 st x1 in dom h & abs(x1- x0) < s0.i1 holds
-       ||. (Proj(j,n)*h)/.x1 - (Proj(j,n)*h)/.x0 .|| < r/n by BB3,XA20;
-  hence 0 < s by XA20;
+       ||. (Proj(j,n)*h)/.x1 - (Proj(j,n)*h)/.x0 .|| < r/n by A18,A20;
+  hence 0 < s by A20;
   let x1;
-  assume BX3: x1 in dom h & abs(x1- x0) < s;
+  assume A21: x1 in dom h & abs(x1- x0) < s;
  now let j be Element of NAT;
  assume 1<=j & j <= n; then
-     BX1:j in Seg n by FINSEQ_1:1;
+     A22:j in Seg n by FINSEQ_1:1;
      then consider jj be Element of NAT such that
-     BX2: jj = j & 0 < s0.j &
+     A23: jj = j & 0 < s0.j &
       for x1 st x1 in dom h & abs(x1- x0)< s0.j holds
-    ||. (Proj(jj,n)*h)/.x1 - (Proj(jj,n)*h)/.x0 .|| < r/n by BB3;
-    s0.j in rng s0 by BX1,BB3,FUNCT_1:3;
+    ||. (Proj(jj,n)*h)/.x1 - (Proj(jj,n)*h)/.x0 .|| < r/n by A18;
+    s0.j in rng s0 by A22,A18,FUNCT_1:3;
     then s <= s0.j by XXREAL_2:def 7;
-    then abs(x1- x0) < s0.j by BX3,XXREAL_0:2; then
-   X100: ||. (Proj(j,n)*h)/.x1 - (Proj(j,n)*h)/.x0 .|| < r/n by BX2,BX3;
-    C0:dom (Proj(j,n)) = the carrier of REAL-NS n by FUNCT_2:def 1; then
-    C1:(Proj(j,n)*h)/.x1 = (Proj(j,n))/.(h/.x1) by BX3,PARTFUN2:4;
-   (Proj(j,n)*h)/.x0 = (Proj(j,n))/.(h/.x0) by C0,U2,U1,PARTFUN2:4;
+    then abs(x1- x0) < s0.j by A21,XXREAL_0:2; then
+   A24: ||. (Proj(j,n)*h)/.x1 - (Proj(j,n)*h)/.x0 .|| < r/n by A23,A21;
+    A25:dom (Proj(j,n)) = the carrier of REAL-NS n by FUNCT_2:def 1; then
+    A26:(Proj(j,n)*h)/.x1 = (Proj(j,n))/.(h/.x1) by A21,PARTFUN2:4;
+   (Proj(j,n)*h)/.x0 = (Proj(j,n))/.(h/.x0) by A25,A8,A7,PARTFUN2:4;
    hence ||. Proj(j,n).((h/.x1) - (h/.x0)) .|| <= r/n
-                                             by X100,C1,PDIFF_8:11;
+                                             by A24,A26,PDIFF_8:11;
  end;
  then ||. h/.x1 - h/.x0 .|| <= n*(r/n) by PDIFF_8:16; then
-D1: ||. h/.x1 - h/.x0 .|| <= r by XCMPLX_1:87;
-  r < r0 by AX1,XREAL_1:216;
-  hence ||. h/.x1 - h/.x0 .|| < r0 by D1,XXREAL_0:2;
+A27: ||. h/.x1 - h/.x0 .|| <= r by XCMPLX_1:87;
+  r < r0 by A9,XREAL_1:216;
+  hence ||. h/.x1 - h/.x0 .|| < r0 by A27,XXREAL_0:2;
 end;
-hence thesis by U2,U1,NFCONT_3:8;
+hence thesis by A8,A7,NFCONT_3:8;
 end;
 
 theorem
 for n be non empty Element of NAT,
-    h be PartFunc of REAL, the carrier of REAL-NS n holds
+    h be PartFunc of REAL, REAL-NS n holds
  h is continuous iff
   for i be Element of NAT st i in Seg n
     holds Proj(i,n)*h is continuous
   proof
     let n be non empty Element of NAT,
-    h be PartFunc of REAL, the carrier of REAL-NS n;
+    h be PartFunc of REAL, REAL-NS n;
     hereby assume
-P1:   h is continuous;
+A1:   h is continuous;
       thus for i be Element of NAT st i in Seg n
       holds Proj(i,n)*h is continuous
       proof
         let i be Element of NAT;
         assume
-P2:     i in Seg n;
-P20:    dom Proj(i,n) = the carrier of REAL-NS n by FUNCT_2:def 1;
+A2:     i in Seg n;
+A3:    dom Proj(i,n) = the carrier of REAL-NS n by FUNCT_2:def 1;
         rng h c= the carrier of REAL-NS n; then
-P21:    dom (Proj(i,n)*h) = dom h by P20,RELAT_1:27;
+A4:    dom (Proj(i,n)*h) = dom h by A3,RELAT_1:27;
         now let x0;
           assume x0 in dom (Proj(i,n)*h);
-          then h is_continuous_in x0 by P1,P21,NFCONT_3:def 2;
-          hence Proj(i,n)*h is_continuous_in x0 by P2,Y1;
+          then h is_continuous_in x0 by A1,A4,NFCONT_3:def 2;
+          hence Proj(i,n)*h is_continuous_in x0 by A2,Th46;
         end;
         hence Proj(i,n)*h is continuous by NFCONT_3:def 2;
       end;
     end;
     assume
-Q1: for i be Element of NAT st i in Seg n holds Proj(i,n)*h is continuous;
+A5: for i be Element of NAT st i in Seg n holds Proj(i,n)*h is continuous;
     let x0;
-    assume A2: x0 in dom h;
+    assume A6: x0 in dom h;
     now let i be Element of NAT;
-      assume P2: i in Seg n;
-P20:  dom (Proj(i,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
+      assume A7: i in Seg n;
+A8:  dom (Proj(i,n)) = the carrier of REAL-NS n by FUNCT_2:def 1;
       rng h c= the carrier of REAL-NS n; then
-P21:  dom (Proj(i,n)*h) = dom h by P20,RELAT_1:27;
-      Proj(i,n)*h is continuous by Q1,P2;
-      hence Proj(i,n)*h is_continuous_in x0 by A2,P21,NFCONT_3:def 2;
+A9:  dom (Proj(i,n)*h) = dom h by A8,RELAT_1:27;
+      Proj(i,n)*h is continuous by A5,A7;
+      hence Proj(i,n)*h is_continuous_in x0 by A6,A9,NFCONT_3:def 2;
     end;
-    hence h is_continuous_in x0 by Y1;
+    hence h is_continuous_in x0 by Th46;
   end;

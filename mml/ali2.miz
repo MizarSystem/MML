@@ -2,7 +2,7 @@
 ::  by Alicia de la Cruz
 ::
 :: Received July 17, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -23,7 +23,7 @@ environ
       PCOMPS_1, TOPS_2, VALUED_1, SEQ_1, SEQ_2, XXREAL_0, REAL_1, NAT_1;
  constructors SETFAM_1, FUNCOP_1, FINSET_1, XXREAL_0, REAL_1, NAT_1, SEQ_2,
       POWER, TOPS_2, COMPTS_1, PCOMPS_1, SEQ_1, VALUED_1, PARTFUN1, BINOP_2,
-      RVSUM_1;
+      RVSUM_1, COMSEQ_2;
  registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, MEMBERED, STRUCT_0,
       METRIC_1, PCOMPS_1, VALUED_1, FUNCT_2, FUNCOP_1, SEQ_4, XREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -39,10 +39,16 @@ reserve M for non empty MetrSpace;
 
 definition
   let M be non empty MetrSpace;
-  mode contraction of M -> Function of M, M means
-    :Def1:
-    ex L being Real st 0
-< L & L < 1 & for x,y being Point of M holds dist(it.x,it.y) <= L*dist(x,y);
+  let f be Function of M, M;
+  attr f is contraction means
+:Def1:
+  ex L being Real st 0 < L & L < 1 &
+   for x,y being Point of M holds dist(f.x,f.y) <= L*dist(x,y);
+end;
+
+registration
+  let M be non empty MetrSpace;
+  cluster contraction for Function of M, M;
   existence
   proof
     set x = the Point of M;
@@ -58,12 +64,17 @@ A1: dist(f.z,f.y) = 0 by METRIC_1:1;
   end;
 end;
 
+definition
+ let M be non empty MetrSpace;
+ mode Contraction of M is contraction Function of M, M;
+end;
+
 ::$N Banach Fix Point Theorem for Compact Spaces
 theorem
-  for f being contraction of M st TopSpaceMetr(M) is compact ex c being
+  for f being Contraction of M st TopSpaceMetr(M) is compact ex c being
   Point of M st f.c =c & for x being Point of M st f.x=x holds x=c
 proof
-  let f be contraction of M;
+  let f be Contraction of M;
   set x0 = the Point of M;
   set a=dist(x0,f.x0);
   consider L being Real such that

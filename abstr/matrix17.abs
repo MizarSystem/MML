@@ -1,0 +1,334 @@
+:: Some Basic Properties of Some Special Matrices, Part {III}
+::  by Xiquan Liang and Tao Wang
+:: 
+:: Received October 23, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, VECTSP_1, FINSEQ_1, MATRIX_1, NAT_1, XXREAL_0,
+      ARYTM_1, INT_1, ARYTM_3, CARD_1, ZFMISC_1, FUNCT_1, RELAT_1, STRUCT_0,
+      ALGSTR_0, FUNCOP_1, FVSUM_1, SUPINF_2, FINSEQ_2, TREES_1, XBOOLE_0,
+      QC_LANG1, PARTFUN1, MATRIX16, RELAT_2, GROUP_1, MATRIX17;
+ notations MATRIX_1, VECTSP_1, GROUP_1, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1,
+      NAT_1, TARSKI, FINSEQ_1, FINSEQ_2, MATRIX_3, FVSUM_1, FUNCT_1, STRUCT_0,
+      BINOP_1, XXREAL_0, MATRIX_2, FUNCOP_1, INT_1, NUMBERS, XCMPLX_0,
+      MATRIX_6, RELAT_1, ALGSTR_0, PARTFUN1, MATRIX13, MATRIX16, RLVECT_1;
+ constructors REAL_1, MATRIX_6, XXREAL_0, MATRIX13, POLYNOM1, BINOP_2, FVSUM_1,
+      MATRIX16;
+ registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, FINSEQ_2, XXREAL_0,
+      FUNCOP_1, XREAL_0, XBOOLE_0, FUNCT_1, CARD_1, ORDINAL1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Basic Properties of Subordinate Symmetric Matrices
+
+reserve i,j,k,n,l for Nat,
+  K for Field,
+  a,b,c for Element of K,
+  p,q for FinSequence of K,
+  M1,M2,M3 for Matrix of n,K;
+
+definition
+  let K be Field, n be Nat, M be Matrix of n,K;
+  attr M is subsymmetric means
+:: MATRIX17:def 1
+  for i,j,k,l being Nat st [i,j] in Indices M & k=n+1-j & l=n+1-i holds
+  M*(i,j) = M*(k,l);
+end;
+
+registration
+  let n,K,a;
+  cluster (n,n)-->a -> subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  cluster subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M be subsymmetric Matrix of n,K;
+  cluster -M -> subsymmetric for Matrix of n,K;
+  end;
+
+registration
+  let n,K;
+  let M1,M2 be subsymmetric Matrix of n,K;
+  cluster M1+M2 -> subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K,a;
+  let M be subsymmetric Matrix of n,K;
+  cluster a*M -> subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be subsymmetric Matrix of n,K;
+  cluster M1-M2 -> subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M be subsymmetric Matrix of n,K;
+  cluster M@ -> subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  cluster line_circulant -> subsymmetric for Matrix of n,K;
+  cluster col_circulant -> subsymmetric for Matrix of n,K;
+end;
+
+definition
+  let K be Field, n be Nat, M be Matrix of n,K;
+  attr M is Anti-subsymmetric means
+:: MATRIX17:def 2
+  for i,j,k,l being Nat st [i,j] in Indices M & k=n+1-j & l=n+1-i holds
+  M*(i,j) = -(M*(k,l));
+end;
+
+registration
+  let n,K;
+  cluster Anti-subsymmetric for Matrix of n,K;
+end;
+
+theorem :: MATRIX17:1
+  for K being Fanoian Field,n,i,j,k,l being Nat,M1 being Matrix of n,K st
+  [i,j] in Indices M1 & i+j=n+1 & k=n+1-j & l=n+1-i &
+  M1 is Anti-subsymmetric holds M1*(i,j)=0.K;
+
+registration
+  let n,K;
+  let M be Anti-subsymmetric Matrix of n,K;
+  cluster -M -> Anti-subsymmetric for Matrix of n,K;
+  end;
+
+registration
+  let n,K;
+  let M1,M2 be Anti-subsymmetric Matrix of n,K;
+  cluster M1+M2 -> Anti-subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K,a;
+  let M be Anti-subsymmetric Matrix of n,K;
+  cluster a*M -> Anti-subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be Anti-subsymmetric Matrix of n,K;
+  cluster M1-M2 -> Anti-subsymmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M be Anti-subsymmetric Matrix of n,K;
+  cluster M@ -> Anti-subsymmetric for Matrix of n,K;
+end;
+
+begin :: Basic Properties of central_symmetric Matrices
+
+definition
+  let K be Field;
+  let n be Nat;
+  let M be Matrix of n,K;
+  attr M is central_symmetric means
+:: MATRIX17:def 3
+  for i,j,k,l being Nat st [i,j] in Indices M & k=n+1-i & l=n+1-j holds
+  M*(i,j) = M*(k,l);
+end;
+
+registration
+  let n,K,a;
+  cluster (n,n)-->a -> central_symmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  cluster central_symmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M be central_symmetric Matrix of n,K;
+  cluster -M -> central_symmetric for Matrix of n,K;
+  end;
+
+registration
+  let n,K;
+  let M1,M2 be central_symmetric Matrix of n,K;
+  cluster M1+M2 -> central_symmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K,a;
+  let M be central_symmetric Matrix of n,K;
+  cluster a*M -> central_symmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be central_symmetric Matrix of n,K;
+  cluster M1-M2 -> central_symmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M be central_symmetric Matrix of n,K;
+  cluster M@ -> central_symmetric for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  cluster symmetric subsymmetric -> central_symmetric for Matrix of n,K;
+end;
+
+begin
+
+definition
+  let K be set, M be (Matrix of K), p be FinSequence;
+  pred M is_symmetry_circulant_about p means
+:: MATRIX17:def 4
+  len p = width M &
+  (for i,j be Nat st [i,j] in Indices M & i+j<>len p+1 holds M*(i,j) =
+  p.(i+j-1 mod len p)) &
+  for i,j be Nat st [i,j] in Indices M & i+j=len p+1 holds M*(i,j) = p.(len p);
+end;
+
+theorem :: MATRIX17:2
+  (n,n)-->a is_symmetry_circulant_about n|->a;
+
+theorem :: MATRIX17:3
+  M1 is_symmetry_circulant_about p implies a*M1 is_symmetry_circulant_about a*p
+;
+
+theorem :: MATRIX17:4
+  M1 is_symmetry_circulant_about p implies -M1 is_symmetry_circulant_about -p;
+
+theorem :: MATRIX17:5
+  M1 is_symmetry_circulant_about p & M2 is_symmetry_circulant_about q
+  implies M1+M2 is_symmetry_circulant_about p+q;
+
+definition
+  let K be set, M be Matrix of K;
+  attr M is symmetry_circulant means
+:: MATRIX17:def 5
+  ex p being FinSequence of K st len p = width M &
+  M is_symmetry_circulant_about p;
+end;
+
+definition
+  let K be non empty set;
+  let p be FinSequence of K;
+  attr p is first-symmetry-of-circulant means
+:: MATRIX17:def 6
+  ex M being Matrix of len p,K st M is_symmetry_circulant_about p;
+end;
+
+definition
+  let K be non empty set, p be FinSequence of K;
+  assume
+ p is first-symmetry-of-circulant;
+  func SCirc(p) -> Matrix of len p,K means
+:: MATRIX17:def 7
+  it is_symmetry_circulant_about p;
+  end;
+
+registration
+  let n,K,a;
+  cluster (n,n)-->a -> symmetry_circulant for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  cluster symmetry_circulant for Matrix of n,K;
+end;
+
+reserve D for non empty set,
+  t for FinSequence of D,
+  A for Matrix of n,D;
+
+theorem :: MATRIX17:6
+  for p being FinSequence of D holds
+  0 < n & A is_symmetry_circulant_about p implies
+  A@ is_symmetry_circulant_about p;
+
+registration
+  let n,K,a;
+  let M1 be symmetry_circulant Matrix of n,K;
+  cluster a*M1 -> symmetry_circulant for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be symmetry_circulant Matrix of n,K;
+  cluster M1+M2 -> symmetry_circulant for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M1 be symmetry_circulant Matrix of n,K;
+  cluster -M1 -> symmetry_circulant for Matrix of n,K;
+end;
+
+registration
+  let n,K;
+  let M1,M2 be symmetry_circulant Matrix of n,K;
+  cluster M1-M2 -> symmetry_circulant for Matrix of n,K;
+end;
+
+theorem :: MATRIX17:7
+  A is symmetry_circulant & n>0 implies A@ is symmetry_circulant;
+
+theorem :: MATRIX17:8
+  p is first-symmetry-of-circulant implies -p is first-symmetry-of-circulant;
+
+theorem :: MATRIX17:9
+  p is first-symmetry-of-circulant implies SCirc(-p) = -(SCirc p);
+
+theorem :: MATRIX17:10
+  p is first-symmetry-of-circulant & q is first-symmetry-of-circulant &
+  len p=len q implies p+q is first-symmetry-of-circulant;
+
+theorem :: MATRIX17:11
+  len p=len q & p is first-symmetry-of-circulant &
+  q is first-symmetry-of-circulant implies SCirc(p+q) = SCirc(p)+SCirc(q);
+
+theorem :: MATRIX17:12
+  p is first-symmetry-of-circulant implies a*p is first-symmetry-of-circulant;
+
+theorem :: MATRIX17:13
+  p is first-symmetry-of-circulant implies SCirc(a*p) =a*(SCirc p);
+
+theorem :: MATRIX17:14
+  p is first-symmetry-of-circulant implies
+  a*(SCirc p)+b*(SCirc p) = SCirc((a+ b)*p);
+
+theorem :: MATRIX17:15
+  p is first-symmetry-of-circulant & q is first-symmetry-of-circulant & len p =
+  len q implies a*(SCirc p)+a*(SCirc q)=SCirc(a*(p+q));
+
+theorem :: MATRIX17:16
+  p is first-symmetry-of-circulant & q is first-symmetry-of-circulant & len p =
+  len q implies a*(SCirc p)+b*(SCirc q)=SCirc(a*p+b*q);
+
+theorem :: MATRIX17:17
+  M1 is symmetry_circulant implies M1@ = M1;
+
+registration
+  let n,K;
+  cluster symmetry_circulant -> symmetric for Matrix of n,K;
+end;

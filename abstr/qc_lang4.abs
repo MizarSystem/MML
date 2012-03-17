@@ -2,7 +2,7 @@
 ::  by Oleg Okhotnikov
 ::
 :: Received October 2, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,22 +17,22 @@ environ
  vocabularies NUMBERS, SUBSET_1, FINSEQ_1, RELAT_1, TREES_1, XBOOLE_0, ARYTM_3,
       XXREAL_0, ORDINAL4, CARD_1, FUNCT_1, TARSKI, TREES_2, TREES_9, ORDINAL1,
       NAT_1, FINSET_1, QC_LANG1, ZF_LANG, CLASSES2, TREES_4, QC_LANG4;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1, FINSEQ_4,
-      TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1,
+ notations TARSKI, XBOOLE_0, XTUPLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
+      ORDINAL1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1,
+      FINSEQ_4, TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2,
       XXREAL_0;
  constructors BINOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_4, TREES_4, TREES_9,
-      QC_LANG2, RELSET_1;
+      QC_LANG2, RELSET_1, XTUPLE_0;
  registrations SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XREAL_0, NAT_1,
-      FINSEQ_1, TREES_1, TREES_2, TREES_A, TREES_9, CARD_1, RELAT_1;
+      FINSEQ_1, TREES_1, TREES_2, TREES_A, TREES_9, CARD_1, RELAT_1, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
+reserve A for QC-alphabet;
 reserve n,k,m for Element of NAT;
-
-reserve F, G, G9,H, H9 for Element of QC-WFF;
+reserve F,G,G9,H,H9 for Element of QC-WFF(A);
 
 theorem :: QC_LANG4:1
   F is_subformula_of G implies len @ F <= len @ G;
@@ -41,12 +41,13 @@ theorem :: QC_LANG4:2
   F is_subformula_of G & len @ F = len @ G implies F = G;
 
 definition
-  let p be Element of QC-WFF;
-  func list_of_immediate_constituents(p) -> FinSequence of QC-WFF equals
+  let A;
+  let p be Element of QC-WFF(A);
+  func list_of_immediate_constituents(p) -> FinSequence of QC-WFF(A) equals
 :: QC_LANG4:def 1
 
-
-  <*> QC-WFF if p = VERUM or p is atomic, <* the_argument_of p *> if p is
+  <*> QC-WFF(A) if p = VERUM(A) or
+  p is atomic, <* the_argument_of p *> if p is
   negative, <* the_left_argument_of p, the_right_argument_of p *> if p is
   conjunctive otherwise <* the_scope_of p *>;
 end;
@@ -57,11 +58,12 @@ theorem :: QC_LANG4:3
 
 theorem :: QC_LANG4:4
   rng list_of_immediate_constituents(F) = { G where G is Element
-  of QC-WFF : G is_immediate_constituent_of F };
+  of QC-WFF(A) : G is_immediate_constituent_of F };
 
 definition
-  let p be Element of QC-WFF;
-  func tree_of_subformulae(p) -> finite DecoratedTree of QC-WFF means
+  let A;
+  let p be Element of QC-WFF(A);
+  func tree_of_subformulae(p) -> finite DecoratedTree of QC-WFF(A) means
 :: QC_LANG4:def 2
 
   it.{} = p & for x being Element of dom it holds succ(it,x) =
@@ -127,7 +129,8 @@ theorem :: QC_LANG4:18
   t9 implies not t,t9 are_c=-comparable;
 
 definition
-  let F, G be Element of QC-WFF;
+  let A;
+  let F, G be Element of QC-WFF(A);
   func F-entry_points_in_subformula_tree_of G -> AntiChain_of_Prefixes of dom
   tree_of_subformulae(F) means
 :: QC_LANG4:def 3
@@ -221,15 +224,17 @@ t is Element of dom tree_of_subformulae(F) : t in C } holds G is_subformula_of
   H or H is_subformula_of G;
 
 definition
-  let F be Element of QC-WFF;
-  mode Subformula of F -> Element of QC-WFF means
+  let A;
+  let F be Element of QC-WFF(A);
+  mode Subformula of F -> Element of QC-WFF(A) means
 :: QC_LANG4:def 4
 
     it is_subformula_of F;
 end;
 
 definition
-  let F be Element of QC-WFF;
+  let A;
+  let F be Element of QC-WFF(A);
   let G be Subformula of F;
   mode Entry_Point_in_Subformula_Tree of G -> Element of dom
     tree_of_subformulae(F) means
@@ -245,7 +250,8 @@ theorem :: QC_LANG4:34
   t <> t9 implies not t,t9 are_c=-comparable;
 
 definition
-  let F be Element of QC-WFF;
+  let A;
+  let F be Element of QC-WFF(A);
   let G be Subformula of F;
   func entry_points_in_subformula_tree(G) -> non empty AntiChain_of_Prefixes
   of dom tree_of_subformulae(F) equals

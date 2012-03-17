@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek and Yatsuka Nakamura
 ::
 :: Received August 10, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,30 +18,26 @@ environ
       FUNCT_1, FINSEQ_1, CIRCCOMB, FINSEQ_2, MSUALG_1, PARTFUN1, MSAFREE2,
       FUNCT_4, TARSKI, STRUCT_0, MARGREL1, XBOOLEAN, CIRCUIT1, FSM_1, CIRCUIT2,
       CARD_3, GLIB_000, LATTICES, MCART_1, FINSET_1, CLASSES1, FACIRC_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, MCART_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1,
+      XTUPLE_0, SUBSET_1, NUMBERS, XCMPLX_0, MCART_1,
       RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, FINSEQ_2,
       FUNCT_4, MARGREL1, BINARITH, CARD_3, CLASSES1, PARTFUN1, MSUALG_1,
-      MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, XXREAL_0, NAT_1;
+      MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, XXREAL_0, ORDINAL1, NAT_1;
  constructors ENUMSET1, XXREAL_0, NAT_1, CLASSES1, BINARITH, CIRCUIT1,
-      CIRCUIT2, CIRCCOMB, SEQ_1, RELSET_1, BINOP_1, WELLORD2, DOMAIN_1;
+      CIRCUIT2, CIRCCOMB, SEQ_1, RELSET_1, BINOP_1, WELLORD2, DOMAIN_1,
+      XTUPLE_0;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0, FINSEQ_1,
       FINSEQ_2, CARD_3, STRUCT_0, MSUALG_1, CIRCCOMB, NAT_1, XCMPLX_0,
-      MSAFREE2, MARGREL1, FINSET_1, CARD_1;
+      MSAFREE2, MARGREL1, FINSET_1, CARD_1, FUNCT_4, XTUPLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, RELAT_1, MSAFREE2, CIRCUIT2, CIRCCOMB, XBOOLE_0, MARGREL1;
+ definitions TARSKI, RELAT_1, MSAFREE2, CIRCUIT2, CIRCCOMB, XBOOLE_0, MARGREL1,
+      XTUPLE_0;
  theorems TARSKI, AXIOMS, ENUMSET1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2,
       FUNCT_4, ORDINAL1, FINSEQ_1, FINSEQ_2, MSUALG_1, MSAFREE2, CIRCUIT1,
-      CIRCUIT2, CIRCCOMB, XBOOLE_0, XBOOLE_1, CLASSES1, CARD_1;
+      CIRCUIT2, CIRCCOMB, XBOOLE_0, XBOOLE_1, CLASSES1, CARD_1, XTUPLE_0;
  schemes NAT_1, RECDEF_1, FUNCT_2;
 
 begin :: Pairs, Set Without Pairs, and Nonpair-yielding Functions
-
-definition
-  let IT be set;
-  attr IT is pair means
-  : Def1:
-  ex x,y being set st IT = [x,y];
-end;
 
 registration
   cluster pair -> non empty for set;
@@ -55,23 +51,6 @@ A1: z = [x,y];
 end;
 
 registration
-  let x,y be set;
-  cluster [x,y] -> pair;
-  coherence
-  proof
-    take x,y;
-    thus thesis;
-  end;
-end;
-
-registration
-  cluster pair for set;
-  existence
-  proof
-    take [0,1];
-    take 0,1;
-    thus thesis;
-  end;
   cluster non pair for set;
   existence
   proof
@@ -95,6 +74,7 @@ A1: n = [x,y];
 end;
 
 definition
+ canceled;
   let IT be set;
   attr IT is with_pair means
   : Def2:
@@ -193,7 +173,7 @@ registration
     let a be set;
     assume a in {x};
     then a = x by TARSKI:def 1;
-    hence thesis by Def1;
+    hence thesis by XTUPLE_0:def 1;
   end;
   let y be pair set;
   cluster {x,y} -> Relation-like;
@@ -202,7 +182,7 @@ registration
     let a be set;
     assume a in {x,y};
     then a = x or a = y by TARSKI:def 2;
-    hence thesis by Def1;
+    hence thesis by XTUPLE_0:def 1;
   end;
   let z be pair set;
   cluster {x,y,z} -> Relation-like;
@@ -211,7 +191,7 @@ registration
     let a be set;
     assume a in {x,y,z};
     then a = x or a = y or a = z by ENUMSET1:def 1;
-    hence thesis by Def1;
+    hence thesis by XTUPLE_0:def 1;
   end;
 end;
 
@@ -1128,7 +1108,7 @@ registration
     consider A being MSAlgebra over S such that
 A1: A is gate`2=den by CIRCCOMB:def 11;
     g`2 = [g`1, (the Charact of A).g]`2 by A1,CIRCCOMB:def 10
-      .= (the Charact of A).g by MCART_1:7
+      .= (the Charact of A).g
       .= Den(g, A) by MSUALG_1:def 6;
     hence thesis;
   end;
@@ -1146,7 +1126,7 @@ A1: for g being set st g in the carrier' of S holds g = [g`1, (the
   Charact of A).g];
   let s be State of A, g be Gate of S;
 A2: Den(g, A) = (the Charact of A).g by MSUALG_1:def 6
-    .= [g`1, (the Charact of A).g]`2 by MCART_1:7
+    .= [g`1, (the Charact of A).g]`2
     .= g`2 by A1;
   set v = the_result_sort_of g;
   dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
@@ -1174,7 +1154,7 @@ A1: g`1 = p & g`2 = f by MCART_1:7;
 A2: the_result_sort_of g = (the ResultSort of S).g by MSUALG_1:def 2
     .= g by CIRCCOMB:44;
   the_arity_of g = (the Arity of S).g by MSUALG_1:def 1
-    .= [(the Arity of S).g, g`2]`1 by MCART_1:7
+    .= [(the Arity of S).g, g`2]`1
     .= g`1 by CIRCCOMB:def 8;
   hence thesis by A1,A2,Th34;
 end;
@@ -1193,7 +1173,7 @@ proof
   assume [p,f] in the carrier' of S;
   then reconsider g = [p,f] as Gate of S;
 A1: the_arity_of g = (the Arity of S).g by MSUALG_1:def 1
-    .= [(the Arity of S).g, g`2]`1 by MCART_1:7
+    .= [(the Arity of S).g, g`2]`1
     .= g`1 by CIRCCOMB:def 8
     .= p by MCART_1:7;
 A2: the_result_sort_of g = (the ResultSort of S).g by MSUALG_1:def 2
@@ -1327,7 +1307,7 @@ proof
     then g in {[p,f]} by CIRCCOMB:def 5;
     then
 A1: g = [p,f] by TARSKI:def 1;
-    [p,f]`2 = f by MCART_1:7;
+    [p,f]`2 = f;
     hence thesis by A1,CIRCCOMB:def 5;
   end;
   thus S is Circuit-like

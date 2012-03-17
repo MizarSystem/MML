@@ -17,6 +17,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -51,9 +52,9 @@
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="17" value="false"/>
-<Adjective nr="32"/>
-<Adjective nr="36"/>
-<Adjective nr="119"/>
+<Adjective nr="35"/>
+<Adjective nr="40"/>
+<Adjective nr="126"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GR_CY_3" nr="2">
@@ -74,38 +75,38 @@
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="17" value="false"/>
-<Adjective nr="32"/>
-<Adjective nr="36"/>
-<Adjective nr="120"/>
+<Adjective nr="35"/>
+<Adjective nr="40"/>
+<Adjective nr="127"/>
 </Cluster>
 </RCluster>
 <FCluster aid="GR_CY_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="43" value="false"/>
 <Adjective nr="47" value="false"/>
-<Adjective nr="67"/>
-<Adjective nr="87"/>
-<Adjective nr="92"/>
+<Adjective nr="51" value="false"/>
+<Adjective nr="73"/>
 <Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="102"/>
-<Adjective nr="104"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="108"/>
 <Adjective nr="110"/>
-<Adjective nr="111"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="203">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="69"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
-<Adjective nr="104"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="75"/>
+<Adjective nr="107"/>
+<Adjective nr="108"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 </Registrations>

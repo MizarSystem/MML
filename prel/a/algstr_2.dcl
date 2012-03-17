@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -31,27 +32,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
 <Adjective nr="39" value="false"/>
-<Adjective nr="82"/>
-<Adjective nr="83"/>
-<Adjective nr="86"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="94"/>
+<Adjective nr="92"/>
 <Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="104"/>
-<Adjective nr="106"/>
-<Adjective nr="111"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
+<Adjective nr="110"/>
 <Adjective nr="112"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSTR_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="156"/>
+<Func kind="K" nr="164"/>
 <Cluster>
-<Adjective nr="82"/>
-<Adjective nr="89"/>
+<Adjective nr="88"/>
+<Adjective nr="95"/>
 </Cluster>
 </FCluster>
 </Registrations>

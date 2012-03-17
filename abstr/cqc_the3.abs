@@ -2,7 +2,7 @@
 ::  by Oleg Okhotnikov
 ::
 :: Received January 24, 1995
-:: Copyright (c) 1995-2011 Association of Mizar Users
+:: Copyright (c) 1995-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,19 +17,20 @@ environ
  vocabularies NUMBERS, SUBSET_1, CQC_LANG, QC_LANG1, CQC_THE1, TARSKI,
       XBOOLE_0, XBOOLEAN, BVFUNC_2, RCOMP_1, XXREAL_0, FINSEQ_1, FUNCT_1,
       ARYTM_3, CARD_1, ZFREFLE1, FUNCOP_1, REALSET1, QC_LANG3, CQC_THE3;
- notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, NUMBERS, NAT_1, FUNCT_1,
-      FINSEQ_1, QC_LANG1, QC_LANG3, CQC_LANG, CQC_THE1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, NUMBERS, ORDINAL1, NAT_1,
+      FUNCT_1, FINSEQ_1, QC_LANG1, QC_LANG3, CQC_LANG, CQC_THE1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, QC_LANG3, CQC_THE1;
- registrations SUBSET_1, RELSET_1, MEMBERED, CQC_LANG, LUKASI_1;
+ registrations SUBSET_1, RELSET_1, MEMBERED, CQC_LANG, LUKASI_1, RELAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
-reserve p, q, r, s, p1, q1 for Element of CQC-WFF,
-  X, Y, Z, X1, X2 for Subset of CQC-WFF,
-  h for QC-formula,
-  x, y for bound_QC-variable,
+reserve A for QC-alphabet;
+reserve p, q, r, s, p1, q1 for Element of CQC-WFF(A),
+  X, Y, Z, X1, X2 for Subset of CQC-WFF(A),
+  h for QC-formula of A,
+  x, y for bound_QC-variable of A,
   n for Element of NAT;
 
 theorem :: CQC_THE3:1
@@ -45,7 +46,8 @@ theorem :: CQC_THE3:4
   X |- p & X c= Y implies Y |- p;
 
 definition
-  let p, q be Element of CQC-WFF;
+  let A;
+  let p, q be Element of CQC-WFF(A);
   pred p |- q means
 :: CQC_THE3:def 1
 
@@ -59,11 +61,12 @@ theorem :: CQC_THE3:6
   p |- q & q |- r implies p |- r;
 
 definition
-  let X, Y be Subset of CQC-WFF;
+  let A;
+  let X, Y be Subset of CQC-WFF(A);
   pred X |- Y means
 :: CQC_THE3:def 2
 
-  for p being Element of CQC-WFF st p in Y holds X |- p;
+  for p being Element of CQC-WFF(A) st p in Y holds X |- p;
 end;
 
 theorem :: CQC_THE3:7
@@ -85,30 +88,31 @@ theorem :: CQC_THE3:12
   X c= Y implies Y |- X;
 
 theorem :: CQC_THE3:13
-  X |- TAUT;
+  X |- TAUT(A);
 
 theorem :: CQC_THE3:14
-  {}(CQC-WFF) |- TAUT;
+  {}(CQC-WFF(A)) |- TAUT(A);
 
 definition
-  let X be Subset of CQC-WFF;
+  let A;
+  let X be Subset of CQC-WFF(A);
   pred |- X means
 :: CQC_THE3:def 3
 
-  for p being Element of CQC-WFF st p in X holds p is valid;
+  for p being Element of CQC-WFF(A) st p in X holds p is valid;
 end;
 
 theorem :: CQC_THE3:15
-  |- X iff {}(CQC-WFF) |- X;
+  |- X iff {}(CQC-WFF(A)) |- X;
 
 theorem :: CQC_THE3:16
-  |- TAUT;
+  |- TAUT(A);
 
 theorem :: CQC_THE3:17
-  |- X iff X c= TAUT;
+  |- X iff X c= TAUT(A);
 
 definition
-  let X, Y;
+  let A, X, Y;
   pred X |-| Y means
 :: CQC_THE3:def 4
 
@@ -148,7 +152,8 @@ theorem :: CQC_THE3:27
   X1 |-| X2 & Y |- X1 implies Y |- X2;
 
 definition
-  let p, q be Element of CQC-WFF;
+  let A;
+  let p, q be Element of CQC-WFF(A);
   pred p |-| q means
 :: CQC_THE3:def 5
 
@@ -188,15 +193,17 @@ theorem :: CQC_THE3:37
   p |-| q implies All(x,p) |-| All(y,q);
 
 definition
-  let p, q be Element of CQC-WFF;
+  let A;
+  let p, q be Element of CQC-WFF(A);
   pred p is_an_universal_closure_of q means
 :: CQC_THE3:def 6
 
   p is closed & ex n being
 Element of NAT st 1 <= n & ex L being FinSequence st len L = n & L.1 = q & L.n
-  = p & for k being Element of NAT st 1 <= k & k < n holds ex x being
-bound_QC-variable st ex r being Element of CQC-WFF st r = L.k & L.(k+1) = All(x
-  ,r);
+  = p & for k being Element of NAT st 1 <= k & k < n holds
+  ex x being bound_QC-variable of A st
+ex r being Element of CQC-WFF(A) st r = L.k &
+L.(k+1) = All(x,r);
 end;
 
 theorem :: CQC_THE3:38
@@ -238,7 +245,8 @@ theorem :: CQC_THE3:49
   implies (p |-| q iff 'not' p1 |-| 'not' q1);
 
 definition
-  let p, q be Element of CQC-WFF;
+  let A;
+  let p, q be Element of CQC-WFF(A);
   pred p <==> q means
 :: CQC_THE3:def 7
 
@@ -278,13 +286,15 @@ theorem :: CQC_THE3:59
   p <==> q implies Ex(x,p) <==> Ex(x,q);
 
 theorem :: CQC_THE3:60
-  for k being Element of NAT, l being QC-variable_list of k, a
-being free_QC-variable, x being bound_QC-variable holds still_not-bound_in l c=
+  for k being Element of NAT, l being QC-variable_list of k,A, a
+being free_QC-variable of A, x being bound_QC-variable of A holds
+still_not-bound_in l c=
   still_not-bound_in Subst(l,a .--> x);
 
 theorem :: CQC_THE3:61
-  for k being Element of NAT, l being QC-variable_list of k, a
-  being free_QC-variable, x being bound_QC-variable holds still_not-bound_in
+  for k being Element of NAT, l being QC-variable_list of k,A, a
+  being free_QC-variable of A,
+  x being bound_QC-variable of A holds still_not-bound_in
   Subst(l,a .--> x) c= still_not-bound_in l \/ {x};
 
 theorem :: CQC_THE3:62

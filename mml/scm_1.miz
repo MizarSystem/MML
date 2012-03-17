@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek and Piotr Rudnicki
 ::
 :: Received October 8, 1993
-:: Copyright (c) 1993-2011 Association of Mizar Users
+:: Copyright (c) 1993-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,24 +15,22 @@
 environ
 
  vocabularies NUMBERS, INT_1, FINSEQ_1, SUBSET_1, FSM_1, AMI_3, PARTFUN1,
-      AMI_1, SCMNORM, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1, ARYTM_3, XXREAL_0,
-      CARD_1, TARSKI, AFINSQ_1, AMI_2, ORDINAL4, GRAPHSP, ARYTM_1, SCM_1,
-      STRUCT_0, ORDINAL1, RECDEF_2, FUNCT_4, CAT_1;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, VALUED_1,
-      MCART_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, XXREAL_0,
-      AFINSQ_1, FUNCT_4, RECDEF_2, AMI_2, STRUCT_0, MEMSTR_0, COMPOS_1,
-      EXTPRO_1, AMI_3;
- constructors XXREAL_0, AMI_3, RELSET_1, AMI_2, AFINSQ_1, ORDINAL4, PRE_POLY,
-      RECDEF_2, AMISTD_2, MEMSTR_0;
- registrations XBOOLE_0, SETFAM_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, AMI_3, AMI_2, AFINSQ_1, RELAT_1, COMPOS_1, PBOOLE, FINSEQ_1,
-      STRUCT_0, VALUED_0, FUNCT_4, MEMSTR_0;
+      AMI_1, EXTPRO_1, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1, ARYTM_3, XXREAL_0,
+      CARD_1, TARSKI, AFINSQ_1, ORDINAL4, GRAPHSP, ARYTM_1, SCM_1, STRUCT_0,
+      ORDINAL1, RECDEF_2, FUNCT_4, CAT_1, GOBRD13, MEMSTR_0;
+ notations TARSKI,
+      XTUPLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, RELAT_1, FUNCT_1,
+      PARTFUN1, FINSEQ_1, XXREAL_0, AFINSQ_1, FUNCT_4, RECDEF_2, STRUCT_0,
+      MEMSTR_0, COMPOS_1, EXTPRO_1, AMI_3;
+ constructors AMI_3, RELSET_1, PRE_POLY, XTUPLE_0;
+ registrations XBOOLE_0, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
+      AMI_3, AFINSQ_1, RELAT_1, PBOOLE, FINSEQ_1, STRUCT_0, VALUED_0, FUNCT_4,
+      COMPOS_0, XTUPLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, AFINSQ_1, COMPOS_1, EXTPRO_1, NAT_1, AMI_3, FUNCOP_1,
-      RELAT_1, FUNCT_1, MEMSTR_0;
- theorems NAT_1, INT_1, FUNCT_1, FUNCT_2, FINSEQ_1, AMI_2, AMI_3, FINSEQ_3,
-      RELSET_1, RELAT_1, AFINSQ_1, PARTFUN1, RECDEF_2, COMPOS_1, FUNCT_4,
-      FUNCOP_1, TARSKI, EXTPRO_1, GRFUNC_1, CARD_1, XCMPLX_1, MEMSTR_0;
+ definitions TARSKI, AFINSQ_1, EXTPRO_1, NAT_1, AMI_3, FUNCOP_1, RELAT_1,
+      FUNCT_1, MEMSTR_0, XTUPLE_0;
+ theorems NAT_1, INT_1, FINSEQ_1, AMI_3, AFINSQ_1, PARTFUN1, RECDEF_2, FUNCT_4,
+      FUNCOP_1, TARSKI, EXTPRO_1, GRFUNC_1, CARD_1, MEMSTR_0;
  schemes PARTFUN1;
 
 begin
@@ -48,90 +46,89 @@ definition
   end;
 end;
 
+registration let i1 be Integer;
+ cluster <%i1%> -> INT-valued;
+ coherence;
+ let i2 be Integer;
+ cluster <%i1,i2%> -> INT-valued;
+ coherence;
+ let i3 be Integer;
+ cluster <%i1,i2,i3%> -> INT-valued;
+ coherence;
+ let i4 be Integer;
+ cluster <%i1,i2,i3,i4%> -> INT-valued;
+ coherence;
+end;
+
 definition
-  let D be FinSequence of INT, ds be Element of NAT;
-  mode State-consisting of ds, D -> State of SCM means
+  let D be XFinSequence of INT;
+  mode State-consisting of D -> State of SCM means
 :Def1:
-   for k being Element of NAT st k < len D holds it.dl.(ds+k) = D.(k+1);
+   for k being Element of NAT st k < len D holds it.dl.k = D.k;
   existence
   proof
     defpred P[set,set] means
-     ex k being Element of NAT st $1 = dl.(ds+k) & $2 = D.(k+1);
-X: for x,y being set
+     ex k being Element of NAT st $1 = dl.k & $2 = D.k;
+A1: for x,y being set
      st x in the carrier of SCM & P[x,y] holds y in INT by INT_1:def 2;
-Y: for x,y1,y2 being set
-     st x in the carrier of SCM & P[x,y1] & P[x,y2] holds y1 = y2
-    proof let x,y1,y2 be set such that
-   x in the carrier of SCM and
-W2:   P[x,y1] and
-W3:   P[x,y2];
-     consider k1 being Element of NAT such that
-W4:   x = dl.(ds+k1) and
-W5:   y1 = D.(k1+1) by W2;
-     consider k2 being Element of NAT such that
-W6:   x = dl.(ds+k2) and
-W7:   y2 = D.(k2+1) by W3;
-      ds+k1 = ds+k2 by W4,W6,AMI_3:10;
-     hence y1 = y2 by W7,W5;
-    end;
+A2: for x,y1,y2 being set
+     st x in the carrier of SCM & P[x,y1] & P[x,y2] holds y1 = y2 by AMI_3:10;
     consider p being PartFunc of SCM,INT such that
-W0: for x being set
+A9: for x being set
       holds x in dom p iff x in the carrier of SCM &
        ex y being set st P[x,y] and
-W1: for x being set st x in dom p holds P[x,p.x]
-      from PARTFUN1:sch 2(X,Y);
-C:  p is (the carrier of SCM)-defined
+A10: for x being set st x in dom p holds P[x,p.x]
+      from PARTFUN1:sch 2(A1,A2);
+A11:  p is (the carrier of SCM)-defined
      proof
       let e be set;
-:::      assume e in dom p;
-:::       then e is Element of SCM by W0;
-      thus thesis by W0;
+      thus thesis by A9;
      end;
-    p is (the Object-Kind of SCM)-compatible
+    p is (the_Values_of SCM)-compatible
      proof let e be set;
       assume
-Z:     e in dom p;
+A12:     e in dom p;
        then
-AA:    ex y being set st P[e,y] by W0;
-       reconsider o = e as Object of SCM by Z,W0;
-B:     ObjectKind o = INT by AA,AMI_3:11;
+A13:    ex y being set st P[e,y] by A9;
+       reconsider o = e as Object of SCM by A12,A9;
+A14:     Values o = INT by A13,AMI_3:11;
        consider k being Element of NAT such that
-W3:     o = dl.(ds+k) & p.o = D.(k+1) by W1,Z;
-      thus p.e in (the Object-Kind of SCM).e by B,W3,INT_1:def 2;
+A15:     o = dl.k & p.o = D.k by A10,A12;
+      thus p.e in (the_Values_of SCM).e by A14,A15,INT_1:def 2;
      end;
-    then reconsider p as PartState of SCM by C;
+    then reconsider p as PartState of SCM by A11;
    take s = (the State of SCM)+*p;
    let k be Element of NAT;
    assume k < len D;
-    ex i being Element of NAT st dl.(ds+k) = dl.(ds+i) & D.(k+1) = D.(i+1);
+    ex i being Element of NAT st dl.k = dl.i & D.k = D.i;
     then
-X:   dl.(ds+k) in dom p by W0;
+A16:   dl.k in dom p by A9;
     then consider i being Element of NAT such that
-W2:  dl.(ds+k) = dl.(ds+i) & p.dl.(ds+k) = D.(i+1) by W1;
-A:  ds+k = ds+i by W2,AMI_3:10;
+A17:  dl.k = dl.i & p.dl.k = D.i by A10;
+A18:  k = i by A17,AMI_3:10;
     p c= s by FUNCT_4:25;
-   hence s.dl.(ds+k) = D.(k+1) by A,W2,X,GRFUNC_1:2;
+   hence s.dl.k = D.k by A18,A17,A16,GRFUNC_1:2;
   end;
 end;
 
 registration
-  let D be FinSequence of INT, il, ds be Element of NAT;
- cluster il-started for State-consisting of ds, D;
+  let D be XFinSequence of INT, il be Element of NAT;
+ cluster il-started for State-consisting of D;
  existence
   proof
-   set s = the State-consisting of ds, D;
+   set s = the State-consisting of D;
    set s1 = s +* Start-At(il,SCM);
-   for k being Element of NAT st k < len D holds s1.dl.(ds+k) = D.(k+1)
+   for k being Element of NAT st k < len D holds s1.dl.k = D.k
     proof let k be Element of NAT;
      assume
 A1:    k < len D;
 A2:   dom Start-At(il,SCM) = {IC SCM} by FUNCOP_1:13;
-      dl.(ds+k) <> IC SCM by AMI_3:13;
-     then not dl.(ds+k) in dom Start-At(il,SCM) by A2,TARSKI:def 1;
-     hence s1.dl.(ds+k) = s.dl.(ds+k) by FUNCT_4:11
-        .= D.(k+1) by A1,Def1;
+      dl.k <> IC SCM by AMI_3:13;
+     then not dl.k in dom Start-At(il,SCM) by A2,TARSKI:def 1;
+     hence s1.dl.k = s.dl.k by FUNCT_4:11
+        .= D.k by A1,Def1;
     end;
-   then reconsider s1 as State-consisting of ds, D by Def1;
+   then reconsider s1 as State-consisting of D by Def1;
    take s1;
    thus IC s1 = il by MEMSTR_0:16;
   end;
@@ -139,47 +136,42 @@ end;
 
 theorem
   for i1, i2, i3, i4 being Integer, il being Element of NAT,
- s being il-started State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*i4*>
+ s being il-started State-consisting of <%i1,i2,i3,i4%>
 holds
   s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
 proof
   let i1, i2, i3, i4 be Integer, il be Element of NAT,
-   s be il-started State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*
-  i4*>;
-  set D = <*i1*>^<*i2*>^<*i3*>^<*i4*>;
-A1: 0+2=2 & 0+3=3;
-A2: D.(2+1) = i3 & D.(3+1) = i4 by FINSEQ_1:66;
-A3: len D = 4 & 0+0=0 by FINSEQ_1:66;
-  D.(0+1) = i1 & D.(1+1) = i2 by FINSEQ_1:66;
-  hence thesis by A2,A3,A1,Def1;
+   s be il-started State-consisting of <%i1,i2,i3,i4%>;
+  set D = <%i1,i2,i3,i4%>;
+A2: D.2 = i3 & D.3 = i4 by AFINSQ_1:85;
+A3: len D = 4 & 0+0=0 by AFINSQ_1:84;
+  D.0 = i1 & D.1 = i2 by AFINSQ_1:85;
+  hence thesis by A2,A3,Def1;
 end;
 
-theorem Th14:
+theorem Th2:
   for i1, i2 being Integer, il being Element of NAT,
-  s being il-started State-consisting of 0, <*i1*>^<*i2*> holds
+  s being il-started State-consisting of <%i1,i2%> holds
    s.dl.0 = i1 & s.dl.1 = i2
 proof
   let i1, i2 be Integer, il be Element of NAT,
-      s be il-started State-consisting of 0, <*i1*>^<*i2*>;
-  set data = <*i1*>^<*i2*>;
-A1: 0+0=0;
-A2: data = <*i1, i2*> by FINSEQ_1:def 9;
-  then
-A3: len data = 2 & data.(0+1) = i1 by FINSEQ_1:44;
- data.(1+1) = i2 by A2,FINSEQ_1:44;
-  hence thesis by A3,A1,Def1;
+      s be il-started State-consisting of <%i1,i2%>;
+  set data = <%i1,i2%>;
+A3: len data = 2 & data.0 = i1 by AFINSQ_1:38;
+ data.1 = i2 by AFINSQ_1:38;
+  hence thesis by A3,Def1;
 end;
 
-theorem Th15:
+theorem Th3:
   for I1, I2 being Instruction of SCM
   for F being total
-   NAT-defined the Instructions of SCM-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
    st <%I1%>^<%I2%> c= F
    holds F.0 = I1 & F.1 = I2
 proof
   let I1, I2 be Instruction of SCM;
   let F be total
-   NAT-defined the Instructions of SCM-valued Function such that
+   NAT-defined the InstructionsF of SCM-valued Function such that
 A1: <%I1%>^<%I2%> c= F;
   set ins = <%I1%>^<%I2%>;
 A2: ins = <%I1, I2%>;
@@ -192,9 +184,9 @@ A4:  ins.0 = I1 by A2,AFINSQ_1:38;
 end;
 
 reserve F for total
-  NAT-defined (the Instructions of SCM)-valued Function;
+  NAT-defined (the InstructionsF of SCM)-valued Function;
 
-Lm3:
+Lm1:
  for k being Element of NAT, s being State of SCM
  holds Comput(F,s,k+1) = Exec(CurInstr(F,Comput(F,s,k)),Comput(F,s,k))
 proof
@@ -203,9 +195,9 @@ proof
     .= Exec(CurInstr(F,Comput(F,s,k)),Comput(F,s,k));
 end;
 
-Lm4: now
+Lm2: now
    let F be total
-  NAT-defined (the Instructions of SCM)-valued Function;
+  NAT-defined (the InstructionsF of SCM)-valued Function;
   let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
   assume
 A1: IC Comput(F,s,k) = n;
@@ -215,13 +207,13 @@ A1: IC Comput(F,s,k) = n;
 A2: F.n = a := b or F.n = AddTo(a,b) or F.n = SubFrom(a, b) or
   F.n = MultBy(a, b) or a<>b & F.n = Divide(a,b);
 A3: dom F = NAT by PARTFUN1:def 2;
-  thus csk1 = (Exec(CurInstr(F,csk), csk)) by Lm3
+  thus csk1 = (Exec(CurInstr(F,csk), csk)) by Lm1
     .= Exec(F.n, csk) by A1,A3,PARTFUN1:def 6;
   hence IC csk1 = succ IC csk by A2,AMI_3:2,3,4,5,6
     .= n+1 by A1;
 end;
 
-theorem Th18:
+theorem Th4:
   for k, n being Element of NAT, s being State of SCM,
     a, b being Data-Location st
   IC Comput(F,s,k) = n & F.n = a := b
@@ -236,11 +228,11 @@ A1: IC Comput(F,s,k) = n;
   assume
 A2: F.n = a := b;
   then Comput(F,s,k+1)
-   = Exec(a:=b, Comput(F,s,k)) by A1,Lm4;
-  hence thesis by A1,A2,Lm4,AMI_3:2;
+   = Exec(a:=b, Comput(F,s,k)) by A1,Lm2;
+  hence thesis by A1,A2,Lm2,AMI_3:2;
 end;
 
-theorem Th19:
+theorem Th5:
   for k, n being Element of NAT, s being State of SCM, a, b being
   Data-Location st IC Comput(F,s,k) = n & F.n = AddTo(a,b)
   holds IC Comput(F,s,k+1) = n+1 &
@@ -255,11 +247,11 @@ A1: IC Comput(F,s,k) = n;
   assume
 A2: F.n = AddTo(a,b);
   then Comput(F,s,k+1)
-   = Exec(AddTo(a,b), Comput(F,s,k)) by A1,Lm4;
-  hence thesis by A1,A2,Lm4,AMI_3:3;
+   = Exec(AddTo(a,b), Comput(F,s,k)) by A1,Lm2;
+  hence thesis by A1,A2,Lm2,AMI_3:3;
 end;
 
-theorem Th20:
+theorem Th6:
   for k, n being Element of NAT, s being State of SCM, a, b being
   Data-Location st IC Comput(F,s,k) = n & F.n = SubFrom(a,b)
    holds IC Comput(F,s,k+1) = n+1 &
@@ -275,11 +267,11 @@ A1: IC Comput(F,s,k)= n;
   assume
 A2: F.n = SubFrom(a,b);
   then Comput(F,s,k+1) =
-   Exec(SubFrom(a,b), Comput(F,s,k)) by A1,Lm4;
-  hence thesis by A1,A2,Lm4,AMI_3:4;
+   Exec(SubFrom(a,b), Comput(F,s,k)) by A1,Lm2;
+  hence thesis by A1,A2,Lm2,AMI_3:4;
 end;
 
-theorem Th21:
+theorem Th7:
   for k, n being Element of NAT, s being State of SCM, a, b being
   Data-Location st IC Comput(F,s,k) = n & F.n = MultBy(a,b) holds
 IC
@@ -295,11 +287,11 @@ A1: IC Comput(F,s,k) = n;
   assume
 A2: F.n = MultBy(a,b);
   then Comput(F,s,k+1)
-   = Exec(MultBy(a,b), Comput(F,s,k)) by A1,Lm4;
-  hence thesis by A1,A2,Lm4,AMI_3:5;
+   = Exec(MultBy(a,b), Comput(F,s,k)) by A1,Lm2;
+  hence thesis by A1,A2,Lm2,AMI_3:5;
 end;
 
-theorem Th22:
+theorem Th8:
   for k, n being Element of NAT, s being State of SCM, a, b being
 Data-Location st IC Comput(F,s,k) = n & F.n = Divide(a,b) & a<>b
 holds
@@ -317,11 +309,11 @@ A1: IC Comput(F,s,k) = n;
   assume
 A2: F.n = Divide(a,b) & a <> b;
   then Comput(F,s,k+1)
-   = Exec(Divide(a,b), Comput(F,s,k)) by A1,Lm4;
-  hence thesis by A1,A2,Lm4,AMI_3:6;
+   = Exec(Divide(a,b), Comput(F,s,k)) by A1,Lm2;
+  hence thesis by A1,A2,Lm2,AMI_3:6;
 end;
 
-theorem Th23:
+theorem Th9:
   for k, n being Element of NAT, s being State of SCM, il being
   Element of NAT st IC Comput(F,s,k) = n &
    F.n = SCM-goto il
@@ -334,13 +326,13 @@ A1: IC Comput(F,s,k) = n & F.n = SCM-goto il;
   set csk1 = Comput(F,s,k+1);
   set csk = Comput(F,s,k);
 A2:  dom F = NAT by PARTFUN1:def 2;
-A3: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
+A3: csk1 = Exec(CurInstr(F,csk), csk) by Lm1
     .= Exec(SCM-goto il, csk) by A1,A2,PARTFUN1:def 6;
   hence IC csk1 = il by AMI_3:7;
   thus thesis by A3,AMI_3:7;
 end;
 
-theorem Th24:
+theorem Th10:
   for k, n being Element of NAT, s being State of SCM, a being
   Data-Location, il being Element of NAT st IC Comput(F,s,k) =
   n & F.n = a =0_goto il holds ( Comput(F,s,k).a = 0 implies IC
@@ -358,7 +350,7 @@ A2: F.n = a =0_goto il;
   set csk1 = Comput(F,s,k+1);
   set csk = Comput(F,s,k);
 A3:  dom F = NAT by PARTFUN1:def 2;
-A4: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
+A4: csk1 = Exec(CurInstr(F,csk), csk) by Lm1
     .= Exec(a =0_goto il, csk) by A1,A2,A3,PARTFUN1:def 6;
   hence csk.a = 0 implies IC csk1 = il by AMI_3:8;
   hereby
@@ -369,7 +361,7 @@ A4: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
   thus thesis by A4,AMI_3:8;
 end;
 
-theorem Th25:
+theorem Th11:
   for k, n being Element of NAT, s being State of SCM, a being
   Data-Location, il being Element of NAT st IC Comput(F,s,k) =
   n & F.n = a >0_goto il holds ( Comput(F,s,k).a > 0 implies IC
@@ -387,7 +379,7 @@ A2: F.n = a >0_goto il;
   set csk1 = Comput(F,s,k+1);
   set csk = Comput(F,s,k);
 A3:  dom F = NAT by PARTFUN1:def 2;
-A4: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
+A4: csk1 = Exec(CurInstr(F,csk), csk) by Lm1
     .= Exec(a >0_goto il, csk) by A1,A2,A3,PARTFUN1:def 6;
   hence csk.a > 0 implies IC csk1 = il by AMI_3:9;
   hereby
@@ -398,7 +390,7 @@ A4: csk1 = Exec(CurInstr(F,csk), csk) by Lm3
   thus thesis by A4,AMI_3:9;
 end;
 
-theorem Th26:
+theorem Th12:
   (halt SCM)`1_3 = 0 &
   (for a, b being Data-Location holds (a := b)`1_3 = 1) &
   (for a, b being Data-Location holds (AddTo(a,b))`1_3 = 2) &
@@ -414,24 +406,18 @@ theorem Th26:
 theorem
   for i1, i2, i3, i4 being Integer,
   s being State of SCM st s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
-   holds s is State-consisting of 0, <*i1*>^<*i2*>^<*i3*>^<*i4*>
+   holds s is State-consisting of <%i1,i2,i3,i4%>
 proof
   let i1, i2, i3, i4 be Integer, s be State of SCM such that
 A1: s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4;
-  set D = <*i1*>^<*i2*>^<*i3*>^<*i4*>;
+  set D = <%i1,i2,i3,i4%>;
   now
     let k be Element of NAT;
-A2: len D=4 & 4=3+1 by FINSEQ_1:66;
-A3: 3=2+1;
+A2: len D=4 & 4=3+1 by AFINSQ_1:84;
     assume k < len D;
     then k <= 3 by A2,NAT_1:13;
-    then
-A4: k <= 2 or k=3 by A3,NAT_1:8;
-A5: 1=0+1;
-    2=1+1;
-    then k <= 1 or k=2 or k=3 by A4,NAT_1:8;
-    then k=0 or k=1 or k=2 or k=3 by A5,NAT_1:8;
-    hence s.dl.(0+k)=D.(k+1) by A1,FINSEQ_1:66;
+    then k=0 or k=1 or k=2 or k=3 by NAT_1:27;
+    hence s.dl.k=D.k by A1,AFINSQ_1:85;
   end;
   hence thesis by Def1;
 end;
@@ -440,15 +426,15 @@ end;
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%halt SCM%> c= F
-  for s being 0-started State-consisting of 0, <*>INT
+  for s being 0-started State-consisting of <*>INT
    holds F halts_on s & LifeSpan(F,s) = 0 & Result(F,s) = s
 proof
   let F be total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%halt SCM%> c= F;
-  let s be 0-started State-consisting of 0, <*>INT;
+  let s be 0-started State-consisting of <*>INT;
   1 = dom <%halt SCM%> by AFINSQ_1:33;
   then
   0 in dom<%halt SCM%> by CARD_1:49,TARSKI:def 1;
@@ -456,14 +442,14 @@ A1: <%halt SCM%> c= F;
 A2: F.(0+0) = <%halt SCM%>.0 by A1,GRFUNC_1:2
     .= halt SCM by AFINSQ_1:34;
 A3: s = Comput(F,s,0) by EXTPRO_1:2;
- F.IC s = halt SCM by A2,MEMSTR_0:def 8;
+ F.IC s = halt SCM by A2,MEMSTR_0:def 11;
   hence
 A4: F halts_on s by A3,EXTPRO_1:30;
   dom F = NAT by PARTFUN1:def 2;
   then CurInstr(F,s) = F.IC s by PARTFUN1:def 6
-       .= halt SCM by A2,MEMSTR_0:def 8;
+       .= halt SCM by A2,MEMSTR_0:def 11;
   hence LifeSpan(F,s) = 0 by A4,A3,EXTPRO_1:def 15;
-  IC s = 0 by MEMSTR_0:def 8;
+  IC s = 0 by MEMSTR_0:def 11;
   hence thesis by A2,A3,EXTPRO_1:31;
 end;
 
@@ -471,81 +457,81 @@ end;
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%dl.0 := dl.1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
    holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i2 &
   for d being Data-Location st d<>dl.0
    holds (Result(F,s)).d = s.d
 proof
   let F be total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%dl.0 := dl.1%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-    s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+    s be 0-started State-consisting of <%i1,i2%>;
   set s1 = Comput(F,s,0+1);
-A2: s.dl.1 = i2 by Th14;
-A3: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 8;
-A4: F.0 = dl.0 := dl.1 by A1,Th15;
+A2: s.dl.1 = i2 by Th2;
+A3: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 11;
+A4: F.0 = dl.0 := dl.1 by A1,Th3;
   then
-A5: IC s1 = 0+1 by A3,Th18;
-A6: F.1 = halt SCM by A1,Th15;
+A5: IC s1 = 0+1 by A3,Th4;
+A6: F.1 = halt SCM by A1,Th3;
   hence F halts_on s by A5,EXTPRO_1:30;
   thus LifeSpan(F,s) = 1 by A6,A3,A5,EXTPRO_1:33;
-  s1.dl.0 = s.dl.1 by A4,A3,Th18;
+  s1.dl.0 = s.dl.1 by A4,A3,Th4;
   hence (Result(F,s)).dl.0 = i2 by A6,A2,A5,EXTPRO_1:31;
   let d be Data-Location;
   assume
 A7: d<>dl.0;
   thus (Result(F,s)).d = s1.d by A6,A5,EXTPRO_1:31
-    .= s.d by A4,A3,A7,Th18;
+    .= s.d by A4,A3,A7,Th4;
 end;
 
 :: Adding two integers
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%AddTo(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
   holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i1 + i2 &
   for d being Data-Location st d<>dl.0 holds Result(F,s).d = s.d
 proof
   let F be total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%AddTo(dl.0,dl.1)%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+      s be 0-started State-consisting of <%i1,i2%>;
   set s0 = Comput(F,s,0);
   set s1 = Comput(F,s,0+1);
 A2: s = s0 by EXTPRO_1:2;
-A3: s.dl.0 = i1 & s.dl.1 = i2 by Th14;
-A4: IC s = 0 by MEMSTR_0:def 8;
-A5: F.0 = AddTo(dl.0,dl.1) by A1,Th15;
+A3: s.dl.0 = i1 & s.dl.1 = i2 by Th2;
+A4: IC s = 0 by MEMSTR_0:def 11;
+A5: F.0 = AddTo(dl.0,dl.1) by A1,Th3;
   then
-A6: IC s1 = (0+1) by A4,A2,Th19;
-A7: F.1 = halt SCM by A1,Th15;
+A6: IC s1 = (0+1) by A4,A2,Th5;
+A7: F.1 = halt SCM by A1,Th3;
   hence F halts_on s by A6,EXTPRO_1:30;
   thus LifeSpan(F,s) = 1 by A4,A7,A2,A6,EXTPRO_1:33;
-  s1.dl.0 = s0.dl.0 + s0.dl.1 by A4,A5,A2,Th19;
+  s1.dl.0 = s0.dl.0 + s0.dl.1 by A4,A5,A2,Th5;
   hence (Result(F,s)).dl.0 = i1 + i2 by A7,A3,A2,A6,EXTPRO_1:31;
   let d be Data-Location;
   assume
 A8: d<>dl.0;
   thus (Result(F,s)).d = s1.d by A7,A6,EXTPRO_1:31
-    .= s.d by A4,A5,A2,A8,Th19;
+    .= s.d by A4,A5,A2,A8,Th5;
 end;
 
 :: Subtracting two integers
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%SubFrom(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s
  & LifeSpan(F,s) = 1 &
  (Result(F,s)).dl.0 = i1 - i2 & for d being Data-Location
@@ -553,75 +539,74 @@ st d<>dl.0 holds
   (Result(F,s)).d = s.d
 proof
   let F being total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%SubFrom(dl.0,dl.1)%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-      s be 0-started State-consisting of 0,
-  <*i1*>^<*i2*>;
+      s be 0-started State-consisting of <%i1,i2%>;
   set s0 = Comput(F,s,0);
   set s1 = Comput(F,s,0+1);
 A2: s = s0 by EXTPRO_1:2;
-A3: s.dl.0 = i1 & s.dl.1 = i2 by Th14;
-A4: IC s = 0 by MEMSTR_0:def 8;
-A5: F.0 = SubFrom(dl.0,dl.1) by A1,Th15;
+A3: s.dl.0 = i1 & s.dl.1 = i2 by Th2;
+A4: IC s = 0 by MEMSTR_0:def 11;
+A5: F.0 = SubFrom(dl.0,dl.1) by A1,Th3;
   then
-A6: IC s1 = (0+1) by A4,A2,Th20;
-A7: F.1 = halt SCM by A1,Th15;
+A6: IC s1 = (0+1) by A4,A2,Th6;
+A7: F.1 = halt SCM by A1,Th3;
   hence F halts_on s by A6,EXTPRO_1:30;
   thus LifeSpan(F,s) = 1 by A4,A7,A2,A6,EXTPRO_1:33;
-  s1.dl.0 = s0.dl.0 - s0.dl.1 by A4,A5,A2,Th20;
+  s1.dl.0 = s0.dl.0 - s0.dl.1 by A4,A5,A2,Th6;
   hence (Result(F,s)).dl.0 = i1 - i2 by A7,A3,A2,A6,EXTPRO_1:31;
   let d be Data-Location;
   assume
 A8: d<>dl.0;
   thus (Result(F,s)).d = s1.d by A7,A6,EXTPRO_1:31
-    .= s.d by A4,A5,A2,A8,Th20;
+    .= s.d by A4,A5,A2,A8,Th6;
 end;
 
 :: Multiplying two integers
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%MultBy(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-     s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+     s being 0-started State-consisting of <%i1,i2%>
   holds F halts_on s & LifeSpan(F,s) = 1 & (Result(F,s)).dl.0 = i1 * i2 &
    for d being Data-Location st d<>dl.0 holds (Result(F,s)).d = s.d
 proof
   let F being total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%MultBy(dl.0,dl.1)%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+      s be 0-started State-consisting of <%i1,i2%>;
   set s0 = Comput(F,s,0);
   set s1 = Comput(F,s,0+1);
 A2: s = s0 by EXTPRO_1:2;
-A3: s.dl.0 = i1 & s.dl.1 = i2 by Th14;
-A4: IC s = 0 by MEMSTR_0:def 8;
-A5: F.0 = MultBy(dl.0,dl.1) by A1,Th15;
+A3: s.dl.0 = i1 & s.dl.1 = i2 by Th2;
+A4: IC s = 0 by MEMSTR_0:def 11;
+A5: F.0 = MultBy(dl.0,dl.1) by A1,Th3;
   then
-A6: IC s1 = (0+1) by A4,A2,Th21;
-A7: F.1 = halt SCM by A1,Th15;
+A6: IC s1 = (0+1) by A4,A2,Th7;
+A7: F.1 = halt SCM by A1,Th3;
   hence F halts_on s by A6,EXTPRO_1:30;
   thus LifeSpan(F,s) = 1 by A4,A7,A2,A6,EXTPRO_1:33;
-  s1.dl.0 = s0.dl.0 * s0.dl.1 by A4,A5,A2,Th21;
+  s1.dl.0 = s0.dl.0 * s0.dl.1 by A4,A5,A2,Th7;
   hence (Result(F,s)).dl.0 = i1 * i2 by A7,A3,A2,A6,EXTPRO_1:31;
   let d be Data-Location;
   assume
 A8: d<>dl.0;
   thus (Result(F,s)).d = s1.d by A7,A6,EXTPRO_1:31
-    .= s.d by A4,A5,A2,A8,Th21;
+    .= s.d by A4,A5,A2,A8,Th7;
 end;
 
 :: Dividing two integers
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%Divide(dl.0,dl.1)%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-    s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+    s being 0-started State-consisting of  <%i1,i2%>
    holds F halts_on s
  & LifeSpan(F,s)
   = 1 & (Result(F,s)).dl.0 = i1 div i2 & (Result(F,s)
@@ -629,129 +614,128 @@ theorem
   Data-Location st d<>dl.0 & d<>dl.1 holds (Result(F,s)).d = s.d
 proof
   let F being total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%Divide(dl.0,dl.1)%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+      s be 0-started State-consisting of  <%i1,i2%>;
   set s1 = Comput(F,s,0+1);
 A2: dl.0 <> dl.1 by AMI_3:10;
-A3: IC s = 0 & F.0 = Divide(dl.0,dl.1) by A1,Th15,MEMSTR_0:def 8;
-A4: s.dl.0 = i1 & s.dl.1 = i2 by Th14;
+A3: IC s = 0 & F.0 = Divide(dl.0,dl.1) by A1,Th3,MEMSTR_0:def 11;
+A4: s.dl.0 = i1 & s.dl.1 = i2 by Th2;
 A5: s = Comput(F,s,0) by EXTPRO_1:2;
-  F.1 = halt SCM by A1,Th15;
+  F.1 = halt SCM by A1,Th3;
   then
-A6: F.(IC s1) = halt SCM by A3,A2,A5,Th22;
+A6: F.(IC s1) = halt SCM by A3,A2,A5,Th8;
   hence F halts_on s by EXTPRO_1:30;
-  Divide(dl.0, dl.1) <> halt SCM by Th26;
+  Divide(dl.0, dl.1) <> halt SCM by Th12;
   hence LifeSpan(F,s) = 1 by A3,A5,A6,EXTPRO_1:32;
   thus (Result(F,s)).dl.0 = s1.dl.0 by A6,EXTPRO_1:31
-    .= i1 div i2 by A3,A4,A2,A5,Th22;
+    .= i1 div i2 by A3,A4,A2,A5,Th8;
   thus (Result(F,s)).dl.1 = s1.dl.1 by A6,EXTPRO_1:31
-    .= i1 mod i2 by A3,A4,A2,A5,Th22;
+    .= i1 mod i2 by A3,A4,A2,A5,Th8;
   let d be Data-Location;
   assume
 A7: d<>dl.0 & d<>dl.1;
   thus (Result(F,s)).d = s1.d by A6,EXTPRO_1:31
-    .= s.d by A3,A2,A5,A7,Th22;
+    .= s.d by A3,A2,A5,A7,Th8;
 end;
 
 :: Unconditional jump
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%SCM-goto 1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s &
  LifeSpan(F,s) = 1 & for d
   being Data-Location holds (Result(F,s)).d = s.d
 proof
   let F being total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%SCM-goto 1%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+      s be 0-started State-consisting of <%i1,i2%>;
   set s1 = Comput(F,s,0+1);
-A2: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 8;
-A3: F.0 = SCM-goto 1 by A1,Th15;
+A2: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 11;
+A3: F.0 = SCM-goto 1 by A1,Th3;
   then
-A4: IC s1 = (0+1) by A2,Th23;
-A5: F.1 = halt SCM by A1,Th15;
+A4: IC s1 = (0+1) by A2,Th9;
+A5: F.1 = halt SCM by A1,Th3;
   hence F halts_on s by A4,EXTPRO_1:30;
   thus LifeSpan(F,s) = 1 by A5,A2,A4,EXTPRO_1:33;
   let d be Data-Location;
   thus (Result(F,s)).d = s1.d by A5,A4,EXTPRO_1:31
-    .= s.d by A3,A2,Th23;
+    .= s.d by A3,A2,Th9;
 end;
 
 :: Jump at zero
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%dl.0=0_goto 1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s
  & LifeSpan(F,s) = 1
   & for d being Data-Location holds (Result(F,s)).d = s.d
 proof
   let F being total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%dl.0=0_goto 1%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-      s be 0-started State-consisting of 0,
-   <*i1*>^<*i2*>;
+      s be 0-started State-consisting of <%i1,i2%>;
   set s1 = Comput(F,s,0+1);
-A2: F.0 = dl.0 =0_goto 1 by A1,Th15;
-A3: F.1 = halt SCM by A1,Th15;
-A4: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 8;
-  s.dl.0 = i1 by Th14;
+A2: F.0 = dl.0 =0_goto 1 by A1,Th3;
+A3: F.1 = halt SCM by A1,Th3;
+A4: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 11;
+  s.dl.0 = i1 by Th2;
   then
-A5: IC s1 = (0+1) by A2,A4,Th24;
+A5: IC s1 = (0+1) by A2,A4,Th10;
   hence F halts_on s by A3,EXTPRO_1:30;
   thus LifeSpan(F,s) = 1 by A3,A4,A5,EXTPRO_1:33;
   let d be Data-Location;
   thus (Result(F,s)).d = s1.d by A3,A5,EXTPRO_1:31
-    .= s.d by A2,A4,Th24;
+    .= s.d by A2,A4,Th10;
 end;
 
 :: Jump at greater than zero
 
 theorem
   for F being total
-   NAT-defined (the Instructions of SCM)-valued Function
+   NAT-defined (the InstructionsF of SCM)-valued Function
     st <%dl.0>0_goto 1%>^<%halt SCM%> c= F
   for i1, i2 being Integer,
-      s being 0-started State-consisting of 0, <*i1*>^<*i2*>
+      s being 0-started State-consisting of <%i1,i2%>
     holds F halts_on s
  & LifeSpan(F,s) = 1
   & for d being Data-Location holds (Result(F,s)).d = s.d
 proof
   let F being total
-   NAT-defined (the Instructions of SCM)-valued Function such that
+   NAT-defined (the InstructionsF of SCM)-valued Function such that
 A1: <%dl.0>0_goto 1%>^<%halt SCM%> c= F;
   let i1, i2 be Integer,
-      s be 0-started State-consisting of 0, <*i1*>^<*i2*>;
+      s be 0-started State-consisting of <%i1,i2%>;
   set s1 = Comput(F,s,0+1);
-A2: F.0 = dl.0 >0_goto 1 by A1,Th15;
-A3: F.1 = halt SCM by A1,Th15;
-A4: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 8;
-  s.dl.0 = i1 by Th14;
+A2: F.0 = dl.0 >0_goto 1 by A1,Th3;
+A3: F.1 = halt SCM by A1,Th3;
+A4: IC s = 0 & s = Comput(F,s,0) by EXTPRO_1:2,MEMSTR_0:def 11;
+  s.dl.0 = i1 by Th2;
   then
-A5: IC s1 = (0+1) by A2,A4,Th25;
+A5: IC s1 = (0+1) by A2,A4,Th11;
   hence F halts_on s by A3,EXTPRO_1:30;
   thus LifeSpan(F,s) = 1 by A3,A4,A5,EXTPRO_1:33;
   let d be Data-Location;
   thus (Result(F,s)).d = s1.d by A3,A5,EXTPRO_1:31
-    .= s.d by A2,A4,Th25;
+    .= s.d by A2,A4,Th11;
 end;
 
 theorem
- for s being State of SCM, n being Element of NAT
- holds s is State-consisting of n, <*>INT
- proof let s be State of SCM, n be Element of NAT;
+ for s being State of SCM
+ holds s is State-consisting of <*>INT
+ proof let s be State of SCM;
   let k be Element of NAT;
   thus thesis;
  end;

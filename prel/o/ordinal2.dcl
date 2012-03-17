@@ -10,6 +10,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
@@ -36,7 +37,7 @@
 <Adjective nr="8"/>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ORDINAL2" nr="1">
@@ -46,7 +47,7 @@
 <Adjective nr="8"/>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -55,13 +56,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="34">
+<Func kind="K" nr="32">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="11"/>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ORDINAL2" nr="2">
@@ -71,7 +72,7 @@
 <Adjective nr="8"/>
 <Adjective nr="11"/>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -80,7 +81,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="40">
+<Func kind="K" nr="38">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -99,12 +100,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="81">
+<Func kind="K" nr="89">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ORDINAL2" nr="4">
@@ -118,7 +119,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="81">
+<Func kind="K" nr="89">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -139,7 +140,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
+<Func kind="K" nr="115">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -167,7 +168,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="93">
+<Func kind="K" nr="101">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -203,7 +204,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="16"/>
-<Adjective nr="27"/>
+<Adjective nr="30"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ORDINAL2" nr="2">

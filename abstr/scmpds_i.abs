@@ -1,0 +1,242 @@
+:: The Instructions for the SCMPDS computer
+::  by JingChao Chen
+::
+:: Received June 15, 1999
+:: Copyright (c) 1999-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, CARD_1, AMI_2, INT_1, XBOOLE_0, FINSEQ_1,
+      TARSKI, RELAT_1, FUNCT_1, AMI_1, PARTFUN1, XXREAL_0, ZFMISC_1, SCMPDS_1,
+      RECDEF_2, UNIALG_1, AMISTD_2, VALUED_0, COMPOS_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, XTUPLE_0, SUBSET_1, RELAT_1,
+      FUNCT_1, CARD_1, PARTFUN1, MCART_1, NUMBERS, VALUED_0, INT_1, FINSEQ_1,
+      FINSEQ_4, XXREAL_0, RECDEF_2, COMPOS_0, SCM_INST;
+ constructors FINSEQ_4, AMI_2, DOMAIN_1, COMPOS_0, VALUED_0, XTUPLE_0;
+ registrations XBOOLE_0, ORDINAL1, NUMBERS, INT_1, FINSEQ_1, XXREAL_0, FUNCT_1,
+      COMPOS_0, SCM_INST, VALUED_0, RELAT_1, GR_CY_1, FINSEQ_4, XTUPLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+reserve
+  i, j, k for Element of NAT,
+  I,I2,I3,I4 for Element of Segm 15,
+  i1 for Element of NAT,
+  d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
+  k1,k2 for Integer;
+
+theorem :: SCMPDS_I:1
+  for k be Integer holds k in SCM-Data-Loc \/ INT;
+
+begin  :: The construction of SCM with Push-Down Stack
+:: [0,goto L]
+:: [1,return sp<-sp+0,count<-(sp)+2]
+:: [2,a:=c(constant)]
+:: [3,saveIC (a,k)]
+:: [4,if(a,k)<>0 goto L ]
+:: [5,if(a,k)<=0 goto L ]
+:: [6,if(a,k)>=0 goto L ]
+:: [7,(a,k):=c(constant) ]
+:: [8,(a,k1)+k2]
+:: [9, (a1,k1)+(a2,k2)]
+:: [10,(a1,k1)-(a2,k2)]
+:: [11,(a1,k1)*(a2,k2)]
+:: [12,(a1,k1)/(a2,k2)]
+:: [13,(a1,k1):=(a2,k2)]
+
+definition
+  func SCMPDS-Instr
+  equals
+:: SCMPDS_I:def 1
+{[0,{},{}]}
+   \/ { [14,{},<*l*>] where l is Element of INT: not contradiction}
+   \/ { [1,{},<*sp*> ] where sp is Element of SCM-Data-Loc:not contradiction}
+   \/ { [I,{},<*v,c*>]
+    where I is Element of Segm 15,v is Element of SCM-Data-Loc,
+      c is Element of INT: I in {2,3} }
+   \/ { [I,{},<*v,c1,c2*>] where I is Element of Segm 15,
+      v is Element of SCM-Data-Loc, c1,c2 is Element of INT: I in {4,5,6,7,8} }
+   \/ { [I,{},<*v1,v2,c1,c2*>]
+    where I is Element of Segm 15, v1,v2 is Element of SCM-Data-Loc, c1,c2 is
+  Element of INT: I in {9,10,11,12,13} };
+end;
+
+theorem :: SCMPDS_I:2
+  [14,{},<*0*>] in SCMPDS-Instr;
+
+registration
+  cluster SCMPDS-Instr -> non empty;
+end;
+
+definition
+  let d be Element of SCM-Data-Loc, s be Integer;
+  redefine func <*d,s*> -> FinSequence of SCM-Data-Loc \/ INT;
+end;
+
+definition
+  let x be Element of SCMPDS-Instr;
+  given mk be Element of SCM-Data-Loc, I such that
+ x = [I,{},<*mk*>];
+  func x address_1 -> Element of SCM-Data-Loc means
+:: SCMPDS_I:def 2
+
+  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.1;
+end;
+
+theorem :: SCMPDS_I:3
+  for x being Element of SCMPDS-Instr, mk being Element of SCM-Data-Loc
+  st x = [I,{},<*mk*>] holds x address_1 = mk;
+
+definition
+  let x be Element of SCMPDS-Instr;
+  given r being Integer, I such that
+ x = [I,{},<*r*>];
+  func x const_INT -> Integer means
+:: SCMPDS_I:def 3
+
+  ex f being FinSequence of INT st f = x`3_3 & it = f/.1;
+end;
+
+theorem :: SCMPDS_I:4
+  for x being Element of SCMPDS-Instr, k being Integer st x = [ I,{}, <*k*>
+  ] holds x const_INT = k;
+
+definition
+  let x be Element of SCMPDS-Instr;
+  given mk being Element of SCM-Data-Loc, r being Integer, I such that
+ x = [I,{},<*mk,r*>];
+  func x P21address -> Element of SCM-Data-Loc means
+:: SCMPDS_I:def 4
+
+  ex f being FinSequence of SCM-Data-Loc \/ INT st f = x`3_3 & it = f/.1;
+  func x P22const -> Integer means
+:: SCMPDS_I:def 5
+
+  ex f being FinSequence of SCM-Data-Loc \/ INT st f = x`3_3 & it = f/.2;
+end;
+
+theorem :: SCMPDS_I:5
+  for x being Element of SCMPDS-Instr, mk being Element of SCM-Data-Loc,
+r being Integer st x = [I,{},<*mk,r*>] holds x P21address = mk & x P22const = r
+;
+
+definition
+  let x be Element of SCMPDS-Instr;
+  given m1 being Element of SCM-Data-Loc,k1,k2 be Integer,I such that
+ x = [I,{},<*m1,k1,k2*>];
+  func x P31address -> Element of SCM-Data-Loc means
+:: SCMPDS_I:def 6
+
+  ex f being FinSequence of (SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.1;
+  func x P32const -> Integer means
+:: SCMPDS_I:def 7
+
+  ex f being FinSequence of SCM-Data-Loc \/ INT st f = x`3_3 & it = f/.2;
+  func x P33const -> Integer means
+:: SCMPDS_I:def 8
+
+  ex f being FinSequence of ( SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.3;
+end;
+
+theorem :: SCMPDS_I:6
+  for x being Element of SCMPDS-Instr, d1 being Element of SCM-Data-Loc,
+  k1,k2 being Integer st x = [I,{}, <*d1,k1,k2*>] holds x P31address = d1 & x
+  P32const = k1 & x P33const = k2;
+
+definition
+  let x be Element of SCMPDS-Instr;
+  given m1,m2 being Element of SCM-Data-Loc,k1,k2 be Integer,I such that
+ x = [I,{},<*m1,m2,k1,k2*>];
+  func x P41address -> Element of SCM-Data-Loc means
+:: SCMPDS_I:def 9
+
+  ex f being FinSequence of (SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.1;
+  func x P42address -> Element of SCM-Data-Loc means
+:: SCMPDS_I:def 10
+
+  ex f being FinSequence of (SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.2;
+  func x P43const -> Integer means
+:: SCMPDS_I:def 11
+
+  ex f being FinSequence of ( SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.3;
+  func x P44const -> Integer means
+:: SCMPDS_I:def 12
+
+  ex f being FinSequence of ( SCM-Data-Loc \/ INT) st f = x`3_3 & it = f/.4;
+end;
+
+theorem :: SCMPDS_I:7
+  for x being Element of SCMPDS-Instr, d1,d2 being Element of
+  SCM-Data-Loc, k1,k2 being Integer st x = [I,{}, <*d1,d2,k1,k2*>] holds x
+  P41address = d1 & x P42address = d2 & x P43const = k1 & x P44const = k2;
+
+:: RetSP: Return Stack Pointer
+:: RetIC: Return Instruction-Counter
+
+definition
+  func RetSP -> Element of NAT equals
+:: SCMPDS_I:def 13
+  0;
+  func RetIC -> Element of NAT equals
+:: SCMPDS_I:def 14
+  1;
+end;
+
+theorem :: SCMPDS_I:8
+ for x being Element of SCMPDS-Instr holds
+  x in {[0,{},{}]} & InsCode x = 0 or
+  x in { [14,{},<*l*>] where l is Element of INT: not contradiction} &
+   InsCode x = 14 or
+  x in { [1,{},<*sp*> ] where sp is Element of SCM-Data-Loc:not contradiction}
+    & InsCode x = 1 or
+  x in { [I,{},<*v,c*>]
+    where I is Element of Segm 15,v is Element of SCM-Data-Loc,
+      c is Element of INT: I in {2,3} }
+   & (InsCode x = 2 or InsCode x = 3) or
+  x in { [I,{},<*v,c1,c2*>] where I is Element of Segm 15,
+      v is Element of SCM-Data-Loc, c1,c2 is Element of INT: I in {4,5,6,7,8} }
+      & (InsCode x = 4 or InsCode x = 5 or
+       InsCode x = 6 or InsCode x = 7 or InsCode x = 8) or
+  x in { [I,{},<*v1,v2,c1,c2*>]
+    where I is Element of Segm 15, v1,v2 is Element of SCM-Data-Loc, c1,c2 is
+  Element of INT: I in {9,10,11,12,13} }
+    & (InsCode x = 9 or InsCode x = 10 or InsCode x = 11
+      or InsCode x = 12 or InsCode x = 13);
+
+begin
+
+reserve x for set,
+  k for Element of NAT;
+
+registration
+ cluster proj2 SCMPDS-Instr -> FinSequence-membered;
+end;
+
+registration
+ cluster SCMPDS-Instr -> standard-ins;
+end;
+
+registration
+ cluster SCMPDS-Instr -> homogeneous;
+end;
+
+registration
+ cluster SCMPDS-Instr -> J/A-independent;
+end;
+
+registration
+ cluster SCMPDS-Instr -> with_halt;
+end;
+
+
+

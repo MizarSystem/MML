@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
@@ -29,9 +30,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="74"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="53"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PCOMPS_1" nr="2">
@@ -40,10 +41,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="52"/>
 <Adjective nr="53"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PCOMPS_1" nr="3">
@@ -52,10 +53,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="75"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
+<Adjective nr="81"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PCOMPS_1" nr="1">
@@ -64,27 +65,27 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PCOMPS_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="34" value="false"/>
+<Adjective nr="38" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
+<Adjective nr="38" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

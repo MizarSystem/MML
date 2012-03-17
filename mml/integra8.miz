@@ -2,7 +2,7 @@
 ::  by Cuiying Peng , Fuguo Ge and Xiquan Liang
 ::
 :: Received August 28, 2007
-:: Copyright (c) 2007-2011 Association of Mizar Users
+:: Copyright (c) 2007-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,17 +18,19 @@ environ
       ARYTM_3, XXREAL_0, CARD_1, XXREAL_1, RELAT_1, ARYTM_1, FUNCT_1, SQUARE_1,
       COMPLEX1, TARSKI, SIN_COS6, SIN_COS2, POWER, VALUED_1, FDIFF_1, SEQ_1,
       FUNCT_2, SEQ_2, ORDINAL2, FUNCOP_1, FUNCT_3, XBOOLE_0, SEQ_4, INTEGRA5,
-      MEASURE7, REALSET1, XXREAL_2, INTEGRA8, MEASURE5;
+      MEASURE7, REALSET1, XXREAL_2, INTEGRA8, MEASURE5, VALUED_0;
  notations TARSKI, XBOOLE_0, FUNCOP_1, INTEGRA1, RFUNCT_1, RELAT_1, INTEGRA5,
+      VALUED_0,
       SIN_COS, SUBSET_1, PARTFUN1, RCOMP_1, NUMBERS, FDIFF_1, XXREAL_0,
-      COMPLEX1, REAL_1, FCONT_1, SEQ_2, SEQ_4, SIN_COS2, NAT_1, POWER,
-      SQUARE_1, VALUED_1, SEQ_1, SIN_COS6, FUNCT_2, MEASURE5;
+      COMPLEX1, REAL_1, FCONT_1, COMSEQ_2, SEQ_2, SEQ_4, SIN_COS2, ORDINAL1,
+      NAT_1, POWER, SQUARE_1, VALUED_1, SEQ_1, SIN_COS6, FUNCT_2, MEASURE5;
  constructors BINOP_2, FINSEQOP, INTEGRA5, SIN_COS, COMSEQ_3, PARTFUN1, REAL_1,
       SQUARE_1, RFUNCT_1, FDIFF_1, RFUNCT_2, FCONT_1, SIN_COS2, NAT_1,
-      SIN_COS6, SEQ_1, POWER, XXREAL_2, SEQ_4, RELSET_1, SEQ_2, INTEGRA1;
+      SIN_COS6, SEQ_1, POWER, XXREAL_2, SEQ_4, RELSET_1, SEQ_2, INTEGRA1,
+      COMSEQ_2;
  registrations INTEGRA1, RELSET_1, MEMBERED, RCOMP_1, FDIFF_1, INT_1, XXREAL_0,
       XREAL_0, NUMBERS, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2,
-      FCONT_1, SIN_COS, FCONT_3, MEASURE5;
+      FCONT_1, SIN_COS, FCONT_3, MEASURE5, COMSEQ_2;
  requirements ARITHM, SUBSET, NUMERALS, BOOLE, REAL;
  definitions TARSKI, SIN_COS, INTEGRA5, VALUED_1, SQUARE_1, SUBSET_1;
  theorems PARTFUN1, INTEGRA1, FUNCT_1, SEQ_1, FDIFF_1, INTEGRA4, XBOOLE_0,
@@ -317,9 +319,9 @@ proof
 end;
 
 theorem Th20:
-  for L1 being LINEAR holds -L1 is LINEAR
+  for L1 being LinearFunc holds -L1 is LinearFunc
 proof
-  let L1 be LINEAR;
+  let L1 be LinearFunc;
   consider g1 being Real such that
 A1: for p holds L1.p = g1*p by FDIFF_1:def 3;
 A2: L1 is total by FDIFF_1:def 3;
@@ -333,20 +335,21 @@ A2: L1 is total by FDIFF_1:def 3;
 end;
 
 theorem Th21:
-  for R1 being REST holds -R1 is REST
+  for R1 being RestFunc holds -R1 is RestFunc
 proof
-  let R1 be REST;
+  let R1 be RestFunc;
 A1: R1 is total by FDIFF_1:def 2;
   then
 A2: dom R1 = REAL by PARTFUN1:def 2;
-A3: for h being convergent_to_0 Real_Sequence holds -(R1/*h) = (-R1)/*h
+A3: for h being 0-convergent non-zero Real_Sequence
+  holds -(R1/*h) = (-R1)/*h
   proof
-    let h be convergent_to_0 Real_Sequence;
+    let h be 0-convergent non-zero Real_Sequence;
     rng h c= dom R1 by A2,VALUED_0:def 3;
     hence thesis by RFUNCT_2:10;
   end;
   now
-    let h be convergent_to_0 Real_Sequence;
+    let h be 0-convergent non-zero Real_Sequence;
 A4: (h")(#)(R1/*h) is convergent by FDIFF_1:def 2;
 A5: (h")(#)((-R1)/*h) = (h")(#)(-(R1/*h)) by A3
       .= - ((h")(#)(R1/*h)) by SEQ_1:19;
@@ -367,12 +370,12 @@ proof
 A1: f1 is_differentiable_in x0;
   then consider N1 be Neighbourhood of x0 such that
 A2: N1 c= dom f1 and
-A3: ex L being LINEAR,R being REST st for x st x in N1 holds f1.x - f1.
+A3: ex L being LinearFunc,R being RestFunc st for x st x in N1 holds f1.x - f1.
   x0 = L.(x-x0) + R.(x-x0) by FDIFF_1:def 4;
-  consider L1 being LINEAR,R1 being REST such that
+  consider L1 being LinearFunc,R1 being RestFunc such that
 A4: for x st x in N1 holds f1.x - f1.x0 = L1.(x-x0) + R1.(x-x0) by A3;
-  reconsider R=-R1 as REST by Th21;
-  reconsider L=-L1 as LINEAR by Th20;
+  reconsider R=-R1 as RestFunc by Th21;
+  reconsider L=-L1 as LinearFunc by Th20;
 A5: L1 is total by FDIFF_1:def 3;
   consider N be Neighbourhood of x0 such that
 A6: N c= N1;

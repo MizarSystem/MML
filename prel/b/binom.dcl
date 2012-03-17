@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -31,62 +32,62 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="86"/>
-<Adjective nr="93"/>
-<Adjective nr="95"/>
-<Adjective nr="97"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="92"/>
+<Adjective nr="99"/>
+<Adjective nr="101"/>
 <Adjective nr="103"/>
-<Adjective nr="112"/>
-<Adjective nr="113"/>
-<Adjective nr="114"/>
+<Adjective nr="109"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
+<Adjective nr="121"/>
 </Cluster>
 </RCluster>
 <CCluster aid="BINOM" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="55"/>
-<Adjective nr="112"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="61"/>
+<Adjective nr="119"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 </CCluster>
 <CCluster aid="BINOM" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="112"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="119"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="55"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </CCluster>
 <CCluster aid="BINOM" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="113"/>
-<Adjective nr="114"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="120"/>
+<Adjective nr="121"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="55"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received July 18, 1989
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,7 +15,7 @@
 environ
 
  vocabularies ORDINAL1, FUNCT_1, XBOOLE_0, TARSKI, ZFMISC_1, RELAT_1, SETFAM_1,
-      SUBSET_1, FUNCOP_1, ORDINAL2;
+      SUBSET_1, FUNCOP_1, ORDINAL2, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
       SETFAM_1, FUNCOP_1;
  constructors SETFAM_1, ORDINAL1, FUNCOP_1;
@@ -23,7 +23,7 @@ environ
  requirements SUBSET, BOOLE, NUMERALS;
  definitions ORDINAL1, TARSKI, XBOOLE_0;
  theorems TARSKI, XBOOLE_0, ORDINAL1, SETFAM_1, ZFMISC_1, FUNCT_1, RELAT_1,
-      XBOOLE_1, FUNCOP_1;
+      XBOOLE_1, FUNCOP_1, XTUPLE_0;
  schemes XBOOLE_0, FUNCT_1, ORDINAL1;
 
 begin
@@ -134,14 +134,14 @@ proof
   thus x in On X implies x in X by ORDINAL1:def 9;
 end;
 
-theorem Th10:
+theorem Th8:
   On A = A
 proof
   x in A iff x in A & x is Ordinal;
   hence thesis by ORDINAL1:def 9;
 end;
 
-theorem Th11:
+theorem Th9:
   X c= Y implies On X c= On Y
 proof
   assume
@@ -178,7 +178,7 @@ proof
   hence thesis by ORDINAL1:def 9;
 end;
 
-theorem Th17:
+theorem Th13:
   (for x st x in X holds x is Ordinal) implies meet X is Ordinal
 proof
   assume
@@ -232,10 +232,10 @@ definition
   coherence
   proof
     x in On X implies x is Ordinal by ORDINAL1:def 9;
-    hence thesis by Th17;
+    hence thesis by Th13;
   end;
   func sup X -> Ordinal means
-  :Def7:
+  :Def3:
   On X c= it & for A st On X c= A holds it c= A;
   existence
   proof
@@ -301,7 +301,7 @@ proof
   then
 A1: On X <> {} by ORDINAL1:def 9;
   assume X c= Y;
-  then On X c= On Y by Th11;
+  then On X c= On Y by Th9;
   hence thesis by A1,SETFAM_1:6;
 end;
 
@@ -336,24 +336,24 @@ A6:   Y in On X;
   hence thesis by A2,A4,SETFAM_1:def 1;
 end;
 
-theorem Th26:
+theorem Th18:
   sup A = A
 proof
-  On A = A & for B st On A c= B holds A c= B by Th10;
-  hence thesis by Def7;
+  On A = A & for B st On A c= B holds A c= B by Th8;
+  hence thesis by Def3;
 end;
 
-theorem Th27:
+theorem Th19:
   A in X implies A in sup X
 proof
   assume A in X;
   then
 A1: A in On X by ORDINAL1:def 9;
-  On X c= sup X by Def7;
+  On X c= sup X by Def3;
   hence thesis by A1;
 end;
 
-theorem Th28:
+theorem Th20:
   (for A st A in X holds A in D) implies sup X c= D
 proof
   assume
@@ -367,7 +367,7 @@ A2: x in On X;
     A in X by A2,ORDINAL1:def 9;
     hence thesis by A1;
   end;
-  hence thesis by Def7;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -377,7 +377,7 @@ proof
 A1: A in sup X and
 A2: for B st B in X holds not A c= B;
   for B st B in X holds B in A by A2,ORDINAL1:16;
-  then sup X c= A by Th28;
+  then sup X c= A by Th20;
   hence contradiction by A1,ORDINAL1:5;
 end;
 
@@ -386,10 +386,10 @@ theorem
 proof
   assume X c= Y;
   then
-A1: On X c= On Y by Th11;
-  On Y c= sup Y by Def7;
+A1: On X c= On Y by Th9;
+  On Y c= sup Y by Def3;
   then On X c= sup Y by A1,XBOOLE_1:1;
-  hence thesis by Def7;
+  hence thesis by Def3;
 end;
 
 theorem
@@ -411,7 +411,7 @@ A2: A in On { A } by ORDINAL1:def 9;
     assume On { A } c= B;
     hence succ A c= B by A2,ORDINAL1:21;
   end;
-  hence thesis by A1,Def7;
+  hence thesis by A1,Def3;
 end;
 
 theorem
@@ -422,7 +422,7 @@ proof
   assume
 A1: x in inf X;
   then reconsider y as Ordinal by ORDINAL1:def 9,SETFAM_1:1;
-  On X c= sup X by Def7;
+  On X c= sup X by Def3;
   then y in sup X by A1,SETFAM_1:1,TARSKI:def 3;
   then
 A2: y c= sup X by ORDINAL1:def 2;
@@ -443,13 +443,13 @@ A1: dom f = A() & for x st x in A() holds f.x = G(x) from FUNCT_1:sch 3;
   assume A in A();
   hence L.A = F(sup union { A }) by A1
     .= F(sup A) by ZFMISC_1:25
-    .= F(A) by Th26;
+    .= F(A) by Th18;
 end;
 
 definition
   let f;
   attr f is Ordinal-yielding means
-  :Def8:
+  :Def4:
   ex A st rng f c= A;
 end;
 
@@ -486,7 +486,7 @@ registration
   coherence
   proof
     consider B such that
-A1: rng L c= B by Def8;
+A1: rng L c= B by Def4;
     L|A is Ordinal-yielding
     proof
       take B;
@@ -499,13 +499,13 @@ end;
 
 reserve fi,psi for Ordinal-Sequence;
 
-theorem Th34:
+theorem Th25:
   A in dom fi implies fi.A is Ordinal
 proof
   assume A in dom fi;
   then
 A1: fi.A in rng fi by FUNCT_1:def 3;
-  ex B st rng fi c= B by Def8;
+  ex B st rng fi c= B by Def4;
   hence thesis by A1;
 end;
 
@@ -515,7 +515,7 @@ registration
   coherence
   proof
     a in dom f or not a in dom f;
-    hence thesis by Th34,FUNCT_1:def 2;
+    hence thesis by Th25,FUNCT_1:def 2;
   end;
 end;
 
@@ -537,7 +537,7 @@ A4: x = L.y by FUNCT_1:def 3;
     L.y = F(y) by A1,A3;
     then
 A5: x in On rng L by A2,A4,ORDINAL1:def 9;
-    On rng L c= sup rng L by Def7;
+    On rng L c= sup rng L by Def3;
     hence thesis by A5;
   end;
   then reconsider L as Ordinal-Sequence;
@@ -663,7 +663,7 @@ A18: dom G = B
       thus a in dom G implies a in B
       proof
         assume a in dom G;
-        then ex b st [a,b] in G by RELAT_1:def 4;
+        then ex b st [a,b] in G by XTUPLE_0:def 12;
         hence thesis by A17;
       end;
       let a;
@@ -675,7 +675,7 @@ A20:  P[a9,L] by A2,A19;
       for A holds for K be T-Sequence holds A = a9 & K = L implies P[A,K]
       by A20;
       then [a9,L] in G by A17,A19;
-      hence thesis by RELAT_1:def 4;
+      hence thesis by XTUPLE_0:def 12;
     end;
 A21: for a st a in B ex b st Q[a,b]
     proof
@@ -684,7 +684,7 @@ A21: for a st a in B ex b st Q[a,b]
 A22:  a in B;
       then reconsider A = a as Ordinal;
       consider c such that
-A23:  [a,c] in G by A18,A22,RELAT_1:def 4;
+A23:  [a,c] in G by A18,A22,XTUPLE_0:def 12;
       reconsider L = c as T-Sequence by A17,A23;
 A24:  now
         given C such that
@@ -1073,7 +1073,7 @@ A10:  for B holds y <> succ B;
       then L.y = D(y,L|y) by A1,A4,A6,A9;
       hence x is Ordinal by A7;
     end;
-A11: On rng L c= sup rng L by Def7;
+A11: On rng L c= sup rng L by Def3;
     now
       given B such that
 A12:  y = succ B;
@@ -1091,7 +1091,7 @@ A12:  y = succ B;
     let A;
     reconsider B = fi.A as Ordinal;
     sup union {B} = sup B by ZFMISC_1:25
-      .= B by Th26;
+      .= B by Th18;
     hence thesis by A3;
   end;
   thus thesis by A4;
@@ -1191,7 +1191,7 @@ A8: for C st succ C in succ A() holds L1.(succ C) = CD(C,L1.C)
 A9: succ C in succ A();
     reconsider x9 = L1.C as Ordinal;
     sup union { L1.C } = sup x9 by ZFMISC_1:25
-      .= x9 by Th26;
+      .= x9 by Th18;
     hence thesis by A5,A9;
   end;
   given L2 being Ordinal-Sequence such that
@@ -1211,7 +1211,7 @@ A17: for C st succ C in succ A() holds L2.(succ C) = CD(C,L2.C)
 A18: succ C in succ A();
     reconsider x9 = L2.C as Ordinal;
     sup union { L2.C } = sup x9 by ZFMISC_1:25
-      .= x9 by Th26;
+      .= x9 by Th18;
     hence thesis by A13,A18;
   end;
 A19: {} in succ A() implies L2.{} = B() by A12;
@@ -1383,7 +1383,7 @@ end;
 definition
   let A,fi;
   pred A is_limes_of fi means
-  :Def13:
+  :Def9:
   ex B st B in dom fi & for C st B c= C &
 C in dom fi holds fi.C = {} if A = {} otherwise for B,C st B in A & A in C ex D
 st D in dom fi & for E being Ordinal st D c= E & E in dom fi holds B in fi.E &
@@ -1396,7 +1396,7 @@ definition
   given A such that
 A1: A is_limes_of fi;
   func lim fi -> Ordinal means
-  :Def14:
+  :Def10:
   it is_limes_of fi;
   existence by A1;
   uniqueness
@@ -1494,7 +1494,7 @@ end;
 definition
   let A,B;
   func A +^ B -> Ordinal means
-  :Def18:
+  :Def14:
   ex fi st it = last fi & dom fi = succ B
 & fi.{} = A & (for C st succ C in succ B holds fi.succ C = succ(fi.C)) & for C
   st C in succ B & C <> {} & C is limit_ordinal holds fi.C = sup(fi|C);
@@ -1518,7 +1518,7 @@ end;
 definition
   let A,B;
   func A *^ B -> Ordinal means
-  :Def19:
+  :Def15:
   ex fi st it = last fi & dom fi = succ A
 & fi.{} = {} & (for C st succ C in succ A holds fi.succ C = (fi.C)+^B) & for C
   st C in succ A & C <> {} & C is limit_ordinal holds fi.C = union sup(fi|C);
@@ -1548,7 +1548,7 @@ end;
 definition
   let A,B;
   func exp(A,B) -> Ordinal means
-  :Def20:
+  :Def16:
   ex fi st it = last fi & dom fi = succ
 B & fi.{} = 1 & (for C st succ C in succ B holds fi.succ C = A*^(fi.C)) & for C
   st C in succ B & C <> {} & C is limit_ordinal holds fi.C = lim(fi|C);
@@ -1569,7 +1569,7 @@ st C in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) ) holds A1
   end;
 end;
 
-theorem Th44:
+theorem Th27:
   A+^{} = A
 proof
   deffunc C(Ordinal,Ordinal) = succ $2;
@@ -1577,11 +1577,11 @@ proof
   deffunc F(Ordinal) = A+^$1;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
   {} = A & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def18;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def14;
   thus F({}) = A from OSResult0(A1);
 end;
 
-theorem Th45:
+theorem Th28:
   A+^succ B = succ(A+^B)
 proof
   deffunc C(Ordinal,Ordinal) = succ $2;
@@ -1589,12 +1589,12 @@ proof
   deffunc F(Ordinal) = A+^$1;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
   {} = A & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def18;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def14;
   for B holds F(succ B) = C(B,F(B)) from OSResultS(A1);
   hence thesis;
 end;
 
-theorem Th46:
+theorem Th29:
   B <> {} & B is limit_ordinal implies for fi st dom fi = B & for
   C st C in B holds fi.C = A+^C holds A+^B = sup fi
 proof
@@ -1608,15 +1608,15 @@ A2: dom fi = B and
 A3: for C st C in B holds fi.C = F(C);
 A4: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
   {} = A & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def18;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def14;
   thus F(B) = D(B,fi) from OSResultL(A4,A1,A2,A3);
 end;
 
-theorem Th47:
+theorem Th30:
   {}+^A = A
 proof
   defpred P[Ordinal] means {}+^$1 = $1;
-A1: for A holds P[A] implies P[succ A] by Th45;
+A1: for A holds P[A] implies P[succ A] by Th28;
 A2: for A st A <> {} & A is limit_ordinal & for B st B in A holds P[B] holds
   P[A]
   proof
@@ -1647,11 +1647,11 @@ A9:   x in A;
       {}+^B = B & fi.B = {}+^B by A4,A5,A9;
       hence thesis by A5,A9,FUNCT_1:def 3;
     end;
-    {}+^A = sup fi by A3,A5,Th46
+    {}+^A = sup fi by A3,A5,Th29
       .= sup rng fi;
-    hence thesis by A6,Th26;
+    hence thesis by A6,Th18;
   end;
-A10: P[{}] by Th44;
+A10: P[{}] by Th27;
   for A holds P[A] from OrdinalInd(A10,A1,A2);
   hence thesis;
 end;
@@ -1661,11 +1661,11 @@ Lm1: 1 = succ {};
 theorem
   A+^1 = succ A
 proof
-  thus A+^1 = succ(A+^{}) by Lm1,Th45
-    .= succ A by Th44;
+  thus A+^1 = succ(A+^{}) by Lm1,Th28
+    .= succ A by Th27;
 end;
 
-theorem Th49:
+theorem Th32:
   A in B implies C +^ A in C +^ B
 proof
   defpred P[Ordinal] means A in $1 implies C +^ A in C +^ $1;
@@ -1681,7 +1681,7 @@ A6:   now
         assume A in D;
         then
 A7:     C +^ A in C +^ D by A2,A5,ORDINAL1:6;
-        succ(C +^ D) = C +^ succ D & C +^ D in succ(C +^ D) by Th45,ORDINAL1:6
+        succ(C +^ D) = C +^ succ D & C +^ D in succ(C +^ D) by Th28,ORDINAL1:6
 ;
         hence thesis by A5,A7,ORDINAL1:10;
       end;
@@ -1690,7 +1690,7 @@ A7:     C +^ A in C +^ D by A2,A5,ORDINAL1:6;
 A8:     not A in D;
         A c< D iff A c= D & A <> D by XBOOLE_0:def 8;
         then C +^ A in succ(C +^ D) by A3,A5,A8,ORDINAL1:11,22;
-        hence thesis by A5,Th45;
+        hence thesis by A5,Th28;
       end;
       hence thesis by A6;
     end;
@@ -1703,9 +1703,9 @@ A9:   dom fi = B & for D st D in B holds fi.D = F(D) from OSLambda;
 A10:  C+^A in rng fi by A3,A9,FUNCT_1:def 3;
       assume for D holds B <> succ D;
       then B is limit_ordinal by ORDINAL1:29;
-      then C+^B = sup fi by A3,A9,Th46
+      then C+^B = sup fi by A3,A9,Th29
         .= sup rng fi;
-      hence thesis by A10,Th27;
+      hence thesis by A10,Th19;
     end;
     hence thesis by A4;
   end;
@@ -1713,7 +1713,7 @@ A10:  C+^A in rng fi by A3,A9,FUNCT_1:def 3;
   hence thesis;
 end;
 
-theorem Th50:
+theorem Th33:
   A c= B implies C +^ A c= C +^ B
 proof
   assume
@@ -1721,13 +1721,13 @@ A1: A c= B;
   now
     assume A <> B;
     then A c< B by A1,XBOOLE_0:def 8;
-    then C +^ A in C +^ B by Th49,ORDINAL1:11;
+    then C +^ A in C +^ B by Th32,ORDINAL1:11;
     hence thesis by ORDINAL1:def 2;
   end;
   hence thesis;
 end;
 
-theorem Th51:
+theorem Th34:
   A c= B implies A +^ C c= B +^ C
 proof
   defpred P[Ordinal] means A +^ $1 c= B +^ $1;
@@ -1740,8 +1740,8 @@ A3: for D st D in C holds A +^ D c= B +^ D;
 A4: now
       given D such that
 A5:   C = succ D;
-A6:   B +^ C = succ(B +^ D) by A5,Th45;
-      A +^ D c= B +^ D & A +^ C = succ(A +^ D) by A3,A5,Th45,ORDINAL1:6;
+A6:   B +^ C = succ(B +^ D) by A5,Th28;
+      A +^ D c= B +^ D & A +^ C = succ(A +^ D) by A3,A5,Th28,ORDINAL1:6;
       hence thesis by A6,Th1;
     end;
 A7: now
@@ -1758,20 +1758,20 @@ A11:  now
 A12:    x in dom fi and
 A13:    D = fi.x by FUNCT_1:def 3;
         reconsider x as Ordinal by A12;
-A14:    B +^ x in B +^ C by A10,A12,Th49;
+A14:    B +^ x in B +^ C by A10,A12,Th32;
         D = A+^x & A +^ x c= B +^ x by A3,A10,A12,A13;
         hence D in B +^ C by A14,ORDINAL1:12;
       end;
       C is limit_ordinal by A9,ORDINAL1:29;
-      then A+^C = sup fi by A8,A10,Th46
+      then A+^C = sup fi by A8,A10,Th29
         .= sup rng fi;
-      hence thesis by A11,Th28;
+      hence thesis by A11,Th20;
     end;
     now
       assume
 A15:  C = {};
-      then A +^ C = A by Th44;
-      hence thesis by A1,A15,Th44;
+      then A +^ C = A by Th27;
+      hence thesis by A1,A15,Th27;
     end;
     hence thesis by A4,A7;
   end;
@@ -1779,7 +1779,7 @@ A15:  C = {};
   hence thesis;
 end;
 
-theorem Th52:
+theorem Th35:
   {}*^A = {}
 proof
   deffunc D(Ordinal,T-Sequence) = union sup $2;
@@ -1787,11 +1787,11 @@ proof
   deffunc C(Ordinal,Ordinal) = $2+^A;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
 {} = {} & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def19;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def15;
   thus F({}) = {} from OSResult0(A1);
 end;
 
-theorem Th53:
+theorem Th36:
   (succ B)*^A = B*^A +^ A
 proof
   deffunc D(Ordinal,T-Sequence) = union sup $2;
@@ -1799,12 +1799,12 @@ proof
   deffunc C(Ordinal,Ordinal) = $2 +^ A;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
 {} = {} & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def19;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def15;
   for B holds F(succ B) = C(B,F(B)) from OSResultS(A1);
   hence thesis;
 end;
 
-theorem Th54:
+theorem Th37:
   B <> {} & B is limit_ordinal implies for fi st dom fi = B & for
   C st C in B holds fi.C = C*^A holds B*^A = union sup fi
 proof
@@ -1818,11 +1818,11 @@ A2: dom fi = B and
 A3: for C st C in B holds fi.C = F(C);
 A4: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
 {} = {} & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def19;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def15;
   thus F(B) = D(B,fi) from OSResultL(A4,A1,A2,A3);
 end;
 
-theorem Th55:
+theorem Th38:
   A*^{} = {}
 proof
   defpred P[Ordinal] means $1*^{} = {};
@@ -1830,8 +1830,8 @@ A1: for A st P[A] holds P[succ A]
   proof
     let A;
     assume A*^{} = {};
-    hence (succ A)*^{} = {}+^{} by Th53
-      .= {} by Th44;
+    hence (succ A)*^{} = {}+^{} by Th36
+      .= {} by Th27;
   end;
 A2: for A st A <> {} & A is limit_ordinal & for B st B in A holds P[B] holds
   P[A]
@@ -1866,28 +1866,28 @@ A9:   x = {} by TARSKI:def 1;
 A10:  {} c< A by A3,XBOOLE_0:def 8;
       then
 A11:  {} in A by ORDINAL1:11;
-      {} *^ {} = {} by Th52;
+      {} *^ {} = {} by Th35;
       then fi.x = x by A6,A10,A9,ORDINAL1:11;
       hence thesis by A6,A11,A9,FUNCT_1:def 3;
     end;
     then
-A12: sup rng fi = succ {} by Th26;
-    A*^{} = union sup fi by A3,A4,A6,Th54
+A12: sup rng fi = succ {} by Th18;
+    A*^{} = union sup fi by A3,A4,A6,Th37
       .= union sup rng fi;
     hence thesis by A12,Th2;
   end;
-A13: P[{}] by Th52;
+A13: P[{}] by Th35;
   for A holds P[A] from OrdinalInd(A13,A1,A2);
   hence thesis;
 end;
 
-theorem Th56:
+theorem Th39:
   1*^A = A & A*^1 = A
 proof
   defpred P[Ordinal] means $1*^succ {} = $1;
-  thus 1*^A = {}*^A +^ A by Lm1,Th53
-    .= {} +^ A by Th52
-    .= A by Th47;
+  thus 1*^A = {}*^A +^ A by Lm1,Th36
+    .= {} +^ A by Th35
+    .= A by Th30;
 A1: for A st for B st B in A holds P[B] holds P[A]
   proof
     let A such that
@@ -1922,26 +1922,26 @@ A10:    x = fi.y by FUNCT_1:def 3;
         hence thesis by A6,A9,A10;
       end;
 A11:  A is limit_ordinal by A5,ORDINAL1:29;
-      then A*^succ {} = union sup fi by A4,A6,Th54
+      then A*^succ {} = union sup fi by A4,A6,Th37
         .= union sup rng fi;
-      hence A*^succ {} = union A by A7,Th26
+      hence A*^succ {} = union A by A7,Th18
         .= A by A11,ORDINAL1:def 6;
     end;
     now
       given B such that
 A12:  A = succ B;
-      thus A*^(succ {}) = B*^(succ {}) +^ succ {} by A12,Th53
+      thus A*^(succ {}) = B*^(succ {}) +^ succ {} by A12,Th36
         .= B +^ succ {} by A2,A12,ORDINAL1:6
-        .= succ(B +^ {}) by Th45
-        .= A by A12,Th44;
+        .= succ(B +^ {}) by Th28
+        .= A by A12,Th27;
     end;
-    hence thesis by A3,Th52;
+    hence thesis by A3,Th35;
   end;
   for A holds P[A] from ORDINAL1:sch 2(A1);
   hence thesis;
 end;
 
-theorem Th57:
+theorem Th40:
   C <> {} & A in B implies A*^C in B*^C
 proof
 A1: {} c= C;
@@ -1963,23 +1963,23 @@ A9:   now
         assume A in D;
         then
 A10:    A*^C in D*^C by A5,A8,ORDINAL1:6;
-A11:    D*^C +^ {} in D*^C +^ C by A2,Th49,ORDINAL1:11;
-        D*^C +^ C = (succ D)*^C & D*^C +^ {} = D*^C by Th44,Th53;
+A11:    D*^C +^ {} in D*^C +^ C by A2,Th32,ORDINAL1:11;
+        D*^C +^ C = (succ D)*^C & D*^C +^ {} = D*^C by Th27,Th36;
         hence thesis by A8,A10,A11,ORDINAL1:10;
       end;
       now
-A12:    A*^C +^ {} = A*^C by Th44;
+A12:    A*^C +^ {} = A*^C by Th27;
         assume
 A13:    not A in D;
         A c< D iff A c= D & A <> D by XBOOLE_0:def 8;
-        then A*^C +^ {} in D*^C +^ C by A3,A6,A8,A13,Th49,ORDINAL1:11,22;
-        hence thesis by A8,A12,Th53;
+        then A*^C +^ {} in D*^C +^ C by A3,A6,A8,A13,Th32,ORDINAL1:11,22;
+        hence thesis by A8,A12,Th36;
       end;
       hence thesis by A9;
     end;
     now
-A14:  A*^C +^ {} = A*^C & A*^C +^ {} in A*^C +^ C by A2,Th44,Th49,ORDINAL1:11;
-A15:  (succ A)*^C = A*^C +^ C by Th53;
+A14:  A*^C +^ {} = A*^C & A*^C +^ {} in A*^C +^ C by A2,Th27,Th32,ORDINAL1:11;
+A15:  (succ A)*^C = A*^C +^ C by Th36;
       deffunc F(Ordinal) = $1*^C;
       consider fi such that
 A16:  dom fi = B & for D st D in B holds fi.D = F(D) from OSLambda;
@@ -1991,8 +1991,8 @@ A18:  succ A in B by A6,ORDINAL1:28;
       then fi.(succ A) = (succ A)*^C by A16;
       then (succ A)*^C in rng fi by A16,A18,FUNCT_1:def 3;
       then
-A19:  (succ A)*^C c= union sup rng fi by Th27,ZFMISC_1:74;
-      B*^C = union sup fi by A6,A17,A16,Th54
+A19:  (succ A)*^C c= union sup rng fi by Th19,ZFMISC_1:74;
+      B*^C = union sup fi by A6,A17,A16,Th37
         .= union sup rng fi;
       hence thesis by A19,A14,A15;
     end;
@@ -2013,14 +2013,14 @@ A3: C <> {};
     now
       assume A <> B;
       then A c< B by A1,XBOOLE_0:def 8;
-      then A*^C in B*^C by A3,Th57,ORDINAL1:11;
+      then A*^C in B*^C by A3,Th40,ORDINAL1:11;
       hence thesis by ORDINAL1:def 2;
     end;
     hence thesis;
   end;
   now
     assume C = {};
-    then A*^C = {} by Th55;
+    then A*^C = {} by Th38;
     hence thesis;
   end;
   hence thesis by A2;
@@ -2044,9 +2044,9 @@ A5:   now
 A6:     C = succ D;
         D*^A c= D*^B by A4,A6,ORDINAL1:6;
         then
-A7:     D*^A +^ A c= D*^B +^ A by Th51;
-A8:     C*^A = D*^A +^ A & C*^B = D*^B +^ B by A6,Th53;
-        D*^B +^ A c= D*^B +^ B by A1,Th50;
+A7:     D*^A +^ A c= D*^B +^ A by Th34;
+A8:     C*^A = D*^A +^ A & C*^B = D*^B +^ B by A6,Th36;
+        D*^B +^ A c= D*^B +^ B by A1,Th33;
         hence thesis by A7,A8,XBOOLE_1:1;
       end;
 A9:   now
@@ -2063,22 +2063,22 @@ A12:    dom fi = C & for D st D in C holds fi.D = F(D) from OSLambda;
 A13:      x in dom fi and
 A14:      D = fi.x by FUNCT_1:def 3;
           reconsider x as Ordinal by A13;
-A15:      x*^B in C*^B by A2,A12,A13,Th57;
+A15:      x*^B in C*^B by A2,A12,A13,Th40;
           D = x*^A & x*^A c= x*^B by A4,A12,A13,A14;
           hence D in C*^B by A15,ORDINAL1:12;
         end;
         then
-A16:    sup rng fi c= C*^B by Th28;
+A16:    sup rng fi c= C*^B by Th20;
         C is limit_ordinal by A11,ORDINAL1:29;
         then
-A17:    C*^A = union sup fi by A10,A12,Th54
+A17:    C*^A = union sup fi by A10,A12,Th37
           .= union sup rng fi;
         union sup rng fi c= sup rng fi by Th5;
         hence thesis by A17,A16,XBOOLE_1:1;
       end;
       now
         assume C = {};
-        then C*^A = {} by Th52;
+        then C*^A = {} by Th35;
         hence thesis;
       end;
       hence thesis by A5,A9;
@@ -2089,7 +2089,7 @@ A17:    C*^A = union sup fi by A10,A12,Th54
   hence thesis by A1;
 end;
 
-theorem Th60:
+theorem Th43:
   exp(A,{}) = 1
 proof
   deffunc D(Ordinal,Ordinal-Sequence) = lim $2;
@@ -2097,11 +2097,11 @@ proof
   deffunc C(Ordinal,Ordinal) = A*^$2;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
   {} = 1 & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def20;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def16;
   thus F({}) = 1 from OSResult0(A1);
 end;
 
-theorem Th61:
+theorem Th44:
   exp(A,succ B) = A*^exp(A,B)
 proof
   deffunc D(Ordinal,Ordinal-Sequence) = lim $2;
@@ -2109,12 +2109,12 @@ proof
   deffunc C(Ordinal,Ordinal) = A *^ $2;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
   {} = 1 & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def20;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def16;
   for B holds F(succ B) = C(B,F(B)) from OSResultS(A1);
   hence thesis;
 end;
 
-theorem Th62:
+theorem Th45:
   B <> {} & B is limit_ordinal implies for fi st dom fi = B & for
   C st C in B holds fi.C = exp(A,C) holds exp(A,B) = lim fi
 proof
@@ -2128,7 +2128,7 @@ A2: dom fi = B and
 A3: for C st C in B holds fi.C = F(C);
 A4: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B & fi.
   {} = 1 & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) & for C st C
-  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def20;
+  in succ B & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C) by Def16;
   thus F(B) = D(B,fi) from OSResultL(A4,A1,A2,A3);
 end;
 
@@ -2140,12 +2140,12 @@ A1: for A st P[A] holds P[succ A]
   proof
     let A;
     assume exp(1,A) = 1;
-    hence exp(1,succ A) = 1*^1 by Th61
-      .= 1 by Th56;
+    hence exp(1,succ A) = 1*^1 by Th44
+      .= 1 by Th39;
   end;
-  thus exp(A,1) = A*^exp(A,{}) by Lm1,Th61
-    .= A*^1 by Th60
-    .= A by Th56;
+  thus exp(A,1) = A*^exp(A,{}) by Lm1,Th44
+    .= A*^1 by Th43
+    .= A by Th39;
 A2: for A st A <> {} & A is limit_ordinal & for B st B in A holds P[B] holds
   P[A]
   proof
@@ -2184,11 +2184,11 @@ A11:  E in dom fi;
       hence B in fi.E & fi.E in C by A7,A10,TARSKI:def 1;
     end;
     then
-A12: 1 is_limes_of fi by Def13;
-    exp(1,A) = lim fi by A3,A4,A6,Th62;
-    hence thesis by A12,Def14;
+A12: 1 is_limes_of fi by Def9;
+    exp(1,A) = lim fi by A3,A4,A6,Th45;
+    hence thesis by A12,Def10;
   end;
-A13: P[{}] by Th60;
+A13: P[{}] by Th43;
   for A holds P[A] from OrdinalInd(A13,A1,A2);
   hence thesis;
 end;
@@ -2213,7 +2213,7 @@ A7:   B = C +^ D by A2,A4,ORDINAL1:6;
       take C, E = succ D;
       thus C is limit_ordinal by A5;
       thus E in omega by A6,ORDINAL1:def 12;
-      thus thesis by A4,A7,Th45;
+      thus thesis by A4,A7,Th28;
     end;
     (for B holds A <> succ B) implies Th[A]
     proof
@@ -2222,7 +2222,7 @@ A8:   for D holds A <> succ D;
       take B = A, C = {};
       thus B is limit_ordinal by A8,ORDINAL1:29;
       thus C in omega by ORDINAL1:def 11;
-      thus thesis by Th44;
+      thus thesis by Th27;
     end;
     hence thesis by A3;
   end;
@@ -2238,7 +2238,7 @@ registration
   proof
     rng(X --> o) c= {o} & {o} c= succ o by FUNCOP_1:13,XBOOLE_1:7;
     then rng(X --> o) c= succ o by XBOOLE_1:1;
-    hence thesis by Def8;
+    hence thesis by Def4;
   end;
 end;
 
@@ -2265,7 +2265,7 @@ definition
 A1: dom id A = A by RELAT_1:45;
     then reconsider xi = id A as T-Sequence by ORDINAL1:def 7;
 A2: rng id A = A by RELAT_1:45;
-    then reconsider xi as Ordinal-Sequence by Def8;
+    then reconsider xi as Ordinal-Sequence by Def4;
     take xi;
     thus dom xi = A & rng xi c= A by RELAT_1:45;
     thus xi is increasing
@@ -2277,13 +2277,13 @@ A4:   C in dom xi;
       xi.C = C by A1,A4,FUNCT_1:18;
       hence thesis by A1,A3,A4,FUNCT_1:18,ORDINAL1:10;
     end;
-    thus thesis by A2,Th26;
+    thus thesis by A2,Th18;
   end;
 end;
 
 reserve e,u for set;
 
-theorem Th66:
+theorem Th48:
   e in rng psi implies e is Ordinal
 proof
   assume e in rng psi;
@@ -2297,8 +2297,8 @@ proof
   let e;
   assume
 A1: e in rng psi;
-  then e is Ordinal by Th66;
-  hence thesis by A1,Th27;
+  then e is Ordinal by Th48;
+  hence thesis by A1,Th19;
 end;
 
 theorem
@@ -2310,17 +2310,17 @@ A1: dom psi = {} and
   psi is increasing and
 A2: A = sup psi;
   thus A = sup {} by A1,A2,RELAT_1:42
-    .= {} by Th26;
+    .= {} by Th18;
 end;
 
 :: from ARYTM_3, 2007.10.23, A.T.
 
 scheme
-  OmegaInd {a()-> natural number, P[set]}:
+  OmegaInd {a()-> Nat, P[set]}:
    P[a()]
 provided
 A1: P[{}] and
-A2: for a being natural number st P[a] holds P[succ a]
+A2: for a being Nat st P[a] holds P[succ a]
 proof
   defpred P[Ordinal] means $1 is natural implies P[$1];
 A3: now
@@ -2357,19 +2357,19 @@ A10: P[{}] by A1;
 end;
 
 registration
-  let a, b be natural number;
+  let a, b be Nat;
   cluster a +^ b -> natural;
   coherence
   proof
-    defpred P[natural number] means a+^$1 is natural;
+    defpred P[Nat] means a+^$1 is natural;
 A1: now
-      let b be natural number;
+      let b be Nat;
       assume P[b];
-      then reconsider c = a+^b as natural number;
-      a+^succ b = succ c by Th45;
+      then reconsider c = a+^b as Nat;
+      a+^succ b = succ c by Th28;
       hence P[succ b];
     end;
-A2: P[{}] by Th44;
+A2: P[{}] by Th27;
     thus P[b] from OmegaInd(A2,A1);
   end;
 end;
@@ -2377,7 +2377,7 @@ end;
 :: from AMI_2, 2008.02.14, A.T.
 
 registration
-  let x,y be set, a,b be natural number;
+  let x,y be set, a,b be Nat;
   cluster IFEQ(x,y,a,b) -> natural;
   coherence
   proof
@@ -2397,7 +2397,7 @@ end;
 
 scheme LambdaRecEx{A() -> set,G(set,set) -> set}:
    ex f being Function st dom f = omega & f.{} = A() &
-    for n being natural number holds f.succ n = G(n,f.n)
+    for n being Nat holds f.succ n = G(n,f.n)
  proof
   deffunc D(set,set) = {};
   consider L being T-Sequence such that
@@ -2410,12 +2410,12 @@ A3: for A being Ordinal st succ A in omega holds L.(succ A) = G(A,L.A) and
   thus dom L = omega by A1;
    {} in omega by ORDINAL1:def 12;
   hence L.{} = A() by A2;
-  let n be natural number;
+  let n be Nat;
   succ n in omega by ORDINAL1:def 12;
   hence thesis by A3;
 end;
 
-reserve n for natural number;
+reserve n for Nat;
 
 scheme RecUn{A() -> set, F, G() -> Function, P[set,set,set]}:
  F() = G()
@@ -2428,7 +2428,7 @@ A5: G().{} = A() and
 A6: for n holds P[n,G().n,G().(succ n)] and
 A7: for n for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2
 proof
-  defpred P[natural number] means F().$1 = G().$1;
+  defpred P[Nat] means F().$1 = G().$1;
 A8: for n st P[n] holds P[succ n]
   proof
     let n;
@@ -2456,9 +2456,9 @@ A4: dom G() = omega and
 A5: G().{} = A() and
 A6: for n holds G().(succ n) = F(n,G().n)
 proof
-  defpred P[natural number,set,set] means $3=F($1,$2);
+  defpred P[Nat,set,set] means $3=F($1,$2);
 A7: for n holds P[n,G().n,G().(succ n)] by A6;
-A8: for n being natural number,x,y1,y2 being set st P[n,x,y1] & P[n,x,y2]
+A8: for n being Nat,x,y1,y2 being set st P[n,x,y1] & P[n,x,y2]
     holds y1=y2;
 A9: for n holds P[n,F().n,F().(succ n)] by A3;
   thus F() = G() from RecUn(A1,A2,A9,A4,A5,A7,A8);

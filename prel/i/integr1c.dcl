@@ -12,8 +12,10 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="INTEGR1C"/>
@@ -38,8 +40,8 @@
 <Func kind="K" nr="29"/>
 </Adjective>
 <Adjective nr="17"/>
-<Adjective nr="26"/>
-<Adjective nr="38"/>
+<Adjective nr="32"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -2,7 +2,7 @@
 ::  by Yuichi Futa , Hiroyuki Okazaki and Yasunari Shidama
 ::
 :: Received December 21, 2010
-:: Copyright (c) 2010-2011 Association of Mizar Users
+:: Copyright (c) 2010-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,20 +19,20 @@ environ
       FUNCT_2, PARTFUN1, INT_2, NAT_1, BINOP_1, BINOP_2, REALSET1, ZFMISC_1,
       INT_3, SUPINF_2, ALGSTR_0, GROUP_1, MESFUNC1, INT_1, VECTSP_1, STRUCT_0,
       GROUP_2, GRAPH_1, FINSEQ_2, EC_PF_1, RLVECT_1, LATTICES, EQREL_1,
-      RELAT_2, UNIROOTS, PROB_2, REAL_1, MOD_2;
+      RELAT_2, UNIROOTS, PROB_2, REAL_1, MOD_2, RECDEF_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELAT_2,
-      RELSET_1, PARTFUN1, MCART_1, FUNCT_2, BINOP_1, DOMAIN_1, FINSET_1,
-      CARD_1, CARD_3, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_1, INT_1, NAT_D,
-      REALSET1, FINSEQ_1, FINSEQ_2, EQREL_1, RVSUM_1, NEWTON, WSIERP_1, MOD_2,
-      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, GROUP_2, GR_CY_1, INT_3,
-      UNIROOTS, PROB_2, BINOM;
- constructors REAL_1, NAT_D, NAT_3, SEQ_1, REALSET1, GROUP_2, BINOP_1, GR_CY_1,
-      INT_3, WSIERP_1, UPROOTS, BINOP_2, RELSET_1, FUNCT_7, UNIROOTS, PROB_2,
-      GROUP_1, FINSET_1, BINOM, MOD_2;
+      RELSET_1, PARTFUN1, XTUPLE_0, MCART_1, FUNCT_2, BINOP_1, DOMAIN_1,
+      FINSET_1, CARD_1, CARD_3, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, ORDINAL1,
+      NAT_1, INT_1, NAT_D, REALSET1, FINSEQ_1, FINSEQ_2, EQREL_1, RVSUM_1,
+      NEWTON, WSIERP_1, MOD_2, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1,
+      GROUP_2, GR_CY_1, INT_3, UNIROOTS, PROB_2, BINOM;
+ constructors NAT_D, SEQ_1, REALSET1, GROUP_2, BINOP_1, GR_CY_1, INT_3,
+      WSIERP_1, UPROOTS, BINOP_2, RELSET_1, FUNCT_7, UNIROOTS, PROB_2, BINOM,
+      MOD_2, XTUPLE_0;
  registrations XBOOLE_0, STRUCT_0, XREAL_0, ORDINAL1, NAT_1, INT_1, GROUP_2,
-      FINSET_1, GR_CY_1, ALGSTR_0, VECTSP_1, INT_3, XXREAL_0, NEWTON, SUBSET_1,
-      CARD_1, VALUED_0, EQREL_1, RELSET_1, FINSEQ_2, UNIROOTS, NUMBERS,
-      ALGSTR_1, MOD_2, MEMBERED;
+      FINSET_1, ALGSTR_0, VECTSP_1, INT_3, XXREAL_0, NEWTON, SUBSET_1, CARD_1,
+      BINOM, RELAT_2, VALUED_0, EQREL_1, RELSET_1, FINSEQ_2, UNIROOTS, NUMBERS,
+      MEMBERED, XTUPLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -154,7 +154,7 @@ theorem :: EC_PF_1:13
   ex n1 st a = n1 mod p;
 
 theorem :: EC_PF_1:14
-  ex a st a = i mod p;
+  i mod p is Element of GF(p);
 
 theorem :: EC_PF_1:15
   a = i mod p & b = j mod p implies a+b = (i+j) mod p;
@@ -184,7 +184,8 @@ theorem :: EC_PF_1:23
   a = n1 mod p implies a|^n = n1|^n mod p;
 
 theorem :: EC_PF_1:24
-  a|^(n+1) = a|^n * a;
+  for K being unital associative non empty multMagma, a being
+  Element of K, n being Nat holds a|^(n+1) = (a|^n) * a;
 
 theorem :: EC_PF_1:25
   a <> 0 implies a |^ n <> 0;
@@ -200,26 +201,17 @@ theorem :: EC_PF_1:27
   holds x = 0.(GF(p));
 
 theorem :: EC_PF_1:28
-  a|^n * b|^n = (a*b) |^ n;
-
-theorem :: EC_PF_1:29
   a <> 0 implies (a") |^n = (a|^n)";
-
-theorem :: EC_PF_1:30
-  a|^n1 * a|^n2 = a|^(n1+n2);
-
-theorem :: EC_PF_1:31
-  (a|^n1) |^ n2 = a|^(n1*n2);
 
 registration let p;
   cluster MultGroup GF(p) -> cyclic;
 end;
 
-theorem :: EC_PF_1:32
+theorem :: EC_PF_1:29
   for x be Element of MultGroup GF(p), x1 be Element of GF(p),
   n be Nat st x = x1 holds x|^n = x1 |^n;
 
-theorem :: EC_PF_1:33
+theorem :: EC_PF_1:30
   ex g be Element of GF(p) st
   for a be Element of GF(p) st a <> 0.GF(p) holds
   ex n be Nat st a = g|^n;
@@ -235,7 +227,7 @@ definition let p, a;
   a <> 0 & not ex x being Element of GF(p) st x|^2 = a;
 end;
 
-theorem :: EC_PF_1:34
+theorem :: EC_PF_1:31
   a <> 0 implies a|^2 is quadratic_residue;
 
 registration let p be Prime;
@@ -250,28 +242,28 @@ definition let p, a;
   otherwise -1;
 end;
 
-theorem :: EC_PF_1:35
+theorem :: EC_PF_1:32
   a is not_quadratic_residue iff Lege_p(a) = -1;
 
-theorem :: EC_PF_1:36
+theorem :: EC_PF_1:33
   a is quadratic_residue iff Lege_p(a) = 1;
 
-theorem :: EC_PF_1:37
+theorem :: EC_PF_1:34
   a = 0 iff Lege_p(a) = 0;
 
-theorem :: EC_PF_1:38
+theorem :: EC_PF_1:35
   a <> 0 implies Lege_p(a|^2) = 1;
 
-theorem :: EC_PF_1:39
+theorem :: EC_PF_1:36
   Lege_p(a*b) = Lege_p(a) * Lege_p(b);
 
-theorem :: EC_PF_1:40
+theorem :: EC_PF_1:37
   a <> 0 & n mod 2 = 0 implies Lege_p(a|^n) = 1;
 
-theorem :: EC_PF_1:41
+theorem :: EC_PF_1:38
   n mod 2 = 1 implies Lege_p(a|^n) = Lege_p(a);
 
-theorem :: EC_PF_1:42
+theorem :: EC_PF_1:39
   2 < p implies card({b : b|^2 = a}) = 1 + Lege_p(a);
 
 begin :: 4.Set of points on an elliptic curve over $\bf{GF}(p)$
@@ -283,7 +275,7 @@ definition let K be Field;
   [:the carrier of K, the carrier of K, the carrier of K:] \ {[0.K,0.K,0.K]};
 end;
 
-theorem :: EC_PF_1:43
+theorem :: EC_PF_1:40
   ProjCo(GF(p)) = [:the carrier of GF(p),
   the carrier of GF(p), the carrier of GF(p):] \ {[0,0,0]};
 
@@ -307,10 +299,11 @@ definition
 :: EC_PF_1:def 8
   for P be Element of [:the carrier of GF(p),
   the carrier of GF(p), the carrier of GF(p):] holds
-  it. P = ((P`2) |^2)*(P`3)-((P`1) |^3 +a*(P`1)*(P`3) |^2+b*(P`3) |^3);
+  it. P = ((P`2_3) |^2)*(P`3_3)-((P`1_3) |^3
+    +a*(P`1_3)*(P`3_3) |^2+b*(P`3_3) |^3);
   end;
 
-theorem :: EC_PF_1:44
+theorem :: EC_PF_1:41
   for X,Y,Z be Element of GF(p) holds
   EC_WEqProjCo(a,b,p).([X,Y,Z]) = Y |^2*Z-(X|^3 +a*X*Z |^2+b*Z |^3);
 
@@ -322,10 +315,10 @@ definition
   {P where P is Element of ProjCo(GF(p)) : EC_WEqProjCo(a,b,p).P = 0.GF(p) };
 end;
 
-theorem :: EC_PF_1:45
+theorem :: EC_PF_1:42
   [0,1,0] is Element of EC_SetProjCo(a,b,p);
 
-theorem :: EC_PF_1:46
+theorem :: EC_PF_1:43
   for p be Prime, a, b, X, Y be Element of GF(p) holds
   Y|^2 = X|^3 + a*X + b iff [X,Y,1] is Element of EC_SetProjCo(a,b,p);
 
@@ -335,22 +328,22 @@ definition
   pred P _EQ_ Q means
 :: EC_PF_1:def 10
     ex a be Element of GF(p) st a <> 0.GF(p)
-    & P`1 = a*Q`1 & P`2 = a*Q`2 & P`3 = a*Q`3;
+    & P`1_3 = a*(Q`1_3) & P`2_3 = a*(Q`2_3) & P`3_3 = a*(Q`3_3);
   reflexivity;
   symmetry;
 end;
 
-theorem :: EC_PF_1:47
+theorem :: EC_PF_1:44
   for p be Prime, P,Q,R be Element of ProjCo(GF(p)) holds
   ( P _EQ_ Q & Q _EQ_ R implies P _EQ_ R);
 
-theorem :: EC_PF_1:48
+theorem :: EC_PF_1:45
   for p be Prime, a, b be Element of GF(p),
   P,Q be Element of [:the carrier of GF(p), the carrier of GF(p),
   the carrier of GF(p):], d be Element of GF(p)
   st p > 3 & Disc(a,b,p) <> 0.GF(p) &
   P in EC_SetProjCo(a,b,p) & d <> 0.GF(p)
-  & Q`1 = d*P`1 & Q`2 = d*P`2 & Q`3 = d*P`3 holds
+  & Q`1_3 = d*(P`1_3) & Q`2_3 = d*(P`2_3) & Q`3_3 = d*(P`3_3) holds
   Q in EC_SetProjCo(a,b,p);
 
 definition
@@ -360,7 +353,7 @@ definition
   {[P,Q] where P,Q is Element of ProjCo(GF(p)) : P _EQ_ Q};
 end;
 
-theorem :: EC_PF_1:49
+theorem :: EC_PF_1:46
   for p be Prime, P,Q be Element of ProjCo(GF(p)) holds
   P _EQ_ Q iff [P,Q] in R_ProjCo p;
 
@@ -377,30 +370,30 @@ definition
   (R_ProjCo p) /\ nabla EC_SetProjCo(a,b,p);
 end;
 
-theorem :: EC_PF_1:50
+theorem :: EC_PF_1:47
   for p be Prime, a, b be Element of GF(p),
   P,Q be Element of ProjCo(GF(p))
   st Disc(a,b,p) <> 0.GF(p) &
   P in EC_SetProjCo(a,b,p) & Q in EC_SetProjCo(a,b,p) holds
   ( P _EQ_ Q iff [P,Q] in R_EllCur (a,b,p));
 
-theorem :: EC_PF_1:51
+theorem :: EC_PF_1:48
   for p be Prime, a, b be Element of GF(p),
   P be Element of ProjCo(GF(p))
   st p > 3 & Disc(a,b,p) <> 0.GF(p) &
-  P in EC_SetProjCo(a,b,p) & P`3 <> 0 holds
+  P in EC_SetProjCo(a,b,p) & P`3_3 <> 0 holds
   ex Q be Element of ProjCo(GF(p)) st Q in EC_SetProjCo(a,b,p)
-  & Q _EQ_ P & Q`3 = 1;
+  & Q _EQ_ P & Q`3_3 = 1;
 
-theorem :: EC_PF_1:52
+theorem :: EC_PF_1:49
   for p be Prime, a, b be Element of GF(p),
   P be Element of ProjCo(GF(p))
   st p > 3 & Disc(a,b,p) <> 0.GF(p) &
-  P in EC_SetProjCo(a,b,p) & P`3 = 0 holds
+  P in EC_SetProjCo(a,b,p) & P`3_3 = 0 holds
   ex Q be Element of ProjCo(GF(p))
-  st Q in EC_SetProjCo(a,b,p) & Q _EQ_ P & Q`1 = 0 & Q`2= 1 & Q`3= 0;
+  st Q in EC_SetProjCo(a,b,p) & Q _EQ_ P & Q`1_3 = 0 & Q`2_3= 1 & Q`3_3= 0;
 
-theorem :: EC_PF_1:53
+theorem :: EC_PF_1:50
   for p be Prime, a, b be Element of GF(p), x be set st
   p > 3 & Disc(a,b,p) <> 0.GF(p)
   & x in Class (R_EllCur(a,b,p)) holds
@@ -410,7 +403,7 @@ theorem :: EC_PF_1:53
   st P in EC_SetProjCo(a,b,p) & P=[X,Y,1]
   & x = Class(R_EllCur(a,b,p),P);
 
-theorem :: EC_PF_1:54
+theorem :: EC_PF_1:51
   for p be Prime, a, b be Element of GF(p) st
   p > 3 & Disc(a,b,p) <> 0.GF(p) holds
   Class (R_EllCur(a,b,p)) = {Class(R_EllCur(a,b,p),[0,1,0])}
@@ -418,7 +411,7 @@ theorem :: EC_PF_1:54
   where P is Element of ProjCo(GF(p)):
   P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p) st P=[X,Y,1]};
 
-theorem :: EC_PF_1:55
+theorem :: EC_PF_1:52
   for p be Prime,
   a, b,d1,Y1,d2,Y2 be Element of GF(p)
   st p > 3 & Disc(a,b,p) <> 0.GF(p)
@@ -427,7 +420,7 @@ theorem :: EC_PF_1:55
   Class(R_EllCur(a,b,p),[d1,Y1,1]) = Class(R_EllCur(a,b,p),[d2,Y2,1])
   iff d1=d2 & Y1=Y2;
 
-theorem :: EC_PF_1:56
+theorem :: EC_PF_1:53
   for p be Prime, a, b be Element of GF(p),
   F1,F2 be set st p > 3 & Disc(a,b,p) <> 0.GF(p)
   & F1 = {Class(R_EllCur(a,b,p),[0,1,0])} & F2 = {Class(R_EllCur(a,b,p),P)
@@ -435,35 +428,34 @@ theorem :: EC_PF_1:56
   P in EC_SetProjCo(a,b,p) &
   ex X,Y be Element of GF(p) st P=[X,Y,1]} holds F1 misses F2;
 
-theorem :: EC_PF_1:57
+theorem :: EC_PF_1:54
   for X be non empty finite set,
   R be Equivalence_Relation of X,
   S be Class(R)-valued Function, i be set st i in dom S holds
   S.i is finite Subset of X;
 
-theorem :: EC_PF_1:58
+theorem :: EC_PF_1:55
   for X be non empty set,
   R be Equivalence_Relation of X,
   S be Class(R)-valued Function st S is one-to-one
   holds S is disjoint_valued;
 
-theorem :: EC_PF_1:59
+theorem :: EC_PF_1:56
   for X be non empty set,
   R be Equivalence_Relation of X,
   S be Class(R)-valued Function st S is onto
   holds Union S = X;
 
-theorem :: EC_PF_1:60
+theorem :: EC_PF_1:57
   for X be non empty finite set,
   R be Equivalence_Relation of X,
   S be Class(R)-valued Function,
   L be FinSequence of NAT
-  st S is one-to-one onto
-  & dom S = dom L
+  st S is one-to-one onto & dom S = dom L
   & (for i be Nat st i in dom S holds L.i = card (S.i))
   holds card (X) = Sum L;
 
-theorem :: EC_PF_1:61
+theorem :: EC_PF_1:58
   for p be Prime, a, b,d be Element of GF(p), F,G be set st
   p > 3 & Disc(a,b,p) <> 0.GF(p)
   & F = {Y where Y is Element of GF(p) : Y|^2= d|^3 + a*d + b} & F <> {}
@@ -471,13 +463,13 @@ theorem :: EC_PF_1:61
   where Y is Element of GF(p) : [d,Y,1] in EC_SetProjCo(a,b,p) } holds
   ex I be Function of F,G st I is onto & I is one-to-one;
 
-theorem :: EC_PF_1:62
+theorem :: EC_PF_1:59
   for p be Prime, a, b, d be Element of GF(p) st
   p > 3 & Disc(a,b,p) <> 0.GF(p) holds
   card ({Class(R_EllCur(a,b,p),[d,Y,1]) where Y is Element of GF(p)
   : [d,Y,1] in EC_SetProjCo(a,b,p) }) = 1 + Lege_p(d|^3 + a*d + b);
 
-theorem :: EC_PF_1:63
+theorem :: EC_PF_1:60
   for p be Prime, a, b be Element of GF(p)
   st p > 3 & Disc(a,b,p) <> 0.GF(p) holds
   ex F be FinSequence of NAT st len F = p
@@ -487,7 +479,7 @@ theorem :: EC_PF_1:63
   where P is Element of ProjCo(GF(p)): P in EC_SetProjCo(a,b,p) &
   ex X,Y be Element of GF(p) st P=[X,Y,1]} = Sum(F);
 
-theorem :: EC_PF_1:64
+theorem :: EC_PF_1:61
   for p be Prime, a, b be Element of GF(p)
   st p > 3 & Disc(a,b,p) <> 0.GF(p)
   ex F be FinSequence of INT st len F = p &

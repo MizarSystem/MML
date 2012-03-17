@@ -16,7 +16,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="40">
+<Func kind="K" nr="38">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -31,7 +31,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="43">
+<Func kind="K" nr="41">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -2,7 +2,7 @@
 ::  by Karol P\c{a}k
 ::
 :: Received March 15, 2005
-:: Copyright (c) 2005-2011 Association of Mizar Users
+:: Copyright (c) 2005-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -16,14 +16,14 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, XBOOLE_0, XXREAL_0, NAT_1, ORDINAL1, CARD_1,
       TARSKI, ARYTM_3, ARYTM_1, FUNCT_1, RELAT_1, FUNCT_2, INT_1, FINSET_1,
-      AFINSQ_1, BINOP_1, FINSEQ_1, FINSOP_1, CARD_3, BINOP_2, ZFMISC_1, NEWTON,
+      AFINSQ_1, FINSEQ_1, FINSOP_1, CARD_3, BINOP_2, ZFMISC_1, NEWTON,
       REALSET1, STIRL2_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, RELSET_1, ORDINAL1, SEQ_4, PARTFUN1, FINSET_1, AFINSQ_1,
       AFINSQ_2, XXREAL_0, FUNCT_2, NAT_1, INT_1, BINOP_1, BINOP_2, NEWTON,
       DOMAIN_1;
  constructors WELLORD2, DOMAIN_1, SETWISEO, REAL_1, BINOP_2, SEQ_4, NEWTON,
-      AFINSQ_1, AFINSQ_2, RELSET_1, PARTFUN3, SEQ_1, BINOP_1;
+      AFINSQ_2, RELSET_1, PARTFUN3, BINOP_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, AFINSQ_1,
       CARD_1, VALUED_0, XXREAL_2, RELSET_1, AFINSQ_2;
@@ -309,13 +309,6 @@ A2:   k=0 or k>0;
       hence thesis by A2,NAT_1:44,SUBSET_1:def 1;
     end;
   end;
-end;
-
-registration
-  let X,Ne;
-  let f be Function of X,Ne,x be set;
-  cluster f.x -> natural;
-  coherence;
 end;
 
 definition
@@ -1421,7 +1414,10 @@ A5:   rng (f|n) c= k
       proof
         let fi be set such that
 A6:     fi in rng (f|n);
-A7:     fi in k+1 by A6;
+        rng(f|n) c= rng f by RELAT_1:70;
+        then fi in rng f by A6;
+        then
+A7:     fi in k+1;
         k+1 is Subset of NAT by Th8;
         then reconsider fi as Element of NAT by A7;
         consider i be set such that
@@ -2206,7 +2202,7 @@ A42:    f.n=l;
   hence thesis;
 end;
 
-theorem Th54:
+theorem Th44:
   for f be Function, n holds union (rng (f|n)) \/ f.n=union rng (f |(n+1))
 proof
   let f be Function,n;
@@ -2403,7 +2399,7 @@ A26:      X<>k1;
         then
 A27:    f.k1=f.k + card Fk1 by A15,BINOP_2:def 23;
         card (urFk1 \/ Fk1) = f.k + card Fk1 by A13,A14,A16,CARD_2:40,NAT_1:13;
-        hence thesis by A27,Th54;
+        hence thesis by A27,Th44;
       end;
       reconsider C1=len CardF-1 as Element of NAT by A8,NAT_1:20;
 A28:  C1 <C1+1 by NAT_1:13;
@@ -2411,7 +2407,7 @@ A29:  F|len CardF =F by A5,RELAT_1:68;
 A30:  P[0]
       proof
         assume 0<len CardF;
-A31:    union rng (F|(0+1)) = union rng (F|(0 qua Ordinal))\/F.0 by Th54;
+A31:    union rng (F|(0+1)) = union rng (F|(0 qua Ordinal))\/F.0 by Th44;
         0 in len CardF by A8,NAT_1:44;
         hence thesis by A1,A5,A9,A31,ZFMISC_1:2;
       end;
@@ -2483,8 +2479,7 @@ A16: for i st i in dom F holds F.i is finite
     then
 A17: F.i in rng F by FUNCT_1:def 3;
 A18: Funcs(X(),Y()) is finite by FRAENKEL:6;
-    rng F c= bool Funcs(X(),Y()) by RELAT_1:def 19;
-    hence thesis by A17,A18;
+    thus thesis by A17,A18;
   end;
   consider CardF be XFinSequence of NAT such that
 A19: dom CardF = dom F and
@@ -2544,7 +2539,7 @@ A35: i in dom CardF;
   hence thesis;
 end;
 
-theorem Th55:
+theorem Th45:
 k * (n block k)= card{f where f is
   Function of n+1,k: f is onto "increasing & f"{f.n}<>{n}}
 proof
@@ -2656,7 +2651,7 @@ end;
 
 :: Recursive dependence
 
-theorem Th56:
+theorem Th46:
 (n+1) block (k+1) = (k+1)*(n block (k+1) ) + (n block k)
 proof
   set F={f where f is Function of n+1,k+1:f is onto "increasing};
@@ -2722,12 +2717,12 @@ A9: F1 c= Funcs(n+1,k+1)
   Funcs(n+1,k+1) is finite by FRAENKEL:6;
   then reconsider F1,F2 as finite set by A9,A8;
   reconsider k1=k+1 as Element of NAT;
-A10: card F2= k1 * (n block k1) by Th55;
+A10: card F2= k1 * (n block k1) by Th45;
   card F1= n block k by Th42;
   hence thesis by A4,A5,A10,CARD_2:40;
 end;
 
-theorem Th57:
+theorem Th47:
 n>=1 implies n block 2 = 1/2 * (2 |^ n - 2 )
 proof
   defpred P[Nat] means $1 block 2 = 1/2 * (2 |^ $1-2);
@@ -2736,7 +2731,7 @@ A1: for k be Nat st k>=1 & P[k] holds P[k + 1]
     let k be Nat such that
 A2: k >=1 and
 A3: P[k];
-    (k+1) block 2 = 2*( k block (1+1)) + (k block 1) by Th56
+    (k+1) block 2 = 2*( k block (1+1)) + (k block 1) by Th46
       .=2 * (1/2 * (2 |^ k - 2)) + 1 by A2,A3,Th32
       .=1/2* (2* 2 |^ k - 2)
       .=1/2* (2 |^ (k+1)-2) by NEWTON:6;
@@ -2749,7 +2744,7 @@ A4: P[1] by Th29;
   hence thesis;
 end;
 
-theorem Th58:
+theorem Th48:
   n >= 2 implies n block 3 = 1/6 * ( 3 |^ n - 3 * 2 |^ n + 3 )
 proof
   defpred P[Nat] means $1 block 3=1/6*(3|^$1-3*2|^$1+3);
@@ -2758,8 +2753,8 @@ A1: for k be Nat st k>=2 & P[k] holds P[k+1]
     let k be Nat such that
 A2: k>=2 and
 A3: P[k];
-    k block 2 = 1/2 * (2 |^ k - 2) by A2,Th57,XXREAL_0:2;
-    hence (k+1) block 3 = 3*(k block (2+1)) +(1/2*(2|^k-2)) by Th56
+    k block 2 = 1/2 * (2 |^ k - 2) by A2,Th47,XXREAL_0:2;
+    hence (k+1) block 3 = 3*(k block (2+1)) +(1/2*(2|^k-2)) by Th46
       .=1/6*((3*3|^k)-3*2*2|^k +3) by A3
       .=1/6*(3|^(k+1)-3*(2*2|^k) +3) by NEWTON:6
       .=1/6*(3|^(k+1)-3*2|^(k+1) +3) by NEWTON:6;
@@ -2791,8 +2786,8 @@ A1: for k be Nat st k>=3 & P[k] holds P[k+1]
     let k be Nat such that
 A2: k>=3 and
 A3: P[k];
-    k block 3 = 1/6 * (3|^k-3*2|^k+3) by A2,Th58,XXREAL_0:2;
-    hence (k+1) block 4 = 4*(k block (3+1)) +(1/6*(3|^k-3*2|^k+3)) by Th56
+    k block 3 = 1/6 * (3|^k-3*2|^k+3) by A2,Th48,XXREAL_0:2;
+    hence (k+1) block 4 = 4*(k block (3+1)) +(1/6*(3|^k-3*2|^k+3)) by Th46
       .=1/24*((4*4|^k)- 4*(3*3|^k)+ 6*(2*2|^k) - 4) by A3
       .=1/24*(4|^(k+1)- 4*(3*3|^k)+ 6*(2*2|^k) - 4) by NEWTON:6
       .=1/24*(4|^(k+1)- 4*3|^(k+1)+ 6*(2*2|^k) - 4) by NEWTON:6
@@ -2808,7 +2803,7 @@ A4: P[3];
   hence thesis;
 end;
 
-theorem Th60:
+theorem Th50:
   3! = 6 & 4! = 24
 proof
   thus
@@ -2818,7 +2813,7 @@ A1: 3! = (2+1)! .= 2*3 by NEWTON:14,15
     .= 24;
 end;
 
-theorem Th61:
+theorem Th51:
   n choose 1=n & n choose 2=n*(n-1)/2 & n choose 3=n*(n-1)*(n-2)/6
   & n choose 4=n*(n-1)*(n-2)*(n-3)/24
 proof
@@ -2874,12 +2869,12 @@ A11:  (n3!)/(n3!)=1 by XCMPLX_1:60;
 A12:  (n3+1)!=(n3)!*(n3+1) by NEWTON:15;
       then
 A13:  n choose 3=((n3)!*(n2*n1*n))/((n3!)*(3!)) by A4,A5,A6,NEWTON:def 3
-        .=((n3!)/(n3!)*(n2*n1*n))/6 by Th60,XCMPLX_1:83
+        .=((n3!)/(n3!)*(n2*n1*n))/6 by Th50,XCMPLX_1:83
         .=n*n1*n2/6 by A11;
       n>=3+1 by A4,NAT_1:13;
       then
 n choose 4=((n4!)*(n3*n2*n1*n))/((n4!)*(4!)) by A5,A6,A12,A10,NEWTON:def 3
-        .=((n4!)/(n4!)*(n3*n2*n1*n))/24 by Th60,XCMPLX_1:83
+        .=((n4!)/(n4!)*(n3*n2*n1*n))/24 by Th50,XCMPLX_1:83
         .=n*n1*n2*n3/24 by A9;
       hence thesis by A4,A8,A13,NEWTON:23,XXREAL_0:2;
     end;
@@ -2887,7 +2882,7 @@ n choose 4=((n4!)*(n3*n2*n1*n))/((n4!)*(4!)) by A5,A6,A12,A10,NEWTON:def 3
   hence thesis;
 end;
 
-theorem Th62:
+theorem Th52:
   (n + 1) block n = (n + 1) choose 2
 proof
   defpred P[Nat] means ($1+1) block $1 = ($1+1) choose 2;
@@ -2896,11 +2891,11 @@ A1: for k st P[k] holds P[k+1]
     let k such that
 A2: P[k];
     set k1=k+1;
-    thus (k1+1) block k1=k1*(k1 block k1)+(k1 block k) by Th56
+    thus (k1+1) block k1=k1*(k1 block k1)+(k1 block k) by Th46
       .=k1*1+(k1 choose 2) by A2,Th26
-      .=k1+k1*(k1-1)/2 by Th61
+      .=k1+k1*(k1-1)/2 by Th51
       .=(k1+1)*(k1+1-1)/2
-      .=(k1+1) choose 2 by Th61;
+      .=(k1+1) choose 2 by Th51;
   end;
   1 block 0 =0 by Th31;
   then
@@ -2922,16 +2917,16 @@ A3: P[k];
     set k1=k+1;
     set k2=k+2;
     set k3=k2+1;
-A4: k1*((k1+1) block k1)=k1*(k2 choose 2) by Th62
-      .=k1*(k2*(k2-1)/2) by Th61
+A4: k1*((k1+1) block k1)=k1*(k2 choose 2) by Th52
+      .=k1*(k2*(k2-1)/2) by Th51
       .=k2*(k2-1)*(k1*12/24);
-    k2 block k=3*(k2*(k2-1)*(k2-2)*(k2-3)/24)+(k2 choose 3) by A3,Th61
-      .=3*(k2*(k2-1)*(k2-2)*(k2-3)/24)+(k2*(k2-1)*(k2-2)/6) by Th61
+    k2 block k=3*(k2*(k2-1)*(k2-2)*(k2-3)/24)+(k2 choose 3) by A3,Th51
+      .=3*(k2*(k2-1)*(k2-2)*(k2-3)/24)+(k2*(k2-1)*(k2-2)/6) by Th51
       .=k2*(k2-1)*(3*(k2-2)*(k2-3)/24 +4*(k2-2)/24);
-    then k3 block k1= k2*k1*(k1*12/24)+k2*k1*(3*k*(k2-3)/24+4*k/24) by A4,Th56
+    then k3 block k1= k2*k1*(k1*12/24)+k2*k1*(3*k*(k2-3)/24+4*k/24) by A4,Th46
       .=3*(k3*(k3-1)*(k3-2)*(k3-3)/24)+k3*k2*k1/6
-      .=3*(k3 choose 4) +(k3*(k3-1)*(k3-2)/6) by Th61
-      .=3*(k3 choose 4)+(k3 choose 3) by Th61;
+      .=3*(k3 choose 4) +(k3*(k3-1)*(k3-2)/6) by Th51
+      .=3*(k3 choose 4)+(k3 choose 3) by Th51;
     hence thesis;
   end;
   2 choose 4=0 by NEWTON:def 3;
@@ -2941,7 +2936,7 @@ A5: P[0] by A1,Th31;
   hence thesis;
 end;
 
-theorem Th64:
+theorem Th54:
   for F be Function,y holds rng (F|(dom F\F"{y}))=rng F\{y} & for
   x st x<>y holds (F|(dom F\F"{y}))"{x}=F"{x}
 proof
@@ -2998,7 +2993,7 @@ A12: not z in F"{y} by FUNCT_1:def 7;
   hence thesis by FUNCT_2:98;
 end;
 
-theorem Th65:
+theorem Th55:
   card X=k+1 & x in X implies card (X\{x})=k
 proof
   assume that
@@ -3037,8 +3032,8 @@ A5: card rng F=n+1;
 A6:   x in rng F and
       Q[x,F];
       set D=dom F\F"{x};
-      card (rng F\{x})=n by A5,A6,Th65;
-      then card rng (F|D)=n by Th64;
+      card (rng F\{x})=n by A5,A6,Th55;
+      then card rng (F|D)=n by Th54;
       hence thesis by A4;
     end;
     hence thesis by A2;
@@ -3059,7 +3054,7 @@ A9: R[0]
   hence thesis by A8;
 end;
 
-theorem Th66:
+theorem Th56:
   for N be Subset of NAT st N is finite ex k st for n st n in N holds n<=k
 proof
   let N be Subset of NAT;
@@ -3083,7 +3078,7 @@ A5: len F>0;
   hence thesis by A5,AFINSQ_2:61;
 end;
 
-theorem Th67:
+theorem Th57:
   for X,Y,x,y st (Y is empty implies X is empty) & not x in X for
   F be Function of X,Y ex G be Function of X\/{x},Y\/{y} st G|X = F & G.x=y
 proof
@@ -3108,7 +3103,7 @@ A5: G|X = F & for x9 be set st x9 in X1\X holds G.x9 = F(x9) from Sch2(
   hence thesis by A5;
 end;
 
-theorem Th68:
+theorem Th58:
   for X,Y,x,y st (Y is empty implies X is empty) for F be Function
   of X,Y,G be Function of X\/{x},Y\/{y} st G|X=F & G.x=y holds ( F is onto
   implies G is onto) & ( not y in Y & F is one-to-one implies G is one-to-one)
@@ -3204,7 +3199,7 @@ A30:    x1 in {x} & x2 in {x};
   end;
 end;
 
-theorem Th69:
+theorem Th59:
   for N be finite Subset of NAT holds ex Order be Function of N,
 card N st Order is bijective & for n,k st n in dom Order & k in dom Order & n<k
   holds Order.n < Order.k
@@ -3223,7 +3218,7 @@ A3: card N =k+1;
     then
 A4: ex n be Nat st M[n];
     consider m9 be Nat such that
-A5: for n st n in N holds n<=m9 by Th66;
+A5: for n st n in N holds n<=m9 by Th56;
 A6: for n be Nat st M[n] holds n<=m9 by A5;
     consider m be Nat such that
 A7: M[m] & for n be Nat st M[n] holds n <= m from NAT_1:sch 6(A6,A4
@@ -3231,8 +3226,8 @@ A7: M[m] & for n be Nat st M[n] holds n <= m from NAT_1:sch 6(A6,A4
     set Nm=N\{m};
     consider F be Function of Nm,card Nm such that
 A8: F is bijective and
-A9: for n,k st n in dom F & k in dom F & n<k holds F.n < F.k by A2,A3,A7,Th65;
-A10: card Nm=k by A3,A7,Th65;
+A9: for n,k st n in dom F & k in dom F & n<k holds F.n < F.k by A2,A3,A7,Th55;
+A10: card Nm=k by A3,A7,Th55;
     then
 A11: (card Nm)\/{k}=card N by A3,AFINSQ_1:2;
 A12: card Nm is empty implies Nm is empty;
@@ -3240,12 +3235,12 @@ A12: card Nm is empty implies Nm is empty;
     then not m in Nm by XBOOLE_0:def 5;
     then consider G be Function of Nm\/{m},card Nm\/{k} such that
 A13: G|Nm=F and
-A14: G.m=k by A12,Th67;
+A14: G.m=k by A12,Th57;
     N=Nm\/{m} by A7,ZFMISC_1:116;
     then reconsider G9=G as Function of N,card N by A3,A10,AFINSQ_1:2;
     take G9;
     not k in card Nm by A10;
-    then G is one-to-one onto by A8,A12,A13,A14,Th68;
+    then G is one-to-one onto by A8,A12,A13,A14,Th58;
     hence G9 is bijective by A11;
     thus for n,k st n in dom G9 & k in dom G9 & n<k holds G9.n < G9.k
     proof
@@ -3262,7 +3257,7 @@ A18:    i <= m by A7;
         i in dom F by A16,FUNCT_2:def 1;
         then
 A19:    F.i=G9.i by A13,FUNCT_1:47;
-        card Nm=k by A3,A7,Th65;
+        card Nm=k by A3,A7,Th55;
         hence thesis by A16,A19,A18,A17,NAT_1:44,XXREAL_0:1;
       end;
       let i,j such that
@@ -3327,10 +3322,10 @@ A1: x in X;
   card X>0 by A1;
   then reconsider c1=card X-1 as Element of NAT by NAT_1:20;
   c1<c1+1 by NAT_1:13;
-  hence thesis by A1,Th65;
+  hence thesis by A1,Th55;
 end;
 
-theorem Th70:
+theorem Th60:
   for X,Y be finite set,F be Function of X,Y st card X=card Y
   holds F is onto iff F is one-to-one
 proof
@@ -3521,13 +3516,13 @@ A30:    Px in dom P by A14,FUNCT_2:def 1;
   then
 A31: P is onto by FUNCT_2:def 3;
   card N=card N;
-  then P is onto one-to-one by A31,Th70;
+  then P is onto one-to-one by A31,Th60;
   then reconsider P as Permutation of N;
   take P;
   thus thesis by A13;
 end;
 
-theorem Th71:
+theorem Th61:
   for F,G be Function,y st y in rng (G*F) & G is one-to-one holds
   ex x st x in dom G & x in rng F & G"{y}={x} & F"{x}=(G*F)"{y}
 proof
@@ -3588,11 +3583,11 @@ definition
   let Ne,Ke;
   let f be Function of Ne,Ke;
   attr f is "increasing means
-  :Def5:
+  :Def3:
   for l,m st l in rng f & m in rng f & l < m holds min* f"{l} < min* f"{m};
 end;
 
-theorem Th72:
+theorem Th62:
   for F be Function of Ne,Ke st F is "increasing holds min* rng F= F.min* dom F
 proof
   let F be Function of Ne,Ke such that
@@ -3644,7 +3639,7 @@ A14:    min* Fmr >= md by NAT_1:def 1;
         then
 A15:    md >= min* Fmd by NAT_1:def 1;
         F.md in rng F by A5,FUNCT_1:def 3;
-        then min* F"{mr}< min* F"{F.md} by A1,A7,A13,Def5;
+        then min* F"{mr}< min* F"{F.md} by A1,A7,A13,Def3;
         hence contradiction by A14,A15,XXREAL_0:2;
       end;
       hence thesis;
@@ -3711,7 +3706,7 @@ A9:     F.m in rng F by FUNCT_1:def 3;
           per cases;
           suppose
             rng (F|D) is empty;
-            then rng F\{F.m}={} by Th64;
+            then rng F\{F.m}={} by Th54;
             then
 A10:        rng F={F.m} by A9,ZFMISC_1:58;
 A11:        for i,j st i in rng F & j in rng F & i<j holds min* F"{i} <
@@ -3725,7 +3720,7 @@ A14:          i<j;
               hence thesis by A10,A13,A14,TARSKI:def 1;
             end;
             set P=id rng F;
-            rng P=rng F by RELAT_1:45;
+            rng P=rng F;
             then P is one-to-one onto by FUNCT_2:def 3;
             then reconsider P as Permutation of rng F;
             F is Function of dom F,rng F by FUNCT_2:1;
@@ -3768,10 +3763,10 @@ A25:          G2.x=Gx by FUNCT_1:def 3;
 ,A24,RELAT_1:61,XBOOLE_0:def 3;
               then
               G.x in rng FD & G.x=G2.x & rng FD=rng F\{F.m} or G2.x=F.m &
-              m in domF by A19,A22,Th64,FUNCT_1:47,def 3,NAT_1:def 1;
+              m in domF by A19,A22,Th54,FUNCT_1:47,def 3,NAT_1:def 1;
               hence thesis by A25,FUNCT_1:def 3,XBOOLE_0:def 5;
             end;
-A26:        rng FD =rng F\{F.m} by Th64;
+A26:        rng FD =rng F\{F.m} by Th54;
             dom FD = dom F /\(dom F\F"{F.m}) by RELAT_1:61;
             then
 A27:        dFD=dom F\F"{F.m} by XBOOLE_1:28,36;
@@ -3790,7 +3785,7 @@ A30:          G2.x in {F.m} by TARSKI:def 1;
             end;
             rng F c= rng G2
             proof
-              rng FD=rng F\{F.m} by Th64;
+              rng FD=rng F\{F.m} by Th54;
               then
 A31:          rng F=rng FD\/{F.m} by A9,ZFMISC_1:116;
               let Fx be set such that
@@ -3823,20 +3818,20 @@ A37:              m in N\dFD by A27,A35,XBOOLE_0:def 5;
             then
 A38:        rng G2=rng F by A23,XBOOLE_0:def 10;
             not F.m in rng F\{F.m} by ZFMISC_1:56;
-            then not F.m in rng FD by Th64;
+            then not F.m in rng FD by Th54;
             then consider
             P2 be Function of rng FD\/{F.m},rng FD\/{F.m} such that
 A39:        P2|(rng FD) = P and
-A40:        P2.(F.m)=(F.m) by Th67;
+A40:        P2.(F.m)=(F.m) by Th57;
             not F.m in rng F\{F.m} by ZFMISC_1:56;
             then
-A41:        P2 is one-to-one onto by A39,A40,A26,Th68;
+A41:        P2 is one-to-one onto by A39,A40,A26,Th58;
             rng FD\/{F.m} = rng F by A9,A26,ZFMISC_1:116;
             then reconsider P2 as Permutation of rng F by A41;
             consider Orde be Function of rF,card rF such that
 A42:        Orde is bijective and
 A43:        for n,k st n in dom Orde & k in dom Orde & n<k holds Orde
-            .n < Orde.k by Th69;
+            .n < Orde.k by Th59;
             rng Orde=card rF by A42,FUNCT_2:def 3;
             then reconsider Orde9=Orde" as Function of card rF,rF by A42,
 FUNCT_2:25;
@@ -3872,7 +3867,7 @@ XBOOLE_0:def 5;
 A50:            x in dom G by FUNCT_2:def 1;
                 then
 A51:            G.x in rng G by FUNCT_1:def 3;
-A52:            rng FD=rng F\{F.m} by Th64;
+A52:            rng FD=rng F\{F.m} by Th54;
                 G.x=G2.x by A22,A50,FUNCT_1:47;
                 then not G2.x in {F.m} by A51,A52,XBOOLE_0:def 5;
                 hence thesis by A48,FUNCT_1:def 7;
@@ -3891,12 +3886,12 @@ A55:        for n st n in rng FD holds G"{n}=G2"{n}
               then dom F=N by FUNCT_2:def 1;
               then
 A56:          dFD= dom G2\G2"{F.m} by A27,A54,FUNCT_2:def 1;
-A57:          rng FD=rng F\{F.m} by Th64;
+A57:          rng FD=rng F\{F.m} by Th54;
               let n;
               assume n in rng FD;
               then not n in {F.m} by A57,XBOOLE_0:def 5;
               then n<>F.m by TARSKI:def 1;
-              hence thesis by A22,A56,Th64;
+              hence thesis by A22,A56,Th54;
             end;
 A58:        for i,j st i in rng PG & j in rng PG & i<j holds min* PG"{i}
             < min* PG"{j}
@@ -3948,7 +3943,7 @@ A79:            Orde9.n in dom Orde by A72,A75,FUNCT_1:def 3;
                 Orde9.k in dom Orde by A73,A78,A75,FUNCT_1:def 3;
                 hence thesis by A67,A77,A74,A76,A79;
               end;
-              rng FD =rng F\{F.m} by Th64;
+              rng FD =rng F\{F.m} by Th54;
               then
 A80:          rng FD\/{F.m} = rng G2 by A9,A38,ZFMISC_1:116;
               let i,j such that
@@ -3959,12 +3954,12 @@ A83:          i<j;
 A84:          i1 in dom P1 and
 A85:          i1 in rng G2 and
 A86:          P1"{i}={i1} and
-A87:          G2"{i1}=PG"{i} by A81,Th71;
+A87:          G2"{i1}=PG"{i} by A81,Th61;
               consider j1 be set such that
 A88:          j1 in dom P1 and
 A89:          j1 in rng G2 and
 A90:          P1"{j}={j1} and
-A91:          G2"{j1}=PG"{j} by A82,Th71;
+A91:          G2"{j1}=PG"{j} by A82,Th61;
               dom P1=rF by FUNCT_2:def 1;
               then reconsider i1,j1 as Element of NAT by A84,A88;
 A92:          i1 in P1"{i} by A86,TARSKI:def 1;
@@ -4176,13 +4171,13 @@ A157: F=P*G and
 A158: rng F=rng G and
 A159: for i,j st i in rng G& j in rng G & i<j holds min* G"{i}<min* G"{j
   } by A156;
-  G is "increasing by A159,Def5;
+  G is "increasing by A159,Def3;
   hence thesis by A157,A158;
 end;
 
 :: uniqueness of expansion
 
-theorem Th74:
+theorem Th64:
   for F be Function of Ne,Ke st rng F is finite for I1,I2 be
   Function of Ne,Me,P1,P2 be Function st P1 is one-to-one & P2 is one-to-one &
   rng I1=rng I2 & rng I1=dom P1 & dom P1=dom P2 & F=P1*I1 & F=P2*I2 & I1 is
@@ -4247,7 +4242,7 @@ A19:    I1 is "increasing and
 A20:    I2 is "increasing;
         dom I1=dom F by A15,A17,RELAT_1:27;
         then
-A21:    min* rng I1=I1.m by A19,Th72;
+A21:    min* rng I1=I1.m by A19,Th62;
         reconsider I=rng I1\{I1.m} as Subset of NAT by XBOOLE_1:1;
         reconsider D=dom F\F"{F.m} as Subset of NAT by XBOOLE_1:1;
 A22:    for I be Function of Ne,Me,P be Function st P is one-to-one & rng
@@ -4269,7 +4264,7 @@ A28:      dom P/\(rng I\{I.m})=rng I\{I.m} by A25,XBOOLE_1:28,36;
           x in dom P and
           x in rng I and
           P"{F.m}={x} and
-A29:      I"{x}=F"{F.m} by A24,A26,Th71;
+A29:      I"{x}=F"{F.m} by A24,A26,Th61;
 A30:      dom (P|(rng I\{I.m}))=dom P/\(rng I\{I.m}) by RELAT_1:61;
 A31:      dom F=dom I by A25,A26,RELAT_1:27;
           then
@@ -4286,7 +4281,7 @@ A34:      for M be Subset of NAT st M=rng I\{I.m} for I1 be Function of D
             M=rng I\{I.m};
             let I1 be Function of D,M such that
 A35:        I1=I|D;
-A36:        rng I1=rng I\{I.m} by A29,A33,A31,A35,Th64;
+A36:        rng I1=rng I\{I.m} by A29,A33,A31,A35,Th54;
             let l,n such that
 A37:        l in rng I1 and
 A38:        n in rng I1 and
@@ -4294,16 +4289,16 @@ A39:        l < n;
 A40:        n in rng I by A38,A36,ZFMISC_1:56;
             n<>I.m by A38,A36,ZFMISC_1:56;
             then
-A41:        I1"{n}=I"{n} by A29,A33,A31,A35,Th64;
+A41:        I1"{n}=I"{n} by A29,A33,A31,A35,Th54;
             l<>I.m by A37,A36,ZFMISC_1:56;
             then
-A42:        I1"{l}=I"{l} by A29,A33,A31,A35,Th64;
+A42:        I1"{l}=I"{l} by A29,A33,A31,A35,Th54;
             l in rng I by A37,A36,ZFMISC_1:56;
-            hence thesis by A27,A39,A40,A42,A41,Def5;
+            hence thesis by A27,A39,A40,A42,A41,Def3;
           end;
           set rI=rng I\{I.m};
 A43:      dom (I|D)=dom I/\D by RELAT_1:61;
-A44:      rng (I|D)=rng I\{I.m} by A29,A33,A31,Th64;
+A44:      rng (I|D)=rng I\{I.m} by A29,A33,A31,Th54;
 A45:      for x st x in dom (F|D) holds (F|D).x = (P|rI).((I|D).x)
           proof
             let x such that
@@ -4322,14 +4317,14 @@ A50:        (F|D).x=F.x by A46,FUNCT_1:47;
           then dom (F|D)=D by RELAT_1:61;
           then for x holds x in dom (F|D) iff x in dom (I|D) & (I|D).x in dom
           (P|rI) by A43,A32,A30,A28,A44,FUNCT_1:def 3;
-          hence thesis by A24,A29,A33,A31,A32,A28,A45,A34,Th64,FUNCT_1:10,52
+          hence thesis by A24,A29,A33,A31,A32,A28,A45,A34,Th54,FUNCT_1:10,52
 ,RELAT_1:61;
         end;
         then
 A51:    P1|I is one-to-one by A12,A15,A17,A19;
         dom I2=dom F by A14,A15,A16,A18,RELAT_1:27;
         then
-A52:    min* rng I2=I2.m by A20,Th72;
+A52:    min* rng I2=I2.m by A20,Th62;
         then
 A53:    P2|I is one-to-one by A13,A14,A15,A16,A18,A20,A22,A21;
 A54:    dom (I2|D)=D by A13,A14,A15,A16,A18,A20,A22;
@@ -4428,7 +4423,7 @@ A8: rng F ={} implies rng F={};
   then
 A9: dom P2=rng F by FUNCT_2:def 1;
   dom P1=rng F by A8,FUNCT_2:def 1;
-  hence thesis by A1,A2,A3,A4,A5,A6,A7,A9,Th74;
+  hence thesis by A1,A2,A3,A4,A5,A6,A7,A9,Th64;
 end;
 
 ::$N Stirling numbers of the second kind

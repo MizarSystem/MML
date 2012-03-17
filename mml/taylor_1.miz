@@ -2,7 +2,7 @@
 ::  by Yasunari Shidama
 ::
 :: Received February 24, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -26,7 +26,8 @@ environ
       POWER, SIN_COS;
  constructors PARTFUN1, ARYTM_0, REAL_1, NAT_1, SEQ_2, RCOMP_1, PARTFUN2,
       RFUNCT_2, FCONT_1, LIMFUNC1, FDIFF_1, SEQFUNC, PREPOWER, COMSEQ_3,
-      SIN_COS, SEQ_1, XXREAL_2, SERIES_1, VALUED_1, POWER, RELSET_1, ABIAN;
+      SIN_COS, SEQ_1, XXREAL_2, SERIES_1, VALUED_1, POWER, RELSET_1, ABIAN,
+      COMSEQ_2;
  registrations XBOOLE_0, RELSET_1, PARTFUN1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, RAT_1, MEMBERED, RCOMP_1, NEWTON, PREPOWER, SIN_COS, VALUED_0,
       VALUED_1, FUNCT_2, XXREAL_2, ORDINAL1, SEQ_4, FCONT_3, ABIAN;
@@ -41,7 +42,7 @@ environ
 
 begin :: The Logarithmic differentiation method
 
-reserve n for natural number,
+reserve n for Nat,
   i for Integer,
   p, x, x0, y for real number,
   q for Rational,
@@ -79,9 +80,9 @@ A3: for d be real number holds f2.d=d #Z q;
 end;
 
 theorem Th1:
-  for m,n be natural number holds x #Z (n+m) = (x #Z n) * (x #Z m)
+  for m,n be Nat holds x #Z (n+m) = (x #Z n) * (x #Z m)
 proof
-  let m,n be natural number;
+  let m,n be Nat;
   per cases;
   suppose
     x <> 0;
@@ -127,9 +128,9 @@ end;
 theorem Th2:
   #Z n is_differentiable_in x & diff(( #Zn),x) = n * x #Z (n-1)
 proof
-  defpred P[natural number] means for x be real number holds #Z $1
+  defpred P[Nat] means for x be real number holds #Z $1
   is_differentiable_in x & diff( ( #Z $1),x) = $1 * x #Z ($1 -1);
-A1: for k be natural number st P[k] holds P[k+1]
+A1: for k be Nat st P[k] holds P[k+1]
   proof
 A2: now
       let x be Real such that
@@ -150,7 +151,7 @@ A7:   x is Real by XREAL_0:def 1;
       thus diff(( #Z 1), x)=( ( #Z 1)`|REAL).x by A5,A7,FDIFF_1:def 7
         .=1 by A2,A4,A3,A7,FDIFF_1:23;
     end;
-    let k be natural number such that
+    let k be Nat such that
 A8: P[k];
     now
       per cases;
@@ -243,7 +244,7 @@ A24: x is Real by XREAL_0:def 1;
     hence f is_differentiable_in x & diff(f,x)= 0 * x #Z (0-1) by A24,A23,A22,
 FDIFF_1:9,def 7;
   end;
-  for n be natural number holds P[n] from NAT_1:sch 2(A15,A1);
+  for n be Nat holds P[n] from NAT_1:sch 2(A15,A1);
   hence thesis;
 end;
 
@@ -262,10 +263,10 @@ end;
 Lm1: (exp_R(x)) #R n = exp_R(n*x)
 proof
   reconsider x as Real by XREAL_0:def 1;
-  defpred P[natural number] means (exp_R(x)) #R $1 = exp_R ($1 * x);
-A1: for k be natural number st P[k] holds P[k+1]
+  defpred P[Nat] means (exp_R(x)) #R $1 = exp_R ($1 * x);
+A1: for k be Nat st P[k] holds P[k+1]
   proof
-    let k be natural number such that
+    let k be Nat such that
 A2: P[k];
     reconsider k1 = k as Element of NAT by ORDINAL1:def 12;
     thus (exp_R(x)) #R (k+1) = (exp_R(x)) #R k * (exp_R(x)) #R 1 by PREPOWER:75
@@ -275,7 +276,7 @@ A2: P[k];
       .=exp_R((k+1)*x);
   end;
 A3: P[0] by PREPOWER:71,SIN_COS:51,55;
-  for n be natural number holds P[n] from NAT_1:sch 2(A3,A1);
+  for n be Nat holds P[n] from NAT_1:sch 2(A3,A1);
   hence thesis;
 end;
 
@@ -868,7 +869,7 @@ definition
   let Z be Subset of REAL;
   func diff(f,Z) -> Functional_Sequence of REAL,REAL means
   :Def5:
-  it.0 = f|Z & for i be natural number holds it.(i+1) = (it.i) `| Z;
+  it.0 = f|Z & for i be Nat holds it.(i+1) = (it.i) `| Z;
   existence
   proof
     reconsider fZ = f|Z as Element of PFuncs(REAL,REAL) by PARTFUN1:45;
@@ -890,7 +891,7 @@ A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     reconsider g as Functional_Sequence of REAL,REAL;
     take g;
     thus g.0 = f|Z by A2;
-    let i be natural number;
+    let i be Nat;
     i is Element of NAT by ORDINAL1:def 12;
     then R[i,g.i,g.(i+1)] by A2;
     hence thesis;
@@ -900,9 +901,9 @@ A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     let seq1,seq2 be Functional_Sequence of REAL,REAL;
     assume that
 A3: seq1.0=f|Z and
-A4: for n be natural number holds seq1.(n+1)=( seq1.n )`|Z and
+A4: for n be Nat holds seq1.(n+1)=( seq1.n )`|Z and
 A5: seq2.0=f|Z and
-A6: for n be natural number holds seq2.(n+1)=( seq2.n )`|Z;
+A6: for n be Nat holds seq2.(n+1)=( seq2.n )`|Z;
     defpred P[Element of NAT] means seq1.$1 = seq2.$1;
 A7: for k be Element of NAT st P[k] holds P[k+1]
     proof
@@ -920,7 +921,7 @@ end;
 
 definition
   let f be PartFunc of REAL,REAL;
-  let n be natural number;
+  let n be Nat;
   let Z be Subset of REAL;
   pred f is_differentiable_on n, Z means
   :Def6:
@@ -929,14 +930,14 @@ end;
 
 theorem Th23:
   for f be PartFunc of REAL,REAL, Z be Subset of REAL, n be
-natural number st f is_differentiable_on n,Z for m be natural number st m <= n
+Nat st f is_differentiable_on n,Z for m be Nat st m <= n
   holds f is_differentiable_on m, Z
 proof
   let f be PartFunc of REAL,REAL;
   let Z be Subset of REAL;
-  let n be natural number such that
+  let n be Nat such that
 A1: f is_differentiable_on n, Z;
-  let m be natural number such that
+  let m be Nat such that
 A2: m <=n;
   now
 A3: m-1 <=n-1 by A2,XREAL_1:13;
@@ -954,23 +955,23 @@ definition
   let a,b be real number;
   func Taylor(f,Z,a,b) -> Real_Sequence means
   :Def7:
-  for n be natural number holds it.n = (diff(f,Z).n).a * (b-a) |^ n / (n!);
+  for n be Nat holds it.n = (diff(f,Z).n).a * (b-a) |^ n / (n!);
   existence
   proof
     deffunc F(Element of NAT)=(diff(f,Z).$1).a * (b-a) |^ $1 /($1!);
     consider seq be Real_Sequence such that
 A1: for n be Element of NAT holds seq.n=F(n) from SEQ_1:sch 1;
     take seq;
-    let n be natural number;
+    let n be Nat;
     n is Element of NAT by ORDINAL1:def 12;
     hence thesis by A1;
   end;
   uniqueness
   proof
-    deffunc F(natural number)=(diff(f,Z).$1).a * (b-a) |^ $1 /($1!);
+    deffunc F(Nat)=(diff(f,Z).$1).a * (b-a) |^ $1 /($1!);
     let s1,s2 be Real_Sequence such that
-A2: for n be natural number holds s1.n=F(n) and
-A3: for n be natural number holds s2.n=F(n);
+A2: for n be Nat holds s1.n=F(n) and
+A3: for n be Nat holds s2.n=F(n);
     now
       let x be set;
       assume x in NAT;
@@ -2383,14 +2384,14 @@ end;
 
 theorem Th31:
   for f be PartFunc of REAL,REAL, Z be Subset of REAL, Z1 be open
-Subset of REAL st Z1 c= Z for n be natural number st f is_differentiable_on n+1
+Subset of REAL st Z1 c= Z for n be Nat st f is_differentiable_on n+1
   ,Z holds f is_differentiable_on n+1, Z1
 proof
   let f be PartFunc of REAL,REAL;
   let Z be Subset of REAL;
   let Z1 be open Subset of REAL such that
 A1: Z1 c= Z;
-  let n be natural number such that
+  let n be Nat such that
 A2: f is_differentiable_on n+1, Z;
   now
     let k be Element of NAT such that

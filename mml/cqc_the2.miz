@@ -2,7 +2,7 @@
 ::  by Agata Darmochwa\l
 ::
 :: Received October 24, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,68 +17,71 @@ environ
  vocabularies SUBSET_1, CQC_LANG, QC_LANG1, FINSEQ_1, ZFMISC_1, CQC_THE1,
       NUMBERS, XBOOLEAN, BVFUNC_2, XBOOLE_0, FUNCT_1, TARSKI, RCOMP_1, MCART_1,
       NAT_1, XXREAL_0, ARYTM_3, CARD_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, FINSEQ_1,
-      FUNCT_1, MCART_1, DOMAIN_1, QC_LANG1, QC_LANG2, CQC_LANG, CQC_THE1,
-      XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, XREAL_0, CQC_THE1;
- registrations XBOOLE_0, RELSET_1, XREAL_0, CQC_LANG, ORDINAL1, LUKASI_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, NAT_1,
+      FINSEQ_1, FUNCT_1, XTUPLE_0, MCART_1, DOMAIN_1, QC_LANG1, QC_LANG2,
+      CQC_LANG, CQC_THE1, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, XREAL_0, CQC_THE1, XTUPLE_0;
+ registrations XBOOLE_0, RELSET_1, XREAL_0, CQC_LANG, ORDINAL1, LUKASI_1,
+      XTUPLE_0;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions CQC_THE1;
+ definitions CQC_THE1, XTUPLE_0;
  theorems TARSKI, ZFMISC_1, LUKASI_1, CQC_LANG, CQC_THE1, ENUMSET1, QC_LANG1,
       QC_LANG2, QC_LANG3, PROCAL_1, XBOOLE_0, XBOOLE_1, XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin
 
-reserve X,T for Subset of CQC-WFF;
-reserve F,G,H,p,q,r,t for Element of CQC-WFF;
-reserve s,h for QC-formula;
-reserve x,y for bound_QC-variable;
-reserve f for FinSequence of [:CQC-WFF,Proof_Step_Kinds:];
+reserve A for QC-alphabet;
+reserve X,T for Subset of CQC-WFF(A);
+reserve F,G,H,p,q,r,t for Element of CQC-WFF(A);
+reserve s,h for QC-formula of A;
+reserve x,y for bound_QC-variable of A;
+reserve f for FinSequence of [:CQC-WFF(A),Proof_Step_Kinds:];
 reserve i,j for Element of NAT;
 
 theorem Th1:
   p => (q => r) is valid implies (p '&' q) => r is valid
 proof
-A1: (p => (q => r)) => ((p '&' q) => r) in TAUT by PROCAL_1:32;
-  assume p => (q => r) in TAUT;
-  hence (p '&' q) => r in TAUT by A1,CQC_THE1:46;
+A1: (p => (q => r)) => ((p '&' q) => r) in TAUT(A) by PROCAL_1:32;
+  assume p => (q => r) in TAUT(A);
+  hence (p '&' q) => r in TAUT(A) by A1,CQC_THE1:46;
 end;
 
 theorem Th2:
   p => (q => r) is valid implies (q '&' p) => r is valid
 proof
-  assume p => (q => r) in TAUT;
+  assume p => (q => r) in TAUT(A);
   then p => (q => r) is valid by CQC_THE1:def 10;
   then (p '&' q) => r is valid by Th1;
   then
-A1: (p '&' q) => r in TAUT by CQC_THE1:def 10;
-  q '&' p => p '&' q in TAUT by CQC_THE1:45;
-  hence (q '&' p) => r in TAUT by A1,LUKASI_1:3;
+A1: (p '&' q) => r in TAUT(A) by CQC_THE1:def 10;
+  q '&' p => p '&' q in TAUT(A) by CQC_THE1:45;
+  hence (q '&' p) => r in TAUT(A) by A1,LUKASI_1:3;
 end;
 
 theorem Th3:
   (p '&' q) => r is valid implies p => (q => r) is valid
 proof
-A1: ((p '&' q) => r) => (p => (q => r)) in TAUT by PROCAL_1:31;
-  assume (p '&' q) => r in TAUT;
-  hence (p => (q => r)) in TAUT by A1,CQC_THE1:46;
+A1: ((p '&' q) => r) => (p => (q => r)) in TAUT(A) by PROCAL_1:31;
+  assume (p '&' q) => r in TAUT(A);
+  hence (p => (q => r)) in TAUT(A) by A1,CQC_THE1:46;
 end;
 
 theorem Th4:
   (p '&' q) => r is valid implies q => (p => r) is valid
 proof
-A1: q '&' p => p '&' q in TAUT by CQC_THE1:45;
-  assume (p '&' q) => r in TAUT;
-  then q '&' p => r in TAUT by A1,LUKASI_1:3;
+A1: q '&' p => p '&' q in TAUT(A) by CQC_THE1:45;
+  assume (p '&' q) => r in TAUT(A);
+  then q '&' p => r in TAUT(A) by A1,LUKASI_1:3;
   then q '&' p => r is valid by CQC_THE1:def 10;
   then q => (p => r) is valid by Th3;
-  hence q => (p => r) in TAUT by CQC_THE1:def 10;
+  hence q => (p => r) in TAUT(A) by CQC_THE1:def 10;
 end;
 
 Lm1: (p '&' q) => p is valid & (p '&' q) => q is valid
 proof
-  thus (p '&' q) => p in TAUT & (p '&' q) => q in TAUT by PROCAL_1:19,21;
+  thus (p '&' q) => p in TAUT(A) &
+(p '&' q) => q in TAUT(A) by PROCAL_1:19,21;
 end;
 
 Lm2: p '&' q is valid implies p is valid & q is valid
@@ -91,63 +94,65 @@ end;
 
 Lm3: p => q is valid & p => r is valid implies p => q '&' r is valid
 proof
-  assume p => q in TAUT & p => r in TAUT;
-  hence p => q '&' r in TAUT by PROCAL_1:52;
+  assume p => q in TAUT(A) & p => r in TAUT(A);
+  hence p => q '&' r in TAUT(A) by PROCAL_1:52;
 end;
 
 Lm4: p => q is valid & r => t is valid implies p 'or' r => q 'or' t is valid
 proof
-  assume p => q in TAUT & r => t in TAUT;
-  hence p 'or' r => q 'or' t in TAUT by PROCAL_1:57;
+  assume p => q in TAUT(A) & r => t in TAUT(A);
+  hence p 'or' r => q 'or' t in TAUT(A) by PROCAL_1:57;
 end;
 
 Lm5: p => q is valid & r => t is valid implies p '&' r => q '&' t is valid
 proof
-  assume p => q in TAUT & r => t in TAUT;
-  hence p '&' r => q '&' t in TAUT by PROCAL_1:56;
+  assume p => q in TAUT(A) & r => t in TAUT(A);
+  hence p '&' r => q '&' t in TAUT(A) by PROCAL_1:56;
 end;
 
 Lm6: p => p 'or' q is valid & p => q 'or' p is valid
 proof
-  thus p => p 'or' q in TAUT & p => q 'or' p in TAUT by PROCAL_1:3,4;
+  thus p => p 'or' q in TAUT(A) & p => q 'or' p in TAUT(A)
+  by PROCAL_1:3,4;
 end;
 
 Lm7: p => q is valid & r => q is valid implies (p 'or' r) => q is valid
 proof
-  assume p => q in TAUT & r => q in TAUT;
-  hence (p 'or' r) => q in TAUT by PROCAL_1:53;
+  assume p => q in TAUT(A) & r => q in TAUT(A);
+  hence (p 'or' r) => q in TAUT(A) by PROCAL_1:53;
 end;
 
 Lm8: p is valid & q is valid implies p '&' q is valid
 proof
-  assume p in TAUT & q in TAUT;
-  hence p '&' q in TAUT by PROCAL_1:47;
+  assume p in TAUT(A) & q in TAUT(A);
+  hence p '&' q in TAUT(A) by PROCAL_1:47;
 end;
 
 Lm9: p => q is valid implies r '&' p => r '&' q is valid
 proof
-  assume p => q in TAUT;
-  hence r '&' p => r '&' q in TAUT by PROCAL_1:50;
+  assume p => q in TAUT(A);
+  hence r '&' p => r '&' q in TAUT(A) by PROCAL_1:50;
 end;
 
 Lm10: p => q is valid implies p 'or' r => q 'or' r is valid
 proof
-  assume p => q in TAUT;
-  hence p 'or' r => q 'or' r in TAUT by PROCAL_1:48;
+  assume p => q in TAUT(A);
+  hence p 'or' r => q 'or' r in TAUT(A) by PROCAL_1:48;
 end;
 
 Lm11: p 'or' q => ('not' p => q) is valid
 proof
-  thus ( p 'or' q ) => ( 'not' p => q ) in TAUT by PROCAL_1:5;
+  thus ( p 'or' q ) => ( 'not' p => q ) in TAUT(A) by PROCAL_1:5;
 end;
 
 Lm12: ('not' p => q) => (p 'or' q) is valid
 proof
-  'not' 'not' p => p in TAUT by LUKASI_1:25;
+  'not' 'not' p => p in TAUT(A) by LUKASI_1:25;
   then
-  ('not' p => q) => ('not' 'not' p 'or' q) in TAUT & 'not' 'not' p 'or' q
-  => p 'or' q in TAUT by PROCAL_1:14,48;
-  hence ('not' p => q) => (p 'or' q) in TAUT by LUKASI_1:3;
+  ('not' p => q) => ('not' 'not' p 'or' q) in TAUT(A) &
+'not' 'not' p 'or' q
+  => p 'or' q in TAUT(A) by PROCAL_1:14,48;
+  hence ('not' p => q) => (p 'or' q) in TAUT(A) by LUKASI_1:3;
 end;
 
 Lm13: p <=> p is valid
@@ -172,20 +177,20 @@ end;
 Lm15: p <=> q is valid implies ( p is valid iff q is valid)
 proof
   assume
-A1: p <=> q in TAUT;
-  (p <=> q) => (p => q) in TAUT by PROCAL_1:23;
+A1: p <=> q in TAUT(A);
+  (p <=> q) => (p => q) in TAUT(A) by PROCAL_1:23;
   then
-A2: p => q in TAUT by A1,CQC_THE1:46;
+A2: p => q in TAUT(A) by A1,CQC_THE1:46;
   thus p is valid implies q is valid
   proof
-    assume p in TAUT;
-    hence q in TAUT by A2,CQC_THE1:46;
+    assume p in TAUT(A);
+    hence q in TAUT(A) by A2,CQC_THE1:46;
   end;
   assume
-A3: q in TAUT;
-  (p <=> q) => (q => p) in TAUT by PROCAL_1:24;
-  then q => p in TAUT by A1,CQC_THE1:46;
-  hence p in TAUT by A3,CQC_THE1:46;
+A3: q in TAUT(A);
+  (p <=> q) => (q => p) in TAUT(A) by PROCAL_1:24;
+  then q => p in TAUT(A) by A1,CQC_THE1:46;
+  hence p in TAUT(A) by A3,CQC_THE1:46;
 end;
 
 Lm16: p => (q => r) is valid & r => t is valid implies p => (q => t) is valid
@@ -223,7 +228,7 @@ proof
   hence thesis by XBOOLE_0:def 3;
 end;
 
-theorem Th9:
+theorem Th8:
   y in still_not-bound_in s '&' h iff y in still_not-bound_in s or
   y in still_not-bound_in h
 proof
@@ -232,7 +237,7 @@ proof
   hence thesis by XBOOLE_0:def 3;
 end;
 
-theorem Th10:
+theorem Th9:
   y in still_not-bound_in s 'or' h iff y in still_not-bound_in s
   or y in still_not-bound_in h
 proof
@@ -263,7 +268,7 @@ A1: not y in still_not-bound_in Ex(x,Ex(y,s)) by Th6;
   hence thesis by A1,QC_LANG2:14;
 end;
 
-theorem Th14:
+theorem Th12:
   (s => h).x = (s.x) => (h.x)
 proof
   s => h = 'not'(s '&' 'not' h) by QC_LANG2:def 2;
@@ -298,7 +303,7 @@ end;
 
 ::---------------------------------------------------------
 
-theorem Th18:
+theorem Th15:
   p => Ex(x,p) is valid
 proof
   All(x,'not' p) => 'not' p is valid by CQC_THE1:66;
@@ -309,30 +314,30 @@ A1: 'not' 'not' p => Ex(x,p) is valid by QC_LANG2:def 5;
   hence thesis by A1,CQC_THE1:65;
 end;
 
-theorem Th19:
+theorem Th16:
   p is valid implies Ex(x,p) is valid
 proof
   assume
 A1: p is valid;
-  p => Ex(x,p) is valid by Th18;
+  p => Ex(x,p) is valid by Th15;
   hence thesis by A1,CQC_THE1:65;
 end;
 
 theorem
   All(x,p) => Ex(x,p) is valid
 proof
-  All(x,p) => p is valid & p => Ex(x,p) is valid by Th18,CQC_THE1:66;
+  All(x,p) => p is valid & p => Ex(x,p) is valid by Th15,CQC_THE1:66;
   hence thesis by LUKASI_1:42;
 end;
 
 theorem
   All(x,p) => Ex(y,p) is valid
 proof
-  All(x,p) => p is valid & p => Ex(y,p) is valid by Th18,CQC_THE1:66;
+  All(x,p) => p is valid & p => Ex(y,p) is valid by Th15,CQC_THE1:66;
   hence thesis by LUKASI_1:42;
 end;
 
-theorem Th22:
+theorem Th19:
   p => q is valid & not x in still_not-bound_in q implies Ex(x,p) => q is valid
 proof
   assume p => q is valid & not x in still_not-bound_in q;
@@ -344,12 +349,12 @@ LUKASI_1:52,QC_LANG3:7;
   hence thesis by LUKASI_1:55;
 end;
 
-theorem Th23:
+theorem Th20:
   not x in still_not-bound_in p implies Ex(x,p) => p is valid
 proof
 A1: p => p is valid;
   assume not x in still_not-bound_in p;
-  hence thesis by A1,Th22;
+  hence thesis by A1,Th19;
 end;
 
 theorem
@@ -358,29 +363,29 @@ proof
   assume that
 A1: not x in still_not-bound_in p and
 A2: Ex(x,p) is valid;
-  Ex(x,p) => p is valid by A1,Th23;
+  Ex(x,p) => p is valid by A1,Th20;
   hence thesis by A2,CQC_THE1:65;
 end;
 
-theorem Th25:
+theorem Th22:
   p=h.x & q=h.y & not y in still_not-bound_in h implies p => Ex(y, q) is valid
 proof
   assume that
 A1: p=h.x and
 A2: q=h.y and
 A3: not y in still_not-bound_in h;
-A4: (h => Ex(y,q)).x = (h.x) => (Ex(y,q).x) by Th14
+A4: (h => Ex(y,q)).x = (h.x) => (Ex(y,q).x) by Th12
     .= p => Ex(y,q) by A1,CQC_LANG:27;
   not y in still_not-bound_in Ex(y,q) by Th6;
   then
 A5: not y in still_not-bound_in h => Ex(y,q) by A3,Th7;
-A6: q => Ex(y,q) is valid by Th18;
-  (h => Ex(y,q)).y = (h.y) => (Ex(y,q).y) by Th14
+A6: q => Ex(y,q) is valid by Th15;
+  (h => Ex(y,q)).y = (h.y) => (Ex(y,q).y) by Th12
     .= q => Ex(y,q) by A2,CQC_LANG:27;
   hence thesis by A6,A4,A5,CQC_THE1:68;
 end;
 
-theorem Th26:
+theorem Th23:
   p is valid implies All(x,p) is valid
 proof
 A1: p => ((All(x,p) => All(x,p)) => p) is valid;
@@ -393,7 +398,7 @@ A2: not x in still_not-bound_in All(x,p) => All(x,p) by Th7;
   hence thesis by CQC_THE1:65;
 end;
 
-theorem Th27:
+theorem Th24:
   not x in still_not-bound_in p implies p => All(x,p) is valid
 proof
 A1: p => p is valid;
@@ -401,20 +406,20 @@ A1: p => p is valid;
   hence thesis by A1,CQC_THE1:67;
 end;
 
-theorem Th28:
+theorem Th25:
   p=h.x & q=h.y & not x in still_not-bound_in h implies All(x,p) => q is valid
 proof
   assume that
 A1: p=h.x and
 A2: q=h.y and
 A3: not x in still_not-bound_in h;
-A4: (All(x,p) => h).y = (All(x,p).y) => q by A2,Th14
+A4: (All(x,p) => h).y = (All(x,p).y) => q by A2,Th12
     .= All(x,p) => q by CQC_LANG:27;
   not x in still_not-bound_in All(x,p) by Th5;
   then
 A5: All(x,p) => p is valid & not x in still_not-bound_in All(x,p) => h by A3
 ,Th7,CQC_THE1:66;
-  (All(x,p) => h).x = (All(x,p).x) => p by A1,Th14
+  (All(x,p) => h).x = (All(x,p).x) => p by A1,Th12
     .= All(x,p) => p by CQC_LANG:27;
   hence thesis by A4,A5,CQC_THE1:68;
 end;
@@ -435,7 +440,7 @@ proof
   assume p=h.x & q=h.y & not x in still_not-bound_in h & not y in
   still_not-bound_in p;
   then ( not y in still_not-bound_in All(x,p))& All(x,p) => q is valid by Th5
-,Th28;
+,Th25;
   hence thesis by CQC_THE1:67;
 end;
 
@@ -445,8 +450,8 @@ proof
   assume not x in still_not-bound_in p;
   then
 A1: not x in still_not-bound_in Ex(y,p) by Th6;
-  p => Ex(y,p) is valid by Th18;
-  hence thesis by A1,Th22;
+  p => Ex(y,p) is valid by Th15;
+  hence thesis by A1,Th19;
 end;
 
 theorem
@@ -456,11 +461,11 @@ proof
   assume p=h.x & q=h.y & not x in still_not-bound_in q & not y in
   still_not-bound_in h;
   then ( not x in still_not-bound_in Ex(y,q))& p => Ex(y,q) is valid by Th6
-,Th25;
-  hence thesis by Th22;
+,Th22;
+  hence thesis by Th19;
 end;
 
-theorem Th34:
+theorem Th30:
   All(x,p => q) => (All(x,p) => All(x,q)) is valid
 proof
   All(x,p => q) => (p => q) is valid by CQC_THE1:66;
@@ -472,32 +477,32 @@ A1: p => (All(x,p => q) => q) is valid by LUKASI_1:44;
 A2: (All(x,p => q) '&' All(x,p)) => q is valid by Th2;
   ( not x in still_not-bound_in All(x,p => q))& not x in
   still_not-bound_in All( x,p) by Th5;
-  then not x in still_not-bound_in All(x,p => q) '&' All(x,p) by Th9;
+  then not x in still_not-bound_in All(x,p => q) '&' All(x,p) by Th8;
   then (All(x,p => q) '&' All(x,p)) => All(x,q) is valid by A2,CQC_THE1:67;
   hence thesis by Th3;
 end;
 
-theorem Th35:
+theorem Th31:
   All(x,p => q) is valid implies All(x,p) => All(x,q) is valid
 proof
   assume
 A1: All(x,p => q) is valid;
-  All(x,p => q) => (All(x,p) => All(x,q)) is valid by Th34;
+  All(x,p => q) => (All(x,p) => All(x,q)) is valid by Th30;
   hence thesis by A1,CQC_THE1:65;
 end;
 
-theorem Th36:
+theorem Th32:
   All(x,p <=> q) => (All(x,p) <=> All(x,q)) is valid
 proof
 A1: All(x,(p => q) '&' (q => p)) => ((p => q) '&' (q => p)) is valid by
 CQC_THE1:66;
   (p <=> q) => (p <=> q) is valid;
   then (p <=> q) => ((p => q) '&' (q => p)) is valid by QC_LANG2:def 4;
-  then All(x,(p <=> q) => ((p => q) '&' (q => p))) is valid by Th26;
+  then All(x,(p <=> q) => ((p => q) '&' (q => p))) is valid by Th23;
   then
-A2: All(x,p <=> q) => All(x,(p => q) '&' (q => p)) is valid by Th35;
+A2: All(x,p <=> q) => All(x,(p => q) '&' (q => p)) is valid by Th31;
   All(x,p => q) => (All(x,p) => All(x,q)) is valid & All(x,q => p) => (
-  All(x,q ) => All(x,p)) is valid by Th34;
+  All(x,q ) => All(x,p)) is valid by Th30;
   then
   (All(x,p => q) '&' All(x,q => p)) => ((All(x,p) => All(x,q)) '&' (All(x
   ,q) => All(x,p))) is valid by Lm5;
@@ -525,37 +530,37 @@ theorem
 proof
   assume
 A1: All(x,p <=> q) is valid;
-  All(x,p <=> q) => (All(x,p) <=> All(x,q)) is valid by Th36;
+  All(x,p <=> q) => (All(x,p) <=> All(x,q)) is valid by Th32;
   hence thesis by A1,CQC_THE1:65;
 end;
 
-theorem Th38:
+theorem Th34:
   All(x,p => q) => (Ex(x,p) => Ex(x,q)) is valid
 proof
   All(x,p => q) => (p => q) is valid by CQC_THE1:66;
   then
 A1: (p '&' All(x,p => q)) => q is valid by Th2;
-  q => Ex(x,q) is valid by Th18;
+  q => Ex(x,q) is valid by Th15;
   then (p '&' All(x,p => q)) => Ex(x,q) is valid by A1,LUKASI_1:42;
   then
 A2: p => (All(x,p => q) => Ex(x,q)) is valid by Th3;
   ( not x in still_not-bound_in All(x,p => q))& not x in
   still_not-bound_in Ex(x,q) by Th5,Th6;
   then not x in still_not-bound_in All(x,p => q) => Ex(x,q) by Th7;
-  then Ex(x,p) => (All(x,p => q) => Ex(x,q)) is valid by A2,Th22;
+  then Ex(x,p) => (All(x,p => q) => Ex(x,q)) is valid by A2,Th19;
   hence thesis by LUKASI_1:44;
 end;
 
-theorem Th39:
+theorem Th35:
   All(x,p => q) is valid implies Ex(x,p) => Ex(x,q) is valid
 proof
   assume
 A1: All(x,p => q) is valid;
-  All(x,p => q) => (Ex(x,p) => Ex(x,q)) is valid by Th38;
+  All(x,p => q) => (Ex(x,p) => Ex(x,q)) is valid by Th34;
   hence thesis by A1,CQC_THE1:65;
 end;
 
-theorem Th40:
+theorem Th36:
   All(x,p '&' q) => (All(x,p) '&' All(x,q)) is valid & (All(x,p)
   '&' All(x,q)) => All(x,p '&' q) is valid
 proof
@@ -563,91 +568,91 @@ proof
   then
 A1: (All(x,p) '&' All(x,q)) => (p '&' q) is valid by Lm5;
   All(x,p '&'q => q) is valid & All(x,p '&' q => q) => (All(x,p '&' q) =>
-  All( x,q)) is valid by Lm1,Th26,Th34;
+  All( x,q)) is valid by Lm1,Th23,Th30;
   then
 A2: All(x,p '&' q) => All(x,q) is valid by CQC_THE1:65;
   All(x,p '&' q => p) is valid & All(x,p '&' q => p) => (All(x,p '&' q) =>
-  All (x,p)) is valid by Lm1,Th26,Th34;
+  All (x,p)) is valid by Lm1,Th23,Th30;
   then All(x,p '&' q) => All(x,p) is valid by CQC_THE1:65;
   hence All(x,p '&' q) => (All(x,p) '&' All(x,q)) is valid by A2,Lm3;
   ( not x in still_not-bound_in All(x,p))& not x in still_not-bound_in
   All( x, q ) by Th5;
-  then not x in still_not-bound_in All(x,p) '&' All(x,q) by Th9;
+  then not x in still_not-bound_in All(x,p) '&' All(x,q) by Th8;
   hence thesis by A1,CQC_THE1:67;
 end;
 
-theorem Th41:
+theorem Th37:
   All(x,p '&' q) <=> (All(x,p) '&' All(x,q)) is valid
 proof
   All(x,p '&' q) => (All(x,p) '&' All(x,q)) is valid & (All(x,p) '&' All(x
-  ,q)) => All(x,p '&' q) is valid by Th40;
+  ,q)) => All(x,p '&' q) is valid by Th36;
   hence thesis by Lm14;
 end;
 
 theorem
   All(x,p '&' q) is valid iff All(x,p) '&' All(x,q) is valid
 proof
-  All(x,p '&' q) <=> (All(x,p) '&' All(x,q)) is valid by Th41;
+  All(x,p '&' q) <=> (All(x,p) '&' All(x,q)) is valid by Th37;
   hence thesis by Lm15;
 end;
 
-theorem Th43:
+theorem Th39:
   (All(x,p) 'or' All(x,q)) => All(x,p 'or' q) is valid
 proof
   All(x,q => p 'or' q) is valid & All(x,q => p 'or' q) => (All(x,q) => All
-  (x,p 'or' q)) is valid by Lm6,Th26,Th34;
+  (x,p 'or' q)) is valid by Lm6,Th23,Th30;
   then
 A1: All(x,q) => All(x,p 'or' q) is valid by CQC_THE1:65;
   All(x,p => p 'or' q) is valid & All(x,p => p 'or' q) => (All(x,p) => All
-  (x,p 'or' q)) is valid by Lm6,Th26,Th34;
+  (x,p 'or' q)) is valid by Lm6,Th23,Th30;
   then All(x,p) => All(x,p 'or' q) is valid by CQC_THE1:65;
   hence thesis by A1,Lm7;
 end;
 
-theorem Th44:
+theorem Th40:
   Ex(x,p 'or' q) => (Ex(x,p) 'or' Ex(x,q)) is valid & (Ex(x,p)
   'or' Ex(x,q)) => Ex(x,p 'or' q) is valid
 proof
   ( not x in still_not-bound_in Ex(x,p))& not x in still_not-bound_in Ex(x
   ,q) by Th6;
   then
-A1: not x in still_not-bound_in Ex(x,p) 'or' Ex(x,q) by Th10;
-  p => Ex(x,p) is valid & q => Ex(x,q) is valid by Th18;
+A1: not x in still_not-bound_in Ex(x,p) 'or' Ex(x,q) by Th9;
+  p => Ex(x,p) is valid & q => Ex(x,q) is valid by Th15;
   then (p 'or' q) => (Ex(x,p) 'or' Ex(x,q)) is valid by Lm4;
-  hence Ex(x,(p 'or' q)) => (Ex(x,p) 'or' Ex(x,q)) is valid by A1,Th22;
+  hence Ex(x,(p 'or' q)) => (Ex(x,p) 'or' Ex(x,q)) is valid by A1,Th19;
   All(x,q => p 'or' q) is valid & All(x,q => p 'or' q) => (Ex(x,q) => Ex(
-  x,p 'or' q)) is valid by Lm6,Th26,Th38;
+  x,p 'or' q)) is valid by Lm6,Th23,Th34;
   then
 A2: Ex(x,q) => Ex(x,p 'or' q) is valid by CQC_THE1:65;
   All(x,p => p 'or' q) is valid & All(x,p => p 'or' q) => (Ex(x,p) => Ex(
-  x,p 'or' q)) is valid by Lm6,Th26,Th38;
+  x,p 'or' q)) is valid by Lm6,Th23,Th34;
   then Ex(x,p) => Ex(x,p 'or' q) is valid by CQC_THE1:65;
   hence thesis by A2,Lm7;
 end;
 
-theorem Th45:
+theorem Th41:
   Ex(x,p 'or' q) <=> (Ex(x,p) 'or' Ex(x,q)) is valid
 proof
   Ex(x,p 'or' q) => (Ex(x,p) 'or' Ex(x,q)) is valid & (Ex(x,p) 'or' Ex(x,q
-  )) => Ex(x,p 'or' q) is valid by Th44;
+  )) => Ex(x,p 'or' q) is valid by Th40;
   hence thesis by Lm14;
 end;
 
 theorem
   Ex(x,p 'or' q) is valid iff Ex(x,p) 'or' Ex(x,q) is valid
 proof
-  Ex(x,p 'or' q) <=> (Ex(x,p) 'or' Ex(x,q)) is valid by Th45;
+  Ex(x,p 'or' q) <=> (Ex(x,p) 'or' Ex(x,q)) is valid by Th41;
   hence thesis by Lm15;
 end;
 
-theorem Th47:
+theorem Th43:
   Ex(x,p '&' q) => (Ex(x,p) '&' Ex(x,q)) is valid
 proof
-  All(x,p '&' q => q) is valid by Lm1,Th26;
+  All(x,p '&' q => q) is valid by Lm1,Th23;
   then
-A1: Ex(x,p '&' q) => Ex(x,q) is valid by Th39;
-  All(x,p '&' q => p) is valid by Lm1,Th26;
-  then Ex(x,p '&' q) => Ex(x,p) is valid by Th39;
+A1: Ex(x,p '&' q) => Ex(x,q) is valid by Th35;
+  All(x,p '&' q => p) is valid by Lm1,Th23;
+  then Ex(x,p '&' q) => Ex(x,p) is valid by Th35;
   hence thesis by A1,Lm3;
 end;
 
@@ -656,54 +661,54 @@ theorem
 proof
   assume
 A1: Ex(x,p '&' q) is valid;
-  Ex(x,p '&' q) => (Ex(x,p) '&' Ex(x,q)) is valid by Th47;
+  Ex(x,p '&' q) => (Ex(x,p) '&' Ex(x,q)) is valid by Th43;
   hence thesis by A1,CQC_THE1:65;
 end;
 
-theorem Th49:
+theorem Th45:
   All(x,'not' 'not' p) => All(x,p) is valid & All(x,p) => All(x,
   'not' 'not' p) is valid
 proof
   All(x,'not' 'not' p => p) is valid & All(x,p => 'not' 'not' p) is valid
-  by Th26;
-  hence thesis by Th35;
+  by Th23;
+  hence thesis by Th31;
 end;
 
 theorem
   All(x,'not' 'not' p) <=> All(x,p) is valid
 proof
   All(x,'not' 'not' p) => All(x,p) is valid & All(x,p) => All(x,'not'
-  'not' p) is valid by Th49;
+  'not' p) is valid by Th45;
   hence thesis by Lm14;
 end;
 
-theorem Th51:
+theorem Th47:
   Ex(x,'not' 'not' p) => Ex(x,p) is valid & Ex(x,p) => Ex(x,'not'
   'not' p) is valid
 proof
   All(x,'not' 'not' p => p) is valid & All(x,p => 'not' 'not' p) is valid
-  by Th26;
-  hence thesis by Th39;
+  by Th23;
+  hence thesis by Th35;
 end;
 
 theorem
   Ex(x,'not' 'not' p) <=> Ex(x,p) is valid
 proof
   Ex(x,'not' 'not' p) => Ex(x,p) is valid & Ex(x,p) => Ex(x,'not' 'not' p)
-  is valid by Th51;
+  is valid by Th47;
   hence thesis by Lm14;
 end;
 
-theorem Th53:
+theorem Th49:
   'not' Ex(x,'not' p) => All(x,p) is valid & All(x,p) => 'not' Ex(
   x,'not' p) is valid
 proof
-A1: All(x,'not' 'not' p) => All(x,p) is valid by Th49;
+A1: All(x,'not' 'not' p) => All(x,p) is valid by Th45;
 A2: 'not' Ex(x,'not' p) = 'not' 'not' All(x,'not' 'not' p) by QC_LANG2:def 5;
   then 'not' Ex(x,'not' p) => All(x,'not' 'not' p) is valid;
   hence 'not' Ex(x,'not' p) => All(x,p) is valid by A1,LUKASI_1:42;
   All(x,p) => All(x,'not' 'not' p) is valid & All(x,'not' 'not' p) =>
-  'not' 'not' All(x,'not' 'not' p) is valid by Th49;
+  'not' 'not' All(x,'not' 'not' p) is valid by Th45;
   hence thesis by A2,LUKASI_1:42;
 end;
 
@@ -711,18 +716,18 @@ theorem
   'not' Ex(x,'not' p) <=> All(x,p) is valid
 proof
   'not' Ex(x,'not' p) => All(x,p) is valid & All(x,p) => 'not' Ex(x,'not'
-  p) is valid by Th53;
+  p) is valid by Th49;
   hence thesis by Lm14;
 end;
 
-theorem Th55:
+theorem Th51:
   'not' All(x,p) => Ex(x,'not' p) is valid & Ex(x,'not' p) =>
   'not' All(x,p) is valid
 proof
 A1: Ex(x,'not' p) = 'not' All(x,'not' 'not' p) by QC_LANG2:def 5;
-  All(x,'not' 'not' p) => All(x,p) is valid by Th49;
+  All(x,'not' 'not' p) => All(x,p) is valid by Th45;
   hence 'not' All(x,p) => Ex(x,'not' p) is valid by A1,LUKASI_1:52;
-  All(x,p) => All(x,'not' 'not' p) is valid by Th49;
+  All(x,p) => All(x,'not' 'not' p) is valid by Th45;
   hence thesis by A1,LUKASI_1:52;
 end;
 
@@ -730,7 +735,7 @@ theorem
   'not' All(x,p) <=> Ex(x,'not' p) is valid
 proof
   'not' All(x,p) => Ex(x,'not' p) is valid & Ex(x,'not' p) => 'not' All(x,
-  p) is valid by Th55;
+  p) is valid by Th51;
   hence thesis by Lm14;
 end;
 
@@ -743,7 +748,7 @@ A1: 'not' Ex(x,p) = 'not' 'not' All(x,'not' p) by QC_LANG2:def 5;
   thus thesis by A1;
 end;
 
-theorem Th58:
+theorem Th54:
   All(x,'not' p) <=> 'not' Ex(x,p) is valid
 proof
   'not' 'not' All(x,'not' p) => All(x,'not' p) is valid;
@@ -762,7 +767,7 @@ proof
   then
 A1: not y in still_not-bound_in All(x,All(y,p)) by Th5;
   All(x,All(y,p) => p) is valid & All(x,All(y,p) => p) => (All(x,All(y,p))
-  => All(x,p)) is valid by Th26,Th34,CQC_THE1:66;
+  => All(x,p)) is valid by Th23,Th30,CQC_THE1:66;
   then All(x,All(y,p)) => All(x,p) is valid by CQC_THE1:65;
   hence All(x,All(y,p)) => All(y,All(x,p)) is valid by A1,CQC_THE1:67;
   then All(x,y,p) => All(y,All(x,p)) is valid by QC_LANG2:14;
@@ -774,8 +779,8 @@ theorem
   => All(x,p) is valid
 proof
   assume p=h.x & q=h.y & not y in still_not-bound_in h;
-  then All(x,All(y,q) => p) is valid by Th26,Th28;
-  hence thesis by Th35;
+  then All(x,All(y,q) => p) is valid by Th23,Th25;
+  hence thesis by Th31;
 end;
 
 theorem
@@ -785,9 +790,9 @@ proof
   then
 A1: not x in still_not-bound_in Ex(y,Ex(x,p)) by Th6;
   All(y,p => Ex(x,p)) is valid & All(y,p => Ex(x,p)) => (Ex(y,p) => Ex(y,
-  Ex(x, p))) is valid by Th18,Th26,Th38;
+  Ex(x, p))) is valid by Th15,Th23,Th34;
   then Ex(y,p) => Ex(y,Ex(x,p)) is valid by CQC_THE1:65;
-  hence Ex(x,Ex(y,p)) => Ex(y,Ex(x,p)) is valid by A1,Th22;
+  hence Ex(x,Ex(y,p)) => Ex(y,Ex(x,p)) is valid by A1,Th19;
   then Ex(x,y,p) => Ex(y,Ex(x,p)) is valid by QC_LANG2:14;
   hence thesis by QC_LANG2:14;
 end;
@@ -797,8 +802,8 @@ theorem
   y,q) is valid
 proof
   assume p=h.x & q=h.y & not y in still_not-bound_in h;
-  then All(x,p => Ex(y,q)) is valid by Th25,Th26;
-  then Ex(x,p) => Ex(x,Ex(y,q)) is valid by Th39;
+  then All(x,p => Ex(y,q)) is valid by Th22,Th23;
+  then Ex(x,p) => Ex(x,Ex(y,q)) is valid by Th35;
   hence thesis by QC_LANG2:14;
 end;
 
@@ -809,15 +814,15 @@ proof
   then
 A1: not x in still_not-bound_in All(y,Ex(x,p)) by Th5;
   All(y,p => Ex(x,p)) is valid & All(y,p => Ex(x,p)) => (All(y,p) => All(y
-  ,Ex( x,p))) is valid by Th18,Th26,Th34;
+  ,Ex( x,p))) is valid by Th15,Th23,Th30;
   then All(y,p) => All(y,Ex(x,p)) is valid by CQC_THE1:65;
-  hence thesis by A1,Th22;
+  hence thesis by A1,Th19;
 end;
 
 theorem
-  Ex(x,p <=> p) is valid by Lm13,Th19;
+  Ex(x,p <=> p) is valid by Lm13,Th16;
 
-theorem Th65:
+theorem Th61:
   Ex(x,p => q) => (All(x,p) => Ex(x,q)) is valid & (All(x,p) => Ex
   (x,q)) => Ex(x,p => q) is valid
 proof
@@ -828,14 +833,14 @@ A1: (p => q) => (All(x,p) => q) is valid by LUKASI_1:41;
   x, q ) by Th5,Th6;
   then
 A2: not x in still_not-bound_in All(x,p) => Ex(x,q) by Th7;
-  q => Ex(x,q) is valid by Th18;
+  q => Ex(x,q) is valid by Th15;
   then (p => q) => (All(x,p) => Ex(x,q)) is valid by A1,Lm16;
-  hence Ex(x,p => q) => (All(x,p) => Ex(x,q)) is valid by A2,Th22;
-  All(x,p '&' 'not' q) => (All(x,p) '&' All(x,'not' q)) is valid by Th40;
+  hence Ex(x,p => q) => (All(x,p) => Ex(x,q)) is valid by A2,Th19;
+  All(x,p '&' 'not' q) => (All(x,p) '&' All(x,'not' q)) is valid by Th36;
   then
 A3: 'not'(All(x,p) '&' All(x,'not' q)) => 'not' All(x,p '&' 'not' q) is
   valid by LUKASI_1:52;
-  'not' All(x,p '&' 'not' q) => Ex(x,'not'(p '&' 'not' q)) is valid by Th55;
+  'not' All(x,p '&' 'not' q) => Ex(x,'not'(p '&' 'not' q)) is valid by Th51;
   then 'not'(All(x,p) '&' All(x,'not' q)) => Ex(x,'not'(p '&' 'not' q)) is
   valid by A3,LUKASI_1:42;
   then
@@ -853,22 +858,22 @@ LUKASI_1:52;
   hence thesis by A4,LUKASI_1:42;
 end;
 
-theorem Th66:
+theorem Th62:
   Ex(x,p => q) <=> (All(x,p) => Ex(x,q)) is valid
 proof
   Ex(x,p => q) => (All(x,p) => Ex(x,q)) is valid & (All(x,p) => Ex(x,q))
-  => Ex (x,p => q) is valid by Th65;
+  => Ex (x,p => q) is valid by Th61;
   hence thesis by Lm14;
 end;
 
 theorem
   Ex(x,p => q) is valid iff All(x,p) => Ex(x,q) is valid
 proof
-  Ex(x,p => q) <=> (All(x,p) => Ex(x,q)) is valid by Th66;
+  Ex(x,p => q) <=> (All(x,p) => Ex(x,q)) is valid by Th62;
   hence thesis by Lm15;
 end;
 
-theorem Th68:
+theorem Th64:
   All(x,p '&' q) => (p '&' All(x,q)) is valid
 proof
 A1: All(x,p '&' q) => (p '&' q) is valid by CQC_THE1:66;
@@ -882,20 +887,20 @@ A3: All(x,p '&' q) => All(x,q) is valid by A2,CQC_THE1:67;
   hence thesis by A3,Lm3;
 end;
 
-theorem Th69:
+theorem Th65:
   All(x,p '&' q) => (All(x,p) '&' q) is valid
 proof
 A1: (q '&' All(x,p)) => (All(x,p) '&' q) is valid by CQC_THE1:64;
   All(x,(p '&' q) => (q '&' p)) is valid & All(x,(p '&' q) => (q '&' p))
-  => ( All(x,p '&' q) => All(x,q '&' p)) is valid by Th26,Th34,CQC_THE1:64;
+  => ( All(x,p '&' q) => All(x,q '&' p)) is valid by Th23,Th30,CQC_THE1:64;
   then
 A2: All(x,p '&' q) => All(x,q '&' p) is valid by CQC_THE1:65;
-  All(x,q '&' p) => (q '&' All(x,p)) is valid by Th68;
+  All(x,q '&' p) => (q '&' All(x,p)) is valid by Th64;
   then All(x,p '&' q) => (q '&' All(x,p)) is valid by A2,LUKASI_1:42;
   hence thesis by A1,LUKASI_1:42;
 end;
 
-theorem Th70:
+theorem Th66:
   not x in still_not-bound_in p implies (p '&' All(x,q)) => All(x,
   p '&' q) is valid
 proof
@@ -905,7 +910,7 @@ A1: not x in still_not-bound_in p;
   then
 A2: p '&' All(x,q) => p '&' q is valid by Lm9;
   not x in still_not-bound_in All(x,q) by Th5;
-  then not x in still_not-bound_in p '&' All(x,q) by A1,Th9;
+  then not x in still_not-bound_in p '&' All(x,q) by A1,Th8;
   hence thesis by A2,CQC_THE1:67;
 end;
 
@@ -916,11 +921,11 @@ proof
   assume that
 A1: not x in still_not-bound_in p and
 A2: p '&' All(x,q) is valid;
-  (p '&' All(x,q)) => All(x,p '&' q) is valid by A1,Th70;
+  (p '&' All(x,q)) => All(x,p '&' q) is valid by A1,Th66;
   hence thesis by A2,CQC_THE1:65;
 end;
 
-theorem Th72:
+theorem Th68:
   not x in still_not-bound_in p implies (p 'or' All(x,q)) => All(x
   ,p 'or' q) is valid & All(x,p 'or' q) => (p 'or' All(x,q)) is valid
 proof
@@ -933,7 +938,7 @@ A2: (All(x,p 'or' q) '&' 'not' p) => q is valid by Th1;
   assume
 A3: not x in still_not-bound_in p;
   then not x in still_not-bound_in 'not' p by QC_LANG3:7;
-  then not x in still_not-bound_in All(x,p 'or' q) '&' 'not' p by A1,Th9;
+  then not x in still_not-bound_in All(x,p 'or' q) '&' 'not' p by A1,Th8;
   then (All(x,p 'or' q) '&' 'not' p) => All(x,q) is valid by A2,CQC_THE1:67;
   then
 A4: All(x, p 'or' q) => ('not' p => All(x,q)) is valid by Th3;
@@ -941,19 +946,19 @@ A4: All(x, p 'or' q) => ('not' p => All(x,q)) is valid by Th3;
   then p => All(x,p) is valid by A3,CQC_THE1:67;
   then
 A5: (p 'or' All(x,q)) => (All(x,p) 'or' All(x,q)) is valid by Lm10;
-  (All(x,p) 'or' All(x,q)) => All(x,p 'or' q) is valid by Th43;
+  (All(x,p) 'or' All(x,q)) => All(x,p 'or' q) is valid by Th39;
   hence (p 'or' All(x,q)) => All(x,p 'or' q) is valid by A5,LUKASI_1:42;
   ('not' p => All(x,q)) => (p 'or' All(x,q)) is valid by Lm12;
   hence thesis by A4,LUKASI_1:42;
 end;
 
-theorem Th73:
+theorem Th69:
   not x in still_not-bound_in p implies (p 'or' All(x,q)) <=> All(
   x,p 'or' q) is valid
 proof
   assume not x in still_not-bound_in p;
   then (p 'or' All(x,q)) => All(x,p 'or' q) is valid & All(x,p 'or' q) => (p
-  'or' All(x,q)) is valid by Th72;
+  'or' All(x,q)) is valid by Th68;
   hence thesis by Lm14;
 end;
 
@@ -962,39 +967,39 @@ theorem
   All(x,p 'or' q) is valid)
 proof
   assume not x in still_not-bound_in p;
-  then (p 'or' All(x,q)) <=> All(x,p 'or' q) is valid by Th73;
+  then (p 'or' All(x,q)) <=> All(x,p 'or' q) is valid by Th69;
   hence thesis by Lm15;
 end;
 
-theorem Th75:
+theorem Th71:
   not x in still_not-bound_in p implies (p '&' Ex(x,q)) => Ex(x,p
   '&' q) is valid & Ex(x,p '&' q) => (p '&' Ex(x,q)) is valid
 proof
   assume
 A1: not x in still_not-bound_in p;
-  p '&' q => Ex(x,p '&' q) is valid by Th18;
+  p '&' q => Ex(x,p '&' q) is valid by Th15;
   then
 A2: q => (p => Ex(x,p '&' q)) is valid by Th4;
   not x in still_not-bound_in Ex(x,p '&' q) by Th6;
   then not x in still_not-bound_in p => Ex(x,p '&' q) by A1,Th7;
-  then Ex(x,q) => (p => Ex(x,p '&' q)) is valid by A2,Th22;
+  then Ex(x,q) => (p => Ex(x,p '&' q)) is valid by A2,Th19;
   hence (p '&' Ex(x,q)) => Ex(x,p '&' q) is valid by Th2;
-  q => Ex(x,q) is valid by Th18;
+  q => Ex(x,q) is valid by Th15;
   then
 A3: p '&' q => p '&' Ex(x,q) is valid by Lm9;
   not x in still_not-bound_in Ex(x,q) by Th6;
-  then not x in still_not-bound_in p '&' Ex(x,q) by A1,Th9;
-  hence thesis by A3,Th22;
+  then not x in still_not-bound_in p '&' Ex(x,q) by A1,Th8;
+  hence thesis by A3,Th19;
 end;
 
-theorem Th76:
+theorem Th72:
   not x in still_not-bound_in p implies (p '&' Ex(x,q)) <=> Ex(x,p
   '&' q) is valid
 proof
   assume not x in still_not-bound_in p;
   then
   (p '&' Ex(x,q)) => Ex(x,p '&' q) is valid & Ex(x,p '&' q) => (p '&' Ex(x
-  ,q)) is valid by Th75;
+  ,q)) is valid by Th71;
   hence thesis by Lm14;
 end;
 
@@ -1003,7 +1008,7 @@ theorem
   x,p '&' q ) is valid )
 proof
   assume not x in still_not-bound_in p;
-  then (p '&' Ex(x,q)) <=> Ex(x,p '&' q) is valid by Th76;
+  then (p '&' Ex(x,q)) <=> Ex(x,p '&' q) is valid by Th72;
   hence thesis by Lm15;
 end;
 
@@ -1012,14 +1017,14 @@ is valid
 proof
   assume not x in still_not-bound_in p;
   then
-A1: p => All(x,p) is valid by Th27;
-  All(x,p => q) => (All(x,p) => All(x,q)) is valid by Th34;
+A1: p => All(x,p) is valid by Th24;
+  All(x,p => q) => (All(x,p) => All(x,q)) is valid by Th30;
   then All(x,p) => (All(x,p => q) => All(x,q)) is valid by LUKASI_1:44;
   then p => (All(x,p => q) => All(x,q)) is valid by A1,LUKASI_1:42;
   hence thesis by LUKASI_1:44;
 end;
 
-theorem Th78:
+theorem Th74:
   not x in still_not-bound_in p implies All(x,p => q) => (p => All
   (x,q)) is valid & (p => All(x,q)) => All(x,p => q) is valid
 proof
@@ -1033,23 +1038,23 @@ A2: All(x,(p => All(x,q)) => (p => q)) => ((p => All(x,q)) => All(x,p => q)
   ) is valid by Lm17;
   All(x,(All(x,q) => q) => ((p => All(x,q)) => (p => q))) is valid & All(x
 ,( All(x,q) => q) => ((p => All(x,q)) => (p => q))) => (All(x,All(x,q) => q) =>
-  All(x,(p => All(x,q)) => (p => q))) is valid by Th26,Th34;
+  All(x,(p => All(x,q)) => (p => q))) is valid by Th23,Th30;
   then
 A3: All(x,All(x,q) => q) => All(x,(p => All(x,q)) => (p => q)) is valid by
 CQC_THE1:65;
-  All(x,All(x,q) => q) is valid by Th26,CQC_THE1:66;
+  All(x,All(x,q) => q) is valid by Th23,CQC_THE1:66;
   then All(x,(p => All(x,q)) => (p => q)) is valid by A3,CQC_THE1:65;
   hence thesis by A2,CQC_THE1:65;
 end;
 
-theorem Th79:
+theorem Th75:
   not x in still_not-bound_in p implies (p => All(x,q)) <=> All(x,
   p => q) is valid
 proof
   assume not x in still_not-bound_in p;
   then
   (p => All(x,q)) => All(x,p => q) is valid & All(x,p => q) => (p => All(x
-  ,q)) is valid by Th78;
+  ,q)) is valid by Th74;
   hence thesis by Lm14;
 end;
 
@@ -1058,11 +1063,11 @@ theorem
   => All(x, q ) is valid )
 proof
   assume not x in still_not-bound_in p;
-  then (p => All(x,q)) <=> All(x,p => q) is valid by Th79;
+  then (p => All(x,q)) <=> All(x,p => q) is valid by Th75;
   hence thesis by Lm15;
 end;
 
-theorem Th81:
+theorem Th77:
   not x in still_not-bound_in q implies Ex(x,p => q) => (All(x,p)
   => q) is valid
 proof
@@ -1071,27 +1076,27 @@ A1: not x in still_not-bound_in q;
   not x in still_not-bound_in All(x,p) by Th5;
   then not x in still_not-bound_in All(x,p) => q by A1,Th7;
   then
-A2: Ex(x,All(x,p) => q) => (All(x,p) => q) is valid by Th23;
+A2: Ex(x,All(x,p) => q) => (All(x,p) => q) is valid by Th20;
   All(x,p) => p is valid by CQC_THE1:66;
   then
-A3: All(x,(p => q) => (All(x,p) => q)) is valid by Th26,LUKASI_1:41;
+A3: All(x,(p => q) => (All(x,p) => q)) is valid by Th23,LUKASI_1:41;
   All(x,(p => q) => (All(x,p) => q)) => (Ex(x,p => q) => Ex(x,All(x,p) =>
-  q)) is valid by Th38;
+  q)) is valid by Th34;
   then Ex(x,p => q) => Ex(x,All(x,p) => q) is valid by A3,CQC_THE1:65;
   hence thesis by A2,LUKASI_1:42;
 end;
 
-theorem Th82:
+theorem Th78:
   (All(x,p) => q) => Ex(x,p => q) is valid
 proof
-  All(x,p '&' 'not' q) => All(x,p) '&' 'not' q is valid by Th69;
+  All(x,p '&' 'not' q) => All(x,p) '&' 'not' q is valid by Th65;
   then 'not'(All(x,p) '&' 'not' q) => 'not' All(x,p '&' 'not' q) is valid by
 LUKASI_1:52;
   then
 A1: (All(x,p) => q) => 'not' All(x,p '&' 'not' q) is valid by QC_LANG2:def 2;
   All(x,'not' 'not'(p '&' 'not' q) => (p '&' 'not' q)) is valid & All(x,
   'not' 'not'(p '&' 'not' q) => (p '&' 'not' q)) => (All(x,'not' 'not'(p '&'
-  'not' q)) => All(x,(p '&' 'not' q))) is valid by Th26,Th34;
+  'not' q)) => All(x,(p '&' 'not' q))) is valid by Th23,Th30;
   then
   All(x,'not' 'not'(p '&' 'not' q)) => All(x,(p '&' 'not' q)) is valid by
 CQC_THE1:65;
@@ -1111,40 +1116,40 @@ theorem
 proof
   assume not x in still_not-bound_in q;
   then
-A1: Ex(x,p => q) => (All(x,p) => q ) is valid by Th81;
-  (All(x,p) => q) => Ex(x,p => q) is valid by Th82;
+A1: Ex(x,p => q) => (All(x,p) => q ) is valid by Th77;
+  (All(x,p) => q) => Ex(x,p => q) is valid by Th78;
   then (All(x,p) => q) <=> Ex(x,p => q) is valid by A1,Lm14;
   hence thesis by Lm15;
 end;
 
-theorem Th84:
+theorem Th80:
   not x in still_not-bound_in q implies (Ex(x,p) => q) => All(x,p
   => q) is valid & All(x,p => q) => (Ex(x,p) => q) is valid
 proof
   assume
 A1: not x in still_not-bound_in q;
-  p => Ex(x,p) is valid by Th18;
+  p => Ex(x,p) is valid by Th15;
   then
 A2: (Ex(x,p) => q) => (p => q) is valid by LUKASI_1:41;
   not x in still_not-bound_in Ex(x,p) by Th6;
   then not x in still_not-bound_in Ex(x,p) => q by A1,Th7;
   hence (Ex(x,p) => q) => All(x,p => q) is valid by A2,CQC_THE1:67;
-  All(x,p => q) => (Ex(x,p) => Ex(x,q)) is valid by Th38;
+  All(x,p => q) => (Ex(x,p) => Ex(x,q)) is valid by Th34;
   then
 A3: (All(x,p => q) '&' Ex(x,p)) => Ex(x,q) is valid by Th1;
-  Ex(x,q) => q is valid by A1,Th23;
+  Ex(x,q) => q is valid by A1,Th20;
   then (All(x,p => q) '&' Ex(x,p)) => q is valid by A3,LUKASI_1:42;
   hence thesis by Th3;
 end;
 
-theorem Th85:
+theorem Th81:
   not x in still_not-bound_in q implies (Ex(x,p) => q) <=> All(x,p
   => q) is valid
 proof
   assume not x in still_not-bound_in q;
   then
   (Ex(x,p) => q) => All(x,p => q) is valid & All(x,p => q) => (Ex(x,p) =>
-  q ) is valid by Th84;
+  q ) is valid by Th80;
   hence thesis by Lm14;
 end;
 
@@ -1153,11 +1158,11 @@ theorem
   x,p => q) is valid )
 proof
   assume not x in still_not-bound_in q;
-  then (Ex(x,p) => q) <=> All(x,p => q) is valid by Th85;
+  then (Ex(x,p) => q) <=> All(x,p => q) is valid by Th81;
   hence thesis by Lm15;
 end;
 
-theorem Th87:
+theorem Th83:
   not x in still_not-bound_in p implies Ex(x,p => q) => (p => Ex(x
   ,q)) is valid
 proof
@@ -1166,34 +1171,34 @@ A1: not x in still_not-bound_in p;
   not x in still_not-bound_in Ex(x,q) by Th6;
   then not x in still_not-bound_in p => Ex(x,q) by A1,Th7;
   then
-A2: Ex(x,p => Ex(x,q)) => (p => Ex(x,q)) is valid by Th23;
-  q => Ex(x,q) is valid by Th18;
+A2: Ex(x,p => Ex(x,q)) => (p => Ex(x,q)) is valid by Th20;
+  q => Ex(x,q) is valid by Th15;
   then
-A3: All(x,(p => q) => (p => Ex(x,q))) is valid by Th26,LUKASI_1:51;
+A3: All(x,(p => q) => (p => Ex(x,q))) is valid by Th23,LUKASI_1:51;
   All(x,(p => q) => (p => Ex(x,q))) => (Ex(x,p => q) => Ex(x,p => Ex(x,q))
-  ) is valid by Th38;
+  ) is valid by Th34;
   then (Ex(x,p => q) => Ex(x,p => Ex(x,q))) is valid by A3,CQC_THE1:65;
   hence thesis by A2,LUKASI_1:42;
 end;
 
-theorem Th88:
+theorem Th84:
   (p => Ex(x,q)) => Ex(x,p => q) is valid
 proof
   All(x,'not' 'not'(p '&' 'not' q) => (p '&' 'not' q)) is valid & All(x,
   'not' 'not'(p '&' 'not' q) => (p '&' 'not' q)) => (All(x,'not' 'not'(p '&'
-  'not' q)) => All(x,p '&' 'not' q)) is valid by Th26,Th34;
+  'not' q)) => All(x,p '&' 'not' q)) is valid by Th23,Th30;
   then All(x,'not' 'not'(p '&' 'not' q)) => All(x,p '&' 'not' q) is valid by
 CQC_THE1:65;
   then
 A1: 'not' All(x,p '&' 'not' q) => 'not' All(x,'not' 'not'(p '&' 'not' q))
   is valid by LUKASI_1:52;
-  All(x,'not' q) <=> 'not' Ex(x,q) is valid by Th58;
+  All(x,'not' q) <=> 'not' Ex(x,q) is valid by Th54;
   then All(x,'not' q) => 'not' Ex(x,q) is valid by Lm14;
   then (p '&' All(x,'not' q)) => (p '&' 'not' Ex(x,q)) is valid by Lm9;
   then
 A2: 'not'(p '&' 'not' Ex(x,q)) => 'not'(p '&' All(x,'not' q)) is valid by
 LUKASI_1:52;
-  All(x,p '&' 'not' q) => (p '&' All(x,'not' q)) is valid by Th68;
+  All(x,p '&' 'not' q) => (p '&' All(x,'not' q)) is valid by Th64;
   then 'not'(p '&' All(x,'not' q)) => 'not' All(x,p '&' 'not' q) is valid by
 LUKASI_1:52;
   then 'not'(p '&' 'not' Ex(x,q)) => 'not' All(x,p '&' 'not' q) is valid by A2,
@@ -1205,14 +1210,14 @@ LUKASI_1:42;
   hence thesis by QC_LANG2:def 5;
 end;
 
-theorem Th89:
+theorem Th85:
   not x in still_not-bound_in p implies (p => Ex(x,q)) <=> Ex(x,p
   => q) is valid
 proof
   assume not x in still_not-bound_in p;
   then
-A1: Ex(x,p => q) => (p => Ex(x,q)) is valid by Th87;
-  (p => Ex(x,q)) => Ex(x,p => q) is valid by Th88;
+A1: Ex(x,p => q) => (p => Ex(x,q)) is valid by Th83;
+  (p => Ex(x,q)) => Ex(x,p => q) is valid by Th84;
   hence thesis by A1,Lm14;
 end;
 
@@ -1221,7 +1226,7 @@ theorem
   ,p => q ) is valid )
 proof
   assume not x in still_not-bound_in p;
-  then (p => Ex(x,q)) <=> Ex(x,p => q) is valid by Th89;
+  then (p => Ex(x,q)) <=> Ex(x,p => q) is valid by Th85;
   hence thesis by Lm15;
 end;
 
@@ -1232,7 +1237,7 @@ proof
   hence p in Cn({p});
 end;
 
-theorem Th92:
+theorem Th88:
   Cn({p} \/ {q}) = Cn({p '&' q})
 proof
   for t holds t in Cn({p} \/ {q}) iff for T st T is being_a_theory & {p
@@ -1248,12 +1253,12 @@ A1:   t in Cn({p} \/ {q});
       assume that
 A2:   T is being_a_theory and
 A3:   {p '&' q} c= T;
-A4:   p '&' q in T & TAUT c= T by A2,A3,CQC_THE1:38,ZFMISC_1:31;
-      p '&' q => q in TAUT by PROCAL_1:21;
+A4:   p '&' q in T & TAUT(A) c= T by A2,A3,CQC_THE1:38,ZFMISC_1:31;
+      p '&' q => q in TAUT(A) by PROCAL_1:21;
       then q in T by A2,A4,CQC_THE1:def 1;
       then
 A5:   {q} c= T by ZFMISC_1:31;
-      p '&' q => p in TAUT by PROCAL_1:19;
+      p '&' q => p in TAUT(A) by PROCAL_1:19;
       then p in T by A2,A4,CQC_THE1:def 1;
       then {p} c= T by ZFMISC_1:31;
       then {p} \/ {q} c= T by A5,XBOOLE_1:8;
@@ -1278,7 +1283,8 @@ A9:     p in T by ZFMISC_1:31;
         then {q} c= T by A8,XBOOLE_1:1;
         then
 A10:    q in T by ZFMISC_1:31;
-        p => (q => p '&' q) in TAUT & TAUT c= T by A7,CQC_THE1:38,PROCAL_1:28;
+        p => (q => p '&' q) in TAUT(A) & TAUT(A) c= T
+          by A7,CQC_THE1:38,PROCAL_1:28;
         then (q => p '&' q) in T by A7,A9,CQC_THE1:def 1;
         then p '&' q in T by A7,A10,CQC_THE1:def 1;
         then {p '&' q} c= T by ZFMISC_1:31;
@@ -1297,14 +1303,14 @@ proof
   proof
     assume r in Cn({p,q});
     then r in Cn({p} \/ {q}) by ENUMSET1:1;
-    hence r in Cn({p '&' q}) by Th92;
+    hence r in Cn({p '&' q}) by Th88;
   end;
   assume r in Cn({p '&' q});
-  then r in Cn({p} \/ {q}) by Th92;
+  then r in Cn({p} \/ {q}) by Th88;
   hence r in Cn({p,q}) by ENUMSET1:1;
 end;
 
-theorem Th94:
+theorem Th90:
   X|- p implies X|- All(x,p)
 proof
 A1: X|- p => ((All(x,p) => All(x,p)) => p) by CQC_THE1:59;
@@ -1321,9 +1327,7 @@ end;
 
 theorem
   not x in still_not-bound_in p implies X|- All(x,p => q) => (p => All(x
-  ,q)) by Th78,CQC_THE1:59;
-
-:: Deduction Theorem
+  ,q)) by Th74,CQC_THE1:59;
 
 ::$N Deduction Theorem
 theorem
@@ -1380,7 +1384,7 @@ A14:        X|- H by A13,CQC_THE1:def 8;
       end;
       suppose
         (f.n)`2 = 1;
-        then H = VERUM by A11,A10,CQC_THE1:def 4;
+        then H = VERUM(A) by A11,A10,CQC_THE1:def 4;
         hence thesis by CQC_THE1:59,LUKASI_1:46;
       end;
       suppose
@@ -1446,12 +1450,12 @@ A26:    i < n and
 A27:    (f.i)`1 = p => q and
 A28:    not x in still_not-bound_in p and
 A29:    H = p => All(x,q) by A11,A10,CQC_THE1:def 4;
-A30:    X|- All(x,p => q) => (p => All(x,q)) by A28,Th78,CQC_THE1:59;
-        not x in still_not-bound_in F by A1,QC_LANG1:def 29;
+A30:    X|- All(x,p => q) => (p => All(x,q)) by A28,Th74,CQC_THE1:59;
+        not x in still_not-bound_in F by A1,QC_LANG1:def 31;
         then
-A31:    X|- All(x,F => (p => q)) => (F => All(x,p => q)) by Th78,CQC_THE1:59;
+A31:    X|- All(x,F => (p => q)) => (F => All(x,p => q)) by Th74,CQC_THE1:59;
         i <= len f by A9,A26,XXREAL_0:2;
-        then X|- All(x,F => (p => q)) by A7,A25,A26,A27,Th94;
+        then X|- All(x,F => (p => q)) by A7,A25,A26,A27,Th90;
         then X|- F => All(x,p => q) by A31,CQC_THE1:55;
         hence thesis by A29,A30,LUKASI_1:59;
       end;
@@ -1460,17 +1464,17 @@ A31:    X|- All(x,F => (p => q)) => (F => All(x,p => q)) by Th78,CQC_THE1:59;
         then consider i,x,y,s such that
 A32:    1 <= i and
 A33:    i < n and
-A34:    s.x in CQC-WFF & s.y in CQC-WFF and
+A34:    s.x in CQC-WFF(A) & s.y in CQC-WFF(A) and
 A35:    not x in still_not-bound_in s and
 A36:    s.x = (f.i)`1 and
 A37:    H = s.y by A11,A10,CQC_THE1:def 4;
-        reconsider s1 = s.x, s2 = s.y as Element of CQC-WFF by A34;
-A38:    X|- All(x,s1) => s2 by A35,Th28,CQC_THE1:59;
-        not x in still_not-bound_in F by A1,QC_LANG1:def 29;
+        reconsider s1 = s.x, s2 = s.y as Element of CQC-WFF(A) by A34;
+A38:    X|- All(x,s1) => s2 by A35,Th25,CQC_THE1:59;
+        not x in still_not-bound_in F by A1,QC_LANG1:def 31;
         then
-A39:    X|- All(x,F => s1) => (F => All(x,s1)) by Th78,CQC_THE1:59;
+A39:    X|- All(x,F => s1) => (F => All(x,s1)) by Th74,CQC_THE1:59;
         i <= len f by A9,A33,XXREAL_0:2;
-        then X|- All(x,F => s1) by A7,A32,A33,A36,Th94;
+        then X|- All(x,F => s1) by A7,A32,A33,A36,Th90;
         then X |- F => All(x,s1) by A39,CQC_THE1:55;
         hence thesis by A37,A38,LUKASI_1:59;
       end;

@@ -2,7 +2,7 @@
 ::  by Jaros{\l}aw Gryko
 ::
 :: Received April 17, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,18 +21,18 @@ environ
       FUNCT_2, T_0TOPSP, TOPS_2, CARD_1, ZFMISC_1, RELAT_2, ORDERS_2, WAYBEL11,
       YELLOW_9, YELLOW_1, LATTICE3, FILTER_1, XXREAL_0, WAYBEL_0, CARD_FIL,
       FINSET_1, REWRITE1, WAYBEL_8, LATTICES, CAT_1, WAYBEL_9, WAYBEL18;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
-      PBOOLE, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, DOMAIN_1, NUMBERS, PRALG_3,
-      STRUCT_0, PRE_TOPC, T_0TOPSP, FUNCT_3, FUNCT_6, FUNCT_7, CARD_3,
-      FUNCOP_1, MONOID_0, PRALG_1, ORDERS_2, LATTICE3, YELLOW_1, CANTOR_1,
-      FINSET_1, TOPS_2, BORSUK_1, TMAP_1, YELLOW_0, YELLOW_9, WAYBEL_0,
-      WAYBEL_3, WAYBEL_8, WAYBEL_9, WAYBEL11;
- constructors SETFAM_1, FUNCT_3, FUNCT_7, TOPS_2, BORSUK_1, LATTICE3, TMAP_1,
-      T_0TOPSP, CANTOR_1, MONOID_0, PRALG_1, PRALG_3, WAYBEL_3, WAYBEL_5,
-      WAYBEL_8, WAYBEL11, YELLOW_9, BINOP_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, RELAT_1, PBOOLE,
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, DOMAIN_1, NUMBERS, STRUCT_0,
+      PRE_TOPC, T_0TOPSP, FUNCT_3, FUNCT_6, FUNCT_7, CARD_3, FUNCOP_1,
+      MONOID_0, PRALG_1, ORDERS_2, LATTICE3, YELLOW_1, CANTOR_1, FINSET_1,
+      TOPS_2, BORSUK_1, TMAP_1, YELLOW_0, YELLOW_9, WAYBEL_0, WAYBEL_3,
+      WAYBEL_8, WAYBEL_9, WAYBEL11;
+ constructors FUNCT_3, FUNCT_7, TOPS_2, BORSUK_1, LATTICE3, TMAP_1, T_0TOPSP,
+      CANTOR_1, MONOID_0, PRALG_1, WAYBEL_3, WAYBEL_5, WAYBEL_8, WAYBEL11,
+      YELLOW_9, BINOP_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, FUNCOP_1, CARD_3,
       STRUCT_0, PRE_TOPC, BORSUK_1, LATTICE3, YELLOW_0, MONOID_0, WAYBEL_0,
-      YELLOW_1, WAYBEL_3, WAYBEL_8, WAYBEL11, YELLOW_9, WAYBEL17;
+      YELLOW_1, WAYBEL_3, WAYBEL_8, WAYBEL11, YELLOW_9, WAYBEL17, RELAT_1;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, TARSKI, PRE_TOPC, FUNCOP_1, WAYBEL_1, WAYBEL_3,
       XBOOLE_0, PRALG_1;
@@ -46,7 +46,7 @@ environ
 
 begin :: Preliminaries
 
-theorem Th2:
+theorem Th1:
   for X being set, A,B being Subset-Family of X st B = A \ {{}} or
   A = B \/ {{}} holds UniCl A = UniCl B
 proof
@@ -92,7 +92,7 @@ A8:     A = B \/ {{}};
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
-theorem Th3:
+theorem Th2:
   for T being TopSpace, K being Subset-Family of T holds K is Basis
   of T iff K \ {{}} is Basis of T
 proof
@@ -105,7 +105,7 @@ A2: K \ {{}} c= K by XBOOLE_1:36;
 A3: K is Basis of T;
     then the topology of T c= UniCl K by CANTOR_1:def 2;
     then
-A4: the topology of T c= UniCl K9 by Th2;
+A4: the topology of T c= UniCl K9 by Th1;
     K c= the topology of T by A3,TOPS_2:64;
     then K \ {{}} c= the topology of T by A2,XBOOLE_1:1;
     hence K \ {{}} is Basis of T by A4,CANTOR_1:def 2,TOPS_2:64;
@@ -138,17 +138,17 @@ end;
 
 definition
   let F be Relation;
-  attr F is TopSpace-yielding means
+  attr F is TopStruct-yielding means
   :Def1:
   for x being set st x in rng F holds x is TopStruct;
 end;
 
 registration
-  cluster TopSpace-yielding -> 1-sorted-yielding for Function;
+  cluster TopStruct-yielding -> 1-sorted-yielding for Function;
   coherence
   proof
     let F be Function such that
-A1: F is TopSpace-yielding;
+A1: F is TopStruct-yielding;
     let x be set;
     assume x in dom F;
     then F.x in rng F by FUNCT_1:def 3;
@@ -158,7 +158,7 @@ end;
 
 registration
   let I be set;
-  cluster TopSpace-yielding for ManySortedSet of I;
+  cluster TopStruct-yielding for ManySortedSet of I;
   existence
   proof
     set T = the TopSpace;
@@ -171,12 +171,12 @@ end;
 
 registration
   let I be set;
-  cluster TopSpace-yielding non-Empty for ManySortedSet of I;
+  cluster TopStruct-yielding non-Empty for ManySortedSet of I;
   existence
   proof
     set R = the non empty TopSpace;
     take J = I --> R;
-    thus J is TopSpace-yielding
+    thus J is TopStruct-yielding
     proof
       let x be set;
       assume x in rng J;
@@ -193,7 +193,7 @@ end;
 
 definition
   let J be non empty set;
-  let A be TopSpace-yielding ManySortedSet of J;
+  let A be TopStruct-yielding ManySortedSet of J;
   let j be Element of J;
   redefine func A.j -> TopStruct;
   coherence
@@ -206,7 +206,7 @@ end;
 
 definition
   let I be set;
-  let J be TopSpace-yielding ManySortedSet of I;
+  let J be TopStruct-yielding ManySortedSet of I;
   func product_prebasis J -> Subset-Family of product Carrier J means
   :Def2:
   for x being Subset of product Carrier J holds x in it iff ex i being set, T
@@ -253,7 +253,7 @@ A5:   x in P1;
   end;
 end;
 
-theorem Th4:
+theorem Th3:
   for X be set, A be Subset-Family of X holds TopStruct (#X,UniCl
     FinMeetCl A#) is TopSpace-like
 proof
@@ -278,7 +278,7 @@ end;
 
 definition
   let I be set;
-  let J be TopSpace-yielding non-Empty ManySortedSet of I;
+  let J be TopStruct-yielding non-Empty ManySortedSet of I;
   func product J -> strict TopSpace means
   :Def3:
   the carrier of it = product Carrier J & product_prebasis J is prebasis of it;
@@ -288,7 +288,7 @@ definition
     reconsider A = product_prebasis J as Subset-Family of X;
     consider T being strict TopStruct such that
 A1: T = TopStruct (# X, UniCl FinMeetCl A #);
-    reconsider T as strict TopSpace by A1,Th4;
+    reconsider T as strict TopSpace by A1,Th3;
     take T;
     thus the carrier of T = product Carrier J by A1;
     now
@@ -296,14 +296,13 @@ A1: T = TopStruct (# X, UniCl FinMeetCl A #);
       then consider i being set such that
 A2:   i in dom Carrier J and
 A3:   {} = (Carrier J).i by FUNCT_1:def 3;
-A4:   dom Carrier J = I by PARTFUN1:def 2;
-      then consider R being 1-sorted such that
-A5:   R = J.i and
-A6:   {} = the carrier of R by A2,A3,PRALG_1:def 13;
+      consider R being 1-sorted such that
+A4:   R = J.i and
+A5:   {} = the carrier of R by A2,A3,PRALG_1:def 13;
       dom J = I by PARTFUN1:def 2;
-      then R in rng J by A2,A4,A5,FUNCT_1:def 3;
+      then R in rng J by A2,A4,FUNCT_1:def 3;
       then reconsider R as non empty 1-sorted by WAYBEL_3:def 7;
-      the carrier of R = {} by A6;
+      the carrier of R = {} by A5;
       hence contradiction;
     end;
     then X is non empty by CARD_3:26;
@@ -312,35 +311,34 @@ A6:   {} = the carrier of R by A2,A3,PRALG_1:def 13;
   uniqueness
   proof
     let T1,T2 be strict TopSpace such that
-A7: the carrier of T1 = product Carrier J and
-A8: product_prebasis J is prebasis of T1 and
-A9: the carrier of T2 = product Carrier J and
-A10: product_prebasis J is prebasis of T2;
+A6: the carrier of T1 = product Carrier J and
+A7: product_prebasis J is prebasis of T1 and
+A8: the carrier of T2 = product Carrier J and
+A9: product_prebasis J is prebasis of T2;
     now
       assume {} in rng Carrier J;
       then consider i being set such that
-A11:  i in dom Carrier J and
-A12:  {} = (Carrier J).i by FUNCT_1:def 3;
-A13:  dom Carrier J = I by PARTFUN1:def 2;
-      then consider R being 1-sorted such that
-A14:  R = J.i and
-A15:  {} = the carrier of R by A11,A12,PRALG_1:def 13;
+A10:  i in dom Carrier J and
+A11:  {} = (Carrier J).i by FUNCT_1:def 3;
+      consider R being 1-sorted such that
+A12:  R = J.i and
+A13:  {} = the carrier of R by A10,A11,PRALG_1:def 13;
       dom J = I by PARTFUN1:def 2;
-      then R in rng J by A11,A13,A14,FUNCT_1:def 3;
+      then R in rng J by A10,A12,FUNCT_1:def 3;
       then reconsider R as non empty 1-sorted by WAYBEL_3:def 7;
-      the carrier of R = {} by A15;
+      the carrier of R = {} by A13;
       hence contradiction;
     end;
     then product Carrier J <> {} by CARD_3:26;
-    then reconsider t1 = T1, t2 = T2 as non empty TopSpace by A7,A9;
-    t1 = t2 by A7,A8,A9,A10,CANTOR_1:17;
+    then reconsider t1 = T1, t2 = T2 as non empty TopSpace by A6,A8;
+    t1 = t2 by A6,A7,A8,A9,CANTOR_1:17;
     hence thesis;
   end;
 end;
 
 registration
   let I be set;
-  let J be TopSpace-yielding non-Empty ManySortedSet of I;
+  let J be TopStruct-yielding non-Empty ManySortedSet of I;
   cluster product J -> non empty;
   coherence
   proof
@@ -349,14 +347,13 @@ A1: now
       then consider i being set such that
 A2:   i in dom Carrier J and
 A3:   {} = (Carrier J).i by FUNCT_1:def 3;
-A4:   dom Carrier J = I by PARTFUN1:def 2;
-      then consider R being 1-sorted such that
-A5:   R = J.i and
-A6:   {} = the carrier of R by A2,A3,PRALG_1:def 13;
+      consider R being 1-sorted such that
+A4:   R = J.i and
+A5:   {} = the carrier of R by A2,A3,PRALG_1:def 13;
       dom J = I by PARTFUN1:def 2;
-      then R in rng J by A2,A4,A5,FUNCT_1:def 3;
+      then R in rng J by A2,A4,FUNCT_1:def 3;
       then reconsider R as non empty 1-sorted by WAYBEL_3:def 7;
-      the carrier of R = {} by A6;
+      the carrier of R = {} by A5;
       hence contradiction;
     end;
     the carrier of product J = product Carrier J by Def3;
@@ -367,7 +364,7 @@ end;
 
 definition
   let I be non empty set;
-  let J be TopSpace-yielding non-Empty ManySortedSet of I;
+  let J be TopStruct-yielding non-Empty ManySortedSet of I;
   let i be Element of I;
   redefine func J.i -> non empty TopStruct;
   coherence
@@ -380,7 +377,7 @@ end;
 
 registration
   let I be set;
-  let J be TopSpace-yielding non-Empty ManySortedSet of I;
+  let J be TopStruct-yielding non-Empty ManySortedSet of I;
   cluster product J -> constituted-Functions;
   coherence
   proof
@@ -391,7 +388,7 @@ end;
 
 definition
   let I be non empty set;
-  let J be TopSpace-yielding non-Empty ManySortedSet of I;
+  let J be TopStruct-yielding non-Empty ManySortedSet of I;
   let x be Element of product J;
   let i be Element of I;
   redefine func x.i -> Element of J.i;
@@ -406,7 +403,7 @@ end;
 
 definition
   let I be non empty set;
-  let J be TopSpace-yielding non-Empty ManySortedSet of I;
+  let J be TopStruct-yielding non-Empty ManySortedSet of I;
   let i be Element of I;
   func proj(J,i) -> Function of product J, J.i equals
   proj(Carrier J,i);
@@ -431,12 +428,12 @@ A4:   y = f.x by FUNCT_1:def 3;
   end;
 end;
 
-theorem Th5:
-  for I being non empty set, J being TopSpace-yielding non-Empty
+theorem Th4:
+  for I being non empty set, J being TopStruct-yielding non-Empty
 ManySortedSet of I, i being Element of I, P being Subset of J.i holds proj(J,i)
   "P = product ((Carrier J) +* (i,P))
 proof
-  let I be non empty set, J be TopSpace-yielding non-Empty ManySortedSet of I,
+  let I be non empty set, J be TopStruct-yielding non-Empty ManySortedSet of I,
   i be Element of I, P be Subset of J.i;
   set f = (Carrier J) +* (i,P);
 A1: dom Carrier J = I by PARTFUN1:def 2;
@@ -455,7 +452,7 @@ A7: for j being set st j in dom Carrier J holds g.j in (Carrier J).j
       let j be set;
       assume j in dom Carrier J;
       then
-A8:   j in I by PARTFUN1:def 2;
+A8:   j in I;
       then
 A9:   ex R being 1-sorted st R = J.j & (Carrier J).j = the carrier of R by
 PRALG_1:def 13;
@@ -491,7 +488,7 @@ A13: proj(Carrier J,i).g in P by A12,CARD_3:def 16;
 A14: x in proj(J,i)"P;
     then
 A15: x in dom proj(Carrier J,i) by FUNCT_1:def 7;
-    then x in product Carrier J by CARD_3:def 16;
+    then x in product Carrier J;
     then consider g being Function such that
 A16: x = g and
 A17: dom g = dom Carrier J and
@@ -521,11 +518,11 @@ A21:    i = j;
   hence thesis by A3,XBOOLE_0:def 10;
 end;
 
-theorem Th6:
-  for I being non empty set, J being TopSpace-yielding non-Empty
+theorem Th5:
+  for I being non empty set, J being TopStruct-yielding non-Empty
   ManySortedSet of I, i being Element of I holds proj(J,i) is continuous
 proof
-  let I be non empty set, J be TopSpace-yielding non-Empty ManySortedSet of I,
+  let I be non empty set, J be TopStruct-yielding non-Empty ManySortedSet of I,
   i be Element of I;
 A1: for P being Subset of J.i st P is open holds proj(J,i)"P is open
   proof
@@ -537,13 +534,13 @@ A2: P is open;
       let x be set;
       assume x in proj(J,i)"P;
       then x in dom proj(Carrier J,i) by FUNCT_1:def 7;
-      hence thesis by CARD_3:def 16;
+      hence thesis;
     end;
     then reconsider x = proj(J,i)"P as Subset of product Carrier J;
     product_prebasis J is prebasis of product J by Def3;
     then
 A3: product_prebasis J c= the topology of product J by TOPS_2:64;
-    x = product ((Carrier J) +* (i,P)) by Th5;
+    x = product ((Carrier J) +* (i,P)) by Th4;
     then proj(J,i)"P in product_prebasis J by A2,Def2;
     hence thesis by A3,PRE_TOPC:def 2;
   end;
@@ -551,20 +548,20 @@ A3: product_prebasis J c= the topology of product J by TOPS_2:64;
   hence thesis by A1,TOPS_2:43;
 end;
 
-theorem Th7:
+theorem Th6:
   for X being non empty TopSpace, I being non empty set, J being
-TopSpace-yielding non-Empty ManySortedSet of I, f being Function of X, product
+TopStruct-yielding non-Empty ManySortedSet of I, f being Function of X, product
   J holds f is continuous iff for i being Element of I holds proj(J,i)*f is
   continuous
 proof
-  let X be non empty TopSpace, I be non empty set, J be TopSpace-yielding
+  let X be non empty TopSpace, I be non empty set, J be TopStruct-yielding
   non-Empty ManySortedSet of I, f be Function of X, product J;
   set B = product_prebasis J;
   hereby
     assume
 A1: f is continuous;
     let i be Element of I;
-    proj(J,i) is continuous by Th6;
+    proj(J,i) is continuous by Th5;
     hence proj(J,i)*f is continuous by A1,TOPS_2:46;
   end;
   assume
@@ -585,7 +582,7 @@ A7: p = product ((Carrier J) +* (i,V)) by Def2;
     proj(J,j)*f is continuous & [#](J.j) <> {} by A2;
     then
 A8: (proj(J,j)*f)"V is open by A5,A6,TOPS_2:43;
-    proj(J,j)"V = p by A7,Th5;
+    proj(J,j)"V = p by A7,Th4;
     hence thesis by A8,RELAT_1:146;
   end;
   B is prebasis of product J by Def3;
@@ -604,12 +601,12 @@ is SubSpace of Y ex g being Function of Y,Z st g is continuous & g|(the carrier
   of X) = f;
 end;
 
-theorem Th8: ::p.121 lemma 3.2.(i)
-  for I being non empty set, J being TopSpace-yielding non-Empty
+theorem Th7: ::p.121 lemma 3.2.(i)
+  for I being non empty set, J being TopStruct-yielding non-Empty
   ManySortedSet of I st for i being Element of I holds J.i is injective holds
   product J is injective
 proof
-  let I be non empty set, J be TopSpace-yielding non-Empty ManySortedSet of I;
+  let I be non empty set, J be TopStruct-yielding non-Empty ManySortedSet of I;
   assume
 A1: for i being Element of I holds J.i is injective;
   set B = product_prebasis J;
@@ -628,7 +625,7 @@ A4: for i being set st i in I ex u being set st P[i,u]
     let i be set;
     assume i in I;
     then reconsider i1 = i as Element of I;
-    J.i1 is injective & proj(J,i1)*f is continuous by A1,A2,Th7;
+    J.i1 is injective & proj(J,i1)*f is continuous by A1,A2,Th6;
     then consider g being Function of Y, J.i1 such that
 A5: g is continuous & g|(the carrier of X) = proj(J,i1)*f by A3,Def5;
     take g, i1;
@@ -692,7 +689,7 @@ A21: dom h = I by A6,A16,A19,FUNCT_6:60
       assume
 A22:  x in dom Carrier J;
       then
-A23:  x in I by PARTFUN1:def 2;
+A23:  x in I;
       then consider i being Element of I such that
 A24:  i = x and
 A25:  ex g being Function of Y, J.i st g is continuous & g|(the
@@ -703,7 +700,7 @@ PRALG_1:def 13;
       g is continuous and
       g|(the carrier of X) = proj(J,i)*f and
 A27:  G.x = g by A25;
-      x in dom G by A6,A22,PARTFUN1:def 2;
+      x in dom G by A6,A22;
       then
 A28:  (rngs G).x = rng g by A27,FUNCT_6:22;
       h.x in (rngs G).x by A19,A20,A21,A22;
@@ -749,126 +746,128 @@ A36: for x being set st x in dom (h|(the carrier of X)) holds (h|(the
     let x be set;
     assume
 A37: x in dom (h|(the carrier of X));
-    then (h|(the carrier of X)).x in rng (h|(the carrier of X)) by
-FUNCT_1:def 3;
+    then
+A38: x in dom h by RELAT_1:57;
+    (h|(the carrier of X)).x in rng (h|(the carrier of X)) by
+FUNCT_1:def 3,A37;
     then (h|(the carrier of X)).x in the carrier of product J;
     then (h|(the carrier of X)).x in product Carrier J by Def3;
     then consider z being Function such that
-A38: (h|(the carrier of X)).x = z and
-A39: dom z = dom Carrier J and
+A39: (h|(the carrier of X)).x = z and
+A40: dom z = dom Carrier J and
     for i being set st i in dom Carrier J holds z.i in (Carrier J).i by
 CARD_3:def 5;
     f.x in rng f by A35,A37,FUNCT_1:def 3;
     then f.x in the carrier of product J;
     then
-A40: f.x in product Carrier J by Def3;
+A41: f.x in product Carrier J by Def3;
     then consider y being Function such that
-A41: f.x = y and
-A42: dom y = dom Carrier J and
+A42: f.x = y and
+A43: dom y = dom Carrier J and
     for i being set st i in dom Carrier J holds y.i in (Carrier J).i by
 CARD_3:def 5;
-A43: x in the carrier of Y by A37;
+A44: x in the carrier of Y by A38;
     for j being set st j in dom y holds y.j = z.j
     proof
       let j be set;
       assume j in dom y;
       then
-A44:  j in I by A42,PARTFUN1:def 2;
+A45:  j in I by A43;
       then consider i being Element of I such that
-A45:  i = j and
-A46:  ex g being Function of Y, J.i st g is continuous & g|(the
+A46:  i = j and
+A47:  ex g being Function of Y, J.i st g is continuous & g|(the
       carrier of X) = proj(J,i)*f & G.j = g by A7;
-A47:  y in dom proj(Carrier J,i) by A40,A41,CARD_3:def 16;
+A48:  y in dom proj(Carrier J,i) by A41,A42,CARD_3:def 16;
       consider g being Function of Y, J.i such that
       g is continuous and
-A48:  g|(the carrier of X) = proj(J,i)*f and
-A49:  G.j = g by A46;
-      x in dom h & z = <:G:>.x by A35,A37,A43,A38,FUNCT_1:49,FUNCT_2:def 1;
-      hence z.j = g.x by A6,A44,A49,FUNCT_6:34
-        .= (proj(J,i)*f).x by A35,A37,A48,FUNCT_1:49
-        .= proj(Carrier J,i).y by A35,A37,A41,FUNCT_2:15
-        .= y.j by A45,A47,CARD_3:def 16;
+A49:  g|(the carrier of X) = proj(J,i)*f and
+A50:  G.j = g by A47;
+      x in dom h & z = <:G:>.x by A37,A44,A39,FUNCT_1:49,FUNCT_2:def 1;
+      hence z.j = g.x by A6,A45,A50,FUNCT_6:34
+        .= (proj(J,i)*f).x by A37,A49,FUNCT_1:49
+        .= proj(Carrier J,i).y by A37,A42,FUNCT_2:15
+        .= y.j by A46,A48,CARD_3:def 16;
     end;
-    hence thesis by A41,A42,A38,A39,FUNCT_1:2;
+    hence thesis by A42,A43,A39,A40,FUNCT_1:2;
   end;
   reconsider h as Function of Y, product J;
-A50: for P being Subset of product J st P in B holds h"P is open
+A51: for P being Subset of product J st P in B holds h"P is open
   proof
     let P be Subset of product J;
     reconsider p = P as Subset of product Carrier J by Def3;
     assume P in B;
     then consider
     i being set, T being TopStruct, V being Subset of T such that
-A51: i in I and
-A52: V is open and
-A53: T = J.i and
-A54: p = product ((Carrier J) +* (i,V)) by Def2;
+A52: i in I and
+A53: V is open and
+A54: T = J.i and
+A55: p = product ((Carrier J) +* (i,V)) by Def2;
     consider j being Element of I such that
-A55: j = i and
-A56: ex g being Function of Y, J.j st g is continuous & g|(the carrier
-    of X) = proj(J,j)*f & G.i = g by A7,A51;
-    reconsider V as Subset of J.j by A53,A55;
-A57: dom proj(J,j) = product Carrier J by CARD_3:def 16;
+A56: j = i and
+A57: ex g being Function of Y, J.j st g is continuous & g|(the carrier
+    of X) = proj(J,j)*f & G.i = g by A7,A52;
+    reconsider V as Subset of J.j by A54,A56;
+A58: dom proj(J,j) = product Carrier J by CARD_3:def 16;
     consider g being Function of Y, J.j such that
-A58: g is continuous and
+A59: g is continuous and
     g|(the carrier of X) = proj(J,j)*f and
-A59: G.i = g by A56;
-A60: dom g = the carrier of Y by FUNCT_2:def 1
+A60: G.i = g by A57;
+A61: dom g = the carrier of Y by FUNCT_2:def 1
       .= dom h by FUNCT_2:def 1;
-A61: proj(J,j)"V = p by A54,A55,Th5;
-A62: h"P c= g"V
+A62: proj(J,j)"V = p by A55,A56,Th4;
+A63: h"P c= g"V
     proof
       let x be set;
       assume
-A63:  x in h"P;
+A64:  x in h"P;
       then
-A64:  h.x in proj(J,j)"V by A61,FUNCT_1:def 7;
-      then h.x in product Carrier J by A57,FUNCT_1:def 7;
+A65:  h.x in proj(J,j)"V by A62,FUNCT_1:def 7;
+      then h.x in product Carrier J by A58,FUNCT_1:def 7;
       then consider y being Function such that
-A65:  h.x = y and
+A66:  h.x = y and
       dom y = dom Carrier J and
       for i being set st i in dom Carrier J holds y.i in (Carrier J).i by
 CARD_3:def 5;
-      h.x in dom proj(J,j) by A64,FUNCT_1:def 7;
-      then proj(J,j).(h.x) = y.j by A65,CARD_3:def 16;
+      h.x in dom proj(J,j) by A65,FUNCT_1:def 7;
+      then proj(J,j).(h.x) = y.j by A66,CARD_3:def 16;
       then
-A66:  y.j in V by A64,FUNCT_1:def 7;
-      x in dom h by A63,FUNCT_1:def 7;
+A67:  y.j in V by A65,FUNCT_1:def 7;
+      x in dom h by A64,FUNCT_1:def 7;
       then
-A67:  g.x = y.j by A6,A55,A59,A65,FUNCT_6:34;
-      x in dom g by A60,A63,FUNCT_1:def 7;
-      hence thesis by A66,A67,FUNCT_1:def 7;
+A68:  g.x = y.j by A6,A56,A60,A66,FUNCT_6:34;
+      x in dom g by A61,A64,FUNCT_1:def 7;
+      hence thesis by A67,A68,FUNCT_1:def 7;
     end;
-A68: g"V c= h"P
+A69: g"V c= h"P
     proof
       let x be set;
       assume
-A69:  x in g"V;
+A70:  x in g"V;
       then
-A70:  x in dom h by A60,FUNCT_1:def 7;
+A71:  x in dom h by A61,FUNCT_1:def 7;
       then
-A71:  h.x in rng h by FUNCT_1:def 3;
+A72:  h.x in rng h by FUNCT_1:def 3;
       then consider y being Function such that
-A72:  h.x = y and
+A73:  h.x = y and
       dom y = dom Carrier J and
       for i being set st i in dom Carrier J holds y.i in (Carrier J).i by A34,
 CARD_3:def 5;
-      h.x in product Carrier J by A34,A71;
-      then y in dom proj(Carrier J,j) by A72,CARD_3:def 16;
+      h.x in product Carrier J by A34,A72;
+      then y in dom proj(Carrier J,j) by A73,CARD_3:def 16;
       then
-A73:  proj(J,j).(h.x) = y.j by A72,CARD_3:def 16;
-      g.x = y.j by A6,A55,A59,A70,A72,FUNCT_6:34;
-      then proj(J,j).(h.x) in V by A69,A73,FUNCT_1:def 7;
-      then h.x in proj(J,j)"V by A34,A57,A71,FUNCT_1:def 7;
-      hence thesis by A61,A70,FUNCT_1:def 7;
+A74:  proj(J,j).(h.x) = y.j by A73,CARD_3:def 16;
+      g.x = y.j by A6,A56,A60,A71,A73,FUNCT_6:34;
+      then proj(J,j).(h.x) in V by A70,A74,FUNCT_1:def 7;
+      then h.x in proj(J,j)"V by A34,A58,A72,FUNCT_1:def 7;
+      hence thesis by A62,A71,FUNCT_1:def 7;
     end;
     [#](J.j) <> {};
-    then g"V is open by A52,A53,A55,A58,TOPS_2:43;
-    hence thesis by A62,A68,XBOOLE_0:def 10;
+    then g"V is open by A53,A54,A56,A59,TOPS_2:43;
+    hence thesis by A63,A69,XBOOLE_0:def 10;
   end;
   take h;
   B is prebasis of product J by Def3;
-  hence h is continuous by A50,YELLOW_9:36;
+  hence h is continuous by A51,YELLOW_9:36;
   thus thesis by A35,A36,FUNCT_1:2;
 end;
 
@@ -931,18 +930,10 @@ end;
 registration
   let X be non empty 1-sorted, Y be non empty TopStruct, f be Function of X,Y;
   cluster Image f -> non empty;
-  coherence
-  proof
-    set x = the Element of dom f;
-    dom f = the carrier of X by FUNCT_2:def 1;
-    then f.x in rng f by FUNCT_1:def 3;
-    then reconsider A = rng f as non empty Subset of Y;
-    the carrier of Image f = [#]Image f .= A by PRE_TOPC:def 5;
-    hence the carrier of Image f is non empty;
-  end;
+  coherence;
 end;
 
-theorem Th10:
+theorem Th9:
   for X being 1-sorted, Y being TopStruct, f being Function of X,Y
   holds the carrier of Image f = rng f
 proof
@@ -956,13 +947,13 @@ definition
   f;
   coherence
   proof
-    the carrier of Image f = rng f & the carrier of X = dom f by Th10,
+    the carrier of Image f = rng f & the carrier of X = dom f by Th9,
 FUNCT_2:def 1;
     hence thesis by FUNCT_2:1;
   end;
 end;
 
-theorem Th11:
+theorem Th10:
   for X, Y being non empty TopSpace, f being Function of X,Y st f
   is continuous holds corestr f is continuous
 proof
@@ -974,7 +965,7 @@ A2: [#]Y <> {};
 A3: f is continuous;
 A4: for R being Subset of Image f st R is open holds (corestr f)"R is open
   proof
-    [#](Image f) = rng f by Th10;
+    [#](Image f) = rng f by Th9;
     then
 A5: f"([#](Image f)) = dom f by A1,FUNCT_2:40
       .= the carrier of X by FUNCT_2:def 1;
@@ -1004,7 +995,7 @@ registration
   cluster corestr f -> onto;
   coherence
   proof
-    the carrier of Image f = rng corestr f by Th10;
+    the carrier of Image f = rng corestr f by Th9;
     hence thesis by FUNCT_2:def 3;
   end;
 end;
@@ -1016,7 +1007,7 @@ definition
   f*f = f & Image f, X are_homeomorphic;
 end;
 
-theorem Th12: ::p.121 lemma 3.2.(iii)
+theorem Th11: ::p.121 lemma 3.2.(iii)
   for T,S being non empty TopSpace st T is injective for f being
   Function of T,S st corestr(f) is being_homeomorphism holds T is_Retract_of S
 proof
@@ -1035,250 +1026,250 @@ A5: h|(the carrier of Image f) = g by A1,Def5;
   g is being_homeomorphism by A3,A2,TOPS_2:56;
   then
 A6: g is one-to-one by TOPS_2:def 5;
-A7: the carrier of Image f = rng f by Th10;
+A7: the carrier of Image f = rng f by Th9;
 A8: for x being set st x in the carrier of T holds (h*f).x = x
   proof
     let x be set;
     assume
-A10: x in the carrier of T;
+A9: x in the carrier of T;
     then
-A11: x in dom (corestr f) by FUNCT_2:def 1;
-A12: x in dom f by A10,FUNCT_2:def 1;
+A10: x in dom (corestr f) by FUNCT_2:def 1;
+A11: x in dom f by A9,FUNCT_2:def 1;
     then
-A13: f.x in rng f by FUNCT_1:def 3;
-A14: corestr f is one-to-one by A3,TOPS_2:def 5;
-    thus (h*f).x = h.(f.x) by A12,FUNCT_1:13
-      .= ((corestr f)").((corestr f).x) by A2,A5,A7,A13,FUNCT_1:49
-      .= ((corestr f qua Function)").((corestr f).x) by A14,TOPS_2:def 4
-      .= x by A11,A14,FUNCT_1:34;
+A12: f.x in rng f by FUNCT_1:def 3;
+A13: corestr f is one-to-one by A3,TOPS_2:def 5;
+    thus (h*f).x = h.(f.x) by A11,FUNCT_1:13
+      .= ((corestr f)").((corestr f).x) by A2,A5,A7,A12,FUNCT_1:49
+      .= ((corestr f qua Function)").((corestr f).x) by A13,TOPS_2:def 4
+      .= x by A10,A13,FUNCT_1:34;
   end;
   dom (h*f) = the carrier of T by FUNCT_2:def 1;
   then
-A15: h*f = id (the carrier of T) by A8,FUNCT_1:17;
+A14: h*f = id (the carrier of T) by A8,FUNCT_1:17;
   take F = f*h;
   set H = h*(incl Image F);
-A16: dom H = [#](Image F) by FUNCT_2:def 1;
+A15: dom H = [#](Image F) by FUNCT_2:def 1;
   rng h c= the carrier of T;
   then
-A17: rng h c= dom f by FUNCT_2:def 1;
-A18: rng F c= rng f
+A16: rng h c= dom f by FUNCT_2:def 1;
+A17: rng F c= rng f
   proof
     let y be set;
     assume y in rng F;
     then consider x being set such that
-A19: x in dom F and
-A20: y = F.x by FUNCT_1:def 3;
-    x in the carrier of S by A19;
+A18: x in dom F and
+A19: y = F.x by FUNCT_1:def 3;
+    x in the carrier of S by A18;
     then
-A21: x in dom h by FUNCT_2:def 1;
+A20: x in dom h by FUNCT_2:def 1;
     then
-A22: h.x in rng h by FUNCT_1:def 3;
-    f.(h.x) = y by A20,A21,FUNCT_1:13;
-    hence thesis by A17,A22,FUNCT_1:def 3;
+A21: h.x in rng h by FUNCT_1:def 3;
+    f.(h.x) = y by A19,A20,FUNCT_1:13;
+    hence thesis by A16,A21,FUNCT_1:def 3;
   end;
-A23: H is one-to-one
+A22: H is one-to-one
   proof
     let x,y be Element of Image F;
     assume
-A24: H.x = H.y;
-A25: x in the carrier of Image F;
+A23: H.x = H.y;
+A24: x in the carrier of Image F;
     then
-A26: x in dom (incl Image F) by FUNCT_2:def 1;
-A27: y in the carrier of Image F;
+A25: x in dom (incl Image F) by FUNCT_2:def 1;
+A26: y in the carrier of Image F;
     then
-A28: y in dom (incl Image F) by FUNCT_2:def 1;
-A29: y in rng F by A27,Th10;
-A30: x in rng F by A25,Th10;
-    then reconsider a = x, b = y as Point of S by A29;
-    reconsider x9 = x, y9 = y as Element of Image f by A18,A30,A29,Th10;
+A27: y in dom (incl Image F) by FUNCT_2:def 1;
+A28: y in rng F by A26,Th9;
+A29: x in rng F by A24,Th9;
+    then reconsider a = x, b = y as Point of S by A28;
+    reconsider x9 = x, y9 = y as Element of Image f by A17,A29,A28,Th9;
     g.x9 = h.x by A5,FUNCT_1:49
       .= h.((incl Image F).a) by TMAP_1:84
-      .= (h*(incl Image F)).b by A24,A26,FUNCT_1:13
-      .= h.((incl Image F).b) by A28,FUNCT_1:13
+      .= (h*(incl Image F)).b by A23,A25,FUNCT_1:13
+      .= h.((incl Image F).b) by A27,FUNCT_1:13
       .= h.y by TMAP_1:84
       .= g.y9 by A5,FUNCT_1:49;
     hence thesis by A6,WAYBEL_1:def 1;
   end;
-A31: dom incl Image F = the carrier of Image F by FUNCT_2:def 1;
-A32: rng H = [#]T
+A30: dom incl Image F = the carrier of Image F by FUNCT_2:def 1;
+A31: rng H = [#]T
   proof
     thus rng H c= [#](T);
     let y be set;
     assume
-A33: y in [#](T);
+A32: y in [#](T);
     then
-A34: y in dom f by FUNCT_2:def 1;
+A33: y in dom f by FUNCT_2:def 1;
     then
-A35: F.(f.y) = ((f*h)*f).y by FUNCT_1:13
-      .= (f*id T).y by A15,RELAT_1:36
+A34: F.(f.y) = ((f*h)*f).y by FUNCT_1:13
+      .= (f*id T).y by A14,RELAT_1:36
       .= f.y by FUNCT_2:17;
-A36: f.y in rng f by A34,FUNCT_1:def 3;
+A35: f.y in rng f by A33,FUNCT_1:def 3;
     then reconsider pp = f.y as Point of S;
-    f.y in the carrier of S by A36;
+    f.y in the carrier of S by A35;
     then
-A37: f.y in dom F by FUNCT_2:def 1;
+A36: f.y in dom F by FUNCT_2:def 1;
     then F.(f.y) in rng F by FUNCT_1:def 3;
     then
-A38: f.y in the carrier of Image F by A35,Th10;
+A37: f.y in the carrier of Image F by A34,Th9;
     then
-A39: y in dom((incl Image F)*f) by A31,A34,FUNCT_1:11;
-    dom H = rng F by A16,Th10;
+A38: y in dom((incl Image F)*f) by A30,A33,FUNCT_1:11;
+    dom H = rng F by A15,Th9;
     then
-A40: f.y in dom H by A37,A35,FUNCT_1:def 3;
-    H.(f.y) = ((h*(incl Image F))*f).y by A34,FUNCT_1:13
+A39: f.y in dom H by A36,A34,FUNCT_1:def 3;
+    H.(f.y) = ((h*(incl Image F))*f).y by A33,FUNCT_1:13
       .= (h*((incl Image F)*f)).y by RELAT_1:36
-      .= h.(((incl Image F)*f).y) by A39,FUNCT_1:13
-      .= h.((incl Image F).pp) by A34,FUNCT_1:13
-      .= h.(f.y) by A38,TMAP_1:84
-      .= (id T).y by A15,A34,FUNCT_1:13
-      .= y by A33,FUNCT_1:18;
-    hence thesis by A40,FUNCT_1:def 3;
+      .= h.(((incl Image F)*f).y) by A38,FUNCT_1:13
+      .= h.((incl Image F).pp) by A33,FUNCT_1:13
+      .= h.(f.y) by A37,TMAP_1:84
+      .= (id T).y by A14,A33,FUNCT_1:13
+      .= y by A32,FUNCT_1:18;
+    hence thesis by A39,FUNCT_1:def 3;
   end;
   reconsider p = incl(Image f) as Function of Image f,S;
-A41: [#]S <> {};
-A42: dom (p*(corestr f)) = the carrier of T by FUNCT_2:def 1
+A40: [#]S <> {};
+A41: dom (p*(corestr f)) = the carrier of T by FUNCT_2:def 1
     .= dom f by FUNCT_2:def 1;
-A43: for P being Subset of S holds f"P = (p*(corestr f))"P
+A42: for P being Subset of S holds f"P = (p*(corestr f))"P
   proof
     let P be Subset of S;
     hereby
       let x be set;
       assume
-A44:  x in f"P;
+A43:  x in f"P;
       then
-A45:  x in dom f by FUNCT_1:def 7;
+A44:  x in dom f by FUNCT_1:def 7;
       then f.x in rng f by FUNCT_1:def 3;
       then
-A46:  f.x in the carrier of Image f by Th10;
-A47:  f.x in P by A44,FUNCT_1:def 7;
+A45:  f.x in the carrier of Image f by Th9;
+A46:  f.x in P by A43,FUNCT_1:def 7;
       then reconsider y = f.x as Point of S;
-      (p*(corestr f)).x = p.(f.x) by A45,FUNCT_1:13
-        .= y by A46,TMAP_1:84;
-      hence x in (p*(corestr f))"P by A42,A45,A47,FUNCT_1:def 7;
+      (p*(corestr f)).x = p.(f.x) by A44,FUNCT_1:13
+        .= y by A45,TMAP_1:84;
+      hence x in (p*(corestr f))"P by A41,A44,A46,FUNCT_1:def 7;
     end;
     let x be set;
     assume
-A48: x in (p*(corestr f))"P;
+A47: x in (p*(corestr f))"P;
     then
-A49: x in dom(p*(corestr f)) by FUNCT_1:def 7;
+A48: x in dom(p*(corestr f)) by FUNCT_1:def 7;
     then
-A50: f.x in rng f by A42,FUNCT_1:def 3;
+A49: f.x in rng f by A41,FUNCT_1:def 3;
     then reconsider y = f.x as Point of S;
-A51: (p*(corestr f)).x in P by A48,FUNCT_1:def 7;
-A52: f.x in the carrier of Image f by A50,Th10;
-    (p*(corestr f)).x = p.(f.x) by A42,A49,FUNCT_1:13
-      .= y by A52,TMAP_1:84;
-    hence thesis by A42,A49,A51,FUNCT_1:def 7;
+A50: (p*(corestr f)).x in P by A47,FUNCT_1:def 7;
+A51: f.x in the carrier of Image f by A49,Th9;
+    (p*(corestr f)).x = p.(f.x) by A41,A48,FUNCT_1:13
+      .= y by A51,TMAP_1:84;
+    hence thesis by A41,A48,A50,FUNCT_1:def 7;
   end;
-A53: corestr(f) is continuous by A3,TOPS_2:def 5;
-A54: for P being Subset of Image F st P is open holds (H")"P is open
+A52: corestr(f) is continuous by A3,TOPS_2:def 5;
+A53: for P being Subset of Image F st P is open holds (H")"P is open
   proof
     let P be Subset of Image F;
-A55: p is continuous by TMAP_1:87;
+A54: p is continuous by TMAP_1:87;
     (incl Image F).:P = P
     proof
       hereby
         let y be set;
         assume y in (incl Image F).:P;
         then consider x being set such that
-A56:    x in dom (incl Image F) and
-A57:    x in P & y = (incl Image F).x by FUNCT_1:def 6;
-        x in the carrier of Image F by A56;
-        then x in rng F by Th10;
+A55:    x in dom (incl Image F) and
+A56:    x in P & y = (incl Image F).x by FUNCT_1:def 6;
+        x in the carrier of Image F by A55;
+        then x in rng F by Th9;
         then reconsider xx = x as Point of S;
-        (incl Image F).xx = x by A56,TMAP_1:84;
-        hence y in P by A57;
+        (incl Image F).xx = x by A55,TMAP_1:84;
+        hence y in P by A56;
       end;
       let y be set;
       assume
-A58:  y in P;
+A57:  y in P;
       then
-A59:  y in the carrier of Image F;
-      then y in rng F by Th10;
+A58:  y in the carrier of Image F;
+      then y in rng F by Th9;
       then reconsider yy = y as Point of S;
-A60:  yy = (incl Image F).y by A58,TMAP_1:84;
-      y in dom (incl Image F) by A59,FUNCT_2:def 1;
-      hence thesis by A58,A60,FUNCT_1:def 6;
+A59:  yy = (incl Image F).y by A57,TMAP_1:84;
+      y in dom (incl Image F) by A58,FUNCT_2:def 1;
+      hence thesis by A57,A59,FUNCT_1:def 6;
     end;
     then
-A61: H.:P = h.:P by RELAT_1:126;
+A60: H.:P = h.:P by RELAT_1:126;
     assume P is open;
     then P in the topology of Image F by PRE_TOPC:def 2;
     then consider Q being Subset of S such that
-A62: Q in the topology of S and
-A63: P = Q /\ [#](Image F) by PRE_TOPC:def 4;
+A61: Q in the topology of S and
+A62: P = Q /\ [#](Image F) by PRE_TOPC:def 4;
     reconsider Q as Subset of S;
-A64: f"Q = h.:P
+A63: f"Q = h.:P
     proof
       hereby
         let x be set;
         assume
-A65:    x in f"Q;
+A64:    x in f"Q;
         then
-A66:    x in dom f by FUNCT_1:def 7;
+A65:    x in dom f by FUNCT_1:def 7;
         then
-A67:    h.(f.x) = (id T).x by A15,FUNCT_1:13
-          .= x by A65,FUNCT_1:18;
-        f.x in rng f by A66,FUNCT_1:def 3;
+A66:    h.(f.x) = (id T).x by A14,FUNCT_1:13
+          .= x by A64,FUNCT_1:18;
+        f.x in rng f by A65,FUNCT_1:def 3;
         then
-A68:    f.x in the carrier of S;
+A67:    f.x in the carrier of S;
         then
-A69:    f.x in dom h by FUNCT_2:def 1;
-A70:    f.x in dom F by A68,FUNCT_2:def 1;
-        F.(f.x) = f.(h.(f.x)) by A69,FUNCT_1:13
-          .= f.((id T).x) by A15,A66,FUNCT_1:13
-          .= f.x by A65,FUNCT_1:18;
-        then f.x in rng F by A70,FUNCT_1:def 3;
+A68:    f.x in dom h by FUNCT_2:def 1;
+A69:    f.x in dom F by A67,FUNCT_2:def 1;
+        F.(f.x) = f.(h.(f.x)) by A68,FUNCT_1:13
+          .= f.((id T).x) by A14,A65,FUNCT_1:13
+          .= f.x by A64,FUNCT_1:18;
+        then f.x in rng F by A69,FUNCT_1:def 3;
         then
-A71:    f.x in the carrier of Image F by Th10;
-        f.x in Q by A65,FUNCT_1:def 7;
-        then f.x in P by A63,A71,XBOOLE_0:def 4;
-        hence x in h.:P by A69,A67,FUNCT_1:def 6;
+A70:    f.x in the carrier of Image F by Th9;
+        f.x in Q by A64,FUNCT_1:def 7;
+        then f.x in P by A62,A70,XBOOLE_0:def 4;
+        hence x in h.:P by A68,A66,FUNCT_1:def 6;
       end;
       let x be set;
       assume x in h.:P;
       then consider y being set such that
-A72:  y in dom h and
-A73:  y in P and
-A74:  x = h.y by FUNCT_1:def 6;
-A75:  y in Q by A63,A73,XBOOLE_0:def 4;
-      y in the carrier of Image F by A73;
+A71:  y in dom h and
+A72:  y in P and
+A73:  x = h.y by FUNCT_1:def 6;
+A74:  y in Q by A62,A72,XBOOLE_0:def 4;
+      y in the carrier of Image F by A72;
       then
-A76:  y in rng F by Th10;
-A77:  x in rng h by A72,A74,FUNCT_1:def 3;
-      then f.x in rng f by A17,FUNCT_1:def 3;
-      then reconsider a = f.x, b = y as Element of Image f by A18,A76,Th10;
+A75:  y in rng F by Th9;
+A76:  x in rng h by A71,A73,FUNCT_1:def 3;
+      then f.x in rng f by A16,FUNCT_1:def 3;
+      then reconsider a = f.x, b = y as Element of Image f by A17,A75,Th9;
       g.a = h.(f.x) by A5,FUNCT_1:49
-        .= (id T).x by A17,A15,A77,FUNCT_1:13
-        .= h.y by A74,A77,FUNCT_1:18
+        .= (id T).x by A16,A14,A76,FUNCT_1:13
+        .= h.y by A73,A76,FUNCT_1:18
         .= g .b by A5,FUNCT_1:49;
-      then f.x in Q by A6,A75,WAYBEL_1:def 1;
-      hence thesis by A17,A77,FUNCT_1:def 7;
+      then f.x in Q by A6,A74,WAYBEL_1:def 1;
+      hence thesis by A16,A76,FUNCT_1:def 7;
     end;
-    Q is open by A62,PRE_TOPC:def 2;
-    then (p*(corestr f))"Q is open by A41,A53,A55,TOPS_2:43;
-    then f"Q is open by A43;
-    hence thesis by A32,A23,A64,A61,TOPS_2:54;
+    Q is open by A61,PRE_TOPC:def 2;
+    then (p*(corestr f))"Q is open by A40,A52,A54,TOPS_2:43;
+    then f"Q is open by A42;
+    hence thesis by A31,A22,A63,A60,TOPS_2:54;
   end;
-A78: p is continuous by TMAP_1:87;
-A79: [#]T <> {};
+A77: p is continuous by TMAP_1:87;
+A78: [#]T <> {};
   for P being Subset of S st P is open holds F"P is open
   proof
     let P be Subset of S;
     assume P is open;
-    then (p*(corestr f))"P is open by A41,A53,A78,TOPS_2:43;
-    then f"P is open by A43;
-    then h"(f"P) is open by A79,A4,TOPS_2:43;
+    then (p*(corestr f))"P is open by A40,A52,A77,TOPS_2:43;
+    then f"P is open by A42;
+    then h"(f"P) is open by A78,A4,TOPS_2:43;
     hence thesis by RELAT_1:146;
   end;
-  hence F is continuous by A41,TOPS_2:43;
+  hence F is continuous by A40,TOPS_2:43;
   thus F*F = (f*h*f)*h by RELAT_1:36
-    .= f*(id T)*h by A15,RELAT_1:36
+    .= f*(id T)*h by A14,RELAT_1:36
     .= F by FUNCT_2:17;
   [#]Image F <> {};
-  then incl Image F is continuous & H" is continuous by A54,TMAP_1:87,TOPS_2:43
+  then incl Image F is continuous & H" is continuous by A53,TMAP_1:87,TOPS_2:43
 ;
-  then H is being_homeomorphism by A4,A16,A32,A23,TOPS_2:def 5;
+  then H is being_homeomorphism by A4,A15,A31,A22,TOPS_2:def 5;
   hence thesis by T_0TOPSP:def 1;
 end;
 
@@ -1556,7 +1547,7 @@ A17:  P in {{}, {1}, {0,1} } by Def9;
       per cases by A17,ENUMSET1:def 1;
       suppose
         P = {};
-        then g"P = {} by RELAT_1:136;
+        then g"P = {};
         then g"P in the topology of Y by PRE_TOPC:1;
         hence thesis by PRE_TOPC:def 2;
       end;
@@ -1613,7 +1604,7 @@ end;
 registration
   let I be set;
   let T be TopStruct;
-  cluster I --> T -> TopSpace-yielding;
+  cluster I --> T -> TopStruct-yielding;
   coherence
   proof
     let x be set;
@@ -1739,7 +1730,7 @@ A17: y in the topology of T;
   hence thesis by A4,TARSKI:1;
 end;
 
-theorem Th14:
+theorem Th13:
   for I being non empty set holds {product ((Carrier (I -->
   Sierpinski_Space))+*(i,{1})) where i is Element of I: not contradiction } is
   prebasis of product (I --> Sierpinski_Space)
@@ -1771,7 +1762,7 @@ A7:   for z being set st z in dom (Carrier IS) holds g.z in ( Carrier IS ) . z
         assume
 A8:     z in dom (Carrier IS);
         then
-A9:     z in I by PARTFUN1:def 2;
+A9:     z in I;
         then consider R being 1-sorted such that
 A10:    R = IS.z and
 A11:    (Carrier IS).z = the carrier of R by PRALG_1:def 13;
@@ -1821,7 +1812,7 @@ FUNCOP_1:7;
   reconsider P as Subset-Family of product IS by Def3;
   reconsider P as Subset-Family of product IS;
   FinMeetCl P is Basis of product IS by A1,YELLOW_9:23;
-  then reconsider F = (FinMeetCl P) \ {{}} as Basis of product IS by Th3;
+  then reconsider F = (FinMeetCl P) \ {{}} as Basis of product IS by Th2;
 A18: F c= FinMeetCl B
   proof
     let x be set;
@@ -1926,7 +1917,7 @@ registration
   end;
 end;
 
-theorem Th15:
+theorem Th14:
   for X being non empty set ex f being Function of BoolePoset X,
 product (X --> BoolePoset 1) st f is isomorphic & for Y being Subset of X holds
   f.Y = chi(Y,X)
@@ -1956,7 +1947,7 @@ A7: for z being set st z in dom (Carrier XB) holds chi(x,X).z in (Carrier XB).z
       let z be set;
       assume z in dom (Carrier XB);
       then
-A8:   z in X by PARTFUN1:def 2;
+A8:   z in X;
       then ex R being 1-sorted st R = XB.z & (Carrier XB).z = the carrier of R
       by PRALG_1:def 13;
       then
@@ -2088,7 +2079,7 @@ A35: A c= X
       let a be set;
       assume a in A;
       then a in dom g by FUNCT_1:def 7;
-      hence thesis by A33,PARTFUN1:def 2;
+      hence thesis by A33;
     end;
 A36: dom chi(A,X) = X by FUNCT_3:def 3
       .= dom g by A33,PARTFUN1:def 2;
@@ -2143,7 +2134,7 @@ A42: f.A = f.B;
   thus thesis by A2;
 end;
 
-theorem Th16: ::p.122 lemma 3.4.(i)
+theorem Th15: ::p.122 lemma 3.4.(i)
   for I being non empty set for T being Scott TopAugmentation of
 product (I --> BoolePoset 1) holds the topology of T = the topology of product
   (I --> Sierpinski_Space)
@@ -2163,7 +2154,7 @@ A3: for i being set st i in dom Carrier IB holds (Carrier IB).i = (Carrier
     let i be set;
     assume i in dom Carrier IB;
     then
-A4: i in I by PARTFUN1:def 2;
+A4: i in I;
     then consider R1 being 1-sorted such that
 A5: R1 = IB.i and
 A6: (Carrier IB).i = the carrier of R1 by PRALG_1:def 13;
@@ -2176,7 +2167,7 @@ A8: (Carrier IS).i = the carrier of R2 by A4,PRALG_1:def 13;
     hence thesis by A6,A8;
   end;
   reconsider P = {product ((Carrier IS)+*(ii,{1})) where ii is Element of I:
-  not contradiction } as prebasis of product (I --> Sierpinski_Space) by Th14;
+  not contradiction } as prebasis of product (I --> Sierpinski_Space) by Th13;
   let T be Scott TopAugmentation of product (I --> BoolePoset 1);
 A9: dom Carrier IB = I by PARTFUN1:def 2
     .= dom Carrier IS by PARTFUN1:def 2;
@@ -2193,7 +2184,7 @@ YELLOW_1:def 4
   then reconsider P9 = P as Subset-Family of T;
   consider f being Function of BoolePoset I, product IB such that
 A13: f is isomorphic and
-A14: for Y being Subset of I holds f.Y = chi(Y,I) by Th15;
+A14: for Y being Subset of I holds f.Y = chi(Y,I) by Th14;
 A15: Carrier IB = Carrier IS by A9,A3,FUNCT_1:2;
 A16: FinMeetCl P c= R
   proof
@@ -2610,7 +2601,7 @@ A115:     w in dom Carrier IS by A112,PARTFUN1:def 2;
   hence thesis by A12,YELLOW_9:26;
 end;
 
-theorem Th17:
+theorem Th16:
   for T,S being non empty TopSpace st the carrier of T = the
   carrier of S & the topology of T = the topology of S & T is injective holds S
   is injective
@@ -2668,7 +2659,7 @@ proof
 A1: dom Carrier IB = I by PARTFUN1:def 2
     .= dom Carrier IS by PARTFUN1:def 2;
 A2: the topology of T = the topology of product (I --> Sierpinski_Space) by
-Th16;
+Th15;
   LattPOSet BooleLatt 1 = RelStr(#the carrier of BooleLatt 1, LattRel(
     BooleLatt 1)#) by LATTICE3:def 2;
   then
@@ -2681,7 +2672,7 @@ A4: for i being set st i in dom Carrier IB holds (Carrier IB).i = (Carrier
     let i be set;
     assume i in dom Carrier IB;
     then
-A5: i in I by PARTFUN1:def 2;
+A5: i in I;
     then consider R1 being 1-sorted such that
 A6: R1 = IB.i and
 A7: (Carrier IB).i = the carrier of R1 by PRALG_1:def 13;
@@ -2696,16 +2687,16 @@ A9: (Carrier IS).i = the carrier of R2 by A5,PRALG_1:def 13;
   for i being Element of I holds (I --> Sierpinski_Space).i is injective
   by FUNCOP_1:7;
   then
-A10: product (I --> Sierpinski_Space) is injective by Th8;
+A10: product (I --> Sierpinski_Space) is injective by Th7;
   the RelStr of T = product (I --> BoolePoset 1) by YELLOW_9:def 4;
   then the carrier of T = product Carrier (I --> BoolePoset 1) by
 YELLOW_1:def 4
     .= product Carrier (I --> Sierpinski_Space) by A1,A4,FUNCT_1:2
     .= the carrier of product (I --> Sierpinski_Space) by Def3;
-  hence thesis by A2,A10,Th17;
+  hence thesis by A2,A10,Th16;
 end;
 
-theorem Th19: ::p.122 lemma 3.4.(ii)
+theorem Th18: ::p.122 lemma 3.4.(ii)
   for T being T_0-TopSpace ex M being non empty set, f being
   Function of T, product (M --> Sierpinski_Space) st corestr(f) is
   being_homeomorphism
@@ -2714,7 +2705,7 @@ proof
   take M = the carrier of (InclPoset the topology of T);
   set J = M --> Sierpinski_Space;
   reconsider PP = {product((Carrier J)+*(m,{1})) where m is Element of M: not
-  contradiction } as prebasis of product J by Th14;
+  contradiction } as prebasis of product J by Th13;
   deffunc F(set) = chi({u where u is Subset of T: $1 in u & u is open}, the
   topology of T);
   consider f being Function such that
@@ -2737,7 +2728,7 @@ A5: for z being set st z in dom (Carrier J) holds ch.z in (Carrier J) . z
       let z be set;
       assume z in dom (Carrier J);
       then
-A6:   z in M by PARTFUN1:def 2;
+A6:   z in M;
       then z in the topology of T by YELLOW_1:1;
       then z in dom ch by FUNCT_3:def 3;
       then
@@ -2786,7 +2777,7 @@ A16:  for w being set st w in dom ((Carrier J) +* (i,V)) holds chi(W,the
         assume w in dom ((Carrier J) +* (i,V));
         then w in dom (Carrier J) by FUNCT_7:30;
         then
-A17:    w in M by PARTFUN1:def 2;
+A17:    w in M;
         then w in the topology of T by YELLOW_1:1;
         then
 A18:    w in dom chi(W,the topology of T) by FUNCT_3:def 3;
@@ -2844,7 +2835,7 @@ A26:  for w being set st w in dom ((Carrier J) +* (i,V)) holds g.w in
   end;
   then f is continuous by YELLOW_9:36;
   then
-A27: dom (corestr f) = [#]T & corestr f is continuous by Th11,FUNCT_2:def 1;
+A27: dom (corestr f) = [#]T & corestr f is continuous by Th10,FUNCT_2:def 1;
 A28: corestr f is one-to-one
   proof
     let x,y be Element of T;
@@ -2904,7 +2895,7 @@ A41:  x in V and
 A42:  y = f.x by FUNCT_1:def 6;
       y in rng f by A40,A42,FUNCT_1:def 3;
       then
-A43:  y in the carrier of Image f by Th10;
+A43:  y in the carrier of Image f by Th9;
       set Q = {u where u is Subset of T: x in u & u is open};
 A44:  V in Q by A39,A41;
 A45:  for W being set st W in dom ((Carrier J) +* (V,{1})) holds chi(Q,
@@ -2915,7 +2906,7 @@ A45:  for W being set st W in dom ((Carrier J) +* (V,{1})) holds chi(Q,
         then
 A46:    W in dom (Carrier J) by FUNCT_7:30;
         then
-A47:    W in M by PARTFUN1:def 2;
+A47:    W in M;
         then
 A48:    W in the topology of T by YELLOW_1:1;
         then
@@ -2959,7 +2950,7 @@ A55: y = g and
     dom g = dom ((Carrier J) +* (V,{1})) and
 A56: for W being set st W in dom ((Carrier J) +* (V,{1})) holds g.W
     in ((Carrier J) +* (V,{1})).W by CARD_3:def 5;
-    rng f = the carrier of Image f by Th10;
+    rng f = the carrier of Image f by Th9;
     then y in rng f by A54,XBOOLE_0:def 4;
     then consider x being set such that
 A57: x in dom f & y = f.x by FUNCT_1:def 3;
@@ -3006,6 +2997,6 @@ proof
   assume
 A1: T is injective;
   ex M being non empty set, f being Function of T, product (M -->
-  Sierpinski_Space) st corestr(f) is being_homeomorphism by Th19;
-  hence thesis by A1,Th12;
+  Sierpinski_Space) st corestr(f) is being_homeomorphism by Th18;
+  hence thesis by A1,Th11;
 end;

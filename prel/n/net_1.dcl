@@ -9,6 +9,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -37,8 +38,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="84"/>
+<Adjective nr="51"/>
+<Adjective nr="90"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NET_1" nr="1">
@@ -47,7 +48,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="244">
+<Func kind="K" nr="252">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -59,18 +60,18 @@
 <Func kind="G" nr="6">
 <Func kind="K" nr="5"/>
 <Func kind="K" nr="5"/>
-<Func kind="K" nr="242">
+<Func kind="K" nr="250">
 <Func kind="K" nr="5"/>
 <Func kind="K" nr="5"/>
 </Func>
-<Func kind="K" nr="242">
+<Func kind="K" nr="250">
 <Func kind="K" nr="5"/>
 <Func kind="K" nr="5"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="84"/>
+<Adjective nr="51"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 </Registrations>

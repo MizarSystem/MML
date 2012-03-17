@@ -1,0 +1,3965 @@
+:: Extended Euclidean Algorithm and CRT Algorithm
+::  by Hiroyuki Okazaki , Yosiki Aoki and Yasunari Shidama
+:: 
+:: Received February 8, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies RECDEF_2, TARSKI, XBOOLE_0, FINSEQ_1, RELAT_1, FUNCT_1, COMPLEX1,
+      NAT_1, MCART_1, ZFMISC_1, SUBSET_1, NUMBERS, INT_1, INT_2, CARD_1,
+      ARYTM_1, XXREAL_0, ARYTM_3, ORDINAL4, NTALGO_1, CARD_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, XTUPLE_0, MCART_1,
+      FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1, INT_2, NAT_D,
+      FINSEQ_1, RVSUM_1, ORDINAL1;
+ constructors XXREAL_0, NAT_D, REAL_1, BINARITH, RVSUM_1, XTUPLE_0;
+ registrations XREAL_0, RELSET_1, ORDINAL1, INT_1, SUBSET_1, FINSEQ_1, NAT_1,
+      XXREAL_0, XBOOLE_0, VALUED_0, CARD_1, NUMBERS, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions FINSEQ_1, INT_1, XTUPLE_0;
+ theorems TARSKI, ZFMISC_1, FUNCT_1, MCART_1, FUNCT_2, XXREAL_0, XREAL_1,
+      NAT_1, INT_1, INT_2, NAT_D, FINSEQ_1, FINSEQ_2, XBOOLE_1, ORDINAL1,
+      ABSVALUE, XCMPLX_1, INT_4, RVSUM_1, INT_6, XTUPLE_0, WSIERP_1;
+ schemes FINSEQ_1, NAT_1, RECDEF_1, RECDEF_2;
+
+begin :: Euclidean Algorithm
+
+theorem LMTh3: for x,p be Integer holds (x mod p) mod p = x mod p
+proof
+  let x,p be Integer;
+  x mod p = (x + 0) mod p .= ((x mod p) + (0 mod p)) mod p by NAT_D:66
+  .= ((x mod p) + 0) mod p by INT_4:12;
+  hence thesis;
+end;
+
+LM6: for a be Element of NAT
+holds a gcd 0 = a
+proof
+  let a be Element of NAT;
+  0 = 0 * a;
+  then
+  P2: a divides 0 by INT_1:def 3;
+  for m being Integer
+  st m divides a & m divides 0 holds m divides a;
+  hence a gcd 0 = a by P2,INT_2:def 2;
+end;
+
+::==========================================================================================
+::NZMATH source code
+::
+::def gcd(a, b):
+::    """
+::    Return the greatest common divisor of 2 integers a and b.
+::    """
+::    a, b = abs(a), abs(b)
+::    while b:
+::        a, b = b, a % b
+::    return a
+::==========================================================================================
+
+  LM1:for a,b be Element of INT
+  holds
+  ex A,B be sequence of NAT
+  st
+  A.0 = abs(a) & B.0 = abs(b)
+  &
+  (for i be Element of NAT
+  holds A.(i+1) = B.i &
+  B.(i+1) = A.i mod B.i)
+  proof
+    let a,b be Element of INT;
+
+    defpred P1[Nat,Nat,Nat,Nat,Nat ]
+    means
+    $4 = $3 & $5 = $2 mod $3;
+
+    Q1: for n being Element of NAT,
+    x being Element of NAT,
+    y being Element of NAT
+    ex
+    x1 being Element of NAT,
+    y1 being Element of NAT st P1[n,x,y,x1,y1];
+
+    consider A be Function of NAT,NAT,B be Function of NAT,NAT
+    such that P2:
+    A.0 = abs(a) & B.0 = abs(b)
+    &
+    for n being Element of NAT
+    holds P1[ n,A.n,B.n,A.(n + 1),B.(n + 1) ]
+    from RECDEF_2:sch 3(Q1);
+    take A,B;
+    thus thesis by P2;
+  end;
+
+  LM2:for a,b be Element of INT,
+  A1,B1,A2,B2 be sequence of NAT
+  st
+  ( A1.0 = abs(a) & B1.0 = abs(b)
+  &
+  (for i be Element of NAT
+  holds A1.(i+1) = B1.i &
+  B1.(i+1) = A1.i mod B1.i))&
+  (A2.0 = abs(a) & B2.0 = abs(b) &
+  (for i be Element of NAT holds
+  A2.(i+1) = B2.i &
+  B2.(i+1) = A2.i mod B2.i)
+  )
+  holds
+  A1 = A2 & B1 = B2
+  proof
+    let a,b be Element of INT;
+    let A1,B1,A2,B2 be sequence of NAT;
+    assume P1:
+    A1.0 = abs(a) & B1.0 = abs(b)
+    &
+    for i be Element of NAT
+    holds
+    A1.(i+1) = B1.i &
+    B1.(i+1) = A1.i mod B1.i;
+
+    assume P2:
+    A2.0 = abs(a) & B2.0 = abs(b)
+    &
+    for i be Element of NAT
+    holds A2.(i+1) = B2.i &
+    B2.(i+1) = A2.i mod B2.i;
+
+    defpred P[Nat] means A1.$1 = A2.$1 & B1.$1 = B2.$1;
+    P0: P[0] by P1,P2;
+    PN: for n being Element of NAT st P[n] holds P[n+1]
+    proof
+      let n being Element of NAT;
+      assume PN1:P[n];
+      PN2: A1.(n+1) = B1.n by P1
+      .=A2.(n+1) by P2,PN1;
+      B1.(n+1) = A1.n mod B1.n by P1
+      .=B2.(n+1) by P2,PN1;
+      hence P[n+1] by PN2;
+    end;
+
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(P0,PN);
+    hence thesis by FUNCT_2:def 8;
+  end;
+
+definition
+  let a,b be Element of INT;
+  func ALGO_GCD(a,b) -> Element of NAT means
+  :defALGOGCD:
+  ex A,B be sequence of NAT st
+  A.0 = abs(a) & B.0 = abs(b) &
+  (for i be Element of NAT holds
+  A.(i+1) = B.i &
+  B.(i+1) = A.i mod B.i) &
+  it = A. (min*{i where i is Element of NAT: B.i = 0} );
+  existence
+  proof
+    consider A,B be sequence of NAT
+    such that P1:
+    A.0 = abs(a) & B.0 = abs(b) &
+    (for i be Element of NAT holds
+    A.(i+1) = B.i &
+    B.(i+1) = A.i mod B.i) by LM1;
+
+    set m = A.(min*{i where i is Element of NAT: B.i = 0});
+    m is Element of NAT;
+    hence thesis by P1;
+  end;
+
+  uniqueness
+  proof
+    let m1,m2 be Element of NAT;
+    assume ex A1,B1 be sequence of NAT
+    st A1.0 = abs(a) & B1.0 = abs(b)
+    &
+    (for i be Element of NAT holds
+    A1.(i+1) = B1.i &
+    B1.(i+1) = A1.i mod B1.i)&
+    m1 = A1.(min*{i where i is Element of NAT: B1.i = 0});
+    then
+    consider A1,B1 be sequence of NAT
+    such that P1:
+    A1.0 = abs(a) & B1.0 = abs(b)
+    &
+    (for i be Element of NAT
+    holds A1.(i+1) = B1.i &
+    B1.(i+1) = A1.i mod B1.i) &
+    m1 = A1.(min*{i where i is Element of NAT: B1.i = 0});
+    assume
+    ex A2,B2 be sequence of NAT
+    st
+    A2.0 = abs(a) & B2.0 = abs(b) &
+    (for i be Element of NAT holds
+    A2.(i+1) = B2.i &
+    B2.(i+1) = A2.i mod B2.i) &
+    m2 = A2.(min*{i where i is Element of NAT: B2.i = 0});
+    then
+    consider A2,B2 be sequence of NAT
+    such that P2:
+    A2.0 = abs(a) & B2.0 = abs(b)
+    &
+    (for i be Element of NAT holds
+    A2.(i+1) = B2.i &
+    B2.(i+1) = A2.i mod B2.i) &
+    m2 = A2.(min*{i where i is Element of NAT: B2.i = 0});
+    A1 = A2 & B1 = B2 by LM2,P1,P2;
+    hence thesis by P1,P2;
+  end;
+end;
+
+LM3:for a,b be Element of INT,
+A,B be sequence of NAT st
+(A.0 = abs(a) & B.0 = abs(b) &
+(for i be Element of NAT holds
+A.(i+1) = B.i &
+B.(i+1) = A.i mod B.i))
+holds
+for i be Element of NAT st B.i <> 0
+holds A.i gcd B.i = A.(i+1) gcd B.(i+1)
+proof
+  let a,b be Element of INT,
+  A,B be sequence of NAT;
+  assume AS:
+  A.0 = abs(a) & B.0 = abs(b) &
+  (for i be Element of NAT holds
+  A.(i+1) = B.i & B.(i+1) = A.i mod B.i);
+
+  let i be Element of NAT;
+  assume AS1: B.i <> 0;
+  set k=A.i gcd B.i;
+
+  Q1: A.(i+1) = B.i by AS;
+  Q2: B.(i+1) = A.i mod B.i by AS;
+
+  P1: k divides A.(i+1) by Q1,INT_2:def 2;
+
+  P2: k divides B.(i+1)
+  proof
+    X1: B.(i+1) = A.i - (A.i div B.i ) * B.i by INT_1:def 10,Q2,AS1;
+    X2: k divides A.i by INT_2:def 2;
+    X3: k divides B.i by INT_2:def 2;
+
+    X4:ex s being Integer
+    st A.i = k*s by X2,INT_1:def 3;
+    ex t being Integer
+    st B.i = k*t by X3,INT_1:def 3;
+    then
+    consider s,t be Integer such that
+    X5:B.(i+1) = (k*s) - (A.i div B.i ) * (k*t) by X1,X4;
+    B.(i+1) = (s - (A.i div B.i)*t ) * k by X5;
+    hence
+    k divides B.(i+1) by INT_1:def 3;
+  end;
+
+  for m being Integer
+  st m divides A.(i+1) & m divides B.(i+1) holds m divides k
+  proof
+    let m being Integer;
+    assume P3: m divides A.(i+1) & m divides B.(i+1);
+    then
+    P31: m divides B.i by AS;
+    P32: m divides A.i
+    proof
+      B.(i+1) = A.i - (A.i div B.i ) * B.i by INT_1:def 10,Q2,AS1;
+      then
+      X1: A.i = B.(i+1) + (A.i div B.i ) * B.i;
+      X21:ex s being Integer
+      st B.i = m * s by INT_1:def 3,P31;
+      X22:ex t being Integer
+      st B.(i+1) = m * t by INT_1:def 3,P3;
+      consider s,t be Integer such that
+      X4:A.i = (m*s) + (A.i div B.i ) * (m*t) by X1,X21,X22;
+      A.i = m * (s + (A.i div B.i ) * t) by X4;
+      hence m divides A.i by INT_1:def 3;
+    end;
+    thus m divides k by P31,P32,INT_2:def 2;
+  end;
+  hence
+  A.(i+1) gcd B.(i+1) = k by P1,P2,INT_2:def 2;
+end;
+
+LM4:for a,b be Element of INT,
+A,B be sequence of NAT
+st
+(A.0 = abs(a) & B.0 = abs(b)
+&
+(for i be Element of NAT holds
+A.(i+1) = B.i &
+B.(i+1) = A.i mod B.i))
+holds
+for i be Element of NAT st B.i <> 0
+holds
+A.0 gcd B.0 = A.i gcd B.i
+proof
+  let a,b be Element of INT,
+  A,B be sequence of NAT;
+  assume AS1:
+  A.0 = abs(a) & B.0 = abs(b)
+  &
+  (for i be Element of NAT holds
+  A.(i+1) = B.i &
+  B.(i+1) = A.i mod B.i);
+  defpred P[Nat] means
+  B.$1 <> 0 implies
+  A.0 gcd B.0 = A.$1 gcd B.$1;
+  P0: P[0];
+  PN: for i being Element of NAT st P[i] holds P[i+1]
+  proof
+    let i being Element of NAT;
+    assume PN1: P[i];
+    B.(i+1) <> 0 implies
+    A.0 gcd B.0 = A.(i+1) gcd B.(i+1)
+    proof
+      assume PN2: B.(i+1) <> 0;
+      B.i <> 0
+      proof
+        assume PN4: B.i = 0;
+        B.(i+1) = A.i mod B.i by AS1;
+        hence contradiction by PN2,PN4,INT_1:def 10;
+      end;
+      hence thesis by PN1,AS1,LM3;
+    end;
+    hence P[i+1];
+  end;
+  for i being Element of NAT holds P[i] from NAT_1:sch 1(P0,PN);
+  hence thesis;
+end;
+
+LM5:for a,b be Element of INT,
+A,B be sequence of NAT
+st
+(A.0 = abs(a) & B.0 = abs(b)
+&
+(for i be Element of NAT
+holds A.(i+1) = B.i &
+B.(i+1) = A.i mod B.i))
+holds
+{i where i is Element of NAT: B.i = 0}
+is non empty Subset of NAT
+proof
+  let a,b be Element of INT,
+  A,B be sequence of NAT;
+  assume AS1:
+  A.0 = abs(a) & B.0 = abs(b)
+  &
+  (for i be Element of NAT holds
+  A.(i+1) = B.i &
+  B.(i+1) = A.i mod B.i);
+  P1:for x be set st x in
+  {i where i is Element of NAT: B.i = 0}
+  holds x in NAT
+  proof let x be set;
+    assume x in {i where i is Element of NAT: B.i = 0};
+    then
+    ex i be Element of NAT st x=i & B.i = 0;
+    hence x in NAT;
+  end;
+
+  ex m0 be Element of NAT st B.m0 = 0
+  proof
+    assume A2:
+    not (ex m0 be Element of NAT st B.m0 = 0);
+
+    A3: for i be Element of NAT holds
+    B.(i+1) <= B.i -1
+    proof
+      let i be Element of NAT;
+      A31:B.i <> 0 by A2;
+
+      B.(i+1) = A.i mod B.i by AS1;
+      then
+      B.(i+1) < B.i by A31,INT_1:58;
+      then
+      B.(i+1) +1 <= B.i by NAT_1:13;
+      then
+      B.(i+1) +1 -1 <= B.i -1 by XREAL_1:9;
+      hence
+      B.(i+1) <= B.i -1;
+    end;
+    defpred P[Nat] means B.$1 <= B.0 - $1;
+
+    P0: P[0];
+    P1: for i be Element of NAT st P[i] holds P[i+1]
+    proof
+      let i be Element of NAT;
+      assume P11:P[i];
+      P12: B.(i+1) <= B.i -1 by A3;
+      B.i -1 <= (B.0 - i) -1 by P11,XREAL_1:9;
+      hence P[i+1] by XXREAL_0:2,P12;
+    end;
+
+    A4: for i be Element of NAT holds P[i] from NAT_1:sch 1(P0,P1);
+    B.(B.0) <=B.0 - (B.0) by A4;
+    hence contradiction by A2,NAT_1:14;
+  end;
+  then
+  consider m0 be Element of NAT such that
+  X1: B.m0 = 0;
+  m0 in {i where i is Element of NAT: B.i = 0} by X1;
+  hence thesis by P1,TARSKI:def 3;
+end;
+
+theorem ::Th1:
+  for a,b be Element of INT
+  holds
+  ALGO_GCD(a,b) = a gcd b
+  proof
+    let a,b be Element of INT;
+    consider A,B be sequence of NAT such that
+    P1:
+    A.0 = abs(a) & B.0 = abs(b)
+    &
+    (for i be Element of NAT holds
+    A.(i+1) = B.i &
+    B.(i+1) = A.i mod B.i)
+    &
+    ALGO_GCD(a,b)
+    = A. (min*{i where i is Element of NAT: B.i = 0})
+    by defALGOGCD;
+
+    set m0= (min*{i where i is Element of NAT: B.i = 0});
+    X0: {i where i is Element of NAT: B.i = 0}
+    is non empty Subset of NAT by P1,LM5;
+    then
+    m0 in {i where i is Element of NAT: B.i = 0} by NAT_1:def 1;
+    then P4:
+    ex i be Element of NAT st m0=i & B.i = 0;
+
+    per cases;
+    suppose C1:m0 = 0;
+      thus
+      ALGO_GCD(a,b) = A.0 gcd B.0 by P4,C1,LM6,P1
+      .= a gcd b by INT_2:34,P1;
+    end;
+    suppose m0 <> 0;
+      then
+      1 <= m0 by NAT_1:14;
+      then
+      1-1 <= m0-1 by XREAL_1:9;
+      then
+      reconsider m1 = m0-1 as Element of NAT by INT_1:3;
+      X1: B.m1 <> 0
+      proof
+        assume B.m1 = 0;
+        then
+        X11: m1 in {i where i is Element of NAT: B.i = 0};
+
+        m0 -1 < m0 - 0 by XREAL_1:15;
+        hence contradiction by X11,X0,NAT_1:def 1;
+      end;
+      then
+      X2: A.0 gcd B.0 = A.m1 gcd B.m1 by P1,LM4;
+      P3:A.m1 gcd B.m1 = A.(m1+1) gcd B.(m1+1) by LM3,X1,P1;
+
+      A.m0 gcd B.m0
+      =ALGO_GCD(a,b) by P1,LM6,P4;
+      hence thesis by P3,INT_2:34,X2,P1;
+    end;
+  end;
+
+begin ::Extended Euclidean Algorithm
+::==========================================================================================
+::NZMATH source code
+::
+:: def extgcd(x,y):
+:: """
+:: Return a tuple (u,v,d); they are the greatest common divisor d
+:: of two integers x and y and u,v such that d = x * u + y * v.
+:: """
+:: # Crandall & Pomerance "PRIME NUMBERS",Algorithm 2.1.4
+:: a,b,g,u,v,w = 1,0,x,0,1,y
+:: while w:
+:: q,t = divmod(g,w)
+:: a,b,g,u,v,w = u,v,w,a-q*u,b-q*v,t
+:: if g >= 0:
+:: return (a,b,g)
+:: else:
+:: return (-a,-b,-g)
+::==========================================================================================
+
+scheme
+  QuadChoiceRec { A,B,C,D() -> non empty set,
+  A0() -> Element of A(),B0() -> Element of B(),
+  C0() -> Element of C(),D0() -> Element of D(),
+  P[set,set,set,set,set,set,set,set,set] }:
+  ex f being Function of NAT,A(),g being Function of NAT,B(),
+  h being Function of NAT,C(),i being Function of NAT,D()
+  st f.0 = A0() & g.0 = B0() &h.0 = C0() & i.0 = D0()
+  & for n being Element of
+  NAT holds P[n,f.n,g.n,h.n,i.n,f.(n+1),g.(n+1),h.(n+1),i.(n+1)]
+  provided
+  A1: for n being Element of NAT,x being Element of A(),y being Element
+  of B(),z being Element of C(),w being Element of D()
+  ex x1 being Element of A(),y1 being Element of B(),
+  z1 being Element of C(),w1 being Element of D()
+  st P[n,x,y,z,w,x1,y1,z1,w1]
+  proof
+    defpred P1[set,set,set,set,set]
+    means P[$1,($2)`1,($2)`2,($3)`1,($3)`2,($4)`1,($4)`2,($5)`1,($5)`2];
+    A2: for n being Element of NAT,x being Element of [:A(),B():],
+    y being Element of [:C(),D():]
+    ex z being Element of [:A(),B():],w being Element of [:C(),D():]
+    st P1[n,x,y,z,w]
+    proof
+      let n be Element of NAT,x be Element of [:A(),B():],
+      y be Element of [:C(),D():];
+      x`1 is Element of A() & x`2 is Element of B()
+      & y`1 is Element of C() & y`2 is Element of D()
+      by MCART_1:10;
+      then
+      consider ai being Element of A(),bi being Element of B(),
+      ci being Element of C(),di being Element of D() such that
+      A3: P[n,x`1,x`2,y`1,y`2,ai,bi,ci,di] by A1;
+      reconsider z= [ai,bi]
+      as Element of [:A(),B():] by ZFMISC_1:87;
+      reconsider w= [ci,di]
+      as Element of [:C(),D():] by ZFMISC_1:87;
+      take z,w;
+      [ai,bi]`1 = ai &
+      [ai,bi]`2 = bi &
+      [ci,di]`1 = ci &
+      [ci,di]`2 = di by MCART_1:7;
+      hence thesis by A3;
+    end;
+    reconsider
+    AB0=[A0(),B0()] as Element of [:A(),B():] by ZFMISC_1:87;
+    reconsider
+    CD0=[C0(),D0()] as Element of [:C(),D():] by ZFMISC_1:87;
+    consider fg being Function of NAT,[:A(),B():],
+    hi being Function of NAT,[:C(),D():] such that
+    A4: fg.0 = AB0 and
+    A41: hi.0 = CD0 and
+    A5: for e being Element of NAT holds P1[e,fg.e,hi.e,fg.(e+1),hi.(e+1)]
+    from RECDEF_2:sch 3( A2);
+    take pr1 fg,pr2 fg,pr1 hi,pr2 hi;
+    (fg.0)`1 = (pr1 fg).0 & (fg.0)`2 = (pr2 fg).0
+    & (hi.0)`1 = (pr1 hi).0 & (hi.0)`2 = (pr2 hi).0
+    by FUNCT_2:def 5,def 6;
+    hence (pr1 fg).0 = A0() & (pr2 fg).0 = B0()
+    &(pr1 hi).0 = C0() & (pr2 hi).0 = D0()
+    by A4,A41,XTUPLE_0:def 2,def 3;
+    let i be Element of NAT;
+    A6: (fg.(i+1))`1 = (pr1 fg).(i+1) & (fg.(i+1))`2 = (pr2 fg).(i+1)
+    & (hi.(i+1))`1 = (pr1 hi).(i+1) & (hi.(i+1))`2 = (pr2 hi).(i+1)
+    by FUNCT_2:def 5,def 6;
+    (fg.i)`1 = (pr1 fg).i & (fg.i)`2 = (pr2 fg).i
+    & (hi.i)`1 = (pr1 hi).i & (hi.i)`2 = (pr2 hi).i
+    by FUNCT_2:def 5,def 6;
+    hence thesis by A5,A6;
+  end;
+
+  EXLM1:for x,y be Element of INT
+  holds
+  ex g,w,q,t be sequence of INT,
+  a,b,v,u be sequence of INT
+  st
+  a.0 = 1 & b.0 = 0 & g.0 = x & q.0=0
+  & u.0 = 0 & v.0 = 1 & w.0 = y & t.0=0
+  &
+  (for i be Element of NAT
+  holds
+  q.(i+1) = g.i div w.i & t.(i+1) = g.i mod w.i
+  &
+  a.(i+1) = u.i & b.(i+1) = v.i & g.(i+1) = w.i
+  &
+  u.(i+1) = a.i - q.(i+1)*u.i & v.(i+1) = b.i - q.(i+1)*v.i
+  &
+  w.(i+1) = t.(i+1))
+  proof
+    let x,y be Element of INT;
+    defpred P[Nat,Integer,Integer,Integer,Integer,
+    Integer,Integer,Integer,Integer]
+    means
+    $6 = $4 div $5
+    & $7 = $4 mod $5
+    & $8 = $5
+    & $9 = $7;
+
+    A1: for n being Element of NAT,x being Element of INT,y being Element
+    of INT,z being Element of INT,w being Element of INT
+    ex x1 being Element of INT,y1 being Element of INT,
+    z1 being Element of INT,w1 being Element of INT
+    st P[n,x,y,z,w,x1,y1,z1,w1]
+    proof
+      let n be Element of NAT, x,y,z,w be Element of INT;
+      reconsider x1 = z div w as Element of INT by INT_1:def 2;
+      reconsider y1 = z mod w as Element of INT by INT_1:def 2;
+      set z1 = w;
+      set w1 = y1;
+      take x1,y1,z1,w1;
+      thus P[n,x,y,z,w,x1,y1,z1,w1];
+    end;
+
+    reconsider i1=1 as Element of INT by INT_1:def 2;
+    reconsider i0=0 as Element of INT by INT_1:def 2;
+    consider q,t,g,w be sequence of INT such that
+    P1:
+    q.0 = i0 & t.0 =i0 & g.0 = x & w.0 = y
+    &
+    for i be Element of NAT
+    holds
+    P[i,q.i,t.i,g.i,w.i,q.(i+1),t.(i+1),g.(i+1),w.(i+1)]
+    from QuadChoiceRec(A1);
+
+    defpred Q[Nat,Integer,Integer,Integer,Integer,
+    Integer,Integer,Integer,Integer]
+    means
+    $6 = $4
+    & $7 = $5
+    & $8 = $2 - q.($1+1)*$4
+    & $9 = $3 - q.($1+1)*$5;
+
+    A2: for n being Element of NAT,
+    x,y,z,w being Element of INT
+    ex x1,y1,z1,w1 being Element of INT
+    st Q[n,x,y,z,w,x1,y1,z1,w1]
+    proof
+      let n being Element of NAT,
+      x,y,z,w being Element of INT;
+      reconsider qn1=q.(n+1) as Element of INT;
+      set x1 = z;
+      set y1 = w;
+
+      reconsider z1 = x- (q.(n+1))*z as Element of INT
+      by INT_1:def 2;
+
+      reconsider w1 = y- (q.(n+1))*w as Element of INT
+      by INT_1:def 2;
+
+      take x1,y1,z1,w1;
+      thus Q[n,x,y,z,w,x1,y1,z1,w1];
+    end;
+
+    consider a,b,u,v be sequence of INT such that
+    P2:
+    a.0 = i1 & b.0 = i0 & u.0 = i0 & v.0 = i1
+    &
+    for i be Element of NAT holds
+
+    Q[i,a.i,b.i,u.i,v.i,a.(i+1),b.(i+1),u.(i+1),v.(i+1)]
+    from QuadChoiceRec(A2);
+    take g,w,q,t,a,b,v,u;
+    thus thesis by P1,P2;
+  end;
+
+  EXLM2:
+  for x,y be Element of INT,
+  g1,w1,q1,t1,
+  a1,b1,v1,u1,
+  g2,w2,q2,t2,
+  a2,b2,v2,u2 be sequence of INT
+  st
+  ( a1.0 = 1 & b1.0 = 0 & g1.0 = x & q1.0=0
+  & u1.0 = 0 & v1.0 = 1 & w1.0 = y & t1.0=0
+  &
+  (for i be Element of NAT
+  holds
+  q1.(i+1) = g1.i div w1.i & t1.(i+1) = g1.i mod w1.i
+  &
+  a1.(i+1) = u1.i & b1.(i+1) = v1.i & g1.(i+1) = w1.i
+  &
+  u1.(i+1) = a1.i - q1.(i+1)*u1.i & v1.(i+1)
+  = b1.i - q1.(i+1)*v1.i
+  &
+  w1.(i+1) = t1.(i+1)) )
+  &
+  ( a2.0 = 1 & b2.0 = 0 & g2.0 = x & q2.0=0
+  & u2.0 = 0 & v2.0 = 1 & w2.0 = y & t2.0=0
+  &
+  (for i be Element of NAT
+  holds
+  q2.(i+1) = g2.i div w2.i & t2.(i+1) = g2.i mod w2.i
+  &
+  a2.(i+1) = u2.i & b2.(i+1) = v2.i & g2.(i+1) = w2.i
+  &
+  u2.(i+1) = a2.i - q2.(i+1)*u2.i & v2.(i+1)
+  = b2.i - q2.(i+1)*v2.i
+  &
+  w2.(i+1) = t2.(i+1)) )
+  holds
+  g1=g2 & w1 = w2 & q1 = q2 & t1 = t2
+  & a1=a2 & b1 = b2 & v1 =v2 & u1 = u2
+
+  proof
+    let x,y be Element of INT,
+    g1,w1,q1,t1,
+    a1,b1,v1,u1,
+    g2,w2,q2,t2,
+    a2,b2,v2,u2 be sequence of INT;
+    assume P1:
+    ( a1.0 = 1 & b1.0 = 0 & g1.0 = x & q1.0=0
+    & u1.0 = 0 & v1.0 = 1 & w1.0 = y & t1.0=0
+    &
+    (for i be Element of NAT
+    holds
+    q1.(i+1) = g1.i div w1.i & t1.(i+1) = g1.i mod w1.i
+    &
+    a1.(i+1) = u1.i & b1.(i+1) = v1.i & g1.(i+1) = w1.i
+    &
+    u1.(i+1) = a1.i - q1.(i+1)*u1.i & v1.(i+1) = b1.i - q1.(i+1)*v1.i
+    &
+    w1.(i+1) = t1.(i+1)) );
+    assume P2:
+    ( a2.0 = 1 & b2.0 = 0 & g2.0 = x & q2.0=0
+    & u2.0 = 0 & v2.0 = 1 & w2.0 = y & t2.0=0
+    &
+    (for i be Element of NAT
+    holds
+    q2.(i+1) = g2.i div w2.i & t2.(i+1) = g2.i mod w2.i
+    &
+    a2.(i+1) = u2.i & b2.(i+1) = v2.i & g2.(i+1) = w2.i
+    &
+    u2.(i+1) = a2.i - q2.(i+1)*u2.i & v2.(i+1) = b2.i - q2.(i+1)*v2.i
+    &
+    w2.(i+1) = t2.(i+1)) );
+
+    defpred P[Nat] means
+
+    g1.$1 =g2.$1 & w1.$1 =w2.$1 & q1.$1 =q2.$1 & t1.$1 = t2.$1 &
+    a1.$1 =a2.$1 & b1.$1 =b2.$1 & v1.$1 =v2.$1 & u1.$1 = u2.$1;
+
+    P0: P[0] by P1,P2;
+    PN: for n being Element of NAT st P[n] holds P[n+1]
+    proof
+      let n being Element of NAT;
+      assume PN1:P[n];
+
+      X1: q1.(n+1)
+      =g2.n div w2.n by P1,PN1
+      .= q2.(n+1) by P2;
+      X2:t1.(n+1)
+      = g2.n mod w2.n by P1,PN1
+      .= t2.(n+1) by P2;
+      X3:a1.(n+1)
+      = u2.n by P1,PN1
+      .= a2.(n+1) by P2;
+
+      X4: b1.(n+1)
+      = v2.n by PN1,P1
+      .= b2.(n+1) by P2;
+      X5: g1.(n+1)
+      = w2.n by PN1,P1
+      .= g2.(n+1) by P2;
+
+      X6: u1.(n+1)
+      = a2.n - q1.(n+1)*u2.n by P1,PN1
+      .= u2.(n+1) by P2,X1;
+      X7: v1.(n+1)
+      = b2.n - q1.(n+1)*v2.n by PN1,P1
+      .= v2.(n+1) by P2,X1;
+      w1.(n+1)
+      =t2.(n+1) by X2,P1
+      .= w2.(n+1) by P2;
+
+      hence P[n+1] by X1,X2,X3,X4,X5,X6,X7;
+    end;
+
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(P0,PN);
+
+    hence thesis by FUNCT_2:def 8;
+  end;
+
+definition
+  let x,y be Element of INT;
+  func ALGO_EXGCD(x,y) -> Element of [:INT,INT,INT:] means
+  :defALGOEXGCD:
+  ex g,w,q,t be sequence of INT,
+  a,b,v,u be sequence of INT,
+  istop be Element of NAT
+  st
+  a.0 = 1 & b.0 = 0 & g.0 = x & q.0 =0
+  & u.0 = 0 & v.0 = 1 & w.0 = y & t.0 =0
+  &
+  (for i be Element of NAT
+  holds
+  q.(i+1) = g.i div w.i & t.(i+1) = g.i mod w.i
+  &
+  a.(i+1) = u.i & b.(i+1) = v.i & g.(i+1) = w.i
+  &
+  u.(i+1) = a.i - q.(i+1)*u.i & v.(i+1) = b.i - q.(i+1)*v.i
+  &
+  w.(i+1) = t.(i+1))
+  & istop = min*{i where i is Element of NAT: w.i = 0}
+  & (0 <= g.istop implies it =[a.istop,b.istop,g.istop] )
+  & (g.istop < 0 implies it =[-(a.istop),-(b.istop),-(g.istop)] );
+  existence
+  proof
+    consider g,w,q,t be sequence of INT,
+    a,b,v,u be sequence of INT such that
+    P1:
+    a.0 = 1 & b.0 = 0 & g.0 = x & q.0=0
+    & u.0 = 0 & v.0 = 1 & w.0 = y & t.0=0
+    &
+    (for i be Element of NAT
+    holds
+    q.(i+1) = g.i div w.i & t.(i+1) = g.i mod w.i
+    &
+    a.(i+1) = u.i & b.(i+1) = v.i & g.(i+1) = w.i
+    &
+    u.(i+1) = a.i - q.(i+1)*u.i & v.(i+1) = b.i - q.(i+1)*v.i
+    &
+    w.(i+1) = t.(i+1)) by EXLM1;
+
+    set istop = min*{i where i is Element of NAT: w.i = 0};
+    now per cases;
+      suppose C1:0 <= g.istop;
+        [a.istop,b.istop,g.istop] in [:INT,INT,INT:]
+        by MCART_1:69;
+        hence
+        ex xx be Element of [:INT,INT,INT:]
+        st
+        (0 <= g.istop implies xx =[a.istop,b.istop,g.istop] )
+        & (g.istop < 0 implies xx =[-(a.istop),-(b.istop),-(g.istop)] )
+        by C1;
+      end;
+      suppose C2:g.istop < 0;
+
+        X1: - g.istop in INT by INT_1:def 2;
+        -a.istop in INT & -b.istop in INT by INT_1:def 2;
+        then
+        [-a.istop,-b.istop,-g.istop] in [:INT,INT,INT:]
+        by MCART_1:69,X1;
+        hence
+        ex xx be Element of [:INT,INT,INT:]
+        st
+        (0 <= g.istop implies xx =[a.istop,b.istop,g.istop] )
+        & (g.istop < 0 implies xx =[-(a.istop),-(b.istop),-(g.istop)] )
+        by C2;
+      end;
+    end;
+    then
+    consider xx be Element of [:INT,INT,INT:] such that
+    P2:
+    (0 <= g.istop implies xx =[a.istop,b.istop,g.istop] )
+    & (g.istop < 0 implies xx =[-(a.istop),-(b.istop),-(g.istop)] );
+    take xx;
+
+    thus thesis by P1,P2;
+  end;
+
+  uniqueness
+  proof
+    let s1,s2 be Element of [:INT,INT,INT:];
+
+    assume A1:
+    ex g1,w1,q1,t1,a1,b1,v1,u1 be sequence of INT,
+    istop1 be Element of NAT
+    st
+    ( a1.0 = 1 & b1.0 = 0 & g1.0 = x & q1.0=0
+    & u1.0 = 0 & v1.0 = 1 & w1.0 = y & t1.0=0
+    &
+    (for i be Element of NAT
+    holds
+    q1.(i+1) = g1.i div w1.i & t1.(i+1) = g1.i mod w1.i
+    &
+    a1.(i+1) = u1.i & b1.(i+1) = v1.i & g1.(i+1) = w1.i
+    &
+    u1.(i+1) = a1.i - q1.(i+1)*u1.i & v1.(i+1) = b1.i - q1.(i+1)*v1.i
+    &
+    w1.(i+1) = t1.(i+1)) )
+    & istop1 = min*{i where i is Element of NAT: w1.i = 0}
+    & (0 <= g1.istop1 implies s1 =[a1.istop1,b1.istop1,g1.istop1] )
+    & (g1.istop1 < 0 implies s1 =[-(a1.istop1),-(b1.istop1),-(g1.istop1)] );
+
+    assume
+    A2:
+    ex g2,w2,q2,t2 be sequence of INT,
+    a2,b2,v2,u2 be sequence of INT,
+    istop2 be Element of NAT
+    st
+    ( a2.0 = 1 & b2.0 = 0 & g2.0 = x & q2.0=0
+    & u2.0 = 0 & v2.0 = 1 & w2.0 = y & t2.0=0
+    &
+    (for i be Element of NAT
+    holds
+    q2.(i+1) = g2.i div w2.i & t2.(i+1) = g2.i mod w2.i
+    &
+    a2.(i+1) = u2.i & b2.(i+1) = v2.i & g2.(i+1) = w2.i
+    &
+    u2.(i+1) = a2.i - q2.(i+1)*u2.i & v2.(i+1) = b2.i - q2.(i+1)*v2.i
+    &
+    w2.(i+1) = t2.(i+1)) )
+    & istop2 = min*{i where i is Element of NAT: w2.i = 0}
+    & (0 <= g2.istop2 implies s2 =[a2.istop2,b2.istop2,g2.istop2] )
+    & (g2.istop2 < 0 implies s2 =[-(a2.istop2),-(b2.istop2),-(g2.istop2)] );
+
+    consider
+    g1,w1,q1,t1 be sequence of INT,
+    a1,b1,v1,u1 be sequence of INT,
+    istop1 be Element of NAT
+    such that P1:
+    ( a1.0 = 1 & b1.0 = 0 & g1.0 = x & q1.0=0
+    & u1.0 = 0 & v1.0 = 1 & w1.0 = y & t1.0=0
+    &
+    (for i be Element of NAT
+    holds
+    q1.(i+1) = g1.i div w1.i & t1.(i+1) = g1.i mod w1.i
+    &
+    a1.(i+1) = u1.i & b1.(i+1) = v1.i & g1.(i+1) = w1.i
+    &
+    u1.(i+1) = a1.i - q1.(i+1)*u1.i & v1.(i+1)
+    = b1.i - q1.(i+1)*v1.i
+    &
+    w1.(i+1) = t1.(i+1)) )
+    & istop1 = min*{k where k is Element of NAT: w1.k = 0}
+    & (0 <= g1.istop1 implies s1 =[a1.istop1,b1.istop1,g1.istop1] )
+    & (g1.istop1 < 0 implies s1 =[-(a1.istop1),-(b1.istop1),-(g1.istop1)] )
+    by A1;
+
+    consider
+    g2,w2,q2,t2 be sequence of INT,
+    a2,b2,v2,u2 be sequence of INT,
+    istop2 be Element of NAT
+    such that P2:
+    ( a2.0 = 1 & b2.0 = 0 & g2.0 = x & q2.0=0
+    & u2.0 = 0 & v2.0 = 1 & w2.0 = y & t2.0=0
+    &
+    (for i be Element of NAT
+    holds
+    q2.(i+1) = g2.i div w2.i & t2.(i+1) = g2.i mod w2.i
+    &
+    a2.(i+1) = u2.i & b2.(i+1) = v2.i & g2.(i+1) = w2.i
+    & u2.(i+1) = a2.i - q2.(i+1)*u2.i
+    & v2.(i+1) = b2.i - q2.(i+1)*v2.i
+    &
+    w2.(i+1) = t2.(i+1)) )
+    & istop2 = min*{k where k is Element of NAT: w2.k = 0}
+    & (0 <= g2.istop2 implies s2 =[a2.istop2,b2.istop2,g2.istop2] )
+    & (g2.istop2 < 0 implies s2 =[-(a2.istop2),-(b2.istop2),-(g2.istop2)] )
+    by A2;
+
+    g1=g2 & w1=w2 & a1=a2 & b1=b2 by P1,P2,EXLM2;
+    hence s1=s2 by P1,P2;
+  end;
+end;
+
+LM3G:for a,b be Element of INT,
+A,B be sequence of INT
+st
+(A.0 = a & B.0 = b
+&
+(for i be Element of NAT
+holds
+A.(i+1) = B.i
+&
+B.(i+1) = A.i mod B.i))
+holds
+for i be Element of NAT
+st B.i <> 0
+holds
+A.i gcd B.i = A.(i+1) gcd B.(i+1)
+proof
+  let a,b be Element of INT,
+  A,B be sequence of INT;
+  assume AS:
+  A.0 = a & B.0 = b
+  &
+  (for i be Element of NAT
+  holds
+  A.(i+1) = B.i
+  &
+  B.(i+1) = A.i mod B.i);
+
+  let i be Element of NAT;
+  assume AS1: B.i <> 0;
+  set k=A.i gcd B.i;
+
+  Q1: A.(i+1) = B.i by AS;
+  Q2: B.(i+1) = A.i mod B.i by AS;
+  P1: k divides A.(i+1) by Q1,INT_2:def 2;
+  P2: k divides B.(i+1)
+  proof
+    X1: B.(i+1) = A.i - (A.i div B.i ) * B.i by INT_1:def 10,Q2,AS1;
+    X2: k divides A.i by INT_2:def 2;
+    X3: k divides B.i by INT_2:def 2;
+
+    X4:ex s being Integer
+    st A.i = k*s by X2,INT_1:def 3;
+    ex t being Integer
+    st B.i = k*t by X3,INT_1:def 3;
+    then
+    consider s,t be Integer such that
+    X5:B.(i+1) = (k*s) - (A.i div B.i ) * (k*t) by X1,X4;
+    B.(i+1) = (s - (A.i div B.i)*t ) * k by X5;
+    hence
+    k divides B.(i+1) by INT_1:def 3;
+  end;
+
+  for m being Integer
+  st m divides A.(i+1) & m divides B.(i+1) holds m divides k
+  proof
+    let m be Integer;
+    assume P3: m divides A.(i+1) & m divides B.(i+1);
+    then
+    P31: m divides B.i by AS;
+    P32: m divides A.i
+    proof
+      B.(i+1) = A.i - (A.i div B.i ) * B.i by INT_1:def 10,Q2,AS1;
+      then
+      X1: A.i = B.(i+1) + (A.i div B.i ) * B.i;
+
+      X21:ex s being Integer
+      st B.i = m * s by INT_1:def 3,P31;
+      X22:ex t being Integer
+      st B.(i+1) = m * t by INT_1:def 3,P3;
+      consider s,t be Integer such that
+      X4:A.i = (m*s) + (A.i div B.i ) * (m*t) by X1,X21,X22;
+      A.i = m * (s + (A.i div B.i ) * t) by X4;
+      hence m divides A.i by INT_1:def 3;
+    end;
+
+    thus m divides k by P31,P32,INT_2:def 2;
+  end;
+  hence
+  A.(i+1) gcd B.(i+1) = k by P1,P2,INT_2:def 2;
+end;
+
+LM4G:for a,b be Element of INT,
+A,B be sequence of INT
+st
+(A.0 = a & B.0 = b
+&
+(for i be Element of NAT
+holds
+A.(i+1) = B.i
+&
+B.(i+1) = A.i mod B.i))
+holds
+for i be Element of NAT st B.i <> 0
+holds
+A.0 gcd B.0 = A.i gcd B.i
+proof
+  let a,b be Element of INT,
+  A,B be sequence of INT;
+  assume AS1:
+  A.0 = a & B.0 = b
+  &
+  (for i be Element of NAT
+  holds
+  A.(i+1) = B.i
+  &
+  B.(i+1) = A.i mod B.i);
+  defpred P[Nat] means
+  B.$1 <> 0 implies
+  A.0 gcd B.0 = A.$1 gcd B.$1;
+
+  P0: P[0];
+  PN: for i being Element of NAT st P[i] holds P[i+1]
+  proof
+    let i being Element of NAT;
+    assume PN1: P[i];
+    B.(i+1) <> 0 implies
+    A.0 gcd B.0 = A.(i+1) gcd B.(i+1)
+    proof
+      assume PN2: B.(i+1) <> 0;
+      B.i <> 0
+      proof
+        assume PN4: B.i = 0;
+        B.(i+1) = A.i mod B.i by AS1;
+        hence contradiction by PN2,PN4,INT_1:def 10;
+      end;
+      hence thesis by PN1,AS1,LM3G;
+    end;
+    hence P[i+1];
+  end;
+  for i being Element of NAT holds P[i] from NAT_1:sch 1(P0,PN);
+  hence thesis;
+end;
+
+theorem INT157A:
+  for i2,i1 being Integer st i2 <= 0 holds
+  i1 mod i2 <= 0
+  proof
+    let i2,i1 be Integer;
+    assume A1: i2 <= 0;
+    per cases by A1;
+    suppose A2: i2 < 0;
+      [\(i1 / i2)/] <= i1 / i2 by INT_1:def 6;
+      then (i1 / i2) * i2 <= (i1 div i2) * i2
+      by A2,XREAL_1:65;
+      then i1 <= (i1 div i2) * i2 by A2,XCMPLX_1:87;
+      then i1 - ((i1 div i2) * i2) <= 0 by XREAL_1:47;
+      hence i1 mod i2 <= 0 by INT_1:def 10;
+    end;
+    suppose i2 = 0;
+      hence i1 mod i2 <= 0 by INT_1:def 10;
+    end;
+  end;
+
+theorem INT158A:
+  for i2,i1 being Integer st i2 < 0 holds
+  -(i1 mod i2) < -i2
+  proof
+    let i2,i1 be Integer;
+    assume A1: i2 <0;
+    (i1 / i2) - 1 < [\(i1 / i2)/] by INT_1:def 6;
+    then (i1 div i2) * i2 < ((i1 / i2) - 1) * i2 by A1,XREAL_1:69;
+    then (i1 div i2) * i2 < ((i1 / i2) * i2) - (1 * i2);
+    then ((i1 div i2) * i2) < i1 - i2 by A1,XCMPLX_1:87;
+    then ((i1 div i2) * i2) -i1 < i1 -i2 - i1 by XREAL_1:14;
+    then -(i1- ((i1 div i2) * i2) ) < -i2;
+    hence -( i1 mod i2) < -i2 by A1,INT_1:def 10;
+  end;
+
+theorem LM5G1:
+  for x,y be Element of INT
+  st abs(y) <> 0 holds
+  abs(x mod y) < abs(y)
+  proof
+    let x,y be Element of INT;
+    assume A1: abs(y) <> 0;
+    per cases;
+    suppose C1: 0 < y;
+      then
+      C2: x mod y < y by INT_1:58;
+      0 <= x mod y by INT_1:57,C1;
+
+      then
+      C3: abs(x mod y) < y by ABSVALUE:def 1,C2;
+      y <= abs(y) by ABSVALUE:4;
+      hence abs(x mod y) < abs(y) by C3,XXREAL_0:2;
+    end;
+    suppose C4: y <= 0;
+      C40P:y <> 0 by ABSVALUE:2,A1;
+
+      C41: -(x mod y) < -y by INT158A,C40P,C4;
+      XX1: (x mod y) <=0 by C4,INT157A;
+      C42: abs(x mod y) = -(x mod y)
+      proof
+        per cases;
+        suppose x mod y = 0;
+          hence
+          abs(x mod y) = -(x mod y) by ABSVALUE:2;
+        end;
+        suppose x mod y <> 0;
+          hence
+          abs(x mod y) = -(x mod y) by ABSVALUE:def 1,XX1;
+        end;
+      end;
+      thus abs(x mod y) < abs(y) by C42,C41,C40P,C4,ABSVALUE:def 1;
+    end;
+  end;
+
+  LM5G:for a,b be Element of INT,
+  A,B be sequence of INT
+  st
+  (A.0 = a & B.0 = b
+  &
+  (for i be Element of NAT
+  holds
+  A.(i+1) = B.i
+  &
+  B.(i+1) = A.i mod B.i))
+  holds
+  {i where i is Element of NAT: B.i = 0}
+  is non empty Subset of NAT
+  proof
+    let a,b be Element of INT,
+    A,B be sequence of INT;
+    assume AS1:
+    A.0 = a & B.0 = b
+    &
+    (for i be Element of NAT
+    holds
+    A.(i+1) = B.i
+    &
+    B.(i+1) = A.i mod B.i);
+    LMM: for x be set
+    st x in
+    {i where i is Element of NAT: B.i = 0}
+    holds x in NAT
+    proof let x be set;
+      assume x in {i where i is Element of NAT: B.i = 0};
+      then
+      ex i be Element of NAT st x=i & B.i = 0;
+      hence x in NAT;
+    end;
+
+    ex m0 be Element of NAT st B.m0 = 0
+    proof
+      assume A20:not (ex m0 be Element of NAT st B.m0 = 0);
+      A2: for m0 be Element of NAT holds abs(B.m0) <> 0
+      proof
+        let m0 be Element of NAT;
+        B.m0 <> 0 by A20;
+        hence
+        abs(B.m0) <> 0 by ABSVALUE:2;
+      end;
+      A3: for i be Element of NAT holds
+      abs(B.(i+1)) <= abs(B.i) -1
+      proof
+        let i be Element of NAT;
+
+        abs(B.(i+1)) = abs(A.i mod B.i) by AS1;
+        then
+        abs(B.(i+1)) < abs(B.i) by A2,LM5G1;
+        then
+        abs(B.(i+1)) +1 <= abs(B.i) by NAT_1:13;
+        then
+        abs(B.(i+1)) +1 -1 <= abs(B.i) -1 by XREAL_1:9;
+        hence
+        abs(B.(i+1)) <= abs(B.i) -1;
+      end;
+      defpred P[Nat] means abs(B.$1) <= abs(B.0) - $1;
+
+      P0: P[0];
+      P1:
+      for i be Element of NAT st P[i] holds P[i+1]
+      proof
+        let i be Element of NAT;
+        assume P11:P[i];
+        P12: abs(B.(i+1)) <= abs(B.i) -1 by A3;
+        abs(B.i) -1 <= (abs(B.0) - i) -1 by P11,XREAL_1:9;
+        hence P[i+1] by XXREAL_0:2,P12;
+      end;
+
+      A4: for i be Element of NAT holds P[i] from NAT_1:sch 1(P0,P1);
+      abs(B.abs(B.0)) <=abs(B.0) - abs((B.0)) by A4;
+      hence contradiction by A2,NAT_1:14;
+    end;
+    then
+    consider m0 be Element of NAT such that
+    X1: B.m0 = 0;
+    m0 in {i where i is Element of NAT: B.i = 0} by X1;
+    hence thesis by LMM,TARSKI:def 3;
+  end;
+
+  LM6G: for a be Element of INT holds a gcd 0 = abs(a) by WSIERP_1:8;
+
+  LM7G:
+  for x,y be Element of INT,
+  g,w,q,t be sequence of INT,
+  a,b,v,u be sequence of INT
+  st
+  a.0 = 1 & b.0 = 0 & g.0 = x & q.0 =0
+  & u.0 = 0 & v.0 = 1 & w.0 = y & t.0 =0
+  &
+  (for i be Element of NAT
+  holds
+  q.(i+1) = g.i div w.i & t.(i+1) = g.i mod w.i
+  &
+  a.(i+1) = u.i & b.(i+1) = v.i & g.(i+1) = w.i
+  &
+  u.(i+1) = a.i - q.(i+1)*u.i & v.(i+1) = b.i - q.(i+1)*v.i
+  &
+  w.(i+1) = t.(i+1))
+  holds
+  for i be Element of NAT
+  st w.i <> 0
+  holds
+  a.(i+1) * x + b.(i+1) * y = g.(i+1)
+  proof
+    let x,y be Element of INT,
+    g,w,q,t be sequence of INT,
+    a,b,v,u be sequence of INT;
+    assume AS:
+    a.0 = 1 & b.0 = 0 & g.0 = x & q.0 =0
+    & u.0 = 0 & v.0 = 1 & w.0 = y & t.0 =0
+    &
+    for i be Element of NAT
+    holds
+    q.(i+1) = g.i div w.i & t.(i+1) = g.i mod w.i
+    &
+    a.(i+1) = u.i & b.(i+1) = v.i & g.(i+1) = w.i
+    &
+    u.(i+1) = a.i - q.(i+1)*u.i & v.(i+1) = b.i - q.(i+1)*v.i
+    &
+    w.(i+1) = t.(i+1);
+
+    defpred P[Nat] means
+    w.$1 <> 0
+    implies
+    (a.($1) * x + b.($1) * y = g.($1)
+    &
+    a.($1+1) * x + b.($1+1) * y = g.($1+1));
+    P0:P[0]
+    proof
+      assume w.0 <> 0;
+
+      reconsider I0=0 as Element of NAT;
+
+      a.(I0 + 1) *x + b.(I0 + 1)* y
+      = (u.0)*x + b.(I0 + 1) *y by AS
+      .= 0 *x + 1 *y by AS
+      .= g.(I0 + 1) by AS;
+      hence thesis by AS;
+    end;
+
+    P1: for i be Element of NAT
+    st P[i] holds P[i+1]
+    proof
+      let i be Element of NAT;
+      assume P12A: P[i];
+
+      assume ASX: w.(i+1) <> 0;
+      XX1: w.i <> 0
+      proof
+        assume
+        XX2:w.i = 0;
+        t.(i+1) = g.i mod w.i by AS
+        .= 0 by XX2,INT_1:def 10;
+        hence contradiction by AS,ASX;
+      end;
+
+      a.((i+1)+1) *x + b.((i+1)+1)* y
+      = (u.(i+1))*x + b.((i+1)+1) *y by AS
+      .= (u.(i+1))*x + (v.(i+1)) *y by AS
+      .= (a.i - q.(i+1)*u.i)*x + (v.(i+1)) *y by AS
+      .= (a.i - q.(i+1)*u.i)*x + (b.i - q.(i+1)*v.i) *y by AS
+      .= g.i -q.(i+1)*(u.i*x + v.i*y ) by XX1,P12A
+      .= g.i -q.(i+1)* (a.(i+1)*x + v.i*y) by AS
+      .= g.i -q.(i+1)* g.(i+1) by XX1,P12A,AS
+      .= g.i -(g.i div w.i)*g.(i+1) by AS
+      .= g.i -(g.i div w.i)*w.i by AS
+      .= g.i mod w.i by INT_1:def 10,XX1
+      .= t.(i+1) by AS
+      .= w.(i+1) by AS
+      .= g.((i+1)+1) by AS;
+      hence thesis by XX1,P12A;
+    end;
+
+    for i be Element of NAT holds P[i]
+    from NAT_1:sch 1 (P0,P1);
+    hence thesis;
+  end;
+
+theorem Th2:
+  for x,y be Element of INT
+  holds
+  ALGO_EXGCD(x,y)`3_3 = x gcd y
+  &
+  ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+  = x gcd y
+  proof
+    let x,y be Element of INT;
+    consider g,w,q,t be sequence of INT,
+    a,b,v,u be sequence of INT,
+    istop be Element of NAT such that
+    P0:
+    a.0 = 1 & b.0 = 0 & g.0 = x & q.0 =0
+    & u.0 = 0 & v.0 = 1 & w.0 = y & t.0 =0
+    &
+    (for i be Element of NAT
+    holds
+    q.(i+1) = g.i div w.i & t.(i+1) = g.i mod w.i
+    &
+    a.(i+1) = u.i & b.(i+1) = v.i & g.(i+1) = w.i
+    &
+    u.(i+1) = a.i - q.(i+1)*u.i & v.(i+1) = b.i - q.(i+1)*v.i
+    &
+    w.(i+1) = t.(i+1))
+    & istop = min*{i where i is Element of NAT: w.i = 0}
+    & (0 <= g.istop implies ALGO_EXGCD(x,y)
+    =[a.istop,b.istop,g.istop] )
+    & (g.istop < 0 implies ALGO_EXGCD(x,y)
+    =[-(a.istop),-(b.istop),-(g.istop)] )
+    by defALGOEXGCD;
+
+    P2X:
+    now let i be Element of NAT;
+      thus g.(i+1) = w.i by P0;
+      thus w.(i+1) = t.(i+1) by P0
+      .= g.i mod w.i by P0;
+    end;
+
+    X0: {i where i is Element of NAT: w.i = 0}
+    is non empty Subset of NAT by P0,P2X,LM5G;
+    then
+    istop in {i where i is Element of NAT: w.i = 0} by P0,NAT_1:def 1;
+    then
+    P4: ex i be Element of NAT st istop=i & w.i = 0;
+
+    XX3: ALGO_EXGCD(x,y)`3_3 = abs(g.istop)
+    proof
+      per cases;
+      suppose 0 <= g.istop;
+        then
+        abs(g.istop) = g.istop by ABSVALUE:def 1;
+        hence
+        ALGO_EXGCD(x,y)`3_3 = abs(g.istop) by P0,MCART_1:def 7;
+      end;
+
+      suppose XX32: g.istop < 0;
+        then
+        abs(g.istop) = -g.istop by ABSVALUE:def 1;
+        hence
+        ALGO_EXGCD(x,y)`3_3 = abs(g.istop) by P0,XX32,MCART_1:def 7;
+      end;
+    end;
+    per cases;
+    suppose C1:istop = 0;
+      thus
+      R1: ALGO_EXGCD(x,y)`3_3
+      = x gcd y by P0,P4,LM6G,XX3,C1;
+
+      thus
+      ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+      = x gcd y
+      proof
+        per cases;
+        suppose Y11: 0 <= g.istop;
+
+          Y13:ALGO_EXGCD(x,y)`1_3
+          = 1 by C1,P0,Y11,MCART_1:def 5;
+
+          ALGO_EXGCD(x,y)`2_3 = 0 by C1,P0,MCART_1:def 6;
+
+          hence
+          ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+          = x gcd y by Y11,P0,C1,XX3,ABSVALUE:def 1,Y13,R1;
+        end;
+
+        suppose XX32: g.istop < 0;
+
+          Y13:ALGO_EXGCD(x,y)`1_3 = -1 by C1,P0,XX32,MCART_1:def 5;
+
+          ALGO_EXGCD(x,y)`2_3 = 0 by P0,C1,MCART_1:def 6;
+          hence
+          ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+          = x gcd y by P0,C1,XX3,ABSVALUE:def 1,XX32,Y13,R1;
+        end;
+      end;
+    end;
+
+    suppose istop <> 0;
+      then
+      1 <= istop by NAT_1:14;
+      then
+      1-1 <= istop-1 by XREAL_1:9;
+      then
+      reconsider
+      m1 = istop-1 as Element of NAT by INT_1:3;
+      X1: w.m1 <> 0
+      proof
+        assume w.m1 = 0;
+        then
+        X11:m1 in {i where i is Element of NAT: w.i = 0};
+
+        istop -1 < istop - 0 by XREAL_1:15;
+        hence contradiction by X11,P0,X0,NAT_1:def 1;
+      end;
+
+      P5: g.m1 gcd w.m1 = g.(m1+1) gcd w.(m1+1) by LM3G,P0,X1,P2X;
+
+      R1: g.(istop) gcd w.(istop)
+      = ALGO_EXGCD(x,y)`3_3 by XX3,LM6G,P4;
+      hence
+      RR1:ALGO_EXGCD(x,y)`3_3 = x gcd y by P5,X1,P2X,LM4G,P0;
+
+      Y1:a.(m1+1) * x + b.(m1+1) * y = g.(m1+1)
+      by X1,LM7G,P0;
+
+      thus
+      ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+      = x gcd y
+      proof
+        per cases;
+        suppose Y11: 0 <= g.istop;
+          then
+          Y12:ALGO_EXGCD(x,y)`3_3 = g.istop by XX3,ABSVALUE:def 1;
+
+          ALGO_EXGCD(x,y)`1_3 = a.(istop) by P0,Y11,MCART_1:def 5;
+          hence
+          ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+          = x gcd y by RR1,Y1,Y12,P0,MCART_1:def 6;
+        end;
+
+        suppose XX32: g.istop < 0;
+          then
+          Y12:ALGO_EXGCD(x,y)`3_3 = -g.istop by XX3,ABSVALUE:def 1;
+          Y13:ALGO_EXGCD(x,y)`1_3 = -a.(istop) by P0,XX32,MCART_1:def 5;
+
+          ALGO_EXGCD(x,y)`2_3 = -b.(istop) by P0,XX32,MCART_1:def 6;
+
+          hence
+          ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+          = x gcd y by Y1,Y12,Y13,R1,P5,X1,P2X,LM4G,P0;
+        end;
+      end;
+    end;
+  end;
+
+::==========================================================================================
+::NZMATH source code
+:: def inverse(x,p):
+:: """
+:: This function returns inverse of x for modulo p.
+:: """
+:: x = x % p
+:: y = gcd.extgcd(p,x)
+:: if y[2] == 1:
+:: if y[1] < 0:
+:: r = p + y[1]
+:: return r
+:: else:
+:: return y[1]
+:: raise ZeroDivisionError("There is no inverse for %d modulo %d." % (x,p))
+::=======================================================================================
+
+definition
+  let x,p be Element of INT;
+  func ALGO_INVERSE(x,p) -> Element of INT means
+  :definverse:
+  for y be Element of INT st y = (x mod p) holds
+  ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+  ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+  (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+  & it = p + z ))
+  &
+  ( (0 <= ALGO_EXGCD(p,y)`2_3) implies it = ALGO_EXGCD(p,y)`2_3)
+  )
+  &
+  ( ALGO_EXGCD(p,y)`3_3 <> 1 implies it = {} );
+  existence
+  proof
+    reconsider y = x mod p as Element of INT by INT_1:def 2;
+    now per cases;
+      suppose C1: ALGO_EXGCD(p,y)`3_3 = 1;
+        now per cases;
+          suppose C11: ( ALGO_EXGCD(p,y)`2_3 < 0);
+
+            reconsider z = ALGO_EXGCD(p,y)`2_3
+            as Element of INT;
+            reconsider s = p + z
+            as Element of INT by INT_1:def 2;
+            ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+            & s = p + z;
+            hence ex s be Element of INT st
+            ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+            (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+            & s = p + z ) )
+            &
+            ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s = ALGO_EXGCD(p,y)`2_3 )
+            &
+            ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s = {} )
+            by C11,C1;
+          end;
+          suppose C12: ( 0 <= ALGO_EXGCD(p,y)`2_3 );
+            reconsider s = ALGO_EXGCD(p,y)`2_3
+            as Element of INT;
+
+            thus ex s be Element of INT st
+            ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+            (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+            & s = p + z ) )
+            &
+            ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s = ALGO_EXGCD(p,y)`2_3 )
+            &
+            ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s = {} )
+            by C12,C1;
+          end;
+        end;
+        hence
+        ex s be Element of INT st
+        ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+        ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+        (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+        & s = p + z ))
+        &
+        ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s = ALGO_EXGCD(p,y)`2_3)
+        )
+        &
+        ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s = {} );
+      end;
+      suppose C2: ALGO_EXGCD(p,y)`3_3 <> 1;
+        reconsider s ={} as Element of INT by INT_1:def 2;
+        ALGO_EXGCD(p,y)`3_3 <> 1 implies s = {};
+        hence
+        ex s be Element of INT st
+        ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+        ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+        (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+        & s = p + z ))
+        &
+        ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s = ALGO_EXGCD(p,y)`2_3)
+        )
+        &
+        ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s = {} ) by C2;
+      end;
+    end;
+    then
+    consider s be Element of INT such that
+    Q1:
+    ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+    ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+    (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+    & s = p + z ))
+    &
+    ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s = ALGO_EXGCD(p,y)`2_3)
+    )
+    &
+    ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s = {} );
+    take s;
+    thus
+    for y be Element of INT
+    st y = (x mod p)
+    holds
+    ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+    ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+    (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+    & s = p + z ))
+    &
+    ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s = ALGO_EXGCD(p,y)`2_3)
+    )
+    &
+    ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s = {} ) by Q1;
+  end;
+  uniqueness
+  proof
+    let s1,s2 be Element of INT;
+    assume A1:
+    for y be Element of INT st y = (x mod p) holds
+    ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+    ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+    (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3 & s1 = p + z )) &
+    ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s1 = ALGO_EXGCD(p,y)`2_3)) &
+    ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s1 = {} );
+    assume A2:
+    for y be Element of INT st y = (x mod p) holds
+    ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+    ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+    (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3 & s2 = p + z ))
+    &
+    ( (0 <= ALGO_EXGCD(p,y)`2_3) implies s2 = ALGO_EXGCD(p,y)`2_3)
+    )
+    &
+    ( ALGO_EXGCD(p,y)`3_3 <> 1 implies s2 = {} );
+    reconsider y = x mod p as Element of INT by INT_1:def 2;
+    thus s1=s2
+    proof
+      per cases;
+      suppose C1: ALGO_EXGCD(p,y)`3_3 = 1;
+        thus s1=s2
+        proof
+          per cases;
+          suppose C11: ALGO_EXGCD(p,y)`2_3 < 0;
+            then
+            C12: (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+            & s1 = p + z ) by A1,C1;
+            (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+            & s2 = p + z ) by A2,C1,C11;
+            hence s1=s2 by C12;
+          end;
+          suppose C12: 0 <= ALGO_EXGCD(p,y)`2_3;
+            thus
+            s1 = ALGO_EXGCD(p,y)`2_3 by C12,C1,A1
+            .=s2 by C12,C1,A2;
+          end;
+        end;
+      end;
+      suppose C2: ALGO_EXGCD(p,y)`3_3 <> 1;
+        thus s1= {} by A1,C2
+        .= s2 by A2,C2;
+      end;
+    end;
+  end;
+end;
+
+  LMTh30:
+  for x,y,p be Element of INT
+  st y = x mod p & ALGO_EXGCD(p,y)`3_3 = 1 & p <> 0
+  holds
+  ( ALGO_INVERSE(x,p) * x ) mod p = 1 mod p
+  proof
+    let x,y,p be Element of INT;
+    assume AS: y = x mod p & ALGO_EXGCD(p,y)`3_3 = 1 & p <> 0;
+    P3P:ALGO_EXGCD(p,y)`3_3 = p gcd y &
+    ALGO_EXGCD(p,y)`1_3 * p + ALGO_EXGCD(p,y)`2_3 * y
+    = p gcd y by Th2;
+
+    reconsider s1 = ALGO_EXGCD(p,y)`1_3 * p as Integer;
+    reconsider s2 = (ALGO_EXGCD(p,y))`2_3 * y as Integer;
+    reconsider s3 = (ALGO_EXGCD(p,y))`2_3 as Integer;
+
+    P40C2:(p mod p)=0 by INT_1:50;
+
+    P4: ( ALGO_EXGCD(p,y)`1_3 * p ) mod p
+    = (( ALGO_EXGCD(p,y)`1_3 mod p ) * (p mod p)) mod p by NAT_D:67
+    .= 0 by INT_4:12,P40C2;
+
+    reconsider I0 = 0 as Element of INT by INT_1:def 2;
+
+    P6: (ALGO_EXGCD(p,y)`1_3 * p + ALGO_EXGCD(p,y)`2_3 * y )
+    mod p
+    = ((s1 mod p) + (s2 mod p)) mod p
+    by NAT_D:66
+    .= ( ALGO_EXGCD(p,y)`2_3 * y ) mod p by LMTh3,P4;
+
+    per cases;
+    suppose ALGO_EXGCD(p,y)`2_3 < 0;
+      then
+      consider z be Element of INT such that
+      A11: z = ALGO_EXGCD(p,y)`2_3
+      & ALGO_INVERSE(x,p) = p + z by definverse,AS;
+      thus ( ALGO_INVERSE(x,p) * x ) mod p
+      =( p*x + z*x ) mod p by A11
+      .= (z*x) mod p by NAT_D:61
+      .= ((z mod p) *(x mod p)) mod p by NAT_D:67
+      .= ((z mod p) *((x mod p) mod p) ) mod p by LMTh3
+      .= 1 mod p by P6,A11,P3P,AS,NAT_D:67;
+    end;
+    suppose
+      0 <= ALGO_EXGCD(p,y)`2_3;
+      hence
+      ( ALGO_INVERSE(x,p) * x ) mod p
+      = ((ALGO_EXGCD(p,y)`2_3)*x ) mod p by definverse,AS
+      .= ((s3 mod p) * (x mod p) ) mod p by NAT_D:67
+      .= ( (s3 mod p) * ((x mod p) mod p) ) mod p
+      by LMTh3
+      .= 1 mod p by P6,P3P,AS,NAT_D:67;
+    end;
+  end;
+
+theorem Th3:
+  for x,p,y be Element of INT
+  st y = x mod p & ALGO_EXGCD(p,y)`3_3 = 1
+  holds
+  ( ALGO_INVERSE(x,p) * x ) mod p = 1 mod p
+  proof
+    let x,p,y be Element of INT;
+    assume AS: y = x mod p & ALGO_EXGCD(p,y)`3_3 = 1;
+    per cases;
+    suppose C1: p = 0;
+      thus ( ALGO_INVERSE(x,p) * x ) mod p = 0 by C1,INT_1:def 10
+      .= 1 mod p by C1,INT_1:def 10;
+    end;
+    suppose p <> 0;
+      hence ( ALGO_INVERSE(x,p) * x ) mod p = 1 mod p by LMTh30,AS;
+    end;
+  end;
+
+begin ::Algorithm for Chinese Remainder Theorem
+:: def ALGO_CRT(nlist):
+:: """
+:: This function is Chinese Remainder Theorem using Algorithm 2.1.7
+:: of C.Pomerance and R.Crandall's book.
+::
+:: For example:
+:: >>> ALGO_CRT([(1,2),(2,3),(3,5)])
+:: 23
+:: """
+:: r = len(nlist)
+:: if r == 1 :
+:: return nlist [ 0 ] [ 0 ]
+::
+:: product = []
+:: prodinv = []
+:: m = 1
+:: for i in range(1,r):
+:: m = m*nlist[i-1][1]
+:: c = inverse(m,nlist[i][1])
+:: product.append(m)
+:: prodinv.append(c)
+::
+:: M = product[r-2]*nlist[r-1][1]
+:: n = nlist[0][0]
+:: for i in range(1,r):
+:: u = ((nlist[i][0]-n)*prodinv[i-1]) % nlist[i][1]
+:: n += u*product[i-1]
+:: return n % M
+::==========================================================================================
+
+definition
+  let nlist be non empty FinSequence of [:INT,INT:];
+  func ALGO_CRT(nlist) -> Element of INT means
+  :defALGOCRT:
+  ( len nlist = 1 implies it = (nlist.1)`1)
+  &
+  ( len nlist <> 1 implies
+  ex m,n,prodc,prodi be FinSequence of INT,
+  M0,M be Element of INT
+  st len m = len nlist
+  & len n = len nlist
+  & len prodc = len nlist - 1
+  & len prodi = len nlist - 1
+  & m.1 =1
+  & (for i be Nat
+  st 1<=i & i<=(len m) - 1
+  holds
+  ex d,x,y be Element of INT
+  st x = (nlist.i)`2
+  &
+  m.(i+1) = m.i * x
+  &
+  y = m.(i+1)
+  &
+  d = (nlist.(i+1))`2
+  &
+  prodi.i = ALGO_INVERSE(y,d)
+  &
+  prodc.i = y
+  )
+
+  & M0 = (nlist.(len m))`2
+  & M = (prodc.((len m)-1))*M0
+  & n.1 = (nlist.1)`1
+  & (for i be Nat st 1<=i & i<=len m - 1 holds
+  ex u,u0,u1 be Element of INT
+  st
+  u0 = ( nlist.(i+1))`1&
+  u1 = ( nlist.(i+1))`2 &
+  u = ( (u0-n.i)*(prodi.i)) mod u1 &
+  n.(i+1) = n.i + u*(prodc.i)) &
+  it = n.(len m) mod M );
+  existence
+  proof
+    per cases;
+    suppose A1: len nlist = 1;
+      then
+      1 in Seg (len nlist);
+      then
+      1 in dom (nlist) by FINSEQ_1:def 3;
+      then
+      nlist.1 in [:INT,INT:] by FINSEQ_2:11;
+      then
+      (nlist.1)`1 is Element of INT by MCART_1:10;
+      hence thesis by A1;
+    end;
+    suppose A2: len nlist <> 1;
+      defpred P[Nat,Integer,Integer] means
+      ex x be Element of INT
+      st x = (nlist.$1)`2
+      &
+      $3 = $2 * x;
+      reconsider i1=1 as Element of INT by INT_1:def 1;
+      X1: for n being Element of NAT st 1 <= n & n < (len nlist)
+      for z being Element of INT ex y being Element of INT st P[n,z,y]
+      proof
+        let n being Element of NAT;
+        assume X11: 1 <= n & n < len nlist;
+        let z being Element of INT;
+        n in Seg (len nlist) by X11;
+        then
+        n in dom (nlist) by FINSEQ_1:def 3;
+        then
+        nlist.n in [:INT,INT:] by FINSEQ_2:11;
+        then
+        reconsider x= (nlist.n)`2 as Element of INT by MCART_1:10;
+        reconsider y= z * x as Element of INT by INT_1:def 2;
+        take y;
+        thus P[n,z,y];
+      end;
+
+      consider m being FinSequence of INT such that
+      X2: len m = len nlist & (m.1 = i1 or len nlist = 0) &
+      for i be Element of NAT st 1 <= i & i < len nlist
+      holds P[i,m.i,m.(i+1)]
+      from RECDEF_1:sch 4(X1);
+
+      II:len m -1 < len m - 0 by XREAL_1:15;
+
+      X3:for i be Nat
+      st 1<=i & i<=(len m) -1
+      holds ex x be Element of INT
+      st x = (nlist.i)`2
+      &
+      m.(i+1) = m.i * x
+      proof
+        let i be Nat;
+        assume 1<=i & i<=(len m) -1;
+        then
+        X32: 1<=i & i< (len nlist) by X2,II,XXREAL_0:2;
+        i is Element of NAT by ORDINAL1:def 12;
+        hence ex x be Element of INT
+        st x = (nlist.i)`2 &
+        m.(i+1) = m.i * x by X2,X32;
+      end;
+
+      VV2: 1 <= (len m) by NAT_1:14,X2;
+      then
+      1-1 <= (len m) -1 by XREAL_1:9;
+      then
+      reconsider lm = (len m) - 1 as Element of NAT by INT_1:3;
+      defpred P1[Nat,Integer] means
+      ex d,x,y be Element of INT
+      st x = (nlist.$1)`2
+      &
+      m.($1+1) = m.$1 * x
+      &
+      y = m.($1+1)
+      &
+      d = (nlist.($1+1))`2
+      &
+      $2 = ALGO_INVERSE(y,d);
+      X4: for n being Nat st n in Seg lm
+      ex z being Element of INT st P1[n,z]
+      proof
+        let n be Nat;
+        assume X41: n in Seg lm;
+        X43: 1 <= n & n <= (len m) - 1 by FINSEQ_1:1,X41;
+        then
+        consider x be Element of INT
+        such that X42: x = (nlist.n)`2
+        &
+        m.(n+1) = m.n * x by X3;
+        reconsider y = m.(n+1) as Element of INT by INT_1:def 2;
+        n +1 <= (len m) - 1 +1 by X43,XREAL_1:6;
+        then
+        1 <= n+1 & n+1 <= len m by NAT_1:12;
+        then
+        n+1 in Seg (len nlist) by X2;
+        then
+        n+1 in dom (nlist) by FINSEQ_1:def 3;
+        then
+        nlist.(n+1) in [:INT,INT:] by FINSEQ_2:11;
+        then
+        reconsider d= (nlist.(n+1))`2 as Element of INT
+        by MCART_1:10;
+        reconsider w= ALGO_INVERSE(y,d) as Element of INT;
+        take w;
+        thus P1[n,w] by X42;
+      end;
+
+      consider prodi being FinSequence of INT such that
+      X5: dom prodi = Seg lm &
+      for k be Nat st k in Seg lm holds P1[k,prodi.k]
+      from FINSEQ_1:sch 5(X4);
+      X6: len prodi = len nlist - 1 by X2,FINSEQ_1:def 3,X5;
+
+      X7:for i be Nat
+      st 1<=i & i<=(len m) -1
+      holds ex d,x,y be Element of INT
+      st x = (nlist.i)`2
+      &
+      m.(i+1) = m.i * x
+      &
+      y = m.(i+1)
+      &
+      d = (nlist.(i+1))`2
+      &
+      prodi.i = ALGO_INVERSE(y,d)
+      proof
+        let i be Nat;
+        assume 1<=i & i<=(len m) -1;
+        then
+        i in Seg(lm) by FINSEQ_1:1;
+        hence ex d,x,y be Element of INT st x = (nlist.i)`2
+        &
+        m.(i+1) = m.i * x
+        &
+        y = m.(i+1)
+        &
+        d = (nlist.(i+1))`2
+        &
+        prodi.i = ALGO_INVERSE(y,d) by X5;
+      end;
+
+      defpred P2[Nat,Integer] means
+      ex d,x,y be Element of INT
+      st x = (nlist.$1)`2 &
+      m.($1+1) = m.$1 * x &
+      y = m.($1+1) &
+      d = (nlist.($1+1))`2 &
+      prodi.$1 = ALGO_INVERSE(y,d) &
+      $2 = y;
+
+      X8: for n being Nat st n in Seg lm
+      ex z being Element of INT st P2[n,z]
+      proof
+        let n be Nat;
+        assume X41: n in Seg lm;
+        1 <= n & n <= (len m) - 1 by FINSEQ_1:1,X41;
+        then
+        consider d,x,y be Element of INT such that
+        X42: x = (nlist.n)`2 &
+        m.(n+1) = m.n * x &
+        y = m.(n+1) &
+        d = (nlist.(n+1))`2 &
+        prodi.n = ALGO_INVERSE(y,d) by X7;
+        reconsider w= y as Element of INT;
+        take w;
+        thus P2[n,w] by X42;
+      end;
+
+      consider prodc being FinSequence of INT such that
+      X9: dom prodc = Seg lm &
+      for k be Nat st k in Seg lm holds P2[k,prodc.k]
+      from FINSEQ_1:sch 5(X8);
+      X10: len prodc = len nlist - 1 by X2,FINSEQ_1:def 3,X9;
+
+      X11:for i be Nat
+      st 1<=i & i<=(len m) -1
+      holds ex d,x,y be Element of INT
+      st x = (nlist.i)`2 &
+      m.(i+1) = m.i * x &
+      y = m.(i+1) &
+      d = (nlist.(i+1))`2 &
+      prodi.i = ALGO_INVERSE(y,d) &
+      prodc.i = y
+      proof
+        let i be Nat;
+        assume 1<=i & i<=(len m) -1;
+        then
+        i in Seg(lm) by FINSEQ_1:1;
+        hence
+        ex d,x,y be Element of INT
+        st x = (nlist.i)`2 &
+        m.(i+1) = m.i * x &
+        y = m.(i+1) &
+        d = (nlist.(i+1))`2 &
+        prodi.i = ALGO_INVERSE(y,d) &
+        prodc.i = y by X9;
+      end;
+      (len nlist) in Seg (len nlist) by FINSEQ_1:3;
+      then
+      (len m) in dom (nlist) by X2,FINSEQ_1:def 3;
+      then
+      nlist.(len m) in [:INT,INT:] by FINSEQ_2:11;
+      then
+      reconsider M0 = (nlist.(len m))`2
+      as Element of INT by MCART_1:10;
+      1 < (len m) by VV2,A2,X2,XXREAL_0:1;
+      then
+      1 + 1 <= (len m) by NAT_1:13;
+      then
+      2 -1 <= (len m) -1 by XREAL_1:9;
+      then
+      VV1: lm in dom (prodc) by X9;
+      prodc in (INT)* by FINSEQ_1:def 11;
+      then
+      reconsider MM = prodc.((len m)-1)
+      as Element of INT by VV1,FINSEQ_1:84;
+      reconsider M = MM*M0 as Element of INT by INT_1:def 2;
+
+      defpred P4[Nat,Integer,Integer ] means
+      ex u,u0,u1 be Element of INT
+      st
+      u0 = ( nlist.($1+1))`1 &
+      u1 = ( nlist.($1+1))`2 &
+      u = ( (u0-$2)*(prodi.$1) ) mod u1 &
+      $3 = $2 + u*(prodc.$1);
+      reconsider i1=1 as Element of INT by INT_1:def 1;
+
+      X12: for n being Element of NAT st 1 <= n & n < (len nlist)
+      for z being Element
+      of INT ex y being Element of INT st P4[n,z,y]
+      proof
+        let n being Element of NAT;
+        assume X41: 1 <= n & n < len nlist;
+
+        let z being Element of INT;
+
+        1 <= n+1 & n+1 <= len m by X41,X2,NAT_1:13;
+        then
+        n+1 in Seg (len nlist) by X2;
+        then
+        n+1 in dom (nlist) by FINSEQ_1:def 3;
+        then
+        XX: nlist.(n+1) in [:INT,INT:] by FINSEQ_2:11;
+        then
+        reconsider u0 = ( nlist.(n+1))`1
+        as Element of INT by MCART_1:10;
+        reconsider u1= (nlist.(n+1))`2
+        as Element of INT by XX,MCART_1:10;
+        reconsider u = (( u0- z)*(prodi.n)) mod u1
+        as Element of INT by INT_1:def 2;
+        reconsider y = z + u*(prodc.n)
+        as Element of INT by INT_1:def 2;
+        take y;
+        thus P4[n,z,y];
+      end;
+
+      1 in Seg (len nlist) by VV2,X2;
+      then
+      1 in dom (nlist) by FINSEQ_1:def 3;
+      then
+      nlist.1 in [:INT,INT:] by FINSEQ_2:11;
+      then
+      reconsider L1 = (nlist.1)`1 as Element of INT by MCART_1:10;
+
+      consider n being FinSequence of INT such that
+      X13: len n = len nlist & (n.1 = L1 or len nlist = 0) &
+      for i be Element of NAT st 1 <= i & i < len nlist
+      holds P4[i,n.i,n.(i+1)] from RECDEF_1:sch 4(X12);
+
+      X14:for i be Nat
+      st 1<=i & i<=(len m) -1
+      holds
+      ex u,u0,u1 be Element of INT
+      st
+      u0 = ( nlist.(i+1))`1 &
+      u1 = ( nlist.(i+1))`2 &
+      u = ( (u0- n.i)*(prodi.i)) mod u1 &
+      n.(i+1) = n.i + u*(prodc.i)
+      proof
+        let i be Nat;
+        assume 1<=i & i<=(len m) -1;
+        then
+        X32: 1<=i & i< (len nlist) by X2,II,XXREAL_0:2;
+        i is Element of NAT by ORDINAL1:def 12;
+        hence ex u,u0,u1 be Element of INT
+        st
+        u0 = ( nlist.(i+1))`1 &
+        u1 = ( nlist.(i+1))`2 &
+        u = ( (u0- n.i)*(prodi.i)) mod u1 &
+        n.(i+1) = n.i + u*(prodc.i) by X13,X32;
+      end;
+
+      reconsider s = n.(len m) mod M as Element of INT by INT_1:def 2;
+
+      M0 = (nlist.(len m))`2
+      & M = (prodc.((len m)-1))*M0
+      & s = n.(len m) mod M;
+      hence thesis by A2,X14,X11,X2,X13,X6,X10;
+    end;
+  end;
+  uniqueness
+  proof
+    let s1,s2 be Element of INT;
+    assume
+    A1:
+    ( len nlist = 1 implies s1 = (nlist.1)`1)
+    &
+    ( len nlist <> 1 implies
+    ex m,n,prodc,prodi be FinSequence of INT,
+    M0,M be Element of INT
+    st len m = len nlist
+    & len n = len nlist
+    & len prodc = len nlist - 1
+    & len prodi = len nlist - 1
+    & m.1 = 1
+    & (for i be Nat st 1<=i & i<=(len m) -1 holds
+    ex d,x,y be Element of INT
+    st x = (nlist.i)`2 &
+    m.(i+1) = m.i * x &
+    y = m.(i+1) &
+    d = (nlist.(i+1))`2 &
+    prodi.i = ALGO_INVERSE(y,d) &
+    prodc.i = y
+    )
+    & M0 = (nlist.(len m))`2
+    & M = (prodc.((len m)-1))*M0
+    & n.1 = (nlist.1)`1
+    & (for i be Nat
+    st 1<=i & i<=len m -1
+    holds
+    ex u,u0,u1 be Element of INT
+    st
+    u0 = ( nlist.(i+1))`1 &
+    u1 = ( nlist.(i+1))`2 &
+    u = ( (u0- n.i)*(prodi.i)) mod u1 &
+    n.(i+1) = n.i + u*(prodc.i))&
+    s1 = n.(len m) mod M );
+
+    assume
+    A2:
+    ( len nlist = 1 implies s2 = (nlist.1)`1)
+    &
+    ( len nlist <> 1 implies
+    ex m,n,prodc,prodi be FinSequence of INT,
+    M0,M be Element of INT
+    st len m = len nlist
+    & len n = len nlist
+    & len prodc = len nlist - 1
+    & len prodi = len nlist - 1
+    & m.1 =1
+    & (for i be Nat
+    st 1<=i & i<=(len m) -1
+    holds
+    ex d,x,y be Element of INT
+    st x = (nlist.i)`2 &
+    m.(i+1) = m.i * x &
+    y = m.(i+1) &
+    d = (nlist.(i+1))`2 &
+    prodi.i = ALGO_INVERSE(y,d) &
+    prodc.i = y
+    )
+    & M0 = (nlist.(len m))`2
+    & M = (prodc.((len m)-1))*M0
+    & n.1 = (nlist.1)`1
+    & (for i be Nat
+    st 1<=i & i<=len m -1
+    holds
+    ex u,u0,u1 be Element of INT
+    st
+    u0 = ( nlist.(i+1))`1 &
+    u1 = ( nlist.(i+1))`2 &
+    u = ( (u0- n.i)*(prodi.i)) mod u1 &
+    n.(i+1) = n.i + u*(prodc.i) ) &
+    s2 = n.(len m) mod M );
+
+    per cases;
+    suppose C1: len nlist = 1;
+      thus s1 = s2 by A1,A2,C1;
+    end;
+    suppose C2: len nlist <> 1;
+
+      consider m1,n1,prodc1,prodi1 be FinSequence of INT,
+      M01,M1 be Element of INT such that
+      P1: len m1 = len nlist
+      & len n1 = len nlist
+      & len prodc1 = len nlist -1
+      & len prodi1 = len nlist -1
+      & m1.1 =1
+      & (for i be Nat
+      st 1<=i & i<=(len m1) -1
+      holds
+      ex d,x,y be Element of INT st x = (nlist.i)`2
+      &
+      m1.(i+1) = m1.i * x
+      &
+      y = m1.(i+1)
+      &
+      d = (nlist.(i+1))`2
+      &
+      prodi1.i = ALGO_INVERSE(y,d)
+      &
+      prodc1.i = y
+      )
+      & M01 = (nlist.(len m1))`2
+      & M1 = (prodc1.((len m1)-1))*M01
+      & n1.1 = (nlist.1)`1
+      & (for i be Nat
+      st 1<=i & i<=len m1 -1
+      holds
+      ex u,u0,u1 be Element of INT
+      st
+      u0 = ( nlist.(i+1))`1
+      &
+      u1 = ( nlist.(i+1))`2
+      &
+      u = ( (u0- n1.i)*(prodi1.i)) mod u1
+      & n1.(i+1) = n1.i + u*(prodc1.i) )
+      & s1 = n1.(len m1) mod M1 by C2,A1;
+
+      consider m2,n2,prodc2,prodi2 be FinSequence of INT,
+      M02,M2 be Element of INT such that
+      P2: len m2 = len nlist
+      & len n2 = len nlist
+      & len prodc2 = len nlist -1
+      & len prodi2 = len nlist -1
+      & m2.1 =1
+      & (for i be Nat
+      st 1<=i & i<=(len m2) -1
+      holds
+      ex d,x,y be Element of INT
+      st x = (nlist.i)`2
+      &
+      m2.(i+1) = m2.i * x
+      &
+      y = m2.(i+1)
+      &
+      d = (nlist.(i+1))`2
+      &
+      prodi2.i = ALGO_INVERSE(y,d)
+      &
+      prodc2.i = y
+      )
+      & M02 = (nlist.(len m2))`2
+      & M2 = (prodc2.((len m2)-1))*M02
+      & n2.1 = (nlist.1)`1
+      & (for i be Nat
+      st 1<=i & i<=len m2 -1
+      holds
+      ex u,u0,u1 be Element of INT
+      st
+      u0 = ( nlist.(i+1))`1
+      &
+      u1 = ( nlist.(i+1))`2
+      &
+      u = ( (u0- n2.i)*(prodi2.i)) mod u1
+      & n2.(i+1) = n2.i + u*(prodc2.i) )
+      & s2 = n2.(len m2) mod M2 by C2,A2;
+      defpred EQ[Nat] means
+      1<= $1 & $1 <= len m1
+      implies m1.$1 =m2.$1;
+      Q50:EQ[ 0 ];
+
+      Q51: for i be Nat
+      st EQ[i] holds EQ[i+1]
+      proof
+        let i be Nat;
+        assume Q52: EQ[i];
+        assume
+        1<= i+1 & i+1 <= len m1;
+        then
+        Q54:1-1 <=i+1 -1 & i+1 -1 <= len m1 -1 by XREAL_1:9;
+
+        Q55:len m1 -1 <= len m1 - 0 by XREAL_1:13;
+
+        per cases;
+        suppose C1: i = 0;
+          thus
+          m1.(i+1) = m2.(i+1) by P1,P2,C1;
+        end;
+        suppose Q56P:i <> 0;
+          then
+          Q56: 1<=i by NAT_1:14;
+
+          Q57: ex d,x,y be Element of INT
+          st x = (nlist.i)`2 &
+          m1.(i+1) = m1.i * x &
+          y = m1.(i+1) &
+          d = (nlist.(i+1))`2 &
+          prodi1.i = ALGO_INVERSE(y,d) &
+          prodc1.i = y by P1,Q56,Q54;
+
+          1<=i & i<=len m2 -1 by Q56P,Q54,P1,P2,NAT_1:14;
+          then ex d,x,y be Element of INT
+          st x = (nlist.i)`2 &
+          m2.(i+1) = m2.i * x &
+          y = m2.(i+1) &
+          d = (nlist.(i+1))`2 &
+          prodi2.i = ALGO_INVERSE(y,d) &
+          prodc2.i = y by P2;
+          hence
+          m1.(i+1) = m2.(i+1) by Q57,Q54,Q52,Q55,Q56P,NAT_1:14,XXREAL_0:2;
+        end;
+      end;
+
+      Q0:for k be Nat holds EQ[k]
+      from NAT_1:sch 2(Q50,Q51);
+
+      QQ3: now let i be Nat;
+      assume ASX0:1<=i & i <=len prodc1;
+      then
+      X1: ex d,x,y be Element of INT
+      st x = (nlist.i)`2 &
+      m1.(i+1) = m1.i * x &
+      y = m1.(i+1) &
+      d = (nlist.(i+1))`2 &
+      prodi1.i = ALGO_INVERSE(y,d) &
+      prodc1.i = y by P1;
+
+      ex d,x,y be Element of INT
+      st x = (nlist.i)`2 &
+      m2.(i+1) = m2.i * x &
+      y = m2.(i+1) &
+      d = (nlist.(i+1))`2 &
+      prodi2.i = ALGO_INVERSE(y,d) &
+      prodc2.i = y by P2,ASX0,P1;
+      hence
+      prodc1.i = prodc2.i by X1,FINSEQ_1:14,P1,P2,Q0;
+    end;
+    then
+    Q3: prodc1 = prodc2 by FINSEQ_1:14,P1,P2;
+    Q3A:now let i be Nat;
+    assume ASX0:1<=i & i <=len prodi1;
+    then
+    X1: ex d,x,y be Element of INT
+    st x = (nlist.i)`2 &
+    m1.(i+1) = m1.i * x &
+    y = m1.(i+1) &
+    d = (nlist.(i+1))`2 &
+    prodi1.i = ALGO_INVERSE(y,d) &
+    prodc1.i = y by P1;
+
+    ex d,x,y be Element of INT
+    st x = (nlist.i)`2 &
+    m2.(i+1) = m2.i * x &
+    y = m2.(i+1) &
+    d = (nlist.(i+1))`2 &
+    prodi2.i = ALGO_INVERSE(y,d) &
+    prodc2.i = y by P2,ASX0,P1;
+    hence
+    prodi1.i = prodi2.i by X1,Q0,FINSEQ_1:14,P1,P2;
+  end;
+
+  Q4: M1 = M2 by P2,FINSEQ_1:14,P1,QQ3;
+
+  defpred EQ[Nat] means
+  1<= $1 & $1 <= len n1
+  implies n1.$1 =n2.$1;
+  Q50:EQ[ 0 ];
+
+  Q51: for k be Nat
+  st EQ[k] holds EQ[k+1]
+  proof
+    let k be Nat;
+    assume Q52: EQ[k];
+    assume 1<= k+1 & k+1 <= len n1;
+    then
+    Q54:1-1 <=k+1 -1 & k+1 -1 <= len n1 -1 by XREAL_1:9;
+
+    Q55:len n1 -1 <= len n1 - 0 by XREAL_1:13;
+
+    per cases;
+    suppose C1: k = 0;
+      thus
+      n1.(k+1) = n2.(k+1) by P1,P2,C1;
+    end;
+    suppose ASQ56:k <> 0;
+      then
+      Q56: 1<=k by NAT_1:14;
+
+      Q57: ex u,u0,u1 be Element of INT
+      st
+      u0 = ( nlist.(k+1))`1
+      &
+      u1 = ( nlist.(k+1))`2
+      &
+      u = ((u0- n1.k)*(prodi1.k)) mod u1
+      &
+      n1.(k+1) = n1.k + u*(prodc1.k) by Q56,Q54,P1;
+
+      ex u,u0,u1 be Element of INT
+      st
+      u0 = ( nlist.(k+1))`1
+      &
+      u1 = ( nlist.(k+1))`2
+      &
+      u = ( (u0- n2.k)*(prodi2.k)) mod u1
+      &
+      n2.(k+1) = n2.k + u*(prodc2.k) by Q56,Q54,P1,P2;
+      hence
+      n1.(k+1) = n2.(k+1) by Q3,Q57,Q52,Q55,ASQ56,
+      NAT_1:14,Q54,XXREAL_0:2,FINSEQ_1:14,P1,P2,Q3A;
+    end;
+  end;
+
+  for k be Nat holds EQ[k] from NAT_1:sch 2(Q50,Q51);
+  hence s1=s2 by Q4,P1,P2,FINSEQ_1:14;
+end;
+end;
+end;
+
+theorem LMLmTh4B:
+  for a,b be Element of INT st b <> 0 holds (a mod b),a are_congruent_mod b
+  proof
+    let a,b be Element of INT;
+    assume b <>0;then
+    C1:a mod b = a - (a div b) * b by INT_1:def 10;
+    reconsider c = -(a div b) as Element of INT by INT_1:def 2;
+    take c;
+    thus thesis by C1;
+  end;
+
+theorem
+  for a,b be Element of INT st b <>0 holds
+  (a mod b ) gcd b = a gcd b by INT_4:14,LMLmTh4B;
+
+theorem LmTh4A:
+  for a,b,c be Element of INT
+  st c <>0 & a = b mod c
+  &
+  b,c are_relative_prime
+  holds a,c are_relative_prime
+  proof
+    let a,b,c be Element of INT;
+    assume A1: c <>0 &
+    a = b mod c
+    &
+    b,c are_relative_prime;
+    then
+    b gcd c = 1 by INT_2:def 3;
+    then
+    a gcd c = 1 by A1,INT_4:14,LMLmTh4B;
+    hence thesis by INT_2:def 3;
+  end;
+
+  LmTh4:
+  for a,b,c be Element of INT
+  st a = b mod c & c <> 0 holds
+  ex d be Element of INT st a = b + d * c
+  proof
+    let a,b,c be Element of INT;
+    assume a = b mod c & c <> 0;then
+    C1:b = (b div c)*c + a by INT_1:59;
+    reconsider x = -(b div c) as Element of INT by INT_1:def 2;
+    take x;
+    thus thesis by C1;
+  end;
+
+  LmTh5A:
+  for b,m be FinSequence of INT
+  st len b = len m
+  &
+  (for i be Nat st i in Seg (len b)
+  holds b.i <> 0 )
+  &
+  m.1 = 1
+  holds
+  for k be Element of NAT
+  st
+  1<= k & k <= len b -1
+  &
+  (for i be Nat st 1<=i & i <=k
+  holds
+  m.(i+1) = m.i * b.i )
+  holds
+  m.(k+1) <> 0
+  proof
+    let b,m be FinSequence of INT;
+    assume len b = len m;
+    assume A2: (for i be Nat st i in Seg (len b)
+    holds b.i <> 0 )&
+    m.1 = 1;
+
+    defpred P[Nat] means
+    ( 1<= $1 & $1 <= len b -1
+    &
+    (for i be Nat st
+    1<=i & i <=$1
+    holds
+    m.(i+1) = m.i * b.i ) )
+    implies
+    m.($1+1) <> 0;
+    reconsider I0=0 as Element of NAT;
+    P0:P[0];
+
+    P1:for k be Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume P11: P[k];
+      assume P12:
+      1<= k+1 & k+1 <= len b -1
+      &
+      (for i be Nat st
+      1<=i & i <=k+1
+      holds
+      m.(i+1) = m.i * b.i );
+
+      P14: k <= k +1 by NAT_1:12;
+      per cases;
+      suppose P15: k = 0;
+        P16: m.((k+1)+1)
+        = m.1 * b.1 by P12,P15
+        .= b.1 by A2;
+
+        len b -1 + (0 qua Nat) <= len b - 1 + 1 by XREAL_1:7;
+        then
+        k+1 <= len b by P12,XXREAL_0:2;
+        then
+        1 <= 1 & 1 <= len b by XXREAL_0:2,P12;
+        then
+        1 in Seg(len b);
+        hence
+        m.((k+1)+1) <> 0 by P16,A2;
+      end;
+      suppose P19:k <> 0;
+
+        P20: now let i be Nat;
+        assume 1<=i & i <=k;
+        then
+        1<=i & i <=(k +1) by NAT_1:12;
+        hence
+        m.(i+1) = m.i * b.i by P12;
+      end;
+
+      thus
+      m.((k+1)+1) <> 0
+      proof
+        XX6:(k+1) +1 <= len b -1 +1 by P12,XREAL_1:6;
+
+        XX1: (k +1) <= (k+1) +1 by NAT_1:12;
+
+        XX2: 1<= k+1 by NAT_1:12;
+        k +1 <= len b by XX1,XX6,XXREAL_0:2;
+        then
+        k+1 in Seg (len b) by XX2;
+        then
+        P23:
+        b.(k+1) <> 0 by A2;
+        m.((k+1)+1) = m.(k+1) * b.(k+1) by P12;
+        hence
+        m.((k+1)+1) <> 0 by P23,P20,P11,P12,P14,
+        XXREAL_0:2,NAT_1:14,P19,XCMPLX_1:6;
+      end;
+    end;
+  end;
+  for k be Element of NAT holds P[k] from NAT_1:sch 1(P0,P1);
+  hence thesis;
+end;
+
+LmTh5:
+for b,m be FinSequence of INT
+st 2 <=len b
+&
+(for i,j be Nat st i in Seg (len b)
+& j in Seg (len b)
+& i <> j
+holds b.i,b.j are_relative_prime )
+&
+m.1 = 1
+holds
+for k be Element of NAT
+st
+1<= k & k <= len b -1
+&
+(for i be Nat st 1<=i & i <=k
+holds
+m.(i+1) = m.i * b.i )
+holds
+for j be Nat st k+1 <= j & j <= len b
+holds
+m.(k+1),b.j are_relative_prime
+proof
+  let b,m be FinSequence of INT;
+  assume 2 <=len b;
+  assume
+  A2: (for i,j be Nat st i in Seg (len b)
+  & j in Seg (len b)
+  & i <> j
+  holds b.i,b.j are_relative_prime )
+  &
+  m.1 = 1;
+  defpred P[Nat] means
+  ( 1<= $1 & $1 <= len b -1
+  &
+  (for i be Nat st
+  1<=i & i <=$1
+  holds
+  m.(i+1) = m.i * b.i ) )
+  implies
+  for j be Nat st $1+1 <= j & j <= len b
+  holds
+  m.($1+1),b.j are_relative_prime;
+  reconsider I0=0 as Element of NAT;
+  P0:P[0];
+
+  P1:for k be Element of NAT st P[k] holds P[k+1]
+  proof
+    let k be Element of NAT;
+    assume P11: P[k];
+    assume P12:
+    1<= k+1 & k+1 <= len b -1
+    &
+    (for i be Nat st 1<=i & i <=k+1 holds
+    m.(i+1) = m.i * b.i );
+
+    P14: k <= k +1 by NAT_1:12;
+
+    per cases;
+    suppose P15: k = 0;
+
+      P16: m.((k+1)+1)
+      = m.1 * b.1 by P12,P15
+      .= b.1 by A2;
+
+      for j be Nat st (k+1)+1 <= j & j <= len b
+      holds
+      m.((k+1)+1),b.j are_relative_prime
+      proof
+        let j be Nat;
+        assume XX0:(k+1)+1 <= j & j <= len b;
+        then
+        XX2: 1 <= j & j <= len b by XXREAL_0:2,P15;
+        then
+        XX1: j in Seg(len b) by FINSEQ_1:1;
+        1 <= 1 & 1 <= len b by XXREAL_0:2,XX2;
+        then
+        XX3: 1 in Seg(len b);
+
+        1 <> j by XX0,P15;
+        hence
+        m.((k+1)+1),b.j are_relative_prime by P16,A2,XX1,XX3;
+      end;
+      hence thesis;
+    end;
+    suppose P19:k <> 0;
+
+      P20: now let i be Nat;
+      assume 1<=i & i <=k;
+      then
+      1<=i & i <=(k +1) by NAT_1:12;
+
+      hence m.(i+1) = m.i * b.i by P12;
+    end;
+
+    thus
+    for j be Nat st (k+1)+1 <= j & j <= len b
+    holds
+
+    m.((k+1)+1),b.j are_relative_prime
+    proof
+      let j be Nat;
+
+      assume XX6:(k+1) +1 <= j & j <= len b;
+      (k +1) <= (k+1) +1 by NAT_1:12;
+      then
+
+      XX1: k +1 <= j & j <= len b by XX6,XXREAL_0:2;
+      then
+      P21: m.(k+1),b.j are_relative_prime
+      by P20,P11,P12,P14,XXREAL_0:2,NAT_1:14,P19;
+
+      XX2: 1<= k+1 by NAT_1:12;
+      k +1 <= len b by XX1,XXREAL_0:2;
+      then
+      XX3: k+1 in Seg (len b) by XX2;
+      1<=j & j <= len b by XX1,XX2,XXREAL_0:2;
+      then
+      XX4: j in Seg (len b) by FINSEQ_1:1;
+
+      (k+1) < j by XX6,XXREAL_0:2,NAT_1:16;
+      then
+      P23:
+      b.(k+1),b.j are_relative_prime by A2,XX3,XX4;
+      m.((k+1)+1) = m.(k+1) * b.(k+1) by P12;
+      hence
+      m.((k+1)+1),b.j are_relative_prime by P23,P21,INT_2:26;
+    end;
+  end;
+end;
+for k be Element of NAT holds P[k] from NAT_1:sch 1(P0,P1);
+hence thesis;
+end;
+
+LmTh6:
+for b,m be FinSequence of INT
+st len b = len m
+&
+m.1 = 1
+holds
+for k be Element of NAT
+st
+1<= k & k <= len b -1
+&
+(for i be Nat st 1<=i & i <=k
+holds
+m.(i+1) = m.i * b.i )
+holds
+for j be Nat st 1<= j & j <=k
+holds
+m.(k+1) mod b.j = 0
+proof
+  let b,m be FinSequence of INT;
+  assume len b = len m;
+  assume A2: m.1 = 1;
+  defpred P[Nat] means
+  ( 1<= $1 & $1 <= len b -1
+  &
+  (for i be Nat st
+  1<=i & i <=$1
+  holds
+  m.(i+1) = m.i * b.i ) )
+  implies
+  for j be Nat st 1<=j & j <=$1
+  holds
+  m.($1+1) mod b.j = 0;
+  reconsider I0=0 as Element of NAT;
+  P0:P[0];
+
+  P1:for k be Element of NAT st P[k] holds P[k+1]
+  proof
+    let k be Element of NAT;
+    assume P11: P[k];
+    assume P12:
+
+    1<= k+1 & k+1 <= len b -1
+
+    &
+    (for i be Nat st
+
+    1<=i & i <=k+1
+    holds
+    m.(i+1) = m.i * b.i );
+    P14: k <= k +1 by NAT_1:12;
+
+    per cases;
+    suppose P15: k = 0;
+      P16: m.((k+1)+1)
+      = m.1 * b.1 by P12,P15
+      .= b.1 by A2;
+
+      for j be Nat st 1<= j & j <= (k+1)
+      holds
+      m.((k+1)+1) mod b.j =0
+      proof
+        let j be Nat;
+        assume 1<= j & j <=(k+1);
+        then
+        j = 1 by XXREAL_0:1,P15;
+        hence
+        m.((k+1)+1) mod b.j = 0 by INT_1:50,P16;
+      end;
+      hence thesis;
+    end;
+    suppose k <> 0;
+      P20: now let i be Nat;
+      assume 1<=i & i <=k;
+      then
+      1<=i & i <=(k +1) by NAT_1:12;
+      hence m.(i+1) = m.i * b.i by P12;
+    end;
+    thus for j be Nat st 1 <=j & j <= k+1 holds m.((k+1)+1) mod b.j = 0
+    proof
+      let j be Nat;
+      assume XX6:1 <=j & j <= k+1;
+      reconsider bj =b.j as Element of INT by INT_1: def 2;
+      per cases;
+      suppose XX61: j = k+1;
+        thus m.((k+1)+1) mod b.j
+        = (m.(k+1) * b.(k+1)) mod b.j by P12
+        .= ((m.(k+1) mod b.j ) *( b.(k+1) mod b.j ) )
+        mod b.j by NAT_D:67
+        .= ((m.(k+1) mod b.j ) * (0 qua Nat) )
+        mod b.j by INT_1:50,XX61
+        .= 0 by INT_4:12;
+      end;
+      suppose j <> k+1;
+        then
+        j < k+1 by XX6,XXREAL_0:1;
+        then
+        XX1: j <= k by NAT_1:13;
+        thus m.((k+1)+1) mod b.j
+        = (m.(k+1) * b.(k+1)) mod b.j by P12
+        .= ((m.(k+1) mod b.j ) *( b.(k+1) mod b.j ) )
+        mod b.j by NAT_D:67
+        .= ( 0 *( b.(k+1) mod b.j ) )
+        mod b.j by XX1,P20,XX6,P11,P12,P14,XXREAL_0:2
+        .= 0 by INT_4:12;
+      end;
+    end;
+  end;
+end;
+for k be Element of NAT holds P[k] from NAT_1:sch 1(P0,P1);
+hence thesis;
+end;
+
+theorem Th4:
+  for nlist be non empty FinSequence of [:INT,INT:],
+  a,b be FinSequence of INT
+  st len a = len b & len a = len nlist
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds b.i <> 0 )
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds
+  (nlist.i)`1 = a.i & (nlist.i)`2 = b.i )
+  &
+  (for i,j be Nat st i in Seg (len nlist)
+  & j in Seg (len nlist)
+  & i <> j
+  holds b.i,b.j are_relative_prime )
+  holds
+  for i be Nat st i in Seg (len nlist)
+  holds ALGO_CRT(nlist) mod b.i = a.i mod b.i
+  proof
+    defpred P[Nat] means
+    for nlist be non empty FinSequence of [:INT,INT:],
+    a,b be FinSequence of INT
+    st len nlist = $1
+    & len a = len b
+    & len a = len nlist
+    & (for i be Nat st i in Seg (len nlist)
+    holds b.i <> 0 )
+    &
+    (for i be Nat st i in Seg (len nlist)
+    holds
+    (nlist.i)`1 = a.i & (nlist.i)`2 = b.i )
+    &
+    (for i,j be Nat st i in Seg (len nlist)
+    & j in Seg (len nlist)
+    & i <> j
+    holds b.i,b.j are_relative_prime)
+    holds
+    (for i be Nat st i in Seg (len nlist)
+    holds ALGO_CRT(nlist) mod b.i = a.i mod b.i
+    );
+
+    P0: P[ 0 ];
+
+    P1: for n be Element of NAT st P[ n ] holds P[n+1]
+    proof
+      let n be Element of NAT;
+
+      assume AS1:P[n];
+      let nlist be non empty FinSequence of [:INT,INT:],
+      a,b be FinSequence of INT;
+      assume AS2: len nlist = n+1
+      & len a = len b
+      & len a = len nlist
+      & (for i be Nat st i in Seg (len nlist)
+      holds b.i <> 0 )
+      &
+      (for i be Nat st i in Seg (len nlist)
+      holds
+      (nlist.i)`1 = a.i & (nlist.i)`2 = b.i )
+      &
+      (for i,j be Nat st i in Seg (len nlist)
+      & j in Seg (len nlist)
+      & i <> j
+      holds b.i,b.j are_relative_prime );
+
+      per cases;
+      suppose P1: n = 0;
+        P2: 1 in Seg(len nlist) by P1,AS2;
+        P3: ALGO_CRT(nlist) = (nlist.1)`1 by defALGOCRT,P1,AS2
+        .= a.1 by AS2,P2;
+        thus
+        for i be Nat st i in Seg (len nlist)
+        holds ALGO_CRT(nlist) mod b.i = a.i mod b.i
+        by P3,TARSKI:def 1,FINSEQ_1:2,P1,AS2;
+      end;
+      suppose NN1: n <> 0;
+        then
+        NN2: 1 <=n by NAT_1:14;
+
+        P4: len nlist <> 1 by AS2,NN1;
+
+        reconsider nlist1 = nlist | n
+        as FinSequence of [:INT,INT:];
+        reconsider a1 = a | n
+        as FinSequence of INT;
+        reconsider b1 = b | n
+        as FinSequence of INT;
+
+        KK: n <= n+1 by NAT_1:11;
+        then
+        D02: len a1 = n by FINSEQ_1:59,AS2;
+
+        D22: len nlist1 = n by KK,FINSEQ_1:59,AS2;
+        then
+        reconsider nlist1 as non empty FinSequence of [:INT,INT:]
+        by NN1;
+
+        D23: dom nlist1 = Seg (len nlist1) by FINSEQ_1:def 3
+        .= Seg n by KK,FINSEQ_1:59,AS2;
+        D25: len nlist1 = n by D23,FINSEQ_1:def 3;
+        then
+        D28: Seg len nlist1 c= Seg (len nlist) by KK,FINSEQ_1:5,AS2;
+
+        X1: len nlist1 = n
+        & len a1 = len b1
+        & len a1 = len nlist1 by D02,KK,FINSEQ_1:59,AS2;
+
+        X2A:for i be Nat st i in Seg (len nlist1)
+        holds b1.i <> 0
+        proof
+          let i be Nat;
+          assume D260: i in Seg (len nlist1);
+          then
+          b1.i =b.i by FUNCT_1:49,D25;
+          hence thesis by D28,D260,AS2;
+        end;
+
+        X2:for i be Nat st i in Seg (len nlist1)
+        holds
+        (nlist1.i)`1 = a1.i & (nlist1.i)`2 =b1.i
+        proof
+          let i be Nat;
+          assume X21: i in Seg (len nlist1);
+
+          X23:(nlist1.i)`1 = (nlist.i)`1 by X21,FUNCT_1:49,D25
+          .= a.i by X21,D28,AS2
+          .= a1.i by X21,FUNCT_1:49,D25;
+          (nlist1.i)`2 = (nlist.i)`2 by X21,FUNCT_1:49,D25
+          .= b.i by X21,D28,AS2
+          .= b1.i by X21,FUNCT_1:49,D25;
+          hence thesis by X23;
+        end;
+
+        X3:
+        for i,j be Nat st i in Seg (len nlist1)
+        & j in Seg (len nlist1)
+        & i<>j
+        holds b1.i,b1.j are_relative_prime
+        proof
+          let i,j be Nat;
+          assume A1: i in Seg (len nlist1)
+          & j in Seg (len nlist1)
+          & i <> j;
+
+          A3: b.i = b1.i by A1,FUNCT_1:49,D25;
+          b.j = b1.j by A1,FUNCT_1:49,D25;
+          hence thesis by A3,A1,D28,AS2;
+        end;
+
+        X400:for i be Nat st i in Seg (len nlist1)
+        holds ALGO_CRT(nlist1) mod b.i = a.i mod b.i
+        proof
+          let i be Nat;
+          assume A1: i in Seg (len nlist1);
+          then
+          a1.i = a.i & b1.i =b.i by FUNCT_1:49,D25;
+          hence
+          ALGO_CRT(nlist1) mod b.i = a.i mod b.i by AS1,X1,X2,X3,X2A,A1;
+        end;
+
+        consider
+        m,l,prodc,prodi be FinSequence of INT,
+        M0,M be Element of INT such that
+        X5:
+        len m = len nlist
+        & len l = len nlist
+        & len prodc = len nlist - 1
+        & len prodi = len nlist - 1
+        & m.1 =1
+        & (for i be Nat
+        st 1<=i & i<=(len m) - 1
+        holds
+        ex d,x,y be Element of INT
+        st x = (nlist.i)`2
+        &
+        m.(i+1) = m.i * x
+        &
+        y = m.(i+1)
+        &
+        d = (nlist.(i+1))`2
+        &
+        prodi.i = ALGO_INVERSE(y,d)
+        &
+        prodc.i = y
+        )
+        & M0 = (nlist.(len m))`2
+        & M = (prodc.((len m)-1))*M0
+        & l.1 = (nlist.1)`1
+        & (for i be Nat
+        st 1<=i & i<=len m - 1
+        holds
+        ex u,u0,u1 be Element of INT
+        st
+        u0 = ( nlist.(i+1))`1
+        &
+        u1 = ( nlist.(i+1))`2
+        &
+        u = ( (u0- l.i)*(prodi.i) ) mod u1
+
+        & l.(i+1) = l.i + u*(prodc.i) )
+
+        & ALGO_CRT(nlist) = l.(len m) mod M by P4,defALGOCRT;
+
+        LmTh51: 1 + 1 <= n + 1 by XREAL_1:6,NN2;
+
+        reconsider lb1=len b -1 as Element of NAT by AS2;
+
+        LmTh54:1<= lb1 & lb1 <= lb1 by AS2,NAT_1:14,NN1;
+        LmTh55:
+        for i be Nat st 1<=i & i <=lb1
+        holds
+        m.(i+1) = m.i * b.i
+
+        proof
+          let i be Nat;
+          assume PX0: 1<=i & i <=lb1;
+          then
+          PX1: ex d,x,y be Element of INT
+
+          st x = (nlist.i)`2
+          &
+          m.(i+1) = m.i * x
+          &
+          y = m.(i+1)
+          &
+          d = (nlist.(i+1))`2
+          &
+          prodi.i = ALGO_INVERSE(y,d)
+          & prodc.i = y by AS2,X5;
+          i in Seg (len nlist1) by PX0,D22,AS2,FINSEQ_1:1;
+          hence
+          m.(i+1) = m.i * b.i by PX1,AS2,D28;
+        end;
+
+        LmTh56:m.(len nlist ),b.(len nlist) are_relative_prime
+        by AS2,LmTh5,LmTh51,X5,LmTh54,LmTh55;
+
+        set l1 = l | n, m1 = m | n;
+
+        KK: n <= n+1 by NAT_1:11;
+        then
+        PD02: len l1 = n by AS2,FINSEQ_1:59,X5;
+
+        PD11: dom m1 = Seg (len m1) by FINSEQ_1:def 3
+        .= Seg n by AS2,FINSEQ_1:59,X5,KK;
+        PD12: len m1 = n by PD11,FINSEQ_1:def 3;
+        1 -1 <=n - 1 by NN2,XREAL_1:9;
+        then
+        n -1 in NAT by INT_1:3;
+        then
+        reconsider nn1 = n-1 as Nat;
+        reconsider prodi1 = prodi | nn1 as FinSequence of INT;
+        reconsider prodc1 = prodc | nn1 as FinSequence of INT;
+
+        XX5: n - 1 <= n - 0 by XREAL_1:10;
+        then
+        QD02: len prodi1 = nn1 by AS2,X5,FINSEQ_1:59;
+        QD12: len prodc1 = nn1 by XX5,AS2,X5,FINSEQ_1:59;
+
+        PD24: 1 in Seg n by NN2;
+
+        PD26X: l1.1 = l.1 by FUNCT_1:49,PD24
+        .= (nlist1.1)`1 by FUNCT_1:49,PD24,X5;
+
+        QKK: n - 1 <= n - 0 by XREAL_1:10;
+
+        PD26: now let i be Nat;
+        assume PD260X: 1<=i & i<=len m1 - 1;
+        then
+        PD260: 1<=i & i<=len m1 by PD12,QKK,XXREAL_0:2;
+        then
+        i in Seg (len m1) by FINSEQ_1:1;
+        hence
+        m1.i =m.i by FUNCT_1:49,PD12;
+
+        i in Seg (len l1) by FINSEQ_1:1,PD260,PD02,PD12;
+        hence
+        l1.i =l.i by FUNCT_1:49,PD02;
+
+        i in Seg (len prodi1) by FINSEQ_1:1,PD260X,PD12,QD02;
+        hence
+        prodi1.i =prodi.i by FUNCT_1:49,QD02;
+
+        i in Seg (len prodc1) by FINSEQ_1:1,PD260X,PD12,QD12;
+        hence
+        prodc1.i =prodc.i by FUNCT_1:49,QD12;
+      end;
+
+      (len m1) in Seg (len nlist1) by D22,PD12,FINSEQ_1:3;
+      then
+      Z1: (len m1) in Seg (len nlist) by D28;
+
+      Z2: nlist1.(len m1) = nlist.(len m1) by FUNCT_1:49,D22,PD12,FINSEQ_1:3;
+
+      (len m1) in dom nlist by FINSEQ_1:def 3,Z1;
+      then
+      nlist1.(len m1) in [:INT,INT:] by FINSEQ_2:11,Z2;
+      then
+      reconsider M01 = (nlist1.(len m1))`2 as Element of INT by MCART_1:10;
+
+      reconsider M1 = (prodc1.((len m1)-1))*M01
+      as Element of INT by INT_1:def 2;
+      QX1: len m1 = len nlist1
+      & len l1 = len nlist1
+      & len prodc1 = len nlist1 - 1
+      & len prodi1 = len nlist1 - 1
+      & m1.1 =1 by KK,FINSEQ_1:59,AS2,PD12,PD02,QD12,QD02,X5,FUNCT_1:49,PD24;
+      QX2: for i be Nat
+      st 1<=i & i<=(len m1) - 1
+      holds
+      ex d,x,y be Element of INT
+      st x = (nlist1.i)`2
+      &
+      m1.(i+1) = m1.i * x
+      &
+      y = m1.(i+1)
+      &
+      d = (nlist1.(i+1))`2
+      &
+      prodi1.i = ALGO_INVERSE(y,d)
+      &
+      prodc1.i = y
+      proof
+        let i be Nat;
+        assume XQ21: 1<=i & i<=(len m1) - 1;
+        then
+        XQ22:m1.i = m.i by PD26;
+        XQ23:prodi1.i = prodi.i by PD26,XQ21;
+        XQ24:prodc1.i = prodc.i by PD26,XQ21;
+
+        XQ25: 1<=i+1 by NAT_1:12;
+        i+1 <=(len m1) - 1 +1 by XQ21,XREAL_1:6;
+        then
+        YY1: i+1 in Seg (len m1) by XQ25;
+        then
+        XQ27:m1.(i+1) =m.(i+1) by FUNCT_1:49,PD12;
+
+        XQ28: 1<=i & i<=len m1 by XQ21,PD12,QKK,XXREAL_0:2;
+
+        XQ30: 1<=i & i <= len m - 1 by X5,AS2,XQ21,PD12,QKK,XXREAL_0:2;
+
+        i in Seg (len nlist1) by PD12,D22,XQ28,FINSEQ_1:1;
+        then
+        XQ32: nlist1.i = nlist.i by FUNCT_1:49,D25;
+
+        nlist1.(i+1) = nlist.(i+1) by FUNCT_1:49,PD12,YY1;
+        hence thesis by XQ22,XQ23,XQ24,XQ27,XQ30,XQ32,X5;
+      end;
+
+      QX4: for i be Nat
+      st 1<=i & i<=len m1 - 1
+      holds
+      ex u,u0,u1 be Element of INT
+      st
+      u0 = ( nlist1.(i+1))`1
+      &
+      u1 = ( nlist1.(i+1))`2
+      &
+      u = ( (u0- l1.i)*(prodi1.i)) mod u1
+      & l1.(i+1) = l1.i + u*(prodc1.i)
+      proof
+        let i be Nat;
+        assume XQ21: 1<=i & i<=(len m1) - 1;
+        then
+        XQ22:l1.i = l.i by PD26;
+        XQ23:prodi1.i = prodi.i by PD26,XQ21;
+        XQ24:prodc1.i = prodc.i by PD26,XQ21;
+        XQ25: 1<=i+1 by NAT_1:12;
+        i+1 <=(len m1) - 1 +1 by XQ21,XREAL_1:6;
+        then
+        YY1: i+1 in Seg (len m1) by XQ25;
+        then
+        XQ27:l1.(i+1) =l.(i+1) by FUNCT_1:49,PD12;
+        XQ30: 1<=i & i <= len m - 1 by X5,AS2,XQ21,PD12,QKK,XXREAL_0:2;
+        nlist1.(i+1) = nlist.(i+1) by FUNCT_1:49,PD12,YY1;
+        hence thesis by XQ22,XQ23,XQ24,XQ27,XQ30,X5;
+      end;
+
+      reconsider s= l1.(len m1) mod M1 as Element of INT by INT_1:def 2;
+
+      QX12: 1 <= (len m) - 1 by X5,AS2,NAT_1:14,NN1;
+      reconsider lm1= (len m) - 1 as Element of NAT by X5;
+
+      QX13: 1<=lm1 & lm1 <= (len m) - 1 by X5,AS2,NAT_1:14,NN1;
+
+      consider d,x,y be Element of INT such that
+      QX14: x = (nlist.lm1)`2 &
+      m.(lm1+1) = m.lm1 * x &
+      y = m.(lm1+1) &
+      d = (nlist.(lm1+1))`2 &
+      prodi.lm1 = ALGO_INVERSE(y,d) &
+      prodc.lm1 = y by X5,AS2,NN2;
+
+      consider u,u0,u1 be Element of INT such that
+      QX15:
+      u0 = ( nlist.(lm1+1))`1 &
+      u1 = ( nlist.(lm1+1))`2 &
+      u = ( (u0-l.lm1)*(prodi.lm1)) mod u1 &
+      l.(lm1+1) = l.lm1 + u*(prodc.lm1)
+      by QX13,X5;
+
+      QX43: len nlist in Seg (len nlist) by FINSEQ_1:3;
+      QX45: M0 = b.(len nlist) by X5,AS2,QX43;
+      then
+      QX37B: M0 <> 0 by QX43,AS2;
+      QX36A:
+      (u0-l.(len m -1) )* ALGO_INVERSE(y,M0) is Element of INT
+      by INT_1:def 2;
+      consider r be Element of INT such that
+      QX37:u = (u0-l.(len m -1) )* ALGO_INVERSE(y,M0)
+      + r*M0 by LmTh4,X5,QX14,QX15,QX36A,QX37B;
+
+      QX26A: y <> 0 by QX14,X5,AS2,LmTh5A,LmTh54,LmTh55;
+
+      now per cases;
+        suppose AA1:len nlist1 = 1;
+
+          AAA1: ALGO_CRT(nlist1) = (nlist1.1)`1 by AA1,defALGOCRT
+          .= (nlist.1)`1 by FUNCT_1:49,PD24
+          .= l.(len m-1) by AA1,AS2,X5,D23,FINSEQ_1:def 3;
+          QX27: ALGO_CRT(nlist)
+          =(l.(len m -1) + u*y ) mod M by QX14,QX15,X5;
+
+          reconsider p=0 as Element of INT by INT_1:def 2;
+          QX28:ALGO_CRT(nlist1) = l.(len m-1) + p * y by AAA1;
+
+          reconsider uy=u*y as Element of INT by INT_1:def 2;
+          reconsider llm1=l.(len m-1) as Element of INT
+          by INT_1:def 2;
+          reconsider ly = llm1 + uy as Element of INT
+          by INT_1:def 2;
+          M = y*M0 by X5,QX14;
+          then consider t be Element of INT such that
+          QX30:ALGO_CRT(nlist) =ly + t* M
+          by LmTh4,QX27,QX37B,QX26A,XCMPLX_1:6;
+
+          reconsider qr = r+t as Element of INT by INT_1:def 2;
+          ALGO_CRT(nlist)
+          = ALGO_CRT(nlist1) - (llm1* ALGO_INVERSE(y,M0)*y + p*y)
+          +qr*M0*y + u0* ALGO_INVERSE(y,M0)*y by X5,QX14,QX37,QX30,AAA1;
+          hence
+          ex p,qr be Element of INT st
+          ALGO_CRT(nlist)
+          = ALGO_CRT(nlist1)-((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+          + qr*M0*y + u0* ALGO_INVERSE(y,M0)*y
+          & ALGO_CRT(nlist1) = l.(len m-1) + p * y by QX28;
+        end;
+
+        suppose AA2:len nlist1 <> 1;
+          then
+          QX7: ALGO_CRT(nlist1) = s by defALGOCRT,QX1,QX2,QX4,PD26X
+          .= l1.(len m1) mod ((prodc1.((len m1)-1))*M01);
+
+          QX8: l1.(len l1) =l.(len l1)
+          by FUNCT_1:49,NN1,PD02,FINSEQ_1:3
+          .=l.(len m -1) by X5,AS2,FINSEQ_1:59,KK;
+
+          2 <= len nlist1 by AA2,NAT_1:23;
+          then
+          2 - 1 <= len m1 - 1 by XREAL_1:9,PD12,X1;
+          then
+          QX90: 1 <= nn1 & nn1 <= len m1 - 1 by PD11,FINSEQ_1:def 3;
+
+          QX10:M01 = (nlist.(len m1))`2 by FUNCT_1:49,D22,PD12,FINSEQ_1:3
+          .= (nlist.(len m -1 ))`2 by X5,AS2,PD11,FINSEQ_1:def 3;
+
+          consider d1,x1,y1 be Element of INT such that
+          QX16: x1 = (nlist1.nn1)`2 &
+          m1.(nn1+1) = m1.nn1 * x1 &
+          y1 = m1.(nn1+1) &
+          d1 = (nlist1.(nn1+1))`2 &
+          prodi1.nn1 = ALGO_INVERSE(y1,d1) &
+          prodc1.nn1 = y1 by QX2,QX90;
+
+          QX21:len m1
+          = len m-1 by X5,AS2,PD11,FINSEQ_1:def 3;
+          then
+          QX20:lm1 in Seg (len m1) by QX12;
+
+          QX24:ALGO_CRT(nlist1)
+          =l.(len m-1) mod (y1*M01)
+          by QX16,QX7,QX21,QX8,AS2,FINSEQ_1:59,X5,KK;
+          QX24A:
+          ALGO_CRT(nlist1) is Element of INT
+          &
+          l.(len m-1) is Element of INT
+          &
+          (y1*M01) is Element of INT by INT_1:def 2;
+
+          QX26:y =y1 * x by QX16,X5,AS2,FUNCT_1:49,PD12,QX20,QX14;
+          then
+          QX26C: y1*M01 <> 0 by X5,AS2,LmTh5A,LmTh54,LmTh55,QX10,QX14;
+          consider p be Element of INT such that
+          QX30:ALGO_CRT(nlist1) = l.(len m-1) + p* (y1*M01)
+          by QX24,LmTh4,QX24A,QX26A,QX10,QX14,QX26;
+
+          QX27: ALGO_CRT(nlist)
+          = (l.(len m -1) + u*(y1*x) ) mod ((prodc.((len m)-1))*M0)
+          by QX16,X5,AS2,FUNCT_1:49,PD12,QX20,QX14,QX15
+          .= (l.(len m -1) + u*(y1*x) )
+          mod (y1*x*M0) by QX16,X5,AS2,FUNCT_1:49,PD12,QX20,QX14;
+
+          ALGO_CRT(nlist) is Element of INT
+          &
+          l.(len m -1) + u*(y1*x) is Element of INT
+          &
+          (y1*x*M0) is Element of INT by INT_1:def 2;
+          then
+          consider q be Element of INT such that
+          QX31:ALGO_CRT(nlist) = l.(len m -1) + u*(y1*x)
+          + q* (y1*x*M0) by QX27,LmTh4,QX10,QX14,QX26C,XCMPLX_1:6,QX37B;
+
+          reconsider qr = r+q as Element of INT by INT_1:def 2;
+
+          ALGO_CRT(nlist1)- p* (y1*M01) + u*(y1*x)
+          = ALGO_CRT(nlist1)- p* (y1*x) + u*(y1*x) by QX10,QX14
+          .= ALGO_CRT(nlist1) -((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+          + r*M0*y + u0* ALGO_INVERSE(y,M0)*y
+          by QX26,QX37;
+          then ALGO_CRT(nlist)
+          = ALGO_CRT(nlist1)-((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+          + r*M0*y + u0* ALGO_INVERSE(y,M0)*y + q* (y*M0)
+          by QX16,X5,AS2,FUNCT_1:49,PD12,QX20,QX14,QX31,QX30
+          .= ALGO_CRT(nlist1)-((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+          + qr*M0*y + u0* ALGO_INVERSE(y,M0)*y;
+
+          hence
+          ex p,qr be Element of INT st
+          ALGO_CRT(nlist)
+          = ALGO_CRT(nlist1)-((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+          + qr*M0*y + u0* ALGO_INVERSE(y,M0)*y
+          &
+          ALGO_CRT(nlist1) = l.(len m-1) + p * y by QX30,QX26,QX10,QX14;
+        end;
+      end;
+
+      then consider p,qr be Element of INT such that
+      QX41:
+      ALGO_CRT(nlist)
+      = ALGO_CRT(nlist1)-((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+      + qr*M0*y + u0* ALGO_INVERSE(y,M0)*y
+      &
+      ALGO_CRT(nlist1) = l.(len m-1) + p * y;
+
+      reconsider y0 = y mod M0 as Element of INT by INT_1:def 2;
+
+      y0,M0 are_relative_prime by QX37B,LmTh4A,QX14,X5,QX45,LmTh56;
+      then
+      y0 gcd M0 = 1 by INT_2:def 3;
+      then
+      QX48: ALGO_EXGCD(M0,y0)`3_3 = 1 by Th2;
+
+      QX50:
+      ((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+      mod M0
+      = ((l.(len m -1) )*(ALGO_INVERSE(y,M0)*y) )
+      mod M0
+      + ( p*y mod M0) mod M0 by NAT_D:66
+
+      .= (l.(len m -1) mod M0 )*((ALGO_INVERSE(y,M0)*y) mod M0)
+      mod M0
+      + (p*y mod M0) mod M0
+      by NAT_D:67
+      .= (l.(len m -1) mod M0 )*(1 mod M0)
+      mod M0
+      + (p*y mod M0) mod M0
+      by QX48,Th3
+      .= (l.(len m -1) * 1 ) mod M0
+      + (p*y mod M0) mod M0
+      by NAT_D:67
+      .= ALGO_CRT(nlist1) mod M0 by QX41,NAT_D:66;
+      thus
+      for i be Nat st i in Seg (len nlist)
+      holds ALGO_CRT(nlist) mod b.i = a.i mod b.i
+
+      proof
+        let i be Nat;
+        assume VA0: i in Seg (len nlist);
+        then
+        VA1:1 <= i & i <= len nlist by FINSEQ_1:1;
+
+        per cases;
+        suppose VA2: i = len nlist;
+          VA22: b.i <> 0 by AS2,VA0;
+
+          reconsider I0 = 0 as Element of INT by INT_1:def 2;
+
+          reconsider K1y = ((l.(len m -1) )*ALGO_INVERSE(y,M0)*y + p*y )
+          as Element of INT by INT_1:def 2;
+          reconsider K2y = ((qr)*y)*M0 as Element of INT by INT_1:def 2;
+          reconsider K3y = u0* (ALGO_INVERSE(y,M0)*y)
+          as Element of INT by INT_1:def 2;
+          reconsider K4y = K2y + K3y
+          as Element of INT by INT_1:def 2;
+          VA31:
+          K2y mod b.i = (((qr)*y) mod M0) *( M0 mod M0) mod M0
+          by QX45,VA2,NAT_D:67
+          .= ( (( (qr)*y ) mod M0 ) *I0 ) mod M0 by INT_1:50
+          .= I0 mod b.i by VA2,X5,AS2,QX43;
+
+          VA30:
+          K4y mod b.i
+          = ((I0 mod b.i) + (K3y mod b.i)) mod b.i by VA31,NAT_D:66
+          .= ( I0 + K3y) mod b.i by NAT_D:66
+          .= ((u0 mod b.i) * ((ALGO_INVERSE(y,M0)*y) mod b.i ))
+          mod b.i by NAT_D:67
+          .= ((u0 mod b.i) * (1 mod b.i )) mod b.i
+          by QX48,Th3,VA2,QX45
+          .= (u0 * 1 ) mod b.i by NAT_D:67
+          .= a.i mod b.i by VA2,QX43,X5,AS2,QX15;
+
+          VA31:
+          (ALGO_CRT(nlist) + (K1y) ) mod b.i
+          = ((ALGO_CRT(nlist) mod b.i) + (ALGO_CRT(nlist1) mod b.i) )
+          mod b.i by QX50,VA2,QX45,NAT_D:66
+          .= (ALGO_CRT(nlist) + ALGO_CRT(nlist1) ) mod b.i by NAT_D:66;
+          VA32:
+          (ALGO_CRT(nlist1) + (K4y) ) mod b.i
+          = ((ALGO_CRT(nlist1) mod b.i) + (K4y mod b.i) ) mod b.i by NAT_D:66
+          .=(ALGO_CRT(nlist1) + a.i ) mod b.i by NAT_D:66,VA30;
+          reconsider LL= (ALGO_CRT(nlist1) + a.i ) mod b.i as Element of INT
+          by INT_1:def 2;
+          reconsider LL1= ALGO_CRT(nlist) + ALGO_CRT(nlist1)
+          as Element of INT by INT_1:def 2;
+          reconsider bi =b.i
+          as Element of INT by INT_1:def 2;
+          consider r be Element of INT such that
+          VA33: LL = LL1 + r *bi
+          by LmTh4,VA22,VA31,VA32,QX41;
+
+          reconsider LL2= ALGO_CRT(nlist1) + a.i
+          as Element of INT by INT_1:def 2;
+
+          consider s be Element of INT such that
+          VA34: LL = LL2 + s *bi by LmTh4,VA22;
+          reconsider LL3= s -r as Element of INT by INT_1:def 2;
+          VA36:
+          LL3*(b.i) mod b.i = ((LL3 mod b.i) * (b.i mod b.i)) mod b.i
+          by NAT_D:67
+          .= ((LL3 mod b.i) * I0 ) mod b.i by INT_1:50
+          .= I0 mod b.i;
+          thus
+          ALGO_CRT(nlist) mod b.i
+           = (a.i + ((s -r)*(b.i)) ) mod b.i by VA33,VA34
+          .= ((a.i mod b.i ) + (I0 mod b.i) ) mod b.i
+          by VA36,NAT_D:66
+          .= ( a.i + I0 ) mod b.i by NAT_D:66
+          .= a.i mod b.i;
+        end;
+        suppose i <> len nlist;
+          then
+          i < len nlist by VA1,XXREAL_0:1;
+          then
+          i + 1 <= len nlist by NAT_1:13;
+          then
+          VA22P:i + 1 - 1 <= len nlist -1 by XREAL_1:9;
+          then
+          VA22: 1<= i & i <= len nlist1 by KK,FINSEQ_1:59,AS2,FINSEQ_1:1,VA0;
+          VA24:i in Seg (len nlist1) by FINSEQ_1:1,VA22P,AS2,X1,VA1;
+
+          reconsider K1 = (l.(len m -1) )*ALGO_INVERSE(y,M0) + p
+          as Element of INT by INT_1:def 2;
+          reconsider K2 = (qr)*M0 + u0* ALGO_INVERSE(y,M0)
+          as Element of INT by INT_1:def 2;
+          reconsider I0 = 0 as Element of INT by INT_1:def 2;
+          VA27: y mod b.i = 0 by X1,QX14,LmTh6,LmTh54,LmTh55,AS2,X5,VA22;
+
+          reconsider K1y = K1*y as Element of INT by INT_1:def 2;
+          reconsider K2y = K2*y as Element of INT by INT_1:def 2;
+          VA29:
+          (K1* y) mod b.i = (K1 mod b.i) *(y mod b.i) mod b.i by NAT_D:67
+          .= 0 mod b.i by VA27;
+          VA30:
+          (K2* y) mod b.i = (K2 mod b.i) *(y mod b.i) mod b.i by NAT_D:67
+          .= 0 mod b.i by VA27;
+          VA31:
+          (ALGO_CRT(nlist) + (K1y) ) mod b.i
+          = ((ALGO_CRT(nlist) mod b.i) + (K1y mod b.i) ) mod b.i by NAT_D:66
+          .=(ALGO_CRT(nlist) + I0 ) mod b.i by NAT_D:66,VA29
+          .=ALGO_CRT(nlist) mod b.i;
+
+          (ALGO_CRT(nlist1) + (K2y) ) mod b.i
+          = ((ALGO_CRT(nlist1) mod b.i) + (K2y mod b.i) ) mod b.i by NAT_D:66
+          .=(ALGO_CRT(nlist1) + I0 ) mod b.i by NAT_D:66,VA30
+          .=ALGO_CRT(nlist1) mod b.i;
+          hence
+          ALGO_CRT(nlist) mod b.i = a.i mod b.i by VA24,QX41,VA31,X400;
+        end;
+      end;
+    end;
+  end;
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(P0,P1);
+  hence thesis;
+end;
+
+LmTh7A:
+for x,y,a,b be Element of INT
+st x mod a = y mod a
+& x mod b = y mod b
+& a,b are_relative_prime
+holds
+x mod (a*b) = y mod (a*b)
+proof
+  let x,y,a,b be Element of INT;
+  assume
+  AS: x mod a = y mod a
+  & x mod b = y mod b
+  & a,b are_relative_prime;
+
+  set g1 = x mod a;
+  set g2 = x mod b;
+
+  per cases;
+  suppose C1: a*b = 0;
+    thus
+    x mod (a*b)
+    =0 by INT_1:def 10,C1
+    .= y mod (a*b) by C1,INT_1:def 10;
+  end;
+  suppose a*b <> 0;
+    then
+    C3: a <> 0 & b <> 0;
+
+    C5: y = (y div a)*a + (y mod a) by C3,INT_1:59;
+    C6: x = (x div b)*b + (x mod b) by C3,INT_1:59;
+
+    x-y = (x div a)*a + (x mod a)
+    - ((y div a)*a + (y mod a)) by C3,INT_1:59,C5
+    .= ((x div a) - (y div a)) *a by AS;
+    then
+    a divides x-y by INT_1:def 3;
+    then
+    C8: x,y are_congruent_mod a by INT_1:def 4;
+    x-y = (x div b)*b + (x mod b)
+    - ((y div b)*b + (y mod b)) by C3,INT_1:59,C6
+    .= ((x div b) - (y div b)) *b by AS;
+    then
+    b divides x-y by INT_1:def 3;
+    then
+    x,y are_congruent_mod b by INT_1:def 4;
+    then
+    x,y are_congruent_mod (a*b)
+    by AS,C8,INT_6:21;
+    then
+    (a*b) divides x-y by INT_1:def 4;
+    then
+    consider p be Integer
+    such that C11: x-y = (a*b)*p by INT_1:def 3;
+
+    reconsider I0 =0 as Element of INT by INT_1:def 2;
+
+    thus
+    x mod (a*b) = (y + (a*b)*p ) mod (a*b) by C11
+    .= ( (y mod (a*b)) + ( ((a*b)*p) mod (a*b) ) ) mod (a*b)
+    by NAT_D:66
+    .= ((y mod (a*b))
+    + (( ((a*b) mod (a*b)) * (p mod (a*b)) ) mod (a*b) ))
+    mod (a*b) by NAT_D:67
+    .= ((y mod (a*b)) + (( I0* (p mod (a*b)) ) mod (a*b)) )
+    mod (a*b) by INT_1:50
+    .= ((y + I0)) mod (a*b) by NAT_D:66
+    .= y mod (a*b);
+  end;
+end;
+
+theorem LmTh7:
+  for x,y be Element of INT,
+  b,m be non empty FinSequence of INT
+  st
+  2 <=len b
+  &
+  (for i,j be Nat st i in Seg (len b)
+  & j in Seg (len b)
+  & i <> j
+  holds b.i,b.j are_relative_prime )
+  &
+  (for i be Nat
+  st i in Seg len b
+  holds x mod b.i = y mod b.i )
+  &
+  m.1 = 1 holds
+  for k be Element of NAT
+  st
+  1<= k & k <= len b
+  &
+  (for i be Nat st 1<=i & i <=k
+  holds
+  m.(i+1) = m.i * b.i )
+  holds
+  x mod m.(k+1) = y mod m.(k+1)
+  proof
+    let x,y be Element of INT,
+    b,m be non empty FinSequence of INT;
+    assume
+    A1: 2 <=len b;
+    assume
+    A4:
+    for i,j be Nat st i in Seg (len b)
+    & j in Seg (len b)
+    & i <> j
+    holds b.i,b.j are_relative_prime;
+    assume
+    A2:
+    for i be Nat
+    st i in Seg len b
+    holds x mod b.i = y mod b.i;
+    assume
+    A3:
+    m.1 = 1;
+
+    defpred P[Nat] means
+    ( 1<= $1 & $1 <= len b
+    &
+    (for i be Nat st 1<=i & i <=$1
+    holds
+    m.(i+1) = m.i * b.i ) )
+    implies
+    x mod m.($1+1) = y mod m.($1+1);
+
+    reconsider I0=0 as Element of NAT;
+    P0:P[0];
+
+    P1:for k be Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume P11: P[k];
+      assume P12:
+      1<= k+1 & k+1 <= len b
+      &
+      (for i be Nat st
+      1<=i & i <=k+1
+      holds
+      m.(i+1) = m.i * b.i );
+
+      P14: k <= k +1 by NAT_1:12;
+
+      per cases;
+      suppose P15: k = 0;
+        P16: m.((k+1)+1)
+        = m.1 * b.1 by P12,P15
+        .= b.1 by A3;
+
+        1<= 1 & 1<= len b by NAT_1:14;
+        then
+        P18: 1 in Seg len b;
+        thus
+        x mod m.((k+1)+1)
+        = y mod m.((k+1)+1) by P16,P18,A2;
+      end;
+      suppose P181:k <> 0;
+
+        k+1 -1 <= len b -1 by P12,XREAL_1:9;
+        then
+        P19: 1<=k & k <= len b -1 by P181,NAT_1:14;
+
+        XX1: now let i be Nat;
+        assume 1<=i & i <=k;
+        then
+
+        1<=i & i <=(k +1) by NAT_1:12;
+
+        hence
+        m.(i+1) = m.i * b.i by P12;
+      end;
+      P22: m.((k+1)+1) = m.(k+1) * b.(k+1) by P12;
+      k+1 in Seg len b by P12;
+      then
+      P23: x mod b.(k+1) = y mod b.(k+1) by A2;
+      P24: m.(k+1),b.(k+1) are_relative_prime
+      by LmTh5,XX1,P19,A1,A4,A3,P12;
+      m.(k+1) is Element of INT & b.(k+1) is Element of INT
+      by INT_1:def 2;
+      hence
+      x mod m.((k+1)+1) = y mod m.((k+1)+1)
+      by P22,P23,P11,NAT_1:14,P181,P12,P14,XXREAL_0:2,XX1,P24,LmTh7A;
+    end;
+
+  end;
+  for k be Element of NAT holds P[k] from NAT_1:sch 1(P0,P1);
+  hence thesis;
+end;
+
+theorem LmTh8:
+  for b be FinSequence of INT
+  st len b = 1 holds Product b = b.1
+  proof
+    let b be FinSequence of INT;
+    assume len b = 1;
+    then
+    b = <*b.1*> by FINSEQ_1:40;
+    hence Product b = b.1 by RVSUM_1:95;
+  end;
+
+theorem LmTh9:
+  for b be FinSequence of INT
+  ex m be non empty FinSequence of INT
+  st
+  len m = len b + 1
+  &
+  m.1 = 1
+  &
+  (for i be Nat st 1<=i & i <=len b
+  holds
+  m.(i+1) = m.i * b.i )
+  &
+  Product b = m.(len b + 1 )
+  proof
+    defpred P[Nat]
+    means
+    for b be FinSequence of INT
+    st
+    len b = $1
+    holds
+    ex m be non empty FinSequence of INT
+    st
+    ( len m = len b + 1
+    &
+    m.1 = 1
+    &
+    (for i be Nat st 1<=i & i <=len b
+    holds
+    m.(i+1) = m.i * b.i ) )
+    & Product b = m.(len b + 1);
+
+    P0: P[0]
+    proof
+      let b be FinSequence of INT;
+      assume A1:len b = 0;
+
+      I0: 1 in INT by INT_1:def 2;
+      rng (<*(1 qua Integer ) *>) = {(1 qua Integer)} by
+      FINSEQ_1:39;
+      then
+      rng (<*(1 qua Integer ) *>) c= INT
+      by ZFMISC_1:31,I0;
+      then
+      reconsider m=<*(1 qua Integer ) *>
+      as non empty FinSequence of INT by FINSEQ_1:def 4;
+      P0: len m = len b + 1 by A1,FINSEQ_1:40;
+      P1: m.1 = 1 by FINSEQ_1:40;
+      P2: for i be Nat st 1<=i & i <=len b
+      holds
+      m.(i+1) = m.i * b.i by A1;
+
+      b = <*>REAL by A1;
+      hence thesis by P0,P1,P2,A1,RVSUM_1:94;
+    end;
+    P1: for k be Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume A1: P[k];
+
+      let b be FinSequence of INT;
+      assume A2: len b = k+1;
+      set b1 = b | k;
+
+      P2: len b1 = k by FINSEQ_1:59,A2,NAT_1:12;
+
+      then
+      consider m1 be non empty FinSequence of INT such that
+      P4:
+      (
+      len b1 + 1 = len m1
+      &
+      m1.1 = 1
+      &
+      (for i be Nat st 1<=i & i <=len b1
+      holds
+      m1.(i+1) = m1.i * b1.i ) )
+      & Product b1 = m1.(len b1+1) by A1;
+
+      set m = m1 ^ <* (Product b1)*b.(len b) *>;
+
+      P5Z: (Product b1)*b.(len b) in INT by P4,INT_1:def 2;
+      P5W: rng (<*(Product b1)*b.(len b) *>)
+      = {(Product b1)*b.(len b)} by FINSEQ_1:39;
+      then
+      P5Q: rng (<* (Product b1)*b.(len b) *>) c= INT
+      by ZFMISC_1:31,P5Z;
+
+      P5: len m = len m1 + len (<* (Product b1)*b.(len b) *>)
+      by FINSEQ_1:22
+      .= (len b1 + 1) + 1 by P4,FINSEQ_1:40
+      .= len b + 1 by FINSEQ_1:59,A2,NAT_1:12;
+
+      VV2: rng m = rng m1 \/ {(Product b1)*b.(len b)}
+      by FINSEQ_1:31,P5W;
+      rng m1 c= INT by FINSEQ_1:def 4;
+      then
+      rng m c= INT by P5W,VV2,P5Q,XBOOLE_1:8;
+
+      then
+      reconsider m as non empty FinSequence of INT by FINSEQ_1:def 4;
+
+
+      P5B: len m1 = len b1 + 1 by P4
+      .= k + 1 by FINSEQ_1:59,A2,NAT_1:12;
+
+      1 <= 1 & 1 <=k+1 by NAT_1:12;
+      then
+      1 in Seg (len m1) by P5B;
+      then
+      1 in dom m1 by FINSEQ_1:def 3;
+      then
+
+      P8: m.1 =1 by P4,FINSEQ_1:def 7;
+
+      P9:for i be Nat st 1<=i & i <=len b
+      holds
+      m.(i+1) = m.i * b.i
+      proof
+        let i be Nat;
+        assume P10: 1<=i & i <=len b;
+        per cases;
+        suppose P11: i = len b;
+
+          len b1+1 in Seg (len m1) by P2,P5B,FINSEQ_1:4;
+          then
+          len b1+1 in dom m1 by FINSEQ_1:def 3;
+          then
+
+          P13: m1.(len b1+1) = m.(len b1+1) by FINSEQ_1:def 7
+          .= m.i by A2,FINSEQ_1:59,NAT_1:12,P11;
+
+          1 in Seg 1;
+          then
+          P13C: 1 in dom (<* (Product b1)*b.(len b) *>)
+          by FINSEQ_1:38;
+          thus m.(i+1) = (<* (Product b1)*b.(len b) *>).1
+          by FINSEQ_1:def 7,P11,A2,P5B,P13C
+          .= m.i * b.i by P13,P11,P4,FINSEQ_1:40;
+        end;
+        suppose i <> len b;
+          then
+          P12D: i < len b by P10,XXREAL_0:1;
+          then
+          P12A: 1<=i & i <=len b1 by P2,A2,NAT_1:13,P10;
+          then P13: m1.(i+1) = m1.i * b1.i by P4;
+          i in Seg(len m1) by FINSEQ_1:1,P10,A2,P5B;
+          then
+          P13B: i in dom m1 by FINSEQ_1:def 3;
+          P13E:i +1 <= len m1 by A2,P5B,P12D,NAT_1:13;
+          1 <= i + 1 by NAT_1:12;
+          then
+          i+1 in Seg(len m1) by P13E;
+          then
+          P13C: i+1 in dom m1 by FINSEQ_1:def 3;
+          i in Seg k by P12A,FINSEQ_1:1,P2;
+          then
+          P15: b.i = b1.i by FUNCT_1:49;
+          P16: m.i = m1.i by FINSEQ_1:def 7,P13B;
+          thus m.(i+1) = m.i * b.i by P13,FINSEQ_1:def 7,P13C,P15,P16;
+        end;
+      end;
+      b|(k+1)=b1 ^ <*b.(len b)*> by INT_6:5,A2; then
+      P17: b = b1^<* b.(len b )*> by FINSEQ_1:58,A2;
+      len b in Seg (len m1) by FINSEQ_1:4,A2,P5B; then
+      P18: len b in dom m1 by FINSEQ_1:def 3;
+      P19: 1<=len b & len b <=len b by A2,NAT_1:12;
+      Product b
+      = m1.(len b1+1)*b.(len b ) by P4,RVSUM_1:96,P17
+      .= m1.(len b )*b.(len b ) by A2,FINSEQ_1:59,NAT_1:12
+      .= m.(len b)*b.(len b ) by FINSEQ_1:def 7,P18
+      .= m.(len b + 1) by P9,P19;
+      hence thesis by P5,P8,P9;
+    end;
+    for k be Element of NAT
+    holds P[k] from NAT_1: sch 1(P0,P1);
+    hence thesis;
+  end;
+
+theorem
+  for nlist be non empty FinSequence of [:INT,INT:],
+  a,b be non empty FinSequence of INT,
+  x,y be Element of INT
+  st len a = len b & len a = len nlist
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds b.i <> 0 )
+
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds
+  (nlist.i)`1 = a.i & (nlist.i)`2 =b.i )
+  &
+  (for i,j be Nat st i in Seg (len nlist)
+  & j in Seg (len nlist)
+  & i <> j
+  holds b.i,b.j are_relative_prime )
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds x mod b.i = a.i mod b.i )
+  & y = Product b
+  holds ALGO_CRT(nlist) mod y = x mod y
+  proof
+    let nlist be non empty FinSequence of [:INT,INT:],
+    a,b be non empty FinSequence of INT,
+    x,y be Element of INT;
+    assume A1:
+    len a = len b & len a = len nlist;
+    assume A2:
+    for i be Nat st i in Seg (len nlist)
+    holds b.i <> 0;
+    assume A3:
+    for i be Nat st i in Seg (len nlist)
+    holds
+    (nlist.i)`1 = a.i & (nlist.i)`2 = b.i;
+    assume A4:
+    for i,j be Nat st i in Seg (len nlist)
+    & j in Seg (len nlist)
+    & i <> j
+    holds b.i,b.j are_relative_prime;
+    assume A5:
+    for i be Nat st i in Seg (len nlist)
+    holds x mod b.i = a.i mod b.i;
+    assume A6: y = Product b;
+    P2: for i be Nat st i in Seg (len nlist)
+    holds ALGO_CRT(nlist) mod b.i = x mod b.i
+    proof
+      let i be Nat;
+      assume P21: i in Seg (len nlist);
+      hence ALGO_CRT(nlist) mod b.i = a.i mod b.i by Th4,A1,A2,A3,A4
+      .= x mod b.i by A5,P21;
+    end;
+
+    per cases;
+    suppose P3: len nlist = 1;
+      then
+      P5: 1 in Seg(len nlist);
+      thus
+      ALGO_CRT(nlist) mod y
+      = ALGO_CRT(nlist) mod b.1 by P3,A1,LmTh8,A6
+      .= x mod b.1 by P2,P5
+      .= x mod y by P3,A1,LmTh8,A6;
+    end;
+    suppose P4: len nlist <> 1;
+      P5: 2 <= len nlist by P4,NAT_1:23;
+      P6: 2 <= len b by A1,P4,NAT_1:23;
+      consider m be non empty FinSequence of INT such that
+      P7:
+      len m = len b + 1 & m.1 = 1 &
+      (for i be Nat st 1<=i & i <=len b holds
+      m.(i+1) = m.i * b.i ) &
+      Product b = m.(len b + 1) by LmTh9;
+      1<= len b & len b <= len b by P6,XXREAL_0:2;
+      hence ALGO_CRT(nlist) mod y = x mod y by A6,P7,LmTh7,A1,A4,P2,P5;
+    end;
+  end;

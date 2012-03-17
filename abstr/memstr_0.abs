@@ -2,7 +2,7 @@
 ::  by Andrzej Trybulec
 ::
 :: Received April 28, 2011
-:: Copyright (c) 2011 Association of Mizar Users
+:: Copyright (c) 2011-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,18 +17,19 @@ environ
  vocabularies STRUCT_0, SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, CARD_1,
       FUNCOP_1, FUNCT_4, RELAT_1, TARSKI, CAT_1, FSM_1, SETFAM_1, FINSET_1,
       NAT_1, ARYTM_1, PARTFUN1, ZFMISC_1, AMI_1, ARYTM_3, COMPOS_1, SCMFSA6C,
-      XXREAL_0, SUPINF_2, MEMSTR_0;
+      XXREAL_0, SUPINF_2, MEMSTR_0, PBOOLE, GOBRD13, QUANTAL1, SCMFSA9A;
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
       PBOOLE, FUNCT_7, CARD_1, CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1,
       FINSET_1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, AFINSQ_1,
-      FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, STRUCT_0, XXREAL_0;
+      FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, STRUCT_0, XXREAL_0,
+      MEASURE6;
  constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, RELSET_1, FUNCT_7,
-      PRE_POLY, PBOOLE, RECDEF_2, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0;
+      PRE_POLY, PBOOLE, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
       RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, AFINSQ_1, VALUED_1, XCMPLX_0,
       PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2, ZFMISC_1,
-      SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5;
+      SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5, MEASURE6;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
 
 
@@ -40,20 +41,30 @@ reserve x,N for set,
 definition let N;
   struct (ZeroStr) Mem-Struct over N (# carrier -> set,
     ZeroF -> Element of the carrier,
-    Object-Kind -> Function of the carrier, N \/ { NAT }
+    Object-Kind -> Function of the carrier, N,
+    ValuesF -> ManySortedSet of N
      #);
 end;
+
+reserve N for with_zero set;
+
+:: wymaganie zeby N byl 'with_zero' jest troche na zapas
+:: na razie wykorzystujemy tylko rejestracje, ze 'with_zero'
+:: musi byc 'non empty' i w definicji Trivial-Mem N
+:: ale tutaj mozna sie tego pozbyc, biorac zamiast 0
+:: the Element of N i potrzebujemy tylko to, ze N jest niepusty
 
 definition let N;
   func Trivial-Mem N -> strict Mem-Struct over N means
 :: MEMSTR_0:def 1
 
   the carrier of it = {0} & the ZeroF of it = 0 &
-  the Object-Kind of it = 0 .--> NAT;
+  the Object-Kind of it = 0 .--> 0 &
+  the ValuesF of it = N --> NAT;
 end;
 
 registration let N;
-  cluster Trivial-Mem N-> 1-element;
+  cluster Trivial-Mem N -> 1-element;
 end;
 
 registration let N;
@@ -66,14 +77,53 @@ notation let N;
   synonym Data-Locations S for NonZero S;
 end;
 
+registration
+ :: gdzie to ma byc, dlaczego nie dziala SETFAM_1
+ cluster with_zero -> non empty for set;
+end;
+
+definition let N;
+  let S be Mem-Struct over N;
+  func the_Values_of S -> ManySortedSet of the carrier of S equals
+:: MEMSTR_0:def 2
+  (the ValuesF of S)*(the Object-Kind of S);
+end;
+
 definition let N;
   let S be Mem-Struct over N;
   mode PartState of S is (the carrier of S)-defined
-           (the Object-Kind of S)-compatible Function;
+           (the_Values_of S)-compatible Function;
 end;
 
-definition let N be with_non-empty_elements set;
+:: Jest potrzeba zagwarantowania, ze
+:: the_Values_of S is non-empty
+:: to bylo wczsniej obsluzone, ze stary N byl
+:: with_non-empty_elements
+:: teraz jest to wlasnosc Mem-Str
+:: sa tutaj rozne warianty, najprosciej jednak napisac co wymgamy:
+
+definition let N;
   let S be Mem-Struct over N;
+ attr S is with_non-empty_values means
+:: MEMSTR_0:def 3
+ the_Values_of S is non-empty;
+end;
+
+registration let N;
+ cluster Trivial-Mem N ->with_non-empty_values;
+end;
+
+registration let N;
+ cluster with_non-empty_values for Mem-Struct over N;
+end;
+
+registration let N;
+  let S be with_non-empty_values Mem-Struct over N;
+ cluster the_Values_of S -> non-empty;
+end;
+
+definition let N;
+  let S be with_non-empty_values Mem-Struct over N;
   mode State of S is total PartState of S;
 end;
 
@@ -87,17 +137,32 @@ begin :: the Object Kind
 definition let N;
   let S be non empty Mem-Struct over N;
   let o be Object of S;
-  func ObjectKind o -> Element of N \/ { NAT } equals
-:: MEMSTR_0:def 2
+  func ObjectKind o -> Element of N equals
+:: MEMSTR_0:def 4
   (the Object-Kind of S).o;
 end;
 
 definition let N;
+  let S be non empty Mem-Struct over N;
+  let o be Object of S;
+  func Values o equals
+:: MEMSTR_0:def 5
+  (the_Values_of S).o;
+end;
+
+:: Jezeli dodamy wartosci, to pewnie nie unikniemy zdefiniowania
+:: funktora, ktory odpowiada staremu Object-Kind
+:: np. the_Object-Kind_of, lub the_Values_of
+:: i wtedy podmiana nie powinna byc zbyt skomplikowana.
+:: Poza tym trzeba bedzie zmienic komputery, dodajac pole ValuesF
+:: wykorzystac mozna atrybut with_zero, ale trzeba wprowadzic nowy:
+:: (the ValuesF of S).0 = NAT
+
+definition let N;
   let IT be non empty Mem-Struct over N;
   attr IT is IC-Ins-separated means
-:: MEMSTR_0:def 3
-
-  ObjectKind IC IT = NAT;
+:: MEMSTR_0:def 6
+ Values IC IT = NAT;
 end;
 
 registration let N;
@@ -105,84 +170,84 @@ registration let N;
 end;
 
 registration let N;
-  cluster IC-Ins-separated strict for 1-element Mem-Struct over N;
+  cluster IC-Ins-separated with_non-empty_values strict
+    for 1-element Mem-Struct over N;
 end;
 
 definition
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let N;
+  let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N;
   let p be PartState of S;
   func IC p -> Element of NAT equals
-:: MEMSTR_0:def 4
+:: MEMSTR_0:def 7
   p.IC S;
 end;
 
 theorem :: MEMSTR_0:1
- for N being with_non-empty_elements set
- for S being IC-Ins-separated 1-element Mem-Struct over N
+ for S being IC-Ins-separated 1-element with_non-empty_values Mem-Struct over N
   for s1, s2 being State of S st IC s1 = IC s2 holds s1= s2;
 
 registration
-  let N be with_non-empty_elements set;
-  let S be non empty Mem-Struct over N, o be Object of S;
-  cluster ObjectKind o -> non empty;
+  let N;
+  let S be non empty with_non-empty_values Mem-Struct over N,
+      o be Object of S;
+  cluster Values o -> non empty;
 end;
 
 registration
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let N;
+  let S be IC-Ins-separated non empty
+       with_non-empty_values Mem-Struct over N;
   let la be Object of S;
-  let a be Element of ObjectKind la;
-  cluster la .--> a -> (the Object-Kind of S)-compatible;
+  let a be Element of Values la;
+  cluster la .--> a -> (the_Values_of S)-compatible;
   let lb be Object of S;
-  let b be Element of ObjectKind lb;
-  cluster (la,lb) --> (a,b) -> (the Object-Kind of S)-compatible;
+  let b be Element of Values lb;
+  cluster (la,lb) --> (a,b) -> (the_Values_of S)-compatible;
 end;
 
 theorem :: MEMSTR_0:2
-  for N being with_non-empty_elements set,
-      S being non empty Mem-Struct over N
+  for S being non empty with_non-empty_values Mem-Struct over N
   for s being State of S holds IC S in dom s;
 
-reserve N for with_non-empty_elements set;
-
-reserve S for IC-Ins-separated non empty Mem-Struct over N;
+reserve S for IC-Ins-separated non empty with_non-empty_values
+     Mem-Struct over N;
 
 definition
-  let N be set;
+  let N;
   let S be Mem-Struct over N;
   let p be PartState of S;
   func DataPart p -> PartState of S equals
-:: MEMSTR_0:def 5
+:: MEMSTR_0:def 8
   p | Data-Locations S;
   projectivity;
 end;
 
 definition
-  let N be set, S be Mem-Struct over N;
+  let N; let S be Mem-Struct over N;
   let p be PartState of S;
   attr p is data-only means
-:: MEMSTR_0:def 6
+:: MEMSTR_0:def 9
 
   dom p misses {IC S};
 end;
 
 registration
-  let N be set, S be Mem-Struct over N;
+  let N; let S be Mem-Struct over N;
   cluster empty -> data-only for PartState of S;
 end;
 
 registration
-  let N be set, S be Mem-Struct over N;
+  let N; let S be Mem-Struct over N;
   cluster empty for PartState of S;
 end;
 
 theorem :: MEMSTR_0:3
-  for N being set, S being Mem-Struct over N
+  for N for S being Mem-Struct over N
   for p being PartState of S holds not IC S in dom DataPart p;
 
 theorem :: MEMSTR_0:4
-  for N being set, S being Mem-Struct over N for p being
+  for N for S being Mem-Struct over N for p being
   PartState of S holds {IC S} misses dom DataPart p;
 
 theorem :: MEMSTR_0:5
@@ -190,7 +255,7 @@ theorem :: MEMSTR_0:5
   holds p c= q iff p c= DataPart q;
 
 registration
-  let N be set;
+  let N;
   let S be Mem-Struct over N;
   let p be PartState of S;
   cluster DataPart p -> data-only;
@@ -231,35 +296,37 @@ theorem :: MEMSTR_0:14
  dom  p /\ Data-Locations S = dom DataPart p;
 
 registration let N;
-  let S be IC-Ins-separated non empty Mem-Struct over N,
+  let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
       l be Element of NAT, s be State of S;
-  cluster s+*(IC S,l) -> (the Object-Kind of S)-compatible;
+  cluster s+*(IC S,l) -> (the_Values_of S)-compatible;
 end;
 
 begin :: The value of the Instruction Counter
 
 definition
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let N;
+  let S be IC-Ins-separated non empty
+    with_non-empty_values Mem-Struct over N;
   let l be Nat;
   func Start-At(l,S) -> PartState of S equals
-:: MEMSTR_0:def 7
+:: MEMSTR_0:def 10
    IC S .--> l;
 end;
 
 definition
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N,
+  let N;
+  let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
       l be Nat;
   let p be PartState of S;
   attr p is l-started means
-:: MEMSTR_0:def 8
+:: MEMSTR_0:def 11
  IC S in dom p & IC p = l;
 end;
 
 registration
- let N be with_non-empty_elements set;
- let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+ let N;
+ let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
+     l be Nat;
   cluster Start-At(l,S) -> l-started non empty;
 end;
 
@@ -271,29 +338,35 @@ theorem :: MEMSTR_0:16
  holds IC(p +* Start-At( n,S)) =  n;
 
 registration
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  let N;
+  let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
+      l be Nat;
   cluster l-started for State of S;
 end;
 
 registration
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat,
-      p being PartState of S, q be l-started PartState of S;
+  let N;
+  let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
+      l be Nat,
+      p being PartState of S,
+      q be l-started PartState of S;
   cluster p +* q -> l-started;
 end;
 
 definition
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  let N;
+  let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
+      l be Nat;
   let s be State of S;
   redefine attr s is l-started means
-:: MEMSTR_0:def 9
+:: MEMSTR_0:def 12
   IC s = l;
 end;
 
 theorem :: MEMSTR_0:17
-  for S being IC-Ins-separated non empty Mem-Struct over N, l being Nat,
+  for S being IC-Ins-separated non empty with_non-empty_values
+               Mem-Struct over N,
+      l being Nat,
       p being l-started PartState of S
   for s being PartState of S st p c= s holds s is l-started;
 
@@ -301,13 +374,14 @@ theorem :: MEMSTR_0:18
   for s being State of S holds Start-At(IC s,S) = s | {IC S};
 
 theorem :: MEMSTR_0:19
-  for S being IC-Ins-separated non empty Mem-Struct over N
+  for S being IC-Ins-separated non empty with_non-empty_values
+         Mem-Struct over N
   for p being PartState of S st IC S in
   dom p holds p = Start-At(IC p,S) +* DataPart p;
 
 theorem :: MEMSTR_0:20
- for N being with_non-empty_elements set,
-     S be IC-Ins-separated non empty Mem-Struct over N, l be Nat
+ for S be IC-Ins-separated non empty
+ with_non-empty_values Mem-Struct over N, l be Nat
   holds DataPart Start-At(l,S) = {};
 
 theorem :: MEMSTR_0:21
@@ -323,14 +397,13 @@ theorem :: MEMSTR_0:23
   holds d tolerates Start-At(k,S);
 
 theorem :: MEMSTR_0:24
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values Mem-Struct over N
  for p being PartState of S st IC S in dom p
   holds dom  p = {IC S} \/ dom DataPart p;
 
-
-
 theorem :: MEMSTR_0:25
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values
+       Mem-Struct over N
  for s being State of S
   holds dom  s = {IC S} \/ dom DataPart s;
 
@@ -345,8 +418,8 @@ theorem :: MEMSTR_0:28
   p +* Start-At( k,S) c= s implies IC s =  k;
 
 theorem :: MEMSTR_0:29
-  for N be with_non-empty_elements set
-  for S be IC-Ins-separated non empty Mem-Struct over N, l be Nat
+  for S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
+      l be Nat
   for p be PartState of S
   holds p is l-started iff Start-At(l,S) c= p;
 
@@ -366,11 +439,13 @@ theorem :: MEMSTR_0:32
  dom  p c= {IC S} \/ dom DataPart p;
 
 theorem :: MEMSTR_0:33
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values
+         Mem-Struct over N
  for s be State of S holds s = s|(Data-Locations S \/ {IC S});
 
 theorem :: MEMSTR_0:34
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values
+        Mem-Struct over N
  for s1,s2 be State of S
   st s1|(Data-Locations S \/ {IC S}) = s2|(Data-Locations S \/ {IC S})
  holds s1 =  s2;
@@ -396,22 +471,25 @@ theorem :: MEMSTR_0:40
  for p being PartState of S st Start-At(k,S) c= p holds IC p = k;
 
 registration let N;
- let S be IC-Ins-separated non empty Mem-Struct over N;
+ let S be IC-Ins-separated non empty
+ with_non-empty_values Mem-Struct over N;
  cluster non empty for PartState of S;
 end;
 
 theorem :: MEMSTR_0:41
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values
+    Mem-Struct over N
  for p being non empty PartState of S
  holds dom p meets {IC S} \/ Data-Locations S;
 
 begin :: Initialize
 
 definition let N;
-  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let S be IC-Ins-separated non empty
+  with_non-empty_values Mem-Struct over N;
   let p be PartState of S;
   func Initialize p -> PartState of S equals
-:: MEMSTR_0:def 10
+:: MEMSTR_0:def 13
   p +* Start-At(0,S);
   projectivity;
 end;
@@ -422,7 +500,8 @@ registration let N,S;
 end;
 
 theorem :: MEMSTR_0:42
-  for S being IC-Ins-separated non empty Mem-Struct over N,
+  for S being IC-Ins-separated non empty
+  with_non-empty_values Mem-Struct over N,
       p being PartState of S
   holds dom Initialize p = dom p \/ {IC S};
 
@@ -456,7 +535,8 @@ theorem :: MEMSTR_0:49
  for p,q being PartState of S holds IC S in dom(p +* Initialize q);
 
 theorem :: MEMSTR_0:50
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty
+ with_non-empty_values Mem-Struct over N
  for p,q being PartState of S
  holds Initialize p c= q implies Start-At(0,S) c= q;
 
@@ -465,7 +545,7 @@ begin :: Increment & Decrement, of the Instruction Counter
 definition let N,S;
  let p be PartState of S, k be Nat;
   func IncIC(p,k) -> PartState of S equals
-:: MEMSTR_0:def 11
+:: MEMSTR_0:def 14
   p +* Start-At(IC p+k,S);
 end;
 
@@ -515,20 +595,20 @@ theorem :: MEMSTR_0:60
   holds IncIC(p+*q,k) = p +* IncIC(q,k);
 
 theorem :: MEMSTR_0:61
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values Mem-Struct over N
   for k being Nat, p being PartState of S,
       s1, s2 being State of S st p c= s1 & IncIC(p,k) c= s2
    holds p c= s1 +* DataPart s2;
 
 theorem :: MEMSTR_0:62
- for S being IC-Ins-separated non empty Mem-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values Mem-Struct over N
  for p being PartState of S, k being Element of NAT
  holds DataPart p c= IncIC(p,k);
 
 definition let N,S;
   let p be PartState of S, k be Nat;
   func DecIC(p,k) -> PartState of S equals
-:: MEMSTR_0:def 12
+:: MEMSTR_0:def 15
   p +* Start-At(IC p-'k,S);
 end;
 
@@ -586,28 +666,35 @@ theorem :: MEMSTR_0:74
  for p,q being PartState of S, k being Nat st IC S in dom q
   holds DecIC(p+*IncIC(q,k),k) = p +* q;
 
+registration let N,S; let k be Nat;
+ let p be k-started PartState of S;
+ cluster DecIC(p,k) -> 0-started;
+end;
+
 begin :: Finite Partial States
 
 registration
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let N;
+  let S be IC-Ins-separated non empty
+    with_non-empty_values Mem-Struct over N;
   let l be Nat;
   cluster Start-At(l,S) -> finite;
 end;
 
-definition let N be set;
+definition let N;
   let S be Mem-Struct over N;
   mode FinPartState of S is finite PartState of S;
 end;
 
 registration
-  let N be with_non-empty_elements set;
-  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  let N;
+  let S be IC-Ins-separated non empty with_non-empty_values Mem-Struct over N,
+      l be Nat;
   cluster l-started for FinPartState of S;
 end;
 
 registration
-  let N be set;
+  let N;
   let S be Mem-Struct over N;
   let p be FinPartState of S;
   cluster DataPart p -> finite;
@@ -629,33 +716,33 @@ registration let N,S;
 end;
 
 definition
-  let N be set;
-  let S be Mem-Struct over N;
-  func FinPartSt S -> Subset of sproduct the Object-Kind of S equals
-:: MEMSTR_0:def 13
-  { p where p is Element of sproduct the Object-Kind of S: p is finite };
+  let N;
+  let S be with_non-empty_values Mem-Struct over N;
+  func FinPartSt S -> Subset of sproduct the_Values_of S equals
+:: MEMSTR_0:def 16
+  { p where p is Element of sproduct the_Values_of S: p is finite };
 end;
 
 theorem :: MEMSTR_0:75
- for N being with_non-empty_elements set,
-     S be Mem-Struct over N
+ for S be with_non-empty_values Mem-Struct over N
  for p being FinPartState of S holds p in FinPartSt S;
 
 registration
-  let N be with_non-empty_elements set;
-  let S be Mem-Struct over N;
+  let N;
+  let S be with_non-empty_values Mem-Struct over N;
   cluster FinPartSt S -> non empty;
 end;
 
 theorem :: MEMSTR_0:76
-  for S being Mem-Struct over N, p being Element of FinPartSt S holds
+  for S being with_non-empty_values Mem-Struct over N,
+      p being Element of FinPartSt S holds
   p is FinPartState of S;
 
 definition
   let N,S;
   let IT be PartFunc of FinPartSt S,FinPartSt S;
   attr IT is data-only means
-:: MEMSTR_0:def 14
+:: MEMSTR_0:def 17
   for p being PartState of S st p in dom IT holds p is data-only &
    for q being PartState of S st q = IT.p holds q is data-only;
 end;
@@ -667,11 +754,12 @@ end;
 begin :: Addenda
 
 theorem :: MEMSTR_0:77
-  for A being non empty Mem-Struct over N, s
-  being State of A, o being Object of A holds s.o in ObjectKind o;
+  for A being non empty with_non-empty_values Mem-Struct over N, s
+  being State of A, o being Object of A holds s.o in Values o;
 
 theorem :: MEMSTR_0:78
-  for A being IC-Ins-separated non empty Mem-Struct over N
+  for A being IC-Ins-separated non empty with_non-empty_values
+        Mem-Struct over N
   for s1,s2 being State of A st IC s1= IC s2 & DataPart s1 =
   DataPart s2 holds s1=s2;
 
@@ -683,4 +771,17 @@ theorem :: MEMSTR_0:80
   for s1,s2 be State of S holds
   DataPart s1 = DataPart s2 implies
     Initialize s1 =  Initialize s2;
+
+theorem :: MEMSTR_0:81
+  the_Values_of Trivial-Mem N = 0 .--> NAT;
+
+::from SCMFSA9A
+
+definition let N,S;
+  let f be Function of product the_Values_of S, NAT;
+  attr f is on_data_only means
+:: MEMSTR_0:def 18
+  for s1, s2 being State of S st DataPart s1 = DataPart s2
+  holds f.s1 = f.s2;
+end;
 

@@ -2,7 +2,7 @@
 ::  by Wojciech A. Trybulec
 ::
 :: Received August 10, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,7 +19,7 @@ environ
       FUNCT_4, FINSUB_1, ORDINAL4, NAT_1, ARYTM_1, PARTFUN1, FINSOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, BINOP_1, PARTFUN1,
       FINSEQ_2, FINSEQ_1, FINSEQ_4, RELAT_1, RELSET_1, FUNCT_1, FINSUB_1,
-      SETWISEO, FUNCT_2, NAT_1, FUNCOP_1, FUNCT_4, XXREAL_0;
+      SETWISEO, FUNCT_2, ORDINAL1, NAT_1, FUNCOP_1, FUNCT_4, XXREAL_0;
  constructors BINOP_1, PARTFUN1, FUNCOP_1, FUNCT_4, SETWISEO, XXREAL_0,
       XREAL_0, NAT_1, FINSEQ_2, FINSEQ_4, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, XXREAL_0,
@@ -41,12 +41,6 @@ reserve x,y,y1,y2 for set,
   g for BinOp of D,
   k,n,i,l for Element of NAT,
   P for Permutation of dom F;
-
-definition
-  let D,n,d;
-  redefine func n |-> d -> FinSequence of D;
-  coherence by FINSEQ_2:63;
-end;
 
 definition
   let D,F,g;
@@ -431,7 +425,7 @@ A2: len F = 0;
     .= g.(g "**" F,d) by A1,A2,Def1;
 end;
 
-theorem Th5:
+theorem Th4:
   g is having_a_unity or len F >= 1 implies g "**" (F ^ <* d *>) =
   g.(g "**" F,d)
 proof
@@ -439,7 +433,7 @@ proof
   hence thesis by Lm5,Lm6;
 end;
 
-theorem Th6:
+theorem Th5:
   g is associative & (g is having_a_unity or len F >= 1 & len G >=
   1) implies g "**" (F ^ G) = g.(g "**" F,g "**" G)
 proof
@@ -461,7 +455,7 @@ A6:   len(F ^ G) = len F + len G by FINSEQ_1:22;
       hence len(F ^ G) >= 1 by A4,A6,NAT_1:12;
     end;
 A7: g "**" (F ^ (G ^ <* d *>)) = g "**" (F ^ G ^ <* d *>) by FINSEQ_1:32
-      .= g.(g "**" (F ^ G),d) by A5,Th5;
+      .= g.(g "**" (F ^ G),d) by A5,Th4;
     now
       per cases;
       suppose
@@ -470,14 +464,14 @@ A8:     len G <> 0;
         hence
         g "**" (F ^ (G ^ <* d *>)) = g.(g.(g "**" F,g "**" G),d) by A2,A3,A4,A7
           .= g.(g "**" F,g.(g "**" G,d)) by A3,BINOP_1:def 3
-          .= g.(g "**" F,g "**" (G ^ <* d *>)) by A8,Th5,NAT_1:14;
+          .= g.(g "**" F,g "**" (G ^ <* d *>)) by A8,Th4,NAT_1:14;
       end;
       suppose
         len G = 0;
         then
 A9:     G = {};
         hence g "**" (F ^ (G ^ <* d *>)) = g "**" (F ^ <* d *>) by FINSEQ_1:34
-          .= g.(g "**" F,d) by A4,Th5
+          .= g.(g "**" F,d) by A4,Th4
           .= g.(g "**" F,g "**" <* d *>) by Lm4
           .= g.(g "**" F,g "**" (G ^ <* d *>)) by A9,FINSEQ_1:34;
       end;
@@ -498,13 +492,13 @@ A11: g is having_a_unity or len F >= 1 & len <*>D >= 1;
   hence thesis;
 end;
 
-theorem Th7:
+theorem Th6:
   g is associative & (g is having_a_unity or len F >= 1) implies g
   "**" (<* d *> ^ F) = g.(d,g "**" F)
 proof
 A1: len<* d *> = 1 by FINSEQ_1:39;
   assume g is associative &( g is having_a_unity or len F >= 1);
-  hence g "**" (<* d *> ^ F) = g.(g "**" <* d *>,g "**" F) by A1,Th6
+  hence g "**" (<* d *> ^ F) = g.(g "**" <* d *>,g "**" F) by A1,Th5
     .= g.(d,g "**" F) by Lm4;
 end;
 
@@ -697,9 +691,8 @@ A55:  len q2 = m2 by A19,FINSEQ_1:def 3;
 A56:  len q = m1 + m2 by A52,FINSEQ_1:22;
       then
 A57:  dom q = Seg k by A17,A16,FINSEQ_1:def 3;
-      dom p = {} implies dom p = {};
-      then reconsider gg as Function of dom q, dom q by A32,A57,A30,A42,
-FUNCT_2:def 1,RELSET_1:4;
+      then reconsider gg as Function of dom q, dom q by A32,A30,A42,
+FUNCT_2:2;
 A58:  len p = k by A5,A6,A25,FINSEQ_1:17;
 A59:  rng gg = dom q
       proof
@@ -934,7 +927,7 @@ A116:     len p <> 0;
 A117:     H2 = p ^ <* d *> by A5,A6,FINSEQ_3:55;
           g "**" p = g "**" q by A4,A17,A16,A58,A56,A98,A116,NAT_1:14;
           then
-A118:     g "**" H2 = g.(g "**" q,d) by A116,A117,Th5,NAT_1:14;
+A118:     g "**" H2 = g.(g "**" q,d) by A116,A117,Th4,NAT_1:14;
           now
             per cases;
             suppose
@@ -946,11 +939,11 @@ A120:         len(<* d *> ^ q2) >= 1 by NAT_1:12;
 A121:         len q1 >= 1 by A119,NAT_1:14;
               len q2 >= 1 by A119,NAT_1:14;
               then g "**" H2 = g.(g.(g "**" q1,g "**" q2),d) by A1,A118,A121
-,Th6
+,Th5
                 .= g.(g "**" q1,g.(g "**" q2,d)) by A1,BINOP_1:def 3
                 .= g.(g "**" q1,g.(d,g "**" q2)) by A2,BINOP_1:def 2
-                .= g.(g "**" q1,g "**" (<* d *> ^ q2)) by A1,A119,Th7,NAT_1:14
-                .= g "**" (q1 ^ (<* d *> ^ q2)) by A1,A121,A120,Th6
+                .= g.(g "**" q1,g "**" (<* d *> ^ q2)) by A1,A119,Th6,NAT_1:14
+                .= g "**" (q1 ^ (<* d *> ^ q2)) by A1,A121,A120,Th5
                 .= g "**" H1 by A97,FINSEQ_1:32;
               hence thesis;
             end;
@@ -962,7 +955,7 @@ A122:         q1 = {};
 A123:         H1 = <* d *> ^ q2 by A97,FINSEQ_1:34
                 .= <* d *> ^ q by A122,FINSEQ_1:34;
               g "**" H2 = g.(d,g "**" q) by A2,A118,BINOP_1:def 2
-                .= g "**" (<* d *> ^ q) by A1,A17,A16,A58,A56,A116,Th7,NAT_1:14
+                .= g "**" (<* d *> ^ q) by A1,A17,A16,A58,A56,A116,Th6,NAT_1:14
 ;
               hence thesis by A123;
             end;
@@ -972,7 +965,7 @@ A123:         H1 = <* d *> ^ q2 by A97,FINSEQ_1:34
 A124:         q2 = {};
               then H1 = q1 ^ <* d *> by A97,FINSEQ_1:34
                 .= q ^ <* d *> by A124,FINSEQ_1:34;
-              hence thesis by A17,A16,A58,A56,A116,A118,Th5,NAT_1:14;
+              hence thesis by A17,A16,A58,A56,A116,A118,Th4,NAT_1:14;
             end;
             suppose
               len q1 = 0 & len q2 = 0;
@@ -1018,7 +1011,7 @@ A4: len G = 0;
     .= g "**" G by A1,A4,Def1;
 end;
 
-theorem Th8:
+theorem Th7:
   g is commutative associative & (g is having_a_unity or len F >= 1
   ) & G = F * P implies g "**" F = g "**" G
 proof
@@ -1071,7 +1064,7 @@ A9: rng P c= dom F by RELAT_1:26;
   F * P = (F * F") * G by RELAT_1:36
     .= id(rng G) * G by A2,A4,FUNCT_1:39
     .= G by RELAT_1:54;
-  hence thesis by A1,A5,Th8;
+  hence thesis by A1,A5,Th7;
 end;
 
 Lm10: len F = 0 & g is having_a_unity & F is one-to-one & G is one-to-one &
@@ -1171,14 +1164,14 @@ A23:      k + 1 in dom F by A5,A20,FINSEQ_1:def 3;
 A24:      d2 = g.(F.(k + 1),G.(k + 1)) by A8,A23;
           F = f ^ <* d *> by A5,FINSEQ_3:55;
           then
-A25:      g "**" F = g.(g "**" f,d) by A17,Th5;
+A25:      g "**" F = g.(g "**" f,d) by A17,Th4;
           G = gg ^ <* d1 *> by A5,A6,FINSEQ_3:55;
           then
-A26:      g "**" G = g.(g "**" gg,d1) by A10,A11,A17,Th5;
+A26:      g "**" G = g.(g "**" gg,d1) by A10,A11,A17,Th4;
 A27:      H = h ^ <* d2 *> by A5,A7,FINSEQ_3:55;
           g "**" h = g.(g "**" f,g "**" gg) by A4,A10,A11,A9,A12,A17;
           hence g "**" H = g.(g.(g "**" f,g "**" gg),g.(d,d1)) by A10,A9,A17
-,A27,A24,Th5
+,A27,A24,Th4
             .= g.(g.(g.(g "**" f,g "**" gg),d),d1) by A1,BINOP_1:def 3
             .= g.(g.(g "**" f,g.(g "**" gg,d)),d1) by A1,BINOP_1:def 3
             .= g.(g.(g "**" f,g.(d,g "**" gg)),d1) by A2,BINOP_1:def 2
@@ -1234,12 +1227,12 @@ theorem
 theorem
   g "**" <* d *> = d by Lm4;
 
-theorem Th13:
+theorem Th12:
   g "**" <* d1,d2 *> = g.(d1,d2)
 proof
 A1: len<* d1 *> = 1 by FINSEQ_1:39;
   thus g "**" <* d1,d2 *> = g "**" (<* d1 *> ^ <* d2 *>) by FINSEQ_1:def 9
-    .= g.(g "**" <* d1 *>,d2) by A1,Th5
+    .= g.(g "**" <* d1 *>,d2) by A1,Th4
     .= g.(d1,d2) by Lm4;
 end;
 
@@ -1248,18 +1241,18 @@ theorem
 proof
   assume
 A1: g is commutative;
-  thus g "**" <* d1,d2 *> = g.(d1,d2) by Th13
+  thus g "**" <* d1,d2 *> = g.(d1,d2) by Th12
     .= g.(d2,d1) by A1,BINOP_1:def 2
-    .= g "**" <* d2,d1 *> by Th13;
+    .= g "**" <* d2,d1 *> by Th12;
 end;
 
-theorem Th15:
+theorem Th14:
   g "**" <* d1,d2,d3 *> = g.(g.(d1,d2),d3)
 proof
 A1: len<* d1,d2 *> = 2 by FINSEQ_1:44;
   thus g "**" <* d1,d2,d3 *> = g "**" (<* d1,d2 *> ^ <* d3 *>) by FINSEQ_1:43
-    .= g.(g "**" <* d1,d2 *>,d3) by A1,Th5
-    .= g.(g.(d1,d2),d3) by Th13;
+    .= g.(g "**" <* d1,d2 *>,d3) by A1,Th4
+    .= g.(g.(d1,d2),d3) by Th12;
 end;
 
 theorem
@@ -1267,12 +1260,12 @@ theorem
 proof
   assume
 A1: g is commutative;
-  thus g "**" <* d1,d2,d3 *> = g.(g.(d1,d2),d3) by Th15
+  thus g "**" <* d1,d2,d3 *> = g.(g.(d1,d2),d3) by Th14
     .= g.(g.(d2,d1),d3) by A1,BINOP_1:def 2
-    .= g "**" <* d2,d1,d3 *> by Th15;
+    .= g "**" <* d2,d1,d3 *> by Th14;
 end;
 
-theorem Th17:
+theorem Th16:
   g "**" (1 |-> d) = d
 proof
   thus g "**" (1 |-> d) = g "**" <* d *> by FINSEQ_2:59
@@ -1283,10 +1276,10 @@ theorem
   g "**" (2 |-> d) = g.(d,d)
 proof
   thus g "**" (2 |-> d) = g "**" <* d,d *> by FINSEQ_2:61
-    .= g.(d,d) by Th13;
+    .= g.(d,d) by Th12;
 end;
 
-theorem Th19:
+theorem Th18:
   g is associative & (g is having_a_unity or k <> 0 & l <> 0)
   implies g "**" ((k + l) |-> d) = g.(g "**" (k |-> d),g "**" (l |-> d))
 proof
@@ -1295,7 +1288,7 @@ proof
   then
 A1: k <> 0 & l <> 0 implies len(k |-> d) >= 1 & len(l |-> d) >= 1 by NAT_1:14;
   (k + l) |-> d = (k |-> d) ^ (l |-> d) by FINSEQ_2:123;
-  hence thesis by A1,Th6;
+  hence thesis by A1,Th5;
 end;
 
 theorem
@@ -1318,19 +1311,19 @@ A4: g is having_a_unity or k <> 0 & l + 1 <> 0;
       per cases;
       suppose
         l = 0;
-        hence thesis by Th17;
+        hence thesis by Th16;
       end;
       suppose
 A5:     l <> 0;
         then
 A6:     k <> 0 implies k * l <> 0 by XCMPLX_1:6;
         g "**" (k * (l + 1) |-> d) = g "**" ((k * l + k * 1) |-> d)
-          .= g.(g "**" (k * l |-> d),g "**" (k |-> d)) by A3,A4,A6,Th19
+          .= g.(g "**" (k * l |-> d),g "**" (k |-> d)) by A3,A4,A6,Th18
           .= g.(g "**" (l |-> (g "**" (k |-> d))),g "**" (k |-> d)) by A2,A3,A4
 ,A5
           .= g.(g "**" (l |-> (g "**" (k |-> d))),g "**" (1 |-> (g "**" (k
-        |-> d)))) by Th17;
-        hence thesis by A3,A5,Th19;
+        |-> d)))) by Th16;
+        hence thesis by A3,A5,Th18;
       end;
     end;
     hence thesis;
@@ -1351,7 +1344,7 @@ A1: len F = 2;
   then F = <* F.1,F.2 *> by FINSEQ_1:44
     .= <* F/.1,F.2 *> by A1,FINSEQ_4:15
     .= <* F/.1,F/.2 *> by A1,FINSEQ_4:15;
-  hence g "**" F = g.(F/.1,F/.2) by Th13
+  hence g "**" F = g.(F/.1,F/.2) by Th12
     .= g.(F.1,F/.2) by A1,FINSEQ_4:15
     .= g.(F.1,F.2) by A1,FINSEQ_4:15;
 end;

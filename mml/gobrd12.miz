@@ -2,7 +2,7 @@
 ::  by Yatsuka Nakamura and Andrzej Trybulec
 ::
 :: Received July 22, 1996
-:: Copyright (c) 1996-2011 Association of Mizar Users
+:: Copyright (c) 1996-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,16 +18,15 @@ environ
       EUCLID, RELAT_1, XXREAL_0, FINSEQ_1, GOBOARD2, TREES_1, TOPS_1, TARSKI,
       XBOOLE_0, PRE_TOPC, CONNSP_3, RELAT_2, GOBOARD9, CONNSP_1, ARYTM_3,
       CARD_1, RLTOPSP1, PARTFUN1, MATRIX_1, ZFMISC_1, MCART_1, ARYTM_1,
-      RCOMP_1, GOBRD10, NAT_1;
+      RCOMP_1, GOBRD10, NAT_1, CONVEX1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, TOPREAL1, NUMBERS, DOMAIN_1,
-      STRUCT_0, REAL_1, NAT_1, NAT_D, PRE_TOPC, FUNCT_1, PARTFUN1, FINSEQ_1,
-      MATRIX_1, TOPS_1, CONNSP_1, RLVECT_1, RLTOPSP1, EUCLID, GOBOARD2,
-      GOBOARD5, GOBOARD9, CONNSP_3, GOBRD10, XXREAL_0;
- constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, BINARITH, TOPS_1,
-      CONNSP_1, GOBOARD2, GOBOARD9, CONNSP_3, GOBRD10, GOBOARD1, NAT_D,
-      RELSET_1;
+      STRUCT_0, REAL_1, ORDINAL1, NAT_1, NAT_D, PRE_TOPC, FUNCT_1, PARTFUN1,
+      FINSEQ_1, MATRIX_1, TOPS_1, CONNSP_1, RLVECT_1, RLTOPSP1, EUCLID,
+      GOBOARD2, GOBOARD5, GOBOARD9, CONNSP_3, GOBRD10, XXREAL_0;
+ constructors DOMAIN_1, REAL_1, TOPS_1, CONNSP_1, GOBOARD2, GOBOARD9, CONNSP_3,
+      GOBRD10, GOBOARD1, NAT_D, RELSET_1, CONVEX1;
  registrations SUBSET_1, RELSET_1, XXREAL_0, NAT_1, MEMBERED, STRUCT_0,
-      PRE_TOPC, EUCLID, GOBOARD2, GOBOARD5, GOBRD11, XBOOLE_0, FINSEQ_1;
+      PRE_TOPC, EUCLID, GOBOARD2, GOBOARD5, GOBRD11, XBOOLE_0, JORDAN1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, CONNSP_3, STRUCT_0;
  theorems TARSKI, NAT_1, FINSEQ_1, SPPOL_1, GOBOARD7, GOBOARD8, GOBOARD9,
@@ -52,7 +51,7 @@ end;
 
 Lm2: the carrier of TOP-REAL 2 = REAL 2 by EUCLID:22;
 
-theorem Th2:
+theorem Th1:
   for i,j st i<=len GoB f & j<=width GoB f holds Int cell(GoB f,i,j )c=(L~f)`
 proof
   let i,j;
@@ -61,7 +60,7 @@ proof
   hence thesis by SUBSET_1:23;
 end;
 
-theorem Th3:
+theorem Th2:
   for i,j st i<=len GoB f & j<=width GoB f holds Cl Down(Int cell(
   GoB f,i,j),(L~f)`)=cell(GoB f,i,j)/\((L~f)`)
 proof
@@ -70,11 +69,11 @@ proof
   reconsider B=(L~f)` as Subset of TOP-REAL 2;
   assume
 A1: i<=len GoB f & j<=width GoB f;
-  then Cl Down(V,B) =(Cl V) /\ B by Th2,CONNSP_3:29;
+  then Cl Down(V,B) =(Cl V) /\ B by Th1,CONNSP_3:29;
   hence thesis by A1,GOBRD11:35;
 end;
 
-theorem Th4:
+theorem Th3:
   for i,j st i<=len GoB f & j<=width GoB f holds Cl Down(Int cell(
 GoB f,i,j),(L~f)`) is connected & Down(Int cell(GoB f,i,j),(L~f)`)=Int cell(GoB
   f,i,j)
@@ -83,11 +82,11 @@ proof
   assume
 A1: i<=len GoB f & j<=width GoB f;
   then
-  Int cell(GoB f,i,j) is connected & Down(Int cell(GoB f,i,j),(L~f)`)=Int
-  cell (GoB f,i,j) by Th2,GOBOARD9:18,XBOOLE_1:28;
+  Int cell(GoB f,i,j) is convex & Down(Int cell(GoB f,i,j),(L~f)`)=Int
+  cell (GoB f,i,j) by Th1,GOBOARD9:17,XBOOLE_1:28;
   then Down(Int cell(GoB f,i,j),(L~f)`) is connected by CONNSP_1:23;
   hence Cl Down(Int cell(GoB f,i,j),(L~f)`) is connected by CONNSP_1:19;
-  thus thesis by A1,Th2,XBOOLE_1:28;
+  thus thesis by A1,Th1,XBOOLE_1:28;
 end;
 
 Lm3: Cl Down(LeftComp f,(L~f)`) is connected & Down(LeftComp f,(L~f)`)=
@@ -118,7 +117,7 @@ A2: the carrier of (TOP-REAL 2)|((L~f)`) =(L~f)` by PRE_TOPC:8;
   thus thesis by A1,A2,XBOOLE_1:28;
 end;
 
-theorem Th5:
+theorem Th4:
   (L~f)`=union {Cl Down(Int cell(GoB f,i,j),(L~f)`): i<=len GoB f &
   j<=width GoB f}
 proof
@@ -139,7 +138,7 @@ A6: i<=len GoB f & j<=width GoB f by A4;
     reconsider Y0=Cl Down(Int cell(GoB f,i,j),(L~f)`) as set;
     x in cell(GoB f,i,j)/\((L~f)`) by A3,A4,A5,XBOOLE_0:def 4;
     then
-A7: x in Y0 by A6,Th3;
+A7: x in Y0 by A6,Th2;
     Y0 in {Cl Down(Int cell(GoB f,i1,j1),(L~f)`): i1<=len GoB f & j1<=
     width GoB f} by A6;
     hence thesis by A7,TARSKI:def 4;
@@ -164,7 +163,7 @@ A9: Y= Cl Down(Int cell(GoB f,i,j),(L~f)`) and
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
-theorem Th6:
+theorem Th5:
   Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`) is
   a_union_of_components of (TOP-REAL 2)|((L~f)`) & Down(LeftComp f,(L~f)`)=
   LeftComp f & Down(RightComp f,(L~f)`)=RightComp f
@@ -403,10 +402,10 @@ XBOOLE_0:def 4;
                     i1,j2)/\((L~f)`) by A31,A47,XBOOLE_0:def 4;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f) `) by A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f) `) by A4,Th2;
                 then
 A48:            Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Component_of
-                p1 by A3,A4,A8,Th4,GOBRD11:1;
+                p1 by A3,A4,A8,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A49:            Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -422,19 +421,19 @@ A51:            Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A50,A49,PRE_TOPC:20;
 A52:            Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Cl Down(Int cell
 (GoB f,i1+1,j2),(L~f) `) & Down(Int cell(GoB f,i1+1,j2),(L~f)`)=Int cell(GoB f,
-                i1+1,j2) by A3,A4,A8,Th4,PRE_TOPC:18;
+                i1+1,j2) by A3,A4,A8,Th3,PRE_TOPC:18;
 A53:            Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i1,j2),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i1,j2),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A53,GOBRD11:4;
                 then
 A54:            Cl Down(Int cell(GoB f,i1,j2),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,A4,A33,Th3;
+                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,A4,A33,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A54,A51,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A54,A51,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A48,XBOOLE_1:1;
                 hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f by
@@ -563,10 +562,10 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:32;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f) `) by A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f) `) by A4,Th2;
                 then
 A78:            Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Component_of
-                p1 by A3,A4,A8,Th4,GOBRD11:1;
+                p1 by A3,A4,A8,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A79:            Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -582,19 +581,19 @@ A81:            Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A80,A79,PRE_TOPC:20;
 A82:            Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Cl Down(Int cell
 (GoB f,i1+1,j2),(L~f) `) & Down(Int cell(GoB f,i1+1,j2),(L~f)`)=Int cell(GoB f,
-                i1+1,j2) by A3,A4,A8,Th4,PRE_TOPC:18;
+                i1+1,j2) by A3,A4,A8,Th3,PRE_TOPC:18;
 A83:            Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i1,j2),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i1,j2),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A83,GOBRD11:4;
                 then
 A84:            Cl Down(Int cell(GoB f,i1,j2),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,A4,A65,Th3;
+                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,A4,A65,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A84,A81,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A84,A81,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A78,XBOOLE_1:1;
                 hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f by
@@ -641,9 +640,9 @@ PRE_TOPC:22;
 A94:            Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A93,A92,PRE_TOPC:20;
 A95:            Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i1,j2),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i1,j2),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A95,GOBRD11:4;
                 then
@@ -651,7 +650,7 @@ A96:            Cl Down(Int cell(GoB f,i1,j2),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
 A97:            Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Cl Down(Int cell
 (GoB f,i1+1,j2),(L~f) `) & Down(Int cell(GoB f,i1+1,j2),(L~f)`)=Int cell(GoB f,
-                i1+1,j2) by A3,A4,A8,Th4,PRE_TOPC:18;
+                i1+1,j2) by A3,A4,A8,Th3,PRE_TOPC:18;
 A98:            1<=i1+1 by NAT_1:11;
 A99:            0+1<=j2 by A85,NAT_1:13;
                 then
@@ -810,13 +809,13 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:32;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f) `) by A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f) `) by A4,Th2;
                 then
 A125:           Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Component_of
-                p1 by A3,A4,A8,Th4,GOBRD11:1;
-                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,A4,A109,Th3;
+                p1 by A3,A4,A8,Th3,GOBRD11:1;
+                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,A4,A109,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A96,A94,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A96,A94,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A125,XBOOLE_1:1;
                 hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f by
@@ -1038,10 +1037,10 @@ XBOOLE_0:def 4;
                     i2,j2)/\((L~f)`) by A156,A173,XBOOLE_0:def 4;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th2;
                 then
 A174:           Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Component_of p1
-                by A3,A4,Th4,GOBRD11:1;
+                by A3,A4,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A175:           Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -1052,24 +1051,24 @@ A176:           Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`) by
 PRE_TOPC:22;
 A177:           Down(Int cell(GoB f,i2,j2),(L~f)`) c= Cl Down(Int cell(
 GoB f,i2,j2),(L~f)`) & Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
-                by A3,A4,Th4,PRE_TOPC:18;
+                by A3,A4,Th3,PRE_TOPC:18;
                 Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`) =
                 Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
                 then
 A178:           Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A176,A175,PRE_TOPC:20;
 A179:           Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i1,j2),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i1,j2),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A179,GOBRD11:4;
                 then
 A180:           Cl Down(Int cell(GoB f,i1,j2),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i2+1,j2),(L~f) `) by A4,A157,Th3;
+                p in Cl Down(Int cell(GoB f,i2+1,j2),(L~f) `) by A4,A157,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A126,A180,A178,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A126,A180,A178,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Down(LeftComp f
                 ,(L~f)`) \/ Down(RightComp f,(L~f)`) by A174,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by
@@ -1198,10 +1197,10 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:32;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th2;
                 then
 A204:           Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Component_of p1
-                by A3,A4,Th4,GOBRD11:1;
+                by A3,A4,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A205:           Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -1212,24 +1211,24 @@ A206:           Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`) by
 PRE_TOPC:22;
 A207:           Down(Int cell(GoB f,i2,j2),(L~f)`) c= Cl Down(Int cell(
 GoB f,i2,j2),(L~f)`) & Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
-                by A3,A4,Th4,PRE_TOPC:18;
+                by A3,A4,Th3,PRE_TOPC:18;
                 Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`) =
                 Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
                 then
 A208:           Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A206,A205,PRE_TOPC:20;
 A209:           Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i1,j2),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i1,j2),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A209,GOBRD11:4;
                 then
 A210:           Cl Down(Int cell(GoB f,i1,j2),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i2+1,j2),(L~f) `) by A4,A189,Th3;
+                p in Cl Down(Int cell(GoB f,i2+1,j2),(L~f) `) by A4,A189,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A126,A210,A208,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A126,A210,A208,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Down(LeftComp f
                 ,(L~f)`) \/ Down(RightComp f,(L~f)`) by A204,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by
@@ -1284,11 +1283,11 @@ A222:           p=|[1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*( i2+1,j2+1))`1)
 , 1/2*(((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2)]| by A216,EUCLID:53;
 A223:           Down(Int cell(GoB f,i2,j2),(L~f)`) c= Cl Down(Int cell(
 GoB f,i2,j2),(L~f)`) & Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
-                by A3,A4,Th4,PRE_TOPC:18;
+                by A3,A4,Th3,PRE_TOPC:18;
 A224:           Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i1,j2),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i1,j2),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A224,GOBRD11:4;
                 then
@@ -1445,13 +1444,13 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:32;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th2;
                 then
 A251:           Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Component_of p1
-                by A3,A4,Th4,GOBRD11:1;
-                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A4,A126,A235,Th3;
+                by A3,A4,Th3,GOBRD11:1;
+                p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A4,A126,A235,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A225,A220,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A225,A220,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Down(LeftComp f
                 ,(L~f)`) \/ Down(RightComp f,(L~f)`) by A251,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by
@@ -1686,10 +1685,10 @@ XBOOLE_0:def 4;
                     i2,j1)/\((L~f)`) by A31,A47,XBOOLE_0:def 4;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f) `) by A3,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f) `) by A3,Th2;
                 then
 A48:            Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Component_of
-                p1 by A3,A4,A8,Th4,GOBRD11:1;
+                p1 by A3,A4,A8,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A49:            Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -1705,19 +1704,19 @@ A51:            Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A50,A49,PRE_TOPC:20;
 A52:            Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Cl Down(Int cell
 (GoB f,i2,j1+1),(L~f) `) & Down(Int cell(GoB f,i2,j1+1),(L~f)`)=Int cell(GoB f,
-                i2,j1+1) by A3,A4,A8,Th4,PRE_TOPC:18;
+                i2,j1+1) by A3,A4,A8,Th3,PRE_TOPC:18;
 A53:            Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i2,j1),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i2,j1),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A53,GOBRD11:4;
                 then
 A54:            Cl Down(Int cell(GoB f,i2,j1),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A2,A3,A33,Th3;
+                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A2,A3,A33,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A54,A51,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A54,A51,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A48,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f by
@@ -1846,10 +1845,10 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:33;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f) `) by A3,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f) `) by A3,Th2;
                 then
 A78:            Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Component_of
-                p1 by A3,A4,A8,Th4,GOBRD11:1;
+                p1 by A3,A4,A8,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A79:            Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -1865,19 +1864,19 @@ A81:            Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A80,A79,PRE_TOPC:20;
 A82:            Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Cl Down(Int cell
 (GoB f,i2,j1+1),(L~f) `) & Down(Int cell(GoB f,i2,j1+1),(L~f)`)=Int cell(GoB f,
-                i2,j1+1) by A3,A4,A8,Th4,PRE_TOPC:18;
+                i2,j1+1) by A3,A4,A8,Th3,PRE_TOPC:18;
 A83:            Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i2,j1),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i2,j1),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A83,GOBRD11:4;
                 then
 A84:            Cl Down(Int cell(GoB f,i2,j1),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A2,A3,A65,Th3;
+                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A2,A3,A65,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A84,A81,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A84,A81,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A78,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f by
@@ -1924,9 +1923,9 @@ PRE_TOPC:22;
 A94:            Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A93,A92,PRE_TOPC:20;
 A95:            Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i2,j1),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i2,j1),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A95,GOBRD11:4;
                 then
@@ -1934,7 +1933,7 @@ A96:            Cl Down(Int cell(GoB f,i2,j1),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
 A97:            Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Cl Down(Int cell
 (GoB f,i2,j1+1),(L~f) `) & Down(Int cell(GoB f,i2,j1+1),(L~f)`)=Int cell(GoB f,
-                i2,j1+1) by A3,A4,A8,Th4,PRE_TOPC:18;
+                i2,j1+1) by A3,A4,A8,Th3,PRE_TOPC:18;
 A98:            1<=j1+1 by NAT_1:11;
 A99:            0+1<=i2 by A85,NAT_1:13;
                 then
@@ -2093,13 +2092,13 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:33;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f) `) by A3,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f) `) by A3,Th2;
                 then
 A125:           Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Component_of
-                p1 by A3,A4,A8,Th4,GOBRD11:1;
-                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A2,A3,A109,Th3;
+                p1 by A3,A4,A8,Th3,GOBRD11:1;
+                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A2,A3,A109,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A96,A94,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A96,A94,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A125,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f by
@@ -2321,10 +2320,10 @@ XBOOLE_0:def 4;
                     i2,j2)/\((L~f)`) by A156,A173,XBOOLE_0:def 4;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th2;
                 then
 A174:           Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Component_of p1
-                by A3,A4,Th4,GOBRD11:1;
+                by A3,A4,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A175:           Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -2335,24 +2334,24 @@ A176:           Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`) by
 PRE_TOPC:22;
 A177:           Down(Int cell(GoB f,i2,j2),(L~f)`) c= Cl Down(Int cell(
 GoB f,i2,j2),(L~f)`) & Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
-                by A3,A4,Th4,PRE_TOPC:18;
+                by A3,A4,Th3,PRE_TOPC:18;
                 Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`) =
                 Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
                 then
 A178:           Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A176,A175,PRE_TOPC:20;
 A179:           Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i2,j1),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i2,j1),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A179,GOBRD11:4;
                 then
 A180:           Cl Down(Int cell(GoB f,i2,j1),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i2,j2+1),(L~f) `) by A3,A157,Th3;
+                p in Cl Down(Int cell(GoB f,i2,j2+1),(L~f) `) by A3,A157,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A126,A180,A178,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A126,A180,A178,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Down(LeftComp f
                 ,(L~f)`) \/ Down(RightComp f,(L~f)`) by A174,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by
@@ -2481,10 +2480,10 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:33;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th2;
                 then
 A203:           Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Component_of p1
-                by A3,A4,Th4,GOBRD11:1;
+                by A3,A4,Th3,GOBRD11:1;
                 Down(RightComp f,(L~f)`) is closed by Lm4,CONNSP_1:33;
                 then
 A204:           Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`) by
@@ -2495,24 +2494,24 @@ A205:           Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`) by
 PRE_TOPC:22;
 A206:           Down(Int cell(GoB f,i2,j2),(L~f)`) c= Cl Down(Int cell(
 GoB f,i2,j2),(L~f)`) & Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
-                by A3,A4,Th4,PRE_TOPC:18;
+                by A3,A4,Th3,PRE_TOPC:18;
                 Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`) =
                 Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
                 then
 A207:           Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
                 f,(L~f)`) \/ Down(RightComp f,(L~f)`) by A205,A204,PRE_TOPC:20;
 A208:           Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i2,j1),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i2,j1),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A208,GOBRD11:4;
                 then
 A209:           Cl Down(Int cell(GoB f,i2,j1),(L~f)`) c= Cl Down(
                 LeftComp f \/ RightComp f,(L~f)`) by PRE_TOPC:19;
-                p in Cl Down(Int cell(GoB f,i2,j2+1),(L~f) `) by A3,A189,Th3;
+                p in Cl Down(Int cell(GoB f,i2,j2+1),(L~f) `) by A3,A189,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A126,A209,A207,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A126,A209,A207,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Down(LeftComp f
                 ,(L~f)`) \/ Down(RightComp f,(L~f)`) by A203,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by
@@ -2561,11 +2560,11 @@ A219:           Cl Down(LeftComp f \/ RightComp f,(L~f)`) =Down(LeftComp
 A220:           1<=j2+1 by NAT_1:11;
 A221:           Down(Int cell(GoB f,i2,j2),(L~f)`) c= Cl Down(Int cell(
 GoB f,i2,j2),(L~f)`) & Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
-                by A3,A4,Th4,PRE_TOPC:18;
+                by A3,A4,Th3,PRE_TOPC:18;
 A222:           Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(
-                L~f)`)=RightComp f by Th6;
+                L~f)`)=RightComp f by Th5;
                 Down(Int cell(GoB f,i2,j1),(L~f)`) c= LeftComp f \/
-                RightComp f by A1,A2,A6,A7,Th4;
+                RightComp f by A1,A2,A6,A7,Th3;
                 then Down(Int cell(GoB f,i2,j1),(L~f)`) c= Down(LeftComp f \/
                 RightComp f,(L~f)`) by A222,GOBRD11:4;
                 then
@@ -2727,13 +2726,13 @@ XBOOLE_0:def 4;
                     hence contradiction by GOBOARD7:33;
                   end;
                 end;
-                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th3;
+                then p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A3,A4,Th2;
                 then
 A249:           Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Component_of p1
-                by A3,A4,Th4,GOBRD11:1;
-                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A3,A126,A234,Th3;
+                by A3,A4,Th3,GOBRD11:1;
+                p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A3,A126,A234,Th2;
                 then Component_of p1 c= Down(LeftComp f,(L~f)`) \/ Down(
-                RightComp f,(L~f)`) by A223,A219,Th6,CONNSP_3:21;
+                RightComp f,(L~f)`) by A223,A219,Th5,CONNSP_3:21;
                 then Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= Down(LeftComp f
                 ,(L~f)`) \/ Down(RightComp f,(L~f)`) by A249,XBOOLE_1:1;
                 hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by
@@ -2751,7 +2750,7 @@ A222,A221,XBOOLE_1:1;
   hence thesis;
 end;
 
-theorem Th7:
+theorem Th6:
   for i1,j1,i2,j2 st i1<=len GoB f & j1<=width GoB f & i2<=len GoB
 f & j2<=width GoB f & i1,j1,i2,j2 are_adjacent2 holds Int cell(GoB f,i1,j1) c=
 LeftComp f \/ RightComp f iff Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp
@@ -2779,7 +2778,7 @@ GOBRD10:def 2;
   hence thesis;
 end;
 
-theorem Th8:
+theorem Th7:
   for F1,F2 being FinSequence of NAT st len F1=len F2 & (ex i st i
 in dom F1 & Int cell(GoB f,F1/.i,F2/.i) c=LeftComp f \/ RightComp f)& (for i,k1
   ,k2 st i in dom F1 & k1=F1.i & k2=F2.i holds k1<=len GoB f & k2<=width GoB f)
@@ -2813,21 +2812,22 @@ A10: k1-'1=F1/.i1 & k2-'1=F2/.i1 by NAT_D:34;
   set n=len GoB f, m=width GoB f;
   defpred P[Nat,Nat,set] means $3 = Int cell(GoB f,$1-'1,$2-'1);
   reconsider F=LeftComp f \/ RightComp f as Subset of REAL 2 by EUCLID:22;
-A12: for i,j being Nat st [i,j] in [:Seg ((len (GoB f))+1), Seg ((width (GoB
+A11: for i,j being Nat st [i,j] in [:Seg ((len (GoB f))+1), Seg ((width (GoB
   f))+1):] ex x being Subset of REAL 2 st P[i,j,x] by Lm2;
   ex Mm being (Matrix of (len (GoB f))+1, (width (GoB f))+1,(bool (REAL 2
   ) )) st for i,j being Nat st [i,j] in Indices Mm holds P[i,j,Mm*(i,j)] from
-  MATRIX_1:sch 2(A12);
+  MATRIX_1:sch 2(A11);
   then consider
   Mm being (Matrix of (len (GoB f))+1, (width (GoB f))+1,(bool (REAL
   2))) such that
-A13: for i,j being Nat st [i,j] in Indices Mm holds Mm*(i,j) = Int cell(
+A12: for i,j being Nat st [i,j] in Indices Mm holds Mm*(i,j) = Int cell(
   GoB f,i-'1,j-'1);
-A14: len Mm=len GoB f +1 by MATRIX_1:def 2;
+A13: len Mm=len GoB f +1 by MATRIX_1:def 2;
   then
-A15: dom Mm=Seg (len (GoB f) +1) by FINSEQ_1:def 3;
-A16: Seg (width (GoB f) +1)=Seg width Mm by A14,MATRIX_1:20;
-A17: width (GoB f) +1=width Mm by A14,MATRIX_1:20;
+A14: dom Mm=Seg (len (GoB f) +1) by FINSEQ_1:def 3;
+A15: len Mm > 0 by A13;
+A16: Seg (width (GoB f) +1)=Seg width Mm by A13,MATRIX_1:20,A15;
+A17: width (GoB f) +1=width Mm by A13,MATRIX_1:20,A15;
 A18: for i1,j1,i2,j2 st i1 in Seg (len GoB f +1) & i2 in Seg (len GoB f +1)
   & j1 in Seg (width GoB f +1) & j2 in Seg (width GoB f +1) & i1,j1,i2,j2
   are_adjacent2 holds Mm*(i1,j1)c=LeftComp f \/ RightComp f iff Mm*(i2,j2)c=
@@ -2844,19 +2844,19 @@ A24: 1<=i2 by A20,FINSEQ_1:1;
     then 0<=i2-1 by XREAL_1:48;
     then
 A25: i2-'1=i2-1 by XREAL_0:def 2;
-    [i2,j2] in [:dom Mm,Seg width Mm:] by A15,A16,A20,A22,ZFMISC_1:87;
+    [i2,j2] in [:dom Mm,Seg width Mm:] by A14,A16,A20,A22,ZFMISC_1:87;
     then [i2,j2] in Indices Mm by MATRIX_1:def 4;
     then
-A26: Mm*(i2,j2)=Int cell(GoB f,i2-'1,j2-'1) by A13;
+A26: Mm*(i2,j2)=Int cell(GoB f,i2-'1,j2-'1) by A12;
     reconsider ii1=i1-'1,ii2=i2-'1,jj1=j1-'1,jj2=j2-'1 as Element of NAT;
 A27: 1<=i1 by A19,FINSEQ_1:1;
     then 0<=i1-1 by XREAL_1:48;
     then
 A28: i1-'1=i1-1 by XREAL_0:def 2;
-    [i1,j1] in [:dom Mm,Seg width Mm:] by A15,A17,A19,A21,ZFMISC_1:87;
+    [i1,j1] in [:dom Mm,Seg width Mm:] by A14,A17,A19,A21,ZFMISC_1:87;
     then [i1,j1] in Indices Mm by MATRIX_1:def 4;
     then
-A29: Mm*(i1,j1)=Int cell(GoB f,i1-'1,j1-'1) by A13;
+A29: Mm*(i1,j1)=Int cell(GoB f,i1-'1,j1-'1) by A12;
 A30: 1<=j2 by A22,FINSEQ_1:1;
     then 0<=j2-1 by XREAL_1:48;
     then
@@ -2878,7 +2878,7 @@ A36: j1-'1<=width GoB f +1-1 by A34,XREAL_1:9;
     then
 A37: i1-'1<=len GoB f +1-1 by A28,XREAL_1:9;
     ii1,jj1,ii2,jj2 are_adjacent2 by A23,A27,A24,A33,A30,GOBRD10:4;
-    hence thesis by A37,A32,A36,A35,A29,A26,Th7;
+    hence thesis by A37,A32,A36,A35,A29,A26,Th6;
   end;
   0+1<=k2 by NAT_1:13;
   then
@@ -2886,9 +2886,9 @@ A38: k2 in Seg(m +1) by A9,FINSEQ_1:1;
   0+1<=k1 by NAT_1:13;
   then
 A39: k1 in Seg(n +1) by A8,FINSEQ_1:1;
-  then [k1,k2] in [:dom Mm,Seg width Mm:] by A38,A15,A16,ZFMISC_1:87;
+  then [k1,k2] in [:dom Mm,Seg width Mm:] by A38,A14,A16,ZFMISC_1:87;
   then [k1,k2] in Indices Mm by MATRIX_1:def 4;
-  then Mm*(k1,k2) c=LeftComp f \/ RightComp f by A5,A13,A10;
+  then Mm*(k1,k2) c=LeftComp f \/ RightComp f by A5,A12,A10;
   then
 A40: for i,j st i in Seg(n +1) & j in Seg(m +1) holds Mm*(i,j)c=F by A39,A38
 ,A18,GOBRD10:8;
@@ -2917,19 +2917,20 @@ A46: kk2 in Seg (width GoB f +1) by A45,FINSEQ_1:1;
     0+1<=kk1 by NAT_1:13;
     then
 A47: kk1 in Seg (len GoB f +1) by A44,FINSEQ_1:1;
-    len Mm=len GoB f +1 by MATRIX_1:def 2;
-    then dom Mm=Seg (len (GoB f) +1) & Seg (width (GoB f) +1)=Seg width Mm by
-FINSEQ_1:def 3,MATRIX_1:20;
+A48: len Mm=len GoB f +1 by MATRIX_1:def 2;
+    then len Mm > 0;
+    then dom Mm=Seg (len (GoB f) +1) & Seg (width (GoB f) +1)=Seg width Mm
+     by FINSEQ_1:def 3,MATRIX_1:20,A48;
     then [kk1,kk2] in [:dom Mm,Seg width Mm:] by A47,A46,ZFMISC_1:87;
     then
-A48: [kk1,kk2] in Indices Mm by MATRIX_1:def 4;
-A49: kk1-'1=F1/.i & kk2-'1=F2/.i by NAT_D:34;
+A49: [kk1,kk2] in Indices Mm by MATRIX_1:def 4;
+A50: kk1-'1=F1/.i & kk2-'1=F2/.i by NAT_D:34;
     Mm*(kk1,kk2)c=LeftComp f \/ RightComp f by A40,A47,A46;
-    hence thesis by A13,A49,A48;
+    hence thesis by A12,A50,A49;
   end;
 end;
 
-theorem Th9:
+theorem Th8:
   ex i,j st i<=len GoB f & j<=width GoB f & Int cell(GoB f,i,j) c=
   LeftComp f \/ RightComp f
 proof
@@ -2941,7 +2942,7 @@ A1: (ex i,j st i <= len GoB f & j <= width GoB f & cell(GoB f,i,j) =
   hence thesis by A1,XBOOLE_1:1;
 end;
 
-theorem Th10:
+theorem Th9:
   for i,j st i<=len GoB f & j<=width GoB f holds Int cell(GoB f,i,
   j) c= LeftComp f \/ RightComp f
 proof
@@ -2949,7 +2950,7 @@ proof
   set n=len GoB f, m=width GoB f;
   consider i2,j2 such that
 A1: i2<=n & j2<=m and
-A2: Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by Th9;
+A2: Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by Th8;
   assume i<=len GoB f & j<=width GoB f;
   then consider fs1,fs2 being FinSequence of NAT such that
 A3: for k,k1,k2 st k in dom fs1 & k1=fs1.k & k2=fs2.k holds k1 <= n & k2
@@ -2976,7 +2977,7 @@ A14: j2=fs2/.len fs1 by A7,A8,PARTFUN1:def 6;
 A15: fs2/.1=j by A6,PARTFUN1:def 6;
 A16: len fs1 in dom fs1 by A9,A13,FINSEQ_3:25;
   then i2= fs1/.len fs1 by A5,PARTFUN1:def 6;
-  hence thesis by A2,A3,A8,A16,A14,A11,A12,A15,Th8;
+  hence thesis by A2,A3,A8,A16,A14,A11,A12,A15,Th7;
 end;
 
 ::$N Jordan Curve Theorem for special polygons
@@ -3029,17 +3030,17 @@ A12: x in y & y in {Cl Down(Int cell(GoB f,i,j),(L~f)`): i<=len GoB f &
     consider i,j such that
 A13: y=Cl Down(Int cell(GoB f,i,j),(L~f)`) and
 A14: i<=len GoB f & j<=width GoB f by A12;
-    Cl (Int cell(GoB f,i,j)) c= Cl (LeftComp f \/ RightComp f) by A14,Th10,
+    Cl (Int cell(GoB f,i,j)) c= Cl (LeftComp f \/ RightComp f) by A14,Th9,
 PRE_TOPC:19;
     then
 A15: (Cl (Int cell(GoB f,i,j)))/\((L~f)`) c= (Cl (LeftComp f) \/ Cl (
     RightComp f))/\((L~f)`) by A11,XBOOLE_1:26;
     reconsider P=Int cell(GoB f,i,j) as Subset of TOP-REAL 2;
-    Cl Down(P,Q) =(Cl (P))/\(Q) by A14,Th2,CONNSP_3:29;
+    Cl Down(P,Q) =(Cl (P))/\(Q) by A14,Th1,CONNSP_3:29;
     hence thesis by A12,A13,A15,A10,A6;
   end;
   then
-A16: (L~f)`c=LeftComp f \/ RightComp f by Th5;
+A16: (L~f)`c=LeftComp f \/ RightComp f by Th4;
   RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
   then consider B1 being Subset of (TOP-REAL 2)|(L~f)` such that
 A17: B1 = RightComp f and

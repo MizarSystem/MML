@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -34,52 +35,52 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="107"/>
-<Adjective nr="112"/>
-<Adjective nr="126"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
-<Adjective nr="129"/>
-<Adjective nr="130"/>
+<Adjective nr="113"/>
+<Adjective nr="118"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFPROJ" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="50" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="54" value="false"/>
+<Adjective nr="111"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="107"/>
-<Adjective nr="112"/>
-<Adjective nr="126"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
-<Adjective nr="129"/>
+<Adjective nr="113"/>
+<Adjective nr="118"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AFPROJ" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="50" value="false"/>
-<Adjective nr="105"/>
-<Adjective nr="106"/>
+<Adjective nr="54" value="false"/>
+<Adjective nr="111"/>
+<Adjective nr="112"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="107"/>
-<Adjective nr="130"/>
+<Adjective nr="113"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 </Registrations>

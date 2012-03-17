@@ -2,7 +2,7 @@
 ::  by Zbigniew Karno
 ::
 :: Received November 9, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -25,11 +25,9 @@ environ
  theorems PRE_TOPC, TOPS_1, CONNSP_1, BORSUK_1, TSEP_1, TDLAT_1, TDLAT_3,
       SUBSET_1, XBOOLE_0, XBOOLE_1;
 
-begin
+begin :: 1. Certain Set-Decompositions of a Topological Space.
 
-:: 1. Certain Set-Decompositions of a Topological Space.
-
-reserve X for non empty TopSpace;
+reserve X for non empty 1-sorted;
 
 theorem Th1:
   for A, B being Subset of X holds ( A`) \ B` = B \ A
@@ -40,10 +38,10 @@ proof
   hence thesis by SUBSET_1:13;
 end;
 
-::Complemented Subsets.
+:: Complemented Subsets.
 
 definition
-  let X be TopSpace, A1, A2 be Subset of X;
+  let X be 1-sorted, A1, A2 be Subset of X;
   pred A1,A2 constitute_a_decomposition means
   :Def1:
   A1 misses A2 & A1 \/ A2 = the carrier of X;
@@ -51,7 +49,7 @@ definition
 end;
 
 notation
-  let X be TopSpace, A1, A2 be Subset of X;
+  let X be 1-sorted, A1, A2 be Subset of X;
   antonym A1,A2 do_not_constitute_a_decomposition for A1,A2
   constitute_a_decomposition;
 end;
@@ -61,7 +59,7 @@ reserve A, A1, A2, B1, B2 for Subset of X;
 theorem
   A1,A2 constitute_a_decomposition iff A1 misses A2 & A1 \/ A2 = [#]X by Def1;
 
-theorem Th4:
+theorem Th3:
   A1,A2 constitute_a_decomposition implies A1 = A2` & A2 = A1`
 proof
   assume
@@ -69,8 +67,8 @@ A1: A1,A2 constitute_a_decomposition;
   then
 A2: A1 misses A2 by Def1;
   then
-A3: A1 c= A2` by TDLAT_1:2;
-A4: A2 c= A1` by A2,TDLAT_1:2;
+A3: A1 c= A2` by SUBSET_1:23;
+A4: A2 c= A1` by A2,SUBSET_1:23;
 A5: A1 \/ A2 = [#]X by A1,Def1;
   then A2` c= A1 by TDLAT_1:1;
   hence A1 = A2` by A3,XBOOLE_0:def 10;
@@ -78,15 +76,15 @@ A5: A1 \/ A2 = [#]X by A1,Def1;
   hence thesis by A4,XBOOLE_0:def 10;
 end;
 
-theorem Th5:
+theorem Th4:
   A1 = A2` or A2 = A1` implies A1,A2 constitute_a_decomposition
 proof
   assume A1 = A2` or A2 = A1`;
-  then A1 misses A2 & A1 \/ A2 = [#]X by TDLAT_1:1,2;
+  then A1 misses A2 & A1 \/ A2 = [#]X by TDLAT_1:1,SUBSET_1:23;
   hence thesis by Def1;
 end;
 
-theorem Th6:
+theorem Th5:
   A, A` constitute_a_decomposition
 proof
   A misses A` & A \/ A` = [#]X by PRE_TOPC:2,XBOOLE_1:79;
@@ -97,10 +95,10 @@ theorem
   {}X,[#]X constitute_a_decomposition
 proof
   [#]X = ({}X)`;
-  hence {}X,[#]X constitute_a_decomposition by Th6;
+  hence {}X,[#]X constitute_a_decomposition by Th5;
 end;
 
-theorem Th8:
+theorem Th7:
   A,A do_not_constitute_a_decomposition
 proof
   assume
@@ -108,7 +106,7 @@ A1: A,A constitute_a_decomposition;
   per cases;
   suppose
 A2: A is non empty;
-    A = A` by A1,Th4;
+    A = A` by A1,Th3;
     then A misses A by SUBSET_1:23;
     then A /\ A = {} by XBOOLE_0:def 7;
     hence contradiction by A2;
@@ -121,69 +119,76 @@ A2: A is non empty;
 end;
 
 definition
-  let X be non empty TopSpace, A1, A2 be Subset of X;
+  let X be non empty 1-sorted, A1, A2 be Subset of X;
   redefine pred A1,A2 constitute_a_decomposition;
-  irreflexivity by Th8;
+  irreflexivity by Th7;
 end;
 
-theorem Th9:
+theorem Th8:
   A1,A constitute_a_decomposition & A,A2 constitute_a_decomposition
   implies A1 = A2
 proof
   assume A1,A constitute_a_decomposition;
   then
-A1: A1 = A` by Th4;
+A1: A1 = A` by Th3;
   assume A,A2 constitute_a_decomposition;
-  hence thesis by A1,Th4;
+  hence thesis by A1,Th3;
 end;
 
-theorem Th10:
+reserve X for non empty TopSpace;
+reserve A, A1, A2, B1, B2 for Subset of X;
+
+theorem Th9:
   A1,A2 constitute_a_decomposition implies (Cl A1),(Int A2)
   constitute_a_decomposition & (Int A1),(Cl A2) constitute_a_decomposition
 proof
   assume
 A1: A1,A2 constitute_a_decomposition;
   Cl A1 = (Int A1`)` by TDLAT_3:1;
-  then Cl A1 = (Int A2)` by A1,Th4;
-  hence (Cl A1),(Int A2) constitute_a_decomposition by Th5;
+  then Cl A1 = (Int A2)` by A1,Th3;
+  hence (Cl A1),(Int A2) constitute_a_decomposition by Th4;
   Int A1 = (Cl A1`)` by TOPS_1:def 1;
-  then Int A1 = (Cl A2)` by A1,Th4;
-  hence (Int A1),(Cl A2) constitute_a_decomposition by Th5;
+  then Int A1 = (Cl A2)` by A1,Th3;
+  hence (Int A1),(Cl A2) constitute_a_decomposition by Th4;
 end;
 
 theorem
-  (Cl A),(Int A`) constitute_a_decomposition & (Cl A`),(Int A)
-constitute_a_decomposition & (Int A),(Cl A`) constitute_a_decomposition & (Int
-  A`),(Cl A) constitute_a_decomposition
+  (Cl A),(Int A`) constitute_a_decomposition & 
+  (Cl A`),(Int A) constitute_a_decomposition & 
+  (Int A),(Cl A`) constitute_a_decomposition & 
+  (Int A`),(Cl A) constitute_a_decomposition
 proof
-A1: A, A` constitute_a_decomposition by Th6;
-  hence (Cl A),(Int A`) constitute_a_decomposition by Th10;
-A2: A`,A constitute_a_decomposition by Th6;
-  hence (Cl A`),(Int A) constitute_a_decomposition by Th10;
-  thus (Int A),(Cl A`) constitute_a_decomposition by A2,Th10;
-  thus thesis by A1,Th10;
+A1: A, A` constitute_a_decomposition by Th5;
+  hence (Cl A),(Int A`) constitute_a_decomposition by Th9;
+A2: A`,A constitute_a_decomposition by Th5;
+  hence (Cl A`),(Int A) constitute_a_decomposition by Th9;
+  thus (Int A),(Cl A`) constitute_a_decomposition by A2,Th9;
+  thus thesis by A1,Th9;
 end;
 
-theorem Th12:
+theorem Th11:
   for A1, A2 being Subset of X st A1,A2 constitute_a_decomposition
   holds (A1 is open iff A2 is closed)
 proof
   let A1, A2 be Subset of X;
   assume
 A1: A1,A2 constitute_a_decomposition;
-  then A2 = A1` by Th4;
+  then A2 = A1` by Th3;
   hence A1 is open implies A2 is closed by TOPS_1:4;
   assume
 A2: A2 is closed;
-  A1 = A2` by A1,Th4;
+  A1 = A2` by A1,Th3;
   hence thesis by A2,TOPS_1:3;
 end;
 
 theorem
   for A1, A2 being Subset of X st A1,A2 constitute_a_decomposition holds
-  (A1 is closed iff A2 is open) by Th12;
+  (A1 is closed iff A2 is open) by Th11;
 
-theorem Th14:
+reserve X for non empty 1-sorted;
+reserve A, A1, A2, B1, B2 for Subset of X;
+
+theorem Th13:
   A1,A2 constitute_a_decomposition & B1,B2
   constitute_a_decomposition implies (A1 /\ B1),(A2 \/ B2)
   constitute_a_decomposition
@@ -220,7 +225,7 @@ end;
 
 theorem
   A1,A2 constitute_a_decomposition & B1,B2 constitute_a_decomposition
-  implies (A1 \/ B1),(A2 /\ B2) constitute_a_decomposition by Th14;
+  implies (A1 \/ B1),(A2 /\ B2) constitute_a_decomposition by Th13;
 
 begin
 
@@ -229,7 +234,7 @@ begin
 reserve X for non empty TopSpace,
   A1, A2 for Subset of X;
 
-theorem Th16:
+theorem Th15:
   for A1, A2, C1, C2 being Subset of X st A1,C1
   constitute_a_decomposition & A2,C2 constitute_a_decomposition holds A1,A2
   are_weakly_separated iff C1,C2 are_weakly_separated
@@ -237,7 +242,7 @@ proof
   let A1, A2, C1, C2 be Subset of X;
   assume A1,C1 constitute_a_decomposition & A2,C2 constitute_a_decomposition;
   then
-A1: C1 = A1` & C2 = A2` by Th4;
+A1: C1 = A1` & C2 = A2` by Th3;
   thus A1,A2 are_weakly_separated implies C1,C2 are_weakly_separated
   proof
     assume A1 \ A2,A2 \ A1 are_separated;
@@ -256,8 +261,8 @@ theorem
   A1,A2 are_weakly_separated iff A1`, A2` are_weakly_separated
 proof
   A1, A1` constitute_a_decomposition & A2, A2` constitute_a_decomposition
-  by Th6;
-  hence thesis by Th16;
+  by Th5;
+  hence thesis by Th15;
 end;
 
 theorem
@@ -270,10 +275,10 @@ proof
 A1: A1,C1 constitute_a_decomposition & A2,C2 constitute_a_decomposition;
   assume A1,A2 are_separated;
   then A1,A2 are_weakly_separated by TSEP_1:46;
-  hence thesis by A1,Th16;
+  hence thesis by A1,Th15;
 end;
 
-theorem Th19:
+theorem Th18:
   for A1, A2, C1, C2 being Subset of X st A1,C1
   constitute_a_decomposition & A2,C2 constitute_a_decomposition holds A1 misses
   A2 & C1,C2 are_weakly_separated implies A1,A2 are_separated
@@ -285,7 +290,7 @@ A1: A1,C1 constitute_a_decomposition & A2,C2 constitute_a_decomposition;
 A2: A1 /\ A2 = {};
   assume C1,C2 are_weakly_separated;
   then
-A3: A1,A2 are_weakly_separated by A1,Th16;
+A3: A1,A2 are_weakly_separated by A1,Th15;
   A1 misses A2 by A2,XBOOLE_0:def 7;
   hence thesis by A3,TSEP_1:46;
 end;
@@ -301,12 +306,12 @@ A1: A1,C1 constitute_a_decomposition & A2,C2 constitute_a_decomposition;
   assume C1 \/ C2 = the carrier of X;
   then
 A2: (C1 \/ C2)` = {}X by XBOOLE_1:37;
-  A1 = C1` & A2 = C2` by A1,Th4;
+  A1 = C1` & A2 = C2` by A1,Th3;
   then A1 /\ A2 = {} by A2,XBOOLE_1:53;
   then
 A3: A1 misses A2 by XBOOLE_0:def 7;
   assume C1,C2 are_weakly_separated;
-  hence thesis by A1,A3,Th19;
+  hence thesis by A1,A3,Th18;
 end;
 
 theorem
@@ -318,7 +323,7 @@ proof
   hence thesis by TSEP_1:46;
 end;
 
-theorem Th22:
+theorem Th21:
   A1,A2 are_weakly_separated iff (A1 \/ A2) \ A1,(A1 \/ A2) \ A2 are_separated
 proof
 A1: (A1 \/ A2) \ A1 = A2 \ A1 & (A1 \/ A2) \ A2 = A1 \ A2 by XBOOLE_1:40;
@@ -334,7 +339,7 @@ end;
 
 ::An Enlargement Theorem for Subsets.
 
-theorem Th23:
+theorem Th22:
   for A1, A2, C1, C2 being Subset of X st C1 c= A1 & C2 c= A2 & C1
   \/ C2 = A1 \/ A2 holds C1,C2 are_weakly_separated implies A1,A2
   are_weakly_separated
@@ -347,12 +352,12 @@ A1: (A1 \/ A2) \ A1 c= (A1 \/ A2) \ C1 & (A1 \/ A2) \ A2 c= (A1 \/ A2) \ C2
   assume
 A2: C1 \/ C2 = A1 \/ A2;
   assume C1,C2 are_weakly_separated;
-  then (A1 \/ A2) \ C1,(A1 \/ A2) \ C2 are_separated by A2,Th22;
+  then (A1 \/ A2) \ C1,(A1 \/ A2) \ C2 are_separated by A2,Th21;
   then (A1 \/ A2) \ A1,(A1 \/ A2) \ A2 are_separated by A1,CONNSP_1:7;
-  hence thesis by Th22;
+  hence thesis by Th21;
 end;
 
-theorem Th24:
+theorem Th23:
   A1,A2 are_weakly_separated iff A1 \ (A1 /\ A2),A2 \ (A1 /\ A2) are_separated
 proof
 A1: A2 \ (A1 /\ A2) = A2 \ A1 by XBOOLE_1:47;
@@ -369,7 +374,7 @@ end;
 
 ::An Extenuation Theorem for Subsets.
 
-theorem Th25:
+theorem Th24:
   for A1, A2, C1, C2 being Subset of X st C1 c= A1 & C2 c= A2 & C1
   /\ C2 = A1 /\ A2 holds A1,A2 are_weakly_separated implies C1,C2
   are_weakly_separated
@@ -382,9 +387,9 @@ A1: C1 \ (C1 /\ C2) c= A1 \ (C1 /\ C2) & C2 \ (C1 /\ C2) c= A2 \ (C1 /\ C2)
   assume
 A2: C1 /\ C2 = A1 /\ A2;
   assume A1,A2 are_weakly_separated;
-  then A1 \ (C1 /\ C2),A2 \ (C1 /\ C2) are_separated by A2,Th24;
+  then A1 \ (C1 /\ C2),A2 \ (C1 /\ C2) are_separated by A2,Th23;
   then C1 \ (C1 /\ C2),C2 \ (C1 /\ C2) are_separated by A1,CONNSP_1:7;
-  hence thesis by Th24;
+  hence thesis by Th23;
 end;
 
 ::Separated and Weakly Separated Subsets in Subspaces.
@@ -392,7 +397,7 @@ end;
 reserve X0 for non empty SubSpace of X,
   B1, B2 for Subset of X0;
 
-theorem Th26:
+theorem Th25:
   B1 = A1 & B2 = A2 implies (A1,A2 are_separated iff B1,B2 are_separated)
 proof
   assume that
@@ -438,7 +443,7 @@ A10: A1 misses Cl A2 by XBOOLE_0:def 7;
   end;
 end;
 
-theorem Th27:
+theorem Th26:
   B1 = (the carrier of X0) /\ A1 & B2 = (the carrier of X0) /\ A2
   implies (A1,A2 are_separated implies B1,B2 are_separated)
 proof
@@ -454,10 +459,10 @@ A3: B2 c= A2 by XBOOLE_1:17;
 A4: A1,A2 are_separated;
   B1 c= A1 by A1,XBOOLE_1:17;
   then C1,C2 are_separated by A3,A4,CONNSP_1:7;
-  hence thesis by Th26;
+  hence thesis by Th25;
 end;
 
-theorem Th28:
+theorem Th27:
   B1 = A1 & B2 = A2 implies (A1,A2 are_weakly_separated iff B1,B2
   are_weakly_separated)
 proof
@@ -467,19 +472,19 @@ A1: B1 = A1 & B2 = A2;
   proof
     assume A1,A2 are_weakly_separated;
     then A1 \ A2,A2 \ A1 are_separated by TSEP_1:def 5;
-    then B1 \ B2,B2 \ B1 are_separated by A1,Th26;
+    then B1 \ B2,B2 \ B1 are_separated by A1,Th25;
     hence thesis by TSEP_1:def 5;
   end;
   thus B1,B2 are_weakly_separated implies A1,A2 are_weakly_separated
   proof
     assume B1,B2 are_weakly_separated;
     then B1 \ B2,B2 \ B1 are_separated by TSEP_1:def 5;
-    then A1 \ A2,A2 \ A1 are_separated by A1,Th26;
+    then A1 \ A2,A2 \ A1 are_separated by A1,Th25;
     hence thesis by TSEP_1:def 5;
   end;
 end;
 
-theorem Th29:
+theorem Th28:
   B1 = (the carrier of X0) /\ A1 & B2 = (the carrier of X0) /\ A2
   implies (A1,A2 are_weakly_separated implies B1,B2 are_weakly_separated)
 proof
@@ -488,7 +493,7 @@ proof
 A1: B1 \ B2 = (the carrier of X0) /\ (A1 \ A2) & B2 \ B1 = (the carrier of
   X0) /\ (A2 \ A1) by XBOOLE_1:50;
   assume A1 \ A2,A2 \ A1 are_separated;
-  then B1 \ B2,B2 \ B1 are_separated by A1,Th27;
+  then B1 \ B2,B2 \ B1 are_separated by A1,Th26;
   hence thesis by TSEP_1:def 5;
 end;
 
@@ -514,7 +519,7 @@ end;
 
 reserve X0, X1, X2, Y1, Y2 for non empty SubSpace of X;
 
-theorem Th30:
+theorem Th29:
   X1,X2 constitute_a_decomposition iff X1 misses X2 & the
   TopStruct of X = X1 union X2
 proof
@@ -549,14 +554,14 @@ A4: the TopStruct of X = X1 union X2;
   hence thesis by Def2;
 end;
 
-theorem Th32:
+theorem Th30:
   X0,X0 do_not_constitute_a_decomposition
 proof
   reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
   now
     take A1 = A0, A2 = A0;
     thus A1 = the carrier of X0 & A2 = the carrier of X0 & A1,A2
-    do_not_constitute_a_decomposition by Th8;
+    do_not_constitute_a_decomposition by Th7;
   end;
   hence thesis by Def2;
 end;
@@ -564,7 +569,7 @@ end;
 definition
   let X be non empty TopSpace, A1, A2 be non empty SubSpace of X;
   redefine pred A1,A2 constitute_a_decomposition;
-  irreflexivity by Th32;
+  irreflexivity by Th30;
 end;
 
 theorem
@@ -580,10 +585,10 @@ A1: A1,A0 constitute_a_decomposition;
   assume for A0, A2 being Subset of X st A0 = the carrier of X0 & A2 = the
   carrier of X2 holds A0,A2 constitute_a_decomposition;
   then A0,A2 constitute_a_decomposition;
-  hence thesis by A1,Th9,TSEP_1:5;
+  hence thesis by A1,Th8,TSEP_1:5;
 end;
 
-theorem Th34:
+theorem Th32:
   for X1, X2, Y1, Y2 being non empty SubSpace of X st X1,Y1
 constitute_a_decomposition & X2,Y2 constitute_a_decomposition holds Y1 union Y2
   = the TopStruct of X iff X1 misses X2
@@ -598,11 +603,11 @@ A1: X1,Y1 constitute_a_decomposition and
 A2: X2,Y2 constitute_a_decomposition;
 A3: A2,B2 constitute_a_decomposition by A2,Def2;
   then
-A4: A2 = B2` by Th4;
-A5: A2 = B2` by A3,Th4;
+A4: A2 = B2` by Th3;
+A5: A2 = B2` by A3,Th3;
 A6: A1,B1 constitute_a_decomposition by A1,Def2;
   then
-A7: A1 = B1` by Th4;
+A7: A1 = B1` by Th3;
   thus Y1 union Y2 = the TopStruct of X implies X1 misses X2
   proof
     assume Y1 union Y2 = the TopStruct of X;
@@ -616,7 +621,7 @@ A7: A1 = B1` by Th4;
   then A1 misses A2 by TSEP_1:def 3;
   then
 A8: A1 /\ A2 = {}X by XBOOLE_0:def 7;
-  A1 = B1` by A6,Th4;
+  A1 = B1` by A6,Th3;
   then (B1 \/ B2)` = {}X by A4,A8,XBOOLE_1:53;
   then B1 \/ B2 = ({}X)`;
   then
@@ -625,7 +630,7 @@ A9: the carrier of Y1 union Y2 = the carrier of X by TSEP_1:def 2;
   hence thesis by A9,TSEP_1:5;
 end;
 
-theorem Th35:
+theorem Th33:
   X1,X2 constitute_a_decomposition implies (X1 is open iff X2 is closed)
 proof
   reconsider A1 = the carrier of X1, A2 = the carrier of X2 as Subset of X by
@@ -643,7 +648,7 @@ A2: for A1 being Subset of X st A1 = the carrier of X1 holds A1 is open;
       then
 A3:   A1,A2 constitute_a_decomposition by A1;
       A1 is open by A2;
-      hence A2 is closed by A3,Th12;
+      hence A2 is closed by A3,Th11;
     end;
     hence thesis by BORSUK_1:def 11;
   end;
@@ -655,16 +660,16 @@ A4: for A2 being Subset of X st A2 = the carrier of X2 holds A2 is closed;
     then
 A5: A1,A2 constitute_a_decomposition by A1;
     A2 is closed by A4;
-    hence A1 is open by A5,Th12;
+    hence A1 is open by A5,Th11;
   end;
   hence thesis by TSEP_1:def 1;
 end;
 
 theorem
   X1,X2 constitute_a_decomposition implies (X1 is closed iff X2 is open)
-  by Th35;
+  by Th33;
 
-theorem Th37:
+theorem Th35:
   X1 meets Y1 & X1,X2 constitute_a_decomposition & Y1,Y2
   constitute_a_decomposition implies (X1 meet Y1),(X2 union Y2)
   constitute_a_decomposition
@@ -687,7 +692,7 @@ A3: B1,B2 constitute_a_decomposition;
     let C, D be Subset of X;
     assume C = the carrier of X1 meet Y1 & D = the carrier of X2 union Y2;
     then C = A1 /\ B1 & D = A2 \/ B2 by A1,TSEP_1:def 2,def 4;
-    hence C,D constitute_a_decomposition by A2,A3,Th14;
+    hence C,D constitute_a_decomposition by A2,A3,Th13;
   end;
   hence thesis by Def2;
 end;
@@ -695,7 +700,7 @@ end;
 theorem
   X2 meets Y2 & X1,X2 constitute_a_decomposition & Y1,Y2
   constitute_a_decomposition implies (X1 union Y1),(X2 meet Y2)
-  constitute_a_decomposition by Th37;
+  constitute_a_decomposition by Th35;
 
 begin
 
@@ -703,7 +708,7 @@ begin
 
 reserve X for non empty TopSpace;
 
-theorem Th39:
+theorem Th37:
   for X1, X2, Y1, Y2 being SubSpace of X st X1,Y1
   constitute_a_decomposition & X2,Y2 constitute_a_decomposition holds X1,X2
   are_weakly_separated implies Y1,Y2 are_weakly_separated
@@ -727,7 +732,7 @@ A3: for A1, A2 being Subset of X st A1 = the carrier of X1 & A2 = the
 A4: A1,B1 constitute_a_decomposition & A2,B2 constitute_a_decomposition by A1
 ,A2;
     A1,A2 are_weakly_separated by A3;
-    hence B1,B2 are_weakly_separated by A4,Th16;
+    hence B1,B2 are_weakly_separated by A4,Th15;
   end;
   hence thesis by TSEP_1:def 7;
 end;
@@ -742,10 +747,10 @@ proof
 A1: X1,Y1 constitute_a_decomposition & X2,Y2 constitute_a_decomposition;
   assume X1,X2 are_separated;
   then X1,X2 are_weakly_separated by TSEP_1:78;
-  hence thesis by A1,Th39;
+  hence thesis by A1,Th37;
 end;
 
-theorem Th41:
+theorem Th39:
   for X1, X2, Y1, Y2 being non empty SubSpace of X st X1,Y1
   constitute_a_decomposition & X2,Y2 constitute_a_decomposition holds X1 misses
   X2 & Y1,Y2 are_weakly_separated implies X1,X2 are_separated
@@ -756,7 +761,7 @@ A1: X1,Y1 constitute_a_decomposition & X2,Y2 constitute_a_decomposition;
   assume
 A2: X1 misses X2;
   assume Y1,Y2 are_weakly_separated;
-  then X1,X2 are_weakly_separated by A1,Th39;
+  then X1,X2 are_weakly_separated by A1,Th37;
   hence thesis by A2,TSEP_1:78;
 end;
 
@@ -770,9 +775,9 @@ proof
 A1: X1,Y1 constitute_a_decomposition & X2,Y2 constitute_a_decomposition;
   assume Y1 union Y2 = the TopStruct of X;
   then
-A2: X1 misses X2 by A1,Th34;
+A2: X1 misses X2 by A1,Th32;
   assume Y1,Y2 are_weakly_separated;
-  hence thesis by A1,A2,Th41;
+  hence thesis by A1,A2,Th39;
 end;
 
 theorem
@@ -782,7 +787,7 @@ theorem
 proof
   let X1, X2 be non empty SubSpace of X;
   assume X1,X2 constitute_a_decomposition;
-  then X1 misses X2 by Th30;
+  then X1 misses X2 by Th29;
   hence thesis by TSEP_1:78;
 end;
 
@@ -812,7 +817,7 @@ A3: C1,C2 are_weakly_separated by TSEP_1:def 7;
 A4: A1 = the carrier of X1 & A2 = the carrier of X2;
     then A1 \/ A2 = the carrier of X1 union X2 by TSEP_1:def 2;
     then A1 \/ A2 = C1 \/ C2 by A2,TSEP_1:def 2;
-    hence A1,A2 are_weakly_separated by A1,A3,A4,Th23;
+    hence A1,A2 are_weakly_separated by A1,A3,A4,Th22;
   end;
   hence thesis by TSEP_1:def 7;
 end;
@@ -850,7 +855,7 @@ A5: C1 = the carrier of Y1 & C2 = the carrier of Y2;
     then X1 meets X2 by TSEP_1:def 3;
     then A1 /\ A2 = the carrier of X1 meet X2 by TSEP_1:def 4;
     then A1 /\ A2 = C1 /\ C2 by A2,A3,A5,TSEP_1:def 4;
-    hence C1,C2 are_weakly_separated by A1,A4,A5,Th25;
+    hence C1,C2 are_weakly_separated by A1,A4,A5,Th24;
   end;
   hence thesis by TSEP_1:def 7;
 end;
@@ -859,7 +864,7 @@ end;
 
 reserve X0 for non empty SubSpace of X;
 
-theorem Th46:
+theorem Th44:
   for X1, X2 being SubSpace of X, Y1, Y2 being SubSpace of X0 st
   the carrier of X1 = the carrier of Y1 & the carrier of X2 = the carrier of Y2
   holds X1,X2 are_separated iff Y1,Y2 are_separated
@@ -877,7 +882,7 @@ A1: the carrier of X1 = the carrier of X01 & the carrier of X2 = the
     assume X1,X2 are_separated;
     then A1,A2 are_separated by TSEP_1:def 6;
     then for B1,B2 be Subset of X0 holds B1 = the carrier of X01 & B2 = the
-    carrier of X02 implies B1,B2 are_separated by A1,Th26;
+    carrier of X02 implies B1,B2 are_separated by A1,Th25;
     hence thesis by TSEP_1:def 6;
   end;
   thus X01,X02 are_separated implies X1,X2 are_separated
@@ -885,7 +890,7 @@ A1: the carrier of X1 = the carrier of X01 & the carrier of X2 = the
     assume X01,X02 are_separated;
     then B1,B2 are_separated by TSEP_1:def 6;
     then for A1,A2 be Subset of X holds A1 = the carrier of X1 & A2 = the
-    carrier of X2 implies A1,A2 are_separated by A1,Th26;
+    carrier of X2 implies A1,A2 are_separated by A1,Th25;
     hence thesis by TSEP_1:def 6;
   end;
 end;
@@ -903,7 +908,7 @@ A1: X1 meets X0 & X2 meets X0;
 A2: Y1 = X1 meet X0 & Y2 = X2 meet X0;
   assume X1,X2 are_separated;
   then (X1 meet X0),(X2 meet X0) are_separated by A1,TSEP_1:70;
-  hence thesis by A2,Th46;
+  hence thesis by A2,Th44;
 end;
 
 theorem
@@ -924,7 +929,7 @@ A1: the carrier of X1 = the carrier of X01 & the carrier of X2 = the
     assume X1,X2 are_weakly_separated;
     then A1,A2 are_weakly_separated by TSEP_1:def 7;
     then for B1,B2 be Subset of X0 holds B1 = the carrier of X01 & B2 = the
-    carrier of X02 implies B1,B2 are_weakly_separated by A1,Th28;
+    carrier of X02 implies B1,B2 are_weakly_separated by A1,Th27;
     hence thesis by TSEP_1:def 7;
   end;
   thus X01,X02 are_weakly_separated implies X1,X2 are_weakly_separated
@@ -932,7 +937,7 @@ A1: the carrier of X1 = the carrier of X01 & the carrier of X2 = the
     assume X01,X02 are_weakly_separated;
     then B1,B2 are_weakly_separated by TSEP_1:def 7;
     then for A1,A2 be Subset of X holds A1 = the carrier of X1 & A2 = the
-    carrier of X2 implies A1,A2 are_weakly_separated by A1,Th28;
+    carrier of X2 implies A1,A2 are_weakly_separated by A1,Th27;
     hence thesis by TSEP_1:def 7;
   end;
 end;
@@ -959,7 +964,7 @@ A3: A1,A2 are_weakly_separated by TSEP_1:def 7;
     then
     C1 = (the carrier of X0) /\ A1 & C2 = (the carrier of X0) /\ A2 by A1,A2,
 TSEP_1:def 4;
-    hence C1,C2 are_weakly_separated by A3,Th29;
+    hence C1,C2 are_weakly_separated by A3,Th28;
   end;
   hence thesis by TSEP_1:def 7;
 end;

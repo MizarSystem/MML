@@ -2,7 +2,7 @@
 ::  by Robert Milewski
 ::
 :: Received June 22, 1999
-:: Copyright (c) 1999-2011 Association of Mizar Users
+:: Copyright (c) 1999-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -19,23 +19,24 @@ environ
       STRUCT_0, ZFMISC_1, FUNCOP_1, XBOOLEAN, EQREL_1, ORDERS_2, WAYBEL23,
       YELLOW_0, LATTICES, ORDINAL2, WAYBEL_0, WAYBEL_3, WAYBEL_8, RCOMP_1,
       PRE_TOPC, RLVECT_3, CANTOR_1, YELLOW15;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, DOMAIN_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, SETFAM_1, DOMAIN_1,
       CARD_1, NUMBERS, FINSET_1, STRUCT_0, MARGREL1, RELAT_1, FUNCT_1,
       RELSET_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, EQREL_1, FUNCOP_1,
       CARD_3, PRE_TOPC, TOPS_2, CANTOR_1, ORDERS_2, YELLOW_0, WAYBEL_0,
       WAYBEL_3, WAYBEL_8, WAYBEL23;
- constructors SETFAM_1, XXREAL_0, FINSEQ_4, REALSET1, VALUAT_1, TOPS_2,
-      CANTOR_1, WAYBEL_8, WAYBEL23, RELSET_1, FINSEQ_2;
+ constructors XXREAL_0, FINSEQ_4, REALSET1, VALUAT_1, TOPS_2, CANTOR_1,
+      WAYBEL_8, WAYBEL23, RELSET_1;
  registrations SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, FINSEQ_1, MARGREL1,
-      FINSEQ_2, REALSET1, STRUCT_0, TOPS_1, LATTICE3, WAYBEL_0, WAYBEL_3,
-      WAYBEL23, ORDINAL1, PRE_TOPC, ZFMISC_1, CARD_1, XBOOLE_0, RELAT_1;
+      FINSEQ_2, STRUCT_0, TOPS_1, LATTICE3, WAYBEL_0, WAYBEL_3, WAYBEL23,
+      ORDINAL1, PRE_TOPC, ZFMISC_1, CARD_1, XBOOLE_0, RELAT_1, CARD_2,
+      FINSEQ_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_2, MARGREL1, XBOOLEAN, STRUCT_0;
  theorems TARSKI, SETFAM_1, ZFMISC_1, FINSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCT_6, MSSUBFAM, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, EQREL_1,
-      FUNCOP_1, CARD_1, CARD_4, T_0TOPSP, PRE_TOPC, TOPS_2, CANTOR_1, MSSCYC_1,
-      YELLOW_0, YELLOW_8, YELLOW_9, WAYBEL_0, WAYBEL_3, WAYBEL_8, WAYBEL23,
-      XBOOLE_0, XBOOLE_1, SUBSET_1, ORDINAL1, XBOOLEAN;
+      MSSUBFAM, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, EQREL_1, FUNCOP_1,
+      CARD_1, CARD_4, T_0TOPSP, PRE_TOPC, TOPS_2, CANTOR_1, YELLOW_0, YELLOW_8,
+      YELLOW_9, WAYBEL_0, WAYBEL_3, WAYBEL_8, WAYBEL23, XBOOLE_0, XBOOLE_1,
+      SUBSET_1, ORDINAL1, XBOOLEAN;
  schemes FUNCT_2, PRE_CIRC, FINSEQ_1, FRAENKEL;
 
 begin  :: Preliminaries
@@ -62,86 +63,10 @@ A4: dom p = Seg i() by FUNCT_2:def 1;
   hence thesis by A3,A4,FINSEQ_1:def 3;
 end;
 
-registration
-  cluster BOOLEAN -> finite;
-  coherence;
-end;
-
-theorem Th2:
-  for i be Nat for D be finite set holds i-tuples_on D is finite
-proof
-  let i be Nat;
-  let D be finite set;
-A1: i is Element of NAT by ORDINAL1:def 12;
-  per cases;
-  suppose
-A2: D is non empty;
-A3: now
-      let x be set;
-      assume x in dom (i |-> D);
-      then x in Seg i by FUNCOP_1:13;
-      hence (i |-> D).x is finite by FUNCOP_1:7;
-    end;
-    product (i |-> D) = i-tuples_on D by A1,A2,FINSEQ_3:131;
-    hence thesis by A3,MSSCYC_1:1;
-  end;
-  suppose
-A4: D is empty;
-    now
-      per cases;
-      suppose
-        i <> 0;
-        hence thesis by A4,FINSEQ_3:119;
-      end;
-      suppose
-        i = 0;
-        then i-tuples_on D = { <*>D } by FINSEQ_2:94;
-        hence thesis;
-      end;
-    end;
-    hence thesis;
-  end;
-end;
-
-theorem
-  for T be finite set for S be Subset-Family of T holds S is finite;
-
-registration
-  let T be finite set;
-  cluster -> finite for Subset-Family of T;
-  coherence;
-end;
-
-registration
-  let T be finite 1-sorted;
-  cluster -> finite for Subset-Family of T;
-  coherence;
-end;
-
-theorem Th4:
-  for X be non trivial set for x being Element of X ex y be set st
-  y in X & x <> y
-proof
-  let X be non trivial set;
-  let x be Element of X;
-  ex y be set st y in X & y <> x
-  proof
-    assume
-A1: for y be set holds not y in X or y = x;
-    X c= {x}
-    proof
-      let z be set;
-      assume z in X;
-      then z = x by A1;
-      hence thesis by TARSKI:def 1;
-    end;
-    hence contradiction;
-  end;
-  then consider y be set such that
-A2: y in X & y <> x;
-  take y;
-  thus thesis by A2;
-end;
+:: registration
+::   cluster BOOLEAN -> finite;
+::   coherence;
+:: end;
 
 begin  :: Components
 
@@ -210,7 +135,9 @@ A12:  i in dom p by A11,FINSEQ_1:def 3;
   end;
 end;
 
-theorem Th5:
+canceled 3;
+
+theorem Th4:
   for X be set for p be FinSequence of bool X for q be FinSequence
   of BOOLEAN holds dom MergeSequence(p,q) = dom p
 proof
@@ -222,7 +149,7 @@ proof
     .= dom p by FINSEQ_1:def 3;
 end;
 
-theorem Th6:
+theorem Th5:
   for X be set for p be FinSequence of bool X for q be FinSequence
   of BOOLEAN for i be Nat st q.i = TRUE holds MergeSequence(p,q).i = p.i
 proof
@@ -251,7 +178,7 @@ A2:   not i in dom p;
   hence thesis;
 end;
 
-theorem Th7:
+theorem Th6:
   for X be set for p be FinSequence of bool X for q be FinSequence
 of BOOLEAN for i be Nat st i in dom p & q.i = FALSE holds MergeSequence(p,q).i
   = X\p.i
@@ -277,7 +204,7 @@ proof
     .= 0;
 end;
 
-theorem Th9:
+theorem Th8:
   for X be set for q be FinSequence of BOOLEAN holds MergeSequence(
   <*>(bool X),q) = <*>(bool X)
 proof
@@ -310,14 +237,14 @@ proof
   thus q.1 = TRUE implies MergeSequence(<*x*>,q).1 = x
   proof
     assume q.1 = TRUE;
-    hence MergeSequence(<*x*>,q).1 = <*x*>.1 by Th6
+    hence MergeSequence(<*x*>,q).1 = <*x*>.1 by Th5
       .= x by FINSEQ_1:40;
   end;
   1 in Seg 1 by FINSEQ_1:1;
   then
 A1: 1 in dom <*x*> by FINSEQ_1:38;
   assume q.1 = FALSE;
-  hence MergeSequence(<*x*>,q).1 = X\<*x*>.1 by A1,Th7
+  hence MergeSequence(<*x*>,q).1 = X\<*x*>.1 by A1,Th6
     .= X\x by FINSEQ_1:40;
 end;
 
@@ -344,7 +271,7 @@ proof
   thus q.1 = TRUE implies MergeSequence(<*x,y*>,q).1 = x
   proof
     assume q.1 = TRUE;
-    hence MergeSequence(<*x,y*>,q).1 = <*x,y*>.1 by Th6
+    hence MergeSequence(<*x,y*>,q).1 = <*x,y*>.1 by Th5
       .= x by FINSEQ_1:44;
   end;
   2 in Seg 2 by FINSEQ_1:1;
@@ -356,17 +283,17 @@ A2: 1 in dom <*x,y*> by FINSEQ_1:89;
   thus q.1 = FALSE implies MergeSequence(<*x,y*>,q).1 = X\x
   proof
     assume q.1 = FALSE;
-    hence MergeSequence(<*x,y*>,q).1 = X\<*x,y*>.1 by A2,Th7
+    hence MergeSequence(<*x,y*>,q).1 = X\<*x,y*>.1 by A2,Th6
       .= X\x by FINSEQ_1:44;
   end;
   thus q.2 = TRUE implies MergeSequence(<*x,y*>,q).2 = y
   proof
     assume q.2 = TRUE;
-    hence MergeSequence(<*x,y*>,q).2 = <*x,y*>.2 by Th6
+    hence MergeSequence(<*x,y*>,q).2 = <*x,y*>.2 by Th5
       .= y by FINSEQ_1:44;
   end;
   assume q.2 = FALSE;
-  hence MergeSequence(<*x,y*>,q).2 = X\<*x,y*>.2 by A1,Th7
+  hence MergeSequence(<*x,y*>,q).2 = X\<*x,y*>.2 by A1,Th6
     .= X\y by FINSEQ_1:44;
 end;
 
@@ -395,7 +322,7 @@ proof
   thus q.1 = TRUE implies MergeSequence(<*x,y,z*>,q).1 = x
   proof
     assume q.1 = TRUE;
-    hence MergeSequence(<*x,y,z*>,q).1 = <*x,y,z*>.1 by Th6
+    hence MergeSequence(<*x,y,z*>,q).1 = <*x,y,z*>.1 by Th5
       .= x by FINSEQ_1:45;
   end;
   3 in Seg 3 by FINSEQ_1:1;
@@ -407,13 +334,13 @@ A2: 1 in dom <*x,y,z*> by FINSEQ_1:89;
   thus q.1 = FALSE implies MergeSequence(<*x,y,z*>,q).1 = X\x
   proof
     assume q.1 = FALSE;
-    hence MergeSequence(<*x,y,z*>,q).1 = X\<*x,y,z*>.1 by A2,Th7
+    hence MergeSequence(<*x,y,z*>,q).1 = X\<*x,y,z*>.1 by A2,Th6
       .= X\x by FINSEQ_1:45;
   end;
   thus q.2 = TRUE implies MergeSequence(<*x,y,z*>,q).2 = y
   proof
     assume q.2 = TRUE;
-    hence MergeSequence(<*x,y,z*>,q).2 = <*x,y,z*>.2 by Th6
+    hence MergeSequence(<*x,y,z*>,q).2 = <*x,y,z*>.2 by Th5
       .= y by FINSEQ_1:45;
   end;
   2 in Seg 3 by FINSEQ_1:1;
@@ -422,21 +349,21 @@ A3: 2 in dom <*x,y,z*> by FINSEQ_1:89;
   thus q.2 = FALSE implies MergeSequence(<*x,y,z*>,q).2 = X\y
   proof
     assume q.2 = FALSE;
-    hence MergeSequence(<*x,y,z*>,q).2 = X\<*x,y,z*>.2 by A3,Th7
+    hence MergeSequence(<*x,y,z*>,q).2 = X\<*x,y,z*>.2 by A3,Th6
       .= X\y by FINSEQ_1:45;
   end;
   thus q.3 = TRUE implies MergeSequence(<*x,y,z*>,q).3 = z
   proof
     assume q.3 = TRUE;
-    hence MergeSequence(<*x,y,z*>,q).3 = <*x,y,z*>.3 by Th6
+    hence MergeSequence(<*x,y,z*>,q).3 = <*x,y,z*>.3 by Th5
       .= z by FINSEQ_1:45;
   end;
   assume q.3 = FALSE;
-  hence MergeSequence(<*x,y,z*>,q).3 = X\<*x,y,z*>.3 by A1,Th7
+  hence MergeSequence(<*x,y,z*>,q).3 = X\<*x,y,z*>.3 by A1,Th6
     .= X\z by FINSEQ_1:45;
 end;
 
-theorem Th16:
+theorem Th15:
   for X be set for p be FinSequence of bool X holds { Intersect (
 rng MergeSequence(p,q)) where q is FinSequence of BOOLEAN : len q = len p } is
   Subset-Family of X
@@ -481,7 +408,7 @@ A1: rng p = Y and
 A2: p is one-to-one by FINSEQ_4:58;
     reconsider p as FinSequence of bool X by A1,FINSEQ_1:def 4;
     reconsider C = { Intersect (rng MergeSequence(p,q)) where q is FinSequence
-    of BOOLEAN : len q = len p } as Subset-Family of X by Th16;
+    of BOOLEAN : len q = len p } as Subset-Family of X by Th15;
     take C,p;
     thus thesis by A1,A2,FINSEQ_4:62;
   end;
@@ -576,26 +503,25 @@ A34:      (p2"*p1).j in dom p2 by A11,FUNCT_1:33;
 A35:      q.j = (q1*(p2"*p1)).j by A26,RELAT_1:36
             .= q1.((p2"*p1).j) by A31,FUNCT_1:12;
 A36:      now
-            per cases;
+            per cases by XBOOLEAN:def 3;
             suppose
 A37:          q.j = TRUE;
-              hence MergeSequence(p2,q1).((p2"*p1).j) = p2.pj by A35,Th6
+              hence MergeSequence(p2,q1).((p2"*p1).j) = p2.pj by A35,Th5
                 .= (p2*(p2"*p1)).j by A33,FUNCT_1:13
                 .= (p2*p2"*p1).j by RELAT_1:36
                 .= (id(rng p1)*p1).j by A6,A9,A11,FUNCT_1:39
                 .= p1.j by RELAT_1:54
-                .= z by A29,A37,Th6;
+                .= z by A29,A37,Th5;
             end;
             suppose
-              not q.j = TRUE;
-              then
-A38:          q.j = FALSE by XBOOLEAN:def 3;
-              hence MergeSequence(p2,q1).((p2"*p1).j) = X\p2.pj by A34,A35,Th7
+S:            q.j = FALSE;
+              hence MergeSequence(p2,q1).((p2"*p1).j) = X\p2.pj
+                  by A34,A35,Th6
                 .= X\(p2*(p2"*p1)).j by A33,FUNCT_1:13
                 .= X\(p2*p2"*p1).j by RELAT_1:36
                 .= X\(id(rng p1)*p1).j by A6,A9,A11,FUNCT_1:39
                 .= X\p1.j by RELAT_1:54
-                .= z by A29,A32,A38,Th7;
+                .= z by A29,A32,Th6,S;
             end;
           end;
           (p2"*p1).j in Seg len p2 by A34,FINSEQ_1:def 3;
@@ -627,26 +553,24 @@ A46:      (p1"*p2).j in dom p1 by A12,FUNCT_1:33;
 A47:      q1.j = (q*(p1"*p2)).j by RELAT_1:36
             .= q.((p1"*p2).j) by A43,FUNCT_1:12;
 A48:      now
-            per cases;
+            per cases by XBOOLEAN:def 3;
             suppose
 A49:          q1.j = TRUE;
-              hence MergeSequence(p1,q).((p1"*p2).j) = p1.pj by A47,Th6
+              hence MergeSequence(p1,q).((p1"*p2).j) = p1.pj by A47,Th5
                 .= (p1*(p1"*p2)).j by A45,FUNCT_1:13
                 .= (p1*p1"*p2).j by RELAT_1:36
                 .= (id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:39
                 .= p2.j by RELAT_1:54
-                .= z by A41,A49,Th6;
+                .= z by A41,A49,Th5;
             end;
             suppose
-              not q1.j = TRUE;
-              then
-A50:          q1.j = FALSE by XBOOLEAN:def 3;
-              hence MergeSequence(p1,q).((p1"*p2).j) = X\p1.pj by A46,A47,Th7
+A50:          q1.j = FALSE;
+              hence MergeSequence(p1,q).((p1"*p2).j) = X\p1.pj by A46,A47,Th6
                 .= X\(p1*(p1"*p2)).j by A45,FUNCT_1:13
                 .= X\(p1*p1"*p2).j by RELAT_1:36
                 .= X\(id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:39
                 .= X\p2.j by RELAT_1:54
-                .= z by A41,A44,A50,Th7;
+                .= z by A41,A44,A50,Th6;
             end;
           end;
           (p1"*p2).j in Seg len p1 by A46,FINSEQ_1:def 3;
@@ -726,26 +650,24 @@ A72:      (p1"*p2).j in dom p1 by A12,FUNCT_1:33;
 A73:      q.j = (q1*(p1"*p2)).j by A64,RELAT_1:36
             .= q1.((p1"*p2).j) by A69,FUNCT_1:12;
 A74:      now
-            per cases;
+            per cases by XBOOLEAN:def 3;
             suppose
 A75:          q.j = TRUE;
-              hence MergeSequence(p1,q1).((p1"*p2).j) = p1.pj by A73,Th6
+              hence MergeSequence(p1,q1).((p1"*p2).j) = p1.pj by A73,Th5
                 .= (p1*(p1"*p2)).j by A71,FUNCT_1:13
                 .= (p1*p1"*p2).j by RELAT_1:36
                 .= (id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:39
                 .= p2.j by RELAT_1:54
-                .= z by A67,A75,Th6;
+                .= z by A67,A75,Th5;
             end;
             suppose
-              not q.j = TRUE;
-              then
-A76:          q.j = FALSE by XBOOLEAN:def 3;
-              hence MergeSequence(p1,q1).((p1"*p2).j) = X\p1.pj by A72,A73,Th7
+A76:         q.j = FALSE;
+              hence MergeSequence(p1,q1).((p1"*p2).j) = X\p1.pj by A72,A73,Th6
                 .= X\(p1*(p1"*p2)).j by A71,FUNCT_1:13
                 .= X\(p1*p1"*p2).j by RELAT_1:36
                 .= X\(id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:39
                 .= X\p2.j by RELAT_1:54
-                .= z by A67,A70,A76,Th7;
+                .= z by A67,A70,A76,Th6;
             end;
           end;
           (p1"*p2).j in Seg len p1 by A72,FINSEQ_1:def 3;
@@ -777,26 +699,24 @@ A84:      (p2"*p1).j in dom p2 by A11,FUNCT_1:33;
 A85:      q1.j = (q*(p2"*p1)).j by RELAT_1:36
             .= q.((p2"*p1).j) by A81,FUNCT_1:12;
 A86:      now
-            per cases;
+            per cases by XBOOLEAN:def 3;
             suppose
 A87:          q1.j = TRUE;
-              hence MergeSequence(p2,q).((p2"*p1).j) = p2.pj by A85,Th6
+              hence MergeSequence(p2,q).((p2"*p1).j) = p2.pj by A85,Th5
                 .= (p2*(p2"*p1)).j by A83,FUNCT_1:13
                 .= (p2*p2"*p1).j by RELAT_1:36
                 .= (id(rng p1)*p1).j by A6,A9,A11,FUNCT_1:39
                 .= p1.j by RELAT_1:54
-                .= z by A79,A87,Th6;
+                .= z by A79,A87,Th5;
             end;
             suppose
-              not q1.j = TRUE;
-              then
-A88:          q1.j = FALSE by XBOOLEAN:def 3;
-              hence MergeSequence(p2,q).((p2"*p1).j) = X\p2.pj by A84,A85,Th7
+A88:         q1.j = FALSE;
+              hence MergeSequence(p2,q).((p2"*p1).j) = X\p2.pj by A84,A85,Th6
                 .= X\(p2*(p2"*p1)).j by A83,FUNCT_1:13
                 .= X\(p2*p2"*p1).j by RELAT_1:36
                 .= X\(id(rng p1)*p1).j by A6,A9,A11,FUNCT_1:39
                 .= X\p1.j by RELAT_1:54
-                .= z by A79,A82,A88,Th7;
+                .= z by A79,A82,A88,Th6;
             end;
           end;
           (p2"*p1).j in Seg len p2 by A84,FINSEQ_1:def 3;
@@ -836,14 +756,14 @@ A3:   z = Intersect (rng MergeSequence(p,q)) & len q = len p by A1;
       by FINSEQ_1:def 11,FINSEQ_2:92;
       hence thesis by A3;
     end;
-A4: len p-tuples_on BOOLEAN is finite by Th2;
+A4: len p-tuples_on BOOLEAN is finite;
     { F(q) where q is Element of BOOLEAN* : q in len p-tuples_on BOOLEAN }
     is finite from FRAENKEL:sch 21(A4);
     hence thesis by A2;
   end;
 end;
 
-theorem Th17:
+theorem Th16:
   for X be set for Y be empty Subset-Family of X holds Components( Y) = {X}
 proof
   let X be set;
@@ -862,14 +782,14 @@ A3: Components(Y) = { Intersect (rng MergeSequence(p,q)) where q is
       then consider q be FinSequence of BOOLEAN such that
 A4:   z = Intersect (rng MergeSequence(p,q)) and
       len q = len p by A3;
-      p = <*>(bool X) by A2,RELAT_1:41;
-      then rng MergeSequence(p,q) = {} by Th9,RELAT_1:38;
+      p = <*>(bool X) by A2;
+      then rng MergeSequence(p,q) = {} by Th8,RELAT_1:38;
       then Intersect (rng MergeSequence(p,q)) = X by SETFAM_1:def 9;
       hence thesis by A4,TARSKI:def 1;
     end;
     let z be set;
-    p = <*>(bool X) by A2,RELAT_1:41;
-    then rng MergeSequence(p,<*>(BOOLEAN)) = {} by Th9,RELAT_1:38;
+    p = <*>(bool X) by A2;
+    then rng MergeSequence(p,<*>(BOOLEAN)) = {} by Th8,RELAT_1:38;
     then
 A5: Intersect (rng MergeSequence(p,<*>(BOOLEAN))) = X by SETFAM_1:def 9;
     assume z in {X};
@@ -932,7 +852,7 @@ A13: rng (p"*p1) c= dom q by RELAT_1:26;
       then consider i be Nat such that
 A14:  i in dom MergeSequence(p1,q1) and
 A15:  MergeSequence(p1,q1).i = z by FINSEQ_2:10;
-A16:  i in dom p1 by A14,Th5;
+A16:  i in dom p1 by A14,Th4;
       then
 A17:  i in dom (p"*p1) by A12,RELAT_1:27;
       then (p"*p1).i in rng (p"*p1) by FUNCT_1:def 3;
@@ -946,29 +866,27 @@ A20:  q.j = (q*(p"*p1)).i by A17,FUNCT_1:13
 A21:  p1 is Function of dom p1,rng p by A1,A3,A5,FUNCT_2:2;
 A22:  j in dom p by A11,A18,FUNCT_1:33;
 A23:  now
-        per cases;
+        per cases by XBOOLEAN:def 3;
         suppose
 A24:      q.j = TRUE;
-          hence MergeSequence(p,q).j = p.j by Th6
+          hence MergeSequence(p,q).j = p.j by Th5
             .= (p*(p"*p1)).i by A17,FUNCT_1:13
             .= (p*p"*p1).i by RELAT_1:36
             .= ((id rng p)*p1).i by A11,FUNCT_1:39
             .= p1.i by A21,FUNCT_2:17
-            .= z by A15,A20,A24,Th6;
+            .= z by A15,A20,A24,Th5;
         end;
         suppose
-          q.j <> TRUE;
-          then
-A25:      q.j = FALSE by XBOOLEAN:def 3;
-          hence MergeSequence(p,q).j = X\p.j by A22,Th7
+A25:     q.j = FALSE;
+          hence MergeSequence(p,q).j = X\p.j by A22,Th6
             .= X\(p*(p"*p1)).i by A17,FUNCT_1:13
             .= X\(p*p"*p1).i by RELAT_1:36
             .= X\((id rng p)*p1).i by A11,FUNCT_1:39
             .= X\p1.i by A21,FUNCT_2:17
-            .= z by A15,A16,A20,A25,Th7;
+            .= z by A15,A16,A20,A25,Th6;
         end;
       end;
-      j in dom MergeSequence(p,q) by A19,Th5;
+      j in dom MergeSequence(p,q) by A19,Th4;
       hence thesis by A23,FUNCT_1:def 3;
     end;
     hence V c= W by A8,SETFAM_1:44;
@@ -976,7 +894,7 @@ A25:      q.j = FALSE by XBOOLEAN:def 3;
   hence thesis by SETFAM_1:def 2;
 end;
 
-theorem Th19:
+theorem Th18:
   for X be set for Y be finite Subset-Family of X holds union Components(Y) = X
 proof
   let X be set;
@@ -1006,7 +924,7 @@ A5: z in X;
       then consider i be Nat such that
 A6:   i in dom MergeSequence(p,q) and
 A7:   MergeSequence(p,q).i = Z by FINSEQ_2:10;
-A8:   dom MergeSequence(p,q) = dom p by Th5;
+A8:   dom MergeSequence(p,q) = dom p by Th4;
       then
 A9:   dom MergeSequence(p,q) = Seg len p by FINSEQ_1:def 3;
       now
@@ -1014,12 +932,12 @@ A9:   dom MergeSequence(p,q) = Seg len p by FINSEQ_1:def 3;
         suppose
 A10:      z in p.i;
           then q.i = TRUE by A4,A6,A9;
-          hence z in Z by A7,A10,Th6;
+          hence z in Z by A7,A10,Th5;
         end;
         suppose
 A11:      not z in p.i;
           then q.i = FALSE by A4,A6,A9;
-          then MergeSequence(p,q).i = X\p.i by A6,A8,Th7;
+          then MergeSequence(p,q).i = X\p.i by A6,A8,Th6;
           hence z in Z by A5,A7,A11,XBOOLE_0:def 5;
         end;
       end;
@@ -1033,7 +951,7 @@ A12: z in Intersect (rng MergeSequence(p,q)) by A5,SETFAM_1:43;
   hence thesis by XBOOLE_0:def 10;
 end;
 
-theorem Th20:
+theorem Th19:
   for X be set for Y be finite Subset-Family of X for A,B be set
   st A in Components(Y) & B in Components(Y) & A <> B holds A misses B
 proof
@@ -1072,41 +990,35 @@ A14: i in dom p by A11,FINSEQ_1:def 3;
     MergeSequence(p,q1).i in rng MergeSequence(p,q1) by A13,FUNCT_1:def 3;
     then
 A15: z in MergeSequence(p,q1).i by A8,A6,SETFAM_1:43;
-    i in dom MergeSequence(p,q2) by A14,Th5;
+    i in dom MergeSequence(p,q2) by A14,Th4;
     then MergeSequence(p,q2).i in rng MergeSequence(p,q2) by FUNCT_1:def 3;
     then
 A16: z in MergeSequence(p,q2).i by A9,A5,SETFAM_1:43;
-    now
-      per cases;
+      per cases by XBOOLEAN:def 3;
       suppose
         q1.i = TRUE;
         then
-A17:    MergeSequence(p,q1).i = p.i by Th6;
+A17:    MergeSequence(p,q1).i = p.i by Th5;
         q2.i = TRUE
         proof
           assume not q2.i = TRUE;
-          then q2.i = FALSE by XBOOLEAN:def 3;
-          then MergeSequence(p,q2).i = X\p.i by A14,Th7;
+          then MergeSequence(p,q2).i = X\p.i by A14,Th6,XBOOLEAN:def 3;
           hence contradiction by A15,A16,A17,XBOOLE_0:def 5;
         end;
-        hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A17,Th6;
+        hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A17,Th5;
       end;
-      suppose
-        not q1.i = TRUE;
-        then q1.i = FALSE by XBOOLEAN:def 3;
+      suppose q1.i = FALSE;
         then
-A18:    MergeSequence(p,q1).i = X\p.i by A14,Th7;
+A18:    MergeSequence(p,q1).i = X\p.i by A14,Th6;
         q2.i = FALSE
         proof
           assume not q2.i = FALSE;
           then q2.i = TRUE by XBOOLEAN:def 3;
-          then MergeSequence(p,q2).i = p.i by Th6;
+          then MergeSequence(p,q2).i = p.i by Th5;
           hence contradiction by A15,A16,A18,XBOOLE_0:def 5;
         end;
-        hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A14,A18,Th7;
+        hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A14,A18,Th6;
       end;
-    end;
-    hence MergeSequence(p,q1).i = MergeSequence(p,q2).i;
   end;
   len MergeSequence(p,q2) = len p by Def1;
   hence contradiction by A3,A8,A9,A10,A12,FINSEQ_2:9;
@@ -1167,91 +1079,85 @@ A17:    p1.i in rng p;
         then p1.i in dom (q*p") by A8,A17,RELAT_1:27;
         then
 A18:    (q*p").(p1.i) in rng (q*p") by FUNCT_1:def 3;
-        rng (q*p"*p1) = rng (q*(p"*p1)) by RELAT_1:36;
-        then rng (q*p"*p1) c= rng q by RELAT_1:26;
-        then
-A19:    rng (q*p"*p1) c= BOOLEAN by XBOOLE_1:1;
         dom (q*p") c= rng p by A8,RELAT_1:25;
         then rng (q*p") = rng (q*p"*p1) by A2,A5,A10,RELAT_1:28,XBOOLE_1:1;
         then (q*p"*p1).i in rng (q*p"*p1) by A16,A18,FUNCT_1:13;
-        hence thesis by A19;
+        hence thesis;
       end;
       thus thesis;
     end;
     consider q1 be FinSequence of BOOLEAN such that
-A20: len q1 = len p1 and
-A21: for i be Nat st i in Seg len p1 holds (C[i] implies q1.i = F(i))
+A19: len q1 = len p1 and
+A20: for i be Nat st i in Seg len p1 holds (C[i] implies q1.i = F(i))
     & (not C[i] implies q1.i = T(i)) from SeqLambda1C(A15);
-A22: p1 is one-to-one by A9,A10,FINSEQ_4:62;
+A21: p1 is one-to-one by A9,A10,FINSEQ_4:62;
     then
-A23: rng p1 = dom (p1") by FUNCT_1:33;
+A22: rng p1 = dom (p1") by FUNCT_1:33;
     rng MergeSequence(p,q) c= rng MergeSequence(p1,q1)
     proof
       let z be set;
       assume z in rng MergeSequence(p,q);
       then consider i be Nat such that
-A24:  i in dom MergeSequence(p,q) and
-A25:  MergeSequence(p,q).i = z by FINSEQ_2:10;
-      i in Seg len MergeSequence(p,q) by A24,FINSEQ_1:def 3;
+A23:  i in dom MergeSequence(p,q) and
+A24:  MergeSequence(p,q).i = z by FINSEQ_2:10;
+      i in Seg len MergeSequence(p,q) by A23,FINSEQ_1:def 3;
       then i in Seg len p by Def1;
       then
-A26:  i in dom p by FINSEQ_1:def 3;
+A25:  i in dom p by FINSEQ_1:def 3;
       then
-A27:  i in dom (p1"*p) by A2,A5,A10,A23,RELAT_1:27;
+A26:  i in dom (p1"*p) by A2,A5,A10,A22,RELAT_1:27;
       then (p1"*p).i in rng (p1"*p) by FUNCT_1:def 3;
       then
-A28:  (p1"*p).i in rng (p1") by FUNCT_1:14;
+A27:  (p1"*p).i in rng (p1") by FUNCT_1:14;
       then
-A29:  (p1"*p).i in dom p1 by A22,FUNCT_1:33;
+A28:  (p1"*p).i in dom p1 by A21,FUNCT_1:33;
       then reconsider j = (p1"*p).i as Element of NAT;
-      p1.j = (p1*(p1"*p)).i by A27,FUNCT_1:13
+      p1.j = (p1*(p1"*p)).i by A26,FUNCT_1:13
         .= (p1*p1"*p).i by RELAT_1:36
-        .= ((id rng p1)*p).i by A22,FUNCT_1:39
+        .= ((id rng p1)*p).i by A21,FUNCT_1:39
         .= p.i by A2,A5,A10,RELAT_1:53;
       then
-A30:  p1.j in rng p by A26,FUNCT_1:def 3;
-      j in Seg len p1 by A29,FINSEQ_1:def 3;
+A29:  p1.j in rng p by A25,FUNCT_1:def 3;
+      j in Seg len p1 by A28,FINSEQ_1:def 3;
       then
-A31:  q1.j = (q*p"*p1).((p1"*p).i) by A21,A30
-        .= (q*p"*p1*(p1"*p)).i by A27,FUNCT_1:13
+A30:  q1.j = (q*p"*p1).((p1"*p).i) by A20,A29
+        .= (q*p"*p1*(p1"*p)).i by A26,FUNCT_1:13
         .= (q*p"*(p1*(p1"*p))).i by RELAT_1:36
         .= (q*p"*(p1*p1"*p)).i by RELAT_1:36
-        .= (q*p"*((id rng p1)*p)).i by A22,FUNCT_1:39
+        .= (q*p"*((id rng p1)*p)).i by A21,FUNCT_1:39
         .= (q*p"*p).i by A2,A5,A10,RELAT_1:53
         .= (q*(p"*p)).i by RELAT_1:36
         .= (q*(id dom p)).i by A7,FUNCT_1:39
         .= (q*(id dom q)).i by A13,FINSEQ_3:29
         .= q.i by RELAT_1:52;
-A32:  j in dom p1 by A22,A28,FUNCT_1:33;
-A33:  now
-        per cases;
+A31:  j in dom p1 by A21,A27,FUNCT_1:33;
+A32:  now
+        per cases by XBOOLEAN:def 3;
         suppose
-A34:      q.i = TRUE;
-          hence z = p.i by A25,Th6
+A33:      q.i = TRUE;
+          hence z = p.i by A24,Th5
             .= ((id rng p1)*p).i by A2,A5,A10,RELAT_1:53
-            .= (p1*p1"*p).i by A22,FUNCT_1:39
+            .= (p1*p1"*p).i by A21,FUNCT_1:39
             .= (p1*(p1"*p)).i by RELAT_1:36
-            .= p1.j by A27,FUNCT_1:13
-            .= MergeSequence(p1,q1).j by A31,A34,Th6;
+            .= p1.j by A26,FUNCT_1:13
+            .= MergeSequence(p1,q1).j by A30,A33,Th5;
         end;
         suppose
-          not q.i = TRUE;
-          then
-A35:      q.i = FALSE by XBOOLEAN:def 3;
-          hence z = X\p.i by A25,A26,Th7
+A34:      q.i = FALSE;
+          hence z = X\p.i by A24,A25,Th6
             .= X\((id rng p1)*p).i by A2,A5,A10,RELAT_1:53
-            .= X\(p1*p1"*p).i by A22,FUNCT_1:39
+            .= X\(p1*p1"*p).i by A21,FUNCT_1:39
             .= X\(p1*(p1"*p)).i by RELAT_1:36
-            .= X\p1.j by A27,FUNCT_1:13
-            .= MergeSequence(p1,q1).j by A32,A31,A35,Th7;
+            .= X\p1.j by A26,FUNCT_1:13
+            .= MergeSequence(p1,q1).j by A31,A30,A34,Th6;
         end;
       end;
-      j in dom MergeSequence(p1,q1) by A29,Th5;
-      hence thesis by A33,FUNCT_1:def 3;
+      j in dom MergeSequence(p1,q1) by A28,Th4;
+      hence thesis by A32,FUNCT_1:def 3;
     end;
     then {} = Intersect (rng MergeSequence(p1,q1)) by A12,SETFAM_1:44
 ,XBOOLE_1:3;
-    hence contradiction by A3,A11,A20;
+    hence contradiction by A3,A11,A19;
   end;
   hence thesis by Def3;
 end;
@@ -1263,7 +1169,7 @@ proof
   let X be non empty set;
   let Y be empty Subset-Family of X;
   not {} in {X} by TARSKI:def 1;
-  then not {} in Components(Y) by Th17;
+  then not {} in Components(Y) by Th16;
   hence thesis by Def3;
 end;
 
@@ -1276,14 +1182,14 @@ proof
   assume Y is in_general_position;
   then
 A1: for A be Subset of X st A in Components(Y) holds A <> {} & for B be
-  Subset of X st B in Components(Y) holds A = B or A misses B by Def3,Th20;
-  union Components(Y) = X by Th19;
+  Subset of X st B in Components(Y) holds A = B or A misses B by Def3,Th19;
+  union Components(Y) = X by Th18;
   hence thesis by A1,EQREL_1:def 4;
 end;
 
 begin  :: About basis of Topological Spaces
 
-theorem Th24:
+theorem Th23:
   for L be non empty RelStr holds [#]L is infs-closed sups-closed
 proof
   let L be non empty RelStr;
@@ -1293,7 +1199,7 @@ proof
   hence thesis by WAYBEL23:20;
 end;
 
-theorem Th25:
+theorem Th24:
   for L be non empty RelStr holds [#]L is with_bottom with_top
 proof
   let L be non empty RelStr;
@@ -1306,7 +1212,7 @@ end;
 registration
   let L be non empty RelStr;
   cluster [#]L -> infs-closed sups-closed with_bottom with_top;
-  coherence by Th24,Th25;
+  coherence by Th23,Th24;
 end;
 
 theorem
@@ -1424,9 +1330,8 @@ proof
 A1: for e be Element of T ex u be Element of the topology of T st P[e, u]
   proof
     let e be Element of T;
-    [#]T \ Cl {e} is open by PRE_TOPC:def 3;
-    then reconsider u = [#]T \ Cl {e} as Element of the topology of T by
-PRE_TOPC:def 2;
+    reconsider u = [#]T \ Cl {e} as Element of the topology of T
+           by PRE_TOPC:def 2,PRE_TOPC:def 3;
     take u;
     thus thesis;
   end;
@@ -1444,14 +1349,13 @@ A5: f.x1 = f.x2;
       .= [#]T \ Cl {y2} by A2
       .= (Cl {y2})` by SUBSET_1:def 4;
     then Cl {y2} c= Cl {y1} & Cl {y1} c= Cl {y2} by SUBSET_1:12;
-    then Cl {y1} = Cl {y2} by XBOOLE_0:def 10;
-    hence thesis by YELLOW_8:23;
+    hence thesis by YELLOW_8:23,XBOOLE_0:def 10;
   end;
   dom f = the carrier of T & rng f c= the topology of T by FUNCT_2:def 1;
   hence thesis by A3,CARD_1:10;
 end;
 
-theorem Th30:
+theorem Th29:
   for T be TopStruct for X be Subset of T st X is open for B be
 finite Subset-Family of T st B is Basis of T for Y be set st Y in Components(B)
   holds X misses Y or Y c= X
@@ -1491,18 +1395,17 @@ A11: Y c= b
     consider i be Nat such that
 A12: i in dom p and
 A13: p.i = b by A4,A2,A9,FINSEQ_2:10;
-A14: i in dom MergeSequence(p,q) by A12,Th5;
+A14: i in dom MergeSequence(p,q) by A12,Th4;
     now
-      per cases;
+      per cases by XBOOLEAN:def 3;
       suppose
         q.i = TRUE;
-        hence MergeSequence(p,q).i = b by A13,Th6;
+        hence MergeSequence(p,q).i = b by A13,Th5;
       end;
       suppose
-        not q.i = TRUE;
-        then q.i = FALSE by XBOOLEAN:def 3;
+        q.i = FALSE;
         then
-A15:    MergeSequence(p,q).i = (the carrier of T) \ b by A12,A13,Th7;
+A15:    MergeSequence(p,q).i = (the carrier of T) \ b by A12,A13,Th6;
         MergeSequence(p,q).i in rng MergeSequence(p,q) by A14,FUNCT_1:def 3;
         then Y c= (the carrier of T) \ b by A6,A15,MSSUBFAM:2;
         hence MergeSequence(p,q).i = b by A10,A8,XBOOLE_0:def 5;
@@ -1527,7 +1430,7 @@ A1: T is infinite;
   let B be Basis of T;
   assume B is finite;
   then reconsider B1 = B as finite Subset-Family of T;
-  union Components(B1) = the carrier of T by Th19;
+  union Components(B1) = the carrier of T by Th18;
   then consider X be set such that
 A2: X in Components(B1) and
 A3: X is infinite by A1,FINSET_1:7;
@@ -1536,7 +1439,7 @@ A3: X is infinite by A1,FINSET_1:7;
 A4: x in X by XBOOLE_0:def 1;
   consider y be set such that
 A5: y in X and
-A6: x <> y by A4,Th4;
+A6: x <> y by A4,SUBSET_1:48;
   reconsider x1 = x, y1 = y as Element of T by A2,A4,A5;
   consider Y be Subset of T such that
 A7: Y is open and
@@ -1546,15 +1449,13 @@ A8: x1 in Y & not y1 in Y or y1 in Y & not x1 in Y by A1,A6,T_0TOPSP:def 7;
     suppose
 A9:   x in Y & not y in Y;
       then x in Y /\ X by A4,XBOOLE_0:def 4;
-      then Y meets X by XBOOLE_0:4;
-      then X c= Y by A2,A7,Th30;
+      then X c= Y by A2,A7,Th29,XBOOLE_0:4;
       hence contradiction by A5,A9;
     end;
     suppose
 A10:  y in Y & not x in Y;
       then y in Y /\ X by A5,XBOOLE_0:def 4;
-      then Y meets X by XBOOLE_0:4;
-      then X c= Y by A2,A7,Th30;
+      then X c= Y by A2,A7,Th29,XBOOLE_0:4;
       hence contradiction by A4,A10;
     end;
   end;
@@ -1595,16 +1496,14 @@ A1: now
   then the carrier of T in sfA;
   then
 A2: x in meet sfA by A1,SETFAM_1:def 1;
-  now
+B3: now
     let P be Subset of T;
     assume P in sfA;
     then ex A be Element of the topology of T st P = A & x in A;
     hence P is open by PRE_TOPC:def 2;
   end;
-  then
-A3: sfA is open by TOPS_2:def 1;
   { F(A) where A is Element of tT : P[A] } is finite from PRE_CIRC:sch 1;
-  then meet sfA is open by A3,TOPS_2:20;
+  then meet sfA is open by B3,TOPS_2:20,TOPS_2:def 1;
   then consider a be Subset of T such that
 A4: a in B and
 A5: x in a and

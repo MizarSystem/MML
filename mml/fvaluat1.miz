@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek , Hidetsune Kobayashi and Artur Korni{\l}owicz
 ::
 :: Received April 7, 2011
-:: Copyright (c) 2011 Association of Mizar Users
+:: Copyright (c) 2011-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -24,7 +24,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, DOMAIN_1,
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, XXREAL_0,
       XREAL_0, XXREAL_2, XXREAL_3, XCMPLX_0, REAL_1, INT_1, MEMBERED, SUPINF_2,
-      EXTREAL1, INT_2, NAT_1, MESFUNC1, FINSEQ_1, FINSEQ_4, REALSET1, BINOP_1,
+      EXTREAL1, INT_2, MESFUNC1, FINSEQ_1, FINSEQ_4, REALSET1, BINOP_1,
       STRUCT_0, ALGSTR_0, RLVECT_1, GRCAT_1, GROUP_1, YELLOW_9, VECTSP_1,
       VECTSP_2, FUNCSDOM, REALSET2, RMOD_2, IDEAL_1, RING_1;
  constructors REAL_1, FINSEQ_4, SUPINF_2, EXTREAL1, MESFUNC1, RMOD_2, YELLOW_9,
@@ -34,10 +34,9 @@ environ
       RING_1, XXREAL_0, NUMBERS, MEMBERED, ORDINAL1, ALGSTR_0, XXREAL_3,
       REALSET2, FINSEQ_1;
  requirements NUMERALS, ARITHM, REAL, BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, SUBSET_1, FUNCT_2, BINOP_1, XXREAL_0, XREAL_0,
-      XCMPLX_0, XXREAL_2, XXREAL_3, REALSET1, RING_1, MESFUNC1, STRUCT_0,
-      ALGSTR_0, RLVECT_1, GROUP_1, GRCAT_1, VECTSP_1, VECTSP_2, IDEAL_1,
-      RMOD_2;
+ definitions TARSKI, XBOOLE_0, SUBSET_1, FUNCT_2, BINOP_1, XREAL_0, XCMPLX_0,
+      XXREAL_2, XXREAL_3, REALSET1, RING_1, MESFUNC1, STRUCT_0, ALGSTR_0,
+      RLVECT_1, GROUP_1, GRCAT_1, VECTSP_1, VECTSP_2, IDEAL_1, RMOD_2;
  theorems VECTSP_1, FUNCOP_1, TARSKI, FUNCT_1, INT_1, RLVECT_1, XREAL_0,
       VECTSP_2, XBOOLE_0, FUNCT_2, ABSVALUE, NAT_1, ZFMISC_1, REALSET1,
       FINSEQ_1, FINSEQ_3, XBOOLE_1, TOPREALA, FINSEQ_5, GROUP_1, IDEAL_1,
@@ -273,7 +272,7 @@ end;
 
 reserve x, y, v, u for ExtInt;
 
-theorem Th11:
+theorem Th10:
   x < y implies x + 1 <= y
   proof
     assume
@@ -310,7 +309,7 @@ definition
   given i0 being positive ExtInt such that
 A1: i0 in X;
   func least-positive(X) -> positive ExtInt means
-  :Def4:
+  :Def2:
   it in X &
   for i being positive ExtInt st i in X holds it <= i;
   existence
@@ -363,7 +362,7 @@ end;
 
 definition let f be Relation;
   attr f is e.i.-valued means
-  :Def5:
+  :Def3:
   for x being set st x in rng f holds x is ext-integer;
 end;
 
@@ -398,7 +397,7 @@ registration
     per cases;
     suppose x in dom f;
       then f.x in rng f by FUNCT_1:def 3;
-      hence thesis by Def5;
+      hence thesis by Def3;
     end;
     suppose not x in dom f;
       hence thesis by FUNCT_1:def 2;
@@ -408,7 +407,7 @@ end;
 
 begin :: Structures
 
-theorem Th13:
+theorem Th12:
   for K being distributive left_unital add-associative right_zeroed
   right_complementable non empty doubleLoopStr holds
   (-1.K) * (-1.K) = 1.K
@@ -424,7 +423,7 @@ definition
   let S be Subset of K;
   let n be Nat;
   func S |^ n -> Subset of K means
-  :Def6:
+  :Def4:
   it = the carrier of K if n = 0 otherwise
   ex f being FinSequence of bool the carrier of K st
   it = f.len f & len f = n & f.1 = S &
@@ -539,7 +538,7 @@ A2:   i in dom f & i+1 in dom f;
       then i = 1 & i+1 = 1 by A2,TARSKI:def 1;
       hence f.(i+1) = A *' (f/.i);
     end;
-    hence thesis by A1,Def6;
+    hence thesis by A1,Def4;
   end;
 
 theorem
@@ -557,7 +556,7 @@ A5:   i+1 in dom f;
       then (i = 1 or i = 2) & (i+1 = 1 or i+1 = 2) by A4,A5,TARSKI:def 2;
       hence f.(i+1) = A *' (f/.i) by A2,A3,A4,PARTFUN1:def 6;
     end;
-    hence thesis by A1,A2,A3,Def6;
+    hence thesis by A1,A2,A3,Def4;
   end;
 
 registration
@@ -570,8 +569,8 @@ registration
     per cases by NAT_1:6;
     suppose
 A1:   n = 0;
-A2:   S|^0 = the carrier of R by Def6;
-      thus S|^n is non empty by A1,Def6;
+A2:   S|^0 = the carrier of R by Def4;
+      thus S|^n is non empty by A1,Def4;
       thus S|^n is add-closed
       proof
         let x, y be Element of R;
@@ -590,7 +589,7 @@ A3:   ex k being Nat st n = k + 1;
       then consider f being FinSequence of bool the carrier of R such that
 A4:   S|^n = f.len f & len f = n & f.1 = S and
 A5:   for i being Nat st i in dom f & i+1 in dom f holds
-      f.(i+1) = S *' (f/.i) by Def6;
+      f.(i+1) = S *' (f/.i) by Def4;
       defpred P[Nat] means
       $1 in dom f implies f.$1 is Ideal of R;
 A6:   P[0] by FINSEQ_3:24;
@@ -624,7 +623,7 @@ definition
   let G be non empty doubleLoopStr,
   g be Element of G,
   i be Integer;
-  func g |^ i -> Element of G equals :Def7:
+  func g |^ i -> Element of G equals :Def5:
   power(G).(g,abs(i)) if 0 <= i
   otherwise (power(G).(g,abs(i)))";
   correctness;
@@ -639,7 +638,7 @@ definition
   compatibility
   proof let g be Element of G;
     abs(n) = n by ABSVALUE:def 1;
-    hence thesis by Def7;
+    hence thesis by Def5;
   end;
 end;
 
@@ -648,7 +647,7 @@ reserve K for Field-like non degenerated
   distributive Abelian non empty doubleLoopStr,
   a, b, c for Element of K;
 
-Lm4: a |^ (n + 1) = a |^ n * a
+Lm3: a |^ (n + 1) = a |^ n * a
      proof
        reconsider n1 = n as Element of NAT by ORDINAL1:def 12;
        thus a |^ (n + 1) = (power(K).(a,n1)) * a by GROUP_1:def 7
@@ -670,16 +669,16 @@ A2: for m st P[m] holds P[m+1]
 A3:   for n holds a |^ (n + m) = a |^ n * (a |^ m);
       let n;
       thus a |^ (n + (m + 1)) = a |^ (n + m + 1)
-      .= a |^ (n + m) * a by Lm4
+      .= a |^ (n + m) * a by Lm3
       .= a |^ n * (a |^ m) * a by A3
       .= a |^ n * (a |^ m * a) by GROUP_1:def 3
-      .= a |^ n * (a |^ (m + 1)) by Lm4;
+      .= a |^ n * (a |^ (m + 1)) by Lm3;
     end;
     for m holds P[m] from NAT_1:sch 2(A1,A2);
     hence thesis;
   end;
 
-Lm5: a <> 0.K implies a|^n <> 0.K
+Lm4: a <> 0.K implies a|^n <> 0.K
      proof
        assume
 A1:    a <> 0.K;
@@ -692,14 +691,14 @@ A3:    for n holds P[n] implies P[n+1]
          let n;
          assume
 A4:      P[n];
-         a|^(n+1) = a|^n*a by Lm4;
+         a|^(n+1) = a|^n*a by Lm3;
          hence a|^(n+1) <> 0.K by A4,A1,VECTSP_1:12;
        end;
        for n holds P[n] from NAT_1:sch 2(A2,A3);
        hence thesis;
      end;
 
-theorem Th17:
+theorem Th16:
   a <> 0.K implies a|^i <> 0.K
   proof
     assume
@@ -708,14 +707,14 @@ A1: a <> 0.K;
     suppose 0 <= i;
       then reconsider n1 = i as Element of NAT by INT_1:3;
       a |^ i = a |^ n1;
-      hence a |^ i <> 0.K by A1,Lm5;
+      hence a |^ i <> 0.K by A1,Lm4;
     end;
     suppose
 A2:   i < 0;
       then reconsider n1 = -i as Element of NAT by INT_1:3;
-A3:   a |^ i = (power(K).(a,abs(i)))" by A2,Def7
+A3:   a |^ i = (power(K).(a,abs(i)))" by A2,Def5
       .= (a |^ n1)" by A2,ABSVALUE:def 1;
-      a |^ n1 <> 0.K by A1,Lm5;
+      a |^ n1 <> 0.K by A1,Lm4;
       hence a |^ i <> 0.K by A3,VECTSP_2:13;
     end;
   end;
@@ -724,7 +723,7 @@ begin :: Valuation
 
 definition let K be doubleLoopStr;
   attr K is having_valuation means
-  :Def9:
+  :Def7:
   ex f being e.i.-valued Function of K, ExtREAL st
   f.0.K = +infty &
   (for a being Element of K st a <> 0.K holds f.a in INT) &
@@ -735,62 +734,62 @@ end;
 
 definition let K be doubleLoopStr such that
 A1: K is having_valuation;
-  mode Valuation of K -> e.i.-valued Function of K, ExtREAL means :Def10:
+  mode Valuation of K -> e.i.-valued Function of K, ExtREAL means :Def8:
   it.0.K = +infty &
   (for a being Element of K st a <> 0.K holds it.a in INT) &
   (for a,b being Element of K holds it.(a*b) = it.a + it.b) &
   (for a being Element of K st 0 <= it.a holds 0 <= it.(1.K+a)) &
   ex a being Element of K st it.a <> 0 & it.a <> +infty;
-  existence by A1,Def9;
+  existence by A1,Def7;
 end;
 
 reserve v for Valuation of K;
 
-theorem Th18:
+theorem Th17:
   K is having_valuation implies v.1.K = 0
   proof
     assume
 A1: K is having_valuation;
 A2: v.1.K = v.(1.K*1.K) by VECTSP_1:def 8
-    .= v.1.K + v.1.K by A1,Def10;
+    .= v.1.K + v.1.K by A1,Def8;
     1.K <> 0.K;
-    then v.1.K in INT by A1,Def10;
-    then reconsider x = v.1.K as Element of REAL;
+    then v.1.K in INT by A1,Def8;
+    then reconsider x = v.1.K as Element of REAL by XREAL_0:def 1;
     x + 0 = x + x by A2,XXREAL_3:def 2;
     hence thesis;
   end;
 
-theorem Th19:
+theorem Th18:
   K is having_valuation & a <> 0.K implies v.a <> +infty
   proof
     assume K is having_valuation & a <> 0.K;
-    then v.a in INT by Def10;
+    then v.a in INT by Def8;
     hence thesis;
   end;
 
-theorem Th20:
+theorem Th19:
   K is having_valuation implies v.-1.K = 0
   proof
     assume
 A1: K is having_valuation;
-    (-1.K) * (-1.K) = 1.K by Th13;
-    then v.(-1.K) + v.(-1.K) = v.(1.K) by A1,Def10
-    .= 0 by A1,Th18;
+    (-1.K) * (-1.K) = 1.K by Th12;
+    then v.(-1.K) + v.(-1.K) = v.(1.K) by A1,Def8
+    .= 0 by A1,Th17;
     hence thesis by Th2;
   end;
 
-theorem Th21:
+theorem Th20:
   K is having_valuation implies v.-a = v.a
   proof
     assume
 A1: K is having_valuation;
     (-1.K) * a = -a by VECTSP_2:29;
-    hence v.-a = v.(-1.K) + v.a by A1,Def10
-    .= 0 + v.a by A1,Th20
+    hence v.-a = v.(-1.K) + v.a by A1,Def8
+    .= 0 + v.a by A1,Th19
     .= v.a by XXREAL_3:4;
   end;
 
-theorem Th22:
+theorem Th21:
   K is having_valuation & a <> 0.K implies v.(a") = -v.a
   proof
     assume that
@@ -798,33 +797,33 @@ A1: K is having_valuation and
 A2: a <> 0.K;
     a * a" = 1.K by A2,VECTSP_2:def 2;
     then
-A3: v.a + v.(a") = v.(1.K) by A1,Def10
-    .= 0 by A1,Th18;
+A3: v.a + v.(a") = v.(1.K) by A1,Def8
+    .= 0 by A1,Th17;
     now
       assume a" = 0.K;
       then 1.K = a*0.K by A2,VECTSP_2:def 2
       .= 0.K by VECTSP_1:6;
       hence contradiction;
     end;
-    then v.a in INT & v.(a") in INT by A1,A2,Def10;
-    then reconsider w1 = v.a, w2 = v.(a") as Element of REAL;
+    then v.a in INT & v.(a") in INT by A1,A2,Def8;
+    then reconsider w1 = v.a, w2 = v.(a") as Element of REAL by XREAL_0:def 1;
     w1 + w2 = 0 by A3,XXREAL_3:def 2;
     then -w1 = w2;
     hence thesis by XXREAL_3:def 3;
   end;
 
-theorem Th23:
+theorem Th22:
   K is having_valuation & b <> 0.K implies v.(a/b) = v.a - v.b
   proof
     assume
 A1: K is having_valuation;
     assume
 A2: b <> 0.K;
-    thus v.(a/b) = v.a + v.(b") by A1,Def10
-    .= v.a - v.b by A1,A2,Th22;
+    thus v.(a/b) = v.a + v.(b") by A1,Def8
+    .= v.a - v.b by A1,A2,Th21;
   end;
 
-theorem Th24:
+theorem Th23:
   K is having_valuation & a <> 0.K & b <> 0.K implies v.(a/b) = -v.(b/a)
   proof
     assume
@@ -832,27 +831,27 @@ A1: K is having_valuation;
     assume
 A2: a <> 0.K;
     assume b <> 0.K;
-    hence v.(a/b) = v.a - v.b by A1,Th23
+    hence v.(a/b) = v.a - v.b by A1,Th22
     .= -(v.b-v.a) by XXREAL_3:26
-    .= -v.(b/a) by A1,A2,Th23;
+    .= -v.(b/a) by A1,A2,Th22;
   end;
 
-theorem Th25:
+theorem Th24:
   K is having_valuation & b <> 0.K & 0 <= v.(a/b) implies v.b <= v.a
   proof
     assume that
 A1: K is having_valuation and
 A2: b <> 0.K and
 A3: 0 <= v.(a/b);
-A4: v.(a/b) = v.a - v.b by A1,A2,Th23;
+A4: v.(a/b) = v.a - v.b by A1,A2,Th22;
     per cases;
     suppose a = 0.K;
-      then v.a = +infty by A1,Def10;
+      then v.a = +infty by A1,Def8;
       hence v.b <= v.a by XXREAL_0:3;
     end;
     suppose a <> 0.K;
-      then v.a in INT & v.b in INT by A1,A2,Def10;
-      then reconsider a1 = v.a, b1 = v.b as Element of REAL;
+      then v.a in INT & v.b in INT by A1,A2,Def8;
+      then reconsider a1 = v.a, b1 = v.b as Element of REAL by XREAL_0:def 1;
 A5:   a1 - b1 + b1 = a1;
       a1 - b1 = v.a - v.b by Lm1;
       then
@@ -862,16 +861,16 @@ A6:   v.(a/b) + v.b = v.a by A4,A5,XXREAL_3:def 2;
     end;
   end;
 
-theorem Th26:
+theorem Th25:
   K is having_valuation & a <> 0.K & b <> 0.K & v.(a/b) <= 0 implies
   0 <= v.(b/a)
   proof
     assume K is having_valuation & a <> 0.K & b <> 0.K;
-    then v.(a/b) = -v.(b/a) by Th24;
+    then v.(a/b) = -v.(b/a) by Th23;
     hence thesis;
   end;
 
-theorem Th27:
+theorem Th26:
   K is having_valuation & b <> 0.K & v.(a/b) <= 0 implies v.a <= v.b
   proof
     assume that
@@ -883,13 +882,13 @@ A4: now
 A5:   a = 0.K;
       a/b = a*b"
       .= 0.K by A5,VECTSP_1:6;
-      hence contradiction by A1,Def10,A3;
+      hence contradiction by A1,Def8,A3;
     end;
-    then 0 <= v.(b/a) by A1,A2,A3,Th26;
-    hence v.a <= v.b by A1,A4,Th25;
+    then 0 <= v.(b/a) by A1,A2,A3,Th25;
+    hence v.a <= v.b by A1,A4,Th24;
   end;
 
-theorem Th28:
+theorem Th27:
   K is having_valuation implies min(v.a,v.b) <= v.(a+b)
   proof
     assume
@@ -897,26 +896,26 @@ A1: K is having_valuation;
     per cases;
     suppose
 A2:   a = 0.K;
-      then v.a = +infty by A1,Def10;
+      then v.a = +infty by A1,Def8;
       then min(v.a,v.b) = v.b by XXREAL_0:42;
       hence min(v.a,v.b) <= v.(a+b) by A2,RLVECT_1:def 4;
     end;
     suppose
 A3:   b = 0.K;
-      then v.b = +infty by A1,Def10;
+      then v.b = +infty by A1,Def8;
       then min(v.a,v.b) = v.a by XXREAL_0:42;
       hence min(v.a,v.b) <= v.(a+b) by A3,RLVECT_1:def 4;
     end;
     suppose that
 A4:   a <> 0.K and
 A5:   0 <= v.(b/a);
-      v.a <= v.b by A1,A4,A5,Th25;
+      v.a <= v.b by A1,A4,A5,Th24;
       then
 A6:   min(v.a,v.b) = v.a by XXREAL_0:def 9;
-      0 <= v.(1.K+b/a) by A5,A1,Def10;
+      0 <= v.(1.K+b/a) by A5,A1,Def8;
       then
 A7:   0 + v.a <= v.(1.K+b/a) + v.a by XXREAL_3:36;
-      v.(1.K+b/a) + v.a = v.((1.K+b/a)* a) by A1,Def10
+      v.(1.K+b/a) + v.a = v.((1.K+b/a)* a) by A1,Def8
       .= v.((1.K*a + b/a*a)) by VECTSP_1:def 3
       .= v.(a + b/a*a) by VECTSP_1:def 8
       .= v.(a + b) by A4,VECTSP_2:22;
@@ -926,14 +925,14 @@ A7:   0 + v.a <= v.(1.K+b/a) + v.a by XXREAL_3:36;
 A8:   a <> 0.K and
 A9:   b <> 0.K and
 A10:  v.(b/a) <= 0;
-A11:  0 <= v.(a/b) by A1,A8,A9,A10,Th26;
-      v.b <= v.a by A1,A8,A10,Th27;
+A11:  0 <= v.(a/b) by A1,A8,A9,A10,Th25;
+      v.b <= v.a by A1,A8,A10,Th26;
       then
 A12:  min(v.a,v.b) = v.b by XXREAL_0:def 9;
-      0 <= v.(1.K+a/b) by A11,A1,Def10;
+      0 <= v.(1.K+a/b) by A11,A1,Def8;
       then
 A13:  0 + v.b <= v.(1.K+a/b) + v.b by XXREAL_3:36;
-      v.(1.K+a/b) + v.b = v.((1.K+a/b)* b) by A1,Def10
+      v.(1.K+a/b) + v.b = v.((1.K+a/b)* b) by A1,Def8
       .= v.((1.K*b + a/b*b)) by VECTSP_1:def 3
       .= v.(b + a/b*b) by VECTSP_1:def 8
       .= v.(b + a) by A9,VECTSP_2:22;
@@ -941,24 +940,24 @@ A13:  0 + v.b <= v.(1.K+a/b) + v.b by XXREAL_3:36;
     end;
   end;
 
-theorem Th29:
+theorem Th28:
   K is having_valuation & v.a < v.b implies v.a = v.(a+b)
   proof
     assume
 A1: K is having_valuation & v.a < v.b;
 A2: min(v.a,v.b) = v.a by A1,XXREAL_0:def 9;
-A3: v.a <= v.(a+b) by A2,A1,Th28;
+A3: v.a <= v.(a+b) by A2,A1,Th27;
 A4: a = a + 0.K by RLVECT_1:def 4;
 A5: 0.K = b - b by RLVECT_1:15;
 A6: a = (a + b) - b by A4,A5,RLVECT_1:28
     .= (a+b)+ -b;
-A7: v.(-b) = v.b by A1,Th21;
-A8: min(v.(a+b),v.b) <=v.a by A6,A7,A1,Th28;
+A7: v.(-b) = v.b by A1,Th20;
+A8: min(v.(a+b),v.b) <=v.a by A6,A7,A1,Th27;
     then min(v.(a+b), v.b) = v.(a+b) by A1,XXREAL_0:def 9;
     hence thesis by A3,A8,XXREAL_0:1;
   end;
 
-theorem Th30:
+theorem Th29:
   K is having_valuation & a <> 0.K implies v.(a|^i) = i * v.a
   proof
     assume that
@@ -967,15 +966,15 @@ A2: a <> 0.K;
     defpred P[Nat] means v.(a|^$1) = $1 * v.a;
     a|^0 = 1_K by GROUP_1:def 7;
     then
-A3: P[0] by A1,Th18;
+A3: P[0] by A1,Th17;
 A4: P[n] implies P[n+1]
     proof
       assume
 A5:   P[n];
-A6:   v.a in REAL by A1,A2,Th19,XXREAL_0:14;
+A6:   v.a in REAL by A1,A2,Th18,XXREAL_0:14;
       reconsider N = n as ext-real number;
-      thus v.(a|^(n+1)) = v.(a|^n*a) by Lm4
-      .= n * v.a + v.a by A5,A1,Def10
+      thus v.(a|^(n+1)) = v.(a|^n*a) by Lm3
+      .= n * v.a + v.a by A5,A1,Def8
       .= n * v.a + 1. * v.a by XXREAL_3:81
       .= v.a * (N+1.) by A6,XXREAL_3:95
       .= (n+1) * v.a by XXREAL_3:def 2;
@@ -991,9 +990,9 @@ A7: P[n] from NAT_1:sch 2(A3,A4);
 A8:   i < 0;
       then reconsider n1 = -i as Element of NAT by INT_1:3;
       reconsider I = i as ext-real number;
-A9:   v.(a |^ i) = v.((power(K).(a,abs(i)))") by A8,Def7
+A9:   v.(a |^ i) = v.((power(K).(a,abs(i)))") by A8,Def5
       .= v.((a |^ n1)") by A8,ABSVALUE:def 1;
-      v.((a |^ n1)") = -v.(a |^ n1) by A1,A2,Th22,Lm5
+      v.((a |^ n1)") = -v.(a |^ n1) by A1,A2,Th21,Lm4
       .= -n1*v.a by A7
       .= -((-I)*v.a) by XXREAL_3:def 3
       .= --i*v.a by XXREAL_3:92;
@@ -1001,14 +1000,14 @@ A9:   v.(a |^ i) = v.((power(K).(a,abs(i)))") by A8,Def7
     end;
   end;
 
-theorem Th31:
+theorem Th30:
   K is having_valuation & 0 <= v.(1.K+a) implies 0 <= v.a
   proof
     assume that
 A1: K is having_valuation & 0 <= v.(1.K+a) and
 A2: v.a < 0;
-    0 = v.1.K by A1,Th18;
-    hence contradiction by A1,A2,Th29;
+    0 = v.1.K by A1,Th17;
+    hence contradiction by A1,A2,Th28;
   end;
 
 theorem
@@ -1017,11 +1016,11 @@ theorem
     assume that
 A1: K is having_valuation and
 A2: 0 <= v.(1.K-a);
-    1.K-a = 1.K + -a & v.-a = v.a by A1,Th21;
-    hence thesis by A1,A2,Th31;
+    1.K-a = 1.K + -a & v.-a = v.a by A1,Th20;
+    hence thesis by A1,A2,Th30;
   end;
 
-Lm6: for a,b being ExtInt st a <= b holds 0 <= b-a
+Lm5: for a,b being ExtInt st a <= b holds 0 <= b-a
      proof
        let a,b be ExtInt;
        assume a <= b;
@@ -1036,29 +1035,29 @@ theorem
 A1: K is having_valuation and
 A2: a <> 0.K;
     assume v.a <= v.b;
-    then 0 <= v.b - v.a by Lm6;
-    hence thesis by A1,A2,Th23;
+    then 0 <= v.b - v.a by Lm5;
+    hence thesis by A1,A2,Th22;
   end;
 
-theorem Th34:
+theorem Th33:
   K is having_valuation implies +infty in rng v
   proof
     assume K is having_valuation;
     then
-A1: v.0.K = +infty by Def10;
+A1: v.0.K = +infty by Def8;
     dom v = the carrier of K by FUNCT_2:def 1;
     hence thesis by A1,FUNCT_1:def 3;
   end;
 
-Th35:
+Lm6:
   K is having_valuation implies least-positive(rng v) in rng v
   proof
     assume K is having_valuation;
-    then +infty in rng v by Th34;
-    hence thesis by Def4;
+    then +infty in rng v by Th33;
+    hence thesis by Def2;
   end;
 
-theorem Th36:
+theorem Th34:
   v.a = 1 implies least-positive(rng v) = 1
   proof
     assume
@@ -1085,10 +1084,10 @@ A2: v.a in rng v by FUNCT_1:def 3;
         hence 1. <= i by XXREAL_0:3;
       end;
     end;
-    hence thesis by A1,A2,Def4;
+    hence thesis by A1,A2,Def2;
   end;
 
-theorem Th38:
+theorem Th35:
   K is having_valuation implies least-positive(rng v) is integer
   proof
     set l = least-positive(rng v);
@@ -1096,20 +1095,19 @@ theorem Th38:
 A1: K is having_valuation;
     then consider a such that
 A2: v.a <> 0 and
-A3: v.a <> +infty by Def10;
+A3: v.a <> +infty by Def8;
 A4: dom v = the carrier of K by FUNCT_2:def 1;
     then
 A5: v.a in rng v by FUNCT_1:def 3;
     assume not thesis;
     then
 A6: l = +infty by Def1;
-A7: a <> 0.K by A1,A3,Def10;
-    then
-A8: v.a in INT by A1,Def10;
-    reconsider va = v.a as Real by A8;
+A7: a <> 0.K by A1,A3,Def8;
+    then v.a in INT by A1,Def8;
+    then reconsider va = v.a as Real by XREAL_0:def 1;
     per cases;
     suppose va is positive;
-      then l <= v.a by A5,Def4;
+      then l <= v.a by A5,Def2;
       hence contradiction by A3,A6,XXREAL_0:4;
     end;
     suppose not va is positive;
@@ -1118,12 +1116,12 @@ A8: v.a in INT by A1,Def10;
       set b = a";
       b <> 0.K by A7,VECTSP_2:13;
       then
-A9:   v.b in INT by A1,Def10;
-A10:  v.b in rng v by A4,FUNCT_1:def 3;
-      v.b = -v.a by A1,A7,Th22
+A8:   v.b in INT by A1,Def8;
+A9:  v.b in rng v by A4,FUNCT_1:def 3;
+      v.b = -v.a by A1,A7,Th21
       .= -va by XXREAL_3:def 3;
-      then l <= v.b by A10,Def4;
-      hence contradiction by A9,A6,XXREAL_0:4;
+      then l <= v.b by A9,Def2;
+      hence contradiction by A8,A6,XXREAL_0:4;
     end;
   end;
 
@@ -1131,12 +1129,12 @@ Lm7:
      K is having_valuation implies least-positive(rng v) in REAL
      proof
        assume K is having_valuation;
-       then least-positive(rng v) is integer by Th38;
+       then least-positive(rng v) is integer by Th35;
        then least-positive(rng v) in INT by INT_1:def 2;
-       hence thesis;
+       hence thesis by XREAL_0:def 1;
      end;
 
-theorem Th39:
+theorem Th36:
   K is having_valuation implies
   for x being Element of K st x <> 0.K
   ex i being Integer st v.x = i * least-positive(rng v)
@@ -1145,8 +1143,8 @@ theorem Th39:
 A1: K is having_valuation;
     let x be Element of K such that
 A2: x <> 0.K;
-    reconsider vx = v.x as Element of INT by A1,A2,Def10;
-    reconsider l = least-positive(rng v) as Integer by A1,Th38;
+    reconsider vx = v.x as Element of INT by A1,A2,Def8;
+    reconsider l = least-positive(rng v) as Integer by A1,Th35;
 A3: v.x = (vx div l) * l + (vx mod l) by INT_1:59;
     per cases;
     suppose
@@ -1157,23 +1155,23 @@ A4:   vx mod l = 0;
     suppose
 A5:   vx mod l <> 0;
       consider k being Element of K such that
-A6:   l = v.k by A1,Th35,FUNCT_2:113;
+A6:   l = v.k by A1,Lm6,FUNCT_2:113;
       set d = vx div l;
       set kd = k|^d;
       set kD = kd";
-A7:   k <> 0.K by A1,A6,Def10;
+A7:   k <> 0.K by A1,A6,Def8;
       then
-A8:   d * v.k = v.kd by A1,Th30;
-A9:   -v.kd = v.kD by A1,A7,Th17,Th22;
+A8:   d * v.k = v.kd by A1,Th29;
+A9:   -v.kd = v.kD by A1,A7,Th16,Th21;
 A10:  d * l = d * v.k by A6,XXREAL_3:def 5;
-A11:  v.(x*kD) = v.x - d * l by A8,A9,A10,A1,Def10
+A11:  v.(x*kD) = v.x - d * l by A8,A9,A10,A1,Def8
       .= vx - d * l by Lm1
       .= vx mod l by A3;
       then
 A12:  0 <= v.(x*kD) by INT_1:57;
 A13:  v.(x*kD) < l by A11,INT_1:58;
       v.(x*kD) in rng v by FUNCT_2:4;
-      hence thesis by A12,A5,A11,A13,Def4;
+      hence thesis by A12,A5,A11,A13,Def2;
     end;
   end;
 
@@ -1182,12 +1180,12 @@ definition
   assume
 A1: K is having_valuation;
   func Pgenerator(v) -> Element of K equals
-  :Def11:
+  :Def9:
   the Element of v"{least-positive(rng v)};
   coherence
   proof
     set l = least-positive(rng v);
-    l in rng v by A1,Th35;
+    l in rng v by A1,Lm6;
     then {l} c= rng v by ZFMISC_1:31;
     then v"{l} is non empty by RELAT_1:139;
     then the Element of v"{l} in v"{l};
@@ -1200,13 +1198,13 @@ definition
   assume
 A1: K is having_valuation;
   func normal-valuation(v) -> Valuation of K means
-  :Def12:
+  :Def10:
   v.a = (it.a) * least-positive(rng v);
   existence
   proof
     set l = least-positive(rng v);
     reconsider ll = l as Element of ExtREAL by XXREAL_0:def 1;
-    reconsider l1 = l as Integer by A1,Th38;
+    reconsider l1 = l as Integer by A1,Th35;
 A2: l1 in REAL by XREAL_0:def 1;
     deffunc F(Element of K) = v.$1 / ll;
     consider f being Function of K, ExtREAL such that
@@ -1222,9 +1220,9 @@ A5:   f.x = y by FUNCT_1:def 3;
 A6:   f.x = v.x / l by A3;
       per cases by Def1;
       suppose v.x is integer;
-        then x <> 0.K by A1,Def10;
+        then x <> 0.K by A1,Def8;
         then consider r being Integer such that
-A7:     v.x = r*l by A1,Th39;
+A7:     v.x = r*l by A1,Th36;
         v.x / l = r by A2,A7,XXREAL_3:88;
         hence thesis by A5,A3;
       end;
@@ -1232,18 +1230,18 @@ A7:     v.x = r*l by A1,Th39;
         hence thesis by A5,A6,A2,XXREAL_3:83;
       end;
     end;
-    then reconsider f as e.i.-valued Function of K, ExtREAL by Def5;
+    then reconsider f as e.i.-valued Function of K, ExtREAL by Def3;
     f is Valuation of K
     proof
       thus K is having_valuation by A1;
       thus f.0.K = v.0.K/l by A3
-      .= +infty/l by A1,Def10
+      .= +infty/l by A1,Def8
       .= +infty by A2,XXREAL_3:83;
       thus for a st a <> 0.K holds f.a in INT
       proof
         let a;
         assume a <> 0.K;
-        then v.a in INT by A1,Def10;
+        then v.a in INT by A1,Def8;
         then reconsider va = v.a as Integer;
         f.a = v.a / l by A3
         .= va / l1 by Lm2;
@@ -1253,7 +1251,7 @@ A7:     v.x = r*l by A1,Th39;
       proof
         let a, b;
         thus f.(a*b) = v.(a*b) / l by A3
-        .= (v.a+v.b) / l by A1,Def10
+        .= (v.a+v.b) / l by A1,Def8
         .= v.a/l + v.b/l by A2,Th7
         .= f.a + v.b/l by A3
         .= f.a + f.b by A3;
@@ -1265,12 +1263,12 @@ A8:    0 <= f.a;
 A9:    f.(1.K+a) = v.(1.K+a) / l by A3;
         f.a = v.a / l by A3;
         then 0 <= v.a by A2,A8,Th5;
-        then 0 <= v.(1.K+a) by A1,Def10;
+        then 0 <= v.(1.K+a) by A1,Def8;
         hence thesis by A9;
       end;
       consider a such that
 A10:  v.a <> 0 and
-A11:  v.a <> +infty by A1,Def10;
+A11:  v.a <> +infty by A1,Def8;
       take a;
 A12:  f.a = v.a / l by A3;
       hence f.a <> 0 by A2,A10,Th9;
@@ -1298,16 +1296,16 @@ A16: least-positive(rng v) in REAL by A1,Lm7;
    end;
  end;
 
-theorem Th40:
+theorem Th37:
   K is having_valuation implies
   (v.a = 0 iff normal-valuation(v).a = 0)
   proof
     assume K is having_valuation;
-    then v.a = (normal-valuation(v).a)*least-positive(rng v) by Def12;
+    then v.a = (normal-valuation(v).a)*least-positive(rng v) by Def10;
     hence thesis;
   end;
 
-theorem Th41:
+theorem Th38:
   K is having_valuation implies
   (v.a = +infty iff normal-valuation(v).a = +infty)
   proof
@@ -1315,8 +1313,8 @@ theorem Th41:
 A1: K is having_valuation;
     set f = normal-valuation(v);
     set l = least-positive(rng v);
-A2: v.a = (f.a)*l by A1,Def12;
-    l is integer by A1,Th38;
+A2: v.a = (f.a)*l by A1,Def10;
+    l is integer by A1,Th35;
     hence v.a = +infty implies f.a = +infty by A2,XXREAL_3:69;
     thus thesis by A2,XXREAL_3:def 5;
   end;
@@ -1331,11 +1329,11 @@ theorem
 A1: K is having_valuation;
     then
 A2: l in REAL by Lm7;
-    v.a = (f.a)*l & v.b = (f.b)*l by A1,Def12;
+    v.a = (f.a)*l & v.b = (f.b)*l by A1,Def10;
     hence thesis by A2,XXREAL_3:68;
   end;
 
-theorem Th43:
+theorem Th40:
   K is having_valuation implies
   (v.a is positive iff normal-valuation(v).a is positive)
   proof
@@ -1344,7 +1342,7 @@ theorem Th43:
     assume
 A1: K is having_valuation;
     then
-A2: v.a = f.a*l by Def12;
+A2: v.a = f.a*l by Def10;
     reconsider l1 = l as Real by A1,Lm7;
     hereby
       assume
@@ -1357,11 +1355,11 @@ A4:     va in REAL by XREAL_0:def 1;
         then consider c, b being complex number such that
 A5:     f.a = c & l1 = b & f.a*l1 = c*b by XXREAL_3:def 5;
         reconsider c as Real by A4,A5,A2,XXREAL_3:73;
-        va = c*b by A1,Def12,A5;
+        va = c*b by A1,Def10,A5;
         hence f.a is positive by A5;
       end;
       suppose v.a = +infty;
-        hence f.a is positive by A1,Th41;
+        hence f.a is positive by A1,Th38;
       end;
     end;
     assume
@@ -1373,11 +1371,11 @@ A6: f.a is positive;
       hence v.a is positive;
     end;
     suppose f.a = +infty;
-      hence v.a is positive by A1,Th41;
+      hence v.a is positive by A1,Th38;
     end;
   end;
 
-theorem Th44:
+theorem Th41:
   K is having_valuation implies
   (0 <= v.a iff 0 <= normal-valuation(v).a)
   proof
@@ -1387,11 +1385,11 @@ A1: K is having_valuation;
     hereby
       assume 0 <= v.a;
       then v.a is positive or 0 = v.a;
-      hence 0 <= f.a by A1,Th43,Th40;
+      hence 0 <= f.a by A1,Th40,Th37;
     end;
     assume 0 <= f.a;
     then f.a is positive or 0 = f.a;
-    hence thesis by A1,Th43,Th40;
+    hence thesis by A1,Th40,Th37;
   end;
 
 theorem
@@ -1403,7 +1401,7 @@ theorem
     assume
 A1: K is having_valuation;
     then
-A2: v.a = f.a*l by Def12;
+A2: v.a = f.a*l by Def10;
     per cases;
     suppose v.a is empty or f.a is empty;
       thus thesis by A2;
@@ -1411,12 +1409,12 @@ A2: v.a = f.a*l by Def12;
     suppose that
 A3:   v.a is non empty and
 A4:   f.a is non empty;
-      thus v.a is non negative implies f.a is non negative by A1,A3,Th43;
-      thus thesis by A4,A1,Th43;
+      thus v.a is non negative implies f.a is non negative by A1,A3,Th40;
+      thus thesis by A4,A1,Th40;
     end;
   end;
 
-theorem Th46:
+theorem Th43:
   K is having_valuation implies normal-valuation(v).Pgenerator(v) = 1
   proof
     set f = normal-valuation(v);
@@ -1425,13 +1423,13 @@ theorem Th46:
     assume
 A1: K is having_valuation;
     then
-A2: v.a = (f.a)*l by Def12;
+A2: v.a = (f.a)*l by Def10;
 A3: l is Real by A1,Lm7;
-    l in rng v by A1,Th35;
+    l in rng v by A1,Lm6;
     then {l} c= rng v by ZFMISC_1:31;
     then
 A4: v"{l} is non empty by RELAT_1:139;
-    a = the Element of v"{l} by A1,Def11;
+    a = the Element of v"{l} by A1,Def9;
     then v.a in {l} by A4,FUNCT_1:def 7;
     then v.a = l by TARSKI:def 1
     .= 1*l by XXREAL_3:81;
@@ -1446,11 +1444,11 @@ theorem
     assume
 A1: K is having_valuation;
     then
-A2: v.a = f.a*l by Def12;
+A2: v.a = f.a*l by Def10;
     assume 0 <= v.a;
     then
-A3: 0 <= f.a by A1,Th44;
-    0.qua ExtInt+1 <= l by Th11;
+A3: 0 <= f.a by A1,Th41;
+    0.qua ExtInt+1 <= l by Th10;
     then f.a*1 <= f.a*l by A3,Th3;
     hence thesis by A2,XXREAL_3:81;
   end;
@@ -1463,8 +1461,8 @@ theorem
 A1: K is having_valuation and
 A2: v.a = 1;
     let a be Element of K;
-    thus v.a = (f.a)*least-positive(rng v) by A1,Def12
-    .= f.a*1 by A2,Th36
+    thus v.a = (f.a)*least-positive(rng v) by A1,Def10
+    .= f.a*1 by A2,Th34
     .= f.a by XXREAL_3:81;
   end;
 
@@ -1478,9 +1476,9 @@ A1: K is having_valuation;
     set g = normal-valuation(f);
     let a be Element of K;
     set k = least-positive(rng f);
-A2: f.a = (g.a)*k by A1,Def12;
-    f.Pgenerator(v) = 1 by A1,Th46;
-    then k = 1 by Th36;
+A2: f.a = (g.a)*k by A1,Def10;
+    f.Pgenerator(v) = 1 by A1,Th43;
+    then k = 1 by Th34;
     hence thesis by A2,XXREAL_3:81;
   end;
 
@@ -1494,7 +1492,7 @@ definition
   coherence;
 end;
 
-theorem Th50:
+theorem Th47:
   for K being non empty doubleLoopStr,
       v being Valuation of K,
       a being Element of K holds
@@ -1511,7 +1509,7 @@ theorem Th50:
     thus thesis;
   end;
 
-theorem Th51:
+theorem Th48:
   for K being non empty doubleLoopStr,
       v being Valuation of K holds
   NonNegElements v c= the carrier of K
@@ -1524,7 +1522,7 @@ theorem Th51:
     hence thesis;
   end;
 
-theorem Th52:
+theorem Th49:
   for K being non empty doubleLoopStr,
       v being Valuation of K holds
   K is having_valuation implies 0.K in NonNegElements v
@@ -1532,23 +1530,23 @@ theorem Th52:
     let K be non empty doubleLoopStr,
     v be Valuation of K;
     assume K is having_valuation;
-    then v.0.K = +infty by Def10;
+    then v.0.K = +infty by Def8;
     hence thesis;
   end;
 
-theorem Th53:
+theorem Th50:
   K is having_valuation implies 1.K in NonNegElements v
   proof
     assume K is having_valuation;
-    then v.1.K = 0 by Th18;
+    then v.1.K = 0 by Th17;
     hence thesis;
   end;
 
 definition
   let K, v such that
-A1: K is having_valuation;
+B1: K is having_valuation;
   func ValuatRing v -> strict commutative non degenerated Ring means
-  :Def14:
+  :Def12:
   the carrier of it = NonNegElements v &
   the addF of it = (the addF of K) | [:NonNegElements v,NonNegElements v:] &
   the multF of it = (the multF of K) | [:NonNegElements v,NonNegElements v:] &
@@ -1561,83 +1559,83 @@ A1: K is having_valuation;
     set m = (the multF of K) | [:c,c:];
     set j = 1.K;
     set z = 0.K;
-A2: c c= the carrier of K by Th51;
+A1: c c= the carrier of K by Th48;
     now
       let x be set such that
-A3:   x in [:c,c:];
+A2:   x in [:c,c:];
       set q = (the addF of K).x;
       consider x1, x2 being set such that
-A4:   x1 in c and
-A5:   x2 in c and
-A6:   x = [x1,x2] by A3,ZFMISC_1:def 2;
+A3:   x1 in c and
+A4:   x2 in c and
+A5:   x = [x1,x2] by A2,ZFMISC_1:def 2;
       consider y1 being Element of K such that
-A7:   y1 = x1 and
-A8:   0 <= v.y1 by A4;
+A6:   y1 = x1 and
+A7:   0 <= v.y1 by A3;
       consider y2 being Element of K such that
-A9:   y2 = x2 and
-A10:  0 <= v.y2 by A5;
-A11:  min(v.y1,v.y2) <= v.(y1+y2) by A1,Th28;
-      0 <= min(v.y1,v.y2) by A8,A10,XXREAL_0:20;
-      hence q in c by A6,A7,A11,A9;
+A8:   y2 = x2 and
+A9:  0 <= v.y2 by A4;
+A10:  min(v.y1,v.y2) <= v.(y1+y2) by B1,Th27;
+      0 <= min(v.y1,v.y2) by A7,A9,XXREAL_0:20;
+      hence q in c by A5,A6,A10,A8;
     end;
-    then reconsider ca = c as Preserv of the addF of K by A2,REALSET1:def 1;
+    then reconsider ca = c as Preserv of the addF of K by A1,REALSET1:def 1;
     (the addF of K)||ca is BinOp of c;
     then reconsider a as BinOp of c;
     now
       let x be set such that
-A12:  x in [:c,c:];
+A11:  x in [:c,c:];
       set q = (the multF of K).x;
       consider x1, x2 being set such that
-A13:  x1 in c and
-A14:  x2 in c and
-A15:  x = [x1,x2] by A12,ZFMISC_1:def 2;
+A12:  x1 in c and
+A13:  x2 in c and
+A14:  x = [x1,x2] by A11,ZFMISC_1:def 2;
       consider y1 being Element of K such that
-A16:  y1 = x1 and
-A17:  0 <= v.y1 by A13;
+A15:  y1 = x1 and
+A16:  0 <= v.y1 by A12;
       consider y2 being Element of K such that
-A18:  y2 = x2 and
-A19:  0 <= v.y2 by A14;
-      0+0 <= v.y1+v.y2 by A17,A19;
-      then 0 <= v.(y1*y2) by A1,Def10;
-      hence q in c by A15,A16,A18;
+A17:  y2 = x2 and
+A18:  0 <= v.y2 by A13;
+      0+0 <= v.y1+v.y2 by A16,A18;
+      then 0 <= v.(y1*y2) by B1,Def8;
+      hence q in c by A14,A15,A17;
     end;
-    then reconsider cm = c as Preserv of the multF of K by A2,REALSET1:def 1;
+    then reconsider cm = c as Preserv of the multF of K by A1,REALSET1:def 1;
     (the multF of K)||cm is BinOp of c;
     then reconsider m as BinOp of c;
-A20: v.z = +infty by A1,Def10;
-     reconsider j, z as Element of c by A1,Th52,Th53;
+A19: v.z = +infty by B1,Def8;
+     reconsider j, z as Element of c by B1,Th49,Th50;
      set R = doubleLoopStr(#c,a,m,j,z#);
-     z in c by A20;
+     z in c by A19;
      then reconsider R as non empty doubleLoopStr;
-A21: now
+A20: now
        let x, y be Element of R,
        x1, y1 be Element of K such that
-A22:   x = x1 & y = y1;
+A21:   x = x1 & y = y1;
        [x,y] in [:c,c:];
-       hence x+y = x1+y1 by A22,FUNCT_1:49;
+       hence x+y = x1+y1 by A21,FUNCT_1:49;
      end;
-A23: now
+A22: now
        let x, y be Element of R,
        x1, y1 be Element of K such that
-A24:   x = x1 & y = y1;
+A23:   x = x1 & y = y1;
        [x,y] in [:c,c:];
-       hence x*y = x1*y1 by A24,FUNCT_1:49;
+       hence x*y = x1*y1 by A23,FUNCT_1:49;
      end;
-A25: now
+A24: now
        let x, e be Element of R;
        assume
-A26:   e = j;
+A25:   e = j;
        x in c & e in c;
-       then reconsider x1 = x, e1 = e as Element of K by A2;
-       thus x*e = x1*e1 by A23
-       .= x by A26,VECTSP_1:def 4;
-       thus e*x = e1*x1 by A23
-       .= x by A26,VECTSP_1:def 4;
+       then reconsider x1 = x, e1 = e as Element of K by A1;
+       thus x*e = x1*e1 by A22
+       .= x by A25,VECTSP_1:def 4;
+       thus e*x = e1*x1 by A22
+       .= x by A25,VECTSP_1:def 4;
      end;
      R is well-unital
      proof
        let x be Element of R;
-       thus x * 1.R = x & 1.R * x = x by A25;
+       thus x * 1.R = x & 1.R * x = x by A24;
      end;
      then reconsider R as well-unital non empty doubleLoopStr;
      R is Abelian add-associative right_zeroed right_complementable
@@ -1646,82 +1644,82 @@ A26:   e = j;
        hereby
          let x, y be Element of R;
          x in c & y in c;
-         then reconsider x1 = x, y1 = y as Element of K by A2;
-         thus x+y = x1+y1 by A21
-         .= y+x by A21;
+         then reconsider x1 = x, y1 = y as Element of K by A1;
+         thus x+y = x1+y1 by A20
+         .= y+x by A20;
        end;
        hereby
          let x, y, z be Element of R;
          x in c & y in c & z in c;
-         then reconsider x1 = x, y1 = y, z1 = z as Element of K by A2;
-A27:     y+z = y1+z1 by A21;
-         x+y = x1+y1 by A21;
-         hence x+y+z = x1+y1+z1 by A21
+         then reconsider x1 = x, y1 = y, z1 = z as Element of K by A1;
+A26:     y+z = y1+z1 by A20;
+         x+y = x1+y1 by A20;
+         hence x+y+z = x1+y1+z1 by A20
          .= x1+(y1+z1) by RLVECT_1:def 3
-         .= x+(y+z) by A27,A21;
+         .= x+(y+z) by A26,A20;
        end;
        hereby
          let x be Element of R;
          x in c;
-         then reconsider x1 = x as Element of K by A2;
-         thus x+0.R = x1 + 0.K by A21
+         then reconsider x1 = x as Element of K by A1;
+         thus x+0.R = x1 + 0.K by A20
          .= x by RLVECT_1:def 4;
        end;
        thus R is right_complementable
        proof
          let x be Element of R;
          x in c;
-         then reconsider x1 = x as Element of K by A2;
+         then reconsider x1 = x as Element of K by A1;
          consider w1 being Element of K such that
-A28:     x1 + w1 = 0.K by ALGSTR_0:def 11;
-A29:     v.(x1+w1) = +infty by A1,A28,Def10;
+A27:     x1 + w1 = 0.K by ALGSTR_0:def 11;
+A28:     v.(x1+w1) = +infty by B1,A27,Def8;
          per cases;
          suppose v.w1 < v.x1;
-           then v.w1 = v.(w1+x1) by A1,Th29;
-           then reconsider w = w1 as Element of R by A29,Th50;
+           then v.w1 = v.(w1+x1) by B1,Th28;
+           then reconsider w = w1 as Element of R by A28,Th47;
            take w;
-           thus x + w = 0.R by A28,A21;
+           thus x + w = 0.R by A27,A20;
          end;
          suppose
-A30:       v.x1 <= v.w1;
-           0 <= v.x1 by Th50;
-           then reconsider w = w1 as Element of R by A30,Th50;
+A29:       v.x1 <= v.w1;
+           0 <= v.x1 by Th47;
+           then reconsider w = w1 as Element of R by A29,Th47;
            take w;
-           thus x + w = 0.R by A28,A21;
+           thus x + w = 0.R by A27,A20;
          end;
        end;
        hereby
          let x, y be Element of R;
          x in c & y in c;
-         then reconsider x1 = x, y1 = y as Element of K by A2;
-         thus x*y = x1*y1 by A23
-         .= y*x by A23;
+         then reconsider x1 = x, y1 = y as Element of K by A1;
+         thus x*y = x1*y1 by A22
+         .= y*x by A22;
        end;
        hereby
          let x, y, z be Element of R;
          x in c & y in c & z in c;
-         then reconsider x1 = x, y1 = y, z1 = z as Element of K by A2;
-A31:     y*z = y1*z1 by A23;
-         x*y = x1*y1 by A23;
-         hence x*y*z = x1*y1*z1 by A23
+         then reconsider x1 = x, y1 = y, z1 = z as Element of K by A1;
+A30:     y*z = y1*z1 by A22;
+         x*y = x1*y1 by A22;
+         hence x*y*z = x1*y1*z1 by A22
          .= x1*(y1*z1) by GROUP_1:def 3
-         .= x*(y*z) by A31,A23;
+         .= x*(y*z) by A30,A22;
        end;
        hereby
          let x, y, z be Element of R;
          x in c & y in c & z in c;
-         then reconsider x1 = x, y1 = y, z1 = z as Element of K by A2;
-A32:     y+z = y1+z1 by A21;
-A33:     x*y = x1*y1 by A23;
-A34:     x*z = x1*z1 by A23;
-A35:     y*x = y1*x1 by A23;
-A36:     z*x = z1*x1 by A23;
-         thus x*(y+z) = x1*(y1+z1) by A32,A23
+         then reconsider x1 = x, y1 = y, z1 = z as Element of K by A1;
+A31:     y+z = y1+z1 by A20;
+A32:     x*y = x1*y1 by A22;
+A33:     x*z = x1*z1 by A22;
+A34:     y*x = y1*x1 by A22;
+A35:     z*x = z1*x1 by A22;
+         thus x*(y+z) = x1*(y1+z1) by A31,A22
          .= x1*y1 + x1*z1 by VECTSP_1:def 2
-         .= x*y + x*z by A21,A33,A34;
-         thus (y+z)*x = (y1+z1)*x1 by A32,A23
+         .= x*y + x*z by A20,A32,A33;
+         thus (y+z)*x = (y1+z1)*x1 by A31,A22
          .= y1*x1 + z1*x1 by VECTSP_1:def 2
-         .= y*x + z*x by A21,A35,A36;
+         .= y*x + z*x by A20,A34,A35;
        end;
        thus 0.R <> 1.R;
      end;
@@ -1730,28 +1728,28 @@ A36:     z*x = z1*x1 by A23;
    uniqueness;
  end;
 
-theorem Th54:
+theorem Th51:
   K is having_valuation implies
   for x being Element of ValuatRing v holds x is Element of K
   proof
     assume
 A1: K is having_valuation;
     let x be Element of ValuatRing v;
-    the carrier of ValuatRing v = NonNegElements v by A1,Def14; then
-    x in NonNegElements v & NonNegElements v c= the carrier of K by Th51;
+    the carrier of ValuatRing v = NonNegElements v by A1,Def12; then
+    x in NonNegElements v & NonNegElements v c= the carrier of K by Th48;
     hence thesis;
   end;
 
-theorem Th55:
+theorem Th52:
   K is having_valuation implies
   (0 <= v.a iff a is Element of ValuatRing v)
   proof
     assume K is having_valuation;
-    then the carrier of ValuatRing v = NonNegElements v by Def14;
-    hence thesis by Th50;
+    then the carrier of ValuatRing v = NonNegElements v by Def12;
+    hence thesis by Th47;
   end;
 
-theorem Th56:
+theorem Th53:
   K is having_valuation implies
   for S being Subset of ValuatRing v holds 0 is LowerBound of v.:S
   proof
@@ -1762,11 +1760,11 @@ A1: K is having_valuation;
     assume x in v.:S;
     then
 A2: ex c being Element of K st c in S & x = v.c by FUNCT_2:65;
-    the carrier of ValuatRing v = NonNegElements v by A1,Def14;
-    hence thesis by A2,Th50;
+    the carrier of ValuatRing v = NonNegElements v by A1,Def12;
+    hence thesis by A2,Th47;
   end;
 
-theorem Th57:
+theorem Th54:
   K is having_valuation implies
   for x, y being Element of K,
   x1, y1 being Element of ValuatRing v st x = x1 & y = y1 holds
@@ -1779,13 +1777,13 @@ A1: K is having_valuation;
     let x, y be Element of K,
     x1, y1 be Element of R such that
 A2: x = x1 & y = y1;
-A3: c = the carrier of R by A1,Def14;
-A4: the addF of R = (the addF of K) | [:c,c:] by A1,Def14;
+A3: c = the carrier of R by A1,Def12;
+A4: the addF of R = (the addF of K) | [:c,c:] by A1,Def12;
     thus x1+y1 = (the addF of R).[x1,y1]
     .= x+y by A3,A4,A2,FUNCT_1:49;
   end;
 
-theorem Th58:
+theorem Th55:
   K is having_valuation implies
   for x, y being Element of K,
   x1, y1 being Element of ValuatRing v st x = x1 & y = y1 holds
@@ -1798,17 +1796,17 @@ A1: K is having_valuation;
     let x, y be Element of K,
     x1, y1 be Element of R such that
 A2: x = x1 & y = y1;
-A3: c = the carrier of R by A1,Def14;
-A4: the multF of R = (the multF of K) | [:c,c:] by A1,Def14;
+A3: c = the carrier of R by A1,Def12;
+A4: the multF of R = (the multF of K) | [:c,c:] by A1,Def12;
     thus x1*y1 = (the multF of R).[x1,y1]
     .= x*y by A3,A4,A2,FUNCT_1:49;
   end;
 
 theorem
-  K is having_valuation implies 0.ValuatRing v = 0.K by Def14;
+  K is having_valuation implies 0.ValuatRing v = 0.K by Def12;
 
 theorem
-  K is having_valuation implies 1.ValuatRing v = 1.K by Def14;
+  K is having_valuation implies 1.ValuatRing v = 1.K by Def12;
 
 theorem
   K is having_valuation implies
@@ -1822,12 +1820,12 @@ A1: K is having_valuation;
     let x be Element of K,
         y be Element of R such that
 A2: x = y;
-A3: 0 <= v.y by A1,A2,Th55;
-    v.-x = v.x by A1,Th21;
-    then reconsider x1 = -x as Element of R by A1,A2,A3,Th55;
+A3: 0 <= v.y by A1,A2,Th52;
+    v.-x = v.x by A1,Th20;
+    then reconsider x1 = -x as Element of R by A1,A2,A3,Th52;
     x+-x = 0.K by RLVECT_1:def 10;
-    then y+x1 = 0.K by A2,A1,Th57
-    .= 0.ValuatRing v by A1,Def14;
+    then y+x1 = 0.K by A2,A1,Th54
+    .= 0.ValuatRing v by A1,Def12;
     hence thesis by RLVECT_1:def 10;
   end;
 
@@ -1862,15 +1860,15 @@ A1: K is having_valuation;
     assume that
 A2: x*y = 0.R and
 A3: x <> 0.R;
-    reconsider x1 = x, y1 = y as Element of K by A1,Th54;
-A4: 0.R = 0.K by A1,Def14;
-A5: x1*y1 = x*y by A1,Th58;
+    reconsider x1 = x, y1 = y as Element of K by A1,Th51;
+A4: 0.R = 0.K by A1,Def12;
+A5: x1*y1 = x*y by A1,Th55;
     y1 = x1"*(x1*y1) by A3,A4,Lm8
     .= 0.K by A2,A4,A5,VECTSP_1:6;
-    hence thesis by A1,Def14;
+    hence thesis by A1,Def12;
   end;
 
-theorem Th63:
+theorem Th60:
   K is having_valuation implies
   for y being Element of ValuatRing v holds
   power(K).(y,n) = power(ValuatRing v).(y,n)
@@ -1881,9 +1879,9 @@ A1: K is having_valuation;
     let y be Element of R;
     defpred P[Nat] means
     power(K).(y,$1) = power(ValuatRing v).(y,$1);
-    reconsider x = y as Element of K by A1,Th54;
+    reconsider x = y as Element of K by A1,Th51;
     power(K).(x,0) = 1_K & power(R).(y,0) = 1_R by GROUP_1:def 7; then
-A2: P[0] by A1,Def14;
+A2: P[0] by A1,Def12;
 A3: for n being Nat st P[n] holds P[n+1]
     proof
       let n be Nat;
@@ -1893,7 +1891,7 @@ A4:   P[n];
       power(K).(y,n+1) = (power(K).(x,m))*x &
       power(ValuatRing v).(y,n+1) = (power(ValuatRing v)).(y,m)*y
       by GROUP_1:def 7;
-      hence P[n+1] by A1,A4,Th58;
+      hence P[n+1] by A1,A4,Th55;
     end;
     for n being Nat holds P[n] from NAT_1:sch 2(A2,A3);
     hence thesis;
@@ -1902,7 +1900,7 @@ A4:   P[n];
 Lm10: now
         let K,v;
         assume K is having_valuation;
-        then v.0.K = +infty by Def10;
+        then v.0.K = +infty by Def8;
         hence 0.K in {x where x is Element of K: 0 < v.x};
       end;
 
@@ -1910,13 +1908,13 @@ definition
   let K, v; assume
 A1: K is having_valuation;
   func PosElements v -> Ideal of ValuatRing v equals
-  :Def15:
+  :Def13:
   {x where x is Element of K: 0 < v.x};
   coherence
   proof
     set R = ValuatRing v;
     set I = {x where x is Element of K: 0 < v.x};
-A2: the carrier of R = NonNegElements v by A1,Def14;
+A2: the carrier of R = NonNegElements v by A1,Def12;
     I c= the carrier of R
     proof
       let a be set;
@@ -1925,7 +1923,7 @@ A2: the carrier of R = NonNegElements v by A1,Def14;
       hence thesis by A2;
     end;
     then reconsider I as non empty Subset of R by A1,Lm10;
-A3: the carrier of R c= the carrier of K by A2,Th51;
+A3: the carrier of R c= the carrier of K by A2,Th48;
     I is add-closed left-ideal right-ideal
     proof
       hereby
@@ -1938,8 +1936,8 @@ A5:     0 < v.x1;
         then consider y1 being Element of K such that
 A6:     y1 = y and
 A7:     0 < v.y1;
-A8:     x+y = x1+y1 by A1,A4,A6,Th57;
-A9:     min(v.x1,v.y1) <= v.(x1+y1) by A1,Th28;
+A8:     x+y = x1+y1 by A1,A4,A6,Th54;
+A9:     min(v.x1,v.y1) <= v.(x1+y1) by A1,Th27;
         0 < min(v.x1,v.y1) by A5,A7,XXREAL_0:21;
         hence x+y in I by A8,A9;
       end;
@@ -1951,9 +1949,9 @@ A10:    x1 = x and
 A11:    0 < v.x1;
         p in the carrier of R;
         then reconsider p1 = p as Element of K by A3;
-A12:    p*x = p1*x1 by A1,A10,Th58;
-A13:    v.(p1*x1) = v.p1 + v.x1 by A1,Def10;
-        0 <= v.p1 by A2,Th50;
+A12:    p*x = p1*x1 by A1,A10,Th55;
+A13:    v.(p1*x1) = v.p1 + v.x1 by A1,Def8;
+        0 <= v.p1 by A2,Th47;
         hence p*x in I by A11,A12,A13;
       end;
       let p, x be Element of R;
@@ -1963,9 +1961,9 @@ A14:  x1 = x and
 A15:  0 < v.x1;
       p in the carrier of R;
       then reconsider p1 = p as Element of K by A3;
-A16:  p*x = p1*x1 by A1,A14,Th58;
-A17:  v.(p1*x1) = v.p1 + v.x1 by A1,Def10;
-      0 <= v.p1 by A2,Th50;
+A16:  p*x = p1*x1 by A1,A14,Th55;
+A17:  v.(p1*x1) = v.p1 + v.x1 by A1,Def8;
+      0 <= v.p1 by A2,Th47;
       hence x*p in I by A15,A16,A17;
     end;
     hence thesis;
@@ -1976,13 +1974,13 @@ notation let K, v;
   synonym vp v for PosElements v;
 end;
 
-theorem Th64:
+theorem Th61:
   K is having_valuation implies
   (a in vp v iff 0 < v.a)
   proof
     assume K is having_valuation;
     then
-A1: vp v = {x where x is Element of K: 0 < v.x} by Def15;
+A1: vp v = {x where x is Element of K: 0 < v.x} by Def13;
     hereby
       assume a in vp v;
       then ex b being Element of K st b = a & 0 < v.b by A1;
@@ -1996,20 +1994,20 @@ theorem
   proof
     assume
 A1: K is having_valuation;
-    then vp v = {x where x is Element of K: 0 < v.x} by Def15;
+    then vp v = {x where x is Element of K: 0 < v.x} by Def13;
     hence thesis by A1,Lm10;
   end;
 
-theorem Th66:
+theorem Th63:
   K is having_valuation implies not 1.K in vp v
   proof
     assume
 A1: K is having_valuation;
     then
-A2: vp v = {x where x is Element of K: 0 < v.x} by Def15;
+A2: vp v = {x where x is Element of K: 0 < v.x} by Def13;
     assume 1.K in vp v;
     then ex x being Element of K st x = 1.K & 0 < v.x by A2;
-    hence thesis by A1,Th18;
+    hence thesis by A1,Th17;
   end;
 
 definition
@@ -2019,7 +2017,7 @@ definition
 A1: K is having_valuation and
 A2: S is Subset of ValuatRing v;
   func min(S,v) -> Subset of ValuatRing v equals
-  :Def16:
+  :Def14:
   v"{inf(v.:S)} /\ S;
   coherence
   proof
@@ -2034,26 +2032,26 @@ A4:   a in v"{inf(v.:S)} by XBOOLE_0:def 4;
       v.a in {inf(v.:S)} by A4,FUNCT_2:38;
       then
 A5:   v.a = inf(vS) by TARSKI:def 1;
-      0 is LowerBound of vS by A1,A2,Th56;
+      0 is LowerBound of vS by A1,A2,Th53;
       then 0 <= inf(vS) by XXREAL_2:def 4;
       hence thesis by A5;
     end;
-    hence thesis by A1,Def14;
+    hence thesis by A1,Def12;
   end;
 end;
 
-theorem Th67:
+theorem Th64:
   for S being non empty Subset of K st
   K is having_valuation & S is Subset of ValuatRing v
   holds min(S,v) c= S
   proof
     let S be non empty Subset of K;
     assume K is having_valuation & S is Subset of ValuatRing v; then
-    min(S,v) = v"{inf(v.:S)} /\ S by Def16;
+    min(S,v) = v"{inf(v.:S)} /\ S by Def14;
     hence min(S,v) c= S by XBOOLE_1:17;
   end;
 
-theorem Th68:
+theorem Th65:
   for S being non empty Subset of K st
   K is having_valuation & S is Subset of ValuatRing v
   for x being Element of K holds x in min(S,v) iff x in S &
@@ -2064,7 +2062,7 @@ theorem Th68:
 A1: K is having_valuation;
     assume
 A2: S is Subset of ValuatRing v;
-A3: min(S,v) = v"{inf(v.:S)} /\ S by A1,A2,Def16;
+A3: min(S,v) = v"{inf(v.:S)} /\ S by A1,A2,Def14;
 A4: inf(v.:S) is LowerBound of v.:S by XXREAL_2:def 4;
     let x be Element of K;
     hereby
@@ -2074,7 +2072,7 @@ A5:   x in min(S,v); then
       then v.x in {inf(v.:S)} by FUNCT_2:38;
       then
 A6:   v.x = inf(v.:S) by TARSKI:def 1;
-      min(S,v) c= S by A1,A2,Th67;
+      min(S,v) c= S by A1,A2,Th64;
       hence x in S by A5;
       let y be Element of K;
       assume y in S;
@@ -2112,27 +2110,27 @@ A1: K is having_valuation;
 A2: I is Ideal of ValuatRing v;
     assume
 A3: x in min(I,v);
-A4: min(I,v) c= I by A1,A2,Th67;
+A4: min(I,v) c= I by A1,A2,Th64;
     thus I c= {x}-Ideal
     proof
       let a be set;
       assume
 A5:   a in I;
       then reconsider y = a as Element of ValuatRing v by A2;
-      reconsider x1 = x, y1 = y as Element of K by A1,Th54;
-      per cases by A1,Def14;
+      reconsider x1 = x, y1 = y as Element of K by A1,Th51;
+      per cases by A1,Def12;
       suppose
 A6:     x <> 0.K;
         set r1 = y1/x1;
-        v.x1 <= v.y1 by A1,A2,A3,A5,Th68;
-        then 0 <= v.y1 - v.x1 by Lm6;
-        then 0 <= v.r1 by A6,A1,Th23;
+        v.x1 <= v.y1 by A1,A2,A3,A5,Th65;
+        then 0 <= v.y1 - v.x1 by Lm5;
+        then 0 <= v.r1 by A6,A1,Th22;
         then reconsider r0 = r1 as Element of ValuatRing v
-        by A1,Th55;
+        by A1,Th52;
         x1*r1 = y1*(x1"*x1) by GROUP_1:def 3
         .= y1*1_K by A6,VECTSP_2:9
         .= y1 by GROUP_1:def 4; then
-A7:     y = x*r0 by A1,Th58;
+A7:     y = x*r0 by A1,Th55;
         {x}-Ideal = {x*r where r is Element of ValuatRing v: not contradiction}
         by IDEAL_1:64;
         hence a in {x}-Ideal by A7;
@@ -2141,10 +2139,10 @@ A7:     y = x*r0 by A1,Th58;
 A8:     x = 0.ValuatRing v;
         then
 A9:     {x}-Ideal = {0.ValuatRing v} by IDEAL_1:47;
-A10:    0.ValuatRing v = 0.K by A1,Def14; then
-A11:    v.x1 = +infty by A1,A8,Def10;
-        v.x1 <= v.y1 by A1,A5,A2,A3,Th68; then
-        y = 0.ValuatRing v by A1,A10,Th19,A11,XXREAL_0:4;
+A10:    0.ValuatRing v = 0.K by A1,Def12; then
+A11:    v.x1 = +infty by A1,A8,Def8;
+        v.x1 <= v.y1 by A1,A5,A2,A3,Th65; then
+        y = 0.ValuatRing v by A1,A10,Th18,A11,XXREAL_0:4;
         hence a in {x}-Ideal by A9,TARSKI:def 1;
       end;
     end;
@@ -2198,7 +2196,7 @@ definition
   let R be Ring;
   let P be RightIdeal of R;
   mode Submodule of P -> Submodule of RightModule R means
-  :Def17:
+  :Def15:
   the carrier of it = P;
   existence
   proof
@@ -2216,7 +2214,7 @@ registration
   proof
     consider S being strict Submodule of RightModule R such that
 A1: the carrier of S = P by Lm11;
-    reconsider T = the RightModStr of S as Submodule of P by A1,Def17;
+    reconsider T = the RightModStr of S as Submodule of P by A1,Def15;
     take T;
     thus thesis;
   end;
@@ -2233,13 +2231,13 @@ theorem
     let R be Ring;
     let P be Ideal of R;
     let M be Submodule of P;
-A1: the carrier of M = P by Def17;
+A1: the carrier of M = P by Def15;
     set V = RightModule R;
     0.M = 0.V &
     the addF of M = (the addF of V) |[:P,P:] &
     the rmult of M = (the rmult of V) | [:P, the carrier of R:]
     by A1,RMOD_2:def 2;
-    hence thesis by Def17;
+    hence thesis by Def15;
   end;
 
 definition
@@ -2277,7 +2275,7 @@ theorem
     assume
 A1: K is having_valuation;
     assume b is Element of ValuatRing v;
-    then 0 <= v.b by A1,Th55;
+    then 0 <= v.b by A1,Th52;
     then v.a+0 <= v.a+v.b by XXREAL_3:35;
     hence thesis by XXREAL_3:4;
   end;
@@ -2292,7 +2290,7 @@ A1: K is having_valuation;
     then reconsider y = a as Element of ValuatRing v;
     reconsider n as Element of NAT by ORDINAL1:def 12;
     power(ValuatRing v).(y,n) is Element of ValuatRing v;
-    hence thesis by A1,Th63;
+    hence thesis by A1,Th60;
   end;
 
 theorem
@@ -2303,12 +2301,12 @@ theorem
     assume
 A1: K is having_valuation;
     let x be Element of ValuatRing v;
-    reconsider y = x as Element of K by A1,Th54;
+    reconsider y = x as Element of K by A1,Th51;
     power(K).(y,n) = y|^n;
-    hence thesis by Th17;
+    hence thesis by Th16;
   end;
 
-theorem Th75:
+theorem Th72:
   K is having_valuation & v.a = 0 implies
   a is Element of ValuatRing v & a" is Element of ValuatRing v
   proof
@@ -2316,10 +2314,10 @@ theorem Th75:
 A1: K is having_valuation;
     assume
 A2: v.a = 0;
-    thus a is Element of ValuatRing v by A1,A2,Th55;
-    a <> 0.K by A1,A2,Def10;
-    then v.a" = -v.a by A1,Th22;
-    hence thesis by A1,A2,Th55;
+    thus a is Element of ValuatRing v by A1,A2,Th52;
+    a <> 0.K by A1,A2,Def8;
+    then v.a" = -v.a by A1,Th21;
+    hence thesis by A1,A2,Th52;
   end;
 
 theorem
@@ -2333,12 +2331,12 @@ A1: K is having_valuation;
 A2: a <> 0.K and
 A3: a is Element of ValuatRing v;
     assume a" is Element of ValuatRing v;
-    then 0 <= v.a" by A1,Th55;
-    then --v.a <= -0 by A1,A2,Th22;
-    hence thesis by A3,A1,Th55;
+    then 0 <= v.a" by A1,Th52;
+    then --v.a <= -0 by A1,A2,Th21;
+    hence thesis by A3,A1,Th52;
   end;
 
-theorem Th77:
+theorem Th74:
   K is having_valuation & v.a = 0 implies
   for I being Ideal of ValuatRing v holds
   a in I iff I = the carrier of ValuatRing v
@@ -2356,17 +2354,17 @@ A3:   a in I;
       let x be set;
       assume x in the carrier of ValuatRing v;
       then reconsider x as Element of ValuatRing v;
-      reconsider b = x as Element of K by A1,Th54;
-A4:   a <> 0.K by A1,A2,Def10;
+      reconsider b = x as Element of K by A1,Th51;
+A4:   a <> 0.K by A1,A2,Def8;
       reconsider y = a, z = a" as Element of ValuatRing v
-      by A1,A2,Th75;
+      by A1,A2,Th72;
 A5:   y*(z*x) in I by A3,IDEAL_1:def 2;
-      reconsider za = z*x as Element of K by A1,Th54;
-      z*x = a"*b by A1,Th58;
-      then y*(z*x) = a*(a"*b) by A1,Th58;
+      reconsider za = z*x as Element of K by A1,Th51;
+      z*x = a"*b by A1,Th55;
+      then y*(z*x) = a*(a"*b) by A1,Th55;
       hence thesis by A5,A4,Lm9;
     end;
-    the carrier of ValuatRing v = NonNegElements v by A1,Def14;
+    the carrier of ValuatRing v = NonNegElements v by A1,Def12;
     hence thesis by A2;
   end;
 
@@ -2378,25 +2376,25 @@ theorem
     assume
 A1: K is having_valuation;
     then
-A2: a = the Element of (v"{l}) by Def11;
-    l in rng v by A1,Th35;
+A2: a = the Element of (v"{l}) by Def9;
+    l in rng v by A1,Lm6;
     then {l} c= rng v by ZFMISC_1:31;
     then v"{l} is non empty by RELAT_1:139;
     then v.a in {l} by A2,FUNCT_1:def 7;
     then v.a = l by TARSKI:def 1;
-    hence thesis by A1,Th55;
+    hence thesis by A1,Th52;
   end;
 
-theorem Th79:
+theorem Th76:
   K is having_valuation implies vp(v) is proper
   proof
     assume
 A1: K is having_valuation;
-    then 1.K is Element of ValuatRing v by Def14;
-    hence vp(v) <> the carrier of ValuatRing v by A1,Th66;
+    then 1.K is Element of ValuatRing v by Def12;
+    hence vp(v) <> the carrier of ValuatRing v by A1,Th63;
   end;
 
-theorem Th80:
+theorem Th77:
   K is having_valuation implies
   for x being Element of ValuatRing v st not x in vp(v)
   holds v.x = 0
@@ -2404,10 +2402,10 @@ theorem Th80:
     assume
 A1: K is having_valuation;
     let x be Element of ValuatRing v;
-    reconsider y = x as Element of K by A1,Th54;
+    reconsider y = x as Element of K by A1,Th51;
     assume not x in vp(v);
-    then v.y <= 0 by A1,Th64;
-    hence thesis by A1,Th55;
+    then v.y <= 0 by A1,Th61;
+    hence thesis by A1,Th52;
   end;
 
 theorem
@@ -2415,23 +2413,23 @@ theorem
   proof
     assume
 A1: K is having_valuation;
-    hence vp(v) is proper by Th79;
+    hence vp(v) is proper by Th76;
     let a, b be Element of ValuatRing v such that
 A2: a*b in vp(v);
     assume not a in vp(v);
     then
-A3: v.a = 0 by A1,Th80;
+A3: v.a = 0 by A1,Th77;
     assume
 A4: not b in vp(v);
-    reconsider x = a, y = b as Element of K by A1,Th54;
-A5: a*b = x*y by A1,Th58;
-A6: v.y = 0 by A1,A4,Th80;
-    v.(x*y) = v.x+v.y by A1,Def10
+    reconsider x = a, y = b as Element of K by A1,Th51;
+A5: a*b = x*y by A1,Th55;
+A6: v.y = 0 by A1,A4,Th77;
+    v.(x*y) = v.x+v.y by A1,Def8
     .= 0 by A3,A6;
-    hence thesis by A1,A2,A5,Th64;
+    hence thesis by A1,A2,A5,Th61;
   end;
 
-theorem Th82:
+theorem Th79:
   K is having_valuation implies
   for I being proper Ideal of ValuatRing v holds I c= vp(v)
   proof
@@ -2443,9 +2441,9 @@ A2: I <> the carrier of ValuatRing v by SUBSET_1:def 6;
     then consider x being set such that
 A3: x in I and
 A4: not x in vp(v) by TARSKI:def 3;
-A5: x is Element of K by A1,A3,Th54;
-    v.x = 0 by A1,A4,A3,Th80;
-    hence thesis by A1,A2,A3,A5,Th77;
+A5: x is Element of K by A1,A3,Th51;
+    v.x = 0 by A1,A4,A3,Th77;
+    hence thesis by A1,A2,A3,A5,Th74;
   end;
 
 theorem
@@ -2455,8 +2453,8 @@ theorem
 A1: K is having_valuation;
     thus vp(v) is proper
     proof
-      1.ValuatRing v = 1.K by A1,Def14;
-      hence vp(v) <> the carrier of ValuatRing v by A1,Th66;
+      1.ValuatRing v = 1.K by A1,Def12;
+      hence vp(v) <> the carrier of ValuatRing v by A1,Th63;
     end;
     let J be Ideal of ValuatRing v;
     assume
@@ -2464,7 +2462,7 @@ A2: vp(v) c= J;
     J is non proper or J = vp(v)
     proof
       assume J is proper;
-      then J c= vp(v) by A1,Th82;
+      then J c= vp(v) by A1,Th79;
       hence J = vp(v) by A2,XBOOLE_0:def 10;
     end;
     hence thesis;
@@ -2481,18 +2479,18 @@ A1: K is having_valuation;
 A2: not thesis;
     per cases;
     suppose not I c= vp(v);
-      hence contradiction by A1,Th82;
+      hence contradiction by A1,Th79;
     end;
     suppose I c= vp(v);
       then vp(v) is non proper or I = vp(v) by RING_1:def 3;
       then
 A3:   vp(v) = the carrier of ValuatRing v or I = vp(v) by SUBSET_1:def 6;
-      1.ValuatRing v = 1.K by A1,Def14;
-      hence contradiction by A3,A1,A2,Th66;
+      1.ValuatRing v = 1.K by A1,Def12;
+      hence contradiction by A3,A1,A2,Th63;
     end;
   end;
 
-theorem Th85:
+theorem Th82:
   K is having_valuation implies
   NonNegElements(normal-valuation v) = NonNegElements(v)
   proof
@@ -2506,7 +2504,7 @@ A1: K is having_valuation;
       then consider x being Element of K such that
 A2:   a = x and
 A3:   0 <= f.x;
-      0 <= v.x by A1,A3,Th44;
+      0 <= v.x by A1,A3,Th41;
       hence thesis by A2;
     end;
     let a be set;
@@ -2514,7 +2512,7 @@ A3:   0 <= f.x;
     then consider x being Element of K such that
 A4: a = x and
 A5: 0 <= v.x;
-    0 <= f.x by A1,A5,Th44;
+    0 <= f.x by A1,A5,Th41;
     hence thesis by A4;
   end;
 
@@ -2527,18 +2525,18 @@ A1: K is having_valuation;
     set f = normal-valuation v;
     set R = ValuatRing(v);
     set S = ValuatRing(f);
-A2: the carrier of S = NonNegElements f by A1,Def14;
-A3: NonNegElements(f) = NonNegElements(v) by A1,Th85;
+A2: the carrier of S = NonNegElements f by A1,Def12;
+A3: NonNegElements(f) = NonNegElements(v) by A1,Th82;
 A4: the addF of R = (the addF of K) | [:NonNegElements v,NonNegElements v:]
-    by A1,Def14
-    .= the addF of S by A1,A3,Def14;
+    by A1,Def12
+    .= the addF of S by A1,A3,Def12;
 A5: the multF of R = (the multF of K) | [:NonNegElements v,NonNegElements v:]
-    by A1,Def14
-    .= the multF of S by A1,A3,Def14;
-A6: the ZeroF of R = 0.K by A1,Def14
-    .= the ZeroF of S by A1,Def14;
-    the OneF of R = 1.K by A1,Def14
-    .= the OneF of S by A1,Def14;
-    hence thesis by A3,A2,A4,A5,A6,A1,Def14;
+    by A1,Def12
+    .= the multF of S by A1,A3,Def12;
+A6: the ZeroF of R = 0.K by A1,Def12
+    .= the ZeroF of S by A1,Def12;
+    the OneF of R = 1.K by A1,Def12
+    .= the OneF of S by A1,Def12;
+    hence thesis by A3,A2,A4,A5,A6,A1,Def12;
   end;
 

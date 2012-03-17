@@ -2,7 +2,7 @@
 ::  by Jan Popio{\l}ek
 ::
 :: Received September 20, 1990
-:: Copyright (c) 1990-2011 Association of Mizar Users
+:: Copyright (c) 1990-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,12 +21,13 @@ environ
       RELAT_2, METRIC_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, FUNCT_1, FUNCOP_1, FUNCT_2, BINOP_1,
-      RELAT_1, SEQ_1, SEQ_2, DOMAIN_1, STRUCT_0, ALGSTR_0, PRE_TOPC, RLVECT_1,
+      RELAT_1, SEQ_1, COMSEQ_2,
+      SEQ_2, DOMAIN_1, STRUCT_0, ALGSTR_0, PRE_TOPC, RLVECT_1,
       RLSUB_1, XXREAL_0, NORMSP_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
-      SEQ_2, RLSUB_1, SEQ_1, VALUED_1, RELSET_1, NORMSP_0;
+      SEQ_2, RLSUB_1, SEQ_1, VALUED_1, RELSET_1, NORMSP_0, COMSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, STRUCT_0, RLVECT_1, ALGSTR_0, NORMSP_0;
+      MEMBERED, STRUCT_0, RLVECT_1, ALGSTR_0, NORMSP_0, COMSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, FUNCT_1, ALGSTR_0, NORMSP_0;
  theorems TARSKI, NAT_1, FUNCT_1, SEQ_2, ABSVALUE, RLVECT_1, RLSUB_1, FUNCT_2,
@@ -107,7 +108,7 @@ definition
 
   let IT be non empty NORMSTR;
   attr IT is RealNormSpace-like means
-  :Def2:
+  :Def1:
   for x, y being Point of IT, a holds ||.a * x.|| = abs(a) * ||.x.|| & ||.x + y
   .|| <= ||.x.|| + ||.y.||;
 end;
@@ -124,7 +125,7 @@ registration
       thus ||.0.X.|| = 0 by Lm5;
      end;
     thus X is discerning by Lm5,NORMSP_0:def 5;
-    thus X is RealNormSpace-like by Def2,Lm5;
+    thus X is RealNormSpace-like by Def1,Lm5;
     thus X is vector-distributive scalar-distributive scalar-associative
     scalar-unital
     proof
@@ -209,97 +210,97 @@ reserve x, y, z, g, g1, g2 for Point of RNS;
 theorem
   ||.0.RNS.|| = 0;
 
-theorem Th6:
+theorem Th2:
   ||.-x.|| = ||.x.||
 proof
 A1: abs(-1 ) = -(-1) by ABSVALUE:def 1
     .= 1;
   ||.-x.|| = ||.(-1) * x.|| by RLVECT_1:16
-    .= abs(-1 ) * ||.x.|| by Def2;
+    .= abs(-1 ) * ||.x.|| by Def1;
   hence thesis by A1;
 end;
 
-theorem Th7:
+theorem Th3:
   ||.x - y.|| <= ||.x.|| + ||.y.||
 proof
-  ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def2;
-  hence thesis by Th6;
+  ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def1;
+  hence thesis by Th2;
 end;
 
-theorem Th8:
+theorem Th4:
   0 <= ||.x.||
 proof
   ||.x - x.|| = ||.09(RNS).|| by RLVECT_1:15
     .= 0;
-  then 0 <= (||.x.|| + ||.x.||)/2 by Th7;
+  then 0 <= (||.x.|| + ||.x.||)/2 by Th3;
   hence thesis;
 end;
 
 registration
   let RNS,x;
   cluster ||.x.|| -> non negative;
-  coherence by Th8;
+  coherence by Th4;
 end;
 
 theorem
   ||.a * x + b * y.|| <= abs(a) * ||.x.|| + abs(b) * ||.y.||
 proof
-  ||.a * x + b * y.|| <= ||.a * x.|| + ||.b * y.|| by Def2;
-  then ||.a * x + b * y.|| <= abs(a) * ||.x.|| + ||.b * y.|| by Def2;
-  hence thesis by Def2;
+  ||.a * x + b * y.|| <= ||.a * x.|| + ||.b * y.|| by Def1;
+  then ||.a * x + b * y.|| <= abs(a) * ||.x.|| + ||.b * y.|| by Def1;
+  hence thesis by Def1;
 end;
 
-theorem Th10:
+theorem Th6:
   ||.x - y.|| = 0 iff x = y
 proof
   ||.x - y.|| = 0 iff x - y = 09(RNS) by NORMSP_0:def 5;
   hence thesis by RLVECT_1:15,21;
 end;
 
-theorem Th11:
+theorem Th7:
   ||.x - y.|| = ||.y - x.||
 proof
   x - y = - (y - x) by RLVECT_1:33;
-  hence thesis by Th6;
+  hence thesis by Th2;
 end;
 
-theorem Th12:
+theorem Th8:
   ||.x.|| - ||.y.|| <= ||.x - y.||
 proof
   (x - y) + y = x - (y - y) by RLVECT_1:29
     .= x - 09(RNS) by RLVECT_1:15
     .= x by RLVECT_1:13;
-  then ||.x.|| <= ||.x - y.|| + ||.y.|| by Def2;
+  then ||.x.|| <= ||.x - y.|| + ||.y.|| by Def1;
   hence thesis by XREAL_1:20;
 end;
 
-theorem Th13:
+theorem Th9:
   abs(||.x.|| - ||.y.||) <= ||.x - y.||
 proof
   (y - x) + x = y - (x - x) by RLVECT_1:29
     .= y - 09(RNS) by RLVECT_1:15
     .= y by RLVECT_1:13;
-  then ||.y.|| <= ||.y - x.|| + ||.x.|| by Def2;
+  then ||.y.|| <= ||.y - x.|| + ||.x.|| by Def1;
   then ||.y.|| - ||.x.|| <= ||.y - x.|| by XREAL_1:20;
-  then ||.y.|| - ||.x.|| <= ||.x - y.|| by Th11;
+  then ||.y.|| - ||.x.|| <= ||.x - y.|| by Th7;
   then
 A1: -(||.y.|| - ||.x.||) >= -||.x - y.|| by XREAL_1:24;
-  ||.x.|| - ||.y.|| <= ||.x - y.|| by Th12;
+  ||.x.|| - ||.y.|| <= ||.x - y.|| by Th8;
   hence thesis by A1,ABSVALUE:5;
 end;
 
-theorem Th14:
+theorem Th10:
   ||.x - z.|| <= ||.x - y.|| + ||.y - z.||
 proof
   x - z = x + (09(RNS) + (-z)) by RLVECT_1:4
     .= x + (((-y) + y) + (-z)) by RLVECT_1:5
     .= x + ((-y) + (y + (-z))) by RLVECT_1:def 3
     .= (x - y) + (y - z) by RLVECT_1:def 3;
-  hence thesis by Def2;
+  hence thesis by Def1;
 end;
 
 theorem
-  x <> y implies ||.x - y.|| <> 0 by Th10;
+  x <> y implies ||.x - y.|| <> 0 by Th6;
 
 reserve S, S1, S2 for sequence of RNS;
 reserve k, n, m, m1, m2 for Element of NAT;
@@ -516,7 +517,7 @@ definition
   let S1, S2 be sequence of RNS;
 
   func S1 + S2 -> sequence of RNS means
-  :Def5:
+  :Def2:
   for n holds it.n = S1.n + S2.n;
   existence
   proof
@@ -544,7 +545,7 @@ definition
   let RNS be non empty addLoopStr;
   let S1, S2 be sequence of RNS;
   func S1 - S2 -> sequence of RNS means
-  :Def6:
+  :Def3:
   for n holds it.n = S1.n - S2.n;
   existence
   proof
@@ -573,7 +574,7 @@ definition
   let S be sequence of RNS;
   let x be Element of RNS;
   func S - x -> sequence of RNS means
-  :Def7:
+  :Def4:
   for n holds it.n = S.n - x;
   existence
   proof
@@ -602,7 +603,7 @@ definition
   let S be sequence of RNS;
   let a;
   func a * S -> sequence of RNS means
-  :Def8:
+  :Def5:
   for n holds it.n = a * S.n;
   existence
   proof
@@ -629,11 +630,11 @@ end;
 definition
   let RNS, S;
   attr S is convergent means
-  :Def9:
+  :Def6:
   ex g st for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r;
 end;
 
-theorem Th34:
+theorem Th19:
   S1 is convergent & S2 is convergent implies S1 + S2 is convergent
 proof
   assume that
@@ -641,10 +642,10 @@ A1: S1 is convergent and
 A2: S2 is convergent;
   consider g1 such that
 A3: for r st 0 < r ex m st for n st m <= n holds ||.(S1.n) - g1.|| < r
-  by A1,Def9;
+  by A1,Def6;
   consider g2 such that
 A4: for r st 0 < r ex m st for n st m <= n holds ||.(S2.n) - g2.|| < r
-  by A2,Def9;
+  by A2,Def6;
   take g = g1 + g2;
   let r;
   assume
@@ -660,13 +661,13 @@ A8: k <= n;
   then m2 <= n by A8,XXREAL_0:2;
   then
 A9: ||.(S2.n) - g2.|| < r/2 by A7;
-A10: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by Def5
+A10: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by Def2
     .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:31
     .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 3
     .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 3
     .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 3;
 A11: ||.(S1.n) - g1 + ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) - g2
-  .|| by Def2;
+  .|| by Def1;
   m1 <= m1 + m2 by NAT_1:12;
   then m1 <= n by A8,XXREAL_0:2;
   then ||.(S1.n) - g1.|| < r/2 by A6;
@@ -674,7 +675,7 @@ A11: ||.(S1.n) - g1 + ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) - g2
   hence thesis by A10,A11,XXREAL_0:2;
 end;
 
-theorem Th35:
+theorem Th20:
   S1 is convergent & S2 is convergent implies S1 - S2 is convergent
 proof
   assume that
@@ -682,10 +683,10 @@ A1: S1 is convergent and
 A2: S2 is convergent;
   consider g1 such that
 A3: for r st 0 < r ex m st for n st m <= n holds ||.(S1.n) - g1.|| < r
-  by A1,Def9;
+  by A1,Def6;
   consider g2 such that
 A4: for r st 0 < r ex m st for n st m <= n holds ||.(S2.n) - g2.|| < r
-  by A2,Def9;
+  by A2,Def6;
   take g = g1 - g2;
   let r;
   assume
@@ -701,13 +702,13 @@ A8: k <= n;
   then m2 <= n by A8,XXREAL_0:2;
   then
 A9: ||.(S2.n) - g2.|| < r/2 by A7;
-A10: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def6
+A10: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def3
     .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:29
     .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:27
     .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:27
     .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:29;
 A11: ||.((S1.n) - g1) - ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) -
-  g2.|| by Th7;
+  g2.|| by Th3;
   m1 <= m1 + m2 by NAT_1:12;
   then m1 <= n by A8,XXREAL_0:2;
   then ||.(S1.n) - g1.|| < r/2 by A6;
@@ -715,12 +716,12 @@ A11: ||.((S1.n) - g1) - ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) -
   hence thesis by A10,A11,XXREAL_0:2;
 end;
 
-theorem Th36:
+theorem Th21:
   S is convergent implies S - x is convergent
 proof
   assume S is convergent;
   then consider g such that
-A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def9;
+A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def6;
   take h = g - x;
   let r;
   assume 0 < r;
@@ -736,15 +737,15 @@ A3: ||.(S.n) - g.|| < r by A2;
     .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:29
     .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 3
     .= ||.((S.n) - x) - h.|| by RLVECT_1:33;
-  hence thesis by A3,Def7;
+  hence thesis by A3,Def4;
 end;
 
-theorem Th37:
+theorem Th22:
   S is convergent implies a * S is convergent
 proof
   assume S is convergent;
   then consider g such that
-A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def9;
+A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def6;
   take h = a * g;
 A2: now
 A3: 0/abs(a) =0;
@@ -765,9 +766,9 @@ A9: abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
       .= 1 * r by A8,XCMPLX_0:def 7
       .= r;
     ||.(a * (S.n)) - (a * g).|| = ||.a * ((S.n) - g).|| by RLVECT_1:34
-      .= abs(a) * ||.(S.n) - g.|| by Def2;
+      .= abs(a) * ||.(S.n) - g.|| by Def1;
     then ||.(a *(S.n)) - h.|| < r by A5,A7,A9,XREAL_1:68;
-    hence ||.(a * S).n - h.|| < r by Def8;
+    hence ||.(a * S).n - h.|| < r by Def5;
   end;
   now
     assume
@@ -785,17 +786,17 @@ A12: ||.(S.n) - g.|| < r by A11;
       .= ||.09(RNS).|| by RLVECT_1:13
       .= 0;
     then ||.a * (S.n) - h.|| < r by A12;
-    hence ||.(a * S).n - h.|| < r by Def8;
+    hence ||.(a * S).n - h.|| < r by Def5;
   end;
   hence thesis by A2;
 end;
 
-theorem Th39:
+theorem Th23:
   S is convergent implies ||.S.|| is convergent
 proof
   assume S is convergent;
   then consider g such that
-A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def9;
+A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def6;
   now
     let r be real number;
     assume
@@ -808,7 +809,7 @@ A3: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2;
       let n;
       assume k <= n; then
 A4:   ||.(S.n) - g.|| < r by A3;
-      abs(||.(S.n).|| - ||.g.||) <= ||.(S.n) - g.|| by Th13;
+      abs(||.(S.n).|| - ||.g.||) <= ||.(S.n) - g.|| by Th9;
       then abs(||.(S.n).|| - ||.g.||) < r by A4,XXREAL_0:2;
       hence abs(||.S.||.n - ||.g.||) < r by NORMSP_0:def 4;
     end;
@@ -823,9 +824,9 @@ definition
   assume
 A1: S is convergent;
   func lim S -> Point of RNS means
-  :Def11:
+  :Def7:
   for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - it.|| < r;
-  existence by A1,Def9;
+  existence by A1,Def6;
   uniqueness
   proof
     for x, y st ( for r st 0 < r ex m st for n st m <= n holds ||.(S.n) -
@@ -836,7 +837,7 @@ x.|| < r ) & ( for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - y.|| < r
 A2:   for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - x.|| < r and
 A3:   for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - y.|| < r and
 A4:   x <> y;
-A5:   ||.x - y.|| <> 0 by A4,Th10;
+A5:   ||.x - y.|| <> 0 by A4,Th6;
       then
 A6:   0/4 < ||.x - y.||/4 by XREAL_1:74;
       then consider m1 such that
@@ -844,9 +845,9 @@ A7:   for n st m1 <= n holds ||.(S.n) - x.|| < ||.x - y.||/4 by A2;
       consider m2 such that
 A8:   for n st m2 <= n holds ||.(S.n) - y.|| < ||.x - y.||/4 by A3,A6;
 A9:  now
-        ||.x - y.|| <= ||.x - (S.m1).|| + ||.(S.m1) - y.|| by Th14;
+        ||.x - y.|| <= ||.x - (S.m1).|| + ||.(S.m1) - y.|| by Th10;
         then
-A10:    ||.x - y.|| <= ||.(S.m1) - x.|| + ||.(S.m1) - y.|| by Th11;
+A10:    ||.x - y.|| <= ||.(S.m1) - x.|| + ||.(S.m1) - y.|| by Th7;
         assume m2 <= m1; then
 A11:    ||.(S.m1) - y.|| < ||.x - y.||/4 by A8;
         ||.(S.m1) - x.|| < ||.x - y.||/4 by A7;
@@ -857,9 +858,9 @@ A11:    ||.(S.m1) - y.|| < ||.x - y.||/4 by A8;
         hence contradiction by A5,XREAL_1:216;
       end;
       now
-        ||.x - y.|| <= ||.x - (S.m2).|| + ||.(S.m2) - y.|| by Th14;
+        ||.x - y.|| <= ||.x - (S.m2).|| + ||.(S.m2) - y.|| by Th10;
         then
-A12:    ||.x - y.|| <= ||.(S.m2) - x.|| + ||.(S.m2) - y.|| by Th11;
+A12:    ||.x - y.|| <= ||.(S.m2) - x.|| + ||.(S.m2) - y.|| by Th7;
         assume m1 <= m2;
         then
 A13:    ||.(S.m2) - x.|| < ||.x - y.||/4 by A7;
@@ -889,7 +890,7 @@ A3: now
 A4: 0 < r;
     r is Real by XREAL_0:def 1;
     then consider m1 such that
-A5: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def11;
+A5: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def7;
     take k = m1;
     let n;
     assume k <= n;
@@ -897,12 +898,12 @@ A5: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def11;
     then
 A6: ||.((S.n) - g ) - 09(RNS).|| < r by RLVECT_1:13;
     abs(||.(S.n) - g.|| - ||.09(RNS).||) <= ||.((S.n) - g ) - 09(RNS).||
-    by Th13;
+    by Th9;
     then abs(||.(S.n) - g.|| - ||.09(RNS).||) < r by A6,XXREAL_0:2;
-    then abs((||.(S - g).n.|| - 0)) < r by Def7;
+    then abs((||.(S - g).n.|| - 0)) < r by Def4;
     hence abs((||.S - g.||.n - 0)) < r by NORMSP_0:def 4;
   end;
-  ||.S - g.|| is convergent by A1,Th36,Th39;
+  ||.S - g.|| is convergent by A1,Th21,Th23;
   hence thesis by A3,SEQ_2:def 7;
 end;
 
@@ -921,9 +922,9 @@ A3: now
     assume 0 < r; then
 A4: 0< r/2 by XREAL_1:215;
     then consider m1 such that
-A5: for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def11;
+A5: for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def7;
     consider m2 such that
-A6: for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def11;
+A6: for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def7;
     take k = m1 + m2;
     let n such that
 A7: k <= n;
@@ -931,21 +932,21 @@ A7: k <= n;
     then m2 <= n by A7,XXREAL_0:2;
     then
 A8: ||.(S2.n) - g2.|| < r/2 by A6;
-A9: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by Def5
+A9: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by Def2
       .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:31
       .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 3
       .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 3
       .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 3;
 A10: ||.(S1.n) - g1 + ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) -
-    g2.|| by Def2;
+    g2.|| by Def1;
     m1 <= m1 + m2 by NAT_1:12;
     then m1 <= n by A7,XXREAL_0:2;
     then ||.(S1.n) - g1.|| < r/2 by A5;
     then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:8;
     hence ||.(S1 + S2).n - g.|| < r by A9,A10,XXREAL_0:2;
   end;
-  S1 + S2 is convergent by A1,A2,Th34;
-  hence thesis by A3,Def11;
+  S1 + S2 is convergent by A1,A2,Th19;
+  hence thesis by A3,Def7;
 end;
 
 theorem
@@ -963,9 +964,9 @@ A3: now
     assume 0 < r; then
 A4: 0< r/2 by XREAL_1:215;
     then consider m1 such that
-A5: for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def11;
+A5: for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def7;
     consider m2 such that
-A6: for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def11;
+A6: for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def7;
     take k = m1 + m2;
     let n such that
 A7: k <= n;
@@ -973,21 +974,21 @@ A7: k <= n;
     then m2 <= n by A7,XXREAL_0:2;
     then
 A8: ||.(S2.n) - g2.|| < r/2 by A6;
-A9: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def6
+A9: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def3
       .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:29
       .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:27
       .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:27
       .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:29;
 A10: ||.((S1.n) - g1) - ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n)
-    - g2.|| by Th7;
+    - g2.|| by Th3;
     m1 <= m1 + m2 by NAT_1:12;
     then m1 <= n by A7,XXREAL_0:2;
     then ||.(S1.n) - g1.|| < r/2 by A5;
     then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:8;
     hence ||.(S1 - S2).n - g.|| < r by A9,A10,XXREAL_0:2;
   end;
-  S1 - S2 is convergent by A1,A2,Th35;
-  hence thesis by A3,Def11;
+  S1 - S2 is convergent by A1,A2,Th20;
+  hence thesis by A3,Def7;
 end;
 
 theorem
@@ -1001,7 +1002,7 @@ A2: now
     let r;
     assume 0 < r;
     then consider m1 such that
-A3: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def11;
+A3: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def7;
     take k = m1;
     let n;
     assume k <= n; then
@@ -1011,10 +1012,10 @@ A4: ||.(S.n) - g.|| < r by A3;
       .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:29
       .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 3
       .= ||.((S.n) - x) - h.|| by RLVECT_1:33;
-    hence ||.(S - x).n - h.|| < r by A4,Def7;
+    hence ||.(S - x).n - h.|| < r by A4,Def4;
   end;
-  S - x is convergent by A1,Th36;
-  hence thesis by A2,Def11;
+  S - x is convergent by A1,Th21;
+  hence thesis by A2,Def7;
 end;
 
 theorem
@@ -1030,7 +1031,7 @@ A3: a = 0;
     let r;
     assume 0 < r;
     then consider m1 such that
-A4: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def11;
+A4: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def7;
     take k = m1;
     let n;
     assume k <= n; then
@@ -1040,7 +1041,7 @@ A5: ||.(S.n) - g.|| < r by A4;
       .= ||.09(RNS).|| by RLVECT_1:13
       .= 0;
     then ||.a * (S.n) - h.|| < r by A5;
-    hence ||.(a * S).n - h.|| < r by Def8;
+    hence ||.(a * S).n - h.|| < r by Def5;
   end;
 A6: now
 A7: 0/abs(a) = 0;
@@ -1051,7 +1052,7 @@ A9: 0 < abs(a) by COMPLEX1:47;
     assume 0 < r;
     then 0 < r/abs(a) by A9,A7,XREAL_1:74;
     then consider m1 such that
-A10: for n st m1 <= n holds ||.(S.n) - g.|| < r/abs(a) by A1,Def11;
+A10: for n st m1 <= n holds ||.(S.n) - g.|| < r/abs(a) by A1,Def7;
     take k = m1;
     let n;
     assume k <= n; then
@@ -1062,10 +1063,10 @@ A13: abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
       .= 1 * r by A12,XCMPLX_0:def 7
       .= r;
     ||.(a * (S.n)) - (a * g).|| = ||.a * ((S.n) - g).|| by RLVECT_1:34
-      .= abs(a) * ||.(S.n) - g.|| by Def2;
+      .= abs(a) * ||.(S.n) - g.|| by Def1;
     then ||.(a *(S.n)) - h.|| < r by A9,A11,A13,XREAL_1:68;
-    hence ||.(a * S).n - h.|| < r by Def8;
+    hence ||.(a * S).n - h.|| < r by Def5;
   end;
-  a * S is convergent by A1,Th37;
-  hence thesis by A2,A6,Def11;
+  a * S is convergent by A1,Th22;
+  hence thesis by A2,A6,Def7;
 end;

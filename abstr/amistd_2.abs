@@ -2,7 +2,7 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received April 14, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,47 +18,46 @@ environ
       AMI_1, XBOOLE_0, RELAT_1, TARSKI, FUNCOP_1, GLIB_000, GOBOARD5, AMISTD_1,
       UNIALG_1, FUNCT_1, CARD_3, CARD_5, FRECHET, RCOMP_1, STRUCT_0, VALUED_1,
       FSM_1, FUNCT_4, FUNCT_7, TURING_1, CIRCUIT2, AMISTD_2, PARTFUN1, CAT_1,
-      SCMNORM, NAT_1, RELOC, PBOOLE, XXREAL_0, COMPOS_1, MSUALG_1, FINSET_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, MCART_1, SETFAM_1,
+      EXTPRO_1, NAT_1, RELOC, PBOOLE, XXREAL_0, COMPOS_1, MSUALG_1, FINSET_1,
+      QUANTAL1, GOBRD13, MEMSTR_0;
+ notations TARSKI, XBOOLE_0, XTUPLE_0, SUBSET_1, ORDINAL1, FINSET_1, SETFAM_1,
       MEMBERED, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, CARD_1,
       NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FUNCOP_1, NAT_D,
-      FUNCT_7, VALUED_0, VALUED_1, AFINSQ_1, STRUCT_0, MEMSTR_0, COMPOS_1,
-      EXTPRO_1, AMISTD_1;
+      FUNCT_7, VALUED_0, VALUED_1, AFINSQ_1, STRUCT_0, MEMSTR_0, COMPOS_0,
+      COMPOS_1, MEASURE6, EXTPRO_1, AMISTD_1;
  constructors WELLORD2, REALSET1, NAT_D, AMISTD_1, XXREAL_2, PRE_POLY,
-      AFINSQ_1, ORDINAL4, RECDEF_2, VALUED_1, NAT_1, FUNCT_7, PBOOLE, FUNCT_4,
-      MEMSTR_0, RELSET_1;
+      AFINSQ_1, ORDINAL4, VALUED_1, NAT_1, FUNCT_7, PBOOLE, FUNCT_4, MEMSTR_0,
+      RELSET_1, MEASURE6, XTUPLE_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3, REALSET1, FUNCT_7,
       STRUCT_0, AMISTD_1, CARD_1, FUNCT_4, XXREAL_2, RELSET_1, GRFUNC_1,
       FUNCT_2, ORDINAL1, AFINSQ_1, VALUED_1, VALUED_0, COMPOS_1, EXTPRO_1,
-      XCMPLX_0, REAL_1, PBOOLE, MEMSTR_0;
+      XCMPLX_0, REAL_1, PBOOLE, MEMSTR_0, MEASURE6, COMPOS_0, XTUPLE_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
 begin  :: Properties of AMI-Struct
 
-reserve k, m for natural number,
+reserve k, m for Nat,
   x, x1, x2, x3, y, y1, y2, y3, X,Y,Z for set,
-  N for with_non-empty_elements non empty set;
+  N for with_zero set;
 
 theorem :: AMISTD_2:1
   for I being Instruction of STC N holds JumpPart I = 0;
 
 definition
-
-  let N be with_non-empty_elements non empty set,
-  S be IC-Ins-separated standard-ins
-  non empty AMI-Struct over N, I be Instruction of S;
+  let N be with_zero set,
+  S be IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N, I be Instruction of S;
   attr I is with_explicit_jumps means
 :: AMISTD_2:def 1
  JUMP I = rng JumpPart I;
-
 end;
 
 definition
-  let N be with_non-empty_elements non empty set,
-  S be standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
   attr S is with_explicit_jumps means
 :: AMISTD_2:def 2
  for I being Instruction of S holds I is with_explicit_jumps;
@@ -66,167 +65,140 @@ definition
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster standard standard-ins for IC-Ins-separated
-    non empty AMI-Struct over N;
+  let N be with_zero set;
+  cluster standard for IC-Ins-separated
+    non empty with_non-empty_values AMI-Struct over N;
 end;
 
 theorem :: AMISTD_2:2
   for S being standard IC-Ins-separated
-  non empty AMI-Struct over N, I being Instruction of S
+  non empty with_non-empty_values AMI-Struct over N, I being Instruction of S
   st for f being Element of NAT holds NIC(I,f)={succ f}
   holds JUMP I is empty;
 
 registration
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   I be Instruction of STC N;
   cluster JUMP I -> empty;
 end;
 
 theorem :: AMISTD_2:3
-  for T being InsType of STC N holds JumpParts T = {0};
+  for T being InsType of the InstructionsF of STC N holds JumpParts T = {0};
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster STC N ->
-   with_explicit_jumps homogeneous regular J/A-independent;
+  let N be with_zero set;
+  cluster STC N -> with_explicit_jumps;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster standard regular J/A-independent homogeneous
+  let N be with_zero set;
+  cluster standard
    halting with_explicit_jumps for IC-Ins-separated
-   standard-ins
-    non empty AMI-Struct over N;
+    non empty with_non-empty_values AMI-Struct over N;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster Trivial-AMI N -> regular J/A-independent;
-end;
-
-registration
-
-  let N be with_non-empty_elements non empty set;
-  cluster regular J/A-independent for standard-ins AMI-Struct over N;
-end;
-
-registration
-
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   I be Instruction of Trivial-AMI N;
   cluster JUMP I -> empty;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   cluster Trivial-AMI N -> with_explicit_jumps;
 end;
 
 registration
-  let N;
-  cluster regular J/A-independent
-    for non empty standard-ins AMI-Struct over N;
-end;
-
-registration
-
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   cluster with_explicit_jumps halting
-    for standard-ins IC-Ins-separated
-    non empty AMI-Struct over N;
+    for IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
 end;
 
 registration
-
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   let S be with_explicit_jumps IC-Ins-separated
-  non empty standard-ins AMI-Struct over N;
+  non empty with_non-empty_values AMI-Struct over N;
   cluster -> with_explicit_jumps for Instruction of S;
 end;
 
 theorem :: AMISTD_2:4
-  for S being IC-Ins-separated non empty AMI-Struct over N,
+  for S being IC-Ins-separated non empty with_non-empty_values
+  AMI-Struct over N,
   I being Instruction of S st I is halting holds JUMP I is empty;
 
 registration
 
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   S be halting
-  IC-Ins-separated non empty AMI-Struct over N,
+  IC-Ins-separated non empty with_non-empty_values AMI-Struct over N,
   I be halting Instruction of S;
   cluster JUMP I -> empty;
 end;
 
 theorem :: AMISTD_2:5
   for S being halting with_explicit_jumps
-  IC-Ins-separated standard-ins non empty AMI-Struct over N,
+  IC-Ins-separated non empty
+  with_non-empty_values AMI-Struct over N,
   I being Instruction of S st I is ins-loc-free holds JUMP I is empty;
 
 registration
 
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   S be with_explicit_jumps
-  standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+   IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
   cluster halting -> ins-loc-free for Instruction of S;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   S be with_explicit_jumps
-   standard-ins IC-Ins-separated
-  standard-ins non empty AMI-Struct over N;
+    IC-Ins-separated non empty with_non-empty_values AMI-Struct over N;
   cluster sequential -> ins-loc-free for Instruction of S;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
+  let N be with_zero set,
   S be standard halting
   IC-Ins-separated
-  non empty AMI-Struct over N;
+  non empty with_non-empty_values AMI-Struct over N;
   cluster Stop S -> really-closed;
 end;
 
 begin  :: On the composition of macro instructions
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be halting with_explicit_jumps
-  regular homogeneous J/A-independent
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N,
-  I be halting Instruction of S, k be natural number;
+  let N be with_zero set,
+  S be halting with_explicit_jumps IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N,
+  I be halting Instruction of S, k be Nat;
   cluster IncAddr(I,k) -> halting;
 end;
 
 theorem :: AMISTD_2:6
-  for S being regular homogeneous J/A-independent standard halting
-  with_explicit_jumps
-  standard-ins IC-Ins-separated
-  non empty AMI-Struct over N,
+  for S being standard halting
+  with_explicit_jumps IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N,
   I being Instruction of S st I is sequential
   holds IncAddr(I,k) is sequential;
 
 definition
 
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N, I be Instruction of S;
+  let N be with_zero set,
+  S be halting
+   IC-Ins-separated non empty with_non-empty_values AMI-Struct over N,
+   I be Instruction of S;
   attr I is IC-relocable means
 :: AMISTD_2:def 3
 
-  for j,k being natural number, s being State of S
+  for j,k being Nat, s being State of S
   holds IC Exec(IncAddr(I,j),s) + k = IC Exec(IncAddr(I,j+k),IncIC(s,k));
 end;
 
 definition
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent
-  halting
-   standard-ins IC-Ins-separated
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N;
   attr S is IC-relocable means
 :: AMISTD_2:def 4
 
@@ -234,78 +206,69 @@ definition
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent
-  with_explicit_jumps
-  standard-ins IC-Ins-separated halting
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be with_explicit_jumps IC-Ins-separated halting
+  non empty with_non-empty_values AMI-Struct over N;
   cluster sequential -> IC-relocable for Instruction of S;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent
-  with_explicit_jumps
-  standard-ins IC-Ins-separated halting
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be with_explicit_jumps IC-Ins-separated halting
+  non empty with_non-empty_values AMI-Struct over N;
   cluster halting -> IC-relocable for Instruction of S;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
+  let N be with_zero set;
   cluster STC N -> IC-relocable;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster homogeneous halting
-    with_explicit_jumps
-    for regular J/A-independent standard standard-ins IC-Ins-separated
-    non empty AMI-Struct over N;
+  let N be with_zero set;
+  cluster halting with_explicit_jumps
+    for standard IC-Ins-separated
+    non empty with_non-empty_values AMI-Struct over N;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set;
-  cluster IC-relocable for homogeneous
+  let N be with_zero set;
+  cluster IC-relocable for
     with_explicit_jumps halting
-    regular J/A-independent standard standard-ins IC-Ins-separated
-    non empty AMI-Struct over N;
+    standard IC-Ins-separated
+    non empty with_non-empty_values AMI-Struct over N;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be IC-relocable regular homogeneous J/A-independent
-  standard-ins IC-Ins-separated halting
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be IC-relocable IC-Ins-separated halting
+  non empty with_non-empty_values AMI-Struct over N;
   cluster -> IC-relocable for Instruction of S;
 end;
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent
-  with_explicit_jumps
-  standard-ins IC-Ins-separated halting
-  non empty AMI-Struct over N;
+  let N be with_zero set,
+  S be with_explicit_jumps IC-Ins-separated halting
+  non empty with_non-empty_values AMI-Struct over N;
  cluster IC-relocable for Instruction of S;
 end;
 
 theorem :: AMISTD_2:7
-  for S be regular homogeneous J/A-independent halting
+  for S be halting
   with_explicit_jumps
-   standard-ins IC-Ins-separated non empty AMI-Struct over N,
+   IC-Ins-separated non empty with_non-empty_values
+   AMI-Struct over N,
   I being IC-relocable Instruction of S
-  for k being natural number, s being State of S
+  for k being Nat, s being State of S
   holds IC Exec(I,s) + k = IC Exec(IncAddr(I,k),IncIC(s,k));
 
 registration
-  let N be with_non-empty_elements non empty set,
-  S be IC-relocable homogeneous
-  regular J/A-independent standard with_explicit_jumps
-  halting standard-ins
-  IC-Ins-separated
-  non empty AMI-Struct over N,
+  let N be with_zero set,
+  S be IC-relocable standard with_explicit_jumps
+  halting IC-Ins-separated
+  non empty with_non-empty_values AMI-Struct over N,
   F, G be really-closed initial non empty NAT-defined
-  (the Instructions of S)-valued finite Function;
+  (the InstructionsF of S)-valued finite Function;
   cluster F ';' G -> really-closed;
 end;
 
@@ -313,12 +276,13 @@ theorem :: AMISTD_2:8
   for I being Instruction of Trivial-AMI N holds JumpPart I = 0;
 
 theorem :: AMISTD_2:9
-  for T being InsType of Trivial-AMI N holds JumpParts T = {0};
+  for T being InsType of the InstructionsF of Trivial-AMI N
+    holds JumpParts T = {0};
 
 reserve n,m for Element of NAT;
 
 theorem :: AMISTD_2:10
- for S being IC-Ins-separated non empty AMI-Struct over N
+ for S being IC-Ins-separated non empty with_non-empty_values AMI-Struct over N
  for s being State of S, I being Program of S
  for P1,P2 being Instruction-Sequence of S
   st I c= P1 & I c= P2 &
@@ -326,7 +290,8 @@ theorem :: AMISTD_2:10
  for m st m <= n holds Comput(P1,s,m) =  Comput(P2,s,m);
 
 theorem :: AMISTD_2:11
- for S being IC-Ins-separated halting non empty AMI-Struct over N,
+ for S being IC-Ins-separated halting non empty with_non-empty_values
+  AMI-Struct over N,
   P being Instruction-Sequence of S,
   s being State of S st  s =  Following(P,s)
   holds for n holds Comput(P,s,n) =  s;

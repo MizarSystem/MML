@@ -1,0 +1,200 @@
+:: Morphology for Image Processing, Part {I}
+::  by Hiroshi Yamazaki , Czes\l aw Byli\'nski and Katsumi Wasaki
+:: 
+:: Received September 21, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, RLVECT_1, FUNCT_1, ARYTM_1, RELAT_1, MATHMORP, SETFAM_1,
+      ARYTM_3, ALGSTR_0, MORPH_01, ZFMISC_1, SUBSET_1, STRUCT_0, XBOOLE_0,
+      REAL_1, SUPINF_2, VALUED_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, FUNCT_2, REAL_1,
+      STRUCT_0, ALGSTR_0, RLVECT_1, RUSUB_4, MATHMORP;
+ constructors SETFAM_1, REAL_1, RUSUB_4, RVSUM_1, RELSET_1, MATHMORP;
+ registrations SUBSET_1, RELSET_1, MEMBERED, STRUCT_0, RLVECT_1;
+ requirements NUMERALS, SUBSET, BOOLE;
+
+
+begin :: Minkowski set operations
+
+definition let E be non empty RLSStruct;
+  mode binary-image of E is Subset of E;
+end;
+
+reserve E for RealLinearSpace;
+reserve A, B, C for binary-image of E;
+reserve a, b, v for Element of E;
+
+definition
+  let E be RealLinearSpace;
+  let A, B be binary-image of E;
+  func A(-)B -> binary-image of E equals
+:: MORPH_01:def 1
+  { z where z is Element of E :
+     for b be Element of E st b in B holds z - b in A };
+end;
+
+notation
+  let a be Real, E be RealLinearSpace,
+      A be Subset of E;
+  synonym a * A for a (.) A;
+end;
+
+theorem :: MORPH_01:1
+  for E be RealLinearSpace, A, B be Subset of E st B = {}
+  holds A(+)B = B & B(+)A = B & A(-)B = the carrier of E;
+
+theorem :: MORPH_01:2
+  for E be RealLinearSpace, A, B be Subset of E st A <> {} & B = {}
+  holds B(-)A = B;
+
+theorem :: MORPH_01:3
+  for E be RealLinearSpace,
+  A, B be Subset of E st B = the carrier of E & A <> {}
+  holds A(+)B = B & B(+)A = B;
+
+theorem :: MORPH_01:4
+  for E be RealLinearSpace,
+  A, B be Subset of E st B = the carrier of E
+  holds B(-)A = B;
+
+theorem :: MORPH_01:5
+  A(+)B = union {b + A where b is Element of E: b in B};
+
+definition
+  let E be non empty RLSStruct;
+  mode binary-image-family of E is Subset-Family of the carrier of E;
+end;
+
+reserve F, G for binary-image-family of E;
+reserve A, B, C for non empty binary-image of E;
+
+theorem :: MORPH_01:6
+  A(-)B = meet {b + A where b is Element of E: b in B};
+
+theorem :: MORPH_01:7
+  A(+)B = {v where v is Element of E: (v + (-1)*B) /\ A <> {}};
+
+theorem :: MORPH_01:8
+  A(-)B = {v where v is Element of E: v + (-1)*B c= A};
+
+theorem :: MORPH_01:9
+  ((the carrier of E) \ A)(+)B = (the carrier of E) \ (A(-)B)
+  & ((the carrier of E) \ A)(-)B = (the carrier of E) \ (A(+)B);
+
+definition let E be non empty Abelian addLoopStr, A, B be Subset of E;
+  redefine func A(+)B;
+  commutativity;
+end;
+
+theorem :: MORPH_01:10
+  for E be non empty add-associative addLoopStr, A, B, C be Subset of E
+  holds A + B + C = A + (B + C);
+
+theorem :: MORPH_01:11
+  A(+)B(+)C = A(+)(B(+)C);
+
+theorem :: MORPH_01:12
+  (union F)(+)B = union {X(+)B where X is binary-image of E: X in F};
+
+theorem :: MORPH_01:13
+  A(+)(union F) = union {A(+)X where X is binary-image of E: X in F};
+
+theorem :: MORPH_01:14
+  (meet F)(+)B c= meet {X(+)B where X is binary-image of E: X in F };
+
+theorem :: MORPH_01:15
+  A(+)(meet F) c= meet { A(+)X where X is binary-image of E: X in F};
+
+theorem :: MORPH_01:16
+  for E be non empty addLoopStr, A, B, C be Subset of E
+  holds B c= C implies A + B c= A + C;
+
+theorem :: MORPH_01:17
+  (v + A)(+)B = A(+)(v+B) & (v+A)(+)B = v+ (A(+)B);
+
+theorem :: MORPH_01:18
+  (meet F)(-)B = meet { X(-)B where X is binary-image of E: X in F};
+
+theorem :: MORPH_01:19
+  meet {B (-)X where X is binary-image of E: X in F} c= B(-)(meet F);
+
+theorem :: MORPH_01:20
+  union {X(-)B where X is binary-image of E: X in F} c= (union F)(-)B;
+
+theorem :: MORPH_01:21
+  F <> {}
+  implies B(-) (union F) = meet {B(-)X where X is binary-image of E: X in F};
+
+theorem :: MORPH_01:22
+  A c= B implies A(-)C c= B(-)C;
+
+theorem :: MORPH_01:23
+  A c= B implies C(-)B c= C(-)A;
+
+theorem :: MORPH_01:24
+  (v+A)(-)B = A(-)(v+B) & (v+A)(-)B = v+(A(-)B);
+
+theorem :: MORPH_01:25
+  (A(-)B)(-)C = A(-)(B(+)C);
+
+begin :: Dilation and erosion
+
+definition
+  let E be RealLinearSpace;
+  let B be binary-image of E;
+  func dilation(B)
+  -> Function of bool the carrier of E, bool the carrier of E means
+:: MORPH_01:def 2
+
+  for A be binary-image of E holds it.A = A(+)B;
+end;
+
+definition
+  let E be RealLinearSpace;
+  let B be binary-image of E;
+  func erosion (B)
+  -> Function of bool the carrier of E, bool the carrier of E means
+:: MORPH_01:def 3
+
+  for A be binary-image of E holds it.A = A(-)B;
+end;
+
+theorem :: MORPH_01:26
+  (dilation(B)).(union F)
+  = union {(dilation(B)).X where X is binary-image of E: X in F};
+
+theorem :: MORPH_01:27
+  A c= B implies (dilation(C)).A c= (dilation(C)).B;
+
+theorem :: MORPH_01:28
+  (dilation(C)).(v+A) = v+((dilation(C)).A);
+
+theorem :: MORPH_01:29
+  (erosion(B)).(meet F)
+  = meet {(erosion(B)).X where X is binary-image of E: X in F};
+
+theorem :: MORPH_01:30
+  A c= B implies (erosion(C)).A c= (erosion(C)).B;
+
+theorem :: MORPH_01:31
+  (erosion(C)).(v+A) = v+((erosion(C)).A);
+
+theorem :: MORPH_01:32
+  (dilation(C)).((the carrier of E) \ A)
+  = (the carrier of E) \ ((erosion(C)).A)
+  & (erosion(C)).( (the carrier of E) \ A)
+  = (the carrier of E) \ ((dilation(C)).A );
+
+theorem :: MORPH_01:33
+  (dilation(C)).((dilation(B)).A) = (dilation((dilation(C)).B)).A
+  & (erosion(C)).((erosion(B)).A) = (erosion((dilation(C)).B)).A;

@@ -1,0 +1,994 @@
+:: Formalization of the Data Encryption Standard
+::  by Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received November 30, 2011
+:: Copyright (c) 2011-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies DESCIP_1, TARSKI, XBOOLE_0, FINSEQ_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FINSEQ_2, NAT_1, XBOOLEAN, MARGREL1, MCART_1, RFINSEQ, ZFMISC_1,
+      SUBSET_1, NUMBERS, INT_1, CARD_1, ARYTM_1, XXREAL_0, PARTFUN1, ARYTM_3,
+      ORDINAL4, ORDINAL1, FINSEQ_5;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, FUNCT_1, CARD_1,
+      ORDINAL1, XTUPLE_0, DOMAIN_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1,
+      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1, FINSEQ_1, FINSEQ_2, XBOOLEAN,
+      MARGREL1, FINSEQ_4, RFINSEQ, FINSEQ_5, BINARITH, BVFUNC_1;
+ constructors CARD_1, INT_3, GROUP_1, RLVECT_1, VECTSP_1, ENUMSET1, RELSET_1,
+      BINOP_1, ARYTM_0, XXREAL_0, DOMAIN_1, REAL_1, FINSEQ_4, RFUNCT_1,
+      RFINSEQ, FINSEQ_5, BINARITH, NAT_D, BVFUNC_1;
+ registrations XREAL_0, RELSET_1, FINSEQ_2, FUNCT_2, ORDINAL1, FINSET_1,
+      MEMBERED, XBOOLEAN, MARGREL1, INT_1, SUBSET_1, FINSEQ_1, NAT_1, RELAT_1,
+      XXREAL_0, XBOOLE_0, FUNCT_1, VALUED_0, CARD_1, FINSEQ_4, BVFUNC_1,
+      AFINSQ_2, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve D for non empty set;
+reserve s for FinSequence of D;
+reserve m,n for Element of NAT;
+
+registration
+  let n be Nat, f be n-element FinSequence;
+  cluster Rev f -> n-element;
+end;
+
+definition
+  let D be non empty set, n be Nat, f be Element of n-tuples_on D;
+  redefine func Rev f -> Element of n-tuples_on D;
+end;
+
+notation
+  let n be Nat, f be FinSequence;
+  synonym Op-Left(f,n) for f|n;
+  synonym Op-Right(f,n) for f/^n;
+end;
+
+definition
+  let D be non empty set, n be Nat, f be FinSequence of D;
+  redefine func Op-Left(f,n) -> FinSequence of D;
+  redefine func Op-Right(f,n) -> FinSequence of D;
+end;
+
+notation
+  let D be non empty set, n be Nat, s be Element of (2*n)-tuples_on D;
+  synonym SP-Left(s) for Op-Left(s,n);
+  synonym SP-Right(s) for Op-Right(s,n);
+end;
+
+definition
+  let D be non empty set, n be Nat, s be Element of (2*n)-tuples_on D;
+  redefine func SP-Left(s) -> Element of n-tuples_on D;
+end;
+
+theorem :: DESCIP_1:1
+  for m,n be non empty Element of NAT, s be Element of n-tuples_on D
+  st m <= n
+  holds Op-Left(s,m) is Element of m-tuples_on D;
+
+theorem :: DESCIP_1:2
+  for m,n,l be non empty Element of NAT,
+  s be Element of n-tuples_on D
+  st m <= n & l= n - m
+  holds (Op-Right(s,m)) is Element of l-tuples_on D;
+
+definition
+  let D be non empty set,n be non empty Element of NAT,
+  s be Element of (2*n)-tuples_on D;
+  redefine func SP-Right(s) -> Element of n-tuples_on D;
+end;
+
+theorem :: DESCIP_1:3
+  for n be non empty Element of NAT,
+  s be Element of (2*n)-tuples_on D holds
+  (SP-Left(s))^( SP-Right(s)) = s;
+
+definition
+  let s be FinSequence;
+  func Op-LeftShift(s) -> FinSequence equals
+:: DESCIP_1:def 1
+  (s /^1) ^ <* s.1 *>;
+end;
+
+theorem :: DESCIP_1:4
+  for s be FinSequence st 1 <= len s
+  holds len (Op-LeftShift(s)) = len s;
+
+theorem :: DESCIP_1:5
+  1 <= len s implies
+  Op-LeftShift(s) is FinSequence of D &
+  len (Op-LeftShift(s)) = len s;
+
+theorem :: DESCIP_1:6
+  for n be non empty Element of NAT,
+  s be Element of n-tuples_on D
+  holds (Op-LeftShift(s)) is Element of n-tuples_on D;
+
+definition
+  let s be FinSequence;
+  func Op-RightShift(s) -> FinSequence equals
+:: DESCIP_1:def 2
+  (<* s.(len s) *> ^ s )| len s;
+end;
+
+theorem :: DESCIP_1:7
+  for s be FinSequence holds len (Op-RightShift(s)) = len s;
+
+theorem :: DESCIP_1:8
+  1 <= len s implies
+  Op-RightShift(s) is FinSequence of D &
+  len (Op-RightShift(s)) = len s;
+
+theorem :: DESCIP_1:9
+  for n be non empty Element of NAT,
+  s be Element of n-tuples_on D
+  holds (Op-RightShift(s)) is Element of n-tuples_on D;
+
+definition
+  let D be non empty set;
+  let s be FinSequence of D,n be Integer;
+  assume  1 <= len s;
+  func Op-Shift(s,n) -> FinSequence of D means
+:: DESCIP_1:def 3
+
+  len it = len s &
+  for i be Nat st i in Seg (len s)
+  holds it.i = s.(( (i-1+n) mod (len s) ) + 1);
+end;
+
+theorem :: DESCIP_1:10
+  for n,m be Integer
+  st 1 <= len s holds
+  Op-Shift(Op-Shift(s,n),m)= Op-Shift(s,n+m);
+
+theorem :: DESCIP_1:11
+  1 <= len s implies Op-Shift(s,0)= s;
+
+theorem :: DESCIP_1:12
+  1 <= len s implies Op-Shift(s,len s)= s;
+
+theorem :: DESCIP_1:13
+  1 <= len s implies Op-Shift(s,-(len s ))= s;
+
+theorem :: DESCIP_1:14
+  for n be non empty Element of NAT,
+  m be Integer,
+  s be Element of n-tuples_on D
+  holds Op-Shift(s,m) is Element of n-tuples_on D;
+
+theorem :: DESCIP_1:15
+  1 <= len s implies Op-Shift(s,-1)= Op-RightShift(s);
+
+theorem :: DESCIP_1:16
+  1 <= len s implies Op-Shift(s,1)= Op-LeftShift(s);
+
+definition
+  let x,y be Element of 28-tuples_on BOOLEAN;
+  redefine func x^y -> Element of 56-tuples_on BOOLEAN;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let s be Element of n-tuples_on BOOLEAN;
+  let i be Nat;
+  redefine func s.i -> Element of BOOLEAN;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let s be Element of n-tuples_on NAT;
+  let i be Nat;
+  redefine func s.i -> Element of NAT;
+end;
+
+registration
+  let n be Nat;
+  cluster -> boolean-valued for Element of n-tuples_on BOOLEAN;
+end;
+
+notation
+  let n be Element of NAT;
+  let s,t be Element of n-tuples_on BOOLEAN;
+  synonym Op-XOR(s,t) for s 'xor' t;
+end;
+
+definition
+  let n be non empty Element of NAT;
+  let s,t be Element of n-tuples_on BOOLEAN;
+  redefine func Op-XOR(s,t) -> Element of n-tuples_on BOOLEAN means
+:: DESCIP_1:def 4
+
+  for i be Nat st i in Seg n holds it.i = s.i 'xor' t.i;
+  commutativity;
+end;
+
+definition
+  let n,k be non empty Element of NAT,
+  RK be Element of k-tuples_on (n-tuples_on BOOLEAN);
+  let i be Element of Seg k;
+  redefine func RK.i -> Element of n-tuples_on BOOLEAN;
+end;
+
+theorem :: DESCIP_1:17
+  for n be non empty Element of NAT,
+  s,t be Element of n-tuples_on BOOLEAN
+  holds Op-XOR(Op-XOR(s,t),t) = s;
+
+definition
+  let m be non empty Element of NAT;
+  let D be non empty set;
+  let L be sequence of (m-tuples_on D );
+  let i be Nat;
+  redefine func L.i -> Element of m-tuples_on D;
+end;
+
+definition
+  let f be Function of 64,16;
+  let i be set;
+  redefine func f.i -> Element of 16;
+end;
+
+theorem :: DESCIP_1:18
+  for n,m be Nat st n+m <= len s holds
+  (s|n)^((s/^n)|m) = s|(n+m);
+
+scheme :: DESCIP_1:sch 1
+
+  QuadChoiceRec { A, B,C,D() -> non empty set,
+  A0() -> Element of A(), B0() -> Element of B(),
+  C0() -> Element of C(), D0() -> Element of D(),
+  P[set,set,set,set,set,set,set,set,set] }:
+  ex f being Function of NAT, A(), g being Function of NAT, B(),
+  h being Function of NAT, C(), i being Function of NAT, D()
+  st f.0 = A0() & g.0 = B0() &h.0 = C0() & i.0 = D0()
+  & for n being Element of
+  NAT holds P[n,f.n,g.n,h.n,i.n,f.(n+1),g.(n+1),h.(n+1),i.(n+1)]
+  provided
+   for n being Element of NAT, x being Element of A(), y being Element
+  of B() , z being Element of C(),w being Element of D()
+  ex x1 being Element of A(), y1 being Element of B(),
+  z1 being Element of C(), w1 being Element of D()
+  st P[n,x,y,z,w,x1,y1,z1,w1];
+
+theorem :: DESCIP_1:19
+  for x be set st x in Seg 16 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16;
+
+theorem :: DESCIP_1:20
+  for x be set st x in Seg 32 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32;
+
+theorem :: DESCIP_1:21
+  for x be set st x in Seg 48 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32
+  or x=33 or x=34 or x=35 or x=36 or x=37 or x=38 or x=39 or x=40
+  or x=41 or x=42 or x=43 or x=44 or x=45 or x=46 or x=47 or x=48;
+
+theorem :: DESCIP_1:22
+  for x be set st x in Seg 56 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32
+  or x=33 or x=34 or x=35 or x=36 or x=37 or x=38 or x=39 or x=40
+  or x=41 or x=42 or x=43 or x=44 or x=45 or x=46 or x=47 or x=48
+  or x=49 or x=50 or x=51 or x=52 or x=53 or x=54 or x=55 or x=56;
+
+theorem :: DESCIP_1:23
+  for x be set st x in Seg 64 holds
+  x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or x=8
+  or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15 or x=16
+  or x=17 or x=18 or x=19 or x=20 or x=21 or x=22 or x=23 or x=24
+  or x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or x=31 or x=32
+  or x=33 or x=34 or x=35 or x=36 or x=37 or x=38 or x=39 or x=40
+  or x=41 or x=42 or x=43 or x=44 or x=45 or x=46 or x=47 or x=48
+  or x=49 or x=50 or x=51 or x=52 or x=53 or x=54 or x=55 or x=56
+  or x=57 or x=58 or x=59 or x=60 or x=61 or x=62 or x=63 or x=64;
+
+theorem :: DESCIP_1:24
+  for n be non empty Nat holds n = {0} \/ ((Seg n) \ {n});
+
+theorem :: DESCIP_1:25
+  for n be non empty Nat,x be set st x in n holds
+  x = 0 or x in Seg n & x <> n;
+
+theorem :: DESCIP_1:26
+  for x be set st x in 16 holds
+  x=0 or x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or x=7 or
+  x=8 or x=9 or x=10 or x=11 or x=12 or x=13 or x=14 or x=15;
+
+theorem :: DESCIP_1:27
+  for x be set st x in 64 holds
+  x=0 or x=1 or x=2 or x=3 or x=4 or x=5 or x=6 or
+  x=7 or x=8 or x=9 or x=10 or x=11 or x=12 or
+  x=13 or x=14 or x=15 or x=16 or x=17 or x=18 or
+  x=19 or x=20 or x=21 or x=22 or x=23 or x=24 or
+  x=25 or x=26 or x=27 or x=28 or x=29 or x=30 or
+  x=31 or x=32 or x=33 or x=34 or x=35 or x=36 or
+  x=37 or x=38 or x=39 or x=40 or x=41 or x=42 or
+  x=43 or x=44 or x=45 or x=46 or x=47 or x=48 or
+  x=49 or x=50 or x=51 or x=52 or x=53 or x=54 or
+  x=55 or x=56 or x=57 or x=58 or x=59 or x=60 or
+  x=61 or x=62 or x=63;
+
+theorem :: DESCIP_1:28
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8 be Element of S holds
+  ex s be FinSequence of S st
+  s is 8-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8;
+
+theorem :: DESCIP_1:29
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16
+  be Element of S holds
+  ex s be FinSequence of S st
+  s is 16-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16;
+
+theorem :: DESCIP_1:30
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32
+  be Element of S holds
+  ex s be FinSequence of S st
+  s is 32-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32;
+
+theorem :: DESCIP_1:31
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48
+  be Element of S holds
+  ex s be FinSequence of S st
+  s is 48-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32&
+  s.33=x33&s.34=x34&s.35=x35&s.36=x36&
+  s.37=x37&s.38=x38&s.39=x39&s.40=x40&
+  s.41=x41&s.42=x42&s.43=x43&s.44=x44&
+  s.45=x45&s.46=x46&s.47=x47&s.48=x48;
+
+theorem :: DESCIP_1:32
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56 be Element of S holds
+  ex s be FinSequence of S st
+  s is 56-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32&
+  s.33=x33&s.34=x34&s.35=x35&s.36=x36&
+  s.37=x37&s.38=x38&s.39=x39&s.40=x40&
+  s.41=x41&s.42=x42&s.43=x43&s.44=x44&
+  s.45=x45&s.46=x46&s.47=x47&s.48=x48&
+  s.49=x49&s.50=x50&s.51=x51&s.52=x52&
+  s.53=x53&s.54=x54&s.55=x55&s.56=x56;
+
+theorem :: DESCIP_1:33
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56,
+  x57,x58,x59,x60,x61,x62,x63,x64 be Element of S holds
+  ex s be FinSequence of S st
+  s is 64-element &
+  s.1=x1&s.2=x2&s.3=x3&s.4=x4&
+  s.5=x5&s.6=x6&s.7=x7&s.8=x8&
+  s.9=x9&s.10=x10&s.11=x11&s.12=x12&
+  s.13=x13&s.14=x14&s.15=x15&s.16=x16 &
+  s.17=x17&s.18=x18&s.19=x19&s.20=x20&
+  s.21=x21&s.22=x22&s.23=x23&s.24=x24&
+  s.25=x25&s.26=x26&s.27=x27&s.28=x28&
+  s.29=x29&s.30=x30&s.31=x31&s.32=x32&
+  s.33=x33&s.34=x34&s.35=x35&s.36=x36&
+  s.37=x37&s.38=x38&s.39=x39&s.40=x40&
+  s.41=x41&s.42=x42&s.43=x43&s.44=x44&
+  s.45=x45&s.46=x46&s.47=x47&s.48=x48&
+  s.49=x49&s.50=x50&s.51=x51&s.52=x52&
+  s.53=x53&s.54=x54&s.55=x55&s.56=x56&
+  s.57=x57&s.58=x58&s.59=x59&s.60=x60&
+  s.61=x61&s.62=x62&s.63=x63&s.64=x64;
+
+notation
+  let n be non empty Nat, i be Element of n;
+  synonym ntoSeg(i) for succ(i);
+end;
+
+definition
+  let n be non empty Nat,
+  i be Element of n;
+  redefine func ntoSeg(i) -> Element of Seg n;
+end;
+
+definition
+  let n be non empty Nat,
+  f be Function of n, Seg n;
+  attr f is NtoSEG means
+:: DESCIP_1:def 5
+
+  for i be Element of n holds f.i=ntoSeg(i);
+end;
+
+registration
+  let n be non empty Nat;
+  cluster NtoSEG for Function of n, Seg n;
+end;
+
+registration
+  let n be non empty Nat;
+  cluster -> bijective for NtoSEG Function of n, Seg n;
+end;
+
+theorem :: DESCIP_1:34
+  for n be non empty Nat,
+  f be NtoSEG Function of n, Seg n,
+  i be Nat st i < n holds f.i=i+1 & i in dom f;
+
+theorem :: DESCIP_1:35
+  for S be non empty set,
+  x1,x2,x3,x4,x5,x6,x7,x8,
+  x9,x10,x11,x12,x13,x14,x15,x16,
+  x17,x18,x19,x20,x21,x22,x23,x24,
+  x25,x26,x27,x28,x29,x30,x31,x32,
+  x33,x34,x35,x36,x37,x38,x39,x40,
+  x41,x42,x43,x44,x45,x46,x47,x48,
+  x49,x50,x51,x52,x53,x54,x55,x56,
+  x57,x58,x59,x60,x61,x62,x63,x64 be Element of S holds
+  ex f be Function of 64, S st
+  f.0=x1&f.1=x2&f.2=x3&f.3=x4&
+  f.4=x5&f.5=x6&f.6=x7&f.7=x8&
+  f.8=x9&f.9=x10&f.10=x11&f.11=x12&
+  f.12=x13&f.13=x14&f.14=x15&f.15=x16&
+  f.16=x17&f.17=x18&f.18=x19&f.19=x20&
+  f.20=x21&f.21=x22&f.22=x23&f.23=x24&
+  f.24=x25&f.25=x26&f.26=x27&f.27=x28&
+  f.28=x29&f.29=x30&f.30=x31&f.31=x32&
+  f.32=x33&f.33=x34&f.34=x35&f.35=x36&
+  f.36=x37&f.37=x38&f.38=x39&f.39=x40&
+  f.40=x41&f.41=x42&f.42=x43&f.43=x44&
+  f.44=x45&f.45=x46&f.46=x47&f.47=x48&
+  f.48=x49&f.49=x50&f.50=x51&f.51=x52&
+  f.52=x53&f.53=x54&f.54=x55&f.55=x56&
+  f.56=x57&f.57=x58&f.58=x59&f.59=x60&
+  f.60=x61&f.61=x62&f.62=x63&f.63=x64;
+
+begin :: S-Boxes
+
+definition
+  func DES-SBOX1 -> Function of 64,16 means
+:: DESCIP_1:def 6
+  it.0 = 14 & it.1 = 4 & it.2 = 13 & it.3 = 1 & it.4 = 2 &
+  it.5 = 15 & it.6 = 11 & it.7 = 8 & it.8 = 3 & it.9 = 10 &
+  it.10 = 6 & it.11 = 12 & it.12 = 5 & it.13 = 9 & it.14 = 0 &
+  it.15 = 7 & it.16 = 0 & it.17 = 15 & it.18 = 7 & it.19 = 4 &
+  it.20 = 14 & it.21 = 2 & it.22 = 13 & it.23 = 1 & it.24 = 10 &
+  it.25 = 6 & it.26 = 12 & it.27 = 11 & it.28 = 9 & it.29 = 5 &
+  it.30 = 3 & it.31 = 8 & it.32 = 4 & it.33 = 1 & it.34 = 14 &
+  it.35 = 8 & it.36 = 13 & it.37 = 6 & it.38 = 2 & it.39 = 11 &
+  it.40 = 15 & it.41 = 12 & it.42 = 9 & it.43 = 7 & it.44 = 3 &
+  it.45 = 10 & it.46 = 5 & it.47 = 0 & it.48 = 15 & it.49 = 12 &
+  it.50 = 8 & it.51 = 2 & it.52 = 4 & it.53 = 9 & it.54 = 1 &
+  it.55 = 7 & it.56 = 5 & it.57 = 11 & it.58 = 3 & it.59 = 14 &
+  it.60 = 10 & it.61 = 0 & it.62 = 6 & it.63 = 13;
+end;
+
+definition
+  func DES-SBOX2 -> Function of 64,16 means
+:: DESCIP_1:def 7
+  it.0 = 15 & it.1 = 1 & it.2 = 8 & it.3 = 14 & it.4 = 6 &
+  it.5 = 11 & it.6 = 3 & it.7 = 4 & it.8 = 9 & it.9 = 7 &
+  it.10 = 2 & it.11 = 13 & it.12 = 12 & it.13 = 0 & it.14 = 5 &
+  it.15 = 10 & it.16 = 3 & it.17 = 13 & it.18 = 4 & it.19 = 7 &
+  it.20 = 15 & it.21 = 2 & it.22 = 8 & it.23 = 14 & it.24 = 12 &
+  it.25 = 0 & it.26 = 1 & it.27 = 10 & it.28 = 6 & it.29 = 9 &
+  it.30 = 11 & it.31 = 5 & it.32 = 0 & it.33 = 14 & it.34 = 7 &
+  it.35 = 11 & it.36 = 10 & it.37 = 4 & it.38 = 13 & it.39 = 1 &
+  it.40 = 5 & it.41 = 8 & it.42 = 12 & it.43 = 6 & it.44 = 9 &
+  it.45 = 3 & it.46 = 2 & it.47 = 15 & it.48 = 13 & it.49 = 8 &
+  it.50 = 10 & it.51 = 1 & it.52 = 3 & it.53 = 15 & it.54 = 4 &
+  it.55 = 2 & it.56 = 11 & it.57 = 6 & it.58 = 7 & it.59 = 12 &
+  it.60 = 0 & it.61 = 5 & it.62 = 14 & it.63 = 9;
+end;
+
+definition
+  func DES-SBOX3 -> Function of 64,16 means
+:: DESCIP_1:def 8
+  it.0 = 10 & it.1 = 0 & it.2 = 9 & it.3 = 14 & it.4 = 6 &
+  it.5 = 3 & it.6 = 15 & it.7 = 5 & it.8 = 1 & it.9 = 13 &
+  it.10 = 12 & it.11 = 7 & it.12 = 11 & it.13 = 4 & it.14 = 2 &
+  it.15 = 8 & it.16 = 13 & it.17 = 7 & it.18 = 0 & it.19 = 9 &
+  it.20 = 3 & it.21 = 4 & it.22 = 6 & it.23 = 10 & it.24 = 2 &
+  it.25 = 8 & it.26 = 5 & it.27 = 14 & it.28 = 12 & it.29 = 11 &
+  it.30 = 15 & it.31 = 1 & it.32 = 13 & it.33 = 6 & it.34 = 4 &
+  it.35 = 9 & it.36 = 8 & it.37 = 15 & it.38 = 3 & it.39 = 0 &
+  it.40 = 11 & it.41 = 1 & it.42 = 2 & it.43 = 12 & it.44 = 5 &
+  it.45 = 10 & it.46 = 14 & it.47 = 7 & it.48 = 1 & it.49 = 10 &
+  it.50 = 13 & it.51 = 0 & it.52 = 6 & it.53 = 9 & it.54 = 8 &
+  it.55 = 7 & it.56 = 4 & it.57 = 15 & it.58 = 14 & it.59 = 3 &
+  it.60 = 11 & it.61 = 5 & it.62 = 2 & it.63 = 12;
+end;
+
+definition
+  func DES-SBOX4 -> Function of 64,16 means
+:: DESCIP_1:def 9
+  it.0 = 7 & it.1 = 13 & it.2 = 14 & it.3 = 3 & it.4 = 0 &
+  it.5 = 6 & it.6 = 9 & it.7 = 10 & it.8 = 1 & it.9 = 2 &
+  it.10 = 8 & it.11 = 5 & it.12 = 11 & it.13 = 12 & it.14 = 4 &
+  it.15 = 15 & it.16 = 13 & it.17 = 8 & it.18 = 11 & it.19 = 5 &
+  it.20 = 6 & it.21 = 15 & it.22 = 0 & it.23 = 3 & it.24 = 4 &
+  it.25 = 7 & it.26 = 2 & it.27 = 12 & it.28 = 1 & it.29 = 10 &
+  it.30 = 14 & it.31 = 9 & it.32 = 10 & it.33 = 6 & it.34 = 9 &
+  it.35 = 0 & it.36 = 12 & it.37 = 11 & it.38 = 7 & it.39 = 13 &
+  it.40 = 15 & it.41 = 1 & it.42 = 3 & it.43 = 14 & it.44 = 5 &
+  it.45 = 2 & it.46 = 8 & it.47 = 4 & it.48 = 3 & it.49 = 15 &
+  it.50 = 0 & it.51 = 6 & it.52 = 10 & it.53 = 1 & it.54 = 13 &
+  it.55 = 8 & it.56 = 9 & it.57 = 4 & it.58 = 5 & it.59 = 11 &
+  it.60 = 12 & it.61 = 7 & it.62 = 2 & it.63 = 14;
+end;
+
+definition
+  func DES-SBOX5 -> Function of 64,16 means
+:: DESCIP_1:def 10
+  it.0 = 2 & it.1 = 12 & it.2 = 4 & it.3 = 1 & it.4 = 7 &
+  it.5 = 10 & it.6 = 11 & it.7 = 6 & it.8 = 8 & it.9 = 5 &
+  it.10 = 3 & it.11 = 15 &it.12 = 13 & it.13 = 0 & it.14 = 14 &
+  it.15 = 9 & it.16 = 14 & it.17 = 11 & it.18 = 2 & it.19 = 12 &
+  it.20 = 4 & it.21 = 7 & it.22 = 13 & it.23 = 1 & it.24 = 5 &
+  it.25 = 0 & it.26 = 15 & it.27 = 10 & it.28 = 3 & it.29 = 9 &
+  it.30 = 8 & it.31 = 6 & it.32 = 4 & it.33 = 2 & it.34 = 1 &
+  it.35 = 11 & it.36 = 10 & it.37 = 13 & it.38 = 7 & it.39 = 8 &
+  it.40 = 15 & it.41 = 9 & it.42 = 12 & it.43 = 5 & it.44 = 6 &
+  it.45 = 3 & it.46 = 0 & it.47 = 14 & it.48 = 11 & it.49 = 8 &
+  it.50 = 12 & it.51 = 7 & it.52 = 1 & it.53 = 14 & it.54 = 2 &
+  it.55 = 13 & it.56 = 6 & it.57 = 15 & it.58 = 0 & it.59 = 9 &
+  it.60 = 10 & it.61 = 4 & it.62 = 5 & it.63 = 3;
+end;
+
+definition
+  func DES-SBOX6 -> Function of 64,16 means
+:: DESCIP_1:def 11
+  it.0 = 12 & it.1 = 1 & it.2 = 10 & it.3 = 15 & it.4 = 9 &
+  it.5 = 2 & it.6 = 6 & it.7 = 8 & it.8 = 0 & it.9 = 13 &
+  it.10 = 3 & it.11 = 4 & it.12 = 14 & it.13 = 7 & it.14 = 5 &
+  it.15 = 11 & it.16 = 10 & it.17 = 15 & it.18 = 4 & it.19 = 2 &
+  it.20 = 7 & it.21 = 12 & it.22 = 9 & it.23 = 5 & it.24 = 6 &
+  it.25 = 1 & it.26 = 13 & it.27 = 14 & it.28 = 0 & it.29 = 11 &
+  it.30 = 3 & it.31 = 8 & it.32 = 9 & it.33 = 14 & it.34 = 15 &
+  it.35 = 5 & it.36 = 2 & it.37 = 8 & it.38 = 12 & it.39 = 3 &
+  it.40 = 7 & it.41 = 0 & it.42 = 4 & it.43 = 10 & it.44 = 1 &
+  it.45 = 13 & it.46 = 11 & it.47 = 6 & it.48 = 4 & it.49 = 3 &
+  it.50 = 2 & it.51 = 12 & it.52 = 9 & it.53 = 5 & it.54 = 15 &
+  it.55 = 10 & it.56 = 11 & it.57 = 14 & it.58 = 1 & it.59 = 7 &
+  it.60 = 6 & it.61 = 0 & it.62 = 8 & it.63 = 13;
+end;
+
+definition
+  func DES-SBOX7 -> Function of 64,16 means
+:: DESCIP_1:def 12
+  it.0 = 4 & it.1 = 11 & it.2 = 2 & it.3 = 14 & it.4 = 15 &
+  it.5 = 0 & it.6 = 8 & it.7 = 13 & it.8 = 3 & it.9 = 12 &
+  it.10 = 9 & it.11 = 7 & it.12 = 5 & it.13 = 10 & it.14 = 6 &
+  it.15 = 1 & it.16 = 13 & it.17 = 0 & it.18 = 11 & it.19 = 7 &
+  it.20 = 4 & it.21 = 9 & it.22 = 1 & it.23 = 10 & it.24 = 14 &
+  it.25 = 3 & it.26 = 5 & it.27 = 12 & it.28 = 2 & it.29 = 15 &
+  it.30 = 8 & it.31 = 6 & it.32 = 1 & it.33 = 4 & it.34 = 11 &
+  it.35 = 13 & it.36 = 12 & it.37 = 3 & it.38 = 7 & it.39 = 14 &
+  it.40 = 10 & it.41 = 15 & it.42 = 6 & it.43 = 8 & it.44 = 0 &
+  it.45 = 5 & it.46 = 9 & it.47 = 2 & it.48 = 6 & it.49 = 11 &
+  it.50 = 13 & it.51 = 8 & it.52 = 1 & it.53 = 4 & it.54 = 10 &
+  it.55 = 7 & it.56 = 9 & it.57 = 5 & it.58 = 0 & it.59 = 15 &
+  it.60 = 14 & it.61 = 2 & it.62 = 3 & it.63 = 12;
+end;
+
+definition
+  func DES-SBOX8 -> Function of 64,16 means
+:: DESCIP_1:def 13
+  it.0 = 13 & it.1 = 2 & it.2 = 8 & it.3 = 4 & it.4 = 6 &
+  it.5 = 15 & it.6 = 11 & it.7 = 1 & it.8 = 10 & it.9 = 9 &
+  it.10 = 3 & it.11 = 14 & it.12 = 5 & it.13 = 0 & it.14 = 12 &
+  it.15 = 7 & it.16 = 1 & it.17 = 15 & it.18 = 13 & it.19 = 8 &
+  it.20 = 10 & it.21 = 3 & it.22 = 7 & it.23 = 4 & it.24 = 12 &
+  it.25 = 5 & it.26 = 5 & it.27 = 11 & it.28 = 0 & it.29 = 14 &
+  it.30 = 9 & it.31 = 2 & it.32 = 7 & it.33 = 11 & it.34 = 4 &
+  it.35 = 1 & it.36 = 9 & it.37 = 12 & it.38 = 14 & it.39 = 2 &
+  it.40 = 0 & it.41 = 6 & it.42 = 10 & it.43 = 13 & it.44 = 15 &
+  it.45 = 3 & it.46 = 5 & it.47 = 8 & it.48 = 2 & it.49 = 1 &
+  it.50 = 14 & it.51 = 7 & it.52 = 4 & it.53 = 10 & it.54 = 8 &
+  it.55 = 13 & it.56 = 15 & it.57 = 12 & it.58 = 9 & it.59 = 0 &
+  it.60 = 3 & it.61 = 5 & it.62 = 6 & it.63 = 11;
+end;
+
+begin :: Initial Permutation
+
+definition
+  let r be Element of 64-tuples_on BOOLEAN;
+  func DES-IP(r) -> Element of 64-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 14
+  it.1=r.58 & it.2=r.50 & it.3=r.42 & it.4=r.34 & it.5=r.26 &
+  it.6=r.18 & it.7=r.10 & it.8=r.2 & it.9=r.60 & it.10=r.52 &
+  it.11=r.44 & it.12=r.36 & it.13=r.28 & it.14=r.20 & it.15=r.12 &
+  it.16=r.4 & it.17=r.62 & it.18=r.54 & it.19=r.46 & it.20=r.38 &
+  it.21=r.30 & it.22=r.22 & it.23=r.14 & it.24=r.6 & it.25=r.64 &
+  it.26=r.56 & it.27=r.48 & it.28=r.40 & it.29=r.32 & it.30=r.24 &
+  it.31=r.16 & it.32=r.8 & it.33=r.57 & it.34=r.49 & it.35=r.41 &
+  it.36=r.33 & it.37=r.25 & it.38=r.17 & it.39=r.9 & it.40=r.1 &
+  it.41=r.59 & it.42=r.51 & it.43=r.43 & it.44=r.35 & it.45=r.27 &
+  it.46=r.19 & it.47=r.11 & it.48=r.3 & it.49=r.61 & it.50=r.53 &
+  it.51=r.45 & it.52=r.37 & it.53=r.29 & it.54=r.21 & it.55=r.13 &
+  it.56=r.5 & it.57=r.63 & it.58=r.55 & it.59=r.47 & it.60=r.39 &
+  it.61=r.31 & it.62=r.23 & it.63=r.15 & it.64=r.7;
+end;
+
+definition
+  func DES-PIP ->
+  Function of 64-tuples_on BOOLEAN,64-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 15
+  for i be Element of 64-tuples_on BOOLEAN holds it.i = DES-IP(i);
+end;
+
+definition
+  let r be Element of 64-tuples_on BOOLEAN;
+  func DES-IPINV(r) -> Element of 64-tuples_on BOOLEAN means
+:: DESCIP_1:def 16
+  it.1=r.40 & it.2=r.8 & it.3=r.48 & it.4=r.16 &
+  it.5=r.56 &it.6=r.24 & it.7=r.64 & it.8=r.32 &
+  it.9=r.39 & it.10=r.7 &it.11=r.47 & it.12=r.15 &
+  it.13=r.55 & it.14=r.23 & it.15=r.63 &it.16=r.31 &
+  it.17=r.38 & it.18=r.6 & it.19=r.46 & it.20=r.14 &
+  it.21=r.54 & it.22=r.22 & it.23=r.62 & it.24=r.30 &
+  it.25=r.37 &it.26=r.5 & it.27=r.45 & it.28=r.13 &
+  it.29=r.53 & it.30=r.21 &it.31=r.61 & it.32=r.29 &
+  it.33=r.36 & it.34=r.4 & it.35=r.44 &it.36=r.12 &
+  it.37=r.52 & it.38=r.20 & it.39=r.60 & it.40=r.28 &
+  it.41=r.35 & it.42=r.3 & it.43=r.43 & it.44=r.11 &
+  it.45=r.51 &it.46=r.19 & it.47=r.59 & it.48=r.27 &
+  it.49=r.34 & it.50=r.2 &it.51=r.42 & it.52=r.10 &
+  it.53=r.50 & it.54=r.18 & it.55=r.58 &it.56=r.26 &
+  it.57=r.33 & it.58=r.1 & it.59=r.41 & it.60=r.9 &
+  it.61=r.49 & it.62=r.17 & it.63=r.57 & it.64=r.25;
+end;
+
+definition
+  func DES-PIPINV ->
+  Function of 64-tuples_on BOOLEAN,64-tuples_on BOOLEAN means
+:: DESCIP_1:def 17
+  for i be Element of 64-tuples_on BOOLEAN holds it.i = DES-IPINV(i);
+end;
+
+registration
+  cluster DES-PIP -> bijective;
+end;
+
+registration
+  cluster DES-PIPINV -> bijective;
+end;
+
+theorem :: DESCIP_1:36
+  DES-PIPINV=DES-PIP";
+
+begin :: Feistel function
+
+definition
+  let r be Element of 32-tuples_on BOOLEAN;
+  func DES-E(r) -> Element of 48-tuples_on BOOLEAN means
+:: DESCIP_1:def 18
+  it.1=r.32 & it.2=r.1 & it.3=r.2& it.4=r.3& it.5=r.4&
+  it.6=r.5& it.7=r.4 & it.8=r.5 & it.9=r.6 & it.10=r.7 &
+  it.11=r.8 & it.12=r.9& it.13=r.8 & it.14=r.9 & it.15=r.10 &
+  it.16=r.11 & it.17=r.12 & it.18=r.13& it.19=r.12 & it.20=r.13 &
+  it.21=r.14 & it.22=r.15 & it.23=r.16 & it.24=r.17& it.25=r.16 &
+  it.26=r.17 & it.27=r.18 & it.28=r.19 & it.29=r.20 & it.30=r.21&
+  it.31=r.20 & it.32=r.21 & it.33=r.22 & it.34=r.23 & it.35=r.24 &
+  it.36=r.25& it.37=r.24 & it.38=r.25 & it.39=r.26 & it.40=r.27 &
+  it.41=r.28 & it.42=r.29& it.43=r.28 & it.44=r.29 & it.45=r.30 &
+  it.46=r.31 & it.47=r.32 & it.48=r.1;
+end;
+
+definition
+  let r be Element of 32-tuples_on BOOLEAN;
+  func DES-P(r) -> Element of 32-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 19
+  it.1=r.16 &it.2=r.7 &it.3=r.20 &it.4=r.21&
+  it.5=r.29 &it.6=r.12 &it.7=r.28 &it.8=r.17&
+  it.9=r.1 &it.10=r.15 &it.11=r.23 &it.12=r.26&
+  it.13=r.5 &it.14=r.18 &it.15=r.31 &it.16=r.10&
+  it.17=r.2 &it.18=r.8 &it.19=r.24 &it.20=r.14&
+  it.21=r.32 &it.22=r.27 &it.23=r.3 &it.24=r.9&
+  it.25=r.19 &it.26=r.13 &it.27=r.30 &it.28=r.6&
+  it.29=r.22 &it.30=r.11 &it.31=r.4 &it.32=r.25;
+end;
+
+definition
+  let r be Element of 48-tuples_on BOOLEAN;
+  func DES-DIV8(r) -> Element of 8-tuples_on (6-tuples_on BOOLEAN) means
+:: DESCIP_1:def 20
+
+  it.1 =Op-Left(r,6) &
+  it.2 =Op-Left(Op-Right(r,6),6) &
+  it.3 =Op-Left(Op-Right(r,12),6) &
+  it.4 =Op-Left(Op-Right(r,18),6) &
+  it.5 =Op-Left(Op-Right(r,24),6) &
+  it.6 =Op-Left(Op-Right(r,30),6) &
+  it.7 =Op-Left(Op-Right(r,36),6) &
+  it.8 =Op-Right(r,42);
+end;
+
+theorem :: DESCIP_1:37
+  for r be Element of 48-tuples_on BOOLEAN
+  ex s1,s2,s3,s4,s5,s6,s7,s8
+  be Element of 6-tuples_on BOOLEAN st
+  s1=(DES-DIV8(r)).1&
+  s2=(DES-DIV8(r)).2&
+  s3=(DES-DIV8(r)).3&
+  s4=(DES-DIV8(r)).4&
+  s5=(DES-DIV8(r)).5&
+  s6=(DES-DIV8(r)).6&
+  s7=(DES-DIV8(r)).7&
+  s8=(DES-DIV8(r)).8&
+  r=s1^s2^s3^s4^s5^s6^s7^s8;
+
+definition
+  let t be Element of 6-tuples_on BOOLEAN;
+  func B6toN64(t) -> Element of 64 equals
+:: DESCIP_1:def 21
+  32*(t.1) + 16*(t.6) + 8*(t.2) + 4*(t.3) + 2*(t.4) + 1*(t.5);
+end;
+
+definition
+  func N16toB4 -> Function of 16,4-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 22
+  it.0=<*0,0,0,0*>&
+  it.1=<*0,0,0,1*>&
+  it.2=<*0,0,1,0*>&
+  it.3=<*0,0,1,1*>&
+  it.4=<*0,1,0,0*>&
+  it.5=<*0,1,0,1*>&
+  it.6=<*0,1,1,0*>&
+  it.7=<*0,1,1,1*>&
+  it.8=<*1,0,0,0*>&
+  it.9=<*1,0,0,1*>&
+  it.10=<*1,0,1,0*>&
+  it.11=<*1,0,1,1*>&
+  it.12=<*1,1,0,0*>&
+  it.13=<*1,1,0,1*>&
+  it.14=<*1,1,1,0*>&
+  it.15=<*1,1,1,1*>;
+end;
+
+definition
+  let R be Element of 32-tuples_on BOOLEAN,
+  RKey be Element of 48-tuples_on BOOLEAN;
+  func DES-F(R,RKey) -> Element of 32-tuples_on BOOLEAN means
+:: DESCIP_1:def 23
+  ex D1,D2,D3,D4,D5,D6,D7,D8 be Element of 6-tuples_on BOOLEAN,
+  x1,x2,x3,x4,x5,x6,x7,x8 be Element of 4-tuples_on BOOLEAN,
+  C32 be Element of 32-tuples_on BOOLEAN
+  st
+  D1=(DES-DIV8(Op-XOR(DES-E(R),RKey))).1 &
+  D2=(DES-DIV8(Op-XOR(DES-E(R),RKey))).2 &
+  D3=(DES-DIV8(Op-XOR(DES-E(R),RKey))).3 &
+  D4=(DES-DIV8(Op-XOR(DES-E(R),RKey))).4 &
+  D5=(DES-DIV8(Op-XOR(DES-E(R),RKey))).5 &
+  D6=(DES-DIV8(Op-XOR(DES-E(R),RKey))).6 &
+  D7=(DES-DIV8(Op-XOR(DES-E(R),RKey))).7 &
+  D8=(DES-DIV8(Op-XOR(DES-E(R),RKey))).8 &
+  Op-XOR(DES-E(R),RKey) =D1^D2^D3^D4^D5^D6^D7^D8&
+  x1=N16toB4.(DES-SBOX1.(B6toN64(D1)))&
+  x2=N16toB4.(DES-SBOX2.(B6toN64(D2)))&
+  x3=N16toB4.(DES-SBOX3.(B6toN64(D3)))&
+  x4=N16toB4.(DES-SBOX4.(B6toN64(D4)))&
+  x5=N16toB4.(DES-SBOX5.(B6toN64(D5)))&
+  x6=N16toB4.(DES-SBOX6.(B6toN64(D6)))&
+  x7=N16toB4.(DES-SBOX7.(B6toN64(D7)))&
+  x8=N16toB4.(DES-SBOX8.(B6toN64(D8)))&
+  C32=x1^x2^x3^x4^x5^x6^x7^x8&
+  it=DES-P(C32);
+end;
+
+definition
+  func DES-FFUNC ->
+  Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+  32-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 24
+  for z be Element of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:]
+  holds it.z = DES-F(z`1 ,z`2);
+end;
+
+begin :: Key Schedule
+
+definition
+  let r be Element of 64-tuples_on BOOLEAN;
+  func DES-PC1(r) -> Element of 56-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 25
+  it.1=r.57&it.2=r.49&it.3=r.41&it.4=r.33&it.5=r.25&
+  it.6=r.17&it.7=r.9&it.8=r.1&it.9=r.58&it.10=r.50&
+  it.11=r.42&it.12=r.34&it.13=r.26&it.14=r.18&it.15=r.10&
+  it.16=r.2&it.17=r.59&it.18=r.51&it.19=r.43&it.20=r.35&
+  it.21=r.27&it.22=r.19&it.23=r.11&it.24=r.3&it.25=r.60&
+  it.26=r.52&it.27=r.44&it.28=r.36&it.29=r.63&it.30=r.55&
+  it.31=r.47&it.32=r.39&it.33=r.31&it.34=r.23&it.35=r.15&
+  it.36=r.7&it.37=r.62&it.38=r.54&it.39=r.46&it.40=r.38&
+  it.41=r.30&it.42=r.22&it.43=r.14&it.44=r.6&it.45=r.61&
+  it.46=r.53&it.47=r.45&it.48=r.37&it.49=r.29&it.50=r.21&
+  it.51=r.13&it.52=r.5&it.53=r.28&it.54=r.20&it.55=r.12&
+  it.56=r.4;
+end;
+
+definition
+  let r be Element of 56-tuples_on BOOLEAN;
+  func DES-PC2(r) -> Element of 48-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 26
+  it.1=r.14&it.2=r.17&it.3=r.11&it.4=r.24&it.5=r.1&
+  it.6=r.5&it.7=r.3&it.8=r.28&it.9=r.15&it.10=r.6&
+  it.11=r.21&it.12=r.10&it.13=r.23&it.14=r.19&
+  it.15=r.12&it.16=r.4&it.17=r.26&it.18=r.8&
+  it.19=r.16&it.20=r.7&it.21=r.27&it.22=r.20&
+  it.23=r.13&it.24=r.2&it.25=r.41&it.26=r.52&
+  it.27=r.31&it.28=r.37&it.29=r.47&it.30=r.55&
+  it.31=r.30&it.32=r.40&it.33=r.51&it.34=r.45&
+  it.35=r.33&it.36=r.48&it.37=r.44&it.38=r.49&
+  it.39=r.39&it.40=r.56&it.41=r.34&it.42=r.53&
+  it.43=r.46&it.44=r.42&it.45=r.50&it.46=r.36&
+  it.47=r.29&it.48=r.32;
+end;
+
+definition
+  func bitshift_DES -> FinSequence of NAT means
+:: DESCIP_1:def 27
+  it is 16-element &
+  it.1=1&it.2=1&it.3=2&it.4=2&
+  it.5=2&it.6=2&it.7=2&it.8=2&
+  it.9=1&it.10=2&it.11=2&it.12=2&
+  it.13=2&it.14=2&it.15=2&it.16=1;
+ end;
+
+definition
+  let Key be Element of 64-tuples_on BOOLEAN;
+  func DES-KS(Key) -> Element of (16-tuples_on (48-tuples_on BOOLEAN)) means
+:: DESCIP_1:def 28
+  ex C,D be sequence of (28-tuples_on BOOLEAN) st
+  C.0= Op-Left(DES-PC1(Key),28) & D.0= Op-Right(DES-PC1(Key),28)
+  & (for i be Element of NAT st 0<=i & i <=15
+  holds
+  it.(i+1)=DES-PC2((C.(i+1))^(D.(i+1)))
+  &
+  C.(i+1) = Op-Shift(C.i,bitshift_DES.i)
+  &
+  D.(i+1) = Op-Shift(D.i,bitshift_DES.i));
+end;
+
+begin
+
+definition
+  let n,m,k be non empty Element of NAT,
+  RK be Element of (k-tuples_on (m-tuples_on BOOLEAN)),
+  F be Function of [:n-tuples_on BOOLEAN,m-tuples_on BOOLEAN:],
+  n-tuples_on BOOLEAN,
+  IP be Permutation of (2*n)-tuples_on BOOLEAN,
+  M be Element of (2*n)-tuples_on BOOLEAN;
+  func DES-like-CoDec(M,F,IP,RK) -> Element of (2*n)-tuples_on BOOLEAN means
+:: DESCIP_1:def 29
+
+  ex L,R be sequence of (n-tuples_on BOOLEAN)
+  st
+  L.0= SP-Left(IP.M) & R.0= SP-Right(IP.M)
+  & (for i be Element of NAT st 0<=i & i <=k-1 holds L.(i+1)= R.i
+  &
+  R.(i+1)=Op-XOR(L.i,F.(R.i,RK/.(i+1))))
+  &
+  it=IP".((R.k )^(L.k));
+end;
+
+theorem :: DESCIP_1:38
+  for n,m,k be non empty Element of NAT,
+  RK be Element of k-tuples_on (m-tuples_on BOOLEAN),
+  F be Function of [:n-tuples_on BOOLEAN,m-tuples_on BOOLEAN:],
+  n-tuples_on BOOLEAN,
+  IP be Permutation of (2*n)-tuples_on BOOLEAN,
+  M be Element of (2*n)-tuples_on BOOLEAN holds
+  DES-like-CoDec(DES-like-CoDec(M,F,IP,RK),F,IP,Rev(RK))=M;
+
+definition
+  let RK be Element of (16-tuples_on (48-tuples_on BOOLEAN)),
+  F be Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+  32-tuples_on BOOLEAN,
+  IP be Permutation of 64-tuples_on BOOLEAN,
+  M be Element of 64-tuples_on BOOLEAN;
+  func DES-CoDec(M,F,IP,RK) -> Element of 64-tuples_on BOOLEAN
+  means
+:: DESCIP_1:def 30
+  ex IPX be Permutation of (2*32)-tuples_on BOOLEAN,
+  MX be Element of (2*32)-tuples_on BOOLEAN st
+  IPX=IP & MX =M & it =DES-like-CoDec(MX,F,IPX,RK);
+end;
+
+theorem :: DESCIP_1:39
+  for RK be Element of 16-tuples_on (48-tuples_on BOOLEAN),
+  F be Function of [:32-tuples_on BOOLEAN,48-tuples_on BOOLEAN:],
+  32-tuples_on BOOLEAN,
+  IP be Permutation of 64-tuples_on BOOLEAN,
+  M be Element of 64-tuples_on BOOLEAN holds
+  DES-CoDec(DES-CoDec(M,F,IP,RK),F,IP,Rev(RK))=M;
+
+definition
+  let plaintext,secretkey be Element of 64-tuples_on BOOLEAN;
+  func DES-ENC(plaintext,secretkey) -> Element of 64-tuples_on BOOLEAN
+  equals
+:: DESCIP_1:def 31
+  DES-CoDec (plaintext,DES-FFUNC,DES-PIP,DES-KS(secretkey));
+end;
+
+definition
+  let ciphertext,secretkey be Element of 64-tuples_on BOOLEAN;
+  func DES-DEC(ciphertext,secretkey) -> Element of 64-tuples_on BOOLEAN
+  equals
+:: DESCIP_1:def 32
+  DES-CoDec (ciphertext,DES-FFUNC,DES-PIP,Rev(DES-KS(secretkey)));
+end;
+
+theorem :: DESCIP_1:40
+  for message,secretkey be Element of 64-tuples_on BOOLEAN
+  holds DES-DEC(DES-ENC(message,secretkey),secretkey) = message;

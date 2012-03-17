@@ -2,7 +2,7 @@
 ::  by Hiroshi Imura , Yuji Sakai and Yasunari Shidama
 ::
 :: Received June 4, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,18 +15,17 @@
 environ
 
  vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
-      NAT_1, FDIFF_1, SUBSET_1, LOPBAN_1, RELAT_1, XXREAL_2, RSSPACE, RCOMP_1,
-      TARSKI, SEQ_1, ARYTM_3, VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2,
-      SUPINF_2, FCONT_1, COMPLEX1, STRUCT_0, CARD_1, VALUED_0, XXREAL_0,
-      FUNCOP_1, XREAL_0, ORDINAL1, XBOOLE_0, NDIFF_2;
+      NAT_1, FDIFF_1, SUBSET_1, LOPBAN_1, RELAT_1, RSSPACE, RCOMP_1, TARSKI,
+      SEQ_1, ARYTM_3, VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2,
+      FCONT_1, COMPLEX1, STRUCT_0, CARD_1, VALUED_0, XXREAL_0, FUNCOP_1,
+      XREAL_0, ORDINAL1, XBOOLE_0, NDIFF_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1,
       SQUARE_1, FUNCOP_1, RLVECT_1, PRE_TOPC, STRUCT_0, VALUED_0, VALUED_1,
       SEQ_1, SEQ_2, VFUNCT_1, NORMSP_0, NORMSP_1, RSSPACE, LOPBAN_1, NFCONT_1,
       FDIFF_1, NDIFF_1;
- constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, FDIFF_1,
-      RSSPACE, VFUNCT_1, LOPBAN_3, NFCONT_1, NDIFF_1, SEQ_1, VALUED_1,
-      NORMSP_1, RELSET_1;
+ constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_2, FDIFF_1, RSSPACE, VFUNCT_1,
+      NFCONT_1, NDIFF_1, SEQ_1, VALUED_1, RELSET_1, COMSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED,
       FDIFF_1, STRUCT_0, LOPBAN_1, LOPBAN_2, NDIFF_1, VALUED_1, FUNCT_2,
       NUMBERS, VALUED_0, FUNCOP_1;
@@ -40,7 +39,7 @@ reserve S,T for non trivial RealNormSpace;
 reserve x0 for Point of S;
 reserve f for PartFunc of S,T;
 reserve c for constant sequence of S;
-reserve R for REST of S,T;
+reserve R for RestFunc of S,T;
 
 definition
   let X,Y,Z be RealNormSpace;
@@ -64,19 +63,22 @@ end;
 theorem :: NDIFF_2:1
   for x0 be Point of S st f is_differentiable_in x0 ex N being
   Neighbourhood of x0 st ( N c= dom f & for z be Point of S holds for h be
-convergent_to_0 Real_Sequence for c st rng c = {x0} & rng (h*z+c) c= N holds h"
+0-convergent non-zero Real_Sequence
+for c st rng c = {x0} & rng (h*z+c) c= N holds h"
 (#)(f/*(h*z+c) - f/*c) is convergent & diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f
   /*c)) );
 
 theorem :: NDIFF_2:2
   for x0 be Point of S st f is_differentiable_in x0 for z be Point of S
-  for h be convergent_to_0 Real_Sequence for c st rng c = {x0} & rng (h*z+c) c=
+  for h be 0-convergent non-zero Real_Sequence
+  for c st rng c = {x0} & rng (h*z+c) c=
 dom f holds h"(#)(f/*(h*z+c) - f/*c) is convergent & diff(f,x0).z = lim (h"(#)(
   f/*(h*z+c) - f/*c));
 
 theorem :: NDIFF_2:3
   for x0 be Point of S for N be Neighbourhood of x0 st N c= dom f
-  for z be Point of S for dv be Point of T holds ( (for h be convergent_to_0
+  for z be Point of S for dv be Point of T holds
+  ( (for h be 0-convergent non-zero
 Real_Sequence for c st ( rng c = {x0} & rng (h*z+c) c= N ) holds h"(#)(f/*(h*z+
   c) - f/*c) is convergent & dv = lim (h"(#)(f/*(h*z+c) - f/*c))) iff for e be
 Real st e > 0 holds ex d be Real st d > 0 & for h be Real st abs(h) < d & h <>
@@ -128,45 +130,49 @@ end;
 theorem :: NDIFF_2:5
   for x0 be Point of S, z be Point of S holds ( f
 is_Gateaux_differentiable_in x0,z iff ex N being Neighbourhood of x0 st ( N c=
-dom f & ex dv be Point of T st for h be convergent_to_0 Real_Sequence for c st
+dom f & ex dv be Point of T st
+for h be 0-convergent non-zero Real_Sequence for c st
 rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent &
   dv= lim (h"(#)(f/*(h*z+c) - f/*c)) ) );
 
 theorem :: NDIFF_2:6
   for x0 be Point of S st f is_differentiable_in x0 for z be Point of S
 holds ( f is_Gateaux_differentiable_in x0,z & Gateaux_diff(f,x0,z)=diff(f,x0).z
-  & ex N being Neighbourhood of x0 st ( N c= dom f & for h be convergent_to_0
+  & ex N being Neighbourhood of x0 st
+  ( N c= dom f & for h be 0-convergent non-zero
 Real_Sequence, c st rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f
   /*c) is convergent & Gateaux_diff(f,x0,z)= lim (h"(#)(f/*(h*z+c) - f/*c))) );
 
 reserve U for non trivial RealNormSpace;
 
 theorem :: NDIFF_2:7
-  for R be REST of S,T st R/.0.S=0.T for e be Real st e > 0 ex d be
+  for R be RestFunc of S,T st R/.0.S=0.T for e be Real st e > 0 ex d be
   Real st d > 0 & for h be Point of S st ||.h.|| < d holds ||.R/.h.|| <= e*||.h
   .||;
 
 theorem :: NDIFF_2:8
-  for R be REST of T,U st R/.0.T=0.U for L be bounded LinearOperator of
-  S,T holds R*L is REST of S,U;
+  for R be RestFunc of T,U st R/.0.T=0.U
+  for L be Lipschitzian LinearOperator of
+  S,T holds R*L is RestFunc of S,U;
 
 theorem :: NDIFF_2:9
-  for R be REST of S,T for L be bounded LinearOperator of T,U holds
-  L*R is REST of S,U;
+  for R be RestFunc of S,T for L be Lipschitzian LinearOperator of T,U holds
+  L*R is RestFunc of S,U;
 
 theorem :: NDIFF_2:10
-  for R1 be REST of S,T st R1/.0.S=0.T for R2 be REST of T,U st R2/.0.T=
-  0.U holds R2*R1 is REST of S,U;
+  for R1 be RestFunc of S,T st R1/.0.S=0.T
+  for R2 be RestFunc of T,U st R2/.0.T=0.U holds R2*R1 is RestFunc of S,U;
 
 theorem :: NDIFF_2:11
-  for R1 be REST of S,T st R1/.0.S=0.T for R2 be REST of T,U st R2
-/.0.T=0.U for L be bounded LinearOperator of S,T holds R2*(L+R1) is REST of S,U
-;
+  for R1 be RestFunc of S,T st R1/.0.S=0.T for R2 be RestFunc of T,U st R2
+/.0.T=0.U for L be Lipschitzian LinearOperator of S,T holds
+R2*(L+R1) is RestFunc of S,U;
 
 theorem :: NDIFF_2:12
-  for R1 be REST of S,T st R1/.0.S=0.T for R2 be REST of T,U st R2
-  /.0.T=0.U for L1 be bounded LinearOperator of S,T for L2 be bounded
-  LinearOperator of T,U holds L2*R1+ R2*(L1+R1) is REST of S,U;
+  for R1 be RestFunc of S,T st R1/.0.S=0.T for R2 be RestFunc of T,U st R2
+  /.0.T=0.U for L1 be Lipschitzian LinearOperator of S,T
+  for L2 be Lipschitzian
+  LinearOperator of T,U holds L2*R1+ R2*(L1+R1) is RestFunc of S,U;
 
 theorem :: NDIFF_2:13
   for f1 be PartFunc of S,T st f1 is_differentiable_in x0 for f2 be

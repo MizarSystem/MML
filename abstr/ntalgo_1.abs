@@ -1,0 +1,353 @@
+:: Extended Euclidean Algorithm and CRT Algorithm
+::  by Hiroyuki Okazaki , Yosiki Aoki and Yasunari Shidama
+:: 
+:: Received February 8, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies RECDEF_2, TARSKI, XBOOLE_0, FINSEQ_1, RELAT_1, FUNCT_1, COMPLEX1,
+      NAT_1, MCART_1, ZFMISC_1, SUBSET_1, NUMBERS, INT_1, INT_2, CARD_1,
+      ARYTM_1, XXREAL_0, ARYTM_3, ORDINAL4, NTALGO_1, CARD_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, XTUPLE_0, MCART_1,
+      FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1, INT_2, NAT_D,
+      FINSEQ_1, RVSUM_1, ORDINAL1;
+ constructors XXREAL_0, NAT_D, REAL_1, BINARITH, RVSUM_1, XTUPLE_0;
+ registrations XREAL_0, RELSET_1, ORDINAL1, INT_1, SUBSET_1, FINSEQ_1, NAT_1,
+      XXREAL_0, XBOOLE_0, VALUED_0, CARD_1, NUMBERS, XTUPLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin :: Euclidean Algorithm
+
+theorem :: NTALGO_1:1
+for x,p be Integer holds (x mod p) mod p = x mod p;
+
+definition
+  let a,b be Element of INT;
+  func ALGO_GCD(a,b) -> Element of NAT means
+:: NTALGO_1:def 1
+
+  ex A,B be sequence of NAT st
+  A.0 = abs(a) & B.0 = abs(b) &
+  (for i be Element of NAT holds
+  A.(i+1) = B.i &
+  B.(i+1) = A.i mod B.i) &
+  it = A. (min*{i where i is Element of NAT: B.i = 0} );
+end;
+
+theorem :: NTALGO_1:2 ::Th1:
+  for a,b be Element of INT
+  holds
+  ALGO_GCD(a,b) = a gcd b;
+
+begin ::Extended Euclidean Algorithm
+::==========================================================================================
+::NZMATH source code
+::
+:: def extgcd(x,y):
+:: """
+:: Return a tuple (u,v,d); they are the greatest common divisor d
+:: of two integers x and y and u,v such that d = x * u + y * v.
+:: """
+:: # Crandall & Pomerance "PRIME NUMBERS",Algorithm 2.1.4
+:: a,b,g,u,v,w = 1,0,x,0,1,y
+:: while w:
+:: q,t = divmod(g,w)
+:: a,b,g,u,v,w = u,v,w,a-q*u,b-q*v,t
+:: if g >= 0:
+:: return (a,b,g)
+:: else:
+:: return (-a,-b,-g)
+::==========================================================================================
+
+scheme :: NTALGO_1:sch 1
+
+  QuadChoiceRec { A,B,C,D() -> non empty set,
+  A0() -> Element of A(),B0() -> Element of B(),
+  C0() -> Element of C(),D0() -> Element of D(),
+  P[set,set,set,set,set,set,set,set,set] }:
+  ex f being Function of NAT,A(),g being Function of NAT,B(),
+  h being Function of NAT,C(),i being Function of NAT,D()
+  st f.0 = A0() & g.0 = B0() &h.0 = C0() & i.0 = D0()
+  & for n being Element of
+  NAT holds P[n,f.n,g.n,h.n,i.n,f.(n+1),g.(n+1),h.(n+1),i.(n+1)]
+  provided
+   for n being Element of NAT,x being Element of A(),y being Element
+  of B(),z being Element of C(),w being Element of D()
+  ex x1 being Element of A(),y1 being Element of B(),
+  z1 being Element of C(),w1 being Element of D()
+  st P[n,x,y,z,w,x1,y1,z1,w1];
+
+definition
+  let x,y be Element of INT;
+  func ALGO_EXGCD(x,y) -> Element of [:INT,INT,INT:] means
+:: NTALGO_1:def 2
+
+  ex g,w,q,t be sequence of INT,
+  a,b,v,u be sequence of INT,
+  istop be Element of NAT
+  st
+  a.0 = 1 & b.0 = 0 & g.0 = x & q.0 =0
+  & u.0 = 0 & v.0 = 1 & w.0 = y & t.0 =0
+  &
+  (for i be Element of NAT
+  holds
+  q.(i+1) = g.i div w.i & t.(i+1) = g.i mod w.i
+  &
+  a.(i+1) = u.i & b.(i+1) = v.i & g.(i+1) = w.i
+  &
+  u.(i+1) = a.i - q.(i+1)*u.i & v.(i+1) = b.i - q.(i+1)*v.i
+  &
+  w.(i+1) = t.(i+1))
+  & istop = min*{i where i is Element of NAT: w.i = 0}
+  & (0 <= g.istop implies it =[a.istop,b.istop,g.istop] )
+  & (g.istop < 0 implies it =[-(a.istop),-(b.istop),-(g.istop)] );
+end;
+
+theorem :: NTALGO_1:3
+  for i2,i1 being Integer st i2 <= 0 holds
+  i1 mod i2 <= 0;
+
+theorem :: NTALGO_1:4
+  for i2,i1 being Integer st i2 < 0 holds
+  -(i1 mod i2) < -i2;
+
+theorem :: NTALGO_1:5
+  for x,y be Element of INT
+  st abs(y) <> 0 holds
+  abs(x mod y) < abs(y);
+
+theorem :: NTALGO_1:6
+  for x,y be Element of INT
+  holds
+  ALGO_EXGCD(x,y)`3_3 = x gcd y
+  &
+  ALGO_EXGCD(x,y)`1_3 * x + ALGO_EXGCD(x,y)`2_3 * y
+  = x gcd y;
+
+::==========================================================================================
+::NZMATH source code
+:: def inverse(x,p):
+:: """
+:: This function returns inverse of x for modulo p.
+:: """
+:: x = x % p
+:: y = gcd.extgcd(p,x)
+:: if y[2] == 1:
+:: if y[1] < 0:
+:: r = p + y[1]
+:: return r
+:: else:
+:: return y[1]
+:: raise ZeroDivisionError("There is no inverse for %d modulo %d." % (x,p))
+::=======================================================================================
+
+definition
+  let x,p be Element of INT;
+  func ALGO_INVERSE(x,p) -> Element of INT means
+:: NTALGO_1:def 3
+
+  for y be Element of INT st y = (x mod p) holds
+  ( ALGO_EXGCD(p,y)`3_3 = 1 implies
+  ( ( ALGO_EXGCD(p,y)`2_3 < 0) implies
+  (ex z be Element of INT st z = ALGO_EXGCD(p,y)`2_3
+  & it = p + z ))
+  &
+  ( (0 <= ALGO_EXGCD(p,y)`2_3) implies it = ALGO_EXGCD(p,y)`2_3)
+  )
+  &
+  ( ALGO_EXGCD(p,y)`3_3 <> 1 implies it = {} );
+end;
+
+theorem :: NTALGO_1:7
+  for x,p,y be Element of INT
+  st y = x mod p & ALGO_EXGCD(p,y)`3_3 = 1
+  holds
+  ( ALGO_INVERSE(x,p) * x ) mod p = 1 mod p;
+
+begin ::Algorithm for Chinese Remainder Theorem
+:: def ALGO_CRT(nlist):
+:: """
+:: This function is Chinese Remainder Theorem using Algorithm 2.1.7
+:: of C.Pomerance and R.Crandall's book.
+::
+:: For example:
+:: >>> ALGO_CRT([(1,2),(2,3),(3,5)])
+:: 23
+:: """
+:: r = len(nlist)
+:: if r == 1 :
+:: return nlist [ 0 ] [ 0 ]
+::
+:: product = []
+:: prodinv = []
+:: m = 1
+:: for i in range(1,r):
+:: m = m*nlist[i-1][1]
+:: c = inverse(m,nlist[i][1])
+:: product.append(m)
+:: prodinv.append(c)
+::
+:: M = product[r-2]*nlist[r-1][1]
+:: n = nlist[0][0]
+:: for i in range(1,r):
+:: u = ((nlist[i][0]-n)*prodinv[i-1]) % nlist[i][1]
+:: n += u*product[i-1]
+:: return n % M
+::==========================================================================================
+
+definition
+  let nlist be non empty FinSequence of [:INT,INT:];
+  func ALGO_CRT(nlist) -> Element of INT means
+:: NTALGO_1:def 4
+
+  ( len nlist = 1 implies it = (nlist.1)`1)
+  &
+  ( len nlist <> 1 implies
+  ex m,n,prodc,prodi be FinSequence of INT,
+  M0,M be Element of INT
+  st len m = len nlist
+  & len n = len nlist
+  & len prodc = len nlist - 1
+  & len prodi = len nlist - 1
+  & m.1 =1
+  & (for i be Nat
+  st 1<=i & i<=(len m) - 1
+  holds
+  ex d,x,y be Element of INT
+  st x = (nlist.i)`2
+  &
+  m.(i+1) = m.i * x
+  &
+  y = m.(i+1)
+  &
+  d = (nlist.(i+1))`2
+  &
+  prodi.i = ALGO_INVERSE(y,d)
+  &
+  prodc.i = y
+  )
+
+  & M0 = (nlist.(len m))`2
+  & M = (prodc.((len m)-1))*M0
+  & n.1 = (nlist.1)`1
+  & (for i be Nat st 1<=i & i<=len m - 1 holds
+  ex u,u0,u1 be Element of INT
+  st
+  u0 = ( nlist.(i+1))`1&
+  u1 = ( nlist.(i+1))`2 &
+  u = ( (u0-n.i)*(prodi.i)) mod u1 &
+  n.(i+1) = n.i + u*(prodc.i)) &
+  it = n.(len m) mod M );
+end;
+
+theorem :: NTALGO_1:8
+  for a,b be Element of INT st b <> 0 holds (a mod b),a are_congruent_mod b;
+
+theorem :: NTALGO_1:9
+  for a,b be Element of INT st b <>0 holds
+  (a mod b ) gcd b = a gcd b;
+
+theorem :: NTALGO_1:10
+  for a,b,c be Element of INT
+  st c <>0 & a = b mod c
+  &
+  b,c are_relative_prime
+  holds a,c are_relative_prime;
+
+theorem :: NTALGO_1:11
+  for nlist be non empty FinSequence of [:INT,INT:],
+  a,b be FinSequence of INT
+  st len a = len b & len a = len nlist
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds b.i <> 0 )
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds
+  (nlist.i)`1 = a.i & (nlist.i)`2 = b.i )
+  &
+  (for i,j be Nat st i in Seg (len nlist)
+  & j in Seg (len nlist)
+  & i <> j
+  holds b.i,b.j are_relative_prime )
+  holds
+  for i be Nat st i in Seg (len nlist)
+  holds ALGO_CRT(nlist) mod b.i = a.i mod b.i;
+
+theorem :: NTALGO_1:12
+  for x,y be Element of INT,
+  b,m be non empty FinSequence of INT
+  st
+  2 <=len b
+  &
+  (for i,j be Nat st i in Seg (len b)
+  & j in Seg (len b)
+  & i <> j
+  holds b.i,b.j are_relative_prime )
+  &
+  (for i be Nat
+  st i in Seg len b
+  holds x mod b.i = y mod b.i )
+  &
+  m.1 = 1 holds
+  for k be Element of NAT
+  st
+  1<= k & k <= len b
+  &
+  (for i be Nat st 1<=i & i <=k
+  holds
+  m.(i+1) = m.i * b.i )
+  holds
+  x mod m.(k+1) = y mod m.(k+1);
+
+theorem :: NTALGO_1:13
+  for b be FinSequence of INT
+  st len b = 1 holds Product b = b.1;
+
+theorem :: NTALGO_1:14
+  for b be FinSequence of INT
+  ex m be non empty FinSequence of INT
+  st
+  len m = len b + 1
+  &
+  m.1 = 1
+  &
+  (for i be Nat st 1<=i & i <=len b
+  holds
+  m.(i+1) = m.i * b.i )
+  &
+  Product b = m.(len b + 1 );
+
+theorem :: NTALGO_1:15
+  for nlist be non empty FinSequence of [:INT,INT:],
+  a,b be non empty FinSequence of INT,
+  x,y be Element of INT
+  st len a = len b & len a = len nlist
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds b.i <> 0 )
+
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds
+  (nlist.i)`1 = a.i & (nlist.i)`2 =b.i )
+  &
+  (for i,j be Nat st i in Seg (len nlist)
+  & j in Seg (len nlist)
+  & i <> j
+  holds b.i,b.j are_relative_prime )
+  &
+  (for i be Nat st i in Seg (len nlist)
+  holds x mod b.i = a.i mod b.i )
+  & y = Product b
+  holds ALGO_CRT(nlist) mod y = x mod y;

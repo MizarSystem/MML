@@ -2,7 +2,7 @@
 ::  by Hiroshi Imura , Yuji Sakai and Yasunari Shidama
 ::
 :: Received June 4, 2004
-:: Copyright (c) 2004-2011 Association of Mizar Users
+:: Copyright (c) 2004-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,18 +15,17 @@
 environ
 
  vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
-      NAT_1, FDIFF_1, SUBSET_1, LOPBAN_1, RELAT_1, XXREAL_2, RSSPACE, RCOMP_1,
-      TARSKI, SEQ_1, ARYTM_3, VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2,
-      SUPINF_2, FCONT_1, COMPLEX1, STRUCT_0, CARD_1, VALUED_0, XXREAL_0,
-      FUNCOP_1, XREAL_0, ORDINAL1, XBOOLE_0, NDIFF_2;
+      NAT_1, FDIFF_1, SUBSET_1, LOPBAN_1, RELAT_1, RSSPACE, RCOMP_1, TARSKI,
+      SEQ_1, ARYTM_3, VALUED_1, FUNCT_2, ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2,
+      FCONT_1, COMPLEX1, STRUCT_0, CARD_1, VALUED_0, XXREAL_0, FUNCOP_1,
+      XREAL_0, ORDINAL1, XBOOLE_0, NDIFF_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1,
       SQUARE_1, FUNCOP_1, RLVECT_1, PRE_TOPC, STRUCT_0, VALUED_0, VALUED_1,
       SEQ_1, SEQ_2, VFUNCT_1, NORMSP_0, NORMSP_1, RSSPACE, LOPBAN_1, NFCONT_1,
       FDIFF_1, NDIFF_1;
- constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, FDIFF_1,
-      RSSPACE, VFUNCT_1, LOPBAN_3, NFCONT_1, NDIFF_1, SEQ_1, VALUED_1,
-      NORMSP_1, RELSET_1;
+ constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_2, FDIFF_1, RSSPACE, VFUNCT_1,
+      NFCONT_1, NDIFF_1, SEQ_1, VALUED_1, RELSET_1, COMSEQ_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED,
       FDIFF_1, STRUCT_0, LOPBAN_1, LOPBAN_2, NDIFF_1, VALUED_1, FUNCT_2,
       NUMBERS, VALUED_0, FUNCOP_1;
@@ -36,7 +35,7 @@ environ
       ZFMISC_1, SEQ_1, SEQ_2, NAT_1, RELAT_1, FUNCT_1, VFUNCT_1, FUNCT_2,
       SEQ_4, NORMSP_1, LOPBAN_1, LOPBAN_2, LOPBAN_3, PARTFUN1, PARTFUN2,
       NFCONT_1, FDIFF_1, NDIFF_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
-      VALUED_1, VALUED_0, ORDINAL1, GRCAT_1, NORMSP_0;
+      VALUED_1, VALUED_0, ORDINAL1, VECTSP_1, NORMSP_0;
  schemes FUNCT_2;
 
 begin :: Differentiable Functions on Normed Linear Spaces
@@ -46,7 +45,7 @@ reserve S,T for non trivial RealNormSpace;
 reserve x0 for Point of S;
 reserve f for PartFunc of S,T;
 reserve c for constant sequence of S;
-reserve R for REST of S,T;
+reserve R for RestFunc of S,T;
 
 definition
   let X,Y,Z be RealNormSpace;
@@ -57,7 +56,7 @@ definition
   modetrans(f,X,Y);
   correctness
   proof
-    modetrans(g,Y,Z)*modetrans(f,X,Y) is bounded LinearOperator of X,Z by
+    modetrans(g,Y,Z)*modetrans(f,X,Y) is Lipschitzian LinearOperator of X,Z by
 LOPBAN_2:2;
     hence thesis by LOPBAN_1:def 9;
   end;
@@ -76,7 +75,7 @@ definition
       R_VectorSpace_of_LinearOperators(X,Z)), Add_(BoundedLinearOperators(X,Z),
 R_VectorSpace_of_LinearOperators(X,Z)), Mult_(BoundedLinearOperators(X,Z),
 R_VectorSpace_of_LinearOperators(X,Z)), BoundedLinearOperatorsNorm(X,Z) #) &
-modetrans(g,Y,Z)*modetrans(f,X,Y) is bounded LinearOperator of X,Z by
+modetrans(g,Y,Z)*modetrans(f,X,Y) is Lipschitzian LinearOperator of X,Z by
 LOPBAN_1:def 14,LOPBAN_2:2;
     hence thesis by LOPBAN_1:def 9;
   end;
@@ -85,7 +84,8 @@ end;
 theorem Th1:
   for x0 be Point of S st f is_differentiable_in x0 ex N being
   Neighbourhood of x0 st ( N c= dom f & for z be Point of S holds for h be
-convergent_to_0 Real_Sequence for c st rng c = {x0} & rng (h*z+c) c= N holds h"
+0-convergent non-zero Real_Sequence
+for c st rng c = {x0} & rng (h*z+c) c= N holds h"
 (#)(f/*(h*z+c) - f/*c) is convergent & diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f
   /*c)) )
 proof
@@ -102,7 +102,7 @@ A4: for x be Point of S st x in N holds f/.x - f/.x0 = diff(f,x0).(x-x0)
   + R/.(x-x0) by A2;
   now
     let z be Point of S;
-    let h be convergent_to_0 Real_Sequence;
+    let h be 0-convergent non-zero Real_Sequence;
     let c such that
 A5: rng c = {x0} and
 A6: rng (h*z+c) c= N;
@@ -136,7 +136,8 @@ NDIFF_1:def 2
         end;
         case
           z<> 0.S;
-          then reconsider s = h*z as convergent_to_0 sequence of S by
+          then reconsider s = h*z as (0.S)-convergent non-zero sequence of S
+          by
 NDIFF_1:21;
           now
             let n be Element of NAT;
@@ -144,12 +145,10 @@ NDIFF_1:21;
             then dom R = the carrier of S by PARTFUN1:def 2;
             then
 A11:        rng s c= dom R;
-            h is non-zero by FDIFF_1:def 1;
-            then h.n <> 0 by SEQ_1:5;
+            h.n <> 0 by SEQ_1:5;
             then
 A12:        abs(h.n) <> 0 by COMPLEX1:47;
-            s is non-zero by NDIFF_1:def 4;
-            then s.n <> 0.S by NDIFF_1:7;
+            s.n <> 0.S by NDIFF_1:7;
             then
 A13:        ||.s.n.|| <> 0 by NORMSP_0:def 5;
             ||.s.n.|| = ||.(h.n)*z.|| by NDIFF_1:def 3
@@ -236,8 +235,6 @@ LOPBAN_1:def 14;
       then reconsider
       L = diff(f,x0) as Element of BoundedLinearOperators(S,T);
       let n be Element of NAT;
-      h is non-zero by FDIFF_1:def 1;
-      then
 A24:  h.n <> 0 by SEQ_1:5;
       dom c = NAT by FUNCT_2:def 1;
       then c.n in rng c by FUNCT_1:3;
@@ -323,7 +320,8 @@ end;
 
 theorem
   for x0 be Point of S st f is_differentiable_in x0 for z be Point of S
-  for h be convergent_to_0 Real_Sequence for c st rng c = {x0} & rng (h*z+c) c=
+  for h be 0-convergent non-zero Real_Sequence
+  for c st rng c = {x0} & rng (h*z+c) c=
 dom f holds h"(#)(f/*(h*z+c) - f/*c) is convergent & diff(f,x0).z = lim (h"(#)(
   f/*(h*z+c) - f/*c))
 proof
@@ -331,11 +329,11 @@ proof
   assume f is_differentiable_in x0;
   then consider N being Neighbourhood of x0 such that
 A1: N c= dom f and
-A2: for z be Point of S holds for h be convergent_to_0 Real_Sequence for
+A2: for z be Point of S holds for h be 0-convergent non-zero Real_Sequence for
   c st rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is
   convergent & diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f/*c)) by Th1;
   let z be Point of S;
-  let h be convergent_to_0 Real_Sequence;
+  let h be 0-convergent non-zero Real_Sequence;
   let c such that
 A3: rng c = {x0} and
 A4: rng (h*z+c) c= dom f;
@@ -369,7 +367,7 @@ A12:    ||.z.||+1 > 0+0 by NORMSP_1:4,XREAL_1:8;
       then consider pp be Real such that
 A13:  pp > 0 and
 A14:  pp*||.z.|| < p;
-      h is convergent & lim h =0 by FDIFF_1:def 1;
+      h is convergent & lim h =0;
       then consider n be Element of NAT such that
 A15:  for m be Element of NAT st n <= m holds abs(h.m- 0) < pp by A13,
 SEQ_2:def 7;
@@ -463,7 +461,8 @@ end;
 
 theorem Th3:
   for x0 be Point of S for N be Neighbourhood of x0 st N c= dom f
-  for z be Point of S for dv be Point of T holds ( (for h be convergent_to_0
+  for z be Point of S for dv be Point of T holds
+  ( (for h be 0-convergent non-zero
 Real_Sequence for c st ( rng c = {x0} & rng (h*z+c) c= N ) holds h"(#)(f/*(h*z+
   c) - f/*c) is convergent & dv = lim (h"(#)(f/*(h*z+c) - f/*c))) iff for e be
 Real st e > 0 holds ex d be Real st d > 0 & for h be Real st abs(h) < d & h <>
@@ -477,7 +476,7 @@ A1: N c= dom f;
 A2: now
     reconsider c = NAT --> x0 as sequence of S;
     assume
-A3: for h be convergent_to_0 Real_Sequence for c st rng c = {x0} & rng
+A3: for h be 0-convergent non-zero Real_Sequence for c st rng c = {x0} & rng
 (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent & dv = lim (h"(#)(f/*
     (h*z+c) - f/*c));
     now
@@ -553,8 +552,8 @@ A17: lim h = 0 by A10,SEQ_2:def 7;
       hence thesis;
     end;
     then h is non-zero by SEQ_1:5;
-    then reconsider h as convergent_to_0 Real_Sequence by A16,A17,FDIFF_1:def 1
-;
+    then reconsider h as 0-convergent non-zero Real_Sequence
+    by A16,A17,FDIFF_1:def 1;
     now
       let x be set;
       assume x in rng (h*z+c);
@@ -600,11 +599,11 @@ A24: for e be Real st e > 0 holds ex d be Real st d > 0 & for h be
 Real st abs(h) < d & h <> 0 & h*z+x0 in N holds ||. h"*(f/.(h*z+x0) - f/.x0) -
     dv .|| < e;
     now
-      let h be convergent_to_0 Real_Sequence;
+      let h be 0-convergent non-zero Real_Sequence;
       let c such that
 A25:  rng c = {x0} and
 A26:  rng (h*z+c) c= N;
-A27:  h is convergent & lim h = 0 by FDIFF_1:def 1;
+A27:  h is convergent & lim h = 0;
       x0 in N by NFCONT_1:4;
       then
 A28:  rng c c= dom f by A1,A25,ZFMISC_1:31;
@@ -614,32 +613,31 @@ A29:  for n be Element of NAT holds c.n=x0
         c.n in rng c by NFCONT_1:6;
         hence thesis by A25,TARSKI:def 1;
       end;
-A30:  h is non-zero by FDIFF_1:def 1;
-A31:  now
+A30:  now
         let r be Real;
         assume r > 0;
         then consider d be Real such that
-A32:    d > 0 and
-A33:    for h be Real st abs(h) < d & h <> 0 & h*z+x0 in N holds ||.
+A31:    d > 0 and
+A32:    for h be Real st abs(h) < d & h <> 0 & h*z+x0 in N holds ||.
         h"*(f/.(h*z+x0) - f/.x0) - dv .|| < r by A24;
         consider n be Element of NAT such that
-A34:    for m be Element of NAT st n <=m holds abs(h.m-0) < d by A27,A32,
+A33:    for m be Element of NAT st n <=m holds abs(h.m-0) < d by A27,A31,
 SEQ_2:def 7;
         take n;
         thus for m be Element of NAT st n <=m holds ||. (h"(#)(f/*(h*z+c) - f
         /*c)).m- dv.|| < r
         proof
           let m be Element of NAT;
-A35:      h.m <> 0 by A30,SEQ_1:5;
+A34:      h.m <> 0 by SEQ_1:5;
           assume n <= m;
           then
-A36:      abs(h.m-0) < d by A34;
+A35:      abs(h.m-0) < d by A33;
           (h*z+c).m in rng (h*z+c) by NFCONT_1:6;
           then (h*z+c).m in N by A26;
           then (h*z).m+c.m in N by NORMSP_1:def 2;
           then h.m*z + c.m in N by NDIFF_1:def 3;
           then
-A37:      h.m*z + x0 in N by A29;
+A36:      h.m*z + x0 in N by A29;
           ||. (h"(#)(f/*(h*z+c) - f/*c)).m- dv.|| = ||.(h".m)*((f/*(h*z+c
           ) - f/*c).m)- dv.|| by NDIFF_1:def 2
             .= ||.(h.m)"*((f/*(h*z+c) - f/*c).m)- dv.|| by VALUED_1:10
@@ -652,14 +650,14 @@ FUNCT_2:109,XBOOLE_1:1
             .= ||.(h.m)"*( f/.((h*z).m+c.m) - f/.x0) - dv.|| by NORMSP_1:def 2
             .= ||.(h.m)"*( f/.((h*z).m+x0) - f/.x0) - dv.|| by A29
             .= ||.(h.m)"*(f/.((h.m)*z+x0) - f/.x0)-dv .|| by NDIFF_1:def 3;
-          hence thesis by A33,A36,A35,A37;
+          hence thesis by A32,A35,A34,A36;
         end;
       end;
       hence (h"(#)(f/*(h*z+c) - f/*c)) is convergent by NORMSP_1:def 6;
-      hence lim (h"(#)(f/*(h*z+c) - f/*c)) = dv by A31,NORMSP_1:def 7;
+      hence lim (h"(#)(f/*(h*z+c) - f/*c)) = dv by A30,NORMSP_1:def 7;
     end;
     hence
-    for h be convergent_to_0 Real_Sequence for c st rng c = {x0} & rng (h
+    for h be 0-convergent non-zero Real_Sequence for c st rng c = {x0} & rng (h
 *z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent & dv = lim (h"(#)(f/*(h
     *z+c) - f/*c));
   end;
@@ -896,7 +894,8 @@ end;
 theorem
   for x0 be Point of S, z be Point of S holds ( f
 is_Gateaux_differentiable_in x0,z iff ex N being Neighbourhood of x0 st ( N c=
-dom f & ex dv be Point of T st for h be convergent_to_0 Real_Sequence for c st
+dom f & ex dv be Point of T st
+for h be 0-convergent non-zero Real_Sequence for c st
 rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent &
   dv= lim (h"(#)(f/*(h*z+c) - f/*c)) ) )
 proof
@@ -904,16 +903,17 @@ proof
   let z be Point of S;
 A1: now
     assume ex N being Neighbourhood of x0 st ( N c= dom f & ex dv be Point of
-T st for h be convergent_to_0 Real_Sequence, c st rng c = {x0} & rng (h*z+c) c=
+T st for h be 0-convergent non-zero Real_Sequence,
+c st rng c = {x0} & rng (h*z+c) c=
 N holds h"(#)(f/*(h*z+c) - f/*c) is convergent & dv= lim (h"(#)(f/*(h*z+c) - f
     /*c)) );
     then consider N being Neighbourhood of x0 such that
 A2: N c= dom f and
-A3: ex dv be Point of T st for h be convergent_to_0 Real_Sequence, c
+A3: ex dv be Point of T st for h be 0-convergent non-zero Real_Sequence, c
 st rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent
     & dv= lim (h"(#)(f/*(h*z+c) - f/*c));
     consider dv be Point of T such that
-A4: for h be convergent_to_0 Real_Sequence, c st rng c = {x0} & rng (
+A4: for h be 0-convergent non-zero Real_Sequence, c st rng c = {x0} & rng (
 h*z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent & dv= lim (h"(#)(f/*(h
     *z+c) - f/*c)) by A3;
     for e be Real st e > 0 holds ex d be Real st d > 0 & for h be Real st
@@ -928,11 +928,13 @@ A5: N c= dom f and
 A6: for e be Real st e > 0 holds ex d be Real st d > 0 & for h be Real
     st abs(h) < d & h <> 0 & h*z+x0 in N holds ||. h"*(f/.(h*z+x0) - f/.x0) -
     Gateaux_diff(f,x0,z) .|| < e by Def4;
-    for h be convergent_to_0 Real_Sequence, c st rng c = {x0} & rng (h*z+c
+    for h be 0-convergent non-zero Real_Sequence,
+    c st rng c = {x0} & rng (h*z+c
 ) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent & Gateaux_diff(f,x0,z) =
     lim (h"(#)(f/*(h*z+c) - f/*c)) by A5,A6,Th3;
     hence ex N being Neighbourhood of x0 st ( N c= dom f & ex dv be Point of T
-st for h be convergent_to_0 Real_Sequence, c st rng c = {x0} & rng (h*z+c) c= N
+st for h be 0-convergent non-zero Real_Sequence,
+c st rng c = {x0} & rng (h*z+c) c= N
 holds h"(#)(f/*(h*z+c) - f/*c) is convergent & dv= lim (h"(#)(f/*(h*z+c) - f/*c
     )) ) by A5;
   end;
@@ -942,7 +944,8 @@ end;
 theorem
   for x0 be Point of S st f is_differentiable_in x0 for z be Point of S
 holds ( f is_Gateaux_differentiable_in x0,z & Gateaux_diff(f,x0,z)=diff(f,x0).z
-  & ex N being Neighbourhood of x0 st ( N c= dom f & for h be convergent_to_0
+  & ex N being Neighbourhood of x0 st
+  ( N c= dom f & for h be 0-convergent non-zero
 Real_Sequence, c st rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f
   /*c) is convergent & Gateaux_diff(f,x0,z)= lim (h"(#)(f/*(h*z+c) - f/*c))) )
 proof
@@ -950,11 +953,12 @@ proof
   assume f is_differentiable_in x0;
   then consider N being Neighbourhood of x0 such that
 A1: N c= dom f and
-A2: for z be Point of S holds for h be convergent_to_0 Real_Sequence, c
+A2: for z be Point of S holds for h be 0-convergent non-zero Real_Sequence, c
 st rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent
   & diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f/*c)) by Th1;
   let z be Point of S;
-A3: for h be convergent_to_0 Real_Sequence, c st rng c = {x0} & rng (h*z+c)
+A3: for h be 0-convergent non-zero Real_Sequence,
+c st rng c = {x0} & rng (h*z+c)
 c= N holds h"(#)(f/*(h*z+c) - f/*c) is convergent & diff(f,x0).z = lim (h"(#)(f
   /*(h*z+c) - f/*c)) by A2;
   then
@@ -969,11 +973,11 @@ end;
 reserve U for non trivial RealNormSpace;
 
 theorem Th7:
-  for R be REST of S,T st R/.0.S=0.T for e be Real st e > 0 ex d be
+  for R be RestFunc of S,T st R/.0.S=0.T for e be Real st e > 0 ex d be
   Real st d > 0 & for h be Point of S st ||.h.|| < d holds ||.R/.h.|| <= e*||.h
   .||
 proof
-  let R be REST of S,T such that
+  let R be RestFunc of S,T such that
 A1: R/.0.S=0.T;
   let e be Real such that
 A2: e > 0;
@@ -1012,12 +1016,13 @@ A8:     h = 0.S;
 end;
 
 theorem
-  for R be REST of T,U st R/.0.T=0.U for L be bounded LinearOperator of
-  S,T holds R*L is REST of S,U
+  for R be RestFunc of T,U st R/.0.T=0.U
+  for L be Lipschitzian LinearOperator of
+  S,T holds R*L is RestFunc of S,U
 proof
-  let R be REST of T,U such that
+  let R be RestFunc of T,U such that
 A1: R/.0.T=0.U;
-  let L be bounded LinearOperator of S,T;
+  let L be Lipschitzian LinearOperator of S,T;
   consider K be Real such that
 A2: 0 <= K and
 A3: for h be Point of S holds ||.L.h.|| <= K * ||.h.|| by LOPBAN_1:def 8;
@@ -1076,11 +1081,11 @@ XREAL_1:68;
 end;
 
 theorem Th9:
-  for R be REST of S,T for L be bounded LinearOperator of T,U holds
-  L*R is REST of S,U
+  for R be RestFunc of S,T for L be Lipschitzian LinearOperator of T,U holds
+  L*R is RestFunc of S,U
 proof
-  let R be REST of S,T;
-  let L be bounded LinearOperator of T,U;
+  let R be RestFunc of S,T;
+  let L be Lipschitzian LinearOperator of T,U;
   consider K be Real such that
 A1: 0 <= K and
 A2: for z be Point of T holds ||.L.z.|| <= K * ||.z.|| by LOPBAN_1:def 8;
@@ -1140,12 +1145,12 @@ A18:  ||.h.||"* ||.L.(R/.h).|| <= e by A15,XXREAL_0:2;
 end;
 
 theorem
-  for R1 be REST of S,T st R1/.0.S=0.T for R2 be REST of T,U st R2/.0.T=
-  0.U holds R2*R1 is REST of S,U
+  for R1 be RestFunc of S,T st R1/.0.S=0.T
+  for R2 be RestFunc of T,U st R2/.0.T=0.U holds R2*R1 is RestFunc of S,U
 proof
-  let R1 be REST of S,T such that
+  let R1 be RestFunc of S,T such that
 A1: R1/.0.S=0.T;
-  let R2 be REST of T,U such that
+  let R2 be RestFunc of T,U such that
 A2: R2/.0.T=0.U;
   R2 is total by NDIFF_1:def 5;
   then dom R2 = the carrier of T by PARTFUN1:def 2;
@@ -1207,17 +1212,18 @@ A22:  ||.h.||"* ||.R2/.(R1/.h).|| <= 1*e by A21,XCMPLX_0:def 7;
 end;
 
 theorem Th11:
-  for R1 be REST of S,T st R1/.0.S=0.T for R2 be REST of T,U st R2
-/.0.T=0.U for L be bounded LinearOperator of S,T holds R2*(L+R1) is REST of S,U
+  for R1 be RestFunc of S,T st R1/.0.S=0.T for R2 be RestFunc of T,U st R2
+/.0.T=0.U for L be Lipschitzian LinearOperator of S,T holds
+R2*(L+R1) is RestFunc of S,U
 proof
-  let R1 be REST of S,T;
+  let R1 be RestFunc of S,T;
   assume R1/.0.S=0.T;
   then consider d0 be Real such that
 A1: 0 < d0 and
 A2: for h be Point of S st ||.h.|| < d0 holds ||.R1/.h.|| <=1* ||.h.|| by Th7;
-  let R2 be REST of T,U such that
+  let R2 be RestFunc of T,U such that
 A3: R2/.0.T=0.U;
-  let L be bounded LinearOperator of S,T;
+  let L be Lipschitzian LinearOperator of S,T;
   consider K be Real such that
 A4: 0 <= K and
 A5: for h be Point of S holds ||.L.h.|| <= K * ||.h.|| by LOPBAN_1:def 8;
@@ -1293,18 +1299,19 @@ XCMPLX_0:def 7;
 end;
 
 theorem Th12:
-  for R1 be REST of S,T st R1/.0.S=0.T for R2 be REST of T,U st R2
-  /.0.T=0.U for L1 be bounded LinearOperator of S,T for L2 be bounded
-  LinearOperator of T,U holds L2*R1+ R2*(L1+R1) is REST of S,U
+  for R1 be RestFunc of S,T st R1/.0.S=0.T for R2 be RestFunc of T,U st R2
+  /.0.T=0.U for L1 be Lipschitzian LinearOperator of S,T
+  for L2 be Lipschitzian
+  LinearOperator of T,U holds L2*R1+ R2*(L1+R1) is RestFunc of S,U
 proof
-  let R1 be REST of S,T such that
+  let R1 be RestFunc of S,T such that
 A1: R1/.0.S=0.T;
-  let R2 be REST of T,U such that
+  let R2 be RestFunc of T,U such that
 A2: R2/.0.T=0.U;
-  let L1 be bounded LinearOperator of S,T;
-  let L2 be bounded LinearOperator of T,U;
-A3: L2*R1 is REST of S,U by Th9;
-  R2*(L1+R1) is REST of S,U by A1,A2,Th11;
+  let L1 be Lipschitzian LinearOperator of S,T;
+  let L2 be Lipschitzian LinearOperator of T,U;
+A3: L2*R1 is RestFunc of S,U by Th9;
+  R2*(L1+R1) is RestFunc of S,U by A1,A2,Th11;
   hence thesis by A3,NDIFF_1:28;
 end;
 
@@ -1317,17 +1324,17 @@ proof
 A1: f1 is_differentiable_in x0;
   consider N1 being Neighbourhood of x0 such that
 A2: N1 c= dom f1 and
-A3: ex R1 be REST of S,T st R1/.0.S=0.T & R1 is_continuous_in 0.S & for
+A3: ex R1 be RestFunc of S,T st R1/.0.S=0.T & R1 is_continuous_in 0.S & for
 x be Point of S st x in N1 holds f1/.x-f1/.x0 = diff(f1,x0).(x-x0) + R1/.(x-x0)
   by A1,NDIFF_1:47;
   let f2 be PartFunc of T,U;
   assume f2 is_differentiable_in f1/.x0;
   then consider N2 being Neighbourhood of f1/.x0 such that
 A4: N2 c= dom f2 and
-A5: ex R2 be REST of T,U st R2/.0.T=0.U & R2 is_continuous_in 0.T & for
+A5: ex R2 be RestFunc of T,U st R2/.0.T=0.U & R2 is_continuous_in 0.T & for
 y be Point of T st y in N2 holds f2/.y-f2/.(f1/.x0) = diff(f2,f1/.x0).(y-f1/.x0
   ) + R2/.(y-f1/.x0) by NDIFF_1:47;
-  consider R2 be REST of T,U such that
+  consider R2 be RestFunc of T,U such that
 A6: R2/.0.T=0.U and
 A7: for y be Point of T st y in N2 holds f2/.y-f2/.(f1/.x0) = diff(f2,
   f1 /.x0).(y-f1/.x0) + R2/.(y-f1/.x0) by A5;
@@ -1348,14 +1355,14 @@ R_VectorSpace_of_LinearOperators(T,U)), BoundedLinearOperatorsNorm(T,U) #) by
 LOPBAN_1:def 14;
   then reconsider
   LB2 = diff(f2,f1/.x0) as Element of BoundedLinearOperators(T,U);
-  consider R1 be REST of S,T such that
+  consider R1 be RestFunc of S,T such that
 A8: R1/.0.S=0.T and
 A9: for x be Point of S st x in N1 holds f1/.x-f1/.x0 = diff(f1,x0).(x-
   x0) + R1/.(x-x0) by A3;
   f1 is_continuous_in x0 by A1,NDIFF_1:44;
   then consider N3 be Neighbourhood of x0 such that
 A10: f1.:N3 c= N2 by NFCONT_1:10;
-  reconsider R0=L2*R1+R2*(L1+R1) as REST of S,U by A8,A6,Th12;
+  reconsider R0=L2*R1+R2*(L1+R1) as RestFunc of S,U by A8,A6,Th12;
   consider N be Neighbourhood of x0 such that
 A11: N c= N1 and
 A12: N c= N3 by NDIFF_1:1;
@@ -1417,7 +1424,7 @@ A33: R2/.(L1.(x-x0)+R1/.(x-x0)) = R2/.(L1/.(x-x0)+R1/.(x-x0))
       .=f2/.(f1/.x) -f2/.(f1/.x0) by A13,A23,PARTFUN2:3
       .=diff(f2,f1/.x0).(f1/.x-f1/.x0) + R2/.(f1/.x-f1/.x0) by A7,A21
       .=L2.(L1.(x-x0)) + L2.(R1/.(x-x0)) + (R2*(L1+R1))/.(x-x0) by A16,A19,A33,
-GRCAT_1:def 8
+VECTSP_1:def 20
       .=L2.(L1.(x-x0)) + ((L2*R1)/.(x-x0) + (R2*(L1+R1))/.(x-x0)) by A32,
 RLVECT_1:def 3
       .=(diff(f2,f1/.x0)*diff(f1,x0)).(x-x0) + R0/.(x-x0) by A31,A22,

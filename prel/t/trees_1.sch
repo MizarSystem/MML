@@ -10,6 +10,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -21,8 +22,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="31"/>
+<Adjective nr="24"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -33,8 +34,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="13" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="31"/>
+<Adjective nr="24"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Not>
@@ -42,23 +43,23 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="42"/>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="68">
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="80">
+<Func kind="K" nr="42"/>
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="78">
+<Func kind="K" nr="90">
 <Var nr="1"/>
-<Func kind="K" nr="68">
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="80">
+<Func kind="K" nr="42"/>
 <Var nr="2"/>
 </Func>
 </Func>

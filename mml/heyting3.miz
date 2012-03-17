@@ -2,7 +2,7 @@
 ::  by Adam Grabowski
 ::
 :: Received July 17, 2000
-:: Copyright (c) 2000-2011 Association of Mizar Users
+:: Copyright (c) 2000-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -21,27 +21,28 @@ environ
       ORDINAL4, CAT_1, YELLOW_0, WELLORD1, HEYTING2, REWRITE1, HEYTING3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       ORDERS_2, NAT_1, FINSEQ_1, BINOP_1, FINSET_1, FINSUB_1, PARTFUN1,
-      LATTICES, DOMAIN_1, REALSET1, STRUCT_0, SUBSTLAT, MCART_1, WELLORD1,
-      YELLOW_0, ABIAN, XXREAL_2, LATTICE3, HEYTING2, XXREAL_0;
+      LATTICES, DOMAIN_1, REALSET1, STRUCT_0, SUBSTLAT, XTUPLE_0, MCART_1,
+      WELLORD1, YELLOW_0, ABIAN, XXREAL_2, LATTICE3, HEYTING2, XXREAL_0;
  constructors BINOP_1, TOLER_1, REALSET1, ABIAN, LATTICE3, YELLOW_0, HEYTING2,
-      VALUED_1, XXREAL_2, RELSET_1;
+      VALUED_1, XXREAL_2, RELSET_1, XTUPLE_0;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, PARTFUN1, FINSET_1,
       FINSUB_1, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1, REALSET1, ABIAN, STRUCT_0,
       LATTICES, LATTICE3, YELLOW_0, YELLOW_1, SUBSTLAT, XXREAL_2, RELAT_1,
-      HEYTING2;
+      HEYTING2, XTUPLE_0;
  requirements SUBSET, BOOLE, NUMERALS, REAL, ARITHM;
- definitions TARSKI, LATTICE3, FUNCT_1, XBOOLE_0, BINOP_1, REALSET1, WELLORD1;
+ definitions TARSKI, LATTICE3, FUNCT_1, XBOOLE_0, BINOP_1, REALSET1, WELLORD1,
+      XTUPLE_0;
  theorems HEYTING2, ZFMISC_1, PARTFUN1, YELLOW_0, LATTICE3, TARSKI, NAT_1,
       LATTICE5, FINSEQ_1, MCART_1, FUNCT_5, ORDERS_2, YELLOW_5, SUBSTLAT,
       FINSUB_1, WAYBEL15, LATTICES, GRFUNC_1, RELAT_1, SYSREL, BINOP_1,
       FUNCT_1, FUNCT_2, XBOOLE_0, XBOOLE_1, ORDINAL1, XREAL_1, XXREAL_0,
-      XXREAL_2, PRE_POLY, ABIAN;
+      XXREAL_2, PRE_POLY, ABIAN, XTUPLE_0;
  schemes LMOD_7, XBOOLE_0;
 
 begin :: Preliminaries
 
 scheme
-  SSubsetUniq { R() -> RelStr, P[set] } : for A1, A2 being Subset of R() st (
+  SSubsetUniq { R() -> 1-sorted, P[set] } : for A1, A2 being Subset of R() st (
 for x being set holds x in A1 iff P[x]) & (for x being set holds x in A2 iff P[
   x]) holds A1 = A2 proof
   let A1, A2 be Subset of R();
@@ -87,7 +88,7 @@ Lm2: 0 = 2 * 0;
 
 Lm3: 1 = 0 + 1;
 
-theorem Th3:
+theorem Th1:
   for X being finite non empty Subset of NAT holds ex n being
   Element of NAT st X c= Seg n \/ {0}
 proof
@@ -123,7 +124,7 @@ proof
   suppose
     X is non empty;
     then consider n being Element of NAT such that
-A1: X c= Seg n \/ {0} by Th3;
+A1: X c= Seg n \/ {0} by Th1;
 A2: not 2*n+1 in X
     proof
 A3:   not 2*n+1 in {0} by TARSKI:def 1;
@@ -143,7 +144,7 @@ A4:   2*n+1 <= n by FINSEQ_1:1;
   end;
 end;
 
-theorem Th5:
+theorem Th3:
   for k being Element of NAT, X being finite non empty Subset of [:
 NAT,{k}:] holds ex n being non empty Element of NAT st X c= [:Seg n \/ {0},{k}
   :]
@@ -165,7 +166,8 @@ A5: x2 in {k} and
 A6: x = [x1,x2] by ZFMISC_1:def 2;
   reconsider n = x`1 as Element of NAT by A4,A6,MCART_1:7;
 A7: x1 = x`1 by A6,MCART_1:7;
-  then n in pX by A3,A6,RELAT_1:def 4;
+  [x1,x2]`1 = x1;
+  then n in pX by A3,A6,XTUPLE_0:def 12;
   then max pX <= m & n <= max pX by NAT_1:11,XXREAL_2:def 8;
   then
 A8: n <= m by XXREAL_0:2;
@@ -182,14 +184,14 @@ A8: n <= m by XXREAL_0:2;
   end;
 end;
 
-theorem Th6:
+theorem Th4:
   for m being Element of NAT, X being finite non empty Subset of [:
   NAT,{m}:] holds ex k being non empty Element of NAT st not [2*k+1,m] in X
 proof
   let m be Element of NAT;
   let X be finite non empty Subset of [:NAT,{m}:];
   consider n being non empty Element of NAT such that
-A1: X c= [:Seg n \/ {0},{m}:] by Th5;
+A1: X c= [:Seg n \/ {0},{m}:] by Th3;
 A2: not [2*n+1,m] in X
   proof
     assume [2*n+1,m] in X;
@@ -218,7 +220,7 @@ proof
     X is non empty;
     then reconsider X9 = X as finite non empty Subset of [:NAT,{m}:];
     consider n being non empty Element of NAT such that
-A1: X9 c= [:Seg n \/ {0},{m}:] by Th5;
+A1: X9 c= [:Seg n \/ {0},{m}:] by Th3;
     take k = n+1;
     let l be Element of NAT;
     assume
@@ -292,7 +294,7 @@ A2: k in B =>> A by XBOOLE_0:def 1;
   hence thesis by A1;
 end;
 
-theorem Th12:
+theorem Th9:
   for V, V9, C, C9 being set st V c= V9 & C c= C9 holds
   SubstitutionSet (V, C) c= SubstitutionSet (V9, C9)
 proof
@@ -322,7 +324,7 @@ st u in D holds u is finite ) & for s, t being Element of PFuncs (V9, C9) holds
   hence thesis by SUBSTLAT:def 1;
 end;
 
-theorem Th13:
+theorem Th10:
   for V, V9, C, C9 being set, A being Element of Fin PFuncs (V, C)
 , B being Element of Fin PFuncs (V9, C9) st V c= V9 & C c= C9 & A = B holds mi
   A = mi B
@@ -382,11 +384,11 @@ FUNCT_2:def 1;
   assume
 A3: V c= V9 & C c= C9;
   SubstitutionSet (V9, C9) = the carrier of L by SUBSTLAT:def 4;
-  then the carrier of K c= the carrier of L by A1,A3,Th12;
+  then the carrier of K c= the carrier of L by A1,A3,Th9;
   then
 A4: dom B2 = [:the carrier of K, the carrier of K:] by A2,RELAT_1:62
 ,ZFMISC_1:96;
-A5: SubstitutionSet (V, C) c= SubstitutionSet (V9, C9) by A3,Th12;
+A5: SubstitutionSet (V, C) c= SubstitutionSet (V9, C9) by A3,Th9;
   rng B2 c= the carrier of K
   proof
     let x be set;
@@ -405,7 +407,7 @@ SUBSTLAT:def 4;
 SUBSTLAT:def 4;
     B2.y = (the L_join of L). (y1, y2) by A4,A6,A9,FUNCT_1:49
       .= mi (y19 \/ y29) by SUBSTLAT:def 4
-      .= mi (y11 \/ y22) by A3,Th13;
+      .= mi (y11 \/ y22) by A3,Th10;
     hence thesis by A1,A7;
   end;
   then reconsider B2 as BinOp of the carrier of K by A4,FUNCT_2:2;
@@ -417,7 +419,7 @@ SUBSTLAT:def 4;
     then reconsider
     a1 = a, b1 = b as Element of SubstitutionSet (V9, C9) by A5;
     thus B1.(a, b) = mi (a9 \/ b9) by SUBSTLAT:def 4
-      .= mi (a1 \/ b1) by A3,Th13
+      .= mi (a1 \/ b1) by A3,Th10
       .= (the L_join of L).(a, b) by SUBSTLAT:def 4
       .= B2.[a, b] by FUNCT_1:49
       .= B2.(a, b);
@@ -444,7 +446,7 @@ registration
   coherence;
 end;
 
-theorem Th15:
+theorem Th12:
   for V, C being set, a, b being Element of SubstPoset (V, C)
   holds a <= b iff for x being set st x in a ex y being set st y in b & y c= x
 proof
@@ -481,7 +483,7 @@ A1: the carrier of K = SubstitutionSet (V, C) & the carrier of L =
   SubstitutionSet (V9, C9) by SUBSTLAT:def 4;
   assume V c= V9 & C c= C9;
   then
-A2: the carrier of K c= the carrier of L by A1,Th12;
+A2: the carrier of K c= the carrier of L by A1,Th9;
   now
     let a, b be set;
     assume
@@ -490,8 +492,8 @@ A3: [a,b] in the InternalRel of K;
     a in the carrier of K & b in the carrier of K by A3,ZFMISC_1:87;
     then reconsider a1 = a, b1 = b as Element of L by A2;
     a9 <= b9 by A3,ORDERS_2:def 5;
-    then for x being set st x in a9 ex y being set st y in b9 & y c= x by Th15;
-    then a1 <= b1 by Th15;
+    then for x being set st x in a9 ex y being set st y in b9 & y c= x by Th12;
+    then a1 <= b1 by Th12;
     hence [a,b] in the InternalRel of L by ORDERS_2:def 5;
   end;
   then the InternalRel of K c= the InternalRel of L by RELAT_1:def 3;
@@ -506,8 +508,8 @@ A5: [x,y] in (the InternalRel of L) by XBOOLE_0:def 4;
     [x,y] in [:the carrier of K, the carrier of K:] by A4,XBOOLE_0:def 4;
     then reconsider p9 = x, q9 = y as Element of K by ZFMISC_1:87;
     p <= q by A5,ORDERS_2:def 5;
-    then for a being set st a in p ex b being set st b in q & b c= a by Th15;
-    then p9 <= q9 by Th15;
+    then for a being set st a in p ex b being set st b in q & b c= a by Th12;
+    then p9 <= q9 by Th12;
     hence [x,y] in the InternalRel of K by ORDERS_2:def 5;
   end;
   then
@@ -521,8 +523,8 @@ A7: [x,y] in the InternalRel of K;
     x in the carrier of K & y in the carrier of K by A7,ZFMISC_1:87;
     then reconsider p9 = p, q9 = q as Element of L by A2;
     p <= q by A7,ORDERS_2:def 5;
-    then for a being set st a in p ex b being set st b in q & b c= a by Th15;
-    then p9 <= q9 by Th15;
+    then for a being set st a in p ex b being set st b in q & b c= a by Th12;
+    then p9 <= q9 by Th12;
     then [p9,q9] in the InternalRel of L by ORDERS_2:def 5;
     hence [x,y] in (the InternalRel of L) |_2 the carrier of K by A7,
 XBOOLE_0:def 4;
@@ -708,7 +710,7 @@ end;
 theorem
   for n, k being Element of NAT holds [2*n+1,k] in PFCrt (n,k) by Def3;
 
-theorem Th18:
+theorem Th15:
   for n, k being Element of NAT holds PFCrt (n,k) misses {[2*n+3,k ]}
 proof
   let n, k be Element of NAT;
@@ -721,7 +723,7 @@ A2: m <= 2*n + 1 and
 A3: [m,k] = x by Def3;
   x in {[2*n+3,k]} by A1,XBOOLE_0:def 4;
   then x = [2*n+3,k] by TARSKI:def 1;
-  then m = 2*n+3 by A3,ZFMISC_1:27;
+  then m = 2*n+3 by A3,XTUPLE_0:1;
   hence thesis by A2,XREAL_1:6;
 end;
 
@@ -732,7 +734,7 @@ proof
   hence thesis by NAT_1:11;
 end;
 
-theorem Th19:
+theorem Th16:
   for n, k being Element of NAT holds PFCrt (n+1,k) = PFCrt (n,k)
   \/ {[2*n+3,k]}
 proof
@@ -782,16 +784,16 @@ Lm5: for n, n9 being Element of NAT holds not PFCrt (n+1,n9) c= PFCrt (n,n9)
 proof
   let n, n9 be Element of NAT;
   set k = [2*n+3,n9];
-  PFCrt (n+1,n9) = PFCrt (n,n9) \/ {[2*n+3,n9]} by Th19;
+  PFCrt (n+1,n9) = PFCrt (n,n9) \/ {[2*n+3,n9]} by Th16;
   then {k} c= PFCrt (n+1,n9) by XBOOLE_1:7;
   then
 A1: k in PFCrt (n+1,n9) by ZFMISC_1:31;
-  PFCrt (n,n9) misses {[2*n+3,n9]} by Th18;
+  PFCrt (n,n9) misses {[2*n+3,n9]} by Th15;
   then PFCrt (n,n9) /\ {[2*n+3,n9]} = {} by XBOOLE_0:def 7;
   hence thesis by A1,ZFMISC_1:46;
 end;
 
-theorem Th20:
+theorem Th17:
   for n, k being Element of NAT holds PFCrt (n,k) c< PFCrt (n+1,k)
 proof
   let n,k be Element of NAT;
@@ -819,7 +821,7 @@ registration
   end;
 end;
 
-theorem Th21:
+theorem Th18:
   for n, m, k being Element of NAT holds not PFArt (n, m) c= PFCrt (k, m)
 proof
   let n, m, k be Element of NAT;
@@ -828,7 +830,7 @@ A1: not x in PFCrt (k,m)
   proof
     assume x in PFCrt (k,m);
     then ex m9 being odd Element of NAT st m9 <= 2*k + 1 & [m9,m] = x by Def3;
-    hence thesis by ZFMISC_1:27;
+    hence thesis by XTUPLE_0:1;
   end;
   x in PFArt (n, m) by Def2;
   hence thesis by A1;
@@ -837,7 +839,7 @@ end;
 Lm6: for n, k being Element of NAT holds PFCrt (n,k) c= PFCrt (n+1,k)
 proof
   let n, k be Element of NAT;
-  PFCrt (n,k) c< PFCrt (n+1,k) by Th20;
+  PFCrt (n,k) c< PFCrt (n+1,k) by Th17;
   hence thesis by XBOOLE_0:def 8;
 end;
 
@@ -1057,7 +1059,7 @@ proof
   then
   ( ex m being non empty Element of NAT st m <= n+1 & PFCrt (n,k) = PFArt
   (m,k) ) or PFCrt (n,k) = PFCrt (n+1,k) by Def4;
-  hence thesis by Th20,Th21;
+  hence thesis by Th17,Th18;
 end;
 
 Lm8: for n, k being Element of NAT, x being set st x in PFBrt (n,k) holds x is
@@ -1079,7 +1081,7 @@ A1: ( ex m being non empty Element of NAT st m <= n & x = PFArt (m,k) ) or x
   end;
 end;
 
-theorem Th26:
+theorem Th23:
   for n, m, k being Element of NAT st PFArt (n,m) c= PFArt (k,m) holds n = k
 proof
   let n, m, k be Element of NAT;
@@ -1088,14 +1090,14 @@ A1: PFArt (n,m) c= PFArt (k,m);
   assume n <> k;
   then 2*n <> 2*k;
   then
-A2: [2*n,m] <> [2*k,m] by ZFMISC_1:27;
+A2: [2*n,m] <> [2*k,m] by XTUPLE_0:1;
   [2*n,m] in PFArt (n,m) by Def2;
   then ex m9 being odd Element of NAT st m9 <= 2*k & [m9,m] = [ 2*n,m] by A1,A2
 ,Def2;
-  hence thesis by ZFMISC_1:27;
+  hence thesis by XTUPLE_0:1;
 end;
 
-theorem Th27:
+theorem Th24:
   for n, m, k being Element of NAT holds PFCrt (n,m) c= PFArt (k,m ) iff n < k
 proof
   let n, m, k be Element of NAT;
@@ -1113,12 +1115,12 @@ A4:   [2*n+1,m] in PFArt (k,m);
       suppose
 A5:     ex m9 being odd Element of NAT st m9 <= 2*k & [m9,m] = [2*n+1, m];
 A6:     2*k <= 2*n by A2,NAT_1:4;
-        2*n+1 <= 2*k by A5,ZFMISC_1:27;
+        2*n+1 <= 2*k by A5,XTUPLE_0:1;
         hence thesis by A6,NAT_1:13;
       end;
       suppose
         [2*k,m] = [2*n+1,m];
-        hence thesis by ZFMISC_1:27;
+        hence thesis by XTUPLE_0:1;
       end;
     end;
     [2*n+1,m] in PFCrt (n,m) by Def3;
@@ -1129,7 +1131,7 @@ end;
 
 begin :: Incompleteness
 
-theorem Th28:
+theorem Th25:
   for n, k being Element of NAT holds PFBrt (n,k) is Element of
   SubstPoset (NAT, {k})
 proof
@@ -1150,16 +1152,16 @@ A6: ( ex m being non empty Element of NAT st m <= n & t = PFArt (m,k) ) or
     suppose
       ( ex m being Element of NAT st m <= n & s = PFArt (m,k) ) & ex m
       being Element of NAT st m <= n & t = PFArt (m,k);
-      hence thesis by A4,Th26;
+      hence thesis by A4,Th23;
     end;
     suppose
       ( ex m being Element of NAT st m <= n & s = PFArt (m,k) ) & t =
       PFCrt (n,k);
-      hence thesis by A4,Th21;
+      hence thesis by A4,Th18;
     end;
     suppose
       s = PFCrt (n,k) & ex m being Element of NAT st m <= n & t = PFArt (m,k);
-      hence thesis by A4,Th27;
+      hence thesis by A4,Th24;
     end;
     suppose
       s = PFCrt (n,k) & t = PFCrt (n,k);
@@ -1200,7 +1202,7 @@ A1: for x being set holds x in X iff x in the carrier of SubstPoset (
     ) by A1;
     given n being non empty Element of NAT such that
 A2: x = PFBrt (n, k);
-    x is Element of SubstPoset (NAT, {k}) by A2,Th28;
+    x is Element of SubstPoset (NAT, {k}) by A2,Th25;
     hence thesis by A1,A2;
   end;
   uniqueness
@@ -1255,7 +1257,7 @@ A4: x in { PFArt (1,k), PFCrt (1,k) };
   end;
 end;
 
-theorem Th30:
+theorem Th27:
   for k being Element of NAT holds PFBrt (1,k) <> {{}}
 proof
   let k be Element of NAT;
@@ -1273,7 +1275,7 @@ registration
   end;
 end;
 
-theorem Th31:
+theorem Th28:
   for n, k being Element of NAT holds { PFArt (n,k) } is Element
   of SubstPoset (NAT, {k})
 proof
@@ -1283,7 +1285,7 @@ SUBSTLAT:def 4;
   hence thesis by HEYTING2:2;
 end;
 
-theorem Th32:
+theorem Th29:
   for k being Element of NAT, V, X being set, a being Element of
   SubstPoset (V, {k}) st X in a holds X is finite Subset of [:V, {k}:]
 proof
@@ -1301,7 +1303,7 @@ SUBSTLAT:def 4;
   hence thesis by A3,A1,A2,HEYTING2:1;
 end;
 
-theorem Th33:
+theorem Th30:
   for m being Element of NAT, a being Element of SubstPoset (NAT,
   {m}) st PFDrt m is_>=_than a holds for X being non empty set st X in a holds
   not ( for n being Element of NAT st [n,m] in X holds n is odd )
@@ -1313,18 +1315,18 @@ A1: PFDrt m is_>=_than a;
   let X be non empty set;
   assume
 A2: X in a;
-  then reconsider X9= X as finite non empty Subset of [:NAT,{m}:] by Th32;
+  then reconsider X9= X as finite non empty Subset of [:NAT,{m}:] by Th29;
   assume
 A3: for n being Element of NAT st [n,m] in X holds n is odd;
 A4: now
     let k be non empty Element of NAT;
-    reconsider Pk = PFBrt (k,m) as Element of SubstPoset (NAT, {m}) by Th28;
+    reconsider Pk = PFBrt (k,m) as Element of SubstPoset (NAT, {m}) by Th25;
 A5: [2*k+1,m] in PFCrt (k,m) by Def3;
     Pk in PFDrt m by Def5;
     then a <= Pk by A1,LATTICE3:def 8;
     then consider y being set such that
 A6: y in Pk and
-A7: y c= X by A2,Th15;
+A7: y c= X by A2,Th12;
 A8: not ex m9 being Element of NAT st m9 <= k & y = PFArt (m9,m)
     proof
       given m9 being Element of NAT such that
@@ -1337,11 +1339,11 @@ A9:   y = PFArt (m9,m);
     or y = PFCrt (k,m) by A6,Def4;
     hence [2*k+1,m] in X by A7,A8,A5;
   end;
-  ex l being non empty Element of NAT st not [2*l+1,m] in X9 by Th6;
+  ex l being non empty Element of NAT st not [2*l+1,m] in X9 by Th4;
   hence thesis by A4;
 end;
 
-theorem Th34:
+theorem Th31:
   for k being Element of NAT, a, b being Element of SubstPoset (
   NAT, {k}), X being Subset of SubstPoset (NAT, {k}) st a is_<=_than X & b
   is_<=_than X holds a "\/" b is_<=_than X
@@ -1395,7 +1397,7 @@ A3: for b being set st b in a holds b = {};
   hence thesis by A1;
 end;
 
-theorem Th35:
+theorem Th32:
   for n being Element of NAT, a being Element of SubstPoset (NAT,
   {n}) st {} in a holds a = {{}}
 proof
@@ -1412,7 +1414,7 @@ A2: a in SubstitutionSet (NAT, {n});
   hence thesis by A2,A1,SUBSTLAT:5,XBOOLE_1:2;
 end;
 
-theorem Th36:
+theorem Th33:
   for k being Element of NAT, a being non empty Element of
 SubstPoset (NAT, {k}) st a <> {{}} ex f being finite Function st f in a & f <>
   {}
@@ -1429,10 +1431,10 @@ SUBSTLAT:def 4;
   take f;
   thus f in a by A2;
   assume f = {};
-  hence thesis by A1,A2,Th35;
+  hence thesis by A1,A2,Th32;
 end;
 
-theorem Th37:
+theorem Th34:
   for k being Element of NAT, a being non empty Element of
 SubstPoset (NAT, {k}), a9 being Element of Fin PFuncs (NAT, {k}) st a <> {{}} &
   a = a9 holds Involved a9 is finite non empty Subset of NAT
@@ -1445,12 +1447,12 @@ A1: a <> {{}} and
 A2: a = a9;
   consider f being finite Function such that
 A3: f in a and
-A4: f <> {} by A1,Th36;
+A4: f <> {} by A1,Th33;
   ex k1 being set st k1 in dom f by A4,XBOOLE_0:def 1;
   hence thesis by A2,A3,HEYTING2:6,def 1;
 end;
 
-theorem Th38:
+theorem Th35:
   for k being Element of NAT, a being Element of SubstPoset (NAT,
   {k}), a9 being Element of Fin PFuncs (NAT, {k}), B being finite non empty
 Subset of NAT st B = Involved a9 & a9 = a holds for X being set st X in a for l
@@ -1471,13 +1473,13 @@ SUBSTLAT:def 4;
   assume
 A4: l > max B + 1;
   assume [l,k] in X;
-  then l in dom X9 by RELAT_1:def 4;
+  then l in dom X9 by XTUPLE_0:def 12;
   then l in Involved a9 by A2,A3,HEYTING2:def 1;
   then max B + 1 >= max B & max B >= l by A1,NAT_1:11,XXREAL_2:def 8;
   hence thesis by A4,XXREAL_0:2;
 end;
 
-theorem Th39:
+theorem Th36:
   for k being Element of NAT holds Top SubstPoset (NAT, {k}) = {{} }
 proof
   let k be Element of NAT;
@@ -1495,14 +1497,14 @@ A1: for b being Element of SubstPoset (NAT, {k}) st b is_<=_than {} holds a
       take y = {};
       thus y in a & y c= x by TARSKI:def 1,XBOOLE_1:2;
     end;
-    hence thesis by Th15;
+    hence thesis by Th12;
   end;
   a is_<=_than {} by YELLOW_0:6;
   then a = "/\"({},SubstPoset (NAT, {k})) by A1,YELLOW_0:31;
   hence thesis by YELLOW_0:def 12;
 end;
 
-theorem Th40:
+theorem Th37:
   for k being Element of NAT holds Bottom SubstPoset (NAT, {k}) = {}
 proof
   let k be Element of NAT;
@@ -1515,41 +1517,41 @@ A1: for b being Element of SubstPoset (NAT, {k}) st b is_>=_than {} holds a
     let b be Element of SubstPoset (NAT, {k});
     assume b is_>=_than {};
     for x be set st x in a ex y being set st y in b & y c= x;
-    hence thesis by Th15;
+    hence thesis by Th12;
   end;
   a is_>=_than {} by YELLOW_0:6;
   then a = "\/"({},SubstPoset (NAT, {k})) by A1,YELLOW_0:30;
   hence thesis by YELLOW_0:def 11;
 end;
 
-theorem Th41:
+theorem Th38:
   for k being Element of NAT, a, b being Element of SubstPoset (
   NAT, {k}) st a <= b & a = {{}} holds b = {{}}
 proof
   let k be Element of NAT, a, b be Element of SubstPoset (NAT, {k});
   assume
 A1: a <= b & a = {{}};
-  Top SubstPoset (NAT, {k}) = {{}} by Th39;
+  Top SubstPoset (NAT, {k}) = {{}} by Th36;
   hence thesis by A1,WAYBEL15:3;
 end;
 
-theorem Th42:
+theorem Th39:
   for k being Element of NAT, a, b being Element of SubstPoset (
   NAT, {k}) st a <= b & b = {} holds a = {}
 proof
   let k be Element of NAT, a, b be Element of SubstPoset (NAT, {k});
   assume
 A1: a <= b & b = {};
-  Bottom SubstPoset (NAT, {k}) = {} by Th40;
+  Bottom SubstPoset (NAT, {k}) = {} by Th37;
   hence thesis by A1,YELLOW_5:19;
 end;
 
-theorem Th43:
+theorem Th40:
   for m being Element of NAT, a being Element of SubstPoset (NAT,
   {m}) st PFDrt m is_>=_than a holds a <> {{}}
 proof
   let m be Element of NAT;
-  reconsider P1 = PFBrt (1,m) as Element of SubstPoset (NAT, {m}) by Th28;
+  reconsider P1 = PFBrt (1,m) as Element of SubstPoset (NAT, {m}) by Th25;
   let a be Element of SubstPoset (NAT, {m});
   assume
 A1: PFDrt m is_>=_than a;
@@ -1558,14 +1560,14 @@ A1: PFDrt m is_>=_than a;
 A2: P1 >= a by A1,LATTICE3:def 8;
   assume
 A3: a = {{}};
-  Top SubstPoset (NAT, {m}) = {{}} by Th39;
-  hence thesis by A3,A2,Th30,WAYBEL15:3;
+  Top SubstPoset (NAT, {m}) = {{}} by Th36;
+  hence thesis by A3,A2,Th27,WAYBEL15:3;
 end;
 
 Lm10: for m being Element of NAT holds SubstPoset (NAT, {m}) is not complete
 proof
   let m be Element of NAT;
-  reconsider Cos = { PFArt (1,m) } as Element of SubstPoset (NAT, {m}) by Th31;
+  reconsider Cos = { PFArt (1,m) } as Element of SubstPoset (NAT, {m}) by Th28;
   assume SubstPoset (NAT, {m}) is complete;
   then consider a being Element of SubstPoset (NAT, {m}) such that
 A1: PFDrt m is_>=_than a and
@@ -1591,12 +1593,12 @@ A4:   d = PFArt (1,m) by TARSKI:def 1;
       then d in PFBrt (n1,m) by A4,Def4;
       hence ex e be set st e in u & e c= d by A3;
     end;
-    hence thesis by Th15;
+    hence thesis by Th12;
   end;
-  then a <> {} by A2,Th42;
-  then reconsider Mi as finite non empty Subset of NAT by A1,Th37,Th43;
+  then a <> {} by A2,Th39;
+  then reconsider Mi as finite non empty Subset of NAT by A1,Th34,Th40;
   reconsider mX = max Mi + 1 as non empty Element of NAT;
-  reconsider Sum = { PFArt (mX,m) } as Element of SubstPoset (NAT, {m}) by Th31
+  reconsider Sum = { PFArt (mX,m) } as Element of SubstPoset (NAT, {m}) by Th28
 ;
   set b = a "\/" Sum;
   Sum is_<=_than PFDrt m
@@ -1626,10 +1628,10 @@ A9:     n >= mX;
         thus thesis by A6,TARSKI:def 1;
       end;
     end;
-    hence Sum <= t by Th15;
+    hence Sum <= t by Th12;
   end;
   then
-A10: PFDrt m is_>=_than b by A1,Th34;
+A10: PFDrt m is_>=_than b by A1,Th31;
 A11: a <> b
   proof
 A12: PFArt (mX,m) in Sum by TARSKI:def 1;
@@ -1638,34 +1640,34 @@ A13: a = b;
     then Sum <= a by YELLOW_0:24;
     then consider g being set such that
 A14: g in a and
-A15: g c= PFArt (mX,m) by A12,Th15;
+A15: g c= PFArt (mX,m) by A12,Th12;
     per cases;
     suppose
       g is non empty;
       then consider n being Element of NAT such that
 A16:  [n,m] in g and
-A17:  n is even by A1,A14,Th33;
+A17:  n is even by A1,A14,Th30;
       now
         per cases by A15,A16,Def2;
         suppose
           ex m9 being odd Element of NAT st m9 <= 2*mX & [m9,m] = [n, m];
-          hence thesis by A17,ZFMISC_1:27;
+          hence thesis by A17,XTUPLE_0:1;
         end;
         suppose
           [2*mX,m] = [n,m];
-          hence thesis by A14,A16,Th38,XREAL_1:155;
+          hence thesis by A14,A16,Th35,XREAL_1:155;
         end;
       end;
       hence thesis;
     end;
     suppose
 A18:  g is empty;
-      reconsider P1 = PFBrt (1,m) as Element of SubstPoset (NAT, {m}) by Th28;
+      reconsider P1 = PFBrt (1,m) as Element of SubstPoset (NAT, {m}) by Th25;
       PFBrt (1,m) in PFDrt m by Def5;
       then
 A19:  P1 >= b by A10,LATTICE3:def 8;
-      PFBrt (1,m) <> {{}} by Th30;
-      hence thesis by A13,A14,A18,A19,Th35,Th41;
+      PFBrt (1,m) <> {{}} by Th27;
+      hence thesis by A13,A14,A18,A19,Th32,Th38;
     end;
   end;
   a <= b by YELLOW_0:22;

@@ -1,0 +1,644 @@
+:: On a Mathematical Model of Programs
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992-2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, XBOOLE_0, CARD_1, ZFMISC_1, FINSEQ_1, FUNCT_1,
+      RELAT_1, AMI_1, PARTFUN1, XXREAL_0, TARSKI, AMI_2, RECDEF_2, UNIALG_1,
+      AMISTD_2, VALUED_0, COMPOS_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+      XTUPLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
+      FUNCT_1, PARTFUN1, VALUED_0, XXREAL_0, MCART_1, DOMAIN_1, FINSEQ_1,
+      FINSEQ_4, RECDEF_2, COMPOS_0;
+ constructors DOMAIN_1, FINSEQ_4, FINSEQ_2, VALUED_1, COMPOS_0, XTUPLE_0;
+ registrations XBOOLE_0, ORDINAL1, XREAL_0, FINSEQ_1, RELAT_1, CARD_1, FUNCT_1,
+      COMPOS_0, VALUED_0, XTUPLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0, CARD_1, FINSEQ_1, MCART_1, COMPOS_0, XTUPLE_0;
+ theorems ZFMISC_1, TARSKI, ENUMSET1, FINSEQ_4, MCART_1, XBOOLE_0, XBOOLE_1,
+      ORDINAL1, RELAT_1, NAT_1, DOMAIN_1, FINSEQ_1, FUNCT_7, RECDEF_2,
+      XTUPLE_0;
+
+begin :: A small concrete machine
+
+reserve x,y,z for set;
+
+notation
+  synonym SCM-Halt for {};
+end;
+
+definition
+  redefine func SCM-Halt -> Element of Segm 9;
+  correctness by NAT_1:44;
+end;
+
+definition
+  func SCM-Data-Loc equals
+  [:{1},NAT:];
+  coherence;
+end;
+
+registration
+  cluster SCM-Data-Loc -> non empty;
+  coherence;
+end;
+
+reserve I,J,K for Element of Segm 9,
+  i,a,a1,a2 for Element of NAT,
+  b,b1,b2,c,c1 for Element of SCM-Data-Loc;
+
+definition
+  func SCM-Instr -> non empty set equals
+  {[SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } }
+   \/ { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
+  coherence;
+end;
+
+theorem Th1:
+  [0,{},{}] in SCM-Instr
+proof
+  [0,{},{}] in { [SCM-Halt,{},{}] } by TARSKI:def 1;
+  then [0,{},{}] in { [SCM-Halt,{},{}] }
+   \/ { [J,<*a*>,{}] : J = 6 } by XBOOLE_0:def 3;
+  then
+  [0,{},{}] in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+registration
+  cluster SCM-Instr -> non empty;
+  coherence;
+end;
+
+theorem Th2:
+  [6,<*a2*>,{}] in SCM-Instr
+proof
+  reconsider x = 6 as Element of Segm 9 by NAT_1:44;
+  [x,<*a2*>,{}] in { [J,<*a*>,{}] : J = 6 };
+  then [x,<*a2*>,{}] in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   by XBOOLE_0:def 3;
+  then
+  [x,<*a2*>,{}] in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem Th3:
+  x in { 7, 8 } implies [x,<*a2*>,<*b2*>] in SCM-Instr
+proof
+  assume
+A1: x in { 7, 8 };
+  then x = 7 or x = 8 by TARSKI:def 2;
+  then reconsider x as Element of Segm 9 by NAT_1:44;
+  [x,<*a2*>,<*b2*>] in { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A1;
+  then
+  [x,<*a2*>,<*b2*>] in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem Th4:
+  x in { 1,2,3,4,5} implies [x,{},<*b1,c1*>] in SCM-Instr
+proof
+  assume
+A1: x in { 1,2,3,4,5};
+  then x=1 or x=2 or x=3 or x=4 or x=5 by ENUMSET1:def 3;
+  then reconsider x as Element of Segm 9 by NAT_1:44;
+  [x,{},<*b1,c1*>] in { [J,{},<*b,c*>] : J in { 1,2,3,4,5 } } by A1;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+definition
+  let x be Element of SCM-Instr;
+  given mk, ml being Element of SCM-Data-Loc, I such that
+A1: x = [ I, {}, <*mk, ml*>];
+  func x address_1 -> Element of SCM-Data-Loc means
+  :Def3:
+  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.1;
+  existence
+  proof
+    take mk,<*mk, ml*>;
+    thus thesis by A1,FINSEQ_4:17,RECDEF_2:def 3;
+  end;
+  uniqueness;
+  func x address_2 -> Element of SCM-Data-Loc means
+  :Def4:
+  ex f being FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.2;
+  existence
+  proof
+    take ml,<*mk, ml*>;
+    thus thesis by A1,FINSEQ_4:17,RECDEF_2:def 3;
+  end;
+  correctness;
+end;
+
+theorem
+  for x being Element of SCM-Instr, mk, ml being Element of SCM-Data-Loc, I
+   st x = [ I, {}, <*mk, ml*>] holds x address_1 = mk & x address_2 = ml
+proof
+  let x be Element of SCM-Instr, mk,ml be Element of SCM-Data-Loc, I;
+  assume
+A1: x = [ I, {}, <*mk,ml*>];
+  then consider f being FinSequence of SCM-Data-Loc such that
+A2: f = x`3_3 and
+A3: x address_1 = f/.1 by Def3;
+  f = <*mk,ml*> by A1,A2,RECDEF_2:def 3;
+  hence x address_1 = mk by A3,FINSEQ_4:17;
+  consider f being FinSequence of SCM-Data-Loc such that
+A4: f = x`3_3 and
+A5: x address_2 = f/.2 by A1,Def4;
+  f = <*mk,ml*> by A1,A4,RECDEF_2:def 3;
+  hence thesis by A5,FINSEQ_4:17;
+end;
+
+definition
+  let x be Element of SCM-Instr;
+  given mk being Element of NAT, I such that
+A1: x = [ I, <*mk*>, {}];
+  func x jump_address -> Element of NAT means
+:Def5: ex f being FinSequence of NAT st f = x`2_3 & it = f/.1;
+  existence
+  proof
+    take mk,<*mk*>;
+    thus thesis by A1,FINSEQ_4:16,RECDEF_2:def 2;
+  end;
+  correctness;
+end;
+
+theorem
+  for x being Element of SCM-Instr, mk being Element of NAT, I st x = [
+  I, <*mk*>, {}] holds x jump_address = mk
+proof
+  let x be Element of SCM-Instr, mk be Element of NAT, I;
+  assume
+A1: x = [ I, <*mk*>, {}];
+  then consider f being FinSequence of NAT such that
+A2: f = x`2_3 and
+A3: x jump_address = f/.1 by Def5;
+  f = <*mk*> by A1,A2,RECDEF_2:def 2;
+  hence thesis by A3,FINSEQ_4:16;
+end;
+
+definition
+  let x be Element of SCM-Instr;
+  given mk being Element of NAT, ml being Element of SCM-Data-Loc, I such that
+A1: x = [ I, <*mk*>, <*ml*>];
+  func x cjump_address -> Element of NAT means
+  :Def6:
+  ex mk being Element of NAT st <*mk*> = x`2_3 & it = <*mk*>/.1;
+  existence
+  proof
+    take mk,mk;
+    thus thesis by A1,FINSEQ_4:16,RECDEF_2:def 2;
+  end;
+  correctness;
+  func x cond_address -> Element of SCM-Data-Loc means
+  :Def7:
+  ex ml being Element of SCM-Data-Loc st <*ml*> = x`3_3 & it = <*ml*>/.1;
+  existence
+  proof
+    take ml,ml;
+    thus thesis by A1,FINSEQ_4:16,RECDEF_2:def 3;
+  end;
+  correctness;
+end;
+
+theorem
+  for x being Element of SCM-Instr, mk being Element of NAT, ml being
+Element of SCM-Data-Loc, I
+ st x = [ I, <*mk*>, <*ml*>] holds x cjump_address = mk &
+  x cond_address = ml
+proof
+  let x be Element of SCM-Instr, mk be Element of NAT, ml be Element of
+  SCM-Data-Loc, I;
+  assume
+A1: x = [ I, <*mk*>, <*ml*>];
+  then consider
+  mk9 being Element of NAT such
+  that
+A2: <*mk9*> = x`2_3 and
+A3: x cjump_address = <*mk9*>/.1 by Def6;
+  <*mk9*> = <*mk*> by A1,A2,RECDEF_2:def 2;
+  hence x cjump_address = mk by A3,FINSEQ_4:16;
+  consider ml9 being Element of SCM-Data-Loc such
+  that
+A4: <*ml9*> = x`3_3 and
+A5: x cond_address = <*ml9*>/.1 by A1,Def7;
+  <*ml9*> = <*ml*> by A1,A4,RECDEF_2:def 3;
+  hence thesis by A5,FINSEQ_4:16;
+end;
+
+theorem Th8:
+ SCM-Instr c= [:NAT,NAT*,proj2 SCM-Instr:]
+proof
+ let x;
+ assume
+A1:  x in SCM-Instr;
+ per cases by A1,XBOOLE_0:def 3;
+ suppose
+A2: x in {[SCM-Halt,{},{}] }
+  \/ { [J,<*a2*>,{}] : J = 6 } \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
+ per cases by A2,XBOOLE_0:def 3;
+ suppose
+A3: x in {[SCM-Halt,{},{}] } \/ { [J,<*a2*>,{}] : J = 6 };
+A4: SCM-Halt = 0;
+ per cases by A3,XBOOLE_0:def 3;
+ suppose x in {[SCM-Halt,{},{}] };
+  then
+A5: x = [SCM-Halt,{},{}] by TARSKI:def 1;
+  then SCM-Halt in NAT & {} in NAT* &
+   {} in proj2 SCM-Instr by A1,A4,FINSEQ_1:49,XTUPLE_0:def 13;
+ hence x in [:NAT,NAT*,proj2 SCM-Instr:] by A5,DOMAIN_1:3;
+ end;
+ suppose x in { [J,<*a2*>,{}] : J = 6 };
+  then consider J,a such that
+A6: x = [J,<*a*>,{}] & J = 6;
+  J in NAT & <*a*> in NAT* & {} in proj2 SCM-Instr
+   by A1,A6,FUNCT_7:18,XTUPLE_0:def 13;
+ hence x in [:NAT,NAT*,proj2 SCM-Instr:] by A6,DOMAIN_1:3;
+ end;
+ end;
+ suppose x in { [K,<*a1*>,<*b1*>] : K in { 7,8 }};
+  then consider K,a1,b1 such that
+A7: x = [K,<*a1*>,<*b1*>] & K in { 7,8 };
+  K in NAT & <*a1*> in NAT* &
+  <*b1*> in proj2 SCM-Instr by A1,A7,FUNCT_7:18,XTUPLE_0:def 13;
+ hence x in [:NAT,NAT*,proj2 SCM-Instr:] by A7,DOMAIN_1:3;
+ end;
+ end;
+ suppose x in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
+  then consider I,b,c such that
+A8: x = [I,{},<*b,c*>] & I in { 1,2,3,4,5};
+  I in NAT & {} in NAT* &
+   <*b,c*> in proj2 SCM-Instr by A1,A8,FINSEQ_1:49,XTUPLE_0:def 13;
+ hence x in [:NAT,NAT*,proj2 SCM-Instr:] by A8,DOMAIN_1:3;
+ end;
+end;
+
+registration
+ cluster proj2 SCM-Instr -> FinSequence-membered;
+ coherence
+  proof let f be set;
+   assume f in proj2 SCM-Instr;
+    then consider y being set such that
+A1:   [y,f] in SCM-Instr by XTUPLE_0:def 13;
+    set x = [y,f];
+ per cases by A1,XBOOLE_0:def 3;
+ suppose
+A2: x in {[SCM-Halt,{},{}] }
+  \/ { [J,<*a2*>,{}] : J = 6 } \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
+ per cases by A2,XBOOLE_0:def 3;
+ suppose
+A3: x in {[SCM-Halt,{},{}] } \/ { [J,<*a2*>,{}] : J = 6 };
+ per cases by A3,XBOOLE_0:def 3;
+ suppose x in {[SCM-Halt,{},{}] };
+  then x = [SCM-Halt,{},{}] by TARSKI:def 1;
+ hence f is FinSequence by XTUPLE_0:1;
+ end;
+ suppose x in { [J,<*a2*>,{}] : J = 6 };
+  then ex J,a st x = [J,<*a*>,{}] & J = 6;
+  hence f is FinSequence by XTUPLE_0:1;
+ end;
+ end;
+ suppose x in { [K,<*a1*>,<*b1*>] : K in { 7,8 }};
+  then ex K,a1,b1 st x = [K,<*a1*>,<*b1*>] & K in { 7,8 };
+ hence f is FinSequence by XTUPLE_0:1;
+ end;
+ end;
+ suppose x in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
+  then ex I,b,c st x = [I,{},<*b,c*>] & I in { 1,2,3,4,5};
+  hence f is FinSequence by XTUPLE_0:1;
+ end;
+  end;
+end;
+
+theorem Th9:
+ for x being Element of SCM-Instr holds
+  x in {[SCM-Halt,{},{}] } & InsCode x = 0 or
+  x in { [J,<*a*>,{}] : J = 6 } & InsCode x = 6 or
+  x in { [K,<*a1*>,<*b1*>] : K in { 7,8 } }
+        & (InsCode x = 7 or InsCode x = 8) or
+  x in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} }
+    & (InsCode x = 1 or InsCode x = 2 or InsCode x = 3
+      or InsCode x = 4 or InsCode x = 5)
+proof
+ let x be Element of SCM-Instr;
+ x in {[SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } or
+    x in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+ then x in{[SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } or
+    x in  { [K,<*a1*>,<*b1*>] : K in { 7,8 } } or
+    x in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+ then per cases by XBOOLE_0:def 3;
+ case x in {[SCM-Halt,{},{}] };
+   then x = [SCM-Halt,{},{}] by TARSKI:def 1;
+  hence thesis by RECDEF_2:def 1;
+ end;
+ case x in { [J,<*a*>,{}] : J = 6 };
+   then ex J,a st x = [J,<*a*>,{}] & J = 6;
+  hence thesis by RECDEF_2:def 1;
+ end;
+ case x in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
+   then consider K,a1,b1 such that
+A1: x = [K,<*a1*>,<*b1*>] and
+A2: K in { 7,8 };
+   InsCode x = K by A1,RECDEF_2:def 1;
+  hence thesis by A2,TARSKI:def 2;
+ end;
+ case x in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
+   then consider I,b,c such that
+A3: x = [I,{},<*b,c*>] and
+A4: I in { 1,2,3,4,5};
+   InsCode x = I by A3,RECDEF_2:def 1;
+  hence thesis by A4,ENUMSET1:def 3;
+ end;
+end;
+
+begin :: from AMI_3
+
+reserve i,j,k for Element of NAT;
+
+registration
+ cluster SCM-Instr -> standard-ins;
+ coherence
+  proof
+    consider X being non empty set such that
+A1:   proj2 SCM-Instr c= X* by FINSEQ_1:85;
+    take X;
+A2:   SCM-Instr c= [: NAT,NAT*,proj2 SCM-Instr:] by Th8;
+     [: NAT,NAT*,proj2 SCM-Instr:] c= [: NAT,NAT*,X*:] by A1,MCART_1:73;
+    hence SCM-Instr c= [: NAT,NAT*,X*:] by A2,XBOOLE_1:1;
+ end;
+end;
+
+reserve I,J,K for Element of Segm 9,
+  a,a1,a2 for Element of NAT,
+  b,b1,b2,c,c1 for Element of SCM-Data-Loc;
+
+theorem Th10:
+  for l being Element of SCM-Instr holds InsCode l <= 8
+proof
+  let l be Element of SCM-Instr;
+   InsCode l = 0 or InsCode l = 1 or InsCode l = 2 or InsCode l = 3 or
+   InsCode l = 4 or InsCode l = 5 or InsCode l = 6 or InsCode l = 7 or
+   InsCode l = 8 by Th9;
+ hence thesis;
+end;
+
+Lm1:
+ for i being Element of SCM-Instr
+  st InsCode i = 1 or InsCode i = 2 or InsCode i = 3
+       or InsCode i = 4 or InsCode i = 5
+ holds JumpPart i = {}
+ proof let i be Element of SCM-Instr;
+  assume
+ InsCode i = 1 or InsCode i = 2 or InsCode i = 3 or
+       InsCode i = 4 or  InsCode i = 5;
+  then i in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by Th9;
+  then ex I,b,c st i = [I,{},<*b,c*>] & I in { 1,2,3,4,5};
+  hence thesis by RECDEF_2:def 2;
+ end;
+
+Lm2:
+ for i being Element of SCM-Instr
+  st InsCode i = 7 or InsCode i = 8
+ holds dom JumpPart i = Seg 1
+ proof let i be Element of SCM-Instr;
+  assume
+ InsCode i = 7 or InsCode i = 8;
+  then i in { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by Th9;
+  then consider K,a1,b1 such that
+A1:  i = [K,<*a1*>,<*b1*>] and K in { 7,8 };
+   JumpPart i = <*a1*> by A1,RECDEF_2:def 2;
+  hence thesis by FINSEQ_1:38;
+ end;
+
+Lm3:
+ for i being Element of SCM-Instr
+  st InsCode i = 6
+ holds dom JumpPart i = Seg 1
+ proof let i be Element of SCM-Instr;
+  assume
+ InsCode i = 6;
+  then i in { [J,<*a*>,{}] : J = 6 } by Th9;
+  then consider J,a such that
+A1:  i = [J,<*a*>,{}] and J = 6;
+   JumpPart i = <*a*> by A1,RECDEF_2:def 2;
+  hence thesis by FINSEQ_1:38;
+ end;
+
+registration
+ cluster SCM-Instr -> homogeneous;
+ coherence
+  proof
+   let i, j be Element of SCM-Instr such that
+A1:   InsCode i = InsCode j;
+    InsCode i <= 8 by Th10;
+    then per cases by NAT_1:32;
+   suppose InsCode i = 0;
+     then i in {[SCM-Halt,{},{}] } & j in {[SCM-Halt,{},{}] } by A1,Th9;
+     then i = [SCM-Halt,{},{}]  & j = [SCM-Halt,{},{}] by TARSKI:def 1;
+    hence thesis;
+   end;
+   suppose
+     InsCode i = 1 or InsCode i = 2 or InsCode i = 3
+        or InsCode i = 4 or  InsCode i = 5;
+     then JumpPart i = {} & JumpPart j = {} by A1,Lm1;
+    hence thesis;
+   end;
+   suppose InsCode i = 7 or InsCode i = 8;
+     then dom JumpPart i = Seg 1 & dom JumpPart j = Seg 1 by A1,Lm2;
+    hence thesis;
+   end;
+   suppose InsCode i = 6;
+     then dom JumpPart i = Seg 1 & dom JumpPart j = Seg 1 by A1,Lm3;
+    hence thesis;
+   end;
+ end;
+end;
+
+Lm4:
+for T being InsType of SCM-Instr
+ holds T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6
+  or T = 7 or T = 8
+proof
+ let T be InsType of SCM-Instr;
+  consider y being set such that
+A1: [T,y] in proj1 SCM-Instr by XTUPLE_0:def 12;
+  consider x being set such that
+A2: [[T,y],x] in SCM-Instr by A1,XTUPLE_0:def 12;
+   reconsider I = [T,y,x] as Element of SCM-Instr by A2;
+   T = InsCode I by RECDEF_2:def 1;
+  hence thesis by Th10,NAT_1:32;
+end;
+
+reserve T for InsType of SCM-Instr,
+        I for Element of SCM-Instr;
+
+Lm5:
+  T = 0 implies JumpParts T = {0}
+proof
+  assume
+A1: T = 0;
+  hereby
+    let a be set;
+    assume a in JumpParts T;
+    then consider I such that
+A2: a = JumpPart I and
+A3: InsCode I = T;
+     I in {[SCM-Halt,{},{}] } by A1,A3,Th9;
+     then I = [SCM-Halt,{},{}] by TARSKI:def 1;
+     then a = 0 by A2,RECDEF_2:def 2;
+    hence a in {0} by TARSKI:def 1;
+  end;
+  let a be set;
+  assume a in {0};
+  then
+A4:  a = 0 by TARSKI:def 1;
+A5:  JumpPart [SCM-Halt,{},{}] = {};
+A6: InsCode [SCM-Halt,{},{}] = SCM-Halt;
+   [SCM-Halt,{},{}] in SCM-Instr by Th1;
+  hence a in JumpParts T by A1,A4,A5,A6;
+end;
+
+Lm6:
+  T = 1 or T = 2 or T = 3 or T = 4 or T = 5
+   implies JumpParts T = {{}}
+proof
+  assume
+A1: T = 1 or T = 2 or T = 3 or T = 4 or T = 5;
+  hereby
+    let x be set;
+    assume x in JumpParts T;
+     then consider I being Element of SCM-Instr such that
+A2:   x = JumpPart I and
+A3:   InsCode I = T;
+     I in { [J,{},<*b,c*>]
+      where J is Element of Segm 9,
+       b is Element of SCM-Data-Loc, c is Element of SCM-Data-Loc
+      : J in { 1,2,3,4,5} } by A1,A3,Th9;
+     then consider J being Element of Segm 9,
+       b being Element of SCM-Data-Loc, c being Element of SCM-Data-Loc
+       such that
+A4:  I = [J,{},<*b,c*>] and
+   J in { 1,2,3,4,5};
+     x = {} by A2,A4,RECDEF_2:def 2;
+    hence x in {{}} by TARSKI:def 1;
+  end;
+  set a = the Element of SCM-Data-Loc;
+  let x be set;
+  assume x in {{}};
+   then
+A5:  x = {} by TARSKI:def 1;
+A6:  JumpPart [T,{},<*a,a*>] = {};
+A7: InsCode [T,{},<*a,a*>] = T;
+   T in { 1,2,3,4,5} by A1,ENUMSET1:def 3;
+   then [T,{},<*a,a*>] in SCM-Instr by Th4;
+  hence thesis by A5,A6,A7;
+end;
+
+registration
+ cluster SCM-Instr -> J/A-independent;
+ coherence
+  proof
+   let T be InsType of SCM-Instr,
+       f1,f2 be natural-valued Function such that
+A1: f1 in JumpParts T and
+A2: dom f1 = dom f2;
+     let p be set such that
+A3: [T,f1,p] in SCM-Instr;
+    per cases by Lm4;
+    suppose T = 0;
+     then
+  JumpParts T = {0} by Lm5;
+     then f1 = 0 by A1,TARSKI:def 1;
+     then f1 = f2 by A2;
+    hence [T,f2,p] in SCM-Instr by A3;
+    end;
+    suppose T = 1 or T = 2 or T = 3 or T = 4 or T = 5;
+     then
+A4:  JumpParts T = {0} by Lm6;
+     f1 = 0 by A4,A1,TARSKI:def 1;
+     then f1 = f2 by A2;
+    hence [T,f2,p] in SCM-Instr by A3;
+    end;
+    suppose
+A5:    T = 6;
+    reconsider J = [T,f1,p] as Element of SCM-Instr by A3;
+ InsCode J = 6 by A5,RECDEF_2:def 1;
+    then J in { [K,<*i1*>,{}]
+      where K is Element of Segm 9, i1 is Element of NAT
+       : K = 6 } by Th9;
+    then consider K being Element of Segm 9,
+     i1 being Element of NAT such that
+A6:  J = [K,<*i1*>,{}] & K = 6;
+A7:   p = {} by A6,XTUPLE_0:3;
+     f1 = <*i1*> by A6,XTUPLE_0:3;
+     then
+A8: dom f2 = {1} by A2,FINSEQ_1:2,38;
+    reconsider l = f2.1 as Element of NAT by ORDINAL1:def 12;
+    set I = [T,f2,{}];
+    I = [6,<*l*>,{}] by A5,A8,FINSEQ_1:2,def 8;
+    then reconsider I as Element of SCM-Instr by Th2;
+    f2 = JumpPart I by RECDEF_2:def 2;
+    hence [T,f2,p] in SCM-Instr by A7;
+    end;
+    suppose
+A9:    T = 7 or T = 8;
+    reconsider J = [T,f1,p] as Element of SCM-Instr by A3;
+ InsCode J = T by RECDEF_2:def 1;
+    then J in { [K,<*i1*>,<*a*>]
+      where K is Element of Segm 9, i1 is Element of NAT,
+         a is Element of SCM-Data-Loc
+     : K in { 7,8 } } by A9,Th9;
+    then consider K being Element of Segm 9, i1 being Element of NAT,
+         a being Element of SCM-Data-Loc
+      such that
+A10:  J = [K,<*i1*>,<*a*>] and K in {7,8};
+A11:   p = <*a*> by A10,XTUPLE_0:3;
+     f1 = <*i1*> by A10,XTUPLE_0:3;
+     then
+A12: dom f2 = {1} by A2,FINSEQ_1:2,38;
+    reconsider l = f2.1 as Element of NAT by ORDINAL1:def 12;
+    set I = [T,f2,p];
+A13: T in {7,8} by A9,TARSKI:def 2;
+    I = [T,<*l*>,<*a*>] by A11,A12,FINSEQ_1:2,def 8;
+    then reconsider I as Element of SCM-Instr by A13,Th3;
+ InsCode I = T by RECDEF_2:def 1;
+    then I in { [L,<*i2*>,<*b*>]
+      where L is Element of Segm 9, i2 is Element of NAT,
+         b is Element of SCM-Data-Loc
+     : L in { 7,8 } } by A9,Th9;
+    then consider L being Element of Segm 9, i2 being Element of NAT,
+         b being Element of SCM-Data-Loc
+      such that
+A14: I  = [L,<*i2*>,<*b*>] and L in {7,8};
+ L = InsCode I by A14,RECDEF_2:def 1
+      .= T by RECDEF_2:def 1;
+    then
+A15: I = [T,<*i2*>,<*b*>] by A14;
+    thus [T,f2,p] in SCM-Instr by A15;
+    end;
+  end;
+ end;
+
+registration
+ cluster SCM-Instr -> with_halt;
+ coherence
+  proof
+   thus [0,{},{}] in SCM-Instr by Th1;
+  end;
+end;

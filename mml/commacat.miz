@@ -2,7 +2,7 @@
 ::  by Grzegorz Bancerek and Agata Darmochwa\l
 ::
 :: Received February 20, 1992
-:: Copyright (c) 1992-2011 Association of Mizar Users
+:: Copyright (c) 1992-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -15,16 +15,17 @@
 environ
 
  vocabularies CAT_1, STRUCT_0, FUNCT_1, XBOOLE_0, SUBSET_1, ZFMISC_1, TARSKI,
-      MCART_1, RELAT_1, GRAPH_1, PARTFUN1, CAT_2, FUNCOP_1, FUNCT_3, COMMACAT;
+      MCART_1, RELAT_1, GRAPH_1, PARTFUN1, CAT_2, FUNCOP_1, FUNCT_3, COMMACAT,
+      MONOID_0, RELAT_2, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, BINOP_1, FUNCOP_1, STRUCT_0, GRAPH_1, CAT_1, CAT_2, MCART_1,
       DOMAIN_1;
  constructors DOMAIN_1, CAT_2, FUNCOP_1, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, CAT_1, CAT_2, STRUCT_0;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, CAT_1, CAT_2, STRUCT_0, XTUPLE_0;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, CAT_1, BINOP_1, FUNCOP_1, GRAPH_1;
  theorems TARSKI, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, CAT_1, CAT_2, GRFUNC_1,
-      RELSET_1, FUNCOP_1;
+      RELSET_1, FUNCOP_1, XTUPLE_0;
  schemes FUNCT_2, CLASSES1;
 
 begin
@@ -39,8 +40,8 @@ reserve C,D,E for Category,
   d,d1 for Object of D,
   x for set,
   f,f1 for (Morphism of E),
-  g for (Morphism of C),
-  h for (Morphism of D) ,
+  g,g1 for (Morphism of C),
+  h,h1 for (Morphism of D) ,
   F for Functor of C,E,
   G for Functor of D,E;
 
@@ -51,7 +52,7 @@ definition
 A1: f1 in Hom(F.c1,G.d1);
   func commaObjs(F,G) -> non empty Subset of [:[:the carrier of C, the carrier
   of D:], the carrier' of E:] equals
-  :Def5:
+  :Def1:
   {[[c,d],f] : f in Hom(F.c,G.d)};
   coherence
   proof
@@ -70,13 +71,13 @@ end;
 
 reserve o,o1,o2 for Element of commaObjs(F,G);
 
-theorem Th2:
+theorem Th1:
   (ex c,d,f st f in Hom(F.c,G.d)) implies o = [[o`11,o`12],o`2] & o
   `2 in Hom(F.o`11,G.o`12) & dom o`2 = F.o`11 & cod o`2 = G.o`12
 proof
   assume ex c,d,f st f in Hom(F.c,G.d);
   then
-A1: commaObjs(F,G) = {[[c,d],f]: f in Hom(F.c,G.d)} by Def5;
+A1: commaObjs(F,G) = {[[c,d],f]: f in Hom(F.c,G.d)} by Def1;
   o in commaObjs(F,G);
   then consider c,d,f such that
 A2: o = [[c,d],f] and
@@ -92,18 +93,18 @@ definition
 A1: f1 in Hom(F.c1,G.d1);
   func commaMorphs(F,G) -> non empty Subset of [:[:commaObjs(F,G), commaObjs(F
   ,G):], [:the carrier' of C, the carrier' of D:]:] equals
-  :Def6:
-  {[[o1,o2], [g,h
-]] : dom g = o1`11 & cod g = o2`11 & dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.
-  g) = (G.h)*(o1`2)};
+  :Def2:
+  {[[o1,o2], [g,h]] :
+    dom g = o1`11 & cod g = o2`11 & dom h = o1`12 & cod h = o2`12 &
+   (o2`2)(*)(F.g) = (G.h)(*)(o1`2)};
   coherence
   proof
-    commaObjs(F,G) = {[[c,d],f] : f in Hom(F.c,G.d)} by A1,Def5;
+    commaObjs(F,G) = {[[c,d],f] : f in Hom(F.c,G.d)} by A1,Def1;
     then [[c1,d1],f1] in commaObjs(F,G) by A1;
     then reconsider o = [[c1,d1],f1] as Element of commaObjs(F,G);
     set X = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 & dom h = o1`12
-    & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)};
-A2: dom id d1 = d1 & cod id d1 = d1 by CAT_1:19;
+    & cod h = o2`12 & (o2`2)(*)(F.g) = (G.h)(*)(o1`2)};
+A2: dom id d1 = d1 & cod id d1 = d1;
 A3: o`1`1 = o`11 & o`1`2 = o`12 by MCART_1:def 14,def 15;
 A4: X c= [:[:commaObjs(F,G), commaObjs(F,G):], [:the carrier' of C, the
     carrier' of D:]:]
@@ -111,19 +112,19 @@ A4: X c= [:[:commaObjs(F,G), commaObjs(F,G):], [:the carrier' of C, the
       let x;
       assume x in X;
       then ex g,h,o1,o2 st x = [[o1,o2], [g,h]] & dom g = o1`11 & cod g = o2
-      `11 & dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2);
+      `11 & dom h = o1`12 & cod h = o2`12 & (o2`2)(*)(F.g) = (G.h)(*)(o1`2);
       hence thesis;
     end;
 A5: [c1,d1]`2 = d1 & o`2 = f1 by MCART_1:7;
 A6: o`1 = [c1,d1] & [c1,d1]`1 = c1 by MCART_1:7;
     cod f1 = G.d1 by A1,CAT_1:1;
     then
-A7: id(G.d1)*f1 = f1 by CAT_1:21;
+A7: id(G.d1)(*)f1 = f1 by CAT_1:21;
     dom f1 = F.c1 by A1,CAT_1:1;
     then
-A8: f1*id(F.c1) = f1 by CAT_1:22;
+A8: f1(*)id(F.c1) = f1 by CAT_1:22;
 A9: F.id c1 = id(F.c1) & G.id d1 = id(G.d1) by CAT_1:71;
-    dom id c1 = c1 & cod id c1 = c1 by CAT_1:19;
+    dom id c1 = c1 & cod id c1 = c1;
     then [[o,o],[id c1,id d1]] in X by A2,A3,A6,A5,A8,A7,A9;
     hence thesis by A4;
   end;
@@ -145,20 +146,20 @@ definition
   end;
 end;
 
-theorem Th3:
+theorem Th2:
   (ex c,d,f st f in Hom(F.c,G.d)) implies k = [[k`11,k`12], [k`21,k
 `22]] & dom k`21 = k`11`11 & cod k`21 = k`12`11 & dom k`22 = k`11`12 & cod k`22
-  = k`12`12 & (k`12`2)*(F.k`21) = (G.k`22)*(k`11`2)
+  = k`12`12 & (k`12`2)(*)(F.k`21) = (G.k`22)(*)(k`11`2)
 proof
   assume ex c,d,f st f in Hom(F.c,G.d);
   then
 A1: commaMorphs(F,G) = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
-  dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)} by Def6;
+  dom h = o1`12 & cod h = o2`12 & (o2`2)(*)(F.g) = (G.h)(*)(o1`2)} by Def2;
   k in commaMorphs(F,G);
   then consider g,h,o1,o2 such that
 A2: k = [[o1,o2], [g,h]] and
 A3: dom g = o1`11 & cod g = o2`11 & dom h = o1`12 & cod h = o2`12 & (o2
-  `2) *(F.g) = (G.h)*(o1`2) by A1;
+  `2)(*)(F.g) = (G.h)(*)(o1`2) by A1;
 A4: k`21 = g by A2,MCART_1:85;
   k`11 = o1 & k`12 = o2 by A2,MCART_1:85;
   hence thesis by A2,A3,A4,MCART_1:85;
@@ -171,46 +172,47 @@ A1: f1 in Hom(F.c1,G.d1);
   assume
 A2: k1`12 = k2`11;
   func k2*k1 -> Element of commaMorphs(F,G) equals
-  :Def7:
-  [[k1`11,k2`12],[k2
-  `21*k1`21,k2`22*k1`22]];
+  :Def3:
+  [[k1`11,k2`12],[k2`21(*)k1`21,k2`22(*)k1`22]];
   coherence
   proof
-    set k22 = k2`22*k1`22;
-    set k21 = k2`21*k1`21;
+    set k22 = k2`22(*)k1`22;
+    set k21 = k2`21(*)k1`21;
 A3: F.cod k2`21 = cod (F.k2`21) & dom (F.k2`21) = F.dom k2`21 by CAT_1:72;
 A4: cod (F.k1`21) = F.cod k1`21 by CAT_1:72;
-A5: cod k1`12`2 = G.k1`12`12 by A1,Th2;
-A6: dom k1`22 = k1`11`12 by A1,Th3;
-A7: (k2`12`2)*(F.k2`21) = (G.k2`22)*(k2`11`2) & dom k2`12`2 = F.k2`12`11
-    by A1,Th2,Th3;
+A5: cod k1`12`2 = G.k1`12`12 by A1,Th1;
+A6: dom k1`22 = k1`11`12 by A1,Th2;
+A7: (k2`12`2)(*)(F.k2`21) = (G.k2`22)(*)(k2`11`2) & dom k2`12`2 = F.k2`12`11
+    by A1,Th1,Th2;
 A8: cod (G.k1`22) = G.cod k1`22 by CAT_1:72;
-A9: (k1`12`2)*(F.k1`21) = (G.k1`22)*(k1`11`2) & dom k1`12`2 = F.k1`12`11
-    by A1,Th2,Th3;
+A9: (k1`12`2)(*)(F.k1`21) = (G.k1`22)(*)(k1`11`2) & dom k1`12`2 = F.k1`12`11
+    by A1,Th1,Th2;
 A10: dom (G.k2`22) = G.dom k2`22 by CAT_1:72;
-A11: cod k1`11`2 = G.k1`11`12 & dom (G.k1`22) = G.dom k1`22 by A1,Th2,CAT_1:72
+A11: cod k1`11`2 = G.k1`11`12 & dom (G.k1`22) = G.dom k1`22 by A1,Th1,CAT_1:72
 ;
-A12: cod k2`21 = k2`12`11 by A1,Th3;
+A12: cod k2`21 = k2`12`11 by A1,Th2;
 A13: commaMorphs(F,G) = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11
-    & dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)} by A1,Def6;
-A14: dom k2`22 = k2`11`12 by A1,Th3;
-A15: cod k1`22 = k1`12`12 by A1,Th3;
+    & dom h = o1`12 & cod h = o2`12 & (o2`2)(*)(F.g) = (G.h)(*)(o1`2)}
+  by A1,Def2;
+A14: dom k2`22 = k2`11`12 by A1,Th2;
+A15: cod k1`22 = k1`12`12 by A1,Th2;
     then
 A16: dom k22 = dom k1`22 & cod k22 = cod k2`22 by A2,A14,CAT_1:17;
-A17: dom k1`21 = k1`11`11 & cod k2`22 = k2`12`12 by A1,Th3;
-A18: cod k1`21 = k1`12`11 by A1,Th3;
-A19: dom k2`21 = k2`11`11 by A1,Th3;
+A17: dom k1`21 = k1`11`11 & cod k2`22 = k2`12`12 by A1,Th2;
+A18: cod k1`21 = k1`12`11 by A1,Th2;
+A19: dom k2`21 = k2`11`11 by A1,Th2;
     then
 A20: dom k21 = dom k1`21 & cod k21 = cod k2`21 by A2,A18,CAT_1:17;
-    ((k2`12)`2)*(F.k21) = (k2`12`2)*((F.k2`21)*(F.k1`21)) by A2,A18,A19,
+    ((k2`12)`2)(*)(F.k21) = (k2`12`2)(*)((F.k2`21)(*)(F.k1`21)) by A2,A18,A19,
 CAT_1:64
-      .= (G.k2`22)*(k2`11`2)*(F.k1`21) by A2,A18,A19,A12,A7,A3,A4,CAT_1:18
-      .= (G.k2`22)*((G.k1`22)*(k1`11`2)) by A2,A18,A14,A9,A5,A4,A10,CAT_1:18
-      .= (G.k2`22)*(G.k1`22)*(k1`11`2) by A2,A6,A15,A14,A10,A11,A8,CAT_1:18
-      .= (G.k22)*((k1`11)`2) by A2,A15,A14,CAT_1:64;
+      .= (G.k2`22)(*)(k2`11`2)(*)(F.k1`21) by A2,A18,A19,A12,A7,A3,A4,CAT_1:18
+      .= (G.k2`22)(*)((G.k1`22)(*)(k1`11`2))
+               by A2,A18,A14,A9,A5,A4,A10,CAT_1:18
+      .= (G.k2`22)(*)(G.k1`22)(*)(k1`11`2) by A2,A6,A15,A14,A10,A11,A8,CAT_1:18
+      .= (G.k22)(*)((k1`11)`2) by A2,A15,A14,CAT_1:64;
     then
-    ([[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]]) in commaMorphs(F,G) by A6,A12
-,A17,A13,A20,A16;
+    ([[k1`11,k2`12],[k2`21(*)k1`21,k2`22(*)k1`22]]) in commaMorphs(F,G)
+     by A6,A12,A17,A13,A20,A16;
     hence thesis;
   end;
 end;
@@ -219,7 +221,7 @@ definition
   let C,D,E,F,G;
   func commaComp(F,G) -> PartFunc of [:commaMorphs(F,G),commaMorphs(F,G):],
   commaMorphs(F,G) means
-  : Def8:
+  : Def4:
   dom it = { [k1,k2]: k1`11 = k2`12 } & for k,k9
   st [k,k9] in dom it holds it.[k,k9] = k*k9;
   existence
@@ -265,8 +267,8 @@ A6:   x = f.y by FUNCT_1:def 3;
     then consider k,k9 such that
 A7: [k1,k2] = [k,k9] and
 A8: f.[k1,k2] = k*k9 by A3;
-    k1 = k by A7,ZFMISC_1:27;
-    hence thesis by A7,A8,ZFMISC_1:27;
+    k1 = k by A7,XTUPLE_0:1;
+    hence thesis by A7,A8,XTUPLE_0:1;
   end;
   uniqueness
   proof
@@ -297,8 +299,8 @@ A1: f1 in Hom(F.c1,G.d1);
   func F comma G -> strict Category means
   the carrier of it = commaObjs(F,G) &
   the carrier' of it = commaMorphs(F,G) & (for k holds (the Source of it).k = k
-`11) & (for k holds (the Target of it).k = k`12) & (for o holds (the Id of it).
-  o = [[o,o], [id o`11,id o`12]]) & the Comp of it = commaComp(F,G);
+`11) & (for k holds (the Target of it).k = k`12) &
+    the Comp of it = commaComp(F,G);
   existence
   proof
     reconsider O = commaObjs(F,G), M = commaMorphs(F,G) as non empty set;
@@ -308,204 +310,345 @@ A1: f1 in Hom(F.c1,G.d1);
     deffunc F(Element of commaMorphs(F,G)) = $1`11;
     consider D9 being Function of commaMorphs(F,G),commaObjs(F,G) such that
 A2: D9.k = F(k) from FUNCT_2:sch 4;
-A3: commaMorphs(F,G) = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
-    dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)} by A1,Def6;
-A4: ex k st P[o,k]
-    proof
-A5:   dom id o`12 = o`12 & cod id o`12 = o`12 by CAT_1:19;
-      dom o`2 = F.o`11 & F.id o`11 = id (F.o`11) by A1,Th2,CAT_1:71;
-      then
-A6:   o`2*(F.id o`11) = o`2 by CAT_1:22;
-      cod o`2 = G.o`12 & G.id o`12 = id (G.o`12) by A1,Th2,CAT_1:71;
-      then
-A7:   (G.id o`12)*o`2 = o`2 by CAT_1:21;
-      dom id o`11 = o`11 & cod id o`11 = o`11 by CAT_1:19;
-      then [[o,o],[id o`11,id o`12]] in commaMorphs(F,G) by A3,A5,A6,A7;
-      hence thesis;
-    end;
-    consider I being Function of commaObjs(F,G),commaMorphs(F,G) such that
-A8: P[o,I.o] from FUNCT_2:sch 3(A4);
+    set I = the Function of commaObjs(F,G),commaMorphs(F,G);
     reconsider I as Function of O,M;
     reconsider a9 = commaComp(F,G) as PartFunc of [:M,M:],M;
     consider C9 being Function of commaMorphs(F,G),commaObjs(F,G) such that
-A9: C9.k = G(k) from FUNCT_2:sch 4;
+A3: C9.k = G(k) from FUNCT_2:sch 4;
     reconsider D9, C9 as Function of M,O;
-    set FG = CatStr(#O, M, D9, C9, a9, I#);
-A10: dom the Comp of FG = { [k1,k2]: k1`11 = k2`12} by Def8;
-A11: for f,g being Morphism of FG for k1,k2 st f = k1 & g = k2 & dom g =
-    cod f holds g*f = [[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]]
+    set FG = CatStr(#O, M, D9, C9, a9#);
+A4: dom the Comp of FG = { [k1,k2]: k1`11 = k2`12} by Def4;
+A5: for f,g being Morphism of FG for k1,k2 st f = k1 & g = k2 & dom g =
+    cod f holds g(*)f = [[k1`11,k2`12],[k2`21(*)k1`21,k2`22(*)k1`22]]
     proof
       let f,g be Morphism of FG;
       let k1,k2;
       assume that
-A12:  f = k1 & g = k2 and
-A13:  dom g = cod f;
-A14:  dom g = k2`11 & cod f = k1`12 by A2,A9,A12;
+A6:  f = k1 & g = k2 and
+A7:  dom g = cod f;
+A8:  dom g = k2`11 & cod f = k1`12 by A2,A3,A6;
       then
-A15:  [k2,k1] in dom a9 by A10,A13;
+A9:  [k2,k1] in dom a9 by A4,A7;
       then
-A16:  a9.(k2,k1) = k2*k1 by Def8;
-      g*f = a9.(g,f) by A12,A15,CAT_1:def 1;
-      hence thesis by A1,A12,A13,A14,A16,Def7;
+A10:  a9.(k2,k1) = k2*k1 by Def4;
+      g(*)f = a9.(g,f) by A6,A9,CAT_1:def 1;
+      hence thesis by A1,A6,A7,A8,A10,Def3;
     end;
-A17: for b being Object of FG holds dom id b = b & cod id b = b & (for f
-being Morphism of FG st cod f = b holds (id b)*f = f) & for g being Morphism of
-    FG st dom g = b holds g*(id b) = g
-    proof
-      let b be Object of FG;
-      reconsider b9 = b as Element of commaObjs(F,G);
-      reconsider i = id b as Element of commaMorphs(F,G);
-A18:  I.b9 = [[b9,b9],[id b9`11, id b9`12]] by A8;
-      then
-A19:  (I.b9)`11 = b9 by MCART_1:85;
-A20:  (I.b9)`12 = b9 by A18,MCART_1:85;
-      hence dom id b = b & cod id b = b by A2,A9,A19;
-A21:  (I.b9)`21 = id b9`11 & (I.b9)`22 = id b9`12 by A18,MCART_1:85;
-      thus for f being Morphism of FG st cod f = b holds (id b)*f = f
-      proof
-        let f be Morphism of FG;
-        reconsider f9 = f as Element of commaMorphs(F,G);
-        assume
-A22:    cod f = b;
+A11: for b being Element of FG holds Hom(b,b) <> {}
+     proof let b be Element of FG;
+       reconsider o = b as Element of commaObjs(F,G);
+       set i = [[o,o], [id o`11,id o`12]];
+       reconsider g = id o`11 as Morphism of C;
+       reconsider h = id o`12 as Morphism of D;
+A12:    dom g = o`11 by CAT_1:58;
+A13:    cod g = o`11 by CAT_1:58;
+A14:    dom h = o`12 by CAT_1:58;
+A15:    cod h = o`12 by CAT_1:58;
+       o in commaObjs(F,G);
+       then o in {[[c,d],f] : f in Hom(F.c,G.d)} by A1,Def1;
+       then consider c,d,f such that
+A16:     o = [[c,d],f] and
+A17:     f in Hom(F.c,G.d);
+A18:     F.g = id(F.o`11) by CAT_1:71;
+A19:     G.h = id(G.o`12) by CAT_1:71;
+A20:    [[c,d],f]`2 = f;
+A21:    c = o`11 by A16,MCART_1:85;
+A22:    d = o`12 by A16,MCART_1:85;
+A23:    cod(o`2) = cod f by A20,A16
+         .= G.d by A17,CAT_1:1
+         .= G.o`12 by A22;
+       dom(o`2) = F.c by A16,A17,CAT_1:1,A20
+         .= F.o`11 by A21;
+       then
+A24:    (o`2)(*)(F.g) = o`2 by A18,CAT_1:22
+         .= (G.h)(*)(o`2) by A19,A23,CAT_1:21;
+       i in {[[o1,o2], [gg,hh]]
+         where gg is (Morphism of C), hh is (Morphism of D),
+       o1 is Element of commaObjs(F,G),  o2 is Element of commaObjs(F,G):
+       dom gg = o1`11 & cod gg = o2`11 & dom hh = o1`12 & cod hh = o2`12 &
+      (o2`2)(*)(F.gg) = (G.hh)(*)(o1`2)} by A12,A13,A14,A15,A24;
+       then i in commaMorphs(F,G) by Def2,A1;
+       then reconsider i as Morphism of FG;
+A25:     cod i = C9.i .= [[o,o], [g,h]]`12 by A3
+          .= b by MCART_1:85;
+     dom i = D9.i .= [[o,o], [g,h]]`11 by A2
+          .= b by MCART_1:85;
+       then i in Hom(b,b) by A25;
+      hence Hom(b,b) <> {};
+     end;
+A26:  for a being Element of FG
+   ex i being Morphism of a,a st
+    for b being Element of FG holds
+     (Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g) &
+     (Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f)
+    proof let a be Element of FG;
+       reconsider o = a as Element of commaObjs(F,G);
+       set i = [[o,o], [id o`11,id o`12]];
+       reconsider g = id o`11 as Morphism of C;
+       reconsider h = id o`12 as Morphism of D;
+A27:    dom g = o`11 by CAT_1:58;
+A28:    cod g = o`11 by CAT_1:58;
+A29:    dom h = o`12 by CAT_1:58;
+A30:    cod h = o`12 by CAT_1:58;
+       o in commaObjs(F,G);
+       then o in {[[c,d],f] : f in Hom(F.c,G.d)} by A1,Def1;
+       then consider c,d,f such that
+A31:     o = [[c,d],f] and
+A32:     f in Hom(F.c,G.d);
+A33:     F.g = id(F.o`11) by CAT_1:71;
+A34:     G.h = id(G.o`12) by CAT_1:71;
+A35:    [[c,d],f]`2 = f;
+A36:    c = o`11 by A31,MCART_1:85;
+A37:    d = o`12 by A31,MCART_1:85;
+A38:    cod(o`2) = cod f by A35,A31
+         .= G.d by A32,CAT_1:1
+         .= G.o`12 by A37;
+       dom(o`2) = F.c by A31,A32,CAT_1:1,A35
+         .= F.o`11 by A36;
+       then
+A39:    (o`2)(*)(F.g) = o`2 by A33,CAT_1:22
+         .= (G.h)(*)(o`2) by A34,A38,CAT_1:21;
+       i in {[[o1,o2], [gg,hh]]
+         where gg is (Morphism of C), hh is (Morphism of D),
+       o1 is Element of commaObjs(F,G),  o2 is Element of commaObjs(F,G):
+       dom gg = o1`11 & cod gg = o2`11 & dom hh = o1`12 & cod hh = o2`12 &
+      (o2`2)(*)(F.gg) = (G.hh)(*)(o1`2)} by A27,A28,A29,A30,A39;
+       then
+     i in commaMorphs(F,G) by Def2,A1;
+       then reconsider i as Morphism of FG;
+A40:     cod i = C9.i .= [[o,o], [g,h]]`12 by A3
+          .= a by MCART_1:85;
+     dom i = D9.i .= [[o,o], [g,h]]`11 by A2
+          .= a by MCART_1:85;
+       then i in Hom(a,a) by A40;
+      then reconsider i as Morphism of a,a by CAT_1:def 5;
+     take i;
+     let b be Element of FG;
+     thus Hom(a,b)<>{} implies for g being Morphism of a,b holds g(*)i = g
+      proof assume
+A41:      Hom(a,b)<>{};
+       let g be Morphism of a,b;
+        reconsider gg = g as Element of commaMorphs(F,G);
+        reconsider ii = i as Element of commaMorphs(F,G);
+A42:     commaMorphs(F,G) =
+        {[[o1,o2], [g1,h1]] :
+         dom g1 = o1`11 & cod g1 = o2`11 & dom h1 = o1`12 & cod h1 = o2`12 &
+        (o2`2)(*)(F.g1) = (G.h1)(*)(o1`2)} by A1,Def2;
+        gg in commaMorphs(F,G);
+        then consider g1,h1,o1,o2 such that
+A43:      gg = [[o1,o2], [g1,h1]] and
+A44:    dom g1 = o1`11 and
+       cod g1 = o2`11 and
+A45:    dom h1 = o1`12 and cod h1 = o2`12 &
+   (o2`2)(*)(F.g1) = (G.h1)(*)(o1`2) by A42;
+A46:     dom commaComp(F,G) = { [k1,k2]: k1`11 = k2`12 } by Def4;
+A47:     ii`21 = [[o,o], [id o`11,id o`12]]`21
+          .= id o`11 by MCART_1:85;
+A48:     ii`22 = [[o,o], [id o`11,id o`12]]`22
+          .= id o`12 by MCART_1:85;
+A49:     o1 = [[o1,o2], [g1,h1]]`11 by MCART_1:85 .=  gg`11 by A43;
+A50:     o2 = [[o1,o2], [g1,h1]]`12 by MCART_1:85 .=  gg`12 by A43;
+A51:     g1 = [[o1,o2], [g1,h1]]`21 by MCART_1:85 .= gg`21 by A43;
+A52:     h1 = [[o1,o2], [g1,h1]]`22 by MCART_1:85 .= gg`22 by A43;
+A53:     dom g = a by A41,CAT_1:5;
+A54:     dom g = gg`11 by A2
+             .= [[o1,o2], [g1,h1]]`11 by A43
+             .= o1 by MCART_1:85;
+A55:     o1 = a by A41,CAT_1:5,A54 .= [[c,d],f] by A31;
+A56:     dom gg`21 = dom([[o1,o2], [g1,h1]]`21) by A43
+           .= dom g1 by MCART_1:85
+           .= o1`11 by A44
+           .= [[c,d],f]`11 by A55
+           .= o`11 by A31;
+A57:     dom gg`22 = dom([[o1,o2], [g1,h1]]`22) by A43
+           .= dom h1 by MCART_1:85
+           .= o1`12 by A45
+           .= [[c,d],f]`12 by A55
+           .= o`12 by A31;
+A58:     ii`11 = [[o,o], [id o`11,id o`12]]`11
+         .= dom g by A53,MCART_1:85
+         .= D9.gg
+         .= gg`11 by A2;
+A59:    ii`11 = o by MCART_1:85 .= ii`12 by MCART_1:85;
         then
-A23:    b = f`12 by A9;
-        cod f9`22 = f9`12`12 by A1,Th3;
+     gg`11 = ii`12 by A58;
         then
-A24:    (id b9`12)*f9`22 = f9`22 by A23,CAT_1:21;
-        cod f9`21 = f9`12`11 by A1,Th3;
-        then
-A25:    (id b9`11)*f9`21 = f9`21 by A23,CAT_1:21;
-        cod f = dom id b by A2,A19,A22;
-        hence (id b)*f = [[f9`11,i`12],[i`21*f9`21,i`22*f9`22]] by A11
-          .= f by A1,A20,A21,A23,A25,A24,Th3;
+A60:     [gg,ii] in dom commaComp(F,G) by A46;
+:::        then [g,i] in dom commaComp(F,G);
+       hence g(*)i = commaComp(F,G).(g,i) by CAT_1:def 1
+           .= gg*ii by A60,Def4
+           .= [[gg`11,gg`12],[gg`21(*)id o`11,gg`22(*)ii`22]]
+                    by A1,A59,Def3,A58,A47
+           .= [[gg`11,gg`12],[gg`21,gg`22(*)ii`22]] by A56,CAT_1:22
+           .= [[gg`11,gg`12],[gg`21,gg`22]] by CAT_1:22,A48,A57
+           .= g by A49,A50,A51,A52,A43;
       end;
-      let g be Morphism of FG;
-      reconsider g9 = g as Element of commaMorphs(F,G);
-      assume
-A26:  dom g = b;
-      then
-A27:  b = g`11 by A2;
-      dom g9`22 = g9`11`12 by A1,Th3;
-      then
-A28:  g9`22*(id b9`12) = g9`22 by A27,CAT_1:22;
-      dom g9`21 = g9`11`11 by A1,Th3;
-      then
-A29:  g9`21*(id b9`11) = g9`21 by A27,CAT_1:22;
-      dom g = cod id b by A9,A20,A26;
-      hence g*(id b) = [[i`11,g9`12],[g9`21*i`21,g9`22*i`22]] by A11
-        .= g by A1,A19,A21,A27,A29,A28,Th3;
+     thus Hom(b,a)<>{} implies for f being Morphism of b,a holds i(*)f = f
+      proof assume
+A61:      Hom(b,a)<>{};
+       let g be Morphism of b,a;
+        reconsider gg = g as Element of commaMorphs(F,G);
+        reconsider ii = i as Element of commaMorphs(F,G);
+A62:     commaMorphs(F,G) =
+        {[[o1,o2], [g1,h1]] :
+         dom g1 = o1`11 & cod g1 = o2`11 & dom h1 = o1`12 & cod h1 = o2`12 &
+        (o2`2)(*)(F.g1) = (G.h1)(*)(o1`2)} by A1,Def2;
+        gg in commaMorphs(F,G);
+        then consider g1,h1,o1,o2 such that
+A63:      gg = [[o1,o2], [g1,h1]] and
+    dom g1 = o1`11 and
+A64:       cod g1 = o2`11 and
+    dom h1 = o1`12 and
+A65:   cod h1 = o2`12 and
+   (o2`2)(*)(F.g1) = (G.h1)(*)(o1`2) by A62;
+A66:     dom commaComp(F,G) = { [k1,k2]: k1`11 = k2`12 } by Def4;
+A67:     ii`21 = [[o,o], [id o`11,id o`12]]`21
+          .= id o`11 by MCART_1:85;
+A68:     ii`22 = [[o,o], [id o`11,id o`12]]`22
+          .= id o`12 by MCART_1:85;
+A69:     o1 = [[o1,o2], [g1,h1]]`11 by MCART_1:85 .=  gg`11 by A63;
+A70:     o2 = [[o1,o2], [g1,h1]]`12 by MCART_1:85 .=  gg`12 by A63;
+A71:     g1 = [[o1,o2], [g1,h1]]`21 by MCART_1:85 .= gg`21 by A63;
+A72:     h1 = [[o1,o2], [g1,h1]]`22 by MCART_1:85 .= gg`22 by A63;
+A73:     cod g = a by A61,CAT_1:5;
+A74:     cod g = gg`12 by A3
+             .= [[o1,o2], [g1,h1]]`12 by A63
+             .= o2 by MCART_1:85;
+A75:     o2 = a by A61,CAT_1:5,A74 .= [[c,d],f] by A31;
+
+A76:     cod gg`21 = cod([[o1,o2], [g1,h1]]`21) by A63
+           .= cod g1 by MCART_1:85
+           .= o2`11 by A64
+           .= [[c,d],f]`11 by A75
+           .= o`11 by A31;
+A77:     cod gg`22 = cod([[o1,o2], [g1,h1]]`22) by A63
+           .= cod h1 by MCART_1:85
+           .= o2`12 by A65
+           .= [[c,d],f]`12 by A75
+           .= o`12 by A31;
+A78:     ii`11 = [[o,o], [id o`11,id o`12]]`11
+         .= cod g by A73,MCART_1:85
+         .= C9.gg
+         .= gg`12 by A3;
+A79:    ii`11 = o by MCART_1:85 .= ii`12 by MCART_1:85;
+     gg`12 = ii`11 by A78;
+        then
+A80:     [ii,gg] in dom commaComp(F,G) by A66;
+       hence i(*)g = commaComp(F,G).(i,g) by CAT_1:def 1
+           .= ii*gg by A80,Def4
+           .= [[gg`11,gg`12],[ii`21(*)gg`21,ii`22(*)gg`22]]
+                    by A1,A79,Def3,A78
+           .= [[gg`11,gg`12],[gg`21,ii`22(*)gg`22]] by A76,CAT_1:21,A67
+           .= [[gg`11,gg`12],[gg`21,gg`22]] by CAT_1:21,A68,A77
+           .= g by A69,A70,A71,A72,A63;
+      end;
     end;
-A30: for f,g being Morphism of FG st dom g = cod f holds dom(g*f) = dom f
-    & cod (g*f) = cod g
+A81: for f,g being Morphism of FG st dom g = cod f holds dom(g(*)f) = dom f
+    & cod (g(*)f) = cod g
     proof
       let f,g be Morphism of FG such that
-A31:  dom g = cod f;
+A82:  dom g = cod f;
       reconsider f1 = f, g1 = g as Element of commaMorphs(F,G);
-A32:  dom g = g1`11 & cod f = f1`12 by A2,A9;
-      then [g1,f1] in dom a9 by A10,A31;
+A83:  dom g = g1`11 & cod f = f1`12 by A2,A3;
+      then [g1,f1] in dom a9 by A4,A82;
       then
-A33:  g*f = a9.(g,f) & a9.(g1,f1) = g1*f1 by Def8,CAT_1:def 1;
-A34:  dom f = f`11 & cod g = g`12 by A2,A9;
-A35:  dom (g*f) = (g*f)`11 & cod (g*f) = (g*f)`12 by A2,A9;
-      g1*f1 = [[f1`11,g1`12],[g1`21*f1`21,g1`22*f1`22]] by A1,A31,A32,Def7;
-      hence thesis by A35,A34,A33,MCART_1:85;
+A84:  g(*)f = a9.(g,f) & a9.(g1,f1) = g1*f1 by Def4,CAT_1:def 1;
+A85:  dom f = f`11 & cod g = g`12 by A2,A3;
+A86:  dom (g(*)f) = (g(*)f)`11 & cod (g(*)f) = (g(*)f)`12 by A2,A3;
+      g1*f1 = [[f1`11,g1`12],[g1`21(*)f1`21,g1`22(*)f1`22]] by A1,A82,A83,Def3;
+      hence thesis by A86,A85,A84,MCART_1:85;
     end;
-A36: for f,g,h being Morphism of FG st dom h = cod g & dom g = cod f holds
-    h*(g*f) = (h*g)*f
+A87: for f,g,h being Morphism of FG st dom h = cod g & dom g = cod f holds
+    h(*)(g(*)f) = (h(*)g)(*)f
     proof
       let f,g,h be Morphism of FG;
-      reconsider f1 = f, g1 = g, h1 = h, gf = g*f, hg = h*g as Element of
+      reconsider f1 = f, g1 = g, h1 = h, gf = g(*)f, hg = h(*)g as Element of
       commaMorphs(F,G);
       assume that
-A37:  dom h = cod g and
-A38:  dom g = cod f;
-A39:  dom g = g`11 & cod g = g`12 by A2,A9;
-      dom (h*g) = dom g by A30,A37;
+A88:  dom h = cod g and
+A89:  dom g = cod f;
+A90:  dom g = g`11 & cod g = g`12 by A2,A3;
+      dom (h(*)g) = dom g by A81,A88;
       then
-A40:  (h*g)*f = [[f`11,hg`12],[hg`21*f1`21,hg`22*f1`22]] by A11,A38;
-A41:  dom h = h`11 & cod f = f`12 by A2,A9;
-      cod (g*f) = cod g by A30,A38;
+A91:  (h(*)g)(*)f = [[f`11,hg`12],[hg`21(*)f1`21,hg`22(*)f1`22]] by A5,A89;
+A92:  dom h = h`11 & cod f = f`12 by A2,A3;
+      cod (g(*)f) = cod g by A81,A89;
       then
-A42:  h*(g*f) = [[gf`11,h`12],[h1`21*gf`21,h1`22*gf`22]] by A11,A37;
-A43:  dom h1`21 = h1`11`11 & cod f1`21 = f1`12`11 by A1,Th3;
-A44:  dom h1`22 = h1`11`12 & cod f1`22 = f1`12`12 by A1,Th3;
-A45:  dom g1`22 = g1`11`12 & cod g1`22 = g1`12`12 by A1,Th3;
-A46:  h*g = [[g`11,h`12],[h1`21*g1`21,h1`22*g1`22]] by A11,A37;
+A93:  h(*)(g(*)f) = [[gf`11,h`12],[h1`21(*)gf`21,h1`22(*)gf`22]] by A5,A88;
+A94:  dom h1`21 = h1`11`11 & cod f1`21 = f1`12`11 by A1,Th2;
+A95:  dom h1`22 = h1`11`12 & cod f1`22 = f1`12`12 by A1,Th2;
+A96:  dom g1`22 = g1`11`12 & cod g1`22 = g1`12`12 by A1,Th2;
+A97:  h(*)g = [[g`11,h`12],[h1`21(*)g1`21,h1`22(*)g1`22]] by A5,A88;
       then
-A47:  (h*g)`12 = h`12 & hg`21 = h1`21*g1`21 by MCART_1:85;
-A48:  g*f = [[f`11,g`12],[g1`21*f1`21,g1`22*f1`22]] by A11,A38;
+A98:  (h(*)g)`12 = h`12 & hg`21 = h1`21(*)g1`21 by MCART_1:85;
+A99:  g(*)f = [[f`11,g`12],[g1`21(*)f1`21,g1`22(*)f1`22]] by A5,A89;
       then
-A49:  (g*f)`11 = f`11 & gf`21 = g1`21*f1`21 by MCART_1:85;
-A50:  gf`22 = g1`22*f1`22 by A48,MCART_1:85;
-A51:  hg`22 = h1`22*g1`22 by A46,MCART_1:85;
-      dom g1`21 = g1`11`11 & cod g1`21 = g1`12`11 by A1,Th3;
-      then (h1`21*g1`21)*f1`21 = h1`21*(g1`21*f1`21) by A37,A38,A39,A43,A41,
-CAT_1:18;
-      hence thesis by A37,A38,A39,A41,A45,A44,A42,A40,A47,A49,A51,A50,CAT_1:18;
+A100:  (g(*)f)`11 = f`11 & gf`21 = g1`21(*)f1`21 by MCART_1:85;
+A101:  gf`22 = g1`22(*)f1`22 by A99,MCART_1:85;
+A102:  hg`22 = h1`22(*)g1`22 by A97,MCART_1:85;
+      dom g1`21 = g1`11`11 & cod g1`21 = g1`12`11 by A1,Th2;
+      then (h1`21(*)g1`21)(*)f1`21 = h1`21(*)(g1`21(*)f1`21)
+           by A88,A89,A90,A94,A92,CAT_1:18;
+      hence thesis by A88,A89,A90,A92,A96,A95,A93,A91,A98,A100,A102,A101,CAT_1:
+18;
     end;
     for f,g being Morphism of FG holds [g,f] in dom the Comp of FG iff
     dom g = cod f
     proof
       let f,g be Morphism of FG;
       reconsider f1 = f, g1 = g as Element of commaMorphs(F,G);
-A52:  dom g = g1`11 & cod f = f1`12 by A2,A9;
+A103:  dom g = g1`11 & cod f = f1`12 by A2,A3;
       thus [g,f] in dom the Comp of FG implies dom g = cod f
       proof
         assume [g,f] in dom the Comp of FG;
         then consider k1,k2 such that
-A53:    [g,f] = [k1,k2] and
-A54:    k1`11 = k2`12 by A10;
-        g = k1 by A53,ZFMISC_1:27;
-        hence thesis by A52,A53,A54,ZFMISC_1:27;
+A104:    [g,f] = [k1,k2] and
+A105:    k1`11 = k2`12 by A4;
+        g = k1 by A104,XTUPLE_0:1;
+        hence thesis by A103,A104,A105,XTUPLE_0:1;
       end;
-      thus thesis by A10,A52;
+      thus thesis by A4,A103;
     end;
-    then reconsider FG as strict Category by A30,A36,A17,CAT_1:10;
+    then reconsider FG as
+     strict Category by A81,A87,A11,A26,CAT_1:def 6,def 7
+,def 8,def 9,def 10;
     take FG;
-    thus thesis by A2,A9,A8;
+    thus thesis by A2,A3;
   end;
   uniqueness
   proof
     let E1,E2 be strict Category such that
-A55: the carrier of E1 = commaObjs(F,G) and
-A56: the carrier' of E1 = commaMorphs(F,G) and
-A57: for k holds (the Source of E1).k = k`11 and
-A58: for k holds (the Target of E1).k = k`12 and
-A59: for o holds (the Id of E1).o = [[o,o], [id o`11,id o`12]] and
-A60: the Comp of E1 = commaComp(F,G) and
-A61: the carrier of E2 = commaObjs(F,G) & the carrier' of E2 =
+A106: the carrier of E1 = commaObjs(F,G) and
+A107: the carrier' of E1 = commaMorphs(F,G) and
+A108: for k holds (the Source of E1).k = k`11 and
+A109: for k holds (the Target of E1).k = k`12 and
+A110: the Comp of E1 = commaComp(F,G) and
+A111: the carrier of E2 = commaObjs(F,G) & the carrier' of E2 =
     commaMorphs(F,G) and
-A62: for k holds (the Source of E2).k = k`11 and
-A63: for k holds (the Target of E2).k = k`12 and
-A64: for o holds (the Id of E2).o = [[o,o], [id o`11,id o`12]] and
-A65: the Comp of E2 = commaComp(F,G);
+A112: for k holds (the Source of E2).k = k`11 and
+A113: for k holds (the Target of E2).k = k`12 and
+A114: the Comp of E2 = commaComp(F,G);
     now
       let x be Element of morph(E1);
-      thus (the Target of E1).x = x`12 by A56,A58
-        .= (the Target of E2).x by A56,A63;
+      thus (the Target of E1).x = x`12 by A107,A109
+        .= (the Target of E2).x by A107,A113;
     end;
     then
-A66: the Target of E1 = the Target of E2 by A55,A56,A61,FUNCT_2:63;
-A67: now
-      let x be Object of E1;
-      reconsider o = x as Element of commaObjs(F,G) by A55;
-      thus (the Id of E1).x = [[o,o],[id o`11,id o`12]] by A59
-        .= (the Id of E2).x by A64;
-    end;
+A115: the Target of E1 = the Target of E2 by A106,A107,A111,FUNCT_2:63;
     now
       let x be Element of morph(E1);
-      thus (the Source of E1).x = x`11 by A56,A57
-        .= (the Source of E2).x by A56,A62;
+      thus (the Source of E1).x = x`11 by A107,A108
+        .= (the Source of E2).x by A107,A112;
     end;
-    then the Source of E1 = the Source of E2 by A55,A56,A61,FUNCT_2:63;
-    hence thesis by A55,A56,A60,A61,A65,A66,A67,FUNCT_2:63;
+    then the Source of E1 = the Source of E2 by A106,A107,A111,FUNCT_2:63;
+    hence thesis by A106,A107,A110,A111,A114,A115;
   end;
 end;
 
 theorem
   the carrier of 1Cat(x,y) = {x} & the carrier' of 1Cat(x,y) = {y};
 
-theorem Th5:
+theorem Th4:
   for a,b being Object of 1Cat(x,y) holds Hom(a,b) = {y}
 proof
   let a,b be Object of 1Cat(x,y);
@@ -529,22 +672,22 @@ A1: now
 A2: now
       let a,b be Object of 1Cat(c, id c);
 A3:   a = c & b = c by TARSKI:def 1;
-      id c in Hom(c,c) & Hom(a,a) = {id c} by Th5,CAT_1:26;
+      id c in Hom(c,c) & Hom(a,a) = {id c} by Th4,CAT_1:27;
       hence for c1,c2 st a = c1 & b = c2 holds Hom(a,b) c= Hom(c1,c2) by A3,
 ZFMISC_1:31;
     end;
     set m = id c;
     set s = (m,m).--> m;
 A4: dom s = {[m,m]} by FUNCOP_1:13;
-A5: dom m = c by CAT_1:19;
-A6: cod m = c by CAT_1:19;
+A5: dom m = c;
+A6: cod m = c;
 A7: s.(m,m) = m by FUNCOP_1:71;
 A8: now
       let x;
       assume
 A9:   x in dom the Comp of 1Cat(c,m);
       hence (the Comp of 1Cat(c,m)).x = m by A7,A4,TARSKI:def 1
-        .= m*(m qua Morphism of C) by A6,CAT_1:21
+        .= m(*)(m qua Morphism of C) by A6,CAT_1:21
         .= (the Comp of C).(m,m) by A5,A6,CAT_1:16
         .= (the Comp of C).x by A4,A9,TARSKI:def 1;
     end;

@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="TARSKI"/>
 </Signature>
 <Scheme>
@@ -31,7 +32,7 @@
 <Var nr="1"/>
 </Pred>
 </Fraenkel>
-<Func kind="K" nr="35">
+<Func kind="K" nr="47">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -73,7 +74,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="9">
+<Func kind="K" nr="7">
 <Func kind="F" nr="4"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -93,7 +94,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="13">
+<Func kind="K" nr="11">
 <Func kind="F" nr="4"/>
 <Func kind="F" nr="3">
 <Var nr="1"/>
@@ -106,7 +107,7 @@
 </Pred>
 <Pred kind="R" nr="13">
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="1">
+<Func kind="K" nr="41">
 <Func kind="F" nr="4"/>
 </Func>
 </Pred>

@@ -9,6 +9,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -38,7 +39,7 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Not>
@@ -61,7 +62,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="95">
+<Func kind="K" nr="103">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>
@@ -89,7 +90,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="99">
+<Func kind="K" nr="108">
 <Func kind="U" nr="6">
 <Var nr="1"/>
 </Func>
@@ -97,7 +98,7 @@
 <Var nr="5"/>
 <Var nr="6"/>
 </Func>
-<Func kind="K" nr="135">
+<Func kind="K" nr="144">
 <Func kind="F" nr="2">
 <Var nr="4"/>
 <Var nr="5"/>
@@ -165,7 +166,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="5">
+<Func kind="K" nr="3">
 <Var nr="4"/>
 <Var nr="5"/>
 </Func>
@@ -199,13 +200,13 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Not>
@@ -228,7 +229,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="95">
+<Func kind="K" nr="103">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>
@@ -256,7 +257,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="99">
+<Func kind="K" nr="108">
 <Func kind="U" nr="6">
 <Var nr="1"/>
 </Func>
@@ -264,7 +265,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="135">
+<Func kind="K" nr="144">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>
@@ -299,7 +300,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="95">
+<Func kind="K" nr="103">
 <Func kind="U" nr="5">
 <Var nr="2"/>
 </Func>
@@ -327,7 +328,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="99">
+<Func kind="K" nr="108">
 <Func kind="U" nr="6">
 <Var nr="2"/>
 </Func>
@@ -335,7 +336,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="135">
+<Func kind="K" nr="144">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>

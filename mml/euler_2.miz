@@ -2,7 +2,7 @@
 ::  by Yoshinori Fujisawa , Yasushi Fuwa and Hidetaka Shimizu
 ::
 :: Received June 10, 1998
-:: Copyright (c) 1998-2011 Association of Mizar Users
+:: Copyright (c) 1998-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -18,9 +18,9 @@ environ
       SUBSET_1, ARYTM_1, INT_2, COMPLEX1, RELAT_1, TARSKI, FUNCT_1, CLASSES1,
       CARD_3, ORDINAL4, RFINSEQ, XBOOLE_0, NEWTON, EULER_1, FINSET_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, CARD_1,
-      RELAT_1, FUNCT_1, RECDEF_1, INT_1, INT_2, FINSET_1, NAT_1, NAT_D, NEWTON,
-      EULER_1, CLASSES1, RFINSEQ, RVSUM_1, FINSEQ_1, FINSEQ_3, TREES_4,
-      WSIERP_1;
+      RELAT_1, FUNCT_1, RECDEF_1, INT_1, INT_2, FINSET_1, ORDINAL1, NAT_1,
+      NAT_D, NEWTON, EULER_1, CLASSES1, RFINSEQ, RVSUM_1, FINSEQ_1, FINSEQ_3,
+      TREES_4, WSIERP_1;
  constructors REAL_1, SQUARE_1, NAT_1, NAT_D, NEWTON, RFINSEQ, WSIERP_1,
       EULER_1, SEQ_1, RECDEF_1, CLASSES1, BINOP_2, RELSET_1;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
@@ -115,7 +115,7 @@ A7:   t < 0;
   hence contradiction;
 end;
 
-theorem Th5:
+theorem Th3:
   a <> 0 & b <> 0 & m <> 0 & a,m are_relative_prime & b,m
   are_relative_prime implies m,a*b mod m are_relative_prime
 proof
@@ -135,7 +135,7 @@ A6: a*b = m*t+(a*b mod m) and
   hence thesis by A6,A5,INT_2:def 3;
 end;
 
-theorem Th6:
+theorem Th4:
   m > 1 & m,n are_relative_prime & n = a*b mod m implies m,b are_relative_prime
 proof
   assume that
@@ -170,7 +170,7 @@ A11: tm <> 0 implies m gcd n <> 1
   hence contradiction by A2,A11,INT_2:def 3;
 end;
 
-theorem Th7:
+theorem Th5:
   (m mod n) mod n = m mod n
 proof
   per cases;
@@ -193,7 +193,7 @@ proof
     .= ((l mod n)+(m mod n)) mod n by NAT_D:23;
 end;
 
-theorem Th9:
+theorem Th7:
   (l*m) mod n = (l*(m mod n)) mod n
 proof
   per cases;
@@ -213,13 +213,13 @@ A2: n = 0;
 end;
 
 theorem
-  (l*m) mod n = ((l mod n)*m) mod n by Th9;
+  (l*m) mod n = ((l mod n)*m) mod n by Th7;
 
-theorem Th11:
+theorem Th9:
   (l*m) mod n = ((l mod n)*(m mod n)) mod n
 proof
-  (l*m) mod n = (l*(m mod n)) mod n by Th9;
-  hence thesis by Th9;
+  (l*m) mod n = (l*(m mod n)) mod n by Th7;
+  hence thesis by Th7;
 end;
 
 begin :: Function of Element of NAT*(FinSequence of NAT)
@@ -244,7 +244,7 @@ A2:   x = (a*f).xx by FUNCT_1:def 3;
   end;
 end;
 
-theorem Th25:
+theorem Th10:
   for R1,R2 be FinSequence of NAT st R1,R2
   are_fiberwise_equipotent holds Product R1 = Product R2
 proof
@@ -445,12 +445,12 @@ A18: (f mod m).(n+1) = f.(n+1) mod m by Def1;
     then
 A19: Product (f mod m) mod m = ((Product (fn mod m))*(f.(n+1) mod m)) mod
     m by RVSUM_1:96
-      .= (((Product (fn mod m)) mod m)*((f.(n+1) mod m) mod m)) mod m by Th11
+      .= (((Product (fn mod m)) mod m)*((f.(n+1) mod m) mod m)) mod m by Th9
       .= (((Product fn) mod m)*((f.(n+1) mod m) mod m)) mod m by A4,A5,A7
-      .= (((Product fn) mod m)*(f.(n+1) mod m)) mod m by Th7;
+      .= (((Product fn) mod m)*(f.(n+1) mod m)) mod m by Th5;
     (Product f) mod m = (Product (fn ^ <* f.(n+1) *>)) mod m by A6,RFINSEQ:7
       .= ((Product fn)*f.(n+1)) mod m by RVSUM_1:96;
-    hence thesis by A19,Th11;
+    hence thesis by A19,Th9;
   end;
 A20: P[0]
   proof
@@ -466,7 +466,7 @@ A22:  f = <*> NAT & len (f mod m) = 0 by A21,Def1;
   hence thesis by A1,A2;
 end;
 
-theorem Th27:
+theorem Th12:
   a <> 0 & m > 1 & a*n mod m = n mod m & m,n are_relative_prime
   implies a mod m = 1
 proof
@@ -513,7 +513,7 @@ A3: x in dom F;
     then reconsider x as Element of NAT;
     ((F mod m) mod m).x = ((F mod m).x) mod m by A1,A3,Def1
       .= (F.x mod m) mod m by A3,Def1
-      .= F.x mod m by Th7
+      .= F.x mod m by Th5
       .= (F mod m).x by A3,Def1;
     hence thesis;
   end;
@@ -544,7 +544,7 @@ A4: x in dom F;
     ((a*(F mod m)) mod m).x = (a*(F mod m)).x mod m by A2,A4,Def1
       .= (a*(F mod m).x ) mod m by RVSUM_1:44
       .= (a*(F.x mod m)) mod m by A4,Def1
-      .= (a*F.x) mod m by Th9
+      .= (a*F.x) mod m by Th7
       .= (a*F).x mod m by RVSUM_1:44
       .= ((a*F) mod m).x by A1,A4,Def1;
     hence thesis;
@@ -723,7 +723,7 @@ end;
 begin :: Euler's Theorem and Small Fermat's Theorem
 
 ::$N Euler's Generalization of Fermat's Little Theorem
-theorem Th33:
+theorem Th18:
   a <> 0 & m > 1 & a,m are_relative_prime implies (a |^ Euler m) mod m = 1
 proof
   assume that
@@ -757,7 +757,7 @@ A10:  a*t = m*s+0 and
     then
 A11: a*t mod m >= 1 by NAT_1:14;
 A12: a*t mod m <= m by A2,NAT_D:1;
-    m,a*t mod m are_relative_prime by A1,A2,A3,A7,A8,Th5;
+    m,a*t mod m are_relative_prime by A1,A2,A3,A7,A8,Th3;
     hence thesis by A6,A11,A12;
   end;
 A13: X = Y
@@ -795,7 +795,7 @@ A20:  i = (i div m)*m+(i mod m) by A2,NEWTON:66;
       ij = (i mod m)*a+(((i div m)*a)+j)*m as Element of NAT by A17;
 A21:  im <= m by A2,NEWTON:65;
 A22:  ij mod m = im*a mod m by EULER_1:12;
-      then m,im are_relative_prime by A2,A15,A18,A17,A20,Th6;
+      then m,im are_relative_prime by A2,A15,A18,A17,A20,Th4;
       then im in X by A19,A21;
       hence thesis by A14,A18,A17,A20,A22;
     end;
@@ -973,12 +973,12 @@ A76:      len (FY|(n+1)) = n+1 by A66,FINSEQ_1:59;
           then (Product(FY|(n+1))) mod m = (Product(FY|n)*FY.(n+1)) mod m by
 A75,A70,RVSUM_1:96
             .= (((a |^ len(FY|n)*Product(FX|n)) mod m) *(FY.(n+1) mod m))
-          mod m by A66,A68,A72,Th11,XXREAL_0:2
+          mod m by A66,A68,A72,Th9,XXREAL_0:2
             .= (((a |^ len(FY|n)*Product(FX|n)) mod m) *((FYY.(n+1) mod m)
           mod m)) mod m by A37,A35,A69,Def1
             .= (((a |^ len(FY|n)*Product(FX|n)) mod m) *((a*FX).(n+1) mod m)
-          ) mod m by Th7
-            .= ((a |^ len(FY|n)*Product(FX|n))*(a*FX).(n+1)) mod m by Th11
+          ) mod m by Th5
+            .= ((a |^ len(FY|n)*Product(FX|n))*(a*FX).(n+1)) mod m by Th9
             .= (a |^ n*Product (FX|n))*(a*(FX.(n+1))) mod m by A73,RVSUM_1:44
             .= (a |^ n*a)*(Product(FX|n)*(FX.(n+1))) mod m
             .= (a |^ len(FY|(n+1)))*(Product(FX|n)*(FX.(n+1))) mod m by A76,
@@ -1051,8 +1051,8 @@ A87: P[0] by INT_2:def 3;
     .= Euler m by EULER_1:def 1;
   then
 A88: len FY = Euler m by A61,RFINSEQ:3;
-  (Product FX) mod m = (Product FY) mod m by A61,Th25;
-  hence thesis by A2,A63,A88,A4,A79,Th27;
+  (Product FX) mod m = (Product FY) mod m by A61,Th10;
+  hence thesis by A2,A63,A88,A4,A79,Th12;
 end;
 
 ::End of Euler's Theorem
@@ -1069,7 +1069,7 @@ A4: m > 1 by A2,INT_2:def 4;
   then m-1 > 1-1 by XREAL_1:9;
   then reconsider mm = m-1 as Element of NAT by INT_1:3;
   Euler m = m-1 by A2,EULER_1:20;
-  then ((a |^ mm) mod m)*a = 1*a by A1,A3,A4,Th33;
-  then mm+1 = m & ((a |^ mm)*a) mod m = a mod m by Th9;
+  then ((a |^ mm) mod m)*a = 1*a by A1,A3,A4,Th18;
+  then mm+1 = m & ((a |^ mm)*a) mod m = a mod m by Th7;
   hence thesis by NEWTON:6;
 end;

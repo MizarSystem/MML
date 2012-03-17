@@ -2,7 +2,7 @@
 ::  by Micha{\l} Muzalewski
 ::
 :: Received December 12, 1991
-:: Copyright (c) 1991-2011 Association of Mizar Users
+:: Copyright (c) 1991-2012 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
 :: This code can be distributed under the GNU General Public Licence
 :: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
@@ -17,12 +17,14 @@ environ
  vocabularies XBOOLE_0, CLASSES2, FUNCSDOM, VECTSP_2, SUBSET_1, STRUCT_0,
       MOD_2, MIDSP_1, CAT_1, GRCAT_1, FUNCT_2, ENS_1, RELAT_1, GRAPH_1,
       FUNCT_1, ALGSTR_0, VECTSP_1, ZFMISC_1, FUNCT_5, MCART_1, TARSKI, ARYTM_3,
-      PARTFUN1, MODCAT_1, MSSUBFAM, UNIALG_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_2, PARTFUN1,
-      BINOP_1, FUNCT_5, STRUCT_0, ALGSTR_0, VECTSP_1, FUNCSDOM, VECTSP_2,
-      GRAPH_1, CAT_1, CLASSES2, GRCAT_1, MOD_2, FUNCT_3;
- constructors GRCAT_1, MOD_2, RELSET_1;
- registrations XBOOLE_0, RELSET_1, STRUCT_0, CAT_1, VECTSP_2, GRCAT_1, MOD_2;
+      PARTFUN1, MODCAT_1, MSSUBFAM, UNIALG_1, MONOID_0, RELAT_2, BINOP_1,
+      SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FUNCT_5, STRUCT_0, ALGSTR_0,
+      VECTSP_1, FUNCSDOM, VECTSP_2, GRAPH_1, CAT_1, CLASSES2, GRCAT_1, MOD_2;
+ constructors GRCAT_1, MOD_2, RELSET_1, FUNCT_5;
+ registrations XBOOLE_0, RELSET_1, STRUCT_0, CAT_1, VECTSP_2, GRCAT_1, MOD_2,
+      FUNCT_2, SETFAM_1;
  requirements SUBSET, BOOLE;
 
 
@@ -203,10 +205,7 @@ definition
 :: MODCAT_1:def 12
 
   for f being Element of Morphs(V) holds it.f = cod'(f);
-  func ID(V) -> Function of V,Morphs(V) means
-:: MODCAT_1:def 13
-
-  for G being Element of V holds it.G = ID(G);
+ canceled;
 end;
 
 ::
@@ -248,7 +247,9 @@ definition
 :: MODCAT_1:def 15
   CatStr(#LModObjects(UN,R),Morphs(
     LModObjects(UN,R)), dom(LModObjects(UN,R)),cod(LModObjects(UN,R)), comp(
-    LModObjects(UN,R)),ID(LModObjects(UN,R))#);
+    LModObjects(UN,R))
+:::,ID(LModObjects(UN,R))
+   #);
 end;
 
 registration
@@ -260,16 +261,11 @@ theorem :: MODCAT_1:12
   for f,g being Morphism of LModCat(UN,R) holds [g,f] in dom(the
   Comp of LModCat(UN,R)) iff dom g = cod f;
 
-theorem :: MODCAT_1:13
-  for f being (Morphism of LModCat(UN,R)), f9 being Element of
-Morphs(LModObjects(UN,R)), b being Object of LModCat(UN,R), b9 being Element of
-  LModObjects(UN,R) holds f is strict Element of Morphs(LModObjects(UN,R)) & f9
-is Morphism of LModCat(UN,R) & b is strict Element of LModObjects(UN,R) & b9 is
-  Object of LModCat(UN,R);
+registration let UN,R;
+ cluster -> strict for Element of Morphs LModObjects(UN,R);
+end;
 
-theorem :: MODCAT_1:14
-  for b being Object of LModCat(UN,R), b9 being Element of
-  LModObjects(UN,R) st b = b9 holds id b = ID(b9);
+canceled 2;
 
 theorem :: MODCAT_1:15
   for f being Morphism of LModCat(UN,R) for f9 being Element of
@@ -279,10 +275,13 @@ theorem :: MODCAT_1:16
   for f,g being (Morphism of LModCat(UN,R)), f9,g9 being Element
 of Morphs(LModObjects(UN,R)) st f = f9 & g = g9 holds (dom g = cod f iff dom g9
 = cod f9) & (dom g = cod f iff [g9,f9] in dom comp(LModObjects(UN,R))) & (dom g
-  = cod f implies g*f = g9*f9) & (dom f = dom g iff dom f9 = dom g9) & (cod f =
+  = cod f implies g(*)f = g9*f9) & (dom f = dom g iff dom f9 = dom g9) &
+(cod f =
   cod g iff cod f9 = cod g9);
 
 registration
   let UN,R;
-  cluster LModCat(UN,R) -> Category-like;
+  cluster LModCat(UN,R) -> Category-like
+    transitive associative reflexive;
 end;
+

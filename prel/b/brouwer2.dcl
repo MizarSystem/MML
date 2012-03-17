@@ -8,6 +8,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XTUPLE_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -24,18 +25,18 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="ALGSTR_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="PRE_TOPC"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="RLSUB_1"/>
+<ArticleID name="PRE_TOPC"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="JORDAN2C"/>
-<ArticleID name="RLSUB_1"/>
 <ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
@@ -46,17 +47,19 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="99"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="156">
+<Adjective nr="163">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
+</Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="21">
+<Func kind="K" nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -65,22 +68,24 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="317">
-<Func kind="K" nr="281">
+<Func kind="K" nr="335">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="156">
+<Adjective nr="163">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
+</Func>
 </Adjective>
 </Cluster>
 </FCluster>

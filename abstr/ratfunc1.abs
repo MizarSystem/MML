@@ -1,0 +1,753 @@
+:: Introduction to Rational Functions
+::  by Christoph Schwarzweller
+:: 
+:: Received February 8, 2012
+:: Copyright (c) 2012 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies ARYTM_3, POLYNOM2, POLYNOM1, ARYTM_1, FUNCT_1, FINSEQ_5,
+      POLYNOM3, RELAT_1, RLVECT_1, FINSEQ_1, GCD_1, VECTSP_1, CARD_1, ALGSEQ_1,
+      ALGSTR_1, CARD_3, SGRAPH1, INT_1, FUNCT_4, ALGSTR_0, POLYNOM5, RFINSEQ,
+      MCART_1, HURWITZ, ZFMISC_1, XBOOLE_0, TARSKI, YELLOW_8, LATTICES,
+      XCMPLX_0, VECTSP_2, MSALIMIT, STRUCT_0, SUBSET_1, SUPINF_2, NAT_1,
+      NUMBERS, MESFUNC1, XXREAL_0, RATFUNC1, GROUP_1, FINSEQ_3, BINOP_1,
+      PARTFUN1, ORDINAL4, ORDINAL1;
+ notations TARSKI, SUBSET_1, ORDINAL1, XCMPLX_0, PARTFUN1, XXREAL_0, NAT_D,
+      GROUP_4, FUNCT_7, VECTSP_2, NUMBERS, XTUPLE_0, MCART_1, ALGSTR_0,
+      ALGSTR_1, VECTSP_1, RLVECT_1, ARYTM_3, RELSET_1, FINSEQ_1, FUNCT_1,
+      FUNCT_2, NAT_1, GROUP_1, INT_1, FINSEQ_3, VFUNCT_1, RFINSEQ, NORMSP_1,
+      POLYNOM3, POLYNOM4, FINSEQ_5, POLYNOM5, STRUCT_0, ALGSEQ_1, HURWITZ;
+ constructors BINOP_1, REAL_1, SQUARE_1, VECTSP_2, POLYNOM4, POLYNOM5,
+      XTUPLE_0, ALGSTR_2, HURWITZ, FUNCT_4, RELSET_1, ARYTM_3, FUNCT_7,
+      GROUP_4, NAT_D, VFUNCT_1, RFINSEQ, FINSEQ_5, NAT_1;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, XCMPLX_0, XXREAL_0, XREAL_0,
+      NAT_1, INT_1, MEMBERED, FINSEQ_1, STRUCT_0, VECTSP_1, ALGSTR_1, GCD_1,
+      POLYNOM3, POLYNOM4, POLYNOM5, POLYNOM1, FUNCT_2, VFUNCT_1, CARD_1,
+      RELAT_1, XTUPLE_0;
+ requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+theorem :: RATFUNC1:1
+for L being add-associative right_zeroed right_complementable
+            right-distributive non empty doubleLoopStr
+for a being Element of L
+for p,q being FinSequence of L
+st len p = len q &
+   for i being Element of NAT st i in dom p holds q/.i = a * (p/.i)
+holds Sum q = a * Sum p;
+
+theorem :: RATFUNC1:2
+for L being add-associative right_zeroed right_complementable
+            right-distributive non empty doubleLoopStr
+for f being FinSequence of L
+for i,j being Element of NAT
+st i in dom f & j = i-1 holds Ins(Del(f,i),j,f/.i) = f;
+
+theorem :: RATFUNC1:3
+for L being add-associative right_zeroed right_complementable
+            associative unital right-distributive commutative
+            non empty doubleLoopStr
+for f being FinSequence of L
+for i being Element of NAT st i in dom f
+holds Product f = (f/.i) * Product Del(f,i);
+
+registration
+let L be add-associative right_zeroed right_complementable
+         well-unital associative left-distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let x,y be non zero Element of L;
+cluster x / y -> non zero;
+end;
+
+registration
+cluster domRing-like -> almost_left_cancelable
+        for add-associative right_zeroed right_complementable
+            right-distributive non empty doubleLoopStr;
+cluster domRing-like -> almost_right_cancelable
+        for add-associative right_zeroed right_complementable
+            left-distributive non empty doubleLoopStr;
+end;
+
+registration
+let x,y be Integer;
+cluster max(x,y) -> integer;
+cluster min(x,y) -> integer;
+end;
+
+theorem :: RATFUNC1:4
+for x,y,z being Integer holds max(x+y,x+z) = x + max(y,z);
+
+
+begin :: More on Polynomials
+
+definition
+let L be non empty ZeroStr;
+let p be Polynomial of L;
+attr p is zero means
+:: RATFUNC1:def 1
+  p = 0_.(L);
+attr p is constant means
+:: RATFUNC1:def 2
+  deg p <= 0;
+end;
+
+registration
+let L be non trivial ZeroStr;
+cluster non zero for Polynomial of L;
+end;
+
+registration
+let L be non empty ZeroStr;
+cluster 0_.(L) -> zero constant;
+end;
+
+registration
+let L be non degenerated multLoopStr_0;
+cluster 1_.(L) -> non zero;
+end;
+
+registration
+let L be non empty multLoopStr_0;
+cluster 1_.(L) -> constant;
+end;
+
+registration
+let L be non empty ZeroStr;
+cluster zero -> constant for Polynomial of L;
+end;
+
+registration
+let L be non empty ZeroStr;
+cluster non constant -> non zero for Polynomial of L;
+end;
+
+registration
+let L be non trivial ZeroStr;
+cluster non constant for Polynomial of L;
+end;
+
+registration
+let L be well-unital non degenerated non empty doubleLoopStr;
+let z be Element of L;
+let k be Element of NAT;
+cluster rpoly(k,z) -> non zero;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         non degenerated doubleLoopStr;
+cluster Polynom-Ring(L) -> non degenerated;
+end;
+
+registration
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+cluster Polynom-Ring(L) -> domRing-like;
+end;
+
+theorem :: RATFUNC1:5
+for L being add-associative right_zeroed right_complementable
+            right-distributive associative non empty doubleLoopStr
+for p,q being Polynomial of L
+for a being Element of L
+holds (a * p) *' q = a * (p *' q);
+
+theorem :: RATFUNC1:6
+for L being add-associative right_zeroed right_complementable
+            right-distributive commutative associative
+            non empty doubleLoopStr
+for p,q being Polynomial of L
+for a being Element of L
+holds p *' (a * q) = a * (p *' q);
+
+registration
+let L be add-associative right_zeroed right_complementable
+         well-unital commutative associative distributive
+         almost_left_invertible non trivial doubleLoopStr;
+let p be non zero Polynomial of L;
+let a be non zero Element of L;
+cluster a * p -> non zero;
+end;
+
+registration
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+let p1,p2 be non zero Polynomial of L;
+cluster p1 *' p2 -> non zero;
+end;
+
+theorem :: RATFUNC1:7
+for L being add-associative right_zeroed right_complementable distributive
+            Abelian domRing-like non trivial doubleLoopStr
+for p1,p2 being Polynomial of L
+for p3 being non zero Polynomial of L
+st p1 *' p3 = p2 *' p3 holds p1 = p2;
+
+registration
+let L be non trivial ZeroStr;
+let p be non zero Polynomial of L;
+cluster degree p -> natural;
+end;
+
+theorem :: RATFUNC1:8
+for L being add-associative right_zeroed right_complementable
+            unital right-distributive non empty doubleLoopStr
+for p being Polynomial of L st deg p = 0
+for x being Element of L holds eval(p,x) <> 0.L;
+
+theorem :: RATFUNC1:9
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible non degenerated doubleLoopStr
+for p being Polynomial of L
+for x being Element of L
+holds eval(p,x) = 0.L iff rpoly(1,x) divides p;
+
+theorem :: RATFUNC1:10
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible domRing-like
+            non degenerated doubleLoopStr
+for p,q being Polynomial of L
+for x being Element of L st rpoly(1,x) divides (p*'q)
+holds rpoly(1,x) divides p or rpoly(1,x) divides q;
+
+theorem :: RATFUNC1:11
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible non degenerated doubleLoopStr
+for f being FinSequence of Polynom-Ring(L)
+st for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z)
+for p being Polynomial of L st p = Product f
+holds p <> 0_.(L);
+
+theorem :: RATFUNC1:12
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible domRing-like
+            non degenerated doubleLoopStr
+for f being FinSequence of Polynom-Ring(L)
+st for i being Nat st i in dom f ex z being Element of L st f.i = rpoly(1,z)
+for p being Polynomial of L st p = Product f
+for x being Element of L
+holds eval(p,x) = 0.L iff
+      ex i being Nat st i in dom f & f.i = rpoly(1,x);
+
+
+begin :: Common Roots of Polynomials
+
+definition
+let L be unital non empty doubleLoopStr;
+let p1,p2 be Polynomial of L;
+let x be Element of L;
+pred x is_a_common_root_of p1,p2 means
+:: RATFUNC1:def 3
+  x is_a_root_of p1 & x is_a_root_of p2;
+end;
+
+definition
+let L be unital non empty doubleLoopStr;
+let p1,p2 be Polynomial of L;
+pred p1,p2 have_a_common_root means
+:: RATFUNC1:def 4
+ex x being Element of L st x is_a_common_root_of p1,p2;
+end;
+
+notation
+let L be unital non empty doubleLoopStr;
+let p1,p2 be Polynomial of L;
+synonym p1,p2 have_common_roots for p1,p2 have_a_common_root;
+antonym p1,p2 have_no_common_roots for p1,p2 have_a_common_root;
+end;
+
+theorem :: RATFUNC1:13
+for L being Abelian add-associative right_zeroed right_complementable
+            unital distributive non empty doubleLoopStr
+for p being Polynomial of L
+for x being Element of L
+st x is_a_root_of p holds x is_a_root_of (-p);
+
+theorem :: RATFUNC1:14
+for L being Abelian add-associative right_zeroed right_complementable
+            unital left-distributive non empty doubleLoopStr
+for p1,p2 being Polynomial of L
+for x being Element of L
+st x is_a_common_root_of p1,p2 holds x is_a_root_of p1 + p2;
+
+theorem :: RATFUNC1:15
+for L being Abelian add-associative right_zeroed right_complementable
+            unital distributive non empty doubleLoopStr
+for p1,p2 being Polynomial of L
+for x being Element of L
+st x is_a_common_root_of p1,p2 holds x is_a_root_of -(p1 + p2);
+
+theorem :: RATFUNC1:16
+for L being Abelian add-associative right_zeroed right_complementable
+            unital distributive non empty doubleLoopStr
+for p,q being Polynomial of L
+for x being Element of L
+st x is_a_common_root_of p,q holds x is_a_root_of p+q;
+
+theorem :: RATFUNC1:17
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative commutative distributive
+            almost_left_invertible non trivial doubleLoopStr
+for p1,p2 being Polynomial of L
+st p1 divides p2 & p1 is with_roots holds p1,p2 have_common_roots;
+
+definition
+let L be unital non empty doubleLoopStr;
+let p,q be Polynomial of L;
+func Common_Roots(p,q) -> Subset of L equals
+:: RATFUNC1:def 5
+  { x where x is Element of L : x is_a_common_root_of p,q };
+end;
+
+
+begin :: Normalized Polynomials
+
+definition
+let L be non empty ZeroStr;
+let p be Polynomial of L;
+func Leading-Coefficient(p) -> Element of L equals
+:: RATFUNC1:def 6
+  p.(len p-'1);
+end;
+
+notation
+let L be non empty ZeroStr;
+let p be Polynomial of L;
+synonym LC p for Leading-Coefficient(p);
+end;
+
+registration
+let L be non trivial doubleLoopStr;
+let p be non zero Polynomial of L;
+cluster LC p -> non zero;
+end;
+
+theorem :: RATFUNC1:18
+for L being add-associative right_zeroed right_complementable
+            well-unital commutative associative distributive
+            almost_left_invertible non empty doubleLoopStr
+for p being Polynomial of L
+for a being Element of L holds LC(a * p) = a * LC(p);
+
+definition
+let L be non empty doubleLoopStr;
+let p be Polynomial of L;
+attr p is normalized means
+:: RATFUNC1:def 7
+  LC p = 1.L;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable
+         well-unital commutative associative distributive
+         almost_left_invertible non trivial doubleLoopStr;
+let p be non zero Polynomial of L;
+cluster (1.L / LC p) * p -> normalized;
+end;
+
+registration
+let L be Field;
+let p be non zero Polynomial of L;
+cluster NormPolynomial(p) -> normalized;
+end;
+
+
+begin :: Rational Functions
+
+definition
+let L be non trivial multLoopStr_0;
+mode rational_function of L means
+:: RATFUNC1:def 8
+  ex p1 being Polynomial of L st
+  ex p2 being non zero Polynomial of L st it = [p1,p2];
+end;
+
+definition
+let L be non trivial multLoopStr_0;
+let p1 be Polynomial of L;
+let p2 be non zero Polynomial of L;
+redefine func [p1,p2] -> rational_function of L;
+end;
+
+definition
+let L be non trivial multLoopStr_0;
+let z be rational_function of L;
+redefine func z`1 -> Polynomial of L;
+redefine func z`2 -> non zero Polynomial of L;
+end;
+
+definition
+let L be non trivial multLoopStr_0;
+let z be rational_function of L;
+attr z is zero means
+:: RATFUNC1:def 9
+  z`1 = 0_.(L);
+end;
+
+registration
+let L be non trivial multLoopStr_0;
+cluster non zero for rational_function of L;
+end;
+
+theorem :: RATFUNC1:19
+for L being non trivial multLoopStr_0
+for z being rational_function of L holds z = [z`1,z`2];
+
+definition
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+let z be rational_function of L;
+attr z is irreducible means
+:: RATFUNC1:def 10
+   z`1, z`2 have_no_common_roots;
+end;
+
+notation
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+let z be rational_function of L;
+antonym z is reducible for z is irreducible;
+end;
+
+definition
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+let z be rational_function of L;
+attr z is normalized means
+:: RATFUNC1:def 11
+  z is irreducible & z`2 is normalized;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         unital non trivial doubleLoopStr;
+cluster normalized -> irreducible for rational_function of L;
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+cluster LC(z`2) -> non zero;
+end;
+
+definition
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+func NormRationalFunction z -> rational_function of L equals
+:: RATFUNC1:def 12
+ [(1.L / LC(z`2)) * z`1, (1.L / LC(z`2)) * z`2];
+end;
+
+notation
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+synonym NormRatF z for NormRationalFunction z;
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be non zero rational_function of L;
+cluster NormRationalFunction z -> non zero;
+end;
+
+definition
+let L be non degenerated multLoopStr_0;
+func 0._(L) -> rational_function of L equals
+:: RATFUNC1:def 13
+  [ 0_.(L), 1_.(L) ];
+func 1._(L) -> rational_function of L equals
+:: RATFUNC1:def 14
+  [ 1_.(L), 1_.(L) ];
+end;
+
+registration
+  let L be add-associative right_zeroed right_complementable distributive
+           associative well-unital non degenerated doubleLoopStr;
+ cluster 0._(L) -> normalized;
+end;
+
+registration
+let L be non degenerated multLoopStr_0;
+cluster 1._(L) -> non zero;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster 1._(L) -> irreducible;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster irreducible non zero for rational_function of L;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         Abelian associative well-unital non degenerated doubleLoopStr;
+let x be Element of L;
+cluster [ rpoly(1,x), rpoly(1,x) ] -> reducible non zero
+        for rational_function of L;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         Abelian associative well-unital non degenerated doubleLoopStr;
+cluster reducible non zero for rational_function of L;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster normalized for rational_function of L;
+end;
+
+registration
+let L be non degenerated multLoopStr_0;
+cluster 0._(L) -> zero;
+end;
+
+registration
+let L be add-associative right_zeroed right_complementable distributive
+         associative well-unital non degenerated doubleLoopStr;
+cluster 1._(L) -> normalized;
+end;
+
+definition
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+let p,q be rational_function of L;
+func p + q -> rational_function of L equals
+:: RATFUNC1:def 15
+  [ p`1 *' q`2 + p`2 *' q`1, p`2 *' q`2];
+end;
+
+definition
+let L be domRing-like add-associative right_zeroed right_complementable
+         distributive non trivial doubleLoopStr;
+let p,q be rational_function of L;
+func p *' q -> rational_function of L equals
+:: RATFUNC1:def 16
+  [ p`1 *' q`1, p`2  *' q`2];
+end;
+
+theorem :: RATFUNC1:20
+for L being add-associative right_zeroed right_complementable
+            well-unital commutative associative distributive
+            almost_left_invertible non trivial doubleLoopStr
+for p being rational_function of L
+for a being non zero Element of L
+holds [a * p`1, a * p`2] is irreducible iff p is irreducible;
+
+
+begin
+
+theorem :: RATFUNC1:21
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative distributive commutative
+            domRing-like non trivial doubleLoopStr
+for z being rational_function of L
+ex z1 being rational_function of L,
+   z2 being non zero Polynomial of L
+st z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+   ex f being FinSequence of Polynom-Ring(L)
+   st z2 = Product f &
+      for i being Element of NAT st i in dom f
+      ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                 f.i = rpoly(1,x);
+
+definition
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+func NF z -> rational_function of L means
+:: RATFUNC1:def 17
+  ex z1 being rational_function of L,
+     z2 being non zero Polynomial of L
+  st z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+     it = NormRationalFunction z1 &
+     ex f being FinSequence of Polynom-Ring(L)
+     st z2 = Product f &
+        for i being Element of NAT st i in dom f
+        ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                   f.i = rpoly(1,x)
+  if z is non zero otherwise it = 0._(L);
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+cluster NF z -> normalized irreducible;
+end;
+
+registration
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be non zero rational_function of L;
+cluster NF z -> non zero;
+end;
+
+theorem :: RATFUNC1:22
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z be non zero rational_function of L
+for z1 being rational_function of L,
+    z2 being non zero Polynomial of L
+st z = [z2 *' z1`1, z2 *' z1`2] & z1 is irreducible &
+   ex f being FinSequence of Polynom-Ring(L)
+   st z2 = Product f &
+      for i being Element of NAT st i in dom f
+      ex x being Element of L st x is_a_common_root_of z`1,z`2 &
+                                 f.i = rpoly(1,x)
+holds NF z = NormRationalFunction z1;
+
+theorem :: RATFUNC1:23
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+holds NF 0._(L) = 0._(L);
+
+theorem :: RATFUNC1:24
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+holds NF 1._(L) = 1._(L);
+
+theorem :: RATFUNC1:25
+for L being Abelian add-associative right_zeroed right_complementable
+            well-unital associative distributive commutative
+            almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being irreducible non zero rational_function of L
+holds NF z = NormRationalFunction z;
+
+theorem :: RATFUNC1:26
+for L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z be rational_function of L
+for x being Element of L
+holds NF [rpoly(1,x) *' z`1, rpoly(1,x) *' z`2] = NF z;
+
+theorem :: RATFUNC1:27
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being rational_function of L
+holds NF (NF z) = NF z;
+
+theorem :: RATFUNC1:28
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non degenerated doubleLoopStr
+for z being non zero rational_function of L
+holds z is irreducible iff
+ex a being Element of L st a <> 0.L & [a * (z`1), a * (z`2)] = NF(z);
+
+
+begin  :: Degree of Rational Functions
+
+definition
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+func degree z -> Integer equals
+:: RATFUNC1:def 18
+  max(degree((NF z)`1),degree((NF z)`2));
+end;
+
+notation
+let L be Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr;
+let z be rational_function of L;
+synonym deg z for degree z;
+end;
+
+theorem :: RATFUNC1:29
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being rational_function of L
+holds degree(z) <= max(degree(z`1),degree(z`2));
+
+theorem :: RATFUNC1:30
+for L being Abelian add-associative right_zeroed right_complementable
+         well-unital associative distributive commutative
+         almost_left_invertible domRing-like non trivial doubleLoopStr
+for z being non zero rational_function of L
+holds z is irreducible iff degree z = max( degree(z`1), degree(z`2) );
+
+
+begin :: Evaluation of Rational Functions
+
+definition
+let L be Field;
+let z be rational_function of L;
+let x be Element of L;
+func eval(z,x) -> Element of L equals
+:: RATFUNC1:def 19
+  eval(z`1,x) / eval(z`2,x);
+end;
+
+theorem :: RATFUNC1:31
+for L being Field
+for x being Element of L holds eval(0._(L),x) = 0.L;
+
+theorem :: RATFUNC1:32
+for L being Field
+for x being Element of L holds eval(1._(L),x) = 1.L;
+
+theorem :: RATFUNC1:33
+for L being Field
+for p,q being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L & eval(q`2,x) <> 0.L
+holds eval(p+q,x) = eval(p,x) + eval(q,x);
+
+theorem :: RATFUNC1:34
+for L being Field
+for p,q being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L & eval(q`2,x) <> 0.L
+holds eval(p*'q,x) = eval(p,x) * eval(q,x);
+
+theorem :: RATFUNC1:35
+for L being Field
+for p being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L
+holds eval(NormRationalFunction p,x) = eval(p,x);
+
+theorem :: RATFUNC1:36
+for L being Field
+for p being rational_function of L
+for x being Element of L st eval(p`2,x) <> 0.L
+holds x is_a_common_root_of p`1,p`2 or eval(NF p,x) = eval(p,x);
+
